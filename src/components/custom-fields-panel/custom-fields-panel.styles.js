@@ -40,7 +40,7 @@ export default EStyleSheet.create({
     color: '$text',
   },
   savingFieldIndicator: {
-    backgroundColor: '$mask',
+    backgroundColor: '$linkLight',
     position: 'absolute',
     top: 0,
     left: 0,
