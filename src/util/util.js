@@ -11,7 +11,6 @@ import appPackage from '../../package.json';
 import {getStorageState} from '../components/storage/storage';
 
 import type {CustomError} from '../flow/Error';
-import type {ProjectCustomField} from '../flow/CustomFields';
 import type {StorageState} from '../components/storage/storage';
 
 
@@ -38,23 +37,6 @@ export const parseUrlQueryString = (url: string): Object => {
   const match = url.match(/\?(.*)/);
   const query_string = match && match[1];
   return qs.parse(query_string);
-};
-
-export const detectLanguage = (code: string): string => {
-  let language;
-
-  switch (true) {
-  case (code.indexOf('java.') !== -1):
-    language = 'java';
-    break;
-  case (code.indexOf('kotlin.') !== -1):
-    language = 'kotlin';
-    break;
-  default:
-    language = '';
-  }
-
-  return language;
 };
 
 export const uuid = (): string => {
@@ -119,8 +101,8 @@ export const until = (promises: any, combine: boolean = false): Promise<[?Custom
 export const createNullProjectCustomField = (
   projectName: string,
   maxLength: number = 20,
-  name: string = 'Project'
-): { projectCustomField: ProjectCustomField, value: { name: string } } => {
+  name: string = 'Project',
+): { projectCustomField: { field: {name: string} }, value: { name: string } } => {
   const visibleProjectName: string = (
     projectName.length > maxLength
       ? `${projectName.substring(0, maxLength - 3)}…`
