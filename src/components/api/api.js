@@ -80,14 +80,6 @@ class API extends BaseAPI {
       {body}
     );
   }
-
-  async getUserFromHub(id: string): Promise<any> {
-    const queryString = qs.stringify({fields: 'avatar/url'});
-    return await this.makeAuthorizedRequest(
-      urlJoin(this.auth.config.auth.serverUri, `/api/rest/users/${id}?${queryString}`)
-    );
-  }
-
   async getProjects(query: string): Promise<Array<IssueProject>> {
     const queryString = qs.stringify({
       fields: issueFields.projectOnList.toString(),
@@ -95,14 +87,6 @@ class API extends BaseAPI {
     });
     return await this.makeAuthorizedRequest(`${this.youTrackProjectUrl}?${queryString}`);
   }
-
-  async getProject(projectId: string): Promise<any> {
-    const queryString = qs.stringify({
-      fields: issueFields.project.toString(),
-    });
-    return await this.makeAuthorizedRequest(`${this.youTrackProjectUrl}/${projectId}?${queryString}`);
-  }
-
   async getCustomFieldUserValues(bundleId: string): Promise<Array<User>> {
     const queryString = qs.stringify({
       banned: false,
