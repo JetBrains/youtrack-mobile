@@ -24,7 +24,6 @@ import type {
   TransformedSuggestion,
   SavedQuery,
   CommandSuggestionResponse,
-  TransformedSuggestionLegacy,
   ServersideSuggestionLegacy,
 } from '../../flow/Issue';
 import type {Folder, User} from '../../flow/User';
@@ -178,7 +177,7 @@ class API extends BaseAPI {
     return ApiHelper.convertQueryAssistSuggestions(response.suggestions);
   }
 
-  async getQueryAssistSuggestionsLegacy(query: string, caret: number): Promise<Array<TransformedSuggestionLegacy>> {
+  async getQueryAssistSuggestionsLegacy(query: string, caret: number): Promise<Array<TransformedSuggestion>> {
     const queryString = qs.stringify({
       query,
       caret,
