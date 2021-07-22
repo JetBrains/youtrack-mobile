@@ -208,7 +208,7 @@ export class KnowledgeBase extends Component<Props, State> {
         </TouchableOpacity>
       ),
     });
-    const tree: ArticlesList = this.renderArticlesList(
+    const tree: Node = this.renderArticlesList(
       [{
         title: null,
         data: childrenData,
@@ -276,7 +276,7 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   };
 
-  renderArticlesList: ((articlesList: ArticlesList, hideSearchPanel?: boolean) => Node) = (articlesList: ArticlesList, hideSearchPanel: boolean = false) => {
+  renderArticlesList: ((articlesList: ArticlesList | $Shape<ArticlesList>, hideSearchPanel?: boolean) => Node) = (articlesList: ArticlesList, hideSearchPanel: boolean = false) => {
     const {isLoading} = this.props;
 
     return (

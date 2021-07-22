@@ -1,9 +1,8 @@
 /* @flow */
 
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
 import type {ArticlesList, ProjectArticlesData} from '../../flow/Article';
-import type {IssueProject} from '../../flow/CustomFields';
 import type {CustomError} from '../../flow/Error';
 
 export type KnowledgeBaseState = {
@@ -11,7 +10,7 @@ export type KnowledgeBaseState = {
   articlesList: ArticlesList | null,
   isLoading: boolean,
   expandingProjectId: string | null,
-  error: CustomError
+  error: CustomError | null,
 };
 
 const articlesInitialState: KnowledgeBaseState = {
@@ -27,19 +26,19 @@ const {reducer, actions} = (createSlice({
   name: 'knowledgeBase',
   initialState: articlesInitialState,
   reducers: {
-    setLoading(state: KnowledgeBaseState, action: PayloadAction<boolean>) {
+    setLoading(state: KnowledgeBaseState, action: { payload: boolean }) {
       state.isLoading = action.payload;
     },
-    setExpandingProjectId(state: KnowledgeBaseState, action: PayloadAction<boolean>) {
+    setExpandingProjectId(state: KnowledgeBaseState, action: { payload: string }) {
       state.expandingProjectId = action.payload;
     },
-    setError(state: KnowledgeBaseState, action: PayloadAction<boolean>) {
+    setError(state: KnowledgeBaseState, action: { payload: CustomError | null }) {
       state.error = action.payload;
     },
-    setList(state: KnowledgeBaseState, action: PayloadAction<Array<{ title: IssueProject, data: ArticlesList }>>) {
+    setList(state: KnowledgeBaseState, action: { payload: ArticlesList }) {
       state.articlesList = action.payload;
     },
-    setArticles(state: KnowledgeBaseState, action: PayloadAction<Array<{ title: IssueProject, data: Array<ProjectArticlesData> }>>) {
+    setArticles(state: KnowledgeBaseState, action: { payload: Array<ProjectArticlesData> }) {
       state.articles = action.payload;
     },
   },
