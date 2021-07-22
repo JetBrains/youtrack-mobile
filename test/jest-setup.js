@@ -1,15 +1,18 @@
 import {NativeModules} from 'react-native';
 
+import Adapter from 'enzyme-adapter-react-16';
 import chai, {should} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import sinonChai from 'sinon-chai';
-import log from '../src/components/log/log';
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
 import chaiEnzyme from 'chai-enzyme';
+import Enzyme from 'enzyme';
+import log from '../src/components/log/log';
 import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock';
 import mockReanimated from 'react-native-reanimated/mock';
-import mockReactNativeNotification from './jest-mock__react-native-notifications';
+import sinonChai from 'sinon-chai';
+import {
+  mockReactNativeNotification,
+  mockReactNativeIOSNotification,
+} from './jest-mock__react-native-notifications';
 
 Enzyme.configure({adapter: new Adapter()});
 
@@ -57,6 +60,7 @@ jest.mock('react-native-appearance', () => ({
   Appearance: {getColorScheme: () => 'light'},
 }));
 
+mockReactNativeIOSNotification();
 mockReactNativeNotification();
 
 NativeModules.RNEncryptedStorage = {

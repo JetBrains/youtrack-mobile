@@ -71,6 +71,7 @@
     "@jetbrains/icons": "^3.14.1",
     "@react-native-community/async-storage": "^1.4.0",
     "@react-native-community/netinfo": "^6.0.0",
+    "@react-native-community/push-notification-ios": "^1.8.0",
     "@reduxjs/toolkit": "^1.4.0",
     "base64-js": "1.5.1",
     "diff-match-patch": "^1.0.5",

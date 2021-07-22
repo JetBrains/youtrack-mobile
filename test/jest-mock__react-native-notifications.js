@@ -17,7 +17,7 @@ export const mockEventsRegistry = {
   payloadMock: payloadMock,
   notificationMock: notificationMock,
 
-  registerRemoteNotificationsRegistered: jest.fn((callback) => callback(deviceTokenMock)),
+  registerRemoteNotificationsRegistered: jest.fn((callback) => callback({deviceToken: deviceTokenMock})),
   registerRemoteNotificationsRegistrationFailed: jest.fn((callback) => callback(errorMock)),
 
   registerNotificationReceivedForeground: onNotificationMock,
@@ -37,5 +37,18 @@ const mockReactNativeNotification = () => {
   });
 };
 
+const mockReactNativeIOSNotification = () => {
+  jest.mock('@react-native-community/push-notification-ios', () => {
+    return {
+      addEventListener: jest.fn().mockReturnValue((callback) => callback(mockEventsRegistry.deviceTokenMock)),
+      removeEventListener: jest.fn(),
+      requestPermissions: jest.fn().mockResolvedValue(true),
+    };
+  });
+};
 
-export default mockReactNativeNotification;
+
+export {
+  mockReactNativeNotification,
+  mockReactNativeIOSNotification,
+};

@@ -378,7 +378,7 @@ export function removeAccountOrLogOut(): Action {
     if (isRegisteredForPush()) {
       setRegisteredForPush(false);
       try {
-        await PushNotifications.unregister(getApi());
+        await PushNotifications.unregister();
       } catch (err) {
         log.warn('Failed to unsubscribe from push notifications', err);
       }
@@ -690,15 +690,13 @@ export function subscribeToPushNotifications(): Action {
 
     if (isRegisteredForPush()) {
       log.info('Device was already registered for push notifications. Initializing.');
-      // $FlowFixMe: should be implemented for iOS
-      PushNotifications.initialize(getApi(), onSwitchAccount);
+      PushNotifications.initialize(onSwitchAccount);
       return;
     }
 
     try {
-      await PushNotifications.register(getApi());
-      // $FlowFixMe: should be implemented for iOS
-      PushNotifications.initialize(getApi(), onSwitchAccount);
+      await PushNotifications.register();
+      PushNotifications.initialize(onSwitchAccount);
       setRegisteredForPush(true);
       log.info('Successfully registered for push notifications');
     } catch (err) {

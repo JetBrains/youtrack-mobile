@@ -28,7 +28,7 @@ import type {
   ServersideSuggestionLegacy,
 } from '../../flow/Issue';
 import type {Folder, User} from '../../flow/User';
-import {ServersideSuggestion} from '../../flow/Issue';
+import type {ServersideSuggestion} from '../../flow/Issue';
 
 class API extends BaseAPI {
   youTrackProjectUrl: string;
@@ -232,6 +232,13 @@ class API extends BaseAPI {
       deviceToken: deviceToken,
     });
   }
+  async unsubscribeFromFCMNotifications(konnectorURL: string, deviceToken: string): Promise<any> {
+    return this.makeAuthorizedRequest(
+      `${konnectorURL}/ring/fcmPushNotifications/unsubscribe`,
+      'POST',
+      {deviceToken: deviceToken}
+    );
+  }
 
   async subscribeToIOSNotifications(konnectorURL: string, youtrackToken: string, deviceToken: string): Promise<string> {
     const url = `${konnectorURL}/ring/pushNotifications`;
@@ -243,6 +250,14 @@ class API extends BaseAPI {
         appleDeviceId: deviceToken,
       }
       );
+  }
+
+  async unsubscribeFromIOSNotifications(konnectorURL: string, deviceToken: string): Promise<any> {
+    return this.makeAuthorizedRequest(
+      `${konnectorURL}/ring/pushNotifications/unsubscribe`,
+      'POST',
+      {deviceToken: deviceToken}
+    );
   }
 
   async getWorkTimeSettings(): Promise<Object> {

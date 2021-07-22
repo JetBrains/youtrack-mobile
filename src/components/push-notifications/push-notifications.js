@@ -1,51 +1,37 @@
 /* @flow */
 
-import PushNotificationsProcessor from './push-notifications-processor';
-import PNHelper from './push-notifications-helper';
-
-import {isUnsupportedFeatureError} from '../error/error-resolver';
 import log from '../log/log';
+import PNHelper from './push-notifications-helper';
+import PushNotificationsProcessor from './push-notifications-processor';
+import {isAndroidPlatform} from '../../util/util';
+import {isUnsupportedFeatureError} from '../error/error-resolver';
 
-import type Api from '../api/api';
 import type {StorageState} from '../storage/storage';
 import type {Token} from '../../flow/Notification';
-
-const componentLogPrefix: string = 'PNotifications';
-
 
 async function getDeviceToken(): Promise<Token> {
   let deviceToken: Token = null;
   try {
     deviceToken = await PushNotificationsProcessor.getDeviceToken();
   } catch (e) {
-    log.warn(`${componentLogPrefix}: cannot retrieve device token from the phone`, e);
+    log.warn(`${PNHelper.logPrefix}cannot retrieve device token from the phone`, e);
   }
   return deviceToken;
 }
 
-async function getYouTrackToken(api: Api): Promise<Token> {
-  let youtrackToken: Token = null;
+async function doSubscribe(youtrackToken: string, deviceToken: string): Promise<void> {
   try {
-    youtrackToken = await PushNotificationsProcessor.getYouTrackToken(api);
-  } catch (e) {
-    log.warn(`${componentLogPrefix}: cannot get YouTrack subscription`, e);
-  }
-  return youtrackToken;
-}
-
-async function doSubscribe(api: Api, youtrackToken: string, deviceToken: string): Promise<void> {
-  try {
-    await PushNotificationsProcessor.subscribe(api, deviceToken, youtrackToken);
-    showSuccessMessage();
+    await PNHelper.subscribe(deviceToken, youtrackToken);
+    if (isAndroidPlatform()) {
+      showSuccessMessage();
+    }
     PNHelper.storeDeviceToken(deviceToken);
   } catch (error) {
     PNHelper.storeDeviceToken(null);
-
     if (isUnsupportedFeatureError(error)) {
-      return log.info(`${componentLogPrefix}: push notifications are not supported in your version of YouTrack`);
+      return log.info(`${PNHelper.logPrefix}push notifications are not supported in your version of YouTrack`);
     }
-
-    log.warn(`${componentLogPrefix}: failed to subscribe`, error);
+    log.warn(`${PNHelper.logPrefix}failed to subscribe`, error);
   }
 
   function showSuccessMessage(): void {
@@ -58,32 +44,31 @@ async function doSubscribe(api: Api, youtrackToken: string, deviceToken: string)
   }
 }
 
-async function register(api: Api): Promise<void> {
+async function register(): Promise<void> {
   const deviceToken: Token = await getDeviceToken();
-
   if (deviceToken) {
-    const youtrackToken: Token = await getYouTrackToken(api);
+    const youtrackToken: Token = await PNHelper.loadYouTrackToken();
     if (youtrackToken) {
-      await doSubscribe(api, youtrackToken, deviceToken);
+      await doSubscribe(youtrackToken, deviceToken);
     }
   }
 }
 
-async function unregister(api: Api): Promise<void> {
+async function unregister(): Promise<void> {
   PNHelper.storeDeviceToken(null);
   const deviceToken: Token = await getDeviceToken();
 
   if (deviceToken) {
-    return await PushNotificationsProcessor.unsubscribe(api, deviceToken);
+    return await PNHelper.unsubscribe(deviceToken);
   }
 }
 
-async function initialize(api: Api, onSwitchAccount: (account: StorageState, issueId: string) => any): Promise<void> {
+async function initialize(onSwitchAccount: (account: StorageState, issueId: string) => any): Promise<void> {
   const deviceToken: Token = await getDeviceToken();
 
   if (PNHelper.isDeviceTokenChanged(deviceToken)) {
-    log.info(`'${componentLogPrefix}'(initialize): device token has changed, re-subscribe`);
-    await register(api);
+    log.info(`'${PNHelper.logPrefix}'(initialize): device token has changed, re-subscribe`);
+    await register();
   }
 
   PushNotificationsProcessor.subscribeOnNotificationOpen(onSwitchAccount);
