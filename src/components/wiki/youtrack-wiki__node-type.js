@@ -32,7 +32,7 @@ const isNodeHasSelector = (node: Object, tag: ?string, className: string): boole
 };
 
 export function nodeHasType(node: Object = {}): NodeType {
-  const types: NodeType = {};
+  const types: NodeType | Object = {};
 
   switch (true) {
   case (node.type === 'text' && node.data === '\n'):
