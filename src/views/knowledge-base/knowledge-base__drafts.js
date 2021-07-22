@@ -22,7 +22,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './knowledge-base.styles';
 
-import type {Article, ArticleDraft, ArticleNode} from '../../flow/Article';
+import type {Article, ArticleDraft} from '../../flow/Article';
 
 
 const KnowledgeBaseDrafts = () => {
@@ -35,7 +35,7 @@ const KnowledgeBaseDrafts = () => {
     updateLoading(true);
     const articleDrafts: Array<ArticleDraft> = await dispatch(loadArticlesDrafts());
     updateLoading(false);
-    updateDrafts(articleDrafts);
+    updateDrafts((articleDrafts: any));
   }, [dispatch]);
 
   const deleteAllDrafts = async () => {
@@ -136,7 +136,7 @@ const KnowledgeBaseDrafts = () => {
           tintColor={styles.link.color}
           onRefresh={loadDrafts}
         />}
-        keyExtractor={(item: ArticleNode, index: number) => item?.id || index}
+        keyExtractor={(item: ArticleDraft, index: number) => item?.id || `${index}`}
         getItemLayout={Select.getItemLayout}
         renderItem={renderArticle}
         ItemSeparatorComponent={Select.renderSeparator}
