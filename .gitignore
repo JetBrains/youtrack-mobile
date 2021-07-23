@@ -27,8 +27,11 @@ google-services.json
 build/
 .idea
 .gradle
+.vscode
 local.properties
 *.iml
+test/teamsysdata
+out*.txt
 
 # node.js
 #
@@ -58,6 +61,3 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
-
-test/teamsysdata
-out*.txt
