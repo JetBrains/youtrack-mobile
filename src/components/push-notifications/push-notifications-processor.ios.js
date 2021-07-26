@@ -48,7 +48,10 @@ export default class PushNotificationsProcessor extends PushNotifications {
           await onSwitchAccount(targetAccount, issueId);
         } else if (issueId) {
           log.info('Push Notification(navigating to):', issueId);
-          Router.Issue({issueId});
+          Router.Issue({
+            issueId,
+            navigateToActivity: !helper.isSummaryOrDescriptionNotification(notification),
+          });
         }
       }
     });

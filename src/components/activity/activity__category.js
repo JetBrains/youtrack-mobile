@@ -1,43 +1,57 @@
 /* @flow */
 
-export const activityCategory = {
-  COMMENT: 'CommentsCategory',
-  COMMENT_TEXT: 'CommentTextCategory',
+export const categoryName = {
+  COMMENT: 'COMMENT',
+  COMMENT_TEXT: 'COMMENT_TEXT',
+  ATTACHMENTS: 'ATTACHMENTS',
+  ATTACHMENT_RENAME: 'ATTACHMENT_RENAME',
+  CUSTOM_FIELD: 'CUSTOM_FIELD',
+  DESCRIPTION: 'DESCRIPTION',
+  LINKS: 'LINKS',
+  ISSUE_CREATED: 'ISSUE_CREATED',
+  ISSUE_RESOLVED: 'ISSUE_RESOLVED',
+  PROJECT: 'PROJECT',
+  PERMITTED_GROUP: 'PERMITTED_GROUP',
+  SPRINT: 'SPRINT',
+  SUMMARY: 'SUMMARY',
+  TAGS: 'TAGS',
+  WORK_ITEM: 'WORK_ITEM',
+  WORK_ITEM_TYPE: 'WORK_ITEM_TYPE',
+  WORK_ITEM_DESCRIPTION: 'WORK_ITEM_DESCRIPTION',
+  WORK_ITEM_USES_MARKDOWN: 'WORK_ITEM_USES_MARKDOWN',
+  WORK_ITEM_DURATION: 'WORK_ITEM_DURATION',
+  WORK_ITEM_DATE: 'WORK_ITEM_DATE',
+  WORK_ITEM_AUTHOR: 'WORK_ITEM_AUTHOR',
+  VOTERS: 'VOTERS',
+  TOTAL_VOTES: 'TOTAL_VOTES',
+  VISIBILITY: 'VISIBILITY',
+};
 
-  ATTACHMENTS: 'AttachmentsCategory',
-  ATTACHMENT_RENAME: 'AttachmentRenameCategory',
-
-  CUSTOM_FIELD: 'CustomFieldCategory',
-
-  DESCRIPTION: 'DescriptionCategory',
-
-  LINKS: 'LinksCategory',
-
-  ISSUE_CREATED: 'IssueCreatedCategory',
-  ISSUE_RESOLVED: 'IssueResolvedCategory',
-
-  PROJECT: 'ProjectCategory',
-
-  PERMITTED_GROUP: 'PermittedGroupCategory',
-
-  SPRINT: 'SprintCategory',
-
-  SUMMARY: 'SummaryCategory',
-
-  TAGS: 'TagsCategory',
-
-  WORK_ITEM: 'WorkItemCategory',
-  WORK_ITEM_TYPE: 'WorkItemTypeCategory',
-  WORK_ITEM_DESCRIPTION: 'WorkItemDescriptionCategory',
-  WORK_ITEM_USES_MARKDOWN: 'WorkItemUsesMarkdownCategory',
-  WORK_ITEM_DURATION: 'WorkItemDurationCategory',
-  WORK_ITEM_DATE: 'WorkItemDateCategory',
-  WORK_ITEM_AUTHOR: 'WorkItemAuthorCategory',
-
-  VOTERS: 'VotersCategory',
-  TOTAL_VOTES: 'TotalVotesCategory',
-
-  VISIBILITY: 'PermittedGroupCategory',
+export const activityCategory: Object = {
+  [categoryName.COMMENT]: 'CommentsCategory',
+  [categoryName.COMMENT_TEXT]: 'CommentTextCategory',
+  [categoryName.ATTACHMENTS]: 'AttachmentsCategory',
+  [categoryName.ATTACHMENT_RENAME]: 'AttachmentRenameCategory',
+  [categoryName.CUSTOM_FIELD]: 'CustomFieldCategory',
+  [categoryName.DESCRIPTION]: 'DescriptionCategory',
+  [categoryName.LINKS]: 'LinksCategory',
+  [categoryName.ISSUE_CREATED]: 'IssueCreatedCategory',
+  [categoryName.ISSUE_RESOLVED]: 'IssueResolvedCategory',
+  [categoryName.PROJECT]: 'ProjectCategory',
+  [categoryName.PERMITTED_GROUP]: 'PermittedGroupCategory',
+  [categoryName.SPRINT]: 'SprintCategory',
+  [categoryName.SUMMARY]: 'SummaryCategory',
+  [categoryName.TAGS]: 'TagsCategory',
+  [categoryName.WORK_ITEM]: 'WorkItemCategory',
+  [categoryName.WORK_ITEM_TYPE]: 'WorkItemTypeCategory',
+  [categoryName.WORK_ITEM_DESCRIPTION]: 'WorkItemDescriptionCategory',
+  [categoryName.WORK_ITEM_USES_MARKDOWN]: 'WorkItemUsesMarkdownCategory',
+  [categoryName.WORK_ITEM_DURATION]: 'WorkItemDurationCategory',
+  [categoryName.WORK_ITEM_DATE]: 'WorkItemDateCategory',
+  [categoryName.WORK_ITEM_AUTHOR]: 'WorkItemAuthorCategory',
+  [categoryName.VOTERS]: 'VotersCategory',
+  [categoryName.TOTAL_VOTES]: 'TotalVotesCategory',
+  [categoryName.VISIBILITY]: 'PermittedGroupCategory',
 };
 
 export const activityArticleCategory = {

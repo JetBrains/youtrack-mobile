@@ -2,6 +2,7 @@ import * as API from '../api/api__instance';
 import * as storage from '../storage/storage';
 import * as util from '../../util/util';
 import helper from './push-notifications-helper';
+import {categoryName} from '../activity/activity__category';
 import {mockEventsRegistry} from '../../../test/jest-mock__react-native-notifications';
 import {UNSUPPORTED_ERRORS} from '../error/error-messages';
 
@@ -238,5 +239,54 @@ describe('push-notifications-helper', () => {
 
       expect(helper.getStoredDeviceToken()).toEqual(mockEventsRegistry.deviceTokenMock);
     });
+  });
+
+
+  describe('isSummaryOrDescriptionNotification', () => {
+    it('should return FALSE if no `data` or `payload` provided', () => {
+      expect(helper.isSummaryOrDescriptionNotification()).toEqual(false);
+    });
+
+    it('should return FALSE if there is no any category', () => {
+      expect(helper.isSummaryOrDescriptionNotification({})).toEqual(false);
+    });
+
+    it('should return FALSE if it is not summary or description category', () => {
+      expect(helper.isSummaryOrDescriptionNotification({
+        categories: categoryName.CUSTOM_FIELD,
+      })).toEqual(false);
+    });
+
+    it('should return TRUE if it is a summary category', () => {
+      expect(helper.isSummaryOrDescriptionNotification({
+        categories: categoryName.SUMMARY,
+      })).toEqual(true);
+    });
+
+    it('should return TRUE if it is a description category', () => {
+      expect(helper.isSummaryOrDescriptionNotification({
+        categories: categoryName.DESCRIPTION,
+      })).toEqual(true);
+    });
+
+    it('should return TRUE if the first category is a description one', () => {
+      expect(helper.isSummaryOrDescriptionNotification({
+        categories: `${categoryName.DESCRIPTION},${categoryName.CUSTOM_FIELD}`,
+      })).toEqual(true);
+    });
+
+    it('should return TRUE if the first category is a summary one', () => {
+      expect(helper.isSummaryOrDescriptionNotification({
+        categories: `${categoryName.SUMMARY},${categoryName.CUSTOM_FIELD}`,
+      })).toEqual(true);
+    });
+
+    it('should return FALSE if the first category is not a description or summary', () => {
+      expect(helper.isSummaryOrDescriptionNotification({
+        categories: `${categoryName.CUSTOM_FIELD},${categoryName.DESCRIPTION},${categoryName.LINKS}`,
+      })).toEqual(false);
+    });
+
+
   });
 });

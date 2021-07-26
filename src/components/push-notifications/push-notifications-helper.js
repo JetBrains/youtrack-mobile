@@ -4,6 +4,7 @@ import {Alert} from 'react-native';
 
 import appPackage from '../../../package.json';
 import log from '../log/log';
+import {categoryName} from '../activity/activity__category';
 import {flushStoragePart, getStorageState} from '../storage/storage';
 import {getApi} from '../api/api__instance';
 import {isAndroidPlatform} from '../../util/util';
@@ -84,6 +85,23 @@ function getIssueId(notification: Object): ?string {
   );
 }
 
+function isSummaryOrDescriptionNotification(notification: Object): boolean {
+  const categories: Array<string> = (
+    notification?.categories ||
+    notification?.data?.categories ||
+    notification?.payload?.categories ||
+    ''
+  ).split(',');
+  if (categories.length === 0 || !categories[0]) {
+    return false;
+  }
+  const categoryId: string = categories[0].toLowerCase();
+  return (
+     categoryId === categoryName.DESCRIPTION.toLowerCase() ||
+     categoryId === categoryName.SUMMARY.toLowerCase()
+   );
+}
+
 function composeError(error: CustomError): Error {
   let err: Error = error;
   if ([400, 404, 405].includes(error?.status)) {
@@ -160,4 +178,5 @@ export default {
   logPrefix,
   KONNECTOR_URL,
   composeError,
+  isSummaryOrDescriptionNotification,
 };
