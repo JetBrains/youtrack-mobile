@@ -9,7 +9,7 @@ import debounce from 'lodash.debounce';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import {useDispatch} from 'react-redux';
 
-import AttachFileDialogStateful from '../attach-file/attach-file-dialog-stateful';
+import AttachFileDialog from '../attach-file/attach-file-dialog';
 import AttachmentAddPanel from '../attachments-row/attachments-add-panel';
 import AttachmentsRow from '../attachments-row/attachments-row';
 import Header from '../header/header';
@@ -265,7 +265,7 @@ const IssueCommentEdit = (props: Props) => {
 
   const renderAttachFileDialog = () => {
     return (
-      <AttachFileDialogStateful
+      <AttachFileDialog
         hideVisibility={true}
         getVisibilityOptions={props.getVisibilityOptions}
         actions={{

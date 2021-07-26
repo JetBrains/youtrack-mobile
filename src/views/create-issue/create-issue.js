@@ -7,7 +7,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as createIssueActions from './create-issue-actions';
-import AttachFileDialogStateful from '../../components/attach-file/attach-file-dialog-stateful';
+import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
@@ -70,7 +70,7 @@ class CreateIssue extends Component<Props, State> {
     hideAddAttachDialog();
   };
 
-  renderAttachFileDialog = (): React$Element<typeof AttachFileDialogStateful> | null => {
+  renderAttachFileDialog = (): React$Element<typeof AttachFileDialog> | null => {
     const {issue} = this.props;
 
     if (!issue || !issue.id) {
@@ -78,7 +78,7 @@ class CreateIssue extends Component<Props, State> {
     }
 
     return (
-      <AttachFileDialogStateful
+      <AttachFileDialog
         getVisibilityOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
         actions={{
           onAttach: this.onAddAttachment,

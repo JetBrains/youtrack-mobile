@@ -7,7 +7,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as issueActions from './issue-actions';
-import AttachFileDialogStateful from '../../components/attach-file/attach-file-dialog-stateful';
+import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 import ColorField from '../../components/color-field/color-field';
 import CommandDialog from '../../components/command-dialog/command-dialog';
 import ErrorMessage from '../../components/error-message/error-message';
@@ -348,8 +348,8 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     />;
   }
 
-  renderAttachFileDialog = (): React$Element<typeof AttachFileDialogStateful> => (
-    <AttachFileDialogStateful
+  renderAttachFileDialog = (): React$Element<typeof AttachFileDialog> => (
+    <AttachFileDialog
       hideVisibility={false}
       getVisibilityOptions={() => getApi().issue.getVisibilityOptions(this.props.issueId)}
       actions={{

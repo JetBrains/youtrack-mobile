@@ -7,7 +7,7 @@ import {useDebouncedCallback} from 'use-debounce';
 import {useDispatch, useSelector} from 'react-redux';
 
 import * as articleCreateActions from './arcticle-create-actions';
-import AttachFileDialogStateful from '../../components/attach-file/attach-file-dialog-stateful';
+import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
 import Badge from '../../components/badge/badge';
@@ -185,13 +185,13 @@ const ArticleCreate = (props: Props) => {
     dispatch(articleCreateActions.loadAttachments());
   };
 
-  const renderAttachFileDialog = (): React$Element<typeof AttachFileDialogStateful> | null => {
+  const renderAttachFileDialog = (): React$Element<typeof AttachFileDialog> | null => {
     if (!articleDraft) {
       return null;
     }
 
     return (
-      <AttachFileDialogStateful
+      <AttachFileDialog
         hideVisibility={true}
         getVisibilityOptions={() => getApi().articles.getVisibilityOptions(articleDraft.id)}
         actions={{

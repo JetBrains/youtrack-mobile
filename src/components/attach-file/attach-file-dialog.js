@@ -20,7 +20,7 @@ import {logEvent} from '../log/log-helper';
 import {notify} from '../notification/notification';
 import {ThemeContext} from '../theme/theme-context';
 
-import styles from './attach-file-modal.styles';
+import styles from './attach-file-dialog.styles';
 
 import type {ActionSheetAction} from '../../flow/Action';
 import type {Attachment, ImageDimensions} from '../../flow/CustomFields';
@@ -64,7 +64,7 @@ type Props = {
 };
 
 
-const AttachFileDialogStateful = (props: Props): React$Element<typeof ModalView> => {
+const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
   usage.trackScreenView('Attach file modal');
 
   const theme: Theme = useContext(ThemeContext);
@@ -229,4 +229,4 @@ const AttachFileDialogStateful = (props: Props): React$Element<typeof ModalView>
   );
 };
 
-export default (React.memo<Props>(AttachFileDialogStateful): React$AbstractComponent<Props, mixed>);
+export default (React.memo<Props>(AttachFileDialog): React$AbstractComponent<Props, mixed>);
