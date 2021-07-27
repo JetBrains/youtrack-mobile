@@ -166,11 +166,9 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
     >
       <Header
         leftButton={
-          <IconClose size={21} color={isAttaching ? styles.disabled.color : styles.link.color}/>
+          <IconClose size={21} color={styles.link.color}/>
         }
-        onBack={() => {
-          !isAttaching && props.actions.onCancel();
-        }}
+        onBack={props.actions.onCancel}
         rightButton={(
           isAttaching ? <ActivityIndicator color={styles.link.color}/> :
             <IconCheck size={20} color={attach ? styles.link.color : styles.disabled.color}/>
