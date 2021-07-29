@@ -49,4 +49,8 @@ module.exports = {
     'jest/globals': true,
     'jasmine': true,
   },
+
+  'globals': {
+    'AbortController': true,
+  },
 };

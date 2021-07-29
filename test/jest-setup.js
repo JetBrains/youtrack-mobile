@@ -67,3 +67,8 @@ NativeModules.RNEncryptedStorage = {
   getItem: jest.fn(() => Promise.resolve()),
   setItem: jest.fn(() => Promise.resolve()),
 };
+
+global.AbortController = jest.fn().mockReturnValue({
+  signal: {},
+  abort: jest.fn(),
+});

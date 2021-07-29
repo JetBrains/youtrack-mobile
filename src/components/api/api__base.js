@@ -1,20 +1,22 @@
 /* @flow */
+
+import ApiHelper from './api__helper';
 import log from '../log/log';
+import qs from 'qs';
+import {HTTP_STATUS} from '../error/error-http-codes';
+import {fetch2, requestController} from './api__request-controller';
+import {routeMap} from '../../app-routes';
+
 import type Auth from '../auth/auth';
 import type {AppConfigFilled} from '../../flow/AppConfig';
-import qs from 'qs';
-import ApiHelper from './api__helper';
-import {HTTP_STATUS} from '../error/error-http-codes';
-
 
 const MAX_QUERY_LENGTH = 2048;
 
 type RequestOptions = {
-  parseJson: boolean
-};
-
-const defaultRequestOptions: RequestOptions = {
-  parseJson: true,
+  controller?: {
+    [$Keys<typeof routeMap>]: AbortController,
+  },
+  parseJson?: boolean,
 };
 
 function updateQueryStringParameter(uri, key, value) {
@@ -47,6 +49,7 @@ function assertLongQuery(url: string) {
   }
 }
 
+requestController.init();
 
 export default class BaseAPI {
   auth: Auth;
@@ -74,21 +77,28 @@ export default class BaseAPI {
     );
   }
 
-  async makeAuthorizedRequest(url: string, method: ?string, body: ?Object, options: RequestOptions = defaultRequestOptions): Promise<any> {
+  async makeAuthorizedRequest(
+    url: string,
+    method: ?string,
+    body: ?Object,
+    options: RequestOptions = {parseJson: true},
+  ): Promise<any> {
     url = patchTopParam(url);
     log.debug(`"${method || 'GET'}" to ${url}${body ? ` with body |${JSON.stringify(body)}|` : ''}`);
     assertLongQuery(url);
 
     const sendRequest = async () => {
-      return await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json, text/plain, */*',
-          ...this.auth.getAuthorizationHeaders(),
+      return await fetch2(url, {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json, text/plain, */*',
+            ...this.auth.getAuthorizationHeaders(),
+          },
+          body: JSON.stringify(body),
         },
-        body: JSON.stringify(body),
-      });
+        options.controller
+      );
     };
 
     let response = await sendRequest();
@@ -103,7 +113,7 @@ export default class BaseAPI {
       throw response;
     }
 
-    if (!options.parseJson) {
+    if (options.parseJson === false) {
       return response;
     }
 
