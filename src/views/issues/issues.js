@@ -33,6 +33,7 @@ import {initialState} from './issues-reducers';
 import {isReactElement} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
 import {notifyError} from '../../components/notification/notification';
+import {requestController} from '../../components/api/api__request-controller';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -77,8 +78,15 @@ export class Issues extends Component<Props, State> {
     this.props.initializeIssuesList(this.props.initialSearchQuery);
 
     this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
+      if (prevRouteName === routeMap.Issues && routeName !== routeMap.Issues) {
+        requestController.cancelIssuesRequests();
+      }
+
       if (routeName === routeMap.Issues && prevRouteName === routeMap.Issue && options?.issueId) {
         this.props.updateIssue(options.issueId);
+        if (this.props.issuesCount === null) {
+          this.props.refreshIssuesCount();
+        }
       }
     });
   }

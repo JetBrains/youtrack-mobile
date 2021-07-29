@@ -305,6 +305,14 @@ export function refreshIssues(): (dispatch: (any) => any, getState: () => any) =
 
     dispatch(setIssuesCount(null));
     dispatch(loadIssues(searchQuery));
+    dispatch(refreshIssuesCount());
+  };
+}
+
+export function refreshIssuesCount(): (dispatch: (any) => any, getState: () => any) => Promise<void> {
+  return async (dispatch: (any) => any, getState: () => Object): Promise<void> => {
+    const userQuery: string = getState().issueList.query;
+    const searchQuery: string = await dispatch(getSearchQuery(userQuery));
     dispatch(loadIssuesCount(searchQuery, getSearchContext()));
   };
 }
@@ -370,7 +378,20 @@ export function loadIssuesCount(query: ?string, folder: ?Folder): ((
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
-    const count = await api.issues.getIssuesCount(query, folder);
-    dispatch(setIssuesCount(count));
+    const abortController: AbortController = new AbortController();
+    const issuesCount: number = await api.issues.getIssuesCount(query, folder, false, abortController);
+    if (issuesCount === -1 && !abortController.signal.aborted) {
+      return new Promise((resolve, reject) => {
+        let timer: ?TimeoutID = setTimeout(resolve, 3000);
+        abortController.signal.onabort = () => {
+          reject();
+          clearTimeout(timer);
+          timer = null;
+        };
+      }).then(() => dispatch(loadIssuesCount(query, folder)));
+    }
+    if (issuesCount >= 0) {
+      dispatch(setIssuesCount(issuesCount));
+    }
   };
 }

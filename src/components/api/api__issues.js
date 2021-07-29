@@ -6,11 +6,10 @@ import ApiBase from './api__base';
 import ApiHelper from './api__helper';
 import issueFields from './api__issue-fields';
 import {checkVersion} from '../feature/feature';
+import {routeMap} from '../../app-routes';
 
 import type {IssueOnList} from '../../flow/Issue';
 import type {Folder} from '../../flow/User';
-
-const REQUEST_INTERVAL_DELAY: number = 3000;
 
 export default class IssuesAPI extends ApiBase {
   async getIssues(query: string = '', $top: number, $skip: number = 0): Promise<Array<IssueOnList>> {
@@ -23,37 +22,60 @@ export default class IssuesAPI extends ApiBase {
     return ApiHelper.patchAllRelativeAvatarUrls(issues, this.config.backendUrl);
   }
 
-  async getIssuesCount(query: string | null = null, folder: ?Folder, unresolvedOnly: boolean = false): Promise<number> {
+  async getIssuesCount(
+    query: string | null = null,
+    folder: ?Folder,
+    unresolvedOnly: boolean = false,
+    abortController: AbortController,
+  ): Promise<number> {
     const isActualVersion: boolean = checkVersion('2020.1');
     type Count = 'count' | 'value';
     const fieldName: Count = isActualVersion ? 'count' : 'value'; //API version specific
 
     const response: { [fieldName: Count]: number } = await (
-      isActualVersion ? this.issuesCount(query, folder, unresolvedOnly) : this.issuesCountLegacy(query)
+      isActualVersion
+        ? this.issuesCount(query, folder, unresolvedOnly, abortController)
+        : this.issuesCountLegacy(query, abortController)
     );
-
-    if (response[fieldName] === -1) {
-      return new Promise(resolve => setTimeout(resolve, REQUEST_INTERVAL_DELAY))
-        .then(() => this.getIssuesCount(query, folder, unresolvedOnly));
-    }
     return response[fieldName];
   }
 
-  issuesCountLegacy(query: string | null): Promise<number> {
+  issuesCountLegacy(query: string | null, abortController: AbortController): Promise<number> {
     const queryString = qs.stringify({sync: false, filter: query});
     const url = `${this.youTrackUrl}/rest/issue/count?${queryString}`;
-    return this.makeAuthorizedRequest(url);
+    return this.makeAuthorizedRequest(
+      url,
+      null,
+      null, {
+        controller: {
+          [routeMap.Issues]: abortController,
+        },
+      }
+    );
   }
 
-  issuesCount(query: string | null = null, folder: ?Folder, unresolvedOnly: boolean = false): Promise<number> {
+  /*
+  * @since 2019.1.51759
+   */
+  issuesCount(
+    query: string | null = null,
+    folder: ?Folder,
+    unresolvedOnly: boolean = false,
+    abortController: AbortController,
+  ): Promise<number> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/issuesGetter/count?fields=count`, //`issuesGetter/count` introduced in 2019.1.51759
+      `${this.youTrackApiUrl}/issuesGetter/count?fields=count`,
       'POST',
       {
         folder: folder?.id ? {$type: folder.$type, id: folder.id} : null,
         query: query ? query.trim() : null,
         unresolvedOnly,
-      }
+      },
+      {
+        controller: {
+          [routeMap.Issues]: abortController,
+        },
+      },
     );
   }
 }

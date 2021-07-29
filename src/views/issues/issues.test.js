@@ -173,7 +173,7 @@ describe('Issue list actions', () => {
       });
     });
 
-    it('should retrieve issues count', async () => {
+    it('should load issues count', async () => {
       apiMock.issues = {
         getIssuesCount: jest.fn(),
       };
@@ -181,7 +181,12 @@ describe('Issue list actions', () => {
       const folderMock = {id: 'contextId'};
       await actions.loadIssuesCount(issueContextQueryMock, folderMock)(dispatch, () => stateMock, () => apiMock);
 
-      expect(apiMock.issues.getIssuesCount).toHaveBeenCalledWith(issueContextQueryMock, folderMock);
+      expect(apiMock.issues.getIssuesCount).toHaveBeenCalledWith(
+        issueContextQueryMock,
+        folderMock,
+        false,
+        expect.anything()
+      );
     });
   });
 });
