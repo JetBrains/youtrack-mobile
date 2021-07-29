@@ -5,7 +5,7 @@
 import DiffMatchPatch from 'diff-match-patch';
 
 class DiffMatchWord {
-  dmp: DiffMatchPatch;
+  dmp: typeof DiffMatchPatch;
   diffPatchType: {DIFF_DELETE: any, DIFF_EQUAL: any, DIFF_INSERT: any} = {
     DIFF_INSERT: DiffMatchPatch.DIFF_INSERT,
     DIFF_DELETE: DiffMatchPatch.DIFF_DELETE,
