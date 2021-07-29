@@ -31,19 +31,19 @@ export default class CustomField extends Component<Props, void> {
     return field.projectCustomField.field.fieldType.valueType;
   }
 
-  _getValue(value: FieldValue, fieldType: ?string): string {
+  _getValue(value: ?FieldValue, fieldType: ?string): ?string {
     const field: CustomFieldType = this.props.field;
-    const emptyValue = field.projectCustomField.emptyFieldText;
+    const emptyValue: ?string = field.projectCustomField.emptyFieldText;
 
     if (value) {
       if (fieldType === 'date') {
-        return ytDate(value, true);
+        return ytDate(((value: any): number), true);
       }
       if (fieldType === 'date and time') {
-        return ytDate(value);
+        return ytDate(((value: any): Date));
       }
       if (fieldType === 'integer' || fieldType === 'string' || fieldType === 'float') {
-        return value;
+        return ((value: any): string);
       }
       return getEntityPresentation(value);
     }
@@ -81,13 +81,16 @@ export default class CustomField extends Component<Props, void> {
     ];
 
     const render = (val: Object | null) => {
+      const valuePresentation: string = this._getValue(val, fieldType) || '';
       return (
         <View
           style={styles.value}
           key="value"
         >
           {val && fieldType === 'user' ? this.renderAvatar(val) : null}
-          <Text testID="value" style={textStyle}>{this._getValue(val, fieldType)}</Text>
+          <Text testID="value" style={textStyle}>{
+            valuePresentation?.length > 203 ? `${valuePresentation.substr(0, 200)}...` : valuePresentation
+          }</Text>
         </View>
       );
     };
@@ -119,7 +122,7 @@ export default class CustomField extends Component<Props, void> {
         key={user.id}
         userName={getEntityPresentation(user)}
         size={20}
-        source={{uri: user.avatarUrl}}
+        source={{uri: ((user.avatarUrl: any): string)}}
       />
     );
   }
@@ -142,7 +145,7 @@ export default class CustomField extends Component<Props, void> {
         </View>
 
         <View style={styles.valuesWrapper}>
-          {this._renderColorMaker(field.value)}
+          {this._renderColorMaker(((field.value: any): FieldValue))}
           {this._renderValue(field.value, this._getFieldType(field))}
         </View>
 
