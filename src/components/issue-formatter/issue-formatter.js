@@ -113,7 +113,7 @@ function getAssigneeField(issue: AnyIssue): ?CustomField {
 }
 
 function getReadableID(issue: AnyIssue): string {
-  return issue && (issue.idReadable || issue.id) || '';
+  return !!issue && (issue.idReadable || issue.id) || '';
 }
 
 function getEntityPresentation(entity: Object): any | string {
