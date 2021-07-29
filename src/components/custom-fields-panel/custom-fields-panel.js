@@ -465,6 +465,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
         <View style={styles.customFieldSimpleEditor}>
           <TextInput
+            multiline
             style={styles.simpleValueInput}
             placeholder={simpleValue.placeholder}
             placeholderTextColor={uiTheme.colors.$icon}
