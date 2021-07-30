@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import {View, TextInput} from 'react-native';
 
 import once from 'lodash.once';
-import debounce from 'lodash.debounce';
+import throttle from 'lodash.throttle';
 
 import TextEditForm from './text-edit-form';
 import usage from '../usage/usage';
@@ -38,12 +38,12 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
   trackSummaryChange: any = once(() => this.trackChange('Summary updated'));
   trackDescriptionChange: any = once(() => this.trackChange('Description updated'));
 
-  onSummaryChange: any = debounce((text: string) => {
+  onSummaryChange: any = throttle((text: string) => {
     this.trackSummaryChange();
     return this.props.onSummaryChange(text);
   }, DELAY);
 
-  onDescriptionChange: any = debounce((text: string) => {
+  onDescriptionChange: any = throttle((text: string) => {
     this.trackDescriptionChange();
     return this.props.onDescriptionChange(text);
   }, DELAY);

@@ -81,6 +81,7 @@
     "jetifier": "^1.6.6",
     "lodash.debounce": "^4.0.8",
     "lodash.once": "^4.1.1",
+    "lodash.throttle": "^4.1.1",
     "markdown-it-checkbox": "anisimov74/markdown-it-checkbox.git#5f35851",
     "object-walk": "^0.1.1",
     "performant-array-to-tree": "^1.8.1",

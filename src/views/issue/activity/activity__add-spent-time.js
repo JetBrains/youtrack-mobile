@@ -3,7 +3,7 @@
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
-import debounce from 'lodash.debounce';
+import throttle from 'lodash.throttle';
 import InputScrollView from 'react-native-input-scroll-view';
 
 import * as issueActivityItems from './issue-activity__actions';
@@ -82,7 +82,7 @@ const AddSpentTimeForm = (props: Props) => {
     }
   };
 
-  const debouncedUpdate = debounce(updateDraft, 350);
+  const delayedUpdate = throttle(updateDraft, 300);
 
   useEffect(() => {
     if (props.workItem) {
@@ -116,7 +116,7 @@ const AddSpentTimeForm = (props: Props) => {
     };
     updateDraftWorkItem(updatedDraft);
     if (!props.workItem) {
-      debouncedUpdate(updatedDraft);
+      delayedUpdate(updatedDraft);
     }
   };
 
