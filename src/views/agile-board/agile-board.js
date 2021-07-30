@@ -269,7 +269,7 @@ class AgileBoard extends Component<Props, State> {
     const {zoomedIn} = this.state;
     return (
       <View style={styles.boardHeaderContainer}>
-        {this.props.sprint && <BoardHeader
+        {!!this.props.sprint && <BoardHeader
           ref={this.boardHeaderRef}
           style={{minWidth: zoomedIn ? this._getScrollableWidth() : null}}
           columns={this.props.sprint.board?.columns}
@@ -301,16 +301,16 @@ class AgileBoard extends Component<Props, State> {
   }
 
   getAgileError(): string | null {
-    const errors: Array<?string> = this.props.agile?.status?.errors || [];
+    const errors: Array<string> = this.props.agile?.status?.errors || [];
     return errors.length > 0 ? errors.join('\n') : null;
   }
 
   renderErrors() {
-    const error: CustomError | null = this.props.error;
+    const error: ?CustomError = this.props.error;
     const agileErrors: string | null = this.getAgileError();
 
     if (error) {
-      return <ErrorMessage style={styles.error} error={this.props.error}/>;
+      return <ErrorMessage style={styles.error} error={error}/>;
     }
 
     if (agileErrors) {

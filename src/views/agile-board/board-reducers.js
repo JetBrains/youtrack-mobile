@@ -31,7 +31,7 @@ export type AgilePageState = {
   sprint?: SprintFull,
   selectProps: Object,
   agile: ?Board,
-  error?: CustomError | null,
+  error?: CustomError & {noAgiles: boolean} | null,
   queryAssistSuggestions: Array<ServersideSuggestion>
 };
 

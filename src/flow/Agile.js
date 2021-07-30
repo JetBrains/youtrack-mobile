@@ -69,8 +69,12 @@ export type Board = {
   sprints: Array<Sprint>,
   status: {
     valid: boolean,
-    error: Array<string>
-  }
+    errors?: Array<string>
+  },
+  sprintsSettings: {
+    disableSprints: boolean,
+  },
+  hideOrphansSwimlane: boolean,
 };
 
 export type BoardOnList = {
