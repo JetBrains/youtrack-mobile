@@ -49,7 +49,6 @@ type Props = AgilePageState & {
   auth: Auth,
   api: Api,
   isLoadingMore: boolean,
-  noMoreSwimlanes: boolean,
   sprint: ?SprintFull,
   isSprintSelectOpen: boolean,
   selectProps: Object,

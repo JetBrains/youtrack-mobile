@@ -50,7 +50,7 @@ export type AgileBoardRow = {
   id: string,
   name: string,
   collapsed: boolean,
-  issue: ?IssueOnList,
+  issue: IssueOnList,
   cells: Array<BoardCell>
 };
 

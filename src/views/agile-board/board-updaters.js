@@ -5,7 +5,6 @@ import {notify} from '../../components/notification/notification';
 
 import type {BoardCell, AgileBoardRow, Board, AgileColumn} from '../../flow/Agile';
 import type {IssueOnList, IssueFull} from '../../flow/Issue';
-import type {Sprint, BoardColumn} from '../../flow/Agile';
 
 export function updateRowCollapsedState(
   board: Board,
@@ -74,21 +73,20 @@ export function addCardToBoard(
   };
 }
 
-function fillIssueFromAnotherIssue(issue: IssueOnList, sourceIssue: IssueFull) {
-  return Object.keys(issue).
-    reduce((updated, key) => {
-      return {...updated, [key]: sourceIssue[key]};
-    }, {});
+function fillIssueFromAnotherIssue(issue: IssueOnList, sourceIssue: IssueFull): IssueOnList {
+  return Object.keys(issue).reduce((updated: IssueOnList, key: string) => {
+    return {...updated, [key]: sourceIssue[key]};
+  }, {});
 }
 
 export function findIssueOnBoard(board: Board, issueId: string): ?{cell: BoardCell, row: AgileBoardRow, issue: IssueOnList, column: AgileColumn} {
-  const rows = [...board.trimmedSwimlanes, board.orphanRow];
+  const rows: Array<AgileBoardRow> = [...board.trimmedSwimlanes, board.orphanRow];
 
   for (const rowIndex in rows) {
-    const row = rows[rowIndex];
+    const row: AgileBoardRow = rows[rowIndex];
 
     for (const cellIndex in row.cells) {
-      const cell = row.cells[cellIndex];
+      const cell: BoardCell = row.cells[cellIndex];
       const foundIssue = cell.issues.filter(issue => issue.id === issueId)[0];
 
       if (foundIssue) {
@@ -114,7 +112,7 @@ function removeAllSwimlaneCardsFromBoard(board: Board, swimlane: AgileBoardRow) 
 }
 
 export function updateCardOnBoard(board: Board, sourceIssue: IssueFull): Board {
-  function updateIssueInRowIfNeeded(row: AgileBoardRow) {
+  function updateIssueInRowIfNeeded(row: AgileBoardRow): AgileBoardRow {
     return {
       ...row,
       issue: row.issue && row.issue.id === sourceIssue?.id ? fillIssueFromAnotherIssue(row.issue, sourceIssue) : row.issue,
@@ -162,9 +160,13 @@ export function removeIssueFromBoard(board: Board, issueId: string): Board {
   };
 }
 
-function reorderCollection(colection: Array<{id: string}>, leadingId: ?string, movedId: string) {
-  const moved = colection.filter(s => s.id === movedId)[0];
-  const updated = colection.filter(s => s !== moved);
+function reorderCollection(
+  collection: Array<IssueOnList | AgileBoardRow>,
+  leadingId: ?string,
+  movedId: string
+): Array<IssueOnList | AgileBoardRow> {
+  const moved = collection.filter((s: IssueOnList | AgileBoardRow) => s.id === movedId)[0];
+  const updated = collection.filter((s: IssueOnList | AgileBoardRow) => s !== moved);
   const leadingIndex = updated.findIndex(s => s.id === leadingId);
   updated.splice(leadingIndex + 1, 0, moved);
   return updated;
@@ -173,45 +175,11 @@ function reorderCollection(colection: Array<{id: string}>, leadingId: ?string, m
 function reorderCardsInRow(row: AgileBoardRow, leadingId: ?string, movedId: string) {
   return {
     ...row,
-    cells: updateCellsIssuesIfNeeded(row.cells, movedId, issues => reorderCollection(issues, leadingId, movedId)),
+    cells: updateCellsIssuesIfNeeded(row.cells, movedId, (issues: Array<IssueOnList>) => reorderCollection(issues, leadingId, movedId)),
   };
 }
 
-export function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId: string):
-  | {
-    columns: Array<BoardColumn>,
-    id: string,
-    name: string,
-    orphanRow: AgileBoardRow,
-    sprints: Array<Sprint>,
-    status: {error: Array<string>, valid: boolean},
-    trimmedSwimlanes: Array<{id: string}>,
-  }
-  | {
-    columns: Array<BoardColumn>,
-    id: string,
-    name: string,
-    orphanRow: {
-      $type: string,
-      cells: Array<BoardCell>,
-      collapsed: boolean,
-      id: string,
-      issue: ?IssueOnList,
-      name: string,
-    },
-    sprints: Array<Sprint>,
-    status: {error: Array<string>, valid: boolean},
-    trimmedSwimlanes: Array<
-      {
-        $type: string,
-        cells: Array<BoardCell>,
-        collapsed: boolean,
-        id: string,
-        issue: ?IssueOnList,
-        name: string,
-      },
-    >,
-  } {
+export function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId: string): Board {
   const isSwimlane = board.trimmedSwimlanes.some(
     (row: AgileBoardRow) => row.id === movedId
   );
@@ -227,17 +195,7 @@ export function reorderEntitiesOnBoard(board: Board, leadingId: ?string, movedId
   };
 }
 
-export function addOrUpdateCell(board: Board, issue: IssueOnList, rowId: string, columnId: string):
-  | Board
-  | {
-    columns: Array<BoardColumn>,
-    id: string,
-    name: string,
-    orphanRow: AgileBoardRow,
-    sprints: Array<Sprint>,
-    status: {error: Array<string>, valid: boolean},
-    trimmedSwimlanes: Array<AgileBoardRow>,
-  } {
+export function addOrUpdateCell(board: Board, issue: IssueOnList, rowId: string, columnId: string): Board {
   board = removeSwimlaneFromBoard(board, issue.id); // Swimlane could be turn into card
 
   const targetRow = [board.orphanRow, ...board.trimmedSwimlanes].filter(row => row.id === rowId)[0];
@@ -269,36 +227,7 @@ export function addOrUpdateCell(board: Board, issue: IssueOnList, rowId: string,
   return addCardToBoard(board, targetCell.id, issue);
 }
 
-export function updateSwimlane(board: Board, swimlane: AgileBoardRow):
-  | {
-    columns: Array<BoardColumn>,
-    id: string,
-    name: string,
-    orphanRow: AgileBoardRow,
-    sprints: Array<Sprint>,
-    status: {error: Array<string>, valid: boolean},
-    trimmedSwimlanes: Array<AgileBoardRow>,
-  }
-  | {
-    columns: Array<BoardColumn>,
-    id: string,
-    name: string,
-    orphanRow: AgileBoardRow,
-    sprints: Array<Sprint>,
-    status: {error: Array<string>, valid: boolean},
-    trimmedSwimlanes: Array<
-
-        | AgileBoardRow
-        | {
-          $type: string,
-          cells: Array<BoardCell>,
-          collapsed: boolean,
-          id: string,
-          issue: ?IssueOnList,
-          name: string,
-        },
-    >,
-  } {
+export function updateSwimlane(board: Board, swimlane: AgileBoardRow): Board {
   const swimlaneToUpdate = board.trimmedSwimlanes.filter(row => row.id === swimlane.id)[0];
 
   if (swimlaneToUpdate) {
@@ -319,42 +248,7 @@ export function updateSwimlane(board: Board, swimlane: AgileBoardRow):
   }
 }
 
-export function moveIssueOnBoard(board: Board, movedId: string, cellId: string, leadingId: ?string):
-  | void
-  | {
-    columns: Array<BoardColumn>,
-    id: string,
-    name: string,
-    orphanRow: AgileBoardRow,
-    sprints: Array<Sprint>,
-    status: {error: Array<string>, valid: boolean},
-    trimmedSwimlanes: Array<{id: string}>,
-  }
-  | {
-    columns: Array<BoardColumn>,
-    id: string,
-    name: string,
-    orphanRow: {
-      $type: string,
-      cells: Array<BoardCell>,
-      collapsed: boolean,
-      id: string,
-      issue: ?IssueOnList,
-      name: string,
-    },
-    sprints: Array<Sprint>,
-    status: {error: Array<string>, valid: boolean},
-    trimmedSwimlanes: Array<
-      {
-        $type: string,
-        cells: Array<BoardCell>,
-        collapsed: boolean,
-        id: string,
-        issue: ?IssueOnList,
-        name: string,
-      },
-    >,
-  } {
+export function moveIssueOnBoard(board: Board, movedId: string, cellId: string, leadingId: ?string): ?Board {
   const issueOnBoard = findIssueOnBoard(board, movedId);
   if (!issueOnBoard) {
     log.debug('Cannot find moved issue on board');

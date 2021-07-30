@@ -32,7 +32,8 @@ export type AgilePageState = {
   selectProps: Object,
   agile: ?Board,
   error?: CustomError & {noAgiles: boolean} | null,
-  queryAssistSuggestions: Array<ServersideSuggestion>
+  queryAssistSuggestions: Array<ServersideSuggestion>,
+  noMoreSwimlanes?: boolean,
 };
 
 const initialPageState: AgilePageState = {
@@ -50,7 +51,7 @@ const initialPageState: AgilePageState = {
 };
 
 const boardReducer = createReducer({}, {
-  [types.RECEIVE_SWIMLANES](state: BoardState, action: Object): BoardState {
+  [types.RECEIVE_SWIMLANES](state: BoardState, action: Object): A {
     if (action?.swimlanes?.length <= 0) {
       return state;
     }
@@ -185,7 +186,7 @@ const agilePageReducer = createReducer(initialPageState, {
       },
     };
   },
-  [types.AGILE_ERROR](state: AgilePageState, action: { error: Error }): AgilePageState {
+  [types.AGILE_ERROR](state: AgilePageState, action: { error: CustomError }): AgilePageState {
     return {
       ...state,
       error: action.error,
