@@ -18,6 +18,8 @@ export const CUSTOM_ERROR_MESSAGE = {
   PUSH_NOTIFICATION_IS_NOT_SUPPORTED: 'Push notification is not supported: ',
   NO_ENTITY_FOUND: 'Can\'t find entity with id',
   BAD_REQUEST: 'Bad Request',
+  NO_COMMAND_SUGGESTIONS: 'Failed to load command suggestions',
+  APPLY_COMMAND_FAILED: 'Failed to apply a command',
 };
 
 export const DEFAULT_ERROR_MESSAGE = 'Something went wrong';

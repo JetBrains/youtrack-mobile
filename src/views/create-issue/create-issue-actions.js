@@ -4,19 +4,24 @@ import ApiHelper from '../../components/api/api__helper';
 import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
+import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 import {actions} from './create-issue-reducers';
+import {ANALYTICS_ISSUE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
 import {attachmentActions} from './create-issue__attachment-actions-and-types';
+import {commandDialogTypes, ISSUE_CREATED} from './create-issue-action-types';
 import {CUSTOM_ERROR_MESSAGE, DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
-import {ISSUE_CREATED} from './create-issue-action-types';
 import {notify, notifyError} from '../../components/notification/notification';
 import {resolveError} from '../../components/error/error-resolver';
+import {showActions} from '../../components/action-sheet/action-sheet';
+import * as commandDialogHelper from '../../components/command-dialog/command-dialog-helper';
 
 import type Api from '../../components/api/api';
+import type {ActionSheetOption} from '../../components/action-sheet/action-sheet';
 import type {AppState} from '../../reducers';
 import type {CreateIssueState} from './create-issue-reducers';
 import type {CustomField, FieldValue, Attachment} from '../../flow/CustomFields';
-import type {IssueFull} from '../../flow/Issue';
+import type {CommandSuggestionResponse, IssueFull} from '../../flow/Issue';
 import type {StorageState} from '../../components/storage/storage';
 import type {Visibility} from '../../flow/Visibility';
 
@@ -93,22 +98,20 @@ export function loadIssueFromDraft(draftId: string): ((
   };
 }
 
-export function applyCommandForDraft(command: string): ((
+export function applyCommand(command: string): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const draftId = getState().creation.issue.id;
-
-    try {
-      await getApi().applyCommand({issueIds: [draftId], command});
-
-      notify('Command applied');
+    dispatch({type: commandDialogTypes.START_APPLYING_COMMAND});
+    await commandDialogHelper.applyCommand([draftId], command).then(async () => {
+      dispatch(toggleCommandDialog(false));
       await dispatch(loadIssueFromDraft(draftId));
-    } catch (err) {
-      notifyError('Failed to apply command', err);
-    }
+    }).finally(() => {
+      dispatch({type: commandDialogTypes.STOP_APPLYING_COMMAND});
+    });
   };
 }
 
@@ -300,5 +303,60 @@ export function updateVisibility(visibility: Visibility): ((
       notify(message, err);
       log.warn(message, err);
     }
+  };
+}
+
+export function showContextActions(actionSheet: typeof ActionSheetProvider): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const selectedAction: ActionSheetOption = await showActions([
+      {
+        title: 'Apply command…',
+        execute: () => {
+          dispatch(toggleCommandDialog(true));
+          usage.trackEvent(ANALYTICS_ISSUE_CREATE_PAGE, 'Apply command');
+        },
+      },
+      {title: 'Cancel'},
+    ], actionSheet);
+
+    if (selectedAction && selectedAction.execute) {
+      selectedAction.execute();
+    }
+  };
+}
+
+export function getCommandSuggestions(command: string, caret: number): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => Promise<void>) {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const issueId = getState().creation.issue.id;
+    await commandDialogHelper.loadIssueCommandSuggestions([issueId], command, caret).then(
+      (suggestions: CommandSuggestionResponse | null) => {
+        suggestions && dispatch({
+          type: commandDialogTypes.RECEIVE_COMMAND_SUGGESTIONS,
+          suggestions,
+        });
+      }
+    ).catch(() => {
+    //
+    });
+  };
+}
+
+export function toggleCommandDialog(isVisible: boolean = false): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => Promise<void>) {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    dispatch({
+      type: isVisible ? commandDialogTypes.OPEN_COMMAND_DIALOG : commandDialogTypes.CLOSE_COMMAND_DIALOG,
+    });
   };
 }

@@ -327,20 +327,18 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   _renderCommandDialog() {
     const {
-      issue,
       closeCommandDialog,
       commandSuggestions,
-      loadCommandSuggestions,
+      getCommandSuggestions,
       applyCommand,
       commandIsApplying,
       initialCommand,
     } = this.props;
 
     return <CommandDialog
-      headerContent={getReadableID(issue)}
       suggestions={commandSuggestions}
       onCancel={closeCommandDialog}
-      onChange={loadCommandSuggestions}
+      onChange={getCommandSuggestions}
       onApply={applyCommand}
       isApplying={commandIsApplying}
       initialCommand={initialCommand}

@@ -19,14 +19,13 @@ import type {CommandSuggestionResponse, CommandSuggestion, SuggestedCommand} fro
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {
-  headerContent: string,
   suggestions: ?CommandSuggestionResponse,
   initialCommand: string,
   onApply: (command: string) => any,
   onChange: (command: string, caret: number) => any,
   isApplying: boolean,
   onCancel: Function,
-  uiTheme: UITheme
+  uiTheme: UITheme,
 };
 
 type State = {

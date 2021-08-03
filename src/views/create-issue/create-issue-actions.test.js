@@ -1,7 +1,8 @@
 import * as actions from './create-issue-actions';
+import * as commandDialogHelper from '../../components/command-dialog/command-dialog-helper';
 import * as storage from '../../components/storage/storage';
 import mocks from '../../../test/mocks';
-import {createIssueReducersNamespace} from './create-issue-reducers';
+import {commandDialogTypes, createIssueNamespace} from './create-issue-action-types';
 import {CUSTOM_ERROR_MESSAGE} from '../../components/error/error-messages';
 import {ISSUE_CREATED} from './create-issue-action-types';
 import {setApi} from '../../components/api/api__instance';
@@ -40,7 +41,7 @@ describe('<CreateIssue/>', () => {
         payload: {
           projectId: PROJECT_ID_MOCK,
         },
-        type: `${createIssueReducersNamespace}/setDraftProjectId`,
+        type: `${createIssueNamespace}/setDraftProjectId`,
       });
     });
 
@@ -65,7 +66,7 @@ describe('<CreateIssue/>', () => {
         payload: {
           issue: issueMock,
         },
-        type: `${createIssueReducersNamespace}/setIssueDraft`,
+        type: `${createIssueNamespace}/setIssueDraft`,
       });
     });
 
@@ -80,7 +81,7 @@ describe('<CreateIssue/>', () => {
       expect(apiMock.issue.loadIssueDraft).toHaveBeenCalledWith(draftIdMock);
       expect(store.getActions()[0]).toEqual({
         payload: undefined,
-        type: `${createIssueReducersNamespace}/resetIssueDraftId`,
+        type: `${createIssueNamespace}/resetIssueDraftId`,
       });
     });
   });
@@ -108,7 +109,7 @@ describe('<CreateIssue/>', () => {
         payload: {
           issue: responseMock,
         },
-        type: `${createIssueReducersNamespace}/setIssueDraft`,
+        type: `${createIssueNamespace}/setIssueDraft`,
       });
     });
 
@@ -129,7 +130,7 @@ describe('<CreateIssue/>', () => {
             description: issueMock.description,
           },
         },
-        type: `${createIssueReducersNamespace}/setIssueDraft`,
+        type: `${createIssueNamespace}/setIssueDraft`,
       });
     });
 
@@ -143,7 +144,7 @@ describe('<CreateIssue/>', () => {
       expect(apiMock.issue.updateIssueDraft).toHaveBeenCalledWith(issueDraftBase);
       expect(store.getActions()[0]).toEqual({
         payload: undefined,
-        type: `${createIssueReducersNamespace}/clearDraftProject`,
+        type: `${createIssueNamespace}/clearDraftProject`,
       });
     });
   });
@@ -156,7 +157,7 @@ describe('<CreateIssue/>', () => {
       expect(apiMock.issue.loadIssueDraft).toHaveBeenCalledWith(issueMock.id);
       expect(store.getActions()[0]).toEqual({
         payload: {preDefinedDraftId: issueMock.id},
-        type: `${createIssueReducersNamespace}/setIssuePredefinedDraftId`,
+        type: `${createIssueNamespace}/setIssuePredefinedDraftId`,
       });
     });
 
@@ -182,7 +183,7 @@ describe('<CreateIssue/>', () => {
       expect(apiMock.issue.loadIssueDraft).not.toHaveBeenCalledWith(issueMock.summary);
       expect(store.getActions()[0]).toEqual({
         payload: {projectId: projectIdMock},
-        type: `${createIssueReducersNamespace}/setDraftProjectId`,
+        type: `${createIssueNamespace}/setDraftProjectId`,
       });
     });
   });
@@ -205,7 +206,7 @@ describe('<CreateIssue/>', () => {
 
       expect(store.getActions()[0]).toEqual({
         payload: undefined,
-        type: `${createIssueReducersNamespace}/startIssueCreation`,
+        type: `${createIssueNamespace}/startIssueCreation`,
       });
     });
 
@@ -215,7 +216,7 @@ describe('<CreateIssue/>', () => {
       expect(apiMock.issue.updateIssueDraft).toHaveBeenCalledWith(issueDraftBase);
       expect(store.getActions()[1]).toEqual({
         payload: {issue: issueMock},
-        type: `${createIssueReducersNamespace}/setIssueDraft`,
+        type: `${createIssueNamespace}/setIssueDraft`,
       });
     });
 
@@ -235,11 +236,11 @@ describe('<CreateIssue/>', () => {
 
       expect(store.getActions()[3]).toEqual({
         payload: undefined,
-        type: `${createIssueReducersNamespace}/resetCreation`,
+        type: `${createIssueNamespace}/resetCreation`,
       });
       expect(store.getActions()[4]).toEqual({
         payload: undefined,
-        type: `${createIssueReducersNamespace}/stopIssueCreation`,
+        type: `${createIssueNamespace}/stopIssueCreation`,
       });
     });
   });
@@ -269,7 +270,7 @@ describe('<CreateIssue/>', () => {
           field: fieldMock,
           value: fieldValueMock,
         },
-        type: `${createIssueReducersNamespace}/setIssueFieldValue`,
+        type: `${createIssueNamespace}/setIssueFieldValue`,
       });
     });
 
@@ -281,6 +282,76 @@ describe('<CreateIssue/>', () => {
 
       expect(apiMock.issue.loadIssueDraft).toHaveBeenCalled();
     });
+  });
+
+
+  describe('toggleCommandDialog', () => {
+    it('should show the command dialog', async () => {
+      await store.dispatch(actions.toggleCommandDialog(true));
+
+      expect(store.getActions()[0]).toEqual({
+        type: commandDialogTypes.OPEN_COMMAND_DIALOG,
+      });
+    });
+
+    it('should close the command dialog', async () => {
+      await store.dispatch(actions.toggleCommandDialog(false));
+
+      expect(store.getActions()[0]).toEqual({
+        type: commandDialogTypes.CLOSE_COMMAND_DIALOG,
+      });
+    });
+  });
+
+
+  describe('getCommandSuggestions', () => {
+    it('should show command suggestions', async () => {
+      const commandSuggestionDataMock = {suggestions: [{}]};
+      jest.spyOn(commandDialogHelper, 'loadIssueCommandSuggestions').mockResolvedValueOnce(
+        commandSuggestionDataMock
+      );
+      await loadSuggestions();
+
+      expect(store.getActions()[0]).toEqual({
+        type: commandDialogTypes.RECEIVE_COMMAND_SUGGESTIONS,
+        suggestions: commandSuggestionDataMock,
+      });
+    });
+
+    it('should not show command suggestions', async () => {
+      jest.spyOn(commandDialogHelper, 'loadIssueCommandSuggestions').mockRejectedValueOnce(
+        new Error('cannot load suggestions')
+      );
+      await loadSuggestions();
+
+      expect(store.getActions().length).toEqual(0);
+    });
+
+    async function loadSuggestions() {
+      await store.dispatch(actions.getCommandSuggestions('maj', 3));
+    }
+  });
+
+
+  describe('applyCommand', () => {
+    it('should apply a command', async () => {
+      apiMock.issue.loadIssueDraft.mockResolvedValueOnce({});
+      jest.spyOn(commandDialogHelper, 'applyCommand').mockResolvedValueOnce({});
+
+      await store.dispatch(actions.applyCommand('major'));
+
+      expect(store.getActions()[0]).toEqual({
+        type: commandDialogTypes.START_APPLYING_COMMAND,
+      });
+      expect(store.getActions()[1]).toEqual({
+        type: commandDialogTypes.CLOSE_COMMAND_DIALOG,
+      });
+      expect(store.getActions()[2]).toEqual({
+        type: `${createIssueNamespace}/setIssueDraft`,
+        payload: {issue: {}},
+      });
+    });
+
   });
 
 

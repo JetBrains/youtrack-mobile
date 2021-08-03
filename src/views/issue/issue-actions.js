@@ -2,6 +2,7 @@
 
 import {Clipboard, Share} from 'react-native';
 
+import * as commandDialogHelper from '../../components/command-dialog/command-dialog-helper';
 import * as types from './issue-action-types';
 import ApiHelper from '../../components/api/api__helper';
 import log from '../../components/log/log';
@@ -568,22 +569,19 @@ export function onTagRemove(tagId: string): ((
 }
 
 
-export function loadCommandSuggestions(command: string, caret: number): ((
+export function getCommandSuggestions(command: string, caret: number): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
-    const api: Api = getApi();
-
-    try {
-      const suggestionsRes = await api.getCommandSuggestions([issueId], command, caret);
-
-      dispatch(receiveCommandSuggestions(suggestionsRes));
-    } catch (err) {
-      notifyError('Failed to load command suggestions', err);
-    }
+    await commandDialogHelper.loadIssueCommandSuggestions([issueId], command, caret).then(
+      (suggestions: CommandSuggestionResponse) => {
+        suggestions && dispatch(receiveCommandSuggestions(suggestions));
+      }).catch(() => {
+      //
+    });
   };
 }
 
@@ -595,26 +593,19 @@ export function applyCommand(command: string): ((
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
 
-    try {
-      dispatch(startApplyingCommand());
-
-      await getApi().applyCommand({issueIds: [issueId], command});
-
+    dispatch(startApplyingCommand());
+    await commandDialogHelper.applyCommand([issueId], command).then(async () => {
       dispatch(closeCommandDialog());
-
-      if (command.trim() === 'delete') {
+      if (command.toLowerCase().trim() === 'delete') {
         notify('Issue deleted');
-        return Router.Issues();
+        Router.Issues();
+      } else {
+        await dispatch(loadIssue());
+        dispatch(issueUpdated(getState().issueState.issue));
       }
-
-      notify('Command applied');
-      await dispatch(loadIssue());
-      dispatch(issueUpdated(getState().issueState.issue));
-    } catch (err) {
-      notifyError('Failed to apply command', err);
-    } finally {
+    }).finally(() => {
       dispatch(stopApplyingCommand());
-    }
+    });
   };
 }
 

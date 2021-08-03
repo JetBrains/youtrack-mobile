@@ -94,7 +94,7 @@ export type ServersideSuggestionLegacy = {
 };
 
 export type SuggestedCommand = {
-  description: ?string,
+  description: string,
   error: boolean,
   delete: boolean
 }

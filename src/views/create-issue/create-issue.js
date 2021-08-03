@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {Component} from 'react';
-import {ScrollView, View, ActivityIndicator} from 'react-native';
+import {ScrollView, View, ActivityIndicator, Text, TouchableOpacity} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -10,6 +10,7 @@ import * as createIssueActions from './create-issue-actions';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
+import CommandDialog from '../../components/command-dialog/command-dialog';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import Header from '../../components/header/header';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
@@ -21,7 +22,9 @@ import usage from '../../components/usage/usage';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {ANALYTICS_ISSUE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
 import {getApi} from '../../components/api/api__instance';
-import {IconCheck, IconClose} from '../../components/icon/icon';
+import {HIT_SLOP} from '../../components/common-styles/button';
+import {IconCheck, IconClose, IconDrag, IconMoreOptions} from '../../components/icon/icon';
+import {isIOSPlatform} from '../../util/util';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
@@ -42,10 +45,14 @@ type AdditionalProps = {
 type Props = CreateIssueState & typeof createIssueActions & AttachmentActions & AdditionalProps;
 
 type State = {
-  showAddTagSelect: boolean
+  showAddTagSelect: boolean,
 };
 
 class CreateIssue extends Component<Props, State> {
+  static contextTypes = {
+    actionSheet: Function,
+  };
+
   uiTheme: UITheme;
   state = {showAddTagSelect: false};
 
@@ -136,6 +143,53 @@ class CreateIssue extends Component<Props, State> {
     );
   }
 
+  renderCommandDialog() {
+    const {
+      applyCommand,
+      commandSuggestions,
+      getCommandSuggestions,
+      commandIsApplying,
+      toggleCommandDialog,
+    } = this.props;
+    return <CommandDialog
+      suggestions={commandSuggestions}
+      onCancel={() => toggleCommandDialog(false)}
+      onChange={getCommandSuggestions}
+      onApply={applyCommand}
+      isApplying={commandIsApplying}
+      initialCommand={''}
+      uiTheme={this.uiTheme}
+    />;
+  }
+
+  renderActionsIcon() {
+    if (this.isProcessing()) {
+      return null;
+    }
+    return (
+      <TouchableOpacity
+        hitSlop={HIT_SLOP}
+        onPress={() => {
+          !this.isProcessing() && this.props.showContextActions(this.context.actionSheet());
+        }}
+      >
+        <Text style={styles.iconMore}>
+          {isIOSPlatform()
+            ? <IconMoreOptions size={18} color={this.uiTheme.colors.$link}/>
+            : <Text><IconDrag size={18} color={this.uiTheme.colors.$link}/></Text>
+          }
+          <Text>{' '}</Text>
+        </Text>
+      </TouchableOpacity>
+    );
+  }
+
+  isProcessing(): boolean {
+    const {attachingImage, processing} = this.props;
+    const isAttaching = attachingImage !== null;
+    return processing || isAttaching;
+  }
+
   render() {
     const {
       storeDraftAndGoBack,
@@ -148,6 +202,7 @@ class CreateIssue extends Component<Props, State> {
       removeAttachment,
       showAddAttachDialog,
       isAttachFileDialogVisible,
+      showCommandDialog,
     } = this.props;
 
     const isAttaching = attachingImage !== null;
@@ -177,6 +232,7 @@ class CreateIssue extends Component<Props, State> {
                 leftButton={<IconClose size={21} color={uiThemeColors.$link}/>}
                 onBack={storeDraftAndGoBack}
                 rightButton={rightButton}
+                extraButton={this.renderActionsIcon()}
                 onRightButtonClick={() => canCreateIssue && createIssue()}/>
 
               {this.renderCustomFieldPanel()}
@@ -262,6 +318,7 @@ class CreateIssue extends Component<Props, State> {
               <KeyboardSpacerIOS/>
 
               {isAttachFileDialogVisible && this.renderAttachFileDialog()}
+              {!this.isProcessing() && showCommandDialog && this.renderCommandDialog()}
             </View>
           );
         }}

@@ -3,17 +3,22 @@
 import {createSlice, Slice} from '@reduxjs/toolkit';
 
 import {attachmentTypes} from './create-issue__attachment-actions-and-types';
+import {createCommandDialogReducers} from '../../components/command-dialog/command-dialog-reducer';
+import {createIssueNamespace} from './create-issue-action-types';
 import {LOG_OUT} from '../../actions/action-types';
 
 import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
-import type {IssueFull} from '../../flow/Issue';
+import type {CommandSuggestionResponse, IssueFull} from '../../flow/Issue';
 
 export type CreateIssueState = {
   processing: boolean,
   attachingImage: ?Object,
   predefinedDraftId: ?string,
   issue: $Shape<IssueFull>,
-  isAttachFileDialogVisible: boolean
+  isAttachFileDialogVisible: boolean,
+  commandIsApplying: boolean,
+  commandSuggestions: ?CommandSuggestionResponse,
+  showCommandDialog: boolean,
 };
 
 
@@ -35,16 +40,18 @@ const initialState: CreateIssueState = {
     project: notSelectedProject,
   },
   isAttachFileDialogVisible: false,
+  commandIsApplying: false,
+  commandSuggestions: null,
+  showCommandDialog: false,
 };
 
-export const createIssueReducersNamespace = 'IssueCreate';
-
 const slice: typeof Slice = createSlice({
-  name: createIssueReducersNamespace,
+  name: createIssueNamespace,
   initialState,
 
   extraReducers: {
     ...createAttachmentReducers(),
+    ...createCommandDialogReducers(createIssueNamespace),
     [LOG_OUT](state: CreateIssueState): CreateIssueState {
       return initialState;
     },
