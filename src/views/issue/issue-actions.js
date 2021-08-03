@@ -104,23 +104,23 @@ export function unloadActiveIssueView(): {type: any} {
 }
 
 export function openCommandDialog(initialCommand: string = ''): {initialCommand: string, type: any} {
-  return {type: types.OPEN_COMMAND_DIALOG, initialCommand};
+  return {type: types.commandDialogTypes.OPEN_COMMAND_DIALOG, initialCommand};
 }
 
 export function closeCommandDialog(): {type: any} {
-  return {type: types.CLOSE_COMMAND_DIALOG};
+  return {type: types.commandDialogTypes.CLOSE_COMMAND_DIALOG};
 }
 
 export function receiveCommandSuggestions(suggestions: CommandSuggestionResponse): {suggestions: CommandSuggestionResponse, type: any} {
-  return {type: types.RECEIVE_COMMAND_SUGGESTIONS, suggestions};
+  return {type: types.commandDialogTypes.RECEIVE_COMMAND_SUGGESTIONS, suggestions};
 }
 
 export function startApplyingCommand(): {type: any} {
-  return {type: types.START_APPLYING_COMMAND};
+  return {type: types.commandDialogTypes.START_APPLYING_COMMAND};
 }
 
 export function stopApplyingCommand(): {type: any} {
-  return {type: types.STOP_APPLYING_COMMAND};
+  return {type: types.commandDialogTypes.STOP_APPLYING_COMMAND};
 }
 
 export function receiveIssueVisibility(visibility: Visibility): {type: any, visibility: Visibility} {

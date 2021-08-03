@@ -1,13 +1,15 @@
 /* @flow */
 
-import {createReducer} from 'redux-create-reducer';
 import * as types from './issue-action-types';
 import {attachmentTypes} from './issue__attachment-actions-and-types';
+import {commandDialogNamespace} from './issue-action-types';
+import {createCommandDialogReducers} from '../../components/command-dialog/command-dialog-reducer';
+import {createReducer} from 'redux-create-reducer';
 import {ON_NAVIGATE_BACK} from '../../actions/action-types';
 import {routeMap} from '../../app-routes';
 
-import type {IssueFull, CommandSuggestionResponse, AnyIssue} from '../../flow/Issue';
 import type {CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
+import type {IssueFull, CommandSuggestionResponse, AnyIssue} from '../../flow/Issue';
 import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
 
@@ -115,6 +117,7 @@ const attachReducers = {
 
 export default (createReducer(initialState, {
   ...attachReducers,
+  ...createCommandDialogReducers(commandDialogNamespace),
 
   [ON_NAVIGATE_BACK]: (state: State, action: { closingView: { routeName: string, params: { issueId?: string } } }): State => {
     if (action.closingView.routeName === routeMap.Issue) {
@@ -261,21 +264,6 @@ export default (createReducer(initialState, {
   },
   [types.UNLOAD_ACTIVE_ISSUE_VIEW]: (state: State): State => {
     return {...initialState, unloadedIssueState: state};
-  },
-  [types.OPEN_COMMAND_DIALOG]: (state: State, action: { initialCommand: string }): State => {
-    return {...state, showCommandDialog: true, initialCommand: action.initialCommand};
-  },
-  [types.CLOSE_COMMAND_DIALOG]: (state: State): State => {
-    return {...state, showCommandDialog: false, commandSuggestions: null, initialCommand: ''};
-  },
-  [types.RECEIVE_COMMAND_SUGGESTIONS]: (state: State, action: { suggestions: Object }): State => {
-    return {...state, commandSuggestions: action.suggestions};
-  },
-  [types.START_APPLYING_COMMAND]: (state: State): State => {
-    return {...state, commandIsApplying: true};
-  },
-  [types.STOP_APPLYING_COMMAND]: (state: State): State => {
-    return {...state, commandIsApplying: false};
   },
   [types.OPEN_ISSUE_SELECT]: (state: State, action: Object) => {
     return {

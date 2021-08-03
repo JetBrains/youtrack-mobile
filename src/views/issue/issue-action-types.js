@@ -1,3 +1,11 @@
+/* @flow */
+
+import {commandDialogActionMap} from '../../components/command-dialog/command-dialog-action-types';
+import {createCommandDialogTypeMap} from '../../components/command-dialog/command-dialog-reducer';
+
+export const commandDialogNamespace: string = 'issue';
+export const commandDialogTypes: typeof commandDialogActionMap = createCommandDialogTypeMap(commandDialogNamespace);
+
 export const SET_ISSUE_ID = 'issue.SET_ISSUE_ID';
 export const RECEIVE_ISSUE = 'issue.RECEIVE_ISSUE';
 export const RECEIVE_ISSUE_VISIBILITY = 'issue.RECEIVE_ISSUE_VISIBILITY';
@@ -36,12 +44,6 @@ export const SET_STARRED = 'issue.SET_STARRED';
 export const START_LOADING_COMMENT_SUGGESTIONS = 'issue.START_LOADING_COMMENT_SUGGESTIONS';
 export const STOP_LOADING_COMMENT_SUGGESTIONS = 'issue.STOP_LOADING_COMMENT_SUGGESTIONS';
 export const RECEIVE_COMMENT_SUGGESTIONS = 'issue.RECEIVE_COMMENT_SUGGESTIONS';
-
-export const OPEN_COMMAND_DIALOG = 'issue.OPEN_COMMAND_DIALOG';
-export const CLOSE_COMMAND_DIALOG = 'issue.CLOSE_COMMAND_DIALOG';
-export const RECEIVE_COMMAND_SUGGESTIONS = 'issue.RECEIVE_COMMAND_SUGGESTIONS';
-export const START_APPLYING_COMMAND = 'issue.START_APPLYING_COMMAND';
-export const STOP_APPLYING_COMMAND = 'issue.STOP_APPLYING_COMMAND';
 
 export const RECEIVE_ACTIVITY_PAGE = 'issue.RECEIVE_ACTIVITY_PAGE';
 export const RECEIVE_ACTIVITY_ERROR = 'issue.RECEIVE_ACTIVITY_ERROR';
