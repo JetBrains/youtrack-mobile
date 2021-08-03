@@ -20,13 +20,13 @@ import Tags from '../../components/tags/tags';
 import usage from '../../components/usage/usage';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {ANALYTICS_ISSUE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
-import {attachmentActions} from './create-issue__attachment-actions-and-types';
 import {getApi} from '../../components/api/api__instance';
 import {IconCheck, IconClose} from '../../components/icon/icon';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {Attachment, CustomField, IssueProject, Tag} from '../../flow/CustomFields';
+import type {AttachmentActions} from '../../components/attachments-row/attachment-actions';
 import type {CreateIssueState} from './create-issue-reducers';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 
@@ -36,9 +36,10 @@ import styles from './create-issue.styles';
 type AdditionalProps = {
   issuePermissions: IssuePermissions,
   predefinedDraftId: ?string,
+  onAddTags: (tags: Array<Tag>) => () => Promise<void>
 };
 
-type Props = CreateIssueState & typeof createIssueActions & typeof attachmentActions & AdditionalProps;
+type Props = CreateIssueState & typeof createIssueActions & AttachmentActions & AdditionalProps;
 
 type State = {
   showAddTagSelect: boolean
