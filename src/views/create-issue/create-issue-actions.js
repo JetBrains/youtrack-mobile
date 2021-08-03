@@ -61,13 +61,13 @@ export function storeDraftAndGoBack(): ((dispatch: (any) => any) => Promise<void
   };
 }
 
-export function loadStoredProject(): ((dispatch: (any) => any) => Promise<mixed>) {
+export function loadStoredProject(): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     const projectId = getStorageState().projectId;
     if (projectId) {
       log.info(`Stored project loaded, id=${projectId}`);
       dispatch(actions.setDraftProjectId({projectId}));
-      return await dispatch(updateIssueDraft());
+      await dispatch(updateIssueDraft());
     }
   };
 }
@@ -111,7 +111,11 @@ export function applyCommandForDraft(command: string): ((
   };
 }
 
-export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Object) {
+export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Object): (
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void> {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {issue} = getState().creation;
@@ -129,15 +133,15 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
     };
 
     try {
-      const actualDraftIssue: IssueFull = await api.issue.updateIssueDraft(draftIssue);
+      const updatedDraftIssue: IssueFull = await api.issue.updateIssueDraft(draftIssue);
       if (ignoreFields) {
-        delete actualDraftIssue.fields;
+        delete updatedDraftIssue.fields;
       }
 
       log.info('Issue draft updated', draftIssue);
-      dispatch(actions.setIssueDraft({issue: actualDraftIssue}));
+      dispatch(actions.setIssueDraft({issue: updatedDraftIssue}));
       if (!getState().creation.predefinedDraftId) {
-        return await storeIssueDraftId(actualDraftIssue.id);
+        await storeIssueDraftId(updatedDraftIssue.id);
       }
     } catch (err) {
       const error = await resolveError(err) || new Error(DEFAULT_ERROR_MESSAGE);
@@ -172,7 +176,7 @@ export function initializeWithDraftOrProject(preDefinedDraftId: ?string): ((disp
   };
 }
 
-export function createIssue() {
+export function createIssue(): (dispatch: (any) => any, getState: () => any, getApi: ApiGetter) => Promise<void> {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(actions.startIssueCreation());
@@ -188,11 +192,11 @@ export function createIssue() {
       dispatch(actions.resetCreation());
 
       Router.pop();
-      return await clearIssueDraftStorage();
+      await clearIssueDraftStorage();
 
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Error');
-      return notifyError('Cannot create issue', err);
+      notifyError('Cannot create issue', err);
     } finally {
       dispatch(actions.stopIssueCreation());
     }
