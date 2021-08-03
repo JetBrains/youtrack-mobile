@@ -13,6 +13,7 @@ import {notify, notifyError} from '../../components/notification/notification';
 import {resolveError} from '../../components/error/error-resolver';
 
 import type Api from '../../components/api/api';
+import type {AppState} from '../../reducers';
 import type {CreateIssueState} from './create-issue-reducers';
 import type {CustomField, FieldValue, Attachment} from '../../flow/CustomFields';
 import type {IssueFull} from '../../flow/Issue';
@@ -77,7 +78,7 @@ export function loadIssueFromDraft(draftId: string): ((
   getState: () => any,
   getApi: ApiGetter
 ) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     try {
       const draftIssue = await api.issue.loadIssueDraft(draftId);
@@ -97,7 +98,7 @@ export function applyCommandForDraft(command: string): ((
   getState: () => any,
   getApi: ApiGetter
 ) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const draftId = getState().creation.issue.id;
 
     try {
@@ -116,7 +117,7 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
   getState: () => any,
   getApi: ApiGetter
 ) => Promise<void> {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {issue} = getState().creation;
 
@@ -133,8 +134,9 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
     };
 
     try {
-      const updatedDraftIssue: IssueFull = await api.issue.updateIssueDraft(draftIssue);
+      const updatedDraftIssue: $Shape<IssueFull> = await api.issue.updateIssueDraft(draftIssue);
       if (ignoreFields) {
+        //$FlowFixMe
         delete updatedDraftIssue.fields;
       }
 
@@ -177,7 +179,7 @@ export function initializeWithDraftOrProject(preDefinedDraftId: ?string): ((disp
 }
 
 export function createIssue(): (dispatch: (any) => any, getState: () => any, getApi: ApiGetter) => Promise<void> {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(actions.startIssueCreation());
 
@@ -204,7 +206,7 @@ export function createIssue(): (dispatch: (any) => any, getState: () => any, get
 }
 
 export function updateProject(project: Object): ((dispatch: (any) => any, getState: () => any) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
     dispatch(actions.setIssueProject({project}));
 
     log.info('Project has been updated');
@@ -219,7 +221,7 @@ export function updateFieldValue(field: CustomField, value: FieldValue): ((
   getState: () => any,
   getApi: ApiGetter
 ) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     dispatch(actions.setIssueFieldValue({field, value}));
     usage.trackEvent(CATEGORY_NAME, 'Change field value');
     log.info('Value of draft field has been changed successfully', {field, value});
@@ -241,7 +243,7 @@ export function updateFieldValue(field: CustomField, value: FieldValue): ((
 }
 
 export function uploadAttach(attach: Attachment): ((dispatch: (any) => any, getState: () => any) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
     const draftId = getState().creation.issue.id;
     await dispatch(attachmentActions.uploadFile(attach, draftId));
   };
@@ -254,7 +256,7 @@ export function cancelAddAttach(attach: Attachment): ((dispatch: (any) => any) =
 }
 
 export function loadAttachments(): ((dispatch: (any) => any, getState: () => any) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
     const draftId = getState().creation.issue.id;
     dispatch(attachmentActions.loadIssueAttachments(draftId));
   };
@@ -273,7 +275,7 @@ export function hideAddAttachDialog(): ((dispatch: (any) => any) => Promise<void
 }
 
 export function removeAttachment(attach: Attachment): ((dispatch: (any) => any, getState: () => any) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: () => Object) => {
+  return async (dispatch: (any) => any, getState: () => AppState) => {
     const draftId = getState().creation.issue.id;
     dispatch(attachmentActions.removeAttachment(attach, draftId));
   };
@@ -284,7 +286,7 @@ export function updateVisibility(visibility: Visibility): ((
   getState: () => any,
   getApi: ApiGetter
 ) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const draftIssue: IssueFull = getState().creation.issue;
     const draftIssueCopy: IssueFull = {...draftIssue};
 

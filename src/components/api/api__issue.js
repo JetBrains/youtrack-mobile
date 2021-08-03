@@ -62,7 +62,7 @@ export default class IssueAPI extends ApiBase {
     return comments;
   }
 
-  async createIssue(issueDraft: IssueOnList): Promise<any> {
+  async createIssue(issueDraft: $Shape<IssueFull>): Promise<any> {
     const queryString = qs.stringify({
       draftId: issueDraft.id,
       fields: issueFields.issuesOnList.toString(),
