@@ -82,7 +82,7 @@ export default class IssueAPI extends ApiBase {
    * @param issue
    * @returns {Promise}
    */
-  async updateIssueDraft(issue: IssueFull): Promise<IssueFull> {
+  async updateIssueDraft(issue: $Shape<IssueFull>): Promise<IssueFull> {
     const queryString = qs.stringify({fields: issueFields.singleIssue.toString()});
 
     const updatedIssue = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issue.id || ''}?${queryString}`, 'POST', issue);

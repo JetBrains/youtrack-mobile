@@ -16,6 +16,8 @@ export const CUSTOM_ERROR_MESSAGE = {
   PUSH_NOTIFICATION_REGISTRATION: 'Push notifications registration failed',
   NOT_SUPPORTED: 'Push notification is not supported: ',
   PUSH_NOTIFICATION_IS_NOT_SUPPORTED: 'Push notification is not supported: ',
+  NO_ENTITY_FOUND: 'Can\'t find entity with id',
+  BAD_REQUEST: 'Bad Request',
 };
 
 export const DEFAULT_ERROR_MESSAGE = 'Something went wrong';

@@ -4,84 +4,51 @@ import ApiHelper from '../../components/api/api__helper';
 import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
-import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
+import {actions} from './create-issue-reducers';
+import {attachmentActions} from './create-issue__attachment-actions-and-types';
+import {CUSTOM_ERROR_MESSAGE, DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
+import {ISSUE_CREATED} from './create-issue-action-types';
 import {notify, notifyError} from '../../components/notification/notification';
 import {resolveError} from '../../components/error/error-resolver';
 
-import * as types from './create-issue-action-types';
-import {attachmentActions} from './create-issue__attachment-actions-and-types';
-
 import type Api from '../../components/api/api';
+import type {CreateIssueState} from './create-issue-reducers';
 import type {CustomField, FieldValue, Attachment} from '../../flow/CustomFields';
 import type {IssueFull} from '../../flow/Issue';
+import type {StorageState} from '../../components/storage/storage';
 import type {Visibility} from '../../flow/Visibility';
 
 type ApiGetter = () => Api;
 
 export const CATEGORY_NAME = 'Create issue view';
 
-export function setIssueDraft(issue: IssueFull): {issue: IssueFull, type: any} {
-  return {type: types.SET_ISSUE_DRAFT, issue};
+
+export function setIssueSummary(summary: string): CreateIssueState {
+  return actions.setIssueSummary({summary});
 }
 
-export function resetIssueDraftId(): {type: any} {
-  return {type: types.RESET_ISSUE_DRAFT};
+export function setIssueDescription(description: string): CreateIssueState {
+  return actions.setIssueDescription({description});
 }
 
-export function setPredefinedDraftId(draftId: string): {draftId: string, type: any} {
-  return {type: types.SET_ISSUE_PREDEFINED_DRAFT_ID, draftId};
+export function propagateCreatedIssue(issue: IssueFull, preDefinedDraftId: ?string): {
+  issue: IssueFull,
+  preDefinedDraftId: ?string,
+  type: string
+} {
+  return {type: ISSUE_CREATED, issue, preDefinedDraftId};
 }
 
-export function setDraftProjectId(projectId: string): {projectId: string, type: any} {
-  return {type: types.SET_DRAFT_PROJECT_ID, projectId};
-}
-
-export function setIssueProject(project: Object): {project: any, type: any} {
-  return {type: types.SET_ISSUE_PROJECT, project};
-}
-
-export function resetIssueCreation(): {type: any} {
-  return {type: types.RESET_CREATION};
-}
-
-export function clearDraftProject(): {type: any} {
-  return {type: types.CLEAR_DRAFT_PROJECT};
-}
-
-export function setIssueSummary(summary: string): {summary: string, type: any} {
-  return {type: types.SET_ISSUE_SUMMARY, summary};
-}
-
-export function setIssueDescription(description: string): {description: string, type: any} {
-  return {type: types.SET_ISSUE_DESCRIPTION, description};
-}
-
-export function startIssueCreation(): {type: any} {
-  return {type: types.START_ISSUE_CREATION};
-}
-
-export function stopIssueCreation(): {type: any} {
-  return {type: types.STOP_ISSUE_CREATION};
-}
-
-export function issueCreated(issue: IssueFull, preDefinedDraftId: ?string): {issue: IssueFull, preDefinedDraftId: ?string, type: any} {
-  return {type: types.ISSUE_CREATED, issue, preDefinedDraftId};
-}
-
-export function setIssueFieldValue(field: CustomField, value: FieldValue): {field: CustomField, type: any, value: FieldValue} {
-  return {type: types.SET_ISSUE_FIELD_VALUE, field, value};
-}
-
-async function clearIssueDraftStorage() {
+async function clearIssueDraftStorage(): Promise<StorageState> {
   return await flushStoragePart({draftId: null});
 }
 
-export async function storeProjectId(projectId: string) {
+export async function storeProjectId(projectId: string): Promise<StorageState> {
   return await flushStoragePart({projectId});
 }
 
-async function storeIssueDraftId(draftId: string) {
+async function storeIssueDraftId(draftId: string): Promise<StorageState> {
   return await flushStoragePart({draftId});
 }
 
@@ -90,16 +57,16 @@ export function storeDraftAndGoBack(): ((dispatch: (any) => any) => Promise<void
     await dispatch(updateIssueDraft());
     Router.pop(true);
     //Hack: reset state after timeout to let router close the view without freezes
-    setTimeout(() => dispatch(resetIssueCreation()), 500);
+    setTimeout(() => dispatch(actions.resetCreation()), 500);
   };
 }
 
-export function loadStoredProject(): ((dispatch: (any) => any) => Promise<void> | Promise<mixed>) {
+export function loadStoredProject(): ((dispatch: (any) => any) => Promise<mixed>) {
   return async (dispatch: (any) => any) => {
     const projectId = getStorageState().projectId;
     if (projectId) {
       log.info(`Stored project loaded, id=${projectId}`);
-      dispatch(setDraftProjectId(projectId));
+      dispatch(actions.setDraftProjectId({projectId}));
       return await dispatch(updateIssueDraft());
     }
   };
@@ -115,11 +82,11 @@ export function loadIssueFromDraft(draftId: string): ((
     try {
       const draftIssue = await api.issue.loadIssueDraft(draftId);
       log.info(`Issue draft loaded, "${draftIssue.summary}"`);
-      dispatch(setIssueDraft(draftIssue));
+      dispatch(actions.setIssueDraft({issue: draftIssue}));
     } catch (err) {
       log.info('Cannot load issue draft, cleaning up');
       clearIssueDraftStorage();
-      dispatch(resetIssueDraftId());
+      dispatch(actions.resetIssueDraftId());
       dispatch(loadStoredProject());
     }
   };
@@ -162,14 +129,13 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
     };
 
     try {
-      const actualDraftIssue = await api.issue.updateIssueDraft(draftIssue);
-
+      const actualDraftIssue: IssueFull = await api.issue.updateIssueDraft(draftIssue);
       if (ignoreFields) {
         delete actualDraftIssue.fields;
       }
 
       log.info('Issue draft updated', draftIssue);
-      dispatch(setIssueDraft(actualDraftIssue));
+      dispatch(actions.setIssueDraft({issue: actualDraftIssue}));
       if (!getState().creation.predefinedDraftId) {
         return await storeIssueDraftId(actualDraftIssue.id);
       }
@@ -177,11 +143,11 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
       const error = await resolveError(err) || new Error(DEFAULT_ERROR_MESSAGE);
       const {error_description} = error;
       if (
-        (error_description && error_description.indexOf('Can\'t find entity with id') !== -1) ||
-        error && (error.error === 'bad_request' || error.error === 'Bad Request')
+        (error_description && error_description.indexOf(CUSTOM_ERROR_MESSAGE.NO_ENTITY_FOUND) !== -1) ||
+        error && (error.error === 'bad_request' || error.error === CUSTOM_ERROR_MESSAGE.BAD_REQUEST)
       ) {
         flushStoragePart({projectId: null});
-        dispatch(clearDraftProject());
+        dispatch(actions.clearDraftProject());
       }
 
       notifyError('Cannot update issue draft', error);
@@ -192,24 +158,24 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
 export function initializeWithDraftOrProject(preDefinedDraftId: ?string): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     if (preDefinedDraftId) {
-      dispatch(setPredefinedDraftId(preDefinedDraftId));
+      dispatch(actions.setIssuePredefinedDraftId({preDefinedDraftId}));
     }
     const draftId = preDefinedDraftId || getStorageState().draftId;
 
     if (draftId) {
       log.info(`Initializing with draft ${draftId}`);
       await dispatch(loadIssueFromDraft(draftId));
-      return;
+    } else {
+      log.info('Draft not found, initializing new draft');
+      await dispatch(loadStoredProject());
     }
-    log.info('Draft not found, initializing new draft');
-    await dispatch(loadStoredProject());
   };
 }
 
 export function createIssue() {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
-    dispatch(startIssueCreation());
+    dispatch(actions.startIssueCreation());
 
     try {
       await dispatch(updateIssueDraft());
@@ -218,7 +184,8 @@ export function createIssue() {
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Success');
 
       const filledIssue = ApiHelper.fillIssuesFieldHash([created])[0];
-      dispatch(issueCreated(filledIssue, getState().creation.predefinedDraftId));
+      dispatch(propagateCreatedIssue(filledIssue, getState().creation.predefinedDraftId));
+      dispatch(actions.resetCreation());
 
       Router.pop();
       return await clearIssueDraftStorage();
@@ -227,14 +194,14 @@ export function createIssue() {
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Error');
       return notifyError('Cannot create issue', err);
     } finally {
-      dispatch(stopIssueCreation());
+      dispatch(actions.stopIssueCreation());
     }
   };
 }
 
 export function updateProject(project: Object): ((dispatch: (any) => any, getState: () => any) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object) => {
-    dispatch(setIssueProject(project));
+    dispatch(actions.setIssueProject({project}));
 
     log.info('Project has been updated');
     usage.trackEvent(CATEGORY_NAME, 'Change project');
@@ -249,7 +216,7 @@ export function updateFieldValue(field: CustomField, value: FieldValue): ((
   getApi: ApiGetter
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    dispatch(setIssueFieldValue(field, value));
+    dispatch(actions.setIssueFieldValue({field, value}));
     usage.trackEvent(CATEGORY_NAME, 'Change field value');
     log.info('Value of draft field has been changed successfully', {field, value});
 
@@ -314,15 +281,15 @@ export function updateVisibility(visibility: Visibility): ((
   getApi: ApiGetter
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    const draftIssue = getState().creation.issue;
-    const draftIssueCopy = {...draftIssue};
+    const draftIssue: IssueFull = getState().creation.issue;
+    const draftIssueCopy: IssueFull = {...draftIssue};
 
     try {
       const draftWithVisibility: Visibility = await getApi().issue.updateVisibility(draftIssue.id, visibility);
-      dispatch(setIssueDraft(draftWithVisibility));
+      dispatch(actions.setIssueDraft({issue: draftWithVisibility}));
 
     } catch (err) {
-      dispatch(setIssueDraft(draftIssueCopy));
+      dispatch(actions.setIssueDraft({issue: draftIssueCopy}));
       const message: string = 'Cannot update draft visibility';
       notify(message, err);
       log.warn(message, err);
