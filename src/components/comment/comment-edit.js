@@ -109,13 +109,13 @@ const IssueCommentEdit = (props: Props) => {
     changeState({isSaving});
   };
 
-  const getCurrentComment = (data: EditingComment = ({}: any)): EditingComment => ({
+  const getCurrentComment = useCallback((data: EditingComment = ({}: any)): EditingComment => ({
     ...props.editingComment,
     ...state.editingComment,
     text: state.editingCommentText,
     ...data,
     usesMarkdown: true,
-  });
+  }), [props.editingComment, state.editingComment, state.editingCommentText]);
 
   const setComment = useCallback((editingComment: $Shape<IssueComment> = EMPTY_COMMENT): void => {
     changeState({editingComment});
@@ -131,22 +131,38 @@ const IssueCommentEdit = (props: Props) => {
   }, [setComment]);
 
   useEffect(() => {
-    if (
-      props.editingComment === null ||
-      (!state.editingComment.id && props.editingComment?.id) ||
-      props.editingComment?.reply === true
-    ) {
-      changeState({
-        editingComment: props.editingComment === null ? EMPTY_COMMENT : props.editingComment,
-        editingCommentText: state.editingCommentText || props.editingComment?.text || EMPTY_COMMENT.text,
-      });
+    if (state.editingComment.id === undefined && props.editingComment?.id) {
+      // set draft id
+      changeState({editingComment: {
+          ...state.editingComment,
+          id: props.editingComment.id,
+        }});
     }
-    if (props.editingComment?.text && !state.editingCommentText) {
-      changeState({
-        editingCommentText: props.editingComment?.text,
-      });
+
+    if (props.editingComment === null && state.editingComment?.id) {
+      // reset after submitting
+      changeState({editingComment: EMPTY_COMMENT});
     }
-  }, [props.editingComment, state.editingComment.id, state.editingCommentText]);
+
+    if (props.editingComment?.reply === true) {
+      // do reply
+      changeState({editingComment: props.editingComment});
+      delayedChange(getCurrentComment({text: props.editingComment?.text}), false);
+    }
+
+    if (state.editingComment.id === undefined && !state.editingComment.text && props.editingComment?.text) {
+      //set draft text
+      changeState({editingCommentText: props.editingComment?.text});
+    }
+  }, [
+    delayedChange,
+    getCurrentComment,
+    props.editingComment,
+    state.editingComment,
+    state.editingComment.id,
+    state.editingComment.text,
+    state.editingCommentText,
+  ]);
 
   const focus = (): void => {editCommentInput.focus();};
 
@@ -245,7 +261,11 @@ const IssueCommentEdit = (props: Props) => {
 
   const renderSendButton = (): Node => {
     const {editingComment, isSaving} = state;
-    const isDisabled: boolean = state.isSaving || (!state.editingComment.text && !editingComment.attachments);
+    const draftHasId: boolean = !!state.editingComment.id;
+    const isDisabled: boolean = !draftHasId || state.isSaving || (
+      !state.editingComment.text &&
+      !editingComment.attachments
+    );
     return (
       <TouchableOpacity
         style={[
@@ -254,13 +274,13 @@ const IssueCommentEdit = (props: Props) => {
         ]}
         disabled={isDisabled}
         onPress={() => submitComment(getCurrentComment())}>
-        {!isSaving && (
+        {(!isSaving || !draftHasId) && (
           <IconArrowUp
             size={22}
             color={theme.uiTheme.colors.$textButton}
           />
         )}
-        {isSaving && <ActivityIndicator color={theme.uiTheme.colors.$background}/>}
+        {(isSaving || !draftHasId) && <ActivityIndicator color={theme.uiTheme.colors.$background}/>}
       </TouchableOpacity>
     );
   };
