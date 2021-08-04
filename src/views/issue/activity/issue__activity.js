@@ -190,9 +190,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         issueContext={this.issueContext}
         comment={editingComment}
         onCommentChange={
-          (comment: IssueComment, isAttachmentChange: boolean) => {
-            isAttachmentChange && submitEditedComment(comment, isAttachmentChange);
-          }
+          (comment: IssueComment, isAttachmentChange: boolean) => (
+            isAttachmentChange ? submitEditedComment(comment, isAttachmentChange) : Promise.resolve()
+          )
         }
         onSubmitComment={
           async (comment: IssueComment) => {

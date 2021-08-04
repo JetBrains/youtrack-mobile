@@ -31,20 +31,22 @@ import {ThemeContext} from '../theme/theme-context';
 import styles, {MIN_INPUT_SIZE} from './comment-edit.styles';
 
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
+import type {CustomError} from '../../flow/Error';
 import type {Node} from 'react';
 import type {Theme} from '../../flow/Theme';
 import type {UserGroup} from '../../flow/UserGroup';
 import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
-import type {CustomError} from '../../flow/Error';
 import type {AttachmentActions} from '../attachments-row/attachment-actions';
 
 type UserMentions = { users: Array<User> };
 
+type EditingComment = $Shape<IssueComment & {reply: boolean}>;
+
 type Props = {
   canAttach: boolean,
   canRemoveAttach: (attachment: Attachment) => boolean,
-  editingComment?: ?$Shape<IssueComment>,
+  editingComment?: EditingComment,
   focus?: boolean,
   getCommentSuggestions: (query: string) => Promise<UserMentions>,
   getVisibilityOptions: () => Array<User | UserGroup>,
@@ -61,7 +63,7 @@ type Props = {
 type State = {
   attachFileSource: string | null,
   commentCaret: number,
-  editingComment: $Shape<IssueComment>,
+  editingComment: EditingComment,
   editingCommentText: string,
   isAttachFileDialogVisible: boolean,
   isAttachActionsVisible: boolean,
@@ -74,7 +76,7 @@ type State = {
   mentionsVisible: boolean,
 };
 
-const EMPTY_COMMENT: $Shape<IssueComment> = {text: '', visibility: null};
+const EMPTY_COMMENT: EditingComment = {text: '', visibility: null};
 
 
 const IssueCommentEdit = (props: Props) => {
@@ -98,7 +100,7 @@ const IssueCommentEdit = (props: Props) => {
     mentionsVisible: false,
   });
 
-  let editCommentInput: AutoGrowingTextInput;
+  let editCommentInput: typeof AutoGrowingTextInput;
 
   const changeState = (statePart: $Shape<State>): void => {
     updateState((prevState: State) => ({...prevState, ...statePart}));
@@ -108,43 +110,65 @@ const IssueCommentEdit = (props: Props) => {
     changeState({isSaving});
   };
 
-  const getCurrentComment = (data: $Shape<IssueComment> = {}): IssueComment => ({
+  const getCurrentComment = useCallback((data: EditingComment = ({}: any)): EditingComment => ({
     ...props.editingComment,
-    ...state.editingComment,
     text: state.editingCommentText,
-    ...data,
+    attachments: state.editingComment.attachments,
+    visibility: state.editingComment.visibility,
     usesMarkdown: true,
-  });
+    ...data,
+  }), [props.editingComment, state.editingComment, state.editingCommentText]);
 
-  const delayedChange = useCallback(debounce((draft: $Shape<IssueComment>, isAttachmentChange: boolean = false) => {
-    props.onCommentChange(draft, isAttachmentChange);
-  }, 100), []);
+  const setComment = useCallback((editingComment: $Shape<IssueComment> = EMPTY_COMMENT): void => {
+    changeState({editingComment});
+  }, []);
+
+  const delayedChange = useCallback(
+    debounce((draft: $Shape<IssueComment>, isAttachmentChange: boolean = false) => {
+      props.onCommentChange(draft, isAttachmentChange);
+    }, 100),
+    []
+  );
 
   useEffect(() => {
     return () => setComment();
-  }, []);
+  }, [setComment]);
 
   useEffect(() => {
-    if (
-      props.editingComment === null ||
-      (!state.editingComment.id && props.editingComment?.id) ||
-      props.editingComment?.reply === true
-    ) {
+    if (state.editingComment.id === undefined && props.editingComment?.id) {
+      // set draft id
       changeState({
-        editingComment: props.editingComment === null ? EMPTY_COMMENT : props.editingComment,
-        editingCommentText: state.editingCommentText || props.editingComment?.text || EMPTY_COMMENT.text,
+        editingComment: {
+          ...state.editingComment,
+          ...props.editingComment,
+        }
       });
     }
-    if (props.editingComment?.text && !state.editingCommentText) {
-      changeState({
-        editingCommentText: props.editingComment?.text
-      });
-    }
-  }, [props.editingComment]);
 
-  const setComment = (editingComment: $Shape<IssueComment> = EMPTY_COMMENT): void => {
-    changeState({editingComment});
-  };
+    if (props.editingComment === null && state.editingComment?.id) {
+      // reset after submitting
+      changeState({editingComment: EMPTY_COMMENT});
+    }
+
+    if (props.editingComment?.reply === true) {
+      // do reply
+      changeState({editingComment: props.editingComment});
+      delayedChange(getCurrentComment({text: props.editingComment?.text}), false);
+    }
+
+    if (state.editingComment.id === undefined && !state.editingComment.text && props.editingComment?.text) {
+      //set draft text
+      changeState({editingCommentText: props.editingComment?.text});
+    }
+  }, [
+    delayedChange,
+    getCurrentComment,
+    props.editingComment,
+    state.editingComment,
+    state.editingComment.id,
+    state.editingComment.text,
+    state.editingCommentText,
+  ]);
 
   const focus = (): void => {editCommentInput.focus();};
 
@@ -156,7 +180,12 @@ const IssueCommentEdit = (props: Props) => {
     toggleSaving(true);
     toggleVisibilityControl(false);
     return props.onSubmitComment(updatedComment)
-      .then(() => setComment())
+      .then(() => {
+        changeState({
+          editingComment: EMPTY_COMMENT,
+          editingCommentText: EMPTY_COMMENT.text,
+        });
+      })
       .finally(() => toggleSaving(false));
   };
 
@@ -185,9 +214,9 @@ const IssueCommentEdit = (props: Props) => {
     const newText: ?string = composeSuggestionText(user, state.editingComment.text, state.commentCaret);
     if (newText) {
       const updatedText: string = `${newText} `;
-      const updatedComment: IssueComment = {
+      const updatedComment: EditingComment = {
         ...state.editingComment,
-        text: updatedText
+        text: updatedText,
       };
       changeState({
         editingComment: updatedComment,
@@ -205,9 +234,9 @@ const IssueCommentEdit = (props: Props) => {
         <Mentions
           style={[
             {
-              maxHeight: Dimensions.get('window').height / 4.7
+              maxHeight: Dimensions.get('window').height / 4.7,
             },
-            props.isEditMode ? styles.mentionsEdit : styles.mentions
+            props.isEditMode ? styles.mentionsEdit : styles.mentions,
           ]}
           isLoading={state.mentionsLoading}
           mentions={state.mentions}
@@ -243,22 +272,31 @@ const IssueCommentEdit = (props: Props) => {
 
   const renderSendButton = (): Node => {
     const {editingComment, isSaving} = state;
-    const isDisabled: boolean = state.isSaving || (!state.editingComment.text && !editingComment.attachments);
+    const draftHasId: boolean = !!state.editingComment.id;
+    const isDisabled: boolean = !draftHasId || state.isSaving || (
+      !state.editingComment.text &&
+      !editingComment.attachments
+    );
     return (
       <TouchableOpacity
         style={[
           styles.commentSendButton,
-          isDisabled ? styles.commentSendButtonDisabled : null
+          isDisabled ? styles.commentSendButtonDisabled : null,
         ]}
         disabled={isDisabled}
-        onPress={() => submitComment(getCurrentComment())}>
-        {!isSaving && (
+        onPress={() => {
+          const comment: IssueComment = getCurrentComment();
+          props.onCommentChange(comment, false).then((response: ?IssueComment) => {
+            submitComment(response || comment);
+          });
+        }}>
+        {(!isSaving && draftHasId) && (
           <IconArrowUp
             size={22}
             color={theme.uiTheme.colors.$textButton}
           />
         )}
-        {isSaving && <ActivityIndicator color={theme.uiTheme.colors.$background}/>}
+        {(isSaving || !draftHasId) && <ActivityIndicator color={theme.uiTheme.colors.$background}/>}
       </TouchableOpacity>
     );
   };
@@ -291,7 +329,7 @@ const IssueCommentEdit = (props: Props) => {
           onCancel: () => {
             changeState({isAttachFileDialogVisible: false});
             delayedChange(getCurrentComment());
-          }
+          },
         }}
       />
     );
@@ -317,15 +355,15 @@ const IssueCommentEdit = (props: Props) => {
             attachment,
             hasType.commentDraft(state.editingComment) ? undefined : state.editingComment.id
           ));
-          const attachments: Array<Attachment> = state.editingComment.attachments.filter(
+          const attachments: Array<Attachment> = (state.editingComment.attachments || []).filter(
             (it: Attachment) => it.id !== attachment.id
           );
           const isDeleted: boolean = !state.editingComment.text && !attachments.length;
           const updatedComment: IssueComment = getCurrentComment({
             attachments,
-            deleted: isDeleted
+            deleted: isDeleted,
           });
-          setComment(isDeleted ? undefined: updatedComment);
+          setComment(isDeleted ? undefined : updatedComment);
           delayedChange(updatedComment, true);
           if (props.isEditMode) {
             closeModal();
@@ -381,11 +419,13 @@ const IssueCommentEdit = (props: Props) => {
     Router.pop(true);
   };
 
+  const hasAttachments = (): boolean => !!state.editingComment?.attachments?.length;
+
   const renderAddNewComment = (): Node => {
     const {isSaving, mentionsVisible, editingComment, isVisibilityControlVisible, isVisibilitySelectVisible} = state;
     const hasText: boolean = !!editingComment.text;
     const showVisibilityControl: boolean = !mentionsVisible && (
-      editingComment.visibility ||
+      !!editingComment.visibility ||
       isVisibilitySelectVisible ||
       isVisibilityControlVisible
     );
@@ -427,11 +467,11 @@ const IssueCommentEdit = (props: Props) => {
                 toggleVisibilityControl(false);
               }
             )}
-            {Boolean(hasText || editingComment?.attachments?.length > 0) && renderSendButton()}
+            {Boolean(hasText || hasAttachments()) && renderSendButton()}
           </View>
         </View>
 
-        {state.editingComment?.attachments?.length > 0 && <View style={styles.attachmentsContainer}>
+        {hasAttachments() && <View style={styles.attachmentsContainer}>
           {renderAttachments()}
         </View>}
 
@@ -452,7 +492,7 @@ const IssueCommentEdit = (props: Props) => {
               >
                 <IconAttachment size={22} color={styles.actionsContainerButton.color}/>
                 <Text
-                  style={[styles.actionsContainerButtonText, styles.floatContextButtonText]}>Attach image</Text>
+                  style={[styles.actionsContainerButtonText, styles.floatContextButtonText]}>Attach file</Text>
               </TouchableOpacity>
             )}
             {!!props.onAddSpentTime && (
@@ -481,7 +521,7 @@ const IssueCommentEdit = (props: Props) => {
 
   const renderEditComment = (): Node => {
     const {isSaving, editingComment} = state;
-    const isSubmitEnabled: boolean = editingComment.text || state.editingComment?.attachments?.length > 0;
+    const isSubmitEnabled: boolean = !!editingComment.text || hasAttachments();
     return (
       <View style={styles.commentEditContainer}>
         {!state.mentionsVisible && (
