@@ -40,10 +40,12 @@ import type {AttachmentActions} from '../attachments-row/attachment-actions';
 
 type UserMentions = { users: Array<User> };
 
+type EditingComment = $Shape<IssueComment & {reply: boolean}>;
+
 type Props = {
   canAttach: boolean,
   canRemoveAttach: (attachment: Attachment) => boolean,
-  editingComment?: ?$Shape<IssueComment>,
+  editingComment?: EditingComment,
   focus?: boolean,
   getCommentSuggestions: (query: string) => Promise<UserMentions>,
   getVisibilityOptions: () => Array<User | UserGroup>,
@@ -60,7 +62,7 @@ type Props = {
 type State = {
   attachFileSource: string | null,
   commentCaret: number,
-  editingComment: $Shape<IssueComment>,
+  editingComment: EditingComment,
   editingCommentText: string,
   isAttachFileDialogVisible: boolean,
   isAttachActionsVisible: boolean,
@@ -73,7 +75,7 @@ type State = {
   mentionsVisible: boolean,
 };
 
-const EMPTY_COMMENT: $Shape<IssueComment> = {text: '', visibility: null};
+const EMPTY_COMMENT: EditingComment = {text: '', visibility: null};
 
 
 const IssueCommentEdit = (props: Props) => {
@@ -107,7 +109,7 @@ const IssueCommentEdit = (props: Props) => {
     changeState({isSaving});
   };
 
-  const getCurrentComment = (data: $Shape<IssueComment> = {}): $Shape<IssueComment> => ({
+  const getCurrentComment = (data: EditingComment = ({}: any)): EditingComment => ({
     ...props.editingComment,
     ...state.editingComment,
     text: state.editingCommentText,
@@ -185,9 +187,9 @@ const IssueCommentEdit = (props: Props) => {
     const newText: ?string = composeSuggestionText(user, state.editingComment.text, state.commentCaret);
     if (newText) {
       const updatedText: string = `${newText} `;
-      const updatedComment: IssueComment = {
+      const updatedComment: EditingComment = {
         ...state.editingComment,
-        text: updatedText
+        text: updatedText,
       };
       changeState({
         editingComment: updatedComment,
@@ -205,9 +207,9 @@ const IssueCommentEdit = (props: Props) => {
         <Mentions
           style={[
             {
-              maxHeight: Dimensions.get('window').height / 4.7
+              maxHeight: Dimensions.get('window').height / 4.7,
             },
-            props.isEditMode ? styles.mentionsEdit : styles.mentions
+            props.isEditMode ? styles.mentionsEdit : styles.mentions,
           ]}
           isLoading={state.mentionsLoading}
           mentions={state.mentions}
@@ -248,7 +250,7 @@ const IssueCommentEdit = (props: Props) => {
       <TouchableOpacity
         style={[
           styles.commentSendButton,
-          isDisabled ? styles.commentSendButtonDisabled : null
+          isDisabled ? styles.commentSendButtonDisabled : null,
         ]}
         disabled={isDisabled}
         onPress={() => submitComment(getCurrentComment())}>
@@ -283,7 +285,7 @@ const IssueCommentEdit = (props: Props) => {
             const updatedComment: IssueComment = getCurrentComment({
               ...state.editingComment,
               ...draftComment,
-              attachments: [].concat(state.editingComment.attachments || []).concat(addedAttachments)
+              attachments: [].concat(state.editingComment.attachments || []).concat(addedAttachments),
             });
             setComment(updatedComment);
             delayedChange(updatedComment, true);
@@ -291,7 +293,7 @@ const IssueCommentEdit = (props: Props) => {
           onCancel: () => {
             changeState({isAttachFileDialogVisible: false});
             delayedChange(getCurrentComment());
-          }
+          },
         }}
       />
     );
@@ -381,6 +383,8 @@ const IssueCommentEdit = (props: Props) => {
     Router.pop(true);
   };
 
+  const hasAttachments = (): boolean => !!state.editingComment?.attachments?.length;
+
   const renderAddNewComment = (): Node => {
     const {isSaving, mentionsVisible, editingComment, isVisibilityControlVisible, isVisibilitySelectVisible} = state;
     const hasText: boolean = !!editingComment.text;
@@ -427,11 +431,11 @@ const IssueCommentEdit = (props: Props) => {
                 toggleVisibilityControl(false);
               }
             )}
-            {Boolean(hasText || editingComment?.attachments?.length > 0) && renderSendButton()}
+            {Boolean(hasText || hasAttachments()) && renderSendButton()}
           </View>
         </View>
 
-        {state.editingComment?.attachments?.length > 0 && <View style={styles.attachmentsContainer}>
+        {hasAttachments() && <View style={styles.attachmentsContainer}>
           {renderAttachments()}
         </View>}
 
@@ -481,7 +485,7 @@ const IssueCommentEdit = (props: Props) => {
 
   const renderEditComment = (): Node => {
     const {isSaving, editingComment} = state;
-    const isSubmitEnabled: boolean = editingComment.text || state.editingComment?.attachments?.length > 0;
+    const isSubmitEnabled: boolean = !!editingComment.text || hasAttachments();
     return (
       <View style={styles.commentEditContainer}>
         {!state.mentionsVisible && (
@@ -550,4 +554,4 @@ const IssueCommentEdit = (props: Props) => {
   );
 };
 
-export default React.memo<any>(IssueCommentEdit);
+export default (React.memo<Props>(IssueCommentEdit): React$AbstractComponent<Props, mixed>);
