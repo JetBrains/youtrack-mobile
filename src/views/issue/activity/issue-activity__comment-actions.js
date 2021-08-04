@@ -155,7 +155,6 @@ export function submitDraftComment(draftComment: IssueComment) {
     const {issue} = getState().issueState;
 
     if (draftComment && issue) {
-      await dispatch(updateDraftComment(draftComment, true));
       const [error] = await until(getApi().issue.submitDraftComment(issue.id, draftComment));
       if (error) {
         const message: string = 'Failed to post a comment';

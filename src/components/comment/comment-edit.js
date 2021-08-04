@@ -274,7 +274,7 @@ const IssueCommentEdit = (props: Props) => {
         ]}
         disabled={isDisabled}
         onPress={() => submitComment(getCurrentComment())}>
-        {(!isSaving || !draftHasId) && (
+        {(!isSaving && draftHasId) && (
           <IconArrowUp
             size={22}
             color={theme.uiTheme.colors.$textButton}
