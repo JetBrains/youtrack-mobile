@@ -135,7 +135,7 @@ const IssueCommentEdit = (props: Props) => {
       // set draft id
       changeState({editingComment: {
           ...state.editingComment,
-          id: props.editingComment.id,
+          ...props.editingComment,
         }});
     }
 
