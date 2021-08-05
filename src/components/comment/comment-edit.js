@@ -111,10 +111,11 @@ const IssueCommentEdit = (props: Props) => {
 
   const getCurrentComment = useCallback((data: EditingComment = ({}: any)): EditingComment => ({
     ...props.editingComment,
-    ...state.editingComment,
     text: state.editingCommentText,
-    ...data,
+    attachments: state.editingComment.attachments,
+    visibility: state.editingComment.visibility,
     usesMarkdown: true,
+    ...data,
   }), [props.editingComment, state.editingComment, state.editingCommentText]);
 
   const setComment = useCallback((editingComment: $Shape<IssueComment> = EMPTY_COMMENT): void => {
@@ -122,9 +123,12 @@ const IssueCommentEdit = (props: Props) => {
   }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const delayedChange = useCallback(debounce((draft: $Shape<IssueComment>, isAttachmentChange: boolean = false) => {
-    props.onCommentChange(draft, isAttachmentChange);
-  }, 100), []);
+  const delayedChange = useCallback(
+    debounce((draft: $Shape<IssueComment>, isAttachmentChange: boolean = false) => {
+      props.onCommentChange(draft, isAttachmentChange);
+    }, 100),
+    []
+  );
 
   useEffect(() => {
     return () => setComment();
