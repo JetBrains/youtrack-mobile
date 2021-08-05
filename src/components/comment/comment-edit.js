@@ -178,7 +178,12 @@ const IssueCommentEdit = (props: Props) => {
     toggleSaving(true);
     toggleVisibilityControl(false);
     return props.onSubmitComment(updatedComment)
-      .then(() => setComment())
+      .then(() => {
+        changeState({
+          editingComment: EMPTY_COMMENT,
+          editingCommentText: EMPTY_COMMENT.text,
+        });
+      })
       .finally(() => toggleSaving(false));
   };
 
@@ -277,7 +282,12 @@ const IssueCommentEdit = (props: Props) => {
           isDisabled ? styles.commentSendButtonDisabled : null,
         ]}
         disabled={isDisabled}
-        onPress={() => submitComment(getCurrentComment())}>
+        onPress={() => {
+          const comment: IssueComment = getCurrentComment();
+          props.onCommentChange(comment, false).then((response: ?IssueComment) => {
+            submitComment(response || comment);
+          });
+        }}>
         {(!isSaving && draftHasId) && (
           <IconArrowUp
             size={22}
