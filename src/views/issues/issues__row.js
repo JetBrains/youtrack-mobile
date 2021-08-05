@@ -77,7 +77,7 @@ export default class IssueRow extends Component<Props, void> {
                 </Text>
 
                 <View style={styles.headRight}>
-                  <Text style={styles.secondaryText}>{`${relativeDate(issue.created)}  `}</Text>
+                  <Text style={styles.secondaryText}>{`${relativeDate(issue.updated)}  `}</Text>
                   <Avatar
                     userName={getEntityPresentation(issue.reporter)}
                     size={20}
