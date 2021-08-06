@@ -158,19 +158,46 @@ describe('push-notifications-helper', () => {
 
   describe('getIssueId', () => {
     it('should return iOS push notification issue id', () => {
-      expect(helper.getIssueId({ytIssueId: youTrackTokenMock})).toEqual(youTrackTokenMock);
+      expect(helper.getIssueId({ytIssueId: 'X-1'})).toEqual('X-1');
     });
 
     it('should return iOS push notification data issue id', () => {
-      expect(helper.getIssueId({data: {ytIssueId: youTrackTokenMock}})).toEqual(youTrackTokenMock);
+      expect(helper.getIssueId({data: {ytIssueId: 'X-2'}})).toEqual('X-2');
+    });
+
+    it('should return iOS push notification issue id via PushNotificationIOS API', () => {
+      expect(helper.getIssueId({getData: () => ({ytIssueId: 'X-3'})})).toEqual('X-3');
     });
 
     it('should return Android push notification issue id', () => {
-      expect(helper.getIssueId({issueId: youTrackTokenMock})).toEqual(youTrackTokenMock);
+      expect(helper.getIssueId({issueId: 'X-4'})).toEqual('X-4');
     });
 
     it('should return Android push notification data issue id', () => {
-      expect(helper.getIssueId({data: {issueId: youTrackTokenMock}})).toEqual(youTrackTokenMock);
+      expect(helper.getIssueId({data: {issueId: 'X-5'}})).toEqual('X-5');
+    });
+  });
+
+
+  describe('getBackendUrl', () => {
+    it('should return iOS push notification getBackendUrl', () => {
+      expect(helper.getBackendUrl({backendUrl: 'https://1'})).toEqual('https://1');
+    });
+
+    it('should return iOS push notification data issue id', () => {
+      expect(helper.getBackendUrl({data: {backendUrl: 'https://2'}})).toEqual('https://2');
+    });
+
+    it('should return iOS push notification issue id via PushNotificationIOS API', () => {
+      expect(helper.getBackendUrl({getData: () => ({backendUrl: 'https://3'})})).toEqual('https://3');
+    });
+
+    it('should return Android push notification issue id', () => {
+      expect(helper.getBackendUrl({backendUrl: 'https://4'})).toEqual('https://4');
+    });
+
+    it('should return Android push notification data issue id', () => {
+      expect(helper.getBackendUrl({data: {backendUrl: 'https://5'}})).toEqual('https://5');
     });
   });
 

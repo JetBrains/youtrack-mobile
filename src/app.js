@@ -1,39 +1,38 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {Component} from 'react';
 import {UIManager} from 'react-native';
 
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {Provider} from 'react-redux';
 
-import Router from './components/router/router';
-import store from './store';
-import {isAndroidPlatform} from './util/util';
-import {onNavigateBack, setAccount} from './actions/app-actions';
-import {rootRoutesList, routeMap} from './app-routes';
-
 import AgileBoard from './views/agile-board/agile-board';
+import AppProvider from './app-provider';
 import Article from './views/article/article';
 import ArticleCreate from './views/article-create/article-create';
 import AttachmentPreview from './views/attachment-preview/attachment-preview';
 import CreateIssue from './views/create-issue/create-issue';
 import EnterServer from './views/enter-server/enter-server';
 import Home from './views/home/home';
-import PreviewFile from './views/preview-file/preview-file';
 import Inbox from './views/inbox/inbox';
 import Issue from './views/issue/issue';
 import Issues from './views/issues/issues';
 import KnowledgeBase from './views/knowledge-base/knowledge-base';
 import LoginForm from './views/log-in/log-in';
 import Page from './views/page/page';
+import PreviewFile from './views/preview-file/preview-file';
+import notificationsHelper from './components/push-notifications/push-notifications-helper';
+import Router from './components/router/router';
 import Settings from './views/settings/settings';
+import store from './store';
 import WikiPage from './views/wiki-page/wiki-page';
-
 import {ActionSheetProvider, connectActionSheet} from '@expo/react-native-action-sheet';
+import {isAndroidPlatform} from './util/util';
 import {Notifications} from 'react-native-notifications';
+import {onNavigateBack, setAccount} from './actions/app-actions';
+import {rootRoutesList, routeMap} from './app-routes';
 
-import AppProvider from './app-provider';
-
+import type {Node} from 'React';
 import type {NotificationRouteData} from './flow/Notification';
 import type {Ref} from 'react';
 
@@ -65,17 +64,16 @@ class YouTrackMobile extends Component<void, void> {
     Router.rootRoutes = rootRoutesList;
   }
 
-  static async getNotificationData() {
-    let notificationData: ?NotificationRouteData;
-    if (isAndroid) {
-      const initialNotification = await Notifications.getInitialNotification();
-      const notificationPayload = initialNotification?.payload;
-      notificationData = {
-        issueId: notificationPayload?.issueId,
-        backendUrl: notificationPayload?.backendUrl,
-      };
-    }
-    return notificationData;
+  static async getNotificationData(): Promise<NotificationRouteData> {
+    const notification: Promise<typeof Notification | ?PushNotificationIOS> = (
+      isAndroid
+        ? await Notifications.getInitialNotification()
+        : await PushNotificationIOS.getInitialNotification()
+    );
+    return {
+      issueId: notificationsHelper.getIssueId(notification),
+      backendUrl: notificationsHelper.getBackendUrl(notification),
+    };
   }
 
   static async init(getNotificationRouteData: () => Promise<?NotificationRouteData>) {

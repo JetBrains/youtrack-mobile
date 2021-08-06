@@ -76,12 +76,25 @@ function showInfoMessage(title: string, message: string, buttons: Array<Object> 
 
 
 function getIssueId(notification: Object): ?string {
+  const data: Object = notification?.getData && notification.getData();
   return (
+    data?.ytIssueId ||
     notification?.ytIssueId ||
     notification?.data?.ytIssueId ||
+    notification?.getData && notification.getData().ytIssueId ||
     notification?.issueId ||
     notification?.payload?.issueId ||
     notification?.data?.issueId
+  );
+}
+
+function getBackendUrl(notification: Object): ?string {
+  const data: Object = notification?.getData && notification.getData();
+  return (
+    data?.backendUrl ||
+    notification?.backendUrl ||
+    notification?.data?.backendUrl ||
+    notification?.payload?.backendUrl
   );
 }
 
@@ -179,4 +192,5 @@ export default {
   KONNECTOR_URL,
   composeError,
   isSummaryOrDescriptionNotification,
+  getBackendUrl,
 };
