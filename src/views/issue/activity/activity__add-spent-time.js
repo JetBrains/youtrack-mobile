@@ -310,7 +310,9 @@ const AddSpentTimeForm = (props: Props) => {
               style={[styles.feedbackInput, styles.feedbackFormTextMain]}
               placeholder="1w 1d 1h 1m"
               value={draft?.duration?.presentation}
-              onChangeText={(periodValue: string) => update({duration: {presentation: periodValue}})}
+              onChangeText={(periodValue: string) => updateDraftWorkItem(
+                {...draft, duration: {presentation: periodValue}}
+              )}
             />
           </View>
           {error && <Text style={styles.feedbackInputErrorHint}>1w 1d 1h 1m</Text>}
