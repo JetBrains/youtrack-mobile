@@ -27,7 +27,7 @@ export const THEME_MODE_KEY = 'YT_THEME_MODE';
 
 export type StorageState = {|
   articles: ?Array<Article>,
-  articlesList: ArticlesList,
+  articlesList: ArticlesList | null,
   articlesQuery: string | null,
   articleLastVisited: { article?: Article, activities?: Array<Activity> } | null,
   authParams: ?AuthParams,
