@@ -354,7 +354,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async updateDraftWorkItem(issueId: string, draft: WorkItem): Promise<any> {
+  async updateDraftWorkItem(issueId: string, draft: WorkItem): Promise<WorkItem> {
     return this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/timeTracking/draftWorkItem?${ApiBase.createFieldsQuery(issueFields.workItems)}`,
       draft.id ? 'POST' : 'PUT',
@@ -373,9 +373,9 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async deleteWorkItem(issueId: string, workItemId: string): Promise<any> {
+  async deleteWorkItem(issueId: string): Promise<any> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackIssueUrl}/${issueId}/timeTracking/workItems/${workItemId}?${ApiBase.createFieldsQuery(
+      `${this.youTrackIssueUrl}/${issueId}/timeTracking/workItems/?${ApiBase.createFieldsQuery(
         issueFields.workItems,
       )}`,
       'DELETE',

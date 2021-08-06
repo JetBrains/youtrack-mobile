@@ -3,7 +3,7 @@
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 import InputScrollView from 'react-native-input-scroll-view';
 
 import * as issueActivityItems from './issue-activity__actions';
@@ -63,26 +63,28 @@ const AddSpentTimeForm = (props: Props) => {
   const [selectProps, updateSelectProps] = useState(null);
   const [error, updateError] = useState(false);
 
-  const getDraft = (draftItem: WorkItem) => ({
+  const getDraft = (draftItem: WorkItem): WorkItem => ({
     ...draftItem,
     type: !draftItem.type || draftItem.type?.id === null ? null : draftItem.type,
   });
 
   const updateDraft = async (draftItem: WorkItem) => {
     const draftWithType: WorkItem = getDraft(draftItem);
-    const updatedDraft: WorkItem = await dispatch(
+    dispatch(
       issueActivityItems.updateWorkItemDraft(draftWithType)
-    );
-    if (updatedDraft) {
-      updateDraftWorkItem({
-        ...draftItem,
-        $type: updatedDraft.$type,
-        id: updatedDraft.id,
-      });
-    }
+    ).then((updatedDraft: WorkItem | null) => {
+      if (updatedDraft) {
+        updateDraftWorkItem({
+          ...draft,
+          $type: updatedDraft.$type,
+          type: updatedDraft.type,
+          id: updatedDraft.id,
+        });
+      }
+    }).catch(() => {});
   };
 
-  const delayedUpdate = throttle(updateDraft, 300);
+  const delayedUpdate = debounce(updateDraft, 300);
 
   useEffect(() => {
     if (props.workItem) {
@@ -100,7 +102,7 @@ const AddSpentTimeForm = (props: Props) => {
         ...timeTracking?.workItemTemplate,
         ...timeTracking?.draftWorkItem,
         $type: undefined,
-        type: timeTracking?.draftWorkItem?.type || draftDefault.type,
+        type: timeTracking?.draftWorkItem?.type || timeTracking?.workItemTemplate?.type || draftDefault.type,
         usesMarkdown: true,
       });
       updateProgress(false);
@@ -324,7 +326,7 @@ const AddSpentTimeForm = (props: Props) => {
             <Text
               style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
               numberOfLines={1}
-            >{draft?.type?.name}</Text>
+            >{draft?.type?.name || draftDefault.type?.name}</Text>
             {iconAngleRight}
           </TouchableOpacity>
 
@@ -335,7 +337,7 @@ const AddSpentTimeForm = (props: Props) => {
             style={[styles.feedbackFormInputDescription]}
             placeholder={commentPlaceholderText}
             value={draft?.text}
-            onChangeText={(comment: string) => update({text: comment})}
+            onChangeText={(comment: string) => updateDraftWorkItem({...draft, text: comment})}
           />
 
           <View style={styles.feedbackFormBottomIndent}/>

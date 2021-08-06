@@ -18,6 +18,7 @@ import type {Activity, ActivityType} from '../../../flow/Activity';
 import type {CustomError} from '../../../flow/Error';
 import type {Folder, User} from '../../../flow/User';
 import type {State as SingleIssueState} from '../issue-reducers';
+import type {TimeTracking} from '../../../flow/Work';
 import type {WorkItem} from '../../../flow/Work';
 
 type ApiGetter = () => Api;
@@ -84,7 +85,7 @@ export function getTimeTracking(): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
-) => Promise<null> | Promise<any>) {
+) => Promise<TimeTracking | null>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
     const api: Api = getApi();
@@ -108,7 +109,7 @@ export function updateWorkItemDraft(draft: WorkItem): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
-) => Promise<null> | Promise<any>) {
+) => Promise<WorkItem | null>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
     const issueId = getState().issueState.issueId;
@@ -244,7 +245,7 @@ export function getWorkItemTypes(): ((
   };
 }
 
-export function deleteWorkItem(workItem: WorkItem): ((
+export function deleteWorkItem(): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
@@ -257,7 +258,7 @@ export function deleteWorkItem(workItem: WorkItem): ((
       'Are you sure you want to delete work item?',
       'Delete'
     ).then(async () => {
-      const [error] = await until(api.issue.deleteWorkItem(issueId, workItem.id));
+      const [error] = await until(api.issue.deleteWorkItem(issueId));
       if (error) {
         const msg: string = 'Failed to delete work item ';
         notify(msg, error);
