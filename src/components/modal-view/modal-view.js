@@ -27,7 +27,8 @@ type Props = {
   supportedOrientations?: Array<ModalOrientation>,
   onRequestClose?: () => any,
   style?: ?ViewStyleProp,
-  children: any
+  children: any,
+  testID?: string,
 }
 
 export default class ModalView extends PureComponent<Props, void> {
@@ -41,7 +42,16 @@ export default class ModalView extends PureComponent<Props, void> {
   };
 
   render(): Node {
-    const {visible, transparent, animationType, supportedOrientations, onRequestClose, children, style = {}} = this.props;
+    const {
+      visible,
+      transparent,
+      animationType,
+      supportedOrientations,
+      onRequestClose,
+      children,
+      style = {},
+      testID = 'modalView',
+    } = this.props;
 
 
     return (
@@ -49,7 +59,7 @@ export default class ModalView extends PureComponent<Props, void> {
         {(theme: Theme) => {
           return (
             <Modal
-              testID="modalView"
+              testID={testID}
               visible={visible}
               transparent={transparent}
               animationType={animationType}

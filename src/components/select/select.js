@@ -109,11 +109,11 @@ export default class Select extends Component<SelectProps, SelectState> {
     }
   }
 
-  renderEmptyValueItem(): void | Node {
+  renderEmptyValueItem(): React$Element<any> | null {
     const {emptyValue} = this.props;
 
     if (!emptyValue) {
-      return;
+      return null;
     }
     return (
       <View
