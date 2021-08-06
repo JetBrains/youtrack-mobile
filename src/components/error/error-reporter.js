@@ -5,11 +5,10 @@ import DeviceInfo from 'react-native-device-info';
 import appPackage from '../../../package.json';
 import log, {getLogs} from '../log/log';
 import {getStorageState} from '../storage/storage';
-import {resolveErrorMessage} from './error-resolver';
 import {ResourceTypes, getShortEntityType} from '../api/api__resource-types';
 
+import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {HTTPResponse} from '../../flow/Error';
-import type {AppConfig} from '../../flow/AppConfig';
 
 export type ReportErrorData = { summary: string, description: string };
 
@@ -25,7 +24,7 @@ export const YOUTRACK_MOBILE_PROJECT_ID = '22-174';
 
 
 export async function sendReport(summary: string, description: string): Promise<string> {
-  const response: Response = await fetch(SERVER_URI, {
+  const response: HTTPResponse = await fetch(SERVER_URI, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -52,11 +51,15 @@ export async function sendReport(summary: string, description: string): Promise<
 }
 
 export const getAppAndDeviceData = (): string => {
-  let config: AppConfig | Object = {};
+  let config: $Shape<AppConfigFilled>;
   try {
-    config = getStorageState().config;
+    config = ((getStorageState().config: any): AppConfigFilled);
   } catch (e) {
-    //
+    const notDefined: string = '<not-defined>';
+    config = {
+      version: notDefined,
+      backendUrl: notDefined,
+    };
   }
 
   return `
@@ -66,8 +69,8 @@ export const getAppAndDeviceData = (): string => {
   System version: ${DeviceInfo.getSystemVersion()};
   Device: ${DeviceInfo.getBrand()} ${DeviceInfo.getDeviceId()};
 
-  YouTrack version: ${config?.version};
-  YouTrack URL: ${config?.backendUrl};
+  YouTrack version: ${config.version};
+  YouTrack URL: ${config.backendUrl};
   `;
 };
 
@@ -97,42 +100,4 @@ export async function createReportErrorData(error: Error | string, isCrashReport
     summary,
     description,
   };
-}
-
-function getNowDate(): string {
-  return new Date(Date.now()).toString();
-}
-
-function getResponseDate(response: HTTPResponse): string {
-  return response?.headers?.map?.date || getNowDate();
-}
-
-async function resolveErrorMessageFromResponse(response: HTTPResponse): Promise<string> {
-  let errorMessage: string;
-  try {
-    errorMessage = await resolveErrorMessage(response);
-  } catch (e) {
-    errorMessage = JSON.stringify(response);
-  }
-  return errorMessage;
-}
-
-export const createExtendedErrorMessage = async (response: HTTPResponse, url: string, method: ?string): Promise<string> => {
-  const requestURL: string = url.split('?fields=')[0];
-  const errorMessage: string = await resolveErrorMessageFromResponse(response);
-
-  return `"${method || 'GET'}" to ${requestURL}\n\n${errorMessage}`;
-};
-
-export async function reportError(error: Error | string, title?: string) {
-  try {
-    const isErrorInstance: boolean = error instanceof Error;
-    const date: string = isErrorInstance ? getResponseDate(error) : getNowDate();
-    const errorMessage: string = isErrorInstance ? await resolveErrorMessageFromResponse(error) : error.toString();
-    const reportErrorData: ReportErrorData = await createReportErrorData(errorMessage);
-
-    sendReport(`${title || 'Error'}: ${reportErrorData.summary}`, `${date}\n${reportErrorData.description}`);
-  } catch (e) {
-    //
-  }
 }
