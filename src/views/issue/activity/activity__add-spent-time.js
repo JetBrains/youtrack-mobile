@@ -51,10 +51,10 @@ const AddSpentTimeForm = (props: Props) => {
     },
     type: {
       id: null,
-      key: 'no-work-type',
       name: 'No type',
     },
     text: null,
+    usesMarkdown: true,
   });
 
   const [isProgress, updateProgress] = useState(false);
@@ -99,8 +99,9 @@ const AddSpentTimeForm = (props: Props) => {
         ...draftDefault,
         ...timeTracking?.workItemTemplate,
         ...timeTracking?.draftWorkItem,
-        usesMarkdown: true,
         $type: undefined,
+        type: timeTracking?.draftWorkItem?.type || draftDefault.type,
+        usesMarkdown: true,
       });
       updateProgress(false);
     }
@@ -108,7 +109,7 @@ const AddSpentTimeForm = (props: Props) => {
   }, [props.workItem, dispatch]);
 
 
-  const update = (data: $Shape<TimeTracking>) => {
+  const update = (data: $Shape<WorkItem>) => {
     updateError(false);
     const updatedDraft: WorkItem = {
       ...draft,
@@ -323,7 +324,7 @@ const AddSpentTimeForm = (props: Props) => {
             <Text
               style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
               numberOfLines={1}
-            >{draft?.type?.name || draftDefault.type.name}</Text>
+            >{draft?.type?.name}</Text>
             {iconAngleRight}
           </TouchableOpacity>
 

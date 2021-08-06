@@ -13,7 +13,7 @@ import type {Theme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
-  current?: Date,
+  current?: number,
   onDateSelect: (date: Date) => any,
   style?: ViewStyleProp,
 };

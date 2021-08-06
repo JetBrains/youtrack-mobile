@@ -10,7 +10,7 @@ export type WorkTimeSettings = {
 }
 
 export type WorkItemType = {
-  id: string,
+  id: string | null,
   name: string
 };
 
@@ -20,15 +20,16 @@ export type WorkItemTemplate = {
   duration: {
     presentation: string
   },
-  type: WorkItemType
+  type: WorkItemType | null,
 };
 
-export type WorkItem = WorkItemTemplate & {
+export type WorkItem = {
+  ...WorkItemTemplate,
   $type?: string,
-  creator: User,
+  creator?: User,
   id?: string,
-  text?: string,
-  usesMarkdown: boolean
+  text: string | null,
+  usesMarkdown: boolean,
 };
 
 export type TimeTracking = {

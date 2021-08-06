@@ -14,7 +14,7 @@ import styles, {SELECT_ITEM_HEIGHT, SELECT_ITEM_SEPARATOR_HEIGHT} from './select
 
 export type SelectProps = {
   dataSource: (query: string) => Promise<Array<Object>>,
-  onSelect: (item: ?Object | Array<Object>) => any,
+  onSelect: (item: any) => any,
   onChangeSelection: (selectedItems: Array<Object>, current: Object) => any,
   onCancel: () => any,
   getTitle: (item: Object) => string,
