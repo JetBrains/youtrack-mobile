@@ -27,7 +27,8 @@ export type HeaderProps = {
 }
 
 type DefaultProps = {
-  onRightButtonClick: Function
+  onRightButtonClick: Function,
+  showShadow: boolean,
 }
 
 export default class Header extends PureComponent<HeaderProps, void> {
