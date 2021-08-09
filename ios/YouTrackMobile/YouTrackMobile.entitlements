@@ -8,6 +8,7 @@
 	<array>
 		<string>applinks:youtrack.jetbrains.com</string>
 		<string>applinks:*.myjetbrains.com</string>
+		<string>applinks:*.youtrack.cloud</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>

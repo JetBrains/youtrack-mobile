@@ -66,6 +66,8 @@
 
           <data android:scheme="https" android:host="*.myjetbrains.com" android:pathPattern="/.*issues"/>
           <data android:scheme="http" android:host="*.myjetbrains.com" android:pathPattern="/.*issues"/>
+          <data android:scheme="https" android:host="*.youtrack.cloud" android:pathPattern="/.*issues"/>
+          <data android:scheme="http" android:host="*.youtrack.cloud" android:pathPattern="/.*issues"/>
         </intent-filter>
       </activity>
 
