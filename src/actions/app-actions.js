@@ -396,7 +396,7 @@ export function removeAccountOrLogOut(): Action {
 
 function setUserPermissions(permissions: Array<PermissionCacheItem>): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const auth: Auth = getState().app.auth;
+    const auth: Auth = ((getState().app.auth: any): Auth);
     dispatch({
       type: types.SET_PERMISSIONS,
       permissionsStore: new PermissionsStore(permissions),
@@ -407,8 +407,8 @@ function setUserPermissions(permissions: Array<PermissionCacheItem>): Action {
 
 export function loadUserPermissions(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const auth: Auth = getState().app.auth;
-    const authParams: ?AuthParams = auth.authParams;
+    const auth: Auth = ((getState().app.auth: any): Auth);
+    const authParams: AuthParams = ((auth.authParams: any): AuthParams);
     const permissions: Array<PermissionCacheItem> = await appActionsHelper.loadPermissions(
       authParams?.token_type,
       authParams?.access_token,
@@ -422,7 +422,7 @@ export function loadUserPermissions(): Action {
   };
 }
 
-export function completeInitialization(issueId: ?string = null): Action {
+export function completeInitialization(issueId: string | null = null): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     log.debug('Completing initialization');
     await dispatch(loadUser());
@@ -490,7 +490,7 @@ export function initializeAuth(config: AppConfigFilled): Action {
 function checkUserAgreement(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<void> => {
     const api: Api = getApi();
-    const auth = getState().app.auth;
+    const auth: Auth = ((getState().app.auth: any): Auth);
     const {currentUser} = auth;
 
     log.debug('Checking user agreement', currentUser);
@@ -582,7 +582,7 @@ function subscribeToURL(): Action {
   };
 }
 
-export function initializeApp(config: AppConfigFilled, issueId?: string): Action {
+export function initializeApp(config: AppConfigFilled, issueId: string | null): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
     Router._getNavigator() && Router.Home({
       backendUrl: config.backendUrl,
@@ -656,7 +656,7 @@ export function setAccount(notificationRouteData: NotificationRouteData | Object
 
     const targetConfig = getStorageState().config;
     if (targetConfig) {
-      dispatch(initializeApp(targetConfig, notificationRouteData?.issueId));
+      dispatch(initializeApp(targetConfig, notificationRouteData?.issueId || null));
     } else {
       log.info('App is not configured, entering server URL');
       const navigateTo = (serverUrl: string | null) => Router.EnterServer({serverUrl});

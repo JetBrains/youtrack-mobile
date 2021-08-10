@@ -9,7 +9,7 @@ import {removeTrailingSlash} from '../util/util';
 import type {PermissionCacheItem} from '../flow/Permission';
 import type {StorageState} from '../components/storage/storage';
 
-function updateCachedPermissions(permissions: ?Array<typeof PermissionsHelper>): void {
+function updateCachedPermissions(permissions: Array<PermissionCacheItem>): void {
   flushStoragePart({permissions});
 }
 
