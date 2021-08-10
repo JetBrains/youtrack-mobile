@@ -38,7 +38,7 @@ export default class IssueVisibility {
     );
   }
 
-  static isSecured(visibility: Visibility): boolean {
+  static isSecured(visibility: Visibility | null): boolean {
     if (!visibility) {
       return false;
     }

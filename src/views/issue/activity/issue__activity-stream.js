@@ -16,19 +16,18 @@ import {getEntityPresentation} from '../../../components/issue-formatter/issue-f
 import {IssueContext} from '../issue-context';
 import {SkeletonIssueActivities} from '../../../components/skeleton/skeleton';
 
-import type {
-  ActivityStreamProps,
-  ActivityStreamPropsReaction
-} from '../../../components/activity-stream/activity__stream';
-import type {ActivityStreamCommentActions} from '../../../flow/Activity';
+import type {ActivityStreamProps} from '../../../components/activity-stream/activity__stream';
+import type {Activity, ActivityStreamCommentActions} from '../../../flow/Activity';
 import type {AppState} from '../../../reducers';
 import type {Attachment, IssueComment} from '../../../flow/CustomFields';
+import type {CustomError} from '../../../flow/Error';
 import type {IssueContextData, IssueFull} from '../../../flow/Issue';
 import type {Reaction} from '../../../flow/Reaction';
 
-type Props = ActivityStreamProps & {
+type Props = {
+  ...ActivityStreamProps,
   issueId: string,
-  actionSheet: Function
+  actionSheet: Function,
 };
 
 
@@ -51,7 +50,7 @@ const IssueActivityStream = (props: Props) => {
     usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Add reaction to comment');
     hideReactionsPanel();
     // $FlowFixMe
-    return props.onReactionSelect(props.issueId, comment, reaction, props.activities, (activities, error) => {
+    return props.onReactionSelect(props.issueId, comment, reaction, props.activities, (activities: Array<Activity>, error: CustomError) => {
       if (!error) {
         setActivities(activities);
       }
@@ -150,10 +149,7 @@ const isActivitiesEqual = (prev, next): boolean => {
   return !!prev && !!next && prev.activities === next.activities;
 };
 
-export const IssueStream: React$AbstractComponent<
-  ActivityStreamProps & ActivityStreamPropsReaction,
-  mixed,
-> = React.memo<ActivityStreamProps & ActivityStreamPropsReaction>(
+export const IssueStream: React$AbstractComponent<ActivityStreamProps, mixed> = React.memo<ActivityStreamProps>(
   ActivityStream, isActivitiesEqual
 );
 export default (React.memo<Props>(IssueActivityStream, isActivitiesEqual): React$AbstractComponent<Props, mixed>);

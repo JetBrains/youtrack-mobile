@@ -16,7 +16,7 @@ import type {UserGroup} from './UserGroup';
 
 export type IssueContextData = {
   issue: IssueFull,
-  issuePermissions: typeof IssuePermissions,
+  issuePermissions: IssuePermissions,
   dispatcher: () => any,
 }
 

@@ -52,7 +52,7 @@ import type {WorkItem, WorkTimeSettings} from '../../flow/Work';
 import type {YouTrackWiki} from '../../flow/Wiki';
 
 
-export type ActivityStreamProps = {
+type Props = {
   activities: Array<Activity> | null,
   attachments: Array<Attachment>,
   commentActions?: ActivityStreamCommentActions,
@@ -78,7 +78,12 @@ export type ActivityStreamPropsReaction = {
   onSelectReaction?: (comment: IssueComment, reaction: Reaction) => void
 }
 
-export const ActivityStream = (props: ActivityStreamProps & ActivityStreamPropsReaction): Node => {
+export type ActivityStreamProps = {
+  ...Props,
+  ...ActivityStreamPropsReaction,
+}
+
+export const ActivityStream = (props: ActivityStreamProps): Node => {
   const isMultiValueActivity = (activity: Object) => {
     if (isActivityCategory.customField(activity)) {
       const field = activity.field;
