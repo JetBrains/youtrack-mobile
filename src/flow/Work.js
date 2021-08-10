@@ -7,18 +7,18 @@ export type WorkTimeSettings = {
   daysAWeek: number,
   minutesADay: number,
   workDays: Array<number>
-}
+} | {};
 
 export type WorkItemType = {
   id: string | null,
-  name: string
+  name: string,
 };
 
 export type WorkItemTemplate = {
   author: User,
   date: number,
   duration: {
-    presentation: string
+    presentation: string,
   },
   type: WorkItemType | null,
 };
@@ -35,5 +35,5 @@ export type WorkItem = {
 export type TimeTracking = {
   enabled: boolean,
   draftWorkItem: WorkItem | null,
-  workItemTemplate: WorkItemTemplate
+  workItemTemplate: WorkItemTemplate,
 };

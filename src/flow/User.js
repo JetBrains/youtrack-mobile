@@ -13,15 +13,15 @@ export type User = {
   id: string,
   issueRelatedGroup?: IssueRelatedGroup,
   login?: string,
-  profiles?: UserProfile,
+  profiles?: UserProfiles,
   ringId?: string,
   endUserAgreementConsent?: {
     accepted: boolean,
     majorVersion: string,
-    minorVersion: string
+    minorVersion: string,
   },
   star: {
-    id: string
+    id: string,
   }
 };
 
@@ -33,11 +33,11 @@ export type IssueRelatedGroup = {
 export type FeatureFlags = {
   $type: string,
   enabled: boolean,
-  id: string
+  id: string,
 }
 
 
-export type UserProfile = {
+export type UserProfiles = {
   $type: string,
   appearance?: UserAppearanceProfile,
   articles: UserArticlesProfile,
@@ -45,7 +45,7 @@ export type UserProfile = {
   issuesList?: Object,
   notifications?: Object,
   teamcity?: Object,
-  timetracking?: Object
+  timetracking?: Object,
 }
 
 export type UserAppearanceProfile = {
@@ -58,14 +58,14 @@ export type UserAppearanceProfile = {
   showPropertiesOnTheLeft?: boolean,
   showSimilarIssues?: boolean,
   uiTheme?: string,
-  useAbsoluteDates?: boolean
+  useAbsoluteDates?: boolean,
 }
 
 export type UserArticlesProfile = {
   $type?: string,
   lastVisitedArticle?: $Shape<Article>,
   showComment?: boolean,
-  showHistory?: boolean
+  showHistory?: boolean,
 }
 
 export type UserGeneralProfile = {
@@ -84,5 +84,5 @@ export type Folder = {
   pinned: ?string,
   issuesUrl: ?string,
   fqFolderId?: ?string,
-  isUpdatable: ?string
+  isUpdatable: ?string,
 }

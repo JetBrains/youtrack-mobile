@@ -10,7 +10,7 @@ import type {PermissionsStore} from '../components/permissions-store/permissions
 import type {StorageState} from '../components/storage/storage';
 import type {EndUserAgreement} from '../flow/AppConfig';
 import type {WorkTimeSettings} from '../flow/Work';
-import type {User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from '../flow/User';
+import type {User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile, UserProfiles} from '../flow/User';
 
 export type RootState = {
   auth: ?Auth,
@@ -21,9 +21,9 @@ export type RootState = {
   otherAccounts: ?Array<StorageState>,
   isChangingAccount: boolean,
   features: Array<string>,
-  workTimeSettings: ?WorkTimeSettings,
-  user?: User,
-  issuePermissions: IssuePermissions
+  workTimeSettings: WorkTimeSettings | {},
+  user: User | null,
+  issuePermissions: IssuePermissions,
 };
 
 const initialState: RootState = {
@@ -151,10 +151,10 @@ export function getIsAuthorized(state: RootState): boolean {
 }
 
 function mergeUserProfile(state: RootState, profileName: string, newProfile: UserGeneralProfile | UserAppearanceProfile): User {
-  const {user} = state;
+  const user: User = ((state.user: any): User);
   const _user = user || {profiles: {}};
-  const userProfiles = Object.assign({}, _user.profiles || {});
-  const updatedProfile = Object.assign({}, userProfiles[profileName], newProfile);
-  const updatedProfiles = Object.assign({}, _user.profiles || {}, {[profileName]: updatedProfile});
-  return {...state.user, ...{profiles: updatedProfiles}};
+  const userProfiles: $Shape<UserProfiles> = Object.assign({}, _user.profiles || {});
+  const updatedProfile: UserGeneralProfile | UserAppearanceProfile = Object.assign({}, userProfiles[profileName], newProfile);
+  const updatedProfiles: $Shape<UserProfiles> = Object.assign({}, _user.profiles || {}, {[profileName]: updatedProfile});
+  return {...user, ...{profiles: updatedProfiles}};
 }
