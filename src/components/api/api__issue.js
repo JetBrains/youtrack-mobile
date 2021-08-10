@@ -367,7 +367,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async deleteWorkItem(issueId: string, workItemId: string) {
+  async deleteWorkItem(issueId: string, workItemId: string = '') {
     return this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/timeTracking/workItems/${workItemId}?${ApiBase.createFieldsQuery(
         issueFields.workItems,

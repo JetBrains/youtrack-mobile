@@ -3,7 +3,7 @@
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 import InputScrollView from 'react-native-input-scroll-view';
 
 import * as issueActivityItems from './issue-activity__actions';
@@ -43,19 +43,19 @@ const AddSpentTimeForm = (props: Props) => {
   const dispatch = useDispatch();
   const currentUser: User = useSelector((state: AppState) => state.app.user);
 
-  const draftDefault: WorkItem = {
+  const draftDefault: WorkItem = Object.freeze({
     date: new Date().getTime(),
     author: currentUser,
     duration: {
-      presentation: '1d'
+      presentation: '1d',
     },
     type: {
       id: null,
-      key: 'no-work-type',
-      name: 'No type'
+      name: 'No type',
     },
-    text: null
-  };
+    text: null,
+    usesMarkdown: true,
+  });
 
   const [isProgress, updateProgress] = useState(false);
   const [isSelectVisible, updateSelectVisibility] = useState(false);
@@ -63,26 +63,28 @@ const AddSpentTimeForm = (props: Props) => {
   const [selectProps, updateSelectProps] = useState(null);
   const [error, updateError] = useState(false);
 
-  const getDraft = (draftItem: WorkItem) => ({
+  const getDraft = (draftItem: WorkItem): WorkItem => ({
     ...draftItem,
-    type: !draftItem.type || draftItem.type?.id === null ? null : draftItem.type
+    type: !draftItem.type || draftItem.type?.id === null ? null : draftItem.type,
   });
 
   const updateDraft = async (draftItem: WorkItem) => {
     const draftWithType: WorkItem = getDraft(draftItem);
-    const updatedDraft: WorkItem = await dispatch(
+    dispatch(
       issueActivityItems.updateWorkItemDraft(draftWithType)
-    );
-    if (updatedDraft) {
-      updateDraftWorkItem({
-        ...draftItem,
-        $type: updatedDraft.$type,
-        id: updatedDraft.id
-      });
-    }
+    ).then((updatedDraft: WorkItem | null) => {
+      if (updatedDraft) {
+        updateDraftWorkItem({
+          ...draft,
+          $type: updatedDraft.$type,
+          type: updatedDraft.type,
+          id: updatedDraft.id,
+        });
+      }
+    }).catch(() => {});
   };
 
-  const debouncedUpdate = throttle(updateDraft, 350);
+  const delayedUpdate = debounce(updateDraft, 300);
 
   useEffect(() => {
     if (props.workItem) {
@@ -99,23 +101,24 @@ const AddSpentTimeForm = (props: Props) => {
         ...draftDefault,
         ...timeTracking?.workItemTemplate,
         ...timeTracking?.draftWorkItem,
+        $type: undefined,
+        type: timeTracking?.draftWorkItem?.type || timeTracking?.workItemTemplate?.type || draftDefault.type,
         usesMarkdown: true,
-        $type: undefined
       });
       updateProgress(false);
     }
-  }, []);
+  }, [props.workItem, dispatch]);
 
 
-  const update = (data: $Shape<TimeTracking>) => {
+  const update = (data: $Shape<WorkItem>) => {
     updateError(false);
     const updatedDraft: WorkItem = {
       ...draft,
-      ...data
+      ...data,
     };
     updateDraftWorkItem(updatedDraft);
     if (!props.workItem) {
-      debouncedUpdate(updatedDraft);
+      delayedUpdate(updatedDraft);
     }
   };
 
@@ -131,7 +134,7 @@ const AddSpentTimeForm = (props: Props) => {
       onSelect: () => {
         usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'SpentTime: visibility update');
         updateSelectVisibility(false);
-      }
+      },
     };
     return <Select {...Object.assign({}, defaultSelectProps, selectProps)}/>;
   };
@@ -142,11 +145,11 @@ const AddSpentTimeForm = (props: Props) => {
       onSelect: (author: User) => {
         logEvent({
           message: 'SpentTime: form:set-author',
-          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
         update({author});
         updateSelectVisibility(false);
-      }
+      },
     };
   };
 
@@ -159,11 +162,11 @@ const AddSpentTimeForm = (props: Props) => {
       onSelect: async (type: WorkItemType) => {
         logEvent({
           message: 'SpentTime: form:set-work-type',
-          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
         update({type});
         updateSelectVisibility(false);
-      }
+      },
     };
   };
 
@@ -178,13 +181,13 @@ const AddSpentTimeForm = (props: Props) => {
     const {onAdd = () => {}} = props;
     logEvent({
       message: 'SpentTime: form:submit',
-      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+      analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
     });
     updateProgress(true);
     const updatedDraft: WorkItem = getDraft(draft);
     const item: ?WorkItem = await dispatch(issueActivityItems.createWorkItem({
       ...updatedDraft,
-      $type: props.workItem ? updatedDraft.$type : undefined
+      $type: props.workItem ? updatedDraft.$type : undefined,
     }));
     updateProgress(false);
     const isWorkItem = hasType.work(item);
@@ -218,7 +221,7 @@ const AddSpentTimeForm = (props: Props) => {
               .then(() => {
                 logEvent({
                   message: 'SpentTime: form:cancel',
-                  analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+                  analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
                 });
                 onClose();
               }).catch(() => null);
@@ -246,7 +249,7 @@ const AddSpentTimeForm = (props: Props) => {
     selectTextOnFocus: true,
     autoCorrect: false,
     placeholderTextColor: styles.icon.color,
-    keyboardAppearance: theme.uiTheme.name
+    keyboardAppearance: theme.uiTheme.name,
   };
   return (
     <View style={styles.container}>
@@ -283,7 +286,7 @@ const AddSpentTimeForm = (props: Props) => {
                   update({date: date.getTime()});
                   close();
                 }}
-                />
+                />,
               })
             }
           >
@@ -299,14 +302,16 @@ const AddSpentTimeForm = (props: Props) => {
           <View style={buttonStyle}>
             <Text style={[
               styles.feedbackFormTextSup,
-              error && styles.feedbackFormTextError
+              error && styles.feedbackFormTextError,
             ]}>Spent time</Text>
             <TextInput
               {...commonInputProps}
               style={[styles.feedbackInput, styles.feedbackFormTextMain]}
               placeholder="1w 1d 1h 1m"
               value={draft?.duration?.presentation}
-              onChangeText={(periodValue: string) => update({duration: {presentation: periodValue}})}
+              onChangeText={(periodValue: string) => updateDraftWorkItem(
+                {...draft, duration: {presentation: periodValue}}
+              )}
             />
           </View>
           {error && <Text style={styles.feedbackInputErrorHint}>1w 1d 1h 1m</Text>}
@@ -322,7 +327,7 @@ const AddSpentTimeForm = (props: Props) => {
             <Text
               style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
               numberOfLines={1}
-            >{draft?.type?.name || draftDefault.type.name}</Text>
+            >{draft?.type?.name || draftDefault.type?.name}</Text>
             {iconAngleRight}
           </TouchableOpacity>
 
@@ -333,7 +338,7 @@ const AddSpentTimeForm = (props: Props) => {
             style={[styles.feedbackFormInputDescription]}
             placeholder={commentPlaceholderText}
             value={draft?.text}
-            onChangeText={(comment: string) => update({text: comment})}
+            onChangeText={(comment: string) => updateDraftWorkItem({...draft, text: comment})}
           />
 
           <View style={styles.feedbackFormBottomIndent}/>
@@ -344,4 +349,4 @@ const AddSpentTimeForm = (props: Props) => {
   );
 };
 
-export default memo<Props>(AddSpentTimeForm);
+export default (memo<Props>(AddSpentTimeForm): React$AbstractComponent<Props, mixed>);
