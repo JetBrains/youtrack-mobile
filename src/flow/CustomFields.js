@@ -137,6 +137,7 @@ export type Attachment = {
   imageDimensions: ?ImageDimensions,
   thumbnailURL: string,
   visibility?: Visibility | null,
+  author?: User,
 }
 
 export type IssueComment = {
