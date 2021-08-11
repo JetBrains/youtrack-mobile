@@ -96,7 +96,7 @@ export default class IssueAPI extends ApiBase {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
   }
 
-  async getDraftComment(issueId: string): Promise<IssueComment | null> {
+  async getDraftComment(issueId: string): Promise<IssueComment> {
     const queryString = qs.stringify({
       fields: ApiHelper.toField({draftComment: issueFields.issueComment}).toString(),
     });
