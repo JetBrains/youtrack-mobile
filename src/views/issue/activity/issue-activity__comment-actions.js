@@ -46,7 +46,7 @@ type StateGetter = () => {
   issueState: SingleIssueState,
 };
 
-export function updateComment(comment: IssueComment) {
+export function updateComment(comment: IssueComment): {comment: IssueComment, type: string} {
   return {type: types.RECEIVE_UPDATED_COMMENT, comment};
 }
 
@@ -69,7 +69,7 @@ export function receiveCommentSuggestions(suggestions: Object): {suggestions: an
 export function loadIssueCommentsAsActivityPage(): ((
   dispatch: (any) => any,
   getState: StateGetter,
-  getApi: ApiGetter
+  getApi: ApiGetter,
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
@@ -102,7 +102,7 @@ export function loadActivity(doNotReset: boolean = false): ((dispatch: (any) => 
 export function addComment(comment: IssueComment): ((
   dispatch: (any) => any,
   getState: StateGetter,
-  getApi: ApiGetter
+  getApi: ApiGetter,
 ) => Promise<void>) {
   return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issue.id;
@@ -120,7 +120,11 @@ export function addComment(comment: IssueComment): ((
   };
 }
 
-export function getDraftComment() {
+export function getDraftComment(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter,
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueState: SingleIssueState = getState().issueState;
     const {issue} = issueState;
@@ -135,8 +139,12 @@ export function getDraftComment() {
   };
 }
 
-export function updateDraftComment(draftComment: IssueComment, doNotFlush: boolean = false) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+export function updateDraftComment(draftComment: IssueComment, doNotFlush: boolean = false): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter,
+) => Promise<null | IssueComment>) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<null | IssueComment> => {
     const {issue} = getState().issueState;
     if (draftComment && issue) {
       const [error, draft] = await until(getApi().issue.updateDraftComment(issue.id, draftComment));
@@ -146,13 +154,19 @@ export function updateDraftComment(draftComment: IssueComment, doNotFlush: boole
         dispatch(setEditingComment(draft));
       }
       return error ? null : draft;
+    } else {
+      return null;
     }
   };
 }
 
-export function submitDraftComment(draftComment: IssueComment) {
+export function submitDraftComment(draftComment: IssueComment): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter,
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const {issue} = getState().issueState;
+    const issue: IssueFull = getState().issueState.issue;
 
     if (draftComment && issue) {
       const [error] = await until(getApi().issue.submitDraftComment(issue.id, draftComment));
@@ -169,14 +183,22 @@ export function submitDraftComment(draftComment: IssueComment) {
   };
 }
 
-export function setEditingComment(comment: IssueComment) {
+export function setEditingComment(comment: IssueComment | null): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter,
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
 
     dispatch({type: types.SET_EDITING_COMMENT, comment});
   };
 }
 
-export function submitEditedComment(comment: IssueComment, isAttachmentChange: boolean) {
+export function submitEditedComment(comment: IssueComment, isAttachmentChange: boolean = false): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter,
+) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issue: IssueFull = getState().issueState.issue;
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update comment');
@@ -248,7 +270,7 @@ export function restoreComment(comment: IssueComment): ((dispatch: (any) => any)
 export function deleteCommentPermanently(comment: IssueComment, activityId?: string): ((
   dispatch: (any) => any,
   getState: StateGetter,
-  getApi: ApiGetter
+  getApi: ApiGetter,
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
@@ -305,8 +327,8 @@ export function showIssueCommentActions(
         title: 'Edit',
         execute: () => {
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Edit comment');
-          updateComment && updateComment(comment);
-        }
+          updateComment(comment);
+        },
       });
     }
     if (canDeleteComment) {
@@ -336,7 +358,7 @@ export function showIssueCommentActions(
 export function loadCommentSuggestions(query: string): ((
   dispatch: (any) => any,
   getState: StateGetter,
-  getApi: ApiGetter
+  getApi: ApiGetter,
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<Array<User>> => {
     const api: Api = getApi();
@@ -356,10 +378,14 @@ export function loadCommentSuggestions(query: string): ((
   };
 }
 
-export function getCommentVisibilityOptions() {
+export function getCommentVisibilityOptions(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter,
+) => Promise<Array<User | UserGroup>>) {
   return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<Array<User | UserGroup>> => {
     const api: Api = getApi();
-    const issueId: IssueFull = getState().issueState.issue.id;
+    const issueId: string = getState().issueState.issue.id;
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open comment visibility select');
     return api.issue.getVisibilityOptions(issueId);
   };
@@ -370,11 +396,11 @@ export function onReactionSelect(
   comment: IssueComment,
   reaction: Reaction,
   activities: Array<ActivityItem>,
-  onReactionUpdate: (activities: Array<ActivityItem>, error?: CustomError) => void
+  onReactionUpdate: (activities: Array<ActivityItem>, error?: CustomError) => void,
 ): ((
   dispatch: (any) => any,
   getState: StateGetter,
-  getApi: ApiGetter
+  getApi: ApiGetter,
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueApi: IssueAPI = getApi().issue;
@@ -383,7 +409,7 @@ export function onReactionSelect(
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Reaction select');
 
     const reactionName: string = reaction.reaction;
-    const existReaction: Reaction = comment.reactions.filter(
+    const existReaction: Reaction = (comment.reactions || []).filter(
       it => it.reaction === reactionName && it.author.id === currentUser.id)[0];
 
     const [error, commentReaction] = await until(

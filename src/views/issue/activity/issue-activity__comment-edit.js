@@ -44,5 +44,5 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(IssueActivityStreamCommentEdit);
+export default (React.memo<Props>(IssueActivityStreamCommentEdit): React$AbstractComponent<Props, mixed>);
 

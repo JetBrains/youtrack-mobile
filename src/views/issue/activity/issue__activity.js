@@ -1,6 +1,5 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 
@@ -31,6 +30,7 @@ import styles from './issue-activity.styles';
 
 import type {IssueComment} from '../../../flow/CustomFields';
 import type {IssueContextData} from '../../../flow/Issue';
+import type {Node} from 'React';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
 import type {Theme, UITheme} from '../../../flow/Theme';
@@ -68,7 +68,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     this.props.setEditingComment(null);
   }
 
-  loadDraftComment = () => this.props.getDraftComment();
+  loadDraftComment: (() => any) = () => this.props.getDraftComment();
 
   loadIssueActivities: ((doNotReset?: boolean) => void) = (doNotReset?: boolean) => {
     if (isIssueActivitiesAPIEnabled()) {
@@ -117,7 +117,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
       user,
       deleteWorkItem,
       onCheckboxUpdate,
-      doUpdateWorkItem
+      doUpdateWorkItem,
     } = this.props;
 
     const youtrackWiki: YouTrackWiki = {
@@ -161,9 +161,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     );
   }
 
-  canAddComment = () => this.issuePermissions.canCommentOn(this.props.issue);
+  canAddComment: (() => boolean) = () => this.issuePermissions.canCommentOn(this.props.issue);
 
-  onSubmitComment: ((comment: Comment) => any) = async (comment: IssueComment) => {
+  onSubmitComment: ((comment: IssueComment) => any) = async (comment: IssueComment) => {
     const {submitDraftComment, activityPage, updateOptimisticallyActivityPage} = this.props;
 
     const currentUser: User = this.props.user;
@@ -183,7 +183,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     await submitDraftComment(comment);
   };
 
-  renderEditCommentInput() {
+  renderEditCommentInput(): Node {
     const {editingComment, submitEditedComment, setEditingComment} = this.props;
     return <>
       <IssueActivityStreamCommentEdit
@@ -215,7 +215,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     </>;
   }
 
-  renderAddCommentInput() {
+  renderAddCommentInput(): Node {
     const {editingComment, issue, updateDraftComment} = this.props;
     const canAddWork: boolean = (
       issue?.project?.plugins?.timeTrackingSettings?.enabled &&
@@ -234,7 +234,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     </View>;
   }
 
-  renderAddSpentTimePage = () => {
+  renderAddSpentTimePage: (() => any) = () => {
     const {issue} = this.props;
     return Router.PageModal({
       children: <AddSpentTimeForm
@@ -267,7 +267,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     return this.props.renderRefreshControl(this.loadIssueActivities);
   };
 
-  render() {
+  render(): Node {
     const {isVisibilitySelectShown, activitiesLoadingError, editingComment} = this.props;
     const activitiesApiEnabled: boolean = isIssueActivitiesAPIEnabled();
     const hasError: boolean = this.hasLoadingError();
