@@ -35,6 +35,8 @@ export type AttachmentActions = {
   stopImageAttaching: Function,
   uploadFile: Function,
   uploadFileToComment: Function,
+  uploadFileToIssueComment: Function,
+  uploadFileToArticleComment: Function,
   removeAttachment: Function,
   removeArticleAttachment: Function,
   removeAttachmentFromIssueComment: Function,
