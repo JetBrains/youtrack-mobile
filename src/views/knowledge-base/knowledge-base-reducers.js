@@ -1,6 +1,6 @@
 /* @flow */
 
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, Slice} from '@reduxjs/toolkit';
 
 import type {ArticlesList, ProjectArticlesData} from '../../flow/Article';
 import type {CustomError} from '../../flow/Error';
@@ -10,7 +10,7 @@ export type KnowledgeBaseState = {
   articlesList: ArticlesList | null,
   isLoading: boolean,
   expandingProjectId: string | null,
-  error: CustomError | null,
+  error: { ...CustomError, noFavoriteProjects?: boolean, ...} | null,
 };
 
 const articlesInitialState: KnowledgeBaseState = {
@@ -35,14 +35,14 @@ const {reducer, actions} = (createSlice({
     setError(state: KnowledgeBaseState, action: { payload: CustomError | null }) {
       state.error = action.payload;
     },
-    setList(state: KnowledgeBaseState, action: { payload: ArticlesList }) {
+    setList(state: KnowledgeBaseState, action: { payload: ArticlesList | null}) {
       state.articlesList = action.payload;
     },
     setArticles(state: KnowledgeBaseState, action: { payload: Array<ProjectArticlesData> }) {
       state.articles = action.payload;
     },
   },
-}): any);
+}): typeof Slice);
 
 export const {setLoading, setError, setList, setArticles, setExpandingProjectId} = actions;
 export default reducer;
