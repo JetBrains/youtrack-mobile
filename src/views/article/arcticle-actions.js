@@ -26,7 +26,8 @@ import {cacheUserLastVisitedArticle} from '../../actions/app-actions';
 import type {ShowActionSheetWithOptions} from '../../components/action-sheet/action-sheet';
 import {showActions, showActionSheet} from '../../components/action-sheet/action-sheet';
 
-import type ActionSheet, {ActionSheetOptions} from '@expo/react-native-action-sheet';
+import type ActionSheet from '@expo/react-native-action-sheet';
+import type {ActionSheetOption} from '../../components/action-sheet/action-sheet';
 import type Api from '../../components/api/api';
 import type {Activity} from '../../flow/Activity';
 import type {AppState} from '../../reducers';
@@ -103,7 +104,7 @@ const loadActivitiesPage = (reset: boolean = true): ((
 ) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
-    const {article}: Article = getState().article;
+    const article: Article = getState().article.article;
 
     dispatch(setLoading(true));
     if (reset) {
@@ -310,10 +311,10 @@ const setPreviousArticle = (): ((dispatch: (any) => any, getState: () => AppStat
   };
 };
 
-const getArticleCommentDraft = () => {
+const getArticleCommentDraft = (): ((dispatch: (any) => any, getState: () => AppState) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const api: Api = getApi();
-    const {article}: Article = getState().article;
+    const article: Article = getState().article.article;
 
     const [error, draftComment] = await until(api.articles.getCommentDraft(article.id));
     if (!error && draftComment) {
@@ -322,10 +323,10 @@ const getArticleCommentDraft = () => {
   };
 };
 
-const updateArticleCommentDraft = (comment: IssueComment) => {
+const updateArticleCommentDraft = (comment: IssueComment): ((dispatch: (any) => any, getState: () => AppState) => Promise<null>) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const api: Api = getApi();
-    const {article}: Article = getState().article;
+    const article: Article = getState().article.article;
     const [error, updatedCommentDraft] = await until(api.articles.updateCommentDraft(article.id, comment));
     if (error) {
       notify('Failed to update a comment draft', error);
@@ -336,7 +337,7 @@ const updateArticleCommentDraft = (comment: IssueComment) => {
   };
 };
 
-const submitArticleCommentDraft = (commentDraft: IssueComment) => {
+const submitArticleCommentDraft = (commentDraft: IssueComment): ((dispatch: (any) => any, getState: () => AppState) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState): Promise<void> => {
     const api: Api = getApi();
     const {article} = getState().article;
@@ -355,7 +356,7 @@ const submitArticleCommentDraft = (commentDraft: IssueComment) => {
 const updateArticleComment = (comment: IssueComment): ((dispatch: (any) => any, getState: () => AppState) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const api: Api = getApi();
-    const {article}: Article = getState().article;
+    const article: Article = getState().article.article;
     logEvent({message: 'Update article comment', analyticsId: ANALYTICS_ARTICLE_PAGE});
     const [error] = await until(api.articles.updateComment(article.id, comment));
     if (error) {
@@ -370,7 +371,7 @@ const updateArticleComment = (comment: IssueComment): ((dispatch: (any) => any, 
 const deleteArticleComment = (commentId: string): ((dispatch: (any) => any, getState: () => AppState) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const api: Api = getApi();
-    const {article}: Article = getState().article;
+    const article: Article = getState().article.article;
     logEvent({message: 'Delete article comment', analyticsId: ANALYTICS_ARTICLE_PAGE});
     try {
       await new Promise((resolve: Function, reject: Function) => {
@@ -413,7 +414,7 @@ const showArticleCommentActions = (
     logEvent({message: 'Show article\'s comment actions', analyticsId: ANALYTICS_ARTICLE_PAGE});
     const url: string = `${api.config.backendUrl}/articles/${article.idReadable}#comment${activityId}`;
     const commentText = comment.text;
-    const options: Array<ActionSheetOptions> = [
+    const options: Array<ActionSheetOption> = [
       {
         title: 'Share…',
         execute: function (): string {
@@ -474,7 +475,7 @@ const getMentions = (query: string): ((
 ) => Promise<null> | Promise<any>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
-    const {article} = getState().article;
+    const article: Article = getState().article.article;
     logEvent({message: 'Get article mentions', analyticsId: ANALYTICS_ARTICLE_PAGE});
     const [error, mentions] = await until(
       api.mentions.getMentions(query, {containers: [{$type: article.$type, id: article.id}]}));
@@ -540,7 +541,7 @@ const createSubArticle = (renderBreadCrumbs: Function): ((
     const {article} = getState().article;
 
     logEvent({message: 'Create sub-article', analyticsId: ANALYTICS_ARTICLE_PAGE});
-    const draft: ArticleDraft = await createArticleDraft(api, article, true);
+    const draft: ArticleDraft | null = await createArticleDraft(api, article, true);
     if (draft) {
       Router.ArticleCreate({
         isNew: true,
