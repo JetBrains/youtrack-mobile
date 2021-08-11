@@ -9,6 +9,7 @@ import NoProjectFoundDark from '../../assets/no-project-found-dark.svg';
 import NothingFound from '../../assets/not-found.svg';
 import NothingFoundDark from '../../assets/not-found-dark.svg';
 
+import type {Node} from 'react';
 import type {Theme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
@@ -19,13 +20,13 @@ type Props = {
 
 export const ICON_NOT_FOUND_DEFAULT_SIZE: number = 240;
 
-const Icon = (props: Props & { icon: { dark: any, default: any } }) => {
+const Icon = (props: {...Props, icon: { dark: any, default: any } }) => {
   const theme: Theme = useContext(ThemeContext);
   const size: number = props.size || ICON_NOT_FOUND_DEFAULT_SIZE;
-  const Icon = theme.uiTheme.dark ? props.icon.dark : props.icon.default;
+  const ThemedIcon: any = theme.uiTheme.dark ? props.icon.dark : props.icon.default;
 
   return (
-    <Icon
+    <ThemedIcon
       width={size}
       height={size}
       style={props.style}
@@ -33,7 +34,7 @@ const Icon = (props: Props & { icon: { dark: any, default: any } }) => {
   );
 };
 
-const IconNothingFound = (props: Props) =>
+const IconNothingFound = (props: Props): Node =>
   <Icon {...{
     ...props,
     icon: {
@@ -42,7 +43,7 @@ const IconNothingFound = (props: Props) =>
     },
   }} />;
 
-const IconNoProjectFound = (props: Props) =>
+const IconNoProjectFound = (props: Props): Node =>
   <Icon {...{
     ...props,
     icon: {
