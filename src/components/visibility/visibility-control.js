@@ -24,7 +24,7 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {
-  getOptions: () => Array<any>,
+  getOptions: () => Array<User | UserGroup>,
   onApply: (visibility: Visibility) => any,
   onHide?: () => any,
   onShow?: () => any,
@@ -77,16 +77,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     this.props.onApply(visibility);
   };
 
-  getVisibilityOptions: (() =>
-  | Promise<
-    {
-      $type: string,
-      implicitPermittedUsers: Array<User>,
-      permittedGroups: Array<UserGroup>,
-      permittedUsers: Array<User>,
-    },
-  >
-  | Promise<Array<any>>) = async () => {
+  getVisibilityOptions: (() => Array<User | UserGroup>) = async () => {
     try {
       return this.props.getOptions();
     } catch (e) {
@@ -111,7 +102,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     return this.createSelectItems(visibility);
   };
 
-  setSelectVisible = (isVisible: boolean) => {
+  setSelectVisible: ((isVisible: boolean) => void) = (isVisible: boolean) => {
     const noop: () => void = (): void => {};
     const {onShow = noop, onHide = noop} = this.props;
     if (isVisible) {
