@@ -8,5 +8,5 @@ export type Visibility = {
   permittedUsers: Array<User>,
   implicitPermittedUsers: Array<User>,
   permittedGroups: Array<UserGroup>,
-  inherited?: boolean,
+  inherited?: Visibility | null,
 } | null;

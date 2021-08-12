@@ -39,7 +39,10 @@ import type {Visibility} from '../../flow/Visibility';
 
 
 type Props = {
-  articleDraft?: Article | null,
+  articleDraft?: {
+    ...Article,
+    project: ArticleProject | null,
+  } | null,
   isNew?: boolean,
   originalArticleId?: string,
   breadCrumbs?: React$Element<any> | null

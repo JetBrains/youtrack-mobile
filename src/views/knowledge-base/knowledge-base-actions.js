@@ -27,7 +27,14 @@ import {until} from '../../util/util';
 import type Api from '../../components/api/api';
 import type {ActionSheetOption} from '../../components/action-sheet/action-sheet';
 import type {AppState} from '../../reducers';
-import type {Article, ArticleProject, ArticlesList, ArticlesListItem, ProjectArticlesData} from '../../flow/Article';
+import type {
+  Article,
+  ArticleNodeList,
+  ArticleProject,
+  ArticlesList,
+  ArticlesListItem,
+  ProjectArticlesData,
+} from '../../flow/Article';
 import type {CustomError} from '../../flow/Error';
 import type {Folder} from '../../flow/User';
 
@@ -55,7 +62,7 @@ export const getPinnedProjects = async (api: Api): Promise<Array<Folder>> => {
     notify('Unable to load favorite projects', error);
     return [];
   } else {
-    return pinnedFolders.filter(hasType.project);
+    return ((pinnedFolders: any): Array<Folder>).filter(hasType.project);
   }
 };
 
@@ -119,7 +126,11 @@ const getArticleList = (reset: boolean = true) =>
     }
   };
 
-const getArticleChildren = (articleId: string): ArticlesList =>
+const getArticleChildren: (articleId: string) => (
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => Promise<ArticleNodeList> = (articleId: string) =>
   async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     logEvent({message: 'Loading article children', analyticsId: ANALYTICS_ARTICLES_PAGE});
     const [error, articleWithChildren] = await until(getApi().articles.getArticleChildren(articleId));
@@ -137,7 +148,7 @@ const filterArticles = (query: string | null): ((
   dispatch: (any) => any,
   getState: () => AppState,
   getApi: ApiGetter
-) => Promise<void> | Promise<mixed>) =>
+) => Promise<void>) =>
   async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     logEvent({
       message: 'Filter articles',
@@ -147,25 +158,24 @@ const filterArticles = (query: string | null): ((
     flushStoragePart({articlesQuery: query ? query : null});
 
     if (!query) {
-      return dispatch(loadArticleList(true));
+      dispatch(loadArticleList(true));
+    } else {
+      setError(null);
+      dispatch(setLoading(true));
+
+      const [error, articles]: [?CustomError, Array<Article>] = await until(
+        getApi().articles.getArticles(query)
+      );
+      dispatch(setLoading(false));
+      if (error) {
+        notify('Unable to filter articles', error);
+      } else {
+        const projectData: Array<ProjectArticlesData> = helper.createProjectDataFromArticles(articles);
+        const articlesList: ArticlesList = createArticleList(projectData, true);
+        dispatch(setList(articlesList));
+      }
     }
 
-    setError(null);
-    dispatch(setLoading(true));
-
-    const [error, articles]: [?CustomError, Array<Article>] = await until(
-      getApi().articles.getArticles(query)
-    );
-    dispatch(setLoading(false));
-
-    if (error) {
-      notify('Unable to filter articles', error);
-      return;
-    }
-
-    const projectData: Array<ProjectArticlesData> = helper.createProjectDataFromArticles(articles);
-    const articlesList: ArticlesList = createArticleList(projectData, true);
-    dispatch(setList(articlesList));
   };
 
 const loadArticlesDrafts = (): ((
@@ -214,7 +224,7 @@ const toggleProjectVisibility = (item: ArticlesListItem): ((
     if (item.dataCollapsed) {
       toggleProject(item, updatedArticlesList, false);
     } else {
-      dispatch(setExpandingProjectId(item.title.id));
+      dispatch(setExpandingProjectId(item.title?.id));
     }
     const updatedProjectData: ProjectArticlesData | null = await getUpdatedProjectData();
     dispatch(setExpandingProjectId(null));
@@ -228,7 +238,7 @@ const toggleProjectVisibility = (item: ArticlesListItem): ((
 
     function toggleProject(listItem: ArticlesListItem, updatedArticlesList: ArticlesList, isCollapsed: boolean) {
       const index: number = updatedArticlesList.findIndex(
-        (it: ArticlesListItem) => it.title.id === listItem.title.id
+        (it: ArticlesListItem) => it.title?.id === listItem.title?.id
       );
       if (index >= 0) {
         updatedArticlesList.splice(index, 1, treeHelper.toggleProject(listItem, isCollapsed));
@@ -432,12 +442,12 @@ async function setArticlesCache(articles: ?Array<ProjectArticlesData>) {
   await flushStoragePart({articles});
 }
 
-async function setArticlesListCache(articlesList: ArticlesList) {
+async function setArticlesListCache(articlesList: ArticlesList | null) {
   await flushStoragePart({articlesList});
 }
 
 
-function storeArticlesList(articlesList: ArticlesList) {
+function storeArticlesList(articlesList: ArticlesList | null) {
   return async (dispatch: (any) => any) => {
     dispatch(setList(articlesList));
     setArticlesListCache(articlesList);

@@ -14,10 +14,11 @@ import type {
   ProjectArticlesData,
 } from '../../flow/Article';
 import type {IssueProject} from '../../flow/CustomFields';
+import type {Visibility} from '../../flow/Visibility';
 
 
 export const createArticlesListItem = (
-  project: ArticleProject,
+  project: ArticleProject | null,
   data: ArticleNodeList,
   isCollapsed: boolean
 ): ArticlesListItem => {
@@ -36,8 +37,8 @@ export const createArticleList = (projectData: Array<ProjectArticlesData>, isExp
     const articles: Array<Article> = (
       item.articles
         .map((it: Article) => {
-          const parentId = isExpanded === true ? null : it?.parentArticle?.id;
-          return {...it, ...{parentId}};
+          const parentId: string | null = isExpanded === true ? null : it?.parentArticle?.id || null;
+          return {...it, parentId};
         })
         .sort(sortByOrdinal)
     );
@@ -49,7 +50,10 @@ export const createArticleList = (projectData: Array<ProjectArticlesData>, isExp
       let parent = article.parentArticle;
       while (parent) {
         if (hasType.visibilityLimited(parent.visibility)) {
-          article.visibility.inherited = parent.visibility;
+          article.visibility = (({
+            ...(article.visibility || {}),
+            inherited: parent.visibility,
+          }: any): Visibility);
           return;
         }
         parent = parent.parentArticle;
@@ -67,7 +71,7 @@ export const createArticleList = (projectData: Array<ProjectArticlesData>, isExp
 };
 
 export const toggleProject = (item: ArticlesListItem, isCollapsed: boolean): ArticlesListItem => {
-  const project: ArticleProject = item.title;
+  const project: ArticleProject | null = item.title;
   return createArticlesListItem(project, item.dataCollapsed || item.data, isCollapsed);
 };
 
@@ -81,19 +85,7 @@ export const flattenArticleListChildren = (nodes: ArticleNodeList): Array<Articl
   return list;
 };
 
-export const flattenArticleList = (articleList: ArticlesList = []): ArticlesList => {
-  return articleList.reduce((list: ArticlesList, item: ArticlesListItem) => {
-    return list.concat(
-      flattenArticleListChildren(
-        item?.title?.articles?.collapsed
-          ? item.dataCollapsed
-          : item.data
-      )
-    );
-  }, []);
-};
-
-export const findNodeById = (articlesList: ArticleNodeList, id: string): ArticleNode => {
+export const findNodeById = (articlesList: ArticleNodeList, id: string): ArticleNode | null => {
   for (let i = 0, l = (articlesList || []).length; i < l; i++) {
     if (articlesList[i].data.id === id) {
       return articlesList[i];
@@ -108,24 +100,26 @@ export const findNodeById = (articlesList: ArticleNodeList, id: string): Article
 };
 
 export const findArticleProjectListItem = (
-  articlesList: ArticleNodeList,
+  articlesList: ArticlesList,
   projectId: string
-): ArticlesListItem | null => {
-  return (articlesList || []).find((it: ArticlesListItem) => it.title.id === projectId);
+): ?ArticlesListItem => {
+  return (articlesList || []).find((it: ArticlesListItem) => it?.title?.id === projectId);
 };
 
-const getProjectNodeData = (projectNode): ArticleNodeList => (
-  projectNode.dataCollapsed?.length > 0
-    ? projectNode.dataCollapsed
-    : projectNode.data
-);
+const getProjectNodeData = (projectNode: ArticlesListItem): ArticleNodeList => {
+  return (
+    projectNode?.dataCollapsed?.length
+      ? projectNode.dataCollapsed
+      : projectNode.data
+  );
+};
 
 export const findArticleNode = (
-  articlesList: Array<ArticleNode>,
+  articlesList: ArticlesList,
   projectId: string,
   nodeId: string
 ): ArticleNode | null => {
-  const articleProject: ArticlesListItem = findArticleProjectListItem(articlesList, projectId);
+  const articleProject: ?ArticlesListItem = findArticleProjectListItem(articlesList, projectId);
   return articleProject ? findNodeById(getProjectNodeData(articleProject), nodeId) : null;
 };
 
@@ -140,7 +134,7 @@ export const createBreadCrumbs = (
 
   const breadCrumbs: Array<Article | IssueProject> = [];
 
-  const projectNode: ArticlesListItem = findArticleProjectListItem(articlesList, article.project.id);
+  const projectNode: ?ArticlesListItem = findArticleProjectListItem(articlesList, article.project.id);
   if (!projectNode || (!projectNode?.data && !projectNode?.dataCollapsed)) {
     return [];
   }

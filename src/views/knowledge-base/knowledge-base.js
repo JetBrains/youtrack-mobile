@@ -1,6 +1,5 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {Component} from 'react';
 import {RefreshControl, SectionList, Text, TouchableOpacity, View, ActivityIndicator} from 'react-native';
 
@@ -31,17 +30,27 @@ import {UNIT} from '../../components/variables/variables';
 import styles from './knowledge-base.styles';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import type {Article, ArticlesList, ArticlesListItem, ArticleNode, ArticleProject} from '../../flow/Article';
+import type {
+  Article,
+  ArticlesList,
+  ArticlesListItem,
+  ArticleNode,
+  ArticleProject,
+  ArticleNodeList,
+} from '../../flow/Article';
 import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
+import type {Node} from 'React';
 import type {SelectProps} from '../../components/select/select';
 import type {Theme, UITheme} from '../../flow/Theme';
 
-type Props = KnowledgeBaseActions & KnowledgeBaseState & {
+type Props = {
+  ...KnowledgeBaseActions,
+  ...KnowledgeBaseState,
   issuePermissions: IssuePermissions,
   project?: ArticleProject,
-  preventReload?: boolean
-};
+  preventReload?: boolean,
+}
 
 type State = {
   isHeaderPinned: boolean,
@@ -107,7 +116,7 @@ export class KnowledgeBase extends Component<Props, State> {
   scrollToProject: ((project: ArticleProject) => void) = (project: ArticleProject) => {
     const {articlesList} = this.props;
     if (project && articlesList) {
-      const index: number = articlesList.findIndex((listItem: ArticlesListItem) => listItem.title.id === project.id);
+      const index: number = articlesList.findIndex((listItem: ArticlesListItem) => listItem.title?.id === project.id);
       if (index > 0) {
         setTimeout(() => this.listRef && this.listRef.scrollToLocation({
           animated: true,
@@ -118,14 +127,14 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   };
 
-  renderProject: ((ArticlesListItem) => void | Node) = ({section}: ArticlesListItem) => {
+  renderProject: (({ section: ArticlesListItem, ... }) => null | React$Element<any>) = ({section}: {section: ArticlesListItem, ...}) => {
     const project: ?ArticleProject = section.title;
     if (project) {
       const {expandingProjectId} = this.props;
       const isProjectExpanding: boolean = expandingProjectId === project.id;
       const isCollapsed: boolean = project?.articles?.collapsed;
       const Icon = isCollapsed ? IconAngleRight : IconAngleDown;
-      const hasHoArticles: boolean = section.title.articles.collapsed === false && section.data?.length === 0;
+      const hasHoArticles: boolean = section.title?.articles?.collapsed === false && section.data?.length === 0;
       const hasSearchQuery: boolean = !!this.getSearchQuery();
       return (
         <>
@@ -174,7 +183,7 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   };
 
-  renderArticle: ((ArticleNode) => Node) = ({item}: ArticleNode) => (
+  renderArticle: ({item: ArticleNode, ...} => null | React$Element<any>) = ({item}: { item: ArticleNode, ... }) => (
     <ArticleWithChildren
       style={styles.itemArticle}
       article={item.data}
@@ -188,7 +197,7 @@ export class KnowledgeBase extends Component<Props, State> {
   );
 
   renderSubArticlesPage: ((article: Article) => Promise<void>) = async (article: Article) => {
-    const childrenData: ArticlesList = await this.props.getArticleChildren(article.id);
+    const childrenData: ArticleNodeList = await this.props.getArticleChildren(article.id);
     const title = this.renderHeader({
       leftButton: (
         <TouchableOpacity
@@ -220,10 +229,10 @@ export class KnowledgeBase extends Component<Props, State> {
 
   renderHeader: ((
   {
-    customTitleComponent?: Node,
-    leftButton?: Node,
-    rightButton?: Node,
+    leftButton?: React$Element<any>,
     title: string,
+    customTitleComponent?: React$Element<any>,
+    rightButton?: React$Element<any>,
   }
 ) => Node) = (
     {leftButton, title, customTitleComponent, rightButton}: {
@@ -260,7 +269,7 @@ export class KnowledgeBase extends Component<Props, State> {
     this.setState({isHeaderPinned: nativeEvent.contentOffset.y >= UNIT});
   };
 
-  renderRefreshControl: (() => Node) = () => {
+  renderRefreshControl: (() => React$Element<typeof RefreshControl>) = () => {
     return <RefreshControl
       refreshing={this.props.isLoading}
       tintColor={styles.link.color}
@@ -268,7 +277,7 @@ export class KnowledgeBase extends Component<Props, State> {
     />;
   };
 
-  getListItemKey: ((item: ArticleNode, index: number) => number | string) = (item: ArticleNode, index: number) => item?.data?.id || index;
+  getListItemKey: ((item: ArticleNode, index: number) => string) = (item: ArticleNode, index: number) => item?.data?.id || `${index}`;
 
   setListRef: ((listRef?: any) => void) = (listRef?: Object) => {
     if (listRef) {
@@ -373,7 +382,7 @@ export class KnowledgeBase extends Component<Props, State> {
 
   renderProjectSelect: (() => Node) = () => {
     const {updateProjectsFavorites} = this.props;
-    const projects: Array<ArticleProject> = getStorageState().projects;
+    const projects: Array<ArticleProject> = ((getStorageState().projects: any): Array<ArticleProject>);
     const prevPinnedProjects: Array<ArticleProject> = projects.filter((it: ArticleProject) => it.pinned);
     const selectProps: SelectProps = {
       placeholder: 'Filter projects',

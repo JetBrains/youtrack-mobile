@@ -19,35 +19,38 @@ export type Article = {
   mentionedIssues: IssueOnList,
   mentionedUsers: User,
   ordinal: number,
+  parentId: string | null,
   parentArticle: Article,
-  project: ArticleProject | null,
+  project: ArticleProject,
   reporter: User,
   summary: string,
   updated: number,
   updatedBy: User,
-  visibility: Visibility | null,
+  visibility: Visibility,
 }
 
 export type ArticleDraft = $Shape<Article>;
 
 export type ArticleNode = {
-  children: Array<Article>,
-  data: Article & { parentId: string | null }
+  children: Array<ArticleNode>,
+  data: {
+    ...Article,
+    parentId: string | null,
+  },
 }
 
 export type ArticleNodeList = Array<ArticleNode>;
 
-export type ArticlesListItemTitle = ArticleProject & { isDrafts: boolean };
-
 export type ArticlesListItem = {
-  title: ArticlesListItemTitle,
+  title: ArticleProject | null,
   data: ArticleNodeList,
   dataCollapsed: ArticleNodeList | null
 };
 
 export type ArticlesList = Array<ArticlesListItem>;
 
-export type ArticleProject = $Shape<IssueProject> & {
+export type ArticleProject = {
+  ...$Shape<IssueProject>,
   articles: {
     collapsed: boolean
   }
