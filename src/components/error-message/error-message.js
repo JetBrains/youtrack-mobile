@@ -38,7 +38,7 @@ export default class ErrorMessage extends PureComponent<ErrorMessageProps, State
     if (this.props.errorMessageData) {
       errorMessage = this.props.errorMessageData;
     } else if (this.props.error) {
-      const error: CustomError & {error?: string} = await resolveError(this.props.error);
+      const error: CustomError = await resolveError(this.props.error);
       errorMessage = {
         title: ERROR_MESSAGE_DATA[error.status || error.error]?.title || error.message || error.error_message || '',
         description: extractErrorMessage(error, true),

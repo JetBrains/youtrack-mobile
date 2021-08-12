@@ -33,7 +33,7 @@ export const extractErrorMessage = function (err: Object | string, isDescription
   return errorText || DEFAULT_ERROR_MESSAGE;
 };
 
-export async function resolveError(err: ?CustomError): Promise<Object> {
+export async function resolveError(err: ?CustomError): Promise<any> {
   if (err && err.json) {
     try {
       return await err.json();
