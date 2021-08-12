@@ -38,7 +38,7 @@ export function sortByUpdatedReverse(a: Object & { updated: number }, b: Object 
   return doSortBy(a, b, 'updated', true);
 }
 
-export function sortByOrdinal(a: Object & { ordinal: number }, b: Object & { ordinal: number }): number {
+export function sortByOrdinal(a: { ordinal: number, ... }, b: { ordinal: number, ... }): number {
   return a.ordinal - b.ordinal;
 }
 

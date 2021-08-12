@@ -3,6 +3,7 @@
 export type CustomError = Error & {
   json: Object,
   status: number,
+  error?: string,
   error_message: string,
   error_description: string,
   error_children: Array<{ error: string }>,
