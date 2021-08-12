@@ -131,6 +131,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
     const buttonStyle: Array<ViewStyleProp> = [styles.feedbackFormInput, styles.feedbackFormType];
     const iconAngleRight = <IconAngleRight size={20} color={uiThemeColors.$icon}/>;
     const isSummaryEmpty: boolean = !(feedback.summary || '').trim();
+    const isEmailValid: boolean = !!feedback.email && (/^[^\s@]+@[^\s@]+\.[^\s@]+$/).test(feedback.email);
     const update: ($Shape<Feedback>) => void = (feedbackPartial: Object) => this.setState({
       feedback: {
         ...feedback,
@@ -138,6 +139,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
       },
     });
 
+    const disabled: boolean = isSummaryEmpty || isFeedbackFormSending || !isEmailValid;
     return (
       <>
         <Header
@@ -148,12 +150,12 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
           extraButton={(
             <TouchableOpacity
               hitSlop={HIT_SLOP}
-              disabled={isSummaryEmpty || isFeedbackFormSending}
+              disabled={disabled}
               onPress={this.onSendFeedback}
             >
               {isFeedbackFormSending
                 ? <ActivityIndicator color={uiThemeColors.$link}/>
-                : <IconCheck size={20} color={isSummaryEmpty ? uiThemeColors.$disabled : uiThemeColors.$link}/>}
+                : <IconCheck size={20} color={disabled ? uiThemeColors.$disabled : uiThemeColors.$link}/>}
             </TouchableOpacity>
           )}
         />
@@ -191,7 +193,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
               testID="settingsFeedbackEmail"
               {...commonInputProps}
               style={styles.feedbackFormInput}
-              placeholder="Email address for follow-up (optional)"
+              placeholder="Email address for follow-up"
               value={feedback.email}
               onChangeText={(value: string) => update({email: value})}
             />
