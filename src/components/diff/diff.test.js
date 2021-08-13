@@ -1,74 +1,52 @@
 import React from 'react';
 
-import {shallow} from 'enzyme';
+import {render, cleanup, fireEvent} from '@testing-library/react-native';
 
 import Diff from './diff';
 import {buildStyles, DEFAULT_THEME} from '../theme/theme';
 
 describe('<Diff/>', () => {
-
-  let wrapper;
   let text1;
   let text2;
 
   beforeAll(() => buildStyles(DEFAULT_THEME.mode, DEFAULT_THEME));
 
   beforeEach(() => {
+    jest.restoreAllMocks();
     text1 = 'ABCy';
     text2 = 'xABC';
   });
 
+  afterEach(cleanup);
+
   describe('Render', () => {
-    beforeEach(() => {
-      wrapper = doShallow(text1, text2);
-    });
-
     it('should render component', () => {
-      expect(findByTestId('diff')).toHaveLength(1);
+      const {getByTestId} = doRender(text1, text2);
+
+      expect(getByTestId('diff').props).toBeDefined();
     });
 
-    it('should render difference', () => {
-      expect(findByTestId('diffText')).toHaveLength(1);
-      expect(findByTestId('diffInsert')).toHaveLength(1);
-      expect(findByTestId('diffDelete')).toHaveLength(1);
-      expect(findByTestId('diffEqual')).toHaveLength(1);
+    it('should render difference', async () => {
+      const {getByTestId} = doRender(text1, text2);
+
+      fireEvent.press(getByTestId('details'));
+
+      expect(getByTestId('diffText').props).toBeDefined();
+      expect(getByTestId('diffInsert').props).toBeDefined();
+      expect(getByTestId('diffDelete').props).toBeDefined();
+      expect(getByTestId('diffEqual').props).toBeDefined();
     });
 
-    it('should not render collapse/expand title', () => {
-      expect(findByTestId('diffToggle')).toHaveLength(0);
-    });
   });
 
 
-  describe('Collapse/expand', () => {
-    let title;
-    beforeEach(() => {
-      title = 'Details';
-      wrapper = doShallow(text1, text2, title);
-    });
-
-    it('should render collapse/expand title', () => {
-      expect(findByTestId('diffToggle')).toHaveLength(1);
-    });
-
-    it('should not render diff', () => {
-      expect(findByTestId('diffText')).toHaveLength(0);
-    });
-
-    it('should render diff after click on a title', () => {
-      findByTestId('diffToggle').simulate('press');
-      expect(findByTestId('diffText')).toHaveLength(1);
-    });
-  });
-
-
-  function findByTestId(testId) {
-    return wrapper && wrapper.find({testID: testId});
-  }
-
-  function doShallow(text1, text2, title) {
-    return shallow(
-      <Diff title={title} text1={text1} text2={text2}/>
+  function doRender(text1, text2, title) {
+    return render(
+      <Diff
+        title={title}
+        text1={text1}
+        text2={text2}
+      />
     );
   }
 });

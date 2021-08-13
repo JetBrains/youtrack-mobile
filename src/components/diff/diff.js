@@ -1,14 +1,14 @@
 /* @flow */
 
-import type {Node} from 'React';
-import React, {PureComponent} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {Text, View} from 'react-native';
 
+import Details from '../details/details';
 import DiffMatchWord from './diff__match-word';
-import {IconChevronDownUp} from '../icon/icon';
 
 import styles from './diff.styles';
 
+import type {Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type DiffInfo = {
@@ -22,21 +22,10 @@ type Props = {
   title?: ?string
 }
 
-type State = {
-  collapsed: boolean
-}
 
-export default class Diff extends PureComponent<Props, State> {
+const Diff = (props: Props) => {
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-    if (props.title) {
-      this.state.collapsed = true;
-    }
-  }
-
-  getDiffInfo(key: string): DiffInfo {
+  const getDiffInfo = (key: string): DiffInfo => {
     let diffInfo = {
       id: 'diffNull',
       style: null,
@@ -62,22 +51,18 @@ export default class Diff extends PureComponent<Props, State> {
       };
     }
     return diffInfo;
-  }
+  };
 
-  createDiff(): any {
-    const {text1, text2} = this.props;
-    return DiffMatchWord.diff(text1, text2);
-  }
-
-  renderDiff(): Node {
+  const renderDiff = (): Node => {
+    const {text1, text2} = props;
     return (
       <Text
         style={styles.content}
         testID="diffText"
       >
-        {this.createDiff().map(
+        {DiffMatchWord.diff(text1, text2).map(
           (it, index) => {
-            const diffInfo = this.getDiffInfo(it[0]);
+            const diffInfo = getDiffInfo(it[0]);
             return <Text
               testID={diffInfo.id}
               key={index}
@@ -88,29 +73,9 @@ export default class Diff extends PureComponent<Props, State> {
         )}
       </Text>
     );
-  }
+  };
 
-  render(): Node {
-    const {title} = this.props;
-    const {collapsed} = this.state;
+  return <View testID="diff"><Details title={props.title} renderer={renderDiff}/></View>;
+};
 
-    return (
-      <View testID="diff">
-        {title && <TouchableOpacity
-          style={styles.button}
-          testID="diffToggle"
-          onPress={() => this.setState({collapsed: !collapsed})}>
-          <Text style={styles.title}>
-            {`${title}: `}
-          </Text>
-          <Text style={styles.toggle}>
-            {'Details '}
-            <IconChevronDownUp size={13} isDown={collapsed} color={styles.toggle.color}/>
-          </Text>
-        </TouchableOpacity>}
-
-        {(!title || (title && !collapsed)) && this.renderDiff()}
-      </View>
-    );
-  }
-}
+export default (React.memo<Props>(Diff): React$AbstractComponent<Props, mixed>);
