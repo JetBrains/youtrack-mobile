@@ -179,7 +179,7 @@ class Menu extends Component<Props, State> {
         style={styles.menu}
       >
         <MenuItem
-          testId="menuIssues"
+          testId="test:id/menuIssues"
           icon={<IconTask
             testID="menuIssuesIcon"
             isActive={this.isActiveRoute(routeMap.Issues)}
@@ -190,14 +190,14 @@ class Menu extends Component<Props, State> {
         />
 
         <MenuItem
-          testId="menuAgile"
+          testId="test:id/menuAgile"
           icon={<IconBoard size={28} color={color(routeMap.AgileBoard)}/>}
           onPress={this.openAgileBoard}
         />
 
         <Feature version={FEATURE_VERSION.inbox}>
           <MenuItem
-            testId="menuNotifications"
+            testId="test:id/menuNotifications"
             icon={<IconBell size={22} color={color(routeMap.Inbox)}/>}
             onPress={this.openInbox}
           />
@@ -205,14 +205,14 @@ class Menu extends Component<Props, State> {
 
         <Feature version={FEATURE_VERSION.knowledgeBase}>
           <MenuItem
-            testId="menuKnowledgeBase"
+            testId="test:id/menuKnowledgeBase"
             icon={<IconKnowledgeBase size={22} color={color(routeMap.KnowledgeBase)}/>}
             onPress={this.openKnowledgeBase}
           />
         </Feature>
 
         <MenuItem
-          testId="menuSettings"
+          testId="test:id/menuSettings"
           icon={<IconSettings size={21} color={color(routeMap.Settings)}/>}
           onPress={this.openSettings}
         />
