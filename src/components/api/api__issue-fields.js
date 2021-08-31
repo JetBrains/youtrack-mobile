@@ -32,6 +32,7 @@ const ISSUE_USER_FIELDS: any = toField([
   'login',
   'ringId',
   'avatarUrl',
+  'name',
 ]);
 
 const BUNDLE_VALUE: any = toField([

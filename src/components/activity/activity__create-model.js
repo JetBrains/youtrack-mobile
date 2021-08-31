@@ -1,8 +1,12 @@
 /* @flow */
+
 import {ResourceTypes, hasType} from '../api/api__resource-types';
 import {ActivityCategory, isActivityCategory} from './activity__category';
 
-export const createActivitiesModel = (activityGroups: Array<Object> = []) => {
+import type {Activity} from '../../flow/Activity';
+
+
+export const createActivitiesModel = (activityGroups: Array<Object> = []): Array<Activity> => {
 
   const activities = getStream(activityGroups)
     .map(streamGroup => {
@@ -40,6 +44,11 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []) => {
         streamGroup.target = event?.target;
         streamGroup.key = ActivityCategory.Source.COMMENT;
         break;
+      case isActivityCategory.vcs(event):
+        streamGroup.vcs = event;
+        streamGroup.target = event?.target;
+        streamGroup.key = ActivityCategory.Source.VCS_ITEM;
+        break;
       default:
         streamGroup.key = ActivityCategory.Source.HISTORY;
       }
@@ -69,7 +78,8 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []) => {
       events.forEach((event) => {
         if (
           isActivityCategory.comment(event) ||
-          isActivityCategory.work(event)
+          isActivityCategory.work(event) ||
+          isActivityCategory.vcs(event)
         ) {
           if (currentGroup && historyChanges.length && !isFirst) {
             currentGroup.events = historyChanges.slice(0);
@@ -165,9 +175,9 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []) => {
     function isMergedActivity(activity, prevActivity) {
       return !!(
         prevActivity &&
-        !activity.comment &&
         activity.author.id === prevActivity.author.id &&
-        getActivityTypeId(activity) === getActivityTypeId(prevActivity)
+        getActivityTypeId(activity) === getActivityTypeId(prevActivity) &&
+        !activity.comment
       );
 
     }

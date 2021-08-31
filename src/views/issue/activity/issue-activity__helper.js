@@ -1,5 +1,6 @@
 /* @flow */
 
+import {ActivityCategory} from '../../../components/activity/activity__category';
 import {checkVersion} from '../../../components/feature/feature';
 import {flushStoragePart, getStorageState} from '../../../components/storage/storage';
 import {getActivityAllTypes} from '../../../components/activity/activity-helper';
@@ -12,10 +13,17 @@ export function isIssueActivitiesAPIEnabled(): any {
 }
 
 export function getIssueActivitiesEnabledTypes(): Array<ActivityType> {
-  let enabledTypes = getStorageState().issueActivitiesEnabledTypes || [];
+  let enabledTypes: Array<ActivityType> = getStorageState().issueActivitiesEnabledTypes || [];
+  const activityAllTypes: Array<ActivityType> = getActivityAllTypes();
   if (!enabledTypes.length) {
-    enabledTypes = getActivityAllTypes();
+    enabledTypes = activityAllTypes;
     saveIssueActivityEnabledTypes(enabledTypes);
+  }
+  if (checkVersion('2021.1.7') && !enabledTypes.find(
+    (it: ActivityType) => it.id === ActivityCategory.Source?.VCS_ITEM)
+  ) {
+    const vcs: ?ActivityType = activityAllTypes.find((it: ActivityType) => it.id === ActivityCategory.Source?.VCS_ITEM);
+    vcs && enabledTypes.push(vcs);
   }
   return enabledTypes;
 }

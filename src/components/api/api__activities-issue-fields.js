@@ -24,6 +24,37 @@ const ISSUE_WORK_ITEMS_FIELDS = toField([
   },
 ]);
 
+const VCS_INTEGRATION_PROCESSOR_FIELDS = toField([
+  '$type',
+  'id',
+]);
+
+const VCS_INTEGRATION_FIELDS = toField([
+  {
+    commands: [
+      'hasError',
+      'errorText',
+      'start',
+      'end',
+    ],
+  },
+  'created',
+  'date',
+  'fetched',
+  'files',
+  'id',
+  'noHubUserReason(id)',
+  'noUserReason(id)',
+  'reopened',
+  'state',
+  'user(@user)',
+  'userName',
+  'version',
+  {
+    processors: [VCS_INTEGRATION_PROCESSOR_FIELDS],
+  },
+  'urls',
+]);
 
 const ISSUE_ACTIVITIES_FIELDS = toField([
   'id',
@@ -32,7 +63,7 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
   'targetSubMember',
   {
     authorGroup: ['icon', 'name'],
-    author: IssueFields.ISSUE_USER_FIELDS,
+    author: ['@user'],
     category: ['id'],
     target: ['id', 'created', 'usesMarkdown'],
     field: [
@@ -66,9 +97,11 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
         reactions: [
           'id',
           'reaction',
-          'author(id,fullName,avatarUrl)',
+          'author(@user)',
         ],
       },
+
+      VCS_INTEGRATION_FIELDS,
     ],
     removed: [
       ISSUE_PROJECT_FIELDS,
@@ -85,9 +118,9 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
 export const ISSUE_ATTACHMENT_FIELDS: Object = IssueFields.attachments;
 
 export default (toField([
-  'cursor',
-  'till',
   {
     activities: ISSUE_ACTIVITIES_FIELDS,
   },
+  'cursor',
+  `till;@user:${IssueFields.ISSUE_USER_FIELDS}`,
 ]): any);

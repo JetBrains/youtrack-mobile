@@ -65,15 +65,17 @@ describe('Issue view actions', () => {
     expect(dispatched[1]).toEqual({
       type: types.RECEIVE_ACTIVITY_CATEGORIES,
       issueActivityTypes: [
-        { id: 'IssueComments', name: 'Comments' },
-        { id: 'IssueHistory', name: 'History' },
-        { id: 'TimeTracking', name: 'Work' }
+        {id: 'IssueComments', name: 'Comments'},
+        {id: 'IssueHistory', name: 'History'},
+        {id: 'TimeTracking', name: 'Work'},
+        {id: 'IssueVcs', name: 'VCS changes'},
       ],
       issueActivityEnabledTypes: [
-        { id: 'IssueComments', name: 'Comments' },
-        { id: 'IssueHistory', name: 'History' },
-        { id: 'TimeTracking', name: 'Work' }
-      ]
+        {id: 'IssueComments', name: 'Comments'},
+        {id: 'IssueHistory', name: 'History'},
+        {id: 'TimeTracking', name: 'Work'},
+        {id: 'IssueVcs', name: 'VCS changes'},
+      ],
     });
     expect(dispatched[2]).toEqual({
       type: types.RECEIVE_ACTIVITY_PAGE,

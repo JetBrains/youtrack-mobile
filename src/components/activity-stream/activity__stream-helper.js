@@ -4,8 +4,8 @@ import getEventTitle from '../activity/activity__history-title';
 
 import type {Activity} from '../../flow/Activity';
 
-const firstActivityChange = (activity: Activity): any => {
-  if (!activity.added) {
+const firstActivityChange = (activity: ?Activity): Object | null => {
+  if (!activity || !activity.added) {
     return null;
   }
   if (Array.isArray(activity.added)) {

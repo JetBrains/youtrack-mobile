@@ -117,11 +117,16 @@ function getReadableID(issue: AnyIssue): string {
 }
 
 function getEntityPresentation(entity: Object): any | string {
-  if (!entity) {
-    return '';
+  let userName: string = '';
+  if (entity) {
+    if (!entity.ringId) {
+      userName = entity.name || entity.userName || entity.login;
+    }
+    if (!userName) {
+    userName = entity.fullName || entity.localizedName || entity.name || entity.login || entity.presentation || entity.text;
+    }
   }
-
-  return entity.fullName || entity.localizedName || entity.name || entity.login || entity.presentation || entity.text || '';
+  return userName || '';
 }
 
 function getVisibilityPresentation(entity: Object): null | string {

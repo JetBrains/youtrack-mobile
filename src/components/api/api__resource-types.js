@@ -2,35 +2,41 @@
 
 export const ResourceTypes = {
   AGILE: 'jetbrains.youtrack.agile.settings.Agile',
-
   ARTICLE: 'Article',
   ARTICLE_DRAFT: 'ArticleDraft',
-
+  BITBUCKET: 'BitBucketServer',
+  BITBUCKET_MAPPING: 'BitBucketChangesProcessor',
   COMMENT_REACTIONS_FEED_ITEM: 'CommentReactionsFeedItem',
-
+  DRAFT_ARTICLE_COMMENT: 'DraftArticleComment',
+  DRAFT_ISSUE_COMMENT: 'DraftIssueComment',
+  DRAFT_WORK_ITEM: 'DraftWorkItem',
   EVENT_GROUP: 'jetbrains.youtrack.event.gaprest.ActivityItemGroup',
-
+  GITEA: 'GiteaServer',
+  GITHUB_MAPPING: 'GitHubChangesProcessor',
+  GITLAB_MAPPING: 'GitLabChangesProcessor',
+  GOGS: 'GogsServer',
+  GOGS_MAPPING: 'GogsChangesProcessor',
   ISSUE: 'jetbrains.charisma.persistent.Issue',
   ISSUE_COMMENT: 'jetbrains.charisma.persistent.IssueComment',
   ISSUE_FOLDER_SAVED_QUERY: 'jetbrains.charisma.persistent.issueFolders.SavedQuery',
   ISSUE_FOLDER_TAG: 'jetbrains.charisma.persistent.issueFolders.IssueTag',
-
+  JENKINS_CHANGES_PROCESSOR: 'JenkinsChangesProcessor',
+  JENKINS_SERVER: 'JenkinsServer',
   PROJECT: 'jetbrains.charisma.persistent.Project',
-
+  SPACE_MAPPING: 'SpaceChangesProcessor',
+  SPACE_SERVER: 'SpaceServer',
+  TEAMCITY_CHANGES_PROCESSOR: 'TeamcityChangesProcessor',
+  UPSOURCE_PROCESSOR: 'UpsourceChangesProcessor',
   USER: 'jetbrains.charisma.persistence.user.User',
   USER_APPEARANCE_PROFILE: 'AppearanceUserProfile',
   USER_GENERAL_PROFILE: 'GeneralUserProfile',
   USER_GROUP: 'jetbrains.charisma.persistent.security.UserGroup',
-
+  VCS_CHANGE: 'VcsChange',
+  VCS_ITEM: 'jetbrains.youtrack.timetracking.gaprest.VcsChangeActivityItem',
   VISIBILITY_GROUP: 'jetbrains.charisma.persistent.security.VisibilityGroups',
   VISIBILITY_LIMITED: 'jetbrains.charisma.persistent.visibility.LimitedVisibility',
   VISIBILITY_UNLIMITED: 'jetbrains.charisma.persistent.visibility.UnlimitedVisibility',
-
   WORK_ITEM: 'jetbrains.youtrack.timetracking.gaprest.IssueWorkItem',
-  DRAFT_WORK_ITEM: 'DraftWorkItem',
-
-  DRAFT_ISSUE_COMMENT: 'DraftIssueComment',
-  DRAFT_ARTICLE_COMMENT: 'DraftArticleComment'
 };
 
 type HasMethodName = 'comment' | 'user' | 'userGroup' | 'project' | 'savedSearch' | 'tag' | 'agile';

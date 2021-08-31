@@ -3,7 +3,7 @@
 import {ActivityCategory, isActivityCategory} from './activity__category';
 import {createActivitiesModel} from './activity__create-model';
 import {groupActivities} from './activity__group-activities';
-import {IconComment, IconHistory, IconHourGlass} from '../icon/icon';
+import {IconComment, IconHistory, IconHourGlass, IconVcs} from '../icon/icon';
 import {mergeActivities} from './activity__merge-activities';
 
 import type {ActivityItem, ActivityPositionData, ActivityType, Activity} from '../../flow/Activity';
@@ -13,6 +13,7 @@ const activityIconMap = {
   [ActivityCategory.Source.COMMENT]: IconComment,
   [ActivityCategory.Source.HISTORY]: IconHistory,
   [ActivityCategory.Source.WORK_ITEM]: IconHourGlass,
+  [ActivityCategory.Source.VCS_ITEM]: IconVcs,
 };
 
 const getActivityAllTypes = (): Array<ActivityType> => {

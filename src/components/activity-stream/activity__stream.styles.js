@@ -131,6 +131,10 @@ export default EStyleSheet.create({
   activityWork: {
     flexDirection: 'row',
   },
+  activityWorkIcon: {
+    position: 'relative',
+    top: -2,
+  },
   activityWorkTime: {
     color: '$icon',
     fontWeight: 'bold',
@@ -141,5 +145,25 @@ export default EStyleSheet.create({
   activityWorkEditIcon: {
     position: 'absolute',
     right: 0,
+  },
+
+  vcsInfo: {
+    flexDirection: 'row',
+  },
+  vcsInfoDate: {
+    flexShrink: 1,
+    flexGrow: 1,
+    marginRight: UNIT * 2,
+  },
+  vcsFilesAmount: {
+    marginTop: UNIT,
+  },
+  vcsMessage: {
+    paddingTop: UNIT,
+    color: '$text',
+  },
+  vcsError: {
+    paddingTop: UNIT,
+    color: '$error',
   },
 });

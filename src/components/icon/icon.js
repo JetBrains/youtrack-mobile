@@ -1,6 +1,8 @@
 import React, {PureComponent} from 'react';
-import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import IconFA from 'react-native-vector-icons/FontAwesome';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconVCS from '@jetbrains/icons/pr-merged.svg';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -306,3 +308,16 @@ export const IconWork = (props?: Props) => <IconYTM {...{
   name: 'hourglass-20px',
   ...props,
 }} />;
+
+export const IconVcs = (props?: Props) => (
+  <IconVCS
+    style={{
+      transform: [
+        {scaleY: -1},
+      ],
+    }}
+    fill={props.color || defaultProps().color}
+    width={props.size || 22}
+    height={props.size || 22}
+  />
+);

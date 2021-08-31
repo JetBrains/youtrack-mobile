@@ -11,6 +11,7 @@ import CommentReactions from '../comment/comment-reactions';
 import CommentVisibility from '../comment/comment__visibility';
 import CustomFieldChangeDelimiter from '../custom-field/custom-field__change-delimiter';
 import Diff from '../diff/diff';
+import IconVcs from '@jetbrains/icons/commit.svg';
 import Feature, {FEATURE_VERSION} from '../feature/feature';
 import getEventTitle from '../activity/activity__history-title';
 import IssueVisibility from '../visibility/issue-visibility';
@@ -18,6 +19,7 @@ import ReactionAddIcon from '../reactions/new-reaction.svg';
 import StreamLink from './activity__stream-link';
 import StreamTimestamp from './activity__stream-timestamp';
 import StreamUserInfo from './activity__stream-user-info';
+import StreamVCS from './activity__stream-vcs';
 import StreamWork from './activity__stream-work';
 import usage from '../usage/usage';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
@@ -215,8 +217,15 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
   const renderActivityIcon = (activityGroup: Object) => {
     const iconColor: string = props.uiTheme.colors.$iconAccent;
+    if (activityGroup.vcs) {
+      return <IconVcs
+        fill={iconColor}
+        width={22}
+        height={22}
+      />;
+    }
     if (activityGroup.work) {
-      return <IconWork size={24} color={iconColor} style={{position: 'relative', top: -2}}/>;
+      return <IconWork size={24} color={iconColor} style={styles.activityWorkIcon}/>;
     }
     return <IconHistory size={26} color={iconColor}/>;
   };
@@ -400,6 +409,10 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
     />
   );
 
+  const renderVCSActivity = (activityGroup: Activity) => (
+    <StreamVCS activityGroup={activityGroup}/>
+  );
+
   const renderVisibilityActivity = (activity) => {
     const textChange = getTextChange(activity, []);
     return renderTextChange(activity, textChange);
@@ -473,9 +486,11 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
                   {activityGroup.work && renderWorkActivity(activityGroup)}
 
+                  {activityGroup.vcs && renderVCSActivity(activityGroup)}
+
                   {renderHistoryAndRelatedChanges(
                     activityGroup,
-                    !!activityGroup.comment || !!activityGroup.work,
+                    !!activityGroup.comment || !!activityGroup.work || !!activityGroup.vcs,
                     props.uiTheme
                   )}
 

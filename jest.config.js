@@ -2,7 +2,10 @@ module.exports = {
   'preset': 'react-native',
   'transform': {
     '^.+\\.(js|ts)$': 'babel-jest',
-    '^[./a-zA-Z0-9$_-]+\\.(bmp|gif|jpg|jpeg|png|psd|svg|webp)$': '<rootDir>/node_modules/react-native/jest/assetFileTransformer.js',
+    '^[./a-zA-Z0-9$_-]+\\.(gif|jpg|jpeg|png|svg)$': 'jest-transform-stub',
+  },
+  'moduleNameMapper': {
+    '^.+.(svg)$': 'jest-transform-stub',
   },
   'setupFilesAfterEnv': [
     '<rootDir>/test/jest-setup.js',

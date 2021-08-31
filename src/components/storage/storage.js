@@ -7,7 +7,7 @@ import log from '../log/log';
 import {notify} from '../notification/notification';
 import {routeMap} from '../../app-routes';
 
-import type {Activity} from '../../flow/Activity';
+import type {Activity, ActivityType} from '../../flow/Activity';
 import type {AnyIssue} from '../../flow/Issue';
 import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {Article, ArticlesList} from '../../flow/Article';
@@ -51,7 +51,7 @@ export type StorageState = {|
   agileQuery: ?string,
   lastRoute: ?(typeof routeMap.Issues | typeof routeMap.Inbox | typeof routeMap.AgileBoard | typeof routeMap.KnowledgeBase | typeof routeMap.ArticleSingle),
   currentAppVersion: ?string,
-  issueActivitiesEnabledTypes: ?Array<Object>,
+  issueActivitiesEnabledTypes: ?Array<ActivityType>,
   permissions: ?Array<PermissionCacheItem>,
   themeMode: ?string
 |}

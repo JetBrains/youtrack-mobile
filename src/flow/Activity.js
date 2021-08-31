@@ -39,8 +39,13 @@ export type Activity = {
   removed: ActivityItem | Array<ActivityItem>,
 
   comment?: IssueComment,
-  work?: Object,
-  merged?: boolean
+  work?: Activity,
+  vcs?: Activity,
+  merged?: boolean,
+
+  key?: boolean,
+  lastGroup?: boolean,
+  root?: boolean,
 }
 
 export type ActivityType = {

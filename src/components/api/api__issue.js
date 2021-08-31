@@ -310,15 +310,16 @@ export default class IssueAPI extends ApiBase {
   }
 
   async getActivitiesPage(issueId: string, sources: Array<string>): Promise<Array<Activity>> {
-    const categoryKey = '&categories=';
-    const categories = `${categoryKey}${(sources || []).join(categoryKey)}`;
+    const categoryKey = 'categories=';
+    const categories = `${categoryKey}${(sources || []).join(',')}`;
     const queryString = qs.stringify({
       $top: 100,
       reverse: true,
-      fields: issueActivityPageFields.toString(),
     });
 
-    const response = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/activitiesPage?${queryString}${categories}`);
+    const response = await this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}/activitiesPage?${categories}&${queryString}&fields=${issueActivityPageFields.toString()}`
+    );
     return ApiHelper.patchAllRelativeAvatarUrls(response.activities, this.config.backendUrl);
   }
 

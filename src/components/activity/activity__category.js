@@ -23,6 +23,7 @@ export const categoryName = {
   WORK_ITEM_DATE: 'WORK_ITEM_DATE',
   WORK_ITEM_AUTHOR: 'WORK_ITEM_AUTHOR',
   VOTERS: 'VOTERS',
+  VCS_ITEM: 'VCS_ITEM',
   TOTAL_VOTES: 'TOTAL_VOTES',
   VISIBILITY: 'VISIBILITY',
 };
@@ -50,6 +51,7 @@ export const activityCategory: Object = {
   [categoryName.WORK_ITEM_DATE]: 'WorkItemDateCategory',
   [categoryName.WORK_ITEM_AUTHOR]: 'WorkItemAuthorCategory',
   [categoryName.VOTERS]: 'VotersCategory',
+  [categoryName.VCS_ITEM]: 'VcsChangeCategory',
   [categoryName.TOTAL_VOTES]: 'TotalVotesCategory',
   [categoryName.VISIBILITY]: 'PermittedGroupCategory',
 };
@@ -70,13 +72,15 @@ export const ActivityCategory: {
     IssueComments: Array<string>,
     IssueHistory: Array<string>,
     TimeTracking: Array<string>,
+    IssueVcs: Array<string>,
   },
   CategoryPresentation: {
     IssueComments: string,
     IssueHistory: string,
     TimeTracking: string,
+    IssueVcs: string,
   },
-  Source: { COMMENT: string, HISTORY: string, WORK_ITEM: string },
+  Source: { COMMENT: string, HISTORY: string, WORK_ITEM: string, VCS_ITEM: string },
 } = [
   ['COMMENT', 'IssueComments', [
     activityCategory.COMMENT,
@@ -98,6 +102,9 @@ export const ActivityCategory: {
   ['WORK_ITEM', 'TimeTracking', [
     activityCategory.WORK_ITEM,
   ], 'Work'],
+  ['VCS_ITEM', 'IssueVcs', [
+    activityCategory.VCS_ITEM,
+  ], 'VCS changes'],
 ].reduce(function (Activity: {
   Source: Object,
   CategoryPresentation: Object,
@@ -137,6 +144,7 @@ isActivityCategory.attachment = isActivityCategories([activityCategory.ATTACHMEN
 isActivityCategory.issueCreated = isActivityCategories([activityCategory.ISSUE_CREATED, activityArticleCategory.CREATED]);
 isActivityCategory.work = isActivityCategory(activityCategory.WORK_ITEM);
 isActivityCategory.voters = isActivityCategory(activityCategory.VOTERS);
+isActivityCategory.vcs = isActivityCategory(activityCategory.VCS_ITEM);
 isActivityCategory.totalVotes = isActivityCategory(activityCategory.TOTAL_VOTES);
 isActivityCategory.commentText = isActivityCategory(activityCategory.COMMENT_TEXT);
 isActivityCategory.customField = isActivityCategory(activityCategory.CUSTOM_FIELD);

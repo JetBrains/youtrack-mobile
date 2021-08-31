@@ -21,7 +21,9 @@ const StreamUserInfo = (props: Props) => {
       <Text style={styles.activityAuthorName}>
         {getEntityPresentation(props.activityGroup.author)}
       </Text>
-      {!props.noTimestamp && <Text><StreamTimestamp timestamp={props.activityGroup.timestamp}/></Text>}
+      {!props.noTimestamp && !!props.activityGroup.timestamp && (
+        <Text><StreamTimestamp timestamp={props.activityGroup.timestamp}/></Text>
+      )}
     </View>
   );
 };

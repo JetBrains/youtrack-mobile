@@ -12,49 +12,88 @@ describe('getEntityPresentation', function() {
     getEntityPresentation({}).should.equal('');
   });
 
-  it('should return `fullName`', () => {
-    const item = {
-      fullName: 'fullName',
-      name: 'name',
-    };
+  describe('Has ringId', () => {
+    it('should return `fullName`', () => {
+      const item = {
+        ringId: 'id',
+        fullName: 'fullName',
+        name: 'name',
+      };
 
-    getEntityPresentation(item).should.equal(item.fullName);
+      getEntityPresentation(item).should.equal(item.fullName);
+    });
+
+    it('should return `localizedName`', () => {
+      const item = {
+        ringId: 'id',
+        name: 'name',
+        localizedName: 'localizedName',
+      };
+
+      getEntityPresentation(item).should.equal(item.localizedName);
+    });
+
+    it('should return `name`', () => {
+      const item = {
+        ringId: 'id',
+        login: 'login',
+        name: 'name',
+      };
+
+      getEntityPresentation(item).should.equal(item.name);
+    });
+
+    it('should return `login`', () => {
+      const item = {
+        ringId: 'id',
+        presentation: 'presentation',
+        login: 'login',
+      };
+
+      getEntityPresentation(item).should.equal(item.login);
+    });
+
+    it('should return `presentation`', () => {
+      const item = {
+        ringId: 'id',
+        presentation: 'presentation',
+      };
+
+      getEntityPresentation(item).should.equal(item.presentation);
+    });
   });
 
-  it('should return `localizedName`', () => {
-    const item = {
-      name: 'name',
-      localizedName: 'localizedName',
-    };
 
-    getEntityPresentation(item).should.equal(item.localizedName);
+  describe('Has no ringId', () => {
+    it('should return `name` if `ringId` is missing', () => {
+      const item = {
+        fullName: 'fullName',
+        name: 'name',
+      };
+
+      getEntityPresentation(item).should.equal(item.name);
+    });
+
+    it('should return `userName` if `ringId` is missing', () => {
+      const item = {
+        fullName: 'fullName',
+        userName: 'name',
+      };
+
+      getEntityPresentation(item).should.equal(item.userName);
+    });
+
+    it('should return `login` if `ringId` is missing', () => {
+      const item = {
+        fullName: 'fullName',
+        login: 'name',
+      };
+
+      getEntityPresentation(item).should.equal(item.login);
+    });
+
   });
 
-  it('should return `name`', () => {
-    const item = {
-      login: 'login',
-      name: 'name',
-    };
-
-    getEntityPresentation(item).should.equal(item.name);
-  });
-
-  it('should return `login`', () => {
-    const item = {
-      presentation: 'presentation',
-      login: 'login',
-    };
-
-    getEntityPresentation(item).should.equal(item.login);
-  });
-
-  it('should return `presentation`', () => {
-    const item = {
-      presentation: 'presentation',
-    };
-
-    getEntityPresentation(item).should.equal(item.presentation);
-  });
 });
 
 
