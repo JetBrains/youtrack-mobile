@@ -6713,6 +6713,11 @@ markdown-it-checkbox@anisimov74/markdown-it-checkbox.git#5f35851:
   dependencies:
     underscore "^1.8.2"
 
+markdown-it-inline-comments@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/markdown-it-inline-comments/-/markdown-it-inline-comments-1.0.1.tgz#176eabe631a3e08125bd739500f43c51f525896d"
+  integrity sha1-F26r5jGj4IElvXOVAPQ8UfUliW0=
+
 markdown-it@^10.0.0:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-10.0.0.tgz#abfc64f141b1722d663402044e43927f1f50a8dc"
