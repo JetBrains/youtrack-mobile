@@ -21,21 +21,23 @@ import styles from './youtrack-wiki.styles';
 
 import type {Article} from '../../flow/Article';
 import type {Attachment, ImageDimensions, IssueProject} from '../../flow/CustomFields';
-import type {Folder} from '../../flow/User';
 import type {IssueFull} from '../../flow/Issue';
 import type {MarkdownNode} from '../../flow/Markdown';
 import type {UITheme} from '../../flow/Theme';
 
 export type Mentions = {
   articles: Array<Article>,
-  issues: Array<IssueFull>
+  issues: Array<IssueFull>,
 }
 
 type TextData = {
   text: string,
-  type: null | number | typeof ResourceTypes.ARTICLE | typeof ResourceTypes.ISSUE
+  type: null | number | typeof ResourceTypes.ARTICLE | typeof ResourceTypes.ISSUE,
 };
 
+const issueId: RegExp = new RegExp(`[a-zA-Z0-9_]+\\-\\d+`);
+const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
+const isURLPattern: RegExp = /^(http(s?)):\/\/|(www.)/i;
 
 function getMarkdownRules(
   attachments: Array<Attachment> = [],
@@ -46,10 +48,6 @@ function getMarkdownRules(
 ): Object {
 
   const imageHeaders = getApi().auth.getAuthorizationHeaders();
-  const projectIds: string = (projects).map((it: Folder) => it?.shortName).join('|');
-  const issueId = new RegExp(`\\b(?:${projectIds})\\b-\\d+$`);
-  const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
-  const isURLPattern: RegExp = /^(http(s?)):\/\/|(www.)/i;
 
   const markdownImage = ({key, uri, alt, imageDimensions}) => {
     const dimensions: ImageDimensions = calculateAspectRatio(
@@ -103,7 +101,7 @@ function getMarkdownRules(
     }
 
     if (node.content.match(imageEmbedRegExp)) {
-      const attach: Attachment = attachments.find((it: Attachment) => it.name && text.includes(it.name));
+      const attach: ?Attachment = attachments.find((it: Attachment) => it.name && text.includes(it.name));
       if (attach && attach.url && hasMimeType.image(attach)) {
         return markdownImage({
           key: node.key,
@@ -115,6 +113,17 @@ function getMarkdownRules(
     }
 
     if (issueId.test(text) && !isURLPattern.test(text)) {
+      const matched: RegExp$matchResult | null = text.match(issueId);
+      if (matched[0] && typeof matched?.index === 'number') {
+        const textWithoutIssueId: string = text.split(matched[0]).join('');
+        return [].concat(
+          textWithoutIssueId.slice(0, matched.index)
+        ).concat(
+          renderIssueIdLink(matched[0], [inheritedStyles, style.text, styles.link], node.key + matched.index)
+        ).concat(
+          `${textWithoutIssueId.slice(matched.index, text.length - 1)}`
+        );
+      }
       return renderIssueIdLink(text, [inheritedStyles, style.text, styles.link], node.key);
     }
 
