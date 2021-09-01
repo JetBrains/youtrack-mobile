@@ -29,6 +29,23 @@ const VCS_INTEGRATION_PROCESSOR_FIELDS = toField([
   'id',
 ]);
 
+const PULL_REQUEST_FIELDS = toField([
+  'id',
+  'noUserReason(id)',
+  'noHubUserReason(id)',
+  'fetched',
+  'files',
+  'userName',
+  'date',
+  'fetched',
+  'url',
+  'text',
+  'title',
+  'idExternal',
+  'user(@user)',
+  'author(@user)',
+]);
+
 const VCS_INTEGRATION_FIELDS = toField([
   {
     commands: [
@@ -46,7 +63,7 @@ const VCS_INTEGRATION_FIELDS = toField([
   'noHubUserReason(id)',
   'noUserReason(id)',
   'reopened',
-  'state',
+  'state(id)',
   'user(@user)',
   'userName',
   'version',
@@ -82,6 +99,7 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
         ],
       },
     ],
+    pullRequest: PULL_REQUEST_FIELDS,
     added: [
       ISSUE_PROJECT_FIELDS,
 

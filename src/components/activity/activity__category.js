@@ -12,6 +12,7 @@ export const categoryName = {
   ISSUE_RESOLVED: 'ISSUE_RESOLVED',
   PROJECT: 'PROJECT',
   PERMITTED_GROUP: 'PERMITTED_GROUP',
+  PULL_REQUEST_CHANGE: 'PULL_REQUEST_CHANGE',
   SPRINT: 'SPRINT',
   SUMMARY: 'SUMMARY',
   TAGS: 'TAGS',
@@ -52,6 +53,7 @@ export const activityCategory: Object = {
   [categoryName.WORK_ITEM_AUTHOR]: 'WorkItemAuthorCategory',
   [categoryName.VOTERS]: 'VotersCategory',
   [categoryName.VCS_ITEM]: 'VcsChangeCategory',
+  [categoryName.PULL_REQUEST_CHANGE]: 'PullRequestChangeCategory',
   [categoryName.TOTAL_VOTES]: 'TotalVotesCategory',
   [categoryName.VISIBILITY]: 'PermittedGroupCategory',
 };
@@ -104,6 +106,7 @@ export const ActivityCategory: {
   ], 'Work'],
   ['VCS_ITEM', 'IssueVcs', [
     activityCategory.VCS_ITEM,
+    activityCategory.PULL_REQUEST_CHANGE,
   ], 'VCS changes'],
 ].reduce(function (Activity: {
   Source: Object,
@@ -144,6 +147,7 @@ isActivityCategory.attachment = isActivityCategories([activityCategory.ATTACHMEN
 isActivityCategory.issueCreated = isActivityCategories([activityCategory.ISSUE_CREATED, activityArticleCategory.CREATED]);
 isActivityCategory.work = isActivityCategory(activityCategory.WORK_ITEM);
 isActivityCategory.voters = isActivityCategory(activityCategory.VOTERS);
+isActivityCategory.pullRequest = isActivityCategory(activityCategory.PULL_REQUEST_CHANGE);
 isActivityCategory.vcs = isActivityCategory(activityCategory.VCS_ITEM);
 isActivityCategory.totalVotes = isActivityCategory(activityCategory.TOTAL_VOTES);
 isActivityCategory.commentText = isActivityCategory(activityCategory.COMMENT_TEXT);

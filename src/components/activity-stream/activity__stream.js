@@ -12,6 +12,9 @@ import CommentVisibility from '../comment/comment__visibility';
 import CustomFieldChangeDelimiter from '../custom-field/custom-field__change-delimiter';
 import Diff from '../diff/diff';
 import IconVcs from '@jetbrains/icons/commit.svg';
+import IconPrOpen from '@jetbrains/icons/pr-open.svg';
+import IconPrMerged from '../icon/assets/pull-request-merged.svg';
+import IconPrDeclined from '../icon/assets/pull-request-declined.svg';
 import Feature, {FEATURE_VERSION} from '../feature/feature';
 import getEventTitle from '../activity/activity__history-title';
 import IssueVisibility from '../visibility/issue-visibility';
@@ -30,6 +33,7 @@ import {firstActivityChange, getActivityEventTitle} from './activity__stream-hel
 import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../icon/icon';
 import {isActivityCategory} from '../activity/activity__category';
 import {guid, isIOSPlatform} from '../../util/util';
+import {pullRequestState} from './activity__stream-vcs-helper';
 import {SkeletonIssueActivities} from '../skeleton/skeleton';
 
 import {HIT_SLOP} from '../common-styles/button';
@@ -217,17 +221,40 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
   const renderActivityIcon = (activityGroup: Object) => {
     const iconColor: string = props.uiTheme.colors.$iconAccent;
-    if (activityGroup.vcs) {
-      return <IconVcs
-        fill={iconColor}
-        width={22}
-        height={22}
-      />;
+    let icon: any;
+
+    switch (true) {
+    case activityGroup.vcs != null:
+      const iconProps: {fill: string, width: number, height: number} = {fill: iconColor, width: 22, height: 22};
+      if (activityGroup.vcs.pullRequest) {
+        switch (activityGroup.vcs.added[0].state.id) {
+        case pullRequestState.OPEN: {
+          icon = <IconPrOpen {...iconProps}/>;
+          break;
+        }
+        case pullRequestState.MERGED: {
+          icon = <IconPrMerged {...iconProps}/>;
+          break;
+        }
+        case pullRequestState.DECLINED: {
+          icon = <IconPrDeclined {...iconProps}/>;
+          break;
+        }
+        }
+      } else {
+        icon = <IconVcs {...iconProps}/>;
+      }
+      break;
+
+    case activityGroup.work != null:
+    icon = <IconWork size={24} color={iconColor} style={styles.activityWorkIcon}/>;
+    break;
+
+    default:
+      icon = <IconHistory size={26} color={iconColor}/>;
     }
-    if (activityGroup.work) {
-      return <IconWork size={24} color={iconColor} style={styles.activityWorkIcon}/>;
-    }
-    return <IconHistory size={26} color={iconColor}/>;
+
+    return icon;
   };
 
   const renderUserAvatar = (activityGroup: Object, showAvatar: boolean) => {

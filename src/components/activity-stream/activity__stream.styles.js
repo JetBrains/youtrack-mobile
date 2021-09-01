@@ -163,7 +163,6 @@ export default EStyleSheet.create({
     color: '$text',
   },
   vcsError: {
-    paddingTop: UNIT,
     color: '$error',
   },
 });

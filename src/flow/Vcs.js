@@ -26,21 +26,25 @@ export type VcsChangeState = {
   legacy: any,
 }
 
+type NoHubUserReason = {
+  $type: 'NoUserReason',
+  id: $Keys<typeof userNotFoundMessageMap>,
+};
+
+type NoUserReason = {
+  $type: string,
+  id: $Keys<typeof userNotFoundMessageMap>,
+};
+
 export type VcsChange = {
   idExternal?: string,
   urls: Array<string>,
   files: number | -1,
   processors: Array<VcsProcessor>,
   author: User,
-  noHubUserReason?: {
-    $type: 'NoUserReason',
-    id: $Keys<typeof userNotFoundMessageMap>,
-  },
+  noHubUserReason?: NoHubUserReason,
   fetched: number,
-  noUserReason: {
-    $type: string,
-    id: $Keys<typeof userNotFoundMessageMap>,
-  },
+  noUserReason: NoUserReason,
   commands: Array<VcsCommand>,
   date: number,
   state: VcsChangeState,
@@ -52,3 +56,20 @@ export type VcsChange = {
   $type: $Keys<typeof ResourceTypes.VCS_ITEM>,
 };
 
+export type PullRequest = {
+  author: User,
+  date: number,
+  fetched: number,
+  files: number,
+  id: string,
+  idExternal: string,
+  noHubUserReason: NoHubUserReason,
+  noUserReason: NoUserReason,
+  text: string,
+  title: string,
+  url: string,
+  user: User,
+  userName: string,
+};
+
+export type VCSActivity = VcsChange | PullRequest;

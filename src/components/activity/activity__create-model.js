@@ -44,7 +44,7 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
         streamGroup.target = event?.target;
         streamGroup.key = ActivityCategory.Source.COMMENT;
         break;
-      case isActivityCategory.vcs(event):
+      case isActivityCategory.vcs(event) || isActivityCategory.pullRequest(event):
         streamGroup.vcs = event;
         streamGroup.target = event?.target;
         streamGroup.key = ActivityCategory.Source.VCS_ITEM;
@@ -79,7 +79,8 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
         if (
           isActivityCategory.comment(event) ||
           isActivityCategory.work(event) ||
-          isActivityCategory.vcs(event)
+          isActivityCategory.vcs(event) ||
+          isActivityCategory.pullRequest(event)
         ) {
           if (currentGroup && historyChanges.length && !isFirst) {
             currentGroup.events = historyChanges.slice(0);
@@ -172,17 +173,19 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
       });
     }
 
-    function isMergedActivity(activity, prevActivity) {
+    function isMergedActivity(activity: Activity, prevActivity: Activity) {
       return !!(
         prevActivity &&
         activity.author.id === prevActivity.author.id &&
         getActivityTypeId(activity) === getActivityTypeId(prevActivity) &&
-        !activity.comment
+        (
+          (!activity.comment && !activity.vcs) || (!activity?.vcs?.pullRequest && !prevActivity?.vcs?.pullRequest)
+        )
       );
 
     }
 
-    function getActivityTypeId(item) {
+    function getActivityTypeId(item: Activity) {
       return item && item.key;
     }
   }

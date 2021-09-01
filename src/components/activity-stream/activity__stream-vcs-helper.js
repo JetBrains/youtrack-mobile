@@ -1,7 +1,7 @@
 /* @flow */
 
 import {ResourceTypes} from '../api/api__resource-types';
-import type {VcsChange, VcsChangeState, VcsCommand, VcsProcessor} from '../../flow/Vcs';
+import type {VCSActivity, VcsChangeState, VcsCommand, VcsProcessor} from '../../flow/Vcs';
 
 const HUB_DEFAULT_ERROR: string = 'YouTrack was unable to match the VCS user name to a Hub account for an unknown reason. Check your server logs for details.';
 export const userNotFoundMessageMap: { [string]: string } = {
@@ -40,6 +40,11 @@ export const userNotFoundMessageMap: { [string]: string } = {
   GITHUB_NO_EMAIL: 'YouTrack did not receive an email address for the commit author from GitHub.',
 };
 
+export const pullRequestState = {
+  OPEN: 'OPEN',
+  MERGED: 'MERGED',
+  DECLINED: 'DECLINED',
+};
 
 function getProcessorName(type: string): string {
   const processorName: { [string]: string } = {
@@ -96,13 +101,13 @@ function getProcessorName(type: string): string {
   return name;
 }
 
-function getCommandsWithError(change: VcsChange) {
+function getCommandsWithError(change: VCSActivity) {
   return (change?.commands || []).filter((command: VcsCommand) => {
     return command.hasError === true;
   });
 }
 
-function getUserNotFoundErrors(change: VcsChange): Array<string> {
+function getUserNotFoundErrors(change: VCSActivity): Array<string> {
   if (!change.noHubUserReason || !change.noUserReason) {
     return [];
   }
@@ -128,13 +133,13 @@ function vcsChangeStateMessage(vcsChangeState: VcsChangeState): (code: Object) =
   };
 }
 
-const getErrorMessages = (change: VcsChange): Array<string> => {
+const getErrorMessages = (change: VCSActivity): Array<string> => {
   const errors: Array<string> = [].concat(getUserNotFoundErrors(change));
   const commandsWithError: Array<string> = getCommandsWithError(change).map((command: VcsCommand) => command.errorText);
   return errors.concat(commandsWithError);
 };
 
-const getInfoMessages = (change: VcsChange): Array<string> => {
+const getInfoMessages = (change: VCSActivity): Array<string> => {
   if (typeof change.state !== 'number') {
     return [];
   }
@@ -160,7 +165,7 @@ const getInfoMessages = (change: VcsChange): Array<string> => {
   return messages;
 };
 
-const getVcsPresentation = (change: VcsChange): string => {
+const getVcsPresentation = (change: VCSActivity): string => {
   if (change.idExternal) {
     return `#${change.idExternal}`;
   } else {
@@ -168,11 +173,11 @@ const getVcsPresentation = (change: VcsChange): string => {
   }
 };
 
-const getProcessorsUrls = function (change: VcsChange): Array<VcsProcessor> {
+const getProcessorsUrls = function (change: VCSActivity): Array<VcsProcessor> {
   const changeUrls: Array<string> = change && change.urls || [];
   const urlsDistinct: { [string]: boolean } = {};
 
-  return change.processors
+  return (change?.processors || [])
     .map((processor: VcsProcessor, index: number) => ({
       ...processor,
       label: getProcessorName(processor.$type),

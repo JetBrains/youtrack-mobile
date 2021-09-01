@@ -3,6 +3,7 @@
 import type {Attachment, IssueComment, IssueProject} from './CustomFields';
 import type {IssueFull} from './Issue';
 import type {User} from './User';
+import type {PullRequest} from './Vcs';
 
 type EventBase = {
   id: string,
@@ -46,6 +47,7 @@ export type Activity = {
   key?: boolean,
   lastGroup?: boolean,
   root?: boolean,
+  pullRequest?: PullRequest,
 }
 
 export type ActivityType = {
@@ -66,6 +68,7 @@ export type ActivityChangeText = {
 };
 
 type CommentAction = (comment: IssueComment) => boolean;
+
 export type ActivityStreamCommentActions = {
   canCommentOn?: boolean,
   canDeleteComment?: CommentAction,
