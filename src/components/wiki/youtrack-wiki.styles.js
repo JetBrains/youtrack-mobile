@@ -91,6 +91,7 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginVertical: -UNIT / 2,
+    marginRight: UNIT / 2,
   },
   checkboxIcon: {
     flexGrow: 0,
@@ -115,7 +116,8 @@ export default EStyleSheet.create({
   },
   checkboxTextGroup: {
     flexDirection: 'row',
-    maxWidth: '75%',
+    flexWrap: 'wrap',
+    maxWidth: '80%',
   },
 
 });
