@@ -225,7 +225,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
     switch (true) {
     case activityGroup.vcs != null:
-      const iconProps: {fill: string, width: number, height: number} = {fill: iconColor, width: 22, height: 22};
+      const iconProps: {fill: string, width: number, height: number} = {fill: iconColor, width: 24, height: 24};
       if (activityGroup.vcs.pullRequest) {
         switch (activityGroup.vcs.added[0].state.id) {
         case pullRequestState.OPEN: {
