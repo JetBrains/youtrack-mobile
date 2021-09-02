@@ -38,6 +38,7 @@ type TextData = {
 const issueId: RegExp = new RegExp(`[a-zA-Z0-9_]+\\-\\d+`);
 const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
 const isURLPattern: RegExp = /^(http(s?)):\/\/|(www.)/i;
+const imgRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
 
 function getMarkdownRules(
   attachments: Array<Attachment> = [],
@@ -50,6 +51,10 @@ function getMarkdownRules(
   const imageHeaders = getApi().auth.getAuthorizationHeaders();
 
   const markdownImage = ({key, uri, alt, imageDimensions}) => {
+    if (uri.indexOf('badgen.net/badge') !== -1) {//TODO: temporary solution to remove HTML image from link label
+      return null;
+    }
+
     const dimensions: ImageDimensions = calculateAspectRatio(
       imageDimensions ||
       {width: 250, height: 300}
@@ -210,6 +215,11 @@ function getMarkdownRules(
     link: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
       const child: ?Object = node?.children[0];
       const content: string = (child && child.content) || children;
+
+      if (imgRegExp.test(content)) { //TODO: temporary solution to remove HTML image from link label
+        return null;
+      }
+
       return (
         <Text
           key={node.key}
