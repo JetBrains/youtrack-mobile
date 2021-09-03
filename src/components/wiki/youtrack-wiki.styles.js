@@ -120,6 +120,11 @@ export default EStyleSheet.create({
     maxWidth: '80%',
   },
 
+  video: {
+    width: 315,
+    height: 240,
+    alignSelf: 'stretch',
+  },
 });
 
 export const htmlViewStyles = EStyleSheet.create({

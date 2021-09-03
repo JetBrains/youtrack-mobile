@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {Image, Linking, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Image, Linking, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 
 import Hyperlink from 'react-native-hyperlink';
 import renderRules from 'react-native-markdown-display/src/lib/renderRules';
@@ -16,6 +16,7 @@ import {guid} from '../../util/util';
 import {hasMimeType} from '../mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from '../icon/icon';
 import {ResourceTypes} from '../api/api__resource-types';
+import {WebView} from 'react-native-webview';
 
 import styles from './youtrack-wiki.styles';
 
@@ -40,6 +41,11 @@ const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
 const isURLPattern: RegExp = /^(http(s?)):\/\/|(www.)/i;
 const imgRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
 
+function getYouTubeId(url: string): ?string {
+  const arr = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+  return undefined !== arr[2] ? arr[2].split(/[^\w-]/i)[0] : arr[0];
+}
+
 function getMarkdownRules(
   attachments: Array<Attachment> = [],
   projects: Array<IssueProject> = [],
@@ -47,6 +53,23 @@ function getMarkdownRules(
   mentions?: Mentions,
   onCheckboxUpdate?: (checked: boolean, position: number) => void,
 ): Object {
+
+  function renderVideo(youtubeVideoId: string, key: string): React$Element<typeof WebView> {
+    return (
+      <WebView
+        key={key}
+        style={styles.video}
+        source={{uri: `https://youtube.com/embed/${youtubeVideoId}?playsinline=1&controls:1`}}
+        allowsFullscreenVideo={false}
+        allowsInlineMediaPlayback={true}
+        renderLoading={() => <ActivityIndicator color={uiTheme.colors.$link}/>}
+        mediaPlaybackRequiresUserAction={true}
+        androidLayerType= "hardware"
+        mixedContentMode="always"
+        javaScriptEnabled={true}
+      />
+    );
+  }
 
   const imageHeaders = getApi().auth.getAuthorizationHeaders();
 
@@ -59,6 +82,11 @@ function getMarkdownRules(
       imageDimensions ||
       {width: 250, height: 300}
     );
+
+    const youtubeVideoId: ?string = getYouTubeId(uri);
+    if (youtubeVideoId) {
+      return renderVideo(youtubeVideoId, key);
+    }
 
     const imageProps: Object = {
       key,
