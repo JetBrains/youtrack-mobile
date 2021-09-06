@@ -163,7 +163,7 @@ class CreateIssue extends Component<Props, State> {
   }
 
   renderActionsIcon() {
-    if (this.isProcessing()) {
+    if (this.isProcessing() || !this.hasProject()) {
       return null;
     }
     return (
@@ -190,6 +190,10 @@ class CreateIssue extends Component<Props, State> {
     return processing || isAttaching;
   }
 
+  hasProject(): boolean {
+    return !!this.props.issue?.project?.id;
+  }
+
   render() {
     const {
       storeDraftAndGoBack,
@@ -214,7 +218,7 @@ class CreateIssue extends Component<Props, State> {
         {(theme: Theme) => {
           this.uiTheme = theme.uiTheme;
           const uiThemeColors: UIThemeColors = this.uiTheme.colors;
-          const hasProject: boolean = !!issue?.project?.id;
+          const hasProject: boolean = this.hasProject();
 
           const rightButton = (
             processing
