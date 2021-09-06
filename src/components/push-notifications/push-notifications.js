@@ -50,6 +50,10 @@ async function register(): Promise<void> {
     const youtrackToken: Token = await PNHelper.loadYouTrackToken();
     if (youtrackToken) {
       await doSubscribe(youtrackToken, deviceToken);
+    } else {
+      const message: string = 'Subscription to push notifications failed.';
+      log.warn(message);
+      throw new Error(message);
     }
   }
 }
@@ -68,7 +72,13 @@ async function initialize(onSwitchAccount: (account: StorageState, issueId: stri
 
   if (PNHelper.isDeviceTokenChanged(deviceToken)) {
     log.info(`'${PNHelper.logPrefix}'(initialize): device token has changed, re-subscribe`);
-    await register();
+    try {
+      await register();
+    } catch (e) {
+      const message: string = 'Re-subscription to push notifications after a device token has been changed failed.';
+      log.warn(message);
+      throw new Error(message);
+    }
   }
 
   PushNotificationsProcessor.subscribeOnNotificationOpen(onSwitchAccount);
