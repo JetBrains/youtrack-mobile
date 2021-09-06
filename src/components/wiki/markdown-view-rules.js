@@ -149,12 +149,12 @@ function getMarkdownRules(
       const matched: RegExp$matchResult | null = text.match(issueId);
       if (matched[0] && typeof matched?.index === 'number') {
         const textWithoutIssueId: string = text.split(matched[0]).join('');
-        return [].concat(
-          textWithoutIssueId.slice(0, matched.index)
-        ).concat(
-          renderIssueIdLink(matched[0], [inheritedStyles, style.text, styles.link], node.key + matched.index)
-        ).concat(
-          `${textWithoutIssueId.slice(matched.index, text.length - 1)}`
+        return (
+          <Text style={[inheritedStyles, style.text]}>
+            {textWithoutIssueId.slice(0, matched.index)}
+            {renderIssueIdLink(matched[0], [inheritedStyles, style.text, styles.link], node.key + matched.index)}
+            {textWithoutIssueId.slice(matched.index, text.length - 1)}
+          </Text>
         );
       }
       return renderIssueIdLink(text, [inheritedStyles, style.text, styles.link], node.key);
