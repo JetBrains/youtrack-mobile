@@ -15,6 +15,7 @@ export default class PushNotificationsProcessor extends PushNotifications {
   static registerNotificationOpenListener: ?EmitterSubscription = null;
 
   static subscribeOnNotificationOpen(onSwitchAccount: (account: StorageState, issueId: string) => any) {
+    log.info('Push notifications(subscribeOnNotificationOpen:Android): subscribe to open event');
     if (this.registerNotificationOpenListener) {
       this.registerNotificationOpenListener.remove && this.registerNotificationOpenListener.remove();
       this.registerNotificationOpenListener = null;

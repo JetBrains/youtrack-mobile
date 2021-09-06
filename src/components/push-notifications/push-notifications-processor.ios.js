@@ -15,6 +15,7 @@ import type {TokenHandler} from '../../flow/Notification';
 export default class PushNotificationsProcessor extends PushNotifications {
 
   static subscribeOnNotificationOpen(onSwitchAccount: (account: StorageState, issueId: string) => any) {
+    log.info('Push notifications(subscribeOnNotificationOpen:IOS): subscribe to open event');
     PushNotificationIOS.removeEventListener('notification');
     PushNotificationIOS.addEventListener('notification', async (notification) => {
       const notificationData: Object = notification.getData();
@@ -37,7 +38,7 @@ export default class PushNotificationsProcessor extends PushNotifications {
       }
 
       const issueId: ?string = helper.getIssueId(notificationData);
-      log.info('Push Notification(issueID):', issueId);
+      log.info(`Push Notification(issueID): ${issueId || ''}`);
       if (issueId) {
         const targetBackendUrl = notification?.data?.backendUrl;
         log.info('Push Notification(targetBackendUrl):', targetBackendUrl);
