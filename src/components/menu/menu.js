@@ -205,12 +205,11 @@ class Menu extends Component<Props, State> {
 
         <Feature version={FEATURE_VERSION.knowledgeBase}>
           <MenuItem
-            testId="test:id/menuKnowledgeBase"
+            testID="test:id/menuKnowledgeBase"
             icon={<IconKnowledgeBase size={22} color={color(routeMap.KnowledgeBase)}/>}
             onPress={this.openKnowledgeBase}
           />
         </Feature>
-
         <MenuItem
           testId="test:id/menuSettings"
           icon={<IconSettings size={21} color={color(routeMap.Settings)}/>}

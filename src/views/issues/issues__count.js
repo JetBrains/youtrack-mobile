@@ -22,6 +22,7 @@ const IssuesCount = (props: Props) => {
 
   return (
     <AnimatedView
+      testID= "test:id/issues-count"
       useNativeDriver
       duration={500}
       animation="fadeIn">

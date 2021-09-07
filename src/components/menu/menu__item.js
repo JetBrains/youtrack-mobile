@@ -18,13 +18,14 @@ type Props = {
 
 
 export const MenuItem = (props: Props): Node => {
-  const {icon, onPress, style, testId} = props;
+  const {icon, onPress, style, testID} = props;
   return (
     <View
       style={[styles.menuItem, style]}
     >
       <TouchableOpacity
-        testID={testId}
+        testID={testID}
+        accessible={true}
         hitSlop={HIT_SLOP}
         style={[styles.menuItemButton, style]}
         onPress={onPress}
