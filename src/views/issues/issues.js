@@ -252,9 +252,18 @@ export class Issues extends Component<Props, State> {
     this.clearSearchQuery(clearSearchQuery);
   };
 
+  onQueryUpdate: (query: string) => void = (query: string) => {
+    logEvent({
+      message: 'Apply search',
+      analyticsId: ANALYTICS_ISSUES_PAGE,
+    });
+    this.setEditQueryMode(false);
+    this.props.setIssuesCount(null);
+    this.props.onQueryUpdate(query);
+  };
 
   renderSearchPanel: (() => Node) = () => {
-    const {query, suggestIssuesQuery, queryAssistSuggestions, onQueryUpdate, setIssuesCount} = this.props;
+    const {query, suggestIssuesQuery, queryAssistSuggestions} = this.props;
     const _query = this.state.clearSearchQuery ? '' : query;
 
     return (
@@ -264,16 +273,20 @@ export class Issues extends Component<Props, State> {
         queryAssistSuggestions={queryAssistSuggestions}
         query={_query}
         suggestIssuesQuery={suggestIssuesQuery}
-        onQueryUpdate={(query: string) => {
-          logEvent({
-            message: 'Apply search',
-            analyticsId: ANALYTICS_ISSUES_PAGE,
-          });
-          this.setEditQueryMode(false);
-          setIssuesCount(null);
-          onQueryUpdate(query);
+        onQueryUpdate={(q: string) => {
+          this.onQueryUpdate(q);
         }}
-        onClose={() => this.setEditQueryMode(false)}
+        onClose={(q: string) => {
+          if (this.state.clearSearchQuery) {
+            logEvent({
+              message: 'Clear search',
+              analyticsId: ANALYTICS_ISSUES_PAGE,
+            });
+            this.onQueryUpdate(q);
+          } else {
+            this.setEditQueryMode(false);
+          }
+        }}
         clearButtonMode="always"
       />
     );

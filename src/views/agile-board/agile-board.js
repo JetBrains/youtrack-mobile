@@ -72,7 +72,8 @@ type State = {
   zoomedIn: boolean,
   stickElement: { agile: boolean, boardHeader: boolean },
   offsetY: number,
-  showAssist: boolean
+  showAssist: boolean,
+  clearQuery: boolean,
 };
 
 class AgileBoard extends Component<Props, State> {
@@ -93,6 +94,7 @@ class AgileBoard extends Component<Props, State> {
       },
       offsetY: 0,
       showAssist: false,
+      clearQuery: false,
     };
   }
 
@@ -395,10 +397,11 @@ class AgileBoard extends Component<Props, State> {
     this.toggleQueryAssist(false);
   };
 
-  onShowAssist = async (clearQuery: boolean) => {
+  onShowAssist = async (clearQuery: boolean = false) => {
     if (clearQuery) {
       this.query = '';
     }
+    this.setState({clearQuery});
     this.toggleQueryAssist(true);
   };
 
@@ -411,7 +414,14 @@ class AgileBoard extends Component<Props, State> {
         query={this.query}
         suggestIssuesQuery={suggestAgileQuery}
         onQueryUpdate={this.onQueryApply}
-        onClose={this.toggleQueryAssist}
+        onClose={(q: string) => {
+          if (this.state.clearQuery) {
+            usage.trackEvent(ANALYTICS_AGILE_PAGE, 'Clear query');
+            this.onQueryApply(q);
+          } else {
+            this.toggleQueryAssist(false);
+          }
+        }}
         clearButtonMode="always"
       />
     );

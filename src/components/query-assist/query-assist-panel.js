@@ -16,7 +16,7 @@ type SearchPanelProps = {
   query: string,
   suggestIssuesQuery: (query: string, caret: number) => any,
   onQueryUpdate: (query: string) => any,
-  onClose: () => any,
+  onClose: (query: string) => any,
 
   issuesCount?: ?number,
   style?: ViewStyleProp,

@@ -23,7 +23,7 @@ type Props = {
   currentQuery: string,
   onApplyQuery: (query: string) => any,
   onChange: (query: string, caret: number) => any,
-  onClose: () => any
+  onClose: (query: string) => any
 };
 
 type State = {
@@ -147,7 +147,7 @@ export default class QueryAssist extends Component<Props, State> {
           testID="query-assist-cancel"
           onPress={() => {
             this.cancelSearch();
-            onClose();
+            onClose(inputValue);
           }}
         >
           <IconBack color={styles.link.color}/>
