@@ -30,9 +30,10 @@ describe('IOS', () => {
       PushNotificationsProcessor.init();
 
       const calls = PushNotificationIOS.addEventListener.mock.calls;
-      expect(calls.length).toEqual(2);
-      expect(calls[0][0]).toEqual('register');
-      expect(calls[1][0]).toEqual('registrationError');
+      expect(calls.length).toEqual(3);
+      expect(calls[0][0]).toEqual('notification');
+      expect(calls[1][0]).toEqual('register');
+      expect(calls[2][0]).toEqual('registrationError');
 
       expect(PushNotificationIOS.requestPermissions).toHaveBeenCalled();
 
@@ -57,6 +58,6 @@ describe('IOS', () => {
 
 
   function callRegistrationCallback(token) {
-    return PushNotificationIOS.addEventListener.mock.calls[0][1].call(null, token);
+    return PushNotificationIOS.addEventListener.mock.calls[1][1].call(null, token);
   }
 });

@@ -12,50 +12,54 @@ import {targetAccountToSwitchTo} from '../../actions/app-actions-helper';
 import type {StorageState} from '../storage/storage';
 import type {TokenHandler} from '../../flow/Notification';
 
+let onSwitch: Function = (account: StorageState, issueId: string): Function => {};
+
+PushNotificationIOS.removeEventListener('notification');
+PushNotificationIOS.addEventListener('notification', async (notification) => {
+  const notificationData: Object = notification.getData();
+  const isClicked: boolean = notificationData.userInteraction === 1;
+  const data = `
+  Title:  ${notification.getTitle()};\n
+  Subtitle:  ${notification.getSubtitle()};\n
+  Message: ${notification.getMessage()};\n
+  Data: ${notificationData};\n
+  badge: ${notification.getBadgeCount()};\n
+  sound: ${notification.getSound()};\n
+  category: ${notification.getCategory()};\n
+  content-available: ${notification.getContentAvailable()};\n
+  Notification is clicked: ${String(isClicked)}.`;
+
+  if (!notification.getTitle()) {
+    log.info('Silent push notification iOS Received', data);
+  } else {
+    log.info(`Push Notification iOS Received ${JSON.stringify(data)}`, data);
+  }
+
+  const issueId: ?string = helper.getIssueId(notificationData);
+  log.info(`Push Notification iOS(issueID): ${issueId || ''}`);
+  if (issueId) {
+    const targetBackendUrl = notification?.data?.backendUrl;
+    log.info('Push Notification iOS(targetBackendUrl):', targetBackendUrl);
+    const targetAccount = await targetAccountToSwitchTo(targetBackendUrl);
+    log.info('Push Notification iOS(account to switch to):', targetAccount);
+    if (targetAccount) {
+      log.info('Push Notification iOS: switching account');
+      await onSwitch(targetAccount, issueId);
+    } else if (issueId) {
+      log.info('Push Notification iOS(navigating to):', issueId);
+      Router.Issue({
+        issueId,
+        navigateToActivity: !helper.isSummaryOrDescriptionNotification(notification),
+      });
+    }
+  }
+});
+
 export default class PushNotificationsProcessor extends PushNotifications {
 
   static subscribeOnNotificationOpen(onSwitchAccount: (account: StorageState, issueId: string) => any) {
-    log.info('Push notifications(subscribeOnNotificationOpen:IOS): subscribe to open event');
-    PushNotificationIOS.removeEventListener('notification');
-    PushNotificationIOS.addEventListener('notification', async (notification) => {
-      const notificationData: Object = notification.getData();
-      const isClicked: boolean = notificationData.userInteraction === 1;
-      const data = `
-      Title:  ${notification.getTitle()};\n
-      Subtitle:  ${notification.getSubtitle()};\n
-      Message: ${notification.getMessage()};\n
-      Data: ${notificationData};\n
-      badge: ${notification.getBadgeCount()};\n
-      sound: ${notification.getSound()};\n
-      category: ${notification.getCategory()};\n
-      content-available: ${notification.getContentAvailable()};\n
-      Notification is clicked: ${String(isClicked)}.`;
-
-      if (!notification.getTitle()) {
-        log.info('Silent push notification Received', data);
-      } else {
-        log.info('Push Notification Received', data);
-      }
-
-      const issueId: ?string = helper.getIssueId(notificationData);
-      log.info(`Push Notification(issueID): ${issueId || ''}`);
-      if (issueId) {
-        const targetBackendUrl = notification?.data?.backendUrl;
-        log.info('Push Notification(targetBackendUrl):', targetBackendUrl);
-        const targetAccount = await targetAccountToSwitchTo(targetBackendUrl);
-        log.info('Push Notification(account to switch to):', targetAccount);
-        if (targetAccount) {
-          log.info('Push Notification: switching account');
-          await onSwitchAccount(targetAccount, issueId);
-        } else if (issueId) {
-          log.info('Push Notification(navigating to):', issueId);
-          Router.Issue({
-            issueId,
-            navigateToActivity: !helper.isSummaryOrDescriptionNotification(notification),
-          });
-        }
-      }
-    });
+    log.info('Push notifications iOS(subscribeOnNotificationOpen): subscribe to open event');
+    onSwitch = onSwitchAccount;
   }
 
   static unsubscribe() {
