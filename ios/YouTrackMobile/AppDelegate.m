@@ -88,7 +88,7 @@ ClearKeychainIfNecessary();
   [[NSURLCache sharedURLCache] removeAllCachedResponses];
   [[NSURLCache sharedURLCache] setDiskCapacity:0];
   [[NSURLCache sharedURLCache] setMemoryCapacity:0];
-  
+
   // Define UNUserNotificationCenter
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   center.delegate = self;
@@ -99,7 +99,12 @@ ClearKeychainIfNecessary();
 //Called when a notification is delivered to a foreground app.
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
 {
-  completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
+    //Still call the javascript onNotification handler so it can display the new message right away
+    NSDictionary *userInfo = notification.request.content.userInfo;
+    [RNCPushNotificationIOS didReceiveRemoteNotification:userInfo];
+
+    //hide push notification
+    completionHandler(UNNotificationPresentationOptionNone);
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
