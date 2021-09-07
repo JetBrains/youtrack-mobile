@@ -16,31 +16,27 @@ let onSwitch: Function = (account: StorageState, issueId: string): Function => {
 
 PushNotificationIOS.removeEventListener('notification');
 PushNotificationIOS.addEventListener('notification', async (notification) => {
-  const notificationData: Object = notification.getData();
-  const isClicked: boolean = notificationData.userInteraction === 1;
-  const data = `
-  Title:  ${notification.getTitle()};\n
-  Subtitle:  ${notification.getSubtitle()};\n
-  Message: ${notification.getMessage()};\n
-  Data: ${notificationData};\n
-  badge: ${notification.getBadgeCount()};\n
-  sound: ${notification.getSound()};\n
-  category: ${notification.getCategory()};\n
-  content-available: ${notification.getContentAvailable()};\n
-  Notification is clicked: ${String(isClicked)}.`;
-
-  log.info(`Push Notification iOS Received ${JSON.stringify(notification)}`, data);
+  const notificationData: {
+    backendUrl?: string,
+    notificationId: string,
+    ytUserId: string,
+    categories: string,
+    remote: true,
+    ytIssueId: string,
+  } = notification.getData();
+  log.info(`Push Notification iOS Received ${JSON.stringify(notification)}`);
 
   const actionIdentifier = notification.getActionIdentifier();
 
   if (actionIdentifier === 'open') {
     const issueId: ?string = helper.getIssueId(notificationData);
     log.info(`Push Notification iOS(issueID): ${issueId || ''}`);
+
     if (issueId) {
-      const targetBackendUrl = notification?.data?.backendUrl;
+      const targetBackendUrl: string = notification?.backendUrl || '';
       log.info('Push Notification iOS(targetBackendUrl):', targetBackendUrl);
-      const targetAccount = await targetAccountToSwitchTo(targetBackendUrl);
-      log.info('Push Notification iOS(account to switch to):', targetAccount);
+      const targetAccount: StorageState | null = await targetAccountToSwitchTo(targetBackendUrl);
+      log.info(`Push Notification iOS(account to switch to): ${targetAccount?.config?.backendUrl || ''}`);
       if (targetAccount) {
         log.info('Push Notification iOS: switching account');
         await onSwitch(targetAccount, issueId);
@@ -52,6 +48,7 @@ PushNotificationIOS.addEventListener('notification', async (notification) => {
         });
       }
     }
+
   }
 });
 

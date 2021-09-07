@@ -103,8 +103,7 @@ ClearKeychainIfNecessary();
     NSDictionary *userInfo = notification.request.content.userInfo;
     [RNCPushNotificationIOS didReceiveRemoteNotification:userInfo];
 
-    //hide push notification
-    completionHandler(UNNotificationPresentationOptionNone);
+      completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge

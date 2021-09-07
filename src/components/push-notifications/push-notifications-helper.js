@@ -76,9 +76,7 @@ function showInfoMessage(title: string, message: string, buttons: Array<Object> 
 
 
 function getIssueId(notification: Object): ?string {
-  const data: Object = notification?.getData && notification.getData();
   return (
-    data?.ytIssueId ||
     notification?.ytIssueId ||
     notification?.data?.ytIssueId ||
     notification?.getData && notification.getData().ytIssueId ||
