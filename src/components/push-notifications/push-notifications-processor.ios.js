@@ -74,7 +74,7 @@ export default class PushNotificationsProcessor extends PushNotifications {
       });
 
     PushNotification.configure({
-      onRegister: function (deviceToken: string) {
+      onRegister: (deviceToken: string) => {
         this.setDeviceToken(deviceToken);
         resolveToken(deviceToken);
       },
@@ -86,7 +86,7 @@ export default class PushNotificationsProcessor extends PushNotifications {
 
       onAction: function (notification) {},
 
-      onRegistrationError: function(err) {
+      onRegistrationError: function (err) {
         rejectToken('');
         notify([CUSTOM_ERROR_MESSAGE.PUSH_NOTIFICATION_REGISTRATION, (err?.message || '')].join('. '));
         log.warn('PushNotificationIOS registration failed', err?.message);
@@ -100,7 +100,13 @@ export default class PushNotificationsProcessor extends PushNotifications {
 
       popInitialNotification: true,
 
-      requestPermissions: true,
+      requestPermissions: false,
+    });
+
+    PushNotificationIOS.requestPermissions({
+      alert: true,
+      badge: true,
+      sound: true,
     });
   }
 }
