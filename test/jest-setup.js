@@ -11,8 +11,6 @@ import mockReanimated from 'react-native-reanimated/mock';
 import sinonChai from 'sinon-chai';
 import {
   mockReactNativeNotification,
-  mockReactNativeIOSNotification,
-  mockReactNativePushNotification,
 } from './jest-mock__react-native-notifications';
 
 Enzyme.configure({adapter: new Adapter()});
@@ -61,8 +59,6 @@ jest.mock('react-native-appearance', () => ({
   Appearance: {getColorScheme: () => 'light'},
 }));
 
-mockReactNativeIOSNotification();
-mockReactNativePushNotification();
 mockReactNativeNotification();
 
 NativeModules.RNEncryptedStorage = {

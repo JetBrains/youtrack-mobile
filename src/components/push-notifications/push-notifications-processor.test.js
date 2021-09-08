@@ -1,6 +1,6 @@
 /* @flow */
 
-import PushNotificationsProcessor from './push-notifications-processor.android';
+import PushNotificationsProcessor from './push-notifications-processor';
 import {mockEventsRegistry} from '../../../test/jest-mock__react-native-notifications';
 
 

@@ -3,7 +3,6 @@
 import React, {Component} from 'react';
 import {UIManager} from 'react-native';
 
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {Provider} from 'react-redux';
 
 import AgileBoard from './views/agile-board/agile-board';
@@ -27,7 +26,6 @@ import Settings from './views/settings/settings';
 import store from './store';
 import WikiPage from './views/wiki-page/wiki-page';
 import {ActionSheetProvider, connectActionSheet} from '@expo/react-native-action-sheet';
-import {isAndroidPlatform} from './util/util';
 import {Notifications} from 'react-native-notifications';
 import {onNavigateBack, setAccount} from './actions/app-actions';
 import {rootRoutesList, routeMap} from './app-routes';
@@ -40,7 +38,6 @@ if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const isAndroid: boolean = isAndroidPlatform();
 /*
   Uncomment this string to debug network request in Chrome. Chrome should be run with --disable-web-security flag.
   Or use React Native Debugger https://github.com/jhen0409/react-native-debugger
@@ -65,11 +62,7 @@ class YouTrackMobile extends Component<void, void> {
   }
 
   static async getNotificationData(): Promise<NotificationRouteData> {
-    const notification: Promise<typeof Notification | ?PushNotificationIOS> = (
-      isAndroid
-        ? await Notifications.getInitialNotification()
-        : await PushNotificationIOS.getInitialNotification()
-    );
+    const notification: Promise<typeof Notification | ?PushNotificationIOS> = await Notifications.getInitialNotification();
     return {
       issueId: notificationsHelper.getIssueId(notification),
       backendUrl: notificationsHelper.getBackendUrl(notification),
