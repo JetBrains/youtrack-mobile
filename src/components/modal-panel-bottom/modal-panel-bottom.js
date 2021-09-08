@@ -25,7 +25,7 @@ const ModalPanelBottom = (props: Props) => {
     <ModalView
       transparent={true}
       animationType="slide"
-      testID={props}
+      testID={props.testID}
       style={styles.container}
     >
       <View style={[styles.content, props.style]}>
