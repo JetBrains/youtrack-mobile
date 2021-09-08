@@ -34,6 +34,9 @@ export function renderSelector(params: {
       params.showBottomBorder ? styles.selectorBorder : null,
     ]}>
       <TouchableOpacity
+        testID="search-context"
+        accessibilityLabel="search-context"
+        accessible={true}
         key={params.key}
         style={styles.selectorButton}
         disabled={params.isLoading}

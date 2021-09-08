@@ -61,6 +61,8 @@ export default class IssueRow extends Component<Props, void> {
         style={style}
         onPress={() => this.props.onClick(issue)}
         testID="test:id/issueRow"
+        accessibilityLabel="issue-row"
+        accessible={true}
       >
         <View>
           <View

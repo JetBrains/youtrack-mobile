@@ -121,6 +121,8 @@ export class Issues extends Component<Props, State> {
       <TouchableOpacity
         hitSlop={HIT_SLOP}
         testID="test:id/create-issue-button"
+        accessibilityLabel="create-issue-button"
+        accessible={true}
         style={styles.createIssueButton}
         onPress={() => Router.CreateIssue()}
         disabled={isDisabled}
@@ -177,6 +179,7 @@ export class Issues extends Component<Props, State> {
         key="issueListContext"
         accessible={true}
         testID = "test:id/issue-list-context"
+        accessibilityLabel = "search-context"
         style={[
           styles.searchContext,
           isSearchContextPinned ? styles.searchContextPinned : null,
@@ -314,6 +317,8 @@ export class Issues extends Component<Props, State> {
           <TouchableOpacity
             style={styles.userSearchQueryButton}
             testID="test:id/user-search-query-button"
+            accessibilityLabel="user-search-query-button"
+            accessible={true}
             onPress={openSavedSearchesSelect}
           >
             <IconBookmark size={28} color={uiTheme.colors.$link}/>

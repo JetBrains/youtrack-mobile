@@ -41,8 +41,6 @@ import type {Notification, Metadata, ChangeValue, ChangeEvent} from '../../flow/
 import type {Reaction} from '../../flow/Reaction';
 import type {Theme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
-import {HIT_SLOP} from "../../components/common-styles/button";
-import {IconAdd} from "../../components/icon/icon";
 
 
 type Props = InboxState & typeof inboxActions;
@@ -350,6 +348,8 @@ class Inbox extends Component<Props, State> {
     return (
       <View
         testID="test:id/notification-row"
+        accessibilityLabel="notification-row"
+        accessible={true}
         style={styles.notification}>
         <View><Text style={[styles.textPrimary, styles.notificationIssueInfo]}>{`${title}:`}</Text></View>
 
@@ -444,6 +444,8 @@ class Inbox extends Component<Props, State> {
     return (
       <View
         testID="test:id/notification-row"
+        accessibilityLabel="notification-row"
+        accessible={true}
         style={styles.notification}>
         <UserInfo
           avatar={
@@ -489,6 +491,8 @@ class Inbox extends Component<Props, State> {
     return (
       <View
         testID="test:id/notification-row"
+        accessibilityLabel="notification-row"
+        accessible={true}
         style={styles.notification}>
         <UserInfo style={styles.userInfo} user={sender} timestamp={change?.endTimestamp}/>
 

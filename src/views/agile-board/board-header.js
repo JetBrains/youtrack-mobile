@@ -52,6 +52,9 @@ export default class BoardHeader extends PureComponent<Props, void> {
 
           return (
             <TouchableOpacity
+              testID="agile-column-header"
+              accessibilityLabel="agile-column-header"
+              accessible={true}
               style={[
                 styles.tableHeaderItem,
                 index === columns.length - 1 ? styles.tableHeaderItemWithoutBorder : null,
