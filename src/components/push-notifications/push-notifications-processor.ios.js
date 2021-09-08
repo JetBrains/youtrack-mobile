@@ -23,12 +23,13 @@ PushNotificationIOS.addEventListener('notification', async (notification) => {
     categories: string,
     remote: true,
     ytIssueId: string,
+    userInteraction: 0 | 1,
   } = notification.getData();
   log.info(`Push Notification iOS Received ${JSON.stringify(notification)}`);
+  log.info(`Push Notification iOS Data ${JSON.stringify(notificationData)}`);
+  const isClicked: boolean = notificationData.userInteraction === 1;
 
-  const actionIdentifier = notification.getActionIdentifier();
-
-  if (actionIdentifier === 'open') {
+  if (isClicked) {
     const issueId: ?string = helper.getIssueId(notificationData);
     log.info(`Push Notification iOS(issueID): ${issueId || ''}`);
 

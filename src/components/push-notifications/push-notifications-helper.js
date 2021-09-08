@@ -103,7 +103,6 @@ function isSummaryOrDescriptionNotification(notification: Object): boolean {
     notification?.payload?.categories ||
     ''
   ).split(',');
-  log.info(`>>>isSummaryOrDescriptionNotification: ${categories.join(',')}`);
   if (categories.length === 0 || !categories[0]) {
     return false;
   }
