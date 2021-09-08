@@ -1,10 +1,7 @@
 /* @flow */
 
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
-
 import PushNotificationsProcessor from './push-notifications-processor.ios';
-import {mockEventsRegistry} from '../../../test/jest-mock__react-native-notifications';
 
 
 describe('IOS', () => {
