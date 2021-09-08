@@ -73,6 +73,7 @@ class YouTrackMobile extends Component<void, void> {
     return {
       issueId: notificationsHelper.getIssueId(notification),
       backendUrl: notificationsHelper.getBackendUrl(notification),
+      navigateToActivity: !notificationsHelper.isSummaryOrDescriptionNotification(notification),
     };
   }
 

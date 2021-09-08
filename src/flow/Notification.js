@@ -10,4 +10,4 @@ export type Token = string | null | typeof undefined;
 
 export type TokenHandler = (token: string) => void;
 
-export type NotificationRouteData = { issueId: ?string, backendUrl: ?string };
+export type NotificationRouteData = { issueId: ?string, backendUrl: ?string, navigateToActivity: boolean };

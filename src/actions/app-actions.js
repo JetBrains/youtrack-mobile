@@ -422,7 +422,7 @@ export function loadUserPermissions(): Action {
   };
 }
 
-export function completeInitialization(issueId: string | null = null): Action {
+export function completeInitialization(issueId: string | null = null, navigateToActivity: boolean = false): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     log.debug('Completing initialization');
     await dispatch(loadUser());
@@ -430,7 +430,7 @@ export function completeInitialization(issueId: string | null = null): Action {
     await dispatch(cacheProjects());
     log.debug('Initialization completed');
 
-    Router.navigateToDefaultRoute(issueId ? {issueId} : null);
+    Router.navigateToDefaultRoute(issueId ? {issueId, navigateToActivity} : null);
 
     dispatch(loadWorkTimeSettings());
     dispatch(subscribeToPushNotifications());
@@ -582,7 +582,7 @@ function subscribeToURL(): Action {
   };
 }
 
-export function initializeApp(config: AppConfigFilled, issueId: string | null): Action {
+export function initializeApp(config: AppConfigFilled, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
     Router._getNavigator() && Router.Home({
       backendUrl: config.backendUrl,
@@ -622,7 +622,7 @@ export function initializeApp(config: AppConfigFilled, issueId: string | null): 
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
-      await dispatch(completeInitialization(issueId));
+      await dispatch(completeInitialization(issueId, navigateToActivity));
     }
 
     dispatch(subscribeToURL());
@@ -656,7 +656,11 @@ export function setAccount(notificationRouteData: NotificationRouteData | Object
 
     const targetConfig = getStorageState().config;
     if (targetConfig) {
-      dispatch(initializeApp(targetConfig, notificationRouteData?.issueId || null));
+      dispatch(initializeApp(
+        targetConfig,
+        notificationRouteData?.issueId || null,
+        notificationRouteData.navigateToActivity
+      ));
     } else {
       log.info('App is not configured, entering server URL');
       const navigateTo = (serverUrl: string | null) => Router.EnterServer({serverUrl});
