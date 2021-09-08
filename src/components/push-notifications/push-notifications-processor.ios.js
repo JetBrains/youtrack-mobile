@@ -1,6 +1,7 @@
 /* @flow */
 
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import PushNotification from 'react-native-push-notification';
 
 import helper, {PushNotifications} from './push-notifications-helper';
 import log from '../log/log';
@@ -12,24 +13,26 @@ import {targetAccountToSwitchTo} from '../../actions/app-actions-helper';
 import type {StorageState} from '../storage/storage';
 import type {TokenHandler} from '../../flow/Notification';
 
+type NotificationData = {
+  backendUrl?: string,
+  ytUserId: string,
+  categories: string,
+  ytIssueId: string,
+};
+
 let onSwitch: Function = (account: StorageState, issueId: string): Function => {};
 
-PushNotificationIOS.removeEventListener('notification');
-PushNotificationIOS.addEventListener('notification', async (notification) => {
-  const notificationData: {
-    backendUrl?: string,
-    notificationId: string,
-    ytUserId: string,
-    categories: string,
-    remote: true,
-    ytIssueId: string,
-    userInteraction: 0 | 1,
-  } = notification.getData();
+const onNotification = async (notification: {
+  foreground: false, // BOOLEAN: If the notification was received in foreground or not
+  userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
+  message: string, // STRING: The notification message
+  data: NotificationData, // OBJECT: The push data or the defined userInfo in local notifications
+}) => {
+  const notificationData: NotificationData = notification.data;
   log.info(`Push Notification iOS Received ${JSON.stringify(notification)}`);
   log.info(`Push Notification iOS Data ${JSON.stringify(notificationData)}`);
-  const isClicked: boolean = notificationData.userInteraction === 1;
 
-  if (isClicked) {
+  if (notification.userInteraction) {
     const issueId: ?string = helper.getIssueId(notificationData);
     log.info(`Push Notification iOS(issueID): ${issueId || ''}`);
 
@@ -51,19 +54,13 @@ PushNotificationIOS.addEventListener('notification', async (notification) => {
     }
 
   }
-});
+};
 
 export default class PushNotificationsProcessor extends PushNotifications {
 
   static subscribeOnNotificationOpen(onSwitchAccount: (account: StorageState, issueId: string) => any) {
     log.info('Push notifications iOS(subscribeOnNotificationOpen): subscribe to open event');
     onSwitch = onSwitchAccount;
-  }
-
-  static unsubscribe() {
-    PushNotificationIOS.removeEventListener('register');
-    PushNotificationIOS.removeEventListener('registrationError');
-    PushNotificationIOS.removeEventListener('notification');
   }
 
   static init() {
@@ -76,24 +73,34 @@ export default class PushNotificationsProcessor extends PushNotifications {
         rejectToken = reject;
       });
 
-    PushNotificationIOS.addEventListener('register', (deviceToken: string) => {
-      this.setDeviceToken(deviceToken);
-      resolveToken(deviceToken);
-    });
-
-    PushNotificationIOS.addEventListener('registrationError', (error: Error) => {
-      rejectToken('');
-      notify(CUSTOM_ERROR_MESSAGE.PUSH_NOTIFICATION_REGISTRATION);
-      log.warn('PushNotificationIOS registration failed', error);
-    });
-
-    PushNotificationIOS.requestPermissions().then(
-      (data) => {
-        log.info('PushNotificationIOS.requestPermissions', data);
+    PushNotification.configure({
+      onRegister: function (deviceToken: string) {
+        this.setDeviceToken(deviceToken);
+        resolveToken(deviceToken);
       },
-      (data) => {
-        log.warn('PushNotificationIOS.requestPermissions failed', data);
+
+      onNotification: function (notification) {
+        onNotification(notification);
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
       },
-    );
+
+      onAction: function (notification) {},
+
+      onRegistrationError: function(err) {
+        rejectToken('');
+        notify([CUSTOM_ERROR_MESSAGE.PUSH_NOTIFICATION_REGISTRATION, (err?.message || '')].join('. '));
+        log.warn('PushNotificationIOS registration failed', err?.message);
+      },
+
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+
+      popInitialNotification: true,
+
+      requestPermissions: true,
+    });
   }
 }

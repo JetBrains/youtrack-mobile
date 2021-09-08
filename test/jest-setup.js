@@ -12,6 +12,7 @@ import sinonChai from 'sinon-chai';
 import {
   mockReactNativeNotification,
   mockReactNativeIOSNotification,
+  mockReactNativePushNotification,
 } from './jest-mock__react-native-notifications';
 
 Enzyme.configure({adapter: new Adapter()});
@@ -61,6 +62,7 @@ jest.mock('react-native-appearance', () => ({
 }));
 
 mockReactNativeIOSNotification();
+mockReactNativePushNotification();
 mockReactNativeNotification();
 
 NativeModules.RNEncryptedStorage = {

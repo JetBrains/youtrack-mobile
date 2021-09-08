@@ -1,6 +1,7 @@
 /* @flow */
 
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import PushNotification from 'react-native-push-notification';
 
 import PushNotificationsProcessor from './push-notifications-processor.ios';
 import {mockEventsRegistry} from '../../../test/jest-mock__react-native-notifications';
@@ -29,35 +30,9 @@ describe('IOS', () => {
     it('should initialize a subscription', async () => {
       PushNotificationsProcessor.init();
 
-      const calls = PushNotificationIOS.addEventListener.mock.calls;
-      expect(calls.length).toEqual(3);
-      expect(calls[0][0]).toEqual('notification');
-      expect(calls[1][0]).toEqual('register');
-      expect(calls[2][0]).toEqual('registrationError');
+      expect(PushNotification.configure).toHaveBeenCalled();
 
-      expect(PushNotificationIOS.requestPermissions).toHaveBeenCalled();
-
-    });
-
-    it('should set device token', () => {
-      jest.spyOn(PushNotificationsProcessor, 'setDeviceToken');
-
-      PushNotificationsProcessor.init();
-      callRegistrationCallback(mockEventsRegistry.deviceTokenMock);
-
-      expect(PushNotificationsProcessor.setDeviceToken).toHaveBeenCalledWith(mockEventsRegistry.deviceTokenMock);
-    });
-
-    it('should return resolved device token promise', async () => {
-      PushNotificationsProcessor.init();
-      callRegistrationCallback(mockEventsRegistry.deviceTokenMock);
-
-      expect(PushNotificationsProcessor.deviceToken).toEqual(mockEventsRegistry.deviceTokenMock);
     });
   });
 
-
-  function callRegistrationCallback(token) {
-    return PushNotificationIOS.addEventListener.mock.calls[1][1].call(null, token);
-  }
 });
