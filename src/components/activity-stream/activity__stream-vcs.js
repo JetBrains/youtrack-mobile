@@ -1,20 +1,23 @@
 /* @flow */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {Linking, Text, TouchableOpacity, View} from 'react-native';
 
 import Details from '../details/details';
 import MarkdownView from '../wiki/markdown-view';
+import ModalPanelBottom from '../modal-panel-bottom/modal-panel-bottom';
 import StreamUserInfo from './activity__stream-user-info';
 import {firstActivityChange} from './activity__stream-helper';
 import {getErrorMessages, getInfoMessages, getVcsPresentation, getProcessorsUrls} from './activity__stream-vcs-helper';
 import {HIT_SLOP} from '../common-styles/button';
+import {IconChevronDownUp} from '../icon/icon';
 import {relativeDate} from '../issue-formatter/issue-formatter';
 
 import styles from './activity__stream.styles';
 
 import type {Activity} from '../../flow/Activity';
 import type {PullRequest, VCSActivity, VcsProcessor} from '../../flow/Vcs';
+import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   activityGroup: Activity,
@@ -47,6 +50,7 @@ const StreamVCS = (props: Props) => {
     return renderMessage(message, index, arr, true);
   }
 
+  const [sourcesVisible, updateSourcesVisible] = useState(false);
 
   const vcs: VCSActivity | null = props.activityGroup.vcs?.pullRequest || firstActivityChange(props.activityGroup.vcs);
 
@@ -61,23 +65,42 @@ const StreamVCS = (props: Props) => {
   const title: string = props.activityGroup.merged ? '' : 'Committed changes' + ' ';
   const renderProcessorURL: (
     processor: VcsProcessor | PullRequest,
-    singleUrl?: boolean
-  ) => React$Element<typeof View> = (processor: VcsProcessor | PullRequest, singleProcessor?: boolean) => {
+    singleUrl?: boolean,
+    textStyle?: TextStyleProp,
+  ) => React$Element<typeof TouchableOpacity> = (
+    processor: VcsProcessor | PullRequest,
+    singleProcessor: boolean = false,
+    textStyle?: TextStyleProp,
+  ) => {
     return (
-      <View
-        key={processor.id}>
+      <Text key={processor.id || processor?.label || processor?.idExternal}>
         <TouchableOpacity
           hitSlop={HIT_SLOP}
           onPress={() => Linking.openURL(processor.url)}
         >
-          <Text style={styles.link}>{singleProcessor ? getVcsPresentation(vcs) : (processor.label || '')}</Text>
+          <Text style={[styles.link, textStyle]}>{singleProcessor ? getVcsPresentation(vcs) : (processor.label || '')}</Text>
         </TouchableOpacity>
-      </View>
+      </Text>
+    );
+  };
+  const renderSourcesDialog = (): React$Element<typeof ModalPanelBottom> => {
+    return (
+      <ModalPanelBottom
+        title={getVcsPresentation(vcs)}
+        onHide={() => updateSourcesVisible(false)}
+      >
+        {processors.map((processor: VcsProcessor) => (
+          renderProcessorURL(processor, false, styles.vcsSourceButton)
+        ))}
+      </ModalPanelBottom>
     );
   };
 
+
   return (
     <View>
+      {sourcesVisible && renderSourcesDialog()}
+
       {!props.activityGroup.merged && props.activityGroup.author && (
         <StreamUserInfo activityGroup={{...props.activityGroup, timestamp: 0}}/>
       )}
@@ -91,10 +114,18 @@ const StreamVCS = (props: Props) => {
           {Boolean(vcs.version && processors) && (
             <View>
               {processors.length === 1 && renderProcessorURL(processors[0], true)}
-              {processors.length > 1 && <Details
-                toggler={getVcsPresentation(vcs)}
-                renderer={() => <>{processors.map((processor: VcsProcessor) => renderProcessorURL(processor))}</>}
-              />}
+              {processors.length > 1 && (
+                <TouchableOpacity
+                  hitSlop={HIT_SLOP}
+                  onPress={() => updateSourcesVisible(true)}
+                >
+                  <Text style={styles.link}>
+                    {getVcsPresentation(vcs)}
+                    <IconChevronDownUp size={13} isDown={!sourcesVisible} color={styles.vcsSourceButton.color}/>
+                  </Text>
+                </TouchableOpacity>
+              )}
+
             </View>
           )}
 

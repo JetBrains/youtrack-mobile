@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {secondaryText} from '../common-styles/typography';
+import {mainText, secondaryText} from '../common-styles/typography';
 import {separator} from '../common-styles/list';
 import {UNIT} from '../variables/variables';
 
@@ -164,5 +164,15 @@ export default EStyleSheet.create({
   },
   vcsError: {
     color: '$error',
+  },
+  vcsSourceButton: {
+    marginVertical: UNIT,
+    marginLeft: UNIT * 3,
+    ...mainText,
+    color: '$link',
+  },
+  vcsSourceSubTitle: {
+    fontSize: 12,
+    color: '$icon',
   },
 });
