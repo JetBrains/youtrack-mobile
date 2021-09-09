@@ -71,7 +71,7 @@ export default class PushNotificationsProcessor extends PushNotifications {
     Notifications.events().registerNotificationReceivedForeground(
       (notification: typeof Notification, completion: (response: NotificationCompletion) => void) => {
         log.info(`Notification received in foreground:: ${JSON.stringify(notification)}`);
-        completion({alert: false, sound: false, badge: false});
+        completion({alert: true, sound: false, badge: false});
       }
     );
 
