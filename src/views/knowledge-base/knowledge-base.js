@@ -274,6 +274,9 @@ export class KnowledgeBase extends Component<Props, State> {
 
   renderRefreshControl: (() => React$Element<typeof RefreshControl>) = () => {
     return <RefreshControl
+      testID="refresh-control"
+      accessibilityLabel="refresh-control"
+      accessible={true}
       refreshing={this.props.isLoading}
       tintColor={styles.link.color}
       onRefresh={this.loadArticlesList}

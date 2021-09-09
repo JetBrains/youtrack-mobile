@@ -132,6 +132,9 @@ const KnowledgeBaseDrafts = () => {
         testID="articleDrafts"
         data={drafts}
         refreshControl={<RefreshControl
+          testID="refresh-control"
+          accessibilityLabel="refresh-control"
+          accessible={true}
           refreshing={false}
           tintColor={styles.link.color}
           onRefresh={loadDrafts}

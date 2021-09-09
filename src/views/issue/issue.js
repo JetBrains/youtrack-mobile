@@ -326,6 +326,9 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   _renderRefreshControl(onRefresh?: Function, uiTheme: UITheme) {
     return <RefreshControl
+      testID="refresh-control"
+      accessibilityLabel="refresh-control"
+      accessible={true}
       refreshing={this.props.isRefreshing}
       tintColor={uiTheme.colors.$link}
       onRefresh={() => {

@@ -157,6 +157,8 @@ export class Issues extends Component<Props, State> {
       onRefresh={this.props.refreshIssues}
       tintColor={uiTheme.colors.$link}
       testID="refresh-control"
+      accessibilityLabel="refresh-control"
+      accessible={true}
     />;
   }
 
