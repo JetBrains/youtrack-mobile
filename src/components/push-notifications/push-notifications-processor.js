@@ -25,15 +25,20 @@ export default class PushNotificationsProcessor extends PushNotifications {
       async (notification: typeof Notification, completion: () => void) => {
         log.info(`On notification open:: ${JSON.stringify(notification)}`);
         const issueId: ?string = helper.getIssueId(notification);
+        log.info(`On notification open:: issue ID ${issueId}`);
         if (!issueId) {
           return;
         }
 
         const targetBackendUrl = notification?.payload?.backendUrl;
+        log.info(`On notification open:: notification?.payload?.backendUrl ${JSON.stringify(targetBackendUrl)}`);
         const targetAccount = await targetAccountToSwitchTo(targetBackendUrl);
+        log.info(`On notification open:: target account ${JSON.stringify(targetAccount)}`);
         if (targetAccount) {
           await onSwitchAccount(targetAccount, issueId);
+        log.info(`On notification open:: switched to target account`);
         } else if (issueId) {
+          log.info(`On notification open:: redirecting to ${issueId}`);
           Router.Issue({
             issueId,
             navigateToActivity: !helper.isSummaryOrDescriptionNotification(notification),
@@ -57,6 +62,12 @@ export default class PushNotificationsProcessor extends PushNotifications {
 
     Notifications.registerRemoteNotifications();
 
+    Notifications.getInitialNotification()
+      .then((notification) => {
+        log.info(`Initial notification:: ${JSON.stringify(notification)}`);
+      })
+      .catch((err) => log.info(`Initial notification::failed ${err}`));
+
     Notifications.events().registerRemoteNotificationsRegistered(
       (event: typeof Registered) => {
         this.setDeviceToken(event.deviceToken);
@@ -71,7 +82,7 @@ export default class PushNotificationsProcessor extends PushNotifications {
     Notifications.events().registerNotificationReceivedForeground(
       (notification: typeof Notification, completion: (response: NotificationCompletion) => void) => {
         log.info(`Notification received in foreground:: ${JSON.stringify(notification)}`);
-        completion({alert: true, sound: false, badge: false});
+        completion({alert: true, sound: true, badge: false});
       }
     );
 

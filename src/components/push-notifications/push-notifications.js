@@ -46,15 +46,17 @@ async function doSubscribe(youtrackToken: string, deviceToken: string): Promise<
 
 async function register(): Promise<void> {
   const deviceToken: Token = await getDeviceToken();
+  const errorMsg: string = 'Subscription to push notifications failed.';
   if (deviceToken) {
     const youtrackToken: Token = await PNHelper.loadYouTrackToken();
     if (youtrackToken) {
       await doSubscribe(youtrackToken, deviceToken);
     } else {
-      const message: string = 'Subscription to push notifications failed.';
-      log.warn(message);
-      throw new Error(message);
+      log.warn(errorMsg);
+      throw new Error([errorMsg, ':YT token'].join(''));
     }
+  } else {
+    throw new Error([errorMsg, ':device token'].join(''));
   }
 }
 

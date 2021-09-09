@@ -33,6 +33,7 @@ import {rootRoutesList, routeMap} from './app-routes';
 import type {Node} from 'React';
 import type {NotificationRouteData} from './flow/Notification';
 import type {Ref} from 'react';
+import log from './components/log/log';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -63,6 +64,7 @@ class YouTrackMobile extends Component<void, void> {
 
   static async getNotificationData(): Promise<NotificationRouteData> {
     const notification: Promise<typeof Notification | ?PushNotificationIOS> = await Notifications.getInitialNotification();
+    log.info(`APP.JS - Initial notification:: ${JSON.stringify(notification)}`);
     return {
       issueId: notificationsHelper.getIssueId(notification),
       backendUrl: notificationsHelper.getBackendUrl(notification),
