@@ -156,6 +156,12 @@ export const IconChevronDownUp = (props?: Props & { isDown?: boolean }) => <Icon
   ...props,
 }}/>;
 
+export const IconCaretDownUp = (props?: Props & { isDown?: boolean }) => <DefaultIcon {...{
+  name: props.isDown ? 'caret-down' : 'caret-up',
+  isFontAwesome: true,
+  ...props,
+}}/>;
+
 export const IconAttachment = (props?: Props) => <IconYTM {...{
   name: 'attachment',
   ...props,

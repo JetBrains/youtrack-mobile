@@ -171,6 +171,10 @@ export default EStyleSheet.create({
     ...mainText,
     color: '$link',
   },
+  vcsSourceButtonIcon: {
+    paddingRight: UNIT / 2,
+    marginRight: UNIT * 2,
+  },
   vcsSourceSubTitle: {
     fontSize: 12,
     color: '$icon',
