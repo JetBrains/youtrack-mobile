@@ -1,5 +1,4 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from '../variables/variables';
 
 export default EStyleSheet.create({
   button: {
@@ -10,10 +9,6 @@ export default EStyleSheet.create({
   },
   toggle: {
     color: '$link',
-  },
-  content: {
-    paddingTop: UNIT,
-    paddingBottom: UNIT,
   },
   icon: {
     width: 10,

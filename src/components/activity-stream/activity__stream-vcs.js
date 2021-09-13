@@ -10,7 +10,7 @@ import StreamUserInfo from './activity__stream-user-info';
 import {firstActivityChange} from './activity__stream-helper';
 import {getErrorMessages, getInfoMessages, getVcsPresentation, getProcessorsUrls} from './activity__stream-vcs-helper';
 import {HIT_SLOP} from '../common-styles/button';
-import {IconChevronDownUp} from '../icon/icon';
+import {IconCaretDownUp} from '../icon/icon';
 import {relativeDate} from '../issue-formatter/issue-formatter';
 
 import styles from './activity__stream.styles';
@@ -120,8 +120,14 @@ const StreamVCS = (props: Props) => {
                   onPress={() => updateSourcesVisible(true)}
                 >
                   <Text style={styles.link}>
+                    <IconCaretDownUp
+                      size={12}
+                      isDown={!sourcesVisible}
+                      style={styles.vcsSourceButtonIcon}
+                      color={styles.vcsSourceButton.color}
+                    />
+                    {' '}
                     {getVcsPresentation(vcs)}
-                    <IconChevronDownUp size={13} isDown={!sourcesVisible} color={styles.vcsSourceButton.color}/>
                   </Text>
                 </TouchableOpacity>
               )}
