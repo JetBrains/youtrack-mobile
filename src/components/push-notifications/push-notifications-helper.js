@@ -77,11 +77,12 @@ function showInfoMessage(title: string, message: string, buttons: Array<Object> 
 
 function getIssueId(notification: Object): ?string {
   return (
+    notification?.payload?.issueId ||
+    notification?.payload?.ytIssueId ||
     notification?.ytIssueId ||
     notification?.data?.ytIssueId ||
     notification?.getData && notification.getData().ytIssueId ||
     notification?.issueId ||
-    notification?.payload?.issueId ||
     notification?.data?.issueId
   );
 }
