@@ -53,7 +53,8 @@ export type StorageState = {|
   currentAppVersion: ?string,
   issueActivitiesEnabledTypes: ?Array<ActivityType>,
   permissions: ?Array<PermissionCacheItem>,
-  themeMode: ?string
+  themeMode: ?string,
+  vcsChanges: boolean | null,
 |}
 
 type StorageStateKeys = $Shape<$ObjMap<StorageState, () => string>>;
@@ -87,6 +88,7 @@ const storageKeys: StorageStateKeys = {
   issueActivitiesEnabledTypes: 'YT_ISSUE_ACTIVITIES_ENABLED_TYPES',
   permissions: 'YT_USER_PERMISSIONS',
   themeMode: THEME_MODE_KEY,
+  vcsChanges: 'YT_VCS_CHANGES',
 };
 
 let storageState: ?StorageState = null;
@@ -122,6 +124,7 @@ export const initialState: StorageState = Object.freeze({
   permissions: null,
   agileDefaultBoard: null,
   themeMode: null,
+  vcsChanges: null,
 });
 
 function cleanAndLogState(message, state) {
