@@ -40,6 +40,7 @@ const issueId: RegExp = new RegExp(`[a-zA-Z0-9_]+\\-\\d+`);
 const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
 const isURLPattern: RegExp = /^(http(s?)):\/\/|(www.)/i;
 const imgRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
+const youTubeURL: RegExp = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/i;
 
 function getYouTubeId(url: string): ?string {
   const arr = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
@@ -84,7 +85,7 @@ function getMarkdownRules(
     );
 
     const youtubeVideoId: ?string = getYouTubeId(uri);
-    if (youtubeVideoId) {
+    if (youTubeURL.test(uri) && youtubeVideoId) {
       return renderVideo(youtubeVideoId, key);
     }
 
