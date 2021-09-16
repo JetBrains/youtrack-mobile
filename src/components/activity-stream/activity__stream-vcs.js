@@ -8,7 +8,13 @@ import MarkdownView from '../wiki/markdown-view';
 import ModalPanelBottom from '../modal-panel-bottom/modal-panel-bottom';
 import StreamUserInfo from './activity__stream-user-info';
 import {firstActivityChange} from './activity__stream-helper';
-import {getErrorMessages, getInfoMessages, getVcsPresentation, getProcessorsUrls} from './activity__stream-vcs-helper';
+import {
+  getErrorMessages,
+  getInfoMessages,
+  getVcsPresentation,
+  getProcessorsUrls,
+  pullRequestState,
+} from './activity__stream-vcs-helper';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconCaretDownUp} from '../icon/icon';
 import {relativeDate} from '../issue-formatter/issue-formatter';
@@ -52,7 +58,9 @@ const StreamVCS = (props: Props) => {
 
   const [sourcesVisible, updateSourcesVisible] = useState(false);
 
-  const vcs: VCSActivity | null = props.activityGroup.vcs?.pullRequest || firstActivityChange(props.activityGroup.vcs);
+  const pullRequest: ?PullRequest = props.activityGroup.vcs?.pullRequest;
+  const firstChange: Object | null = firstActivityChange(props.activityGroup.vcs);
+  const vcs: VCSActivity | null = pullRequest || firstChange;
 
   if (!vcs) {
     return null;
@@ -62,7 +70,24 @@ const StreamVCS = (props: Props) => {
   const errorMessages: Array<string> = getErrorMessages(vcs);
   const date: number = vcs.fetched || vcs.date;
   const processors: Array<VcsProcessor> = getProcessorsUrls(vcs);
-  const title: string = props.activityGroup.merged ? '' : 'Committed changes' + ' ';
+  let title: string = props.activityGroup.merged ? '' : 'committed changes';
+  if (pullRequest) {
+    switch (firstChange?.state?.id) {
+    case pullRequestState.OPEN: {
+      const reopened = firstChange.reopened;
+      title = reopened ? 'reopened the pull request' : 'submitted a pull request';
+      break;
+    }
+    case pullRequestState.MERGED: {
+      title = 'merged the pull request';
+      break;
+    }
+    case pullRequestState.DECLINED: {
+      title = 'closed the pull request';
+    }
+    }
+  }
+
   const renderProcessorURL: (
     processor: VcsProcessor | PullRequest,
     singleUrl?: boolean,
@@ -108,7 +133,7 @@ const StreamVCS = (props: Props) => {
       <View style={styles.activityChange}>
         <View style={styles.vcsInfo}>
           {!!date && (
-            <Text style={[styles.vcsInfoDate, styles.secondaryTextColor]}>{title}{relativeDate(date)}</Text>
+            <Text style={[styles.vcsInfoDate, styles.secondaryTextColor]}>{title}{' '}{relativeDate(date)}</Text>
           )}
 
           {Boolean(vcs.version && processors) && (

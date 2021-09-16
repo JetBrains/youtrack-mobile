@@ -590,13 +590,18 @@ export function initializeApp(config: AppConfigFilled, issueId: string | null, n
       message: 'Connecting to YouTrack...',
     });
 
+    const refreshConfig: () => Promise<void> = async (): Promise<void> => {
+      const updatedConfig: AppConfigFilled = await loadConfig(config.backendUrl);
+      await flushStoragePart({config: updatedConfig, currentAppVersion: packageJson.version});
+    };
+
+    const versionHasChanged: boolean = packageJson.version !== getStorageState().currentAppVersion;
     try {
-      if (packageJson.version !== getStorageState().currentAppVersion) {
+      if (versionHasChanged) {
         log.info(
           `App upgraded from ${getStorageState().currentAppVersion || 'NOTHING'} to "${packageJson.version}"; reloading config`
         );
-        config = await loadConfig(config.backendUrl);
-        await flushStoragePart({config, currentAppVersion: packageJson.version});
+        await refreshConfig();
       }
 
       await dispatch(initializeAuth(config));
@@ -626,6 +631,10 @@ export function initializeApp(config: AppConfigFilled, issueId: string | null, n
     }
 
     dispatch(subscribeToURL());
+
+    if (!versionHasChanged) {
+      refreshConfig();
+    }
   };
 }
 

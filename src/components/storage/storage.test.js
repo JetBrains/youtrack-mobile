@@ -77,6 +77,7 @@ describe('Storage', () => {
         'YT_USER_PERMISSIONS',
         'YT_AGILE_DEFAULT_BOARD',
         'YT_THEME_MODE',
+        'YT_VCS_CHANGES',
       ]);
     });
 

@@ -40,6 +40,7 @@ const issueId: RegExp = new RegExp(`[a-zA-Z0-9_]+\\-\\d+`);
 const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
 const isURLPattern: RegExp = /^(http(s?)):\/\/|(www.)/i;
 const imgRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
+const youTubeURL: RegExp = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/i;
 
 function getYouTubeId(url: string): ?string {
   const arr = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
@@ -84,7 +85,7 @@ function getMarkdownRules(
     );
 
     const youtubeVideoId: ?string = getYouTubeId(uri);
-    if (youtubeVideoId) {
+    if (youTubeURL.test(uri) && youtubeVideoId) {
       return renderVideo(youtubeVideoId, key);
     }
 
@@ -164,7 +165,7 @@ function getMarkdownRules(
       if (matched[0] && typeof matched?.index === 'number') {
         const textWithoutIssueId: string = text.split(matched[0]).join('');
         return (
-          <Text style={[inheritedStyles, style.text]}>
+          <Text key={`${node.key}`} style={[inheritedStyles, style.text]}>
             {renderHyperLink(textWithoutIssueId.slice(0, matched.index), `${node.key}0`)}
             {renderIssueIdLink(matched[0], [inheritedStyles, style.text, styles.link], `${node.key}1`)}
             {renderHyperLink(textWithoutIssueId.slice(matched.index, text.length - 1), `${node.key}2`)}

@@ -19,11 +19,12 @@ export function getIssueActivitiesEnabledTypes(): Array<ActivityType> {
     enabledTypes = activityAllTypes;
     saveIssueActivityEnabledTypes(enabledTypes);
   }
-  if (checkVersion('2021.1.7') && !enabledTypes.find(
-    (it: ActivityType) => it.id === ActivityCategory.Source?.VCS_ITEM)
-  ) {
+  if (!getStorageState().vcsChanges && !enabledTypes.find(
+    (it: ActivityType) => it.id === ActivityCategory.Source?.VCS_ITEM
+  )) {
     const vcs: ?ActivityType = activityAllTypes.find((it: ActivityType) => it.id === ActivityCategory.Source?.VCS_ITEM);
     vcs && enabledTypes.push(vcs);
+    flushStoragePart({vcsChanges: true});
   }
   return enabledTypes;
 }
