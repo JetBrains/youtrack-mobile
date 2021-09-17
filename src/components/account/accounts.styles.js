@@ -2,12 +2,11 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 import {mainText, secondaryText} from '../common-styles/typography';
 
-export const SWIPER_HEIGHT = 200;
+export const SWIPER_HEIGHT = 170;
 
 export default EStyleSheet.create({
   accountContainer: {
     flexDirection: 'row',
-    marginTop: UNIT * 3,
     minHeight: SWIPER_HEIGHT,
   },
   accountProfile: {

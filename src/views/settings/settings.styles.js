@@ -33,7 +33,7 @@ export default (EStyleSheet.create({
   },
   settingsListItem: {
     flexDirection: 'row',
-    marginVertical: UNIT,
+    marginBottom: UNIT,
   },
   settingsListItemTitle: {
     padding: UNIT,
@@ -60,8 +60,7 @@ export default (EStyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: UNIT * 2,
-    marginBottom: UNIT * 3,
+    marginVertical: UNIT * 2,
   },
   settingsFooterTitle: {
     ...mainText,
