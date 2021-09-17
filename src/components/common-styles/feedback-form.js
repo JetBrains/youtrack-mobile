@@ -11,7 +11,6 @@ const feedbackFormStyles = {
     flexGrow: 1,
     flexDirection: 'column',
     paddingHorizontal: UNIT,
-    paddingBottom: UNIT * 5,
   },
   feedbackForm: {
     flexGrow: 1,
@@ -71,7 +70,7 @@ const feedbackFormStyles = {
     backgroundColor: '$boxBackground',
   },
   feedbackFormBottomIndent: {
-    height: UNIT * 8,
+    height: UNIT * 14,
   },
   elevation1: elevation1,
 };
