@@ -2,12 +2,13 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 import {mainText, secondaryText} from '../common-styles/typography';
 
-export const SWIPER_HEIGHT = 170;
+export const SWIPER_HEIGHT = 178;
 
 export default EStyleSheet.create({
   accountContainer: {
     flexDirection: 'row',
     minHeight: SWIPER_HEIGHT,
+    marginBottom: UNIT / 2,
   },
   accountProfile: {
     flexDirection: 'column',
@@ -19,12 +20,13 @@ export default EStyleSheet.create({
   accountProfileName: {
     ...mainText,
     fontSize: 18,
-    marginTop: UNIT * 3,
+    marginTop: UNIT * 2,
     marginBottom: UNIT,
     fontWeight: '500',
     color: '$text',
   },
   accountProfileServerURL: {
+    lineHeight: 14,
     ...secondaryText,
     color: '$icon',
   },
@@ -34,5 +36,8 @@ export default EStyleSheet.create({
   },
   accountActionLogOut: {
     alignItems: 'flex-end',
+  },
+  accountPager: {
+    marginBottom: -UNIT,
   },
 });

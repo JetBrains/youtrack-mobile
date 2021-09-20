@@ -131,6 +131,7 @@ export default class Accounts extends PureComponent<Props, void> {
           index={accounts.indexOf(storageState)}
           onIndexChanged={(index: number) => this._onChangeAccount(accounts[index])}
           onTouchStart={() => clicksToShowCounter(openDebugView, 'open debug view')}
+          paginationStyle={styles.accountPager}
         >
           {accounts.map((account:StorageState) => this.renderAccount(account))}
         </Swiper>
