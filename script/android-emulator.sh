@@ -1,26 +1,41 @@
-EMULATORS="$($(which emulator) -list-avds)"
+#! /bin/bash
 
-printf "Existing emulators:\n$EMULATORS\n\n"
-
-SELECTED_EMU="YouTrackMobile"
-
-printf "Default emulator:\n$SELECTED_EMU\n\n"
-
-if [ -z `echo "$EMULATORS" | grep -Fx "$SELECTED_EMU"` ];
-then
-  echo "Default emulator not found. Pick one of these:"
-
-  counter=0
-  for line in $EMULATORS; do
-      counter=$(($counter+1))
-      echo "[$counter] $line"
-  done
-
-  echo
-  read EMU_INDEX
-
-  SELECTED_EMU="$(echo "$EMULATORS" | head -$EMU_INDEX | tail -1)"
-  echo "Selected: $SELECTED_EMU"
+if ! type emulator > /dev/null; then
+  echo "`emulator` command not found"
+  exit 1
 fi
 
-$(which emulator) -avd $SELECTED_EMU -gpu on
+DEVICES=( $(emulator -list-avds 2>&1 ) )
+
+echo "
+-------------------
+Available Emulators
+-------------------"
+N=1
+EMU=null
+for DEVICE in "${DEVICES[@]}"
+do
+  echo "$N) $DEVICE"
+  EMU="$DEVICE"
+  let N=$N+1
+done
+
+if ((N != null));
+then
+  echo "Running the last one: ${EMU}"
+  emulator "@$EMU" > /dev/null 2>&1 &
+  exit 0
+else
+  read -p "
+  Choose an emulator: " num
+
+  if [ $num -lt $N ] && [ $num -gt 0 ];
+  then
+    DEVICE=${DEVICES[$num-1]}
+    emulator "@$DEVICE" > /dev/null 2>&1 &
+    exit 0
+  else
+    echo "Invalid Entry : $num"
+    exit 1
+  fi
+fi
