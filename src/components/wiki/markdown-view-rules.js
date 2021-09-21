@@ -119,6 +119,7 @@ function getMarkdownRules(
   const renderIssueIdLink = (issueId: string, styles: Array<Object>, key: string) => {
     return (
       <Text
+        selectable={true}
         key={key}
         onPress={() => Router.Issue({issueId: issueId.trim()})}
         style={styles}>
@@ -154,7 +155,7 @@ function getMarkdownRules(
         key={key}
         linkStyle={style.link}
         linkDefault={true}>
-        <Text style={[inheritedStyles, style.text]}>
+        <Text selectable={true} style={[inheritedStyles, style.text]}>
           {txt}
         </Text>
       </Hyperlink>
@@ -165,7 +166,7 @@ function getMarkdownRules(
       if (matched[0] && typeof matched?.index === 'number') {
         const textWithoutIssueId: string = text.split(matched[0]).join('');
         return (
-          <Text key={`${node.key}`} style={[inheritedStyles, style.text]}>
+          <Text selectable={true} key={`${node.key}`} style={[inheritedStyles, style.text]}>
             {renderHyperLink(textWithoutIssueId.slice(0, matched.index), `${node.key}0`)}
             {renderIssueIdLink(matched[0], [inheritedStyles, style.text, styles.link], `${node.key}1`)}
             {renderHyperLink(textWithoutIssueId.slice(matched.index, text.length - 1), `${node.key}2`)}
@@ -207,7 +208,7 @@ function getMarkdownRules(
 
     code_inline: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
       return (
-        <Text key={node.key} style={[inheritedStyles, styles.inlineCode]}>
+        <Text selectable={true} key={node.key} style={[inheritedStyles, styles.inlineCode]}>
           {node.content}
         </Text>
       );
@@ -228,7 +229,7 @@ function getMarkdownRules(
 
       return (
         <View key={node.key} style={styles.codeContainer}>
-          {!!language && !isStacktraceOrException && <Text style={styles.codeLanguage}>{language}</Text>}
+          {!!language && !isStacktraceOrException && <Text selectable={true} style={styles.codeLanguage}>{language}</Text>}
 
           {<ScrollView
             scrollEventThrottle={100}
@@ -239,7 +240,7 @@ function getMarkdownRules(
               scrollEventThrottle={100}
             >
               {isStacktraceOrException && <LongText style={styles.exception}>{content}</LongText>}
-              {!isStacktraceOrException && <Text key={node.key}>{renderCode({content}, language, uiTheme)}</Text>}
+              {!isStacktraceOrException && <Text selectable={true} key={node.key}>{renderCode({content}, language, uiTheme)}</Text>}
             </ScrollView>
           </ScrollView>}
         </View>
@@ -256,6 +257,7 @@ function getMarkdownRules(
 
       return (
         <Text
+          selectable={true}
           key={node.key}
           style={[inheritedStyles, style.text, styles.link]}
           onPress={() => Linking.openURL(node.attributes.href)}
@@ -326,7 +328,7 @@ function getMarkdownRules(
             color={uiTheme.colors.$icon}
             style={[styles.checkboxIcon, !isChecked && styles.checkboxIconBlank]}
           />
-          <Text style={[inheritedStyles, style.text, styles.checkboxLabel]}>
+          <Text selectable={true} style={[inheritedStyles, style.text, styles.checkboxLabel]}>
             {issueId.test(text)
               ? renderIssueIdLink(text, [inheritedStyles, style.text, styles.link], node.key)
               : text}
@@ -425,9 +427,10 @@ function renderArticleMentions(
 
       if (td.type !== PLAIN_TEXT_TYPE) {
         composed.push(
-          <Text key={guid()}>
-            {textTokensToJoin.length > 0 && <Text style={style.text}>{`${textTokensToJoin.join(' ')} `}</Text>}
+          <Text selectable={true} key={guid()}>
+            {textTokensToJoin.length > 0 && <Text selectable={true} style={style.text}>{`${textTokensToJoin.join(' ')} `}</Text>}
             <Text
+              selectable={true}
               style={{color: uiTheme.colors.$link}}
               onPress={
                 () => (
@@ -445,6 +448,7 @@ function renderArticleMentions(
     if (textTokensToJoin.length > 0) {
       composed.push(
         <Text
+          selectable={true}
           style={[inheritedStyles, style.text]}
           key={guid()}
         >{textTokensToJoin.join(' ')}
@@ -452,7 +456,7 @@ function renderArticleMentions(
       );
     }
 
-    return <Text key={node.key}>{composed}</Text>;
+    return <Text selectable={true} key={node.key}>{composed}</Text>;
   }
 
 }
