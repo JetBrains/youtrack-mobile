@@ -76,16 +76,15 @@ export default class ArticlesAPI extends ApiBase {
   }
 
   async getActivitiesPage(articleId: string): Promise<Array<Activity>> {
-    const categoryKey = '&categories=';
-    const categories = `${categoryKey}${(this.categories).join(categoryKey)}`;
+    const categories = `categories=${(this.categories).join(',')}`;
     const queryString = qs.stringify({
       $top: 100,
       reverse: true,
-      fields: issueActivityPageFields.toString(),
     });
 
     const activityPage: Array<ActivityItem> = await this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/articles/${articleId}/activitiesPage?${queryString}${categories}`);
+      `${this.youTrackApiUrl}/articles/${articleId}/activitiesPage?${categories}&${queryString}&fields=${issueActivityPageFields.toString()}`
+    );
     return ApiHelper.patchAllRelativeAvatarUrls(activityPage, this.config.backendUrl);
   }
 
