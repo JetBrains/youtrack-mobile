@@ -1,8 +1,14 @@
 /* @flow */
+
 import ApiHelper from './api__helper';
 import IssueFields from './api__issue-fields';
+import {checkVersion} from '../feature/feature';
 
 const toField = ApiHelper.toField;
+const isActualVersion: boolean = checkVersion('2020.1');
+const getUserFields: string = (fieldName: string) => (
+  isActualVersion ? `${fieldName}(@user)` : `${fieldName}(id,fullName,avatarUrl)`
+);
 
 const ISSUE_ACTIVITIES_EVENT_BASE = toField([
   'id',
@@ -42,8 +48,8 @@ const PULL_REQUEST_FIELDS = toField([
   'text',
   'title',
   'idExternal',
-  'user(@user)',
-  'author(@user)',
+  getUserFields('user'),
+  getUserFields('author'),
 ]);
 
 const VCS_INTEGRATION_FIELDS = toField([
@@ -64,7 +70,7 @@ const VCS_INTEGRATION_FIELDS = toField([
   'noUserReason(id)',
   'reopened',
   'state(id)',
-  'user(@user)',
+  getUserFields('user'),
   'userName',
   'version',
   {
@@ -80,7 +86,7 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
   'targetSubMember',
   {
     authorGroup: ['icon', 'name'],
-    author: ['@user'],
+    author: isActualVersion ? ['@user'] : IssueFields.ISSUE_USER_FIELDS,
     category: ['id'],
     target: ['id', 'created', 'usesMarkdown'],
     field: [
@@ -115,7 +121,7 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
         reactions: [
           'id',
           'reaction',
-          'author(@user)',
+          getUserFields('author'),
         ],
       },
 
@@ -140,5 +146,5 @@ export default (toField([
     activities: ISSUE_ACTIVITIES_FIELDS,
   },
   'cursor',
-  `till;@user:${IssueFields.ISSUE_USER_FIELDS}`,
+  isActualVersion ? `till;@user:${IssueFields.ISSUE_USER_FIELDS}` : 'till',
 ]): any);
