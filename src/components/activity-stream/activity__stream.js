@@ -306,7 +306,6 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
             {canComment && !isAuthor && (
               <TouchableOpacity
                 hitSlop={HIT_SLOP}
-                disabled={disabled}
                 onPress={() => {
                   if (commentActions && commentActions.onReply) {
                     commentActions.onReply(comment);
@@ -320,7 +319,6 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
             {canUpdate && isAuthor && (
               <TouchableOpacity
                 hitSlop={HIT_SLOP}
-                disabled={disabled}
                 onPress={() => {
                   if (commentActions && commentActions.onStartEditing) {
                     commentActions.onStartEditing(comment);
@@ -345,7 +343,6 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
           {Boolean(commentActions && commentActions.onShowCommentActions) && <TouchableOpacity
             hitSlop={HIT_SLOP}
-            disabled={disabled}
             onPress={() => {
               if (commentActions?.onShowCommentActions) {
                 commentActions.onShowCommentActions(comment, activityGroup.comment.id);
