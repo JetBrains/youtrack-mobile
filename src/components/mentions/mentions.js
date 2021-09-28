@@ -1,16 +1,14 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React from 'react';
-import {View, Text, ActivityIndicator, ScrollView} from 'react-native';
-
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View, Text, ActivityIndicator, ScrollView, TouchableOpacity} from 'react-native';
 
 import Avatar from '../avatar/avatar';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 import styles from './mentions.styles';
 
+import type {Node} from 'React';
 import type {User} from '../../flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
