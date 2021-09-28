@@ -95,7 +95,7 @@ export default class Accounts extends PureComponent<Props, void> {
 
         <Text style={styles.accountProfileName}>{user.name}</Text>
 
-        <Text style={styles.accountProfileServerURL} numberOfLines={1}>{formatYouTrackURL(config.backendUrl)}</Text>
+        <Text style={styles.accountProfileServerURL} numberOfLines={1}>{formatYouTrackURL(config.backendUrl)}, {config.version}</Text>
       </View>
     );
   }
