@@ -3,7 +3,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import Auth from './auth';
 import sinon from 'sinon';
 
-import * as Storage from '../storage/storage';
+import * as storageHelper from '../storage/storage__oauth';
 import {__setStorageState} from '../storage/storage';
 
 let configMock;
@@ -66,20 +66,20 @@ describe('Auth', function () {
       });
 
       it('should try to load current user to verify token', () => {
-        auth.verifyToken(authParamsMock);
+        auth.loadCurrentUser(authParamsMock);
 
         getLastRequest().url.should.contain('api/rest/users/me?fields=');
       });
 
       it('should provide authorization params when trying to verify token', () => {
-        auth.verifyToken(authParamsMock);
+        auth.loadCurrentUser(authParamsMock);
 
         getLastRequest().options.headers.Authorization.should
           .equal(`${authParamsMock.token_type} ${authParamsMock.access_token}`);
       });
 
       it('should complete verification successfully if hub responded', () => {
-        const promise = auth.verifyToken(authParamsMock);
+        const promise = auth.loadCurrentUser(authParamsMock);
 
         getLastRequest().resolve({
           status: 200,
@@ -92,7 +92,7 @@ describe('Auth', function () {
       });
 
       it('should fail verification if hub responded with error', () => {
-        const promise = auth.verifyToken(authParamsMock);
+        const promise = auth.loadCurrentUser(authParamsMock);
 
         getLastRequest().resolve({status: 403});
 
@@ -100,8 +100,9 @@ describe('Auth', function () {
       });
 
       it('should perform token refresh if it`s expired', () => {
-        const promise = auth.verifyToken(authParamsMock);
+        sinon.stub(auth, 'getRefreshToken').returns('token');
         sinon.stub(auth, 'refreshToken').returns(Promise.resolve({}));
+        const promise = auth.loadCurrentUser(authParamsMock);
 
         getLastRequest().resolve({status: 401});
 
@@ -183,10 +184,10 @@ describe('Auth', function () {
 
     describe('cacheAuthParams', () => {
       it('should cache encrypted auth params', async () => {
-      jest.spyOn(Storage, 'storeAuthParams');
+      jest.spyOn(storageHelper, 'storeSecurelyAuthParams');
         const cachedAuthParams = await auth.cacheAuthParams(authParamsMock);
 
-        await expect(Storage.storeAuthParams).toHaveBeenCalledWith(
+        await expect(storageHelper.storeSecurelyAuthParams).toHaveBeenCalledWith(
           authParamsMock,
           undefined
           );
@@ -194,11 +195,11 @@ describe('Auth', function () {
       });
 
       it('should cache encrypted auth params with particular key', async () => {
-      jest.spyOn(Storage, 'storeAuthParams');
+      jest.spyOn(storageHelper, 'storeSecurelyAuthParams');
         const keyMock = 'datestamp';
         const cachedAuthParams = await auth.cacheAuthParams(authParamsMock, keyMock);
 
-        await expect(Storage.storeAuthParams).toHaveBeenCalledWith(
+        await expect(storageHelper.storeSecurelyAuthParams).toHaveBeenCalledWith(
           authParamsMock,
           keyMock
           );
@@ -209,7 +210,7 @@ describe('Auth', function () {
 
     describe('getCachedAuthParams', () => {
       beforeEach(() => {
-        jest.spyOn(Storage, 'getStoredAuthParams');
+        jest.spyOn(storageHelper, 'getStoredSecurelyAuthParams');
       });
 
       it('should throw if there is no cached auth parameters', async () => {
@@ -222,7 +223,7 @@ describe('Auth', function () {
         jest.spyOn(EncryptedStorage, 'getItem').mockResolvedValueOnce(JSON.stringify(authParamsMock));
         const cachedAuthParams = await auth.getCachedAuthParams();
 
-        await expect(Storage.getStoredAuthParams).toHaveBeenCalled();
+        await expect(storageHelper.getStoredSecurelyAuthParams).toHaveBeenCalled();
         await expect(cachedAuthParams).toEqual(authParamsMock);
       });
     });

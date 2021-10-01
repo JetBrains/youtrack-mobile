@@ -1,6 +1,5 @@
 /* @flow */
 
-import type {Node} from 'React';
 import {
   Image,
   View,
@@ -14,12 +13,12 @@ import {
 } from 'react-native';
 import React, {Component} from 'react';
 import Auth from '../../components/auth/auth';
+import OAuth2 from '../../components/auth/oauth2';
 import Router from '../../components/router/router';
 import {connect} from 'react-redux';
 import {formatYouTrackURL} from '../../components/config/config';
 import {logo, IconBack} from '../../components/icon/icon';
 import Keystore from '../../components/keystore/keystore';
-import authorizeInHub from '../../components/auth/auth__oauth';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
@@ -35,12 +34,13 @@ import {formStyles} from '../../components/common-styles/form';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import styles from './log-in.styles';
 
-import type {AppConfigFilled} from '../../flow/AppConfig';
-import type {AuthParams} from '../../flow/Auth';
+import type {AppConfig} from '../../flow/AppConfig';
+import type {AuthParams, OAuthParams} from '../../flow/Auth';
+import type {Node} from 'React';
 import type {Theme, UIThemeColors} from '../../flow/Theme';
 
 type Props = {
-  config: AppConfigFilled,
+  config: AppConfig,
   onLogIn: (authParams: AuthParams) => any,
   onShowDebugView: Function,
   onChangeServerUrl: (currentUrl: string) => any
@@ -71,7 +71,7 @@ export class LogIn extends Component<Props, State> {
       youTrackBackendUrl: props.config.backendUrl,
     };
 
-    const config: AppConfigFilled = props.config;
+    const config: AppConfig = props.config;
     Keystore.getInternetCredentials(config.auth.serverUri)
       .then(({username, password}) => this.setState({username, password}), noop);
 
@@ -109,17 +109,15 @@ export class LogIn extends Component<Props, State> {
 
   async logInViaHub(): Promise<void> | Promise<any> {
     const {config, onLogIn} = this.props;
-
     try {
-      const code = await authorizeInHub(config);
       this.setState({loggingIn: true});
 
-      const authParams = await Auth.obtainTokenByOAuthCode(code, config);
-      usage.trackEvent(CATEGORY_NAME, 'Login via browser', 'Success');
+      const oauthParams: OAuthParams = await OAuth2.obtainToken(config);
 
-      onLogIn(authParams);
+      usage.trackEvent(CATEGORY_NAME, 'Login via browser with PKCE', 'Success');
+      onLogIn(oauthParams);
     } catch (err) {
-      usage.trackEvent(CATEGORY_NAME, 'Login via browser', 'Error');
+      usage.trackEvent(CATEGORY_NAME, 'Login via browser PKCE', 'Error');
       const errorMessage = await resolveErrorMessage(err);
       this.setState({loggingIn: false, errorMessage: errorMessage});
     }
@@ -228,8 +226,6 @@ export class LogIn extends Component<Props, State> {
                       />
                     </View>
                   )}
-
-
                 </View>
 
                 <TouchableOpacity
@@ -239,7 +235,8 @@ export class LogIn extends Component<Props, State> {
                   onPress={() => this.logInViaHub()}
                 >
                   <Text style={styles.action}>
-                    Log in with Browser</Text>
+                    Log in with Browser
+                  </Text>
                 </TouchableOpacity>
 
                 <KeyboardSpacer/>
@@ -267,7 +264,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       }
       Router.EnterServer({serverUrl: youtrackUrl});
     },
-    onLogIn: authParams => dispatch(applyAuthorization(authParams)),
+    onLogIn: (authParams: AuthParams | OAuthParams) => dispatch(applyAuthorization(authParams)),
     onShowDebugView: () => dispatch(openDebugView()),
   };
 };

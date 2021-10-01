@@ -1,35 +1,10 @@
 /* @flow */
 
-export type ConfigAuth = {
-  serverUri: ?string,
-  clientId: ?string,
-  clientSecret: ?string,
-  sessionCookie?: ?string,
-  scopes: string,
-  landingUrl: string,
-  youtrackServiceId: ?string
-};
-
-export type ConfigAuthFilled = {
-  serverUri: string,
-  clientId: string,
-  clientSecret: string,
-  sessionCookie: ?string,
-  scopes: string,
-  landingUrl: string,
-  youtrackServiceId: string
-}
+import type {AuthConfig} from './Auth';
 
 export type AppConfig = {
-  backendUrl: ?string,
-  auth: ConfigAuth,
-  statisticsEnabled: ?boolean,
-  version: ?string
-};
-
-export type AppConfigFilled = {
   backendUrl: string,
-  auth: ConfigAuthFilled,
+  auth: AuthConfig,
   statisticsEnabled: boolean,
   version: string
 };

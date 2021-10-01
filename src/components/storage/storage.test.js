@@ -2,6 +2,7 @@ import MockedStorage from '@react-native-community/async-storage';
 import sinon from 'sinon';
 
 import * as storage from './storage';
+import * as storageHelper from './storage__oauth';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
 let queryMock;
@@ -57,6 +58,8 @@ describe('Storage', () => {
         'YT_ARTICLES_QUERY',
         'YT_ARTICLE_LAST_VISITED',
         'yt_mobile_auth',
+        'yt_mobile_oauth',
+        'yt_mobile_oauth_key',
         'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
         'YT_PROJECTS_STORAGE',
         'DRAFT_ID_STORAGE_KEY',
@@ -125,7 +128,7 @@ describe('Storage', () => {
 
     describe('storeAuthParams', () => {
       it('should cache encrypted auth params', async () => {
-        const cachedAuthParams = await storage.storeAuthParams(authParamsMock);
+        const cachedAuthParams = await storageHelper.storeSecurelyAuthParams(authParamsMock);
 
         await expect(EncryptedStorage.setItem).toHaveBeenCalledWith(
           authParamsKeyMock,
@@ -139,7 +142,7 @@ describe('Storage', () => {
     describe('getStoredAuthParams', () => {
       it('should return cached auth params object', async () => {
         EncryptedStorage.getItem.mockResolvedValueOnce(JSON.stringify(authParamsMock));
-        const cachedParams = await storage.getStoredAuthParams();
+        const cachedParams = await storageHelper.getStoredSecurelyAuthParams();
 
         await expect(EncryptedStorage.getItem).toHaveBeenCalledWith(authParamsKeyMock);
         await expect(cachedParams).toEqual(authParamsMock);
@@ -147,7 +150,7 @@ describe('Storage', () => {
 
       it('should return NULL if no data cached', async () => {
         EncryptedStorage.setItem.mockResolvedValueOnce(undefined);
-        const cachedParams = await storage.getStoredAuthParams();
+        const cachedParams = await storageHelper.getStoredSecurelyAuthParams();
 
         await expect(EncryptedStorage.getItem).toHaveBeenCalledWith(authParamsKeyMock);
         await expect(cachedParams).toEqual(null);

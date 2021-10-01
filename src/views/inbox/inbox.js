@@ -33,7 +33,7 @@ import {UNIT} from '../../components/variables/variables';
 import styles from './inbox.styles';
 
 import type {Activity} from '../../flow/Activity';
-import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {AppConfig} from '../../flow/AppConfig';
 import type {InboxState} from './inbox-reducers';
 import type {IssueComment} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
@@ -67,7 +67,7 @@ class Inbox extends Component<Props, State> {
     savedSearchReasons: '',
     workflow: 'Workflow',
   };
-  config: ?AppConfigFilled;
+  config: ?AppConfig;
   theme: Theme;
 
   constructor(props) {

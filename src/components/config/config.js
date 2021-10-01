@@ -15,9 +15,9 @@ const VERSION_DETECT_FALLBACK_URL = '/rest/workflow/version';
 
 export function getDefaultConfig(): AppConfig {
   return {
-    backendUrl: null,
-    statisticsEnabled: null,
-    version: null,
+    backendUrl: '',
+    statisticsEnabled: false,
+    version: '0.0.0-dev',
     auth: {
       serverUri: null,
       clientId: null,

@@ -1,30 +1,28 @@
-import log from '../components/log/log';
-import {__setStorageState, populateStorage} from '../components/storage/storage';
-
-import PushNotifications from '../components/push-notifications/push-notifications';
-import * as Notification from '../components/notification/notification';
-
-import * as actions from './app-actions';
-import * as types from './action-types';
-
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import Router from '../components/router/router';
-import {CUSTOM_ERROR_MESSAGE, REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
-import permissionsHelper from '../components/permissions-store/permissions-helper';
-import * as appActionHelper from './app-actions-helper';
-import PermissionsStore from '../components/permissions-store/permissions-store';
 
-let apiMock;
-let store;
-const getApi = () => apiMock;
-const middlewares = [thunk.withExtraArgument(getApi)];
-const storeMock = configureMockStore(middlewares);
+import * as actions from './app-actions';
+import * as appActionHelper from './app-actions-helper';
+import * as Notification from '../components/notification/notification';
+import * as types from './action-types';
+import AuthTest from '../components/auth/auth';
+import log from '../components/log/log';
+import permissionsHelper from '../components/permissions-store/permissions-helper';
+import PermissionsStore from '../components/permissions-store/permissions-store';
+import PushNotifications from '../components/push-notifications/push-notifications';
+import Router from '../components/router/router';
+import {__setStorageState, getStorageState, populateStorage} from '../components/storage/storage';
+import {CUSTOM_ERROR_MESSAGE, REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
 
 const backendURLMock = 'https://example.com';
 const permissionsCacheURLMock = `${backendURLMock}/permissionsCache`;
-let authLogOutMock;
+let apiMock;
 let appStateMock;
+let store;
+
+const getApi = () => apiMock;
+const middlewares = [thunk.withExtraArgument(getApi)];
+const storeMock = configureMockStore(middlewares);
 
 
 describe('app-actions', () => {
@@ -32,22 +30,14 @@ describe('app-actions', () => {
 
   beforeEach(async () => {
     apiMock = {};
-    authLogOutMock = jest.fn();
 
     appStateMock = {
-      auth: {
-        currentUser: {},
-        logOut: authLogOutMock,
-        getPermissionsCacheURL: jest.fn(() => permissionsCacheURLMock),
-        authParams: {
-          token_type: 'token_type',
-          access_token: 'access_token',
-        },
-        config: {
-          backendUrl: backendURLMock,
+      auth: new AuthTest({
+        backendUrl: backendURLMock,
+        auth: {
           serverUri: `${backendURLMock}/hub`,
         },
-      },
+      }),
     };
 
     updateStore({});
@@ -152,9 +142,11 @@ describe('app-actions', () => {
     });
 
     it('should logout from the only account', async () => {
+      jest.spyOn(appStateMock.auth, 'logOut');
+
       await store.dispatch(actions.removeAccountOrLogOut());
 
-      expect(authLogOutMock).toHaveBeenCalled();
+      expect(appStateMock.auth.logOut).toHaveBeenCalled();
     });
 
     it('should not unsubscribe from push notifications', async () => {
@@ -193,13 +185,20 @@ describe('app-actions', () => {
     });
 
     it('should load permissions', async () => {
+      const tokenTypeMock = 'TOKEN_TYPE';
+      const accessTokenMock = 'ACCESS_TOKEN';
+      appStateMock.auth.PERMISSIONS_CACHE_URL = permissionsCacheURLMock;
+      jest.spyOn(appStateMock.auth, 'getTokenType').mockReturnValueOnce(tokenTypeMock);
+      jest.spyOn(appStateMock.auth, 'getAccessToken').mockReturnValueOnce(accessTokenMock);
+
       await store.dispatch(actions.loadUserPermissions());
 
       expect(permissionsHelper.loadPermissions).toHaveBeenCalledWith(
-        appStateMock.auth.authParams.token_type,
-        appStateMock.auth.authParams.access_token,
+        tokenTypeMock,
+        accessTokenMock,
         permissionsCacheURLMock
       );
+      expect(getStorageState().permissions).toEqual(actualPermissionsMock);
     });
 
     it('should not set permissions from cache if there are no any', async () => {
@@ -261,5 +260,3 @@ describe('app-actions', () => {
   }
 
 });
-
-

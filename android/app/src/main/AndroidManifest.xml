@@ -36,18 +36,11 @@
             android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustResize"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:taskAffinity="">
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
           <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
           </intent-filter>
-            <intent-filter android:label="YouTrack Mobile Authorization">
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="ytoauth" android:host="landing.url"/>
-            </intent-filter>
             <intent-filter android:label="YouTrack Mobile">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>

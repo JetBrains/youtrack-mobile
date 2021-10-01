@@ -91,6 +91,7 @@
     "react-fast-compare": "^3.2.0",
     "react-native": "0.65.1",
     "react-native-animatable": "1.2.4",
+    "react-native-app-auth": "^6.4.0",
     "react-native-appearance": "0.3.4",
     "react-native-autogrow-textinput": "^5.4.0",
     "react-native-calendars": "1.5.3",

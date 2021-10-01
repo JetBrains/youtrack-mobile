@@ -16,7 +16,7 @@ import avatarStyles from '../avatar/default-avatar.styles';
 import styles, {SWIPER_HEIGHT} from './accounts.styles';
 
 import type {StorageState} from '../storage/storage';
-import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {AppConfig} from '../../flow/AppConfig';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
 
@@ -71,7 +71,7 @@ export default class Accounts extends PureComponent<Props, void> {
   };
 
   renderAccount(account: StorageState): Node {
-    const config: AppConfigFilled = account.config;
+    const config: AppConfig = account.config;
     const user = account.currentUser;
 
     if (!user) {

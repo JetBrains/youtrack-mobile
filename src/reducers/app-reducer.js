@@ -11,9 +11,10 @@ import type {StorageState} from '../components/storage/storage';
 import type {EndUserAgreement} from '../flow/AppConfig';
 import type {WorkTimeSettings} from '../flow/Work';
 import type {User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile, UserProfiles} from '../flow/User';
+import OAuth2 from '../components/auth/oauth2';
 
 export type RootState = {
-  auth: ?Auth,
+  auth: Auth | OAuth2 | null,
   showMenu: boolean,
   showDebugView: boolean,
   showUserAgreement: boolean,

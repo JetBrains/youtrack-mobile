@@ -1,63 +1,25 @@
 /* @flow */
 
 import EncryptedStorage from 'react-native-encrypted-storage';
-import qs from 'qs';
 
 import log from '../log/log';
-import PermissionsStore from '../permissions-store/permissions-store';
 import urlJoin from 'url-join';
-import {createBtoa} from '../../util/util';
-import {storeAuthParams, getStoredAuthParams, STORAGE_AUTH_PARAMS_KEY} from '../storage/storage';
-import {USER_AGENT} from '../usage/usage';
+import {AuthBase} from './auth-base';
+import {getStoredSecurelyAuthParams, storeSecurelyAuthParams} from '../storage/storage__oauth';
+import {STORAGE_AUTH_PARAMS_KEY} from '../storage/storage';
 
-import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {AppConfig} from '../../flow/AppConfig';
 import type {AuthParams} from '../../flow/Auth';
-import type {CustomError, HTTPResponse} from '../../flow/Error';
-import type {User} from '../../flow/User';
-
-const ACCEPT_HEADER = 'application/json, text/plain, */*';
-const URL_ENCODED_TYPE = 'application/x-www-form-urlencoded';
 
 
-export default class AuthTest {
-  CHECK_TOKEN_URL: string;
-  PERMISSIONS_CACHE_URL: string;
+export default class AuthTest extends AuthBase {
+  authParams: AuthParams;
 
-  config: AppConfigFilled;
-  authParams: ?AuthParams;
-
-  permissionsStore: PermissionsStore;
-  currentUser: User;
-
-  constructor(config: AppConfigFilled) {
-    this.authParams = null;
-    this.config = config;
-    this.CHECK_TOKEN_URL = urlJoin(
-      this.config.auth.serverUri,
-      '/api/rest/users/me?fields=id,guest,name,profile/avatar/url,endUserAgreementConsent(accepted,majorVersion,minorVersion)'
-    );
-
-    const permissionsQueryString = qs.stringify({
-      query: `service:{0-0-0-0-0} or service:{${config.auth.youtrackServiceId}}`,
-      fields: 'permission/key,global,projects(id)',
-    });
-    this.PERMISSIONS_CACHE_URL = urlJoin(
-      this.config.auth.serverUri,
-      `/api/rest/permissions/cache?${permissionsQueryString}`
-    );
-  }
-
-  static obtainToken(body: string, config: AppConfigFilled): AuthParams {
+  static obtainToken(body: string, config: AppConfig): Promise<AuthParams> {
     const hubTokenUrl = urlJoin(config.auth.serverUri, '/api/rest/oauth2/token');
-
     return fetch(hubTokenUrl, {
       method: 'POST',
-      headers: {
-        'Accept': ACCEPT_HEADER,
-        'User-Agent': USER_AGENT,
-        'Authorization': `Basic ${createBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
-        'Content-Type': URL_ENCODED_TYPE,
-      },
+      headers: AuthTest.getHeaders(config),
       body: body,
     }).then(async res => {
       log.log(`Got result from ${hubTokenUrl}: ${res && res.status}`);
@@ -72,19 +34,19 @@ export default class AuthTest {
       });
   }
 
-  static obtainTokenByOAuthCode(code: string, config: AppConfigFilled): AuthParams {
+  static obtainTokenByOAuthCode(code: string, config: AppConfig): Promise<AuthParams> {
     log.info('Obtaining token for code', code, config.auth.serverUri);
 
     return this.obtainToken([
       'grant_type=authorization_code',
       `&code=${code}`,
       `&client_id=${config.auth.clientId}`,
-      `&client_secret=${config.auth.clientSecret}`,
+      `&client_secret=${((config.auth.clientSecret: any): string)}`,
       `&redirect_uri=${config.auth.landingUrl}`,
     ].join(''), config);
   }
 
-  static obtainTokenByCredentials(login: string, password: string, config: AppConfigFilled): AuthParams {
+  static obtainTokenByCredentials(login: string, password: string, config: AppConfig): Promise<AuthParams> {
     log.info(`Obtaining token by credentials on ${config.auth.serverUri} for "${login}"`);
     return this.obtainToken([
       'grant_type=password',
@@ -97,7 +59,7 @@ export default class AuthTest {
 
   setAuthParamsFromCache(): Promise<void> {
     return this.getCachedAuthParams()
-      .then((authParams) => this.verifyToken(authParams))
+      .then((authParams) => this.loadCurrentUser(authParams))
       .then((authParams) => {
         this.authParams = authParams;
       });
@@ -107,11 +69,23 @@ export default class AuthTest {
     return this.PERMISSIONS_CACHE_URL;
   }
 
+  getTokenType(): string {
+    return this.authParams?.token_type || '';
+  }
+
+  getAccessToken(): string {
+    return this.authParams?.access_token || '';
+  }
+
+  getRefreshToken(): string {
+    return this.authParams?.refresh_token || '';
+  }
+
   async logOut() {
     await EncryptedStorage.removeItem(STORAGE_AUTH_PARAMS_KEY, () => {
       EncryptedStorage.setItem(STORAGE_AUTH_PARAMS_KEY, '');
     });
-    delete this.authParams;
+    this.authParams = null;
   }
 
   refreshToken(): Promise<AuthParams> {
@@ -124,12 +98,7 @@ export default class AuthTest {
       `&refresh_token=${authParams.refresh_token}`
     ), {
       method: 'POST',
-      headers: {
-        'Accept': ACCEPT_HEADER,
-        'User-Agent': USER_AGENT,
-        'Authorization': `Basic ${createBtoa(`${config.auth.clientId}:${config.auth.clientSecret}`)}`,
-        'Content-Type': URL_ENCODED_TYPE,
-      },
+      headers: AuthTest.getHeaders(config),
     });
 
     return this.getCachedAuthParams()
@@ -153,7 +122,7 @@ export default class AuthTest {
         }
         return authParams;
       })
-      .then((authParams: AuthParams) => this.verifyToken(authParams))
+      .then((authParams: AuthParams) => this.loadCurrentUser(authParams))
       .then((authParams: AuthParams) => this.cacheAuthParams(authParams))
       .then((authParams: AuthParams) => {
         this.authParams = authParams;
@@ -167,56 +136,16 @@ export default class AuthTest {
     }
     return {
       'Authorization': `${authParams.token_type} ${authParams.access_token}`,
-      'User-Agent': USER_AGENT,
     };
   }
 
-  /**
-   * Not sure that check is still required.
-   */
-  verifyToken(authParams: AuthParams): Promise<AuthParams> {
-    log.info('Verifying token...');
-
-    return fetch(this.CHECK_TOKEN_URL, {
-      headers: {
-        'Accept': ACCEPT_HEADER,
-        'Hub-API-Version': 2,
-        'User-Agent': USER_AGENT,
-        ...this.getAuthorizationHeaders(authParams),
-      },
-    }).then((res: HTTPResponse | CustomError) => {
-      if (res.status > 400) {
-        const errorTitle: string = 'Check token error';
-        log.log(errorTitle, res);
-        throw res;
-      }
-      log.info('Token has been verified');
-      return res.json();
-    })
-      .then((currentUser: User) => {
-        this.currentUser = currentUser;
-        return authParams;
-      })
-      .catch((error: CustomError) => {
-        if (error.status === 401 && authParams.refresh_token) {
-          log.log('Trying to refresh token', error);
-          return this.refreshToken();
-        }
-        throw error;
-      })
-      .catch((err: CustomError) => {
-        log.log('Error during token validation', err);
-        throw err;
-      });
-  }
-
   async cacheAuthParams(authParams: AuthParams, key?: string): Promise<AuthParams> {
-    await storeAuthParams(authParams, key);
+    await storeSecurelyAuthParams(authParams, key);
     return authParams;
   }
 
   async getCachedAuthParams(): Promise<AuthParams> {
-    const authParams: ?AuthParams = await getStoredAuthParams();
+    const authParams: ?AuthParams = await getStoredSecurelyAuthParams();
     if (!authParams) {
       throw new Error('No stored auth params found');
     }

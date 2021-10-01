@@ -8,7 +8,7 @@ import {fetch2, requestController} from './api__request-controller';
 import {routeMap} from '../../app-routes';
 
 import type Auth from '../auth/auth';
-import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {AppConfig} from '../../flow/AppConfig';
 
 const MAX_QUERY_LENGTH = 2048;
 
@@ -53,7 +53,7 @@ requestController.init();
 
 export default class BaseAPI {
   auth: Auth;
-  config: AppConfigFilled;
+  config: AppConfig;
 
   youTrackUrl: string;
   youTrackIssueUrl: string;

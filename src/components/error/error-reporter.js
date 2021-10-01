@@ -7,7 +7,7 @@ import log, {getLogs} from '../log/log';
 import {getStorageState} from '../storage/storage';
 import {ResourceTypes, getShortEntityType} from '../api/api__resource-types';
 
-import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {AppConfig} from '../../flow/AppConfig';
 import type {HTTPResponse} from '../../flow/Error';
 
 export type ReportErrorData = { summary: string, description: string };
@@ -51,9 +51,9 @@ export async function sendReport(summary: string, description: string): Promise<
 }
 
 export const getAppAndDeviceData = (): string => {
-  let config: $Shape<AppConfigFilled>;
+  let config: $Shape<AppConfig>;
   try {
-    config = ((getStorageState().config: any): AppConfigFilled);
+    config = ((getStorageState().config: any): AppConfig);
   } catch (e) {
     const notDefined: string = '<not-defined>';
     config = {

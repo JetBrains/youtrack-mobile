@@ -23,7 +23,7 @@ import {VERSION_DETECT_FALLBACK_URL} from '../../components/config/config';
 import log from '../../components/log/log';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
 import {resolveErrorMessage} from '../../components/error/error-resolver';
-import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {AppConfig} from '../../flow/AppConfig';
 import {connectToNewYoutrack, openDebugView} from '../../actions/app-actions';
 import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-text-messages';
 
@@ -46,7 +46,7 @@ const CLOUD_DOMAIN = 'myjetbrains.com';
 
 type Props = {
   serverUrl: string,
-  connectToYoutrack: (newServerUrl: string) => Promise<AppConfigFilled>,
+  connectToYoutrack: (newServerUrl: string) => Promise<AppConfig>,
   onShowDebugView: Function,
   onCancel: () => any
 };

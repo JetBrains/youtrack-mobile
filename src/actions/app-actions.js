@@ -8,6 +8,7 @@ import * as appActionsHelper from './app-actions-helper';
 import * as types from './action-types';
 import Api from '../components/api/api';
 import Auth from '../components/auth/auth';
+import OAuth2 from '../components/auth/oauth2';
 import log from '../components/log/log';
 import openByUrlDetector, {isOneOfServers} from '../components/open-url-handler/open-url-handler';
 import packageJson from '../../package.json';
@@ -29,7 +30,8 @@ import {
   initialState,
   populateStorage,
   storeAccounts,
-  getStoredAuthParams,
+  storageStateAuthParamsKey,
+  storageStateOAuthParamsKey,
 } from '../components/storage/storage';
 import {hasType} from '../components/api/api__resource-types';
 import {isIOSPlatform} from '../util/util';
@@ -41,15 +43,17 @@ import {setApi} from '../components/api/api__instance';
 import {storeSearchContext} from '../views/issues/issues-actions';
 
 import type {Activity} from '../flow/Activity';
-import type {AppConfigFilled, EndUserAgreement} from '../flow/AppConfig';
+import type {AppConfig, EndUserAgreement} from '../flow/AppConfig';
 import type {AppState} from '../reducers';
 import type {Article} from '../flow/Article';
-import type {AuthParams} from '../flow/Auth';
+import type {AuthParams, AuthConfig, OAuthParams} from '../flow/Auth';
 import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from '../flow/User';
 import type {NotificationRouteData} from '../flow/Notification';
 import type {PermissionCacheItem} from '../flow/Permission';
 import type {StorageState} from '../components/storage/storage';
 import type {WorkTimeSettings} from '../flow/Work';
+import {createAuthInstance} from '../components/auth/oauth2-helper';
+import {getStoredSecurelyAuthParams} from '../components/storage/storage__oauth';
 
 type Action = (
   (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) =>
@@ -173,7 +177,7 @@ export const cacheUserLastVisitedArticle = (article: Article | null, activities?
 
 export function checkAuthorization(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const auth: Auth = ((getState().app.auth: any): Auth);
+    const auth: Auth | OAuth2 = ((getState().app.auth: any): Auth);
     await auth.setAuthParamsFromCache();
     await flushStoragePart({currentUser: auth.currentUser});
 
@@ -181,8 +185,8 @@ export function checkAuthorization(): Action {
   };
 }
 
-export function setAuth(config: AppConfigFilled): { auth: Auth, type: string } {
-  const auth: Auth = new Auth(config);
+export function setAuth(config: AppConfig): { auth: Auth, type: string } {
+  const auth: Auth | OAuth2 = createAuthInstance(config);
   usage.init(config.statisticsEnabled);
 
   return {type: types.INITIALIZE_AUTH, auth};
@@ -193,7 +197,7 @@ function showUserAgreement(agreement) {
   return {type: types.SHOW_USER_AGREEMENT, agreement};
 }
 
-async function storeConfig(config: AppConfigFilled) {
+async function storeConfig(config: AppConfig) {
   await flushStoragePart({config});
 }
 
@@ -212,7 +216,7 @@ function endAccountChange() {
   return {type: types.END_ACCOUNT_CHANGE};
 }
 
-async function connectToOneMoreServer(serverUrl: string, onBack: Function): Promise<AppConfigFilled> {
+async function connectToOneMoreServer(serverUrl: string, onBack: Function): Promise<AppConfig> {
   return new Promise(resolve => {
     Router.EnterServer({
       onCancel: onBack,
@@ -222,7 +226,7 @@ async function connectToOneMoreServer(serverUrl: string, onBack: Function): Prom
   });
 }
 
-async function authorizeOnOneMoreServer(config: AppConfigFilled, onBack: (serverUrl: string) => any) {
+async function authorizeOnOneMoreServer(config: AppConfig, onBack: (serverUrl: string) => any) {
   return new Promise(resolve => {
     Router.LogIn({
       config,
@@ -232,7 +236,7 @@ async function authorizeOnOneMoreServer(config: AppConfigFilled, onBack: (server
   });
 }
 
-function applyAccount(config: AppConfigFilled, auth: Auth, authParams: AuthParams): Action {
+function applyAccount(config: AppConfig, auth: Auth, authParams: AuthParams): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const otherAccounts: Array<StorageState> = getState().app.otherAccounts || [];
     const currentAccount: StorageState = getStorageState();
@@ -264,7 +268,7 @@ export function addAccount(serverUrl: string = ''): Action {
     log.info('Adding new account started');
 
     try {
-      const config: AppConfigFilled = await connectToOneMoreServer(serverUrl, () => {
+      const config: AppConfig = await connectToOneMoreServer(serverUrl, () => {
         log.info('Adding new server canceled by user');
         Router.navigateToDefaultRoute();
       });
@@ -336,14 +340,14 @@ export function updateOtherAccounts(
 export function changeAccount(account: StorageState, removeCurrentAccount?: boolean, issueId: ?string): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const state: AppState = getState();
-    const config: AppConfigFilled = ((account.config: any): AppConfigFilled);
-    const authParams: ?AuthParams = await getStoredAuthParams(account.authParamsKey);
+    const config: AppConfig = ((account.config: any): AppConfig);
+    const authParams: ?AuthParams = await getStoredSecurelyAuthParams(account.authParamsKey);
     if (!authParams) {
       const errorMessage: string = 'Account doesn\'t have valid authorization, cannot switch onto it.';
       notify(errorMessage);
       throw new Error(errorMessage);
     }
-    const auth = new Auth(config);
+    const auth: Auth | OAuth2 = createAuthInstance(config);
 
     dispatch(beginAccountChange());
 
@@ -351,7 +355,7 @@ export function changeAccount(account: StorageState, removeCurrentAccount?: bool
       await dispatch(updateOtherAccounts(account, removeCurrentAccount));
 
       await auth.cacheAuthParams(
-        authParams,
+        (authParams: any),
         account.authParamsKey || ((account.creationTimestamp: any): number).toString()
       );
       await storeConfig(config);
@@ -408,10 +412,9 @@ function setUserPermissions(permissions: Array<PermissionCacheItem>): Action {
 export function loadUserPermissions(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const auth: Auth = ((getState().app.auth: any): Auth);
-    const authParams: AuthParams = ((auth.authParams: any): AuthParams);
     const permissions: Array<PermissionCacheItem> = await appActionsHelper.loadPermissions(
-      authParams?.token_type,
-      authParams?.access_token,
+      auth.getTokenType(),
+      auth.getAccessToken(),
       auth.getPermissionsCacheURL()
     );
 
@@ -480,7 +483,7 @@ export function declineUserAgreement(): Action {
   };
 }
 
-export function initializeAuth(config: AppConfigFilled): Action {
+export function initializeAuth(config: AppConfig): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     dispatch(setAuth(config));
     await dispatch(checkAuthorization());
@@ -514,16 +517,18 @@ function checkUserAgreement(): Action {
   };
 }
 
-export function applyAuthorization(authParams: AuthParams): Action {
+export function applyAuthorization(authParams: AuthParams | OAuthParams): Action {
   return async (dispatch: Function, getState: () => AppState) => {
-    const auth = getState().app.auth;
+    const auth: Auth | OAuth2 | null = getState().app.auth;
     const creationTimestamp: number = Date.now();
+    const authStorageStateValue: string = creationTimestamp.toString();
+    const authStorageStateKey: string = authParams.access_token ? storageStateAuthParamsKey : storageStateOAuthParamsKey;
     await flushStoragePart({
       creationTimestamp: creationTimestamp,
-      authParamsKey: creationTimestamp.toString(),
+      [authStorageStateKey]: authStorageStateValue,
     });
     if (auth && authParams) {
-      await auth.cacheAuthParams(authParams, creationTimestamp.toString());
+      await auth.cacheAuthParams((authParams: any), authStorageStateValue);
     }
 
     await dispatch(checkAuthorization());
@@ -582,7 +587,7 @@ function subscribeToURL(): Action {
   };
 }
 
-export function initializeApp(config: AppConfigFilled, issueId: string | null, navigateToActivity: boolean): Action {
+export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
     Router._getNavigator() && Router.Home({
       backendUrl: config.backendUrl,
@@ -591,7 +596,7 @@ export function initializeApp(config: AppConfigFilled, issueId: string | null, n
     });
 
     const refreshConfig: () => Promise<void> = async (): Promise<void> => {
-      const updatedConfig: AppConfigFilled = await loadConfig(config.backendUrl);
+      const updatedConfig: AuthConfig = await loadConfig(config.backendUrl);
       await flushStoragePart({config: updatedConfig, currentAppVersion: packageJson.version});
     };
 

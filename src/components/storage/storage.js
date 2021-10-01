@@ -9,10 +9,10 @@ import {routeMap} from '../../app-routes';
 
 import type {Activity, ActivityType} from '../../flow/Activity';
 import type {AnyIssue} from '../../flow/Issue';
-import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {AppConfig} from '../../flow/AppConfig';
 import type {Article, ArticlesList} from '../../flow/Article';
 import type {ArticleProject} from '../../flow/Article';
-import type {AuthParams} from '../../flow/Auth';
+import type {AuthParams, OAuthParams} from '../../flow/Auth';
 import type {Board, Sprint} from '../../flow/Agile';
 import type {Folder, User} from '../../flow/User';
 import type {IssueProject} from '../../flow/CustomFields';
@@ -23,6 +23,10 @@ const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 export const MAX_STORED_QUERIES = 5;
 export const STORAGE_AUTH_PARAMS: string = 'yt_mobile_auth';
 export const STORAGE_AUTH_PARAMS_KEY: string = 'yt_mobile_auth_key';
+export const STORAGE_OAUTH_PARAMS: string = 'yt_mobile_oauth';
+export const STORAGE_OAUTH_PARAMS_KEY: string = 'yt_mobile_oauth_key';
+export const storageStateAuthParamsKey: string = 'authParamsKey';
+export const storageStateOAuthParamsKey: string = 'oauthParamsKey';
 export const THEME_MODE_KEY = 'YT_THEME_MODE';
 
 export type StorageState = {|
@@ -31,13 +35,15 @@ export type StorageState = {|
   articlesQuery: string | null,
   articleLastVisited: { article?: Article, activities?: Array<Activity> } | null,
   authParams: ?AuthParams,
-  authParamsKey: ?string,
+  [storageStateAuthParamsKey]: ?string,
+  oauthParams: OAuthParams | null,
+  [storageStateOAuthParamsKey]: ?string,
   projectId: ?string,
   projects: Array<IssueProject | ArticleProject>,
   draftId: ?string,
   currentUser: ?User,
   creationTimestamp: ?number,
-  config: ?AppConfigFilled,
+  config: ?AppConfig,
   query: ?string,
   searchContext: ?Folder,
   lastQueries: ?Array<string>,
@@ -65,7 +71,9 @@ const storageKeys: StorageStateKeys = {
   articlesQuery: 'YT_ARTICLES_QUERY',
   articleLastVisited: 'YT_ARTICLE_LAST_VISITED',
   authParams: STORAGE_AUTH_PARAMS,
-  authParamsKey: STORAGE_AUTH_PARAMS_KEY,
+  [storageStateAuthParamsKey]: STORAGE_AUTH_PARAMS_KEY,
+  oauthParams: STORAGE_OAUTH_PARAMS,
+  [storageStateOAuthParamsKey]: STORAGE_OAUTH_PARAMS_KEY,
   projectId: 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
   projects: 'YT_PROJECTS_STORAGE',
   draftId: 'DRAFT_ID_STORAGE_KEY',
@@ -101,7 +109,9 @@ export const initialState: StorageState = Object.freeze({
   articlesQuery: null,
   articleLastVisited: null,
   authParams: null,
-  authParamsKey: null,
+  [storageStateAuthParamsKey]: null,
+  oauthParams: null,
+  [storageStateOAuthParamsKey]: null,
   projectId: null,
   projects: [],
   draftId: null,
@@ -291,26 +301,4 @@ export async function storeAccounts(accounts: Array<StorageState>) {
 // For tests only!
 export async function __setStorageState(state: StorageState) {
   storageState = state;
-}
-
-export function getAuthParamsKey(): string {
-  const state: StorageState = getStorageState();
-  return ((state.authParamsKey: any): string);
-}
-
-export async function storeAuthParams(authParams: AuthParams, key?: string): Promise<AuthParams> {
-  const authParamsKey: string = key || getAuthParamsKey();
-  if (authParamsKey && authParams) {
-    await EncryptedStorage.setItem(authParamsKey, JSON.stringify(authParams));
-  }
-  return authParams;
-}
-
-export async function getStoredAuthParams(key: ?string): Promise<AuthParams | null> {
-  const authParamsKey: string = key || getAuthParamsKey();
-  if (authParamsKey) {
-    const authParams: ?string = await EncryptedStorage.getItem(authParamsKey);
-    return typeof authParams === 'string' ? JSON.parse(authParams) : null;
-  }
-  return null;
 }

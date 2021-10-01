@@ -143,6 +143,9 @@ android {
         versionName buildVersionName(appVersion)
         vectorDrawables.useSupportLibrary = true
         missingDimensionStrategy "RNNotifications.reactNativeVersion", "reactNative60"
+        manifestPlaceholders = [
+          appAuthRedirectScheme: "ytoauth"
+        ]
     }
     splits {
         abi {
@@ -205,6 +208,8 @@ dependencies {
     implementation 'com.facebook.fresco:animated-gif:2.5.0'
 
 //    implementation project(':react-native-eventsource')
+
+    implementation 'net.openid:appauth:0.8.1'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
