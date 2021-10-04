@@ -71,7 +71,7 @@ export default class OAuth2 extends AuthBase {
       }
     }
 
-    if (authParams.refreshToken) {
+    if (authParams.accessToken) {
       const updatedOauthParams: OAuthParams = {
         ...this.authParams,
         accessToken: authParams.accessToken,
