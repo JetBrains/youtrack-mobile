@@ -77,7 +77,6 @@
     "entities": "^1.1.1",
     "from-now": "1.0.2",
     "htmlparser-to-html": "0.0.6",
-    "jetifier": "^1.6.6",
     "lodash.debounce": "^4.0.8",
     "lodash.once": "^4.1.1",
     "lodash.throttle": "^4.1.1",
