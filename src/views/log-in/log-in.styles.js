@@ -48,4 +48,18 @@ export default EStyleSheet.create({
     ...rowFormStyles.link,
     fontSize: MAIN_FONT_SIZE,
   },
+  loadingContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadingMessage: {
+    marginTop: UNIT * 2,
+  },
+  loadingMessageIndicator: {
+    color: '$link',
+  },
+  formContentCenter: {
+    alignItems: 'center',
+  },
 });

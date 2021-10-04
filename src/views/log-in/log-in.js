@@ -80,9 +80,15 @@ export class LogIn extends Component<Props, State> {
     usage.trackScreenView('Login form');
   }
 
+  async componentDidMount(): void {
+    if (!this.isConfigHasClientSecret()) {
+      await this.logInViaHub();
+    }
+  }
+
   focusOnPassword: (() => void) = () => {
     this.passInputRef.current.focus();
-  }
+  };
 
   logInViaCredentials: (() => Promise<void> | Promise<any>) = async () => {
     const {config, onLogIn} = this.props;
@@ -126,6 +132,7 @@ export class LogIn extends Component<Props, State> {
   render(): Node {
     const {onShowDebugView, config} = this.props;
     const {password, username, loggingIn, errorMessage} = this.state;
+    const isLoginWithCreds: boolean = this.isConfigHasClientSecret();
 
     return (
       <ThemeContext.Consumer>
@@ -138,7 +145,7 @@ export class LogIn extends Component<Props, State> {
               keyboardShouldPersistTaps="handled"
               keyboardDismissMode="on-drag"
             >
-              <View style={styles.container}>
+              <View style={[styles.container, isLoginWithCreds ? null : styles.loadingContainer]}>
                 <View style={styles.backIconButtonContainer}>
                   <TouchableOpacity
                     onPress={() => this.changeYouTrackUrl()}
@@ -149,7 +156,7 @@ export class LogIn extends Component<Props, State> {
                   </TouchableOpacity>
                 </View>
 
-                <View style={styles.formContent}>
+                <View style={isLoginWithCreds ? styles.formContent : styles.formContentCenter}>
                   <TouchableWithoutFeedback onPress={() => clicksToShowCounter(onShowDebugView)}>
                     <Image style={styles.logoImage} source={logo}/>
                   </TouchableWithoutFeedback>
@@ -164,7 +171,7 @@ export class LogIn extends Component<Props, State> {
                       style={styles.hintText}>{formatYouTrackURL(config.backendUrl)}</Text>
                   </TouchableOpacity>
 
-                  <TextInput
+                  {isLoginWithCreds && <TextInput
                     autoCapitalize="none"
                     autoCorrect={false}
                     editable={!loggingIn}
@@ -177,8 +184,9 @@ export class LogIn extends Component<Props, State> {
                     onSubmitEditing={() => this.focusOnPassword()}
                     value={username}
                     onChangeText={(username: string) => this.setState({username})}
-                  />
-                  <TextInput
+                  />}
+
+                  {isLoginWithCreds && <TextInput
                     ref={this.passInputRef}
                     editable={!loggingIn}
                     testID="password-input"
@@ -192,9 +200,9 @@ export class LogIn extends Component<Props, State> {
                       this.logInViaCredentials();
                     }}
                     secureTextEntry={true}
-                    onChangeText={(password: string) => this.setState({password})}/>
+                    onChangeText={(password: string) => this.setState({password})}/>}
 
-                  <TouchableOpacity
+                  {isLoginWithCreds && <TouchableOpacity
                     style={[
                       formStyles.button,
                       (loggingIn || hasNoCredentials) && formStyles.buttonDisabled,
@@ -207,16 +215,25 @@ export class LogIn extends Component<Props, State> {
                       Log in
                     </Text>
                     {this.state.loggingIn && <ActivityIndicator style={styles.progressIndicator}/>}
-                  </TouchableOpacity>
+                  </TouchableOpacity>}
 
-                  <Text style={styles.hintText}>
+                  {!isLoginWithCreds && this.state.loggingIn && <View style={styles.loadingMessage}>
+                    <Text>
+                      <Text style={styles.title}>
+                        Loading issues...
+                      </Text>
+                      <ActivityIndicator style={styles.loadingMessageIndicator} color={styles.loadingMessageIndicator.color}/>
+                    </Text>
+                  </View>}
+
+                  {isLoginWithCreds && <Text style={styles.hintText}>
                     {'You need a YouTrack account to use the app.\n By logging in, you agree to the '}
                     <Text
                       style={formStyles.link}
                       onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
                       Privacy Policy
                     </Text>.
-                  </Text>
+                  </Text>}
 
                   {Boolean(errorMessage || hasNoCredentials) && (
                     <View style={styles.error}>
@@ -227,8 +244,7 @@ export class LogIn extends Component<Props, State> {
                     </View>
                   )}
                 </View>
-
-                <TouchableOpacity
+                {isLoginWithCreds && <TouchableOpacity
                   hitSlop={HIT_SLOP}
                   style={styles.support}
                   testID="log-in-via-browser"
@@ -237,7 +253,7 @@ export class LogIn extends Component<Props, State> {
                   <Text style={styles.action}>
                     Log in with Browser
                   </Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
 
                 <KeyboardSpacer/>
               </View>
