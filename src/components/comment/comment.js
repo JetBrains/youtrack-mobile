@@ -1,6 +1,6 @@
 /* @flow */
 
-import {View, Text} from 'react-native';
+import {View, Text, TouchableWithoutFeedback} from 'react-native';
 
 import React from 'react';
 
@@ -23,6 +23,7 @@ type Props = {
 
   canRestore: boolean,
   onRestore: Function,
+  onLongPress: Function,
   canDeletePermanently: boolean,
   onDeletePermanently: Function,
 
@@ -99,15 +100,17 @@ function Comment(props: Props) {
   };
 
   const renderComment = () => {
-    const {comment} = props;
+    const {comment, onLongPress} = props;
     const usesMarkdown: boolean = comment.usesMarkdown;
     const testID: string = comment.deleted ? 'commentDeleted' : usesMarkdown ? 'commentMarkdown' : 'commentYTWiki';
     return (
-      <View testID={testID}>
-        {comment.deleted && renderDeletedComment()}
-        {!comment.deleted && (usesMarkdown || !comment.textPreview) && renderMarkdown()}
-        {!comment.deleted && !usesMarkdown && !!comment.textPreview && renderYoutrackWiki()}
-      </View>
+      <TouchableWithoutFeedback onLongPress={onLongPress}>
+        <View testID={testID}>
+          {comment.deleted && renderDeletedComment()}
+          {!comment.deleted && (usesMarkdown || !comment.textPreview) && renderMarkdown()}
+          {!comment.deleted && !usesMarkdown && !!comment.textPreview && renderYoutrackWiki()}
+        </View>
+      </TouchableWithoutFeedback>
     );
   };
 

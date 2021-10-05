@@ -284,6 +284,12 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
     firstActivityChange(activityGroup.comment)
   );
 
+  const onShowCommentActions = (activityGroup: Activity, comment: IssueComment): void => {
+    if (props.commentActions?.onShowCommentActions) {
+      props.commentActions.onShowCommentActions(comment, ((activityGroup.comment: any): IssueComment).id);
+    }
+  };
+
   const renderCommentActions = (activityGroup: Object) => {
     const comment: IssueComment | null = getCommentFromActivityGroup(activityGroup);
     if (!comment) {
@@ -343,11 +349,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
           {Boolean(commentActions && commentActions.onShowCommentActions) && <TouchableOpacity
             hitSlop={HIT_SLOP}
-            onPress={() => {
-              if (commentActions?.onShowCommentActions) {
-                commentActions.onShowCommentActions(comment, activityGroup.comment.id);
-              }
-            }}>
+            onPress={() => onShowCommentActions(activityGroup, comment)}>
             {isIOSPlatform()
               ? <IconMoreOptions size={18} color={styles.activityCommentActionsOther.color}/>
               : <IconDrag size={18} color={styles.activityCommentActionsOther.color}/>}
@@ -397,6 +399,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
               }
             }}
             onRestore={() => { if (commentActions?.onRestoreComment) {commentActions.onRestoreComment(comment);} }}
+            onLongPress={() => onShowCommentActions(activityGroup, comment)}
             uiTheme={props.uiTheme}
             youtrackWiki={props.youtrackWiki}
             onCheckboxUpdate={
