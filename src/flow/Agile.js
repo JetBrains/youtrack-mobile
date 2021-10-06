@@ -53,7 +53,7 @@ export type AgileBoardRow = {
 export type BoardColumn = {
   id: string,
   collapsed: boolean,
-  agileColumn: AgileColumn
+  agileColumn: AgileColumn,
 };
 
 export type Board = {

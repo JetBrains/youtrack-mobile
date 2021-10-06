@@ -40,7 +40,7 @@ import type IssuePermissions from '../../components/issue-permissions/issue-perm
 import type {AgilePageState} from './board-reducers';
 import type {AnyIssue, IssueOnList} from '../../flow/Issue';
 import type {CustomError} from '../../flow/Error';
-import type {SprintFull, AgileBoardRow, AgileColumn, BoardColumn, BoardOnList, Sprint} from '../../flow/Agile';
+import type {SprintFull, AgileBoardRow, BoardColumn, BoardOnList, Sprint} from '../../flow/Agile';
 import type {Theme, UITheme} from '../../flow/Theme';
 
 const CATEGORY_NAME = 'Agile board';
@@ -56,7 +56,7 @@ type Props = AgilePageState & {
   onLoadBoard: (query: string) => any,
   onLoadMoreSwimlanes: (query?: string) => any,
   onRowCollapseToggle: (row: AgileBoardRow) => any,
-  onColumnCollapseToggle: (column: AgileColumn) => any,
+  onColumnCollapseToggle: (column: BoardColumn) => any,
   onOpenSprintSelect: (any) => any,
   onOpenBoardSelect: (any) => any,
   onCloseSelect: (any) => any,
@@ -539,7 +539,7 @@ const mapDispatchToProps = (dispatch) => {
     onLoadBoard: (query: string) => dispatch(boardActions.loadDefaultAgileBoard(query)),
     onLoadMoreSwimlanes: (query?: string) => dispatch(boardActions.fetchMoreSwimlanes(query)),
     onRowCollapseToggle: (row) => dispatch(boardActions.rowCollapseToggle(row)),
-    onColumnCollapseToggle: (column) => dispatch(boardActions.columnCollapseToggle(column)),
+    onColumnCollapseToggle: (column: BoardColumn) => dispatch(boardActions.columnCollapseToggle(column)),
     onOpenSprintSelect: () => dispatch(boardActions.openSprintSelect()),
     onOpenBoardSelect: () => dispatch(boardActions.openBoardSelect()),
     onCloseSelect: () => dispatch(boardActions.closeSelect()),

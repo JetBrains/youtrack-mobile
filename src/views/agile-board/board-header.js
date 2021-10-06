@@ -1,6 +1,5 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 
 import {View, Text, TouchableOpacity} from 'react-native';
@@ -13,13 +12,14 @@ import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/agile-column/agile-
 
 import {secondaryText} from '../../components/common-styles/typography';
 
-import type {AgileColumn} from '../../flow/Agile';
+import type {BoardColumn} from '../../flow/Agile';
+import type {Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   style?: ViewStyleProp,
-  columns: Array<AgileColumn>,
-  onCollapseToggle: (column: AgileColumn) => any,
+  columns?: Array<BoardColumn>,
+  onCollapseToggle: (column: BoardColumn) => any,
 };
 
 export default class BoardHeader extends PureComponent<Props, void> {

@@ -23,9 +23,9 @@ import {sortAlphabetically} from '../../components/search/sorting';
 import type Api from '../../components/api/api';
 import type {
   AgileBoardRow,
-  AgileColumn,
   AgileUserProfile,
   Board,
+  BoardColumn,
   BoardOnList,
   Sprint,
   SprintFull,
@@ -442,7 +442,7 @@ function updateColumnCollapsedState(column, newCollapsed: boolean) {
   };
 }
 
-export function columnCollapseToggle(column: AgileColumn): ((
+export function columnCollapseToggle(column: BoardColumn): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
