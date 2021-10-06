@@ -30,7 +30,7 @@ export type AgilePageState = {
   creatingIssueDraftCellId: ?string,
   sprint?: SprintFull,
   selectProps: Object,
-  agile: ?Board,
+  agile: Board,
   error?: CustomError & {noAgiles: boolean} | null,
   queryAssistSuggestions: Array<ServersideSuggestion>,
   noMoreSwimlanes?: boolean,

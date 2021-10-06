@@ -31,7 +31,6 @@ import type {
   SprintFull,
 } from '../../flow/Agile';
 import type {AgilePageState} from './board-reducers';
-import type {BoardColumn} from '../../flow/Agile';
 import type {CustomError} from '../../flow/Error';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
 
@@ -40,7 +39,7 @@ type ApiGetter = () => Api;
 export const PAGE_SIZE = 15;
 
 const RECONNECT_TIMEOUT = 60000;
-let serverSideEventsInstance = null;
+let serverSideEventsInstance: ServersideEvents;
 let serverSideEventsInstanceErrorTimer = null;
 export const DEFAULT_ERROR_AGILE_WITH_INVALID_STATUS = {status: {valid: false, errors: [DEFAULT_ERROR_MESSAGE]}};
 
@@ -59,7 +58,7 @@ function receiveSprint(sprint) {
   };
 }
 
-function setError(error: CustomError) {
+function setError(error: CustomError | null) {
   return {
     type: types.AGILE_ERROR,
     error,
@@ -85,17 +84,17 @@ function animateLayout() {
 }
 
 function getLastVisitedSprint(boardId: string, visitedSprints: ?Array<Sprint>): ?Sprint {
-  return boardId && (visitedSprints || []).find((sprint: Sprint) => sprint.agile.id === boardId);
+  return (visitedSprints || []).find((sprint: Sprint) => sprint.agile?.id === boardId);
 }
 
-export function getAgileUserProfile(): AgileUserProfile | {} {
+export function getAgileUserProfile(): (dispatch: (any) => any, getState: () => any) => Promise<$Shape<AgileUserProfile>> {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const state = getState();
     return state?.agile?.profile || {};
   };
 }
 
-export function loadAgileWithStatus(agileId: string): ((dispatch: (any) => any) => Promise<void> | Promise<mixed>) {
+export function loadAgileWithStatus(agileId: string): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     dispatch({type: types.START_LOADING_AGILE});
 
@@ -110,7 +109,7 @@ export function loadAgileWithStatus(agileId: string): ((dispatch: (any) => any) 
 
     if (!agileWithStatus.status.valid) {
       dispatch(receiveSprint(null));
-      return dispatch(stopSprintLoad());
+      dispatch(stopSprintLoad());
     }
   };
 }
@@ -124,12 +123,12 @@ export function loadBoard(board: Board, query: string): ((dispatch: (any) => any
 
     const agileUserProfile: AgileUserProfile = await dispatch(getAgileUserProfile());
 
-    const cachedAgileLastSprint: Sprint = getStorageState().agileLastSprint;
-    let sprint: Sprint = getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints) || (
+    const cachedAgileLastSprint: ?Sprint = getStorageState().agileLastSprint;
+    let sprint: ?Sprint = getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints) || (
       cachedAgileLastSprint?.agile?.id === board.id ? cachedAgileLastSprint : null
     );
     if (!sprint) {
-      sprint = (board.sprints || []).slice(-1)[0] || {};
+      sprint = (board.sprints || []).slice(-1)[0];
       trackError('Cannot find last visited sprint');
       log.info('Last visited sprint is undefined. Use the last one of the current board.');
     }
@@ -178,24 +177,12 @@ export function loadAgile(agileId: string): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
-) =>
-  | Promise<
-    {
-      columns: Array<BoardColumn>,
-      id: string,
-      name: string,
-      orphanRow: AgileBoardRow,
-      sprints: Array<Sprint>,
-      status: {error: Array<string>, valid: boolean},
-      trimmedSwimlanes: Array<AgileBoardRow>,
-    },
-  >
-  | Promise<{status: {errors: Array<string>, valid: boolean}}>) {
+) => Promise<$Shape<Board>>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const api: Api = getApi();
 
     try {
-      const agileWithStatus = await api.agile.getAgile(agileId);
+      const agileWithStatus: Board = await api.agile.getAgile(agileId);
       dispatch(receiveAgile(agileWithStatus));
       log.info(`Loaded agile board ${agileId} status`, agileWithStatus);
       return agileWithStatus;
@@ -206,8 +193,8 @@ export function loadAgile(agileId: string): ((
   };
 }
 
-export async function cacheSprint(sprint: Sprint) {
-  return flushStoragePart({agileLastSprint: sprint});
+export async function cacheSprint(sprint: Sprint): Promise<void> {
+  flushStoragePart({agileLastSprint: sprint});
 }
 
 export function suggestAgileQuery(query: string, caret: number): ((
@@ -242,7 +229,7 @@ export function loadSprint(agileId: string, sprintId: string, query: string): ((
       log.info(`Sprint ${sprintId} (agileBoardId="${agileId}") has been loaded`);
     } catch (e) {
       const message: string = 'Could not load requested sprint';
-      const error: CustomError = new Error(message);
+      const error: CustomError = ((new Error(message): any): CustomError);
       error.error_description = 'Check that the sprint exists';
       dispatch(setError(error));
       trackError('Load sprint');
@@ -252,7 +239,7 @@ export function loadSprint(agileId: string, sprintId: string, query: string): ((
   };
 }
 
-export function loadSprintIssues(sprint: Sprint): ((
+export function loadSprintIssues(sprint: SprintFull): ((
   dispatch: (any) => any,
   getState: () => AgilePageState,
   getApi: ApiGetter
@@ -261,8 +248,8 @@ export function loadSprintIssues(sprint: Sprint): ((
     const api: Api = getApi();
     dispatch(startSprintLoad());
     try {
-      const allIssuesIds = getSprintAllIssues(sprint);
-      const sprintIssues = await api.agile.getAgileIssues(allIssuesIds);
+      const allIssuesIds: Array<{id: string}> = getSprintAllIssues(sprint);
+      const sprintIssues: Array<IssueFull> = await api.agile.getAgileIssues(allIssuesIds);
       const updatedSprint: Sprint = updateSprintIssues(sprint, sprintIssues);
       dispatch(receiveSprint(updatedSprint));
 
@@ -273,7 +260,7 @@ export function loadSprintIssues(sprint: Sprint): ((
 
     } catch (e) {
       const message: string = 'Could not load requested sprint issues';
-      const error: CustomError = new Error(message);
+      const error: CustomError = ((new Error(message): any): CustomError);
       error.error_description = 'Check that the sprint exists';
       trackError('Load sprint');
 
@@ -319,7 +306,7 @@ export function loadDefaultAgileBoard(query: string): ((dispatch: (any) => any) 
       await dispatch(loadBoard(board, query));
     } else {
       dispatch(receiveSprint(null));
-      const error: CustomError = new Error('No agile boards found');
+      const error: CustomError & { noAgiles: boolean } = (new Error('No agile boards found'): any);
       error.error_description = 'Create an agile board first';
       error.noAgiles = true;
       dispatch(setError(error));
@@ -344,7 +331,7 @@ function receiveSwimlanes(swimlanes) {
   };
 }
 
-function setSSEInstance(sseInstance) {
+function setSSEInstance(sseInstance: ?ServersideEvents) {
   serverSideEventsInstance = sseInstance;
 }
 
@@ -437,7 +424,7 @@ export function rowCollapseToggle(row: AgileBoardRow): ((
         ...row,
         collapsed: !row.collapsed,
       });
-      log.info(`Collapse state successfully updated for row ${row.id}, new state = ${!row.collapsed}`);
+      log.info(`Collapse state successfully updated for row ${row.id}, new state is = ${oldCollapsed ? 'expanded' : 'collapsed'}`);
       trackEvent('Toggle row collapsing');
     } catch (e) {
       dispatch(updateRowCollapsedState(row, oldCollapsed));
@@ -475,7 +462,7 @@ export function columnCollapseToggle(column: AgileColumn): ((
         ...column,
         collapsed: !column.collapsed,
       });
-      log.info(`Collapse state successfully updated for column ${column.id}, new state = ${!column.collapsed}`);
+      log.info(`Collapse state successfully updated for column ${column.id}, new state is ${oldCollapsed ? 'expanded' : 'collapsed'}`);
       trackEvent('Toggle column collapsing');
     } catch (e) {
       dispatch(updateColumnCollapsedState(column, oldCollapsed));
@@ -531,9 +518,9 @@ export function openBoardSelect(): ((dispatch: (any) => any, getState: () => any
         show: true,
         placeholder: 'Filter boards by name',
         dataSource: async () => {
-          const agileBoardsList = await api.agile.getAgileBoardsList();
+          const agileBoardsList: Array<BoardOnList> = await api.agile.getAgileBoardsList();
           const boards = agileBoardsList.sort(sortAlphabetically).reduce(
-            (list, board) => {
+            (list: { favorites: Array<Board>, regular: Array<Board> }, board: Board) => {
               if (board.favorite) {
                 list.favorites.push(board);
               } else {
@@ -628,7 +615,7 @@ export function subscribeServersideUpdates(): ((
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
-    const updateCache = () => cacheSprint(getState().agile.sprint);
+    const updateCache = (): void => {cacheSprint(getState().agile.sprint);};
 
     serverSideEventsInstance = new ServersideEvents(getApi().config.backendUrl);
     serverSideEventsInstance.subscribeAgileBoardUpdates(sprint.eventSourceTicket);
@@ -764,7 +751,7 @@ export function storeLastQuery(query: string): (() => Promise<void>) {
 
 export function updateIssue(issueId: string, sprint?: SprintFull): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
-    const issue: IssueFull = await issueUpdater.loadIssue(issueId);
+    const issue: IssueFull | null = await issueUpdater.loadIssue(issueId);
 
     dispatch({
       type: ISSUE_UPDATED,
