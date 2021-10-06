@@ -72,6 +72,7 @@ export type Board = {
     disableSprints: boolean,
   },
   hideOrphansSwimlane: boolean,
+  currentSprint: $Shape<Sprint>,
 };
 
 export type BoardOnList = {

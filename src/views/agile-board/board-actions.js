@@ -114,7 +114,7 @@ export function loadAgileWithStatus(agileId: string): ((dispatch: (any) => any) 
   };
 }
 
-export function loadBoard(board: Board, query: string): ((dispatch: (any) => any) => Promise<void>) {
+export function loadBoard(board: Board, query: string, refresh: boolean): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     destroySSE();
     dispatch(updateAgileUserProfileLastVisitedAgile(board.id));
@@ -124,9 +124,20 @@ export function loadBoard(board: Board, query: string): ((dispatch: (any) => any
     const agileUserProfile: AgileUserProfile = await dispatch(getAgileUserProfile());
 
     const cachedAgileLastSprint: ?Sprint = getStorageState().agileLastSprint;
-    let sprint: ?Sprint = getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints) || (
-      cachedAgileLastSprint?.agile?.id === board.id ? cachedAgileLastSprint : null
+    const getLastVisited = () => (
+      getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints) ||
+      (cachedAgileLastSprint?.agile?.id === board.id ? cachedAgileLastSprint : null)
     );
+    let sprint: ?Sprint;
+    if (agileUserProfile?.defaultAgile?.currentSprint) {
+      sprint = (
+        refresh
+          ? getLastVisited()
+          : agileUserProfile?.defaultAgile?.currentSprint
+      );
+    } else {
+      sprint = getLastVisited();
+    }
     if (!sprint) {
       sprint = (board.sprints || []).slice(-1)[0];
       trackError('Cannot find last visited sprint');
@@ -291,7 +302,7 @@ export function loadAgileProfile(): ((
   };
 }
 
-export function loadDefaultAgileBoard(query: string): ((dispatch: (any) => any) => Promise<void>) {
+export function loadDefaultAgileBoard(query: string, refresh: boolean): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     dispatch(setError(null));
     dispatch(receiveSprint(getStorageState().agileLastSprint));
@@ -303,7 +314,7 @@ export function loadDefaultAgileBoard(query: string): ((dispatch: (any) => any) 
 
     if (board) {
       log.info('Loading Default Agile board', board?.name || board?.id);
-      await dispatch(loadBoard(board, query));
+      await dispatch(loadBoard(board, query, refresh));
     } else {
       dispatch(receiveSprint(null));
       const error: CustomError & { noAgiles: boolean } = (new Error('No agile boards found'): any);
