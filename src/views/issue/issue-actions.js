@@ -518,6 +518,34 @@ export function showIssueActions(
   };
 }
 
+export function onShowDescriptionContextActions(actionSheet: ActionSheet): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const {issue} = getState().issueState;
+    const selectedAction = await showActions(
+      [
+        {
+          title: 'Copy description text',
+          execute: () => {
+            usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy description text');
+            Clipboard.setString(issue.description);
+            notify('Text copied');
+          },
+        },
+        {title: 'Cancel'},
+      ],
+      actionSheet,
+    );
+
+    if (selectedAction && selectedAction.execute) {
+      selectedAction.execute();
+    }
+  };
+}
+
 export function openNestedIssueView(params: OpenNestedViewParams): (() => any | void) {
   return () => {
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Navigate to linked issue');

@@ -117,6 +117,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       onTagRemove,
 
       onCheckboxUpdate,
+      onShowDescriptionContextActions,
     } = this.props;
 
     return (
@@ -157,6 +158,9 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         onTagRemove={onTagRemove}
 
         onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(checked, position, description)}
+        onDescriptionLongPress={() => {
+          onShowDescriptionContextActions(this.context.actionSheet());
+        }}
       />
     );
   }
