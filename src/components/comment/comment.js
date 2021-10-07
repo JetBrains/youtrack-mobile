@@ -104,7 +104,7 @@ function Comment(props: Props) {
     const usesMarkdown: boolean = comment.usesMarkdown;
     const testID: string = comment.deleted ? 'commentDeleted' : usesMarkdown ? 'commentMarkdown' : 'commentYTWiki';
     return (
-      <TouchableWithoutFeedback onLongPress={onLongPress}>
+      <TouchableWithoutFeedback delayLongPress={280} onLongPress={onLongPress}>
         <View testID={testID}>
           {comment.deleted && renderDeletedComment()}
           {!comment.deleted && (usesMarkdown || !comment.textPreview) && renderMarkdown()}
