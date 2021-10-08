@@ -31,12 +31,13 @@ import {ThemeContext} from '../theme/theme-context';
 import styles, {MIN_INPUT_SIZE} from './comment-edit.styles';
 
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
+import type {AttachmentActions} from '../attachments-row/attachment-actions';
 import type {Node} from 'react';
+import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {Theme} from '../../flow/Theme';
 import type {UserGroup} from '../../flow/UserGroup';
 import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
-import type {AttachmentActions} from '../attachments-row/attachment-actions';
 
 type UserMentions = { users: Array<User> };
 
@@ -305,13 +306,13 @@ const IssueCommentEdit = (props: Props) => {
         hideVisibility={true}
         getVisibilityOptions={props.getVisibilityOptions}
         actions={{
-          onAttach: async (file: Attachment, onAttachingFinish: () => any) => {
+          onAttach: async (files: Array<NormalizedAttachment>, onAttachingFinish: () => any) => {
             let draftComment: IssueComment = state.editingComment;
             if (!draftComment.id) {
               draftComment = await props.onCommentChange(state.editingComment, false);
             }
             const addedAttachments: Array<Attachment> = await dispatch(props.onAttach(
-              file,
+              files,
               state.editingComment,
             ));
             onAttachingFinish();

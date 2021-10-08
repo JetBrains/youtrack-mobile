@@ -34,6 +34,7 @@ import type {Article, ArticleDraft, ArticleProject} from '../../flow/Article';
 import type {ArticleCreateState} from './article-create-reducers';
 import type {Attachment, IssueProject} from '../../flow/CustomFields';
 import type {CustomError} from '../../flow/Error';
+import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {Theme, UIThemeColors} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
 
@@ -182,8 +183,8 @@ const ArticleCreate = (props: Props) => {
     );
   };
 
-  const onAddAttachment = async (attach: Attachment, onAttachingFinish: () => any) => {
-    await dispatch(articleCreateActions.uploadFile(attach));
+  const onAddAttachment = async (files: Array<NormalizedAttachment>, onAttachingFinish: () => any) => {
+    await dispatch(articleCreateActions.uploadFile(files));
     onAttachingFinish();
     dispatch(articleCreateActions.loadAttachments());
   };
@@ -198,8 +199,8 @@ const ArticleCreate = (props: Props) => {
         hideVisibility={true}
         getVisibilityOptions={() => getApi().articles.getVisibilityOptions(articleDraft.id)}
         actions={{
-          onAttach: async (file: Attachment, onAttachingFinish: () => any) => {
-            onAddAttachment(file, onAttachingFinish);
+          onAttach: async (files: Array<NormalizedAttachment>, onAttachingFinish: () => any) => {
+            onAddAttachment(files, onAttachingFinish);
           },
           onCancel: () => {
             dispatch(articleCreateActions.cancelAddAttach(attachingImage));

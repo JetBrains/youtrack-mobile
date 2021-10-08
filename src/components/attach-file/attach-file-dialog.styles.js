@@ -13,7 +13,7 @@ export default (EStyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
-  image: {
+  images: {
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -22,6 +22,9 @@ export default (EStyleSheet.create({
     width: '100%',
     minHeight: 50,
     flexGrow: 1,
+  },
+  imagePreview: {
+    marginTop: UNIT,
   },
   title: {
     ...headerTitle,

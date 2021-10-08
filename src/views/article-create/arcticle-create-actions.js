@@ -114,7 +114,7 @@ const hideAddAttachDialog = (): ((dispatch: (any) => any) => Promise<void>) => {
   };
 };
 
-const uploadFile = (attach: Attachment): ((
+const uploadFile = (attachments: Array<Attachment>): ((
   dispatch: (any) => any,
   getState: () => AppState,
   getApi: ApiGetter
@@ -123,7 +123,9 @@ const uploadFile = (attach: Attachment): ((
     const api: Api = getApi();
     const articleDraft: ArticleDraft = getState().articleCreate.articleDraft || {};
 
-    const [error, updatedDraft] = await until(api.articles.attachFile(articleDraft.id, attach.url, attach.name));
+    const [error, updatedDraft] = await until(
+      attachments.map((attach: Attachment) => api.articles.attachFile(articleDraft.id, attach.url, attach.name))
+    );
     if (error) {
       const message: string = 'Failed to attach file';
       logEvent({message: message, isError: true});
