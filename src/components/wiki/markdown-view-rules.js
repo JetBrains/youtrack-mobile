@@ -176,7 +176,11 @@ function getMarkdownRules(
       return renderIssueIdLink(text, [inheritedStyles, style.text, styles.link], node.key);
     }
 
-    return text;
+    return (
+      <Text style={[inheritedStyles, style.text]}>
+        {text}
+      </Text>
+    );
   };
 
 
