@@ -28,9 +28,10 @@ import {isIOSPlatform} from '../../util/util';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import type {Attachment, CustomField, IssueProject, Tag} from '../../flow/CustomFields';
 import type {AttachmentActions} from '../../components/attachments-row/attachment-actions';
 import type {CreateIssueState} from './create-issue-reducers';
+import type {CustomField, IssueProject, Tag} from '../../flow/CustomFields';
+import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 
 import styles from './create-issue.styles';
@@ -65,9 +66,9 @@ class CreateIssue extends Component<Props, State> {
     this.props.initializeWithDraftOrProject(this.props.predefinedDraftId);
   }
 
-  onAddAttachment = async (attach: Attachment, onAttachingFinish: () => any) => {
-    const {uploadAttach, loadAttachments} = this.props;
-    await uploadAttach(attach);
+  onAddAttachment = async (files: Array<NormalizedAttachment>, onAttachingFinish: () => any) => {
+    const {uploadIssueAttach, loadAttachments} = this.props;
+    await uploadIssueAttach(files);
     onAttachingFinish();
     loadAttachments();
   };

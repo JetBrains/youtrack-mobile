@@ -1,7 +1,6 @@
 /* @flow */
 
-import type {Node} from 'React';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import React, {Component} from 'react';
 
 import {View as AnimatedView} from 'react-native-animatable';
@@ -31,6 +30,7 @@ import styles from './issue.styles';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {AnyIssue, IssueFull, IssueOnList} from '../../flow/Issue';
 import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
+import type {Node} from 'React';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
 import type {YouTrackWiki} from '../../flow/Wiki';
@@ -73,6 +73,7 @@ type Props = {
   onAttach: (isVisible: boolean) => any,
 
   onCheckboxUpdate: (checked: boolean, position: number, description: string) => void,
+  onDescriptionLongPress: () => void,
 }
 
 export default class IssueDetails extends Component<Props, void> {
@@ -200,7 +201,7 @@ export default class IssueDetails extends Component<Props, void> {
   }
 
   renderIssueContent(uiTheme: UITheme): Node {
-    const {issue, openIssueListWithSearch, openNestedIssueView, onTagRemove, onCheckboxUpdate} = this.props;
+    const {issue, openIssueListWithSearch, openNestedIssueView, onTagRemove, onCheckboxUpdate, onDescriptionLongPress} = this.props;
 
     if (!issue) {
       return <SkeletonIssueContent/>;
@@ -241,13 +242,20 @@ export default class IssueDetails extends Component<Props, void> {
 
         {this.renderLinks(issue)}
 
-        <IssueDescription
-          {...ytWikiProps}
-          attachments={issue.attachments}
-          markdown={issue.usesMarkdown && issue.description}
-          uiTheme={uiTheme}
-          onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(checked, position, description)}
-        />
+        <TouchableWithoutFeedback
+          onLongPress={() => {onDescriptionLongPress();}}
+          delayLongPress={250}
+        >
+          <View>
+            <IssueDescription
+              {...ytWikiProps}
+              attachments={issue.attachments}
+              markdown={issue.usesMarkdown && issue.description}
+              uiTheme={uiTheme}
+              onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(checked, position, description)}
+            />
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     );
   }

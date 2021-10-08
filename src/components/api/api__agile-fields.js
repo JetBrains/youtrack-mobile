@@ -17,6 +17,9 @@ const AGILE_SHORT_WITH_SPRINTS = toField([
   {
     sprints: SPRINT,
   },
+  {
+    currentSprint: SPRINT,
+  },
 ]);
 
 const AGILE_PROFILE: any = toField([

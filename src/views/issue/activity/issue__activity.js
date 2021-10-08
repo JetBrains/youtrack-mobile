@@ -210,7 +210,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
           <IconClose size={21} color={styles.link.color}/>
         </TouchableOpacity>}
       />
-      <KeyboardSpacerIOS top={98}/>
+      <KeyboardSpacerIOS top={66}/>
 
     </>;
   }
@@ -230,7 +230,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
         onSubmitComment={this.onSubmitComment}
       />
 
-      <KeyboardSpacerIOS top={98}/>
+      <KeyboardSpacerIOS top={66}/>
     </View>;
   }
 

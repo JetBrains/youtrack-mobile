@@ -19,9 +19,10 @@ import * as commandDialogHelper from '../../components/command-dialog/command-di
 import type Api from '../../components/api/api';
 import type {ActionSheetOption} from '../../components/action-sheet/action-sheet';
 import type {AppState} from '../../reducers';
+import type {CommandSuggestionResponse, IssueFull} from '../../flow/Issue';
 import type {CreateIssueState} from './create-issue-reducers';
 import type {CustomField, FieldValue, Attachment} from '../../flow/CustomFields';
-import type {CommandSuggestionResponse, IssueFull} from '../../flow/Issue';
+import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {StorageState} from '../../components/storage/storage';
 import type {Visibility} from '../../flow/Visibility';
 
@@ -245,10 +246,10 @@ export function updateFieldValue(field: CustomField, value: FieldValue): ((
   };
 }
 
-export function uploadAttach(attach: Attachment): ((dispatch: (any) => any, getState: () => any) => Promise<void>) {
+export function uploadIssueAttach(files: Array<NormalizedAttachment>): ((dispatch: (any) => any, getState: () => any) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => AppState) => {
-    const draftId = getState().creation.issue.id;
-    await dispatch(attachmentActions.uploadFile(attach, draftId));
+    const draftId: string = getState().creation.issue.id;
+    await dispatch(attachmentActions.uploadFile(files, draftId));
   };
 }
 

@@ -176,7 +176,7 @@ function getMarkdownRules(
       return renderIssueIdLink(text, [inheritedStyles, style.text, styles.link], node.key);
     }
 
-    return renderHyperLink(text, node.key);
+    return text;
   };
 
 

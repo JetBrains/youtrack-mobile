@@ -25,6 +25,7 @@ import type Api from '../../components/api/api';
 import type {Attachment, CustomField, FieldValue, IssueProject, Tag} from '../../flow/CustomFields';
 import type {CommandSuggestionResponse, IssueFull, OpenNestedViewParams} from '../../flow/Issue';
 import type {IssueLink, IssueComment} from '../../flow/CustomFields';
+import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {UserAppearanceProfile} from '../../flow/User';
 import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
@@ -518,6 +519,34 @@ export function showIssueActions(
   };
 }
 
+export function onShowDescriptionContextActions(actionSheet: ActionSheet): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const {issue} = getState().issueState;
+    const selectedAction = await showActions(
+      [
+        {
+          title: 'Copy description text',
+          execute: () => {
+            usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy description text');
+            Clipboard.setString(issue.description);
+            notify('Text copied');
+          },
+        },
+        {title: 'Cancel'},
+      ],
+      actionSheet,
+    );
+
+    if (selectedAction && selectedAction.execute) {
+      selectedAction.execute();
+    }
+  };
+}
+
 export function openNestedIssueView(params: OpenNestedViewParams): (() => any | void) {
   return () => {
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Navigate to linked issue');
@@ -615,9 +644,9 @@ export function updateUserAppearanceProfile(userAppearanceProfile: UserAppearanc
   };
 }
 
-export function uploadAttach(attach: Attachment): ((dispatch: (any) => any, getState: StateGetter) => Promise<void>) {
+export function uploadIssueAttach(files: Array<NormalizedAttachment>): ((dispatch: (any) => any, getState: StateGetter) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
-    await dispatch(attachmentActions.uploadFile(attach, getState().issueState.issueId));
+    await dispatch(attachmentActions.uploadFile(files, getState().issueState.issueId));
   };
 }
 

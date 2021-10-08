@@ -14,11 +14,7 @@ export type Swimlane = Object & {
 };
 
 export type AgileUserProfile = {
-  defaultAgile: {
-    id: string,
-    name: string,
-    sprints: Array<Sprint>
-  },
+  defaultAgile: $Shape<Board>,
   visitedSprints: Array<{
     id: string,
     name: string,
@@ -57,10 +53,11 @@ export type AgileBoardRow = {
 export type BoardColumn = {
   id: string,
   collapsed: boolean,
-  agileColumn: AgileColumn
+  agileColumn: AgileColumn,
 };
 
 export type Board = {
+  favorite: boolean,
   id: string,
   name: string,
   columns: Array<BoardColumn>,
@@ -75,6 +72,7 @@ export type Board = {
     disableSprints: boolean,
   },
   hideOrphansSwimlane: boolean,
+  currentSprint: $Shape<Sprint>,
 };
 
 export type BoardOnList = {
@@ -91,8 +89,8 @@ export type Sprint = {
   archived: boolean,
   start: ?number,
   finish: ?number,
-  agile: ?Board,
-  board: ?Board,
+  agile?: Board,
+  board?: Board,
 };
 
 export type SprintFull = Sprint & {

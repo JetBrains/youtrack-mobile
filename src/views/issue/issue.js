@@ -34,6 +34,7 @@ import type IssuePermissions from '../../components/issue-permissions/issue-perm
 import type {AnyIssue, IssueFull} from '../../flow/Issue';
 import type {Attachment, Tag} from '../../flow/CustomFields';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
+import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
@@ -46,7 +47,7 @@ type AdditionalProps = {
   issuePermissions: IssuePermissions,
   issuePlaceholder: Object,
 
-  uploadAttach: (attach: Attachment) => any,
+  uploadIssueAttach: (files: Array<NormalizedAttachment>) => any,
   loadAttachments: () => any,
   hideAddAttachDialog: () => any,
   createAttachActions: () => any,
@@ -117,6 +118,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       onTagRemove,
 
       onCheckboxUpdate,
+      onShowDescriptionContextActions,
     } = this.props;
 
     return (
@@ -157,6 +159,9 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         onTagRemove={onTagRemove}
 
         onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(checked, position, description)}
+        onDescriptionLongPress={() => {
+          onShowDescriptionContextActions(this.context.actionSheet());
+        }}
       />
     );
   }
@@ -351,8 +356,8 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       hideVisibility={false}
       getVisibilityOptions={() => getApi().issue.getVisibilityOptions(this.props.issueId)}
       actions={{
-        onAttach: async (file: Attachment, onAttachingFinish: () => any) => {
-          await this.addAttachment(file, onAttachingFinish);
+        onAttach: async (files: Array<NormalizedAttachment>, onAttachingFinish: () => any) => {
+          await this.addAttachment(files, onAttachingFinish);
           this.setState({isAttachFileDialogVisible: false});
         },
         onCancel: () => {
@@ -369,9 +374,9 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     toggleVisibleAddAttachDialog(false);
   };
 
-  addAttachment = async (attach: Attachment, onAttachingFinish: () => any) => {
-    const {uploadAttach, loadAttachments} = this.props;
-    await uploadAttach(attach);
+  addAttachment = async (files: Array<NormalizedAttachment>, onAttachingFinish: () => any) => {
+    const {uploadIssueAttach, loadAttachments} = this.props;
+    await uploadIssueAttach(files);
     onAttachingFinish();
     loadAttachments();
   };

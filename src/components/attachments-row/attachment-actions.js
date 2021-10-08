@@ -17,6 +17,7 @@ import type {ActionSheetAction} from '../../flow/Action';
 import type {AppState} from '../../reducers';
 import type {Article} from '../../flow/Article';
 import type {Attachment, IssueComment} from '../../flow/CustomFields';
+import type {NormalizedAttachment} from '../../flow/Attachment';
 
 type ApiGetter = () => Api;
 type StateGetter = () => AppState;
@@ -70,12 +71,20 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
       return {type: types.ATTACH_STOP_ADDING};
     },
 
-    uploadFile: function (attach: Attachment, issueId?: string) {
+    uploadFile: function (files: Array<NormalizedAttachment>, issueId?: string) {
       return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
-        const _issueId: string = issueId || getState().issueState.issue.id;
+        const entityId: string = issueId || getState().issueState.issue.id;
 
-        const [error, addedAttachments] = await until(api.issue.attachFile(_issueId, attach.url, attach.name, attach.mimeType));
+        const [error, addedAttachments] = await until(
+          files.map((attach: Attachment) => api.issue.attachFile(
+            entityId,
+            attach.url,
+            attach.name,
+            attach.mimeType
+            )),
+          true
+        );
 
         if (error) {
           const message: string = 'Failed to attach file';
@@ -83,9 +92,15 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           notify(message, error);
           return [];
         } else {
-          try {
-            await api.issue.updateIssueAttachmentVisibility(_issueId, addedAttachments[0].id, attach.visibility || null);
-          } catch (err) {
+          const [err] = await until(
+            addedAttachments.map((attach: Attachment) => api.issue.updateIssueAttachmentVisibility(
+              entityId,
+              attach.id,
+              attach.visibility || null
+            ))
+          );
+
+          if (err) {
             const msg: string = `Failed to update issue attachment visibility after uploading a file`;
             log.warn(msg);
             sendReport(
@@ -97,7 +112,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
               `
             );
           }
-          log.info(`File attached to issue ${_issueId}`);
+          log.info(`File attached to issue ${entityId}`);
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Attach image', 'Success');
 
           dispatch(actions.stopImageAttaching());
@@ -107,7 +122,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
       };
     },
 
-    uploadFileToIssueComment: function (attach: Attachment, comment: $Shape<IssueComment>) {
+    uploadFileToIssueComment: function (files: Array<NormalizedAttachment>, comment: $Shape<IssueComment>) {
       return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter): Promise<Array<Attachment>> => {
         logEvent({
           message: 'Attaching file to a comment',
@@ -117,7 +132,13 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
         const issueId: string = getState().issueState.issue.id;
         const isDraftComment: boolean = comment.$type === ResourceTypes.DRAFT_ISSUE_COMMENT;
         const [error, attachments] = await until(
-          api.issue.attachFileToComment(issueId, attach.url, attach.name, isDraftComment ? undefined : comment.id, attach.mimeType)
+          files.map((attach: Attachment) => api.issue.attachFileToComment(
+            issueId,
+            attach.url,
+            attach.name,
+            isDraftComment ? undefined : comment.id, attach.mimeType
+          )),
+          true
         );
         if (error) {
           const message: string = 'Failed to attach file to a comment';
@@ -125,6 +146,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           notify(message, error);
           return [];
         } else {
+          //TODO: update visibility
           dispatch(actions.stopImageAttaching());
           dispatch(actions.toggleAttachFileDialog(false));
           return attachments;
@@ -132,7 +154,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
       };
     },
 
-    uploadFileToArticleComment: function (attach: Attachment, comment: $Shape<IssueComment>) {
+    uploadFileToArticleComment: function (files: Array<NormalizedAttachment>, comment: $Shape<IssueComment>) {
       return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter): Promise<Array<Attachment>> => {
         logEvent({
           message: 'Attaching file to a comment',
@@ -142,13 +164,14 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
         const articleId: string = getState().article.article.id;
         const isDraftComment: boolean = comment.$type === ResourceTypes.DRAFT_ARTICLE_COMMENT;
         const [error, attachments] = await until(
-          api.articles.attachFileToComment(
+          files.map((attach: Attachment) => api.articles.attachFileToComment(
             articleId,
             attach.url,
             attach.name,
             isDraftComment ? undefined : comment.id,
             attach.mimeType
-          )
+          )),
+          true
         );
         if (error) {
           const message: string = 'Failed to attach file to a comment';

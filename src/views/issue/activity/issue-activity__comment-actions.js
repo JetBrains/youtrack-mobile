@@ -315,6 +315,14 @@ export function showIssueCommentActions(
   return async (dispatch: (any) => any) => {
     const actions = [
       {
+        title: 'Copy text',
+        execute: () => {
+          Clipboard.setString(comment.text);
+          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment text');
+          notify('Text copied');
+        },
+      },
+      {
         title: 'Copy URL',
         execute: () => {
           dispatch(copyCommentUrl(comment));

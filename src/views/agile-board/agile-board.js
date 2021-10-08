@@ -40,7 +40,7 @@ import type IssuePermissions from '../../components/issue-permissions/issue-perm
 import type {AgilePageState} from './board-reducers';
 import type {AnyIssue, IssueOnList} from '../../flow/Issue';
 import type {CustomError} from '../../flow/Error';
-import type {SprintFull, AgileBoardRow, AgileColumn, BoardColumn, BoardOnList, Sprint} from '../../flow/Agile';
+import type {SprintFull, AgileBoardRow, BoardColumn, BoardOnList, Sprint} from '../../flow/Agile';
 import type {Theme, UITheme} from '../../flow/Theme';
 
 const CATEGORY_NAME = 'Agile board';
@@ -56,7 +56,7 @@ type Props = AgilePageState & {
   onLoadBoard: (query: string) => any,
   onLoadMoreSwimlanes: (query?: string) => any,
   onRowCollapseToggle: (row: AgileBoardRow) => any,
-  onColumnCollapseToggle: (column: AgileColumn) => any,
+  onColumnCollapseToggle: (column: BoardColumn) => any,
   onOpenSprintSelect: (any) => any,
   onOpenBoardSelect: (any) => any,
   onCloseSelect: (any) => any,
@@ -120,8 +120,8 @@ class AgileBoard extends Component<Props, State> {
     this.unsubscribeOnDispatch();
   }
 
-  loadBoard = () => {
-    this.props.onLoadBoard(this.query);
+  loadBoard = (refresh: boolean = false) => {
+    this.props.onLoadBoard(this.query, refresh);
   }
 
   onVerticalScroll = (event) => {
@@ -163,7 +163,7 @@ class AgileBoard extends Component<Props, State> {
     return <RefreshControl
       refreshing={this.props.isLoading}
       tintColor={uiTheme.colors.$link}
-      onRefresh={this.loadBoard}
+      onRefresh={() => this.loadBoard(true)}
     />;
   }
 
@@ -536,10 +536,10 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLoadBoard: (query: string) => dispatch(boardActions.loadDefaultAgileBoard(query)),
+    onLoadBoard: (query: string, refresh: boolean) => dispatch(boardActions.loadDefaultAgileBoard(query, refresh)),
     onLoadMoreSwimlanes: (query?: string) => dispatch(boardActions.fetchMoreSwimlanes(query)),
     onRowCollapseToggle: (row) => dispatch(boardActions.rowCollapseToggle(row)),
-    onColumnCollapseToggle: (column) => dispatch(boardActions.columnCollapseToggle(column)),
+    onColumnCollapseToggle: (column: BoardColumn) => dispatch(boardActions.columnCollapseToggle(column)),
     onOpenSprintSelect: () => dispatch(boardActions.openSprintSelect()),
     onOpenBoardSelect: () => dispatch(boardActions.openBoardSelect()),
     onCloseSelect: () => dispatch(boardActions.closeSelect()),
