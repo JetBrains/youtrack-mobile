@@ -212,7 +212,14 @@ export default class IssueAPI extends ApiBase {
     return await response.json();
   }
 
-  async attachFileToComment(issueId: string, fileUri: string, fileName: string, commentId?: string, mimeType: string): Promise<Array<Attachment>> {
+  async attachFileToComment(
+    issueId: string,
+    fileUri: string,
+    fileName: string,
+    commentId?: string,
+    mimeType: string,
+    visibility: ?Visibility = null
+  ): Promise<Array<Attachment>> {
     const resourcePath: string = commentId ? `comments/${commentId}` : 'draftComment';
     const url = `${this.youTrackIssueUrl}/${issueId}/${resourcePath}/attachments?fields=id,name,url,thumbnailURL,mimeType,imageDimensions(height,width)`;
     const formData = new FormData();
@@ -221,6 +228,7 @@ export default class IssueAPI extends ApiBase {
       uri: fileUri,
       name: fileName,
       type: mimeType,
+      visibility,
     });
     const response = await fetch(
       url,
