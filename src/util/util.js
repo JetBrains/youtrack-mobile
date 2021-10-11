@@ -115,3 +115,4 @@ export const createNullProjectCustomField = (
   };
 };
 
+export const isURLPattern: (str: string) => boolean = (str: string): boolean => /^(http(s?)):\/\/|(www.)/i.test(str);

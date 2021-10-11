@@ -57,4 +57,10 @@ export default EStyleSheet.create({
   colorMarker: {
     marginRight: UNIT,
   },
+  url: {
+    marginTop: UNIT / 2,
+    marginLeft: UNIT * 1.5,
+    marginRight: UNIT / 2,
+    color: '$link',
+  },
 });
