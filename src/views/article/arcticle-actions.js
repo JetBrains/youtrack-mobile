@@ -230,27 +230,26 @@ const showArticleActions = (
 };
 
 const getUnpublishedArticleDraft = async (api: Api, article: Article): Promise<ArticleDraft | null> => {
-  let articleDraft: ArticleDraft | null = null;
+  let articleDraft: ArticleDraft;
 
+  // eslint-disable-next-line no-unused-vars
   const [error, articleDrafts] = await until(api.articles.getArticleDrafts(article.id));
 
-  if (error) {
-    logEvent({message: `Failed to load ${article.idReadable} article drafts`, isError: true});
+  if (articleDrafts && articleDrafts[0]) {
+    articleDraft = articleDrafts[0];
   } else {
-    if (articleDrafts && articleDrafts[0]) {
-      articleDraft = articleDrafts[0];
-    } else {
-      const [err, draft] = await until(api.articles.createArticleDraft(article.id));
+    const [err, draft] = await until(api.articles.createArticleDraft(article.id));
+    if (err) {
       logEvent({message: `Failed to create article draft`, isError: true});
-      articleDraft = {
-        attachments: article.attachments,
-        summary: article.summary,
-        content: article.content,
-        project: article.project,
-        visibility: article.visibility,
-        ...(err ? {} : draft),
-      };
     }
+    articleDraft = {
+      attachments: article.attachments,
+      summary: article.summary,
+      content: article.content,
+      project: article.project,
+      visibility: article.visibility,
+      ...(err ? {} : draft),
+    };
   }
 
   return articleDraft;
