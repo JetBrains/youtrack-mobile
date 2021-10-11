@@ -35,7 +35,7 @@ export default class CustomField extends Component<Props, void> {
     const field: CustomFieldType = this.props.field;
     const emptyValue: ?string = field.projectCustomField.emptyFieldText;
 
-    if (value) {
+    if (value != null) {
       if (fieldType === 'date') {
         return ytDate(((value: any): number), true);
       }
@@ -43,7 +43,7 @@ export default class CustomField extends Component<Props, void> {
         return ytDate(((value: any): Date));
       }
       if (fieldType === 'integer' || fieldType === 'string' || fieldType === 'float') {
-        return ((value: any): string);
+        return `${(value: any)}`;
       }
       return getEntityPresentation(value);
     }

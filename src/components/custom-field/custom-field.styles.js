@@ -39,6 +39,7 @@ export default EStyleSheet.create({
     color: '$icon',
   },
   value: {
+    minWidth: UNIT * 4,
     flexDirection: 'row',
   },
   valueText: {

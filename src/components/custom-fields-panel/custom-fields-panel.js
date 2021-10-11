@@ -11,7 +11,7 @@ import usage from '../usage/usage';
 import {Calendar} from 'react-native-calendars';
 import {createNullProjectCustomField} from '../../util/util';
 import {getApi} from '../api/api__instance';
-import {IconClose} from '../icon/icon';
+import {IconCheck, IconClose} from '../icon/icon';
 import {PanelWithSeparator} from '../panel/panel-with-separator';
 import {SkeletonIssueCustomFields} from '../skeleton/skeleton';
 import {View as AnimatedView} from 'react-native-animatable';
@@ -271,8 +271,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     const placeholder = placeholders[type] || placeholders.default;
     const valueFormatter = valueFormatters[type] || valueFormatters.default;
 
-    const value = field.value
-      ? field.value.presentation || field.value.text || field.value.toString()
+    const value = field.value !== undefined
+      ? field.value.presentation || field.value.text || `${field.value}`
       : '';
 
     return this.setState({
@@ -386,11 +386,19 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   }
 
   renderHeader(title: string, uiTheme: UITheme): Node {
+    const {simpleValue, editingField} = this.state;
+    const isSimpleValueEditorShown: boolean = simpleValue.show && !!editingField;
     return (
       <Header
         style={styles.customFieldEditorHeader}
-        rightButton={<IconClose size={21} color={uiTheme.colors.$link}/>}
-        onRightButtonClick={() => this.closeEditor()}
+        leftButton={<IconClose size={21} color={uiTheme.colors.$link}/>}
+        onBack={() => this.closeEditor()}
+        rightButton={isSimpleValueEditorShown ? <IconCheck size={21} color={uiTheme.colors.$link}/> : null}
+        onRightButtonClick={() => {
+          if (isSimpleValueEditorShown) {
+            simpleValue.onApply(simpleValue.value);
+          }
+        }}
         title={title}
       />
     );
@@ -483,7 +491,6 @@ export default class CustomFieldsPanel extends Component<Props, State> {
                 },
               });
             }}
-            onSubmitEditing={() => simpleValue.onApply(simpleValue.value)}
             value={simpleValue.value}/>
         </View>
       </ModalView>
