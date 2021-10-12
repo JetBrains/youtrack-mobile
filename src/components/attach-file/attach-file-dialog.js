@@ -1,9 +1,9 @@
 /* @flow */
 
 import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
-import {View, Text, Image, TouchableOpacity, ActivityIndicator, ScrollView} from 'react-native';
+import {ActivityIndicator, Dimensions, Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 
-import attachFile from './attach-file';
+import attachFile, {attachFileMethod} from './attach-file';
 import AttachmentErrorBoundary from '../attachments-row/attachment-error-boundary';
 import calculateAspectRatio from '../aspect-ratio/aspect-ratio';
 import Header from '../header/header';
@@ -23,17 +23,13 @@ import {ThemeContext} from '../theme/theme-context';
 import styles from './attach-file-dialog.styles';
 
 import type {ActionSheetAction} from '../../flow/Action';
-import type {Attachment, ImageDimensions} from '../../flow/CustomFields';
+import type {ImageDimensions} from '../../flow/CustomFields';
+import type {DisplayMetrics} from 'react-native/Libraries/Utilities/NativeDeviceInfo';
 import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {Theme} from '../../flow/Theme';
 import type {UserGroup} from '../../flow/UserGroup';
 import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
-
-export const attachFileMethod: Object = {
-  openCamera: 'openCamera',
-  openPicker: 'openPicker',
-};
 
 export const attachFileActions: Array<ActionSheetAction> = [
   {
@@ -55,12 +51,12 @@ export const attachFileActions: Array<ActionSheetAction> = [
 
 type Props = {
   actions: {
-    onAttach: (attachment: Attachment, onAttachingFinish: () => any) => any,
+    onAttach: (attachments: Array<NormalizedAttachment>, onAttachingFinish: () => any) => any,
     onCancel: () => any,
   },
   getVisibilityOptions: () => Array<User | UserGroup>,
   hideVisibility?: boolean,
-  source?: typeof attachFileMethod,
+  source?: $Keys<typeof attachFileMethod>,
 };
 
 
@@ -70,7 +66,7 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
 
   const theme: Theme = useContext(ThemeContext);
 
-  const [attaches, updateAttaches] = useState<Array<NormalizedAttachment>>(null);
+  const [attaches, updateAttaches] = useState<Array<NormalizedAttachment> | null>(null);
   const [isAttaching, updateAttaching] = useState(false);
 
   const createActions = useCallback((): Array<ActionSheetAction> => {
@@ -110,9 +106,9 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
     }
   }, [createActions, props.source]);
 
-  const showSystemDialog = async (method: typeof attachFileMethod) => {
+  const showSystemDialog = async (method: $Keys<typeof attachFileMethod>) => {
     try {
-      const attachedFiles: ?Array<NormalizedAttachment> = await attachFile(method);
+      const attachedFiles: Array<NormalizedAttachment> | null = await attachFile(method);
       if (attachedFiles) {
         updateAttaches(attachedFiles);
       }
@@ -122,9 +118,13 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
   };
 
   const renderMedia: (file: NormalizedAttachment) => any = (file: NormalizedAttachment): React$Element<typeof Video> => {
+    const dimensions: DisplayMetrics = Dimensions.get('window');
     return (
       <Video
-        style={styles.filePreview}
+        style={{
+          minHeight: Math.min(file.dimensions.height, dimensions.height / 1.5),
+          minWidth: Math.min(file.dimensions.width, dimensions.width),
+        }}
         controls={true}
         fullscreen={false}
         headers={getApi().auth.getAuthorizationHeaders()}
@@ -152,7 +152,7 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
     );
   };
 
-  const renderPreview: (files: Array<NormalizedAttachment>) => React$Element<any> = (files: Array<NormalizedAttachment>): React$Element<any> => {
+  const renderPreview = (files: Array<NormalizedAttachment>): Array<React$Element<any>> => {
     return files.map((file: NormalizedAttachment, index: number) => {
       const isMediaMimeType: boolean = hasMimeType.audio(file) || hasMimeType.video(file);
       if (file?.url) {
@@ -161,8 +161,10 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
             key={`${file.name}-${index}`}
             attachName={file.name}
           >
-            {isMediaMimeType && renderMedia(file)}
-            {hasMimeType.image(file) && renderImage(file)}
+            <>
+              {isMediaMimeType && renderMedia(file)}
+              {!isMediaMimeType && hasMimeType.image(file) && renderImage(file)}
+            </>
           </AttachmentErrorBoundary>
         );
       }
@@ -192,7 +194,7 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
             });
           }
         }}>
-        <Text style={styles.title}>{attaches?.name || 'Attach files'}</Text>
+        <Text style={styles.title}>{attaches?.length === 1 ? attaches[0].name : 'Attach files'}</Text>
       </Header>
 
       <View style={styles.content}>
