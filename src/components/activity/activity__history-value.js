@@ -1,9 +1,10 @@
 /* @flow */
 
+import {formatDate, getEntityPresentation, relativeDate} from '../issue-formatter/issue-formatter';
 import {getPeriodPresentationFor} from '../time-tracking/time-tracking';
+import {getSimpleCustomFieldType} from '../custom-field/custom-field-helper';
 import {hasType} from '../api/api__resource-types';
 import {isActivityCategory} from './activity__category';
-import {relativeDate, formatDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 import type {IssueProject} from '../../flow/CustomFields';
 import type {WorkTimeSettings} from '../../flow/Work';
@@ -77,14 +78,6 @@ export function getTextValueChange(params: TextValueChangeParams): string {
       break;
     }
   }
-}
-
-function getSimpleCustomFieldType(customField) {
-  if (!customField) {
-    return null;
-  }
-  const fieldType = (customField.field && customField.field.fieldType) || customField.fieldType;
-  return fieldType && fieldType.valueType;
 }
 
 function getEmptyFieldValue(activity, issueFields) {
