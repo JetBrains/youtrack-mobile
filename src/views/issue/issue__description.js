@@ -11,7 +11,7 @@ import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   youtrackWiki: YouTrackWiki,
-  markdown?: string,
+  markdown: ?string,
   attachments: Array<Attachment>,
   uiTheme: UITheme,
   onCheckboxUpdate: (checked: boolean, position: number, description: string) => void,

@@ -207,7 +207,11 @@ export default class IssueDetails extends Component<Props, void> {
       return <SkeletonIssueContent/>;
     }
 
-    const ytWikiProps: YouTrackWiki = {
+    const ytWikiProps: {
+      youtrackWiki: YouTrackWiki,
+      markdown: ?string,
+      attachments: Array<Attachment>,
+    } = {
       youtrackWiki: {
         style: styles.description,
         backendUrl: this.backendUrl,
@@ -217,7 +221,7 @@ export default class IssueDetails extends Component<Props, void> {
         title: getReadableID(issue),
         description: issue.wikifiedDescription,
       },
-      markdown: issue.usesMarkdown && issue.description,
+      markdown: issue.usesMarkdown ? issue.description : null,
       attachments: issue.attachments,
     };
 
@@ -250,7 +254,7 @@ export default class IssueDetails extends Component<Props, void> {
             <IssueDescription
               {...ytWikiProps}
               attachments={issue.attachments}
-              markdown={issue.usesMarkdown && issue.description}
+              markdown={issue.usesMarkdown ? issue.description : null}
               uiTheme={uiTheme}
               onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(checked, position, description)}
             />
@@ -310,7 +314,7 @@ export default class IssueDetails extends Component<Props, void> {
     return this.props.issue || this.props.issuePlaceholder;
   }
 
-  getIssuePermissions: (() => AnyIssue) = (): AnyIssue => {
+  getIssuePermissions: (() => IssuePermissions) = (): IssuePermissions => {
     const noop = () => false;
     return this.props.issuePermissions || {
       canCreateIssueToProject: noop,

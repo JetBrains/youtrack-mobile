@@ -13,6 +13,7 @@ import type {
 } from './CustomFields';
 import type {User} from './User';
 import type {UserGroup} from './UserGroup';
+import type {Visibility} from './Visibility';
 
 export type IssueContextData = {
   issue: IssueFull,
@@ -47,6 +48,8 @@ export type IssueFull = {
   votes: number,
   watchers: { hasStar: boolean },
   wikifiedDescription: string,
+  usesMarkdown: boolean,
+  visibility: Visibility,
 };
 
 export type AnyIssue = IssueOnList | IssueFull;
