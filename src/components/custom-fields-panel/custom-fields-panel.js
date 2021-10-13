@@ -271,8 +271,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     const placeholder = placeholders[type] || placeholders.default;
     const valueFormatter = valueFormatters[type] || valueFormatters.default;
 
-    const value = field.value !== undefined
-      ? field.value.presentation || field.value.text || `${field.value}`
+    const value = field.value != null
+      ? field.value?.presentation || field.value.text || `${field.value}`
       : '';
 
     return this.setState({
