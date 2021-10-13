@@ -2,21 +2,21 @@
 
 import React, {PureComponent} from 'react';
 import {View, Text, TouchableOpacity, Linking, TouchableWithoutFeedback} from 'react-native';
+
 import {connect} from 'react-redux';
 
 import * as AppActions from '../../actions/app-actions';
 import Accounts from '../../components/account/accounts';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
 import FeaturesView from '../../components/feature/features-view';
-import SettingsFeedbackForm from './settings__feedback-form';
 import Header from '../../components/header/header';
 import Router from '../../components/router/router';
 import SettingsAppearance from './settings__appearance';
+import SettingsFeedbackForm from './settings__feedback-form';
 import usage, {VERSION_STRING} from '../../components/usage/usage';
-import {AppVersion} from '../../util/util';
+import {HIT_SLOP} from '../../components/common-styles/button';
 import {ThemeContext} from '../../components/theme/theme-context';
 
-import {HIT_SLOP} from '../../components/common-styles/button';
 import styles from './settings.styles';
 
 import type {StorageState} from '../../components/storage/storage';
@@ -126,7 +126,7 @@ class Settings extends PureComponent<Props, State> {
                   testID="settingsFooter"
                   style={styles.settingsFooter}
                 >
-                  <Text style={styles.settingsFooterTitle}>YouTrack Mobile {AppVersion}</Text>
+                  <Text style={styles.settingsFooterTitle}>YouTrack Mobile</Text>
 
                   <TouchableOpacity
                     onPress={() => Linking.openURL('https://jetbrains.com/youtrack')}>
