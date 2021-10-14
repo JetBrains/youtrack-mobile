@@ -313,7 +313,7 @@ export default class IssueDetails extends Component<Props, void> {
       {this.getIssueTextFields().map((textField: CustomField, index: number) => {
         return (
           <View
-            key={`issueTextFieldView-${index}`}
+            key={`issueTextFieldEdit-${index}`}
             style={styles.issueTextField}
           >
 
@@ -322,7 +322,6 @@ export default class IssueDetails extends Component<Props, void> {
               {isRequiredCustomField(textField) && <Text style={styles.error}> *</Text>}
             </Text>
             <TextEditForm
-              key={`textFiled-${index}`}
               editable={true}
               description={textField?.value?.text || ''}
               placeholderText={textField.projectCustomField.emptyFieldText || ''}
