@@ -8,7 +8,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
-import IssueDescription from './issue__description';
+import IssueMarkdown from './issue__markdown';
 import IssueVotes from '../../components/issue-actions/issue-votes';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
@@ -262,7 +262,7 @@ export default class IssueDetails extends Component<Props, void> {
           delayLongPress={250}
         >
           <View>
-            <IssueDescription
+            <IssueMarkdown
               {...ytWikiProps}
               attachments={issue.attachments}
               markdown={issue.usesMarkdown ? issue.description : null}
@@ -281,7 +281,7 @@ export default class IssueDetails extends Component<Props, void> {
                 style={styles.issueTextField}
               >
                 <Text style={styles.issueTextFieldTitle}>{textField?.name}</Text>
-                <IssueDescription
+                <IssueMarkdown
                   attachments={issue.attachments}
                   markdown={issue.usesMarkdown ? textField?.value?.text || '' : null}
                   youtrackWiki={{

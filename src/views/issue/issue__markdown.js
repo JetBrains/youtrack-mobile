@@ -17,7 +17,7 @@ type Props = {
   onCheckboxUpdate?: (checked: boolean, position: number, description: string) => void,
 }
 
-function IssueDescription(props: Props) {
+function IssueMarkdown(props: Props) {
   const {
     youtrackWiki,
     attachments,
@@ -47,4 +47,4 @@ function IssueDescription(props: Props) {
   return null;
 }
 
-export default (React.memo<Props>(IssueDescription): React$AbstractComponent<Props, mixed>);
+export default (React.memo<Props>(IssueMarkdown): React$AbstractComponent<Props, mixed>);
