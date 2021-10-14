@@ -10,6 +10,5 @@ export type YouTrackWiki = {
   onIssueIdTap: () => void,
   title?: string,
   description?: string,
-  markdown?: string,
   style?: ViewStyleProp
 };

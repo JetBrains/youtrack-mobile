@@ -16,15 +16,17 @@ import log from '../../components/log/log';
 import Separator from '../../components/separator/separator';
 import SummaryDescriptionForm from '../../components/form/summary-description-form';
 import Tags from '../../components/tags/tags';
+import TextEditForm from '../../components/form/text-edit-form';
 import usage from '../../components/usage/usage';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {ANALYTICS_ISSUE_PAGE} from '../../components/analytics/analytics-ids';
 import {getApi} from '../../components/api/api__instance';
 import {getEntityPresentation, getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
+import {HIT_SLOP} from '../../components/common-styles/button';
+import {isTextCustomField, isRequiredCustomField} from '../../components/custom-field/custom-field-helper';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
-import {HIT_SLOP} from '../../components/common-styles/button';
 import styles from './issue.styles';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
@@ -200,8 +202,19 @@ export default class IssueDetails extends Component<Props, void> {
     return <SkeletonIssueInfoLine/>;
   }
 
+  getIssueTextFields(): Array<CustomField> {
+    return (this.props.issue.fields || []).filter((field: CustomField) => isTextCustomField(field.projectCustomField));
+  }
+
   renderIssueContent(uiTheme: UITheme): Node {
-    const {issue, openIssueListWithSearch, openNestedIssueView, onTagRemove, onCheckboxUpdate, onDescriptionLongPress} = this.props;
+    const {
+      issue,
+      openIssueListWithSearch,
+      openNestedIssueView,
+      onTagRemove,
+      onCheckboxUpdate,
+      onDescriptionLongPress,
+    } = this.props;
 
     if (!issue) {
       return <SkeletonIssueContent/>;
@@ -209,7 +222,6 @@ export default class IssueDetails extends Component<Props, void> {
 
     const ytWikiProps: {
       youtrackWiki: YouTrackWiki,
-      markdown: ?string,
       attachments: Array<Attachment>,
     } = {
       youtrackWiki: {
@@ -221,7 +233,6 @@ export default class IssueDetails extends Component<Props, void> {
         title: getReadableID(issue),
         description: issue.wikifiedDescription,
       },
-      markdown: issue.usesMarkdown ? issue.description : null,
       attachments: issue.attachments,
     };
 
@@ -256,23 +267,83 @@ export default class IssueDetails extends Component<Props, void> {
               attachments={issue.attachments}
               markdown={issue.usesMarkdown ? issue.description : null}
               uiTheme={uiTheme}
-              onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(checked, position, description)}
+              onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(
+                checked, position, description)}
             />
           </View>
         </TouchableWithoutFeedback>
+
+        {
+          this.getIssueTextFields().map((textField: CustomField, index: number) => {
+            return textField?.value?.text ? (
+              <View
+                key={`issueTextFieldView-${index}`}
+                style={styles.issueTextField}
+              >
+                <Text style={styles.issueTextFieldTitle}>{textField?.name}</Text>
+                <IssueDescription
+                  attachments={issue.attachments}
+                  markdown={issue.usesMarkdown ? textField?.value?.text || '' : null}
+                  youtrackWiki={{
+                    ...ytWikiProps,
+                    description: issue.usesMarkdown ? null : textField.value.text,
+                  }}
+                  uiTheme={uiTheme}
+                />
+              </View>
+            ) : null;
+          })
+        }
       </View>
     );
   }
 
+  renderIssueEditContent(): Node {
+    const {isSavingEditedIssue, summaryCopy, descriptionCopy} = this.props;
+
+    return <>
+      <SummaryDescriptionForm
+        analyticsId={ANALYTICS_ISSUE_PAGE}
+        editable={!isSavingEditedIssue}
+        summary={summaryCopy}
+        description={descriptionCopy}
+        onSummaryChange={this.props.setIssueSummaryCopy}
+        onDescriptionChange={this.props.setIssueDescriptionCopy}
+      />
+      {this.getIssueTextFields().map((textField: CustomField, index: number) => {
+        return (
+          <View
+            key={`issueTextFieldView-${index}`}
+            style={styles.issueTextField}
+          >
+
+            <Text style={styles.issueTextFieldTitle}>
+              {textField?.name}
+              {isRequiredCustomField(textField) && <Text style={styles.error}> *</Text>}
+            </Text>
+            <TextEditForm
+              key={`textFiled-${index}`}
+              editable={true}
+              description={textField?.value?.text || ''}
+              placeholderText={textField.projectCustomField.emptyFieldText || ''}
+              multiline={true}
+              onDescriptionChange={async (fieldValue: string) => {
+                textField.value = {
+                  ...(textField.value || {}),
+                  text: fieldValue,
+                };
+                await this.onFieldUpdate(textField, {text: fieldValue});
+              }}
+            />
+          </View>
+        );
+      })
+      }
+    </>;
+  }
+
   renderIssueView(uiTheme: UITheme): Node {
-    const {
-      issue,
-      editMode,
-      isSavingEditedIssue,
-      summaryCopy,
-      descriptionCopy,
-      onAttach,
-    } = this.props;
+    const {issue, editMode, onAttach} = this.props;
 
     return (
       <View style={styles.issueView}>
@@ -283,15 +354,7 @@ export default class IssueDetails extends Component<Props, void> {
         </View>
         {this.renderAdditionalInfo()}
 
-        {editMode && <SummaryDescriptionForm
-          analyticsId={ANALYTICS_ISSUE_PAGE}
-          editable={!isSavingEditedIssue}
-          summary={summaryCopy}
-          description={descriptionCopy}
-          onSummaryChange={this.props.setIssueSummaryCopy}
-          onDescriptionChange={this.props.setIssueDescriptionCopy}
-        />}
-
+        {editMode && this.renderIssueEditContent()}
         {!editMode && this.renderIssueContent(uiTheme)}
 
         {editMode && (

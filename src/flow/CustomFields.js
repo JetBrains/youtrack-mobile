@@ -107,10 +107,12 @@ export type FieldValue = {
 
   isResolved: boolean,
 
-  color: ColorField
+  color: ColorField,
+
+  text: string,
 }
 
-export type CustomFieldValue = FieldValue | number | string | Array<any>;
+export type CustomFieldValue = $Shape<FieldValue> | number | string | Array<any>;
 
 export type CustomField = {
   $type: string,
