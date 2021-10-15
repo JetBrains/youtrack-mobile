@@ -1,6 +1,9 @@
+import {Platform} from 'react-native';
+
 import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {MAIN_FONT_SIZE, mainText, secondaryText} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
-import {mainText, secondaryText} from '../common-styles/typography';
 
 
 const sidePadding = {
@@ -62,5 +65,26 @@ export default EStyleSheet.create({
     marginLeft: UNIT * 1.5,
     marginRight: UNIT / 2,
     color: '$link',
+  },
+  issueTextField: {
+    marginTop: UNIT * 2.5,
+    paddingTop: UNIT * 2.5,
+    borderColor: '$separator',
+    borderTopWidth: 1,
+  },
+  issueTextFieldTitle: {
+    color: '$text',
+    fontSize: MAIN_FONT_SIZE + 3,
+    ...Platform.select({
+      ios: {
+        fontWeight: '600',
+      },
+      android: {
+        fontWeight: '700',
+      },
+    }),
+  },
+  error: {
+    color: '$error',
   },
 });

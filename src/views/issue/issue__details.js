@@ -10,20 +10,20 @@ import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import IssueMarkdown from './issue__markdown';
 import IssueVotes from '../../components/issue-actions/issue-votes';
+import IssueCustomFieldText from '../../components/custom-field/issue-custom-field-text';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import log from '../../components/log/log';
 import Separator from '../../components/separator/separator';
 import SummaryDescriptionForm from '../../components/form/summary-description-form';
 import Tags from '../../components/tags/tags';
-import TextEditForm from '../../components/form/text-edit-form';
 import usage from '../../components/usage/usage';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {ANALYTICS_ISSUE_PAGE} from '../../components/analytics/analytics-ids';
 import {getApi} from '../../components/api/api__instance';
 import {getEntityPresentation, getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
 import {HIT_SLOP} from '../../components/common-styles/button';
-import {isTextCustomField, isRequiredCustomField} from '../../components/custom-field/custom-field-helper';
+import {getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
@@ -31,7 +31,7 @@ import styles from './issue.styles';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {AnyIssue, IssueFull, IssueOnList} from '../../flow/Issue';
-import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
+import type {Attachment, CustomField, CustomFieldText, FieldValue, IssueProject} from '../../flow/CustomFields';
 import type {Node} from 'React';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
@@ -202,11 +202,28 @@ export default class IssueDetails extends Component<Props, void> {
     return <SkeletonIssueInfoLine/>;
   }
 
-  getIssueTextFields(): Array<CustomField> {
-    return (this.props.issue.fields || []).filter((field: CustomField) => isTextCustomField(field.projectCustomField));
+  renderIssueTextFields(): Node {
+    const {issue, editMode} = this.props;
+    return getIssueTextCustomFields(this.props.issue.fields).map((textField: CustomFieldText, index: number) => {
+      return (
+        <IssueCustomFieldText
+          key={`issueCustomFieldText${index}`}
+          editMode={editMode}
+          onUpdateFieldValue={async (fieldValue: string): Promise<void> => {
+            textField.value = {
+              ...(textField.value || {id: undefined}),
+              text: fieldValue,
+            };
+            await this.onFieldUpdate(textField, {text: fieldValue});
+          }}
+          textField={textField}
+          usesMarkdown={issue.usesMarkdown}
+        />
+      );
+    });
   }
 
-  renderIssueContent(uiTheme: UITheme): Node {
+  renderIssueContent(): Node {
     const {
       issue,
       openIssueListWithSearch,
@@ -266,34 +283,13 @@ export default class IssueDetails extends Component<Props, void> {
               {...ytWikiProps}
               attachments={issue.attachments}
               markdown={issue.usesMarkdown ? issue.description : null}
-              uiTheme={uiTheme}
               onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(
                 checked, position, description)}
             />
           </View>
         </TouchableWithoutFeedback>
 
-        {
-          this.getIssueTextFields().map((textField: CustomField, index: number) => {
-            return textField?.value?.text ? (
-              <View
-                key={`issueTextFieldView-${index}`}
-                style={styles.issueTextField}
-              >
-                <Text style={styles.issueTextFieldTitle}>{textField?.name}</Text>
-                <IssueMarkdown
-                  attachments={issue.attachments}
-                  markdown={issue.usesMarkdown ? textField?.value?.text || '' : null}
-                  youtrackWiki={{
-                    ...ytWikiProps,
-                    description: issue.usesMarkdown ? null : textField.value.text,
-                  }}
-                  uiTheme={uiTheme}
-                />
-              </View>
-            ) : null;
-          })
-        }
+        {this.renderIssueTextFields()}
       </View>
     );
   }
@@ -310,34 +306,7 @@ export default class IssueDetails extends Component<Props, void> {
         onSummaryChange={this.props.setIssueSummaryCopy}
         onDescriptionChange={this.props.setIssueDescriptionCopy}
       />
-      {this.getIssueTextFields().map((textField: CustomField, index: number) => {
-        return (
-          <View
-            key={`issueTextFieldEdit-${index}`}
-            style={styles.issueTextField}
-          >
-
-            <Text style={styles.issueTextFieldTitle}>
-              {textField?.name}
-              {isRequiredCustomField(textField) && <Text style={styles.error}> *</Text>}
-            </Text>
-            <TextEditForm
-              editable={true}
-              description={textField?.value?.text || ''}
-              placeholderText={textField.projectCustomField.emptyFieldText || ''}
-              multiline={true}
-              onDescriptionChange={async (fieldValue: string) => {
-                textField.value = {
-                  ...(textField.value || {}),
-                  text: fieldValue,
-                };
-                await this.onFieldUpdate(textField, {text: fieldValue});
-              }}
-            />
-          </View>
-        );
-      })
-      }
+      {this.renderIssueTextFields()}
     </>;
   }
 
@@ -354,7 +323,7 @@ export default class IssueDetails extends Component<Props, void> {
         {this.renderAdditionalInfo()}
 
         {editMode && this.renderIssueEditContent()}
-        {!editMode && this.renderIssueContent(uiTheme)}
+        {!editMode && this.renderIssueContent()}
 
         {editMode && (
           <>
@@ -390,7 +359,7 @@ export default class IssueDetails extends Component<Props, void> {
 
   canCreateIssueToProject: ((project: IssueProject) => any) = (project: IssueProject) => this.getIssuePermissions().canCreateIssueToProject(project);
 
-  onFieldUpdate: ((field: CustomField, value: any) => Promise<any>) = async (field: CustomField, value: any) => await this.props.updateIssueFieldValue(field, value);
+  onFieldUpdate: ((field: CustomField | CustomFieldText, value: any) => Promise<any>) = async (field: CustomField | CustomFieldText, value: any) => await this.props.updateIssueFieldValue(field, value);
 
   onUpdateProject: ((project: IssueProject) => Promise<any>) = async (project: IssueProject) => await this.props.updateProject(project);
 

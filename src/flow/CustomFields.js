@@ -114,6 +114,13 @@ export type FieldValue = {
 
 export type CustomFieldValue = $Shape<FieldValue> | number | string | Array<any>;
 
+export type CustomFieldBase = {|
+  $type: string,
+  id: string,
+  name: string,
+  projectCustomField: ProjectCustomField,
+|}
+
 export type CustomField = {
   $type: string,
   id: string,
@@ -121,6 +128,14 @@ export type CustomField = {
   hasStateMachine: boolean,
   value: CustomFieldValue,
   projectCustomField: ProjectCustomField
+}
+
+export type CustomFieldText = {
+  ...CustomFieldBase,
+  value: {
+    id: ?string,
+    text: string,
+  },
 }
 
 export type CustomFieldShort = $Shape<CustomField>

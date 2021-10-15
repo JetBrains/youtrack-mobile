@@ -33,7 +33,7 @@ export type IssueFull = {
   created: number,
   description: string,
   fieldHash?: any,
-  fields: Array<CustomField>,
+  fields: Array<CustomField | CustomFieldText>,
   id: string,
   idReadable: string,
   links: Array<IssueLink>,

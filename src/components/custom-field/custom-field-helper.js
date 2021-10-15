@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {CustomField, ProjectCustomField} from '../../flow/CustomFields';
+import type {CustomField, CustomFieldBase, CustomFieldText, ProjectCustomField} from '../../flow/CustomFields';
 
 const isProjectCustomField = (customField: ProjectCustomField): boolean => {
   return customField?.$type ? customField.$type.indexOf('ProjectCustomField') !== -1 : false;
@@ -22,14 +22,19 @@ const isTextCustomField = (customField: ProjectCustomField): boolean => {
   return valueType ? valueType === 'text' : false;
 };
 
-const isRequiredCustomField = (issueField: CustomField): boolean => {
-    if (!issueField || !issueField?.projectCustomField) {
+const isRequiredCustomField = (customField: CustomFieldBase | CustomFieldText | CustomField): boolean => {
+    if (!customField || !customField?.projectCustomField) {
       return false;
     }
-    return !issueField.projectCustomField.canBeEmpty;
+    return !customField.projectCustomField.canBeEmpty;
 };
 
+const getIssueTextCustomFields = (issueCustomFields: Array<CustomField | CustomFieldText> = []): Array<CustomFieldText> => (
+  issueCustomFields.filter((field: CustomField | CustomFieldText) => isTextCustomField(field.projectCustomField))
+);
+
 export {
+  getIssueTextCustomFields,
   getSimpleCustomFieldType,
   isTextCustomField,
   isRequiredCustomField,

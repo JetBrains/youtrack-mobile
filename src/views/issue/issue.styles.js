@@ -5,7 +5,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {elevation1} from '../../components/common-styles/shadow';
 import {headerTitleText} from '../../components/common-styles/header';
 import {issueIdResolved} from '../../components/common-styles/issue';
-import {MAIN_FONT_SIZE, mainText, secondaryText} from '../../components/common-styles/typography';
+import {mainText, secondaryText} from '../../components/common-styles/typography';
 import {separatorBorder} from '../../components/common-styles/list';
 import {summary} from '../../components/form/summary-description-form.style';
 import {UNIT} from '../../components/variables/variables';
@@ -150,26 +150,5 @@ export default EStyleSheet.create({
   iconMore: {
     position: 'absolute',
     top: -10,
-  },
-  issueTextField: {
-    marginTop: UNIT * 2.5,
-    paddingTop: UNIT * 2.5,
-    borderColor: '$separator',
-    borderTopWidth: 1,
-  },
-  issueTextFieldTitle: {
-    color: '$text',
-    fontSize: MAIN_FONT_SIZE + 3,
-    ...Platform.select({
-      ios: {
-        fontWeight: '600',
-      },
-      android: {
-        fontWeight: '700',
-      },
-    }),
-  },
-  error: {
-    color: '$error',
   },
 });
