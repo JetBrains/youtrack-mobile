@@ -519,20 +519,19 @@ export function showIssueActions(
   };
 }
 
-export function onShowDescriptionContextActions(actionSheet: ActionSheet): ((
+export function onShowCopyTextContextActions(actionSheet: ActionSheet, text: string, title?: string): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const {issue} = getState().issueState;
     const selectedAction = await showActions(
       [
         {
-          title: 'Copy description text',
+          title: title || 'Copy text',
           execute: () => {
-            usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy description text');
-            Clipboard.setString(issue.description);
+            usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy text via action');
+            Clipboard.setString(text);
             notify('Text copied');
           },
         },

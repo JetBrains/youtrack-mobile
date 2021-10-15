@@ -75,7 +75,7 @@ type Props = {
   onAttach: (isVisible: boolean) => any,
 
   onCheckboxUpdate: (checked: boolean, position: number, description: string) => void,
-  onDescriptionLongPress: () => void,
+  onLongPress: (text: string, title?: string) => void,
 }
 
 export default class IssueDetails extends Component<Props, void> {
@@ -203,22 +203,29 @@ export default class IssueDetails extends Component<Props, void> {
   }
 
   renderIssueTextFields(): Node {
-    const {issue, editMode} = this.props;
+    const {issue, editMode, onLongPress} = this.props;
     return getIssueTextCustomFields(this.props.issue.fields).map((textField: CustomFieldText, index: number) => {
       return (
-        <IssueCustomFieldText
+        <TouchableWithoutFeedback
           key={`issueCustomFieldText${index}`}
-          editMode={editMode}
-          onUpdateFieldValue={async (fieldValue: string): Promise<void> => {
-            textField.value = {
-              ...(textField.value || {id: undefined}),
-              text: fieldValue,
-            };
-            await this.onFieldUpdate(textField, {text: fieldValue});
-          }}
-          textField={textField}
-          usesMarkdown={issue.usesMarkdown}
-        />
+          onLongPress={() => {textField?.value?.text && onLongPress(textField?.value?.text, `Copy field text`);}}
+          delayLongPress={250}
+        >
+          <View>
+            <IssueCustomFieldText
+              editMode={editMode}
+              onUpdateFieldValue={async (fieldValue: string): Promise<void> => {
+                textField.value = {
+                  ...(textField.value || {id: undefined}),
+                  text: fieldValue,
+                };
+                await this.onFieldUpdate(textField, {text: fieldValue});
+              }}
+              textField={textField}
+              usesMarkdown={issue.usesMarkdown}
+            />
+          </View>
+        </TouchableWithoutFeedback>
       );
     });
   }
@@ -230,7 +237,7 @@ export default class IssueDetails extends Component<Props, void> {
       openNestedIssueView,
       onTagRemove,
       onCheckboxUpdate,
-      onDescriptionLongPress,
+      onLongPress,
     } = this.props;
 
     if (!issue) {
@@ -275,7 +282,7 @@ export default class IssueDetails extends Component<Props, void> {
         {this.renderLinks(issue)}
 
         <TouchableWithoutFeedback
-          onLongPress={() => {onDescriptionLongPress();}}
+          onLongPress={() => {onLongPress(issue.description, 'Copy description');}}
           delayLongPress={250}
         >
           <View>
