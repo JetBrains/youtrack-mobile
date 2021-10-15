@@ -1,6 +1,6 @@
 /* @flow */
 
-import React from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {Text, View} from 'react-native';
 
 import IssueMarkdown from '../../views/issue/issue__markdown';
@@ -11,18 +11,31 @@ import styles from './custom-field.styles';
 
 import type {CustomFieldText} from '../../flow/CustomFields';
 import type {Node} from 'react';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   editMode: boolean,
   onUpdateFieldValue: (textValue: string) => Promise<any>,
   textField: CustomFieldText,
+  style?: ViewStyleProp,
   usesMarkdown: boolean,
 };
 
 const IssueCustomFieldText = (props: Props): Node => {
+  const timeout: { current: ?TimeoutID } = useRef(null);
+
+  useEffect(() => {
+    return clearTimeout(timeout.current);
+  }, [timeout]);
+
+
+  const onChange = useCallback((text: string) => {
+    timeout.current = setTimeout(() => {props.onUpdateFieldValue(text);}, 300);
+  }, [props]);
+
   return (
     <View
-      style={styles.issueTextField}
+      style={[styles.issueTextField, props.style]}
     >
       <Text style={styles.issueTextFieldTitle}>
         {props.textField?.name}
@@ -34,13 +47,7 @@ const IssueCustomFieldText = (props: Props): Node => {
         description={props.textField?.value?.text || ''}
         placeholderText={props.textField.projectCustomField.emptyFieldText || ''}
         multiline={true}
-        onDescriptionChange={(fieldValue: string) => {
-          props.textField.value = {
-            ...(props.textField.value) || {id: undefined},
-            text: fieldValue,
-          };
-          props.onUpdateFieldValue(fieldValue);
-        }}
+        onDescriptionChange={(fieldValue: string) => {onChange(fieldValue);}}
       />}
 
       {!props.editMode && !!props.textField?.value?.text && (

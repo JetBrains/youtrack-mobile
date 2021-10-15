@@ -2,13 +2,19 @@ import React from 'react';
 
 import {render, cleanup} from '@testing-library/react-native';
 
-import mocks from '../../../test/mocks';
-
 import Comment from './comment';
-import {DEFAULT_THEME} from '../theme/theme';
+import mocks from '../../../test/mocks';
 import {__setStorageState} from '../storage/storage';
+import {DEFAULT_THEME} from '../theme/theme';
 import {setApi} from '../api/api__instance';
 
+jest.mock('react', () => {
+  const ActualReact = jest.requireActual('react');
+  return {
+    ...ActualReact,
+    useContext: () => ({uiTheme: require('../theme/theme').DEFAULT_THEME}),
+  };
+});
 
 describe('<Comment/>', () => {
 

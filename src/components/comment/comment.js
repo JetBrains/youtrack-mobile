@@ -89,7 +89,6 @@ function Comment(props: Props) {
       <MarkdownView
         testID="commentMarkdown"
         attachments={props.attachments}
-        uiTheme={props.uiTheme}
         onCheckboxUpdate={(checked: boolean, position: number) => (
           props.onCheckboxUpdate && props.onCheckboxUpdate(checked, position)
         )}
