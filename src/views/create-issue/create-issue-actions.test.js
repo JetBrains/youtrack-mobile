@@ -28,6 +28,7 @@ describe('<CreateIssue/>', () => {
       summary: issueMock.summary,
       description: issueMock.description,
       project: issueMock.project,
+      fields: issueMock.fields,
     };
     createStore();
   });

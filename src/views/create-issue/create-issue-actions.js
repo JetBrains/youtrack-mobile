@@ -134,6 +134,7 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
       summary: issue.summary,
       description: issue.description,
       project: issue.project,
+      fields: issue.fields,
       ...draftData,
     };
 
