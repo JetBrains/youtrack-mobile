@@ -21,7 +21,7 @@ import type {ActionSheetOption} from '../../components/action-sheet/action-sheet
 import type {AppState} from '../../reducers';
 import type {CommandSuggestionResponse, IssueFull} from '../../flow/Issue';
 import type {CreateIssueState} from './create-issue-reducers';
-import type {CustomField, FieldValue, Attachment} from '../../flow/CustomFields';
+import type {CustomField, FieldValue, Attachment, CustomFieldText} from '../../flow/CustomFields';
 import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {StorageState} from '../../components/storage/storage';
 import type {Visibility} from '../../flow/Visibility';
@@ -220,7 +220,7 @@ export function updateProject(project: Object): ((dispatch: (any) => any, getSta
   };
 }
 
-export function updateFieldValue(field: CustomField, value: FieldValue): ((
+export function updateFieldValue(field: CustomField | CustomFieldText, value: $Shape<FieldValue>): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter

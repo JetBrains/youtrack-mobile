@@ -71,4 +71,8 @@ export default EStyleSheet.create({
     marginLeft: UNIT * 2,
     marginBottom: UNIT * 2,
   },
+  textFields: {
+    marginLeft: UNIT * 2,
+    paddingRight: UNIT * 2,
+  },
 });
