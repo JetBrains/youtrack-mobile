@@ -10,6 +10,7 @@ import type {
   Attachment,
   IssueComment,
   IssueLink,
+  CustomFieldText,
 } from './CustomFields';
 import type {User} from './User';
 import type {UserGroup} from './UserGroup';
