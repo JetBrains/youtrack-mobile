@@ -33,6 +33,10 @@ const IssueCustomFieldText = (props: Props): Node => {
     timeout.current = setTimeout(() => {props.onUpdateFieldValue(text);}, 300);
   }, [props]);
 
+  const fieldValue: string = props.textField?.value?.text || '';
+  if (!props.editMode && !fieldValue) {
+    return null;
+  }
   return (
     <View
       style={[styles.issueTextField, props.style]}
@@ -44,17 +48,17 @@ const IssueCustomFieldText = (props: Props): Node => {
 
       {props.editMode && <TextEditForm
         editable={true}
-        description={props.textField?.value?.text || ''}
+        description={fieldValue}
         placeholderText={props.textField.projectCustomField.emptyFieldText || ''}
         multiline={true}
-        onDescriptionChange={(fieldValue: string) => {onChange(fieldValue);}}
+        onDescriptionChange={(text: string) => {onChange(text);}}
       />}
 
-      {!props.editMode && !!props.textField?.value?.text && (
+      {!props.editMode && (
         <IssueMarkdown
-          markdown={props.usesMarkdown ? props.textField?.value?.text || '' : null}
+        markdown={props.usesMarkdown ? fieldValue : null}
           youtrackWiki={{
-            description: props.usesMarkdown ? null : props.textField.value.text,
+            description: props.usesMarkdown ? null : fieldValue,
           }}
         />
       )}
