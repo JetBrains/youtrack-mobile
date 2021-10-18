@@ -8,12 +8,13 @@ import {View as AnimatedView} from 'react-native-animatable';
 import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
+import IssueCustomFieldText from '../../components/custom-field/issue-custom-field-text';
 import IssueMarkdown from './issue__markdown';
 import IssueVotes from '../../components/issue-actions/issue-votes';
-import IssueCustomFieldText from '../../components/custom-field/issue-custom-field-text';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import log from '../../components/log/log';
+import Router from '../../components/router/router';
 import Separator from '../../components/separator/separator';
 import SummaryDescriptionForm from '../../components/form/summary-description-form';
 import Tags from '../../components/tags/tags';
@@ -22,8 +23,10 @@ import VisibilityControl from '../../components/visibility/visibility-control';
 import {ANALYTICS_ISSUE_PAGE} from '../../components/analytics/analytics-ids';
 import {getApi} from '../../components/api/api__instance';
 import {getEntityPresentation, getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
-import {HIT_SLOP} from '../../components/common-styles/button';
+import {getIssueLinkedIssuesTitle} from '../../components/linked-issues/linked-issues-helper';
 import {getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
+import {HIT_SLOP} from '../../components/common-styles/button';
+import {IconAngleRight} from '../../components/icon/icon';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
@@ -97,15 +100,38 @@ export default class IssueDetails extends Component<Props, void> {
 
   renderLinks: ((issue: IssueFull) => void | Node) = (issue: IssueFull) => {
     if (issue.links && issue.links.length) {
+      const issueLinkedIssuesTitle: string = getIssueLinkedIssuesTitle(issue.links);
       return (
-        <AnimatedView
-          animation="fadeIn"
-          duration={500}
-          useNativeDriver>
-          <LinkedIssues
-            links={issue.links}
-            onIssueTap={(issue: IssueOnList) => this.props.openNestedIssueView({issue})}/>
-        </AnimatedView>
+        <TouchableOpacity
+          style={styles.linkedIssuesButton}
+          onPress={() => Router.Page({
+            children: (
+              <LinkedIssues
+                links={issue.links}
+                onPress={(issueLink: IssueOnList) => {
+                  Router.pop();
+                  this.props.openNestedIssueView({issue: issueLink});
+                }}
+              />),
+          })}
+        >
+          <View style={styles.linkedIssues}>
+            <Text style={styles.linkedIssuesTitle}>
+              Linked issues
+            </Text>
+            {issueLinkedIssuesTitle.length > 0 && (
+              <AnimatedView
+                animation="fadeIn"
+                duration={500}
+                useNativeDriver>
+                <Text>
+                  {issueLinkedIssuesTitle}
+                </Text>
+              </AnimatedView>
+            )}
+          </View>
+          <IconAngleRight size={18} color={styles.summary.color}/>
+        </TouchableOpacity>
       );
     }
   };

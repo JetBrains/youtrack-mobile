@@ -184,7 +184,7 @@ export type IssueLinkType = {
 export type IssueLink = {
   $type: string,
   id: string,
-  direction: 'string',
+  direction: string,
   linkType: IssueLinkType,
   trimmedIssues: Array<IssueOnList>,
   resolved: boolean,

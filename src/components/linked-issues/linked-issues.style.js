@@ -23,4 +23,8 @@ export default EStyleSheet.create({
   linkedIssueText: {
     color: '$link',
   },
+  resolved: {
+    color: '$resolved',
+    textDecorationLine: 'line-through',
+  },
 });
