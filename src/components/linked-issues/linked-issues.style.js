@@ -27,4 +27,23 @@ export default EStyleSheet.create({
     color: '$resolved',
     textDecorationLine: 'line-through',
   },
+  linkedIssuesButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginRight: -UNIT * 2,
+    marginVertical: UNIT * 2,
+    paddingRight: UNIT * 2.5,
+    paddingVertical: UNIT * 2,
+    borderTopWidth: 0.75,
+    borderBottomWidth: 0.75,
+    borderColor: '$separator',
+  },
+  linkedIssues: {
+    flex: 0.95,
+  },
+  linkedIssuesTitle: {
+    color: '$icon',
+    marginBottom: UNIT / 2,
+  },
 });
