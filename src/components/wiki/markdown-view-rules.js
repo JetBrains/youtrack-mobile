@@ -176,7 +176,7 @@ function getMarkdownRules(
     }
 
     return (
-      <Text style={[inheritedStyles, style.text]}>
+      <Text key={node.key} style={[inheritedStyles, style.text]}>
         {text}
       </Text>
     );
