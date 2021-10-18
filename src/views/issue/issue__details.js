@@ -48,7 +48,7 @@ type Props = {
   refreshIssue: () => any,
 
   issuePermissions: IssuePermissions,
-  updateIssueFieldValue: (field: CustomField, value: FieldValue) => any,
+  updateIssueFieldValue: (field: CustomField | CustomFieldText, value: FieldValue) => any,
   updateProject: (project: IssueProject) => any,
 
   issue: IssueFull,
