@@ -51,6 +51,8 @@ type State = {
   savingField: ?IssueCustomField,
   isEditingProject: boolean,
   isSavingProject: boolean,
+  height: number,
+  topCoord: number,
 
   select: {
     show: boolean,
@@ -69,7 +71,7 @@ type State = {
     show: boolean,
     title: string,
     withTime: boolean,
-    time: ?string,
+    time: string | null,
     value: Date,
     emptyValueName?: ?string,
     onSelect: (selected: any) => any
@@ -218,7 +220,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       datePicker: {
         show: true,
         withTime,
-        time: field.value ? new Date(field.value).toLocaleTimeString(
+        time: field.value ? new Date(((field.value: any): number)).toLocaleTimeString(
           [],
           {
             hour: '2-digit',
@@ -226,7 +228,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
           }
         ) : null,
         title: field.projectCustomField.field.name,
-        value: field.value ? new Date(field.value) : new Date(),
+        value: field.value ? new Date(((field.value: any): number)) : new Date(),
         emptyValueName: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
         onSelect: (date) => {
           if (!date) {
@@ -271,8 +273,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     const placeholder = placeholders[type] || placeholders.default;
     const valueFormatter = valueFormatters[type] || valueFormatters.default;
 
-    const value = field.value != null
-      ? field.value?.presentation || field.value.text || `${field.value}`
+    const value: string = field.value != null
+      ? field.value?.presentation || field.value.text || `${((field.value: any): string)}`
       : '';
 
     return this.setState({
@@ -291,12 +293,12 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     this.trackEvent(`Edit custom field: ${projectCustomFieldName ? projectCustomFieldName.toLowerCase() : ''}`);
 
     const isMultiValue = projectCustomField.field.fieldType.isMultiValue;
-    let selectedItems;
+    let selectedItems: Array<string>;
 
     if (isMultiValue) {
-      selectedItems = field.value;
+      selectedItems = ((field.value: any): Array<string>);
     } else {
-      selectedItems = field.value ? [field.value] : [];
+      selectedItems = field.value ? [((field.value: any): string)] : [];
     }
 
     this.setState({
