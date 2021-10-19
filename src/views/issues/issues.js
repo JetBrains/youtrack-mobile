@@ -136,7 +136,7 @@ export class Issues extends Component<Props, State> {
 
     return (
       <IssueRow
-        key={item.id}
+        style={styles.row}
         issue={item}
         onClick={(issue) => this.goToIssue(issue)}
         onTagPress={(query) => Router.Issues({query})}/>

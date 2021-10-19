@@ -1,32 +1,11 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {secondaryText} from '../common-styles/typography';
+import {SELECT_ITEM_HEIGHT} from '../select/select.styles';
+import {separatorBorder} from '../common-styles/list';
 import {UNIT} from '../variables/variables';
 
 export default EStyleSheet.create({
-  linkedIssuesContainer: {
-    marginTop: UNIT,
-    marginBottom: UNIT,
-  },
-  linkedIssuesSection: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'flex-start',
-    marginTop: UNIT / 2,
-  },
-  relationTitle: {
-    color: '$icon',
-  },
-  linkedIssueContainer: {
-    marginTop: UNIT / -4,
-    marginLeft: UNIT,
-    padding: UNIT / 4,
-  },
-  linkedIssueText: {
-    color: '$link',
-  },
-  resolved: {
-    color: '$resolved',
-    textDecorationLine: 'line-through',
-  },
   linkedIssuesButton: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -39,11 +18,38 @@ export default EStyleSheet.create({
     borderBottomWidth: 0.75,
     borderColor: '$separator',
   },
-  linkedIssues: {
+  linkedIssuesTitle: {
     flex: 0.95,
   },
-  linkedIssuesTitle: {
+  linkedIssuesTitleText: {
     color: '$icon',
     marginBottom: UNIT / 2,
+  },
+
+  link: {
+    color: '$link',
+  },
+  linkedList: {
+    padding: UNIT * 2,
+    paddingBottom: SELECT_ITEM_HEIGHT,
+  },
+  linkedIssue: {
+    paddingVertical: UNIT * 1.5,
+  },
+  separator: {
+    ...separatorBorder,
+    marginRight: -UNIT * 2,
+    borderBottomWidth: 1,
+    borderColor: '$separator',
+  },
+  linkedIssueTypeTitle: {
+    paddingTop: UNIT * 2,
+    paddingBottom: UNIT,
+    marginBottom: UNIT,
+    backgroundColor: '$background',
+    color: '$icon',
+    ...secondaryText,
+    fontWeight: '600',
+    textTransform: 'uppercase',
   },
 });

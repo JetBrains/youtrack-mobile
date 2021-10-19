@@ -238,13 +238,17 @@ const ISSUE_LINKS_FIELDS = toField([
   'direction',
   {
     linkType: [
-      'name',
       'sourceToTarget',
       'localizedSourceToTarget',
       'targetToSource',
       'localizedTargetToSource',
     ],
-    trimmedIssues: ISSUE_BASE_FIELDS,
+    trimmedIssues: [
+      'id',
+      'idReadable',
+      'summary',
+      'resolved',
+    ],
   },
 ]);
 

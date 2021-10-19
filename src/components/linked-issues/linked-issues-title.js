@@ -41,8 +41,8 @@ const LinkedIssuesTitle = (props: Props): Node => {
           />),
       })}
     >
-      <View style={styles.linkedIssues}>
-        <Text style={styles.linkedIssuesTitle}>
+      <View style={styles.linkedIssuesTitle}>
+        <Text style={styles.linkedIssuesTitleText}>
           Linked issues
         </Text>
         {issueLinkedIssuesTitle.length > 0 && (

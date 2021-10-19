@@ -1,9 +1,7 @@
 /* @flow */
-import type {Node} from 'React';
+
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-
-import EStyleSheet from 'react-native-extended-stylesheet';
 
 import ColorField from '../../components/color-field/color-field';
 import Tags from '../../components/tags/tags';
@@ -16,22 +14,22 @@ import {
 
 import Avatar from '../../components/avatar/avatar';
 
-import {ThemeContext} from '../../components/theme/theme-context';
-
 import styles from './issues.styles';
 
 import type {AnyIssue} from '../../flow/Issue';
 import type {BundleValue} from '../../flow/CustomFields';
-import type {Theme} from '../../flow/Theme';
+import type {Node} from 'React';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   issue: AnyIssue,
   onClick: Function,
-  onTagPress: (query: string) => any
+  onTagPress?: (query: string) => any,
+  style?: ViewStyleProp,
 };
 
-export default class IssueRow extends Component<Props, void> {
 
+export default class IssueRow extends Component<Props, void> {
   shouldComponentUpdate(nextProps: Props): boolean {
     return ['tags','links','fields','resolved','summary'].some((issueFieldName: string) => {
       return nextProps.issue[issueFieldName] !== this.props.issue[issueFieldName];
@@ -56,54 +54,50 @@ export default class IssueRow extends Component<Props, void> {
   }
 
   render(): Node {
-    const {issue, onTagPress} = this.props;
+    const {issue, onTagPress, style} = this.props;
 
     return (
-      <ThemeContext.Consumer>
-        {(theme: Theme) => (
-          <TouchableOpacity
-            onPress={() => this.props.onClick(issue)}
-            testID="issue-row"
+      <TouchableOpacity
+        onPress={() => this.props.onClick(issue)}
+        testID="issue-row"
+      >
+        <View style={style}>
+          <View
+            testID="issue-row-details"
+            style={styles.rowLine}
           >
-            <View style={styles.row}>
-              <View
-                testID="issue-row-details"
-                style={styles.rowLine}
-              >
-                {this.renderPriority()}
-                <Text
-                  style={[styles.headLeft, issue.resolved ? {textDecorationLine: 'line-through'} : null]}>
-                  {getReadableID(issue)}
-                </Text>
+            {this.renderPriority()}
+            <Text
+              style={[styles.headLeft, issue.resolved ? {textDecorationLine: 'line-through'} : null]}>
+              {getReadableID(issue)}
+            </Text>
 
-                <View style={styles.headRight}>
-                  <Text style={styles.secondaryText}>{`${relativeDate(issue.updated)}  `}</Text>
-                  <Avatar
-                    userName={getEntityPresentation(issue.reporter)}
-                    size={20}
-                    source={{uri: issue.reporter?.avatarUrl}}
-                  />
-                </View>
-              </View>
+            {Boolean(issue.updated || issue.reporter) && <View style={styles.headRight}>
+              {!!issue.updated && <Text style={styles.secondaryText}>{`${relativeDate(issue.updated)}  `}</Text>}
+              {!issue.reporter && <Avatar
+                userName={getEntityPresentation(issue.reporter)}
+                size={20}
+                source={{uri: issue.reporter?.avatarUrl}}
+              />}
+            </View>}
+          </View>
 
-              <Text
-                style={[
-                  styles.summary,
-                  issue.resolved ? {color: EStyleSheet.value('$resolved')} : null,
-                ]}
-                numberOfLines={2}
-                testID="issue-row-summary">
-                {issue.summary}
-              </Text>
+          <Text
+            style={[
+              styles.summary,
+              issue.resolved ? styles.resolved : null,
+            ]}
+            numberOfLines={2}
+            testID="issue-row-summary">
+            {issue.summary}
+          </Text>
 
-              {Boolean(issue.tags && issue.tags.length) &&
-              <Tags tags={issue.tags} onTagPress={onTagPress} style={styles.tags}/>
-              }
+          {onTagPress && issue.tags?.length > 0 &&
+          <Tags tags={issue.tags} onTagPress={onTagPress} style={styles.tags}/>
+          }
 
-            </View>
-          </TouchableOpacity>
-        )}
-      </ThemeContext.Consumer>
+        </View>
+      </TouchableOpacity>
     );
   }
 }
