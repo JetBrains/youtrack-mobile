@@ -61,11 +61,6 @@ const LinkedIssues = (props: Props): Node => {
         renderSectionHeader={renderSectionTitle}
         ItemSeparatorComponent={() => <View style={styles.separator}/>}
         stickySectionHeadersEnabled={true}
-        ListHeaderComponent={
-          <>
-          </>
-        }
-        ListFooterComponent={null}
       />
     );
   };
