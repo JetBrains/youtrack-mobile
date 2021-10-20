@@ -10,7 +10,7 @@ import IssueCustomFieldText from '../../components/custom-field/issue-custom-fie
 import IssueMarkdown from './issue__markdown';
 import IssueVotes from '../../components/issue-actions/issue-votes';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
-import LinkedIssuesTitle from '../../components/linked-issues/linked-issues-title';
+import LinkedIssues from '../../components/linked-issues/linked-issues';
 import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import Separator from '../../components/separator/separator';
@@ -22,15 +22,25 @@ import {ANALYTICS_ISSUE_PAGE} from '../../components/analytics/analytics-ids';
 import {getApi} from '../../components/api/api__instance';
 import {getEntityPresentation, getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
 import {getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
+import {getLinkedIssuesTitle} from '../../components/linked-issues/linked-issues-helper';
 import {HIT_SLOP} from '../../components/common-styles/button';
+import {IconAngleRight} from '../../components/icon/icon';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
+import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './issue.styles';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {AnyIssue, IssueFull, IssueOnList} from '../../flow/Issue';
-import type {Attachment, CustomField, CustomFieldText, FieldValue, IssueProject} from '../../flow/CustomFields';
+import type {
+  Attachment,
+  CustomField,
+  CustomFieldText,
+  FieldValue,
+  IssueLink,
+  IssueProject,
+} from '../../flow/CustomFields';
 import type {Node} from 'React';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
@@ -94,17 +104,38 @@ export default class IssueDetails extends Component<Props, void> {
     return false;
   }
 
-  renderLinksBlock: ((issue: IssueFull) => void | Node) = (issue: IssueFull) => {
+  renderLinksBlock: (() => void | Node) = () => {
+    const {issue} = this.props;
+    const issueLinks: Array<IssueLink> = issue.links || [];
+    const linkedIssuesTitle: string = issueLinks.length > 0 ? getLinkedIssuesTitle(issueLinks) : '';
     return (
-      <LinkedIssuesTitle
-        issueLinks={issue.links || []}
-        onPress={(issueLink: IssueOnList) => {
-          Router.pop();
-          this.props.openNestedIssueView({issue: issueLink});
-        }}
-      />
+      <TouchableOpacity
+        style={styles.linkedIssuesButton}
+        onPress={() => Router.Page({
+          children: (
+            <LinkedIssues/>),
+        })}
+      >
+        <View style={styles.linkedIssuesTitle}>
+          <Text style={styles.linkedIssuesTitleText}>
+            Linked issues
+          </Text>
+          {linkedIssuesTitle.length > 0 && (
+            <AnimatedView
+              animation="fadeIn"
+              duration={500}
+              useNativeDriver>
+              <Text>
+                {linkedIssuesTitle}
+              </Text>
+            </AnimatedView>
+          )}
+        </View>
+        <IconAngleRight size={18}/>
+      </TouchableOpacity>
     );
   };
+
   renderAttachments(attachments: Array<Attachment> | null, uiTheme: UITheme): null | Node {
     if (!attachments || !attachments.length) {
       return null;
@@ -274,7 +305,7 @@ export default class IssueDetails extends Component<Props, void> {
 
         {Boolean(issue?.tags?.length > 0) && <View style={styles.tagsSeparator}/>}
 
-        {this.renderLinksBlock(issue)}
+        {this.renderLinksBlock()}
 
         <TouchableWithoutFeedback
           onLongPress={() => {onLongPress(issue.description, 'Copy description');}}

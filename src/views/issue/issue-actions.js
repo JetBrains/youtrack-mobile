@@ -207,28 +207,44 @@ export function loadIssue(): ((
   };
 }
 
-export function loadIssueLinks(): ((
+export function loadIssueLinksTitle(): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().issueState.issueId;
+    const issueId: string = getState().issueState.issueId;
     const api: Api = getApi();
 
     try {
-      if (!issueId) {
-        throw new Error('Issue ID is required');
-      }
-      log.debug(`Loading "${issueId}" linked issues`);
-      const issue = await api.issue.getIssueLinks(issueId);
-      log.info(`"${issueId}" linked issues loaded`);
-
-      dispatch({type: types.RECEIVE_ISSUE_LINKS, issueLinks: issue.links});
+      const issueLinks: Array<IssueLink> = await api.issue.getIssueLinksTitle(issueId);
+      log.info(`"${issueId}" linked issues title data loaded`);
+      dispatch({type: types.RECEIVE_ISSUE_LINKS, issueLinks});
     } catch (rawError) {
       const error = await resolveError(rawError);
       log.warn('Failed to load linked issues', error);
     }
+  };
+}
+
+export function loadIssueLinks(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<Array<IssueLink>>) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId = getState().issueState.issueId;
+    const api: Api = getApi();
+
+    let issueLinks: Array<IssueLink> = [];
+    try {
+      issueLinks = await api.issue.getIssueLinks(issueId);
+      log.info(`"${issueId}" linked issues loaded`);
+    } catch (rawError) {
+      const error = await resolveError(rawError);
+      log.warn('Failed to load linked issues', error);
+    }
+    return issueLinks;
   };
 }
 

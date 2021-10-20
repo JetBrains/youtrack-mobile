@@ -174,11 +174,12 @@ export type IssueComment = {
 }
 
 export type IssueLinkType = {
+  id: string,
   name: string,
   sourceToTarget: string,
   localizedSourceToTarget: ?string,
   targetToSource: string,
-  localizedTargetToSource: ?string
+  localizedTargetToSource: ?string,
 }
 
 export type IssueLink = {
@@ -188,4 +189,6 @@ export type IssueLink = {
   linkType: IssueLinkType,
   trimmedIssues: Array<IssueOnList>,
   resolved: boolean,
+  issuesSize: number,
+  unresolvedIssuesSize: number,
 }

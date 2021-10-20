@@ -53,7 +53,7 @@ export type IssueFull = {
   visibility: Visibility,
 };
 
-export type AnyIssue = IssueOnList | IssueFull;
+export type AnyIssue = IssueOnList | IssueFull | IssueLink;
 
 export type TransformedSuggestion = {
   prefix: string,

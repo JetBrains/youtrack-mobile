@@ -3,8 +3,13 @@
 import type {IssueLink} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
 
-export type LinksMap = { [string]: Array<IssueOnList> };
+export type LinksMap = { [string]: IssueLink };
 
+export type LinksListData = {
+  title: string,
+  data: Array<IssueOnList>,
+  linkTypeId: string,
+};
 
 const getLinkTitle = (link: IssueLink): string => {
   const linkType = link.linkType;
@@ -14,25 +19,38 @@ const getLinkTitle = (link: IssueLink): string => {
   return linkType.localizedTargetToSource || linkType.targetToSource;
 };
 
-const getIssueLinkedIssuesMap = (links: Array<IssueLink>): LinksMap => {
+const getLinkedIssuesMap = (links: Array<IssueLink>): LinksMap => {
   return links.reduce((linksMap: LinksMap, link: IssueLink) => {
-    if (link.trimmedIssues.length > 0) {
-      linksMap[getLinkTitle(link)] = link.trimmedIssues;
+    if (link.issuesSize > 0) {
+      linksMap[getLinkTitle(link)] = link;
     }
     return linksMap;
   }, ({}: LinksMap));
 };
 
-const getIssueLinkedIssuesTitle = (links: Array<IssueLink>): string => {
-  const issueLinkedIssuesMap: LinksMap = getIssueLinkedIssuesMap(links);
-  return Object.keys(issueLinkedIssuesMap).map((key: string) => {
-    return issueLinkedIssuesMap[key].length > 0 ? `${issueLinkedIssuesMap[key].length} ${key}` : '';
+const getLinkedIssuesTitle = (links: Array<IssueLink>): string => {
+  const linkedIssuesMap: LinksMap = getLinkedIssuesMap(links);
+  return Object.keys(linkedIssuesMap).map((key: string) => {
+    const issuesLength: number = linkedIssuesMap[key].issuesSize;
+    return issuesLength > 0 ? `${issuesLength} ${key}` : '';
   }).join(', ');
+};
+
+const createLinksList = (links: Array<IssueLink>): Array<LinksListData> => {
+  const linkedIssuesMap: LinksMap = getLinkedIssuesMap(links);
+  return Object.keys(linkedIssuesMap).map(
+    (title: string) => ({
+      title,
+      data: linkedIssuesMap[title].trimmedIssues,
+      linkTypeId: linkedIssuesMap[title].id,
+    })
+  );
 };
 
 
 export {
-  getIssueLinkedIssuesMap,
-  getIssueLinkedIssuesTitle,
+  createLinksList,
+  getLinkedIssuesMap,
+  getLinkedIssuesTitle,
   getLinkTitle,
 };

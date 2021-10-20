@@ -1,83 +1,91 @@
 /* @flow */
 
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, Text, SectionList} from 'react-native';
+
+import {useDispatch} from 'react-redux';
 
 import Header from '../header/header';
 import IssueRow from '../../views/issues/issues__row';
 import Router from '../router/router';
 
-import {getIssueLinkedIssuesMap} from './linked-issues-helper';
+import {createLinksList} from './linked-issues-helper';
 import {IconBack} from '../icon/icon';
+import {loadIssueLinks} from '../../views/issue/issue-actions';
 
 import styles from './linked-issues.style';
 
 import type {IssueLink} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
-import type {LinksMap} from './linked-issues-helper';
 import type {Node} from 'React';
+import type {LinksListData} from './linked-issues-helper';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
-  links: Array<IssueLink>,
-  onPress: (issue: IssueOnList) => any,
   style?: ViewStyleProp,
 }
 
-
 const LinkedIssues = (props: Props): Node => {
-  const renderList = () => {
-    const issueLinkedIssuesMap: LinksMap = getIssueLinkedIssuesMap(props.links);
-    const sections: Array<{ title: string, data: Array<IssueOnList> }> = Object.keys(issueLinkedIssuesMap).map(
-      (title: string) => ({
-        title,
-        data: issueLinkedIssuesMap[title],
-      }));
+  const dispatch: Function = useDispatch();
 
-    const renderIssue = (issue: IssueOnList) => (
+  const [sections, updateSections] = useState([]);
+
+  const loadLinks = useCallback(async () => {
+    const links: Array<IssueLink> = await dispatch(loadIssueLinks());
+    updateSections(createLinksList(links));
+  }, [dispatch]);
+
+  useEffect(() => {
+    loadLinks();
+  }, [loadLinks]);
+
+  const renderLinkedIssue = (linkedIssue: IssueOnList) => (
+    <View style={styles.linkedIssueItem}>
       <IssueRow
         style={styles.linkedIssue}
-        issue={issue}
-        onClick={(issue: IssueOnList) => null}
+        issue={linkedIssue}
+        onClick={() => {
+          Router.Issue({
+            issuePlaceholder: linkedIssue,
+            issueId: linkedIssue.id,
+          });
+        }}
       />
-    );
+    </View>
+  );
 
-    const renderSectionTitle = (it: { section: { title: string, data: Array<IssueOnList> }, ... }) => {
-      const amount: number = it.section.data.length;
-      return (
-        <Text style={styles.linkedIssueTypeTitle}>
-          {`${it.section.title} ${it.section.data.length} ${amount > 1 ? 'issues' : 'issue'}`}
-        </Text>
-      );
-    };
-
+  const renderSectionTitle = (it: { section: LinksListData, ... }) => {
+    const amount: number = it.section.data.length;
     return (
-      <SectionList
-        contentContainerStyle={styles.linkedList}
-        sections={sections}
-        scrollEventThrottle={10}
-        keyExtractor={(issue: IssueOnList) => issue.id}
-        renderItem={(info: { item: any, ... }) => renderIssue(info.item)}
-        renderSectionHeader={renderSectionTitle}
-        ItemSeparatorComponent={() => <View style={styles.separator}/>}
-        stickySectionHeadersEnabled={true}
-      />
+      <Text style={styles.linkedIssueTypeTitle}>
+        {`${it.section.title} ${it.section.data.length} ${amount > 1 ? 'issues' : 'issue'}`}
+      </Text>
     );
   };
 
-
   return (
-    <View style={props.style}>
+    <View style={[styles.container, props.style]}>
       <Header
         title="Linked issues"
         showShadow={true}
         leftButton={<IconBack color={styles.link.color}/>}
         onBack={() => Router.pop()}
       />
-      {renderList()}
+      <SectionList
+        contentContainerStyle={styles.linkedList}
+        sections={sections}
+        scrollEventThrottle={10}
+        keyExtractor={(issue: IssueOnList) => issue.id}
+        renderItem={(info: { item: any, section: LinksListData & any, ... }) => (
+          renderLinkedIssue(info.item)
+        )}
+        renderSectionHeader={renderSectionTitle}
+        ItemSeparatorComponent={() => <View style={styles.separator}/>}
+        stickySectionHeadersEnabled={true}
+      />
     </View>
   );
 };
 
 
-export default (React.memo<Props>(LinkedIssues): React$AbstractComponent<Props, mixed>);
+export default LinkedIssues;

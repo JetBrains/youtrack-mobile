@@ -58,10 +58,11 @@ export default class IssueRow extends Component<Props, void> {
 
     return (
       <TouchableOpacity
+        style={style}
         onPress={() => this.props.onClick(issue)}
         testID="issue-row"
       >
-        <View style={style}>
+        <View>
           <View
             testID="issue-row-details"
             style={styles.rowLine}

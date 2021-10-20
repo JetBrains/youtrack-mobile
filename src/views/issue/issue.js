@@ -88,7 +88,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   async loadIssue() {
     await this.props.loadIssue();
-    this.props.loadIssueLinks();
+    this.props.loadIssueLinksTitle();
   }
 
   renderDetails = (uiTheme: UITheme) => {

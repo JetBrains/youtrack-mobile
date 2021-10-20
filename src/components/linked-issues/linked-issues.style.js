@@ -6,35 +6,28 @@ import {separatorBorder} from '../common-styles/list';
 import {UNIT} from '../variables/variables';
 
 export default EStyleSheet.create({
-  linkedIssuesButton: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginRight: -UNIT * 2,
-    marginVertical: UNIT * 2,
-    paddingRight: UNIT * 2.5,
-    paddingVertical: UNIT * 2,
-    borderTopWidth: 0.75,
-    borderBottomWidth: 0.75,
-    borderColor: '$separator',
-  },
-  linkedIssuesTitle: {
-    flex: 0.95,
-  },
-  linkedIssuesTitleText: {
-    color: '$icon',
-    marginBottom: UNIT / 2,
-  },
-
   link: {
     color: '$link',
   },
   linkedList: {
     padding: UNIT * 2,
+    paddingRight: UNIT,
     paddingBottom: SELECT_ITEM_HEIGHT,
   },
-  linkedIssue: {
+  linkedIssueItem: {
+    flex: 1,
+    flexDirection: 'row',
     paddingVertical: UNIT * 1.5,
+  },
+  linkedIssue: {
+    flexGrow: 1,
+    flexBasis: UNIT * 4,
+  },
+  linkedIssueRemoveAction: {
+    padding: UNIT / 1.5,
+    height: UNIT * 4,
+    marginLeft: UNIT,
+    color: '$iconAccent',
   },
   separator: {
     ...separatorBorder,
