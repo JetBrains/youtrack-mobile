@@ -85,11 +85,18 @@ type Props = {
 
   onCheckboxUpdate: (checked: boolean, position: number, description: string) => void,
   onLongPress: (text: string, title?: string) => void,
+  loadIssueLinksTitle: () => void,
 }
 
 export default class IssueDetails extends Component<Props, void> {
   imageHeaders: any = getApi().auth.getAuthorizationHeaders();
   backendUrl: any = getApi().config.backendUrl;
+
+  UNSAFE_componentWillUpdate(nextProps: Props) {
+    if (!this.props?.issue?.id && nextProps?.issue?.id) {
+      this.props.loadIssueLinksTitle();
+    }
+  }
 
   shouldComponentUpdate(nextProps: Props): boolean {
     if (nextProps.issue !== this.props.issue) {
@@ -105,7 +112,7 @@ export default class IssueDetails extends Component<Props, void> {
   }
 
   renderLinksBlock: (() => void | Node) = () => {
-    const {issue} = this.props;
+    const {issue, issuePermissions,loadIssueLinksTitle} = this.props;
     const issueLinks: Array<IssueLink> = issue.links || [];
     const linkedIssuesTitle: string = issueLinks.length > 0 ? getLinkedIssuesTitle(issueLinks) : '';
     return (
@@ -113,7 +120,14 @@ export default class IssueDetails extends Component<Props, void> {
         style={styles.linkedIssuesButton}
         onPress={() => Router.Page({
           children: (
-            <LinkedIssues/>),
+            <LinkedIssues
+              onUpdate={loadIssueLinksTitle}
+              canLink={(
+                issuePermissions.canLink(issue)
+                  ? (linkedIssue: AnyIssue) => issuePermissions.canLink(linkedIssue)
+                  : undefined
+              )}
+            />),
         })}
       >
         <View style={styles.linkedIssuesTitle}>

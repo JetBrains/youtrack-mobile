@@ -23,7 +23,7 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
 import type {Attachment, CustomField, FieldValue, IssueProject, Tag} from '../../flow/CustomFields';
-import type {CommandSuggestionResponse, IssueFull, OpenNestedViewParams} from '../../flow/Issue';
+import type {CommandSuggestionResponse, IssueFull, IssueOnList, OpenNestedViewParams} from '../../flow/Issue';
 import type {IssueLink, IssueComment} from '../../flow/CustomFields';
 import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {UserAppearanceProfile} from '../../flow/User';
@@ -245,6 +245,30 @@ export function loadIssueLinks(): ((
       log.warn('Failed to load linked issues', error);
     }
     return issueLinks;
+  };
+}
+
+export function onUnlinkIssue(linkedIssue: IssueOnList, linkTypeId: string): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<boolean>) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId = getState().issueState.issueId;
+    const api: Api = getApi();
+
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Remove linked issue');
+    const [error] = await until(api.issue.removeIssueLink(issueId, linkedIssue.id, linkTypeId));
+    if (error) {
+      const err: Error = await resolveError(error);
+      const errorMsg: string = 'Failed to load linked issues';
+      log.warn(errorMsg, err);
+      notify(errorMsg);
+    } else {
+      dispatch(loadIssueLinks());
+      notify('Issue link removed');
+    }
+    return !error;
   };
 }
 

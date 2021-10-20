@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, SectionList} from 'react-native';
+import {View, Text, SectionList, TouchableOpacity} from 'react-native';
 
 import {useDispatch} from 'react-redux';
 
@@ -10,8 +10,8 @@ import IssueRow from '../../views/issues/issues__row';
 import Router from '../router/router';
 
 import {createLinksList} from './linked-issues-helper';
-import {IconBack} from '../icon/icon';
-import {loadIssueLinks} from '../../views/issue/issue-actions';
+import {IconBack, IconClose} from '../icon/icon';
+import {loadIssueLinks, onUnlinkIssue} from '../../views/issue/issue-actions';
 
 import styles from './linked-issues.style';
 
@@ -22,6 +22,8 @@ import type {LinksListData} from './linked-issues-helper';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
+  canLink?: (issue: IssueOnList) => boolean,
+  onUpdate: () => void,
   style?: ViewStyleProp,
 }
 
@@ -39,7 +41,7 @@ const LinkedIssues = (props: Props): Node => {
     loadLinks();
   }, [loadLinks]);
 
-  const renderLinkedIssue = (linkedIssue: IssueOnList) => (
+  const renderLinkedIssue = (linkedIssue: IssueOnList, linkTypeId: string) => (
     <View style={styles.linkedIssueItem}>
       <IssueRow
         style={styles.linkedIssue}
@@ -51,6 +53,29 @@ const LinkedIssues = (props: Props): Node => {
           });
         }}
       />
+      {props.canLink && props.canLink(linkedIssue) && (
+        <TouchableOpacity
+          onPress={async () => {
+            const isRemoved: boolean = await dispatch(onUnlinkIssue(linkedIssue, linkTypeId));
+            props.onUpdate();
+            if (isRemoved) {
+              const _sections: Array<LinksListData> = sections.map((it: LinksListData) => {
+                if (it.linkTypeId === linkTypeId) {
+                  it.data = it.data.filter((il: IssueOnList) => il.id !== linkedIssue.id);
+                }
+                return it;
+              }).filter((it:LinksListData) => it.data.length > 0);
+              updateSections(_sections);
+            }
+          }}
+          style={styles.linkedIssueRemoveAction}
+        >
+          <IconClose
+            size={20}
+            color={styles.linkedIssueRemoveAction.color}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 
@@ -77,7 +102,7 @@ const LinkedIssues = (props: Props): Node => {
         scrollEventThrottle={10}
         keyExtractor={(issue: IssueOnList) => issue.id}
         renderItem={(info: { item: any, section: LinksListData & any, ... }) => (
-          renderLinkedIssue(info.item)
+          renderLinkedIssue(info.item, info.section.linkTypeId)
         )}
         renderSectionHeader={renderSectionTitle}
         ItemSeparatorComponent={() => <View style={styles.separator}/>}

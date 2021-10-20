@@ -88,7 +88,6 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   async loadIssue() {
     await this.props.loadIssue();
-    this.props.loadIssueLinksTitle();
   }
 
   renderDetails = (uiTheme: UITheme) => {
@@ -119,6 +118,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
       onCheckboxUpdate,
       onShowCopyTextContextActions,
+      loadIssueLinksTitle,
     } = this.props;
 
     return (
@@ -162,6 +162,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         onLongPress={(text: string, title?: string) => {
           onShowCopyTextContextActions(this.context.actionSheet(), text, title);
         }}
+        loadIssueLinksTitle={loadIssueLinksTitle}
       />
     );
   }
