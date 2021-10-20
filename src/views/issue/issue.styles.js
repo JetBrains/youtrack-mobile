@@ -171,4 +171,7 @@ export default EStyleSheet.create({
     color: '$icon',
     marginBottom: UNIT / 2,
   },
+  linkedIssuesTitleTextDetails: {
+    color: '$text',
+  },
 });

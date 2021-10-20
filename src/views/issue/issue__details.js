@@ -139,7 +139,7 @@ export default class IssueDetails extends Component<Props, void> {
               animation="fadeIn"
               duration={500}
               useNativeDriver>
-              <Text>
+              <Text style={styles.linkedIssuesTitleTextDetails}>
                 {linkedIssuesTitle}
               </Text>
             </AnimatedView>

@@ -40,7 +40,7 @@ export default EStyleSheet.create({
     paddingBottom: UNIT,
     marginBottom: UNIT,
     backgroundColor: '$background',
-    color: '$icon',
+    color: '$text',
     ...secondaryText,
     fontWeight: '600',
     textTransform: 'uppercase',
