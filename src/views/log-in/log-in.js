@@ -86,6 +86,10 @@ export class LogIn extends Component<Props, State> {
     }
   }
 
+  isConfigHasClientSecret(): boolean {
+    return !!this.props?.config?.auth?.clientSecret;
+  }
+
   focusOnPassword: (() => void) = () => {
     this.passInputRef.current.focus();
   };
