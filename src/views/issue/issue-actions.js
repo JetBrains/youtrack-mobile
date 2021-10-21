@@ -604,6 +604,18 @@ export function showIssueActions(
       });
     }
 
+    if (typeof renderLinkIssues === 'function') {
+      actions.push({
+        title: 'Link issue',
+        execute: () => {
+          Router.Page({
+            children: renderLinkIssues(),
+          });
+          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Link issue');
+        },
+      });
+    }
+
     if (permissions.canApplyCommand) {
       actions.push({
         title: 'Apply command…',
