@@ -165,7 +165,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         loadIssueLinksTitle={loadIssueLinksTitle}
       />
     );
-  }
+  };
 
   renderActivity = (uiTheme: UITheme) => {
     const {issue, user, issuePermissions, selectProps, updateUserAppearanceProfile, openNestedIssueView} = this.props;

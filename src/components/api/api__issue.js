@@ -38,7 +38,13 @@ export default class IssueAPI extends ApiBase {
   }
 
   getIssueLinksTitle(id: string): Promise<Array<IssueLink>> {
-    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}/links?fields=${issueFields.issueLinksBase.toString()}`);
+    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}/links?fields=${issueFields.issueLinkBase.toString()}`);
+  }
+
+  getIssueLinkTypes(): Promise<Array<IssueLinkType>> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/issueLinkTypes/?fields=${issueFields.issueLinkTypes.toString()}`
+    );
   }
 
   removeIssueLink(issueId: string, linkedIssueId: string, linkTypeId: string): Promise<void> {
@@ -47,6 +53,17 @@ export default class IssueAPI extends ApiBase {
       'DELETE',
       null,
       {parseJson: false},
+    );
+  }
+
+  addIssueLink(linkedIssueId: string, query: string): Promise<void> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/commands`,
+      'POST',
+      {
+        issues: [{id: linkedIssueId}],
+        query,
+      },
     );
   }
 
