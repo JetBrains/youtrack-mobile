@@ -2,7 +2,12 @@
 
 import ImagePicker from 'react-native-image-crop-picker';
 
-import type {NormalizedAttachment} from '../../flow/Attachment';
+import type {Attachment, NormalizedAttachment} from '../../flow/Attachment';
+
+export const attachFileMethod: { [string]: string } = {
+  openCamera: 'openCamera',
+  openPicker: 'openPicker',
+};
 
 const FILE_NAME_REGEXP: RegExp = /(?=\w+\.\w{3,4}$).+/ig;
 
@@ -11,13 +16,13 @@ function extractFileNameFromPath(path: string): string {
   return fileName;
 }
 
-async function pickPhoto(method: string): Promise<Array<NormalizedAttachment>> {
-  const files: Array<NormalizedAttachment> = await ImagePicker[method]({
+async function pickPhoto(method: $Keys<typeof attachFileMethod>): Promise<Array<NormalizedAttachment>> {
+  const files: Array<Attachment> = await ImagePicker[method]({
     mediaType: 'any',
     multiple: true,
   });
 
-  return files.map((file: NormalizedAttachment) => {
+  return (files?.length >= 1 ? files : [((files: any): Attachment)]).map((file: Attachment) => {
     return {
       url: file.path || '',
       name: file.filename || extractFileNameFromPath(file.path || ''),
@@ -30,7 +35,7 @@ async function pickPhoto(method: string): Promise<Array<NormalizedAttachment>> {
   });
 }
 
-export default async function attachFile(method: 'openCamera' | 'openPicker' = 'openPicker'): Promise<?NormalizedAttachment> {
+export default async function attachFile(method: $Keys<typeof attachFileMethod> = attachFileMethod.openPicker): Promise<Array<NormalizedAttachment> | null> {
   try {
     return await pickPhoto(method);
   } catch (err) {

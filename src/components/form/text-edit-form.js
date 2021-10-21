@@ -1,15 +1,14 @@
 /* @flow */
 
-import type {Node} from 'React';
-import React, {PureComponent} from 'react';
-
-import debounce from 'lodash.debounce';
+import React, {useCallback, useContext, useEffect, useRef} from 'react';
 
 import MultilineInput from '../multiline-input/multiline-input';
+import {ThemeContext} from '../theme/theme-context';
 
 import styles from './summary-description-form.style';
 
-import type {UITheme} from '../../flow/Theme';
+import type {Node} from 'React';
+import type {Theme, UITheme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
@@ -19,55 +18,65 @@ type Props = {
   description: string,
   placeholderText?: string,
   multiline: boolean,
-  onDescriptionChange: ?(text: string) => any,
+  onDescriptionChange: (text: string) => any,
   onSelectionChange?: (event: Object) => any,
   style?: ViewStyleProp,
-  uiTheme: UITheme,
+  uiTheme?: UITheme,
 }
 
 
-export default class TextEditForm extends PureComponent<Props, void> {
+const TextEditForm = (props: Props): Node => {
+  const {onDescriptionChange = (text: string) => {}} = props;
+  const timeout: { current: ?TimeoutID } = useRef(null);
 
-  onDescriptionChange: any = debounce((text: string) => {
-    const {onDescriptionChange} = this.props;
-    return onDescriptionChange && onDescriptionChange(text);
-  }, 300);
+  const theme: Theme = useContext(ThemeContext);
 
-  render(): Node {
-    const {
-      adaptive = false,
-      autoFocus = false,
-      description,
-      editable = false,
-      multiline = true,
-      placeholderText = 'Description',
-      style,
-      uiTheme,
-    } = this.props;
+  useEffect(() => {
+    return clearTimeout(timeout.current);
+  }, [timeout]);
 
-    return (
-      <MultilineInput
-        style={[styles.descriptionInput, style]}
-        adaptive={adaptive}
-        autoFocus={autoFocus}
-        multiline={multiline}
-        scrollEnabled={!adaptive}
-        editable={editable}
-        maxInputHeight={0}
-        autoCapitalize="sentences"
-        placeholderTextColor={uiTheme.colors.$icon}
-        placeholder={placeholderText}
-        textAlignVertical="top"
-        keyboardAppearance={uiTheme.name}
-        underlineColorAndroid="transparent"
-        defaultValue={description}
-        onChangeText={this.onDescriptionChange}
-        onSelectionChange={(event: Object) => {
-          if (this.props.onSelectionChange) {
-            this.props.onSelectionChange(event);
-          }
-        }}
-      />
-    );
-  }
-}
+
+  const onChange = useCallback((text: string) => {
+    timeout.current = setTimeout(() => {onDescriptionChange(text);}, 300);
+  }, [onDescriptionChange]);
+
+  const {
+    adaptive = false,
+    autoFocus = false,
+    description,
+    editable = false,
+    multiline = true,
+    placeholderText = 'Description',
+    style,
+  } = props;
+
+  return (
+    <MultilineInput
+      style={[styles.descriptionInput, style]}
+      adaptive={adaptive}
+      autoFocus={autoFocus}
+      multiline={multiline}
+      scrollEnabled={!adaptive}
+      editable={editable}
+      maxInputHeight={0}
+      autoCapitalize="sentences"
+      placeholderTextColor={theme.uiTheme.colors.$icon}
+      placeholder={placeholderText}
+      textAlignVertical="top"
+      keyboardAppearance={theme.uiTheme.name}
+      underlineColorAndroid="transparent"
+      defaultValue={description}
+      onChangeText={(text: string) => {
+        clearTimeout(timeout.current);
+        onChange(text);
+      }}
+      onSelectionChange={(event: Object) => {
+        if (props.onSelectionChange) {
+          props.onSelectionChange(event);
+        }
+      }}
+    />
+  );
+};
+
+export default (React.memo<Props>(TextEditForm): React$AbstractComponent<Props, mixed>);

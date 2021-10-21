@@ -12,7 +12,7 @@ import LongText from './text-renderer';
 import renderCode from './code-renderer';
 import Router from '../router/router';
 import {getApi} from '../api/api__instance';
-import {guid} from '../../util/util';
+import {guid, isURLPattern} from '../../util/util';
 import {hasMimeType} from '../mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from '../icon/icon';
 import {ResourceTypes} from '../api/api__resource-types';
@@ -38,7 +38,6 @@ type TextData = {
 
 const issueId: RegExp = new RegExp(`[a-zA-Z0-9_]+\\-\\d+`);
 const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
-const isURLPattern: RegExp = /^(http(s?)):\/\/|(www.)/i;
 const imgRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
 const youTubeURL: RegExp = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/i;
 
@@ -161,7 +160,7 @@ function getMarkdownRules(
       </Hyperlink>
     );
 
-    if (issueId.test(text) && !isURLPattern.test(text)) {
+    if (issueId.test(text) && !isURLPattern(text)) {
       const matched: RegExp$matchResult | null = text.match(issueId);
       if (matched[0] && typeof matched?.index === 'number') {
         const textWithoutIssueId: string = text.split(matched[0]).join('');
@@ -176,7 +175,11 @@ function getMarkdownRules(
       return renderIssueIdLink(text, [inheritedStyles, style.text, styles.link], node.key);
     }
 
-    return text;
+    return (
+      <Text key={node.key} style={[inheritedStyles, style.text]}>
+        {text}
+      </Text>
+    );
   };
 
 

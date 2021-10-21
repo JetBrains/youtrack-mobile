@@ -155,7 +155,7 @@ const ISSUE_ATTACHMENTS_FIELDS: any = toField([
   'mimeType',
   'imageDimension(width,height)',
   'imageDimensions(width,height)',
-  {author: ['ringId']}
+  {author: ['ringId']},
 ]);
 
 const USER_GROUP_FIELDS = toField([
@@ -233,18 +233,31 @@ const ISSUE_SHORT_FIELDS: any = toField([
   {tags: ISSUE_TAGS_FIELDS},
 ]);
 
-const ISSUE_LINKS_FIELDS = toField([
-  'id',
+const ISSUE_LINKS_FIELDS_BASE: any = toField([
   'direction',
+  'issuesSize',
   {
     linkType: [
-      'name',
       'sourceToTarget',
       'localizedSourceToTarget',
       'targetToSource',
       'localizedTargetToSource',
     ],
-    trimmedIssues: ISSUE_BASE_FIELDS,
+  },
+]);
+
+const ISSUE_LINKS_FIELDS: any = toField([
+  ISSUE_LINKS_FIELDS_BASE,
+  'id',
+  'unresolvedIssuesSize',
+  {
+    trimmedIssues: [
+      'id',
+      'idReadable',
+      'summary',
+      'resolved',
+      'project(ringId)',
+    ],
   },
 ]);
 
@@ -330,9 +343,8 @@ const ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS: any = toField([
 export default {
   attachments: ISSUE_ATTACHMENTS_FIELDS,
   issuesOnList: ISSUE_SHORT_FIELDS,
-  singleIssueLinks: (toField({
-    links: ISSUE_LINKS_FIELDS,
-  }): any),
+  singleIssueLinks: ISSUE_LINKS_FIELDS,
+  issueLinksBase: ISSUE_LINKS_FIELDS_BASE,
   singleIssue: (toField([
     'id',
     'idReadable',

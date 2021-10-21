@@ -23,7 +23,7 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
 import type {Attachment, CustomField, FieldValue, IssueProject, Tag} from '../../flow/CustomFields';
-import type {CommandSuggestionResponse, IssueFull, OpenNestedViewParams} from '../../flow/Issue';
+import type {CommandSuggestionResponse, IssueFull, IssueOnList, OpenNestedViewParams} from '../../flow/Issue';
 import type {IssueLink, IssueComment} from '../../flow/CustomFields';
 import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {UserAppearanceProfile} from '../../flow/User';
@@ -207,28 +207,68 @@ export function loadIssue(): ((
   };
 }
 
-export function loadIssueLinks(): ((
+export function loadIssueLinksTitle(): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().issueState.issueId;
+    const issueId: string = getState().issueState.issueId;
     const api: Api = getApi();
 
     try {
-      if (!issueId) {
-        throw new Error('Issue ID is required');
-      }
-      log.debug(`Loading "${issueId}" linked issues`);
-      const issue = await api.issue.getIssueLinks(issueId);
-      log.info(`"${issueId}" linked issues loaded`);
-
-      dispatch({type: types.RECEIVE_ISSUE_LINKS, issueLinks: issue.links});
+      const issueLinks: Array<IssueLink> = await api.issue.getIssueLinksTitle(issueId);
+      log.info(`"${issueId}" linked issues title data loaded`);
+      dispatch({type: types.RECEIVE_ISSUE_LINKS, issueLinks});
     } catch (rawError) {
       const error = await resolveError(rawError);
       log.warn('Failed to load linked issues', error);
     }
+  };
+}
+
+export function loadIssueLinks(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<Array<IssueLink>>) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId = getState().issueState.issueId;
+    const api: Api = getApi();
+
+    let issueLinks: Array<IssueLink> = [];
+    try {
+      issueLinks = await api.issue.getIssueLinks(issueId);
+      log.info(`"${issueId}" linked issues loaded`);
+    } catch (rawError) {
+      const error = await resolveError(rawError);
+      log.warn('Failed to load linked issues', error);
+    }
+    return issueLinks;
+  };
+}
+
+export function onUnlinkIssue(linkedIssue: IssueOnList, linkTypeId: string): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<boolean>) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId = getState().issueState.issueId;
+    const api: Api = getApi();
+
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Remove linked issue');
+    const [error] = await until(api.issue.removeIssueLink(issueId, linkedIssue.id, linkTypeId));
+    if (error) {
+      const err: Error = await resolveError(error);
+      const errorMsg: string = 'Failed to load linked issues';
+      log.warn(errorMsg, err);
+      notify(errorMsg);
+    } else {
+      dispatch(loadIssueLinks());
+      notify('Issue link removed');
+    }
+    return !error;
   };
 }
 
@@ -519,20 +559,19 @@ export function showIssueActions(
   };
 }
 
-export function onShowDescriptionContextActions(actionSheet: ActionSheet): ((
+export function onShowCopyTextContextActions(actionSheet: ActionSheet, text: string, title?: string): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const {issue} = getState().issueState;
     const selectedAction = await showActions(
       [
         {
-          title: 'Copy description text',
+          title: title || 'Copy text',
           execute: () => {
-            usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy description text');
-            Clipboard.setString(issue.description);
+            usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy text via action');
+            Clipboard.setString(text);
             notify('Text copied');
           },
         },

@@ -107,10 +107,19 @@ export type FieldValue = {
 
   isResolved: boolean,
 
-  color: ColorField
+  color: ColorField,
+
+  text: string,
 }
 
-export type CustomFieldValue = FieldValue | number | string | Array<any>;
+export type CustomFieldValue = $Shape<FieldValue> | number | string | Array<any>;
+
+export type CustomFieldBase = {|
+  $type: string,
+  id: string,
+  name: string,
+  projectCustomField: ProjectCustomField,
+|}
 
 export type CustomField = {
   $type: string,
@@ -119,6 +128,14 @@ export type CustomField = {
   hasStateMachine: boolean,
   value: CustomFieldValue,
   projectCustomField: ProjectCustomField
+}
+
+export type CustomFieldText = {
+  ...CustomFieldBase,
+  value: {
+    id: ?string,
+    text: string,
+  },
 }
 
 export type CustomFieldShort = $Shape<CustomField>
@@ -157,18 +174,21 @@ export type IssueComment = {
 }
 
 export type IssueLinkType = {
+  id: string,
   name: string,
   sourceToTarget: string,
   localizedSourceToTarget: ?string,
   targetToSource: string,
-  localizedTargetToSource: ?string
+  localizedTargetToSource: ?string,
 }
 
 export type IssueLink = {
   $type: string,
   id: string,
-  direction: 'string',
+  direction: string,
   linkType: IssueLinkType,
   trimmedIssues: Array<IssueOnList>,
   resolved: boolean,
+  issuesSize: number,
+  unresolvedIssuesSize: number,
 }

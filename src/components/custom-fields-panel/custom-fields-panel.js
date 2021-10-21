@@ -11,7 +11,7 @@ import usage from '../usage/usage';
 import {Calendar} from 'react-native-calendars';
 import {createNullProjectCustomField} from '../../util/util';
 import {getApi} from '../api/api__instance';
-import {IconClose} from '../icon/icon';
+import {IconCheck, IconClose} from '../icon/icon';
 import {PanelWithSeparator} from '../panel/panel-with-separator';
 import {SkeletonIssueCustomFields} from '../skeleton/skeleton';
 import {View as AnimatedView} from 'react-native-animatable';
@@ -19,7 +19,7 @@ import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator} 
 
 import styles, {calendarTheme} from './custom-fields-panel.styles';
 
-import type {IssueProject, CustomField as CustomFieldType} from '../../flow/CustomFields';
+import type {IssueProject, CustomField as IssueCustomField, CustomFieldText} from '../../flow/CustomFields';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
 
@@ -29,15 +29,15 @@ type Props = {
 
   issueId: string,
   issueProject: IssueProject,
-  fields: Array<CustomFieldType>,
+  fields: Array<IssueCustomField | CustomFieldText>,
 
   hasPermission: {
-    canUpdateField: (field: CustomFieldType) => boolean,
+    canUpdateField: (field: IssueCustomField) => boolean,
     canCreateIssueToProject: (project: IssueProject) => boolean,
     canEditProject: boolean
   },
 
-  onUpdate: (field: CustomFieldType, value: null | number | Object | Array<Object>) => Promise<Object>,
+  onUpdate: (field: IssueCustomField, value: null | number | Object | Array<Object>) => Promise<Object>,
   onUpdateProject: (project: IssueProject) => Promise<Object>,
 
   uiTheme: UITheme,
@@ -47,10 +47,12 @@ type Props = {
 };
 
 type State = {
-  editingField: ?CustomFieldType,
-  savingField: ?CustomFieldType,
+  editingField: ?IssueCustomField,
+  savingField: ?IssueCustomField,
   isEditingProject: boolean,
   isSavingProject: boolean,
+  height: number,
+  topCoord: number,
 
   select: {
     show: boolean,
@@ -69,7 +71,7 @@ type State = {
     show: boolean,
     title: string,
     withTime: boolean,
-    time: ?string,
+    time: string | null,
     value: Date,
     emptyValueName?: ?string,
     onSelect: (selected: any) => any
@@ -154,7 +156,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     }
   }
 
-  saveUpdatedField(field: CustomFieldType, value: null | number | Object | Array<Object>): Promise<boolean> {
+  saveUpdatedField(field: IssueCustomField, value: null | number | Object | Array<Object>): Promise<boolean> {
     const updateSavingState = (value) => this.isComponentMounted && this.setState({savingField: value});
     this.closeEditor();
     updateSavingState(field);
@@ -211,14 +213,14 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     });
   }
 
-  editDateField(field: CustomFieldType): void {
+  editDateField(field: IssueCustomField): void {
     this.trackEvent('Edit date field');
     const withTime = field.projectCustomField.field.fieldType.valueType === DATE_AND_TIME;
     return this.setState({
       datePicker: {
         show: true,
         withTime,
-        time: field.value ? new Date(field.value).toLocaleTimeString(
+        time: field.value ? new Date(((field.value: any): number)).toLocaleTimeString(
           [],
           {
             hour: '2-digit',
@@ -226,7 +228,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
           }
         ) : null,
         title: field.projectCustomField.field.name,
-        value: field.value ? new Date(field.value) : new Date(),
+        value: field.value ? new Date(((field.value: any): number)) : new Date(),
         emptyValueName: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
         onSelect: (date) => {
           if (!date) {
@@ -250,7 +252,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     });
   }
 
-  editSimpleValueField(field: CustomFieldType, type: string): void {
+  editSimpleValueField(field: IssueCustomField, type: string): void {
     this.trackEvent('Edit simple value field');
     const placeholders = {
       integer: '-12 or 34',
@@ -271,8 +273,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     const placeholder = placeholders[type] || placeholders.default;
     const valueFormatter = valueFormatters[type] || valueFormatters.default;
 
-    const value = field.value
-      ? field.value.presentation || field.value.text || field.value.toString()
+    const value: string = field.value != null
+      ? field.value?.presentation || field.value.text || `${((field.value: any): string)}`
       : '';
 
     return this.setState({
@@ -285,18 +287,18 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     });
   }
 
-  editCustomField(field: CustomFieldType) {
+  editCustomField(field: IssueCustomField) {
     const projectCustomField = field.projectCustomField;
     const projectCustomFieldName: ?string = projectCustomField?.field?.name;
     this.trackEvent(`Edit custom field: ${projectCustomFieldName ? projectCustomFieldName.toLowerCase() : ''}`);
 
     const isMultiValue = projectCustomField.field.fieldType.isMultiValue;
-    let selectedItems;
+    let selectedItems: Array<string>;
 
     if (isMultiValue) {
-      selectedItems = field.value;
+      selectedItems = ((field.value: any): Array<string>);
     } else {
-      selectedItems = field.value ? [field.value] : [];
+      selectedItems = field.value ? [((field.value: any): string)] : [];
     }
 
     this.setState({
@@ -327,7 +329,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     });
   }
 
-  onEditField: ((field: CustomFieldType) => ?Promise<any>) = (field: CustomFieldType) => {
+  onEditField: ((field: IssueCustomField) => ?Promise<any>) = (field: IssueCustomField) => {
     if (field === this.state.editingField) {
       return this.closeEditor();
     }
@@ -386,11 +388,19 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   }
 
   renderHeader(title: string, uiTheme: UITheme): Node {
+    const {simpleValue, editingField} = this.state;
+    const isSimpleValueEditorShown: boolean = simpleValue.show && !!editingField;
     return (
       <Header
         style={styles.customFieldEditorHeader}
-        rightButton={<IconClose size={21} color={uiTheme.colors.$link}/>}
-        onRightButtonClick={() => this.closeEditor()}
+        leftButton={<IconClose size={21} color={uiTheme.colors.$link}/>}
+        onBack={() => this.closeEditor()}
+        rightButton={isSimpleValueEditorShown ? <IconCheck size={21} color={uiTheme.colors.$link}/> : null}
+        onRightButtonClick={() => {
+          if (isSimpleValueEditorShown) {
+            simpleValue.onApply(simpleValue.value);
+          }
+        }}
         title={title}
       />
     );
@@ -483,7 +493,6 @@ export default class CustomFieldsPanel extends Component<Props, State> {
                 },
               });
             }}
-            onSubmitEditing={() => simpleValue.onApply(simpleValue.value)}
             value={simpleValue.value}/>
         </View>
       </ModalView>
@@ -524,7 +533,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
               {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
             </View>
 
-            {fields.map((field: CustomFieldType) => {
+            {fields.map((field: IssueCustomField) => {
               const isDisabled: boolean = (
                 !hasPermission.canUpdateField(field) ||
                 !field?.projectCustomField?.field?.fieldType

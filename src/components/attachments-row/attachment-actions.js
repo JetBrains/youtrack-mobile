@@ -9,7 +9,6 @@ import {IconAttachment, IconCamera} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
 import {notify} from '../notification/notification';
 import {ResourceTypes} from '../api/api__resource-types';
-import {sendReport} from '../error/error-reporter';
 import {until} from '../../util/util';
 
 import type Api from '../api/api';
@@ -92,26 +91,6 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           notify(message, error);
           return [];
         } else {
-          const [err] = await until(
-            addedAttachments.map((attach: Attachment) => api.issue.updateIssueAttachmentVisibility(
-              entityId,
-              attach.id,
-              attach.visibility || null
-            ))
-          );
-
-          if (err) {
-            const msg: string = `Failed to update issue attachment visibility after uploading a file`;
-            log.warn(msg);
-            sendReport(
-              msg,
-              `
-              \`\`\`
-              ${err}
-              \`\`\`
-              `
-            );
-          }
           log.info(`File attached to issue ${entityId}`);
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Attach image', 'Success');
 
@@ -136,7 +115,8 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
             issueId,
             attach.url,
             attach.name,
-            isDraftComment ? undefined : comment.id, attach.mimeType
+            isDraftComment ? undefined : comment.id, attach.mimeType,
+            comment.visibility,
           )),
           true
         );
@@ -146,7 +126,6 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           notify(message, error);
           return [];
         } else {
-          //TODO: update visibility
           dispatch(actions.stopImageAttaching());
           dispatch(actions.toggleAttachFileDialog(false));
           return attachments;

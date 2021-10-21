@@ -233,6 +233,11 @@ export default class IssuePermissions {
 
   canDeleteWork: ((entity: AnyIssue, workItem: WorkItem) => boolean) = (entity: AnyIssue, workItem: WorkItem) => this.canUpdateWork(entity, workItem)
 
+  canLink: ((entity: AnyIssue) => boolean) = (entity: AnyIssue) => {
+    return this.hasPermissionFor(entity, CAN_LINK_ISSUE);
+  };
+
+
   /*
    Articles
    */

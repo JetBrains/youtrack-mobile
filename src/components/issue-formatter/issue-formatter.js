@@ -86,7 +86,7 @@ function shortRelativeDate(date: Date|number): string {
 }
 
 function findIssueField(issue: AnyIssue, predicate: (field: CustomField) => boolean): ?CustomField {
-  const fields: Array<CustomField> = issue.fields;
+  const fields: Array<CustomField> = issue.fields || [];
 
   for (const field of fields) {
     if (predicate(field)) {

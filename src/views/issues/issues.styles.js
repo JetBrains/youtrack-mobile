@@ -151,4 +151,7 @@ export default EStyleSheet.create({
     marginLeft: -UNIT * 4,
     marginBottom: -UNIT * 2,
   },
+  resolved: {
+    color: '$resolved',
+  },
 });

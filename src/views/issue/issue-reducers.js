@@ -8,8 +8,8 @@ import {createReducer} from 'redux-create-reducer';
 import {ON_NAVIGATE_BACK} from '../../actions/action-types';
 import {routeMap} from '../../app-routes';
 
-import type {CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
-import type {IssueFull, CommandSuggestionResponse, AnyIssue} from '../../flow/Issue';
+import type {CustomField, FieldValue, IssueLink, IssueProject} from '../../flow/CustomFields';
+import type {IssueFull, CommandSuggestionResponse} from '../../flow/Issue';
 import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
 
@@ -147,7 +147,7 @@ export default (createReducer(initialState, {
       },
     };
   },
-  [types.RECEIVE_ISSUE_LINKS]: (state: State, action: { issueLinks: Array<AnyIssue> }): State => {
+  [types.RECEIVE_ISSUE_LINKS]: (state: State, action: { issueLinks: Array<IssueLink> }): State => {
     return {
       ...state,
       issue: {

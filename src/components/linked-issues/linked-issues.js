@@ -1,69 +1,116 @@
 /* @flow */
 
-import type {Node} from 'React';
-import {View, Text, TouchableOpacity} from 'react-native';
-import React, {PureComponent} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
+import {View, Text, SectionList, TouchableOpacity} from 'react-native';
 
-import EStyleSheet from 'react-native-extended-stylesheet';
+import {useDispatch} from 'react-redux';
 
-import {getReadableID} from '../issue-formatter/issue-formatter';
+import Header from '../header/header';
+import IssueRow from '../../views/issues/issues__row';
+import Router from '../router/router';
+
+import {createLinksList} from './linked-issues-helper';
+import {IconBack, IconClose} from '../icon/icon';
+import {loadIssueLinks, onUnlinkIssue} from '../../views/issue/issue-actions';
 
 import styles from './linked-issues.style';
 
 import type {IssueLink} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
+import type {Node} from 'React';
+import type {LinksListData} from './linked-issues-helper';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
-  links: Array<IssueLink>,
-  onIssueTap: (issue: IssueOnList) => any,
+  canLink?: (issue: IssueOnList) => boolean,
+  onUpdate: () => void,
   style?: ViewStyleProp,
 }
 
-export default class LinkedIssues extends PureComponent<Props, void> {
-  static defaultProps: Props = {
-    onIssueTap: (issue: IssueOnList) => {},
-    links: [],
+const LinkedIssues = (props: Props): Node => {
+  const dispatch: Function = useDispatch();
+
+  const [sections, updateSections] = useState([]);
+
+  const loadLinks = useCallback(async () => {
+    const links: Array<IssueLink> = await dispatch(loadIssueLinks());
+    updateSections(createLinksList(links));
+  }, [dispatch]);
+
+  useEffect(() => {
+    loadLinks();
+  }, [loadLinks]);
+
+  const renderLinkedIssue = (linkedIssue: IssueOnList, linkTypeId: string) => (
+    <View style={styles.linkedIssueItem}>
+      <IssueRow
+        style={styles.linkedIssue}
+        issue={linkedIssue}
+        onClick={() => {
+          Router.Issue({
+            issuePlaceholder: linkedIssue,
+            issueId: linkedIssue.id,
+          });
+        }}
+      />
+      {props.canLink && props.canLink(linkedIssue) && (
+        <TouchableOpacity
+          onPress={async () => {
+            const isRemoved: boolean = await dispatch(onUnlinkIssue(linkedIssue, linkTypeId));
+            props.onUpdate();
+            if (isRemoved) {
+              const _sections: Array<LinksListData> = sections.map((it: LinksListData) => {
+                if (it.linkTypeId === linkTypeId) {
+                  it.data = it.data.filter((il: IssueOnList) => il.id !== linkedIssue.id);
+                }
+                return it;
+              }).filter((it:LinksListData) => it.data.length > 0);
+              updateSections(_sections);
+            }
+          }}
+          style={styles.linkedIssueRemoveAction}
+        >
+          <IconClose
+            size={20}
+            color={styles.linkedIssueRemoveAction.color}
+          />
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+
+  const renderSectionTitle = (it: { section: LinksListData, ... }) => {
+    const amount: number = it.section.data.length;
+    return (
+      <Text style={styles.linkedIssueTypeTitle}>
+        {`${it.section.title} ${it.section.data.length} ${amount > 1 ? 'issues' : 'issue'}`}
+      </Text>
+    );
   };
 
-  _getLinkTitle(link: IssueLink) {
-    if (link.direction === 'OUTWARD' || link.direction === 'BOTH') {
-      return link.linkType.localizedSourceToTarget || link.linkType.sourceToTarget;
-    }
-    return link.linkType.localizedTargetToSource || link.linkType.targetToSource;
-  }
+  return (
+    <View style={[styles.container, props.style]}>
+      <Header
+        title="Linked issues"
+        showShadow={true}
+        leftButton={<IconBack color={styles.link.color}/>}
+        onBack={() => Router.pop()}
+      />
+      <SectionList
+        contentContainerStyle={styles.linkedList}
+        sections={sections}
+        scrollEventThrottle={10}
+        keyExtractor={(issue: IssueOnList) => issue.id}
+        renderItem={(info: { item: any, section: LinksListData & any, ... }) => (
+          renderLinkedIssue(info.item, info.section.linkTypeId)
+        )}
+        renderSectionHeader={renderSectionTitle}
+        ItemSeparatorComponent={() => <View style={styles.separator}/>}
+        stickySectionHeadersEnabled={true}
+      />
+    </View>
+  );
+};
 
-  _renderLinkedIssue(issue: IssueOnList) {
-    const issueTextStyle = issue.resolved ? {color: EStyleSheet.value('$resolved'), textDecorationLine: 'line-through'} : null;
 
-    return <TouchableOpacity key={issue.id}
-      onPress={() => this.props.onIssueTap && this.props.onIssueTap(issue)}
-      style={styles.linkedIssueContainer}>
-      <Text style={[styles.linkedIssueText, issueTextStyle]}>
-        {getReadableID(issue)}
-      </Text>
-    </TouchableOpacity>;
-  }
-
-  _renderLinkType(link: IssueLink) {
-    return <View key={link.id} style={styles.linkedIssuesSection}>
-      <Text style={styles.relationTitle}>{this._getLinkTitle(link)}:</Text>
-      {link.trimmedIssues.map(issue => this._renderLinkedIssue(issue))}
-    </View>;
-  }
-
-  render(): null | Node {
-    const {links, style} = this.props;
-    const linksWithIssues = links.filter(link => (link.trimmedIssues || []).length > 0);
-
-    if (linksWithIssues.length > 0) {
-      return (
-        <View style={[styles.linkedIssuesContainer, style]}>
-          {linksWithIssues.map(link => this._renderLinkType(link))}
-        </View>
-      );
-    }
-
-    return null;
-  }
-}
+export default LinkedIssues;

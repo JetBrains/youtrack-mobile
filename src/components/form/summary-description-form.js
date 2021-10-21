@@ -89,7 +89,6 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
                 placeholderText={descriptionPlaceholder}
                 multiline={true}
                 onDescriptionChange={this.onDescriptionChange}
-                uiTheme={theme.uiTheme}
               />
             </View>
           );

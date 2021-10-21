@@ -88,7 +88,6 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   async loadIssue() {
     await this.props.loadIssue();
-    this.props.loadIssueLinks();
   }
 
   renderDetails = (uiTheme: UITheme) => {
@@ -118,7 +117,8 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       onTagRemove,
 
       onCheckboxUpdate,
-      onShowDescriptionContextActions,
+      onShowCopyTextContextActions,
+      loadIssueLinksTitle,
     } = this.props;
 
     return (
@@ -159,9 +159,10 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         onTagRemove={onTagRemove}
 
         onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(checked, position, description)}
-        onDescriptionLongPress={() => {
-          onShowDescriptionContextActions(this.context.actionSheet());
+        onLongPress={(text: string, title?: string) => {
+          onShowCopyTextContextActions(this.context.actionSheet(), text, title);
         }}
+        loadIssueLinksTitle={loadIssueLinksTitle}
       />
     );
   }

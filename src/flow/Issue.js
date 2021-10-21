@@ -10,9 +10,11 @@ import type {
   Attachment,
   IssueComment,
   IssueLink,
+  CustomFieldText,
 } from './CustomFields';
 import type {User} from './User';
 import type {UserGroup} from './UserGroup';
+import type {Visibility} from './Visibility';
 
 export type IssueContextData = {
   issue: IssueFull,
@@ -32,7 +34,7 @@ export type IssueFull = {
   created: number,
   description: string,
   fieldHash?: any,
-  fields: Array<CustomField>,
+  fields: Array<CustomField | CustomFieldText>,
   id: string,
   idReadable: string,
   links: Array<IssueLink>,
@@ -47,9 +49,11 @@ export type IssueFull = {
   votes: number,
   watchers: { hasStar: boolean },
   wikifiedDescription: string,
+  usesMarkdown: boolean,
+  visibility: Visibility,
 };
 
-export type AnyIssue = IssueOnList | IssueFull;
+export type AnyIssue = IssueOnList | IssueFull | IssueLink;
 
 export type TransformedSuggestion = {
   prefix: string,

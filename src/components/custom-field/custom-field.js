@@ -1,18 +1,20 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {Component} from 'react';
-import {TouchableOpacity, View, Text} from 'react-native';
+import {TouchableOpacity, View, Text, Linking} from 'react-native';
 
-import ColorField from '../color-field/color-field';
-import {getEntityPresentation, ytDate} from '../issue-formatter/issue-formatter';
-import {getHUBUrl} from '../../util/util';
-import Avatar from '../avatar/avatar';
 import ApiHelper from '../api/api__helper';
+import Avatar from '../avatar/avatar';
+import ColorField from '../color-field/color-field';
+import IconUrl from '@jetbrains/icons/new-window.svg';
+import {getEntityPresentation, ytDate} from '../issue-formatter/issue-formatter';
+import {getHUBUrl, isURLPattern} from '../../util/util';
+import {HIT_SLOP} from '../common-styles/button';
 
 import styles from './custom-field.styles';
 
 import type {CustomField as CustomFieldType, FieldValue} from '../../flow/CustomFields';
+import type {Node} from 'React';
 import type {User} from '../../flow/User';
 
 type Props = {
@@ -35,7 +37,7 @@ export default class CustomField extends Component<Props, void> {
     const field: CustomFieldType = this.props.field;
     const emptyValue: ?string = field.projectCustomField.emptyFieldText;
 
-    if (value) {
+    if (value != null) {
       if (fieldType === 'date') {
         return ytDate(((value: any): number), true);
       }
@@ -43,7 +45,7 @@ export default class CustomField extends Component<Props, void> {
         return ytDate(((value: any): Date));
       }
       if (fieldType === 'integer' || fieldType === 'string' || fieldType === 'float') {
-        return ((value: any): string);
+        return `${(value: any)}`;
       }
       return getEntityPresentation(value);
     }
@@ -88,9 +90,17 @@ export default class CustomField extends Component<Props, void> {
           key="value"
         >
           {val && fieldType === 'user' ? this.renderAvatar(val) : null}
-          <Text testID="value" style={textStyle}>{
-            valuePresentation?.length > 203 ? `${valuePresentation.substr(0, 200)}...` : valuePresentation
-          }</Text>
+          <Text testID="value" style={textStyle}>
+            {
+              valuePresentation?.length > 203 ? `${valuePresentation.substr(0, 200)}...` : valuePresentation
+            }
+          </Text>
+          {isURLPattern(valuePresentation) && <TouchableOpacity
+            hitSlop={HIT_SLOP}
+            onPress={() => Linking.openURL(valuePresentation.trim())}
+          >
+            <IconUrl size={22} fill={styles.url.color} style={styles.url}/>
+          </TouchableOpacity>}
         </View>
       );
     };

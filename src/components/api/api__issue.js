@@ -9,7 +9,7 @@ import {handleRelativeUrl} from '../config/config';
 
 import type Auth from '../auth/auth';
 import type {Activity} from '../../flow/Activity';
-import type {Attachment, FieldValue, IssueComment, IssueProject, Tag} from '../../flow/CustomFields';
+import type {Attachment, FieldValue, IssueComment, IssueLink, IssueProject, Tag} from '../../flow/CustomFields';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import type {Visibility} from '../../flow/Visibility';
 import type {WorkItem} from '../../flow/Work';
@@ -29,12 +29,25 @@ export default class IssueAPI extends ApiBase {
     return issue;
   }
 
-  async getIssueLinks(id: string): Promise<IssueFull> {
+  async getIssueLinks(id: string): Promise<Array<IssueLink>> {
     const queryString = qs.stringify({
       fields: issueFields.singleIssueLinks.toString(),
     }, {encode: false});
 
-    return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}?${queryString}`);
+    return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}/links?${queryString}&$topLinks=100`);
+  }
+
+  getIssueLinksTitle(id: string): Promise<Array<IssueLink>> {
+    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}/links?fields=${issueFields.issueLinksBase.toString()}`);
+  }
+
+  removeIssueLink(issueId: string, linkedIssueId: string, linkTypeId: string): Promise<void> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}/links/${linkTypeId}/issues/${linkedIssueId}`,
+      'DELETE',
+      null,
+      {parseJson: false},
+    );
   }
 
   async updateVisibility(issueId: string, visibility: Visibility | null): Promise<any> {
@@ -212,7 +225,14 @@ export default class IssueAPI extends ApiBase {
     return await response.json();
   }
 
-  async attachFileToComment(issueId: string, fileUri: string, fileName: string, commentId?: string, mimeType: string): Promise<Array<Attachment>> {
+  async attachFileToComment(
+    issueId: string,
+    fileUri: string,
+    fileName: string,
+    commentId?: string,
+    mimeType: string,
+    visibility: ?Visibility = null
+  ): Promise<Array<Attachment>> {
     const resourcePath: string = commentId ? `comments/${commentId}` : 'draftComment';
     const url = `${this.youTrackIssueUrl}/${issueId}/${resourcePath}/attachments?fields=id,name,url,thumbnailURL,mimeType,imageDimensions(height,width)`;
     const formData = new FormData();
@@ -221,6 +241,7 @@ export default class IssueAPI extends ApiBase {
       uri: fileUri,
       name: fileName,
       type: mimeType,
+      visibility,
     });
     const response = await fetch(
       url,

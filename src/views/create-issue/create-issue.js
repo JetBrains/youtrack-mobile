@@ -13,6 +13,7 @@ import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import CommandDialog from '../../components/command-dialog/command-dialog';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import Header from '../../components/header/header';
+import IssueCustomFieldText from '../../components/custom-field/issue-custom-field-text';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import SummaryDescriptionForm from '../../components/form/summary-description-form';
 import TagAddPanel from '../../components/tags/tag-add-panel';
@@ -22,6 +23,7 @@ import usage from '../../components/usage/usage';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {ANALYTICS_ISSUE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
 import {getApi} from '../../components/api/api__instance';
+import {getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconCheck, IconClose, IconDrag, IconMoreOptions} from '../../components/icon/icon';
 import {isIOSPlatform} from '../../util/util';
@@ -30,7 +32,7 @@ import {ThemeContext} from '../../components/theme/theme-context';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {AttachmentActions} from '../../components/attachments-row/attachment-actions';
 import type {CreateIssueState} from './create-issue-reducers';
-import type {CustomField, IssueProject, Tag} from '../../flow/CustomFields';
+import type {CustomField, CustomFieldText, IssueProject, Tag} from '../../flow/CustomFields';
 import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 
@@ -258,6 +260,23 @@ class CreateIssue extends Component<Props, State> {
                   onSummaryChange={setIssueSummary}
                   onDescriptionChange={setIssueDescription}
                 />
+
+                {hasProject && (
+                  getIssueTextCustomFields(this.props.issue.fields).map((textField: CustomFieldText, index: number) => {
+                    return (
+                      <IssueCustomFieldText
+                        key={`issueCustomFieldText${index}`}
+                        style={styles.textFields}
+                        editMode={true}
+                        onUpdateFieldValue={async (fieldValue: string): Promise<void> => {
+                          await this.props.updateFieldValue(textField, {text: fieldValue});
+                        }}
+                        textField={textField}
+                        usesMarkdown={issue.usesMarkdown}
+                      />
+                    );
+                  })
+                )}
 
                 {hasProject && (
                   <>
