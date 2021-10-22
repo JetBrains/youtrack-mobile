@@ -5,7 +5,12 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import log from '../log/log';
 import urlJoin from 'url-join';
 import {AuthBase} from './auth-base';
-import {getStoredSecurelyAuthParams, storeSecurelyAuthParams} from '../storage/storage__oauth';
+import {
+  getAuthParamsKey,
+  getAuthStorageKey,
+  getStoredSecurelyAuthParams,
+  storeSecurelyAuthParams,
+} from '../storage/storage__oauth';
 import {STORAGE_AUTH_PARAMS_KEY} from '../storage/storage';
 
 import type {AppConfig} from '../../flow/AppConfig';
@@ -123,29 +128,20 @@ export default class AuthTest extends AuthBase {
         return authParams;
       })
       .then((authParams: AuthParams) => this.loadCurrentUser(authParams))
-      .then((authParams: AuthParams) => this.cacheAuthParams(authParams))
+      .then((authParams: AuthParams) => this.cacheAuthParams(authParams, getAuthParamsKey()))
       .then((authParams: AuthParams) => {
         this.authParams = authParams;
         return authParams;
       });
   }
 
-  getAuthorizationHeaders(authParams: ?AuthParams = this.authParams): { Authorization: string, 'User-Agent': string } {
-    if (!authParams) {
-      throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
-    }
-    return {
-      'Authorization': `${authParams.token_type} ${authParams.access_token}`,
-    };
-  }
-
-  async cacheAuthParams(authParams: AuthParams, key?: string): Promise<AuthParams> {
-    await storeSecurelyAuthParams(authParams, key);
+  async cacheAuthParams(authParams: AuthParams, timestamp: string): Promise<AuthParams> {
+    await storeSecurelyAuthParams(authParams, timestamp);
     return authParams;
   }
 
   async getCachedAuthParams(): Promise<AuthParams> {
-    const authParams: ?AuthParams = await getStoredSecurelyAuthParams();
+    const authParams: ?AuthParams = await getStoredSecurelyAuthParams(getAuthStorageKey());
     if (!authParams) {
       throw new Error('No stored auth params found');
     }

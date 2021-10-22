@@ -14,18 +14,21 @@ const getOAuthParamsKey = (): string => {
   return getStorageState()[storageStateOAuthParamsKey] || '';
 };
 
+const getAuthStorageKey = (): string => {
+  return getOAuthParamsKey() || getAuthParamsKey();
+};
+
 const storeSecurelyAuthParams = async (
   authParams: OAuthParams | AuthParams | null,
-  key?: string
+  authParamsKey: string
 ): Promise<OAuthParams | AuthParams | null> => {
-  const authParamsKey: string = key || getAuthParamsKey();
   if (authParamsKey && authParams) {
     await EncryptedStorage.setItem(authParamsKey, JSON.stringify(authParams));
   }
   return authParams;
 };
 
-const getStoredSecurelyAuthParams = async (authParamsKey: string = getAuthParamsKey()): Promise<OAuthParams | AuthParams | null> => {
+const getStoredSecurelyAuthParams = async (authParamsKey: string): Promise<OAuthParams | AuthParams | null> => {
   if (authParamsKey) {
     const authParams: ?string = await EncryptedStorage.getItem(authParamsKey);
     return typeof authParams === 'string' ? JSON.parse(authParams) : null;
@@ -34,7 +37,8 @@ const getStoredSecurelyAuthParams = async (authParamsKey: string = getAuthParams
 };
 
 export {
-
+  getAuthStorageKey,
+  getAuthParamsKey,
   getOAuthParamsKey,
   getStoredSecurelyAuthParams,
   storeSecurelyAuthParams,

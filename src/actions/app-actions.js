@@ -245,10 +245,11 @@ function applyAccount(config: AppConfig, auth: Auth, authParams: AuthParams): Ac
     await storeAccounts(newOtherAccounts);
     dispatch(receiveOtherAccounts(newOtherAccounts));
     const creationTimestamp: number = Date.now();
+    const authStorageStateKey: string = authParams.accessToken ? storageStateOAuthParamsKey : storageStateAuthParamsKey;
     await flushStorage({
       ...initialState,
       creationTimestamp: creationTimestamp,
-      authParamsKey: creationTimestamp.toString(),
+      [authStorageStateKey]: creationTimestamp.toString(),
     });
 
     await auth.cacheAuthParams(authParams, creationTimestamp.toString());
@@ -341,7 +342,8 @@ export function changeAccount(account: StorageState, removeCurrentAccount?: bool
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const state: AppState = getState();
     const config: AppConfig = ((account.config: any): AppConfig);
-    const authParams: ?AuthParams = await getStoredSecurelyAuthParams(account.authParamsKey);
+    const authStorageKey: string = account[storageStateOAuthParamsKey] || account[storageStateAuthParamsKey];
+    const authParams: ?AuthParams = await getStoredSecurelyAuthParams(authStorageKey);
     if (!authParams) {
       const errorMessage: string = 'Account doesn\'t have valid authorization, cannot switch onto it.';
       notify(errorMessage);
@@ -522,7 +524,7 @@ export function applyAuthorization(authParams: AuthParams | OAuthParams): Action
     const auth: Auth | OAuth2 | null = getState().app.auth;
     const creationTimestamp: number = Date.now();
     const authStorageStateValue: string = creationTimestamp.toString();
-    const authStorageStateKey: string = authParams.access_token ? storageStateAuthParamsKey : storageStateOAuthParamsKey;
+    const authStorageStateKey: string = authParams.accessToken ? storageStateOAuthParamsKey : storageStateAuthParamsKey;
     await flushStoragePart({
       creationTimestamp: creationTimestamp,
       [authStorageStateKey]: authStorageStateValue,

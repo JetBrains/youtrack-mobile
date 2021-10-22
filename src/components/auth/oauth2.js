@@ -6,8 +6,8 @@ import log from '../log/log';
 import {AuthBase} from './auth-base';
 import {doAuthorize, refreshToken, revokeToken} from './oauth2-helper';
 import {getOAuthParamsKey, getStoredSecurelyAuthParams, storeSecurelyAuthParams} from '../storage/storage__oauth';
-import {getStorageState, STORAGE_OAUTH_PARAMS_KEY} from '../storage/storage';
 import {logEvent} from '../log/log-helper';
+import {STORAGE_OAUTH_PARAMS_KEY} from '../storage/storage';
 
 import type {AppConfig} from '../../flow/AppConfig';
 import type {OAuthParams} from '../../flow/Auth';
@@ -85,23 +85,12 @@ export default class OAuth2 extends AuthBase {
     return authParams;
   }
 
-  getAuthorizationHeaders(authParams: OAuthParams = this.authParams): { Authorization: string, 'User-Agent': string } {
-    if (!authParams) {
-      throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
-    }
-    return {
-      'Authorization': `${authParams.tokenType} ${authParams.accessToken}`,
-    };
-  }
-
-  async cacheAuthParams(oauthParams: OAuthParams, key?: string): Promise<void> {
-    await storeSecurelyAuthParams(oauthParams, key);
+  async cacheAuthParams(oauthParams: OAuthParams, timestamp: string): Promise<void> {
+    await storeSecurelyAuthParams(oauthParams, timestamp);
   }
 
   async getCachedAuthParams(): Promise<OAuthParams> {
-    const creationTimestamp: ?number = getStorageState().creationTimestamp;
-    const authParamsKey: string = typeof creationTimestamp === 'number' ? creationTimestamp.toString() : getOAuthParamsKey();
-    const oauthParams: OAuthParams | null = await getStoredSecurelyAuthParams(authParamsKey);
+    const oauthParams: OAuthParams | null = await getStoredSecurelyAuthParams(getOAuthParamsKey());
     if (!oauthParams) {
       throw new Error('No stored auth params found');
     }

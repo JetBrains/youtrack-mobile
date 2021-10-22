@@ -176,8 +176,9 @@ export async function clearCachesAndDrafts(): Promise<StorageState> {
 
 async function secureAccount(account: StorageState): Promise<boolean> {
   if (!account.authParamsKey && account.authParams && account.creationTimestamp) {
-    account.authParamsKey = account.creationTimestamp.toString();
-    await cacheAuthParamsSecured(account.authParams, account.authParamsKey);
+    const authStorageStateKey: string = account.authParams.accessToken ? storageStateOAuthParamsKey : storageStateAuthParamsKey;
+    account[authStorageStateKey] = account.creationTimestamp.toString();
+    await cacheAuthParamsSecured(account.authParams, account[authStorageStateKey]);
     delete account.authParams;
     return true;
   }

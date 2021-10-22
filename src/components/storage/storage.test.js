@@ -128,7 +128,7 @@ describe('Storage', () => {
 
     describe('storeAuthParams', () => {
       it('should cache encrypted auth params', async () => {
-        const cachedAuthParams = await storageHelper.storeSecurelyAuthParams(authParamsMock);
+        const cachedAuthParams = await storageHelper.storeSecurelyAuthParams(authParamsMock, authParamsKeyMock);
 
         await expect(EncryptedStorage.setItem).toHaveBeenCalledWith(
           authParamsKeyMock,
@@ -142,7 +142,7 @@ describe('Storage', () => {
     describe('getStoredAuthParams', () => {
       it('should return cached auth params object', async () => {
         EncryptedStorage.getItem.mockResolvedValueOnce(JSON.stringify(authParamsMock));
-        const cachedParams = await storageHelper.getStoredSecurelyAuthParams();
+        const cachedParams = await storageHelper.getStoredSecurelyAuthParams(authParamsKeyMock);
 
         await expect(EncryptedStorage.getItem).toHaveBeenCalledWith(authParamsKeyMock);
         await expect(cachedParams).toEqual(authParamsMock);
@@ -150,7 +150,7 @@ describe('Storage', () => {
 
       it('should return NULL if no data cached', async () => {
         EncryptedStorage.setItem.mockResolvedValueOnce(undefined);
-        const cachedParams = await storageHelper.getStoredSecurelyAuthParams();
+        const cachedParams = await storageHelper.getStoredSecurelyAuthParams(authParamsKeyMock);
 
         await expect(EncryptedStorage.getItem).toHaveBeenCalledWith(authParamsKeyMock);
         await expect(cachedParams).toEqual(null);

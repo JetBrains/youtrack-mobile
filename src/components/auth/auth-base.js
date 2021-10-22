@@ -9,6 +9,7 @@ import {USER_AGENT} from '../usage/usage';
 
 import type {AppConfig} from '../../flow/AppConfig';
 import type {CustomError, HTTPResponse} from '../../flow/Error';
+import type {OAuthParams} from '../../flow/Auth';
 import type {User} from '../../flow/User';
 
 const ACCEPT_HEADER: string = 'application/json, text/plain, */*';
@@ -73,7 +74,14 @@ export class AuthBase {
 
   refreshToken(): Promise<any> {}
 
-  getAuthorizationHeaders(authParams: any): { Authorization: string, 'User-Agent': string } {}
+  getAuthorizationHeaders(authParams: OAuthParams = this.authParams): { Authorization: string, 'User-Agent': string } {
+    if (!authParams) {
+      throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
+    }
+    return {
+      'Authorization': `${authParams.tokenType || authParams.token_type} ${authParams.accessToken || authParams.access_token}`,
+    };
+  }
 
   loadCurrentUser(authParams: any): Promise<any> {
     log.info('Verifying token, loading current user data...');

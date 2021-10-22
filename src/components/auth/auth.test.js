@@ -8,6 +8,7 @@ import {__setStorageState} from '../storage/storage';
 
 let configMock;
 let authParamsMock;
+let authParamsMockKey;
 let requests;
 let clock;
 let auth;
@@ -28,6 +29,7 @@ describe('Auth', function () {
       clock = sinon.useFakeTimers();
       configMock = createConfigMock();
       authParamsMock = createAuthParamsMock();
+      authParamsMockKey = '0123';
 
       global.fetch = sinon.spy(function (url, options) {
         return new Promise(function (resolve, reject) {
@@ -44,6 +46,8 @@ describe('Auth', function () {
       });
 
       global.fetch.onRequest = () => {};
+
+      __setStorageState({authParamsKey: authParamsMockKey});
     });
 
     afterEach(function () {
@@ -110,6 +114,7 @@ describe('Auth', function () {
       });
 
       it('should refresh token', async () => {
+
         const response = {access_token: 'new-token', refresh_token: 'new-refresh'};
 
         global.fetch.onRequest = options => {
@@ -179,17 +184,16 @@ describe('Auth', function () {
     beforeEach(() => {
       authParamsMock = createAuthParamsMock();
       auth = createAuthMock(createConfigMock());
-      __setStorageState({authParamsKey: '000'});
     });
 
     describe('cacheAuthParams', () => {
       it('should cache encrypted auth params', async () => {
       jest.spyOn(storageHelper, 'storeSecurelyAuthParams');
-        const cachedAuthParams = await auth.cacheAuthParams(authParamsMock);
+        const cachedAuthParams = await auth.cacheAuthParams(authParamsMock, authParamsMockKey);
 
         await expect(storageHelper.storeSecurelyAuthParams).toHaveBeenCalledWith(
           authParamsMock,
-          undefined
+          authParamsMockKey
           );
         await expect(cachedAuthParams).toEqual(authParamsMock);
       });
