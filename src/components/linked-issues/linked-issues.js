@@ -16,7 +16,6 @@ import {loadLinkedIssues, onUnlinkIssue} from '../../views/issue/issue-actions';
 
 import styles from './linked-issues.style';
 
-import type {IssueLink} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
 import type {Node} from 'React';
 import type {LinksListData} from './linked-issues-helper';
@@ -24,7 +23,7 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   canLink?: (issue: IssueOnList) => boolean,
-  onUpdate: () => void,
+  onUpdate: (linkedIssues: Array<IssueOnList>) => void,
   style?: ViewStyleProp,
 }
 
@@ -33,9 +32,10 @@ const LinkedIssues = (props: Props): Node => {
 
   const [sections, updateSections] = useState([]);
 
-  const getLinkedIssues = useCallback(async () => {
-    const links: Array<IssueLink> = await dispatch(loadLinkedIssues());
-    updateSections(createLinksList(links));
+  const getLinkedIssues = useCallback(async (): Array<IssueOnList> => {
+    const linkedIssue: Array<IssueOnList> = await dispatch(loadLinkedIssues());
+    updateSections(createLinksList(linkedIssue));
+    return linkedIssue;
   }, [dispatch]);
 
   useEffect(() => {
@@ -98,9 +98,9 @@ const LinkedIssues = (props: Props): Node => {
         rightButton={props.canLink ? <IconAdd style={styles.addLinkButton} color={styles.link.color} size={20}/> : null}
         onRightButtonClick={() => Router.Page({
           children: <LinkedIssuesAddLink
-            onUpdate={() => {
-              getLinkedIssues();
-              props.onUpdate();
+            onUpdate={async () => {
+              const linkedIssues: Array<IssueOnList> = await getLinkedIssues();
+              props.onUpdate(linkedIssues);
             }}
           />,
         })}

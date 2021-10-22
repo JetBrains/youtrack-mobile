@@ -227,6 +227,20 @@ export function loadIssueLinksTitle(): ((
   };
 }
 
+export function getIssueLinksTitle(issueLinks: IssueOnList): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    if (issueLinks) {
+      dispatch({type: types.RECEIVE_ISSUE_LINKS, issueLinks});
+    } else {
+      dispatch(loadIssueLinksTitle());
+    }
+  };
+}
+
 export function loadLinkedIssues(): ((
   dispatch: (any) => any,
   getState: StateGetter,
@@ -334,7 +348,6 @@ export function onLinkIssue(linkedIssueIdReadable: string, linkTypeName: string)
       log.warn(errorMsg, err);
       notify(errorMsg);
     } else {
-      dispatch(loadLinkedIssues());
       notify('Issue link added');
     }
     return !error;
