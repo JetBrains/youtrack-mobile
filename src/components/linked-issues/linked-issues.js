@@ -85,6 +85,7 @@ const LinkedIssues = (props: Props): Node => {
     return (
       <Text style={styles.linkedIssueTypeTitle}>
         {`${it.section.title} ${it.section.data.length} ${amount > 1 ? 'issues' : 'issue'}`}
+        {it.section?.unresolvedIssuesSize > 0 ? ` (${it.section.unresolvedIssuesSize} unresolved)` : ''}
       </Text>
     );
   };
