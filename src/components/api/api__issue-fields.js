@@ -237,6 +237,7 @@ const ISSUE_LINKED_ISSUE_FIELDS: any = toField([
   'id',
   'idReadable',
   'summary',
+  'resolved',
   {fields: ISSUE_FIELD_SHORT_FIELDS},
 ]);
 
