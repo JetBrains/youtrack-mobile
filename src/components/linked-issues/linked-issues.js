@@ -24,6 +24,7 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
   canLink?: (issue: IssueOnList) => boolean,
   onUpdate: (linkedIssues: Array<IssueOnList>) => void,
+  subTitle?: any,
   style?: ViewStyleProp,
 }
 
@@ -93,7 +94,6 @@ const LinkedIssues = (props: Props): Node => {
   return (
     <View style={[styles.container, props.style]}>
       <Header
-        title="Linked issues"
         showShadow={true}
         leftButton={<IconBack color={styles.link.color}/>}
         rightButton={props.canLink ? <IconAdd style={styles.addLinkButton} color={styles.link.color} size={20}/> : null}
@@ -106,7 +106,14 @@ const LinkedIssues = (props: Props): Node => {
           />,
         })}
         onBack={() => Router.pop()}
-      />
+      >
+        <Text
+          style={styles.headerSubTitle}
+          numberOfLines={1}>
+          {props.subTitle}
+        </Text>
+        <Text style={styles.headerTitle}>Linked issues</Text>
+      </Header>
       <SectionList
         style={styles.linkedListContainer}
         contentContainerStyle={styles.linkedList}

@@ -129,6 +129,7 @@ export default class IssueDetails extends Component<Props, void> {
                   ? (linkedIssue: AnyIssue) => issuePermissions.canLink(linkedIssue)
                   : undefined
               )}
+              subTitle={`${issue.idReadable} ${issue.summary}`}
             />),
         })}
       >

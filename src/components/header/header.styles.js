@@ -6,6 +6,12 @@ import {elevation1} from '../common-styles/shadow';
 const minButtonWidth = UNIT * 5;
 export const headerMinHeight = UNIT * 8;
 
+export const headerTitlePresentation = {
+  ...headerTitle,
+  marginLeft: UNIT,
+  color: '$text',
+};
+
 export default EStyleSheet.create({
   header: {
     position: 'relative',
@@ -19,11 +25,7 @@ export default EStyleSheet.create({
     backgroundColor: '$background',
   },
   headerShadow: elevation1,
-  headerTitle: {
-    ...headerTitle,
-    marginLeft: UNIT,
-    color: '$text',
-  },
+  headerTitle: headerTitlePresentation,
   headerButtonLeft: {
     minWidth: minButtonWidth,
     justifyContent: 'flex-start',

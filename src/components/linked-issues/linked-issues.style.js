@@ -3,7 +3,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {secondaryText} from '../common-styles/typography';
 import {separatorBorder} from '../common-styles/list';
 import {UNIT} from '../variables/variables';
-import {headerMinHeight} from '../header/header.styles';
+import {headerMinHeight, headerTitlePresentation} from '../header/header.styles';
 import {selectButtonMinHeight} from '../select/select-button.styles';
 
 const linkTypeSelect = {
@@ -59,5 +59,13 @@ export default EStyleSheet.create({
   linkTypeSelect: linkTypeSelect,
   issuesToLinkContainer: {
     marginBottom: headerMinHeight + selectButtonMinHeight + linkTypeSelect.marginTop + linkTypeSelect.marginBottom,
+  },
+  headerTitle: {
+    ...headerTitlePresentation,
+    marginLeft: 0,
+  },
+  headerSubTitle: {
+    lineHeight: 13,
+    color: '$icon',
   },
 });
