@@ -22,6 +22,7 @@ const createConfig = (config: AppConfig): OAuthConfig => {
       tokenEndpoint: `${config.auth.serverUri}/api/rest/oauth2/token`,
     },
     usePKCE: true,
+    dangerouslyAllowInsecureHttpRequests: true,
   };
 };
 
