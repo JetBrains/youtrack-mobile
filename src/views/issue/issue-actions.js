@@ -227,7 +227,7 @@ export function loadIssueLinksTitle(): ((
   };
 }
 
-export function loadIssueLinks(): ((
+export function loadLinkedIssues(): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
@@ -265,7 +265,7 @@ export function onUnlinkIssue(linkedIssue: IssueOnList, linkTypeId: string): ((
       log.warn(errorMsg, err);
       notify(errorMsg);
     } else {
-      dispatch(loadIssueLinks());
+      dispatch(loadLinkedIssues());
       notify('Issue link removed');
     }
     return !error;
@@ -334,7 +334,7 @@ export function onLinkIssue(linkedIssueIdReadable: string, linkTypeName: string)
       log.warn(errorMsg, err);
       notify(errorMsg);
     } else {
-      dispatch(loadIssueLinks());
+      dispatch(loadLinkedIssues());
       notify('Issue link added');
     }
     return !error;

@@ -12,7 +12,7 @@ import Router from '../router/router';
 
 import {createLinksList} from './linked-issues-helper';
 import {IconAdd, IconBack, IconClose} from '../icon/icon';
-import {loadIssueLinks, onUnlinkIssue} from '../../views/issue/issue-actions';
+import {loadLinkedIssues, onUnlinkIssue} from '../../views/issue/issue-actions';
 
 import styles from './linked-issues.style';
 
@@ -33,14 +33,14 @@ const LinkedIssues = (props: Props): Node => {
 
   const [sections, updateSections] = useState([]);
 
-  const loadLinks = useCallback(async () => {
-    const links: Array<IssueLink> = await dispatch(loadIssueLinks());
+  const getLinkedIssues = useCallback(async () => {
+    const links: Array<IssueLink> = await dispatch(loadLinkedIssues());
     updateSections(createLinksList(links));
   }, [dispatch]);
 
   useEffect(() => {
-    loadLinks();
-  }, [loadLinks]);
+    getLinkedIssues();
+  }, [getLinkedIssues]);
 
   const renderLinkedIssue = (linkedIssue: IssueOnList, linkTypeId: string) => (
     <View style={styles.linkedIssueItem}>
@@ -96,7 +96,14 @@ const LinkedIssues = (props: Props): Node => {
         showShadow={true}
         leftButton={<IconBack color={styles.link.color}/>}
         rightButton={props.canLink ? <IconAdd style={styles.addLinkButton} color={styles.link.color} size={20}/> : null}
-        onRightButtonClick={() => Router.Page({children: <LinkedIssuesAddLink onUpdate={props.onUpdate}/>})}
+        onRightButtonClick={() => Router.Page({
+          children: <LinkedIssuesAddLink
+            onUpdate={() => {
+              getLinkedIssues();
+              props.onUpdate();
+            }}
+          />,
+        })}
         onBack={() => Router.pop()}
       />
       <SectionList
