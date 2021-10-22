@@ -12,14 +12,18 @@ import type {IssueOnList} from '../../flow/Issue';
 import type {Folder} from '../../flow/User';
 
 export default class IssuesAPI extends ApiBase {
-  async getIssues(query: string = '', $top: number, $skip: number = 0): Promise<Array<IssueOnList>> {
-    const queryString = qs.stringify({
-      query, $top, $skip,
-      fields: issueFields.issuesOnList.toString(),
-    });
+  async _getIssues(query: string = '', $top: number, $skip: number = 0, fields: string): Promise<Array<IssueOnList>> {
+    const q: string = qs.stringify({$top, $skip, query, fields}, {encode: false});
+    return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${q}`);
+  }
 
-    const issues: Array<IssueOnList> = await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${queryString}`);
+  async getIssues(query: string = '', $top: number, $skip: number): Promise<Array<IssueOnList>> {
+    const issues: Array<IssueOnList> = await this._getIssues(query, $top, $skip, issueFields.issuesOnList.toString());
     return ApiHelper.patchAllRelativeAvatarUrls(issues, this.config.backendUrl);
+  }
+
+  async getIssuesXShort(query: string = '', $top: number, $skip: number): Promise<Array<$Shape<IssueOnList>>> {
+    return await this._getIssues(query, $top, $skip, issueFields.issueLinks.toString());
   }
 
   async getIssuesCount(

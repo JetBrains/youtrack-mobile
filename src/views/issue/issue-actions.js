@@ -10,7 +10,7 @@ import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE} from '../../components/analytics/analytics-ids';
 import {attachmentActions, attachmentTypes} from './issue__attachment-actions-and-types';
-import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
+import {getEntityPresentation, getReadableID} from '../../components/issue-formatter/issue-formatter';
 import type {State as IssueState} from './issue-reducers';
 import {initialState} from './issue-reducers';
 import {isIOSPlatform, until} from '../../util/util';
@@ -22,7 +22,7 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 
 import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
-import type {Attachment, CustomField, FieldValue, IssueProject, Tag} from '../../flow/CustomFields';
+import type {Attachment, CustomField, FieldValue, IssueLinkType, IssueProject, Tag} from '../../flow/CustomFields';
 import type {CommandSuggestionResponse, IssueFull, IssueOnList, OpenNestedViewParams} from '../../flow/Issue';
 import type {IssueLink, IssueComment} from '../../flow/CustomFields';
 import type {NormalizedAttachment} from '../../flow/Attachment';
@@ -272,6 +272,75 @@ export function onUnlinkIssue(linkedIssue: IssueOnList, linkTypeId: string): ((
   };
 }
 
+export function loadIssueLinkTypes(): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<IssueLinkType>) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Link issue');
+    const [error, issueLinkTypes] = await until(api.issue.getIssueLinkTypes());
+    if (error) {
+      const err: Error = await resolveError(error);
+      const errorMsg: string = 'Failed to link issue';
+      log.warn(errorMsg, err);
+    }
+    return issueLinkTypes || [];
+  };
+}
+
+export function loadIssuesXShort(linkTypeName: string, page: number = 50): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<IssueOnList>) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const api: Api = getApi();
+    const issue: IssueFull = getState().issueState.issue;
+
+    const [error, issues] = await until(api.issues.getIssuesXShort(
+      `(project:${issue?.project?.shortName})+and+(${linkTypeName.split(' ').join('+')}:+-${getReadableID(issue)})`,
+      page
+    ));
+    if (error) {
+      const err: Error = await resolveError(error);
+      const errorMsg: string = 'Failed to load issues';
+      log.warn(errorMsg, err);
+      notify(errorMsg);
+    }
+    return (issues || []).filter((it: IssueOnList) => it.id !== issue.id);
+  };
+}
+
+export function onLinkIssue(linkedIssueIdReadable: string, linkTypeName: string): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<boolean>) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const issueId: string = getState().issueState.issue.id;
+    const api: Api = getApi();
+
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Link issue');
+    const [error] = await until(api.issue.addIssueLink(
+      issueId,
+      `${linkTypeName} ${linkedIssueIdReadable}`
+    ));
+    if (error) {
+      const err: Error = await resolveError(error);
+      const errorMsg: string = 'Failed to link issue';
+      log.warn(errorMsg, err);
+      notify(errorMsg);
+    } else {
+      dispatch(loadIssueLinks());
+      notify('Issue link added');
+    }
+    return !error;
+  };
+}
+
 export function refreshIssue(): ((dispatch: (any) => any, getState: StateGetter) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter) => {
     dispatch(startIssueRefreshing());
@@ -469,8 +538,9 @@ function makeIssueWebUrl(api: Api, issue: IssueFull, commentId: ?string) {
 
 export function showIssueActions(
   actionSheet: ActionSheet,
-  permissions: { canAttach: boolean, canEdit: boolean, canApplyCommand: boolean, canTag: boolean },
-  switchToDetailsTab: () => any
+  permissions: { canAttach: boolean, canEdit: boolean, canApplyCommand: boolean, canTag: boolean},
+  switchToDetailsTab: () => any,
+  renderLinkIssues?: () => any,
 ): ((
   dispatch: (any) => any,
   getState: StateGetter,
@@ -530,6 +600,18 @@ export function showIssueActions(
           switchToDetailsTab();
           dispatch(attachmentActions.toggleAttachFileDialog(true));
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Attach file');
+        },
+      });
+    }
+
+    if (typeof renderLinkIssues === 'function') {
+      actions.push({
+        title: 'Link issue',
+        execute: () => {
+          Router.Page({
+            children: renderLinkIssues(),
+          });
+          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Link issue');
         },
       });
     }

@@ -115,7 +115,7 @@ export default class IssueDetails extends Component<Props, void> {
     const {issue, issuePermissions,loadIssueLinksTitle} = this.props;
     const issueLinks: Array<IssueLink> = issue.links || [];
     const linkedIssuesTitle: string = issueLinks.length > 0 ? getLinkedIssuesTitle(issueLinks) : '';
-    return (
+    return linkedIssuesTitle ? (
       <TouchableOpacity
         style={styles.linkedIssuesButton}
         onPress={() => Router.Page({
@@ -147,7 +147,7 @@ export default class IssueDetails extends Component<Props, void> {
         </View>
         <IconAngleRight size={18}/>
       </TouchableOpacity>
-    );
+    ) : null;
   };
 
   renderAttachments(attachments: Array<Attachment> | null, uiTheme: UITheme): null | Node {

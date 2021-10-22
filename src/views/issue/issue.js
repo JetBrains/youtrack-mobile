@@ -15,6 +15,7 @@ import Header from '../../components/header/header';
 import IssueActivity from './activity/issue__activity';
 import IssueDetails from './issue__details';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
+import LinkedIssuesAddLink from '../../components/linked-issues/linked-issues-add-link';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import Star from '../../components/star/star';
@@ -165,7 +166,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         loadIssueLinksTitle={loadIssueLinksTitle}
       />
     );
-  }
+  };
 
   renderActivity = (uiTheme: UITheme) => {
     const {issue, user, issuePermissions, selectProps, updateUserAppearanceProfile, openNestedIssueView} = this.props;
@@ -266,6 +267,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       showIssueActions,
       stopEditingIssue,
       issuePermissions,
+      loadIssueLinksTitle,
     } = this.props;
 
     const issueIdReadable = this.renderHeaderIssueTitle();
@@ -287,6 +289,9 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
                   canTag: issuePermissions.canTag(issue),
                 },
                 this.switchToDetailsTab,
+                (issuePermissions.canLink(issue)
+                  ? () => <LinkedIssuesAddLink onUpdate={loadIssueLinksTitle}/>
+                  : null)
               );
             }
           }

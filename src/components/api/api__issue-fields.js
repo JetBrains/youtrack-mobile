@@ -233,17 +233,35 @@ const ISSUE_SHORT_FIELDS: any = toField([
   {tags: ISSUE_TAGS_FIELDS},
 ]);
 
+const ISSUE_LINKED_ISSUE_FIELDS: any = toField([
+  'id',
+  'idReadable',
+  'summary',
+  {fields: ISSUE_FIELD_SHORT_FIELDS},
+]);
+
+const ISSUE_LINK_TYPES_FIELDS_BASE: any = toField([
+  'sourceToTarget',
+  'localizedSourceToTarget',
+  'targetToSource',
+  'localizedTargetToSource',
+]);
+
+const ISSUE_LINK_TYPES_FIELDS: any = toField([
+  'id',
+  'readOnly',
+  'name',
+  'aggregation',
+  'directed',
+  'outwards',
+  'localizedName',
+  ISSUE_LINK_TYPES_FIELDS_BASE,
+]);
+
 const ISSUE_LINKS_FIELDS_BASE: any = toField([
   'direction',
   'issuesSize',
-  {
-    linkType: [
-      'sourceToTarget',
-      'localizedSourceToTarget',
-      'targetToSource',
-      'localizedTargetToSource',
-    ],
-  },
+  {linkType: ISSUE_LINK_TYPES_FIELDS_BASE},
 ]);
 
 const ISSUE_LINKS_FIELDS: any = toField([
@@ -344,7 +362,9 @@ export default {
   attachments: ISSUE_ATTACHMENTS_FIELDS,
   issuesOnList: ISSUE_SHORT_FIELDS,
   singleIssueLinks: ISSUE_LINKS_FIELDS,
-  issueLinksBase: ISSUE_LINKS_FIELDS_BASE,
+  issueLinkBase: ISSUE_LINKS_FIELDS_BASE,
+  issueLinkTypes: ISSUE_LINK_TYPES_FIELDS,
+  issueLinks: ISSUE_LINKED_ISSUE_FIELDS,
   singleIssue: (toField([
     'id',
     'idReadable',

@@ -180,6 +180,10 @@ export type IssueLinkType = {
   localizedSourceToTarget: ?string,
   targetToSource: string,
   localizedTargetToSource: ?string,
+  readOnly: string,
+  aggregation: boolean,
+  directed: boolean,
+  localizedName: string,
 }
 
 export type IssueLink = {

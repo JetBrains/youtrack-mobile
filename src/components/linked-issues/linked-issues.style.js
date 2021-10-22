@@ -1,18 +1,26 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {secondaryText} from '../common-styles/typography';
-import {SELECT_ITEM_HEIGHT} from '../select/select.styles';
 import {separatorBorder} from '../common-styles/list';
 import {UNIT} from '../variables/variables';
+import {headerMinHeight} from '../header/header.styles';
+import {selectButtonMinHeight} from '../select/select-button.styles';
+
+const linkTypeSelect = {
+  marginTop: UNIT * 3,
+  marginBottom: UNIT,
+  marginHorizontal: UNIT * 2,
+};
 
 export default EStyleSheet.create({
   link: {
     color: '$link',
   },
+  linkedListContainer: {
+    marginBottom: headerMinHeight,
+  },
   linkedList: {
-    padding: UNIT * 2,
-    paddingRight: UNIT,
-    paddingBottom: SELECT_ITEM_HEIGHT,
+    paddingHorizontal: UNIT * 2,
   },
   linkedIssueItem: {
     flex: 1,
@@ -44,5 +52,12 @@ export default EStyleSheet.create({
     ...secondaryText,
     fontWeight: '600',
     textTransform: 'uppercase',
+  },
+  addLinkButton: {
+    padding: UNIT * 1.5,
+  },
+  linkTypeSelect: linkTypeSelect,
+  issuesToLinkContainer: {
+    marginBottom: headerMinHeight + selectButtonMinHeight + linkTypeSelect.marginTop + linkTypeSelect.marginBottom,
   },
 });
