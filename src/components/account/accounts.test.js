@@ -34,7 +34,7 @@ describe('<Accounts/>', () => {
 
   const testIdWrapper = 'accounts';
   const testIdAccountElement = 'accountsAccount';
-  const testIdAddAccountButton = 'accountsAddAccount';
+  const testIdAddAccountButton = 'test:id/accountsAddAccount';
 
   describe('Account', () => {
     beforeEach(() => {

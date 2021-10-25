@@ -13,7 +13,7 @@ type Props = {
   icon: React$Element<any>,
   onPress: () => any,
   style?: ViewStyleProp,
-  testId?: string,
+  testID?: string,
 }
 
 
