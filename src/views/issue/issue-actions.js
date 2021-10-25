@@ -250,13 +250,14 @@ export function loadLinkedIssues(): ((
     const issueId = getState().issueState.issueId;
     const api: Api = getApi();
 
-    let issueLinks: Array<IssueLink> = [];
+    let issueLinks: Array<IssueLink>;
     try {
       issueLinks = await api.issue.getIssueLinks(issueId);
       log.info(`"${issueId}" linked issues loaded`);
     } catch (rawError) {
       const error = await resolveError(rawError);
       log.warn('Failed to load linked issues', error);
+      issueLinks = [];
     }
     return issueLinks;
   };
@@ -305,7 +306,7 @@ export function loadIssueLinkTypes(): ((
   };
 }
 
-export function loadIssuesXShort(linkTypeName: string, page: number = 50): ((
+export function loadIssuesXShort(linkTypeName: string, query: string, page: number = 50): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
@@ -315,7 +316,7 @@ export function loadIssuesXShort(linkTypeName: string, page: number = 50): ((
     const issue: IssueFull = getState().issueState.issue;
 
     const [error, issues] = await until(api.issues.getIssuesXShort(
-      `(project:${issue?.project?.shortName})+and+(${linkTypeName.split(' ').join('+')}:+-${getReadableID(issue)})`,
+      `(${query})+and+(${linkTypeName.split(' ').join('+')}:+-${getReadableID(issue)})`,
       page
     ));
     if (error) {

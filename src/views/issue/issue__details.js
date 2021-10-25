@@ -85,7 +85,7 @@ type Props = {
 
   onCheckboxUpdate: (checked: boolean, position: number, description: string) => void,
   onLongPress: (text: string, title?: string) => void,
-  getIssueLinksTitle: () => void,
+  getIssueLinksTitle: (linkedIssues?: Array<IssueLink>) => any,
 }
 
 export default class IssueDetails extends Component<Props, void> {
@@ -121,7 +121,7 @@ export default class IssueDetails extends Component<Props, void> {
         onPress={() => Router.Page({
           children: (
             <LinkedIssues
-              onUpdate={(issues: IssueOnList) => {
+              onUpdate={(issues?: Array<IssueLink>) => {
                 getIssueLinksTitle(issues);
               }}
               canLink={(

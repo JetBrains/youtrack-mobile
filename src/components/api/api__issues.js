@@ -22,7 +22,7 @@ export default class IssuesAPI extends ApiBase {
     return ApiHelper.patchAllRelativeAvatarUrls(issues, this.config.backendUrl);
   }
 
-  async getIssuesXShort(query: string = '', $top: number, $skip: number): Promise<Array<$Shape<IssueOnList>>> {
+  async getIssuesXShort(query: string = '', $top: number, $skip?: number): Promise<Array<$Shape<IssueOnList>>> {
     return await this._getIssues(query, $top, $skip, issueFields.issueLinks.toString());
   }
 

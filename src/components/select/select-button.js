@@ -22,7 +22,7 @@ const SelectButton = (props: Props) => {
       style={[styles.button, props.style]}
       onPress={props.onPress}
     >
-      {!!props.subTitle && <Text style={styles.buttonTextSub}>{props.subTitle}</Text>}
+      {!!props.subTitle && <Text numberOfLines={1} style={styles.buttonTextSub}>{props.subTitle}</Text>}
       <Text style={[styles.buttonText, props.subTitle ? styles.buttonTextMain : null]}>
         {props.children}
       </Text>
