@@ -13,6 +13,7 @@ import Router from '../router/router';
 import {createLinksList} from './linked-issues-helper';
 import {IconAdd, IconBack, IconClose} from '../icon/icon';
 import {loadLinkedIssues, onUnlinkIssue} from '../../views/issue/issue-actions';
+import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './linked-issues.style';
 
@@ -55,7 +56,12 @@ const LinkedIssues = (props: Props): Node => {
     const isButtonPressed: boolean = buttonPressed !== null;
     const isCurrentButtonPressed: boolean = isButtonPressed && buttonPressed === linkedIssue.id;
     return (
-      <View style={styles.linkedIssueItem}>
+      <AnimatedView
+        useNativeDriver
+        duration={500}
+        animation="fadeIn"
+        style={styles.linkedIssueItem}
+      >
         <IssueRow
           style={styles.linkedIssue}
           issue={linkedIssue}
@@ -93,7 +99,7 @@ const LinkedIssues = (props: Props): Node => {
             />}
           </TouchableOpacity>
         )}
-      </View>
+      </AnimatedView>
     );
   };
 

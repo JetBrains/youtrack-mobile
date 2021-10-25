@@ -23,6 +23,7 @@ import {IconNothingFound} from '../icon/icon-no-found';
 import {loadIssueLinkTypes, loadIssuesXShort, onLinkIssue} from '../../views/issue/issue-actions';
 import {noIssuesFoundIconSize} from '../../views/issues/issues.styles';
 import {UNIT} from '../variables/variables';
+import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './linked-issues.style';
 
@@ -127,19 +128,24 @@ const LinkedIssuesAddLink = (props: Props): Node => {
 
   const renderIssue = (issue: IssueOnList) => {
     return (
-      <IssueRow
-        style={[styles.linkedIssueItem, styles.linkedIssue]}
-        issue={issue}
-        onClick={async () => {
-          if (currentIssueLinkTypeExtended) {
-            updateLoading(true);
-            await dispatch(onLinkIssue(getReadableID(issue), currentIssueLinkTypeExtended.getName()));
-            updateLoading(false);
-            props.onUpdate();
-            Router.pop();
-          }
-        }}
-      />
+      <AnimatedView
+        useNativeDriver
+        duration={500}
+        animation="fadeIn">
+        <IssueRow
+          style={[styles.linkedIssueItem, styles.linkedIssue]}
+          issue={issue}
+          onClick={async () => {
+            if (currentIssueLinkTypeExtended) {
+              updateLoading(true);
+              await dispatch(onLinkIssue(getReadableID(issue), currentIssueLinkTypeExtended.getName()));
+              updateLoading(false);
+              props.onUpdate();
+              Router.pop();
+            }
+          }}
+        />
+      </AnimatedView>
     );
   };
 
