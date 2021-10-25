@@ -52,7 +52,7 @@ const LinkedIssuesAddLink = (props: Props): Node => {
   const [isSelectVisible, updateSelectVisible] = useState(false);
   const [isScrolling, updateScrolling] = useState(false);
 
-  const [query, updateQuery] = useState('');
+  const [queryData, updateQueryData] = useState({query: '', _query: ''});
   const [isQASelectVisible, updateQASelectVisible] = useState(false);
   const [suggestions, updateSuggestions] = useState([]);
 
@@ -64,14 +64,14 @@ const LinkedIssuesAddLink = (props: Props): Node => {
     [dispatch]
   );
 
-  const doSearch = useCallback(async (linkType: ?IssueLinkTypeExtended, q: string = query) => {
+  const doSearch = useCallback(async (linkType: ?IssueLinkTypeExtended, q: string = queryData.query) => {
     if (linkType) {
       updateLoading(true);
       const _issues: Array<IssueOnList> = await dispatch(loadIssuesXShort(linkType.getName(), q));
       updateIssues(_issues);
       updateLoading(false);
     }
-  }, [dispatch, query]);
+  }, [dispatch, queryData]);
 
 
   useEffect(() => {
@@ -96,15 +96,18 @@ const LinkedIssuesAddLink = (props: Props): Node => {
       return (
         <QueryAssistPanel
           queryAssistSuggestions={suggestions}
-          query={query}
+          query={queryData.query}
           suggestIssuesQuery={loadSuggestions}
           onQueryUpdate={(q: string) => {
-            updateQuery(q);
+            updateQueryData({query: q, _query: q});
             updateQASelectVisible(false);
             doSearch(currentIssueLinkTypeExtended, q);
           }}
           onClose={(q: string) => {
-            updateQuery(q);
+            if (!q && q !== queryData._query) {
+              doSearch(currentIssueLinkTypeExtended, q);
+            }
+            updateQueryData({query: q, _query: q});
             updateQASelectVisible(false);
           }}
           clearButtonMode="always"
@@ -114,10 +117,10 @@ const LinkedIssuesAddLink = (props: Props): Node => {
       return <View style={isScrolling ? styles.searchPanelContainer : null}>
         <QueryPreview
           style={styles.searchPanel}
-          query={query}
+          query={queryData.query}
           onFocus={(clearQuery: boolean) => {
             if (clearQuery) {
-              updateQuery('');
+              updateQueryData({query: '', _query: queryData.query});
             }
             updateQASelectVisible(true);
           }}
@@ -201,7 +204,7 @@ const LinkedIssuesAddLink = (props: Props): Node => {
         }}
         refreshControl={<RefreshControl
           refreshing={false}
-          onRefresh={() => doSearch(currentIssueLinkTypeExtended, query)}
+          onRefresh={() => doSearch(currentIssueLinkTypeExtended, queryData.query)}
           tintColor={styles.link.color}
         />}
         scrollEventThrottle={50}
