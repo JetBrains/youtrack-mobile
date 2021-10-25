@@ -179,7 +179,7 @@ class Menu extends Component<Props, State> {
         style={styles.menu}
       >
         <MenuItem
-          testId="test:id/menuIssues"
+          testId="menuIssues"
           icon={<IconTask
             testID="menuIssuesIcon"
             isActive={this.isActiveRoute(routeMap.Issues)}

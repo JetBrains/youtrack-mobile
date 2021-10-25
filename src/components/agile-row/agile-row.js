@@ -92,7 +92,7 @@ export default function BoardRow(props: Props): null | Node {
       style={[styles.rowContainer, style]}
     >
       <View
-        testID="agile-row-header"
+        testID="agileRowHeader"
         accessibilityLabel="agile-row-header"
         accessible={true}
         style={[

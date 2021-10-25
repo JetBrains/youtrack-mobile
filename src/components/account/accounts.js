@@ -114,7 +114,7 @@ export default class Accounts extends PureComponent<Props, void> {
       >
 
         <TouchableOpacity
-          testID="test:id/accountsAddAccount"
+          testID="accountsAddAccount"
           accessibilityLabel="accountsAddAccount"
           accessible={true}
           hitSlop={HIT_SLOP}
