@@ -24,7 +24,10 @@ export default EStyleSheet.create({
   header: {
     paddingHorizontal: UNIT * 2,
   },
-  headerText: headerTitle,
+  headerText: {
+    ...headerTitle,
+    color: '$text',
+  },
   headerTextResolved: {
     ...issueIdResolved,
     color: '$icon',
