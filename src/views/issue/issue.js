@@ -119,7 +119,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
       onCheckboxUpdate,
       onShowCopyTextContextActions,
-      loadIssueLinksTitle,
+      getIssueLinksTitle,
     } = this.props;
 
     return (
@@ -163,7 +163,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         onLongPress={(text: string, title?: string) => {
           onShowCopyTextContextActions(this.context.actionSheet(), text, title);
         }}
-        loadIssueLinksTitle={loadIssueLinksTitle}
+        getIssueLinksTitle={getIssueLinksTitle}
       />
     );
   };

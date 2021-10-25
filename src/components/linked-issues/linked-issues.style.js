@@ -1,10 +1,12 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {secondaryText} from '../common-styles/typography';
-import {separatorBorder} from '../common-styles/list';
-import {UNIT} from '../variables/variables';
-import {headerMinHeight} from '../header/header.styles';
+import {elevation1} from '../common-styles/shadow';
+import {headerMinHeight, headerTitlePresentation} from '../header/header.styles';
+import {SECONDARY_FONT_SIZE, secondaryText} from '../common-styles/typography';
 import {selectButtonMinHeight} from '../select/select-button.styles';
+import {separatorBorder} from '../common-styles/list';
+import {StyleSheet} from 'react-native';
+import {UNIT} from '../variables/variables';
 
 const linkTypeSelect = {
   marginTop: UNIT * 3,
@@ -12,11 +14,24 @@ const linkTypeSelect = {
   marginHorizontal: UNIT * 2,
 };
 
+const searchPanel = {
+  marginHorizontal: UNIT * 2,
+  marginTop: UNIT,
+  marginBottom: UNIT * 2,
+};
+
 export default EStyleSheet.create({
+  container: {
+    flexGrow: 1,
+  },
   link: {
     color: '$link',
   },
+  disabled: {
+    color: '$disabled',
+  },
   linkedListContainer: {
+    marginTop: UNIT * 2,
     marginBottom: headerMinHeight,
   },
   linkedList: {
@@ -44,13 +59,14 @@ export default EStyleSheet.create({
     borderColor: '$separator',
   },
   linkedIssueTypeTitle: {
-    paddingTop: UNIT * 2,
-    paddingBottom: UNIT,
-    marginBottom: UNIT,
+    paddingVertical: UNIT * 1.5,
+    marginBottom: UNIT / 2,
+    marginRight: -UNIT * 2,
     backgroundColor: '$background',
-    color: '$text',
+    opacity: 0.9,
+    color: '$icon',
     ...secondaryText,
-    fontWeight: '600',
+    fontWeight: '700',
     textTransform: 'uppercase',
   },
   addLinkButton: {
@@ -58,6 +74,26 @@ export default EStyleSheet.create({
   },
   linkTypeSelect: linkTypeSelect,
   issuesToLinkContainer: {
-    marginBottom: headerMinHeight + selectButtonMinHeight + linkTypeSelect.marginTop + linkTypeSelect.marginBottom,
+    marginBottom: headerMinHeight + selectButtonMinHeight +
+      linkTypeSelect.marginTop + linkTypeSelect.marginBottom +
+      selectButtonMinHeight + searchPanel.marginTop + searchPanel.marginBottom,
+  },
+  headerTitle: {
+    ...headerTitlePresentation,
+    marginLeft: 0,
+  },
+  headerSubTitle: {
+    lineHeight: SECONDARY_FONT_SIZE,
+    color: '$icon',
+  },
+  searchPanelContainer: {
+    backgroundColor: '$background',
+    ...elevation1,
+  },
+  searchPanel: searchPanel,
+  loader: StyleSheet.absoluteFillObject,
+  noIssuesMessage: {
+    marginLeft: -UNIT * 4,
+    marginBottom: -UNIT * 2,
   },
 });

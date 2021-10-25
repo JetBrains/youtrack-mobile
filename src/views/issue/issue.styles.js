@@ -3,9 +3,8 @@ import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {elevation1} from '../../components/common-styles/shadow';
-import {headerTitleText} from '../../components/common-styles/header';
 import {issueIdResolved} from '../../components/common-styles/issue';
-import {mainText, secondaryText} from '../../components/common-styles/typography';
+import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
 import {separatorBorder} from '../../components/common-styles/list';
 import {summary} from '../../components/form/summary-description-form.style';
 import {UNIT} from '../../components/variables/variables';
@@ -25,7 +24,7 @@ export default EStyleSheet.create({
   header: {
     paddingHorizontal: UNIT * 2,
   },
-  headerText: headerTitleText,
+  headerText: headerTitle,
   headerTextResolved: {
     ...issueIdResolved,
     color: '$icon',

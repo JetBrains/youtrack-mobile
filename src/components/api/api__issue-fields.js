@@ -236,7 +236,9 @@ const ISSUE_SHORT_FIELDS: any = toField([
 const ISSUE_LINKED_ISSUE_FIELDS: any = toField([
   'id',
   'idReadable',
+  'project(name,ringId)',
   'summary',
+  'resolved',
   {fields: ISSUE_FIELD_SHORT_FIELDS},
 ]);
 
@@ -270,11 +272,7 @@ const ISSUE_LINKS_FIELDS: any = toField([
   'unresolvedIssuesSize',
   {
     trimmedIssues: [
-      'id',
-      'idReadable',
-      'summary',
-      'resolved',
-      'project(ringId)',
+      ISSUE_LINKED_ISSUE_FIELDS,
     ],
   },
 ]);

@@ -13,7 +13,7 @@ import type {Folder} from '../../flow/User';
 
 export default class IssuesAPI extends ApiBase {
   async _getIssues(query: string = '', $top: number, $skip: number = 0, fields: string): Promise<Array<IssueOnList>> {
-    const q: string = qs.stringify({$top, $skip, query, fields}, {encode: false});
+    const q: string = qs.stringify({$top, $skip, query: encodeURIComponent(query.trim()), fields}, {encode: false});
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${q}`);
   }
 
@@ -22,7 +22,7 @@ export default class IssuesAPI extends ApiBase {
     return ApiHelper.patchAllRelativeAvatarUrls(issues, this.config.backendUrl);
   }
 
-  async getIssuesXShort(query: string = '', $top: number, $skip: number): Promise<Array<$Shape<IssueOnList>>> {
+  async getIssuesXShort(query: string = '', $top: number, $skip?: number): Promise<Array<$Shape<IssueOnList>>> {
     return await this._getIssues(query, $top, $skip, issueFields.issueLinks.toString());
   }
 
