@@ -69,12 +69,12 @@ function createIssueLink(linkType: IssueLinkType, outward: boolean) {
     type: linkType,
     outward: outward,
     id: linkType.id + getIssueLinkIdSuffix(linkType.directed, outward),
-    getPresentation: (opposite: boolean) => (
+    getPresentation: (opposite: boolean = false) => (
       isSourceToTargetLink(opposite)
         ? (linkType.localizedSourceToTarget || linkType.sourceToTarget)
         : (linkType.localizedTargetToSource || linkType.targetToSource)
     ),
-    getName: (opposite: boolean) => (
+    getName: (opposite: boolean = false) => (
       isSourceToTargetLink(opposite)
         ? linkType.sourceToTarget
         : linkType.targetToSource
@@ -86,12 +86,12 @@ export type IssueLinkTypeExtended = {
   type: IssueLinkType,
   outward: boolean,
   id: string,
-  getPresentation: (opposite: boolean) => string,
-  getName: (opposite: boolean) => string,
+  getPresentation: (opposite?: boolean) => string,
+  getName: (opposite?: boolean) => string,
 };
 
-const createLinkTypes = (linkTypes: Array<IssueLinkType>): IssueLinkTypeExtended => {
-  return linkTypes.reduce((directions: Array<IssueLinkType>, linkType: IssueLinkType) => {
+const createLinkTypes = (linkTypes: Array<IssueLinkType>): Array<IssueLinkTypeExtended> => {
+  return linkTypes.reduce((directions: Array<IssueLinkTypeExtended>, linkType: IssueLinkType) => {
     directions.push(createIssueLink(linkType, true));
     if (linkType.directed) {
       directions.push(createIssueLink(linkType, false));
