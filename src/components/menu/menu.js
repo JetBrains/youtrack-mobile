@@ -190,14 +190,14 @@ class Menu extends Component<Props, State> {
         />
 
         <MenuItem
-          testId="test:id/menuAgile"
+          testId="menuAgile"
           icon={<IconBoard size={28} color={color(routeMap.AgileBoard)}/>}
           onPress={this.openAgileBoard}
         />
 
         <Feature version={FEATURE_VERSION.inbox}>
           <MenuItem
-            testId="test:id/menuNotifications"
+            testId="menuNotifications"
             icon={<IconBell size={22} color={color(routeMap.Inbox)}/>}
             onPress={this.openInbox}
           />
@@ -205,13 +205,13 @@ class Menu extends Component<Props, State> {
 
         <Feature version={FEATURE_VERSION.knowledgeBase}>
           <MenuItem
-            testID="test:id/menuKnowledgeBase"
+            testID="menuKnowledgeBase"
             icon={<IconKnowledgeBase size={22} color={color(routeMap.KnowledgeBase)}/>}
             onPress={this.openKnowledgeBase}
           />
         </Feature>
         <MenuItem
-          testId="test:id/menuSettings"
+          testId="menuSettings"
           icon={<IconSettings size={21} color={color(routeMap.Settings)}/>}
           onPress={this.openSettings}
         />
