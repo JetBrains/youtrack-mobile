@@ -24,11 +24,10 @@ import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
 import type {Attachment, CustomField, FieldValue, IssueProject, Tag} from '../../flow/CustomFields';
 import type {CommandSuggestionResponse, IssueFull, IssueOnList, OpenNestedViewParams} from '../../flow/Issue';
-import type {IssueLink, IssueComment} from '../../flow/CustomFields';
+import type {IssueLink} from '../../flow/CustomFields';
 import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {State as IssueState} from './issue-reducers';
 import type {UserAppearanceProfile} from '../../flow/User';
-import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
 
 type ApiGetter = () => Api;
@@ -157,33 +156,7 @@ export function loadIssue(): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
-) =>
-  | Promise<void>
-  | Promise<
-    {
-      $type: string,
-      attachments: Array<Attachment>,
-      comments?: Array<IssueComment>,
-      created: number,
-      description: string,
-      fieldHash: any,
-      fields: Array<CustomField>,
-      id: string,
-      idReadable: string,
-      links: Array<IssueLink>,
-      project: IssueProject,
-      reporter: User,
-      resolved: boolean,
-      summary: string,
-      tags: Array<Tag>,
-      updated: number,
-      updater: User,
-      voters: {hasVote: boolean},
-      votes: number,
-      watchers: {hasStar: boolean},
-      wikifiedDescription: string,
-    },
-  >) {
+) => Promise<IssueFull | void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issueId = getState().issueState.issueId;
     const api: Api = getApi();
@@ -199,6 +172,7 @@ export function loadIssue(): ((
 
       dispatch(setIssueId(issue.id)); //Set issue ID again because first one could be readable like YTM-111
       dispatch(receiveIssue(issue));
+      dispatch(getIssueLinksTitle());
       return issue;
     } catch (rawError) {
       const error = await resolveError(rawError);
