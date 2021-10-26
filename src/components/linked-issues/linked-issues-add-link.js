@@ -3,10 +3,9 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, FlatList, Text, RefreshControl, ActivityIndicator} from 'react-native';
 
-import {useDispatch} from 'react-redux';
-
 import ErrorMessage from '../error-message/error-message';
 import Header from '../header/header';
+import issueCommonLinksActions from '../issue-actions/issue-links-actions';
 import IssueRow from '../../views/issues/issues__row';
 import QueryAssistPanel from '../query-assist/query-assist-panel';
 import QueryPreview from '../query-assist/query-preview';
@@ -20,7 +19,6 @@ import {getAssistSuggestions} from '../query-assist/query-assist-helper';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 import {IconBack} from '../icon/icon';
 import {IconNothingFound} from '../icon/icon-no-found';
-import {loadIssueLinkTypes, onLinkIssue} from '../../views/issue/issue-actions';
 import {noIssuesFoundIconSize} from '../../views/issues/issues.styles';
 import {UNIT} from '../variables/variables';
 import {View as AnimatedView} from 'react-native-animatable';
@@ -35,6 +33,7 @@ import type {IssueLinkTypeExtended} from './linked-issues-helper';
 
 type Props = {
   issuesGetter: (linkTypeName: string, q: string) => any,
+  onLinkIssue: (linkedIssueIdReadable: string, linkTypeName: string) => any,
   onUpdate: () => any,
   style?: ViewStyleProp,
   subTitle?: any,
@@ -42,8 +41,6 @@ type Props = {
 
 
 const LinkedIssuesAddLink = (props: Props): Node => {
-  const dispatch: Function = useDispatch();
-
   const [issues, updateIssues] = useState([]);
   const [isLoading, updateLoading] = useState(false);
 
@@ -60,9 +57,10 @@ const LinkedIssuesAddLink = (props: Props): Node => {
 
   const loadLinkTypes = useCallback(
     async (): Promise<Array<IssueLinkType>> => {
-      return (await dispatch(loadIssueLinkTypes())).filter((it: IssueLinkType) => !it.readOnly);
-      },
-    [dispatch]
+      const linkTypes: Array<IssueLinkType> = await issueCommonLinksActions(({}: any)).loadIssueLinkTypes();
+      return linkTypes.filter((it: IssueLinkType) => !it.readOnly);
+    },
+    []
   );
 
   const doSearch = useCallback(async (linkType: ?IssueLinkTypeExtended, q: string = queryData.query) => {
@@ -142,7 +140,7 @@ const LinkedIssuesAddLink = (props: Props): Node => {
           onClick={async () => {
             if (currentIssueLinkTypeExtended) {
               updateLoading(true);
-              await dispatch(onLinkIssue(getReadableID(issue), currentIssueLinkTypeExtended.getName()));
+              await props.onLinkIssue(getReadableID(issue), currentIssueLinkTypeExtended.getName());
               updateLoading(false);
               props.onUpdate();
               Router.pop();

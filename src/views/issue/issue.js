@@ -167,6 +167,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         issuesGetter={this.props.loadIssuesXShort}
         linksGetter={this.props.loadLinkedIssues}
         onUnlink={this.props.onUnlinkIssue}
+        onLinkIssue={this.props.onLinkIssue}
       />
     );
   };
@@ -271,6 +272,8 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       stopEditingIssue,
       issuePermissions,
       loadIssueLinksTitle,
+      onLinkIssue,
+      loadIssuesXShort,
     } = this.props;
 
     const issueIdReadable = this.renderHeaderIssueTitle();
@@ -295,7 +298,8 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
                 (issuePermissions.canLink(issue)
                   ? () => (
                     <LinkedIssuesAddLink
-                      issuesGetter={this.props.loadIssuesXShort}
+                      onLinkIssue={onLinkIssue}
+                      issuesGetter={loadIssuesXShort}
                       onUpdate={loadIssueLinksTitle}
                     />
                   )

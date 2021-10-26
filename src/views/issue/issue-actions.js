@@ -5,13 +5,13 @@ import {Clipboard, Share} from 'react-native';
 import * as commandDialogHelper from '../../components/command-dialog/command-dialog-helper';
 import * as types from './issue-action-types';
 import ApiHelper from '../../components/api/api__helper';
+import issueCommonLinksActions from '../../components/issue-actions/issue-links-actions';
 import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE} from '../../components/analytics/analytics-ids';
 import {attachmentActions, attachmentTypes} from './issue__attachment-actions-and-types';
 import {getEntityPresentation, getReadableID} from '../../components/issue-formatter/issue-formatter';
-import type {State as IssueState} from './issue-reducers';
 import {initialState} from './issue-reducers';
 import {isIOSPlatform, until} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
@@ -22,10 +22,11 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 
 import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
-import type {Attachment, CustomField, FieldValue, IssueLinkType, IssueProject, Tag} from '../../flow/CustomFields';
+import type {Attachment, CustomField, FieldValue, IssueProject, Tag} from '../../flow/CustomFields';
 import type {CommandSuggestionResponse, IssueFull, IssueOnList, OpenNestedViewParams} from '../../flow/Issue';
 import type {IssueLink, IssueComment} from '../../flow/CustomFields';
 import type {NormalizedAttachment} from '../../flow/Attachment';
+import type {State as IssueState} from './issue-reducers';
 import type {UserAppearanceProfile} from '../../flow/User';
 import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
@@ -211,33 +212,23 @@ export function loadIssueLinksTitle(): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
-) => Promise<void>) {
+) => Promise<Array<IssueLink>>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId: string = getState().issueState.issueId;
-    const api: Api = getApi();
-
-    try {
-      const issueLinks: Array<IssueLink> = await api.issue.getIssueLinksTitle(issueId);
-      log.info(`"${issueId}" linked issues title data loaded`);
-      dispatch({type: types.RECEIVE_ISSUE_LINKS, issueLinks});
-    } catch (rawError) {
-      const error = await resolveError(rawError);
-      log.warn('Failed to load linked issues', error);
-    }
+    const issue: IssueFull = getState().issueState.issue;
+    return await issueCommonLinksActions(issue).loadIssueLinksTitle();
   };
 }
 
-export function getIssueLinksTitle(issueLinks: IssueOnList): ((
+export function getIssueLinksTitle(links?: Array<IssueLink>): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    if (issueLinks) {
-      dispatch({type: types.RECEIVE_ISSUE_LINKS, issueLinks});
-    } else {
-      dispatch(loadIssueLinksTitle());
-    }
+    dispatch({
+      type: types.RECEIVE_ISSUE_LINKS,
+      issueLinks: links || await dispatch(loadIssueLinksTitle()),
+    });
   };
 }
 
@@ -266,92 +257,39 @@ export function loadLinkedIssues(): ((
 export function onUnlinkIssue(linkedIssue: IssueOnList, linkTypeId: string): ((
   dispatch: (any) => any,
   getState: StateGetter,
-  getApi: ApiGetter
+  getApi: ApiGetter,
 ) => Promise<boolean>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().issueState.issueId;
-    const api: Api = getApi();
-
+    const issue: IssueFull = getState().issueState.issue;
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Remove linked issue');
-    const [error] = await until(api.issue.removeIssueLink(issueId, linkedIssue.id, linkTypeId));
-    if (error) {
-      const err: Error = await resolveError(error);
-      const errorMsg: string = 'Failed to load linked issues';
-      log.warn(errorMsg, err);
-      notify(errorMsg);
-    } else {
-      dispatch(loadLinkedIssues());
-      notify('Issue link removed');
-    }
-    return !error;
+    return issueCommonLinksActions(issue).onUnlinkIssue(linkedIssue, linkTypeId);
   };
 }
 
-export function loadIssueLinkTypes(): ((
+export function loadIssuesXShort(linkTypeName: string, query: string, page?: number): ((
   dispatch: (any) => any,
   getState: StateGetter,
-  getApi: ApiGetter
-) => Promise<IssueLinkType>) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const api: Api = getApi();
-
-    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Link issue');
-    const [error, issueLinkTypes] = await until(api.issue.getIssueLinkTypes());
-    if (error) {
-      const err: Error = await resolveError(error);
-      const errorMsg: string = 'Failed to link issue';
-      log.warn(errorMsg, err);
-    }
-    return issueLinkTypes || [];
-  };
-}
-
-export function loadIssuesXShort(linkTypeName: string, query: string, page: number = 50): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter
+  getApi: ApiGetter,
 ) => Promise<IssueOnList>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const api: Api = getApi();
     const issue: IssueFull = getState().issueState.issue;
-
-    const [error, issues] = await until(api.issues.getIssuesXShort(
+    return await issueCommonLinksActions(issue).loadIssuesXShort(
+      linkTypeName,
       `(${query})+and+(${linkTypeName.split(' ').join('+')}:+-${getReadableID(issue)})`,
       page
-    ));
-    if (error) {
-      const err: Error = await resolveError(error);
-      const errorMsg: string = 'Failed to load issues';
-      log.warn(errorMsg, err);
-      notify(errorMsg);
-    }
-    return (issues || []).filter((it: IssueOnList) => it.id !== issue.id);
+    );
   };
 }
 
 export function onLinkIssue(linkedIssueIdReadable: string, linkTypeName: string): ((
   dispatch: (any) => any,
   getState: StateGetter,
-  getApi: ApiGetter
+  getApi: ApiGetter,
 ) => Promise<boolean>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId: string = getState().issueState.issue.id;
-    const api: Api = getApi();
-
+    const issue: IssueFull = getState().issueState.issue;
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Link issue');
-    const [error] = await until(api.issue.addIssueLink(
-      issueId,
-      `${linkTypeName} ${linkedIssueIdReadable}`
-    ));
-    if (error) {
-      const err: Error = await resolveError(error);
-      const errorMsg: string = 'Failed to link issue';
-      log.warn(errorMsg, err);
-      notify(errorMsg);
-    } else {
-      notify('Issue link added');
-    }
-    return !error;
+    return await issueCommonLinksActions(issue).onLinkIssue(linkedIssueIdReadable, linkTypeName);
   };
 }
 

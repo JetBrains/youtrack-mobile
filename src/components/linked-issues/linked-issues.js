@@ -22,9 +22,10 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   canLink?: (issue: IssueOnList) => boolean,
-  issuesGetter: (linkedIssue: IssueOnList, linkTypeId: string) => any,
+  issuesGetter: (linkTypeName: string, query: string) => any,
   linksGetter: () => any,
-  onUnlink: (linkedIssue: IssueOnList, linkTypeId: string) => void,
+  onUnlink: (linkedIssue: IssueOnList, linkTypeId: string) => any,
+  onLinkIssue: (linkedIssueId: string, linkTypeName: string) => any,
   onUpdate: (linkedIssues?: Array<IssueLink>) => void,
   style?: ViewStyleProp,
   subTitle?: any,
@@ -121,6 +122,7 @@ const LinkedIssues = (props: Props): Node => {
         rightButton={props.canLink ? <IconAdd style={styles.addLinkButton} color={styles.link.color} size={20}/> : null}
         onRightButtonClick={() => Router.Page({
           children: <LinkedIssuesAddLink
+            onLinkIssue={props.onLinkIssue}
             issuesGetter={props.issuesGetter}
             onUpdate={async () => {
               const linkedIssues: Array<IssueLink> = await getLinkedIssues();

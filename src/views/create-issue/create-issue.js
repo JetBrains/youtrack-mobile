@@ -13,8 +13,13 @@ import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import CommandDialog from '../../components/command-dialog/command-dialog';
 import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
 import Header from '../../components/header/header';
+import IconLink from '@jetbrains/icons/link.svg';
 import IssueCustomFieldText from '../../components/custom-field/issue-custom-field-text';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
+import LinkedIssues from '../../components/linked-issues/linked-issues';
+import LinkedIssuesAddLink from '../../components/linked-issues/linked-issues-add-link';
+import LinkedIssuesTitle from '../../components/linked-issues/linked-issues-title';
+import Router from '../../components/router/router';
 import SummaryDescriptionForm from '../../components/form/summary-description-form';
 import TagAddPanel from '../../components/tags/tag-add-panel';
 import TagAddSelect from '../../components/tags/tag-add-select';
@@ -30,9 +35,10 @@ import {isIOSPlatform} from '../../util/util';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import type {AnyIssue} from '../../flow/Issue';
 import type {AttachmentActions} from '../../components/attachments-row/attachment-actions';
 import type {CreateIssueState} from './create-issue-reducers';
-import type {CustomField, CustomFieldText, IssueProject, Tag} from '../../flow/CustomFields';
+import type {CustomField, CustomFieldText, IssueLink, IssueProject, Tag} from '../../flow/CustomFields';
 import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {Theme, UITheme, UIThemeColors} from '../../flow/Theme';
 
@@ -197,6 +203,41 @@ class CreateIssue extends Component<Props, State> {
     return !!this.props.issue?.project?.id;
   }
 
+  renderLinksBlock() {
+    const {
+      issue,
+      issuePermissions,
+      loadIssuesXShort,
+      loadLinkedIssues,
+      onUnlinkIssue,
+      onLinkIssue,
+      getIssueLinksTitle,
+    } = this.props;
+    return (
+      <LinkedIssuesTitle
+        issueLinks={issue.links}
+        onPress={() => Router.Page({
+          children: (
+            <LinkedIssues
+              issuesGetter={loadIssuesXShort}
+              linksGetter={loadLinkedIssues}
+              onUnlink={onUnlinkIssue}
+              onLinkIssue={onLinkIssue}
+              onUpdate={(issues?: Array<IssueLink>) => {
+                getIssueLinksTitle(issues);
+              }}
+              canLink={(
+                issuePermissions.canLink(issue)
+                  ? (linkedIssue: AnyIssue) => issuePermissions.canLink(linkedIssue)
+                  : undefined
+              )}
+              subTitle="Current issue"
+            />),
+        })}
+      />
+    );
+  }
+
   render() {
     const {
       storeDraftAndGoBack,
@@ -210,6 +251,9 @@ class CreateIssue extends Component<Props, State> {
       showAddAttachDialog,
       isAttachFileDialogVisible,
       showCommandDialog,
+      issuePermissions,
+      loadIssuesXShort,
+      onLinkIssue,
     } = this.props;
 
     const isAttaching = attachingImage !== null;
@@ -228,6 +272,13 @@ class CreateIssue extends Component<Props, State> {
               ? <ActivityIndicator color={uiThemeColors.$link}/>
               : <IconCheck size={20} color={canCreateIssue ? uiThemeColors.$link : uiThemeColors.$disabled}/>
           );
+          //$FlowFixMe
+          const iconLink: any = <IconLink
+            width={24}
+            height={24}
+            fill={processing ? styles.addLinkButtonTextDisabled.color : styles.addLinkButtonText.color}
+          />;
+
           return (
             <View
               testID="createIssue"
@@ -309,32 +360,65 @@ class CreateIssue extends Component<Props, State> {
                   </View>
                 )}
 
-                <View style={styles.separator}/>
+                {hasProject && (
+                  <>
+                    <View style={styles.separator}/>
+                    <View
+                      testID="createIssueAttachments"
+                      style={styles.additionalData}
+                    >
+                      {!!issue.tags && (
+                        <Tags
+                          tags={issue.tags}
+                          multiline={true}
+                        />
+                      )}
+                      {hasProject && (
+                        <TagAddPanel
+                          disabled={processing}
+                          onAdd={() => this.setState({showAddTagSelect: true})}
+                        />
+                      )}
+                      {this.state.showAddTagSelect && <TagAddSelect
+                        existed={issue?.tags}
+                        projectId={issue.project?.id}
+                        onAdd={(tags: Array<Tag>) => this.props.onAddTags(tags)}
+                        onHide={() => this.setState({showAddTagSelect: false})}
+                      />}
+                    </View>
+                  </>
+                )}
 
                 {hasProject && (
-                  <View
-                    testID="createIssueAttachments"
-                    style={styles.additionalData}
-                  >
-                    {!!issue.tags && (
-                      <Tags
-                        tags={issue.tags}
-                        multiline={true}
-                      />
-                    )}
-                    {!!issue.project?.id && (
-                      <TagAddPanel
-                        disabled={processing}
-                        onAdd={() => this.setState({showAddTagSelect: true})}
-                      />
-                    )}
-                    {this.state.showAddTagSelect && <TagAddSelect
-                      existed={issue?.tags}
-                      projectId={issue.project?.id}
-                      onAdd={(tags: Array<Tag>) => this.props.onAddTags(tags)}
-                      onHide={() => this.setState({showAddTagSelect: false})}
-                    />}
-                  </View>
+                  <>
+                    <View style={styles.separator}/>
+                    <View
+                      style={styles.additionalData}
+                    >
+                      {hasProject && issuePermissions.canLink(issue) && (
+                        <TouchableOpacity
+                          style={styles.addLinkButton}
+                          onPress={() => {
+                            Router.Page({
+                              children: (
+                                <LinkedIssuesAddLink
+                                  issuesGetter={loadIssuesXShort}
+                                  onLinkIssue={onLinkIssue}
+                                  onUpdate={async () => {
+
+                                  }}
+                                />
+                              ),
+                            });
+                          }}
+                        >
+                          {iconLink}
+                          <Text style={styles.addLinkButtonText}>Link issue</Text>
+                        </TouchableOpacity>
+                      )}
+                      {hasProject && this.renderLinksBlock()}
+                    </View>
+                  </>
                 )}
 
               </ScrollView>
