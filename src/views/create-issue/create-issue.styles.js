@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {UNIT} from '../../components/variables/variables';
-import {headerTitle} from '../../components/common-styles/typography';
+import {headerTitle, mainText} from '../../components/common-styles/typography';
 import {separator} from '../../components/common-styles/list';
 
 export default EStyleSheet.create({
@@ -32,7 +32,7 @@ export default EStyleSheet.create({
   },
   separator: {
     height: 1,
-    marginVertical: UNIT * 1.5,
+    marginVertical: UNIT,
     ...separator,
     borderColor: '$separator',
   },
@@ -74,5 +74,17 @@ export default EStyleSheet.create({
   textFields: {
     marginLeft: UNIT * 2,
     paddingRight: UNIT * 2,
+  },
+  addLinkButton: {
+    flexDirection: 'row',
+    paddingVertical: UNIT * 1.5,
+  },
+  addLinkButtonText: {
+    ...mainText,
+    marginLeft: UNIT * 1.8,
+    color: '$link',
+  },
+  addLinkButtonTextDisabled: {
+    color: '$textSecondary',
   },
 });

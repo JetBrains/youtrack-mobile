@@ -4,7 +4,7 @@ import type {Node} from 'React';
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
-import {IconPaperClip} from '../icon/icon';
+import IconAttachment from '@jetbrains/icons/attachment.svg';
 import {View} from 'react-native-animatable';
 
 import styles from './attachment-add-panel.styles';
@@ -27,10 +27,10 @@ const AttachmentAddPanel = (props: Props): Node => {
         style={styles.attachButton}
         onPress={props.showAddAttachDialog}
       >
-        <IconPaperClip
-          style={styles.attachButtonIcon}
-          size={20}
-          color={props.isDisabled ? styles.attachButtonTextDisabled.color : styles.attachButtonText.color}
+        <IconAttachment
+          width={23}
+          height={23}
+          fill={props.isDisabled ? styles.attachButtonTextDisabled.color : styles.attachButtonText.color}
         />
         <Text
           style={[

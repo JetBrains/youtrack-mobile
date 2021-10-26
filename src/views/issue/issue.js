@@ -164,6 +164,10 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
           onShowCopyTextContextActions(this.context.actionSheet(), text, title);
         }}
         getIssueLinksTitle={getIssueLinksTitle}
+        issuesGetter={this.props.loadIssuesXShort}
+        linksGetter={this.props.loadLinkedIssues}
+        onUnlink={this.props.onUnlinkIssue}
+        onLinkIssue={this.props.onLinkIssue}
       />
     );
   };
@@ -268,6 +272,8 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       stopEditingIssue,
       issuePermissions,
       loadIssueLinksTitle,
+      onLinkIssue,
+      loadIssuesXShort,
     } = this.props;
 
     const issueIdReadable = this.renderHeaderIssueTitle();
@@ -290,7 +296,13 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
                 },
                 this.switchToDetailsTab,
                 (issuePermissions.canLink(issue)
-                  ? () => <LinkedIssuesAddLink onUpdate={loadIssueLinksTitle}/>
+                  ? () => (
+                    <LinkedIssuesAddLink
+                      onLinkIssue={onLinkIssue}
+                      issuesGetter={loadIssuesXShort}
+                      onUpdate={loadIssueLinksTitle}
+                    />
+                  )
                   : null)
               );
             }
@@ -326,6 +338,9 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   _renderRefreshControl(onRefresh?: Function, uiTheme: UITheme) {
     return <RefreshControl
+      testID="refresh-control"
+      accessibilityLabel="refresh-control"
+      accessible={true}
       refreshing={this.props.isRefreshing}
       tintColor={uiTheme.colors.$link}
       onRefresh={() => {

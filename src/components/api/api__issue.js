@@ -9,7 +9,15 @@ import {handleRelativeUrl} from '../config/config';
 
 import type Auth from '../auth/auth';
 import type {Activity} from '../../flow/Activity';
-import type {Attachment, FieldValue, IssueComment, IssueLink, IssueProject, Tag} from '../../flow/CustomFields';
+import type {
+  Attachment,
+  FieldValue,
+  IssueComment,
+  IssueLink,
+  IssueLinkType,
+  IssueProject,
+  Tag,
+} from '../../flow/CustomFields';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
 import type {Visibility} from '../../flow/Visibility';
 import type {WorkItem} from '../../flow/Work';

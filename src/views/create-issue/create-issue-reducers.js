@@ -7,7 +7,7 @@ import {createCommandDialogReducers} from '../../components/command-dialog/comma
 import {createIssueNamespace} from './create-issue-action-types';
 import {LOG_OUT} from '../../actions/action-types';
 
-import type {Attachment, CustomField, FieldValue, IssueProject} from '../../flow/CustomFields';
+import type {Attachment, CustomField, FieldValue, IssueLink, IssueProject} from '../../flow/CustomFields';
 import type {CommandSuggestionResponse, IssueFull} from '../../flow/Issue';
 
 export type CreateIssueState = {
@@ -115,6 +115,12 @@ const slice: typeof Slice = createSlice({
         fields: [...state.issue.fields].map(
           (it: CustomField) => it === action.payload.field ? {...it, value: action.payload.value} : it
         ),
+      };
+    },
+    setIssueLinks: (state: CreateIssueState, action: { payload: { links: Array<IssueLink> } }) => {
+      state.issue = {
+        ...state.issue,
+        links: action.payload.links,
       };
     },
   },

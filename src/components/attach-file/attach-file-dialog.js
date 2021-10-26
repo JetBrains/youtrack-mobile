@@ -7,6 +7,7 @@ import attachFile, {attachFileMethod} from './attach-file';
 import AttachmentErrorBoundary from '../attachments-row/attachment-error-boundary';
 import calculateAspectRatio from '../aspect-ratio/aspect-ratio';
 import Header from '../header/header';
+import IconAttachment from '@jetbrains/icons/attachment.svg';
 import ModalView from '../modal-view/modal-view';
 import usage from '../usage/usage';
 import Video from 'react-native-video';
@@ -15,7 +16,7 @@ import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {getApi} from '../api/api__instance';
 import {hasMimeType} from '../mime-type/mime-type';
 import {HIT_SLOP} from '../common-styles/button';
-import {IconAttachment, IconCamera, IconCheck, IconClose} from '../icon/icon';
+import {IconCamera, IconCheck, IconClose} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
 import {notify} from '../notification/notification';
 import {ThemeContext} from '../theme/theme-context';
@@ -214,6 +215,7 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
 
         {!attaches && <View>
           {createActions().map((action: ActionSheetAction) => {
+            const size: number = action.iconSize || 20;
             return (
               <TouchableOpacity
                 hitSlop={HIT_SLOP}
@@ -221,7 +223,16 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
                 onPress={action.execute}
                 style={styles.button}
               >
-                {action.icon && <action.icon size={20} color={styles.buttonIcon.color} style={styles.buttonIcon}/>}
+                {action.icon && (
+                  <action.icon
+                    size={size}
+                    width={size}
+                    height={size}
+                    color={styles.buttonIcon.color}
+                    fill={styles.buttonIcon.color}
+                    style={styles.buttonIcon}
+                  />
+                )}
                 <Text style={styles.buttonText}>{action.title}</Text>
               </TouchableOpacity>
             );

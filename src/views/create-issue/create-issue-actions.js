@@ -1,27 +1,30 @@
 /* @flow */
 
+import {ActionSheetProvider} from '@expo/react-native-action-sheet';
+
+import * as commandDialogHelper from '../../components/command-dialog/command-dialog-helper';
 import ApiHelper from '../../components/api/api__helper';
+import issueCommonLinksActions from '../../components/issue-actions/issue-links-actions';
 import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
-import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 import {actions} from './create-issue-reducers';
 import {ANALYTICS_ISSUE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
 import {attachmentActions} from './create-issue__attachment-actions-and-types';
 import {commandDialogTypes, ISSUE_CREATED} from './create-issue-action-types';
 import {CUSTOM_ERROR_MESSAGE, DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
+import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import {notify, notifyError} from '../../components/notification/notification';
 import {resolveError} from '../../components/error/error-resolver';
 import {showActions} from '../../components/action-sheet/action-sheet';
-import * as commandDialogHelper from '../../components/command-dialog/command-dialog-helper';
 
 import type Api from '../../components/api/api';
 import type {ActionSheetOption} from '../../components/action-sheet/action-sheet';
 import type {AppState} from '../../reducers';
-import type {CommandSuggestionResponse, IssueFull} from '../../flow/Issue';
+import type {CommandSuggestionResponse, IssueFull, IssueOnList} from '../../flow/Issue';
 import type {CreateIssueState} from './create-issue-reducers';
-import type {CustomField, FieldValue, Attachment, CustomFieldText} from '../../flow/CustomFields';
+import type {CustomField, FieldValue, Attachment, CustomFieldText, IssueLink} from '../../flow/CustomFields';
 import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {StorageState} from '../../components/storage/storage';
 import type {Visibility} from '../../flow/Visibility';
@@ -176,6 +179,9 @@ export function initializeWithDraftOrProject(preDefinedDraftId: ?string): ((disp
     if (draftId) {
       log.info(`Initializing with draft ${draftId}`);
       await dispatch(loadIssueFromDraft(draftId));
+      dispatch(actions.setIssueLinks({
+        links: await dispatch(loadIssueLinksTitle()),
+      }));
     } else {
       log.info('Draft not found, initializing new draft');
       await dispatch(loadStoredProject());
@@ -360,5 +366,79 @@ export function toggleCommandDialog(isVisible: boolean = false): ((
     dispatch({
       type: isVisible ? commandDialogTypes.OPEN_COMMAND_DIALOG : commandDialogTypes.CLOSE_COMMAND_DIALOG,
     });
+  };
+}
+
+export function loadIssuesXShort(linkTypeName: string, query: string, page?: number): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => Promise<IssueOnList>) {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const issue: IssueFull = getState().creation.issue;
+     return await issueCommonLinksActions(issue).loadIssuesXShort(
+      linkTypeName,
+      `(${query})+and+(${linkTypeName.split(' ').join('+')}:+-${getReadableID(issue)})`,
+      page
+    );
+  };
+}
+
+export function onLinkIssue(linkedIssueIdReadable: string, linkTypeName: string): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => Promise<boolean>) {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const issue: IssueFull = getState().creation.issue;
+    usage.trackEvent(ANALYTICS_ISSUE_CREATE_PAGE, 'Link issue');
+    return await issueCommonLinksActions(issue).onLinkIssue(linkedIssueIdReadable, linkTypeName);
+  };
+}
+
+export function loadLinkedIssues(): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => Promise<Array<IssueLink>>) {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const issue: IssueFull = getState().creation.issue;
+    return await issueCommonLinksActions(issue).loadLinkedIssues();
+  };
+}
+
+export function onUnlinkIssue(linkedIssue: IssueOnList, linkTypeId: string): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => Promise<boolean>) {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const issue: IssueFull = getState().creation.issue;
+    usage.trackEvent(ANALYTICS_ISSUE_CREATE_PAGE, 'Remove linked issue');
+    return issueCommonLinksActions(issue).onUnlinkIssue(linkedIssue, linkTypeId);
+  };
+}
+
+export function loadIssueLinksTitle(): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<Array<IssueLink>>) {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const issue: IssueFull = getState().creation.issue;
+    return await issueCommonLinksActions(issue).loadIssueLinksTitle();
+  };
+}
+
+export function getIssueLinksTitle(links?: Array<IssueLink>): ((
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter
+) => Promise<void>) {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const issue: IssueFull = getState().creation.issue;
+    dispatch(actions.setIssueLinks({
+      links: await issueCommonLinksActions(issue).getIssueLinksTitle(links),
+    }));
   };
 }

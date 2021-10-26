@@ -51,7 +51,7 @@ describe('<BoardRow/>', () => {
     });
 
     it('should render a header', () => {
-      expect(findByTestId('agileRowHeader')).toHaveLength(1);
+      expect(findByTestId('agile-row-header')).toHaveLength(1);
     });
 
     it('should render a collapse button', () => {

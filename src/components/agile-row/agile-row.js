@@ -92,7 +92,9 @@ export default function BoardRow(props: Props): null | Node {
       style={[styles.rowContainer, style]}
     >
       <View
-        testID="agileRowHeader"
+        testID="agile-row-header"
+        accessibilityLabel="agile-row-header"
+        accessible={true}
         style={[
           styles.rowHeader,
           !zoomedIn ? styles.rowHeaderZoomedOut : null,

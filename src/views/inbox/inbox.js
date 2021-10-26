@@ -346,7 +346,11 @@ class Inbox extends Component<Props, State> {
   renderWorkflowNotification(text: string) {
     const title: string = Inbox.notificationReasons.workflow;
     return (
-      <View style={styles.notification}>
+      <View
+        testID="test:id/notification-row"
+        accessibilityLabel="notification-row"
+        accessible={true}
+        style={styles.notification}>
         <View><Text style={[styles.textPrimary, styles.notificationIssueInfo]}>{`${title}:`}</Text></View>
 
         <View style={[styles.notificationContent, styles.notificationContentWorkflow]}>
@@ -438,7 +442,11 @@ class Inbox extends Component<Props, State> {
     const issue: IssueOnList = ((comment.issue: any): IssueOnList);
 
     return (
-      <View style={styles.notification}>
+      <View
+        testID="test:id/notification-row"
+        accessibilityLabel="notification-row"
+        accessible={true}
+        style={styles.notification}>
         <UserInfo
           avatar={
             <View style={styles.reactionIcon}>
@@ -481,7 +489,11 @@ class Inbox extends Component<Props, State> {
     }
 
     return (
-      <View style={styles.notification}>
+      <View
+        testID="test:id/notification-row"
+        accessibilityLabel="notification-row"
+        accessible={true}
+        style={styles.notification}>
         <UserInfo style={styles.userInfo} user={sender} timestamp={change?.endTimestamp}/>
 
         <View style={styles.notificationContent}>
@@ -532,6 +544,8 @@ class Inbox extends Component<Props, State> {
         onRefresh={this.refresh}
         tintColor={this.theme.uiTheme.colors.$link}
         testID="refresh-control"
+        accessibilityLabel="refresh-control"
+        accessible={true}
       />
     );
   };

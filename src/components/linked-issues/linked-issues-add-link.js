@@ -3,10 +3,9 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, FlatList, Text, RefreshControl, ActivityIndicator} from 'react-native';
 
-import {useDispatch} from 'react-redux';
-
 import ErrorMessage from '../error-message/error-message';
 import Header from '../header/header';
+import issueCommonLinksActions from '../issue-actions/issue-links-actions';
 import IssueRow from '../../views/issues/issues__row';
 import QueryAssistPanel from '../query-assist/query-assist-panel';
 import QueryPreview from '../query-assist/query-preview';
@@ -20,9 +19,9 @@ import {getAssistSuggestions} from '../query-assist/query-assist-helper';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 import {IconBack} from '../icon/icon';
 import {IconNothingFound} from '../icon/icon-no-found';
-import {loadIssueLinkTypes, loadIssuesXShort, onLinkIssue} from '../../views/issue/issue-actions';
 import {noIssuesFoundIconSize} from '../../views/issues/issues.styles';
 import {UNIT} from '../variables/variables';
+import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './linked-issues.style';
 
@@ -33,6 +32,8 @@ import type {IssueLinkType} from '../../flow/CustomFields';
 import type {IssueLinkTypeExtended} from './linked-issues-helper';
 
 type Props = {
+  issuesGetter: (linkTypeName: string, q: string) => any,
+  onLinkIssue: (linkedIssueIdReadable: string, linkTypeName: string) => any,
   onUpdate: () => any,
   style?: ViewStyleProp,
   subTitle?: any,
@@ -40,8 +41,6 @@ type Props = {
 
 
 const LinkedIssuesAddLink = (props: Props): Node => {
-  const dispatch: Function = useDispatch();
-
   const [issues, updateIssues] = useState([]);
   const [isLoading, updateLoading] = useState(false);
 
@@ -51,26 +50,27 @@ const LinkedIssuesAddLink = (props: Props): Node => {
   const [isSelectVisible, updateSelectVisible] = useState(false);
   const [isScrolling, updateScrolling] = useState(false);
 
-  const [query, updateQuery] = useState('');
+  const [queryData, updateQueryData] = useState({query: '', _query: ''});
   const [isQASelectVisible, updateQASelectVisible] = useState(false);
   const [suggestions, updateSuggestions] = useState([]);
 
 
   const loadLinkTypes = useCallback(
     async (): Promise<Array<IssueLinkType>> => {
-      return (await dispatch(loadIssueLinkTypes())).filter((it: IssueLinkType) => !it.readOnly);
-      },
-    [dispatch]
+      const linkTypes: Array<IssueLinkType> = await issueCommonLinksActions(({}: any)).loadIssueLinkTypes();
+      return linkTypes.filter((it: IssueLinkType) => !it.readOnly);
+    },
+    []
   );
 
-  const doSearch = useCallback(async (linkType: ?IssueLinkTypeExtended, q: string = query) => {
+  const doSearch = useCallback(async (linkType: ?IssueLinkTypeExtended, q: string = queryData.query) => {
     if (linkType) {
       updateLoading(true);
-      const _issues: Array<IssueOnList> = await dispatch(loadIssuesXShort(linkType.getName(), q));
+      const _issues: Array<IssueOnList> = await props.issuesGetter(linkType.getName(), q);
       updateIssues(_issues);
       updateLoading(false);
     }
-  }, [dispatch, query]);
+  }, [props, queryData.query]);
 
 
   useEffect(() => {
@@ -95,15 +95,18 @@ const LinkedIssuesAddLink = (props: Props): Node => {
       return (
         <QueryAssistPanel
           queryAssistSuggestions={suggestions}
-          query={query}
+          query={queryData.query}
           suggestIssuesQuery={loadSuggestions}
           onQueryUpdate={(q: string) => {
-            updateQuery(q);
+            updateQueryData({query: q, _query: q});
             updateQASelectVisible(false);
             doSearch(currentIssueLinkTypeExtended, q);
           }}
           onClose={(q: string) => {
-            updateQuery(q);
+            if (!q && q !== queryData._query) {
+              doSearch(currentIssueLinkTypeExtended, q);
+            }
+            updateQueryData({query: q, _query: q});
             updateQASelectVisible(false);
           }}
           clearButtonMode="always"
@@ -113,10 +116,10 @@ const LinkedIssuesAddLink = (props: Props): Node => {
       return <View style={isScrolling ? styles.searchPanelContainer : null}>
         <QueryPreview
           style={styles.searchPanel}
-          query={query}
+          query={queryData.query}
           onFocus={(clearQuery: boolean) => {
             if (clearQuery) {
-              updateQuery('');
+              updateQueryData({query: '', _query: queryData.query});
             }
             updateQASelectVisible(true);
           }}
@@ -127,19 +130,24 @@ const LinkedIssuesAddLink = (props: Props): Node => {
 
   const renderIssue = (issue: IssueOnList) => {
     return (
-      <IssueRow
-        style={[styles.linkedIssueItem, styles.linkedIssue]}
-        issue={issue}
-        onClick={async () => {
-          if (currentIssueLinkTypeExtended) {
-            updateLoading(true);
-            await dispatch(onLinkIssue(getReadableID(issue), currentIssueLinkTypeExtended.getName()));
-            updateLoading(false);
-            props.onUpdate();
-            Router.pop();
-          }
-        }}
-      />
+      <AnimatedView
+        useNativeDriver
+        duration={500}
+        animation="fadeIn">
+        <IssueRow
+          style={[styles.linkedIssueItem, styles.linkedIssue]}
+          issue={issue}
+          onClick={async () => {
+            if (currentIssueLinkTypeExtended) {
+              updateLoading(true);
+              await props.onLinkIssue(getReadableID(issue), currentIssueLinkTypeExtended.getName());
+              updateLoading(false);
+              props.onUpdate();
+              Router.pop();
+            }
+          }}
+        />
+      </AnimatedView>
     );
   };
 
@@ -195,7 +203,7 @@ const LinkedIssuesAddLink = (props: Props): Node => {
         }}
         refreshControl={<RefreshControl
           refreshing={false}
-          onRefresh={() => doSearch(currentIssueLinkTypeExtended, query)}
+          onRefresh={() => doSearch(currentIssueLinkTypeExtended, queryData.query)}
           tintColor={styles.link.color}
         />}
         scrollEventThrottle={50}

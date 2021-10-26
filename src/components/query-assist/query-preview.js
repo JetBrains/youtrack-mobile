@@ -44,7 +44,9 @@ export default class QueryPreview extends PureComponent<Props, void> {
           <Text
             numberOfLines={1}
             onPress={this.focus}
-            testID="query-assist-input"
+            accessible={true}
+            testID="test:id/query-assist-input"
+            accessibilityLabel="query-assist-input"
             style={[
               styles.searchInput,
               styles.searchInputPlaceholder,

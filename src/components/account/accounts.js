@@ -114,7 +114,9 @@ export default class Accounts extends PureComponent<Props, void> {
       >
 
         <TouchableOpacity
-          testID="accountsAddAccount"
+          testID="test:id/accountsAddAccount"
+          accessibilityLabel="accountsAddAccount"
+          accessible={true}
           hitSlop={HIT_SLOP}
           style={styles.accountAction}
           disabled={isChangingAccount}
@@ -137,7 +139,9 @@ export default class Accounts extends PureComponent<Props, void> {
         </Swiper>
 
         <TouchableOpacity
-          testID="accountsOnLogOut"
+          testID="test:id/accountsOnLogOut"
+          accessibilityLabel="accountsOnLogOut"
+          accessible={true}
           hitSlop={HIT_SLOP}
           style={[styles.accountAction, styles.accountActionLogOut]}
           disabled={isChangingAccount}

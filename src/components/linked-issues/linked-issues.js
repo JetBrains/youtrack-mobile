@@ -3,8 +3,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, Text, SectionList, TouchableOpacity, ActivityIndicator} from 'react-native';
 
-import {useDispatch} from 'react-redux';
-
 import Header from '../header/header';
 import IssueRow from '../../views/issues/issues__row';
 import LinkedIssuesAddLink from './linked-issues-add-link';
@@ -12,7 +10,7 @@ import Router from '../router/router';
 
 import {createLinksList} from './linked-issues-helper';
 import {IconAdd, IconBack, IconClose} from '../icon/icon';
-import {loadLinkedIssues, onUnlinkIssue} from '../../views/issue/issue-actions';
+import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './linked-issues.style';
 
@@ -24,24 +22,26 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   canLink?: (issue: IssueOnList) => boolean,
+  issuesGetter: (linkTypeName: string, query: string) => any,
+  linksGetter: () => any,
+  onUnlink: (linkedIssue: IssueOnList, linkTypeId: string) => any,
+  onLinkIssue: (linkedIssueId: string, linkTypeName: string) => any,
   onUpdate: (linkedIssues?: Array<IssueLink>) => void,
-  subTitle?: any,
   style?: ViewStyleProp,
+  subTitle?: any,
 }
 
 const LinkedIssues = (props: Props): Node => {
-  const dispatch: Function = useDispatch();
-
   const [sections, updateSections] = useState([]);
   const [buttonPressed, updateButtonPressed] = useState(null);
   const [isLoading, updateLoading] = useState(false);
 
   const getLinkedIssues = useCallback(async (): Promise<Array<IssueLink>> => {
-    const linkedIssues: Array<IssueLink> = await dispatch(loadLinkedIssues());
+    const linkedIssues: Array<IssueLink> = await props.linksGetter();
     const linksListData = createLinksList(linkedIssues);
     updateSections(linksListData);
     return linkedIssues;
-  }, [dispatch]);
+  }, [props]);
 
   useEffect(() => {
     updateLoading(true);
@@ -55,7 +55,12 @@ const LinkedIssues = (props: Props): Node => {
     const isButtonPressed: boolean = buttonPressed !== null;
     const isCurrentButtonPressed: boolean = isButtonPressed && buttonPressed === linkedIssue.id;
     return (
-      <View style={styles.linkedIssueItem}>
+      <AnimatedView
+        useNativeDriver
+        duration={500}
+        animation="fadeIn"
+        style={styles.linkedIssueItem}
+      >
         <IssueRow
           style={styles.linkedIssue}
           issue={linkedIssue}
@@ -71,7 +76,7 @@ const LinkedIssues = (props: Props): Node => {
             disabled={isButtonPressed}
             onPress={async () => {
               updateButtonPressed(linkedIssue.id);
-              const isRemoved: boolean = await dispatch(onUnlinkIssue(linkedIssue, linkTypeId));
+              const isRemoved: boolean = await props.onUnlink(linkedIssue, linkTypeId);
               updateButtonPressed(null);
               if (isRemoved) {
                 const _sections: Array<LinksListData> = sections.map((it: LinksListData) => {
@@ -93,7 +98,7 @@ const LinkedIssues = (props: Props): Node => {
             />}
           </TouchableOpacity>
         )}
-      </View>
+      </AnimatedView>
     );
   };
 
@@ -117,6 +122,8 @@ const LinkedIssues = (props: Props): Node => {
         rightButton={props.canLink ? <IconAdd style={styles.addLinkButton} color={styles.link.color} size={20}/> : null}
         onRightButtonClick={() => Router.Page({
           children: <LinkedIssuesAddLink
+            onLinkIssue={props.onLinkIssue}
+            issuesGetter={props.issuesGetter}
             onUpdate={async () => {
               const linkedIssues: Array<IssueLink> = await getLinkedIssues();
               props.onUpdate(linkedIssues);

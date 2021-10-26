@@ -11,6 +11,7 @@ import IssueMarkdown from './issue__markdown';
 import IssueVotes from '../../components/issue-actions/issue-votes';
 import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
+import LinkedIssuesTitle from '../../components/linked-issues/linked-issues-title';
 import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import Separator from '../../components/separator/separator';
@@ -22,12 +23,9 @@ import {ANALYTICS_ISSUE_PAGE} from '../../components/analytics/analytics-ids';
 import {getApi} from '../../components/api/api__instance';
 import {getEntityPresentation, getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
 import {getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
-import {getLinkedIssuesTitle} from '../../components/linked-issues/linked-issues-helper';
 import {HIT_SLOP} from '../../components/common-styles/button';
-import {IconAngleRight} from '../../components/icon/icon';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
-import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './issue.styles';
 
@@ -85,7 +83,12 @@ type Props = {
 
   onCheckboxUpdate: (checked: boolean, position: number, description: string) => void,
   onLongPress: (text: string, title?: string) => void,
+
   getIssueLinksTitle: (linkedIssues?: Array<IssueLink>) => any,
+  issuesGetter: (linkTypeName: string, q: string) => any,
+  linksGetter: () => any,
+  onUnlink: (linkedIssue: IssueOnList, linkTypeId: string) => any,
+  onLinkIssue: (linkedIssueIdReadable: string, linkTypeName: string) => Promise<boolean>,
 }
 
 export default class IssueDetails extends Component<Props, void> {
@@ -113,14 +116,16 @@ export default class IssueDetails extends Component<Props, void> {
 
   renderLinksBlock: (() => void | Node) = () => {
     const {issue, issuePermissions, getIssueLinksTitle} = this.props;
-    const issueLinks: Array<IssueLink> = issue.links || [];
-    const linkedIssuesTitle: string = issueLinks.length > 0 ? getLinkedIssuesTitle(issueLinks) : '';
-    return linkedIssuesTitle ? (
-      <TouchableOpacity
-        style={styles.linkedIssuesButton}
+    return (
+      <LinkedIssuesTitle
+        issueLinks={issue.links}
         onPress={() => Router.Page({
           children: (
             <LinkedIssues
+              issuesGetter={this.props.issuesGetter}
+              linksGetter={this.props.linksGetter}
+              onUnlink={this.props.onUnlink}
+              onLinkIssue={this.props.onLinkIssue}
               onUpdate={(issues?: Array<IssueLink>) => {
                 getIssueLinksTitle(issues);
               }}
@@ -132,25 +137,8 @@ export default class IssueDetails extends Component<Props, void> {
               subTitle={`${issue.idReadable} ${issue.summary}`}
             />),
         })}
-      >
-        <View style={styles.linkedIssuesTitle}>
-          <Text style={styles.linkedIssuesTitleText}>
-            Linked issues
-          </Text>
-          {linkedIssuesTitle.length > 0 && (
-            <AnimatedView
-              animation="fadeIn"
-              duration={500}
-              useNativeDriver>
-              <Text style={styles.linkedIssuesTitleTextDetails}>
-                {linkedIssuesTitle}
-              </Text>
-            </AnimatedView>
-          )}
-        </View>
-        <IconAngleRight size={18}/>
-      </TouchableOpacity>
-    ) : null;
+      />
+    );
   };
 
   renderAttachments(attachments: Array<Attachment> | null, uiTheme: UITheme): null | Node {

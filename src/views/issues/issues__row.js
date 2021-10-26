@@ -60,11 +60,13 @@ export default class IssueRow extends Component<Props, void> {
       <TouchableOpacity
         style={style}
         onPress={() => this.props.onClick(issue)}
-        testID="issue-row"
+        testID="test:id/issueRow"
+        accessibilityLabel="issue-row"
+        accessible={true}
       >
         <View>
           <View
-            testID="issue-row-details"
+            testID="test:id/issueRowDetails"
             style={styles.rowLine}
           >
             {this.renderPriority()}
@@ -89,7 +91,7 @@ export default class IssueRow extends Component<Props, void> {
               issue.resolved ? styles.resolved : null,
             ]}
             numberOfLines={2}
-            testID="issue-row-summary">
+            testID="test:id/issueRowSummary">
             {issue.summary}
           </Text>
 

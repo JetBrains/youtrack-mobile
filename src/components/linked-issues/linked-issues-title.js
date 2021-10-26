@@ -1,0 +1,52 @@
+/* @flow */
+
+import React from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
+
+import {View as AnimatedView} from 'react-native-animatable';
+
+import {IconAngleRight} from '../icon/icon';
+import {getLinkedIssuesTitle} from './linked-issues-helper';
+
+import styles from './linked-issues.style';
+
+import type {IssueLink} from '../../flow/CustomFields';
+import type {Node} from 'React';
+
+type Props = {
+  issueLinks: Array<IssueLink>,
+  onPress: () => any,
+}
+
+
+const LinkedIssuesTitle = (props: Props): Node => {
+  const {issueLinks = [], onPress} = props;
+
+  const linkedIssuesTitle: string = issueLinks.length > 0 ? getLinkedIssuesTitle(issueLinks) : '';
+  return linkedIssuesTitle ? (
+    <TouchableOpacity
+      style={styles.linkedIssuesButton}
+      onPress={onPress}
+    >
+      <View style={styles.linkedIssuesTitle}>
+        <Text style={styles.linkedIssuesTitleText}>
+          Linked issues
+        </Text>
+        {linkedIssuesTitle.length > 0 && (
+          <AnimatedView
+            animation="fadeIn"
+            duration={500}
+            useNativeDriver>
+            <Text style={styles.linkedIssuesTitleTextDetails}>
+              {linkedIssuesTitle}
+            </Text>
+          </AnimatedView>
+        )}
+      </View>
+      <IconAngleRight size={18}/>
+    </TouchableOpacity>
+  ) : null;
+};
+
+
+export default (React.memo<Props>(LinkedIssuesTitle): React$AbstractComponent<Props, mixed>);

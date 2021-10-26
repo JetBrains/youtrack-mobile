@@ -95,11 +95,6 @@ export const IconBookmark = (props?: Props) => <DefaultIcon {...{
   ...props,
 }} />;
 
-export const IconPaperClip = (props?: Props) => <DefaultIcon {...{
-  name: 'paperclip',
-  ...props,
-}} />;
-
 
 /* FontAwesome icons */
 

@@ -56,13 +56,13 @@ describe('<Menu/>', () => {
     it('should render menu `Issue` item', async () => {
       const {getByTestId} = doRender();
 
-      expect(getByTestId('menuIssues')).toBeTruthy();
+      expect(getByTestId('test:id/menuIssues')).toBeTruthy();
     });
 
     it('should render menu `Agile Boards` item', async () => {
       const {getByTestId} = doRender();
 
-      expect(getByTestId('menuAgile')).toBeTruthy();
+      expect(getByTestId('test:id/menuAgile')).toBeTruthy();
     });
 
 
@@ -93,7 +93,7 @@ describe('<Menu/>', () => {
         });
         const {getByTestId} = doRender();
 
-        expect(getByTestId('menuNotifications')).toBeTruthy();
+        expect(getByTestId('test:id/menuNotifications')).toBeTruthy();
       });
 
       it('should not render menu `Notifications` item', async () => {
@@ -104,7 +104,7 @@ describe('<Menu/>', () => {
         });
         const {queryByTestId} = doRender();
 
-        expect(queryByTestId('menuNotifications')).toBeNull();
+        expect(queryByTestId('test:id/menuNotifications')).toBeNull();
       });
     });
 
@@ -112,7 +112,7 @@ describe('<Menu/>', () => {
     it('should render menu `Settings` item', async () => {
       const {getByTestId} = doRender({auth: {}, agileUserProfile: {}});
 
-      expect(getByTestId('menuSettings')).toBeTruthy();
+      expect(getByTestId('test:id/menuSettings')).toBeTruthy();
     });
 
     it('should not render menu container if `auth` is not provided', () => {
@@ -153,15 +153,15 @@ describe('<Menu/>', () => {
       storeMock = createStoreMock(stateMock, ownPropsMock);
 
       const {getByTestId} = doRender();
-      fireEvent.press(getByTestId('menuAgile'));
+      fireEvent.press(getByTestId('test:id/menuAgile'));
 
       expect(Router.navigate).toHaveBeenCalledTimes(0);
     });
 
     it('should navigate to the root route', async () => {
       const {getByTestId} = doRender();
-      fireEvent.press(getByTestId('menuIssues'));
-      fireEvent.press(getByTestId('menuAgile'));
+      fireEvent.press(getByTestId('test:id/menuIssues'));
+      fireEvent.press(getByTestId('test:id/menuAgile'));
 
       expect(Router.navigate).toHaveBeenCalledTimes(2);
     });
@@ -169,8 +169,8 @@ describe('<Menu/>', () => {
     it('should not navigate to the same root route', async () => {
       const {getByTestId} = doRender();
 
-      fireEvent.press(getByTestId('menuIssues'));
-      fireEvent.press(getByTestId('menuIssues'));
+      fireEvent.press(getByTestId('test:id/menuIssues'));
+      fireEvent.press(getByTestId('test:id/menuIssues'));
 
       expect(Router.navigate).toHaveBeenCalledTimes(1);
     });
@@ -178,9 +178,9 @@ describe('<Menu/>', () => {
     it('should navigate to a root route if current route is `Issue`', async () => {
       const {getByTestId} = doRender();
 
-      fireEvent.press(getByTestId('menuIssues'));
+      fireEvent.press(getByTestId('test:id/menuIssues'));
       Router.Issue();
-      fireEvent.press(getByTestId('menuIssues'));
+      fireEvent.press(getByTestId('test:id/menuIssues'));
 
       expect(Router.navigate).toHaveBeenCalledTimes(3);
     });
@@ -188,10 +188,10 @@ describe('<Menu/>', () => {
     it('should activate pressed root route', async () => {
       const {getByTestId} = doRender();
 
-      fireEvent.press(getByTestId('menuIssues'));
+      fireEvent.press(getByTestId('test:id/menuIssues'));
       expect(getByTestId('menuIssuesIcon')).toHaveProp('isActive', true);
 
-      fireEvent.press(getByTestId('menuAgile'));
+      fireEvent.press(getByTestId('test:id/menuAgile'));
       expect(getByTestId('menuIssuesIcon')).toHaveProp('isActive', false);
     });
   });

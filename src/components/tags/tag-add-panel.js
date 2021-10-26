@@ -3,7 +3,7 @@
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
-import IconTag from '../icon/assets/tag.svg';
+import IconTag from '@jetbrains/icons/tag.svg';
 
 import {HIT_SLOP} from '../common-styles/button';
 
@@ -16,11 +16,10 @@ type Props = {
 
 
 const TagAddPanel = (props: Props) => {
-  //$FlowFixMe
-  const iconTag = <IconTag
+  const iconTag: any = <IconTag
     style={styles.tagIcon}
-    width={16}
-    height={16}
+    width={23}
+    height={23}
     fill={props.disabled ? styles.buttonTextDisabled.color : styles.buttonText.color}
   />;
   return (

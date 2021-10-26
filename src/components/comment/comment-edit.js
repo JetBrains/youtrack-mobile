@@ -14,6 +14,7 @@ import AttachmentAddPanel from '../attachments-row/attachments-add-panel';
 import AttachmentsRow from '../attachments-row/attachments-row';
 import Header from '../header/header';
 import IconHourGlass from '@jetbrains/icons/hourglass.svg';
+import IconAttachment from '@jetbrains/icons/attachment.svg';
 import log from '../log/log';
 import Mentions from '../mentions/mentions';
 import ModalPanelBottom from '../modal-panel-bottom/modal-panel-bottom';
@@ -25,7 +26,7 @@ import {commentPlaceholderText} from '../../app-text';
 import {composeSuggestionText, getSuggestWord} from '../mentions/mension-helper';
 import {getAttachmentActions} from '../attachments-row/attachment-actions';
 import {hasType} from '../api/api__resource-types';
-import {IconArrowUp, IconCheck, IconClose, IconAdd, IconAttachment} from '../icon/icon';
+import {IconArrowUp, IconCheck, IconClose, IconAdd} from '../icon/icon';
 import {ThemeContext} from '../theme/theme-context';
 
 import styles, {MIN_INPUT_SIZE} from './comment-edit.styles';
@@ -489,7 +490,7 @@ const IssueCommentEdit = (props: Props) => {
                   });
                 }}
               >
-                <IconAttachment size={22} color={styles.actionsContainerButton.color}/>
+                <IconAttachment width={22} height={22} fill={styles.actionsContainerButton.color}/>
                 <Text
                   style={[styles.actionsContainerButtonText, styles.floatContextButtonText]}>Attach file</Text>
               </TouchableOpacity>

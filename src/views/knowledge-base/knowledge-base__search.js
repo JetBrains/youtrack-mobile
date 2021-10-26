@@ -29,6 +29,9 @@ const KnowledgeBaseSearchPanel = (props: Props) => {
       }
 
       <TextInput
+        estID="test:id/knowledge-base-search-panel"
+        accessibilityLabel="query-assist-input"
+        accessible={true}
         ref={(instance: ?Object) => {if (instance) {searchInput = instance;}}}
 
         style={styles.searchInput}

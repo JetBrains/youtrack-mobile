@@ -161,6 +161,9 @@ class AgileBoard extends Component<Props, State> {
 
   _renderRefreshControl = (uiTheme: UITheme) => {
     return <RefreshControl
+      testID="refresh-control"
+      accessibilityLabel="refresh-control"
+      accessible={true}
       refreshing={this.props.isLoading}
       tintColor={uiTheme.colors.$link}
       onRefresh={() => this.loadBoard(true)}
@@ -243,6 +246,9 @@ class AgileBoard extends Component<Props, State> {
           style={styles.zoomButton}
         >
           <TouchableOpacity
+            testID="magnifier-button"
+            accessibilityLabel="magnifier-button"
+            accessible={true}
             hitSlop={HIT_SLOP}
             onPress={this.toggleZoom}
           >
