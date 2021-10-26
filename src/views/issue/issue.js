@@ -164,6 +164,9 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
           onShowCopyTextContextActions(this.context.actionSheet(), text, title);
         }}
         getIssueLinksTitle={getIssueLinksTitle}
+        issuesGetter={this.props.loadIssuesXShort}
+        linksGetter={this.props.loadLinkedIssues}
+        onUnlink={this.props.onUnlinkIssue}
       />
     );
   };
@@ -290,7 +293,12 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
                 },
                 this.switchToDetailsTab,
                 (issuePermissions.canLink(issue)
-                  ? () => <LinkedIssuesAddLink onUpdate={loadIssueLinksTitle}/>
+                  ? () => (
+                    <LinkedIssuesAddLink
+                      issuesGetter={this.props.loadIssuesXShort}
+                      onUpdate={loadIssueLinksTitle}
+                    />
+                  )
                   : null)
               );
             }

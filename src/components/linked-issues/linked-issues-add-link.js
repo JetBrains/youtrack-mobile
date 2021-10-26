@@ -20,7 +20,7 @@ import {getAssistSuggestions} from '../query-assist/query-assist-helper';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 import {IconBack} from '../icon/icon';
 import {IconNothingFound} from '../icon/icon-no-found';
-import {loadIssueLinkTypes, loadIssuesXShort, onLinkIssue} from '../../views/issue/issue-actions';
+import {loadIssueLinkTypes, onLinkIssue} from '../../views/issue/issue-actions';
 import {noIssuesFoundIconSize} from '../../views/issues/issues.styles';
 import {UNIT} from '../variables/variables';
 import {View as AnimatedView} from 'react-native-animatable';
@@ -34,6 +34,7 @@ import type {IssueLinkType} from '../../flow/CustomFields';
 import type {IssueLinkTypeExtended} from './linked-issues-helper';
 
 type Props = {
+  issuesGetter: (linkTypeName: string, q: string) => any,
   onUpdate: () => any,
   style?: ViewStyleProp,
   subTitle?: any,
@@ -67,11 +68,11 @@ const LinkedIssuesAddLink = (props: Props): Node => {
   const doSearch = useCallback(async (linkType: ?IssueLinkTypeExtended, q: string = queryData.query) => {
     if (linkType) {
       updateLoading(true);
-      const _issues: Array<IssueOnList> = await dispatch(loadIssuesXShort(linkType.getName(), q));
+      const _issues: Array<IssueOnList> = await props.issuesGetter(linkType.getName(), q);
       updateIssues(_issues);
       updateLoading(false);
     }
-  }, [dispatch, queryData]);
+  }, [props, queryData.query]);
 
 
   useEffect(() => {
