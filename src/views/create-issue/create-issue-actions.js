@@ -137,7 +137,7 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
       summary: issue.summary,
       description: issue.description,
       project: issue.project,
-      fields: issue.fields,
+      fields: ignoreFields ? undefined : issue.fields,
       ...draftData,
     };
 
@@ -222,7 +222,7 @@ export function updateProject(project: Object): ((dispatch: (any) => any, getSta
 
     log.info('Project has been updated');
     usage.trackEvent(CATEGORY_NAME, 'Change project');
-    dispatch(updateIssueDraft());
+    dispatch(updateIssueDraft(false, {fields: []}));
     storeProjectId(project.id);
   };
 }

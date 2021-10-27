@@ -28,7 +28,7 @@ import usage from '../../components/usage/usage';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {ANALYTICS_ISSUE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
 import {getApi} from '../../components/api/api__instance';
-import {getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
+import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconCheck, IconClose, IconDrag, IconMoreOptions} from '../../components/icon/icon';
 import {isIOSPlatform} from '../../util/util';
@@ -123,7 +123,7 @@ class CreateIssue extends Component<Props, State> {
 
       issueId={issue.id}
       issueProject={issue.project}
-      fields={issue.fields}
+      fields={getIssueCustomFieldsNotText(issue.fields)}
 
       hasPermission={{
         canUpdateField: this.canUpdateField,

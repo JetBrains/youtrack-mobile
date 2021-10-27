@@ -123,7 +123,10 @@ describe('<CreateIssue/>', () => {
 
       await store.dispatch(actions.updateIssueDraft(true));
 
-      expect(apiMock.issue.updateIssueDraft).toHaveBeenCalledWith(issueDraftBase);
+      expect(apiMock.issue.updateIssueDraft).toHaveBeenCalledWith({
+        ...issueDraftBase,
+        fields: undefined,
+      });
       expect(store.getActions()[0]).toEqual({
         payload: {
           issue: {

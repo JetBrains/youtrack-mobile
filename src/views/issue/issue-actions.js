@@ -29,6 +29,7 @@ import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {State as IssueState} from './issue-reducers';
 import type {UserAppearanceProfile} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
+import type {AppState} from '../../reducers';
 
 type ApiGetter = () => Api;
 type StateGetter = () => { issueState: IssueState };
@@ -208,23 +209,13 @@ export function getIssueLinksTitle(links?: Array<IssueLink>): ((
 
 export function loadLinkedIssues(): ((
   dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter
+  getState: () => AppState,
+  getApi: ApiGetter,
 ) => Promise<Array<IssueLink>>) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().issueState.issueId;
-    const api: Api = getApi();
-
-    let issueLinks: Array<IssueLink>;
-    try {
-      issueLinks = await api.issue.getIssueLinks(issueId);
-      log.info(`"${issueId}" linked issues loaded`);
-    } catch (rawError) {
-      const error = await resolveError(rawError);
-      log.warn('Failed to load linked issues', error);
-      issueLinks = [];
-    }
-    return issueLinks;
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Load linked issue');
+    const issue: IssueFull = getState().issueState.issue;
+    return await issueCommonLinksActions(issue).loadLinkedIssues();
   };
 }
 
@@ -246,6 +237,7 @@ export function loadIssuesXShort(linkTypeName: string, query: string, page?: num
   getApi: ApiGetter,
 ) => Promise<IssueOnList>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Search to link issues');
     const issue: IssueFull = getState().issueState.issue;
     return await issueCommonLinksActions(issue).loadIssuesXShort(
       linkTypeName,

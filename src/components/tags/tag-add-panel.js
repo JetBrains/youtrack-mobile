@@ -18,8 +18,8 @@ type Props = {
 const TagAddPanel = (props: Props) => {
   const iconTag: any = <IconTag
     style={styles.tagIcon}
-    width={23}
-    height={23}
+    width={21}
+    height={21}
     fill={props.disabled ? styles.buttonTextDisabled.color : styles.buttonText.color}
   />;
   return (
