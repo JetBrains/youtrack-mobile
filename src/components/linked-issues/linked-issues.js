@@ -51,6 +51,18 @@ const LinkedIssues = (props: Props): Node => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const doUpdateSections = (removedLinkedIssue: IssueOnList, linkTypeId: string): void => {
+    const _sections: Array<LinksListData> = sections.map((it: LinksListData) => {
+      if (it.linkTypeId === linkTypeId) {
+        it.data = it.data.filter((il: IssueOnList) => il.id !== removedLinkedIssue.id);
+      }
+      it.unresolvedIssuesSize -= 1;
+      return it;
+    }).filter((it: LinksListData) => it.data.length > 0);
+    updateSections(_sections);
+    props.onUpdate();
+  };
+
   const renderLinkedIssue = (linkedIssue: IssueOnList, linkTypeId: string) => {
     const isButtonPressed: boolean = buttonPressed !== null;
     const isCurrentButtonPressed: boolean = isButtonPressed && buttonPressed === linkedIssue.id;
@@ -79,14 +91,7 @@ const LinkedIssues = (props: Props): Node => {
               const isRemoved: boolean = await props.onUnlink(linkedIssue, linkTypeId);
               updateButtonPressed(null);
               if (isRemoved) {
-                const _sections: Array<LinksListData> = sections.map((it: LinksListData) => {
-                  if (it.linkTypeId === linkTypeId) {
-                    it.data = it.data.filter((il: IssueOnList) => il.id !== linkedIssue.id);
-                  }
-                  return it;
-                }).filter((it: LinksListData) => it.data.length > 0);
-                updateSections(_sections);
-                props.onUpdate();
+                doUpdateSections(linkedIssue, linkTypeId);
               }
             }}
             style={styles.linkedIssueRemoveAction}
