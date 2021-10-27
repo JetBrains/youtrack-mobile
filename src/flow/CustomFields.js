@@ -130,6 +130,11 @@ export type CustomField = {
   projectCustomField: ProjectCustomField
 }
 
+export type CustomFieldTextValue = {
+  id: ?string,
+  text: string,
+}
+
 export type CustomFieldText = {
   ...CustomFieldBase,
   value: {

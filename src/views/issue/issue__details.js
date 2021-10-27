@@ -35,6 +35,7 @@ import type {
   Attachment,
   CustomField,
   CustomFieldText,
+  CustomFieldTextValue,
   FieldValue,
   IssueLink,
   IssueProject,
@@ -89,6 +90,8 @@ type Props = {
   linksGetter: () => any,
   onUnlink: (linkedIssue: IssueOnList, linkTypeId: string) => any,
   onLinkIssue: (linkedIssueIdReadable: string, linkTypeName: string) => Promise<boolean>,
+
+  setCustomFieldValue: (field: CustomFieldText, value: CustomFieldTextValue) => any,
 }
 
 export default class IssueDetails extends Component<Props, void> {
@@ -234,23 +237,22 @@ export default class IssueDetails extends Component<Props, void> {
   }
 
   renderIssueTextFields(): Node {
-    const {issue, editMode, onLongPress} = this.props;
-    return getIssueTextCustomFields(this.props.issue.fields).map((textField: CustomFieldText, index: number) => {
+    const {issue, editMode, onLongPress, setCustomFieldValue} = this.props;
+    return getIssueTextCustomFields(issue.fields).map((textField: CustomFieldText, index: number) => {
       return (
         <TouchableWithoutFeedback
           key={`issueCustomFieldText${index}`}
-          onLongPress={() => {textField?.value?.text && onLongPress(textField?.value?.text, `Copy field text`);}}
+          onLongPress={() => {textField?.value?.text && onLongPress(textField.value.text, `Copy field text`);}}
           delayLongPress={250}
         >
           <View>
             <IssueCustomFieldText
               editMode={editMode}
-              onUpdateFieldValue={async (fieldValue: string): Promise<void> => {
-                textField.value = {
+              onUpdateFieldValue={async (text: string): Promise<void> => {
+                setCustomFieldValue(textField, {
                   ...(textField.value || {id: undefined}),
-                  text: fieldValue,
-                };
-                await this.onFieldUpdate(textField, {text: fieldValue});
+                  text,
+                });
               }}
               textField={textField}
               usesMarkdown={issue.usesMarkdown}

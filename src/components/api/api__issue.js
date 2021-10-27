@@ -11,6 +11,7 @@ import type Auth from '../auth/auth';
 import type {Activity} from '../../flow/Activity';
 import type {
   Attachment,
+  CustomFieldText,
   FieldValue,
   IssueComment,
   IssueLink,
@@ -18,7 +19,7 @@ import type {
   IssueProject,
   Tag,
 } from '../../flow/CustomFields';
-import type {IssueFull, IssueOnList} from '../../flow/Issue';
+import type {AnyIssue, IssueFull} from '../../flow/Issue';
 import type {Visibility} from '../../flow/Visibility';
 import type {WorkItem} from '../../flow/Work';
 
@@ -300,11 +301,20 @@ export default class IssueAPI extends ApiBase {
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/attachments/${attachmentId}?${queryString}`, 'POST', body);
   }
 
-  async updateIssueSummaryDescription(issue: IssueFull): Promise<any> {
-    const queryString = qs.stringify({fields: 'id,value,summary,description'});
-    const body = {summary: issue.summary, description: issue.description};
+  async saveIssueSummaryAndDescriptionChange(
+    issueId: string,
+    summary: string,
+    description: string,
+    fields?: Array<CustomFieldText>
+  ): Promise<any> {
+    const queryString = qs.stringify({
+      fields: issueFields.singleIssue.toString(),
+    }, {encode: false});
 
-    return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issue.id}?${queryString}`, 'POST', body);
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${issueId}?${queryString}`,
+      'POST',
+      {summary, description, fields});
   }
 
   async updateIssueFieldValue(issueId: string, fieldId: string, value: FieldValue): Promise<any> {
@@ -327,7 +337,7 @@ export default class IssueAPI extends ApiBase {
     return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${issueId}/voters`, 'POST', {hasVote});
   }
 
-  async updateProject(issue: IssueOnList, project: IssueProject): Promise<any> {
+  async updateProject(issue: AnyIssue, project: IssueProject): Promise<any> {
     const body = {
       id: issue.id,
       project: project,

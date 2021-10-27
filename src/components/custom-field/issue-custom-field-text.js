@@ -30,7 +30,12 @@ const IssueCustomFieldText = (props: Props): Node => {
 
 
   const onChange = useCallback((text: string) => {
-    timeout.current = setTimeout(() => {props.onUpdateFieldValue(text);}, 300);
+    timeout.current = setTimeout(
+      () => {
+        props.onUpdateFieldValue(text.trim());
+      },
+      300
+    );
   }, [props]);
 
   const fieldValue: string = props.textField?.value?.text || '';
@@ -51,12 +56,14 @@ const IssueCustomFieldText = (props: Props): Node => {
         description={fieldValue}
         placeholderText={props.textField.projectCustomField.emptyFieldText || ''}
         multiline={true}
-        onDescriptionChange={(text: string) => {onChange(text);}}
+        onDescriptionChange={(text: string) => {
+          onChange(text);
+        }}
       />}
 
       {!props.editMode && (
         <IssueMarkdown
-        markdown={props.usesMarkdown ? fieldValue : null}
+          markdown={props.usesMarkdown ? fieldValue : null}
           youtrackWiki={{
             description: props.usesMarkdown ? null : fieldValue,
           }}

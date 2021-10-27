@@ -1,6 +1,15 @@
 /* @flow */
 
-import type {CustomField, CustomFieldBase, CustomFieldText, ProjectCustomField} from '../../flow/CustomFields';
+import type {
+  CustomField,
+  CustomFieldBase,
+  CustomFieldText,
+  CustomFieldValue,
+  ProjectCustomField,
+} from '../../flow/CustomFields';
+
+type AnyCustomField = $Shape<CustomField & CustomFieldText>;
+
 
 const isProjectCustomField = (customField: ProjectCustomField): boolean => {
   return customField?.$type ? customField.$type.indexOf('ProjectCustomField') !== -1 : false;
@@ -29,13 +38,30 @@ const isRequiredCustomField = (customField: CustomFieldBase | CustomFieldText | 
     return !customField.projectCustomField.canBeEmpty;
 };
 
-const getIssueTextCustomFields = (issueCustomFields: Array<CustomField | CustomFieldText> = []): Array<CustomFieldText> => (
-  issueCustomFields.filter((field: CustomField | CustomFieldText) => isTextCustomField(field.projectCustomField))
+const getIssueTextCustomFields = (issueCustomFields: Array<AnyCustomField> = []): Array<CustomFieldText> => (
+  issueCustomFields.filter((field: AnyCustomField) => isTextCustomField(field.projectCustomField))
 );
 
-const getIssueCustomFieldsNotText = (issueCustomFields: Array<CustomField | CustomFieldText> = []): Array<CustomField> => (
-  issueCustomFields.filter((field: CustomField | CustomFieldText) => !isTextCustomField(field.projectCustomField))
+const getIssueCustomFieldsNotText = (issueCustomFields: Array<AnyCustomField> = []): Array<CustomField> => (
+  issueCustomFields.filter((field: AnyCustomField) => !isTextCustomField(field.projectCustomField))
 );
+
+const updateCustomFieldValue = (
+  fields: Array<AnyCustomField> = [],
+  cf: AnyCustomField,
+  value: CustomFieldValue,
+): Array<AnyCustomField> => {
+  const index: number = fields.findIndex((f: AnyCustomField) => f.id === cf.id);
+  return (
+    index >= 0
+      ? [
+        ...fields.slice(0, index),
+        {...fields[index], value},
+        ...fields.slice(index + 1),
+      ]
+      : fields
+  );
+};
 
 export {
   getIssueTextCustomFields,
@@ -43,4 +69,5 @@ export {
   getSimpleCustomFieldType,
   isTextCustomField,
   isRequiredCustomField,
+  updateCustomFieldValue,
 };

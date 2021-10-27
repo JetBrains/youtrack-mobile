@@ -12,6 +12,7 @@ import usage from '../../components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE} from '../../components/analytics/analytics-ids';
 import {attachmentActions, attachmentTypes} from './issue__attachment-actions-and-types';
 import {getEntityPresentation, getReadableID} from '../../components/issue-formatter/issue-formatter';
+import {getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
 import {initialState} from './issue-reducers';
 import {isIOSPlatform, until} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
@@ -22,7 +23,7 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 
 import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
-import type {Attachment, CustomField, FieldValue, IssueProject, Tag} from '../../flow/CustomFields';
+import type {Attachment, CustomField, CustomFieldText, FieldValue, IssueProject, Tag} from '../../flow/CustomFields';
 import type {CommandSuggestionResponse, IssueFull, IssueOnList, OpenNestedViewParams} from '../../flow/Issue';
 import type {IssueLink} from '../../flow/CustomFields';
 import type {NormalizedAttachment} from '../../flow/Attachment';
@@ -283,14 +284,20 @@ export function saveIssueSummaryAndDescriptionChange(): ((
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const api: Api = getApi();
+    const {issue} = getState().issueState;
     const {summaryCopy, descriptionCopy} = getState().issueState;
+    const textCustomFields: Array<CustomFieldText> = getIssueTextCustomFields(issue.fields);
 
     dispatch(setIssueSummaryAndDescription(summaryCopy, descriptionCopy));
     dispatch(startSavingEditedIssue());
 
     try {
-      const {issue} = getState().issueState;
-      await api.issue.updateIssueSummaryDescription(issue);
+      await api.issue.saveIssueSummaryAndDescriptionChange(
+        issue.id,
+        summaryCopy,
+        descriptionCopy,
+        textCustomFields.length > 0 ? textCustomFields : undefined,
+      );
       log.info(`Issue (${issue.id}) summary/description has been updated`);
       usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update issue', 'Success');
 
@@ -298,7 +305,6 @@ export function saveIssueSummaryAndDescriptionChange(): ((
       dispatch(stopEditingIssue());
       dispatch(issueUpdated(getState().issueState.issue));
     } catch (err) {
-      await dispatch(loadIssue());
       notifyError('Failed to update issue', err);
     } finally {
       dispatch(stopSavingEditedIssue());
@@ -316,7 +322,15 @@ export function onCheckboxUpdate(checked: boolean, position: number, description
     const {issue} = getState().issueState;
     const preIssueDescription: string = issue.description;
     dispatch(setIssueSummaryAndDescription(issue.summary, description));
-    const [error] = await until(api.issue.updateIssueSummaryDescription({...issue, description}));
+
+    const textCustomFields: Array<CustomFieldText> = getIssueTextCustomFields(issue.fields);
+    const [error] = await until(api.issue.saveIssueSummaryAndDescriptionChange(
+      issue.id,
+      issue.summary,
+      description,
+      textCustomFields.length > 0 ? textCustomFields : undefined,
+    ));
+
     if (error) {
       dispatch(setIssueSummaryAndDescription(issue.summary, preIssueDescription));
       const message: string = 'Failed to update a checkbox';
@@ -332,6 +346,17 @@ export function onCheckboxUpdate(checked: boolean, position: number, description
   };
 }
 
+export function setCustomFieldValue(field: CustomField, value: FieldValue): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter,
+) => Promise<void>) {
+  return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update field value');
+    dispatch(setIssueFieldValue(field, value));
+  };
+}
+
 export function updateIssueFieldValue(field: CustomField, value: FieldValue): ((
   dispatch: (any) => any,
   getState: StateGetter,
@@ -343,11 +368,9 @@ export function updateIssueFieldValue(field: CustomField, value: FieldValue): ((
     getApi: ApiGetter
   ) => {
     const api: Api = getApi();
-    const {issue} = getState().issueState;
+    const issue: IssueFull = getState().issueState.issue;
 
-    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update field value');
-
-    dispatch(setIssueFieldValue(field, value));
+    dispatch(setCustomFieldValue(field, value));
     const updateMethod = (...args) => {
       if (field.hasStateMachine) {
         return api.issue.updateIssueFieldEvent(...args);
