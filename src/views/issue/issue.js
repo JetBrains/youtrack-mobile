@@ -120,6 +120,8 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       onCheckboxUpdate,
       onShowCopyTextContextActions,
       getIssueLinksTitle,
+
+      setCustomFieldValue,
     } = this.props;
 
     return (
@@ -168,6 +170,8 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         linksGetter={this.props.loadLinkedIssues}
         onUnlink={this.props.onUnlinkIssue}
         onLinkIssue={this.props.onLinkIssue}
+
+        setCustomFieldValue={setCustomFieldValue}
       />
     );
   };

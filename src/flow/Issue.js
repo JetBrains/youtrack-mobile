@@ -35,6 +35,7 @@ export type IssueFull = {
   description: string,
   fieldHash?: any,
   fields: Array<CustomField | CustomFieldText>,
+  _fields?: Array<CustomField | CustomFieldText>,
   id: string,
   idReadable: string,
   links: Array<IssueLink>,

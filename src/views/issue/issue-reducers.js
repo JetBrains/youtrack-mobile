@@ -177,7 +177,16 @@ export default (createReducer(initialState, {
     };
   },
   [types.STOP_EDITING_ISSUE]: (state: State): State => {
-    return {...state, editMode: false, summaryCopy: '', descriptionCopy: ''};
+    return {
+      ...state,
+      issue: {
+        ...state.issue,
+        fields: state.issue._fields || state.issue.fields,
+      },
+      editMode: false,
+      summaryCopy: '',
+      descriptionCopy: '',
+    };
   },
   [types.SET_ISSUE_SUMMARY_AND_DESCRIPTION]: (state: State, action: { summary: string, description: string }): State => {
     return {
@@ -213,6 +222,7 @@ export default (createReducer(initialState, {
       ...state,
       issue: {
         ...state.issue,
+        _fields: state.issue.fields,
         fields: [...state.issue.fields].map(it => {
           return it === field ? {...it, value} : it;
         }),
