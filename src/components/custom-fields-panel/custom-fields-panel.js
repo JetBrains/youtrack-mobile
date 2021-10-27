@@ -19,7 +19,7 @@ import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator} 
 
 import styles, {calendarTheme} from './custom-fields-panel.styles';
 
-import type {IssueProject, CustomField as IssueCustomField, CustomFieldText} from '../../flow/CustomFields';
+import type {IssueProject, CustomField as IssueCustomField} from '../../flow/CustomFields';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
 
@@ -29,7 +29,7 @@ type Props = {
 
   issueId: string,
   issueProject: IssueProject,
-  fields: Array<IssueCustomField | CustomFieldText>,
+  fields: Array<IssueCustomField>,
 
   hasPermission: {
     canUpdateField: (field: IssueCustomField) => boolean,

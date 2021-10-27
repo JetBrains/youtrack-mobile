@@ -33,8 +33,13 @@ const getIssueTextCustomFields = (issueCustomFields: Array<CustomField | CustomF
   issueCustomFields.filter((field: CustomField | CustomFieldText) => isTextCustomField(field.projectCustomField))
 );
 
+const getIssueCustomFieldsNotText = (issueCustomFields: Array<CustomField | CustomFieldText> = []): Array<CustomField> => (
+  issueCustomFields.filter((field: CustomField | CustomFieldText) => !isTextCustomField(field.projectCustomField))
+);
+
 export {
   getIssueTextCustomFields,
+  getIssueCustomFieldsNotText,
   getSimpleCustomFieldType,
   isTextCustomField,
   isRequiredCustomField,
