@@ -51,7 +51,9 @@ const LinkedIssues = (props: Props): Node => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const doUpdateSections = (removedLinkedIssue: IssueOnList, linkTypeId: string): void => {
+  const navigateBack = (): void => {Router.pop();};
+
+  const doUpdateSections = (removedLinkedIssue: IssueOnList, linkTypeId: string): Array<LinksListData> => {
     const _sections: Array<LinksListData> = sections.map((it: LinksListData) => {
       if (it.linkTypeId === linkTypeId) {
         it.data = it.data.filter((il: IssueOnList) => il.id !== removedLinkedIssue.id);
@@ -60,7 +62,7 @@ const LinkedIssues = (props: Props): Node => {
       return it;
     }).filter((it: LinksListData) => it.data.length > 0);
     updateSections(_sections);
-    props.onUpdate();
+    return _sections;
   };
 
   const renderLinkedIssue = (linkedIssue: IssueOnList, linkTypeId: string) => {
@@ -91,7 +93,11 @@ const LinkedIssues = (props: Props): Node => {
               const isRemoved: boolean = await props.onUnlink(linkedIssue, linkTypeId);
               updateButtonPressed(null);
               if (isRemoved) {
-                doUpdateSections(linkedIssue, linkTypeId);
+                const updatedLinksList: Array<LinksListData> = doUpdateSections(linkedIssue, linkTypeId);
+                props.onUpdate();
+                if (updatedLinksList.length === 0) {
+                  navigateBack();
+                }
               }
             }}
             style={styles.linkedIssueRemoveAction}
@@ -136,7 +142,7 @@ const LinkedIssues = (props: Props): Node => {
             subTitle={props.subTitle}
           />,
         })}
-        onBack={() => Router.pop()}
+        onBack={navigateBack}
       >
         <Text
           style={styles.headerSubTitle}
