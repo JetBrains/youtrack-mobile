@@ -22,7 +22,8 @@ const IssuesCount = (props: Props) => {
 
   return (
     <AnimatedView
-      testID= "test:id/issues-count"
+      testID= "issuesCount"
+      accessibilityLabel= "issuesCount"
       accessible={true}
       useNativeDriver
       duration={500}
