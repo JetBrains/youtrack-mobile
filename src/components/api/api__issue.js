@@ -43,7 +43,7 @@ export default class IssueAPI extends ApiBase {
       fields: issueFields.singleIssueLinks.toString(),
     }, {encode: false});
 
-    return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}/links?${queryString}&$topLinks=100`);
+    return await this.makeAuthorizedRequest(`${this.youTrackIssueUrl}/${id}/links?${queryString}&$topLinks=200`);
   }
 
   getIssueLinksTitle(id: string): Promise<Array<IssueLink>> {
