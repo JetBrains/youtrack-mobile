@@ -33,7 +33,7 @@ import styles from './issue.styles';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {AnyIssue, IssueFull} from '../../flow/Issue';
-import type {Attachment, Tag} from '../../flow/CustomFields';
+import type {Attachment, IssueLink, Tag} from '../../flow/CustomFields';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {State as IssueState} from './issue-reducers';
@@ -275,7 +275,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       showIssueActions,
       stopEditingIssue,
       issuePermissions,
-      loadIssueLinksTitle,
+      getIssueLinksTitle,
       onLinkIssue,
       loadIssuesXShort,
     } = this.props;
@@ -304,7 +304,9 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
                     <LinkedIssuesAddLink
                       onLinkIssue={onLinkIssue}
                       issuesGetter={loadIssuesXShort}
-                      onUpdate={loadIssueLinksTitle}
+                      onUpdate={(issues?: Array<IssueLink>) => {
+                        getIssueLinksTitle(issues);
+                      }}
                     />
                   )
                   : null)
