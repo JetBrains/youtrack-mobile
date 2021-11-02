@@ -37,8 +37,8 @@ export default class OAuth2 extends AuthBase {
     return this.authParams?.accessToken || '';
   }
 
-  getRefreshToken(): string {
-    return this.authParams?.refreshToken || '';
+  getRefreshToken(authParams: OAuthParams): string {
+    return authParams?.refreshToken || '';
   }
 
   async logOut(): Promise<void> {

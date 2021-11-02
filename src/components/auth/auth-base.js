@@ -68,7 +68,7 @@ export class AuthBase {
 
   getAccessToken(): string {}
 
-  getRefreshToken(): string {}
+  getRefreshToken(authParams: any): string {}
 
   logOut(): Promise<void> {}
 
@@ -107,7 +107,7 @@ export class AuthBase {
         return authParams;
       })
       .catch((error: CustomError) => {
-        if (error.status === 401 && this.getRefreshToken()) {
+        if (error.status === 401 && this.getRefreshToken(authParams)) {
           log.log('Trying to refresh token', error);
           return this.refreshToken();
         }

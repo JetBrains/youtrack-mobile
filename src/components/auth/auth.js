@@ -82,8 +82,8 @@ export default class AuthTest extends AuthBase {
     return this.authParams?.access_token || '';
   }
 
-  getRefreshToken(): string {
-    return this.authParams?.refresh_token || '';
+  getRefreshToken(authParams: AuthParams): string {
+    return authParams?.refresh_token || '';
   }
 
   async logOut() {
