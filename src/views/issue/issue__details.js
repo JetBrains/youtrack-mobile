@@ -302,15 +302,14 @@ export default class IssueDetails extends Component<Props, void> {
           {issue.summary}
         </Text>
 
-        <Tags
+        {Boolean(issue?.tags?.length) && <Tags
           style={styles.tags}
           multiline={true}
           tags={issue?.tags}
           onTagPress={openIssueListWithSearch}
           onTagRemove={onTagRemove}
-        />
+        />}
 
-        {Boolean(issue?.tags?.length > 0) && <View style={styles.tagsSeparator}/>}
 
         {this.renderLinksBlock()}
 
@@ -318,7 +317,7 @@ export default class IssueDetails extends Component<Props, void> {
           onLongPress={() => {onLongPress(issue.description, 'Copy description');}}
           delayLongPress={250}
         >
-          <View>
+          <View style={styles.description}>
             <IssueMarkdown
               {...ytWikiProps}
               attachments={issue.attachments}
