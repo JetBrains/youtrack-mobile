@@ -54,11 +54,9 @@ export default EStyleSheet.create({
     color: '$icon',
   },
   tags: {
-    marginTop: UNIT * 2,
-  },
-  tagsSeparator: {
-    height: UNIT,
-    marginRight: -UNIT * 2,
+    marginTop: UNIT * 1.5,
+    paddingTop: UNIT / 2,
+    paddingBottom: UNIT * 1.5,
     ...separatorBorder,
     borderColor: '$separator',
   },
@@ -74,8 +72,7 @@ export default EStyleSheet.create({
     color: '$icon',
   },
   description: {
-    marginTop: UNIT * 2,
-    color: '$text',
+    marginTop: UNIT,
   },
   attachments: {
     marginTop: UNIT * 2,
