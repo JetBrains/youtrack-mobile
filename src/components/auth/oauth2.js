@@ -30,15 +30,15 @@ export default class OAuth2 extends AuthBase {
   }
 
   getTokenType(): string {
-    return this.authParams?.tokenType || '';
+    return this.authParams.tokenType;
   }
 
   getAccessToken(): string {
-    return this.authParams?.accessToken || '';
+    return this.authParams.accessToken;
   }
 
   getRefreshToken(authParams: OAuthParams): string {
-    return authParams?.refreshToken || '';
+    return authParams.refreshToken;
   }
 
   async logOut(): Promise<void> {

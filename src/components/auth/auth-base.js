@@ -46,10 +46,12 @@ export class AuthBase {
     'Authorization': string,
     'Content-Type': string
   } {
+    const authorization: string = `Basic ${createBtoa(`${config.auth.clientId}:${((config.auth.clientSecret: any): string)}`)}`;
+    log.info(`AuthBase(getHeaders): ${authorization}`);
     return {
       'Accept': ACCEPT_HEADER,
       'User-Agent': USER_AGENT,
-      'Authorization': `Basic ${createBtoa(`${config.auth.clientId}:${((config.auth.clientSecret: any): string)}`)}`,
+      'Authorization': authorization,
       'Content-Type': URL_ENCODED_TYPE,
     };
   }
@@ -78,9 +80,11 @@ export class AuthBase {
     if (!authParams) {
       throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
     }
-    return {
+    const authHeaders: {'Authorization': string} = {
       'Authorization': `${authParams.tokenType || authParams.token_type} ${authParams.accessToken || authParams.access_token}`,
     };
+    log.info('getAuthorizationHeaders: ', authParams);
+    return authHeaders;
   }
 
   loadCurrentUser(authParams: any): Promise<any> {
@@ -117,7 +121,7 @@ export class AuthBase {
         throw error;
       })
       .catch((err: CustomError) => {
-        log.log('loadCurrentUser: Token refresh failed.', err);
+        log.log(`loadCurrentUser: Token refresh failed. Error ${err.status}`, err);
         throw err;
       });
   }
