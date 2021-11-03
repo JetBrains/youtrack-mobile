@@ -97,17 +97,21 @@ export class AuthBase {
         log.log(`loadCurrentUser: Error ${res.status}. Verifying token...`, res);
         throw res;
       }
-      log.info('loadCurrentUser: Token refreshed. Current user data updated.');
+      log.info('loadCurrentUser: Token refreshed.');
       return res.json();
     })
       .then((currentUser: User) => {
         this.currentUser = currentUser;
-        log.info('loadCurrentUser: Token refreshed. Current user updated.');
+        log.info('loadCurrentUser: Current user updated.');
         return authParams;
       })
       .catch((error: CustomError) => {
-        if (error.status === 401 && this.getRefreshToken(authParams)) {
-          log.log('loadCurrentUser: Token refreshed.', error);
+        const prevToken: ?string = this.getRefreshToken(authParams);
+        if (!prevToken) {
+          log.warn('loadCurrentUser: Previous token is undefined.');
+        }
+        if (error.status === 401 && prevToken) {
+          log.log('loadCurrentUser: Token refresh.', error);
           return this.refreshToken();
         }
         throw error;

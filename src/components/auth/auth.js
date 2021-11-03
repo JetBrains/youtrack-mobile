@@ -75,15 +75,15 @@ export default class AuthTest extends AuthBase {
   }
 
   getTokenType(): string {
-    return this.authParams?.token_type || '';
+    return this.authParams.token_type;
   }
 
   getAccessToken(): string {
-    return this.authParams?.access_token || '';
+    return this.authParams.access_token;
   }
 
   getRefreshToken(authParams: AuthParams): string {
-    return authParams?.refresh_token || '';
+    return authParams.refresh_token;
   }
 
   async logOut() {
@@ -94,13 +94,13 @@ export default class AuthTest extends AuthBase {
   }
 
   refreshToken(): Promise<AuthParams> {
-    let token;
+    let prevToken: string;
     const config = this.config;
     const requestToken = (authParams: AuthParams) => fetch(urlJoin(
       config.auth.serverUri,
       '/api/rest/oauth2/token',
       '?grant_type=refresh_token',
-      `&refresh_token=${authParams.refresh_token}`
+      `&refresh_token=${this.getRefreshToken(authParams)}`
     ), {
       method: 'POST',
       headers: AuthTest.getHeaders(config),
@@ -111,7 +111,7 @@ export default class AuthTest extends AuthBase {
         log.info('Starting token refresh...');
 
         //store old refresh token
-        token = authParams.refresh_token;
+        prevToken = this.getRefreshToken(authParams);
         return requestToken(authParams);
       })
       .then(res => res.json())
@@ -119,7 +119,7 @@ export default class AuthTest extends AuthBase {
         if (!authParams.error_code) {
           log.info('Token has been refreshed.');
           //restore old refresh token
-          authParams.refresh_token = authParams.refresh_token || token;
+          authParams.refresh_token = authParams.refresh_token || prevToken;
         } else {
           const message: string = 'Token refreshing failed';
           log.warn(message, authParams);
