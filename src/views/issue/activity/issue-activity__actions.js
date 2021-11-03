@@ -72,7 +72,7 @@ export function loadActivitiesPage(doNotReset: boolean = false): ((
       log.info('Loading activities...');
       const activityPage: Array<Activity> = await api.issue.getActivitiesPage(issueId, activityCategories);
       dispatch(receiveActivityPage(activityPage));
-      log.info('Received activities', activityPage);
+      log.info('Received activities');
     } catch (error) {
       dispatch(receiveActivityPageError(error));
       dispatch({type: types.RECEIVE_ACTIVITY_ERROR, error});

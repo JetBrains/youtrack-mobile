@@ -64,7 +64,7 @@ class YouTrackMobile extends Component<void, void> {
 
   static async getNotificationData(): Promise<NotificationRouteData> {
     const notification: Promise<typeof Notification | ?PushNotificationIOS> = await Notifications.getInitialNotification();
-    log.info(`APP.JS - Initial notification:: ${JSON.stringify(notification)}`);
+    log.info(`Initial notification(on start app):: ${JSON.stringify(notification)}`);
     return {
       issueId: notificationsHelper.getIssueId(notification),
       backendUrl: notificationsHelper.getBackendUrl(notification),

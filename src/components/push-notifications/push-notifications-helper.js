@@ -22,7 +22,6 @@ export class PushNotifications {
 
   static setDeviceToken(token: string) {
     this.deviceToken = token;
-    log.info('DEVICE TOKEN', token);
   }
   static async getDeviceToken(): Promise<string | null> {
     return this.deviceTokenPromise;

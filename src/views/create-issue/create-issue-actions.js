@@ -91,7 +91,7 @@ export function loadIssueFromDraft(draftId: string): ((
     const api: Api = getApi();
     try {
       const draftIssue = await api.issue.loadIssueDraft(draftId);
-      log.info(`Issue draft loaded, "${draftIssue.summary}"`);
+      log.info(`Issue draft loaded, "${draftIssue.id || ''}"`);
       dispatch(actions.setIssueDraft({issue: draftIssue}));
     } catch (err) {
       log.info('Cannot load issue draft, cleaning up');
@@ -148,7 +148,7 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
         delete updatedDraftIssue.fields;
       }
 
-      log.info('Issue draft updated', draftIssue);
+      log.info('Issue draft updated', draftIssue.id);
       dispatch(actions.setIssueDraft({issue: updatedDraftIssue}));
       if (!getState().creation.predefinedDraftId) {
         await storeIssueDraftId(updatedDraftIssue.id);
