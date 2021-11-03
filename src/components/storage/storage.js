@@ -127,13 +127,19 @@ export const initialState: StorageState = Object.freeze({
   vcsChanges: null,
 });
 
-function cleanAndLogState(message, state) {
+function cleanAndLogState(message, state: StorageState) {
   const CENSORED: string = 'CENSORED';
   log.debug(message, {
     ...state,
+    agileLastSprint: state.agileLastSprint ? state.agileLastSprint.id : CENSORED,
+    articleLastVisited: state.articleLastVisited ? {
+      id: state.articleLastVisited.id,
+    } : CENSORED,
+    articlesList: state.articlesList ? state.articlesList.length : CENSORED,
+    currentUser: state.currentUser ? state.currentUser.guest : CENSORED,
     issuesCache: CENSORED,
     inboxCache: CENSORED,
-    projects: CENSORED,
+    projects: state.projects ? state.projects.length : CENSORED,
   });
 }
 
@@ -238,11 +244,11 @@ export async function flushStorage(newState: StorageState): Promise<StorageState
   return storageState;
 }
 
-export async function flushStoragePart(part: Object): Promise<StorageState> {
+export async function flushStoragePart(part: Object, doNotLog: boolean = false): Promise<StorageState> {
   const currentState: StorageState = getStorageState();
   let newState: Promise<StorageState>;
   try {
-    cleanAndLogState('Flushing storage part', part);
+    cleanAndLogState('Flushing storage part', doNotLog ? null : part);
     newState = flushStorage({
       ...currentState,
       ...part,
