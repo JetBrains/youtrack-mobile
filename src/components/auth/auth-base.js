@@ -9,7 +9,7 @@ import {USER_AGENT} from '../usage/usage';
 
 import type {AppConfig} from '../../flow/AppConfig';
 import type {CustomError, HTTPResponse} from '../../flow/Error';
-import type {OAuthParams} from '../../flow/Auth';
+import type {AuthParams, OAuthParams} from '../../flow/Auth';
 import type {User} from '../../flow/User';
 
 const ACCEPT_HEADER: string = 'application/json, text/plain, */*';
@@ -74,7 +74,7 @@ export class AuthBase {
 
   refreshToken(): Promise<any> {}
 
-  getAuthorizationHeaders(authParams: OAuthParams = this.authParams): { Authorization: string, 'User-Agent': string } {
+  getAuthorizationHeaders(authParams: OAuthParams | AuthParams = this.authParams): { Authorization: string, 'User-Agent': string } {
     if (!authParams) {
       throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
     }
@@ -84,7 +84,7 @@ export class AuthBase {
   }
 
   loadCurrentUser(authParams: any): Promise<any> {
-    log.info('Verifying token, loading current user data...');
+    log.info('loadCurrentUser: Verifying token, loading current user...');
     return fetch(this.CHECK_TOKEN_URL, {
       headers: {
         'Accept': ACCEPT_HEADER,
@@ -94,27 +94,26 @@ export class AuthBase {
       },
     }).then((res: HTTPResponse | CustomError) => {
       if (res.status > 400) {
-        const errorTitle: string = 'Check token error';
-        log.log(errorTitle, res);
+        log.log(`loadCurrentUser: Error ${res.status}. Verifying token...`, res);
         throw res;
       }
-      log.info('Token has been verified');
+      log.info('loadCurrentUser: Token refreshed. Current user data updated.');
       return res.json();
     })
       .then((currentUser: User) => {
         this.currentUser = currentUser;
-        log.info('Current user loaded');
+        log.info('loadCurrentUser: Token refreshed. Current user updated.');
         return authParams;
       })
       .catch((error: CustomError) => {
         if (error.status === 401 && this.getRefreshToken(authParams)) {
-          log.log('Trying to refresh token', error);
+          log.log('loadCurrentUser: Token refreshed.', error);
           return this.refreshToken();
         }
         throw error;
       })
       .catch((err: CustomError) => {
-        log.log('Error during token validation', err);
+        log.log('loadCurrentUser: Token refresh failed.', err);
         throw err;
       });
   }
