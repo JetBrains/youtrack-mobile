@@ -39,7 +39,10 @@ describe('app-actions', () => {
         },
       }),
     };
-
+    appStateMock.auth.authParams = {
+      token_type: 'token_type',
+      access_token: 'access_token',
+    };
     updateStore({});
     await populateStorage();
   });
