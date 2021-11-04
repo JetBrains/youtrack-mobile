@@ -14,6 +14,8 @@ import IssueFolderAPI from './api__issue-folder';
 import IssuesAPI from './api__issues';
 import MentionsAPI from './api__mention';
 import ProjectsAPI from './api__projects';
+import CustomFieldsAPI from './api__custom-fields';
+import SearchAPI from './api__search';
 import UserAPI from './api__user';
 import UserGroupAPI from './api__user-group';
 
@@ -35,12 +37,14 @@ class API extends BaseAPI {
 
   agile: AgileAPI;
   articles: ArticlesAPI;
+  customFields: CustomFieldsAPI;
   inbox: InboxAPI;
   issue: IssueAPI;
   issueFolder: IssueFolderAPI
   issues: IssuesAPI;
   mentions: MentionsAPI;
   projects: ProjectsAPI;
+  search: SearchAPI;
   user: UserAPI;
   userGroup: UserGroupAPI;
 
@@ -49,12 +53,14 @@ class API extends BaseAPI {
 
     this.agile = new AgileAPI(auth);
     this.articles = new ArticlesAPI(auth);
+    this.customFields = new CustomFieldsAPI(auth);
     this.inbox = new InboxAPI(auth);
     this.issue = new IssueAPI(auth);
     this.issueFolder = new IssueFolderAPI(auth);
     this.issues = new IssuesAPI(auth);
     this.mentions = new MentionsAPI(auth);
     this.projects = new ProjectsAPI(auth);
+    this.search = new SearchAPI(auth);
     this.user = new UserAPI(auth);
     this.userGroup = new UserGroupAPI(auth);
 

@@ -63,7 +63,12 @@ const updateCustomFieldValue = (
   );
 };
 
+const getCustomFieldName = (customField: AnyCustomField) => {
+  return customField?.localizedName || customField?.name || '';
+};
+
 export {
+  getCustomFieldName,
   getIssueTextCustomFields,
   getIssueCustomFieldsNotText,
   getSimpleCustomFieldType,

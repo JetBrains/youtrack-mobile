@@ -68,12 +68,13 @@ export default class BaseAPI {
     this.youTrackIssueUrl = `${this.youTrackApiUrl}/issues`;
   }
 
-  static createFieldsQuery(fields: Object | Array<Object | string>, restParams?: Object): string {
+  static createFieldsQuery(fields: Object | Array<Object | string>, restParams?: ?Object, opts: ?Object): string {
     return qs.stringify(
       Object.assign({
         ...restParams,
         ...{fields: ApiHelper.toField(fields).toString()},
-      })
+      }),
+      opts
     );
   }
 

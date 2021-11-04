@@ -17,6 +17,7 @@ import * as issueActions from './issues-actions';
 import ErrorMessage from '../../components/error-message/error-message';
 import IssueRow from './issues__row';
 import IssuesCount from './issues__count';
+import IssuesSortBy from './issues__sortby';
 import log from '../../components/log/log';
 import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
 import QueryPreview from '../../components/query-assist/query-preview';
@@ -301,7 +302,7 @@ export class Issues extends Component<Props, State> {
   };
 
   renderSearchQuery: ((uiTheme: UITheme) => Node) = (uiTheme: UITheme) => {
-    const {query, issuesCount, openSavedSearchesSelect} = this.props;
+    const {query, issuesCount, openSavedSearchesSelect, searchContext} = this.props;
 
     return (
       <AnimatedView
@@ -328,7 +329,14 @@ export class Issues extends Component<Props, State> {
 
         </View>
 
-        <IssuesCount issuesCount={issuesCount}/>
+        <View style={styles.toolbar}>
+          <IssuesCount issuesCount={issuesCount}/>
+          <IssuesSortBy
+            context={searchContext}
+            onApply={(q: string) => {this.onQueryUpdate(q);}}
+            query={query}
+          />
+        </View>
       </AnimatedView>
     );
   };
