@@ -148,7 +148,7 @@ const IssuesSortBy = (props: Props) => {
           onPress={() => updateSelectVisible(true)}
         >
           <Text
-            style={styles.toolbarText}
+            style={[styles.toolbarText, styles.toolbarSortByText]}
             numberOfLines={1}
           >
             Sort by {createSortButtonTitle()}

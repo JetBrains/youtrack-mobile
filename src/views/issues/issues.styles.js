@@ -151,12 +151,15 @@ export default EStyleSheet.create({
     marginRight: UNIT * 2,
   },
   toolbarActionSortBy: {
-    marginRight: 0,
+    marginRight: -UNIT / 4,
   },
   toolbarText: {
     flexBasis: '45%',
     ...secondaryText,
     color: '$icon',
+  },
+  toolbarSortByText: {
+    textAlign: 'right',
   },
   noIssuesFoundIcon: {
     marginTop: -noIssuesFoundIconSize / 3,
