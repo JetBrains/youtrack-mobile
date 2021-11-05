@@ -10,7 +10,7 @@ import type {PermissionCacheItem} from '../flow/Permission';
 import type {StorageState} from '../components/storage/storage';
 
 function updateCachedPermissions(permissions: Array<PermissionCacheItem>): void {
-  flushStoragePart({permissions}, true);
+  flushStoragePart({permissions});
 }
 
 async function loadPermissions(token_type: string, access_token: string, permissionsCacheUrl: string): Promise<Array<PermissionCacheItem>> {

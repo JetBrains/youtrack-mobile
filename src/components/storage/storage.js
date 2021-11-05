@@ -129,17 +129,28 @@ export const initialState: StorageState = Object.freeze({
 
 function cleanAndLogState(message, state: StorageState) {
   const CENSORED: string = 'CENSORED';
+  const config: ?$Shape<AppConfigFilled> = state?.config ? {
+    ...state.config,
+    backendUrl: state.config.backendUrl,
+    auth: {
+      serverUri: state.config.auth.serverUri,
+      scopes: state.config.auth.scopes,
+    },
+    statisticsEnabled: state.config.statisticsEnabled,
+    version: state.config.version,
+  } : undefined;
+
   log.debug(message, {
     ...state,
-    agileLastSprint: state.agileLastSprint ? state.agileLastSprint.id : CENSORED,
-    articleLastVisited: state.articleLastVisited ? {
-      id: state.articleLastVisited.id,
-    } : CENSORED,
-    articlesList: state.articlesList ? state.articlesList.length : CENSORED,
-    currentUser: state.currentUser ? state.currentUser.guest : CENSORED,
+    ...(state?.agileLastSprint ? {agileLastSprint: state.agileLastSprint.id} : undefined),
+    ...(state?.articleLastVisited ? {articleLastVisited: state.articleLastVisited.id} : undefined),
+    ...(state?.articlesList ? {articlesList: state.articlesList.length} : undefined),
+    ...(state?.currentUser ? {currentUser: state.currentUser.guest} : undefined),
+    ...{config},
+    ...(state?.projects ? {projects: state.projects.length} : undefined),
+    ...(state?.permissions ? {permissions: state.permissions.length} : undefined),
     issuesCache: CENSORED,
     inboxCache: CENSORED,
-    projects: state.projects ? state.projects.length : CENSORED,
   });
 }
 
