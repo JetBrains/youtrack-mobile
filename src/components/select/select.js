@@ -1,16 +1,18 @@
 /* @flow */
-import type {Node} from 'React';
-import {Text, View, TouchableOpacity, TextInput, ActivityIndicator, FlatList} from 'react-native';
+
 import React, {Component} from 'react';
+import {Text, View, TouchableOpacity, TextInput, ActivityIndicator, FlatList} from 'react-native';
 
 import ColorField from '../color-field/color-field';
-import {notifyError} from '../notification/notification';
 import ModalView from '../modal-view/modal-view';
-import {IconCheck, IconBack} from '../icon/icon';
-import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import SelectItem from './select__item';
+import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {IconCheck, IconBack} from '../icon/icon';
+import {notifyError} from '../notification/notification';
 
 import styles, {SELECT_ITEM_HEIGHT, SELECT_ITEM_SEPARATOR_HEIGHT} from './select.styles';
+
+import type {Node} from 'React';
 
 export type SelectProps = {
   dataSource: (query: string) => Promise<Array<Object>>,
@@ -37,6 +39,9 @@ type SelectState = {
   selectedItems: Array<Object>,
   loaded: boolean
 };
+
+type SelectItemsSortData = { selected: Array<Object>, other: Array<Object> };
+
 
 export default class Select extends Component<SelectProps, SelectState> {
   static defaultProps: {
@@ -80,8 +85,26 @@ export default class Select extends Component<SelectProps, SelectState> {
     };
   }
 
+  getSortedItems = (items: Array<Object> = []) => {
+    const selectedItemsKey: Array<string> = this.state.selectedItems.map((it: Object) => this.getItemKey(it));
+    const sortData: SelectItemsSortData = items.reduce((data: SelectItemsSortData, item: Object) => {
+      if (selectedItemsKey.includes(this.getItemKey(item))) {
+        data.selected.push(item);
+      } else {
+        data.other.push(item);
+      }
+      return data;
+    }, {
+      selected: [],
+      other: [],
+    });
+
+    return [].concat(sortData.selected).concat(sortData.other);
+  }
+
   componentDidMount() {
     const selectedItems = this.props.selectedItems ? this.props.selectedItems : [];
+    //TODO: remove setState from this hook, since it should trigger a second render
     this.setState({selectedItems});
     this._loadItems(this.state.query);
   }
@@ -136,11 +159,11 @@ export default class Select extends Component<SelectProps, SelectState> {
     query = query || '';
     const {getValue, getTitle} = this.props;
 
-    const filteredItems = (this.state.items || []).filter(item => {
-      const label = (getValue && getValue(item)) || getTitle(item) || '';
+    const filteredItems = (this.state.items || []).filter((item: any) => {
+      const label: string = (getValue && getValue(item)) || getTitle(item) || '';
       return label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
     });
-    this.setState({filteredItems});
+    this.setState({filteredItems: this.getSortedItems(filteredItems)});
   }
 
   _renderTitle(item) {
@@ -215,6 +238,10 @@ export default class Select extends Component<SelectProps, SelectState> {
     );
   };
 
+  getItemKey = (item: Object) => {
+    return item.key || item.ringId || item.id;
+  }
+
   renderItems(): Node {
     return (
       <FlatList
@@ -226,7 +253,7 @@ export default class Select extends Component<SelectProps, SelectState> {
         scrollEventThrottle={50}
 
         data={this.state.filteredItems}
-        keyExtractor={(item: Object) => item.key || item.ringId || item.id}
+        keyExtractor={this.getItemKey}
         renderItem={this.renderItem}
 
         ItemSeparatorComponent={Select.renderSeparator}
