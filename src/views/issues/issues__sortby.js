@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
 import {View as AnimatedView} from 'react-native-animatable';
@@ -35,18 +35,18 @@ const IssuesSortBy = (props: Props) => {
   const [selectedSortProperties, updateSelectedSortProperties] = useState([]);
   const [isSelectVisible, updateSelectVisible] = useState(false);
 
-  const doAssist = async (params: ?Object): Promise<SearchSuggestions> => {
+  const doAssist = useCallback(async (params: ?Object): Promise<SearchSuggestions> => {
     return await api.search.assist({
       folder: props.context.id ? props.context : undefined,
       query: props.query || '',
       ...params,
     });
-  };
+  }, [api.search, props.context, props.query]);
 
-  const loadAppliedSortProperties = async (): Promise<SearchSuggestions> => {
+  const loadAppliedSortProperties = useCallback(async (): Promise<SearchSuggestions> => {
     const searchSuggestions: SearchSuggestions = await doAssist();
     updateSelectedSortProperties(searchSuggestions.sortProperties);
-  };
+  }, [doAssist]);
 
   const getUniqueSortProperties = (): Array<IssueSortField> => {
     const sortPropertiesIds = {};
@@ -75,8 +75,7 @@ const IssuesSortBy = (props: Props) => {
 
   useEffect(() => {
     loadAppliedSortProperties();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadAppliedSortProperties, props.query]);
 
   const applySorting = async (sortProperties: Array<IssueSortField>) => {
     usage.trackEvent(ANALYTICS_ISSUES_PAGE, 'issues-sort-by');
