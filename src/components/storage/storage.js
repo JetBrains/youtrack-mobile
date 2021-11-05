@@ -132,10 +132,10 @@ function cleanAndLogState(message, state: StorageState) {
   const config: ?$Shape<AppConfigFilled> = state?.config ? {
     ...state.config,
     backendUrl: state.config.backendUrl,
-    auth: {
+    auth: state.config.auth ? {
       serverUri: state.config.auth.serverUri,
       scopes: state.config.auth.scopes,
-    },
+    } : undefined,
     statisticsEnabled: state.config.statisticsEnabled,
     version: state.config.version,
   } : undefined;
@@ -255,11 +255,11 @@ export async function flushStorage(newState: StorageState): Promise<StorageState
   return storageState;
 }
 
-export async function flushStoragePart(part: Object, doNotLog: boolean = false): Promise<StorageState> {
+export async function flushStoragePart(part: Object): Promise<StorageState> {
   const currentState: StorageState = getStorageState();
   let newState: Promise<StorageState>;
   try {
-    cleanAndLogState('Flushing storage part', doNotLog ? null : part);
+    cleanAndLogState('Flushing storage part');
     newState = flushStorage({
       ...currentState,
       ...part,
