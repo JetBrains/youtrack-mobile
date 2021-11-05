@@ -137,13 +137,30 @@ export const initialState: StorageState = Object.freeze({
   vcsChanges: null,
 });
 
-function cleanAndLogState(message, state) {
+function cleanAndLogState(message, state: StorageState) {
   const CENSORED: string = 'CENSORED';
+  const config: ?$Shape<AppConfigFilled> = state?.config ? {
+    ...state.config,
+    backendUrl: state.config.backendUrl,
+    auth: state.config.auth ? {
+      serverUri: state.config.auth.serverUri,
+      scopes: state.config.auth.scopes,
+    } : undefined,
+    statisticsEnabled: state.config.statisticsEnabled,
+    version: state.config.version,
+  } : undefined;
+
   log.debug(message, {
     ...state,
+    ...(state?.agileLastSprint ? {agileLastSprint: state.agileLastSprint.id} : undefined),
+    ...(state?.articleLastVisited ? {articleLastVisited: state.articleLastVisited.id} : undefined),
+    ...(state?.articlesList ? {articlesList: state.articlesList.length} : undefined),
+    ...(state?.currentUser ? {currentUser: state.currentUser.guest} : undefined),
+    ...{config},
+    ...(state?.projects ? {projects: state.projects.length} : undefined),
+    ...(state?.permissions ? {permissions: state.permissions.length} : undefined),
     issuesCache: CENSORED,
     inboxCache: CENSORED,
-    projects: CENSORED,
   });
 }
 
@@ -253,7 +270,7 @@ export async function flushStoragePart(part: Object): Promise<StorageState> {
   const currentState: StorageState = getStorageState();
   let newState: Promise<StorageState>;
   try {
-    cleanAndLogState('Flushing storage part', part);
+    cleanAndLogState('Flushing storage part');
     newState = flushStorage({
       ...currentState,
       ...part,

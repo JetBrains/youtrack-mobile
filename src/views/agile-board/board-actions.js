@@ -195,7 +195,7 @@ export function loadAgile(agileId: string): ((
     try {
       const agileWithStatus: Board = await api.agile.getAgile(agileId);
       dispatch(receiveAgile(agileWithStatus));
-      log.info(`Loaded agile board ${agileId} status`, agileWithStatus);
+      log.info(`Loaded agile board ${agileId} status: ${agileWithStatus.status.valid}`);
       return agileWithStatus;
     } catch (error) {
       log.warn(`Cannot load agile board ${agileId} status`, error);

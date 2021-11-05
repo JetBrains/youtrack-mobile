@@ -33,7 +33,7 @@ export default class PushNotificationsProcessor extends PushNotifications {
         const targetBackendUrl = notification?.payload?.backendUrl;
         log.info(`On notification open:: notification?.payload?.backendUrl ${JSON.stringify(targetBackendUrl)}`);
         const targetAccount = await targetAccountToSwitchTo(targetBackendUrl);
-        log.info(`On notification open:: target account ${JSON.stringify(targetAccount)}`);
+        log.info(`On notification open:: target account ${targetAccount?.config?.backendUrl || ''}`);
         if (targetAccount) {
           await onSwitchAccount(targetAccount, issueId);
         log.info(`On notification open:: switched to target account`);

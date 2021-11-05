@@ -139,12 +139,27 @@ export default EStyleSheet.create({
     width: UNIT * 5,
     padding: UNIT,
   },
-  issuesCount: {
-    marginTop: UNIT * 2,
-    marginBottom: UNIT * 2,
-    marginLeft: UNIT * 2,
+  toolbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: UNIT * 2,
+  },
+  toolbarAction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: UNIT * 2,
+  },
+  toolbarActionSortBy: {
+    marginRight: -UNIT / 4,
+  },
+  toolbarText: {
+    flexBasis: '45%',
     ...secondaryText,
     color: '$icon',
+  },
+  toolbarSortByText: {
+    textAlign: 'right',
   },
   noIssuesFoundIcon: {
     marginTop: -noIssuesFoundIconSize / 3,

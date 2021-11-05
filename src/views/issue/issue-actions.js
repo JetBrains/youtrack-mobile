@@ -169,7 +169,7 @@ export function loadIssue(): ((
       }
       log.debug(`Loading issue "${issueId}"`);
       const issue = await api.issue.getIssue(issueId);
-      log.info(`Issue "${issueId}" loaded`, {...issue, fields: 'CENSORED'});
+      log.info(`Issue "${issueId}" loaded`);
       issue.fieldHash = ApiHelper.makeFieldHash(issue);
 
       dispatch(setIssueId(issue.id)); //Set issue ID again because first one could be readable like YTM-111

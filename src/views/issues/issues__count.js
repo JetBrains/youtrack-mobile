@@ -27,8 +27,12 @@ const IssuesCount = (props: Props) => {
       accessible={true}
       useNativeDriver
       duration={500}
-      animation="fadeIn">
-      <Text style={styles.issuesCount}>
+      animation="fadeIn"
+      style={styles.toolbarAction}
+    >
+      <Text
+        numberOfLines={1}
+        style={styles.toolbarText}>
         {text}
       </Text>
     </AnimatedView>
