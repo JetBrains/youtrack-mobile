@@ -108,6 +108,11 @@ const IssuesSortBy = (props: Props) => {
     const hideSelect = (): void => {updateSelectVisible(false);};
     const selectProps = {
       multi: true,
+      header: () => (
+        <Text style={styles.toolbarText}>
+          Issues can be sorted by up to 4 attributes
+        </Text>
+      ),
       selectedItems: selectedSortProperties,
       emptyValue: null,
       placeholder: 'Filter items',

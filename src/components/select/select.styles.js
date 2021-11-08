@@ -87,4 +87,8 @@ export default EStyleSheet.create({
   placeholder: {
     color: '$icon',
   },
+  note: {
+    maxHeight: UNIT * 7,
+    alignItems: 'center',
+  },
 });

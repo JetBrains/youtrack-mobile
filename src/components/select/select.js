@@ -265,7 +265,7 @@ export default class Select extends Component<SelectProps, SelectState> {
   }
 
   render(): Node {
-    const {multi, autoFocus, style, placeholder, onCancel, noFilter} = this.props;
+    const {multi, autoFocus, style, placeholder, onCancel, noFilter, header} = this.props;
 
     return (
       <ModalView
@@ -274,6 +274,7 @@ export default class Select extends Component<SelectProps, SelectState> {
         animationType="slide"
         style={style}
       >
+        {!!header && <View style={styles.note}>{header()}</View>}
         {!noFilter && (
           <View style={styles.inputWrapper}>
 
