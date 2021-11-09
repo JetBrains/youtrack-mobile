@@ -15,11 +15,12 @@ export default class SearchAPI extends ApiBase {
       {
         query: '',
         sortProperties: [
+          '$type',
           'id',
           'asc',
           'readOnly',
           'localizedName',
-          {sortField: ['id', 'localizedName', 'name', 'defaultSortAsc', 'sortablePresentation']},
+          {sortField: ['$type', 'id', 'localizedName', 'name', 'defaultSortAsc', 'sortablePresentation']},
           {folder: ['id']},
         ],
       },

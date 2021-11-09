@@ -190,7 +190,8 @@ export default EStyleSheet.create({
     ...rowLine,
     justifyContent: 'space-between',
     paddingVertical: UNIT * 2,
-    paddingHorizontal: UNIT * 1.5,
+    paddingLeft: UNIT * 2,
+    paddingRight: 0,
   },
   sortByListWarning: {
     color: '$icon',
@@ -204,5 +205,12 @@ export default EStyleSheet.create({
   },
   sortIcon: {
     color: '$iconAccent',
+  },
+  sortIconButton: {
+    width: UNIT * 4.5,
+    height: UNIT * 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: UNIT * 1.5,
   },
 });

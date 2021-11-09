@@ -12,7 +12,6 @@ import type {IssueFieldSortProperty, SearchSuggestions} from '../../flow/Sorting
 const doAssist = async (params: { context: Folder, query: string, ... } = {}): Promise<SearchSuggestions> => {
   const api: API = getApi();
   const {context, query = '', ...rest} = params;
-  //$FlowFixMe
   return await api.search.assist({
     folder: context?.id ? context : undefined,
     query,
@@ -38,8 +37,13 @@ const getSortPropertyName = (sortProperty: IssueFieldSortProperty): string => {
   );
 };
 
+const isRelevanceSortProperty = (sortProperty: IssueFieldSortProperty) => {
+  return sortProperty.$type === 'RelevanceSortProperty';
+};
+
 
 export {
   doAssist,
   getSortPropertyName,
+  isRelevanceSortProperty,
 };

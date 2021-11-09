@@ -7,14 +7,15 @@ import {View as AnimatedView} from 'react-native-animatable';
 
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import Header from '../../components/header/header';
+import IconAscending from '../../components/icon/assets/ascending.svg';
+import IconDescending from '../../components/icon/assets/descending.svg';
 import IssuesSortByAddAttribute from './issues__sortby_add-attribute';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
-import {doAssist, getSortPropertyName} from './issues__sortby-helper';
+import {doAssist, getSortPropertyName, isRelevanceSortProperty} from './issues__sortby-helper';
 import {EllipsisVertical, IconAdd, IconBack, IconClose} from '../../components/icon/icon';
-import {HIT_SLOP} from '../../components/common-styles/button';
 
 import styles from './issues.styles';
 
@@ -58,6 +59,7 @@ const IssuesSortByList = (props: Props) => {
   };
 
   const renderItem = ({item, drag, isActive}: { item: IssueFieldSortProperty, drag: () => any, isActive: boolean }) => {
+    const IconSort: any = item.asc ? IconAscending : IconDescending;
     return (
       <AnimatedView
         useNativeDriver
@@ -79,8 +81,23 @@ const IssuesSortByList = (props: Props) => {
             </Text>
           </View>
           <View style={styles.rowLine}>
+            {!isRelevanceSortProperty(item) && (
+              <TouchableOpacity
+                style={styles.sortIconButton}
+                onPress={() => {
+                  onUpdate(
+                    selectedSortProperties.map((it: IssueFieldSortProperty) => ({
+                      ...it,
+                      asc: it.id === item.id ? !it.asc : it.asc,
+                    }))
+                  );
+                }}
+              >
+                <IconSort size={20} color={styles.sortIcon.color}/>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
-              hitSlop={HIT_SLOP}
+              style={styles.sortIconButton}
               onPress={() => {
                 onUpdate(
                   selectedSortProperties.filter((it: IssueFieldSortProperty) => it.id !== item.id)
