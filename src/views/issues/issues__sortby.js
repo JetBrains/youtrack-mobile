@@ -1,144 +1,60 @@
 /* @flow */
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
 import {View as AnimatedView} from 'react-native-animatable';
 
-import Select from '../../components/select/select';
-import usage from '../../components/usage/usage';
-import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
-import {getApi} from '../../components/api/api__instance';
-import {getCustomFieldName} from '../../components/custom-field/custom-field-helper';
+import IssuesSortByList from './issues__sortby_list';
+import Router from '../../components/router/router';
+import {doAssist, getSortPropertyName} from './issues__sortby-helper';
 import {IconAngleDown} from '../../components/icon/icon';
 
 import styles from './issues.styles';
 
-import type API from '../../components/api/api';
 import type {Folder} from '../../flow/User';
-import type {CustomFilterField, IssueSortField, SearchSuggestions} from '../../flow/Sorting';
+import type {IssueFieldSortProperty, SearchSuggestions} from '../../flow/Sorting';
 
-const issueSortFieldType: string = 'IssueFieldSortProperty';
 
 type Props = {
   context: Folder,
-  onApply: (sortProperties: Array<IssueSortField>) => any,
+  onApply: (query: string) => any,
   query: string,
 };
 
-const MAX_NUMBER_PARTICIPATING_IN_SORTING_PROPERTIES: number = 4;
+const MAX_NUMBER_SORTING_PROPERTIES: number = 4;
 
 
 const IssuesSortBy = (props: Props) => {
-  const api: API = getApi();
-
   const [selectedSortProperties, updateSelectedSortProperties] = useState([]);
-  const [isSelectVisible, updateSelectVisible] = useState(false);
-
-  const doAssist = useCallback(async (params: ?Object): Promise<SearchSuggestions> => {
-    return await api.search.assist({
-      folder: props.context.id ? props.context : undefined,
-      query: props.query || '',
-      ...params,
-    });
-  }, [api.search, props.context, props.query]);
-
-  const loadAppliedSortProperties = useCallback(async (): Promise<SearchSuggestions> => {
-    const searchSuggestions: SearchSuggestions = await doAssist();
-    updateSelectedSortProperties(searchSuggestions.sortProperties);
-  }, [doAssist]);
-
-  const getUniqueSortProperties = (): Array<IssueSortField> => {
-    const sortPropertiesIds = {};
-    return selectedSortProperties.filter(
-      (it: SearchSuggestions) => sortPropertiesIds[it.id] ? false : sortPropertiesIds[it.id] = true
-    );
-  };
-
-  const getSortPropertyName = (sortProperty: IssueSortField): string => {
-    const name = (
-      sortProperty
-        ? (
-          sortProperty?.sortField?.sortablePresentation ||
-          sortProperty.localizedName ||
-          getCustomFieldName(sortProperty.sortField)
-        )
-        : sortProperty
-    );
-
-    return (
-      name && sortProperty?.sortField?.$type === 'PredefinedFilterField'
-        ? name.charAt(0).toUpperCase() + name.slice(1)
-        : name
-    );
-  };
 
   useEffect(() => {
-    loadAppliedSortProperties();
-  }, [loadAppliedSortProperties, props.query]);
-
-  const applySorting = async (sortProperties: Array<IssueSortField>) => {
-    usage.trackEvent(ANALYTICS_ISSUES_PAGE, 'issues-sort-by');
-    const sProps: Array<SearchSuggestions> = sortProperties.filter(
-      (sortProperty: SearchSuggestions) => !sortProperty.readOnly
-    );
-    const response: SearchSuggestions = await doAssist({sortProperties: sProps});
-    props.onApply(response.query);
-  };
-
-  const loadSortProperties = async (): Promise<Array<IssueSortField>> => {
-    const filterFields: Array<CustomFilterField> = await api.customFields.filterFields({
-      // query: props.query,
-      fld: props?.context?.id,
-      getUnusedVisibleFields: true,
-      fieldTypes: ['custom', 'predefined'],
+    doAssist({context: props.context, query: props.query}).then((searchSuggestions: SearchSuggestions ) => {
+      updateSelectedSortProperties(searchSuggestions.sortProperties);
     });
-    return (
-      filterFields
-        .map((filterField: CustomFilterField) => ({
-          $type: issueSortFieldType,
-          asc: filterField.defaultSortAsc,
-          id: filterField.id,
-          sortField: filterField,
-        }))
+  }, [props.context, props.query]);
+
+
+  const getUniqueSortProperties = (sortProperties: Array<IssueFieldSortProperty>): Array<IssueFieldSortProperty> => {
+    const sortPropertiesIds = {};
+    return sortProperties.filter(
+      (it: IssueFieldSortProperty) => sortPropertiesIds[it.id] ? false : sortPropertiesIds[it.id] = true
     );
   };
 
-  const renderSortPropertiesSelect = (): React$Element<Select> => {
-    const hideSelect = (): void => {updateSelectVisible(false);};
-    const selectProps = {
-      multi: true,
-      header: () => (
-        <Text style={styles.toolbarText}>
-          Issues can be sorted by up to 4 attributes
-        </Text>
-      ),
-      selectedItems: selectedSortProperties,
-      emptyValue: null,
-      placeholder: 'Filter items',
-      getTitle: (it: IssueSortField) => getSortPropertyName(it),
-      dataSource: loadSortProperties,
-      onSelect: (selectedItems: Array<IssueSortField>) => {
-        updateSelectedSortProperties(selectedItems);
-        hideSelect();
-        applySorting(selectedItems);
-      },
-      onCancel: hideSelect,
-    };
+  const createSortButtonTitle = (sortProperties: Array<IssueFieldSortProperty>): string => {
+    const uniqueSortProperties = getUniqueSortProperties(sortProperties);
     return (
-      <Select {...selectProps}/>
+      uniqueSortProperties
+        .slice(0, MAX_NUMBER_SORTING_PROPERTIES)
+        .map((it: IssueFieldSortProperty) => getSortPropertyName(it))
+        .join(', ')
     );
   };
 
-  const createSortButtonTitle = (): string => (
-    getUniqueSortProperties(selectedSortProperties)
-      .slice(0, MAX_NUMBER_PARTICIPATING_IN_SORTING_PROPERTIES)
-      .map((it) => getSortPropertyName(it))
-      .join(', ')
-  );
 
-  const renderSortButton = (): ?Node => {
-    return selectedSortProperties.length ? (
+  return (
+    selectedSortProperties.length ? (
       <AnimatedView
         testID= "test:id/issuesSortBy"
         accessibilityLabel= "issuesSortBy"
@@ -149,26 +65,32 @@ const IssuesSortBy = (props: Props) => {
       >
         <TouchableOpacity
           style={[styles.toolbarAction, styles.toolbarActionSortBy]}
-          onPress={() => updateSelectVisible(true)}
+          onPress={() => {
+            Router.Page({
+              children: (
+                <IssuesSortByList
+                  context={props.context}
+                  onApply={(sortProperties: Array<IssueFieldSortProperty>, query: string) => {
+                    updateSelectedSortProperties(sortProperties);
+                    props.onApply(query);
+                  }}
+                  query={props.query}
+                  selectedSortProperties={selectedSortProperties}
+                />
+              ),
+            });
+          }}
         >
           <Text
             style={[styles.toolbarText, styles.toolbarSortByText]}
             numberOfLines={1}
           >
-            Sort by {createSortButtonTitle()}
+            Sort by {createSortButtonTitle(selectedSortProperties)}
           </Text>
           <IconAngleDown size={20} color={styles.toolbarText.color}/>
         </TouchableOpacity>
       </AnimatedView>
-    ) : null;
-  };
-
-
-  return (
-    <>
-      {renderSortButton()}
-      {isSelectVisible && renderSortPropertiesSelect()}
-    </>
+    ) : null
   );
 };
 

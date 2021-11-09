@@ -29,7 +29,9 @@ export type SelectProps = {
   autoFocus?: boolean,
   emptyValue?: ?string,
   style?: any,
-  noFilter?: boolean
+  noFilter?: boolean,
+  getWrapperComponent?: () => any,
+  getWrapperProps?: () => any,
 };
 
 type SelectState = {
@@ -85,7 +87,7 @@ export default class Select extends Component<SelectProps, SelectState> {
     };
   }
 
-  getSortedItems = (items: Array<Object> = []) => {
+  getSortedItems = (items: Array<Object> = []): Array<string> => {
     const selectedItemsKey: Array<string> = this.state.selectedItems.map((it: Object) => this.getItemKey(it));
     const sortData: SelectItemsSortData = items.reduce((data: SelectItemsSortData, item: Object) => {
       if (selectedItemsKey.includes(this.getItemKey(item))) {
@@ -264,14 +266,30 @@ export default class Select extends Component<SelectProps, SelectState> {
     );
   }
 
+  getWrapperComponent(): any {
+    return this.props.getWrapperComponent ? this.props.getWrapperComponent() : ModalView;
+  }
+
+  getWrapperProps(defaultWrapperProps: { visible: boolean, animationType: string}): Object {
+    return (
+      this.props.getWrapperProps
+        ? this.props.getWrapperProps()
+        : defaultWrapperProps
+    );
+  }
+
   render(): Node {
     const {multi, autoFocus, style, placeholder, onCancel, noFilter, header} = this.props;
+    const WrapperComponent: any = this.getWrapperComponent();
+    const wrapperProps: Object = this.getWrapperProps({
+      visible: true,
+      animationType: 'slide',
+    });
 
     return (
-      <ModalView
+      <WrapperComponent
         testID="select"
-        visible={true}
-        animationType="slide"
+        {...wrapperProps}
         style={style}
       >
         {!!header && <View style={styles.note}>{header()}</View>}
@@ -325,7 +343,7 @@ export default class Select extends Component<SelectProps, SelectState> {
 
         {this.renderItems()}
 
-      </ModalView>
+      </WrapperComponent>
     );
   }
 }

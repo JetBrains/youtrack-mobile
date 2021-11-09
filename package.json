@@ -95,6 +95,7 @@
     "react-native-calendars": "1.5.3",
     "react-native-device-info": "1.6.2",
     "react-native-device-log": "Trihydro/react-native-device-log",
+    "react-native-draggable-flatlist": "^2.6.2",
     "react-native-easy-toast": "^2.0.0",
     "react-native-encrypted-storage": "^4.0.2",
     "react-native-extended-stylesheet": "^0.12.0",

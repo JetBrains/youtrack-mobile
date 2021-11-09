@@ -16,6 +16,8 @@ export type Props = {
   item: Object,
   isSelected: boolean,
   onPress: (item: Object) => any,
+  onLongPress?: (any) => any,
+  disabled?: boolean,
   titleRenderer?: (item: Object) => any,
   style?: ViewStyleProp
 };
@@ -44,7 +46,7 @@ export default class SelectItem extends PureComponent<Props, void> {
   }
 
   render(): null | Node {
-    const {item, isSelected, style} = this.props;
+    const {item, isSelected, style, onLongPress = () => {}, disabled = false} = this.props;
 
     if (!item) {
       return null;
@@ -55,6 +57,8 @@ export default class SelectItem extends PureComponent<Props, void> {
         key={item.id}
         style={[styles.row, style]}
         onPress={this.onSelect}
+        onLongPress={onLongPress}
+        disabled={disabled}
       >
         <View style={styles.selectItemValue}>
           {item.avatarUrl && (

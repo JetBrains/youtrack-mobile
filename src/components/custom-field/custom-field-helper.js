@@ -63,7 +63,7 @@ const updateCustomFieldValue = (
   );
 };
 
-const getCustomFieldName = (customField: AnyCustomField) => {
+const getCustomFieldName = (customField: $Shape<AnyCustomField>): string => {
   return customField?.localizedName || customField?.name || '';
 };
 
