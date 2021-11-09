@@ -24,6 +24,7 @@ export default class CustomFieldsAPI extends ApiBase {
         'instant',
         {
           customField: [
+            '$type',
             'id',
             'name',
             'localizedName',
