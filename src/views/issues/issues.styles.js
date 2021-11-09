@@ -2,13 +2,14 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {Platform} from 'react-native';
 
-import {UNIT} from '../../components/variables/variables';
 import {COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
-import {ICON_NOT_FOUND_DEFAULT_SIZE} from '../../components/icon/icon-no-found';
-import {headerTitle, secondaryText} from '../../components/common-styles/typography';
-import {issueCard} from '../../components/common-styles/issue';
 import {elevation1} from '../../components/common-styles/shadow';
+import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
+import {headerTitlePresentation} from '../../components/header/header.styles';
+import {ICON_NOT_FOUND_DEFAULT_SIZE} from '../../components/icon/icon-no-found';
+import {issueCard} from '../../components/common-styles/issue';
 import {separator} from '../../components/common-styles/list';
+import {UNIT} from '../../components/variables/variables';
 
 const rowLine = {
   flexDirection: 'row',
@@ -69,6 +70,10 @@ export default EStyleSheet.create({
   secondaryText: {
     ...secondaryText,
     color: '$icon',
+  },
+  mainText: {
+    ...mainText,
+    color: '$text',
   },
   headLeft: {
     ...issueCard.issueId,
@@ -168,5 +173,36 @@ export default EStyleSheet.create({
   },
   resolved: {
     color: '$resolved',
+  },
+  headerTitle: {
+    ...headerTitlePresentation,
+    marginLeft: 0,
+  },
+  link: {
+    color: '$link',
+  },
+  sortByList: {
+    flex: 1,
+    paddingTop: UNIT,
+    marginLeft: UNIT / 2,
+  },
+  sortByListItem: {
+    ...rowLine,
+    justifyContent: 'space-between',
+    paddingVertical: UNIT * 2,
+    paddingHorizontal: UNIT * 1.5,
+  },
+  sortByListWarning: {
+    color: '$icon',
+    margin: UNIT * 2.5,
+    marginBottom: UNIT,
+  },
+  sortByListItemText: {
+    color: '$text',
+    ...mainText,
+    paddingLeft: UNIT * 2,
+  },
+  sortIcon: {
+    color: '$iconAccent',
   },
 });

@@ -2,18 +2,21 @@
 
 import type {CustomField, IssueProject} from './CustomFields';
 
-export type IssueSortField = {
-  $type: string/*IssueFieldSortProperty*/,
+export type PredefinedFilterField = {
+  $type: 'PredefinedFilterField',
+  defaultSortAsc: boolean,
+  id: string,
+  name: string,
+  sortablePresentation: string,
+};
+
+export type IssueFieldSortProperty = {
+  $type: 'IssueFieldSortProperty',
   asc: boolean,
   id: string,
-  localizedName: string,
-  sortedField: {
-    $type: 'PredefinedFilterField',
-    defaultSortAsc: boolean,
-    id: string,
-    name: string,
-    sortablePresentation: string,
-  },
+  localizedName?: string,
+  readOnly?: boolean,
+  sortField: PredefinedFilterField,
 };
 
 export type CustomFilterField = {
@@ -32,5 +35,5 @@ export type CustomFilterField = {
 export type SearchSuggestions = {
   $type: 'SearchSuggestions',
   query: string,
-  sortProperties: Array<IssueSortField>,
+  sortProperties: Array<IssueFieldSortProperty>,
 };

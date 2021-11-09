@@ -127,6 +127,7 @@ export type CustomField = {
   name: string,
   hasStateMachine: boolean,
   value: CustomFieldValue,
+  localizedName?: string,
   projectCustomField: ProjectCustomField
 }
 

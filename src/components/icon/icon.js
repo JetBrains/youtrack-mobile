@@ -98,6 +98,12 @@ export const IconBookmark = (props?: Props) => <DefaultIcon {...{
 
 /* FontAwesome icons */
 
+export const EllipsisVertical = (props?: Props) => <DefaultIcon {...{
+  isFontAwesome: true,
+  name: 'ellipsis-v',
+  ...props,
+}} />;
+
 export const IconAngleRight = (props?: Props) => <DefaultIcon {...{
   isFontAwesome: true,
   name: 'angle-right',
