@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
 import {View as AnimatedView} from 'react-native-animatable';
@@ -28,11 +28,16 @@ const MAX_NUMBER_SORTING_PROPERTIES: number = 4;
 const IssuesSortBy = (props: Props) => {
   const [selectedSortProperties, updateSelectedSortProperties] = useState([]);
 
-  useEffect(() => {
+  const loadSortingProperties = useCallback(() => {
     doAssist({context: props.context, query: props.query}).then((searchSuggestions: SearchSuggestions ) => {
       updateSelectedSortProperties(searchSuggestions.sortProperties);
     });
-  }, [props.context, props.query]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    loadSortingProperties();
+  }, [loadSortingProperties]);
 
 
   const getUniqueSortProperties = (sortProperties: Array<IssueFieldSortProperty>): Array<IssueFieldSortProperty> => {
@@ -73,6 +78,10 @@ const IssuesSortBy = (props: Props) => {
                   onApply={(sortProperties: Array<IssueFieldSortProperty>, query: string) => {
                     updateSelectedSortProperties(sortProperties);
                     props.onApply(query);
+                    if (sortProperties.length === 0) {
+                      loadSortingProperties();
+                      Router.pop();
+                    }
                   }}
                   query={props.query}
                   selectedSortProperties={selectedSortProperties}
