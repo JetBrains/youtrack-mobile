@@ -190,6 +190,11 @@ export default EStyleSheet.create({
     ...rowLine,
     padding: UNIT,
   },
+  sortByListWarning: {
+    color: '$icon',
+    margin: UNIT * 2.5,
+    marginBottom: UNIT,
+  },
   sortByListItemText: {
     color: '$text',
     ...mainText,

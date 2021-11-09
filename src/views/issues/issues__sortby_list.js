@@ -101,9 +101,11 @@ const IssuesSortByList = (props: Props) => {
       </Header>
 
       {selectedSortProperties.length > MAX_SORT_ATTRIBUTES_AMOUNT && (
-        <Text style={styles.toolbarText}>
-          Issues can be sorted by up to 4 attributes
-        </Text>
+        <View style={styles.searchContextPinned}>
+          <Text style={styles.sortByListWarning}>
+            Issues can be sorted by up to 4 attributes
+          </Text>
+        </View>
       )}
 
       <DraggableFlatList
