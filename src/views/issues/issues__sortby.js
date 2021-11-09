@@ -32,8 +32,7 @@ const IssuesSortBy = (props: Props) => {
     doAssist({context: props.context, query: props.query}).then((searchSuggestions: SearchSuggestions ) => {
       updateSelectedSortProperties(searchSuggestions.sortProperties);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [props.context, props.query]);
 
   useEffect(() => {
     loadSortingProperties();
