@@ -13,7 +13,8 @@ import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
 import {doAssist, getSortPropertyName} from './issues__sortby-helper';
-import {EllipsisVertical, IconAdd, IconBack} from '../../components/icon/icon';
+import {EllipsisVertical, IconAdd, IconBack, IconClose} from '../../components/icon/icon';
+import {HIT_SLOP} from '../../components/common-styles/button';
 
 import styles from './issues.styles';
 
@@ -51,21 +52,44 @@ const IssuesSortByList = (props: Props) => {
     );
   };
 
-  const renderItem = ({ item, drag, isActive }: { item: IssueFieldSortProperty, drag : () => any, isActive: boolean }) => {
+  const onUpdate = (sortProperties: Array<IssueFieldSortProperty>): void => {
+    updateSelectedSortProperties(sortProperties);
+    applySorting(sortProperties);
+  };
+
+  const renderItem = ({item, drag, isActive}: { item: IssueFieldSortProperty, drag: () => any, isActive: boolean }) => {
     return (
       <AnimatedView
         useNativeDriver
         duration={500}
         animation="fadeIn"
-        style={styles.sortByListItem}
       >
         <TouchableOpacity
           style={styles.sortByListItem}
           disabled={isActive}
           onLongPress={drag}
         >
-          <EllipsisVertical size={20} color={styles.sortDrugIcon.color} styles={styles.sortDrugIcon}/>
-          <Text style={styles.sortByListItemText}>{getSortPropertyName(item)}</Text>
+          <View style={styles.rowLine}>
+            <EllipsisVertical
+              size={22}
+              color={styles.sortIcon.color}
+            />
+            <Text style={styles.sortByListItemText}>
+              {getSortPropertyName(item)}
+            </Text>
+          </View>
+          <View style={styles.rowLine}>
+            <TouchableOpacity
+              hitSlop={HIT_SLOP}
+              onPress={() => {
+                onUpdate(
+                  selectedSortProperties.filter((it: IssueFieldSortProperty) => it.id !== item.id)
+                );
+              }}
+            >
+              <IconClose size={20} color={styles.sortIcon.color}/>
+            </TouchableOpacity>
+          </View>
         </TouchableOpacity>
       </AnimatedView>
     );
@@ -87,10 +111,7 @@ const IssuesSortByList = (props: Props) => {
             <IssuesSortByAddAttribute
               context={props.context}
               selected={selectedSortProperties}
-              onApply={(sortProperties: Array<IssueFieldSortProperty>) => {
-                updateSelectedSortProperties(sortProperties);
-                applySorting(sortProperties);
-              }}
+              onApply={onUpdate}
               query={props.query}
             />
           ),

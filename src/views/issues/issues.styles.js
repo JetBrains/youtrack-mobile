@@ -188,7 +188,9 @@ export default EStyleSheet.create({
   },
   sortByListItem: {
     ...rowLine,
-    padding: UNIT,
+    justifyContent: 'space-between',
+    paddingVertical: UNIT * 2,
+    paddingHorizontal: UNIT * 1.5,
   },
   sortByListWarning: {
     color: '$icon',
@@ -200,7 +202,7 @@ export default EStyleSheet.create({
     ...mainText,
     paddingLeft: UNIT * 2,
   },
-  sortDrugIcon: {
+  sortIcon: {
     color: '$iconAccent',
   },
 });
