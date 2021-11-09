@@ -181,17 +181,25 @@ export default EStyleSheet.create({
   link: {
     color: '$link',
   },
+  sortBy: {
+    flex: 1,
+    backgroundColor: '$background',
+    paddingRight: UNIT,
+  },
   sortByList: {
     flex: 1,
     paddingTop: UNIT,
     marginLeft: UNIT / 2,
+  },
+  sortByListAddIcon: {
+    paddingRight: UNIT,
   },
   sortByListItem: {
     ...rowLine,
     justifyContent: 'space-between',
     paddingVertical: UNIT * 2,
     paddingLeft: UNIT * 2,
-    paddingRight: 0,
+    paddingRight: UNIT,
   },
   sortByListWarning: {
     color: '$icon',

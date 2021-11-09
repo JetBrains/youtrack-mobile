@@ -15,7 +15,7 @@ import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
 import {doAssist, getSortPropertyName, isRelevanceSortProperty} from './issues__sortby-helper';
-import {EllipsisVertical, IconAdd, IconBack, IconClose} from '../../components/icon/icon';
+import {EllipsisVertical, IconAdd, IconBack, IconCheck, IconClose} from '../../components/icon/icon';
 
 import styles from './issues.styles';
 
@@ -46,7 +46,7 @@ const IssuesSortByList = (props: Props) => {
     const sProps: Array<IssueFieldSortProperty> = sortProperties.filter(
       (sortProperty: IssueFieldSortProperty) => !sortProperty.readOnly
     );
-    doAssist({context: props.context, query: props.query, sortProperties: sProps}).then(
+    return doAssist({context: props.context, query: props.query, sortProperties: sProps}).then(
       (response: SearchSuggestions) => {
         props.onApply(sortProperties, response.query);
       }
@@ -55,7 +55,6 @@ const IssuesSortByList = (props: Props) => {
 
   const onUpdate = (sortProperties: Array<IssueFieldSortProperty>): void => {
     updateSelectedSortProperties(sortProperties);
-    applySorting(sortProperties);
   };
 
   const renderItem = ({item, drag, isActive}: { item: IssueFieldSortProperty, drag: () => any, isActive: boolean }) => {
@@ -121,19 +120,31 @@ const IssuesSortByList = (props: Props) => {
     <View style={styles.listContainer}>
       <Header
         showShadow={true}
+
         leftButton={<IconBack color={styles.link.color}/>}
-        rightButton={<IconAdd style={styles.addLinkButton} color={styles.link.color} size={20}/>}
-        onRightButtonClick={() => Router.Page({
-          children: (
-            <IssuesSortByAddAttribute
-              context={props.context}
-              selected={selectedSortProperties}
-              onApply={onUpdate}
-              query={props.query}
-            />
-          ),
-        })}
         onBack={() => Router.pop()}
+
+        rightButton={<IconCheck size={20} color={styles.link.color}/>}
+        onRightButtonClick={() => {
+          applySorting(selectedSortProperties);
+          Router.pop();
+        }}
+
+        extraButton={<TouchableOpacity
+          style={styles.sortIconButton}
+          onPress={() => Router.Page({
+            children: (
+              <IssuesSortByAddAttribute
+                context={props.context}
+                selected={selectedSortProperties}
+                onApply={onUpdate}
+                query={props.query}
+              />
+            ),
+          })}
+        >
+          <IconAdd style={styles.sortByListAddIcon} color={styles.link.color} size={20}/>
+        </TouchableOpacity>}
       >
         <Text style={styles.headerTitle}>Sort Attributes</Text>
       </Header>
