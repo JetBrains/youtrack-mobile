@@ -66,7 +66,11 @@ const IssuesSortByList = (props: Props) => {
         animation="fadeIn"
       >
         <TouchableOpacity
-          style={styles.sortByListItem}
+          activeOpacity={0.8}
+          style={[
+            styles.sortByListItem,
+            isActive ? styles.sortByListItemActive : null,
+          ]}
           disabled={isActive}
           onLongPress={drag}
         >
@@ -165,8 +169,8 @@ const IssuesSortByList = (props: Props) => {
         scrollEventThrottle={50}
 
         data={selectedSortProperties}
-        onDragEnd={({ data }) => {
-          //TODO
+        onDragEnd={({data}: {data: Array<IssueFieldSortProperty>}) => {
+          updateSelectedSortProperties(data);
         }}
         keyExtractor={(item: IssueFieldSortProperty) => item.id}
         renderItem={renderItem}

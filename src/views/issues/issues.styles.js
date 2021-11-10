@@ -201,6 +201,9 @@ export default EStyleSheet.create({
     paddingLeft: UNIT * 2,
     paddingRight: UNIT,
   },
+  sortByListItemActive: {
+    backgroundColor: '$boxBackground',
+  },
   sortByListWarning: {
     color: '$icon',
     margin: UNIT * 2.5,
