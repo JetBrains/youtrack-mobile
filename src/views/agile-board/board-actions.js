@@ -114,7 +114,7 @@ export function loadAgileWithStatus(agileId: string): ((dispatch: (any) => any) 
   };
 }
 
-export function loadBoard(board: Board, query: string, refresh: boolean): ((dispatch: (any) => any) => Promise<void>) {
+export function loadBoard(board: Board, query: string, refresh: boolean = false): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     destroySSE();
     dispatch(updateAgileUserProfileLastVisitedAgile(board.id));
@@ -124,19 +124,13 @@ export function loadBoard(board: Board, query: string, refresh: boolean): ((disp
     const agileUserProfile: AgileUserProfile = await dispatch(getAgileUserProfile());
 
     const cachedAgileLastSprint: ?Sprint = getStorageState().agileLastSprint;
-    const getLastVisited = () => (
-      getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints) ||
-      (cachedAgileLastSprint?.agile?.id === board.id ? cachedAgileLastSprint : null)
-    );
     let sprint: ?Sprint;
-    if (agileUserProfile?.defaultAgile?.currentSprint) {
-      sprint = (
-        refresh
-          ? getLastVisited()
-          : agileUserProfile?.defaultAgile?.currentSprint
-      );
+    if (!refresh && board.currentSprint) {
+      sprint = board.currentSprint;
     } else {
-      sprint = getLastVisited();
+      sprint = getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints) || (
+        cachedAgileLastSprint?.agile?.id === board.id ? cachedAgileLastSprint : null
+      );
     }
     if (!sprint) {
       sprint = (board.sprints || []).slice(-1)[0];
