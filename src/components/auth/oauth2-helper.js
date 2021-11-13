@@ -2,12 +2,14 @@
 
 import {authorize, prefetchConfiguration, refresh, revoke} from 'react-native-app-auth';
 
-import Auth from './auth';
 import log from '../log/log';
-import OAuth2 from './oauth2';
 
 import type {AppConfig} from '../../flow/AppConfig';
-import type {OAuthConfig, OAuthParams} from '../../flow/Auth';
+import type {OAuthConfig, OAuthParams2} from '../../flow/Auth';
+
+const ACCEPT_HEADER: string = 'application/json, text/plain, */*';
+const URL_ENCODED_TYPE: string = 'application/x-www-form-urlencoded';
+
 const createConfig = (config: AppConfig): OAuthConfig => {
   return {
     additionalParameters: {
@@ -45,9 +47,9 @@ const revokeToken = async (config: AppConfig, accessToken: string): Promise<void
   }
 };
 
-const refreshToken = async (config: AppConfig, refreshToken: string): Promise<OAuthParams> => {
+const refreshToken = async (config: AppConfig, refreshToken: string): Promise<OAuthParams2> => {
   try {
-    const newOAuthParams: OAuthParams = await refresh(createConfig(config), {refreshToken});
+    const newOAuthParams: OAuthParams2 = await refresh(createConfig(config), {refreshToken});
     log.log('Access token refreshed');
     return newOAuthParams;
   } catch (error) {
@@ -56,10 +58,9 @@ const refreshToken = async (config: AppConfig, refreshToken: string): Promise<OA
   }
 };
 
-const doAuthorize = async (config: AppConfig): Promise<OAuthParams> => {
+const doAuthorize = async (config: AppConfig): Promise<OAuthParams2> => {
   try {
-    const authConfig: OAuthConfig = createConfig(config);
-    const authParams: OAuthParams = await authorize(authConfig);
+    const authParams: OAuthParams2 = await authorize(createConfig(config));
     log.log('Access token received');
     return authParams;
   } catch (error) {
@@ -68,14 +69,12 @@ const doAuthorize = async (config: AppConfig): Promise<OAuthParams> => {
   }
 };
 
-const createAuthInstance = (config: AppConfig): Auth | OAuth2 => {
-  return config.auth?.clientSecret ? new Auth(config) : new OAuth2(config);
-};
 
 export {
-  createAuthInstance,
+  ACCEPT_HEADER,
   doAuthorize,
   prefetch,
   refreshToken,
   revokeToken,
+  URL_ENCODED_TYPE,
 };

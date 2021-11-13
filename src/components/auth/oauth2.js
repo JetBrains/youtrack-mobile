@@ -1,62 +1,47 @@
 /* @flow */
 
-import EncryptedStorage from 'react-native-encrypted-storage';
-
 import log from '../log/log';
 import {AuthBase} from './auth-base';
-import {doAuthorize, refreshToken, revokeToken} from './oauth2-helper';
-import {getOAuthParamsKey, getStoredSecurelyAuthParams, storeSecurelyAuthParams} from '../storage/storage__oauth';
+import {doAuthorize, refreshToken} from './oauth2-helper';
+import {getAuthParamsKey} from '../storage/storage__oauth';
 import {logEvent} from '../log/log-helper';
-import {STORAGE_OAUTH_PARAMS_KEY} from '../storage/storage';
 
 import type {AppConfig} from '../../flow/AppConfig';
-import type {OAuthParams} from '../../flow/Auth';
+import type {OAuthParams2} from '../../flow/Auth';
 
 
 export default class OAuth2 extends AuthBase {
-  authParams: OAuthParams;
+  authParams: OAuthParams2;
 
-  static obtainToken(config: AppConfig): Promise<OAuthParams> {
+  static async obtainTokenWithOAuthCode(config: AppConfig): Promise<OAuthParams2> {
     return doAuthorize(config);
   }
 
-  async setAuthParamsFromCache(): Promise<void> {
+  async checkAuthorization(): Promise<void> {
     this.authParams = await this.getCachedAuthParams();
-    await this.loadCurrentUser(this.authParams); //TODO: should be loaded separately
-  }
-
-  getPermissionsCacheURL(): string { //TODO: same as in the base class
-    return this.PERMISSIONS_CACHE_URL;
+    return await this.loadCurrentUser(this.authParams);
   }
 
   getTokenType(): string {
-    return this.authParams.tokenType;
+    return this.authParams.tokenType || this.authParams.token_type;
   }
 
   getAccessToken(): string {
-    return this.authParams.accessToken;
+    return this.authParams.accessToken || this.authParams.access_token;
   }
 
-  getRefreshToken(authParams: OAuthParams): string {
-    return authParams.refreshToken;
+  getRefreshToken(authParams: OAuthParams2): string {
+    return authParams.refreshToken || authParams.refresh_token;
   }
 
-  async logOut(): Promise<void> {
-    await EncryptedStorage.removeItem(STORAGE_OAUTH_PARAMS_KEY, () => {
-      EncryptedStorage.setItem(STORAGE_OAUTH_PARAMS_KEY, '');
-    });
-    await revokeToken(this.config, this.authParams.accessToken);
-    this.authParams = null;
-  }
-
-  async refreshToken(): Promise<OAuthParams> {
-    let authParams: OAuthParams;
-    const prevAuthParams: OAuthParams = ((await this.getCachedAuthParams(): any): OAuthParams);
+  async refreshTokenOAuth(): Promise<OAuthParams2> {
+    let authParams: OAuthParams2;
+    const prevAuthParams: OAuthParams2 = ((await this.getCachedAuthParams(): any): OAuthParams2);
     log.info('Token refresh: start...', prevAuthParams);
 
     if (!prevAuthParams.refreshToken) {
       try {
-        authParams = await OAuth2.obtainToken(this.config);
+        authParams = await OAuth2.obtainTokenWithOAuthCode(this.config);
       } catch (e) {
         throw e;
       }
@@ -72,28 +57,21 @@ export default class OAuth2 extends AuthBase {
     }
 
     if (authParams.accessToken) {
-      const updatedOauthParams: OAuthParams = {
+      const updatedOauthParams: OAuthParams2 = {
         ...this.authParams,
         accessToken: authParams.accessToken,
         accessTokenExpirationDate: authParams.accessTokenExpirationDate || this.authParams.accessTokenExpirationDate,
         refreshToken: authParams.refreshToken || this.authParams.refreshToken,
       };
-      await this.cacheAuthParams(updatedOauthParams, getOAuthParamsKey());
+      await this.cacheAuthParams(updatedOauthParams, getAuthParamsKey());
       await this.loadCurrentUser(updatedOauthParams);
     }
 
     return authParams;
   }
 
-  async cacheAuthParams(oauthParams: OAuthParams, timestamp: string): Promise<void> {
-    await storeSecurelyAuthParams(oauthParams, timestamp);
+  refreshToken(): Promise<any> {
+    return this.authParams?.refreshToken ? this.refreshTokenOAuth() : super.refreshToken();
   }
 
-  async getCachedAuthParams(): Promise<OAuthParams> {
-    const oauthParams: OAuthParams | null = await getStoredSecurelyAuthParams(getOAuthParamsKey());
-    if (!oauthParams) {
-      throw new Error('No stored auth params found');
-    }
-    return oauthParams;
-  }
 }

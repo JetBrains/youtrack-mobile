@@ -2,33 +2,24 @@
 
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-import {getStorageState, storageStateAuthParamsKey, storageStateOAuthParamsKey} from './storage';
+import {getStorageState, storageStateAuthParamsKey} from './storage';
 
-import type {AuthParams, OAuthParams} from '../../flow/Auth';
+import type {OAuthParams2} from '../../flow/Auth';
 
-function getAuthParamsKey(): string {
-  return getStorageState()[storageStateAuthParamsKey] || '';
-}
 
-const getOAuthParamsKey = (): string => {
-  return getStorageState()[storageStateOAuthParamsKey] || '';
-};
-
-const getAuthStorageKey = (): string => {
-  return getOAuthParamsKey() || getAuthParamsKey();
-};
+const getAuthParamsKey = (): string => getStorageState()[storageStateAuthParamsKey] || '';
 
 const storeSecurelyAuthParams = async (
-  authParams: OAuthParams | AuthParams | null,
+  authParams: OAuthParams2 | null,
   authParamsKey: string
-): Promise<OAuthParams | AuthParams | null> => {
+): Promise<OAuthParams2 | null> => {
   if (authParamsKey && authParams) {
     await EncryptedStorage.setItem(authParamsKey, JSON.stringify(authParams));
   }
   return authParams;
 };
 
-const getStoredSecurelyAuthParams = async (authParamsKey: string): Promise<OAuthParams | AuthParams | null> => {
+const getStoredSecurelyAuthParams = async (authParamsKey: string): Promise<?OAuthParams2> => {
   if (authParamsKey) {
     const authParams: ?string = await EncryptedStorage.getItem(authParamsKey);
     return typeof authParams === 'string' ? JSON.parse(authParams) : null;
@@ -36,10 +27,9 @@ const getStoredSecurelyAuthParams = async (authParamsKey: string): Promise<OAuth
   return null;
 };
 
+
 export {
-  getAuthStorageKey,
   getAuthParamsKey,
-  getOAuthParamsKey,
   getStoredSecurelyAuthParams,
   storeSecurelyAuthParams,
 };

@@ -9,7 +9,7 @@ import isEqual from 'react-fast-compare';
 import * as boardActions from './board-actions';
 import AgileBoardSprint from './agile-board__sprint';
 import Api from '../../components/api/api';
-import Auth from '../../components/auth/auth';
+import Auth from '../../components/auth/oauth2';
 import BoardHeader from './board-header';
 import BoardScroller from '../../components/board-scroller/board-scroller';
 import ErrorMessage from '../../components/error-message/error-message';

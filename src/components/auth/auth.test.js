@@ -1,10 +1,12 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-import Auth from './auth';
+import Auth from './oauth2';
 import sinon from 'sinon';
 
 import * as storageHelper from '../storage/storage__oauth';
 import {__setStorageState} from '../storage/storage';
+
+jest.mock('react-native-app-auth');
 
 let configMock;
 let authParamsMock;
@@ -162,16 +164,34 @@ describe('Auth', function () {
         request.requestBody.should.equal('grant_type=password&access_type=offline&username=lo%24g&password=pa%25ss&scope=scope1%20scope2');
       });
 
-      it('should authorize OAuth2 code', () => {
-        const oauthCodeMock = 'fake-code';
-        Auth.obtainTokenByOAuthCode(oauthCodeMock, configMock);
+      it('should authorize with OAuth2 code flow', async () => {
+        const AppAuth = require('react-native-app-auth');
+        const oauthCodeFlowParamsMock = {
+          accessToken: 'accessToken',
+          refreshToken: 'refreshToken',
+          tokenType: 'tokenType',
+        };
+        AppAuth.authorize.mockResolvedValueOnce(oauthCodeFlowParamsMock);
 
-        const request = getLastRequest();
+        const authParams = await Auth.obtainTokenWithOAuthCode(configMock);
 
-        request.options.method.should.equal('POST');
-        request.url.should.equal(`${configMock.auth.serverUri}/api/rest/oauth2/token`);
-        request.options.headers.Authorization.should.equal('Basic Y2xpZW50LWlkOmNsaWVudC1zZWNyZXQ=');
-        request.requestBody.should.equal(`grant_type=authorization_code&code=${oauthCodeMock}&client_id=client-id&client_secret=client-secret&redirect_uri=ytoauth://landing.url`);
+        expect(authParams).toEqual(oauthCodeFlowParamsMock);
+        expect(AppAuth.authorize).toHaveBeenCalledWith({
+          additionalParameters: {
+            access_type: 'offline',
+            prompt: 'login',
+          },
+          clientId: configMock.auth.clientId,
+          redirectUrl: configMock.auth.landingUrl,
+          scopes: configMock.auth.scopes.split(' '),
+          serviceConfiguration: {
+            authorizationEndpoint: `${configMock.auth.serverUri}/api/rest/oauth2/auth`,
+            tokenEndpoint: `${configMock.auth.serverUri}/api/rest/oauth2/token`,
+          },
+          usePKCE: true,
+          dangerouslyAllowInsecureHttpRequests: true,
+        });
+
       });
     });
 

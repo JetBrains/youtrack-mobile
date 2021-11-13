@@ -19,7 +19,7 @@ import SearchAPI from './api__search';
 import UserAPI from './api__user';
 import UserGroupAPI from './api__user-group';
 
-import type Auth from '../auth/auth';
+import type Auth from '../auth/oauth2';
 import type {EndUserAgreement} from '../../flow/AppConfig';
 import type {IssueProject, Tag} from '../../flow/CustomFields';
 import type {

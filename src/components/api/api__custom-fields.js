@@ -2,7 +2,7 @@
 
 import ApiBase from './api__base';
 
-import type Auth from '../auth/auth';
+import type Auth from '../auth/oauth2';
 
 
 export default class CustomFieldsAPI extends ApiBase {

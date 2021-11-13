@@ -44,7 +44,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 import styles, {noIssuesFoundIconSize} from './issues.styles';
 
 import type Api from '../../components/api/api';
-import type Auth from '../../components/auth/auth';
+import type Auth from '../../components/auth/oauth2';
 import type {ErrorMessageProps} from '../../components/error-message/error-message';
 import type {IssueOnList} from '../../flow/Issue';
 import type {IssuesState} from './issues-reducers';

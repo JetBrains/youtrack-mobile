@@ -12,7 +12,6 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import React, {Component} from 'react';
-import Auth from '../../components/auth/auth';
 import OAuth2 from '../../components/auth/oauth2';
 import Router from '../../components/router/router';
 import {connect} from 'react-redux';
@@ -35,13 +34,13 @@ import {HIT_SLOP} from '../../components/common-styles/button';
 import styles from './log-in.styles';
 
 import type {AppConfig} from '../../flow/AppConfig';
-import type {AuthParams, OAuthParams} from '../../flow/Auth';
+import type {OAuthParams2} from '../../flow/Auth';
 import type {Node} from 'React';
 import type {Theme, UIThemeColors} from '../../flow/Theme';
 
 type Props = {
   config: AppConfig,
-  onLogIn: (authParams: AuthParams) => any,
+  onLogIn: (authParams: OAuthParams2) => any,
   onShowDebugView: Function,
   onChangeServerUrl: (currentUrl: string) => any
 };
@@ -80,7 +79,7 @@ export class LogIn extends Component<Props, State> {
     usage.trackScreenView('Login form');
   }
 
-  async componentDidMount(): void {
+  async componentDidMount() {
     if (!this.isConfigHasClientSecret()) {
       await this.logInViaHub();
     }
@@ -101,10 +100,10 @@ export class LogIn extends Component<Props, State> {
     this.setState({loggingIn: true});
 
     try {
-      const authParams: AuthParams = await Auth.obtainTokenByCredentials(username, password, config);
+      const authParams: OAuthParams2 = await OAuth2.obtainTokenByCredentials(username, password, config);
       Keystore.setInternetCredentials(config.auth.serverUri, username, password).catch(noop);
       usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Success');
-
+      authParams.inAppLogin = true;
       onLogIn(authParams);
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Error');
@@ -121,11 +120,9 @@ export class LogIn extends Component<Props, State> {
     const {config, onLogIn} = this.props;
     try {
       this.setState({loggingIn: true});
-
-      const oauthParams: OAuthParams = await OAuth2.obtainToken(config);
-
+      const authParams: OAuthParams2 = await OAuth2.obtainTokenWithOAuthCode(config);
       usage.trackEvent(CATEGORY_NAME, 'Login via browser with PKCE', 'Success');
-      onLogIn(oauthParams);
+      onLogIn(authParams);
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Login via browser PKCE', 'Error');
       const errorMessage = await resolveErrorMessage(err);
@@ -291,7 +288,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       }
       Router.EnterServer({serverUrl: youtrackUrl});
     },
-    onLogIn: (authParams: AuthParams | OAuthParams) => dispatch(applyAuthorization(authParams)),
+    onLogIn: (authParams: OAuthParams2) => dispatch(applyAuthorization(authParams)),
     onShowDebugView: () => dispatch(openDebugView()),
   };
 };

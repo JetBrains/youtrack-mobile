@@ -4,7 +4,7 @@ import ApiBase from './api__base';
 import issueFields from './api__issue-fields';
 import UserAPI from './api__user';
 
-import type Auth from '../auth/auth';
+import type Auth from '../auth/oauth2';
 import type {Folder} from '../../flow/User';
 import type {Tag} from '../../flow/CustomFields';
 

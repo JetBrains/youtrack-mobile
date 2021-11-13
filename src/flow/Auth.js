@@ -1,6 +1,8 @@
 /* @flow */
 
-export type AuthParams = {
+import type {AuthConfiguration} from 'react-native-app-auth';
+
+type AuthParams = {
   access_token: string,
   error_code?: string,
   refresh_token: string,
@@ -17,7 +19,7 @@ export type AuthConfig = {
   youtrackServiceId: string
 };
 
-export type OAuthParams = {
+type OAuthParams = {
   accessToken: string,
   accessTokenExpirationDate: string,
   authorizationCode: string,
@@ -30,14 +32,11 @@ export type OAuthParams = {
   tokenType: string,
 };
 
-export type OAuthConfig = {
-  additionalParameters: {
-    access_type: 'offline',
-    prompt: 'login',
-  },
-  clientId: string,
-  redirectUrl: string,
-  scopes: Array<string>,
-  serviceConfiguration: { authorizationEndpoint: string, tokenEndpoint: string },
-  usePKCE: boolean,
+//$FlowFixMe
+export type OAuthConfig = AuthConfiguration;
+
+export type OAuthParams2 = {
+  ...AuthParams,
+  ...OAuthParams,
+  inAppLogin?: boolean
 };

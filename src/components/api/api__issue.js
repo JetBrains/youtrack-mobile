@@ -7,7 +7,7 @@ import issueFields from './api__issue-fields';
 import qs from 'qs';
 import {handleRelativeUrl} from '../config/config';
 
-import type Auth from '../auth/auth';
+import type Auth from '../auth/oauth2';
 import type {Activity} from '../../flow/Activity';
 import type {
   Attachment,

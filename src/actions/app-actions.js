@@ -7,7 +7,6 @@ import DeviceInfo from 'react-native-device-info';
 import * as appActionsHelper from './app-actions-helper';
 import * as types from './action-types';
 import Api from '../components/api/api';
-import Auth from '../components/auth/auth';
 import OAuth2 from '../components/auth/oauth2';
 import log from '../components/log/log';
 import openByUrlDetector, {isOneOfServers} from '../components/open-url-handler/open-url-handler';
@@ -29,10 +28,10 @@ import {
   getStorageState,
   initialState,
   populateStorage,
-  storeAccounts,
   storageStateAuthParamsKey,
-  storageStateOAuthParamsKey,
+  storeAccounts,
 } from '../components/storage/storage';
+import {getAuthParamsKey, getStoredSecurelyAuthParams} from '../components/storage/storage__oauth';
 import {hasType} from '../components/api/api__resource-types';
 import {isIOSPlatform} from '../util/util';
 import {isUnsupportedFeatureError} from '../components/error/error-resolver';
@@ -46,14 +45,12 @@ import type {Activity} from '../flow/Activity';
 import type {AppConfig, EndUserAgreement} from '../flow/AppConfig';
 import type {AppState} from '../reducers';
 import type {Article} from '../flow/Article';
-import type {AuthParams, AuthConfig, OAuthParams} from '../flow/Auth';
+import type {AuthConfig, OAuthParams2} from '../flow/Auth';
 import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from '../flow/User';
 import type {NotificationRouteData} from '../flow/Notification';
 import type {PermissionCacheItem} from '../flow/Permission';
 import type {StorageState} from '../components/storage/storage';
 import type {WorkTimeSettings} from '../flow/Work';
-import {createAuthInstance} from '../components/auth/oauth2-helper';
-import {getStoredSecurelyAuthParams} from '../components/storage/storage__oauth';
 
 type Action = (
   (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) =>
@@ -177,18 +174,17 @@ export const cacheUserLastVisitedArticle = (article: Article | null, activities?
 
 export function checkAuthorization(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const auth: Auth | OAuth2 = ((getState().app.auth: any): Auth);
-    await auth.setAuthParamsFromCache();
+    const auth: OAuth2 = ((getState().app.auth: any): OAuth2);
+    await auth.checkAuthorization();
     await flushStoragePart({currentUser: auth.currentUser});
 
     setApi(new Api(auth));
   };
 }
 
-export function setAuth(config: AppConfig): { auth: Auth, type: string } {
-  const auth: Auth | OAuth2 = createAuthInstance(config);
+export function setAuth(config: AppConfig): { auth: OAuth2, type: string } {
+  const auth: OAuth2 = new OAuth2(config);
   usage.init(config.statisticsEnabled);
-
   return {type: types.INITIALIZE_AUTH, auth};
 }
 
@@ -231,12 +227,12 @@ async function authorizeOnOneMoreServer(config: AppConfig, onBack: (serverUrl: s
     Router.LogIn({
       config,
       onChangeServerUrl: onBack,
-      onLogIn: (authParams: AuthParams) => resolve(authParams),
+      onLogIn: (authParams: OAuthParams2) => resolve(authParams),
     });
   });
 }
 
-function applyAccount(config: AppConfig, auth: Auth, authParams: AuthParams): Action {
+function applyAccount(config: AppConfig, auth: OAuth2, authParams: OAuthParams2): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const otherAccounts: Array<StorageState> = getState().app.otherAccounts || [];
     const currentAccount: StorageState = getStorageState();
@@ -245,7 +241,7 @@ function applyAccount(config: AppConfig, auth: Auth, authParams: AuthParams): Ac
     await storeAccounts(newOtherAccounts);
     dispatch(receiveOtherAccounts(newOtherAccounts));
     const creationTimestamp: number = Date.now();
-    const authStorageStateKey: string = authParams.accessToken ? storageStateOAuthParamsKey : storageStateAuthParamsKey;
+    const authStorageStateKey: string = getAuthParamsKey();
     await flushStorage({
       ...initialState,
       creationTimestamp: creationTimestamp,
@@ -275,8 +271,8 @@ export function addAccount(serverUrl: string = ''): Action {
       });
       log.info(`Config loaded for new server (${config.backendUrl}), logging in...`);
 
-      const tmpAuthInstance: Auth = new Auth(config); //NB! this temporary instance for Login screen code
-      const authParams: AuthParams = await authorizeOnOneMoreServer(config, function onBack(url: string) {
+      const tmpAuthInstance: OAuth2 = new OAuth2(config); //NB! this temporary instance for Login screen code
+      const authParams: OAuthParams2 = await authorizeOnOneMoreServer(config, function onBack(url: string) {
         log.info('Authorization canceled by user, going back');
         dispatch(addAccount(url));
       });
@@ -342,14 +338,13 @@ export function changeAccount(account: StorageState, removeCurrentAccount?: bool
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const state: AppState = getState();
     const config: AppConfig = ((account.config: any): AppConfig);
-    const authStorageKey: string = account[storageStateOAuthParamsKey] || account[storageStateAuthParamsKey];
-    const authParams: ?AuthParams = await getStoredSecurelyAuthParams(authStorageKey);
+    const authParams: ?OAuthParams2 = await getStoredSecurelyAuthParams(getAuthParamsKey());
     if (!authParams) {
       const errorMessage: string = 'Account doesn\'t have valid authorization, cannot switch onto it.';
       notify(errorMessage);
       throw new Error(errorMessage);
     }
-    const auth: Auth | OAuth2 = createAuthInstance(config);
+    const auth: OAuth2 = new OAuth2(config);
 
     dispatch(beginAccountChange());
 
@@ -402,7 +397,7 @@ export function removeAccountOrLogOut(): Action {
 
 function setUserPermissions(permissions: Array<PermissionCacheItem>): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const auth: Auth = ((getState().app.auth: any): Auth);
+    const auth: OAuth2 = ((getState().app.auth: any): OAuth2);
     dispatch({
       type: types.SET_PERMISSIONS,
       permissionsStore: new PermissionsStore(permissions),
@@ -413,7 +408,7 @@ function setUserPermissions(permissions: Array<PermissionCacheItem>): Action {
 
 export function loadUserPermissions(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const auth: Auth = ((getState().app.auth: any): Auth);
+    const auth: OAuth2 = ((getState().app.auth: any): OAuth2);
     const permissions: Array<PermissionCacheItem> = await appActionsHelper.loadPermissions(
       auth.getTokenType(),
       auth.getAccessToken(),
@@ -495,7 +490,7 @@ export function initializeAuth(config: AppConfig): Action {
 function checkUserAgreement(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<void> => {
     const api: Api = getApi();
-    const auth: Auth = ((getState().app.auth: any): Auth);
+    const auth: OAuth2 = ((getState().app.auth: any): OAuth2);
     const {currentUser} = auth;
 
     log.debug('Checking user agreement', currentUser);
@@ -519,15 +514,14 @@ function checkUserAgreement(): Action {
   };
 }
 
-export function applyAuthorization(authParams: AuthParams | OAuthParams): Action {
+export function applyAuthorization(authParams: OAuthParams2): Action {
   return async (dispatch: Function, getState: () => AppState) => {
-    const auth: Auth | OAuth2 | null = getState().app.auth;
+    const auth: OAuth2 | null = getState().app.auth;
     const creationTimestamp: number = Date.now();
     const authStorageStateValue: string = creationTimestamp.toString();
-    const authStorageStateKey: string = authParams.accessToken ? storageStateOAuthParamsKey : storageStateAuthParamsKey;
     await flushStoragePart({
       creationTimestamp: creationTimestamp,
-      [authStorageStateKey]: authStorageStateValue,
+      [storageStateAuthParamsKey]: authStorageStateValue,
     });
     if (auth && authParams) {
       await auth.cacheAuthParams((authParams: any), authStorageStateValue);

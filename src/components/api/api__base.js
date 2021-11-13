@@ -7,7 +7,7 @@ import {HTTP_STATUS} from '../error/error-http-codes';
 import {fetch2, requestController} from './api__request-controller';
 import {routeMap} from '../../app-routes';
 
-import type Auth from '../auth/auth';
+import type Auth from '../auth/oauth2';
 import type {AppConfig} from '../../flow/AppConfig';
 
 const MAX_QUERY_LENGTH = 2048;

@@ -5,7 +5,7 @@ import * as actions from './app-actions';
 import * as appActionHelper from './app-actions-helper';
 import * as Notification from '../components/notification/notification';
 import * as types from './action-types';
-import AuthTest from '../components/auth/auth';
+import AuthTest from '../components/auth/oauth2';
 import log from '../components/log/log';
 import permissionsHelper from '../components/permissions-store/permissions-helper';
 import PermissionsStore from '../components/permissions-store/permissions-store';

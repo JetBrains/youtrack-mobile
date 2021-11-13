@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
 import log from '../log/log';
+import {getAuthParamsKey} from './storage__oauth';
 import {notify} from '../notification/notification';
 import {routeMap} from '../../app-routes';
 
@@ -12,7 +13,7 @@ import type {AnyIssue} from '../../flow/Issue';
 import type {AppConfig} from '../../flow/AppConfig';
 import type {Article, ArticlesList} from '../../flow/Article';
 import type {ArticleProject} from '../../flow/Article';
-import type {AuthParams, OAuthParams} from '../../flow/Auth';
+import type {OAuthParams2} from '../../flow/Auth';
 import type {Board, Sprint} from '../../flow/Agile';
 import type {Folder, User} from '../../flow/User';
 import type {IssueProject} from '../../flow/CustomFields';
@@ -23,10 +24,7 @@ const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 export const MAX_STORED_QUERIES = 5;
 export const STORAGE_AUTH_PARAMS: string = 'yt_mobile_auth';
 export const STORAGE_AUTH_PARAMS_KEY: string = 'yt_mobile_auth_key';
-export const STORAGE_OAUTH_PARAMS: string = 'yt_mobile_oauth';
-export const STORAGE_OAUTH_PARAMS_KEY: string = 'yt_mobile_oauth_key';
 export const storageStateAuthParamsKey: string = 'authParamsKey';
-export const storageStateOAuthParamsKey: string = 'oauthParamsKey';
 export const THEME_MODE_KEY = 'YT_THEME_MODE';
 
 export type StorageState = {|
@@ -34,10 +32,8 @@ export type StorageState = {|
   articlesList: ArticlesList | null,
   articlesQuery: string | null,
   articleLastVisited: { article?: Article, activities?: Array<Activity> } | null,
-  authParams: ?AuthParams,
-  [storageStateAuthParamsKey]: ?string,
-  oauthParams: OAuthParams | null,
-  [storageStateOAuthParamsKey]: ?string,
+  authParams: ?OAuthParams2,
+  [typeof storageStateAuthParamsKey]: ?string,
   projectId: ?string,
   projects: Array<IssueProject | ArticleProject>,
   draftId: ?string,
@@ -72,8 +68,6 @@ const storageKeys: StorageStateKeys = {
   articleLastVisited: 'YT_ARTICLE_LAST_VISITED',
   authParams: STORAGE_AUTH_PARAMS,
   [storageStateAuthParamsKey]: STORAGE_AUTH_PARAMS_KEY,
-  oauthParams: STORAGE_OAUTH_PARAMS,
-  [storageStateOAuthParamsKey]: STORAGE_OAUTH_PARAMS_KEY,
   projectId: 'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
   projects: 'YT_PROJECTS_STORAGE',
   draftId: 'DRAFT_ID_STORAGE_KEY',
@@ -110,8 +104,6 @@ export const initialState: StorageState = Object.freeze({
   articleLastVisited: null,
   authParams: null,
   [storageStateAuthParamsKey]: null,
-  oauthParams: null,
-  [storageStateOAuthParamsKey]: null,
   projectId: null,
   projects: [],
   draftId: null,
@@ -137,9 +129,9 @@ export const initialState: StorageState = Object.freeze({
   vcsChanges: null,
 });
 
-function cleanAndLogState(message, state: StorageState) {
+function cleanAndLogState(message, state?: StorageState) {
   const CENSORED: string = 'CENSORED';
-  const config: ?$Shape<AppConfigFilled> = state?.config ? {
+  const config: ?$Shape<AppConfig> = state?.config ? ({
     ...state.config,
     backendUrl: state.config.backendUrl,
     auth: state.config.auth ? {
@@ -148,7 +140,7 @@ function cleanAndLogState(message, state: StorageState) {
     } : undefined,
     statisticsEnabled: state.config.statisticsEnabled,
     version: state.config.version,
-  } : undefined;
+  }: any) : undefined;
 
   log.debug(message, {
     ...state,
@@ -193,7 +185,7 @@ export async function clearCachesAndDrafts(): Promise<StorageState> {
 
 async function secureAccount(account: StorageState): Promise<boolean> {
   if (!account.authParamsKey && account.authParams && account.creationTimestamp) {
-    const authStorageStateKey: string = account.authParams.accessToken ? storageStateOAuthParamsKey : storageStateAuthParamsKey;
+    const authStorageStateKey: string = getAuthParamsKey();
     account[authStorageStateKey] = account.creationTimestamp.toString();
     await cacheAuthParamsSecured(account.authParams, account[authStorageStateKey]);
     delete account.authParams;
@@ -286,7 +278,7 @@ export async function flushStoragePart(part: Object): Promise<StorageState> {
   return newState;
 }
 
-export async function cacheAuthParamsSecured(authParams: ?AuthParams, key: ?string): Promise<void> {
+export async function cacheAuthParamsSecured(authParams: ?OAuthParams2, key: ?string): Promise<void> {
   if (authParams && key) {
     await EncryptedStorage.setItem(key, typeof authParams === 'string' ? authParams : JSON.stringify(authParams));
   }

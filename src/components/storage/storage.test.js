@@ -58,8 +58,6 @@ describe('Storage', () => {
         'YT_ARTICLES_QUERY',
         'YT_ARTICLE_LAST_VISITED',
         'yt_mobile_auth',
-        'yt_mobile_oauth',
-        'yt_mobile_oauth_key',
         'YT_DEFAULT_CREATE_PROJECT_ID_STORAGE',
         'YT_PROJECTS_STORAGE',
         'DRAFT_ID_STORAGE_KEY',
