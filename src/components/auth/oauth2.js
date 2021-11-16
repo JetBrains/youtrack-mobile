@@ -8,6 +8,7 @@ import {logEvent} from '../log/log-helper';
 
 import type {AppConfig} from '../../flow/AppConfig';
 import type {OAuthParams2} from '../../flow/Auth';
+import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
 
 
 export default class OAuth2 extends AuthBase {
@@ -52,6 +53,9 @@ export default class OAuth2 extends AuthBase {
       } catch (e) {
         const message: string = `Token refresh: failed. ${e.message || e}`;
         logEvent({message, isError: true});
+        if (e.error === 'banned_user') {
+          e.error_description = ERROR_MESSAGE_DATA.USER_BANNED.title;
+        }
         throw e;
       }
     }

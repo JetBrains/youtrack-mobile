@@ -10,6 +10,7 @@ export type User = {
   fullName?: string,
   name?: string,
   guest?: boolean,
+  banned: boolean,
   id: string,
   issueRelatedGroup?: IssueRelatedGroup,
   login?: string,

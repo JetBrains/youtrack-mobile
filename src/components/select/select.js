@@ -7,7 +7,7 @@ import ColorField from '../color-field/color-field';
 import ModalView from '../modal-view/modal-view';
 import SelectItem from './select__item';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
-import {IconCheck, IconBack} from '../icon/icon';
+import {IconCheck, IconClose} from '../icon/icon';
 import {notifyError} from '../notification/notification';
 
 import styles, {SELECT_ITEM_HEIGHT, SELECT_ITEM_SEPARATOR_HEIGHT} from './select.styles';
@@ -300,7 +300,7 @@ export default class Select extends Component<SelectProps, SelectState> {
               testID="selectBackButton"
               onPress={onCancel}
             >
-              <IconBack style={styles.cancelButton} color={styles.cancelButton.color}/>
+              <IconClose size={21} style={styles.cancelButton} color={styles.cancelButton.color}/>
             </TouchableOpacity>
 
             <TextInput

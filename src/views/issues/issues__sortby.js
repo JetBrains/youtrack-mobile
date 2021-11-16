@@ -70,7 +70,7 @@ const IssuesSortBy = (props: Props) => {
         <TouchableOpacity
           style={[styles.toolbarAction, styles.toolbarActionSortBy]}
           onPress={() => {
-            Router.Page({
+            Router.PageModal({
               children: (
                 <IssuesSortByList
                   context={props.context}

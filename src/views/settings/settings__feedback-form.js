@@ -16,7 +16,7 @@ import Header from '../../components/header/header';
 import Router from '../../components/router/router';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 import {feedbackLogsOptions, feedbackTypeOptions, sendFeedback} from './settings-helper';
-import {IconAngleRight, IconBack, IconCheck} from '../../components/icon/icon';
+import {IconAngleRight, IconCheck, IconClose} from '../../components/icon/icon';
 import {notify} from '../../components/notification/notification';
 import {showActions} from '../../components/action-sheet/action-sheet';
 import {until} from '../../util/util';
@@ -102,7 +102,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
     }
   };
 
-  close: (() => any) = () => Router.pop();
+  close: (() => any) = () => Router.pop(true);
 
   onSendFeedback: (() => Promise<void> | Promise<any>) = async () => {
     this.setSendingProgress(true);
@@ -145,7 +145,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
         <Header
           style={styles.elevation1}
           title="Send Feedback"
-          leftButton={<IconBack color={isFeedbackFormSending ? uiThemeColors.$disabled : uiThemeColors.$link}/>}
+          leftButton={<IconClose size={21} color={isFeedbackFormSending ? uiThemeColors.$disabled : uiThemeColors.$link}/>}
           onBack={() => !isFeedbackFormSending && this.close()}
           extraButton={(
             <TouchableOpacity

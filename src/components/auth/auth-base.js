@@ -8,7 +8,9 @@ import log from '../log/log';
 import PermissionsStore from '../permissions-store/permissions-store';
 import {ACCEPT_HEADER, revokeToken, URL_ENCODED_TYPE} from './oauth2-helper';
 import {createBtoa} from '../../util/util';
+import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
 import {getAuthParamsKey, getStoredSecurelyAuthParams, storeSecurelyAuthParams} from '../storage/storage__oauth';
+import {HTTP_STATUS} from '../error/error-http-codes';
 import {STORAGE_AUTH_PARAMS_KEY} from '../storage/storage';
 import {USER_AGENT} from '../usage/usage';
 
@@ -195,6 +197,11 @@ export class AuthBase {
       return res.json();
     })
       .then((currentUser: User) => {
+        if (currentUser.banned) {
+          const e: CustomError = ((new Error(ERROR_MESSAGE_DATA.USER_BANNED.title)): any);
+          e.status = HTTP_STATUS.FORBIDDEN;
+          throw e;
+        }
         this.currentUser = currentUser;
         log.info('loadCurrentUser: Current user updated.');
         return authParams;

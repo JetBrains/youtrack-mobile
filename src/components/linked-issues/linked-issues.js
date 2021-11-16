@@ -33,7 +33,7 @@ type Props = {
 
 const LinkedIssues = (props: Props): Node => {
   const [sections, updateSections] = useState([]);
-  const [buttonPressed, updateButtonPressed] = useState(null);
+  const [pressedButtonId, updatePressedButtonId] = useState(null);
   const [isLoading, updateLoading] = useState(false);
 
   const getLinkedIssues = useCallback(async (): Promise<Array<IssueLink>> => {
@@ -66,8 +66,8 @@ const LinkedIssues = (props: Props): Node => {
   };
 
   const renderLinkedIssue = (linkedIssue: IssueOnList, linkTypeId: string) => {
-    const isButtonPressed: boolean = buttonPressed !== null;
-    const isCurrentButtonPressed: boolean = isButtonPressed && buttonPressed === linkedIssue.id;
+    const isButtonPressed: boolean = pressedButtonId !== null;
+    const isCurrentButtonPressed: boolean = isButtonPressed && pressedButtonId === (linkedIssue.id + linkTypeId);
     return (
       <AnimatedView
         useNativeDriver
@@ -89,9 +89,9 @@ const LinkedIssues = (props: Props): Node => {
           <TouchableOpacity
             disabled={isButtonPressed}
             onPress={async () => {
-              updateButtonPressed(linkedIssue.id);
+              updatePressedButtonId(linkedIssue.id + linkTypeId);
               const isRemoved: boolean = await props.onUnlink(linkedIssue, linkTypeId);
-              updateButtonPressed(null);
+              updatePressedButtonId(null);
               if (isRemoved) {
                 const updatedLinksList: Array<LinksListData> = doUpdateSections(linkedIssue, linkTypeId);
                 props.onUpdate();

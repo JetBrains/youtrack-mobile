@@ -76,7 +76,7 @@ class Settings extends PureComponent<Props, State> {
             onPress: openDebugView,
           }, {
             title: 'Send feedback',
-            onPress: () => Router.Page({children: <SettingsFeedbackForm uiTheme={uiTheme}/>}),
+            onPress: () => Router.PageModal({children: <SettingsFeedbackForm uiTheme={uiTheme}/>}),
           }];
 
           return (

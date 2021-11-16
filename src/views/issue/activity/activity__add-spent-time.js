@@ -75,7 +75,7 @@ const AddSpentTimeForm = (props: Props) => {
     ).then((updatedDraft: WorkItem | null) => {
       if (updatedDraft) {
         updateDraftWorkItem({
-          ...draft,
+          ...draftItem,
           $type: updatedDraft.$type,
           type: updatedDraft.type,
           id: updatedDraft.id,
@@ -283,11 +283,15 @@ const AddSpentTimeForm = (props: Props) => {
             style={buttonStyle}
             onPress={
               () => Router.PageModal({
-                children: <DatePicker current={draft.date} onDateSelect={(date: Date) => {
-                  update({date: date.getTime()});
-                  close();
-                }}
-                />,
+                children: (
+                  <DatePicker
+                    current={draft.date}
+                    onDateSelect={(date: Date) => {
+                      update({date: date.getTime()});
+                      close();
+                    }}
+                  />
+                ),
               })
             }
           >
