@@ -15,7 +15,7 @@ import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
 import {doAssist, getSortPropertyName, isRelevanceSortProperty} from './issues__sortby-helper';
-import {EllipsisVertical, IconAdd, IconBack, IconCheck, IconClose} from '../../components/icon/icon';
+import {EllipsisVertical, IconAdd, IconCheck, IconClose} from '../../components/icon/icon';
 
 import styles from './issues.styles';
 
@@ -125,8 +125,8 @@ const IssuesSortByList = (props: Props) => {
       <Header
         showShadow={true}
 
-        leftButton={<IconBack color={styles.link.color}/>}
-        onBack={() => Router.pop()}
+        leftButton={<IconClose size={21} color={styles.link.color}/>}
+        onBack={() => Router.pop(true)}
 
         rightButton={<IconCheck size={20} color={styles.link.color}/>}
         onRightButtonClick={() => {
@@ -136,7 +136,7 @@ const IssuesSortByList = (props: Props) => {
 
         extraButton={<TouchableOpacity
           style={styles.sortIconButton}
-          onPress={() => Router.Page({
+          onPress={() => Router.PageModal({
             children: (
               <IssuesSortByAddAttribute
                 context={props.context}
@@ -147,7 +147,7 @@ const IssuesSortByList = (props: Props) => {
             ),
           })}
         >
-          <IconAdd style={styles.sortByListAddIcon} color={styles.link.color} size={20}/>
+          <IconAdd size={21} style={styles.sortByListAddIcon} color={styles.link.color}/>
         </TouchableOpacity>}
       >
         <Text style={styles.headerTitle}>Sort Attributes</Text>
