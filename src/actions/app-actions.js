@@ -19,17 +19,17 @@ import UrlParse from 'url-parse';
 import usage from '../components/usage/usage';
 import {CUSTOM_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
 import {EVERYTHING_CONTEXT} from '../components/search/search-context';
-import {getIsAuthorized} from '../reducers/app-reducer';
+
 import {
   clearCachesAndDrafts,
   flushStorage,
   flushStoragePart,
   getOtherAccounts,
   getStorageState,
+  getStoredAuthParams,
   initialState,
   populateStorage,
   storeAccounts,
-  getStoredAuthParams,
 } from '../components/storage/storage';
 import {hasType} from '../components/api/api__resource-types';
 import {isIOSPlatform} from '../util/util';
@@ -50,6 +50,7 @@ import type {NotificationRouteData} from '../flow/Notification';
 import type {PermissionCacheItem} from '../flow/Permission';
 import type {StorageState} from '../components/storage/storage';
 import type {WorkTimeSettings} from '../flow/Work';
+import type {RootState} from '../reducers/app-reducer';
 
 type Action = (
   (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) =>
@@ -549,6 +550,10 @@ export function cacheProjects(): ((
     await flushStoragePart({projects: projects});
     return projects;
   };
+}
+
+function getIsAuthorized(state: RootState): boolean {
+  return !!state.auth?.currentUser;
 }
 
 function subscribeToURL(): Action {
