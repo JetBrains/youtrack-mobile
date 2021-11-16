@@ -33,7 +33,7 @@ import {
 } from '../components/storage/storage';
 import {hasType} from '../components/api/api__resource-types';
 import {isIOSPlatform} from '../util/util';
-import {isUnsupportedFeatureError} from '../components/error/error-resolver';
+import {getErrorMessage, isUnsupportedFeatureError} from '../components/error/error-resolver';
 import {loadConfig} from '../components/config/config';
 import {logEvent} from '../components/log/log-helper';
 import {notify, notifyError} from '../components/notification/notification';
@@ -624,7 +624,7 @@ export function initializeApp(config: AppConfigFilled, issueId: string | null, n
       try {
         await dispatch(initializeAuth(reloadedConfig));
       } catch (e) {
-        Router.LogIn({config});
+        Router.LogIn({config, errorMessage: getErrorMessage(e)});
         return;
       }
     }

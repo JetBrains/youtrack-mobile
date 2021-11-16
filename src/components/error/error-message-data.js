@@ -39,6 +39,9 @@ export const ERROR_MESSAGE_DATA: Object = {
     title: 'Invalid query',
   },
   'Not Found': notFoundMessageData,
+  USER_BANNED: {
+    title: 'User account is banned',
+  },
   [HTTP_STATUS.UNAUTHORIZED]: unauthorizedErrorMessageData,
   [HTTP_STATUS.FORBIDDEN]: unauthorizedErrorMessageData,
   [HTTP_STATUS.BAD_REQUEST]: {

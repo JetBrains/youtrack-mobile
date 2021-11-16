@@ -7,6 +7,8 @@ import log from '../log/log';
 import PermissionsStore from '../permissions-store/permissions-store';
 import urlJoin from 'url-join';
 import {createBtoa} from '../../util/util';
+import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
+import {HTTP_STATUS} from '../error/error-http-codes';
 import {storeAuthParams, getStoredAuthParams, STORAGE_AUTH_PARAMS_KEY} from '../storage/storage';
 import {USER_AGENT} from '../usage/usage';
 
@@ -34,7 +36,7 @@ export default class AuthTest {
     this.config = config;
     this.CHECK_TOKEN_URL = urlJoin(
       this.config.auth.serverUri,
-      '/api/rest/users/me?fields=id,guest,name,profile/avatar/url,endUserAgreementConsent(accepted,majorVersion,minorVersion)'
+      '/api/rest/users/me?fields=id,guest,name,profile/avatar/url,endUserAgreementConsent(accepted,majorVersion,minorVersion),banned'
     );
 
     const permissionsQueryString = qs.stringify({
@@ -194,6 +196,11 @@ export default class AuthTest {
       return res.json();
     })
       .then((currentUser: User) => {
+        if (currentUser.banned) {
+          const e: CustomError = ((new Error(ERROR_MESSAGE_DATA.USER_BANNED.title)): any);
+          e.status = HTTP_STATUS.FORBIDDEN;
+          throw e;
+        }
         this.currentUser = currentUser;
         return authParams;
       })
@@ -205,6 +212,9 @@ export default class AuthTest {
         throw error;
       })
       .catch((err: CustomError) => {
+        if (err.error === 'banned_user') {
+          err.error_description = ERROR_MESSAGE_DATA.USER_BANNED.title;
+        }
         log.log('Error during token validation', err);
         throw err;
       });

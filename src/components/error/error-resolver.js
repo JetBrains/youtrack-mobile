@@ -51,7 +51,7 @@ export async function resolveErrorMessage(err: ?CustomError, isDescriptionOnly?:
 }
 
 export function getErrorMessage(error: ?CustomError): ?string {
-  return error?.message || error?.localizedDescription || '';
+  return error?.message || error?.localizedDescription || error?.error_description || '';
 }
 
 export function isUnsupportedFeatureError(error: ?CustomError): boolean {

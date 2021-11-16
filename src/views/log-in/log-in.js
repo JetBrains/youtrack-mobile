@@ -43,7 +43,8 @@ type Props = {
   config: AppConfigFilled,
   onLogIn: (authParams: AuthParams) => any,
   onShowDebugView: Function,
-  onChangeServerUrl: (currentUrl: string) => any
+  onChangeServerUrl: (currentUrl: string) => any,
+  errorMessage?: string,
 };
 
 type State = {
@@ -66,7 +67,7 @@ export class LogIn extends Component<Props, State> {
     this.state = {
       username: '',
       password: '',
-      errorMessage: '',
+      errorMessage: props.errorMessage || '',
       loggingIn: false,
       youTrackBackendUrl: props.config.backendUrl,
     };
