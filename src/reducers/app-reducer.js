@@ -146,15 +146,19 @@ export default (createReducer(initialState, {
   },
 }): any);
 
-export function getIsAuthorized(state: RootState): boolean {
-  return !!state.auth?.currentUser;
-}
-
-function mergeUserProfile(state: RootState, profileName: string, newProfile: UserGeneralProfile | UserAppearanceProfile): User {
+function mergeUserProfile(
+  state: RootState,
+  profileName: string,
+  newProfile: UserGeneralProfile | UserAppearanceProfile
+): User {
   const user: User = ((state.user: any): User);
-  const _user = user || {profiles: {}};
+  const _user: $Shape<User> = ((user || {profiles: {}}): any);
   const userProfiles: $Shape<UserProfiles> = Object.assign({}, _user.profiles || {});
-  const updatedProfile: UserGeneralProfile | UserAppearanceProfile = Object.assign({}, userProfiles[profileName], newProfile);
+  const updatedProfile: UserGeneralProfile | UserAppearanceProfile = Object.assign(
+    {},
+    userProfiles[profileName],
+    newProfile
+  );
   const updatedProfiles: $Shape<UserProfiles> = Object.assign({}, _user.profiles || {}, {[profileName]: updatedProfile});
   return {...user, ...{profiles: updatedProfiles}};
 }
