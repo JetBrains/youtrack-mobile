@@ -45,6 +45,7 @@ import styles, {noIssuesFoundIconSize} from './issues.styles';
 
 import type Api from '../../components/api/api';
 import type Auth from '../../components/auth/auth';
+import type {AppState} from '../../reducers';
 import type {ErrorMessageProps} from '../../components/error-message/error-message';
 import type {IssueOnList} from '../../flow/Issue';
 import type {IssuesState} from './issues-reducers';
@@ -446,11 +447,10 @@ export class Issues extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: AppState) => {
   return {
     ...state.issueList,
     ...state.app,
-    initialSearchQuery: ownProps.query,
     searchContext: state.app?.user?.profiles?.general?.searchContext,
   };
 };
