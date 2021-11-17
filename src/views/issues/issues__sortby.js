@@ -58,7 +58,7 @@ const IssuesSortBy = (props: Props) => {
 
 
   return (
-    selectedSortProperties.length ? (
+    selectedSortProperties?.length ? (
       <AnimatedView
         testID= "test:id/issuesSortBy"
         accessibilityLabel= "issuesSortBy"
