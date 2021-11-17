@@ -45,7 +45,7 @@ import type {Activity} from '../flow/Activity';
 import type {AppConfig, EndUserAgreement} from '../flow/AppConfig';
 import type {AppState} from '../reducers';
 import type {Article} from '../flow/Article';
-import type {AuthConfig, OAuthParams2} from '../flow/Auth';
+import type {AuthConfig, AuthParams, OAuthParams2} from '../flow/Auth';
 import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from '../flow/User';
 import type {NotificationRouteData} from '../flow/Notification';
 import type {PermissionCacheItem} from '../flow/Permission';
@@ -515,7 +515,7 @@ function checkUserAgreement(): Action {
   };
 }
 
-export function applyAuthorization(authParams: OAuthParams2): Action {
+export function applyAuthorization(authParams: AuthParams): Action {
   return async (dispatch: Function, getState: () => AppState) => {
     const auth: OAuth2 | null = getState().app.auth;
     const creationTimestamp: number = Date.now();

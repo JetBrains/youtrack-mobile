@@ -175,7 +175,12 @@ describe('Auth', function () {
 
         const authParams = await Auth.obtainTokenWithOAuthCode(configMock);
 
-        expect(authParams).toEqual(oauthCodeFlowParamsMock);
+        expect(authParams).toEqual({
+          access_token: oauthCodeFlowParamsMock.accessToken,
+          accessTokenExpirationDate: undefined,
+          refresh_token: oauthCodeFlowParamsMock.refreshToken,
+          token_type: oauthCodeFlowParamsMock.tokenType,
+        });
         expect(AppAuth.authorize).toHaveBeenCalledWith({
           additionalParameters: {
             access_type: 'offline',
@@ -191,7 +196,6 @@ describe('Auth', function () {
           usePKCE: true,
           dangerouslyAllowInsecureHttpRequests: true,
         });
-
       });
     });
 

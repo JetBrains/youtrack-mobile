@@ -15,13 +15,13 @@ import {STORAGE_AUTH_PARAMS_KEY} from '../storage/storage';
 import {USER_AGENT} from '../usage/usage';
 
 import type {AppConfig} from '../../flow/AppConfig';
-import type {OAuthParams2} from '../../flow/Auth';
+import type {AuthParams} from '../../flow/Auth';
 import type {CustomError} from '../../flow/Error';
 import type {User} from '../../flow/User';
 
 
 export class AuthBase {
-  authParams: any;
+  authParams: AuthParams;
   LOAD_USER_URL: string;
   config: AppConfig;
   currentUser: User;
@@ -61,7 +61,7 @@ export class AuthBase {
     };
   }
 
-  static obtainToken(body: string, config: AppConfig): Promise<OAuthParams2> {
+  static obtainToken(body: string, config: AppConfig): Promise<AuthParams> {
     const hubTokenUrl = urlJoin(config.auth.serverUri, '/api/rest/oauth2/token');
     return fetch(hubTokenUrl, {
       method: 'POST',
@@ -82,7 +82,7 @@ export class AuthBase {
 
   static async obtainTokenWithOAuthCode(config: AppConfig): any {}
 
-  static obtainTokenByCredentials(login: string, password: string, config: AppConfig): Promise<OAuthParams2> {
+  static obtainTokenByCredentials(login: string, password: string, config: AppConfig): Promise<AuthParams> {
     log.info(`Obtaining token by credentials on ${config.auth.serverUri} for "${login}"`);
     return this.obtainToken([
       'grant_type=password',
@@ -100,15 +100,15 @@ export class AuthBase {
   }
 
   getTokenType(): string {
-    return '';
+    return this.authParams.token_type;
   }
 
   getAccessToken(): string {
-    return '';
+    return this.authParams.access_token;
   }
 
-  getRefreshToken(authParams: any): string {
-    return '';
+  getRefreshToken(authParams: AuthParams): string {
+    return authParams.refresh_token;
   }
 
   async logOut(): Promise<void> {
@@ -124,7 +124,7 @@ export class AuthBase {
   refreshToken(): Promise<any> {
     let prevToken: string;
     const config = this.config;
-    const requestToken = (authParams: OAuthParams2) => fetch(urlJoin(
+    const requestToken = (authParams: AuthParams) => fetch(urlJoin(
       config.auth.serverUri,
       '/api/rest/oauth2/token',
       '?grant_type=refresh_token',
@@ -135,7 +135,7 @@ export class AuthBase {
     });
 
     return this.getCachedAuthParams()
-      .then((authParams: OAuthParams2) => {
+      .then((authParams: AuthParams) => {
         log.info('Starting token refresh...');
 
         //store old refresh token
@@ -143,7 +143,7 @@ export class AuthBase {
         return requestToken(authParams);
       })
       .then(res => res.json())
-      .then(async (authParams: OAuthParams2) => {
+      .then(async (authParams: AuthParams) => {
         if (!authParams.error_code) {
           log.info('Token has been refreshed.');
           //restore old refresh token
@@ -155,25 +155,23 @@ export class AuthBase {
         }
         return authParams;
       })
-      .then((authParams: OAuthParams2) => this.loadCurrentUser(authParams))
-      .then((authParams: OAuthParams2) => this.cacheAuthParams(authParams, getAuthParamsKey()))
-      .then((authParams: OAuthParams2) => {
+      .then((authParams: AuthParams) => this.loadCurrentUser(authParams))
+      .then((authParams: AuthParams) => this.cacheAuthParams(authParams, getAuthParamsKey()))
+      .then((authParams: AuthParams) => {
         this.authParams = authParams;
         return authParams;
       });
   }
 
-  getAuthorizationHeaders(authParams: OAuthParams2 = this.authParams): {
+  getAuthorizationHeaders(authParams: AuthParams = this.authParams): {
     Authorization: string,
     'User-Agent': string
   } {
     if (!authParams) {
       throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
     }
-    const tokenType: string = authParams.tokenType || authParams.token_type;
-    const accessToken: string = authParams.accessToken || authParams.access_token;
     const authHeaders: { 'Authorization': string, 'User-Agent': string } = {
-      'Authorization': `${tokenType} ${accessToken}`,
+      'Authorization': `${authParams.token_type} ${authParams.access_token}`,
       'User-Agent': USER_AGENT,
     };
     log.info('getAuthorizationHeaders: ', authHeaders);
@@ -223,14 +221,14 @@ export class AuthBase {
       });
   }
 
-  async cacheAuthParams(authParams: OAuthParams2, timestamp: string): Promise<OAuthParams2> {
+  async cacheAuthParams(authParams: AuthParams, timestamp: string): Promise<AuthParams> {
     await storeSecurelyAuthParams(authParams, timestamp);
     return authParams;
   }
 
-  async getCachedAuthParams(): Promise<OAuthParams2> {
+  async getCachedAuthParams(): Promise<AuthParams> {
     const authParamsKey = getAuthParamsKey();
-    const authParams: ?OAuthParams2 = await getStoredSecurelyAuthParams(authParamsKey);
+    const authParams: ?AuthParams = await getStoredSecurelyAuthParams(authParamsKey);
     if (!authParams) {
       throw new Error('No stored auth params found');
     }

@@ -2,7 +2,7 @@
 
 import type {AuthConfiguration} from 'react-native-app-auth';
 
-type AuthParams = {
+export type AuthParams = {
   access_token: string,
   error_code?: string,
   refresh_token: string,
@@ -19,7 +19,7 @@ export type AuthConfig = {
   youtrackServiceId: string
 };
 
-type OAuthParams = {
+export type OAuthParams = {
   accessToken: string,
   accessTokenExpirationDate: string,
   authorizationCode: string,

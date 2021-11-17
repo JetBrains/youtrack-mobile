@@ -5,17 +5,22 @@ import {authorize, prefetchConfiguration, refresh, revoke} from 'react-native-ap
 import log from '../log/log';
 
 import type {AppConfig} from '../../flow/AppConfig';
-import type {OAuthConfig, OAuthParams2} from '../../flow/Auth';
+import type {AuthParams, OAuthConfig, OAuthParams2} from '../../flow/Auth';
 
 const ACCEPT_HEADER: string = 'application/json, text/plain, */*';
 const URL_ENCODED_TYPE: string = 'application/x-www-form-urlencoded';
 
-const createConfig = (config: AppConfig): OAuthConfig => {
+const normalizeAuthParams = (authParams: OAuthParams2): Promise<AuthParams> => {
   return {
-    additionalParameters: {
-      access_type: 'offline',
-      prompt: 'login',
-    },
+    access_token: authParams.access_token || authParams.accessToken,
+    accessTokenExpirationDate: authParams.accessTokenExpirationDate,
+    refresh_token: authParams.refresh_token || authParams.refreshToken,
+    token_type: authParams.token_type || authParams.tokenType,
+  };
+};
+
+const createConfig = (config: AppConfig, isRefresh: boolean = false): OAuthConfig => {
+  let authConfiguration: OAuthConfig = {
     clientId: config.auth.clientId,
     redirectUrl: config.auth.landingUrl,
     scopes: config.auth.scopes.split(' '),
@@ -23,9 +28,19 @@ const createConfig = (config: AppConfig): OAuthConfig => {
       authorizationEndpoint: `${config.auth.serverUri}/api/rest/oauth2/auth`,
       tokenEndpoint: `${config.auth.serverUri}/api/rest/oauth2/token`,
     },
-    usePKCE: true,
-    dangerouslyAllowInsecureHttpRequests: true,
   };
+  if (!isRefresh) {
+    authConfiguration = {
+      ...authConfiguration,
+      additionalParameters: {
+        access_type: 'offline',
+        prompt: 'login',
+      },
+      usePKCE: true,
+      dangerouslyAllowInsecureHttpRequests: true,
+    };
+  }
+  return authConfiguration;
 };
 
 const prefetch = (config: AppConfig): void => {
@@ -73,6 +88,7 @@ const doAuthorize = async (config: AppConfig): Promise<OAuthParams2> => {
 export {
   ACCEPT_HEADER,
   doAuthorize,
+  normalizeAuthParams,
   prefetch,
   refreshToken,
   revokeToken,

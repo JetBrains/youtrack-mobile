@@ -34,7 +34,7 @@ import {HIT_SLOP} from '../../components/common-styles/button';
 import styles from './log-in.styles';
 
 import type {AppConfig} from '../../flow/AppConfig';
-import type {OAuthParams2} from '../../flow/Auth';
+import type {AuthParams, OAuthParams2} from '../../flow/Auth';
 import type {Node} from 'React';
 import type {Theme, UIThemeColors} from '../../flow/Theme';
 
@@ -289,7 +289,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       }
       Router.EnterServer({serverUrl: youtrackUrl});
     },
-    onLogIn: (authParams: OAuthParams2) => dispatch(applyAuthorization(authParams)),
+    onLogIn: (authParams: AuthParams) => dispatch(applyAuthorization(authParams)),
     onShowDebugView: () => dispatch(openDebugView()),
   };
 };
