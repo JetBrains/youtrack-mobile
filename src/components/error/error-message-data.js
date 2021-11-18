@@ -6,6 +6,10 @@ import {DEFAULT_ERROR_MESSAGE} from './error-messages';
 import type {ErrorMessageData} from '../../flow/Error';
 import {HTTP_STATUS} from './error-http-codes';
 
+const useBrowserLoginOptionMessageData: ErrorMessageData = {
+  title: 'Two-factor authentication is enabled. Use "Log in with Browser" option.',
+};
+
 const unauthorizedErrorMessageData: ErrorMessageData = {
   title: 'Woah, you can\'t touch this!',
   description: 'You don\'t have sufficient permissions.',
@@ -22,7 +26,7 @@ const notFoundMessageData: ErrorMessageData = {
   description: 'It could mean that the issue doesn\'t exist or you don\'t have permission to view it',
 };
 
-export const ERROR_MESSAGE_DATA: Object = {
+export const ERROR_MESSAGE_DATA: { [string]: ErrorMessageData } = {
   DEFAULT: {
     title: 'Something went wrong',
   },
@@ -42,6 +46,9 @@ export const ERROR_MESSAGE_DATA: Object = {
   USER_BANNED: {
     title: 'User account is banned',
   },
+  '2fa_required': useBrowserLoginOptionMessageData,
+  'hub-auth-2fa-enabled': useBrowserLoginOptionMessageData,
+
   [HTTP_STATUS.UNAUTHORIZED]: unauthorizedErrorMessageData,
   [HTTP_STATUS.FORBIDDEN]: unauthorizedErrorMessageData,
   [HTTP_STATUS.BAD_REQUEST]: {
