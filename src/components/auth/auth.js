@@ -228,7 +228,8 @@ export default class AuthTest {
   async getCachedAuthParams(): Promise<AuthParams> {
     const authParams: ?AuthParams = await getStoredAuthParams();
     if (!authParams) {
-      throw new Error('No stored auth params found');
+      log.log('No stored auth params found');
+      throw new Error('');
     }
     return authParams;
   }
