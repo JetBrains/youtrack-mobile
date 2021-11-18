@@ -213,9 +213,7 @@ describe('Auth', function () {
       });
 
       it('should throw if there is no cached auth parameters', async () => {
-        await expect(auth.getCachedAuthParams())
-          .rejects
-          .toThrow('No stored auth params found');
+        await expect(auth.getCachedAuthParams()).rejects.toThrow('');
       });
 
       it('should get auth parameters', async () => {
