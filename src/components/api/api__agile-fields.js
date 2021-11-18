@@ -119,7 +119,6 @@ const BOARD_ON_LIST: any = toField([
   'name',
   'favorite',
   {sprints: ['id', 'name']},
-  'templates=false',
 ]);
 
 const SPRINT_WITH_BOARD: any = toField([

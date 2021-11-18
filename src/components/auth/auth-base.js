@@ -230,7 +230,8 @@ export class AuthBase {
     const authParamsKey = getAuthParamsKey();
     const authParams: ?AuthParams = await getStoredSecurelyAuthParams(authParamsKey);
     if (!authParams) {
-      throw new Error('No stored auth params found');
+      log.log('No stored auth params found');
+      throw new Error('');
     }
     return authParams;
   }

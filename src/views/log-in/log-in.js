@@ -21,8 +21,8 @@ import Keystore from '../../components/keystore/keystore';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
+import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 import {openDebugView, applyAuthorization} from '../../actions/app-actions';
-import {LOG_IN_2FA_TIP} from '../../components/error-message/error-text-messages';
 
 import {resolveErrorMessage} from '../../components/error/error-resolver';
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
@@ -108,7 +108,11 @@ export class LogIn extends Component<Props, State> {
       onLogIn(authParams);
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Error');
-      const errorMessage = err.error_description || err.message;
+      const errorMessage: string = (
+        ERROR_MESSAGE_DATA[err.error]
+          ? ERROR_MESSAGE_DATA[err.error].title
+          : err.error_description || err.message
+      );
       this.setState({errorMessage: errorMessage, loggingIn: false});
     }
   }
@@ -248,7 +252,6 @@ export class LogIn extends Component<Props, State> {
                     <View style={styles.error}>
                       <ErrorMessageInline
                         error={this.state.errorMessage}
-                        tips={LOG_IN_2FA_TIP}
                       />
                     </View>
                   )}

@@ -105,6 +105,7 @@ export default class AgileAPI extends ApiBase {
   async getAgileBoardsList(): Promise<Array<BoardOnList>> {
     const queryString = qs.stringify({
       fields: agileFields.boardOnList.toString(),
+      templates: false,
     });
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles?${queryString}`);
   }
