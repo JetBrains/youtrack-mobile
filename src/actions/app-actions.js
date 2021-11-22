@@ -31,12 +31,13 @@ import {
   storageStateAuthParamsKey,
   storeAccounts,
 } from '../components/storage/storage';
-import {getAuthParamsKey, getStoredSecurelyAuthParams} from '../components/storage/storage__oauth';
+import {getStoredSecurelyAuthParams} from '../components/storage/storage__oauth';
 import {hasType} from '../components/api/api__resource-types';
 import {isIOSPlatform} from '../util/util';
 import {getErrorMessage, isUnsupportedFeatureError} from '../components/error/error-resolver';
 import {loadConfig} from '../components/config/config';
 import {logEvent} from '../components/log/log-helper';
+import {normalizeAuthParams} from '../components/auth/oauth2-helper';
 import {notify, notifyError} from '../components/notification/notification';
 import {setApi} from '../components/api/api__instance';
 import {storeSearchContext} from '../views/issues/issues-actions';
@@ -242,11 +243,10 @@ function applyAccount(config: AppConfig, auth: OAuth2, authParams: OAuthParams2)
     await storeAccounts(newOtherAccounts);
     dispatch(receiveOtherAccounts(newOtherAccounts));
     const creationTimestamp: number = Date.now();
-    const authStorageStateKey: string = getAuthParamsKey();
     await flushStorage({
       ...initialState,
       creationTimestamp: creationTimestamp,
-      [authStorageStateKey]: creationTimestamp.toString(),
+      [storageStateAuthParamsKey]: creationTimestamp.toString(),
     });
 
     await auth.cacheAuthParams(authParams, creationTimestamp.toString());
@@ -279,7 +279,7 @@ export function addAccount(serverUrl: string = ''): Action {
       });
       log.info('Authorized on new server, applying');
 
-      await dispatch(applyAccount(config, tmpAuthInstance, authParams));
+      await dispatch(applyAccount(config, tmpAuthInstance, normalizeAuthParams(authParams)));
 
       const user: ?User = getStorageState().currentUser;
       const userName: string = user?.name || '';
@@ -339,7 +339,7 @@ export function changeAccount(account: StorageState, removeCurrentAccount?: bool
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const state: AppState = getState();
     const config: AppConfig = ((account.config: any): AppConfig);
-    const authParams: ?OAuthParams2 = await getStoredSecurelyAuthParams(getAuthParamsKey());
+    const authParams: ?OAuthParams2 = await getStoredSecurelyAuthParams(account.authParamsKey);
     if (!authParams) {
       const errorMessage: string = 'Account doesn\'t have valid authorization, cannot switch onto it.';
       notify(errorMessage);

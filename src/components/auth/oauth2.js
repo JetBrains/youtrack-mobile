@@ -15,8 +15,7 @@ export default class OAuth2 extends AuthBase {
   authParams: AuthParams;
 
   static async obtainTokenWithOAuthCode(config: AppConfig): Promise<AuthParams> {
-    const authParams: OAuthParams = await doAuthorize(config);
-    return normalizeAuthParams(authParams);
+    return await doAuthorize(config);
   }
 
   async checkAuthorization(): Promise<void> {
@@ -24,7 +23,7 @@ export default class OAuth2 extends AuthBase {
     return await this.loadCurrentUser(this.authParams);
   }
 
-  async refreshTokenOAuth(): Promise<AuthParams> {
+  async refreshToken(): Promise<AuthParams> {
     let authParams: OAuthParams;
     const prevAuthParams: AuthParams = ((await this.getCachedAuthParams(): any): AuthParams);
     log.info('OAuth2 token refresh: start...', prevAuthParams);
@@ -46,15 +45,12 @@ export default class OAuth2 extends AuthBase {
         ...this.authParams,
         ...authParams,
       });
-      await this.cacheAuthParams(updatedOauthParams, getAuthParamsKey());
+      const authParamsKey = getAuthParamsKey();
+      await this.cacheAuthParams(updatedOauthParams, authParamsKey);
       await this.loadCurrentUser(updatedOauthParams);
     }
 
     return authParams;
-  }
-
-  async refreshToken(): Promise<any> {
-    return this.authParams?.accessTokenExpirationDate ? this.refreshTokenOAuth() : super.refreshToken();
   }
 
 }

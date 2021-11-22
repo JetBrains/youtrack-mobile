@@ -14,6 +14,7 @@ let authParamsMockKey;
 let requests;
 let clock;
 let auth;
+let AppAuth;
 
 describe('Auth', function () {
 
@@ -50,6 +51,10 @@ describe('Auth', function () {
       global.fetch.onRequest = () => {};
 
       __setStorageState({authParamsKey: authParamsMockKey});
+    });
+
+    beforeEach(() => {
+      AppAuth = require('react-native-app-auth');
     });
 
     afterEach(function () {
@@ -116,34 +121,31 @@ describe('Auth', function () {
       });
 
       it('should refresh token', async () => {
-
-        const response = {access_token: 'new-token', refresh_token: 'new-refresh'};
-
-        global.fetch.onRequest = options => {
-          if (options.url.includes('/api/rest/oauth2/token')) {
-            return options.resolve({status: 200, json: () => (response)});
-          }
-          options.resolve({status: 200, json: () => ({})});
+        const responseMock = {
+          accessToken: 'new access token',
         };
+        AppAuth.refresh.mockResolvedValueOnce(responseMock);
+        jest.spyOn(auth, 'loadCurrentUser').mockResolvedValueOnce({});
 
         const authParams = await auth.refreshToken();
 
-        authParams.should.deep.equal(response);
-        auth.authParams.should.equal(authParams);
+        expect(AppAuth.refresh).toHaveBeenCalledWith({
+          clientId: configMock.auth.clientId,
+          clientSecret: configMock.auth.clientSecret,
+          redirectUrl: configMock.auth.landingUrl,
+          serviceConfiguration: {
+            authorizationEndpoint: `${configMock.auth.serverUri}/api/rest/oauth2/auth`,
+            tokenEndpoint: `${configMock.auth.serverUri}/api/rest/oauth2/token`,
+          },
+        }, {refreshToken: authParamsMock.refresh_token});
+        expect(authParams).toEqual(responseMock);
       });
 
-      it('should fail refresh if permission management service is unavailable', () => {
-        const response = {error_code: 500};
-        const promise = auth.refreshToken();
+      it('should fail refresh if permission management service is unavailable', async () => {
+        const error = new Error('Service unavailable');
+        AppAuth.refresh.mockRejectedValueOnce(error);
 
-        global.fetch.onRequest = options => {
-          if (options.url.includes('/api/rest/oauth2/token')) {
-            return options.resolve({status: 200, json: () => (response)});
-          }
-          options.resolve({status: 200, json: () => ({})});
-        };
-
-        return promise.should.be.rejected;
+        await expect(auth.refreshToken()).rejects.toThrow(error);
       });
 
       it('should authorize via login/password', () => {
@@ -165,7 +167,6 @@ describe('Auth', function () {
       });
 
       it('should authorize with OAuth2 code flow', async () => {
-        const AppAuth = require('react-native-app-auth');
         const oauthCodeFlowParamsMock = {
           accessToken: 'accessToken',
           refreshToken: 'refreshToken',
@@ -187,13 +188,14 @@ describe('Auth', function () {
             prompt: 'login',
           },
           clientId: configMock.auth.clientId,
+          clientSecret: 'client-secret',
           redirectUrl: configMock.auth.landingUrl,
           scopes: configMock.auth.scopes.split(' '),
           serviceConfiguration: {
             authorizationEndpoint: `${configMock.auth.serverUri}/api/rest/oauth2/auth`,
             tokenEndpoint: `${configMock.auth.serverUri}/api/rest/oauth2/token`,
           },
-          usePKCE: true,
+          usePKCE: false,
           dangerouslyAllowInsecureHttpRequests: true,
         });
       });

@@ -6,7 +6,8 @@ export type AuthParams = {
   access_token: string,
   error_code?: string,
   refresh_token: string,
-  token_type: string
+  token_type: string,
+  scope: string,
 };
 
 export type AuthConfig = {

@@ -12,18 +12,21 @@ const URL_ENCODED_TYPE: string = 'application/x-www-form-urlencoded';
 
 const normalizeAuthParams = (authParams: OAuthParams2): Promise<AuthParams> => {
   return {
-    access_token: authParams.access_token || authParams.accessToken,
+    access_token: authParams.accessToken || authParams.access_token,
     accessTokenExpirationDate: authParams.accessTokenExpirationDate,
-    refresh_token: authParams.refresh_token || authParams.refreshToken,
-    token_type: authParams.token_type || authParams.tokenType,
+    expires_in: authParams.expires_in,
+    refresh_token: authParams.refreshToken || authParams.refresh_token,
+    scope: authParams.scope,
+    scopes: authParams.scopes,
+    token_type: authParams.tokenType || authParams.token_type,
   };
 };
 
 const createConfig = (config: AppConfig, isRefresh: boolean = false): OAuthConfig => {
   let authConfiguration: OAuthConfig = {
     clientId: config.auth.clientId,
+    clientSecret: config.auth.clientSecret,
     redirectUrl: config.auth.landingUrl,
-    scopes: config.auth.scopes.split(' '),
     serviceConfiguration: {
       authorizationEndpoint: `${config.auth.serverUri}/api/rest/oauth2/auth`,
       tokenEndpoint: `${config.auth.serverUri}/api/rest/oauth2/token`,
@@ -36,8 +39,9 @@ const createConfig = (config: AppConfig, isRefresh: boolean = false): OAuthConfi
         access_type: 'offline',
         prompt: 'login',
       },
-      usePKCE: true,
       dangerouslyAllowInsecureHttpRequests: true,
+      scopes: config.auth.scopes.split(' '),
+      usePKCE: !config.auth.clientSecret,
     };
   }
   return authConfiguration;
@@ -50,10 +54,10 @@ const prefetch = (config: AppConfig): void => {
   });
 };
 
-const revokeToken = async (config: AppConfig, accessToken: string): Promise<void> => {
+const revokeToken = async (config: AppConfig, tokenToRevoke: string): Promise<void> => {
   try {
     await revoke(createConfig(config), {
-      tokenToRevoke: accessToken,
+      tokenToRevoke,
       sendClientId: true,
     });
     log.log('Access token revoked');
@@ -64,7 +68,7 @@ const revokeToken = async (config: AppConfig, accessToken: string): Promise<void
 
 const refreshToken = async (config: AppConfig, refreshToken: string): Promise<OAuthParams2> => {
   try {
-    const newOAuthParams: OAuthParams2 = await refresh(createConfig(config), {refreshToken});
+    const newOAuthParams: OAuthParams2 = await refresh(createConfig(config, true), {refreshToken});
     log.log('Access token refreshed');
     return newOAuthParams;
   } catch (error) {
@@ -73,11 +77,11 @@ const refreshToken = async (config: AppConfig, refreshToken: string): Promise<OA
   }
 };
 
-const doAuthorize = async (config: AppConfig): Promise<OAuthParams2> => {
+const doAuthorize = async (config: AppConfig): Promise<AuthParams> => {
   try {
     const authParams: OAuthParams2 = await authorize(createConfig(config));
     log.log('Access token received');
-    return authParams;
+    return normalizeAuthParams(authParams);
   } catch (error) {
     log.warn('Authorization failed', error.message);
     throw error;

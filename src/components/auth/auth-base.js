@@ -116,52 +116,12 @@ export class AuthBase {
       EncryptedStorage.setItem(STORAGE_AUTH_PARAMS_KEY, '');
     });
     if (this.authParams.accessToken) {
-      await revokeToken(this.config, this.authParams.accessToken);
+      await revokeToken(this.config, this.getAccessToken());
     }
     this.authParams = null;
   }
 
-  refreshToken(): Promise<any> {
-    let prevToken: string;
-    const config = this.config;
-    const requestToken = (authParams: AuthParams) => fetch(urlJoin(
-      config.auth.serverUri,
-      '/api/rest/oauth2/token',
-      '?grant_type=refresh_token',
-      `&refresh_token=${this.getRefreshToken(authParams)}`
-    ), {
-      method: 'POST',
-      headers: AuthBase.getHeaders(config),
-    });
-
-    return this.getCachedAuthParams()
-      .then((authParams: AuthParams) => {
-        log.info('Starting token refresh...');
-
-        //store old refresh token
-        prevToken = authParams.refresh_token;
-        return requestToken(authParams);
-      })
-      .then(res => res.json())
-      .then(async (authParams: AuthParams) => {
-        if (!authParams.error_code) {
-          log.info('Token has been refreshed.');
-          //restore old refresh token
-          authParams.refresh_token = authParams.refresh_token || prevToken;
-        } else {
-          const message: string = 'Token refreshing failed';
-          log.warn(message, authParams);
-          throw authParams;
-        }
-        return authParams;
-      })
-      .then((authParams: AuthParams) => this.loadCurrentUser(authParams))
-      .then((authParams: AuthParams) => this.cacheAuthParams(authParams, getAuthParamsKey()))
-      .then((authParams: AuthParams) => {
-        this.authParams = authParams;
-        return authParams;
-      });
-  }
+  refreshToken(): Promise<any> {}
 
   getAuthorizationHeaders(authParams: AuthParams = this.authParams): {
     Authorization: string,
