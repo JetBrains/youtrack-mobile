@@ -56,13 +56,13 @@ const createArticleList = (articles: Array<Article>, isExpanded?: boolean): Arti
   treeHelper.createArticleList(articles, isExpanded)
 );
 
-export const getPinnedProjects = async (api: Api): Promise<Array<Folder>> => {
+export const getPinnedNonTemplateProjects = async (api: Api): Promise<Array<Folder>> => {
   const [error, pinnedFolders]: [?CustomError, Folder] = await until(api.issueFolder.getPinnedIssueFolder());
   if (error) {
     notify('Unable to load favorite projects', error);
     return [];
   } else {
-    return ((pinnedFolders: any): Array<Folder>).filter(hasType.project);
+    return ((pinnedFolders: any): Array<Folder>).filter((it: Folder) => !it.template).filter(hasType.project);
   }
 };
 
@@ -95,7 +95,7 @@ const getArticleList = (reset: boolean = true) =>
       dispatch(setLoading(true));
     }
 
-    const pinnedProjects: Array<Folder> = await getPinnedProjects(api);
+    const pinnedProjects: Array<Folder> = await getPinnedNonTemplateProjects(api);
     if (pinnedProjects.length === 0) {
       dispatch(setLoading(false));
       dispatch(storeArticlesList(null));
