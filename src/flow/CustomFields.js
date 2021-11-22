@@ -28,7 +28,8 @@ export type IssueProject = {
       timeSpent: ?TimeTrackingFieldInfo,
       workItemTypes: Array<WorkItemType>
     }
-  }
+  },
+  template:boolean,
 }
 
 export type ColorField = {
