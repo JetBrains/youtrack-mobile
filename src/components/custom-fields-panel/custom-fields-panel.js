@@ -187,7 +187,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
           const projects = await this.api.getProjects(query);
 
           return projects
-            .filter(project => !project.archived)
+            .filter(project => !project.archived && !project.template)
             .filter(project => hasPermission.canCreateIssueToProject(project));
         },
         multi: false,
