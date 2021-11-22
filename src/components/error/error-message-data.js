@@ -44,7 +44,7 @@ export const ERROR_MESSAGE_DATA: { [string]: ErrorMessageData } = {
     title: 'User account is banned',
   },
   '2fa_required': {
-    title: 'Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\nTo log in on this screen, enter your username and a one-time application password.',
+    title: 'Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n\nTo log in on this screen, enter your username and a one-time application password.',
   },
 
   [HTTP_STATUS.UNAUTHORIZED]: unauthorizedErrorMessageData,
