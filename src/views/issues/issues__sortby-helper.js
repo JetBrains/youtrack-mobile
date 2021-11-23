@@ -9,13 +9,17 @@ import type {Folder} from '../../flow/User';
 import type {IssueFieldSortProperty, SearchSuggestions} from '../../flow/Sorting';
 
 
-const doAssist = async (params: { context: Folder, query: string, ... } = {}): Promise<SearchSuggestions> => {
+const doAssist = async (params: {
+  context: ?Folder,
+  query: string,
+  sortProperties?: Array<IssueFieldSortProperty>,
+}): Promise<SearchSuggestions> => {
   const api: API = getApi();
-  const {context, query = '', ...rest} = params;
+  const {context, query = '', sortProperties} = params;
   return await api.search.assist({
     folder: context?.id ? context : undefined,
     query,
-    ...rest,
+    sortProperties,
   });
 };
 
@@ -37,7 +41,7 @@ const getSortPropertyName = (sortProperty: IssueFieldSortProperty): string => {
   );
 };
 
-const isRelevanceSortProperty = (sortProperty: IssueFieldSortProperty) => {
+const isRelevanceSortProperty = (sortProperty: IssueFieldSortProperty): boolean => {
   return sortProperty.$type === 'RelevanceSortProperty';
 };
 
