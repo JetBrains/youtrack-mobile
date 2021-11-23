@@ -51,12 +51,16 @@ import type {IssueOnList} from '../../flow/Issue';
 import type {IssuesState} from './issues-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 
-type Props = $Shape<IssuesState & typeof issueActions & {
+type IssuesActions = typeof issueActions;
+type Props = {
+  ...IssuesState,
+  ...IssuesActions,
   auth: Auth,
   api: Api,
-  initialSearchQuery: ?string,
+  isAppStart?: boolean,
   onOpenContextSelect: () => any
-}>;
+};
+
 
 type State = {
   isEditQuery: boolean,
@@ -77,7 +81,7 @@ export class Issues extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.props.initializeIssuesList(this.props.initialSearchQuery);
+    this.props.initializeIssuesList(this.props.isAppStart);
 
     this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
       if (prevRouteName === routeMap.Issues && routeName !== routeMap.Issues) {
@@ -154,7 +158,7 @@ export class Issues extends Component<Props, State> {
 
   _renderRefreshControl(uiTheme: UITheme) {
     return <RefreshControl
-      refreshing={this.props.isRefreshing}
+      refreshing={this.props.isRefreshing && !!this.props.isAppStart}
       //$FlowFixMe
       onRefresh={this.props.refreshIssues}
       tintColor={uiTheme.colors.$link}
@@ -303,13 +307,15 @@ export class Issues extends Component<Props, State> {
   };
 
   renderSearchQuery: ((uiTheme: UITheme) => Node) = (uiTheme: UITheme) => {
-    const {query, issuesCount, openSavedSearchesSelect, searchContext} = this.props;
-
+    const {query, issuesCount, openSavedSearchesSelect, searchContext, isAppStart} = this.props;
+    const Component: any = isAppStart ? AnimatedView : View;
     return (
-      <AnimatedView
-        useNativeDriver
-        duration={500}
-        animation="fadeIn"
+      <Component
+        {...(isAppStart ? {
+          useNativeDriver: true,
+          duration: isAppStart ? 500 : 0,
+          animation: 'fadeIn',
+        } : {})}
         style={styles.listHeader}
       >
         <View style={styles.listHeaderTop}>
@@ -331,14 +337,14 @@ export class Issues extends Component<Props, State> {
         </View>
 
         <View style={styles.toolbar}>
-          <IssuesCount issuesCount={issuesCount}/>
-          <IssuesSortBy
+          {!isAppStart && <IssuesCount issuesCount={issuesCount}/>}
+          {!isAppStart && <IssuesSortBy
             context={searchContext}
             onApply={(q: string) => {this.onQueryUpdate(q);}}
             query={query}
-          />
+          />}
         </View>
-      </AnimatedView>
+      </Component>
     );
   };
 
@@ -447,8 +453,9 @@ export class Issues extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: AppState, ownProps: { isAppStart?: boolean }) => {
   return {
+    ...ownProps,
     ...state.issueList,
     ...state.app,
     searchContext: state.app?.user?.profiles?.general?.searchContext,

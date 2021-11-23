@@ -97,7 +97,7 @@ export default EStyleSheet.create({
     marginTop: UNIT,
   },
   listHeader: {
-    minHeight: 105,
+    minHeight: 108,
   },
   listHeaderTop: {
     flexDirection: 'row',
