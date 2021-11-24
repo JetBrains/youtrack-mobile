@@ -61,7 +61,7 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
         <SectionList
           contentContainerStyle={styles.list}
 
-          testID="selectItems"
+          testID="test:id/selectItems"
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"
 

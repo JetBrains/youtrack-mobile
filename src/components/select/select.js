@@ -247,7 +247,7 @@ export default class Select extends Component<SelectProps, SelectState> {
   renderItems(): Node {
     return (
       <FlatList
-        testID="selectItems"
+        testID="test:id/selectItems"
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
 
