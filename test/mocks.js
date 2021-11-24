@@ -14,7 +14,7 @@ async function mockStorage() {
   return await storage.populateStorage();
 }
 
-async function setStorage(state) {
+async function setStorage(state = {}) {
   return await storage.__setStorageState(state);
 }
 

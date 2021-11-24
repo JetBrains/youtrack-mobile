@@ -2,7 +2,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import sinon from 'sinon';
 
-import * as Mocks from '../../../test/mocks';
+import Mocks from '../../../test/mocks';
 
 import * as actions from './issue-actions';
 import * as activityCommentActions from './activity/issue-activity__comment-actions';
@@ -10,34 +10,35 @@ import * as types from './issue-action-types';
 
 import * as activityHelper from './activity/issue-activity__helper';
 
-import {convertCommentsToActivityPage} from '../../components/activity/activity-helper';
 
-let fakeApi;
-const getApi = () => fakeApi;
+let apiMock;
+const getApi = () => apiMock;
 const ISSUE_ID = 'test-id';
 
 const mockStore = configureMockStore([thunk.withExtraArgument(getApi)]);
 
 describe('Issue view actions', () => {
   let store;
-  let fakeIssue;
-  let fakeComment;
+  let issueMock;
+  let commentMock;
 
   beforeEach(() => {
-    fakeIssue = {
+    jest.restoreAllMocks();
+
+    issueMock = {
       id: ISSUE_ID,
     };
-    fakeComment = {id: 'fake-comment', text: 'fake-text'};
-    fakeApi = {
+    commentMock = {id: 'fake-comment', text: 'fake-text'};
+    apiMock = {
       issue: {
-        getIssue: sinon.stub().returns(fakeIssue),
-        getIssueComments: sinon.stub().returns([fakeComment]),
-        submitComment: sinon.stub().returns(fakeComment),
-        getActivitiesPage: sinon.stub().returns([]),
+        getIssue: sinon.stub().returns(issueMock),
+        getIssueComments: sinon.stub().returns([commentMock]),
+        submitDraftComment: jest.fn(),
+        getActivitiesPage: jest.fn(),
       },
     };
     store = mockStore({
-      issueState: {issueId: ISSUE_ID, issue: fakeIssue},
+      issueState: {issueId: ISSUE_ID, issue: issueMock},
       issueActivity: {
         activityPage: [],
       },
@@ -47,22 +48,26 @@ describe('Issue view actions', () => {
   it('should load issue', async () => {
     await store.dispatch(actions.loadIssue());
 
-    fakeApi.issue.getIssue.should.have.been.calledWith(ISSUE_ID);
+    apiMock.issue.getIssue.should.have.been.calledWith(ISSUE_ID);
     const dispatched = store.getActions();
-    expect(dispatched[0]).toEqual({type: types.SET_ISSUE_ID, issueId: fakeIssue.id});
-    expect(dispatched[1]).toEqual({type: types.RECEIVE_ISSUE, issue: fakeIssue});
+    expect(dispatched[0]).toEqual({type: types.SET_ISSUE_ID, issueId: issueMock.id});
+    expect(dispatched[1]).toEqual({type: types.RECEIVE_ISSUE, issue: issueMock});
   });
 
   it('should add comment', async () => {
-    Mocks.default.setStorage({});
+    Mocks.setStorage();
+    jest.spyOn(activityHelper, 'isIssueActivitiesAPIEnabled').mockResolvedValueOnce(true);
+    apiMock.issue.submitDraftComment.mockResolvedValueOnce(commentMock);
+    const activityPageMock = [{}];
+    apiMock.issue.getActivitiesPage.mockResolvedValueOnce(activityPageMock);
 
-    await store.dispatch(activityCommentActions.addComment(fakeComment));
+    await store.dispatch(activityCommentActions.submitDraftComment(commentMock));
 
-    fakeApi.issue.submitComment.should.have.been.calledWith(ISSUE_ID, fakeComment);
+    await expect(apiMock.issue.submitDraftComment).toHaveBeenCalledWith(ISSUE_ID, commentMock);
 
-    const dispatched = store.getActions();
-    expect(dispatched[0]).toEqual({type: types.RECEIVE_ACTIVITY_API_AVAILABILITY, activitiesEnabled: false});
-    expect(dispatched[1]).toEqual({
+    const storeActions = store.getActions();
+    expect(storeActions[0]).toEqual({type: types.SET_EDITING_COMMENT, comment: null});
+    expect(storeActions[1]).toEqual({
       type: types.RECEIVE_ACTIVITY_CATEGORIES,
       issueActivityTypes: [
         {id: 'IssueComments', name: 'Comments'},
@@ -77,10 +82,7 @@ describe('Issue view actions', () => {
         {id: 'IssueVcs', name: 'VCS changes'},
       ],
     });
-    expect(dispatched[2]).toEqual({
-      type: types.RECEIVE_ACTIVITY_PAGE,
-      activityPage: convertCommentsToActivityPage([fakeComment]),
-    });
+    expect(storeActions[2]).toEqual({type: types.RECEIVE_ACTIVITY_API_AVAILABILITY, activitiesEnabled: true});
   });
 
 
@@ -106,7 +108,7 @@ describe('Issue view actions', () => {
     it('should refresh issue details', async () => {
       await store.dispatch(actions.refreshIssue());
 
-      fakeApi.issue.getIssue.should.have.been.calledWith(ISSUE_ID);
+      apiMock.issue.getIssue.should.have.been.calledWith(ISSUE_ID);
 
       const dispatched = store.getActions();
       expect(dispatched[0]).toEqual({type: types.START_ISSUE_REFRESHING});
