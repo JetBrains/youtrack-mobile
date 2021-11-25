@@ -74,7 +74,9 @@ export default class ErrorMessage extends PureComponent<ErrorMessageProps, State
         <Icon size={iconSize} color={EStyleSheet.value('$navigation')}/>
 
         <Text
-          testID="error-message"
+          testID="test:id/error-message"
+          accessibilityLabel="error-message"
+          accessible={true}
           style={styles.errorTitle}
         >
           {errorMessageData?.title}
