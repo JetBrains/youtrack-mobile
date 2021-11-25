@@ -34,6 +34,7 @@ import styles from './inbox.styles';
 
 import type {Activity} from '../../flow/Activity';
 import type {AppConfigFilled} from '../../flow/AppConfig';
+import type {AppState} from '../../reducers';
 import type {InboxState} from './inbox-reducers';
 import type {IssueComment} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
@@ -612,11 +613,12 @@ class Inbox extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: AppState, ownProps) => {
   return {
     ...state.inbox,
     ...ownProps,
     currentUser: state.app.user,
+    isTablet: state.app.isTablet,
   };
 };
 

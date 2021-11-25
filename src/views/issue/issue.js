@@ -56,6 +56,7 @@ type AdditionalProps = {
   removeAttachment: (attach: Attachment) => any,
   isTagsSelectVisible: boolean,
   navigateToActivity: boolean,
+  isModal?: boolean,
 };
 
 type IssueProps = IssueState & typeof issueActions & AdditionalProps;
@@ -210,14 +211,22 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   }
 
   handleOnBack = () => {
-    const returned = Router.pop(false, {issueId: this.props?.issue?.id});
-    if (!returned) {
+    const {isModal} = this.props;
+    const returned = Router.pop(isModal, isModal ? undefined : {issueId: this.props?.issue?.id});
+    if (!isModal && !returned) {
       Router.Issues();
     }
   };
 
-  renderBackIcon(uiTheme: UITheme) {
-    return <IconBack color={uiTheme.colors.$link}/>;
+  renderBackIcon = () => {
+    const {isModal, isTablet} = this.props;
+    const iconProps: { color: string, size: ?number } = {
+      color: this.uiTheme.colors.$link,
+    };
+    if (isModal) {
+      return <IconClose size={21} {...iconProps}/>;
+    }
+    return isTablet ? null : <IconBack {...iconProps} />;
   }
 
   canStar = (): boolean => {
@@ -290,7 +299,6 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       getIssueLinksTitle,
       onLinkIssue,
       loadIssuesXShort,
-      isTablet,
     } = this.props;
 
     const issueIdReadable = this.renderHeaderIssueTitle();
@@ -298,7 +306,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       const isIssueLoaded: boolean = this.isIssueLoaded();
       return (
         <Header
-          leftButton={!isTablet && this.renderBackIcon(this.uiTheme)}
+          leftButton={this.renderBackIcon()}
           rightButton={isIssueLoaded ? this.renderActionsIcon(this.uiTheme) : null}
           extraButton={isIssueLoaded ? this.renderStar(this.uiTheme) : null}
           onRightButtonClick={() => {

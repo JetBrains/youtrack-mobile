@@ -13,6 +13,7 @@ import Auth from '../../components/auth/auth';
 import BoardHeader from './board-header';
 import BoardScroller from '../../components/board-scroller/board-scroller';
 import ErrorMessage from '../../components/error-message/error-message';
+import Issue from '../issue/issue';
 import log from '../../components/log/log';
 import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
 import QueryPreview from '../../components/query-assist/query-preview';
@@ -176,10 +177,22 @@ class AgileBoard extends Component<Props, State> {
   _onTapIssue = (issue: IssueOnList) => {
     log.debug(`Opening issue "${issue.id}" from Agile Board`);
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
-    Router.Issue({
-      issuePlaceholder: issue,
-      issueId: issue.id,
-    });
+    if (this.props.isTablet) {
+      Router.PageModal({
+        children: (
+          <Issue
+            issuePlaceholder={issue}
+            issueId={issue.id}
+            isModal={true}
+          />
+        ),
+      });
+    } else {
+      Router.Issue({
+        issuePlaceholder: issue,
+        issueId: issue.id,
+      });
+    }
   };
 
   _getScrollableWidth = (): number | null => {
