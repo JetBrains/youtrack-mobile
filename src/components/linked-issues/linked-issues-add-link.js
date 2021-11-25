@@ -18,8 +18,7 @@ import {getApi} from '../api/api__instance';
 import {getAssistSuggestions} from '../query-assist/query-assist-helper';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 import {IconBack, IconClose} from '../icon/icon';
-import {IconNothingFound} from '../icon/icon-no-found';
-import {noIssuesFoundIconSize} from '../../views/issues/issues.styles';
+import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound} from '../icon/icon-pictogram';
 import {UNIT} from '../variables/variables';
 import {View as AnimatedView} from 'react-native-animatable';
 
@@ -215,7 +214,7 @@ const LinkedIssuesAddLink = (props: Props): Node => {
           !isLoading && issues.length === 0 ? () => (
             <ErrorMessage style={styles.container} errorMessageData={{
               ...ERROR_MESSAGE_DATA.NO_ISSUES_FOUND,
-              icon: () => <IconNothingFound size={noIssuesFoundIconSize / 1.5} style={styles.noIssuesMessage}/>,
+              icon: () => <IconNothingFound size={ICON_PICTOGRAM_DEFAULT_SIZE / 1.5} style={styles.noIssuesMessage}/>,
             }}/>
           ) : null
         )}

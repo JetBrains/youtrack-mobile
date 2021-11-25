@@ -30,7 +30,7 @@ import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAdd, IconAngleDown, IconBookmark} from '../../components/icon/icon';
-import {IconNothingFound} from '../../components/icon/icon-no-found';
+import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound, IconNothingSelected} from '../../components/icon/icon-pictogram';
 import {initialState} from './issues-reducers';
 import {isReactElement} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
@@ -42,7 +42,7 @@ import {ThemeContext} from '../../components/theme/theme-context';
 import {UNIT} from '../../components/variables/variables';
 import {View as AnimatedView} from 'react-native-animatable';
 
-import styles, {noIssuesFoundIconSize} from './issues.styles';
+import styles from './issues.styles';
 
 import type Api from '../../components/api/api';
 import type Auth from '../../components/auth/auth';
@@ -444,7 +444,7 @@ export class Issues extends Component<Props, State> {
         : (!this.hasIssues() ? {
           errorMessageData: {
             ...ERROR_MESSAGE_DATA.NO_ISSUES_FOUND,
-            icon: () => <IconNothingFound size={noIssuesFoundIconSize} style={styles.noIssuesFoundIcon}/>,
+            icon: () => <IconNothingFound size={ICON_PICTOGRAM_DEFAULT_SIZE} style={styles.noIssuesFoundIcon}/>,
           },
         } : null)
     );
@@ -480,7 +480,8 @@ export class Issues extends Component<Props, State> {
     if (!focusedIssue || !this.hasIssues()) {
       return (
         <View style={styles.tabletContainerIssueEmpty}>
-          <Text style={styles.mainText}>Select issue</Text>
+          {<IconNothingSelected size={ICON_PICTOGRAM_DEFAULT_SIZE} style={styles.noIssuesSelected}/>}
+          <Text style={styles.headerText}>Select an issue from the list</Text>
         </View>
       );
     }

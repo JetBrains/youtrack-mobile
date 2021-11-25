@@ -20,7 +20,7 @@ import {HIT_SLOP} from '../../components/common-styles/button';
 import {getGroupedByFieldNameAlphabetically} from '../../components/search/sorting';
 import {getStorageState} from '../../components/storage/storage';
 import {IconAngleDown, IconAngleRight, IconBack, IconContextActions} from '../../components/icon/icon';
-import {IconNoProjectFound, IconNothingFound} from '../../components/icon/icon-no-found';
+import {IconNoProjectFound, IconNothingFound} from '../../components/icon/icon-pictogram';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';

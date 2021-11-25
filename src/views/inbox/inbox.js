@@ -23,7 +23,7 @@ import {getReadableID, ytDate} from '../../components/issue-formatter/issue-form
 import {getStorageState} from '../../components/storage/storage';
 import {handleRelativeUrl} from '../../components/config/config';
 import {hasType} from '../../components/api/api__resource-types';
-import {IconNothingFound} from '../../components/icon/icon-no-found';
+import {IconNothingFound} from '../../components/icon/icon-pictogram';
 import {isReactElement} from '../../util/util';
 import {LoadMoreList} from '../../components/progress/load-more-list';
 import {SkeletonIssueActivities} from '../../components/skeleton/skeleton';
