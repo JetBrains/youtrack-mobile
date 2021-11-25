@@ -17,7 +17,7 @@ import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
 import {getApi} from '../api/api__instance';
 import {getAssistSuggestions} from '../query-assist/query-assist-helper';
 import {getReadableID} from '../issue-formatter/issue-formatter';
-import {IconBack} from '../icon/icon';
+import {IconBack, IconClose} from '../icon/icon';
 import {IconNothingFound} from '../icon/icon-no-found';
 import {noIssuesFoundIconSize} from '../../views/issues/issues.styles';
 import {UNIT} from '../variables/variables';
@@ -37,6 +37,7 @@ type Props = {
   onUpdate: () => any,
   style?: ViewStyleProp,
   subTitle?: any,
+  isTablet: boolean,
 }
 
 
@@ -175,8 +176,8 @@ const LinkedIssuesAddLink = (props: Props): Node => {
       <Header
         title="Link issue"
         showShadow={true}
-        leftButton={<IconBack color={styles.link.color}/>}
-        onBack={() => Router.pop()}
+        leftButton={props.isTablet ? <IconClose size={21} color={styles.link.color}/> : <IconBack color={styles.link.color}/>}
+        onBack={() => Router.pop(props.isTablet)}
       />
 
       {!!currentIssueLinkTypeExtended && (

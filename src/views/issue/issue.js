@@ -132,6 +132,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       getIssueLinksTitle,
 
       setCustomFieldValue,
+      isTablet,
     } = this.props;
 
     return (
@@ -182,6 +183,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         onLinkIssue={this.props.onLinkIssue}
 
         setCustomFieldValue={setCustomFieldValue}
+        isTablet={isTablet}
       />
     );
   };
