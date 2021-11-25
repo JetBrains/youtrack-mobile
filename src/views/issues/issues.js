@@ -101,6 +101,14 @@ export class Issues extends Component<Props, State> {
     });
   }
 
+  componentDidUpdate(prevProps: Props): void {
+    if (
+      prevProps?.searchContext && prevProps?.searchContext?.id !== this.props?.searchContext?.id ||
+      prevProps?.query !== undefined && prevProps?.query !== this.props?.query) {
+      this.updateFocusedIssue(null);
+    }
+  }
+
   componentWillUnmount() {
     this.unsubscribeOnDispatch();
   }
@@ -289,7 +297,6 @@ export class Issues extends Component<Props, State> {
       message: 'Apply search',
       analyticsId: ANALYTICS_ISSUES_PAGE,
     });
-    this.updateFocusedIssue(null);
     this.setEditQueryMode(false);
     this.props.setIssuesCount(null);
     this.props.onQueryUpdate(query);

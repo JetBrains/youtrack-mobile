@@ -188,7 +188,7 @@ export function openContextSelect(): ((dispatch: (any) => any, getState: () => a
       show: true,
       placeholder: 'Filter projects, saved searches, and tags',
       dataSource: async () => {
-        let folders = [];
+        let folders: Array<Folder> = [];
         try {
           folders = await api.user.getUserFolders();
         } catch (e) {
