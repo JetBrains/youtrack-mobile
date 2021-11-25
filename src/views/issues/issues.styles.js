@@ -24,6 +24,25 @@ export default EStyleSheet.create({
     flex: 1,
     backgroundColor: '$background',
   },
+  tabletContainer: {
+    flexDirection: 'row',
+  },
+  tabletContainerList: {
+    flexBasis: 375,
+    borderColor: '$separator',
+    borderRightWidth: 1,
+  },
+  tabletContainerIssue: {
+    flexGrow: 1,
+  },
+  tabletContainerIssueFocused: {
+    backgroundColor: '$blueBackground',
+  },
+  tabletContainerIssueEmpty: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   list: {
     flexGrow: 0,
     minHeight: 160,

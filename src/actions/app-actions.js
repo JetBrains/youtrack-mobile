@@ -426,6 +426,7 @@ export function loadUserPermissions(): Action {
 export function completeInitialization(issueId: string | null = null, navigateToActivity: boolean = false): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     log.debug('Completing initialization');
+    dispatch({type: types.SET_IS_TABLET, isTablet: DeviceInfo.isTablet()});
     await dispatch(loadUser());
     await dispatch(loadUserPermissions());
     await dispatch(cacheProjects());

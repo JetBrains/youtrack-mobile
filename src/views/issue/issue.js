@@ -36,6 +36,7 @@ import type {AnyIssue, IssueFull} from '../../flow/Issue';
 import type {Attachment, IssueLink, Tag} from '../../flow/CustomFields';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import type {NormalizedAttachment} from '../../flow/Attachment';
+import type {RootState} from '../../reducers/app-reducer';
 import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
@@ -69,8 +70,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   backendUrl = getApi().config.backendUrl;
   renderRefreshControl = this._renderRefreshControl.bind(this);
 
-
-  async componentDidMount() {
+  async init() {
     usage.trackScreenView(CATEGORY_NAME);
     await this.props.unloadIssueIfExist();
     await this.props.setIssueId(this.props.issueId);
@@ -78,6 +78,16 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
     if (this.props.navigateToActivity) {
       this.switchToActivityTab();
+    }
+  }
+
+  async componentDidMount() {
+    await this.init();
+  }
+
+  async UNSAFE_componentWillReceiveProps(nextProps: Props): void {
+    if (nextProps.issueId !== this.props.issueId) {
+      await this.init();
     }
   }
 
@@ -278,6 +288,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       getIssueLinksTitle,
       onLinkIssue,
       loadIssuesXShort,
+      isTablet,
     } = this.props;
 
     const issueIdReadable = this.renderHeaderIssueTitle();
@@ -285,7 +296,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       const isIssueLoaded: boolean = this.isIssueLoaded();
       return (
         <Header
-          leftButton={this.renderBackIcon(this.uiTheme)}
+          leftButton={!isTablet && this.renderBackIcon(this.uiTheme)}
           rightButton={isIssueLoaded ? this.renderActionsIcon(this.uiTheme) : null}
           extraButton={isIssueLoaded ? this.renderStar(this.uiTheme) : null}
           onRightButtonClick={() => {
@@ -484,7 +495,7 @@ type OwnProps = {
   navigateToActivity: ?boolean
 };
 
-const mapStateToProps = (state: { app: Object, issueState: IssueState }, ownProps: OwnProps): IssueState & OwnProps => {
+const mapStateToProps = (state: { app: RootState, issueState: IssueState }, ownProps: OwnProps): IssueState & OwnProps => {
   return ({
     issuePermissions: state.app.issuePermissions,
     ...state.issueState,
@@ -492,6 +503,7 @@ const mapStateToProps = (state: { app: Object, issueState: IssueState }, ownProp
     issueId: ownProps.issueId,
     user: state.app.user,
     navigateToActivity: ownProps.navigateToActivity,
+    isTablet: state.app.isTablet,
   }: $Shape<IssueState & OwnProps>);
 };
 

@@ -35,7 +35,8 @@ export type State = {
   updateUserAppearanceProfile: Function,
 
   attachingImage: ?Object,
-  isAttachFileDialogVisible: boolean
+  isAttachFileDialogVisible: boolean,
+  isTablet: boolean,
 };
 
 export const initialState: State = {
@@ -61,6 +62,7 @@ export const initialState: State = {
 
   attachingImage: null,
   isAttachFileDialogVisible: false,
+  isTablet: false,
 };
 
 const attachReducers = {

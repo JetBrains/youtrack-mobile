@@ -46,7 +46,7 @@
     "ios-archive": "xcodebuild archive -allowProvisioningUpdates -workspace ios/YouTrackMobile.xcworkspace -scheme YouTrackMobile[Release] -archivePath ios/build/YouTrackMobile[Release].xcarchive",
     "ios-archive-no-sign": "export RCT_NO_LAUNCH_PACKAGER=true && yarn run ios-archive -- CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED='NO'",
     "ios-build-bundle": "react-native bundle --entry-file=index.js --platform ios --dev false --reset-cache --bundle-output build/main.jsbundle --assets-dest build",
-    "ios-iPadAir": "react-native run-ios --simulator='iPad Air'",
+    "ios-iPadAir": "react-native run-ios --simulator='iPad Air (4th generation)'",
     "ios-iphoneX": "react-native run-ios --simulator='iPhone X'",
     "ios-iphone8Plus": "react-native run-ios --simulator='iPhone 8 Plus (13.5)'",
     "ios-release": "yarn run ios-download-archive && yarn run ios-export-ipa",
