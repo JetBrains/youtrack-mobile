@@ -160,7 +160,7 @@ export class Issues extends Component<Props, State> {
           issue={item}
           onClick={(issue) => {
             if (this.props.isTablet) {
-              this.setState({focusedIssue: issue});
+              this.updateFocusedIssue(issue);
             } else {
               this.goToIssue(issue);
             }
@@ -264,15 +264,15 @@ export class Issues extends Component<Props, State> {
   };
 
   setEditQueryMode(isEditQuery: boolean) {
-    this.setState({
-      isEditQuery: isEditQuery,
-    });
+    this.setState({isEditQuery});
   }
 
   clearSearchQuery(clearSearchQuery: boolean) {
-    this.setState({
-      clearSearchQuery: clearSearchQuery,
-    });
+    this.setState({clearSearchQuery});
+  }
+
+  updateFocusedIssue(focusedIssue: IssueOnList | null) {
+    this.setState({focusedIssue});
   }
 
   onSearchQueryPanelFocus: ((clearSearchQuery?: boolean) => void) = (clearSearchQuery: boolean = false) => {
@@ -289,6 +289,7 @@ export class Issues extends Component<Props, State> {
       message: 'Apply search',
       analyticsId: ANALYTICS_ISSUES_PAGE,
     });
+    this.updateFocusedIssue(null);
     this.setEditQueryMode(false);
     this.props.setIssuesCount(null);
     this.props.onQueryUpdate(query);
