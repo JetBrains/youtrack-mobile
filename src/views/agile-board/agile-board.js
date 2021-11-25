@@ -39,6 +39,7 @@ import styles from './agile-board.styles';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {AgilePageState} from './board-reducers';
 import type {AnyIssue, IssueOnList} from '../../flow/Issue';
+import type {AppState} from '../../reducers';
 import type {CustomError} from '../../flow/Error';
 import type {SprintFull, AgileBoardRow, BoardColumn, BoardOnList, Sprint} from '../../flow/Agile';
 import type {Theme, UITheme} from '../../flow/Theme';
@@ -79,7 +80,8 @@ type State = {
 class AgileBoard extends Component<Props, State> {
   boardHeader: ?BoardHeader;
   query: string;
-  unsubscribeOnDispatch: Function
+  unsubscribeOnDispatch: Function;
+  uiTheme: UITheme;
 
   constructor(props: Props) {
     super(props);
@@ -159,13 +161,13 @@ class AgileBoard extends Component<Props, State> {
     }
   };
 
-  _renderRefreshControl = (uiTheme: UITheme) => {
+  _renderRefreshControl = () => {
     return <RefreshControl
       testID="refresh-control"
       accessibilityLabel="refresh-control"
       accessible={true}
       refreshing={this.props.isLoading}
-      tintColor={uiTheme.colors.$link}
+      tintColor={styles.link.color}
       onRefresh={() => this.loadBoard(true)}
     />;
   }
@@ -189,7 +191,7 @@ class AgileBoard extends Component<Props, State> {
     return getScrollableWidth(sprint.board.columns);
   };
 
-  renderAgileSelector(uiTheme: UITheme) {
+  renderAgileSelector() {
     const {agile, onOpenBoardSelect} = this.props;
     if (agile) {
       return renderSelector({
@@ -200,7 +202,7 @@ class AgileBoard extends Component<Props, State> {
         textStyle: styles.agileSelectorText,
         showBottomBorder: this.state.stickElement.agile,
         showLoader: true,
-        uiTheme,
+        uiTheme: this.uiTheme,
       });
     }
     return <View style={styles.agileSelector}/>;
@@ -211,7 +213,7 @@ class AgileBoard extends Component<Props, State> {
     return agile?.sprintsSettings?.disableSprints === true;
   }
 
-  renderSprintSelector(uiTheme: UITheme) {
+  renderSprintSelector() {
     const {agile, sprint, onOpenSprintSelect, isLoading} = this.props;
 
     if (!agile || !sprint) {
@@ -228,12 +230,12 @@ class AgileBoard extends Component<Props, State> {
         onPress: onOpenSprintSelect,
         style: styles.sprintSelector,
         isLoading,
-        uiTheme,
+        uiTheme: this.uiTheme,
       });
     }
   }
 
-  renderZoomButton(uiTheme: UITheme) {
+  renderZoomButton() {
     const {isLoading, isLoadingAgile, sprint} = this.props;
     const {zoomedIn, stickElement} = this.state;
 
@@ -252,7 +254,7 @@ class AgileBoard extends Component<Props, State> {
             hitSlop={HIT_SLOP}
             onPress={this.toggleZoom}
           >
-            <IconMagnifyZoom zoomedIn={zoomedIn} size={24} color={uiTheme.colors.$link}/>
+            <IconMagnifyZoom zoomedIn={zoomedIn} size={24} color={styles.link.color}/>
           </TouchableOpacity>
         </AnimatedView>
       );
@@ -337,7 +339,7 @@ class AgileBoard extends Component<Props, State> {
     return this.props.issuePermissions.canRunCommand(issue);
   };
 
-  renderSprint = (uiTheme: UITheme) => {
+  renderSprint = () => {
     const {sprint, createCardForCell, onRowCollapseToggle, agile} = this.props;
 
     return (
@@ -352,7 +354,7 @@ class AgileBoard extends Component<Props, State> {
         onTapIssue={this._onTapIssue}
         onTapCreateIssue={createCardForCell}
         onCollapseToggle={onRowCollapseToggle}
-        uiTheme={uiTheme}
+        uiTheme={this.uiTheme}
       />
     );
   };
@@ -443,10 +445,10 @@ class AgileBoard extends Component<Props, State> {
     );
   };
 
-  renderBoard(uiTheme: UITheme) {
+  renderBoard() {
     const {sprint, isLoadingMore, error, agile} = this.props;
     const {zoomedIn} = this.state;
-    const renderAgileSelector = () => <View style={styles.agileNoSprint}>{this.renderAgileSelector(uiTheme)}</View>;
+    const renderAgileSelector = () => <View style={styles.agileNoSprint}>{this.renderAgileSelector()}</View>;
 
     if (agile?.status?.errors?.length || error) {
       return renderAgileSelector();
@@ -469,7 +471,7 @@ class AgileBoard extends Component<Props, State> {
         <BoardScroller
           columns={sprint?.board?.columns}
           snap={zoomedIn}
-          refreshControl={this._renderRefreshControl(uiTheme)}
+          refreshControl={this._renderRefreshControl()}
           horizontalScrollProps={{
             contentContainerStyle: {
               display: 'flex',
@@ -486,15 +488,15 @@ class AgileBoard extends Component<Props, State> {
             },
           }}
 
-          agileSelector={this.renderAgileSelector(uiTheme)}
-          sprintSelector={this.renderSprintSelector(uiTheme)}
+          agileSelector={this.renderAgileSelector()}
+          sprintSelector={this.renderSprintSelector()}
           boardHeader={this.renderBoardHeader()}
           boardSearch={this.renderSearchPanelPreview()}
 
         >
 
-          {this.renderSprint(uiTheme)}
-          {isLoadingMore && <ActivityIndicator color={uiTheme.colors.$link} style={styles.loadingMoreIndicator}/>}
+          {this.renderSprint()}
+          {isLoadingMore && <ActivityIndicator color={styles.link.color} style={styles.loadingMoreIndicator}/>}
 
         </BoardScroller>
       </DragContainer>
@@ -507,16 +509,16 @@ class AgileBoard extends Component<Props, State> {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
-          const uiTheme: UITheme = theme.uiTheme;
+          this.uiTheme = theme.uiTheme;
           return (
             <View
               testID="pageAgile"
               style={styles.agile}
             >
 
-              {this.renderZoomButton(uiTheme)}
+              {this.renderZoomButton()}
 
-              {this.renderBoard(uiTheme)}
+              {this.renderBoard()}
 
               {this.renderErrors()}
 
@@ -533,7 +535,7 @@ class AgileBoard extends Component<Props, State> {
 }
 
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: AppState) => {
   return {
     ...state.agile,
     ...state.app,

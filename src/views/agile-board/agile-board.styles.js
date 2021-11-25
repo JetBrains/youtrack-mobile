@@ -15,6 +15,9 @@ export default EStyleSheet.create({
   error: {
     marginTop: UNIT * 5,
   },
+  link: {
+    color: '$link',
+  },
   title: {
     fontSize: 17,
     color: '$text',
