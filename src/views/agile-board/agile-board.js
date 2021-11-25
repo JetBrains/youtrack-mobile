@@ -66,7 +66,8 @@ type Props = AgilePageState & {
   refreshAgile: (agileId: string, sprintId: string, query?: string) => any,
   suggestAgileQuery: (query: ?string, caret: number) => any,
   storeLastQuery: (query: string) => any,
-  updateIssue: (issueId: string, sprint?: SprintFull) => any
+  updateIssue: (issueId: string, sprint?: SprintFull) => any,
+  isTablet: boolean,
 };
 
 type State = {
@@ -182,13 +183,13 @@ class AgileBoard extends Component<Props, State> {
   };
 
   _getScrollableWidth = (): number | null => {
-    const {sprint} = this.props;
+    const {sprint, isTablet} = this.props;
 
     if (!sprint || !sprint.board || !sprint.board.columns) {
       return null;
     }
 
-    return getScrollableWidth(sprint.board.columns);
+    return getScrollableWidth(sprint.board.columns, isTablet && this.state.zoomedIn);
   };
 
   renderAgileSelector() {
@@ -340,7 +341,7 @@ class AgileBoard extends Component<Props, State> {
   };
 
   renderSprint = () => {
-    const {sprint, createCardForCell, onRowCollapseToggle, agile} = this.props;
+    const {sprint, createCardForCell, onRowCollapseToggle, agile, isTablet} = this.props;
 
     return (
       <AgileBoardSprint
@@ -355,6 +356,7 @@ class AgileBoard extends Component<Props, State> {
         onTapCreateIssue={createCardForCell}
         onCollapseToggle={onRowCollapseToggle}
         uiTheme={this.uiTheme}
+        isTablet={isTablet}
       />
     );
   };

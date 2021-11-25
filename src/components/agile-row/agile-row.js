@@ -29,7 +29,8 @@ type Props = {
   renderIssueCard: RenderIssueCard,
   zoomedIn?: boolean,
   columns: Array<BoardColumn>,
-  uiTheme: UITheme
+  uiTheme: UITheme,
+  isTablet: boolean,
 };
 
 function renderCollapsedCard(issue: IssueOnList) {
@@ -78,6 +79,7 @@ export default function BoardRow(props: Props): null | Node {
     zoomedIn,
     columns,
     uiTheme,
+    isTablet,
   } = props;
 
   if (!row) {
@@ -89,7 +91,7 @@ export default function BoardRow(props: Props): null | Node {
   return (
     <View
       testID="agileRow"
-      style={[styles.rowContainer, style]}
+      style={style}
     >
       <View
         testID="agile-row-header"
@@ -163,6 +165,7 @@ export default function BoardRow(props: Props): null | Node {
                 renderIssueCard={renderIssueCard}
                 uiTheme={uiTheme}
                 zoomedIn={zoomedIn}
+                isTablet={isTablet}
               />
             );
           })}
