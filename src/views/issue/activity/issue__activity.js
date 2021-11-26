@@ -49,7 +49,7 @@ type IssueActivityProps = $Shape<IssueActivityState
 }>;
 
 export class IssueActivity extends PureComponent<IssueActivityProps, void> {
-  static contextTypes: any | {actionSheet: typeof Function} = {
+  static contextTypes: any | { actionSheet: typeof Function } = {
     actionSheet: Function,
   };
 
@@ -60,19 +60,29 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   issueContext: IssueContextData;
 
   componentDidMount() {
-    this.loadIssueActivities();
-    this.loadDraftComment();
+    this.load();
+  }
+
+  componentDidUpdate(prevProps: IssueActivityProps): void {
+    if ((!prevProps.issuePlaceholder && this.props.issuePlaceholder) || (prevProps.issuePlaceholder && this.props.issuePlaceholder && prevProps.issuePlaceholder.id !== this.props.issuePlaceholder.id)) {
+      this.load(this.props.issuePlaceholder.id);
+    }
   }
 
   componentWillUnmount() {
     this.props.setEditingComment(null);
   }
 
+  load = (issueId?: string) => {
+    this.loadIssueActivities(false, issueId);
+    this.loadDraftComment(issueId);
+  };
+
   loadDraftComment: (() => any) = () => this.props.getDraftComment();
 
-  loadIssueActivities: ((doNotReset?: boolean) => void) = (doNotReset?: boolean) => {
+  loadIssueActivities = (doNotReset?: boolean, issueId?: string) => {
     if (isIssueActivitiesAPIEnabled()) {
-      this.props.loadActivitiesPage(doNotReset);
+      this.props.loadActivitiesPage(doNotReset, issueId);
     } else {
       this.props.loadIssueCommentsAsActivityPage();
     }

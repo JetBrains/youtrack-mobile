@@ -14,7 +14,8 @@ import type {UITheme, UIThemeColors} from '../../flow/Theme';
 
 export type IssueTabbedState = {
   index: number,
-  routes: Array<TabRoute>
+  routes: Array<TabRoute>,
+  isTransitionInProgress: boolean,
 };
 
 
@@ -37,6 +38,8 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
   switchToDetailsTab: (() => void) = () => this.setState({index: 0});
 
   switchToActivityTab: (() => void) = () => this.setState({index: 1});
+
+  isActivityTabEnabled: (() => boolean) = (): boolean => this?.state?.index === 1;
 
   renderTabBar(uiTheme: UITheme, editMode: boolean = false): ((props: any) => Node) {
     return (props: Object) => {

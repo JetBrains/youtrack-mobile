@@ -27,7 +27,7 @@ export type State = {
   issueActivityEnabledTypes: Array<Object>,
   issueActivityTypes: Array<Object>,
   issueLoadingError: ?Error,
-  issuePlaceholder: Object,
+  issuePlaceholder: $Shape<IssueFull>,
   openNestedIssueView: (params: OpenNestedViewParams) => any,
   renderRefreshControl: (() => void) => any,
   updateUserAppearanceProfile: (appearanceProfile: UserAppearanceProfile) => any,

@@ -533,12 +533,12 @@ export default class CustomFieldsPanel extends Component<Props, State> {
               {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
             </View>
 
-            {fields.map((field: IssueCustomField) => {
+            {fields.map((field: IssueCustomField, index: number) => {
               const isDisabled: boolean = (
                 !hasPermission.canUpdateField(field) ||
                 !field?.projectCustomField?.field?.fieldType
               );
-              return <View key={field.id}>
+              return <View key={field.id || `${field.name}-${index}`}>
                 <CustomField
                   field={field}
                   onPress={() => this.onEditField(field)}

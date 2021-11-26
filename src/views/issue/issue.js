@@ -74,7 +74,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   async init() {
     usage.trackScreenView(CATEGORY_NAME);
     await this.props.unloadIssueIfExist();
-    await this.props.setIssueId(this.props.issueId);
+    await this.props.setIssueId(this.props.issueId || this.props?.issuePlaceholder?.id);
     await this.loadIssue();
 
     if (this.props.navigateToActivity) {
@@ -92,8 +92,8 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     }
   }
 
-  componentDidUpdate(prevProps: $Shape<IssueProps>): void {
-    if (this.props.editMode === true && !prevProps.editMode && this.state.index === 1) {
+  componentDidUpdate(prevProps: IssueProps): void {
+    if (this.props.editMode === true && !prevProps.editMode && this.isActivityTabEnabled()) {
       this.switchToDetailsTab();
     }
   }
@@ -190,11 +190,20 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   };
 
   renderActivity = (uiTheme: UITheme) => {
-    const {issue, user, issuePermissions, selectProps, updateUserAppearanceProfile, openNestedIssueView} = this.props;
+    const {
+      issue,
+      user,
+      issuePermissions,
+      selectProps,
+      updateUserAppearanceProfile,
+      openNestedIssueView,
+      issuePlaceholder,
+    } = this.props;
 
     return (
       <IssueActivity
         issue={issue}
+        issuePlaceholder={issuePlaceholder}
         user={user}
         openNestedIssueView={openNestedIssueView}
         issuePermissions={issuePermissions}

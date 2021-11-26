@@ -9,6 +9,7 @@ import {headerTitlePresentation} from '../../components/header/header.styles';
 import {ICON_PICTOGRAM_DEFAULT_SIZE} from '../../components/icon/icon-pictogram';
 import {issueCard} from '../../components/common-styles/issue';
 import {separator} from '../../components/common-styles/list';
+import {splitViewStyles} from '../../components/common-styles/split-view';
 import {UNIT} from '../../components/variables/variables';
 
 const rowLine = {
@@ -28,25 +29,7 @@ export default EStyleSheet.create({
     flex: 1,
     backgroundColor: '$background',
   },
-  tabletContainer: {
-    flexDirection: 'row',
-  },
-  tabletContainerList: {
-    flexBasis: 375,
-    borderColor: '$separator',
-    borderRightWidth: 1,
-  },
-  tabletContainerIssue: {
-    flexGrow: 1,
-  },
-  tabletContainerIssueFocused: {
-    backgroundColor: '$blueBackground',
-  },
-  tabletContainerIssueEmpty: {
-    flexGrow: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  ...splitViewStyles,
   list: {
     flexGrow: 0,
     minHeight: 160,

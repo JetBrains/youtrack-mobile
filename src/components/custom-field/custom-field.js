@@ -26,7 +26,7 @@ type Props = {
 
 export default class CustomField extends Component<Props, void> {
   _getFieldType(field: CustomFieldType) {
-    if (!field.projectCustomField.field.fieldType) {
+    if (!field?.projectCustomField?.field?.fieldType) {
       return null;
     }
 
@@ -35,7 +35,7 @@ export default class CustomField extends Component<Props, void> {
 
   _getValue(value: ?FieldValue, fieldType: ?string): ?string {
     const field: CustomFieldType = this.props.field;
-    const emptyValue: ?string = field.projectCustomField.emptyFieldText;
+    const emptyValue: ?string = field?.projectCustomField?.emptyFieldText || '';
 
     if (value != null) {
       if (fieldType === 'date') {
@@ -54,8 +54,8 @@ export default class CustomField extends Component<Props, void> {
   }
 
   _getKey() {
-    const field = this.props.field;
-    return field.projectCustomField.field.name;
+    const field: CustomFieldType = this.props.field;
+    return field?.projectCustomField?.field?.name || field?.name || '';
   }
 
   _renderColorMaker(value: ?FieldValue | ?Array<FieldValue>) {

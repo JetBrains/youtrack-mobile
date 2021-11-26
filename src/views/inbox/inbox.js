@@ -11,6 +11,7 @@ import CommentReactions from '../../components/comment/comment-reactions';
 import CustomFieldChangeDelimiter from '../../components/custom-field/custom-field__change-delimiter';
 import Diff from '../../components/diff/diff';
 import ErrorMessage from '../../components/error-message/error-message';
+import Issue from '../issue/issue';
 import log from '../../components/log/log';
 import ReactionIcon from '../../components/reactions/reaction-icon';
 import Router from '../../components/router/router';
@@ -23,7 +24,7 @@ import {getReadableID, ytDate} from '../../components/issue-formatter/issue-form
 import {getStorageState} from '../../components/storage/storage';
 import {handleRelativeUrl} from '../../components/config/config';
 import {hasType} from '../../components/api/api__resource-types';
-import {IconNothingFound} from '../../components/icon/icon-pictogram';
+import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound, IconNothingSelected} from '../../components/icon/icon-pictogram';
 import {isReactElement} from '../../util/util';
 import {LoadMoreList} from '../../components/progress/load-more-list';
 import {SkeletonIssueActivities} from '../../components/skeleton/skeleton';
@@ -32,9 +33,8 @@ import {UNIT} from '../../components/variables/variables';
 
 import styles from './inbox.styles';
 
-import type {Activity} from '../../flow/Activity';
-import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {AppState} from '../../reducers';
+import type {AppConfigFilled} from '../../flow/AppConfig';
 import type {InboxState} from './inbox-reducers';
 import type {IssueComment} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
@@ -44,10 +44,17 @@ import type {Theme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
 
 
-type Props = InboxState & typeof inboxActions;
+type IssueActions = typeof inboxActions;
+type Props = {
+  ...InboxState,
+  ...IssueActions,
+  isTablet: boolean,
+};
 
 type State = {
-  isTitlePinned: boolean
+  focusedNotificationId: any,
+  isSummaryOrDescriptionChange: boolean,
+  isTitlePinned: boolean,
 };
 
 const Category: Object = {
@@ -73,7 +80,11 @@ class Inbox extends Component<Props, State> {
 
   constructor(props) {
     super(props);
-    this.state = {isTitlePinned: false};
+    this.state = {
+      focusedNotificationId: null,
+      isSummaryOrDescriptionChange: false,
+      isTitlePinned: false,
+    };
     this.config = getStorageState().config;
     usage.trackScreenView(ANALYTICS_NOTIFICATIONS_PAGE);
   }
@@ -265,7 +276,7 @@ class Inbox extends Component<Props, State> {
     switch (true) {
     case event.category === Category.WORK:
       const work: ChangeValue = event.addedValues[0];
-      const activityGroup: $Shape<Activity> = {
+      const activityGroup: any = {
         work: {
           added: [{
             date: work.date,
@@ -392,7 +403,7 @@ class Inbox extends Component<Props, State> {
     if (hasType.commentReaction(item)) {
       renderer = this.renderReactionChange(item);
     } else if (metadata && this.isIssueDigestChange(metadata)) {
-      renderer = metadata.issue ? this.renderIssueChange(metadata, item.sender) : null;
+      renderer = metadata.issue ? this.renderIssueChange(metadata, item.sender, item.id) : null;
     } else if (metadata && this.isWorkflowNotification(metadata)) {
       renderer = this.renderWorkflowNotification(this.getWorkflowNotificationText(metadata));
     }
@@ -407,12 +418,26 @@ class Inbox extends Component<Props, State> {
     return handleRelativeUrl(sender.avatarUrl, this.config.backendUrl);
   }
 
-  renderIssue(issue: IssueOnList, navigateToActivity: boolean) {
+  updateFocusedNotificationId = (focusedNotificationId: string, isSummaryOrDescriptionChange: boolean) => {
+    this.setState({
+      focusedNotificationId,
+      isSummaryOrDescriptionChange,
+    });
+  }
+
+  renderIssue(issue: IssueOnList, isSummaryOrDescriptionChange: boolean, notificationId: string) {
+    const {isTablet} = this.props;
     const readableID: string = getReadableID(issue);
     return (
       <TouchableOpacity
         style={styles.notificationIssue}
-        onPress={() => this.goToIssue(issue, navigateToActivity)}
+        onPress={() => {
+          if (isTablet) {
+            this.updateFocusedNotificationId(notificationId, isSummaryOrDescriptionChange);
+          } else {
+            this.goToIssue(issue, !isSummaryOrDescriptionChange);
+          }
+        }}
       >
         <Text>
           {!!readableID && (
@@ -462,7 +487,7 @@ class Inbox extends Component<Props, State> {
         />
 
         <View style={styles.notificationContent}>
-          {this.renderIssue(issue, true)}
+          {this.renderIssue(issue, false, reactionData.id)}
           <View style={styles.notificationChange}>
             <Text style={styles.secondaryText}>{comment.text}</Text>
             <CommentReactions
@@ -476,7 +501,7 @@ class Inbox extends Component<Props, State> {
   };
 
 
-  renderIssueChange(metadata: Metadata, sender: $Shape<User> = {}) {
+  renderIssueChange(metadata: Metadata, sender: $Shape<User> = {}, notificationId: string) {
     const {issue, change} = metadata;
 
     if (!issue) {
@@ -498,7 +523,7 @@ class Inbox extends Component<Props, State> {
         <UserInfo style={styles.userInfo} user={sender} timestamp={change?.endTimestamp}/>
 
         <View style={styles.notificationContent}>
-          {this.renderIssue(issue, !this.isSummaryOrDescriptionChange(events[0]))}
+          {this.renderIssue(issue, this.isSummaryOrDescriptionChange(events[0]), notificationId)}
           {events.length > 0 && (
             <View style={styles.notificationChange}>
               {this.renderEvents(events)}
@@ -572,39 +597,94 @@ class Inbox extends Component<Props, State> {
     });
   };
 
+  renderNotifications = () => {
+    const {loading, items} = this.props;
+    const data: Array<React$Element<any> | Notification> = [this.renderTitle()].concat(items || []);
+    return (
+      <FlatList
+        removeClippedSubviews={false}
+        data={data}
+        refreshControl={this.renderRefreshControl()}
+        refreshing={loading}
+        keyExtractor={(item: Object | Notification, index: number) => `${(item.key || item.id)}-${index}`}
+        renderItem={this.renderItem}
+        onEndReached={this.onLoadMore}
+        onEndReachedThreshold={0.1}
+        onScroll={this.onScroll}
+        ListFooterComponent={this.renderListMessage}
+        scrollEventThrottle={10}
+        stickyHeaderIndices={[0]}
+      />
+    );
+  }
+
+  renderSelectIssueIcon = () => {
+    return (
+      <View style={styles.splitViewMainEmpty}>
+        {<IconNothingSelected size={ICON_PICTOGRAM_DEFAULT_SIZE} style={styles.noIssuesSelected}/>}
+        <Text style={styles.headerText}>Select an issue from the list</Text>
+      </View>
+    );
+  }
+
+  renderFocusedIssue = () => {
+    const {items} = this.props;
+    const {focusedNotificationId, isSummaryOrDescriptionChange} = this.state;
+
+    const notification: any = items.find((it: any) => it.id === focusedNotificationId);
+    if (!focusedNotificationId || !items?.length || !notification) {
+      return this.renderSelectIssueIcon();
+    }
+
+    const issue: $Shape<IssueOnList> = notification?.metadata?.issue || notification?.comment?.issue;
+    return (
+      issue
+        ? (
+          <Issue
+            issuePlaceholder={issue}
+            issueId={issue.id}
+            navigateToActivity={!isSummaryOrDescriptionChange}
+          />
+        )
+        : this.renderSelectIssueIcon()
+    );
+  };
+
+  renderSplitView = () => {
+    return (
+      <>
+        <View style={styles.splitViewSide}>
+          {this.renderNotifications()}
+        </View>
+        <View style={styles.splitViewMain}>
+          {this.renderFocusedIssue()}
+        </View>
+      </>
+    );
+  };
+
   render() {
-    const {loading, error, items} = this.props;
-    const hasError: boolean = !!error;
+    const {error, isTablet} = this.props;
+
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
           this.theme = theme;
 
-          const data: Array<React$Element<any> | Notification> = [this.renderTitle()].concat(items || []);
-
           return (
-            <View style={styles.container}>
+            <View style={[
+              styles.container,
+              isTablet ? styles.splitViewContainer : null,
+            ]}>
 
-              {hasError && (
+              {!!error && (
                 <View style={styles.error}>
                   <ErrorMessage error={error}/>
                 </View>
               )}
 
-              {!hasError && <FlatList
-                removeClippedSubviews={false}
-                data={data}
-                refreshControl={this.renderRefreshControl()}
-                refreshing={loading}
-                keyExtractor={(item: Object | Notification, index: number) => `${(item.key || item.id)}-${index}`}
-                renderItem={this.renderItem}
-                onEndReached={this.onLoadMore}
-                onEndReachedThreshold={0.1}
-                onScroll={this.onScroll}
-                ListFooterComponent={this.renderListMessage}
-                scrollEventThrottle={10}
-                stickyHeaderIndices={[0]}
-              />}
+              {!error && isTablet && this.renderSplitView()}
+              {!error && !isTablet && this.renderNotifications()}
             </View>
           );
         }}

@@ -161,7 +161,7 @@ export class Issues extends Component<Props, State> {
       <View
         style={[
           styles.row,
-          focusedIssue?.id === item.id ? styles.tabletContainerIssueFocused : null,
+          focusedIssue?.id === item.id ? styles.splitViewMainFocused : null,
         ]}
       >
         <IssueRow
@@ -479,7 +479,7 @@ export class Issues extends Component<Props, State> {
 
     if (!focusedIssue || !this.hasIssues()) {
       return (
-        <View style={styles.tabletContainerIssueEmpty}>
+        <View style={styles.splitViewMainEmpty}>
           {<IconNothingSelected size={ICON_PICTOGRAM_DEFAULT_SIZE} style={styles.noIssuesSelected}/>}
           <Text style={styles.headerText}>Select an issue from the list</Text>
         </View>
@@ -487,7 +487,7 @@ export class Issues extends Component<Props, State> {
     }
 
     return (
-      <View style={styles.tabletContainerIssue}>
+      <View style={styles.splitViewMain}>
         <Issue
           issuePlaceholder={focusedIssue}
           issueId={focusedIssue.id}
@@ -499,10 +499,10 @@ export class Issues extends Component<Props, State> {
   renderSplitView = () => {
     return (
       <>
-        <View style={styles.tabletContainerList}>
+        <View style={styles.splitViewSide}>
           {this.renderIssues()}
         </View>
-        <View style={styles.tabletContainerIssue}>
+        <View style={styles.splitViewMain}>
           {this.renderFocusedIssue()}
         </View>
       </>
@@ -517,7 +517,7 @@ export class Issues extends Component<Props, State> {
           this.theme = theme;
           return (
             <View
-              style={[styles.listContainer, isTablet ? styles.tabletContainer : null]}
+              style={[styles.listContainer, isTablet ? styles.splitViewContainer : null]}
               testID="issue-list-page"
             >
               {isTablet && this.renderSplitView()}

@@ -3,7 +3,7 @@
 import type {Attachment, IssueComment, IssueProject} from './CustomFields';
 import type {IssueFull} from './Issue';
 import type {User} from './User';
-import type {PullRequest} from './Vcs';
+import type {PullRequest, VCSActivity} from './Vcs';
 
 type EventBase = {
   id: string,
@@ -40,8 +40,8 @@ export type Activity = {
   removed: ActivityItem | Array<ActivityItem>,
 
   comment?: IssueComment,
-  work?: Activity,
-  vcs?: Activity,
+  work?: ActivityWork,
+  vcs?: VCSActivity,
   merged?: boolean,
 
   key?: boolean,

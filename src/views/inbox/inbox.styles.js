@@ -1,10 +1,12 @@
 import {Platform} from 'react-native';
+
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {UNIT} from '../../components/variables/variables';
+import {elevation1} from '../../components/common-styles/shadow';
 import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
 import {issueIdResolved} from '../../components/common-styles/issue';
-import {elevation1} from '../../components/common-styles/shadow';
+import {splitViewStyles} from '../../components/common-styles/split-view';
+import {UNIT} from '../../components/variables/variables';
 
 const font = {
   lineHeight: 18,
@@ -21,6 +23,7 @@ export default EStyleSheet.create({
     flex: 1,
     backgroundColor: '$background',
   },
+  ...splitViewStyles,
   arrowImage: {
     lineHeight: 22,
   },
