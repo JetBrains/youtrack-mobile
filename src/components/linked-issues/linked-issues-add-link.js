@@ -173,6 +173,9 @@ const LinkedIssuesAddLink = (props: Props): Node => {
   return (
     <View style={[styles.container, props.style]}>
       <Header
+        testID="test:id/link-issue-button"
+        accessibilityLabel="link-issue-button"
+        accessible={true}
         title="Link issue"
         showShadow={true}
         leftButton={props.isTablet ? <IconClose size={21} color={styles.link.color}/> : <IconBack color={styles.link.color}/>}

@@ -149,6 +149,9 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   renderSelect(): Node {
     return (
       <Select
+        testID="test:id/visibility-control-button"
+        accessibilityLabel="visibility-control-button"
+        accessible={true}
         multi={true}
         emptyValue={null}
         placeholder="Filter users, groups, and teams"

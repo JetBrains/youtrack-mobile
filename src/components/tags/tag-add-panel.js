@@ -24,6 +24,9 @@ const TagAddPanel = (props: Props) => {
   />;
   return (
     <TouchableOpacity
+      testID="test:id/add-tag-button"
+      accessibilityLabel="add-tag-button"
+      accessible={true}
       disabled={props.disabled}
       style={styles.button}
       hitSlop={HIT_SLOP}
