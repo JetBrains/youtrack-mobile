@@ -63,7 +63,7 @@ describe('<CustomField/>', () => {
 
     const wrapper = shallow(<CustomField field={userFieldMock}/>);
 
-    expect(wrapper.find({testID: 'customFieldAvatar'})).toHaveLength(1);
+    expect(wrapper.find({testID: 'test:id/customFieldAvatar'})).toHaveLength(1);
     expect(wrapper.find({testID: 'value'}).children()).toHaveLength(1);
   });
 

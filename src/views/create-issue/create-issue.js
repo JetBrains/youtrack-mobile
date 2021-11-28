@@ -119,8 +119,9 @@ class CreateIssue extends Component<Props, State> {
     return <CustomFieldsPanel
       analyticsId={ANALYTICS_ISSUE_CREATE_PAGE}
       autoFocusSelect
-      testID="createIssueFields"
-
+      testID="test:id/createIssueFields"
+      accessibilityLabel="createIssueFields"
+      accessible={true}
       issueId={issue.id}
       issueProject={issue.project}
       fields={getIssueCustomFieldsNotText(issue.fields)}

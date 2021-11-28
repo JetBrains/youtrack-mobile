@@ -185,7 +185,9 @@ export default class VisibilityControl extends PureComponent<Props, State> {
 
     return (
       <View
-        testID="visibilityControlButton"
+        testID="test:id/visibilityControlButton"
+        accessibilityLabel="visibilityControlButton"
+        accessible={true}
         style={[
           styles.container,
           this.props.style,

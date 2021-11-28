@@ -90,7 +90,12 @@ export default class CustomField extends Component<Props, void> {
           key="value"
         >
           {val && fieldType === 'user' ? this.renderAvatar(val) : null}
-          <Text testID="value" style={textStyle}>
+          <Text
+            testID="test:id/value"
+            accessibilityLabel="value"
+            accessible={true}
+            style={textStyle}
+          >
             {
               valuePresentation?.length > 203 ? `${valuePresentation.substr(0, 200)}...` : valuePresentation
             }
@@ -127,7 +132,9 @@ export default class CustomField extends Component<Props, void> {
     const user: User = ApiHelper.convertRelativeUrls([fieldValue], 'avatarUrl', getHUBUrl())[0];
     return (
       <Avatar
-        testID="customFieldAvatar"
+        testID="test:id/customFieldAvatar"
+        accessibilityLabel="name"
+        accessible={true}
         style={styles.colorMarker}
         key={user.id}
         userName={getEntityPresentation(user)}
@@ -148,7 +155,9 @@ export default class CustomField extends Component<Props, void> {
         <View style={styles.keyWrapper}>
           <Text
             style={styles.keyText}
-            testID="name"
+            testID="test:id/name"
+            accessibilityLabel="name"
+            accessible={true}
           >
             {this._getKey()}
           </Text>

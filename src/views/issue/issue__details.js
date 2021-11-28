@@ -319,6 +319,9 @@ export default class IssueDetails extends Component<Props, void> {
         <TouchableWithoutFeedback
           onLongPress={() => {onLongPress(issue.description, 'Copy description');}}
           delayLongPress={250}
+          testID="test:id/issue-description"
+          accessibilityLabel="issue-description"
+          accessible={true}
         >
           <View style={styles.description}>
             <IssueMarkdown
