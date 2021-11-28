@@ -34,13 +34,13 @@ describe('<CustomField/>', () => {
 
   it('should render field name', () => {
     const wrapper = shallow(<CustomField field={fakeField}/>);
-    const name = wrapper.find({testID: 'name'});
+    const name = wrapper.find({testID: 'test:id/name'});
     name.children().should.have.text(fakeField.projectCustomField.field.name);
   });
 
   it('should render field value', () => {
     const wrapper = shallow(<CustomField field={fakeField}/>);
-    const value = wrapper.find({testID: 'value'});
+    const value = wrapper.find({testID: 'test:id/value'});
     value.children().should.have.text(fakeField.value.name);
   });
 
@@ -64,7 +64,7 @@ describe('<CustomField/>', () => {
     const wrapper = shallow(<CustomField field={userFieldMock}/>);
 
     expect(wrapper.find({testID: 'test:id/customFieldAvatar'})).toHaveLength(1);
-    expect(wrapper.find({testID: 'value'}).children()).toHaveLength(1);
+    expect(wrapper.find({testID: 'test:id/value'}).children()).toHaveLength(1);
   });
 
   it('should render value of type date', () => {
@@ -73,7 +73,7 @@ describe('<CustomField/>', () => {
     fakeField.projectCustomField.field.fieldType.valueType = 'date';
 
     const wrapper = shallow(<CustomField field={fakeField}/>);
-    const value = wrapper.find({testID: 'value'});
+    const value = wrapper.find({testID: 'test:id/value'});
     value.children().should.have.text(ytDate(timestamp, true));
   });
 
@@ -82,7 +82,7 @@ describe('<CustomField/>', () => {
     fakeField.projectCustomField.field.fieldType.valueType = 'integer';
 
     const wrapper = shallow(<CustomField field={fakeField}/>);
-    const value = wrapper.find({testID: 'value'});
+    const value = wrapper.find({testID: 'test:id/value'});
     value.children().should.have.text('123');
   });
 
@@ -90,21 +90,21 @@ describe('<CustomField/>', () => {
     fakeField.value.name = null;
     fakeField.value.login = 'testuser';
     const wrapper = shallow(<CustomField field={fakeField}/>);
-    const value = wrapper.find({testID: 'value'});
+    const value = wrapper.find({testID: 'test:id/value'});
     value.children().should.have.text('testuser');
   });
 
   it('should render empty value if value is empty', () => {
     fakeField.value = null;
     const wrapper = shallow(<CustomField field={fakeField}/>);
-    const value = wrapper.find({testID: 'value'});
+    const value = wrapper.find({testID: 'test:id/value'});
     value.children().should.have.text(fakeField.projectCustomField.emptyFieldText);
   });
 
   it('should render empty value if value is empty array', () => {
     fakeField.value = [];
     const wrapper = shallow(<CustomField field={fakeField}/>);
-    const value = wrapper.find({testID: 'value'});
+    const value = wrapper.find({testID: 'test:id/value'});
     value.children().should.have.text(fakeField.projectCustomField.emptyFieldText);
   });
 });
