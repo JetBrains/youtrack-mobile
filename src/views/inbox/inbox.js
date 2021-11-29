@@ -621,8 +621,8 @@ class Inbox extends Component<Props, State> {
   renderSelectIssueIcon = () => {
     return (
       <View style={styles.splitViewMainEmpty}>
-        {<IconNothingSelected size={ICON_PICTOGRAM_DEFAULT_SIZE} style={styles.noIssuesSelected}/>}
-        <Text style={styles.headerText}>Select an issue from the list</Text>
+        {<IconNothingSelected size={ICON_PICTOGRAM_DEFAULT_SIZE}/>}
+        <Text style={styles.splitViewMessage}>Select an issue from the list</Text>
       </View>
     );
   }
@@ -632,8 +632,8 @@ class Inbox extends Component<Props, State> {
     const {focusedNotificationId, isSummaryOrDescriptionChange} = this.state;
 
     const notification: any = items.find((it: any) => it.id === focusedNotificationId);
-    if (!focusedNotificationId || !items?.length || !notification) {
-      return this.renderSelectIssueIcon();
+    if (!focusedNotificationId || !notification) {
+      return items?.length === 0 ? null : this.renderSelectIssueIcon();
     }
 
     const issue: $Shape<IssueOnList> = notification?.metadata?.issue || notification?.comment?.issue;

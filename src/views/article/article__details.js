@@ -33,12 +33,13 @@ type Props = {
   uiTheme: UITheme,
   scrollData: Object,
   onCheckboxUpdate?: (articleContent: string) => Function,
+  isTablet: boolean,
 };
 
 const ArticleDetails = (props: Props) => {
 
   function navigateToSubArticlePage(article: Article) {
-    Router.Page({children: renderSubArticles(article)});
+    Router[props.isTablet ? routeMap.PageModal : routeMap.Page]({children: renderSubArticles(article)});
   }
 
   function renderSubArticles(article: Article) {
@@ -48,12 +49,18 @@ const ArticleDetails = (props: Props) => {
         <ArticleWithChildren
           style={styles.subArticleItem}
           article={item}
-          onArticlePress={(article: Article) => Router.Article({
-            articlePlaceholder: article,
-            storePrevArticle: true,
-            store: true,
-            storeRouteName: routeMap.ArticleSingle,
-          })}
+          onArticlePress={(article: Article) => {
+            if (props.isTablet) {
+              Router.KnowledgeBase({lastVisitedArticle: article});
+            } else {
+              Router.Article({
+                articlePlaceholder: article,
+                storePrevArticle: true,
+                store: true,
+                storeRouteName: routeMap.ArticleSingle,
+              });
+            }
+          }}
           onShowSubArticles={(childArticle: Article) => navigateToSubArticlePage(childArticle)}
         />
       );

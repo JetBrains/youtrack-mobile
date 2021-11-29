@@ -1,5 +1,8 @@
+import {MAIN_FONT_SIZE} from './typography';
+
 export const splitViewStyles = {
   splitViewContainer: {
+    flex: 1,
     flexDirection: 'row',
   },
   splitViewSide: {
@@ -17,5 +20,9 @@ export const splitViewStyles = {
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  splitViewMessage: {
+    color: '$text',
+    fontSize: MAIN_FONT_SIZE + 1,
   },
 };

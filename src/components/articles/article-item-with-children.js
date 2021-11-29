@@ -18,14 +18,15 @@ type Props = {
   onArticlePress: (article: Article) => void,
   onShowSubArticles?: (article: Article) => any,
   onDelete?: (article: Article) => any,
-  style?: ViewStyleProp
+  style?: ViewStyleProp,
+  isTablet: boolean,
 };
 
 
 const ArticleItemWithChildren = (props: Props) => {
   const [isLoadingSubArticles, updateIsLoadingSubArticles] = useState(false);
 
-  const {article, onArticlePress, onShowSubArticles, style, onDelete} = props;
+  const {article, onArticlePress, onShowSubArticles, style, onDelete, isTablet} = props;
 
   if (!article) {
     return null;
@@ -61,6 +62,7 @@ const ArticleItemWithChildren = (props: Props) => {
       </TouchableOpacity>}
 
       {article?.childArticles?.length > 0 && <TouchableOpacity
+        isDisabled={isTablet}
         style={styles.itemButtonContainer}
         onPress={async () => {
           if (onShowSubArticles) {
@@ -70,11 +72,11 @@ const ArticleItemWithChildren = (props: Props) => {
           }
         }}
       >
-        <View style={styles.itemButton}>
-          {isLoadingSubArticles && <ActivityIndicator color={styles.icon.color} />}
+        <View style={isTablet ? null : styles.itemButton}>
+          {!isTablet && isLoadingSubArticles && <ActivityIndicator color={styles.icon.color} />}
           {!isLoadingSubArticles && <>
-            <Text style={styles.itemButtonText}>{article.childArticles.length}</Text>
-            <IconAngleRight style={styles.itemButtonIcon} size={22} color={styles.icon.color}/>
+            <Text style={[styles.itemButtonText, isTablet && styles.itemButtonTextTablet]}>{article.childArticles.length}</Text>
+            {!isTablet && <IconAngleRight style={styles.itemButtonIcon} size={22} color={styles.icon.color}/>}
           </>}
         </View>
       </TouchableOpacity>}

@@ -480,8 +480,8 @@ export class Issues extends Component<Props, State> {
     if (!focusedIssue || !this.hasIssues()) {
       return (
         <View style={styles.splitViewMainEmpty}>
-          {<IconNothingSelected size={ICON_PICTOGRAM_DEFAULT_SIZE} style={styles.noIssuesSelected}/>}
-          <Text style={styles.headerText}>Select an issue from the list</Text>
+          {<IconNothingSelected size={ICON_PICTOGRAM_DEFAULT_SIZE}/>}
+          <Text style={styles.splitViewMessage}>Select an issue from the list</Text>
         </View>
       );
     }

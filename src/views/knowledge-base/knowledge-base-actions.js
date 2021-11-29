@@ -284,7 +284,7 @@ const toggleProjectFavorite = (item: ArticlesListItem): ((
       message: 'Toggle project article favorite',
       analyticsId: ANALYTICS_ARTICLES_PAGE,
     });
-    confirmation(
+    return confirmation(
       'Remove project from favorites?',
       'Remove',
     )
@@ -301,12 +301,15 @@ const toggleProjectFavorite = (item: ArticlesListItem): ((
         if (error) {
           notify('Failed to toggle favorite for the project', error);
           update(prevArticles);
+          return true;
         } else {
           const projects: Array<ArticleProject> = await dispatch(cacheProjects());
           const hasPinned: boolean = projects.some((it: ArticleProject) => it.pinned);
           if (!hasPinned) {
             update(null);
+            dispatch(clearUserLastVisitedArticle());
           }
+          return hasPinned;
         }
       }).catch(() => {});
 
@@ -360,7 +363,12 @@ const setNoFavoriteProjects = (): ((dispatch: (any) => any) => Promise<void>) =>
   dispatch(setError({noFavoriteProjects: true}));
 };
 
-const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean, onShowMoreProjects: Function): (() => Promise<void>) =>
+const showContextActions = (
+  actionSheet: ActionSheet,
+  canCreateArticle: boolean,
+  onShowMoreProjects: Function,
+  isTablet: boolean,
+): (() => Promise<void>) =>
   async () => {
     const actions: Array<ActionSheetOption> = [
       {
@@ -373,7 +381,7 @@ const showContextActions = (actionSheet: ActionSheet, canCreateArticle: boolean,
     if (canCreateArticle && getStorageState().projects.some((it:ArticleProject) => it.pinned)) {
       actions.unshift({
         title: 'New Article',
-        execute: () => Router.ArticleCreate({isNew: true}),
+        execute: () => Router.ArticleCreate({isNew: true, isTablet}),
       });
     }
 

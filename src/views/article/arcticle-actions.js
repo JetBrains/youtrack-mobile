@@ -130,7 +130,8 @@ const showArticleActions = (
   canDelete: boolean,
   renderBreadCrumbs: Function,
   canStar: boolean,
-  hasStar: boolean
+  hasStar: boolean,
+  isTablet: boolean,
 ): ((
   dispatch: (any) => any,
   getState: () => AppState,
@@ -198,6 +199,7 @@ const showArticleActions = (
             originalArticleId: article.id,
             articleDraft: Array.isArray(articleDrafts) ? articleDrafts[0] : articleDrafts,
             breadCrumbs: renderBreadCrumbs(),
+            isTablet,
           });
         },
       });

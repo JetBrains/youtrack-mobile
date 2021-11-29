@@ -6,6 +6,7 @@ import {elevation1} from '../../components/common-styles/shadow';
 import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
 import {Platform} from 'react-native';
 import {SELECT_ITEM_HEIGHT} from '../../components/select/select.styles';
+import {splitViewStyles} from '../../components/common-styles/split-view';
 import {UNIT} from '../../components/variables/variables';
 
 const wrapper = {
@@ -25,7 +26,7 @@ export default EStyleSheet.create({
   content: {
     flex: 1,
   },
-
+  ...splitViewStyles,
   header: {
     position: 'relative',
     zIndex: 1,

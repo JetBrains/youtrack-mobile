@@ -46,7 +46,8 @@ type Props = {
   } | null,
   isNew?: boolean,
   originalArticleId?: string,
-  breadCrumbs?: React$Element<any> | null
+  breadCrumbs?: React$Element<any> | null,
+  isTablet: boolean,
 }
 
 const ArticleCreate = (props: Props) => {
@@ -175,8 +176,12 @@ const ArticleCreate = (props: Props) => {
               articleCreateActions.publishArticleDraft(draft)
             );
             if (!error) {
-              Router.KnowledgeBase({preventReload: true}); //TODO #YTM-12710. It fixes hanging after creating 2nd sub-article #YTM-12655
-              Router.Article({articlePlaceholder: createdArticle});
+              if (props.isTablet) {
+                Router.KnowledgeBase({lastVisitedArticle: createdArticle});
+              } else {
+                Router.KnowledgeBase({preventReload: true}); //TODO #YTM-12710. It fixes hanging after creating 2nd sub-article #YTM-12655
+                Router.Article({articlePlaceholder: createdArticle});
+              }
             }
           }
         }}/>
