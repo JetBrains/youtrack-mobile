@@ -43,7 +43,9 @@ describe('Issue list actions', () => {
     };
     dispatch = sinon.spy();
     getState = () => stateMock;
-    apiMock = {};
+    apiMock = {
+      search: {},
+    };
 
     __setStorageState({});
   });
@@ -67,15 +69,15 @@ describe('Issue list actions', () => {
 
     beforeEach(() => {
       const queryAssistSuggestionsResourceMock = jest.fn().mockResolvedValueOnce(assistSuggestions);
-      apiMock.getQueryAssistSuggestions = queryAssistSuggestionsResourceMock;
-      apiMock.getQueryAssistSuggestionsLegacy = queryAssistSuggestionsResourceMock;
+      apiMock.search.getQueryAssistSuggestions = queryAssistSuggestionsResourceMock;
+      apiMock.search.getQueryAssistSuggestionsLegacy = queryAssistSuggestionsResourceMock;
     });
 
     it('should use legacy REST endpoint', async () => {
       jest.spyOn(Feature, 'checkVersion').mockReturnValueOnce(false);
 
       await doSuggest(2);
-      expect(apiMock.getQueryAssistSuggestionsLegacy).toHaveBeenCalledWith(
+      expect(apiMock.search.getQueryAssistSuggestionsLegacy).toHaveBeenCalledWith(
         stateMock.issueList.query,
         2
       );
@@ -89,7 +91,7 @@ describe('Issue list actions', () => {
       });
 
       await doSuggest(5);
-      expect(apiMock.getQueryAssistSuggestions).toHaveBeenCalledWith(
+      expect(apiMock.search.getQueryAssistSuggestions).toHaveBeenCalledWith(
         stateMock.issueList.query,
         5,
         [searchContextMock]
@@ -100,7 +102,7 @@ describe('Issue list actions', () => {
       jest.spyOn(Feature, 'checkVersion').mockReturnValueOnce(true);
 
       await doSuggest(5);
-      expect(apiMock.getQueryAssistSuggestions).toHaveBeenCalledWith(
+      expect(apiMock.search.getQueryAssistSuggestions).toHaveBeenCalledWith(
         stateMock.issueList.query,
         5,
         null

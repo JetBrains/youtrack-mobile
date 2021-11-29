@@ -33,8 +33,8 @@ export const getAssistSuggestions = async (
   const folder: Folder | null = getStorageState().searchContext || null;
   const promise: Promise<Array<TransformedSuggestion>> = (
     checkVersion('2020.1')
-      ? api.getQueryAssistSuggestions(query, caret, folder && folder.id ? [folder] : null)
-      : api.getQueryAssistSuggestionsLegacy(query, caret)
+      ? api.search.getQueryAssistSuggestions(query, caret, folder && folder.id ? [folder] : null)
+      : api.search.getQueryAssistSuggestionsLegacy(query, caret)
   );
   const [error, assistSuggestions] = await until(promise);
 

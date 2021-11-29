@@ -16,7 +16,7 @@ const doAssist = async (params: {
 }): Promise<SearchSuggestions> => {
   const api: API = getApi();
   const {context, query = '', sortProperties} = params;
-  return await api.search.assist({
+  return await api.search.getSearchSuggestions({
     folder: context?.id ? context : undefined,
     query,
     sortProperties,
