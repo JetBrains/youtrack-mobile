@@ -35,7 +35,6 @@ import {rootRoutesList, routeMap} from './app-routes';
 import type {Node} from 'React';
 import type {NotificationRouteData} from './flow/Notification';
 import type {Ref} from 'react';
-import log from './components/log/log';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
