@@ -16,6 +16,7 @@ export const routeMap = {
   Page: 'Page',
   PageModal: 'PageModal',
   Settings: 'Settings',
+  Modal: 'Modal',
   PreviewFile: 'PreviewFile',
   Issue: 'Issue',
   Issue2: 'Issue2',

@@ -17,10 +17,12 @@ import Inbox from './views/inbox/inbox';
 import Issue from './views/issue/issue';
 import Issues from './views/issues/issues';
 import KnowledgeBase from './views/knowledge-base/knowledge-base';
+import log from './components/log/log';
 import LoginForm from './views/log-in/log-in';
+import ModalViewDimmed from './components/modal-view/modal-view-dimmed';
+import notificationsHelper from './components/push-notifications/push-notifications-helper';
 import Page from './views/page/page';
 import PreviewFile from './views/preview-file/preview-file';
-import notificationsHelper from './components/push-notifications/push-notifications-helper';
 import Router from './components/router/router';
 import Settings from './views/settings/settings';
 import store from './store';
@@ -122,6 +124,7 @@ class YouTrackMobile extends Component<void, void> {
     Router.registerRoute({name: routeMap.KnowledgeBase, component: KnowledgeBase, type: 'reset'});
     Router.registerRoute({name: routeMap.Page, component: Page});
     Router.registerRoute({name: routeMap.PageModal, component: Page, modal: true});
+    Router.registerRoute({name: routeMap.Modal, component: ModalViewDimmed, modal: true, dimmed: true});
     Router.registerRoute({name: routeMap.Settings, component: Settings, type: 'reset'});
     Router.registerRoute({name: routeMap.WikiPage, component: WikiPage, modal: true});
 

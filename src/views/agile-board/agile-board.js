@@ -178,7 +178,7 @@ class AgileBoard extends Component<Props, State> {
     log.debug(`Opening issue "${issue.id}" from Agile Board`);
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
     if (this.props.isTablet) {
-      Router.PageModal({
+      Router.Modal({
         children: (
           <Issue
             issuePlaceholder={issue}
