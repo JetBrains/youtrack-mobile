@@ -1,7 +1,7 @@
 /* @flow */
 
 import {Dimensions} from 'react-native';
-import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../agile-column/agile-column';
+import {AGILE_COLLAPSED_COLUMN_WIDTH, AGILE_TABLET_EXPANDED_COLUMN_WIDTH} from '../agile-common/agile-common';
 import {UNIT} from '../variables/variables';
 
 import {isIOSPlatform} from '../../util/util';
@@ -40,11 +40,18 @@ export function getColumnsWidthAsArray(columns: Array<BoardColumn> = []): Array<
     .map(col => col.collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : widthData.cardWidth);
 }
 
-export function getScrollableWidth(columns: Array<BoardColumn> = []): number {
+export function getScrollableWidth(columns: Array<BoardColumn> = [], isTablet: boolean): number {
   const widthData: WidthData = calculateWidthData();
 
   if (isAllColumnsCollapsed(columns)) {
     return widthData.windowWidth;
+  }
+
+  if (isTablet) {
+    return Math.max(
+      AGILE_TABLET_EXPANDED_COLUMN_WIDTH * columns.length,
+      widthData.windowWidth
+    );
   }
 
   return getColumnsWidthAsArray(columns).reduce((totalWidth: number, item: number) => totalWidth + item, 0);

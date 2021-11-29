@@ -16,12 +16,14 @@ import styles from './menu.styles';
 
 import type {Article} from '../../flow/Article';
 import type {UITheme} from '../../flow/Theme';
+import type {AppState} from '../../reducers';
 
 type Props = {
-  isVisible: boolean,
   isDisabled: boolean,
+  isTablet: boolean,
+  isVisible: boolean,
   lastVisitedArticle?: Article,
-  uiTheme: UITheme
+  uiTheme: UITheme,
 }
 
 type State = {
@@ -146,10 +148,10 @@ class Menu extends Component<Props, State> {
     if (this.canNavigateTo(routeMap.KnowledgeBase)) {
       const articleLastVisited = getStorageState().articleLastVisited;
       const article: ?Article = articleLastVisited && articleLastVisited.article;
-      if (article && isNotArticleView) {
+      if (article && isNotArticleView && !this.props.isTablet) {
         Router.ArticleSingle({articlePlaceholder: article});
       } else {
-        Router.KnowledgeBase();
+        Router.KnowledgeBase(this.props.isTablet ? {lastVisitedArticle: article} : undefined);
       }
     }
   };
@@ -221,10 +223,11 @@ class Menu extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: AppState) => {
   return {
     isVisible: state.app.auth && state.app.user,
     isDisabled: state.app.isChangingAccount,
+    isTablet: state.app.isTablet,
   };
 };
 

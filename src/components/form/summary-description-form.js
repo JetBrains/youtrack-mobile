@@ -71,6 +71,9 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
                 multiline={true}
                 editable={editable}
                 autoFocus
+                testID="test:id/issue-summary"
+                accessibilityLabel="issue-summary"
+                accessible={true}
                 placeholder={summaryPlaceholder}
                 placeholderTextColor={styles.placeholder.color}
                 underlineColorAndroid="transparent"
@@ -85,6 +88,9 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
 
               <TextEditForm
                 editable={editable}
+                testID="test:id/issue-description"
+                accessibilityLabel="issue-description"
+                accessible={true}
                 description={description}
                 placeholderText={descriptionPlaceholder}
                 multiline={true}

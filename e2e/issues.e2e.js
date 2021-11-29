@@ -19,7 +19,7 @@ describe('Issues list', () => {
     it('should show `No issues found` error', async () => {
       await issuesPage.search('"Find not existing issues"');
 
-      await expect(element(by.id('error-message'))).toHaveText('No issues found');
+      await expect(element(by.id('test:id/error-message'))).toHaveText('No issues found');
     });
 
     it('should search for TP-7', async () => {
@@ -31,7 +31,7 @@ describe('Issues list', () => {
     it('should show `Invalid query` error', async () => {
       await issuesPage.search('#{broken search}');
 
-      await expect(element(by.id('error-message'))).toHaveText('Invalid query');
+      await expect(element(by.id('test:id/error-message'))).toHaveText('Invalid query');
     });
   });
 

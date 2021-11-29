@@ -45,7 +45,8 @@ type Props = ArticleState & {
   articlePlaceholder: ArticleEntity,
   storePrevArticle?: boolean,
   updateArticlesList: () => Function,
-  lastVisitedArticle: ?Article
+  lastVisitedArticle: ?Article,
+  isTablet: boolean,
 } & typeof articleActions;
 
 //$FlowFixMe
@@ -75,6 +76,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
 
     const currentArticle: Article = this.getArticle();
     if (currentArticle && (currentArticle.id || currentArticle.idReadable)) {
+      this.switchToDetailsTab();
       this.props.loadArticleFromCache(currentArticle);
       this.loadArticle(currentArticle.id || currentArticle.idReadable, false);
 
@@ -147,8 +149,9 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       issuePermissions,
       createSubArticle,
       onCheckboxUpdate,
+      isTablet,
     } = this.props;
-    const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
+    const breadCrumbsElement = article && !isTablet ? this.renderBreadCrumbs() : null;
 
     const articleNode: ?ArticleNode = articleData?.project && findArticleNode(
       articlesList, articleData.project.id, articleData?.id
@@ -208,6 +211,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
           isLoading={isLoading}
           uiTheme={this.uiTheme}
           onCheckboxUpdate={(articleContent: string) => onCheckboxUpdate(articleContent)}
+          isTablet={isTablet}
         />
       </View>
     );
@@ -272,6 +276,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       isProcessing,
       showArticleActions,
       issuePermissions,
+      isTablet,
     } = this.props;
     const articleData: $Shape<ArticleEntity> = article || articlePlaceholder;
     if (!articleData) {
@@ -284,13 +289,15 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     const isArticleLoaded: boolean = !!article;
 
     const props: HeaderProps = {
-      leftButton: <IconBack color={isProcessing ? textSecondaryColor : linkColor}/>,
+      leftButton: isTablet ? null : <IconBack color={isProcessing ? textSecondaryColor : linkColor}/>,
       onBack: () => {
-        if (isProcessing) {
-          return;
+        if (!isTablet) {
+          if (isProcessing) {
+            return;
+          }
+          const hasParent: boolean = Router.pop();
+          !hasParent && Router.KnowledgeBase();
         }
-        const hasParent: boolean = Router.pop();
-        !hasParent && Router.KnowledgeBase();
       },
       rightButton: isArticleLoaded && !isProcessing ? <IconContextActions size={18} color={linkColor}/> : null,
       onRightButtonClick: () => showArticleActions(
@@ -302,7 +309,8 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
           excludeProject: true,
         }),
         issuePermissions.canStar(),
-        articleData.hasStar
+        articleData.hasStar,
+        isTablet,
       ),
     };
 
@@ -352,6 +360,7 @@ const mapStateToProps = (
     issuePermissions: state.app.issuePermissions,
     lastVisitedArticle: state.app?.user?.profiles?.articles?.lastVisitedArticle,
     articlesList: createArticleList(state.articles.articles || getStorageState().articles || []),
+    isTablet: state.app.isTablet,
   };
 };
 const mapDispatchToProps = (dispatch) => {

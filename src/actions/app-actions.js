@@ -590,11 +590,15 @@ function subscribeToURL(): Action {
 
 export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
-    Router._getNavigator() && Router.Home({
-      backendUrl: config.backendUrl,
-      error: null,
-      message: 'Connecting to YouTrack...',
-    });
+    dispatch({type: types.SET_IS_TABLET, isTablet: DeviceInfo.isTablet()});
+    if (Router._getNavigator()) {
+      Router.navigateToDefaultRoute(
+        {
+          isAppStart: true,
+        ...(issueId ? {issueId, navigateToActivity} : {}),
+        }
+      );
+    }
 
     const refreshConfig: () => Promise<void> = async (): Promise<void> => {
       const updatedConfig: AuthConfig = await loadConfig(config.backendUrl);

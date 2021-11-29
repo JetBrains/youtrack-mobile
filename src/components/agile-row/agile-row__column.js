@@ -19,11 +19,12 @@ type ColumnProps = {
   lastColumn: boolean,
   renderIssueCard: (issue: IssueFull) => any,
   uiTheme: UITheme,
-  zoomedIn?: boolean
+  zoomedIn?: boolean,
+  isTablet: boolean,
 }
 
 export default function AgileRowColumn(props: ColumnProps): Node {
-  const {cell, uiTheme} = props;
+  const {cell, uiTheme, zoomedIn, isTablet} = props;
   const issues: Array<IssueFull> = cell.issues || [];
 
   return (
@@ -39,7 +40,10 @@ export default function AgileRowColumn(props: ColumnProps): Node {
 
       <TouchableOpacity
         onPress={() => props.onTapCreateIssue(cell.column.id, cell.id)}
-        style={styles.addCardButton}
+        style={[
+          styles.addCardButton,
+          isTablet && zoomedIn ? styles.addCardButtonTablet : null,
+        ]}
       >
         <IconAdd color={uiTheme.colors.$link} size={18}/>
       </TouchableOpacity>

@@ -11,6 +11,7 @@ const ISSUE_PROJECT_FIELDS: any = toField([
   'archived',
   'shortName',
   'ringId',
+  'template',
   {
     plugins: {
       timeTrackingSettings: toField([

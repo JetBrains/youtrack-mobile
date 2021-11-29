@@ -22,7 +22,9 @@ const AttachmentAddPanel = (props: Props): Node => {
   return (
     <View style={[styles.attachButtonsContainer, props.style]}>
       <TouchableOpacity
-        testID="createIssueAttachmentButton"
+        testID="test:id/attachment-button"
+        accessibilityLabel="attachment-button"
+        accessible={true}
         disabled={props.isDisabled}
         style={styles.attachButton}
         onPress={props.showAddAttachDialog}

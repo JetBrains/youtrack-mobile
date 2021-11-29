@@ -26,7 +26,7 @@ type Props = {
 
 export default class CustomField extends Component<Props, void> {
   _getFieldType(field: CustomFieldType) {
-    if (!field.projectCustomField.field.fieldType) {
+    if (!field?.projectCustomField?.field?.fieldType) {
       return null;
     }
 
@@ -35,7 +35,7 @@ export default class CustomField extends Component<Props, void> {
 
   _getValue(value: ?FieldValue, fieldType: ?string): ?string {
     const field: CustomFieldType = this.props.field;
-    const emptyValue: ?string = field.projectCustomField.emptyFieldText;
+    const emptyValue: ?string = field?.projectCustomField?.emptyFieldText || '';
 
     if (value != null) {
       if (fieldType === 'date') {
@@ -54,8 +54,8 @@ export default class CustomField extends Component<Props, void> {
   }
 
   _getKey() {
-    const field = this.props.field;
-    return field.projectCustomField.field.name;
+    const field: CustomFieldType = this.props.field;
+    return field?.projectCustomField?.field?.name || field?.name || '';
   }
 
   _renderColorMaker(value: ?FieldValue | ?Array<FieldValue>) {
@@ -90,7 +90,12 @@ export default class CustomField extends Component<Props, void> {
           key="value"
         >
           {val && fieldType === 'user' ? this.renderAvatar(val) : null}
-          <Text testID="value" style={textStyle}>
+          <Text
+            testID="test:id/value"
+            accessibilityLabel="value"
+            accessible={true}
+            style={textStyle}
+          >
             {
               valuePresentation?.length > 203 ? `${valuePresentation.substr(0, 200)}...` : valuePresentation
             }
@@ -127,7 +132,9 @@ export default class CustomField extends Component<Props, void> {
     const user: User = ApiHelper.convertRelativeUrls([fieldValue], 'avatarUrl', getHUBUrl())[0];
     return (
       <Avatar
-        testID="customFieldAvatar"
+        testID="test:id/customFieldAvatar"
+        accessibilityLabel="name"
+        accessible={true}
         style={styles.colorMarker}
         key={user.id}
         userName={getEntityPresentation(user)}
@@ -148,7 +155,9 @@ export default class CustomField extends Component<Props, void> {
         <View style={styles.keyWrapper}>
           <Text
             style={styles.keyText}
-            testID="name"
+            testID="test:id/name"
+            accessibilityLabel="name"
+            accessible={true}
           >
             {this._getKey()}
           </Text>

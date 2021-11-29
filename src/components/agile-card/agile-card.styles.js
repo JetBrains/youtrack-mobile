@@ -2,9 +2,10 @@
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {UNIT} from '../variables/variables';
+import {AGILE_TABLET_CARD_WIDTH} from '../agile-common/agile-common';
 import {issueCard, issueIdResolved} from '../common-styles/issue';
 import {secondaryText} from '../common-styles/typography';
+import {UNIT} from '../variables/variables';
 
 export const agileCard = {
   flexDirection: 'row',
@@ -16,6 +17,9 @@ export const agileCard = {
 
 export default (EStyleSheet.create({
   card: agileCard,
+  cardTablet: {
+    width: AGILE_TABLET_CARD_WIDTH,
+  },
   cardColorCoding: {
     flexShrink: 0,
     marginTop: UNIT / 4,

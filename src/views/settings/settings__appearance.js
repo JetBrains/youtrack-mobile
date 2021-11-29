@@ -1,6 +1,5 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
@@ -8,15 +7,22 @@ import Header from '../../components/header/header';
 import Router from '../../components/router/router';
 import {getStorageState} from '../../components/storage/storage';
 import {getSystemThemeMode, themes} from '../../components/theme/theme';
-import {IconBack, IconCheck} from '../../components/icon/icon';
+import {IconBack, IconCheck, IconClose} from '../../components/icon/icon';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import {HIT_SLOP} from '../../components/common-styles/button';
+
 import styles from './settings.styles';
 
+import type {Node} from 'React';
 import type {Theme} from '../../flow/Theme';
 
-const SettingsAppearance = (): Node => {
+type Props = {
+  isTablet: boolean,
+}
+
+
+const SettingsAppearance = (props: Props): Node => {
 
   const renderThemeCheckbox = (currentTheme: Theme, uiTheme: Object): any => {
     const userThemeMode: ?string = getStorageState().themeMode || '';
@@ -50,10 +56,12 @@ const SettingsAppearance = (): Node => {
           <Header
             style={styles.elevation1}
             title="Appearance"
-            leftButton={
-              <IconBack color={theme.uiTheme.colors.$link}/>
-            }
-            onBack={() => Router.pop()}
+            leftButton={(
+              props.isTablet
+                ? <IconClose size={21} color={theme.uiTheme.colors.$link}/>
+                : <IconBack color={theme.uiTheme.colors.$link}/>
+            )}
+            onBack={() => Router.pop(props.isTablet)}
           />
 
           <View style={styles.settingsAppearance}>

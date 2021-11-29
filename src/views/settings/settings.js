@@ -21,6 +21,8 @@ import styles from './settings.styles';
 
 import type {StorageState} from '../../components/storage/storage';
 import type {Theme, UITheme} from '../../flow/Theme';
+import type {AppState} from '../../reducers';
+import {routeMap} from '../../app-routes';
 
 type Props = {
   onLogOut: () => any,
@@ -32,7 +34,8 @@ type Props = {
   isChangingAccount: ?boolean,
 
   features: Array<Object>,
-  setFeatures: Function
+  setFeatures: Function,
+  isTablet: boolean,
 };
 
 type State = {
@@ -62,6 +65,7 @@ class Settings extends PureComponent<Props, State> {
       features,
       otherAccounts,
       isChangingAccount,
+      isTablet,
     } = this.props;
 
     return (
@@ -70,7 +74,9 @@ class Settings extends PureComponent<Props, State> {
           const uiTheme: UITheme = theme.uiTheme;
           const settingItems: Array<{ title: string, onPress: Function }> = [{
             title: 'Appearance',
-            onPress: () => Router.Page({children: <SettingsAppearance/>}),
+            onPress: () => {
+              Router[isTablet ? routeMap.Modal : routeMap.Page]({children: <SettingsAppearance isTablet={true}/>});
+              },
           }, {
             title: 'Share logs',
             onPress: openDebugView,
@@ -153,12 +159,13 @@ class Settings extends PureComponent<Props, State> {
 }
 
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: AppState, ownProps) => {
   return {
     ...ownProps,
     otherAccounts: state.app.otherAccounts,
     isChangingAccount: state.app.isChangingAccount,
     features: state.app.features,
+    isTablet: state.app.isTablet,
   };
 };
 

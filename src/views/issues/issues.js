@@ -15,6 +15,7 @@ import {connect} from 'react-redux';
 
 import * as issueActions from './issues-actions';
 import ErrorMessage from '../../components/error-message/error-message';
+import Issue from '../issue/issue';
 import IssueRow from './issues__row';
 import IssuesCount from './issues__count';
 import IssuesSortBy from './issues__sortby';
@@ -29,7 +30,7 @@ import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAdd, IconAngleDown, IconBookmark} from '../../components/icon/icon';
-import {IconNothingFound} from '../../components/icon/icon-no-found';
+import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound, IconNothingSelected} from '../../components/icon/icon-pictogram';
 import {initialState} from './issues-reducers';
 import {isReactElement} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
@@ -41,7 +42,7 @@ import {ThemeContext} from '../../components/theme/theme-context';
 import {UNIT} from '../../components/variables/variables';
 import {View as AnimatedView} from 'react-native-animatable';
 
-import styles, {noIssuesFoundIconSize} from './issues.styles';
+import styles from './issues.styles';
 
 import type Api from '../../components/api/api';
 import type Auth from '../../components/auth/oauth2';
@@ -49,35 +50,42 @@ import type {AppState} from '../../reducers';
 import type {ErrorMessageProps} from '../../components/error-message/error-message';
 import type {IssueOnList} from '../../flow/Issue';
 import type {IssuesState} from './issues-reducers';
-import type {Theme, UITheme} from '../../flow/Theme';
+import type {Theme} from '../../flow/Theme';
 
-type Props = $Shape<IssuesState & typeof issueActions & {
+type IssuesActions = typeof issueActions;
+type Props = {
+  ...IssuesState,
+  ...IssuesActions,
   auth: Auth,
   api: Api,
-  initialSearchQuery: ?string,
+  isAppStart?: boolean,
   onOpenContextSelect: () => any
-}>;
+};
+
 
 type State = {
   isEditQuery: boolean,
-  clearSearchQuery: boolean
+  clearSearchQuery: boolean,
+  focusedIssue: IssueOnList | null,
 }
 
 export class Issues extends Component<Props, State> {
   searchPanelNode: Object;
   unsubscribeOnDispatch: Function;
+  theme: Theme;
 
   constructor(props: Props) {
     super(props);
     this.state = {
       isEditQuery: false,
       clearSearchQuery: false,
+      focusedIssue: null,
     };
     usage.trackScreenView('Issue list');
   }
 
   componentDidMount() {
-    this.props.initializeIssuesList(this.props.initialSearchQuery);
+    this.props.initializeIssuesList(this.props.isAppStart);
 
     this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
       if (prevRouteName === routeMap.Issues && routeName !== routeMap.Issues) {
@@ -91,6 +99,14 @@ export class Issues extends Component<Props, State> {
         }
       }
     });
+  }
+
+  componentDidUpdate(prevProps: Props): void {
+    if (
+      prevProps?.searchContext && prevProps?.searchContext?.id !== this.props?.searchContext?.id ||
+      prevProps?.query !== undefined && prevProps?.query !== this.props?.query) {
+      this.updateFocusedIssue(null);
+    }
   }
 
   componentWillUnmount() {
@@ -118,7 +134,7 @@ export class Issues extends Component<Props, State> {
     });
   }
 
-  renderCreateIssueButton: ((isDisabled: boolean, uiTheme: UITheme) => Node) = (isDisabled: boolean, uiTheme: UITheme) => {
+  renderCreateIssueButton: ((isDisabled: boolean) => Node) = (isDisabled: boolean) => {
     return (
       <TouchableOpacity
         hitSlop={HIT_SLOP}
@@ -129,22 +145,36 @@ export class Issues extends Component<Props, State> {
         onPress={() => Router.CreateIssue()}
         disabled={isDisabled}
       >
-        <IconAdd size={20} color={uiTheme.colors.$link}/>
+        <IconAdd size={20} color={this.theme.uiTheme.colors.$link}/>
       </TouchableOpacity>
     );
   };
 
   _renderRow = ({item}) => {
+    const {focusedIssue} = this.state;
+
     if (isReactElement(item)) {
       return item;
     }
 
     return (
-      <IssueRow
-        style={styles.row}
-        issue={item}
-        onClick={(issue) => this.goToIssue(issue)}
-        onTagPress={(query) => Router.Issues({query})}/>
+      <View
+        style={[
+          styles.row,
+          focusedIssue?.id === item.id ? styles.splitViewMainFocused : null,
+        ]}
+      >
+        <IssueRow
+          issue={item}
+          onClick={(issue) => {
+            if (this.props.isTablet) {
+              this.updateFocusedIssue(issue);
+            } else {
+              this.goToIssue(issue);
+            }
+          }}
+          onTagPress={(query) => Router.Issues({query})}/>
+      </View>
     );
   };
 
@@ -152,12 +182,12 @@ export class Issues extends Component<Props, State> {
     return `${isReactElement(item) ? item.key : item.id}`;
   };
 
-  _renderRefreshControl(uiTheme: UITheme) {
+  _renderRefreshControl() {
     return <RefreshControl
-      refreshing={this.props.isRefreshing}
+      refreshing={this.props.isRefreshing && !!this.props.isAppStart}
       //$FlowFixMe
       onRefresh={this.props.refreshIssues}
-      tintColor={uiTheme.colors.$link}
+      tintColor={this.theme.uiTheme.colors.$link}
       testID="refresh-control"
       accessibilityLabel="refresh-control"
       accessible={true}
@@ -175,7 +205,7 @@ export class Issues extends Component<Props, State> {
     this.props.loadMoreIssues();
   };
 
-  renderContextButton: ((uiTheme: UITheme) => Node) = (uiTheme: UITheme) => {
+  renderContextButton = () => {
     const {onOpenContextSelect, isRefreshing, searchContext, isSearchContextPinned} = this.props;
 
     return (
@@ -200,7 +230,7 @@ export class Issues extends Component<Props, State> {
           >
             {`${searchContext?.name || ''} `}
           </Text>
-          {searchContext && <IconAngleDown color={uiTheme.colors.$text} size={17}/>}
+          {searchContext && <IconAngleDown color={this.theme.uiTheme.colors.$text} size={17}/>}
         </View>
       </TouchableOpacity>
     );
@@ -242,15 +272,15 @@ export class Issues extends Component<Props, State> {
   };
 
   setEditQueryMode(isEditQuery: boolean) {
-    this.setState({
-      isEditQuery: isEditQuery,
-    });
+    this.setState({isEditQuery});
   }
 
   clearSearchQuery(clearSearchQuery: boolean) {
-    this.setState({
-      clearSearchQuery: clearSearchQuery,
-    });
+    this.setState({clearSearchQuery});
+  }
+
+  updateFocusedIssue(focusedIssue: IssueOnList | null) {
+    this.setState({focusedIssue});
   }
 
   onSearchQueryPanelFocus: ((clearSearchQuery?: boolean) => void) = (clearSearchQuery: boolean = false) => {
@@ -302,14 +332,18 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  renderSearchQuery: ((uiTheme: UITheme) => Node) = (uiTheme: UITheme) => {
-    const {query, issuesCount, openSavedSearchesSelect, searchContext} = this.props;
+  hasIssues = (): boolean => this.props.issues?.length > 0;
 
+  renderSearchQuery = () => {
+    const {query, issuesCount, openSavedSearchesSelect, searchContext, isAppStart} = this.props;
+    const Component: any = isAppStart ? AnimatedView : View;
     return (
-      <AnimatedView
-        useNativeDriver
-        duration={500}
-        animation="fadeIn"
+      <Component
+        {...(isAppStart ? {
+          useNativeDriver: true,
+          duration: isAppStart ? 500 : 0,
+          animation: 'fadeIn',
+        } : {})}
         style={styles.listHeader}
       >
         <View style={styles.listHeaderTop}>
@@ -325,20 +359,20 @@ export class Issues extends Component<Props, State> {
             accessible={true}
             onPress={openSavedSearchesSelect}
           >
-            <IconBookmark size={28} color={uiTheme.colors.$link}/>
+            <IconBookmark size={28} color={this.theme.uiTheme.colors.$link}/>
           </TouchableOpacity>
 
         </View>
 
-        <View style={styles.toolbar}>
-          <IssuesCount issuesCount={issuesCount}/>
-          <IssuesSortBy
+        {this.hasIssues() && <View style={styles.toolbar}>
+          {!isAppStart && <IssuesCount issuesCount={issuesCount}/>}
+          {!isAppStart && <IssuesSortBy
             context={searchContext}
             onApply={(q: string) => {this.onQueryUpdate(q);}}
             query={query}
-          />
-        </View>
-      </AnimatedView>
+          />}
+        </View>}
+      </Component>
     );
   };
 
@@ -350,10 +384,10 @@ export class Issues extends Component<Props, State> {
     return null;
   };
 
-  renderIssues(uiTheme: UITheme): Node {
+  renderIssueList(): Node {
     const {issues, isRefreshing} = this.props;
-    const contextButton = this.renderContextButton(uiTheme);
-    const searchQuery = this.renderSearchQuery(uiTheme);
+    const contextButton = this.renderContextButton();
+    const searchQuery = this.renderSearchQuery();
 
     if (isRefreshing && (!issues || issues.length === 0)) {
       return (
@@ -387,9 +421,9 @@ export class Issues extends Component<Props, State> {
         }}
         ListFooterComponent={this.renderIssuesFooter}
 
-        refreshControl={this._renderRefreshControl(uiTheme)}
+        refreshControl={this._renderRefreshControl()}
         onScroll={(params) => this.onScroll(params.nativeEvent)}
-        tintColor={uiTheme.colors.$link}
+        tintColor={this.theme.uiTheme.colors.$link}
 
         onEndReached={this.onEndReached}
         onEndReachedThreshold={0.1}
@@ -398,7 +432,7 @@ export class Issues extends Component<Props, State> {
   }
 
   renderError(): null | Node {
-    const {isRefreshing, loadingError, issues, isInitialized} = this.props;
+    const {isRefreshing, loadingError, isInitialized} = this.props;
     if (isRefreshing || !isInitialized) {
       return null;
     }
@@ -407,10 +441,10 @@ export class Issues extends Component<Props, State> {
       {},
       loadingError
         ? {error: loadingError}
-        : (issues?.length === 0 ? {
+        : (!this.hasIssues() ? {
           errorMessageData: {
             ...ERROR_MESSAGE_DATA.NO_ISSUES_FOUND,
-            icon: () => <IconNothingFound size={noIssuesFoundIconSize} style={styles.noIssuesFoundIcon} />,
+            icon: () => <IconNothingFound size={ICON_PICTOGRAM_DEFAULT_SIZE} style={styles.noIssuesFoundIcon}/>,
           },
         } : null)
     );
@@ -422,23 +456,72 @@ export class Issues extends Component<Props, State> {
     return null;
   }
 
-  render(): Node {
+  renderIssues = () => {
     const {isIssuesContextOpen, isRefreshing} = this.props;
+    return (
+      <View
+        style={styles.listContainer}
+        testID="test:id/issueListPhone"
+      >
+        {isIssuesContextOpen && this.renderContextSelect()}
+        {this.state.isEditQuery && this.renderSearchPanel()}
+
+        {this.renderIssueList()}
+        {this.renderError()}
+
+        {this.renderCreateIssueButton(isRefreshing)}
+      </View>
+    );
+  };
+
+  renderFocusedIssue = () => {
+    const {focusedIssue} = this.state;
+
+    if (!focusedIssue || !this.hasIssues()) {
+      return (
+        <View style={styles.splitViewMainEmpty}>
+          {<IconNothingSelected size={ICON_PICTOGRAM_DEFAULT_SIZE}/>}
+          <Text style={styles.splitViewMessage}>Select an issue from the list</Text>
+        </View>
+      );
+    }
+
+    return (
+      <View style={styles.splitViewMain}>
+        <Issue
+          issuePlaceholder={focusedIssue}
+          issueId={focusedIssue.id}
+        />
+      </View>
+    );
+  };
+
+  renderSplitView = () => {
+    return (
+      <>
+        <View style={styles.splitViewSide}>
+          {this.renderIssues()}
+        </View>
+        <View style={styles.splitViewMain}>
+          {this.renderFocusedIssue()}
+        </View>
+      </>
+    );
+  };
+
+  render(): Node {
+    const {isTablet} = this.props;
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
+          this.theme = theme;
           return (
             <View
-              style={styles.listContainer}
+              style={[styles.listContainer, isTablet ? styles.splitViewContainer : null]}
               testID="issue-list-page"
             >
-              {isIssuesContextOpen && this.renderContextSelect()}
-              {this.state.isEditQuery && this.renderSearchPanel()}
-
-              {this.renderIssues(theme.uiTheme)}
-              {this.renderError()}
-
-              {this.renderCreateIssueButton(isRefreshing, theme.uiTheme)}
+              {isTablet && this.renderSplitView()}
+              {!isTablet && this.renderIssues()}
             </View>
           );
         }}
@@ -447,11 +530,13 @@ export class Issues extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: AppState, ownProps: { isAppStart?: boolean }) => {
   return {
+    ...ownProps,
     ...state.issueList,
     ...state.app,
     searchContext: state.app?.user?.profiles?.general?.searchContext,
+    isTablet: state.app.isTablet,
   };
 };
 

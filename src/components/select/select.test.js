@@ -18,8 +18,8 @@ describe('<Select/>', () => {
   describe('Render', () => {
     it('should render component', () => {
       expect(findByTestId('select')).toHaveLength(1);
-      expect(findByTestId('selectInput')).toHaveLength(1);
-      expect(findByTestId('selectItems')).toHaveLength(1);
+      expect(findByTestId('test:id/selectInput')).toHaveLength(1);
+      expect(findByTestId('test:id/selectItems')).toHaveLength(1);
     });
   });
 

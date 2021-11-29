@@ -24,6 +24,7 @@ import {getApi} from '../../components/api/api__instance';
 import {getEntityPresentation, getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
 import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
 import {HIT_SLOP} from '../../components/common-styles/button';
+import {routeMap} from '../../app-routes';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
@@ -92,6 +93,7 @@ type Props = {
   onLinkIssue: (linkedIssueIdReadable: string, linkTypeName: string) => Promise<boolean>,
 
   setCustomFieldValue: (field: CustomFieldText, value: CustomFieldTextValue) => any,
+  isTablet: boolean,
 }
 
 export default class IssueDetails extends Component<Props, void> {
@@ -118,11 +120,11 @@ export default class IssueDetails extends Component<Props, void> {
   }
 
   renderLinksBlock: (() => void | Node) = () => {
-    const {issue, issuePermissions, getIssueLinksTitle} = this.props;
+    const {issue, issuePermissions, getIssueLinksTitle, isTablet} = this.props;
     return (
       <LinkedIssuesTitle
         issueLinks={issue.links}
-        onPress={() => Router.Page({
+        onPress={() => Router[isTablet ? routeMap.PageModal : routeMap.Page]({
           children: (
             <LinkedIssues
               issuesGetter={this.props.issuesGetter}
@@ -138,6 +140,7 @@ export default class IssueDetails extends Component<Props, void> {
                   : undefined
               )}
               subTitle={`${issue.idReadable} ${issue.summary}`}
+              isTablet={isTablet}
             />),
         })}
       />
@@ -316,6 +319,9 @@ export default class IssueDetails extends Component<Props, void> {
         <TouchableWithoutFeedback
           onLongPress={() => {onLongPress(issue.description, 'Copy description');}}
           delayLongPress={250}
+          testID="test:id/issue-description"
+          accessibilityLabel="issue-description"
+          accessible={true}
         >
           <View style={styles.description}>
             <IssueMarkdown

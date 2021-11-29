@@ -17,7 +17,7 @@ export default class IssuesAPI extends ApiBase {
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${q}`);
   }
 
-  async getIssues(query: string = '', $top: number, $skip: number): Promise<Array<IssueOnList>> {
+  async getIssues(query: string = '', $top: number, $skip?: number): Promise<Array<IssueOnList>> {
     const issues: Array<IssueOnList> = await this._getIssues(query, $top, $skip, issueFields.issuesOnList.toString());
     return ApiHelper.patchAllRelativeAvatarUrls(issues, this.config.backendUrl);
   }

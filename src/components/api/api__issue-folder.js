@@ -21,7 +21,7 @@ export default class IssueFolderAPI extends ApiBase {
   }
 
   async getPinnedIssueFolder(top: number = 100, skip: number = 0): Promise<Folder> {
-    const queryString = UserAPI.createFieldsQuery(['id', 'name', 'ringId', 'pinned']);
+    const queryString = UserAPI.createFieldsQuery(['id', 'name', 'ringId', 'pinned', 'template']);
     return this.makeAuthorizedRequest(`${this.youTrackApiUrl}/issueFolders?pinned=true&$top=${top}&$skip=${skip}&${queryString}`);
   }
 

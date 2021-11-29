@@ -119,8 +119,9 @@ class CreateIssue extends Component<Props, State> {
     return <CustomFieldsPanel
       analyticsId={ANALYTICS_ISSUE_CREATE_PAGE}
       autoFocusSelect
-      testID="createIssueFields"
-
+      testID="test:id/createIssueFields"
+      accessibilityLabel="createIssueFields"
+      accessible={true}
       issueId={issue.id}
       issueProject={issue.project}
       fields={getIssueCustomFieldsNotText(issue.fields)}
@@ -316,6 +317,9 @@ class CreateIssue extends Component<Props, State> {
                   getIssueTextCustomFields(this.props.issue.fields).map((textField: CustomFieldText, index: number) => {
                     return (
                       <IssueCustomFieldText
+                        testID="test:id/issue-custom-field"
+                        accessibilityLabel="issue-custom-field"
+                        accessible={true}
                         key={`issueCustomFieldText${index}`}
                         style={styles.textFields}
                         editMode={true}
@@ -333,7 +337,9 @@ class CreateIssue extends Component<Props, State> {
                   <>
                     <View style={styles.separator}/>
                     <View
-                      testID="createIssueAttachments"
+                      testID="test:id/attachment-button"
+                      accessibilityLabel="attachment-button"
+                      accessible={true}
                       style={[styles.additionalData, styles.issueAttachments]}
                     >
                       <AttachmentsRow
@@ -350,7 +356,9 @@ class CreateIssue extends Component<Props, State> {
 
                 {hasProject && (
                   <View
-                    testID="createIssueAttachments"
+                    testID="test:id/attachment-button"
+                    accessibilityLabel="attachment-button"
+                    accessible={true}
                     style={styles.additionalData}
                   >
                     <AttachmentAddPanel
@@ -364,7 +372,9 @@ class CreateIssue extends Component<Props, State> {
                   <>
                     <View style={styles.separator}/>
                     <View
-                      testID="createIssueAttachments"
+                      testID="test:id/attachment-button"
+                      accessibilityLabel="attachment-button"
+                      accessible={true}
                       style={styles.additionalData}
                     >
                       {!!issue.tags && (
@@ -393,6 +403,9 @@ class CreateIssue extends Component<Props, State> {
                   <>
                     <View style={styles.separator}/>
                     <View
+                      testID="test:id/link-issue-button"
+                      accessibilityLabel="link-issue-button"
+                      accessible={true}
                       style={styles.additionalData}
                     >
                       {hasProject && issuePermissions.canLink(issue) && (

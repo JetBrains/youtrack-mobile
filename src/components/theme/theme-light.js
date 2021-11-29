@@ -14,6 +14,7 @@ const light: UITheme = {
   colors: {
     $background: '#FFFFFF',
     $boxBackground: '#f3f3f3',
+    $dimBackground: 'rgba(0,0,0,0.4)',
 
     $error: '#C22731',
 

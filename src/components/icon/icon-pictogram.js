@@ -8,6 +8,8 @@ import NoProjectFound from '../../assets/no-project-found.svg';
 import NoProjectFoundDark from '../../assets/no-project-found-dark.svg';
 import NothingFound from '../../assets/not-found.svg';
 import NothingFoundDark from '../../assets/not-found-dark.svg';
+import NothingSelected from '../../assets/nothing-selected.svg';
+import NothingSelectedDark from '../../assets/nothing-selected-dark.svg';
 
 import type {Node} from 'react';
 import type {Theme} from '../../flow/Theme';
@@ -18,11 +20,11 @@ type Props = {
   style?: ViewStyleProp
 }
 
-export const ICON_NOT_FOUND_DEFAULT_SIZE: number = 240;
+export const ICON_PICTOGRAM_DEFAULT_SIZE: number = 240;
 
 const Icon = (props: {...Props, icon: { dark: any, default: any } }) => {
   const theme: Theme = useContext(ThemeContext);
-  const size: number = props.size || ICON_NOT_FOUND_DEFAULT_SIZE;
+  const size: number = props.size || ICON_PICTOGRAM_DEFAULT_SIZE;
   const ThemedIcon: any = theme.uiTheme.dark ? props.icon.dark : props.icon.default;
 
   return (
@@ -52,7 +54,17 @@ const IconNoProjectFound = (props: Props): Node =>
     },
   }} />;
 
+const IconNothingSelected = (props: Props): Node =>
+  <Icon {...{
+    ...props,
+    icon: {
+      dark: NothingSelectedDark,
+      default: NothingSelected,
+    },
+  }} />;
+
 export {
   IconNothingFound,
   IconNoProjectFound,
+  IconNothingSelected,
 };

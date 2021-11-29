@@ -49,13 +49,13 @@ export function receiveActivityEnabledTypes(): {
   };
 }
 
-export function loadActivitiesPage(doNotReset: boolean = false): ((
+export function loadActivitiesPage(doNotReset: boolean = false, issueId?: string): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().issueState.issueId;
+    const targetIssueId: string = issueId || getState().issueState.issueId;
     const api: Api = getApi();
 
     dispatch(receiveActivityEnabledTypes());
@@ -70,7 +70,7 @@ export function loadActivitiesPage(doNotReset: boolean = false): ((
 
     try {
       log.info('Loading activities...');
-      const activityPage: Array<Activity> = await api.issue.getActivitiesPage(issueId, activityCategories);
+      const activityPage: Array<Activity> = await api.issue.getActivitiesPage(targetIssueId, activityCategories);
       dispatch(receiveActivityPage(activityPage));
       log.info('Received activities');
     } catch (error) {

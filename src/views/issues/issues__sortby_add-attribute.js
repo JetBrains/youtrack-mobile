@@ -48,7 +48,7 @@ const IssuesSortByAddAttribute = (props: Props) => {
 
   const loadSortProperties = async (): Promise<Array<IssueFieldSortProperty>> => {
     const filterFields: Array<CustomFilterField> = await api.customFields.filterFields({
-      fld: props?.context?.id,
+      fld: props?.context?.id || undefined,
       getUnusedVisibleFields: true,
       fieldTypes: ['custom', 'predefined'],
     });

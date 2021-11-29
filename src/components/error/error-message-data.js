@@ -6,9 +6,6 @@ import {DEFAULT_ERROR_MESSAGE} from './error-messages';
 import type {ErrorMessageData} from '../../flow/Error';
 import {HTTP_STATUS} from './error-http-codes';
 
-const useBrowserLoginOptionMessageData: ErrorMessageData = {
-  title: 'Two-factor authentication is enabled. Use "Log in with Browser" option.',
-};
 
 const unauthorizedErrorMessageData: ErrorMessageData = {
   title: 'Woah, you can\'t touch this!',
@@ -46,8 +43,9 @@ export const ERROR_MESSAGE_DATA: { [string]: ErrorMessageData } = {
   USER_BANNED: {
     title: 'User account is banned',
   },
-  '2fa_required': useBrowserLoginOptionMessageData,
-  'hub-auth-2fa-enabled': useBrowserLoginOptionMessageData,
+  '2fa_required': {
+    title: 'Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n\nTo log in on this screen, enter your username and a one-time application password.',
+  },
 
   [HTTP_STATUS.UNAUTHORIZED]: unauthorizedErrorMessageData,
   [HTTP_STATUS.FORBIDDEN]: unauthorizedErrorMessageData,

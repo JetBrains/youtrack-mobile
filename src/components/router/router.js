@@ -37,7 +37,14 @@ const SlideFromRight = {
 
 const SlideModal = {
   transitionSpec: TransitionSpec,
-  screenInterpolator: StackViewStyleInterpolator.forVertical,
+  screenInterpolator: (sceneProps) => {
+    const route = sceneProps.scenes[sceneProps.scenes.length - 1].route;
+    if (route?.routeName === routeMap.Modal && sceneProps.scenes.length > 1) {
+      return StackViewStyleInterpolator.forFade;
+    }
+
+    return StackViewStyleInterpolator.forVertical;
+  },
 };
 
 /**
@@ -77,12 +84,13 @@ class Router {
     return SlideFromRight;
   };
 
-  registerRoute({name, component, props, type, modal}) {
+  registerRoute({name, component, props, type, modal, dimmed}) {
     this.routes[name] = {
       screen: ({navigation}) => createElement(component, navigation.state.params),
       type,
       props,
       modal,
+      dimmed,
       defaultNavigationOptions: {
         gesturesEnabled: true,
       },

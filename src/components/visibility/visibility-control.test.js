@@ -25,7 +25,7 @@ describe('<VisibilityControl/>', () => {
   describe('Render', () => {
     it('should initialize state', () => {
       expect(findByTestId('visibilityControl')).toHaveLength(1);
-      expect(findByTestId('visibilityControlButton')).toHaveLength(1);
+      expect(findByTestId('test:id/visibilityControlButton')).toHaveLength(1);
     });
   });
 

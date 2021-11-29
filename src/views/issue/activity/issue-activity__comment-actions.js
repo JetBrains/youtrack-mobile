@@ -27,7 +27,7 @@ import {
 import * as types from '../issue-action-types';
 import type Api from '../../../components/api/api';
 import type IssueAPI from '../../../components/api/api__issue';
-import type {ActivityItem, ActivityPositionData, Activity} from '../../../flow/Activity';
+import type {ActivityItem, ActivityPositionData} from '../../../flow/Activity';
 import type {CustomError} from '../../../flow/Error';
 import type {IssueComment} from '../../../flow/CustomFields';
 import type {IssueFull} from '../../../flow/Issue';
@@ -99,27 +99,6 @@ export function loadActivity(doNotReset: boolean = false): ((dispatch: (any) => 
   };
 }
 
-export function addComment(comment: IssueComment): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter,
-) => Promise<void>) {
-  return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().issueState.issue.id;
-    const activityPage: ?Array<Activity> = getState().issueActivity.activityPage;
-
-    try {
-      await getApi().issue.submitComment(issueId, comment);
-      usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Add comment', 'Success');
-      log.info(`Comment created in issue ${issueId}. Reloading...`);
-      dispatch(loadActivity(true));
-    } catch (error) {
-      activityPage && dispatch(receiveActivityPage(activityPage.filter(it => !it.tmp)));
-      notify('Cannot create comment', error);
-    }
-  };
-}
-
 export function getDraftComment(): ((
   dispatch: (any) => any,
   getState: StateGetter,
@@ -167,7 +146,7 @@ export function submitDraftComment(draftComment: IssueComment): ((
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const issue: IssueFull = getState().issueState.issue;
-
+    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Add comment', 'Success');
     if (draftComment && issue) {
       const [error] = await until(getApi().issue.submitDraftComment(issue.id, draftComment));
       if (error) {
@@ -217,23 +196,6 @@ export function submitEditedComment(comment: IssueComment, isAttachmentChange: b
       const errorMessage = 'Comment update failed';
       log.warn(errorMessage, error);
       notify(errorMessage, error);
-    }
-  };
-}
-
-export function addOrEditComment(comment: IssueComment | null): ((dispatch: (any) => any, getState: StateGetter) => Promise<any>) {
-  return async (dispatch: (any) => any, getState: StateGetter) => {
-    if (comment) {
-      const state = getState();
-      const editingComment = state.issueCommentActivity.editingComment;
-
-      if (editingComment) {
-        dispatch(submitEditedComment({...editingComment, ...comment}));
-        dispatch(setEditingComment(null));
-      } else {
-        dispatch(addComment(comment));
-      }
-      dispatch(setEditingComment(null));
     }
   };
 }

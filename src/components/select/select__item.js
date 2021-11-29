@@ -54,6 +54,9 @@ export default class SelectItem extends PureComponent<Props, void> {
 
     return (
       <TouchableOpacity
+        testID="test:id/selectItem"
+        accessibilityLabel="selectItem"
+        accessible={true}
         key={item.id}
         style={[styles.row, style]}
         onPress={this.onSelect}

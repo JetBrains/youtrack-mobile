@@ -86,4 +86,5 @@ export type Folder = {
   issuesUrl: ?string,
   fqFolderId?: ?string,
   isUpdatable: ?string,
+  template: boolean,
 }

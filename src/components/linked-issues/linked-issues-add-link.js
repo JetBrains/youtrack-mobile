@@ -17,9 +17,8 @@ import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
 import {getApi} from '../api/api__instance';
 import {getAssistSuggestions} from '../query-assist/query-assist-helper';
 import {getReadableID} from '../issue-formatter/issue-formatter';
-import {IconBack} from '../icon/icon';
-import {IconNothingFound} from '../icon/icon-no-found';
-import {noIssuesFoundIconSize} from '../../views/issues/issues.styles';
+import {IconBack, IconClose} from '../icon/icon';
+import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound} from '../icon/icon-pictogram';
 import {UNIT} from '../variables/variables';
 import {View as AnimatedView} from 'react-native-animatable';
 
@@ -37,6 +36,7 @@ type Props = {
   onUpdate: () => any,
   style?: ViewStyleProp,
   subTitle?: any,
+  isTablet: boolean,
 }
 
 
@@ -173,10 +173,13 @@ const LinkedIssuesAddLink = (props: Props): Node => {
   return (
     <View style={[styles.container, props.style]}>
       <Header
+        testID="test:id/link-issue-button"
+        accessibilityLabel="link-issue-button"
+        accessible={true}
         title="Link issue"
         showShadow={true}
-        leftButton={<IconBack color={styles.link.color}/>}
-        onBack={() => Router.pop()}
+        leftButton={props.isTablet ? <IconClose size={21} color={styles.link.color}/> : <IconBack color={styles.link.color}/>}
+        onBack={() => Router.pop(props.isTablet)}
       />
 
       {!!currentIssueLinkTypeExtended && (
@@ -214,7 +217,7 @@ const LinkedIssuesAddLink = (props: Props): Node => {
           !isLoading && issues.length === 0 ? () => (
             <ErrorMessage style={styles.container} errorMessageData={{
               ...ERROR_MESSAGE_DATA.NO_ISSUES_FOUND,
-              icon: () => <IconNothingFound size={noIssuesFoundIconSize / 1.5} style={styles.noIssuesMessage}/>,
+              icon: () => <IconNothingFound size={ICON_PICTOGRAM_DEFAULT_SIZE / 1.5} style={styles.noIssuesMessage}/>,
             }}/>
           ) : null
         )}

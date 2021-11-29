@@ -29,6 +29,7 @@ type Props = {
   onUpdate: (linkedIssues?: Array<IssueLink>) => void,
   style?: ViewStyleProp,
   subTitle?: any,
+  isTablet: boolean,
 }
 
 const LinkedIssues = (props: Props): Node => {
@@ -51,7 +52,7 @@ const LinkedIssues = (props: Props): Node => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const navigateBack = (): void => {Router.pop();};
+  const navigateBack = (): void => {Router.pop(props.isTablet);};
 
   const doUpdateSections = (removedLinkedIssue: IssueOnList, linkTypeId: string): Array<LinksListData> => {
     const _sections: Array<LinksListData> = sections.map((it: LinksListData) => {
@@ -129,7 +130,7 @@ const LinkedIssues = (props: Props): Node => {
     <View style={[styles.container, props.style]}>
       <Header
         showShadow={true}
-        leftButton={<IconBack color={styles.link.color}/>}
+        leftButton={props.isTablet ? <IconClose size={21} color={styles.link.color}/> : <IconBack color={styles.link.color}/>}
         rightButton={props.canLink ? <IconAdd style={styles.addLinkButton} color={styles.link.color} size={20}/> : null}
         onRightButtonClick={() => Router.Page({
           children: <LinkedIssuesAddLink
@@ -140,6 +141,7 @@ const LinkedIssues = (props: Props): Node => {
               props.onUpdate(linkedIssues);
             }}
             subTitle={props.subTitle}
+            isTablet={props.isTablet}
           />,
         })}
         onBack={navigateBack}

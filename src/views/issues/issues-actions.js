@@ -188,7 +188,7 @@ export function openContextSelect(): ((dispatch: (any) => any, getState: () => a
       show: true,
       placeholder: 'Filter projects, saved searches, and tags',
       dataSource: async () => {
-        let folders = [];
+        let folders: Array<Folder> = [];
         try {
           folders = await api.user.getUserFolders();
         } catch (e) {
@@ -317,18 +317,10 @@ export function refreshIssuesCount(): (dispatch: (any) => any, getState: () => a
   };
 }
 
-export function initializeIssuesList(query: ?string): ((dispatch: (any) => any) => Promise<void>) {
+export function initializeIssuesList(isAppStart: boolean = false): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
-    if (query) {
-      dispatch(setIssuesQuery(query));
-    } else {
-      await readStoredIssuesQuery()(dispatch);
-    }
     await dispatch(readCachedIssues());
-
-    if (query) {
-      dispatch(loadIssues(query));
-    } else {
+    if (!isAppStart) {
       dispatch(refreshIssues());
     }
   };

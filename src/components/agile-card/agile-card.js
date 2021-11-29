@@ -24,7 +24,8 @@ type Props = {
   zoomedIn?: boolean,
   ghost?: boolean, // from <Draggable/>
   dragging?: boolean, // from <DragContainer/>
-  uiTheme: UITheme
+  uiTheme: UITheme,
+  isTablet: boolean,
 };
 
 
@@ -70,7 +71,7 @@ export default class AgileCard extends PureComponent<Props, void> {
   }
 
   render(): Node {
-    const {issue, style, ghost, dragging, zoomedIn} = this.props;
+    const {issue, style, ghost, dragging, zoomedIn, isTablet} = this.props;
     const priorityField = getPriotityField(issue);
     const priorityFieldValueBackgroundColor = priorityField?.value?.color?.background;
 
@@ -88,6 +89,7 @@ export default class AgileCard extends PureComponent<Props, void> {
           style,
           dragging && ([styles.dragging, !zoomedIn && styles.draggingZoomedOut]),
           {height: agileCardHeight - cardBottomMargin},
+          isTablet && zoomedIn ? styles.cardTablet : null,
         ]}>
           <View style={[
             styles.cardColorCoding,

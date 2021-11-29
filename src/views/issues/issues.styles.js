@@ -6,9 +6,10 @@ import {COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 import {elevation1} from '../../components/common-styles/shadow';
 import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
 import {headerTitlePresentation} from '../../components/header/header.styles';
-import {ICON_NOT_FOUND_DEFAULT_SIZE} from '../../components/icon/icon-no-found';
+import {ICON_PICTOGRAM_DEFAULT_SIZE} from '../../components/icon/icon-pictogram';
 import {issueCard} from '../../components/common-styles/issue';
 import {separator} from '../../components/common-styles/list';
+import {splitViewStyles} from '../../components/common-styles/split-view';
 import {UNIT} from '../../components/variables/variables';
 
 const rowLine = {
@@ -17,13 +18,18 @@ const rowLine = {
 };
 
 const searchContextHeight = UNIT * 7;
-export const noIssuesFoundIconSize = ICON_NOT_FOUND_DEFAULT_SIZE;
+
+const iconPictogram = {
+  marginTop: -ICON_PICTOGRAM_DEFAULT_SIZE / 3,
+  marginLeft: -UNIT * 4,
+};
 
 export default EStyleSheet.create({
   listContainer: {
     flex: 1,
     backgroundColor: '$background',
   },
+  ...splitViewStyles,
   list: {
     flexGrow: 0,
     minHeight: 160,
@@ -97,7 +103,7 @@ export default EStyleSheet.create({
     marginTop: UNIT,
   },
   listHeader: {
-    minHeight: 105,
+    minHeight: 108,
   },
   listHeaderTop: {
     flexDirection: 'row',
@@ -167,9 +173,12 @@ export default EStyleSheet.create({
     textAlign: 'right',
   },
   noIssuesFoundIcon: {
-    marginTop: -noIssuesFoundIconSize / 3,
-    marginLeft: -UNIT * 4,
+    ...iconPictogram,
     marginBottom: -UNIT * 2,
+  },
+  noIssuesSelected: {
+    ...iconPictogram,
+    marginBottom: UNIT * 2,
   },
   resolved: {
     color: '$resolved',

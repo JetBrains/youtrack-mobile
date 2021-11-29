@@ -1,6 +1,7 @@
 /* @flow */
 
 import {createReducer} from 'redux-create-reducer';
+import {EVERYTHING_CONTEXT} from '../../components/search/search-context';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {LOG_OUT} from '../../actions/action-types';
@@ -25,7 +26,7 @@ export type IssuesState = {
   issues: Array<IssueOnList>,
 
   selectProps: Object,
-  searchContext: ?Folder,
+  searchContext: $Shape<Folder>,
   isSearchContextPinned: boolean
 };
 
@@ -44,7 +45,7 @@ export const initialState: IssuesState = {
   issues: [],
 
   selectProps: null,
-  searchContext: null,
+  searchContext: EVERYTHING_CONTEXT,
   isSearchContextPinned: false,
 };
 

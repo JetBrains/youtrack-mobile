@@ -14,6 +14,7 @@ const dark: UITheme = {
   colors: {
     $background: '#1c1c1e',
     $boxBackground: '#2c2c2e',
+    $dimBackground: 'rgba(0,0,0,0.7)',
 
     $error: '#C22731',
 

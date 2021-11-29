@@ -247,7 +247,7 @@ export default class Select extends Component<SelectProps, SelectState> {
   renderItems(): Node {
     return (
       <FlatList
-        testID="selectItems"
+        testID="test:id/selectItems"
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
 
@@ -297,16 +297,20 @@ export default class Select extends Component<SelectProps, SelectState> {
           <View style={styles.inputWrapper}>
 
             <TouchableOpacity
-              testID="selectBackButton"
+              testID="test:id/selectBackButton"
+              accessibilityLabel="selectBackButton"
+              accessible={true}
               onPress={onCancel}
             >
               <IconClose size={21} style={styles.cancelButton} color={styles.cancelButton.color}/>
             </TouchableOpacity>
 
             <TextInput
-              testID="selectInput"
               placeholder={placeholder}
               autoFocus={autoFocus}
+              testID="test:id/selectInput"
+              accessibilityLabel="selectInput"
+              accessible={true}
               placeholderTextColor={styles.placeholder.color}
               returnKeyType={multi ? 'done' : 'search'}
               autoCorrect={false}

@@ -66,7 +66,9 @@ export default class Header extends PureComponent<HeaderProps, void> {
               ]}
             >
               {!!leftButton && <TouchableOpacity
-                testID="header-back"
+                testID="test:id/header-back"
+                accessibilityLabel="header-back"
+                accessible={true}
                 hitSlop={HIT_SLOP}
                 style={styles.headerButtonLeft}
                 onPress={() => this.onBack()}
@@ -76,7 +78,9 @@ export default class Header extends PureComponent<HeaderProps, void> {
 
               {!!title && (
                 <Text
-                  testID="headerTitle"
+                  testID="test:id/headerTitle"
+                  accessibilityLabel="headerTitle"
+                  accessible={true}
                   style={styles.headerTitle}>{title}</Text>
               )}
 
@@ -84,10 +88,18 @@ export default class Header extends PureComponent<HeaderProps, void> {
                 {children}
               </View>
 
-              {extraButton}
+              {!!extraButton && <TouchableOpacity
+                testID="test:id/extra-button"
+                accessibilityLabel="extra-button"
+                accessible={true}>
+                {extraButton}
+              </TouchableOpacity>
+              }
 
               {!!rightButton && <TouchableOpacity
-                testID="header-action"
+                testID="test:id/header-action"
+                accessibilityLabel="header-action"
+                accessible={true}
                 hitSlop={HIT_SLOP}
                 style={styles.headerButtonRight}
                 onPress={this.onRightButtonClick}>

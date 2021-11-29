@@ -14,7 +14,7 @@ import usage from '../../components/usage/usage';
 import {ANALYTICS_PREVIEW_PAGE} from '../../components/analytics/analytics-ids';
 import {hasMimeType} from '../../components/mime-type/mime-type';
 import {IconClose} from '../../components/icon/icon';
-import {IconNoProjectFound} from '../../components/icon/icon-no-found';
+import {IconNoProjectFound} from '../../components/icon/icon-pictogram';
 import {isAndroidPlatform} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
 

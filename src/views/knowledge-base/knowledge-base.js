@@ -7,6 +7,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as knowledgeBaseActions from './knowledge-base-actions';
+import Article from '../../views/article/article';
 import ArticleWithChildren from '../../components/articles/article-item-with-children';
 import ErrorMessage from '../../components/error-message/error-message';
 import KnowledgeBaseDrafts from './knowledge-base__drafts';
@@ -20,7 +21,12 @@ import {HIT_SLOP} from '../../components/common-styles/button';
 import {getGroupedByFieldNameAlphabetically} from '../../components/search/sorting';
 import {getStorageState} from '../../components/storage/storage';
 import {IconAngleDown, IconAngleRight, IconBack, IconContextActions} from '../../components/icon/icon';
-import {IconNoProjectFound, IconNothingFound} from '../../components/icon/icon-no-found';
+import {
+  ICON_PICTOGRAM_DEFAULT_SIZE,
+  IconNoProjectFound,
+  IconNothingFound,
+  IconNothingSelected,
+} from '../../components/icon/icon-pictogram';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -30,8 +36,9 @@ import {UNIT} from '../../components/variables/variables';
 import styles from './knowledge-base.styles';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import type {AppState} from '../../reducers';
 import type {
-  Article,
+  Article as ArticleSingle,
   ArticlesList,
   ArticlesListItem,
   ArticleNode,
@@ -50,11 +57,14 @@ type Props = {
   issuePermissions: IssuePermissions,
   project?: ArticleProject,
   preventReload?: boolean,
+  isTablet: boolean,
+  lastVisitedArticle?: ArticleSingle,
 }
 
 type State = {
+  focusedArticle: boolean,
   isHeaderPinned: boolean,
-  isSelectVisible: boolean
+  isSelectVisible: boolean,
 };
 
 const ERROR_MESSAGE_DATA: Object = {
@@ -68,7 +78,7 @@ const ERROR_MESSAGE_DATA: Object = {
 };
 
 export class KnowledgeBase extends Component<Props, State> {
-  static contextTypes: any | {actionSheet: typeof Function} = {
+  static contextTypes: any | { actionSheet: typeof Function } = {
     actionSheet: Function,
   };
 
@@ -81,6 +91,7 @@ export class KnowledgeBase extends Component<Props, State> {
     this.state = {
       isHeaderPinned: false,
       isSelectVisible: false,
+      focusedArticle: props.isTablet ? props.lastVisitedArticle : null,
     };
     usage.trackScreenView(ANALYTICS_ARTICLES_PAGE);
   }
@@ -127,7 +138,11 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   };
 
-  renderProject: (({ section: ArticlesListItem, ... }) => null | React$Element<any>) = ({section}: {section: ArticlesListItem, ...}) => {
+  updateFocusedArticle = (focusedArticle: ArticleSingle | null): void => {
+    this.setState({focusedArticle});
+  };
+
+  renderProject: (({ section: ArticlesListItem, ... }) => null | React$Element<any>) = ({section}: { section: ArticlesListItem, ... }) => {
     const project: ?ArticleProject = section.title;
     if (project) {
       const {expandingProjectId} = this.props;
@@ -165,7 +180,12 @@ export class KnowledgeBase extends Component<Props, State> {
               size={19}
               hasStar={project.pinned}
               canStar={true}
-              onStarToggle={() => this.props.toggleProjectFavorite(section)}
+              onStarToggle={async () => {
+                const hasPinnedProjects: boolean = await this.props.toggleProjectFavorite(section);
+                if (!hasPinnedProjects) {
+                  this.updateFocusedArticle(null);
+                }
+              }}
               uiTheme={this.uiTheme}
             />}
           </View>
@@ -186,20 +206,25 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   };
 
-  renderArticle: ({item: ArticleNode, ...} => null | React$Element<any>) = ({item}: { item: ArticleNode, ... }) => (
+  renderArticle: ({ item: ArticleNode, ... } => null | React$Element<any>) = ({item}: { item: ArticleNode, ... }) => (
     <ArticleWithChildren
       style={styles.itemArticle}
       article={item.data}
-      onArticlePress={(article: Article) => Router.Article({
-        articlePlaceholder: article,
-        store: true,
-        storeRouteName: routeMap.ArticleSingle,
-      })}
-      onShowSubArticles={(article: Article) => this.renderSubArticlesPage(article)}
+      onArticlePress={(article: ArticleSingle) => {
+        if (this.props.isTablet) {
+          Router.KnowledgeBase({lastVisitedArticle: article, preventReload: true});
+        } else {
+          Router.Article({
+            articlePlaceholder: article,
+          });
+        }
+      }}
+      onShowSubArticles={(article: ArticleSingle) => this.renderSubArticlesPage(article)}
+      isTablet={this.props.isTablet}
     />
   );
 
-  renderSubArticlesPage: ((article: Article) => Promise<void>) = async (article: Article) => {
+  renderSubArticlesPage: ((article: ArticleSingle) => Promise<void>) = async (article: ArticleSingle) => {
     const childrenData: ArticleNodeList = await this.props.getArticleChildren(article.id);
     const title = this.renderHeader({
       leftButton: (
@@ -231,13 +256,13 @@ export class KnowledgeBase extends Component<Props, State> {
   };
 
   renderHeader: ((
-  {
-    leftButton?: React$Element<any>,
-    title: string,
-    customTitleComponent?: React$Element<any>,
-    rightButton?: React$Element<any>,
-  }
-) => Node) = (
+    {
+      leftButton?: React$Element<any>,
+      title: string,
+      customTitleComponent?: React$Element<any>,
+      rightButton?: React$Element<any>,
+    }
+  ) => Node) = (
     {leftButton, title, customTitleComponent, rightButton}: {
       leftButton?: React$Element<any>,
       title: string,
@@ -438,6 +463,8 @@ export class KnowledgeBase extends Component<Props, State> {
         await updateProjectsFavorites(pinnedProjects, unpinnedProjects, selectedProjects?.length === 0);
         if ((selectedProjects || []).length === 0) {
           this.props.setNoFavoriteProjects();
+          this.updateFocusedArticle(null);
+          this.props.clearUserLastVisitedArticle();
         } else {
           this.loadArticlesList(false);
         }
@@ -466,8 +493,81 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
+  renderArticleList = () => {
+    const {isLoading, articlesList, error, showContextActions, issuePermissions, isTablet} = this.props;
+    return (
+      <>
+        {
+          this.renderHeader({
+            title: 'Knowledge Base',
+            rightButton: (
+              <TouchableOpacity
+                hitSlop={HIT_SLOP}
+                onPress={() => {
+                  showContextActions(
+                    this.context.actionSheet(),
+                    issuePermissions.articleCanCreateArticle(),
+                    this.openProjectSelect,
+                    isTablet,
+                  );
+                }}
+              >
+                <IconContextActions color={styles.link.color}/>
+              </TouchableOpacity>
+            ),
+          })
+        }
+        <View
+          style={styles.content}
+        >
+
+          {error && !error.noFavoriteProjects && <ErrorMessage testID="articleError" error={error}/>}
+
+          {error && error.noFavoriteProjects && this.renderNoFavouriteProjects()}
+
+          {!error && !articlesList && isLoading && <SkeletonIssues/>}
+
+          {!error && articlesList && this.renderArticlesList(articlesList)}
+
+        </View>
+      </>
+    );
+  };
+
+  renderFocusedArticle = () => {
+    const {focusedArticle} = this.state;
+
+    if (!this.props?.articlesList || this.props.articlesList.length === 0) {
+      return null;
+    }
+
+    return (
+      focusedArticle
+        ? <View style={styles.content}><Article articlePlaceholder={focusedArticle}/></View>
+        : (
+          <View style={styles.splitViewMainEmpty}>
+            {<IconNothingSelected size={ICON_PICTOGRAM_DEFAULT_SIZE}/>}
+            <Text style={styles.splitViewMessage}>Select an article from the list</Text>
+          </View>
+        )
+    );
+  };
+
+  renderSplitView = () => {
+    return (
+      <View style={styles.splitViewContainer}>
+        <View style={styles.splitViewSide}>
+          {this.renderArticleList()}
+        </View>
+        <View style={styles.splitViewMain}>
+          {this.renderFocusedArticle()}
+        </View>
+      </View>
+    );
+  };
+
   render(): Node {
-    const {isLoading, articlesList, error, showContextActions, issuePermissions} = this.props;
+    const {isTablet} = this.props;
 
     return (
       <ThemeContext.Consumer>
@@ -476,41 +576,15 @@ export class KnowledgeBase extends Component<Props, State> {
 
           return (
             <View
-              style={styles.container}
+              style={[
+                styles.container,
+                isTablet ? styles.splitViewContainer : null,
+              ]}
               testID="articles"
             >
-              {
-                this.renderHeader({
-                  title: 'Knowledge Base',
-                  rightButton: (
-                    <TouchableOpacity
-                      hitSlop={HIT_SLOP}
-                      onPress={() => {
-                        showContextActions(
-                          this.context.actionSheet(),
-                          issuePermissions.articleCanCreateArticle(),
-                          this.openProjectSelect
-                        );
-                      }}
-                    >
-                      <IconContextActions color={styles.link.color}/>
-                    </TouchableOpacity>
-                  ),
-                })
-              }
-              <View
-                style={styles.content}
-              >
 
-                {error && !error.noFavoriteProjects && <ErrorMessage testID="articleError" error={error}/>}
-
-                {error && error.noFavoriteProjects && this.renderNoFavouriteProjects()}
-
-                {!error && !articlesList && isLoading && <SkeletonIssues/>}
-
-                {!error && articlesList && this.renderArticlesList(articlesList)}
-
-              </View>
+              {isTablet && this.renderSplitView()}
+              {!isTablet && this.renderArticleList()}
 
               {this.state.isSelectVisible && this.renderProjectSelect()}
             </View>
@@ -521,11 +595,12 @@ export class KnowledgeBase extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: AppState) => {
   return {
     ...state.app,
     ...state.articles,
     issuePermissions: state.app.issuePermissions,
+    isTablet: state.app.isTablet,
   };
 };
 
