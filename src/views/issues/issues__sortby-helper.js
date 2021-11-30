@@ -3,6 +3,7 @@
 import {getApi} from '../../components/api/api__instance';
 
 import {getCustomFieldName} from '../../components/custom-field/custom-field-helper';
+import {until} from '../../util/util';
 
 import type API from '../../components/api/api';
 import type {Folder} from '../../flow/User';
@@ -13,14 +14,17 @@ const doAssist = async (params: {
   context: ?Folder,
   query: string,
   sortProperties?: Array<IssueFieldSortProperty>,
-}): Promise<SearchSuggestions> => {
+}): Promise<?SearchSuggestions> => {
   const api: API = getApi();
   const {context, query = '', sortProperties} = params;
-  return await api.search.getSearchSuggestions({
-    folder: context?.id ? context : undefined,
-    query,
-    sortProperties,
-  });
+  const [error, searchSuggestions] = await until(
+    api.search.getSearchSuggestions({
+      folder: context?.id ? context : undefined,
+      query,
+      sortProperties,
+    })
+  );
+  return error ? ({}: any) : searchSuggestions;
 };
 
 const getSortPropertyName = (sortProperty: IssueFieldSortProperty): string => {

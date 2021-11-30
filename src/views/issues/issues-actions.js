@@ -262,25 +262,30 @@ export function loadIssues(query: string): ((
   getApi: ApiGetter
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    const api: Api = getApi();
-    log.info('Loading issues...');
+    try {
+      const api: Api = getApi();
+      log.info('Loading issues...');
 
-    dispatch(startIssuesLoading());
-    const [error, listIssues] = await until(api.issues.getIssues(query, PAGE_SIZE));
-    dispatch(stopIssuesLoading());
+      dispatch(startIssuesLoading());
+      const [error, listIssues] = await until(api.issues.getIssues(query, PAGE_SIZE));
+      dispatch(stopIssuesLoading());
 
-    if (error) {
-      dispatch(loadingIssuesError(error));
-    } else {
-      const issues: Array<AnyIssue> = ApiHelper.fillIssuesFieldHash(listIssues);
-      log.info(`${issues?.length} issues loaded`);
-      dispatch(receiveIssues(issues));
-      dispatch(cacheIssues(issues));
-      if (issues?.length < PAGE_SIZE) {
-        log.info('End reached during initial load');
-        dispatch(listEndReached());
+      if (error) {
+        dispatch(loadingIssuesError(error));
+      } else {
+        const issues: Array<AnyIssue> = ApiHelper.fillIssuesFieldHash(listIssues);
+        log.info(`${issues?.length} issues loaded`);
+        dispatch(receiveIssues(issues));
+        dispatch(cacheIssues(issues));
+        if (issues?.length < PAGE_SIZE) {
+          log.info('End reached during initial load');
+          dispatch(listEndReached());
+        }
       }
+    } catch (e) {
+      log.log('Failed to load issues');
     }
+
   };
 }
 
@@ -332,33 +337,37 @@ export function loadMoreIssues(): ((
   getApi: ApiGetter
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    const api: Api = getApi();
-
-    const {isInitialized, isLoadingMore, isRefreshing, loadingError, isListEndReached, skip, issues, query} = getState().issueList;
-    if (!isInitialized || isLoadingMore || isRefreshing || loadingError || isListEndReached) {
-      return;
-    }
-    const newSkip = skip + PAGE_SIZE;
-
-    log.info(`Loading more issues. newSkip = ${newSkip}`);
-    dispatch(startMoreIssuesLoading(newSkip));
-
     try {
-      const searchQuery = dispatch(getSearchQuery(query));
-      let moreIssues: Array<AnyIssue> = (await api.issues.getIssues(searchQuery, PAGE_SIZE, newSkip): any);
-      log.info(`Loaded ${PAGE_SIZE} more issues.`);
-      moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues);
-      const updatedIssues = ApiHelper.removeDuplicatesByPropName(issues.concat(moreIssues), 'id');
-      dispatch(receiveIssues(updatedIssues));
-      dispatch(cacheIssues(updatedIssues));
-      if (moreIssues?.length < PAGE_SIZE) {
-        log.info(`End of issues reached: all ${updatedIssues?.length} issues are loaded`);
-        dispatch(listEndReached());
+      const api: Api = getApi();
+
+      const {isInitialized, isLoadingMore, isRefreshing, loadingError, isListEndReached, skip, issues, query} = getState().issueList;
+      if (!isInitialized || isLoadingMore || isRefreshing || loadingError || isListEndReached) {
+        return;
       }
-    } catch (err) {
-      notifyError('Failed to load more issues', err);
-    } finally {
-      dispatch(stopMoreIssuesLoading());
+      const newSkip = skip + PAGE_SIZE;
+
+      log.info(`Loading more issues. newSkip = ${newSkip}`);
+      dispatch(startMoreIssuesLoading(newSkip));
+
+      try {
+        const searchQuery = dispatch(getSearchQuery(query));
+        let moreIssues: Array<AnyIssue> = (await api.issues.getIssues(searchQuery, PAGE_SIZE, newSkip): any);
+        log.info(`Loaded ${PAGE_SIZE} more issues.`);
+        moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues);
+        const updatedIssues = ApiHelper.removeDuplicatesByPropName(issues.concat(moreIssues), 'id');
+        dispatch(receiveIssues(updatedIssues));
+        dispatch(cacheIssues(updatedIssues));
+        if (moreIssues?.length < PAGE_SIZE) {
+          log.info(`End of issues reached: all ${updatedIssues?.length} issues are loaded`);
+          dispatch(listEndReached());
+        }
+      } catch (err) {
+        notifyError('Failed to load more issues', err);
+      } finally {
+        dispatch(stopMoreIssuesLoading());
+      }
+    } catch (e) {
+      log.log('Failed to load more issues');
     }
   };
 }
@@ -369,21 +378,25 @@ export function loadIssuesCount(query: ?string, folder: ?Folder): ((
   getApi: ApiGetter
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
-    const api: Api = getApi();
-    const abortController: AbortController = new AbortController();
-    const issuesCount: number = await api.issues.getIssuesCount(query, folder, false, abortController);
-    if (issuesCount === -1 && !abortController.signal.aborted) {
-      return new Promise((resolve, reject) => {
-        let timer: ?TimeoutID = setTimeout(resolve, 3000);
-        abortController.signal.onabort = () => {
-          reject();
-          clearTimeout(timer);
-          timer = null;
-        };
-      }).then(() => dispatch(loadIssuesCount(query, folder)));
-    }
-    if (issuesCount >= 0) {
-      dispatch(setIssuesCount(issuesCount));
+    try {
+      const api: Api = getApi();
+      const abortController: AbortController = new AbortController();
+      const issuesCount: number = await api.issues.getIssuesCount(query, folder, false, abortController);
+      if (issuesCount === -1 && !abortController.signal.aborted) {
+        return new Promise((resolve, reject) => {
+          let timer: ?TimeoutID = setTimeout(resolve, 3000);
+          abortController.signal.onabort = () => {
+            reject();
+            clearTimeout(timer);
+            timer = null;
+          };
+        }).then(() => dispatch(loadIssuesCount(query, folder)));
+      }
+      if (issuesCount >= 0) {
+        dispatch(setIssuesCount(issuesCount));
+      }
+    } catch (e) {
+      log.log('Failed to load issues count');
     }
   };
 }
