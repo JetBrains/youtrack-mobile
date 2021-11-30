@@ -23,6 +23,10 @@ export default class OAuth2 extends AuthBase {
     return await this.loadCurrentUser(this.authParams);
   }
 
+  setAuthParams(authParams: AuthParams) {
+    this.authParams = authParams;
+  }
+
   async refreshToken(): Promise<AuthParams> {
     let authParams: OAuthParams;
     const prevAuthParams: AuthParams = ((await this.getCachedAuthParams(): any): AuthParams);
@@ -45,8 +49,8 @@ export default class OAuth2 extends AuthBase {
         ...this.authParams,
         ...authParams,
       });
-      const authParamsKey = getAuthParamsKey();
-      await this.cacheAuthParams(updatedOauthParams, authParamsKey);
+      this.setAuthParams(updatedOauthParams);
+      await this.cacheAuthParams(updatedOauthParams, getAuthParamsKey());
       await this.loadCurrentUser(updatedOauthParams);
     }
 

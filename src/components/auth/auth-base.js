@@ -100,11 +100,11 @@ export class AuthBase {
   }
 
   getTokenType(): string {
-    return this.authParams.token_type;
+    return this.authParams?.token_type;
   }
 
   getAccessToken(): string {
-    return this.authParams.access_token;
+    return this.authParams?.access_token;
   }
 
   getRefreshToken(authParams: AuthParams): string {
@@ -115,13 +115,13 @@ export class AuthBase {
     await EncryptedStorage.removeItem(STORAGE_AUTH_PARAMS_KEY, () => {
       EncryptedStorage.setItem(STORAGE_AUTH_PARAMS_KEY, '');
     });
-    if (this.authParams.accessToken) {
+    if (this.getAccessToken()) {
       await revokeToken(this.config, this.getAccessToken());
     }
     this.authParams = null;
   }
 
-  refreshToken(): Promise<any> {}
+  async refreshToken(): Promise<any> {}
 
   getAuthorizationHeaders(authParams: AuthParams = this.authParams): {
     Authorization: string,
