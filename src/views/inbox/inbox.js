@@ -33,7 +33,6 @@ import {UNIT} from '../../components/variables/variables';
 
 import styles from './inbox.styles';
 
-import type {Activity} from '../../flow/Activity';
 import type {AppConfig} from '../../flow/AppConfig';
 import type {AppState} from '../../reducers';
 import type {InboxState} from './inbox-reducers';
