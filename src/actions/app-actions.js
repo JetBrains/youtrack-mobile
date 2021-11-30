@@ -592,11 +592,10 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
     dispatch({type: types.SET_IS_TABLET, isTablet: DeviceInfo.isTablet()});
     if (Router._getNavigator()) {
-      Router.navigateToDefaultRoute(
-        {
-          isAppStart: true,
-        ...(issueId ? {issueId, navigateToActivity} : {}),
-        }
+      Router.Issues({
+        isAppStart: true,
+        isRedirecting: !!issueId,
+      }
       );
     }
 
