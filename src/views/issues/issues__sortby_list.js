@@ -47,8 +47,8 @@ const IssuesSortByList = (props: Props) => {
       (sortProperty: IssueFieldSortProperty) => !sortProperty.readOnly
     );
     return doAssist({context: props.context, query: props.query, sortProperties: sProps}).then(
-      (response: SearchSuggestions) => {
-        props.onApply(sortProperties, response.query);
+      (response: ?SearchSuggestions) => {
+        props.onApply(sortProperties, response?.query || '');
       }
     );
   };
