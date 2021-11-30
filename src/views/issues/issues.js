@@ -2,6 +2,7 @@
 
 import type {Node} from 'React';
 import {
+  ActivityIndicator,
   View,
   Text,
   FlatList,
@@ -58,6 +59,7 @@ type Props = {
   auth: Auth,
   api: Api,
   isAppStart?: boolean,
+  isRedirecting?: boolean,
   onOpenContextSelect: () => any
 };
 
@@ -429,7 +431,7 @@ export class Issues extends Component<Props, State> {
   }
 
   render(): Node {
-    const {isIssuesContextOpen, isRefreshing} = this.props;
+    const {isIssuesContextOpen, isRefreshing, isRedirecting} = this.props;
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
@@ -445,6 +447,8 @@ export class Issues extends Component<Props, State> {
               {this.renderError()}
 
               {this.renderCreateIssueButton(isRefreshing, theme.uiTheme)}
+
+              {isRedirecting && <ActivityIndicator color={styles.link.color} style={styles.loadingIndicator}/>}
             </View>
           );
         }}

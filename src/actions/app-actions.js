@@ -590,11 +590,10 @@ function subscribeToURL(): Action {
 export function initializeApp(config: AppConfigFilled, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
     if (Router._getNavigator()) {
-      Router.navigateToDefaultRoute(
-        {
-          isAppStart: true,
-        ...(issueId ? {issueId, navigateToActivity} : {}),
-        }
+      Router.Issues({
+        isAppStart: true,
+        isRedirecting: !!issueId,
+      }
       );
     }
 

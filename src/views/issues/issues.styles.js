@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {Platform} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 
 import {COLOR_FIELD_SIZE} from '../../components/color-field/color-field';
 import {elevation1} from '../../components/common-styles/shadow';
@@ -224,4 +224,5 @@ export default EStyleSheet.create({
     justifyContent: 'center',
     marginLeft: UNIT * 1.5,
   },
+  loadingIndicator: StyleSheet.absoluteFillObject,
 });
