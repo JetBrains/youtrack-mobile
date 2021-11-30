@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
 import {View as AnimatedView} from 'react-native-animatable';
@@ -27,12 +27,20 @@ const MAX_NUMBER_SORTING_PROPERTIES: number = 4;
 
 const IssuesSortBy = (props: Props) => {
   const [selectedSortProperties, updateSelectedSortProperties] = useState([]);
+  const mounted: { current: boolean } = useRef(false);
 
   const loadSortingProperties = useCallback(() => {
-    doAssist({context: props.context, query: props.query}).then((searchSuggestions: SearchSuggestions ) => {
-      updateSelectedSortProperties(searchSuggestions.sortProperties);
+    doAssist({context: props.context, query: props.query}).then((searchSuggestions: ?SearchSuggestions ) => {
+      if (mounted.current === true && searchSuggestions?.sortProperties) {
+        updateSelectedSortProperties(searchSuggestions.sortProperties);
+      }
     });
   }, [props.context, props.query]);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {mounted.current = false;};
+  }, []);
 
   useEffect(() => {
     loadSortingProperties();
