@@ -88,9 +88,6 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
 
               <TextEditForm
                 editable={editable}
-                testID="test:id/issue-description"
-                accessibilityLabel="issue-description"
-                accessible={true}
                 description={description}
                 placeholderText={descriptionPlaceholder}
                 multiline={true}

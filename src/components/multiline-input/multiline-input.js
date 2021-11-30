@@ -93,6 +93,9 @@ export default class MultilineInput extends PureComponent<Props, State> {
       <TextInput
         {...rest}
         ref={this.inputRef}
+        testID="test:id/multiline-input"
+        accessibilityLabel="multiline-input"
+        accessible={true}
         multiline={true}
         onContentSizeChange={this.onContentSizeChange}
         style={[

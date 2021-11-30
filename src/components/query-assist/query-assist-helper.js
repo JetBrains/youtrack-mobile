@@ -1,7 +1,7 @@
 /* @flow */
 
 import log from '../log/log';
-import {checkVersion} from '../feature/feature';
+import {checkVersion, FEATURE_VERSION} from '../feature/feature';
 import {getStorageState} from '../storage/storage';
 import {until} from '../../util/util';
 
@@ -32,7 +32,7 @@ export const getAssistSuggestions = async (
   let suggestions: Array<{ title: string | null, data: Array<TransformedSuggestion> }> = [{title: null, data: []}];
   const folder: Folder | null = getStorageState().searchContext || null;
   const promise: Promise<Array<TransformedSuggestion>> = (
-    checkVersion('2020.1')
+    checkVersion(FEATURE_VERSION.searchAssist)
       ? api.search.getQueryAssistSuggestions(query, caret, folder && folder.id ? [folder] : null)
       : api.search.getQueryAssistSuggestionsLegacy(query, caret)
   );
