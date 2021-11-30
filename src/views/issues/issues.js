@@ -41,7 +41,6 @@ import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 import {UNIT} from '../../components/variables/variables';
-import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './issues.styles';
 
@@ -338,16 +337,8 @@ export class Issues extends Component<Props, State> {
 
   renderSearchQuery = () => {
     const {query, issuesCount, openSavedSearchesSelect, searchContext, isAppStart} = this.props;
-    const Component: any = isAppStart ? AnimatedView : View;
     return (
-      <Component
-        {...(isAppStart ? {
-          useNativeDriver: true,
-          duration: isAppStart ? 500 : 0,
-          animation: 'fadeIn',
-        } : {})}
-        style={styles.listHeader}
-      >
+      <View style={styles.listHeader}>
         <View style={styles.listHeaderTop}>
           <QueryPreview
             style={styles.searchPanel}
@@ -374,7 +365,7 @@ export class Issues extends Component<Props, State> {
             query={query}
           />}
         </View>}
-      </Component>
+      </View>
     );
   };
 
@@ -538,7 +529,7 @@ const mapStateToProps = (state: AppState, ownProps: { isAppStart?: boolean }) =>
     ...ownProps,
     ...state.issueList,
     ...state.app,
-    searchContext: state.app?.user?.profiles?.general?.searchContext,
+    searchContext: state.app?.user?.profiles?.general?.searchContext || state.issueList.searchContext,
     isTablet: state.app.isTablet,
   };
 };
