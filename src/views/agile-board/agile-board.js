@@ -12,6 +12,7 @@ import Api from '../../components/api/api';
 import Auth from '../../components/auth/auth';
 import BoardHeader from './board-header';
 import BoardScroller from '../../components/board-scroller/board-scroller';
+import CreateIssue from '../create-issue/create-issue';
 import ErrorMessage from '../../components/error-message/error-message';
 import Issue from '../issue/issue';
 import log from '../../components/log/log';
@@ -366,7 +367,14 @@ class AgileBoard extends Component<Props, State> {
         zoomedIn={this.state.zoomedIn}
         canRunCommand={this.canRunCommand}
         onTapIssue={this._onTapIssue}
-        onTapCreateIssue={(...args) => createCardForCell.apply(null, [...args, isTablet])}
+        onTapCreateIssue={async (...args): Promise<void> => {
+          const draft: $Shape<IssueOnList> = await createCardForCell.apply(null, [...args, isTablet]);
+          if (isTablet) {
+            Router.Modal({children: <CreateIssue predefinedDraftId={draft.id}/>});
+          } else {
+            Router.CreateIssue({predefinedDraftId: draft.id});
+          }
+        }}
         onCollapseToggle={onRowCollapseToggle}
         uiTheme={this.uiTheme}
         isTablet={isTablet}

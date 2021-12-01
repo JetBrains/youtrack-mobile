@@ -204,8 +204,8 @@ export function createIssue(): (dispatch: (any) => any, getState: () => any, get
       dispatch(propagateCreatedIssue(filledIssue, getState().creation.predefinedDraftId));
       dispatch(actions.resetCreation());
 
-      Router.pop();
-      await clearIssueDraftStorage();
+      Router.pop(true);
+      clearIssueDraftStorage();
 
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Error');
