@@ -22,7 +22,7 @@ function convertToNumber(semverVersion: string) {
   }, 0);
 }
 
-export const checkVersion = (version?: string): boolean => {
+export const checkVersion = (version?: string, returnOnThrow?: boolean): boolean => {
   try {
     const {version: serverVersion} = getApi().config;
 
@@ -32,7 +32,7 @@ export const checkVersion = (version?: string): boolean => {
       return true;
     }
   } catch (e) {
-    return false;
+    return returnOnThrow !== undefined ? returnOnThrow : false;
   }
 };
 
@@ -40,7 +40,7 @@ export const checkDev = (): boolean => __DEV__;
 
 export const FEATURE_VERSION = featureList;
 
-const Feature = (props: Props): 
+const Feature = (props: Props):
   | any
   | null
   | {

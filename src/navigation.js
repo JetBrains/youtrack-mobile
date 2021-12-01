@@ -1,17 +1,16 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import Router from './components/router/router';
 import Menu from './components/menu/menu';
-import {routeMap} from './app-routes';
-
+import Router from './components/router/router';
 import {menuHeight} from './components/common-styles/header';
-import {View as AnimatedView} from 'react-native-animatable';
-import type {Theme} from './flow/Theme';
+import {routeMap} from './app-routes';
 import {ThemeContext} from './components/theme/theme-context';
+
+import type {Node} from 'React';
+import type {Theme} from './flow/Theme';
 
 const styles = StyleSheet.create({
   flexBox: {
@@ -29,15 +28,14 @@ const styles = StyleSheet.create({
   },
 });
 
+type State = {
+  isMenuShown: boolean,
+};
 
-export default class Navigation extends PureComponent<{}, {isMenuShown: boolean}> {
-  constructor() {
-    super();
-
-    this.state = {
-      isMenuShown: false,
-    };
-  }
+export default class Navigation extends PureComponent<{}, State> {
+  state: State = {
+    isMenuShown: false,
+  };
 
   render(): Node {
     const onRoute = (currentRoute) => {
@@ -60,10 +58,7 @@ export default class Navigation extends PureComponent<{}, {isMenuShown: boolean}
           {Router.renderNavigatorView(onRoute)}
         </View>
 
-        <AnimatedView
-          animation="slideInUp"
-          duration={500}
-          useNativeDriver
+        <View
           style={[
             styles.navigation,
             this.state.isMenuShown ? null : styles.navigationHidden,
@@ -72,7 +67,7 @@ export default class Navigation extends PureComponent<{}, {isMenuShown: boolean}
           <ThemeContext.Consumer>
             {(theme: Theme) => <Menu uiTheme={theme.uiTheme}/>}
           </ThemeContext.Consumer>
-        </AnimatedView>
+        </View>
 
       </View>
     );

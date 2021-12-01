@@ -3,12 +3,13 @@ import React from 'react';
 import {Provider} from 'react-redux';
 import {render, cleanup, fireEvent} from '@testing-library/react-native';
 
-import * as api from '../api/api__instance';
 import Menu from './menu';
 import mocks from '../../../test/mocks';
 import Router from '../router/router';
 import {buildStyles, DEFAULT_THEME} from '../theme/theme';
 import {rootRoutesList, routeMap} from '../../app-routes';
+
+jest.mock('../feature/feature');
 
 
 let apiMock;
@@ -66,46 +67,45 @@ describe('<Menu/>', () => {
     });
 
 
-    xdescribe('Knowledge Base', () => {
-      beforeEach(() => jest.spyOn(api, 'getApi'));
+    it('should render menu `Knowledge Base` item', async () => {
+      const feature = require('../feature/feature');
+      feature.checkVersion.mockReturnValue(true);
 
-      it('should render menu `Knowledge Base` item', async () => {
-        api.getApi.mockReturnValueOnce({
-          config: {
-            version: '2020.2',
-          },
-        });
-        const {getByTestId} = doRender();
+      const {getByTestId} = doRender();
 
-        expect(getByTestId('menuKnowledgeBase')).toBeTruthy();
-      });
+      expect(getByTestId('menuKnowledgeBase')).toBeTruthy();
+    });
+
+    it('should not render menu `Knowledge Base` item', async () => {
+      const feature = require('../feature/feature');
+      feature.checkVersion.mockReturnValue(false);
+
+      const {getByTestId} = doRender();
+
+      expect(() => {
+        getByTestId('menuKnowledgeBase');
+      }).toThrow();
     });
 
 
-    describe('Notifications', () => {
-      beforeEach(() => jest.spyOn(api, 'getApi'));
+    it('should render menu `Notifications` item', async () => {
+      const feature = require('../feature/feature');
+      feature.checkVersion.mockReturnValue(true);
 
-      it('should render menu `Notifications` item', async () => {
-        api.getApi.mockReturnValueOnce({
-          config: {
-            version: '2018.4',
-          },
-        });
-        const {getByTestId} = doRender();
+      const {getByTestId} = doRender();
 
-        expect(getByTestId('test:id/menuNotifications')).toBeTruthy();
-      });
+      expect(getByTestId('test:id/menuNotifications')).toBeTruthy();
+    });
 
-      it('should not render menu `Notifications` item', async () => {
-        api.getApi.mockReturnValueOnce({
-          config: {
-            version: '2018.2',
-          },
-        });
-        const {queryByTestId} = doRender();
+    it('should not render menu `Notifications` item', async () => {
+      const feature = require('../feature/feature');
+      feature.checkVersion.mockReturnValue(false);
 
-        expect(queryByTestId('test:id/menuNotifications')).toBeNull();
-      });
+      const {getByTestId} = doRender();
+
+      expect(() => {
+        getByTestId('test:id/menuNotifications');
+      }).toThrow();
     });
 
 
@@ -115,20 +115,20 @@ describe('<Menu/>', () => {
       expect(getByTestId('test:id/menuSettings')).toBeTruthy();
     });
 
-    it('should not render menu container if `auth` is not provided', () => {
+    it('should render menu container if `auth` is not provided', () => {
       stateMock.app.auth = null;
       storeMock = createStoreMock(stateMock, ownPropsMock);
       const {queryByTestId} = doRender();
 
-      expect(queryByTestId('menu')).toBeNull();
+      expect(queryByTestId('menu')).toBeTruthy();
     });
 
-    it('should not render menu container if `user` is not provided', () => {
+    it('should render menu container if `user` is not provided', () => {
       stateMock.app.user = null;
       storeMock = createStoreMock(stateMock, ownPropsMock);
       const {queryByTestId} = doRender();
 
-      expect(queryByTestId('menu')).toBeNull();
+      expect(queryByTestId('menu')).toBeTruthy();
     });
   });
 
