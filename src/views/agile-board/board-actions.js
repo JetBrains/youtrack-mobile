@@ -33,6 +33,8 @@ import type {
 import type {AgilePageState} from './board-reducers';
 import type {CustomError} from '../../flow/Error';
 import type {IssueFull, IssueOnList} from '../../flow/Issue';
+import CreateIssue from '../create-issue/create-issue';
+import React from 'react';
 
 type ApiGetter = () => Api;
 
@@ -594,7 +596,7 @@ export function storeCreatingIssueDraft(draftId: string, cellId: string): {cellI
   };
 }
 
-export function createCardForCell(columnId: string, cellId: string): ((
+export function createCardForCell(columnId: string, cellId: string, isTablet: boolean): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
@@ -605,7 +607,11 @@ export function createCardForCell(columnId: string, cellId: string): ((
     try {
       const draft = await api.agile.getIssueDraftForAgileCell(sprint.agile.id, sprint.id, columnId, cellId);
       dispatch(storeCreatingIssueDraft(draft.id, cellId));
-      Router.CreateIssue({predefinedDraftId: draft.id});
+      if (isTablet) {
+        Router.Modal({children: <CreateIssue predefinedDraftId={draft.id}/>});
+      } else {
+        Router.CreateIssue({predefinedDraftId: draft.id});
+      }
       trackEvent('Open create card for cell');
     } catch (err) {
       notify('Could not create card', err);

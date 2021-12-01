@@ -366,7 +366,7 @@ class AgileBoard extends Component<Props, State> {
         zoomedIn={this.state.zoomedIn}
         canRunCommand={this.canRunCommand}
         onTapIssue={this._onTapIssue}
-        onTapCreateIssue={createCardForCell}
+        onTapCreateIssue={(...args) => createCardForCell.apply(null, [...args, isTablet])}
         onCollapseToggle={onRowCollapseToggle}
         uiTheme={this.uiTheme}
         isTablet={isTablet}

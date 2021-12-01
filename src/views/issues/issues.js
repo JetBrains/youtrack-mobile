@@ -15,6 +15,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as issueActions from './issues-actions';
+import CreateIssue from '../../views/create-issue/create-issue';
 import ErrorMessage from '../../components/error-message/error-message';
 import Issue from '../issue/issue';
 import IssueRow from './issues__row';
@@ -60,6 +61,7 @@ type Props = {
   api: Api,
   isAppStart?: boolean,
   isRedirecting?: boolean,
+  isTablet: boolean,
   onOpenContextSelect: () => any
 };
 
@@ -143,7 +145,11 @@ export class Issues extends Component<Props, State> {
         accessibilityLabel="create-issue-button"
         accessible={true}
         style={styles.createIssueButton}
-        onPress={() => Router.CreateIssue()}
+        onPress={() => (
+          this.props.isTablet
+            ? Router.Modal({children: <CreateIssue/>})
+            : Router.CreateIssue()
+        )}
         disabled={isDisabled}
       >
         <IconAdd size={20} color={this.theme.uiTheme.colors.$link}/>
