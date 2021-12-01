@@ -325,6 +325,10 @@ export function refreshIssuesCount(): (dispatch: (any) => any, getState: () => a
 export function initializeIssuesList(isAppStart: boolean = false): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     await dispatch(readCachedIssues());
+    dispatch({
+      type: types.SET_SEARCH_CONTEXT,
+      searchContext: getSearchContext(),
+    });
     if (!isAppStart) {
       dispatch(refreshIssues());
     }

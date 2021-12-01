@@ -138,4 +138,10 @@ export default (createReducer(initialState, {
       isSearchContextPinned: action.isSearchContextPinned,
     };
   },
+  [types.SET_SEARCH_CONTEXT](state: IssuesState, action: Object): IssuesState {
+    return {
+      ...state,
+      searchContext: action.searchContext,
+    };
+  },
 }): any);
