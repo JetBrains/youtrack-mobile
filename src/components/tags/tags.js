@@ -86,7 +86,9 @@ export default class Tags extends PureComponent<Props, void> {
           return (
             <TouchableOpacity
               style={[styles.tag, multiline ? styles.tagMultiline : null]}
-              testID="tagsListTag"
+              testID="test:id/tagsListTag"
+              accessibilityLabel="tagsListTag"
+              accessible={true}
               onPress={() => this.showContextActions(tag)}
               key={tag.id}
             >

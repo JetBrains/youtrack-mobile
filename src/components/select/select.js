@@ -325,7 +325,9 @@ export default class Select extends Component<SelectProps, SelectState> {
               style={styles.searchInput}/>
 
             {multi && <TouchableOpacity
-              testID="applyButton"
+              testID="test:id/applyButton"
+              accessibilityLabel="applyButton"
+              accessible={true}
               style={styles.applyButton}
               onPress={() => this._onSave()}
             >
