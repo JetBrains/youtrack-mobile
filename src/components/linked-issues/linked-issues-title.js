@@ -43,7 +43,7 @@ const LinkedIssuesTitle = (props: Props): Node => {
           </AnimatedView>
         )}
       </View>
-      <IconAngleRight size={18}/>
+      <IconAngleRight size={18} color={styles.linkedIssuesTitleTextDetails.color}/>
     </TouchableOpacity>
   ) : null;
 };
