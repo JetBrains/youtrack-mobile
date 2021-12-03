@@ -369,16 +369,20 @@ export function toggleCommandDialog(isVisible: boolean = false): ((
   };
 }
 
-export function loadIssuesXShort(linkTypeName: string, query: string, page?: number): ((
+export function loadIssuesXShort(linkTypeName: string, query: string = '', page?: number): ((
   dispatch: (any) => any,
   getState: () => AppState,
   getApi: ApiGetter,
 ) => Promise<IssueOnList>) {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const issue: IssueFull = getState().creation.issue;
-     return await issueCommonLinksActions(issue).loadIssuesXShort(
-      linkTypeName,
-      `(${query})+and+(${linkTypeName.split(' ').join('+')}:+-${getReadableID(issue)})`,
+    const searchQuery = [
+      `(project:${issue.project.shortName})`,
+      query.length > 0 ? `(${query})` : '',
+      `(${linkTypeName.split(' ').join('+')}:+-${getReadableID(issue)})`,
+    ].filter(Boolean).join('+and+');
+    return await issueCommonLinksActions(issue).loadIssuesXShort(
+      searchQuery,
       page
     );
   };
