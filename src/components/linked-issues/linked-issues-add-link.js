@@ -9,7 +9,6 @@ import issueCommonLinksActions from '../issue-actions/issue-links-actions';
 import IssueRow from '../../views/issues/issues__row';
 import QueryAssistPanel from '../query-assist/query-assist-panel';
 import QueryPreview from '../query-assist/query-preview';
-import Router from '../router/router';
 import Select from '../select/select';
 import SelectButton from '../select/select-button';
 import {createLinkTypes} from './linked-issues-helper';
@@ -143,7 +142,7 @@ const LinkedIssuesAddLink = (props: Props): Node => {
               await props.onLinkIssue(getReadableID(issue), currentIssueLinkTypeExtended.getName());
               updateLoading(false);
               props.onUpdate();
-              Router.pop();
+              props.onHide();
             }
           }}
         />
