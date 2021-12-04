@@ -217,7 +217,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     );
   };
 
-  renderDetails = (uiTheme: UITheme) => {
+  renderDetails = () => {
     const {article, articlePlaceholder, error} = this.props;
 
     if (error) {
