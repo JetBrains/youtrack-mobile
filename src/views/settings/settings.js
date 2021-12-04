@@ -15,6 +15,7 @@ import SettingsAppearance from './settings__appearance';
 import SettingsFeedbackForm from './settings__feedback-form';
 import usage, {VERSION_STRING} from '../../components/usage/usage';
 import {HIT_SLOP} from '../../components/common-styles/button';
+import {modalHide, modalShow} from '../../components/modal-view/modal-helper';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import styles from './settings.styles';
@@ -22,7 +23,6 @@ import styles from './settings.styles';
 import type {StorageState} from '../../components/storage/storage';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {AppState} from '../../reducers';
-import {routeMap} from '../../app-routes';
 
 type Props = {
   onLogOut: () => any,
@@ -75,8 +75,18 @@ class Settings extends PureComponent<Props, State> {
           const settingItems: Array<{ title: string, onPress: Function }> = [{
             title: 'Appearance',
             onPress: () => {
-              Router[isTablet ? routeMap.Modal : routeMap.Page]({children: <SettingsAppearance isTablet={true}/>});
-              },
+              if (isTablet) {
+                let id: string = '';
+                id = modalShow(
+                  <SettingsAppearance
+                    isTablet={true}
+                    onHide={() => modalHide(id)}
+                  />
+                );
+              } else {
+                Router.Page({
+                  children: <SettingsAppearance onHide={() => Router.pop()}/>});
+              }},
           }, {
             title: 'Share logs',
             onPress: openDebugView,

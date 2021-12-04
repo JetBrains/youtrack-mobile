@@ -4,7 +4,6 @@ import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
 import Header from '../../components/header/header';
-import Router from '../../components/router/router';
 import {getStorageState} from '../../components/storage/storage';
 import {getSystemThemeMode, themes} from '../../components/theme/theme';
 import {IconBack, IconCheck, IconClose} from '../../components/icon/icon';
@@ -18,7 +17,8 @@ import type {Node} from 'React';
 import type {Theme} from '../../flow/Theme';
 
 type Props = {
-  isTablet: boolean,
+  onHide: () => any,
+  isTablet?: boolean,
 }
 
 
@@ -61,7 +61,7 @@ const SettingsAppearance = (props: Props): Node => {
                 ? <IconClose size={21} color={theme.uiTheme.colors.$link}/>
                 : <IconBack color={theme.uiTheme.colors.$link}/>
             )}
-            onBack={() => Router.pop(props.isTablet)}
+            onBack={props.onHide}
           />
 
           <View style={styles.settingsAppearance}>
