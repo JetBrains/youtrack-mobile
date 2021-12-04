@@ -31,7 +31,8 @@ import {getApi} from '../../components/api/api__instance';
 import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconCheck, IconClose, IconDrag, IconMoreOptions} from '../../components/icon/icon';
-import {isIOSPlatform} from '../../util/util';
+import {isIOSPlatform, isTablet} from '../../util/util';
+import {modalHide, modalShow} from '../../components/modal-view/modal-helper';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
@@ -249,6 +250,49 @@ class CreateIssue extends Component<Props, State> {
     }
   }
 
+  renderLinkedIssues = () => {
+    const {loadIssuesXShort, onLinkIssue, getIssueLinksTitle, processing} = this.props;
+    //$FlowFixMe
+    const iconLink: any = <IconLink
+      width={24}
+      height={24}
+      fill={processing ? styles.addLinkButtonTextDisabled.color : styles.addLinkButtonText.color}
+    />;
+    const renderAddLinkedIssue = (onHide: () => void) => (
+      <LinkedIssuesAddLink
+        issuesGetter={loadIssuesXShort}
+        onLinkIssue={onLinkIssue}
+        onUpdate={(issues?: Array<IssueLink>) => {
+          getIssueLinksTitle(issues);
+        }}
+        onHide={onHide}
+      />
+    );
+
+    return (
+      <TouchableOpacity
+        style={styles.addLinkButton}
+        onPress={() => {
+          if (isTablet) {
+            let modalId: string = '';
+
+            modalId = modalShow(
+              renderAddLinkedIssue(() => modalHide(modalId)),
+              {hasOverlay: false},
+            );
+          } else {
+            Router.Page({
+              children: (renderAddLinkedIssue(() => Router.pop())),
+            });
+          }
+        }}
+      >
+        {iconLink}
+        <Text style={styles.addLinkButtonText}>Link issue</Text>
+      </TouchableOpacity>
+    );
+  }
+
   render() {
     const {
       setIssueSummary,
@@ -262,8 +306,6 @@ class CreateIssue extends Component<Props, State> {
       isAttachFileDialogVisible,
       showCommandDialog,
       issuePermissions,
-      loadIssuesXShort,
-      onLinkIssue,
     } = this.props;
 
     const isAttaching = attachingImage !== null;
@@ -282,12 +324,6 @@ class CreateIssue extends Component<Props, State> {
               ? <ActivityIndicator color={uiThemeColors.$link}/>
               : <IconCheck size={20} color={canCreateIssue ? uiThemeColors.$link : uiThemeColors.$disabled}/>
           );
-          //$FlowFixMe
-          const iconLink: any = <IconLink
-            width={24}
-            height={24}
-            fill={processing ? styles.addLinkButtonTextDisabled.color : styles.addLinkButtonText.color}
-          />;
 
           return (
             <View
@@ -417,27 +453,7 @@ class CreateIssue extends Component<Props, State> {
                       accessible={true}
                       style={styles.additionalData}
                     >
-                      {hasProject && issuePermissions.canLink(issue) && (
-                        <TouchableOpacity
-                          style={styles.addLinkButton}
-                          onPress={() => {
-                            Router.Page({
-                              children: (
-                                <LinkedIssuesAddLink
-                                  issuesGetter={loadIssuesXShort}
-                                  onLinkIssue={onLinkIssue}
-                                  onUpdate={async () => {
-
-                                  }}
-                                />
-                              ),
-                            });
-                          }}
-                        >
-                          {iconLink}
-                          <Text style={styles.addLinkButtonText}>Link issue</Text>
-                        </TouchableOpacity>
-                      )}
+                      {hasProject && issuePermissions.canLink(issue) && this.renderLinkedIssues()}
                       {hasProject && this.renderLinksBlock()}
                     </View>
                   </>
