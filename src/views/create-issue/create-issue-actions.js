@@ -65,7 +65,6 @@ async function storeIssueDraftId(draftId: string): Promise<StorageState> {
 export function storeDraftAndGoBack(): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     await dispatch(updateIssueDraft());
-    Router.pop(true);
     //Hack: reset state after timeout to let router close the view without freezes
     setTimeout(() => dispatch(actions.resetCreation()), 500);
   };

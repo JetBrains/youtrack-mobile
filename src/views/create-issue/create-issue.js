@@ -48,7 +48,8 @@ import styles from './create-issue.styles';
 type AdditionalProps = {
   issuePermissions: IssuePermissions,
   predefinedDraftId: ?string,
-  onAddTags: (tags: Array<Tag>) => () => Promise<void>
+  onAddTags: (tags: Array<Tag>) => () => Promise<void>,
+  onHide?: () => void,
 };
 
 type Props = CreateIssueState & typeof createIssueActions & AttachmentActions & AdditionalProps;
@@ -239,9 +240,17 @@ class CreateIssue extends Component<Props, State> {
     );
   }
 
+  onHide = async () => {
+    await this.props.storeDraftAndGoBack();
+    if (this.props.onHide) {
+      this.props.onHide();
+    } else {
+      Router.pop(true);
+    }
+  }
+
   render() {
     const {
-      storeDraftAndGoBack,
       setIssueSummary,
       setIssueDescription,
       createIssue,
@@ -289,7 +298,7 @@ class CreateIssue extends Component<Props, State> {
                 title="New Issue"
                 showShadow={true}
                 leftButton={<IconClose size={21} color={uiThemeColors.$link}/>}
-                onBack={storeDraftAndGoBack}
+                onBack={this.onHide}
                 rightButton={rightButton}
                 extraButton={this.renderActionsIcon()}
                 onRightButtonClick={() => canCreateIssue && createIssue()}/>

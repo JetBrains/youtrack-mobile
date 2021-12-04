@@ -1,10 +1,10 @@
 /* @flow */
 
 import React from 'react';
-
 import {Platform} from 'react-native';
 
 import base64 from 'base64-js';
+import DeviceInfo from 'react-native-device-info';
 import qs from 'qs';
 
 import appPackage from '../../package.json';
@@ -15,6 +15,7 @@ import type {StorageState} from '../components/storage/storage';
 
 
 export const AppVersion: any = appPackage.version.split('-')[0];
+export const isTablet: boolean = DeviceInfo.isTablet();
 
 export const isReactElement = (element: any): boolean => {
   return React.isValidElement(element);

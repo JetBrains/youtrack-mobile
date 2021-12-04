@@ -34,8 +34,9 @@ import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAdd, IconAngleDown, IconBookmark} from '../../components/icon/icon';
 import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound, IconNothingSelected} from '../../components/icon/icon-pictogram';
 import {initialState} from './issues-reducers';
-import {isReactElement} from '../../util/util';
+import {isReactElement, isTablet} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
+import {modalHide, modalShow} from '../../components/modal-view/modal-helper';
 import {notifyError} from '../../components/notification/notification';
 import {requestController} from '../../components/api/api__request-controller';
 import {routeMap} from '../../app-routes';
@@ -61,7 +62,6 @@ type Props = {
   api: Api,
   isAppStart?: boolean,
   isRedirecting?: boolean,
-  isTablet: boolean,
   onOpenContextSelect: () => any
 };
 
@@ -145,11 +145,16 @@ export class Issues extends Component<Props, State> {
         accessibilityLabel="create-issue-button"
         accessible={true}
         style={styles.createIssueButton}
-        onPress={() => (
-          this.props.isTablet
-            ? Router.Modal({children: <CreateIssue/>})
-            : Router.CreateIssue()
-        )}
+        onPress={() => {
+          let modalId: string = '';
+          if (isTablet) {
+            modalId = modalShow(
+              <CreateIssue onHide={() => modalHide(modalId)}/>
+            );
+          } else {
+            Router.CreateIssue();
+          }
+        }}
         disabled={isDisabled}
       >
         <IconAdd size={20} color={this.theme.uiTheme.colors.$link}/>
@@ -174,7 +179,7 @@ export class Issues extends Component<Props, State> {
         <IssueRow
           issue={item}
           onClick={(issue) => {
-            if (this.props.isTablet) {
+            if (isTablet) {
               this.updateFocusedIssue(issue);
             } else {
               this.goToIssue(issue);
@@ -509,7 +514,7 @@ export class Issues extends Component<Props, State> {
   };
 
   render(): Node {
-    const {isTablet, isRedirecting} = this.props;
+    const {isRedirecting} = this.props;
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
@@ -536,7 +541,6 @@ const mapStateToProps = (state: AppState, ownProps: { isAppStart?: boolean }) =>
     ...state.issueList,
     ...state.app,
     searchContext: state.app?.user?.profiles?.general?.searchContext || state.issueList.searchContext,
-    isTablet: state.app.isTablet,
   };
 };
 
