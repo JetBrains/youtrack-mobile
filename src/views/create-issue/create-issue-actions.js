@@ -13,7 +13,6 @@ import {ANALYTICS_ISSUE_CREATE_PAGE} from '../../components/analytics/analytics-
 import {attachmentActions} from './create-issue__attachment-actions-and-types';
 import {commandDialogTypes, ISSUE_CREATED} from './create-issue-action-types';
 import {CUSTOM_ERROR_MESSAGE, DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
-import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import {notify, notifyError} from '../../components/notification/notification';
 import {resolveError} from '../../components/error/error-resolver';
@@ -378,7 +377,6 @@ export function loadIssuesXShort(linkTypeName: string, query: string = '', page?
     const searchQuery = [
       `(project:${issue.project.shortName})`,
       query.length > 0 ? `(${query})` : '',
-      `(${linkTypeName.split(' ').join('+')}:+-${getReadableID(issue)})`,
     ].filter(Boolean).join('+and+');
     return await issueCommonLinksActions(issue).loadIssuesXShort(
       searchQuery,
