@@ -232,7 +232,7 @@ export function onUnlinkIssue(linkedIssue: IssueOnList, linkTypeId: string): ((
   };
 }
 
-export function loadIssuesXShort(linkTypeName: string, query: string, page?: number): ((
+export function loadIssuesXShort(linkTypeName: string, query: string = '', page?: number): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter,
@@ -240,11 +240,13 @@ export function loadIssuesXShort(linkTypeName: string, query: string, page?: num
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Search to link issues');
     const issue: IssueFull = getState().issueState.issue;
-    return await issueCommonLinksActions(issue).loadIssuesXShort(
-      linkTypeName,
-      `(${query})+and+(${linkTypeName.split(' ').join('+')}:+-${getReadableID(issue)})`,
-      page
-    );
+    const searchQuery = [
+      `(project:${issue.project.shortName})`,
+      query.length > 0 ? `(${query})` : '',
+      `(${linkTypeName.split(' ').join('+')}:+-${getReadableID(issue)})`,
+    ].filter(Boolean).join('+and+');
+
+    return await issueCommonLinksActions(issue).loadIssuesXShort(searchQuery, page);
   };
 }
 

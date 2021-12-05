@@ -2,7 +2,6 @@
 
 import log from '../log/log';
 import {getApi} from '../api/api__instance';
-import {getReadableID} from '../issue-formatter/issue-formatter';
 import {notify} from '../notification/notification';
 import {resolveError} from '../error/error-resolver';
 import {until} from '../../util/util';
@@ -15,7 +14,7 @@ import type {IssueLink, IssueLinkType} from '../../flow/CustomFields';
 const issueCommonLinksActions = (issue: $Shape<IssueFull>): {
   getIssueLinksTitle: (links?: Array<IssueLink>) => Promise<Array<IssueLink>>,
   loadIssueLinksTitle: () => Promise<Array<IssueLink>>,
-  loadIssuesXShort: (linkTypeName: string, query: string, page?: number) => Promise<IssueOnList>,
+  loadIssuesXShort: (query: string, page?: number) => Promise<IssueOnList>,
   loadLinkedIssues: () => Promise<Array<IssueLink>>,
   onLinkIssue: (linkedIssueIdReadable: string, linkTypeName: string) => Promise<boolean>,
   onUnlinkIssue: (linkedIssue: IssueOnList, linkTypeId: string) => Promise<boolean>,
@@ -24,11 +23,8 @@ const issueCommonLinksActions = (issue: $Shape<IssueFull>): {
   const api: API = getApi();
 
   return {
-    loadIssuesXShort: async (linkTypeName: string, query: string, page: number = 50): Promise<IssueOnList> => {
-      const [error, issues] = await until(api.issues.getIssuesXShort(
-        `(${query})+and+(${linkTypeName.split(' ').join('+')}:+-${getReadableID(issue)})`,
-        page
-      ));
+    loadIssuesXShort: async (query: string, page: number = 50): Promise<IssueOnList> => {
+      const [error, issues] = await until(api.issues.getIssuesXShort(query, page));
       if (error) {
         const err: Error = await resolveError(error);
         const errorMsg: string = 'Failed to load issues';

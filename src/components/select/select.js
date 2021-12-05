@@ -3,14 +3,18 @@
 import React, {Component} from 'react';
 import {Text, View, TouchableOpacity, TextInput, ActivityIndicator, FlatList} from 'react-native';
 
+import {Modal} from 'react-native-modals';
+
 import ColorField from '../color-field/color-field';
 import ModalView from '../modal-view/modal-view';
 import SelectItem from './select__item';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {IconCheck, IconClose} from '../icon/icon';
+import {isTablet} from '../../util/util';
 import {notifyError} from '../notification/notification';
 
 import styles, {SELECT_ITEM_HEIGHT, SELECT_ITEM_SEPARATOR_HEIGHT} from './select.styles';
+import modalStyles from '../modal-view/modal.view.styles';
 
 import type {Node} from 'React';
 
@@ -45,7 +49,7 @@ type SelectState = {
 type SelectItemsSortData = { selected: Array<Object>, other: Array<Object> };
 
 
-export default class Select extends Component<SelectProps, SelectState> {
+export class Select extends Component<SelectProps, SelectState> {
   static defaultProps: {
   autoFocus: boolean,
   getTitle: (item: any) => any,
@@ -87,7 +91,7 @@ export default class Select extends Component<SelectProps, SelectState> {
     };
   }
 
-  getSortedItems = (items: Array<Object> = []): Array<string> => {
+  getSortedItems: (items?: Array<any>) => Array<string> = (items: Array<Object> = []): Array<string> => {
     const selectedItemsKey: Array<string> = this.state.selectedItems.map((it: Object) => this.getItemKey(it));
     const sortData: SelectItemsSortData = items.reduce((data: SelectItemsSortData, item: Object) => {
       if (selectedItemsKey.includes(this.getItemKey(item))) {
@@ -191,9 +195,13 @@ export default class Select extends Component<SelectProps, SelectState> {
     return this.state.selectedItems.some(selectedItem => item.id === selectedItem.id);
   }
 
+  onSelect(item: any): any {
+    return this.props.onSelect(item);
+  }
+
   _onTouchItem(item) {
     if (!this.props.multi) {
-      return this.props.onSelect(item);
+      return this.onSelect(item);
     }
 
     let selectedItems = this._isSelected(item)
@@ -214,11 +222,11 @@ export default class Select extends Component<SelectProps, SelectState> {
   }
 
   onClearValue: (() => any) = () => {
-    return this.props.onSelect(this.props.multi ? [] : null);
+    return this.onSelect(this.props.multi ? [] : null);
   }
 
   _onSave() {
-    return this.props.onSelect(this.state.selectedItems);
+    return this.onSelect(this.state.selectedItems);
   }
 
   getItemLayout(items: ?Array<Object>, index: number): {index: number, length: any, offset: number} {
@@ -240,9 +248,7 @@ export default class Select extends Component<SelectProps, SelectState> {
     );
   };
 
-  getItemKey = (item: Object) => {
-    return item.key || item.ringId || item.id;
-  }
+  getItemKey: (item: any) => any = (item: Object) => item.key || item.ringId || item.id
 
   renderItems(): Node {
     return (
@@ -325,7 +331,9 @@ export default class Select extends Component<SelectProps, SelectState> {
               style={styles.searchInput}/>
 
             {multi && <TouchableOpacity
-              testID="applyButton"
+              testID="test:id/applyButton"
+              accessibilityLabel="applyButton"
+              accessible={true}
               style={styles.applyButton}
               onPress={() => this._onSave()}
             >
@@ -351,3 +359,64 @@ export default class Select extends Component<SelectProps, SelectState> {
     );
   }
 }
+
+
+//$FlowFixMe
+class SelectModal extends Select<SelectProps, SelectState> {
+
+  constructor(props) {
+    //$FlowFixMe
+    super(props);
+    this.state = {
+      ...this.state,
+      visible: true,
+    };
+  }
+
+  onHide = (): void => {
+    this.setState({ visible: false });
+  }
+
+  //$FlowFixMe
+  onCancel = (): void => {
+    //$FlowFixMe
+    super.onCancel();
+    this.onHide();
+  }
+
+  //$FlowFixMe
+  onSelect = (items: any): void => {
+    //$FlowFixMe
+    super.onSelect(items);
+    this.onHide();
+  }
+
+  getWrapperProps(): null {
+    return null;
+  }
+
+  getWrapperComponent(): any {
+    return View;
+  }
+
+  //$FlowFixMe
+  renderSelect = () => super.render()
+
+  render() {
+    return (
+      <Modal
+        animationDuration={0}
+        modalStyle={modalStyles.modal}
+        containerStyle= {modalStyles.modalContainer}
+        visible={this.state.visible}
+        onTouchOutside={this.onCancel}
+      >
+        <View style={modalStyles.modalContent}>
+          {this.renderSelect()}
+        </View>
+      </Modal>
+    );
+  }
+}
+
+export default ((isTablet ? SelectModal : Select): React$AbstractComponent<SelectProps, mixed>);

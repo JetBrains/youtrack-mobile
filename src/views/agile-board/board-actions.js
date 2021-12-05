@@ -598,17 +598,18 @@ export function createCardForCell(columnId: string, cellId: string): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
-) => Promise<void>) {
+) => Promise<$Shape<IssueOnList> | null>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
     const api: Api = getApi();
     try {
-      const draft = await api.agile.getIssueDraftForAgileCell(sprint.agile.id, sprint.id, columnId, cellId);
+      const draft:$Shape<IssueOnList> = await api.agile.getIssueDraftForAgileCell(sprint.agile.id, sprint.id, columnId, cellId);
       dispatch(storeCreatingIssueDraft(draft.id, cellId));
-      Router.CreateIssue({predefinedDraftId: draft.id});
       trackEvent('Open create card for cell');
+      return draft;
     } catch (err) {
       notify('Could not create card', err);
+      return null;
     }
   };
 }

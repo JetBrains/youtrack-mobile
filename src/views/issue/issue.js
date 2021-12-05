@@ -14,6 +14,7 @@ import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IssueActivity from './activity/issue__activity';
 import IssueDetails from './issue__details';
+import IssueDetailsModal from './issue.modal__details';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import LinkedIssuesAddLink from '../../components/linked-issues/linked-issues-add-link';
 import Router from '../../components/router/router';
@@ -34,6 +35,7 @@ import styles from './issue.styles';
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
 import type {AnyIssue, IssueFull} from '../../flow/Issue';
 import type {Attachment, IssueLink, Tag} from '../../flow/CustomFields';
+import type {AttachmentActions} from '../../components/attachments-row/attachment-actions';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {RootState} from '../../reducers/app-reducer';
@@ -41,7 +43,6 @@ import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
 
-const CATEGORY_NAME = 'Issue';
 
 const isIOS: boolean = isIOSPlatform();
 
@@ -56,23 +57,28 @@ type AdditionalProps = {
   removeAttachment: (attach: Attachment) => any,
   isTagsSelectVisible: boolean,
   navigateToActivity: boolean,
-  isModal?: boolean,
 };
 
-type IssueProps = IssueState & typeof issueActions & AdditionalProps;
+export type IssueProps = {
+  ...IssueState,
+  ...(typeof issueActions),
+  ...AttachmentActions,
+  ...AdditionalProps
+};
 
 //$FlowFixMe
-class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
+export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   static contextTypes = {
     actionSheet: Function,
   };
 
+  CATEGORY_NAME = 'Issue';
   imageHeaders = getApi().auth.getAuthorizationHeaders();
   backendUrl = getApi().config.backendUrl;
   renderRefreshControl = this._renderRefreshControl.bind(this);
 
   async init() {
-    usage.trackScreenView(CATEGORY_NAME);
+    usage.trackScreenView(this.CATEGORY_NAME);
     await this.props.unloadIssueIfExist();
     await this.props.setIssueId(this.props.issueId || this.props?.issuePlaceholder?.id);
     await this.loadIssue();
@@ -86,7 +92,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     await this.init();
   }
 
-  async UNSAFE_componentWillReceiveProps(nextProps: Props): void {
+  async UNSAFE_componentWillReceiveProps(nextProps: IssueProps): Promise<void> {
     if (nextProps.issueId !== this.props.issueId) {
       await this.init();
     }
@@ -136,8 +142,9 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       isTablet,
     } = this.props;
 
+    const Component: any = isTablet ? IssueDetailsModal : IssueDetails;
     return (
-      <IssueDetails
+      <Component
         loadIssue={loadIssue}
         openNestedIssueView={openNestedIssueView}
         attachingImage={attachingImage}
@@ -160,7 +167,7 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         setIssueSummaryCopy={setIssueSummaryCopy}
         setIssueDescriptionCopy={setIssueDescriptionCopy}
 
-        analyticCategory={CATEGORY_NAME}
+        analyticCategory={this.CATEGORY_NAME}
         renderRefreshControl={() => this.renderRefreshControl(() => this.loadIssue(), uiTheme)}
 
         onVoteToggle={toggleVote}
@@ -185,11 +192,12 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
         setCustomFieldValue={setCustomFieldValue}
         isTablet={isTablet}
+        linksHasOverlay={isTablet}
       />
     );
   };
 
-  renderActivity = (uiTheme: UITheme) => {
+  renderActivity = (uiTheme: UITheme): React$Element<typeof IssueActivity> => {
     const {
       issue,
       user,
@@ -219,23 +227,15 @@ class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return !editMode && !isSavingEditedIssue && !isRefreshing && !attachingImage;
   }
 
-  handleOnBack = () => {
-    const {isModal} = this.props;
-    const returned = Router.pop(isModal, isModal ? undefined : {issueId: this.props?.issue?.id});
-    if (!isModal && !returned) {
+  handleOnBack() {
+    const hasParentRoute: boolean = Router.pop();
+    if (!hasParentRoute) {
       Router.Issues();
     }
-  };
+  }
 
   renderBackIcon = () => {
-    const {isModal, isTablet} = this.props;
-    const iconProps: { color: string, size: ?number } = {
-      color: this.uiTheme.colors.$link,
-    };
-    if (isModal) {
-      return <IconClose size={21} {...iconProps}/>;
-    }
-    return isTablet ? null : <IconBack {...iconProps} />;
+    return this.props.isTablet ? null : <IconBack color={this.uiTheme.colors.$link}/>;
   }
 
   canStar = (): boolean => {
@@ -534,4 +534,8 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps)(Issue): any);
+export function connectIssue(Component: any): any {
+  return connect(mapStateToProps, mapDispatchToProps)(Component);
+}
+
+export default (connectIssue(Issue): React$AbstractComponent<IssueProps, mixed>);

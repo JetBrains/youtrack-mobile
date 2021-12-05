@@ -1,15 +1,17 @@
 /* @flow */
 
-import type {Node} from 'React';
-import {TouchableOpacity, View} from 'react-native';
 import React from 'react';
+import {TouchableOpacity, View} from 'react-native';
 
 import {HIT_SLOP} from '../common-styles/button';
+
 import styles from './menu.styles';
 
+import type {Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
+  disabled?: boolean,
   icon: React$Element<any>,
   onPress: () => any,
   style?: ViewStyleProp,
@@ -18,16 +20,19 @@ type Props = {
 
 
 export const MenuItem = (props: Props): Node => {
-  const {icon, onPress, style, testID} = props;
+  const {icon, onPress, style, testID, disabled = false} = props;
   return (
-    <View
-      style={[styles.menuItem, style]}
+    disabled ? null : <View
+      style={[
+        styles.menuItem,
+        style,
+      ]}
     >
       <TouchableOpacity
         testID={testID}
+        style={[styles.menuItemButton, style]}
         accessible={true}
         hitSlop={HIT_SLOP}
-        style={[styles.menuItemButton, style]}
         onPress={onPress}
       >
         {icon}

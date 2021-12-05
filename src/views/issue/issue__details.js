@@ -24,7 +24,6 @@ import {getApi} from '../../components/api/api__instance';
 import {getEntityPresentation, getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
 import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
 import {HIT_SLOP} from '../../components/common-styles/button';
-import {routeMap} from '../../app-routes';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
@@ -47,7 +46,7 @@ import type {Visibility} from '../../flow/Visibility';
 import type {YouTrackWiki} from '../../flow/Wiki';
 
 
-type Props = {
+export type IssueDetailsProps = {
   loadIssue: () => any,
   openNestedIssueView: ({ issue?: IssueFull, issueId?: string }) => any,
   attachingImage: ?Object,
@@ -93,20 +92,19 @@ type Props = {
   onLinkIssue: (linkedIssueIdReadable: string, linkTypeName: string) => Promise<boolean>,
 
   setCustomFieldValue: (field: CustomFieldText, value: CustomFieldTextValue) => any,
-  isTablet: boolean,
 }
 
-export default class IssueDetails extends Component<Props, void> {
+export default class IssueDetails extends Component<IssueDetailsProps, void> {
   imageHeaders: any = getApi().auth.getAuthorizationHeaders();
   backendUrl: any = getApi().config.backendUrl;
 
-  UNSAFE_componentWillUpdate(nextProps: Props) {
+  UNSAFE_componentWillUpdate(nextProps: IssueDetailsProps) {
     if (!this.props?.issue?.id && nextProps?.issue?.id) {
       this.props.getIssueLinksTitle();
     }
   }
 
-  shouldComponentUpdate(nextProps: Props): boolean {
+  shouldComponentUpdate(nextProps: IssueDetailsProps): boolean {
     if (nextProps.issue !== this.props.issue) {
       return true;
     }
@@ -120,11 +118,11 @@ export default class IssueDetails extends Component<Props, void> {
   }
 
   renderLinksBlock: (() => void | Node) = () => {
-    const {issue, issuePermissions, getIssueLinksTitle, isTablet} = this.props;
+    const {issue, issuePermissions, getIssueLinksTitle} = this.props;
     return (
       <LinkedIssuesTitle
         issueLinks={issue.links}
-        onPress={() => Router[isTablet ? routeMap.PageModal : routeMap.Page]({
+        onPress={() => Router.Page({
           children: (
             <LinkedIssues
               issuesGetter={this.props.issuesGetter}
@@ -140,7 +138,7 @@ export default class IssueDetails extends Component<Props, void> {
                   : undefined
               )}
               subTitle={`${issue.idReadable} ${issue.summary}`}
-              isTablet={isTablet}
+              onHide={() => Router.pop()}
             />),
         })}
       />

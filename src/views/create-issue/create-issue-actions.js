@@ -13,7 +13,6 @@ import {ANALYTICS_ISSUE_CREATE_PAGE} from '../../components/analytics/analytics-
 import {attachmentActions} from './create-issue__attachment-actions-and-types';
 import {commandDialogTypes, ISSUE_CREATED} from './create-issue-action-types';
 import {CUSTOM_ERROR_MESSAGE, DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
-import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import {getStorageState, flushStoragePart} from '../../components/storage/storage';
 import {notify, notifyError} from '../../components/notification/notification';
 import {resolveError} from '../../components/error/error-resolver';
@@ -65,7 +64,6 @@ async function storeIssueDraftId(draftId: string): Promise<StorageState> {
 export function storeDraftAndGoBack(): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     await dispatch(updateIssueDraft());
-    Router.pop(true);
     //Hack: reset state after timeout to let router close the view without freezes
     setTimeout(() => dispatch(actions.resetCreation()), 500);
   };
@@ -204,8 +202,8 @@ export function createIssue(): (dispatch: (any) => any, getState: () => any, get
       dispatch(propagateCreatedIssue(filledIssue, getState().creation.predefinedDraftId));
       dispatch(actions.resetCreation());
 
-      Router.pop();
-      await clearIssueDraftStorage();
+      Router.pop(true);
+      clearIssueDraftStorage();
 
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Error');
@@ -369,16 +367,19 @@ export function toggleCommandDialog(isVisible: boolean = false): ((
   };
 }
 
-export function loadIssuesXShort(linkTypeName: string, query: string, page?: number): ((
+export function loadIssuesXShort(linkTypeName: string, query: string = '', page?: number): ((
   dispatch: (any) => any,
   getState: () => AppState,
   getApi: ApiGetter,
 ) => Promise<IssueOnList>) {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const issue: IssueFull = getState().creation.issue;
-     return await issueCommonLinksActions(issue).loadIssuesXShort(
-      linkTypeName,
-      `(${query})+and+(${linkTypeName.split(' ').join('+')}:+-${getReadableID(issue)})`,
+    const searchQuery = [
+      `(project:${issue.project.shortName})`,
+      query.length > 0 ? `(${query})` : '',
+    ].filter(Boolean).join('+and+');
+    return await issueCommonLinksActions(issue).loadIssuesXShort(
+      searchQuery,
       page
     );
   };

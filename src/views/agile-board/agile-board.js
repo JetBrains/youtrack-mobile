@@ -3,8 +3,8 @@
 import React, {Component} from 'react';
 import {View, RefreshControl, TouchableOpacity, ActivityIndicator, Dimensions} from 'react-native';
 
-import {connect} from 'react-redux';
 import isEqual from 'react-fast-compare';
+import {connect} from 'react-redux';
 
 import * as boardActions from './board-actions';
 import AgileBoardSprint from './agile-board__sprint';
@@ -12,8 +12,9 @@ import Api from '../../components/api/api';
 import Auth from '../../components/auth/oauth2';
 import BoardHeader from './board-header';
 import BoardScroller from '../../components/board-scroller/board-scroller';
+import CreateIssue from '../create-issue/create-issue';
 import ErrorMessage from '../../components/error-message/error-message';
-import Issue from '../issue/issue';
+import IssueModal from '../issue/issue.modal';
 import log from '../../components/log/log';
 import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
 import QueryPreview from '../../components/query-assist/query-preview';
@@ -26,6 +27,7 @@ import {flushStoragePart, getStorageState} from '../../components/storage/storag
 import {getScrollableWidth} from '../../components/board-scroller/board-scroller__math';
 import {hasType} from '../../components/api/api__resource-types';
 import {IconException, IconMagnifyZoom} from '../../components/icon/icon';
+import {modalHide, modalShow} from '../../components/modal-view/modal-helper';
 import {notify} from '../../components/notification/notification';
 import {renderSelector} from './agile-board__renderer';
 import {routeMap} from '../../app-routes';
@@ -55,7 +57,7 @@ type Props = AgilePageState & {
   isSprintSelectOpen: boolean,
   selectProps: Object,
   issuePermissions: IssuePermissions,
-  onLoadBoard: (query: string) => any,
+  onLoadBoard: (query: string, refresh: boolean) => any,
   onLoadMoreSwimlanes: (query?: string) => any,
   onRowCollapseToggle: (row: AgileBoardRow) => any,
   onColumnCollapseToggle: (column: BoardColumn) => any,
@@ -178,15 +180,14 @@ class AgileBoard extends Component<Props, State> {
     log.debug(`Opening issue "${issue.id}" from Agile Board`);
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
     if (this.props.isTablet) {
-      Router.Modal({
-        children: (
-          <Issue
-            issuePlaceholder={issue}
-            issueId={issue.id}
-            isModal={true}
-          />
-        ),
-      });
+      let modalId: string = '';
+      modalId = modalShow(
+        <IssueModal
+          issuePlaceholder={issue}
+          issueId={issue.id}
+          onHide={() => {modalHide(modalId);}}
+        />
+      );
     } else {
       Router.Issue({
         issuePlaceholder: issue,
@@ -366,7 +367,14 @@ class AgileBoard extends Component<Props, State> {
         zoomedIn={this.state.zoomedIn}
         canRunCommand={this.canRunCommand}
         onTapIssue={this._onTapIssue}
-        onTapCreateIssue={createCardForCell}
+        onTapCreateIssue={async (...args): Promise<void> => {
+          const draft: $Shape<IssueOnList> = await createCardForCell.apply(null, [...args, isTablet]);
+          if (isTablet) {
+            Router.Modal({children: <CreateIssue predefinedDraftId={draft.id}/>});
+          } else {
+            Router.CreateIssue({predefinedDraftId: draft.id});
+          }
+        }}
         onCollapseToggle={onRowCollapseToggle}
         uiTheme={this.uiTheme}
         isTablet={isTablet}

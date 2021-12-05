@@ -9,7 +9,6 @@ import issueCommonLinksActions from '../issue-actions/issue-links-actions';
 import IssueRow from '../../views/issues/issues__row';
 import QueryAssistPanel from '../query-assist/query-assist-panel';
 import QueryPreview from '../query-assist/query-preview';
-import Router from '../router/router';
 import Select from '../select/select';
 import SelectButton from '../select/select-button';
 import {createLinkTypes} from './linked-issues-helper';
@@ -17,7 +16,7 @@ import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
 import {getApi} from '../api/api__instance';
 import {getAssistSuggestions} from '../query-assist/query-assist-helper';
 import {getReadableID} from '../issue-formatter/issue-formatter';
-import {IconBack, IconClose} from '../icon/icon';
+import {IconBack} from '../icon/icon';
 import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound} from '../icon/icon-pictogram';
 import {UNIT} from '../variables/variables';
 import {View as AnimatedView} from 'react-native-animatable';
@@ -36,7 +35,7 @@ type Props = {
   onUpdate: () => any,
   style?: ViewStyleProp,
   subTitle?: any,
-  isTablet: boolean,
+  onHide: () => any,
 }
 
 
@@ -143,7 +142,7 @@ const LinkedIssuesAddLink = (props: Props): Node => {
               await props.onLinkIssue(getReadableID(issue), currentIssueLinkTypeExtended.getName());
               updateLoading(false);
               props.onUpdate();
-              Router.pop();
+              props.onHide();
             }
           }}
         />
@@ -178,8 +177,8 @@ const LinkedIssuesAddLink = (props: Props): Node => {
         accessible={true}
         title="Link issue"
         showShadow={true}
-        leftButton={props.isTablet ? <IconClose size={21} color={styles.link.color}/> : <IconBack color={styles.link.color}/>}
-        onBack={() => Router.pop(props.isTablet)}
+        leftButton={<IconBack color={styles.link.color}/>}
+        onBack={props.onHide}
       />
 
       {!!currentIssueLinkTypeExtended && (

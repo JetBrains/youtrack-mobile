@@ -1,29 +1,26 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {Component} from 'react';
 import {StatusBar, Platform} from 'react-native';
 
-import { SafeAreaView } from 'react-native-safe-area-context';
-
-import ThemeProvider from './components/theme/theme-provider';
-import {ThemeContext} from './components/theme/theme-context';
-
-import DebugView from './components/debug-view/debug-view';
-import UserAgreement from './components/user-agreement/user-agreement';
-import {setNotificationComponent} from './components/notification/notification';
-
-
-import ErrorBoundary from './components/error-boundary/error-boundary';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
+import {ModalPortal} from 'react-native-modals';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
+import DebugView from './components/debug-view/debug-view';
+import ErrorBoundary from './components/error-boundary/error-boundary';
 import Navigation from './navigation';
+import ThemeProvider from './components/theme/theme-provider';
+import UserAgreement from './components/user-agreement/user-agreement';
 import {buildStyles, DEFAULT_THEME, getUITheme, getThemeMode} from './components/theme/theme';
+import {setNotificationComponent} from './components/notification/notification';
+import {ThemeContext} from './components/theme/theme-context';
 
-
+import type {Node} from 'React';
 import type {Theme} from './flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+
 
 export default class AppProvider extends Component<{ }, { mode: string }> {
   state: {mode: string};
@@ -67,6 +64,7 @@ export default class AppProvider extends Component<{ }, { mode: string }> {
                   </ErrorBoundary>
 
                   <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
+                  <ModalPortal/>
 
                 </SafeAreaView>
               );

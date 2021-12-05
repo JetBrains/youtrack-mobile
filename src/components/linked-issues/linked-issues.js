@@ -10,6 +10,7 @@ import Router from '../router/router';
 
 import {createLinksList} from './linked-issues-helper';
 import {IconAdd, IconBack, IconClose} from '../icon/icon';
+import {modalHide, modalShow} from '../modal-view/modal-helper';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './linked-issues.style';
@@ -29,7 +30,8 @@ type Props = {
   onUpdate: (linkedIssues?: Array<IssueLink>) => void,
   style?: ViewStyleProp,
   subTitle?: any,
-  isTablet: boolean,
+  onHide: () => void,
+  isTablet?: boolean,
 }
 
 const LinkedIssues = (props: Props): Node => {
@@ -39,7 +41,7 @@ const LinkedIssues = (props: Props): Node => {
 
   const getLinkedIssues = useCallback(async (): Promise<Array<IssueLink>> => {
     const linkedIssues: Array<IssueLink> = await props.linksGetter();
-    const linksListData = createLinksList(linkedIssues);
+    const linksListData: Array<LinksListData> = createLinksList(linkedIssues);
     updateSections(linksListData);
     return linkedIssues;
   }, [props]);
@@ -51,8 +53,6 @@ const LinkedIssues = (props: Props): Node => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const navigateBack = (): void => {Router.pop(props.isTablet);};
 
   const doUpdateSections = (removedLinkedIssue: IssueOnList, linkTypeId: string): Array<LinksListData> => {
     const _sections: Array<LinksListData> = sections.map((it: LinksListData) => {
@@ -97,7 +97,7 @@ const LinkedIssues = (props: Props): Node => {
                 const updatedLinksList: Array<LinksListData> = doUpdateSections(linkedIssue, linkTypeId);
                 props.onUpdate();
                 if (updatedLinksList.length === 0) {
-                  navigateBack();
+                  props.onHide();
                 }
               }
             }}
@@ -126,25 +126,39 @@ const LinkedIssues = (props: Props): Node => {
     );
   };
 
+  const onAddIssueLink = () => {
+    let modalId: string = '';
+    const renderAddIssueLink = (onHide: Function) => <LinkedIssuesAddLink
+      onLinkIssue={props.onLinkIssue}
+      issuesGetter={props.issuesGetter}
+      onUpdate={async () => {
+        const linkedIssues: Array<IssueLink> = await getLinkedIssues();
+        props.onUpdate(linkedIssues);
+      }}
+      subTitle={props.subTitle}
+      onHide={onHide}
+    />;
+
+    if (props.isTablet) {
+      modalId = modalShow(
+        renderAddIssueLink(() => modalHide(modalId)),
+        {hasOverlay: false},
+      );
+    } else {
+      Router.Page({
+        children: renderAddIssueLink(props.onHide),
+      });
+    }
+  };
+
   return (
     <View style={[styles.container, props.style]}>
       <Header
         showShadow={true}
-        leftButton={props.isTablet ? <IconClose size={21} color={styles.link.color}/> : <IconBack color={styles.link.color}/>}
+        leftButton={<IconBack color={styles.link.color}/>}
         rightButton={props.canLink ? <IconAdd style={styles.addLinkButton} color={styles.link.color} size={20}/> : null}
-        onRightButtonClick={() => Router.Page({
-          children: <LinkedIssuesAddLink
-            onLinkIssue={props.onLinkIssue}
-            issuesGetter={props.issuesGetter}
-            onUpdate={async () => {
-              const linkedIssues: Array<IssueLink> = await getLinkedIssues();
-              props.onUpdate(linkedIssues);
-            }}
-            subTitle={props.subTitle}
-            isTablet={props.isTablet}
-          />,
-        })}
-        onBack={navigateBack}
+        onRightButtonClick={onAddIssueLink}
+        onBack={props.onHide}
       >
         <Text
           style={styles.headerSubTitle}

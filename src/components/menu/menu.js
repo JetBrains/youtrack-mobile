@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import {View as AnimatedView} from 'react-native-animatable';
 import {connect} from 'react-redux';
 
-import Feature, {FEATURE_VERSION} from '../feature/feature';
+import {checkVersion, FEATURE_VERSION} from '../feature/feature';
 import Router from '../router/router';
 import {DEFAULT_THEME} from '../theme/theme';
 import {getStorageState} from '../storage/storage';
@@ -32,8 +32,8 @@ type State = {
 }
 
 class Menu extends Component<Props, State> {
-  static defaultProps: Props = {
-    isVisible: false,
+  static defaultProps: $Shape<Props> = {
+    isVisible: true,
     isDisabled: false,
     uiTheme: DEFAULT_THEME,
   };
@@ -157,12 +157,9 @@ class Menu extends Component<Props, State> {
   };
 
   render() {
-    const {isVisible, isDisabled, uiTheme} = this.props;
-
-    if (!isVisible) {
-      return null;
-    }
-
+    const {isDisabled, uiTheme} = this.props;
+    const isKBEnabled: boolean = checkVersion(FEATURE_VERSION.knowledgeBase, true);
+    const isInboxEnabled: boolean = checkVersion(FEATURE_VERSION.inbox, true);
     const color = (routeName: string) => {
       return (
         isDisabled
@@ -174,7 +171,7 @@ class Menu extends Component<Props, State> {
     return (
       <AnimatedView
         useNativeDriver
-        duration={500}
+        duration={300}
         animation="fadeIn"
 
         testID="menu"
@@ -197,21 +194,20 @@ class Menu extends Component<Props, State> {
           onPress={this.openAgileBoard}
         />
 
-        <Feature version={FEATURE_VERSION.inbox}>
-          <MenuItem
-            testID="test:id/menuNotifications"
-            icon={<IconBell size={22} color={color(routeMap.Inbox)}/>}
-            onPress={this.openInbox}
-          />
-        </Feature>
+        <MenuItem
+          disabled={!isInboxEnabled}
+          testID="test:id/menuNotifications"
+          icon={<IconBell size={22} color={color(routeMap.Inbox)}/>}
+          onPress={this.openInbox}
+        />
 
-        <Feature version={FEATURE_VERSION.knowledgeBase}>
-          <MenuItem
-            testID="menuKnowledgeBase"
-            icon={<IconKnowledgeBase size={22} color={color(routeMap.KnowledgeBase)}/>}
-            onPress={this.openKnowledgeBase}
-          />
-        </Feature>
+        <MenuItem
+          disabled={!isKBEnabled}
+          testID="menuKnowledgeBase"
+          icon={<IconKnowledgeBase size={22} color={color(routeMap.KnowledgeBase)}/>}
+          onPress={this.openKnowledgeBase}
+        />
+
         <MenuItem
           testID="test:id/menuSettings"
           icon={<IconSettings size={21} color={color(routeMap.Settings)}/>}
@@ -225,7 +221,6 @@ class Menu extends Component<Props, State> {
 
 const mapStateToProps = (state: AppState) => {
   return {
-    isVisible: state.app.auth && state.app.user,
     isDisabled: state.app.isChangingAccount,
     isTablet: state.app.isTablet,
   };

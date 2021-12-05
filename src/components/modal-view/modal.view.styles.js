@@ -5,26 +5,14 @@ export default EStyleSheet.create({
   box: {
     flex: 1,
   },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    paddingVertical: UNIT * 7,
-    backgroundColor: '$dimBackground',
+  modal: {
+    marginVertical: UNIT * 7,
+    borderRadius: 18,
   },
-  content: {
+  modalContent: {
     flex: 1,
-    maxWidth: 704,
-    marginHorizontal: 40,
+    width: 704,
+    paddingHorizontal: UNIT,
     backgroundColor: '$background',
-    borderRadius: UNIT * 3,
-  },
-  children: {
-    flex: 1,
-    maxWidth: 704,
-    overflow: 'hidden',
-    borderRadius: UNIT * 3,
-    paddingHorizontal: UNIT * 2.5,
   },
 });
