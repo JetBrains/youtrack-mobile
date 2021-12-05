@@ -97,7 +97,9 @@ export default class CommandDialog extends Component<Props, State> {
         placeholder="Enter command"
         clearButtonMode="while-editing"
         returnKeyType="done"
-        testID="command-input"
+        testID="test:id/selectInput"
+        accessibilityLabel="selectInput"
+        accessible={true}
         autoFocus
         autoCorrect={false}
         underlineColorAndroid="transparent"
@@ -176,7 +178,9 @@ export default class CommandDialog extends Component<Props, State> {
         <View style={styles.inputWrapper}>
 
           <TouchableOpacity
-            testID="commandBackButton"
+            testID="test:id/selectBackButton"
+            accessibilityLabel="selectBackButton"
+            accessible={true}
             onPress={this.props.onCancel}
           >
             <IconBack size={28}/>
@@ -185,7 +189,9 @@ export default class CommandDialog extends Component<Props, State> {
           {this._renderInput()}
 
           <TouchableOpacity
-            testID="command-apply"
+            testID="test:id/applyButton"
+            accessibilityLabel="applyButton"
+            accessible={true}
             disabled={!canApply}
             style={styles.applyButton}
             onPress={() => this.onApply()}
