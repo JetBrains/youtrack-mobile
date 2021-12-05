@@ -79,7 +79,9 @@ export default class Tags extends PureComponent<Props, void> {
 
     return (
       <View
-        testID="tagsList"
+        testID="test:id/tagsList"
+        accessibilityLabel="tagsList"
+        accessible={true}
         style={[styles.tags, multiline ? styles.tagsMultiline : null, style]}
       >
         {(tags || []).map((tag: Tag) => {

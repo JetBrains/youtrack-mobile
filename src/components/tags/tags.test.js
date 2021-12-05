@@ -28,7 +28,7 @@ describe('<Tags/>', () => {
   describe('Render', () => {
 
     it('should render component', () => {
-      expect(findByTestId('tagsList')).toHaveLength(1);
+      expect(findByTestId('test:id/tagsList')).toHaveLength(1);
     });
   });
 
