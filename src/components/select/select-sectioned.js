@@ -47,7 +47,9 @@ export default class SelectSectioned extends Select {
       <SectionList
         contentContainerStyle={styles.list}
 
-        testID="test:id/selectItems"
+        testID="test:id/selectItem"
+        accessibilityLabel="selectItem"
+        accessible={true}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
 
