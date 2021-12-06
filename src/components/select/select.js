@@ -9,6 +9,7 @@ import ColorField from '../color-field/color-field';
 import ModalView from '../modal-view/modal-view';
 import SelectItem from './select__item';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {hasOpenModal} from '../modal-view/modal-helper';
 import {IconCheck, IconClose} from '../icon/icon';
 import {isTablet} from '../../util/util';
 import {notifyError} from '../notification/notification';
@@ -407,6 +408,7 @@ class SelectModal extends Select<SelectProps, SelectState> {
   render() {
     return (
       <Modal
+        hasOverlay={!hasOpenModal()}
         animationDuration={0}
         modalStyle={modalStyles.modal}
         containerStyle= {modalStyles.modalContainer}
