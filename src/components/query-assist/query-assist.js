@@ -1,20 +1,26 @@
 /* @flow */
 
-import type {Node} from 'React';
-import {View, TouchableOpacity, TextInput} from 'react-native';
 import React, {Component} from 'react';
+import {View, TouchableOpacity, TextInput} from 'react-native';
 
-import QueryAssistSuggestionsList from './query-assist__suggestions-list';
-import {IconBack, IconClose} from '../icon/icon';
-import ModalView from '../modal-view/modal-view';
 import debounce from 'lodash.debounce';
 import {View as AnimatedView} from 'react-native-animatable';
-import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
 
+import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
+import ModalView from '../modal-view/modal-view';
+import QueryAssistSuggestionsList from './query-assist__suggestions-list';
+import {hasOpenModal} from '../modal-view/modal-helper';
+import {HIT_SLOP} from '../common-styles/button';
+import {IconBack, IconClose} from '../icon/icon';
+import {isTablet} from '../../util/util';
+import {Modal} from 'react-native-modals';
+
+import modalStyles from '../modal-view/modal.view.styles';
 import styles from './query-assist.styles';
 
+import type {Node} from 'React';
 import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
-import {HIT_SLOP} from '../common-styles/button';
+
 
 const SHOW_LIST_ANIMATION_DURATION = 500;
 
@@ -33,7 +39,7 @@ type State = {
   suggestionsListTop: number
 }
 
-export default class QueryAssist extends Component<Props, State> {
+export class QueryAssist extends Component<Props, State> {
   queryAssistContainer: ?Object;
   lastQueryParams: { query: string, caret: number } = {query: '', caret: 0};
   initialState: State = {
@@ -87,7 +93,7 @@ export default class QueryAssist extends Component<Props, State> {
     this.props.onChange(inputValue, inputValue.length);
   }
 
-  onSubmitEditing() {
+  onSubmitEditing = () => {
     this.blurInput();
     this.props.onApplyQuery(this.state.inputValue || '');
   }
@@ -118,6 +124,11 @@ export default class QueryAssist extends Component<Props, State> {
     this.props.onApplyQuery(savedQuery.query);
   };
 
+  onClose = (): void => {
+    this.cancelSearch();
+    this.props.onClose(this.state.inputValue);
+  }
+
   renderClearIcon(): Node {
     return (
       <TouchableOpacity
@@ -125,14 +136,17 @@ export default class QueryAssist extends Component<Props, State> {
         hitSlop={HIT_SLOP}
         style={styles.clearIcon}
       >
-        <IconClose size={21} color={styles.link.color}/>
+        <IconClose size={13} color={styles.clearIcon.color}/>
       </TouchableOpacity>
     );
   }
 
+  renderCloseButton() {
+    return <IconBack color={styles.link.color}/>;
+  }
+
   _renderInput() {
     const {inputValue} = this.state;
-    const {onClose} = this.props;
 
     return (
       <View
@@ -147,12 +161,9 @@ export default class QueryAssist extends Component<Props, State> {
           testID="query-assist-cancel"
           accessibilityLabel="query-assist-cancel"
           accessible={true}
-          onPress={() => {
-            this.cancelSearch();
-            onClose(inputValue);
-          }}
+          onPress={this.onClose}
         >
-          <IconBack color={styles.link.color}/>
+          {this.renderCloseButton()}
         </TouchableOpacity>
 
         <TextInput
@@ -205,19 +216,79 @@ export default class QueryAssist extends Component<Props, State> {
     );
   }
 
-  render(): Node {
+  renderQueryAssist(): Node {
+    return (
+      <>
+        {this._renderInput()}
+        {this._renderSuggestions()}
+      </>
+    );
+  }
+
+  render() {
     return (
       <ModalView
         visible={true}
         animationType="fade"
         style={styles.modal}
       >
-
-        {this._renderInput()}
-        {this._renderSuggestions()}
+        {this.renderQueryAssist()}
         <KeyboardSpacerIOS/>
-
       </ModalView>
     );
   }
 }
+
+
+class QueryAssistModal extends QueryAssist<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      ...this.state,
+      visible: true,
+    };
+  }
+
+  onHide = (): void => {
+    this.setState({ visible: false });
+  }
+
+  onClose(): void {
+    super.onClose();
+    this.onHide();
+  }
+
+  onApplySavedQuery(savedQuery: SavedQuery) {
+    super.onApplyQuery(savedQuery.query);
+    this.onHide();
+  }
+
+  onSubmitEditing() {
+    super.onSubmitEditing();
+    this.onHide();
+  }
+
+  renderCloseButton() {
+    return <IconClose size={21} color={styles.link.color}/>;
+  }
+
+  render(): Node {
+    return (
+      <Modal
+        hasOverlay={!hasOpenModal()}
+        animationDuration={0}
+        modalStyle={modalStyles.modal}
+        containerStyle= {modalStyles.modalContainer}
+        visible={this.state.visible}
+        onTouchOutside={this.onClose}
+      >
+        <View style={modalStyles.modalContent}>
+          {this.renderQueryAssist()}
+        </View>
+      </Modal>
+    );
+  }
+}
+
+
+export default ((isTablet ? QueryAssistModal : QueryAssist): React$AbstractComponent<Props, mixed>);
