@@ -47,6 +47,12 @@ export default EStyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  link: {
+    color: '$link',
+  },
+  placeholderText: {
+    color: '$icon',
+  },
 });
 
 export const calendarTheme = (uiTheme: UITheme) => {

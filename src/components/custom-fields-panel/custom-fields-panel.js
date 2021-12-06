@@ -1,27 +1,31 @@
 /* @flow */
 
-import type {Node} from 'React';
+import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
+
+import {Calendar} from 'react-native-calendars';
+
 import Api from '../api/api';
 import CustomField from '../custom-field/custom-field';
 import Header from '../header/header';
 import ModalView from '../modal-view/modal-view';
 import React, {Component} from 'react';
 import Select from '../select/select';
+import SimpleValueEditor from './custom-fields-panel__simple-value';
 import usage from '../usage/usage';
-import {Calendar} from 'react-native-calendars';
-import {createNullProjectCustomField} from '../../util/util';
+import {createNullProjectCustomField, isTablet} from '../../util/util';
 import {getApi} from '../api/api__instance';
+import {hasOpenModal, modalHide, modalShow} from '../modal-view/modal-helper';
 import {IconCheck, IconClose} from '../icon/icon';
 import {PanelWithSeparator} from '../panel/panel-with-separator';
 import {SkeletonIssueCustomFields} from '../skeleton/skeleton';
 import {View as AnimatedView} from 'react-native-animatable';
-import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
 
 import styles, {calendarTheme} from './custom-fields-panel.styles';
 
 import type {IssueProject, CustomField as IssueCustomField} from '../../flow/CustomFields';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {Node} from 'React';
 import type {UITheme} from '../../flow/Theme';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   autoFocusSelect?: boolean,
@@ -464,40 +468,43 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     );
   }
 
-  _renderSimpleValueInput(uiTheme: UITheme) {
-    const {simpleValue, editingField} = this.state;
+  renderSimpleValueInput(): any {
+    const {editingField} = this.state;
+    const title: string = editingField?.projectCustomField?.field?.name || '';
 
-    return (
-      <ModalView
-        animationType="slide"
-      >
-        {this.renderHeader(editingField?.projectCustomField?.field?.name || '', uiTheme)}
-
-        <View style={styles.customFieldSimpleEditor}>
-          <TextInput
-            multiline
-            style={styles.simpleValueInput}
-            placeholder={simpleValue.placeholder}
-            placeholderTextColor={uiTheme.colors.$icon}
-            underlineColorAndroid="transparent"
-            clearButtonMode="always"
-            returnKeyType="done"
-            autoCorrect={false}
-            autoFocus={true}
-            autoCapitalize="none"
-            onChangeText={(value) => {
-              this.setState({
-                simpleValue: {
-                  ...this.state.simpleValue,
-                  value,
-                },
-              });
-            }}
-            value={simpleValue.value}/>
-        </View>
-      </ModalView>
-
+    const render = (onHide: () => any): Node => (
+      <SimpleValueEditor
+        editingField={this.state.editingField}
+        onApply={(value: any) => {
+          onHide();
+          this.state.simpleValue.onApply(value);
+        }}
+        onHide={onHide}
+        placeholder={this.state.simpleValue.placeholder}
+        title={title}
+        value={this.state.simpleValue.value}
+      />
     );
+
+  if (isTablet) {
+    let modalId: string = ';';
+      modalId = modalShow(
+        render(() => modalHide(modalId)),
+        {
+          hasOverlay: !hasOpenModal(),
+          animationDuration: 0,
+        },
+      );
+      return null;
+    } else {
+      return (
+        <ModalView
+          animationType="slide"
+        >
+          {render(this.closeEditor)}
+        </ModalView>
+      );
+    }
   }
 
   renderFields(): Node {
@@ -574,7 +581,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         >
           {select.show && this._renderSelect()}
           {datePicker.show && this._renderDatePicker(uiTheme)}
-          {(simpleValue.show && !!editingField) && this._renderSimpleValueInput(uiTheme)}
+          {(simpleValue.show && !!editingField) && this.renderSimpleValueInput()}
         </AnimatedView>
 
       </View>
