@@ -41,7 +41,12 @@ export default EStyleSheet.create({
     marginLeft: UNIT / 2,
     color: '$icon',
   },
-  clearIcon: clearIcon,
+  clearIcon: {
+    ...clearIcon,
+    backgroundColor: '$boxBackground',
+    borderRadius: UNIT * 2,
+    padding: UNIT / 2,
+  },
   link: {
     color: '$link',
   },
