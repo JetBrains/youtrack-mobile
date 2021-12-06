@@ -76,8 +76,10 @@ const modalShow = (children: any, props?: ModalProps): string => {
   return id;
 };
 
+const hasOpenModal = (): boolean => modalsStack.size > 0;
 
 export {
+  hasOpenModal,
   modalShow,
   modalUpdate,
   modalHide,

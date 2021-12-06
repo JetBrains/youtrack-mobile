@@ -10,6 +10,7 @@ import Router from '../router/router';
 
 import {createLinksList} from './linked-issues-helper';
 import {IconAdd, IconBack, IconClose} from '../icon/icon';
+import {isTablet} from '../../util/util';
 import {modalHide, modalShow} from '../modal-view/modal-helper';
 import {View as AnimatedView} from 'react-native-animatable';
 
@@ -31,7 +32,7 @@ type Props = {
   style?: ViewStyleProp,
   subTitle?: any,
   onHide: () => void,
-  isTablet?: boolean,
+  closeIcon?: any,
 }
 
 const LinkedIssues = (props: Props): Node => {
@@ -139,7 +140,7 @@ const LinkedIssues = (props: Props): Node => {
       onHide={onHide}
     />;
 
-    if (props.isTablet) {
+    if (isTablet) {
       modalId = modalShow(
         renderAddIssueLink(() => modalHide(modalId)),
         {hasOverlay: false},
@@ -155,7 +156,7 @@ const LinkedIssues = (props: Props): Node => {
     <View style={[styles.container, props.style]}>
       <Header
         showShadow={true}
-        leftButton={<IconBack color={styles.link.color}/>}
+        leftButton={props.closeIcon || <IconBack color={styles.link.color}/>}
         rightButton={props.canLink ? <IconAdd style={styles.addLinkButton} color={styles.link.color} size={20}/> : null}
         onRightButtonClick={onAddIssueLink}
         onBack={props.onHide}

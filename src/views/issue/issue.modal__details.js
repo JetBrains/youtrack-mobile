@@ -6,7 +6,10 @@ import IssueDetails from './issue__details';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import LinkedIssuesTitle from '../../components/linked-issues/linked-issues-title';
 import Router from '../../components/router/router';
+import {IconClose} from '../../components/icon/icon';
 import {modalHide, modalShow} from '../../components/modal-view/modal-helper';
+
+import styles from './issue.styles';
 
 import type {AnyIssue} from '../../flow/Issue';
 import type {IssueDetailsProps} from './issue__details';
@@ -35,8 +38,8 @@ export default class IssueModalDetails extends IssueDetails<{ ...IssueDetailsPro
             : undefined
         )}
         subTitle={`${issue.idReadable} ${issue.summary}`}
-        isTablet={isTablet}
         onHide={onHide}
+        closeIcon={<IconClose size={21} color={styles.link.color}/>}
       />
     );
 
