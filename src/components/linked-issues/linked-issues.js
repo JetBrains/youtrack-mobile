@@ -32,6 +32,7 @@ type Props = {
   style?: ViewStyleProp,
   subTitle?: any,
   onHide: () => void,
+  closeIcon?: any,
 }
 
 const LinkedIssues = (props: Props): Node => {
@@ -155,7 +156,7 @@ const LinkedIssues = (props: Props): Node => {
     <View style={[styles.container, props.style]}>
       <Header
         showShadow={true}
-        leftButton={<IconBack color={styles.link.color}/>}
+        leftButton={props.closeIcon || <IconBack color={styles.link.color}/>}
         rightButton={props.canLink ? <IconAdd style={styles.addLinkButton} color={styles.link.color} size={20}/> : null}
         onRightButtonClick={onAddIssueLink}
         onBack={props.onHide}

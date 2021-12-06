@@ -12,7 +12,6 @@ export default EStyleSheet.create({
   modalContent: {
     flex: 1,
     width: 704,
-    paddingHorizontal: UNIT,
     backgroundColor: '$background',
   },
 });

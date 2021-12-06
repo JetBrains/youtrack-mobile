@@ -150,4 +150,7 @@ export default EStyleSheet.create({
     position: 'absolute',
     top: -10,
   },
+  link: {
+    color: '$link',
+  },
 });
