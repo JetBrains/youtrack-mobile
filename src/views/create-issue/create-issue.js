@@ -216,29 +216,40 @@ class CreateIssue extends Component<Props, State> {
       onLinkIssue,
       getIssueLinksTitle,
     } = this.props;
-    return (
-      <LinkedIssuesTitle
-        issueLinks={issue.links}
-        onPress={() => Router.Page({
-          children: (
-            <LinkedIssues
-              issuesGetter={loadIssuesXShort}
-              linksGetter={loadLinkedIssues}
-              onUnlink={onUnlinkIssue}
-              onLinkIssue={onLinkIssue}
-              onUpdate={(issues?: Array<IssueLink>) => {
-                getIssueLinksTitle(issues);
-              }}
-              canLink={(
-                issuePermissions.canLink(issue)
-                  ? (linkedIssue: AnyIssue) => issuePermissions.canLink(linkedIssue)
-                  : undefined
-              )}
-              subTitle="Current issue"
-            />),
-        })}
+    const renderLinkedIssues = (onHide: () => void) => (
+      <LinkedIssues
+        issuesGetter={loadIssuesXShort}
+        linksGetter={loadLinkedIssues}
+        onUnlink={onUnlinkIssue}
+        onLinkIssue={onLinkIssue}
+        onUpdate={(issues?: Array<IssueLink>) => {
+          getIssueLinksTitle(issues);
+        }}
+        canLink={(
+          issuePermissions.canLink(issue)
+            ? (linkedIssue: AnyIssue) => issuePermissions.canLink(linkedIssue)
+            : undefined
+        )}
+        subTitle="Current issue"
+        onHide={onHide}
       />
     );
+
+    return <LinkedIssuesTitle
+      issueLinks={issue.links}
+      onPress={() => {
+        let modalId: string = '';
+        if (isTablet) {
+          modalId = modalShow(
+            renderLinkedIssues(() => modalHide(modalId)),
+            {hasOverlay: false});
+        } else {
+          Router.Page({
+            children: renderLinkedIssues(() => Router.pop()),
+          });
+        }
+      }}
+    />;
   }
 
   onHide = async () => {
@@ -250,7 +261,7 @@ class CreateIssue extends Component<Props, State> {
     }
   }
 
-  renderLinkedIssues = () => {
+  renderLinkedIssuesAddLink = () => {
     const {loadIssuesXShort, onLinkIssue, getIssueLinksTitle, processing} = this.props;
     //$FlowFixMe
     const iconLink: any = <IconLink
@@ -275,7 +286,6 @@ class CreateIssue extends Component<Props, State> {
         onPress={() => {
           if (isTablet) {
             let modalId: string = '';
-
             modalId = modalShow(
               renderAddLinkedIssue(() => modalHide(modalId)),
               {hasOverlay: false},
@@ -453,7 +463,7 @@ class CreateIssue extends Component<Props, State> {
                       accessible={true}
                       style={styles.additionalData}
                     >
-                      {hasProject && issuePermissions.canLink(issue) && this.renderLinkedIssues()}
+                      {hasProject && issuePermissions.canLink(issue) && this.renderLinkedIssuesAddLink()}
                       {hasProject && this.renderLinksBlock()}
                     </View>
                   </>

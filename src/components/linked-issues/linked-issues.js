@@ -10,6 +10,7 @@ import Router from '../router/router';
 
 import {createLinksList} from './linked-issues-helper';
 import {IconAdd, IconBack, IconClose} from '../icon/icon';
+import {isTablet} from '../../util/util';
 import {modalHide, modalShow} from '../modal-view/modal-helper';
 import {View as AnimatedView} from 'react-native-animatable';
 
@@ -31,7 +32,6 @@ type Props = {
   style?: ViewStyleProp,
   subTitle?: any,
   onHide: () => void,
-  isTablet?: boolean,
 }
 
 const LinkedIssues = (props: Props): Node => {
@@ -139,7 +139,7 @@ const LinkedIssues = (props: Props): Node => {
       onHide={onHide}
     />;
 
-    if (props.isTablet) {
+    if (isTablet) {
       modalId = modalShow(
         renderAddIssueLink(() => modalHide(modalId)),
         {hasOverlay: false},

@@ -35,7 +35,6 @@ export default class IssueModalDetails extends IssueDetails<{ ...IssueDetailsPro
             : undefined
         )}
         subTitle={`${issue.idReadable} ${issue.summary}`}
-        isTablet={isTablet}
         onHide={onHide}
       />
     );
