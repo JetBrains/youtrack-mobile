@@ -7,6 +7,11 @@ import {UNIT} from '../variables/variables';
 import type {UITheme, UIThemeColors} from '../../flow/Theme';
 
 
+const simpleValueInput = {
+  ...rowFormStyles.input,
+  color: '$text',
+};
+
 export default EStyleSheet.create({
   customFieldDateEditor: {
     flex: 1,
@@ -29,16 +34,18 @@ export default EStyleSheet.create({
   customFieldDateEditorCalendar: {
     marginTop: UNIT * 2,
   },
-  clearDate: {
-    paddingTop: UNIT,
-    paddingBottom: UNIT,
+  buttonClearDate: {
+    ...simpleValueInput,
+    padding: UNIT * 2,
+    backgroundColor: 'transparent',
+    borderColor: '$separator',
+    borderWidth: 1,
+  },
+  buttonClearDateText: {
     color: '$link',
+    textAlign: 'center',
   },
-  simpleValueInput: {
-    ...rowFormStyles.input,
-    backgroundColor: '$boxBackground',
-    color: '$text',
-  },
+  simpleValueInput: simpleValueInput,
   savingFieldIndicator: {
     backgroundColor: '$linkLight',
     position: 'absolute',

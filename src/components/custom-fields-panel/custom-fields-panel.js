@@ -1,11 +1,10 @@
 /* @flow */
 
-import {View, ScrollView, Text, TouchableOpacity, TextInput, ActivityIndicator} from 'react-native';
-
-import {Calendar} from 'react-native-calendars';
+import {View, ScrollView, ActivityIndicator} from 'react-native';
 
 import Api from '../api/api';
 import CustomField from '../custom-field/custom-field';
+import DatePicker from './custom-fields-panel__date-picker';
 import Header from '../header/header';
 import ModalView from '../modal-view/modal-view';
 import React, {Component} from 'react';
@@ -78,7 +77,8 @@ type State = {
     time: string | null,
     value: Date,
     emptyValueName?: ?string,
-    onSelect: (selected: any) => any
+    onSelect: (selected: any) => any,
+    placeholder: string,
   },
 
   simpleValue: {
@@ -105,8 +105,8 @@ const initialEditorsState = {
     time: null,
     withTime: false,
     value: new Date(),
-    onSelect: () => {
-    },
+    onSelect: () => {},
+    placeholder: '',
   },
 
   simpleValue: {
@@ -223,6 +223,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     return this.setState({
       datePicker: {
         show: true,
+        placeholder: 'Enter time',
         withTime,
         time: field.value ? new Date(((field.value: any): number)).toLocaleTimeString(
           [],
@@ -234,13 +235,13 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         title: field.projectCustomField.field.name,
         value: field.value ? new Date(((field.value: any): number)) : new Date(),
         emptyValueName: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
-        onSelect: (date) => {
+        onSelect: (date: Date, time?: string) => {
           if (!date) {
             return this.saveUpdatedField(field, null);
           }
-          if (withTime && this.state.datePicker.time) {
+          if (withTime && time) {
             try {
-              const match = this.state.datePicker.time.match(/(\d\d):(\d\d)/);
+              const match = time.match(/(\d\d):(\d\d)/);
               if (match) {
                 const [, hours = 3, minutes = 0] = match;
                 date.setHours(hours, minutes);
@@ -410,81 +411,72 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     );
   }
 
-  _renderDatePicker(uiTheme: UITheme) {
+  renderDatePicker(uiTheme: UITheme) {
     const {datePicker} = this.state;
+    const render = (onHide: () => any): Node => {
+      const hideEditor = (): void => {
+        onHide();
+        this.closeEditor();
+      };
+      return (
+        <DatePicker
+          emptyValueName={datePicker.emptyValueName}
+          onApply={(date, time) => {
+            datePicker.onSelect(date, time);
+            hideEditor();
+          }}
+          onHide={hideEditor}
+          placeholder={datePicker.placeholder}
+          theme={calendarTheme(uiTheme)}
+          title={datePicker.title}
+          time={datePicker.time}
+          value={datePicker.value}
+          withTime={datePicker.withTime}
+        />
+      );
+    };
 
-    return (
-      <ModalView
-        animationType="slide"
-      >
-        {this.renderHeader(datePicker.title, uiTheme)}
-
-        <View style={styles.customFieldDateEditor}>
-
-          <View style={styles.customFieldDateEditorValue}>
-            {datePicker.emptyValueName &&
-            <TouchableOpacity onPress={() => datePicker.onSelect(null)}>
-              <Text style={styles.clearDate}>{datePicker.emptyValueName} (Clear value)</Text>
-            </TouchableOpacity>}
-          </View>
-
-          {datePicker.withTime && (
-            <TextInput
-              placeholderTextColor={uiTheme.colors.$icon}
-              style={styles.simpleValueInput}
-              placeholder="13:00"
-              underlineColorAndroid="transparent"
-              clearButtonMode="always"
-              autoCorrect={false}
-              autoCapitalize="none"
-              value={datePicker.time}
-              onSubmitEditing={() => {
-                datePicker.onSelect(datePicker.value);
-                this.closeEditor();
-              }}
-              onChangeText={text => {
-                this.setState({
-                  datePicker: {
-                    ...datePicker,
-                    time: text,
-                  },
-                });
-              }}
-            />
-          )}
-
-          <Calendar
-            style={styles.customFieldDateEditorCalendar}
-            current={datePicker.value}
-            selected={[datePicker.value]}
-            onDayPress={day => {
-              return datePicker.onSelect(new Date(day.timestamp));
-            }}
-            firstDay={1}
-            theme={calendarTheme(uiTheme)}
-          />
-        </View>
-      </ModalView>
-    );
+    if (isTablet) {
+      let modalId: string = ';';
+      modalId = modalShow(
+        render(() => modalHide(modalId)),
+        {
+          hasOverlay: !hasOpenModal(),
+          animationDuration: 0,
+        },
+      );
+      return null;
+    } else {
+      return (
+        <ModalView animationType="slide">
+          {render(this.closeEditor)}
+        </ModalView>
+      );
+    }
   }
 
   renderSimpleValueInput(): any {
     const {editingField} = this.state;
     const title: string = editingField?.projectCustomField?.field?.name || '';
-
-    const render = (onHide: () => any): Node => (
-      <SimpleValueEditor
-        editingField={this.state.editingField}
-        onApply={(value: any) => {
-          onHide();
-          this.state.simpleValue.onApply(value);
-        }}
-        onHide={onHide}
-        placeholder={this.state.simpleValue.placeholder}
-        title={title}
-        value={this.state.simpleValue.value}
-      />
-    );
+    const render = (onHide: () => any): Node => {
+      const hideEditor = () => {
+        onHide();
+        this.closeEditor();
+      };
+      return (
+        <SimpleValueEditor
+          editingField={this.state.editingField}
+          onApply={(value: any) => {
+            this.state.simpleValue.onApply(value);
+            hideEditor();
+          }}
+          onHide={hideEditor}
+          placeholder={this.state.simpleValue.placeholder}
+          title={title}
+          value={this.state.simpleValue.value}
+        />
+      );
+    };
 
   if (isTablet) {
     let modalId: string = ';';
@@ -580,7 +572,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
           useNativeDriver
         >
           {select.show && this._renderSelect()}
-          {datePicker.show && this._renderDatePicker(uiTheme)}
+          {datePicker.show && this.renderDatePicker(uiTheme)}
           {(simpleValue.show && !!editingField) && this.renderSimpleValueInput()}
         </AnimatedView>
 
