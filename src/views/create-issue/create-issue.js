@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {ScrollView, View, ActivityIndicator, Text, TouchableOpacity} from 'react-native';
 
 import {bindActionCreators} from 'redux';
@@ -31,7 +31,7 @@ import {getApi} from '../../components/api/api__instance';
 import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconCheck, IconClose, IconDrag, IconMoreOptions} from '../../components/icon/icon';
-import {isIOSPlatform, isTablet} from '../../util/util';
+import {isIOSPlatform} from '../../util/util';
 import {modalHide, modalShow} from '../../components/modal-view/modal-helper';
 import {ThemeContext} from '../../components/theme/theme-context';
 
@@ -53,13 +53,15 @@ type AdditionalProps = {
   onHide?: () => void,
 };
 
-type Props = CreateIssueState & typeof createIssueActions & AttachmentActions & AdditionalProps;
+type Props = CreateIssueState & typeof createIssueActions & AttachmentActions & AdditionalProps & {
+  isSplitView?: boolean,
+};
 
 type State = {
   showAddTagSelect: boolean,
 };
 
-class CreateIssue extends Component<Props, State> {
+class CreateIssue extends PureComponent<Props, State> {
   static contextTypes = {
     actionSheet: Function,
   };
@@ -239,10 +241,12 @@ class CreateIssue extends Component<Props, State> {
       issueLinks={issue.links}
       onPress={() => {
         let modalId: string = '';
-        if (isTablet) {
+        if (this.props.isSplitView) {
           modalId = modalShow(
-            renderLinkedIssues(() => modalHide(modalId)),
-            {hasOverlay: false});
+            renderLinkedIssues(
+              () => modalHide(modalId)),
+            {hasOverlay: false}
+          );
         } else {
           Router.Page({
             children: renderLinkedIssues(() => Router.pop()),
@@ -284,7 +288,7 @@ class CreateIssue extends Component<Props, State> {
       <TouchableOpacity
         style={styles.addLinkButton}
         onPress={() => {
-          if (isTablet) {
+          if (this.props.isSplitView) {
             let modalId: string = '';
             modalId = modalShow(
               renderAddLinkedIssue(() => modalHide(modalId)),

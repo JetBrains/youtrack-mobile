@@ -18,7 +18,7 @@ import IssueDetailsModal from './issue.modal__details';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import LinkedIssuesAddLink from '../../components/linked-issues/linked-issues-add-link';
 import Router from '../../components/router/router';
-import Select from '../../components/select/select';
+import {Select, SelectModal} from '../../components/select/select';
 import Star from '../../components/star/star';
 import usage from '../../components/usage/usage';
 import {attachmentActions} from './issue__attachment-actions-and-types';
@@ -26,6 +26,7 @@ import {getApi} from '../../components/api/api__instance';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import {IconBack, IconCheck, IconClose, IconDrag, IconMoreOptions} from '../../components/icon/icon';
 import {isIOSPlatform} from '../../util/util';
+import {isSplitView} from '../../components/responsive/responsive-helper';
 import {IssueContext} from './issue-context';
 import {Skeleton} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -89,6 +90,8 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   }
 
   async componentDidMount() {
+    //$FlowFixMe
+    super.componentDidMount();
     await this.init();
   }
 
@@ -108,7 +111,8 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     await this.props.loadIssue();
   }
 
-  renderDetails = (uiTheme: UITheme) => {
+  renderDetails: (uiTheme: UITheme) => React$Element<any> = (uiTheme: UITheme) => {
+    const {isSplitView} = this.state;
     const {
       loadIssue,
       openNestedIssueView,
@@ -139,10 +143,9 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       getIssueLinksTitle,
 
       setCustomFieldValue,
-      isTablet,
     } = this.props;
 
-    const Component: any = isTablet ? IssueDetailsModal : IssueDetails;
+    const Component: any = isSplitView ? IssueDetailsModal : IssueDetails;
     return (
       <Component
         loadIssue={loadIssue}
@@ -191,13 +194,12 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         onLinkIssue={this.props.onLinkIssue}
 
         setCustomFieldValue={setCustomFieldValue}
-        isTablet={isTablet}
-        linksHasOverlay={isTablet}
+        isSplitView={isSplitView}
       />
     );
   };
 
-  renderActivity = (uiTheme: UITheme): React$Element<typeof IssueActivity> => {
+  renderActivity: (uiTheme: UITheme) => React$Element<any> = (uiTheme: UITheme): React$Element<typeof IssueActivity> => {
     const {
       issue,
       user,
@@ -234,16 +236,16 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     }
   }
 
-  renderBackIcon = () => {
-    return this.props.isTablet ? null : <IconBack color={this.uiTheme.colors.$link}/>;
+  renderBackIcon: () => (null | React$Element<any>) = () => {
+    return isSplitView() ? null : <IconBack color={this.uiTheme.colors.$link}/>;
   }
 
-  canStar = (): boolean => {
+  canStar: () => boolean = (): boolean => {
     const {issue, issuePermissions} = this.props;
     return issue && issuePermissions && issuePermissions.canStar();
   };
 
-  renderActionsIcon(uiTheme: UITheme) {
+  renderActionsIcon(uiTheme: UITheme): React$Element<typeof Skeleton | typeof Text> {
     if (!this.isIssueLoaded()) {
       return <Skeleton width={24}/>;
     }
@@ -258,7 +260,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   }
 
-  renderStar = (uiTheme: UITheme) => {
+  renderStar: (uiTheme: UITheme) => React$Element<typeof Star | typeof Skeleton> = (uiTheme: UITheme): React$Element<typeof Star | typeof Skeleton> => {
     const {issue, toggleStar} = this.props;
     if (this.isIssueLoaded()) {
       return (
@@ -276,7 +278,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   };
 
 
-  renderHeaderIssueTitle() {
+  renderHeaderIssueTitle(): React$Element<any> | null {
     const {issue, issuePlaceholder, issueLoadingError} = this.props;
     const _issue: AnyIssue = issue || issuePlaceholder;
     const readableID: ?string = getReadableID(_issue);
@@ -337,6 +339,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
                       onUpdate={(issues?: Array<IssueLink>) => {
                         getIssueLinksTitle(issues);
                       }}
+                      onHide={() => Router.pop()}
                     />
                   )
                   : null)
@@ -408,7 +411,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     />;
   }
 
-  renderAttachFileDialog = (): React$Element<typeof AttachFileDialog> => (
+  renderAttachFileDialog: () => React$Element<any> = (): React$Element<typeof AttachFileDialog> => (
     <AttachFileDialog
       hideVisibility={false}
       getVisibilityOptions={() => getApi().issue.getVisibilityOptions(this.props.issueId)}
@@ -445,8 +448,9 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   renderTagsSelect() {
     const {selectProps} = this.props;
+    const Component: any = this.state.isSplitView ? SelectModal : Select;
     return (
-      <Select
+      <Component
         {...selectProps}
         titleRenderer={(tag: Tag) => {
           return (
@@ -522,7 +526,6 @@ const mapStateToProps = (state: { app: RootState, issueState: IssueState }, ownP
     issueId: ownProps.issueId,
     user: state.app.user,
     navigateToActivity: ownProps.navigateToActivity,
-    isTablet: state.app.isTablet,
   }: $Shape<IssueState & OwnProps>);
 };
 

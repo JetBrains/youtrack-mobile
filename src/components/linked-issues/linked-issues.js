@@ -10,7 +10,7 @@ import Router from '../router/router';
 
 import {createLinksList} from './linked-issues-helper';
 import {IconAdd, IconBack, IconClose} from '../icon/icon';
-import {isTablet} from '../../util/util';
+import {isSplitView} from '../responsive/responsive-helper';
 import {modalHide, modalShow} from '../modal-view/modal-helper';
 import {View as AnimatedView} from 'react-native-animatable';
 
@@ -140,7 +140,7 @@ const LinkedIssues = (props: Props): Node => {
       onHide={onHide}
     />;
 
-    if (isTablet) {
+    if (isSplitView()) {
       modalId = modalShow(
         renderAddIssueLink(() => modalHide(modalId)),
         {hasOverlay: false},

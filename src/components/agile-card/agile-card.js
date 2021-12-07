@@ -1,19 +1,21 @@
 /* @flow */
 
-import type {Node} from 'React';
-import {View, Text} from 'react-native';
 import React, {PureComponent} from 'react';
-import Avatar from '../avatar/avatar';
+import {View, Text} from 'react-native';
+
 import ApiHelper from '../api/api__helper';
-import {getPriotityField, getAssigneeField} from '../issue-formatter/issue-formatter';
+import Avatar from '../avatar/avatar';
 import Tags from '../tags/tags';
-import {UNIT} from '../variables/variables';
+import {getPriotityField, getAssigneeField} from '../issue-formatter/issue-formatter';
 import {getStorageState} from '../storage/storage';
+import {isTablet} from '../../util/util';
+import {UNIT} from '../variables/variables';
 
 import styles from './agile-card.styles';
 
 import type {IssueOnList} from '../../flow/Issue';
 import type {CustomFieldShort, CustomField, FieldValue} from '../../flow/CustomFields';
+import type {Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
 
@@ -25,7 +27,6 @@ type Props = {
   ghost?: boolean, // from <Draggable/>
   dragging?: boolean, // from <DragContainer/>
   uiTheme: UITheme,
-  isTablet: boolean,
 };
 
 
@@ -71,7 +72,7 @@ export default class AgileCard extends PureComponent<Props, void> {
   }
 
   render(): Node {
-    const {issue, style, ghost, dragging, zoomedIn, isTablet} = this.props;
+    const {issue, style, ghost, dragging, zoomedIn} = this.props;
     const priorityField = getPriotityField(issue);
     const priorityFieldValueBackgroundColor = priorityField?.value?.color?.background;
 

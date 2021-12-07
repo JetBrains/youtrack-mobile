@@ -5,6 +5,7 @@ import {FlatList, View, Text, RefreshControl, TouchableOpacity, Dimensions} from
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
 
 import * as inboxActions from './inbox-actions';
 import CommentReactions from '../../components/comment/comment-reactions';
@@ -26,6 +27,7 @@ import {handleRelativeUrl} from '../../components/config/config';
 import {hasType} from '../../components/api/api__resource-types';
 import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound, IconNothingSelected} from '../../components/icon/icon-pictogram';
 import {isReactElement} from '../../util/util';
+import {isSplitView} from '../../components/responsive/responsive-helper';
 import {LoadMoreList} from '../../components/progress/load-more-list';
 import {SkeletonIssueActivities} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -48,13 +50,13 @@ type IssueActions = typeof inboxActions;
 type Props = {
   ...InboxState,
   ...IssueActions,
-  isTablet: boolean,
 };
 
 type State = {
   focusedNotificationId: any,
   isSummaryOrDescriptionChange: boolean,
   isTitlePinned: boolean,
+  isSplitView: boolean,
 };
 
 const Category: Object = {
@@ -77,6 +79,7 @@ class Inbox extends Component<Props, State> {
   };
   config: ?AppConfig;
   theme: Theme;
+  unsubscribeOnDimensionsChange: EventSubscription;
 
   constructor(props) {
     super(props);
@@ -84,14 +87,26 @@ class Inbox extends Component<Props, State> {
       focusedNotificationId: null,
       isSummaryOrDescriptionChange: false,
       isTitlePinned: false,
+      isSplitView: false,
     };
     this.config = getStorageState().config;
     usage.trackScreenView(ANALYTICS_NOTIFICATIONS_PAGE);
   }
 
+  onDimensionsChange: () => void = (): void => {
+    this.setState({isSplitView: isSplitView()});
+  }
+
   componentDidMount() {
+    this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.onDimensionsChange);
+    this.onDimensionsChange();
+
     this.props.loadInboxCache();
     this.refresh();
+  }
+
+  componentWillUnmount(): void {
+    this.unsubscribeOnDimensionsChange.remove();
   }
 
   refresh = () => {
@@ -426,13 +441,12 @@ class Inbox extends Component<Props, State> {
   }
 
   renderIssue(issue: IssueOnList, isSummaryOrDescriptionChange: boolean, notificationId: string) {
-    const {isTablet} = this.props;
     const readableID: string = getReadableID(issue);
     return (
       <TouchableOpacity
         style={styles.notificationIssue}
         onPress={() => {
-          if (isTablet) {
+          if (this.state.isSplitView) {
             this.updateFocusedNotificationId(notificationId, isSummaryOrDescriptionChange);
           } else {
             this.goToIssue(issue, !isSummaryOrDescriptionChange);
@@ -664,8 +678,8 @@ class Inbox extends Component<Props, State> {
   };
 
   render() {
-    const {error, isTablet} = this.props;
-
+    const {error} = this.props;
+    const {isSplitView} = this.state;
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
@@ -674,7 +688,7 @@ class Inbox extends Component<Props, State> {
           return (
             <View style={[
               styles.container,
-              isTablet ? styles.splitViewContainer : null,
+              isSplitView ? styles.splitViewContainer : null,
             ]}>
 
               {!!error && (
@@ -683,8 +697,8 @@ class Inbox extends Component<Props, State> {
                 </View>
               )}
 
-              {!error && isTablet && this.renderSplitView()}
-              {!error && !isTablet && this.renderNotifications()}
+              {!error && isSplitView && this.renderSplitView()}
+              {!error && !isSplitView && this.renderNotifications()}
             </View>
           );
         }}
@@ -698,7 +712,6 @@ const mapStateToProps = (state: AppState, ownProps) => {
     ...state.inbox,
     ...ownProps,
     currentUser: state.app.user,
-    isTablet: state.app.isTablet,
   };
 };
 

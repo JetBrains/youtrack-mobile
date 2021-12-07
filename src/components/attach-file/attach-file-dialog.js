@@ -31,6 +31,8 @@ import type {Theme} from '../../flow/Theme';
 import type {UserGroup} from '../../flow/UserGroup';
 import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
+import {isSplitView} from '../responsive/responsive-helper';
+import {hasOpenModal, modalHide, modalShow} from '../modal-view/modal-helper';
 
 export const attachFileActions: Array<ActionSheetAction> = [
   {
@@ -173,16 +175,13 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
     });
   };
 
-  return (
-    <ModalView
-      animationType="slide"
-      style={styles.container}
-    >
+  const render: (onHide: () => any) => any = (onHide: () => any) => (
+    <>
       <Header
         leftButton={
           <IconClose size={21} color={styles.link.color}/>
         }
-        onBack={props.actions.onCancel}
+        onBack={onHide}
         rightButton={(
           isAttaching ? <ActivityIndicator color={styles.link.color}/> :
             <IconCheck size={20} color={attaches ? styles.link.color : styles.disabled.color}/>
@@ -191,7 +190,7 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
           if (attaches) {
             updateAttaching(true);
             props.actions.onAttach(attaches, () => {
-             mounted.current === true && updateAttaching(false);
+              mounted.current === true && updateAttaching(false);
             });
           }
         }}>
@@ -240,8 +239,27 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
         </View>}
       </View>
 
-    </ModalView>
+    </>
   );
+
+  let modalId: string = '';
+  if (isSplitView()) {
+    modalId = modalShow(
+      render(() => modalHide(modalId)),
+      {hasOverlay: !hasOpenModal()}
+    );
+    return null;
+  } else {
+    return (
+      <ModalView
+        animationType="slide"
+        style={styles.container}
+      >
+        {render(props.actions.onCancel)}
+      </ModalView>
+    );
+  }
+
 };
 
 export default (React.memo<Props>(AttachFileDialog): React$AbstractComponent<Props, mixed>);

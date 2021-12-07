@@ -1,14 +1,17 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {Text, Dimensions} from 'react-native';
 
 // $FlowFixMe: module throws on type check
 import {TabView, TabBar} from 'react-native-tab-view';
+import {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
+
+import {isSplitView} from '../responsive/responsive-helper';
 
 import styles from './issue-tabbed.style';
 
+import type {Node} from 'React';
 import type {TabRoute} from '../../flow/Issue';
 import type {UITheme, UIThemeColors} from '../../flow/Theme';
 
@@ -16,18 +19,29 @@ export type IssueTabbedState = {
   index: number,
   routes: Array<TabRoute>,
   isTransitionInProgress: boolean,
+  isSplitView: boolean,
 };
 
 
 export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
   initialWindowDimensions: any = Dimensions.get('window');
   tabRoutes: Array<TabRoute> = ['Details', 'Activity'].map((name: string) => ({key: name, title: name}));
+  unsubscribeOnDimensionsChange: EventSubscription;
 
   state: IssueTabbedState = {
     index: 0,
     routes: this.tabRoutes,
     isTransitionInProgress: false,
+    isSplitView: isSplitView(),
   };
+
+  componentDidMount() {
+    this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.setSplitView);
+  }
+
+  componentWillUnmount(): void {
+    this.unsubscribeOnDimensionsChange.remove();
+  }
 
   renderDetails: ((uiTheme: UITheme) => null) = (uiTheme: UITheme) => null;
 
@@ -40,6 +54,10 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
   switchToActivityTab: (() => void) = () => this.setState({index: 1});
 
   isActivityTabEnabled: (() => boolean) = (): boolean => this?.state?.index === 1;
+
+  setSplitView: () => void = (): void => {
+    this.setState({isSplitView: isSplitView()});
+  }
 
   renderTabBar(uiTheme: UITheme, editMode: boolean = false): ((props: any) => Node) {
     return (props: Object) => {

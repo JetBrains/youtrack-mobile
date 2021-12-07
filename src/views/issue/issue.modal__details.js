@@ -5,7 +5,6 @@ import React from 'react';
 import IssueDetails from './issue__details';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import LinkedIssuesTitle from '../../components/linked-issues/linked-issues-title';
-import Router from '../../components/router/router';
 import {IconClose} from '../../components/icon/icon';
 import {modalHide, modalShow} from '../../components/modal-view/modal-helper';
 
@@ -18,12 +17,12 @@ import type {Node} from 'React';
 
 
 //$FlowFixMe
-export default class IssueModalDetails extends IssueDetails<{ ...IssueDetailsProps, linksHasOverlay: boolean }, void> {
+export default class IssueModalDetails extends IssueDetails<{ ...IssueDetailsProps, isSplitView: boolean }, void> {
+  modalId: string = '';
 
-  renderLinksBlock: (() => void | Node) = () => {
-    const {issue, issuePermissions, getIssueLinksTitle, isTablet, linksHasOverlay = false} = this.props;
-    let modalId: string = '';
-    const renderLinkedIssues = (onHide: Function) => (
+  renderLinkedIssues: (onHide: any) => React$Element<any> = (onHide: Function) => {
+    const {issue, issuePermissions, getIssueLinksTitle} = this.props;
+    return (
       <LinkedIssues
         issuesGetter={this.props.issuesGetter}
         linksGetter={this.props.linksGetter}
@@ -42,20 +41,18 @@ export default class IssueModalDetails extends IssueDetails<{ ...IssueDetailsPro
         closeIcon={<IconClose size={21} color={styles.link.color}/>}
       />
     );
+  };
 
+
+  renderLinksBlock: (() => void | Node) = () => {
     return (
       <LinkedIssuesTitle
-        issueLinks={issue.links}
+        issueLinks={this.props.issue.links}
         onPress={() => {
-          if (isTablet) {
-            modalId = modalShow(renderLinkedIssues(
-              () => modalHide(modalId)),
-              {hasOverlay: linksHasOverlay});
-          } else {
-            Router.Page({
-              children: renderLinkedIssues(() => Router.pop()),
-            });
-          }
+          this.modalId = modalShow(
+            this.renderLinkedIssues(() => modalHide(this.modalId)),
+            {hasOverlay: this.props.isSplitView}
+          );
         }}
       />
     );

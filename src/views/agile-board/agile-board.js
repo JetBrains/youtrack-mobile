@@ -19,7 +19,7 @@ import log from '../../components/log/log';
 import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
 import QueryPreview from '../../components/query-assist/query-preview';
 import Router from '../../components/router/router';
-import Select from '../../components/select/select';
+import {Select, SelectModal} from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_AGILE_PAGE} from '../../components/analytics/analytics-ids';
 import {DragContainer} from '../../components/draggable/';
@@ -46,6 +46,7 @@ import type {AppState} from '../../reducers';
 import type {CustomError} from '../../flow/Error';
 import type {SprintFull, AgileBoardRow, BoardColumn, BoardOnList, Sprint} from '../../flow/Agile';
 import type {Theme, UITheme} from '../../flow/Theme';
+import {isSplitView} from '../../components/responsive/responsive-helper';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -70,7 +71,6 @@ type Props = AgilePageState & {
   suggestAgileQuery: (query: ?string, caret: number) => any,
   storeLastQuery: (query: string) => any,
   updateIssue: (issueId: string, sprint?: SprintFull) => any,
-  isTablet: boolean,
 };
 
 type State = {
@@ -179,7 +179,7 @@ class AgileBoard extends Component<Props, State> {
   _onTapIssue = (issue: IssueOnList) => {
     log.debug(`Opening issue "${issue.id}" from Agile Board`);
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
-    if (this.props.isTablet) {
+    if (isSplitView()) {
       let modalId: string = '';
       modalId = modalShow(
         <IssueModal
@@ -197,13 +197,13 @@ class AgileBoard extends Component<Props, State> {
   };
 
   _getScrollableWidth = (): number | null => {
-    const {sprint, isTablet} = this.props;
+    const {sprint} = this.props;
 
     if (!sprint || !sprint.board || !sprint.board.columns) {
       return null;
     }
 
-    return getScrollableWidth(sprint.board.columns, isTablet && this.state.zoomedIn);
+    return getScrollableWidth(sprint.board.columns, isSplitView() && this.state.zoomedIn);
   };
 
   renderAgileSelector() {
@@ -309,8 +309,9 @@ class AgileBoard extends Component<Props, State> {
 
   _renderSelect() {
     const {selectProps} = this.props;
+    const Component: any = isSplitView() ? SelectModal : Select;
     return (
-      <Select
+      <Component
         getTitle={item => item.name}
         onCancel={this.props.onCloseSelect}
         {...selectProps}
@@ -355,7 +356,7 @@ class AgileBoard extends Component<Props, State> {
   };
 
   renderSprint = () => {
-    const {sprint, createCardForCell, onRowCollapseToggle, agile, isTablet} = this.props;
+    const {sprint, createCardForCell, onRowCollapseToggle, agile} = this.props;
 
     return (
       <AgileBoardSprint
@@ -368,8 +369,9 @@ class AgileBoard extends Component<Props, State> {
         canRunCommand={this.canRunCommand}
         onTapIssue={this._onTapIssue}
         onTapCreateIssue={async (...args): Promise<void> => {
-          const draft: $Shape<IssueOnList> = await createCardForCell.apply(null, [...args, isTablet]);
-          if (isTablet) {
+          const isSplitVewEnabled: boolean = isSplitView();
+          const draft: $Shape<IssueOnList> = await createCardForCell.apply(null, [...args, isSplitVewEnabled]);
+          if (isSplitVewEnabled) {
             Router.Modal({children: <CreateIssue predefinedDraftId={draft.id}/>});
           } else {
             Router.CreateIssue({predefinedDraftId: draft.id});
@@ -377,7 +379,6 @@ class AgileBoard extends Component<Props, State> {
         }}
         onCollapseToggle={onRowCollapseToggle}
         uiTheme={this.uiTheme}
-        isTablet={isTablet}
       />
     );
   };

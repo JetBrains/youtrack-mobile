@@ -15,6 +15,7 @@ import SettingsAppearance from './settings__appearance';
 import SettingsFeedbackForm from './settings__feedback-form';
 import usage, {VERSION_STRING} from '../../components/usage/usage';
 import {HIT_SLOP} from '../../components/common-styles/button';
+import {isSplitView} from '../../components/responsive/responsive-helper';
 import {modalHide, modalShow} from '../../components/modal-view/modal-helper';
 import {ThemeContext} from '../../components/theme/theme-context';
 
@@ -35,7 +36,6 @@ type Props = {
 
   features: Array<Object>,
   setFeatures: Function,
-  isTablet: boolean,
 };
 
 type State = {
@@ -65,7 +65,6 @@ class Settings extends PureComponent<Props, State> {
       features,
       otherAccounts,
       isChangingAccount,
-      isTablet,
     } = this.props;
 
     return (
@@ -75,7 +74,7 @@ class Settings extends PureComponent<Props, State> {
           const settingItems: Array<{ title: string, onPress: Function }> = [{
             title: 'Appearance',
             onPress: () => {
-              if (isTablet) {
+              if (isSplitView()) {
                 let id: string = '';
                 id = modalShow(
                   <SettingsAppearance

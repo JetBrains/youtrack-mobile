@@ -30,7 +30,6 @@ type Props = {
   zoomedIn?: boolean,
   columns: Array<BoardColumn>,
   uiTheme: UITheme,
-  isTablet: boolean,
 };
 
 function renderCollapsedCard(issue: IssueOnList) {
@@ -79,7 +78,6 @@ export default function BoardRow(props: Props): null | Node {
     zoomedIn,
     columns,
     uiTheme,
-    isTablet,
   } = props;
 
   if (!row) {
@@ -165,7 +163,6 @@ export default function BoardRow(props: Props): null | Node {
                 renderIssueCard={renderIssueCard}
                 uiTheme={uiTheme}
                 zoomedIn={zoomedIn}
-                isTablet={isTablet}
               />
             );
           })}
