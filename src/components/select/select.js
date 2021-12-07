@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {Text, View, TouchableOpacity, TextInput, ActivityIndicator, FlatList} from 'react-native';
 
 import {Modal} from 'react-native-modals';
@@ -11,7 +11,7 @@ import SelectItem from './select__item';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {hasOpenModal} from '../modal-view/modal-helper';
 import {IconCheck, IconClose} from '../icon/icon';
-import {isTablet} from '../../util/util';
+import {isSplitView} from '../responsive/responsive-helper';
 import {notifyError} from '../notification/notification';
 
 import styles, {SELECT_ITEM_HEIGHT, SELECT_ITEM_SEPARATOR_HEIGHT} from './select.styles';
@@ -50,7 +50,7 @@ type SelectState = {
 type SelectItemsSortData = { selected: Array<Object>, other: Array<Object> };
 
 
-export class Select extends Component<SelectProps, SelectState> {
+export class Select extends PureComponent<SelectProps, SelectState> {
   static defaultProps: {
   autoFocus: boolean,
   getTitle: (item: any) => any,
@@ -287,8 +287,12 @@ export class Select extends Component<SelectProps, SelectState> {
     );
   }
 
+  onCancel: () => void = (): void => {
+    this.props.onCancel();
+  }
+
   render(): Node {
-    const {multi, autoFocus, style, placeholder, onCancel, noFilter, header} = this.props;
+    const {multi, autoFocus, style, placeholder, noFilter, header} = this.props;
     const WrapperComponent: any = this.getWrapperComponent();
     const wrapperProps: Object = this.getWrapperProps({
       visible: true,
@@ -309,7 +313,7 @@ export class Select extends Component<SelectProps, SelectState> {
               testID="test:id/selectBackButton"
               accessibilityLabel="selectBackButton"
               accessible={true}
-              onPress={onCancel}
+              onPress={this.onCancel}
             >
               <IconClose size={21} style={styles.cancelButton} color={styles.cancelButton.color}/>
             </TouchableOpacity>
@@ -365,9 +369,10 @@ export class Select extends Component<SelectProps, SelectState> {
 
 
 //$FlowFixMe
-class SelectModal extends Select<SelectProps, SelectState> {
+export class SelectModal extends Select<SelectProps, SelectState> {
 
-  constructor(props) {
+  //$FlowFixMe
+  constructor(props: SelectProps) {
     //$FlowFixMe
     super(props);
     this.state = {
@@ -380,15 +385,13 @@ class SelectModal extends Select<SelectProps, SelectState> {
     this.setState({ visible: false });
   }
 
-  //$FlowFixMe
-  onCancel = (): void => {
+  onCancel(): void {
     //$FlowFixMe
     super.onCancel();
     this.onHide();
   }
 
-  //$FlowFixMe
-  onSelect = (items: any): void => {
+  onSelect(items: any): void {
     //$FlowFixMe
     super.onSelect(items);
     this.onHide();
@@ -402,10 +405,12 @@ class SelectModal extends Select<SelectProps, SelectState> {
     return View;
   }
 
+  renderSelect(): Node {
   //$FlowFixMe
-  renderSelect = () => super.render()
+    return super.render();
+  }
 
-  render() {
+  render(): Node {
     return (
       <Modal
         hasOverlay={!hasOpenModal()}
@@ -423,4 +428,4 @@ class SelectModal extends Select<SelectProps, SelectState> {
   }
 }
 
-export default ((isTablet ? SelectModal : Select): React$AbstractComponent<SelectProps, mixed>);
+export default ((isSplitView() ? SelectModal : Select): React$AbstractComponent<SelectProps, mixed>);

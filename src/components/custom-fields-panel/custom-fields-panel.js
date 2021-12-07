@@ -8,14 +8,15 @@ import DatePicker from './custom-fields-panel__date-picker';
 import Header from '../header/header';
 import ModalView from '../modal-view/modal-view';
 import React, {Component} from 'react';
-import Select from '../select/select';
 import SimpleValueEditor from './custom-fields-panel__simple-value';
 import usage from '../usage/usage';
-import {createNullProjectCustomField, isTablet} from '../../util/util';
+import {createNullProjectCustomField} from '../../util/util';
 import {getApi} from '../api/api__instance';
 import {hasOpenModal, modalHide, modalShow} from '../modal-view/modal-helper';
 import {IconCheck, IconClose} from '../icon/icon';
+import {isSplitView} from '../responsive/responsive-helper';
 import {PanelWithSeparator} from '../panel/panel-with-separator';
+import {Select, SelectModal} from '../select/select';
 import {SkeletonIssueCustomFields} from '../skeleton/skeleton';
 import {View as AnimatedView} from 'react-native-animatable';
 
@@ -77,7 +78,7 @@ type State = {
     time: string | null,
     value: Date,
     emptyValueName?: ?string,
-    onSelect: (selected: any) => any,
+    onSelect: (date: Date, time: string) => any,
     placeholder: string,
   },
 
@@ -385,7 +386,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   };
 
   _renderSelect() {
-    return <Select
+    const Component: Select | SelectModal = isSplitView() ? SelectModal : Select;
+    return <Component
       {...this.state.select}
       autoFocus={this.props.autoFocusSelect}
       onCancel={() => this.closeEditor()}
@@ -436,7 +438,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       );
     };
 
-    if (isTablet) {
+    if (isSplitView()) {
       let modalId: string = ';';
       modalId = modalShow(
         render(() => modalHide(modalId)),
@@ -478,7 +480,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       );
     };
 
-  if (isTablet) {
+  if (isSplitView()) {
     let modalId: string = ';';
       modalId = modalShow(
         render(() => modalHide(modalId)),

@@ -26,6 +26,7 @@ import {getApi} from '../../components/api/api__instance';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import {IconBack, IconCheck, IconClose, IconDrag, IconMoreOptions} from '../../components/icon/icon';
 import {isIOSPlatform} from '../../util/util';
+import {isSplitView} from '../../components/responsive/responsive-helper';
 import {IssueContext} from './issue-context';
 import {Skeleton} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
@@ -139,10 +140,10 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       getIssueLinksTitle,
 
       setCustomFieldValue,
-      isTablet,
     } = this.props;
 
-    const Component: any = isTablet ? IssueDetailsModal : IssueDetails;
+    const splitViewEnabled: boolean = isSplitView();
+    const Component: any = splitViewEnabled ? IssueDetailsModal : IssueDetails;
     return (
       <Component
         loadIssue={loadIssue}
@@ -191,8 +192,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         onLinkIssue={this.props.onLinkIssue}
 
         setCustomFieldValue={setCustomFieldValue}
-        isTablet={isTablet}
-        linksHasOverlay={isTablet}
+        linksHasOverlay={splitViewEnabled}
       />
     );
   };
@@ -235,7 +235,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   }
 
   renderBackIcon = () => {
-    return this.props.isTablet ? null : <IconBack color={this.uiTheme.colors.$link}/>;
+    return isSplitView() ? null : <IconBack color={this.uiTheme.colors.$link}/>;
   }
 
   canStar = (): boolean => {
@@ -522,7 +522,6 @@ const mapStateToProps = (state: { app: RootState, issueState: IssueState }, ownP
     issueId: ownProps.issueId,
     user: state.app.user,
     navigateToActivity: ownProps.navigateToActivity,
-    isTablet: state.app.isTablet,
   }: $Shape<IssueState & OwnProps>);
 };
 

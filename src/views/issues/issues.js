@@ -3,6 +3,7 @@
 import type {Node} from 'React';
 import {
   ActivityIndicator,
+  Dimensions,
   View,
   Text,
   FlatList,
@@ -34,7 +35,8 @@ import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAdd, IconAngleDown, IconBookmark} from '../../components/icon/icon';
 import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound, IconNothingSelected} from '../../components/icon/icon-pictogram';
 import {initialState} from './issues-reducers';
-import {isReactElement, isTablet} from '../../util/util';
+import {isReactElement} from '../../util/util';
+import {isSplitView} from '../../components/responsive/responsive-helper';
 import {logEvent} from '../../components/log/log-helper';
 import {modalHide, modalShow} from '../../components/modal-view/modal-helper';
 import {notifyError} from '../../components/notification/notification';
@@ -70,11 +72,13 @@ type State = {
   isEditQuery: boolean,
   clearSearchQuery: boolean,
   focusedIssue: IssueOnList | null,
+  isSplitView: boolean,
 }
 
 export class Issues extends Component<Props, State> {
   searchPanelNode: Object;
   unsubscribeOnDispatch: Function;
+  unsubscribeOnDimensionsChange: Function;
   theme: Theme;
 
   constructor(props: Props) {
@@ -83,11 +87,23 @@ export class Issues extends Component<Props, State> {
       isEditQuery: false,
       clearSearchQuery: false,
       focusedIssue: null,
+      isSplitView: false,
     };
     usage.trackScreenView('Issue list');
   }
 
+  onDimensionsChange: () => void = (): void => {
+    const isSplit: boolean = isSplitView();
+    this.setState({
+      isSplitView: isSplit,
+      focusedIssue: isSplit ? this.state.focusedIssue : null,
+    });
+  }
+
   componentDidMount() {
+    this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.onDimensionsChange);
+    this.onDimensionsChange();
+
     this.props.initializeIssuesList(this.props.isAppStart);
 
     this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
@@ -113,9 +129,9 @@ export class Issues extends Component<Props, State> {
   }
 
   componentWillUnmount() {
+    this.unsubscribeOnDimensionsChange.remove();
     this.unsubscribeOnDispatch();
   }
-
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
     if (Object.keys(initialState).some((stateKey: string) => this.props[stateKey] !== nextProps[stateKey])) {
       return true;
@@ -147,7 +163,7 @@ export class Issues extends Component<Props, State> {
         style={styles.createIssueButton}
         onPress={() => {
           let modalId: string = '';
-          if (isTablet) {
+          if (this.state.isSplitView) {
             modalId = modalShow(
               <CreateIssue onHide={() => modalHide(modalId)}/>
             );
@@ -179,7 +195,7 @@ export class Issues extends Component<Props, State> {
         <IssueRow
           issue={item}
           onClick={(issue) => {
-            if (isTablet) {
+            if (this.state.isSplitView) {
               this.updateFocusedIssue(issue);
             } else {
               this.goToIssue(issue);
@@ -217,7 +233,7 @@ export class Issues extends Component<Props, State> {
     this.props.loadMoreIssues();
   };
 
-  renderContextButton = () => {
+  renderContextButton: () => Node = () => {
     const {onOpenContextSelect, isRefreshing, searchContext, isSearchContextPinned} = this.props;
 
     return (
@@ -249,7 +265,7 @@ export class Issues extends Component<Props, State> {
   };
 
 
-  renderContextSelect(): Node {
+  renderContextSelect(): any {
     const {selectProps} = this.props;
 
     if (selectProps.isOwnSearches) {
@@ -344,9 +360,9 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  hasIssues = (): boolean => this.props.issues?.length > 0;
+  hasIssues: () => boolean = (): boolean => this.props.issues?.length > 0;
 
-  renderSearchQuery = () => {
+  renderSearchQuery: () => Node = () => {
     const {query, issuesCount, openSavedSearchesSelect, searchContext, isAppStart} = this.props;
     return (
       <View style={styles.listHeader}>
@@ -460,7 +476,7 @@ export class Issues extends Component<Props, State> {
     return null;
   }
 
-  renderIssues = () => {
+  renderIssues: () => Node = () => {
     const {isIssuesContextOpen, isRefreshing} = this.props;
     return (
       <View
@@ -478,7 +494,7 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  renderFocusedIssue = () => {
+  renderFocusedIssue: () => Node = () => {
     const {focusedIssue} = this.state;
 
     if (!focusedIssue || !this.hasIssues()) {
@@ -500,7 +516,7 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  renderSplitView = () => {
+  renderSplitView: () => Node = () => {
     return (
       <>
         <View style={styles.splitViewSide}>
@@ -515,17 +531,18 @@ export class Issues extends Component<Props, State> {
 
   render(): Node {
     const {isRedirecting} = this.props;
+    const {isSplitView} = this.state;
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
           this.theme = theme;
           return (
             <View
-              style={[styles.listContainer, isTablet ? styles.splitViewContainer : null]}
+              style={[styles.listContainer, isSplitView ? styles.splitViewContainer : null]}
               testID="issue-list-page"
             >
-              {isTablet && this.renderSplitView()}
-              {!isTablet && this.renderIssues()}
+              {isSplitView && this.renderSplitView()}
+              {!isSplitView && this.renderIssues()}
               {isRedirecting && <ActivityIndicator color={styles.link.color} style={styles.loadingIndicator}/>}
             </View>
           );
