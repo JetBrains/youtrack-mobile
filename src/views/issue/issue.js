@@ -18,7 +18,7 @@ import IssueDetailsModal from './issue.modal__details';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import LinkedIssuesAddLink from '../../components/linked-issues/linked-issues-add-link';
 import Router from '../../components/router/router';
-import Select from '../../components/select/select';
+import {Select, SelectModal} from '../../components/select/select';
 import Star from '../../components/star/star';
 import usage from '../../components/usage/usage';
 import {attachmentActions} from './issue__attachment-actions-and-types';
@@ -411,7 +411,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     />;
   }
 
-  renderAttachFileDialog = (): React$Element<typeof AttachFileDialog> => (
+  renderAttachFileDialog: () => React$Element<any> = (): React$Element<typeof AttachFileDialog> => (
     <AttachFileDialog
       hideVisibility={false}
       getVisibilityOptions={() => getApi().issue.getVisibilityOptions(this.props.issueId)}
@@ -448,8 +448,9 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   renderTagsSelect() {
     const {selectProps} = this.props;
+    const Component: any = this.state.isSplitView ? SelectModal : Select;
     return (
-      <Select
+      <Component
         {...selectProps}
         titleRenderer={(tag: Tag) => {
           return (
