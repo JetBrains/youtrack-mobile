@@ -90,6 +90,8 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   }
 
   async componentDidMount() {
+    //$FlowFixMe
+    super.componentDidMount();
     await this.init();
   }
 
@@ -109,7 +111,8 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     await this.props.loadIssue();
   }
 
-  renderDetails = (uiTheme: UITheme) => {
+  renderDetails: (uiTheme: UITheme) => React$Element<any> = (uiTheme: UITheme) => {
+    const {isSplitView} = this.state;
     const {
       loadIssue,
       openNestedIssueView,
@@ -142,8 +145,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       setCustomFieldValue,
     } = this.props;
 
-    const splitViewEnabled: boolean = isSplitView();
-    const Component: any = splitViewEnabled ? IssueDetailsModal : IssueDetails;
+    const Component: any = isSplitView ? IssueDetailsModal : IssueDetails;
     return (
       <Component
         loadIssue={loadIssue}
@@ -192,12 +194,12 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         onLinkIssue={this.props.onLinkIssue}
 
         setCustomFieldValue={setCustomFieldValue}
-        linksHasOverlay={splitViewEnabled}
+        isSplitView={isSplitView}
       />
     );
   };
 
-  renderActivity = (uiTheme: UITheme): React$Element<typeof IssueActivity> => {
+  renderActivity: (uiTheme: UITheme) => React$Element<any> = (uiTheme: UITheme): React$Element<typeof IssueActivity> => {
     const {
       issue,
       user,
@@ -234,16 +236,16 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     }
   }
 
-  renderBackIcon = () => {
+  renderBackIcon: () => (null | React$Element<any>) = () => {
     return isSplitView() ? null : <IconBack color={this.uiTheme.colors.$link}/>;
   }
 
-  canStar = (): boolean => {
+  canStar: () => boolean = (): boolean => {
     const {issue, issuePermissions} = this.props;
     return issue && issuePermissions && issuePermissions.canStar();
   };
 
-  renderActionsIcon(uiTheme: UITheme) {
+  renderActionsIcon(uiTheme: UITheme): React$Element<typeof Skeleton | typeof Text> {
     if (!this.isIssueLoaded()) {
       return <Skeleton width={24}/>;
     }
@@ -258,7 +260,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   }
 
-  renderStar = (uiTheme: UITheme) => {
+  renderStar: (uiTheme: UITheme) => React$Element<typeof Star | typeof Skeleton> = (uiTheme: UITheme): React$Element<typeof Star | typeof Skeleton> => {
     const {issue, toggleStar} = this.props;
     if (this.isIssueLoaded()) {
       return (
@@ -276,7 +278,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   };
 
 
-  renderHeaderIssueTitle() {
+  renderHeaderIssueTitle(): React$Element<any> | null {
     const {issue, issuePlaceholder, issueLoadingError} = this.props;
     const _issue: AnyIssue = issue || issuePlaceholder;
     const readableID: ?string = getReadableID(_issue);
@@ -337,6 +339,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
                       onUpdate={(issues?: Array<IssueLink>) => {
                         getIssueLinksTitle(issues);
                       }}
+                      onHide={() => Router.pop()}
                     />
                   )
                   : null)
