@@ -165,7 +165,7 @@ export class Issues extends Component<Props, State> {
           let modalId: string = '';
           if (this.state.isSplitView) {
             modalId = modalShow(
-              <CreateIssue onHide={() => modalHide(modalId)}/>
+              <CreateIssue isSplitView={true} onHide={() => modalHide(modalId)}/>
             );
           } else {
             Router.CreateIssue();
