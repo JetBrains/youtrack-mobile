@@ -20,7 +20,6 @@ type Props = {
   onTapCreateIssue: (columnId: string, cellId: string) => void,
   onCollapseToggle: (row: AgileBoardRow) => void,
   uiTheme: UITheme,
-  isTablet: boolean,
 };
 
 
@@ -67,7 +66,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
   };
 
   renderCard: ((issue: AnyIssue) => Node) = (issue: AnyIssue) => {
-    const {sprint, zoomedIn, canRunCommand, onTapIssue, uiTheme, isTablet} = this.props;
+    const {sprint, zoomedIn, canRunCommand, onTapIssue, uiTheme} = this.props;
     const canDrag = sprint.agile.isUpdatable || canRunCommand(issue);
 
     return (
@@ -82,14 +81,13 @@ export default class AgileBoardSprint extends Component<Props, void> {
           estimationField={sprint.agile.estimationField}
           zoomedIn={zoomedIn}
           uiTheme={uiTheme}
-          isTablet={isTablet}
         />
       </Draggable>
     );
   };
 
   renderOrphan: ((board: Board) => Node) = (board: Board) => {
-    const {zoomedIn, isTablet} = this.props;
+    const {zoomedIn} = this.props;
 
     return (
       <BoardRow
@@ -98,14 +96,13 @@ export default class AgileBoardSprint extends Component<Props, void> {
         row={board.orphanRow}
         zoomedIn={zoomedIn}
         columns={board.columns}
-        isTablet={isTablet}
         {...this.createCommonRowProps()}
       />
     );
   };
 
   render(): null | Node {
-    const {sprint, zoomedIn, isTablet} = this.props;
+    const {sprint, zoomedIn} = this.props;
     const board: Board = sprint?.board;
 
     if (!sprint || !board) {
@@ -128,7 +125,6 @@ export default class AgileBoardSprint extends Component<Props, void> {
               row={swimlane}
               zoomedIn={zoomedIn}
               columns={board.columns}
-              isTablet={isTablet}
               {...this.createCommonRowProps()}
             />
           );
