@@ -44,6 +44,9 @@ const createConfig = (config: AppConfig, isRefresh: boolean = false): OAuthConfi
       usePKCE: !config.auth.clientSecret,
     };
   }
+  if (!config.auth.clientSecret) {
+    delete authConfiguration.clientSecret;
+  }
   return authConfiguration;
 };
 
