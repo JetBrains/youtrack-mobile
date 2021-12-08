@@ -134,6 +134,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         excludeProject={excludeProject}
         withSeparator={withSeparator}
         withLast={withLast}
+        isSplitView={this.state.isSplitView}
       />
     );
   };
@@ -149,7 +150,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       createSubArticle,
       onCheckboxUpdate,
     } = this.props;
-    const breadCrumbsElement = article && !this.state.isSplitView ? this.renderBreadCrumbs() : null;
+    const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
 
     const articleNode: ?ArticleNode = articleData?.project && findArticleNode(
       articlesList, articleData.project.id, articleData?.id
@@ -209,7 +210,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
           isLoading={isLoading}
           uiTheme={this.uiTheme}
           onCheckboxUpdate={(articleContent: string) => onCheckboxUpdate(articleContent)}
-          isTablet={this.state.isSplitView}
+          isSplitView={this.state.isSplitView}
         />
       </View>
     );

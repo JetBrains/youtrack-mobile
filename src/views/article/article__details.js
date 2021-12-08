@@ -12,7 +12,8 @@ import Select from '../../components/select/select';
 import Separator from '../../components/separator/separator';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
-import {IconAdd, IconAngleRight, IconBack} from '../../components/icon/icon';
+import {hasOpenModal, modalHide, modalHideAll, modalShow} from '../../components/modal-view/modal-helper';
+import {IconAdd, IconAngleRight, IconBack, IconClose} from '../../components/icon/icon';
 import {logEvent} from '../../components/log/log-helper';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssueContent} from '../../components/skeleton/skeleton';
@@ -33,16 +34,26 @@ type Props = {
   uiTheme: UITheme,
   scrollData: Object,
   onCheckboxUpdate?: (articleContent: string) => Function,
-  isTablet: boolean,
+  isSplitView: boolean,
 };
 
 const ArticleDetails = (props: Props) => {
 
   function navigateToSubArticlePage(article: Article) {
-    Router[props.isTablet ? routeMap.PageModal : routeMap.Page]({children: renderSubArticles(article)});
+    if (props.isSplitView) {
+      const modalId: string = modalShow(
+        renderSubArticles(article, () => modalHide(modalId)),
+        {
+          animationDuration: 0,
+          hasOverlay: !hasOpenModal(),
+        }
+      );
+    } else {
+      Router.Page({children: renderSubArticles(article)});
+    }
   }
 
-  function renderSubArticles(article: Article) {
+  function renderSubArticles(article: Article, onHide: () => any = () => Router.pop()) {
 
     const renderArticle = ({item}: { item: Article }) => {
       return (
@@ -50,8 +61,11 @@ const ArticleDetails = (props: Props) => {
           style={styles.subArticleItem}
           article={item}
           onArticlePress={(article: Article) => {
-            if (props.isTablet) {
-              Router.KnowledgeBase({lastVisitedArticle: article});
+            if (props.isSplitView) {
+              if (hasOpenModal()) {
+                modalHideAll();
+              }
+              Router.KnowledgeBase({lastVisitedArticle: article, preventReload: true});
             } else {
               Router.Article({
                 articlePlaceholder: article,
@@ -70,8 +84,8 @@ const ArticleDetails = (props: Props) => {
       <>
         <Header
           style={styles.subArticlesHeader}
-          leftButton={<IconBack color={styles.link.color}/>}
-          onBack={() => Router.pop()}
+          leftButton={props.isSplitView && !hasOpenModal() ? <IconClose size={21} color={styles.link.color}/> : <IconBack color={styles.link.color}/> }
+          onBack={onHide}
         >
           <Text numberOfLines={2} style={styles.articlesHeaderText}>{article.summary}</Text>
         </Header>

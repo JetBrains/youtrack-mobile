@@ -29,7 +29,8 @@ type ArticleBreadCrumbsItemProps = {
   article: Article,
   onPress?: Function,
   noSeparator?: boolean,
-  style?: ViewStyleProp
+  style?: ViewStyleProp,
+  isSplitView: boolean,
 };
 export const ArticleBreadCrumbsItem = (props: ArticleBreadCrumbsItemProps): Node => {
   const breadcrumbText: string = props.article.name || props.article.summary;
@@ -59,7 +60,11 @@ const ArticleBreadCrumbs = (props: Props) => {
     return null;
   }
 
-  const breadCrumbs: Array<ArticleEntity | ArticleProject> = createBreadCrumbs(article, articlesList, excludeProject);
+  const breadCrumbs: Array<ArticleEntity | ArticleProject> = createBreadCrumbs(
+    article,
+    articlesList,
+    excludeProject || props.isSplitView
+  );
 
   if (breadCrumbs.length === 0) {
     return null;
@@ -80,6 +85,8 @@ const ArticleBreadCrumbs = (props: Props) => {
             onPress={() => {
               if (hasType.project(it)) {
                 Router.KnowledgeBase({project: it, preventReload: true});
+              } else if (props.isSplitView) {
+                Router.KnowledgeBase({lastVisitedArticle: it, preventReload: true});
               } else {
                 Router.Article({articlePlaceholder: it, storePrevArticle: true});
               }
