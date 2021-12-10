@@ -3,19 +3,16 @@
 import React, {PureComponent} from 'react';
 import {Text, View, TouchableOpacity, TextInput, ActivityIndicator, FlatList} from 'react-native';
 
-import {Modal} from 'react-native-modals';
-
 import ColorField from '../color-field/color-field';
+import ModalPortal from '../modal-view/modal-portal';
 import ModalView from '../modal-view/modal-view';
 import SelectItem from './select__item';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
-import {hasOpenModal} from '../modal-view/modal-helper';
 import {IconCheck, IconClose} from '../icon/icon';
 import {isSplitView} from '../responsive/responsive-helper';
 import {notifyError} from '../notification/notification';
 
 import styles, {SELECT_ITEM_HEIGHT, SELECT_ITEM_SEPARATOR_HEIGHT} from './select.styles';
-import modalStyles from '../modal-view/modal.view.styles';
 
 import type {Node} from 'React';
 
@@ -412,18 +409,11 @@ export class SelectModal extends Select<SelectProps, SelectState> {
 
   render(): Node {
     return (
-      <Modal
-        hasOverlay={!hasOpenModal()}
-        animationDuration={0}
-        modalStyle={modalStyles.modal}
-        containerStyle= {modalStyles.modalContainer}
-        visible={this.state.visible}
-        onTouchOutside={this.onCancel}
+      <ModalPortal
+        onHide={this.onCancel}
       >
-        <View style={modalStyles.modalContent}>
-          {this.renderSelect()}
-        </View>
-      </Modal>
+        {this.renderSelect()}
+      </ModalPortal>
     );
   }
 }

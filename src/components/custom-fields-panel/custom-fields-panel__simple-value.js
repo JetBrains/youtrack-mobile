@@ -5,13 +5,14 @@ import React, {useEffect, useState} from 'react';
 import {TextInput, View} from 'react-native';
 
 import Header from '../header/header';
-import {IconCheck, IconClose} from '../icon/icon';
+import {IconBack, IconCheck, IconClose} from '../icon/icon';
 
 import styles from './custom-fields-panel.styles';
 
 import type {CustomField as IssueCustomField} from '../../flow/CustomFields';
 
 type Props = {
+  modal?: boolean,
   editingField: ?IssueCustomField,
   onApply: any => any,
   placeholder: string,
@@ -33,7 +34,7 @@ const SimpleValueEditor = (props: Props) => {
     <>
       <Header
         style={styles.customFieldEditorHeader}
-        leftButton={<IconClose size={21} color={styles.link.color}/>}
+        leftButton={props.modal ? <IconBack color={styles.link.color}/> : <IconClose size={21} color={styles.link.color}/>}
         onBack={props.onHide}
         rightButton={value.trim() ? <IconCheck size={21} color={styles.link.color}/> : null}
         onRightButtonClick={() => {

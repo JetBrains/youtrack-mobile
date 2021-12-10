@@ -12,6 +12,7 @@ import {IconClose} from '../../components/icon/icon';
 type Props = {
   ...IssueProps,
   onHide: () => any,
+  modal?: boolean,
 };
 
 //$FlowFixMe
@@ -63,6 +64,7 @@ class IssueModal extends Issue<Props> {
 
       setCustomFieldValue,
       isTablet,
+      modal,
     } = this.props;
 
     return (
@@ -116,6 +118,7 @@ class IssueModal extends Issue<Props> {
 
         setCustomFieldValue={setCustomFieldValue}
         isTablet={isTablet}
+        modal={modal}
       />
     );
   };

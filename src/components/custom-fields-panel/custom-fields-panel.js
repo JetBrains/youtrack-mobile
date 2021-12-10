@@ -6,13 +6,13 @@ import Api from '../api/api';
 import CustomField from '../custom-field/custom-field';
 import DatePicker from './custom-fields-panel__date-picker';
 import Header from '../header/header';
+import ModalPortal from '../modal-view/modal-portal';
 import ModalView from '../modal-view/modal-view';
 import React, {Component} from 'react';
 import SimpleValueEditor from './custom-fields-panel__simple-value';
 import usage from '../usage/usage';
 import {createNullProjectCustomField} from '../../util/util';
 import {getApi} from '../api/api__instance';
-import {hasOpenModal, modalHide, modalShow} from '../modal-view/modal-helper';
 import {IconCheck, IconClose} from '../icon/icon';
 import {isSplitView} from '../responsive/responsive-helper';
 import {PanelWithSeparator} from '../panel/panel-with-separator';
@@ -48,6 +48,8 @@ type Props = {
 
   analyticsId?: string,
   testID?: string,
+
+  modal?: boolean,
 };
 
 type State = {
@@ -127,6 +129,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
   constructor() {
     super();
+
+    this.closeEditor = this.closeEditor.bind(this);
 
     this.state = {
       topCoord: 0,
@@ -415,13 +419,14 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
   renderDatePicker(uiTheme: UITheme) {
     const {datePicker} = this.state;
-    const render = (onHide: () => any): Node => {
+    const {modal} = this.props;
+    const render = (): Node => {
       const hideEditor = (): void => {
-        onHide();
         this.closeEditor();
       };
       return (
         <DatePicker
+          modal={modal}
           emptyValueName={datePicker.emptyValueName}
           onApply={(date, time) => {
             datePicker.onSelect(date, time);
@@ -439,19 +444,18 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     };
 
     if (isSplitView()) {
-      let modalId: string = ';';
-      modalId = modalShow(
-        render(() => modalHide(modalId)),
-        {
-          hasOverlay: !hasOpenModal(),
-          animationDuration: 0,
-        },
+      return (
+        <ModalPortal
+          hasOverlay={!this.props.modal}
+          onHide={this.closeEditor}
+        >
+          {render()}
+        </ModalPortal>
       );
-      return null;
     } else {
       return (
         <ModalView animationType="slide">
-          {render(this.closeEditor)}
+          {render()}
         </ModalView>
       );
     }
@@ -460,19 +464,16 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   renderSimpleValueInput(): any {
     const {editingField} = this.state;
     const title: string = editingField?.projectCustomField?.field?.name || '';
-    const render = (onHide: () => any): Node => {
-      const hideEditor = () => {
-        onHide();
-        this.closeEditor();
-      };
+    const render = (): Node => {
       return (
         <SimpleValueEditor
+          modal={this.props.modal}
           editingField={this.state.editingField}
           onApply={(value: any) => {
             this.state.simpleValue.onApply(value);
-            hideEditor();
+            this.closeEditor();
           }}
-          onHide={hideEditor}
+          onHide={this.closeEditor}
           placeholder={this.state.simpleValue.placeholder}
           title={title}
           value={this.state.simpleValue.value}
@@ -481,21 +482,20 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     };
 
   if (isSplitView()) {
-    let modalId: string = ';';
-      modalId = modalShow(
-        render(() => modalHide(modalId)),
-        {
-          hasOverlay: !hasOpenModal(),
-          animationDuration: 0,
-        },
-      );
-      return null;
+    return (
+      <ModalPortal
+        hasOverlay={!this.props.modal}
+        onHide={this.closeEditor}
+      >
+        {render()}
+      </ModalPortal>
+    );
     } else {
       return (
         <ModalView
           animationType="slide"
         >
-          {render(this.closeEditor)}
+          {render()}
         </ModalView>
       );
     }

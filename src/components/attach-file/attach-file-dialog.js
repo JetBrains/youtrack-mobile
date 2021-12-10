@@ -8,6 +8,7 @@ import AttachmentErrorBoundary from '../attachments-row/attachment-error-boundar
 import calculateAspectRatio from '../aspect-ratio/aspect-ratio';
 import Header from '../header/header';
 import IconAttachment from '@jetbrains/icons/attachment.svg';
+import ModalPortal from '../modal-view/modal-portal';
 import ModalView from '../modal-view/modal-view';
 import usage from '../usage/usage';
 import Video from 'react-native-video';
@@ -17,6 +18,7 @@ import {getApi} from '../api/api__instance';
 import {hasMimeType} from '../mime-type/mime-type';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconCamera, IconCheck, IconClose} from '../icon/icon';
+import {isSplitView} from '../responsive/responsive-helper';
 import {logEvent} from '../log/log-helper';
 import {notify} from '../notification/notification';
 import {ThemeContext} from '../theme/theme-context';
@@ -31,8 +33,6 @@ import type {Theme} from '../../flow/Theme';
 import type {UserGroup} from '../../flow/UserGroup';
 import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
-import {isSplitView} from '../responsive/responsive-helper';
-import {hasOpenModal, modalHide, modalShow} from '../modal-view/modal-helper';
 
 export const attachFileActions: Array<ActionSheetAction> = [
   {
@@ -242,20 +242,22 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
     </>
   );
 
-  let modalId: string = '';
+  const children = render(props.actions.onCancel);
   if (isSplitView()) {
-    modalId = modalShow(
-      render(() => modalHide(modalId)),
-      {hasOverlay: !hasOpenModal()}
+    return (
+      <ModalPortal
+        onHide={props.actions.onCancel}
+      >
+        {children}
+      </ModalPortal>
     );
-    return null;
   } else {
     return (
       <ModalView
         animationType="slide"
         style={styles.container}
       >
-        {render(props.actions.onCancel)}
+        {children}
       </ModalView>
     );
   }

@@ -1,18 +1,18 @@
 /* @flow */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 
 import ArticleContent from './article__details-content';
 import ArticleWithChildren from '../../components/articles/article-item-with-children';
 import AttachmentsRow from '../../components/attachments-row/attachments-row';
 import Header from '../../components/header/header';
+import ModalPortal from '../../components/modal-view/modal-portal';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import Separator from '../../components/separator/separator';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
-import {hasOpenModal, modalHide, modalHideAll, modalShow} from '../../components/modal-view/modal-helper';
 import {IconAdd, IconAngleRight, IconBack, IconClose} from '../../components/icon/icon';
 import {logEvent} from '../../components/log/log-helper';
 import {routeMap} from '../../app-routes';
@@ -38,22 +38,35 @@ type Props = {
 };
 
 const ArticleDetails = (props: Props) => {
+  const [modalStack, updateModalStack] = useState([]);
+
 
   function navigateToSubArticlePage(article: Article) {
+    const update = () => {
+      updateModalStack(((prev: Array<{ id: string, children: any, onHide: () => any }>) => {
+        const onHide = () => updateModalStack(
+          (prev: Array<{ id: string, children: any, onHide: () => any }>) => prev.filter((it) => it.id !== article.id)
+        );
+        prev.push({
+          id: article.id,
+          onHide,
+          children: renderSubArticles(
+            article,
+            onHide,
+            prev.length === 0 ? <IconClose size={21} color={styles.link.color}/> : null
+          )});
+        return prev.slice();
+      }));
+    };
+
     if (props.isSplitView) {
-      const modalId: string = modalShow(
-        renderSubArticles(article, () => modalHide(modalId)),
-        {
-          animationDuration: 0,
-          hasOverlay: !hasOpenModal(),
-        }
-      );
+      update();
     } else {
       Router.Page({children: renderSubArticles(article)});
     }
   }
 
-  function renderSubArticles(article: Article, onHide: () => any = () => Router.pop()) {
+  function renderSubArticles(article: Article, onHide: () => any = () => Router.pop(), backIcon?: any) {
 
     const renderArticle = ({item}: { item: Article }) => {
       return (
@@ -62,9 +75,7 @@ const ArticleDetails = (props: Props) => {
           article={item}
           onArticlePress={(article: Article) => {
             if (props.isSplitView) {
-              if (hasOpenModal()) {
-                modalHideAll();
-              }
+
               Router.KnowledgeBase({lastVisitedArticle: article, preventReload: true});
             } else {
               Router.Article({
@@ -76,7 +87,8 @@ const ArticleDetails = (props: Props) => {
             }
           }}
           onShowSubArticles={(childArticle: Article) => navigateToSubArticlePage(childArticle)}
-        />
+        >
+        </ArticleWithChildren>
       );
     };
 
@@ -84,7 +96,7 @@ const ArticleDetails = (props: Props) => {
       <>
         <Header
           style={styles.subArticlesHeader}
-          leftButton={props.isSplitView && !hasOpenModal() ? <IconClose size={21} color={styles.link.color}/> : <IconBack color={styles.link.color}/> }
+          leftButton={backIcon || <IconBack color={styles.link.color}/>}
           onBack={onHide}
         >
           <Text numberOfLines={2} style={styles.articlesHeaderText}>{article.summary}</Text>
@@ -192,6 +204,12 @@ const ArticleDetails = (props: Props) => {
             />
           </View>
         </>
+      )}
+
+      {props.isSplitView && (
+        <ModalPortal onHide={modalStack.length > 0 ? modalStack[modalStack.length - 1].onHide : () => {}}>
+          {modalStack.length > 0 ? modalStack[modalStack.length - 1].children : null}
+        </ModalPortal>
       )}
     </>
   );

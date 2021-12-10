@@ -5,6 +5,7 @@ import {View, RefreshControl, TouchableOpacity, ActivityIndicator, Dimensions} f
 
 import isEqual from 'react-fast-compare';
 import {connect} from 'react-redux';
+import {View as AnimatedView} from 'react-native-animatable';
 
 import * as boardActions from './board-actions';
 import AgileBoardSprint from './agile-board__sprint';
@@ -16,10 +17,10 @@ import CreateIssue from '../create-issue/create-issue';
 import ErrorMessage from '../../components/error-message/error-message';
 import IssueModal from '../issue/issue.modal';
 import log from '../../components/log/log';
+import ModalPortal from '../../components/modal-view/modal-portal';
 import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
 import QueryPreview from '../../components/query-assist/query-preview';
 import Router from '../../components/router/router';
-import {Select, SelectModal} from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_AGILE_PAGE} from '../../components/analytics/analytics-ids';
 import {DragContainer} from '../../components/draggable/';
@@ -27,13 +28,13 @@ import {flushStoragePart, getStorageState} from '../../components/storage/storag
 import {getScrollableWidth} from '../../components/board-scroller/board-scroller__math';
 import {hasType} from '../../components/api/api__resource-types';
 import {IconException, IconMagnifyZoom} from '../../components/icon/icon';
-import {modalHide, modalShow} from '../../components/modal-view/modal-helper';
+import {isSplitView} from '../../components/responsive/responsive-helper';
 import {notify} from '../../components/notification/notification';
 import {renderSelector} from './agile-board__renderer';
 import {routeMap} from '../../app-routes';
+import {Select, SelectModal} from '../../components/select/select';
 import {SkeletonAgile} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
-import {View as AnimatedView} from 'react-native-animatable';
 
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {UNIT} from '../../components/variables/variables';
@@ -46,7 +47,6 @@ import type {AppState} from '../../reducers';
 import type {CustomError} from '../../flow/Error';
 import type {SprintFull, AgileBoardRow, BoardColumn, BoardOnList, Sprint} from '../../flow/Agile';
 import type {Theme, UITheme} from '../../flow/Theme';
-import {isSplitView} from '../../components/responsive/responsive-helper';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -79,6 +79,8 @@ type State = {
   offsetY: number,
   showAssist: boolean,
   clearQuery: boolean,
+  issue: ?IssueOnList,
+  isSplitView: boolean,
 };
 
 class AgileBoard extends Component<Props, State> {
@@ -86,6 +88,7 @@ class AgileBoard extends Component<Props, State> {
   query: string;
   unsubscribeOnDispatch: Function;
   uiTheme: UITheme;
+  unsubscribeOnDimensionsChange: Function;
 
   constructor(props: Props) {
     super(props);
@@ -101,11 +104,13 @@ class AgileBoard extends Component<Props, State> {
       offsetY: 0,
       showAssist: false,
       clearQuery: false,
+      isSplitView: isSplitView(),
     };
   }
 
   componentDidMount() {
     usage.trackScreenView(CATEGORY_NAME);
+    this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.onDimensionsChange);
     this.loadBoard();
 
     this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
@@ -124,6 +129,11 @@ class AgileBoard extends Component<Props, State> {
   componentWillUnmount() {
     boardActions.destroySSE();
     this.unsubscribeOnDispatch();
+    this.unsubscribeOnDimensionsChange.remove();
+  }
+
+  onDimensionsChange: () => void = (): void => {
+    this.setState({isSplitView: isSplitView()});
   }
 
   loadBoard = (refresh: boolean = false) => {
@@ -179,15 +189,9 @@ class AgileBoard extends Component<Props, State> {
   _onTapIssue = (issue: IssueOnList) => {
     log.debug(`Opening issue "${issue.id}" from Agile Board`);
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
+
     if (isSplitView()) {
-      let modalId: string = '';
-      modalId = modalShow(
-        <IssueModal
-          issuePlaceholder={issue}
-          issueId={issue.id}
-          onHide={() => {modalHide(modalId);}}
-        />
-      );
+      this.setState({issue});
     } else {
       Router.Issue({
         issuePlaceholder: issue,
@@ -527,6 +531,24 @@ class AgileBoard extends Component<Props, State> {
     );
   }
 
+  renderModalPortal = (): any => {
+    const onHide = () => this.setState({issue: null});
+    return (
+      this.state.isSplitView ? (
+        <ModalPortal onHide={onHide}>
+          {this.state.issue && (
+            <IssueModal
+              issuePlaceholder={this.state.issue}
+              issueId={this.state.issue.id}
+              onHide={onHide}
+              modal={true}
+            />
+          )}
+        </ModalPortal>
+      ) : null
+    );
+  };
+
   render() {
     const {isSprintSelectOpen} = this.props;
 
@@ -549,6 +571,8 @@ class AgileBoard extends Component<Props, State> {
               {isSprintSelectOpen && this._renderSelect()}
 
               {this.state.showAssist && this.renderSearchPanel()}
+
+              {this.renderModalPortal()}
 
             </View>
           );

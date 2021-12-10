@@ -3,6 +3,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, Text, SectionList, TouchableOpacity, ActivityIndicator} from 'react-native';
 
+import {View as AnimatedView} from 'react-native-animatable';
+
 import Header from '../header/header';
 import IssueRow from '../../views/issues/issues__row';
 import LinkedIssuesAddLink from './linked-issues-add-link';
@@ -10,9 +12,6 @@ import Router from '../router/router';
 
 import {createLinksList} from './linked-issues-helper';
 import {IconAdd, IconBack, IconClose} from '../icon/icon';
-import {isSplitView} from '../responsive/responsive-helper';
-import {modalHide, modalShow} from '../modal-view/modal-helper';
-import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './linked-issues.style';
 
@@ -32,6 +31,7 @@ type Props = {
   style?: ViewStyleProp,
   subTitle?: any,
   onHide: () => void,
+  onAddLink?: ((onHide: () => any) => any) => any,
   closeIcon?: any,
 }
 
@@ -127,9 +127,8 @@ const LinkedIssues = (props: Props): Node => {
     );
   };
 
-  const onAddIssueLink = () => {
-    let modalId: string = '';
-    const renderAddIssueLink = (onHide: Function) => <LinkedIssuesAddLink
+  const renderAddIssueLink = (onHide: () => any) => (
+    <LinkedIssuesAddLink
       onLinkIssue={props.onLinkIssue}
       issuesGetter={props.issuesGetter}
       onUpdate={async () => {
@@ -138,14 +137,14 @@ const LinkedIssues = (props: Props): Node => {
       }}
       subTitle={props.subTitle}
       onHide={onHide}
-    />;
+    />
+  );
 
-    if (isSplitView()) {
-      modalId = modalShow(
-        renderAddIssueLink(() => modalHide(modalId)),
-        {hasOverlay: false},
-      );
+  const onAddIssueLink = () => {
+    if (props.onAddLink) {
+      return props.onAddLink((onHide: () => any) => renderAddIssueLink(onHide));
     } else {
+      //TODO: use `props.onAddLink`
       Router.Page({
         children: renderAddIssueLink(props.onHide),
       });

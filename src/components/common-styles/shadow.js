@@ -35,3 +35,20 @@ export const elevationTop = {
   borderTopWidth: 0.6,
   borderColor: '$separator',
 };
+
+export const boxShadow = {
+  ...Platform.select({
+    ios: {
+      shadowColor: '$text',
+      shadowOffset: {
+        width: 0,
+        height: 0,
+      },
+      shadowOpacity: 0.3,
+      shadowRadius: 60,
+    },
+    android: {
+      elevation: 50,
+    },
+  }),
+};

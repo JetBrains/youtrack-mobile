@@ -62,7 +62,7 @@ const ArticleItemWithChildren = (props: Props) => {
       </TouchableOpacity>}
 
       {article?.childArticles?.length > 0 && <TouchableOpacity
-        isDisabled={isTablet}
+        disabled={isTablet}
         style={styles.itemButtonContainer}
         onPress={async () => {
           if (onShowSubArticles) {
