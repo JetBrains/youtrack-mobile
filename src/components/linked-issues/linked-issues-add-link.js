@@ -36,6 +36,7 @@ type Props = {
   style?: ViewStyleProp,
   subTitle?: any,
   onHide: () => any,
+  closeIcon?: any,
 }
 
 
@@ -177,7 +178,7 @@ const LinkedIssuesAddLink = (props: Props): Node => {
         accessible={true}
         title="Link issue"
         showShadow={true}
-        leftButton={<IconBack color={styles.link.color}/>}
+        leftButton={props.closeIcon || <IconBack color={styles.link.color}/>}
         onBack={props.onHide}
       />
 

@@ -25,7 +25,6 @@ export type RootState = {
   workTimeSettings: WorkTimeSettings | {},
   user: User | null,
   issuePermissions: IssuePermissions,
-  isTablet: boolean,
 };
 
 const initialState: RootState = {
@@ -40,13 +39,9 @@ const initialState: RootState = {
   workTimeSettings: {},
   user: null,
   issuePermissions: issuePermissionsNull,
-  isTablet: false,
 };
 
 export default (createReducer(initialState, {
-  [types.SET_IS_TABLET](state: RootState, action: {isTablet: boolean}) {
-    return {...state, isTablet: action.isTablet};
-  },
   [types.INITIALIZE_AUTH](state: RootState, action: {auth: Auth}) {
     const {auth} = action;
     return {...state, auth};

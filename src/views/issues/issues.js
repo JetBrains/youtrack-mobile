@@ -23,6 +23,7 @@ import IssueRow from './issues__row';
 import IssuesCount from './issues__count';
 import IssuesSortBy from './issues__sortby';
 import log from '../../components/log/log';
+import ModalPortal from '../../components/modal-view/modal-portal';
 import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
 import QueryPreview from '../../components/query-assist/query-preview';
 import Router from '../../components/router/router';
@@ -38,7 +39,6 @@ import {initialState} from './issues-reducers';
 import {isReactElement} from '../../util/util';
 import {isSplitView} from '../../components/responsive/responsive-helper';
 import {logEvent} from '../../components/log/log-helper';
-import {modalHide, modalShow} from '../../components/modal-view/modal-helper';
 import {notifyError} from '../../components/notification/notification';
 import {requestController} from '../../components/api/api__request-controller';
 import {routeMap} from '../../app-routes';
@@ -73,6 +73,7 @@ type State = {
   clearSearchQuery: boolean,
   focusedIssue: IssueOnList | null,
   isSplitView: boolean,
+  isCreateModalVisible: boolean,
 }
 
 export class Issues extends Component<Props, State> {
@@ -88,6 +89,7 @@ export class Issues extends Component<Props, State> {
       clearSearchQuery: false,
       focusedIssue: null,
       isSplitView: false,
+      isCreateModalVisible: false,
     };
     usage.trackScreenView('Issue list');
   }
@@ -132,6 +134,7 @@ export class Issues extends Component<Props, State> {
     this.unsubscribeOnDimensionsChange.remove();
     this.unsubscribeOnDispatch();
   }
+
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
     if (Object.keys(initialState).some((stateKey: string) => this.props[stateKey] !== nextProps[stateKey])) {
       return true;
@@ -153,6 +156,24 @@ export class Issues extends Component<Props, State> {
     });
   }
 
+  renderModalPortal: () => ?Node = (): ?Node => {
+    const onHide = () => this.setState({isCreateModalVisible: false});
+    return (
+      this.state.isSplitView ? (
+        <ModalPortal
+          onHide={onHide}
+        >
+          {this.state.isCreateModalVisible && (
+            <CreateIssue
+              isSplitView={true}
+              onHide={onHide}
+            />
+          )}
+        </ModalPortal>
+      ) : null
+    );
+  };
+
   renderCreateIssueButton: ((isDisabled: boolean) => Node) = (isDisabled: boolean) => {
     return (
       <TouchableOpacity
@@ -162,13 +183,12 @@ export class Issues extends Component<Props, State> {
         accessible={true}
         style={styles.createIssueButton}
         onPress={() => {
-          let modalId: string = '';
           if (this.state.isSplitView) {
-            modalId = modalShow(
-              <CreateIssue isSplitView={true} onHide={() => modalHide(modalId)}/>
-            );
+            this.setState({isCreateModalVisible: true});
           } else {
-            Router.CreateIssue();
+            Router.CreateIssue({
+              onHide: () => Router.pop(true),
+            });
           }
         }}
         disabled={isDisabled}
@@ -544,6 +564,7 @@ export class Issues extends Component<Props, State> {
               {isSplitView && this.renderSplitView()}
               {!isSplitView && this.renderIssues()}
               {isRedirecting && <ActivityIndicator color={styles.link.color} style={styles.loadingIndicator}/>}
+              {this.renderModalPortal()}
             </View>
           );
         }}

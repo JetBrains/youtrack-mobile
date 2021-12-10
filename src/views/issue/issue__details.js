@@ -92,11 +92,17 @@ export type IssueDetailsProps = {
   onLinkIssue: (linkedIssueIdReadable: string, linkTypeName: string) => Promise<boolean>,
 
   setCustomFieldValue: (field: CustomFieldText, value: CustomFieldTextValue) => any,
+  modal?: boolean,
 }
 
 export default class IssueDetails extends Component<IssueDetailsProps, void> {
   imageHeaders: any = getApi().auth.getAuthorizationHeaders();
   backendUrl: any = getApi().config.backendUrl;
+
+  constructor(props: IssueDetailsProps) {
+    super(props);
+    this.renderContent = this.renderContent.bind(this);
+  }
 
   UNSAFE_componentWillUpdate(nextProps: IssueDetailsProps) {
     if (!this.props?.issue?.id && nextProps?.issue?.id) {
@@ -139,6 +145,9 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
               )}
               subTitle={`${issue.idReadable} ${issue.summary}`}
               onHide={() => Router.pop()}
+              onAddLink={(renderChildren: (() => any) => any) => Router.Page({
+                children: renderChildren(),
+              })}
             />),
         })}
       />
@@ -427,36 +436,39 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
       onUpdateProject={this.onUpdateProject}
 
       uiTheme={uiTheme}
+      modal={this.props.modal}
     />;
   };
 
-  render(): Node {
+  renderContent(uiTheme: UITheme): Node {
     const {renderRefreshControl, onSwitchToActivity} = this.props;
 
     return (
+      <ScrollView
+        refreshControl={renderRefreshControl()}
+        keyboardDismissMode="interactive"
+        keyboardShouldPersistTaps="handled"
+        scrollEventThrottle={16}
+      >
+        {this.renderCustomFieldPanel(uiTheme)}
+        {this.renderIssueView(uiTheme)}
+
+        <TouchableOpacity
+          style={styles.switchToActivityButton}
+          hitSlop={HIT_SLOP}
+          onPress={onSwitchToActivity}
+        >
+          <Text style={styles.switchToActivityButtonText}>View comments and other activity</Text>
+        </TouchableOpacity>
+
+      </ScrollView>
+    );
+  }
+
+  render(): Node {
+    return (
       <ThemeContext.Consumer>
-        {(theme: Theme) => {
-          return (
-            <ScrollView
-              refreshControl={renderRefreshControl()}
-              keyboardDismissMode="interactive"
-              keyboardShouldPersistTaps="handled"
-              scrollEventThrottle={16}
-            >
-              {this.renderCustomFieldPanel(theme.uiTheme)}
-              {this.renderIssueView(theme.uiTheme)}
-
-              <TouchableOpacity
-                style={styles.switchToActivityButton}
-                hitSlop={HIT_SLOP}
-                onPress={onSwitchToActivity}
-              >
-                <Text style={styles.switchToActivityButtonText}>View comments and other activity</Text>
-              </TouchableOpacity>
-
-            </ScrollView>
-          );
-        }}
+        {(theme: Theme) => this.renderContent(theme.uiTheme)}
       </ThemeContext.Consumer>
     );
   }

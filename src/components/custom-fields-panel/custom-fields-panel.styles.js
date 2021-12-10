@@ -18,6 +18,7 @@ export default EStyleSheet.create({
     padding: UNIT * 2,
   },
   customFieldEditorHeader: {
+    paddingHorizontal: UNIT * 2,
     ...elevation1,
   },
   customFieldSimpleEditor: {

@@ -5,7 +5,7 @@ import {StatusBar, Platform} from 'react-native';
 
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
-import {ModalPortal} from 'react-native-modals';
+import {Host} from 'react-native-portalize';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import DebugView from './components/debug-view/debug-view';
@@ -58,13 +58,14 @@ export default class AppProvider extends Component<{ }, { mode: string }> {
                     translucent={true}
                   />
                   <ErrorBoundary>
-                    <Navigation/>
-                    <UserAgreement/>
-                    <DebugView/>
+                    <Host>
+                      <Navigation/>
+                      <UserAgreement/>
+                      <DebugView/>
+                    </Host>
                   </ErrorBoundary>
 
                   <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
-                  <ModalPortal/>
 
                 </SafeAreaView>
               );

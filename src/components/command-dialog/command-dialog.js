@@ -8,6 +8,7 @@ import debounce from 'lodash.debounce';
 
 import ApiHelper from '../api/api__helper';
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
+import ModalPortal from '../modal-view/modal-portal';
 import ModalView from '../modal-view/modal-view';
 import SelectItem from '../select/select__item';
 import {guid} from '../../util/util';
@@ -167,14 +168,12 @@ export default class CommandDialog extends Component<Props, State> {
     );
   }
 
-  render(): Node {
+  renderContent(): Node {
     const {isApplying, uiTheme} = this.props;
     const canApply = this.canApplyCommand();
 
     return (
-      <ModalView
-        animationType="slide"
-      >
+      <>
         <View style={styles.inputWrapper}>
 
           <TouchableOpacity
@@ -211,7 +210,29 @@ export default class CommandDialog extends Component<Props, State> {
         {this._renderSuggestions()}
 
         {<KeyboardSpacerIOS/>}
+      </>
+    );
+  }
+
+  render(): Node {
+    return (
+      <ModalView
+        animationType="slide"
+      >
+        {this.renderContent()}
       </ModalView>
+    );
+  }
+}
+
+export class CommandDialogModal extends CommandDialog {
+  render(): Node {
+    return (
+      <ModalPortal
+        onHide={this.props.onCancel}
+      >
+        {this.renderContent()}
+      </ModalPortal>
     );
   }
 }

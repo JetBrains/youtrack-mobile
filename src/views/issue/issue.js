@@ -9,7 +9,7 @@ import {connect} from 'react-redux';
 import * as issueActions from './issue-actions';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 import ColorField from '../../components/color-field/color-field';
-import CommandDialog from '../../components/command-dialog/command-dialog';
+import CommandDialog, {CommandDialogModal} from '../../components/command-dialog/command-dialog';
 import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IssueActivity from './activity/issue__activity';
@@ -17,8 +17,8 @@ import IssueDetails from './issue__details';
 import IssueDetailsModal from './issue.modal__details';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import LinkedIssuesAddLink from '../../components/linked-issues/linked-issues-add-link';
+import ModalPortal from '../../components/modal-view/modal-portal';
 import Router from '../../components/router/router';
-import {Select, SelectModal} from '../../components/select/select';
 import Star from '../../components/star/star';
 import usage from '../../components/usage/usage';
 import {attachmentActions} from './issue__attachment-actions-and-types';
@@ -28,6 +28,7 @@ import {IconBack, IconCheck, IconClose, IconDrag, IconMoreOptions} from '../../c
 import {isIOSPlatform} from '../../util/util';
 import {isSplitView} from '../../components/responsive/responsive-helper';
 import {IssueContext} from './issue-context';
+import {Select, SelectModal} from '../../components/select/select';
 import {Skeleton} from '../../components/skeleton/skeleton';
 import {ThemeContext} from '../../components/theme/theme-context';
 
@@ -77,6 +78,13 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   imageHeaders = getApi().auth.getAuthorizationHeaders();
   backendUrl = getApi().config.backendUrl;
   renderRefreshControl = this._renderRefreshControl.bind(this);
+
+  constructor(props: IssueProps) {
+    //$FlowFixMe
+    super(props);
+    this.onAddIssueLink = this.onAddIssueLink.bind(this);
+    this.toggleModalChildren = this.toggleModalChildren.bind(this);
+  }
 
   async init() {
     usage.trackScreenView(this.CATEGORY_NAME);
@@ -224,7 +232,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   };
 
-  isTabChangeEnabled() {
+  isTabChangeEnabled(): boolean {
     const {editMode, isSavingEditedIssue, isRefreshing, attachingImage} = this.props;
     return !editMode && !isSavingEditedIssue && !isRefreshing && !attachingImage;
   }
@@ -297,6 +305,32 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return this.isIssueLoaded() ? null : !issueLoadingError && <Skeleton width={120}/> || null;
   }
 
+  toggleModalChildren(modalChildren?: any): void {
+    this.setState({modalChildren});
+  }
+
+  onAddIssueLink(): any {
+    const {getIssueLinksTitle, onLinkIssue, loadIssuesXShort} = this.props;
+    const render = (onHide: () => any, closeIcon?: any) => (
+      <LinkedIssuesAddLink
+        onLinkIssue={onLinkIssue}
+        issuesGetter={loadIssuesXShort}
+        onUpdate={(issues?: Array<IssueLink>) => {
+          getIssueLinksTitle(issues);
+        }}
+        onHide={onHide}
+        closeIcon={closeIcon}
+      />
+    );
+    if (this.state.isSplitView) {
+      this.toggleModalChildren(render(this.toggleModalChildren, <IconClose size={21} color={styles.link.color}/>));
+    } else {
+      return Router.Page({
+        children: render(() => Router.pop()),
+      });
+    }
+  }
+
   _renderHeader() {
     const {
       issue,
@@ -307,9 +341,6 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       showIssueActions,
       stopEditingIssue,
       issuePermissions,
-      getIssueLinksTitle,
-      onLinkIssue,
-      loadIssuesXShort,
     } = this.props;
 
     const issueIdReadable = this.renderHeaderIssueTitle();
@@ -331,18 +362,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
                   canTag: issuePermissions.canTag(issue),
                 },
                 this.switchToDetailsTab,
-                (issuePermissions.canLink(issue)
-                  ? () => (
-                    <LinkedIssuesAddLink
-                      onLinkIssue={onLinkIssue}
-                      issuesGetter={loadIssuesXShort}
-                      onUpdate={(issues?: Array<IssueLink>) => {
-                        getIssueLinksTitle(issues);
-                      }}
-                      onHide={() => Router.pop()}
-                    />
-                  )
-                  : null)
+                issuePermissions.canLink(issue) ? this.onAddIssueLink : null,
               );
             }
           }
@@ -399,8 +419,8 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       commandIsApplying,
       initialCommand,
     } = this.props;
-
-    return <CommandDialog
+    const Component: any = this.state.isSplitView ? CommandDialogModal : CommandDialog;
+    return <Component
       suggestions={commandSuggestions}
       onCancel={closeCommandDialog}
       onChange={getCommandSuggestions}
@@ -428,25 +448,25 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     />
   );
 
-  cancelAddAttach = () => {
+  cancelAddAttach: () => void = (): void => {
     const {cancelAddAttach, toggleVisibleAddAttachDialog, attachingImage} = this.props;
     cancelAddAttach(attachingImage);
     toggleVisibleAddAttachDialog(false);
   };
 
-  addAttachment = async (files: Array<NormalizedAttachment>, onAttachingFinish: () => any) => {
+  addAttachment: (files: Array<NormalizedAttachment>, onAttachingFinish: () => any) => void = async (files: Array<NormalizedAttachment>, onAttachingFinish: () => any): any => {
     const {uploadIssueAttach, loadAttachments} = this.props;
     await uploadIssueAttach(files);
     onAttachingFinish();
     loadAttachments();
   };
 
-  isIssueLoaded = (): boolean => {
+  isIssueLoaded: () => boolean = (): boolean => {
     const {issueLoaded, issueLoadingError} = this.props;
     return Boolean(issueLoaded && !issueLoadingError);
   };
 
-  renderTagsSelect() {
+  renderTagsSelect(): any {
     const {selectProps} = this.props;
     const Component: any = this.state.isSplitView ? SelectModal : Select;
     return (
@@ -466,7 +486,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   }
 
-  render() {
+  render(): any {
     const {
       issue,
       issueLoadingError,
@@ -501,6 +521,14 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
                 {isAttachFileDialogVisible && this.renderAttachFileDialog()}
 
                 {isTagsSelectVisible && this.renderTagsSelect()}
+
+                {this.state.isSplitView && (
+                  <ModalPortal
+                    onHide={() => this.toggleModalChildren()}
+                  >
+                    {this.state.modalChildren}
+                  </ModalPortal>
+                )}
               </View>
             );
           }}

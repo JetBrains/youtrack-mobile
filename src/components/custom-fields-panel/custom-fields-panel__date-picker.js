@@ -7,11 +7,12 @@ import {Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 
 import Header from '../header/header';
-import {IconClose} from '../icon/icon';
+import {IconClose, IconBack} from '../icon/icon';
 
 import styles from './custom-fields-panel.styles';
 
 type Props = {
+  modal?: boolean,
   emptyValueName?: ?string,
   onApply: (date, time) => any,
   onHide: () => void,
@@ -40,7 +41,7 @@ const DatePicker = (props: Props) => {
     <>
       <Header
         style={styles.customFieldEditorHeader}
-        leftButton={<IconClose size={21} color={styles.link.color}/>}
+        leftButton={props.modal ? <IconBack color={styles.link.color}/> : <IconClose size={21} color={styles.link.color}/>}
         onBack={props.onHide}
         title={props.title}
       />

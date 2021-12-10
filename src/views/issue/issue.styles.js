@@ -153,4 +153,7 @@ export default EStyleSheet.create({
   link: {
     color: '$link',
   },
+  issueModalCloseIcon: {
+    paddingHorizontal: UNIT,
+  },
 });

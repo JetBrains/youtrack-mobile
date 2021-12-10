@@ -19,6 +19,7 @@ import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
 import LinkedIssues from '../../components/linked-issues/linked-issues';
 import LinkedIssuesAddLink from '../../components/linked-issues/linked-issues-add-link';
 import LinkedIssuesTitle from '../../components/linked-issues/linked-issues-title';
+import ModalPortal from '../../components/modal-view/modal-portal';
 import Router from '../../components/router/router';
 import SummaryDescriptionForm from '../../components/form/summary-description-form';
 import TagAddPanel from '../../components/tags/tag-add-panel';
@@ -32,7 +33,6 @@ import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from '../../compo
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconCheck, IconClose, IconDrag, IconMoreOptions} from '../../components/icon/icon';
 import {isIOSPlatform} from '../../util/util';
-import {modalHide, modalShow} from '../../components/modal-view/modal-helper';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
@@ -58,6 +58,7 @@ type Props = CreateIssueState & typeof createIssueActions & AttachmentActions & 
 };
 
 type State = {
+  modalChildren: any,
   showAddTagSelect: boolean,
 };
 
@@ -67,11 +68,15 @@ class CreateIssue extends PureComponent<Props, State> {
   };
 
   uiTheme: UITheme;
-  state = {showAddTagSelect: false};
+  state = {
+    modalChildren: null,
+    showAddTagSelect: false,
+  };
 
   constructor(props) {
     super(props);
     usage.trackScreenView(ANALYTICS_ISSUE_CREATE_PAGE);
+    this.toggleSetModalChildren = this.toggleSetModalChildren.bind(this);
   }
 
   UNSAFE_componentWillMount() {
@@ -208,6 +213,10 @@ class CreateIssue extends PureComponent<Props, State> {
     return !!this.props.issue?.project?.id;
   }
 
+  toggleSetModalChildren(modalChildren: any = null) {
+    this.setState({modalChildren});
+  }
+
   renderLinksBlock() {
     const {
       issue,
@@ -217,6 +226,7 @@ class CreateIssue extends PureComponent<Props, State> {
       onUnlinkIssue,
       onLinkIssue,
       getIssueLinksTitle,
+      isSplitView,
     } = this.props;
     const renderLinkedIssues = (onHide: () => void) => (
       <LinkedIssues
@@ -234,19 +244,23 @@ class CreateIssue extends PureComponent<Props, State> {
         )}
         subTitle="Current issue"
         onHide={onHide}
+        onAddLink={(renderChildren: (() => any) => any) => {
+          if (isSplitView) {
+            this.toggleSetModalChildren(renderChildren(this.toggleSetModalChildren));
+          } else {
+            Router.Page({
+              children: renderChildren(onHide),
+            });
+          }
+        }}
       />
     );
 
     return <LinkedIssuesTitle
       issueLinks={issue.links}
       onPress={() => {
-        let modalId: string = '';
         if (this.props.isSplitView) {
-          modalId = modalShow(
-            renderLinkedIssues(
-              () => modalHide(modalId)),
-            {hasOverlay: false}
-          );
+          this.toggleSetModalChildren(renderLinkedIssues(this.toggleSetModalChildren));
         } else {
           Router.Page({
             children: renderLinkedIssues(() => Router.pop()),
@@ -285,25 +299,32 @@ class CreateIssue extends PureComponent<Props, State> {
     );
 
     return (
-      <TouchableOpacity
-        style={styles.addLinkButton}
-        onPress={() => {
-          if (this.props.isSplitView) {
-            let modalId: string = '';
-            modalId = modalShow(
-              renderAddLinkedIssue(() => modalHide(modalId)),
-              {hasOverlay: false},
-            );
-          } else {
-            Router.Page({
-              children: (renderAddLinkedIssue(() => Router.pop())),
-            });
-          }
-        }}
-      >
-        {iconLink}
-        <Text style={styles.addLinkButtonText}>Link issue</Text>
-      </TouchableOpacity>
+      <>
+        <TouchableOpacity
+          style={styles.addLinkButton}
+          onPress={() => {
+            if (this.props.isSplitView) {
+              this.toggleSetModalChildren(renderAddLinkedIssue(this.toggleSetModalChildren));
+            } else {
+              Router.Page({
+                children: (renderAddLinkedIssue(() => Router.pop())),
+              });
+            }
+          }}
+        >
+          {iconLink}
+          <Text style={styles.addLinkButtonText}>Link issue</Text>
+        </TouchableOpacity>
+
+        {this.props.isSplitView && (
+          <ModalPortal
+            hasOverlay={false}
+            onHide={() => this.toggleSetModalChildren(null)}
+          >
+            {this.state.modalChildren ? this.state.modalChildren : null}
+          </ModalPortal>
+        )}
+      </>
     );
   }
 
@@ -320,6 +341,7 @@ class CreateIssue extends PureComponent<Props, State> {
       isAttachFileDialogVisible,
       showCommandDialog,
       issuePermissions,
+      onHide = () => {},
     } = this.props;
 
     const isAttaching = attachingImage !== null;
@@ -351,7 +373,7 @@ class CreateIssue extends PureComponent<Props, State> {
                 onBack={this.onHide}
                 rightButton={rightButton}
                 extraButton={this.renderActionsIcon()}
-                onRightButtonClick={() => canCreateIssue && createIssue()}/>
+                onRightButtonClick={() => canCreateIssue && createIssue(onHide)}/>
 
               {this.renderCustomFieldPanel()}
 

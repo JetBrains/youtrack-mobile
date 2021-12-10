@@ -2,16 +2,19 @@
 
 import React from 'react';
 
-import {Issue, connectIssue} from './issue';
 import IssueModalDetails from './issue.modal__details';
+import {IconClose} from '../../components/icon/icon';
+import {Issue, connectIssue} from './issue';
+
+import styles from './issue.styles';
 
 import type {UITheme} from '../../flow/Theme';
 import type {IssueProps} from './issue';
-import {IconClose} from '../../components/icon/icon';
 
 type Props = {
   ...IssueProps,
   onHide: () => any,
+  modal?: boolean,
 };
 
 //$FlowFixMe
@@ -28,7 +31,7 @@ class IssueModal extends Issue<Props> {
   };
 
   renderBackIcon = () => {
-    return <IconClose size={21} color={this.uiTheme.colors.$link}/>;
+    return <IconClose style={styles.issueModalCloseIcon} size={21} color={this.uiTheme.colors.$link}/>;
   }
 
   renderDetails = (uiTheme: UITheme) => {
@@ -63,6 +66,7 @@ class IssueModal extends Issue<Props> {
 
       setCustomFieldValue,
       isTablet,
+      modal,
     } = this.props;
 
     return (
@@ -116,6 +120,7 @@ class IssueModal extends Issue<Props> {
 
         setCustomFieldValue={setCustomFieldValue}
         isTablet={isTablet}
+        modal={modal}
       />
     );
   };

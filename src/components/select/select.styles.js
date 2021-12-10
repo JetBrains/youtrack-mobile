@@ -19,6 +19,7 @@ export default EStyleSheet.create({
   },
   cancelButton: {
     minWidth: minButtonWidth,
+    paddingLeft: UNIT,
     color: '$link',
   },
   searchInput: {
@@ -79,7 +80,7 @@ export default EStyleSheet.create({
   applyButton: {
     minWidth: minButtonWidth,
     padding: UNIT,
-    paddingLeft: UNIT * 2,
+    paddingHorizontal: UNIT * 2,
   },
   link: {
     color: '$link',

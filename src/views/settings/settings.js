@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {View, Text, TouchableOpacity, Linking, TouchableWithoutFeedback} from 'react-native';
+import {View, Text, TouchableOpacity, Linking, TouchableWithoutFeedback, Dimensions} from 'react-native';
 
 import {connect} from 'react-redux';
 
@@ -10,13 +10,13 @@ import Accounts from '../../components/account/accounts';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
 import FeaturesView from '../../components/feature/features-view';
 import Header from '../../components/header/header';
+import ModalPortal from '../../components/modal-view/modal-portal';
 import Router from '../../components/router/router';
 import SettingsAppearance from './settings__appearance';
 import SettingsFeedbackForm from './settings__feedback-form';
 import usage, {VERSION_STRING} from '../../components/usage/usage';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {isSplitView} from '../../components/responsive/responsive-helper';
-import {modalHide, modalShow} from '../../components/modal-view/modal-helper';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import styles from './settings.styles';
@@ -41,18 +41,48 @@ type Props = {
 type State = {
   appearanceSettingsVisible: boolean,
   featuresSettingsVisible: boolean,
+  modalChildren: any,
 }
 
 class Settings extends PureComponent<Props, State> {
   CATEGORY_NAME: string = 'Settings';
+  unsubscribeOnDimensionsChange: Function;
+
   state = {
     appearanceSettingsVisible: false,
     featuresSettingsVisible: false,
+    isSplitView: isSplitView(),
+    modalChildren: null,
   };
 
   constructor(props) {
     super(props);
     usage.trackScreenView(this.CATEGORY_NAME);
+    this.toggleModalChildren = this.toggleModalChildren.bind(this);
+  }
+
+  onDimensionsChange: () => void = (): void => {
+    this.setState({isSplitView: isSplitView()});
+  }
+
+  componentDidMount() {
+    this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.onDimensionsChange);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeOnDimensionsChange.remove();
+  }
+
+  toggleModalChildren = (modalChildren: any = null) => this.setState({modalChildren});
+
+  renderModalPortal() {
+    return this.state.isSplitView && (
+      <ModalPortal
+        onHide={this.toggleModalChildren}
+      >
+        {this.state.modalChildren || null}
+      </ModalPortal>
+    );
   }
 
   render() {
@@ -74,14 +104,13 @@ class Settings extends PureComponent<Props, State> {
           const settingItems: Array<{ title: string, onPress: Function }> = [{
             title: 'Appearance',
             onPress: () => {
-              if (isSplitView()) {
-                let id: string = '';
-                id = modalShow(
+              if (this.state.isSplitView) {
+                this.toggleModalChildren((
                   <SettingsAppearance
                     isTablet={true}
-                    onHide={() => modalHide(id)}
+                    onHide={this.toggleModalChildren}
                   />
-                );
+                ));
               } else {
                 Router.Page({
                   children: <SettingsAppearance onHide={() => Router.pop()}/>});
@@ -159,6 +188,7 @@ class Settings extends PureComponent<Props, State> {
 
                 </View>
               </View>
+              {this.renderModalPortal()}
             </View>
           );
         }}

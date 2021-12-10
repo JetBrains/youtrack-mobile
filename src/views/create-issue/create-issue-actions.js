@@ -6,7 +6,6 @@ import * as commandDialogHelper from '../../components/command-dialog/command-di
 import ApiHelper from '../../components/api/api__helper';
 import issueCommonLinksActions from '../../components/issue-actions/issue-links-actions';
 import log from '../../components/log/log';
-import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
 import {actions} from './create-issue-reducers';
 import {ANALYTICS_ISSUE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
@@ -187,7 +186,7 @@ export function initializeWithDraftOrProject(preDefinedDraftId: ?string): ((disp
   };
 }
 
-export function createIssue(): (dispatch: (any) => any, getState: () => any, getApi: ApiGetter) => Promise<void> {
+export function createIssue(onHide: () => any): (dispatch: (any) => any, getState: () => any, getApi: ApiGetter) => Promise<void> {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(actions.startIssueCreation());
@@ -202,7 +201,7 @@ export function createIssue(): (dispatch: (any) => any, getState: () => any, get
       dispatch(propagateCreatedIssue(filledIssue, getState().creation.predefinedDraftId));
       dispatch(actions.resetCreation());
 
-      Router.pop(true);
+      onHide();
       clearIssueDraftStorage();
 
     } catch (err) {

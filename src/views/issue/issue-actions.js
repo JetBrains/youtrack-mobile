@@ -551,9 +551,7 @@ export function showIssueActions(
       actions.push({
         title: 'Link issue',
         execute: () => {
-          Router.Page({
-            children: renderLinkIssues(),
-          });
+          renderLinkIssues();
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Link issue');
         },
       });

@@ -7,15 +7,13 @@ import debounce from 'lodash.debounce';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
+import ModalPortal from '../modal-view/modal-portal';
 import ModalView from '../modal-view/modal-view';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
-import {hasOpenModal} from '../modal-view/modal-helper';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconBack, IconClose} from '../icon/icon';
 import {isTablet} from '../../util/util';
-import {Modal} from 'react-native-modals';
 
-import modalStyles from '../modal-view/modal.view.styles';
 import styles from './query-assist.styles';
 
 import type {Node} from 'React';
@@ -274,18 +272,11 @@ class QueryAssistModal extends QueryAssist<Props, State> {
 
   render(): Node {
     return (
-      <Modal
-        hasOverlay={!hasOpenModal()}
-        animationDuration={0}
-        modalStyle={modalStyles.modal}
-        containerStyle= {modalStyles.modalContainer}
-        visible={this.state.visible}
-        onTouchOutside={this.onClose}
+      <ModalPortal
+        onHide={this.onClose}
       >
-        <View style={modalStyles.modalContent}>
-          {this.renderQueryAssist()}
-        </View>
-      </Modal>
+        {this.renderQueryAssist()}
+      </ModalPortal>
     );
   }
 }

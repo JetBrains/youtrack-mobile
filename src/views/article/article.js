@@ -46,7 +46,6 @@ type Props = ArticleState & {
   storePrevArticle?: boolean,
   updateArticlesList: () => Function,
   lastVisitedArticle: ?Article,
-  isTablet: boolean,
 } & typeof articleActions;
 
 //$FlowFixMe
@@ -135,6 +134,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         excludeProject={excludeProject}
         withSeparator={withSeparator}
         withLast={withLast}
+        isSplitView={this.state.isSplitView}
       />
     );
   };
@@ -149,9 +149,8 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       issuePermissions,
       createSubArticle,
       onCheckboxUpdate,
-      isTablet,
     } = this.props;
-    const breadCrumbsElement = article && !isTablet ? this.renderBreadCrumbs() : null;
+    const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
 
     const articleNode: ?ArticleNode = articleData?.project && findArticleNode(
       articlesList, articleData.project.id, articleData?.id
@@ -211,7 +210,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
           isLoading={isLoading}
           uiTheme={this.uiTheme}
           onCheckboxUpdate={(articleContent: string) => onCheckboxUpdate(articleContent)}
-          isTablet={isTablet}
+          isSplitView={this.state.isSplitView}
         />
       </View>
     );
@@ -276,7 +275,6 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       isProcessing,
       showArticleActions,
       issuePermissions,
-      isTablet,
     } = this.props;
     const articleData: $Shape<ArticleEntity> = article || articlePlaceholder;
     if (!articleData) {
@@ -289,9 +287,9 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     const isArticleLoaded: boolean = !!article;
 
     const props: HeaderProps = {
-      leftButton: isTablet ? null : <IconBack color={isProcessing ? textSecondaryColor : linkColor}/>,
+      leftButton: this.state.isSplitView ? null : <IconBack color={isProcessing ? textSecondaryColor : linkColor}/>,
       onBack: () => {
-        if (!isTablet) {
+        if (!this.state.isSplitView) {
           if (isProcessing) {
             return;
           }
@@ -310,7 +308,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
         }),
         issuePermissions.canStar(),
         articleData.hasStar,
-        isTablet,
+        this.state.isSplitView,
       ),
     };
 
@@ -360,7 +358,6 @@ const mapStateToProps = (
     issuePermissions: state.app.issuePermissions,
     lastVisitedArticle: state.app?.user?.profiles?.articles?.lastVisitedArticle,
     articlesList: createArticleList(state.articles.articles || getStorageState().articles || []),
-    isTablet: state.app.isTablet,
   };
 };
 const mapDispatchToProps = (dispatch) => {
