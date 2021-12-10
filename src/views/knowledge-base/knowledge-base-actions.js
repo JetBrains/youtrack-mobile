@@ -7,7 +7,6 @@ import type ActionSheet from '@expo/react-native-action-sheet';
 import * as helper from './knowledge-base-helper';
 import * as treeHelper from '../../components/articles/articles-tree-helper';
 import animation from '../../components/animation/animation';
-import Router from '../../components/router/router';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
 import {confirmation} from '../../components/confirmation/confirmation';
 import {flushStoragePart, getStorageState} from '../../components/storage/storage';
@@ -367,7 +366,7 @@ const showContextActions = (
   actionSheet: ActionSheet,
   canCreateArticle: boolean,
   onShowMoreProjects: Function,
-  isTablet: boolean,
+  onCreateArticle: () => any,
 ): (() => Promise<void>) =>
   async () => {
     const actions: Array<ActionSheetOption> = [
@@ -381,7 +380,7 @@ const showContextActions = (
     if (canCreateArticle && getStorageState().projects.some((it:ArticleProject) => it.pinned)) {
       actions.unshift({
         title: 'New Article',
-        execute: () => Router.ArticleCreate({isNew: true, isTablet}),
+        execute: onCreateArticle,
       });
     }
 

@@ -44,7 +44,7 @@ export type ArticleNodeList = Array<ArticleNode>;
 export type ArticlesListItem = {
   title: ArticleProject | null,
   data: ArticleNodeList,
-  dataCollapsed: ArticleNodeList | null
+  dataCollapsed?: ArticleNodeList | null
 };
 
 export type ArticlesList = Array<ArticlesListItem>;
