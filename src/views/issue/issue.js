@@ -9,7 +9,7 @@ import {connect} from 'react-redux';
 import * as issueActions from './issue-actions';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 import ColorField from '../../components/color-field/color-field';
-import CommandDialog from '../../components/command-dialog/command-dialog';
+import CommandDialog, {CommandDialogModal} from '../../components/command-dialog/command-dialog';
 import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IssueActivity from './activity/issue__activity';
@@ -232,7 +232,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   };
 
-  isTabChangeEnabled() {
+  isTabChangeEnabled(): boolean {
     const {editMode, isSavingEditedIssue, isRefreshing, attachingImage} = this.props;
     return !editMode && !isSavingEditedIssue && !isRefreshing && !attachingImage;
   }
@@ -419,8 +419,8 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       commandIsApplying,
       initialCommand,
     } = this.props;
-
-    return <CommandDialog
+    const Component: any = this.state.isSplitView ? CommandDialogModal : CommandDialog;
+    return <Component
       suggestions={commandSuggestions}
       onCancel={closeCommandDialog}
       onChange={getCommandSuggestions}
@@ -448,25 +448,25 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     />
   );
 
-  cancelAddAttach = () => {
+  cancelAddAttach: () => void = (): void => {
     const {cancelAddAttach, toggleVisibleAddAttachDialog, attachingImage} = this.props;
     cancelAddAttach(attachingImage);
     toggleVisibleAddAttachDialog(false);
   };
 
-  addAttachment = async (files: Array<NormalizedAttachment>, onAttachingFinish: () => any) => {
+  addAttachment: (files: Array<NormalizedAttachment>, onAttachingFinish: () => any) => void = async (files: Array<NormalizedAttachment>, onAttachingFinish: () => any): any => {
     const {uploadIssueAttach, loadAttachments} = this.props;
     await uploadIssueAttach(files);
     onAttachingFinish();
     loadAttachments();
   };
 
-  isIssueLoaded = (): boolean => {
+  isIssueLoaded: () => boolean = (): boolean => {
     const {issueLoaded, issueLoadingError} = this.props;
     return Boolean(issueLoaded && !issueLoadingError);
   };
 
-  renderTagsSelect() {
+  renderTagsSelect(): any {
     const {selectProps} = this.props;
     const Component: any = this.state.isSplitView ? SelectModal : Select;
     return (
@@ -486,7 +486,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   }
 
-  render() {
+  render(): any {
     const {
       issue,
       issueLoadingError,
