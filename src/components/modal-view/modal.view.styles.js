@@ -2,6 +2,7 @@ import {StyleSheet} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
+import {boxShadow} from '../common-styles/shadow';
 import {UNIT} from '../variables/variables';
 
 const borderRadius = 22;
@@ -23,6 +24,7 @@ export default EStyleSheet.create({
     marginVertical: UNIT * 7,
     backgroundColor: '$background',
     borderRadius,
+    ...boxShadow,
   },
   modalContent: {
     overflow: 'hidden',
