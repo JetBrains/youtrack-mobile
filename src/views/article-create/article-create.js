@@ -47,7 +47,8 @@ type Props = {
   isNew?: boolean,
   originalArticleId?: string,
   breadCrumbs?: React$Element<any> | null,
-  isTablet: boolean,
+  isSplitView: boolean,
+  onHide: () => any,
 }
 
 const ArticleCreate = (props: Props) => {
@@ -137,7 +138,11 @@ const ArticleCreate = (props: Props) => {
     }
   };
 
-  const closeCreateArticleScreen = () => !isProcessing && Router.pop(true);
+  const closeCreateArticleScreen = () => {
+    if (!isProcessing) {
+      props.onHide();
+    }
+  };
 
   const renderHeader = () => {
     const draft: ArticleDraft = ({...articleDraft, ...articleDraftData}: any);
@@ -176,7 +181,7 @@ const ArticleCreate = (props: Props) => {
               articleCreateActions.publishArticleDraft(draft)
             );
             if (!error) {
-              if (props.isTablet) {
+              if (props.isSplitView) {
                 Router.KnowledgeBase({lastVisitedArticle: createdArticle});
               } else {
                 Router.KnowledgeBase({preventReload: true}); //TODO #YTM-12710. It fixes hanging after creating 2nd sub-article #YTM-12655

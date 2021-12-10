@@ -8,10 +8,12 @@ import {connect} from 'react-redux';
 
 import * as knowledgeBaseActions from './knowledge-base-actions';
 import Article from '../../views/article/article';
+import ArticleCreate from '../../views/article-create/article-create';
 import ArticleWithChildren from '../../components/articles/article-item-with-children';
 import ErrorMessage from '../../components/error-message/error-message';
 import KnowledgeBaseDrafts from './knowledge-base__drafts';
 import KnowledgeBaseSearchPanel from './knowledge-base__search';
+import ModalPortal from '../../components/modal-view/modal-portal';
 import Router from '../../components/router/router';
 import SelectSectioned from '../../components/select/select-sectioned';
 import Star from '../../components/star/star';
@@ -67,6 +69,7 @@ type State = {
   isHeaderPinned: boolean,
   isSelectVisible: boolean,
   isSplitView: boolean,
+  modalChildren: any,
 };
 
 const ERROR_MESSAGE_DATA: Object = {
@@ -97,8 +100,11 @@ export class KnowledgeBase extends Component<Props, State> {
       isSelectVisible: false,
       isSplitView: splitView,
       focusedArticle: splitView ? props.lastVisitedArticle : null,
+      modalChildren: null,
     };
     usage.trackScreenView(ANALYTICS_ARTICLES_PAGE);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.onCreateArticle = this.onCreateArticle.bind(this);
   }
 
   componentWillUnmount() {
@@ -503,6 +509,24 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
+  toggleModal(modalChildren: any = null) {
+    this.setState({modalChildren});
+  }
+
+  onCreateArticle() {
+    if (this.state.isSplitView) {
+      this.toggleModal(
+        <ArticleCreate
+          isNew={true}
+          isSplitView={this.state.isSplitView}
+          onHide={this.toggleModal}
+        />
+      );
+    } else {
+      Router.ArticleCreate({isNew: true, onHide: () => Router.pop(true)});
+    }
+  }
+
   renderArticleList: () => Node = (): Node => {
     const {isLoading, articlesList, error, showContextActions, issuePermissions} = this.props;
     return (
@@ -518,7 +542,7 @@ export class KnowledgeBase extends Component<Props, State> {
                     this.context.actionSheet(),
                     issuePermissions.articleCanCreateArticle(),
                     this.openProjectSelect,
-                    this.state.isSplitView,
+                    this.onCreateArticle,
                   );
                 }}
               >
@@ -597,6 +621,14 @@ export class KnowledgeBase extends Component<Props, State> {
               {!isSplitView && this.renderArticleList()}
 
               {this.state.isSelectVisible && this.renderProjectSelect()}
+
+              {this.state.isSplitView && (
+                <ModalPortal
+                  onHide={() => this.toggleModal()}
+                >
+                  {this.state.modalChildren}
+                </ModalPortal>
+              )}
             </View>
           );
         }}

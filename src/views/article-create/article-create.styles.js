@@ -9,7 +9,10 @@ export default EStyleSheet.create({
     flex: 1,
     backgroundColor: '$background',
   },
-  header: elevation1,
+  header: {
+    ...elevation1,
+    paddingHorizontal: UNIT * 2,
+  },
   content: {
     flex: 1,
     paddingHorizontal: UNIT * 2,
