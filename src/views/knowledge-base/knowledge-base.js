@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {Component} from 'react';
-import {RefreshControl, SectionList, Text, TouchableOpacity, View, ActivityIndicator} from 'react-native';
+import {RefreshControl, SectionList, Text, TouchableOpacity, View, ActivityIndicator, Dimensions} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -17,10 +17,12 @@ import SelectSectioned from '../../components/select/select-sectioned';
 import Star from '../../components/star/star';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
+import {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {getGroupedByFieldNameAlphabetically} from '../../components/search/sorting';
 import {getStorageState} from '../../components/storage/storage';
 import {IconAngleDown, IconAngleRight, IconBack, IconContextActions} from '../../components/icon/icon';
+import {isSplitView} from '../../components/responsive/responsive-helper';
 import {
   ICON_PICTOGRAM_DEFAULT_SIZE,
   IconNoProjectFound,
@@ -57,14 +59,14 @@ type Props = {
   issuePermissions: IssuePermissions,
   project?: ArticleProject,
   preventReload?: boolean,
-  isTablet: boolean,
   lastVisitedArticle?: ArticleSingle,
 }
 
 type State = {
-  focusedArticle: boolean,
+  focusedArticle: ?ArticleSingle,
   isHeaderPinned: boolean,
   isSelectVisible: boolean,
+  isSplitView: boolean,
 };
 
 const ERROR_MESSAGE_DATA: Object = {
@@ -85,22 +87,27 @@ export class KnowledgeBase extends Component<Props, State> {
   listRef: ?Object;
   uiTheme: UITheme;
   unsubscribe: Function = () => null;
+  unsubscribeOnDimensionsChange: EventSubscription;
 
   constructor(props: Props) {
     super(props);
+    const splitView: boolean = isSplitView();
     this.state = {
       isHeaderPinned: false,
       isSelectVisible: false,
-      focusedArticle: props.isTablet ? props.lastVisitedArticle : null,
+      isSplitView: splitView,
+      focusedArticle: splitView ? props.lastVisitedArticle : null,
     };
     usage.trackScreenView(ANALYTICS_ARTICLES_PAGE);
   }
 
   componentWillUnmount() {
+    this.unsubscribeOnDimensionsChange.remove();
     this.unsubscribe();
   }
 
   async componentDidMount() {
+    this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.setSplitView);
     this.unsubscribe = Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
       if (!this.props.preventReload && routeName === routeMap.KnowledgeBase && (
         prevRouteName === routeMap.Article ||
@@ -122,6 +129,10 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   }
 
+  setSplitView: () => void = (): void => {
+    this.setState({isSplitView: isSplitView()});
+  }
+
   loadArticlesList: ((reset?: boolean) => Promise<any>) = async (reset?: boolean) => this.props.loadArticleList(reset);
 
   scrollToProject: ((project: ArticleProject) => void) = (project: ArticleProject) => {
@@ -138,7 +149,7 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   };
 
-  updateFocusedArticle = (focusedArticle: ArticleSingle | null): void => {
+  updateFocusedArticle: (focusedArticle: ?ArticleSingle) => void = (focusedArticle: ?ArticleSingle): void => {
     this.setState({focusedArticle});
   };
 
@@ -211,7 +222,7 @@ export class KnowledgeBase extends Component<Props, State> {
       style={styles.itemArticle}
       article={item.data}
       onArticlePress={(article: ArticleSingle) => {
-        if (this.props.isTablet) {
+        if (this.state.isSplitView) {
           Router.KnowledgeBase({lastVisitedArticle: article, preventReload: true});
         } else {
           Router.Article({
@@ -220,7 +231,7 @@ export class KnowledgeBase extends Component<Props, State> {
         }
       }}
       onShowSubArticles={(article: ArticleSingle) => this.renderSubArticlesPage(article)}
-      isTablet={this.props.isTablet}
+      isSplitView={this.state.isSplitView}
     />
   );
 
@@ -400,7 +411,6 @@ export class KnowledgeBase extends Component<Props, State> {
         </TouchableOpacity>
         <TouchableOpacity
           testID="test:id/drafts"
-          estID="test:id/drafts"
           accessible={true}
           disabled={isLoading}
           hitSlop={HIT_SLOP}
@@ -493,8 +503,8 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
-  renderArticleList = () => {
-    const {isLoading, articlesList, error, showContextActions, issuePermissions, isTablet} = this.props;
+  renderArticleList: () => Node = (): Node => {
+    const {isLoading, articlesList, error, showContextActions, issuePermissions} = this.props;
     return (
       <>
         {
@@ -508,7 +518,7 @@ export class KnowledgeBase extends Component<Props, State> {
                     this.context.actionSheet(),
                     issuePermissions.articleCanCreateArticle(),
                     this.openProjectSelect,
-                    isTablet,
+                    this.state.isSplitView,
                   );
                 }}
               >
@@ -534,7 +544,7 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
-  renderFocusedArticle = () => {
+  renderFocusedArticle: () => Node = (): Node => {
     const {focusedArticle} = this.state;
 
     if (!this.props?.articlesList || this.props.articlesList.length === 0) {
@@ -553,7 +563,7 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
-  renderSplitView = () => {
+  renderSplitView: () => Node = (): Node => {
     return (
       <View style={styles.splitViewContainer}>
         <View style={styles.splitViewSide}>
@@ -567,7 +577,7 @@ export class KnowledgeBase extends Component<Props, State> {
   };
 
   render(): Node {
-    const {isTablet} = this.props;
+    const {isSplitView} = this.state;
 
     return (
       <ThemeContext.Consumer>
@@ -578,13 +588,13 @@ export class KnowledgeBase extends Component<Props, State> {
             <View
               style={[
                 styles.container,
-                isTablet ? styles.splitViewContainer : null,
+                isSplitView ? styles.splitViewContainer : null,
               ]}
               testID="articles"
             >
 
-              {isTablet && this.renderSplitView()}
-              {!isTablet && this.renderArticleList()}
+              {isSplitView && this.renderSplitView()}
+              {!isSplitView && this.renderArticleList()}
 
               {this.state.isSelectVisible && this.renderProjectSelect()}
             </View>
@@ -600,7 +610,6 @@ const mapStateToProps = (state: AppState) => {
     ...state.app,
     ...state.articles,
     issuePermissions: state.app.issuePermissions,
-    isTablet: state.app.isTablet,
   };
 };
 
