@@ -589,7 +589,6 @@ function subscribeToURL(): Action {
 
 export function initializeApp(config: AppConfigFilled, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
-    dispatch({type: types.SET_IS_TABLET, isTablet: DeviceInfo.isTablet()});
     if (Router._getNavigator()) {
       Router.Issues({
         isAppStart: true,
