@@ -48,6 +48,7 @@ import type {AppState} from '../reducers';
 import type {Article} from '../flow/Article';
 import type {AuthConfig, AuthParams, OAuthParams2} from '../flow/Auth';
 import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from '../flow/User';
+import type {NavigationNavigator} from 'react-navigation';
 import type {NotificationRouteData} from '../flow/Notification';
 import type {PermissionCacheItem} from '../flow/Permission';
 import type {StorageState} from '../components/storage/storage';
@@ -590,12 +591,27 @@ function subscribeToURL(): Action {
 
 export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
-    if (Router._getNavigator()) {
-      Router.Issues({
-        isAppStart: true,
-        isRedirecting: !!issueId,
+    const navigator: NavigationNavigator = Router._getNavigator();
+    const redirectToHomeScreen = () => navigator && Router.Home({
+      backendUrl: config.backendUrl,
+      error: null,
+      message: 'Connecting to YouTrack...',
+    });
+    try {
+      let authParams: ?AuthParams = null;
+      if (config) {
+        //eslint-disable-next-line no-unused-vars
+        const {type, auth}: { type: string, auth: OAuth2 } = dispatch(setAuth(config));
+        authParams = await auth.getCachedAuthParams();
+        auth.setAuthParams(authParams);
       }
-      );
+      if (navigator && config && authParams) {
+        Router.Issues({isAppStart: true, isRedirecting: !!issueId});
+      } else {
+        redirectToHomeScreen();
+      }
+    } catch (e) {
+      redirectToHomeScreen();
     }
 
     const refreshConfig: () => Promise<void> = async (): Promise<void> => {
@@ -671,7 +687,7 @@ export function setAccount(notificationRouteData: NotificationRouteData | Object
       }
     }
 
-    const targetConfig = getStorageState().config;
+    const targetConfig: ?AppConfig = getStorageState().config;
     if (targetConfig) {
       dispatch(initializeApp(
         targetConfig,
