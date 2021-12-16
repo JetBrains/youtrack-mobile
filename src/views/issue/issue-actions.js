@@ -9,11 +9,12 @@ import issueCommonLinksActions from '../../components/issue-actions/issue-links-
 import log from '../../components/log/log';
 import Router from '../../components/router/router';
 import usage from '../../components/usage/usage';
+import {actions} from './issue-reducers';
 import {ANALYTICS_ISSUE_PAGE} from '../../components/analytics/analytics-ids';
 import {attachmentActions, attachmentTypes} from './issue__attachment-actions-and-types';
 import {getEntityPresentation, getReadableID} from '../../components/issue-formatter/issue-formatter';
 import {getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
-import {initialState} from './issue-reducers';
+import {initialState} from './issue-base-reducer';
 import {isIOSPlatform, until} from '../../util/util';
 import {logEvent} from '../../components/log/log-helper';
 import {notify, notifyError} from '../../components/notification/notification';
@@ -23,88 +24,97 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 
 import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from '../../components/api/api';
+import type {AppState} from '../../reducers';
 import type {Attachment, CustomField, CustomFieldText, FieldValue, IssueProject, Tag} from '../../flow/CustomFields';
 import type {CommandSuggestionResponse, IssueFull, IssueOnList, OpenNestedViewParams} from '../../flow/Issue';
 import type {IssueLink} from '../../flow/CustomFields';
+import type {IssueState} from './issue-base-reducer';
 import type {NormalizedAttachment} from '../../flow/Attachment';
-import type {State as IssueState} from './issue-reducers';
 import type {UserAppearanceProfile} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
-import type {AppState} from '../../reducers';
+import type {CustomError} from '../../flow/Error';
 
 type ApiGetter = () => Api;
 type StateGetter = () => { issueState: IssueState };
 
 export function setIssueId(issueId: string): {issueId: string, type: any} {
-  return {type: types.SET_ISSUE_ID, issueId};
+  return actions.SET_ISSUE_ID({issueId});
 }
 
 export function startIssueRefreshing(): {type: any} {
-  return {type: types.START_ISSUE_REFRESHING};
+  return actions.START_ISSUE_REFRESHING();
 }
 
 export function stopIssueRefreshing(): {type: any} {
-  return {type: types.STOP_ISSUE_REFRESHING};
+  return actions.START_ISSUE_REFRESHING();
 }
 
 export function receiveIssue(issue: IssueFull): {issue: IssueFull, type: any} {
-  return {type: types.RECEIVE_ISSUE, issue};
+  return actions.RECEIVE_ISSUE({issue});
 }
 
 export function setIssueFieldValue(field: CustomField, value: FieldValue): {field: CustomField, type: any, value: FieldValue} {
-  return {type: types.SET_ISSUE_FIELD_VALUE, field, value};
+  return actions.SET_ISSUE_FIELD_VALUE({field, value});
 }
 
 export function setProject(project: IssueProject): {project: IssueProject, type: any} {
-  return {type: types.SET_PROJECT, project};
+  return actions.SET_PROJECT({project});
 }
 
 export function startEditingIssue(): {type: any} {
-  return {type: types.START_EDITING_ISSUE};
+  return actions.START_EDITING_ISSUE();
 }
 
 export function stopEditingIssue(): {type: any} {
-  return {type: types.STOP_EDITING_ISSUE};
+  return actions.STOP_EDITING_ISSUE();
 }
 
 export function setIssueSummaryAndDescription(summary: string, description: string): {description: string, summary: string, type: any} {
-  return {type: types.SET_ISSUE_SUMMARY_AND_DESCRIPTION, summary, description};
+  return actions.SET_ISSUE_SUMMARY_AND_DESCRIPTION({summary, description});
 }
 
 export function setIssueSummaryCopy(summary: string): {summary: string, type: any} {
-  return {type: types.SET_ISSUE_SUMMARY_COPY, summary};
+  return actions.SET_ISSUE_SUMMARY_COPY({summary});
 }
 
 export function setIssueDescriptionCopy(description: string): {description: string, type: any} {
-  return {type: types.SET_ISSUE_DESCRIPTION_COPY, description};
+  return actions.SET_ISSUE_DESCRIPTION_COPY({description});
 }
 
 export function startSavingEditedIssue(): {type: any} {
-  return {type: types.START_SAVING_EDITED_ISSUE};
+  return actions.START_SAVING_EDITED_ISSUE();
 }
 
 export function stopSavingEditedIssue(): {type: any} {
-  return {type: types.STOP_SAVING_EDITED_ISSUE};
+  return actions.STOP_SAVING_EDITED_ISSUE();
 }
 
 export function setVoted(voted: boolean): {type: any, voted: boolean} {
-  return {type: types.SET_VOTED, voted};
+  return actions.SET_VOTED({voted});
 }
 
 export function setStarred(starred: boolean): {starred: boolean, type: any} {
-  return {type: types.SET_STARRED, starred};
+  return actions.SET_STARRED({starred});
 }
 
 export function issueUpdated(issue: IssueFull): {issue: IssueFull, type: any} {
-  return {type: types.ISSUE_UPDATED, issue};
-}
-
-export function resetIssueView(): {type: any} {
-  return {type: types.RESET_SINGLE_ISSUE};
+  return actions.RECEIVE_ISSUE({issue});
 }
 
 export function unloadActiveIssueView(): {type: any} {
-  return {type: types.UNLOAD_ACTIVE_ISSUE_VIEW};
+  return actions.UNLOAD_ACTIVE_ISSUE_VIEW();
+}
+
+export function openTagsSelect(selectProps: any) {
+  return actions.OPEN_ISSUE_SELECT({selectProps});
+}
+
+export function closeTagsSelect(): { selectProps: null, isTagsSelectVisible: boolean} {
+  return actions.CLOSE_ISSUE_SELECT({selectProps: null});
+}
+
+export function setError(error: CustomError) {
+  return actions.RECEIVE_ISSUE_ERROR({error});
 }
 
 export function openCommandDialog(initialCommand: string = ''): {initialCommand: string, type: any} {
@@ -128,8 +138,9 @@ export function stopApplyingCommand(): {type: any} {
 }
 
 export function receiveIssueVisibility(visibility: Visibility): {type: any, visibility: Visibility} {
-  return {type: types.RECEIVE_ISSUE_VISIBILITY, visibility};
+  return actions.RECEIVE_ISSUE_VISIBILITY({visibility});
 }
+
 
 export function loadIssueAttachments(): ((
   dispatch: (any) => any,
@@ -178,7 +189,7 @@ export function loadIssue(): ((
       return issue;
     } catch (rawError) {
       const error = await resolveError(rawError);
-      dispatch({type: types.RECEIVE_ISSUE_ERROR, error});
+      dispatch(setError(error));
       log.warn('Failed to load issue', error);
     }
   };
@@ -201,10 +212,9 @@ export function getIssueLinksTitle(links?: Array<IssueLink>): ((
   getApi: ApiGetter
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    dispatch({
-      type: types.RECEIVE_ISSUE_LINKS,
-      issueLinks: links || await dispatch(loadIssueLinksTitle()),
-    });
+    dispatch(actions.RECEIVE_ISSUE_LINKS({
+      links: links || await dispatch(loadIssueLinksTitle()),
+    }));
   };
 }
 
@@ -761,12 +771,10 @@ export function updateIssueVisibility(visibility: Visibility): ((
 
 export function onCloseTagsSelect(): ((dispatch: (any) => any) => void) {
   return (dispatch: (any) => any) => {
-
-    dispatch({
-      type: types.CLOSE_ISSUE_SELECT,
+    dispatch(closeTagsSelect({
       selectProps: null,
       isTagsSelectVisible: false,
-    });
+    }));
   };
 }
 
@@ -776,35 +784,32 @@ export function onOpenTagsSelect(): ((dispatch: (any) => any, getState: StateGet
     const issue: IssueFull = getState().issueState.issue;
     usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open Tags select');
 
-    dispatch({
-      type: types.OPEN_ISSUE_SELECT,
-      selectProps: {
-        multi: true,
-        placeholder: 'Filter tags',
-        dataSource: async () => {
-          const issueProjectId: string = issue.project.id;
-          const [error, relevantProjectTags] = await until(api.issueFolder.getProjectRelevantTags(issueProjectId));
-          if (error) {
-            return [];
-          }
-          return relevantProjectTags;
-        },
-
-        selectedItems: issue?.tags || [],
-        getTitle: item => getEntityPresentation(item),
-        onCancel: () => dispatch(onCloseTagsSelect()),
-        onSelect: async (tags: Array<Tag>) => {
-          const [error, issueWithTags] = await until(api.issue.addTags(issue.id, tags));
-          dispatch(receiveIssue({...issue, tags: issueWithTags?.tags || []}));
-          dispatch(onCloseTagsSelect());
-          if (error) {
-            dispatch(receiveIssue(issue));
-            notify('Failed to add a tag');
-          }
-
-        },
+    dispatch(openTagsSelect({
+      multi: true,
+      placeholder: 'Filter tags',
+      dataSource: async () => {
+        const issueProjectId: string = issue.project.id;
+        const [error, relevantProjectTags] = await until(api.issueFolder.getProjectRelevantTags(issueProjectId));
+        if (error) {
+          return [];
+        }
+        return relevantProjectTags;
       },
-      isTagsSelectVisible: true,
-    });
+
+      selectedItems: issue?.tags || [],
+      getTitle: item => getEntityPresentation(item),
+      onCancel: () => dispatch(onCloseTagsSelect()),
+      onSelect: async (tags: Array<Tag>) => {
+        const [error, issueWithTags] = await until(api.issue.addTags(issue.id, tags));
+        dispatch(receiveIssue({...issue, tags: issueWithTags?.tags || []}));
+
+        dispatch(onCloseTagsSelect());
+        if (error) {
+          dispatch(receiveIssue(issue));
+          notify('Failed to add a tag');
+        }
+
+      },
+    }));
   };
 }

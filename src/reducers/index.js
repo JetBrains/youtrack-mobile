@@ -24,7 +24,7 @@ import type {InboxState} from '../views/inbox/inbox-reducers';
 import type {State as ActivityState} from '../views/issue/activity/issue-activity__reducers';
 import type {State as IssueCommentActivityState} from '../views/issue/activity/issue-activity__comment-reducers';
 import type {IssuesState} from '../views/issues/issues-reducers';
-import type {State as IssueState} from '../views/issue/issue-reducers';
+import type {IssueState} from '../views/issue/issue-base-reducer';
 
 export type AppState = {
   agile: AgilePageState,
