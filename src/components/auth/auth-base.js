@@ -15,7 +15,7 @@ import {STORAGE_AUTH_PARAMS_KEY} from '../storage/storage';
 import {USER_AGENT} from '../usage/usage';
 
 import type {AppConfig} from '../../flow/AppConfig';
-import type {AuthParams} from '../../flow/Auth';
+import type {AuthParams, RequestHeaders} from '../../flow/Auth';
 import type {CustomError} from '../../flow/Error';
 import type {User} from '../../flow/User';
 
@@ -123,10 +123,7 @@ export class AuthBase {
 
   async refreshToken(): Promise<any> {}
 
-  getAuthorizationHeaders(authParams: AuthParams = this.authParams): {
-    Authorization: string,
-    'User-Agent': string
-  } {
+  getAuthorizationHeaders(authParams: AuthParams = this.authParams): RequestHeaders {
     if (!authParams) {
       throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
     }

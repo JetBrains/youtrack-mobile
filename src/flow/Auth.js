@@ -41,3 +41,8 @@ export type OAuthParams2 = {
   ...OAuthParams,
   inAppLogin?: boolean
 };
+
+export type RequestHeaders = {
+  Authorization: string,
+  'User-Agent': string
+};
