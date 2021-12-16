@@ -1,14 +1,13 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 import sinon from 'sinon';
+import thunk from 'redux-thunk';
 
-import Mocks from '../../../test/mocks';
-
-import * as actions from './issue-actions';
 import * as activityCommentActions from './activity/issue-activity__comment-actions';
-import * as types from './issue-action-types';
-
 import * as activityHelper from './activity/issue-activity__helper';
+import * as issueActions from './issue-actions';
+import * as types from './issue-action-types';
+import Mocks from '../../../test/mocks';
+import {actions} from './issue-reducers';
 
 
 let apiMock;
@@ -46,12 +45,13 @@ describe('Issue view actions', () => {
   });
 
   it('should load issue', async () => {
-    await store.dispatch(actions.loadIssue());
+    await store.dispatch(issueActions.loadIssue());
 
     apiMock.issue.getIssue.should.have.been.calledWith(ISSUE_ID);
     const dispatched = store.getActions();
-    expect(dispatched[0]).toEqual({type: types.SET_ISSUE_ID, issueId: issueMock.id});
-    expect(dispatched[1]).toEqual({type: types.RECEIVE_ISSUE, issue: issueMock});
+
+    expect(dispatched[0]).toEqual({type: actions.SET_ISSUE_ID.type, payload: {issueId: issueMock.id}});
+    expect(dispatched[1]).toEqual({type: actions.RECEIVE_ISSUE.type, payload: {issue: issueMock}});
   });
 
   it('should add comment', async () => {
@@ -106,13 +106,13 @@ describe('Issue view actions', () => {
     });
 
     it('should refresh issue details', async () => {
-      await store.dispatch(actions.refreshIssue());
+      await store.dispatch(issueActions.refreshIssue());
 
       apiMock.issue.getIssue.should.have.been.calledWith(ISSUE_ID);
 
       const dispatched = store.getActions();
-      expect(dispatched[0]).toEqual({type: types.START_ISSUE_REFRESHING});
-      expect(dispatched[dispatched.length - 1]).toEqual({type: types.STOP_ISSUE_REFRESHING});
+      expect(dispatched[0]).toEqual({type: actions.START_ISSUE_REFRESHING.type});
+      expect(dispatched[dispatched.length - 1]).toEqual({type: actions.START_ISSUE_REFRESHING.type});
     });
 
   });

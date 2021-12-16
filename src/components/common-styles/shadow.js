@@ -39,7 +39,7 @@ export const elevationTop = {
 export const boxShadow = {
   ...Platform.select({
     ios: {
-      shadowColor: '$text',
+      shadowColor: '#000',
       shadowOffset: {
         width: 0,
         height: 0,
