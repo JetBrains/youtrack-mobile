@@ -22,18 +22,15 @@ import type {Theme} from '../../../flow/Theme';
 
 type ModalData = {
   children: any,
-  hasNoOverlay?: boolean,
 };
 
 type State = {
-  addLinkChildren: any,
   modalData: ModalData,
 }
 
 //$FlowFixMe
-export default class IssueModalDetails extends IssueDetails<IssueDetailsProps, State> {
+export default class IssueModalDetails extends IssueDetails<IssueDetailsProps & {stacked: boolean}, State> {
   state: State = {
-    addLinkChildren: null,
     modalData: {
       children: null,
     },
@@ -56,23 +53,24 @@ export default class IssueModalDetails extends IssueDetails<IssueDetailsProps, S
             : undefined
         )}
         subTitle={`${issue.idReadable} ${issue.summary}`}
-        onHide={this.onHideModalPortal}
-        closeIcon={<IconClose size={21} color={styles.link.color} style={stylesModal.backIcon}/>}
+        onHide={this.toggleModalData}
+        closeIcon={this.props.stacked ? null : <IconClose size={21} color={styles.link.color} style={stylesModal.backIcon}/>}
         onAddLink={(renderAddLink: (onHide: () => any) => any) => {
-          this.toggleAddLinkModal(
-            renderAddLink(this.toggleAddLinkModal)
-          );
+          const prevModalData: ModalData = this.state.modalData;
+          this.toggleModalData({
+            children: renderAddLink(() => this.toggleModalData(prevModalData)),
+          });
         }}
         onIssueLinkPress={(linkedIssue: IssueOnList) => {
           const prevModalData: ModalData = this.state.modalData;
           this.toggleModalData({
-            hasNoOverlay: false,
             children: <IssueModal
               issuePlaceholder={linkedIssue}
               issueId={linkedIssue.id}
-              onHide={this.onHideModalPortal}
+              onHide={this.toggleModalData}
               backIcon={<IconBack color={styles.link.color}/>}
               onBack={() => this.toggleModalData(prevModalData)}
+              stacked={true}
             />,
           });
         }}
@@ -85,11 +83,6 @@ export default class IssueModalDetails extends IssueDetails<IssueDetailsProps, S
     this.forceUpdate(); //TODO: investigate
   };
 
-  toggleAddLinkModal: (addLinkChildren?: any) => void = (addLinkChildren: any = null): void => {
-    this.setState({addLinkChildren});
-    this.forceUpdate(); //TODO: investigate
-  };
-
   renderLinksBlock: () => Node = () => {
     return (
       <LinkedIssuesTitle
@@ -99,29 +92,19 @@ export default class IssueModalDetails extends IssueDetails<IssueDetailsProps, S
     );
   };
 
-  onHideModalPortal: () => void = (): void => {
-    this.toggleModalData();
-    this.toggleAddLinkModal();
-  };
-
   render(): Node {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
-          const {addLinkChildren, modalData} = this.state;
           return <>
             {super.renderContent(theme.uiTheme)}
             <ModalPortal
-              onHide={this.onHideModalPortal}
-              hasOverlay={!modalData.hasNoOverlay}
+              hasOverlay={!this.props.stacked}
+              onHide={() => {
+                this.toggleModalData({children: null});
+              }}
             >
-              {modalData.children}
-            </ModalPortal>
-            <ModalPortal
-              hasOverlay={false}
-              onHide={this.onHideModalPortal}
-            >
-              {addLinkChildren}
+              {this.state.modalData.children}
             </ModalPortal>
           </>;
         }}

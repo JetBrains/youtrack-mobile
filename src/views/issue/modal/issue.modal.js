@@ -25,6 +25,7 @@ type Props = {
   onBack?: () => any,
   backIcon?: any,
   onNavigate?: (issue: IssueOnList) => any,
+  stacked?: boolean,
 };
 
 //$FlowFixMe
@@ -82,6 +83,7 @@ class IssueModal extends Issue<Props> {
 
       setCustomFieldValue,
       onNavigate,
+      stacked,
     } = this.props;
 
     return (
@@ -134,6 +136,7 @@ class IssueModal extends Issue<Props> {
 
         setCustomFieldValue={setCustomFieldValue}
         onNavigate={onNavigate}
+        stacked={stacked}
       />
     );
   };
