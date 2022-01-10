@@ -604,6 +604,7 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
         const {type, auth}: { type: string, auth: OAuth2 } = dispatch(setAuth(config));
         authParams = await auth.getCachedAuthParams();
         auth.setAuthParams(authParams);
+        setApi(new Api(auth));
       }
       if (navigator && config && authParams) {
         Router.Issues({isAppStart: true, isRedirecting: !!issueId});
