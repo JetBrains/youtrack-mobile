@@ -541,7 +541,7 @@ class AgileBoard extends Component<Props, State> {
               issuePlaceholder={this.state.issue}
               issueId={this.state.issue.id}
               onHide={onHide}
-              modal={true}
+              stacked={true}
             />
           )}
         </ModalPortal>
