@@ -81,7 +81,6 @@ class IssueModal extends Issue<Props> {
       getIssueLinksTitle,
 
       setCustomFieldValue,
-      isTablet,
       onNavigate,
     } = this.props;
 
@@ -134,7 +133,6 @@ class IssueModal extends Issue<Props> {
         onLinkIssue={this.props.onLinkIssue}
 
         setCustomFieldValue={setCustomFieldValue}
-        isTablet={isTablet}
         onNavigate={onNavigate}
       />
     );
