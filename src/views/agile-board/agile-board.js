@@ -15,7 +15,7 @@ import BoardHeader from './board-header';
 import BoardScroller from '../../components/board-scroller/board-scroller';
 import CreateIssue from '../create-issue/create-issue';
 import ErrorMessage from '../../components/error-message/error-message';
-import IssueModal from '../issue/issue.modal';
+import IssueModal from '../issue/modal/issue.modal';
 import log from '../../components/log/log';
 import ModalPortal from '../../components/modal-view/modal-portal';
 import QueryAssistPanel from '../../components/query-assist/query-assist-panel';

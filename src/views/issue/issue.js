@@ -3,10 +3,10 @@
 import React from 'react';
 import {RefreshControl, Text, View} from 'react-native';
 
-import {bindActionCreators} from 'redux';
+import {bindActionCreatorsExt} from '../../util/redux-ext';
 import {connect} from 'react-redux';
 
-import * as issueActions from './issue-actions';
+import createIssueActions, {dispatchActions} from './issue-actions';
 import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
 import ColorField from '../../components/color-field/color-field';
 import CommandDialog, {CommandDialogModal} from '../../components/command-dialog/command-dialog';
@@ -14,7 +14,7 @@ import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IssueActivity from './activity/issue__activity';
 import IssueDetails from './issue__details';
-import IssueDetailsModal from './issue.modal__details';
+import IssueDetailsModal from './modal/issue.modal__details';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
 import LinkedIssuesAddLink from '../../components/linked-issues/linked-issues-add-link';
 import ModalPortal from '../../components/modal-view/modal-portal';
@@ -40,6 +40,7 @@ import type {Attachment, IssueLink, Tag} from '../../flow/CustomFields';
 import type {AttachmentActions} from '../../components/attachments-row/attachment-actions';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
 import type {NormalizedAttachment} from '../../flow/Attachment';
+import type {RequestHeaders} from '../../flow/Auth';
 import type {RootState} from '../../reducers/app-reducer';
 import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
@@ -63,26 +64,28 @@ type AdditionalProps = {
 
 export type IssueProps = {
   ...IssueState,
-  ...(typeof issueActions),
+  ...(typeof dispatchActions),
   ...AttachmentActions,
   ...AdditionalProps
 };
 
 //$FlowFixMe
 export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
-  static contextTypes = {
+  static contextTypes: { actionSheet: Function } = {
     actionSheet: Function,
   };
 
-  CATEGORY_NAME = 'Issue';
-  imageHeaders = getApi().auth.getAuthorizationHeaders();
-  backendUrl = getApi().config.backendUrl;
-  renderRefreshControl = this._renderRefreshControl.bind(this);
+  CATEGORY_NAME: string = 'Issue';
+  imageHeaders: RequestHeaders = getApi().auth.getAuthorizationHeaders();
+  backendUrl: string = getApi().config.backendUrl;
+  renderRefreshControl: Function = this._renderRefreshControl.bind(this);
 
   constructor(props: IssueProps) {
     //$FlowFixMe
     super(props);
+    //$FlowFixMe
     this.onAddIssueLink = this.onAddIssueLink.bind(this);
+    //$FlowFixMe
     this.toggleModalChildren = this.toggleModalChildren.bind(this);
   }
 
@@ -538,7 +541,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   }
 }
 
-type OwnProps = {
+export type OwnProps = {
   issuePermissions: IssuePermissions,
   issuePlaceholder: $Shape<IssueFull>,
   issueId: string,
@@ -546,7 +549,7 @@ type OwnProps = {
   navigateToActivity: ?boolean
 };
 
-const mapStateToProps = (state: { app: RootState, issueState: IssueState }, ownProps: OwnProps): IssueState & OwnProps => {
+const mapStateToProps = (state: { app: RootState, issueState: IssueState }, ownProps: OwnProps): $Shape<IssueState & OwnProps> => {
   return ({
     issuePermissions: state.app.issuePermissions,
     ...state.issueState,
@@ -554,14 +557,19 @@ const mapStateToProps = (state: { app: RootState, issueState: IssueState }, ownP
     issueId: ownProps.issueId,
     user: state.app.user,
     navigateToActivity: ownProps.navigateToActivity,
-  }: $Shape<IssueState & OwnProps>);
+  });
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    ...bindActionCreators(issueActions, dispatch),
+    ...bindActionCreatorsExt(createIssueActions(), dispatch),
     createAttachActions: () => attachmentActions.createAttachActions(dispatch),
     dispatcher: dispatch,
+    setIssueId: (issueId) => dispatch(dispatchActions.setIssueId(issueId)),
+    setIssueSummaryCopy: (summary) => dispatch(dispatchActions.setIssueSummaryCopy(summary)),
+    setIssueDescriptionCopy: (description) => dispatch(dispatchActions.setIssueDescriptionCopy(description)),
+    stopEditingIssue: () => dispatch(dispatchActions.stopEditingIssue()),
+    closeCommandDialog: () => dispatch(dispatchActions.closeCommandDialog()),
   };
 };
 

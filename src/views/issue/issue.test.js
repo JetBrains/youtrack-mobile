@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 
 import * as activityCommentActions from './activity/issue-activity__comment-actions';
 import * as activityHelper from './activity/issue-activity__helper';
-import * as issueActions from './issue-actions';
+import createIssueActions from './issue-actions';
 import * as types from './issue-action-types';
 import Mocks from '../../../test/mocks';
 import {actions} from './issue-reducers';
@@ -13,6 +13,7 @@ import {actions} from './issue-reducers';
 let apiMock;
 const getApi = () => apiMock;
 const ISSUE_ID = 'test-id';
+const issueActions = createIssueActions();
 
 const mockStore = configureMockStore([thunk.withExtraArgument(getApi)]);
 
@@ -23,7 +24,6 @@ describe('Issue view actions', () => {
 
   beforeEach(() => {
     jest.restoreAllMocks();
-
     issueMock = {
       id: ISSUE_ID,
     };

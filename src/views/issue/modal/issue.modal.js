@@ -2,19 +2,29 @@
 
 import React from 'react';
 
+import {connect} from 'react-redux';
+
+import issueModalActions, {dispatchActions} from './issue.modal-actions';
 import IssueModalDetails from './issue.modal__details';
-import {IconClose} from '../../components/icon/icon';
-import {Issue, connectIssue} from './issue';
+import {attachmentActions} from '../issue__attachment-actions-and-types';
+import {bindActionCreatorsExt} from '../../../util/redux-ext';
+import {IconClose} from '../../../components/icon/icon';
+import {Issue} from '../issue';
 
-import styles from './issue.styles';
+import styles from '../issue.styles';
 
-import type {UITheme} from '../../flow/Theme';
-import type {IssueProps} from './issue';
+import type {IssueOnList} from '../../../flow/Issue';
+import type {IssueProps, OwnProps} from '../issue';
+import type {RootState} from '../../../reducers/app-reducer';
+import type {State as IssueState} from '../issue-reducers';
+import type {UITheme} from '../../../flow/Theme';
 
 type Props = {
   ...IssueProps,
   onHide: () => any,
-  modal?: boolean,
+  onBack?: () => any,
+  backIcon?: any,
+  onNavigate?: (issue: IssueOnList) => any,
 };
 
 //$FlowFixMe
@@ -22,7 +32,9 @@ class IssueModal extends Issue<Props> {
 
   //$FlowFixMe
   handleOnBack = () => {
-    if (this.props.onHide) {
+    if (this.props.onBack) {
+      this.props.onBack();
+    } else if (this.props.onHide) {
       this.props.onHide();
     } else {
       //$FlowFixMe
@@ -31,8 +43,12 @@ class IssueModal extends Issue<Props> {
   };
 
   renderBackIcon = () => {
-    return <IconClose style={styles.issueModalCloseIcon} size={21} color={this.uiTheme.colors.$link}/>;
-  }
+    return (
+      this.props.backIcon !== undefined
+        ? this.props.backIcon
+        : <IconClose style={styles.issueModalCloseIcon} size={21} color={this.uiTheme.colors.$link}/>
+    );
+  };
 
   renderDetails = (uiTheme: UITheme) => {
     const {
@@ -66,11 +82,10 @@ class IssueModal extends Issue<Props> {
 
       setCustomFieldValue,
       isTablet,
-      modal,
+      onNavigate,
     } = this.props;
 
     return (
-      //$FlowFixMe
       <IssueModalDetails
         loadIssue={loadIssue}
         openNestedIssueView={openNestedIssueView}
@@ -120,11 +135,35 @@ class IssueModal extends Issue<Props> {
 
         setCustomFieldValue={setCustomFieldValue}
         isTablet={isTablet}
-        modal={modal}
+        onNavigate={onNavigate}
       />
     );
   };
-
 }
 
-export default (connectIssue(IssueModal): React$AbstractComponent<Props, mixed>);
+const mapStateToProps = (state: { app: RootState, issueModalState: IssueState }, ownProps: OwnProps): IssueState & OwnProps => {
+  //$FlowFixMe
+  return ({
+    issuePermissions: state.app.issuePermissions,
+    ...state.issueModalState,
+    issuePlaceholder: ownProps.issuePlaceholder,
+    issueId: ownProps.issueId,
+    user: state.app.user,
+    navigateToActivity: ownProps.navigateToActivity,
+  }: $Shape<IssueState & OwnProps>);
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    ...bindActionCreatorsExt(issueModalActions(), dispatch),
+    createAttachActions: () => attachmentActions.createAttachActions(dispatch),
+    dispatcher: dispatch,
+    setIssueId: (issueId) => dispatch(dispatchActions.setIssueId(issueId)),
+    setIssueSummaryCopy: (summary) => dispatch(dispatchActions.setIssueSummaryCopy(summary)),
+    setIssueDescriptionCopy: (description) => dispatch(dispatchActions.setIssueDescriptionCopy(description)),
+    stopEditingIssue: () => dispatch(dispatchActions.stopEditingIssue()),
+    closeCommandDialog: () => dispatch(dispatchActions.closeCommandDialog()),
+  };
+};
+
+export default (connect(mapStateToProps, mapDispatchToProps)(IssueModal): React$AbstractComponent<Props, mixed>);

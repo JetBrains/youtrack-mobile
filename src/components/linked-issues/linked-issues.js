@@ -33,6 +33,7 @@ type Props = {
   onHide: () => void,
   onAddLink?: ((onHide: () => any) => any) => any,
   closeIcon?: any,
+  onIssueLinkPress?: (issue: IssueOnList) => any,
 }
 
 const LinkedIssues = (props: Props): Node => {
@@ -81,10 +82,14 @@ const LinkedIssues = (props: Props): Node => {
           style={styles.linkedIssue}
           issue={linkedIssue}
           onClick={() => {
-            Router.Issue({
-              issuePlaceholder: linkedIssue,
-              issueId: linkedIssue.id,
-            });
+            if (props.onIssueLinkPress) {
+              props.onIssueLinkPress(linkedIssue);
+            } else {
+              Router.Issue({
+                issuePlaceholder: linkedIssue,
+                issueId: linkedIssue.id,
+              });
+            }
           }}
         />
         {props.canLink && props.canLink(linkedIssue) && (

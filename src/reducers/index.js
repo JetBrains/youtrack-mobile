@@ -12,6 +12,7 @@ import inbox from '../views/inbox/inbox-reducers';
 import issueActivity from '../views/issue/activity/issue-activity__reducers';
 import issueCommentActivity from '../views/issue/activity/issue-activity__comment-reducers';
 import issueList from '../views/issues/issues-reducers';
+import issueModalState from '../views/issue/modal/issue.modal-reducers';
 import issueState from '../views/issue/issue-reducers';
 
 import type {AgilePageState} from '../views/agile-board/board-reducers';
@@ -38,6 +39,7 @@ export type AppState = {
   issueCommentActivity: IssueCommentActivityState,
   issueList: IssuesState,
   issueState: IssueState,
+  issueModalState: IssueState,
 };
 
 export default (combineReducers({
@@ -52,4 +54,5 @@ export default (combineReducers({
   issueCommentActivity,
   issueList,
   issueState,
+  issueModalState,
 }): any);
