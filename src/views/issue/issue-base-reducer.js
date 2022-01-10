@@ -2,12 +2,13 @@
 
 import {createSlice} from '@reduxjs/toolkit';
 
+import {attachmentActionMap} from '../../components/attachments-row/attachment-helper';
+
 import type {CommandSuggestionResponse, IssueFull} from '../../flow/Issue';
 import type {CustomField, FieldValue, IssueLink, IssueProject} from '../../flow/CustomFields';
 import type {SliceCaseReducers} from '@reduxjs/toolkit';
 import type {User} from '../../flow/User';
 import type {Visibility} from '../../flow/Visibility';
-import {attachmentActionMap} from '../../components/attachments-row/attachment-helper';
 
 export type IssueState = {
   attachingImage: ?Object,
@@ -24,42 +25,42 @@ export type IssueState = {
   issueLoaded: boolean,
   issueLoadingError: ?Error,
   isVisibilitySelectShown: boolean,
+  isTagsSelectVisible: boolean,
   selectProps: ?Object,
   showCommandDialog: boolean,
   suggestionsAreLoading: boolean,
   summaryCopy: string,
   unloadedIssueState: ?IssueState,
   updateUserAppearanceProfile: Function,
-  user: User,
+  user: User | null,
 };
 
 export const initialState: IssueState = {
-  unloadedIssueState: null,
-  issueId: '',
-  issue: null,
+  attachingImage: null,
+  commandIsApplying: false,
+  commandSuggestions: null,
+  descriptionCopy: '',
+  editMode: false,
+  initialCommand: '',
+  isAttachFileDialogVisible: false,
   isRefreshing: false,
+  isSavingEditedIssue: false,
+  issue: null,
+  issueId: '',
   issueLoaded: false,
   issueLoadingError: null,
-  editMode: false,
-  isSavingEditedIssue: false,
-  summaryCopy: '',
-  descriptionCopy: '',
-  suggestionsAreLoading: false,
-  showCommandDialog: false,
-  initialCommand: '',
-  commandSuggestions: null,
-  commandIsApplying: false,
   isVisibilitySelectShown: false,
+  isTagsSelectVisible: false,
   selectProps: null,
-  user: null,
+  showCommandDialog: false,
+  suggestionsAreLoading: false,
+  summaryCopy: '',
+  unloadedIssueState: null,
   updateUserAppearanceProfile: null,
-
-  attachingImage: null,
-  isAttachFileDialogVisible: false,
-  isTablet: false,
+  user: null,
 };
 
-type Actions = {
+export type IssueBaseActions = {
   SET_ISSUE_ID: (action: { payload: { issueId: string } }) => IssueState,
   START_ISSUE_REFRESHING: () => IssueState,
   STOP_ISSUE_REFRESHING: () => IssueState,
@@ -84,7 +85,7 @@ type Actions = {
 };
 
 
-export const createAttachmentReducer = (types: $Keys<typeof attachmentActionMap>) => ({
+export const createAttachmentReducer = (types: typeof attachmentActionMap) => ({
   [types.ATTACH_START_ADDING](state: IssueState, action: {attachingImage: Object}): IssueState {
     const {attachingImage} = action;
     return {
@@ -139,7 +140,7 @@ export const createAttachmentReducer = (types: $Keys<typeof attachmentActionMap>
 export const createIssueReduxSlice: (
   namespace: string,
   extraReducers: Object
-) => { actions: Actions, reducer: SliceCaseReducers } = (namespace: string = '', extraReducers: Object = {}) => createSlice({
+) => { actions: IssueBaseActions, reducer: SliceCaseReducers } = (namespace: string = '', extraReducers: Object = {}) => createSlice({
   name: `${namespace}/issue`,
   initialState,
   extraReducers,
@@ -202,7 +203,7 @@ export const createIssueReduxSlice: (
       state.summaryCopy = action.payload.summary;
     },
     SET_ISSUE_DESCRIPTION_COPY: (state: IssueState, action: { payload: { description: string } }) => {
-      state.descriptionCopy = action.payload.summary;
+      state.descriptionCopy = action.payload.description;
     },
     START_SAVING_EDITED_ISSUE: (state: IssueState) => {
       state.isSavingEditedIssue = true;
