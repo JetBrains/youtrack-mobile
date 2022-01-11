@@ -622,7 +622,7 @@ export class KnowledgeBase extends Component<Props, State> {
 
               {this.state.isSelectVisible && this.renderProjectSelect()}
 
-              {this.state.isSplitView && (
+              {isSplitView && (
                 <ModalPortal
                   onHide={() => this.toggleModal()}
                 >
