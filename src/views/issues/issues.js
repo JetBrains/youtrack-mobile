@@ -64,7 +64,8 @@ type Props = {
   api: Api,
   isAppStart?: boolean,
   isRedirecting?: boolean,
-  onOpenContextSelect: () => any
+  onOpenContextSelect: () => any,
+  focusedIssueId?: string,
 };
 
 
@@ -102,7 +103,7 @@ export class Issues extends Component<Props, State> {
     });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.onDimensionsChange);
     this.onDimensionsChange();
 
@@ -120,6 +121,10 @@ export class Issues extends Component<Props, State> {
         }
       }
     });
+
+    if (this.props.focusedIssueId) {
+      this.updateFocusedIssue({id: this.props.focusedIssueId});
+    }
   }
 
   componentDidUpdate(prevProps: Props): void {
@@ -209,7 +214,7 @@ export class Issues extends Component<Props, State> {
       <View
         style={[
           styles.row,
-          focusedIssue?.id === item.id ? styles.splitViewMainFocused : null,
+          focusedIssue?.id === item.id || focusedIssue?.id === item.idReadable ? styles.splitViewMainFocused : null,
         ]}
       >
         <IssueRow

@@ -12,7 +12,7 @@ import LongText from './text-renderer';
 import renderCode from './code-renderer';
 import Router from '../router/router';
 import {getApi} from '../api/api__instance';
-import {guid, isURLPattern} from '../../util/util';
+import {guid, isTablet, isURLPattern} from '../../util/util';
 import {hasMimeType} from '../mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from '../icon/icon';
 import {ResourceTypes} from '../api/api__resource-types';
@@ -120,7 +120,14 @@ function getMarkdownRules(
       <Text
         selectable={true}
         key={key}
-        onPress={() => Router.Issue({issueId: issueId.trim()})}
+        onPress={() => {
+          const id: string = issueId.trim();
+          if (isTablet) {
+            Router.Issues({focusedIssueId: id});
+          } else {
+            Router.Issue({issueId: id});
+          }
+        }}
         style={styles}>
         {issueId}
       </Text>
