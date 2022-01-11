@@ -6,10 +6,9 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import Header from '../../components/header/header';
 import {getStorageState} from '../../components/storage/storage';
 import {getSystemThemeMode, themes} from '../../components/theme/theme';
-import {IconBack, IconCheck, IconClose} from '../../components/icon/icon';
-import {ThemeContext} from '../../components/theme/theme-context';
-
 import {HIT_SLOP} from '../../components/common-styles/button';
+import {IconBack, IconCheck} from '../../components/icon/icon';
+import {ThemeContext} from '../../components/theme/theme-context';
 
 import styles from './settings.styles';
 
@@ -18,7 +17,7 @@ import type {Theme} from '../../flow/Theme';
 
 type Props = {
   onHide: () => any,
-  isTablet?: boolean,
+  backIcon?: any,
 }
 
 
@@ -56,11 +55,7 @@ const SettingsAppearance = (props: Props): Node => {
           <Header
             style={styles.elevation1}
             title="Appearance"
-            leftButton={(
-              props.isTablet
-                ? <IconClose size={21} color={theme.uiTheme.colors.$link}/>
-                : <IconBack color={theme.uiTheme.colors.$link}/>
-            )}
+            leftButton={props.backIcon || <IconBack color={theme.uiTheme.colors.$link}/>}
             onBack={props.onHide}
           />
 

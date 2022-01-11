@@ -16,7 +16,9 @@ import SettingsAppearance from './settings__appearance';
 import SettingsFeedbackForm from './settings__feedback-form';
 import usage, {VERSION_STRING} from '../../components/usage/usage';
 import {HIT_SLOP} from '../../components/common-styles/button';
+import {IconBack, IconClose} from '../../components/icon/icon';
 import {isSplitView} from '../../components/responsive/responsive-helper';
+import {isTablet} from '../../util/util';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import styles from './settings.styles';
@@ -42,6 +44,7 @@ type State = {
   appearanceSettingsVisible: boolean,
   featuresSettingsVisible: boolean,
   modalChildren: any,
+  isSplitView: boolean,
 }
 
 class Settings extends PureComponent<Props, State> {
@@ -80,7 +83,7 @@ class Settings extends PureComponent<Props, State> {
       <ModalPortal
         onHide={this.toggleModalChildren}
       >
-        {this.state.modalChildren || null}
+        {this.state.modalChildren}
       </ModalPortal>
     );
   }
@@ -104,13 +107,11 @@ class Settings extends PureComponent<Props, State> {
           const settingItems: Array<{ title: string, onPress: Function }> = [{
             title: 'Appearance',
             onPress: () => {
+              const backIcon: any = isTablet && isSplitView()
+                ? <IconClose size={21} color={theme.uiTheme.colors.$link}/>
+                : <IconBack color={theme.uiTheme.colors.$link}/>;
               if (this.state.isSplitView) {
-                this.toggleModalChildren((
-                  <SettingsAppearance
-                    isTablet={true}
-                    onHide={this.toggleModalChildren}
-                  />
-                ));
+                this.toggleModalChildren(<SettingsAppearance backIcon={backIcon} onHide={this.toggleModalChildren} />);
               } else {
                 Router.Page({
                   children: <SettingsAppearance onHide={() => Router.pop()}/>});
@@ -204,7 +205,6 @@ const mapStateToProps = (state: AppState, ownProps) => {
     otherAccounts: state.app.otherAccounts,
     isChangingAccount: state.app.isChangingAccount,
     features: state.app.features,
-    isTablet: state.app.isTablet,
   };
 };
 
