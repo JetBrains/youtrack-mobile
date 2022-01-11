@@ -171,7 +171,7 @@ async function loadYouTrackToken(): Promise<string | null> {
     log.info(logMessages.successReceivingYTToken);
     return youTrackToken;
   } catch (error) {
-    log.warn(`${logMessages.errorReceivingYTToken}::${error}`, error);
+    log.warn(`${logMessages.errorReceivingYTToken}`, error);
     return null;
   }
 }
