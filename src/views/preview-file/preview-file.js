@@ -171,9 +171,10 @@ const ImagePreview = (props: Props): Node => {
     <View style={styles.container}>
       <Header
         leftButton={<IconClose size={21} color={styles.link.color}/>}
-        extraButton={!error ? <View style={styles.headerFileName}>{renderOpenButton()}</View> : null}
         onBack={closeView}
-      />
+      >
+        {!error && <View>{renderOpenButton()}</View>}
+      </Header>
       {isImageAttach() && renderImageGallery()}
 
       {!isImageAttach() && renderVideo()}

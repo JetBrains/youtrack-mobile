@@ -11,9 +11,6 @@ export default (EStyleSheet.create({
     flex: 1,
     backgroundColor: '$background',
   },
-  headerFileName: {
-    width:'80%',
-  },
   preview: {
     position: 'relative',
     flexGrow: 1,
