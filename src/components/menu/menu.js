@@ -1,26 +1,30 @@
 /* @flow */
 
 import React, {Component} from 'react';
-import {View as AnimatedView} from 'react-native-animatable';
-import {connect} from 'react-redux';
+import {Dimensions} from 'react-native';
 
-import {checkVersion, FEATURE_VERSION} from '../feature/feature';
+import {connect} from 'react-redux';
+import {View as AnimatedView} from 'react-native-animatable';
+
 import Router from '../router/router';
+import {checkVersion, FEATURE_VERSION} from '../feature/feature';
 import {DEFAULT_THEME} from '../theme/theme';
 import {getStorageState} from '../storage/storage';
 import {IconBell, IconBoard, IconSettings, IconTask, IconKnowledgeBase} from '../icon/icon';
+import {isSplitView} from '../responsive/responsive-helper';
+import {isTablet} from '../../util/util';
 import {MenuItem} from './menu__item';
 import {routeMap} from '../../app-routes';
 
 import styles from './menu.styles';
 
-import type {Article} from '../../flow/Article';
-import type {UITheme} from '../../flow/Theme';
 import type {AppState} from '../../reducers';
+import type {Article} from '../../flow/Article';
+import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
+import type {UITheme} from '../../flow/Theme';
 
 type Props = {
   isDisabled: boolean,
-  isTablet: boolean,
   isVisible: boolean,
   lastVisitedArticle?: Article,
   uiTheme: UITheme,
@@ -28,7 +32,8 @@ type Props = {
 
 type State = {
   prevRouteName: ?string,
-  currentRouteName: ?string
+  currentRouteName: ?string,
+  isSplitView: boolean,
 }
 
 class Menu extends Component<Props, State> {
@@ -39,13 +44,15 @@ class Menu extends Component<Props, State> {
   };
 
   unsubscribeOnDispatch: Function;
+  unsubscribeOnDimensionsChange: EventSubscription;
 
-  constructor() {
-    super();
+  constructor(props: Props) {
+    super(props);
 
     this.state = {
       prevRouteName: null,
       currentRouteName: null,
+      isSplitView: isSplitView(),
     };
 
     this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: ?string, prevRouteName: ?string) => {
@@ -53,8 +60,17 @@ class Menu extends Component<Props, State> {
     });
   }
 
+  setSplitView: () => void = (): void => {
+    this.setState({isSplitView: isSplitView()});
+  }
+
+  componentDidMount() {
+    this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.setSplitView);
+  }
+
   componentWillUnmount() {
     this.unsubscribeOnDispatch();
+    this.unsubscribeOnDimensionsChange.remove();
   }
 
   setCurrentRouteName = (routeName: ?string, prevRouteName: ?string) => this.setState({
@@ -148,10 +164,10 @@ class Menu extends Component<Props, State> {
     if (this.canNavigateTo(routeMap.KnowledgeBase)) {
       const articleLastVisited = getStorageState().articleLastVisited;
       const article: ?Article = articleLastVisited && articleLastVisited.article;
-      if (article && isNotArticleView && !this.props.isTablet) {
+      if (article && isNotArticleView && !(isTablet)) {
         Router.ArticleSingle({articlePlaceholder: article});
       } else {
-        Router.KnowledgeBase(this.props.isTablet ? {lastVisitedArticle: article} : undefined);
+        Router.KnowledgeBase(isTablet ? {lastVisitedArticle: article} : undefined);
       }
     }
   };
@@ -222,7 +238,6 @@ class Menu extends Component<Props, State> {
 const mapStateToProps = (state: AppState) => {
   return {
     isDisabled: state.app.isChangingAccount,
-    isTablet: state.app.isTablet,
   };
 };
 
