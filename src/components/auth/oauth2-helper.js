@@ -26,6 +26,7 @@ const createConfig = (config: AppConfig, isRefresh: boolean = false): OAuthConfi
   let authConfiguration: OAuthConfig = {
     clientId: config.auth.clientId,
     clientSecret: config.auth.clientSecret,
+    dangerouslyAllowInsecureHttpRequests: true,
     redirectUrl: config.auth.landingUrl,
     serviceConfiguration: {
       authorizationEndpoint: `${config.auth.serverUri}/api/rest/oauth2/auth`,
@@ -39,7 +40,6 @@ const createConfig = (config: AppConfig, isRefresh: boolean = false): OAuthConfi
         access_type: 'offline',
         prompt: 'login',
       },
-      dangerouslyAllowInsecureHttpRequests: true,
       scopes: config.auth.scopes.split(' '),
       usePKCE: !config.auth.clientSecret,
     };
