@@ -11,6 +11,8 @@ export default EStyleSheet.create({
   container: {
     ...loginStylesForm.container,
     backgroundColor: '$background',
+    maxWidth: 600,
+    alignSelf: 'center',
   },
   input: {
     ...rowFormStyles.input,
