@@ -133,6 +133,7 @@ describe('Auth', function () {
           clientId: configMock.auth.clientId,
           clientSecret: configMock.auth.clientSecret,
           redirectUrl: configMock.auth.landingUrl,
+          dangerouslyAllowInsecureHttpRequests: true,
           serviceConfiguration: {
             authorizationEndpoint: `${configMock.auth.serverUri}/api/rest/oauth2/auth`,
             tokenEndpoint: `${configMock.auth.serverUri}/api/rest/oauth2/token`,
