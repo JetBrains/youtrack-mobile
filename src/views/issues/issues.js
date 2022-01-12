@@ -2,7 +2,6 @@
 
 import type {Node} from 'React';
 import {
-  ActivityIndicator,
   Dimensions,
   View,
   Text,
@@ -62,8 +61,6 @@ type Props = {
   ...IssuesActions,
   auth: Auth,
   api: Api,
-  isAppStart?: boolean,
-  isRedirecting?: boolean,
   onOpenContextSelect: () => any,
   focusedIssueId?: string,
 };
@@ -107,7 +104,7 @@ export class Issues extends Component<Props, State> {
     this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.onDimensionsChange);
     this.onDimensionsChange();
 
-    this.props.initializeIssuesList(this.props.isAppStart);
+    this.props.initializeIssuesList();
 
     this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
       if (prevRouteName === routeMap.Issues && routeName !== routeMap.Issues) {
@@ -237,7 +234,7 @@ export class Issues extends Component<Props, State> {
 
   _renderRefreshControl() {
     return <RefreshControl
-      refreshing={this.props.isRefreshing && !!this.props.isAppStart}
+      refreshing={this.props.isRefreshing}
       //$FlowFixMe
       onRefresh={this.props.refreshIssues}
       tintColor={this.theme.uiTheme.colors.$link}
@@ -388,7 +385,7 @@ export class Issues extends Component<Props, State> {
   hasIssues: () => boolean = (): boolean => this.props.issues?.length > 0;
 
   renderSearchQuery: () => Node = () => {
-    const {query, issuesCount, openSavedSearchesSelect, searchContext, isAppStart} = this.props;
+    const {query, issuesCount, openSavedSearchesSelect, searchContext} = this.props;
     return (
       <View style={styles.listHeader}>
         <View style={styles.listHeaderTop}>
@@ -410,12 +407,12 @@ export class Issues extends Component<Props, State> {
         </View>
 
         {this.hasIssues() && <View style={styles.toolbar}>
-          {!isAppStart && <IssuesCount issuesCount={issuesCount}/>}
-          {!isAppStart && <IssuesSortBy
+          <IssuesCount issuesCount={issuesCount}/>
+          <IssuesSortBy
             context={searchContext}
             onApply={(q: string) => {this.onQueryUpdate(q);}}
             query={query}
-          />}
+          />
         </View>}
       </View>
     );
@@ -555,7 +552,6 @@ export class Issues extends Component<Props, State> {
   };
 
   render(): Node {
-    const {isRedirecting} = this.props;
     const {isSplitView} = this.state;
     return (
       <ThemeContext.Consumer>
@@ -568,7 +564,6 @@ export class Issues extends Component<Props, State> {
             >
               {isSplitView && this.renderSplitView()}
               {!isSplitView && this.renderIssues()}
-              {isRedirecting && <ActivityIndicator color={styles.link.color} style={styles.loadingIndicator}/>}
               {this.renderModalPortal()}
             </View>
           );
@@ -578,7 +573,7 @@ export class Issues extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: AppState, ownProps: { isAppStart?: boolean }) => {
+const mapStateToProps = (state: AppState, ownProps: { focusedIssueId?: string, query?: string }) => {
   return {
     ...ownProps,
     ...state.issueList,

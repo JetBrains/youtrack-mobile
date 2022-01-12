@@ -322,19 +322,16 @@ export function refreshIssuesCount(): (dispatch: (any) => any, getState: () => a
   };
 }
 
-export function initializeIssuesList(isAppStart: boolean = false): ((dispatch: (any) => any) => Promise<void>) {
+export function initializeIssuesList(): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     await dispatch(readCachedIssues());
     dispatch({
       type: types.SET_SEARCH_CONTEXT,
       searchContext: getSearchContext(),
     });
-    if (!isAppStart) {
-      dispatch(refreshIssues());
-    }
+    dispatch(refreshIssues());
   };
 }
-
 export function loadMoreIssues(): ((
   dispatch: (any) => any,
   getState: () => any,

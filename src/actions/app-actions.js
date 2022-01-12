@@ -31,10 +31,12 @@ import {
   storageStateAuthParamsKey,
   storeAccounts,
 } from '../components/storage/storage';
+import {getCachedPermissions} from './app-actions-helper';
+import {getErrorMessage, isUnsupportedFeatureError} from '../components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from '../components/storage/storage__oauth';
 import {hasType} from '../components/api/api__resource-types';
-import {isIOSPlatform} from '../util/util';
-import {getErrorMessage, isUnsupportedFeatureError} from '../components/error/error-resolver';
+import {isIOSPlatform, isTablet} from '../util/util';
+import {isSplitView} from '../components/responsive/responsive-helper';
 import {loadConfig} from '../components/config/config';
 import {logEvent} from '../components/log/log-helper';
 import {normalizeAuthParams} from '../components/auth/oauth2-helper';
@@ -48,7 +50,6 @@ import type {AppState} from '../reducers';
 import type {Article} from '../flow/Article';
 import type {AuthConfig, AuthParams, OAuthParams2} from '../flow/Auth';
 import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from '../flow/User';
-import type {NavigationNavigator} from 'react-navigation';
 import type {NotificationRouteData} from '../flow/Notification';
 import type {PermissionCacheItem} from '../flow/Permission';
 import type {StorageState} from '../components/storage/storage';
@@ -424,7 +425,11 @@ export function loadUserPermissions(): Action {
   };
 }
 
-export function completeInitialization(issueId: string | null = null, navigateToActivity: boolean = false): Action {
+export function completeInitialization(
+  issueId: string | null = null,
+  navigateToActivity: boolean = false,
+  skipNavigateToRoute: boolean = false
+): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     log.debug('Completing initialization');
     await dispatch(loadUser());
@@ -432,7 +437,9 @@ export function completeInitialization(issueId: string | null = null, navigateTo
     await dispatch(cacheProjects());
     log.debug('Initialization completed');
 
-    Router.navigateToDefaultRoute(issueId ? {issueId, navigateToActivity} : null);
+    if (!skipNavigateToRoute) {
+      Router.navigateToDefaultRoute(issueId ? {issueId, navigateToActivity} : null);
+    }
 
     dispatch(loadWorkTimeSettings());
     dispatch(subscribeToPushNotifications());
@@ -589,14 +596,10 @@ function subscribeToURL(): Action {
   };
 }
 
-export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
-    const navigator: NavigationNavigator = Router._getNavigator();
-    const redirectToHomeScreen = () => navigator && Router.Home({
-      backendUrl: config.backendUrl,
-      error: null,
-      message: 'Connecting to YouTrack...',
-    });
+export function redirectToRoute(config: AppConfig, issueId: string | null): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<boolean> => {
+    let isRedirected: boolean = false;
+
     try {
       let authParams: ?AuthParams = null;
       if (config) {
@@ -605,15 +608,42 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
         authParams = await auth.getCachedAuthParams();
         auth.setAuthParams(authParams);
         setApi(new Api(auth));
-      }
-      if (navigator && config && authParams) {
-        Router.Issues({isAppStart: true, isRedirecting: !!issueId});
-      } else {
-        redirectToHomeScreen();
+
+        const cachedPermissions: ?Array<PermissionCacheItem> = getCachedPermissions();
+        if (cachedPermissions) {
+          await dispatch(setUserPermissions(cachedPermissions));
+        }
+
+        if (authParams && cachedPermissions) {
+          if ((isTablet && isSplitView()) || !issueId) {
+            isRedirected = true;
+            Router.Issues({focusedIssueId: issueId});
+          } else if (issueId) {
+            isRedirected = true;
+            Router.Issues();
+            Router.Issue({issueId});
+          }
+        }
       }
     } catch (e) {
-      redirectToHomeScreen();
     }
+
+    if (!isRedirected) {
+      Router.Home({
+        backendUrl: config.backendUrl,
+        error: null,
+        message: 'Connecting to YouTrack...',
+      });
+    }
+
+    return isRedirected;
+  };
+}
+
+export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
+
+    const isRedirectedToTargetRoute: boolean = await dispatch(redirectToRoute(config, issueId));
 
     const refreshConfig: () => Promise<void> = async (): Promise<void> => {
       const updatedConfig: AuthConfig = await loadConfig(config.backendUrl);
@@ -652,7 +682,7 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
-      await dispatch(completeInitialization(issueId, navigateToActivity));
+      await dispatch(completeInitialization(issueId, navigateToActivity, isRedirectedToTargetRoute));
     }
 
     dispatch(subscribeToURL());

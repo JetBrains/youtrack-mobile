@@ -13,6 +13,10 @@ function updateCachedPermissions(permissions: Array<PermissionCacheItem>): void 
   flushStoragePart({permissions});
 }
 
+function getCachedPermissions(): ?Array<PermissionCacheItem> {
+  return getStorageState().permissions;
+}
+
 async function loadPermissions(token_type: string, access_token: string, permissionsCacheUrl: string): Promise<Array<PermissionCacheItem>> {
   let permissions: Array<PermissionCacheItem> = [];
 
@@ -53,6 +57,7 @@ async function targetAccountToSwitchTo(targetBackendUrl: string = ''): Promise<S
 }
 
 export {
+  getCachedPermissions,
   updateCachedPermissions,
   loadPermissions,
   targetAccountToSwitchTo,
