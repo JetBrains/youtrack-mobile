@@ -139,8 +139,9 @@ const ArticleCreate = (props: Props) => {
   };
 
   const closeCreateArticleScreen = () => {
+    const {onHide = () => Router.pop(true)} = props;
     if (!isProcessing) {
-      props.onHide();
+      onHide();
     }
   };
 
