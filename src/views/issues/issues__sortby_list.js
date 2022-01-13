@@ -21,6 +21,9 @@ import styles from './issues.styles';
 
 import type {Folder} from '../../flow/User';
 import type {IssueFieldSortProperty, SearchSuggestions} from '../../flow/Sorting';
+import {isTablet} from '../../util/util';
+import {isSplitView} from '../../components/responsive/responsive-helper';
+import ModalPortal from '../../components/modal-view/modal-portal';
 
 
 type Props = {
@@ -28,6 +31,7 @@ type Props = {
   onApply: (sortProperties: Array<IssueFieldSortProperty>, query: string) => any,
   query: string,
   selectedSortProperties: Array<IssueFieldSortProperty>,
+  onBack?: () => any,
 };
 
 const MAX_SORT_ATTRIBUTES_AMOUNT: number = 4;
@@ -36,6 +40,7 @@ const MAX_SORT_ATTRIBUTES_AMOUNT: number = 4;
 const IssuesSortByList = (props: Props) => {
 
   const [selectedSortProperties, updateSelectedSortProperties] = useState([]);
+  const [modalChildren, updateModalChildren] = useState(null);
 
   useEffect(() => {
     updateSelectedSortProperties(props.selectedSortProperties);
@@ -116,6 +121,7 @@ const IssuesSortByList = (props: Props) => {
   };
 
 
+  const {onBack = () => Router.pop(true)} = props;
   if (!props?.selectedSortProperties?.length) {
     return null;
   }
@@ -125,27 +131,33 @@ const IssuesSortByList = (props: Props) => {
       <Header
         showShadow={true}
 
-        leftButton={<IconClose size={21} color={styles.link.color}/>}
-        onBack={() => Router.pop(true)}
+        leftButton={<IconClose size={21} color={styles.link.color} style={styles.sortIconBack}/>}
+        onBack={onBack}
 
-        rightButton={<IconCheck size={20} color={styles.link.color}/>}
+        rightButton={<IconCheck size={20} color={styles.link.color} style={styles.sortByListAddIcon}/>}
         onRightButtonClick={() => {
           applySorting(selectedSortProperties);
-          Router.pop();
+          onBack();
         }}
 
         extraButton={<TouchableOpacity
           style={styles.sortIconButton}
-          onPress={() => Router.PageModal({
-            children: (
-              <IssuesSortByAddAttribute
-                context={props.context}
-                selected={selectedSortProperties}
-                onApply={onUpdate}
-                query={props.query}
-              />
-            ),
-          })}
+          onPress={() => {
+            const isSplitViewMode: boolean = isTablet && isSplitView();
+            const issuesSortByAddAttribute = <IssuesSortByAddAttribute
+              context={props.context}
+              selected={selectedSortProperties}
+              onApply={onUpdate}
+              query={props.query}
+              onCancel={onBack}
+            />;
+
+            if (isSplitViewMode) {
+              updateModalChildren(issuesSortByAddAttribute);
+            } else {
+              Router.PageModal({children: issuesSortByAddAttribute});
+            }
+          }}
         >
           <IconAdd size={21} style={styles.sortByListAddIcon} color={styles.link.color}/>
         </TouchableOpacity>}
@@ -178,6 +190,10 @@ const IssuesSortByList = (props: Props) => {
         ItemSeparatorComponent={Select.renderSeparator}
         getItemLayout={Select.getItemLayout}
       />
+
+      <ModalPortal onHide={() => updateModalChildren()} hasOverlay={false}>
+        {modalChildren}
+      </ModalPortal>
     </View>
   );
 };

@@ -233,5 +233,8 @@ export default EStyleSheet.create({
     justifyContent: 'center',
     marginLeft: UNIT * 1.5,
   },
+  sortIconBack: {
+    paddingLeft: UNIT,
+  },
   loadingIndicator: StyleSheet.absoluteFillObject,
 });

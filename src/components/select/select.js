@@ -288,7 +288,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
     this.props.onCancel();
   }
 
-  render(): Node {
+  renderContent: () => Node = (): Node => {
     const {multi, autoFocus, style, placeholder, noFilter, header} = this.props;
     const WrapperComponent: any = this.getWrapperComponent();
     const wrapperProps: Object = this.getWrapperProps({
@@ -362,11 +362,15 @@ export class Select extends PureComponent<SelectProps, SelectState> {
       </WrapperComponent>
     );
   }
+
+  render(): Node {
+    return this.renderContent();
+  }
 }
 
 
 //$FlowFixMe
-export class SelectModal extends Select<SelectProps, SelectState> {
+export class SelectModal extends Select<SelectProps, SelectState & { visible: boolean }> {
 
   //$FlowFixMe
   constructor(props: SelectProps) {
@@ -378,41 +382,35 @@ export class SelectModal extends Select<SelectProps, SelectState> {
     };
   }
 
-  onHide = (): void => {
+  onHide: () => void = (): void => {
     this.setState({ visible: false });
   }
 
-  onCancel(): void {
-    //$FlowFixMe
-    super.onCancel();
+  onCancel: () => void = (): void => {
+    this.props.onCancel();
     this.onHide();
   }
 
-  onSelect(items: any): void {
-    //$FlowFixMe
-    super.onSelect(items);
+  onSelect: (items: any) => void = (item: any): void => {
+    this.props.onSelect(item);
     this.onHide();
   }
 
-  getWrapperProps(): null {
+  getWrapperProps: () => null = (): null => {
     return null;
   }
 
-  getWrapperComponent(): any {
+  getWrapperComponent: () => any = (): any => {
     return View;
   }
 
-  renderSelect(): Node {
-  //$FlowFixMe
-    return super.render();
-  }
-
-  render(): Node {
+  render: () => Node = (): Node => {
+    const {visible} = this.state;
     return (
       <ModalPortal
         onHide={this.onCancel}
       >
-        {this.renderSelect()}
+        {visible && this.renderContent()}
       </ModalPortal>
     );
   }

@@ -6,9 +6,12 @@ import {Text, TouchableOpacity} from 'react-native';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import IssuesSortByList from './issues__sortby_list';
+import ModalPortal from '../../components/modal-view/modal-portal';
 import Router from '../../components/router/router';
 import {doAssist, getSortPropertyName} from './issues__sortby-helper';
 import {IconAngleDown} from '../../components/icon/icon';
+import {isSplitView} from '../../components/responsive/responsive-helper';
+import {isTablet} from '../../util/util';
 
 import styles from './issues.styles';
 
@@ -27,6 +30,7 @@ const MAX_NUMBER_SORTING_PROPERTIES: number = 4;
 
 const IssuesSortBy = (props: Props) => {
   const [selectedSortProperties, updateSelectedSortProperties] = useState([]);
+  const [modalChildren, updateModalChildren] = useState(null);
   const mounted: { current: boolean } = useRef(false);
 
   const loadSortingProperties = useCallback(() => {
@@ -65,47 +69,64 @@ const IssuesSortBy = (props: Props) => {
   };
 
 
+  const isSplitViewMode: boolean = isTablet && isSplitView();
+  const issuesSortByListOnBack: () => void = () => {
+    if (isSplitViewMode) {
+      updateModalChildren(null);
+    } else {
+      Router.pop(true);
+    }
+  };
   return (
     selectedSortProperties?.length ? (
-      <AnimatedView
-        testID= "test:id/issuesSortBy"
-        accessibilityLabel= "issuesSortBy"
-        accessible={true}
-        useNativeDriver
-        duration={500}
-        animation="fadeIn"
-      >
-        <TouchableOpacity
-          style={[styles.toolbarAction, styles.toolbarActionSortBy]}
-          onPress={() => {
-            Router.PageModal({
-              children: (
-                <IssuesSortByList
-                  context={props.context}
-                  onApply={(sortProperties: Array<IssueFieldSortProperty>, query: string) => {
-                    updateSelectedSortProperties(sortProperties);
-                    props.onApply(query);
-                    if (sortProperties.length === 0) {
-                      loadSortingProperties();
-                      Router.pop();
-                    }
-                  }}
-                  query={props.query}
-                  selectedSortProperties={selectedSortProperties}
-                />
-              ),
-            });
-          }}
+      <>
+        <AnimatedView
+          testID= "test:id/issuesSortBy"
+          accessibilityLabel= "issuesSortBy"
+          accessible={true}
+          useNativeDriver
+          duration={500}
+          animation="fadeIn"
         >
-          <Text
-            style={[styles.toolbarText, styles.toolbarSortByText]}
-            numberOfLines={1}
+          <TouchableOpacity
+            style={[styles.toolbarAction, styles.toolbarActionSortBy]}
+            onPress={() => {
+              const issuesSortByList = <IssuesSortByList
+                context={props.context}
+                onApply={(sortProperties: Array<IssueFieldSortProperty>, query: string) => {
+                  updateSelectedSortProperties(sortProperties);
+                  props.onApply(query);
+                  if (sortProperties.length === 0) {
+                    loadSortingProperties();
+                    issuesSortByListOnBack();
+                  }
+                }}
+                onBack={issuesSortByListOnBack}
+                query={props.query}
+                selectedSortProperties={selectedSortProperties}
+              />;
+              if (isSplitViewMode) {
+                updateModalChildren(issuesSortByList);
+              } else {
+                Router.PageModal({
+                  children: issuesSortByList,
+                });
+              }
+            }}
           >
-            Sort by {createSortButtonTitle(selectedSortProperties)}
-          </Text>
-          <IconAngleDown size={20} color={styles.toolbarText.color}/>
-        </TouchableOpacity>
-      </AnimatedView>
+            <Text
+              style={[styles.toolbarText, styles.toolbarSortByText]}
+              numberOfLines={1}
+            >
+              Sort by {createSortButtonTitle(selectedSortProperties)}
+            </Text>
+            <IconAngleDown size={20} color={styles.toolbarText.color}/>
+          </TouchableOpacity>
+        </AnimatedView>
+        <ModalPortal onHide={() => updateModalChildren(null)}>
+          {modalChildren}
+        </ModalPortal>
+      </>
     ) : null
   );
 };
