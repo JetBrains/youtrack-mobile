@@ -24,8 +24,12 @@ import styles from './knowledge-base.styles';
 
 import type {Article, ArticleDraft} from '../../flow/Article';
 
+type Props = {
+  backIcon?: any,
+  onBack?: () => any,
+}
 
-const KnowledgeBaseDrafts = () => {
+const KnowledgeBaseDrafts = (props: Props) => {
   const dispatch = useDispatch();
   const [drafts, updateDrafts] = useState(null);
   const [isLoading, updateLoading] = useState(false);
@@ -79,14 +83,18 @@ const KnowledgeBaseDrafts = () => {
     );
   };
 
+  const {onBack = () => Router.pop()} = props;
   return (
     <View style={styles.content}>
       <Header
         title={'Drafts'}
         showShadow={true}
         leftButton={(
-          <TouchableOpacity onPress={() => !isDeleting && Router.pop()}>
-            <IconBack color={isDeleting ? styles.icon.color : styles.link.color}/>
+          <TouchableOpacity
+            disabled={isDeleting}
+            onPress={onBack}
+          >
+            {props.backIcon || <IconBack color={isDeleting ? styles.icon.color : styles.link.color}/>}
           </TouchableOpacity>
         )}
         rightButton={drafts && drafts.length > 0 ? (

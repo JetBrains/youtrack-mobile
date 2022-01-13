@@ -23,7 +23,7 @@ import {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubs
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {getGroupedByFieldNameAlphabetically} from '../../components/search/sorting';
 import {getStorageState} from '../../components/storage/storage';
-import {IconAngleDown, IconAngleRight, IconBack, IconContextActions} from '../../components/icon/icon';
+import {IconAngleDown, IconAngleRight, IconBack, IconClose, IconContextActions} from '../../components/icon/icon';
 import {isSplitView} from '../../components/responsive/responsive-helper';
 import {
   ICON_PICTOGRAM_DEFAULT_SIZE,
@@ -421,9 +421,20 @@ export class KnowledgeBase extends Component<Props, State> {
           disabled={isLoading}
           hitSlop={HIT_SLOP}
           style={styles.actionBarButton}
-          onPress={() => Router.Page({
-            children: <KnowledgeBaseDrafts/>,
-          })}
+          onPress={() => {
+            if (this.state.isSplitView) {
+              this.toggleModal(
+                <KnowledgeBaseDrafts
+                  backIcon={<IconClose size={21} color={styles.link.color}/>}
+                  onBack={() => this.toggleModal()}
+                />
+              );
+            } else {
+              return Router.Page({
+                children: <KnowledgeBaseDrafts/>,
+              });
+            }
+          }}
         >
           <Text style={styles.actionBarButtonText}>Drafts</Text>
           <IconAngleRight size={20} color={styles.actionBarButtonText.color}/>
