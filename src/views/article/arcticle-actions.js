@@ -532,24 +532,17 @@ const deleteAttachment = (attachmentId: string): ((
   };
 };
 
-const createSubArticle = (renderBreadCrumbs: Function): ((
+const createSubArticleDraft = (): ((
   dispatch: (any) => any,
   getState: () => AppState,
   getApi: ApiGetter
-) => Promise<void>) => {
+) => Promise<ArticleDraft | null>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     const {article} = getState().article;
 
     logEvent({message: 'Create sub-article', analyticsId: ANALYTICS_ARTICLE_PAGE});
-    const draft: ArticleDraft | null = await createArticleDraft(api, article, true);
-    if (draft) {
-      Router.ArticleCreate({
-        isNew: true,
-        articleDraft: draft,
-        breadCrumbs: renderBreadCrumbs(),
-      });
-    }
+    return await createArticleDraft(api, article, true);
   };
 };
 
@@ -574,7 +567,7 @@ const onCheckboxUpdate = (articleContent: string): Function =>
 
 export {
   clearArticle,
-  createSubArticle,
+  createSubArticleDraft,
   loadArticle,
   loadActivitiesPage,
   loadCachedActivitiesPage,

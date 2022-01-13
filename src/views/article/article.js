@@ -9,12 +9,14 @@ import {connect} from 'react-redux';
 import * as articleActions from './arcticle-actions';
 import ArticleActivities from './article__activity';
 import ArticleBreadCrumbs from './article__breadcrumbs';
+import ArticleCreate from '../article-create/article-create';
 import ArticleDetails from './article__details';
 import Badge from '../../components/badge/badge';
 import CreateUpdateInfo from '../../components/issue-tabbed/issue-tabbed__created-updated';
 import ErrorMessage from '../../components/error-message/error-message';
 import Header from '../../components/header/header';
 import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
+import ModalPortal from '../../components/modal-view/modal-portal';
 import Router from '../../components/router/router';
 import VisibilityControl from '../../components/visibility/visibility-control';
 import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
@@ -49,7 +51,7 @@ type Props = ArticleState & {
 } & typeof articleActions;
 
 //$FlowFixMe
-class Article extends IssueTabbed<Props, IssueTabbedState> {
+class Article extends IssueTabbed<Props, IssueTabbedState & { modalChildren: any }> {
   static contextTypes = {
     actionSheet: Function,
   };
@@ -139,6 +141,10 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
     );
   };
 
+  toggleModalChildren = (modalChildren: any = null) => {
+    this.setState({modalChildren});
+  }
+
   createArticleDetails = (articleData: Article, scrollData: Object) => {
     const {
       article,
@@ -147,7 +153,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
       isLoading,
       deleteAttachment,
       issuePermissions,
-      createSubArticle,
+      createSubArticleDraft,
       onCheckboxUpdate,
     } = this.props;
     const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
@@ -195,15 +201,36 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
           }
           onCreateArticle={
             issuePermissions.canUpdateArticle(article)
-              ? () => createSubArticle(() =>
-                <View style={styles.breadCrumbsItem}>
-                  {this.renderBreadCrumbs({
-                    style: styles.breadCrumbsCompact,
-                    withSeparator: true,
-                    withLast: true,
-                  })}
-                </View>
-              )
+              ? async () => {
+                const draft = await createSubArticleDraft();
+                if (!draft) {
+                  return;
+                }
+                const createParams = {
+                  isNew: true,
+                  articleDraft: draft,
+                  breadCrumbs: <View style={styles.breadCrumbsItem}>
+                    {this.renderBreadCrumbs({
+                      style: styles.breadCrumbsCompact,
+                      withSeparator: true,
+                      withLast: true,
+                    })}
+                  </View>,
+                };
+
+                if (this.state.isSplitView) {
+                  this.toggleModalChildren(
+                    <ArticleCreate
+                      {...createParams}
+                      onHide={this.toggleModalChildren}
+                      isSplitView={this.state.isSplitView}
+                    />
+                  );
+                } else {
+                  Router.ArticleCreate(createParams);
+                }
+
+              }
               : undefined
           }
           error={error}
@@ -340,6 +367,14 @@ class Article extends IssueTabbed<Props, IssueTabbedState> {
               {this.renderHeader()}
 
               {this.renderTabs(this.uiTheme)}
+
+              {this.state.isSplitView && (
+                <ModalPortal
+                  onHide={() => this.toggleModalChildren()}
+                >
+                  {this.state.modalChildren}
+                </ModalPortal>
+              )}
             </View>
           );
         }}
