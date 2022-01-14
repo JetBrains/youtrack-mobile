@@ -120,7 +120,8 @@ export class Issues extends Component<Props, State> {
     });
 
     if (this.props.focusedIssueId) {
-      this.updateFocusedIssue({id: this.props.focusedIssueId});
+      const focusedIssue = await this.props.loadIssue(this.props.focusedIssueId);
+      this.updateFocusedIssue(focusedIssue);
     }
   }
 

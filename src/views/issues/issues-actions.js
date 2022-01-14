@@ -289,6 +289,20 @@ export function loadIssues(query: string): ((
   };
 }
 
+export function loadIssue(issueId: string): ((dispatch: (any) => any, getState: () => any) => Promise<IssueFull | null>) {
+  return async (dispatch: (any) => any, getState: () => Promise<IssueFull | null>) => {
+    const cachedIssues: Array<AnyIssue>| null = getStorageState().issuesCache;
+    let issue: AnyIssue;
+    if (cachedIssues) {
+      issue = cachedIssues.find((it: AnyIssue) => it.id === issueId || it.idReadable === issueId);
+    }
+    if (!issue) {
+      issue = await issueUpdater.loadIssue(issueId);
+    }
+    return issue;
+  };
+}
+
 export function updateIssue(issueId: string): ((dispatch: (any) => any, getState: () => any) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object) => {
     const currentIssues: Array<AnyIssue> = getState().issueList.issues;
