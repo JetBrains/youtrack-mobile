@@ -68,10 +68,10 @@ const IssuesSortBy = (props: Props) => {
     );
   };
 
+  const isSplitViewMode: () => boolean = (): boolean => isTablet && isSplitView();
 
-  const isSplitViewMode: boolean = isTablet && isSplitView();
   const issuesSortByListOnBack: () => void = () => {
-    if (isSplitViewMode) {
+    if (isSplitViewMode()) {
       updateModalChildren(null);
     } else {
       Router.pop(true);
@@ -105,7 +105,7 @@ const IssuesSortBy = (props: Props) => {
                 query={props.query}
                 selectedSortProperties={selectedSortProperties}
               />;
-              if (isSplitViewMode) {
+              if (isSplitViewMode()) {
                 updateModalChildren(issuesSortByList);
               } else {
                 Router.PageModal({

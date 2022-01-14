@@ -149,7 +149,13 @@ const IssuesSortByList = (props: Props) => {
               selected={selectedSortProperties}
               onApply={onUpdate}
               query={props.query}
-              onCancel={onBack}
+              onHide={() => {
+                if (isSplitViewMode) {
+                  updateModalChildren(null);
+                } else {
+                  onBack();
+                }
+              }}
             />;
 
             if (isSplitViewMode) {

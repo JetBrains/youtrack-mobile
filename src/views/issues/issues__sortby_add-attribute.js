@@ -4,14 +4,11 @@ import React from 'react';
 import {View} from 'react-native';
 
 
-import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
 import {getApi} from '../../components/api/api__instance';
 import {getCustomFieldName} from '../../components/custom-field/custom-field-helper';
-import {isSplitView} from '../../components/responsive/responsive-helper';
-import {isTablet} from '../../util/util';
 
 import type API from '../../components/api/api';
 import type {Folder} from '../../flow/User';
@@ -22,7 +19,7 @@ type Props = {
   onApply: (sortProperties: Array<IssueFieldSortProperty>) => any,
   query: string,
   selected: Array<IssueFieldSortProperty>,
-  onCancel: () => any,
+  onHide: () => any,
 };
 
 
@@ -72,13 +69,6 @@ const IssuesSortByAddAttribute = (props: Props) => {
   };
 
   const renderSortPropertiesSelect = (): React$Element<typeof Select> => {
-    const hide = (): void => {
-      if (isTablet && isSplitView()) {
-        props.onCancel();
-      } else {
-        Router.pop(true);
-      }
-    };
     const selectProps = {
       multi: true,
       getWrapperComponent: () => View,
@@ -90,9 +80,9 @@ const IssuesSortByAddAttribute = (props: Props) => {
       dataSource: loadSortProperties,
       onSelect: (selectedItems: Array<IssueFieldSortProperty>) => {
         applySorting(selectedItems);
-        hide();
+        props.onHide();
       },
-      onCancel: hide,
+      onCancel: props.onHide,
     };
     return (
       <Select {...selectProps}/>
