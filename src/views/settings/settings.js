@@ -81,7 +81,7 @@ class Settings extends PureComponent<Props, State> {
   renderModalPortal() {
     return this.state.isSplitView && (
       <ModalPortal
-        onHide={this.toggleModalChildren}
+        onHide={() => this.toggleModalChildren()}
       >
         {this.state.modalChildren}
       </ModalPortal>
