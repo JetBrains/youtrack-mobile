@@ -381,6 +381,41 @@ export const createActions = (dispatchActions: any, stateFieldName: string = 'is
       };
     },
 
+    onOpenTagsSelect: function (): (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => void {
+      return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+        const api: Api = getApi();
+        const issue: IssueFull = getState()[stateFieldName].issue;
+        usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open Tags select');
+
+        dispatch(dispatchActions.openTagsSelect({
+          multi: true,
+          placeholder: 'Filter tags',
+          dataSource: async () => {
+            const issueProjectId: string = issue.project.id;
+            const [error, relevantProjectTags] = await until(api.issueFolder.getProjectRelevantTags(issueProjectId));
+            if (error) {
+              return [];
+            }
+            return relevantProjectTags;
+          },
+
+          selectedItems: issue?.tags || [],
+          getTitle: item => getEntityPresentation(item),
+          onCancel: () => dispatch(actions.onCloseTagsSelect()),
+          onSelect: async (tags: Array<Tag>) => {
+            const [error, issueWithTags] = await until(api.issue.addTags(issue.id, tags));
+            dispatch(dispatchActions.receiveIssue({...issue, tags: issueWithTags?.tags || []}));
+
+            dispatch(actions.onCloseTagsSelect());
+            if (error) {
+              dispatch(dispatchActions.receiveIssue(issue));
+              notify('Failed to add a tag');
+            }
+
+          },
+        }));
+      };
+    },
 
     showIssueActions: function (
       actionSheet: ActionSheet,
@@ -396,7 +431,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = 'is
         const api: Api = getApi();
         const {issue} = getState()[stateFieldName];
 
-        const actions = [
+        const actionSheetActions = [
           {
             title: 'Share…',
             execute: () => {
@@ -420,7 +455,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = 'is
         ];
 
         if (permissions.canEdit) {
-          actions.push({
+          actionSheetActions.push({
             title: 'Edit',
             execute: () => {
               dispatch(dispatchActions.startEditingIssue());
@@ -430,7 +465,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = 'is
         }
 
         if (permissions.canTag) {
-          actions.push({
+          actionSheetActions.push({
             title: 'Add tag',
             execute: () => {
               dispatch(actions.onOpenTagsSelect());
@@ -440,7 +475,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = 'is
         }
 
         if (permissions.canAttach) {
-          actions.push({
+          actionSheetActions.push({
             title: 'Attach file',
             execute: () => {
               switchToDetailsTab();
@@ -451,7 +486,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = 'is
         }
 
         if (typeof renderLinkIssues === 'function') {
-          actions.push({
+          actionSheetActions.push({
             title: 'Link issue',
             execute: () => {
               renderLinkIssues();
@@ -461,7 +496,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = 'is
         }
 
         if (permissions.canApplyCommand) {
-          actions.push({
+          actionSheetActions.push({
             title: 'Apply command…',
             execute: () => {
               dispatch(dispatchActions.openCommandDialog());
@@ -470,10 +505,10 @@ export const createActions = (dispatchActions: any, stateFieldName: string = 'is
           });
         }
 
-        actions.push({title: 'Cancel'});
+        actionSheetActions.push({title: 'Cancel'});
 
         const selectedAction = await showActions(
-          actions,
+          actionSheetActions,
           actionSheet,
           issue.idReadable,
           issue.summary.length > 155 ? `${issue.summary.substr(0, 153)}…` : issue.summary
@@ -675,42 +710,6 @@ export const createActions = (dispatchActions: any, stateFieldName: string = 'is
         dispatch(dispatchActions.closeTagsSelect({
           selectProps: null,
           isTagsSelectVisible: false,
-        }));
-      };
-    },
-
-    onOpenTagsSelect: function (): (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => void {
-      return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-        const api: Api = getApi();
-        const issue: IssueFull = getState()[stateFieldName].issue;
-        usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open Tags select');
-
-        dispatch(dispatchActions.openTagsSelect({
-          multi: true,
-          placeholder: 'Filter tags',
-          dataSource: async () => {
-            const issueProjectId: string = issue.project.id;
-            const [error, relevantProjectTags] = await until(api.issueFolder.getProjectRelevantTags(issueProjectId));
-            if (error) {
-              return [];
-            }
-            return relevantProjectTags;
-          },
-
-          selectedItems: issue?.tags || [],
-          getTitle: item => getEntityPresentation(item),
-          onCancel: () => dispatch(actions.onCloseTagsSelect()),
-          onSelect: async (tags: Array<Tag>) => {
-            const [error, issueWithTags] = await until(api.issue.addTags(issue.id, tags));
-            dispatch(dispatchActions.receiveIssue({...issue, tags: issueWithTags?.tags || []}));
-
-            dispatch(actions.onCloseTagsSelect());
-            if (error) {
-              dispatch(dispatchActions.receiveIssue(issue));
-              notify('Failed to add a tag');
-            }
-
-          },
         }));
       };
     },
