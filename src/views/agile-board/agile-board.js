@@ -392,6 +392,7 @@ class AgileBoard extends Component<Props, State> {
           if (isSplitVewEnabled) {
             this.toggleModalChildren(
               <CreateIssue
+                isSplitView={this.state.isSplitView}
                 onHide={this.clearModalChildren}
                 predefinedDraftId={draft.id}
               />
