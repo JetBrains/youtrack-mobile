@@ -79,8 +79,8 @@ type State = {
   offsetY: number,
   showAssist: boolean,
   clearQuery: boolean,
-  issue: ?IssueOnList,
   isSplitView: boolean,
+  modalChildren: any,
 };
 
 class AgileBoard extends Component<Props, State> {
@@ -105,6 +105,7 @@ class AgileBoard extends Component<Props, State> {
       showAssist: false,
       clearQuery: false,
       isSplitView: isSplitView(),
+      modalChildren: null,
     };
   }
 
@@ -186,12 +187,25 @@ class AgileBoard extends Component<Props, State> {
     />;
   }
 
+  toggleModalChildren(modalChildren: any = null) {
+    this.setState({modalChildren});
+  }
+
+  clearModalChildren = () => this.toggleModalChildren(null);
+
   _onTapIssue = (issue: IssueOnList) => {
     log.debug(`Opening issue "${issue.id}" from Agile Board`);
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
 
     if (isSplitView()) {
-      this.setState({issue});
+      this.setState({
+        modalChildren: <IssueModal
+          issuePlaceholder={issue}
+          issueId={issue.id}
+          onHide={this.clearModalChildren}
+          stacked={true}
+        />,
+      });
     } else {
       Router.Issue({
         issuePlaceholder: issue,
@@ -376,7 +390,12 @@ class AgileBoard extends Component<Props, State> {
           const isSplitVewEnabled: boolean = isSplitView();
           const draft: $Shape<IssueOnList> = await createCardForCell.apply(null, [...args, isSplitVewEnabled]);
           if (isSplitVewEnabled) {
-            Router.Modal({children: <CreateIssue predefinedDraftId={draft.id}/>});
+            this.toggleModalChildren(
+              <CreateIssue
+                onHide={this.clearModalChildren}
+                predefinedDraftId={draft.id}
+              />
+            );
           } else {
             Router.CreateIssue({predefinedDraftId: draft.id});
           }
@@ -531,26 +550,9 @@ class AgileBoard extends Component<Props, State> {
     );
   }
 
-  renderModalPortal = (): any => {
-    const onHide = () => this.setState({issue: null});
-    return (
-      this.state.isSplitView ? (
-        <ModalPortal onHide={onHide}>
-          {this.state.issue && (
-            <IssueModal
-              issuePlaceholder={this.state.issue}
-              issueId={this.state.issue.id}
-              onHide={onHide}
-              stacked={true}
-            />
-          )}
-        </ModalPortal>
-      ) : null
-    );
-  };
-
   render() {
     const {isSprintSelectOpen} = this.props;
+    const {isSplitView, modalChildren, showAssist} = this.state;
 
     return (
       <ThemeContext.Consumer>
@@ -570,9 +572,13 @@ class AgileBoard extends Component<Props, State> {
 
               {isSprintSelectOpen && this._renderSelect()}
 
-              {this.state.showAssist && this.renderSearchPanel()}
+              {showAssist && this.renderSearchPanel()}
 
-              {this.renderModalPortal()}
+              {isSplitView && (
+                <ModalPortal onHide={this.clearModalChildren}>
+                  {modalChildren}
+                </ModalPortal>
+              )}
 
             </View>
           );
