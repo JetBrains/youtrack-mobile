@@ -42,7 +42,7 @@ import type {Theme, UIThemeColors} from '../../flow/Theme';
 
 const CATEGORY_NAME = 'Choose server';
 const protocolRegExp = /^https?:/i;
-const CLOUD_DOMAIN = 'myjetbrains.com';
+const CLOUD_DOMAIN = ['myjetbrains.com', 'youtrack.cloud'];
 
 type Props = {
   serverUrl: string,
@@ -76,7 +76,7 @@ export class EnterServer extends Component<Props, State> {
 
   getPossibleUrls(enteredUrl: string): Array<string> {
     if (protocolRegExp.test(enteredUrl)) {
-      if (enteredUrl.indexOf('http:') === 0 && enteredUrl.indexOf(CLOUD_DOMAIN) !== -1) {
+      if (enteredUrl.indexOf('http:') === 0 && CLOUD_DOMAIN.some((it) => enteredUrl.indexOf(it) !== -1)) {
         enteredUrl = enteredUrl.replace('http:', 'https:');
         log.info('HTTP protocol was replaced for cloud instance', enteredUrl);
       }
