@@ -197,7 +197,7 @@ class AgileBoard extends Component<Props, State> {
     log.debug(`Opening issue "${issue.id}" from Agile Board`);
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
 
-    if (isSplitView()) {
+    if (this.state.isSplitView) {
       this.setState({
         modalChildren: <IssueModal
           issuePlaceholder={issue}
@@ -221,7 +221,7 @@ class AgileBoard extends Component<Props, State> {
       return null;
     }
 
-    return getScrollableWidth(sprint.board.columns, isSplitView() && this.state.zoomedIn);
+    return getScrollableWidth(sprint.board.columns, this.state.isSplitView && this.state.zoomedIn);
   };
 
   renderAgileSelector() {
@@ -327,7 +327,7 @@ class AgileBoard extends Component<Props, State> {
 
   _renderSelect() {
     const {selectProps} = this.props;
-    const Component: any = isSplitView() ? SelectModal : Select;
+    const Component: any = this.state.isSplitView ? SelectModal : Select;
     return (
       <Component
         getTitle={item => item.name}
@@ -387,9 +387,8 @@ class AgileBoard extends Component<Props, State> {
         canRunCommand={this.canRunCommand}
         onTapIssue={this._onTapIssue}
         onTapCreateIssue={async (...args): Promise<void> => {
-          const isSplitVewEnabled: boolean = isSplitView();
-          const draft: $Shape<IssueOnList> = await createCardForCell.apply(null, [...args, isSplitVewEnabled]);
-          if (isSplitVewEnabled) {
+          const draft: $Shape<IssueOnList> = await createCardForCell.apply(null, [...args, this.state.isSplitView]);
+          if (this.state.isSplitView) {
             this.toggleModalChildren(
               <CreateIssue
                 isSplitView={this.state.isSplitView}
