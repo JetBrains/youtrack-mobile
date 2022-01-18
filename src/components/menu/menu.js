@@ -12,7 +12,6 @@ import {DEFAULT_THEME} from '../theme/theme';
 import {getStorageState} from '../storage/storage';
 import {IconBell, IconBoard, IconSettings, IconTask, IconKnowledgeBase} from '../icon/icon';
 import {isSplitView} from '../responsive/responsive-helper';
-import {isTablet} from '../../util/util';
 import {MenuItem} from './menu__item';
 import {routeMap} from '../../app-routes';
 
@@ -164,10 +163,10 @@ class Menu extends Component<Props, State> {
     if (this.canNavigateTo(routeMap.KnowledgeBase)) {
       const articleLastVisited = getStorageState().articleLastVisited;
       const article: ?Article = articleLastVisited && articleLastVisited.article;
-      if (article && isNotArticleView && !(isTablet)) {
+      if (article && isNotArticleView && !this.state.isSplitView) {
         Router.ArticleSingle({articlePlaceholder: article});
       } else {
-        Router.KnowledgeBase(isTablet ? {lastVisitedArticle: article} : undefined);
+        Router.KnowledgeBase(this.state.isSplitView ? {lastVisitedArticle: article} : undefined);
       }
     }
   };
