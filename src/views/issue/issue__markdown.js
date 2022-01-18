@@ -38,7 +38,7 @@ function IssueMarkdown(props: Props) {
     </MarkdownView>;
   } else if (youtrackWiki?.description) {
     return <YoutrackWiki
-      {...Object.assign({uiTheme: theme.uiTheme}, {youtrackWiki}, attachments)}
+      {...Object.assign({uiTheme: theme.uiTheme}, youtrackWiki, attachments)}
     >
       {youtrackWiki.description}
     </YoutrackWiki>;
