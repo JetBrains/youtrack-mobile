@@ -438,7 +438,11 @@ export function completeInitialization(
     log.debug('Initialization completed');
 
     if (!skipNavigateToRoute) {
-      Router.navigateToDefaultRoute(issueId ? {issueId, navigateToActivity} : null);
+      if (isTablet && isSplitView()) {
+        Router.Issues({issueId});
+      } else {
+        Router.navigateToDefaultRoute(issueId ? {issueId, navigateToActivity} : null);
+      }
     }
 
     dispatch(loadWorkTimeSettings());

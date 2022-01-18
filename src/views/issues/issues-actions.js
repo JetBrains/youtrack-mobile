@@ -289,13 +289,14 @@ export function loadIssues(query: string): ((
   };
 }
 
-export function loadIssue(issueId: string): ((dispatch: (any) => any, getState: () => any) => Promise<IssueFull | null>) {
+export function getIssueFromCache(issueId: string): ?AnyIssue {
+  const cachedIssues: Array<AnyIssue> = getStorageState().issuesCache || [];
+  return cachedIssues.find((it: AnyIssue) => it.id === issueId || it?.idReadable === issueId);
+}
+
+export function loadIssue(issueId: string): ((dispatch: (any) => any, getState: () => any) => Promise<AnyIssue | null>) {
   return async (dispatch: (any) => any, getState: () => Promise<IssueFull | null>) => {
-    const cachedIssues: Array<AnyIssue>| null = getStorageState().issuesCache;
-    let issue: AnyIssue;
-    if (cachedIssues) {
-      issue = cachedIssues.find((it: AnyIssue) => it.id === issueId || it.idReadable === issueId);
-    }
+    let issue: ?AnyIssue = getIssueFromCache(issueId);
     if (!issue) {
       issue = await issueUpdater.loadIssue(issueId);
     }

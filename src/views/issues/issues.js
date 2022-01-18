@@ -31,6 +31,7 @@ import SelectSectioned from '../../components/select/select-sectioned';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
+import {getIssueFromCache} from './issues-actions';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconAdd, IconAngleDown, IconBookmark} from '../../components/icon/icon';
 import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound, IconNothingSelected} from '../../components/icon/icon-pictogram';
@@ -51,7 +52,7 @@ import type Api from '../../components/api/api';
 import type Auth from '../../components/auth/oauth2';
 import type {AppState} from '../../reducers';
 import type {ErrorMessageProps} from '../../components/error-message/error-message';
-import type {IssueOnList} from '../../flow/Issue';
+import type {AnyIssue, IssueOnList} from '../../flow/Issue';
 import type {IssuesState} from './issues-reducers';
 import type {Theme} from '../../flow/Theme';
 
@@ -69,7 +70,7 @@ type Props = {
 type State = {
   isEditQuery: boolean,
   clearSearchQuery: boolean,
-  focusedIssue: IssueOnList | null,
+  focusedIssue: ?AnyIssue,
   isSplitView: boolean,
   isCreateModalVisible: boolean,
 }
@@ -119,9 +120,10 @@ export class Issues extends Component<Props, State> {
       }
     });
 
-    if (this.props.focusedIssueId) {
-      const focusedIssue = await this.props.loadIssue(this.props.focusedIssueId);
-      this.updateFocusedIssue(focusedIssue);
+    const issueId: ?string = this.props.focusedIssueId;
+    if (issueId) {
+      const targetIssue: AnyIssue = getIssueFromCache(issueId) || ({id: issueId}: any);
+      this.updateFocusedIssue(targetIssue);
     }
   }
 
@@ -330,7 +332,7 @@ export class Issues extends Component<Props, State> {
     this.setState({clearSearchQuery});
   }
 
-  updateFocusedIssue(focusedIssue: IssueOnList | null) {
+  updateFocusedIssue(focusedIssue: ?AnyIssue) {
     this.setState({focusedIssue});
   }
 
