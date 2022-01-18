@@ -4,7 +4,9 @@ import React, {Component} from 'react';
 
 import AgileCard from '../../components/agile-card/agile-card';
 import BoardRow from '../../components/agile-row/agile-row';
+import {AGILE_TABLET_CARD_WIDTH} from '../../components/agile-common/agile-common';
 import {Draggable} from '../../components/draggable/';
+import {isSplitView} from '../../components/responsive/responsive-helper';
 
 import type {AgileBoardRow, Board, SprintFull} from '../../flow/Agile';
 import type {AnyIssue} from '../../flow/Issue';
@@ -75,6 +77,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
         data={issue.id}
         onPress={() => onTapIssue(issue)}
         disabled={!canDrag}
+        style={isSplitView() && {width: AGILE_TABLET_CARD_WIDTH}}
       >
         <AgileCard
           issue={issue}
