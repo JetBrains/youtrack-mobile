@@ -25,6 +25,7 @@ import type {Attachment, ImageDimensions, IssueProject} from '../../flow/CustomF
 import type {IssueFull} from '../../flow/Issue';
 import type {MarkdownNode} from '../../flow/Markdown';
 import type {UITheme} from '../../flow/Theme';
+import {isSplitView} from '../responsive/responsive-helper';
 
 export type Mentions = {
   articles: Array<Article>,
@@ -122,7 +123,7 @@ function getMarkdownRules(
         key={key}
         onPress={() => {
           const id: string = issueId.trim();
-          if (isTablet) {
+          if (isTablet && isSplitView()) {
             Router.Issues({focusedIssueId: id});
           } else {
             Router.Issue({issueId: id});
