@@ -15,6 +15,8 @@ import Draggable from './draggable';
 import {DragContext} from './drag-container';
 
 import type {DragContextType} from './drag-container';
+import {AGILE_TABLET_CARD_WIDTH} from '../agile-common/agile-common';
+import {isSplitView} from '../responsive/responsive-helper';
 
 export type ZoneInfo = {
   width: number,
@@ -166,7 +168,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
     withoutMoving.splice(placeholderIndex, 0, (
       <View
         key="placeholder"
-        style={this.placeholderStyles}
+        style={[this.placeholderStyles, {width: isSplitView() ? AGILE_TABLET_CARD_WIDTH : 'auth'}]}
       />
     ));
     return withoutMoving;
