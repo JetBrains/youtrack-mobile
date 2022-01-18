@@ -40,14 +40,14 @@ export function getColumnsWidthAsArray(columns: Array<BoardColumn> = []): Array<
     .map(col => col.collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : widthData.cardWidth);
 }
 
-export function getScrollableWidth(columns: Array<BoardColumn> = [], isTablet: boolean): number {
+export function getScrollableWidth(columns: Array<BoardColumn> = [], isSplitView: boolean): number {
   const widthData: WidthData = calculateWidthData();
 
   if (isAllColumnsCollapsed(columns)) {
     return widthData.windowWidth;
   }
 
-  if (isTablet) {
+  if (isSplitView) {
     return Math.max(
       AGILE_TABLET_EXPANDED_COLUMN_WIDTH * columns.length,
       widthData.windowWidth

@@ -11,7 +11,6 @@ import Router from '../../components/router/router';
 import {doAssist, getSortPropertyName} from './issues__sortby-helper';
 import {IconAngleDown} from '../../components/icon/icon';
 import {isSplitView} from '../../components/responsive/responsive-helper';
-import {isTablet} from '../../util/util';
 
 import styles from './issues.styles';
 
@@ -68,10 +67,8 @@ const IssuesSortBy = (props: Props) => {
     );
   };
 
-  const isSplitViewMode: () => boolean = (): boolean => isTablet && isSplitView();
-
   const issuesSortByListOnBack: () => void = () => {
-    if (isSplitViewMode()) {
+    if (isSplitView()) {
       updateModalChildren(null);
     } else {
       Router.pop(true);
@@ -105,7 +102,7 @@ const IssuesSortBy = (props: Props) => {
                 query={props.query}
                 selectedSortProperties={selectedSortProperties}
               />;
-              if (isSplitViewMode()) {
+              if (isSplitView()) {
                 updateModalChildren(issuesSortByList);
               } else {
                 Router.PageModal({

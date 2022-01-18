@@ -13,8 +13,9 @@ import {
 
 import log from '../log/log';
 import {flushStoragePart} from '../storage/storage';
-import {routeMap} from '../../app-routes';
+import {isSplitView} from '../responsive/responsive-helper';
 import {uuid} from '../../util/util';
+import {routeMap} from '../../app-routes';
 
 import type {
   NavigationNavigator,
@@ -84,20 +85,21 @@ class Router {
     return SlideFromRight;
   };
 
-  registerRoute({name, component, props, type, modal, dimmed}) {
+  registerRoute({name, component, props, type, modal, tabletComponentName}) {
     this.routes[name] = {
       screen: ({navigation}) => createElement(component, navigation.state.params),
       type,
       props,
       modal,
-      dimmed,
       defaultNavigationOptions: {
         gesturesEnabled: true,
       },
     };
 
     if (!this[name]) {
-      this[name] = (...args) => this.navigate(name, ...args);
+      this[name] = (...args) => {
+        this.navigate(tabletComponentName && isSplitView() ? tabletComponentName : name, ...args);
+      };
     }
   }
 

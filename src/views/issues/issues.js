@@ -50,9 +50,10 @@ import styles from './issues.styles';
 
 import type Api from '../../components/api/api';
 import type Auth from '../../components/auth/oauth2';
+import type {AnyIssue, IssueOnList} from '../../flow/Issue';
 import type {AppState} from '../../reducers';
 import type {ErrorMessageProps} from '../../components/error-message/error-message';
-import type {AnyIssue, IssueOnList} from '../../flow/Issue';
+import type {Folder} from '../../flow/User';
 import type {IssuesState} from './issues-reducers';
 import type {Theme} from '../../flow/Theme';
 
@@ -63,7 +64,7 @@ type Props = {
   auth: Auth,
   api: Api,
   onOpenContextSelect: () => any,
-  focusedIssueId?: string,
+  issueId?: string,
 };
 
 
@@ -120,18 +121,10 @@ export class Issues extends Component<Props, State> {
       }
     });
 
-    const issueId: ?string = this.props.focusedIssueId;
+    const issueId: ?string = this.props.issueId;
     if (issueId) {
       const targetIssue: AnyIssue = getIssueFromCache(issueId) || ({id: issueId}: any);
       this.updateFocusedIssue(targetIssue);
-    }
-  }
-
-  componentDidUpdate(prevProps: Props): void {
-    if (
-      prevProps?.searchContext && prevProps?.searchContext?.id !== this.props?.searchContext?.id ||
-      prevProps?.query !== undefined && prevProps?.query !== this.props?.query) {
-      this.updateFocusedIssue(null);
     }
   }
 
@@ -292,12 +285,19 @@ export class Issues extends Component<Props, State> {
 
   renderContextSelect(): any {
     const {selectProps} = this.props;
-
+    const {onSelect, ...restSelectProps} = selectProps;
+    const sp: any = {
+      ...restSelectProps,
+      onSelect: async (selectedContext: Folder) => {
+        this.updateFocusedIssue(null);
+        onSelect(selectedContext);
+      },
+    };
     if (selectProps.isOwnSearches) {
       return (
         <SelectSectioned
           getTitle={item => item.name + (item.shortName ? ` (${item.shortName})` : '')}
-          {...selectProps}
+          {...sp}
         />
       );
     }
@@ -305,7 +305,7 @@ export class Issues extends Component<Props, State> {
     return (
       <Select
         getTitle={item => item.name + (item.shortName ? ` (${item.shortName})` : '')}
-        {...selectProps}
+        {...sp}
       />
     );
   }
@@ -576,7 +576,7 @@ export class Issues extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: AppState, ownProps: { focusedIssueId?: string, query?: string }) => {
+const mapStateToProps = (state: AppState, ownProps: { issueId?: string, query?: string }) => {
   return {
     ...ownProps,
     ...state.issueList,

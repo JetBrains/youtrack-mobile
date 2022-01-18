@@ -35,7 +35,7 @@ import {getCachedPermissions} from './app-actions-helper';
 import {getErrorMessage, isUnsupportedFeatureError} from '../components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from '../components/storage/storage__oauth';
 import {hasType} from '../components/api/api__resource-types';
-import {isIOSPlatform, isTablet} from '../util/util';
+import {isIOSPlatform} from '../util/util';
 import {isSplitView} from '../components/responsive/responsive-helper';
 import {loadConfig} from '../components/config/config';
 import {logEvent} from '../components/log/log-helper';
@@ -438,11 +438,7 @@ export function completeInitialization(
     log.debug('Initialization completed');
 
     if (!skipNavigateToRoute) {
-      if (isTablet && isSplitView()) {
-        Router.Issues({issueId});
-      } else {
-        Router.navigateToDefaultRoute(issueId ? {issueId, navigateToActivity} : null);
-      }
+      Router.navigateToDefaultRoute(issueId ? {issueId, navigateToActivity} : null);
     }
 
     dispatch(loadWorkTimeSettings());
@@ -619,9 +615,9 @@ export function redirectToRoute(config: AppConfig, issueId: string | null): Acti
         }
 
         if (authParams && cachedPermissions) {
-          if ((isTablet && isSplitView()) || !issueId) {
+          if ((isSplitView()) || !issueId) {
             isRedirected = true;
-            Router.Issues({focusedIssueId: issueId});
+            Router.Issues({issueId});
           } else if (issueId) {
             isRedirected = true;
             Router.Issues();

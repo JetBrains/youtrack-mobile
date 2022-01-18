@@ -10,20 +10,19 @@ import Header from '../../components/header/header';
 import IconAscending from '../../components/icon/assets/ascending.svg';
 import IconDescending from '../../components/icon/assets/descending.svg';
 import IssuesSortByAddAttribute from './issues__sortby_add-attribute';
+import ModalPortal from '../../components/modal-view/modal-portal';
 import Router from '../../components/router/router';
 import Select from '../../components/select/select';
 import usage from '../../components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
 import {doAssist, getSortPropertyName, isRelevanceSortProperty} from './issues__sortby-helper';
 import {EllipsisVertical, IconAdd, IconCheck, IconClose} from '../../components/icon/icon';
+import {isSplitView} from '../../components/responsive/responsive-helper';
 
 import styles from './issues.styles';
 
 import type {Folder} from '../../flow/User';
 import type {IssueFieldSortProperty, SearchSuggestions} from '../../flow/Sorting';
-import {isTablet} from '../../util/util';
-import {isSplitView} from '../../components/responsive/responsive-helper';
-import ModalPortal from '../../components/modal-view/modal-portal';
 
 
 type Props = {
@@ -143,7 +142,7 @@ const IssuesSortByList = (props: Props) => {
         extraButton={<TouchableOpacity
           style={styles.sortIconButton}
           onPress={() => {
-            const isSplitViewMode: boolean = isTablet && isSplitView();
+            const isSplitViewMode: boolean = isSplitView();
             const issuesSortByAddAttribute = <IssuesSortByAddAttribute
               context={props.context}
               selected={selectedSortProperties}

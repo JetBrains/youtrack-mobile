@@ -12,7 +12,7 @@ import LongText from './text-renderer';
 import renderCode from './code-renderer';
 import Router from '../router/router';
 import {getApi} from '../api/api__instance';
-import {guid, isTablet, isURLPattern} from '../../util/util';
+import {guid, isURLPattern} from '../../util/util';
 import {hasMimeType} from '../mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from '../icon/icon';
 import {ResourceTypes} from '../api/api__resource-types';
@@ -25,7 +25,6 @@ import type {Attachment, ImageDimensions, IssueProject} from '../../flow/CustomF
 import type {IssueFull} from '../../flow/Issue';
 import type {MarkdownNode} from '../../flow/Markdown';
 import type {UITheme} from '../../flow/Theme';
-import {isSplitView} from '../responsive/responsive-helper';
 
 export type Mentions = {
   articles: Array<Article>,
@@ -122,12 +121,7 @@ function getMarkdownRules(
         selectable={true}
         key={key}
         onPress={() => {
-          const id: string = issueId.trim();
-          if (isTablet && isSplitView()) {
-            Router.Issues({focusedIssueId: id});
-          } else {
-            Router.Issue({issueId: id});
-          }
+          Router.Issue({issueId: issueId.trim()});
         }}
         style={styles}>
         {issueId}

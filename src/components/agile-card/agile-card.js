@@ -8,7 +8,7 @@ import Avatar from '../avatar/avatar';
 import Tags from '../tags/tags';
 import {getPriotityField, getAssigneeField} from '../issue-formatter/issue-formatter';
 import {getStorageState} from '../storage/storage';
-import {isTablet} from '../../util/util';
+import {isSplitView} from '../responsive/responsive-helper';
 import {UNIT} from '../variables/variables';
 
 import styles from './agile-card.styles';
@@ -90,7 +90,7 @@ export default class AgileCard extends PureComponent<Props, void> {
           style,
           dragging && ([styles.dragging, !zoomedIn && styles.draggingZoomedOut]),
           {height: agileCardHeight - cardBottomMargin},
-          isTablet && zoomedIn ? styles.cardTablet : null,
+          isSplitView() && zoomedIn ? styles.cardTablet : null,
         ]}>
           <View style={[
             styles.cardColorCoding,

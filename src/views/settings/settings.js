@@ -18,7 +18,6 @@ import usage, {VERSION_STRING} from '../../components/usage/usage';
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {IconBack, IconClose} from '../../components/icon/icon';
 import {isSplitView} from '../../components/responsive/responsive-helper';
-import {isTablet} from '../../util/util';
 import {ThemeContext} from '../../components/theme/theme-context';
 
 import styles from './settings.styles';
@@ -107,9 +106,11 @@ class Settings extends PureComponent<Props, State> {
           const settingItems: Array<{ title: string, onPress: Function }> = [{
             title: 'Appearance',
             onPress: () => {
-              const backIcon: any = isTablet && isSplitView()
-                ? <IconClose size={21} color={theme.uiTheme.colors.$link}/>
-                : <IconBack color={theme.uiTheme.colors.$link}/>;
+              const backIcon: any = (
+                isSplitView()
+                  ? <IconClose size={21} color={theme.uiTheme.colors.$link}/>
+                  : <IconBack color={theme.uiTheme.colors.$link}/>
+              );
               if (this.state.isSplitView) {
                 this.toggleModalChildren(<SettingsAppearance backIcon={backIcon} onHide={this.toggleModalChildren} />);
               } else {

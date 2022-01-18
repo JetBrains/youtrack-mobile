@@ -6,7 +6,6 @@ import helper, {PushNotifications} from './push-notifications-helper';
 import log from '../log/log';
 import Router from '../router/router';
 import {isSplitView} from '../responsive/responsive-helper';
-import {isTablet} from '../../util/util';
 import {targetAccountToSwitchTo} from '../../actions/app-actions-helper';
 
 import type EmitterSubscription from 'react-native/Libraries/vendor/emitter/_EmitterSubscription';
@@ -41,8 +40,8 @@ export default class PushNotificationsProcessor extends PushNotifications {
         log.info(`On notification open:: switched to target account`);
         } else if (issueId) {
           log.info(`On notification open:: redirecting to ${issueId}`);
-          if (isTablet && isSplitView()) {
-            Router.Issues({focusedIssueId: issueId});
+          if (isSplitView()) {
+            Router.Issues({issueId});
           } else {
             Router.Issue({
               issueId,
