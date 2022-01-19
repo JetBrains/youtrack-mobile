@@ -9,7 +9,6 @@ export default EStyleSheet.create({
 
   container: {
     ...loginStylesForm.container,
-    backgroundColor: '$background',
   },
   title: {
     ...loginStylesForm.title,

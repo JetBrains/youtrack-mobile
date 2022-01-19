@@ -8,6 +8,7 @@ export const containerPadding = UNIT * 4;
 export const rowFormStyles = {
   scrollContainer: {
     flexGrow: 1,
+    backgroundColor: '$background',
   },
   container: {
     flexGrow: 1,

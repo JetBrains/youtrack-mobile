@@ -1,17 +1,20 @@
+import {formStyles, containerPadding, rowFormStyles} from './form';
 import {UNIT} from '../variables/variables';
-import {formStyles, containerPadding} from './form';
 
 export const loginStylesForm = {
   scrollContainer: {
-    flexGrow: 1,
+    ...rowFormStyles.scrollContainer,
   },
   container: {
     flexGrow: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
+    alignSelf: 'center',
+    maxWidth: '100%',
     paddingTop: containerPadding,
     paddingLeft: containerPadding,
     paddingRight: containerPadding,
+    backgroundColor: '$background',
   },
   backIconButtonContainer: {
     position: 'absolute',

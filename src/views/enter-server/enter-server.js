@@ -162,7 +162,10 @@ export class EnterServer extends Component<Props, State> {
               testID="enterServer"
               keyboardShouldPersistTaps="handled"
               keyboardDismissMode="on-drag"
-              contentContainerStyle={styles.scrollContainer}
+              contentContainerStyle={[styles.scrollContainer, {
+                alignItems: 'center',
+                justifyContent: 'center',
+              }]}
             >
               <View style={styles.container}>
                 <View style={styles.backIconButtonContainer}>
@@ -208,7 +211,7 @@ export class EnterServer extends Component<Props, State> {
                     onChangeText={(serverUrl) => this.setState({serverUrl})}/>
 
                   <TouchableOpacity
-                    style={[styles.button, isDisabled ? formStyles.buttonDisabled : null]}
+                    style={[formStyles.button, isDisabled ? formStyles.buttonDisabled : null]}
                     disabled={isDisabled}
                     testID="test:id/next"
                     accessibilityLabel="next"
