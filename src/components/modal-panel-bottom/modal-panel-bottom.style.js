@@ -9,13 +9,18 @@ export default EStyleSheet.create({
     justifyContent: 'flex-end',
     marginTop: -UNIT * 6,
   },
-  content: {
-    paddingHorizontal: UNIT,
-    paddingTop: UNIT,
-    paddingBottom: UNIT * 3,
-    backgroundColor: '$background',
+  header: {
+    paddingTop: UNIT * 2,
+    paddingRight: UNIT * 2,
     borderColor: '$boxBackground',
     borderTopWidth: 1.5,
+  },
+  content: {
+    paddingTop: UNIT,
+    paddingLeft: UNIT * 2,
+    paddingRight: UNIT,
+    paddingBottom: UNIT * 3,
+    backgroundColor: '$background',
   },
   title: {
     fontSize: HEADER_FONT_SIZE,

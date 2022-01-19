@@ -28,14 +28,14 @@ const ModalPanelBottom = (props: Props) => {
       testID={props.testID}
       style={styles.container}
     >
+      <Header
+        style={[styles.header, !props.title && {minHeight: 0}]}
+        rightButton={<IconClose size={21} color={styles.link.color}/>}
+        onRightButtonClick={props.onHide}
+      >
+        {props.title ? <Text selectable={true} style={styles.title}>{props.title}</Text> : null}
+      </Header>
       <View style={[styles.content, props.style]}>
-        <Header
-          style={!props.title && {minHeight: 0}}
-          rightButton={<IconClose size={21} color={styles.link.color}/>}
-          onRightButtonClick={props.onHide}
-        >
-          {props.title ? <Text style={styles.title}>{props.title}</Text> : null}
-        </Header>
 
         {props.children}
       </View>
