@@ -303,10 +303,12 @@ export function switchAccount(account: StorageState, dropCurrentAccount: boolean
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     dispatch(resetUserArticlesProfile());
     cacheUserLastVisitedArticle(null);
+    const prevAccount: StorageState = getStorageState();
     try {
+      redirectToHome(account.config.backendUrl);
       await dispatch(changeAccount(account, dropCurrentAccount, issueId));
     } catch (e) {
-      await dispatch(changeAccount(getStorageState()));
+      await dispatch(changeAccount(prevAccount));
     }
   };
 }
@@ -369,6 +371,7 @@ export function changeAccount(account: StorageState, removeCurrentAccount?: bool
       log.info('Account changed, URL:', account?.config?.backendUrl);
     } catch (err) {
       notifyError('Could not change account', err);
+      throw (err);
     }
 
     dispatch(endAccountChange());
@@ -629,15 +632,19 @@ export function redirectToRoute(config: AppConfig, issueId: string | null): Acti
     }
 
     if (!isRedirected) {
-      Router.Home({
-        backendUrl: config.backendUrl,
-        error: null,
-        message: 'Connecting to YouTrack...',
-      });
+      redirectToHome(config.backendUrl);
     }
 
     return isRedirected;
   };
+}
+
+function redirectToHome(backendUrl: string = '') {
+  Router.Home({
+    backendUrl: backendUrl,
+    error: null,
+    message: 'Connecting to YouTrack...',
+  });
 }
 
 export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
