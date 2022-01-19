@@ -11,15 +11,18 @@ export default EStyleSheet.create({
   container: {
     ...loginStylesForm.container,
     backgroundColor: '$background',
-    maxWidth: '100%',
-    alignSelf: 'center',
   },
   input: {
     ...rowFormStyles.input,
+    maxWidth: 500,
     marginTop: UNIT * 3,
     marginBottom: UNIT * 2,
     color: '$text',
     backgroundColor: '$boxBackground',
+  },
+  button: {
+    ...rowFormStyles.button,
+    maxWidth: 500,
   },
   title: {
     ...loginStylesForm.title,

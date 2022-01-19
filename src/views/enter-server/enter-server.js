@@ -208,7 +208,7 @@ export class EnterServer extends Component<Props, State> {
                     onChangeText={(serverUrl) => this.setState({serverUrl})}/>
 
                   <TouchableOpacity
-                    style={[formStyles.button, isDisabled ? formStyles.buttonDisabled : null]}
+                    style={[styles.button, isDisabled ? formStyles.buttonDisabled : null]}
                     disabled={isDisabled}
                     testID="test:id/next"
                     accessibilityLabel="next"
