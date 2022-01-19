@@ -131,7 +131,6 @@ export class AuthBase {
       'Authorization': `${authParams.token_type} ${authParams.access_token}`,
       'User-Agent': USER_AGENT,
     };
-    log.info('getAuthorizationHeaders: ', authHeaders);
     return authHeaders;
   }
 
