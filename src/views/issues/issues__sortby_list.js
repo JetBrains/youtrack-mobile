@@ -5,7 +5,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 
 import {View as AnimatedView} from 'react-native-animatable';
 
-import DraggableFlatList from 'react-native-draggable-flatlist';
+import DraggableFlatList from 'react-native-draggable-dynamic-flatlist';
 import Header from '../../components/header/header';
 import IconAscending from '../../components/icon/assets/ascending.svg';
 import IconDescending from '../../components/icon/assets/descending.svg';
@@ -61,7 +61,7 @@ const IssuesSortByList = (props: Props) => {
     updateSelectedSortProperties(sortProperties);
   };
 
-  const renderItem = ({item, drag, isActive}: { item: IssueFieldSortProperty, drag: () => any, isActive: boolean }) => {
+  const renderItem = ({item, move, isActive}: { item: IssueFieldSortProperty, move: () => any, isActive: boolean }) => {
     const IconSort: any = item.asc ? IconAscending : IconDescending;
     return (
       <AnimatedView
@@ -76,7 +76,7 @@ const IssuesSortByList = (props: Props) => {
             isActive ? styles.sortByListItemActive : null,
           ]}
           disabled={isActive}
-          onLongPress={drag}
+          onLongPress={move}
         >
           <View style={styles.rowLine}>
             <EllipsisVertical
@@ -182,16 +182,14 @@ const IssuesSortByList = (props: Props) => {
         containerStyle={styles.sortByList}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
-
         scrollEventThrottle={50}
-
         data={selectedSortProperties}
-        onDragEnd={({data}: {data: Array<IssueFieldSortProperty>}) => {
+        onMoveEnd={({data}: {data: Array<IssueFieldSortProperty>}) => {
           updateSelectedSortProperties(data);
         }}
+        scrollPercent={5}
         keyExtractor={(item: IssueFieldSortProperty) => item.id}
         renderItem={renderItem}
-
         ItemSeparatorComponent={Select.renderSeparator}
         getItemLayout={Select.getItemLayout}
       />
