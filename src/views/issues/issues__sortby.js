@@ -32,13 +32,13 @@ const IssuesSortBy = (props: Props) => {
   const [modalChildren, updateModalChildren] = useState(null);
   const mounted: { current: boolean } = useRef(false);
 
-  const loadSortingProperties = useCallback(() => {
-    doAssist({context: props.context, query: props.query}).then((searchSuggestions: ?SearchSuggestions ) => {
+  const loadSortingProperties = useCallback((context: Folder, query: string) => {
+    doAssist({context, query}).then((searchSuggestions: ?SearchSuggestions) => {
       if (mounted.current === true && searchSuggestions?.sortProperties) {
         updateSelectedSortProperties(searchSuggestions.sortProperties);
       }
     });
-  }, [props.context, props.query]);
+  }, []);
 
   useEffect(() => {
     mounted.current = true;
@@ -46,8 +46,8 @@ const IssuesSortBy = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    loadSortingProperties();
-  }, [loadSortingProperties]);
+    loadSortingProperties(props.context, props.query);
+  }, [loadSortingProperties, props.context, props.query]);
 
 
   const getUniqueSortProperties = (sortProperties: Array<IssueFieldSortProperty>): Array<IssueFieldSortProperty> => {
@@ -94,7 +94,6 @@ const IssuesSortBy = (props: Props) => {
                   updateSelectedSortProperties(sortProperties);
                   props.onApply(query);
                   if (sortProperties.length === 0) {
-                    loadSortingProperties();
                     issuesSortByListOnBack();
                   }
                 }}
