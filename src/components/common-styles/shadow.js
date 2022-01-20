@@ -13,7 +13,7 @@ export const elevation1 = {
     },
     android: {
       elevation: 2,
-      borderBottomWidth: 0.3,
+      borderBottomWidth: 0.5,
       borderColor: '$separator',
     },
   }),
