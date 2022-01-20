@@ -318,9 +318,9 @@ export function updateIssue(issueId: string): ((dispatch: (any) => any, getState
   };
 }
 
-export function refreshIssues(): (dispatch: (any) => any, getState: () => any) => Promise<void> {
+export function refreshIssues(query?: string): (dispatch: (any) => any, getState: () => any) => Promise<void> {
   return async (dispatch: (any) => any, getState: () => Object): Promise<void> => {
-    const userQuery: string = getState().issueList.query;
+    const userQuery: string = typeof query === 'string' ? query : getState().issueList.query;
     const searchQuery: string = await dispatch(getSearchQuery(userQuery));
 
     dispatch(setIssuesCount(null));
@@ -344,7 +344,8 @@ export function initializeIssuesList(): ((dispatch: (any) => any) => Promise<voi
       type: types.SET_SEARCH_CONTEXT,
       searchContext: getSearchContext(),
     });
-    dispatch(refreshIssues());
+    dispatch(readStoredIssuesQuery());
+    dispatch(refreshIssues(''));
   };
 }
 export function loadMoreIssues(): ((
