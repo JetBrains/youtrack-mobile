@@ -345,7 +345,7 @@ export function initializeIssuesList(): ((dispatch: (any) => any) => Promise<voi
       searchContext: getSearchContext(),
     });
     dispatch(readStoredIssuesQuery());
-    dispatch(refreshIssues(''));
+    dispatch(refreshIssues(getStorageState().query));
   };
 }
 export function loadMoreIssues(): ((
