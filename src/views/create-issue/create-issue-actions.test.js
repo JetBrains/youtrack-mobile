@@ -235,6 +235,26 @@ describe('<CreateIssue/>', () => {
       });
     });
 
+    it('should submit a new issue and do not propagate just created entity', async () => {
+      await store.dispatch(actions.createIssue(() => null, () => false));
+
+      expect(apiMock.issue.createIssue).toHaveBeenCalledWith(issueMock);
+      expect(store.getActions().length).toEqual(4);
+      expect(store.getActions()[0]).toEqual({
+        type: 'IssueCreate/startIssueCreation',
+      });
+      expect(store.getActions()[1]).toEqual({
+        type: 'IssueCreate/setIssueDraft',
+        payload: {issue: issueMock},
+      });
+      expect(store.getActions()[2]).toEqual({
+        type: 'IssueCreate/resetCreation',
+      });
+      expect(store.getActions()[3]).toEqual({
+        type: 'IssueCreate/stopIssueCreation',
+      });
+    });
+
     it('should reset issue draft and disable processing after submitting', async () => {
       await store.dispatch(actions.createIssue());
 

@@ -51,6 +51,7 @@ type AdditionalProps = {
   predefinedDraftId: ?string,
   onAddTags: (tags: Array<Tag>) => () => Promise<void>,
   onHide?: () => void,
+  isMatchesQuery?: () => boolean,
 };
 
 type Props = CreateIssueState & typeof createIssueActions & AttachmentActions & AdditionalProps & {
@@ -342,6 +343,7 @@ class CreateIssue extends PureComponent<Props, State> {
       showCommandDialog,
       issuePermissions,
       onHide = () => {},
+      isMatchesQuery,
     } = this.props;
 
     const isAttaching = attachingImage !== null;
@@ -373,7 +375,7 @@ class CreateIssue extends PureComponent<Props, State> {
                 onBack={this.onHide}
                 rightButton={rightButton}
                 extraButton={this.renderActionsIcon()}
-                onRightButtonClick={() => canCreateIssue && createIssue(onHide)}/>
+                onRightButtonClick={() => canCreateIssue && createIssue(onHide, isMatchesQuery)}/>
 
               {this.renderCustomFieldPanel()}
 

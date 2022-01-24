@@ -154,6 +154,10 @@ export class Issues extends Component<Props, State> {
     });
   }
 
+  isMatchesQuery: (issueId: string) => Promise<boolean> = async (issueIdReadable: string): Function => {
+    return await this.props.isIssueMatchesQuery(issueIdReadable);
+  };
+
   renderModalPortal: () => ?Node = (): ?Node => {
     const onHide = () => this.setState({isCreateModalVisible: false});
     return (
@@ -165,6 +169,7 @@ export class Issues extends Component<Props, State> {
             <CreateIssue
               isSplitView={true}
               onHide={onHide}
+              isMatchesQuery={this.isMatchesQuery}
             />
           )}
         </ModalPortal>
@@ -186,6 +191,7 @@ export class Issues extends Component<Props, State> {
           } else {
             Router.CreateIssue({
               onHide: () => Router.pop(true),
+              isMatchesQuery: this.isMatchesQuery,
             });
           }
         }}

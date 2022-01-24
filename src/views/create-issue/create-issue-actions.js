@@ -20,7 +20,7 @@ import {showActions} from '../../components/action-sheet/action-sheet';
 import type Api from '../../components/api/api';
 import type {ActionSheetOption} from '../../components/action-sheet/action-sheet';
 import type {AppState} from '../../reducers';
-import type {CommandSuggestionResponse, IssueFull, IssueOnList} from '../../flow/Issue';
+import type {AnyIssue, CommandSuggestionResponse, IssueFull, IssueOnList} from '../../flow/Issue';
 import type {CreateIssueState} from './create-issue-reducers';
 import type {CustomField, FieldValue, Attachment, CustomFieldText, IssueLink} from '../../flow/CustomFields';
 import type {NormalizedAttachment} from '../../flow/Attachment';
@@ -186,7 +186,11 @@ export function initializeWithDraftOrProject(preDefinedDraftId: ?string): ((disp
   };
 }
 
-export function createIssue(onHide: () => any): (dispatch: (any) => any, getState: () => any, getApi: ApiGetter) => Promise<void> {
+export function createIssue(onHide: () => any, isMatchesQuery: (issueIdReadable: string) => boolean = () => true): (
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter,
+) => Promise<void> {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(actions.startIssueCreation());
@@ -197,8 +201,12 @@ export function createIssue(onHide: () => any): (dispatch: (any) => any, getStat
       log.info('Issue has been created');
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Success');
 
-      const filledIssue = ApiHelper.fillIssuesFieldHash([created])[0];
-      dispatch(propagateCreatedIssue(filledIssue, getState().creation.predefinedDraftId));
+      const isMatches: boolean = await isMatchesQuery(created.idReadable);
+      if (isMatches) {
+        const filledIssue: AnyIssue = ApiHelper.fillIssuesFieldHash([created])[0];
+        dispatch(propagateCreatedIssue(filledIssue, getState().creation.predefinedDraftId));
+      }
+
       dispatch(actions.resetCreation());
 
       onHide();

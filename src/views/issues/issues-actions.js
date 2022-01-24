@@ -15,6 +15,7 @@ import {until} from '../../util/util';
 import {updateUserGeneralProfile} from '../../actions/app-actions';
 
 import type Api from '../../components/api/api';
+import type {AppState} from '../../reducers';
 import type {Folder} from '../../flow/User';
 import type {AnyIssue, IssueFull, SavedQuery} from '../../flow/Issue';
 import type {IssueProject, Tag} from '../../flow/CustomFields';
@@ -118,12 +119,10 @@ function getSearchContext() {
   return getStorageState().searchContext;
 }
 
-export function getSearchQuery(query: string = ''): (() => string) {
-  return () => {
-    const userSearchContext: ?Folder = getSearchContext();
-    const searchContextQuery: string = userSearchContext?.query || '';
-    return userSearchContext?.query ? `${searchContextQuery} ${query}` : query;
-  };
+export function getSearchQuery(query: string = ''): string {
+  const userSearchContext: ?Folder = getSearchContext();
+  const searchContextQuery: string = userSearchContext?.query || '';
+  return userSearchContext?.query ? `${searchContextQuery} ${query}` : query;
 }
 
 
@@ -289,6 +288,19 @@ export function loadIssues(query: string): ((
   };
 }
 
+export function isIssueMatchesQuery(issueIdReadable: string): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<boolean>) {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const [error, listIssues] = await until(
+      getApi().issues.getIssuesXShort(encodeURIComponent(`${getSearchQuery(getState().issueList.query)} #${issueIdReadable}`), 1)
+    );
+    return !error && listIssues.length > 0;
+  };
+}
+
 export function getIssueFromCache(issueId: string): ?AnyIssue {
   const cachedIssues: Array<AnyIssue> = getStorageState().issuesCache || [];
   return cachedIssues.find((it: AnyIssue) => it.id === issueId || it?.idReadable === issueId);
@@ -321,7 +333,7 @@ export function updateIssue(issueId: string): ((dispatch: (any) => any, getState
 export function refreshIssues(query?: string): (dispatch: (any) => any, getState: () => any) => Promise<void> {
   return async (dispatch: (any) => any, getState: () => Object): Promise<void> => {
     const userQuery: string = typeof query === 'string' ? query : getState().issueList.query;
-    const searchQuery: string = await dispatch(getSearchQuery(userQuery));
+    const searchQuery: string = getSearchQuery(userQuery);
 
     dispatch(setIssuesCount(null));
     dispatch(loadIssues(searchQuery));
@@ -332,7 +344,7 @@ export function refreshIssues(query?: string): (dispatch: (any) => any, getState
 export function refreshIssuesCount(): (dispatch: (any) => any, getState: () => any) => Promise<void> {
   return async (dispatch: (any) => any, getState: () => Object): Promise<void> => {
     const userQuery: string = getState().issueList.query;
-    const searchQuery: string = await dispatch(getSearchQuery(userQuery));
+    const searchQuery: string = getSearchQuery(userQuery);
     dispatch(loadIssuesCount(searchQuery, getSearchContext()));
   };
 }
@@ -367,7 +379,7 @@ export function loadMoreIssues(): ((
       dispatch(startMoreIssuesLoading(newSkip));
 
       try {
-        const searchQuery = dispatch(getSearchQuery(query));
+        const searchQuery = getSearchQuery(query);
         let moreIssues: Array<AnyIssue> = (await api.issues.getIssues(searchQuery, PAGE_SIZE, newSkip): any);
         log.info(`Loaded ${PAGE_SIZE} more issues.`);
         moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues);
