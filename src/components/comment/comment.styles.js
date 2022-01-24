@@ -62,6 +62,7 @@ export default EStyleSheet.create({
   },
   reactionsReactionCount: {
     ...secondaryText,
+    lineHeight: secondaryText.fontSize + 2,
     marginLeft: UNIT / 2,
     color: '$icon',
   },
