@@ -12,9 +12,15 @@ export default EStyleSheet.create({
     backgroundColor: '$background',
   },
   tabLabel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tabLabelText: {
     ...mainText,
     paddingTop: UNIT,
     paddingBottom: UNIT,
+    paddingRight: UNIT,
     fontWeight: '500',
     textTransform: 'none',
 

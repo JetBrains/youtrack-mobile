@@ -14,6 +14,7 @@ export type IssueState = {
   attachingImage: ?Object,
   commandIsApplying: boolean,
   commandSuggestions: ?CommandSuggestionResponse,
+  commentsCounter: number,
   descriptionCopy: string,
   editMode: boolean,
   initialCommand: string,
@@ -39,6 +40,7 @@ export const initialState: IssueState = {
   attachingImage: null,
   commandIsApplying: false,
   commandSuggestions: null,
+  commentsCounter: 0,
   descriptionCopy: '',
   editMode: false,
   initialCommand: '',
@@ -159,6 +161,7 @@ export const createIssueReduxSlice: (
       state.issue = action.payload.issue;
       state.issueLoaded = true;
       state.issueLoadingError = null;
+      state.commentsCounter = state.issue?.comments?.length || 0;
     },
     RECEIVE_ISSUE_LINKS: (state: IssueState, action: { payload: { links: Array<IssueLink> } }) => {
       state.issue = {

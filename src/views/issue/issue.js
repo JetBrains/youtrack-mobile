@@ -24,7 +24,7 @@ import usage from '../../components/usage/usage';
 import {attachmentActions} from './issue__attachment-actions-and-types';
 import {getApi} from '../../components/api/api__instance';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
-import {IconBack, IconCheck, IconClose, IconDrag, IconMoreOptions} from '../../components/icon/icon';
+import {IconBack, IconCheck, IconClose, IconComment, IconDrag, IconMoreOptions} from '../../components/icon/icon';
 import {isIOSPlatform} from '../../util/util';
 import {isSplitView} from '../../components/responsive/responsive-helper';
 import {IssueContext} from './issue-context';
@@ -35,7 +35,7 @@ import {ThemeContext} from '../../components/theme/theme-context';
 import styles from './issue.styles';
 
 import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import type {AnyIssue, IssueFull} from '../../flow/Issue';
+import type {AnyIssue, IssueFull, TabRoute} from '../../flow/Issue';
 import type {Attachment, IssueLink, Tag} from '../../flow/CustomFields';
 import type {AttachmentActions} from '../../components/attachments-row/attachment-actions';
 import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
@@ -116,6 +116,21 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     if (this.props.editMode === true && !prevProps.editMode && this.isActivityTabEnabled()) {
       this.switchToDetailsTab();
     }
+  }
+
+  getRouteBadge(route: TabRoute): React$Element<typeof View> | null {
+    if (route.title !== this.tabRoutes[1].title) {
+      return null;
+    }
+    const {commentsCounter} = this.props;
+    return (
+      commentsCounter > 0
+        ? <View style={styles.tabBadge}>
+          <IconComment size={17} color={styles.tabBadgeIcon.color} style={styles.tabBadgeIcon}/>
+          <Text style={styles.tabBadgeText}>{commentsCounter}</Text>
+        </View>
+        : null
+    );
   }
 
   async loadIssue() {

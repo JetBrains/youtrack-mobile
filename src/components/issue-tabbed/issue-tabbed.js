@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {Text, Dimensions} from 'react-native';
+import {Text, Dimensions, View} from 'react-native';
 
 // $FlowFixMe: module throws on type check
 import {TabView, TabBar} from 'react-native-tab-view';
@@ -59,6 +59,10 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
     this.setState({isSplitView: isSplitView()});
   }
 
+  getRouteBadge(route: TabRoute): any {
+    return null;
+  }
+
   renderTabBar(uiTheme: UITheme, editMode: boolean = false): ((props: any) => Node) {
     return (props: Object) => {
       const uiThemeColors: UIThemeColors = uiTheme.colors;
@@ -70,17 +74,19 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
           style={[styles.tabsBar, editMode ? {height: 1} : null, {shadowColor: uiThemeColors.$separator}]}
           renderLabel={({route, focused}) => {
             return (
-              <Text style={[
-                styles.tabLabel,
-                focused ? styles.tabLabelActive : null,
-                {
-                  color: focused && !editMode
-                    ? uiThemeColors.$link
-                    : this.isTabChangeEnabled() ? uiThemeColors.$text : uiThemeColors.$disabled,
-                },
-              ]}>
-                {route.title}
-              </Text>
+              <View style={styles.tabLabel}>
+                <Text style={[
+                  styles.tabLabelText,
+                  {
+                    color: focused && !editMode
+                      ? uiThemeColors.$link
+                      : this.isTabChangeEnabled() ? uiThemeColors.$text : uiThemeColors.$disabled,
+                  },
+                ]}>
+                  {route.title}
+                </Text>
+                {this.getRouteBadge(route)}
+              </View>
             );
           }}
         />

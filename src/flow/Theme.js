@@ -11,6 +11,7 @@ export type BarStyle = 'light-content' | 'dark-content';
 type UIThemeCommonColors = {|
   $background: string,
   $boxBackground: string,
+  $dimBackground: string,
 
   $error: string,
 

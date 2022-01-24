@@ -2,7 +2,6 @@ import {Platform} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {elevation1} from '../../components/common-styles/shadow';
 import {issueIdResolved} from '../../components/common-styles/issue';
 import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
 import {separatorBorder} from '../../components/common-styles/list';
@@ -94,30 +93,26 @@ export default EStyleSheet.create({
     marginRight: UNIT,
   },
 
-  tabsBar: {
-    ...elevation1,
-    backgroundColor: '$background',
+  tabBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: UNIT / 1.75,
+    paddingVertical: UNIT / 4,
+    borderRadius: UNIT / 2,
+    backgroundColor: '$greyBackground',
   },
-  tabLabel: {
-    ...mainText,
-    paddingTop: UNIT,
-    paddingBottom: UNIT,
-    fontWeight: '500',
-    textTransform: 'none',
-
+  tabBadgeText: {
+    paddingLeft: UNIT / 2,
+    color: '$icon',
     ...Platform.select({
-      ios: {},
       android: {
-        fontSize: 18,
-        fontWeight: '400',
+        lineHeight: 17,
       },
     }),
   },
-  tabLabelActive: {
-    fontWeight: '400',
-  },
-  tabLazyPlaceholder: {
-    ...centered,
+  tabBadgeIcon: {
+    color: '$iconAccent',
   },
   issueTopActions: {
     flexDirection: 'row',
