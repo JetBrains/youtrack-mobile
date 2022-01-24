@@ -375,6 +375,7 @@ export default {
     'updated',
     'wikifiedDescription',
     'usesMarkdown',
+    'comments(id)',
     {watchers: 'hasStar'},
     {voters: 'hasVote'},
     {project: ISSUE_PROJECT_FIELDS},
