@@ -77,7 +77,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
         data={issue.id}
         onPress={() => onTapIssue(issue)}
         disabled={!canDrag}
-        style={isSplitView() && {width: AGILE_TABLET_CARD_WIDTH}}
+        style={isSplitView() && zoomedIn && {maxWidth: AGILE_TABLET_CARD_WIDTH}}
       >
         <AgileCard
           issue={issue}

@@ -14,7 +14,7 @@ import {UNIT} from '../variables/variables';
 import styles from './agile-card.styles';
 
 import type {IssueOnList} from '../../flow/Issue';
-import type {CustomFieldShort, CustomField, FieldValue} from '../../flow/CustomFields';
+import type {CustomFieldShort, CustomField, CustomFieldValue} from '../../flow/CustomFields';
 import type {Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
@@ -52,12 +52,12 @@ export default class AgileCard extends PureComponent<Props, void> {
     }
   }
 
-  renderAssignees(): Array<FieldValue> {
+  renderAssignees(): Array<React$Element<Avatar>> {
     const {issue} = this.props;
-    const assigneeField: CustomField = getAssigneeField(issue);
-    const assignees: Array<FieldValue> = [].concat(assigneeField ? assigneeField.value : null).filter(item => item);
+    const assigneeField: ?CustomField = getAssigneeField(issue);
+    const assignees: Array<CustomFieldValue> = [].concat(assigneeField ? assigneeField.value : null).filter(Boolean);
 
-    return assignees.map((assignee: FieldValue) => {
+    return assignees.map((assignee: CustomFieldValue) => {
       return (
         <Avatar
           style={styles.assignee}
