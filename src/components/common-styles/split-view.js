@@ -1,12 +1,14 @@
 import {MAIN_FONT_SIZE} from './typography';
 
+export const splitViewLeftSideBarWidth = 375;
+
 export const splitViewStyles = {
   splitViewContainer: {
     flex: 1,
     flexDirection: 'row',
   },
   splitViewSide: {
-    flexBasis: 375,
+    flexBasis: splitViewLeftSideBarWidth,
     borderColor: '$separator',
     borderRightWidth: 1,
   },
