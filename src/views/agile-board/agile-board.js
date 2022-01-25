@@ -198,14 +198,14 @@ class AgileBoard extends Component<Props, State> {
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
 
     if (this.state.isSplitView) {
-      this.setState({
-        modalChildren: <IssueModal
+      this.toggleModalChildren(
+        <IssueModal
           issuePlaceholder={issue}
           issueId={issue.id}
           onHide={this.clearModalChildren}
           stacked={true}
-        />,
-      });
+        />
+      );
     } else {
       Router.Issue({
         issuePlaceholder: issue,
