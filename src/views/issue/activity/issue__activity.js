@@ -60,11 +60,15 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   issueContext: IssueContextData;
 
   componentDidMount() {
-    this.load();
+    const {issue, issuePlaceholder} = this.props;
+    this.load(issuePlaceholder?.id || issue?.id);
   }
 
   componentDidUpdate(prevProps: IssueActivityProps): void {
-    if ((!prevProps.issuePlaceholder && this.props.issuePlaceholder) || (prevProps.issuePlaceholder && this.props.issuePlaceholder && prevProps.issuePlaceholder.id !== this.props.issuePlaceholder.id)) {
+    if (
+      (!prevProps.issuePlaceholder && this.props.issuePlaceholder) ||
+      (prevProps.issuePlaceholder && this.props.issuePlaceholder && prevProps.issuePlaceholder.id !== this.props.issuePlaceholder.id)
+    ) {
       this.load(this.props.issuePlaceholder.id);
     }
   }
