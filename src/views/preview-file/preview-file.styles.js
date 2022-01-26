@@ -3,15 +3,20 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {headerMinHeight} from '../../components/header/header.styles';
+import {StyleSheet} from 'react-native';
 import {title} from '../../components/common-styles/issue';
 import {UNIT} from '../../components/variables/variables';
 
 export default (EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '$background',
+    backgroundColor: '#1A1A1C',
+  },
+  header: {
+    backgroundColor: 'transparent',
   },
   preview: {
+    flex: 1,
     position: 'relative',
     flexGrow: 1,
     alignSelf: 'center',
@@ -22,12 +27,7 @@ export default (EStyleSheet.create({
   },
 
   loader: {
-    position: 'absolute',
-    backgroundColor: 'transparent',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
     color: '$link',
   },
 
@@ -38,27 +38,14 @@ export default (EStyleSheet.create({
   },
 
   closeIcon: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain',
-  },
-
-  removeIcon: {
-    width: 30,
-    height: 30,
-    resizeMode: 'contain',
-    opacity: 0.4,
+    paddingVertical: UNIT / 2,
+    paddingHorizontal: UNIT,
   },
   link: {
     color: '$link',
   },
   fullScreen: {
-    backgroundColor: 'transparent',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
+    ...StyleSheet.absoluteFillObject,
     width: '100%',
     height: '100%',
   },

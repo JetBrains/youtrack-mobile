@@ -13,10 +13,11 @@ type Props = {
   children: any,
   hasOverlay?: boolean,
   onHide: () => any,
+  fullscreen?: boolean,
 }
 
 const ModalPortal = (props: Props): Node => {
-  const {children, hasOverlay = true, onHide = () => {}} = props;
+  const {children, hasOverlay = true, onHide = () => {}, fullscreen} = props;
 
   return <Portal>
     {children && <>
@@ -26,8 +27,8 @@ const ModalPortal = (props: Props): Node => {
           style={modalStyles.modalMask}
           onPress={onHide}/>
       )}
-      <View style={modalStyles.modal}>
-        <View style={modalStyles.modalContent}>
+      <View style={[modalStyles.modal, fullscreen && modalStyles.modalFullscreen]}>
+        <View style={[modalStyles.modalContent, fullscreen && modalStyles.modalContentFullscreen]}>
           {children}
         </View>
       </View>

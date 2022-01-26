@@ -6,6 +6,7 @@ import {View, ActivityIndicator, Text, TouchableOpacity, Linking} from 'react-na
 import Gallery from 'react-native-image-gallery';
 import Video from 'react-native-video';
 import {SvgFromUri} from 'react-native-svg';
+import {View as AnimatedView} from 'react-native-animatable';
 
 import Header from '../../components/header/header';
 import ImageProgress from 'react-native-image-progress';
@@ -34,7 +35,8 @@ type Props = {
   imageAttachments: Array<Attachment>,
   current: Attachment,
   imageHeaders: ?Object,
-  onRemoveImage?: (index: number) => any
+  onRemoveImage?: (index: number) => any,
+  onHide?: () => any,
 }
 
 const isAndroid: boolean = isAndroidPlatform();
@@ -54,7 +56,13 @@ const ImagePreview = (props: Props): Node => {
   const [error, updateError] = useState(null);
   const [isLoading, updateIsLoading] = useState(false);
 
-  const closeView = (): void => {Router.pop(true);};
+  const closeView = (): void => {
+    if (props.onHide) {
+      props.onHide();
+    } else {
+      Router.pop(true);
+    }
+  };
 
   const getCurrentIndex: (attachment: Attachment) => number = useCallback((attachment: Attachment): number => (
     props.imageAttachments.findIndex(
@@ -168,13 +176,21 @@ const ImagePreview = (props: Props): Node => {
   };
 
   return (
-    <View style={styles.container}>
+
+    <AnimatedView
+      animation="fadeIn"
+      duration={500}
+      useNativeDriver={true}
+      style={styles.container}
+    >
       <Header
-        leftButton={<IconClose size={21} color={styles.link.color}/>}
+        leftButton={<IconClose size={21} color={styles.link.color} style={styles.closeIcon}/>}
         onBack={closeView}
+        style={styles.header}
       >
         {!error && <View>{renderOpenButton()}</View>}
       </Header>
+
       {isImageAttach() && renderImageGallery()}
 
       {!isImageAttach() && renderVideo()}
@@ -182,7 +198,7 @@ const ImagePreview = (props: Props): Node => {
       {isLoading && renderLoader()}
 
       {!!error && renderError()}
-    </View>
+    </AnimatedView>
   );
 };
 

@@ -7,12 +7,15 @@ import debounce from 'lodash.debounce';
 import ImageProgress from 'react-native-image-progress';
 import {SvgUri} from 'react-native-svg';
 
+import ModalPortal from '../modal-view/modal-portal';
+import PreviewFile from '../../views/preview-file/preview-file';
 import Router from '../router/router';
 import {attachmentCategories} from './attachment-helper';
 import {hasMimeType} from '../mime-type/mime-type';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconRemoveFilled} from '../icon/icon';
 import {isAndroidPlatform} from '../../util/util';
+import {isSplitView} from '../responsive/responsive-helper';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './attachments-row.styles';
@@ -39,7 +42,8 @@ type Props = {
 }
 
 type State = {
-  isRemoving: boolean
+  isRemoving: boolean,
+  modalChildren: any,
 }
 
 const ANIMATION_DURATION: number = 700;
@@ -67,7 +71,10 @@ export default class Attach extends PureComponent<Props, State> {
     this.props.onImageLoadingError(err);
   }, 60 * 1000);
 
-  state: State = {isRemoving: false};
+  state: State = {
+    isRemoving: false,
+    modalChildren: null,
+  };
 
   componentDidMount() {
     this._isUnmounted = false;
@@ -77,21 +84,40 @@ export default class Attach extends PureComponent<Props, State> {
     this._isUnmounted = true;
   }
 
-  showImageAttachment(attach: Attachment): any | void | Promise<null> {
-    const {imageHeaders, onRemoveImage, attachments = [attach]} = this.props;
+  toggleModalChildren(modalChildren: any = null) {
+    this.setState({modalChildren});
+  }
 
+  showImageAttachment(attach: Attachment): any | void | Promise<null> {
     this.props.onOpenAttachment('image', attach.id);
 
     if (isAndroid && hasMimeType.svg(attach)) {
       return this.openAttachmentUrl(attach.name, attach.url);
     }
 
-    return Router.PreviewFile({
-      imageAttachments: attachments.filter((it: Attachment) => hasMimeType.previewable(it)),
-      current: attach,
-      imageHeaders,
-      ...(onRemoveImage ? {onRemoveImage: (currentPage: number) => onRemoveImage(attachments[currentPage])} : {}),
-    });
+    this.doPreview();
+  }
+
+  doPreview: () => void = (): void => {
+    const {attach, attachments, onRemoveImage, imageHeaders} = this.props;
+    if (isSplitView()) {
+      this.toggleModalChildren(
+        <PreviewFile
+          current={attach}
+          imageAttachments={this.isMedia() ? undefined : [attach]}
+          imageHeaders={imageHeaders}
+          onRemoveImage={onRemoveImage ? () => onRemoveImage(attach) : undefined}
+          onHide={() => this.toggleModalChildren()}
+        />
+      );
+    } else {
+      Router.PreviewFile({
+        current: attach,
+        imageAttachments: this.isMedia() ? undefined : attachments.filter((it: Attachment) => hasMimeType.previewable(it)),
+        imageHeaders,
+        onRemoveImage: onRemoveImage ? () => onRemoveImage(attach) : undefined,
+      });
+    }
   }
 
   openAttachmentUrl(name: string, url: string): void | Promise<null> {
@@ -156,7 +182,7 @@ export default class Attach extends PureComponent<Props, State> {
       <AnimatedView
         testID="attachmentImage"
         animation={isAttachingImage ? 'zoomIn' : null}
-        useNativeDriver
+        useNativeDriver={true}
         duration={ANIMATION_DURATION}
         easing="ease-out-quart"
       >
@@ -215,13 +241,9 @@ export default class Attach extends PureComponent<Props, State> {
   };
 
   onAttachPress: (() => void) = () => {
-    const {imageHeaders, attach, onRemoveImage} = this.props;
+    const {attach} = this.props;
     if (this.isMedia()) {
-      Router.PreviewFile({
-        current: attach,
-        imageHeaders,
-        onRemoveImage: () => onRemoveImage(attach),
-      });
+      this.doPreview();
     } else if (this.isImage() || this.isSVG()) {
       this.showImageAttachment(attach);
     } else {
@@ -261,6 +283,7 @@ export default class Attach extends PureComponent<Props, State> {
 
   render(): Node {
     const {attach, uiTheme} = this.props;
+    const {modalChildren} = this.state;
 
     return (
       <View
@@ -289,6 +312,14 @@ export default class Attach extends PureComponent<Props, State> {
             />
 
           </TouchableOpacity>
+        )}
+        {isSplitView() && (
+          <ModalPortal
+            fullscreen={true}
+            onHide={() => this.toggleModalChildren()}
+          >
+            {modalChildren}
+          </ModalPortal>
         )}
       </View>
     );

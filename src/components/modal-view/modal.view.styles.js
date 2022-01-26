@@ -26,11 +26,22 @@ export default EStyleSheet.create({
     borderRadius,
     ...boxShadow,
   },
+  modalFullscreen: {
+    ...StyleSheet.absoluteFillObject,
+    marginVertical: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: 1,
+    borderRadius: 0,
+    backgroundColor: '$dimBackground',
+  },
   modalContent: {
     overflow: 'hidden',
     width: '100%',
     height: '100%',
-    backgroundColor: '$background',
     borderRadius,
+  },
+  modalContentFullscreen: {
+    borderRadius: 0,
   },
 });
