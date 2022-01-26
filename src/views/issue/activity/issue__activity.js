@@ -60,8 +60,11 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   issueContext: IssueContextData;
 
   componentDidMount() {
-    const {issue, issuePlaceholder} = this.props;
-    this.load(issuePlaceholder?.id || issue?.id);
+    this.load(this.getCurrentIssueId());
+  }
+
+  getCurrentIssueId(): string {
+    return this.props.issuePlaceholder?.id || this.props.issue?.id;
   }
 
   componentDidUpdate(prevProps: IssueActivityProps): void {
@@ -278,7 +281,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   }
 
   renderRefreshControl: (() => any) = () => {
-    return this.props.renderRefreshControl(this.loadIssueActivities);
+    return this.props.renderRefreshControl(() => this.loadIssueActivities(false, this.getCurrentIssueId()));
   };
 
   render(): Node {
