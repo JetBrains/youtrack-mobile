@@ -106,7 +106,7 @@ export class Issues extends Component<Props, State> {
     this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.onDimensionsChange);
     this.onDimensionsChange();
 
-    this.props.initializeIssuesList();
+    this.props.initializeIssuesList(this.props.query);
 
     this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
       if (prevRouteName === routeMap.Issues && routeName !== routeMap.Issues) {
@@ -584,8 +584,8 @@ export class Issues extends Component<Props, State> {
 
 const mapStateToProps = (state: AppState, ownProps: { issueId?: string, query?: string }) => {
   return {
-    ...ownProps,
     ...state.issueList,
+    ...ownProps,
     ...state.app,
     searchContext: state.app?.user?.profiles?.general?.searchContext || state.issueList.searchContext,
   };

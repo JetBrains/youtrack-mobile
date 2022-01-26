@@ -349,7 +349,7 @@ export function refreshIssuesCount(): (dispatch: (any) => any, getState: () => a
   };
 }
 
-export function initializeIssuesList(): ((dispatch: (any) => any) => Promise<void>) {
+export function initializeIssuesList(query?: string): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     await dispatch(readCachedIssues());
     dispatch({
@@ -357,7 +357,7 @@ export function initializeIssuesList(): ((dispatch: (any) => any) => Promise<voi
       searchContext: getSearchContext(),
     });
     dispatch(readStoredIssuesQuery());
-    dispatch(refreshIssues(getStorageState().query));
+    dispatch(refreshIssues(query || getStorageState().query));
   };
 }
 export function loadMoreIssues(): ((
