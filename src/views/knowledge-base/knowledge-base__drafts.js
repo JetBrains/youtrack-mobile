@@ -27,6 +27,7 @@ import type {Article, ArticleDraft} from '../../flow/Article';
 type Props = {
   backIcon?: any,
   onBack?: () => any,
+  onArticleCreate: (articleDraft: ?ArticleDraft, isNew: boolean) => any,
 }
 
 const KnowledgeBaseDrafts = (props: Props) => {
@@ -72,7 +73,7 @@ const KnowledgeBaseDrafts = (props: Props) => {
           isDeleting ? styles.itemDraftDisabled : null,
         ]}
         article={item}
-        onArticlePress={(article: Article) => Router.ArticleCreate({articleDraft: article, isNew: false})}
+        onArticlePress={(article: ArticleDraft) => props.onArticleCreate(article, false)}
         onDelete={(article: Article) => {
           if (!isDeleting) {
             confirmDeleteArticleDraft()
@@ -129,7 +130,7 @@ const KnowledgeBaseDrafts = (props: Props) => {
 
           <TouchableOpacity
             style={styles.noDraftsButton}
-            onPress={() => Router.ArticleCreate({isNew: true})}
+            onPress={() => props.onArticleCreate(null, true)}
           >
             <Text style={styles.noDraftsButtonText}>Start a new article</Text>
           </TouchableOpacity>

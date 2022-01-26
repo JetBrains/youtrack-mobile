@@ -48,6 +48,7 @@ import type {
   ArticleNode,
   ArticleProject,
   ArticleNodeList,
+  ArticleDraft,
 } from '../../flow/Article';
 import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
@@ -391,6 +392,10 @@ export class KnowledgeBase extends Component<Props, State> {
     />
   );
 
+  onArticleCreate(articleDraft?: ArticleDraft, isNew: boolean) {
+    Router.ArticleCreate({articleDraft, isNew});
+  }
+
   renderActionsBar: (() => Node) = () => {
     const {isLoading, articlesList} = this.props;
     const list: ArticlesList = articlesList || [];
@@ -427,11 +432,16 @@ export class KnowledgeBase extends Component<Props, State> {
                 <KnowledgeBaseDrafts
                   backIcon={<IconClose size={21} color={styles.link.color}/>}
                   onBack={() => this.toggleModal()}
+                  onArticleCreate={this.onArticleCreate}
                 />
               );
             } else {
               return Router.Page({
-                children: <KnowledgeBaseDrafts/>,
+                children: (
+                  <KnowledgeBaseDrafts
+                    onArticleCreate={this.onArticleCreate}
+                  />
+                ),
               });
             }
           }}
