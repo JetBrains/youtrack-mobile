@@ -1,7 +1,5 @@
 /* @flow */
 
-import Router from '../../components/router/router';
-
 import {ANALYTICS_ARTICLE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
 import {attachmentActions} from './article-create__attachment-actions-and-types';
 import {confirmDeleteArticleDraft} from '../article/arcticle-helper';
@@ -188,11 +186,10 @@ const deleteDraft = (): ((dispatch: (any) => any, getState: () => AppState) => P
   return async (dispatch: (any) => any, getState: () => AppState) => {
     const articleDraft: ArticleDraft = getState().articleCreate.articleDraft;
 
-    confirmDeleteArticleDraft().then(async () => {
+    return confirmDeleteArticleDraft().then(async () => {
       dispatch(setProcessing(true));
       await dispatch(deleteArticle(articleDraft));
       dispatch(setProcessing(false));
-      Router.pop();
     });
   };
 };

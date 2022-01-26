@@ -232,7 +232,10 @@ const ArticleCreate = (props: Props) => {
         <TouchableOpacity
           style={styles.discardButton}
           disabled={isProcessing}
-          onPress={() => dispatch(articleCreateActions.deleteDraft())}
+
+          onPress={async () => {
+            dispatch(articleCreateActions.deleteDraft()).then(closeCreateArticleScreen);
+          }}
         >
           <Text style={styles.discardButtonText}>
             {props.isNew ? 'Delete draft' : 'Discard unpublished changes'}
