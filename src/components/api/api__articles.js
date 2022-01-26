@@ -90,7 +90,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async getArticleDrafts(original?: string): Promise<Array<ArticleDraft>> {
     const originalParam: string = `&original=${original || 'null'}`;
-    const url: string = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/?${this.articleFieldsQuery}${originalParam}`;
+    const url: string = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/?${this.articleFieldsQuery}${originalParam}&$top=1000`;
     const articleDrafts: Array<ArticleDraft> = await this.makeAuthorizedRequest(url, 'GET');
     return articleDrafts.map((it: ArticleDraft) => {
       it.attachments = this.convertAttachmentsURL(it.attachments);
