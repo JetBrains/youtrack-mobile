@@ -105,7 +105,7 @@ export class KnowledgeBase extends Component<Props, State> {
     };
     usage.trackScreenView(ANALYTICS_ARTICLES_PAGE);
     this.toggleModal = this.toggleModal.bind(this);
-    this.onCreateArticle = this.onCreateArticle.bind(this);
+    this.onArticleCreate = this.onArticleCreate.bind(this);
   }
 
   componentWillUnmount() {
@@ -392,10 +392,6 @@ export class KnowledgeBase extends Component<Props, State> {
     />
   );
 
-  onArticleCreate(articleDraft?: ArticleDraft, isNew: boolean) {
-    Router.ArticleCreate({articleDraft, isNew});
-  }
-
   renderActionsBar: (() => Node) = () => {
     const {isLoading, articlesList} = this.props;
     const list: ArticlesList = articlesList || [];
@@ -436,11 +432,9 @@ export class KnowledgeBase extends Component<Props, State> {
                 />
               );
             } else {
-              return Router.Page({
+              Router.Page({
                 children: (
-                  <KnowledgeBaseDrafts
-                    onArticleCreate={this.onArticleCreate}
-                  />
+                  <KnowledgeBaseDrafts onArticleCreate={this.onArticleCreate}/>
                 ),
               });
             }
@@ -534,17 +528,22 @@ export class KnowledgeBase extends Component<Props, State> {
     this.setState({modalChildren});
   }
 
-  onCreateArticle() {
+  onArticleCreate(articleDraft?: ?ArticleDraft, isNew: boolean = true) {
     if (this.state.isSplitView) {
       this.toggleModal(
         <ArticleCreate
-          isNew={true}
+          isNew={isNew}
           isSplitView={this.state.isSplitView}
           onHide={this.toggleModal}
+          articleDraft={articleDraft}
         />
       );
     } else {
-      Router.ArticleCreate({isNew: true, onHide: () => Router.pop(true)});
+      Router.ArticleCreate({
+        articleDraft,
+        isNew,
+        onHide: () => Router.pop(true),
+      });
     }
   }
 
@@ -563,7 +562,7 @@ export class KnowledgeBase extends Component<Props, State> {
                     this.context.actionSheet(),
                     issuePermissions.articleCanCreateArticle(),
                     this.openProjectSelect,
-                    this.onCreateArticle,
+                    this.onArticleCreate,
                   );
                 }}
               >
