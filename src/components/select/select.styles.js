@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {elevation1} from '../common-styles/shadow';
-import {inputWrapper} from '../common-styles/search';
+import {inputWrapper, searchInput} from '../common-styles/search';
 import {MAIN_FONT_SIZE} from '../common-styles/typography';
 import {separator} from '../common-styles/list';
 import {UNIT} from '../variables/variables';
@@ -93,5 +93,8 @@ export default EStyleSheet.create({
   note: {
     maxHeight: UNIT * 7,
     alignItems: 'center',
+  },
+  modalPortalSelectContent: {
+    paddingBottom: SELECT_ITEM_HEIGHT + searchInput.paddingVertical,
   },
 });

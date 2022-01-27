@@ -408,6 +408,7 @@ export class SelectModal extends Select<SelectProps, SelectState & { visible: bo
     const {visible} = this.state;
     return (
       <ModalPortal
+        style={styles.modalPortalSelectContent}
         onHide={this.onCancel}
       >
         {visible && this.renderContent()}
