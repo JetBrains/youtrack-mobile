@@ -16,6 +16,8 @@ export default EStyleSheet.create({
     ...inputWrapper,
     ...elevation1,
     backgroundColor: '$background',
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
   },
   cancelButton: {
     minWidth: minButtonWidth,
