@@ -3,13 +3,14 @@ import {StyleSheet} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {boxShadow} from '../common-styles/shadow';
-import {UNIT} from '../variables/variables';
 
 const borderRadius = 22;
 
 export default EStyleSheet.create({
-  box: {
+  container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   modalMask: {
     ...StyleSheet.absoluteFillObject,
@@ -19,9 +20,7 @@ export default EStyleSheet.create({
   },
   modal: {
     width: 704,
-    alignSelf: 'center',
-    alignItems: 'center',
-    marginVertical: UNIT * 7,
+    maxHeight: '85%',
     backgroundColor: '$background',
     borderRadius,
     ...boxShadow,
@@ -31,6 +30,7 @@ export default EStyleSheet.create({
     marginVertical: 0,
     width: '100%',
     height: '100%',
+    maxHeight: '100%',
     zIndex: 1,
     borderRadius: 0,
     backgroundColor: '$dimBackground',

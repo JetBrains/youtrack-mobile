@@ -8,31 +8,33 @@ import {Portal} from 'react-native-portalize';
 import modalStyles from './modal.view.styles';
 
 import type {Node} from 'React';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   children: any,
+  fullscreen?: boolean,
   hasOverlay?: boolean,
   onHide: () => any,
-  fullscreen?: boolean,
+  style?: ViewStyleProp,
 }
 
 const ModalPortal = (props: Props): Node => {
-  const {children, hasOverlay = true, onHide = () => {}, fullscreen} = props;
+  const {hasOverlay = true, onHide = () => {}} = props;
 
   return <Portal>
-    {children && <>
+    {!!props.children && <View style={modalStyles.container}>
       {hasOverlay && (
         <TouchableOpacity
           activeOpacity={1}
           style={modalStyles.modalMask}
           onPress={onHide}/>
       )}
-      <View style={[modalStyles.modal, fullscreen && modalStyles.modalFullscreen]}>
-        <View style={[modalStyles.modalContent, fullscreen && modalStyles.modalContentFullscreen]}>
-          {children}
+      <View style={[modalStyles.modal, props.fullscreen && modalStyles.modalFullscreen]}>
+        <View style={[modalStyles.modalContent, props.fullscreen && modalStyles.modalContentFullscreen, props.style]}>
+          {props.children}
         </View>
       </View>
-    </>}
+    </View>}
   </Portal>;
 };
 
