@@ -179,7 +179,7 @@ const ImagePreview = (props: Props): Node => {
 
     <AnimatedView
       animation="fadeIn"
-      duration={500}
+      duration={200}
       useNativeDriver={true}
       style={styles.container}
     >
