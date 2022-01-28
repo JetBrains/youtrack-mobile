@@ -69,21 +69,24 @@ export default class AgileBoardSprint extends Component<Props, void> {
 
   renderCard: ((issue: AnyIssue) => Node) = (issue: AnyIssue) => {
     const {sprint, zoomedIn, canRunCommand, onTapIssue, uiTheme} = this.props;
-    const canDrag = sprint.agile.isUpdatable || canRunCommand(issue);
-
+    const canDrag: boolean = sprint.agile.isUpdatable || canRunCommand(issue);
+    const cardWidth: ?number = (
+      isSplitView() && zoomedIn && sprint?.board?.columns?.length > 3 ? AGILE_TABLET_CARD_WIDTH : undefined
+    );
     return (
       <Draggable
         key={issue.id}
         data={issue.id}
         onPress={() => onTapIssue(issue)}
         disabled={!canDrag}
-        style={isSplitView() && zoomedIn && {maxWidth: AGILE_TABLET_CARD_WIDTH}}
+        style={cardWidth && {width: AGILE_TABLET_CARD_WIDTH}}
       >
         <AgileCard
           issue={issue}
           estimationField={sprint.agile.estimationField}
           zoomedIn={zoomedIn}
           uiTheme={uiTheme}
+          cardWidth={cardWidth}
         />
       </Draggable>
     );

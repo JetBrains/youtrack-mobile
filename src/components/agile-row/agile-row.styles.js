@@ -3,7 +3,7 @@ import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {UNIT} from '../variables/variables';
-import {AGILE_COLLAPSED_COLUMN_WIDTH, AGILE_TABLET_CARD_WIDTH} from '../agile-common/agile-common';
+import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../agile-common/agile-common';
 import {issueIdResolved} from '../common-styles/issue';
 import {headerTitle, MAIN_FONT_SIZE, mainText} from '../common-styles/typography';
 import {separatorBorder} from '../common-styles/list';
@@ -119,9 +119,6 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '$boxBackground',
-  },
-  addCardButtonTablet: {
-    width: AGILE_TABLET_CARD_WIDTH,
   },
   addCardIcon: {
     height: UNIT * 2.5,

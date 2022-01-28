@@ -9,21 +9,27 @@ import {View, LayoutAnimation} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {getAgileCardHeight} from '../agile-card/agile-card';
-import {UNIT} from '../variables/variables';
 import Draggable from './draggable';
 import {DragContext} from './drag-container';
+import {getAgileCardHeight} from '../agile-card/agile-card';
+import {UNIT} from '../variables/variables';
 
 import type {DragContextType} from './drag-container';
-import {AGILE_TABLET_CARD_WIDTH} from '../agile-common/agile-common';
-import {isSplitView} from '../responsive/responsive-helper';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+
+type ZoneInfoData = {
+  columnId: string,
+  cellId: string,
+  issueIds: Array<string>,
+  columnsLength: number,
+};
 
 export type ZoneInfo = {
   width: number,
   height: number,
   x: number,
   y: number,
-  data: Object,
+  data: ZoneInfoData,
   placeholderIndex: ?number,
   ref: React.Ref<typeof DropZone>,
   onMoveOver: ({ x: number, y: number }, zone: ZoneInfo) => any,
@@ -36,7 +42,7 @@ type Props = {
   onMoveOver: any => any,
   onLeave: any => any,
   onDrop: (data: ?Object) => any,
-  data: Object,
+  data: ZoneInfoData,
   dragging?: boolean,
   disabled?: boolean,
   children: React.Node,
@@ -50,8 +56,9 @@ type State = {
   active: boolean
 }
 
+
 class DropZone extends React.Component<PropsWithContext, State> {
-  placeholderStyles = {
+  placeholderStyles: ViewStyleProp = {
     height: UNIT,
     marginLeft: UNIT * 2,
     backgroundColor: EStyleSheet.value('$link'),
@@ -157,18 +164,22 @@ class DropZone extends React.Component<PropsWithContext, State> {
     this.setState({active: false, placeholderIndex: null});
   };
 
-  getChildrenWithPlaceholder(children) {
+  getChildrenWithPlaceholder(children: any) {
     const {placeholderIndex} = this.state;
     if (placeholderIndex === null || placeholderIndex === undefined) {
       return children;
     }
-    const childs = React.Children.toArray(children);
-    const withoutMoving = childs.filter((c: React.Element<typeof Draggable | any>) => this.props.dragContext?.dragging?.data !== c.props.data);
+    const withoutMoving = React.Children.toArray(children).filter(
+      (c: React.Element<typeof Draggable | any>) => this.props.dragContext?.dragging?.data !== c.props.data
+    );
 
     withoutMoving.splice(placeholderIndex, 0, (
       <View
         key="placeholder"
-        style={[this.placeholderStyles, {width: isSplitView() ? AGILE_TABLET_CARD_WIDTH : 'auth'}]}
+        style={[
+          this.placeholderStyles,
+          {width: this.props.dragContext?.dragging?.startPosition?.width || 'auto'},
+        ]}
       />
     ));
     return withoutMoving;

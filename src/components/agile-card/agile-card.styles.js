@@ -2,7 +2,6 @@
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {AGILE_TABLET_CARD_WIDTH} from '../agile-common/agile-common';
 import {issueCard, issueIdResolved} from '../common-styles/issue';
 import {secondaryText} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
@@ -17,9 +16,6 @@ export const agileCard = {
 
 export default (EStyleSheet.create({
   card: agileCard,
-  cardTablet: {
-    width: AGILE_TABLET_CARD_WIDTH,
-  },
   cardColorCoding: {
     flexShrink: 0,
     marginTop: UNIT / 4,
@@ -64,9 +60,6 @@ export default (EStyleSheet.create({
     transform: [{rotate: '-3deg'}],
     borderWidth: 2,
     borderColor: '$iconAccent',
-  },
-  draggingZoomedOut: {
-    width: '38%'
   },
   estimation: {
     marginRight: UNIT,

@@ -124,7 +124,15 @@ describe('<BoardRow/>', () => {
 
 
   function doShallow(row, zoomedIn: boolean = true, collapsedColumnIds: ?Array<string> = []) {
-    wrapper = shallow(<BoardRow row={row} collapsedColumnIds={collapsedColumnIds} zoomedIn={zoomedIn} uiTheme={DEFAULT_THEME}/>);
+    wrapper = shallow(
+      <BoardRow
+        collapsedColumnIds={collapsedColumnIds}
+        columns={[{}, {}]}
+        row={row}
+        zoomedIn={zoomedIn}
+        uiTheme={DEFAULT_THEME}
+      />
+    );
   }
 
   function findByTestId(testId) {

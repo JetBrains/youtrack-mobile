@@ -8,7 +8,6 @@ import Avatar from '../avatar/avatar';
 import Tags from '../tags/tags';
 import {getPriotityField, getAssigneeField} from '../issue-formatter/issue-formatter';
 import {getStorageState} from '../storage/storage';
-import {isSplitView} from '../responsive/responsive-helper';
 import {UNIT} from '../variables/variables';
 
 import styles from './agile-card.styles';
@@ -20,13 +19,15 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from '../../flow/Theme';
 
 type Props = {
-  style?: any,
-  issue: IssueOnList,
-  estimationField?: { id: string },
-  zoomedIn?: boolean,
-  ghost?: boolean, // from <Draggable/>
+  cardWidth?: ?number,
   dragging?: boolean, // from <DragContainer/>
+  dropZoneWidth?: number, // from <DragContainer/>
+  estimationField?: { id: string },
+  ghost?: boolean, // from <Draggable/>
+  issue: IssueOnList,
+  style?: any,
   uiTheme: UITheme,
+  zoomedIn?: boolean,
 };
 
 
@@ -72,12 +73,13 @@ export default class AgileCard extends PureComponent<Props, void> {
   }
 
   render(): Node {
-    const {issue, style, ghost, dragging, zoomedIn} = this.props;
+    const {issue, style, ghost, dragging, zoomedIn, dropZoneWidth, cardWidth} = this.props;
     const priorityField = getPriotityField(issue);
     const priorityFieldValueBackgroundColor = priorityField?.value?.color?.background;
 
     const zoomedInTextStyle: ?ViewStyleProp = zoomedIn ? null : styles.zoomedInText;
     const agileCardHeight: number = getAgileCardHeight();
+    const hasWidth: boolean = typeof dropZoneWidth === 'number';
 
     return (
       <View style={[
@@ -88,9 +90,10 @@ export default class AgileCard extends PureComponent<Props, void> {
         <View style={[
           styles.card,
           style,
-          dragging && ([styles.dragging, !zoomedIn && styles.draggingZoomedOut]),
+          dragging && styles.dragging,
+          !!cardWidth && !dragging && {width: cardWidth},
+          dragging && hasWidth && {width: dropZoneWidth},
           {height: agileCardHeight - cardBottomMargin},
-          isSplitView() && zoomedIn ? styles.cardTablet : null,
         ]}>
           <View style={[
             styles.cardColorCoding,

@@ -270,7 +270,7 @@ class DragContainer extends React.Component<Props, State> {
             ref,
             data,
             children: React.Children.map(children, child => {
-              return React.cloneElement(child, {dragging: true});
+              return React.cloneElement(child, {dragging: true, dropZoneWidth: width});
             }),
             startPosition: {
               x: pageX,
