@@ -49,7 +49,14 @@ export function getScrollableWidth(columns: Array<BoardColumn> = [], isSplitView
 
   if (isSplitView) {
     return Math.max(
-      AGILE_TABLET_EXPANDED_COLUMN_WIDTH * columns.length,
+      columns.reduce((totalWidth, column: BoardColumn) => {
+        if (column.collapsed) {
+          totalWidth += AGILE_COLLAPSED_COLUMN_WIDTH;
+        } else {
+          totalWidth += AGILE_TABLET_EXPANDED_COLUMN_WIDTH;
+        }
+        return totalWidth;
+      }, 0),
       widthData.windowWidth
     );
   }
