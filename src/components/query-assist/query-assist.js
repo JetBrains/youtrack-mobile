@@ -214,15 +214,6 @@ export class QueryAssist extends Component<Props, State> {
     );
   }
 
-  renderQueryAssist(): Node {
-    return (
-      <>
-        {this._renderInput()}
-        {this._renderSuggestions()}
-      </>
-    );
-  }
-
   render() {
     return (
       <ModalView
@@ -230,7 +221,8 @@ export class QueryAssist extends Component<Props, State> {
         animationType="fade"
         style={styles.modal}
       >
-        {this.renderQueryAssist()}
+        {this._renderInput()}
+        {this._renderSuggestions()}
         <KeyboardSpacerIOS/>
       </ModalView>
     );
@@ -275,7 +267,8 @@ class QueryAssistModal extends QueryAssist<Props, State> {
       <ModalPortal
         onHide={this.onClose}
       >
-        {this.renderQueryAssist()}
+        {this._renderInput()}
+        {this._renderSuggestions()}
       </ModalPortal>
     );
   }

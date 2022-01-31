@@ -10,7 +10,7 @@ export default EStyleSheet.create({
     height: UNIT * 6,
   },
   modal: {
-    flex: 1,
+    height: '100%',
     justifyContent: 'flex-start',
   },
   suggestContainer: {
