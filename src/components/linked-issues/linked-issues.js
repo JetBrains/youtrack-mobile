@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {View, Text, SectionList, TouchableOpacity, ActivityIndicator} from 'react-native';
 
 import {View as AnimatedView} from 'react-native-animatable';
@@ -9,9 +9,9 @@ import Header from '../header/header';
 import IssueRow from '../../views/issues/issues__row';
 import LinkedIssuesAddLink from './linked-issues-add-link';
 import Router from '../router/router';
-
 import {createLinksList} from './linked-issues-helper';
 import {IconAdd, IconBack, IconClose} from '../icon/icon';
+import {ThemeContext} from '../theme/theme-context';
 
 import styles from './linked-issues.style';
 
@@ -19,6 +19,7 @@ import type {IssueLink} from '../../flow/CustomFields';
 import type {IssueOnList} from '../../flow/Issue';
 import type {LinksListData} from './linked-issues-helper';
 import type {Node} from 'React';
+import type {Theme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
@@ -37,6 +38,10 @@ type Props = {
 }
 
 const LinkedIssues = (props: Props): Node => {
+  // update UI on theme change
+  // eslint-disable-next-line no-unused-vars
+  const theme: Theme = useContext(ThemeContext);
+
   const [sections, updateSections] = useState([]);
   const [pressedButtonId, updatePressedButtonId] = useState(null);
   const [isLoading, updateLoading] = useState(false);

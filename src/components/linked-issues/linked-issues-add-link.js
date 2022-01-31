@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {View, FlatList, Text, RefreshControl, ActivityIndicator} from 'react-native';
 
 import ErrorMessage from '../error-message/error-message';
@@ -16,18 +16,20 @@ import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
 import {getApi} from '../api/api__instance';
 import {getAssistSuggestions} from '../query-assist/query-assist-helper';
 import {getReadableID} from '../issue-formatter/issue-formatter';
-import {IconBack} from '../icon/icon';
 import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound} from '../icon/icon-pictogram';
+import {IconBack} from '../icon/icon';
+import {ThemeContext} from '../theme/theme-context';
 import {UNIT} from '../variables/variables';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './linked-issues.style';
 
+import type {IssueLinkTypeExtended} from './linked-issues-helper';
+import type {IssueLinkType} from '../../flow/CustomFields';
 import type {IssueOnList, TransformedSuggestion} from '../../flow/Issue';
 import type {Node} from 'React';
+import type {Theme} from '../../flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {IssueLinkType} from '../../flow/CustomFields';
-import type {IssueLinkTypeExtended} from './linked-issues-helper';
 
 type Props = {
   issuesGetter: (linkTypeName: string, q: string) => any,
@@ -41,6 +43,10 @@ type Props = {
 
 
 const LinkedIssuesAddLink = (props: Props): Node => {
+  // update UI on theme change
+  // eslint-disable-next-line no-unused-vars
+  const theme: Theme = useContext(ThemeContext);
+
   const [issues, updateIssues] = useState([]);
   const [isLoading, updateLoading] = useState(false);
 

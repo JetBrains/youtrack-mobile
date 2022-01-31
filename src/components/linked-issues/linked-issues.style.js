@@ -23,6 +23,7 @@ const searchPanel = {
 export default EStyleSheet.create({
   container: {
     flexGrow: 1,
+    backgroundColor: '$background',
   },
   link: {
     color: '$link',
