@@ -381,10 +381,10 @@ export function loadIssuesXShort(linkTypeName: string, query: string = '', page?
 ) => Promise<IssueOnList>) {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const issue: IssueFull = getState().creation.issue;
-    const searchQuery = [
+    const searchQuery: string = encodeURIComponent([
       `(project:${issue.project.shortName})`,
       query.length > 0 ? `(${query})` : '',
-    ].filter(Boolean).join('+and+');
+    ].filter(Boolean).join(' and '));
     return await issueCommonLinksActions(issue).loadIssuesXShort(
       searchQuery,
       page

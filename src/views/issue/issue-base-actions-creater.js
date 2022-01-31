@@ -143,12 +143,11 @@ export const createActions = (dispatchActions: any, stateFieldName: string = 'is
       return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Search to link issues');
         const issue: IssueFull = getState()[stateFieldName].issue;
-        const searchQuery = [
+        const searchQuery: string = encodeURIComponent([
           `(project:${issue.project.shortName})`,
           query.length > 0 ? `(${query})` : '',
-          `(${linkTypeName.split(' ').join('+')}:+-${getReadableID(issue)})`,
-        ].filter(Boolean).join('+and+');
-
+          `(${linkTypeName.split(' ').join(' ')}: -${getReadableID(issue)})`,
+        ].filter(Boolean).join(' and '));
         return await issueCommonLinksActions(issue).loadIssuesXShort(searchQuery, page);
       };
     },
