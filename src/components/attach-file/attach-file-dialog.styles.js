@@ -7,21 +7,20 @@ import {UNIT} from '../variables/variables';
 
 export default (EStyleSheet.create({
   container: {
-    paddingBottom: UNIT * 4,
+    height: '100%',
+    backgroundColor: '$background',
   },
   content: {
     flex: 1,
-    flexDirection: 'column',
+    paddingBottom: UNIT * 6,
   },
   images: {
     flexGrow: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingHorizontal: UNIT * 2,
   },
   filePreview: {
     width: '100%',
     minHeight: 50,
-    flexGrow: 1,
   },
   imagePreview: {
     marginTop: UNIT,
@@ -46,7 +45,7 @@ export default (EStyleSheet.create({
   },
   visibilityButton: {
     marginVertical: UNIT,
-    marginLeft: UNIT * 8,
+    marginLeft: UNIT * 2,
   },
   link: {
     color: '$link',
