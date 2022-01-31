@@ -5,9 +5,14 @@ import {elevation1} from '../common-styles/shadow';
 import {inputWrapper, searchInput} from '../common-styles/search';
 
 export default EStyleSheet.create({
+  container: {
+    height: '100%',
+  },
   inputWrapper: {
     ...inputWrapper,
     ...elevation1,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
     backgroundColor: '$background',
   },
   listContainer: {

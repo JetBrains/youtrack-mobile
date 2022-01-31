@@ -173,7 +173,7 @@ export default class CommandDialog extends Component<Props, State> {
     const canApply = this.canApplyCommand();
 
     return (
-      <>
+      <View style={styles.container}>
         <View style={styles.inputWrapper}>
 
           <TouchableOpacity
@@ -210,7 +210,7 @@ export default class CommandDialog extends Component<Props, State> {
         {this._renderSuggestions()}
 
         {<KeyboardSpacerIOS/>}
-      </>
+      </View>
     );
   }
 
