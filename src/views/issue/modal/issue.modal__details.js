@@ -20,20 +20,14 @@ import type {Node} from 'React';
 import type {Theme} from '../../../flow/Theme';
 
 
-type ModalData = {
-  children: any,
-};
-
 type State = {
-  modalData: ModalData,
+  modalChildren: any,
 }
 
 //$FlowFixMe
 export default class IssueModalDetails extends IssueDetails<IssueDetailsProps & {stacked: boolean}, State> {
   state: State = {
-    modalData: {
-      children: null,
-    },
+    modalChildren: null,
   };
 
   renderLinkedIssues: () => React$Element<any> = () => {
@@ -53,33 +47,33 @@ export default class IssueModalDetails extends IssueDetails<IssueDetailsProps & 
             : undefined
         )}
         subTitle={`${issue.idReadable} ${issue.summary}`}
-        onHide={this.toggleModalData}
+        onHide={this.toggleModalChildren}
         closeIcon={this.props.stacked ? null : <IconClose size={21} color={styles.link.color} style={stylesModal.backIcon}/>}
         onAddLink={(renderAddLink: (onHide: () => any) => any) => {
-          const prevModalData: ModalData = this.state.modalData;
-          this.toggleModalData({
-            children: renderAddLink(() => this.toggleModalData(prevModalData)),
-          });
+          const prevModalData: any = this.state.modalChildren;
+          this.toggleModalChildren(
+            renderAddLink(() => this.toggleModalChildren(prevModalData))
+          );
         }}
         onIssueLinkPress={(linkedIssue: IssueOnList) => {
-          const prevModalData: ModalData = this.state.modalData;
-          this.toggleModalData({
-            children: <IssueModal
+          const prevModalData: any = this.state.modalChildren;
+          this.toggleModalChildren(
+            <IssueModal
               issuePlaceholder={linkedIssue}
               issueId={linkedIssue.id}
-              onHide={this.toggleModalData}
+              onHide={this.toggleModalChildren}
               backIcon={<IconBack color={styles.link.color}/>}
-              onBack={() => this.toggleModalData(prevModalData)}
+              onBack={() => this.toggleModalChildren(prevModalData)}
               stacked={true}
-            />,
-          });
+            />
+          );
         }}
       />
     );
   };
 
-  toggleModalData: (modalData?: ModalData) => void = (modalData: ModalData = {children: null}) => {
-    this.setState({modalData});
+  toggleModalChildren: (modalChildren: any) => void = (modalChildren: any = null) => {
+    this.setState({modalChildren});
     this.forceUpdate(); //TODO: investigate
   };
 
@@ -87,7 +81,7 @@ export default class IssueModalDetails extends IssueDetails<IssueDetailsProps & 
     return (
       <LinkedIssuesTitle
         issueLinks={this.props.issue.links}
-        onPress={() => this.toggleModalData({children: this.renderLinkedIssues()})}
+        onPress={() => this.toggleModalChildren(this.renderLinkedIssues())}
       />
     );
   };
@@ -100,11 +94,9 @@ export default class IssueModalDetails extends IssueDetails<IssueDetailsProps & 
             {this.renderContent(theme.uiTheme)}
             <ModalPortal
               hasOverlay={!this.props.stacked}
-              onHide={() => {
-                this.toggleModalData({children: null});
-              }}
+              onHide={() => this.toggleModalChildren()}
             >
-              {this.state.modalData.children}
+              {this.state.modalChildren}
             </ModalPortal>
           </>;
         }}
