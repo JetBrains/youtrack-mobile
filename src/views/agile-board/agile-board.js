@@ -204,6 +204,9 @@ class AgileBoard extends Component<Props, State> {
           issueId={issue.id}
           onHide={this.clearModalChildren}
           stacked={true}
+          onCommandApply={() => {
+            this.loadBoard(true);
+          }}
         />
       );
     } else {

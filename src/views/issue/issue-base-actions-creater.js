@@ -622,12 +622,12 @@ export const createActions = (dispatchActions: any, stateFieldName: string = 'is
       dispatch: (any) => any,
       getState: StateGetter,
       getApi: ApiGetter
-    ) => Promise<void> | Promise<any> {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    ) => Promise<void> {
+      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<void> => {
         const issueId = getState()[stateFieldName].issueId;
 
         dispatch(dispatchActions.startApplyingCommand());
-        await commandDialogHelper.applyCommand([issueId], command).then(async () => {
+        return await commandDialogHelper.applyCommand([issueId], command).then(async () => {
           dispatch(dispatchActions.closeCommandDialog());
           if (command.toLowerCase().trim() === 'delete') {
             notify('Issue deleted');

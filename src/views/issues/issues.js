@@ -102,11 +102,15 @@ export class Issues extends Component<Props, State> {
     });
   }
 
+  refresh() {
+    this.props.initializeIssuesList(this.props.query);
+  }
+
   async componentDidMount() {
     this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.onDimensionsChange);
     this.onDimensionsChange();
 
-    this.props.initializeIssuesList(this.props.query);
+    this.refresh();
 
     this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
       if (prevRouteName === routeMap.Issues && routeName !== routeMap.Issues) {
@@ -542,6 +546,9 @@ export class Issues extends Component<Props, State> {
         <Issue
           issuePlaceholder={focusedIssue}
           issueId={focusedIssue.id}
+          onCommandApply={() => {
+            this.refresh();
+          }}
         />
       </View>
     );

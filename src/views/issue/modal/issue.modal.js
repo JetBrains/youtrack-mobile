@@ -8,6 +8,7 @@ import issueModalActions, {dispatchActions} from './issue.modal-actions';
 import IssueModalDetails from './issue.modal__details';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
 import {bindActionCreatorsExt} from '../../../util/redux-ext';
+import {CommandDialogModal} from '../../../components/command-dialog/command-dialog';
 import {IconClose} from '../../../components/icon/icon';
 import {Issue} from '../issue';
 
@@ -26,6 +27,7 @@ type Props = {
   backIcon?: any,
   onNavigate?: (issue: IssueOnList) => any,
   stacked?: boolean,
+  onCommandApply: () => any,
 };
 
 //$FlowFixMe
@@ -140,6 +142,31 @@ class IssueModal extends Issue<Props> {
       />
     );
   };
+
+  _renderCommandDialog() {
+    const {
+      closeCommandDialog,
+      commandSuggestions,
+      getCommandSuggestions,
+      applyCommand,
+      commandIsApplying,
+      initialCommand,
+    } = this.props;
+    return <CommandDialogModal
+      suggestions={commandSuggestions}
+      onCancel={closeCommandDialog}
+      onChange={getCommandSuggestions}
+      onApply={(command: string) => {
+        applyCommand(command);
+        if (this.props.onCommandApply) {
+          this.props.onCommandApply();
+        }
+      }}
+      isApplying={commandIsApplying}
+      initialCommand={initialCommand}
+      uiTheme={this.uiTheme}
+    />;
+  }
 }
 
 const mapStateToProps = (state: { app: RootState, issueModalState: IssueState }, ownProps: OwnProps): IssueState & OwnProps => {

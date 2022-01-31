@@ -60,6 +60,7 @@ type AdditionalProps = {
   removeAttachment: (attach: Attachment) => any,
   isTagsSelectVisible: boolean,
   navigateToActivity: boolean,
+  onCommandApply: () => any,
 };
 
 export type IssueProps = {
@@ -442,7 +443,12 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       suggestions={commandSuggestions}
       onCancel={closeCommandDialog}
       onChange={getCommandSuggestions}
-      onApply={applyCommand}
+      onApply={async (command: string) => {
+        await applyCommand(command);
+        if (this.props.onCommandApply) {
+          this.props.onCommandApply();
+        }
+      }}
       isApplying={commandIsApplying}
       initialCommand={initialCommand}
       uiTheme={this.uiTheme}
