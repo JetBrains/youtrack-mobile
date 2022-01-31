@@ -48,7 +48,7 @@ exports[`EnterServer Render should render 1`] = `
         rejectResponderTermination={true}
         returnKeyType="done"
         selectTextOnFocus={true}
-        testID="server-url"
+        testID="server url"
         underlineColorAndroid="transparent"
         value="http://example.com"
       />

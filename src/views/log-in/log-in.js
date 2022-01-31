@@ -259,7 +259,9 @@ export class LogIn extends Component<Props, State> {
                 {isLoginWithCreds && <TouchableOpacity
                   hitSlop={HIT_SLOP}
                   style={styles.support}
-                  testID="log-in-via-browser"
+                  testID="test:id/log-in-via-browser"
+                  accessibilityLabel="log-in-via-browser"
+                  accessible={true}
                   onPress={() => this.logInViaHub()}
                 >
                   <Text style={styles.action}>
