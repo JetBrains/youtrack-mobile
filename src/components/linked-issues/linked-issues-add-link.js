@@ -69,14 +69,41 @@ const LinkedIssuesAddLink = (props: Props): Node => {
     []
   );
 
+  const doLinkIssue = useCallback(async (issue: IssueOnList) => {
+    if (currentIssueLinkTypeExtended) {
+      updateLoading(true);
+      await props.onLinkIssue(getReadableID(issue), currentIssueLinkTypeExtended.getName());
+      updateLoading(false);
+      props.onUpdate();
+      props.onHide();
+    }
+  }, [currentIssueLinkTypeExtended, props]);
+
+  const getIssueToLink = useCallback((q: string, _issues: Array<IssueOnList>): ?IssueOnList => {
+    const issueToLinkIdReadable: string = (q[0] === '#' ? q.slice(1) : q).trim().toLowerCase();
+    const issueIdTokens: Array<string> = issueToLinkIdReadable.split('-');
+    const isSingleIssueQuery: boolean = (
+      issueIdTokens.length === 2 &&
+      issueIdTokens[1].length > 0 &&
+      issueIdTokens[1].split('').some((char: string) => char >= '0' && char <= '9')
+    );
+    return isSingleIssueQuery ? _issues.find(
+      (issue: IssueOnList) => issue.idReadable.toLowerCase() === issueToLinkIdReadable) : null;
+  }, []);
+
   const doSearch = useCallback(async (linkType: ?IssueLinkTypeExtended, q: string = queryData.query) => {
     if (linkType) {
       updateLoading(true);
       const _issues: Array<IssueOnList> = await props.issuesGetter(linkType.getName(), q);
-      updateIssues(_issues);
+      const issueToLink: ?IssueOnList = getIssueToLink(q, _issues);
+      if (issueToLink) {
+        await doLinkIssue(issueToLink);
+      } else {
+        updateIssues(_issues);
+      }
       updateLoading(false);
     }
-  }, [props, queryData.query]);
+  }, [doLinkIssue, getIssueToLink, props, queryData.query]);
 
 
   useEffect(() => {
@@ -143,15 +170,7 @@ const LinkedIssuesAddLink = (props: Props): Node => {
         <IssueRow
           style={[styles.linkedIssueItem, styles.linkedIssue]}
           issue={issue}
-          onClick={async () => {
-            if (currentIssueLinkTypeExtended) {
-              updateLoading(true);
-              await props.onLinkIssue(getReadableID(issue), currentIssueLinkTypeExtended.getName());
-              updateLoading(false);
-              props.onUpdate();
-              props.onHide();
-            }
-          }}
+          onClick={doLinkIssue}
         />
       </AnimatedView>
     );
