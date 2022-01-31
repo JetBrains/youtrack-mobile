@@ -2,7 +2,7 @@
 
 import {Slice} from '@reduxjs/toolkit';
 
-import {attachmentTypes} from '../issue__attachment-actions-and-types';
+import {attachmentTypes} from './issue.modal__attachment-actions-and-types';
 import {ON_NAVIGATE_BACK} from '../../../actions/action-types';
 import {routeMap} from '../../../app-routes';
 import {
