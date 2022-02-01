@@ -226,6 +226,24 @@ export function loadSprint(agileId: string, sprintId: string, query: string): ((
     try {
       const sprint = await api.agile.getSprint(agileId, sprintId, PAGE_SIZE, 0, query);
       const state: AgilePageState = getState();
+      async function loadSEETicket(): Promise<string | null> {
+        const [error, eventSourceTicket] = await until(
+          api.agile.loadSprintSSETicket(
+            sprint.agile?.id || getState().agile.id,
+            sprint.id,
+            encodeURIComponent(getStorageState().agileQuery || '')
+          )
+        );
+        return error ? null : eventSourceTicket;
+      }
+
+      if (sprint && !sprint.eventSourceTicket) {
+        const eventSourceTicket: string | null = await loadSEETicket();
+        if (eventSourceTicket) {
+          sprint.eventSourceTicket = eventSourceTicket;
+        }
+      }
+
       if (!state?.agile?.sprint) {
         dispatch(receiveSprint(sprint));
       }
@@ -732,13 +750,6 @@ export function refreshAgile(agileId: string, sprintId: string, query: string): 
     log.info('Refresh agile with popup');
     flushStoragePart({agileQuery: query});
     dispatch(loadSprint(agileId, sprintId, query));
-  };
-}
-
-export function reSubscribeSEE(): ((dispatch: (any) => any) => Promise<void>) {
-  return async (dispatch: (any) => any) => {
-    destroySSE();
-    dispatch(subscribeServersideUpdates());
   };
 }
 

@@ -42,6 +42,19 @@ export default class AgileAPI extends ApiBase {
     return ApiHelper.patchAllRelativeAvatarUrls(sprint, this.config.backendUrl);
   }
 
+  async loadSprintSSETicket(
+    agileId: string,
+    sprintId: string,
+    issuesQuery: string,
+  ): Promise<string> {
+    const sseData: { ticket: string } = await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/agiles/${agileId}/sprints/${sprintId}/sseSubscription?fields=ticket`,
+      'POST',
+      {issuesQuery}
+    );
+    return sseData.ticket;
+  }
+
   async getAgileIssues(issueIds: Array<{ id: string }>): Promise<Array<IssueFull>> {
     const issues = await this.makeAuthorizedRequest(
       `${this.youTrackUrl}/api/issuesGetter?${qs.stringify({fields: agileFields.sprintIssues.toString()})}`,

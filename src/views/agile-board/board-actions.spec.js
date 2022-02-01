@@ -30,9 +30,10 @@ let cachedSprintMock;
 let cachedSprintIdMock;
 
 describe('Agile board async actions', () => {
-  afterEach(() => {jest.clearAllMocks();});
+  beforeEach(() => {jest.clearAllMocks();});
 
   beforeEach(async () => {
+    const sseTicketMock = 'SSETicket';
     cachedSprintIdMock = 'cachedSprint';
     cachedSprintMock = createSprintMock(cachedSprintIdMock);
 
@@ -55,6 +56,7 @@ describe('Agile board async actions', () => {
         updateAgileUserProfile: jest.fn(),
         getAgile: jest.fn(() => agileWithStatusMock),
         getAgileIssues: jest.fn().mockResolvedValueOnce([{id: 'issueId'}]),
+        loadSprintSSETicket: jest.fn().mockResolvedValueOnce(sseTicketMock),
       },
     };
 
@@ -116,6 +118,19 @@ describe('Agile board async actions', () => {
 
 
     describe('Default agile', () => {
+      beforeEach(async () => {
+        await __setStorageState({agileLastSprint: cachedSprintMock});
+      });
+
+      it('should load cached sprint first', async () => {
+        await store.dispatch(actions.loadDefaultAgileBoard());
+
+        expect(store.getActions()[1]).toEqual({
+          type: types.RECEIVE_SPRINT,
+          sprint: cachedSprintMock,
+        });
+      });
+
       it('should load the last visited sprint of the default agile', async () => {
         await store.dispatch(actions.loadDefaultAgileBoard());
 
@@ -139,18 +154,6 @@ describe('Agile board async actions', () => {
           0,
           queryMock
         );
-      });
-
-      it('should load cached sprint first', async () => {
-        await __setStorageState({agileLastSprint: cachedSprintMock});
-
-        await store.dispatch(actions.loadDefaultAgileBoard());
-        storeActions = store.getActions();
-
-        expect(storeActions[1]).toEqual({
-          type: types.RECEIVE_SPRINT,
-          sprint: cachedSprintMock,
-        });
       });
 
       it(
