@@ -1,6 +1,5 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {View, Text, Linking} from 'react-native';
 
@@ -8,23 +7,41 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {UNIT} from '../variables/variables';
 
+import type {Node} from 'React';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+
 type Props = {
   error?: ?string,
   tips?: string,
-  showSupportLink?: boolean
+  showSupportLink?: boolean,
+  style?: ViewStyleProp,
 };
 
 
+const styles = EStyleSheet.create({
+  error: {
+    marginTop: UNIT,
+    marginBottom: UNIT * 2,
+  },
+  errorText: {
+    marginBottom: UNIT,
+    color: '$error',
+  },
+  link: {
+    color: '$link',
+  },
+});
+
 export default class ErrorMessageInline extends PureComponent<Props, void> {
   render(): null | Node {
-    const {error, tips, showSupportLink} = this.props;
+    const {error, tips, showSupportLink, style} = this.props;
     if (!error) {
       return null;
     }
     return (
       <View
         testID="errorMessageInline"
-        style={styles.error}>
+        style={[styles.error, style]}>
         <Text
           style={styles.errorText}
           selectable={true}
@@ -52,17 +69,3 @@ export default class ErrorMessageInline extends PureComponent<Props, void> {
     );
   }
 }
-
-const styles = EStyleSheet.create({
-  error: {
-    marginTop: UNIT,
-    marginBottom: UNIT * 2,
-  },
-  errorText: {
-    marginBottom: UNIT,
-    color: '$error',
-  },
-  link: {
-    color: '$link',
-  },
-});

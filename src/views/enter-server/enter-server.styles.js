@@ -5,13 +5,17 @@ import {loginStylesForm} from '../../components/common-styles/login-form';
 import {mainText} from '../../components/common-styles/typography';
 
 
+const buttonMaxWidth = 500;
 export default EStyleSheet.create({
   ...loginStylesForm,
 
   container: {
     ...loginStylesForm.container,
-    maxWidth: '100%',
-    backgroundColor: '$background',
+  },
+  scrollContainer: {
+    ...loginStylesForm.scrollContainer,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   input: {
     ...rowFormStyles.input,
@@ -22,7 +26,7 @@ export default EStyleSheet.create({
   },
   button: {
     ...rowFormStyles.button,
-    maxWidth: 500,
+    maxWidth: buttonMaxWidth,
   },
   title: {
     ...loginStylesForm.title,
@@ -30,14 +34,16 @@ export default EStyleSheet.create({
   },
   errorContainer: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    flex: 1,
+    alignSelf: 'flex-start',
+    maxWidth: buttonMaxWidth,
     marginTop: UNIT * 2,
+    marginRight: UNIT * 2,
   },
-  errorText: {
-    flexGrow: 1,
+  error: {
+    maxWidth: '95%',
   },
   infoIcon: {
-    flexGrow: 0,
     marginTop: UNIT / 2,
     marginLeft: UNIT * 2,
   },

@@ -1,6 +1,5 @@
 /* @flow */
 
-import type {Node} from 'React';
 import {
   ActivityIndicator,
   Image,
@@ -14,30 +13,28 @@ import {
 } from 'react-native';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {logo, IconBack} from '../../components/icon/icon';
-import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
-import Popup from '../../components/popup/popup';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
-import usage from '../../components/usage/usage';
-import {VERSION_DETECT_FALLBACK_URL} from '../../components/config/config';
-import log from '../../components/log/log';
+
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
-import {resolveErrorMessage} from '../../components/error/error-resolver';
-import type {AppConfig} from '../../flow/AppConfig';
-import {connectToNewYoutrack, openDebugView} from '../../actions/app-actions';
-import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-text-messages';
-
 import ErrorMessageInline from '../../components/error-message/error-message-inline';
-import {View as AnimatedView} from 'react-native-animatable';
-
-import {ThemeContext} from '../../components/theme/theme-context';
-
-import {UNIT} from '../../components/variables/variables';
-import {HIT_SLOP} from '../../components/common-styles/button';
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+import log from '../../components/log/log';
+import Popup from '../../components/popup/popup';
+import usage from '../../components/usage/usage';
+import {connectToNewYoutrack, openDebugView} from '../../actions/app-actions';
 import {formStyles} from '../../components/common-styles/form';
+import {HIT_SLOP} from '../../components/common-styles/button';
+import {logo, IconBack} from '../../components/icon/icon';
+import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-text-messages';
+import {resolveErrorMessage} from '../../components/error/error-resolver';
+import {ThemeContext} from '../../components/theme/theme-context';
+import {UNIT} from '../../components/variables/variables';
+import {VERSION_DETECT_FALLBACK_URL} from '../../components/config/config';
 
 import styles from './enter-server.styles';
 
+import type {AppConfig} from '../../flow/AppConfig';
+import type {Node} from 'React';
 import type {Theme, UIThemeColors} from '../../flow/Theme';
 
 const CATEGORY_NAME = 'Choose server';
@@ -162,10 +159,7 @@ export class EnterServer extends Component<Props, State> {
               testID="enterServer"
               keyboardShouldPersistTaps="handled"
               keyboardDismissMode="on-drag"
-              contentContainerStyle={[styles.scrollContainer, {
-                alignItems: 'center',
-                justifyContent: 'center',
-              }]}
+              contentContainerStyle={styles.scrollContainer}
             >
               <View style={styles.container}>
                 <View style={styles.backIconButtonContainer}>
@@ -222,29 +216,24 @@ export class EnterServer extends Component<Props, State> {
                   </TouchableOpacity>
 
                   {Boolean(error) && (
-                    <AnimatedView
-                      animation="fadeIn"
-                      duration={500}
-                      useNativeDriver
-                    >
-                      <View style={styles.errorContainer}>
-                        <ErrorMessageInline
-                          error={error}
-                        />
+                    <View style={styles.errorContainer}>
+                      <ErrorMessageInline
+                        style={styles.error}
+                        error={error}
+                      />
 
-                        <TouchableOpacity
-                          style={styles.infoIcon}
-                          hitSlop={HIT_SLOP}
-                          onPress={this.toggleErrorInfoModalVisibility}
-                        >
-                          <IconMaterial
-                            name="information"
-                            size={24}
-                            color={uiThemeColors.$iconAccent}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    </AnimatedView>
+                      <TouchableOpacity
+                        style={styles.infoIcon}
+                        hitSlop={HIT_SLOP}
+                        onPress={this.toggleErrorInfoModalVisibility}
+                      >
+                        <IconMaterial
+                          name="information"
+                          size={24}
+                          color={uiThemeColors.$iconAccent}
+                        />
+                      </TouchableOpacity>
+                    </View>
                   )}
 
                 </View>
