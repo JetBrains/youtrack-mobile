@@ -12,7 +12,6 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 import {Orientation, AnimationType} from '../../flow/ModalView';
 
-import styles from './modal.view.styles';
 
 import type {Node} from 'React';
 import type {Theme} from '../../flow/Theme';
@@ -58,6 +57,7 @@ export default class ModalView extends PureComponent<Props, void> {
     } = this.props;
 
 
+    const baseStyle: ViewStyleProp = {flex: 1};
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
@@ -71,10 +71,10 @@ export default class ModalView extends PureComponent<Props, void> {
               onRequestClose={onRequestClose}
             >
               <SafeAreaView style={[
-                styles.box,
+                baseStyle,
                 transparent === true ? null : {backgroundColor: theme.uiTheme.colors.$background},
               ]}>
-                <View style={[styles.box, style]}>
+                <View style={[baseStyle, style]}>
                   {children}
                 </View>
               </SafeAreaView>
