@@ -65,6 +65,7 @@ type Props = {
   api: Api,
   onOpenContextSelect: () => any,
   issueId?: string,
+  searchQuery?: string,
 };
 
 
@@ -103,7 +104,7 @@ export class Issues extends Component<Props, State> {
   }
 
   refresh() {
-    this.props.initializeIssuesList(this.props.query);
+    this.props.initializeIssuesList(this.props.searchQuery);
   }
 
   async componentDidMount() {
@@ -229,7 +230,7 @@ export class Issues extends Component<Props, State> {
               this.goToIssue(issue);
             }
           }}
-          onTagPress={(query) => Router.Issues({query})}/>
+          onTagPress={(searchQuery: string) => Router.Issues({searchQuery})}/>
       </View>
     );
   };
@@ -589,7 +590,7 @@ export class Issues extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: AppState, ownProps: { issueId?: string, query?: string }) => {
+const mapStateToProps = (state: AppState, ownProps: { issueId?: string, searchQuery?: string }) => {
   return {
     ...state.issueList,
     ...ownProps,

@@ -587,13 +587,13 @@ function subscribeToURL(): Action {
         usage.trackEvent('app', 'Open issue in app by URL');
         Router.Issue({issueId}, {forceReset: true});
       },
-      (url, issuesQuery) => {
+      (url, searchQuery) => {
         if (!getIsAuthorized(getState().app) || !isServerConfigured(url)) {
           log.debug('User is not authorized, URL won\'t be opened');
           return;
         }
         usage.trackEvent('app', 'Open issues query in app by URL');
-        Router.Issues({query: issuesQuery});
+        Router.Issues({searchQuery});
       }
     );
   };

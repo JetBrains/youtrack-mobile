@@ -573,9 +573,9 @@ export const createActions = (dispatchActions: any, stateFieldName: string = 'is
       };
     },
 
-    openIssueListWithSearch: function (query: string): () => void {
+    openIssueListWithSearch: function (searchQuery: string): () => void {
       return () => {
-        Router.Issues({query});
+        Router.Issues({searchQuery});
       };
     },
 

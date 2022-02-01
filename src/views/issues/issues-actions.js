@@ -237,17 +237,6 @@ export function cacheIssues(issues: Array<AnyIssue>): (() => void) {
   };
 }
 
-export function readCachedIssues(): ((dispatch: (any) => any) => Promise<void>) {
-  return async (dispatch: (any) => any) => {
-    const issues: Array<AnyIssue>| null = getStorageState().issuesCache;
-
-    if (issues?.length) {
-      log.debug(`Loaded ${issues.length} cached issues`);
-      dispatch(receiveIssues(issues));
-    }
-  };
-}
-
 export function loadingIssuesError(error: Object): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     dispatch(resetIssuesCount());
@@ -330,10 +319,9 @@ export function updateIssue(issueId: string): ((dispatch: (any) => any, getState
   };
 }
 
-export function refreshIssues(query?: string): (dispatch: (any) => any, getState: () => any) => Promise<void> {
+export function refreshIssues(): (dispatch: (any) => any, getState: () => any) => Promise<void> {
   return async (dispatch: (any) => any, getState: () => Object): Promise<void> => {
-    const userQuery: string = typeof query === 'string' ? query : getState().issueList.query;
-    const searchQuery: string = getSearchQuery(userQuery);
+    const searchQuery: string = getSearchQuery(getState().issueList.query);
 
     dispatch(setIssuesCount(null));
     dispatch(loadIssues(searchQuery));
@@ -349,15 +337,26 @@ export function refreshIssuesCount(): (dispatch: (any) => any, getState: () => a
   };
 }
 
-export function initializeIssuesList(query?: string): ((dispatch: (any) => any) => Promise<void>) {
+export function initializeIssuesList(searchQuery?: string): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
-    await dispatch(readCachedIssues());
+    dispatch(setIssuesQuery(searchQuery || getStorageState().query || ''));
+    if (searchQuery) {
+      dispatch(storeIssuesQuery(searchQuery));
+    } else {
+      dispatch(readStoredIssuesQuery());
+    }
+
     dispatch({
       type: types.SET_SEARCH_CONTEXT,
       searchContext: getSearchContext(),
     });
-    dispatch(readStoredIssuesQuery());
-    dispatch(refreshIssues(query || getStorageState().query));
+
+    const cachedIssues: Array<AnyIssue>| null = getStorageState().issuesCache;
+    if (cachedIssues?.length) {
+      log.debug(`Loaded ${cachedIssues.length} cached issues`);
+      dispatch(receiveIssues(cachedIssues));
+    }
+    dispatch(refreshIssues());
   };
 }
 export function loadMoreIssues(): ((
