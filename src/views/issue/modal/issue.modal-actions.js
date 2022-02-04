@@ -6,11 +6,13 @@ import {attachmentActions, attachmentTypes} from './issue.modal__attachment-acti
 import {createDispatchActions} from '../issue-actions-helper';
 import {createActions} from '../issue-base-actions-creater';
 
-export const dispatchActions = createDispatchActions(
+export const ISSUE_MODAL_STATE_FIELD_NAME: string = 'issueModalState';
+
+export const dispatchActions: any = createDispatchActions(
   actions,
   types.commandDialogTypes,
   attachmentActions,
-  attachmentTypes
+  attachmentTypes,
 );
 
-export default () => createActions(dispatchActions, 'issueModalState');
+export default (): any => createActions(dispatchActions, ISSUE_MODAL_STATE_FIELD_NAME);

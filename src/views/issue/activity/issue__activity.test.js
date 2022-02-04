@@ -2,15 +2,14 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import * as Mocks from '../../../../test/mocks';
 
-import * as activityActions from './issue-activity__actions';
-import * as issueCommentActions from './issue-activity__comment-actions';
-
 import * as types from '../issue-action-types';
 import {
   convertCommentsToActivityPage,
   getActivityCategories,
   getActivityAllTypes,
 } from '../../../components/activity/activity-helper';
+import {createActivityCommentActions} from './issue-activity__comment-actions';
+import {createIssueActivityActions} from './issue-activity__actions';
 
 let APIMock;
 const getApi = () => APIMock;
@@ -25,6 +24,8 @@ describe('Issue activity', () => {
   let issueMock;
   let commentMock;
   let activityPageMock;
+  let activityActions;
+  let issueCommentActions;
 
   beforeEach(() => {
     issueMock = {id: ISSUE_ID};
@@ -41,6 +42,9 @@ describe('Issue activity', () => {
     store = mockStore({
       issueState: {issueId: ISSUE_ID, issue: issueMock},
     });
+
+    activityActions = createIssueActivityActions();
+    issueCommentActions = createActivityCommentActions();
   });
 
   beforeEach(async () => {

@@ -22,6 +22,7 @@ import Router from '../../components/router/router';
 import Star from '../../components/star/star';
 import usage from '../../components/usage/usage';
 import {attachmentActions} from './issue__attachment-actions-and-types';
+import {DEFAULT_ISSUE_STATE_FIELD_NAME} from './issue-base-actions-creater';
 import {getApi} from '../../components/api/api__instance';
 import {getReadableID} from '../../components/issue-formatter/issue-formatter';
 import {IconBack, IconCheck, IconClose, IconComment, IconDrag, IconMoreOptions} from '../../components/icon/icon';
@@ -226,6 +227,10 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   };
 
+  getActivityStateFieldName(): string {
+    return DEFAULT_ISSUE_STATE_FIELD_NAME;
+  }
+
   renderActivity: (uiTheme: UITheme) => React$Element<any> = (uiTheme: UITheme): React$Element<typeof IssueActivity> => {
     const {
       issue,
@@ -239,6 +244,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
     return (
       <IssueActivity
+        stateFieldName={this.getActivityStateFieldName()}
         issue={issue}
         issuePlaceholder={issuePlaceholder}
         user={user}

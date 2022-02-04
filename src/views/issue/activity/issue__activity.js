@@ -6,8 +6,6 @@ import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import * as activityActions from './issue-activity__actions';
-import * as commentActions from './issue-activity__comment-actions';
 import AddSpentTimeForm from './activity__add-spent-time';
 import ErrorMessage from '../../../components/error-message/error-message';
 import IssueActivitiesSettings from './issue__activity-settings';
@@ -19,7 +17,10 @@ import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios'
 import Router from '../../../components/router/router';
 import Select from '../../../components/select/select';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
+import {bindActionCreatorsExt} from '../../../util/redux-ext';
 import {convertCommentsToActivityPage, createActivityModel} from '../../../components/activity/activity-helper';
+import {createActivityCommentActions} from './issue-activity__comment-actions';
+import {createIssueActivityActions, receiveActivityPage} from './issue-activity__actions';
 import {getApi} from '../../../components/api/api__instance';
 import {IconClose} from '../../../components/icon/icon';
 import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
@@ -40,12 +41,12 @@ import type {YouTrackWiki} from '../../../flow/Wiki';
 import type {Activity} from '../../../flow/Activity';
 
 type IssueActivityProps = $Shape<IssueActivityState
-  & typeof activityActions
   & IssueCommentActivityState
   & typeof attachmentActions
   & {
   canAttach: boolean,
-  onAttach: () => any
+  onAttach: () => any,
+  stateFieldName: string,
 }>;
 
 export class IssueActivity extends PureComponent<IssueActivityProps, void> {
@@ -201,9 +202,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   };
 
   renderEditCommentInput(): Node {
-    const {editingComment, submitEditedComment, setEditingComment} = this.props;
+    const {editingComment, submitEditedComment, setEditingComment, stateFieldName} = this.props;
     return <>
       <IssueActivityStreamCommentEdit
+        stateFieldName={stateFieldName}
         issueContext={this.issueContext}
         comment={editingComment}
         onCommentChange={
@@ -233,7 +235,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   }
 
   renderAddCommentInput(): Node {
-    const {editingComment, issue, updateDraftComment} = this.props;
+    const {editingComment, issue, updateDraftComment, stateFieldName} = this.props;
     const canAddWork: boolean = (
       issue?.project?.plugins?.timeTrackingSettings?.enabled &&
       this.issuePermissions.canCreateWork(issue)
@@ -241,6 +243,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
     return <View>
       <IssueActivityCommentAdd
+        stateFieldName={stateFieldName}
         comment={editingComment}
         onAddSpentTime={canAddWork ? this.renderAddSpentTimePage : null}
         onCommentChange={(comment: IssueComment) => updateDraftComment(comment)}
@@ -350,12 +353,13 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const commentActions = createActivityCommentActions(ownProps.stateFieldName);
   return {
-    ...bindActionCreators(activityActions, dispatch),
+    ...bindActionCreatorsExt(createIssueActivityActions(ownProps.stateFieldName), dispatch),
     ...bindActionCreators(attachmentActions, dispatch),
-    ...bindActionCreators(commentActions, dispatch),
-    updateOptimisticallyActivityPage: (activityPage) => dispatch(activityActions.receiveActivityPage(activityPage)),
+    ...bindActionCreatorsExt(commentActions, dispatch),
+    updateOptimisticallyActivityPage: (activityPage) => dispatch(receiveActivityPage(activityPage)),
     onGetCommentVisibilityOptions: () => dispatch(commentActions.getCommentVisibilityOptions()),
   };
 };

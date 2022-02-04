@@ -4,10 +4,10 @@ import React, {useContext} from 'react';
 
 import {useDispatch} from 'react-redux';
 
-import * as commentActions from './issue-activity__comment-actions';
 import IssueCommentEdit from '../../../components/comment/comment-edit';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import {attachmentActions} from './issue-activity__attachment-actions-and-types';
+import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {getApi} from '../../../components/api/api__instance';
 import {IssueContext} from '../issue-context';
 
@@ -19,6 +19,7 @@ type Props = {
   onAddSpentTime: null | (() => void),
   onCommentChange: (draftComment: IssueComment) => Promise<void>,
   onSubmitComment: (draftComment: IssueComment) => Promise<void>,
+  stateFieldName: string,
 };
 
 
@@ -35,7 +36,7 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
       getVisibilityOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
       onSubmitComment={props.onSubmitComment}
       editingComment={props.comment}
-      getCommentSuggestions={(query: string) => dispatch(commentActions.loadCommentSuggestions(query))}
+      getCommentSuggestions={(query: string) => dispatch(createActivityCommentActions(props.stateFieldName).loadCommentSuggestions(query))}
       canAttach={canAttach}
       canRemoveAttach={() => canAttach}
       onAddSpentTime={props.onAddSpentTime}

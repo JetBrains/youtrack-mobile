@@ -7,13 +7,9 @@ import log from '../../../components/log/log';
 import usage from '../../../components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE, ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
 import {confirmation} from '../../../components/confirmation/confirmation';
-import {
-  loadActivitiesPage,
-  receiveActivityAPIAvailability,
-  receiveActivityEnabledTypes,
-  receiveActivityPage,
-} from './issue-activity__actions';
+import {createIssueActivityActions, receiveActivityAPIAvailability, receiveActivityPage} from './issue-activity__actions';
 import {COMMENT_REACTIONS_SEPARATOR} from '../../../components/reactions/reactions';
+import {DEFAULT_ISSUE_STATE_FIELD_NAME} from '../issue-base-actions-creater';
 import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
 import {logEvent} from '../../../components/log/log-helper';
 import {notify} from '../../../components/notification/notification';
@@ -66,389 +62,399 @@ export function receiveCommentSuggestions(suggestions: Object): {suggestions: an
   return {type: types.RECEIVE_COMMENT_SUGGESTIONS, suggestions};
 }
 
-export function loadIssueCommentsAsActivityPage(): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter,
-) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().issueState.issueId;
-    const api: Api = getApi();
+export const createActivityCommentActions = (stateFieldName: string = DEFAULT_ISSUE_STATE_FIELD_NAME): any => {
+  const actions = {
+    loadIssueCommentsAsActivityPage: function loadIssueCommentsAsActivityPage(): ((
+      dispatch: (any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter,
+    ) => Promise<void>) {
+      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+        const issueId = getState()[stateFieldName].issueId;
+        const api: Api = getApi();
 
-    try {
-      const comments = await api.issue.getIssueComments(issueId);
-      log.info(`Loaded ${comments.length} comments for ${issueId} issue`);
-      dispatch(receiveActivityAPIAvailability(false));
-      const activityPage = convertCommentsToActivityPage(comments);
-      dispatch(receiveActivityEnabledTypes());
-      dispatch(receiveActivityPage(activityPage));
-    } catch (error) {
-      dispatch({type: types.RECEIVE_COMMENTS_ERROR, error: error});
-      notify('Failed to load comments. Try refresh', error);
-    }
-  };
-}
-
-export function loadActivity(doNotReset: boolean = false): ((dispatch: (any) => any) => Promise<void>) {
-  return async (dispatch: any => any) => {
-    if (activityHelper.isIssueActivitiesAPIEnabled()) {
-      dispatch(loadActivitiesPage(doNotReset));
-    } else {
-      dispatch(loadIssueCommentsAsActivityPage());
-    }
-  };
-}
-
-export function getDraftComment(): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter,
-) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueState: SingleIssueState = getState().issueState;
-    const {issue} = issueState;
-    if (issue && issue.id) {
-      try {
-        const draftComment: IssueComment = await getApi().issue.getDraftComment(issue.id);
-        dispatch(setEditingComment(draftComment));
-      } catch (error) {
-        log.warn('Failed to receive issue comment draft', error);
-      }
-    }
-  };
-}
-
-export function updateDraftComment(draftComment: IssueComment, doNotFlush: boolean = false): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter,
-) => Promise<null | IssueComment>) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<null | IssueComment> => {
-    const {issue} = getState().issueState;
-    if (draftComment && issue) {
-      const [error, draft] = await until(getApi().issue.updateDraftComment(issue.id, draftComment));
-      if (error) {
-        log.warn('Failed to update a comment draft', error);
-      } else if (!doNotFlush) {
-        dispatch(setEditingComment(draft));
-      }
-      return error ? null : draft;
-    } else {
-      return null;
-    }
-  };
-}
-
-export function submitDraftComment(draftComment: IssueComment): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter,
-) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issue: IssueFull = getState().issueState.issue;
-    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Add comment', 'Success');
-    if (draftComment && issue) {
-      const [error] = await until(getApi().issue.submitDraftComment(issue.id, draftComment));
-      if (error) {
-        const message: string = 'Failed to post a comment';
-        log.warn(message, error);
-        notify(message, error);
-        logEvent({message, isError: true, analyticsId: ANALYTICS_ISSUE_STREAM_SECTION});
-      } else {
-        dispatch(setEditingComment(null));
-        dispatch(loadActivity(true));
-      }
-    }
-  };
-}
-
-export function setEditingComment(comment: IssueComment | null): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter,
-) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-
-    dispatch({type: types.SET_EDITING_COMMENT, comment});
-  };
-}
-
-export function submitEditedComment(comment: IssueComment, isAttachmentChange: boolean = false): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter,
-) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issue: IssueFull = getState().issueState.issue;
-    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update comment');
-
-    try {
-      const updatedComment = await getApi().issue.submitComment(issue.id, comment);
-      log.info(`Comment ${updatedComment.id} updated. Refreshing...`);
-      if (isAttachmentChange) {
-        notify('Comment updated');
-      }
-      if (!isAttachmentChange) {
-        await dispatch(setEditingComment(null));
-      }
-      await dispatch(loadActivity(true));
-    } catch (error) {
-      const errorMessage = 'Comment update failed';
-      log.warn(errorMessage, error);
-      notify(errorMessage, error);
-    }
-  };
-}
-
-function toggleCommentDeleted(comment: IssueComment, deleted: boolean) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().issueState.issueId;
-    try {
-      dispatch(
-        updateComment({...comment, deleted})
-      );
-      await getApi().issue.updateCommentDeleted(issueId, comment.id, deleted);
-      log.info(`Comment ${comment.id} deleted state updated: ${deleted.toString()}`);
-    } catch (error) {
-      dispatch(updateComment({...comment}));
-      notify(`Failed to ${deleted ? 'delete' : 'restore'} comment`, error);
-    }
-  };
-}
-
-export function deleteComment(comment: IssueComment): ((dispatch: (any) => any) => Promise<mixed>) {
-  return async (dispatch: (any) => any) => {
-    return dispatch(toggleCommentDeleted(comment, true));
-  };
-}
-
-export function restoreComment(comment: IssueComment): ((dispatch: (any) => any) => Promise<any>) {
-  return async (dispatch: (any) => any) => {
-    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Restore comment');
-    return dispatch(toggleCommentDeleted(comment, false));
-  };
-}
-
-export function deleteCommentPermanently(comment: IssueComment, activityId?: string): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter,
-) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueId = getState().issueState.issueId;
-
-    confirmation('Delete comment permanently?', 'Delete')
-      .then(async () => {
         try {
-          await getApi().issue.deleteCommentPermanently(issueId, comment.id);
-          log.info(`Comment ${comment.id} deleted forever`);
-          dispatch(deleteCommentFromList(comment, activityId));
-          dispatch(loadActivity());
+          const comments = await api.issue.getIssueComments(issueId);
+          log.info(`Loaded ${comments.length} comments for ${issueId} issue`);
+          dispatch(receiveActivityAPIAvailability(false));
+          const activityPage = convertCommentsToActivityPage(comments);
+          dispatch(createIssueActivityActions(stateFieldName).receiveActivityEnabledTypes());
+          dispatch(receiveActivityPage(activityPage));
         } catch (error) {
-          dispatch(loadActivity());
-          notify('Failed to delete comment. Refresh', error);
+          dispatch({type: types.RECEIVE_COMMENTS_ERROR, error: error});
+          notify('Failed to load comments. Try refresh', error);
         }
-      })
-      .catch(() => {});
-  };
-}
+      };
+    },
 
-
-export function copyCommentUrl(comment: IssueComment): ((dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => void) {
-  return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const api: Api = getApi();
-    const {issue} = getState().issueState;
-    Clipboard.setString(makeIssueWebUrl(api, issue, comment.id));
-    notify('Comment URL copied');
-  };
-
-  function makeIssueWebUrl(api: Api, issue: IssueFull, commentId: ?string) {
-    const commentHash = commentId ? `#comment=${commentId}` : '';
-    return `${api.config.backendUrl}/issue/${issue.idReadable}${commentHash}`;
-  }
-}
-
-export function showIssueCommentActions(
-  actionSheet: Object,
-  comment: IssueComment,
-  updateComment: ?(comment: IssueComment) => void,
-  canDeleteComment: boolean
-): ((dispatch: (any) => any) => Promise<void>) {
-  return async (dispatch: (any) => any) => {
-    const actions = [
-      {
-        title: 'Copy text',
-        execute: () => {
-          Clipboard.setString(comment.text);
-          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment text');
-          notify('Text copied');
-        },
-      },
-      {
-        title: 'Copy URL',
-        execute: () => {
-          dispatch(copyCommentUrl(comment));
-          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment URL');
-        },
-      },
-    ];
-    if (typeof updateComment === 'function') {
-      actions.push({
-        title: 'Edit',
-        execute: () => {
-          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Edit comment');
-          updateComment(comment);
-        },
-      });
-    }
-    if (canDeleteComment) {
-      actions.push({
-        title: 'Delete',
-        execute: () => {
-          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Delete comment');
-          dispatch(deleteComment(comment));
-        },
-      });
-    }
-    actions.push({title: 'Cancel'});
-
-    const selectedAction = await showActions(
-      actions,
-      actionSheet,
-      comment?.author ? getEntityPresentation(comment.author) : null,
-      comment.text.length > 155 ? `${comment.text.substr(0, 153)}…` : comment.text
-    );
-
-    if (selectedAction && selectedAction.execute) {
-      selectedAction.execute();
-    }
-  };
-}
-
-export function loadCommentSuggestions(query: string): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter,
-) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<Array<User>> => {
-    const api: Api = getApi();
-    const issue: IssueFull = getState().issueState.issue;
-    dispatch(startLoadingCommentSuggestions());
-
-    try {
-      const suggestions = await api.mentions.getMentions(query, {issues: [{id: issue.id}]});
-      dispatch(receiveCommentSuggestions(suggestions));
-      return suggestions;
-    } catch (error) {
-      notify('Failed to load comment suggestions', error);
-      return [];
-    } finally {
-      dispatch(stopLoadingCommentSuggestions());
-    }
-  };
-}
-
-export function getCommentVisibilityOptions(): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter,
-) => Promise<Array<User | UserGroup>>) {
-  return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<Array<User | UserGroup>> => {
-    const api: Api = getApi();
-    const issueId: string = getState().issueState.issue.id;
-    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open comment visibility select');
-    return api.issue.getVisibilityOptions(issueId);
-  };
-}
-
-export function onReactionSelect(
-  issueId: string,
-  comment: IssueComment,
-  reaction: Reaction,
-  activities: Array<ActivityItem>,
-  onReactionUpdate: (activities: Array<ActivityItem>, error?: CustomError) => void,
-): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter,
-) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const issueApi: IssueAPI = getApi().issue;
-    //$FlowFixMe
-    const currentUser: User = getState().app.user;
-    usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Reaction select');
-
-    const reactionName: string = reaction.reaction;
-    const existReaction: Reaction = (comment.reactions || []).filter(
-      it => it.reaction === reactionName && it.author.id === currentUser.id)[0];
-
-    const [error, commentReaction] = await until(
-      existReaction
-        ? issueApi.removeCommentReaction(issueId, comment.id, existReaction.id)
-        : issueApi.addCommentReaction(issueId, comment.id, reactionName)
-    );
-
-    if (error) {
-      const errorMsg: string = `Failed to update a reaction ${reaction?.reaction}`;
-      log.warn(errorMsg);
-      onReactionUpdate(activities, error);
-      notify(errorMsg);
-      return;
-    }
-
-    const targetActivityData: ?ActivityPositionData = findActivityInGroupedActivities(
-      activities, comment.id
-    );
-    if (targetActivityData) {
-      onReactionUpdate(updateActivities());
-    }
-
-    function updateActivities() {
-      const targetComment: IssueComment = targetActivityData?.activity?.comment.added[0];
-      if (existReaction) {
-        const selectedReactionEntity: Reaction = targetComment.reactions.find(
-          (it: Reaction) => it.reaction === reactionName && it?.author?.id === currentUser?.id
-        );
-        targetComment.reactions = targetComment.reactions.filter(
-          (it: Reaction) => it?.id !== selectedReactionEntity?.id && selectedReactionEntity?.author?.id === currentUser?.id);
-
-        if (!targetComment.reactions.some((it: Reaction) => it.reaction === reactionName)) {
-          targetComment.reactionOrder = (targetComment.reactionOrder
-            .split(COMMENT_REACTIONS_SEPARATOR)
-            .filter((name: string) => name !== reactionName)
-            .join(COMMENT_REACTIONS_SEPARATOR));
+    loadActivity: function loadActivity(doNotReset: boolean = false): ((dispatch: (any) => any) => Promise<void>) {
+      return async (dispatch: any => any) => {
+        if (activityHelper.isIssueActivitiesAPIEnabled()) {
+          dispatch(createIssueActivityActions(stateFieldName).loadActivitiesPage(doNotReset));
+        } else {
+          dispatch(actions.loadIssueCommentsAsActivityPage());
         }
-      } else {
-        targetComment.reactions.push(commentReaction);
-        targetComment.reactionOrder = targetComment.reactionOrder || '';
-        if (!(targetComment.reactionOrder).split(COMMENT_REACTIONS_SEPARATOR).some((it: string) => it === reactionName)) {
-          targetComment.reactionOrder = `${targetComment.reactionOrder}|${reactionName}`;
+      };
+    },
+
+    getDraftComment: function getDraftComment(): ((
+      dispatch: (any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter,
+    ) => Promise<void>) {
+      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+        const issueState: SingleIssueState = getState()[stateFieldName];
+        const {issue} = issueState;
+        if (issue && issue.id) {
+          try {
+            const draftComment: IssueComment = await getApi().issue.getDraftComment(issue.id);
+            dispatch(actions.setEditingComment(draftComment));
+          } catch (error) {
+            log.warn('Failed to receive issue comment draft', error);
+          }
         }
+      };
+    },
+
+    updateDraftComment: function updateDraftComment(draftComment: IssueComment, doNotFlush: boolean = false): ((
+      dispatch: (any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter,
+    ) => Promise<null | IssueComment>) {
+      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<null | IssueComment> => {
+        const {issue} = getState()[stateFieldName];
+        if (draftComment && issue) {
+          const [error, draft] = await until(getApi().issue.updateDraftComment(issue.id, draftComment));
+          if (error) {
+            log.warn('Failed to update a comment draft', error);
+          } else if (!doNotFlush) {
+            dispatch(actions.setEditingComment(draft));
+          }
+          return error ? null : draft;
+        } else {
+          return null;
+        }
+      };
+    },
+
+    submitDraftComment: function submitDraftComment(draftComment: IssueComment): ((
+      dispatch: (any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter,
+    ) => Promise<void>) {
+      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+        const issue: IssueFull = getState()[stateFieldName].issue;
+        usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Add comment', 'Success');
+        if (draftComment && issue) {
+          const [error] = await until(getApi().issue.submitDraftComment(issue.id, draftComment));
+          if (error) {
+            const message: string = 'Failed to post a comment';
+            log.warn(message, error);
+            notify(message, error);
+            logEvent({message, isError: true, analyticsId: ANALYTICS_ISSUE_STREAM_SECTION});
+          } else {
+            dispatch(actions.setEditingComment(null));
+            dispatch(actions.loadActivity(true));
+          }
+        }
+      };
+    },
+
+    setEditingComment: function setEditingComment(comment: IssueComment | null): ((
+      dispatch: (any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter,
+    ) => Promise<void>) {
+      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+
+        dispatch({type: types.SET_EDITING_COMMENT, comment});
+      };
+    },
+
+    submitEditedComment: function submitEditedComment(comment: IssueComment, isAttachmentChange: boolean = false): ((
+      dispatch: (any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter,
+    ) => Promise<void>) {
+      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+        const issue: IssueFull = getState()[stateFieldName].issue;
+        usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update comment');
+        try {
+          const updatedComment = await getApi().issue.submitComment(issue.id, comment);
+          log.info(`Comment ${updatedComment.id} updated. Refreshing...`);
+          if (isAttachmentChange) {
+            notify('Comment updated');
+          }
+          if (!isAttachmentChange) {
+            await dispatch(actions.setEditingComment(null));
+          }
+          await dispatch(actions.loadActivity(true));
+        } catch (error) {
+          const errorMessage = 'Comment update failed';
+          log.warn(errorMessage, error);
+          notify(errorMessage, error);
+        }
+      };
+    },
+
+    toggleCommentDeleted: function toggleCommentDeleted(comment: IssueComment, deleted: boolean) {
+      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+        const issueId = getState()[stateFieldName].issueId;
+        try {
+          dispatch(
+            updateComment({...comment, deleted})
+          );
+          await getApi().issue.updateCommentDeleted(issueId, comment.id, deleted);
+          log.info(`Comment ${comment.id} deleted state updated: ${deleted.toString()}`);
+        } catch (error) {
+          dispatch(updateComment({...comment}));
+          notify(`Failed to ${deleted ? 'delete' : 'restore'} comment`, error);
+        }
+      };
+    },
+
+    deleteComment: function deleteComment(comment: IssueComment): ((dispatch: (any) => any) => Promise<mixed>) {
+      return async (dispatch: (any) => any) => {
+        return dispatch(actions.toggleCommentDeleted(comment, true));
+      };
+    },
+
+    restoreComment: function restoreComment(comment: IssueComment): ((dispatch: (any) => any) => Promise<any>) {
+      return async (dispatch: (any) => any) => {
+        usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Restore comment');
+        return dispatch(actions.toggleCommentDeleted(comment, false));
+      };
+    },
+
+    deleteCommentPermanently: function deleteCommentPermanently(comment: IssueComment, activityId?: string): ((
+      dispatch: (any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter,
+    ) => Promise<void>) {
+      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+        const issueId = getState()[stateFieldName].issueId;
+
+        confirmation('Delete comment permanently?', 'Delete')
+          .then(async () => {
+            try {
+              await getApi().issue.deleteCommentPermanently(issueId, comment.id);
+              log.info(`Comment ${comment.id} deleted forever`);
+              dispatch(deleteCommentFromList(comment, activityId));
+              dispatch(actions.loadActivity());
+            } catch (error) {
+              dispatch(actions.loadActivity());
+              notify('Failed to delete comment. Refresh', error);
+            }
+          })
+          .catch(() => {});
+      };
+    },
+
+
+    copyCommentUrl: function copyCommentUrl(comment: IssueComment): ((
+      dispatch: (any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter
+    ) => void) {
+      return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+        const api: Api = getApi();
+        const {issue} = getState()[stateFieldName];
+        Clipboard.setString(makeIssueWebUrl(api, issue, comment.id));
+        notify('Comment URL copied');
+      };
+
+      function makeIssueWebUrl(api: Api, issue: IssueFull, commentId: ?string) {
+        const commentHash = commentId ? `#comment=${commentId}` : '';
+        return `${api.config.backendUrl}/issue/${issue.idReadable}${commentHash}`;
       }
+    },
 
-      const newActivities: Array<ActivityItem> = activities.slice(0);
-      const targetIndex: ?number = targetActivityData?.index;
-      const targetActivity = targetIndex && newActivities[targetIndex];
-      targetActivity && (targetActivity.comment.added[0] = targetComment);
-      return newActivities;
-    }
-  };
-}
+    showIssueCommentActions: function showIssueCommentActions(
+      actionSheet: Object,
+      comment: IssueComment,
+      updateComment: ?(comment: IssueComment) => void,
+      canDeleteComment: boolean
+    ): ((dispatch: (any) => any) => Promise<void>) {
+      return async (dispatch: (any) => any) => {
+        const contextActions = [
+          {
+            title: 'Copy text',
+            execute: () => {
+              Clipboard.setString(comment.text);
+              usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment text');
+              notify('Text copied');
+            },
+          },
+          {
+            title: 'Copy URL',
+            execute: () => {
+              dispatch(actions.copyCommentUrl(comment));
+              usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment URL');
+            },
+          },
+        ];
+        if (typeof updateComment === 'function') {
+          contextActions.push({
+            title: 'Edit',
+            execute: () => {
+              usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Edit comment');
+              updateComment(comment);
+            },
+          });
+        }
+        if (canDeleteComment) {
+          contextActions.push({
+            title: 'Delete',
+            execute: () => {
+              usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Delete comment');
+              dispatch(actions.deleteComment(comment));
+            },
+          });
+        }
+        contextActions.push({title: 'Cancel'});
 
-export function onCheckboxUpdate(checked: boolean, position: number, comment: IssueComment): ((
-  dispatch: (any) => any,
-  getState: StateGetter,
-  getApi: ApiGetter
-) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const api: Api = getApi();
-    const {issue} = getState().issueState;
-    const [error, response] = await until(api.issue.updateCommentCheckbox(issue.id, checked, position, comment));
-    if (!error && response) {
-      dispatch(updateComment({
-        ...comment,
-        text: response.text,
-      }));
-    }
+        const selectedAction = await showActions(
+          contextActions,
+          actionSheet,
+          comment?.author ? getEntityPresentation(comment.author) : null,
+          comment.text.length > 155 ? `${comment.text.substr(0, 153)}…` : comment.text
+        );
+
+        if (selectedAction && selectedAction.execute) {
+          selectedAction.execute();
+        }
+      };
+    },
+
+    loadCommentSuggestions: function loadCommentSuggestions(query: string): ((
+      dispatch: (any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter,
+    ) => Promise<void>) {
+      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<Array<User>> => {
+        const api: Api = getApi();
+        const issue: IssueFull = getState()[stateFieldName].issue;
+        dispatch(startLoadingCommentSuggestions());
+
+        try {
+          const suggestions = await api.mentions.getMentions(query, {issues: [{id: issue.id}]});
+          dispatch(receiveCommentSuggestions(suggestions));
+          return suggestions;
+        } catch (error) {
+          notify('Failed to load comment suggestions', error);
+          return [];
+        } finally {
+          dispatch(stopLoadingCommentSuggestions());
+        }
+      };
+    },
+
+    getCommentVisibilityOptions: function getCommentVisibilityOptions(): ((
+      dispatch: (any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter,
+    ) => Promise<Array<User | UserGroup>>) {
+      return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<Array<User | UserGroup>> => {
+        const api: Api = getApi();
+        const issueId: string = getState()[stateFieldName].issue.id;
+        usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open comment visibility select');
+        return api.issue.getVisibilityOptions(issueId);
+      };
+    },
+
+    onReactionSelect: function onReactionSelect(
+      issueId: string,
+      comment: IssueComment,
+      reaction: Reaction,
+      activities: Array<ActivityItem>,
+      onReactionUpdate: (activities: Array<ActivityItem>, error?: CustomError) => void,
+    ): ((
+      dispatch: (any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter,
+    ) => Promise<void>) {
+      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+        const issueApi: IssueAPI = getApi().issue;
+        //$FlowFixMe
+        const currentUser: User = getState().app.user;
+        usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Reaction select');
+
+        const reactionName: string = reaction.reaction;
+        const existReaction: Reaction = (comment.reactions || []).filter(
+          it => it.reaction === reactionName && it.author.id === currentUser.id)[0];
+
+        const [error, commentReaction] = await until(
+          existReaction
+            ? issueApi.removeCommentReaction(issueId, comment.id, existReaction.id)
+            : issueApi.addCommentReaction(issueId, comment.id, reactionName)
+        );
+
+        if (error) {
+          const errorMsg: string = `Failed to update a reaction ${reaction?.reaction}`;
+          log.warn(errorMsg);
+          onReactionUpdate(activities, error);
+          notify(errorMsg);
+          return;
+        }
+
+        const targetActivityData: ?ActivityPositionData = findActivityInGroupedActivities(
+          activities, comment.id
+        );
+        if (targetActivityData) {
+          onReactionUpdate(updateActivities());
+        }
+
+        function updateActivities() {
+          const targetComment: IssueComment = targetActivityData?.activity?.comment.added[0];
+          if (existReaction) {
+            const selectedReactionEntity: Reaction = targetComment.reactions.find(
+              (it: Reaction) => it.reaction === reactionName && it?.author?.id === currentUser?.id
+            );
+            targetComment.reactions = targetComment.reactions.filter(
+              (it: Reaction) => it?.id !== selectedReactionEntity?.id && selectedReactionEntity?.author?.id === currentUser?.id);
+
+            if (!targetComment.reactions.some((it: Reaction) => it.reaction === reactionName)) {
+              targetComment.reactionOrder = (targetComment.reactionOrder
+                .split(COMMENT_REACTIONS_SEPARATOR)
+                .filter((name: string) => name !== reactionName)
+                .join(COMMENT_REACTIONS_SEPARATOR));
+            }
+          } else {
+            targetComment.reactions.push(commentReaction);
+            targetComment.reactionOrder = targetComment.reactionOrder || '';
+            if (!(targetComment.reactionOrder).split(COMMENT_REACTIONS_SEPARATOR).some(
+              (it: string) => it === reactionName)) {
+              targetComment.reactionOrder = `${targetComment.reactionOrder}|${reactionName}`;
+            }
+          }
+
+          const newActivities: Array<ActivityItem> = activities.slice(0);
+          const targetIndex: ?number = targetActivityData?.index;
+          const targetActivity = targetIndex && newActivities[targetIndex];
+          targetActivity && (targetActivity.comment.added[0] = targetComment);
+          return newActivities;
+        }
+      };
+    },
+
+    onCheckboxUpdate: function onCheckboxUpdate(checked: boolean, position: number, comment: IssueComment): ((
+      dispatch: (any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter
+    ) => Promise<void>) {
+      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+        const api: Api = getApi();
+        const {issue} = getState()[stateFieldName];
+        const [error, response] = await until(api.issue.updateCommentCheckbox(issue.id, checked, position, comment));
+        if (!error && response) {
+          dispatch(updateComment({
+            ...comment,
+            text: response.text,
+          }));
+        }
+      };
+    },
+
   };
-}
+  return actions;
+};

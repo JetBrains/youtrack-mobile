@@ -4,7 +4,6 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import {useSelector} from 'react-redux';
 
-import * as commentActions from './issue-activity__comment-actions';
 import ApiHelper from '../../../components/api/api__helper';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import ReactionsPanel from './issue__activity-reactions-dialog';
@@ -12,6 +11,7 @@ import usage from '../../../components/usage/usage';
 import {ActivityStream} from '../../../components/activity-stream/activity__stream';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
 import {attachmentActions} from './issue-activity__attachment-actions-and-types';
+import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
 import {IssueContext} from '../issue-context';
 import {SkeletonIssueActivities} from '../../../components/skeleton/skeleton';
@@ -34,6 +34,7 @@ type Props = {
 const IssueActivityStream = (props: Props) => {
   const configBackendUrl: string = useSelector((appState: AppState) => appState.app.auth?.config?.backendUrl || '');
   const issueContext: IssueContextData = useContext(IssueContext);
+  const commentActions = createActivityCommentActions();
 
   const [reactionState, setReactionState] = useState({
     isReactionsPanelVisible: false,

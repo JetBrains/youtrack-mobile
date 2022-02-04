@@ -2,12 +2,12 @@ import configureMockStore from 'redux-mock-store';
 import sinon from 'sinon';
 import thunk from 'redux-thunk';
 
-import * as activityCommentActions from './activity/issue-activity__comment-actions';
 import * as activityHelper from './activity/issue-activity__helper';
 import createIssueActions from './issue-actions';
 import * as types from './issue-action-types';
 import Mocks from '../../../test/mocks';
 import {actions} from './issue-reducers';
+import {createActivityCommentActions} from './activity/issue-activity__comment-actions';
 
 
 let apiMock;
@@ -61,7 +61,7 @@ describe('Issue view actions', () => {
     const activityPageMock = [{}];
     apiMock.issue.getActivitiesPage.mockResolvedValueOnce(activityPageMock);
 
-    await store.dispatch(activityCommentActions.submitDraftComment(commentMock));
+    await store.dispatch(createActivityCommentActions().submitDraftComment(commentMock));
 
     await expect(apiMock.issue.submitDraftComment).toHaveBeenCalledWith(ISSUE_ID, commentMock);
 

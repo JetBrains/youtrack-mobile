@@ -38,7 +38,9 @@ function makeIssueWebUrl(api: Api, issue: IssueFull, commentId: ?string) {
   return `${api.config.backendUrl}/issue/${issue.idReadable}${commentHash}`;
 }
 
-export const createActions = (dispatchActions: any, stateFieldName: string = 'issueState') : any => {
+export const DEFAULT_ISSUE_STATE_FIELD_NAME: string = 'issueState';
+
+export const createActions = (dispatchActions: any, stateFieldName: string = DEFAULT_ISSUE_STATE_FIELD_NAME) : any => {
   const actions = {
     loadIssueAttachments: function (): (
       dispatch: (any) => any,

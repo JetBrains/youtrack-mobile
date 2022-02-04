@@ -4,7 +4,7 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import issueModalActions, {dispatchActions} from './issue.modal-actions';
+import issueModalActions, {dispatchActions, ISSUE_MODAL_STATE_FIELD_NAME} from './issue.modal-actions';
 import IssueModalDetails from './issue.modal__details';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
 import {bindActionCreatorsExt} from '../../../util/redux-ext';
@@ -142,6 +142,10 @@ class IssueModal extends Issue<Props> {
       />
     );
   };
+
+  getActivityStateFieldName(): string {
+    return ISSUE_MODAL_STATE_FIELD_NAME;
+  }
 
   _renderCommandDialog() {
     const {
