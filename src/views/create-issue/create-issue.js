@@ -342,7 +342,7 @@ class CreateIssue extends PureComponent<Props, State> {
       isAttachFileDialogVisible,
       showCommandDialog,
       issuePermissions,
-      onHide = () => {},
+      onHide = () => Router.pop(true),
       isMatchesQuery,
     } = this.props;
 
