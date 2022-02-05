@@ -6,18 +6,21 @@ import {ActivityIndicator, Text, TextInput, TouchableOpacity, View} from 'react-
 import debounce from 'lodash.debounce';
 import InputScrollView from 'react-native-input-scroll-view';
 
-import * as issueActivityItems from './issue-activity__actions';
 import DatePicker from '../../../components/date-picker/date-picker';
 import Header from '../../../components/header/header';
+import ModalPortal from '../../../components/modal-view/modal-portal';
 import Router from '../../../components/router/router';
 import Select from '../../../components/select/select';
+import usage from '../../../components/usage/usage';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
 import {commentPlaceholderText} from '../../../app-text';
 import {confirmation} from '../../../components/confirmation/confirmation';
+import {createIssueActivityActions} from './issue-activity__actions';
 import {getEntityPresentation, ytDate} from '../../../components/issue-formatter/issue-formatter';
 import {hasType} from '../../../components/api/api__resource-types';
 import {HIT_SLOP} from '../../../components/common-styles/button';
 import {IconAngleRight, IconCheck, IconClose} from '../../../components/icon/icon';
+import {isSplitView} from '../../../components/responsive/responsive-helper';
 import {logEvent} from '../../../components/log/log-helper';
 import {ThemeContext} from '../../../components/theme/theme-context';
 import {useDispatch, useSelector} from 'react-redux';
@@ -25,25 +28,25 @@ import {useDispatch, useSelector} from 'react-redux';
 import styles from './activity__add-spent-time.styles';
 
 import type {AppState} from '../../../reducers';
+import type {IssueFull} from '../../../flow/Issue';
+import type {IssueProject} from '../../../flow/CustomFields';
 import type {SelectProps} from '../../../components/select/select';
 import type {Theme} from '../../../flow/Theme';
 import type {User} from '../../../flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {WorkItem, TimeTracking, WorkItemType} from '../../../flow/Work';
-import usage from '../../../components/usage/usage';
 
 type Props = {
+  issue?: IssueFull,
   workItem?: WorkItem,
   onAdd?: () => any,
-  canCreateNotOwn?: boolean
+  onHide: () => any,
+  canCreateNotOwn?: boolean,
 }
 
 const AddSpentTimeForm = (props: Props) => {
-  const theme: Theme = useContext(ThemeContext);
-  const dispatch = useDispatch();
   const currentUser: User = useSelector((state: AppState) => state.app.user);
-
-  const draftDefault: WorkItem = Object.freeze({
+  const draftDefault: $Shape<WorkItem> = Object.freeze(({
     date: new Date().getTime(),
     author: currentUser,
     duration: {
@@ -55,13 +58,32 @@ const AddSpentTimeForm = (props: Props) => {
     },
     text: null,
     usesMarkdown: true,
-  });
+    issue: {project: {}},
+  }: any));
+
+  const theme: Theme = useContext(ThemeContext);
+  const dispatch = useDispatch();
 
   const [isProgress, updateProgress] = useState(false);
   const [isSelectVisible, updateSelectVisibility] = useState(false);
   const [draft, updateDraftWorkItem] = useState(props.workItem || draftDefault);
   const [selectProps, updateSelectProps] = useState(null);
   const [error, updateError] = useState(false);
+  const [modalChildren, updateModalChildren] = useState(null);
+
+
+  const issueActivityActions = createIssueActivityActions();
+
+  const doHide: () => void = (): void => {
+    if (props.onHide) {
+      props.onHide();
+    } else {
+      Router.pop(true);
+    }
+  };
+
+  const getIssueId: () => string = (): string => ((props.issue || (props.workItem?.issue): any): IssueFull).id;
+  const getProjectRingId: () => string = (): string => ((props?.issue?.project || (props.workItem?.issue?.project: any)): IssueProject).ringId;
 
   const getDraft = (draftItem: WorkItem): WorkItem => ({
     ...draftItem,
@@ -71,7 +93,7 @@ const AddSpentTimeForm = (props: Props) => {
   const updateDraft = async (draftItem: WorkItem) => {
     const draftWithType: WorkItem = getDraft(draftItem);
     dispatch(
-      issueActivityItems.updateWorkItemDraft(draftWithType)
+      issueActivityActions.updateWorkItemDraft(draftWithType, getIssueId())
     ).then((updatedDraft: WorkItem | null) => {
       if (updatedDraft) {
         updateDraftWorkItem({
@@ -89,14 +111,13 @@ const AddSpentTimeForm = (props: Props) => {
   useEffect(() => {
     if (props.workItem) {
       updateDraftWorkItem(props.workItem);
-      issueActivityItems.updateWorkItem();
     } else {
       loadTimeTracking();
     }
 
     async function loadTimeTracking() {
       updateProgress(true);
-      const timeTracking: TimeTracking = await dispatch(issueActivityItems.getTimeTracking());
+      const timeTracking: TimeTracking = await dispatch(issueActivityActions.getTimeTracking(getIssueId()));
       updateDraftWorkItem({
         ...draftDefault,
         ...timeTracking?.workItemTemplate,
@@ -142,7 +163,7 @@ const AddSpentTimeForm = (props: Props) => {
 
   const getUserSelectProps = (): $Shape<SelectProps> => {
     return {
-      dataSource: async () => await dispatch(issueActivityItems.getWorkItemAuthors()),
+      dataSource: async () => await dispatch(issueActivityActions.getWorkItemAuthors(getProjectRingId())),
       onSelect: (author: User) => {
         logEvent({
           message: 'SpentTime: form:set-author',
@@ -157,7 +178,7 @@ const AddSpentTimeForm = (props: Props) => {
   const getWorkTypeSelectProps = (): $Shape<SelectProps> => {
     return {
       dataSource: async () => {
-        const types: Array<WorkItemType> = await dispatch(issueActivityItems.getWorkItemTypes());
+        const types: Array<WorkItemType> = await dispatch(issueActivityActions.getWorkItemTypes(draft.issue.project.id));
         return [draftDefault.type].concat(types);
       },
       onSelect: async (type: WorkItemType) => {
@@ -171,11 +192,16 @@ const AddSpentTimeForm = (props: Props) => {
     };
   };
 
-  const close = () => Router.pop(true);
-
   const onClose = () => {
-    dispatch(issueActivityItems.deleteWorkItemDraft());
-    close();
+    confirmation('Discard draft and close?', 'Discard and close')
+      .then(() => {
+        logEvent({
+          message: 'SpentTime: form:cancel',
+          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
+        });
+        dispatch(issueActivityActions.deleteWorkItemDraft(getIssueId()));
+        doHide();
+      }).catch(() => null);
   };
 
   const onCreate = async () => {
@@ -186,15 +212,18 @@ const AddSpentTimeForm = (props: Props) => {
     });
     updateProgress(true);
     const updatedDraft: WorkItem = getDraft(draft);
-    const item: ?WorkItem = await dispatch(issueActivityItems.createWorkItem({
-      ...updatedDraft,
-      $type: props.workItem ? updatedDraft.$type : undefined,
-    }));
+    const item: ?WorkItem = await dispatch(issueActivityActions.createWorkItem(
+      {
+        ...updatedDraft,
+        $type: props.workItem ? updatedDraft.$type : undefined,
+      },
+      getIssueId()
+    ));
     updateProgress(false);
     const isWorkItem = hasType.work(item);
     if (isWorkItem) {
       onAdd();
-      close();
+      doHide();
     } else {
       updateError(true);
     }
@@ -216,18 +245,7 @@ const AddSpentTimeForm = (props: Props) => {
         style={styles.elevation1}
         title="Spent time"
         leftButton={<IconClose size={21} color={isProgress ? styles.disabled.color : styles.link.color}/>}
-        onBack={() => {
-          if (!isProgress) {
-            confirmation('Discard draft and close?', 'Discard and close')
-              .then(() => {
-                logEvent({
-                  message: 'SpentTime: form:cancel',
-                  analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
-                });
-                onClose();
-              }).catch(() => null);
-          }
-        }}
+        onBack={() => !isProgress && onClose()}
         extraButton={(
           <TouchableOpacity
             hitSlop={HIT_SLOP}
@@ -252,6 +270,28 @@ const AddSpentTimeForm = (props: Props) => {
     placeholderTextColor: styles.icon.color,
     keyboardAppearance: theme.uiTheme.name,
   };
+
+  const renderDatePicker: () => void = (): void => {
+    const isSplitModeView: boolean = isSplitView();
+    const datePicker: any = <DatePicker
+      current={draft.date}
+      onDateSelect={(date: Date) => {
+        update({date: date.getTime()});
+        if (isSplitModeView) {
+          updateModalChildren(null);
+        } else {
+          doHide();
+        }
+      }}
+    />;
+
+    if (isSplitModeView) {
+      updateModalChildren(datePicker);
+    } else {
+      Router.PageModal({children: datePicker});
+    }
+  };
+
   return (
     <View style={styles.container}>
       {renderHeader()}
@@ -281,19 +321,7 @@ const AddSpentTimeForm = (props: Props) => {
 
           <TouchableOpacity
             style={buttonStyle}
-            onPress={
-              () => Router.PageModal({
-                children: (
-                  <DatePicker
-                    current={draft.date}
-                    onDateSelect={(date: Date) => {
-                      update({date: date.getTime()});
-                      close();
-                    }}
-                  />
-                ),
-              })
-            }
+            onPress={renderDatePicker}
           >
             <Text style={styles.feedbackFormTextSup}>Date</Text>
             <Text
@@ -350,6 +378,10 @@ const AddSpentTimeForm = (props: Props) => {
         </View>
       </InputScrollView>
       {isSelectVisible && !!selectProps && renderSelect(selectProps)}
+
+      {modalChildren && <ModalPortal onHide={() => updateModalChildren(null)}>
+        {modalChildren}
+      </ModalPortal>}
     </View>
   );
 };

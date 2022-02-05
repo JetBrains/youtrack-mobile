@@ -22,6 +22,7 @@ const ISSUE_WORK_ITEMS_FIELDS = toField([
   {
     type: ['id,name'],
     duration: ['presentation'],
+    issue: ['id,project(id,ringId)'],
   },
 ]);
 

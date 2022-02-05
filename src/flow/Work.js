@@ -21,6 +21,13 @@ export type WorkItemTemplate = {
     presentation: string,
   },
   type: WorkItemType | null,
+  issue: {
+    id: string,
+    project: {
+      id: string,
+      ringId: string,
+    },
+  },
 };
 
 export type WorkItem = {

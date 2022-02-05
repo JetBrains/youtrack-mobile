@@ -6,22 +6,20 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useSelector} from 'react-redux';
 
-import AddSpentTimeForm from '../../views/issue/activity/activity__add-spent-time';
 import IssuePermissions from '../issue-permissions/issue-permissions';
 import MarkdownView from '../wiki/markdown-view';
-import Router from '../router/router';
 import StreamUserInfo from './activity__stream-user-info';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {firstActivityChange, getDurationPresentation} from './activity__stream-helper';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconContextActions} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
-import type {ActionSheetOption} from '../action-sheet/action-sheet';
 import {showActionSheet} from '../action-sheet/action-sheet';
 import {ytDate} from '../issue-formatter/issue-formatter';
 
 import styles from './activity__stream.styles';
 
+import type {ActionSheetOption} from '../action-sheet/action-sheet';
 import type {Activity} from '../../flow/Activity';
 import type {AppState} from '../../reducers';
 import type {IssueFull} from '../../flow/Issue';
@@ -30,7 +28,8 @@ import type {WorkItem} from '../../flow/Work';
 type Props = {
   activityGroup: Activity,
   onDelete?: (workItem: WorkItem) => any,
-  onUpdate?: (workItem?: WorkItem) => any
+  onUpdate?: (workItem?: WorkItem) => any,
+  onEdit?: (workItem: WorkItem) => any,
 }
 
 type WorkPermissions = { canUpdate: boolean, canDelete: boolean, canCreateNotOwn: boolean };
@@ -82,7 +81,7 @@ const StreamWork = (props: Props) => {
                 if (props.onUpdate) {
                   props.onUpdate({
                     ...work,
-                    text: workItemText
+                    text: workItemText,
                   });
                 }
               }}
@@ -109,21 +108,7 @@ const StreamWork = (props: Props) => {
     if (workPermissions.canUpdate) {
       options.push({
         title: 'Edit',
-        execute: () => {
-          logEvent({
-            message: 'SpentTime: actions:update',
-            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
-          });
-          Router.PageModal({
-            children: (
-              <AddSpentTimeForm
-                canCreateNotOwn={workPermissions.canCreateNotOwn}
-                workItem={work}
-                onAdd={props.onUpdate}
-              />
-            ),
-          });
-        },
+        execute: () => props?.onEdit && props.onEdit(work),
       });
     }
     if (workPermissions.canDelete) {

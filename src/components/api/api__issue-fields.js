@@ -322,30 +322,30 @@ const ISSUE_WORK_ITEMS_DURATION_FIELDS = toField([
   'presentation',
 ]);
 
+const ISSUE_WORK_ITEMS_BASE_FIELDS: any = toField({
+  type: ['name', 'id'],
+  creator: ISSUE_USER_FIELDS,
+  author: ISSUE_USER_FIELDS,
+  issue: ['id,project(id,ringId)'],
+});
+
+
 const ISSUE_WORK_ITEMS_FIELDS: any = toField([
   'id',
   'text',
   'name',
   'date',
   'usesMarkdown',
-  {
-    type: ['name', 'id'],
-    duration: ISSUE_WORK_ITEMS_DURATION_FIELDS,
-    creator: ISSUE_USER_FIELDS,
-    author: ISSUE_USER_FIELDS,
-  },
+  ISSUE_WORK_ITEMS_BASE_FIELDS,
+  {duration: ISSUE_WORK_ITEMS_DURATION_FIELDS},
 ]);
 
 const ISSUE_WORK_ITEM_TEMPLATE = toField([
   {
     workItemTemplate: toField([
       'date',
-      {
-        type: ['name', 'id'],
-        duration: ['presentation'],
-        creator: ISSUE_USER_FIELDS,
-        author: ISSUE_USER_FIELDS,
-      },
+      ISSUE_WORK_ITEMS_BASE_FIELDS,
+      {duration: ['presentation']},
     ]),
   }]);
 

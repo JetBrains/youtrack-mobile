@@ -16,7 +16,13 @@ type ActivityWork = EventBase & {
   $type: string;
   date: number;
   type: {name: string},
-  duration: {minutes: number}
+  duration: {minutes: number},
+  issue: {
+    id: string,
+    project: {
+      ringId: string,
+    },
+  },
 }
 
 export type ActivityItem = IssueProject | IssueComment | Attachment | IssueFull | ActivityWork | string | null;

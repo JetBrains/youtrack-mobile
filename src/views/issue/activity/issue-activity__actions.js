@@ -17,7 +17,7 @@ import {WORK_ITEM_CREATE, WORK_ITEM_UPDATE} from '../../../components/issue-perm
 import type Api from '../../../components/api/api';
 import type {Activity, ActivityType} from '../../../flow/Activity';
 import type {CustomError} from '../../../flow/Error';
-import type {Folder, User} from '../../../flow/User';
+import type {User} from '../../../flow/User';
 import type {State as SingleIssueState} from '../issue-reducers';
 import type {TimeTracking} from '../../../flow/Work';
 import type {WorkItem} from '../../../flow/Work';
@@ -36,13 +36,6 @@ export function receiveActivityPage(activityPage: Array<Activity> | null): {acti
 
 export function receiveActivityPageError(error: Error): {error: Error, type: any} {
   return {type: types.RECEIVE_ACTIVITY_ERROR, error};
-}
-
-export function updateWorkItem() {
-  logEvent({
-    message: 'Update spent time',
-    analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
-  });
 }
 
 
@@ -91,20 +84,20 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
       };
     },
 
-    getTimeTracking: function getTimeTracking(): ((
+    getTimeTracking: function getTimeTracking(issueId?: string): ((
       dispatch: (any) => any,
       getState: StateGetter,
       getApi: ApiGetter
     ) => Promise<TimeTracking | null>) {
       return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-        const issueId = getState()[stateFieldName].issueId;
+        const targetIssueId: string = issueId || getState()[stateFieldName].issueId;
         const api: Api = getApi();
 
         logEvent({
           message: 'Create spent time',
           analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
-        const [error, timeTracking] = await until(api.issue.timeTracking(issueId));
+        const [error, timeTracking] = await until(api.issue.timeTracking(targetIssueId));
         if (error) {
           const msg: string = 'Failed to load time tracking';
           notify(msg, error);
@@ -115,16 +108,15 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
       };
     },
 
-    updateWorkItemDraft: function updateWorkItemDraft(draft: WorkItem): ((
+    updateWorkItemDraft: function updateWorkItemDraft(draft: WorkItem, issueId?: string): ((
       dispatch: (any) => any,
       getState: StateGetter,
       getApi: ApiGetter
     ) => Promise<WorkItem | null>) {
       return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
-        const issueId = getState()[stateFieldName].issueId;
-
-        const [error, updatedDraft] = await until(api.issue.updateDraftWorkItem(issueId, draft));
+        const targetIssueId: string = issueId || getState()[stateFieldName].issueId;
+        const [error, updatedDraft] = await until(api.issue.updateDraftWorkItem(targetIssueId, draft));
         if (error) {
           const msg: string = 'Failed to update work item draft';
           notify(msg, error);
@@ -137,9 +129,15 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
 
     doUpdateWorkItem: function doUpdateWorkItem(workItem: WorkItem): Function {
       return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+        logEvent({
+          message: 'Update spent time',
+          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
+        });
+
         const api: Api = getApi();
-        const issueId = getState()[stateFieldName].issueId;
-        const [error] = await until(api.issue.createWorkItem(issueId, workItem));
+        const targetIssueId: string = workItem.issue.id || getState()[stateFieldName].issueId;
+
+        const [error] = await until(api.issue.createWorkItem(targetIssueId, workItem));
         if (error) {
           const message: string = 'Failed to update work item';
           notify(message, error);
@@ -147,26 +145,26 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
         } else {
           logEvent({
             message: 'Work item checkbox updated',
-            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION
+            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
           });
         }
       };
     },
 
-    createWorkItem: function createWorkItem(draft: WorkItem): ((
+    createWorkItem: function createWorkItem(draft: WorkItem, issueId?: string): ((
       dispatch: (any) => any,
       getState: StateGetter,
       getApi: ApiGetter
     ) => Promise<CustomError> | Promise<any>) {
       return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
-        const issueId = getState()[stateFieldName].issueId;
+        const targetIssueId: string = issueId || getState()[stateFieldName].issueId;
 
         logEvent({
           message: 'Create work item',
           analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
-        const [error, updatedDraft] = await until(api.issue.createWorkItem(issueId, draft));
+        const [error, updatedDraft] = await until(api.issue.createWorkItem(targetIssueId, draft));
         if (error) {
           const msg: string = (extractErrorMessage(await resolveError(error), true));
           notify(msg, error);
@@ -177,16 +175,16 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
       };
     },
 
-    deleteWorkItemDraft: function deleteWorkItemDraft(): ((
+    deleteWorkItemDraft: function deleteWorkItemDraft(issueId?: string): ((
       dispatch: (any) => any,
       getState: StateGetter,
       getApi: ApiGetter
     ) => Promise<void>) {
       return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
-        const issueId = getState()[stateFieldName].issueId;
+        const targetIssueId: string = issueId || getState()[stateFieldName].issueId;
 
-        const [error] = await until(api.issue.deleteDraftWorkItem(issueId));
+        const [error] = await until(api.issue.deleteDraftWorkItem(targetIssueId));
         if (error) {
           const msg: string = 'Failed to delete work item draft';
           notify(msg, error);
@@ -195,23 +193,22 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
       };
     },
 
-    getWorkItemAuthors: function getWorkItemAuthors(): ((
+    getWorkItemAuthors: function getWorkItemAuthors(projectRingId?: string): ((
       dispatch: (any) => any,
       getState: StateGetter,
       getApi: ApiGetter
-    ) => Promise<any> | Promise<Array<any>>) {
+    ) => Promise<any> | Promise<Array<$Shape<User>>>) {
       return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
-        const project: Folder = getState()[stateFieldName].issue.project;
         logEvent({
           message: 'SpentTime: form:get-authors',
           analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
-        const promises: Array<Promise<User>> = [
+        const promises: Array<Promise<$Shape<User>>> = [
           WORK_ITEM_UPDATE,
           WORK_ITEM_CREATE,
         ].map((permissionName: string) => {
-          return api.user.getHubProjectUsers(encodeURIComponent(`access(project:${project.ringId},with:{${permissionName}})`));
+          return api.user.getHubProjectUsers(encodeURIComponent(`access(project:${projectRingId},with:{${permissionName}})`));
         });
         const [error, users] = await until(promises, true);
         if (error) {
@@ -225,19 +222,19 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
       };
     },
 
-    getWorkItemTypes: function getWorkItemTypes(): ((
+    getWorkItemTypes: function getWorkItemTypes(projectId?: string): ((
       dispatch: (any) => any,
       getState: StateGetter,
       getApi: ApiGetter
     ) => Promise<any> | Promise<{...}>) {
       return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
-        const projectId: string = getState()[stateFieldName].issue.project.id;
+        const targetProjectId: string = projectId || getState()[stateFieldName].issue.project.id;
         logEvent({
           message: 'SpentTime: form:get-work-types',
           analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
-        const [error, projectTimeTrackingSettings] = await until(api.projects.getTimeTrackingSettings(projectId));
+        const [error, projectTimeTrackingSettings] = await until(api.projects.getTimeTrackingSettings(targetProjectId));
         if (error) {
           const msg: string = 'Failed to load project time tracking settings';
           notify(msg, error);
@@ -248,20 +245,19 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
       };
     },
 
-    deleteWorkItem: function deleteWorkItem(): ((
+    deleteWorkItem: function deleteWorkItem(workItem: WorkItem): ((
       dispatch: (any) => any,
       getState: StateGetter,
       getApi: ApiGetter
     ) => Promise<any>) {
       return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
-        const issueId: string = getState()[stateFieldName].issueId;
-
+        const issueId: string = workItem?.issue?.id || getState()[stateFieldName].issueId;
         return confirmation(
           'Are you sure you want to delete work item?',
           'Delete'
         ).then(async () => {
-          const [error] = await until(api.issue.deleteWorkItem(issueId));
+          const [error] = await until(api.issue.deleteWorkItem(issueId, workItem.id));
           if (error) {
             const msg: string = 'Failed to delete work item ';
             notify(msg, error);

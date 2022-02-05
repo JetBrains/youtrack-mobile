@@ -14,8 +14,10 @@ import IssueActivityStream from './issue__activity-stream';
 import IssueActivityStreamCommentEdit from './issue-activity__comment-edit';
 import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
 import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios';
+import ModalPortal from '../../../components/modal-view/modal-portal';
 import Router from '../../../components/router/router';
 import Select from '../../../components/select/select';
+import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
 import {bindActionCreatorsExt} from '../../../util/redux-ext';
 import {convertCommentsToActivityPage, createActivityModel} from '../../../components/activity/activity-helper';
@@ -24,7 +26,9 @@ import {createIssueActivityActions, receiveActivityPage} from './issue-activity_
 import {getApi} from '../../../components/api/api__instance';
 import {IconClose} from '../../../components/icon/icon';
 import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
+import {isSplitView} from '../../../components/responsive/responsive-helper';
 import {IssueContext} from '../issue-context';
+import {logEvent} from '../../../components/log/log-helper';
 import {ThemeContext} from '../../../components/theme/theme-context';
 
 import styles from './issue-activity.styles';
@@ -49,7 +53,9 @@ type IssueActivityProps = $Shape<IssueActivityState
   stateFieldName: string,
 }>;
 
-export class IssueActivity extends PureComponent<IssueActivityProps, void> {
+type State = { modalChildren: any };
+
+export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   static contextTypes: any | { actionSheet: typeof Function } = {
     actionSheet: Function,
   };
@@ -59,6 +65,8 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
   issuePermissions: $Shape<IssuePermissions>;
   props: IssueActivityProps;
   issueContext: IssueContextData;
+
+  state: State = {modalChildren: null};
 
   componentDidMount() {
     this.load(this.getCurrentIssueId());
@@ -171,6 +179,13 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
               onWorkUpdate();
             }
           }}
+          onWorkEdit={(work: WorkItem) => {
+            logEvent({
+              message: 'SpentTime: actions:update',
+              analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
+            });
+            this.renderAddSpentTimePage(work);
+          }}
           onCheckboxUpdate={(checked: boolean, position: number, comment: IssueComment) => (
             onCheckboxUpdate(checked, position, comment)
           )}
@@ -254,14 +269,25 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
     </View>;
   }
 
-  renderAddSpentTimePage: (() => any) = () => {
+  renderAddSpentTimePage: ((workItem?: WorkItem) => any) = (workItem?: WorkItem) => {
     const {issue} = this.props;
-    return Router.PageModal({
-      children: <AddSpentTimeForm
+    const isSplitViewMode: boolean = isSplitView();
+    const onHide = () => isSplitViewMode ? this.setState({modalChildren: null}) : Router.pop(true);
+    const addSpentTimeForm: React$Element<typeof AddSpentTimeForm> = (
+      <AddSpentTimeForm
+        workItem={workItem}
+        issue={issue}
         canCreateNotOwn={this.issuePermissions.canCreateWorkNotOwn(issue)}
         onAdd={() => this.loadIssueActivities(true)}
-      />,
-    });
+        onHide={onHide}
+      />
+    );
+
+    if (isSplitViewMode) {
+      this.setState({modalChildren: addSpentTimeForm});
+    } else {
+      Router.PageModal({children: addSpentTimeForm});
+    }
   };
 
   renderCommentVisibilitySelect(): Node {
@@ -326,6 +352,11 @@ export class IssueActivity extends PureComponent<IssueActivityProps, void> {
 
                   {Boolean(this.canAddComment()) && !editingComment?.isEdit && this.renderAddCommentInput()}
                   {editingComment?.isEdit && this.renderEditCommentInput()}
+
+                  {this.state.modalChildren && <ModalPortal
+                    onHide={() => this.setState({modalChildren: null})}>
+                    {this.state.modalChildren}
+                  </ModalPortal>}
                 </View>
               );
             }}

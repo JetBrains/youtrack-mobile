@@ -74,8 +74,9 @@ type Props = {
   uiTheme: UITheme,
   workTimeSettings: ?WorkTimeSettings,
   youtrackWiki: YouTrackWiki,
-  onWorkDelete?: () => any,
+  onWorkDelete?: (workItem: WorkItem) => any,
   onWorkUpdate?: (workItem?: WorkItem) => void,
+  onWorkEdit?: (workItem: WorkItem) => void,
   onCheckboxUpdate?: (checked: boolean, position: number, comment: IssueComment) => Function,
 };
 
@@ -433,6 +434,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
       activityGroup={activityGroup}
       onDelete={props.onWorkDelete}
       onUpdate={props.onWorkUpdate}
+      onEdit={props.onWorkEdit}
     />
   );
 
