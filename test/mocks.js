@@ -7,10 +7,10 @@ import * as storage from '../src/components/storage/storage';
 import {createProjectCustomFieldMock} from './mocks__custom-fields';
 import {ResourceTypes} from '../src/components/api/api__resource-types';
 
-const sandbox = sinon.sandbox.create();
+const sandbox = sinon.createSandbox();
 
 async function mockStorage() {
-  sandbox.stub(MockedStorage, 'multiGet').returns(Promise.resolve([]));
+  sandbox.stub(MockedStorage, 'multiGet').callsFake(Promise.resolve([]));
   return await storage.populateStorage();
 }
 

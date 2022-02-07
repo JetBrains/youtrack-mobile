@@ -17,7 +17,7 @@ describe('Storage', () => {
       queryMock = 'for: me';
       configMock = {foo: 'bar'};
 
-      sandbox = sinon.sandbox.create();
+      sandbox = sinon.createSandbox();
       sandbox.spy(MockedStorage, 'multiSet');
       sandbox.spy(MockedStorage, 'multiRemove');
       sandbox.stub(MockedStorage, 'multiGet').returns(Promise.resolve([

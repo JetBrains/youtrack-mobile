@@ -21,7 +21,7 @@ describe('Auth', function () {
   describe('General', () => {
     const getLastRequest = () => requests[requests.length - 1];
     const mockConfigLoading = auth => sinon.stub(auth, 'getCachedAuthParams').returns(Promise.resolve(authParamsMock));
-    const mockConfigSaving = auth => sinon.stub(auth, 'cacheAuthParams', (authParams) => authParams);
+    const mockConfigSaving = auth => sinon.stub(auth, 'cacheAuthParams').callsFake((authParams) => authParams);
 
     beforeEach(() => {
       jest.restoreAllMocks();

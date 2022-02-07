@@ -20,9 +20,9 @@ log.disableLog();
 chai.use(chaiEnzyme());
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
-
 should();
 
+require('react-native-reanimated/lib/src/reanimated2/jestUtils').setUpTests();
 
 // Modules mocks
 
@@ -49,7 +49,7 @@ NativeModules.RNKeychainManager = {
 
 jest.mock('@react-native-community/async-storage', () => mockAsyncStorage);
 
-jest.mock('react-native-reanimated', () => mockReanimated);
+// jest.mock('react-native-reanimated', () => mockReanimated);
 
 jest.mock('react-native-gesture-handler', () => ({}));
 
