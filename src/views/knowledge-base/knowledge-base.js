@@ -238,7 +238,6 @@ export class KnowledgeBase extends Component<Props, State> {
         }
       }}
       onShowSubArticles={(article: ArticleSingle) => this.renderSubArticlesPage(article)}
-      isSplitView={this.state.isSplitView}
     />
   );
 
@@ -247,9 +246,9 @@ export class KnowledgeBase extends Component<Props, State> {
     const title = this.renderHeader({
       leftButton: (
         <TouchableOpacity
-          onPress={() => Router.pop()}
+          onPress={() => this.state.isSplitView ? this.toggleModal(null) : Router.pop()}
         >
-          <IconBack color={styles.link.color}/>
+          {this.state.isSplitView ? <IconClose size={21} color={styles.link.color}/> : <IconBack color={styles.link.color}/>}
         </TouchableOpacity>
       ),
       title: article.summary,
@@ -270,7 +269,12 @@ export class KnowledgeBase extends Component<Props, State> {
       }],
       true
     );
-    Router.Page({children: <>{title}<View style={styles.itemChild}>{tree}</View></>});
+
+    if (this.state.isSplitView) {
+      this.toggleModal([title, tree]);
+    } else {
+      Router.Page({children: <>{title}<View style={styles.itemChild}>{tree}</View></>});
+    }
   };
 
   renderHeader: ((

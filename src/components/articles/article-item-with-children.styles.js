@@ -50,9 +50,6 @@ export const articleItemWithChildrenStyles = {
     paddingRight: UNIT,
     color: '$icon',
   },
-  itemButtonTextTablet: {
-    paddingRight: UNIT * 1.3,
-  },
   itemButtonIcon: {
     marginTop: -1,
   },

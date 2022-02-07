@@ -19,14 +19,13 @@ type Props = {
   onShowSubArticles?: (article: Article) => any,
   onDelete?: (article: Article) => any,
   style?: ViewStyleProp,
-  isSplitView: boolean,
 };
 
 
 const ArticleItemWithChildren = (props: Props) => {
   const [isLoadingSubArticles, updateIsLoadingSubArticles] = useState(false);
 
-  const {article, onArticlePress, onShowSubArticles, style, onDelete, isSplitView} = props;
+  const {article, onArticlePress, onShowSubArticles, style, onDelete} = props;
 
   if (!article) {
     return null;
@@ -62,7 +61,6 @@ const ArticleItemWithChildren = (props: Props) => {
       </TouchableOpacity>}
 
       {article?.childArticles?.length > 0 && <TouchableOpacity
-        disabled={isSplitView}
         style={styles.itemButtonContainer}
         onPress={async () => {
           if (onShowSubArticles) {
@@ -72,11 +70,11 @@ const ArticleItemWithChildren = (props: Props) => {
           }
         }}
       >
-        <View style={isSplitView ? null : styles.itemButton}>
-          {!isSplitView && isLoadingSubArticles && <ActivityIndicator color={styles.icon.color} />}
+        <View style={styles.itemButton}>
+          {isLoadingSubArticles && <ActivityIndicator color={styles.icon.color} />}
           {!isLoadingSubArticles && <>
-            <Text style={[styles.itemButtonText, isSplitView && styles.itemButtonTextTablet]}>{article.childArticles.length}</Text>
-            {!isSplitView && <IconAngleRight style={styles.itemButtonIcon} size={22} color={styles.icon.color}/>}
+            <Text style={styles.itemButtonText}>{article.childArticles.length}</Text>
+            <IconAngleRight style={styles.itemButtonIcon} size={22} color={styles.icon.color}/>
           </>}
         </View>
       </TouchableOpacity>}
