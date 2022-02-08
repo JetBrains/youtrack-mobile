@@ -12,29 +12,30 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import React, {Component} from 'react';
+
+import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
+import ErrorMessageInline from '../../components/error-message/error-message-inline';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+import Keystore from '../../components/keystore/keystore';
+import log from '../../components/log/log';
 import OAuth2 from '../../components/auth/oauth2';
 import Router from '../../components/router/router';
-import {connect} from 'react-redux';
-import {formatYouTrackURL} from '../../components/config/config';
-import {logo, IconBack} from '../../components/icon/icon';
-import Keystore from '../../components/keystore/keystore';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import usage from '../../components/usage/usage';
-import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
+import {connect} from 'react-redux';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
-import {openDebugView, applyAuthorization} from '../../actions/app-actions';
-
-import {resolveErrorMessage} from '../../components/error/error-resolver';
-import ErrorMessageInline from '../../components/error-message/error-message-inline';
-
-import {ThemeContext} from '../../components/theme/theme-context';
-
+import {formatYouTrackURL} from '../../components/config/config';
 import {formStyles} from '../../components/common-styles/form';
 import {HIT_SLOP} from '../../components/common-styles/button';
+import {logo, IconBack} from '../../components/icon/icon';
+import {openDebugView, applyAuthorization} from '../../actions/app-actions';
+import {resolveErrorMessage} from '../../components/error/error-resolver';
+import {ThemeContext} from '../../components/theme/theme-context';
+
 import styles from './log-in.styles';
 
 import type {AppConfig} from '../../flow/AppConfig';
 import type {AuthParams, OAuthParams2} from '../../flow/Auth';
+import type {CustomError} from '../../flow/Error';
 import type {Node} from 'React';
 import type {Theme, UIThemeColors} from '../../flow/Theme';
 
@@ -44,6 +45,7 @@ type Props = {
   onShowDebugView: Function,
   onChangeServerUrl: (currentUrl: string) => any,
   errorMessage?: string,
+  error?: CustomError,
 };
 
 type State = {
@@ -123,15 +125,21 @@ export class LogIn extends Component<Props, State> {
 
   async logInViaHub(): Promise<void> | Promise<any> {
     const {config, onLogIn} = this.props;
+    const msg: string = 'Login via browser PKCE';
     try {
       this.setState({loggingIn: true});
       const authParams: OAuthParams2 = await OAuth2.obtainTokenWithOAuthCode(config);
-      usage.trackEvent(CATEGORY_NAME, 'Login via browser with PKCE', 'Success');
+      usage.trackEvent(CATEGORY_NAME, msg, 'Success');
       onLogIn(authParams);
     } catch (err) {
-      usage.trackEvent(CATEGORY_NAME, 'Login via browser PKCE', 'Error');
-      const errorMessage = await resolveErrorMessage(err);
-      this.setState({loggingIn: false, errorMessage: errorMessage});
+      usage.trackEvent(CATEGORY_NAME, msg, 'Error');
+      log.warn(msg, err);
+      if (err.code === 'authentication_failed') {
+        this.changeYouTrackUrl();
+      } else {
+        const errorMessage = await resolveErrorMessage(err);
+        this.setState({loggingIn: false, errorMessage: errorMessage});
+      }
     }
   }
 
@@ -230,13 +238,8 @@ export class LogIn extends Component<Props, State> {
                     {this.state.loggingIn && <ActivityIndicator style={styles.progressIndicator}/>}
                   </TouchableOpacity>}
 
-                  {!isLoginWithCreds && this.state.loggingIn && <View style={styles.loadingMessage}>
-                    <Text>
-                      <Text style={styles.title}>
-                        Loading issues...
-                      </Text>
-                      <ActivityIndicator style={styles.loadingMessageIndicator} color={styles.loadingMessageIndicator.color}/>
-                    </Text>
+                  {!isLoginWithCreds && this.state.loggingIn && !this.state.errorMessage && <View style={styles.loadingMessage}>
+                    <ActivityIndicator style={styles.loadingMessageIndicator} color={styles.loadingMessageIndicator.color}/>
                   </View>}
 
                   {isLoginWithCreds && <Text style={styles.hintText}>
