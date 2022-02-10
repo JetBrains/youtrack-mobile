@@ -2,7 +2,7 @@
 
 import ImagePicker from 'react-native-image-crop-picker';
 
-import type {Attachment, NormalizedAttachment} from '../../flow/Attachment';
+import type {Attachment, NormalizedAttachment} from 'flow/Attachment';
 
 export const attachFileMethod: { [string]: string } = {
   openCamera: 'openCamera',

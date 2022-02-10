@@ -18,7 +18,7 @@ import styles, {htmlViewStyles} from './youtrack-wiki.styles';
 
 import type {Node as Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 HTMLView.propTypes.style = Text.propTypes.style;
 

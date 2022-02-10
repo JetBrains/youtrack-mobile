@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {CustomError} from '../../flow/Error';
+import type {CustomError} from 'flow/Error';
 import {DEFAULT_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from './error-messages';
 
 

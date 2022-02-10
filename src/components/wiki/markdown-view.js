@@ -14,10 +14,10 @@ import {hasType} from '../api/api__resource-types';
 import {ThemeContext} from '../theme/theme-context';
 import {updateMarkdownCheckbox} from './markdown-helper';
 
-import type {Attachment} from '../../flow/CustomFields';
-import type {Folder} from '../../flow/User';
+import type {Attachment} from 'flow/CustomFields';
+import type {Folder} from 'flow/User';
 import type {Mentions} from './markdown-view-rules';
-import type {Theme} from '../../flow/Theme';
+import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 

@@ -7,8 +7,8 @@ import log, {getLogs} from '../log/log';
 import {getStorageState} from '../storage/storage';
 import {ResourceTypes, getShortEntityType} from '../api/api__resource-types';
 
-import type {AppConfig} from '../../flow/AppConfig';
-import type {HTTPResponse} from '../../flow/Error';
+import type {AppConfig} from 'flow/AppConfig';
+import type {HTTPResponse} from 'flow/Error';
 
 export type ReportErrorData = { summary: string, description: string };
 

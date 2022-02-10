@@ -18,9 +18,9 @@ import {routeMap} from '../../app-routes';
 import styles from './menu.styles';
 
 import type {AppState} from '../../reducers';
-import type {Article} from '../../flow/Article';
+import type {Article} from 'flow/Article';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 type Props = {
   isDisabled: boolean,

@@ -8,14 +8,14 @@ import ApiHelper from '../api/api__helper';
 import {IconAngleDownRight} from '../icon/icon';
 import AgileRowColumn from './agile-row__column';
 import {getPriotityField} from '../issue-formatter/issue-formatter';
-import {isAllColumnsCollapsed} from '../../views/agile-board/agile-board__helper';
+import {isAllColumnsCollapsed} from 'views/agile-board/agile-board__helper';
 
 import styles from './agile-row.styles';
 
-import type {AgileBoardRow, BoardCell, BoardColumn} from '../../flow/Agile';
-import type {IssueOnList} from '../../flow/Issue';
+import type {AgileBoardRow, BoardCell, BoardColumn} from 'flow/Agile';
+import type {IssueOnList} from 'flow/Issue';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 type RenderIssueCard = (issue: IssueOnList) => any;
 

@@ -17,11 +17,11 @@ import {DEFAULT_THEME} from '../theme/theme';
 
 import styles from './visibility-control.styles';
 
-import type {User} from '../../flow/User';
-import type {UserGroup} from '../../flow/UserGroup';
-import type {Visibility} from '../../flow/Visibility';
+import type {User} from 'flow/User';
+import type {UserGroup} from 'flow/UserGroup';
+import type {Visibility} from 'flow/Visibility';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 type Props = {
   getOptions: () => Array<User | UserGroup>,

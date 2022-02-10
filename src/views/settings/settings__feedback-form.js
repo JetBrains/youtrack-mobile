@@ -12,21 +12,21 @@ import {
 
 import InputScrollView from 'react-native-input-scroll-view';
 
-import Header from '../../components/header/header';
-import Router from '../../components/router/router';
-import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
+import Header from 'components/header/header';
+import Router from 'components/router/router';
+import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {feedbackLogsOptions, feedbackTypeOptions, sendFeedback} from './settings-helper';
-import {IconAngleRight, IconCheck, IconClose} from '../../components/icon/icon';
-import {notify} from '../../components/notification/notification';
-import {showActions} from '../../components/action-sheet/action-sheet';
-import {until} from '../../util/util';
+import {IconAngleRight, IconCheck, IconClose} from 'components/icon/icon';
+import {notify} from 'components/notification/notification';
+import {showActions} from 'components/action-sheet/action-sheet';
+import {until} from 'util/util';
 
-import {HIT_SLOP} from '../../components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles/button';
 
 import styles from './settings__feedback-form.styles';
 
 import type {FeedbackLogs, FeedbackType} from './settings-helper';
-import type {UITheme, UIThemeColors} from '../../flow/Theme';
+import type {UITheme, UIThemeColors} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Feedback = {

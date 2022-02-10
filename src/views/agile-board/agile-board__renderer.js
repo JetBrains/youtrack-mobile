@@ -6,13 +6,13 @@ import {Text, TouchableOpacity, View, ActivityIndicator} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {IconAngleDown} from '../../components/icon/icon';
-import {UNIT} from '../../components/variables/variables';
-import {mainText} from '../../components/common-styles/typography';
-import {elevation1} from '../../components/common-styles/shadow';
+import {IconAngleDown} from 'components/icon/icon';
+import {UNIT} from 'components/variables/variables';
+import {mainText} from 'components/common-styles/typography';
+import {elevation1} from 'components/common-styles/shadow';
 
 import type {TextStyleProp, ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 
 export function renderSelector(params: {

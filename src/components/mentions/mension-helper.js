@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {User} from '../../flow/User';
+import type {User} from 'flow/User';
 
 const getSuggestWord = (text: string, caret: number): null | RegExp$matchResult | string => {
   const match = /[\S@]+$/.exec(text.slice(0, caret));

@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {PermissionCacheItem} from '../../flow/Permission';
+import type {PermissionCacheItem} from 'flow/Permission';
 
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
 

@@ -1,6 +1,6 @@
 import * as API from '../api/api__instance';
 import * as storage from '../storage/storage';
-import * as util from '../../util/util';
+import * as util from 'util/util';
 import helper from './push-notifications-helper';
 import {categoryName} from '../activity/activity__category';
 import {mockEventsRegistry} from '../../../test/jest-mock__react-native-notifications';

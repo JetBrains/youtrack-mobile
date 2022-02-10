@@ -7,19 +7,19 @@ import {connect} from 'react-redux';
 import issueModalActions, {dispatchActions, ISSUE_MODAL_STATE_FIELD_NAME} from './issue.modal-actions';
 import IssueModalDetails from './issue.modal__details';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
-import {bindActionCreatorsExt} from '../../../util/redux-ext';
-import {CommandDialogModal} from '../../../components/command-dialog/command-dialog';
-import {IconClose} from '../../../components/icon/icon';
+import {bindActionCreatorsExt} from 'util/redux-ext';
+import {CommandDialogModal} from 'components/command-dialog/command-dialog';
+import {IconClose} from 'components/icon/icon';
 import {Issue} from '../issue';
 
 import styles from '../issue.styles';
 
-import type {IssueOnList} from '../../../flow/Issue';
+import type {IssueOnList} from 'flow/Issue';
 import type {IssueProps, OwnProps} from '../issue';
-import type {RootState} from '../../../reducers/app-reducer';
-import type {ScrollData} from '../../../flow/Markdown';
+import type {RootState} from 'reducers/app-reducer';
+import type {ScrollData} from 'flow/Markdown';
 import type {State as IssueState} from '../issue-reducers';
-import type {UITheme} from '../../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 type Props = {
   ...IssueProps,

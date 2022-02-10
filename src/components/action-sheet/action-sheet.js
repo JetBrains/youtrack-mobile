@@ -5,7 +5,7 @@ import {getThemeMode, getUITheme} from '../theme/theme';
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 
 import type {ActionSheetOptions} from '@expo/react-native-action-sheet';
-import type {UIThemeColors} from '../../flow/Theme';
+import type {UIThemeColors} from 'flow/Theme';
 
 export type ActionSheetOption = { title: string, execute?: Function }
 // $FlowFixMe: any-typed ActionSheetOptions

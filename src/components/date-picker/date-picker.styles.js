@@ -2,7 +2,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {UNIT} from '../variables/variables';
 
-import type {UITheme, UIThemeColors} from '../../flow/Theme';
+import type {UITheme, UIThemeColors} from 'flow/Theme';
 import {MAIN_FONT_SIZE} from '../common-styles/typography';
 
 export default EStyleSheet.create({

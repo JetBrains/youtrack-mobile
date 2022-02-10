@@ -9,9 +9,9 @@ import issueActivityPageFields, {ISSUE_ATTACHMENT_FIELDS} from './api__activitie
 import issueFields from './api__issue-fields';
 import {activityArticleCategory} from '../activity/activity__category';
 
-import type {Activity, ActivityItem} from '../../flow/Activity';
-import type {Article, ArticleDraft} from '../../flow/Article';
-import type {Attachment, IssueComment} from '../../flow/CustomFields';
+import type {Activity, ActivityItem} from 'flow/Activity';
+import type {Article, ArticleDraft} from 'flow/Article';
+import type {Attachment, IssueComment} from 'flow/CustomFields';
 
 export default class ArticlesAPI extends ApiBase {
   articleFieldsQuery: string = ApiBase.createFieldsQuery(articleFields);

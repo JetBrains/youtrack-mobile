@@ -1,6 +1,6 @@
 /* @flow */
 
-import {getAppAndDeviceData, getDeviceLogs, sendReport} from '../../components/error/error-reporter';
+import {getAppAndDeviceData, getDeviceLogs, sendReport} from 'components/error/error-reporter';
 
 export type FeedbackType = { title: string, marker: string };
 export type FeedbackLogs = { title: string, value: boolean };

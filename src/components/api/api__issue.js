@@ -8,7 +8,7 @@ import qs from 'qs';
 import {handleRelativeUrl} from '../config/config';
 
 import type Auth from '../auth/oauth2';
-import type {Activity} from '../../flow/Activity';
+import type {Activity} from 'flow/Activity';
 import type {
   Attachment,
   CustomFieldText,
@@ -18,10 +18,10 @@ import type {
   IssueLinkType,
   IssueProject,
   Tag,
-} from '../../flow/CustomFields';
-import type {AnyIssue, IssueFull} from '../../flow/Issue';
-import type {Visibility} from '../../flow/Visibility';
-import type {WorkItem} from '../../flow/Work';
+} from 'flow/CustomFields';
+import type {AnyIssue, IssueFull} from 'flow/Issue';
+import type {Visibility} from 'flow/Visibility';
+import type {WorkItem} from 'flow/Work';
 
 export default class IssueAPI extends ApiBase {
   constructor(auth: Auth) {

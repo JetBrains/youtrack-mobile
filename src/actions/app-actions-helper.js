@@ -1,13 +1,13 @@
 /* @flow */
 
-import log from '../components/log/log';
-import PermissionsHelper from '../components/permissions-store/permissions-helper';
-import {flushStoragePart, getOtherAccounts, getStorageState} from '../components/storage/storage';
-import {notify} from '../components/notification/notification';
-import {removeTrailingSlash} from '../util/util';
+import log from 'components/log/log';
+import PermissionsHelper from 'components/permissions-store/permissions-helper';
+import {flushStoragePart, getOtherAccounts, getStorageState} from 'components/storage/storage';
+import {notify} from 'components/notification/notification';
+import {removeTrailingSlash} from 'util/util';
 
-import type {PermissionCacheItem} from '../flow/Permission';
-import type {StorageState} from '../components/storage/storage';
+import type {PermissionCacheItem} from 'flow/Permission';
+import type {StorageState} from 'components/storage/storage';
 
 function updateCachedPermissions(permissions: Array<PermissionCacheItem>): void {
   flushStoragePart({permissions});

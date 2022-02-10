@@ -6,7 +6,7 @@ import {TouchableOpacity} from 'react-native';
 
 import {IconStar, IconStarOutline} from '../icon/icon';
 import {HIT_SLOP} from '../common-styles/button';
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 type Props = {
   disabled?: boolean,

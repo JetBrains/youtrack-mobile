@@ -4,8 +4,8 @@ import {Slice} from '@reduxjs/toolkit';
 
 import {attachmentTypes} from './issue.modal__attachment-actions-and-types';
 import {commandDialogNamespace} from '../issue-action-types';
-import {createCommandDialogReducers} from '../../../components/command-dialog/command-dialog-reducer';
-import {ON_NAVIGATE_BACK} from '../../../actions/action-types';
+import {createCommandDialogReducers} from 'components/command-dialog/command-dialog-reducer';
+import {ON_NAVIGATE_BACK} from 'actions/action-types';
 import {routeMap} from '../../../app-routes';
 import {
   createAttachmentReducer,

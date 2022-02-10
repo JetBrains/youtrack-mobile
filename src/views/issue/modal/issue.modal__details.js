@@ -4,20 +4,20 @@ import React from 'react';
 
 import IssueDetails from '../issue__details';
 import IssueModal from './issue.modal';
-import LinkedIssues from '../../../components/linked-issues/linked-issues';
-import LinkedIssuesTitle from '../../../components/linked-issues/linked-issues-title';
-import ModalPortal from '../../../components/modal-view/modal-portal';
-import {IconBack, IconClose} from '../../../components/icon/icon';
-import {ThemeContext} from '../../../components/theme/theme-context';
+import LinkedIssues from 'components/linked-issues/linked-issues';
+import LinkedIssuesTitle from 'components/linked-issues/linked-issues-title';
+import ModalPortal from 'components/modal-view/modal-portal';
+import {IconBack, IconClose} from 'components/icon/icon';
+import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from '../issue.styles';
 import stylesModal from './issue.modal.styles';
 
-import type {AnyIssue, IssueOnList} from '../../../flow/Issue';
+import type {AnyIssue, IssueOnList} from 'flow/Issue';
 import type {IssueDetailsProps} from '../issue__details';
-import type {IssueLink} from '../../../flow/CustomFields';
+import type {IssueLink} from 'flow/CustomFields';
 import type {Node} from 'React';
-import type {Theme} from '../../../flow/Theme';
+import type {Theme} from 'flow/Theme';
 
 
 type State = {

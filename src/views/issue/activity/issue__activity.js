@@ -7,42 +7,42 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import AddSpentTimeForm from './activity__add-spent-time';
-import ErrorMessage from '../../../components/error-message/error-message';
+import ErrorMessage from 'components/error-message/error-message';
 import IssueActivitiesSettings from './issue__activity-settings';
 import IssueActivityCommentAdd from './issue__activity-comment-add';
 import IssueActivityStream from './issue__activity-stream';
 import IssueActivityStreamCommentEdit from './issue-activity__comment-edit';
-import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
-import KeyboardSpacerIOS from '../../../components/platform/keyboard-spacer.ios';
-import ModalPortal from '../../../components/modal-view/modal-portal';
-import Router from '../../../components/router/router';
-import Select from '../../../components/select/select';
-import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
+import IssuePermissions from 'components/issue-permissions/issue-permissions';
+import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
+import ModalPortal from 'components/modal-view/modal-portal';
+import Router from 'components/router/router';
+import Select from 'components/select/select';
+import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
-import {bindActionCreatorsExt} from '../../../util/redux-ext';
-import {convertCommentsToActivityPage, createActivityModel} from '../../../components/activity/activity-helper';
+import {bindActionCreatorsExt} from 'util/redux-ext';
+import {convertCommentsToActivityPage, createActivityModel} from 'components/activity/activity-helper';
 import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {createIssueActivityActions, receiveActivityPage} from './issue-activity__actions';
-import {getApi} from '../../../components/api/api__instance';
-import {IconClose} from '../../../components/icon/icon';
+import {getApi} from 'components/api/api__instance';
+import {IconClose} from 'components/icon/icon';
 import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
-import {isSplitView} from '../../../components/responsive/responsive-helper';
+import {isSplitView} from 'components/responsive/responsive-helper';
 import {IssueContext} from '../issue-context';
-import {logEvent} from '../../../components/log/log-helper';
-import {ThemeContext} from '../../../components/theme/theme-context';
+import {logEvent} from 'components/log/log-helper';
+import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './issue-activity.styles';
 
-import type {IssueComment} from '../../../flow/CustomFields';
-import type {IssueContextData} from '../../../flow/Issue';
+import type {IssueComment} from 'flow/CustomFields';
+import type {IssueContextData} from 'flow/Issue';
 import type {Node} from 'React';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
-import type {Theme, UITheme} from '../../../flow/Theme';
-import type {User, UserAppearanceProfile} from '../../../flow/User';
-import type {WorkItem} from '../../../flow/Work';
-import type {YouTrackWiki} from '../../../flow/Wiki';
-import type {Activity} from '../../../flow/Activity';
+import type {Theme, UITheme} from 'flow/Theme';
+import type {User, UserAppearanceProfile} from 'flow/User';
+import type {WorkItem} from 'flow/Work';
+import type {YouTrackWiki} from 'flow/Wiki';
+import type {Activity} from 'flow/Activity';
 
 type IssueActivityProps = $Shape<IssueActivityState
   & IssueCommentActivityState

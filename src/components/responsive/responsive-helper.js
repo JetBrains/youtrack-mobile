@@ -2,7 +2,7 @@
 
 import {Dimensions} from 'react-native';
 
-import {isTablet} from '../../util/util';
+import {isTablet} from 'util/util';
 
 
 const tabletSplitViewFactor: number = 0.66;

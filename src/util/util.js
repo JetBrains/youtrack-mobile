@@ -8,10 +8,10 @@ import DeviceInfo from 'react-native-device-info';
 import qs from 'qs';
 
 import appPackage from '../../package.json';
-import {getStorageState} from '../components/storage/storage';
+import {getStorageState} from 'components/storage/storage';
 
-import type {CustomError} from '../flow/Error';
-import type {StorageState} from '../components/storage/storage';
+import type {CustomError} from 'flow/Error';
+import type {StorageState} from 'components/storage/storage';
 
 
 export const AppVersion: any = appPackage.version.split('-')[0];

@@ -5,26 +5,26 @@ import {arrayToTree} from 'performant-array-to-tree';
 import type ActionSheet from '@expo/react-native-action-sheet';
 
 import * as helper from './knowledge-base-helper';
-import * as treeHelper from '../../components/articles/articles-tree-helper';
-import animation from '../../components/animation/animation';
-import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
-import {confirmation} from '../../components/confirmation/confirmation';
-import {flushStoragePart, getStorageState} from '../../components/storage/storage';
-import {hasType} from '../../components/api/api__resource-types';
-import {logEvent} from '../../components/log/log-helper';
-import {notify} from '../../components/notification/notification';
+import * as treeHelper from 'components/articles/articles-tree-helper';
+import animation from 'components/animation/animation';
+import {ANALYTICS_ARTICLES_PAGE} from 'components/analytics/analytics-ids';
+import {confirmation} from 'components/confirmation/confirmation';
+import {flushStoragePart, getStorageState} from 'components/storage/storage';
+import {hasType} from 'components/api/api__resource-types';
+import {logEvent} from 'components/log/log-helper';
+import {notify} from 'components/notification/notification';
 import {setArticles, setError, setExpandingProjectId, setList, setLoading} from './knowledge-base-reducers';
 import {
   cacheProjects,
   cacheUserLastVisitedArticle,
   resetUserArticlesProfile,
-} from '../../actions/app-actions';
-import {showActions} from '../../components/action-sheet/action-sheet';
-import {sortByUpdatedReverse} from '../../components/search/sorting';
-import {until} from '../../util/util';
+} from 'actions/app-actions';
+import {showActions} from 'components/action-sheet/action-sheet';
+import {sortByUpdatedReverse} from 'components/search/sorting';
+import {until} from 'util/util';
 
-import type Api from '../../components/api/api';
-import type {ActionSheetOption} from '../../components/action-sheet/action-sheet';
+import type Api from 'components/api/api';
+import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
 import type {AppState} from '../../reducers';
 import type {
   Article,
@@ -33,9 +33,9 @@ import type {
   ArticlesList,
   ArticlesListItem,
   ProjectArticlesData,
-} from '../../flow/Article';
-import type {CustomError} from '../../flow/Error';
-import type {Folder} from '../../flow/User';
+} from 'flow/Article';
+import type {CustomError} from 'flow/Error';
+import type {Folder} from 'flow/User';
 
 type ApiGetter = () => Api;
 

@@ -3,7 +3,7 @@
 import {IconAccountAlert} from '../icon/icon';
 import {DEFAULT_ERROR_MESSAGE} from './error-messages';
 
-import type {ErrorMessageData} from '../../flow/Error';
+import type {ErrorMessageData} from 'flow/Error';
 import {HTTP_STATUS} from './error-http-codes';
 
 

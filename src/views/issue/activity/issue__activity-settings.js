@@ -6,18 +6,18 @@ import {View, Text, TouchableOpacity} from 'react-native';
 
 import Switch from 'react-native-switch-pro';
 
-import ModalPanelBottom from '../../../components/modal-panel-bottom/modal-panel-bottom';
-import {getIssueActivityIcon} from '../../../components/activity/activity-helper';
-import {IconAngleDown} from '../../../components/icon/icon';
+import ModalPanelBottom from 'components/modal-panel-bottom/modal-panel-bottom';
+import {getIssueActivityIcon} from 'components/activity/activity-helper';
+import {IconAngleDown} from 'components/icon/icon';
 import {toggleIssueActivityEnabledType} from './issue-activity__helper';
 
-import {HIT_SLOP} from '../../../components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles/button';
 
 import styles from './issue-activity.styles';
 
-import type {ActivityType} from '../../../flow/Activity';
-import type {UITheme} from '../../../flow/Theme';
-import type {UserAppearanceProfile} from '../../../flow/User';
+import type {ActivityType} from 'flow/Activity';
+import type {UITheme} from 'flow/Theme';
+import type {UserAppearanceProfile} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {

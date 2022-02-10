@@ -5,7 +5,7 @@ import {USER_AGENT} from '../usage/usage';
 import log from '../log/log';
 import {YT_SUPPORTED_VERSION} from '../error-message/error-text-messages';
 
-import type {AppConfig} from '../../flow/AppConfig';
+import type {AppConfig} from 'flow/AppConfig';
 
 const MIN_YT_VERSION = 7.0;
 const PROTOCOL_REGEXP = /^https?:\/\//i;

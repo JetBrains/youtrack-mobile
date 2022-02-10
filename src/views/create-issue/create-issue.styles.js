@@ -1,8 +1,8 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {UNIT} from '../../components/variables/variables';
-import {headerTitle, mainText} from '../../components/common-styles/typography';
-import {separator} from '../../components/common-styles/list';
+import {UNIT} from 'components/variables/variables';
+import {headerTitle, mainText} from 'components/common-styles/typography';
+import {separator} from 'components/common-styles/list';
 
 export default EStyleSheet.create({
   container: {

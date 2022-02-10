@@ -9,7 +9,7 @@ import QueryAssist from './query-assist';
 import styles from './query-assist.styles';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {TransformedSuggestion} from '../../flow/Issue';
+import type {TransformedSuggestion} from 'flow/Issue';
 
 type SearchPanelProps = {
   queryAssistSuggestions: Array<TransformedSuggestion>,

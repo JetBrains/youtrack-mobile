@@ -1,9 +1,9 @@
 /* @flow */
 
-import {sortAlphabetically} from '../../components/search/sorting';
+import {sortAlphabetically} from 'components/search/sorting';
 
-import type {Article, ArticleProject, ArticlesList, ArticlesListItem, ProjectArticlesData} from '../../flow/Article';
-import type {Folder} from '../../flow/User';
+import type {Article, ArticleProject, ArticlesList, ArticlesListItem, ProjectArticlesData} from 'flow/Article';
+import type {Folder} from 'flow/User';
 
 
 export const createSortedProjects = (

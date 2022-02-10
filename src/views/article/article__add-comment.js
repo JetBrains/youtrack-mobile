@@ -4,15 +4,15 @@ import React, {useCallback, useEffect} from 'react';
 
 import {useDispatch} from 'react-redux';
 
-import IssueCommentEdit from '../../components/comment/comment-edit';
-import IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import IssueCommentEdit from 'components/comment/comment-edit';
+import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import {attachmentActions} from './article__activity__attachment-actions-and-types';
-import {getApi} from '../../components/api/api__instance';
+import {getApi} from 'components/api/api__instance';
 import {getArticleCommentDraft, getMentions} from './arcticle-actions';
-import {visibilityArticleDefaultText} from '../../components/visibility/visibility-strings';
+import {visibilityArticleDefaultText} from 'components/visibility/visibility-strings';
 
-import type {Article} from '../../flow/Article';
-import type {IssueComment} from '../../flow/CustomFields';
+import type {Article} from 'flow/Article';
+import type {IssueComment} from 'flow/CustomFields';
 
 type Props = {
   article: Article,

@@ -5,9 +5,9 @@ import {handleRelativeUrl} from '../config/config';
 import {ResourceTypes} from './api__resource-types';
 
 import type Auth from '../auth/oauth2';
-import type {IssueComment} from '../../flow/CustomFields';
-import type {Reaction} from '../../flow/Reaction';
-import type {Folder, User, UserAppearanceProfile, UserGeneralProfile} from '../../flow/User';
+import type {IssueComment} from 'flow/CustomFields';
+import type {Reaction} from 'flow/Reaction';
+import type {Folder, User, UserAppearanceProfile, UserGeneralProfile} from 'flow/User';
 
 
 export default class UserAPI extends ApiBase {

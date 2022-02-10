@@ -3,8 +3,8 @@
 import React, {useState} from 'react';
 import {TextInput, View} from 'react-native';
 
-import {IconSearch} from '../../components/icon/icon';
-import {iconClearText} from '../../components/icon/icon-clear-text';
+import {IconSearch} from 'components/icon/icon';
+import {iconClearText} from 'components/icon/icon-clear-text';
 
 import styles from './knowledge-base.styles';
 

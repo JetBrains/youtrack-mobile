@@ -1,7 +1,7 @@
 /* @flow */
 
-import {commandDialogActionMap} from '../../components/command-dialog/command-dialog-action-types';
-import {createCommandDialogTypeMap} from '../../components/command-dialog/command-dialog-reducer';
+import {commandDialogActionMap} from 'components/command-dialog/command-dialog-action-types';
+import {createCommandDialogTypeMap} from 'components/command-dialog/command-dialog-reducer';
 
 export const commandDialogNamespace: string = 'issue';
 export const commandDialogTypes: typeof commandDialogActionMap = createCommandDialogTypeMap(commandDialogNamespace);

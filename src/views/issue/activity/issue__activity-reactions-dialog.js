@@ -4,14 +4,14 @@ import React from 'react';
 
 import {TouchableOpacity, View} from 'react-native';
 
-import availableReactionNames from '../../../components/reactions/reactions-name-list';
-import ModalPanelBottom from '../../../components/modal-panel-bottom/modal-panel-bottom';
-import ReactionIcon from '../../../components/reactions/reaction-icon';
+import availableReactionNames from 'components/reactions/reactions-name-list';
+import ModalPanelBottom from 'components/modal-panel-bottom/modal-panel-bottom';
+import ReactionIcon from 'components/reactions/reaction-icon';
 
-import {HIT_SLOP} from '../../../components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles/button';
 import styles from './issue-activity.styles';
 
-import type {Reaction} from '../../../flow/Reaction';
+import type {Reaction} from 'flow/Reaction';
 
 type Props = {
   onHide: () => void,

@@ -6,7 +6,7 @@ import {View, Text, SectionList, TouchableOpacity, ActivityIndicator} from 'reac
 import {View as AnimatedView} from 'react-native-animatable';
 
 import Header from '../header/header';
-import IssueRow from '../../views/issues/issues__row';
+import IssueRow from 'views/issues/issues__row';
 import LinkedIssuesAddLink from './linked-issues-add-link';
 import Router from '../router/router';
 import {createLinksList} from './linked-issues-helper';
@@ -15,11 +15,11 @@ import {ThemeContext} from '../theme/theme-context';
 
 import styles from './linked-issues.style';
 
-import type {IssueLink} from '../../flow/CustomFields';
-import type {IssueOnList} from '../../flow/Issue';
+import type {IssueLink} from 'flow/CustomFields';
+import type {IssueOnList} from 'flow/Issue';
 import type {LinksListData} from './linked-issues-helper';
 import type {Node} from 'React';
-import type {Theme} from '../../flow/Theme';
+import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {

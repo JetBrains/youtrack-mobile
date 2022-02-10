@@ -12,7 +12,7 @@ import LongText from './text-renderer';
 import renderCode from './code-renderer';
 import Router from '../router/router';
 import {getApi} from '../api/api__instance';
-import {guid, isURLPattern} from '../../util/util';
+import {guid, isURLPattern} from 'util/util';
 import {hasMimeType} from '../mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from '../icon/icon';
 import {ResourceTypes} from '../api/api__resource-types';
@@ -20,11 +20,11 @@ import {WebView} from 'react-native-webview';
 
 import styles from './youtrack-wiki.styles';
 
-import type {Article} from '../../flow/Article';
-import type {Attachment, ImageDimensions, IssueProject} from '../../flow/CustomFields';
-import type {IssueFull} from '../../flow/Issue';
-import type {MarkdownNode} from '../../flow/Markdown';
-import type {UITheme} from '../../flow/Theme';
+import type {Article} from 'flow/Article';
+import type {Attachment, ImageDimensions, IssueProject} from 'flow/CustomFields';
+import type {IssueFull} from 'flow/Issue';
+import type {MarkdownNode} from 'flow/Markdown';
+import type {UITheme} from 'flow/Theme';
 
 export type Mentions = {
   articles: Array<Article>,

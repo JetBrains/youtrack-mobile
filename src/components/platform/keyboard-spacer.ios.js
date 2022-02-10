@@ -3,7 +3,7 @@
 import React from 'react';
 
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import {isIOSPlatform} from '../../util/util';
+import {isIOSPlatform} from 'util/util';
 
 import type {Node} from 'React';
 

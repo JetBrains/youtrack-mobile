@@ -1,7 +1,7 @@
 /* @flow */
 
 
-import {confirmation} from '../../components/confirmation/confirmation';
+import {confirmation} from 'components/confirmation/confirmation';
 
 export const confirmDeleteArticle = (message?: string): any => (
   confirmation('Are you sure you want to delete this article?', 'Delete', message)

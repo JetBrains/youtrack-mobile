@@ -1,7 +1,7 @@
 /* @flow */
 
-import type {IssueLink, IssueLinkType} from '../../flow/CustomFields';
-import type {IssueOnList} from '../../flow/Issue';
+import type {IssueLink, IssueLinkType} from 'flow/CustomFields';
+import type {IssueOnList} from 'flow/Issue';
 
 export type LinksMap = { [string]: IssueLink };
 

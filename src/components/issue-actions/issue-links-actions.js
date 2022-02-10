@@ -4,11 +4,11 @@ import log from '../log/log';
 import {getApi} from '../api/api__instance';
 import {notify} from '../notification/notification';
 import {resolveError} from '../error/error-resolver';
-import {until} from '../../util/util';
+import {until} from 'util/util';
 
 import type API from '../api/api';
-import type {IssueFull, IssueOnList} from '../../flow/Issue';
-import type {IssueLink, IssueLinkType} from '../../flow/CustomFields';
+import type {IssueFull, IssueOnList} from 'flow/Issue';
+import type {IssueLink, IssueLinkType} from 'flow/CustomFields';
 
 
 const issueCommonLinksActions = (issue: $Shape<IssueFull>): {

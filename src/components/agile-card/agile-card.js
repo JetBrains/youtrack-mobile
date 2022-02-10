@@ -12,11 +12,11 @@ import {UNIT} from '../variables/variables';
 
 import styles from './agile-card.styles';
 
-import type {IssueOnList} from '../../flow/Issue';
-import type {CustomFieldShort, CustomField, CustomFieldValue} from '../../flow/CustomFields';
+import type {IssueOnList} from 'flow/Issue';
+import type {CustomFieldShort, CustomField, CustomFieldValue} from 'flow/CustomFields';
 import type {Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 type Props = {
   cardWidth?: ?number,

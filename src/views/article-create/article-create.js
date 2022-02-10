@@ -7,36 +7,36 @@ import {useDebouncedCallback} from 'use-debounce';
 import {useDispatch, useSelector} from 'react-redux';
 
 import * as articleCreateActions from './arcticle-create-actions';
-import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
-import AttachmentsRow from '../../components/attachments-row/attachments-row';
-import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
-import Badge from '../../components/badge/badge';
-import Header from '../../components/header/header';
-import IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import Router from '../../components/router/router';
-import Select from '../../components/select/select';
-import Separator from '../../components/separator/separator';
-import SummaryDescriptionForm from '../../components/form/summary-description-form';
-import VisibilityControl from '../../components/visibility/visibility-control';
-import {ANALYTICS_ARTICLE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
-import {getApi} from '../../components/api/api__instance';
-import {getStorageState} from '../../components/storage/storage';
-import {IconAngleDown, IconCheck, IconClose} from '../../components/icon/icon';
-import {PanelWithSeparator} from '../../components/panel/panel-with-separator';
-import {SkeletonCreateArticle} from '../../components/skeleton/skeleton';
-import {ThemeContext} from '../../components/theme/theme-context';
+import AttachFileDialog from 'components/attach-file/attach-file-dialog';
+import AttachmentsRow from 'components/attachments-row/attachments-row';
+import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
+import Badge from 'components/badge/badge';
+import Header from 'components/header/header';
+import IssuePermissions from 'components/issue-permissions/issue-permissions';
+import Router from 'components/router/router';
+import Select from 'components/select/select';
+import Separator from 'components/separator/separator';
+import SummaryDescriptionForm from 'components/form/summary-description-form';
+import VisibilityControl from 'components/visibility/visibility-control';
+import {ANALYTICS_ARTICLE_CREATE_PAGE} from 'components/analytics/analytics-ids';
+import {getApi} from 'components/api/api__instance';
+import {getStorageState} from 'components/storage/storage';
+import {IconAngleDown, IconCheck, IconClose} from 'components/icon/icon';
+import {PanelWithSeparator} from 'components/panel/panel-with-separator';
+import {SkeletonCreateArticle} from 'components/skeleton/skeleton';
+import {ThemeContext} from 'components/theme/theme-context';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './article-create.styles';
 
 import type {AppState} from '../../reducers';
-import type {Article, ArticleDraft, ArticleProject} from '../../flow/Article';
+import type {Article, ArticleDraft, ArticleProject} from 'flow/Article';
 import type {ArticleCreateState} from './article-create-reducers';
-import type {Attachment, IssueProject} from '../../flow/CustomFields';
-import type {CustomError} from '../../flow/Error';
-import type {NormalizedAttachment} from '../../flow/Attachment';
-import type {Theme, UIThemeColors} from '../../flow/Theme';
-import type {Visibility} from '../../flow/Visibility';
+import type {Attachment, IssueProject} from 'flow/CustomFields';
+import type {CustomError} from 'flow/Error';
+import type {NormalizedAttachment} from 'flow/Attachment';
+import type {Theme, UIThemeColors} from 'flow/Theme';
+import type {Visibility} from 'flow/Visibility';
 
 
 type Props = {

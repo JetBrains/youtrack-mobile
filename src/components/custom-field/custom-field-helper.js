@@ -6,7 +6,7 @@ import type {
   CustomFieldText,
   CustomFieldValue,
   ProjectCustomField,
-} from '../../flow/CustomFields';
+} from 'flow/CustomFields';
 
 type AnyCustomField = $Shape<CustomField & CustomFieldText>;
 

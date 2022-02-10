@@ -2,15 +2,15 @@
 
 import React, {useContext} from 'react';
 
-import YoutrackWiki from '../../components/wiki/youtrack-wiki';
-import MarkdownView from '../../components/wiki/markdown-view';
-import MarkdownViewChunks from '../../components/wiki/markdown-view-chunks';
-import {ThemeContext} from '../../components/theme/theme-context';
+import YoutrackWiki from 'components/wiki/youtrack-wiki';
+import MarkdownView from 'components/wiki/markdown-view';
+import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
+import {ThemeContext} from 'components/theme/theme-context';
 
-import type {Attachment} from '../../flow/CustomFields';
-import type {Theme} from '../../flow/Theme';
-import type {YouTrackWiki} from '../../flow/Wiki';
-import type {ScrollData} from '../../flow/Markdown';
+import type {Attachment} from 'flow/CustomFields';
+import type {Theme} from 'flow/Theme';
+import type {YouTrackWiki} from 'flow/Wiki';
+import type {ScrollData} from 'flow/Markdown';
 
 type Props = {
   youtrackWiki?: YouTrackWiki,

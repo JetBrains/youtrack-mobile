@@ -12,8 +12,8 @@ import {isSplitView} from '../responsive/responsive-helper';
 import styles from './issue-tabbed.style';
 
 import type {Node} from 'React';
-import type {TabRoute} from '../../flow/Issue';
-import type {UITheme, UIThemeColors} from '../../flow/Theme';
+import type {TabRoute} from 'flow/Issue';
+import type {UITheme, UIThemeColors} from 'flow/Theme';
 
 export type IssueTabbedState = {
   index: number,

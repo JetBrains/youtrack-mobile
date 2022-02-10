@@ -2,17 +2,17 @@
 
 import React, {Component} from 'react';
 
-import AgileCard from '../../components/agile-card/agile-card';
-import BoardRow from '../../components/agile-row/agile-row';
-import {AGILE_TABLET_CARD_WIDTH} from '../../components/agile-common/agile-common';
-import {Draggable} from '../../components/draggable/';
-import {isSplitView} from '../../components/responsive/responsive-helper';
+import AgileCard from 'components/agile-card/agile-card';
+import BoardRow from 'components/agile-row/agile-row';
+import {AGILE_TABLET_CARD_WIDTH} from 'components/agile-common/agile-common';
+import {Draggable} from 'components/draggable/';
+import {isSplitView} from 'components/responsive/responsive-helper';
 
-import type {AgileBoardRow, Board, SprintFull} from '../../flow/Agile';
-import type {AnyIssue} from '../../flow/Issue';
+import type {AgileBoardRow, Board, SprintFull} from 'flow/Agile';
+import type {AnyIssue} from 'flow/Issue';
 import type {Node} from 'React';
-import type {UIThemeName, UIThemeColors, BarStyle} from '../../flow/Theme';
-import type {UITheme} from '../../flow/Theme';
+import type {UIThemeName, UIThemeColors, BarStyle} from 'flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 type Props = {
   sprint: SprintFull,

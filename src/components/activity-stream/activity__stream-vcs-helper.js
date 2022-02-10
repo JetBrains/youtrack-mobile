@@ -1,7 +1,7 @@
 /* @flow */
 
 import {ResourceTypes} from '../api/api__resource-types';
-import type {VCSActivity, VcsChangeState, VcsCommand, VcsProcessor} from '../../flow/Vcs';
+import type {VCSActivity, VcsChangeState, VcsCommand, VcsProcessor} from 'flow/Vcs';
 
 const HUB_DEFAULT_ERROR: string = 'YouTrack was unable to match the VCS user name to a Hub account for an unknown reason. Check your server logs for details.';
 export const userNotFoundMessageMap: { [string]: string } = {

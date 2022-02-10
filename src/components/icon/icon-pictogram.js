@@ -4,15 +4,15 @@ import React, {useContext} from 'react';
 
 import {ThemeContext} from '../theme/theme-context';
 
-import NoProjectFound from '../../assets/no-project-found.svg';
-import NoProjectFoundDark from '../../assets/no-project-found-dark.svg';
-import NothingFound from '../../assets/not-found.svg';
-import NothingFoundDark from '../../assets/not-found-dark.svg';
-import NothingSelected from '../../assets/nothing-selected.svg';
-import NothingSelectedDark from '../../assets/nothing-selected-dark.svg';
+import NoProjectFound from 'assets/no-project-found.svg';
+import NoProjectFoundDark from 'assets/no-project-found-dark.svg';
+import NothingFound from 'assets/not-found.svg';
+import NothingFoundDark from 'assets/not-found-dark.svg';
+import NothingSelected from 'assets/nothing-selected.svg';
+import NothingSelectedDark from 'assets/nothing-selected-dark.svg';
 
 import type {Node} from 'react';
-import type {Theme} from '../../flow/Theme';
+import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {

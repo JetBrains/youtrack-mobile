@@ -2,10 +2,10 @@
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {mainText, secondaryText} from '../../components/common-styles/typography';
-import {separatorBorder} from '../../components/common-styles/list';
-import {UNIT} from '../../components/variables/variables';
-import {elevation1} from '../../components/common-styles/shadow';
+import {mainText, secondaryText} from 'components/common-styles/typography';
+import {separatorBorder} from 'components/common-styles/list';
+import {UNIT} from 'components/variables/variables';
+import {elevation1} from 'components/common-styles/shadow';
 
 
 const hPaddings = {

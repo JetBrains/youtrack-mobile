@@ -5,34 +5,34 @@ import {UIManager} from 'react-native';
 
 import {Provider} from 'react-redux';
 
-import AgileBoard from './views/agile-board/agile-board';
+import AgileBoard from 'views/agile-board/agile-board';
 import AppProvider from './app-provider';
-import Article from './views/article/article';
-import ArticleCreate from './views/article-create/article-create';
-import AttachmentPreview from './views/attachment-preview/attachment-preview';
-import CreateIssue from './views/create-issue/create-issue';
-import EnterServer from './views/enter-server/enter-server';
-import Home from './views/home/home';
-import Inbox from './views/inbox/inbox';
-import Issue from './views/issue/issue';
-import Issues from './views/issues/issues';
-import KnowledgeBase from './views/knowledge-base/knowledge-base';
-import log from './components/log/log';
-import LoginForm from './views/log-in/log-in';
-import notificationsHelper from './components/push-notifications/push-notifications-helper';
-import Page from './views/page/page';
-import PreviewFile from './views/preview-file/preview-file';
-import Router from './components/router/router';
-import Settings from './views/settings/settings';
+import Article from 'views/article/article';
+import ArticleCreate from 'views/article-create/article-create';
+import AttachmentPreview from 'views/attachment-preview/attachment-preview';
+import CreateIssue from 'views/create-issue/create-issue';
+import EnterServer from 'views/enter-server/enter-server';
+import Home from 'views/home/home';
+import Inbox from 'views/inbox/inbox';
+import Issue from 'views/issue/issue';
+import Issues from 'views/issues/issues';
+import KnowledgeBase from 'views/knowledge-base/knowledge-base';
+import log from 'components/log/log';
+import LoginForm from 'views/log-in/log-in';
+import notificationsHelper from 'components/push-notifications/push-notifications-helper';
+import Page from 'views/page/page';
+import PreviewFile from 'views/preview-file/preview-file';
+import Router from 'components/router/router';
+import Settings from 'views/settings/settings';
 import store from './store';
-import WikiPage from './views/wiki-page/wiki-page';
+import WikiPage from 'views/wiki-page/wiki-page';
 import {ActionSheetProvider, connectActionSheet} from '@expo/react-native-action-sheet';
 import {Notifications} from 'react-native-notifications';
-import {onNavigateBack, setAccount} from './actions/app-actions';
+import {onNavigateBack, setAccount} from 'actions/app-actions';
 import {rootRoutesList, routeMap} from './app-routes';
 
 import type {Node} from 'React';
-import type {NotificationRouteData} from './flow/Notification';
+import type {NotificationRouteData} from 'flow/Notification';
 import type {Ref} from 'react';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {

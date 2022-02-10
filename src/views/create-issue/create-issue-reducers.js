@@ -3,12 +3,12 @@
 import {createSlice, Slice} from '@reduxjs/toolkit';
 
 import {attachmentTypes} from './create-issue__attachment-actions-and-types';
-import {createCommandDialogReducers} from '../../components/command-dialog/command-dialog-reducer';
+import {createCommandDialogReducers} from 'components/command-dialog/command-dialog-reducer';
 import {createIssueNamespace} from './create-issue-action-types';
-import {LOG_OUT} from '../../actions/action-types';
+import {LOG_OUT} from 'actions/action-types';
 
-import type {Attachment, CustomField, FieldValue, IssueLink, IssueProject} from '../../flow/CustomFields';
-import type {CommandSuggestionResponse, IssueFull} from '../../flow/Issue';
+import type {Attachment, CustomField, FieldValue, IssueLink, IssueProject} from 'flow/CustomFields';
+import type {CommandSuggestionResponse, IssueFull} from 'flow/Issue';
 
 export type CreateIssueState = {
   processing: boolean,

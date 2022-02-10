@@ -9,12 +9,12 @@ import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import {Appearance, AppearanceProvider} from 'react-native-appearance';
 
 import {flushStoragePart, getStorageState} from '../storage/storage';
-import {isAndroidPlatform} from '../../util/util';
+import {isAndroidPlatform} from 'util/util';
 
 import {ThemeContext} from './theme-context';
 import {buildStyles, getSystemThemeMode, getUITheme, themes} from './theme';
 
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 type State = {
   mode: ?string,

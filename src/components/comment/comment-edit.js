@@ -4,7 +4,7 @@ import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, View, Text, TouchableOpacity, TextInput, Dimensions} from 'react-native';
 
 import InputScrollView from 'react-native-input-scroll-view';
-import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
+import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import debounce from 'lodash.debounce';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import {useDispatch} from 'react-redux';
@@ -31,14 +31,14 @@ import {ThemeContext} from '../theme/theme-context';
 
 import styles, {MIN_INPUT_SIZE} from './comment-edit.styles';
 
-import type {Attachment, IssueComment} from '../../flow/CustomFields';
+import type {Attachment, IssueComment} from 'flow/CustomFields';
 import type {AttachmentActions} from '../attachments-row/attachment-actions';
 import type {Node} from 'react';
-import type {NormalizedAttachment} from '../../flow/Attachment';
-import type {Theme} from '../../flow/Theme';
-import type {UserGroup} from '../../flow/UserGroup';
-import type {User} from '../../flow/User';
-import type {Visibility} from '../../flow/Visibility';
+import type {NormalizedAttachment} from 'flow/Attachment';
+import type {Theme} from 'flow/Theme';
+import type {UserGroup} from 'flow/UserGroup';
+import type {User} from 'flow/User';
+import type {Visibility} from 'flow/Visibility';
 
 type UserMentions = { users: Array<User> };
 

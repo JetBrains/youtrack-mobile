@@ -3,10 +3,10 @@
 import React from 'react';
 import {View, Image, Text, TouchableOpacity} from 'react-native';
 
-import usage from '../../components/usage/usage';
-import {formatYouTrackURL} from '../../components/config/config';
-import {HIT_SLOP} from '../../components/common-styles/button';
-import {logo, IconPencil} from '../../components/icon/icon';
+import usage from 'components/usage/usage';
+import {formatYouTrackURL} from 'components/config/config';
+import {HIT_SLOP} from 'components/common-styles/button';
+import {logo, IconPencil} from 'components/icon/icon';
 
 import styles from './home.styles';
 

@@ -4,14 +4,14 @@ import {createReducer} from 'redux-create-reducer';
 
 import * as types from '../issue-action-types';
 import {attachmentTypes} from './issue-activity__attachment-actions-and-types';
-import {guid} from '../../../util/util';
+import {guid} from 'util/util';
 
-import type {Activity} from '../../../flow/Activity';
-import type {CustomError} from '../../../flow/Error';
-import type {IssueComment} from '../../../flow/CustomFields';
-import type {IssueFull, OpenNestedViewParams} from '../../../flow/Issue';
-import type {User, UserAppearanceProfile} from '../../../flow/User';
-import type {WorkTimeSettings} from '../../../flow/Work';
+import type {Activity} from 'flow/Activity';
+import type {CustomError} from 'flow/Error';
+import type {IssueComment} from 'flow/CustomFields';
+import type {IssueFull, OpenNestedViewParams} from 'flow/Issue';
+import type {User, UserAppearanceProfile} from 'flow/User';
+import type {WorkTimeSettings} from 'flow/Work';
 
 type ActivityPage = Array<Activity> | null;
 

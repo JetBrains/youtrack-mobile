@@ -2,12 +2,12 @@
 /**
  * https://confluence.jetbrains.com/display/TSYS/Issue+access+rights
  */
-import type {AnyIssue} from '../../flow/Issue';
-import type {Article} from '../../flow/Article';
+import type {AnyIssue} from 'flow/Issue';
+import type {Article} from 'flow/Article';
 import type {PermissionsStore} from '../permissions-store/permissions-store';
-import type {User} from '../../flow/User';
-import type {Attachment, CustomField, IssueComment, IssueProject} from '../../flow/CustomFields';
-import type {WorkItem} from '../../flow/Work';
+import type {User} from 'flow/User';
+import type {Attachment, CustomField, IssueComment, IssueProject} from 'flow/CustomFields';
+import type {WorkItem} from 'flow/Work';
 
 export const CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_ISSUE';
 export const READ_ISSUE = 'JetBrains.YouTrack.READ_ISSUE';

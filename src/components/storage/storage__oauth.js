@@ -4,7 +4,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 
 import {getStorageState, storageStateAuthParamsKey} from './storage';
 
-import type {AuthParams} from '../../flow/Auth';
+import type {AuthParams} from 'flow/Auth';
 
 
 const getAuthParamsKey = (): string => getStorageState()[storageStateAuthParamsKey] || '';

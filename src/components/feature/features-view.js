@@ -10,7 +10,7 @@ import Header from '../header/header';
 import ModalView from '../modal-view/modal-view';
 
 import styles from './feature-view.style';
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 import {IconClose} from '../icon/icon';
 
 type Props = {

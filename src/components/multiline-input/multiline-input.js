@@ -4,7 +4,7 @@ import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {TextInput} from 'react-native';
 
-import {isIOSPlatform} from '../../util/util';
+import {isIOSPlatform} from 'util/util';
 import {UNIT} from '../variables/variables';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';

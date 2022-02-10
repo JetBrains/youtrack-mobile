@@ -9,7 +9,7 @@ import {IconBack, IconCheck, IconClose} from '../icon/icon';
 
 import styles from './custom-fields-panel.styles';
 
-import type {CustomField as IssueCustomField} from '../../flow/CustomFields';
+import type {CustomField as IssueCustomField} from 'flow/CustomFields';
 
 type Props = {
   modal?: boolean,

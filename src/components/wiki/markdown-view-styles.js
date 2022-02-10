@@ -4,7 +4,7 @@ import {Platform} from 'react-native';
 
 import {UNIT} from '../variables/variables';
 import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from '../common-styles/typography';
-import type {UITheme, UIThemeColors} from '../../flow/Theme';
+import type {UITheme, UIThemeColors} from 'flow/Theme';
 
 
 const vSpace = {

@@ -11,13 +11,13 @@ import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
 import ModalPortal from '../modal-view/modal-portal';
 import ModalView from '../modal-view/modal-view';
 import SelectItem from '../select/select__item';
-import {guid} from '../../util/util';
+import {guid} from 'util/util';
 import {IconBack, IconCheck} from '../icon/icon';
 
 import styles from './command-dialog.styles';
 
-import type {CommandSuggestionResponse, CommandSuggestion, SuggestedCommand} from '../../flow/Issue';
-import type {UITheme} from '../../flow/Theme';
+import type {CommandSuggestionResponse, CommandSuggestion, SuggestedCommand} from 'flow/Issue';
+import type {UITheme} from 'flow/Theme';
 
 type Props = {
   suggestions: ?CommandSuggestionResponse,

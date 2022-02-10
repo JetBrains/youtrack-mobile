@@ -9,7 +9,7 @@ import {
   STOP_APPLYING_COMMAND,
 } from './command-dialog-action-types';
 
-import type {CommandSuggestionResponse} from '../../flow/Issue';
+import type {CommandSuggestionResponse} from 'flow/Issue';
 
 export const createCommandDialogTypeMap: Object = (namespace: string = '') => Object.keys(
   commandDialogActionMap

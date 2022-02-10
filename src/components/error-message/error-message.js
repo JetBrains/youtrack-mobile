@@ -11,7 +11,7 @@ import {IconSearch} from '../icon/icon';
 
 import {styles} from './error-message.style';
 
-import type {CustomError, ErrorMessageData} from '../../flow/Error';
+import type {CustomError, ErrorMessageData} from 'flow/Error';
 import type {Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 

@@ -1,9 +1,9 @@
 /* @flow */
 
-import {attachmentActionMap, createAttachmentTypes} from '../../components/attachments-row/attachment-helper';
-import {getAttachmentActions} from '../../components/attachments-row/attachment-actions';
+import {attachmentActionMap, createAttachmentTypes} from 'components/attachments-row/attachment-helper';
+import {getAttachmentActions} from 'components/attachments-row/attachment-actions';
 
-import type {AttachmentActions} from '../../components/attachments-row/attachment-actions';
+import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 
 const PREFIX: string = 'articleActivity';
 

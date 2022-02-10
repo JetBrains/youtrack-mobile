@@ -7,8 +7,8 @@ import agileFields from './api__agile-fields';
 import ApiHelper from './api__helper';
 
 import type Auth from '../auth/oauth2';
-import type {AgileUserProfile, SprintFull, AgileBoardRow, BoardOnList, Board} from '../../flow/Agile';
-import type {IssueFull} from '../../flow/Issue';
+import type {AgileUserProfile, SprintFull, AgileBoardRow, BoardOnList, Board} from 'flow/Agile';
+import type {IssueFull} from 'flow/Issue';
 
 export default class AgileAPI extends ApiBase {
   constructor(auth: Auth) {

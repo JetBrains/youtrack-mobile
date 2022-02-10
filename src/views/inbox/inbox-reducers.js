@@ -3,9 +3,9 @@
 import * as types from './inbox-action-types';
 import {createReducer} from 'redux-create-reducer';
 
-import type {CustomError} from '../../flow/Error';
-import type {Theme} from '../../flow/Theme';
-import type {User} from '../../flow/User';
+import type {CustomError} from 'flow/Error';
+import type {Theme} from 'flow/Theme';
+import type {User} from 'flow/User';
 
 export type InboxState = {
   loading: boolean,

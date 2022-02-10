@@ -3,14 +3,14 @@
 import {View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
-import ColorField from '../../components/color-field/color-field';
+import ColorField from 'components/color-field/color-field';
 import {showActions} from '../action-sheet/action-sheet';
 
 import styles from './tags.styles';
 
 import type {ActionSheetOption} from '../action-sheet/action-sheet';
 import type {Node} from 'React';
-import type {Tag} from '../../flow/CustomFields';
+import type {Tag} from 'flow/CustomFields';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 

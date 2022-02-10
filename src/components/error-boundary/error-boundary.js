@@ -9,7 +9,7 @@ import RNRestart from 'react-native-restart';
 
 import usage from '../usage/usage';
 import {connect} from 'react-redux';
-import {openDebugView} from '../../actions/app-actions';
+import {openDebugView} from 'actions/app-actions';
 import log from '../log/log';
 import {sendReport, createReportErrorData} from '../error/error-reporter';
 import {notify} from '../notification/notification';
@@ -23,7 +23,7 @@ import styles from './error-boundary.styles';
 
 import type {ReportErrorData} from '../error/error-reporter';
 import {ThemeContext} from '../theme/theme-context';
-import type {Theme, UIThemeColors} from '../../flow/Theme';
+import type {Theme, UIThemeColors} from 'flow/Theme';
 
 type Props = {
   openDebugView: any => any,

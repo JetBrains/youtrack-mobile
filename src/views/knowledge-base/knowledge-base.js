@@ -7,39 +7,39 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as knowledgeBaseActions from './knowledge-base-actions';
-import Article from '../../views/article/article';
-import ArticleCreate from '../../views/article-create/article-create';
-import ArticleWithChildren from '../../components/articles/article-item-with-children';
-import ErrorMessage from '../../components/error-message/error-message';
+import Article from 'views/article/article';
+import ArticleCreate from 'views/article-create/article-create';
+import ArticleWithChildren from 'components/articles/article-item-with-children';
+import ErrorMessage from 'components/error-message/error-message';
 import KnowledgeBaseDrafts from './knowledge-base__drafts';
 import KnowledgeBaseSearchPanel from './knowledge-base__search';
-import ModalPortal from '../../components/modal-view/modal-portal';
-import Router from '../../components/router/router';
-import SelectSectioned from '../../components/select/select-sectioned';
-import Star from '../../components/star/star';
-import usage from '../../components/usage/usage';
-import {ANALYTICS_ARTICLES_PAGE} from '../../components/analytics/analytics-ids';
+import ModalPortal from 'components/modal-view/modal-portal';
+import Router from 'components/router/router';
+import SelectSectioned from 'components/select/select-sectioned';
+import Star from 'components/star/star';
+import usage from 'components/usage/usage';
+import {ANALYTICS_ARTICLES_PAGE} from 'components/analytics/analytics-ids';
 import {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
-import {HIT_SLOP} from '../../components/common-styles/button';
-import {getGroupedByFieldNameAlphabetically} from '../../components/search/sorting';
-import {getStorageState} from '../../components/storage/storage';
-import {IconAngleDown, IconAngleRight, IconBack, IconClose, IconContextActions} from '../../components/icon/icon';
-import {isSplitView} from '../../components/responsive/responsive-helper';
+import {HIT_SLOP} from 'components/common-styles/button';
+import {getGroupedByFieldNameAlphabetically} from 'components/search/sorting';
+import {getStorageState} from 'components/storage/storage';
+import {IconAngleDown, IconAngleRight, IconBack, IconClose, IconContextActions} from 'components/icon/icon';
+import {isSplitView} from 'components/responsive/responsive-helper';
 import {
   ICON_PICTOGRAM_DEFAULT_SIZE,
   IconNoProjectFound,
   IconNothingFound,
   IconNothingSelected,
-} from '../../components/icon/icon-pictogram';
+} from 'components/icon/icon-pictogram';
 import {routeMap} from '../../app-routes';
-import {SkeletonIssues} from '../../components/skeleton/skeleton';
-import {ThemeContext} from '../../components/theme/theme-context';
-import {UNIT} from '../../components/variables/variables';
+import {SkeletonIssues} from 'components/skeleton/skeleton';
+import {ThemeContext} from 'components/theme/theme-context';
+import {UNIT} from 'components/variables/variables';
 
 
 import styles from './knowledge-base.styles';
 
-import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
+import type IssuePermissions from 'components/issue-permissions/issue-permissions';
 import type {AppState} from '../../reducers';
 import type {
   Article as ArticleSingle,
@@ -49,12 +49,12 @@ import type {
   ArticleProject,
   ArticleNodeList,
   ArticleDraft,
-} from '../../flow/Article';
+} from 'flow/Article';
 import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {Node} from 'React';
-import type {SelectProps} from '../../components/select/select';
-import type {Theme, UITheme} from '../../flow/Theme';
+import type {SelectProps} from 'components/select/select';
+import type {Theme, UITheme} from 'flow/Theme';
 
 type Props = {
   ...KnowledgeBaseActions,

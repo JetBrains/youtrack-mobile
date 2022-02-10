@@ -10,7 +10,7 @@ import {getLinkedIssuesTitle} from './linked-issues-helper';
 
 import styles from './linked-issues.style';
 
-import type {IssueLink} from '../../flow/CustomFields';
+import type {IssueLink} from 'flow/CustomFields';
 import type {Node} from 'React';
 
 type Props = {

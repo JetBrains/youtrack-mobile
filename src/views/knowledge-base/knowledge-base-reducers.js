@@ -2,8 +2,8 @@
 
 import {createSlice, Slice} from '@reduxjs/toolkit';
 
-import type {ArticlesList, ProjectArticlesData} from '../../flow/Article';
-import type {CustomError} from '../../flow/Error';
+import type {ArticlesList, ProjectArticlesData} from 'flow/Article';
+import type {CustomError} from 'flow/Error';
 
 export type KnowledgeBaseState = {
   articles: Array<ProjectArticlesData> | null,

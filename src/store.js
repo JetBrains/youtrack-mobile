@@ -1,7 +1,7 @@
 /* @flow */
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import {getApi} from './components/api/api__instance';
+import {getApi} from 'components/api/api__instance';
 
 import reducer from './reducers';
 

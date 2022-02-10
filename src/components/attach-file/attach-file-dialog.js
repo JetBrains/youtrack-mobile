@@ -25,14 +25,14 @@ import {ThemeContext} from '../theme/theme-context';
 
 import styles from './attach-file-dialog.styles';
 
-import type {ActionSheetAction} from '../../flow/Action';
-import type {ImageDimensions} from '../../flow/CustomFields';
+import type {ActionSheetAction} from 'flow/Action';
+import type {ImageDimensions} from 'flow/CustomFields';
 import type {DisplayMetrics} from 'react-native/Libraries/Utilities/NativeDeviceInfo';
-import type {NormalizedAttachment} from '../../flow/Attachment';
-import type {Theme} from '../../flow/Theme';
-import type {UserGroup} from '../../flow/UserGroup';
-import type {User} from '../../flow/User';
-import type {Visibility} from '../../flow/Visibility';
+import type {NormalizedAttachment} from 'flow/Attachment';
+import type {Theme} from 'flow/Theme';
+import type {UserGroup} from 'flow/UserGroup';
+import type {User} from 'flow/User';
+import type {Visibility} from 'flow/Visibility';
 
 export const attachFileActions: Array<ActionSheetAction> = [
   {

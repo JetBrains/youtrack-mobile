@@ -4,15 +4,15 @@ import React, {useContext} from 'react';
 
 import {useDispatch} from 'react-redux';
 
-import IssueCommentEdit from '../../../components/comment/comment-edit';
-import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
+import IssueCommentEdit from 'components/comment/comment-edit';
+import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import {attachmentActions} from './issue-activity__attachment-actions-and-types';
 import {createActivityCommentActions} from './issue-activity__comment-actions';
-import {getApi} from '../../../components/api/api__instance';
+import {getApi} from 'components/api/api__instance';
 import {IssueContext} from '../issue-context';
 
-import type {IssueComment} from '../../../flow/CustomFields';
-import type {IssueContextData, IssueFull} from '../../../flow/Issue';
+import type {IssueComment} from 'flow/CustomFields';
+import type {IssueContextData, IssueFull} from 'flow/Issue';
 
 type Props = {
   comment: IssueComment,

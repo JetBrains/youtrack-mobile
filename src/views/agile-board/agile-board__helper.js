@@ -1,7 +1,7 @@
 /* @flow */
 
-import type {BoardColumn, Cell, Sprint, SprintFull, Swimlane} from '../../flow/Agile';
-import type {IssueFull, IssueOnList} from '../../flow/Issue';
+import type {BoardColumn, Cell, Sprint, SprintFull, Swimlane} from 'flow/Agile';
+import type {IssueFull, IssueOnList} from 'flow/Issue';
 
 type GroupedSprints = {
   active: Array<Sprint>,

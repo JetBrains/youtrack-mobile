@@ -13,31 +13,31 @@ import {
 } from 'react-native';
 import React, {Component} from 'react';
 
-import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
-import ErrorMessageInline from '../../components/error-message/error-message-inline';
+import clicksToShowCounter from 'components/debug-view/clicks-to-show-counter';
+import ErrorMessageInline from 'components/error-message/error-message-inline';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import Keystore from '../../components/keystore/keystore';
-import log from '../../components/log/log';
-import OAuth2 from '../../components/auth/oauth2';
-import Router from '../../components/router/router';
-import usage from '../../components/usage/usage';
+import Keystore from 'components/keystore/keystore';
+import log from 'components/log/log';
+import OAuth2 from 'components/auth/oauth2';
+import Router from 'components/router/router';
+import usage from 'components/usage/usage';
 import {connect} from 'react-redux';
-import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
-import {formatYouTrackURL} from '../../components/config/config';
-import {formStyles} from '../../components/common-styles/form';
-import {HIT_SLOP} from '../../components/common-styles/button';
-import {logo, IconBack} from '../../components/icon/icon';
-import {openDebugView, applyAuthorization} from '../../actions/app-actions';
-import {resolveErrorMessage} from '../../components/error/error-resolver';
-import {ThemeContext} from '../../components/theme/theme-context';
+import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
+import {formatYouTrackURL} from 'components/config/config';
+import {formStyles} from 'components/common-styles/form';
+import {HIT_SLOP} from 'components/common-styles/button';
+import {logo, IconBack} from 'components/icon/icon';
+import {openDebugView, applyAuthorization} from 'actions/app-actions';
+import {resolveErrorMessage} from 'components/error/error-resolver';
+import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './log-in.styles';
 
-import type {AppConfig} from '../../flow/AppConfig';
-import type {AuthParams, OAuthParams2} from '../../flow/Auth';
-import type {CustomError} from '../../flow/Error';
+import type {AppConfig} from 'flow/AppConfig';
+import type {AuthParams, OAuthParams2} from 'flow/Auth';
+import type {CustomError} from 'flow/Error';
 import type {Node} from 'React';
-import type {Theme, UIThemeColors} from '../../flow/Theme';
+import type {Theme, UIThemeColors} from 'flow/Theme';
 
 type Props = {
   config: AppConfig,

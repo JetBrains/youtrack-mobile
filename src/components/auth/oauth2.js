@@ -7,8 +7,8 @@ import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
 import {getAuthParamsKey} from '../storage/storage__oauth';
 import {logEvent} from '../log/log-helper';
 
-import type {AppConfig} from '../../flow/AppConfig';
-import type {AuthParams, OAuthParams} from '../../flow/Auth';
+import type {AppConfig} from 'flow/AppConfig';
+import type {AuthParams, OAuthParams} from 'flow/Auth';
 
 
 export default class OAuth2 extends AuthBase {

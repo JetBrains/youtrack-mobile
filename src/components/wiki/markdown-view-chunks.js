@@ -5,9 +5,9 @@ import {View} from 'react-native';
 
 import {stringToTokens, tokensToAST} from 'react-native-markdown-display';
 
-import apiHelper from '../../components/api/api__helper';
+import apiHelper from 'components/api/api__helper';
 import getMarkdownRules from './markdown-view-rules';
-import MarkdownAST from '../../components/wiki/markdown-ast';
+import MarkdownAST from 'components/wiki/markdown-ast';
 import MarkdownItInstance from './markdown-instance';
 import {getApi} from '../api/api__instance';
 import {getStorageState} from '../storage/storage';
@@ -15,13 +15,13 @@ import {hasType} from '../api/api__resource-types';
 import {SkeletonIssueContent} from '../skeleton/skeleton';
 import {updateMarkdownCheckbox} from './markdown-helper';
 
-import type {Article} from '../../flow/Article';
+import type {Article} from 'flow/Article';
 import type {ASTNode} from 'react-native-markdown-display';
-import type {Attachment} from '../../flow/CustomFields';
-import type {Folder} from '../../flow/User';
-import type {IssueOnList} from '../../flow/Issue';
-import type {MarkdownNode} from '../../flow/Markdown';
-import type {UITheme} from '../../flow/Theme';
+import type {Attachment} from 'flow/CustomFields';
+import type {Folder} from 'flow/User';
+import type {IssueOnList} from 'flow/Issue';
+import type {MarkdownNode} from 'flow/Markdown';
+import type {UITheme} from 'flow/Theme';
 
 type Props = {
   attachments?: Array<Attachment>,
