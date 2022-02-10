@@ -49,7 +49,7 @@ const MarkdownViewChunks = (props: Props) => {
     onCheckboxUpdate = (markdown: string) => {},
   } = props;
 
-  const [chunksToRender, updateChunksToRender] = useState(0);
+  const [chunksToRender, updateChunksToRender] = useState(1);
   const [astToRender, updateAstToRender] = useState([]);
 
   const createMarkdown = useCallback((markdown: string): void => {
