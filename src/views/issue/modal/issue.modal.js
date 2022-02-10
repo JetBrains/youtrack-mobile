@@ -17,6 +17,7 @@ import styles from '../issue.styles';
 import type {IssueOnList} from '../../../flow/Issue';
 import type {IssueProps, OwnProps} from '../issue';
 import type {RootState} from '../../../reducers/app-reducer';
+import type {ScrollData} from '../../../flow/Markdown';
 import type {State as IssueState} from '../issue-reducers';
 import type {UITheme} from '../../../flow/Theme';
 
@@ -53,7 +54,10 @@ class IssueModal extends Issue<Props> {
     );
   };
 
-  renderDetails = (uiTheme: UITheme) => {
+  createIssueDetails: (uiTheme: UITheme, scrollData: ScrollData) => React$Element<any> = (
+    uiTheme: UITheme,
+    scrollData: ScrollData,
+  ) => {
     const {
       loadIssue,
       openNestedIssueView,
@@ -139,6 +143,7 @@ class IssueModal extends Issue<Props> {
         setCustomFieldValue={setCustomFieldValue}
         onNavigate={onNavigate}
         stacked={stacked}
+        scrollData={scrollData}
       />
     );
   };
