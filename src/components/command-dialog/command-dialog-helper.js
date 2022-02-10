@@ -3,7 +3,7 @@
 import {CUSTOM_ERROR_MESSAGE} from '../error/error-messages';
 import {getApi} from '../api/api__instance';
 import {notify} from '../notification/notification';
-import type {CommandSuggestionResponse} from '../../flow/Issue';
+import type {CommandSuggestionResponse} from 'flow/Issue';
 
 
 const loadIssueCommandSuggestions = async (

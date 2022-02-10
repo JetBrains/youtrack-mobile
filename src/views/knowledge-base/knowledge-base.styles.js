@@ -1,13 +1,13 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {articleItemWithChildrenStyles} from '../../components/articles/article-item-with-children.styles';
-import {clearIcon, inputWrapper, searchInput} from '../../components/common-styles/search';
-import {elevation1} from '../../components/common-styles/shadow';
-import {headerTitle, mainText, secondaryText} from '../../components/common-styles/typography';
+import {articleItemWithChildrenStyles} from 'components/articles/article-item-with-children.styles';
+import {clearIcon, inputWrapper, searchInput} from 'components/common-styles/search';
+import {elevation1} from 'components/common-styles/shadow';
+import {headerTitle, mainText, secondaryText} from 'components/common-styles/typography';
 import {Platform} from 'react-native';
-import {SELECT_ITEM_HEIGHT} from '../../components/select/select.styles';
-import {splitViewStyles} from '../../components/common-styles/split-view';
-import {UNIT} from '../../components/variables/variables';
+import {SELECT_ITEM_HEIGHT} from 'components/select/select.styles';
+import {splitViewStyles} from 'components/common-styles/split-view';
+import {UNIT} from 'components/variables/variables';
 
 const wrapper = {
   marginHorizontal: UNIT * 2,

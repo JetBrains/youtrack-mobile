@@ -21,8 +21,8 @@ import {relativeDate} from '../issue-formatter/issue-formatter';
 
 import styles from './activity__stream.styles';
 
-import type {Activity} from '../../flow/Activity';
-import type {PullRequest, VCSActivity, VcsProcessor} from '../../flow/Vcs';
+import type {Activity} from 'flow/Activity';
+import type {PullRequest, VCSActivity, VcsProcessor} from 'flow/Vcs';
 import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {

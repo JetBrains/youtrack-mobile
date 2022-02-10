@@ -14,7 +14,7 @@ import {
 import log from '../log/log';
 import {flushStoragePart} from '../storage/storage';
 import {isSplitView} from '../responsive/responsive-helper';
-import {uuid} from '../../util/util';
+import {uuid} from 'util/util';
 import {routeMap} from '../../app-routes';
 
 import type {

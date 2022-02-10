@@ -2,7 +2,7 @@
 
 import {TIME_IDENTIFIERS, DEFAULT_WORK_TIME_SETTINGS, getPeriodName} from './time-tracking__default-settings';
 
-import type {WorkTimeSettings} from '../../flow/Work';
+import type {WorkTimeSettings} from 'flow/Work';
 
 export function getPeriodPresentationFor(minutes: number, workTimeSettings: WorkTimeSettings, fullPeriodPresentation: boolean = false): string {
   const period = minutesToPeriod(minutes, workTimeSettings || DEFAULT_WORK_TIME_SETTINGS);

@@ -4,10 +4,10 @@ import {Dimensions} from 'react-native';
 import {AGILE_COLLAPSED_COLUMN_WIDTH, AGILE_TABLET_EXPANDED_COLUMN_WIDTH} from '../agile-common/agile-common';
 import {UNIT} from '../variables/variables';
 
-import {isIOSPlatform} from '../../util/util';
-import {isAllColumnsCollapsed} from '../../views/agile-board/agile-board__helper';
+import {isIOSPlatform} from 'util/util';
+import {isAllColumnsCollapsed} from 'views/agile-board/agile-board__helper';
 
-import type {BoardColumn} from '../../flow/Agile';
+import type {BoardColumn} from 'flow/Agile';
 
 type WidthData = { windowWidth: number, cardWidth: number };
 

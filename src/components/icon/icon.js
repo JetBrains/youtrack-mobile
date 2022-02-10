@@ -6,7 +6,7 @@ import IconVCS from '@jetbrains/icons/pr-merged.svg';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {isAndroidPlatform} from '../../util/util';
+import {isAndroidPlatform} from 'util/util';
 
 import IconYTM from './youtrack-icon';
 

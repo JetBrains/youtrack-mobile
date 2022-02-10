@@ -8,7 +8,7 @@ import darkTheme from './theme-dark';
 import lightTheme from './theme-light';
 import {THEME_MODE_KEY} from '../storage/storage';
 
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 export const DEFAULT_THEME: UITheme = lightTheme;
 export const getSystemThemeMode = (): any => Appearance.getColorScheme();

@@ -11,9 +11,9 @@ import {relativeDate, getEntityPresentation} from '../issue-formatter/issue-form
 
 import styles from './comment.styles';
 
-import type {IssueComment, Attachment} from '../../flow/CustomFields';
-import type {UITheme} from '../../flow/Theme';
-import type {YouTrackWiki} from '../../flow/Wiki';
+import type {IssueComment, Attachment} from 'flow/CustomFields';
+import type {UITheme} from 'flow/Theme';
+import type {YouTrackWiki} from 'flow/Wiki';
 
 type Props = {
   comment: IssueComment,

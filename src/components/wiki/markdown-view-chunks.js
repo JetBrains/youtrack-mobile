@@ -1,12 +1,13 @@
 /* @flow */
 
 import React, {useCallback, useEffect, useState} from 'react';
+import {View} from 'react-native';
 
 import {stringToTokens, tokensToAST} from 'react-native-markdown-display';
 
-import apiHelper from '../../components/api/api__helper';
+import apiHelper from 'components/api/api__helper';
 import getMarkdownRules from './markdown-view-rules';
-import MarkdownAST from '../../components/wiki/markdown-ast';
+import MarkdownAST from 'components/wiki/markdown-ast';
 import MarkdownItInstance from './markdown-instance';
 import {getApi} from '../api/api__instance';
 import {getStorageState} from '../storage/storage';
@@ -14,12 +15,13 @@ import {hasType} from '../api/api__resource-types';
 import {SkeletonIssueContent} from '../skeleton/skeleton';
 import {updateMarkdownCheckbox} from './markdown-helper';
 
-import type {Article} from '../../flow/Article';
-import type {Attachment} from '../../flow/CustomFields';
-import type {Folder} from '../../flow/User';
-import type {IssueOnList} from '../../flow/Issue';
-import type {MarkdownNode} from '../../flow/Markdown';
-import type {UITheme} from '../../flow/Theme';
+import type {Article} from 'flow/Article';
+import type {ASTNode} from 'react-native-markdown-display';
+import type {Attachment} from 'flow/CustomFields';
+import type {Folder} from 'flow/User';
+import type {IssueOnList} from 'flow/Issue';
+import type {MarkdownNode} from 'flow/Markdown';
+import type {UITheme} from 'flow/Theme';
 
 type Props = {
   attachments?: Array<Attachment>,
@@ -32,7 +34,7 @@ type Props = {
   onCheckboxUpdate?: (markdown: string) => Function,
 };
 
-
+const DEFAULT_CHUNK_SIZE: number = 10;
 let chunks: Array<Array<MarkdownNode>> = [];
 let rules: Object = {};
 let tokens: Array<MarkdownNode> = [];
@@ -94,6 +96,17 @@ const MarkdownViewChunks = (props: Props) => {
     md = children;
   }, [children, createMarkdown]);
 
+  const renderAST = (ast: Array<ASTNode>, key: string): React$Element<typeof MarkdownAST> => {
+    return (
+      <MarkdownAST
+        testID="chunk"
+        key={key}
+        ast={ast}
+        rules={rules}
+        uiTheme={props.uiTheme}
+      />
+    );
+  };
 
   if (!children || astToRender?.length === 0) {
     return null;
@@ -108,22 +121,17 @@ const MarkdownViewChunks = (props: Props) => {
   };
 
   return (
-    <>
+    <View
+      testID="markdownViewChunks"
+    >
       {
-        astToRender.slice(0, chunksToRender).map((astPart, index) => {
-          return (
-            <MarkdownAST
-              key={`chunk-${index}`}
-              ast={astPart}
-              rules={rules}
-              uiTheme={props.uiTheme}
-            />
-          );
-        })
+        astToRender.slice(0, chunksToRender).map(
+          (astPart, index) => renderAST(astPart, `chunk-${index}`)
+        )
       }
 
       {hasMore && <SkeletonIssueContent/>}
-    </>
+    </View>
   );
 
 };
@@ -131,8 +139,8 @@ const MarkdownViewChunks = (props: Props) => {
 export default (React.memo<Props>(MarkdownViewChunks): React$AbstractComponent<Props, mixed>);
 
 
-function createChunks(array, size = 10) {
-  const chunked_arr = [];
+function createChunks(array: Array<ASTNode>, size: number = DEFAULT_CHUNK_SIZE): Array<ASTNode> {
+  const chunked_arr: Array<ASTNode> = [];
   let index = 0;
   while (index < array.length) {
     chunked_arr.push(array.slice(index, size + index));

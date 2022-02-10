@@ -9,7 +9,7 @@ import {ThemeContext} from '../theme/theme-context';
 
 import styles, {calendarTheme} from './date-picker.styles';
 
-import type {Theme} from '../../flow/Theme';
+import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {

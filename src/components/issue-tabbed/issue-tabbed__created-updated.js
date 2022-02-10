@@ -8,7 +8,7 @@ import {getEntityPresentation, ytDate} from '../issue-formatter/issue-formatter'
 
 import styles from './issue-tabbed.style';
 
-import type {User} from '../../flow/User';
+import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {SkeletonIssueInfoLine} from '../skeleton/skeleton';
 

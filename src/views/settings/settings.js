@@ -5,25 +5,25 @@ import {View, Text, TouchableOpacity, Linking, TouchableWithoutFeedback, Dimensi
 
 import {connect} from 'react-redux';
 
-import * as AppActions from '../../actions/app-actions';
-import Accounts from '../../components/account/accounts';
-import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
-import FeaturesView from '../../components/feature/features-view';
-import Header from '../../components/header/header';
-import ModalPortal from '../../components/modal-view/modal-portal';
-import Router from '../../components/router/router';
+import * as AppActions from 'actions/app-actions';
+import Accounts from 'components/account/accounts';
+import clicksToShowCounter from 'components/debug-view/clicks-to-show-counter';
+import FeaturesView from 'components/feature/features-view';
+import Header from 'components/header/header';
+import ModalPortal from 'components/modal-view/modal-portal';
+import Router from 'components/router/router';
 import SettingsAppearance from './settings__appearance';
 import SettingsFeedbackForm from './settings__feedback-form';
-import usage, {VERSION_STRING} from '../../components/usage/usage';
-import {HIT_SLOP} from '../../components/common-styles/button';
-import {IconBack, IconClose} from '../../components/icon/icon';
-import {isSplitView} from '../../components/responsive/responsive-helper';
-import {ThemeContext} from '../../components/theme/theme-context';
+import usage, {VERSION_STRING} from 'components/usage/usage';
+import {HIT_SLOP} from 'components/common-styles/button';
+import {IconBack, IconClose} from 'components/icon/icon';
+import {isSplitView} from 'components/responsive/responsive-helper';
+import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './settings.styles';
 
-import type {StorageState} from '../../components/storage/storage';
-import type {Theme, UITheme} from '../../flow/Theme';
+import type {StorageState} from 'components/storage/storage';
+import type {Theme, UITheme} from 'flow/Theme';
 import type {AppState} from '../../reducers';
 
 type Props = {

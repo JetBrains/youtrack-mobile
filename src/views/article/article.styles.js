@@ -2,12 +2,12 @@ import {Platform} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {elevation1, elevationBottom} from '../../components/common-styles/shadow';
-import {headerTitleText} from '../../components/common-styles/header';
-import {MAIN_FONT_SIZE, mainText} from '../../components/common-styles/typography';
-import {separator} from '../../components/common-styles/list';
-import {summaryTitle} from '../../components/common-styles/issue';
-import {UNIT} from '../../components/variables/variables';
+import {elevation1, elevationBottom} from 'components/common-styles/shadow';
+import {headerTitleText} from 'components/common-styles/header';
+import {MAIN_FONT_SIZE, mainText} from 'components/common-styles/typography';
+import {separator} from 'components/common-styles/list';
+import {summaryTitle} from 'components/common-styles/issue';
+import {UNIT} from 'components/variables/variables';
 
 const INPUT_BORDER_RADIUS = UNIT;
 const MIN_INPUT_SIZE = UNIT * 4;

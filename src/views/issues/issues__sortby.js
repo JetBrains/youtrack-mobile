@@ -6,16 +6,16 @@ import {Text, TouchableOpacity} from 'react-native';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import IssuesSortByList from './issues__sortby_list';
-import ModalPortal from '../../components/modal-view/modal-portal';
-import Router from '../../components/router/router';
+import ModalPortal from 'components/modal-view/modal-portal';
+import Router from 'components/router/router';
 import {doAssist, getSortPropertyName} from './issues__sortby-helper';
-import {IconAngleDown} from '../../components/icon/icon';
-import {isSplitView} from '../../components/responsive/responsive-helper';
+import {IconAngleDown} from 'components/icon/icon';
+import {isSplitView} from 'components/responsive/responsive-helper';
 
 import styles from './issues.styles';
 
-import type {Folder} from '../../flow/User';
-import type {IssueFieldSortProperty, SearchSuggestions} from '../../flow/Sorting';
+import type {Folder} from 'flow/User';
+import type {IssueFieldSortProperty, SearchSuggestions} from 'flow/Sorting';
 
 
 type Props = {

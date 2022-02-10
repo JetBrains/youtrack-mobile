@@ -6,7 +6,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 
 import {LogView} from 'react-native-device-log';
-import {closeDebugView} from '../../actions/app-actions';
+import {closeDebugView} from 'actions/app-actions';
 import {copyRawLogs} from '../log/log';
 import ModalView from '../modal-view/modal-view';
 

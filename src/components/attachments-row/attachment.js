@@ -8,22 +8,22 @@ import ImageProgress from 'react-native-image-progress';
 import {SvgUri} from 'react-native-svg';
 
 import ModalPortal from '../modal-view/modal-portal';
-import PreviewFile from '../../views/preview-file/preview-file';
+import PreviewFile from 'views/preview-file/preview-file';
 import Router from '../router/router';
 import {attachmentCategories} from './attachment-helper';
 import {hasMimeType} from '../mime-type/mime-type';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconRemoveFilled} from '../icon/icon';
-import {isAndroidPlatform} from '../../util/util';
+import {isAndroidPlatform} from 'util/util';
 import {isSplitView} from '../responsive/responsive-helper';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './attachments-row.styles';
 
-import type {Attachment} from '../../flow/CustomFields';
+import type {Attachment} from 'flow/CustomFields';
 import type {FileCategoryKey} from './attachment-helper';
 import type {Node} from 'React';
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type StyleMap = { [FileCategoryKey]: ViewStyleProp };

@@ -3,11 +3,11 @@
 import log from '../log/log';
 import {checkVersion, FEATURE_VERSION} from '../feature/feature';
 import {getStorageState} from '../storage/storage';
-import {until} from '../../util/util';
+import {until} from 'util/util';
 
 import type Api from '../api/api';
-import type {Folder} from '../../flow/User';
-import type {TransformedSuggestion} from '../../flow/Issue';
+import type {Folder} from 'flow/User';
+import type {TransformedSuggestion} from 'flow/Issue';
 
 type CachedQueries = {
   id: string,

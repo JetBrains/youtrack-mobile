@@ -3,36 +3,36 @@
 import {Clipboard} from 'react-native';
 
 import * as activityHelper from './issue-activity__helper';
-import log from '../../../components/log/log';
-import usage from '../../../components/usage/usage';
-import {ANALYTICS_ISSUE_PAGE, ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
-import {confirmation} from '../../../components/confirmation/confirmation';
+import log from 'components/log/log';
+import usage from 'components/usage/usage';
+import {ANALYTICS_ISSUE_PAGE, ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
+import {confirmation} from 'components/confirmation/confirmation';
 import {createIssueActivityActions, receiveActivityAPIAvailability, receiveActivityPage} from './issue-activity__actions';
-import {COMMENT_REACTIONS_SEPARATOR} from '../../../components/reactions/reactions';
+import {COMMENT_REACTIONS_SEPARATOR} from 'components/reactions/reactions';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from '../issue-base-actions-creater';
-import {getEntityPresentation} from '../../../components/issue-formatter/issue-formatter';
-import {logEvent} from '../../../components/log/log-helper';
-import {notify} from '../../../components/notification/notification';
-import {showActions} from '../../../components/action-sheet/action-sheet';
-import {until} from '../../../util/util';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+import {logEvent} from 'components/log/log-helper';
+import {notify} from 'components/notification/notification';
+import {showActions} from 'components/action-sheet/action-sheet';
+import {until} from 'util/util';
 import {
   convertCommentsToActivityPage,
   findActivityInGroupedActivities,
-} from '../../../components/activity/activity-helper';
+} from 'components/activity/activity-helper';
 
 import * as types from '../issue-action-types';
-import type Api from '../../../components/api/api';
-import type IssueAPI from '../../../components/api/api__issue';
-import type {ActivityItem, ActivityPositionData} from '../../../flow/Activity';
-import type {CustomError} from '../../../flow/Error';
-import type {IssueComment} from '../../../flow/CustomFields';
-import type {IssueFull} from '../../../flow/Issue';
-import type {Reaction} from '../../../flow/Reaction';
+import type Api from 'components/api/api';
+import type IssueAPI from 'components/api/api__issue';
+import type {ActivityItem, ActivityPositionData} from 'flow/Activity';
+import type {CustomError} from 'flow/Error';
+import type {IssueComment} from 'flow/CustomFields';
+import type {IssueFull} from 'flow/Issue';
+import type {Reaction} from 'flow/Reaction';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
 import type {State as SingleIssueState} from '../issue-reducers';
-import type {User} from '../../../flow/User';
-import type {UserGroup} from '../../../flow/UserGroup';
+import type {User} from 'flow/User';
+import type {UserGroup} from 'flow/UserGroup';
 
 
 type ApiGetter = () => Api;

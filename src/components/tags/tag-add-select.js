@@ -7,13 +7,13 @@ import ColorField from '../color-field/color-field';
 import Select from '../select/select';
 import {getApi} from '../api/api__instance';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
-import {until} from '../../util/util';
+import {until} from 'util/util';
 
 import API from '../api/api';
 
 import styles from './tags.styles';
 
-import type {Tag} from '../../flow/CustomFields';
+import type {Tag} from 'flow/CustomFields';
 
 type Props = {
   existed: Array<Tag>,

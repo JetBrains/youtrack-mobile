@@ -2,13 +2,13 @@
 
 import {createSlice} from '@reduxjs/toolkit';
 
-import {attachmentActionMap} from '../../components/attachments-row/attachment-helper';
+import {attachmentActionMap} from 'components/attachments-row/attachment-helper';
 
-import type {CommandSuggestionResponse, IssueFull} from '../../flow/Issue';
-import type {CustomField, FieldValue, IssueLink, IssueProject} from '../../flow/CustomFields';
+import type {CommandSuggestionResponse, IssueFull} from 'flow/Issue';
+import type {CustomField, FieldValue, IssueLink, IssueProject} from 'flow/CustomFields';
 import type {SliceCaseReducers} from '@reduxjs/toolkit';
-import type {User} from '../../flow/User';
-import type {Visibility} from '../../flow/Visibility';
+import type {User} from 'flow/User';
+import type {Visibility} from 'flow/Visibility';
 
 export type IssueState = {
   attachingImage: ?Object,

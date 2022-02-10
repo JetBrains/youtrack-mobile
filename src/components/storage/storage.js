@@ -8,17 +8,17 @@ import {getAuthParamsKey} from './storage__oauth';
 import {notify} from '../notification/notification';
 import {routeMap} from '../../app-routes';
 
-import type {Activity, ActivityType} from '../../flow/Activity';
-import type {AnyIssue} from '../../flow/Issue';
-import type {AppConfig} from '../../flow/AppConfig';
-import type {Article, ArticlesList} from '../../flow/Article';
-import type {ArticleProject} from '../../flow/Article';
-import type {OAuthParams2} from '../../flow/Auth';
-import type {Board, Sprint} from '../../flow/Agile';
-import type {Folder, User} from '../../flow/User';
-import type {IssueProject} from '../../flow/CustomFields';
-import type {Notification} from '../../flow/Inbox';
-import type {PermissionCacheItem} from '../../flow/Permission';
+import type {Activity, ActivityType} from 'flow/Activity';
+import type {AnyIssue} from 'flow/Issue';
+import type {AppConfig} from 'flow/AppConfig';
+import type {Article, ArticlesList} from 'flow/Article';
+import type {ArticleProject} from 'flow/Article';
+import type {OAuthParams2} from 'flow/Auth';
+import type {Board, Sprint} from 'flow/Agile';
+import type {Folder, User} from 'flow/User';
+import type {IssueProject} from 'flow/CustomFields';
+import type {Notification} from 'flow/Inbox';
+import type {PermissionCacheItem} from 'flow/Permission';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 export const MAX_STORED_QUERIES = 5;

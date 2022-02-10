@@ -9,13 +9,13 @@ import Markdown from 'react-native-markdown-display';
 
 import ModalView from '../modal-view/modal-view';
 
-import {acceptUserAgreement, declineUserAgreement} from '../../actions/app-actions';
+import {acceptUserAgreement, declineUserAgreement} from 'actions/app-actions';
 
 import {UNIT} from '../variables/variables';
 
 import styles from './user-agreement.styles';
 
-import type {EndUserAgreement} from '../../flow/AppConfig';
+import type {EndUserAgreement} from 'flow/AppConfig';
 
 type Props = {
   show: boolean,

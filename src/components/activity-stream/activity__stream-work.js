@@ -20,10 +20,10 @@ import {ytDate} from '../issue-formatter/issue-formatter';
 import styles from './activity__stream.styles';
 
 import type {ActionSheetOption} from '../action-sheet/action-sheet';
-import type {Activity} from '../../flow/Activity';
+import type {Activity} from 'flow/Activity';
 import type {AppState} from '../../reducers';
-import type {IssueFull} from '../../flow/Issue';
-import type {WorkItem} from '../../flow/Work';
+import type {IssueFull} from 'flow/Issue';
+import type {WorkItem} from 'flow/Work';
 
 type Props = {
   activityGroup: Activity,

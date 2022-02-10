@@ -1,51 +1,52 @@
 /* @flow */
 
 import React from 'react';
-import {RefreshControl, Text, View} from 'react-native';
+import {FlatList, RefreshControl, Text, View} from 'react-native';
 
-import {bindActionCreatorsExt} from '../../util/redux-ext';
+import {bindActionCreatorsExt} from 'util/redux-ext';
 import {connect} from 'react-redux';
 
 import createIssueActions, {dispatchActions} from './issue-actions';
-import AttachFileDialog from '../../components/attach-file/attach-file-dialog';
-import ColorField from '../../components/color-field/color-field';
-import CommandDialog, {CommandDialogModal} from '../../components/command-dialog/command-dialog';
-import ErrorMessage from '../../components/error-message/error-message';
-import Header from '../../components/header/header';
+import AttachFileDialog from 'components/attach-file/attach-file-dialog';
+import ColorField from 'components/color-field/color-field';
+import CommandDialog, {CommandDialogModal} from 'components/command-dialog/command-dialog';
+import ErrorMessage from 'components/error-message/error-message';
+import Header from 'components/header/header';
 import IssueActivity from './activity/issue__activity';
 import IssueDetails from './issue__details';
 import IssueDetailsModal from './modal/issue.modal__details';
-import IssueTabbed from '../../components/issue-tabbed/issue-tabbed';
-import LinkedIssuesAddLink from '../../components/linked-issues/linked-issues-add-link';
-import ModalPortal from '../../components/modal-view/modal-portal';
-import Router from '../../components/router/router';
-import Star from '../../components/star/star';
-import usage from '../../components/usage/usage';
+import IssueTabbed from 'components/issue-tabbed/issue-tabbed';
+import LinkedIssuesAddLink from 'components/linked-issues/linked-issues-add-link';
+import ModalPortal from 'components/modal-view/modal-portal';
+import Router from 'components/router/router';
+import Star from 'components/star/star';
+import usage from 'components/usage/usage';
 import {attachmentActions} from './issue__attachment-actions-and-types';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from './issue-base-actions-creater';
-import {getApi} from '../../components/api/api__instance';
-import {getReadableID} from '../../components/issue-formatter/issue-formatter';
-import {IconBack, IconCheck, IconClose, IconComment, IconDrag, IconMoreOptions} from '../../components/icon/icon';
-import {isIOSPlatform} from '../../util/util';
-import {isSplitView} from '../../components/responsive/responsive-helper';
+import {getApi} from 'components/api/api__instance';
+import {getReadableID} from 'components/issue-formatter/issue-formatter';
+import {IconBack, IconCheck, IconClose, IconComment, IconDrag, IconMoreOptions} from 'components/icon/icon';
+import {isIOSPlatform} from 'util/util';
+import {isSplitView} from 'components/responsive/responsive-helper';
 import {IssueContext} from './issue-context';
-import {Select, SelectModal} from '../../components/select/select';
-import {Skeleton} from '../../components/skeleton/skeleton';
-import {ThemeContext} from '../../components/theme/theme-context';
+import {Select, SelectModal} from 'components/select/select';
+import {Skeleton} from 'components/skeleton/skeleton';
+import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './issue.styles';
 
-import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import type {AnyIssue, IssueFull, TabRoute} from '../../flow/Issue';
-import type {Attachment, IssueLink, Tag} from '../../flow/CustomFields';
-import type {AttachmentActions} from '../../components/attachments-row/attachment-actions';
-import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed';
-import type {NormalizedAttachment} from '../../flow/Attachment';
-import type {RequestHeaders} from '../../flow/Auth';
-import type {RootState} from '../../reducers/app-reducer';
+import type IssuePermissions from 'components/issue-permissions/issue-permissions';
+import type {AnyIssue, IssueFull, TabRoute} from 'flow/Issue';
+import type {Attachment, IssueLink, Tag} from 'flow/CustomFields';
+import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
+import type {IssueTabbedState} from 'components/issue-tabbed/issue-tabbed';
+import type {NormalizedAttachment} from 'flow/Attachment';
+import type {RequestHeaders} from 'flow/Auth';
+import type {RootState} from 'reducers/app-reducer';
+import type {ScrollData} from 'flow/Markdown';
 import type {State as IssueState} from './issue-reducers';
-import type {Theme, UITheme} from '../../flow/Theme';
-import type {User} from '../../flow/User';
+import type {Theme, UITheme} from 'flow/Theme';
+import type {User} from 'flow/User';
 
 
 const isIOS: boolean = isIOSPlatform();
@@ -139,7 +140,10 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     await this.props.loadIssue();
   }
 
-  renderDetails: (uiTheme: UITheme) => React$Element<any> = (uiTheme: UITheme) => {
+  createIssueDetails: (uiTheme: UITheme, scrollData: ScrollData) => React$Element<any> = (
+    uiTheme: UITheme,
+    scrollData: ScrollData,
+  ) => {
     const {isSplitView} = this.state;
     const {
       loadIssue,
@@ -223,6 +227,23 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
         setCustomFieldValue={setCustomFieldValue}
         isSplitView={isSplitView}
+        scrollData={scrollData}
+      />
+    );
+  };
+
+  renderDetails: (uiTheme: UITheme) => React$Element<any> = (uiTheme: UITheme) => {
+    const scrollData: ScrollData = {loadMore: () => null};
+    return (
+      <FlatList
+        data={[0]}
+        removeClippedSubviews={false}
+        refreshControl={this.renderRefreshControl(() => this.loadIssue(), uiTheme)}
+        keyExtractor={() => 'issue-details'}
+        renderItem={() => this.createIssueDetails(uiTheme, scrollData)}
+
+        onEndReached={() => scrollData.loadMore && scrollData.loadMore()}
+        onEndReachedThreshold={5}
       />
     );
   };

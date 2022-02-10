@@ -6,7 +6,7 @@ import {View, FlatList, Text, RefreshControl, ActivityIndicator} from 'react-nat
 import ErrorMessage from '../error-message/error-message';
 import Header from '../header/header';
 import issueCommonLinksActions from '../issue-actions/issue-links-actions';
-import IssueRow from '../../views/issues/issues__row';
+import IssueRow from 'views/issues/issues__row';
 import QueryAssistPanel from '../query-assist/query-assist-panel';
 import QueryPreview from '../query-assist/query-preview';
 import Select from '../select/select';
@@ -25,10 +25,10 @@ import {View as AnimatedView} from 'react-native-animatable';
 import styles from './linked-issues.style';
 
 import type {IssueLinkTypeExtended} from './linked-issues-helper';
-import type {IssueLinkType} from '../../flow/CustomFields';
-import type {IssueOnList, TransformedSuggestion} from '../../flow/Issue';
+import type {IssueLinkType} from 'flow/CustomFields';
+import type {IssueOnList, TransformedSuggestion} from 'flow/Issue';
 import type {Node} from 'React';
-import type {Theme} from '../../flow/Theme';
+import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {

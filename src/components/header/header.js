@@ -12,7 +12,7 @@ import {HIT_SLOP} from '../common-styles/button';
 import styles from './header.styles';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {Theme} from '../../flow/Theme';
+import type {Theme} from 'flow/Theme';
 
 export type HeaderProps = {
   onBack?: () => any,

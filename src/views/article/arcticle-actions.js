@@ -1,17 +1,17 @@
 /* @flow */
 
-import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
+import {ANALYTICS_ARTICLE_PAGE} from 'components/analytics/analytics-ids';
 import {Alert, Clipboard, Share} from 'react-native';
 
-import Router from '../../components/router/router';
+import Router from 'components/router/router';
 import {confirmDeleteArticle} from './arcticle-helper';
-import {getStorageState} from '../../components/storage/storage';
-import {getApi} from '../../components/api/api__instance';
-import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
-import {hasType} from '../../components/api/api__resource-types';
-import {isIOSPlatform, until} from '../../util/util';
-import {logEvent} from '../../components/log/log-helper';
-import {notify} from '../../components/notification/notification';
+import {getStorageState} from 'components/storage/storage';
+import {getApi} from 'components/api/api__instance';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+import {hasType} from 'components/api/api__resource-types';
+import {isIOSPlatform, until} from 'util/util';
+import {logEvent} from 'components/log/log-helper';
+import {notify} from 'components/notification/notification';
 import type {ArticleState} from './article-reducers';
 import {
   setActivityPage,
@@ -22,17 +22,17 @@ import {
   setPrevArticle,
   setProcessing,
 } from './article-reducers';
-import {cacheUserLastVisitedArticle} from '../../actions/app-actions';
-import type {ShowActionSheetWithOptions} from '../../components/action-sheet/action-sheet';
-import {showActions, showActionSheet} from '../../components/action-sheet/action-sheet';
+import {cacheUserLastVisitedArticle} from 'actions/app-actions';
+import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
+import {showActions, showActionSheet} from 'components/action-sheet/action-sheet';
 
 import type ActionSheet from '@expo/react-native-action-sheet';
-import type {ActionSheetOption} from '../../components/action-sheet/action-sheet';
-import type Api from '../../components/api/api';
-import type {Activity} from '../../flow/Activity';
+import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
+import type Api from 'components/api/api';
+import type {Activity} from 'flow/Activity';
 import type {AppState} from '../../reducers';
-import type {Article, ArticleDraft} from '../../flow/Article';
-import type {Attachment, IssueComment} from '../../flow/CustomFields';
+import type {Article, ArticleDraft} from 'flow/Article';
+import type {Attachment, IssueComment} from 'flow/CustomFields';
 
 type ApiGetter = () => Api;
 

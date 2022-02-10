@@ -1,24 +1,24 @@
 /* @flow */
 
-import * as issueUpdater from '../../components/issue-actions/issue-updater';
+import * as issueUpdater from 'components/issue-actions/issue-updater';
 import * as types from './issues-action-types';
-import ApiHelper from '../../components/api/api__helper';
-import log from '../../components/log/log';
-import usage from '../../components/usage/usage';
-import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
-import {EVERYTHING_CONTEXT} from '../../components/search/search-context';
-import {filterArrayByType} from '../../components/api/api__resource-types';
-import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from '../../components/storage/storage';
-import {getAssistSuggestions, getCachedUserQueries} from '../../components/query-assist/query-assist-helper';
-import {notifyError} from '../../components/notification/notification';
-import {until} from '../../util/util';
-import {updateUserGeneralProfile} from '../../actions/app-actions';
+import ApiHelper from 'components/api/api__helper';
+import log from 'components/log/log';
+import usage from 'components/usage/usage';
+import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
+import {EVERYTHING_CONTEXT} from 'components/search/search-context';
+import {filterArrayByType} from 'components/api/api__resource-types';
+import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from 'components/storage/storage';
+import {getAssistSuggestions, getCachedUserQueries} from 'components/query-assist/query-assist-helper';
+import {notifyError} from 'components/notification/notification';
+import {until} from 'util/util';
+import {updateUserGeneralProfile} from 'actions/app-actions';
 
-import type Api from '../../components/api/api';
+import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
-import type {Folder} from '../../flow/User';
-import type {AnyIssue, IssueFull, SavedQuery} from '../../flow/Issue';
-import type {IssueProject, Tag} from '../../flow/CustomFields';
+import type {Folder} from 'flow/User';
+import type {AnyIssue, IssueFull, SavedQuery} from 'flow/Issue';
+import type {IssueProject, Tag} from 'flow/CustomFields';
 
 const PAGE_SIZE = 10;
 

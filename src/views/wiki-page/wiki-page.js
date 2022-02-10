@@ -4,24 +4,24 @@ import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {View, Text, ScrollView} from 'react-native';
 
-import type {Attachment} from '../../flow/CustomFields';
+import type {Attachment} from 'flow/CustomFields';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-import {getApi} from '../../components/api/api__instance';
-import usage from '../../components/usage/usage';
-import Header from '../../components/header/header';
-import YoutrackWiki from '../../components/wiki/youtrack-wiki';
-import Router from '../../components/router/router';
-import LongText from '../../components/wiki/text-renderer';
-import {IconClose} from '../../components/icon/icon';
+import {getApi} from 'components/api/api__instance';
+import usage from 'components/usage/usage';
+import Header from 'components/header/header';
+import YoutrackWiki from 'components/wiki/youtrack-wiki';
+import Router from 'components/router/router';
+import LongText from 'components/wiki/text-renderer';
+import {IconClose} from 'components/icon/icon';
 
-import {ThemeContext} from '../../components/theme/theme-context';
+import {ThemeContext} from 'components/theme/theme-context';
 
-import {UNIT} from '../../components/variables/variables';
-import {elevation1} from '../../components/common-styles/shadow';
+import {UNIT} from 'components/variables/variables';
+import {elevation1} from 'components/common-styles/shadow';
 import styles from './wiki-page.styles';
 
-import type {Theme, UITheme} from '../../flow/Theme';
+import type {Theme, UITheme} from 'flow/Theme';
 
 const CATEGORY_NAME = 'WikiPage';
 

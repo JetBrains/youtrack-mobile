@@ -6,8 +6,8 @@ import ApiBase from './api__base';
 import ApiHelper from './api__helper';
 
 import type Auth from '../auth/oauth2';
-import type {Folder} from '../../flow/User';
-import type {ServersideSuggestion, ServersideSuggestionLegacy, TransformedSuggestion} from '../../flow/Issue';
+import type {Folder} from 'flow/User';
+import type {ServersideSuggestion, ServersideSuggestionLegacy, TransformedSuggestion} from 'flow/Issue';
 
 
 export default class SearchAPI extends ApiBase {

@@ -3,34 +3,34 @@
 import {ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import React, {Component} from 'react';
 
-import AttachmentAddPanel from '../../components/attachments-row/attachments-add-panel';
-import AttachmentsRow from '../../components/attachments-row/attachments-row';
-import CustomFieldsPanel from '../../components/custom-fields-panel/custom-fields-panel';
-import IssueCustomFieldText from '../../components/custom-field/issue-custom-field-text';
+import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
+import AttachmentsRow from 'components/attachments-row/attachments-row';
+import CustomFieldsPanel from 'components/custom-fields-panel/custom-fields-panel';
+import IssueCustomFieldText from 'components/custom-field/issue-custom-field-text';
 import IssueMarkdown from './issue__markdown';
-import IssueVotes from '../../components/issue-actions/issue-votes';
-import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
-import LinkedIssues from '../../components/linked-issues/linked-issues';
-import LinkedIssuesTitle from '../../components/linked-issues/linked-issues-title';
-import log from '../../components/log/log';
-import Router from '../../components/router/router';
-import Separator from '../../components/separator/separator';
-import SummaryDescriptionForm from '../../components/form/summary-description-form';
-import Tags from '../../components/tags/tags';
-import usage from '../../components/usage/usage';
-import VisibilityControl from '../../components/visibility/visibility-control';
-import {ANALYTICS_ISSUE_PAGE} from '../../components/analytics/analytics-ids';
-import {getApi} from '../../components/api/api__instance';
-import {getEntityPresentation, getReadableID, ytDate} from '../../components/issue-formatter/issue-formatter';
-import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
-import {HIT_SLOP} from '../../components/common-styles/button';
-import {SkeletonIssueContent, SkeletonIssueInfoLine} from '../../components/skeleton/skeleton';
-import {ThemeContext} from '../../components/theme/theme-context';
+import IssueVotes from 'components/issue-actions/issue-votes';
+import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
+import LinkedIssues from 'components/linked-issues/linked-issues';
+import LinkedIssuesTitle from 'components/linked-issues/linked-issues-title';
+import log from 'components/log/log';
+import Router from 'components/router/router';
+import Separator from 'components/separator/separator';
+import SummaryDescriptionForm from 'components/form/summary-description-form';
+import Tags from 'components/tags/tags';
+import usage from 'components/usage/usage';
+import VisibilityControl from 'components/visibility/visibility-control';
+import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
+import {getApi} from 'components/api/api__instance';
+import {getEntityPresentation, getReadableID, ytDate} from 'components/issue-formatter/issue-formatter';
+import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
+import {HIT_SLOP} from 'components/common-styles/button';
+import {SkeletonIssueContent, SkeletonIssueInfoLine} from 'components/skeleton/skeleton';
+import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './issue.styles';
 
-import type IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import type {AnyIssue, IssueFull, IssueOnList} from '../../flow/Issue';
+import type IssuePermissions from 'components/issue-permissions/issue-permissions';
+import type {AnyIssue, IssueFull, IssueOnList} from 'flow/Issue';
 import type {
   Attachment,
   CustomField,
@@ -39,11 +39,12 @@ import type {
   FieldValue,
   IssueLink,
   IssueProject,
-} from '../../flow/CustomFields';
+} from 'flow/CustomFields';
 import type {Node} from 'React';
-import type {Theme, UITheme} from '../../flow/Theme';
-import type {Visibility} from '../../flow/Visibility';
-import type {YouTrackWiki} from '../../flow/Wiki';
+import type {ScrollData} from 'flow/Markdown';
+import type {Theme, UITheme} from 'flow/Theme';
+import type {Visibility} from 'flow/Visibility';
+import type {YouTrackWiki} from 'flow/Wiki';
 
 
 export type IssueDetailsProps = {
@@ -93,6 +94,7 @@ export type IssueDetailsProps = {
 
   setCustomFieldValue: (field: CustomFieldText, value: CustomFieldTextValue) => any,
   modal?: boolean,
+  scrollData: ScrollData,
 }
 
 export default class IssueDetails extends Component<IssueDetailsProps, void> {
@@ -281,6 +283,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
       onTagRemove,
       onCheckboxUpdate,
       onLongPress,
+      scrollData,
     } = this.props;
 
     if (!issue) {
@@ -333,6 +336,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
           <View style={styles.description}>
             <IssueMarkdown
               {...ytWikiProps}
+              scrollData={scrollData}
               attachments={issue.attachments}
               markdown={issue.usesMarkdown ? issue.description : null}
               onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(

@@ -12,9 +12,9 @@ import type {
   ArticlesList,
   ArticlesListItem,
   ProjectArticlesData,
-} from '../../flow/Article';
-import type {IssueProject} from '../../flow/CustomFields';
-import type {Visibility} from '../../flow/Visibility';
+} from 'flow/Article';
+import type {IssueProject} from 'flow/CustomFields';
+import type {Visibility} from 'flow/Visibility';
 
 
 export const createArticlesListItem = (

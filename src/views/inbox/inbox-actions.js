@@ -1,17 +1,17 @@
 /* @flow */
 
 import * as types from './inbox-action-types';
-import log from '../../components/log/log';
-import usage from '../../components/usage/usage';
-import {ANALYTICS_NOTIFICATIONS_PAGE} from '../../components/analytics/analytics-ids';
-import {checkVersion, FEATURE_VERSION} from '../../components/feature/feature';
-import {flushStoragePart, getStorageState} from '../../components/storage/storage';
-import {sortByTimestampReverse} from '../../components/search/sorting';
-import {until} from '../../util/util';
+import log from 'components/log/log';
+import usage from 'components/usage/usage';
+import {ANALYTICS_NOTIFICATIONS_PAGE} from 'components/analytics/analytics-ids';
+import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
+import {flushStoragePart, getStorageState} from 'components/storage/storage';
+import {sortByTimestampReverse} from 'components/search/sorting';
+import {until} from 'util/util';
 
-import type Api from '../../components/api/api';
-import type {CustomError} from '../../flow/Error';
-import type {Notification} from '../../flow/Inbox';
+import type Api from 'components/api/api';
+import type {CustomError} from 'flow/Error';
+import type {Notification} from 'flow/Inbox';
 
 type ApiGetter = () => Api;
 

@@ -6,7 +6,7 @@ import {ResourceTypes} from '../api/api__resource-types';
 import CommentVisibility from './comment__visibility';
 import {IconLock} from '../icon/icon';
 
-import type {Visibility} from '../../flow/Visibility';
+import type {Visibility} from 'flow/Visibility';
 
 
 describe('<CommentVisibility/>', () => {

@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {MAIN_FONT_SIZE} from '../../../components/common-styles/typography';
-import {UNIT} from '../../../components/variables/variables';
+import {MAIN_FONT_SIZE} from 'components/common-styles/typography';
+import {UNIT} from 'components/variables/variables';
 
 export default EStyleSheet.create({
   container: {

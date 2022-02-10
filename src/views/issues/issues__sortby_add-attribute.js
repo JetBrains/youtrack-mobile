@@ -4,15 +4,15 @@ import React from 'react';
 import {View} from 'react-native';
 
 
-import Select from '../../components/select/select';
-import usage from '../../components/usage/usage';
-import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
-import {getApi} from '../../components/api/api__instance';
-import {getCustomFieldName} from '../../components/custom-field/custom-field-helper';
+import Select from 'components/select/select';
+import usage from 'components/usage/usage';
+import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
+import {getApi} from 'components/api/api__instance';
+import {getCustomFieldName} from 'components/custom-field/custom-field-helper';
 
-import type API from '../../components/api/api';
-import type {Folder} from '../../flow/User';
-import type {CustomFilterField, IssueFieldSortProperty, PredefinedFilterField} from '../../flow/Sorting';
+import type API from 'components/api/api';
+import type {Folder} from 'flow/User';
+import type {CustomFilterField, IssueFieldSortProperty, PredefinedFilterField} from 'flow/Sorting';
 
 type Props = {
   context: Folder,

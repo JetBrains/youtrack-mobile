@@ -9,8 +9,8 @@ import {getReadableID} from '../issue-formatter/issue-formatter';
 
 import styles from './activity__stream.styles';
 
-import type {Activity} from '../../flow/Activity';
-import type {IssueFull} from '../../flow/Issue';
+import type {Activity} from 'flow/Activity';
+import type {IssueFull} from 'flow/Issue';
 
 type Props = {
   activity: Activity

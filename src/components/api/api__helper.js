@@ -4,13 +4,13 @@ import {handleRelativeUrl} from '../config/config';
 import objectWalk from 'object-walk';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 
-import type {Attachment, CustomField} from '../../flow/CustomFields';
+import type {Attachment, CustomField} from 'flow/CustomFields';
 import type {
   AnyIssue,
   ServersideSuggestion,
   TransformedSuggestion,
   ServersideSuggestionLegacy,
-} from '../../flow/Issue';
+} from 'flow/Issue';
 
 const API = {
   makeFieldHash: (issue: AnyIssue): Object => {

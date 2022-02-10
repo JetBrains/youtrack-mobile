@@ -10,10 +10,10 @@ import {isSplitView} from '../responsive/responsive-helper';
 
 import styles from './agile-row.styles';
 
-import type {BoardCell} from '../../flow/Agile';
-import type {IssueFull} from '../../flow/Issue';
+import type {BoardCell} from 'flow/Agile';
+import type {IssueFull} from 'flow/Issue';
 import type {Node} from 'React';
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 type ColumnProps = {
   cell: BoardCell,

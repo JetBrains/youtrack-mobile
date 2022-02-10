@@ -1,7 +1,7 @@
 /* @flow */
 
-import type {PermissionCacheItem} from '../../flow/Permission';
-import type {IssueProject} from '../../flow/CustomFields';
+import type {PermissionCacheItem} from 'flow/Permission';
+import type {IssueProject} from 'flow/CustomFields';
 
 class PermissionsStore {
   permissionsMap: Object;

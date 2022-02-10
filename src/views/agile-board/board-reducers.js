@@ -1,6 +1,6 @@
 /* @flow */
 import * as types from './board-action-types';
-import {LOG_OUT} from '../../actions/action-types';
+import {LOG_OUT} from 'actions/action-types';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {createReducer} from 'redux-create-reducer';
@@ -15,9 +15,9 @@ import {
   moveIssueOnBoard,
 } from './board-updaters';
 
-import type {SprintFull, AgileBoardRow, Board, AgileUserProfile} from '../../flow/Agile';
-import type {IssueOnList, IssueFull, ServersideSuggestion} from '../../flow/Issue';
-import type {CustomError} from '../../flow/Error';
+import type {SprintFull, AgileBoardRow, Board, AgileUserProfile} from 'flow/Agile';
+import type {IssueOnList, IssueFull, ServersideSuggestion} from 'flow/Issue';
+import type {CustomError} from 'flow/Error';
 
 type BoardState = Board;
 

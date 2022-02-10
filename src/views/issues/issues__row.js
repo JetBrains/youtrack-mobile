@@ -3,22 +3,22 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
-import ColorField from '../../components/color-field/color-field';
-import Tags from '../../components/tags/tags';
+import ColorField from 'components/color-field/color-field';
+import Tags from 'components/tags/tags';
 import {
   getPriotityField,
   getEntityPresentation,
   relativeDate,
   getReadableID,
-} from '../../components/issue-formatter/issue-formatter';
+} from 'components/issue-formatter/issue-formatter';
 
-import Avatar from '../../components/avatar/avatar';
-import {ThemeContext} from '../../components/theme/theme-context';
+import Avatar from 'components/avatar/avatar';
+import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './issues.styles';
 
-import type {AnyIssue} from '../../flow/Issue';
-import type {BundleValue} from '../../flow/CustomFields';
+import type {AnyIssue} from 'flow/Issue';
+import type {BundleValue} from 'flow/CustomFields';
 import type {Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 

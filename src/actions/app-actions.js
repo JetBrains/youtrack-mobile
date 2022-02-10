@@ -6,19 +6,19 @@ import DeviceInfo from 'react-native-device-info';
 
 import * as appActionsHelper from './app-actions-helper';
 import * as types from './action-types';
-import Api from '../components/api/api';
-import OAuth2 from '../components/auth/oauth2';
-import log from '../components/log/log';
-import openByUrlDetector, {isOneOfServers} from '../components/open-url-handler/open-url-handler';
+import Api from 'components/api/api';
+import OAuth2 from 'components/auth/oauth2';
+import log from 'components/log/log';
+import openByUrlDetector, {isOneOfServers} from 'components/open-url-handler/open-url-handler';
 import packageJson from '../../package.json';
-import PermissionsStore from '../components/permissions-store/permissions-store';
-import PushNotifications from '../components/push-notifications/push-notifications';
-import PushNotificationsProcessor from '../components/push-notifications/push-notifications-processor';
-import Router from '../components/router/router';
+import PermissionsStore from 'components/permissions-store/permissions-store';
+import PushNotifications from 'components/push-notifications/push-notifications';
+import PushNotificationsProcessor from 'components/push-notifications/push-notifications-processor';
+import Router from 'components/router/router';
 import UrlParse from 'url-parse';
-import usage from '../components/usage/usage';
-import {CUSTOM_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
-import {EVERYTHING_CONTEXT} from '../components/search/search-context';
+import usage from 'components/usage/usage';
+import {CUSTOM_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from 'components/error/error-messages';
+import {EVERYTHING_CONTEXT} from 'components/search/search-context';
 
 import {
   clearCachesAndDrafts,
@@ -30,31 +30,31 @@ import {
   populateStorage,
   storageStateAuthParamsKey,
   storeAccounts,
-} from '../components/storage/storage';
+} from 'components/storage/storage';
 import {getCachedPermissions} from './app-actions-helper';
-import {getErrorMessage, isUnsupportedFeatureError} from '../components/error/error-resolver';
-import {getStoredSecurelyAuthParams} from '../components/storage/storage__oauth';
-import {hasType} from '../components/api/api__resource-types';
-import {isIOSPlatform} from '../util/util';
-import {isSplitView} from '../components/responsive/responsive-helper';
-import {loadConfig} from '../components/config/config';
-import {logEvent} from '../components/log/log-helper';
-import {normalizeAuthParams} from '../components/auth/oauth2-helper';
-import {notify, notifyError} from '../components/notification/notification';
-import {setApi} from '../components/api/api__instance';
-import {storeSearchContext} from '../views/issues/issues-actions';
+import {getErrorMessage, isUnsupportedFeatureError} from 'components/error/error-resolver';
+import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
+import {hasType} from 'components/api/api__resource-types';
+import {isIOSPlatform} from 'util/util';
+import {isSplitView} from 'components/responsive/responsive-helper';
+import {loadConfig} from 'components/config/config';
+import {logEvent} from 'components/log/log-helper';
+import {normalizeAuthParams} from 'components/auth/oauth2-helper';
+import {notify, notifyError} from 'components/notification/notification';
+import {setApi} from 'components/api/api__instance';
+import {storeSearchContext} from 'views/issues/issues-actions';
 
-import type {Activity} from '../flow/Activity';
-import type {AppConfig, EndUserAgreement} from '../flow/AppConfig';
+import type {Activity} from 'flow/Activity';
+import type {AppConfig, EndUserAgreement} from 'flow/AppConfig';
 import type {AppState} from '../reducers';
-import type {Article} from '../flow/Article';
-import type {AuthConfig, AuthParams, OAuthParams2} from '../flow/Auth';
-import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from '../flow/User';
-import type {NotificationRouteData} from '../flow/Notification';
-import type {PermissionCacheItem} from '../flow/Permission';
-import type {StorageState} from '../components/storage/storage';
-import type {WorkTimeSettings} from '../flow/Work';
-import type {RootState} from '../reducers/app-reducer';
+import type {Article} from 'flow/Article';
+import type {AuthConfig, AuthParams, OAuthParams2} from 'flow/Auth';
+import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from 'flow/User';
+import type {NotificationRouteData} from 'flow/Notification';
+import type {PermissionCacheItem} from 'flow/Permission';
+import type {StorageState} from 'components/storage/storage';
+import type {WorkTimeSettings} from 'flow/Work';
+import type {RootState} from 'reducers/app-reducer';
 
 type Action = (
   (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) =>

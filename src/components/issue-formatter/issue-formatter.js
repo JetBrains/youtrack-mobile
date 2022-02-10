@@ -3,9 +3,9 @@
 import DeviceInfo from 'react-native-device-info';
 import fromNow from 'from-now';
 
-import type {CustomField} from '../../flow/CustomFields';
-import type {User} from '../../flow/User';
-import type {AnyIssue} from '../../flow/Issue';
+import type {CustomField} from 'flow/CustomFields';
+import type {User} from 'flow/User';
+import type {AnyIssue} from 'flow/Issue';
 
 const shortRelativeFormat = {
   'now': 'just now',

@@ -1,10 +1,10 @@
 /* @flow */
 
-import type {Visibility} from '../../flow/Visibility';
+import type {Visibility} from 'flow/Visibility';
 import {ResourceTypes, addTypes} from '../api/api__resource-types';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
-import type {UserGroup} from '../../flow/UserGroup';
-import type {User} from '../../flow/User';
+import type {UserGroup} from 'flow/UserGroup';
+import type {User} from 'flow/User';
 
 export default class IssueVisibility {
 

@@ -8,7 +8,7 @@ import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 import styles from './activity__stream.styles';
 
-import type {Activity} from '../../flow/Activity';
+import type {Activity} from 'flow/Activity';
 
 type Props = {
   activityGroup: Activity,

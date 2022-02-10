@@ -32,7 +32,7 @@ import {getTextValueChange} from '../activity/activity__history-value';
 import {firstActivityChange, getActivityEventTitle} from './activity__stream-helper';
 import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../icon/icon';
 import {isActivityCategory} from '../activity/activity__category';
-import {guid, isIOSPlatform} from '../../util/util';
+import {guid, isIOSPlatform} from 'util/util';
 import {pullRequestState} from './activity__stream-vcs-helper';
 import {SkeletonIssueActivities} from '../skeleton/skeleton';
 
@@ -46,16 +46,16 @@ import type {
   ActivityItem,
   ActivityStreamCommentActions,
   ActivityChangeText,
-} from '../../flow/Activity';
-import type {Attachment, IssueComment} from '../../flow/CustomFields';
-import type {CustomError} from '../../flow/Error';
+} from 'flow/Activity';
+import type {Attachment, IssueComment} from 'flow/CustomFields';
+import type {CustomError} from 'flow/Error';
 import type {Node} from 'react';
-import type {Reaction} from '../../flow/Reaction';
+import type {Reaction} from 'flow/Reaction';
 import type {TextValueChangeParams} from '../activity/activity__history-value';
-import type {UITheme} from '../../flow/Theme';
-import type {User} from '../../flow/User';
-import type {WorkItem, WorkTimeSettings} from '../../flow/Work';
-import type {YouTrackWiki} from '../../flow/Wiki';
+import type {UITheme} from 'flow/Theme';
+import type {User} from 'flow/User';
+import type {WorkItem, WorkTimeSettings} from 'flow/Work';
+import type {YouTrackWiki} from 'flow/Wiki';
 
 
 type Props = {

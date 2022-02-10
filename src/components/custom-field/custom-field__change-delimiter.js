@@ -1,3 +1,3 @@
-import {isIOSPlatform} from '../../util/util';
+import {isIOSPlatform} from 'util/util';
 
 export default isIOSPlatform() ? ' → ' : ' ➔ ';

@@ -1,6 +1,6 @@
 /* @flow */
 
-import IssuePermissions from '../components/issue-permissions/issue-permissions';
+import IssuePermissions from 'components/issue-permissions/issue-permissions';
 
 import type {
   IssueProject,

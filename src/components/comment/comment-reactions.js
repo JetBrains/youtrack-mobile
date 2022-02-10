@@ -10,9 +10,9 @@ import SelectItem from '../select/select__item';
 import {UNIT} from '../variables/variables';
 import styles from './comment.styles';
 
-import type {IssueComment} from '../../flow/CustomFields';
-import type {Reaction} from '../../flow/Reaction';
-import type {User} from '../../flow/User';
+import type {IssueComment} from 'flow/CustomFields';
+import type {Reaction} from 'flow/Reaction';
+import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type ReactionsType = {

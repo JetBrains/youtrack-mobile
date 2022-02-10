@@ -12,12 +12,12 @@ import ModalView from '../modal-view/modal-view';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconBack, IconClose} from '../icon/icon';
-import {isTablet} from '../../util/util';
+import {isTablet} from 'util/util';
 
 import styles from './query-assist.styles';
 
 import type {Node} from 'React';
-import type {TransformedSuggestion, SavedQuery} from '../../flow/Issue';
+import type {TransformedSuggestion, SavedQuery} from 'flow/Issue';
 
 
 const SHOW_LIST_ANIMATION_DURATION = 500;

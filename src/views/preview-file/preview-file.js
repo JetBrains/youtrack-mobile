@@ -8,20 +8,20 @@ import Video from 'react-native-video';
 import {SvgFromUri} from 'react-native-svg';
 import {View as AnimatedView} from 'react-native-animatable';
 
-import Header from '../../components/header/header';
+import Header from 'components/header/header';
 import ImageProgress from 'react-native-image-progress';
-import Router from '../../components/router/router';
-import usage from '../../components/usage/usage';
-import {ANALYTICS_PREVIEW_PAGE} from '../../components/analytics/analytics-ids';
-import {hasMimeType} from '../../components/mime-type/mime-type';
-import {IconClose} from '../../components/icon/icon';
-import {IconNoProjectFound} from '../../components/icon/icon-pictogram';
-import {isAndroidPlatform} from '../../util/util';
-import {logEvent} from '../../components/log/log-helper';
+import Router from 'components/router/router';
+import usage from 'components/usage/usage';
+import {ANALYTICS_PREVIEW_PAGE} from 'components/analytics/analytics-ids';
+import {hasMimeType} from 'components/mime-type/mime-type';
+import {IconClose} from 'components/icon/icon';
+import {IconNoProjectFound} from 'components/icon/icon-pictogram';
+import {isAndroidPlatform} from 'util/util';
+import {logEvent} from 'components/log/log-helper';
 
 import styles from './preview-file.styles';
 
-import type {Attachment} from '../../flow/CustomFields';
+import type {Attachment} from 'flow/CustomFields';
 import type {Node} from 'React';
 
 type FileSource = {

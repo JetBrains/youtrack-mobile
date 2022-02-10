@@ -2,30 +2,30 @@
 
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 
-import * as commandDialogHelper from '../../components/command-dialog/command-dialog-helper';
-import ApiHelper from '../../components/api/api__helper';
-import issueCommonLinksActions from '../../components/issue-actions/issue-links-actions';
-import log from '../../components/log/log';
-import usage from '../../components/usage/usage';
+import * as commandDialogHelper from 'components/command-dialog/command-dialog-helper';
+import ApiHelper from 'components/api/api__helper';
+import issueCommonLinksActions from 'components/issue-actions/issue-links-actions';
+import log from 'components/log/log';
+import usage from 'components/usage/usage';
 import {actions} from './create-issue-reducers';
-import {ANALYTICS_ISSUE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
+import {ANALYTICS_ISSUE_CREATE_PAGE} from 'components/analytics/analytics-ids';
 import {attachmentActions} from './create-issue__attachment-actions-and-types';
 import {commandDialogTypes, ISSUE_CREATED} from './create-issue-action-types';
-import {CUSTOM_ERROR_MESSAGE, DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
-import {getStorageState, flushStoragePart} from '../../components/storage/storage';
-import {notify, notifyError} from '../../components/notification/notification';
-import {resolveError} from '../../components/error/error-resolver';
-import {showActions} from '../../components/action-sheet/action-sheet';
+import {CUSTOM_ERROR_MESSAGE, DEFAULT_ERROR_MESSAGE} from 'components/error/error-messages';
+import {getStorageState, flushStoragePart} from 'components/storage/storage';
+import {notify, notifyError} from 'components/notification/notification';
+import {resolveError} from 'components/error/error-resolver';
+import {showActions} from 'components/action-sheet/action-sheet';
 
-import type Api from '../../components/api/api';
-import type {ActionSheetOption} from '../../components/action-sheet/action-sheet';
+import type Api from 'components/api/api';
+import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
 import type {AppState} from '../../reducers';
-import type {AnyIssue, CommandSuggestionResponse, IssueFull, IssueOnList} from '../../flow/Issue';
+import type {AnyIssue, CommandSuggestionResponse, IssueFull, IssueOnList} from 'flow/Issue';
 import type {CreateIssueState} from './create-issue-reducers';
-import type {CustomField, FieldValue, Attachment, CustomFieldText, IssueLink} from '../../flow/CustomFields';
-import type {NormalizedAttachment} from '../../flow/Attachment';
-import type {StorageState} from '../../components/storage/storage';
-import type {Visibility} from '../../flow/Visibility';
+import type {CustomField, FieldValue, Attachment, CustomFieldText, IssueLink} from 'flow/CustomFields';
+import type {NormalizedAttachment} from 'flow/Attachment';
+import type {StorageState} from 'components/storage/storage';
+import type {Visibility} from 'flow/Visibility';
 
 type ApiGetter = () => Api;
 

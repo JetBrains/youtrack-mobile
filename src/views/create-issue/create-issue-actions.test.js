@@ -1,11 +1,11 @@
 import * as actions from './create-issue-actions';
-import * as commandDialogHelper from '../../components/command-dialog/command-dialog-helper';
-import * as storage from '../../components/storage/storage';
+import * as commandDialogHelper from 'components/command-dialog/command-dialog-helper';
+import * as storage from 'components/storage/storage';
 import mocks from '../../../test/mocks';
 import {commandDialogTypes, createIssueNamespace} from './create-issue-action-types';
-import {CUSTOM_ERROR_MESSAGE} from '../../components/error/error-messages';
+import {CUSTOM_ERROR_MESSAGE} from 'components/error/error-messages';
 import {ISSUE_CREATED} from './create-issue-action-types';
-import {setApi} from '../../components/api/api__instance';
+import {setApi} from 'components/api/api__instance';
 
 let apiMock;
 const getApi = () => apiMock;

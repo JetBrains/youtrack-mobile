@@ -1,10 +1,10 @@
 /* @flow */
 
-import log from '../../components/log/log';
-import {notify} from '../../components/notification/notification';
+import log from 'components/log/log';
+import {notify} from 'components/notification/notification';
 
-import type {BoardCell, AgileBoardRow, Board, AgileColumn} from '../../flow/Agile';
-import type {IssueOnList, IssueFull} from '../../flow/Issue';
+import type {BoardCell, AgileBoardRow, Board, AgileColumn} from 'flow/Agile';
+import type {IssueOnList, IssueFull} from 'flow/Issue';
 
 export function updateRowCollapsedState(
   board: Board,

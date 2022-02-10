@@ -1,11 +1,11 @@
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 
-import {__setStorageState, getStorageState} from '../../components/storage/storage';
-import animation from '../../components/animation/animation';
+import {__setStorageState, getStorageState} from 'components/storage/storage';
+import animation from 'components/animation/animation';
 
 import * as actions from './board-actions';
-import * as notification from '../../components/notification/notification';
+import * as notification from 'components/notification/notification';
 
 import * as types from './board-action-types';
 

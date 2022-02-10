@@ -4,17 +4,17 @@ import React from 'react';
 
 import {useSelector} from 'react-redux';
 
-import API from '../../components/api/api';
-import {ActivityStream} from '../../components/activity-stream/activity__stream';
-import {getApi} from '../../components/api/api__instance';
-import {updateMarkdownCheckbox} from '../../components/wiki/markdown-helper';
+import API from 'components/api/api';
+import {ActivityStream} from 'components/activity-stream/activity__stream';
+import {getApi} from 'components/api/api__instance';
+import {updateMarkdownCheckbox} from 'components/wiki/markdown-helper';
 
-import type {ActivityItem, ActivityStreamCommentActions} from '../../flow/Activity';
-import type {Attachment, IssueComment} from '../../flow/CustomFields';
-import type {UITheme} from '../../flow/Theme';
-import type {User} from '../../flow/User';
-import type {WorkTimeSettings} from '../../flow/Work';
-import type {YouTrackWiki} from '../../flow/Wiki';
+import type {ActivityItem, ActivityStreamCommentActions} from 'flow/Activity';
+import type {Attachment, IssueComment} from 'flow/CustomFields';
+import type {UITheme} from 'flow/Theme';
+import type {User} from 'flow/User';
+import type {WorkTimeSettings} from 'flow/Work';
+import type {YouTrackWiki} from 'flow/Wiki';
 
 type Props = {
   activities: Array<ActivityItem> | null,

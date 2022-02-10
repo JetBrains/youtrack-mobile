@@ -1,7 +1,7 @@
 /* @flow */
 
-import {userNotFoundMessageMap} from '../components/activity-stream/activity__stream-vcs-helper';
-import {ResourceTypes} from '../components/api/api__resource-types';
+import {userNotFoundMessageMap} from 'components/activity-stream/activity__stream-vcs-helper';
+import {ResourceTypes} from 'components/api/api__resource-types';
 
 import type {User} from './User';
 

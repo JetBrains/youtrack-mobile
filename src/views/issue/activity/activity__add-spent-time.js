@@ -6,35 +6,35 @@ import {ActivityIndicator, Text, TextInput, TouchableOpacity, View} from 'react-
 import debounce from 'lodash.debounce';
 import InputScrollView from 'react-native-input-scroll-view';
 
-import DatePicker from '../../../components/date-picker/date-picker';
-import Header from '../../../components/header/header';
-import ModalPortal from '../../../components/modal-view/modal-portal';
-import Router from '../../../components/router/router';
-import Select from '../../../components/select/select';
-import usage from '../../../components/usage/usage';
-import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
+import DatePicker from 'components/date-picker/date-picker';
+import Header from 'components/header/header';
+import ModalPortal from 'components/modal-view/modal-portal';
+import Router from 'components/router/router';
+import Select from 'components/select/select';
+import usage from 'components/usage/usage';
+import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
 import {commentPlaceholderText} from '../../../app-text';
-import {confirmation} from '../../../components/confirmation/confirmation';
+import {confirmation} from 'components/confirmation/confirmation';
 import {createIssueActivityActions} from './issue-activity__actions';
-import {getEntityPresentation, ytDate} from '../../../components/issue-formatter/issue-formatter';
-import {hasType} from '../../../components/api/api__resource-types';
-import {HIT_SLOP} from '../../../components/common-styles/button';
-import {IconAngleRight, IconCheck, IconClose} from '../../../components/icon/icon';
-import {isSplitView} from '../../../components/responsive/responsive-helper';
-import {logEvent} from '../../../components/log/log-helper';
-import {ThemeContext} from '../../../components/theme/theme-context';
+import {getEntityPresentation, ytDate} from 'components/issue-formatter/issue-formatter';
+import {hasType} from 'components/api/api__resource-types';
+import {HIT_SLOP} from 'components/common-styles/button';
+import {IconAngleRight, IconCheck, IconClose} from 'components/icon/icon';
+import {isSplitView} from 'components/responsive/responsive-helper';
+import {logEvent} from 'components/log/log-helper';
+import {ThemeContext} from 'components/theme/theme-context';
 import {useDispatch, useSelector} from 'react-redux';
 
 import styles from './activity__add-spent-time.styles';
 
 import type {AppState} from '../../../reducers';
-import type {IssueFull} from '../../../flow/Issue';
-import type {IssueProject} from '../../../flow/CustomFields';
-import type {SelectProps} from '../../../components/select/select';
-import type {Theme} from '../../../flow/Theme';
-import type {User} from '../../../flow/User';
+import type {IssueFull} from 'flow/Issue';
+import type {IssueProject} from 'flow/CustomFields';
+import type {SelectProps} from 'components/select/select';
+import type {Theme} from 'flow/Theme';
+import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {WorkItem, TimeTracking, WorkItemType} from '../../../flow/Work';
+import type {WorkItem, TimeTracking, WorkItemType} from 'flow/Work';
 
 type Props = {
   issue?: IssueFull,

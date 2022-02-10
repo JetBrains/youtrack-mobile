@@ -7,17 +7,17 @@ import urlJoin from 'url-join';
 import log from '../log/log';
 import PermissionsStore from '../permissions-store/permissions-store';
 import {ACCEPT_HEADER, revokeToken, URL_ENCODED_TYPE} from './oauth2-helper';
-import {createBtoa} from '../../util/util';
+import {createBtoa} from 'util/util';
 import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
 import {getAuthParamsKey, getStoredSecurelyAuthParams, storeSecurelyAuthParams} from '../storage/storage__oauth';
 import {HTTP_STATUS} from '../error/error-http-codes';
 import {STORAGE_AUTH_PARAMS_KEY} from '../storage/storage';
 import {USER_AGENT} from '../usage/usage';
 
-import type {AppConfig} from '../../flow/AppConfig';
-import type {AuthParams, RequestHeaders} from '../../flow/Auth';
-import type {CustomError} from '../../flow/Error';
-import type {User} from '../../flow/User';
+import type {AppConfig} from 'flow/AppConfig';
+import type {AuthParams, RequestHeaders} from 'flow/Auth';
+import type {CustomError} from 'flow/Error';
+import type {User} from 'flow/User';
 
 
 export class AuthBase {

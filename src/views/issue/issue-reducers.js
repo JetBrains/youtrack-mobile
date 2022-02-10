@@ -1,15 +1,15 @@
 /* @flow */
 
-import {activityCategory} from '../../components/activity/activity__category';
+import {activityCategory} from 'components/activity/activity__category';
 import {attachmentTypes} from './issue__attachment-actions-and-types';
 import {commandDialogNamespace} from './issue-action-types';
 import {createAttachmentReducer, createIssueReduxSlice, initialState} from './issue-base-reducer';
-import {createCommandDialogReducers} from '../../components/command-dialog/command-dialog-reducer';
-import {ON_NAVIGATE_BACK} from '../../actions/action-types';
+import {createCommandDialogReducers} from 'components/command-dialog/command-dialog-reducer';
+import {ON_NAVIGATE_BACK} from 'actions/action-types';
 import {routeMap} from '../../app-routes';
 
 import * as types from './issue-action-types';
-import type {Activity} from '../../flow/Activity';
+import type {Activity} from 'flow/Activity';
 import type {IssueState} from './issue-base-reducer';
 import type {Slice} from '@reduxjs/toolkit';
 

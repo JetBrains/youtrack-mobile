@@ -1,23 +1,23 @@
 /* @flow */
 
-import {ANALYTICS_ARTICLE_CREATE_PAGE} from '../../components/analytics/analytics-ids';
+import {ANALYTICS_ARTICLE_CREATE_PAGE} from 'components/analytics/analytics-ids';
 import {attachmentActions} from './article-create__attachment-actions-and-types';
 import {confirmDeleteArticleDraft} from '../article/arcticle-helper';
 import {deleteArticle} from '../article/arcticle-actions';
-import {logEvent} from '../../components/log/log-helper';
-import {notify} from '../../components/notification/notification';
-import {until} from '../../util/util';
+import {logEvent} from 'components/log/log-helper';
+import {notify} from 'components/notification/notification';
+import {until} from 'util/util';
 import {
   setArticleDraft,
   setError,
   setProcessing,
 } from './article-create-reducers';
-import usage from '../../components/usage/usage';
+import usage from 'components/usage/usage';
 
-import type Api from '../../components/api/api';
+import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
-import type {Article, ArticleDraft} from '../../flow/Article';
-import type {Attachment} from '../../flow/CustomFields';
+import type {Article, ArticleDraft} from 'flow/Article';
+import type {Attachment} from 'flow/CustomFields';
 
 type ApiGetter = () => Api;
 

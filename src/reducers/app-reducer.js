@@ -1,17 +1,17 @@
 /* @flow */
 
-import * as types from '../actions/action-types';
-import IssuePermissions from '../components/issue-permissions/issue-permissions';
-import OAuth2 from '../components/auth/oauth2';
+import * as types from 'actions/action-types';
+import IssuePermissions from 'components/issue-permissions/issue-permissions';
+import OAuth2 from 'components/auth/oauth2';
 import {createReducer} from 'redux-create-reducer';
-import {issuePermissionsNull} from '../components/issue-permissions/issue-permissions-helper';
+import {issuePermissionsNull} from 'components/issue-permissions/issue-permissions-helper';
 
-import type Auth from '../components/auth/oauth2';
-import type {PermissionsStore} from '../components/permissions-store/permissions-store';
-import type {StorageState} from '../components/storage/storage';
-import type {EndUserAgreement} from '../flow/AppConfig';
-import type {WorkTimeSettings} from '../flow/Work';
-import type {User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile, UserProfiles} from '../flow/User';
+import type Auth from 'components/auth/oauth2';
+import type {PermissionsStore} from 'components/permissions-store/permissions-store';
+import type {StorageState} from 'components/storage/storage';
+import type {EndUserAgreement} from 'flow/AppConfig';
+import type {WorkTimeSettings} from 'flow/Work';
+import type {User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile, UserProfiles} from 'flow/User';
 
 export type RootState = {
   auth: OAuth2 | null,

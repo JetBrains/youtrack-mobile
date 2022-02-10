@@ -6,23 +6,23 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import DraggableFlatList from 'react-native-draggable-dynamic-flatlist';
-import Header from '../../components/header/header';
-import IconAscending from '../../components/icon/assets/ascending.svg';
-import IconDescending from '../../components/icon/assets/descending.svg';
+import Header from 'components/header/header';
+import IconAscending from 'components/icon/assets/ascending.svg';
+import IconDescending from 'components/icon/assets/descending.svg';
 import IssuesSortByAddAttribute from './issues__sortby_add-attribute';
-import ModalPortal from '../../components/modal-view/modal-portal';
-import Router from '../../components/router/router';
-import Select from '../../components/select/select';
-import usage from '../../components/usage/usage';
-import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
+import ModalPortal from 'components/modal-view/modal-portal';
+import Router from 'components/router/router';
+import Select from 'components/select/select';
+import usage from 'components/usage/usage';
+import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {doAssist, getSortPropertyName, isRelevanceSortProperty} from './issues__sortby-helper';
-import {EllipsisVertical, IconAdd, IconCheck, IconClose} from '../../components/icon/icon';
-import {isSplitView} from '../../components/responsive/responsive-helper';
+import {EllipsisVertical, IconAdd, IconCheck, IconClose} from 'components/icon/icon';
+import {isSplitView} from 'components/responsive/responsive-helper';
 
 import styles from './issues.styles';
 
-import type {Folder} from '../../flow/User';
-import type {IssueFieldSortProperty, SearchSuggestions} from '../../flow/Sorting';
+import type {Folder} from 'flow/User';
+import type {IssueFieldSortProperty, SearchSuggestions} from 'flow/Sorting';
 
 
 type Props = {

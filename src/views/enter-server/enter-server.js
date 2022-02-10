@@ -14,28 +14,28 @@ import {
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
-import ErrorMessageInline from '../../components/error-message/error-message-inline';
+import clicksToShowCounter from 'components/debug-view/clicks-to-show-counter';
+import ErrorMessageInline from 'components/error-message/error-message-inline';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import log from '../../components/log/log';
-import Popup from '../../components/popup/popup';
-import usage from '../../components/usage/usage';
-import {connectToNewYoutrack, openDebugView} from '../../actions/app-actions';
-import {formStyles} from '../../components/common-styles/form';
-import {HIT_SLOP} from '../../components/common-styles/button';
-import {logo, IconBack} from '../../components/icon/icon';
-import {NETWORK_PROBLEM_TIPS} from '../../components/error-message/error-text-messages';
-import {resolveErrorMessage} from '../../components/error/error-resolver';
-import {ThemeContext} from '../../components/theme/theme-context';
-import {UNIT} from '../../components/variables/variables';
-import {VERSION_DETECT_FALLBACK_URL} from '../../components/config/config';
+import log from 'components/log/log';
+import Popup from 'components/popup/popup';
+import usage from 'components/usage/usage';
+import {connectToNewYoutrack, openDebugView} from 'actions/app-actions';
+import {formStyles} from 'components/common-styles/form';
+import {HIT_SLOP} from 'components/common-styles/button';
+import {logo, IconBack} from 'components/icon/icon';
+import {NETWORK_PROBLEM_TIPS} from 'components/error-message/error-text-messages';
+import {resolveErrorMessage} from 'components/error/error-resolver';
+import {ThemeContext} from 'components/theme/theme-context';
+import {UNIT} from 'components/variables/variables';
+import {VERSION_DETECT_FALLBACK_URL} from 'components/config/config';
 
 import styles from './enter-server.styles';
 
-import type {AppConfig} from '../../flow/AppConfig';
+import type {AppConfig} from 'flow/AppConfig';
 import type {Node} from 'React';
-import type {Theme, UIThemeColors} from '../../flow/Theme';
+import type {Theme, UIThemeColors} from 'flow/Theme';
 
 const CATEGORY_NAME = 'Choose server';
 const protocolRegExp = /^https?:/i;

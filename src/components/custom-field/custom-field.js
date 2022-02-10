@@ -8,14 +8,14 @@ import Avatar from '../avatar/avatar';
 import ColorField from '../color-field/color-field';
 import IconUrl from '@jetbrains/icons/new-window.svg';
 import {getEntityPresentation, ytDate} from '../issue-formatter/issue-formatter';
-import {getHUBUrl, isURLPattern} from '../../util/util';
+import {getHUBUrl, isURLPattern} from 'util/util';
 import {HIT_SLOP} from '../common-styles/button';
 
 import styles from './custom-field.styles';
 
-import type {CustomField as CustomFieldType, FieldValue} from '../../flow/CustomFields';
+import type {CustomField as CustomFieldType, FieldValue} from 'flow/CustomFields';
 import type {Node} from 'React';
-import type {User} from '../../flow/User';
+import type {User} from 'flow/User';
 
 type Props = {
   field: CustomFieldType,

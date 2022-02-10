@@ -6,12 +6,12 @@ import React from 'react';
 import {Text, Image, Dimensions} from 'react-native';
 
 import {hasMimeType} from '../mime-type/mime-type';
-import calculateAspectRatio from '../../components/aspect-ratio/aspect-ratio';
-import {isAndroidPlatform, isIOSPlatform} from '../../util/util';
+import calculateAspectRatio from 'components/aspect-ratio/aspect-ratio';
+import {isAndroidPlatform, isIOSPlatform} from 'util/util';
 
 import {UNIT} from '../variables/variables';
 
-import type {Attachment, ImageDimensions} from '../../flow/CustomFields';
+import type {Attachment, ImageDimensions} from 'flow/CustomFields';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 const DIMENSION_WIDTH = Dimensions.get('window').width;

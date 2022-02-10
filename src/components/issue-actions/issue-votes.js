@@ -11,7 +11,7 @@ import {UNIT} from '../variables/variables';
 import {HIT_SLOP} from '../common-styles/button';
 import {secondaryText} from '../common-styles/typography';
 
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 type Props = {
   voted: boolean,

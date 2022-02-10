@@ -3,8 +3,8 @@ import reducer from './issues-reducers';
 
 import * as actions from './issues-actions';
 import * as types from './issues-action-types';
-import * as Feature from '../../components/feature/feature';
-import {flushStoragePart, getStorageState, __setStorageState} from '../../components/storage/storage';
+import * as Feature from 'components/feature/feature';
+import {flushStoragePart, getStorageState, __setStorageState} from 'components/storage/storage';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 
 let dispatch;

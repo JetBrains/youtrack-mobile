@@ -2,33 +2,33 @@
 
 import {Clipboard, Share} from 'react-native';
 
-import * as commandDialogHelper from '../../components/command-dialog/command-dialog-helper';
-import ApiHelper from '../../components/api/api__helper';
-import issueCommonLinksActions from '../../components/issue-actions/issue-links-actions';
-import log from '../../components/log/log';
-import Router from '../../components/router/router';
-import usage from '../../components/usage/usage';
-import {ANALYTICS_ISSUE_PAGE} from '../../components/analytics/analytics-ids';
-import {getEntityPresentation, getReadableID} from '../../components/issue-formatter/issue-formatter';
-import {getIssueTextCustomFields} from '../../components/custom-field/custom-field-helper';
+import * as commandDialogHelper from 'components/command-dialog/command-dialog-helper';
+import ApiHelper from 'components/api/api__helper';
+import issueCommonLinksActions from 'components/issue-actions/issue-links-actions';
+import log from 'components/log/log';
+import Router from 'components/router/router';
+import usage from 'components/usage/usage';
+import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
+import {getEntityPresentation, getReadableID} from 'components/issue-formatter/issue-formatter';
+import {getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
 import {initialState} from './issue-base-reducer';
-import {isIOSPlatform, until} from '../../util/util';
-import {logEvent} from '../../components/log/log-helper';
-import {notify, notifyError} from '../../components/notification/notification';
-import {receiveUserAppearanceProfile} from '../../actions/app-actions';
-import {resolveError, resolveErrorMessage} from '../../components/error/error-resolver';
-import {showActions} from '../../components/action-sheet/action-sheet';
+import {isIOSPlatform, until} from 'util/util';
+import {logEvent} from 'components/log/log-helper';
+import {notify, notifyError} from 'components/notification/notification';
+import {receiveUserAppearanceProfile} from 'actions/app-actions';
+import {resolveError, resolveErrorMessage} from 'components/error/error-resolver';
+import {showActions} from 'components/action-sheet/action-sheet';
 
 import type ActionSheet from '@expo/react-native-action-sheet';
-import type Api from '../../components/api/api';
+import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
-import type {Attachment, CustomField, CustomFieldText, FieldValue, IssueProject, Tag} from '../../flow/CustomFields';
-import type {CommandSuggestionResponse, IssueFull, IssueOnList, OpenNestedViewParams} from '../../flow/Issue';
-import type {IssueLink} from '../../flow/CustomFields';
+import type {Attachment, CustomField, CustomFieldText, FieldValue, IssueProject, Tag} from 'flow/CustomFields';
+import type {CommandSuggestionResponse, IssueFull, IssueOnList, OpenNestedViewParams} from 'flow/Issue';
+import type {IssueLink} from 'flow/CustomFields';
 import type {IssueState} from './issue-base-reducer';
-import type {NormalizedAttachment} from '../../flow/Attachment';
-import type {UserAppearanceProfile} from '../../flow/User';
-import type {Visibility} from '../../flow/Visibility';
+import type {NormalizedAttachment} from 'flow/Attachment';
+import type {UserAppearanceProfile} from 'flow/User';
+import type {Visibility} from 'flow/Visibility';
 
 type ApiGetter = () => Api;
 type StateGetter = () => IssueState;

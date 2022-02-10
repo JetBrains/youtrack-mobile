@@ -7,27 +7,27 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 
 import * as articleActions from './arcticle-actions';
-import ApiHelper from '../../components/api/api__helper';
+import ApiHelper from 'components/api/api__helper';
 import ArticleActivityStream from './article__activity-stream';
 import ArticleActivityStreamCommentEdit from './article__edit-comment';
 import ArticleAddComment from './article__add-comment';
-import IssuePermissions from '../../components/issue-permissions/issue-permissions';
-import Router from '../../components/router/router';
-import KeyboardSpacerIOS from '../../components/platform/keyboard-spacer.ios';
-import usage from '../../components/usage/usage';
-import {ANALYTICS_ARTICLE_PAGE_STREAM} from '../../components/analytics/analytics-ids';
-import {convertCommentsToActivityPage, createActivityModel} from '../../components/activity/activity-helper';
-import {getEntityPresentation} from '../../components/issue-formatter/issue-formatter';
+import IssuePermissions from 'components/issue-permissions/issue-permissions';
+import Router from 'components/router/router';
+import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
+import usage from 'components/usage/usage';
+import {ANALYTICS_ARTICLE_PAGE_STREAM} from 'components/analytics/analytics-ids';
+import {convertCommentsToActivityPage, createActivityModel} from 'components/activity/activity-helper';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {setArticleCommentDraft,} from './article-reducers';
 
 import styles from './article.styles';
 
-import type {Activity, ActivityStreamCommentActions} from '../../flow/Activity';
+import type {Activity, ActivityStreamCommentActions} from 'flow/Activity';
 import type {AppState} from '../../reducers';
-import type {Article} from '../../flow/Article';
-import type {Attachment, IssueComment} from '../../flow/CustomFields';
-import type {UITheme} from '../../flow/Theme';
-import type {User} from '../../flow/User';
+import type {Article} from 'flow/Article';
+import type {Attachment, IssueComment} from 'flow/CustomFields';
+import type {UITheme} from 'flow/Theme';
+import type {User} from 'flow/User';
 
 type Props = {
   article: Article,

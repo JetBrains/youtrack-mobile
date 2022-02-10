@@ -1,7 +1,7 @@
 /* @flow */
 import RNEventSource from '@gpsgate/react-native-eventsource';
 import qs from 'qs';
-import log from '../../components/log/log';
+import log from 'components/log/log';
 import agileFields from './api__agile-fields';
 import apiHelper from './api__helper';
 import {logEvent} from '../log/log-helper';

@@ -4,7 +4,7 @@ import {elevation1} from '../common-styles/shadow';
 import {rowFormStyles} from '../common-styles/form';
 import {UNIT} from '../variables/variables';
 
-import type {UITheme, UIThemeColors} from '../../flow/Theme';
+import type {UITheme, UIThemeColors} from 'flow/Theme';
 
 
 const simpleValueInput = {

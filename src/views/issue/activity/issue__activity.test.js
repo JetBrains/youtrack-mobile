@@ -7,7 +7,7 @@ import {
   convertCommentsToActivityPage,
   getActivityCategories,
   getActivityAllTypes,
-} from '../../../components/activity/activity-helper';
+} from 'components/activity/activity-helper';
 import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {createIssueActivityActions} from './issue-activity__actions';
 

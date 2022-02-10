@@ -3,11 +3,11 @@
 import log from '../log/log';
 import PNHelper from './push-notifications-helper';
 import PushNotificationsProcessor from './push-notifications-processor';
-import {isAndroidPlatform} from '../../util/util';
+import {isAndroidPlatform} from 'util/util';
 import {isUnsupportedFeatureError} from '../error/error-resolver';
 
 import type {StorageState} from '../storage/storage';
-import type {Token} from '../../flow/Notification';
+import type {Token} from 'flow/Notification';
 
 async function getDeviceToken(): Promise<Token> {
   let deviceToken: Token = null;

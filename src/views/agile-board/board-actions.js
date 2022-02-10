@@ -3,24 +3,24 @@
 import * as types from './board-action-types';
 import {findIssueOnBoard} from './board-updaters';
 
-import * as issueUpdater from '../../components/issue-actions/issue-updater';
-import animation from '../../components/animation/animation';
-import log from '../../components/log/log';
-import Router from '../../components/router/router';
-import ServersideEvents from '../../components/api/api__serverside-events';
-import usage from '../../components/usage/usage';
-import {ANALYTICS_AGILE_PAGE} from '../../components/analytics/analytics-ids';
-import {DEFAULT_ERROR_MESSAGE} from '../../components/error/error-messages';
-import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from '../../components/storage/storage';
-import {getAssistSuggestions} from '../../components/query-assist/query-assist-helper';
+import * as issueUpdater from 'components/issue-actions/issue-updater';
+import animation from 'components/animation/animation';
+import log from 'components/log/log';
+import Router from 'components/router/router';
+import ServersideEvents from 'components/api/api__serverside-events';
+import usage from 'components/usage/usage';
+import {ANALYTICS_AGILE_PAGE} from 'components/analytics/analytics-ids';
+import {DEFAULT_ERROR_MESSAGE} from 'components/error/error-messages';
+import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from 'components/storage/storage';
+import {getAssistSuggestions} from 'components/query-assist/query-assist-helper';
 import {getGroupedSprints, getSprintAllIssues, updateSprintIssues} from './agile-board__helper';
-import {isIOSPlatform, until} from '../../util/util';
+import {isIOSPlatform, until} from 'util/util';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
-import {notify} from '../../components/notification/notification';
+import {notify} from 'components/notification/notification';
 import {routeMap} from '../../app-routes';
-import {sortAlphabetically} from '../../components/search/sorting';
+import {sortAlphabetically} from 'components/search/sorting';
 
-import type Api from '../../components/api/api';
+import type Api from 'components/api/api';
 import type {
   AgileBoardRow,
   AgileUserProfile,
@@ -29,10 +29,10 @@ import type {
   BoardOnList,
   Sprint,
   SprintFull,
-} from '../../flow/Agile';
+} from 'flow/Agile';
 import type {AgilePageState} from './board-reducers';
-import type {CustomError} from '../../flow/Error';
-import type {IssueFull, IssueOnList} from '../../flow/Issue';
+import type {CustomError} from 'flow/Error';
+import type {IssueFull, IssueOnList} from 'flow/Issue';
 
 type ApiGetter = () => Api;
 

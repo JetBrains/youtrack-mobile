@@ -6,8 +6,8 @@ import {groupActivities} from './activity__group-activities';
 import {IconComment, IconHistory, IconHourGlass, IconVcs} from '../icon/icon';
 import {mergeActivities} from './activity__merge-activities';
 
-import type {ActivityItem, ActivityPositionData, ActivityType, Activity} from '../../flow/Activity';
-import type {IssueComment} from '../../flow/CustomFields';
+import type {ActivityItem, ActivityPositionData, ActivityType, Activity} from 'flow/Activity';
+import type {IssueComment} from 'flow/CustomFields';
 
 const activityIconMap = {
   [ActivityCategory.Source.COMMENT]: IconComment,

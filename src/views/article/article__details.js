@@ -4,26 +4,26 @@ import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 
 import ArticleContent from './article__details-content';
-import ArticleWithChildren from '../../components/articles/article-item-with-children';
-import AttachmentsRow from '../../components/attachments-row/attachments-row';
-import Header from '../../components/header/header';
-import ModalPortal from '../../components/modal-view/modal-portal';
-import Router from '../../components/router/router';
-import Select from '../../components/select/select';
-import Separator from '../../components/separator/separator';
-import usage from '../../components/usage/usage';
-import {ANALYTICS_ARTICLE_PAGE} from '../../components/analytics/analytics-ids';
-import {IconAdd, IconAngleRight, IconBack, IconClose} from '../../components/icon/icon';
-import {logEvent} from '../../components/log/log-helper';
+import ArticleWithChildren from 'components/articles/article-item-with-children';
+import AttachmentsRow from 'components/attachments-row/attachments-row';
+import Header from 'components/header/header';
+import ModalPortal from 'components/modal-view/modal-portal';
+import Router from 'components/router/router';
+import Select from 'components/select/select';
+import Separator from 'components/separator/separator';
+import usage from 'components/usage/usage';
+import {ANALYTICS_ARTICLE_PAGE} from 'components/analytics/analytics-ids';
+import {IconAdd, IconAngleRight, IconBack, IconClose} from 'components/icon/icon';
+import {logEvent} from 'components/log/log-helper';
 import {routeMap} from '../../app-routes';
-import {SkeletonIssueContent} from '../../components/skeleton/skeleton';
+import {SkeletonIssueContent} from 'components/skeleton/skeleton';
 
 import styles from './article.styles';
 
-import type {Article} from '../../flow/Article';
-import type {Attachment} from '../../flow/CustomFields';
-import type {CustomError} from '../../flow/Error';
-import type {UITheme} from '../../flow/Theme';
+import type {Article} from 'flow/Article';
+import type {Attachment} from 'flow/CustomFields';
+import type {CustomError} from 'flow/Error';
+import type {UITheme} from 'flow/Theme';
 
 type Props = {
   article: Article,

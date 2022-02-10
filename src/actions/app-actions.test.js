@@ -3,16 +3,16 @@ import thunk from 'redux-thunk';
 
 import * as actions from './app-actions';
 import * as appActionHelper from './app-actions-helper';
-import * as Notification from '../components/notification/notification';
+import * as Notification from 'components/notification/notification';
 import * as types from './action-types';
-import AuthTest from '../components/auth/oauth2';
-import log from '../components/log/log';
-import permissionsHelper from '../components/permissions-store/permissions-helper';
-import PermissionsStore from '../components/permissions-store/permissions-store';
-import PushNotifications from '../components/push-notifications/push-notifications';
-import Router from '../components/router/router';
-import {__setStorageState, getStorageState, populateStorage} from '../components/storage/storage';
-import {CUSTOM_ERROR_MESSAGE, REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from '../components/error/error-messages';
+import AuthTest from 'components/auth/oauth2';
+import log from 'components/log/log';
+import permissionsHelper from 'components/permissions-store/permissions-helper';
+import PermissionsStore from 'components/permissions-store/permissions-store';
+import PushNotifications from 'components/push-notifications/push-notifications';
+import Router from 'components/router/router';
+import {__setStorageState, getStorageState, populateStorage} from 'components/storage/storage';
+import {CUSTOM_ERROR_MESSAGE, REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from 'components/error/error-messages';
 
 const backendURLMock = 'https://example.com';
 const permissionsCacheURLMock = `${backendURLMock}/permissionsCache`;

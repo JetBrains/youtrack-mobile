@@ -3,13 +3,13 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import {Text, View} from 'react-native';
 
-import IssueMarkdown from '../../views/issue/issue__markdown';
+import IssueMarkdown from 'views/issue/issue__markdown';
 import TextEditForm from '../form/text-edit-form';
 import {isRequiredCustomField} from './custom-field-helper';
 
 import styles from './custom-field.styles';
 
-import type {CustomFieldText} from '../../flow/CustomFields';
+import type {CustomFieldText} from 'flow/CustomFields';
 import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 

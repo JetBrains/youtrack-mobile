@@ -3,10 +3,10 @@
 import ApiHelper from '../api/api__helper';
 import log from '../log/log';
 import {getApi} from '../api/api__instance';
-import {until} from '../../util/util';
+import {until} from 'util/util';
 
 import type Api from '../api/api';
-import type {AnyIssue, IssueFull} from '../../flow/Issue';
+import type {AnyIssue, IssueFull} from 'flow/Issue';
 
 export const loadIssue = async (issueId: string): Promise<IssueFull | null> => {
   const api: Api = getApi();

@@ -8,7 +8,7 @@ import {getEntityPresentation, relativeDate} from '../issue-formatter/issue-form
 
 import styles from './user-info.styles';
 
-import type {User} from '../../flow/User';
+import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import Avatar from '../avatar/avatar';
 

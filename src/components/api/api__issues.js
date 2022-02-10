@@ -8,8 +8,8 @@ import issueFields from './api__issue-fields';
 import {checkVersion, FEATURE_VERSION} from '../feature/feature';
 import {routeMap} from '../../app-routes';
 
-import type {IssueOnList} from '../../flow/Issue';
-import type {Folder} from '../../flow/User';
+import type {IssueOnList} from 'flow/Issue';
+import type {Folder} from 'flow/User';
 
 export default class IssuesAPI extends ApiBase {
   async _getIssues(query: string = '', $top: number, $skip: number = 0, fields: string): Promise<Array<IssueOnList>> {

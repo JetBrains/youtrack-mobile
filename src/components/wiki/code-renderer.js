@@ -10,14 +10,14 @@ import { idea, darcula } from 'react-syntax-highlighter/dist/styles';
 import entities from 'entities';
 import Router from '../router/router';
 
-import {isAndroidPlatform} from '../../util/util';
+import {isAndroidPlatform} from 'util/util';
 import {showMoreText} from '../text-view/text-view';
 import {monospaceFontAndroid, monospaceFontIOS, SECONDARY_FONT_SIZE} from '../common-styles/typography';
 
 import styles from './youtrack-wiki.styles';
 
 import type {Node as $IMPORTED_TYPE$_Node} from 'React';
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 const isAndroid: boolean = isAndroidPlatform();
 const MAX_CODE_LENGTH: number = 630;

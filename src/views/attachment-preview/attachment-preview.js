@@ -6,9 +6,9 @@ import {View, Text, ActivityIndicator, Linking} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { WebView } from 'react-native-webview';
 
-import Header from '../../components/header/header';
-import {IconClose} from '../../components/icon/icon';
-import {UNIT} from '../../components/variables/variables';
+import Header from 'components/header/header';
+import {IconClose} from 'components/icon/icon';
+import {UNIT} from 'components/variables/variables';
 
 import type {Node} from 'React';
 

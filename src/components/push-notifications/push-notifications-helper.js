@@ -7,12 +7,12 @@ import log from '../log/log';
 import {categoryName} from '../activity/activity__category';
 import {flushStoragePart, getStorageState} from '../storage/storage';
 import {getApi} from '../api/api__instance';
-import {isAndroidPlatform} from '../../util/util';
+import {isAndroidPlatform} from 'util/util';
 import {UNSUPPORTED_ERRORS} from '../error/error-messages';
 
 import type Api from '../api/api';
-import type {Token} from '../../flow/Notification';
-import type {CustomError} from '../../flow/Error';
+import type {Token} from 'flow/Notification';
+import type {CustomError} from 'flow/Error';
 import type {StorageState} from '../storage/storage';
 
 

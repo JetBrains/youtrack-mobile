@@ -2,14 +2,14 @@
 
 import React from 'react';
 
-import IssueCommentEdit from '../../../components/comment/comment-edit';
-import IssuePermissions from '../../../components/issue-permissions/issue-permissions';
+import IssueCommentEdit from 'components/comment/comment-edit';
+import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import {attachmentActions} from './issue-activity__attachment-actions-and-types';
 import {createActivityCommentActions} from './issue-activity__comment-actions';
-import {getApi} from '../../../components/api/api__instance';
+import {getApi} from 'components/api/api__instance';
 
-import type {Attachment, IssueComment} from '../../../flow/CustomFields';
-import type {IssueContextData, IssueFull} from '../../../flow/Issue';
+import type {Attachment, IssueComment} from 'flow/CustomFields';
+import type {IssueContextData, IssueFull} from 'flow/Issue';
 
 type Props = {
   comment: IssueComment,

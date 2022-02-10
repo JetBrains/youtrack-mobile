@@ -1,8 +1,8 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {elevation1} from '../../components/common-styles/shadow';
-import {UNIT} from '../../components/variables/variables';
-import {mainText} from '../../components/common-styles/typography';
+import {elevation1} from 'components/common-styles/shadow';
+import {UNIT} from 'components/variables/variables';
+import {mainText} from 'components/common-styles/typography';
 
 export default EStyleSheet.create({
   container: {

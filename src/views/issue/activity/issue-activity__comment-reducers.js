@@ -2,7 +2,7 @@
 
 import {createReducer} from 'redux-create-reducer';
 import * as types from '../issue-action-types';
-import type {IssueComment} from '../../../flow/CustomFields';
+import type {IssueComment} from 'flow/CustomFields';
 
 export type State = {
   commentsLoadingError: ?Error,

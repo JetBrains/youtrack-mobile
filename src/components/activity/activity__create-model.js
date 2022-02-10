@@ -3,7 +3,7 @@
 import {ResourceTypes, hasType} from '../api/api__resource-types';
 import {ActivityCategory, isActivityCategory} from './activity__category';
 
-import type {Activity} from '../../flow/Activity';
+import type {Activity} from 'flow/Activity';
 
 
 export const createActivitiesModel = (activityGroups: Array<Object> = []): Array<Activity> => {

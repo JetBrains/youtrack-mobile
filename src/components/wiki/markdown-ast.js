@@ -7,8 +7,8 @@ import Markdown from 'react-native-markdown-display';
 import MarkdownItInstance from './markdown-instance';
 import markdownStyles from './markdown-view-styles';
 
-import type {MarkdownNode} from '../../flow/Markdown';
-import type {UITheme} from '../../flow/Theme';
+import type {MarkdownNode} from 'flow/Markdown';
+import type {UITheme} from 'flow/Theme';
 
 
 type Props = {

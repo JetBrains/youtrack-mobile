@@ -6,13 +6,13 @@ import {View, Text, TouchableOpacity} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {UNIT} from '../../components/variables/variables';
+import {UNIT} from 'components/variables/variables';
 import {isAllColumnsCollapsed} from './agile-board__helper';
-import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../../components/agile-common/agile-common';
+import {AGILE_COLLAPSED_COLUMN_WIDTH} from 'components/agile-common/agile-common';
 
-import {secondaryText} from '../../components/common-styles/typography';
+import {secondaryText} from 'components/common-styles/typography';
 
-import type {BoardColumn} from '../../flow/Agile';
+import type {BoardColumn} from 'flow/Agile';
 import type {Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 

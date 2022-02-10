@@ -4,6 +4,7 @@ import sinon from 'sinon';
 import thunk from 'redux-thunk';
 
 import * as storage from '../src/components/storage/storage';
+import Auth from '../src/components/auth/oauth2';
 import {createProjectCustomFieldMock} from './mocks__custom-fields';
 import {ResourceTypes} from '../src/components/api/api__resource-types';
 
@@ -162,6 +163,35 @@ function randomSentence(n) {
   return n ? word.repeat(n) : word;
 }
 
+function createConfigMock() {
+  return {
+    backendUrl: 'https://youtrack.cloud',
+    auth: {
+      serverUri: 'https://youtrack.cloud/hub',
+      clientId: 'client-id',
+      clientSecret: 'client-secret',
+      youtrackServiceId: 'yt-service-id',
+      scopes: 'scope1 scope2',
+      landingUrl: 'ytoauth://landing.url',
+    },
+  };
+}
+
+function createAuthParamsMock() {
+  return {
+    access_token: 'fake-access-token',
+    refresh_token: 'fake-refresh-token',
+    token_type: 'bearer',
+  };
+}
+
+function createAuthMock(config) {
+  return {
+    ...(new Auth(config || createConfigMock())),
+    getAuthorizationHeaders: () => ({Authorization: 'token type fake token'}),
+  };
+}
+
 export default {
   sandbox,
   mockStorage,
@@ -176,4 +206,8 @@ export default {
   createCommentMock,
 
   randomSentence,
+
+  createConfigMock,
+  createAuthMock,
+  createAuthParamsMock,
 };

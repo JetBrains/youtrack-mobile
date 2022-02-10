@@ -2,25 +2,25 @@
 
 import * as activityHelper from './issue-activity__helper';
 import * as types from '../issue-action-types';
-import log from '../../../components/log/log';
-import {ANALYTICS_ISSUE_STREAM_SECTION} from '../../../components/analytics/analytics-ids';
-import {confirmation} from '../../../components/confirmation/confirmation';
+import log from 'components/log/log';
+import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
+import {confirmation} from 'components/confirmation/confirmation';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from '../issue-base-actions-creater';
-import {extractErrorMessage, resolveError} from '../../../components/error/error-resolver';
-import {getActivityAllTypes, getActivityCategories} from '../../../components/activity/activity-helper';
-import {logEvent} from '../../../components/log/log-helper';
-import {notify} from '../../../components/notification/notification';
-import {sortAlphabetically, sortByOrdinal} from '../../../components/search/sorting';
-import {until} from '../../../util/util';
-import {WORK_ITEM_CREATE, WORK_ITEM_UPDATE} from '../../../components/issue-permissions/issue-permissions';
+import {extractErrorMessage, resolveError} from 'components/error/error-resolver';
+import {getActivityAllTypes, getActivityCategories} from 'components/activity/activity-helper';
+import {logEvent} from 'components/log/log-helper';
+import {notify} from 'components/notification/notification';
+import {sortAlphabetically, sortByOrdinal} from 'components/search/sorting';
+import {until} from 'util/util';
+import {WORK_ITEM_CREATE, WORK_ITEM_UPDATE} from 'components/issue-permissions/issue-permissions';
 
-import type Api from '../../../components/api/api';
-import type {Activity, ActivityType} from '../../../flow/Activity';
-import type {CustomError} from '../../../flow/Error';
-import type {User} from '../../../flow/User';
+import type Api from 'components/api/api';
+import type {Activity, ActivityType} from 'flow/Activity';
+import type {CustomError} from 'flow/Error';
+import type {User} from 'flow/User';
 import type {State as SingleIssueState} from '../issue-reducers';
-import type {TimeTracking} from '../../../flow/Work';
-import type {WorkItem} from '../../../flow/Work';
+import type {TimeTracking} from 'flow/Work';
+import type {WorkItem} from 'flow/Work';
 
 type ApiGetter = () => Api;
 type StateGetter = () => { issueState: SingleIssueState };

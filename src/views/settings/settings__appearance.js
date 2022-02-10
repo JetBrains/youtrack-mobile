@@ -3,17 +3,17 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
-import Header from '../../components/header/header';
-import {getStorageState} from '../../components/storage/storage';
-import {getSystemThemeMode, themes} from '../../components/theme/theme';
-import {HIT_SLOP} from '../../components/common-styles/button';
-import {IconBack, IconCheck} from '../../components/icon/icon';
-import {ThemeContext} from '../../components/theme/theme-context';
+import Header from 'components/header/header';
+import {getStorageState} from 'components/storage/storage';
+import {getSystemThemeMode, themes} from 'components/theme/theme';
+import {HIT_SLOP} from 'components/common-styles/button';
+import {IconBack, IconCheck} from 'components/icon/icon';
+import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './settings.styles';
 
 import type {Node} from 'React';
-import type {Theme} from '../../flow/Theme';
+import type {Theme} from 'flow/Theme';
 
 type Props = {
   onHide: () => any,
