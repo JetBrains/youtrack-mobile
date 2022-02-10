@@ -41,6 +41,7 @@ import type {
   IssueProject,
 } from '../../flow/CustomFields';
 import type {Node} from 'React';
+import type {ScrollData} from '../../flow/Markdown';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {Visibility} from '../../flow/Visibility';
 import type {YouTrackWiki} from '../../flow/Wiki';
@@ -93,6 +94,7 @@ export type IssueDetailsProps = {
 
   setCustomFieldValue: (field: CustomFieldText, value: CustomFieldTextValue) => any,
   modal?: boolean,
+  scrollData: ScrollData,
 }
 
 export default class IssueDetails extends Component<IssueDetailsProps, void> {
@@ -281,6 +283,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
       onTagRemove,
       onCheckboxUpdate,
       onLongPress,
+      scrollData,
     } = this.props;
 
     if (!issue) {
@@ -333,6 +336,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
           <View style={styles.description}>
             <IssueMarkdown
               {...ytWikiProps}
+              scrollData={scrollData}
               attachments={issue.attachments}
               markdown={issue.usesMarkdown ? issue.description : null}
               onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(

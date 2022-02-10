@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {RefreshControl, Text, View} from 'react-native';
+import {FlatList, RefreshControl, Text, View} from 'react-native';
 
 import {bindActionCreatorsExt} from '../../util/redux-ext';
 import {connect} from 'react-redux';
@@ -43,6 +43,7 @@ import type {IssueTabbedState} from '../../components/issue-tabbed/issue-tabbed'
 import type {NormalizedAttachment} from '../../flow/Attachment';
 import type {RequestHeaders} from '../../flow/Auth';
 import type {RootState} from '../../reducers/app-reducer';
+import type {ScrollData} from '../../flow/Markdown';
 import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from '../../flow/Theme';
 import type {User} from '../../flow/User';
@@ -139,7 +140,10 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     await this.props.loadIssue();
   }
 
-  renderDetails: (uiTheme: UITheme) => React$Element<any> = (uiTheme: UITheme) => {
+  createIssueDetails: (uiTheme: UITheme, scrollData: ScrollData) => React$Element<any> = (
+    uiTheme: UITheme,
+    scrollData: ScrollData,
+  ) => {
     const {isSplitView} = this.state;
     const {
       loadIssue,
@@ -223,6 +227,23 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
         setCustomFieldValue={setCustomFieldValue}
         isSplitView={isSplitView}
+        scrollData={scrollData}
+      />
+    );
+  };
+
+  renderDetails: (uiTheme: UITheme) => React$Element<any> = (uiTheme: UITheme) => {
+    const scrollData: ScrollData = {loadMore: () => null};
+    return (
+      <FlatList
+        data={[0]}
+        removeClippedSubviews={false}
+        refreshControl={this.renderRefreshControl(() => this.loadIssue(), uiTheme)}
+        keyExtractor={() => 'issue-details'}
+        renderItem={() => this.createIssueDetails(uiTheme, scrollData)}
+
+        onEndReached={() => scrollData.loadMore && scrollData.loadMore()}
+        onEndReachedThreshold={5}
       />
     );
   };
