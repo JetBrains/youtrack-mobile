@@ -5,7 +5,7 @@ PODS:
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
   - boost (1.76.0)
-  - BugsnagReactNative (7.10.2):
+  - BugsnagReactNative (7.16.1):
     - React-Core
   - BVLinearGradient (2.4.0):
     - React
@@ -299,7 +299,7 @@ PODS:
   - React-jsinspector (0.66.4)
   - React-logger (0.66.4):
     - glog
-  - react-native-app-auth (6.4.0):
+  - react-native-app-auth (6.4.2):
     - AppAuth (= 1.4.0)
     - React-Core
   - react-native-appearance (0.3.4):
@@ -308,22 +308,22 @@ PODS:
     - React-Core
   - react-native-eventsource (0.0.1):
     - React
-  - react-native-netinfo (6.0.0):
+  - react-native-netinfo (6.2.1):
     - React-Core
   - react-native-notifications (3.1.4):
     - React
-  - react-native-pager-view (5.1.2):
+  - react-native-pager-view (5.4.9):
     - React-Core
   - react-native-restart (0.0.22):
     - React-Core
-  - react-native-safe-area-context (3.2.0):
+  - react-native-safe-area-context (3.3.2):
     - React-Core
-  - react-native-video (5.1.1):
+  - react-native-video (5.2.0):
     - React-Core
-    - react-native-video/Video (= 5.1.1)
-  - react-native-video/Video (5.1.1):
+    - react-native-video/Video (= 5.2.0)
+  - react-native-video/Video (5.2.0):
     - React-Core
-  - react-native-webview (11.13.0):
+  - react-native-webview (11.17.2):
     - React-Core
   - React-perflogger (0.66.4)
   - React-RCTActionSheet (0.66.4):
@@ -409,7 +409,7 @@ PODS:
     - TOCropViewController
   - RNKeychain (7.0.0):
     - React-Core
-  - RNReanimated (2.4.0):
+  - RNReanimated (2.4.1):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -662,7 +662,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   boost: a7c83b31436843459a1961bfd74b96033dc77234
-  BugsnagReactNative: 7b1c90f4982326cbf092144d32db43dba8786928
+  BugsnagReactNative: bd1c905fb868fae8448a913b87356dbf2b02dc80
   BVLinearGradient: 8913bd8fdc47b85abc801ae8bae007bbfb6b4ce5
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
@@ -695,17 +695,17 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 94ce921e1d8ce7023366873ec371f3441383b396
   React-jsinspector: d0374f7509d407d2264168b6d0fad0b54e300b85
   React-logger: 933f80c97c633ee8965d609876848148e3fef438
-  react-native-app-auth: 0970add7ceaadc90d2ccd1d9e21916d33d203701
+  react-native-app-auth: 1f1b595bf4122f95e0f766404c8621054238e313
   react-native-appearance: 0f0e5fc2fcef70e03d48c8fe6b00b9158c2ba8aa
   react-native-encrypted-storage: e78d848ce0fb663c2ce306e37921d026809322e6
   react-native-eventsource: fea4e2c2505d19660b312406ce45dbb3fe68fd35
-  react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
+  react-native-netinfo: 3d3769f0d65de15c83a9bf1346f8be71de5a24bf
   react-native-notifications: 36929512507417ba0021659bd2f9e0184dda2489
-  react-native-pager-view: c1ec84a464024641ccb1102e9ec12be020d3d74c
+  react-native-pager-view: 3ee7d4c7697fb3ef788346e834a60cca97ed8540
   react-native-restart: 733a51ad137f15b0f8dc34c4082e55af7da00979
-  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
-  react-native-video: 0bb76b6d6b77da3009611586c7dbf817b947f30e
-  react-native-webview: 133a6a5149f963259646e710b4545c67ef35d7c9
+  react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
+  react-native-video: a4c2635d0802f983594b7057e1bce8f442f0ad28
+  react-native-webview: 380c1a03ec94b7ed764dac8db1e7c9952d08c93a
   React-perflogger: 93075d8931c32cd1fce8a98c15d2d5ccc4d891bd
   React-RCTActionSheet: 7d3041e6761b4f3044a37079ddcb156575fb6d89
   React-RCTAnimation: 743e88b55ac62511ae5c2e22803d4f503f2a3a13
@@ -724,7 +724,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNImageCropPicker: e641bf83ac47324994cac139bde74635ec52c17c
   RNKeychain: f75b8c8b2f17d3b2aa1f25b4a0ac5b83d947ff8f
-  RNReanimated: fb56abd99a5d7efe91ae3c7bf3cd3663cee1b21b
+  RNReanimated: e8afbe2a9e08e9e778ea72ddb1a8533445812621
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
@@ -734,4 +734,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 36e753648796576e283705e8ddac286730047cd7
 
-COCOAPODS: 1.11.0
+COCOAPODS: 1.10.1

@@ -65,7 +65,7 @@
   },
   "tmp": ".tmp",
   "dependencies": {
-    "@bugsnag/react-native": "^7.10.2",
+    "@bugsnag/react-native": "^7.16.1",
     "@expo/react-native-action-sheet": "3.8.0",
     "@gpsgate/react-native-eventsource": "ExpandoPakistan/react-native-eventsource.git",
     "@jetbrains/icons": "^3.14.1",
