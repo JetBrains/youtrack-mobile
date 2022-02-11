@@ -7,7 +7,7 @@ import {Text} from 'react-native';
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
 import { idea, darcula } from 'react-syntax-highlighter/dist/styles';
 
-import entities from 'entities';
+import {decodeHTML} from 'entities';
 import Router from '../router/router';
 
 import {isAndroidPlatform} from 'util/util';
@@ -72,7 +72,7 @@ function renderCode(node: Node, language?: ?string, uiTheme: UITheme): $IMPORTED
         fontSize={SECONDARY_FONT_SIZE}
         fontFamily={isAndroid ? monospaceFontAndroid : monospaceFontIOS}
       >
-        {entities.decodeHTML(codeData.code)}
+        {decodeHTML(codeData.code)}
       </SyntaxHighlighter>
 
       {codeData.isLongCode && separator}

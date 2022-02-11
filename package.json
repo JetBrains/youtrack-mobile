@@ -74,7 +74,7 @@
     "@reduxjs/toolkit": "^1.4.0",
     "base64-js": "1.5.1",
     "diff-match-patch": "^1.0.5",
-    "entities": "^1.1.1",
+    "entities": "^2.0.0",
     "from-now": "1.0.2",
     "htmlparser-to-html": "0.0.6",
     "lodash.debounce": "^4.0.8",

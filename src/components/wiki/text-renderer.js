@@ -4,7 +4,7 @@ import React from 'react';
 
 import {TextInput} from 'react-native';
 
-import entities from 'entities';
+import {decodeHTML} from 'entities';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
@@ -15,7 +15,7 @@ type Props = {
 
 const LongText = (props: Props) => {
   const {children, style} = props;
-  const decodedText: string = entities.decodeHTML(children) || '';
+  const decodedText: string = decodeHTML(children) || '';
 
   return <TextInput
     style={style}
