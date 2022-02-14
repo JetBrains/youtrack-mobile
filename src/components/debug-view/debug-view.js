@@ -14,12 +14,14 @@ import styles from './debug-view.styles';
 
 type Props = {
   show: boolean,
-  onHide: Function
+  onHide: Function,
+  backgroundColor: string,
+  logsStyle: { textColor: string, backgroundColor: string, separatorColor: string },
 };
 
 export class DebugView extends PureComponent<Props, void> {
   render(): null | Node {
-    const {show, onHide} = this.props;
+    const {show, onHide, logsStyle} = this.props;
     if (!show) {
       return null;
     }
@@ -34,10 +36,14 @@ export class DebugView extends PureComponent<Props, void> {
             inverted={true}
             multiExpanded={true}
             timeStampFormat="HH:mm:ss"
+            {...logsStyle}
           />
 
           <View style={styles.buttons}>
-            <TouchableOpacity style={styles.closeButton} onPress={onHide}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={onHide}
+            >
               <Text style={styles.closeButtonText}>Close</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.closeButton} onPress={copyRawLogs}>

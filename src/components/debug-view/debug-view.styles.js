@@ -4,6 +4,7 @@ import {UNIT} from '../variables/variables';
 export default EStyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '$background',
   },
   buttons: {
     flexDirection: 'row',
