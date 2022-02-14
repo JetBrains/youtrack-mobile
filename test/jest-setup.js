@@ -24,7 +24,7 @@ chai.use(chaiAsPromised);
 chai.use(sinonChai);
 should();
 
-require('react-native-reanimated/lib/src/reanimated2/jestUtils').setUpTests();
+require('react-native-reanimated/lib/reanimated2/jestUtils').setUpTests();
 
 // Modules mocks
 
