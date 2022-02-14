@@ -399,9 +399,10 @@ export class KnowledgeBase extends Component<Props, State> {
   renderActionsBar: (() => Node) = () => {
     const {isLoading, articlesList} = this.props;
     const list: ArticlesList = articlesList || [];
+    const hasSearchQuery: boolean = !!this.getSearchQuery();
     const isToggleButtonEnabled: boolean = (
       !isLoading &&
-      !this.getSearchQuery() &&
+      !hasSearchQuery &&
       list.length > 0 &&
       list.some((it: ArticlesListItem) => !it.title?.articles?.collapsed)
     );
@@ -412,13 +413,13 @@ export class KnowledgeBase extends Component<Props, State> {
           testID="test:id/collapse-all"
           accessibilityLabel="collapse-all"
           accessible={true}
-          disabled={!isToggleButtonEnabled}
+          disabled={!isToggleButtonEnabled || hasSearchQuery}
           hitSlop={HIT_SLOP}
           onPress={() => this.props.toggleAllProjects()}
         >
-          <Text style={styles.actionBarButtonText}>
+          {!hasSearchQuery && <Text style={styles.actionBarButtonText}>
             Collapse all
-          </Text>
+          </Text>}
         </TouchableOpacity>
         <TouchableOpacity
           testID="test:id/drafts"
