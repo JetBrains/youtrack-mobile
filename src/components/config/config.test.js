@@ -69,15 +69,18 @@ describe('Config', () => {
       res.auth.serverUri.should.equal('https://foo.myjetbrains.com/hub');
     });
 
-    it('should go for config to correct URL', async() => {
+    it('should go for config to correct URL', async () => {
       await loadConfig('http://fake.backend');
-      fetch.should.have.been.calledWith('http://fake.backend/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'User-Agent': 'YouTrackMobile/0.1 (undefined undefined undefined)',
-        },
-      });
+      fetch.should.have.been.calledWith(
+        'http://fake.backend/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled',
+        {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'User-Agent': 'YouTrackMobile/0.1 (unknown unknown unknown)',
+          },
+        }
+      );
     });
 
     it('should not add fields to URL if it is version detect fallback URL', async() => {

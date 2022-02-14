@@ -753,7 +753,7 @@ export function setAccount(notificationRouteData: NotificationRouteData | Object
 
 export function subscribeToPushNotifications(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<void> => {
-    if (DeviceInfo.isEmulator()) {
+    if (await DeviceInfo.isEmulator()) {
       return;
     }
 
