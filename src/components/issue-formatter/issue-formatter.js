@@ -1,11 +1,19 @@
 /* @flow */
 
-import DeviceInfo from 'react-native-device-info';
 import fromNow from 'from-now';
+import RNLocalize from 'react-native-localize';
 
 import type {CustomField} from 'flow/CustomFields';
 import type {User} from 'flow/User';
 import type {AnyIssue} from 'flow/Issue';
+
+type Locale = {
+  languageCode: string,
+  scriptCode?: string,
+  countryCode: string,
+  languageTag: string,
+  isRTL: boolean,
+};
 
 const shortRelativeFormat = {
   'now': 'just now',
@@ -42,15 +50,20 @@ function makeDatePast(date: Date|number) {
   return date;
 }
 
+function getDeviceLocale(): string {
+  const locales: Array<Locale> = RNLocalize.getLocales();
+  return locales[0] && locales[0].languageTag;
+}
+
 function formatDate(date: Date|number): string {
   const dateObj = new Date(date);
-  return `${dateObj.toLocaleString(DeviceInfo.getDeviceLocale(), {year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute:'2-digit'})}`;
+  return `${dateObj.toLocaleString(getDeviceLocale(), {year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute:'2-digit'})}`;
 }
 
 function ytDate(date: Date | number, noTime: boolean = false): string {
   const dateObj = new Date(date);
   //$FlowFixMe
-  return `${dateObj.toLocaleString(DeviceInfo.getDeviceLocale(), Object.assign(
+  return `${dateObj.toLocaleString(getDeviceLocale(), Object.assign(
     {
       month: 'short',
       day: '2-digit',
@@ -75,8 +88,8 @@ function relativeDate(date: Date|number): string {
 
 function absDate(date: Date|number, localeString: ?string): string {
   const utcDate = new Date(date);
-  const _locales = localeString ? [localeString] : DeviceInfo.getDeviceLocale();
-  return utcDate.toLocaleTimeString(_locales, {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
+  const locale: Array<string> | string = localeString ? [localeString] : getDeviceLocale();
+  return utcDate.toLocaleTimeString(locale, {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
 }
 
 function shortRelativeDate(date: Date|number): string {

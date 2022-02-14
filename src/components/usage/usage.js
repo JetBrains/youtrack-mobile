@@ -9,16 +9,24 @@ const VERSION = appPackage.version || 'dev.dev.dev-dev';
 const [major, minor, patch, build] = VERSION.split(splitRegExp);
 const patchPart = parseInt(patch) === 0 ? '' : `.${patch}`;
 
-export const VERSION_STRING = `${major}.${minor}${patchPart} (build ${build})`;
+export const VERSION_STRING: string = `${major}.${minor}${patchPart} (build ${build})`;
 
-export const USER_AGENT = `YouTrackMobile/${major}.${minor}${patchPart} (${DeviceInfo.getBrand()} ${DeviceInfo.getSystemName()} ${DeviceInfo.getSystemVersion()})`;
+export const USER_AGENT: string = `YouTrackMobile/${major}.${minor}${patchPart} (${DeviceInfo.getBrand()} ${DeviceInfo.getSystemName()} ${DeviceInfo.getSystemVersion()})`;
 
-const googleAnalyiticsId = appPackage.config.ANALYTICS_ID;
-let isAnalyticsEnabled = false;
+const googleAnalyiticsId: string = appPackage.config.ANALYTICS_ID;
+let isAnalyticsEnabled: boolean = false;
 
-const clientId = DeviceInfo.getUniqueID();
+const clientId: string = DeviceInfo.getUniqueId();
 
-const ga = new Analytics(googleAnalyiticsId, clientId, 1, DeviceInfo.getUserAgent());
+let gaAnalyticInstance: Analytics;
+const createInstance = async () => {
+  const userAgent: string = await DeviceInfo.getUserAgent();
+  gaAnalyticInstance = new Analytics(googleAnalyiticsId, clientId, 1, userAgent || 'YouTrackMobile');
+};
+
+const getInstance = () => gaAnalyticInstance;
+
+createInstance();
 
 const usage = {
   init(statisticsEnabled: boolean) {
@@ -31,7 +39,7 @@ const usage = {
     }
 
     const screenView = new GAHits.ScreenView('YouTrack Mobile', screenName, VERSION);
-    return ga.send(screenView);
+    return getInstance().send(screenView);
   },
 
   trackEvent(eventName: string, ...params: Array<any>): any | void {
@@ -39,7 +47,7 @@ const usage = {
       return;
     }
     const gaEvent = new GAHits.Event(eventName, ...params);
-    return ga.send(gaEvent);
+    return getInstance().send(gaEvent);
   },
 
   trackError(error: any, additionalMessage: ?string): any | void {

@@ -1,7 +1,7 @@
-import DeviceInfo from 'react-native-device-info';
+import RNLocalize from 'react-native-localize';
 
 import {getEntityPresentation, getVisibilityPresentation, absDate, getReadableID} from './issue-formatter';
-import sinon from 'sinon';
+
 
 describe('getEntityPresentation', function() {
   it('should return empty string if no parameter is provided', () => {
@@ -134,32 +134,23 @@ describe('absDate', function () {
   const formatDateParams = {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'};
   const _Date = Date;
 
-  beforeEach(() => {
-    dateMock.toLocaleTimeString = sinon.spy();
-    global.Date = class extends _Date {
-      constructor() {
-        super();
-        return dateMock;
-      }
-    };
-  });
+  beforeEach(() => mockGlobalDateObj(dateMock));
 
   afterEach(() => global.Date = _Date);
 
   it('should return absolute date with provided locale string', () => {
-    const localeString = 'en-US';
+    const localeString = 'en-EN';
     absDate(dateInMillis, localeString);
 
-    dateMock.toLocaleTimeString.should.have.been.calledWith([localeString], formatDateParams);
+    expect(dateMock.toLocaleTimeString).toHaveBeenCalledWith([localeString], formatDateParams);
   });
+
   it('should return absolute date with no locale string', () => {
-    const getDeviceLocale = DeviceInfo.getDeviceLocale;
-    const deviceLocale = 'en-EN';
-    sinon.stub(DeviceInfo, 'getDeviceLocale').returns(deviceLocale);
+    const defaultDeviceLocale = 'ko-KO';
+    jest.spyOn(RNLocalize, 'getLocales').mockReturnValueOnce([{languageTag: defaultDeviceLocale, isRTL: false}, {languageTag: 'us-US', isRTL: false}]);
     absDate(dateInMillis);
 
-    dateMock.toLocaleTimeString.should.have.been.calledWith(deviceLocale, formatDateParams);
-    DeviceInfo.getDeviceLocale = getDeviceLocale;
+    expect(dateMock.toLocaleTimeString).toHaveBeenCalledWith(defaultDeviceLocale, formatDateParams);
   });
 
 
@@ -184,6 +175,16 @@ describe('absDate', function () {
       expect(getReadableID(issueMock)).toEqual(issueMock.id);
     });
   });
+
+  function mockGlobalDateObj(date) {
+    date.toLocaleTimeString = jest.fn();
+    global.Date = class extends _Date {
+      constructor() {
+        super();
+        return date;
+      }
+    };
+  }
 });
 
 

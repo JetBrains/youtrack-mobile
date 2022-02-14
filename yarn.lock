@@ -8415,10 +8415,10 @@ react-native-codegen@^0.0.7:
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
 
-react-native-device-info@1.6.2:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-1.6.2.tgz#3c867e7be55f59636ebc91cb28e5151dfe5ed352"
-  integrity sha512-Ihhqg/rTeFPkMKnyXRi1rg0TDfTaSmyNS6h1ckKORCb3w5jAtZkqmuJ5zezHFsXr0WCJz1pfmfwUZs8YAF7dcA==
+react-native-device-info@^8.4.9:
+  version "8.4.9"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-8.4.9.tgz#3089ea0bf9c9a28327d3ba683469a32b093172dd"
+  integrity sha512-EEdeoaBhaLTOZmCy5xtfepVAfvodteiDHoIxBPUgnNe5p0JLv90BLKtVytbJhlllWScUO48+2u9S7M6WNYsXDQ==
 
 react-native-device-log@Trihydro/react-native-device-log:
   version "1.0.3"
@@ -8548,6 +8548,11 @@ react-native-linear-gradient@2.4.0:
   integrity sha512-h4nwmcjfeedSiHGBmQkMmCSIqm3196YtT1AtbAqE93jgAcpib0btvoCx8nBUemmhfm+CA5mFEh8p5biA4wFw/A==
   dependencies:
     prop-types "^15.5.10"
+
+react-native-localize@^2.1.9:
+  version "2.1.9"
+  resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-2.1.9.tgz#47b13b2d7f8fea95a0e784cdc0269e2028c88857"
+  integrity sha512-n2Bi5P0cII8BrnG23Fs9PmpYcufD3JRbr1IBn3ArIA3Z3cGWg4eebv6am+CgdFC4kTPWUlVzX9fEgEMA+X8d6w==
 
 react-native-markdown-display@^6.1.6:
   version "6.1.6"

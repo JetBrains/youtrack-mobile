@@ -1,5 +1,6 @@
 import {NativeModules} from 'react-native';
 
+import * as mockLocalize from 'react-native-localize/mock.js';
 import Adapter from 'enzyme-adapter-react-16';
 import chai, {should} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -7,6 +8,7 @@ import chaiEnzyme from 'chai-enzyme';
 import Enzyme from 'enzyme';
 import log from '../src/components/log/log';
 import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock';
+import mockDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
 import mockReanimated from 'react-native-reanimated/mock';
 import sinonChai from 'sinon-chai';
 import {
@@ -65,6 +67,10 @@ NativeModules.RNEncryptedStorage = {
   getItem: jest.fn(() => Promise.resolve()),
   setItem: jest.fn(() => Promise.resolve()),
 };
+
+jest.mock('react-native-device-info', () => mockDeviceInfo);
+
+jest.mock('react-native-localize', () => mockLocalize);
 
 global.AbortController = jest.fn().mockReturnValue({
   signal: {},
