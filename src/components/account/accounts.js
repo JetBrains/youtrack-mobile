@@ -8,7 +8,6 @@ import Swiper from 'react-native-swiper';
 import Avatar from '../avatar/avatar';
 import {IconLogout, IconAdd} from '../icon/icon';
 import {formatYouTrackURL} from '../config/config';
-import clicksToShowCounter from '../debug-view/clicks-to-show-counter';
 import {getStorageState} from '../storage/storage';
 
 import {HIT_SLOP} from '../common-styles/button';
@@ -100,12 +99,32 @@ export default class Accounts extends PureComponent<Props, void> {
     );
   }
 
-  render(): Node {
-    const {openDebugView, onAddAccount, otherAccounts, isChangingAccount, uiTheme} = this.props;
-    const storageState = getStorageState();
+  renderAccounts(): React$Element<any> {
+    const {openDebugView, otherAccounts, isChangingAccount, uiTheme} = this.props;
+    const storageState: StorageState = getStorageState();
     const accounts: Array<StorageState> = [].concat(storageState).concat(otherAccounts || [])
       .filter(account => !!account.config) // Do not render if account is not ready
       .sort((a, b) => (b.creationTimestamp || 0) - (a.creationTimestamp || 0));
+
+    return (
+      <Swiper
+        height={SWIPER_HEIGHT}
+        dotColor={uiTheme.colors.$linkLight}
+        activeDotColor={uiTheme.colors.$link}
+        loop={false}
+        scrollEnabled={!isChangingAccount}
+        index={accounts.indexOf(storageState)}
+        onIndexChanged={(index: number) => this._onChangeAccount(accounts[index])}
+        onTouchStart={openDebugView}
+        paginationStyle={styles.accountPager}
+      >
+        {accounts.map((account:StorageState) => this.renderAccount(account))}
+      </Swiper>
+    );
+  }
+
+  render(): Node {
+    const {onAddAccount, isChangingAccount, uiTheme} = this.props;
 
     return (
       <View
@@ -124,19 +143,7 @@ export default class Accounts extends PureComponent<Props, void> {
           <IconAdd size={24} color={uiTheme.colors.$link}/>
         </TouchableOpacity>
 
-        <Swiper
-          height={SWIPER_HEIGHT}
-          dotColor={uiTheme.colors.$linkLight}
-          activeDotColor={uiTheme.colors.$link}
-          loop={false}
-          scrollEnabled={!isChangingAccount}
-          index={accounts.indexOf(storageState)}
-          onIndexChanged={(index: number) => this._onChangeAccount(accounts[index])}
-          onTouchStart={() => clicksToShowCounter(openDebugView, 'open debug view')}
-          paginationStyle={styles.accountPager}
-        >
-          {accounts.map((account:StorageState) => this.renderAccount(account))}
-        </Swiper>
+        {this.renderAccounts()}
 
         <TouchableOpacity
           testID="test:id/accountsOnLogOut"
