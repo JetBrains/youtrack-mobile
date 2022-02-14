@@ -15,12 +15,8 @@ type Props = {
 
 
 const KnowledgeBaseSearchPanel = (props: Props) => {
-  let searchInput: Object | null = null;
-
   const [searchQuery, updateQuery] = useState(props.query || '');
   const [focus, updateFocus] = useState(false);
-
-  const focusInput = () => searchInput && searchInput.focus && searchInput.focus();
 
   return (
     <View style={styles.searchPanelContainer}>
@@ -29,10 +25,9 @@ const KnowledgeBaseSearchPanel = (props: Props) => {
       }
 
       <TextInput
-        estID="test:id/knowledge-base-search-panel"
+        testID="test:id/knowledge-base-search-panel"
         accessibilityLabel="query-assist-input"
         accessible={true}
-        ref={(instance: ?Object) => {if (instance) {searchInput = instance;}}}
 
         style={styles.searchInput}
 
@@ -57,7 +52,7 @@ const KnowledgeBaseSearchPanel = (props: Props) => {
       {!!searchQuery && iconClearText(
         () => {
           updateQuery('');
-          focusInput();
+          props.onSearch('');
         },
         styles.clearIcon.color
       )}
