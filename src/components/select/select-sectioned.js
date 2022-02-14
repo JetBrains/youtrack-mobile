@@ -6,10 +6,15 @@ import {SectionList, Text, View} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import Select from './select';
+import Select, {SelectModal} from './select';
 
 import {mainText, secondaryText} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
+
+//$FlowFixMe
+export class SelectSectionedModal extends SelectModal {
+  constructor(props) {super(props);}
+}
 
 //$FlowFixMe
 export default class SelectSectioned extends Select {

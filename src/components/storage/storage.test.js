@@ -79,6 +79,7 @@ describe('Storage', () => {
         'YT_AGILE_DEFAULT_BOARD',
         'YT_THEME_MODE',
         'YT_VCS_CHANGES',
+        'YT_HANDSET_MODE',
       ]);
     });
 

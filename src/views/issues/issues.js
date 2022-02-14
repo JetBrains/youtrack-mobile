@@ -21,16 +21,16 @@ import Issue from '../issue/issue';
 import IssueRow from './issues__row';
 import IssuesCount from './issues__count';
 import IssuesSortBy from './issues__sortby';
-import log from 'components/log/log';
-import ModalPortal from 'components/modal-view/modal-portal';
-import QueryAssistPanel from 'components/query-assist/query-assist-panel';
-import QueryPreview from 'components/query-assist/query-preview';
-import Router from 'components/router/router';
-import Select from 'components/select/select';
-import SelectSectioned from 'components/select/select-sectioned';
-import usage from 'components/usage/usage';
-import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
-import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
+import log from '../../components/log/log';
+import ModalPortal from '../../components/modal-view/modal-portal';
+import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
+import QueryPreview from '../../components/query-assist/query-preview';
+import Router from '../../components/router/router';
+import Select, {SelectModal} from '../../components/select/select';
+import SelectSectioned, {SelectSectionedModal} from '../../components/select/select-sectioned';
+import usage from '../../components/usage/usage';
+import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
+import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 import {getIssueFromCache} from './issues-actions';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {IconAdd, IconAngleDown, IconBookmark} from 'components/icon/icon';
@@ -304,17 +304,21 @@ export class Issues extends Component<Props, State> {
         onSelect(selectedContext);
       },
     };
+    const isSplitViewMode: boolean = isSplitView();
+    let SelectComponent: any;
     if (selectProps.isOwnSearches) {
+      SelectComponent = isSplitViewMode ? SelectSectionedModal : SelectSectioned;
       return (
-        <SelectSectioned
+        <SelectComponent
           getTitle={item => item.name + (item.shortName ? ` (${item.shortName})` : '')}
           {...sp}
         />
       );
     }
 
+    SelectComponent = isSplitViewMode ? SelectModal : Select;
     return (
-      <Select
+      <SelectComponent
         getTitle={item => item.name + (item.shortName ? ` (${item.shortName})` : '')}
         {...sp}
       />
