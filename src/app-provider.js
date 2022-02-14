@@ -61,7 +61,13 @@ export default class AppProvider extends Component<{ }, { mode: string }> {
                     <Host>
                       <Navigation/>
                       <UserAgreement/>
-                      <DebugView/>
+                      <DebugView
+                        logsStyle={{
+                          textColor: uiTheme.colors.$text,
+                          backgroundColor,
+                          separatorColor: uiTheme.colors.$separator,
+                        }}
+                      />
                     </Host>
                   </ErrorBoundary>
 
