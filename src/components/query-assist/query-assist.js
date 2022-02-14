@@ -12,7 +12,6 @@ import ModalView from '../modal-view/modal-view';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconBack, IconClose} from '../icon/icon';
-import {isTablet} from '../../util/util';
 
 import styles from './query-assist.styles';
 
@@ -230,7 +229,7 @@ export class QueryAssist extends Component<Props, State> {
 }
 
 
-class QueryAssistModal extends QueryAssist<Props, State> {
+export class QueryAssistModal extends QueryAssist<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -275,4 +274,4 @@ class QueryAssistModal extends QueryAssist<Props, State> {
 }
 
 
-export default ((isTablet ? QueryAssistModal : QueryAssist): React$AbstractComponent<Props, mixed>);
+export default (QueryAssist: React$AbstractComponent<Props, mixed>);

@@ -1,15 +1,16 @@
 /* @flow */
 
-import type {Node} from 'React';
-import {View} from 'react-native';
 import React, {PureComponent} from 'react';
+import {View} from 'react-native';
 
-import QueryAssist from './query-assist';
+import QueryAssist, {QueryAssistModal} from './query-assist';
+import {isSplitView} from '../responsive/responsive-helper';
 
 import styles from './query-assist.styles';
 
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {Node} from 'React';
 import type {TransformedSuggestion} from '../../flow/Issue';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type SearchPanelProps = {
   queryAssistSuggestions: Array<TransformedSuggestion>,
@@ -45,13 +46,13 @@ export default class QueryAssistPanel extends PureComponent<SearchPanelProps, vo
 
   render(): Node {
     const {queryAssistSuggestions, query, style, clearButtonMode} = this.props;
-
+    const Component: any = isSplitView() ? QueryAssistModal : QueryAssist;
     return (
       <View
         style={[styles.searchPanel, style]}
         ref={node => this.node = node}
       >
-        <QueryAssist
+        <Component
           suggestions={queryAssistSuggestions}
           currentQuery={query}
           onChange={this.loadSuggests}

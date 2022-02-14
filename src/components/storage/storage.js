@@ -57,6 +57,7 @@ export type StorageState = {|
   permissions: ?Array<PermissionCacheItem>,
   themeMode: ?string,
   vcsChanges: boolean | null,
+  forceHandsetMode: boolean | null,
 |}
 
 type StorageStateKeys = $Shape<$ObjMap<StorageState, () => string>>;
@@ -91,6 +92,7 @@ const storageKeys: StorageStateKeys = {
   permissions: 'YT_USER_PERMISSIONS',
   themeMode: THEME_MODE_KEY,
   vcsChanges: 'YT_VCS_CHANGES',
+  forceHandsetMode: 'YT_HANDSET_MODE',
 };
 
 let storageState: ?StorageState = null;
@@ -127,6 +129,7 @@ export const initialState: StorageState = Object.freeze({
   agileDefaultBoard: null,
   themeMode: null,
   vcsChanges: null,
+  forceHandsetMode: null,
 });
 
 function cleanAndLogState(message, state?: StorageState) {

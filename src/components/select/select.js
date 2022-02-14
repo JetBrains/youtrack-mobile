@@ -9,7 +9,6 @@ import ModalView from '../modal-view/modal-view';
 import SelectItem from './select__item';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {IconCheck, IconClose} from '../icon/icon';
-import {isSplitView} from '../responsive/responsive-helper';
 import {notifyError} from '../notification/notification';
 
 import styles, {SELECT_ITEM_HEIGHT, SELECT_ITEM_SEPARATOR_HEIGHT} from './select.styles';
@@ -417,4 +416,4 @@ export class SelectModal extends Select<SelectProps, SelectState & { visible: bo
   }
 }
 
-export default ((isSplitView() ? SelectModal : Select): React$AbstractComponent<SelectProps, mixed>);
+export default (Select: React$AbstractComponent<SelectProps, mixed>);
