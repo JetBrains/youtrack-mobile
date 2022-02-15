@@ -218,8 +218,8 @@ export const createIssueReduxSlice: (
       state.issue = {
         ...state.issue,
         _fields: state.issue.fields,
-        fields: [...state.issue.fields].map((it: CustomField) => {
-          return it === action.payload.field ? {...it, value: action.payload.value} : it;
+        fields: [...state.issue.fields].map((cf: CustomField) => {
+          return cf.id === action.payload.field.id ? {...cf, value: action.payload.value} : cf;
         }),
       };
     },
