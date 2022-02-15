@@ -1,13 +1,15 @@
 /* @flow */
 
 import React, {useState} from 'react';
-import {View, Text, Switch, ScrollView} from 'react-native';
+import {View, Text, Switch, ScrollView, TouchableOpacity} from 'react-native';
 
 import Header from '../header/header';
 import ModalView from '../modal-view/modal-view';
 import Router from '../router/router';
-import {flushStoragePart, getStorageState} from '../storage/storage';
+import {clearCachesAndDrafts, flushStoragePart, getStorageState} from '../storage/storage';
+import {confirmation} from '../confirmation/confirmation';
 import {IconClose} from '../icon/icon';
+import {notify} from '../notification/notification';
 
 import styles from './feature-view.style';
 
@@ -52,6 +54,20 @@ const FeaturesDebugSettings = (props: Props): Node => {
                 updateForceHandsetMode(!forceHandsetMode);
               }}
             />
+          </View>
+          <View
+            style={styles.featuresListItem}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                confirmation('Clear cached data?', 'Clear now').then(async () => {
+                  await clearCachesAndDrafts();
+                  notify('Storage cleared');
+                });
+              }}
+            >
+              <Text style={styles.button}>Clear storage</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </View>

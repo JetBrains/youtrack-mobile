@@ -27,4 +27,10 @@ export default EStyleSheet.create({
     paddingLeft: UNIT,
     color: '$link',
   },
+  button: {
+    ...mainText,
+    color: '$link',
+    padding: UNIT,
+    paddingLeft: 0,
+  },
 });
