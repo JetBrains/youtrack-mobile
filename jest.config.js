@@ -20,7 +20,7 @@ module.exports = {
     '<rootDir>/e2e/',
   ],
   'transformIgnorePatterns': [
-    'node_modules/(?!(jest-)?react-native|@react-native|@react-native/polyfills|react-native-device-log|@react-native-community/netinfo|@react-native-community|react-navigation|@gpsgate.*)',
+    'node_modules/(?!(jest-)?react-native|@react-native|@react-native/polyfills|react-native-device-log|@react-native-community/netinfo|@react-native-community|react-navigation|@gpsgate.*|react-syntax-highlighter/)',
   ],
 };
 

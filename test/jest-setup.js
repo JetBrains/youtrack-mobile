@@ -9,7 +9,6 @@ import Enzyme from 'enzyme';
 import log from '../src/components/log/log';
 import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock';
 import mockDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
-import mockReanimated from 'react-native-reanimated/mock';
 import sinonChai from 'sinon-chai';
 import {
   mockReactNativeNotification,
@@ -71,6 +70,11 @@ NativeModules.RNEncryptedStorage = {
 jest.mock('react-native-device-info', () => mockDeviceInfo);
 
 jest.mock('react-native-localize', () => mockLocalize);
+
+jest.mock('react-native-image-crop-picker', () => ({
+  openCamera: jest.fn(),
+  openPicker: jest.fn(),
+}));
 
 global.AbortController = jest.fn().mockReturnValue({
   signal: {},
