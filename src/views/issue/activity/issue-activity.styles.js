@@ -51,7 +51,6 @@ export default EStyleSheet.create({
     color: '$text',
     fontSize: MAIN_FONT_SIZE,
     fontWeight: '500',
-    textTransform: 'capitalize',
   },
 
   reactionContainer: {

@@ -54,7 +54,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
     };
 
     this.sortOrderOption = {
-      name: 'Show oldest activity first',
+      name: 'Sort: oldest first',
       isNaturalCommentsOrder: props?.userAppearanceProfile?.naturalCommentsOrder,
     };
 
@@ -185,10 +185,6 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
     );
   }
 
-  getTitle(): string {
-    return this.props.issueActivityEnabledTypes.map((category) => category.name).join(', ');
-  }
-
   render(): Node {
     return (
       <View style={this.props.style}>
@@ -198,7 +194,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
           style={styles.settingsButton}
           onPress={this.toggleSettingsDialogVisibility}
         >
-          <Text style={styles.settingsButtonText}>{this.getTitle()}</Text>
+          <Text style={styles.settingsButtonText}>Activity Settings</Text>
           <IconAngleDown size={19} color={this.props.uiTheme.colors.$icon}/>
         </TouchableOpacity>
 
