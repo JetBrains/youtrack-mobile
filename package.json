@@ -135,7 +135,7 @@
     "react-navigation-stack": "^1.4.0",
     "react-redux": "^7.2.2",
     "react-syntax-highlighter": "^15.4.5",
-    "redux": "4.0.5",
+    "redux": "4.1.2",
     "redux-create-reducer": "2.0.1",
     "redux-thunk": "2.3.0",
     "url-join": "4.0.0",
