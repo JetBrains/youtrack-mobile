@@ -47,7 +47,7 @@ const CommentReactions = (props: ReactionsType) => {
 
           const count: number = comment.reactions.filter((it: Reaction) => it.reaction === reactionName).length;
           const reaction: ?Reaction = reactionsMap[reactionName];
-          if (reaction) {
+          if (reaction && props.currentUser) {
             const isUserReacted: boolean = reaction.author.id === props.currentUser.id;
             return (
               <TouchableOpacity
