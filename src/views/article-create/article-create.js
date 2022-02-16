@@ -106,7 +106,7 @@ const ArticleCreate = (props: Props) => {
 
   const updateDraft = (data: Object) => {
     updateArticleDraftData(({...articleDraftData, ...data}: any));
-    debouncedUpdate.callback({...articleDraft, ...data});
+    debouncedUpdate({...articleDraft, ...data});
   };
 
   const renderProjectSelect = () => {

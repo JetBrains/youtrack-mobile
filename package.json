@@ -140,7 +140,7 @@
     "redux-thunk": "2.4.1",
     "url-join": "4.0.1",
     "url-parse": "1.5.6",
-    "use-debounce": "^5.2.0"
+    "use-debounce": "^7.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
