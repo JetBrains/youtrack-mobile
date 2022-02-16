@@ -137,7 +137,7 @@
     "react-syntax-highlighter": "^15.4.5",
     "redux": "4.1.2",
     "redux-create-reducer": "2.0.1",
-    "redux-thunk": "2.3.0",
+    "redux-thunk": "2.4.1",
     "url-join": "4.0.0",
     "url-parse": "1.4.3",
     "use-debounce": "^5.2.0"
