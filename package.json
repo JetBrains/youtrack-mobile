@@ -117,7 +117,6 @@
     "react-native-notifications": "anisimov74/react-native-notifications.git#fd47b17",
     "react-native-pager-view": "^5.1.2",
     "react-native-portalize": "^1.0.7",
-    "react-native-push-notification": "^8.1.0",
     "react-native-reanimated": "^2.4.0",
     "react-native-restart": "^0.0.22",
     "react-native-safe-area-context": "^3.2.0",
