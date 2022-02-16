@@ -7871,10 +7871,10 @@ react-native-syntax-highlighter@2.1.0:
   dependencies:
     react-syntax-highlighter "^6.0.4"
 
-react-native-tab-view@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.0.0.tgz#ea01e0956a4a96dd87d3cfdd8ee39f9aad319943"
-  integrity sha512-uuvLV3KWVXx3ZEESBYALo4w8fuHFUrrg2K2OCtfHv+xOmTWjjRzm+opi0PMXSLOxl7+uMeJvJYEzR13B6pXpkA==
+react-native-tab-view@3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.1.1.tgz#1f8d7a835ab4f5b1b1407ec8dddc1053b53fa3c6"
+  integrity sha512-M5pRN6utQfytKWoKlKVzg5NbkYu308qNoW1khGTtEOTs1k14p2dHJ/BWOJoJYHKbPVUyZldbG9MFT7gUl4YHnw==
 
 react-native-tab-view@^1.2.0, react-native-tab-view@^1.4.1:
   version "1.4.1"
