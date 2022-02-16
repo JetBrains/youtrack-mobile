@@ -138,8 +138,8 @@
     "redux": "4.1.2",
     "redux-create-reducer": "2.0.1",
     "redux-thunk": "2.4.1",
-    "url-join": "4.0.0",
-    "url-parse": "1.4.3",
+    "url-join": "4.0.1",
+    "url-parse": "1.5.6",
     "use-debounce": "^5.2.0"
   },
   "devDependencies": {
