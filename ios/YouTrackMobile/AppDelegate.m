@@ -103,33 +103,17 @@ ClearKeychainIfNecessary();
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-// fill screen with a colour
-UIView *colourView = [[UIView alloc]initWithFrame:self.window.frame];
-  if (@available(iOS 13.0, *)) {
-    colourView.backgroundColor = [UIColor systemBackgroundColor];
-  } else {
-    colourView.backgroundColor = [UIColor whiteColor];
-  }
-  colourView.tag = 1234;
-  colourView.alpha = 0;
-  [self.window addSubview:colourView];
-  [self.window bringSubviewToFront:colourView];
-  // fade in the view
-  [UIView animateWithDuration:0.5 animations:^{
-    colourView.alpha = 1;
-  }];
+  UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+  UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+  blurEffectView.alpha = 0.9f;
+  blurEffectView.frame = self.window.bounds;
+  blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+  blurEffectView.tag = 221122;
+  [self.window addSubview:blurEffectView];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-  // grab a reference to our coloured view
-  UIView *colourView = [self.window viewWithTag:1234];
-  // fade away colour view from main view
-  [UIView animateWithDuration:0.5 animations:^{
-  colourView.alpha = 0;
-  } completion:^(BOOL finished) {
-  // remove when finished fading
-  [colourView removeFromSuperview];
-  }];
+  [[self.window viewWithTag:221122] removeFromSuperview];
 }
 
 - (BOOL)application:(UIApplication *)application
