@@ -125,7 +125,7 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
     const api: Api = getApi();
     const {issue} = getState().creation;
 
-    if (!issue.project || !issue.project.id) {
+    if (!issue || !issue.project || !issue.project.id) {
       return;
     }
 
