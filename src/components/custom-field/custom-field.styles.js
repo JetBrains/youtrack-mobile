@@ -68,9 +68,6 @@ export default EStyleSheet.create({
   },
   issueTextField: {
     marginTop: UNIT * 2.5,
-    paddingTop: UNIT * 2.5,
-    borderColor: '$separator',
-    borderTopWidth: 1,
   },
   issueTextFieldTitle: {
     color: '$text',

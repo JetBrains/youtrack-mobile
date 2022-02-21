@@ -23,7 +23,7 @@ export default EStyleSheet.create({
     paddingBottom: UNIT * 5,
   },
   issueAttachments: {
-    marginBottom: UNIT * 2,
+    marginBottom: UNIT,
   },
   creatingIndicator: {
     paddingTop: 4,
@@ -35,6 +35,9 @@ export default EStyleSheet.create({
     marginVertical: UNIT,
     ...separator,
     borderColor: '$separator',
+  },
+  separatorWithMargin: {
+    marginTop: UNIT * 4,
   },
   additionalData: {
     marginHorizontal: UNIT * 2,

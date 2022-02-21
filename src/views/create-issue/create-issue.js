@@ -418,26 +418,7 @@ class CreateIssue extends PureComponent<Props, State> {
 
                 {hasProject && (
                   <>
-                    <View style={styles.separator}/>
-                    <View
-                      testID="test:id/attachment-button"
-                      accessibilityLabel="attachment-button"
-                      accessible={true}
-                      style={[styles.additionalData, styles.issueAttachments]}
-                    >
-                      <AttachmentsRow
-                        attachments={issue.attachments}
-                        attachingImage={attachingImage}
-                        imageHeaders={getApi().auth.getAuthorizationHeaders()}
-                        canRemoveAttachment={true}
-                        onRemoveImage={removeAttachment}
-                        uiTheme={this.uiTheme}
-                      />
-                    </View>
-                  </>
-                )}
-
-                {hasProject && (
+                  <View style={[styles.separator, styles.separatorWithMargin]}/>
                   <View
                     testID="test:id/attachment-button"
                     accessibilityLabel="attachment-button"
@@ -448,7 +429,24 @@ class CreateIssue extends PureComponent<Props, State> {
                       isDisabled={processing}
                       showAddAttachDialog={showAddAttachDialog}
                     />
+
+                    <View
+                      testID="test:id/attachment-button"
+                      accessibilityLabel="attachment-button"
+                      accessible={true}
+                    >
+                      <AttachmentsRow
+                        style={[styles.additionalData, styles.issueAttachments]}
+                        attachments={issue.attachments}
+                        attachingImage={attachingImage}
+                        imageHeaders={getApi().auth.getAuthorizationHeaders()}
+                        canRemoveAttachment={true}
+                        onRemoveImage={removeAttachment}
+                        uiTheme={this.uiTheme}
+                      />
+                    </View>
                   </View>
+                  </>
                 )}
 
                 {hasProject && (
@@ -460,16 +458,16 @@ class CreateIssue extends PureComponent<Props, State> {
                       accessible={true}
                       style={styles.additionalData}
                     >
-                      {!!issue.tags && (
-                        <Tags
-                          tags={issue.tags}
-                          multiline={true}
-                        />
-                      )}
                       {hasProject && (
                         <TagAddPanel
                           disabled={processing}
                           onAdd={() => this.setState({showAddTagSelect: true})}
+                        />
+                      )}
+                      {!!issue.tags && (
+                        <Tags
+                          tags={issue.tags}
+                          multiline={true}
                         />
                       )}
                       {this.state.showAddTagSelect && <TagAddSelect
