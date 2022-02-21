@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -16,6 +16,7 @@ import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
+import SheetModal from '../../../components/modal-panel-bottom/bottom-sheet-modal';
 import Select from 'components/select/select';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
@@ -24,7 +25,8 @@ import {convertCommentsToActivityPage, createActivityModel} from 'components/act
 import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {createIssueActivityActions, receiveActivityPage} from './issue-activity__actions';
 import {getApi} from 'components/api/api__instance';
-import {IconClose} from 'components/icon/icon';
+import {HIT_SLOP} from '../../../components/common-styles/button';
+import {IconAngleDown, IconClose} from 'components/icon/icon';
 import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {IssueContext} from '../issue-context';
@@ -53,7 +55,10 @@ type IssueActivityProps = $Shape<IssueActivityState
   stateFieldName: string,
 }>;
 
-type State = { modalChildren: any };
+type State = {
+  modalChildren: any,
+  settingsVisible: boolean,
+};
 
 export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   static contextTypes: any | { actionSheet: typeof Function } = {
@@ -66,7 +71,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   props: IssueActivityProps;
   issueContext: IssueContextData;
 
-  state: State = {modalChildren: null};
+  state: State = {
+    modalChildren: null,
+    settingsVisible: false,
+  };
 
   componentDidMount() {
     this.load(this.getCurrentIssueId());
@@ -111,20 +119,41 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
       updateUserAppearanceProfile,
     } = this.props;
 
-    return <IssueActivitiesSettings
-      disabled={disabled}
-      style={styles.settings}
-      issueActivityTypes={issueActivityTypes}
-      issueActivityEnabledTypes={issueActivityEnabledTypes}
-      onApply={(userAppearanceProfile: UserAppearanceProfile) => {
-        if (userAppearanceProfile) {
-          return updateUserAppearanceProfile(userAppearanceProfile);
-        }
-        this.loadIssueActivities();
-      }}
-      userAppearanceProfile={this.getUserAppearanceProfile()}
-      uiTheme={uiTheme}
-    />;
+    return (
+      <>
+        <TouchableOpacity
+          hitSlop={HIT_SLOP}
+          disabled={disabled}
+          style={styles.settingsButton}
+          onPress={() => {
+          this.setState({settingsVisible: true});
+        }}>
+          <Text style={styles.settingsButtonText}>Activity Settings</Text>
+          <IconAngleDown size={19} color={uiTheme.colors.$icon}/>
+        </TouchableOpacity>
+        <SheetModal
+          isVisible={this.state.settingsVisible}
+          onDismiss={() => {
+            this.setState({settingsVisible: false});
+          }}
+        >
+          <IssueActivitiesSettings
+            disabled={disabled}
+            style={styles.settings}
+            issueActivityTypes={issueActivityTypes}
+            issueActivityEnabledTypes={issueActivityEnabledTypes}
+            onApply={(userAppearanceProfile: UserAppearanceProfile) => {
+              if (userAppearanceProfile) {
+                return updateUserAppearanceProfile(userAppearanceProfile);
+              }
+              this.loadIssueActivities();
+            }}
+            userAppearanceProfile={this.getUserAppearanceProfile()}
+            uiTheme={uiTheme}
+          />
+        </SheetModal>
+      </>
+    );
   }
 
   getUserAppearanceProfile(): UserAppearanceProfile | { naturalCommentsOrder: boolean } {

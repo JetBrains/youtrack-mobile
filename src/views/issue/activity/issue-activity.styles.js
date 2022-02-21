@@ -25,8 +25,8 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: UNIT,
-    paddingTop: UNIT,
+    marginTop: UNIT * 1.5,
+    paddingVertical: UNIT,
     paddingBottom: UNIT,
   },
   settingsButtonText: {

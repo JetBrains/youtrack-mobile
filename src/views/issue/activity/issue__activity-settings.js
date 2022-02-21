@@ -1,21 +1,17 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {PureComponent} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text} from 'react-native';
 
 import Switch from 'react-native-switch-pro';
 
-import ModalPanelBottom from 'components/modal-panel-bottom/modal-panel-bottom';
 import {getIssueActivityIcon} from 'components/activity/activity-helper';
-import {IconAngleDown} from 'components/icon/icon';
 import {toggleIssueActivityEnabledType} from './issue-activity__helper';
-
-import {HIT_SLOP} from 'components/common-styles/button';
 
 import styles from './issue-activity.styles';
 
 import type {ActivityType} from 'flow/Activity';
+import type {Node} from 'React';
 import type {UITheme} from 'flow/Theme';
 import type {UserAppearanceProfile} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
@@ -31,7 +27,6 @@ type Props = {
 };
 
 type State = {
-  visible: boolean,
   settings: Array<ActivityType>
 };
 
@@ -59,7 +54,6 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
     };
 
     this.state = {
-      visible: false,
       settings: [],
     };
   }
@@ -100,28 +94,8 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
     return list.concat(this.sortOrderOption);
   }
 
-  toggleSettingsDialogVisibility: (() => void) = () => {
-    const {visible} = this.state;
-    this.setState({visible: !visible});
-  };
-
   onApplySettings(userAppearanceProfile: UserAppearanceProfile) {
     this.props.onApply(userAppearanceProfile);
-  }
-
-  renderSettingsDialog(): Node {
-    return (
-      <ModalPanelBottom
-        testID="activitySettingsDialog"
-        title="Activity Settings"
-        onHide={this.toggleSettingsDialogVisibility}
-      >
-        <>
-          {this.renderOrderItem()}
-          {this.renderTypesList()}
-        </>
-      </ModalPanelBottom>
-    );
   }
 
   renderOrderItem(): Node {
@@ -187,19 +161,10 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
 
   render(): Node {
     return (
-      <View style={this.props.style}>
-        <TouchableOpacity
-          hitSlop={HIT_SLOP}
-          disabled={this.props.disabled}
-          style={styles.settingsButton}
-          onPress={this.toggleSettingsDialogVisibility}
-        >
-          <Text style={styles.settingsButtonText}>Activity Settings</Text>
-          <IconAngleDown size={19} color={this.props.uiTheme.colors.$icon}/>
-        </TouchableOpacity>
-
-        {this.state.visible && this.renderSettingsDialog()}
-      </View>
+      <>
+        {this.renderOrderItem()}
+        {this.renderTypesList()}
+      </>
     );
   }
 }

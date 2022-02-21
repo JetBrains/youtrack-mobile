@@ -46,10 +46,7 @@ export type UIThemeColorsPaletteColors = {|
   $blueColor: string,
 |};
 
-export type UIThemeColors = {
-  ...$Exact<UIThemeCommonColors>,
-  ...$Exact<UIThemeColorsPaletteColors>,
-};
+export type UIThemeColors = UIThemeCommonColors & UIThemeColorsPaletteColors;
 
 export type UIThemeName = 'light' | 'dark';
 
