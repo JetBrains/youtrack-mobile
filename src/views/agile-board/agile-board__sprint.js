@@ -87,6 +87,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
           zoomedIn={zoomedIn}
           uiTheme={uiTheme}
           cardWidth={cardWidth}
+          colorCoding={sprint.agile.colorCoding}
         />
       </Draggable>
     );

@@ -56,6 +56,30 @@ export type BoardColumn = {
   agileColumn: AgileColumn,
 };
 
+export type FieldStyle = {
+    $type?: string,
+    id: string,
+    background?: string,
+}
+
+export type ProjectColor = {
+  id: string,
+  color: { id: string },
+  project: { id: string },
+};
+
+type FieldBasedColorCoding = {
+  id: string,
+  prototype: {
+    id: string,
+    name: string,
+  },
+};
+
+type ProjectBasedColorCoding = FieldBasedColorCoding & {
+  projectColors: Array<ProjectColor>,
+};
+
 export type Board = {
   favorite: boolean,
   id: string,
@@ -73,6 +97,7 @@ export type Board = {
   },
   hideOrphansSwimlane: boolean,
   currentSprint: $Shape<Sprint>,
+  colorCoding: FieldBasedColorCoding | ProjectBasedColorCoding,
 };
 
 export type BoardOnList = {

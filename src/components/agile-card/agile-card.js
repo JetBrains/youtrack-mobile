@@ -6,7 +6,8 @@ import {View, Text} from 'react-native';
 import ApiHelper from '../api/api__helper';
 import Avatar from '../avatar/avatar';
 import Tags from '../tags/tags';
-import {getPriotityField, getAssigneeField} from '../issue-formatter/issue-formatter';
+import {getAgileCardColorCoding, hasColorCoding} from '../../views/agile-board/agile-board__helper';
+import {getAssigneeField} from '../issue-formatter/issue-formatter';
 import {getStorageState} from '../storage/storage';
 import {UNIT} from '../variables/variables';
 
@@ -14,6 +15,7 @@ import styles from './agile-card.styles';
 
 import type {IssueOnList} from 'flow/Issue';
 import type {CustomFieldShort, CustomField, CustomFieldValue} from 'flow/CustomFields';
+import type {FieldStyle} from '../../flow/Agile';
 import type {Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from 'flow/Theme';
@@ -28,6 +30,7 @@ type Props = {
   style?: any,
   uiTheme: UITheme,
   zoomedIn?: boolean,
+  colorCoding?: FieldStyle,
 };
 
 
@@ -74,8 +77,7 @@ export default class AgileCard extends PureComponent<Props, void> {
 
   render(): Node {
     const {issue, style, ghost, dragging, zoomedIn, dropZoneWidth, cardWidth} = this.props;
-    const priorityField = getPriotityField(issue);
-    const priorityFieldValueBackgroundColor = priorityField?.value?.color?.background;
+    const colorCoding: ?FieldStyle = getAgileCardColorCoding(issue, this.props.colorCoding);
 
     const zoomedInTextStyle: ?ViewStyleProp = zoomedIn ? null : styles.zoomedInText;
     const agileCardHeight: number = getAgileCardHeight();
@@ -97,7 +99,7 @@ export default class AgileCard extends PureComponent<Props, void> {
         ]}>
           <View style={[
             styles.cardColorCoding,
-            priorityField ? {backgroundColor: priorityFieldValueBackgroundColor} : null,
+            hasColorCoding(colorCoding) && {backgroundColor: colorCoding?.background},
           ]}/>
 
           <View style={[

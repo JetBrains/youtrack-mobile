@@ -1,6 +1,8 @@
 /* @flow */
 
-import type {BoardColumn, Cell, Sprint, SprintFull, Swimlane} from 'flow/Agile';
+import {ResourceTypes} from '../../components/api/api__resource-types';
+
+import type {BoardColumn, Cell, FieldStyle, ProjectColor, Sprint, SprintFull, Swimlane} from 'flow/Agile';
 import type {IssueFull, IssueOnList} from 'flow/Issue';
 
 type GroupedSprints = {
@@ -90,4 +92,61 @@ export function updateSprintIssues(sprint: SprintFull, sprintIssues: Array<{ id:
       }
     });
   }
+}
+
+function issueFieldIsInstanceOf(issueField, field) {
+  function issueFieldValueToProjectCustomField(issueFieldValue) {
+    return issueFieldValue.projectCustomField || {};
+  }
+
+  if (!field) {
+    return false;
+  }
+  const issueFieldsValueProjectCF = issueFieldValueToProjectCustomField(issueField);
+  if (field.id === issueFieldsValueProjectCF.id) {
+    return true;
+  }
+  return issueFieldsValueProjectCF.field && field.id === issueFieldsValueProjectCF.field.id;
+}
+
+const DEFAULT_COLOR_CODING: FieldStyle = {
+  id: '0',
+};
+
+function fieldBaseColorCodingToColorId(issue, colorCoding): FieldStyle {
+  const colorCodingIssueField = (issue.fields || []).find(function (fieldValue) {
+    return issueFieldIsInstanceOf(fieldValue, colorCoding.prototype);
+  });
+  const colorCodingIssueFieldValue = colorCodingIssueField && colorCodingIssueField.value;
+  if (!colorCodingIssueFieldValue) {
+    return DEFAULT_COLOR_CODING;
+  }
+  const color: ?FieldStyle = colorCodingIssueFieldValue[0] ? colorCodingIssueFieldValue[0].color : colorCodingIssueFieldValue.color;
+
+  return color || DEFAULT_COLOR_CODING;
+}
+
+function projectBasedColorCodingToColorId(issue, colorCoding): FieldStyle {
+  if (!Array.isArray(colorCoding.projectColors) || !issue.project) {
+    return DEFAULT_COLOR_CODING;
+  }
+  const projectColor: ?ProjectColor = colorCoding.projectColors.find((prjColor: ProjectColor) => prjColor.id === issue.project.id);
+  return projectColor?.color || DEFAULT_COLOR_CODING;
+}
+
+export function getAgileCardColorCoding(issue, agileBoardColorCoding): FieldStyle {
+  if (!issue || !agileBoardColorCoding) {
+    return DEFAULT_COLOR_CODING;
+  }
+  if (agileBoardColorCoding.$type === ResourceTypes.FIELD_BASED_COLOR_CODING) {
+    return fieldBaseColorCodingToColorId(issue, agileBoardColorCoding);
+  }
+  if (agileBoardColorCoding.$type === ResourceTypes.PROJECT_BASED_COLOR_CODING) {
+    return projectBasedColorCodingToColorId(issue, agileBoardColorCoding);
+  }
+  return DEFAULT_COLOR_CODING;
+}
+
+export function hasColorCoding(colorCoding: FieldStyle) {
+  return colorCoding.id !== DEFAULT_COLOR_CODING.id;
 }

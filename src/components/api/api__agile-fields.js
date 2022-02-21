@@ -102,6 +102,12 @@ const BOARD_ROW: any = toField([
   },
 ]);
 
+const COLOR_CODING = toField([
+  'id',
+  'prototype(id,name)', //FieldBasedColorCoding
+  'projectColors(id,color(id,background),project(id))', //ProjectBasedColorCoding
+]);
+
 const BOARD = toField([
   'id',
   'name',
@@ -132,6 +138,7 @@ const SPRINT_WITH_BOARD: any = toField([
       'orphansAtTheTop',
       'isUpdatable',
       {estimationField: 'id'},
+      {colorCoding: COLOR_CODING},
     ],
   },
 ]);
@@ -154,6 +161,7 @@ const SPRINT_ISSUES_FIELDS: any = toField([
   'id',
   'resolved',
   {tags: IssueFields.ISSUE_TAGS_FIELDS},
+  {project: 'id'},
   {
     fields: [
       'id',
