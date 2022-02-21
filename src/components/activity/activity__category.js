@@ -100,10 +100,10 @@ export const ActivityCategory: {
     activityCategory.SPRINT,
     activityCategory.SUMMARY,
     activityCategory.TAGS,
-  ], 'History'],
+  ], 'Issue history'],
   ['WORK_ITEM', 'TimeTracking', [
     activityCategory.WORK_ITEM,
-  ], 'Work'],
+  ], 'Spent time'],
   ['VCS_ITEM', 'IssueVcs', [
     activityCategory.VCS_ITEM,
     activityCategory.PULL_REQUEST_CHANGE,

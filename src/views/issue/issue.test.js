@@ -65,22 +65,19 @@ describe('Issue view actions', () => {
 
     await expect(apiMock.issue.submitDraftComment).toHaveBeenCalledWith(ISSUE_ID, commentMock);
 
+    const issueActivityTypes = [
+      {id: 'IssueComments', name: 'Comments'},
+      {id: 'IssueHistory', name: 'Issue history'},
+      {id: 'TimeTracking', name: 'Spent time'},
+      {id: 'IssueVcs', name: 'VCS changes'},
+    ];
     const storeActions = store.getActions();
+
     expect(storeActions[0]).toEqual({type: types.SET_EDITING_COMMENT, comment: null});
     expect(storeActions[1]).toEqual({
       type: types.RECEIVE_ACTIVITY_CATEGORIES,
-      issueActivityTypes: [
-        {id: 'IssueComments', name: 'Comments'},
-        {id: 'IssueHistory', name: 'History'},
-        {id: 'TimeTracking', name: 'Work'},
-        {id: 'IssueVcs', name: 'VCS changes'},
-      ],
-      issueActivityEnabledTypes: [
-        {id: 'IssueComments', name: 'Comments'},
-        {id: 'IssueHistory', name: 'History'},
-        {id: 'TimeTracking', name: 'Work'},
-        {id: 'IssueVcs', name: 'VCS changes'},
-      ],
+      issueActivityTypes: issueActivityTypes,
+      issueActivityEnabledTypes: issueActivityTypes,
     });
     expect(storeActions[2]).toEqual({type: types.RECEIVE_ACTIVITY_API_AVAILABILITY, activitiesEnabled: true});
   });
