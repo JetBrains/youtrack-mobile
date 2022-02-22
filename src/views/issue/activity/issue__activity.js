@@ -7,6 +7,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import AddSpentTimeForm from './activity__add-spent-time';
+import BottomSheetModal from '../../../components/modal-panel-bottom/bottom-sheet-modal';
 import ErrorMessage from 'components/error-message/error-message';
 import IssueActivitiesSettings from './issue__activity-settings';
 import IssueActivityCommentAdd from './issue__activity-comment-add';
@@ -16,7 +17,6 @@ import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
-import SheetModal from '../../../components/modal-panel-bottom/bottom-sheet-modal';
 import Select from 'components/select/select';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
@@ -125,17 +125,14 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
           hitSlop={HIT_SLOP}
           disabled={disabled}
           style={styles.settingsButton}
-          onPress={() => {
-          this.setState({settingsVisible: true});
-        }}>
+          onPress={() => this.setState({settingsVisible: true})}>
           <Text style={styles.settingsButtonText}>Activity Settings</Text>
           <IconAngleDown size={19} color={uiTheme.colors.$icon}/>
         </TouchableOpacity>
-        <SheetModal
+        <BottomSheetModal
+          height={350}
           isVisible={this.state.settingsVisible}
-          onDismiss={() => {
-            this.setState({settingsVisible: false});
-          }}
+          onClose={() => this.setState({settingsVisible: false})}
         >
           <IssueActivitiesSettings
             disabled={disabled}
@@ -151,7 +148,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
             userAppearanceProfile={this.getUserAppearanceProfile()}
             uiTheme={uiTheme}
           />
-        </SheetModal>
+        </BottomSheetModal>
       </>
     );
   }
