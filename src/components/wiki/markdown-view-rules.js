@@ -1,13 +1,14 @@
 /* @flow */
 
 import React from 'react';
-import {ActivityIndicator, Image, Linking, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Linking, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 
 import Hyperlink from 'react-native-hyperlink';
 import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
 
 import calculateAspectRatio from '../aspect-ratio/aspect-ratio';
+import ImageWithProgress from '../image/image-with-progress';
 import LongText from './text-renderer';
 import renderCode from './code-renderer';
 import Router from '../router/router';
@@ -99,7 +100,7 @@ function getMarkdownRules(
       imageProps.accessibilityLabel = alt;
     }
 
-    return <Image {...imageProps} />;
+    return <ImageWithProgress {...imageProps} />;
   };
 
   const isNodeContainsCheckbox = (node: MarkdownNode): boolean => {

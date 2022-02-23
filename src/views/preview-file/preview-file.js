@@ -9,7 +9,7 @@ import {SvgFromUri} from 'react-native-svg';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import Header from 'components/header/header';
-import ImageProgress from 'react-native-image-progress';
+import ImageWithProgress from '../../components/image/image-with-progress';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
 import {ANALYTICS_PREVIEW_PAGE} from 'components/analytics/analytics-ids';
@@ -95,8 +95,7 @@ const ImagePreview = (props: Props): Node => {
         height="100%"
         uri={attach.url}
       />)
-      : (<ImageProgress
-        renderIndicator={renderLoader}
+      : (<ImageWithProgress
         renderError={renderError}
         {...imageProps}
         imageStyle={[styles.preview, attach.imageDimensions ? {

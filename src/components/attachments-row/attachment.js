@@ -4,9 +4,9 @@ import React, {PureComponent} from 'react';
 import {View, ActivityIndicator, TouchableOpacity, Text, Alert} from 'react-native';
 
 import debounce from 'lodash.debounce';
-import ImageProgress from 'react-native-image-progress';
 import {SvgUri} from 'react-native-svg';
 
+import ImageWithProgress from '../image/image-with-progress';
 import ModalPortal from '../modal-view/modal-portal';
 import PreviewFile from 'views/preview-file/preview-file';
 import Router from '../router/router';
@@ -186,9 +186,8 @@ export default class Attach extends PureComponent<Props, State> {
         duration={ANIMATION_DURATION}
         easing="ease-out-quart"
       >
-        <ImageProgress
+        <ImageWithProgress
           style={[styles.attachmentThumbContainer, this.thumbStyleMap.default]}
-          renderIndicator={() => <ActivityIndicator/>}
           source={source}
           onError={this.handleLoadError}
           renderError={() => (

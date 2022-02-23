@@ -101,6 +101,7 @@
     "react-native-easy-toast": "^2.0.0",
     "react-native-encrypted-storage": "^4.0.2",
     "react-native-extended-stylesheet": "^0.12.0",
+    "react-native-fast-image": "^8.5.11",
     "react-native-gesture-handler": "2.2.0",
     "react-native-google-analytics": "1.3.2",
     "react-native-htmlview": "0.16.0",

@@ -91,4 +91,7 @@ export default EStyleSheet.create({
     backgroundColor: '$blueBackground',
     borderColor: 'transparent',
   },
+  link: {
+    color: '$link',
+  },
 });
