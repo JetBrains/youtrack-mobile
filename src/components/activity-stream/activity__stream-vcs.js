@@ -3,9 +3,9 @@
 import React, {useState} from 'react';
 import {Linking, Text, TouchableOpacity, View} from 'react-native';
 
+import BottomSheetModal from '../modal-panel-bottom/bottom-sheet-modal';
 import Details from '../details/details';
 import MarkdownView from '../wiki/markdown-view';
-import ModalPanelBottom from '../modal-panel-bottom/modal-panel-bottom';
 import StreamUserInfo from './activity__stream-user-info';
 import {firstActivityChange} from './activity__stream-helper';
 import {
@@ -108,16 +108,17 @@ const StreamVCS = (props: Props) => {
       </Text>
     );
   };
-  const renderSourcesDialog = (): React$Element<typeof ModalPanelBottom> => {
+  const renderSourcesDialog = (): React$Element<typeof BottomSheetModal> => {
     return (
-      <ModalPanelBottom
+      <BottomSheetModal
+        isVisible={sourcesVisible}
         title={getVcsPresentation(vcs)}
-        onHide={() => updateSourcesVisible(false)}
+        onClose={() => updateSourcesVisible(false)}
       >
         {processors.map((processor: VcsProcessor) => (
           renderProcessorURL(processor, false, styles.vcsSourceButton)
         ))}
-      </ModalPanelBottom>
+      </BottomSheetModal>
     );
   };
 
