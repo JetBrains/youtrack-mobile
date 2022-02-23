@@ -5,7 +5,7 @@ import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 import availableReactionNames from 'components/reactions/reactions-name-list';
-import ModalPanelBottom from 'components/modal-panel-bottom/modal-panel-bottom';
+import BottomSheetModal from '../../../components/modal-panel-bottom/bottom-sheet-modal';
 import ReactionIcon from 'components/reactions/reaction-icon';
 
 import {HIT_SLOP} from 'components/common-styles/button';
@@ -21,9 +21,10 @@ type Props = {
 const ReactionsPanel = (props: Props) => {
 
   return (
-    <ModalPanelBottom
+    <BottomSheetModal
+      isVisible={true}
       testID="reactionsDialog"
-      onHide={props.onHide}
+      onClose={props.onHide}
     >
       <View style={styles.reactionContainer}>
         {availableReactionNames.map((reactionName: string) => {
@@ -39,7 +40,7 @@ const ReactionsPanel = (props: Props) => {
           );
         })}
       </View>
-    </ModalPanelBottom>
+    </BottomSheetModal>
   );
 };
 
