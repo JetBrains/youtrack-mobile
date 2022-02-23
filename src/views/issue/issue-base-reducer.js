@@ -247,7 +247,7 @@ export const createIssueReduxSlice: (
       state.issue = {
         ...state.issue,
         watchers: {
-          ...state.issue?.watchers,
+          ...state?.issue?.watchers,
           hasStar: action.payload.starred,
         },
       };

@@ -314,16 +314,16 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   }
 
-  renderStar: (uiTheme: UITheme) => React$Element<typeof Star | typeof Skeleton> = (uiTheme: UITheme): React$Element<typeof Star | typeof Skeleton> => {
+  renderStar: () => React$Element<typeof Star | typeof Skeleton> = (): React$Element<typeof Star | typeof Skeleton> => {
     const {issue, toggleStar} = this.props;
-    if (this.isIssueLoaded()) {
+    if (issue && this.isIssueLoaded()) {
       return (
         <Star
           style={styles.issueStar}
           canStar={this.canStar()}
-          hasStar={issue.watchers.hasStar}
+          hasStar={issue.watchers?.hasStar}
           onStarToggle={toggleStar}
-          uiTheme={uiTheme}
+          uiTheme={this.uiTheme}
         />
       );
     }
@@ -396,7 +396,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         <Header
           leftButton={this.renderBackIcon()}
           rightButton={isIssueLoaded ? this.renderActionsIcon(this.uiTheme) : null}
-          extraButton={isIssueLoaded ? this.renderStar(this.uiTheme) : null}
+          extraButton={isIssueLoaded ? this.renderStar() : null}
           onRightButtonClick={() => {
             if (isIssueLoaded) {
               showIssueActions(
