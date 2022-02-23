@@ -297,7 +297,6 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
       return null;
     }
 
-    const disabled = activityGroup.merged;
     const commentActions = props.commentActions;
     const isAuthor = commentActions && commentActions.isAuthor && commentActions.isAuthor(comment);
 
@@ -341,7 +340,6 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
           {!!props.onReactionPanelOpen && <Feature version={FEATURE_VERSION.reactions}>
             <TouchableOpacity
               hitSlop={HIT_SLOP}
-              disabled={disabled}
               onPress={() => {if (props.onReactionPanelOpen) {props.onReactionPanelOpen(comment);}}}
             >
               {reactionAddIcon}
@@ -362,7 +360,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
   const renderCommentActivityReactions = (activityGroup: Object) => {
     const comment: IssueComment | null = getCommentFromActivityGroup(activityGroup);
-    if (!comment) {
+    if (!comment || comment.deleted) {
       return null;
     }
     return <CommentReactions
