@@ -130,8 +130,8 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
           <IconAngleDown size={19} color={uiTheme.colors.$icon}/>
         </TouchableOpacity>
         <BottomSheetModal
-          height={350}
-          snapPoint={350}
+          height={310}
+          snapPoint={310}
           isVisible={this.state.settingsVisible}
           onClose={() => this.setState({settingsVisible: false})}
         >
