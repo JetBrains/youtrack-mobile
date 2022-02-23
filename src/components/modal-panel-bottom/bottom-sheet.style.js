@@ -12,4 +12,8 @@ export default EStyleSheet.create({
     paddingVertical: UNIT,
     paddingHorizontal: UNIT * 2,
   },
+  content: {
+    padding: UNIT,
+    paddingBottom: UNIT * 2,
+  },
 });

@@ -15,9 +15,12 @@ interface Props {
   isVisible: boolean;
   onClose: () => void;
   snapPoint?: number;
+  withHandle?: boolean;
 }
 
 const SheetModal = (props: Props): React$Element<typeof Portal> | null => {
+  const {snapPoint = 16, withHandle = false} = props;
+
   const ref: typeof Modalize = useRef(null);
 
   useEffect(() => {
@@ -28,15 +31,23 @@ const SheetModal = (props: Props): React$Element<typeof Portal> | null => {
     }
   }, [props.isVisible]);
 
+  useEffect(() => {
+    if (props.isVisible) {
+      setTimeout(() => ref.current?.open());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Portal style={styles.container}>
       <Modalize
+        adjustToContentHeight={typeof props?.height !== 'number'}
         modalHeight={props?.height}
         modalStyle={styles.modal}
-        childrenStyle={[styles.container, styles.content]}
+        childrenStyle={styles.content}
         ref={ref}
-        withHandle={true}
-        snapPoint={props?.snapPoint}
+        withHandle={withHandle}
+        snapPoint={snapPoint}
         onClose={props.onClose}
         HeaderComponent={() => props.header}
       >
