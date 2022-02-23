@@ -131,6 +131,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
         </TouchableOpacity>
         <BottomSheetModal
           height={350}
+          snapPoint={350}
           isVisible={this.state.settingsVisible}
           onClose={() => this.setState({settingsVisible: false})}
         >

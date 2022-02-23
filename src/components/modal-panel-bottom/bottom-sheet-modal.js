@@ -14,6 +14,7 @@ interface Props {
   header?: any;
   isVisible: boolean;
   onClose: () => void;
+  snapPoint?: number;
 }
 
 const SheetModal = (props: Props): React$Element<typeof Portal> | null => {
@@ -28,14 +29,14 @@ const SheetModal = (props: Props): React$Element<typeof Portal> | null => {
   }, [props.isVisible]);
 
   return (
-    <Portal>
+    <Portal style={styles.container}>
       <Modalize
-        modalHeight={props.height}
+        modalHeight={props?.height}
         modalStyle={styles.modal}
         childrenStyle={[styles.container, styles.content]}
         ref={ref}
         withHandle={true}
-        snapPoint={350}
+        snapPoint={props?.snapPoint}
         onClose={props.onClose}
         HeaderComponent={() => props.header}
       >
