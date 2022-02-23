@@ -1,6 +1,10 @@
 /* @flow */
 
-import {View, ScrollView, ActivityIndicator} from 'react-native';
+import React, {Component} from 'react';
+import {View, ActivityIndicator} from 'react-native';
+
+import {ScrollView} from 'react-native-gesture-handler';
+import {View as AnimatedView} from 'react-native-animatable';
 
 import Api from '../api/api';
 import CustomField from '../custom-field/custom-field';
@@ -8,7 +12,6 @@ import DatePicker from './custom-fields-panel__date-picker';
 import Header from '../header/header';
 import ModalPortal from '../modal-view/modal-portal';
 import ModalView from '../modal-view/modal-view';
-import React, {Component} from 'react';
 import SimpleValueEditor from './custom-fields-panel__simple-value';
 import usage from '../usage/usage';
 import {createNullProjectCustomField} from 'util/util';
@@ -18,7 +21,6 @@ import {isSplitView} from '../responsive/responsive-helper';
 import {PanelWithSeparator} from '../panel/panel-with-separator';
 import {Select, SelectModal} from '../select/select';
 import {SkeletonIssueCustomFields} from '../skeleton/skeleton';
-import {View as AnimatedView} from 'react-native-animatable';
 
 import styles, {calendarTheme} from './custom-fields-panel.styles';
 
@@ -507,9 +509,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
     return (
       <>
-        {!fields && <View style={styles.customFieldsPanel}>
-          <SkeletonIssueCustomFields/>
-        </View>}
+        {!fields && <SkeletonIssueCustomFields/>}
 
         {!!fields && <PanelWithSeparator>
           <ScrollView
