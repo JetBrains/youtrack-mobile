@@ -599,7 +599,7 @@ function subscribeToURL(): Action {
   };
 }
 
-export function redirectToRoute(config: AppConfig, issueId: string | null): Action {
+export function redirectToRoute(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<boolean> => {
     let isRedirected: boolean = false;
 
@@ -620,11 +620,11 @@ export function redirectToRoute(config: AppConfig, issueId: string | null): Acti
         if (authParams && cachedPermissions) {
           if ((isSplitView()) || !issueId) {
             isRedirected = true;
-            Router.Issues({issueId});
+            Router.Issues({issueId, navigateToActivity});
           } else if (issueId) {
             isRedirected = true;
             Router.Issues();
-            Router.Issue({issueId});
+            Router.Issue({issueId, navigateToActivity});
           }
         }
       }
@@ -650,7 +650,9 @@ function redirectToHome(backendUrl: string = '') {
 export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
 
-    const isRedirectedToTargetRoute: boolean = await dispatch(redirectToRoute(config, issueId));
+    const isRedirectedToTargetRoute: boolean = await dispatch(
+      redirectToRoute(config, issueId, navigateToActivity)
+    );
 
     const refreshConfig: () => Promise<void> = async (): Promise<void> => {
       const updatedConfig: AuthConfig = await loadConfig(config.backendUrl);
