@@ -45,7 +45,7 @@ export default class PushNotificationsProcessor extends PushNotifications {
           } else {
             Router.Issue({
               issueId,
-              navigateToActivity: !helper.isSummaryOrDescriptionNotification(notification),
+              navigateToActivity: !helper.isIssueDetailsNotification(notification),
             });
           }
         }

@@ -269,47 +269,53 @@ describe('push-notifications-helper', () => {
   });
 
 
-  describe('isSummaryOrDescriptionNotification', () => {
+  describe('isIssueDetailsNotification', () => {
     it('should return FALSE if no `data` or `payload` provided', () => {
-      expect(helper.isSummaryOrDescriptionNotification()).toEqual(false);
+      expect(helper.isIssueDetailsNotification()).toEqual(false);
     });
 
     it('should return FALSE if there is no any category', () => {
-      expect(helper.isSummaryOrDescriptionNotification({})).toEqual(false);
+      expect(helper.isIssueDetailsNotification({})).toEqual(false);
     });
 
     it('should return FALSE if it is not summary or description category', () => {
-      expect(helper.isSummaryOrDescriptionNotification({
+      expect(helper.isIssueDetailsNotification({
         categories: categoryName.CUSTOM_FIELD,
       })).toEqual(false);
     });
 
     it('should return TRUE if it is a summary category', () => {
-      expect(helper.isSummaryOrDescriptionNotification({
+      expect(helper.isIssueDetailsNotification({
         categories: categoryName.SUMMARY,
       })).toEqual(true);
     });
 
     it('should return TRUE if it is a description category', () => {
-      expect(helper.isSummaryOrDescriptionNotification({
+      expect(helper.isIssueDetailsNotification({
         categories: categoryName.DESCRIPTION,
       })).toEqual(true);
     });
 
     it('should return TRUE if the first category is a description one', () => {
-      expect(helper.isSummaryOrDescriptionNotification({
+      expect(helper.isIssueDetailsNotification({
         categories: `${categoryName.DESCRIPTION},${categoryName.CUSTOM_FIELD}`,
       })).toEqual(true);
     });
 
     it('should return TRUE if the first category is a summary one', () => {
-      expect(helper.isSummaryOrDescriptionNotification({
+      expect(helper.isIssueDetailsNotification({
         categories: `${categoryName.SUMMARY},${categoryName.CUSTOM_FIELD}`,
       })).toEqual(true);
     });
 
+    it('should return TRUE if the first category is a create issue category', () => {
+      expect(helper.isIssueDetailsNotification({
+        categories: `${categoryName.ISSUE_CREATED},${categoryName.LINKS}`,
+      })).toEqual(true);
+    });
+
     it('should return FALSE if the first category is not a description or summary', () => {
-      expect(helper.isSummaryOrDescriptionNotification({
+      expect(helper.isIssueDetailsNotification({
         categories: `${categoryName.CUSTOM_FIELD},${categoryName.DESCRIPTION},${categoryName.LINKS}`,
       })).toEqual(false);
     });

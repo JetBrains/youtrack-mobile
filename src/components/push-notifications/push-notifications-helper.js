@@ -96,7 +96,7 @@ function getBackendUrl(notification: Object): ?string {
   );
 }
 
-function isSummaryOrDescriptionNotification(notification: Object): boolean {
+function isIssueDetailsNotification(notification: Object): boolean {
   const categories: Array<string> = (
     notification?.categories ||
     notification?.data?.categories ||
@@ -106,11 +106,9 @@ function isSummaryOrDescriptionNotification(notification: Object): boolean {
   if (categories.length === 0 || !categories[0]) {
     return false;
   }
-  const categoryId: string = categories[0].toLowerCase();
-  return (
-     categoryId === categoryName.DESCRIPTION.toLowerCase() ||
-     categoryId === categoryName.SUMMARY.toLowerCase()
-   );
+  return [categoryName.DESCRIPTION, categoryName.SUMMARY, categoryName.ISSUE_CREATED].some((it: string) => (
+    it.toLowerCase() === categories[0].toLowerCase())
+  );
 }
 
 function composeError(error: CustomError): Error {
@@ -189,6 +187,6 @@ export default {
   logPrefix,
   KONNECTOR_URL,
   composeError,
-  isSummaryOrDescriptionNotification,
+  isIssueDetailsNotification,
   getBackendUrl,
 };
