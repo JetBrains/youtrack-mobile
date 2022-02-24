@@ -303,13 +303,10 @@ export function switchAccount(account: StorageState, dropCurrentAccount: boolean
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     dispatch(resetUserArticlesProfile());
     cacheUserLastVisitedArticle(null);
-    const prevAccount: StorageState = getStorageState();
     try {
       redirectToHome(account.config.backendUrl);
       await dispatch(changeAccount(account, dropCurrentAccount, issueId));
-    } catch (e) {
-      await dispatch(changeAccount(prevAccount));
-    }
+    } catch (e) {}
   };
 }
 
