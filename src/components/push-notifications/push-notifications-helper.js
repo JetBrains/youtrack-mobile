@@ -106,7 +106,12 @@ function isIssueDetailsNotification(notification: Object): boolean {
   if (categories.length === 0 || !categories[0]) {
     return false;
   }
-  return [categoryName.DESCRIPTION, categoryName.SUMMARY, categoryName.ISSUE_CREATED].some((it: string) => (
+  return [
+    categoryName.DESCRIPTION,
+    categoryName.SUMMARY,
+    categoryName.ISSUE_CREATED,
+    categoryName.ISSUE_CREATED.split('_').pop(),
+  ].some((it: string) => (
     it.toLowerCase() === categories[0].toLowerCase())
   );
 }
