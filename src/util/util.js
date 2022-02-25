@@ -99,10 +99,12 @@ export const until = (promises: any, combine: boolean = false): Promise<[?Custom
     });
 };
 
+export const nullProjectCustomFieldMaxLength: number = 20;
+
 export const createNullProjectCustomField = (
-  projectName: string,
-  maxLength: number = 20,
-  name: string = 'Project',
+  projectName: string = '',
+  label: string,
+  maxLength: number = nullProjectCustomFieldMaxLength,
 ): { projectCustomField: { field: {name: string} }, value: { name: string } } => {
   const visibleProjectName: string = (
     projectName.length > maxLength
@@ -111,7 +113,7 @@ export const createNullProjectCustomField = (
   );
 
   return {
-    projectCustomField: {field: {name}},
+    projectCustomField: {field: {name: label}},
     value: {name: visibleProjectName},
   };
 };

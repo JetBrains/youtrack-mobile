@@ -161,7 +161,7 @@ const SPRINT_ISSUES_FIELDS: any = toField([
   'id',
   'resolved',
   {tags: IssueFields.ISSUE_TAGS_FIELDS},
-  {project: 'id'},
+  {project: 'id,name'},
   {
     fields: [
       'id',
