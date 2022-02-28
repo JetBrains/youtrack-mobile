@@ -1,21 +1,20 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {Component} from 'react';
-
-import {connect} from 'react-redux';
 import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
+
 import Markdown from 'react-native-markdown-display';
+import {connect} from 'react-redux';
 
 import ModalView from '../modal-view/modal-view';
-
 import {acceptUserAgreement, declineUserAgreement} from 'actions/app-actions';
-
+import {i18n} from '../i18n/i18n';
 import {UNIT} from '../variables/variables';
 
 import styles from './user-agreement.styles';
 
 import type {EndUserAgreement} from 'flow/AppConfig';
+import type {Node} from 'React';
 
 type Props = {
   show: boolean,
@@ -58,11 +57,11 @@ export class UserAgreementView extends Component<Props, void> {
               onPress={onAccept}
             >
               <Text style={styles.buttonText}>
-                Accept
+                {i18n('Accept')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={onDecline}>
-              <Text style={styles.buttonText}>Decline</Text>
+              <Text style={styles.buttonText}>{i18n('Decline')}</Text>
             </TouchableOpacity>
           </View>
         </View>

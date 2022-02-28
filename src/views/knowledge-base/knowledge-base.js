@@ -25,6 +25,7 @@ import {getGroupedByFieldNameAlphabetically} from 'components/search/sorting';
 import {getStorageState} from 'components/storage/storage';
 import {IconAngleDown, IconAngleRight, IconBack, IconClose, IconContextActions} from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';
+import {i18n} from '../../components/i18n/i18n';
 import {
   ICON_PICTOGRAM_DEFAULT_SIZE,
   IconNoProjectFound,
@@ -213,7 +214,7 @@ export class KnowledgeBase extends Component<Props, State> {
               <View style={[styles.itemArticle, styles.itemNoArticle]}>
                 {isProjectExpanding && <ActivityIndicator color={styles.link.color}/>}
                 {hasHoArticles && <Text style={styles.itemNoArticleText}>
-                  No articles
+                  {i18n('No articles')}
                 </Text>}
               </View>
               {this.renderSeparator()}
@@ -374,7 +375,7 @@ export class KnowledgeBase extends Component<Props, State> {
               hitSlop={HIT_SLOP}
               onPress={this.openProjectSelect}
             >
-              <Text style={styles.link}>Manage Favorite Projects</Text>
+              <Text style={styles.link}>{i18n('Manage Favorite Projects')}</Text>
             </TouchableOpacity>
           </View>}
         ListEmptyComponent={() => !isLoading && <ErrorMessage errorMessageData={{
@@ -418,7 +419,7 @@ export class KnowledgeBase extends Component<Props, State> {
           onPress={() => this.props.toggleAllProjects()}
         >
           {!hasSearchQuery && <Text style={styles.actionBarButtonText}>
-            Collapse all
+            {i18n('Collapse all')}
           </Text>}
         </TouchableOpacity>
         <TouchableOpacity
@@ -445,7 +446,7 @@ export class KnowledgeBase extends Component<Props, State> {
             }
           }}
         >
-          <Text style={styles.actionBarButtonText}>Drafts</Text>
+          <Text style={styles.actionBarButtonText}>{i18n('Drafts')}</Text>
           <IconAngleRight size={20} color={styles.actionBarButtonText.color}/>
         </TouchableOpacity>
       </View>
@@ -465,7 +466,7 @@ export class KnowledgeBase extends Component<Props, State> {
       multi: true,
       header: () => (
         <Text style={styles.manageFavoriteProjectsNote}>
-          To view articles in the knowledge base for a specific project, mark it as a favorite
+          {i18n('To view articles in the knowledge base for a specific project, mark it as a favorite')}
         </Text>
       ),
       dataSource: () => {
@@ -514,7 +515,7 @@ export class KnowledgeBase extends Component<Props, State> {
       <View style={styles.noProjects}>
         <IconNoProjectFound style={styles.noProjectsIcon}/>
         <Text style={styles.noProjectsMessage}>
-          Here you'll see a list of articles from your favorite projects
+          {i18n('Here you\'ll see a list of articles from your favorite projects')}
         </Text>
         <TouchableOpacity
           style={styles.noProjectsButton}
@@ -522,7 +523,7 @@ export class KnowledgeBase extends Component<Props, State> {
           onPress={this.openProjectSelect}
         >
           <Text style={styles.noProjectsButtonText}>
-            Find favorite projects
+            {i18n('Find favorite projects')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -606,7 +607,7 @@ export class KnowledgeBase extends Component<Props, State> {
         : (
           <View style={styles.splitViewMainEmpty}>
             {<IconNothingSelected size={ICON_PICTOGRAM_DEFAULT_SIZE}/>}
-            <Text style={styles.splitViewMessage}>Select an article from the list</Text>
+            <Text style={styles.splitViewMessage}>{i18n('Select an article from the list')}</Text>
           </View>
         )
     );

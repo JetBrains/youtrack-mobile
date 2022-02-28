@@ -31,6 +31,7 @@ import {ANALYTICS_ISSUE_CREATE_PAGE} from 'components/analytics/analytics-ids';
 import {getApi} from 'components/api/api__instance';
 import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
 import {HIT_SLOP} from 'components/common-styles/button';
+import {i18n} from '../../components/i18n/i18n';
 import {IconCheck, IconClose, IconDrag, IconMoreOptions} from 'components/icon/icon';
 import {isIOSPlatform} from 'util/util';
 import {ThemeContext} from 'components/theme/theme-context';
@@ -314,7 +315,7 @@ class CreateIssue extends PureComponent<Props, State> {
           }}
         >
           {iconLink}
-          <Text style={styles.addLinkButtonText}>Link issue</Text>
+          <Text style={styles.addLinkButtonText}>{i18n('Link issue')}</Text>
         </TouchableOpacity>
 
         {this.props.isSplitView && (

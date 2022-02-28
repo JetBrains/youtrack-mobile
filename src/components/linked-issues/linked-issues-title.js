@@ -5,6 +5,7 @@ import {View, Text, TouchableOpacity} from 'react-native';
 
 import {View as AnimatedView} from 'react-native-animatable';
 
+import {i18n} from '../i18n/i18n';
 import {IconAngleRight} from '../icon/icon';
 import {getLinkedIssuesTitle} from './linked-issues-helper';
 
@@ -30,7 +31,7 @@ const LinkedIssuesTitle = (props: Props): Node => {
     >
       <View style={styles.linkedIssuesTitle}>
         <Text style={styles.linkedIssuesTitleText}>
-          Linked issues
+          {i18n('Linked issues')}
         </Text>
         {linkedIssuesTitle.length > 0 && (
           <AnimatedView

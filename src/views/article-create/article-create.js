@@ -21,6 +21,7 @@ import VisibilityControl from 'components/visibility/visibility-control';
 import {ANALYTICS_ARTICLE_CREATE_PAGE} from 'components/analytics/analytics-ids';
 import {getApi} from 'components/api/api__instance';
 import {getStorageState} from 'components/storage/storage';
+import {i18n} from '../../components/i18n/i18n';
 import {IconAngleDown, IconCheck, IconClose} from 'components/icon/icon';
 import {PanelWithSeparator} from 'components/panel/panel-with-separator';
 import {SkeletonCreateArticle} from 'components/skeleton/skeleton';
@@ -238,7 +239,7 @@ const ArticleCreate = (props: Props) => {
           }}
         >
           <Text style={styles.discardButtonText}>
-            {props.isNew ? 'Delete draft' : 'Discard unpublished changes'}
+            {props.isNew ? i18n('Delete draft') : i18n('Discard unpublished changes')}
           </Text>
         </TouchableOpacity>
         <Separator/>
@@ -305,8 +306,8 @@ const ArticleCreate = (props: Props) => {
               editable={!!articleDraft}
               onSummaryChange={(summary: string) => updateDraft({summary})}
               onDescriptionChange={(content: string) => updateDraft({content})}
-              summaryPlaceholder="Title"
-              descriptionPlaceholder="Article content"
+              summaryPlaceholder={i18n('Title')}
+              descriptionPlaceholder={i18n('Article content')}
             />
           </View>
         )}

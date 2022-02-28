@@ -5,6 +5,7 @@ import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
 import IconAttachment from '@jetbrains/icons/attachment.svg';
+import {i18n} from '../i18n/i18n';
 import {View} from 'react-native-animatable';
 
 import styles from './attachment-add-panel.styles';
@@ -39,7 +40,7 @@ const AttachmentAddPanel = (props: Props): Node => {
             styles.attachButtonText,
             props.isDisabled ? styles.attachButtonTextDisabled : null,
           ]}>
-          Add attachment
+          {i18n('Add attachment')}
         </Text>
       </TouchableOpacity>
     </View>

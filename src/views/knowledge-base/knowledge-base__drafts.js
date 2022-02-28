@@ -13,6 +13,7 @@ import Router from 'components/router/router';
 import Select from 'components/select/select';
 import {confirmDeleteAllDrafts, confirmDeleteArticleDraft} from '../article/arcticle-helper';
 import {deleteArticle} from '../article/arcticle-actions';
+import {i18n} from '../../components/i18n/i18n';
 import {IconBack, IconKnowledgeBase} from 'components/icon/icon';
 import {loadArticlesDrafts} from './knowledge-base-actions';
 import {routeMap} from '../../app-routes';
@@ -132,7 +133,7 @@ const KnowledgeBaseDrafts = (props: Props) => {
             style={styles.noDraftsButton}
             onPress={() => props.onArticleCreate(null, true)}
           >
-            <Text style={styles.noDraftsButtonText}>Start a new article</Text>
+            <Text style={styles.noDraftsButtonText}>{i18n('Start a new article')}</Text>
           </TouchableOpacity>
         </AnimatedView>
       )}

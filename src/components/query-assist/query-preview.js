@@ -4,6 +4,7 @@ import type {Node} from 'React';
 import {Text, View} from 'react-native';
 import React, {PureComponent} from 'react';
 
+import {i18n} from '../i18n/i18n';
 import {IconSearch} from '../icon/icon';
 import {iconClearText} from '../icon/icon-clear-text';
 
@@ -53,7 +54,7 @@ export default class QueryPreview extends PureComponent<Props, void> {
               query ? styles.searchInputHasText : null,
             ]}
           >
-            {query ? query : 'Enter search request'}
+            {query ? query : i18n('Enter search request')}
           </Text>
 
           {!!query && iconClearText(this.focusAndClear, styles.clearIcon.color)}

@@ -7,6 +7,7 @@ import React from 'react';
 import Avatar from '../avatar/avatar';
 import MarkdownView from '../wiki/markdown-view';
 import YoutrackWiki from '../wiki/youtrack-wiki';
+import {i18n} from '../i18n/i18n';
 import {relativeDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 import styles from './comment.styles';
@@ -39,7 +40,13 @@ function Comment(props: Props) {
     const {onRestore, onDeletePermanently, canRestore, canDeletePermanently} = props;
     return (
       <>
-        <View><Text style={styles.deletedCommentText}>Comment was deleted.</Text></View>
+        <View>
+          <Text
+            style={styles.deletedCommentText}
+          >
+            {i18n('Comment was deleted.')}
+          </Text>
+        </View>
 
         {Boolean(canRestore || canDeletePermanently) && (
           <View style={styles.actions}>
@@ -49,16 +56,16 @@ function Comment(props: Props) {
                   onPress={onRestore}
                   style={styles.actionLink}
                 >
-                  Restore
+                  {i18n('Restore')}
                 </Text>
               )}
-              {canDeletePermanently && <Text> or </Text>}
+              {canDeletePermanently && <Text>{i18n(' or ')}</Text>}
               {canDeletePermanently &&
               <Text
                 onPress={onDeletePermanently}
                 style={styles.actionLink}
               >
-                Delete permanently
+                {i18n('Delete permanently')}
               </Text>}
             </Text>
           </View>

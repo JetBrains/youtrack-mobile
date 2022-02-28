@@ -6,6 +6,7 @@ import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
 import IconTrash from '@jetbrains/icons/trash.svg';
 
 import {hasType} from '../api/api__resource-types';
+import {i18n} from '../i18n/i18n';
 import {IconAngleRight, IconLock} from '../icon/icon';
 
 import styles from './article-item-with-children.styles';
@@ -37,7 +38,7 @@ const ArticleItemWithChildren = (props: Props) => {
         style={{...styles.row, ...styles.item}}
         onPress={() => onArticlePress(article)}
       >
-        <Text numberOfLines={2} style={styles.articleTitleText}>{article.summary || 'Untitled'}</Text>
+        <Text numberOfLines={2} style={styles.articleTitleText}>{article.summary || i18n('Untitled')}</Text>
         <View style={styles.itemArticleIcon}>
           {hasType.visibilityLimited(article?.visibility) && (
             <IconLock

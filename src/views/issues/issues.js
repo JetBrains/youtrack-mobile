@@ -33,6 +33,7 @@ import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 import {getIssueFromCache} from './issues-actions';
 import {HIT_SLOP} from 'components/common-styles/button';
+import {i18n} from '../../components/i18n/i18n';
 import {IconAdd, IconAngleDown, IconBookmark} from 'components/icon/icon';
 import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound, IconNothingSelected} from 'components/icon/icon-pictogram';
 import {initialState} from './issues-reducers';
@@ -477,7 +478,7 @@ export class Issues extends Component<Props, State> {
         renderItem={this._renderRow}
         ItemSeparatorComponent={this._renderSeparator}
         ListEmptyComponent={() => {
-          return <Text>No issues found</Text>;
+          return <Text>{i18n('No issues found')}</Text>;
         }}
         ListFooterComponent={this.renderIssuesFooter}
 
@@ -541,7 +542,7 @@ export class Issues extends Component<Props, State> {
       return (
         <View style={styles.splitViewMainEmpty}>
           {<IconNothingSelected size={ICON_PICTOGRAM_DEFAULT_SIZE}/>}
-          <Text style={styles.splitViewMessage}>Select an issue from the list</Text>
+          <Text style={styles.splitViewMessage}>{i18n('Select an issue from the list')}</Text>
         </View>
       );
     }

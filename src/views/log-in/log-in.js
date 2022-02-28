@@ -26,6 +26,7 @@ import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {formatYouTrackURL} from 'components/config/config';
 import {formStyles} from 'components/common-styles/form';
 import {HIT_SLOP} from 'components/common-styles/button';
+import {i18n} from '../../components/i18n/i18n';
 import {logo, IconBack} from 'components/icon/icon';
 import {openDebugView, applyAuthorization} from 'actions/app-actions';
 import {resolveErrorMessage} from 'components/error/error-resolver';
@@ -180,7 +181,7 @@ export class LogIn extends Component<Props, State> {
                     onPress={() => this.changeYouTrackUrl()}
                     testID="youtrack-url"
                   >
-                    <Text style={styles.title}>Log in to YouTrack</Text>
+                    <Text style={styles.title}>{i18n('Log in to YouTrack')}</Text>
                     <Text
                       style={styles.hintText}>{formatYouTrackURL(config.backendUrl)}</Text>
                   </TouchableOpacity>
@@ -193,7 +194,7 @@ export class LogIn extends Component<Props, State> {
                     accessibilityLabel="login-input"
                     accessible={true}
                     style={styles.inputUser}
-                    placeholder="Username or email"
+                    placeholder={i18n('Username or email')}
                     placeholderTextColor={uiThemeColors.$icon}
                     returnKeyType="next"
                     underlineColorAndroid="transparent"
@@ -209,7 +210,7 @@ export class LogIn extends Component<Props, State> {
                     accessibilityLabel="password-input"
                     accessible={true}
                     style={styles.inputPass}
-                    placeholder="Password"
+                    placeholder={i18n('Password')}
                     placeholderTextColor={uiThemeColors.$icon}
                     returnKeyType="done"
                     underlineColorAndroid="transparent"
@@ -233,7 +234,7 @@ export class LogIn extends Component<Props, State> {
                     onPress={this.logInViaCredentials}>
                     <Text
                       style={[formStyles.buttonText, hasNoCredentials && formStyles.buttonTextDisabled]}>
-                      Log in
+                      {i18n('Log in')}
                     </Text>
                     {this.state.loggingIn && <ActivityIndicator style={styles.progressIndicator}/>}
                   </TouchableOpacity>}
@@ -243,12 +244,12 @@ export class LogIn extends Component<Props, State> {
                   </View>}
 
                   {isLoginWithCreds && <Text style={styles.hintText}>
-                    {'You need a YouTrack account to use the app.\n By logging in, you agree to the '}
+                    {i18n('You need a YouTrack account to use the app.\n By logging in, you agree to the ')}
                     <Text
                       style={formStyles.link}
                       onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
-                      Privacy Policy
-                    </Text>.
+                      {i18n('Privacy Policy.')}
+                    </Text>
                   </Text>}
 
                   {Boolean(errorMessage || hasNoCredentials) && (
@@ -268,7 +269,7 @@ export class LogIn extends Component<Props, State> {
                   onPress={() => this.logInViaHub()}
                 >
                   <Text style={styles.action}>
-                    Log in with Browser
+                    {i18n('Log in with Browser')}
                   </Text>
                 </TouchableOpacity>}
 

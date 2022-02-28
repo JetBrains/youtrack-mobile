@@ -7,6 +7,7 @@ import Header from 'components/header/header';
 import {getStorageState} from 'components/storage/storage';
 import {getSystemThemeMode, themes} from 'components/theme/theme';
 import {HIT_SLOP} from 'components/common-styles/button';
+import {i18n} from '../../components/i18n/i18n';
 import {IconBack, IconCheck} from 'components/icon/icon';
 import {ThemeContext} from 'components/theme/theme-context';
 
@@ -38,7 +39,7 @@ const SettingsAppearance = (props: Props): Node => {
       >
         <View style={styles.settingsListItemOption}>
           <Text style={styles.settingsListItemOptionText}>
-            {`${uiTheme.name} theme`}
+            {`${uiTheme.name} ${i18n('theme')}`}
             {uiTheme.system && <Text style={styles.settingsListItemOptionTextSecondary}>{` (${uiTheme.mode})`}</Text>}
           </Text>
           {isChecked && <IconCheck size={20} color={currentTheme.uiTheme.colors.$link}/>}

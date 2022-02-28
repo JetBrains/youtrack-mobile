@@ -5,6 +5,7 @@ import {Text, TouchableOpacity} from 'react-native';
 
 import IconTag from '@jetbrains/icons/tag.svg';
 
+import {i18n} from '../i18n/i18n';
 import {HIT_SLOP} from '../common-styles/button';
 
 import styles from './tags.styles';
@@ -35,7 +36,7 @@ const TagAddPanel = (props: Props) => {
       {iconTag}
       <Text
         style={[styles.buttonText, props.disabled && styles.buttonTextDisabled]}>
-        Add Tag
+        {i18n('Add Tag')}
       </Text>
     </TouchableOpacity>
   );

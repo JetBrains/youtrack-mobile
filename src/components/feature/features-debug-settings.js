@@ -8,6 +8,7 @@ import ModalView from '../modal-view/modal-view';
 import Router from '../router/router';
 import {clearCachesAndDrafts, flushStoragePart, getStorageState} from '../storage/storage';
 import {confirmation} from '../confirmation/confirmation';
+import {i18n} from '../i18n/i18n';
 import {IconClose} from '../icon/icon';
 import {notify} from '../notification/notification';
 
@@ -45,7 +46,7 @@ const FeaturesDebugSettings = (props: Props): Node => {
             <Text
               style={styles.featuresListItemText}
             >
-              Force handset mode
+              {i18n('Force handset mode')}
             </Text>
             <Switch
               value={forceHandsetMode}
@@ -66,7 +67,7 @@ const FeaturesDebugSettings = (props: Props): Node => {
                 });
               }}
             >
-              <Text style={styles.button}>Clear storage</Text>
+              <Text style={styles.button}>{i18n('Clear storage')}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

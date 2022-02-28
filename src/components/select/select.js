@@ -8,6 +8,7 @@ import ModalPortal from '../modal-view/modal-portal';
 import ModalView from '../modal-view/modal-view';
 import SelectItem from './select__item';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {i18n} from '../i18n/i18n';
 import {IconCheck, IconClose} from '../icon/icon';
 import {notifyError} from '../notification/notification';
 
@@ -348,11 +349,11 @@ export class Select extends PureComponent<SelectProps, SelectState> {
 
         {!this.state.loaded && <View style={[styles.row, styles.loadingRow]}>
           <ActivityIndicator/>
-          <Text style={styles.loadingMessage}>Loading values...</Text>
+          <Text style={styles.loadingMessage}>{i18n('Loading values...')}</Text>
         </View>}
         {this.state.loaded && this.state?.items?.length === 0 && (
           <View style={[styles.row, styles.loadingRow]}>
-            <Text style={styles.loadingMessage}>No items</Text>
+            <Text style={styles.loadingMessage}>{i18n('No items')}</Text>
           </View>
         )}
 

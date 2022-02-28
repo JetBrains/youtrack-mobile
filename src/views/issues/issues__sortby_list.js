@@ -17,6 +17,7 @@ import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {doAssist, getSortPropertyName, isRelevanceSortProperty} from './issues__sortby-helper';
 import {EllipsisVertical, IconAdd, IconCheck, IconClose} from 'components/icon/icon';
+import {i18n} from '../../components/i18n/i18n';
 import {isSplitView} from 'components/responsive/responsive-helper';
 
 import styles from './issues.styles';
@@ -167,13 +168,13 @@ const IssuesSortByList = (props: Props) => {
           <IconAdd size={21} style={styles.sortByListAddIcon} color={styles.link.color}/>
         </TouchableOpacity>}
       >
-        <Text style={styles.headerTitle}>Sort Attributes</Text>
+        <Text style={styles.headerTitle}>{i18n('Sort Attributes')}</Text>
       </Header>
 
       {selectedSortProperties.length > MAX_SORT_ATTRIBUTES_AMOUNT && (
         <View style={styles.searchContextPinned}>
           <Text style={styles.sortByListWarning}>
-            Issues can be sorted by up to 4 attributes
+            {i18n('Issues can be sorted by up to 4 attributes')}
           </Text>
         </View>
       )}

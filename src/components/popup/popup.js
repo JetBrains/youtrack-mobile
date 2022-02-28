@@ -1,13 +1,16 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {PureComponent} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
 
 import ModalView from '../modal-view/modal-view';
+
 import {HIT_SLOP} from '../common-styles/button';
+import {i18n} from '../i18n/i18n';
+import {View, Text, TouchableOpacity} from 'react-native';
 
 import styles from './popup.styles';
+
+import type {Node} from 'React';
 
 type Props = {
   childrenRenderer: () => any,
@@ -39,7 +42,7 @@ export default class Popup extends PureComponent<Props, void> {
                 onPress={onHide}
                 style={styles.button}
               >
-                <Text style={styles.buttonText}>Close</Text>
+                <Text style={styles.buttonText}>{i18n('Close')}</Text>
               </TouchableOpacity>
 
             </View>

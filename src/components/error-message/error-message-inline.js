@@ -5,6 +5,7 @@ import {View, Text, Linking} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
+import {i18n} from '../i18n/i18n';
 import {UNIT} from '../variables/variables';
 
 import type {Node} from 'React';
@@ -62,7 +63,7 @@ export default class ErrorMessageInline extends PureComponent<Props, void> {
             testID="errorMessageInlineSupportLink"
             onPress={() => Linking.openURL('https://youtrack-support.jetbrains.com/hc/en-us/requests/new')}
             style={[styles.error, styles.link]}>
-            Contact support
+            {i18n('Contact support')}
           </Text>
         )}
       </View>

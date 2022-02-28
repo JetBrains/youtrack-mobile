@@ -7,6 +7,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { WebView } from 'react-native-webview';
 
 import Header from 'components/header/header';
+import {i18n} from '../../components/i18n/i18n';
 import {IconClose} from 'components/icon/icon';
 import {UNIT} from 'components/variables/variables';
 
@@ -30,7 +31,7 @@ export function AttachmentPreview(props: Props): Node {
     <View style={styles.container}>
       <Header
         leftButton={<IconClose size={21} color={styles.link.color}/>}
-        rightButton={<Text style={styles.link}>Browser</Text>}
+        rightButton={<Text style={styles.link}>{i18n('Browser')}</Text>}
         onRightButtonClick={() => {Linking.openURL(url);}}
       >
         <Text style={styles.headerText} numberOfLines={1}>{name}</Text>

@@ -16,6 +16,7 @@ import Header from 'components/header/header';
 import Router from 'components/router/router';
 import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {feedbackLogsOptions, feedbackTypeOptions, sendFeedback} from './settings-helper';
+import {i18n} from '../../components/i18n/i18n';
 import {IconAngleRight, IconCheck, IconClose} from 'components/icon/icon';
 import {notify} from 'components/notification/notification';
 import {showActions} from 'components/action-sheet/action-sheet';
@@ -181,7 +182,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
               style={buttonStyle}
               onPress={() => this.renderContextActions(false)}
             >
-              <Text style={styles.feedbackFormTextSup}>Logs</Text>
+              <Text style={styles.feedbackFormTextSup}>{i18n('Logs')}</Text>
               <Text
                 testID="settingsFeedbackLogs"
                 style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
@@ -193,7 +194,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
               testID="settingsFeedbackEmail"
               {...commonInputProps}
               style={styles.feedbackFormInput}
-              placeholder="Email address for follow-up"
+              placeholder={i18n('Email address for follow-up')}
               value={feedback.email}
               onChangeText={(value: string) => update({email: value})}
             />
@@ -202,7 +203,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
               testID="settingsFeedbackSummary"
               {...commonInputProps}
               style={styles.feedbackFormInput}
-              placeholder="Summary"
+              placeholder={i18n('Summary')}
               value={feedback.summary}
               onChangeText={(value: string) => update({summary: value})}
             />
@@ -213,7 +214,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
               testID="settingsFeedbackDescription"
               {...commonInputProps}
               style={[styles.feedbackFormInputDescription]}
-              placeholder="Description"
+              placeholder={i18n('Description')}
               onChangeText={(value: string) => update({description: value})}
             />
 

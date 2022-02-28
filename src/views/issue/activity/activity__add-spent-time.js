@@ -19,6 +19,7 @@ import {createIssueActivityActions} from './issue-activity__actions';
 import {getEntityPresentation, ytDate} from 'components/issue-formatter/issue-formatter';
 import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles/button';
+import {i18n} from '../../../components/i18n/i18n';
 import {IconAngleRight, IconCheck, IconClose} from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {logEvent} from 'components/log/log-helper';
@@ -310,7 +311,7 @@ const AddSpentTimeForm = (props: Props) => {
               updateSelectVisibility(true);
             }}
           >
-            <Text style={styles.feedbackFormTextSup}>Author</Text>
+            <Text style={styles.feedbackFormTextSup}>{i18n('Author')}</Text>
             <Text
               style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
             >
@@ -323,7 +324,7 @@ const AddSpentTimeForm = (props: Props) => {
             style={buttonStyle}
             onPress={renderDatePicker}
           >
-            <Text style={styles.feedbackFormTextSup}>Date</Text>
+            <Text style={styles.feedbackFormTextSup}>{i18n('Date')}</Text>
             <Text
               style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
             >
@@ -336,18 +337,18 @@ const AddSpentTimeForm = (props: Props) => {
             <Text style={[
               styles.feedbackFormTextSup,
               error && styles.feedbackFormTextError,
-            ]}>Spent time</Text>
+            ]}>{i18n('Spent time')}</Text>
             <TextInput
               {...commonInputProps}
               style={[styles.feedbackInput, styles.feedbackFormTextMain]}
-              placeholder="1w 1d 1h 1m"
+              placeholder={i18n('1w 1d 1h 1m')}
               value={draft?.duration?.presentation}
               onChangeText={(periodValue: string) => updateDraftWorkItem(
                 {...draft, duration: {presentation: periodValue}}
               )}
             />
           </View>
-          {error && <Text style={styles.feedbackInputErrorHint}>1w 1d 1h 1m</Text>}
+          {error && <Text style={styles.feedbackInputErrorHint}>{i18n('1w 1d 1h 1m')}</Text>}
 
           <TouchableOpacity
             style={buttonStyle}
@@ -356,7 +357,7 @@ const AddSpentTimeForm = (props: Props) => {
               updateSelectVisibility(true);
             }}
           >
-            <Text style={styles.feedbackFormTextSup}>Type</Text>
+            <Text style={styles.feedbackFormTextSup}>{i18n('Type')}</Text>
             <Text
               style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
               numberOfLines={1}

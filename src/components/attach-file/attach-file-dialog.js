@@ -17,6 +17,7 @@ import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {getApi} from '../api/api__instance';
 import {hasMimeType} from '../mime-type/mime-type';
 import {HIT_SLOP} from '../common-styles/button';
+import {i18n} from '../i18n/i18n';
 import {IconCamera, IconCheck, IconClose} from '../icon/icon';
 import {isSplitView} from '../responsive/responsive-helper';
 import {logEvent} from '../log/log-helper';
@@ -194,7 +195,7 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
             });
           }
         }}>
-        <Text style={styles.title}>{attaches?.length === 1 ? attaches[0].name : 'Attach files'}</Text>
+        <Text style={styles.title}>{attaches?.length === 1 ? attaches[0].name : i18n('Attach files')}</Text>
       </Header>
 
       <View style={styles.content}>

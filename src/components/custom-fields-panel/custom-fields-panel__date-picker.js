@@ -7,6 +7,7 @@ import {Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 
 import Header from '../header/header';
+import {i18n} from '../i18n/i18n';
 import {IconClose, IconBack} from '../icon/icon';
 
 import styles from './custom-fields-panel.styles';
@@ -54,7 +55,7 @@ const DatePicker = (props: Props) => {
             onPress={() => props.onApply(null)}
           >
             <Text style={styles.buttonClearDateText}>
-              {props.emptyValueName} (Clear value)
+              {props.emptyValueName} {i18n('(Clear value)')}
             </Text>
           </TouchableOpacity>}
         </View>

@@ -16,6 +16,7 @@ import {
   pullRequestState,
 } from './activity__stream-vcs-helper';
 import {HIT_SLOP} from '../common-styles/button';
+import {i18n} from '../i18n/i18n';
 import {IconCaretDownUp} from '../icon/icon';
 import {relativeDate} from '../issue-formatter/issue-formatter';
 
@@ -183,7 +184,7 @@ const StreamVCS = (props: Props) => {
         {!!vcs.files && vcs.files !== -1 && (
           <View style={styles.vcsFilesAmount}>
             <Text style={[styles.activityLabel]}>
-              {vcs.files} {vcs.files > 1 ? 'files' : 'file'}
+              {vcs.files} {vcs.files > 1 ? i18n('files') : i18n('file')}
             </Text>
           </View>
         )}

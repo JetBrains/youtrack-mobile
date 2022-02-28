@@ -12,6 +12,7 @@ import StreamUserInfo from './activity__stream-user-info';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {firstActivityChange, getDurationPresentation} from './activity__stream-helper';
 import {HIT_SLOP} from '../common-styles/button';
+import {i18n} from '../i18n/i18n';
 import {IconContextActions} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
 import {showActionSheet} from '../action-sheet/action-sheet';
@@ -58,11 +59,9 @@ const StreamWork = (props: Props) => {
         {Boolean(work.date) && <Text style={styles.secondaryTextColor}>{ytDate(work.date, true)}</Text>}
 
         <View style={styles.activityWork}>
-          <Text>
-            <Text style={styles.activityLabel}>Spent time: </Text>
-            <Text style={styles.activityWorkTime}>{getDurationPresentation(work.duration)}</Text>
-            {work.type && <Text style={styles.secondaryTextColor}>{`, ${work.type.name}`}</Text>}
-          </Text>
+          <Text style={styles.activityLabel}>{i18n('Spent time:')}</Text>
+          <Text style={styles.activityWorkTime}>{getDurationPresentation(work.duration)}</Text>
+          {work.type && <Text style={styles.secondaryTextColor}>{`, ${work.type.name}`}</Text>}
           {work.id && (workPermissions.canUpdate || workPermissions.canDelete) && (
             <TouchableOpacity
               hitSlop={HIT_SLOP}

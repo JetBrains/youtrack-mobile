@@ -7,6 +7,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
 import {extractErrorMessage, resolveError} from '../error/error-resolver';
+import {i18n} from '../i18n/i18n';
 import {IconSearch} from '../icon/icon';
 
 import {styles} from './error-message.style';
@@ -92,7 +93,7 @@ export default class ErrorMessage extends PureComponent<ErrorMessageProps, State
             style={styles.tryAgainButton}
             onPress={onTryAgain}
           >
-            <Text style={styles.tryAgainText}>Try Again</Text>
+            <Text style={styles.tryAgainText}>{i18n('Try Again')}</Text>
           </TouchableOpacity>
         )}
 

@@ -5,6 +5,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 
 import {connect} from 'react-redux';
 
+import {i18n} from '../i18n/i18n';
 import {LogView} from 'react-native-device-log';
 import {closeDebugView} from 'actions/app-actions';
 import {copyRawLogs} from '../log/log';
@@ -44,10 +45,10 @@ export class DebugView extends PureComponent<Props, void> {
               style={styles.closeButton}
               onPress={onHide}
             >
-              <Text style={styles.closeButtonText}>Close</Text>
+              <Text style={styles.closeButtonText}>{i18n('Close')}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.closeButton} onPress={copyRawLogs}>
-              <Text style={styles.closeButtonText}>Share</Text>
+              <Text style={styles.closeButtonText}>{i18n('Share')}</Text>
             </TouchableOpacity>
           </View>
         </View>

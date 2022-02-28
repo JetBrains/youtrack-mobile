@@ -5,9 +5,10 @@ import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
 import ApiHelper from '../api/api__helper';
-import {IconAngleDownRight} from '../icon/icon';
 import AgileRowColumn from './agile-row__column';
 import {getPriotityField} from '../issue-formatter/issue-formatter';
+import {i18n} from '../i18n/i18n';
+import {IconAngleDownRight} from '../icon/icon';
 import {isAllColumnsCollapsed} from 'views/agile-board/agile-board__helper';
 
 import styles from './agile-row.styles';
@@ -116,7 +117,7 @@ export default function BoardRow(props: Props): null | Node {
             !zoomedIn ? styles.rowHeaderTextZoomedOut : null,
             isResolved && styles.issueIdResolved,
           ]}>
-            {row.id === 'orphans' ? 'Uncategorized Cards' : (row.issue && row.issue.summary || row.name)}
+            {row.id === 'orphans' ? i18n('Uncategorized Cards') : (row.issue && row.issue.summary || row.name)}
           </Text>
         </TouchableOpacity>
 

@@ -24,6 +24,7 @@ import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation, getReadableID, ytDate} from 'components/issue-formatter/issue-formatter';
 import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
 import {HIT_SLOP} from 'components/common-styles/button';
+import {i18n} from '../../components/i18n/i18n';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 
@@ -215,14 +216,14 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
             style={styles.issueTopPanelText}
             selectable={true}
           >
-            Created by {getEntityPresentation(issue.reporter)} {ytDate(issue?.created) || ''}
+            {i18n('Created by')} {getEntityPresentation(issue.reporter)} {ytDate(issue?.created) || ''}
           </Text>
 
           <Text
             style={[styles.issueTopPanelText, styles.topPanelUpdatedInformation]}
             selectable={true}
           >
-            Updated by {getEntityPresentation(issue.updater)} {ytDate(issue?.updated) || ''}
+            {i18n('Updated by')} {getEntityPresentation(issue.updater)} {ytDate(issue?.updated) || ''}
           </Text>
         </View>
         : <SkeletonIssueInfoLine lines={2}/>
@@ -462,7 +463,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
           hitSlop={HIT_SLOP}
           onPress={onSwitchToActivity}
         >
-          <Text style={styles.switchToActivityButtonText}>View comments and other activity</Text>
+          <Text style={styles.switchToActivityButtonText}>{i18n('View comments and other activity')}</Text>
         </TouchableOpacity>
 
       </ScrollView>

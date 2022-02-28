@@ -30,6 +30,7 @@ import {DEFAULT_WORK_TIME_SETTINGS} from '../time-tracking/time-tracking__defaul
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {getTextValueChange} from '../activity/activity__history-value';
 import {firstActivityChange, getActivityEventTitle} from './activity__stream-helper';
+import {i18n} from '../i18n/i18n';
 import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../icon/icon';
 import {isActivityCategory} from '../activity/activity__category';
 import {guid, isIOSPlatform} from 'util/util';
@@ -331,7 +332,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
                   }
                 }}>
                 <Text style={styles.link}>
-                  Edit
+                  {i18n('Edit')}
                 </Text>
               </TouchableOpacity>
             )}
@@ -529,7 +530,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
             </View>
           );
         })
-        : !!props.activities && <Text style={styles.activityNoActivity}>No activity yet</Text>
+        : !!props.activities && <Text style={styles.activityNoActivity}>{i18n('No activity yet')}</Text>
       }
     </>
   );

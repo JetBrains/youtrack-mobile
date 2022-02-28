@@ -136,6 +136,7 @@ export default EStyleSheet.create({
     top: -2,
   },
   activityWorkTime: {
+    marginLeft: UNIT / 2,
     color: '$icon',
     fontWeight: 'bold',
   },

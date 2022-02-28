@@ -7,6 +7,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import {sortAlphabetically} from '../search/sorting';
 import {hasType} from '../api/api__resource-types';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {i18n} from '../i18n/i18n';
 import {IconAngleDown, IconClose, IconLock} from '../icon/icon';
 import Select from '../select/select';
 import IssueVisibility from './issue-visibility';
@@ -154,7 +155,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
         accessible={true}
         multi={true}
         emptyValue={null}
-        placeholder="Filter users, groups, and teams"
+        placeholder={i18n('Filter users, groups, and teams')}
         selectedItems={this.getVisibilitySelectedItems()}
         getTitle={this.getItemTitle}
         dataSource={this.getVisibilitySelectItems}

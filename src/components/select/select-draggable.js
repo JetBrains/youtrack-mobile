@@ -3,20 +3,21 @@
 import React from 'react';
 
 import DraggableFlatList from 'react-native-draggable-flatlist';
-import type {RenderItemParams} from 'react-native-draggable-flatlist';
 
 import Select from './select';
+import SelectItem from './select__item';
+import {i18n} from '../i18n/i18n';
+import {Text} from 'react-native';
 
 import type {Node} from 'React';
-import SelectItem from './select__item';
-import {Text} from 'react-native';
+import type {RenderItemParams} from 'react-native-draggable-flatlist';
 
 
 //$FlowFixMe
 export default class SelectDraggable extends Select {
 
   renderPlaceholder: ((any) => Node) = () => {
-    return <Text>'PLACEHOLDER'</Text>;
+    return <Text>{i18n('\'PLACEHOLDER\'')}</Text>;
   }
 
   renderItem = ({ item, drag, isActive }: RenderItemParams<Item>) => {

@@ -24,6 +24,7 @@ import usage from 'components/usage/usage';
 import {connectToNewYoutrack, openDebugView} from 'actions/app-actions';
 import {formStyles} from 'components/common-styles/form';
 import {HIT_SLOP} from 'components/common-styles/button';
+import {i18n} from '../../components/i18n/i18n';
 import {logo, IconBack} from 'components/icon/icon';
 import {NETWORK_PROBLEM_TIPS} from 'components/error-message/error-text-messages';
 import {resolveErrorMessage} from 'components/error/error-resolver';
@@ -183,7 +184,7 @@ export class EnterServer extends Component<Props, State> {
                   </TouchableWithoutFeedback>
 
                   <View testID="enterServerHint">
-                    <Text style={styles.title}>Enter your YouTrack server URL</Text>
+                    <Text style={styles.title}>{i18n('Enter your YouTrack server URL')}</Text>
                   </View>
 
                   <TextInput
@@ -195,7 +196,7 @@ export class EnterServer extends Component<Props, State> {
                     autoFocus={true}
                     selectTextOnFocus={true}
                     autoCorrect={false}
-                    placeholder="youtrack-server.com:PORT"
+                    placeholder={i18n('youtrack-server.com:PORT')}
                     placeholderTextColor={styles.placeholder.color}
                     returnKeyType="done"
                     keyboardType="url"
@@ -211,7 +212,7 @@ export class EnterServer extends Component<Props, State> {
                     accessibilityLabel="next"
                     accessible={true}
                     onPress={() => this.onApplyServerUrlChange()}>
-                    <Text style={[formStyles.buttonText, isDisabled && formStyles.buttonTextDisabled]}>Next</Text>
+                    <Text style={[formStyles.buttonText, isDisabled && formStyles.buttonTextDisabled]}>{i18n('Next')}</Text>
                     {connecting && <ActivityIndicator style={styles.progressIndicator}/>}
                   </TouchableOpacity>
 
@@ -246,7 +247,7 @@ export class EnterServer extends Component<Props, State> {
                     hitSlop={hitSlop}
                     onPress={() => Linking.openURL('https://youtrack-support.jetbrains.com/hc/en-us/requests/new')}
                   >
-                    <Text style={formStyles.link}>Contact support</Text>
+                    <Text style={formStyles.link}>{i18n('Contact support')}</Text>
                   </TouchableOpacity>
                 </View>
 
