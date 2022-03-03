@@ -13,7 +13,7 @@ import Select from 'components/select/select';
 import Separator from 'components/separator/separator';
 import usage from 'components/usage/usage';
 import {ANALYTICS_ARTICLE_PAGE} from 'components/analytics/analytics-ids';
-import {i18n} from '../../components/i18n/i18n';
+import {i18n, i18nPlural} from '../../components/i18n/i18n';
 import {IconAdd, IconAngleRight, IconBack, IconClose} from 'components/icon/icon';
 import {logEvent} from 'components/log/log-helper';
 import {routeMap} from '../../app-routes';
@@ -140,7 +140,12 @@ const ArticleDetails = (props: Props) => {
           {hasSubArticles && <View style={styles.subArticlesContent}>
             <Text
               style={styles.subArticleItemText}>
-              {`${article?.childArticles?.length} ${article?.childArticles?.length > 1 ? i18n('articles') : i18n('article')}`}
+              {i18nPlural(
+                article?.childArticles?.length,
+                '{{amount}} article',
+                '{{amount}} articles',
+                {amount: article?.childArticles?.length}
+              )}
             </Text>
             <IconAngleRight
               size={18}

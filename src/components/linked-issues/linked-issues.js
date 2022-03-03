@@ -10,7 +10,7 @@ import IssueRow from 'views/issues/issues__row';
 import LinkedIssuesAddLink from './linked-issues-add-link';
 import Router from '../router/router';
 import {createLinksList} from './linked-issues-helper';
-import {i18n} from '../i18n/i18n';
+import {i18n, i18nPlural} from '../i18n/i18n';
 import {IconAdd, IconBack, IconClose} from '../icon/icon';
 import {ThemeContext} from '../theme/theme-context';
 
@@ -127,13 +127,20 @@ const LinkedIssues = (props: Props): Node => {
   };
 
   const renderSectionTitle = (it: { section: LinksListData, ... }) => {
-    const amount: number = it.section.data.length;
+    const section: LinksListData = it.section;
+    const issuesAmount: number = section.data.length;
     return (
       <Text
         numberOfLines={1}
         style={styles.linkedIssueTypeTitle}>
-        {`${it.section.title} ${it.section.data.length} ${amount > 1 ? i18n('issues') : i18n('issue')}`}
-        {it.section?.unresolvedIssuesSize > 0 ? ` (${it.section.unresolvedIssuesSize} unresolved)` : ''}
+        {`${section.title} `}
+        {i18nPlural(
+          issuesAmount,
+          `{{issuesAmount}} issue`,
+          `{{issuesAmount}} issues`,
+          {issuesAmount}
+        )}
+        {section?.unresolvedIssuesSize > 0 ? i18n(' ({{amount}} unresolved)') : null}
       </Text>
     );
   };
