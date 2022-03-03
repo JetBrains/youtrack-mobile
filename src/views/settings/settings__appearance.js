@@ -39,7 +39,7 @@ const SettingsAppearance = (props: Props): Node => {
       >
         <View style={styles.settingsListItemOption}>
           <Text style={styles.settingsListItemOptionText}>
-            {`${uiTheme.name} ${i18n('theme')}`}
+            {i18n('{{themeName}} theme', {themeName: uiTheme.name})}
             {uiTheme.system && <Text style={styles.settingsListItemOptionTextSecondary}>{` (${uiTheme.mode})`}</Text>}
           </Text>
           {isChecked && <IconCheck size={20} color={currentTheme.uiTheme.colors.$link}/>}
