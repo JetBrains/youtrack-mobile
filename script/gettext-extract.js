@@ -17,6 +17,13 @@ extractor
         context: 1,
       },
     }),
+    JsExtractors.callExpression('i18nPlural', {
+      arguments: {
+        text: 1,
+        textPlural: 2,
+        context: 3,
+      },
+    }),
   ])
   .parseFilesGlob('./src/**/!(*.spec).js');
 
