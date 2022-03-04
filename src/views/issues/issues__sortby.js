@@ -115,7 +115,7 @@ const IssuesSortBy = (props: Props) => {
               style={[styles.toolbarText, styles.toolbarSortByText]}
               numberOfLines={1}
             >
-              {i18n('Sort by')} {createSortButtonTitle(selectedSortProperties)}
+              {i18n('Sorted by')} {createSortButtonTitle(selectedSortProperties)}
             </Text>
             <IconAngleDown size={20} color={styles.toolbarText.color}/>
           </TouchableOpacity>
