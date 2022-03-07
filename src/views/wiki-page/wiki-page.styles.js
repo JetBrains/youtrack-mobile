@@ -4,15 +4,14 @@ import {headerTitle, monospace, SECONDARY_FONT_SIZE} from 'components/common-sty
 
 
 export default EStyleSheet.create({
-  headerTitle: {
-    ...headerTitle,
-  },
+  headerTitle: headerTitle,
   container: {
     flex: 1,
-    backgroundColor: '$background',
   },
-  wiki: {
-    paddingHorizontal: UNIT * 2,
+  content: {
+    flexGrow: 1,
+    paddingTop: UNIT,
+    paddingLeft: UNIT,
   },
   plainText: {
     color: '$text',

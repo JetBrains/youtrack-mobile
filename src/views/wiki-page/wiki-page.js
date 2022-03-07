@@ -103,10 +103,9 @@ export default class WikiPage extends PureComponent<Props, State> {
           return (
             <SafeAreaView style={[styles.container, {backgroundColor: theme.uiTheme.colors.$background}]}>
               <View
-                testID="wikiPage"
                 style={styles.container}
+                testID="wikiPage"
               >
-
                 <Header
                   showShadow={true}
                   leftButton={<IconClose size={21} color={theme.uiTheme.colors.$link}/>}
@@ -116,21 +115,20 @@ export default class WikiPage extends PureComponent<Props, State> {
                 </Header>
 
                 <ScrollView
+                  contentContainerStyle={styles.container}
                   scrollEventThrottle={100}
                   onScroll={(params) => this.onScroll(params.nativeEvent)}
-                  contentContainerStyle={styles.container}
                 >
-                  <ScrollView
-                    horizontal={true}
-                    scrollEventThrottle={100}
-                    style={styles.container}
-                  >
-                    <View style={styles.wiki}>
+                  <View style={styles.content}>
+                    <ScrollView
+                      horizontal={true}
+                      scrollEventThrottle={100}
+                    >
                       {wikiText && this._renderWiki(theme.uiTheme)}
                       {Boolean(!wikiText && plainText) && this._renderPlainText()}
-                    </View>
 
-                  </ScrollView>
+                    </ScrollView>
+                  </View>
                 </ScrollView>
               </View>
             </SafeAreaView>
