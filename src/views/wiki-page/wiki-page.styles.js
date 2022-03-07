@@ -9,14 +9,9 @@ export default EStyleSheet.create({
   },
   container: {
     flex: 1,
-    flexDirection: 'column',
     backgroundColor: '$background',
   },
-  scrollContent: {
-    flexGrow: 1,
-  },
   wiki: {
-    paddingVertical: UNIT,
     paddingHorizontal: UNIT * 2,
   },
   plainText: {

@@ -1,27 +1,25 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React, {PureComponent} from 'react';
 import {View, Text, ScrollView} from 'react-native';
 
-import type {Attachment} from 'flow/CustomFields';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
-import {getApi} from 'components/api/api__instance';
-import usage from 'components/usage/usage';
 import Header from 'components/header/header';
-import YoutrackWiki from 'components/wiki/youtrack-wiki';
-import Router from 'components/router/router';
 import LongText from 'components/wiki/text-renderer';
+import Router from 'components/router/router';
+import usage from 'components/usage/usage';
+import YoutrackWiki from 'components/wiki/youtrack-wiki';
+import {getApi} from 'components/api/api__instance';
 import {IconClose} from 'components/icon/icon';
-
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {ThemeContext} from 'components/theme/theme-context';
-
 import {UNIT} from 'components/variables/variables';
-import {elevation1} from 'components/common-styles/shadow';
+
 import styles from './wiki-page.styles';
 
+import type {Attachment} from 'flow/CustomFields';
+import type {Node} from 'React';
 import type {Theme, UITheme} from 'flow/Theme';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 const CATEGORY_NAME = 'WikiPage';
 
@@ -69,18 +67,6 @@ export default class WikiPage extends PureComponent<Props, State> {
     this.setState({isPinned: nativeEvent.contentOffset.y >= UNIT});
   };
 
-  _renderHeader(uiTheme: UITheme) {
-    return (
-      <Header
-        style={this.state.isPinned ? elevation1 : null}
-        leftButton={<IconClose size={21} color={uiTheme.colors.$link}/>}
-        onBack={this.onBack}
-      >
-        <Text style={styles.headerTitle} selectable={true}>{this.props.title}</Text>
-      </Header>
-    );
-  }
-
   _renderWiki(uiTheme: UITheme) {
     const {wikiText, attachments, onIssueIdTap} = this.props;
     const auth = getApi().auth;
@@ -115,31 +101,39 @@ export default class WikiPage extends PureComponent<Props, State> {
       <ThemeContext.Consumer>
         {(theme: Theme) => {
           return (
-            <View
-              testID="wikiPage"
-              style={styles.container}
-            >
-
-              {this._renderHeader(theme.uiTheme)}
-
-              <ScrollView
-                scrollEventThrottle={100}
-                onScroll={(params) => this.onScroll(params.nativeEvent)}
-                style={styles.scrollContent}
+            <SafeAreaView style={[styles.container, {backgroundColor: theme.uiTheme.colors.$background}]}>
+              <View
+                testID="wikiPage"
+                style={styles.container}
               >
-                <ScrollView
-                  horizontal={true}
-                  scrollEventThrottle={100}
-                  contentContainerStyle={styles.scrollContent}
-                >
-                  <View style={styles.wiki}>
-                    {wikiText && this._renderWiki(theme.uiTheme)}
-                    {Boolean(!wikiText && plainText) && this._renderPlainText()}
-                  </View>
 
+                <Header
+                  showShadow={true}
+                  leftButton={<IconClose size={21} color={theme.uiTheme.colors.$link}/>}
+                  onBack={this.onBack}
+                >
+                  <Text style={styles.headerTitle} selectable={true}>{this.props.title}</Text>
+                </Header>
+
+                <ScrollView
+                  scrollEventThrottle={100}
+                  onScroll={(params) => this.onScroll(params.nativeEvent)}
+                  contentContainerStyle={styles.container}
+                >
+                  <ScrollView
+                    horizontal={true}
+                    scrollEventThrottle={100}
+                    style={styles.container}
+                  >
+                    <View style={styles.wiki}>
+                      {wikiText && this._renderWiki(theme.uiTheme)}
+                      {Boolean(!wikiText && plainText) && this._renderPlainText()}
+                    </View>
+
+                  </ScrollView>
                 </ScrollView>
-              </ScrollView>
-            </View>
+              </View>
+            </SafeAreaView>
           );
         }}
       </ThemeContext.Consumer>
