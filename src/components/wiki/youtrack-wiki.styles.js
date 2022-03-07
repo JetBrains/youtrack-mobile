@@ -61,7 +61,6 @@ export default EStyleSheet.create({
     marginBottom: UNIT,
   },
   codeContent: {
-    paddingTop: 0,
     padding: UNIT,
     backgroundColor: '$boxBackground',
   },
