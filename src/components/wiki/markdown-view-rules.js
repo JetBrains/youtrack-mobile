@@ -246,7 +246,15 @@ function getMarkdownRules(
               scrollEventThrottle={100}
             >
               {isStacktraceOrException && <LongText style={styles.exception}>{content}</LongText>}
-              {!isStacktraceOrException && <Text selectable={true} key={node.key}>{renderCode({content}, language, uiTheme)}</Text>}
+              {!isStacktraceOrException && (
+                <Text
+                  onStartShouldSetResponder={() => true}
+                  selectable={true}
+                  key={node.key}
+                >
+                  {renderCode({content}, language, uiTheme)}
+                </Text>
+              )}
             </ScrollView>
           </ScrollView>}
         </View>

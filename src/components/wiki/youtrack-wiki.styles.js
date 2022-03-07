@@ -61,6 +61,7 @@ export default EStyleSheet.create({
     marginBottom: UNIT,
   },
   codeContent: {
+    paddingTop: 0,
     padding: UNIT,
     backgroundColor: '$boxBackground',
   },
@@ -86,6 +87,7 @@ export default EStyleSheet.create({
     color: '$text',
     fontSize: SECONDARY_FONT_SIZE,
     lineHeight: mainText.lineHeight,
+    maxHeight: 600,
   },
   checkboxRow: {
     flexDirection: 'row',
