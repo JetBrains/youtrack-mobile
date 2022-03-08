@@ -17,4 +17,7 @@ export default EStyleSheet.create({
     fontSize: SECONDARY_FONT_SIZE,
     ...monospace,
   },
+  icon: {
+    color: '$iconAccent',
+  },
 });
