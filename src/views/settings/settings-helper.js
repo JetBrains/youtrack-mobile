@@ -1,6 +1,7 @@
 /* @flow */
 
 import {getAppAndDeviceData, getDeviceLogs, sendReport} from 'components/error/error-reporter';
+import {i18n} from 'components/i18n/i18n';
 
 export type FeedbackType = { title: string, marker: string };
 export type FeedbackLogs = { title: string, value: boolean };
@@ -15,13 +16,13 @@ export type FeedbackData = {
 
 const feedbackTypeMarker: string = '[InAppFeedback]';
 export const feedbackTypeOptions: Array<FeedbackType> = [
-  {title: 'Problem', marker: feedbackTypeMarker},
-  {title: 'Feature request', marker: feedbackTypeMarker},
-  {title: 'Other', marker: feedbackTypeMarker},
+  {title: i18n('Problem'), marker: feedbackTypeMarker},
+  {title: i18n('Feature request'), marker: feedbackTypeMarker},
+  {title: i18n('Other'), marker: feedbackTypeMarker},
 ];
 export const feedbackLogsOptions: Array<FeedbackLogs> = [
-  {title: 'Don\'t send logs', value: false},
-  {title: 'Send logs', value: true},
+  {title: i18n('Don\'t send logs'), value: false},
+  {title: i18n('Send logs'), value: true},
 ];
 
 export const sendFeedback = async (feedbackData: FeedbackData): Promise<string> => {

@@ -365,7 +365,7 @@ class AgileBoard extends Component<Props, State> {
       return <ErrorMessage
         style={styles.error}
         errorMessageData={{
-          title: `The board ${boardName} has configuration errors`,
+          title: i18n('The board {{boardName}} has configuration errors', {boardName}),
           description: agileErrors,
           icon: IconException,
           iconSize: 56,

@@ -145,7 +145,7 @@ const showArticleActions = (
     logEvent({message: 'Show article actions', analyticsId: ANALYTICS_ARTICLE_PAGE});
     const actions = [
       {
-        title: 'Share…',
+        title: i18n('Share…'),
         execute: () => {
           const msg: string = i18n('Share article URL');
           if (isIOSPlatform()) {
@@ -157,7 +157,7 @@ const showArticleActions = (
         },
       },
       {
-        title: 'Copy article URL',
+        title: i18n('Copy article URL'),
         execute: () => {
           Clipboard.setString(url);
           logEvent({message: i18n('Copy article URL'), analyticsId: ANALYTICS_ARTICLE_PAGE});
@@ -186,7 +186,7 @@ const showArticleActions = (
 
     if (canUpdate) {
       actions.push({
-        title: 'Edit',
+        title: i18n('Edit'),
         execute: async () => {
           logEvent({
             message: 'Edit article',
@@ -208,7 +208,7 @@ const showArticleActions = (
 
     if (canDelete) {
       actions.push({
-        title: 'Delete',
+        title: i18n('Delete'),
         execute: async () => {
           logEvent({
             message: 'Delete article',
@@ -222,7 +222,7 @@ const showArticleActions = (
       });
     }
 
-    actions.push({title: 'Cancel'});
+    actions.push({title: i18n('Cancel')});
 
     const selectedAction = await showActions(actions, actionSheet);
 
@@ -418,7 +418,7 @@ const showArticleCommentActions = (
     const commentText = comment.text;
     const options: Array<ActionSheetOption> = [
       {
-        title: 'Share…',
+        title: i18n('Share…'),
         execute: function (): string {
           const params: Object = {};
           const isIOS: boolean = isIOSPlatform();
@@ -429,13 +429,13 @@ const showArticleCommentActions = (
             params.title = commentText;
             params.message = url;
           }
-          Share.share(params, {dialogTitle: 'Share URL'});
+          Share.share(params, {dialogTitle: i18n('Share URL')});
           logEvent({message: 'Share article', analyticsId: ANALYTICS_ARTICLE_PAGE});
           return this.title;
         },
       },
       {
-        title: 'Copy URL',
+        title: i18n('Copy URL'),
         execute: function (): string {
           logEvent({message: 'Copy article URL', analyticsId: ANALYTICS_ARTICLE_PAGE});
           Clipboard.setString(url);
@@ -446,7 +446,7 @@ const showArticleCommentActions = (
 
     if (canDeleteComment) {
       options.push({
-        title: 'Delete',
+        title: i18n('Delete'),
         execute: function () {
           logEvent({message: 'Delete article', analyticsId: ANALYTICS_ARTICLE_PAGE});
           dispatch(deleteArticleComment(comment.id));
@@ -455,7 +455,7 @@ const showArticleCommentActions = (
       });
     }
 
-    options.push({title: 'Cancel'});
+    options.push({title: i18n('Cancel')});
 
     const selectedAction = await showActionSheet(
       options,

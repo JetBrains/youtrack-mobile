@@ -17,7 +17,7 @@ const ISSUE_PROJECT_FIELDS: any = toField([
       timeTrackingSettings: toField([
         'enabled',
         {
-          timeSpent: toField(['id', 'field(id,name)']),
+          timeSpent: toField(['id', 'field(id,name,localizedName)']),
         },
       ]),
     },
@@ -34,12 +34,14 @@ const ISSUE_USER_FIELDS: any = toField([
   'ringId',
   'avatarUrl',
   'name',
+  'localizedName',
 ]);
 
 const BUNDLE_VALUE: any = toField([
   '$type',
   'id',
   'name',
+  'localizedName',
   'description',
   'ordinal',
   'ringId', // for user bundle elements
@@ -59,6 +61,7 @@ const ISSUE_FIELD_VALUE = toField([
       '$type',
       'id',
       'name',
+      'localizedName',
       'ringId',
       'fullName',
       'avatarUrl',
@@ -90,6 +93,7 @@ const PROJECT_CUSTOM_FIELD_FIELDS = toField([
     field: [
       'id',
       'name',
+      'localizedName',
       'ordinal',
       {
         fieldType: ['valueType', 'isMultiValue'],
@@ -104,6 +108,7 @@ const ISSUE_FIELD_FIELDS = toField([
   '$type',
   'id',
   'name',
+  'localizedName',
   'hasStateMachine',
 
   ISSUE_FIELD_VALUE,
@@ -116,11 +121,13 @@ const ISSUE_FIELD_FIELDS = toField([
 const ISSUE_FIELD_SHORT_FIELDS = toField([
   'id',
   'name',
+  'localizedName',
   '$type',
   {
     value: [
       'id',
       'name',
+      'localizedName',
       'ringId',
       'avatarUrl',
       'login',
@@ -133,7 +140,7 @@ const ISSUE_FIELD_SHORT_FIELDS = toField([
   {
     projectCustomField: [
       {
-        field: ['id', 'name'],
+        field: ['id', 'name', 'localizedName'],
       },
     ],
   },
@@ -141,6 +148,7 @@ const ISSUE_FIELD_SHORT_FIELDS = toField([
 
 const ISSUE_TAGS_FIELDS: any = toField([
   'name',
+  'localizedName',
   'id',
   'query',
   {
@@ -151,6 +159,7 @@ const ISSUE_TAGS_FIELDS: any = toField([
 const ISSUE_ATTACHMENTS_FIELDS: any = toField([
   'id',
   'name',
+  'localizedName',
   'url',
   'thumbnailURL',
   'mimeType',
@@ -163,6 +172,7 @@ const USER_GROUP_FIELDS = toField([
   '$type',
   'id',
   'name',
+  'localizedName',
   'allUsersGroup',
 ]);
 
@@ -281,6 +291,7 @@ const ISSUE_LINKS_FIELDS: any = toField([
 const ISSUE_FOLDER_FIELDS: any = toField([
   'id',
   'name',
+  'localizedName',
   'query',
   'isUpdatable',
   {owner: ['id', 'ringId']},
@@ -323,7 +334,7 @@ const ISSUE_WORK_ITEMS_DURATION_FIELDS = toField([
 ]);
 
 const ISSUE_WORK_ITEMS_BASE_FIELDS: any = toField({
-  type: ['name', 'id'],
+  type: ['name', 'localizedName', 'id'],
   creator: ISSUE_USER_FIELDS,
   author: ISSUE_USER_FIELDS,
   issue: ['id,project(id,ringId)'],
@@ -334,6 +345,7 @@ const ISSUE_WORK_ITEMS_FIELDS: any = toField([
   'id',
   'text',
   'name',
+  'localizedName',
   'date',
   'usesMarkdown',
   ISSUE_WORK_ITEMS_BASE_FIELDS,
@@ -390,6 +402,7 @@ export default {
   project: (toField([
     'id',
     'name',
+    'localizedName',
     'shortName',
     'description',
     {leader: ISSUE_USER_FIELDS},

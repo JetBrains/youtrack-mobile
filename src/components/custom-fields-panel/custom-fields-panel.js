@@ -530,7 +530,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
                 disabled={!hasPermission.canEditProject}
                 onPress={this.onSelectProject}
                 active={isEditingProject}
-                field={createNullProjectCustomField(issueProject.name, 'Project')}
+                field={createNullProjectCustomField(issueProject.name, i18n('Project'))}
               />
               {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
             </View>

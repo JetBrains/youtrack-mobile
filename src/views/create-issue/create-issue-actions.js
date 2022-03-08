@@ -328,13 +328,13 @@ export function showContextActions(actionSheet: typeof ActionSheetProvider): ((
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const selectedAction: ActionSheetOption = await showActions([
       {
-        title: 'Apply command…',
+        title: i18n('Apply command…'),
         execute: () => {
           dispatch(toggleCommandDialog(true));
           usage.trackEvent(ANALYTICS_ISSUE_CREATE_PAGE, 'Apply command');
         },
       },
-      {title: 'Cancel'},
+      {title: i18n('Cancel')},
     ], actionSheet);
 
     if (selectedAction && selectedAction.execute) {

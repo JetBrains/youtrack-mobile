@@ -17,7 +17,7 @@ import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {getApi} from '../api/api__instance';
 import {hasMimeType} from '../mime-type/mime-type';
 import {HIT_SLOP} from '../common-styles/button';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconCamera, IconCheck, IconClose} from '../icon/icon';
 import {isSplitView} from '../responsive/responsive-helper';
 import {logEvent} from '../log/log-helper';
@@ -38,14 +38,14 @@ import type {Visibility} from 'flow/Visibility';
 export const attachFileActions: Array<ActionSheetAction> = [
   {
     id: attachFileMethod.openPicker,
-    title: 'Choose from library…',
+    title: i18n('Choose from library…'),
     icon: IconAttachment,
     iconSize: 22,
     execute: () => {},
   },
   {
     id: attachFileMethod.openCamera,
-    title: 'Take a picture…',
+    title: i18n('Take a picture…'),
     icon: IconCamera,
     iconSize: 18,
     execute: () => {},

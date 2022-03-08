@@ -76,15 +76,15 @@ const StreamVCS = (props: Props) => {
     switch (firstChange?.state?.id) {
     case pullRequestState.OPEN: {
       const reopened = firstChange.reopened;
-      title = reopened ? 'reopened the pull request' : 'submitted a pull request';
+      title = reopened ? i18n('reopened the pull request') : i18n('submitted a pull request');
       break;
     }
     case pullRequestState.MERGED: {
-      title = 'merged the pull request';
+      title = i18n('merged the pull request');
       break;
     }
     case pullRequestState.DECLINED: {
-      title = 'closed the pull request';
+      title = i18n('closed the pull request');
     }
     }
   }

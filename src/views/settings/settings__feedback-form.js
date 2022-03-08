@@ -93,7 +93,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
           }),
         }
       );
-    }).concat({title: 'Cancel'});
+    }).concat({title: i18n('Cancel')});
   };
 
   renderContextActions: ((isType: boolean) => Promise<void>) = async (isType: boolean) => {
@@ -145,7 +145,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
       <>
         <Header
           style={styles.elevation1}
-          title="Send Feedback"
+          title={i18n('Send Feedback')}
           leftButton={<IconClose size={21} color={isFeedbackFormSending ? uiThemeColors.$disabled : uiThemeColors.$link}/>}
           onBack={() => !isFeedbackFormSending && this.close()}
           extraButton={(

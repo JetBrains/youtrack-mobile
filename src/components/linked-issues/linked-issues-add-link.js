@@ -202,7 +202,7 @@ const LinkedIssuesAddLink = (props: Props): Node => {
         testID="test:id/link-issue-button"
         accessibilityLabel="link-issue-button"
         accessible={true}
-        title="Link issue"
+        title={i18n('Link issue')}
         showShadow={true}
         leftButton={props.closeIcon || <IconBack color={styles.link.color}/>}
         onBack={props.onHide}

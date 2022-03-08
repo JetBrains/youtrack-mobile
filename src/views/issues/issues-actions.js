@@ -151,7 +151,7 @@ export function openSavedSearchesSelect(): ((dispatch: (any) => any, getState: (
             title: null,
             data: filterArrayByType((issueFolders: any), 'savedSearch'),
           }, {
-            title: 'Recent searches',
+            title: i18n('Recent searches'),
             data: folders,
           }];
         } catch (e) {

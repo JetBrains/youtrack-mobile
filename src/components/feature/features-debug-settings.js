@@ -36,7 +36,7 @@ const FeaturesDebugSettings = (props: Props): Node => {
           showShadow={true}
           leftButton={<IconClose size={21} color={styles.closeButton.color} style={styles.closeButton}/>}
           onBack={onHide}
-          title="Debug settings"
+          title={i18n('Debug settings')}
         />
 
         <ScrollView>

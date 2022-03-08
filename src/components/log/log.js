@@ -4,6 +4,8 @@ import {Share} from 'react-native';
 
 import deviceLog, {InMemoryAdapter} from 'react-native-device-log';
 
+import {i18n} from 'components/i18n/i18n';
+
 deviceLog.init(new InMemoryAdapter(), {
   logToConsole : true,
   logRNErrors : true,
@@ -46,5 +48,5 @@ export async function getLogs(): Promise<string> {
 
 export async function copyRawLogs() {
   const logs = await getLogs();
-  Share.share({itle: 'YouTrack Mobile render crash logs', message: logs}, {dialogTitle: 'Share issue URL'});
+  Share.share({title: i18n('YouTrack Mobile render crash logs'), message: logs}, {dialogTitle: i18n('Share issue URL')});
 }

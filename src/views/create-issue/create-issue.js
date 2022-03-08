@@ -244,7 +244,7 @@ class CreateIssue extends PureComponent<Props, State> {
             ? (linkedIssue: AnyIssue) => issuePermissions.canLink(linkedIssue)
             : undefined
         )}
-        subTitle="Current issue"
+        subTitle={i18n('Current issue')}
         onHide={onHide}
         onAddLink={(renderChildren: (() => any) => any) => {
           if (isSplitView) {
@@ -370,7 +370,7 @@ class CreateIssue extends PureComponent<Props, State> {
               style={styles.container}
             >
               <Header
-                title="New Issue"
+                title={i18n('New Issue')}
                 showShadow={true}
                 leftButton={<IconClose size={21} color={uiThemeColors.$link}/>}
                 onBack={this.onHide}

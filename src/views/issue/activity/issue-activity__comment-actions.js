@@ -282,7 +282,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
       return async (dispatch: (any) => any) => {
         const contextActions = [
           {
-            title: 'Copy text',
+            title: i18n('Copy text'),
             execute: () => {
               Clipboard.setString(comment.text);
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment text');
@@ -290,7 +290,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
             },
           },
           {
-            title: 'Copy URL',
+            title: i18n('Copy URL'),
             execute: () => {
               dispatch(actions.copyCommentUrl(comment));
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment URL');
@@ -299,7 +299,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
         ];
         if (typeof updateComment === 'function') {
           contextActions.push({
-            title: 'Edit',
+            title: i18n('Edit'),
             execute: () => {
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Edit comment');
               updateComment(comment);
@@ -308,14 +308,14 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
         }
         if (canDeleteComment) {
           contextActions.push({
-            title: 'Delete',
+            title: i18n('Delete'),
             execute: () => {
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Delete comment');
               dispatch(actions.deleteComment(comment));
             },
           });
         }
-        contextActions.push({title: 'Cancel'});
+        contextActions.push({title: i18n('Cancel')});
 
         const selectedAction = await showActions(
           contextActions,

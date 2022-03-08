@@ -246,7 +246,7 @@ class Inbox extends Component<Props, State> {
   renderTextDiff(event: ChangeEvent, title: ?string) {
     return (
       <Diff
-        title={title || 'Details'}
+        title={title || i18n('Details')}
         text1={this.getChangeValue(event.removedValues[0])}
         text2={this.getChangeValue(event.addedValues[0])}
       />
@@ -282,7 +282,7 @@ class Inbox extends Component<Props, State> {
   }
 
   renderEventItem(event: ChangeEvent) {
-    const textChangeEventName = (e: ChangeEvent) => `${e.name} changed`;
+    const textChangeEventName = (e: ChangeEvent) => i18n('{{eventName}} changed', {eventName: e.name});
     const renderEventName = (e: ChangeEvent) => <Text style={styles.textSecondary}>{e.name}: </Text>;
 
     if (!this.hasAddedValues(event) && !this.hasRemovedValues(event)) {
@@ -495,7 +495,7 @@ class Inbox extends Component<Props, State> {
               {!added && <View style={styles.reactionIconRemoved}/>}
             </View>
           }
-          additionalInfo={`\n${reactionData.added ? 'added a reaction' : 'removed a reaction'}`}
+          additionalInfo={`\n${reactionData.added ? i18n('added a reaction') : i18n('removed a reaction')}`}
           style={[styles.userInfo, styles.userInfoReaction]}
           timestamp={timestamp}
           user={reaction.author}

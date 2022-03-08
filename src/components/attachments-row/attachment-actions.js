@@ -257,7 +257,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
     createAttachActions: function (dispatch: (Function) => any): Array<ActionSheetAction> {
       return [
         {
-          title: 'Choose from library…',
+          title: i18n('Choose from library…'),
           icon: IconAttachment,
           execute: () => {
             logEvent({
@@ -268,7 +268,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           },
         },
         {
-          title: 'Take a picture…',
+          title: i18n('Take a picture…'),
           icon: IconCamera,
           execute: () => {
             logEvent({

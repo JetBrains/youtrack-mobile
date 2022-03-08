@@ -372,15 +372,15 @@ const showContextActions = (
   async () => {
     const actions: Array<ActionSheetOption> = [
       {
-        title: 'Manage Favorite Projects',
+        title: i18n('Manage Favorite Projects'),
         execute: onShowMoreProjects,
       },
-      {title: 'Cancel'},
+      {title: i18n('Cancel')},
     ];
 
     if (canCreateArticle && getStorageState().projects.some((it:ArticleProject) => it.pinned)) {
       actions.unshift({
-        title: 'New Article',
+        title: i18n('New Article'),
         execute: onCreateArticle,
       });
     }

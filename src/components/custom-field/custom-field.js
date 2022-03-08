@@ -55,7 +55,13 @@ export default class CustomField extends Component<Props, void> {
 
   _getKey() {
     const field: CustomFieldType = this.props.field;
-    return field?.projectCustomField?.field?.name || field?.name || '';
+    return (
+      field?.projectCustomField?.field?.localizedName ||
+      field?.localizedName ||
+      field?.projectCustomField?.field?.name ||
+      field?.name ||
+      ''
+    );
   }
 
   _renderColorMaker(value: ?FieldValue | ?Array<FieldValue>) {

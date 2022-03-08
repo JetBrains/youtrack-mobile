@@ -16,6 +16,7 @@ import SettingsAppearance from './settings__appearance';
 import SettingsFeedbackForm from './settings__feedback-form';
 import usage, {VERSION_STRING} from 'components/usage/usage';
 import {HIT_SLOP} from 'components/common-styles/button';
+import {i18n} from 'components/i18n/i18n';
 import {IconBack, IconClose} from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {ThemeContext} from 'components/theme/theme-context';
@@ -102,7 +103,7 @@ class Settings extends PureComponent<Props, State> {
         {(theme: Theme) => {
           const uiTheme: UITheme = theme.uiTheme;
           const settingItems: Array<{ title: string, onPress: Function }> = [{
-            title: 'Appearance',
+            title: i18n('Appearance'),
             onPress: () => {
               const backIcon: any = (
                 isSplitView()
@@ -116,10 +117,10 @@ class Settings extends PureComponent<Props, State> {
                   children: <SettingsAppearance onHide={() => Router.pop()}/>});
               }},
           }, {
-            title: 'Share logs',
+            title: i18n('Share logs'),
             onPress: openDebugView,
           }, {
-            title: 'Send feedback',
+            title: i18n('Send feedback'),
             onPress: () => Router.PageModal({children: <SettingsFeedbackForm uiTheme={uiTheme}/>}),
           }];
 
@@ -128,7 +129,7 @@ class Settings extends PureComponent<Props, State> {
               testID="settings"
               style={styles.settings}
             >
-              <Header title="Settings"/>
+              <Header title={i18n('Settings')}/>
 
               <View style={styles.settingsContent}>
                 <Accounts
@@ -138,7 +139,7 @@ class Settings extends PureComponent<Props, State> {
                   onLogOut={onLogOut}
                   openDebugView={() => clicksToShowCounter(
                     () => Router.PageModal({children: <FeaturesDebugSettings/>}),
-                    'open debug settings'
+                    i18n('open debug settings')
                   )}
                   otherAccounts={otherAccounts}
                   isChangingAccount={isChangingAccount}

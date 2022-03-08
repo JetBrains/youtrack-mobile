@@ -4,6 +4,7 @@ import {View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import ColorField from 'components/color-field/color-field';
+import {i18n} from 'components/i18n/i18n';
 import {showActions} from '../action-sheet/action-sheet';
 
 import styles from './tags.styles';
@@ -39,17 +40,17 @@ export default class Tags extends PureComponent<Props, void> {
   getContextActions(tag: Tag): Array<{execute?: () => any, title: string}> {
     const actions: Array<{ title: string, execute?: () => any }> = [
       {
-        title: `Show all issues tagged with "${tag.name}"...`,
+        title: i18n('Show all issues tagged with "{{tagName}}"...', {tagName: tag.name}),
         execute: () => this.props.onTagPress(tag.query),
       },
     ];
     if (this.props.onTagRemove) {
       actions.push({
-        title: 'Remove tag',
+        title: i18n('Remove tag'),
         execute: () => this.props.onTagRemove && this.props.onTagRemove(tag.id),
       });
     }
-    actions.push({title: 'Cancel'});
+    actions.push({title: i18n('Cancel')});
     return actions;
   }
 

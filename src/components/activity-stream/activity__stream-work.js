@@ -106,13 +106,13 @@ const StreamWork = (props: Props) => {
 
     if (workPermissions.canUpdate) {
       options.push({
-        title: 'Edit',
+        title: i18n('Edit'),
         execute: () => props?.onEdit && props.onEdit(work),
       });
     }
     if (workPermissions.canDelete) {
       options.push({
-        title: 'Delete',
+        title: i18n('Delete'),
         execute: () => {
           logEvent({
             message: 'SpentTime: actions:delete',
@@ -125,7 +125,7 @@ const StreamWork = (props: Props) => {
       });
     }
 
-    options.push({title: 'Cancel'});
+    options.push({title: i18n('Cancel')});
 
     const selectedAction = await showActionSheet(options, showActionSheetWithOptions);
     if (selectedAction && selectedAction.execute) {

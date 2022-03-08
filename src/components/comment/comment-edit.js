@@ -534,7 +534,7 @@ const IssueCommentEdit = (props: Props) => {
         {!state.mentionsVisible && (
           <Header
             style={styles.commentEditHeader}
-            title="Edit comment"
+            title={i18n('Edit comment')}
             leftButton={<IconClose size={21} color={isSaving ? styles.disabled.color : styles.link.color}/>}
             onBack={() => !isSaving && closeModal()}
             rightButton={

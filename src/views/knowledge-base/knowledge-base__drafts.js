@@ -125,7 +125,7 @@ const KnowledgeBaseDrafts = (props: Props) => {
           style={styles.noDrafts}
         >
           <ErrorMessage errorMessageData={{
-            title: 'No drafts yet',
+            title: i18n('No drafts yet'),
             icon: () => <IconKnowledgeBase color={styles.actionBarButtonText.color} size={81}/>,
           }}/>
 

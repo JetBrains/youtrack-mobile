@@ -3,6 +3,7 @@
 import log from '../log/log';
 import {checkVersion, FEATURE_VERSION} from '../feature/feature';
 import {getStorageState} from '../storage/storage';
+import {i18n} from 'components/i18n/i18n';
 import {until} from 'util/util';
 
 import type Api from '../api/api';
@@ -49,7 +50,7 @@ export const getAssistSuggestions = async (
     const cachedUserQueries: Array<CachedQueries> = getCachedUserQueries();
     if (cachedUserQueries.length) {
       suggestions.push({
-        title: 'Recent searches',
+        title: i18n('Recent searches'),
         data: cachedUserQueries,
       });
     }

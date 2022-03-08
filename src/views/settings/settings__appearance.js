@@ -55,7 +55,7 @@ const SettingsAppearance = (props: Props): Node => {
         <View style={styles.settings}>
           <Header
             style={styles.elevation1}
-            title="Appearance"
+            title={i18n('Appearance')}
             leftButton={props.backIcon || <IconBack color={theme.uiTheme.colors.$link}/>}
             onBack={props.onHide}
           />

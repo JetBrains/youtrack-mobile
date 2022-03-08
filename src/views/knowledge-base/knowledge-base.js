@@ -76,11 +76,11 @@ type State = {
 
 const ERROR_MESSAGE_DATA: Object = {
   noFavoriteProjects: {
-    title: 'No favorites projects found',
-    description: 'Add some project to favorites',
+    title: i18n('No favorites projects found'),
+    description: i18n('Add some project to favorites'),
   },
   noArticlesFound: {
-    title: 'No articles found',
+    title: i18n('No articles found'),
   },
 };
 
@@ -472,10 +472,10 @@ export class KnowledgeBase extends Component<Props, State> {
       dataSource: () => {
         const sortedProjects = getGroupedByFieldNameAlphabetically(projects, 'pinned');
         return Promise.resolve([{
-          title: 'Favorites',
+          title: i18n('Favorites'),
           data: sortedProjects.favorites,
         }, {
-          title: 'Projects',
+          title: i18n('Projects'),
           data: sortedProjects.others,
         }]);
       },
@@ -559,7 +559,7 @@ export class KnowledgeBase extends Component<Props, State> {
       <>
         {
           this.renderHeader({
-            title: 'Knowledge Base',
+            title: i18n('Knowledge Base'),
             rightButton: (
               <TouchableOpacity
                 hitSlop={HIT_SLOP}

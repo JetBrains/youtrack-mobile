@@ -1,5 +1,7 @@
 /* @flow */
 
+import {i18n} from '../i18n/i18n';
+
 export default function getEventTitle(event: Object, omitFormatting?: boolean): ?string {
   const title = getTitle(event);
   if (omitFormatting) {
@@ -14,22 +16,22 @@ function getTitle(event) {
 
   switch (true) {
   case !eventField:
-    label = '[Removed field]';
+    label = i18n('[Removed field]');
     break;
   case eventField.id === 'description':
-    label = 'Description changed';
+    label = i18n('Description changed');
     break;
   case eventField.id === 'summary':
-    label = 'Summary changed';
+    label = i18n('Summary changed');
     break;
   case eventField.id === 'tag':
-    label = countAllEventEntities(event) > 1 ? 'Tags' : 'Tag';
+    label = countAllEventEntities(event) > 1 ? i18n('Tags') : i18n('Tag');
     break;
   case eventField.id === 'attachments':
-    label = countAllEventEntities(event) > 1 ? 'Attachments' : 'Attachment';
+    label = countAllEventEntities(event) > 1 ? i18n('Attachments') : i18n('Attachment');
     break;
   case eventField.id === 'visible to':
-    label = 'Visibility';
+    label = i18n('Visibility');
     break;
   default:
     label = eventField.presentation;

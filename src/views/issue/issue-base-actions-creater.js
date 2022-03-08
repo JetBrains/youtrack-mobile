@@ -435,19 +435,19 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
 
         const actionSheetActions = [
           {
-            title: 'Share…',
+            title: i18n('Share…'),
             execute: () => {
               const url = makeIssueWebUrl(api, issue);
               if (isIOSPlatform()) {
                 Share.share({url});
               } else {
-                Share.share({title: issue.summary, message: url}, {dialogTitle: 'Share URL'});
+                Share.share({title: issue.summary, message: url}, {dialogTitle: i18n('Share URL')});
               }
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Share URL');
             },
           },
           {
-            title: 'Copy URL',
+            title: i18n('Copy URL'),
             execute: () => {
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy URL');
               Clipboard.setString(makeIssueWebUrl(api, issue));
@@ -458,7 +458,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
 
         if (permissions.canEdit) {
           actionSheetActions.push({
-            title: 'Edit',
+            title: i18n('Edit'),
             execute: () => {
               dispatch(dispatchActions.startEditingIssue());
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Edit issue');
@@ -468,7 +468,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
 
         if (permissions.canTag) {
           actionSheetActions.push({
-            title: 'Add tag',
+            title: i18n('Add tag'),
             execute: () => {
               dispatch(actions.onOpenTagsSelect());
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Add tag');
@@ -478,7 +478,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
 
         if (permissions.canAttach) {
           actionSheetActions.push({
-            title: 'Attach file',
+            title: i18n('Attach file'),
             execute: () => {
               switchToDetailsTab();
               dispatch(dispatchActions.toggleAttachFileDialog(true));
@@ -489,7 +489,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
 
         if (typeof renderLinkIssues === 'function') {
           actionSheetActions.push({
-            title: 'Link issue',
+            title: i18n('Link issue'),
             execute: () => {
               renderLinkIssues();
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Link issue');
@@ -499,7 +499,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
 
         if (permissions.canApplyCommand) {
           actionSheetActions.push({
-            title: 'Apply command…',
+            title: i18n('Apply command…'),
             execute: () => {
               dispatch(dispatchActions.openCommandDialog());
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Apply command');
@@ -507,7 +507,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           });
         }
 
-        actionSheetActions.push({title: 'Cancel'});
+        actionSheetActions.push({title: i18n('Cancel')});
 
         const selectedAction = await showActions(
           actionSheetActions,
