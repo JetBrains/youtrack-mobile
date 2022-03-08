@@ -1,16 +1,15 @@
 /* @flow */
 
 import React from 'react';
-import {ActivityIndicator, Linking, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Linking, Text, TouchableOpacity, View} from 'react-native';
 
 import Hyperlink from 'react-native-hyperlink';
 import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
 
 import calculateAspectRatio from '../aspect-ratio/aspect-ratio';
+import CodeHighlighter from './code-renderer';
 import ImageWithProgress from '../image/image-with-progress';
-import LongText from './text-renderer';
-import renderCode from './code-renderer';
 import Router from '../router/router';
 import {getApi} from '../api/api__instance';
 import {guid, isURLPattern} from 'util/util';
@@ -220,38 +219,7 @@ function getMarkdownRules(
       );
     },
 
-    fence: (node: MarkdownNode) => {
-      let content = node.content;
-
-      if (
-        typeof node.content === 'string' &&
-        node.content.charAt(node.content.length - 1) === '\n'
-      ) {
-        content = node.content.substring(0, node.content.length - 1);
-      }
-
-      const language: string = node.sourceInfo;
-      const isStacktraceOrException: boolean = !!language && ['exception', 'stacktrace'].includes(language);
-
-      return (
-        <View key={node.key} style={styles.codeContainer}>
-          {!!language && !isStacktraceOrException && <Text selectable={true} style={styles.codeLanguage}>{language}</Text>}
-
-          {<ScrollView
-            scrollEventThrottle={100}
-            style={styles.codeContent}
-          >
-            <ScrollView
-              horizontal={true}
-              scrollEventThrottle={100}
-            >
-              {isStacktraceOrException && <LongText style={styles.exception}>{content}</LongText>}
-              {!isStacktraceOrException && <Text selectable={true} key={node.key}>{renderCode({content}, language, uiTheme)}</Text>}
-            </ScrollView>
-          </ScrollView>}
-        </View>
-      );
-    },
+    fence: (node: MarkdownNode) => <CodeHighlighter key={node.key} node={node} uiTheme={uiTheme}/>,
 
     link: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
       const child: ?Object = node?.children[0];

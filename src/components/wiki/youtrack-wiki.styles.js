@@ -9,6 +9,32 @@ const showMoreLink = {
 };
 
 export default EStyleSheet.create({
+  codeToolbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingLeft: UNIT,
+    borderWidth: 2,
+    borderBottomWidth: 0,
+    borderColor: '$boxBackground',
+    borderTopLeftRadius: UNIT,
+    borderTopRightRadius: UNIT,
+  },
+  codeToolbarButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  codeToolbarButton: {
+    marginLeft: UNIT,
+    padding: UNIT,
+  },
+  codeToolbarIcon: {
+    color: '$iconAccent',
+  },
+  codeToolbarText: {
+    color: '$text',
+  },
   htmlView: {
     color: '$text',
     textAlign: 'left',
@@ -26,9 +52,7 @@ export default EStyleSheet.create({
   lineSpace: {
     lineHeight: 30,
   },
-  monospace: {
-    ...monospace,
-  },
+  monospace,
   deleted: {
     textDecorationLine: 'line-through',
   },
@@ -44,7 +68,7 @@ export default EStyleSheet.create({
   link: {
     color: '$link',
     fontSize: SECONDARY_FONT_SIZE,
-    marginTop: UNIT / 4
+    marginTop: UNIT / 4,
   },
   text: {
     color: '$link',
@@ -57,12 +81,14 @@ export default EStyleSheet.create({
   },
   exceptionLink: showMoreLink,
   codeContainer: {
-    marginTop: UNIT * 2,
-    marginBottom: UNIT,
+    marginVertical: UNIT,
   },
   codeContent: {
     padding: UNIT,
+    paddingRight: 0,
     backgroundColor: '$boxBackground',
+    borderBottomLeftRadius: UNIT,
+    borderBottomRightRadius: UNIT,
   },
   code: {
     ...monospace,

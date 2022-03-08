@@ -282,7 +282,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
             execute: () => {
               Clipboard.setString(comment.text);
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment text');
-              notify('Text copied');
+              notify('Copied');
             },
           },
           {

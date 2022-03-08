@@ -6,7 +6,7 @@ import HTMLView from 'react-native-htmlview';
 import toHtml from 'htmlparser-to-html';
 
 import Router from '../router/router';
-import renderCode from './code-renderer';
+import {renderWikiCode} from './code-renderer';
 import {renderImage, renderTable, renderTableRow, renderTableCell} from './youtrack-wiki__renderers';
 import {getBaseUrl} from '../config/config';
 import {extractId} from '../open-url-handler/open-url-handler';
@@ -115,7 +115,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
       return <Text key={`checkbox-${node.attribs['data-position']}`}>{'checked' in node.attribs ? '✓' : '☐'}</Text>;
 
     case (wikiNodeType.code):
-      return <Text key={index}>{renderCode(
+      return <Text key={index}>{renderWikiCode(
         getCode(),
         this.getLanguage(getCode()),
         this.props.uiTheme

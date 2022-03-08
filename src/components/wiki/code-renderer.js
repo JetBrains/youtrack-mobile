@@ -2,88 +2,185 @@
 
 import React from 'react';
 
-import {Text} from 'react-native';
+import {Clipboard, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
 import { idea, darcula } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-import {decodeHTML} from 'entities';
+import IconCopy from '@jetbrains/icons/copy.svg';
+import IconFullscreen from '@jetbrains/icons/fullscreen.svg';
 import Router from '../router/router';
-
+import {decodeHTML} from 'entities';
 import {isAndroidPlatform} from 'util/util';
-import {showMoreText} from '../text-view/text-view';
 import {monospaceFontAndroid, monospaceFontIOS, SECONDARY_FONT_SIZE} from '../common-styles/typography';
+import {notify} from '../notification/notification';
+import {showMoreText} from '../text-view/text-view';
 
 import styles from './youtrack-wiki.styles';
 
-import type {Node as $IMPORTED_TYPE$_Node} from 'React';
+import type {MarkdownNode} from '../../flow/Markdown';
+import type {Node as ReactNode} from 'React';
 import type {UITheme} from 'flow/Theme';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 const isAndroid: boolean = isAndroidPlatform();
 const MAX_CODE_LENGTH: number = 630;
 
 type Node = { content?: string, children?: any };
+type CodeData = {
+  code: string,
+  snippet: string,
+  hasMore: boolean,
+};
 
-function getCodeData(node: Node) {
-  let code = node.content || (node?.children || []).map(it => it.data).join('\n') || '';
+function getCodeData(node: Node): CodeData {
+  let code: string = node.content || (node?.children || []).map(it => it.data).join('\n') || '';
   code = code.replace(/(\n){4,}/g, '\n\n').replace(/[ \t]+$/g, '');
-
-  const isTooLongCode = code.length > MAX_CODE_LENGTH; //https://github.com/facebook/react-native/issues/19453
-
+  const hasMore: boolean = code.length > MAX_CODE_LENGTH; //https://github.com/facebook/react-native/issues/19453
   return {
-    code: isTooLongCode ? `${code.substr(0, MAX_CODE_LENGTH)}… ` : code,
-    fullCode: code,
-    isLongCode: isTooLongCode,
+    snippet: hasMore ? `${code.substr(0, MAX_CODE_LENGTH)}… ` : code,
+    code: code,
+    hasMore,
   };
 }
 
-function onShowFullCode(code: string) {
-  Router.WikiPage({
-    plainText: code,
-  });
+function getNodeLanguage(node: MarkdownNode & {sourceInfo: ?string}): ?string {
+  return node.sourceInfo;
 }
 
-function renderCode(node: Node, language?: ?string, uiTheme: UITheme): $IMPORTED_TYPE$_Node {
-  const codeData = getCodeData(node);
-  const separator = <Text>{'\n'}</Text>;
-  const codeStyle = uiTheme.dark ? darcula : idea;
+function isStacktraceOrException (language?: string): boolean {
+  return !!language && ['exception', 'stacktrace'].includes(language);
+}
 
+function onShowFullCode(code: string) {
+  Router.WikiPage({plainText: code});
+}
+
+function Highlighter({code = '', language, uiTheme}: {code: string, language: string, uiTheme: UITheme}) {
+  return <SyntaxHighlighter
+    highlighter="hljs"
+    language={language}
+    PreTag={View}
+    CodeTag={View}
+
+    style={getCodeStyle(uiTheme)}
+    fontSize={SECONDARY_FONT_SIZE}
+    fontFamily={isAndroid ? monospaceFontAndroid : monospaceFontIOS}
+  >
+    {decodeHTML(code.trim())}
+  </SyntaxHighlighter>;
+}
+
+function getCodeStyle(uiTheme: UITheme): ViewStyleProp {
+  const codeStyle: ViewStyleProp = uiTheme.dark ? darcula : idea;
   for (const i in codeStyle) {
     codeStyle[i].lineHeight = '1.25em';
   }
+  return {
+    ...codeStyle,
+    ...{
+      hljs: {
+        backgroundColor: 'transparent',
+        color: uiTheme.colors.$text,
+      },
+    },
+  };
+}
 
+export function renderWikiCode(node: Node, language?: ?string, uiTheme: UITheme): ReactNode {
+  const codeData: CodeData = getCodeData(node);
   return (
-    <Text>
-      <SyntaxHighlighter
-        highlighter="hljs"
+    <Text onStartShouldSetResponder={() => true}>
+      <Highlighter
+        code={codeData.hasMore ? codeData.snippet : codeData.code}
         language={language}
-        PreTag={Text}
-        CodeTag={Text}
+        uiTheme={uiTheme}
+      />
 
-        style={{
-          ...codeStyle,
-          ...{
-            hljs: {
-              backgroundColor: 'transparent',
-              color: uiTheme.colors.$text,
-            },
-          },
-        }}
-        fontSize={SECONDARY_FONT_SIZE}
-        fontFamily={isAndroid ? monospaceFontAndroid : monospaceFontIOS}
-      >
-        {decodeHTML(codeData.code)}
-      </SyntaxHighlighter>
-
-      {codeData.isLongCode && separator}
-      {codeData.isLongCode && (
-        <Text
-          onPress={() => codeData.isLongCode && onShowFullCode(codeData.fullCode)}
-          style={styles.showMoreLink}
-        >{` ${showMoreText} `}</Text>
+      {codeData.hasMore && (
+        <>
+          <Text>{'\n'}</Text>
+          <Text
+            onPress={() => onShowFullCode(codeData.code)}
+            style={styles.showMoreLink}
+          >{` ${showMoreText} `}</Text>
+        </>
       )}
     </Text>
   );
 }
 
-export default renderCode;
+function CodeHighlighter(props: {node: Node, uiTheme: UITheme}) {
+  const {node, uiTheme} = props;
+  const codeData: CodeData = getCodeData(node);
+  const language: string = getNodeLanguage(node);
+  const stacktraceOrException: boolean = isStacktraceOrException(language);
+  const codeSnippet: string = codeData.hasMore ? codeData.snippet : codeData.code;
+
+  return (
+    <View
+      style={styles.codeContainer}
+    >
+      {!stacktraceOrException && <Text selectable={true} style={styles.codeLanguage}>{language}</Text>}
+
+      <View style={styles.codeToolbar}>
+        <Text style={styles.codeToolbarText}>Code snippet</Text>
+        <View style={styles.codeToolbarButtonContainer}>
+          <TouchableOpacity
+            style={styles.codeToolbarButton}
+            onPress={() => {
+              Clipboard.setString(codeData.code);
+              notify('Copied');
+            }}
+          >
+            <IconCopy
+              width={15}
+              height={15}
+              fill={styles.codeToolbarIcon.color}
+              color={styles.codeToolbarIcon.color}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.codeToolbarButton}
+            onPress={() => onShowFullCode(codeData.code)}
+          >
+            <IconFullscreen
+              width={15}
+              height={15}
+              color={styles.codeToolbarIcon.color}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View
+        style={styles.codeContent}
+        scrollEventThrottle={100}
+      >
+        <ScrollView
+          horizontal={true}
+          fadingEdgeLength={70}
+          scrollEventThrottle={100}
+        >
+          <View onStartShouldSetResponder={() => true}>
+            {stacktraceOrException && (
+              <View><Text style={styles.exception}>{codeSnippet}</Text></View>
+            )}
+            {!stacktraceOrException && (
+              <Text selectable={true}>
+                <Highlighter
+                  code={codeSnippet}
+                  language={language}
+                  uiTheme={uiTheme}
+                />
+              </Text>
+            )}
+          </View>
+        </ScrollView>
+      </View>
+    </View>
+  );
+}
+
+export default React.memo(CodeHighlighter);
+

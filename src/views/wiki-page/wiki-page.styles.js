@@ -4,24 +4,20 @@ import {headerTitle, monospace, SECONDARY_FONT_SIZE} from 'components/common-sty
 
 
 export default EStyleSheet.create({
-  headerTitle: {
-    ...headerTitle,
-  },
+  headerTitle: headerTitle,
   container: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '$background',
   },
-  scrollContent: {
+  content: {
     flexGrow: 1,
-  },
-  wiki: {
-    paddingVertical: UNIT,
-    paddingHorizontal: UNIT * 2,
+    paddingLeft: UNIT,
   },
   plainText: {
     color: '$text',
     fontSize: SECONDARY_FONT_SIZE,
     ...monospace,
+  },
+  icon: {
+    color: '$iconAccent',
   },
 });

@@ -95,6 +95,11 @@ export const IconBookmark = (props?: Props) => <DefaultIcon {...{
   ...props,
 }} />;
 
+export const IconShare = (props?: Props) => <DefaultIcon {...{
+  name: 'export-variant',
+  ...props,
+}} />;
+
 
 /* FontAwesome icons */
 
