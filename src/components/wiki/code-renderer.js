@@ -118,26 +118,23 @@ function CodeHighlighter(props: {node: Node, uiTheme: UITheme}) {
 
   return (
     <View
-      key={node.key}
       style={styles.codeContainer}
     >
       {!stacktraceOrException && <Text selectable={true} style={styles.codeLanguage}>{language}</Text>}
 
-      {codeData.hasMore && <View style={styles.codeToolbar}>
+      <View style={styles.codeToolbar}>
         <Text style={styles.codeToolbarText}>Code snippet</Text>
-        {codeData.hasMore && (
-          <TouchableOpacity
-            style={styles.codeToolbarButton}
-            onPress={() => onShowFullCode(codeData.code)}
-          >
-            <IconFullscreen
-              width={16}
-              height={16}
-              color={styles.codeToolbarIcon.color}
-            />
-          </TouchableOpacity>
-        )}
-      </View>}
+        <TouchableOpacity
+          style={styles.codeToolbarButton}
+          onPress={() => onShowFullCode(codeData.code)}
+        >
+          <IconFullscreen
+            width={16}
+            height={16}
+            color={styles.codeToolbarIcon.color}
+          />
+        </TouchableOpacity>
+      </View>
 
       <View
         style={styles.codeContent}

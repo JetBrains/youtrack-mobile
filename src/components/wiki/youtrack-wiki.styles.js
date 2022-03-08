@@ -81,6 +81,8 @@ export default EStyleSheet.create({
     padding: UNIT,
     paddingRight: 0,
     backgroundColor: '$boxBackground',
+    borderBottomLeftRadius: UNIT,
+    borderBottomRightRadius: UNIT,
   },
   code: {
     ...monospace,
