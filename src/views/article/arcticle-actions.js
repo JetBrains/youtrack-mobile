@@ -166,7 +166,7 @@ const showArticleActions = (
     ];
 
     if (canStar) {
-      const title: string = hasStar ? i18n('Remove from favorites') : i18n('Add to favorites');
+      const title: string = hasStar ? i18n('Remove favorite') : i18n('Add to favorites');
       actions.push({
         title: title,
         execute: async () => {
@@ -176,8 +176,8 @@ const showArticleActions = (
           });
           notify(
             hasStar
-              ? i18n('You\'ve been unsubscribed from updates')
-              : i18n('You\'ve been subscribed to updates')
+              ? i18n('Article removed from favorites')
+              : i18n('Article added to favorites')
           );
           dispatch(toggleFavorite());
         },
