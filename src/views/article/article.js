@@ -24,6 +24,7 @@ import {createArticleList} from '../knowledge-base/knowledge-base-actions';
 import {findArticleNode} from 'components/articles/articles-tree-helper';
 import {getApi} from 'components/api/api__instance';
 import {getStorageState} from 'components/storage/storage';
+import {i18n} from '../../components/i18n/i18n';
 import {IconBack, IconContextActions} from 'components/icon/icon';
 import {logEvent} from 'components/log/log-helper';
 import {routeMap} from '../../app-routes';
@@ -89,6 +90,10 @@ class Article extends IssueTabbed<Props, IssueTabbedState & { modalChildren: any
     } else {
       return Router.KnowledgeBase();
     }
+  }
+
+  getMainTabText(): string {
+    return i18n('Content');
   }
 
   loadArticle = (articleId: string, reset: boolean) => this.props.loadArticle(articleId, reset);

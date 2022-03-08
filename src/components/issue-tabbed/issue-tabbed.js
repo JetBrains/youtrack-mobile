@@ -7,6 +7,7 @@ import {Text, Dimensions, View} from 'react-native';
 import {TabView, TabBar} from 'react-native-tab-view';
 import {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
 
+import {i18n} from '../i18n/i18n';
 import {isSplitView} from '../responsive/responsive-helper';
 
 import styles from './issue-tabbed.style';
@@ -25,7 +26,9 @@ export type IssueTabbedState = {
 
 export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
   initialWindowDimensions: any = Dimensions.get('window');
-  tabRoutes: Array<TabRoute> = ['Details', 'Activity'].map((name: string) => ({key: name, title: name}));
+  tabRoutes: Array<TabRoute> = [this.getMainTabText(), this.getSecondaryTabText()].map(
+    (name: string) => ({key: name, title: name})
+  );
   unsubscribeOnDimensionsChange: EventSubscription;
 
   state: IssueTabbedState = {
@@ -41,6 +44,14 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
 
   componentWillUnmount(): void {
     this.unsubscribeOnDimensionsChange.remove();
+  }
+
+  getMainTabText(): string {
+    return i18n('Details');
+  }
+
+  getSecondaryTabText(): string {
+    return i18n('Activity');
   }
 
   renderDetails: ((uiTheme: UITheme) => null) = (uiTheme: UITheme) => null;
