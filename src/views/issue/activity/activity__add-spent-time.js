@@ -55,7 +55,7 @@ const AddSpentTimeForm = (props: Props) => {
     },
     type: {
       id: null,
-      name: 'No type',
+      name: i18n('No type'),
     },
     text: null,
     usesMarkdown: true,
@@ -147,7 +147,7 @@ const AddSpentTimeForm = (props: Props) => {
 
   const renderSelect = (selectProps: SelectProps) => {
     const defaultSelectProps: SelectProps = {
-      placeholder: 'Filter items',
+      placeholder: i18n('Filter items'),
       multi: false,
       dataSource: () => Promise.resolve([]),
       selectedItems: [],
@@ -244,7 +244,7 @@ const AddSpentTimeForm = (props: Props) => {
     return (
       <Header
         style={styles.elevation1}
-        title="Spent time"
+        title={i18n('Spent time')}
         leftButton={<IconClose size={21} color={isProgress ? styles.disabled.color : styles.link.color}/>}
         onBack={() => !isProgress && onClose()}
         extraButton={(

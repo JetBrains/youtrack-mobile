@@ -118,7 +118,7 @@ const ArticleCreate = (props: Props) => {
         multi: false,
         selectedItems: selectedItems,
         emptyValue: null,
-        placeholder: 'Filter projects',
+        placeholder: i18n('Filter projects'),
         dataSource: () => Promise.resolve(getStorageState().projects.filter(
           (it: ArticleProject) => issuePermissions.articleCanCreateArticle(it.ringId)
         )),

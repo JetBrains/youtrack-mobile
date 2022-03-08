@@ -512,13 +512,13 @@ export function openSprintSelect(): ((dispatch: (any) => any, getState: () => an
       type: types.OPEN_AGILE_SELECT,
       selectProps: {
         show: true,
-        placeholder: 'Filter sprints by name',
+        placeholder: i18n('Filter sprints by name'),
         dataSource: async () => {
           const sprints = await api.agile.getSprintList(sprint.agile.id);
           return getGroupedSprints(sprints);
         },
         selectedItems: [sprint],
-        getTitle: sprint => `${sprint.name} ${sprint.archived ? '(archived)' : ''}`,
+        getTitle: sprint => `${sprint.name} ${sprint.archived ? i18n('(archived)') : ''}`,
         onSelect: (selectedSprint: Sprint, query: string) => {
           dispatch(closeSelect());
           dispatch(loadSprint(sprint.agile.id, selectedSprint.id, query));
@@ -540,7 +540,7 @@ export function openBoardSelect(): ((dispatch: (any) => any, getState: () => any
       type: types.OPEN_AGILE_SELECT,
       selectProps: {
         show: true,
-        placeholder: 'Filter boards by name',
+        placeholder: i18n('Filter boards by name'),
         dataSource: async () => {
           const agileBoardsList: Array<BoardOnList> = await api.agile.getAgileBoardsList();
           const boards = agileBoardsList.sort(sortAlphabetically).reduce(

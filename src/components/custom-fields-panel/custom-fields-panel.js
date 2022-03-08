@@ -16,6 +16,7 @@ import SimpleValueEditor from './custom-fields-panel__simple-value';
 import usage from '../usage/usage';
 import {createNullProjectCustomField} from 'util/util';
 import {getApi} from '../api/api__instance';
+import {i18n} from 'components/i18n/i18n';
 import {IconCheck, IconClose} from '../icon/icon';
 import {isSplitView} from '../responsive/responsive-helper';
 import {PanelWithSeparator} from '../panel/panel-with-separator';
@@ -202,7 +203,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
             .filter(project => hasPermission.canCreateIssueToProject(project));
         },
         multi: false,
-        placeholder: 'Search for the project',
+        placeholder: i18n('Search for the project'),
         selectedItems: [this.props.issueProject],
         onSelect: (project: IssueProject) => {
           this.trackEvent('Update project: updated');
@@ -230,7 +231,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     return this.setState({
       datePicker: {
         show: true,
-        placeholder: 'Enter time',
+        placeholder: i18n('Enter time'),
         withTime,
         time: field.value ? new Date(((field.value: any): number)).toLocaleTimeString(
           [],
@@ -319,7 +320,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         multi: isMultiValue,
         selectedItems: selectedItems,
         emptyValue: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
-        placeholder: 'Search for the field value',
+        placeholder: i18n('Search for the field value'),
         dataSource: () => {
           if (field.hasStateMachine) {
             return this.api.getStateMachineEvents(this.props.issueId, field.id)

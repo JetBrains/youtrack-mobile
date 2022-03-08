@@ -7,6 +7,7 @@ import ColorField from '../color-field/color-field';
 import Select from '../select/select';
 import {getApi} from '../api/api__instance';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {i18n} from 'components/i18n/i18n';
 import {until} from 'util/util';
 
 import API from '../api/api';
@@ -27,7 +28,7 @@ const TagAddSelect = (props: Props) => {
   const {onAdd, onHide, projectId, existed = []} = props;
   const api: API = getApi();
   const selectProps = {
-    placeholder: 'Filter tags',
+    placeholder: i18n('Filter tags'),
     multi: true,
     dataSource: async () => {
       const [error, relevantTags] = await until(api.issueFolder.getProjectRelevantTags(projectId));

@@ -16,6 +16,7 @@ import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
 import {getApi} from '../api/api__instance';
 import {getAssistSuggestions} from '../query-assist/query-assist-helper';
 import {getReadableID} from '../issue-formatter/issue-formatter';
+import {i18n} from 'components/i18n/i18n';
 import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound} from '../icon/icon-pictogram';
 import {IconBack} from '../icon/icon';
 import {ThemeContext} from '../theme/theme-context';
@@ -182,7 +183,7 @@ const LinkedIssuesAddLink = (props: Props): Node => {
       multi: false,
       selectedItems: [currentIssueLinkTypeExtended],
       emptyValue: null,
-      placeholder: 'Filter items',
+      placeholder: i18n('Filter items'),
       getTitle: (linkType: IssueLinkTypeExtended) => linkType.getPresentation(),
       dataSource: () => Promise.resolve(issueLinkTypes),
       onSelect: (linkType: IssueLinkTypeExtended) => {

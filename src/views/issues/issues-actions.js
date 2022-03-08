@@ -10,6 +10,7 @@ import {EVERYTHING_CONTEXT} from 'components/search/search-context';
 import {filterArrayByType} from 'components/api/api__resource-types';
 import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from 'components/storage/storage';
 import {getAssistSuggestions, getCachedUserQueries} from 'components/query-assist/query-assist-helper';
+import {i18n} from 'components/i18n/i18n';
 import {notifyError} from 'components/notification/notification';
 import {until} from 'util/util';
 import {updateUserGeneralProfile} from 'actions/app-actions';
@@ -141,7 +142,7 @@ export function openSavedSearchesSelect(): ((dispatch: (any) => any, getState: (
     const savedSearchesSelectProps = {
       isOwnSearches: true,
       show: true,
-      placeholder: 'Filter saved searches',
+      placeholder: i18n('Filter saved searches'),
       dataSource: async () => {
         let folders: Array<Object> = getCachedUserQueries();
         try {
@@ -185,7 +186,7 @@ export function openContextSelect(): ((dispatch: (any) => any, getState: () => a
     const currentSearchContext = currentUserGeneralProfile?.searchContext || EVERYTHING_CONTEXT;
     const searchContextSelectProps = {
       show: true,
-      placeholder: 'Filter projects, saved searches, and tags',
+      placeholder: i18n('Filter projects, saved searches, and tags'),
       dataSource: async () => {
         let folders: Array<Folder> = [];
         try {

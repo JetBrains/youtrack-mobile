@@ -8,7 +8,7 @@ import ModalPortal from '../modal-view/modal-portal';
 import ModalView from '../modal-view/modal-view';
 import SelectItem from './select__item';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconCheck, IconClose} from '../icon/icon';
 import {notifyError} from '../notification/notification';
 
@@ -56,7 +56,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
   onChangeSelection: (items: Array<any>) => null,
   placeholder: string,
 } = {
-    placeholder: 'Filter item',
+    placeholder: i18n('Filter item'),
     autoFocus: false,
     onChangeSelection: (items: Array<Object>) => null,
     noFilter: false,

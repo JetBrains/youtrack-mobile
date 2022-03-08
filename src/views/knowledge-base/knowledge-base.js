@@ -24,8 +24,8 @@ import {HIT_SLOP} from 'components/common-styles/button';
 import {getGroupedByFieldNameAlphabetically} from 'components/search/sorting';
 import {getStorageState} from 'components/storage/storage';
 import {IconAngleDown, IconAngleRight, IconBack, IconClose, IconContextActions} from 'components/icon/icon';
+import {i18n} from 'components/i18n/i18n';
 import {isSplitView} from 'components/responsive/responsive-helper';
-import {i18n} from '../../components/i18n/i18n';
 import {
   ICON_PICTOGRAM_DEFAULT_SIZE,
   IconNoProjectFound,
@@ -462,7 +462,7 @@ export class KnowledgeBase extends Component<Props, State> {
     const projects: Array<ArticleProject> = ((getStorageState().projects: any): Array<ArticleProject>);
     const prevPinnedProjects: Array<ArticleProject> = projects.filter((it: ArticleProject) => it.pinned);
     const selectProps: SelectProps = {
-      placeholder: 'Filter projects',
+      placeholder: i18n('Filter projects'),
       multi: true,
       header: () => (
         <Text style={styles.manageFavoriteProjectsNote}>

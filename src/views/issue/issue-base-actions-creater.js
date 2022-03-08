@@ -12,6 +12,7 @@ import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
 import {getEntityPresentation, getReadableID} from 'components/issue-formatter/issue-formatter';
 import {getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
 import {initialState} from './issue-base-reducer';
+import {i18n} from 'components/i18n/i18n';
 import {isIOSPlatform, until} from 'util/util';
 import {logEvent} from 'components/log/log-helper';
 import {notify, notifyError} from 'components/notification/notification';
@@ -29,7 +30,6 @@ import type {IssueState} from './issue-base-reducer';
 import type {NormalizedAttachment} from 'flow/Attachment';
 import type {UserAppearanceProfile} from 'flow/User';
 import type {Visibility} from 'flow/Visibility';
-import {i18n} from '../../components/i18n/i18n';
 
 type ApiGetter = () => Api;
 type StateGetter = () => IssueState;
@@ -391,7 +391,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
 
         dispatch(dispatchActions.openTagsSelect({
           multi: true,
-          placeholder: 'Filter tags',
+          placeholder: i18n('Filter tags'),
           dataSource: async () => {
             const issueProjectId: string = issue.project.id;
             const [error, relevantProjectTags] = await until(api.issueFolder.getProjectRelevantTags(issueProjectId));

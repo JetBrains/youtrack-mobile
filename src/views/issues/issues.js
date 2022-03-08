@@ -151,7 +151,7 @@ export class Issues extends Component<Props, State> {
     log.debug(`Opening issue "${issue.id}" from list`);
     if (!issue.id) {
       log.warn('Attempt to open bad issue', issue);
-      notifyError('Can\'t open issue', new Error('Attempt to open issue without ID'));
+      notifyError(i18n('Can\'t open issue'), new Error('Attempt to open issue without ID'));
       return;
     }
     Router.Issue({
