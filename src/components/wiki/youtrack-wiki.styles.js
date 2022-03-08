@@ -11,13 +11,17 @@ const showMoreLink = {
 export default EStyleSheet.create({
   codeToolbar: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    padding: UNIT,
+    paddingLeft: UNIT,
     borderWidth: 2,
     borderBottomWidth: 0,
     borderColor: '$boxBackground',
     borderTopLeftRadius: UNIT,
     borderTopRightRadius: UNIT,
+  },
+  codeToolbarButton: {
+    padding: UNIT,
   },
   codeToolbarIcon: {
     color: '$icon',
