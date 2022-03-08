@@ -175,12 +175,12 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
       return async (dispatch: (any) => any, getState: StateGetter) => {
         dispatch(dispatchActions.startIssueRefreshing());
         try {
-          const successMessage = 'Issue updated';
+          const successMessage = i18n('Issue updated');
           await dispatch(actions.loadIssue());
           notify(successMessage);
           log.debug(`${successMessage} "${getState()[stateFieldName].issueId}" loaded`);
         } catch (error) {
-          const errorMessage = 'Cannot update issue';
+          const errorMessage = i18n('Cannot update issue');
           notify(errorMessage, error);
         } finally {
           dispatch(dispatchActions.stopIssueRefreshing());
@@ -244,7 +244,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
 
         if (error) {
           dispatch(dispatchActions.setIssueSummaryAndDescription(issue.summary, preIssueDescription));
-          const message: string = 'Failed to update a checkbox';
+          const message: string = i18n('Failed to update a checkbox');
           notify(message);
           logEvent({
             message,
@@ -354,7 +354,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           await api.issue.updateIssueVoted(issue.id, voted);
         } catch (err) {
           const errorMessage: string = await resolveErrorMessage(err);
-          notify(errorMessage || 'Cannot vote');
+          notify(errorMessage || i18n('You can\'t vote'));
           dispatch(dispatchActions.setVoted(!voted));
         }
       };
@@ -531,14 +531,14 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
         const selectedAction = await showActions(
           [
             {
-              title: title || 'Copy text',
+              title: title || i18n('Copy text'),
               execute: () => {
                 usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy text via action');
                 Clipboard.setString(text);
                 notify(i18n('Copied'));
               },
             },
-            {title: 'Cancel'},
+            {title: i18n('Cancel')},
           ],
           actionSheet,
         );
@@ -596,7 +596,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           const updatedIssue: IssueFull = {...issue, tags: issue.tags.filter((tag: Tag) => tag.id !== tagId)};
           dispatch(dispatchActions.receiveIssue(updatedIssue));
         } catch (err) {
-          const errorMsg: string = 'Failed to remove tag';
+          const errorMsg: string = i18n('Failed to remove tag');
           log.warn(errorMsg, err);
           notify(errorMsg, err);
         }
@@ -700,7 +700,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
 
         } catch (err) {
           dispatch(dispatchActions.receiveIssueVisibility(Object.assign({timestamp: Date.now()}, prevVisibility)));
-          const message: string = 'Cannot update issue visibility';
+          const message: string = i18n('Failed to update issue visibility');
           notify(message, err);
           log.warn(message, err);
         }

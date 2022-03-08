@@ -33,7 +33,7 @@ const updateArticleDraft = (articleDraft: Article): ((
     const [error] = await until(api.articles.updateArticleDraft(articleDraft));
 
     if (error) {
-      const errorMsg: string = 'Failed to update article draft';
+      const errorMsg: string = i18n('Failed to update article draft');
       logEvent({message: errorMsg, isError: true});
       notify(errorMsg, error);
     }
@@ -126,7 +126,7 @@ const uploadFile = (attachments: Array<Attachment>): ((
       attachments.map((attach: Attachment) => api.articles.attachFile(articleDraft.id, attach.url, attach.name))
     );
     if (error) {
-      const message: string = 'Failed to attach file';
+      const message: string = i18n('Failed to attach file');
       logEvent({message: message, isError: true});
       notify(message, error);
     } else {
@@ -150,7 +150,7 @@ const loadAttachments = (): ((
 
     const [error, draftAttachments] = await until(api.articles.getAttachments(articleDraft.id));
     if (error) {
-      const message: string = 'Failed to load article attachments';
+      const message: string = i18n('Failed to load article attachments');
       logEvent({message: message, isError: true});
       notify(message, error);
     } else {
@@ -170,7 +170,7 @@ const deleteDraftAttachment = (attachmentId: string): ((
 
     const [error] = await until(api.articles.deleteDraftAttachment(articleDraft.id, attachmentId));
     if (error) {
-      const message = 'Failed to delete attachment';
+      const message = i18n('Failed to delete attachment');
       notify(message, error);
       logEvent({message: message, isError: true});
     } else {

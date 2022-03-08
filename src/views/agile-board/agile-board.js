@@ -25,6 +25,7 @@ import usage from 'components/usage/usage';
 import {ANALYTICS_AGILE_PAGE} from 'components/analytics/analytics-ids';
 import {DragContainer} from 'components/draggable/';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
+import {i18n} from 'components/i18n/i18n';
 import {getScrollableWidth} from 'components/board-scroller/board-scroller__math';
 import {hasType} from 'components/api/api__resource-types';
 import {IconException, IconMagnifyZoom} from 'components/icon/icon';
@@ -306,7 +307,7 @@ class AgileBoard extends Component<Props, State> {
   };
 
   toggleColumn = (column: BoardColumn) => {
-    notify(column.collapsed ? 'Column expanded' : 'Column collapsed');
+    notify(column.collapsed ? i18n('Column expanded') : i18n('Column collapsed'));
     this.props.onColumnCollapseToggle(column);
   };
 

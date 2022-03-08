@@ -100,7 +100,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
         });
         const [error, timeTracking] = await until(api.issue.timeTracking(targetIssueId));
         if (error) {
-          const msg: string = 'Failed to load time tracking';
+          const msg: string = i18n('Failed to load time tracking');
           notify(msg, error);
           logEvent({message: msg, isError: true});
           return null;
@@ -119,7 +119,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
         const targetIssueId: string = issueId || getState()[stateFieldName].issueId;
         const [error, updatedDraft] = await until(api.issue.updateDraftWorkItem(targetIssueId, draft));
         if (error) {
-          const msg: string = 'Failed to update work item draft';
+          const msg: string = i18n('Failed to update work item draft');
           notify(msg, error);
           logEvent({message: msg, isError: true});
           return null;
@@ -140,7 +140,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
 
         const [error] = await until(api.issue.createWorkItem(targetIssueId, workItem));
         if (error) {
-          const message: string = 'Failed to update work item';
+          const message: string = i18n('Failed to update work item');
           notify(message, error);
           logEvent({message, isError: true});
         } else {
@@ -187,7 +187,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
 
         const [error] = await until(api.issue.deleteDraftWorkItem(targetIssueId));
         if (error) {
-          const msg: string = 'Failed to delete work item draft';
+          const msg: string = i18n('Failed to delete work item draft');
           notify(msg, error);
           logEvent({message: msg, isError: true});
         }
@@ -213,7 +213,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
         });
         const [error, users] = await until(promises, true);
         if (error) {
-          const msg: string = 'Failed to load work item authors';
+          const msg: string = i18n('Failed to load work item authors');
           notify(msg, error);
           logEvent({message: msg, isError: true});
           return [];
@@ -237,7 +237,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
         });
         const [error, projectTimeTrackingSettings] = await until(api.projects.getTimeTrackingSettings(targetProjectId));
         if (error) {
-          const msg: string = 'Failed to load project time tracking settings';
+          const msg: string = i18n('Failed to load project time tracking settings');
           notify(msg, error);
           logEvent({message: msg, isError: true});
           return {};

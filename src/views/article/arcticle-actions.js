@@ -147,7 +147,7 @@ const showArticleActions = (
       {
         title: 'Share…',
         execute: () => {
-          const msg: string = 'Share article URL';
+          const msg: string = i18n('Share article URL');
           if (isIOSPlatform()) {
             Share.share({url});
           } else {
@@ -160,13 +160,13 @@ const showArticleActions = (
         title: 'Copy article URL',
         execute: () => {
           Clipboard.setString(url);
-          logEvent({message: 'Copy article URL', analyticsId: ANALYTICS_ARTICLE_PAGE});
+          logEvent({message: i18n('Copy article URL'), analyticsId: ANALYTICS_ARTICLE_PAGE});
         },
       },
     ];
 
     if (canStar) {
-      const title: string = hasStar ? 'Unsubscribe from updates' : 'Subscribe for updates';
+      const title: string = hasStar ? i18n('Remove from favorites') : i18n('Add to favorites');
       actions.push({
         title: title,
         execute: async () => {
@@ -176,8 +176,8 @@ const showArticleActions = (
           });
           notify(
             hasStar
-              ? 'You\'ve been unsubscribed from updates'
-              : 'You\'ve been subscribed for updates'
+              ? i18n('You\'ve been unsubscribed from updates')
+              : i18n('You\'ve been subscribed to updates')
           );
           dispatch(toggleFavorite());
         },
@@ -297,7 +297,7 @@ const deleteArticle = (article: Article, onAfterDelete?: () => any): ((
     dispatch(setProcessing(false));
 
     if (error) {
-      const errorMsg: string = 'Failed to delete article';
+      const errorMsg: string = i18n('Failed to delete article');
       logEvent({message: errorMsg, isError: true});
       notify(errorMsg, error);
     } else if (onAfterDelete) {
@@ -520,7 +520,7 @@ const deleteAttachment = (attachmentId: string): ((
     logEvent({message: 'Delete article attachment', analyticsId: ANALYTICS_ARTICLE_PAGE});
     const [error] = await until(api.articles.deleteAttachment(article.id, attachmentId));
     if (error) {
-      const message = 'Failed to delete attachment';
+      const message = i18n('Failed to delete attachment');
       notify(message, error);
       logEvent({message: message, isError: true});
     } else {

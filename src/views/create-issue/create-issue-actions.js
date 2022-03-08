@@ -13,6 +13,7 @@ import {attachmentActions} from './create-issue__attachment-actions-and-types';
 import {commandDialogTypes, ISSUE_CREATED} from './create-issue-action-types';
 import {CUSTOM_ERROR_MESSAGE, DEFAULT_ERROR_MESSAGE} from 'components/error/error-messages';
 import {getStorageState, flushStoragePart} from 'components/storage/storage';
+import {i18n} from '../../components/i18n/i18n';
 import {notify, notifyError} from 'components/notification/notification';
 import {resolveError} from 'components/error/error-resolver';
 import {showActions} from 'components/action-sheet/action-sheet';
@@ -312,7 +313,7 @@ export function updateVisibility(visibility: Visibility): ((
 
     } catch (err) {
       dispatch(actions.setIssueDraft({issue: draftIssueCopy}));
-      const message: string = 'Cannot update draft visibility';
+      const message: string = i18n('Cannot update draft visibility');
       notify(message, err);
       log.warn(message, err);
     }

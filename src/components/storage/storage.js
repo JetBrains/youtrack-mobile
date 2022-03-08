@@ -5,6 +5,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 
 import log from '../log/log';
 import {getAuthParamsKey} from './storage__oauth';
+import {i18n} from '../i18n/i18n';
 import {notify} from '../notification/notification';
 import {routeMap} from '../../app-routes';
 
@@ -273,7 +274,7 @@ export async function flushStoragePart(part: Object): Promise<StorageState> {
   } catch (error) {
     newState = new Promise(resolve => resolve(currentState));
     notify(
-      'Your mobile device is running low on available storage space. Some app functionality may be unavailable.',
+      i18n('Your mobile device is running low on available storage space. Some app functionality may be unavailable.'),
       error,
       10000
     );

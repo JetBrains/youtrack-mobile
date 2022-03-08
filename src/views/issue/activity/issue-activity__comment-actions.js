@@ -149,7 +149,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
         if (draftComment && issue) {
           const [error] = await until(getApi().issue.submitDraftComment(issue.id, draftComment));
           if (error) {
-            const message: string = 'Failed to post a comment';
+            const message: string = i18n('Failed to post a comment');
             log.warn(message, error);
             notify(message, error);
             logEvent({message, isError: true, analyticsId: ANALYTICS_ISSUE_STREAM_SECTION});
@@ -191,7 +191,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
           }
           await dispatch(actions.loadActivity(true));
         } catch (error) {
-          const errorMessage = 'Comment update failed';
+          const errorMessage: string = i18n('Comment update failed');
           log.warn(errorMessage, error);
           notify(errorMessage, error);
         }
@@ -209,7 +209,10 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
           log.info(`Comment ${comment.id} deleted state updated: ${deleted.toString()}`);
         } catch (error) {
           dispatch(updateComment({...comment}));
-          notify(`Failed to ${deleted ? 'delete' : 'restore'} comment`, error);
+          notify(
+            deleted ? i18n('Failed to delete comment') : i18n('Failed to restore comment'),
+            error,
+          );
         }
       };
     },
@@ -391,7 +394,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
         );
 
         if (error) {
-          const errorMsg: string = `Failed to update a reaction ${reaction?.reaction}`;
+          const errorMsg: string = i18n(`Failed to update a reaction {{reactionName}}`, {reactionName: reaction?.reaction || ''});
           log.warn(errorMsg);
           onReactionUpdate(activities, error);
           notify(errorMsg);

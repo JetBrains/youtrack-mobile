@@ -113,7 +113,7 @@ const getArticleList = (reset: boolean = true) =>
 
       if (error) {
         dispatch(setError(error));
-        const msg: string = 'Unable to load favorite projects articles';
+        const msg: string = i18n('Unable to load favorite projects articles');
         notify(msg, error);
         logEvent({message: msg, isError: true});
       } else {
@@ -409,7 +409,7 @@ const toggleAllProjects = (collapse: boolean = true): ((dispatch: (any) => any, 
       list.concat(treeHelper.toggleProject(item, collapse))
     ), []);
     dispatch(storeArticlesList(updatedArticlesList));
-    notify(`${collapse ? 'Projects collapsed' : 'Projects expanded'}`);
+    notify(`${collapse ? i18n('Projects collapsed') : i18n('Projects expanded')}`);
   };
 
 export type KnowledgeBaseActions = {

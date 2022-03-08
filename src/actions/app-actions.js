@@ -19,6 +19,7 @@ import UrlParse from 'url-parse';
 import usage from 'components/usage/usage';
 import {CUSTOM_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from 'components/error/error-messages';
 import {EVERYTHING_CONTEXT} from 'components/search/search-context';
+import {i18n} from '../components/i18n/i18n';
 
 import {
   clearCachesAndDrafts,
@@ -342,7 +343,7 @@ export function changeAccount(account: StorageState, removeCurrentAccount?: bool
     const config: AppConfig = ((account.config: any): AppConfig);
     const authParams: ?OAuthParams2 = await getStoredSecurelyAuthParams(account.authParamsKey);
     if (!authParams) {
-      const errorMessage: string = 'Account doesn\'t have valid authorization, cannot switch onto it.';
+      const errorMessage: string = i18n('Account doesn\'t have valid authorization, cannot switch onto it.');
       notify(errorMessage);
       throw new Error(errorMessage);
     }

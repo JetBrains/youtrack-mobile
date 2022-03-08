@@ -28,7 +28,7 @@ const issueCommonLinksActions = (issue: $Shape<IssueFull>): {
       const [error, issues] = await until(api.issues.getIssuesXShort(query, page));
       if (error) {
         const err: Error = await resolveError(error);
-        const errorMsg: string = 'Failed to load issues';
+        const errorMsg: string = i18n('Failed to load issues');
         log.warn(errorMsg, err);
         notify(errorMsg);
       }
@@ -42,7 +42,7 @@ const issueCommonLinksActions = (issue: $Shape<IssueFull>): {
       ));
       if (error) {
         const err: Error = await resolveError(error);
-        const errorMsg: string = 'Failed to link issue';
+        const errorMsg: string = i18n('Failed to link issue');
         log.warn(errorMsg, err);
         notify(errorMsg);
       } else {
@@ -68,7 +68,7 @@ const issueCommonLinksActions = (issue: $Shape<IssueFull>): {
       const [error] = await until(api.issue.removeIssueLink(issue.id, linkedIssue.id, linkTypeId));
       if (error) {
         const err: Error = await resolveError(error);
-        const errorMsg: string = 'Failed to load linked issues';
+        const errorMsg: string = i18n('Failed to load linked issues');
         log.warn(errorMsg, err);
         notify(errorMsg);
       } else {

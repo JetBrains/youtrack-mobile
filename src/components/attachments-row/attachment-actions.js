@@ -26,6 +26,7 @@ const attachFileMethod: Object = {
   openCamera: 'openCamera',
   openPicker: 'openPicker',
 };
+const failedToAttachFileToCommentMessage: string = i18n('Failed to attach file to a comment');
 const notifySuccessAttachmentDeletion: () => void = () => notify(i18n('Attachment deleted'));
 
 export type AttachmentActions = {
@@ -87,7 +88,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
         );
 
         if (error) {
-          const message: string = 'Failed to attach file';
+          const message: string = i18n('Failed to attach file');
           log.warn(message, error);
           notify(message, error);
           return [];
@@ -122,9 +123,8 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           true
         );
         if (error) {
-          const message: string = 'Failed to attach file to a comment';
-          log.warn(message, error);
-          notify(message, error);
+          log.warn(failedToAttachFileToCommentMessage, error);
+          notify(failedToAttachFileToCommentMessage, error);
           return [];
         } else {
           dispatch(actions.stopImageAttaching());
@@ -154,9 +154,8 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           true
         );
         if (error) {
-          const message: string = 'Failed to attach file to a comment';
-          log.warn(message, error);
-          notify(message, error);
+          log.warn(failedToAttachFileToCommentMessage, error);
+          notify(failedToAttachFileToCommentMessage, error);
           return [];
         } else {
           dispatch(actions.stopImageAttaching());
