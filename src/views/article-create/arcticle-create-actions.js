@@ -4,6 +4,7 @@ import {ANALYTICS_ARTICLE_CREATE_PAGE} from 'components/analytics/analytics-ids'
 import {attachmentActions} from './article-create__attachment-actions-and-types';
 import {confirmDeleteArticleDraft} from '../article/arcticle-helper';
 import {deleteArticle} from '../article/arcticle-actions';
+import {i18n} from '../../components/i18n/i18n';
 import {logEvent} from 'components/log/log-helper';
 import {notify} from 'components/notification/notification';
 import {until} from 'util/util';
@@ -77,13 +78,13 @@ const publishArticleDraft = (articleDraft: Article): ((
     dispatch(setProcessing(false));
 
     if (error) {
-      const errorMsg: string = 'Failed to publish article draft';
+      const errorMsg: string = i18n('Failed to publish article draft');
       logEvent({message: errorMsg, isError: true});
       notify(errorMsg, error);
       dispatch(setError(error));
     } else {
       dispatch(setDraft(null));
-      notify('Article published');
+      notify(i18n('Article published'));
       return article;
     }
   };

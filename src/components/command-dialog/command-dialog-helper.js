@@ -2,7 +2,9 @@
 
 import {CUSTOM_ERROR_MESSAGE} from '../error/error-messages';
 import {getApi} from '../api/api__instance';
+import {i18n} from '../i18n/i18n';
 import {notify} from '../notification/notification';
+
 import type {CommandSuggestionResponse} from 'flow/Issue';
 
 
@@ -22,7 +24,7 @@ const loadIssueCommandSuggestions = async (
 const applyCommand = async (issueIds: Array<string>, command: string): Promise<void> => {
   try {
     const response: any = await getApi().applyCommand({issueIds, command});
-    notify('Command applied');
+    notify(i18n('Command applied'));
     return response;
   } catch (err) {
     notify(CUSTOM_ERROR_MESSAGE.APPLY_COMMAND_FAILED, err);

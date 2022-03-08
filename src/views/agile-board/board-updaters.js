@@ -1,6 +1,7 @@
 /* @flow */
 
 import log from 'components/log/log';
+import {i18n} from '../../components/i18n/i18n';
 import {notify} from 'components/notification/notification';
 
 import type {BoardCell, AgileBoardRow, Board, AgileColumn} from 'flow/Agile';
@@ -205,7 +206,7 @@ export function addOrUpdateCell(board: Board, issue: IssueOnList, rowId: string,
 
   const targetCell = targetRow.cells.filter((cell: BoardCell) => cell.column.id === columnId)[0];
   if (!targetCell) {
-    notify('Agile board settings have been changed. Reload the board.');
+    notify(i18n('Agile board settings have been changed. Reload the board.'));
     return {
       ...board,
       orphanRow: board.orphanRow,

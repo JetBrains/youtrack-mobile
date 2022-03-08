@@ -61,9 +61,9 @@ const FeaturesDebugSettings = (props: Props): Node => {
           >
             <TouchableOpacity
               onPress={() => {
-                confirmation('Clear cached data?', 'Clear now').then(async () => {
+                confirmation(i18n('Clear cached data?'), i18n('Clear now')).then(async () => {
                   await clearCachesAndDrafts();
-                  notify('Storage cleared');
+                  notify(i18n('Storage cleared'));
                 });
               }}
             >

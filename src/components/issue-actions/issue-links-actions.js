@@ -2,6 +2,7 @@
 
 import log from '../log/log';
 import {getApi} from '../api/api__instance';
+import {i18n} from '../i18n/i18n';
 import {notify} from '../notification/notification';
 import {resolveError} from '../error/error-resolver';
 import {until} from 'util/util';
@@ -45,7 +46,7 @@ const issueCommonLinksActions = (issue: $Shape<IssueFull>): {
         log.warn(errorMsg, err);
         notify(errorMsg);
       } else {
-        notify('Issue link added');
+        notify(i18n('Issue link added'));
       }
       return !error;
     },
@@ -71,7 +72,7 @@ const issueCommonLinksActions = (issue: $Shape<IssueFull>): {
         log.warn(errorMsg, err);
         notify(errorMsg);
       } else {
-        notify('Issue link removed');
+        notify(i18n('Issue link removed'));
       }
       return !error;
     },

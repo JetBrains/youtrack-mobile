@@ -83,7 +83,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
           dispatch(receiveActivityPage(activityPage));
         } catch (error) {
           dispatch({type: types.RECEIVE_COMMENTS_ERROR, error: error});
-          notify('Failed to load comments. Try refresh', error);
+          notify(i18n('Failed to load comments'), error);
         }
       };
     },
@@ -184,7 +184,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
           const updatedComment = await getApi().issue.submitComment(issue.id, comment);
           log.info(`Comment ${updatedComment.id} updated. Refreshing...`);
           if (isAttachmentChange) {
-            notify('Comment updated');
+            notify(i18n('Comment updated'));
           }
           if (!isAttachmentChange) {
             await dispatch(actions.setEditingComment(null));
@@ -235,7 +235,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
       return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
         const issueId = getState()[stateFieldName].issueId;
 
-        confirmation('Delete comment permanently?', 'Delete')
+        confirmation(i18n('Delete comment permanently?'), i18n('Delete'))
           .then(async () => {
             try {
               await getApi().issue.deleteCommentPermanently(issueId, comment.id);
@@ -244,7 +244,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
               dispatch(actions.loadActivity());
             } catch (error) {
               dispatch(actions.loadActivity());
-              notify('Failed to delete comment. Refresh', error);
+              notify(i18n('Failed to delete comment'), error);
             }
           })
           .catch(() => {});
@@ -261,7 +261,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
         const api: Api = getApi();
         const {issue} = getState()[stateFieldName];
         Clipboard.setString(makeIssueWebUrl(api, issue, comment.id));
-        notify('Comment URL copied');
+        notify(i18n('Comment URL copied'));
       };
 
       function makeIssueWebUrl(api: Api, issue: IssueFull, commentId: ?string) {
@@ -342,7 +342,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
           dispatch(receiveCommentSuggestions(suggestions));
           return suggestions;
         } catch (error) {
-          notify('Failed to load comment suggestions', error);
+          notify(i18n('Failed to load comment suggestions'), error);
           return [];
         } finally {
           dispatch(stopLoadingCommentSuggestions());

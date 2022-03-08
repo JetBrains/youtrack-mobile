@@ -5,6 +5,7 @@ import log from '../log/log';
 import usage from '../usage/usage';
 import {ANALYTICS_ISSUE_PAGE, ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {attachmentActionMap, createAttachmentTypes} from './attachment-helper';
+import {i18n} from '../i18n/i18n';
 import {IconAttachment, IconCamera} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
 import {notify} from '../notification/notification';
@@ -25,7 +26,7 @@ const attachFileMethod: Object = {
   openCamera: 'openCamera',
   openPicker: 'openPicker',
 };
-const notifySuccessAttachmentDeletion: () => void = () => notify('Attachment deleted');
+const notifySuccessAttachmentDeletion: () => void = () => notify(i18n('Attachment deleted'));
 
 export type AttachmentActions = {
   toggleAttachFileDialog: Function,
@@ -249,7 +250,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
             dispatch(actions.toggleAttachFileDialog(true));
           }
         } catch (err) {
-          notify('Can\'t add file', err);
+          notify(i18n('Can\'t add file'), err);
         }
       };
     },

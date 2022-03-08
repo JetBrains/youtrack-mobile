@@ -6,6 +6,7 @@ import {Alert, Clipboard, Share} from 'react-native';
 import Router from 'components/router/router';
 import {confirmDeleteArticle} from './arcticle-helper';
 import {getStorageState} from 'components/storage/storage';
+import {i18n} from '../../components/i18n/i18n';
 import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {hasType} from 'components/api/api__resource-types';
@@ -330,7 +331,7 @@ const updateArticleCommentDraft = (comment: IssueComment): ((dispatch: (any) => 
     const article: Article = getState().article.article;
     const [error, updatedCommentDraft] = await until(api.articles.updateCommentDraft(article.id, comment));
     if (error) {
-      notify('Failed to update a comment draft', error);
+      notify(i18n('Failed to update a comment draft'), error);
     } else {
       dispatch(setArticleCommentDraft(updatedCommentDraft));
     }
@@ -346,7 +347,7 @@ const submitArticleCommentDraft = (commentDraft: IssueComment): ((dispatch: (any
     await dispatch(updateArticleCommentDraft(commentDraft));
     const [error] = await until(api.articles.submitCommentDraft(article.id, commentDraft.id));
     if (error) {
-      notify('Failed to update a comment draft', error);
+      notify(i18n('Failed to update a comment draft'), error);
     } else {
       logEvent({message: 'Comment added', analyticsId: ANALYTICS_ARTICLE_PAGE});
       dispatch(setArticleCommentDraft(null));
@@ -361,7 +362,7 @@ const updateArticleComment = (comment: IssueComment): ((dispatch: (any) => any, 
     logEvent({message: 'Update article comment', analyticsId: ANALYTICS_ARTICLE_PAGE});
     const [error] = await until(api.articles.updateComment(article.id, comment));
     if (error) {
-      notify('Failed to update a comment', error);
+      notify(i18n('Failed to update a comment'), error);
     } else {
       logEvent({message: 'Comment updated', analyticsId: ANALYTICS_ARTICLE_PAGE});
       dispatch(loadActivitiesPage());
@@ -389,7 +390,7 @@ const deleteArticleComment = (commentId: string): ((dispatch: (any) => any, getS
 
       const [error] = await until(api.articles.deleteComment(article.id, commentId));
       if (error) {
-        notify('Failed to delete a comment', error);
+        notify(i18n('Failed to delete a comment'), error);
       } else {
         dispatch(loadActivitiesPage());
       }
@@ -481,7 +482,7 @@ const getMentions = (query: string): ((
     const [error, mentions] = await until(
       api.mentions.getMentions(query, {containers: [{$type: article.$type, id: article.id}]}));
     if (error) {
-      notify('Failed to load user mentions', error);
+      notify(i18n('Failed to load user mentions'), error);
       return null;
     }
     return mentions;
@@ -502,7 +503,7 @@ const toggleFavorite = (): ((
 
     const [error] = await until(api.articles.updateArticle(article.id, {hasStar: !prev}));
     if (error) {
-      notify('Failed to update the article', error);
+      notify(i18n('Failed to update the article'), error);
       dispatch(setArticle({...article, hasStar: prev}));
     }
   };
@@ -557,7 +558,7 @@ const onCheckboxUpdate = (articleContent: string): Function =>
       article.id, {content: articleContent}, 'content')
     );
     if (error) {
-      notify('Failed to update a checkbox', error);
+      notify(i18n('Failed to update a checkbox'), error);
       await dispatch(setArticle(article));
     } else {
       cacheUserLastVisitedArticle(updatedArticle);

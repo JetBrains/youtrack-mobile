@@ -117,7 +117,7 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
         updateAttaches(attachedFiles);
       }
     } catch (err) {
-      notify('Can\'t add a file', err);
+      notify(i18n('Can\'t add a file'), err);
     }
   };
 

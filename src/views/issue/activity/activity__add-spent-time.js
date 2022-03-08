@@ -194,7 +194,7 @@ const AddSpentTimeForm = (props: Props) => {
   };
 
   const onClose = () => {
-    confirmation('Discard draft and close?', 'Discard and close')
+    confirmation(i18n('Discard draft and close?'), i18n('Discard and close'))
       .then(() => {
         logEvent({
           message: 'SpentTime: form:cancel',

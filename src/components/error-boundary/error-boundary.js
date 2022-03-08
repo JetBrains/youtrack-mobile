@@ -75,12 +75,11 @@ class ErrorBoundary extends Component<Props, State> {
 
       const reportedIssueId: ?string = await sendReport(`Render crash report: ${errorData.summary}`, errorData.description);
       if (reportedIssueId) {
-        notify('Crash has been reported');
+        notify(i18n('Crash has been reported'));
       }
     } catch (err) {
-      const errorMsg: string = 'Failed to report the crash.';
-      log.warn(errorMsg, err);
-      notify(`${errorMsg} Try one more time.`, err);
+      log.warn('Failed to report the crash.', err);
+      notify(i18n('Failed to report the crash. Try one more time.'), err);
     } finally {
       this.setState({isReporting: false});
     }
@@ -117,7 +116,7 @@ class ErrorBoundary extends Component<Props, State> {
     try {
       RNRestart.Restart();
     } catch (err) {
-      notify('Failed to restart the app automatically. Try restart it manually.');
+      notify(i18n('Failed to restart the app automatically. Try restart it manually.'));
     }
   };
 

@@ -112,7 +112,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
     if (error) {
       notify(ERROR_MESSAGE_DATA.DEFAULT.title);
     } else {
-      notify('Thank you your feedback!');
+      notify(i18n('Thank you for your feedback!'));
       this.setState(this.initialState);
       this.close();
     }

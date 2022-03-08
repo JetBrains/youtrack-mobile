@@ -8,6 +8,7 @@ import {confirmation} from 'components/confirmation/confirmation';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from '../issue-base-actions-creater';
 import {extractErrorMessage, resolveError} from 'components/error/error-resolver';
 import {getActivityAllTypes, getActivityCategories} from 'components/activity/activity-helper';
+import {i18n} from '../../../components/i18n/i18n';
 import {logEvent} from 'components/log/log-helper';
 import {notify} from 'components/notification/notification';
 import {sortAlphabetically, sortByOrdinal} from 'components/search/sorting';
@@ -254,14 +255,14 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
         const api: Api = getApi();
         const issueId: string = workItem?.issue?.id || getState()[stateFieldName].issueId;
         return confirmation(
-          'Are you sure you want to delete work item?',
-          'Delete'
+          i18n('Are you sure you want to delete work item?'),
+          i18n('Delete')
         ).then(async () => {
           const [error] = await until(api.issue.deleteWorkItem(issueId, workItem.id));
           if (error) {
-            const msg: string = 'Failed to delete work item ';
+            const msg: string = i18n('Failed to delete work item');
             notify(msg, error);
-            logEvent({message: msg, isError: true});
+            logEvent({message: `${msg} `, isError: true});
             return false;
           }
           return true;

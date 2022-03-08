@@ -411,7 +411,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
             dispatch(actions.onCloseTagsSelect());
             if (error) {
               dispatch(dispatchActions.receiveIssue(issue));
-              notify('Failed to add a tag');
+              notify(i18n('Failed to add a tag'));
             }
 
           },
@@ -451,7 +451,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
             execute: () => {
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy URL');
               Clipboard.setString(makeIssueWebUrl(api, issue));
-              notify('URL copied');
+              notify(i18n('Copied'));
             },
           },
         ];
@@ -632,7 +632,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
         return await commandDialogHelper.applyCommand([issueId], command).then(async () => {
           dispatch(dispatchActions.closeCommandDialog());
           if (command.toLowerCase().trim() === 'delete') {
-            notify('Issue deleted');
+            notify(i18n('Issue deleted'));
             Router.Issues();
           } else {
             await dispatch(actions.loadIssue());

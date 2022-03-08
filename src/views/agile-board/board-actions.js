@@ -14,6 +14,7 @@ import {DEFAULT_ERROR_MESSAGE} from 'components/error/error-messages';
 import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from 'components/storage/storage';
 import {getAssistSuggestions} from 'components/query-assist/query-assist-helper';
 import {getGroupedSprints, getSprintAllIssues, updateSprintIssues} from './agile-board__helper';
+import {i18n} from '../../components/i18n/i18n';
 import {isIOSPlatform, until} from 'util/util';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {notify} from 'components/notification/notification';
@@ -411,7 +412,7 @@ export function fetchMoreSwimlanes(query?: string): ((
       log.info(`Loaded ${swimlanes.length} more swimlanes`);
       trackEvent('Load more swimlanes');
     } catch (e) {
-      notify('Could not load swimlanes', e);
+      notify(i18n('Could not load swimlanes'), e);
     } finally {
       dispatch(stopSwimlanesLoading());
     }
@@ -451,7 +452,7 @@ export function rowCollapseToggle(row: AgileBoardRow): ((
       trackEvent('Toggle row collapsing');
     } catch (e) {
       dispatch(updateRowCollapsedState(row, oldCollapsed));
-      notify('Could not update row', e);
+      notify(i18n('Could not update row'), e);
     }
   };
 }
@@ -489,7 +490,7 @@ export function columnCollapseToggle(column: BoardColumn): ((
       trackEvent('Toggle column collapsing');
     } catch (e) {
       dispatch(updateColumnCollapsedState(column, oldCollapsed));
-      notify('Could not update column', e);
+      notify(i18n('Could not update column'), e);
     }
   };
 }
@@ -626,7 +627,7 @@ export function createCardForCell(columnId: string, cellId: string): ((
       trackEvent('Open create card for cell');
       return draft;
     } catch (err) {
-      notify('Could not create card', err);
+      notify(i18n('Could not create card'), err);
       return null;
     }
   };

@@ -11,6 +11,7 @@ import {ANALYTICS_ARTICLES_PAGE} from 'components/analytics/analytics-ids';
 import {confirmation} from 'components/confirmation/confirmation';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {hasType} from 'components/api/api__resource-types';
+import {i18n} from '../../components/i18n/i18n';
 import {logEvent} from 'components/log/log-helper';
 import {notify} from 'components/notification/notification';
 import {setArticles, setError, setExpandingProjectId, setList, setLoading} from './knowledge-base-reducers';
@@ -58,7 +59,7 @@ const createArticleList = (articles: Array<Article>, isExpanded?: boolean): Arti
 export const getPinnedNonTemplateProjects = async (api: Api): Promise<Array<Folder>> => {
   const [error, pinnedFolders]: [?CustomError, Folder] = await until(api.issueFolder.getPinnedIssueFolder());
   if (error) {
-    notify('Unable to load favorite projects', error);
+    notify(i18n('Failed to load favorite projects'), error);
     return [];
   } else {
     return ((pinnedFolders: any): Array<Folder>).filter((it: Folder) => !it.template).filter(hasType.project);
@@ -167,7 +168,7 @@ const filterArticles = (query: string | null): ((
       );
       dispatch(setLoading(false));
       if (error) {
-        notify('Unable to filter articles', error);
+        notify(i18n('Failed to filter articles'), error);
       } else {
         const projectData: Array<ProjectArticlesData> = helper.createProjectDataFromArticles(articles);
         const articlesList: ArticlesList = createArticleList(projectData, true);
@@ -187,7 +188,7 @@ const loadArticlesDrafts = (): ((
   const [error, articlesDrafts] = await until(api.articles.getArticleDrafts());
 
   if (error) {
-    notify('Unable to load article drafts', error);
+    notify(i18n('Failed to load article drafts'), error);
     return [];
   } else {
     return articlesDrafts.sort(sortByUpdatedReverse);
@@ -267,7 +268,7 @@ const toggleProjectVisibility = (item: ArticlesListItem): ((
       );
 
       if (error) {
-        notify('Unable to load project articles', error);
+        notify(i18n('Unable to load project articles'), error);
       }
       return projectData && projectData[0] ? helper.replaceProjectData(articles, projectData[0]) : null;
     }
@@ -284,8 +285,8 @@ const toggleProjectFavorite = (item: ArticlesListItem): ((
       analyticsId: ANALYTICS_ARTICLES_PAGE,
     });
     return confirmation(
-      'Remove project from favorites?',
-      'Remove',
+      i18n('Remove project from favorites?'),
+      i18n('Remove'),
     )
       .then(async () => {
         const api: Api = getApi();
@@ -298,7 +299,7 @@ const toggleProjectFavorite = (item: ArticlesListItem): ((
 
         const [error] = await until(api.projects.toggleFavorite(item.title.id, item.title.pinned));
         if (error) {
-          notify('Failed to toggle favorite for the project', error);
+          notify(i18n('Failed to toggle favorite for the project'), error);
           update(prevArticles);
           return true;
         } else {
@@ -349,7 +350,7 @@ const updateProjectsFavorites = (
         )
     );
     if (error) {
-      notify('Failed to change favorites', error);
+      notify(i18n('Failed to change favorites'), error);
     } else if (hasNoFavorites) {
       storeProjectData(null);
       storeArticlesList(null);
