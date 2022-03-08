@@ -22,6 +22,7 @@ import type {MarkdownNode} from '../../flow/Markdown';
 import type {Node as ReactNode} from 'React';
 import type {UITheme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {i18n} from '../i18n/i18n';
 
 const isAndroid: boolean = isAndroidPlatform();
 const MAX_CODE_LENGTH: number = 630;
@@ -130,7 +131,7 @@ function CodeHighlighter(props: {node: Node, uiTheme: UITheme}) {
             style={styles.codeToolbarButton}
             onPress={() => {
               Clipboard.setString(codeData.code);
-              notify('Copied');
+              notify(i18n('Copied'));
             }}
           >
             <IconCopy

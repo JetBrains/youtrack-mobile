@@ -33,6 +33,7 @@ import type {State as IssueCommentActivityState} from './issue-activity__comment
 import type {State as SingleIssueState} from '../issue-reducers';
 import type {User} from 'flow/User';
 import type {UserGroup} from 'flow/UserGroup';
+import {i18n} from '../../../components/i18n/i18n';
 
 
 type ApiGetter = () => Api;
@@ -282,7 +283,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
             execute: () => {
               Clipboard.setString(comment.text);
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment text');
-              notify('Copied');
+              notify(i18n('Copied'));
             },
           },
           {

@@ -29,6 +29,7 @@ import type {IssueState} from './issue-base-reducer';
 import type {NormalizedAttachment} from 'flow/Attachment';
 import type {UserAppearanceProfile} from 'flow/User';
 import type {Visibility} from 'flow/Visibility';
+import {i18n} from '../../components/i18n/i18n';
 
 type ApiGetter = () => Api;
 type StateGetter = () => IssueState;
@@ -534,7 +535,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
               execute: () => {
                 usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy text via action');
                 Clipboard.setString(text);
-                notify('Text copied');
+                notify(i18n('Copied'));
               },
             },
             {title: 'Cancel'},
