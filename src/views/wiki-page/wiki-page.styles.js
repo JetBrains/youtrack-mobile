@@ -10,7 +10,6 @@ export default EStyleSheet.create({
   },
   content: {
     flexGrow: 1,
-    paddingTop: UNIT,
     paddingLeft: UNIT,
   },
   plainText: {

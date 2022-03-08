@@ -10,6 +10,7 @@ import usage from 'components/usage/usage';
 import YoutrackWiki from 'components/wiki/youtrack-wiki';
 import {getApi} from 'components/api/api__instance';
 import {IconClose} from 'components/icon/icon';
+import {isAndroidPlatform} from '../../util/util';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables/variables';
@@ -86,12 +87,8 @@ export default class WikiPage extends PureComponent<Props, State> {
     );
   }
 
-  _renderPlainText() {
-    return <LongText style={[styles.plainText, this.props.style]}>{this.props.plainText}</LongText>;
-  }
-
   render(): null | Node {
-    const {wikiText, plainText} = this.props;
+    const {wikiText, plainText, style, title} = this.props;
 
     if (!wikiText && !plainText) {
       return null;
@@ -100,6 +97,8 @@ export default class WikiPage extends PureComponent<Props, State> {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
+          const isAndroid: boolean = isAndroidPlatform();
+          const ContentComponent: any = isAndroid ? Text : LongText;
           return (
             <SafeAreaView style={[styles.container, {backgroundColor: theme.uiTheme.colors.$background}]}>
               <View
@@ -111,24 +110,26 @@ export default class WikiPage extends PureComponent<Props, State> {
                   leftButton={<IconClose size={21} color={theme.uiTheme.colors.$link}/>}
                   onBack={this.onBack}
                 >
-                  <Text style={styles.headerTitle} selectable={true}>{this.props.title}</Text>
+                  <Text style={styles.headerTitle} selectable={true}>{title}</Text>
                 </Header>
 
                 <ScrollView
-                  contentContainerStyle={styles.container}
-                  scrollEventThrottle={100}
+                  contentContainerStyle={isAndroid ? null : styles.container}
+                  fadingEdgeLength={70}
+                  scrollEventThrottle={50}
                   onScroll={(params) => this.onScroll(params.nativeEvent)}
                 >
-                  <View style={styles.content}>
-                    <ScrollView
-                      horizontal={true}
-                      scrollEventThrottle={100}
-                    >
+                  <ScrollView
+                    horizontal={true}
+                    fadingEdgeLength={70}
+                    scrollEventThrottle={50}
+                  >
+                    <View style={styles.content}>
                       {wikiText && this._renderWiki(theme.uiTheme)}
-                      {Boolean(!wikiText && plainText) && this._renderPlainText()}
+                      {Boolean(!wikiText && !!plainText) && <ContentComponent selectable={true} style={[styles.plainText, style]}>{plainText}</ContentComponent>}
+                    </View>
 
-                    </ScrollView>
-                  </View>
+                  </ScrollView>
                 </ScrollView>
               </View>
             </SafeAreaView>

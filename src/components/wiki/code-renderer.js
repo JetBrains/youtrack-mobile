@@ -2,17 +2,18 @@
 
 import React from 'react';
 
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Clipboard, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
 import { idea, darcula } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
+import IconCopy from '@jetbrains/icons/copy.svg';
 import IconFullscreen from '@jetbrains/icons/fullscreen.svg';
-import LongText from './text-renderer';
 import Router from '../router/router';
 import {decodeHTML} from 'entities';
 import {isAndroidPlatform} from 'util/util';
 import {monospaceFontAndroid, monospaceFontIOS, SECONDARY_FONT_SIZE} from '../common-styles/typography';
+import {notify} from '../notification/notification';
 import {showMoreText} from '../text-view/text-view';
 
 import styles from './youtrack-wiki.styles';
@@ -55,7 +56,7 @@ function onShowFullCode(code: string) {
   Router.WikiPage({plainText: code});
 }
 
-function Highlighter({code, language, uiTheme}: {code: string, language: string, uiTheme: UITheme}) {
+function Highlighter({code = '', language, uiTheme}: {code: string, language: string, uiTheme: UITheme}) {
   return <SyntaxHighlighter
     highlighter="hljs"
     language={language}
@@ -124,16 +125,32 @@ function CodeHighlighter(props: {node: Node, uiTheme: UITheme}) {
 
       <View style={styles.codeToolbar}>
         <Text style={styles.codeToolbarText}>Code snippet</Text>
-        <TouchableOpacity
-          style={styles.codeToolbarButton}
-          onPress={() => onShowFullCode(codeData.code)}
-        >
-          <IconFullscreen
-            width={16}
-            height={16}
-            color={styles.codeToolbarIcon.color}
-          />
-        </TouchableOpacity>
+        <View style={styles.codeToolbarButtonContainer}>
+          <TouchableOpacity
+            style={styles.codeToolbarButton}
+            onPress={() => {
+              Clipboard.setString(codeData.code);
+              notify('Copied');
+            }}
+          >
+            <IconCopy
+              width={15}
+              height={15}
+              fill={styles.codeToolbarIcon.color}
+              color={styles.codeToolbarIcon.color}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.codeToolbarButton}
+            onPress={() => onShowFullCode(codeData.code)}
+          >
+            <IconFullscreen
+              width={15}
+              height={15}
+              color={styles.codeToolbarIcon.color}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View
@@ -142,11 +159,12 @@ function CodeHighlighter(props: {node: Node, uiTheme: UITheme}) {
       >
         <ScrollView
           horizontal={true}
+          fadingEdgeLength={70}
           scrollEventThrottle={100}
         >
           <View onStartShouldSetResponder={() => true}>
             {stacktraceOrException && (
-              <LongText style={styles.exception}>{codeSnippet}</LongText>
+              <View><Text style={styles.exception}>{codeSnippet}</Text></View>
             )}
             {!stacktraceOrException && (
               <Text selectable={true}>

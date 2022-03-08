@@ -20,11 +20,17 @@ export default EStyleSheet.create({
     borderTopLeftRadius: UNIT,
     borderTopRightRadius: UNIT,
   },
+  codeToolbarButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   codeToolbarButton: {
+    marginLeft: UNIT,
     padding: UNIT,
   },
   codeToolbarIcon: {
-    color: '$icon',
+    color: '$iconAccent',
   },
   codeToolbarText: {
     color: '$text',
