@@ -29,6 +29,7 @@ import {IconBack, IconContextActions} from 'components/icon/icon';
 import {logEvent} from 'components/log/log-helper';
 import {routeMap} from '../../app-routes';
 import {ThemeContext} from 'components/theme/theme-context';
+import {visibilityArticleDefaultText} from 'components/visibility/visibility-strings';
 
 import styles from './article.styles';
 
@@ -182,9 +183,9 @@ class Article extends IssueTabbed<Props, IssueTabbedState & { modalChildren: any
                 onSubmit={(visibility: Visibility) => getApi().articles.updateArticle(articleData.id, {visibility})}
                 uiTheme={this.uiTheme}
                 getOptions={() => getApi().articles.getVisibilityOptions(articleData.idReadable)}
-                visibilityDefaultLabel="Visible to article readers"
+                visibilityDefaultLabel={visibilityArticleDefaultText}
               />
-              {articleData?.hasUnpublishedChanges && <Badge valid={true} text="in revision"/>}
+              {articleData?.hasUnpublishedChanges && <Badge valid={true} text={i18n('in revision')}/>}
             </View>
 
             <CreateUpdateInfo
