@@ -38,10 +38,57 @@ describe('<CustomField/>', () => {
     name.children().should.have.text(fakeField.projectCustomField.field.name);
   });
 
+  it('should render localized field name', () => {
+    const localizedFieldMock = {
+      projectCustomField: {
+        emptyFieldText: 'im empty',
+        field: {
+          name: 'Test custom field',
+          localizedName: 'Test custom field localized',
+          fieldType: {
+            valueType: 'some-type',
+          },
+        },
+      },
+      value: {
+        name: 'Test value',
+        localizedName: 'Test value localized',
+      },
+      color: {id: 4},
+    };
+    const wrapper = shallow(<CustomField field={localizedFieldMock}/>);
+    const name = wrapper.find({testID: 'test:id/name'});
+    name.children().should.have.text(localizedFieldMock.projectCustomField.field.localizedName);
+  });
+
   it('should render field value', () => {
     const wrapper = shallow(<CustomField field={fakeField}/>);
     const value = wrapper.find({testID: 'test:id/value'});
-    value.children().should.have.text(fakeField.value.name);
+    value.children().should.have.text(fakeField.value.localizedName);
+  });
+
+  it('should render localized field value', () => {
+    const localizedFieldMock = {
+      projectCustomField: {
+        emptyFieldText: 'im empty',
+        field: {
+          name: 'Test custom field',
+          localizedName: 'Test custom field localized',
+          fieldType: {
+            valueType: 'some-type',
+          },
+        },
+      },
+      value: {
+        name: 'Test value',
+        localizedName: 'Test value localized',
+      },
+      color: {id: 4},
+    };
+
+    const wrapper = shallow(<CustomField field={localizedFieldMock}/>);
+    const value = wrapper.find({testID: 'test:id/value'});
+    value.children().should.have.text(fakeField.value.localizedName);
   });
 
   it('should render user field value with avatar', () => {

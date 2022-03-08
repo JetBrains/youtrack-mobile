@@ -73,7 +73,7 @@ export default class CustomField extends Component<Props, void> {
       return (
         <ColorField
           style={styles.colorMarker}
-          text={firstColorCodedValue.name}
+          text={firstColorCodedValue.localizedName || firstColorCodedValue.name}
           color={firstColorCodedValue.color}
         />
       );
