@@ -74,7 +74,7 @@ function Highlighter({code = '', language, uiTheme}: {code: string, language: st
 function getCodeStyle(uiTheme: UITheme): ViewStyleProp {
   const codeStyle: ViewStyleProp = uiTheme.dark ? darcula : idea;
   for (const i in codeStyle) {
-    codeStyle[i].lineHeight = '1.25em';
+    codeStyle[i].lineHeight = '1.15em';
   }
   return {
     ...codeStyle,
