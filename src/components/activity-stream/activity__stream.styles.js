@@ -156,7 +156,7 @@ export default EStyleSheet.create({
     flexGrow: 1,
     marginRight: UNIT * 2,
   },
-  vcsFilesAmount: {
+  showMoreMessage: {
     marginTop: UNIT,
   },
   vcsMessage: {

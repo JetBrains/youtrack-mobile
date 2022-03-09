@@ -16,7 +16,7 @@ import {
   pullRequestState,
 } from './activity__stream-vcs-helper';
 import {HIT_SLOP} from '../common-styles/button';
-import {i18n} from '../i18n/i18n';
+import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {IconCaretDownUp} from '../icon/icon';
 import {relativeDate} from '../issue-formatter/issue-formatter';
 
@@ -168,9 +168,17 @@ const StreamVCS = (props: Props) => {
         {renderMarkdown(vcs.title, !!vcs.id)}
         {renderMarkdown(vcs.text, !!vcs.id)}
 
+        {!!vcs.files && vcs.files !== -1 && (
+          <View>
+            <Text style={styles.activityLabel}>
+              {vcs.files} {i18nPlural(vcs.files, 'file', 'files')}
+            </Text>
+          </View>
+        )}
+
         {(infoMessages.length > 0 || errorMessages.length > 0) && (
           <Details
-            style={styles.secondaryTextColor}
+            style={{...styles.showMoreMessage, ...styles.secondaryTextColor}}
             toggler="Show more"
             renderer={() => (
               <>
@@ -179,14 +187,6 @@ const StreamVCS = (props: Props) => {
               </>
             )}
           />
-        )}
-
-        {!!vcs.files && vcs.files !== -1 && (
-          <View style={styles.vcsFilesAmount}>
-            <Text style={[styles.activityLabel]}>
-              {vcs.files} {vcs.files > 1 ? i18n('files') : i18n('file')}
-            </Text>
-          </View>
         )}
 
       </View>

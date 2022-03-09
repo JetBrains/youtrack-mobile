@@ -166,7 +166,7 @@ class Settings extends PureComponent<Props, State> {
                   testID="settingsFooter"
                   style={styles.settingsFooter}
                 >
-                  <Text style={styles.settingsFooterTitle}>YouTrack Mobile</Text>
+                  <Text style={styles.settingsFooterTitle}>{i18n('YouTrack Mobile')}</Text>
 
                   <TouchableOpacity
                     onPress={() => Linking.openURL('https://jetbrains.com/youtrack')}>
