@@ -36,7 +36,7 @@ const FeaturesDebugSettings = (props: Props): Node => {
           showShadow={true}
           leftButton={<IconClose size={21} color={styles.closeButton.color} style={styles.closeButton}/>}
           onBack={onHide}
-          title={i18n('Debug settings')}
+          title="Debug settings"
         />
 
         <ScrollView>
@@ -46,7 +46,7 @@ const FeaturesDebugSettings = (props: Props): Node => {
             <Text
               style={styles.featuresListItemText}
             >
-              {i18n('Force handset mode')}
+              Force handset mode
             </Text>
             <Switch
               value={forceHandsetMode}
@@ -61,13 +61,13 @@ const FeaturesDebugSettings = (props: Props): Node => {
           >
             <TouchableOpacity
               onPress={() => {
-                confirmation(i18n('Clear cached data?'), i18n('Clear now')).then(async () => {
+                confirmation('Clear cached data?', 'Clear now').then(async () => {
                   await clearCachesAndDrafts();
-                  notify(i18n('Storage cleared'));
+                  notify('Storage cleared');
                 });
               }}
             >
-              <Text style={styles.button}>{i18n('Clear storage')}</Text>
+              <Text style={styles.button}>Clear storage</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
