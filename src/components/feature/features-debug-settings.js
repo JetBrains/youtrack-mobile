@@ -8,7 +8,6 @@ import ModalView from '../modal-view/modal-view';
 import Router from '../router/router';
 import {clearCachesAndDrafts, flushStoragePart, getStorageState} from '../storage/storage';
 import {confirmation} from '../confirmation/confirmation';
-import {i18n} from '../i18n/i18n';
 import {IconClose} from '../icon/icon';
 import {notify} from '../notification/notification';
 
