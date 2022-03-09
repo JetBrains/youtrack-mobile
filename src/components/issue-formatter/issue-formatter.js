@@ -3,9 +3,10 @@
 import fromNow from 'from-now';
 import RNLocalize from 'react-native-localize';
 
-import type {CustomField} from 'flow/CustomFields';
-import type {User} from 'flow/User';
+import {i18n} from '../i18n/i18n';
+
 import type {AnyIssue} from 'flow/Issue';
+import type {CustomField} from 'flow/CustomFields';
 
 type Locale = {
   languageCode: string,
@@ -15,28 +16,38 @@ type Locale = {
   isRTL: boolean,
 };
 
-const shortRelativeFormat = {
-  'now': 'just now',
-  'seconds': ['sec', 'sec'],
-  'minutes': ['min', 'min'],
-  'hours': ['hr', 'hr'],
-  'days': ['d', 'd'],
-  'weeks': ['w', 'w'],
-  'months': ['mon', 'mon'],
-  'years': ['y', 'y'],
+const justNow: string = i18n('just now');
+const translations: { [string]: { 1: string, 2: string } } = {
+  'now': justNow,
+  'seconds': {
+    1: i18n('second'),
+    2: i18n('seconds'),
+  },
+  'minutes': {
+    1: i18n('minute'),
+    2: i18n('minutes'),
+  },
+  'hours': {
+    1: i18n('hour'),
+    2: i18n('hours'),
+  },
+  'days': {
+    1: i18n('day'),
+    2: i18n('days'),
+  },
+  'weeks': {
+    1: i18n('week'),
+    2: i18n('weeks'),
+  },
+  'months': {
+    1: i18n('month'),
+    2: i18n('months'),
+  },
+  'years': {
+    1: i18n('year'),
+    2: i18n('years'),
+  },
 };
-
-function getForText(assignee: User | Array<User>): string {
-  if (Array.isArray(assignee) && assignee.length > 0) {
-    return assignee
-      .map(it => getForText(it))
-      .join(', ');
-  }
-  if (assignee && !Array.isArray(assignee)) {
-    return `for ${getEntityPresentation(assignee)}`;
-  }
-  return '    Unassigned';
-}
 
 /**
  * fromNow does not format date if it is not past. But such situation could happen if there are a little time shift on server/client.
@@ -76,26 +87,20 @@ function ytDate(date: Date | number, noTime: boolean = false): string {
   ))}`;
 }
 
-function getPostfix(formattedDate: string) {
-  return formattedDate === 'just now' ? '' : ' ago';
-}
-
 function relativeDate(date: Date|number): string {
   date = makeDatePast(date);
-  const formatted = fromNow(date, {now: 'just now'});
-  return `${formatted}${getPostfix(formatted)}`;
+  const formatted = fromNow(date, translations);
+  if (formatted === justNow) {
+    return formatted;
+  } else {
+    return i18n(`{{minutesOrHoursOrDaysOrMonthOrYears}} ago`, {minutesOrHoursOrDaysOrMonthOrYears: formatted});
+  }
 }
 
 function absDate(date: Date|number, localeString: ?string): string {
   const utcDate = new Date(date);
   const locale: Array<string> | string = localeString ? [localeString] : getDeviceLocale();
   return utcDate.toLocaleTimeString(locale, {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
-}
-
-function shortRelativeDate(date: Date|number): string {
-  date = makeDatePast(date);
-  const formatted = fromNow(date, shortRelativeFormat);
-  return `${formatted}${getPostfix(formatted)}`;
 }
 
 function findIssueField(issue: AnyIssue, predicate: (field: CustomField) => boolean): ?CustomField {
@@ -157,6 +162,13 @@ function getVisibilityPresentation(entity: Object): null | string {
 }
 
 export {
-  getForText, formatDate, relativeDate, shortRelativeDate, getPriotityField, getAssigneeField, getReadableID,
-  getVisibilityPresentation, getEntityPresentation, absDate, ytDate,
+  absDate,
+  formatDate,
+  getAssigneeField,
+  getEntityPresentation,
+  getPriotityField,
+  getReadableID,
+  getVisibilityPresentation,
+  relativeDate,
+  ytDate,
 };
