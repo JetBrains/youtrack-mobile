@@ -12,7 +12,7 @@ import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
 import Router from 'components/router/router';
 import {__setStorageState, getStorageState, populateStorage} from 'components/storage/storage';
-import {CUSTOM_ERROR_MESSAGE, REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from 'components/error/error-messages';
+import {REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from 'components/error/error-messages';
 
 const backendURLMock = 'https://example.com';
 const permissionsCacheURLMock = `${backendURLMock}/permissionsCache`;
@@ -101,7 +101,7 @@ describe('app-actions', () => {
 
         await store.dispatch(actions.subscribeToPushNotifications());
 
-        expect(Notification.notify).toHaveBeenCalledWith(CUSTOM_ERROR_MESSAGE.PUSH_NOTIFICATION_REGISTRATION, registrationErrorMock);
+        expect(Notification.notifyError).toHaveBeenCalledWith(registrationErrorMock);
       });
 
       it('should not initialize if a registration service returns error', async () => {

@@ -17,7 +17,7 @@ import {getGroupedSprints, getSprintAllIssues, updateSprintIssues} from './agile
 import {i18n} from '../../components/i18n/i18n';
 import {isIOSPlatform, until} from 'util/util';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
-import {notify} from 'components/notification/notification';
+import {notify, notifyError} from 'components/notification/notification';
 import {routeMap} from '../../app-routes';
 import {sortAlphabetically} from 'components/search/sorting';
 
@@ -412,7 +412,7 @@ export function fetchMoreSwimlanes(query?: string): ((
       log.info(`Loaded ${swimlanes.length} more swimlanes`);
       trackEvent('Load more swimlanes');
     } catch (e) {
-      notify(i18n('Could not load swimlanes'), e);
+      notifyError(e);
     } finally {
       dispatch(stopSwimlanesLoading());
     }
@@ -452,7 +452,7 @@ export function rowCollapseToggle(row: AgileBoardRow): ((
       trackEvent('Toggle row collapsing');
     } catch (e) {
       dispatch(updateRowCollapsedState(row, oldCollapsed));
-      notify(i18n('Could not update row'), e);
+      notifyError(e);
     }
   };
 }
@@ -490,7 +490,7 @@ export function columnCollapseToggle(column: BoardColumn): ((
       trackEvent('Toggle column collapsing');
     } catch (e) {
       dispatch(updateColumnCollapsedState(column, oldCollapsed));
-      notify(i18n('Could not update column'), e);
+      notifyError(e);
     }
   };
 }
@@ -627,7 +627,7 @@ export function createCardForCell(columnId: string, cellId: string): ((
       trackEvent('Open create card for cell');
       return draft;
     } catch (err) {
-      notify(i18n('Could not create card'), err);
+      notifyError(err);
       return null;
     }
   };

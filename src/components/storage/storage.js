@@ -275,7 +275,6 @@ export async function flushStoragePart(part: Object): Promise<StorageState> {
     newState = new Promise(resolve => resolve(currentState));
     notify(
       i18n('Your mobile device is running low on available storage space. Some app functionality may be unavailable.'),
-      error,
       10000
     );
   }

@@ -50,15 +50,14 @@ const usage = {
     return getInstance().send(gaEvent);
   },
 
-  trackError(error: any, additionalMessage: ?string): any | void {
-    //We are not allowed to gather error itself because of Privacy Policy
+  trackError(additionalMessage: ?string): any | void {
     return usage.trackEvent('exception', JSON.stringify({
       'exDescription': additionalMessage,
     }));
   },
 
   onGlobalError(error: any, isFatal: boolean): any | void {
-    return usage.trackError(error, `Global error happened, isFatal:${isFatal.toString()}`);
+    return usage.trackError(`Global error happened, isFatal:${isFatal.toString()}`);
   },
 };
 

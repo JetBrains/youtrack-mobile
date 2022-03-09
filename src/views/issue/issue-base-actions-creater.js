@@ -14,10 +14,9 @@ import {getIssueTextCustomFields} from 'components/custom-field/custom-field-hel
 import {initialState} from './issue-base-reducer';
 import {i18n} from 'components/i18n/i18n';
 import {isIOSPlatform, until} from 'util/util';
-import {logEvent} from 'components/log/log-helper';
 import {notify, notifyError} from 'components/notification/notification';
 import {receiveUserAppearanceProfile} from 'actions/app-actions';
-import {resolveError, resolveErrorMessage} from 'components/error/error-resolver';
+import {resolveError} from 'components/error/error-resolver';
 import {showActions} from 'components/action-sheet/action-sheet';
 
 import type ActionSheet from '@expo/react-native-action-sheet';
@@ -180,8 +179,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           notify(successMessage);
           log.debug(`${successMessage} "${getState()[stateFieldName].issueId}" loaded`);
         } catch (error) {
-          const errorMessage = i18n('Cannot update issue');
-          notify(errorMessage, error);
+          notifyError(error);
         } finally {
           dispatch(dispatchActions.stopIssueRefreshing());
         }
@@ -216,7 +214,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           dispatch(dispatchActions.stopEditingIssue());
           dispatch(dispatchActions.issueUpdated(getState()[stateFieldName].issue));
         } catch (err) {
-          notifyError(i18n('Failed to update issue'), err);
+          notifyError(err);
         } finally {
           dispatch(dispatchActions.stopSavingEditedIssue());
         }
@@ -244,13 +242,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
 
         if (error) {
           dispatch(dispatchActions.setIssueSummaryAndDescription(issue.summary, preIssueDescription));
-          const message: string = i18n('Failed to update a checkbox');
-          notify(message);
-          logEvent({
-            message,
-            isError: true,
-            analyticsId: ANALYTICS_ISSUE_PAGE,
-          });
+          notifyError(error);
         } else {
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, `Checkbox: ${checked ? 'checked' : 'unchecked'}`);
         }
@@ -302,7 +294,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
             dispatch(dispatchActions.openCommandDialog(`${error.error_field} `));
           }
 
-          notifyError(i18n('Failed to update issue field'), error);
+          notifyError(error);
           dispatch(actions.loadIssue());
         }
       };
@@ -330,7 +322,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           await dispatch(actions.loadIssue());
           dispatch(dispatchActions.issueUpdated(getState()[stateFieldName].issue));
         } catch (err) {
-          notifyError(i18n('Failed to update issue project'), err);
+          notifyError(err);
           dispatch(actions.loadIssue());
         }
       };
@@ -353,8 +345,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
         try {
           await api.issue.updateIssueVoted(issue.id, voted);
         } catch (err) {
-          const errorMessage: string = await resolveErrorMessage(err);
-          notify(errorMessage || i18n('You can\'t vote'));
+          notifyError(err);
           dispatch(dispatchActions.setVoted(!voted));
         }
       };
@@ -377,7 +368,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
         try {
           await api.issue.updateIssueStarred(issue.id, starred);
         } catch (err) {
-          notifyError(i18n('Cannot update "Starred"'), err);
+          notifyError(err);
           dispatch(dispatchActions.setStarred(!starred));
         }
       };
@@ -411,7 +402,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
             dispatch(actions.onCloseTagsSelect());
             if (error) {
               dispatch(dispatchActions.receiveIssue(issue));
-              notify(i18n('Failed to add a tag'));
+              notifyError(error);
             }
 
           },
@@ -596,9 +587,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           const updatedIssue: IssueFull = {...issue, tags: issue.tags.filter((tag: Tag) => tag.id !== tagId)};
           dispatch(dispatchActions.receiveIssue(updatedIssue));
         } catch (err) {
-          const errorMsg: string = i18n('Failed to remove tag');
-          log.warn(errorMsg, err);
-          notify(errorMsg, err);
+          notifyError(err);
         }
       };
     },
@@ -700,9 +689,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
 
         } catch (err) {
           dispatch(dispatchActions.receiveIssueVisibility(Object.assign({timestamp: Date.now()}, prevVisibility)));
-          const message: string = i18n('Failed to update issue visibility');
-          notify(message, err);
-          log.warn(message, err);
+          notifyError(err);
         }
       };
     },

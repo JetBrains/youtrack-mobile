@@ -12,7 +12,7 @@ import {getEntityPresentation} from 'components/issue-formatter/issue-formatter'
 import {hasType} from 'components/api/api__resource-types';
 import {isIOSPlatform, until} from 'util/util';
 import {logEvent} from 'components/log/log-helper';
-import {notify} from 'components/notification/notification';
+import {notify, notifyError} from 'components/notification/notification';
 import type {ArticleState} from './article-reducers';
 import {
   setActivityPage,
@@ -297,9 +297,7 @@ const deleteArticle = (article: Article, onAfterDelete?: () => any): ((
     dispatch(setProcessing(false));
 
     if (error) {
-      const errorMsg: string = i18n('Failed to delete article');
-      logEvent({message: errorMsg, isError: true});
-      notify(errorMsg, error);
+      notifyError(error);
     } else if (onAfterDelete) {
       onAfterDelete();
     }
@@ -331,7 +329,7 @@ const updateArticleCommentDraft = (comment: IssueComment): ((dispatch: (any) => 
     const article: Article = getState().article.article;
     const [error, updatedCommentDraft] = await until(api.articles.updateCommentDraft(article.id, comment));
     if (error) {
-      notify(i18n('Failed to update a comment draft'), error);
+      notifyError(error);
     } else {
       dispatch(setArticleCommentDraft(updatedCommentDraft));
     }
@@ -347,7 +345,7 @@ const submitArticleCommentDraft = (commentDraft: IssueComment): ((dispatch: (any
     await dispatch(updateArticleCommentDraft(commentDraft));
     const [error] = await until(api.articles.submitCommentDraft(article.id, commentDraft.id));
     if (error) {
-      notify(i18n('Failed to update a comment draft'), error);
+      notifyError(error);
     } else {
       logEvent({message: 'Comment added', analyticsId: ANALYTICS_ARTICLE_PAGE});
       dispatch(setArticleCommentDraft(null));
@@ -362,7 +360,7 @@ const updateArticleComment = (comment: IssueComment): ((dispatch: (any) => any, 
     logEvent({message: 'Update article comment', analyticsId: ANALYTICS_ARTICLE_PAGE});
     const [error] = await until(api.articles.updateComment(article.id, comment));
     if (error) {
-      notify(i18n('Failed to update a comment'), error);
+      notifyError(error);
     } else {
       logEvent({message: 'Comment updated', analyticsId: ANALYTICS_ARTICLE_PAGE});
       dispatch(loadActivitiesPage());
@@ -390,7 +388,7 @@ const deleteArticleComment = (commentId: string): ((dispatch: (any) => any, getS
 
       const [error] = await until(api.articles.deleteComment(article.id, commentId));
       if (error) {
-        notify(i18n('Failed to delete a comment'), error);
+        notifyError(error);
       } else {
         dispatch(loadActivitiesPage());
       }
@@ -482,7 +480,7 @@ const getMentions = (query: string): ((
     const [error, mentions] = await until(
       api.mentions.getMentions(query, {containers: [{$type: article.$type, id: article.id}]}));
     if (error) {
-      notify(i18n('Failed to load user mentions'), error);
+      notifyError(error);
       return null;
     }
     return mentions;
@@ -503,7 +501,7 @@ const toggleFavorite = (): ((
 
     const [error] = await until(api.articles.updateArticle(article.id, {hasStar: !prev}));
     if (error) {
-      notify(i18n('Failed to update the article'), error);
+      notifyError(error);
       dispatch(setArticle({...article, hasStar: prev}));
     }
   };
@@ -520,15 +518,12 @@ const deleteAttachment = (attachmentId: string): ((
     logEvent({message: 'Delete article attachment', analyticsId: ANALYTICS_ARTICLE_PAGE});
     const [error] = await until(api.articles.deleteAttachment(article.id, attachmentId));
     if (error) {
-      const message = i18n('Failed to delete attachment');
-      notify(message, error);
-      logEvent({message: message, isError: true});
+      notifyError(error);
     } else {
       logEvent({message: 'Attachment deleted', analyticsId: ANALYTICS_ARTICLE_PAGE});
-      dispatch(setArticle(
-        {
-          ...article, attachments: article.attachments.filter((it: Attachment) => it.id !== attachmentId),
-        }));
+      dispatch(setArticle({
+        ...article, attachments: article.attachments.filter((it: Attachment) => it.id !== attachmentId),
+      }));
     }
   };
 };
@@ -558,7 +553,7 @@ const onCheckboxUpdate = (articleContent: string): Function =>
       article.id, {content: articleContent}, 'content')
     );
     if (error) {
-      notify(i18n('Failed to update a checkbox'), error);
+      notifyError(error);
       await dispatch(setArticle(article));
     } else {
       cacheUserLastVisitedArticle(updatedArticle);

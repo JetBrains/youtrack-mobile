@@ -14,11 +14,10 @@ import InputScrollView from 'react-native-input-scroll-view';
 
 import Header from 'components/header/header';
 import Router from 'components/router/router';
-import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {feedbackLogsOptions, feedbackTypeOptions, sendFeedback} from './settings-helper';
 import {i18n} from '../../components/i18n/i18n';
 import {IconAngleRight, IconCheck, IconClose} from 'components/icon/icon';
-import {notify} from 'components/notification/notification';
+import {notify, notifyError} from 'components/notification/notification';
 import {showActions} from 'components/action-sheet/action-sheet';
 import {until} from 'util/util';
 
@@ -110,7 +109,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
     const [error] = await until(sendFeedback(this.state.feedback));
     this.setSendingProgress(false);
     if (error) {
-      notify(ERROR_MESSAGE_DATA.DEFAULT.title);
+      notifyError(error);
     } else {
       notify(i18n('Thank you for your feedback!'));
       this.setState(this.initialState);

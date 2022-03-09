@@ -40,7 +40,7 @@ import {initialState} from './issues-reducers';
 import {isReactElement} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {logEvent} from 'components/log/log-helper';
-import {notifyError} from 'components/notification/notification';
+import {notify} from 'components/notification/notification';
 import {requestController} from 'components/api/api__request-controller';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from 'components/skeleton/skeleton';
@@ -151,7 +151,7 @@ export class Issues extends Component<Props, State> {
     log.debug(`Opening issue "${issue.id}" from list`);
     if (!issue.id) {
       log.warn('Attempt to open bad issue', issue);
-      notifyError(i18n('Can\'t open issue'), new Error('Attempt to open issue without ID'));
+      notify('Attempt to open issue without ID', 7000);
       return;
     }
     Router.Issue({

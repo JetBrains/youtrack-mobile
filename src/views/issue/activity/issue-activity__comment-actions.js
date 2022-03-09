@@ -5,14 +5,13 @@ import {Clipboard} from 'react-native';
 import * as activityHelper from './issue-activity__helper';
 import log from 'components/log/log';
 import usage from 'components/usage/usage';
-import {ANALYTICS_ISSUE_PAGE, ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
+import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
 import {confirmation} from 'components/confirmation/confirmation';
 import {createIssueActivityActions, receiveActivityAPIAvailability, receiveActivityPage} from './issue-activity__actions';
 import {COMMENT_REACTIONS_SEPARATOR} from 'components/reactions/reactions';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from '../issue-base-actions-creater';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
-import {logEvent} from 'components/log/log-helper';
-import {notify} from 'components/notification/notification';
+import {notify, notifyError} from 'components/notification/notification';
 import {showActions} from 'components/action-sheet/action-sheet';
 import {until} from 'util/util';
 import {
@@ -83,7 +82,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
           dispatch(receiveActivityPage(activityPage));
         } catch (error) {
           dispatch({type: types.RECEIVE_COMMENTS_ERROR, error: error});
-          notify(i18n('Failed to load comments'), error);
+          notifyError(error);
         }
       };
     },
@@ -149,10 +148,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
         if (draftComment && issue) {
           const [error] = await until(getApi().issue.submitDraftComment(issue.id, draftComment));
           if (error) {
-            const message: string = i18n('Failed to post a comment');
-            log.warn(message, error);
-            notify(message, error);
-            logEvent({message, isError: true, analyticsId: ANALYTICS_ISSUE_STREAM_SECTION});
+            notifyError(error);
           } else {
             dispatch(actions.setEditingComment(null));
             dispatch(actions.loadActivity(true));
@@ -191,9 +187,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
           }
           await dispatch(actions.loadActivity(true));
         } catch (error) {
-          const errorMessage: string = i18n('Comment update failed');
-          log.warn(errorMessage, error);
-          notify(errorMessage, error);
+          notifyError(error);
         }
       };
     },
@@ -209,10 +203,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
           log.info(`Comment ${comment.id} deleted state updated: ${deleted.toString()}`);
         } catch (error) {
           dispatch(updateComment({...comment}));
-          notify(
-            deleted ? i18n('Failed to delete comment') : i18n('Failed to restore comment'),
-            error,
-          );
+          notifyError(error);
         }
       };
     },
@@ -247,7 +238,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
               dispatch(actions.loadActivity());
             } catch (error) {
               dispatch(actions.loadActivity());
-              notify(i18n('Failed to delete comment'), error);
+              notifyError(error);
             }
           })
           .catch(() => {});
@@ -345,7 +336,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
           dispatch(receiveCommentSuggestions(suggestions));
           return suggestions;
         } catch (error) {
-          notify(i18n('Failed to load comment suggestions'), error);
+          notifyError(error);
           return [];
         } finally {
           dispatch(stopLoadingCommentSuggestions());
@@ -394,10 +385,8 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
         );
 
         if (error) {
-          const errorMsg: string = i18n(`Failed to update a reaction {{reactionName}}`, {reactionName: reaction?.reaction || ''});
-          log.warn(errorMsg);
           onReactionUpdate(activities, error);
-          notify(errorMsg);
+          notifyError(error);
           return;
         }
 

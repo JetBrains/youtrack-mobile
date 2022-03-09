@@ -1,30 +1,27 @@
 /* @flow */
 
-import showNotification from './notification_show';
 import log from '../log/log';
-import usage from '../usage/usage';
-import {extractErrorMessage, resolveError} from '../error/error-resolver';
+import showNotification from './notification_show';
+import {resolveErrorMessage} from '../error/error-resolver';
 
-const NOTIFY_DURATION = 3000;
-let toastComponentRef: Object;
+const NOTIFY_DURATION: number = 3000;
+let toastComponentRef: any;
 
-const showErrorMessage = function (message: string, error: Object) {
+const showErrorMessage = function (message: string, error?: ?Object, duration?: number) {
   log.warn(message, error);
-  usage.trackError(error, message);
-  showNotification(message, extractErrorMessage(error), toastComponentRef);
+  showNotification(message, null, toastComponentRef, duration);
 };
 
-export function notifyError(message: string, err: Object): Promise<null> {
-  return resolveError(err).then(extracted => showErrorMessage(message, extracted));
+export function notifyError(err: Object, duration: number = NOTIFY_DURATION * 2): void {
+  resolveErrorMessage(err, true).then(
+    (errorMessage: string) => showErrorMessage(errorMessage, err, duration)
+  );
 }
 
-export function notify(message: string, error?: Object, duration: number = NOTIFY_DURATION): any {
-  if (error) {
-    log.warn(message, error);
-  }
-  return showNotification(message, null, toastComponentRef, duration);
+export function notify(message: string, duration: number = NOTIFY_DURATION): void {
+  showErrorMessage(message, null, duration);
 }
 
-export function setNotificationComponent(reference: Object) {
+export function setNotificationComponent(reference: any) {
   toastComponentRef = reference;
 }

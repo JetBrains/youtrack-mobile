@@ -15,7 +15,7 @@ import usage from '../usage/usage';
 import {connect} from 'react-redux';
 import {flushStoragePart} from '../storage/storage';
 import {i18n} from '../i18n/i18n';
-import {notify} from '../notification/notification';
+import {notify, notifyError} from '../notification/notification';
 import {openDebugView} from 'actions/app-actions';
 import {sendReport, createReportErrorData} from '../error/error-reporter';
 import {ThemeContext} from '../theme/theme-context';
@@ -49,7 +49,7 @@ class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, info: Object) {
     log.warn(`${this.ERROR_TITLE}:\n${error.toString()}`);
-    usage.trackError(error, info.componentStack);
+    usage.trackError(info.componentStack);
     this.setState({error});
     // Reset stored route
     flushStoragePart({lastRoute: null});
@@ -78,8 +78,7 @@ class ErrorBoundary extends Component<Props, State> {
         notify(i18n('Crash has been reported'));
       }
     } catch (err) {
-      log.warn('Failed to report the crash.', err);
-      notify(i18n('Failed to report the crash. Try one more time.'), err);
+      notifyError(err);
     } finally {
       this.setState({isReporting: false});
     }

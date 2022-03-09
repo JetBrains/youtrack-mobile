@@ -8,7 +8,7 @@ import {attachmentActionMap, createAttachmentTypes} from './attachment-helper';
 import {i18n} from '../i18n/i18n';
 import {IconAttachment, IconCamera} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
-import {notify} from '../notification/notification';
+import {notify, notifyError} from '../notification/notification';
 import {ResourceTypes} from '../api/api__resource-types';
 import {until} from 'util/util';
 
@@ -26,7 +26,6 @@ const attachFileMethod: Object = {
   openCamera: 'openCamera',
   openPicker: 'openPicker',
 };
-const failedToAttachFileToCommentMessage: string = i18n('Failed to attach file to a comment');
 const notifySuccessAttachmentDeletion: () => void = () => notify(i18n('Attachment deleted'));
 
 export type AttachmentActions = {
@@ -88,9 +87,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
         );
 
         if (error) {
-          const message: string = i18n('Failed to attach file');
-          log.warn(message, error);
-          notify(message, error);
+          notifyError(error);
           return [];
         } else {
           log.info(`File attached to issue ${entityId}`);
@@ -123,8 +120,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           true
         );
         if (error) {
-          log.warn(failedToAttachFileToCommentMessage, error);
-          notify(failedToAttachFileToCommentMessage, error);
+          notifyError(error);
           return [];
         } else {
           dispatch(actions.stopImageAttaching());
@@ -154,8 +150,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           true
         );
         if (error) {
-          log.warn(failedToAttachFileToCommentMessage, error);
-          notify(failedToAttachFileToCommentMessage, error);
+          notifyError(error);
           return [];
         } else {
           dispatch(actions.stopImageAttaching());
@@ -177,9 +172,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           dispatch(actions.doRemoveAttach(attach.id));
           notifySuccessAttachmentDeletion();
         } catch (error) {
-          const message: string = 'Failed to remove attachment';
-          log.warn(message, error);
-          notify(message, error);
+          notifyError(error);
         }
       };
     },
@@ -194,9 +187,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
         const article: Article = getState().article.article;
         const [error] = await until(api.articles.removeAttachment(article.id, attach.id));
         if (error) {
-          const message: string = 'Failed to remove article attachment';
-          log.warn(message, error);
-          notify(message, error);
+          notifyError(error);
         } else {
           notifySuccessAttachmentDeletion();
           dispatch(actions.doRemoveAttach(attach.id));
@@ -211,9 +202,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           dispatch(actions.doRemoveAttach(attachId));
           notifySuccessAttachmentDeletion();
         } catch (error) {
-          const message: string = 'Failed to remove attachment';
-          log.warn(message, error);
-          notify(message, error);
+          notifyError(error);
         }
       };
     },
@@ -249,7 +238,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
             dispatch(actions.toggleAttachFileDialog(true));
           }
         } catch (err) {
-          notify(i18n('Can\'t add file'), err);
+          notifyError(err);
         }
       };
     },

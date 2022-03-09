@@ -6,11 +6,10 @@ import log from 'components/log/log';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
 import {confirmation} from 'components/confirmation/confirmation';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from '../issue-base-actions-creater';
-import {extractErrorMessage, resolveError} from 'components/error/error-resolver';
 import {getActivityAllTypes, getActivityCategories} from 'components/activity/activity-helper';
 import {i18n} from '../../../components/i18n/i18n';
 import {logEvent} from 'components/log/log-helper';
-import {notify} from 'components/notification/notification';
+import {notifyError} from 'components/notification/notification';
 import {sortAlphabetically, sortByOrdinal} from 'components/search/sorting';
 import {until} from 'util/util';
 import {WORK_ITEM_CREATE, WORK_ITEM_UPDATE} from 'components/issue-permissions/issue-permissions';
@@ -100,9 +99,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
         });
         const [error, timeTracking] = await until(api.issue.timeTracking(targetIssueId));
         if (error) {
-          const msg: string = i18n('Failed to load time tracking');
-          notify(msg, error);
-          logEvent({message: msg, isError: true});
+          notifyError(error);
           return null;
         }
         return timeTracking;
@@ -119,9 +116,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
         const targetIssueId: string = issueId || getState()[stateFieldName].issueId;
         const [error, updatedDraft] = await until(api.issue.updateDraftWorkItem(targetIssueId, draft));
         if (error) {
-          const msg: string = i18n('Failed to update work item draft');
-          notify(msg, error);
-          logEvent({message: msg, isError: true});
+          notifyError(error);
           return null;
         }
         return updatedDraft;
@@ -140,9 +135,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
 
         const [error] = await until(api.issue.createWorkItem(targetIssueId, workItem));
         if (error) {
-          const message: string = i18n('Failed to update work item');
-          notify(message, error);
-          logEvent({message, isError: true});
+          notifyError(error);
         } else {
           logEvent({
             message: 'Work item checkbox updated',
@@ -167,9 +160,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
         });
         const [error, updatedDraft] = await until(api.issue.createWorkItem(targetIssueId, draft));
         if (error) {
-          const msg: string = (extractErrorMessage(await resolveError(error), true));
-          notify(msg, error);
-          logEvent({message: msg, isError: true});
+          notifyError(error);
           return error;
         }
         return updatedDraft;
@@ -187,9 +178,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
 
         const [error] = await until(api.issue.deleteDraftWorkItem(targetIssueId));
         if (error) {
-          const msg: string = i18n('Failed to delete work item draft');
-          notify(msg, error);
-          logEvent({message: msg, isError: true});
+          notifyError(error);
         }
       };
     },
@@ -213,9 +202,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
         });
         const [error, users] = await until(promises, true);
         if (error) {
-          const msg: string = i18n('Failed to load work item authors');
-          notify(msg, error);
-          logEvent({message: msg, isError: true});
+          notifyError(error);
           return [];
         }
         return users.reduce((list: Array<User>, user: User) => list.some(
@@ -237,9 +224,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
         });
         const [error, projectTimeTrackingSettings] = await until(api.projects.getTimeTrackingSettings(targetProjectId));
         if (error) {
-          const msg: string = i18n('Failed to load project time tracking settings');
-          notify(msg, error);
-          logEvent({message: msg, isError: true});
+          notifyError(error);
           return {};
         }
         return projectTimeTrackingSettings.workItemTypes.sort(sortByOrdinal);
@@ -260,9 +245,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
         ).then(async () => {
           const [error] = await until(api.issue.deleteWorkItem(issueId, workItem.id));
           if (error) {
-            const msg: string = i18n('Failed to delete work item');
-            notify(msg, error);
-            logEvent({message: `${msg} `, isError: true});
+            notifyError(error);
             return false;
           }
           return true;

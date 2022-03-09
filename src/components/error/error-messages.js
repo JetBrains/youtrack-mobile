@@ -19,13 +19,10 @@ export const UNSUPPORTED_ERRORS = {
 };
 
 export const CUSTOM_ERROR_MESSAGE = {
-  PUSH_NOTIFICATION_REGISTRATION: i18n('Push notifications registration failed'),
   NOT_SUPPORTED: i18n('Push notification is not supported: '),
   PUSH_NOTIFICATION_IS_NOT_SUPPORTED: i18n('Push notification is not supported: '),
   NO_ENTITY_FOUND: i18n('Can\'t find entity with id'),
   BAD_REQUEST: i18n('Bad Request'),
-  NO_COMMAND_SUGGESTIONS: i18n('Failed to load command suggestions'),
-  APPLY_COMMAND_FAILED: i18n('Failed to apply a command'),
 };
 
 export const DEFAULT_ERROR_MESSAGE = i18n('Something went wrong');

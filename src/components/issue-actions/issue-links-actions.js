@@ -3,7 +3,7 @@
 import log from '../log/log';
 import {getApi} from '../api/api__instance';
 import {i18n} from '../i18n/i18n';
-import {notify} from '../notification/notification';
+import {notify, notifyError} from '../notification/notification';
 import {resolveError} from '../error/error-resolver';
 import {until} from 'util/util';
 
@@ -27,10 +27,7 @@ const issueCommonLinksActions = (issue: $Shape<IssueFull>): {
     loadIssuesXShort: async (query: string, page: number = 50): Promise<IssueOnList> => {
       const [error, issues] = await until(api.issues.getIssuesXShort(query, page));
       if (error) {
-        const err: Error = await resolveError(error);
-        const errorMsg: string = i18n('Failed to load issues');
-        log.warn(errorMsg, err);
-        notify(errorMsg);
+        notifyError(error);
       }
       return (issues || []).filter((it: IssueOnList) => it.id !== issue.id);
     },
@@ -41,10 +38,7 @@ const issueCommonLinksActions = (issue: $Shape<IssueFull>): {
         `${linkTypeName} ${linkedIssueIdReadable}`
       ));
       if (error) {
-        const err: Error = await resolveError(error);
-        const errorMsg: string = i18n('Failed to link issue');
-        log.warn(errorMsg, err);
-        notify(errorMsg);
+        notifyError(error);
       } else {
         notify(i18n('Issue link added'));
       }
@@ -67,10 +61,7 @@ const issueCommonLinksActions = (issue: $Shape<IssueFull>): {
     onUnlinkIssue: async (linkedIssue: IssueOnList, linkTypeId: string): Promise<boolean> => {
       const [error] = await until(api.issue.removeIssueLink(issue.id, linkedIssue.id, linkTypeId));
       if (error) {
-        const err: Error = await resolveError(error);
-        const errorMsg: string = i18n('Failed to load linked issues');
-        log.warn(errorMsg, err);
-        notify(errorMsg);
+        notifyError(error);
       } else {
         notify(i18n('Issue link removed'));
       }

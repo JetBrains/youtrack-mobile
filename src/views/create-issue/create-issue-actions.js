@@ -14,7 +14,7 @@ import {commandDialogTypes, ISSUE_CREATED} from './create-issue-action-types';
 import {CUSTOM_ERROR_MESSAGE, DEFAULT_ERROR_MESSAGE} from 'components/error/error-messages';
 import {getStorageState, flushStoragePart} from 'components/storage/storage';
 import {i18n} from '../../components/i18n/i18n';
-import {notify, notifyError} from 'components/notification/notification';
+import {notifyError} from 'components/notification/notification';
 import {resolveError} from 'components/error/error-resolver';
 import {showActions} from 'components/action-sheet/action-sheet';
 
@@ -162,7 +162,7 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
         dispatch(actions.clearDraftProject());
       }
 
-      notifyError(i18n('Cannot update issue draft'), error);
+      notifyError(error);
     }
   };
 }
@@ -215,7 +215,7 @@ export function createIssue(onHide: () => any, isMatchesQuery: (issueIdReadable:
 
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Error');
-      notifyError(i18n('Cannot create issue'), err);
+      notifyError(err);
     } finally {
       dispatch(actions.stopIssueCreation());
     }
@@ -253,8 +253,7 @@ export function updateFieldValue(field: CustomField | CustomFieldText, value: $S
 
       dispatch(loadIssueFromDraft(issue.id));
     } catch (err) {
-      const error = await resolveError(err);
-      notifyError(i18n('Cannot update field'), error);
+      notifyError(err);
     }
   };
 }
@@ -313,9 +312,7 @@ export function updateVisibility(visibility: Visibility): ((
 
     } catch (err) {
       dispatch(actions.setIssueDraft({issue: draftIssueCopy}));
-      const message: string = i18n('Cannot update draft visibility');
-      notify(message, err);
-      log.warn(message, err);
+      notifyError(err);
     }
   };
 }

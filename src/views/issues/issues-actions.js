@@ -391,7 +391,7 @@ export function loadMoreIssues(): ((
           dispatch(listEndReached());
         }
       } catch (err) {
-        notifyError(i18n('Failed to load more issues'), err);
+        notifyError(err);
       } finally {
         dispatch(stopMoreIssuesLoading());
       }

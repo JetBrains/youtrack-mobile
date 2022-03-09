@@ -6,7 +6,7 @@ import {confirmDeleteArticleDraft} from '../article/arcticle-helper';
 import {deleteArticle} from '../article/arcticle-actions';
 import {i18n} from '../../components/i18n/i18n';
 import {logEvent} from 'components/log/log-helper';
-import {notify} from 'components/notification/notification';
+import {notify, notifyError} from 'components/notification/notification';
 import {until} from 'util/util';
 import {
   setArticleDraft,
@@ -33,9 +33,7 @@ const updateArticleDraft = (articleDraft: Article): ((
     const [error] = await until(api.articles.updateArticleDraft(articleDraft));
 
     if (error) {
-      const errorMsg: string = i18n('Failed to update article draft');
-      logEvent({message: errorMsg, isError: true});
-      notify(errorMsg, error);
+      notifyError(error);
     }
   };
 };
@@ -53,9 +51,7 @@ const createArticleDraft = (articleId?: string): ((
     dispatch(setProcessing(false));
 
     if (error) {
-      const errorMsg: string = 'Failed to create article draft';
-      logEvent({message: errorMsg, isError: true});
-      notify(errorMsg, error);
+      notifyError(error);
     } else {
       logEvent({message: 'Create article draft', analyticsId: ANALYTICS_ARTICLE_CREATE_PAGE});
       dispatch(setDraft(articleDraft));
@@ -78,9 +74,7 @@ const publishArticleDraft = (articleDraft: Article): ((
     dispatch(setProcessing(false));
 
     if (error) {
-      const errorMsg: string = i18n('Failed to publish article draft');
-      logEvent({message: errorMsg, isError: true});
-      notify(errorMsg, error);
+      notifyError(error);
       dispatch(setError(error));
     } else {
       dispatch(setDraft(null));
@@ -126,9 +120,7 @@ const uploadFile = (attachments: Array<Attachment>): ((
       attachments.map((attach: Attachment) => api.articles.attachFile(articleDraft.id, attach.url, attach.name))
     );
     if (error) {
-      const message: string = i18n('Failed to attach file');
-      logEvent({message: message, isError: true});
-      notify(message, error);
+      notifyError(error);
     } else {
       logEvent({message: `Image attached to article ${updatedDraft.id}`});
       usage.trackEvent(ANALYTICS_ARTICLE_CREATE_PAGE, 'Attach image', 'Success');
@@ -150,9 +142,7 @@ const loadAttachments = (): ((
 
     const [error, draftAttachments] = await until(api.articles.getAttachments(articleDraft.id));
     if (error) {
-      const message: string = i18n('Failed to load article attachments');
-      logEvent({message: message, isError: true});
-      notify(message, error);
+      notifyError(error);
     } else {
       dispatch(setDraft({...articleDraft, attachments: draftAttachments}));
     }
@@ -170,9 +160,7 @@ const deleteDraftAttachment = (attachmentId: string): ((
 
     const [error] = await until(api.articles.deleteDraftAttachment(articleDraft.id, attachmentId));
     if (error) {
-      const message = i18n('Failed to delete attachment');
-      notify(message, error);
-      logEvent({message: message, isError: true});
+      notifyError(error);
     } else {
       logEvent({message: 'Attachment deleted', analyticsId: ANALYTICS_ARTICLE_CREATE_PAGE});
       dispatch(setDraft(

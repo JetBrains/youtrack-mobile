@@ -21,7 +21,7 @@ import {i18n} from 'components/i18n/i18n';
 import {IconCamera, IconCheck, IconClose} from '../icon/icon';
 import {isSplitView} from '../responsive/responsive-helper';
 import {logEvent} from '../log/log-helper';
-import {notify} from '../notification/notification';
+import {notifyError} from '../notification/notification';
 import {ThemeContext} from '../theme/theme-context';
 
 import styles from './attach-file-dialog.styles';
@@ -117,7 +117,7 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
         updateAttaches(attachedFiles);
       }
     } catch (err) {
-      notify(i18n('Can\'t add a file'), err);
+      notifyError(err);
     }
   };
 
