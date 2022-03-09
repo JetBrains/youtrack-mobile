@@ -103,7 +103,6 @@ const MarkdownViewChunks = (props: Props) => {
         key={key}
         ast={ast}
         rules={rules}
-        uiTheme={props.uiTheme}
       />
     );
   };

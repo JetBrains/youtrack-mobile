@@ -2,8 +2,10 @@
 
 import {Platform} from 'react-native';
 
+import {DEFAULT_THEME} from '../theme/theme';
 import {UNIT} from '../variables/variables';
 import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from '../common-styles/typography';
+
 import type {UITheme, UIThemeColors} from 'flow/Theme';
 
 
@@ -13,7 +15,7 @@ const vSpace = {
 };
 
 // Source: 'react-native-markdown-display/src/lib/styles'
-const markdownStyles = (uiTheme: UITheme) => {
+const markdownStyles = (uiTheme: UITheme = DEFAULT_THEME) => {
   const uiThemeColors: UIThemeColors = uiTheme.colors;
   const code = {
     borderWidth: 0,
