@@ -288,7 +288,7 @@ export function addAccount(serverUrl: string = ''): Action {
       const userName: string = user?.name || '';
       log.info(`Successfully added account, user "${userName}", server "${config.backendUrl}"`);
     } catch (err) {
-      const errorMsg: string = 'Failed to add an account.';
+      const errorMsg: string = i18n('Failed to add an account.');
       notifyError(errorMsg, err);
       const {otherAccounts} = getState().app;
       if (!getStorageState().config && otherAccounts?.length) {
@@ -368,7 +368,7 @@ export function changeAccount(account: StorageState, removeCurrentAccount?: bool
       }
       log.info('Account changed, URL:', account?.config?.backendUrl);
     } catch (err) {
-      notifyError('Could not change account', err);
+      notifyError(i18n('Could not change account'), err);
       throw (err);
     }
 
@@ -570,7 +570,7 @@ function subscribeToURL(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     function isServerConfigured(url: ?string) {
       if (!isOneOfServers(url || '', [(getStorageState().config || {}).backendUrl])) {
-        notifyError('Open URL error', {message: `"${url || ''}" doesn't match the configured server`});
+        notifyError(i18n('Open URL error'), {message: i18n('`"{{url}}" doesn\'t match the configured server`', {url: url || ''})});
         return false;
       }
       return true;

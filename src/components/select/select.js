@@ -132,7 +132,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
       this._onSearch(query);
       this.setState({loaded: true});
     } catch (err) {
-      notifyError('Failed to load values', err);
+      notifyError(i18n('Failed to load values'), err);
     }
   }
 

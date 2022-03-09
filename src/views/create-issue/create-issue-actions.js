@@ -162,7 +162,7 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Obje
         dispatch(actions.clearDraftProject());
       }
 
-      notifyError('Cannot update issue draft', error);
+      notifyError(i18n('Cannot update issue draft'), error);
     }
   };
 }
@@ -215,7 +215,7 @@ export function createIssue(onHide: () => any, isMatchesQuery: (issueIdReadable:
 
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Error');
-      notifyError('Cannot create issue', err);
+      notifyError(i18n('Cannot create issue'), err);
     } finally {
       dispatch(actions.stopIssueCreation());
     }
@@ -254,7 +254,7 @@ export function updateFieldValue(field: CustomField | CustomFieldText, value: $S
       dispatch(loadIssueFromDraft(issue.id));
     } catch (err) {
       const error = await resolveError(err);
-      notifyError('Cannot update field', error);
+      notifyError(i18n('Cannot update field'), error);
     }
   };
 }

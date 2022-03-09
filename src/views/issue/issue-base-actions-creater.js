@@ -216,7 +216,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           dispatch(dispatchActions.stopEditingIssue());
           dispatch(dispatchActions.issueUpdated(getState()[stateFieldName].issue));
         } catch (err) {
-          notifyError('Failed to update issue', err);
+          notifyError(i18n('Failed to update issue'), err);
         } finally {
           dispatch(dispatchActions.stopSavingEditedIssue());
         }
@@ -302,7 +302,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
             dispatch(dispatchActions.openCommandDialog(`${error.error_field} `));
           }
 
-          notifyError('Failed to update issue field', error);
+          notifyError(i18n('Failed to update issue field'), error);
           dispatch(actions.loadIssue());
         }
       };
@@ -330,7 +330,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           await dispatch(actions.loadIssue());
           dispatch(dispatchActions.issueUpdated(getState()[stateFieldName].issue));
         } catch (err) {
-          notifyError('Failed to update issue project', err);
+          notifyError(i18n('Failed to update issue project'), err);
           dispatch(actions.loadIssue());
         }
       };
@@ -377,7 +377,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
         try {
           await api.issue.updateIssueStarred(issue.id, starred);
         } catch (err) {
-          notifyError('Cannot update "Starred"', err);
+          notifyError(i18n('Cannot update "Starred"'), err);
           dispatch(dispatchActions.setStarred(!starred));
         }
       };
