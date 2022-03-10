@@ -21,5 +21,5 @@ export type GetText = {
   setlocale: () => void,
 }
 
-export const gt: GetText = new Gettext();
+export default ((new Gettext()): GetText);
 
