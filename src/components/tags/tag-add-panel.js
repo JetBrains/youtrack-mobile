@@ -36,7 +36,7 @@ const TagAddPanel = (props: Props) => {
       {iconTag}
       <Text
         style={[styles.buttonText, props.disabled && styles.buttonTextDisabled]}>
-        {i18n('Add Tag')}
+        {i18n('Add tag')}
       </Text>
     </TouchableOpacity>
   );
