@@ -196,7 +196,7 @@ export class EnterServer extends Component<Props, State> {
                     autoFocus={true}
                     selectTextOnFocus={true}
                     autoCorrect={false}
-                    placeholder={i18n('youtrack-server.com:PORT')}
+                    placeholder="youtrack-server.com:PORT"
                     placeholderTextColor={styles.placeholder.color}
                     returnKeyType="done"
                     keyboardType="url"
