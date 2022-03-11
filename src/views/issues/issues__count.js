@@ -6,7 +6,7 @@ import {Text} from 'react-native';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './issues.styles';
-import {i18nPlural} from '../../components/i18n/i18n';
+import {i18nPlural} from 'components/i18n/i18n';
 
 type Props = {
   issuesCount: ?number
@@ -19,8 +19,8 @@ const IssuesCount = (props: Props) => {
     issuesCount
       ? i18nPlural(
         issuesCount,
-        'Matches {{issuesCount}} issue',
-        'Matches {{issuesCount}} issues',
+        `Matches ${issuesCount} issue`,
+        `Matches ${issuesCount} issues`,
         {issuesCount}
       )
       : ''

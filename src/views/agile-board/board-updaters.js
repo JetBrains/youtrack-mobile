@@ -1,7 +1,7 @@
 /* @flow */
 
 import log from 'components/log/log';
-import {i18n} from '../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {notify} from 'components/notification/notification';
 
 import type {BoardCell, AgileBoardRow, Board, AgileColumn} from 'flow/Agile';

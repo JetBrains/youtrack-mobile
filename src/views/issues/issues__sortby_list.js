@@ -17,7 +17,7 @@ import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {doAssist, getSortPropertyName, isRelevanceSortProperty} from './issues__sortby-helper';
 import {EllipsisVertical, IconAdd, IconCheck, IconClose} from 'components/icon/icon';
-import {i18n} from '../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {isSplitView} from 'components/responsive/responsive-helper';
 
 import styles from './issues.styles';

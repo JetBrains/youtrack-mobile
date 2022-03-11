@@ -13,7 +13,7 @@ import Select from 'components/select/select';
 import Separator from 'components/separator/separator';
 import usage from 'components/usage/usage';
 import {ANALYTICS_ARTICLE_PAGE} from 'components/analytics/analytics-ids';
-import {i18n, i18nPlural} from '../../components/i18n/i18n';
+import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {IconAdd, IconAngleRight, IconBack, IconClose} from 'components/icon/icon';
 import {logEvent} from 'components/log/log-helper';
 import {routeMap} from '../../app-routes';

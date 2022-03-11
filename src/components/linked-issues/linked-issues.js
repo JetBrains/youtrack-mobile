@@ -10,7 +10,7 @@ import IssueRow from 'views/issues/issues__row';
 import LinkedIssuesAddLink from './linked-issues-add-link';
 import Router from '../router/router';
 import {createLinksList} from './linked-issues-helper';
-import {i18n, i18nPlural} from '../i18n/i18n';
+import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {IconAdd, IconBack, IconClose} from '../icon/icon';
 import {ThemeContext} from '../theme/theme-context';
 

@@ -7,7 +7,7 @@ import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids
 import {confirmation} from 'components/confirmation/confirmation';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from '../issue-base-actions-creater';
 import {getActivityAllTypes, getActivityCategories} from 'components/activity/activity-helper';
-import {i18n} from '../../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {logEvent} from 'components/log/log-helper';
 import {notifyError} from 'components/notification/notification';
 import {sortAlphabetically, sortByOrdinal} from 'components/search/sorting';

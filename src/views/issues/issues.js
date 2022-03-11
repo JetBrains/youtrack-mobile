@@ -33,7 +33,7 @@ import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 import {getIssueFromCache} from './issues-actions';
 import {HIT_SLOP} from 'components/common-styles/button';
-import {i18n} from '../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconAdd, IconAngleDown, IconBookmark} from 'components/icon/icon';
 import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound, IconNothingSelected} from 'components/icon/icon-pictogram';
 import {initialState} from './issues-reducers';

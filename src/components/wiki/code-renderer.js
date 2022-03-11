@@ -22,7 +22,7 @@ import type {MarkdownNode} from '../../flow/Markdown';
 import type {Node as ReactNode} from 'React';
 import type {UITheme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 
 const isAndroid: boolean = isAndroidPlatform();
 const MAX_CODE_LENGTH: number = 630;

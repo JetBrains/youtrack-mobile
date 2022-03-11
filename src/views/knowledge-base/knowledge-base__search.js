@@ -3,7 +3,7 @@
 import React, {useState} from 'react';
 import {TextInput, View} from 'react-native';
 
-import {i18n} from '../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconSearch} from 'components/icon/icon';
 import {iconClearText} from 'components/icon/icon-clear-text';
 

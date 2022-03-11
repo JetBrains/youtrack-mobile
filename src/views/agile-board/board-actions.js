@@ -14,7 +14,7 @@ import {DEFAULT_ERROR_MESSAGE} from 'components/error/error-messages';
 import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from 'components/storage/storage';
 import {getAssistSuggestions} from 'components/query-assist/query-assist-helper';
 import {getGroupedSprints, getSprintAllIssues, updateSprintIssues} from './agile-board__helper';
-import {i18n} from '../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {isIOSPlatform, until} from 'util/util';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {notify, notifyError} from 'components/notification/notification';

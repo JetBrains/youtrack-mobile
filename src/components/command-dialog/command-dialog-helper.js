@@ -1,7 +1,7 @@
 /* @flow */
 
 import {getApi} from '../api/api__instance';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {notify, notifyError} from '../notification/notification';
 
 import type {CommandSuggestionResponse} from 'flow/Issue';

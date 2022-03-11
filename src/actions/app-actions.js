@@ -19,7 +19,7 @@ import UrlParse from 'url-parse';
 import usage from 'components/usage/usage';
 import {UNSUPPORTED_ERRORS} from 'components/error/error-messages';
 import {EVERYTHING_CONTEXT} from 'components/search/search-context';
-import {i18n} from '../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 
 import {
   clearCachesAndDrafts,

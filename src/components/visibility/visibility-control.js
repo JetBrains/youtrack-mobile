@@ -7,7 +7,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import {sortAlphabetically} from '../search/sorting';
 import {hasType} from '../api/api__resource-types';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconAngleDown, IconClose, IconLock} from '../icon/icon';
 import Select from '../select/select';
 import IssueVisibility from './issue-visibility';

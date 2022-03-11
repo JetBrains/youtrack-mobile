@@ -1,6 +1,6 @@
 /* @flow */
 
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 
 const notImplementedText: string = i18n('Not implemented');
 const doesNotSupportPushNotificationsText = i18n('YouTrack does not support push notifications');

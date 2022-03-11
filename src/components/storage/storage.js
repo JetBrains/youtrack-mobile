@@ -5,7 +5,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 
 import log from '../log/log';
 import {getAuthParamsKey} from './storage__oauth';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {notify} from '../notification/notification';
 import {routeMap} from '../../app-routes';
 

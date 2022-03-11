@@ -26,7 +26,7 @@ import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {createIssueActivityActions, receiveActivityPage} from './issue-activity__actions';
 import {getApi} from 'components/api/api__instance';
 import {HIT_SLOP} from '../../../components/common-styles/button';
-import {i18n} from '../../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconAngleDown, IconClose} from 'components/icon/icon';
 import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
 import {isSplitView} from 'components/responsive/responsive-helper';

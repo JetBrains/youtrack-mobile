@@ -15,7 +15,7 @@ import InputScrollView from 'react-native-input-scroll-view';
 import Header from 'components/header/header';
 import Router from 'components/router/router';
 import {feedbackLogsOptions, feedbackTypeOptions, sendFeedback} from './settings-helper';
-import {i18n} from '../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconAngleRight, IconCheck, IconClose} from 'components/icon/icon';
 import {notify, notifyError} from 'components/notification/notification';
 import {showActions} from 'components/action-sheet/action-sheet';

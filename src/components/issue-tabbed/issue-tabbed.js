@@ -7,7 +7,7 @@ import {Text, Dimensions, View} from 'react-native';
 import {TabView, TabBar} from 'react-native-tab-view';
 import {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
 
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {isSplitView} from '../responsive/responsive-helper';
 
 import styles from './issue-tabbed.style';

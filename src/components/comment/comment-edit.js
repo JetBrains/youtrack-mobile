@@ -26,7 +26,7 @@ import {commentPlaceholderText} from '../../app-text';
 import {composeSuggestionText, getSuggestWord} from '../mentions/mension-helper';
 import {getAttachmentActions} from '../attachments-row/attachment-actions';
 import {hasType} from '../api/api__resource-types';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconArrowUp, IconCheck, IconClose, IconAdd} from '../icon/icon';
 import {ThemeContext} from '../theme/theme-context';
 

@@ -5,7 +5,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 
 import {connect} from 'react-redux';
 
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {LogView} from 'react-native-device-log';
 import {closeDebugView} from 'actions/app-actions';
 import {copyRawLogs} from '../log/log';

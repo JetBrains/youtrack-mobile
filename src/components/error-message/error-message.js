@@ -7,7 +7,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
 import {extractErrorMessage, resolveError} from '../error/error-resolver';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconSearch} from '../icon/icon';
 
 import {styles} from './error-message.style';

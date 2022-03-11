@@ -24,7 +24,7 @@ import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation, getReadableID, ytDate} from 'components/issue-formatter/issue-formatter';
 import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
 import {HIT_SLOP} from 'components/common-styles/button';
-import {i18n} from '../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 

@@ -3,7 +3,7 @@
 import fromNow from 'from-now';
 import RNLocalize from 'react-native-localize';
 
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 
 import type {AnyIssue} from 'flow/Issue';
 import type {CustomField} from 'flow/CustomFields';

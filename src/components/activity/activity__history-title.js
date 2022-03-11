@@ -1,6 +1,6 @@
 /* @flow */
 
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 
 export default function getEventTitle(event: Object, omitFormatting?: boolean): ?string {
   const title = getTitle(event);

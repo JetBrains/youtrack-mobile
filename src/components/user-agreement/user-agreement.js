@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 
 import ModalView from '../modal-view/modal-view';
 import {acceptUserAgreement, declineUserAgreement} from 'actions/app-actions';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {UNIT} from '../variables/variables';
 
 import styles from './user-agreement.styles';

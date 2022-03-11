@@ -11,7 +11,7 @@ import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
 import ModalPortal from '../modal-view/modal-portal';
 import ModalView from '../modal-view/modal-view';
 import SelectItem from '../select/select__item';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {guid} from 'util/util';
 import {IconBack, IconCheck} from '../icon/icon';
 

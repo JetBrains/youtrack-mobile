@@ -11,7 +11,7 @@ import ModalPortal from '../modal-view/modal-portal';
 import ModalView from '../modal-view/modal-view';
 import QueryAssistSuggestionsList from './query-assist__suggestions-list';
 import {HIT_SLOP} from '../common-styles/button';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconBack, IconClose} from '../icon/icon';
 
 import styles from './query-assist.styles';

@@ -6,7 +6,7 @@ import {View, Image, Text, TouchableOpacity} from 'react-native';
 import usage from 'components/usage/usage';
 import {formatYouTrackURL} from 'components/config/config';
 import {HIT_SLOP} from 'components/common-styles/button';
-import {i18n} from '../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {logo, IconPencil} from 'components/icon/icon';
 
 import styles from './home.styles';

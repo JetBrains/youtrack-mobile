@@ -6,7 +6,7 @@ import {Alert, Clipboard, Share} from 'react-native';
 import Router from 'components/router/router';
 import {confirmDeleteArticle} from './arcticle-helper';
 import {getStorageState} from 'components/storage/storage';
-import {i18n} from '../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {hasType} from 'components/api/api__resource-types';

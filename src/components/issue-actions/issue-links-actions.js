@@ -2,7 +2,7 @@
 
 import log from '../log/log';
 import {getApi} from '../api/api__instance';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {notify, notifyError} from '../notification/notification';
 import {resolveError} from '../error/error-resolver';
 import {until} from 'util/util';

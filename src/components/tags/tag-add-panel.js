@@ -5,7 +5,7 @@ import {Text, TouchableOpacity} from 'react-native';
 
 import IconTag from '@jetbrains/icons/tag.svg';
 
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {HIT_SLOP} from '../common-styles/button';
 
 import styles from './tags.styles';

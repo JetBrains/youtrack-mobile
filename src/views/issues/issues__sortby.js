@@ -9,7 +9,7 @@ import IssuesSortByList from './issues__sortby_list';
 import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
 import {doAssist, getSortPropertyName} from './issues__sortby-helper';
-import {i18n} from '../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconAngleDown} from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';
 

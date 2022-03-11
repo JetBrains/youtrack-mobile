@@ -19,7 +19,7 @@ import {createIssueActivityActions} from './issue-activity__actions';
 import {getEntityPresentation, ytDate} from 'components/issue-formatter/issue-formatter';
 import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles/button';
-import {i18n} from '../../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconAngleRight, IconCheck, IconClose} from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {logEvent} from 'components/log/log-helper';

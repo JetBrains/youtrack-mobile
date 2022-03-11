@@ -2,7 +2,7 @@
 
 
 import {confirmation} from 'components/confirmation/confirmation';
-import {i18n} from '../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 
 const deleteButtonText: string = i18n('Delete');
 

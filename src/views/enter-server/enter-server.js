@@ -24,7 +24,7 @@ import usage from 'components/usage/usage';
 import {connectToNewYoutrack, openDebugView} from 'actions/app-actions';
 import {formStyles} from 'components/common-styles/form';
 import {HIT_SLOP} from 'components/common-styles/button';
-import {i18n} from '../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {logo, IconBack} from 'components/icon/icon';
 import {NETWORK_PROBLEM_TIPS} from 'components/error-message/error-text-messages';
 import {resolveErrorMessage} from 'components/error/error-resolver';

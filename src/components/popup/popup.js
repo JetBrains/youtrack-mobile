@@ -5,7 +5,7 @@ import React, {PureComponent} from 'react';
 import ModalView from '../modal-view/modal-view';
 
 import {HIT_SLOP} from '../common-styles/button';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {View, Text, TouchableOpacity} from 'react-native';
 
 import styles from './popup.styles';

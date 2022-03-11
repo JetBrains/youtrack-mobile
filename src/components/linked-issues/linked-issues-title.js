@@ -5,7 +5,7 @@ import {View, Text, TouchableOpacity} from 'react-native';
 
 import {View as AnimatedView} from 'react-native-animatable';
 
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconAngleRight} from '../icon/icon';
 import {getLinkedIssuesTitle} from './linked-issues-helper';
 

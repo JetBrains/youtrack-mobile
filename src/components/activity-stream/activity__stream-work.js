@@ -12,7 +12,7 @@ import StreamUserInfo from './activity__stream-user-info';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {firstActivityChange, getDurationPresentation} from './activity__stream-helper';
 import {HIT_SLOP} from '../common-styles/button';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconContextActions} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
 import {showActionSheet} from '../action-sheet/action-sheet';

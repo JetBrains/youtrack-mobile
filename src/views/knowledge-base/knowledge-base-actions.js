@@ -11,7 +11,7 @@ import {ANALYTICS_ARTICLES_PAGE} from 'components/analytics/analytics-ids';
 import {confirmation} from 'components/confirmation/confirmation';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {hasType} from 'components/api/api__resource-types';
-import {i18n} from '../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {logEvent} from 'components/log/log-helper';
 import {notify, notifyError} from 'components/notification/notification';
 import {setArticles, setError, setExpandingProjectId, setList, setLoading} from './knowledge-base-reducers';

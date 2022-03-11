@@ -14,7 +14,7 @@ import Popup from '../popup/popup';
 import usage from '../usage/usage';
 import {connect} from 'react-redux';
 import {flushStoragePart} from '../storage/storage';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {notify, notifyError} from '../notification/notification';
 import {openDebugView} from 'actions/app-actions';
 import {sendReport, createReportErrorData} from '../error/error-reporter';

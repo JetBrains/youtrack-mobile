@@ -4,7 +4,7 @@ import type {Node} from 'React';
 import {Text, View} from 'react-native';
 import React, {PureComponent} from 'react';
 
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {IconSearch} from '../icon/icon';
 import {iconClearText} from '../icon/icon-clear-text';
 

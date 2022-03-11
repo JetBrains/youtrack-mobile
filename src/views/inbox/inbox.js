@@ -26,7 +26,7 @@ import {getStorageState} from 'components/storage/storage';
 import {handleRelativeUrl} from 'components/config/config';
 import {hasType} from 'components/api/api__resource-types';
 import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound, IconNothingSelected} from 'components/icon/icon-pictogram';
-import {i18n} from '../../components/i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {isReactElement} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {LoadMoreList} from 'components/progress/load-more-list';

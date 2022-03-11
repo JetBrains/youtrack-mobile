@@ -7,7 +7,7 @@ import React from 'react';
 import Avatar from '../avatar/avatar';
 import MarkdownView from '../wiki/markdown-view';
 import YoutrackWiki from '../wiki/youtrack-wiki';
-import {i18n} from '../i18n/i18n';
+import {i18n} from 'components/i18n/i18n';
 import {relativeDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 import styles from './comment.styles';
