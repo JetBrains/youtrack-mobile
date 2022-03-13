@@ -154,10 +154,11 @@ function CodeHighlighter(props: {node: Node, uiTheme: UITheme}) {
       </View>
 
       <ScrollView
-        style={styles.codeContent}
+        style={styles.codeScrollContainer}
         horizontal={true}
         fadingEdgeLength={70}
         scrollEventThrottle={100}
+        contentContainerStyle={styles.codeScrollContent}
       >
         <View onStartShouldSetResponder={() => true}>
           {stacktraceOrException && (

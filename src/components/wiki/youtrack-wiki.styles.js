@@ -83,12 +83,16 @@ export default EStyleSheet.create({
   codeContainer: {
     marginVertical: UNIT,
   },
-  codeContent: {
+  codeScrollContainer: {
     padding: UNIT,
     paddingRight: 0,
     backgroundColor: '$boxBackground',
     borderBottomLeftRadius: UNIT,
     borderBottomRightRadius: UNIT,
+  },
+  codeScrollContent: {
+    paddingLeft: UNIT / 2,
+    paddingRight: UNIT * 1.5,
   },
   code: {
     ...monospace,
