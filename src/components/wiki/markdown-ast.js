@@ -1,27 +1,29 @@
 /* @flow */
 
-import React from 'react';
+import React, {useContext} from 'react';
 
 import Markdown from 'react-native-markdown-display';
 
 import MarkdownItInstance from './markdown-instance';
 import markdownStyles from './markdown-view-styles';
+import {ThemeContext} from '../theme/theme-context';
 
 import type {MarkdownNode} from 'flow/Markdown';
-import type {UITheme} from 'flow/Theme';
+import type {Theme} from 'flow/Theme';
 
 
 type Props = {
   ast: Array<MarkdownNode>,
   rules: Object,
-  uiTheme: UITheme,
 };
 
 const MarkdownAST = (props: Props) => {
-  const {ast, rules, uiTheme} = props;
+  const {ast, rules} = props;
+  const theme: Theme = useContext(ThemeContext);
+
   return (
     <Markdown
-      style={markdownStyles(uiTheme)}
+      style={markdownStyles(theme?.uiTheme)}
       markdownit={MarkdownItInstance}
       rules={rules}
     >

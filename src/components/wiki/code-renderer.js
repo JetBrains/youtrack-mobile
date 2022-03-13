@@ -75,7 +75,7 @@ function Highlighter({code = '', language, uiTheme}: {code: string, language: st
 function getCodeStyle(uiTheme: UITheme): ViewStyleProp {
   const codeStyle: ViewStyleProp = uiTheme.dark ? darcula : idea;
   for (const i in codeStyle) {
-    codeStyle[i].lineHeight = '1.25em';
+    codeStyle[i].lineHeight = '1em';
   }
   return {
     ...codeStyle,
@@ -154,31 +154,30 @@ function CodeHighlighter(props: {node: Node, uiTheme: UITheme}) {
         </View>
       </View>
 
-      <View
-        style={styles.codeContent}
+      <ScrollView
+        style={styles.codeScrollContainer}
+        horizontal={true}
+        fadingEdgeLength={70}
         scrollEventThrottle={100}
+        contentContainerStyle={styles.codeScrollContent}
       >
-        <ScrollView
-          horizontal={true}
-          fadingEdgeLength={70}
-          scrollEventThrottle={100}
-        >
-          <View onStartShouldSetResponder={() => true}>
-            {stacktraceOrException && (
-              <View><Text style={styles.exception}>{codeSnippet}</Text></View>
-            )}
-            {!stacktraceOrException && (
-              <Text selectable={true}>
-                <Highlighter
-                  code={codeSnippet}
-                  language={language}
-                  uiTheme={uiTheme}
-                />
-              </Text>
-            )}
-          </View>
-        </ScrollView>
-      </View>
+        <View onStartShouldSetResponder={() => true}>
+          {stacktraceOrException && (
+            <View><Text style={styles.exception}>{codeSnippet}</Text></View>
+          )}
+          {!stacktraceOrException && (
+            <Text
+              selectable={true}
+            >
+              <Highlighter
+                code={codeSnippet}
+                language={language}
+                uiTheme={uiTheme}
+              />
+            </Text>
+          )}
+        </View>
+      </ScrollView>
     </View>
   );
 }
