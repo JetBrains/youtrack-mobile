@@ -136,9 +136,9 @@ const LinkedIssues = (props: Props): Node => {
         {`${section.title} `}
         {i18nPlural(
           issuesAmount,
-          `{{issuesAmount}} issue`,
-          `{{issuesAmount}} issues`,
-          {issuesAmount}
+          '{{amount}} issue',
+          '{{amount}} issues',
+          {amount: issuesAmount}
         )}
         {section?.unresolvedIssuesSize > 0 ? i18n(' ({{amount}} unresolved)') : null}
       </Text>

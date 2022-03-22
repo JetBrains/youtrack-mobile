@@ -19,8 +19,8 @@ const IssuesCount = (props: Props) => {
     issuesCount
       ? i18nPlural(
         issuesCount,
-        `Matches ${issuesCount} issue`,
-        `Matches ${issuesCount} issues`,
+        'Matches {{issuesCount}} issue',
+        'Matches {{issuesCount}} issues',
         {issuesCount}
       )
       : ''

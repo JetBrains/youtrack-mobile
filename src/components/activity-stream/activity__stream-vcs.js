@@ -171,7 +171,7 @@ const StreamVCS = (props: Props) => {
         {!!vcs.files && vcs.files !== -1 && (
           <View>
             <Text style={styles.activityLabel}>
-              {vcs.files} {i18nPlural(vcs.files, 'file', 'files')}
+              {vcs.files} {i18nPlural(vcs.files, '{{amount}} file', '{{amount}} files', {amount: vcs.files})}
             </Text>
           </View>
         )}
