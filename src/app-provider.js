@@ -6,7 +6,7 @@ import {StatusBar, Platform} from 'react-native';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
 import {Host} from 'react-native-portalize';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 
 import DebugView from 'components/debug-view/debug-view';
 import ErrorBoundary from 'components/error-boundary/error-boundary';
@@ -50,30 +50,32 @@ export default class AppProvider extends Component<{ }, { mode: string }> {
               };
 
               return (
-                <SafeAreaView
-                  style={style}>
+                <SafeAreaProvider>
                   <StatusBar
                     backgroundColor={backgroundColor}
                     barStyle={uiTheme.barStyle}
                     translucent={true}
                   />
-                  <ErrorBoundary>
-                    <Host>
-                      <Navigation/>
-                      <UserAgreement/>
-                      <DebugView
-                        logsStyle={{
-                          textColor: uiTheme.colors.$text,
-                          backgroundColor,
-                          separatorColor: uiTheme.colors.$separator,
-                        }}
-                      />
-                    </Host>
-                  </ErrorBoundary>
+                  <SafeAreaView
+                    style={style}>
+                    <ErrorBoundary>
+                      <Host>
+                        <Navigation/>
+                        <UserAgreement/>
+                        <DebugView
+                          logsStyle={{
+                            textColor: uiTheme.colors.$text,
+                            backgroundColor,
+                            separatorColor: uiTheme.colors.$separator,
+                          }}
+                        />
+                      </Host>
+                    </ErrorBoundary>
 
-                  <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
+                    <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
 
-                </SafeAreaView>
+                  </SafeAreaView>
+                </SafeAreaProvider>
               );
             })
           }
