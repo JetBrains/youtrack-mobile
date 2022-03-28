@@ -165,11 +165,13 @@ export default EStyleSheet.create({
     marginRight: -UNIT / 4,
   },
   toolbarText: {
-    flexBasis: '45%',
+    paddingRight: UNIT,
     ...secondaryText,
     color: '$icon',
   },
   toolbarSortByText: {
+    paddingLeft: UNIT,
+    paddingRight: 0,
     textAlign: 'right',
   },
   noIssuesFoundIcon: {
