@@ -74,7 +74,7 @@ function formatYouTrackURL(url: string): string {
 async function loadConfig(ytUrl: string): Promise<any> {
   const url = ytUrl.includes(VERSION_DETECT_FALLBACK_URL) ?
     ytUrl :
-    `${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled`;
+    `${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled,l10n(language,locale)`;
   return fetch(url, {
     method: 'GET',
     headers: {
@@ -94,6 +94,7 @@ async function loadConfig(ytUrl: string): Promise<any> {
       config.backendUrl = ytUrl;
       config.statisticsEnabled = res.statisticsEnabled;
       config.version = res.version;
+      config.l10n = res.l10n;
 
       Object.assign(config.auth, {
         serverUri: handleRelativeUrl(res.ring.url, ytUrl),
