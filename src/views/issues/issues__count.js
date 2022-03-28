@@ -31,7 +31,7 @@ const IssuesCount = (props: Props) => {
       style={styles.toolbarAction}
     >
       <Text
-        numberOfLines={1}
+        numberOfLines={2}
         style={styles.toolbarText}>
         {text}
       </Text>
