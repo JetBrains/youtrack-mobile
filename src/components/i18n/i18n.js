@@ -5,15 +5,11 @@ import gt from './i18n-gettext';
 type Params = { [p: string]: string | number | undefined } | undefined;
 
 export function i18n(text: string = '', params?: Params): string {
-  return gt.gettext(createGettextMessage(text, params));
+  return createGettextMessage(gt.gettext(text), params);
 }
 
 export function i18nPlural(count: number, text: string, textPlural: string, params?: Params): string {
-  return gt.ngettext(
-    createGettextMessage(text, params),
-    createGettextMessage(textPlural, params),
-    count
-  );
+  return createGettextMessage(gt.ngettext(text, textPlural, count), params);
 }
 
 
