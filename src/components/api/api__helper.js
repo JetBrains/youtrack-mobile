@@ -16,7 +16,8 @@ const API = {
   makeFieldHash: (issue: AnyIssue): Object => {
     const fieldHash: $Shape<{ key: string, value: CustomField }> = {};
     (issue.fields || []).forEach((field: CustomField) => {
-      const fieldName: string = field.projectCustomField.field.name;
+      const _field: CustomField = field.projectCustomField.field;
+      const fieldName: string = _field.localizedName || _field.name;
       fieldHash[fieldName] = field.value;
     });
     return fieldHash;

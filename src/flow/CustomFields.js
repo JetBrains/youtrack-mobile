@@ -82,6 +82,7 @@ export type ProjectCustomField = {
   field: {
     id: string,
     name: string,
+    localizedName: string,
     ordinal: number,
     fieldType: {
       valueType: string,

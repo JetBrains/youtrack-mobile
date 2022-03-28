@@ -90,6 +90,7 @@ const BOARD_ROW: any = toField([
                     field: [
                       'id',
                       'name',
+                      'localizedName',
                     ],
                   },
                 ],

@@ -53,7 +53,7 @@ export default class CustomField extends Component<Props, void> {
     return emptyValue;
   }
 
-  _getKey() {
+  getLabel() {
     const field: CustomFieldType = this.props.field;
     return (
       field?.projectCustomField?.field?.localizedName ||
@@ -165,7 +165,7 @@ export default class CustomField extends Component<Props, void> {
             accessibilityLabel="name"
             accessible={true}
           >
-            {this._getKey()}
+            {this.getLabel()}
           </Text>
         </View>
 
