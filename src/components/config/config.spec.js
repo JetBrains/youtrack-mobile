@@ -24,6 +24,10 @@ describe('Config', () => {
         },
         statisticsEnabled: true,
         version: '7.0',
+        l10n: {
+          language: 'de',
+          locale: 'de-DE',
+        },
       };
       response = {
         status: 200,
@@ -52,8 +56,9 @@ describe('Config', () => {
           youtrackServiceId: 'fake-service-id',
         },
         backendUrl: 'http://fake.backend',
-        statisticsEnabled: true,
-        version: '7.0',
+        statisticsEnabled: responseJson.statisticsEnabled,
+        version: responseJson.version,
+        l10n: responseJson.l10n,
       });
     });
 
@@ -72,7 +77,7 @@ describe('Config', () => {
     it('should go for config to correct URL', async () => {
       await loadConfig('http://fake.backend');
       fetch.should.have.been.calledWith(
-        'http://fake.backend/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled',
+        'http://fake.backend/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled,l10n(language,locale)',
         {
           method: 'GET',
           headers: {

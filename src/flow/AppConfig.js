@@ -6,7 +6,11 @@ export type AppConfig = {
   backendUrl: string,
   auth: AuthConfig,
   statisticsEnabled: boolean,
-  version: string
+  version: string,
+  l10n: {
+    language: string,
+    locale: string,
+  },
 };
 
 export type EndUserAgreement = {

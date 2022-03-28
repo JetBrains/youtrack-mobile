@@ -39,6 +39,7 @@ import {hasType} from 'components/api/api__resource-types';
 import {isIOSPlatform} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {loadConfig} from 'components/config/config';
+import {loadTranslation} from 'components/i18n/i18n-translation';
 import {logEvent} from 'components/log/log-helper';
 import {normalizeAuthParams} from 'components/auth/oauth2-helper';
 import {notify, notifyError} from 'components/notification/notification';
@@ -644,6 +645,12 @@ function redirectToHome(backendUrl: string = '') {
   });
 }
 
+async function refreshConfig(backendUrl: string): Promise<AppConfig> {
+  const updatedConfig: AuthConfig = await loadConfig(backendUrl);
+  await flushStoragePart({config: updatedConfig, currentAppVersion: packageJson.version});
+  return updatedConfig;
+}
+
 export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
 
@@ -651,10 +658,12 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
       redirectToRoute(config, issueId, navigateToActivity)
     );
 
-    const refreshConfig: () => Promise<void> = async (): Promise<void> => {
-      const updatedConfig: AuthConfig = await loadConfig(config.backendUrl);
-      await flushStoragePart({config: updatedConfig, currentAppVersion: packageJson.version});
-    };
+    if (!config.l10n) {
+      const updatedConfig: AppConfig = await refreshConfig(config);
+      return await dispatch(initializeApp(updatedConfig, issueId, navigateToActivity));
+    } else {
+      loadTranslation(config.l10n.locale, config.l10n.language);
+    }
 
     const versionHasChanged: boolean = packageJson.version !== getStorageState().currentAppVersion;
     try {
@@ -662,7 +671,7 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
         log.info(
           `App upgraded from ${getStorageState().currentAppVersion || 'NOTHING'} to "${packageJson.version}"; reloading config`
         );
-        await refreshConfig();
+        await refreshConfig(config.backendUrl);
       }
 
       await dispatch(initializeAuth(config));
@@ -694,7 +703,7 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
     dispatch(subscribeToURL());
 
     if (!versionHasChanged) {
-      refreshConfig();
+      refreshConfig(config.backendUrl);
     }
   };
 }
