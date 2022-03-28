@@ -7,14 +7,7 @@ import {i18n} from 'components/i18n/i18n';
 
 import type {AnyIssue} from 'flow/Issue';
 import type {CustomField} from 'flow/CustomFields';
-
-type Locale = {
-  languageCode: string,
-  scriptCode?: string,
-  countryCode: string,
-  languageTag: string,
-  isRTL: boolean,
-};
+import type {Locale} from '../../flow/Date';
 
 const justNow: string = i18n('just now');
 const translations: { [string]: { 1: string, 2: string } } = {
