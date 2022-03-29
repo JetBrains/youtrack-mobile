@@ -152,7 +152,7 @@ export default EStyleSheet.create({
   },
   toolbar: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     padding: UNIT * 2,
   },
@@ -165,6 +165,7 @@ export default EStyleSheet.create({
     marginRight: -UNIT / 4,
   },
   toolbarText: {
+    flexBasis: '45%',
     paddingRight: UNIT,
     ...secondaryText,
     color: '$icon',
