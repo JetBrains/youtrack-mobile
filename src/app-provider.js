@@ -3,6 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import {StatusBar} from 'react-native';
 
+import NetworkPopup from './components/network/network';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
 import {Host} from 'react-native-portalize';
@@ -75,6 +76,7 @@ export default function AppProvider(): Node {
                   </ErrorBoundary>
 
                   <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
+                  <NetworkPopup/>
 
                 </SafeAreaView>
               </SafeAreaProvider>

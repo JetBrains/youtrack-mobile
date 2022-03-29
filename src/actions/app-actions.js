@@ -50,17 +50,23 @@ import type {AppState} from '../reducers';
 import type {Article} from 'flow/Article';
 import type {AuthConfig, AuthParams, OAuthParams2} from 'flow/Auth';
 import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from 'flow/User';
+import type {NetInfoState} from '@react-native-community/netinfo';
 import type {NotificationRouteData} from 'flow/Notification';
 import type {PermissionCacheItem} from 'flow/Permission';
+import type {RootState} from 'reducers/app-reducer';
 import type {StorageState} from 'components/storage/storage';
 import type {WorkTimeSettings} from 'flow/Work';
-import type {RootState} from 'reducers/app-reducer';
 
 type Action = (
   (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) =>
     Promise<void> | Promise<mixed> | typeof undefined
   );
 
+export function setNetworkState(networkState: NetInfoState): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+    dispatch({type: types.SET_NETWORK, networkState});
+  };
+}
 
 export function logOut(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
@@ -644,6 +650,12 @@ function redirectToHome(backendUrl: string = '') {
   });
 }
 
+async function refreshConfig(backendUrl: string): Promise<AppConfig> {
+  const updatedConfig: AuthConfig = await loadConfig(backendUrl);
+  await flushStoragePart({config: updatedConfig, currentAppVersion: packageJson.version});
+  return updatedConfig;
+}
+
 export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
 
@@ -651,18 +663,13 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
       redirectToRoute(config, issueId, navigateToActivity)
     );
 
-    const refreshConfig: () => Promise<void> = async (): Promise<void> => {
-      const updatedConfig: AuthConfig = await loadConfig(config.backendUrl);
-      await flushStoragePart({config: updatedConfig, currentAppVersion: packageJson.version});
-    };
-
     const versionHasChanged: boolean = packageJson.version !== getStorageState().currentAppVersion;
     try {
       if (versionHasChanged) {
         log.info(
           `App upgraded from ${getStorageState().currentAppVersion || 'NOTHING'} to "${packageJson.version}"; reloading config`
         );
-        await refreshConfig();
+        await refreshConfig(config.backendUrl);
       }
 
       await dispatch(initializeAuth(config));
@@ -694,7 +701,7 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
     dispatch(subscribeToURL());
 
     if (!versionHasChanged) {
-      refreshConfig();
+      refreshConfig(config.backendUrl);
     }
   };
 }
