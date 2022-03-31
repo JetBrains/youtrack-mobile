@@ -19,7 +19,7 @@ export default function NetworkPopup(): Node {
   const networkState: ?NetInfoState = useSelector((appState: AppState) => appState?.app?.networkState);
   let toastInstance;
 
-  const updateNetInfoState = (state: NetInfoState) => {
+  const updateNetworkState = (state: NetInfoState) => {
     if (state.isConnected !== networkState?.isConnected) {
       // eslint-disable-next-line no-unused-vars
       const {details, ...rest} = state;
@@ -27,7 +27,7 @@ export default function NetworkPopup(): Node {
       if (toastInstance) {
         if (rest.isConnected === false) {
           toastInstance.show('Offline', DURATION.FOREVER);
-        } else {
+        } else if (rest.isConnected === true) {
           toastInstance.close();
         }
       }
@@ -35,8 +35,8 @@ export default function NetworkPopup(): Node {
   };
 
   useEffect(() => {
-    NetInfo.fetch().then(updateNetInfoState);
-    return NetInfo.addEventListener(updateNetInfoState);
+    NetInfo.fetch().then(updateNetworkState);
+    return NetInfo.addEventListener(updateNetworkState);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
