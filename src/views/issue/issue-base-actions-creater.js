@@ -11,6 +11,7 @@ import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
 import {getEntityPresentation, getReadableID} from 'components/issue-formatter/issue-formatter';
 import {getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
+import {getStorageState} from 'components/storage/storage';
 import {initialState} from './issue-base-reducer';
 import {isIOSPlatform, until} from 'util/util';
 import {logEvent} from 'components/log/log-helper';
@@ -23,7 +24,7 @@ import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
 import type {Attachment, CustomField, CustomFieldText, FieldValue, IssueProject, Tag} from 'flow/CustomFields';
-import type {CommandSuggestionResponse, IssueFull, IssueOnList, OpenNestedViewParams} from 'flow/Issue';
+import type {AnyIssue, CommandSuggestionResponse, IssueFull, IssueOnList, OpenNestedViewParams} from 'flow/Issue';
 import type {IssueLink} from 'flow/CustomFields';
 import type {IssueState} from './issue-base-reducer';
 import type {NormalizedAttachment} from 'flow/Attachment';
@@ -88,9 +89,14 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
       getState: StateGetter,
       getApi: ApiGetter
     ) => Promise<IssueFull | void>) {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+      return async (dispatch: (any) => any, getState: AppState, getApi: ApiGetter) => {
         const issueId = getState()[stateFieldName].issueId;
         const api: Api = getApi();
+        const doUpdate = (issue: AnyIssue): void => {
+          dispatch(dispatchActions.setIssueId(issue.id));//Set issue ID again because first one could be readable id
+          dispatch(dispatchActions.receiveIssue(issue));
+          dispatch(actions.getIssueLinksTitle());
+        };
 
         try {
           if (!issueId) {
@@ -100,15 +106,20 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           const issue = await api.issue.getIssue(issueId);
           log.info(`Issue "${issueId}" loaded`);
           issue.fieldHash = ApiHelper.makeFieldHash(issue);
-
-          dispatch(dispatchActions.setIssueId(issue.id)); //Set issue ID again because first one could be readable like YTM-111
-          dispatch(dispatchActions.receiveIssue(issue));
-          dispatch(actions.getIssueLinksTitle());
+          doUpdate(issue);
           return issue;
-        } catch (rawError) {
-          const error = await resolveError(rawError);
-          dispatch(dispatchActions.setError(error));
-          log.warn('Failed to load issue', error);
+        } catch (err) {
+          const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+          if (isOffline) {
+            const cachedIssue: ?AnyIssue = (getStorageState().issuesCache || []).find((issue: AnyIssue) => {
+              return issue.id === issueId || issue.idReadable === issueId;
+            });
+            cachedIssue && doUpdate(cachedIssue);
+          } else {
+            const error = await resolveError(err);
+            dispatch(dispatchActions.setError(error));
+            log.warn('Failed to load issue', error);
+          }
         }
       };
     },
