@@ -111,6 +111,10 @@ export class AuthBase {
     return authParams.refresh_token;
   }
 
+  setCurrentUser(user: User): void {
+    this.currentUser = user;
+  }
+
   async logOut(): Promise<void> {
     await EncryptedStorage.removeItem(STORAGE_AUTH_PARAMS_KEY, () => {
       EncryptedStorage.setItem(STORAGE_AUTH_PARAMS_KEY, '');
@@ -156,7 +160,7 @@ export class AuthBase {
           e.status = HTTP_STATUS.FORBIDDEN;
           throw e;
         }
-        this.currentUser = currentUser;
+        this.setCurrentUser(currentUser);
         log.info('loadCurrentUser: Current user updated.');
         return authParams;
       })
