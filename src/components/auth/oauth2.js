@@ -18,11 +18,6 @@ export default class OAuth2 extends AuthBase {
     return await doAuthorize(config);
   }
 
-  async checkAuthorization(): Promise<void> {
-    this.authParams = await this.getCachedAuthParams();
-    return await this.loadCurrentUser(this.authParams);
-  }
-
   async setAuthorizationFromCache(): Promise<AuthParams> {
     this.authParams = await this.getCachedAuthParams();
     return this.authParams;

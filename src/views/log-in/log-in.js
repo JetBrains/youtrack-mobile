@@ -27,7 +27,7 @@ import {formatYouTrackURL} from 'components/config/config';
 import {formStyles} from 'components/common-styles/form';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {logo, IconBack} from 'components/icon/icon';
-import {openDebugView, applyAuthorization} from 'actions/app-actions';
+import {openDebugView, onLogIn} from 'actions/app-actions';
 import {resolveErrorMessage} from 'components/error/error-resolver';
 import {ThemeContext} from 'components/theme/theme-context';
 
@@ -297,7 +297,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       }
       Router.EnterServer({serverUrl: youtrackUrl});
     },
-    onLogIn: (authParams: AuthParams) => dispatch(applyAuthorization(authParams)),
+    onLogIn: (authParams: AuthParams) => dispatch(onLogIn(authParams)),
     onShowDebugView: () => dispatch(openDebugView()),
   };
 };

@@ -93,8 +93,6 @@ export class AuthBase {
     ].join(''), config);
   }
 
-  checkAuthorization(): any {}
-
   getPermissionsCacheURL(): string {
     return this.PERMISSIONS_CACHE_URL;
   }
