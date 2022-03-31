@@ -1,6 +1,7 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {enableFetchMocks} from 'jest-fetch-mock';
 
+import mocks from '../../../test/mocks';
 import * as storageHelper from '../storage/storage__oauth';
 import Auth from './oauth2';
 import {__setStorageState} from '../storage/storage';
@@ -23,8 +24,8 @@ describe('OAuth', () => {
   });
 
   beforeEach(() => {
-    configMock = createConfigMock();
-    authParamsMock = createAuthParamsMock();
+    configMock = mocks.createConfigMock();
+    authParamsMock = mocks.createAuthParamsMock();
     authParamsMockKey = '0123';
 
     __setStorageState({authParamsKey: authParamsMockKey});
@@ -263,27 +264,6 @@ describe('OAuth', () => {
   });
 });
 
-function createConfigMock() {
-  return {
-    backendUrl: 'http://youtrack.example',
-    auth: {
-      serverUri: 'http://youtrack/pm.example',
-      clientId: 'client-id',
-      clientSecret: 'client-secret',
-      youtrackServiceId: 'yt-service-id',
-      scopes: 'scope# scope2',
-      landingUrl: 'oauth://url',
-    },
-  };
-}
-
-function createAuthParamsMock() {
-  return {
-    'access_token': 'access-token',
-    'refresh_token': 'refresh-token',
-    'token_type': 'token-type',
-  };
-}
 
 function createAuthMock(config) {
   return new Auth(config || configMock);

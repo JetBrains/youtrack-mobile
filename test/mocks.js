@@ -171,17 +171,17 @@ function createConfigMock() {
       clientId: 'client-id',
       clientSecret: 'client-secret',
       youtrackServiceId: 'yt-service-id',
-      scopes: 'scope1 scope2',
-      landingUrl: 'ytoauth://landing.url',
+      scopes: 'scope# scope2',
+      landingUrl: 'oauth://url',
     },
   };
 }
 
 function createAuthParamsMock() {
   return {
-    access_token: 'fake-access-token',
-    refresh_token: 'fake-refresh-token',
-    token_type: 'bearer',
+    'access_token': 'access-token',
+    'refresh_token': 'refresh-token',
+    'token_type': 'token-type',
   };
 }
 
