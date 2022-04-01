@@ -238,7 +238,7 @@ export function cacheIssues(issues: Array<AnyIssue>): (() => void) {
   };
 }
 
-export function loadingIssuesError(error: Object): ((dispatch: (any) => any) => Promise<void>) {
+export function setIssuesError(error: Object): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     dispatch(resetIssuesCount());
     dispatch({type: types.LOADING_ISSUES_ERROR, error: error});
@@ -253,14 +253,19 @@ export function loadIssues(query: string): ((
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     try {
       const api: Api = getApi();
+      const isOffline: boolean = getState().app?.networkState?.isConnected === false;
       log.info('Loading issues...');
 
-      dispatch(startIssuesLoading());
+      if (!isOffline) {
+        dispatch(startIssuesLoading());
+      }
       const [error, listIssues] = await until(api.issues.getIssues(query, PAGE_SIZE));
       dispatch(stopIssuesLoading());
 
       if (error) {
-        dispatch(loadingIssuesError(error));
+        if (isOffline && !getStorageState().issuesCache) {
+          dispatch(setIssuesError(error));
+        }
       } else {
         const issues: Array<AnyIssue> = ApiHelper.fillIssuesFieldHash(listIssues);
         log.info(`${issues?.length} issues loaded`);
@@ -367,6 +372,10 @@ export function loadMoreIssues(): ((
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     try {
+      const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+      if (isOffline) {
+        return;
+      }
       const api: Api = getApi();
 
       const {isInitialized, isLoadingMore, isRefreshing, loadingError, isListEndReached, skip, issues, query} = getState().issueList;

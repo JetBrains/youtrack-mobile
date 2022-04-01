@@ -113,7 +113,7 @@ const IssuesSortBy = (props: Props) => {
           >
             <Text
               style={[styles.toolbarText, styles.toolbarSortByText]}
-              numberOfLines={1}
+              numberOfLines={2}
             >
               {i18n('Sorted by')} {createSortButtonTitle(selectedSortProperties)}
             </Text>

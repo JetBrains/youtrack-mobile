@@ -1,5 +1,7 @@
 module.exports = {
   'preset': 'react-native',
+  'automock': false,
+  'resetMocks': false,
   'transform': {
     '^.+\\.(js|ts)$': 'babel-jest',
     '^[./a-zA-Z0-9$_-]+\\.(gif|jpg|jpeg|png|svg)$': 'jest-transform-stub',

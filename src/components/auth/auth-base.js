@@ -93,8 +93,6 @@ export class AuthBase {
     ].join(''), config);
   }
 
-  checkAuthorization(): any {}
-
   getPermissionsCacheURL(): string {
     return this.PERMISSIONS_CACHE_URL;
   }
@@ -109,6 +107,10 @@ export class AuthBase {
 
   getRefreshToken(authParams: AuthParams): string {
     return authParams.refresh_token;
+  }
+
+  setCurrentUser(user: User): void {
+    this.currentUser = user;
   }
 
   async logOut(): Promise<void> {
@@ -156,7 +158,7 @@ export class AuthBase {
           e.status = HTTP_STATUS.FORBIDDEN;
           throw e;
         }
-        this.currentUser = currentUser;
+        this.setCurrentUser(currentUser);
         log.info('loadCurrentUser: Current user updated.');
         return authParams;
       })

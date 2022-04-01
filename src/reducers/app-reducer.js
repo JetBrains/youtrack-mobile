@@ -7,11 +7,12 @@ import {createReducer} from 'redux-create-reducer';
 import {issuePermissionsNull} from 'components/issue-permissions/issue-permissions-helper';
 
 import type Auth from 'components/auth/oauth2';
+import type {EndUserAgreement} from 'flow/AppConfig';
+import type {NetInfoState} from '@react-native-community/netinfo';
 import type {PermissionsStore} from 'components/permissions-store/permissions-store';
 import type {StorageState} from 'components/storage/storage';
-import type {EndUserAgreement} from 'flow/AppConfig';
-import type {WorkTimeSettings} from 'flow/Work';
 import type {User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile, UserProfiles} from 'flow/User';
+import type {WorkTimeSettings} from 'flow/Work';
 
 export type RootState = {
   auth: OAuth2 | null,
@@ -25,6 +26,7 @@ export type RootState = {
   workTimeSettings: WorkTimeSettings | {},
   user: User | null,
   issuePermissions: IssuePermissions,
+  networkState: NetInfoState | null,
 };
 
 const initialState: RootState = {
@@ -143,6 +145,12 @@ export default (createReducer(initialState, {
     return {
       ...state,
       ...{user: updatedUser},
+    };
+  },
+  [types.SET_NETWORK](state: RootState, action: {networkState: NetInfoState}) {
+    return {
+      ...state,
+      networkState: action.networkState,
     };
   },
 }): any);

@@ -52,17 +52,23 @@ import type {AppState} from '../reducers';
 import type {Article} from 'flow/Article';
 import type {AuthConfig, AuthParams, OAuthParams2} from 'flow/Auth';
 import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from 'flow/User';
+import type {NetInfoState} from '@react-native-community/netinfo';
 import type {NotificationRouteData} from 'flow/Notification';
 import type {PermissionCacheItem} from 'flow/Permission';
+import type {RootState} from 'reducers/app-reducer';
 import type {StorageState} from 'components/storage/storage';
 import type {WorkTimeSettings} from 'flow/Work';
-import type {RootState} from 'reducers/app-reducer';
 
 type Action = (
   (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) =>
     Promise<void> | Promise<mixed> | typeof undefined
   );
 
+export function setNetworkState(networkState: NetInfoState): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+    dispatch({type: types.SET_NETWORK, networkState});
+  };
+}
 
 export function logOut(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
@@ -178,17 +184,34 @@ export const cacheUserLastVisitedArticle = (article: Article | null, activities?
   }
 };
 
-export function checkAuthorization(): Action {
+export function applyAuthParamsAndInitAPI(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const auth: OAuth2 = ((getState().app.auth: any): OAuth2);
-    await auth.checkAuthorization();
-    await flushStoragePart({currentUser: auth.currentUser});
+    const doUpdate = async () => {
+      await auth.loadCurrentUser(cachedAuthParams);
+      await flushStoragePart({currentUser: auth.currentUser});
+      setApi(new Api(auth));
+    };
 
-    setApi(new Api(auth));
+    const cachedCurrentUser: ?User = getStorageState().currentUser;
+    if (cachedCurrentUser) {
+      auth.setCurrentUser(cachedCurrentUser);
+    }
+
+    const cachedAuthParams: ?AuthParams = await auth.setAuthorizationFromCache();
+    if (cachedAuthParams) {
+      setApi(new Api(auth));
+    }
+
+    if (!cachedCurrentUser || !cachedAuthParams) {
+      await doUpdate();
+    } else {
+      doUpdate();
+    }
   };
 }
 
-export function setAuth(config: AppConfig): { auth: OAuth2, type: string } {
+export function createAuthInstance(config: AppConfig): { type: string, auth: OAuth2 } {
   const auth: OAuth2 = new OAuth2(config);
   usage.init(config.statisticsEnabled);
   return {type: types.INITIALIZE_AUTH, auth};
@@ -492,8 +515,8 @@ export function declineUserAgreement(): Action {
 
 export function initializeAuth(config: AppConfig): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    dispatch(setAuth(config));
-    await dispatch(checkAuthorization());
+    dispatch(createAuthInstance(config));
+    await dispatch(applyAuthParamsAndInitAPI());
   };
 }
 
@@ -524,7 +547,7 @@ function checkUserAgreement(): Action {
   };
 }
 
-export function applyAuthorization(authParams: AuthParams): Action {
+export function onLogIn(authParams: AuthParams): Action {
   return async (dispatch: Function, getState: () => AppState) => {
     const auth: OAuth2 | null = getState().app.auth;
     const creationTimestamp: number = Date.now();
@@ -537,7 +560,7 @@ export function applyAuthorization(authParams: AuthParams): Action {
       await auth.cacheAuthParams((authParams: any), authStorageStateValue);
     }
 
-    await dispatch(checkAuthorization());
+    await dispatch(applyAuthParamsAndInitAPI());
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
@@ -605,7 +628,7 @@ export function redirectToRoute(config: AppConfig, issueId: string | null, navig
       let authParams: ?AuthParams = null;
       if (config) {
         //eslint-disable-next-line no-unused-vars
-        const {type, auth}: { type: string, auth: OAuth2 } = dispatch(setAuth(config));
+        const {type, auth}: { type: string, auth: OAuth2 } = dispatch(createAuthInstance(config));
         authParams = await auth.getCachedAuthParams();
         auth.setAuthParams(authParams);
         setApi(new Api(auth));
@@ -712,7 +735,7 @@ export function connectToNewYoutrack(newURL: string): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const config = await loadConfig(newURL);
     await storeConfig(config);
-    dispatch(setAuth(config));
+    dispatch(createAuthInstance(config));
     Router.LogIn({config});
   };
 }
