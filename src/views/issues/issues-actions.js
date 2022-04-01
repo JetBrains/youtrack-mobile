@@ -371,6 +371,10 @@ export function loadMoreIssues(): ((
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
     try {
+      const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+      if (isOffline) {
+        return;
+      }
       const api: Api = getApi();
 
       const {isInitialized, isLoadingMore, isRefreshing, loadingError, isListEndReached, skip, issues, query} = getState().issueList;
