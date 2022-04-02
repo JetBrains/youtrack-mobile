@@ -81,6 +81,17 @@ const loadArticleList = (reset: boolean = true): ((dispatch: (any) => any) => Pr
 
 const getArticleList = (reset: boolean = true) =>
   async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    if (isOffline) {
+      const cachedProjectData: ?Array<ProjectArticlesData> = getStorageState().articles;
+      const cachedArticlesList: ?ArticlesList = getStorageState().articlesList;
+      if (cachedProjectData && cachedArticlesList) {
+        dispatch(setArticles(cachedProjectData));
+        dispatch(setList(cachedArticlesList));
+      }
+      return;
+    }
+
     const api: Api = getApi();
 
     logEvent({
