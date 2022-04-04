@@ -126,7 +126,8 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   }
 
   renderLinksBlock: (() => void | Node) = () => {
-    const {issue, issuePermissions, getIssueLinksTitle} = this.props;
+    const {issuePermissions, getIssueLinksTitle} = this.props;
+    const issue: AnyIssue = this.getIssue();
     return (
       <LinkedIssuesTitle
         issueLinks={issue.links}
@@ -202,12 +203,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   }
 
   renderAdditionalInfo(): null | Node {
-    const {issue} = this.props;
-
-    if (!issue) {
-      return null;
-    }
-
+    const issue: AnyIssue = this.getIssue();
     return (
       issue
         ? <View style={styles.issueTopPanel}>
@@ -230,7 +226,8 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   }
 
   renderIssueVisibility(uiTheme: UITheme): Node {
-    const {issue, onVisibilityChange} = this.props;
+    const {onVisibilityChange} = this.props;
+    const issue: AnyIssue = this.getIssue();
 
     if (issue) {
       return (
@@ -249,7 +246,8 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   }
 
   renderIssueTextFields(): Node {
-    const {issue, editMode, onLongPress, setCustomFieldValue} = this.props;
+    const {editMode, onLongPress, setCustomFieldValue} = this.props;
+    const issue: AnyIssue = this.getIssue();
     return getIssueTextCustomFields(issue.fields).map((textField: CustomFieldText, index: number) => {
       return (
         <TouchableWithoutFeedback
@@ -277,7 +275,6 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
 
   renderIssueContent(): Node {
     const {
-      issue,
       openIssueListWithSearch,
       openNestedIssueView,
       onTagRemove,
@@ -286,6 +283,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
       scrollData,
     } = this.props;
 
+    const issue: AnyIssue = this.getIssue();
     if (!issue) {
       return <SkeletonIssueContent/>;
     }
@@ -299,7 +297,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         backendUrl: this.backendUrl,
         attachments: issue.attachments,
         imageHeaders: this.imageHeaders,
-        onIssueIdTap: issueId => openNestedIssueView({issueId}),
+        onIssueIdTap: (issueId: string) => openNestedIssueView({issueId}),
         title: getReadableID(issue),
         description: issue.wikifiedDescription,
       },

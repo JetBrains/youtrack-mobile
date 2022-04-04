@@ -98,10 +98,10 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     await this.props.setIssueId(this.props.issueId || this.props?.issuePlaceholder?.id);
 
     if (this.props.navigateToActivity) {
-      this.loadIssue();
+      this.loadIssue(this.props?.issuePlaceholder);
       this.switchToActivityTab();
     } else {
-      await this.loadIssue();
+      await this.loadIssue(this.props?.issuePlaceholder);
     }
   }
 
@@ -138,8 +138,8 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   }
 
-  async loadIssue() {
-    await this.props.loadIssue();
+  async loadIssue(issuePlaceholder: ?$Shape<IssueFull>) {
+    await this.props.loadIssue(issuePlaceholder);
   }
 
   createIssueDetails: (uiTheme: UITheme, scrollData: ScrollData) => React$Element<any> = (
@@ -606,7 +606,7 @@ const mapStateToProps = (state: { app: RootState, issueState: IssueState }, ownP
     issuePlaceholder: ownProps.issuePlaceholder,
     issueId: ownProps.issueId,
     user: state.app.user,
-    navigateToActivity: ownProps.navigateToActivity,
+    navigateToActivity: state.app.networkState.isConnected !== false && ownProps.navigateToActivity,
   });
 };
 

@@ -10,6 +10,7 @@ import {sortByTimestampReverse} from 'components/search/sorting';
 import {until} from 'util/util';
 
 import type Api from 'components/api/api';
+import type {AppState} from '../../reducers';
 import type {CustomError} from 'flow/Error';
 import type {Notification} from 'flow/Inbox';
 
@@ -49,7 +50,11 @@ const loadInbox = (skip: number = 0, top: number = 10): ((
   getState: () => any,
   getApi: ApiGetter
 ) => Promise<void> | Promise<any>) => {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    if (isOffline) {
+      return;
+    }
     const api = getApi();
 
     dispatch(setError(null));
