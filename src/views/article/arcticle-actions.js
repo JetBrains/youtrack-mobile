@@ -63,6 +63,10 @@ const loadArticle = (articleId: string, reset: boolean = true): ((
   getApi: ApiGetter
 ) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    if (isOffline) {
+      return;
+    }
     const api: Api = getApi();
 
     logEvent({message: 'Loading article'});
@@ -104,6 +108,10 @@ const loadActivitiesPage = (reset: boolean = true): ((
   getApi: ApiGetter
 ) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    if (isOffline) {
+      return;
+    }
     const api: Api = getApi();
     const article: Article = getState().article.article;
 

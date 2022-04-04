@@ -229,12 +229,15 @@ class AgileBoard extends Component<Props, State> {
   };
 
   renderAgileSelector() {
-    const {agile, onOpenBoardSelect} = this.props;
-    if (agile) {
+    const {agile, onOpenBoardSelect, sprint, networkState} = this.props;
+    const agileName: string = agile?.name || sprint?.agile?.name;
+    const agileId: string = agile?.id || sprint?.agile?.id;
+    if (agileName && agileId) {
       return renderSelector({
-        key: agile.id,
-        label: agile.name,
+        key: agileId,
+        label: agileName,
         onPress: onOpenBoardSelect,
+        isDisabled: networkState?.isConnected === false,
         style: styles.agileSelector,
         textStyle: styles.agileSelectorText,
         showBottomBorder: this.state.stickElement.agile,
@@ -251,7 +254,7 @@ class AgileBoard extends Component<Props, State> {
   }
 
   renderSprintSelector() {
-    const {agile, sprint, onOpenSprintSelect, isLoading} = this.props;
+    const {agile, sprint, onOpenSprintSelect, isLoading, networkState} = this.props;
 
     if (!agile || !sprint) {
       return null;
@@ -266,7 +269,7 @@ class AgileBoard extends Component<Props, State> {
         label: sprint.name,
         onPress: onOpenSprintSelect,
         style: styles.sprintSelector,
-        isLoading,
+        isDisabled: isLoading || networkState?.isConnected === false,
         uiTheme: this.uiTheme,
       });
     }
@@ -378,7 +381,7 @@ class AgileBoard extends Component<Props, State> {
   };
 
   renderSprint = () => {
-    const {sprint, createCardForCell, onRowCollapseToggle, agile} = this.props;
+    const {sprint, createCardForCell, onRowCollapseToggle, agile, networkState} = this.props;
 
     return (
       <AgileBoardSprint
@@ -391,6 +394,9 @@ class AgileBoard extends Component<Props, State> {
         canRunCommand={this.canRunCommand}
         onTapIssue={this._onTapIssue}
         onTapCreateIssue={async (...args): Promise<void> => {
+          if (networkState?.isConnected === false) {
+            return;
+          }
           const draft: $Shape<IssueOnList> = await createCardForCell.apply(null, [...args, this.state.isSplitView]);
           if (this.state.isSplitView) {
             this.toggleModalChildren(
@@ -487,7 +493,8 @@ class AgileBoard extends Component<Props, State> {
   };
 
   renderSearchPanelPreview = () => {
-    return (
+    const {networkState} = this.props;
+    return networkState?.isConnected !== false && (
       <QueryPreview
         style={styles.searchQueryPreview}
         query={this.query}

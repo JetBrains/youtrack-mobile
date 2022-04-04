@@ -11,7 +11,7 @@ import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
 import {getEntityPresentation, getReadableID} from 'components/issue-formatter/issue-formatter';
 import {getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
-import {getStorageState} from 'components/storage/storage';
+import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {initialState} from './issue-base-reducer';
 import {i18n} from 'components/i18n/i18n';
 import {isIOSPlatform, until} from 'util/util';
@@ -97,6 +97,15 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           dispatch(dispatchActions.receiveIssue(issue));
           dispatch(actions.getIssueLinksTitle());
         };
+        const updateCache = (issue: AnyIssue) => {
+          const updatedCache: Array<AnyIssue> = (getStorageState().issuesCache || []).map((it: AnyIssue) => {
+            if (it.id === issue.id) {
+              return {...it, ...issue};
+            }
+            return it;
+          });
+          flushStoragePart({issuesCache: updatedCache});
+        };
 
         try {
           if (!issueId) {
@@ -107,6 +116,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           log.info(`Issue "${issueId}" loaded`);
           issue.fieldHash = ApiHelper.makeFieldHash(issue);
           doUpdate(issue);
+          updateCache(issue);
           return issue;
         } catch (err) {
           const isOffline: boolean = getState().app?.networkState?.isConnected === false;

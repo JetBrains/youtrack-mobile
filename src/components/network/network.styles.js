@@ -4,7 +4,9 @@ import {UNIT} from '../variables/variables';
 
 export default EStyleSheet.create({
   container: {
-    backgroundColor: '$yellowBackground',
+    position: 'relative',
+    zIndex: -1,
+    backgroundColor: '$boxBackground',
     padding: UNIT / 2,
     paddingHorizontal: UNIT / 1.5,
   },

@@ -2,7 +2,7 @@
 
 import type {Node} from 'React';
 import React from 'react';
-import {Text, TouchableOpacity, View, ActivityIndicator} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -22,7 +22,7 @@ export function renderSelector(params: {
   style?: ViewStyleProp,
   textStyle?: TextStyleProp,
   showBottomBorder?: boolean,
-  isLoading?: boolean,
+  isDisabled?: boolean,
   showLoader?: boolean,
   uiTheme: UITheme
 }): Node {
@@ -39,25 +39,24 @@ export function renderSelector(params: {
         accessible={true}
         key={params.key}
         style={styles.selectorButton}
-        disabled={params.isLoading}
+        disabled={params.isDisabled}
         onPress={params.onPress}
       >
         <Text
           style={[
             styles.selectorButtonText,
             params.textStyle,
-            params.isLoading ? styles.selectorButtonTextDisabled : null,
+            params.isDisabled ? styles.selectorButtonTextDisabled : null,
           ]}
           numberOfLines={1}
         >
           {`${params.label} `}
         </Text>
-        {((params.showLoader && !params.isLoading) || (!params.showLoader)) && <IconAngleDown
+        {((params.showLoader && !params.isDisabled) || (!params.showLoader)) && <IconAngleDown
           size={17}
           style={styles.selectorIcon}
-          color={params.isLoading ? params.uiTheme.colors.$icon : params.uiTheme.colors.$text}
+          color={params.isDisabled ? params.uiTheme.colors.$icon : params.uiTheme.colors.$text}
         />}
-        {params.showLoader && params.isLoading && <ActivityIndicator color={params.uiTheme.colors.$link}/>}
       </TouchableOpacity>
     </View>
   );

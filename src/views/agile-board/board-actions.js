@@ -32,6 +32,7 @@ import type {
   SprintFull,
 } from 'flow/Agile';
 import type {AgilePageState} from './board-reducers';
+import type {AppState} from '../../reducers';
 import type {CustomError} from 'flow/Error';
 import type {IssueFull, IssueOnList} from 'flow/Issue';
 
@@ -96,21 +97,24 @@ export function getAgileUserProfile(): (dispatch: (any) => any, getState: () => 
 }
 
 export function loadAgileWithStatus(agileId: string): ((dispatch: (any) => any) => Promise<void>) {
-  return async (dispatch: (any) => any) => {
-    dispatch({type: types.START_LOADING_AGILE});
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
 
     const cachedDefaultAgileBoard: ?Board = getStorageState().agileDefaultBoard;
     if (cachedDefaultAgileBoard) {
       dispatch(receiveAgile(cachedDefaultAgileBoard));
     }
 
-    const agileWithStatus: Board = await dispatch(loadAgile(agileId));
-    dispatch({type: types.STOP_LOADING_AGILE});
-    flushStoragePart({agileDefaultBoard: agileWithStatus});
+    if (!isOffline) {
+      dispatch({type: types.START_LOADING_AGILE});
+      const agileWithStatus: Board = await dispatch(loadAgile(agileId));
+      dispatch({type: types.STOP_LOADING_AGILE});
+      flushStoragePart({agileDefaultBoard: agileWithStatus});
 
-    if (!agileWithStatus.status.valid) {
-      dispatch(receiveSprint(null));
-      dispatch(stopSprintLoad());
+      if (!agileWithStatus.status.valid) {
+        dispatch(receiveSprint(null));
+        dispatch(stopSprintLoad());
+      }
     }
   };
 }
@@ -316,9 +320,14 @@ export function loadAgileProfile(): ((
 }
 
 export function loadDefaultAgileBoard(query: string, refresh: boolean): ((dispatch: (any) => any) => Promise<void>) {
-  return async (dispatch: (any) => any) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     dispatch(setError(null));
-    dispatch(receiveSprint(getStorageState().agileLastSprint));
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    const cachedAgileLastSprint: ?Sprint = getStorageState().agileLastSprint;
+    dispatch(receiveSprint(cachedAgileLastSprint));
+    if (isOffline) {
+      return;
+    }
 
     await dispatch(loadAgileProfile());
 
@@ -392,7 +401,11 @@ export function fetchMoreSwimlanes(query?: string): ((
   getState: () => any,
   getApi: ApiGetter
 ) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    if (isOffline) {
+      return;
+    }
     const {sprint, noMoreSwimlanes, isLoadingMore} = getState().agile;
     const api: Api = getApi();
     if (!sprint || noMoreSwimlanes || isLoadingMore) {
@@ -433,7 +446,7 @@ export function rowCollapseToggle(row: AgileBoardRow): ((
   getState: () => any,
   getApi: ApiGetter
 ) => Promise<void>) {
-  return async (dispatch: (any) => any, getState: () => Object, getApi: ApiGetter) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const {sprint} = getState().agile;
     const api: Api = getApi();
     if (!sprint) {
@@ -443,6 +456,10 @@ export function rowCollapseToggle(row: AgileBoardRow): ((
 
     dispatch(updateRowCollapsedState(row, !row.collapsed));
 
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    if (isOffline) {
+      return;
+    }
     try {
       await api.agile.updateRowCollapsedState(sprint.agile.id, sprint.id, {
         ...row,
