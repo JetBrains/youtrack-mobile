@@ -96,10 +96,12 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     usage.trackScreenView(this.CATEGORY_NAME);
     await this.props.unloadIssueIfExist();
     await this.props.setIssueId(this.props.issueId || this.props?.issuePlaceholder?.id);
-    await this.loadIssue();
 
     if (this.props.navigateToActivity) {
+      this.loadIssue();
       this.switchToActivityTab();
+    } else {
+      await this.loadIssue();
     }
   }
 
