@@ -138,8 +138,7 @@ class Settings extends PureComponent<Props, State> {
                   onClose={() => {}}
                   onLogOut={onLogOut}
                   openDebugView={() => clicksToShowCounter(
-                    () => Router.PageModal({children: <FeaturesDebugSettings/>}),
-                    i18n('open debug settings')
+                    () => Router.PageModal({children: <FeaturesDebugSettings/>})
                   )}
                   otherAccounts={otherAccounts}
                   isChangingAccount={isChangingAccount}

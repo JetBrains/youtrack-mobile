@@ -17,7 +17,6 @@ import PushNotificationsProcessor from 'components/push-notifications/push-notif
 import Router from 'components/router/router';
 import UrlParse from 'url-parse';
 import usage from 'components/usage/usage';
-import {UNSUPPORTED_ERRORS} from 'components/error/error-messages';
 import {EVERYTHING_CONTEXT} from 'components/search/search-context';
 import {i18n} from 'components/i18n/i18n';
 
@@ -33,7 +32,7 @@ import {
   storeAccounts,
 } from 'components/storage/storage';
 import {getCachedPermissions} from './app-actions-helper';
-import {getErrorMessage, isUnsupportedFeatureError} from 'components/error/error-resolver';
+import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
 import {hasType} from 'components/api/api__resource-types';
 import {isIOSPlatform} from 'util/util';
@@ -806,11 +805,6 @@ export function subscribeToPushNotifications(): Action {
       setRegisteredForPush(true);
       log.info('Successfully registered for push notifications');
     } catch (err) {
-      if (isUnsupportedFeatureError(err)) {
-        log.warn(UNSUPPORTED_ERRORS.PUSH_NOTIFICATION_NOT_SUPPORTED);
-        return;
-      }
-
       notifyError(err);
     }
   };

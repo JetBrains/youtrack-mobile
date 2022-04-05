@@ -12,7 +12,6 @@ import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
 import Router from 'components/router/router';
 import {__setStorageState, getStorageState, populateStorage} from 'components/storage/storage';
-import {REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from 'components/error/error-messages';
 
 const backendURLMock = 'https://example.com';
 const permissionsCacheURLMock = `${backendURLMock}/permissionsCache`;
@@ -81,7 +80,6 @@ describe('app-actions', () => {
 
     describe('Registration error', () => {
       const registrationErrorMock = new Error('Registration failed');
-      const errorMessageMock = REGISTRATION_ERRORS[0];
 
       beforeEach(() => {
         jest.spyOn(log, 'warn');
@@ -118,8 +116,7 @@ describe('app-actions', () => {
 
         await store.dispatch(actions.subscribeToPushNotifications());
 
-        expect(Notification.notifyError).not.toHaveBeenCalled();
-        expect(log.warn).toHaveBeenCalledWith(UNSUPPORTED_ERRORS.PUSH_NOTIFICATION_NOT_SUPPORTED);
+        expect(Notification.notifyError).toHaveBeenCalledWith(registrationErrorMock);
       });
 
       function setRegistrationThrow() {
@@ -127,9 +124,7 @@ describe('app-actions', () => {
       }
 
       function setRegistrationServiceReturnError() {
-        jest.spyOn(PushNotifications, 'register').mockReturnValue(Promise.reject({
-          message: errorMessageMock,
-        }));
+        jest.spyOn(PushNotifications, 'register').mockReturnValue(Promise.reject(registrationErrorMock));
       }
     });
   });

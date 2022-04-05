@@ -4,7 +4,6 @@ import * as util from 'util/util';
 import helper from './push-notifications-helper';
 import {categoryName} from '../activity/activity__category';
 import {mockEventsRegistry} from '../../../test/jest-mock__react-native-notifications';
-import {UNSUPPORTED_ERRORS} from '../error/error-messages';
 
 
 describe('push-notifications-helper', () => {
@@ -199,39 +198,6 @@ describe('push-notifications-helper', () => {
     it('should return Android push notification data issue id', () => {
       expect(helper.getBackendUrl({data: {backendUrl: 'https://5'}})).toEqual('https://5');
     });
-  });
-
-
-  describe('composeError', () => {
-    let err;
-    beforeEach(() => {
-      err = new Error('Error');
-    });
-
-    it('should return unsupported error with 400 response', () => {
-      err.status = 400;
-
-      expect(helper.composeError(err).message).toEqual(UNSUPPORTED_ERRORS.PUSH_NOTIFICATION_NOT_SUPPORTED);
-    });
-
-    it('should return unsupported error with 404 response', () => {
-      err.status = 404;
-
-      expect(helper.composeError(err).message).toEqual(UNSUPPORTED_ERRORS.PUSH_NOTIFICATION_NOT_SUPPORTED);
-    });
-
-    it('should return unsupported error with 405 response', () => {
-      err.status = 405;
-
-      expect(helper.composeError(err).message).toEqual(UNSUPPORTED_ERRORS.PUSH_NOTIFICATION_NOT_SUPPORTED);
-    });
-
-    it('should not return unsupported error', () => {
-      err.status = 403;
-
-      expect(helper.composeError(err).message).not.toEqual(UNSUPPORTED_ERRORS.PUSH_NOTIFICATION_NOT_SUPPORTED);
-    });
-
   });
 
 

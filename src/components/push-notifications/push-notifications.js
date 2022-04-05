@@ -4,7 +4,6 @@ import log from '../log/log';
 import PNHelper from './push-notifications-helper';
 import PushNotificationsProcessor from './push-notifications-processor';
 import {isAndroidPlatform} from 'util/util';
-import {isUnsupportedFeatureError} from '../error/error-resolver';
 
 import type {StorageState} from '../storage/storage';
 import type {Token} from 'flow/Notification';
@@ -28,9 +27,6 @@ async function doSubscribe(youtrackToken: string, deviceToken: string): Promise<
     PNHelper.storeDeviceToken(deviceToken);
   } catch (error) {
     PNHelper.storeDeviceToken(null);
-    if (isUnsupportedFeatureError(error)) {
-      return log.info(`${PNHelper.logPrefix}push notifications are not supported in your version of YouTrack`);
-    }
     log.warn(`${PNHelper.logPrefix}failed to subscribe`, error);
   }
 

@@ -24,9 +24,6 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  header: {
-    alignItems: 'flex-end',
-  },
   message: {
     flexGrow: 3,
     ...alignCenter,

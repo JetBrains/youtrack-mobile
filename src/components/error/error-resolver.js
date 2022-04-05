@@ -1,7 +1,8 @@
 /* @flow */
 
+import {DEFAULT_ERROR_MESSAGE} from './error-messages';
+
 import type {CustomError} from 'flow/Error';
-import {DEFAULT_ERROR_MESSAGE, UNSUPPORTED_ERRORS} from './error-messages';
 
 
 export const extractErrorMessage = function (err: Object | string, isDescriptionOnly: ?boolean): string {
@@ -52,10 +53,4 @@ export async function resolveErrorMessage(err: ?CustomError, isDescriptionOnly?:
 
 export function getErrorMessage(error: ?CustomError): ?string {
   return error?.message || error?.localizedDescription || error?.error_description || '';
-}
-
-export function isUnsupportedFeatureError(error: ?CustomError): boolean {
-  return Object.keys(UNSUPPORTED_ERRORS).map(
-    (key: string) => UNSUPPORTED_ERRORS[key]
-  ).includes(getErrorMessage(error));
 }

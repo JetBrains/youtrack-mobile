@@ -8,11 +8,9 @@ import {categoryName} from '../activity/activity__category';
 import {flushStoragePart, getStorageState} from '../storage/storage';
 import {getApi} from '../api/api__instance';
 import {isAndroidPlatform} from 'util/util';
-import {UNSUPPORTED_ERRORS} from '../error/error-messages';
 
 import type Api from '../api/api';
 import type {Token} from 'flow/Notification';
-import type {CustomError} from 'flow/Error';
 import type {StorageState} from '../storage/storage';
 
 
@@ -116,14 +114,6 @@ function isIssueDetailsNotification(notification: Object): boolean {
   );
 }
 
-function composeError(error: CustomError): Error {
-  let err: Error = error;
-  if ([400, 404, 405].includes(error?.status)) {
-    err = new Error(UNSUPPORTED_ERRORS.PUSH_NOTIFICATION_NOT_SUPPORTED);
-  }
-  return err;
-}
-
 async function subscribe(deviceToken: string, youtrackToken: string): Promise<any> {
   const isAndroid = isAndroidPlatform();
   const api: Api = getApi();
@@ -143,7 +133,8 @@ async function subscribe(deviceToken: string, youtrackToken: string): Promise<an
     log.info(logMessages.successSubscribing);
     return response;
   } catch (error) {
-    log.warn(logMessages.errorSubscribing, composeError(error));
+    log.warn(logMessages.errorSubscribing);
+    log.warn(error);
     return Promise.reject(error);
   }
 }
@@ -191,7 +182,6 @@ export default {
   unsubscribe,
   logPrefix,
   KONNECTOR_URL,
-  composeError,
   isIssueDetailsNotification,
   getBackendUrl,
 };

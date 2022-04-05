@@ -121,7 +121,6 @@ class ErrorBoundary extends Component<Props, State> {
 
   render() {
     const {error, isReporting, isExtendedReportEnabled, isExtendedReportInfoVisible} = this.state;
-    const {openDebugView} = this.props;
 
     return (
       <ThemeContext.Consumer>
@@ -132,17 +131,6 @@ class ErrorBoundary extends Component<Props, State> {
 
             return (
               <View style={styles.container}>
-                <View style={styles.header}>
-                  <TouchableOpacity
-                    hitSlop={HIT_SLOP}
-                    style={buttonStyle}
-                    disabled={isReporting}
-                    onPress={openDebugView}
-                  >
-                    <Text style={styles.buttonText}>{i18n('Show logs')}</Text>
-                  </TouchableOpacity>
-                </View>
-
                 <View style={styles.message}>
                   <IconFA
                     name="exclamation-circle"
