@@ -16,7 +16,6 @@ const optionText = {
   ...mainText,
   color: '$text',
   fontWeight: '500',
-  textTransform: 'capitalize',
 };
 
 export default (EStyleSheet.create({
@@ -43,8 +42,7 @@ export default (EStyleSheet.create({
   },
   settingsListItemOption: {
     flexDirection: 'row',
-    padding: UNIT * 2,
-    paddingLeft: 0,
+    paddingVertical: UNIT * 2,
     color: '$text',
     ...separatorBorder,
     borderColor: '$separator',

@@ -30,6 +30,8 @@ const SettingsAppearance = (props: Props): Node => {
     const isChecked = (!userThemeMode && uiTheme.system) || (
       !uiTheme.system && !!userThemeMode && userThemeMode.indexOf(mode) !== -1
     );
+    const uiThemeName: string = uiTheme.name.toLowerCase();
+    const isLightTheme: boolean = uiThemeName.indexOf('light') !== -1;
 
     return (
       <TouchableOpacity
@@ -39,8 +41,9 @@ const SettingsAppearance = (props: Props): Node => {
       >
         <View style={styles.settingsListItemOption}>
           <Text style={styles.settingsListItemOptionText}>
-            {i18n('{{themeName}} theme', {themeName: uiTheme.name})}
-            {uiTheme.system && <Text style={styles.settingsListItemOptionTextSecondary}>{` (${uiTheme.mode})`}</Text>}
+            {isLightTheme && i18n('Light theme')}
+            {!isLightTheme && !uiTheme.system && i18n('Dark theme')}
+            {uiTheme.system && i18n('Sync with OS')}
           </Text>
           {isChecked && <IconCheck size={20} color={currentTheme.uiTheme.colors.$link}/>}
         </View>
