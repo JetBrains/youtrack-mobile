@@ -30,8 +30,8 @@ export default (createReducer(initialState, {
     return {...state, loading};
   },
 
-  [types.ADD_ITEMS](state, {items, hasMore}): InboxState {
-    return {...state, items: [...state.items, ...items], hasMore};
+  [types.ADD_ITEMS](state, {items, hasMore, issueLinkTypes}): InboxState {
+    return {...state, items: [...state.items, ...items], hasMore, issueLinkTypes};
   },
 
   [types.RESET_ITEMS](state): InboxState {

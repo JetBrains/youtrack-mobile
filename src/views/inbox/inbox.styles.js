@@ -104,8 +104,11 @@ export default EStyleSheet.create({
   changeItem: {
     marginTop: UNIT,
   },
-  changeRemoved: {
+  textRemoved: {
     color: '$icon',
+    textDecorationLine: 'line-through',
+  },
+  changeRemoved: {
     textDecorationLine: 'line-through',
   },
   headerTitle: {

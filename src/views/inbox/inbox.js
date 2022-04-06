@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {Component} from 'react';
-import {FlatList, View, Text, RefreshControl, TouchableOpacity, Dimensions} from 'react-native';
+import {Dimensions, FlatList, RefreshControl, Text, TouchableOpacity, View} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -12,6 +12,7 @@ import CommentReactions from 'components/comment/comment-reactions';
 import CustomFieldChangeDelimiter from 'components/custom-field/custom-field__change-delimiter';
 import Diff from 'components/diff/diff';
 import ErrorMessage from 'components/error-message/error-message';
+import getEventTitle from '../../components/activity/activity__history-title';
 import Issue from '../issue/issue';
 import log from 'components/log/log';
 import ReactionIcon from 'components/reactions/reaction-icon';
@@ -41,7 +42,7 @@ import type {AppState} from '../../reducers';
 import type {InboxState} from './inbox-reducers';
 import type {IssueComment} from 'flow/CustomFields';
 import type {IssueOnList} from 'flow/Issue';
-import type {Notification, Metadata, ChangeValue, ChangeEvent} from 'flow/Inbox';
+import type {ChangeEvent, ChangeValue, Metadata, Notification} from 'flow/Inbox';
 import type {Reaction} from 'flow/Reaction';
 import type {Theme} from 'flow/Theme';
 import type {User} from 'flow/User';
@@ -96,7 +97,7 @@ class Inbox extends Component<Props, State> {
 
   onDimensionsChange: () => void = (): void => {
     this.setState({isSplitView: isSplitView()});
-  }
+  };
 
   componentDidMount() {
     this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.onDimensionsChange);
@@ -206,7 +207,7 @@ class Inbox extends Component<Props, State> {
 
     return (
       <Text>
-        {hasRemovedChange && <Text style={styles.changeRemoved}>
+        {hasRemovedChange && <Text style={styles.textRemoved}>
           {removed}
         </Text>}
         {this.hasAddedValues(event) && (<Text style={styles.textPrimary}>
@@ -225,7 +226,7 @@ class Inbox extends Component<Props, State> {
     return (
       <Text>
         {hasRemovedValues && (
-          <Text style={!hasAddedValues ? styles.changeRemoved : null}>
+          <Text style={!hasAddedValues ? styles.textRemoved : null}>
             {this.renderValues(event.removedValues, event.entityId)}
           </Text>
         )}
@@ -265,7 +266,12 @@ class Inbox extends Component<Props, State> {
               Router.Issue({issueId: issue.id});
             }}>
               <Text style={styles.link}>
-                <Text style={[styles.link, issue.resolved ? styles.resolved : null]}>
+                <Text
+                  style={[
+                    styles.link,
+                    issue.resolved && styles.resolved,
+                    Array.isArray(event.removedValues) && event.removedValues.length > 0 && styles.changeRemoved
+                  ]}>
                   {issue.id}
                 </Text>
                 {` ${issue?.summary || ''}`}
@@ -282,7 +288,17 @@ class Inbox extends Component<Props, State> {
   }
 
   renderEventItem(event: ChangeEvent) {
-    const textChangeEventName = (e: ChangeEvent) => i18n('{{eventName}} changed', {eventName: e.name});
+    const {issueLinkTypes} = this.props;
+    const textChangeEventName = (e: ChangeEvent): string => getEventTitle(
+      {
+        field: {
+          id: e.category.toLowerCase(),
+          presentation: e.name,
+        },
+      },
+      true
+    );
+
     const renderEventName = (e: ChangeEvent) => <Text style={styles.textSecondary}>{e.name}: </Text>;
 
     if (!this.hasAddedValues(event) && !this.hasRemovedValues(event)) {
@@ -325,7 +341,7 @@ class Inbox extends Component<Props, State> {
     case event.category === Category.LINKS:
       return (
         <View style={styles.change}>
-          {renderEventName(event)}
+          {renderEventName({...event, name: issueLinkTypes[event.name.toLowerCase()] || event.name})}
           {this.renderLinks(event)}
         </View>
       );

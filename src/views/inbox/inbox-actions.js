@@ -11,6 +11,7 @@ import {until} from 'util/util';
 
 import type Api from 'components/api/api';
 import type {CustomError} from 'flow/Error';
+import type {IssueLinkType} from '../../flow/CustomFields';
 import type {Notification} from 'flow/Inbox';
 
 type ApiGetter = () => Api;
@@ -19,8 +20,12 @@ export function setLoading(loading: boolean): {loading: boolean, type: any} {
   return {type: types.SET_LOADING, loading};
 }
 
-export function addItems(items: Array<Object>, hasMore: boolean): {hasMore: boolean, items: Array<any>, type: any} {
-  return {type: types.ADD_ITEMS, items, hasMore};
+export function addItems(
+  items: Array<Object>,
+  hasMore: boolean,
+  issueLinkTypes: { [string]: $Shape<IssueLinkType> },
+): { hasMore: boolean, items: Array<any>, type: any, issueLinkTypes: { [string]: string } } {
+  return {type: types.ADD_ITEMS, items, hasMore, issueLinkTypes};
 }
 
 export function resetItems(): {type: any} {
@@ -39,7 +44,7 @@ const loadInboxCache = (): ((dispatch: (any) => any) => Promise<void>) => {
   return async (dispatch: (any) => any) => {
     const inboxCache: Array<Notification> | null = getStorageState().inboxCache;
     if (inboxCache) {
-      dispatch(addItems(inboxCache, false));
+      dispatch(addItems(inboxCache, false, {}));
     }
   };
 };
@@ -62,17 +67,18 @@ const loadInbox = (skip: number = 0, top: number = 10): ((
       usage.trackEvent(ANALYTICS_NOTIFICATIONS_PAGE, 'Loading reaction feed');
       promises.push(api.user.reactionsFeed(skip, top));
     }
+    promises.push(api.issue.getIssueLinkTypes());
 
-    const [error, notificationAndReactions] = await until(promises);
+    const [error, response] = await until(promises);
 
-    if (error || notificationAndReactions.filter(Boolean).length === 0) {
+    if (error || response.filter(Boolean).length === 0) {
       const err: CustomError = error || new Error(loadingErrorMessage);
       log.warn(loadingErrorMessage, err);
       return dispatch(setError(err));
     }
 
     const notifications = (
-      (notificationAndReactions[0] || [])
+      (response[0] || [])
         .filter(item => item.metadata)
         .map(it => (
           Object.assign(
@@ -82,19 +88,29 @@ const loadInbox = (skip: number = 0, top: number = 10): ((
           )
         ))
     );
-    const reactions = isReactionsAvailable ? notificationAndReactions && notificationAndReactions[1] : [];
+    const reactions = isReactionsAvailable ? response && response[1] : [];
     const sortedByTimestampItems = notifications.concat(reactions).sort(sortByTimestampReverse);
+    const issueLinkTypes: { [string]: string } = (response[isReactionsAvailable ? 2 : 1] || []).reduce(
+      (map: { [string]: $Shape<IssueLinkType> }, ilt: IssueLinkType) => {
+        if (ilt.localizedSourceToTarget) {
+          map[ilt.sourceToTarget.toLowerCase()] = ilt.localizedSourceToTarget;
+        }
+        if (ilt.localizedTargetToSource) {
+          map[ilt.targetToSource.toLowerCase()] = ilt.localizedTargetToSource;
+        }
+        return map;
+      }, {});
 
     if (!skip) {
       dispatch(resetItems());
     }
 
     dispatch(
-      addItems(sortedByTimestampItems, notificationAndReactions[0].length > 0)
+      addItems(sortedByTimestampItems, response[0].length > 0, issueLinkTypes)
     );
     flushStoragePart({inboxCache: sortedByTimestampItems});
 
-    if (notificationAndReactions[0].length < top) {
+    if (response[0].length < top) {
       dispatch(listEndReached());
     }
 

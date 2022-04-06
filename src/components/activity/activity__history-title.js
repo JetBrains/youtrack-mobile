@@ -10,11 +10,11 @@ export default function getEventTitle(event: Object, omitFormatting?: boolean): 
   return format(title);
 }
 
-function getTitle(event) {
+export function getTitle(event) {
   const eventField = event.field;
   let label;
 
-  const eventsCount: number = countAllEventEntities(event);
+  const eventsCount: number = (event.added || []).length + (event.removed || []).length;
   switch (true) {
   case !eventField:
     label = i18n('[Removed field]');
@@ -24,6 +24,9 @@ function getTitle(event) {
     break;
   case eventField.id === 'summary':
     label = i18n('Summary changed');
+    break;
+  case eventField.id === 'comment':
+    label = i18n('Comment changed');
     break;
   case eventField.id === 'tag':
     label = i18nPlural(
@@ -52,8 +55,4 @@ function getTitle(event) {
 
 function format(title: string) {
   return title ? `${title}: ` : null;
-}
-
-function countAllEventEntities(event): number {
-  return (event.added || []).length + (event.removed || []).length;
 }
