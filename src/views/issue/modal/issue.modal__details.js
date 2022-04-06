@@ -78,9 +78,10 @@ export default class IssueModalDetails extends IssueDetails<IssueDetailsProps & 
   };
 
   renderLinksBlock: () => Node = () => {
+    const issue: AnyIssue = this.getIssue();
     return (
       <LinkedIssuesTitle
-        issueLinks={this.props.issue.links}
+        issueLinks={issue.links}
         onPress={() => this.toggleModalChildren(this.renderLinkedIssues())}
       />
     );
