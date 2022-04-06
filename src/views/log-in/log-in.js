@@ -243,14 +243,16 @@ export class LogIn extends Component<Props, State> {
                     <ActivityIndicator style={styles.loadingMessageIndicator} color={styles.loadingMessageIndicator.color}/>
                   </View>}
 
-                  {isLoginWithCreds && <Text style={styles.hintText}>
-                    {i18n('You need a YouTrack account to use the app.\n By logging in, you agree to the ')}
-                    <Text
-                      style={formStyles.link}
-                      onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
-                      {i18n('Privacy Policy.')}
+                  {isLoginWithCreds && (
+                    <Text style={styles.hintText}>
+                      {i18n('You need a YouTrack account to use the app.\n')}
+                      <Text
+                        style={formStyles.link}
+                        onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
+                        {i18n('By logging in, you agree to the Privacy Policy.')}
+                      </Text>
                     </Text>
-                  </Text>}
+                  )}
 
                   {Boolean(errorMessage || hasNoCredentials) && (
                     <View style={styles.error}>
