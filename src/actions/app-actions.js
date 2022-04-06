@@ -9,7 +9,7 @@ import * as types from './action-types';
 import Api from 'components/api/api';
 import OAuth2 from 'components/auth/oauth2';
 import log from 'components/log/log';
-import openByUrlDetector, {isOneOfServers} from 'components/open-url-handler/open-url-handler';
+import openByUrlDetector from 'components/open-url-handler/open-url-handler';
 import packageJson from '../../package.json';
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
@@ -54,7 +54,6 @@ import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserGener
 import type {NetInfoState} from '@react-native-community/netinfo';
 import type {NotificationRouteData} from 'flow/Notification';
 import type {PermissionCacheItem} from 'flow/Permission';
-import type {RootState} from 'reducers/app-reducer';
 import type {StorageState} from 'components/storage/storage';
 import type {WorkTimeSettings} from 'flow/Work';
 
@@ -584,23 +583,11 @@ export function cacheProjects(): ((
   };
 }
 
-function getIsAuthorized(state: RootState): boolean {
-  return !!state.auth?.currentUser;
-}
-
 function subscribeToURL(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    function isServerConfigured(url: ?string) {
-      if (!isOneOfServers(url || '', [(getStorageState().config || {}).backendUrl])) {
-        notifyError(new Error(i18n('`"{{url}}" doesn\'t match the configured server`', {url: url || ''})));
-        return false;
-      }
-      return true;
-    }
-
     openByUrlDetector(
       (url, issueId) => {
-        if (!getIsAuthorized(getState().app) || !isServerConfigured(url)) {
+        if (!getIsAuthorized()) {
           log.debug('User is not authorized, URL won\'t be opened');
           return;
         }
@@ -608,7 +595,7 @@ function subscribeToURL(): Action {
         Router.Issue({issueId}, {forceReset: true});
       },
       (url, searchQuery) => {
-        if (!getIsAuthorized(getState().app) || !isServerConfigured(url)) {
+        if (!getIsAuthorized()) {
           log.debug('User is not authorized, URL won\'t be opened');
           return;
         }
@@ -616,6 +603,10 @@ function subscribeToURL(): Action {
         Router.Issues({searchQuery});
       }
     );
+
+    function getIsAuthorized(): boolean {
+      return !!getState().app?.auth?.currentUser;
+    }
   };
 }
 

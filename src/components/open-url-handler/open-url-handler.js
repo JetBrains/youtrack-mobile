@@ -5,10 +5,6 @@ import log from '../log/log';
 
 const issueIdReg = /issue(Mobile)?\/([\w-\d]+)/;
 
-export function isOneOfServers(url: string, serverURLs: Array<string>): boolean {
-  return serverURLs.some((serverURL: string) => url.toLowerCase().indexOf(serverURL.toLowerCase()) !== -1);
-}
-
 export function extractId(issueUrl: ?string): null | RegExp$matchResult | string {
   if (issueUrl) {
     const match = decodeURIComponent(issueUrl).match(issueIdReg);
