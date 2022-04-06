@@ -364,7 +364,7 @@ export function changeAccount(account: StorageState, removeCurrentAccount?: bool
     const config: AppConfig = ((account.config: any): AppConfig);
     const authParams: ?OAuthParams2 = await getStoredSecurelyAuthParams(account.authParamsKey);
     if (!authParams) {
-      const errorMessage: string = i18n('Account doesn\'t have valid authorization, cannot switch onto it.');
+      const errorMessage: string = i18n('The selected account is no longer authorized to use YouTrack Mobile. Please log in again.');
       notify(errorMessage);
       throw new Error(errorMessage);
     }
