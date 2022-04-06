@@ -3,7 +3,7 @@
 import React, {PureComponent} from 'react';
 import {Modal, View} from 'react-native';
 
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 
 import {ThemeContext} from '../theme/theme-context';
 
@@ -70,14 +70,16 @@ export default class ModalView extends PureComponent<Props, void> {
               supportedOrientations={supportedOrientations}
               onRequestClose={onRequestClose}
             >
-              <SafeAreaView style={[
-                baseStyle,
-                transparent === true ? null : {backgroundColor: theme.uiTheme.colors.$background},
-              ]}>
-                <View style={[baseStyle, style]}>
-                  {children}
-                </View>
-              </SafeAreaView>
+              <SafeAreaProvider>
+                <SafeAreaView style={[
+                  baseStyle,
+                  transparent === true ? null : {backgroundColor: theme.uiTheme.colors.$background},
+                ]}>
+                  <View style={[baseStyle, style]}>
+                    {children}
+                  </View>
+                </SafeAreaView>
+              </SafeAreaProvider>
             </Modal>
           );
         }}
