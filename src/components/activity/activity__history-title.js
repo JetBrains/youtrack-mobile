@@ -31,17 +31,15 @@ export function getTitle(event) {
   case eventField.id === 'tag':
     label = i18nPlural(
       eventsCount,
-      '{{amount}} Tag',
-      '{{amount}} Tags',
-      {amount: eventsCount}
+      'Tag',
+      'Tags',
     );
     break;
   case eventField.id === 'attachments':
     label = i18nPlural(
       eventsCount,
-      '{{amount}} Attachment',
-      '{{amount}} Attachments',
-      {amount: eventsCount}
+      'Attachment',
+      'Attachments',
     );
     break;
   case eventField.id === 'visible to':

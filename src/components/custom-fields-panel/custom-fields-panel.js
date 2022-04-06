@@ -231,7 +231,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     return this.setState({
       datePicker: {
         show: true,
-        placeholder: i18n('Enter time'),
+        placeholder: i18n('Enter time value'),
         withTime,
         time: field.value ? new Date(((field.value: any): number)).toLocaleTimeString(
           [],

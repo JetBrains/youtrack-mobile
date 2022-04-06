@@ -580,7 +580,7 @@ class Inbox extends Component<Props, State> {
             style={styles.listFooterMessageText}
             testID="no-notifications"
           >
-            {i18n('You have no notifications')}
+            {i18n('You haven’t received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app.')}
           </Text>
         </View>
       );

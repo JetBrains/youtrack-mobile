@@ -40,7 +40,7 @@ const AttachmentAddPanel = (props: Props): Node => {
             styles.attachButtonText,
             props.isDisabled ? styles.attachButtonTextDisabled : null,
           ]}>
-          {i18n('Add attachment')}
+          {i18n('Attach files')}
         </Text>
       </TouchableOpacity>
     </View>

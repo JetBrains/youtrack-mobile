@@ -75,7 +75,7 @@ class ErrorBoundary extends Component<Props, State> {
 
       const reportedIssueId: ?string = await sendReport(`Render crash report: ${errorData.summary}`, errorData.description);
       if (reportedIssueId) {
-        notify(i18n('Crash has been reported'));
+        notify(i18n('Crash report sent'));
       }
     } catch (err) {
       notifyError(err);
@@ -90,16 +90,16 @@ class ErrorBoundary extends Component<Props, State> {
         <View>
           <Text style={styles.extendedReportModalTitle}>{i18n('Help us fix problems faster')}</Text>
           <Text style={[styles.extendedReportModalText, styles.extendedReportModalTextInfo]}>
-            {i18n('In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service, that help us diagnose and fix problems faster, monitor application stability.We will only share error report data with Bugsnag if you agree to do so.')}
+            {i18n('In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so.')}
           </Text>
         </View>
 
         <TouchableOpacity onPress={() => Linking.openURL('https://www.jetbrains.com/company/privacy.html')}>
-          <Text style={styles.extendedReportModalTextLink}>{i18n('JetBrains privacy policy')}</Text>
+          <Text style={styles.extendedReportModalTextLink}>{i18n('JetBrains Privacy Policy')}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => Linking.openURL('https://docs.bugsnag.com/legal/privacy-policy/')}>
-          <Text style={styles.extendedReportModalTextLink}>{i18n('Bugsnag privacy policy')}</Text>
+          <Text style={styles.extendedReportModalTextLink}>{i18n('Bugsnag Privacy Policy')}</Text>
         </TouchableOpacity>
 
       </React.Fragment>
@@ -115,7 +115,7 @@ class ErrorBoundary extends Component<Props, State> {
     try {
       RNRestart.Restart();
     } catch (err) {
-      notify(i18n('Failed to restart the app automatically. Try restart it manually.'));
+      notify(i18n('The application failed to restart automatically. Please try to restart it manually.'));
     }
   };
 

@@ -44,7 +44,7 @@ function Comment(props: Props) {
           <Text
             style={styles.deletedCommentText}
           >
-            {i18n('Comment was deleted.')}
+            {i18n('Comment deleted')}
           </Text>
         </View>
 

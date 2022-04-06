@@ -77,7 +77,7 @@ type State = {
 const ERROR_MESSAGE_DATA: Object = {
   noFavoriteProjects: {
     title: i18n('No favorites projects found'),
-    description: i18n('Add some project to favorites'),
+    description: i18n('Add project to favorites'),
   },
   noArticlesFound: {
     title: i18n('No articles found'),

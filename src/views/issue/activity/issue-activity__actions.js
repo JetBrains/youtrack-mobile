@@ -240,7 +240,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
         const api: Api = getApi();
         const issueId: string = workItem?.issue?.id || getState()[stateFieldName].issueId;
         return confirmation(
-          i18n('Are you sure you want to delete work item?'),
+          i18n('Are you sure you want to delete this work item?'),
           i18n('Delete')
         ).then(async () => {
           const [error] = await until(api.issue.deleteWorkItem(issueId, workItem.id));

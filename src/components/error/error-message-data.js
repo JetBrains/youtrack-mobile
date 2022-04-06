@@ -10,7 +10,7 @@ import type {ErrorMessageData} from 'flow/Error';
 
 const unauthorizedErrorMessageData: ErrorMessageData = {
   title: i18n('Woah, you can\'t touch this!'),
-  description: i18n('You don\'t have sufficient permissions.'),
+  description: i18n('Your account has insufficient permission to perform this operation.'),
 };
 
 const noIssueFoundDescriptionMessages: Array<string> = [

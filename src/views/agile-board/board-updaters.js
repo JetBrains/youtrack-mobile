@@ -206,7 +206,7 @@ export function addOrUpdateCell(board: Board, issue: IssueOnList, rowId: string,
 
   const targetCell = targetRow.cells.filter((cell: BoardCell) => cell.column.id === columnId)[0];
   if (!targetCell) {
-    notify(i18n('Agile board settings have been changed. Reload the board.'));
+    notify(i18n('The settings for this agile board have been updated. Please reload the board.'));
     return {
       ...board,
       orphanRow: board.orphanRow,
