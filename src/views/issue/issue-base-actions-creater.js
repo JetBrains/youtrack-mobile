@@ -84,7 +84,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
       };
     },
 
-    loadIssue: function (): ((
+    loadIssue: function (issuePlaceholder: ?$Shape<IssueFull>): ((
       dispatch: (any) => any,
       getState: StateGetter,
       getApi: ApiGetter
@@ -123,7 +123,7 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           if (isOffline) {
             const cachedIssue: ?AnyIssue = (getStorageState().issuesCache || []).find((issue: AnyIssue) => {
               return issue.id === issueId || issue.idReadable === issueId;
-            });
+            }) || issuePlaceholder;
             cachedIssue && doUpdate(cachedIssue);
           } else {
             const error = await resolveError(err);
