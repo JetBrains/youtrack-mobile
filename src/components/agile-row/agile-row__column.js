@@ -12,7 +12,7 @@ import styles from './agile-row.styles';
 
 import type {BoardCell} from 'flow/Agile';
 import type {IssueFull} from 'flow/Issue';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
 
 type ColumnProps = {

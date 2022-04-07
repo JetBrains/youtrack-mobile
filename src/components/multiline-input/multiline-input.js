@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import React, {PureComponent} from 'react';
 import {TextInput} from 'react-native';
 

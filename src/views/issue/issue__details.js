@@ -40,7 +40,7 @@ import type {
   IssueLink,
   IssueProject,
 } from 'flow/CustomFields';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {ScrollData} from 'flow/Markdown';
 import type {Theme, UITheme} from 'flow/Theme';
 import type {Visibility} from 'flow/Visibility';

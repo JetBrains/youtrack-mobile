@@ -19,7 +19,7 @@ import styles from './issues.styles';
 
 import type {AnyIssue} from 'flow/Issue';
 import type {BundleValue} from 'flow/CustomFields';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {

@@ -52,7 +52,7 @@ import type {
 } from 'flow/Article';
 import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {SelectProps} from 'components/select/select';
 import type {Theme, UITheme} from 'flow/Theme';
 

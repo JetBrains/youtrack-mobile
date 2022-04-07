@@ -9,7 +9,7 @@ import {menuHeight} from 'components/common-styles/header';
 import {routeMap} from './app-routes';
 import {ThemeContext} from 'components/theme/theme-context';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 
 const styles = StyleSheet.create({

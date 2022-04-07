@@ -7,7 +7,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {UNIT} from '../variables/variables';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {

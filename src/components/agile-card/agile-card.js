@@ -16,7 +16,7 @@ import styles from './agile-card.styles';
 import type {IssueOnList} from 'flow/Issue';
 import type {CustomFieldShort, CustomField, CustomFieldValue} from 'flow/CustomFields';
 import type {FieldStyle} from '../../flow/Agile';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from 'flow/Theme';
 

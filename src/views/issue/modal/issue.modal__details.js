@@ -16,7 +16,7 @@ import stylesModal from './issue.modal.styles';
 import type {AnyIssue, IssueOnList} from 'flow/Issue';
 import type {IssueDetailsProps} from '../issue__details';
 import type {IssueLink} from 'flow/CustomFields';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 
 

@@ -14,7 +14,7 @@ import {HIT_SLOP} from '../common-styles/button';
 import styles from './custom-field.styles';
 
 import type {CustomField as CustomFieldType, FieldValue} from 'flow/CustomFields';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {User} from 'flow/User';
 
 type Props = {

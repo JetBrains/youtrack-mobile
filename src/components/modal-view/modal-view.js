@@ -13,7 +13,7 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {Orientation, AnimationType} from 'flow/ModalView';
 
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 
 

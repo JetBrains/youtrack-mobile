@@ -12,7 +12,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import styles from './article.styles';
 
 import type {Article, Article as ArticleEntity, ArticleProject, ArticlesList} from 'flow/Article';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {

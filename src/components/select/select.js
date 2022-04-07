@@ -13,7 +13,7 @@ import {notifyError} from '../notification/notification';
 
 import styles, {SELECT_ITEM_HEIGHT, SELECT_ITEM_SEPARATOR_HEIGHT} from './select.styles';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 
 export type SelectProps = {
   dataSource: (query: string) => Promise<Array<Object>>,

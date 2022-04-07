@@ -18,7 +18,7 @@ import {buildStyles, DEFAULT_THEME, getThemeMode, getUITheme} from 'components/t
 import {setNotificationComponent} from 'components/notification/notification';
 import {ThemeContext} from 'components/theme/theme-context';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 

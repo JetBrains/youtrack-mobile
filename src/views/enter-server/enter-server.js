@@ -34,7 +34,7 @@ import {VERSION_DETECT_FALLBACK_URL} from 'components/config/config';
 import styles from './enter-server.styles';
 
 import type {AppConfig} from 'flow/AppConfig';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {Theme, UIThemeColors} from 'flow/Theme';
 
 const CATEGORY_NAME = 'Choose server';

@@ -10,7 +10,7 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 
 import type {AgileBoardRow, Board, SprintFull} from 'flow/Agile';
 import type {AnyIssue} from 'flow/Issue';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {UIThemeName, UIThemeColors, BarStyle} from 'flow/Theme';
 import type {UITheme} from 'flow/Theme';
 

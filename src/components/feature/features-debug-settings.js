@@ -13,7 +13,7 @@ import {notify} from '../notification/notification';
 
 import styles from './feature-view.style';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 
 type Props = {
   onHide?: Function,

@@ -22,7 +22,7 @@ import styles from './attachments-row.styles';
 
 import type {Attachment} from 'flow/CustomFields';
 import type {FileCategoryKey} from './attachment-helper';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 

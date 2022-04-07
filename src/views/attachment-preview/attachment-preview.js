@@ -10,7 +10,7 @@ import Header from 'components/header/header';
 import {IconClose} from 'components/icon/icon';
 import {UNIT} from 'components/variables/variables';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 
 type Props = {
   name: string,

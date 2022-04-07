@@ -22,7 +22,7 @@ import {logEvent} from 'components/log/log-helper';
 import styles from './preview-file.styles';
 
 import type {Attachment} from 'flow/CustomFields';
-import type {Node} from 'React';
+import type {Node} from 'react';
 
 type FileSource = {
   id: string,

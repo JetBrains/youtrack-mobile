@@ -37,7 +37,7 @@ import styles from './issue-activity.styles';
 
 import type {IssueComment} from 'flow/CustomFields';
 import type {IssueContextData} from 'flow/Issue';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
 import type {Theme, UITheme} from 'flow/Theme';

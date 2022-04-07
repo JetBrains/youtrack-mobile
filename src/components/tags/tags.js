@@ -9,7 +9,7 @@ import {showActions} from '../action-sheet/action-sheet';
 import styles from './tags.styles';
 
 import type {ActionSheetOption} from '../action-sheet/action-sheet';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {Tag} from 'flow/CustomFields';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 

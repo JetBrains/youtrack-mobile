@@ -1,5 +1,5 @@
 /* @flow */
-import type {Node} from 'React';
+import type {Node} from 'react';
 import {Text, View} from 'react-native';
 // $FlowFixMe: cannot typecheck react-native-linear-gradient module because of mistakes there
 import LinearGradient from 'react-native-linear-gradient';

@@ -12,7 +12,7 @@ import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './settings.styles';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 
 type Props = {

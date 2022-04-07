@@ -25,7 +25,7 @@ import {SkeletonIssueCustomFields} from '../skeleton/skeleton';
 import styles, {calendarTheme} from './custom-fields-panel.styles';
 
 import type {IssueProject, CustomField as IssueCustomField} from 'flow/CustomFields';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 

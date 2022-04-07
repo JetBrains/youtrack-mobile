@@ -18,7 +18,7 @@ import styles from './linked-issues.style';
 import type {IssueLink} from 'flow/CustomFields';
 import type {IssueOnList} from 'flow/Issue';
 import type {LinksListData} from './linked-issues-helper';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 

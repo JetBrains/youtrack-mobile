@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import {View, Text, TouchableWithoutFeedback, TouchableOpacity, Alert} from 'react-native';
 import React, {PureComponent} from 'react';
 

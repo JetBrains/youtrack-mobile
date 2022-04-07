@@ -7,7 +7,7 @@ import type {RenderItemParams} from 'react-native-draggable-flatlist';
 
 import Select from './select';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import SelectItem from './select__item';
 import {Text} from 'react-native';
 
