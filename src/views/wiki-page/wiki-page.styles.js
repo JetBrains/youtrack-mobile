@@ -7,17 +7,22 @@ export default EStyleSheet.create({
   headerTitle: headerTitle,
   container: {
     flex: 1,
+    backgroundColor: '$background',
   },
   content: {
     flexGrow: 1,
     paddingLeft: UNIT,
   },
   plainText: {
+    paddingTop: UNIT,
     color: '$text',
     fontSize: SECONDARY_FONT_SIZE,
     ...monospace,
   },
   icon: {
     color: '$iconAccent',
+  },
+  link: {
+    color: '$link',
   },
 });
