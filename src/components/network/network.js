@@ -4,6 +4,8 @@ import React, {useCallback, useEffect, useRef} from 'react';
 import {AppState} from 'react-native';
 
 import NetInfo from '@react-native-community/netinfo';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 import Toast, {DURATION} from 'react-native-easy-toast';
 import {isIOSPlatform} from '../../util/util';
 import {setNetworkState} from '../../actions/app-actions';
@@ -11,9 +13,10 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import styles from './network.styles';
 
-import type {NetInfoState} from '@react-native-community/netinfo';
-import type {Node} from 'React';
 import type {AppStateValues} from 'react-native/Libraries/AppState/AppState';
+import type {EdgeInsets} from 'react-native-safe-area-context/src/SafeArea.types';
+import type {NetInfoState} from '@react-native-community/netinfo';
+import type {Node} from 'react';
 
 export function useIsNetworkConnected() {
   const networkState: ?NetInfoState = useSelector((appState: AppState) => appState?.app?.networkState);
@@ -24,6 +27,7 @@ export default function NetworkPopup(): Node {
   const toastInstance = useRef(null);
   const dispatch: Function = useDispatch();
   const isConnected: ?boolean = useIsNetworkConnected();
+  const insets: EdgeInsets = useSafeAreaInsets();
 
   const updateNetworkState = useCallback((state: NetInfoState) => {
     if (state.isConnected !== isConnected) {
@@ -54,13 +58,13 @@ export default function NetworkPopup(): Node {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+  }, []);
 
   return <Toast
     ref={toastInstance}
     style={styles.container}
     position="top"
-    positionValue={40}
+    positionValue={typeof insets?.top === 'number' ? insets?.top : 40}
     opacity={1}
     textStyle={styles.text}
   />;
