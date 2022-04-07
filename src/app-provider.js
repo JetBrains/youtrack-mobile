@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import {StatusBar} from 'react-native';
 
-import NetworkPopup from './components/network/network';
+import NetworkPopup from './components/network/network-popup';
 // $FlowFixMe: cannot typecheck easy-toast module because of mistakes there
 import Toast from 'react-native-easy-toast';
 import {Host} from 'react-native-portalize';
