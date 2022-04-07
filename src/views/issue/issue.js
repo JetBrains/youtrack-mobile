@@ -600,13 +600,14 @@ export type OwnProps = {
 };
 
 const mapStateToProps = (state: { app: RootState, issueState: IssueState }, ownProps: OwnProps): $Shape<IssueState & OwnProps> => {
+  const isConnected: ?boolean = state.app?.networkState?.isConnected;
   return ({
     issuePermissions: state.app.issuePermissions,
     ...state.issueState,
     issuePlaceholder: ownProps.issuePlaceholder,
     issueId: ownProps.issueId,
     user: state.app.user,
-    navigateToActivity: state.app.networkState.isConnected !== false && ownProps.navigateToActivity,
+    navigateToActivity: (isConnected === true || isConnected === undefined) && ownProps.navigateToActivity,
   });
 };
 
