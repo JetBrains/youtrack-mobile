@@ -1,9 +1,7 @@
 /* @flow */
 
-import log from 'components/log/log';
 import PermissionsHelper from 'components/permissions-store/permissions-helper';
 import {flushStoragePart, getOtherAccounts, getStorageState} from 'components/storage/storage';
-import {notify} from 'components/notification/notification';
 import {removeTrailingSlash} from 'util/util';
 
 import type {PermissionCacheItem} from 'flow/Permission';
@@ -18,22 +16,11 @@ function getCachedPermissions(): ?Array<PermissionCacheItem> {
 }
 
 async function loadPermissions(token_type: string, access_token: string, permissionsCacheUrl: string): Promise<Array<PermissionCacheItem>> {
-  let permissions: Array<PermissionCacheItem> = [];
-
-  try {
-    permissions = await PermissionsHelper.loadPermissions(
-      token_type,
-      access_token,
-      permissionsCacheUrl
-    );
-    log.info('Permissions loaded');
-  } catch (error) {
-    const errorMessage: string = 'Failed to load permissions. You\'re unable to make any changes.';
-    notify(errorMessage, 7000);
-    log.warn(errorMessage, error);
-  }
-
-  return permissions;
+  return await PermissionsHelper.loadPermissions(
+    token_type,
+    access_token,
+    permissionsCacheUrl
+  );
 }
 
 async function targetAccountToSwitchTo(targetBackendUrl: string = ''): Promise<StorageState | null> {

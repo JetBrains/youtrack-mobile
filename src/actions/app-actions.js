@@ -435,16 +435,20 @@ function setUserPermissions(permissions: Array<PermissionCacheItem>): Action {
 export function loadUserPermissions(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const auth: OAuth2 = ((getState().app.auth: any): OAuth2);
-    const permissions: Array<PermissionCacheItem> = await appActionsHelper.loadPermissions(
-      auth.getTokenType(),
-      auth.getAccessToken(),
-      auth.getPermissionsCacheURL()
-    );
-
-    await dispatch(setUserPermissions(permissions));
-    log.info('PermissionsStore created');
-    appActionsHelper.updateCachedPermissions(permissions);
-    log.debug('Permissions stored');
+    try {
+      const permissions: Array<PermissionCacheItem> = await appActionsHelper.loadPermissions(
+        auth.getTokenType(),
+        auth.getAccessToken(),
+        auth.getPermissionsCacheURL()
+      );
+      await dispatch(setUserPermissions(permissions));
+      log.info('PermissionsStore created');
+      appActionsHelper.updateCachedPermissions(permissions);
+      log.debug('Permissions stored');
+    } catch (error) {
+      notify(getErrorMessage(error), 7000);
+      log.warn(error);
+    }
   };
 }
 
