@@ -18,6 +18,7 @@ import {createNullProjectCustomField} from 'util/util';
 import {getApi} from '../api/api__instance';
 import {IconCheck, IconClose} from '../icon/icon';
 import {isSplitView} from '../responsive/responsive-helper';
+import {IssueContext} from '../../views/issue/issue-context';
 import {PanelWithSeparator} from '../panel/panel-with-separator';
 import {Select, SelectModal} from '../select/select';
 import {SkeletonIssueCustomFields} from '../skeleton/skeleton';
@@ -128,6 +129,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   api: Api = getApi();
   currentScrollX: number = 0;
   isComponentMounted: ?boolean;
+  isConnected: ?boolean;
 
   constructor() {
     super();
@@ -526,7 +528,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
           >
             <View key="Project">
               <CustomField
-                disabled={!hasPermission.canEditProject}
+                disabled={!hasPermission.canEditProject || this.isConnected === false}
                 onPress={this.onSelectProject}
                 active={isEditingProject}
                 field={createNullProjectCustomField(issueProject.name, 'Project')}
@@ -537,7 +539,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
             {fields.map((field: IssueCustomField, index: number) => {
               const isDisabled: boolean = (
                 !hasPermission.canUpdateField(field) ||
-                !field?.projectCustomField?.field?.fieldType
+                !field?.projectCustomField?.field?.fieldType ||
+                this.isConnected === false
               );
               return <View key={field.id || `${field.name}-${index}`}>
                 <CustomField
@@ -560,25 +563,34 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     const {select, datePicker, simpleValue, editingField} = this.state;
 
     return (
-      <View
-        testID={testID}
-        style={[styles.container, style]}
-      >
+      <IssueContext.Consumer>
+        {(issueDate) => {
+          if (issueDate) {
+            this.isConnected = issueDate.isConnected;
+          }
+          return (
+            <View
+              testID={testID}
+              style={[styles.container, style]}
+            >
 
-        {this.renderFields()}
+              {this.renderFields()}
 
-        <AnimatedView
-          style={styles.editorViewContainer}
-          animation="fadeIn"
-          duration={500}
-          useNativeDriver
-        >
-          {select.show && this._renderSelect()}
-          {datePicker.show && this.renderDatePicker(uiTheme)}
-          {(simpleValue.show && !!editingField) && this.renderSimpleValueInput()}
-        </AnimatedView>
+              <AnimatedView
+                style={styles.editorViewContainer}
+                animation="fadeIn"
+                duration={500}
+                useNativeDriver
+              >
+                {select.show && this._renderSelect()}
+                {datePicker.show && this.renderDatePicker(uiTheme)}
+                {(simpleValue.show && !!editingField) && this.renderSimpleValueInput()}
+              </AnimatedView>
 
-      </View>
+            </View>
+          );
+        }}
+      </IssueContext.Consumer>
     );
   }
 }

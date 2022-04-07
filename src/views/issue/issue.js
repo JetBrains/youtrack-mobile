@@ -548,6 +548,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       isTagsSelectVisible,
       issuePermissions,
       dispatcher,
+      isConnected,
     } = this.props;
 
     return (
@@ -556,6 +557,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
           issue,
           issuePermissions,
           dispatcher,
+          isConnected,
         }}
       >
         <ThemeContext.Consumer>
@@ -607,6 +609,7 @@ const mapStateToProps = (state: { app: RootState, issueState: IssueState }, ownP
     issuePlaceholder: ownProps.issuePlaceholder,
     issueId: ownProps.issueId,
     user: state.app.user,
+    isConnected,
     navigateToActivity: (isConnected === true || isConnected === undefined) && ownProps.navigateToActivity,
   });
 };
