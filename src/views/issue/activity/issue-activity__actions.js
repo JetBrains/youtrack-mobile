@@ -8,6 +8,7 @@ import {confirmation} from 'components/confirmation/confirmation';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from '../issue-base-actions-creater';
 import {extractErrorMessage, resolveError} from 'components/error/error-resolver';
 import {getActivityAllTypes, getActivityCategories} from 'components/activity/activity-helper';
+import {flushStoragePart, getStorageState} from '../../../components/storage/storage';
 import {logEvent} from 'components/log/log-helper';
 import {notify} from 'components/notification/notification';
 import {sortAlphabetically, sortByOrdinal} from 'components/search/sorting';
@@ -16,10 +17,12 @@ import {WORK_ITEM_CREATE, WORK_ITEM_UPDATE} from 'components/issue-permissions/i
 
 import type Api from 'components/api/api';
 import type {Activity, ActivityType} from 'flow/Activity';
+import type {AnyIssue} from '../../../flow/Issue';
+import type {AppState} from '../../../reducers';
 import type {CustomError} from 'flow/Error';
-import type {User} from 'flow/User';
 import type {State as SingleIssueState} from '../issue-reducers';
 import type {TimeTracking} from 'flow/Work';
+import type {User} from 'flow/User';
 import type {WorkItem} from 'flow/Work';
 
 type ApiGetter = () => Api;
@@ -58,8 +61,18 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
       getState: StateGetter,
       getApi: ApiGetter
     ) => Promise<void>) {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+      return async (dispatch: (any) => any, getState: AppState, getApi: ApiGetter) => {
         const targetIssueId: string = issueId || getState()[stateFieldName].issueId;
+
+        const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+        if (isOffline) {
+          const cachedIssue = getIssuesCache().find((it: AnyIssue) => it.id === targetIssueId);
+          if (cachedIssue && cachedIssue.activityPage) {
+            dispatch(receiveActivityPage(cachedIssue.activityPage));
+            return;
+          }
+        }
+
         const api: Api = getApi();
         dispatch(createIssueActivityActions(stateFieldName).receiveActivityEnabledTypes());
         const activityCategories = getActivityCategories(
@@ -75,13 +88,29 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
           log.info('Loading activities...');
           const activityPage: Array<Activity> = await api.issue.getActivitiesPage(targetIssueId, activityCategories);
           dispatch(receiveActivityPage(activityPage));
+          updateCache(activityPage);
           log.info('Received activities');
         } catch (error) {
           dispatch(receiveActivityPageError(error));
           dispatch({type: types.RECEIVE_ACTIVITY_ERROR, error});
           log.warn('Failed to load activity', error);
         }
+
+        function getIssuesCache() {
+          return getStorageState().issuesCache || [];
+        }
+
+        function updateCache(activityPage: Array<Activity>) {
+          const updatedCache: Array<AnyIssue> = getIssuesCache().map((it: AnyIssue) => {
+            if (it.id === targetIssueId) {
+              return {...it, activityPage};
+            }
+            return it;
+          });
+          flushStoragePart({issuesCache: updatedCache});
+        }
       };
+
     },
 
     getTimeTracking: function getTimeTracking(issueId?: string): ((

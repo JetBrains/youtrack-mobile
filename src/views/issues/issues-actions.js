@@ -233,7 +233,21 @@ export function closeSelect(): ((dispatch: (any) => any) => void) {
 
 export function cacheIssues(issues: Array<AnyIssue>): (() => void) {
   return () => {
-    flushStoragePart({issuesCache: issues});
+    let updatedCache: Array<AnyIssue> = issues;
+    const cachedIssues: ?Array<AnyIssue> = getStorageState().issuesCache;
+    if (cachedIssues) {
+      const issueActivityMap: { [string]: AnyIssue } = cachedIssues.reduce(
+        (map: { [string]: AnyIssue }, it: AnyIssue) => map[it.id] = it.activityPage,
+        {}
+      );
+      updatedCache = issues.map((it: AnyIssue) => {
+        if (issueActivityMap[it.id]) {
+          it.activityPage = issueActivityMap[it.id];
+        }
+        return it;
+      });
+    }
+    flushStoragePart({issuesCache: updatedCache});
   };
 }
 
