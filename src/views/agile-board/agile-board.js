@@ -493,11 +493,11 @@ class AgileBoard extends Component<Props, State> {
 
   renderSearchPanelPreview = () => {
     const {networkState} = this.props;
-    return networkState?.isConnected !== false && (
+    return (
       <QueryPreview
         style={styles.searchQueryPreview}
         query={this.query}
-        onFocus={this.onShowAssist}
+        onFocus={networkState?.isConnected !== false && this.onShowAssist}
       />
     );
   };

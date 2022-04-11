@@ -13,7 +13,7 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   query: string,
-  onFocus: (clear: boolean) => any,
+  onFocus?: (clear: boolean) => any,
   onClearText: () => void,
   style?: ViewStyleProp
 };
@@ -26,11 +26,15 @@ export default class QueryPreview extends PureComponent<Props, void> {
   };
 
   focusAndClear: (() => void) = () => {
-    this.props.onFocus(true);
+    if (this.props.onFocus) {
+      this.props.onFocus(true);
+    }
   }
 
   focus: (() => void) = () => {
-    this.props.onFocus(false);
+    if (this.props.onFocus) {
+      this.props.onFocus(false);
+    }
   }
 
   render(): Node {
