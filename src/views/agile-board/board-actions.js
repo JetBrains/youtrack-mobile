@@ -402,17 +402,14 @@ export function fetchMoreSwimlanes(query?: string): ((
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
     const isOffline: boolean = getState().app?.networkState?.isConnected === false;
-    if (isOffline) {
-      return;
-    }
     const {sprint, noMoreSwimlanes, isLoadingMore} = getState().agile;
-    const api: Api = getApi();
-    if (!sprint || noMoreSwimlanes || isLoadingMore) {
+    if (!sprint || noMoreSwimlanes || isLoadingMore || isOffline) {
       return;
     }
     dispatch(startSwimlanesLoading());
 
     try {
+      const api: Api = getApi();
       const swimlanes = await api.agile.getSwimlanes(
         sprint.agile.id,
         sprint.id,
