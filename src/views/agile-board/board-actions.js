@@ -324,7 +324,7 @@ export function loadDefaultAgileBoard(query: string, refresh: boolean): ((dispat
     const isOffline: boolean = getState().app?.networkState?.isConnected === false;
     const cachedAgileLastSprint: ?Sprint = getStorageState().agileLastSprint;
     dispatch(receiveSprint(cachedAgileLastSprint));
-    if (isOffline) {
+    if (isOffline && cachedAgileLastSprint) {
       return;
     }
 
