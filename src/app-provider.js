@@ -11,6 +11,7 @@ import {SafeAreaView, SafeAreaProvider, initialWindowMetrics} from 'react-native
 import DebugView from 'components/debug-view/debug-view';
 import ErrorBoundary from 'components/error-boundary/error-boundary';
 import Navigation from './navigation';
+import Network from './components/network/network';
 import ThemeProvider from 'components/theme/theme-provider';
 import UserAgreement from 'components/user-agreement/user-agreement';
 import {buildStyles, DEFAULT_THEME, getUITheme, getThemeMode} from 'components/theme/theme';
@@ -20,7 +21,6 @@ import {ThemeContext} from 'components/theme/theme-context';
 import type {Node} from 'React';
 import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import NetworkPopup from './components/network/network-popup';
 
 
 export default class AppProvider extends Component<{}, { mode: string }> {
@@ -73,7 +73,7 @@ export default class AppProvider extends Component<{}, { mode: string }> {
                     </ErrorBoundary>
 
                     <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
-                    <NetworkPopup/>
+                    <Network/>
 
                   </SafeAreaView>
                 </SafeAreaProvider>

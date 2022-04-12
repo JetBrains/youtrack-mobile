@@ -21,6 +21,7 @@ import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
 import Star from 'components/star/star';
 import usage from 'components/usage/usage';
+import {addListenerGoOnline} from '../../components/network/network-events';
 import {attachmentActions} from './issue__attachment-actions-and-types';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from './issue-base-actions-creater';
 import {getApi} from 'components/api/api__instance';
@@ -39,6 +40,7 @@ import type IssuePermissions from 'components/issue-permissions/issue-permission
 import type {AnyIssue, IssueFull, TabRoute} from 'flow/Issue';
 import type {Attachment, IssueLink, Tag} from 'flow/CustomFields';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
+import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {IssueTabbedState} from 'components/issue-tabbed/issue-tabbed';
 import type {NormalizedAttachment} from 'flow/Attachment';
 import type {RequestHeaders} from 'flow/Auth';
@@ -82,6 +84,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   imageHeaders: RequestHeaders = getApi().auth.getAuthorizationHeaders();
   backendUrl: string = getApi().config.backendUrl;
   renderRefreshControl: Function = this._renderRefreshControl.bind(this);
+  goOnlineSubscription: EventSubscription;
 
   constructor(props: IssueProps) {
     //$FlowFixMe
@@ -90,6 +93,10 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     this.onAddIssueLink = this.onAddIssueLink.bind(this);
     //$FlowFixMe
     this.toggleModalChildren = this.toggleModalChildren.bind(this);
+
+    this.goOnlineSubscription = addListenerGoOnline(() => {
+      this.loadIssue(props?.issuePlaceholder);
+    });
   }
 
   async init() {
@@ -109,6 +116,11 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     //$FlowFixMe
     super.componentDidMount();
     await this.init();
+  }
+
+  componentWillUnmount() {
+    super.componentWillUnmount();
+    this.goOnlineSubscription.remove();
   }
 
   async UNSAFE_componentWillReceiveProps(nextProps: IssueProps): Promise<void> {
