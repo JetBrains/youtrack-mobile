@@ -44,6 +44,7 @@ import type {Notification, Metadata, ChangeValue, ChangeEvent} from 'flow/Inbox'
 import type {Reaction} from 'flow/Reaction';
 import type {Theme} from 'flow/Theme';
 import type {User} from 'flow/User';
+import {addListenerGoOnline} from '../../components/network/network-events';
 
 
 type IssueActions = typeof inboxActions;
@@ -80,6 +81,7 @@ class Inbox extends Component<Props, State> {
   config: ?AppConfig;
   theme: Theme;
   unsubscribeOnDimensionsChange: EventSubscription;
+  goOnlineSubscription: EventSubscription;
 
   constructor(props) {
     super(props);
@@ -103,10 +105,15 @@ class Inbox extends Component<Props, State> {
 
     this.props.loadInboxCache();
     this.refresh();
+
+    this.goOnlineSubscription = addListenerGoOnline(() => {
+      this.refresh();
+    });
   }
 
   componentWillUnmount(): void {
     this.unsubscribeOnDimensionsChange.remove();
+    this.goOnlineSubscription.remove();
   }
 
   refresh = () => {
