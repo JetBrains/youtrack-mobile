@@ -19,6 +19,7 @@ import IssueTabbed from 'components/issue-tabbed/issue-tabbed';
 import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
 import VisibilityControl from 'components/visibility/visibility-control';
+import {addListenerGoOnline} from '../../components/network/network-events';
 import {ANALYTICS_ARTICLE_PAGE} from 'components/analytics/analytics-ids';
 import {createArticleList} from '../knowledge-base/knowledge-base-actions';
 import {findArticleNode} from 'components/articles/articles-tree-helper';
@@ -33,15 +34,16 @@ import styles from './article.styles';
 
 import type {Article as ArticleEntity, ArticleNode} from 'flow/Article';
 import type {ArticleState} from './article-reducers';
-import type {CustomError} from 'flow/Error';
-import type {HeaderProps} from 'components/header/header';
 import type {Attachment} from 'flow/CustomFields';
+import type {CustomError} from 'flow/Error';
+import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
+import type {HeaderProps} from 'components/header/header';
 import type {IssueTabbedState} from 'components/issue-tabbed/issue-tabbed';
 import type {KnowledgeBaseState} from '../knowledge-base/knowledge-base-reducers';
 import type {RootState} from 'reducers/app-reducer';
 import type {Theme, UITheme, UIThemeColors} from 'flow/Theme';
-import type {Visibility} from 'flow/Visibility';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {Visibility} from 'flow/Visibility';
 
 type Props = ArticleState & {
   articlePlaceholder: ArticleEntity,
@@ -60,12 +62,14 @@ class Article extends IssueTabbed<Props, IssueTabbedState & { modalChildren: any
   uiTheme: UITheme;
   unsubscribe: Function;
   articleDetailsList: Object;
+  goOnlineSubscription: EventSubscription;
 
   componentWillUnmount = () => {
     this.unsubscribe && this.unsubscribe();
     if (!this.props.storePrevArticle) {
       this.props.clearArticle();
     }
+    this.goOnlineSubscription.remove();
   };
 
   componentDidMount() {
@@ -89,6 +93,10 @@ class Article extends IssueTabbed<Props, IssueTabbedState & { modalChildren: any
     } else {
       return Router.KnowledgeBase();
     }
+
+    this.goOnlineSubscription = addListenerGoOnline(() => {
+      this.loadArticle(currentArticle.id, false);
+    });
   }
 
   loadArticle = (articleId: string, reset: boolean) => this.props.loadArticle(articleId, reset);

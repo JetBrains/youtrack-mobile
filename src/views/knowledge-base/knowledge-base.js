@@ -18,6 +18,7 @@ import Router from 'components/router/router';
 import SelectSectioned from 'components/select/select-sectioned';
 import Star from 'components/star/star';
 import usage from 'components/usage/usage';
+import {addListenerGoOnline} from '../../components/network/network-events';
 import {ANALYTICS_ARTICLES_PAGE} from 'components/analytics/analytics-ids';
 import {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
 import {HIT_SLOP} from 'components/common-styles/button';
@@ -92,6 +93,7 @@ export class KnowledgeBase extends Component<Props, State> {
   uiTheme: UITheme;
   unsubscribe: Function = () => null;
   unsubscribeOnDimensionsChange: EventSubscription;
+  goOnlineSubscription: EventSubscription;
 
   constructor(props: Props) {
     super(props);
@@ -111,6 +113,7 @@ export class KnowledgeBase extends Component<Props, State> {
   componentWillUnmount() {
     this.unsubscribeOnDimensionsChange.remove();
     this.unsubscribe();
+    this.goOnlineSubscription.remove();
   }
 
   async componentDidMount() {
@@ -134,6 +137,10 @@ export class KnowledgeBase extends Component<Props, State> {
     if (this.props.project) {
       this.scrollToProject(this.props.project);
     }
+
+    this.goOnlineSubscription = addListenerGoOnline(() => {
+      this.loadArticlesList(false);
+    });
   }
 
   setSplitView: () => void = (): void => {
