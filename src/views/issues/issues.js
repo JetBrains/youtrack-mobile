@@ -1,6 +1,5 @@
 /* @flow */
 
-import type {Node} from 'react';
 import {
   Dimensions,
   View,
@@ -29,6 +28,7 @@ import Router from '../../components/router/router';
 import Select, {SelectModal} from '../../components/select/select';
 import SelectSectioned, {SelectSectionedModal} from '../../components/select/select-sectioned';
 import usage from '../../components/usage/usage';
+import {addListenerGoOnline} from '../../components/network/network-events';
 import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 import {getIssueFromCache} from './issues-actions';
@@ -53,8 +53,10 @@ import type Auth from 'components/auth/oauth2';
 import type {AnyIssue, IssueOnList} from 'flow/Issue';
 import type {AppState} from '../../reducers';
 import type {ErrorMessageProps} from 'components/error-message/error-message';
+import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {Folder} from 'flow/User';
 import type {IssuesState} from './issues-reducers';
+import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 
 type IssuesActions = typeof issueActions;
@@ -80,8 +82,9 @@ type State = {
 export class Issues extends Component<Props, State> {
   searchPanelNode: Object;
   unsubscribeOnDispatch: Function;
-  unsubscribeOnDimensionsChange: Function;
+  unsubscribeOnDimensionsChange: EventSubscription;
   theme: Theme;
+  goOnlineSubscription: EventSubscription;
 
   constructor(props: Props) {
     super(props);
@@ -131,11 +134,16 @@ export class Issues extends Component<Props, State> {
       const targetIssue: AnyIssue = getIssueFromCache(issueId) || ({id: issueId}: any);
       this.updateFocusedIssue(targetIssue);
     }
+
+    this.goOnlineSubscription = addListenerGoOnline(() => {
+      this.refresh();
+    });
   }
 
   componentWillUnmount() {
     this.unsubscribeOnDimensionsChange.remove();
     this.unsubscribeOnDispatch();
+    this.goOnlineSubscription.remove();
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {

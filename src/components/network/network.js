@@ -28,13 +28,14 @@ export default function Network(): Node {
 
   const updateNetworkState = useCallback((state: NetInfoState) => {
     if (state.isConnected !== prevConnected?.current?.isConnected) {
-      if (state.isConnected === true && prevConnected?.current?.isConnected === false) {
-        emitGoOnlineEvent(state);
-      }
       // eslint-disable-next-line no-unused-vars
       const {details, ...rest} = state;
-      prevConnected.current = rest;
       dispatch(setNetworkState(rest));
+      const wasOffline = !prevConnected?.current?.isConnected;
+      if (state.isConnected === true && wasOffline) {
+        emitGoOnlineEvent(state);
+      }
+      prevConnected.current = rest;
       if (toastInstance.current) {
         if (rest?.isConnected === false) {
           toastInstance.current.show('Offline', DURATION.FOREVER);
