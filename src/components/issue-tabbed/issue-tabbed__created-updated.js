@@ -10,16 +10,11 @@ import styles from './issue-tabbed.style';
 
 import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import {SkeletonIssueInfoLine} from '../skeleton/skeleton';
 
 type Props = { reporter: User, updater: User, created: number, updated: number, style?: ViewStyleProp };
 
 
 const CreateUpdateInfo = (props: Props): Node => {
-  if (!props.reporter && !props.updater) {
-    return <SkeletonIssueInfoLine style={[styles.createUpdateInfoPanel, props.style]} lines={2}/>;
-  }
-
   return (
     <View style={[styles.createUpdateInfoPanel, props.style]}>
       {!!props.reporter && <Text
