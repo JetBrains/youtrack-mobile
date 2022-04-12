@@ -93,10 +93,6 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     this.onAddIssueLink = this.onAddIssueLink.bind(this);
     //$FlowFixMe
     this.toggleModalChildren = this.toggleModalChildren.bind(this);
-
-    this.goOnlineSubscription = addListenerGoOnline(() => {
-      this.loadIssue(props?.issuePlaceholder);
-    });
   }
 
   async init() {
@@ -116,6 +112,9 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     //$FlowFixMe
     super.componentDidMount();
     await this.init();
+    this.goOnlineSubscription = addListenerGoOnline(() => {
+      this.loadIssue(this.props?.issuePlaceholder);
+    });
   }
 
   componentWillUnmount() {
