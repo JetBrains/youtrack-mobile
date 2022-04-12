@@ -22,8 +22,9 @@ import QueryAssistPanel from 'components/query-assist/query-assist-panel';
 import QueryPreview from 'components/query-assist/query-preview';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
+import {addListenerGoOnline} from '../../components/network/network-events';
 import {ANALYTICS_AGILE_PAGE} from 'components/analytics/analytics-ids';
-import {DragContainer} from 'components/draggable/';
+import {DragContainer} from 'components/draggable';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {getScrollableWidth} from 'components/board-scroller/board-scroller__math';
 import {hasType} from 'components/api/api__resource-types';
@@ -45,6 +46,7 @@ import type {AgilePageState} from './board-reducers';
 import type {AnyIssue, IssueOnList} from 'flow/Issue';
 import type {AppState} from '../../reducers';
 import type {CustomError} from 'flow/Error';
+import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {SprintFull, AgileBoardRow, BoardColumn, BoardOnList, Sprint} from 'flow/Agile';
 import type {Theme, UITheme} from 'flow/Theme';
 
@@ -88,7 +90,8 @@ class AgileBoard extends Component<Props, State> {
   query: string;
   unsubscribeOnDispatch: Function;
   uiTheme: UITheme;
-  unsubscribeOnDimensionsChange: Function;
+  unsubscribeOnDimensionsChange: EventSubscription;
+  goOnlineSubscription: EventSubscription;
 
   constructor(props: Props) {
     super(props);
@@ -119,6 +122,9 @@ class AgileBoard extends Component<Props, State> {
         options.issueId && this.props.updateIssue(options.issueId, this.props?.sprint);
       }
     });
+    this.goOnlineSubscription = addListenerGoOnline(() => {
+      this.loadBoard(true);
+    });
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
@@ -131,6 +137,7 @@ class AgileBoard extends Component<Props, State> {
     boardActions.destroySSE();
     this.unsubscribeOnDispatch();
     this.unsubscribeOnDimensionsChange.remove();
+    this.goOnlineSubscription.remove();
   }
 
   onDimensionsChange: () => void = (): void => {
