@@ -237,7 +237,12 @@ export function cacheIssues(issues: Array<AnyIssue>): (() => void) {
     const cachedIssues: ?Array<AnyIssue> = getStorageState().issuesCache;
     if (cachedIssues) {
       const issueActivityMap: { [string]: AnyIssue } = cachedIssues.reduce(
-        (map: { [string]: AnyIssue }, it: AnyIssue) => map[it.id] = it.activityPage,
+        (map: { [string]: AnyIssue }, it: AnyIssue) => {
+          if (it.activityPage) {
+            map[it.id] = it.activityPage;
+          }
+          return map;
+          },
         {}
       );
       updatedCache = issues.map((it: AnyIssue) => {
