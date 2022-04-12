@@ -93,6 +93,13 @@ const attachmentReducers = {
 export default ((createReducer(initialState, {
   ...attachmentReducers,
 
+  [types.LOADING_ACTIVITY_PAGE]: (state: State, action: { isLoading: boolean }): State => {
+    const {isLoading} = action;
+    return {
+      ...state,
+      isLoading,
+    };
+  },
   [types.RECEIVE_ACTIVITY_PAGE]: (state: State, action: { activityPage: Array<Activity> }): State => {
     const {activityPage} = action;
     return {

@@ -34,7 +34,6 @@ import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../icon/icon';
 import {isActivityCategory} from '../activity/activity__category';
 import {guid, isIOSPlatform} from 'util/util';
 import {pullRequestState} from './activity__stream-vcs-helper';
-import {SkeletonIssueActivities} from '../skeleton/skeleton';
 
 import {HIT_SLOP} from '../common-styles/button';
 import {UNIT} from '../variables/variables';
@@ -485,9 +484,6 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
   };
 
 
-  if (!props.activities) {
-    return <SkeletonIssueActivities/>;
-  }
   return (
     <>
       {props.activities?.length > 0

@@ -32,6 +32,7 @@ import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {IssueContext} from '../issue-context';
 import {logEvent} from 'components/log/log-helper';
+import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './issue-activity.styles';
@@ -182,6 +183,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
       deleteWorkItem,
       onCheckboxUpdate,
       doUpdateWorkItem,
+      isLoading,
     } = this.props;
 
     const youtrackWiki: YouTrackWiki = {
@@ -196,6 +198,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
       }
       this.loadIssueActivities(true);
     };
+
+    if (!activityPage && isLoading) {
+      return <SkeletonIssueActivities/>;
+    }
 
     return (
       <View style={styles.activitiesContainer}>

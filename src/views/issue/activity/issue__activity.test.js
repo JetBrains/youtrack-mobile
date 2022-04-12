@@ -106,6 +106,11 @@ describe('Issue activity', () => {
       });
 
       expect(dispatched[3]).toEqual({
+        type: types.LOADING_ACTIVITY_PAGE,
+        isLoading: true,
+      });
+
+      expect(dispatched[4]).toEqual({
         type: types.RECEIVE_ACTIVITY_PAGE,
         activityPage: activityPageMock,
       });

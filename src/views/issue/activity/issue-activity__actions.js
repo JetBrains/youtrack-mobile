@@ -41,6 +41,10 @@ export function receiveActivityPageError(error: Error): {error: Error, type: any
   return {type: types.RECEIVE_ACTIVITY_ERROR, error};
 }
 
+export function loadingActivityPage(isLoading: boolean): {isLoading: boolean, type: any} {
+  return {type: types.LOADING_ACTIVITY_PAGE, isLoading};
+}
+
 
 export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSUE_STATE_FIELD_NAME): any => {
   const actions = {
@@ -85,6 +89,7 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
         dispatch(receiveActivityAPIAvailability(true));
 
         try {
+          dispatch(loadingActivityPage(true));
           log.info('Loading activities...');
           const activityPage: Array<Activity> = await api.issue.getActivitiesPage(targetIssueId, activityCategories);
           dispatch(receiveActivityPage(activityPage));
@@ -94,6 +99,8 @@ export const createIssueActivityActions = (stateFieldName: string = DEFAULT_ISSU
           dispatch(receiveActivityPageError(error));
           dispatch({type: types.RECEIVE_ACTIVITY_ERROR, error});
           log.warn('Failed to load activity', error);
+        } finally {
+          dispatch(loadingActivityPage(false));
         }
 
         function getIssuesCache() {
