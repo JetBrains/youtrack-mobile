@@ -38,7 +38,7 @@ function getCodeData(node: Node): CodeData {
   code = code.replace(/(\n){4,}/g, '\n\n').replace(/[ \t]+$/g, '');
   const hasMore: boolean = code.length > MAX_CODE_LENGTH; //https://github.com/facebook/react-native/issues/19453
   return {
-    snippet: hasMore ? `${code.substr(0, MAX_CODE_LENGTH)}… ` : code,
+    snippet: hasMore ? `${code.substr(0, MAX_CODE_LENGTH)}…\n…` : code,
     code: code,
     hasMore,
   };
