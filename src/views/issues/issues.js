@@ -57,7 +57,7 @@ import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/Even
 import type {Folder} from 'flow/User';
 import type {IssuesState} from './issues-reducers';
 import type {Node} from 'react';
-import type {Theme} from 'flow/Theme';
+import type {Theme, UIThemeColors} from 'flow/Theme';
 
 type IssuesActions = typeof issueActions;
 type Props = {
@@ -210,7 +210,7 @@ export class Issues extends Component<Props, State> {
         }}
         disabled={isDisabled}
       >
-        <IconAdd size={20} color={this.theme.uiTheme.colors.$link}/>
+        <IconAdd size={20} color={isDisabled ? this.getThemeColors().$disabled : this.getThemeColors().$link}/>
       </TouchableOpacity>
     );
   };
@@ -270,9 +270,13 @@ export class Issues extends Component<Props, State> {
     this.props.loadMoreIssues();
   };
 
-  renderContextButton: () => Node = () => {
-    const {onOpenContextSelect, isRefreshing, searchContext, isSearchContextPinned} = this.props;
+  getThemeColors(): UIThemeColors {
+    return this.theme.uiTheme.colors;
+  }
 
+  renderContextButton: () => Node = () => {
+    const {onOpenContextSelect, isRefreshing, searchContext, isSearchContextPinned, networkState} = this.props;
+    const isDisabled: boolean = isRefreshing || !searchContext || !networkState.isConnected;
     return (
       <TouchableOpacity
         key="issueListContext"
@@ -283,7 +287,7 @@ export class Issues extends Component<Props, State> {
           styles.searchContext,
           isSearchContextPinned ? styles.searchContextPinned : null,
         ]}
-        disabled={isRefreshing || !searchContext}
+        disabled={isDisabled}
         onPress={onOpenContextSelect}
       >
         <View
@@ -295,7 +299,11 @@ export class Issues extends Component<Props, State> {
           >
             {`${searchContext?.name || ''} `}
           </Text>
-          {searchContext && <IconAngleDown color={this.theme.uiTheme.colors.$text} size={17}/>}
+          {searchContext &&
+            <IconAngleDown
+              color={isDisabled ? this.getThemeColors().$disabled : this.getThemeColors().$text}
+              size={17}
+            />}
         </View>
       </TouchableOpacity>
     );
@@ -411,7 +419,7 @@ export class Issues extends Component<Props, State> {
   hasIssues: () => boolean = (): boolean => this.props.issues?.length > 0;
 
   renderSearchQuery: () => Node = () => {
-    const {query, issuesCount, openSavedSearchesSelect, searchContext} = this.props;
+    const {query, issuesCount, openSavedSearchesSelect, searchContext, networkState} = this.props;
     return (
       <View style={styles.listHeader}>
         <View style={styles.listHeaderTop}>
@@ -426,8 +434,12 @@ export class Issues extends Component<Props, State> {
             accessibilityLabel="user-search-query-button"
             accessible={true}
             onPress={openSavedSearchesSelect}
+            disabled={!networkState.isConnected}
           >
-            <IconBookmark size={28} color={this.theme.uiTheme.colors.$link}/>
+            <IconBookmark
+              size={28}
+              color={networkState.isConnected ? this.getThemeColors().$link : this.getThemeColors().$disabled}
+            />
           </TouchableOpacity>
 
         </View>
@@ -525,7 +537,7 @@ export class Issues extends Component<Props, State> {
   }
 
   renderIssues: () => Node = () => {
-    const {isIssuesContextOpen, isRefreshing} = this.props;
+    const {isIssuesContextOpen, isRefreshing, networkState} = this.props;
     return (
       <View
         style={styles.listContainer}
@@ -537,7 +549,7 @@ export class Issues extends Component<Props, State> {
         {this.renderIssueList()}
         {this.renderError()}
 
-        {this.renderCreateIssueButton(isRefreshing)}
+        {this.renderCreateIssueButton(isRefreshing || !networkState.isConnected)}
       </View>
     );
   };
