@@ -24,7 +24,7 @@ type Props = {
   row: AgileBoardRow,
   collapsedColumnIds: Array<string>,
   onTapIssue: (issue: IssueOnList) => any,
-  onTapCreateIssue: (columnId: string, cellId: string) => any,
+  onTapCreateIssue?: (columnId: string, cellId: string) => any,
   onCollapseToggle: (row: AgileBoardRow) => any,
   renderIssueCard: RenderIssueCard,
   zoomedIn?: boolean,

@@ -19,7 +19,7 @@ type Props = {
   zoomedIn: boolean,
   canRunCommand: (issue: AnyIssue) => boolean,
   onTapIssue: (issue: AnyIssue) => void,
-  onTapCreateIssue: (columnId: string, cellId: string) => void,
+  onTapCreateIssue?: (columnId: string, cellId: string) => void,
   onCollapseToggle: (row: AgileBoardRow) => void,
   uiTheme: UITheme,
 };
@@ -42,7 +42,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
   createCommonRowProps: (() => {
   collapsedColumnIds: Array<string>,
   onCollapseToggle: (row: AgileBoardRow) => void,
-  onTapCreateIssue: (columnId: string, cellId: string) => void,
+  onTapCreateIssue?: (columnId: string, cellId: string) => void,
   onTapIssue: (issue: AnyIssue) => void,
   renderIssueCard: (issue: AnyIssue) => Node,
   uiTheme: {

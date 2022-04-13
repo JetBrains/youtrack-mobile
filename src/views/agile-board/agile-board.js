@@ -399,10 +399,7 @@ class AgileBoard extends Component<Props, State> {
         zoomedIn={this.state.zoomedIn}
         canRunCommand={this.canRunCommand}
         onTapIssue={this._onTapIssue}
-        onTapCreateIssue={async (...args): Promise<void> => {
-          if (networkState?.isConnected === false) {
-            return;
-          }
+        onTapCreateIssue={networkState?.isConnected === false ? null : async (...args): Promise<void> => {
           const draft: $Shape<IssueOnList> = await createCardForCell.apply(null, [...args, this.state.isSplitView]);
           if (this.state.isSplitView) {
             this.toggleModalChildren(

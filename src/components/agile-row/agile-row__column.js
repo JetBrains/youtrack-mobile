@@ -17,7 +17,7 @@ import type {UITheme} from 'flow/Theme';
 
 type ColumnProps = {
   cell: BoardCell,
-  onTapCreateIssue: Function,
+  onTapCreateIssue?: Function,
   lastColumn: boolean,
   renderIssueCard: (issue: IssueFull) => any,
   uiTheme: UITheme,
@@ -42,13 +42,14 @@ export default function AgileRowColumn(props: ColumnProps): Node {
       {issues.map(props.renderIssueCard)}
 
       <TouchableOpacity
-        onPress={() => props.onTapCreateIssue(cell.column.id, cell.id)}
+        disabled={!props.onTapCreateIssue}
+        onPress={() => props.onTapCreateIssue && props.onTapCreateIssue(cell.column.id, cell.id)}
         style={[
           styles.addCardButton,
           isSplitView() && zoomedIn && columnsLength > 3 ? {width: AGILE_TABLET_CARD_WIDTH} : null,
         ]}
       >
-        <IconAdd color={uiTheme.colors.$link} size={18}/>
+        <IconAdd color={!!props.onTapCreateIssue ? uiTheme.colors.$link : uiTheme.colors.$disabled} size={18}/>
       </TouchableOpacity>
     </DropZone>
   );
