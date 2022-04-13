@@ -244,7 +244,9 @@ class Article extends IssueTabbed<Props, IssueTabbedState & { modalChildren: any
           error={error}
           isLoading={isLoading}
           uiTheme={this.uiTheme}
-          onCheckboxUpdate={(articleContent: string) => onCheckboxUpdate(articleContent)}
+          onCheckboxUpdate={
+            (checked: boolean, position: number, articleContent: string) => onCheckboxUpdate(articleContent)
+          }
           isSplitView={this.state.isSplitView}
         />
       </View>
