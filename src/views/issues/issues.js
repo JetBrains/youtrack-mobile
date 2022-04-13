@@ -537,7 +537,7 @@ export class Issues extends Component<Props, State> {
   }
 
   renderIssues: () => Node = () => {
-    const {isIssuesContextOpen, isRefreshing, networkState} = this.props;
+    const {isIssuesContextOpen, isRefreshing} = this.props;
     return (
       <View
         style={styles.listContainer}
@@ -549,7 +549,7 @@ export class Issues extends Component<Props, State> {
         {this.renderIssueList()}
         {this.renderError()}
 
-        {this.renderCreateIssueButton(isRefreshing || !networkState.isConnected)}
+        {this.renderCreateIssueButton(isRefreshing)}
       </View>
     );
   };
