@@ -60,7 +60,7 @@ const MarkdownViewChunks = (props: Props) => {
 
   const onCheckboxPress = (checked: boolean, position: number): void => {
     if (md) {
-      onCheckboxUpdate(updateMarkdownCheckbox(md, position, checked));
+      onCheckboxUpdate(checked, position, updateMarkdownCheckbox(md, position, checked));
     }
   };
 

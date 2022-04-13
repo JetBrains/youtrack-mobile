@@ -450,16 +450,21 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async updateDescriptionCheckbox(issueId: string, checked: boolean, position: number, text: string): Promise<any> {
+  async updateDescriptionCheckbox(
+    issueId: string,
+    checked: boolean,
+    position: number,
+    description: string
+  ): Promise<{ text: string, updated: number, description: string }> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackIssueUrl}/${issueId}?${ApiBase.createFieldsQuery(['text', 'updated', 'description'])}`,
+      `${this.youTrackIssueUrl}/${issueId}?fields=updated,description`,
       'POST',
       {
         checkboxes: [{
           checked,
           position,
         }],
-        text,
+        description,
       }
     );
   }
