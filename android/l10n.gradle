@@ -1,0 +1,31 @@
+buildscript {
+  repositories {
+    maven {
+      url spaceUrl
+      credentials {
+        username = spaceUsername
+        password = spacePassword
+      }
+    }
+  }
+  dependencies {
+    classpath 'org.jetbrains.ring:youtrack-crowdin:0.10'
+  }
+}
+
+task crowdinUpload(type: org.jetbrains.crowdin.CrowdinUploadTask) {
+  projects = [YOUTRACK, YOUTRACK_COMMUNITY]
+  files = [
+    [name: 'youtrack-mobile.po', source: { "$projectDir/../translations/default.pot" }]
+  ]
+}
+
+task generateEnglishLocale(type: org.jetbrains.crowdin.GenerateEnglishLocaleTask) {
+  folders = ["$projectDir/../translations"]
+}
+
+task crowdinDownload(type: org.jetbrains.crowdin.CrowdinDownloadTask) {
+  projects = [YOUTRACK, YOUTRACK_COMMUNITY]
+  fileMapping = ['youtrack-mobile' : "$projectDir/../translations"]
+  finalizedBy tasks.generateEnglishLocale
+}

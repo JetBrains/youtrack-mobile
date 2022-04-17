@@ -1,0 +1,982 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: youtrackjetbrains\n"
+"X-Crowdin-Project-ID: 295498\n"
+"X-Crowdin-Language: ko\n"
+"X-Crowdin-File: youtrack-mobile.po\n"
+"X-Crowdin-File-ID: 622250\n"
+"Project-Id-Version: youtrackjetbrains\n"
+"Language-Team: Korean\n"
+"Language: ko\n"
+
+
+#: src/components/linked-issues/linked-issues.js
+msgid " ({{amount}} unresolved)"
+msgstr ""
+
+#: src/components/comment/comment.js
+msgid " or "
+msgstr ""
+
+#: src/views/agile-board/board-actions.js
+msgid "(archived)"
+msgstr ""
+
+#: src/components/custom-fields-panel/custom-fields-panel__date-picker.js
+msgid "(Clear value)"
+msgstr ""
+
+#: src/components/activity/activity__history-title.js
+msgid "[Removed field]"
+msgstr ""
+
+#: src/views/article/article__details.js
+msgid "{{amount}} article"
+msgid_plural "{{amount}} articles"
+msgstr[0] ""
+
+#: src/components/activity/activity__history-title.js
+msgid "{{amount}} Attachment"
+msgid_plural "{{amount}} Attachments"
+msgstr[0] ""
+
+#: src/components/activity-stream/activity__stream-vcs.js
+msgid "{{amount}} file"
+msgid_plural "{{amount}} files"
+msgstr[0] ""
+
+#: src/components/linked-issues/linked-issues.js
+msgid "{{amount}} issue"
+msgid_plural "{{amount}} issues"
+msgstr[0] ""
+
+#: src/components/activity/activity__history-title.js
+msgid "{{amount}} Tag"
+msgid_plural "{{amount}} Tags"
+msgstr[0] ""
+
+#: src/views/inbox/inbox.js
+msgid "{{eventName}} changed"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "{{minutesOrHoursOrDaysOrMonthOrYears}} ago"
+msgstr ""
+
+#: src/views/settings/settings__appearance.js
+msgid "{{themeName}} theme"
+msgstr ""
+
+#: src/actions/app-actions.js
+msgid "`\"{{url}}\" doesn't match the configured server`"
+msgstr ""
+
+#: src/views/issue/activity/activity__add-spent-time.js
+#: src/views/issue/activity/activity__add-spent-time.js
+msgid "1w 1d 1h 1m"
+msgstr ""
+
+#: src/components/user-agreement/user-agreement.js
+msgid "Accept"
+msgstr ""
+
+#: src/actions/app-actions.js
+msgid "Account doesn't have valid authorization, cannot switch onto it."
+msgstr ""
+
+#: src/components/issue-tabbed/issue-tabbed.js
+msgid "Activity"
+msgstr ""
+
+#: src/views/issue/activity/issue__activity.js
+msgid "Activity Settings"
+msgstr ""
+
+#: src/components/attachments-row/attachments-add-panel.js
+msgid "Add attachment"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base.js
+msgid "Add some project to favorites"
+msgstr ""
+
+#: src/components/comment/comment-edit.js
+msgid "Add spent time"
+msgstr ""
+
+#: src/components/tags/tag-add-panel.js
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Add tag"
+msgstr ""
+
+#: src/views/article/arcticle-actions.js
+msgid "Add to favorites"
+msgstr ""
+
+#: src/views/inbox/inbox.js
+msgid "added a reaction"
+msgstr ""
+
+#: src/views/agile-board/board-updaters.js
+msgid "Agile board settings have been changed. Reload the board."
+msgstr ""
+
+#: src/views/settings/settings__appearance.js
+#: src/views/settings/settings.js
+msgid "Appearance"
+msgstr ""
+
+#: src/views/create-issue/create-issue-actions.js
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Apply command…"
+msgstr ""
+
+#: src/views/article/arcticle-helper.js
+msgid "Are you sure you want to delete all article drafts?"
+msgstr ""
+
+#: src/views/article/arcticle-helper.js
+msgid "Are you sure you want to delete this article?"
+msgstr ""
+
+#: src/views/article/arcticle-helper.js
+msgid "Are you sure you want to delete this draft?"
+msgstr ""
+
+#: src/views/issue/activity/issue-activity__actions.js
+msgid "Are you sure you want to delete work item?"
+msgstr ""
+
+#: src/views/article/arcticle-actions.js
+msgid "Article added to favorites"
+msgstr ""
+
+#: src/views/article-create/article-create.js
+msgid "Article content"
+msgstr ""
+
+#: src/views/article-create/arcticle-create-actions.js
+msgid "Article published"
+msgstr ""
+
+#: src/views/article/arcticle-actions.js
+msgid "Article removed from favorites"
+msgstr ""
+
+#: src/components/comment/comment-edit.js
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Attach file"
+msgstr ""
+
+#: src/components/attach-file/attach-file-dialog.js
+msgid "Attach files"
+msgstr ""
+
+#: src/components/attachments-row/attachment-actions.js
+msgid "Attachment deleted"
+msgstr ""
+
+#: src/views/issue/activity/activity__add-spent-time.js
+msgid "Author"
+msgstr ""
+
+#: src/components/error/error-messages.js
+msgid "Bad Request"
+msgstr ""
+
+#: src/views/attachment-preview/attachment-preview.js
+msgid "Browser"
+msgstr ""
+
+#: src/components/error-boundary/error-boundary.js
+msgid "Bugsnag privacy policy"
+msgstr ""
+
+#: src/components/error/error-messages.js
+msgid "Can't find entity with id"
+msgstr ""
+
+#: src/components/activity-stream/activity__stream-work.js
+#: src/components/confirmation/confirmation.js
+#: src/components/tags/tags.js
+#: src/views/article/arcticle-actions.js
+#: src/views/article/arcticle-actions.js
+#: src/views/create-issue/create-issue-actions.js
+#: src/views/issue/activity/issue-activity__comment-actions.js
+#: src/views/issue/issue-base-actions-creater.js
+#: src/views/issue/issue-base-actions-creater.js
+#: src/views/knowledge-base/knowledge-base-actions.js
+#: src/views/settings/settings__feedback-form.js
+msgid "Cancel"
+msgstr ""
+
+#: src/components/attach-file/attach-file-dialog.js
+#: src/components/attachments-row/attachment-actions.js
+msgid "Choose from library…"
+msgstr ""
+
+#: src/components/debug-view/debug-view.js
+#: src/components/popup/popup.js
+msgid "Close"
+msgstr ""
+
+#: src/components/activity-stream/activity__stream-vcs.js
+msgid "closed the pull request"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base.js
+msgid "Collapse all"
+msgstr ""
+
+#: src/views/agile-board/agile-board.js
+msgid "Column collapsed"
+msgstr ""
+
+#: src/views/agile-board/agile-board.js
+msgid "Column expanded"
+msgstr ""
+
+#: src/components/command-dialog/command-dialog-helper.js
+msgid "Command applied"
+msgstr ""
+
+#: src/views/issue/activity/issue-activity__comment-actions.js
+msgid "Comment updated"
+msgstr ""
+
+#: src/views/issue/activity/issue-activity__comment-actions.js
+msgid "Comment URL copied"
+msgstr ""
+
+#: src/components/comment/comment.js
+msgid "Comment was deleted."
+msgstr ""
+
+#: src/components/error-boundary/error-boundary.js
+#: src/components/error-message/error-message-inline.js
+#: src/views/enter-server/enter-server.js
+msgid "Contact support"
+msgstr ""
+
+#: src/views/article/article.js
+msgid "Content"
+msgstr ""
+
+#: src/components/wiki/code-renderer.js
+#: src/views/issue/activity/issue-activity__comment-actions.js
+#: src/views/issue/issue-base-actions-creater.js
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Copied"
+msgstr ""
+
+#: src/views/article/arcticle-actions.js
+#: src/views/article/arcticle-actions.js
+msgid "Copy article URL"
+msgstr ""
+
+#: src/views/issue/activity/issue-activity__comment-actions.js
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Copy text"
+msgstr ""
+
+#: src/views/article/arcticle-actions.js
+#: src/views/issue/activity/issue-activity__comment-actions.js
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Copy URL"
+msgstr ""
+
+#: src/components/error-boundary/error-boundary.js
+msgid "Crash has been reported"
+msgstr ""
+
+#: src/views/issue/issue__details.js
+msgid "Created by"
+msgstr ""
+
+#: src/views/create-issue/create-issue.js
+msgid "Current issue"
+msgstr ""
+
+#: src/views/issue/activity/activity__add-spent-time.js
+msgid "Date"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "day"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "days"
+msgstr ""
+
+#: src/components/user-agreement/user-agreement.js
+msgid "Decline"
+msgstr ""
+
+#: src/components/activity-stream/activity__stream-work.js
+#: src/views/article/arcticle-actions.js
+#: src/views/article/arcticle-actions.js
+#: src/views/article/arcticle-helper.js
+#: src/views/issue/activity/issue-activity__actions.js
+#: src/views/issue/activity/issue-activity__comment-actions.js
+#: src/views/issue/activity/issue-activity__comment-actions.js
+msgid "Delete"
+msgstr ""
+
+#: src/views/issue/activity/issue-activity__comment-actions.js
+msgid "Delete comment permanently?"
+msgstr ""
+
+#: src/views/article-create/article-create.js
+msgid "Delete draft"
+msgstr ""
+
+#: src/components/comment/comment.js
+msgid "Delete permanently"
+msgstr ""
+
+#: src/views/settings/settings__feedback-form.js
+msgid "Description"
+msgstr ""
+
+#: src/components/activity/activity__history-title.js
+msgid "Description changed"
+msgstr ""
+
+#: src/components/issue-tabbed/issue-tabbed.js
+#: src/views/inbox/inbox.js
+msgid "Details"
+msgstr ""
+
+#: src/views/issue/activity/activity__add-spent-time.js
+msgid "Discard and close"
+msgstr ""
+
+#: src/views/issue/activity/activity__add-spent-time.js
+msgid "Discard draft and close?"
+msgstr ""
+
+#: src/views/article-create/article-create.js
+msgid "Discard unpublished changes"
+msgstr ""
+
+#: src/views/settings/settings-helper.js
+msgid "Don't send logs"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base.js
+msgid "Drafts"
+msgstr ""
+
+#: src/components/activity-stream/activity__stream-work.js
+#: src/components/activity-stream/activity__stream.js
+#: src/views/article/arcticle-actions.js
+#: src/views/issue/activity/issue-activity__comment-actions.js
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Edit"
+msgstr ""
+
+#: src/components/comment/comment-edit.js
+msgid "Edit comment"
+msgstr ""
+
+#: src/views/settings/settings__feedback-form.js
+msgid "Email address for follow-up"
+msgstr ""
+
+#: src/components/command-dialog/command-dialog.js
+msgid "Enter command"
+msgstr ""
+
+#: src/components/query-assist/query-assist.js
+#: src/components/query-assist/query-preview.js
+msgid "Enter search request"
+msgstr ""
+
+#: src/components/custom-fields-panel/custom-fields-panel.js
+msgid "Enter time"
+msgstr ""
+
+#: src/views/enter-server/enter-server.js
+msgid "Enter your YouTrack server URL"
+msgstr ""
+
+#: src/components/error-boundary/error-boundary.js
+msgid "Failed to restart the app automatically. Try restart it manually."
+msgstr ""
+
+#: src/views/settings/settings-helper.js
+msgid "Feature request"
+msgstr ""
+
+#: src/views/agile-board/board-actions.js
+msgid "Filter boards by name"
+msgstr ""
+
+#: src/components/select/select.js
+msgid "Filter item"
+msgstr ""
+
+#: src/components/linked-issues/linked-issues-add-link.js
+#: src/views/issue/activity/activity__add-spent-time.js
+#: src/views/issues/issues__sortby_add-attribute.js
+msgid "Filter items"
+msgstr ""
+
+#: src/views/article-create/article-create.js
+msgid "Filter projects"
+msgstr ""
+
+#: src/views/issues/issues-actions.js
+msgid "Filter projects, saved searches, and tags"
+msgstr ""
+
+#: src/views/issues/issues-actions.js
+msgid "Filter saved searches"
+msgstr ""
+
+#: src/views/agile-board/board-actions.js
+msgid "Filter sprints by name"
+msgstr ""
+
+#: src/components/tags/tag-add-select.js
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Filter tags"
+msgstr ""
+
+#: src/components/visibility/visibility-control.js
+msgid "Filter users, groups, and teams"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base.js
+msgid "Find favorite projects"
+msgstr ""
+
+#: src/components/error-boundary/error-boundary.js
+msgid "Help us fix problems faster"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base.js
+msgid "Here you'll see a list of articles from your favorite projects"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "hour"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "hours"
+msgstr ""
+
+#: src/components/error/error-message-data.js
+msgid "If this isn't what you expected, you might try one of these solutions:"
+msgstr ""
+
+#: src/components/error-boundary/error-boundary.js
+msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service, that help us diagnose and fix problems faster, monitor application stability.We will only share error report data with Bugsnag if you agree to do so."
+msgstr ""
+
+#: src/views/article/article.js
+msgid "in revision"
+msgstr ""
+
+#: src/components/error/error-message-data.js
+msgid "Invalid query"
+msgstr ""
+
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Issue deleted"
+msgstr ""
+
+#: src/components/issue-actions/issue-links-actions.js
+msgid "Issue link added"
+msgstr ""
+
+#: src/components/issue-actions/issue-links-actions.js
+msgid "Issue link removed"
+msgstr ""
+
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Issue updated"
+msgstr ""
+
+#: src/views/issues/issues__sortby_list.js
+msgid "Issues can be sorted by up to 4 attributes"
+msgstr ""
+
+#: src/components/error/error-message-data.js
+msgid "It could mean that the issue doesn't exist or you don't have permission to view it"
+msgstr ""
+
+#: src/components/error-boundary/error-boundary.js
+msgid "JetBrains privacy policy"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "just now"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base.js
+msgid "Knowledge Base"
+msgstr ""
+
+#: src/components/error/error-message-data.js
+#: src/components/error/error-message-data.js
+msgid "License error"
+msgstr ""
+
+#: src/components/linked-issues/linked-issues-add-link.js
+#: src/views/create-issue/create-issue.js
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Link issue"
+msgstr ""
+
+#: src/components/linked-issues/linked-issues-title.js
+#: src/components/linked-issues/linked-issues.js
+msgid "Linked issues"
+msgstr ""
+
+#: src/components/select/select.js
+msgid "Loading values..."
+msgstr ""
+
+#: src/views/log-in/log-in.js
+msgid "Log in"
+msgstr ""
+
+#: src/views/log-in/log-in.js
+msgid "Log in to YouTrack"
+msgstr ""
+
+#: src/views/log-in/log-in.js
+msgid "Log in with Browser"
+msgstr ""
+
+#: src/views/settings/settings__feedback-form.js
+msgid "Logs"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base-actions.js
+#: src/views/knowledge-base/knowledge-base.js
+msgid "Manage Favorite Projects"
+msgstr ""
+
+#: src/views/issues/issues__count.js
+msgid "Matches {{issuesCount}} issue"
+msgid_plural "Matches {{issuesCount}} issues"
+msgstr[0] ""
+
+#: src/components/activity-stream/activity__stream-vcs.js
+msgid "merged the pull request"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "minute"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "minutes"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "month"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "months"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base-actions.js
+msgid "New Article"
+msgstr ""
+
+#: src/views/create-issue/create-issue.js
+msgid "New Issue"
+msgstr ""
+
+#: src/views/enter-server/enter-server.js
+msgid "Next"
+msgstr ""
+
+#: src/components/activity-stream/activity__stream.js
+msgid "No activity yet"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base.js
+msgid "No articles"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base.js
+msgid "No articles found"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base__drafts.js
+msgid "No drafts yet"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base.js
+msgid "No favorites projects found"
+msgstr ""
+
+#: src/components/error/error-message-data.js
+#: src/views/issues/issues.js
+msgid "No issues found"
+msgstr ""
+
+#: src/components/select/select.js
+msgid "No items"
+msgstr ""
+
+#: src/views/issue/activity/activity__add-spent-time.js
+msgid "No type"
+msgstr ""
+
+#: src/components/error/error-message-data.js
+msgid "Nope, can't find it!"
+msgstr ""
+
+#: src/components/error/error-messages.js
+msgid "Not implemented"
+msgstr ""
+
+#: src/views/inbox/inbox.js
+msgid "Notifications"
+msgstr ""
+
+#: src/views/settings/settings.js
+msgid "open debug settings"
+msgstr ""
+
+#: src/views/settings/settings-helper.js
+msgid "Other"
+msgstr ""
+
+#: src/views/log-in/log-in.js
+msgid "Password"
+msgstr ""
+
+#: src/views/log-in/log-in.js
+msgid "Privacy Policy."
+msgstr ""
+
+#: src/views/settings/settings-helper.js
+msgid "Problem"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base-actions.js
+msgid "Projects collapsed"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base-actions.js
+msgid "Projects expanded"
+msgstr ""
+
+#: src/components/error/error-messages.js
+#: src/components/error/error-messages.js
+msgid "Push notification is not supported: "
+msgstr ""
+
+#: src/components/query-assist/query-assist-helper.js
+#: src/views/issues/issues-actions.js
+msgid "Recent searches"
+msgstr ""
+
+#: src/components/error/error-messages.js
+msgid "remote notifications are not supported in the simulator"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base-actions.js
+msgid "Remove"
+msgstr ""
+
+#: src/views/article/arcticle-actions.js
+msgid "Remove favorite"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base-actions.js
+msgid "Remove project from favorites?"
+msgstr ""
+
+#: src/components/tags/tags.js
+msgid "Remove tag"
+msgstr ""
+
+#: src/views/inbox/inbox.js
+msgid "removed a reaction"
+msgstr ""
+
+#: src/components/activity-stream/activity__stream-vcs.js
+msgid "reopened the pull request"
+msgstr ""
+
+#: src/components/error-boundary/error-boundary.js
+msgid "Restart"
+msgstr ""
+
+#: src/components/comment/comment.js
+msgid "Restore"
+msgstr ""
+
+#: src/views/home/home.js
+msgid "Retry"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base__search.js
+msgid "Search articles"
+msgstr ""
+
+#: src/components/error/error-message-data.js
+msgid "Search for a different value"
+msgstr ""
+
+#: src/components/custom-fields-panel/custom-fields-panel.js
+msgid "Search for the project"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "second"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "seconds"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base.js
+msgid "Select an article from the list"
+msgstr ""
+
+#: src/views/inbox/inbox.js
+#: src/views/issues/issues.js
+msgid "Select an issue from the list"
+msgstr ""
+
+#: src/components/error-boundary/error-boundary.js
+msgid "Send crash report"
+msgstr ""
+
+#: src/components/error-boundary/error-boundary.js
+msgid "Send extended report to Bugsnag"
+msgstr ""
+
+#: src/views/settings/settings.js
+msgid "Send feedback"
+msgstr ""
+
+#: src/views/settings/settings__feedback-form.js
+msgid "Send Feedback"
+msgstr ""
+
+#: src/views/settings/settings-helper.js
+msgid "Send logs"
+msgstr ""
+
+#: src/components/error-boundary/error-boundary.js
+msgid "Sending crash report..."
+msgstr ""
+
+#: src/views/settings/settings.js
+msgid "Settings"
+msgstr ""
+
+#: src/components/debug-view/debug-view.js
+msgid "Share"
+msgstr ""
+
+#: src/views/article/arcticle-actions.js
+msgid "Share article URL"
+msgstr ""
+
+#: src/components/log/log.js
+msgid "Share issue URL"
+msgstr ""
+
+#: src/views/settings/settings.js
+msgid "Share logs"
+msgstr ""
+
+#: src/views/article/arcticle-actions.js
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Share URL"
+msgstr ""
+
+#: src/views/article/arcticle-actions.js
+#: src/views/article/arcticle-actions.js
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Share…"
+msgstr ""
+
+#: src/components/tags/tags.js
+msgid "Show all issues tagged with \"{{tagName}}\"..."
+msgstr ""
+
+#: src/components/error-boundary/error-boundary.js
+msgid "Show logs"
+msgstr ""
+
+#: src/components/error/error-message-data.js
+#: src/components/error/error-messages.js
+msgid "Something went wrong"
+msgstr ""
+
+#: src/views/issues/issues__sortby_list.js
+msgid "Sort Attributes"
+msgstr ""
+
+#: src/views/issues/issues__sortby.js
+msgid "Sorted by"
+msgstr ""
+
+#: src/views/issue/activity/activity__add-spent-time.js
+#: src/views/issue/activity/activity__add-spent-time.js
+msgid "Spent time"
+msgstr ""
+
+#: src/components/activity-stream/activity__stream-work.js
+msgid "Spent time:"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base__drafts.js
+msgid "Start a new article"
+msgstr ""
+
+#: src/views/article/article__details.js
+msgid "Sub-articles"
+msgstr ""
+
+#: src/components/activity-stream/activity__stream-vcs.js
+msgid "submitted a pull request"
+msgstr ""
+
+#: src/views/settings/settings__feedback-form.js
+msgid "Summary"
+msgstr ""
+
+#: src/components/activity/activity__history-title.js
+msgid "Summary changed"
+msgstr ""
+
+#: src/components/attach-file/attach-file-dialog.js
+#: src/components/attachments-row/attachment-actions.js
+msgid "Take a picture…"
+msgstr ""
+
+#: src/views/settings/settings__feedback-form.js
+msgid "Thank you for your feedback!"
+msgstr ""
+
+#: src/views/agile-board/agile-board.js
+msgid "The board {{boardName}} has configuration errors"
+msgstr ""
+
+#: src/components/error/error-message-data.js
+msgid "The server is overloaded or down for maintenance"
+msgstr ""
+
+#: src/views/article/arcticle-helper.js
+msgid "This action deletes all drafts, including unpublished sub-articles"
+msgstr ""
+
+#: src/views/article-create/article-create.js
+msgid "Title"
+msgstr ""
+
+#: src/views/knowledge-base/knowledge-base.js
+msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
+msgstr ""
+
+#: src/components/error-message/error-message.js
+msgid "Try Again"
+msgstr ""
+
+#: src/views/issue/activity/activity__add-spent-time.js
+msgid "Type"
+msgstr ""
+
+#: src/components/agile-row/agile-row.js
+msgid "Uncategorized Cards"
+msgstr ""
+
+#: src/components/articles/article-item-with-children.js
+msgid "Untitled"
+msgstr ""
+
+#: src/views/issue/issue__details.js
+msgid "Updated by"
+msgstr ""
+
+#: src/components/error/error-message-data.js
+msgid "Use fewer search parameters"
+msgstr ""
+
+#: src/components/error/error-message-data.js
+msgid "User account is banned"
+msgstr ""
+
+#: src/views/log-in/log-in.js
+msgid "Username or email"
+msgstr ""
+
+#: src/views/issue/issue__details.js
+msgid "View comments and other activity"
+msgstr ""
+
+#: src/components/activity/activity__history-title.js
+msgid "Visibility"
+msgstr ""
+
+#: src/components/visibility/visibility-strings.js
+msgid "Visible to article readers"
+msgstr ""
+
+#: src/components/visibility/visibility-strings.js
+msgid "Visible to issue readers"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "week"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "weeks"
+msgstr ""
+
+#: src/components/error/error-message-data.js
+msgid "Woah, you can't touch this!"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "year"
+msgstr ""
+
+#: src/components/issue-formatter/issue-formatter.js
+msgid "years"
+msgstr ""
+
+#: src/components/error/error-message-data.js
+msgid "You don't have sufficient permissions."
+msgstr ""
+
+#: src/views/inbox/inbox.js
+msgid "You have no notifications"
+msgstr ""
+
+#: src/views/log-in/log-in.js
+msgid "You need a YouTrack account to use the app.\n"
+" By logging in, you agree to the "
+msgstr ""
+
+#: src/components/error/error-message-data.js
+msgid "Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n\n"
+"To log in on this screen, enter your username and a one-time application password."
+msgstr ""
+
+#: src/components/error/error-messages.js
+msgid "YouTrack does not support push notifications"
+msgstr ""
+
+#: src/components/log/log.js
+msgid "YouTrack Mobile render crash logs"
+msgstr ""
+
