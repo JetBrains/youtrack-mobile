@@ -29,3 +29,8 @@ task crowdinDownload(type: org.jetbrains.crowdin.CrowdinDownloadTask) {
   fileMapping = ['youtrack-mobile' : "$projectDir/../translations"]
   finalizedBy tasks.generateEnglishLocale
 }
+
+task crowdinSync(type: DefaultTask) {
+  dependsOn tasks.crowdinUpload
+  finalizedBy tasks.crowdinDownload
+}
