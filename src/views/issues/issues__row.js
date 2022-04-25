@@ -8,8 +8,8 @@ import Tags from 'components/tags/tags';
 import {
   getPriotityField,
   getEntityPresentation,
-  relativeDate,
   getReadableID,
+  ytDate,
 } from 'components/issue-formatter/issue-formatter';
 
 import Avatar from 'components/avatar/avatar';
@@ -80,7 +80,7 @@ export default class IssueRow extends Component<Props, void> {
                   </Text>
 
                   {Boolean(issue.updated || issue.reporter) && <View style={styles.headRight}>
-                    {!!issue.updated && <Text style={styles.secondaryText}>{`${relativeDate(issue.updated)}  `}</Text>}
+                    {!!issue.updated && <Text style={styles.secondaryText}>{`${ytDate(issue.updated)}  `}</Text>}
                     {!issue.reporter && <Avatar
                       userName={getEntityPresentation(issue.reporter)}
                       size={20}
