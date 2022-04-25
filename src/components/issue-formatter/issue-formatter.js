@@ -66,10 +66,7 @@ function formatDate(date: Date|number): string {
   return `${dateObj.toLocaleString(getDeviceLocale(), {year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute:'2-digit'})}`;
 }
 
-function ytDate(date: Date | number, noTime: boolean = false): string {
-  if (date == null) {
-    return '';
-  }
+function getDateFormatPattern(noTime: boolean = false): string {
   const currentUser: User = BaseAPI.getUser();
   const dateFieldFormat: ?UserDateFieldFormat = currentUser?.profiles?.general?.dateFieldFormat;
   let formatPattern: string;
@@ -78,7 +75,11 @@ function ytDate(date: Date | number, noTime: boolean = false): string {
   } else {
     formatPattern = dateFieldFormat ? dateFieldFormat.pattern : DEFAULT_DATE_TIME_PATTERN;
   }
-  return format(date, formatPattern);
+  return formatPattern;
+}
+
+function ytDate(date?: Date | number, noTime?: boolean): string {
+  return date == null ? '' : format(date, getDateFormatPattern(noTime));
 }
 
 function getPostfix(formattedDate: string) {
