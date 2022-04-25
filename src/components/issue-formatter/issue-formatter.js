@@ -1,14 +1,13 @@
 /* @flow */
 
-import fromNow from 'from-now';
 import RNLocalize from 'react-native-localize';
-import {format} from 'date-fns';
+import {format, formatDistanceToNow} from 'date-fns';
 
 import BaseAPI from '../api/api__base';
 
+import type {AnyIssue} from 'flow/Issue';
 import type {CustomField} from 'flow/CustomFields';
 import type {User, UserDateFieldFormat} from 'flow/User';
-import type {AnyIssue} from 'flow/Issue';
 
 type Locale = {
   languageCode: string,
@@ -21,16 +20,6 @@ type Locale = {
 export const DEFAULT_DATE_PATTERN: string = 'd MMM yyyy';
 export const DEFAULT_DATE_TIME_PATTERN: string = 'd MMM yyyy HH:mm';
 
-const shortRelativeFormat = {
-  'now': 'just now',
-  'seconds': ['sec', 'sec'],
-  'minutes': ['min', 'min'],
-  'hours': ['hr', 'hr'],
-  'days': ['d', 'd'],
-  'weeks': ['w', 'w'],
-  'months': ['mon', 'mon'],
-  'years': ['y', 'y'],
-};
 
 function getForText(assignee: User | Array<User>): string {
   if (Array.isArray(assignee) && assignee.length > 0) {
@@ -44,26 +33,13 @@ function getForText(assignee: User | Array<User>): string {
   return '    Unassigned';
 }
 
-/**
- * fromNow does not format date if it is not past. But such situation could happen if there are a little time shift on server/client.
- */
-function makeDatePast(date: Date|number) {
-  const dateObj = new Date(date);
-  if (dateObj.getTime() >= Date.now()) {
-    return Date.now();
-  }
-
-  return date;
+function getDeviceLocale(): Locale {
+  return RNLocalize.getLocales()[0];
 }
 
-function getDeviceLocale(): string {
-  const locales: Array<Locale> = RNLocalize.getLocales();
-  return locales[0] && locales[0].languageTag;
-}
-
-function formatDate(date: Date|number): string {
-  const dateObj = new Date(date);
-  return `${dateObj.toLocaleString(getDeviceLocale(), {year: '2-digit', month: 'short', day: '2-digit', hour: '2-digit', minute:'2-digit'})}`;
+function isAbsoluteDates(): boolean {
+  const currentUser: User = BaseAPI.getUser();
+  return !!currentUser?.profiles?.appearance?.useAbsoluteDates;
 }
 
 function getDateFormatPattern(noTime: boolean = false): string {
@@ -79,29 +55,25 @@ function getDateFormatPattern(noTime: boolean = false): string {
 }
 
 function ytDate(date?: Date | number, noTime?: boolean): string {
-  return date == null ? '' : format(date, getDateFormatPattern(noTime));
-}
+  if (date == null) {
+    return '';
+  }
 
-function getPostfix(formattedDate: string) {
-  return formattedDate === 'just now' ? '' : ' ago';
-}
+  if (isAbsoluteDates()) {
+    return format(date, getDateFormatPattern(noTime));
+  }
 
-function relativeDate(date: Date|number): string {
-  date = makeDatePast(date);
-  const formatted = fromNow(date, {now: 'just now'});
-  return `${formatted}${getPostfix(formatted)}`;
+  if ((Date.now() - date) <= 60 * 1000) {
+    return 'just now';
+  }
+
+  return formatDistanceToNow(date, {addSuffix: true});
 }
 
 function absDate(date: Date|number, localeString: ?string): string {
   const utcDate = new Date(date);
-  const locale: Array<string> | string = localeString ? [localeString] : getDeviceLocale();
+  const locale: Array<string> | string = localeString ? [localeString] : getDeviceLocale().languageTag;
   return utcDate.toLocaleTimeString(locale, {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
-}
-
-function shortRelativeDate(date: Date|number): string {
-  date = makeDatePast(date);
-  const formatted = fromNow(date, shortRelativeFormat);
-  return `${formatted}${getPostfix(formatted)}`;
 }
 
 function findIssueField(issue: AnyIssue, predicate: (field: CustomField) => boolean): ?CustomField {
@@ -163,6 +135,12 @@ function getVisibilityPresentation(entity: Object): null | string {
 }
 
 export {
-  getForText, formatDate, relativeDate, shortRelativeDate, getPriotityField, getAssigneeField, getReadableID,
-  getVisibilityPresentation, getEntityPresentation, absDate, ytDate,
+  getForText,
+  getPriotityField,
+  getAssigneeField,
+  getReadableID,
+  getVisibilityPresentation,
+  getEntityPresentation,
+  absDate,
+  ytDate,
 };

@@ -212,42 +212,72 @@ describe('Issue formatter', () => {
       expect(ytDate(null)).toEqual('');
     });
 
-    describe('default format', () => {
-      beforeEach(() => {
-        BaseAPI.getUser.mockReturnValueOnce(
-          mocks.createUserMock(createUserProfileMock(DEFAULT_DATE_TIME_PATTERN, DEFAULT_DATE_PATTERN))
-        );
+    describe('Absolute dates', () => {
+
+      describe('default format', () => {
+        beforeEach(() => {
+          BaseAPI.getUser.mockReturnValue(
+            mocks.createUserMock(createUserProfileMock(DEFAULT_DATE_TIME_PATTERN, DEFAULT_DATE_PATTERN))
+          );
+        });
+
+        it('should return date in a default format', () => {
+          expect(ytDate(testDate)).toEqual('20 Mar 2020 17:48');
+        });
+
+        it('should return date without the time in a default format', () => {
+          expect(ytDate(testDate, true)).toEqual('20 Mar 2020');
+        });
       });
 
-      it('should return date in a default format', () => {
-        expect(ytDate(testDate)).toEqual('20 Mar 2020 17:48');
-      });
+      describe('custom format', () => {
+        beforeEach(() => {
+          BaseAPI.getUser.mockReturnValue(
+            mocks.createUserMock(createUserProfileMock('d MMM yyyy hh:mm aaa', 'd/MM/yyyy'))
+          );
+        });
 
-      it('should return date without the time in a default format', () => {
-        expect(ytDate(testDate, true)).toEqual('20 Mar 2020');
+        it('should return date string from the user`s profile', () => {
+          expect(ytDate(testDate)).toEqual('20 Mar 2020 05:48 pm');
+        });
+
+        it('should return date string from the user`s profile without the time', () => {
+          expect(ytDate(testDate, true)).toEqual('20/03/2020');
+        });
       });
     });
 
-    describe('custom format', () => {
+    describe('Relative dates', () => {
       beforeEach(() => {
-        BaseAPI.getUser.mockReturnValueOnce(
-          mocks.createUserMock(createUserProfileMock('d MMM yyyy hh:mm aaa', 'd/MM/yyyy'))
+        BaseAPI.getUser.mockReturnValue(
+          mocks.createUserMock(createUserProfileMock(DEFAULT_DATE_TIME_PATTERN, DEFAULT_DATE_PATTERN, false))
         );
       });
 
-      it('should return date string from the user`s profile', async () => {
-        expect(ytDate(testDate)).toEqual('20 Mar 2020 05:48 pm');
+      it('should return `just now`', () => {
+        expect(ytDate(Date.now())).toEqual('just now');
       });
 
-      it('should return date string from the user`s profile without the time', () => {
-        expect(ytDate(testDate, true)).toEqual('20/03/2020');
+      it('should return date in minutes', () => {
+        expect(ytDate(Date.now() - 60 * 1000 * 2)).toEqual('2 minutes ago');
+      });
+
+      it('should return date in hours', () => {
+        expect(ytDate(Date.now() - 60 * 1000 * 60 * 2)).toEqual('about 2 hours ago');
+      });
+
+      it('should return date in years', () => {
+        expect(ytDate(Date.now() - 60 * 1000 * 60 * 24 * 366)).toEqual('about 1 year ago');
       });
     });
 
 
-    function createUserProfileMock(pattern, datePattern) {
+    function createUserProfileMock(pattern, datePattern, useAbsoluteDates = true) {
       return {
         profiles: {
+          appearance: {
+            useAbsoluteDates,
+          },
           general: {
             dateFieldFormat: {
               pattern,

@@ -77,7 +77,6 @@
     "date-fns": "2.28.0",
     "diff-match-patch": "1.0.5",
     "entities": "2.2.0",
-    "from-now": "1.0.2",
     "htmlparser-to-html": "0.0.6",
     "lodash.debounce": "4.0.8",
     "lodash.once": "4.1.1",

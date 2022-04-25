@@ -55,7 +55,7 @@ export default class UserAPI extends ApiBase {
               'pattern',
             ],
           },
-          appearance: ['naturalCommentsOrder'],
+          appearance: ['naturalCommentsOrder', 'useAbsoluteDates'],
           articles: {
             lastVisitedArticle: ['id,idReadable,summary,project(id,ringId)'],
           },
