@@ -2,7 +2,6 @@ import React from 'react';
 import {View} from 'react-native';
 
 import {shallow} from 'enzyme';
-import toJson from 'enzyme-to-json';
 
 import UserInfo from './user-info';
 
@@ -28,10 +27,6 @@ describe('<UserInfo/>', () => {
 
 
   describe('Render', () => {
-    it('should match a snapshot', () => {
-      expect(toJson(wrapper)).toMatchSnapshot();
-    });
-
     it('should render component', () => {
       expect(findByTestId('UserInfo')).toHaveLength(1);
     });

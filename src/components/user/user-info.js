@@ -4,7 +4,7 @@ import type {Node} from 'react';
 import {View, Text} from 'react-native';
 import React, {PureComponent} from 'react';
 
-import {getEntityPresentation, relativeDate} from '../issue-formatter/issue-formatter';
+import {getEntityPresentation, ytDate} from '../issue-formatter/issue-formatter';
 
 import styles from './user-info.styles';
 
@@ -53,12 +53,11 @@ export default class UserInfo extends PureComponent<Props, void> {
           {!!additionalInfo && <Text testID="UserAdditionalInfo">{additionalInfo}</Text>}
         </Text>}
 
-        <View
-          testID="UserInfoTimestamp"
-          style={styles.timestampContainer}
-        >
-          <Text style={styles.timestamp}>
-            {relativeDate(timestamp)}
+        <View style={styles.timestampContainer}>
+          <Text
+            testID="UserInfoTimestamp"
+            style={styles.timestamp}>
+            {ytDate(timestamp)}
           </Text>
         </View>
       </View>
