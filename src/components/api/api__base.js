@@ -9,6 +9,7 @@ import {routeMap} from '../../app-routes';
 
 import type Auth from '../auth/oauth2';
 import type {AppConfig} from 'flow/AppConfig';
+import type {User} from '../../flow/User';
 
 const MAX_QUERY_LENGTH = 2048;
 
@@ -59,6 +60,8 @@ export default class BaseAPI {
   youTrackIssueUrl: string;
   youTrackApiUrl: string;
 
+  user: User;
+
   constructor(auth: Auth) {
     this.auth = auth;
     this.config = auth.config;
@@ -76,6 +79,14 @@ export default class BaseAPI {
       }),
       opts
     );
+  }
+
+  static setUser(user: User) {
+    BaseAPI.user = user;
+  }
+
+  static getUser() {
+    return BaseAPI.user;
   }
 
   async makeAuthorizedRequest(

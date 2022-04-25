@@ -21,9 +21,6 @@ export type User = {
     majorVersion: string,
     minorVersion: string,
   },
-  star: {
-    id: string,
-  }
 };
 
 export type IssueRelatedGroup = {
@@ -69,10 +66,23 @@ export type UserArticlesProfile = {
   showHistory?: boolean,
 }
 
+export type UserDateFieldFormat = {
+  dateNoYearPattern: string,
+  datePattern: string,
+  pattern: string,
+};
+
 export type UserGeneralProfile = {
   $type: string,
   id: string,
   searchContext?: ?Folder,
+  timezone: {
+    id: string,
+  },
+  dateFieldFormat: UserDateFieldFormat,
+  star: {
+    id: string,
+  },
 }
 
 export type Folder = {

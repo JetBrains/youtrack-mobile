@@ -48,6 +48,12 @@ export default class UserAPI extends ApiBase {
           general: {
             star: ['id'],
             searchContext: this.SEARCH_CONTEXT_FIELDS,
+            timezone: ['id'],
+            dateFieldFormat: [
+              'dateNoYearPattern',
+              'datePattern',
+              'pattern',
+            ],
           },
           appearance: ['naturalCommentsOrder'],
           articles: {
@@ -59,6 +65,7 @@ export default class UserAPI extends ApiBase {
 
     const user: User = await this.makeAuthorizedRequest(`${this.adminApiUrl}/${userId}?${queryString}`);
     user.avatarUrl = handleRelativeUrl(user.avatarUrl, this.config.backendUrl);
+    ApiBase.setUser(user);
     return user;
   }
 

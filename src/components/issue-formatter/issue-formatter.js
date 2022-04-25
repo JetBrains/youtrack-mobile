@@ -2,9 +2,12 @@
 
 import fromNow from 'from-now';
 import RNLocalize from 'react-native-localize';
+import {format} from 'date-fns';
+
+import BaseAPI from '../api/api__base';
 
 import type {CustomField} from 'flow/CustomFields';
-import type {User} from 'flow/User';
+import type {User, UserDateFieldFormat} from 'flow/User';
 import type {AnyIssue} from 'flow/Issue';
 
 type Locale = {
@@ -61,19 +64,15 @@ function formatDate(date: Date|number): string {
 }
 
 function ytDate(date: Date | number, noTime: boolean = false): string {
-  const dateObj = new Date(date);
-  //$FlowFixMe
-  return `${dateObj.toLocaleString(getDeviceLocale(), Object.assign(
-    {
-      month: 'short',
-      day: '2-digit',
-      year: 'numeric',
-    },
-    noTime ? {} : {
-      hour: '2-digit',
-      minute: '2-digit',
-    }
-  ))}`;
+  const currentUser: User = BaseAPI.getUser();
+  const dateFieldFormat: ?UserDateFieldFormat = currentUser?.profiles?.general?.dateFieldFormat;
+  let formatPattern: string;
+  if (noTime) {
+    formatPattern = dateFieldFormat ? dateFieldFormat.datePattern : 'd MMM yyyy';
+  } else {
+    formatPattern = dateFieldFormat ? dateFieldFormat.pattern : 'd MMM yyyy HH:mm';
+  }
+  return format(date, formatPattern);
 }
 
 function getPostfix(formattedDate: string) {
