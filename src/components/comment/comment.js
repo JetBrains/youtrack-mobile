@@ -7,7 +7,7 @@ import React from 'react';
 import Avatar from '../avatar/avatar';
 import MarkdownView from '../wiki/markdown-view';
 import YoutrackWiki from '../wiki/youtrack-wiki';
-import {relativeDate, getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {getEntityPresentation, ytDate} from '../issue-formatter/issue-formatter';
 
 import styles from './comment.styles';
 
@@ -137,7 +137,7 @@ function Comment(props: Props) {
             {userPresentation}
           </Text>
           <Text style={{color: uiTheme.colors.$icon}}>
-            {' '}{relativeDate(comment.created)}
+            {' '}{ytDate(comment.created)}
           </Text>
         </Text>
         <View style={styles.commentText}>

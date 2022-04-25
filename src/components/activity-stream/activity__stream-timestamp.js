@@ -3,7 +3,7 @@
 import React from 'react';
 import {Text} from 'react-native';
 
-import {relativeDate} from '../issue-formatter/issue-formatter';
+import {ytDate} from '../issue-formatter/issue-formatter';
 
 import styles from './activity__stream.styles';
 
@@ -21,7 +21,7 @@ const StreamTimestamp = (props: Props) => {
   }
   return (
     <Text style={[styles.activityTimestamp, props.style]}>
-      {relativeDate(props.timestamp)}
+      {ytDate(props.timestamp)}
     </Text>
   );
 

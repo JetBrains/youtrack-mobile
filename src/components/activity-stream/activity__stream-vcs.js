@@ -17,7 +17,7 @@ import {
 } from './activity__stream-vcs-helper';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconCaretDownUp} from '../icon/icon';
-import {relativeDate} from '../issue-formatter/issue-formatter';
+import {ytDate} from '../issue-formatter/issue-formatter';
 
 import styles from './activity__stream.styles';
 
@@ -134,7 +134,7 @@ const StreamVCS = (props: Props) => {
       <View style={styles.activityChange}>
         <View style={styles.vcsInfo}>
           {!!date && (
-            <Text style={[styles.vcsInfoDate, styles.secondaryTextColor]}>{title}{' '}{relativeDate(date)}</Text>
+            <Text style={[styles.vcsInfoDate, styles.secondaryTextColor]}>{title}{' '}{ytDate(date)}</Text>
           )}
 
           {Boolean(vcs.version && processors) && (
