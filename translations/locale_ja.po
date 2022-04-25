@@ -37,11 +37,6 @@ msgid "{{amount}} article"
 msgid_plural "{{amount}} articles"
 msgstr[0] ""
 
-#: src/components/activity/activity__history-title.js
-msgid "{{amount}} Attachment"
-msgid_plural "{{amount}} Attachments"
-msgstr[0] ""
-
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "{{amount}} file"
 msgid_plural "{{amount}} files"
@@ -52,25 +47,8 @@ msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
 msgstr[0] ""
 
-#: src/components/activity/activity__history-title.js
-msgid "{{amount}} Tag"
-msgid_plural "{{amount}} Tags"
-msgstr[0] ""
-
-#: src/views/inbox/inbox.js
-msgid "{{eventName}} changed"
-msgstr ""
-
 #: src/components/issue-formatter/issue-formatter.js
 msgid "{{minutesOrHoursOrDaysOrMonthOrYears}} ago"
-msgstr ""
-
-#: src/views/settings/settings__appearance.js
-msgid "{{themeName}} theme"
-msgstr ""
-
-#: src/actions/app-actions.js
-msgid "`\"{{url}}\" doesn't match the configured server`"
 msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.js
@@ -82,10 +60,6 @@ msgstr ""
 msgid "Accept"
 msgstr ""
 
-#: src/actions/app-actions.js
-msgid "Account doesn't have valid authorization, cannot switch onto it."
-msgstr ""
-
 #: src/components/issue-tabbed/issue-tabbed.js
 msgid "Activity"
 msgstr ""
@@ -94,12 +68,8 @@ msgstr ""
 msgid "Activity Settings"
 msgstr ""
 
-#: src/components/attachments-row/attachments-add-panel.js
-msgid "Add attachment"
-msgstr ""
-
 #: src/views/knowledge-base/knowledge-base.js
-msgid "Add some project to favorites"
+msgid "Add project to favorites"
 msgstr ""
 
 #: src/components/comment/comment-edit.js
@@ -119,10 +89,6 @@ msgstr ""
 msgid "added a reaction"
 msgstr ""
 
-#: src/views/agile-board/board-updaters.js
-msgid "Agile board settings have been changed. Reload the board."
-msgstr ""
-
 #: src/views/settings/settings__appearance.js
 #: src/views/settings/settings.js
 msgid "Appearance"
@@ -130,7 +96,7 @@ msgstr ""
 
 #: src/views/create-issue/create-issue-actions.js
 #: src/views/issue/issue-base-actions-creater.js
-msgid "Apply command…"
+msgid "Apply command?"
 msgstr ""
 
 #: src/views/article/arcticle-helper.js
@@ -146,7 +112,7 @@ msgid "Are you sure you want to delete this draft?"
 msgstr ""
 
 #: src/views/issue/activity/issue-activity__actions.js
-msgid "Are you sure you want to delete work item?"
+msgid "Are you sure you want to delete this work item?"
 msgstr ""
 
 #: src/views/article/arcticle-actions.js
@@ -171,8 +137,14 @@ msgid "Attach file"
 msgstr ""
 
 #: src/components/attach-file/attach-file-dialog.js
+#: src/components/attachments-row/attachments-add-panel.js
 msgid "Attach files"
 msgstr ""
+
+#: src/components/activity/activity__history-title.js
+msgid "Attachment"
+msgid_plural "Attachments"
+msgstr[0] ""
 
 #: src/components/attachments-row/attachment-actions.js
 msgid "Attachment deleted"
@@ -182,20 +154,16 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: src/components/error/error-messages.js
-msgid "Bad Request"
-msgstr ""
-
 #: src/views/attachment-preview/attachment-preview.js
 msgid "Browser"
 msgstr ""
 
 #: src/components/error-boundary/error-boundary.js
-msgid "Bugsnag privacy policy"
+msgid "Bugsnag Privacy Policy"
 msgstr ""
 
-#: src/components/error/error-messages.js
-msgid "Can't find entity with id"
+#: src/views/log-in/log-in.js
+msgid "By logging in, you agree to the Privacy Policy."
 msgstr ""
 
 #: src/components/activity-stream/activity__stream-work.js
@@ -214,7 +182,7 @@ msgstr ""
 
 #: src/components/attach-file/attach-file-dialog.js
 #: src/components/attachments-row/attachment-actions.js
-msgid "Choose from library…"
+msgid "Choose from library?"
 msgstr ""
 
 #: src/components/debug-view/debug-view.js
@@ -242,16 +210,20 @@ msgstr ""
 msgid "Command applied"
 msgstr ""
 
+#: src/components/activity/activity__history-title.js
+msgid "Comment changed"
+msgstr ""
+
+#: src/components/comment/comment.js
+msgid "Comment deleted"
+msgstr ""
+
 #: src/views/issue/activity/issue-activity__comment-actions.js
 msgid "Comment updated"
 msgstr ""
 
 #: src/views/issue/activity/issue-activity__comment-actions.js
 msgid "Comment URL copied"
-msgstr ""
-
-#: src/components/comment/comment.js
-msgid "Comment was deleted."
 msgstr ""
 
 #: src/components/error-boundary/error-boundary.js
@@ -288,7 +260,7 @@ msgid "Copy URL"
 msgstr ""
 
 #: src/components/error-boundary/error-boundary.js
-msgid "Crash has been reported"
+msgid "Crash report sent"
 msgstr ""
 
 #: src/views/issue/issue__details.js
@@ -297,6 +269,10 @@ msgstr ""
 
 #: src/views/create-issue/create-issue.js
 msgid "Current issue"
+msgstr ""
+
+#: src/views/settings/settings__appearance.js
+msgid "Dark theme"
 msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.js
@@ -396,15 +372,11 @@ msgid "Enter search request"
 msgstr ""
 
 #: src/components/custom-fields-panel/custom-fields-panel.js
-msgid "Enter time"
+msgid "Enter time value"
 msgstr ""
 
 #: src/views/enter-server/enter-server.js
 msgid "Enter your YouTrack server URL"
-msgstr ""
-
-#: src/components/error-boundary/error-boundary.js
-msgid "Failed to restart the app automatically. Try restart it manually."
 msgstr ""
 
 #: src/views/settings/settings-helper.js
@@ -475,7 +447,7 @@ msgid "If this isn't what you expected, you might try one of these solutions:"
 msgstr ""
 
 #: src/components/error-boundary/error-boundary.js
-msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service, that help us diagnose and fix problems faster, monitor application stability.We will only share error report data with Bugsnag if you agree to do so."
+msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
 msgstr ""
 
 #: src/views/article/article.js
@@ -511,7 +483,7 @@ msgid "It could mean that the issue doesn't exist or you don't have permission t
 msgstr ""
 
 #: src/components/error-boundary/error-boundary.js
-msgid "JetBrains privacy policy"
+msgid "JetBrains Privacy Policy"
 msgstr ""
 
 #: src/components/issue-formatter/issue-formatter.js
@@ -525,6 +497,10 @@ msgstr ""
 #: src/components/error/error-message-data.js
 #: src/components/error/error-message-data.js
 msgid "License error"
+msgstr ""
+
+#: src/views/settings/settings__appearance.js
+msgid "Light theme"
 msgstr ""
 
 #: src/components/linked-issues/linked-issues-add-link.js
@@ -637,16 +613,8 @@ msgstr ""
 msgid "Nope, can't find it!"
 msgstr ""
 
-#: src/components/error/error-messages.js
-msgid "Not implemented"
-msgstr ""
-
 #: src/views/inbox/inbox.js
 msgid "Notifications"
-msgstr ""
-
-#: src/views/settings/settings.js
-msgid "open debug settings"
 msgstr ""
 
 #: src/views/settings/settings-helper.js
@@ -655,10 +623,6 @@ msgstr ""
 
 #: src/views/log-in/log-in.js
 msgid "Password"
-msgstr ""
-
-#: src/views/log-in/log-in.js
-msgid "Privacy Policy."
 msgstr ""
 
 #: src/views/settings/settings-helper.js
@@ -673,18 +637,9 @@ msgstr ""
 msgid "Projects expanded"
 msgstr ""
 
-#: src/components/error/error-messages.js
-#: src/components/error/error-messages.js
-msgid "Push notification is not supported: "
-msgstr ""
-
 #: src/components/query-assist/query-assist-helper.js
 #: src/views/issues/issues-actions.js
 msgid "Recent searches"
-msgstr ""
-
-#: src/components/error/error-messages.js
-msgid "remote notifications are not supported in the simulator"
 msgstr ""
 
 #: src/views/knowledge-base/knowledge-base-actions.js
@@ -788,10 +743,6 @@ msgstr ""
 msgid "Share article URL"
 msgstr ""
 
-#: src/components/log/log.js
-msgid "Share issue URL"
-msgstr ""
-
 #: src/views/settings/settings.js
 msgid "Share logs"
 msgstr ""
@@ -804,15 +755,11 @@ msgstr ""
 #: src/views/article/arcticle-actions.js
 #: src/views/article/arcticle-actions.js
 #: src/views/issue/issue-base-actions-creater.js
-msgid "Share…"
+msgid "Share?"
 msgstr ""
 
 #: src/components/tags/tags.js
 msgid "Show all issues tagged with \"{{tagName}}\"..."
-msgstr ""
-
-#: src/components/error-boundary/error-boundary.js
-msgid "Show logs"
 msgstr ""
 
 #: src/components/error/error-message-data.js
@@ -857,21 +804,42 @@ msgstr ""
 msgid "Summary changed"
 msgstr ""
 
+#: src/views/settings/settings__appearance.js
+msgid "Sync with OS"
+msgstr ""
+
+#: src/components/activity/activity__history-title.js
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] ""
+
 #: src/components/attach-file/attach-file-dialog.js
 #: src/components/attachments-row/attachment-actions.js
-msgid "Take a picture…"
+msgid "Take a picture?"
 msgstr ""
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Thank you for your feedback!"
 msgstr ""
 
+#: src/components/error-boundary/error-boundary.js
+msgid "The application failed to restart automatically. Please try to restart it manually."
+msgstr ""
+
 #: src/views/agile-board/agile-board.js
 msgid "The board {{boardName}} has configuration errors"
 msgstr ""
 
+#: src/actions/app-actions.js
+msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
+msgstr ""
+
 #: src/components/error/error-message-data.js
 msgid "The server is overloaded or down for maintenance"
+msgstr ""
+
+#: src/views/agile-board/board-updaters.js
+msgid "The settings for this agile board have been updated. Please reload the board."
 msgstr ""
 
 #: src/views/article/arcticle-helper.js
@@ -954,29 +922,20 @@ msgstr ""
 msgid "years"
 msgstr ""
 
-#: src/components/error/error-message-data.js
-msgid "You don't have sufficient permissions."
-msgstr ""
-
 #: src/views/inbox/inbox.js
-msgid "You have no notifications"
+msgid "You haven?t received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 msgstr ""
 
 #: src/views/log-in/log-in.js
 msgid "You need a YouTrack account to use the app.\n"
-" By logging in, you agree to the "
+msgstr ""
+
+#: src/components/error/error-message-data.js
+msgid "Your account has insufficient permission to perform this operation."
 msgstr ""
 
 #: src/components/error/error-message-data.js
 msgid "Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n\n"
 "To log in on this screen, enter your username and a one-time application password."
-msgstr ""
-
-#: src/components/error/error-messages.js
-msgid "YouTrack does not support push notifications"
-msgstr ""
-
-#: src/components/log/log.js
-msgid "YouTrack Mobile render crash logs"
 msgstr ""
 
