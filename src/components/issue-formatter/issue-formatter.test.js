@@ -204,7 +204,7 @@ describe('Issue formatter', () => {
     beforeEach(() => {
       jest.restoreAllMocks();
       jest.spyOn(BaseAPI, 'getUser');
-      testDate = 1584722920873;
+      testDate = new Date('March 20, 2020 17:48:30 GMT+01:00');
     });
 
     it('should return empty string if no date is provided', () => {
