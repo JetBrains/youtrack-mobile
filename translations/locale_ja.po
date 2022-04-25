@@ -923,7 +923,7 @@ msgid "years"
 msgstr ""
 
 #: src/views/inbox/inbox.js
-msgid "You haven?t received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
+msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 msgstr ""
 
 #: src/views/log-in/log-in.js
