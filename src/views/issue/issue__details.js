@@ -211,14 +211,14 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
             style={styles.issueTopPanelText}
             selectable={true}
           >
-            Created by {getEntityPresentation(issue.reporter)} {ytDate(issue?.created) || ''}
+            Created by {getEntityPresentation(issue.reporter)} {ytDate(issue?.created)}
           </Text>
 
           <Text
             style={[styles.issueTopPanelText, styles.topPanelUpdatedInformation]}
             selectable={true}
           >
-            Updated by {getEntityPresentation(issue.updater)} {ytDate(issue?.updated) || ''}
+            Updated by {getEntityPresentation(issue.updater)} {ytDate(issue?.updated)}
           </Text>
         </View>
         : <SkeletonIssueInfoLine lines={2}/>

@@ -18,6 +18,9 @@ type Locale = {
   isRTL: boolean,
 };
 
+export const DEFAULT_DATE_PATTERN: string = 'd MMM yyyy';
+export const DEFAULT_DATE_TIME_PATTERN: string = 'd MMM yyyy HH:mm';
+
 const shortRelativeFormat = {
   'now': 'just now',
   'seconds': ['sec', 'sec'],
@@ -64,13 +67,16 @@ function formatDate(date: Date|number): string {
 }
 
 function ytDate(date: Date | number, noTime: boolean = false): string {
+  if (date == null) {
+    return '';
+  }
   const currentUser: User = BaseAPI.getUser();
   const dateFieldFormat: ?UserDateFieldFormat = currentUser?.profiles?.general?.dateFieldFormat;
   let formatPattern: string;
   if (noTime) {
-    formatPattern = dateFieldFormat ? dateFieldFormat.datePattern : 'd MMM yyyy';
+    formatPattern = dateFieldFormat ? dateFieldFormat.datePattern : DEFAULT_DATE_PATTERN;
   } else {
-    formatPattern = dateFieldFormat ? dateFieldFormat.pattern : 'd MMM yyyy HH:mm';
+    formatPattern = dateFieldFormat ? dateFieldFormat.pattern : DEFAULT_DATE_TIME_PATTERN;
   }
   return format(date, formatPattern);
 }
