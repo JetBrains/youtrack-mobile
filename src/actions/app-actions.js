@@ -682,7 +682,7 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
     );
 
     if (!config.l10n) {
-      const updatedConfig: AppConfig = await refreshConfig(config);
+      const updatedConfig: AppConfig = await refreshConfig(config.backendUrl);
       return await dispatch(initializeApp(updatedConfig, issueId, navigateToActivity));
     } else {
       loadTranslation(config.l10n.locale, config.l10n.language);

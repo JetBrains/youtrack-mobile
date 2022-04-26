@@ -88,11 +88,6 @@ describe('Config', () => {
       );
     });
 
-    it('should not add fields to URL if it is version detect fallback URL', async() => {
-      await loadConfig('http://fake.backend/rest/workflow/version');
-      fetch.should.have.been.calledWith('http://fake.backend/rest/workflow/version', sinon.match.object);
-    });
-
     it('should throw IncompatibleYouTrackError if old YouTrack entered', (done) => {
       responseJson.version = '6.5';
       loadConfig('http://fake.backend')

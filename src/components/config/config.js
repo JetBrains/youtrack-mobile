@@ -6,6 +6,7 @@ import log from '../log/log';
 import {YT_SUPPORTED_VERSION} from '../error-message/error-text-messages';
 
 import type {AppConfig} from 'flow/AppConfig';
+import type {CustomError} from '../../flow/Error';
 
 const MIN_YT_VERSION = 7.0;
 const PROTOCOL_REGEXP = /^https?:\/\//i;
@@ -33,7 +34,7 @@ class IncompatibleYouTrackError extends Error {
   isIncompatibleYouTrackError = true;
 }
 
-function handleIncompatibleYouTrack(response: Object, ytUrl: string) {
+function handleIncompatibleYouTrack(response: CustomError, ytUrl: string) {
   ytUrl = ytUrl.replace(VERSION_DETECT_FALLBACK_URL, '');
 
   //Handle very old (6.5 and below) instances
@@ -72,9 +73,7 @@ function formatYouTrackURL(url: string): string {
 }
 
 async function loadConfig(ytUrl: string): Promise<any> {
-  const url = ytUrl.includes(VERSION_DETECT_FALLBACK_URL) ?
-    ytUrl :
-    `${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled,l10n(language,locale)`;
+  const url: string = `${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled,l10n(language,locale)`;
   return fetch(url, {
     method: 'GET',
     headers: {
