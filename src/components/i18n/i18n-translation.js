@@ -13,18 +13,18 @@ const DEFAULT_LANGUAGE: string = 'en';
 export function loadTranslation(localeString: string = `${DEFAULT_LANGUAGE}-US`, language: string = '') {
   try {
     const translationsMap = {
-      de: require('translations/locale_de.json'),
-      ru: require('translations/locale_ru.json'),
-      es: require('translations/locale_es.json'),
-      fr: require('translations/locale_fr.json'),
-      cs: require('translations/locale_cs.json'),
-      he: require('translations/locale_he.json'),
-      hu: require('translations/locale_hu.json'),
-      ja: require('translations/locale_ja.json'),
-      ko: require('translations/locale_ko.json'),
-      zh: require('translations/locale_zh.json'),
-      pt: require('translations/locale_pt.json'),
-      pl: require('translations/locale_pl.json'),
+      de: require('../../../translations/locale_de.json'),
+      ru: require('../../../translations/locale_ru.json'),
+      es: require('../../../translations/locale_es.json'),
+      fr: require('../../../translations/locale_fr.json'),
+      cs: require('../../../translations/locale_cs.json'),
+      he: require('../../../translations/locale_he.json'),
+      hu: require('../../../translations/locale_hu.json'),
+      ja: require('../../../translations/locale_ja.json'),
+      ko: require('../../../translations/locale_ko.json'),
+      zh: require('../../../translations/locale_zh.json'),
+      pt: require('../../../translations/locale_pt.json'),
+      pl: require('../../../translations/locale_pl.json'),
     };
 
     const lang: string = language.toLowerCase();
