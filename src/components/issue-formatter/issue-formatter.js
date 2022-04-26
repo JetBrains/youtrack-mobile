@@ -2,20 +2,7 @@
 
 import type {AnyIssue} from 'flow/Issue';
 import type {CustomField} from 'flow/CustomFields';
-import type {User} from 'flow/User';
 
-
-function getForText(assignee: User | Array<User>): string {
-  if (Array.isArray(assignee) && assignee.length > 0) {
-    return assignee
-      .map(it => getForText(it))
-      .join(', ');
-  }
-  if (assignee && !Array.isArray(assignee)) {
-    return `for ${getEntityPresentation(assignee)}`;
-  }
-  return '    Unassigned';
-}
 
 function findIssueField(issue: AnyIssue, predicate: (field: CustomField) => boolean): ?CustomField {
   const fields: Array<CustomField> = issue.fields || [];
@@ -76,7 +63,6 @@ function getVisibilityPresentation(entity: Object): null | string {
 }
 
 export {
-  getForText,
   getPriotityField,
   getAssigneeField,
   getReadableID,
