@@ -2,8 +2,22 @@
 
 import RNLocalize from 'react-native-localize';
 
-import {getStorageState} from '../storage/storage';
+import {getStorageState} from 'components/storage/storage';
 import {format, formatDistanceToNow} from 'date-fns';
+import {i18n} from 'components/i18n/i18n';
+
+import deLocale from 'date-fns/locale/de';
+import ruLocale from 'date-fns/locale/ru';
+import esLocale from 'date-fns/locale/es';
+import frLocale from 'date-fns/locale/fr';
+import csLocale from 'date-fns/locale/cs';
+import heLocale from 'date-fns/locale/he';
+import huLocale from 'date-fns/locale/hu';
+import jaLocale from 'date-fns/locale/ja';
+import koLocale from 'date-fns/locale/ko';
+import zhLocale from 'date-fns/locale/zh-CN';
+import ptLocale from 'date-fns/locale/pt';
+import plLocale from 'date-fns/locale/pl';
 
 import type {User, UserDateFieldFormat} from '../../flow/User';
 
@@ -18,6 +32,20 @@ type Locale = {
 
 const DEFAULT_DATE_PATTERN: string = 'd MMM yyyy';
 const DEFAULT_DATE_TIME_PATTERN: string = 'd MMM yyyy HH:mm';
+const localeMap: {[key: string]: Locale} = {
+  de: deLocale,
+  ru: ruLocale,
+  es: esLocale,
+  fr: frLocale,
+  cs: csLocale,
+  he: heLocale,
+  hu: huLocale,
+  ja: jaLocale,
+  ko: koLocale,
+  zh: zhLocale,
+  pt: ptLocale,
+  pl: plLocale,
+};
 
 function getDeviceLocale(): Locale {
   return RNLocalize.getLocales()[0];
@@ -49,15 +77,18 @@ function ytDate(date?: Date | number, noTime?: boolean): string {
     return '';
   }
 
+  const lang: ?string = RNLocalize.getLocales()[0].languageCode.toLowerCase();
+  const locale = lang in localeMap ? localeMap[lang] : undefined;
+
   if (isAbsoluteDates()) {
-    return format(date, getDateFormatPattern(noTime));
+    return format(date, getDateFormatPattern(noTime), {locale});
   }
 
   if ((Date.now() - date) <= 60 * 1000) {
-    return 'just now';
+    return i18n('just now');
   }
 
-  return formatDistanceToNow(date, {addSuffix: true});
+  return formatDistanceToNow(date, {addSuffix: true, locale});
 }
 
 function absDate(date: Date | number, localeString: ?string): string {
