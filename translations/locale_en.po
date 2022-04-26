@@ -43,10 +43,6 @@ msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} issue"
 msgstr[1] "{{amount}} issues"
 
-#: src/components/issue-formatter/issue-formatter.js
-msgid "{{minutesOrHoursOrDaysOrMonthOrYears}} ago"
-msgstr "{{minutesOrHoursOrDaysOrMonthOrYears}} ago"
-
 #: src/views/issue/activity/activity__add-spent-time.js
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "1w 1d 1h 1m"
@@ -276,14 +272,6 @@ msgstr "Dark theme"
 msgid "Date"
 msgstr "Date"
 
-#: src/components/issue-formatter/issue-formatter.js
-msgid "day"
-msgstr "day"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "days"
-msgstr "days"
-
 #: src/components/user-agreement/user-agreement.js
 msgid "Decline"
 msgstr "Decline"
@@ -431,14 +419,6 @@ msgstr "Help us fix problems faster"
 msgid "Here you'll see a list of articles from your favorite projects"
 msgstr "Here you'll see a list of articles from your favorite projects"
 
-#: src/components/issue-formatter/issue-formatter.js
-msgid "hour"
-msgstr "hour"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "hours"
-msgstr "hours"
-
 #: src/components/error/error-message-data.js
 msgid "If this isn't what you expected, you might try one of these solutions:"
 msgstr "If this isn't what you expected, you might try one of these solutions:"
@@ -483,7 +463,7 @@ msgstr "It could mean that the issue doesn't exist or you don't have permission 
 msgid "JetBrains Privacy Policy"
 msgstr "JetBrains Privacy Policy"
 
-#: src/components/issue-formatter/issue-formatter.js
+#: src/components/date/date.js
 msgid "just now"
 msgstr "just now"
 
@@ -545,22 +525,6 @@ msgstr[1] "Matches {{issuesCount}} issues"
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "merged the pull request"
 msgstr "merged the pull request"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "minute"
-msgstr "minute"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "minutes"
-msgstr "minutes"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "month"
-msgstr "month"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "months"
-msgstr "months"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "New Article"
@@ -687,14 +651,6 @@ msgstr "Search for a different value"
 #: src/components/custom-fields-panel/custom-fields-panel.js
 msgid "Search for the project"
 msgstr "Search for the project"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "second"
-msgstr "second"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "seconds"
-msgstr "seconds"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Select an article from the list"
@@ -901,25 +857,9 @@ msgstr "Visible to article readers"
 msgid "Visible to issue readers"
 msgstr "Visible to issue readers"
 
-#: src/components/issue-formatter/issue-formatter.js
-msgid "week"
-msgstr "week"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "weeks"
-msgstr "weeks"
-
 #: src/components/error/error-message-data.js
 msgid "Woah, you can't touch this!"
 msgstr "Woah, you can't touch this!"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "year"
-msgstr "year"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "years"
-msgstr "years"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."

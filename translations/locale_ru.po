@@ -56,10 +56,6 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: src/components/issue-formatter/issue-formatter.js
-msgid "{{minutesOrHoursOrDaysOrMonthOrYears}} ago"
-msgstr ""
-
 #: src/views/issue/activity/activity__add-spent-time.js
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "1w 1d 1h 1m"
@@ -291,14 +287,6 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: src/components/issue-formatter/issue-formatter.js
-msgid "day"
-msgstr ""
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "days"
-msgstr ""
-
 #: src/components/user-agreement/user-agreement.js
 msgid "Decline"
 msgstr ""
@@ -446,14 +434,6 @@ msgstr ""
 msgid "Here you'll see a list of articles from your favorite projects"
 msgstr ""
 
-#: src/components/issue-formatter/issue-formatter.js
-msgid "hour"
-msgstr ""
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "hours"
-msgstr ""
-
 #: src/components/error/error-message-data.js
 msgid "If this isn't what you expected, you might try one of these solutions:"
 msgstr ""
@@ -498,7 +478,7 @@ msgstr ""
 msgid "JetBrains Privacy Policy"
 msgstr ""
 
-#: src/components/issue-formatter/issue-formatter.js
+#: src/components/date/date.js
 msgid "just now"
 msgstr ""
 
@@ -561,22 +541,6 @@ msgstr[3] ""
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "merged the pull request"
-msgstr ""
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "minute"
-msgstr ""
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "minutes"
-msgstr ""
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "month"
-msgstr ""
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "months"
 msgstr ""
 
 #: src/views/knowledge-base/knowledge-base-actions.js
@@ -703,14 +667,6 @@ msgstr ""
 
 #: src/components/custom-fields-panel/custom-fields-panel.js
 msgid "Search for the project"
-msgstr ""
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "second"
-msgstr ""
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "seconds"
 msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.js
@@ -920,24 +876,8 @@ msgstr ""
 msgid "Visible to issue readers"
 msgstr ""
 
-#: src/components/issue-formatter/issue-formatter.js
-msgid "week"
-msgstr ""
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "weeks"
-msgstr ""
-
 #: src/components/error/error-message-data.js
 msgid "Woah, you can't touch this!"
-msgstr ""
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "year"
-msgstr ""
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "years"
 msgstr ""
 
 #: src/views/inbox/inbox.js

@@ -50,10 +50,6 @@ msgid_plural "{{amount}} issues"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/components/issue-formatter/issue-formatter.js
-msgid "{{minutesOrHoursOrDaysOrMonthOrYears}} ago"
-msgstr ""
-
 #: src/views/issue/activity/activity__add-spent-time.js
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "1w 1d 1h 1m"
@@ -283,14 +279,6 @@ msgstr ""
 msgid "Date"
 msgstr "Dátum"
 
-#: src/components/issue-formatter/issue-formatter.js
-msgid "day"
-msgstr "nap"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "days"
-msgstr "napok"
-
 #: src/components/user-agreement/user-agreement.js
 msgid "Decline"
 msgstr "Elutasítás"
@@ -438,14 +426,6 @@ msgstr ""
 msgid "Here you'll see a list of articles from your favorite projects"
 msgstr ""
 
-#: src/components/issue-formatter/issue-formatter.js
-msgid "hour"
-msgstr "óra"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "hours"
-msgstr "órák"
-
 #: src/components/error/error-message-data.js
 msgid "If this isn't what you expected, you might try one of these solutions:"
 msgstr "Ha nem erre számított, akkor megpróbálhatja a következő megoldások valamelyikét:"
@@ -490,7 +470,7 @@ msgstr ""
 msgid "JetBrains Privacy Policy"
 msgstr ""
 
-#: src/components/issue-formatter/issue-formatter.js
+#: src/components/date/date.js
 msgid "just now"
 msgstr "épp most"
 
@@ -552,22 +532,6 @@ msgstr[1] ""
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "merged the pull request"
 msgstr "egyesítette az áthúzási kérelmet"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "minute"
-msgstr "perc"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "minutes"
-msgstr "percek"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "month"
-msgstr "hónap"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "months"
-msgstr ""
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "New Article"
@@ -693,14 +657,6 @@ msgstr "Másik érték keresése"
 
 #: src/components/custom-fields-panel/custom-fields-panel.js
 msgid "Search for the project"
-msgstr ""
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "second"
-msgstr "második"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "seconds"
 msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.js
@@ -908,25 +864,9 @@ msgstr "A cikkolvasók számára látható"
 msgid "Visible to issue readers"
 msgstr ""
 
-#: src/components/issue-formatter/issue-formatter.js
-msgid "week"
-msgstr "hét"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "weeks"
-msgstr "hetek"
-
 #: src/components/error/error-message-data.js
 msgid "Woah, you can't touch this!"
 msgstr "Hú, ezt nem érintheti meg!"
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "year"
-msgstr ""
-
-#: src/components/issue-formatter/issue-formatter.js
-msgid "years"
-msgstr ""
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
