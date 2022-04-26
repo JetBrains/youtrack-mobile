@@ -19,20 +19,13 @@ import zhLocale from 'date-fns/locale/zh-CN';
 import ptLocale from 'date-fns/locale/pt';
 import plLocale from 'date-fns/locale/pl';
 
-import type {User, UserDateFieldFormat} from '../../flow/User';
-
-type Locale = {
-  languageCode: string,
-  scriptCode?: string,
-  countryCode: string,
-  languageTag: string,
-  isRTL: boolean,
-};
+import type {Locale} from 'date-fns';
+import type {User, UserDateFieldFormat} from 'flow/User';
 
 
 const DEFAULT_DATE_PATTERN: string = 'd MMM yyyy';
 const DEFAULT_DATE_TIME_PATTERN: string = 'd MMM yyyy HH:mm';
-const localeMap: {[key: string]: Locale} = {
+const dateLocaleMap: {[key: string]: Locale} = {
   de: deLocale,
   ru: ruLocale,
   es: esLocale,
@@ -53,6 +46,10 @@ function getDeviceLocale(): Locale {
 
 function getYTCurrentUser(): ?User {
   return getStorageState().currentUser?.ytCurrentUser;
+}
+
+function getLanguage(): ?string {
+  return getStorageState().config?.l10n?.language;
 }
 
 function isAbsoluteDates(): boolean {
@@ -77,8 +74,7 @@ function ytDate(date?: Date | number, noTime?: boolean): string {
     return '';
   }
 
-  const lang: ?string = RNLocalize.getLocales()[0].languageCode.toLowerCase();
-  const locale = lang in localeMap ? localeMap[lang] : undefined;
+  const locale: ?Locale = dateLocaleMap[getLanguage()];
 
   if (isAbsoluteDates()) {
     return format(date, getDateFormatPattern(noTime), {locale});
