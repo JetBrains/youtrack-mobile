@@ -1,8 +1,6 @@
 /* @flow */
 
-import RNLocalize from 'react-native-localize';
-
-import {getStorageState} from 'components/storage/storage';
+import {getStorageState} from '../storage/storage';
 import {format, formatDistanceToNow} from 'date-fns';
 import {i18n} from 'components/i18n/i18n';
 
@@ -39,10 +37,6 @@ const dateLocaleMap: {[key: string]: Locale} = {
   pt: ptLocale,
   pl: plLocale,
 };
-
-function getDeviceLocale(): Locale {
-  return RNLocalize.getLocales()[0];
-}
 
 function getYTCurrentUser(): ?User {
   return getStorageState().currentUser?.ytCurrentUser;
@@ -87,16 +81,8 @@ function ytDate(date?: Date | number, noTime?: boolean): string {
   return formatDistanceToNow(date, {addSuffix: true, locale});
 }
 
-function absDate(date: Date | number, localeString: ?string): string {
-  const utcDate = new Date(date);
-  const locale: Array<string> | string = localeString ? [localeString] : getDeviceLocale().languageTag;
-  return utcDate.toLocaleTimeString(
-    locale, {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
-}
-
 export {
   DEFAULT_DATE_PATTERN,
   DEFAULT_DATE_TIME_PATTERN,
-  absDate,
   ytDate,
 };
