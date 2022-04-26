@@ -16,7 +16,7 @@ import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids
 import {commentPlaceholderText} from '../../../app-text';
 import {confirmation} from 'components/confirmation/confirmation';
 import {createIssueActivityActions} from './issue-activity__actions';
-import {getEntityPresentation, ytDate} from 'components/issue-formatter/issue-formatter';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {i18n} from 'components/i18n/i18n';
@@ -25,6 +25,7 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 import {logEvent} from 'components/log/log-helper';
 import {ThemeContext} from 'components/theme/theme-context';
 import {useDispatch, useSelector} from 'react-redux';
+import {ytDate} from 'components/date/date';
 
 import styles from './activity__add-spent-time.styles';
 

@@ -1,6 +1,5 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
@@ -15,6 +14,7 @@ import styles from './agile-row.styles';
 
 import type {AgileBoardRow, BoardCell, BoardColumn} from 'flow/Agile';
 import type {IssueOnList} from 'flow/Issue';
+import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from 'flow/Theme';
 
@@ -25,7 +25,7 @@ type Props = {
   row: AgileBoardRow,
   collapsedColumnIds: Array<string>,
   onTapIssue: (issue: IssueOnList) => any,
-  onTapCreateIssue: (columnId: string, cellId: string) => any,
+  onTapCreateIssue?: (columnId: string, cellId: string) => any,
   onCollapseToggle: (row: AgileBoardRow) => any,
   renderIssueCard: RenderIssueCard,
   zoomedIn?: boolean,

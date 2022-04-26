@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import React from 'react';
 import {SectionList, Text, View} from 'react-native';
 

@@ -8,7 +8,7 @@ import DiffMatchWord from './diff__match-word';
 
 import styles from './diff.styles';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type DiffInfo = {

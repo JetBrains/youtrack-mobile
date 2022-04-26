@@ -37,7 +37,7 @@ import styles from './log-in.styles';
 import type {AppConfig} from 'flow/AppConfig';
 import type {AuthParams, OAuthParams2} from 'flow/Auth';
 import type {CustomError} from 'flow/Error';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {Theme, UIThemeColors} from 'flow/Theme';
 
 type Props = {

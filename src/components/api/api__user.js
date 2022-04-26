@@ -48,8 +48,14 @@ export default class UserAPI extends ApiBase {
           general: {
             star: ['id'],
             searchContext: this.SEARCH_CONTEXT_FIELDS,
+            timezone: ['id'],
+            dateFieldFormat: [
+              'dateNoYearPattern',
+              'datePattern',
+              'pattern',
+            ],
           },
-          appearance: ['naturalCommentsOrder'],
+          appearance: ['naturalCommentsOrder', 'useAbsoluteDates'],
           articles: {
             lastVisitedArticle: ['id,idReadable,summary,project(id,ringId)'],
           },

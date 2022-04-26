@@ -22,8 +22,9 @@ import QueryAssistPanel from 'components/query-assist/query-assist-panel';
 import QueryPreview from 'components/query-assist/query-preview';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
+import {addListenerGoOnline} from '../../components/network/network-events';
 import {ANALYTICS_AGILE_PAGE} from 'components/analytics/analytics-ids';
-import {DragContainer} from 'components/draggable/';
+import {DragContainer} from 'components/draggable';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {i18n} from 'components/i18n/i18n';
 import {getScrollableWidth} from 'components/board-scroller/board-scroller__math';
@@ -46,6 +47,7 @@ import type {AgilePageState} from './board-reducers';
 import type {AnyIssue, IssueOnList} from 'flow/Issue';
 import type {AppState} from '../../reducers';
 import type {CustomError} from 'flow/Error';
+import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {SprintFull, AgileBoardRow, BoardColumn, BoardOnList, Sprint} from 'flow/Agile';
 import type {Theme, UITheme} from 'flow/Theme';
 
@@ -89,7 +91,8 @@ class AgileBoard extends Component<Props, State> {
   query: string;
   unsubscribeOnDispatch: Function;
   uiTheme: UITheme;
-  unsubscribeOnDimensionsChange: Function;
+  unsubscribeOnDimensionsChange: EventSubscription;
+  goOnlineSubscription: EventSubscription;
 
   constructor(props: Props) {
     super(props);
@@ -120,6 +123,9 @@ class AgileBoard extends Component<Props, State> {
         options.issueId && this.props.updateIssue(options.issueId, this.props?.sprint);
       }
     });
+    this.goOnlineSubscription = addListenerGoOnline(() => {
+      this.loadBoard(true);
+    });
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
@@ -132,6 +138,7 @@ class AgileBoard extends Component<Props, State> {
     boardActions.destroySSE();
     this.unsubscribeOnDispatch();
     this.unsubscribeOnDimensionsChange.remove();
+    this.goOnlineSubscription.remove();
   }
 
   onDimensionsChange: () => void = (): void => {
@@ -393,10 +400,7 @@ class AgileBoard extends Component<Props, State> {
         zoomedIn={this.state.zoomedIn}
         canRunCommand={this.canRunCommand}
         onTapIssue={this._onTapIssue}
-        onTapCreateIssue={async (...args): Promise<void> => {
-          if (networkState?.isConnected === false) {
-            return;
-          }
+        onTapCreateIssue={networkState?.isConnected === false ? null : async (...args): Promise<void> => {
           const draft: $Shape<IssueOnList> = await createCardForCell.apply(null, [...args, this.state.isSplitView]);
           if (this.state.isSplitView) {
             this.toggleModalChildren(
@@ -494,11 +498,11 @@ class AgileBoard extends Component<Props, State> {
 
   renderSearchPanelPreview = () => {
     const {networkState} = this.props;
-    return networkState?.isConnected !== false && (
+    return (
       <QueryPreview
         style={styles.searchQueryPreview}
         query={this.query}
-        onFocus={this.onShowAssist}
+        onFocus={networkState?.isConnected !== false && this.onShowAssist}
       />
     );
   };

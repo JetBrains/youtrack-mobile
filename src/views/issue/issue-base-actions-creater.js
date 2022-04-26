@@ -250,19 +250,16 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
       return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
         const api: Api = getApi();
         const {issue} = getState()[stateFieldName];
-        const preIssueDescription: string = issue.description;
         dispatch(dispatchActions.setIssueSummaryAndDescription(issue.summary, description));
-
-        const textCustomFields: Array<CustomFieldText> = getIssueTextCustomFields(issue.fields);
-        const [error] = await until(api.issue.saveIssueSummaryAndDescriptionChange(
+        const [error, updated] = await until(api.issue.updateDescriptionCheckbox(
           issue.id,
-          issue.summary,
-          description,
-          textCustomFields.length > 0 ? textCustomFields : undefined,
+          checked,
+          position,
+          issue.description,
         ));
 
         if (error) {
-          dispatch(dispatchActions.setIssueSummaryAndDescription(issue.summary, preIssueDescription));
+          dispatch(dispatchActions.setIssueSummaryAndDescription(issue.summary, updated.description));
           notifyError(error);
         } else {
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, `Checkbox: ${checked ? 'checked' : 'unchecked'}`);

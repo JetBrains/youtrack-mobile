@@ -11,7 +11,7 @@ import {toggleIssueActivityEnabledType} from './issue-activity__helper';
 import styles from './issue-activity.styles';
 
 import type {ActivityType} from 'flow/Activity';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
 import type {UserAppearanceProfile} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';

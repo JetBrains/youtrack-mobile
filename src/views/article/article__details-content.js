@@ -37,7 +37,7 @@ const ArticleContent = (props: Props) => {
         mentionedArticles={mentionedArticles}
         mentionedIssues={mentionedIssues}
         uiTheme={uiTheme}
-        onCheckboxUpdate={(articleContent: string) => onCheckboxUpdate(articleContent)}
+        onCheckboxUpdate={(checked: boolean, position: number, articleContent: string) => onCheckboxUpdate(checked, position, articleContent)}
       >
         {articleContent}
       </MarkdownViewChunks>

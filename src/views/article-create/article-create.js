@@ -64,6 +64,7 @@ const ArticleCreate = (props: Props) => {
   const dispatch = useDispatch();
   const theme: Theme = useContext(ThemeContext);
 
+  const isConnected: boolean = useSelector((state: AppState) => state.app.networkState.isConnected);
   const articleDraft: ArticleDraft = useSelector((state: AppState) => state.articleCreate.articleDraft);
   const error: CustomError | null = useSelector((state: AppState) => state.articleCreate.error);
   const isProcessing: boolean = useSelector((state: AppState) => state.articleCreate.isProcessing);
@@ -152,7 +153,8 @@ const ArticleCreate = (props: Props) => {
       !draft.id ||
       isProcessing ||
       !articleDraftData.project.id ||
-      articleDraftData.summary.length === 0
+      articleDraftData.summary.length === 0 ||
+      !isConnected
     );
 
     return (
@@ -232,13 +234,13 @@ const ArticleCreate = (props: Props) => {
         style={styles.discard}>
         <TouchableOpacity
           style={styles.discardButton}
-          disabled={isProcessing}
+          disabled={isProcessing || !isConnected}
 
           onPress={async () => {
             dispatch(articleCreateActions.deleteDraft()).then(closeCreateArticleScreen);
           }}
         >
-          <Text style={styles.discardButtonText}>
+          <Text style={[styles.discardButtonText, !isConnected && styles.discardButtonTextDisabled]}>
             {props.isNew ? i18n('Delete draft') : i18n('Discard unpublished changes')}
           </Text>
         </TouchableOpacity>

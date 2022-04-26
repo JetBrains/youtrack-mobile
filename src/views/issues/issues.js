@@ -1,6 +1,5 @@
 /* @flow */
 
-import type {Node} from 'React';
 import {
   Dimensions,
   View,
@@ -29,6 +28,7 @@ import Router from '../../components/router/router';
 import Select, {SelectModal} from '../../components/select/select';
 import SelectSectioned, {SelectSectionedModal} from '../../components/select/select-sectioned';
 import usage from '../../components/usage/usage';
+import {addListenerGoOnline} from '../../components/network/network-events';
 import {ANALYTICS_ISSUES_PAGE} from '../../components/analytics/analytics-ids';
 import {ERROR_MESSAGE_DATA} from '../../components/error/error-message-data';
 import {getIssueFromCache} from './issues-actions';
@@ -54,9 +54,11 @@ import type Auth from 'components/auth/oauth2';
 import type {AnyIssue, IssueOnList} from 'flow/Issue';
 import type {AppState} from '../../reducers';
 import type {ErrorMessageProps} from 'components/error-message/error-message';
+import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {Folder} from 'flow/User';
 import type {IssuesState} from './issues-reducers';
-import type {Theme} from 'flow/Theme';
+import type {Node} from 'react';
+import type {Theme, UIThemeColors} from 'flow/Theme';
 
 type IssuesActions = typeof issueActions;
 type Props = {
@@ -81,8 +83,9 @@ type State = {
 export class Issues extends Component<Props, State> {
   searchPanelNode: Object;
   unsubscribeOnDispatch: Function;
-  unsubscribeOnDimensionsChange: Function;
+  unsubscribeOnDimensionsChange: EventSubscription;
   theme: Theme;
+  goOnlineSubscription: EventSubscription;
 
   constructor(props: Props) {
     super(props);
@@ -132,11 +135,16 @@ export class Issues extends Component<Props, State> {
       const targetIssue: AnyIssue = getIssueFromCache(issueId) || ({id: issueId}: any);
       this.updateFocusedIssue(targetIssue);
     }
+
+    this.goOnlineSubscription = addListenerGoOnline(() => {
+      this.refresh();
+    });
   }
 
   componentWillUnmount() {
     this.unsubscribeOnDimensionsChange.remove();
     this.unsubscribeOnDispatch();
+    this.goOnlineSubscription.remove();
   }
 
   shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
@@ -203,7 +211,7 @@ export class Issues extends Component<Props, State> {
         }}
         disabled={isDisabled}
       >
-        <IconAdd size={20} color={this.theme.uiTheme.colors.$link}/>
+        <IconAdd size={20} color={isDisabled ? this.getThemeColors().$disabled : this.getThemeColors().$link}/>
       </TouchableOpacity>
     );
   };
@@ -263,9 +271,13 @@ export class Issues extends Component<Props, State> {
     this.props.loadMoreIssues();
   };
 
-  renderContextButton: () => Node = () => {
-    const {onOpenContextSelect, isRefreshing, searchContext, isSearchContextPinned} = this.props;
+  getThemeColors(): UIThemeColors {
+    return this.theme.uiTheme.colors;
+  }
 
+  renderContextButton: () => Node = () => {
+    const {onOpenContextSelect, isRefreshing, searchContext, isSearchContextPinned, networkState} = this.props;
+    const isDisabled: boolean = isRefreshing || !searchContext || !networkState.isConnected;
     return (
       <TouchableOpacity
         key="issueListContext"
@@ -276,7 +288,7 @@ export class Issues extends Component<Props, State> {
           styles.searchContext,
           isSearchContextPinned ? styles.searchContextPinned : null,
         ]}
-        disabled={isRefreshing || !searchContext}
+        disabled={isDisabled}
         onPress={onOpenContextSelect}
       >
         <View
@@ -288,7 +300,11 @@ export class Issues extends Component<Props, State> {
           >
             {`${searchContext?.name || ''} `}
           </Text>
-          {searchContext && <IconAngleDown color={this.theme.uiTheme.colors.$text} size={17}/>}
+          {searchContext &&
+            <IconAngleDown
+              color={isDisabled ? this.getThemeColors().$disabled : this.getThemeColors().$text}
+              size={17}
+            />}
         </View>
       </TouchableOpacity>
     );
@@ -404,7 +420,7 @@ export class Issues extends Component<Props, State> {
   hasIssues: () => boolean = (): boolean => this.props.issues?.length > 0;
 
   renderSearchQuery: () => Node = () => {
-    const {query, issuesCount, openSavedSearchesSelect, searchContext} = this.props;
+    const {query, issuesCount, openSavedSearchesSelect, searchContext, networkState} = this.props;
     return (
       <View style={styles.listHeader}>
         <View style={styles.listHeaderTop}>
@@ -419,8 +435,12 @@ export class Issues extends Component<Props, State> {
             accessibilityLabel="user-search-query-button"
             accessible={true}
             onPress={openSavedSearchesSelect}
+            disabled={!networkState.isConnected}
           >
-            <IconBookmark size={28} color={this.theme.uiTheme.colors.$link}/>
+            <IconBookmark
+              size={28}
+              color={networkState.isConnected ? this.getThemeColors().$link : this.getThemeColors().$disabled}
+            />
           </TouchableOpacity>
 
         </View>

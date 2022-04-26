@@ -11,7 +11,7 @@ import {i18n} from 'components/i18n/i18n';
 import {IconClose} from 'components/icon/icon';
 import {UNIT} from 'components/variables/variables';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 
 type Props = {
   name: string,

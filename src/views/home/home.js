@@ -11,7 +11,7 @@ import {logo, IconPencil} from 'components/icon/icon';
 
 import styles from './home.styles';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 
 type Props = {
   backendUrl: string,

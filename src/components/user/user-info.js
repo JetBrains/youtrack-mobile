@@ -1,16 +1,17 @@
 /* @flow */
 
-import type {Node} from 'React';
 import {View, Text} from 'react-native';
 import React, {PureComponent} from 'react';
 
-import {getEntityPresentation, relativeDate} from '../issue-formatter/issue-formatter';
+import Avatar from '../avatar/avatar';
+import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {ytDate} from 'components/date/date';
 
 import styles from './user-info.styles';
 
+import type {Node} from 'react';
 import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import Avatar from '../avatar/avatar';
 
 type Props = {
   additionalInfo?: string,
@@ -53,12 +54,11 @@ export default class UserInfo extends PureComponent<Props, void> {
           {!!additionalInfo && <Text testID="UserAdditionalInfo">{additionalInfo}</Text>}
         </Text>}
 
-        <View
-          testID="UserInfoTimestamp"
-          style={styles.timestampContainer}
-        >
-          <Text style={styles.timestamp}>
-            {relativeDate(timestamp)}
+        <View style={styles.timestampContainer}>
+          <Text
+            testID="UserInfoTimestamp"
+            style={styles.timestamp}>
+            {ytDate(timestamp)}
           </Text>
         </View>
       </View>

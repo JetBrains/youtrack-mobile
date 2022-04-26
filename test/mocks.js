@@ -210,4 +210,5 @@ export default {
   createConfigMock,
   createAuthMock,
   createAuthParamsMock,
+  createUserMock,
 };

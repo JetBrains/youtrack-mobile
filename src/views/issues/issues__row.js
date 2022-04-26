@@ -8,9 +8,9 @@ import Tags from 'components/tags/tags';
 import {
   getPriotityField,
   getEntityPresentation,
-  relativeDate,
   getReadableID,
 } from 'components/issue-formatter/issue-formatter';
+import {ytDate} from 'components/date/date';
 
 import Avatar from 'components/avatar/avatar';
 import {ThemeContext} from 'components/theme/theme-context';
@@ -19,7 +19,7 @@ import styles from './issues.styles';
 
 import type {AnyIssue} from 'flow/Issue';
 import type {BundleValue} from 'flow/CustomFields';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
@@ -80,7 +80,7 @@ export default class IssueRow extends Component<Props, void> {
                   </Text>
 
                   {Boolean(issue.updated || issue.reporter) && <View style={styles.headRight}>
-                    {!!issue.updated && <Text style={styles.secondaryText}>{`${relativeDate(issue.updated)}  `}</Text>}
+                    {!!issue.updated && <Text style={styles.secondaryText}>{`${ytDate(issue.updated)}  `}</Text>}
                     {!issue.reporter && <Avatar
                       userName={getEntityPresentation(issue.reporter)}
                       size={20}

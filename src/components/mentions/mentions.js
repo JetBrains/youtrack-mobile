@@ -8,7 +8,7 @@ import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 import styles from './mentions.styles';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 

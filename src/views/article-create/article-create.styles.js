@@ -66,4 +66,7 @@ export default EStyleSheet.create({
     color: '$link',
     textAlign: 'center',
   },
+  discardButtonTextDisabled: {
+    color: '$disabled',
+  },
 });

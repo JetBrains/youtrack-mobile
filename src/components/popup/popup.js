@@ -10,7 +10,7 @@ import {View, Text, TouchableOpacity} from 'react-native';
 
 import styles from './popup.styles';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 
 type Props = {
   childrenRenderer: () => any,

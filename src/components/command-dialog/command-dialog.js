@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import {View, TouchableOpacity, Text, TextInput, FlatList, ActivityIndicator} from 'react-native';
 import React, {Component} from 'react';
 

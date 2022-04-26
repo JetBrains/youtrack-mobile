@@ -16,7 +16,7 @@ import {IconBack, IconClose} from '../icon/icon';
 
 import styles from './query-assist.styles';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {TransformedSuggestion, SavedQuery} from 'flow/Issue';
 
 

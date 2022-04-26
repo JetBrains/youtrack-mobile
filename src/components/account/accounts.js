@@ -1,6 +1,5 @@
 /* @flow */
 
-import type {Node} from 'React';
 import {View, Text, TouchableWithoutFeedback, TouchableOpacity, Alert} from 'react-native';
 import React, {PureComponent} from 'react';
 
@@ -14,10 +13,11 @@ import {HIT_SLOP} from '../common-styles/button';
 import avatarStyles from '../avatar/default-avatar.styles';
 import styles, {SWIPER_HEIGHT} from './accounts.styles';
 
-import type {StorageState} from '../storage/storage';
 import type {AppConfig} from 'flow/AppConfig';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {StorageState} from '../storage/storage';
+import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   otherAccounts: Array<StorageState>,

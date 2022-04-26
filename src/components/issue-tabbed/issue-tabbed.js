@@ -12,7 +12,7 @@ import {isSplitView} from '../responsive/responsive-helper';
 
 import styles from './issue-tabbed.style';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {TabRoute} from 'flow/Issue';
 import type {UITheme, UIThemeColors} from 'flow/Theme';
 

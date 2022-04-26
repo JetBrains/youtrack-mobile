@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import React, {PureComponent} from 'react';
 import {ScrollView} from 'react-native';
 import styles from './attachments-row.styles';

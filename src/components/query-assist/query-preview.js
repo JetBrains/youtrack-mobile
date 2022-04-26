@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import {Text, View} from 'react-native';
 import React, {PureComponent} from 'react';
 
@@ -14,7 +14,7 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   query: string,
-  onFocus: (clear: boolean) => any,
+  onFocus?: (clear: boolean) => any,
   onClearText: () => void,
   style?: ViewStyleProp
 };
@@ -27,11 +27,15 @@ export default class QueryPreview extends PureComponent<Props, void> {
   };
 
   focusAndClear: (() => void) = () => {
-    this.props.onFocus(true);
+    if (this.props.onFocus) {
+      this.props.onFocus(true);
+    }
   }
 
   focus: (() => void) = () => {
-    this.props.onFocus(false);
+    if (this.props.onFocus) {
+      this.props.onFocus(false);
+    }
   }
 
   render(): Node {

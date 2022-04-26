@@ -7,7 +7,7 @@ import {ThemeContext} from '../theme/theme-context';
 
 import styles from './summary-description-form.style';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {Theme, UITheme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 

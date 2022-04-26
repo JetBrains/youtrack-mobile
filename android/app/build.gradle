@@ -151,6 +151,10 @@ android {
         manifestPlaceholders = [
           appAuthRedirectScheme: "ytoauth"
         ]
+        configurations.all {
+          //TODO: Flipper requires compileSdkVersion = 31
+          resolutionStrategy { force 'androidx.sqlite:sqlite-framework:2.1.0' }
+        }
     }
     splits {
         abi {

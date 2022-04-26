@@ -10,7 +10,7 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 
 import type {AgileBoardRow, Board, SprintFull} from 'flow/Agile';
 import type {AnyIssue} from 'flow/Issue';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {UIThemeName, UIThemeColors, BarStyle} from 'flow/Theme';
 import type {UITheme} from 'flow/Theme';
 
@@ -19,7 +19,7 @@ type Props = {
   zoomedIn: boolean,
   canRunCommand: (issue: AnyIssue) => boolean,
   onTapIssue: (issue: AnyIssue) => void,
-  onTapCreateIssue: (columnId: string, cellId: string) => void,
+  onTapCreateIssue?: (columnId: string, cellId: string) => void,
   onCollapseToggle: (row: AgileBoardRow) => void,
   uiTheme: UITheme,
 };
@@ -42,7 +42,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
   createCommonRowProps: (() => {
   collapsedColumnIds: Array<string>,
   onCollapseToggle: (row: AgileBoardRow) => void,
-  onTapCreateIssue: (columnId: string, cellId: string) => void,
+  onTapCreateIssue?: (columnId: string, cellId: string) => void,
   onTapIssue: (issue: AnyIssue) => void,
   renderIssueCard: (issue: AnyIssue) => Node,
   uiTheme: {

@@ -1,6 +1,4 @@
-import {NativeModules} from 'react-native';
-
-import * as mockLocalize from 'react-native-localize/mock.js';
+import * as mockLocalize from 'react-native-localize/mock';
 import Adapter from 'enzyme-adapter-react-16';
 import chai, {should} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -10,9 +8,9 @@ import log from '../src/components/log/log';
 import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock';
 import mockDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
 import sinonChai from 'sinon-chai';
-import {
-  mockReactNativeNotification,
-} from './jest-mock__react-native-notifications';
+
+import {__setStorageState} from '../src/components/storage/storage';
+import {mockReactNativeNotification} from './jest-mock__react-native-notifications';
 
 Enzyme.configure({adapter: new Adapter()});
 
@@ -25,7 +23,12 @@ should();
 
 require('react-native-reanimated/lib/reanimated2/jestUtils').setUpTests();
 
-// Modules mocks
+mockReactNativeNotification();
+
+beforeAll(() => {
+  __setStorageState({});
+});
+
 
 jest.mock('react-native-device-log', () => ({
   init: jest.fn(),
@@ -37,20 +40,7 @@ jest.mock('react-native-device-log', () => ({
   options: {logToConsole: false},
 }));
 
-// RNDeviceInfo mock
-NativeModules.RNDeviceInfo = {
-  uniqueId: 'unique-id',
-  userAgent: 'user-agent',
-};
-
-NativeModules.RNKeychainManager = {
-  getInternetCredentialsForServer: jest.fn(),
-  setInternetCredentialsForServer: jest.fn(),
-};
-
 jest.mock('@react-native-community/async-storage', () => mockAsyncStorage);
-
-// jest.mock('react-native-reanimated', () => mockReanimated);
 
 jest.mock('react-native-gesture-handler', () => ({}));
 
@@ -60,12 +50,10 @@ jest.mock('react-native-appearance', () => ({
   Appearance: {getColorScheme: () => 'light'},
 }));
 
-mockReactNativeNotification();
-
-NativeModules.RNEncryptedStorage = {
+jest.mock('react-native-encrypted-storage', () => ({
   getItem: jest.fn(() => Promise.resolve()),
   setItem: jest.fn(() => Promise.resolve()),
-};
+}));
 
 jest.mock('react-native-device-info', () => mockDeviceInfo);
 

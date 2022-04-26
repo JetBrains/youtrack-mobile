@@ -8,7 +8,7 @@ import {isSplitView} from '../responsive/responsive-helper';
 
 import styles from './query-assist.styles';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {TransformedSuggestion} from '../../flow/Issue';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 

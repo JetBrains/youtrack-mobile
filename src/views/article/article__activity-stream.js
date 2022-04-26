@@ -7,10 +7,12 @@ import {useSelector} from 'react-redux';
 import API from 'components/api/api';
 import {ActivityStream} from 'components/activity-stream/activity__stream';
 import {getApi} from 'components/api/api__instance';
+import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 import {updateMarkdownCheckbox} from 'components/wiki/markdown-helper';
 
 import type {ActivityItem, ActivityStreamCommentActions} from 'flow/Activity';
 import type {Attachment, IssueComment} from 'flow/CustomFields';
+import type {AppState} from '../../reducers';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
 import type {WorkTimeSettings} from 'flow/Work';
@@ -37,8 +39,12 @@ const getYoutrackWikiProps = (): YouTrackWiki => {
 const ArticleActivityStream = (props: Props) => {
   const {activities, attachments, uiTheme, user, commentActions, onCheckboxUpdate} = props;
 
-  const workTimeSettings: WorkTimeSettings = useSelector(store => store.app.workTimeSettings);
+  const workTimeSettings: WorkTimeSettings = useSelector((store: AppState) => store.app.workTimeSettings);
+  const isLoading: boolean = useSelector((store: AppState) => store.article.isLoading);
 
+  if (!activities && isLoading) {
+    return <SkeletonIssueActivities/>;
+  }
   return (
     <ActivityStream
       activities={activities}

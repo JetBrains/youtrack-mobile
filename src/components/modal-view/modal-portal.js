@@ -7,7 +7,7 @@ import {Portal} from 'react-native-portalize';
 
 import modalStyles from './modal.view.styles';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {

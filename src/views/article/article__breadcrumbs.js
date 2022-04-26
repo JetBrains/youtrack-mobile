@@ -1,16 +1,18 @@
 /* @flow */
 
-import type {Node} from 'React';
 import React from 'react';
+
+import {ScrollView} from 'react-native-gesture-handler';
 
 import Router from 'components/router/router';
 import {createBreadCrumbs} from 'components/articles/articles-tree-helper';
 import {hasType} from 'components/api/api__resource-types';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 
 import styles from './article.styles';
 
 import type {Article, Article as ArticleEntity, ArticleProject, ArticlesList} from 'flow/Article';
+import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {

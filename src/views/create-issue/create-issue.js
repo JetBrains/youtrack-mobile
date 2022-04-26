@@ -53,6 +53,7 @@ type AdditionalProps = {
   onAddTags: (tags: Array<Tag>) => () => Promise<void>,
   onHide?: () => void,
   isMatchesQuery?: () => boolean,
+  isConnected?: boolean,
 };
 
 type Props = CreateIssueState & typeof createIssueActions & AttachmentActions & AdditionalProps & {
@@ -125,7 +126,7 @@ class CreateIssue extends PureComponent<Props, State> {
   onUpdateProject = async (project: IssueProject) => await this.props.updateProject(project);
 
   renderCustomFieldPanel() {
-    const {issue} = this.props;
+    const {issue, isConnected} = this.props;
 
     return <CustomFieldsPanel
       analyticsId={ANALYTICS_ISSUE_CREATE_PAGE}
@@ -138,9 +139,9 @@ class CreateIssue extends PureComponent<Props, State> {
       fields={getIssueCustomFieldsNotText(issue.fields)}
 
       hasPermission={{
-        canUpdateField: this.canUpdateField,
-        canCreateIssueToProject: this.canCreateIssueToProject,
-        canEditProject: true,
+        canUpdateField: isConnected && this.canUpdateField,
+        canCreateIssueToProject: isConnected && this.canCreateIssueToProject,
+        canEditProject: isConnected,
       }}
 
       onUpdate={this.onFieldUpdate}
@@ -184,7 +185,7 @@ class CreateIssue extends PureComponent<Props, State> {
   }
 
   renderActionsIcon() {
-    if (this.isProcessing() || !this.hasProject()) {
+    if (this.isProcessing() || !this.hasProject() || !this.props.isConnected) {
       return null;
     }
     return (
@@ -345,6 +346,7 @@ class CreateIssue extends PureComponent<Props, State> {
       issuePermissions,
       onHide = () => Router.pop(true),
       isMatchesQuery,
+      isConnected,
     } = this.props;
 
     const isAttaching = attachingImage !== null;
@@ -361,7 +363,7 @@ class CreateIssue extends PureComponent<Props, State> {
           const rightButton = (
             processing
               ? <ActivityIndicator color={uiThemeColors.$link}/>
-              : <IconCheck size={20} color={canCreateIssue ? uiThemeColors.$link : uiThemeColors.$disabled}/>
+              : <IconCheck size={20} color={canCreateIssue && isConnected ? uiThemeColors.$link : uiThemeColors.$disabled}/>
           );
 
           return (
@@ -376,7 +378,7 @@ class CreateIssue extends PureComponent<Props, State> {
                 onBack={this.onHide}
                 rightButton={rightButton}
                 extraButton={this.renderActionsIcon()}
-                onRightButtonClick={() => canCreateIssue && createIssue(onHide, isMatchesQuery)}/>
+                onRightButtonClick={() => canCreateIssue && isConnected && createIssue(onHide, isMatchesQuery)}/>
 
               {this.renderCustomFieldPanel()}
 
@@ -515,6 +517,7 @@ const mapStateToProps = (state, ownProps) => {
     ...state.creation,
     predefinedDraftId: ownProps.predefinedDraftId,
     issuePermissions: state.app.issuePermissions,
+    isConnected: state.app.networkState.isConnected,
   };
 };
 

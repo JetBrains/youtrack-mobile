@@ -187,7 +187,7 @@ const ArticleDetails = (props: Props) => {
         mentionedIssues={article?.mentionedIssues}
         uiTheme={uiTheme}
         articleContent={article?.content}
-        onCheckboxUpdate={(articleContent: string) => onCheckboxUpdate && onCheckboxUpdate(articleContent)}
+        onCheckboxUpdate={(checked: boolean, position: number, articleContent: string) => onCheckboxUpdate && onCheckboxUpdate(checked, position, articleContent)}
       />
 
       {article?.attachments?.length > 0 && (

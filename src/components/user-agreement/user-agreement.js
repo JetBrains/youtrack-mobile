@@ -14,7 +14,7 @@ import {UNIT} from '../variables/variables';
 import styles from './user-agreement.styles';
 
 import type {EndUserAgreement} from 'flow/AppConfig';
-import type {Node} from 'React';
+import type {Node} from 'react';
 
 type Props = {
   show: boolean,

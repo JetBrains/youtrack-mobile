@@ -8,7 +8,7 @@ import {IconCaretDownUp} from '../icon/icon';
 
 import styles from './details.styles';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {

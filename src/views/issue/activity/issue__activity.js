@@ -20,6 +20,7 @@ import Router from 'components/router/router';
 import Select from 'components/select/select';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
+import {addListenerGoOnline} from '../../../components/network/network-events';
 import {bindActionCreatorsExt} from 'util/redux-ext';
 import {convertCommentsToActivityPage, createActivityModel} from 'components/activity/activity-helper';
 import {createActivityCommentActions} from './issue-activity__comment-actions';
@@ -32,20 +33,22 @@ import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {IssueContext} from '../issue-context';
 import {logEvent} from 'components/log/log-helper';
+import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './issue-activity.styles';
 
+import type {Activity} from 'flow/Activity';
+import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {IssueComment} from 'flow/CustomFields';
 import type {IssueContextData} from 'flow/Issue';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
 import type {Theme, UITheme} from 'flow/Theme';
 import type {User, UserAppearanceProfile} from 'flow/User';
 import type {WorkItem} from 'flow/Work';
 import type {YouTrackWiki} from 'flow/Wiki';
-import type {Activity} from 'flow/Activity';
 
 type IssueActivityProps = $Shape<IssueActivityState
   & IssueCommentActivityState
@@ -71,11 +74,19 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   issuePermissions: $Shape<IssuePermissions>;
   props: IssueActivityProps;
   issueContext: IssueContextData;
+  goOnlineSubscription: EventSubscription;
 
   state: State = {
     modalChildren: null,
     settingsVisible: false,
   };
+
+  constructor(props: IssueActivityProps) {
+    super(props);
+    this.goOnlineSubscription = addListenerGoOnline(() => {
+      this.load(this.props.issuePlaceholder.id);
+    });
+  }
 
   componentDidMount() {
     this.load(this.getCurrentIssueId());
@@ -96,6 +107,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
 
   componentWillUnmount() {
     this.props.setEditingComment(null);
+    this.goOnlineSubscription.remove();
   }
 
   load = (issueId?: string) => {
@@ -172,6 +184,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
       deleteWorkItem,
       onCheckboxUpdate,
       doUpdateWorkItem,
+      isLoading,
     } = this.props;
 
     const youtrackWiki: YouTrackWiki = {
@@ -186,6 +199,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
       }
       this.loadIssueActivities(true);
     };
+
+    if (!activityPage && isLoading) {
+      return <SkeletonIssueActivities/>;
+    }
 
     return (
       <View style={styles.activitiesContainer}>

@@ -21,8 +21,9 @@ import StreamWork from 'components/activity-stream/activity__stream-work';
 import usage from 'components/usage/usage';
 import UserInfo from 'components/user/user-info';
 import YoutrackWiki from 'components/wiki/youtrack-wiki';
+import {addListenerGoOnline} from '../../components/network/network-events';
 import {ANALYTICS_NOTIFICATIONS_PAGE} from 'components/analytics/analytics-ids';
-import {getReadableID, ytDate} from 'components/issue-formatter/issue-formatter';
+import {getReadableID} from 'components/issue-formatter/issue-formatter';
 import {getStorageState} from 'components/storage/storage';
 import {handleRelativeUrl} from 'components/config/config';
 import {hasType} from 'components/api/api__resource-types';
@@ -34,6 +35,7 @@ import {LoadMoreList} from 'components/progress/load-more-list';
 import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables/variables';
+import {ytDate} from 'components/date/date';
 
 import styles from './inbox.styles';
 
@@ -82,6 +84,7 @@ class Inbox extends Component<Props, State> {
   config: ?AppConfig;
   theme: Theme;
   unsubscribeOnDimensionsChange: EventSubscription;
+  goOnlineSubscription: EventSubscription;
 
   constructor(props) {
     super(props);
@@ -105,10 +108,15 @@ class Inbox extends Component<Props, State> {
 
     this.props.loadInboxCache();
     this.refresh();
+
+    this.goOnlineSubscription = addListenerGoOnline(() => {
+      this.refresh();
+    });
   }
 
   componentWillUnmount(): void {
     this.unsubscribeOnDimensionsChange.remove();
+    this.goOnlineSubscription.remove();
   }
 
   refresh = () => {

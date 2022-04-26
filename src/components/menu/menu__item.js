@@ -7,7 +7,7 @@ import {HIT_SLOP} from '../common-styles/button';
 
 import styles from './menu.styles';
 
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {

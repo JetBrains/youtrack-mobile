@@ -7,14 +7,15 @@ import ApiHelper from '../api/api__helper';
 import Avatar from '../avatar/avatar';
 import ColorField from '../color-field/color-field';
 import IconUrl from '@jetbrains/icons/new-window.svg';
-import {getEntityPresentation, ytDate} from '../issue-formatter/issue-formatter';
+import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {getHUBUrl, isURLPattern} from 'util/util';
 import {HIT_SLOP} from '../common-styles/button';
+import {ytDate} from 'components/date/date';
 
 import styles from './custom-field.styles';
 
 import type {CustomField as CustomFieldType, FieldValue} from 'flow/CustomFields';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {User} from 'flow/User';
 
 type Props = {

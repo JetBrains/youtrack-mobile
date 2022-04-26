@@ -16,7 +16,7 @@ import stylesModal from './issue.modal.styles';
 import type {AnyIssue, IssueOnList} from 'flow/Issue';
 import type {IssueDetailsProps} from '../issue__details';
 import type {IssueLink} from 'flow/CustomFields';
-import type {Node} from 'React';
+import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 
 
@@ -78,9 +78,10 @@ export default class IssueModalDetails extends IssueDetails<IssueDetailsProps & 
   };
 
   renderLinksBlock: () => Node = () => {
+    const issue: AnyIssue = this.getIssue();
     return (
       <LinkedIssuesTitle
-        issueLinks={this.props.issue.links}
+        issueLinks={issue.links}
         onPress={() => this.toggleModalChildren(this.renderLinkedIssues())}
       />
     );
