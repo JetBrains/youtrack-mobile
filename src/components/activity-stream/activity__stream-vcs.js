@@ -17,7 +17,7 @@ import {
 } from './activity__stream-vcs-helper';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconCaretDownUp} from '../icon/icon';
-import {ytDate} from '../issue-formatter/issue-formatter';
+import {ytDate} from 'components/date/date';
 
 import styles from './activity__stream.styles';
 

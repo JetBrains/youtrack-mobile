@@ -3,7 +3,7 @@ import {shallow} from 'enzyme';
 
 import CustomField from './custom-field';
 import {__setStorageState} from '../storage/storage';
-import {ytDate} from '../issue-formatter/issue-formatter';
+import {ytDate} from 'components/date/date';
 
 describe('<CustomField/>', () => {
   let fakeField;

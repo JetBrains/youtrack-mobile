@@ -9,8 +9,8 @@ import {
   getPriotityField,
   getEntityPresentation,
   getReadableID,
-  ytDate,
 } from 'components/issue-formatter/issue-formatter';
+import {ytDate} from 'components/date/date';
 
 import Avatar from 'components/avatar/avatar';
 import {ThemeContext} from 'components/theme/theme-context';

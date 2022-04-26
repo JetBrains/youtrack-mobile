@@ -81,14 +81,6 @@ export default class BaseAPI {
     );
   }
 
-  static setUser(user: User) {
-    BaseAPI.user = user;
-  }
-
-  static getUser() {
-    return BaseAPI.user;
-  }
-
   async makeAuthorizedRequest(
     url: string,
     method: ?string,

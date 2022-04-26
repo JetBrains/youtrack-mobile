@@ -1,10 +1,11 @@
 /* @flow */
 
-import {getEntityPresentation, ytDate} from '../issue-formatter/issue-formatter';
+import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {getPeriodPresentationFor} from '../time-tracking/time-tracking';
 import {getSimpleCustomFieldType} from '../custom-field/custom-field-helper';
 import {hasType} from '../api/api__resource-types';
 import {isActivityCategory} from './activity__category';
+import {ytDate} from 'components/date/date';
 
 import type {IssueProject} from 'flow/CustomFields';
 import type {WorkTimeSettings} from 'flow/Work';

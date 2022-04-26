@@ -21,11 +21,12 @@ import usage from 'components/usage/usage';
 import VisibilityControl from 'components/visibility/visibility-control';
 import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
 import {getApi} from 'components/api/api__instance';
-import {getEntityPresentation, getReadableID, ytDate} from 'components/issue-formatter/issue-formatter';
+import {getEntityPresentation, getReadableID} from 'components/issue-formatter/issue-formatter';
 import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
+import {ytDate} from 'components/date/date';
 
 import styles from './issue.styles';
 

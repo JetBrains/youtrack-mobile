@@ -1,13 +1,14 @@
 /* @flow */
 
-import type {Node} from 'react';
 import React from 'react';
 import {Text, View} from 'react-native';
 
-import {getEntityPresentation, ytDate} from '../issue-formatter/issue-formatter';
+import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {ytDate} from 'components/date/date';
 
 import styles from './issue-tabbed.style';
 
+import type {Node} from 'react';
 import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 

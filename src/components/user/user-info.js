@@ -1,16 +1,17 @@
 /* @flow */
 
-import type {Node} from 'react';
 import {View, Text} from 'react-native';
 import React, {PureComponent} from 'react';
 
-import {getEntityPresentation, ytDate} from '../issue-formatter/issue-formatter';
+import Avatar from '../avatar/avatar';
+import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {ytDate} from 'components/date/date';
 
 import styles from './user-info.styles';
 
+import type {Node} from 'react';
 import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import Avatar from '../avatar/avatar';
 
 type Props = {
   additionalInfo?: string,

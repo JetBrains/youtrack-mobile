@@ -3,7 +3,7 @@
 import React from 'react';
 import {Text} from 'react-native';
 
-import {ytDate} from '../issue-formatter/issue-formatter';
+import {ytDate} from 'components/date/date';
 
 import styles from './activity__stream.styles';
 

@@ -15,7 +15,7 @@ import {HIT_SLOP} from '../common-styles/button';
 import {IconContextActions} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
 import {showActionSheet} from '../action-sheet/action-sheet';
-import {ytDate} from '../issue-formatter/issue-formatter';
+import {ytDate} from 'components/date/date';
 
 import styles from './activity__stream.styles';
 

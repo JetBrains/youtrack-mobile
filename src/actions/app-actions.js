@@ -484,6 +484,12 @@ function loadUser(): Action {
     user.profiles.general.searchContext = user.profiles.general.searchContext || EVERYTHING_CONTEXT;
     await dispatch(storeSearchContext(user.profiles.general.searchContext));
     dispatch({type: types.RECEIVE_USER, user});
+    flushStoragePart({
+      currentUser: {
+        ...getStorageState().currentUser,
+        ytCurrentUser: user,
+      },
+    });
   };
 }
 
