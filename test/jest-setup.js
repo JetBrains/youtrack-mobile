@@ -1,4 +1,3 @@
-import * as mockLocalize from 'react-native-localize/mock';
 import Adapter from 'enzyme-adapter-react-16';
 import chai, {should} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -56,8 +55,6 @@ jest.mock('react-native-encrypted-storage', () => ({
 }));
 
 jest.mock('react-native-device-info', () => mockDeviceInfo);
-
-jest.mock('react-native-localize', () => mockLocalize);
 
 jest.mock('react-native-image-crop-picker', () => ({
   openCamera: jest.fn(),

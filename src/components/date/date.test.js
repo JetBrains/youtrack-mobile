@@ -1,52 +1,12 @@
-import RNLocalize from 'react-native-localize';
-
 import * as storage from 'components/storage/storage';
 import mocks from '../../../test/mocks';
 import {__setStorageState} from 'components/storage/storage';
-import {absDate, DEFAULT_DATE_PATTERN, DEFAULT_DATE_TIME_PATTERN, ytDate} from 'components/date/date';
+import {DEFAULT_DATE_PATTERN, DEFAULT_DATE_TIME_PATTERN, ytDate} from 'components/date/date';
 
 
 describe('Date', () => {
   beforeEach(() => {
     __setStorageState({});
-  });
-
-
-  describe('absDate', function () {
-    const dateInMillis = 1551448813974;
-    const dateMock = new Date(dateInMillis);
-    const formatDateParams = {day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'};
-    const _Date = Date;
-
-    beforeEach(() => mockGlobalDateObj(dateMock));
-
-    afterEach(() => global.Date = _Date);
-
-    it('should return absolute date with provided locale string', () => {
-      const localeString = 'en-EN';
-      absDate(dateInMillis, localeString);
-
-      expect(dateMock.toLocaleTimeString).toHaveBeenCalledWith([localeString], formatDateParams);
-    });
-
-    it('should return absolute date with no locale string', () => {
-      const defaultDeviceLocale = 'ko-KO';
-      jest.spyOn(RNLocalize, 'getLocales').mockReturnValueOnce([{languageTag: defaultDeviceLocale, isRTL: false}, {languageTag: 'us-US', isRTL: false}]);
-      absDate(dateInMillis);
-
-      expect(dateMock.toLocaleTimeString).toHaveBeenCalledWith(defaultDeviceLocale, formatDateParams);
-    });
-
-
-    function mockGlobalDateObj(date) {
-      date.toLocaleTimeString = jest.fn();
-      global.Date = class extends _Date {
-        constructor() {
-          super();
-          return date;
-        }
-      };
-    }
   });
 
 
