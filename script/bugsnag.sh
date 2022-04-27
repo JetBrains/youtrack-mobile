@@ -13,8 +13,8 @@ bugsnag-source-maps upload-react-native \
   --api-key "$1" \
   --app-version "$3" \
   --platform android \
-  --source-map android/app/build/generated/sourcemaps/react/release/index.android.bundle.map \
-  --bundle android/app/build/generated/assets/react/release/index.android.bundle
+  --source-map ../android/app/build/generated/sourcemaps/react/release/index.android.bundle.map \
+  --bundle ../android/app/build/generated/assets/react/release/index.android.bundle
 echo "ANDROID: Source maps uploaded"
 
 
