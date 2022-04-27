@@ -276,7 +276,7 @@ export class Issues extends Component<Props, State> {
 
   renderContextButton: () => Node = () => {
     const {onOpenContextSelect, isRefreshing, searchContext, isSearchContextPinned, networkState} = this.props;
-    const isDisabled: boolean = isRefreshing || !searchContext || !networkState.isConnected;
+    const isDisabled: boolean = isRefreshing || !searchContext || !networkState?.isConnected;
     return (
       <TouchableOpacity
         key="issueListContext"
@@ -434,11 +434,11 @@ export class Issues extends Component<Props, State> {
             accessibilityLabel="user-search-query-button"
             accessible={true}
             onPress={openSavedSearchesSelect}
-            disabled={!networkState.isConnected}
+            disabled={!networkState?.isConnected}
           >
             <IconBookmark
               size={28}
-              color={networkState.isConnected ? this.getThemeColors().$link : this.getThemeColors().$disabled}
+              color={networkState?.isConnected ? this.getThemeColors().$link : this.getThemeColors().$disabled}
             />
           </TouchableOpacity>
 
