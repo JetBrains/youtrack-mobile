@@ -16,6 +16,7 @@ import SimpleValueEditor from './custom-fields-panel__simple-value';
 import usage from '../usage/usage';
 import {createNullProjectCustomField} from 'util/util';
 import {getApi} from '../api/api__instance';
+import {formatTime} from '../date/date';
 import {IconCheck, IconClose} from '../icon/icon';
 import {isSplitView} from '../responsive/responsive-helper';
 import {IssueContext} from '../../views/issue/issue-context';
@@ -234,15 +235,9 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         show: true,
         placeholder: 'Enter time',
         withTime,
-        time: field.value ? new Date(((field.value: any): number)).toLocaleTimeString(
-          [],
-          {
-            hour: '2-digit',
-            minute: '2-digit',
-          }
-        ) : null,
+        time: field.value ? formatTime(new Date(field.value)) : null,
         title: field.projectCustomField.field.name,
-        value: field.value ? new Date(((field.value: any): number)) : new Date(),
+        value: field.value ? new Date(field.value) : new Date(),
         emptyValueName: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
         onSelect: (date: Date, time?: string) => {
           if (!date) {

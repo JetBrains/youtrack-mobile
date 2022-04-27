@@ -1,16 +1,29 @@
 /* @flow */
 
-import {getStorageState} from '../storage/storage';
 import {format, formatDistanceToNow} from 'date-fns';
 
-import type {User, UserDateFieldFormat} from '../../flow/User';
+import {getStorageState} from '../storage/storage';
+
+import type {User, UserProfileDateFieldFormat} from 'flow/User';
 
 
-const DEFAULT_DATE_PATTERN: string = 'd MMM yyyy';
-const DEFAULT_DATE_TIME_PATTERN: string = 'd MMM yyyy HH:mm';
+const USER_DATE_FORMAT_DEFAULT_PATTERN: string = 'd MMM yyyy HH:mm';
+const USER_DATE_FORMAT_DEFAULT_DATE_PATTERN: string = 'd MMM yyyy';
 
 function getYTCurrentUser(): ?User {
   return getStorageState().currentUser?.ytCurrentUser;
+}
+
+function getUserProfileDateFieldFormat(): ?UserProfileDateFieldFormat {
+  return getYTCurrentUser()?.profiles?.general?.dateFieldFormat;
+}
+
+function getPattern() {
+  return getUserProfileDateFieldFormat()?.pattern || USER_DATE_FORMAT_DEFAULT_PATTERN;
+}
+
+function getDatePattern() {
+  return getUserProfileDateFieldFormat()?.datePattern || USER_DATE_FORMAT_DEFAULT_DATE_PATTERN;
 }
 
 function isAbsoluteDates(): boolean {
@@ -18,16 +31,12 @@ function isAbsoluteDates(): boolean {
   return !!currentUser?.profiles?.appearance?.useAbsoluteDates;
 }
 
-function getDateFormatPattern(noTime: boolean = false): string {
-  const currentUser: User = getYTCurrentUser();
-  const dateFieldFormat: ?UserDateFieldFormat = currentUser?.profiles?.general?.dateFieldFormat;
-  let formatPattern: string;
-  if (noTime) {
-    formatPattern = dateFieldFormat ? dateFieldFormat.datePattern : DEFAULT_DATE_PATTERN;
-  } else {
-    formatPattern = dateFieldFormat ? dateFieldFormat.pattern : DEFAULT_DATE_TIME_PATTERN;
-  }
-  return formatPattern;
+function formatDate(date: Date | number, pattern: string = USER_DATE_FORMAT_DEFAULT_PATTERN) {
+  return format(date, pattern);
+}
+
+function formatTime(date: Date | number) {
+  return format(date, getPattern().split(getDatePattern()).pop().trim());
 }
 
 function ytDate(date?: Date | number, noTime?: boolean): string {
@@ -36,7 +45,7 @@ function ytDate(date?: Date | number, noTime?: boolean): string {
   }
 
   if (isAbsoluteDates()) {
-    return format(date, getDateFormatPattern(noTime));
+    return formatDate(date, noTime ? getDatePattern() : getPattern());
   }
 
   if ((Date.now() - date) <= 60 * 1000) {
@@ -47,7 +56,8 @@ function ytDate(date?: Date | number, noTime?: boolean): string {
 }
 
 export {
-  DEFAULT_DATE_PATTERN,
-  DEFAULT_DATE_TIME_PATTERN,
+  USER_DATE_FORMAT_DEFAULT_DATE_PATTERN,
+  USER_DATE_FORMAT_DEFAULT_PATTERN,
+  formatTime,
   ytDate,
 };
