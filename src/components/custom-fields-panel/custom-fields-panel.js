@@ -30,6 +30,7 @@ import type {IssueProject, CustomField as IssueCustomField} from 'flow/CustomFie
 import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import log from '../log/log';
 
 type Props = {
   autoFocusSelect?: boolean,
@@ -532,10 +533,12 @@ export default class CustomFieldsPanel extends Component<Props, State> {
             </View>
 
             {fields.map((field: IssueCustomField, index: number) => {
+              const canUpdateField: boolean = hasPermission.canUpdateField(field);
+              log.debug(`Field ${field.name} updatable`, canUpdateField);
               const isDisabled: boolean = (
-                !hasPermission.canUpdateField(field) ||
-                !field?.projectCustomField?.field?.fieldType ||
-                this.isConnected === false
+                this.isConnected === false ||
+                !canUpdateField ||
+                !field?.projectCustomField?.field?.fieldType
               );
               return <View key={field.id || `${field.name}-${index}`}>
                 <CustomField
