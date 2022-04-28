@@ -12,5 +12,5 @@ CONFIGURATION_BUILD_DIR="$(xcodebuild -workspace ios/YouTrackMobile.xcworkspace 
 export CONFIGURATION_BUILD_DIR
 echo "IOS: Source map path dir: $(CONFIGURATION_BUILD_DIR)"
 
-cp "$TMPDIR"/"$(md5 -qs "$CONFIGURATION_BUILD_DIR")"-main.jsbundle.map ios/build/main.jsbundle.map
+cp "$TMPDIR/$(md5 -qs "$CONFIGURATION_BUILD_DIR")-main.jsbundle.map" ios/build/main.jsbundle.map
 cp "$CONFIGURATION_BUILD_DIR"/main.jsbundle ios/build/main.jsbundle
