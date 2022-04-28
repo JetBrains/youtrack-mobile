@@ -15,8 +15,8 @@ function getCachedPermissions(): ?Array<PermissionCacheItem> {
   return getStorageState().permissions;
 }
 
-async function loadPermissions(token_type: string, access_token: string, permissionsCacheUrl: string): Promise<Array<PermissionCacheItem>> {
-  return await PermissionsHelper.loadPermissions(
+function loadPermissions(token_type: string, access_token: string, permissionsCacheUrl: string): Promise<Array<PermissionCacheItem>> {
+  return PermissionsHelper.loadPermissions(
     token_type,
     access_token,
     permissionsCacheUrl
