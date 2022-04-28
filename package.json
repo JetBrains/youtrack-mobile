@@ -44,7 +44,7 @@
     "e2e:ios": "yarn run e2e-clean && yarn run e2e-build:ios && yarn run e2e-test:ios",
     "e2e:ci": "yarn run ios-delete-build && script/ci-e2e-runner.sh",
     "flow-watch": "fswatch -o ./ | xargs -n1 -I{} sh -c 'clear; printf \"\\033[3J\" && flow'",
-    "ios-archive": "node script/ios-archive.sh",
+    "ios-archive": "export RCT_NO_LAUNCH_PACKAGER=true && node script/ios-archive.sh",
     "ios-iPadAir": "react-native run-ios --simulator='iPad Air (4th generation)'",
     "ios-iphoneX": "react-native run-ios --simulator='iPhone X'",
     "ios-iphone8Plus": "react-native run-ios --simulator='iPhone 8 Plus (13.5)'",
