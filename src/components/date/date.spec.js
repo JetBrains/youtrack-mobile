@@ -1,7 +1,7 @@
 import * as storage from 'components/storage/storage';
 import mocks from '../../../test/mocks';
 import {__setStorageState} from 'components/storage/storage';
-import {DEFAULT_DATE_PATTERN, DEFAULT_DATE_TIME_PATTERN, ytDate} from 'components/date/date';
+import {USER_DATE_FORMAT_DEFAULT_DATE_PATTERN, USER_DATE_FORMAT_DEFAULT_PATTERN, ytDate} from 'components/date/date';
 
 
 describe('Date', () => {
@@ -88,8 +88,8 @@ describe('Date', () => {
 
 
     function createStorageStateMock(
-      pattern = DEFAULT_DATE_TIME_PATTERN,
-      datePattern = DEFAULT_DATE_PATTERN,
+      pattern = USER_DATE_FORMAT_DEFAULT_PATTERN,
+      datePattern = USER_DATE_FORMAT_DEFAULT_DATE_PATTERN,
       useAbsoluteDates = true
     ) {
       return {

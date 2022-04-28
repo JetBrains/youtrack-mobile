@@ -66,7 +66,7 @@ export type UserArticlesProfile = {
   showHistory?: boolean,
 }
 
-export type UserDateFieldFormat = {
+export type UserProfileDateFieldFormat = {
   dateNoYearPattern: string,
   datePattern: string,
   pattern: string,
@@ -79,7 +79,7 @@ export type UserGeneralProfile = {
   timezone: {
     id: string,
   },
-  dateFieldFormat: UserDateFieldFormat,
+  dateFieldFormat: UserProfileDateFieldFormat,
   star: {
     id: string,
   },

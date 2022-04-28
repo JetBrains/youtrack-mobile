@@ -26,11 +26,11 @@ export default function Network(): Node {
   const prevConnected = useRef(null);
   const insets: EdgeInsets = useSafeAreaInsets();
 
-  const updateNetworkState = useCallback((state: NetInfoState) => {
+  const updateNetworkState = useCallback(async (state: NetInfoState) => {
     if (state.isConnected !== prevConnected?.current?.isConnected) {
       // eslint-disable-next-line no-unused-vars
       const {details, ...rest} = state;
-      dispatch(setNetworkState(rest));
+      await dispatch(setNetworkState(rest));
       const wasOffline = !prevConnected?.current?.isConnected;
       if (state.isConnected === true && wasOffline) {
         emitGoOnlineEvent(state);

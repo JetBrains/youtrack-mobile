@@ -1,8 +1,9 @@
 /* @flow */
 
-import {getStorageState} from '../storage/storage';
 import {format, formatDistanceToNow} from 'date-fns';
+
 import {i18n} from 'components/i18n/i18n';
+import {getStorageState} from '../storage/storage';
 
 import deLocale from 'date-fns/locale/de';
 import ruLocale from 'date-fns/locale/ru';
@@ -18,11 +19,8 @@ import ptLocale from 'date-fns/locale/pt';
 import plLocale from 'date-fns/locale/pl';
 
 import type {Locale} from 'date-fns';
-import type {User, UserDateFieldFormat} from 'flow/User';
+import type {User, UserProfileDateFieldFormat} from 'flow/User';
 
-
-const DEFAULT_DATE_PATTERN: string = 'd MMM yyyy';
-const DEFAULT_DATE_TIME_PATTERN: string = 'd MMM yyyy HH:mm';
 const dateLocaleMap: {[key: string]: Locale} = {
   de: deLocale,
   ru: ruLocale,
@@ -38,8 +36,23 @@ const dateLocaleMap: {[key: string]: Locale} = {
   pl: plLocale,
 };
 
+const USER_DATE_FORMAT_DEFAULT_PATTERN: string = 'd MMM yyyy HH:mm';
+const USER_DATE_FORMAT_DEFAULT_DATE_PATTERN: string = 'd MMM yyyy';
+
 function getYTCurrentUser(): ?User {
   return getStorageState().currentUser?.ytCurrentUser;
+}
+
+function getUserProfileDateFieldFormat(): ?UserProfileDateFieldFormat {
+  return getYTCurrentUser()?.profiles?.general?.dateFieldFormat;
+}
+
+function getPattern() {
+  return getUserProfileDateFieldFormat()?.pattern || USER_DATE_FORMAT_DEFAULT_PATTERN;
+}
+
+function getDatePattern() {
+  return getUserProfileDateFieldFormat()?.datePattern || USER_DATE_FORMAT_DEFAULT_DATE_PATTERN;
 }
 
 function getLanguage(): ?string {
@@ -51,16 +64,12 @@ function isAbsoluteDates(): boolean {
   return !!currentUser?.profiles?.appearance?.useAbsoluteDates;
 }
 
-function getDateFormatPattern(noTime: boolean = false): string {
-  const currentUser: User = getYTCurrentUser();
-  const dateFieldFormat: ?UserDateFieldFormat = currentUser?.profiles?.general?.dateFieldFormat;
-  let formatPattern: string;
-  if (noTime) {
-    formatPattern = dateFieldFormat ? dateFieldFormat.datePattern : DEFAULT_DATE_PATTERN;
-  } else {
-    formatPattern = dateFieldFormat ? dateFieldFormat.pattern : DEFAULT_DATE_TIME_PATTERN;
-  }
-  return formatPattern;
+function formatDate(date: Date | number, pattern: string = USER_DATE_FORMAT_DEFAULT_PATTERN) {
+  return format(date, pattern);
+}
+
+function formatTime(date: Date | number) {
+  return format(date, getPattern().split(getDatePattern()).pop().trim());
 }
 
 function ytDate(date?: Date | number, noTime?: boolean): string {
@@ -71,7 +80,7 @@ function ytDate(date?: Date | number, noTime?: boolean): string {
   const locale: ?Locale = dateLocaleMap[getLanguage()];
 
   if (isAbsoluteDates()) {
-    return format(date, getDateFormatPattern(noTime), {locale});
+    return formatDate(date, noTime ? getDatePattern() : getPattern());
   }
 
   if ((Date.now() - date) <= 60 * 1000) {
@@ -82,7 +91,8 @@ function ytDate(date?: Date | number, noTime?: boolean): string {
 }
 
 export {
-  DEFAULT_DATE_PATTERN,
-  DEFAULT_DATE_TIME_PATTERN,
+  USER_DATE_FORMAT_DEFAULT_DATE_PATTERN,
+  USER_DATE_FORMAT_DEFAULT_PATTERN,
+  formatTime,
   ytDate,
 };
