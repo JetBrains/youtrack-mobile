@@ -446,7 +446,6 @@ export function loadUserPermissions(): Action {
       appActionsHelper.updateCachedPermissions(permissions);
       log.debug('Permissions cached');
     } catch (error) {
-      notify(getErrorMessage(error), 7000);
       log.warn(error);
     }
   };
