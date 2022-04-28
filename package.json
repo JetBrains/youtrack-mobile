@@ -46,7 +46,6 @@
     "e2e:ci": "yarn run ios-delete-build && script/ci-e2e-runner.sh",
     "flow-watch": "fswatch -o ./ | xargs -n1 -I{} sh -c 'clear; printf \"\\033[3J\" && flow'",
     "ios-archive": "node script/ios-archive.sh",
-    "ios-archive-no-sign": "export RCT_NO_LAUNCH_PACKAGER=true && yarn run ios-archive -- CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED='NO'",
     "ios-build-bundle": "react-native bundle --entry-file=index.js --platform ios --dev false --reset-cache --bundle-output build/main.jsbundle --assets-dest build",
     "ios-iPadAir": "react-native run-ios --simulator='iPad Air (4th generation)'",
     "ios-iphoneX": "react-native run-ios --simulator='iPhone X'",

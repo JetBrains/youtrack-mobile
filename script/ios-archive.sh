@@ -3,7 +3,8 @@
 set -ex
 
 echo "IOS: Creating archive and source maps files..."
-xcodebuild archive -allowProvisioningUpdates -workspace ios/YouTrackMobile.xcworkspace -scheme YouTrackMobile[Release] -archivePath ios/build/YouTrackMobile[Release].xcarchive
+export RCT_NO_LAUNCH_PACKAGER=true
+xcodebuild archive -allowProvisioningUpdates -workspace ios/YouTrackMobile.xcworkspace -scheme YouTrackMobile[Release] -archivePath ios/build/YouTrackMobile[Release].xcarchive CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED='NO'
 
 
 echo "IOS: create JS bundle and source maps files..."
