@@ -18,6 +18,7 @@ function extractFileNameFromPath(path: string): string {
 
 async function pickPhoto(method: $Keys<typeof attachFileMethod>): Promise<Array<NormalizedAttachment>> {
   const files: Array<Attachment> = await ImagePicker[method]({
+    forceJpg:true,
     mediaType: 'any',
     multiple: true,
   });
@@ -25,7 +26,7 @@ async function pickPhoto(method: $Keys<typeof attachFileMethod>): Promise<Array<
   return (files?.length >= 1 ? files : [((files: any): Attachment)]).map((file: Attachment) => {
     return {
       url: file.path || '',
-      name: file.filename || extractFileNameFromPath(file.path || ''),
+      name: file.path ? extractFileNameFromPath(file.path || '') : file.filename,
       mimeType: file.mime,
       dimensions: {
         width: file.width,
