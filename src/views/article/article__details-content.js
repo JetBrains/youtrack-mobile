@@ -4,6 +4,7 @@ import React from 'react';
 import {View} from 'react-native';
 
 import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
+import {MAIN_FONT_SIZE} from '../../components/common-styles/typography';
 
 import styles from './article.styles';
 
@@ -32,6 +33,9 @@ const ArticleContent = (props: Props) => {
   return (
     <View style={styles.description}>
       <MarkdownViewChunks
+        textStyle={{
+          fontSize: MAIN_FONT_SIZE,
+        }}
         scrollData={scrollData}
         attachments={attachments}
         mentionedArticles={mentionedArticles}

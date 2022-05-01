@@ -21,6 +21,7 @@ import type {Attachment} from 'flow/CustomFields';
 import type {Folder} from 'flow/User';
 import type {IssueOnList} from 'flow/Issue';
 import type {MarkdownNode} from 'flow/Markdown';
+import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from 'flow/Theme';
 
 type Props = {
@@ -32,6 +33,7 @@ type Props = {
   uiTheme: UITheme,
   scrollData?: Object,
   onCheckboxUpdate?: (markdown: string) => Function,
+  textStyle?: TextStyleProp,
 };
 
 const DEFAULT_CHUNK_SIZE: number = 10;
@@ -77,7 +79,8 @@ const MarkdownViewChunks = (props: Props) => {
         articles: mentionedArticles,
         issues: mentionedIssues,
       },
-      onCheckboxPress
+      onCheckboxPress,
+      props.textStyle,
     );
   };
 
@@ -99,6 +102,7 @@ const MarkdownViewChunks = (props: Props) => {
   const renderAST = (ast: Array<ASTNode>, key: string): React$Element<typeof MarkdownAST> => {
     return (
       <MarkdownAST
+        textStyle={props.textStyle}
         testID="chunk"
         key={key}
         ast={ast}

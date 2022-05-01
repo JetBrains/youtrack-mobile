@@ -5,6 +5,7 @@ import React, {useContext} from 'react';
 import YoutrackWiki from 'components/wiki/youtrack-wiki';
 import MarkdownView from 'components/wiki/markdown-view';
 import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
+import {MAIN_FONT_SIZE} from '../../components/common-styles/typography';
 import {ThemeContext} from 'components/theme/theme-context';
 
 import type {Attachment} from 'flow/CustomFields';
@@ -40,6 +41,7 @@ function IssueMarkdown(props: Props) {
       }
       scrollData={scrollData}
       uiTheme={theme.uiTheme}
+      textStyle={{fontSize: MAIN_FONT_SIZE}}
     >
       {markdown}
     </Component>;

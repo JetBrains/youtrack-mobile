@@ -10,20 +10,22 @@ import {ThemeContext} from '../theme/theme-context';
 
 import type {MarkdownNode} from 'flow/Markdown';
 import type {Theme} from 'flow/Theme';
+import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
 type Props = {
   ast: Array<MarkdownNode>,
   rules: Object,
+  textStyle?: TextStyleProp,
 };
 
 const MarkdownAST = (props: Props) => {
-  const {ast, rules} = props;
+  const {ast, rules, textStyle} = props;
   const theme: Theme = useContext(ThemeContext);
 
   return (
     <Markdown
-      style={markdownStyles(theme?.uiTheme)}
+      style={markdownStyles(theme?.uiTheme, textStyle)}
       markdownit={MarkdownItInstance}
       rules={rules}
     >
