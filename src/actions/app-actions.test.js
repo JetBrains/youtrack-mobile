@@ -13,6 +13,8 @@ import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
 import {__setStorageState, getStorageState, populateStorage} from 'components/storage/storage';
 import {CUSTOM_ERROR_MESSAGE, REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from 'components/error/error-messages';
+import {EVERYTHING_CONTEXT} from '../components/search/search-context';
+import {USER_NULL_VALUE} from './app-actions';
 
 jest.mock('components/router/router', () => ({
   Home: jest.fn(),
@@ -24,6 +26,7 @@ const permissionsCacheURLMock = `${backendURLMock}/permissionsCache`;
 let apiMock;
 let appStateMock;
 let store;
+let userMock;
 
 const getApi = () => apiMock;
 const middlewares = [thunk.withExtraArgument(getApi)];
@@ -250,17 +253,111 @@ describe('app-actions', () => {
   });
 
 
-  describe('initializeApp', () => {
-    it('should set YT current user from cache', async () => {
-      const userMock = mocks.createUserMock();
-      await __setStorageState({currentUser: {ytCurrentUser: userMock}});
-      await store.dispatch(actions.initializeApp({}));
+  describe('setCurrentUser', () => {
+    it('should set default user', async () => {
+      await store.dispatch(actions.setCurrentUser());
 
       expect(store.getActions()[0]).toEqual({
         type: types.RECEIVE_USER,
-        user: userMock,
+        user: USER_NULL_VALUE,
       });
     });
+
+    it('should merge user fields', async () => {
+      userMock = mocks.createUserMock({
+        id: 2,
+        profiles: {
+          general: {searchContext: searchContextMock},
+          appearance: {naturalCommentsOrder: naturalCommentsOrderMock},
+        },
+      });
+
+      await store.dispatch(actions.setCurrentUser(userMock));
+
+      expect(store.getActions()[0]).toEqual({
+        type: types.RECEIVE_USER,
+        user: {
+          ...userMock,
+          id: 2,
+          profiles: {
+            general: {
+              useMarkup: true,
+              searchContext: searchContextMock,
+            },
+            appearance: {
+              useAbsoluteDates: true,
+              naturalCommentsOrder: naturalCommentsOrderMock,
+            },
+            notifications: {},
+            issuesList: {},
+            timetracking: {
+              isTimeTrackingAvailable: true,
+            },
+          },
+        },
+      });
+    });
+  });
+
+
+  const searchContextMock = {id: 1};
+  const naturalCommentsOrderMock = false;
+
+  describe('initializeApp', () => {
+    it('should set YT current user from cache', async () => {
+      userMock = mocks.createUserMock({
+        id: 2,
+        profiles: {
+          general: {searchContext: searchContextMock},
+          appearance: {naturalCommentsOrder: naturalCommentsOrderMock},
+        },
+      });
+      await initApp(userMock);
+
+      const action = store.getActions()[0];
+      expect(action.user.profiles.general.searchContext).toEqual(searchContextMock);
+      expect(action.user.profiles.appearance.naturalCommentsOrder).toEqual(naturalCommentsOrderMock);
+      expect(action).toEqual({
+        type: types.RECEIVE_USER,
+        user: {
+          ...userMock,
+          id: 2,
+          profiles: {
+            general: {
+              useMarkup: true,
+              searchContext: searchContextMock,
+            },
+            appearance: {
+              useAbsoluteDates: true,
+              naturalCommentsOrder: naturalCommentsOrderMock,
+            },
+            notifications: {},
+            issuesList: {},
+            timetracking: {
+              isTimeTrackingAvailable: true,
+            },
+          },
+        },
+      });
+    });
+
+    it('should set EVERYTHING context for the current user', async () => {
+      await initApp(mocks.createUserMock());
+
+      expect(getStorageState().searchContext).toEqual(EVERYTHING_CONTEXT);
+    });
+
+    it('should set YT current user search context from cache', async () => {
+      userMock = mocks.createUserMock({profiles: {general: {searchContext: searchContextMock}}});
+      await initApp(userMock);
+
+      expect(getStorageState().searchContext).toEqual(searchContextMock);
+    });
+
+    async function initApp(ytCurrentUser) {
+      __setStorageState({currentUser: {ytCurrentUser}});
+      await store.dispatch(actions.initializeApp({}));
+    }
   });
 
 
