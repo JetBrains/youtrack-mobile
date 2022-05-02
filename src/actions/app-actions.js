@@ -682,12 +682,20 @@ async function refreshConfig(backendUrl: string): Promise<AppConfig> {
   return updatedConfig;
 }
 
+export function setCurrentUserFromCache(): Promise<void> {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<boolean> => {
+    const user: ?User = getStorageState().currentUser.ytCurrentUser;
+    if (user) {
+      dispatch({type: types.RECEIVE_USER, user});
+    }
+  };
+}
+
 export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
+    await dispatch(setCurrentUserFromCache());
 
-    const isRedirectedToTargetRoute: boolean = await dispatch(
-      redirectToRoute(config, issueId, navigateToActivity)
-    );
+    const isRedirectedToTargetRoute: boolean = await dispatch(redirectToRoute(config, issueId, navigateToActivity));
 
     const versionHasChanged: boolean = packageJson.version !== getStorageState().currentAppVersion;
     try {

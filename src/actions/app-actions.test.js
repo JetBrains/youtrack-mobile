@@ -7,12 +7,17 @@ import * as Notification from 'components/notification/notification';
 import * as types from './action-types';
 import AuthTest from 'components/auth/oauth2';
 import log from 'components/log/log';
+import mocks from '../../test/mocks';
 import permissionsHelper from 'components/permissions-store/permissions-helper';
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
-import Router from 'components/router/router';
 import {__setStorageState, getStorageState, populateStorage} from 'components/storage/storage';
 import {CUSTOM_ERROR_MESSAGE, REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from 'components/error/error-messages';
+
+jest.mock('components/router/router', () => ({
+  Home: jest.fn(),
+  EnterServer: jest.fn(),
+}));
 
 const backendURLMock = 'https://example.com';
 const permissionsCacheURLMock = `${backendURLMock}/permissionsCache`;
@@ -136,11 +141,8 @@ describe('app-actions', () => {
 
 
   describe('removeAccountOrLogOut', () => {
-    const copy = Router.EnterServer;
-    afterEach(() => Router.EnterServer = copy);
     beforeEach(() => {
       jest.spyOn(PushNotifications, 'unregister').mockResolvedValueOnce({});
-      Router.EnterServer = jest.fn();
       createStore();
     });
 
@@ -245,6 +247,20 @@ describe('app-actions', () => {
         permissions: permissions,
       });
     }
+  });
+
+
+  describe('initializeApp', () => {
+    it('should set YT current user from cache', async () => {
+      const userMock = mocks.createUserMock();
+      await __setStorageState({currentUser: {ytCurrentUser: userMock}});
+      await store.dispatch(actions.initializeApp({}));
+
+      expect(store.getActions()[0]).toEqual({
+        type: types.RECEIVE_USER,
+        user: userMock,
+      });
+    });
   });
 
 
