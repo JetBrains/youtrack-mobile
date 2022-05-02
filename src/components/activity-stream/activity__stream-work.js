@@ -24,6 +24,7 @@ import type {Activity} from 'flow/Activity';
 import type {AppState} from '../../reducers';
 import type {IssueFull} from 'flow/Issue';
 import type {WorkItem} from 'flow/Work';
+import {MAIN_FONT_SIZE} from '../common-styles/typography';
 
 type Props = {
   activityGroup: Activity,
@@ -77,6 +78,7 @@ const StreamWork = (props: Props) => {
         {!!work.text && (
           <View style={work.id && styles.activityWorkComment}>
             <MarkdownView
+              textStyle={{fontSize: MAIN_FONT_SIZE}}
               onCheckboxUpdate={(checked: boolean, position: number, workItemText: string): void => {
                 if (props.onUpdate) {
                   props.onUpdate({
