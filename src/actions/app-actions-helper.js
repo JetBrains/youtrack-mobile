@@ -6,6 +6,7 @@ import {removeTrailingSlash} from 'util/util';
 
 import type {PermissionCacheItem} from 'flow/Permission';
 import type {StorageState} from 'components/storage/storage';
+import type {User} from '../flow/User';
 
 function updateCachedPermissions(permissions: Array<PermissionCacheItem>): void {
   flushStoragePart({permissions});
@@ -43,9 +44,19 @@ async function targetAccountToSwitchTo(targetBackendUrl: string = ''): Promise<S
   return targetAccount;
 }
 
+function storeCurrentUser(user: User): void {
+  flushStoragePart({
+    currentUser: {
+      ...getStorageState().currentUser,
+      ytCurrentUser: user,
+    },
+  });
+}
+
 export {
   getCachedPermissions,
   updateCachedPermissions,
   loadPermissions,
   targetAccountToSwitchTo,
+  storeCurrentUser,
 };
