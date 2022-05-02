@@ -429,7 +429,6 @@ function setUserPermissions(permissions: Array<PermissionCacheItem>): Action {
       permissionsStore: new PermissionsStore(permissions),
       currentUser: auth.currentUser,
     });
-    log.debug('PermissionsStore created', permissions);
   };
 }
 
@@ -443,8 +442,9 @@ export function loadUserPermissions(): Action {
         auth.getPermissionsCacheURL()
       );
       await dispatch(setUserPermissions(permissions));
+      log.info('PermissionsStore created');
       appActionsHelper.updateCachedPermissions(permissions);
-      log.debug('Permissions cached');
+      log.debug('Permissions stored');
     } catch (error) {
       log.warn(error);
     }
@@ -643,7 +643,6 @@ export function redirectToRoute(config: AppConfig, issueId: string | null, navig
 
         const cachedPermissions: ?Array<PermissionCacheItem> = getCachedPermissions();
         if (cachedPermissions) {
-          log.debug('Create PermissionsStore from cached permissions');
           await dispatch(setUserPermissions(cachedPermissions));
         }
 
