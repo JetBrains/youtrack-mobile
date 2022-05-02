@@ -429,7 +429,6 @@ function setUserPermissions(permissions: Array<PermissionCacheItem>): Action {
       permissionsStore: new PermissionsStore(permissions),
       currentUser: auth.currentUser,
     });
-    log.debug('PermissionsStore created', permissions);
   };
 }
 
@@ -443,8 +442,9 @@ export function loadUserPermissions(): Action {
         auth.getPermissionsCacheURL()
       );
       await dispatch(setUserPermissions(permissions));
+      log.info('PermissionsStore created');
       appActionsHelper.updateCachedPermissions(permissions);
-      log.debug('Permissions cached');
+      log.debug('Permissions stored');
     } catch (error) {
       log.warn(error);
     }
@@ -472,17 +472,43 @@ export function completeInitialization(
   };
 }
 
+export const USER_NULL_VALUE: $Shape<User> = {
+  profiles: {
+    appearance: {
+      naturalCommentsOrder: true,
+    },
+    general: {
+      searchContext: EVERYTHING_CONTEXT,
+    },
+  },
+};
+
+export function setCurrentUser(usr: ?User = {profiles: {}}): Promise<void> {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<boolean> => {
+    const user: User = {
+      ...usr,
+      profiles: {
+        ...usr.profiles,
+        general: {
+          ...USER_NULL_VALUE.profiles.general,
+          ...usr.profiles.general,
+        },
+        appearance: {
+          ...USER_NULL_VALUE.profiles.appearance,
+          ...usr.profiles.appearance,
+        },
+      },
+    };
+
+    await dispatch({type: types.RECEIVE_USER, user});
+    await dispatch(storeSearchContext(user.profiles.general.searchContext));
+  };
+}
+
 function loadUser(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const user: User = await getApi().user.getUser();
-    const DEFAULT_USER_PROFILES: { general: $Shape<UserGeneralProfile>, appearance: $Shape<UserAppearanceProfile> } = {
-      general: {searchContext: EVERYTHING_CONTEXT},
-      appearance: {naturalCommentsOrder: true},
-    };
-    user.profiles = Object.assign({}, DEFAULT_USER_PROFILES, user.profiles);
-    user.profiles.general.searchContext = user.profiles.general.searchContext || EVERYTHING_CONTEXT;
-    await dispatch(storeSearchContext(user.profiles.general.searchContext));
-    dispatch({type: types.RECEIVE_USER, user});
+    await dispatch(setCurrentUser(user));
     flushStoragePart({
       currentUser: {
         ...getStorageState().currentUser,
@@ -643,7 +669,6 @@ export function redirectToRoute(config: AppConfig, issueId: string | null, navig
 
         const cachedPermissions: ?Array<PermissionCacheItem> = getCachedPermissions();
         if (cachedPermissions) {
-          log.debug('Create PermissionsStore from cached permissions');
           await dispatch(setUserPermissions(cachedPermissions));
         }
 
@@ -685,10 +710,9 @@ async function refreshConfig(backendUrl: string): Promise<AppConfig> {
 
 export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
+    await dispatch(setCurrentUser(getStorageState()?.currentUser?.ytCurrentUser));
 
-    const isRedirectedToTargetRoute: boolean = await dispatch(
-      redirectToRoute(config, issueId, navigateToActivity)
-    );
+    const isRedirectedToTargetRoute: boolean = await dispatch(redirectToRoute(config, issueId, navigateToActivity));
 
     const versionHasChanged: boolean = packageJson.version !== getStorageState().currentAppVersion;
     try {
