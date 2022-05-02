@@ -6,6 +6,7 @@ import thunk from 'redux-thunk';
 import * as storage from '../src/components/storage/storage';
 import Auth from '../src/components/auth/oauth2';
 import {createProjectCustomFieldMock} from './mocks__custom-fields';
+import {deepmerge} from 'deepmerge-ts';
 import {ResourceTypes} from '../src/components/api/api__resource-types';
 
 const sandbox = sinon.createSandbox();
@@ -76,28 +77,35 @@ const navigatorMock = {
 };
 
 function createUserMock(data = {}) {
-  return Object.assign({
-    $type: ResourceTypes.USER,
-    id: uuid(),
-    ringId: uuid(),
-    fullName: randomWord(),
-    name: randomWord(),
-    login: randomWord(),
-    avatarUrl: 'https://unsplash.it/32/32',
-    guest: false,
-    profiles: {
-      general: {
-        useMarkup: true,
+  return deepmerge(
+    {
+      $type: ResourceTypes.USER,
+      id: uuid(),
+      ringId: uuid(),
+      fullName: randomWord(),
+      name: randomWord(),
+      login: randomWord(),
+      avatarUrl: 'https://unsplash.it/32/32',
+      guest: false,
+      profiles: {
+        general: {
+          useMarkup: true,
+        },
+        notifications: {},
+        appearance: {
+          useAbsoluteDates: true,
+        },
+        issuesList: {},
+        timetracking: {
+          isTimeTrackingAvailable: true,
+        },
       },
-      notifications: {},
-      appearance: {},
-      issuesList: {},
-      timetracking: {},
+      userPermissions: {
+        has: () => true,
+      },
     },
-    userPermissions: {
-      has: () => true,
-    },
-  }, data);
+    data
+  );
 }
 
 function createProjectMock(data) {
