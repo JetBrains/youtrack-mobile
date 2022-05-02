@@ -254,48 +254,27 @@ describe('app-actions', () => {
 
 
   describe('setCurrentUser', () => {
-    it('should set default user', async () => {
+    it('should set default user and cache it', async () => {
+      __setStorageState({currentUser: {}});
       await store.dispatch(actions.setCurrentUser());
 
       expect(store.getActions()[0]).toEqual({
         type: types.RECEIVE_USER,
         user: USER_NULL_VALUE,
       });
+      expect(getStorageState().currentUser.ytCurrentUser).toEqual(USER_NULL_VALUE);
     });
 
-    it('should merge user fields', async () => {
-      userMock = mocks.createUserMock({
-        id: 2,
-        profiles: {
-          general: {searchContext: searchContextMock},
-          appearance: {naturalCommentsOrder: naturalCommentsOrderMock},
-        },
-      });
-
-      await store.dispatch(actions.setCurrentUser(userMock));
+    it('should set default user and do not cache it', async () => {
+      __setStorageState({currentUser: {}});
+      userMock = mocks.createUserMock();
+      await store.dispatch(actions.setCurrentUser(userMock, true));
 
       expect(store.getActions()[0]).toEqual({
         type: types.RECEIVE_USER,
-        user: {
-          ...userMock,
-          id: 2,
-          profiles: {
-            general: {
-              useMarkup: true,
-              searchContext: searchContextMock,
-            },
-            appearance: {
-              useAbsoluteDates: true,
-              naturalCommentsOrder: naturalCommentsOrderMock,
-            },
-            notifications: {},
-            issuesList: {},
-            timetracking: {
-              isTimeTrackingAvailable: true,
-            },
-          },
-        },
+        user: userMock,
       });
+      expect(getStorageState().currentUser.ytCurrentUser).toBeUndefined();
     });
   });
 
@@ -341,8 +320,8 @@ describe('app-actions', () => {
       });
     });
 
-    it('should set EVERYTHING context for the current user', async () => {
-      await initApp(mocks.createUserMock());
+    it('should set EVERYTHING context if there is no cached YT current user', async () => {
+      await initApp();
 
       expect(getStorageState().searchContext).toEqual(EVERYTHING_CONTEXT);
     });

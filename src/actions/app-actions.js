@@ -31,8 +31,8 @@ import {
   storageStateAuthParamsKey,
   storeAccounts,
 } from 'components/storage/storage';
-import {getCachedPermissions} from './app-actions-helper';
-import {getErrorMessage, isUnsupportedFeatureError} from 'components/error/error-resolver';
+import {getCachedPermissions, storeCurrentUser} from './app-actions-helper';
+import {getErrorMessage, isUnsupportedFeatureError, resolveErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
 import {hasType} from 'components/api/api__resource-types';
 import {isIOSPlatform} from 'util/util';
@@ -136,8 +136,14 @@ export function updateUserGeneralProfile(userGeneralProfile: $Shape<UserGeneralP
         type: types.RECEIVE_USER_GENERAL_PROFILE,
         ...{general: updatedUserGeneralProfile},
       });
+      const user: User = getStorageState().currentUser.ytCurrentUser || USER_NULL_VALUE;
+      user.profiles.general = {
+        ...user.profiles.general,
+        ...updatedUserGeneralProfile,
+      };
+      storeCurrentUser(user);
     } catch (e) {
-      log.info('Cannot update your profile');
+      log.warn(resolveErrorMessage(e, true));
     }
   };
 }
@@ -483,38 +489,20 @@ export const USER_NULL_VALUE: $Shape<User> = {
   },
 };
 
-export function setCurrentUser(usr: ?User = {profiles: {}}): Promise<void> {
+export function setCurrentUser(user: User = USER_NULL_VALUE, doNotCache: boolean = false): Promise<void> {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<boolean> => {
-    const user: User = {
-      ...usr,
-      profiles: {
-        ...usr.profiles,
-        general: {
-          ...USER_NULL_VALUE.profiles.general,
-          ...usr.profiles.general,
-        },
-        appearance: {
-          ...USER_NULL_VALUE.profiles.appearance,
-          ...usr.profiles.appearance,
-        },
-      },
-    };
-
     await dispatch({type: types.RECEIVE_USER, user});
     await dispatch(storeSearchContext(user.profiles.general.searchContext));
+    if (!doNotCache) {
+      storeCurrentUser(user);
+    }
   };
 }
 
-function loadUser(): Action {
+export function loadUser(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const user: User = await getApi().user.getUser();
     await dispatch(setCurrentUser(user));
-    flushStoragePart({
-      currentUser: {
-        ...getStorageState().currentUser,
-        ytCurrentUser: user,
-      },
-    });
   };
 }
 
@@ -710,7 +698,8 @@ async function refreshConfig(backendUrl: string): Promise<AppConfig> {
 
 export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
-    await dispatch(setCurrentUser(getStorageState()?.currentUser?.ytCurrentUser));
+    const user: User = getStorageState()?.currentUser?.ytCurrentUser || USER_NULL_VALUE;
+    await dispatch(setCurrentUser(user, true));
 
     const isRedirectedToTargetRoute: boolean = await dispatch(redirectToRoute(config, issueId, navigateToActivity));
 
