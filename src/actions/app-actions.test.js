@@ -13,7 +13,6 @@ import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
 import {__setStorageState, getStorageState, populateStorage} from 'components/storage/storage';
 import {CUSTOM_ERROR_MESSAGE, REGISTRATION_ERRORS, UNSUPPORTED_ERRORS} from 'components/error/error-messages';
-import {EVERYTHING_CONTEXT} from '../components/search/search-context';
 import {USER_NULL_VALUE} from './app-actions';
 
 jest.mock('components/router/router', () => ({
@@ -318,19 +317,6 @@ describe('app-actions', () => {
           },
         },
       });
-    });
-
-    it('should set EVERYTHING context if there is no cached YT current user', async () => {
-      await initApp();
-
-      expect(getStorageState().searchContext).toEqual(EVERYTHING_CONTEXT);
-    });
-
-    it('should set YT current user search context from cache', async () => {
-      userMock = mocks.createUserMock({profiles: {general: {searchContext: searchContextMock}}});
-      await initApp(userMock);
-
-      expect(getStorageState().searchContext).toEqual(searchContextMock);
     });
 
     async function initApp(ytCurrentUser) {

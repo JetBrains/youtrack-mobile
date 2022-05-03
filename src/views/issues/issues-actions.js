@@ -12,7 +12,6 @@ import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from 'components/
 import {getAssistSuggestions, getCachedUserQueries} from 'components/query-assist/query-assist-helper';
 import {notifyError} from 'components/notification/notification';
 import {until} from 'util/util';
-import {updateUserGeneralProfile} from 'actions/app-actions';
 
 import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
@@ -75,10 +74,6 @@ export function storeIssuesQuery(query: string): (() => void) {
   };
 }
 
-export function storeSearchContext(searchContext: Folder): () => Promise<void> {
-  return async () => {await flushStoragePart({searchContext});};
-}
-
 export function listEndReached(): {type: any} {
   return {type: types.LIST_END_REACHED};
 }
@@ -116,7 +111,7 @@ export function updateSearchContextPinned(isPinned: boolean): {isSearchContextPi
 }
 
 function getSearchContext() {
-  return getStorageState().searchContext;
+  return getStorageState().searchContext || EVERYTHING_CONTEXT;
 }
 
 export function getSearchQuery(query: string = ''): string {
@@ -180,9 +175,7 @@ export function openContextSelect(): ((dispatch: (any) => any, getState: () => a
     trackEvent('Issue list context select');
 
     const api: Api = getApi();
-    const currentUser = getState().app?.user;
-    const currentUserGeneralProfile = currentUser?.profiles?.general;
-    const currentSearchContext = currentUserGeneralProfile?.searchContext || EVERYTHING_CONTEXT;
+    const currentSearchContext = getSearchContext();
     const searchContextSelectProps = {
       show: true,
       placeholder: 'Filter projects, saved searches, and tags',
@@ -197,13 +190,11 @@ export function openContextSelect(): ((dispatch: (any) => any, getState: () => a
       },
       selectedItems: [currentSearchContext],
       onCancel: () => dispatch(closeSelect()),
-      onSelect: async (selectedContext: Folder) => {
+      onSelect: async (searchContext: Folder) => {
         try {
           dispatch(closeSelect());
-          await dispatch(storeSearchContext(selectedContext));
-          dispatch(updateUserGeneralProfile({
-            searchContext: selectedContext.id ? selectedContext : null,
-          }));
+          await dispatch(setSearchContext(searchContext));
+          await flushStoragePart({searchContext});
           dispatch(refreshIssues());
         } catch (error) {
           log.warn('Failed to change a context', error);
@@ -361,6 +352,15 @@ export function refreshIssuesCount(): (dispatch: (any) => any, getState: () => a
   };
 }
 
+export function setSearchContext(searchContext: Folder = EVERYTHING_CONTEXT): ((dispatch: (any) => any) => Promise<void>) {
+  return async (dispatch: (any) => any) => {
+    dispatch({
+      type: types.SET_SEARCH_CONTEXT,
+      searchContext,
+    });
+  };
+}
+
 export function initializeIssuesList(searchQuery?: string): ((dispatch: (any) => any) => Promise<void>) {
   return async (dispatch: (any) => any) => {
     dispatch(setIssuesQuery(searchQuery || getStorageState().query || ''));
@@ -369,11 +369,7 @@ export function initializeIssuesList(searchQuery?: string): ((dispatch: (any) =>
     } else {
       dispatch(readStoredIssuesQuery());
     }
-
-    dispatch({
-      type: types.SET_SEARCH_CONTEXT,
-      searchContext: getSearchContext(),
-    });
+    await dispatch(setSearchContext(getSearchContext()));
 
     const cachedIssues: Array<AnyIssue>| null = getStorageState().issuesCache;
     if (cachedIssues?.length) {
