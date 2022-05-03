@@ -31,7 +31,6 @@ export const ResourceTypes = {
   UPSOURCE_PROCESSOR: 'UpsourceChangesProcessor',
   USER: 'jetbrains.charisma.persistence.user.User',
   USER_APPEARANCE_PROFILE: 'AppearanceUserProfile',
-  USER_GENERAL_PROFILE: 'GeneralUserProfile',
   USER_GROUP: 'jetbrains.charisma.persistent.security.UserGroup',
   VCS_CHANGE: 'VcsChange',
   VCS_ITEM: 'jetbrains.youtrack.timetracking.gaprest.VcsChangeActivityItem',

@@ -7,7 +7,7 @@ import {ResourceTypes} from './api__resource-types';
 import type Auth from '../auth/oauth2';
 import type {IssueComment} from 'flow/CustomFields';
 import type {Reaction} from 'flow/Reaction';
-import type {Folder, User, UserAppearanceProfile, UserGeneralProfile} from 'flow/User';
+import type {Folder, User, UserAppearanceProfile} from 'flow/User';
 
 
 export default class UserAPI extends ApiBase {
@@ -83,16 +83,6 @@ export default class UserAPI extends ApiBase {
       appearanceProfile.$type
         ? appearanceProfile
         : Object.assign({}, appearanceProfile, {$type: ResourceTypes.USER_APPEARANCE_PROFILE})
-    );
-  }
-
-  async updateUserGeneralProfile(generalProfile: UserGeneralProfile, userId: string = 'me'): Promise<UserGeneralProfile> {
-    const queryString = ApiBase.createFieldsQuery({searchContext: this.SEARCH_CONTEXT_FIELDS});
-
-    return await this.makeAuthorizedRequest(
-      `${this.adminApiUrl}/${userId}/profiles/general?${queryString}`,
-      'POST',
-      {...generalProfile, $type: ResourceTypes.USER_GENERAL_PROFILE},
     );
   }
 
