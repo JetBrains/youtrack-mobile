@@ -11,7 +11,7 @@ import type {EndUserAgreement} from 'flow/AppConfig';
 import type {NetInfoState} from '@react-native-community/netinfo';
 import type {PermissionsStore} from 'components/permissions-store/permissions-store';
 import type {StorageState} from 'components/storage/storage';
-import type {User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile, UserProfiles} from 'flow/User';
+import type {User, UserAppearanceProfile, UserArticlesProfile} from 'flow/User';
 import type {WorkTimeSettings} from 'flow/Work';
 
 export type RootState = {
@@ -140,13 +140,6 @@ export default (createReducer(initialState, {
       ...{user: updatedUser},
     };
   },
-  [types.RECEIVE_USER_GENERAL_PROFILE](state: RootState, action: {general: UserGeneralProfile}) {
-    const updatedUser = mergeUserProfile(state, 'general', action.general);
-    return {
-      ...state,
-      ...{user: updatedUser},
-    };
-  },
   [types.SET_NETWORK](state: RootState, action: {networkState: NetInfoState}) {
     return {
       ...state,
@@ -154,20 +147,3 @@ export default (createReducer(initialState, {
     };
   },
 }): any);
-
-function mergeUserProfile(
-  state: RootState,
-  profileName: string,
-  newProfile: UserGeneralProfile | UserAppearanceProfile
-): User {
-  const user: User = ((state.user: any): User);
-  const _user: $Shape<User> = ((user || {profiles: {}}): any);
-  const userProfiles: $Shape<UserProfiles> = Object.assign({}, _user.profiles || {});
-  const updatedProfile: UserGeneralProfile | UserAppearanceProfile = Object.assign(
-    {},
-    userProfiles[profileName],
-    newProfile
-  );
-  const updatedProfiles: $Shape<UserProfiles> = Object.assign({}, _user.profiles || {}, {[profileName]: updatedProfile});
-  return {...user, ...{profiles: updatedProfiles}};
-}

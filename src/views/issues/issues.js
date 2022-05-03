@@ -620,7 +620,7 @@ const mapStateToProps = (state: AppState, ownProps: { issueId?: string, searchQu
     ...state.issueList,
     ...ownProps,
     ...state.app,
-    searchContext: state.app?.user?.profiles?.general?.searchContext || state.issueList.searchContext,
+    searchContext: state.issueList.searchContext,
   };
 };
 

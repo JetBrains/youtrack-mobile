@@ -32,7 +32,7 @@ import {
   storeAccounts,
 } from 'components/storage/storage';
 import {getCachedPermissions, storeCurrentUser} from './app-actions-helper';
-import {getErrorMessage, resolveErrorMessage} from 'components/error/error-resolver';
+import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
 import {hasType} from 'components/api/api__resource-types';
 import {isIOSPlatform} from 'util/util';
@@ -43,14 +43,13 @@ import {logEvent} from 'components/log/log-helper';
 import {normalizeAuthParams} from 'components/auth/oauth2-helper';
 import {notify, notifyError} from 'components/notification/notification';
 import {setApi} from 'components/api/api__instance';
-import {storeSearchContext} from 'views/issues/issues-actions';
 
 import type {Activity} from 'flow/Activity';
 import type {AppConfig, EndUserAgreement} from 'flow/AppConfig';
 import type {AppState} from '../reducers';
 import type {Article} from 'flow/Article';
 import type {AuthConfig, AuthParams, OAuthParams2} from 'flow/Auth';
-import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserGeneralProfile} from 'flow/User';
+import type {Folder, User, UserAppearanceProfile, UserArticlesProfile} from 'flow/User';
 import type {NetInfoState} from '@react-native-community/netinfo';
 import type {NotificationRouteData} from 'flow/Notification';
 import type {PermissionCacheItem} from 'flow/Permission';
@@ -117,33 +116,6 @@ export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppeara
       } catch (error) {
         log.info('Can\'t update user appearance profile.');
       }
-    }
-  };
-}
-
-export function updateUserGeneralProfile(userGeneralProfile: $Shape<UserGeneralProfile>): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    try {
-      const updatedUserGeneralProfile: UserGeneralProfile = await getApi().user.updateUserGeneralProfile(
-        userGeneralProfile
-      );
-
-      if (updatedUserGeneralProfile.searchContext === null) {
-        updatedUserGeneralProfile.searchContext = EVERYTHING_CONTEXT;
-      }
-
-      dispatch({
-        type: types.RECEIVE_USER_GENERAL_PROFILE,
-        ...{general: updatedUserGeneralProfile},
-      });
-      const user: User = getStorageState().currentUser.ytCurrentUser || USER_NULL_VALUE;
-      user.profiles.general = {
-        ...user.profiles.general,
-        ...updatedUserGeneralProfile,
-      };
-      storeCurrentUser(user);
-    } catch (e) {
-      log.warn(resolveErrorMessage(e, true));
     }
   };
 }
@@ -491,7 +463,6 @@ export const USER_NULL_VALUE: $Shape<User> = {
 export function setCurrentUser(user: User = USER_NULL_VALUE, doNotCache: boolean = false): Promise<void> {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<boolean> => {
     await dispatch({type: types.RECEIVE_USER, user});
-    await dispatch(storeSearchContext(user.profiles.general.searchContext));
     if (!doNotCache) {
       storeCurrentUser(user);
     }
