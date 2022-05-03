@@ -118,6 +118,7 @@ export default EStyleSheet.create({
     lineHeight: mainText.lineHeight,
   },
   checkboxRow: {
+    flex: 0.96,
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginVertical: -UNIT / 2,
