@@ -31,7 +31,6 @@ export default EStyleSheet.create({
   },
   ...splitViewStyles,
   list: {
-    flexGrow: 0,
     minHeight: 160,
     paddingBottom: UNIT * 4,
   },
