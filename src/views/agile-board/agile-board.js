@@ -290,8 +290,8 @@ class AgileBoard extends Component<Props, State> {
       return (
         <AnimatedView
           useNativeDriver
-          duration={300}
-          animation="zoomIn"
+          duration={3000}
+          animation="tada"
           style={styles.zoomButton}
         >
           <TouchableOpacity

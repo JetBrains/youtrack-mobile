@@ -462,7 +462,7 @@ export class Issues extends Component<Props, State> {
     if (isLoadingMore) {
       return <SkeletonIssues/>;
     }
-    return null;
+    return this.renderError();
   };
 
   renderIssueList(): Node {
@@ -548,7 +548,6 @@ export class Issues extends Component<Props, State> {
         {this.state.isEditQuery && this.renderSearchPanel()}
 
         {this.renderIssueList()}
-        {this.renderError()}
 
         {this.renderCreateIssueButton(isRefreshing)}
       </View>
