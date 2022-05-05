@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 import * as actions from './app-actions';
 import * as appActionHelper from './app-actions-helper';
 import * as Notification from 'components/notification/notification';
+import * as storage from 'components/storage/storage';
 import * as types from './action-types';
 import AuthTest from 'components/auth/oauth2';
 import log from 'components/log/log';
@@ -11,8 +12,6 @@ import mocks from '../../test/mocks';
 import permissionsHelper from 'components/permissions-store/permissions-helper';
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
-import {__setStorageState, getStorageState, populateStorage} from 'components/storage/storage';
-import {USER_NULL_VALUE} from './app-actions';
 
 jest.mock('components/router/router', () => ({
   Home: jest.fn(),
@@ -50,7 +49,7 @@ describe('app-actions', () => {
       access_token: 'access_token',
     };
     updateStore({});
-    await populateStorage();
+    await storage.populateStorage();
   });
 
 
@@ -200,7 +199,7 @@ describe('app-actions', () => {
         accessTokenMock,
         permissionsCacheURLMock
       );
-      expect(getStorageState().permissions).toEqual(actualPermissionsMock);
+      expect(storage.getStorageState().permissions).toEqual(actualPermissionsMock);
     });
 
     it('should not set permissions from cache if there are no any', async () => {
@@ -240,7 +239,7 @@ describe('app-actions', () => {
     });
 
     function setCachedPermissions(permissions) {
-      __setStorageState({
+      storage.__setStorageState({
         permissions: permissions,
       });
     }
@@ -248,27 +247,36 @@ describe('app-actions', () => {
 
 
   describe('setCurrentUser', () => {
-    it('should set default user and cache it', async () => {
-      __setStorageState({currentUser: {}});
-      await store.dispatch(actions.setCurrentUser());
-
-      expect(store.getActions()[0]).toEqual({
-        type: types.RECEIVE_USER,
-        user: USER_NULL_VALUE,
-      });
-      expect(getStorageState().currentUser.ytCurrentUser).toEqual(USER_NULL_VALUE);
-    });
-
-    it('should set default user and do not cache it', async () => {
-      __setStorageState({currentUser: {}});
+    let currentUserMock;
+    let dispatchedObj;
+    beforeEach(() => {
+      currentUserMock = {};
+      storage.__setStorageState({currentUser: currentUserMock});
+      jest.spyOn(storage, 'flushStoragePart');
       userMock = mocks.createUserMock();
-      await store.dispatch(actions.setCurrentUser(userMock, true));
-
-      expect(store.getActions()[0]).toEqual({
+      dispatchedObj = {
         type: types.RECEIVE_USER,
         user: userMock,
+      };
+    });
+
+    it('should set user and cache it', async () => {
+      await store.dispatch(actions.setCurrentUser(userMock));
+
+      expect(store.getActions()[0]).toEqual(dispatchedObj);
+      expect(storage.flushStoragePart).toHaveBeenCalledWith({
+        currentUser: {
+          ...currentUserMock,
+          ytCurrentUser: userMock,
+        },
       });
-      expect(getStorageState().currentUser.ytCurrentUser).toBeUndefined();
+    });
+
+    it('should set user, but not cache it', async () => {
+      await store.dispatch(actions.setCurrentUser(userMock, true));
+
+      expect(store.getActions()[0]).toEqual(dispatchedObj);
+      expect(storage.flushStoragePart).not.toHaveBeenCalled();
     });
   });
 
@@ -315,14 +323,14 @@ describe('app-actions', () => {
     });
 
     async function initApp(ytCurrentUser) {
-      __setStorageState({currentUser: {ytCurrentUser}});
+      storage.__setStorageState({currentUser: {ytCurrentUser}});
       await store.dispatch(actions.initializeApp({l10n: {}}));
     }
   });
 
 
   function setRegistered(isRegistered) {
-    __setStorageState({isRegisteredForPush: isRegistered});
+    storage.__setStorageState({isRegisteredForPush: isRegistered});
   }
 
   function createStore(otherAccounts) {

@@ -38,7 +38,7 @@ export type StorageState = {|
   projectId: ?string,
   projects: Array<IssueProject | ArticleProject>,
   draftId: ?string,
-  currentUser: ?User,
+  currentUser: ?User & {ytCurrentUser: User},
   creationTimestamp: ?number,
   config: ?AppConfig,
   query: ?string,

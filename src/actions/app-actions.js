@@ -17,7 +17,6 @@ import PushNotificationsProcessor from 'components/push-notifications/push-notif
 import Router from 'components/router/router';
 import UrlParse from 'url-parse';
 import usage from 'components/usage/usage';
-import {EVERYTHING_CONTEXT} from 'components/search/search-context';
 import {i18n} from 'components/i18n/i18n';
 
 import {
@@ -449,19 +448,8 @@ export function completeInitialization(
   };
 }
 
-export const USER_NULL_VALUE: $Shape<User> = {
-  profiles: {
-    appearance: {
-      naturalCommentsOrder: true,
-    },
-    general: {
-      searchContext: EVERYTHING_CONTEXT,
-    },
-  },
-};
-
-export function setCurrentUser(user: User = USER_NULL_VALUE, doNotCache: boolean = false): Promise<void> {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<boolean> => {
+export function setCurrentUser(user: User, doNotCache: boolean = false): Action {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<void> => {
     await dispatch({type: types.RECEIVE_USER, user});
     if (!doNotCache) {
       storeCurrentUser(user);
@@ -660,8 +648,12 @@ async function refreshConfig(backendUrl: string): Promise<AppConfig> {
 
 export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
-    const user: User = getStorageState()?.currentUser?.ytCurrentUser || USER_NULL_VALUE;
-    await dispatch(setCurrentUser(user, true));
+    const user: ?User = getStorageState()?.currentUser?.ytCurrentUser;
+    if (user) {
+      await dispatch(setCurrentUser(user, true));
+    } else {
+      await dispatch(loadUser());
+    }
 
     const isRedirectedToTargetRoute: boolean = await dispatch(redirectToRoute(config, issueId, navigateToActivity));
 
