@@ -3,8 +3,7 @@ import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {elevation1, elevationBottom} from 'components/common-styles/shadow';
-import {headerTitleText} from 'components/common-styles/header';
-import {MAIN_FONT_SIZE, mainText} from 'components/common-styles/typography';
+import {headerTitle, MAIN_FONT_SIZE, mainText} from 'components/common-styles/typography';
 import {separator} from 'components/common-styles/list';
 import {summaryTitle} from 'components/common-styles/issue';
 import {UNIT} from 'components/variables/variables';
@@ -75,7 +74,10 @@ export default EStyleSheet.create({
   subArticlesHeader: {
     ...elevation1,
   },
-  articlesHeaderText: headerTitleText,
+  articlesHeaderText: {
+    ...headerTitle,
+    color: '$text',
+  },
   subArticleItem: {
     marginLeft: UNIT * 2,
   },
