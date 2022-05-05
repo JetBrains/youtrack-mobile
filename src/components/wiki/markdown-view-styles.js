@@ -7,6 +7,7 @@ import {UNIT} from '../variables/variables';
 import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from '../common-styles/typography';
 
 import type {UITheme, UIThemeColors} from 'flow/Theme';
+import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
 const vSpace = {
@@ -15,7 +16,7 @@ const vSpace = {
 };
 
 // Source: 'react-native-markdown-display/src/lib/styles'
-const markdownStyles = (uiTheme: UITheme = DEFAULT_THEME) => {
+const markdownStyles = (uiTheme: UITheme = DEFAULT_THEME, textStyle: ?TextStyleProp = {}) => {
   const uiThemeColors: UIThemeColors = uiTheme.colors;
   const code = {
     borderWidth: 0,
@@ -29,6 +30,7 @@ const markdownStyles = (uiTheme: UITheme = DEFAULT_THEME) => {
     body: {
       color: uiThemeColors.$text,
       fontSize: SECONDARY_FONT_SIZE,
+      ...textStyle,
     },
 
     // Headings
@@ -196,6 +198,7 @@ const markdownStyles = (uiTheme: UITheme = DEFAULT_THEME) => {
     // Text Output
     text: {
       color: uiThemeColors.$text,
+      ...textStyle,
     },
     textgroup: {},
     paragraph: {

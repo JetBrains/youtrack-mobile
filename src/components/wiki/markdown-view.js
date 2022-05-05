@@ -18,11 +18,11 @@ import type {Attachment} from 'flow/CustomFields';
 import type {Folder} from 'flow/User';
 import type {Mentions} from './markdown-view-rules';
 import type {Theme} from 'flow/Theme';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
 type Props = {
-  style?: ViewStyleProp,
+  textStyle?: TextStyleProp,
   attachments?: Array<Attachment>,
   children: string,
   mentions?: Mentions,
@@ -48,9 +48,9 @@ function MarkdownView(props: Props) {
 
   return (
     <Markdown
-      style={markdownStyles(theme.uiTheme)}
+      style={markdownStyles(theme.uiTheme, props.textStyle)}
       markdownit={MarkdownItInstance}
-      rules={getMarkdownRules(attaches, projects, theme.uiTheme, mentions, onCheckBoxPress)}
+      rules={getMarkdownRules(attaches, projects, theme.uiTheme, mentions, onCheckBoxPress, props.textStyle)}
       ui
     >
       {children}

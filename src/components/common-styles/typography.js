@@ -36,3 +36,8 @@ export const mainText = {
   lineHeight: 20,
   letterSpacing: -0.19,
 };
+
+export const markdownText = {
+  fontSize: MAIN_FONT_SIZE,
+  lineHeight: 22,
+};

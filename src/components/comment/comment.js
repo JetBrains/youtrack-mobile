@@ -9,6 +9,7 @@ import MarkdownView from '../wiki/markdown-view';
 import YoutrackWiki from '../wiki/youtrack-wiki';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
+import {markdownText} from '../common-styles/typography';
 import {ytDate} from 'components/date/date';
 
 import styles from './comment.styles';
@@ -95,6 +96,7 @@ function Comment(props: Props) {
   const renderMarkdown = () => {
     return (
       <MarkdownView
+        textStyle={markdownText}
         testID="commentMarkdown"
         attachments={props.attachments}
         onCheckboxUpdate={(checked: boolean, position: number) => (

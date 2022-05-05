@@ -15,6 +15,7 @@ import {HIT_SLOP} from '../common-styles/button';
 import {i18n} from 'components/i18n/i18n';
 import {IconContextActions} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
+import {markdownText} from '../common-styles/typography';
 import {showActionSheet} from '../action-sheet/action-sheet';
 import {ytDate} from 'components/date/date';
 
@@ -76,6 +77,7 @@ const StreamWork = (props: Props) => {
         {!!work.text && (
           <View style={work.id && styles.activityWorkComment}>
             <MarkdownView
+              textStyle={markdownText}
               onCheckboxUpdate={(checked: boolean, position: number, workItemText: string): void => {
                 if (props.onUpdate) {
                   props.onUpdate({
