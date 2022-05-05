@@ -164,7 +164,10 @@ export function applyAuthParamsAndInitAPI(): Action {
     const auth: OAuth2 = ((getState().app.auth: any): OAuth2);
     const doUpdate = async () => {
       await auth.loadCurrentUser(cachedAuthParams);
-      await flushStoragePart({currentUser: auth.currentUser});
+      await flushStoragePart({currentUser: {
+          ...getStorageState().currentUser,
+          ...auth.currentUser,
+        }});
       setApi(new Api(auth));
     };
 
@@ -657,14 +660,14 @@ async function refreshConfig(backendUrl: string): Promise<AppConfig> {
 
 export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
-    const user: ?User = getStorageState()?.currentUser?.ytCurrentUser;
+    const isRedirectedToTargetRoute: boolean = await dispatch(redirectToRoute(config, issueId, navigateToActivity));
+
+    const user: ?User = getStorageState().currentUser?.ytCurrentUser;
     if (user) {
       await dispatch(setCurrentUser(user, true));
     } else {
       await dispatch(loadUser());
     }
-
-    const isRedirectedToTargetRoute: boolean = await dispatch(redirectToRoute(config, issueId, navigateToActivity));
 
     const versionHasChanged: boolean = packageJson.version !== getStorageState().currentAppVersion;
     try {
