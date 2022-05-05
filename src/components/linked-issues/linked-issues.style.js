@@ -2,7 +2,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {elevation1} from '../common-styles/shadow';
 import {headerMinHeight, headerTitlePresentation} from '../header/header.styles';
-import {SECONDARY_FONT_SIZE, secondaryText} from '../common-styles/typography';
+import {markdownText, SECONDARY_FONT_SIZE, secondaryText} from '../common-styles/typography';
 import {selectButtonMinHeight} from '../select/select-button.styles';
 import {separatorBorder} from '../common-styles/list';
 import {StyleSheet} from 'react-native';
@@ -120,5 +120,6 @@ export default EStyleSheet.create({
   },
   linkedIssuesTitleTextDetails: {
     color: '$text',
+    fontSize: markdownText.fontSize,
   },
 });
