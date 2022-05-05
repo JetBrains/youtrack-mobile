@@ -8,7 +8,7 @@ import Avatar from '../avatar/avatar';
 import MarkdownView from '../wiki/markdown-view';
 import YoutrackWiki from '../wiki/youtrack-wiki';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
-import {MAIN_FONT_SIZE} from '../common-styles/typography';
+import {markdownText} from '../common-styles/typography';
 import {ytDate} from 'components/date/date';
 
 import styles from './comment.styles';
@@ -89,9 +89,7 @@ function Comment(props: Props) {
   const renderMarkdown = () => {
     return (
       <MarkdownView
-        textStyle={{
-          fontSize: MAIN_FONT_SIZE,
-        }}
+        textStyle={markdownText}
         testID="commentMarkdown"
         attachments={props.attachments}
         onCheckboxUpdate={(checked: boolean, position: number) => (

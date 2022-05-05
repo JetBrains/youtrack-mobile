@@ -14,6 +14,7 @@ import {firstActivityChange, getDurationPresentation} from './activity__stream-h
 import {HIT_SLOP} from '../common-styles/button';
 import {IconContextActions} from '../icon/icon';
 import {logEvent} from '../log/log-helper';
+import {markdownText} from '../common-styles/typography';
 import {showActionSheet} from '../action-sheet/action-sheet';
 import {ytDate} from 'components/date/date';
 
@@ -24,7 +25,6 @@ import type {Activity} from 'flow/Activity';
 import type {AppState} from '../../reducers';
 import type {IssueFull} from 'flow/Issue';
 import type {WorkItem} from 'flow/Work';
-import {MAIN_FONT_SIZE} from '../common-styles/typography';
 
 type Props = {
   activityGroup: Activity,
@@ -78,7 +78,7 @@ const StreamWork = (props: Props) => {
         {!!work.text && (
           <View style={work.id && styles.activityWorkComment}>
             <MarkdownView
-              textStyle={{fontSize: MAIN_FONT_SIZE}}
+              textStyle={markdownText}
               onCheckboxUpdate={(checked: boolean, position: number, workItemText: string): void => {
                 if (props.onUpdate) {
                   props.onUpdate({
