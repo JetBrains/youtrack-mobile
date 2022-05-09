@@ -366,19 +366,6 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
     );
   };
 
-  const renderWorkActivity = (activityGroup: Activity) => (
-    <StreamWork
-      activityGroup={activityGroup}
-      onDelete={props.onWorkDelete}
-      onUpdate={props.onWorkUpdate}
-      onEdit={props.onWorkEdit}
-    />
-  );
-
-  const renderVCSActivity = (activityGroup: Activity) => (
-    <StreamVCS activityGroup={activityGroup}/>
-  );
-
   const renderVisibilityActivity = (activity) => {
     const textChange = getTextChange(activity, []);
     return renderTextChange(activity, textChange);
@@ -450,9 +437,16 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
                 <View style={styles.activityItem}>
                   {isCommentActivity && renderCommentActivity(activityGroup)}
 
-                  {activityGroup.work && renderWorkActivity(activityGroup)}
+                  {activityGroup.work && (
+                    <StreamWork
+                      activityGroup={activityGroup}
+                      onDelete={props.onWorkDelete}
+                      onUpdate={props.onWorkUpdate}
+                      onEdit={props.onWorkEdit}
+                    />)
+                  }
 
-                  {activityGroup.vcs && renderVCSActivity(activityGroup)}
+                  {activityGroup.vcs && <StreamVCS activityGroup={activityGroup}/>}
 
                   {renderHistoryAndRelatedChanges(
                     activityGroup,

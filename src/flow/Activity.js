@@ -5,14 +5,11 @@ import type {IssueFull} from './Issue';
 import type {User} from './User';
 import type {PullRequest, VCSActivity} from './Vcs';
 
-type EventBase = {
+type ActivityWork = {
   id: string,
   name: string,
   text: string,
-  color: {id: string}
-}
-
-type ActivityWork = EventBase & {
+  color: {id: string},
   $type: string;
   date: number;
   type: {name: string},

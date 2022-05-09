@@ -34,7 +34,10 @@ import {rootRoutesList, routeMap} from './app-routes';
 import type {Node} from 'react';
 import type {NotificationRouteData} from 'flow/Notification';
 import type {Ref} from 'react';
-
+// eslint-disable-next-line no-console
+console.reportErrorsAsExceptions = false;
+// eslint-disable-next-line no-console
+console.disableYellowBox = true;
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
