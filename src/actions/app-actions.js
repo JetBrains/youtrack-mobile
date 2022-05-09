@@ -30,6 +30,7 @@ import {
   storageStateAuthParamsKey,
   storeAccounts,
 } from 'components/storage/storage';
+import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 import {getCachedPermissions, storeCurrentUser} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
@@ -660,11 +661,13 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
       await dispatch(loadUser());
     }
 
-    if (!config.l10n) {
-      const updatedConfig: AppConfig = await refreshConfig(config.backendUrl);
-      return await dispatch(initializeApp(updatedConfig, issueId, navigateToActivity));
-    } else {
-      loadTranslation(config.l10n.locale, config.l10n.language);
+    if (checkVersion(FEATURE_VERSION.translations)) {
+      if (!config.l10n) {
+        const updatedConfig: AppConfig = await refreshConfig(config.backendUrl);
+        return await dispatch(initializeApp(updatedConfig, issueId, navigateToActivity));
+      } else {
+        loadTranslation(config.l10n.locale, config.l10n.language);
+      }
     }
 
     const versionHasChanged: boolean = packageJson.version !== getStorageState().currentAppVersion;
