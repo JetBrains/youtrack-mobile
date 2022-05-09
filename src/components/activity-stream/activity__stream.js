@@ -4,34 +4,23 @@ import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 import ActivityUserAvatar from './activity__stream-avatar';
-import ApiHelper from '../api/api__helper';
-import AttachmentsRow from '../attachments-row/attachments-row';
-import Comment from '../comment/comment';
-import CommentReactions from '../comment/comment-reactions';
-import CommentVisibility from '../comment/comment__visibility';
-import CustomFieldChangeDelimiter from '../custom-field/custom-field__change-delimiter';
-import Diff from '../diff/diff';
+import ApiHelper from 'components/api/api__helper';
+import Comment from 'components/comment/comment';
+import CommentReactions from 'components/comment/comment-reactions';
+import CommentVisibility from 'components/comment/comment__visibility';
 import Feature, {FEATURE_VERSION} from '../feature/feature';
-import getEventTitle from '../activity/activity__history-title';
-import IssueVisibility from '../visibility/issue-visibility';
-import ReactionAddIcon from '../reactions/new-reaction.svg';
-import StreamLink from './activity__stream-link';
-import StreamTimestamp from './activity__stream-timestamp';
+import IssueVisibility from 'components/visibility/issue-visibility';
+import ReactionAddIcon from 'components/reactions/new-reaction.svg';
+import StreamAttachments from './activity__stream-attachment';
+import StreamHistoryAndRelatedChanges from './activity__stream-history';
 import StreamUserInfo from './activity__stream-user-info';
 import StreamVCS from './activity__stream-vcs';
 import StreamWork from './activity__stream-work';
-import usage from '../usage/usage';
-import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
-import {DEFAULT_WORK_TIME_SETTINGS} from '../time-tracking/time-tracking__default-settings';
-import {getTextValueChange} from '../activity/activity__history-value';
-import {firstActivityChange, getActivityEventTitle} from './activity__stream-helper';
-import {i18n} from 'components/i18n/i18n';
-import {IconDrag, IconMoreOptions} from '../icon/icon';
-import {isActivityCategory} from '../activity/activity__category';
+import {firstActivityChange} from './activity__stream-helper';
 import {guid, isIOSPlatform} from 'util/util';
-
-import {HIT_SLOP} from '../common-styles/button';
-import {UNIT} from '../variables/variables';
+import {HIT_SLOP} from 'components/common-styles/button';
+import {i18n} from 'components/i18n/i18n';
+import {IconDrag, IconMoreOptions} from 'components/icon/icon';
 
 import styles from './activity__stream.styles';
 
@@ -39,13 +28,11 @@ import type {
   Activity,
   ActivityItem,
   ActivityStreamCommentActions,
-  ActivityChangeText,
 } from 'flow/Activity';
 import type {Attachment, IssueComment} from 'flow/CustomFields';
 import type {CustomError} from 'flow/Error';
 import type {Node} from 'react';
 import type {Reaction} from 'flow/Reaction';
-import type {TextValueChangeParams} from '../activity/activity__history-value';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
 import type {WorkItem, WorkTimeSettings} from 'flow/Work';
@@ -85,136 +72,6 @@ export type ActivityStreamProps = {
 }
 
 export const ActivityStream = (props: ActivityStreamProps): Node => {
-  const isMultiValueActivity = (activity: Object) => {
-    if (isActivityCategory.customField(activity)) {
-      const field = activity.field;
-      if (!field) {
-        return false;
-      }
-      return field.customField && field.customField.fieldType && field.customField.fieldType.isMultiValue;
-    }
-
-    if (activity.added?.length > 1 || activity.removed?.length > 1) {
-      return true;
-    }
-
-    return false;
-  };
-
-  const getTextChange = (activity: Activity, issueFields: ?Array<Object>): ActivityChangeText => {
-    const getParams = (isRemovedValue: boolean): TextValueChangeParams => ({
-      activity,
-      issueFields: issueFields,
-      workTimeSettings: props.workTimeSettings || DEFAULT_WORK_TIME_SETTINGS,
-      isRemovedValue: isRemovedValue,
-    });
-
-    return {
-      added: getTextValueChange(getParams(false)),
-      removed: getTextValueChange(getParams(true)),
-    };
-  };
-
-  const renderTextDiff = (activity: Activity, textChange: ActivityChangeText) => {
-    return <Diff
-      title={getEventTitle(activity, true)}
-      text1={textChange.removed}
-      text2={textChange.added}
-    />;
-  };
-
-  const renderTextChange = (activity: Activity, textChange: ActivityChangeText) => {
-    const isMultiValue = isMultiValueActivity(activity);
-    return (
-      <Text>
-        <Text style={styles.activityLabel}>{getActivityEventTitle(activity)}</Text>
-
-        <Text
-          style={[
-            styles.activityText,
-            isMultiValue || textChange.removed && !textChange.added ? styles.activityRemoved : null,
-          ]}
-        >
-          {textChange.removed}
-        </Text>
-
-        {Boolean(textChange.removed && textChange.added) && (
-          <Text style={styles.activityText}>
-            {isMultiValue ? ', ' : CustomFieldChangeDelimiter}
-          </Text>
-        )}
-
-        <Text style={styles.activityText}>{textChange.added}</Text>
-      </Text>
-    );
-  };
-
-  const renderTextValueChange = (activity: Activity, issueFields?: Array<Object>) => {
-    const textChange: ActivityChangeText = getTextChange(activity, issueFields);
-    const isTextDiff: boolean = (
-      isActivityCategory.description(activity) ||
-      isActivityCategory.summary(activity)
-    );
-
-    return (
-      <View style={styles.activityTextValueChange}>
-        {isTextDiff && renderTextDiff(activity, textChange)}
-        {!isTextDiff && renderTextChange(activity, textChange)}
-      </View>
-    );
-  };
-
-  const renderLinkChange = (activity: Activity) => <StreamLink activity={activity}/>;
-
-  const updateToAbsUrl = (attachments: Array<Attachment> = []): Array<Attachment> => {
-    if (attachments.length) {
-      attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(attachments, props.youtrackWiki.backendUrl);
-    }
-    return attachments;
-  };
-
-  const renderAttachments = (attachments: Array<Attachment> = [], uiTheme: UITheme): Node => {
-    return (
-      <AttachmentsRow
-        attachments={updateToAbsUrl(attachments)}
-        attachingImage={null}
-        onOpenAttachment={(type: string) => (
-          usage.trackEvent(
-            ANALYTICS_ISSUE_STREAM_SECTION, type === 'image' ? 'Showing image' : 'Open attachment by URL'
-          )
-        )}
-        uiTheme={uiTheme}
-      />
-    );
-  };
-
-  const renderAttachmentChange = (activity: Object, uiTheme: UITheme) => {
-    const removed: Array<any> = activity.removed || [];
-    const added: Array<any> = activity.added || [];
-    const addedAndLaterRemoved: Array<any> = added.filter(it => !it.url);
-    const addedAndAvailable: Array<any> = added.filter(it => it.url);
-    const hasAddedAttachments: boolean = addedAndAvailable.length > 0;
-
-    return (
-      <View key={activity.id}>
-        {hasAddedAttachments && renderAttachments(addedAndAvailable, uiTheme)}
-        {addedAndLaterRemoved.length > 0 && addedAndLaterRemoved.map(
-          it => <Text style={styles.activityAdded} key={it.id}>{it.name}</Text>
-        )}
-
-        {removed.length > 0 &&
-        <Text style={hasAddedAttachments && {marginTop: UNIT / 2}}>{activity.removed.map((it, index) =>
-          <Text key={it.id}>
-            {index > 0 && ', '}
-            <Text style={styles.activityRemoved}>{it.name}</Text>
-          </Text>
-        )}
-        </Text>}
-      </View>
-    );
-  };
-
-  const renderTimestamp = (timestamp, style) => <StreamTimestamp timestamp={timestamp} style={style}/>;
 
   const renderUserInfo = (activityGroup: Object, noTimestamp?: boolean) => (
     <StreamUserInfo activityGroup={activityGroup} noTimestamp={noTimestamp}/>
@@ -316,7 +173,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
       return null;
     }
 
-    const allAttachments = updateToAbsUrl(comment.attachments).concat(props.attachments || []);
+    const allAttachments = ApiHelper.convertAttachmentRelativeToAbsURLs(comment.attachments || [], props.youtrackWiki.backendUrl).concat(props.attachments || []);
     const commentActions: ?ActivityStreamCommentActions = props.commentActions;
 
     return (
@@ -351,7 +208,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
             <View
               style={styles.activityCommentAttachments}
             >
-              {renderAttachments(comment.attachments, props.uiTheme)}
+              <StreamAttachments attachments={comment.attachments}/>
             </View>
           )}
 
@@ -365,51 +222,6 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
       </View>
     );
   };
-
-  const renderVisibilityActivity = (activity) => {
-    const textChange = getTextChange(activity, []);
-    return renderTextChange(activity, textChange);
-  };
-
-  const renderActivityByCategory = (activity: Activity, uiTheme: UITheme) => {
-    switch (true) {
-    case Boolean(
-      isActivityCategory.tag(activity) ||
-      isActivityCategory.customField(activity) ||
-      isActivityCategory.sprint(activity) ||
-      isActivityCategory.work(activity) ||
-      isActivityCategory.description(activity) ||
-      isActivityCategory.summary(activity) ||
-      isActivityCategory.project(activity)
-    ):
-      return renderTextValueChange(activity);
-    case Boolean(isActivityCategory.link(activity)):
-      return renderLinkChange(activity);
-    case Boolean(isActivityCategory.attachment(activity)):
-      return renderAttachmentChange(activity, uiTheme);
-    case Boolean(isActivityCategory.visibility(activity)):
-      return renderVisibilityActivity(activity);
-    }
-    return null;
-  };
-
-  const renderHistoryAndRelatedChanges = (activityGroup: Object, isRelatedChange: boolean, uiTheme: UITheme) => {
-    if (activityGroup?.events?.length > 0) {
-      return (
-        <View style={isRelatedChange ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
-          {Boolean(!activityGroup.merged && !isRelatedChange) && renderUserInfo(activityGroup)}
-          {activityGroup.merged && renderTimestamp(activityGroup.timestamp)}
-
-          {activityGroup.events.map((event) => (
-            <View key={event.id} style={styles.activityChange}>
-              {renderActivityByCategory(event, uiTheme)}
-            </View>
-          ))}
-        </View>
-      );
-    }
-  };
-
 
   return (
     <>
@@ -448,11 +260,10 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
                   {activityGroup.vcs && <StreamVCS activityGroup={activityGroup}/>}
 
-                  {renderHistoryAndRelatedChanges(
-                    activityGroup,
-                    !!activityGroup.comment || !!activityGroup.work || !!activityGroup.vcs,
-                    props.uiTheme
-                  )}
+                  <StreamHistoryAndRelatedChanges
+                    activityGroup={activityGroup}
+                    isRelatedChange={!!activityGroup.comment || !!activityGroup.work || !!activityGroup.vcs}
+                  />
 
                   {isCommentActivity && !!props.onSelectReaction && renderCommentActivityReactions(activityGroup)}
                   {isCommentActivity && renderCommentActions(activityGroup)}
