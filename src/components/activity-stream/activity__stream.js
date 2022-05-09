@@ -263,6 +263,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
                   <StreamHistoryAndRelatedChanges
                     activityGroup={activityGroup}
                     isRelatedChange={!!activityGroup.comment || !!activityGroup.work || !!activityGroup.vcs}
+                    workTimeSettings={props.workTimeSettings}
                   />
 
                   {isCommentActivity && !!props.onSelectReaction && renderCommentActivityReactions(activityGroup)}
