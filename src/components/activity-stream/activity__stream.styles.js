@@ -118,6 +118,9 @@ export default EStyleSheet.create({
   activityCommentAttachments: {
     marginVertical: UNIT,
   },
+  activityIcon: {
+    color: '$iconAccent',
+  },
   link: {
     ...secondaryText,
     color: '$link',

@@ -3,18 +3,14 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
+import ActivityUserAvatar from './activity__stream-avatar';
 import ApiHelper from '../api/api__helper';
 import AttachmentsRow from '../attachments-row/attachments-row';
-import Avatar from '../avatar/avatar';
 import Comment from '../comment/comment';
 import CommentReactions from '../comment/comment-reactions';
 import CommentVisibility from '../comment/comment__visibility';
 import CustomFieldChangeDelimiter from '../custom-field/custom-field__change-delimiter';
 import Diff from '../diff/diff';
-import IconVcs from '@jetbrains/icons/commit.svg';
-import IconPrOpen from '@jetbrains/icons/pr-open.svg';
-import IconPrMerged from '../icon/assets/pull-request-merged.svg';
-import IconPrDeclined from '../icon/assets/pull-request-declined.svg';
 import Feature, {FEATURE_VERSION} from '../feature/feature';
 import getEventTitle from '../activity/activity__history-title';
 import IssueVisibility from '../visibility/issue-visibility';
@@ -27,14 +23,12 @@ import StreamWork from './activity__stream-work';
 import usage from '../usage/usage';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {DEFAULT_WORK_TIME_SETTINGS} from '../time-tracking/time-tracking__default-settings';
-import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {getTextValueChange} from '../activity/activity__history-value';
 import {firstActivityChange, getActivityEventTitle} from './activity__stream-helper';
 import {i18n} from 'components/i18n/i18n';
-import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../icon/icon';
+import {IconDrag, IconMoreOptions} from '../icon/icon';
 import {isActivityCategory} from '../activity/activity__category';
 import {guid, isIOSPlatform} from 'util/util';
-import {pullRequestState} from './activity__stream-vcs-helper';
 
 import {HIT_SLOP} from '../common-styles/button';
 import {UNIT} from '../variables/variables';
@@ -216,61 +210,6 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
           </Text>
         )}
         </Text>}
-      </View>
-    );
-  };
-
-  const renderActivityIcon = (activityGroup: Object) => {
-    const iconColor: string = props.uiTheme.colors.$iconAccent;
-    let icon: any;
-
-    switch (true) {
-    case activityGroup.vcs != null:
-      const iconProps: {fill: string, width: number, height: number} = {fill: iconColor, width: 24, height: 24};
-      if (activityGroup.vcs.pullRequest) {
-        switch (activityGroup.vcs.added[0].state.id) {
-        case pullRequestState.OPEN: {
-          icon = <IconPrOpen {...iconProps}/>;
-          break;
-        }
-        case pullRequestState.MERGED: {
-          icon = <IconPrMerged {...iconProps}/>;
-          break;
-        }
-        case pullRequestState.DECLINED: {
-          icon = <IconPrDeclined {...iconProps}/>;
-          break;
-        }
-        }
-      } else {
-        icon = <IconVcs {...iconProps}/>;
-      }
-      break;
-
-    case activityGroup.work != null:
-    icon = <IconWork size={24} color={iconColor} style={styles.activityWorkIcon}/>;
-    break;
-
-    default:
-      icon = <IconHistory size={26} color={iconColor}/>;
-    }
-
-    return icon;
-  };
-
-  const renderUserAvatar = (activityGroup: Object, showAvatar: boolean) => {
-    const shouldRenderIcon: boolean = Boolean(!activityGroup.merged && !showAvatar);
-
-    return (
-      <View style={styles.activityAvatar}>
-        {Boolean(!activityGroup.merged && showAvatar) && (
-          <Avatar
-            userName={getEntityPresentation(activityGroup.author)}
-            size={32}
-            source={{uri: activityGroup.author.avatarUrl}}
-          />
-        )}
-        {shouldRenderIcon && renderActivityIcon(activityGroup)}
       </View>
     );
   };
@@ -503,7 +442,10 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
                 activityGroup.merged ? styles.activityMerged : null,
               ]}>
 
-                {renderUserAvatar(activityGroup, !!activityGroup.comment)}
+                <ActivityUserAvatar
+                  activityGroup={activityGroup}
+                  showAvatar={!!activityGroup.comment}
+                />
 
                 <View style={styles.activityItem}>
                   {isCommentActivity && renderCommentActivity(activityGroup)}
