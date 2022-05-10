@@ -31,7 +31,7 @@ import {
   storeAccounts,
 } from 'components/storage/storage';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
-import {getCachedPermissions, storeCurrentUser} from './app-actions-helper';
+import {getCachedPermissions, storeYTCurrentUser} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
 import {hasType} from 'components/api/api__resource-types';
@@ -407,7 +407,7 @@ function setUserPermissions(permissions: Array<PermissionCacheItem>): Action {
     dispatch({
       type: types.SET_PERMISSIONS,
       permissionsStore: new PermissionsStore(permissions),
-      currentUser: auth.currentUser,
+      currentUser: auth.currentUser || getStorageState().currentUser,
     });
   };
 }
@@ -434,11 +434,11 @@ export function loadUserPermissions(): Action {
 export function completeInitialization(
   issueId: string | null = null,
   navigateToActivity: boolean = false,
-  skipNavigateToRoute: boolean = false
+  skipNavigateToRoute: boolean = false,
 ): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     log.debug('Completing initialization');
-    await dispatch(loadUser());
+    await dispatch(loadYTCurrentUser());
     await dispatch(loadUserPermissions());
     await dispatch(cacheProjects());
     log.debug('Initialization completed');
@@ -452,19 +452,17 @@ export function completeInitialization(
   };
 }
 
-export function setCurrentUser(user: User, doNotCache: boolean = false): Action {
+export function setYTCurrentUser(user: User): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<void> => {
     await dispatch({type: types.RECEIVE_USER, user});
-    if (!doNotCache) {
-      storeCurrentUser(user);
-    }
+    await storeYTCurrentUser(user);
   };
 }
 
-export function loadUser(): Action {
+export function loadYTCurrentUser(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const user: User = await getApi().user.getUser();
-    await dispatch(setCurrentUser(user));
+    await dispatch(setYTCurrentUser(user));
   };
 }
 
@@ -604,10 +602,17 @@ export function redirectToRoute(config: AppConfig, issueId: string | null, navig
       let authParams: ?AuthParams = null;
       if (config) {
         //eslint-disable-next-line no-unused-vars
-        const {type, auth}: { type: string, auth: OAuth2 } = dispatch(createAuthInstance(config));
-        authParams = await auth.getCachedAuthParams();
-        auth.setAuthParams(authParams);
-        setApi(new Api(auth));
+        const oauthData: { type: string, auth: OAuth2 } = dispatch(createAuthInstance(config));
+        authParams = await oauthData.auth.getCachedAuthParams();
+        oauthData.auth.setAuthParams(authParams);
+        setApi(new Api(oauthData.auth));
+
+        const user: ?User = getStorageState().currentUser?.ytCurrentUser;
+        if (user && !user.guest) {
+          await dispatch(setYTCurrentUser(user));
+        } else {
+          await dispatch(loadYTCurrentUser());
+        }
 
         const cachedPermissions: ?Array<PermissionCacheItem> = getCachedPermissions();
         if (cachedPermissions) {
@@ -653,13 +658,6 @@ async function refreshConfig(backendUrl: string): Promise<AppConfig> {
 export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
     const isRedirectedToTargetRoute: boolean = await dispatch(redirectToRoute(config, issueId, navigateToActivity));
-
-    const user: ?User = getStorageState().currentUser?.ytCurrentUser;
-    if (user) {
-      await dispatch(setCurrentUser(user, true));
-    } else {
-      await dispatch(loadUser());
-    }
 
     if (checkVersion(FEATURE_VERSION.translations)) {
       if (!config.l10n) {
