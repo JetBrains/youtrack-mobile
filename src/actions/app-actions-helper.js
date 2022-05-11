@@ -44,8 +44,8 @@ async function targetAccountToSwitchTo(targetBackendUrl: string = ''): Promise<S
   return targetAccount;
 }
 
-function storeCurrentUser(user: User): void {
-  flushStoragePart({
+async function storeYTCurrentUser(user: User): Promise<void> {
+  await flushStoragePart({
     currentUser: {
       ...getStorageState().currentUser,
       ytCurrentUser: user,
@@ -58,5 +58,5 @@ export {
   updateCachedPermissions,
   loadPermissions,
   targetAccountToSwitchTo,
-  storeCurrentUser,
+  storeYTCurrentUser,
 };

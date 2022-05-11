@@ -12,6 +12,8 @@ import mocks from '../../test/mocks';
 import permissionsHelper from 'components/permissions-store/permissions-helper';
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
+import {AuthBase} from 'components/auth/auth-base';
+import {storageStateAuthParamsKey} from 'components/storage/storage';
 
 jest.mock('components/router/router', () => ({
   Home: jest.fn(),
@@ -20,6 +22,7 @@ jest.mock('components/router/router', () => ({
 
 const backendURLMock = 'https://example.com';
 const permissionsCacheURLMock = `${backendURLMock}/permissionsCache`;
+let appConfigMock;
 let apiMock;
 let appStateMock;
 let store;
@@ -34,15 +37,21 @@ describe('app-actions', () => {
   beforeEach(() => jest.restoreAllMocks());
 
   beforeEach(async () => {
-    apiMock = {};
+    apiMock = {
+      user: {
+        getUser: jest.fn(() => Promise.resolve({})),
+      },
+    };
 
+    appConfigMock = {
+      l10n: {},
+      backendUrl: backendURLMock,
+      auth: {
+        serverUri: `${backendURLMock}/hub`,
+      },
+    };
     appStateMock = {
-      auth: new AuthTest({
-        backendUrl: backendURLMock,
-        auth: {
-          serverUri: `${backendURLMock}/hub`,
-        },
-      }),
+      auth: new AuthTest(appConfigMock),
     };
     appStateMock.auth.authParams = {
       token_type: 'token_type',
@@ -246,7 +255,7 @@ describe('app-actions', () => {
   });
 
 
-  describe('setCurrentUser', () => {
+  describe('setYTCurrentUser', () => {
     let currentUserMock;
     let dispatchedObj;
     beforeEach(() => {
@@ -261,7 +270,7 @@ describe('app-actions', () => {
     });
 
     it('should set user and cache it', async () => {
-      await store.dispatch(actions.setCurrentUser(userMock));
+      await store.dispatch(actions.setYTCurrentUser(userMock));
 
       expect(store.getActions()[0]).toEqual(dispatchedObj);
       expect(storage.flushStoragePart).toHaveBeenCalledWith({
@@ -271,13 +280,6 @@ describe('app-actions', () => {
         },
       });
     });
-
-    it('should set user, but not cache it', async () => {
-      await store.dispatch(actions.setCurrentUser(userMock, true));
-
-      expect(store.getActions()[0]).toEqual(dispatchedObj);
-      expect(storage.flushStoragePart).not.toHaveBeenCalled();
-    });
   });
 
 
@@ -285,6 +287,10 @@ describe('app-actions', () => {
   const naturalCommentsOrderMock = false;
 
   describe('initializeApp', () => {
+    beforeEach(() => {
+      jest.spyOn(AuthBase.prototype, 'getCachedAuthParams').mockImplementationOnce(() => ({}));
+    });
+
     it('should set YT current user from cache', async () => {
       userMock = mocks.createUserMock({
         id: 2,
@@ -295,7 +301,7 @@ describe('app-actions', () => {
       });
       await initApp(userMock);
 
-      const action = store.getActions()[0];
+      const action = store.getActions()[1];
       expect(action.user.profiles.general.searchContext).toEqual(searchContextMock);
       expect(action.user.profiles.appearance.naturalCommentsOrder).toEqual(naturalCommentsOrderMock);
       expect(action).toEqual({
@@ -322,9 +328,24 @@ describe('app-actions', () => {
       });
     });
 
+    it('should load YT current user if cache is empty', async () => {
+      await initApp(null);
+
+      expect(apiMock.user.getUser).toHaveBeenCalled();
+    });
+
+    it('should load YT current user if cached user is `guest`', async () => {
+      await initApp({guest: true});
+
+      expect(apiMock.user.getUser).toHaveBeenCalled();
+    });
+
     async function initApp(ytCurrentUser) {
-      storage.__setStorageState({currentUser: {ytCurrentUser}});
-      await store.dispatch(actions.initializeApp({l10n: {}}));
+      storage.__setStorageState({
+        currentUser: {ytCurrentUser},
+        [storageStateAuthParamsKey]: '0101',
+      });
+      await store.dispatch(actions.initializeApp(appConfigMock));
     }
   });
 

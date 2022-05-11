@@ -40,8 +40,10 @@ export default class UserAPI extends ApiBase {
   async getUser(userId: string = 'me'): Promise<User> {
     const queryString = ApiBase.createFieldsQuery([
       'id',
+      'ringId',
       'avatarUrl',
       'login',
+      'guest',
       'fullName',
       {
         profiles: {
