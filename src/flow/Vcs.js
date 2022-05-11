@@ -20,12 +20,6 @@ export type VcsCommand = {
   start: number,
 };
 
-export type VcsChangeState = {
-  attached: 0,
-  detached: 0,
-  legacy: any,
-}
-
 type NoHubUserReason = {
   $type: 'NoUserReason',
   id: $Keys<typeof userNotFoundMessageMap>,
@@ -47,7 +41,7 @@ export type VcsChange = {
   noUserReason: NoUserReason,
   commands: Array<VcsCommand>,
   date: number,
-  state: VcsChangeState,
+  state: 0 | 1 | 2 | 3,
   userName: string,
   version: string,
   text: string,
