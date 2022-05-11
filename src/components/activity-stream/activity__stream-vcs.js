@@ -67,11 +67,11 @@ const StreamVCS = (props: Props) => {
     return null;
   }
 
-  const infoMessages: Array<string> = getInfoMessages(vcs);
-  const errorMessages: Array<string> = getErrorMessages(vcs);
+  const infoMessages: Array<string> = getInfoMessages(vcs).filter(Boolean);
+  const errorMessages: Array<string> = getErrorMessages(vcs).filter(Boolean);
   const date: number = vcs.fetched || vcs.date;
   const processors: Array<VcsProcessor> = getProcessorsUrls(vcs);
-  let title: string = props.activityGroup.merged ? '' : 'committed changes';
+  let title: string = props.activityGroup.merged ? '' : i18n('committed changes');
   if (pullRequest) {
     switch (firstChange?.state?.id) {
     case pullRequestState.OPEN: {
@@ -135,7 +135,10 @@ const StreamVCS = (props: Props) => {
       <View style={styles.activityChange}>
         <View style={styles.vcsInfo}>
           {!!date && (
-            <Text style={[styles.vcsInfoDate, styles.secondaryTextColor]}>{title}{' '}{ytDate(date)}</Text>
+            <Text style={[styles.vcsInfoDate, styles.secondaryTextColor]}>
+              {title ? `${title} ` : ''}
+              {ytDate(date)}
+            </Text>
           )}
 
           {Boolean(vcs.version && processors) && (
@@ -171,15 +174,15 @@ const StreamVCS = (props: Props) => {
         {!!vcs.files && vcs.files !== -1 && (
           <View>
             <Text style={styles.activityLabel}>
-              {vcs.files} {i18nPlural(vcs.files, '{{amount}} file', '{{amount}} files', {amount: vcs.files})}
+              {i18nPlural(vcs.files, '{{amount}} file', '{{amount}} files', {amount: vcs.files})}
             </Text>
           </View>
         )}
 
         {(infoMessages.length > 0 || errorMessages.length > 0) && (
           <Details
-            style={{...styles.showMoreMessage, ...styles.secondaryTextColor}}
-            toggler="Show more"
+            style={{...styles.showMoreMessage, ...(errorMessages.length ? styles.vcsError : styles.secondaryTextColor)}}
+            toggler={i18n('Show more')}
             renderer={() => (
               <>
                 {infoMessages.length > 0 && infoMessages.map(renderMessage)}

@@ -10,10 +10,4 @@ export default EStyleSheet.create({
   toggle: {
     color: '$link',
   },
-  icon: {
-    width: 10,
-    height: 10,
-    resizeMode: 'contain',
-    color: '$link',
-  },
 });
