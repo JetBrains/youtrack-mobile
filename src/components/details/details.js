@@ -35,7 +35,7 @@ const Details = (props: Props): Node => {
           {`${props.title}: `}
         </Text>}
         <Text style={[styles.toggle, props.style]}>
-          <IconCaretDownUp size={12} isDown={!expanded} style={styles.toggleIcon} color={props?.style?.color || styles.toggle.color}/>
+          <IconCaretDownUp size={12} isDown={!expanded} color={props?.style?.color || styles.toggle.color}/>
           <Text style={styles.toggleText}>{' '}{toggler}</Text>
         </Text>
       </TouchableOpacity>
