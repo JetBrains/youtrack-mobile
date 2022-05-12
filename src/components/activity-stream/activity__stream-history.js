@@ -8,8 +8,6 @@ import getEventTitle from 'components/activity/activity__history-title';
 import StreamAttachments from './activity__stream-attachment';
 import StreamHistoryTextChange from './activity__stream-history__text-change';
 import StreamLink from './activity__stream-link';
-import StreamTimestamp from './activity__stream-timestamp';
-import StreamUserInfo from './activity__stream-user-info';
 import {DEFAULT_WORK_TIME_SETTINGS} from 'components/time-tracking/time-tracking__default-settings';
 import {getTextValueChange} from 'components/activity/activity__history-value';
 import {isActivityCategory} from 'components/activity/activity__category';
@@ -22,9 +20,8 @@ import type {TextValueChangeParams} from 'components/activity/activity__history-
 import type {WorkTimeSettings} from 'flow/Work';
 
 type Props = {
-  activityGroup: Activity,
+  activity: Activity,
   workTimeSettings?: WorkTimeSettings,
-  isRelatedChange: boolean,
 }
 
 const renderAttachmentChange = (activity: Object) => {
@@ -56,7 +53,7 @@ const renderAttachmentChange = (activity: Object) => {
 };
 
 
-const StreamHistoryAndRelatedChanges = ({activityGroup, workTimeSettings = DEFAULT_WORK_TIME_SETTINGS, isRelatedChange}: Props) => {
+const StreamHistoryChange = ({activity, workTimeSettings = DEFAULT_WORK_TIME_SETTINGS}: Props) => {
   const getTextChange = (activity: Activity, issueFields: ?Array<Object>): ActivityChangeText => {
     const getParams = (isRemovedValue: boolean): TextValueChangeParams => ({
       activity,
@@ -114,23 +111,7 @@ const StreamHistoryAndRelatedChanges = ({activityGroup, workTimeSettings = DEFAU
     return null;
   };
 
-
-  if (activityGroup?.events?.length) {
-    return (
-      <View style={isRelatedChange ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
-        {Boolean(!activityGroup.merged && !isRelatedChange) && <StreamUserInfo activityGroup={activityGroup}/>}
-        {activityGroup.merged && <StreamTimestamp timestamp={activityGroup.timestamp}/>}
-
-        {activityGroup.events.map((event) => (
-          <View key={event.id} style={styles.activityChange}>
-            {renderActivityByCategory(event)}
-          </View>
-        ))}
-      </View>
-    );
-  }
-  return null;
+  return <View style={styles.activityChange}>{renderActivityByCategory(activity)}</View>;
 };
 
-
-export default StreamHistoryAndRelatedChanges;
+export default StreamHistoryChange;
