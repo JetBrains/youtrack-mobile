@@ -23,7 +23,6 @@ import UserInfo from 'components/user/user-info';
 import YoutrackWiki from 'components/wiki/youtrack-wiki';
 import {addListenerGoOnline} from '../../components/network/network-events';
 import {ANALYTICS_NOTIFICATIONS_PAGE} from 'components/analytics/analytics-ids';
-import {getReadableID} from 'components/issue-formatter/issue-formatter';
 import {getStorageState} from 'components/storage/storage';
 import {handleRelativeUrl} from 'components/config/config';
 import {hasType} from 'components/api/api__resource-types';
@@ -48,6 +47,7 @@ import type {ChangeEvent, ChangeValue, Metadata, Notification} from 'flow/Inbox'
 import type {Reaction} from 'flow/Reaction';
 import type {Theme} from 'flow/Theme';
 import type {User} from 'flow/User';
+import InboxIssue from './inbox__issue';
 
 
 type IssueActions = typeof inboxActions;
@@ -398,7 +398,7 @@ class Inbox extends Component<Props, State> {
         accessibilityLabel="notification-row"
         accessible={true}
         style={styles.notification}>
-        <View><Text style={[styles.textPrimary, styles.notificationIssueInfo]}>{`${title}:`}</Text></View>
+        <View><Text style={[styles.textPrimary, styles.wnotificationIssueInfo]}>{`${title}:`}</Text></View>
 
         <View style={[styles.notificationContent, styles.notificationContentWorkflow]}>
           <YoutrackWiki
@@ -461,33 +461,13 @@ class Inbox extends Component<Props, State> {
   }
 
   renderIssue(issue: IssueOnList, isSummaryOrDescriptionChange: boolean, notificationId: string) {
-    const readableID: string = getReadableID(issue);
-    return (
-      <TouchableOpacity
-        style={styles.notificationIssue}
-        onPress={() => {
-          if (this.state.isSplitView) {
-            this.updateFocusedNotificationId(notificationId, isSummaryOrDescriptionChange);
-          } else {
-            this.goToIssue(issue, !isSummaryOrDescriptionChange);
-          }
-        }}
-      >
-        <Text>
-          {!!readableID && (
-            <Text style={[
-              styles.notificationIssueInfo,
-              issue.resolved ? styles.resolved : null,
-            ]}>{readableID}</Text>
-          )}
-          {!!issue.summary && (
-            <Text numberOfLines={2} style={[styles.notificationIssueInfo, issue.resolved != null && styles.secondaryText]}>
-              {` ${issue.summary}`}
-            </Text>
-          )}
-        </Text>
-      </TouchableOpacity>
-    );
+    return <InboxIssue issue={issue} onNavigateToIssue={() => {
+      if (this.state.isSplitView) {
+        this.updateFocusedNotificationId(notificationId, isSummaryOrDescriptionChange);
+      } else {
+        this.goToIssue(issue, !isSummaryOrDescriptionChange);
+      }
+    }}/>;
   }
 
   renderReactionChange = (reactionData: {

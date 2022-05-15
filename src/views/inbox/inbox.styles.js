@@ -31,14 +31,12 @@ export default EStyleSheet.create({
     paddingLeft: UNIT * 2,
   },
   notificationContent: {
+    marginTop: -UNIT,
     marginLeft: UNIT * 6,
     paddingBottom: UNIT * 2,
     paddingRight: UNIT * 2,
     borderBottomColor: '$separator',
     borderBottomWidth: 0.5,
-  },
-  notificationIssue: {
-    marginTop: -UNIT,
   },
   notificationIssueInfo: {
     ...mainText,
@@ -128,6 +126,9 @@ export default EStyleSheet.create({
   },
   link: {
     ...font,
+    color: '$link',
+  },
+  linkColor: {
     color: '$link',
   },
   resolved: {

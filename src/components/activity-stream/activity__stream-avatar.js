@@ -8,21 +8,24 @@ import Avatar from 'components/avatar/avatar';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 
 import styles from './activity__stream.styles';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 interface Props {
   activityGroup: Object,
   showAvatar: boolean,
+  size?: number,
+  style?: ViewStyleProp,
 }
 
-const ActivityUserAvatar = ({activityGroup, showAvatar}: Props): React$Element<typeof View> => {
+const ActivityUserAvatar = ({activityGroup, showAvatar, size = 32, style}: Props): React$Element<typeof View> => {
   const shouldRenderIcon: boolean = Boolean(!activityGroup.merged && !showAvatar);
 
   return (
-    <View style={styles.activityAvatar}>
+    <View style={[styles.activityAvatar, style]}>
       {Boolean(!activityGroup.merged && showAvatar) && (
         <Avatar
           userName={getEntityPresentation(activityGroup.author)}
-          size={32}
+          size={size}
           source={{uri: activityGroup.author.avatarUrl}}
         />
       )}

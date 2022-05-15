@@ -1,130 +1,164 @@
 /* @flow */
 
+import {isActivityCategory} from './activity__category';
+
 import type {Activity} from 'flow/Activity';
 
-export const mergeActivities = (activities: Array<Activity> = []): Array<Activity> => {
-  if (!activities || activities.length < 2) {
+type MergedActivity = Activity;
+
+interface activityMapItem {
+  [key: string]: Activity;
+}
+
+export function mergeActivities(activities: Activity[]): MergedActivity[] {
+  if (!activities) {
+    return [];
+  }
+
+  if (activities.length < 2) {
     return activities;
   }
 
   return removeEmptyActivities(
     activities.reduce(createActivitiesMerger(), [])
   );
+}
 
 
-  function createActivitiesMerger() {
-    const activitiesMap = {};
+function createMergedActivity(activity: Activity) {
+  return Object.create(activity);
+}
 
-    return (activities, activity) => {
-      const k = key(activity);
+function createActivitiesMerger() {
+  const activitiesMap: activityMapItem = {};
 
-      if (activitiesMap[k]) {
-        update(activitiesMap[k], activity);
-      } else {
-        activitiesMap[k] = createMergedActivity(activity);
-        activities.push(activitiesMap[k]);
-      }
+  return function (activities: any, activity: Activity) {
+    const k = key(activity);
 
-      return activities;
-    };
-  }
-
-
-  function removeEmptyActivities(activities: Array<Activity> = []): Array<Activity> {
-    return activities.filter(hasChanges);
-
-    function hasChanges(mergedActivity: Activity) {
-      if (mergedActivity.added === mergedActivity.removed) {
-        return false;
-      }
-
-      if (isMultiple(mergedActivity)) {
-        return (
-          (mergedActivity.added && mergedActivity.added.length) ||
-          (mergedActivity.removed && mergedActivity.removed.length));
-      }
-
-      const bothNotNull = !!mergedActivity.added && !!mergedActivity.removed;
-      const bothComplex = typeof mergedActivity.added === 'object' && typeof mergedActivity.removed === 'object';
-
-      return (
-        (bothNotNull && bothComplex) ?
-          mergedActivity.added.id !== mergedActivity.removed.id :
-          true
-      );
-    }
-  }
-
-
-  function update(mergedActivity: Activity, activity: Activity) {
-    if (isMultiple(mergedActivity)) {
-      const addedRemoved = disjoint(mergedActivity.added, activity.removed);
-      const removedAdded = disjoint(mergedActivity.removed, activity.added);
-      mergedActivity.added = merge(addedRemoved[0], removedAdded[1]);
-      mergedActivity.removed = merge(addedRemoved[1], removedAdded[0]);
+    if (activitiesMap[k]) {
+      update(activitiesMap[k], activity);
     } else {
-      mergedActivity.added = activity.added;
+      activitiesMap[k] = createMergedActivity(activity);
+      activities.push(activitiesMap[k]);
     }
 
-    mergedActivity.timestamp = activity.timestamp;
-    mergedActivity.id = activity.id;
+    return activities;
+  };
+}
 
-    return mergedActivity;
-  }
+function removeEmptyActivities(activities: MergedActivity[]): MergedActivity[] {
+  return activities.filter(hasChanges);
 
-
-  function isMultiple(activity: Activity) {
-    return Array.isArray(activity.added) || Array.isArray(activity.removed);
-  }
-
-
-  function createMergedActivity(activity: Activity) {
-    return Object.create(activity);
-  }
-
-
-  function key(activity: Activity) {
-    return `${activity.target.id}${activity.targetMember || ''}`;
-  }
-
-
-  function merge(A, B) {
-    if (!A || !B) {
-      return A || B;
-    }
-    return removeDuplicates(A.concat(B));
-  }
-
-
-  function removeDuplicates(A) {
-    const idsMap = {};
-    return A.filter((it) => (idsMap[it.id]) ? false : idsMap[it.id] = true);
-  }
-
-
-  function disjoint(A, B) {
-    if (!A || !B) {
-      return [A, B];
+  function hasChanges(mergedActivity) {
+    if (isActivityCategory.issueCreated(mergedActivity)) {
+      return true;
     }
 
-    const inB = arrayToMap(B);
+    if (isActivityCategory.articleCreated(mergedActivity)) {
+      return true;
+    }
 
-    A = A.filter(a => inB[a.id] ? !(delete inB[a.id]) : a);
+    if (mergedActivity.added === mergedActivity.removed) {
+      return false;
+    }
 
-    B = mapToArray(inB);
+    if (isMultiple(mergedActivity)) {
+      return (
+        (mergedActivity.added && mergedActivity.added.length) ||
+        (mergedActivity.removed && mergedActivity.removed.length));
+    }
+
+    return (
+      (isAddedRemovedValueObject(mergedActivity)) ?
+        mergedActivity.added.id !== mergedActivity.removed.id : true
+    );
+  }
+}
+
+
+function update(mergedActivity: MergedActivity, activity: Activity): MergedActivity {
+  if (activity.pseudo) {
+    mergedActivity.removed = activity.removed;
+    mergedActivity.added = activity.added;
+  } else if (isMultiple(mergedActivity)) {
+    const addedRemoved = disjoint(mergedActivity.added, activity.removed);
+    const removedAdded = disjoint(mergedActivity.removed, activity.added);
+    mergedActivity.added = merge(addedRemoved[0], removedAdded[1]);
+    mergedActivity.removed = merge(addedRemoved[1], removedAdded[0]);
+  } else {
+    mergedActivity.added = activity.added;
+  }
+
+  mergedActivity.timestamp = activity.timestamp;
+  mergedActivity.id = activity.id;
+
+  return mergedActivity;
+}
+
+
+function isAddedRemovedValueObject(mergedActivity: MergedActivity): boolean {
+  return (
+    !isMultiple(mergedActivity) &&
+    typeof mergedActivity.added === 'object' && mergedActivity.added !== null &&
+    typeof mergedActivity.removed === 'object' && mergedActivity.removed !== null
+  );
+}
+
+
+function isMultiple(activity: MergedActivity): boolean {
+  return (
+    Array.isArray(activity.added) ||
+    Array.isArray(activity.removed)
+  );
+}
+
+
+function key(activity: Activity): string {
+  return `${activity?.target?.id}${activity.targetMember || ''}`;
+}
+
+
+export function merge(A: any[], B: any[]): any[] {
+  if (!A || !B) {
+    return A || B;
+  }
+  return removeDuplicates(A.concat(B));
+}
+
+
+function removeDuplicates(A: any[]): any[] {
+  const idsMap: { [key: string]: boolean } = {};
+  return A.filter(it => {
+    return (idsMap[it.id]) ? false : idsMap[it.id] = true;
+  });
+}
+
+
+// O(size(A) + 2*size(B))
+export function disjoint(A: any, B: any): any {
+  if (!A || !B) {
     return [A, B];
   }
 
-  function arrayToMap(items) {
-    return items.reduce((map, item) => {
-      map[item.id] = item;
-      return map;
-    }, {});
-  }
+  const inB = arrayToMap(B);
 
-  function mapToArray(map) {
-    return Object.keys(map).map(id => map[id]);
-  }
-};
+  const newA = A.filter(a => {
+    return inB[a.id] ? !(delete inB[a.id]) : a;
+  });
 
+  const newB = mapToArray(inB);
+  return [newA, newB];
+}
 
+function arrayToMap(items: any[]): { [string]: any } {
+  return items.reduce(function (map, item) {
+    map[item.id] = item;
+    return map;
+  }, {});
+}
+
+function mapToArray(map: { [string]: any }): any[] {
+  return Object.keys(map).map(function (id) {
+    return map[id];
+  });
+}

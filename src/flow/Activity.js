@@ -24,33 +24,33 @@ type ActivityWork = {
 
 export type ActivityItem = IssueProject | IssueComment | Attachment | IssueFull | ActivityWork | string | null;
 
-export type Activity = {
-  $type?: string,
-  id: string,
-  hidden?: boolean,
-  category: {id: string, $type?: string},
-  timestamp: number,
-  targetMember: Object,
-  targetSubMember?: Object,
+export interface Activity {
+  $type?: string;
+  id: string;
+  hidden?: boolean;
+  category: {id: string; $type?: string};
+  timestamp: number;
+  targetMember: Object;
+  targetSubMember?: Object;
   authorGroup?: {
-    icon: string,
+    icon: string;
     name: string
-  } | null,
-  author: User,
-  target: {$type?: string, id: string, created: number, usesMarkdown: boolean},
-  field: Object,
-  added: ActivityItem | Array<ActivityItem>,
-  removed: ActivityItem | Array<ActivityItem>,
+  } | null;
+  author: User;
+  target: {$type?: string; id: string; created: number; usesMarkdown: boolean};
+  field: Object;
+  added: ActivityItem | Array<ActivityItem>;
+  removed: ActivityItem | Array<ActivityItem>;
 
-  comment?: IssueComment,
-  work?: ActivityWork,
-  vcs?: VCSActivity,
-  merged?: boolean,
+  comment?: IssueComment;
+  work?: ActivityWork;
+  vcs?: VCSActivity;
+  merged?: boolean;
 
-  key?: boolean,
-  lastGroup?: boolean,
-  root?: boolean,
-  pullRequest?: PullRequest,
+  key?: boolean;
+  lastGroup?: boolean;
+  root?: boolean;
+  pullRequest?: PullRequest;
 }
 
 export type ActivityType = {
@@ -59,11 +59,6 @@ export type ActivityType = {
 }
 
 export type ActivityPositionData = { activity: Activity, index: number };
-
-export type ActivityChange = {
-  added: ActivityItem,
-  removed: ActivityItem
-};
 
 export type ActivityChangeText = {
   added: string,

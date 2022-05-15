@@ -4,6 +4,7 @@ import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 import ActivityUserAvatar from './activity__stream-avatar';
+import ApiHelper from '../api/api__helper';
 import CommentReactions from 'components/comment/comment-reactions';
 import Feature, {FEATURE_VERSION} from '../feature/feature';
 import ReactionAddIcon from 'components/reactions/new-reaction.svg';
@@ -162,11 +163,17 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
   const renderCommentActivity = (activityGroup: Object) => {
     const activity: ?Activity = activityGroup.comment;
+    const commentAttachments = (firstActivityChange(activity) || {}).attachmets || [];
+    const allAttachments: Array<Attachment> = ApiHelper.convertAttachmentRelativeToAbsURLs(
+      commentAttachments,
+      props.youtrackWiki.backendUrl
+    ).concat(props.attachments || []);
+
     return <>
       {!activityGroup.merged && <StreamUserInfo activityGroup={activityGroup}/>}
       <StreamComment
         activity={activity}
-        attachments={props.attachments}
+        attachments={allAttachments}
         commentActions={props.commentActions}
         onShowCommentActions={(comment: IssueComment) => {
           if (props.commentActions?.onShowCommentActions) {

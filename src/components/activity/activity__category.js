@@ -27,6 +27,7 @@ export const categoryName = {
   VCS_ITEM: 'VCS_ITEM',
   TOTAL_VOTES: 'TOTAL_VOTES',
   VISIBILITY: 'VISIBILITY',
+  STAR: 'STAR',
 };
 
 export const activityCategory: Object = {
@@ -56,6 +57,7 @@ export const activityCategory: Object = {
   [categoryName.PULL_REQUEST_CHANGE]: 'PullRequestChangeCategory',
   [categoryName.TOTAL_VOTES]: 'TotalVotesCategory',
   [categoryName.VISIBILITY]: 'PermittedGroupCategory',
+  [categoryName.STAR]: 'StarCategory',
 };
 
 export const activityArticleCategory = {
@@ -66,6 +68,8 @@ export const activityArticleCategory = {
   PROJECT: 'ArticleProjectCategory',
   SUMMARY: 'ArticleSummaryCategory',
   VISIBILITY: 'ArticleVisibilityCategory',
+
+  ARTICLE_CREATED: 'ArticleCreatedCategory',
 };
 
 
@@ -145,8 +149,11 @@ export const isActivityCategories = function (categoryIds: Array<string>): ((act
 isActivityCategory.comment = isActivityCategories([activityCategory.COMMENT, activityArticleCategory.COMMENT]);
 isActivityCategory.attachment = isActivityCategories([activityCategory.ATTACHMENTS, activityArticleCategory.ATTACHMENTS]);
 isActivityCategory.issueCreated = isActivityCategories([activityCategory.ISSUE_CREATED, activityArticleCategory.CREATED]);
+isActivityCategory.articleCreated = isActivityCategory(activityCategory.ARTICLE_CREATED);
 isActivityCategory.work = isActivityCategory(activityCategory.WORK_ITEM);
 isActivityCategory.voters = isActivityCategory(activityCategory.VOTERS);
+isActivityCategory.vote = isActivityCategory(activityCategory.VOTERS);
+isActivityCategory.vcsItem = isActivityCategories([activityCategory.VCS_ITEM, activityCategory.PULL_REQUEST_CHANGE]);
 isActivityCategory.pullRequest = isActivityCategory(activityCategory.PULL_REQUEST_CHANGE);
 isActivityCategory.vcs = isActivityCategory(activityCategory.VCS_ITEM);
 isActivityCategory.totalVotes = isActivityCategory(activityCategory.TOTAL_VOTES);
@@ -158,6 +165,7 @@ isActivityCategory.tag = isActivityCategory(activityCategory.TAGS);
 isActivityCategory.summary = isActivityCategories([activityCategory.SUMMARY, activityArticleCategory.SUMMARY]);
 isActivityCategory.description = isActivityCategories([activityCategory.DESCRIPTION, activityArticleCategory.DESCRIPTION]);
 isActivityCategory.sprint = isActivityCategory(activityCategory.SPRINT);
+isActivityCategory.star = isActivityCategory(activityCategory.SPRINT);
 isActivityCategory.project = isActivityCategories([activityCategory.PROJECT, activityArticleCategory.PROJECT]);
 isActivityCategory.visibility = isActivityCategories([activityCategory.VISIBILITY, activityArticleCategory.VISIBILITY]);
 

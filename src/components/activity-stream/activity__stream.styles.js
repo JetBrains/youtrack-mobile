@@ -8,7 +8,7 @@ const secondaryTextColor = {
   color: '$icon',
 };
 
-export default EStyleSheet.create({
+export const rowStyles = {
   activity: {
     flexDirection: 'row',
     paddingTop: UNIT,
@@ -183,4 +183,6 @@ export default EStyleSheet.create({
     fontSize: 12,
     color: '$icon',
   },
-});
+};
+
+export default EStyleSheet.create(rowStyles);

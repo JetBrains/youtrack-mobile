@@ -77,6 +77,10 @@ class Menu extends Component<Props, State> {
     currentRouteName: routeName,
   });
 
+  isInboxThreadsEnabled(): boolean {
+    return checkVersion(FEATURE_VERSION.inboxThreads, true);
+  }
+
   isActiveRoute = (routeName: string) => {
     if (this.state.currentRouteName === routeMap.Issue) {
       return this.state.prevRouteName === routeName;
@@ -144,8 +148,9 @@ class Menu extends Component<Props, State> {
   };
 
   openInbox = () => {
-    if (this.canNavigateTo(routeMap.Inbox)) {
-      Router.Inbox();
+    const routeName: string = this.isInboxThreadsEnabled() ? routeMap.InboxThreads : routeMap.Inbox;
+    if (this.canNavigateTo(routeName) && Router[routeName]) {
+      Router[routeName]();
     }
   };
 
@@ -210,9 +215,9 @@ class Menu extends Component<Props, State> {
         />
 
         <MenuItem
-          disabled={!isInboxEnabled}
+          disabled={!isInboxEnabled && !this.isInboxThreadsEnabled()}
           testID="test:id/menuNotifications"
-          icon={<IconBell size={22} color={color(routeMap.Inbox)}/>}
+          icon={<IconBell size={22} color={color(this.isInboxThreadsEnabled() ? routeMap.InboxThreads : routeMap.Inbox)}/>}
           onPress={this.openInbox}
         />
 

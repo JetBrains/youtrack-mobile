@@ -9,6 +9,12 @@ import {mergeActivities} from './activity__merge-activities';
 import type {ActivityItem, ActivityPositionData, ActivityType, Activity} from 'flow/Activity';
 import type {IssueComment} from 'flow/CustomFields';
 
+export interface GroupActivitiesParams {
+  onCreateGroup?: (group) => void,
+  onAddActivityToGroup?: (group, activity) => void,
+  onCompleteGroup?: (group) => void
+}
+
 const activityIconMap = {
   [ActivityCategory.Source.COMMENT]: IconComment,
   [ActivityCategory.Source.HISTORY]: IconHistory,
@@ -69,8 +75,11 @@ const findActivityInGroupedActivities = (
 };
 
 
-const getGroupedActivity = (activityPage: Array<Activity> = []) => {
-  return groupActivities(activityPage, {
+const createActivityModel = (activityPage: Array<Activity> | null, naturalCommentsOrder: boolean): Array<ActivityItem> | null => {
+  if (!activityPage) {
+    return null;
+  }
+  const groupedActivities = groupActivities(activityPage, {
     onAddActivityToGroup: (group, activity: Activity) => {
       if (isActivityCategory.issueCreated(activity)) {
         group.hidden = true;
@@ -80,13 +89,7 @@ const getGroupedActivity = (activityPage: Array<Activity> = []) => {
       group.events = mergeActivities(group.events);
     },
   });
-};
 
-const createActivityModel = (activityPage: Array<Activity> | null, naturalCommentsOrder: boolean): Array<ActivityItem> | null => {
-  if (!activityPage) {
-    return null;
-  }
-  const groupedActivities = getGroupedActivity(activityPage);
   return createActivitiesModel(
     naturalCommentsOrder ? groupedActivities.reverse() : groupedActivities
   ) || [];

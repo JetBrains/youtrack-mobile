@@ -16,6 +16,7 @@ import Home from 'views/home/home';
 import Inbox from 'views/inbox/inbox';
 import Issue from 'views/issue/issue';
 import Issues from 'views/issues/issues';
+import InboxThreads from 'views/inbox-threads/inbox-threads';
 import KnowledgeBase from 'views/knowledge-base/knowledge-base';
 import log from 'components/log/log';
 import LoginForm from 'views/log-in/log-in';
@@ -34,10 +35,8 @@ import {rootRoutesList, routeMap} from './app-routes';
 import type {Node} from 'react';
 import type {NotificationRouteData} from 'flow/Notification';
 import type {Ref} from 'react';
-// eslint-disable-next-line no-console
-console.reportErrorsAsExceptions = false;
-// eslint-disable-next-line no-console
-console.disableYellowBox = true;
+import {checkVersion, FEATURE_VERSION} from './components/feature/feature';
+
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
@@ -121,6 +120,9 @@ class YouTrackMobile extends Component<void, void> {
     Router.registerRoute({name: routeMap.CreateIssue, component: CreateIssue, modal: true});
     Router.registerRoute({name: routeMap.PreviewFile, component: PreviewFile, modal: true});
     Router.registerRoute({name: routeMap.Inbox, component: Inbox, type: 'reset'});
+    if (checkVersion(FEATURE_VERSION.inboxThreads, true)) {
+      Router.registerRoute({name: routeMap.InboxThreads, component: InboxThreads, type: 'reset'});
+    }
     Router.registerRoute({
       name: routeMap.Issue,
       component: Issue,

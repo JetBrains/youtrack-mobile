@@ -20,9 +20,9 @@ import type {YouTrackWiki} from 'flow/Wiki';
 
 type Props = {
   comment: IssueComment,
-  attachments: Array<Attachment>,
+  attachments?: Array<Attachment>,
 
-  youtrackWiki: YouTrackWiki,
+  youtrackWiki?: YouTrackWiki,
 
   canRestore: boolean,
   onRestore: Function,

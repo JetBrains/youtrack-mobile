@@ -1,7 +1,8 @@
 /* @flow */
 
 import type {User} from './User';
-import type {IssueOnList} from './Issue';
+import type {AnyIssue, IssueOnList} from './Issue';
+import type {Activity} from './Activity';
 
 type ChangeCategory = 'COMMENT' | 'CUSTOM_FIELD' | 'SPRINT' | 'SUMMARY' | 'DESCRIPTION';
 
@@ -81,3 +82,42 @@ export type Metadata = {
   reason: ?ReasonData,
   text: string,
 };
+
+export interface InboxMessageReasons {
+  $type?: string;
+  id: string;
+  name: string;
+  type: string;
+}
+
+export interface InboxThreadMessage {
+  $type?: string;
+  activities: Array<Activity>;
+  id: string;
+  muted: string;
+  notified: string;
+  reasons: InboxMessageReasons,
+  threadId: string;
+  timestamp: string;
+}
+
+export interface InboxThread {
+  $type: string;
+  id: string;
+  subject: {
+    $type: string;
+    id: string;
+    target: AnyIssue;
+  },
+  messages: Array<InboxThreadMessage>;
+}
+
+export interface InboxThreadGroup {
+  head: Activity,
+  mergedActivities: Array<Activity>,
+  messages: Array<InboxThreadMessage>
+}
+
+export interface InboxThreadGroupComment extends InboxThreadGroup {
+  comment: Activity;
+}

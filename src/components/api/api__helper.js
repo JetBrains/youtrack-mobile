@@ -11,6 +11,7 @@ import type {
   TransformedSuggestion,
   ServersideSuggestionLegacy,
 } from 'flow/Issue';
+import type {ToField} from 'flow/ToField';
 
 const API = {
   makeFieldHash: (issue: AnyIssue): Object => {
@@ -80,11 +81,7 @@ const API = {
     return convertedItems;
   },
 
-  //Ported from youtrack frontend
-  toField: function toFieldConstructor(fields: Object | Array<string | Object>): {
-    constructor: Function,
-    toString: Function
-  } {
+  toField: function toFieldConstructor(fields: Object | Array<string | Object>): ToField {
     const toArray = function (object) {
       if (Array.isArray(object)) {
         return object;

@@ -3,7 +3,6 @@
 import React, {useContext} from 'react';
 import {View} from 'react-native';
 
-import ApiHelper from 'components/api/api__helper';
 import Comment from 'components/comment/comment';
 import CommentVisibility from 'components/comment/comment__visibility';
 import IssueVisibility from 'components/visibility/issue-visibility';
@@ -22,9 +21,9 @@ import type {YouTrackWiki} from 'flow/Wiki';
 
 interface Props {
   activity: Activity,
-  attachments: Array<Attachment>;
+  attachments?: Array<Attachment>;
   commentActions?: ActivityStreamCommentActions;
-  youtrackWiki: YouTrackWiki;
+  youtrackWiki?: YouTrackWiki;
   onCheckboxUpdate?: (checked: boolean, position: number, comment: IssueComment) => any;
   onShowCommentActions?: (comment: IssueComment) => any;
 }
@@ -44,15 +43,10 @@ const StreamComment = ({
     return null;
   }
 
-  const allAttachments = ApiHelper.convertAttachmentRelativeToAbsURLs(
-    comment.attachments || [],
-    youtrackWiki.backendUrl
-  ).concat(attachments);
-
   return (
     <>
       <Comment
-        attachments={allAttachments}
+        attachments={attachments}
         canDeletePermanently={!!commentActions?.canDeleteCommentPermanently}
         canRestore={commentActions?.canRestoreComment ? commentActions.canRestoreComment(comment) : false}
         comment={comment}

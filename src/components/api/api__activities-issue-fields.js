@@ -31,7 +31,7 @@ const VCS_INTEGRATION_PROCESSOR_FIELDS = toField([
   'id',
 ]);
 
-const PULL_REQUEST_FIELDS = toField([
+export const PULL_REQUEST_FIELDS = toField([
   'id',
   'noUserReason(id)',
   'noHubUserReason(id)',
@@ -75,7 +75,7 @@ const VCS_INTEGRATION_FIELDS = toField([
   'urls',
 ]);
 
-const ISSUE_ACTIVITIES_FIELDS = toField([
+export const ISSUE_ACTIVITIES_FIELDS = toField([
   'id',
   'timestamp',
   'targetMember',
@@ -106,7 +106,9 @@ const ISSUE_ACTIVITIES_FIELDS = toField([
       ISSUE_PROJECT_FIELDS,
 
       ISSUE_ACTIVITIES_EVENT_BASE,
+
       IssueFields.issueComment,
+      'usesMarkdown',
 
       IssueFields.ISSUE_XSHORT_FIELDS,
 
