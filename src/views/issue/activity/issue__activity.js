@@ -426,6 +426,7 @@ const mapStateToProps = (
     ...state.issueActivity,
     ...ownProps,
     workTimeSettings: state.app.workTimeSettings,
+    user: state.app.user,
   };
 };
 

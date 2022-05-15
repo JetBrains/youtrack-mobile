@@ -210,6 +210,10 @@ msgstr ""
 msgid "Command applied"
 msgstr ""
 
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "Command was successfully applied."
+msgstr "Parancs sikeresen végrehajtva."
+
 #: src/components/activity/activity__history-title.js
 msgid "Comment changed"
 msgstr ""
@@ -225,6 +229,10 @@ msgstr ""
 #: src/views/issue/activity/issue-activity__comment-actions.js
 msgid "Comment URL copied"
 msgstr ""
+
+#: src/components/activity-stream/activity__stream-vcs.js
+msgid "committed changes"
+msgstr "közzétett változások"
 
 #: src/components/error-boundary/error-boundary.js
 #: src/components/error-message/error-message-inline.js
@@ -258,6 +266,10 @@ msgstr ""
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Copy URL"
 msgstr ""
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "Could not apply specified command."
+msgstr "A megadott parancs nem használható."
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Crash report sent"
@@ -578,6 +590,10 @@ msgstr ""
 msgid "No type"
 msgstr "Nincs típus"
 
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "No user information provided by Upsource."
+msgstr "Nincs az Upsource által nyújtott felhasználói információ."
+
 #: src/components/error/error-message-data.js
 msgid "Nope, can't find it!"
 msgstr "Nem, nem találom!"
@@ -723,6 +739,10 @@ msgstr ""
 msgid "Show all issues tagged with \"{{tagName}}\"..."
 msgstr ""
 
+#: src/components/activity-stream/activity__stream-vcs.js
+msgid "Show more"
+msgstr "Mutasson többet"
+
 #: src/components/error/error-message-data.js
 #: src/components/error/error-messages.js
 msgid "Something went wrong"
@@ -788,9 +808,41 @@ msgstr ""
 msgid "The application failed to restart automatically. Please try to restart it manually."
 msgstr ""
 
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
+msgstr "A közzététel végrehajtóját nem sikerült azonosítani, mert nem adták meg e-mail címüket a YouTrack profiljukban."
+
 #: src/views/agile-board/agile-board.js
 msgid "The board {{boardName}} has configuration errors"
 msgstr ""
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "The change has been detached from this issue. It is still displayed here because its comment mentions the issue."
+msgstr "A változást leválasztották erről a hibajegyről. Még mindig itt jelenik meg, mert a megjegyzése megemlíti a problémát."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "The change has been manually attached to this issue."
+msgstr "A változást manuálisan csatolták ehhez a hibajegyhez."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "The change was processed during the initial data fetching, thus no command has been applied."
+msgstr "A változást a kezdeti adatok lekérése során dolgozták fel, tehát nem parancshívás volt."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "The commit author does not belong to the committers group."
+msgstr "A közzététel végrehajtó nem tartozik a commit végrehajtók csoportjába."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "The commit author has not specified an email address."
+msgstr "A közzététel végrehajtó nem adott meg e-mail címet."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "The commit author has specified an email address that is associated with a different user account."
+msgstr "A közzététel végrehajtó olyan e-mail címet adott meg, amely egy másik felhasználói fiókhoz van társítva."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "The commit author is not an assignee in the project."
+msgstr "A közzététel végrehajtó nem a projekt egyik felelőse."
 
 #: src/actions/app-actions.js
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
@@ -803,6 +855,18 @@ msgstr ""
 #: src/views/agile-board/board-updaters.js
 msgid "The settings for this agile board have been updated. Please reload the board."
 msgstr ""
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "The VCS user name does not match any user in YouTrack. To link future commits, add the VCS user name to the Hub account for this user."
+msgstr "A VCS felhasználónév nem egyezik meg a YouTrack egyik felhasználójával sem. A jövőbeli közzétételek összekapcsolásához adja hozzá a VCS-felhasználónevet ennek a felhasználónak a Hub-fiókjához."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "The VCS user name matches more than one user in YouTrack. To link future commits, remove the duplicate VCS user names from one or more Hub accounts or merge the duplicates into a single user account."
+msgstr "A VCS Felhasználónév egynél több felhasználóval is megegyezik a YouTrack-ben. A jövőbeli commit-ok hozzárendeléséhez távolítsa el az ismétlődő VCS-felhasználóneveket egy vagy több Hub felhasználónál, vagy egyesítse az ismétlődéseket egyetlen felhasználói fiókba."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
+msgstr "Hiba történt a változás TeamCity-beli szerzőjével kapcsolatos információ letöltése során. A legvalószínűbb ok az, hogy a TeamCity felhasználó, amely az integráció nevében fut, nem rendelkezik a szükséges engedélyekkel."
 
 #: src/views/article/arcticle-helper.js
 msgid "This action deletes all drafts, including unpublished sub-articles"
@@ -864,6 +928,14 @@ msgstr "A cikkolvasók számára látható"
 msgid "Visible to issue readers"
 msgstr ""
 
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."
+msgstr "A TeamCity és a YouTrack integrálásakor a felhasználókat az e-mail címük alapján párosítják. A TeamCity nem gondoskodik a közzétevő e-mail címéről."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. There are two or more different YouTrack users that have the same email address as the commit's author has in TeamCity."
+msgstr "TeamCity és YouTrack integrálásakor a felhasználók az email címük alapján lesznek egyeztetve. Legalább két különböző YouTrack felhasználó van, akinek ugyanaz az email címe, mint a TeamCity-ben a közzététel végrehajtónak."
+
 #: src/components/error/error-message-data.js
 msgid "Woah, you can't touch this!"
 msgstr "Hú, ezt nem érintheti meg!"
@@ -884,4 +956,58 @@ msgstr ""
 msgid "Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n\n"
 "To log in on this screen, enter your username and a one-time application password."
 msgstr ""
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "YouTrack did not find a user that matches the user account in Bitbucket."
+msgstr "A YouTrack nem talált a Bitbucket felhasználói fióknak megfelelő felhasználót."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "YouTrack did not find a user that matches the user account in GitHub."
+msgstr "A YouTrack nem talált a GitHub felhasználói fióknak megfelelő felhasználót."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "YouTrack did not find a user that matches the user account in GitLab."
+msgstr "A YouTrack nem talált a GitLab felhasználói fióknak megfelelő felhasználót."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "YouTrack did not receive an email address for the commit author from Bitbucket."
+msgstr "A YouTrack-hez nem érkezett meg a Bitbucket-től a közzététel végrehajtójának az email címe."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "YouTrack did not receive an email address for the commit author from GitHub."
+msgstr "A YouTrack nem kapta meg a közzététel végrehajtójának az email címét a GitHub-tól."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "YouTrack did not receive an email address for the commit author from GitLab."
+msgstr "A YouTrack nem kapta meg a közzététel végrehajtójának az email címét a GitLab-tól."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "YouTrack did not receive user data for this commit author from Bitbucket."
+msgstr "A YouTrack-hez nem érkeztek meg a közzététel végrehajtójának a felhasználói adatai a Bitbucket-től."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "YouTrack did not receive user data for this commit author from GitHub."
+msgstr "A YouTrack nem kapott felhasználói adatokat a GitHub-tól a közzététel végrehajtóról."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "YouTrack did not receive user data for this commit author from GitLab."
+msgstr "A YouTrack nem kapott felhasználói adatokat a közzététel végrehajtójáról a GitLab-tól."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "YouTrack found multiple users with email addresses that match the registered email in Bitbucket."
+msgstr "A YouTrack több felhasználót talált olyan e-mail címekkel, amelyek megegyeznek a Bitbucketben regisztrált e-mail címmel."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "YouTrack found multiple users with email addresses that match the registered email in GitHub."
+msgstr "A YouTrack több felhasználót talált olyan e-mail címekkel, amelyek megegyeznek a GitHub-ban regisztrált e-mail címmel."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "YouTrack found multiple users with email addresses that match the registered email in GitLab."
+msgstr "A YouTrack több felhasználót talált olyan e-mail címekkel, amelyek megegyeznek a GitLab-ban regisztrált e-mail címmel."
+
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+#: src/components/activity-stream/activity__stream-vcs-helper.js
+msgid "YouTrack was unable to match the VCS user name to a Hub account for an unknown reason. Check your server logs for details."
+msgstr "A YouTrack ismeretlen okból nem tudta egyeztetni a VCS felhasználónevet egy Hub-fiókkal. A részleteket nézze meg a szervernaplókban."
 
