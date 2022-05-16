@@ -10,6 +10,7 @@ import StreamHistoryTextChange from './activity__stream-history__text-change';
 import StreamLink from './activity__stream-link';
 import {DEFAULT_WORK_TIME_SETTINGS} from 'components/time-tracking/time-tracking__default-settings';
 import {getTextValueChange} from 'components/activity/activity__history-value';
+import {i18n} from 'components/i18n/i18n';
 import {isActivityCategory} from 'components/activity/activity__category';
 import {UNIT} from 'components/variables/variables';
 
@@ -89,6 +90,20 @@ const StreamHistoryChange = ({activity, workTimeSettings = DEFAULT_WORK_TIME_SET
     );
   };
 
+  const renderVotesChange = (activity: Activity) => {
+    const votesBefore: number = activity.removed ? parseInt(activity.removed) : 0;
+    const votesAfter: number = activity.added ? parseInt(activity.added) : 0;
+    const isAdded: boolean = votesAfter > votesBefore;
+
+    return (
+      <View style={styles.activityTextValueChange}>
+        <Text style={styles.activityAdded}>
+          {isAdded ? '+' : '-'}1. {i18n('Total votes')}: {votesAfter}
+        </Text>
+      </View>
+    );
+  };
+
   const renderActivityByCategory = (activity: Activity) => {
     switch (true) {
     case Boolean(
@@ -107,6 +122,8 @@ const StreamHistoryChange = ({activity, workTimeSettings = DEFAULT_WORK_TIME_SET
       return renderAttachmentChange(activity);
     case Boolean(isActivityCategory.visibility(activity)):
       return <StreamHistoryTextChange activity={activity} textChange={getTextChange(activity, [])}/>;
+    case Boolean(isActivityCategory.totalVotes(activity)):
+      return renderVotesChange(activity);
     }
     return null;
   };
