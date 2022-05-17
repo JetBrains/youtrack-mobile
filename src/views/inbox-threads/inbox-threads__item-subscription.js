@@ -20,13 +20,15 @@ import styles from './inbox-threads.styles';
 import type {Activity} from 'flow/Activity';
 import type {InboxThread, InboxThreadGroup} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
+import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 export default function InboxThreadItemSubscription({
   thread,
   style,
+  currentUser,
   uiTheme,
-}: { thread: InboxThread, style?: ViewStyleProp, uiTheme: UITheme }) {
+}: { thread: InboxThread, style?: ViewStyleProp, currentUser: User, uiTheme: UITheme}): React$Element<typeof View> {
   const activityToMessageMap = createMessagesMap(thread.messages);
   const activities: Array<Activity> = thread.messages.reduce((list, it) => list.concat(it.activities), []);
   const messageGroups = groupActivities(activities.reverse(), {
@@ -69,23 +71,31 @@ export default function InboxThreadItemSubscription({
       })}
     </View>
   );
-}
 
-function renderGroup(group: InboxThreadGroup, target: any, isLast: boolean) {
-  let Component: any;
-  switch (true) {
-  case !!group.issue:
-    Component = ThreadIssueCreatedItem;
-    break;
-  case !!group.comment:
-    Component = ThreadCommentItem;
-    break;
-  case !!group.work:
-    Component = ThreadWorkItem;
-    break;
-  default:
-    Component = ThreadHistoryItem;
+  function renderGroup(group: InboxThreadGroup, target: any, isLast: boolean) {
+    let Component: any;
+    switch (true) {
+    case !!group.issue:
+      Component = ThreadIssueCreatedItem;
+      break;
+    case !!group.comment:
+      Component = ThreadCommentItem;
+      break;
+    case !!group.work:
+      Component = ThreadWorkItem;
+      break;
+    default:
+      Component = ThreadHistoryItem;
+    }
+    return (
+      <Component
+        key={guid()}
+        group={group}
+        isLast={isLast}
+        currentUser={currentUser}
+        uiTheme={uiTheme}
+      />
+    );
   }
-  return <Component key={guid()} group={group} isLast={isLast}/>;
 }
 

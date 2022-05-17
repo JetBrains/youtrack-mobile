@@ -71,6 +71,11 @@ export default EStyleSheet.create({
   threadChangeMarkdown: {
     paddingTop: 0,
   },
+  threadCommentReactions: {
+    marginTop: -UNIT,
+    marginBottom: UNIT,
+    marginLeft: -UNIT / 2,
+  },
   threadChangeReason: {
     marginRight: UNIT / 2,
     ...secondaryText,

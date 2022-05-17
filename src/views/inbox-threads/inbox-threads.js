@@ -15,20 +15,21 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './inbox-threads.styles';
 
 import type {AppState} from '../../reducers';
-import type {Node} from 'react';
-import type {InboxThreadState} from './inbox-threads-reducers';
-import type {Theme} from 'flow/Theme';
 import type {CustomError} from 'flow/Error';
+import type {InboxThreadState} from './inbox-threads-reducers';
 import type {InboxThread} from 'flow/Inbox';
+import type {Node} from 'react';
+import type {Theme} from 'flow/Theme';
+import type {User} from 'flow/User';
 
 interface Props extends InboxThreadState {}
 
 const InboxThreads: (props: Props) => Node = (props: Props): Node => {
-  // eslint-disable-next-line no-unused-vars
   const theme: Theme = useContext(ThemeContext);
   const dispatch = useDispatch();
 
   const threads: Array<InboxThread> = useSelector((state: AppState) => state.inboxThreads.threads);
+  const currentUser: User = useSelector((state: AppState) => state.app.user);
   const inProgress: boolean = useSelector((state: AppState) => state.inboxThreads.inProgress);
   const error: ?CustomError = useSelector((state: AppState) => state.inboxThreads.error);
 
@@ -51,6 +52,7 @@ const InboxThreads: (props: Props) => Node = (props: Props): Node => {
           <InboxThreadItemSubscription
             style={[styles.thread, isLast && styles.threadLast]}
             thread={thread}
+            currentUser={currentUser}
             uiTheme={theme.uiTheme}
           />
         );
