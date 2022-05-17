@@ -118,4 +118,5 @@ export interface InboxThreadGroup {
   messages: Array<InboxThreadMessage>;
   comment?: Activity;
   issue?: (Activity & {issue: any});
+  work?: Activity;
 }

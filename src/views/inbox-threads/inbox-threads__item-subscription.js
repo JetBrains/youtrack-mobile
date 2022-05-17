@@ -8,6 +8,7 @@ import Router from 'components/router/router';
 import ThreadCommentItem from './inbox-threads__item-comment';
 import ThreadHistoryItem from './inbox-threads__item-history';
 import ThreadIssueCreatedItem from './inbox-threads__item-issue-created';
+import ThreadWorkItem from './inbox-threads__item-work';
 import {createMessagesMap, sortEvents} from './inbox-threads-helper';
 import {groupActivities} from 'components/activity/activity__group-activities';
 import {guid} from 'util/util';
@@ -71,8 +72,7 @@ export default function InboxThreadItemSubscription({
 }
 
 function renderGroup(group: InboxThreadGroup, target: any, isLast: boolean) {
-  const key: string = guid();
-  let Component: any = ThreadHistoryItem;
+  let Component: any;
   switch (true) {
   case !!group.issue:
     Component = ThreadIssueCreatedItem;
@@ -80,7 +80,12 @@ function renderGroup(group: InboxThreadGroup, target: any, isLast: boolean) {
   case !!group.comment:
     Component = ThreadCommentItem;
     break;
+  case !!group.work:
+    Component = ThreadWorkItem;
+    break;
+  default:
+    Component = ThreadHistoryItem;
   }
-  return <Component key={key} group={group} isLast={isLast}/>;
+  return <Component key={guid()} group={group} isLast={isLast}/>;
 }
 
