@@ -12,6 +12,8 @@ import {i18n} from 'components/i18n/i18n';
 import styles from './inbox-threads.styles';
 
 import type {InboxThreadGroup} from 'flow/Inbox';
+import type {Activity} from '../../flow/Activity';
+import StreamHistoryChange from '../../components/activity-stream/activity__stream-history';
 
 interface Props {
   group: InboxThreadGroup;
@@ -46,6 +48,9 @@ export default function ThreadCommentItem({group, isLast}: Props) {
         <StreamComment
           activity={group.comment}
         />
+        {group.mergedActivities.map(
+          (activity: Activity) => <StreamHistoryChange key={activity.id} activity={activity}/>
+        )}
       </View>
     </View>
   );
