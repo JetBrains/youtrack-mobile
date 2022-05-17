@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useCallback, useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {Text, View} from 'react-native';
 
 import {stringToTokens, tokensToAST} from 'react-native-markdown-display';
 
@@ -28,6 +28,7 @@ type Props = {
   attachments?: Array<Attachment>,
   children: string,
   chunkSize?: number,
+  maxChunks?: number,
   mentionedArticles?: Array<Article>,
   mentionedIssues?: Array<IssueOnList>,
   uiTheme: UITheme,
@@ -49,6 +50,7 @@ const MarkdownViewChunks = (props: Props) => {
     mentionedArticles = [],
     mentionedIssues = [],
     onCheckboxUpdate = (checked: boolean, position: number, markdown: string) => {},
+    maxChunks,
   } = props;
 
   const [chunksToRender, updateChunksToRender] = useState(1);
@@ -61,7 +63,7 @@ const MarkdownViewChunks = (props: Props) => {
   }, [props.chunkSize]);
 
   const onCheckboxPress = (checked: boolean, position: number): void => {
-    if (md) {
+    if (md && maxChunks == null) {
       onCheckboxUpdate(checked, position, updateMarkdownCheckbox(md, position, checked));
     }
   };
@@ -115,8 +117,11 @@ const MarkdownViewChunks = (props: Props) => {
     return null;
   }
 
-  const hasMore: boolean = (chunksToRender + 1) <= chunks.length;
+  const hasMore: boolean = maxChunks != null ? false : (chunksToRender + 1) <= chunks.length;
   scrollData.loadMore = () => {
+    if (maxChunks != null) {
+      return;
+    }
     const number = chunksToRender + 1;
     if (number <= chunks.length) {
       updateChunksToRender(number);
@@ -128,12 +133,13 @@ const MarkdownViewChunks = (props: Props) => {
       testID="markdownViewChunks"
     >
       {
-        astToRender.slice(0, chunksToRender).map(
+        astToRender.slice(0, maxChunks || chunksToRender).map(
           (astPart, index) => renderAST(astPart, `chunk-${index}`)
         )
       }
 
       {hasMore && <SkeletonIssueContent/>}
+      {maxChunks != null && (astToRender.length > maxChunks) && <Text>{'…\n'}</Text>}
     </View>
   );
 

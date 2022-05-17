@@ -47,7 +47,13 @@ const InboxThreads: (props: Props) => Node = (props: Props): Node => {
         // mention
         return null;
       case 'S':
-        return <InboxThreadItemSubscription style={[styles.thread, isLast && styles.threadLast]} thread={thread}/>;
+        return (
+          <InboxThreadItemSubscription
+            style={[styles.thread, isLast && styles.threadLast]}
+            thread={thread}
+            uiTheme={theme.uiTheme}
+          />
+        );
       }
     }
     return null;

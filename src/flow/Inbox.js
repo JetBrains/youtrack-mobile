@@ -113,11 +113,9 @@ export interface InboxThread {
 }
 
 export interface InboxThreadGroup {
-  head: Activity,
-  mergedActivities: Array<Activity>,
-  messages: Array<InboxThreadMessage>
-}
-
-export interface InboxThreadGroupComment extends InboxThreadGroup {
-  comment: Activity;
+  head: Activity;
+  mergedActivities: Array<Activity>;
+  messages: Array<InboxThreadMessage>;
+  comment?: Activity;
+  issue?: (Activity & {issue: any});
 }

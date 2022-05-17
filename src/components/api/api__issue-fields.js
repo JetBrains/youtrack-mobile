@@ -1,8 +1,6 @@
 /* @flow */
 
-import ApiHelper from './api__helper';
-
-const toField = ApiHelper.toField;
+import {toField} from 'util/to-field';
 
 const ISSUE_PROJECT_FIELDS: any = toField([
   '$type',

@@ -2,5 +2,6 @@
 
 export type ToField = {
   constructor: Function,
-  toString: Function
+  toString: Function,
+  exclude: Function,
 };

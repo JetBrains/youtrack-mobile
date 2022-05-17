@@ -68,8 +68,11 @@ export default EStyleSheet.create({
     marginRight: UNIT * 2,
     marginBottom: UNIT * 3.5,
   },
+  threadChangeMarkdown: {
+    paddingTop: 0,
+  },
   threadChangeReason: {
-    marginRight: UNIT / 1.5,
+    marginRight: UNIT / 2,
     ...secondaryText,
     color: '$icon',
   },

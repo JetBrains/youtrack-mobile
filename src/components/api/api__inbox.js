@@ -1,13 +1,10 @@
 /* @flow */
 
 import ApiBase from './api__base';
-import ApiHelper from './api__helper';
-import {ISSUE_ACTIVITIES_FIELDS} from './api__activities-issue-fields';
+import {inboxThreadFields} from './api__inbox-fields';
 
 import type Auth from '../auth/oauth2';
-import type {InboxThread} from '../../flow/Inbox';
-
-const toField = ApiHelper.toField;
+import type {InboxThread} from 'flow/Inbox';
 
 
 export default class IssueAPI extends ApiBase {
@@ -24,49 +21,13 @@ export default class IssueAPI extends ApiBase {
   }
 
   async getThreads(top: number = 16, end?: number): Promise<Array<InboxThread>> {
-    const fields: string = toField([
-      'id',
-      {
-        subject: [
-          'id',
-          {
-            target: [
-              'id',
-              'idReadable',
-              'resolved',
-              'summary',
-            ],
-          },
-        ],
-      },
-      {
-        messages: [
-          'id',
-          'threadId',
-          'timestamp',
-          {
-            activities: ISSUE_ACTIVITIES_FIELDS,
-          },
-          {
-            reasons: [
-              'id',
-              'name',
-              'type',
-            ],
-          },
-        ],
-      },
-      'muted',
-      'notified',
-    ]).toString();
-
     return this.makeAuthorizedRequest(
       [
         `${this.youTrackApiUrl}/inbox/threads?$top=${top}`,
         'customFields=assignee',
         `customFieldsTypes=user`,
         `reverse=true`,
-        `fields=${fields}`,
+        `fields=${inboxThreadFields.toString()}`,
         typeof end === 'number' ? `$end=${end}` : undefined,
       ].filter(Boolean).join('&')
     );

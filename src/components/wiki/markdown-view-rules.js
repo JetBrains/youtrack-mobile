@@ -186,6 +186,10 @@ function getMarkdownRules(
     );
   };
 
+  function isFigmaImage(url: string): boolean {
+    return url.indexOf('figma.com') !== 0;
+  }
+
 
   return {
 
@@ -201,7 +205,7 @@ function getMarkdownRules(
 
       const parsedURL = UrlParse(src);
       const url: ?string = parsedURL?.protocol && parsedURL?.origin ? src : targetAttach?.url;
-      if (!url || hasMimeType.svg(targetAttach)) {
+      if (!url || hasMimeType.svg(targetAttach) || isFigmaImage(url)) {
         return null;
       }
 

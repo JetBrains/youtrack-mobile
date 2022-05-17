@@ -1,9 +1,5 @@
-/* @flow */
-
-import ApiHelper from './api__helper';
 import IssueFields from './api__issue-fields';
-
-const toField = ApiHelper.toField;
+import {toField} from 'util/to-field';
 
 const ISSUE_ACTIVITIES_EVENT_BASE = toField([
   'id',

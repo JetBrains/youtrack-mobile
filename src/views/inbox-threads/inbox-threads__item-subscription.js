@@ -4,8 +4,10 @@ import React from 'react';
 import {View} from 'react-native';
 
 import InboxIssue from '../inbox/inbox__issue';
+import Router from 'components/router/router';
 import ThreadCommentItem from './inbox-threads__item-comment';
 import ThreadHistoryItem from './inbox-threads__item-history';
+import ThreadIssueCreatedItem from './inbox-threads__item-issue-created';
 import {createMessagesMap, sortEvents} from './inbox-threads-helper';
 import {groupActivities} from 'components/activity/activity__group-activities';
 import {guid} from 'util/util';
@@ -15,10 +17,15 @@ import {splitActivities} from 'components/activity/activity__split-activities';
 import styles from './inbox-threads.styles';
 
 import type {Activity} from 'flow/Activity';
-import type {InboxThread, InboxThreadGroup, InboxThreadGroupComment} from 'flow/Inbox';
+import type {InboxThread, InboxThreadGroup} from 'flow/Inbox';
+import type {UITheme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-export default function InboxThreadItemSubscription({thread, style}: { thread: InboxThread, style?: ViewStyleProp }) {
+export default function InboxThreadItemSubscription({
+  thread,
+  style,
+  uiTheme,
+}: { thread: InboxThread, style?: ViewStyleProp, uiTheme: UITheme }) {
   const activityToMessageMap = createMessagesMap(thread.messages);
   const activities: Array<Activity> = thread.messages.reduce((list, it) => list.concat(it.activities), []);
   const messageGroups = groupActivities(activities.reverse(), {
@@ -52,9 +59,9 @@ export default function InboxThreadItemSubscription({thread, style}: { thread: I
   return (
     <View style={style}>
       <InboxIssue
-         issue={thread.subject.target}
-         onNavigateToIssue={() => {}}
-         style={styles.threadTitle}
+        issue={thread.subject.target}
+        onNavigateToIssue={() => Router.Issue({issueId: thread.subject.target.id, navigateToActivity: true})}
+        style={styles.threadTitle}
       />
       {splittedMessageGroups.map((group: InboxThreadGroup, idx: number) => {
         return renderGroup(group, thread.subject.target, (splittedMessageGroups.length - 1) === idx);
@@ -63,10 +70,13 @@ export default function InboxThreadItemSubscription({thread, style}: { thread: I
   );
 }
 
-function renderGroup(group: InboxThreadGroupComment | InboxThreadGroup, target: any, isLast: boolean) {
+function renderGroup(group: InboxThreadGroup, target: any, isLast: boolean) {
   const key: string = guid();
   let Component: any = ThreadHistoryItem;
   switch (true) {
+  case !!group.issue:
+    Component = ThreadIssueCreatedItem;
+    break;
   case !!group.comment:
     Component = ThreadCommentItem;
     break;

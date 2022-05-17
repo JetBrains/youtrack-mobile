@@ -1,6 +1,6 @@
 /* @flow */
 
-import ApiHelper from './api__helper';
+import {toField} from 'util/to-field';
 
 import {ISSUE_ACTIVITIES_FIELDS, PULL_REQUEST_FIELDS} from './api__activities-issue-fields';
 import issueFields from './api__issue-fields';
@@ -8,50 +8,15 @@ import issueFields from './api__issue-fields';
 import type {ToField} from 'flow/ToField';
 
 
-const toField = ApiHelper.toField;
 const excludeArray = [
   'noUserReason(id)', 'noHubUserReason(id)', 'version', 'files', 'reopened',
   'commands(end,errorText,hasError,start)', 'userName', 'urls', 'shortName', 'fetched', 'hasEmail', 'state(id)',
 ];
 
-export const _fields: ToField = toField([
-  'id',
-  {
-    subject: [
-      'id',
-      {
-        target: [
-          'id',
-          'idReadable',
-          'resolved',
-          'summary',
-        ],
-      },
-    ],
-  },
-  {
-    messages: [
-      'id',
-      'threadId',
-      'timestamp',
-      {
-        activities: ISSUE_ACTIVITIES_FIELDS,
-      },
-      {
-        reasons: [
-          'id',
-          'name',
-          'type',
-        ],
-      },
-    ],
-  },
-  'muted',
-  'notified',
-]);
-
 const entity = 'id,idReadable,summary,resolved';
-export const fields: ToField = toField([
+
+
+export const inboxThreadFields: ToField = toField([
   'id',
   'notified',
   'muted',
@@ -60,7 +25,7 @@ export const fields: ToField = toField([
       'id',
       {
         target: toField([
-        entity, // issue, article
+          entity, // issue, article
           {
             issue: entity, // comment issue
             article: entity, // comment article
