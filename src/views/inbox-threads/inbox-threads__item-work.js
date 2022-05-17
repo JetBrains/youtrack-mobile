@@ -12,6 +12,8 @@ import {IconWork} from 'components/icon/icon';
 import styles from './inbox-threads.styles';
 
 import type {InboxThreadGroup} from 'flow/Inbox';
+import type {Activity} from '../../flow/Activity';
+import StreamHistoryChange from '../../components/activity-stream/activity__stream-history';
 
 interface Props {
   group: InboxThreadGroup;
@@ -39,6 +41,9 @@ export default function ThreadWorkItem({group, isLast}: Props): React$Element<ty
 
       <View style={styles.threadChange}>
         <StreamWork activityGroup={{work: group.work}}/>
+        {group.mergedActivities.map(
+          (activity: Activity) => <StreamHistoryChange key={activity.id} activity={activity}/>
+        )}
       </View>
     </View>
   );
