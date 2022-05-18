@@ -56,7 +56,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
   onChangeSelection: (items: Array<any>) => null,
   placeholder: string,
 } = {
-    placeholder: i18n('Filter item'),
+    placeholder: i18n('Filter items'),
     autoFocus: false,
     onChangeSelection: (items: Array<Object>) => null,
     noFilter: false,
