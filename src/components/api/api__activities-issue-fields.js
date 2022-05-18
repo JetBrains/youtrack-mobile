@@ -111,6 +111,7 @@ export const ISSUE_ACTIVITIES_FIELDS = toField([
       ISSUE_WORK_ITEMS_FIELDS,
 
       'reactionOrder',
+      'reaction',
       {
         reactions: [
           'id',
@@ -128,6 +129,8 @@ export const ISSUE_ACTIVITIES_FIELDS = toField([
       IssueFields.ISSUE_COMMENTS_REMOVED_FIELDS,
 
       IssueFields.ISSUE_XSHORT_FIELDS,
+
+      'reaction',
     ],
   },
 ]);

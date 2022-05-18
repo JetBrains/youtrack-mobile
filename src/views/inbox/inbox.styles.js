@@ -148,7 +148,7 @@ export default EStyleSheet.create({
   },
   reactionIconRemoved: {
     position: 'absolute',
-    width: 2,
+    width: 1,
     height: UNIT * 4,
     backgroundColor: '$error',
     transform: [{rotate: '45deg'}],

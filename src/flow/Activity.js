@@ -4,6 +4,7 @@ import type {Attachment, IssueComment, IssueProject} from './CustomFields';
 import type {IssueFull} from './Issue';
 import type {User} from './User';
 import type {PullRequest, VCSActivity} from './Vcs';
+import type {Reaction} from './Reaction';
 
 type ActivityWork = {
   id: string,
@@ -22,7 +23,7 @@ type ActivityWork = {
   },
 }
 
-export type ActivityItem = IssueProject | IssueComment | Attachment | IssueFull | ActivityWork | string | null;
+export type ActivityItem = IssueProject | IssueComment | Attachment | IssueFull | ActivityWork | Reaction | string | null;
 
 export interface Activity {
   $type?: string;

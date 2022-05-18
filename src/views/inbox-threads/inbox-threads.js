@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import actions from './inbox-threads-actions';
 import ErrorMessage from 'components/error-message/error-message';
 import Header from 'components/header/header';
+import InboxThreadReaction from './inbox-threads__reactions';
 import InboxThreadItemSubscription from './inbox-threads__item-subscription';
 import {guid} from 'util/util';
 import {ThemeContext} from 'components/theme/theme-context';
@@ -16,15 +17,12 @@ import styles from './inbox-threads.styles';
 
 import type {AppState} from '../../reducers';
 import type {CustomError} from 'flow/Error';
-import type {InboxThreadState} from './inbox-threads-reducers';
 import type {InboxThread} from 'flow/Inbox';
 import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {User} from 'flow/User';
 
-interface Props extends InboxThreadState {}
-
-const InboxThreads: (props: Props) => Node = (props: Props): Node => {
+const InboxThreads: () => Node = (): Node => {
   const theme: Theme = useContext(ThemeContext);
   const dispatch = useDispatch();
 
@@ -42,8 +40,14 @@ const InboxThreads: (props: Props) => Node = (props: Props): Node => {
     if (thread.id) {
       switch (thread.id[0]) {
       case 'R':
-        // reaction
-        return null;
+        return (
+          <InboxThreadReaction
+            style={[styles.thread, isLast && styles.threadLast]}
+            thread={thread}
+            currentUser={currentUser}
+            uiTheme={theme.uiTheme}
+          />
+        );
       case 'M':
         // mention
         return null;
@@ -68,11 +72,15 @@ const InboxThreads: (props: Props) => Node = (props: Props): Node => {
         title="Notifications"
       />
 
-      {threads.length === 0 && !error && inProgress && <ActivityIndicator color={styles.link.color} style={StyleSheet.absoluteFillObject}/>}
+      {threads.length === 0 && !error && inProgress && (
+        <ActivityIndicator color={styles.link.color} style={StyleSheet.absoluteFillObject}/>
+      )}
 
       {threads.length > 0 && (
         <ScrollView>
-          {threads.map((thread: InboxThread, index: number) => thread.messages.length && <Thread key={guid()} thread={thread} isLast={index === threads.length - 1}/>)}
+          {threads.map((thread: InboxThread, index: number) => (
+            thread.messages.length && <Thread key={guid()} thread={thread} isLast={index === threads.length - 1}/>
+          ))}
         </ScrollView>
       )}
 

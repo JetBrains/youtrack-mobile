@@ -21,7 +21,7 @@ export default EStyleSheet.create({
     flexDirection: 'row',
   },
   thread: {
-    marginTop: UNIT * 2,
+    marginTop: UNIT * 1.5,
     marginLeft: UNIT * 2,
     marginBottom: UNIT,
     paddingBottom: UNIT / 2,
@@ -64,9 +64,9 @@ export default EStyleSheet.create({
     paddingTop: UNIT / 4,
     paddingBottom: UNIT,
 
-    marginLeft: UNIT * 6,
+    marginLeft: UNIT * 5.5,
     marginRight: UNIT * 2,
-    marginBottom: UNIT * 3.5,
+    marginBottom: UNIT * 3,
   },
   threadChangeMarkdown: {
     paddingTop: 0,
@@ -85,6 +85,7 @@ export default EStyleSheet.create({
     flexGrow: 1,
     flexShrink: 0,
     ...mainText,
+    color: '$text',
     fontSize: 18,
     lineHeight: 24,
     fontWeight: '500',

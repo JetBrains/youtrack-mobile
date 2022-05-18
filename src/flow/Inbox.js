@@ -1,8 +1,9 @@
 /* @flow */
 
-import type {User} from './User';
-import type {AnyIssue, IssueOnList} from './Issue';
 import type {Activity} from './Activity';
+import type {AnyIssue, IssueOnList} from './Issue';
+import type {IssueComment} from './CustomFields';
+import type {User} from './User';
 
 type ChangeCategory = 'COMMENT' | 'CUSTOM_FIELD' | 'SPRINT' | 'SUMMARY' | 'DESCRIPTION';
 
@@ -104,10 +105,11 @@ export interface InboxThreadMessage {
 export interface InboxThread {
   $type: string;
   id: string;
+  notified: number;
   subject: {
     $type: string;
     id: string;
-    target: AnyIssue;
+    target: (AnyIssue | IssueComment);
   },
   messages: Array<InboxThreadMessage>;
 }
