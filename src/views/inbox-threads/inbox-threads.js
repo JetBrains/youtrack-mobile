@@ -9,7 +9,7 @@ import actions from './inbox-threads-actions';
 import ErrorMessage from 'components/error-message/error-message';
 import Header from 'components/header/header';
 import InboxThreadReaction from './inbox-threads__reactions';
-import InboxThreadItemSubscription from './inbox-threads__item-subscription';
+import InboxThreadItemSubscription from './inbox-threads__subscription';
 import {guid} from 'util/util';
 import {ThemeContext} from 'components/theme/theme-context';
 
