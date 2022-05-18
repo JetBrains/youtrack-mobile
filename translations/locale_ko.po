@@ -387,11 +387,8 @@ msgstr ""
 msgid "Filter boards by name"
 msgstr ""
 
-#: src/components/select/select.js
-msgid "Filter item"
-msgstr ""
-
 #: src/components/linked-issues/linked-issues-add-link.js
+#: src/components/select/select.js
 #: src/views/issue/activity/activity__add-spent-time.js
 #: src/views/issues/issues__sortby_add-attribute.js
 msgid "Filter items"
