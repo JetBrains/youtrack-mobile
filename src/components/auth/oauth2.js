@@ -18,13 +18,19 @@ export default class OAuth2 extends AuthBase {
     return await doAuthorize(config);
   }
 
-  async setAuthorizationFromCache(): Promise<AuthParams> {
-    this.authParams = await this.getCachedAuthParams();
-    return this.authParams;
+  async setAuthParamsFromCache(): Promise<void> {
+    const authParams: ?AuthParams = await this.getCachedAuthParams();
+    if (authParams) {
+      this.setAuthParams(authParams);
+    }
   }
 
   setAuthParams(authParams: AuthParams) {
     this.authParams = authParams;
+  }
+
+  getAuthParams(): AuthParams {
+    return this.authParams;
   }
 
   async refreshToken(): Promise<AuthParams> {
