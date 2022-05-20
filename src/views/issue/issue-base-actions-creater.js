@@ -450,13 +450,13 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
               if (isIOSPlatform()) {
                 Share.share({url});
               } else {
-                Share.share({title: issue.summary, message: url}, {dialogTitle: i18n('Share URL')});
+                Share.share({title: issue.summary, message: url}, {dialogTitle: i18n('Share link')});
               }
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Share URL');
             },
           },
           {
-            title: i18n('Copy URL'),
+            title: i18n('Copy link'),
             execute: () => {
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy URL');
               Clipboard.setString(makeIssueWebUrl(api, issue));

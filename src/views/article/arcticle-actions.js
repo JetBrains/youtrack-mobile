@@ -155,7 +155,7 @@ const showArticleActions = (
       {
         title: i18n('Share…'),
         execute: () => {
-          const msg: string = i18n('Share article URL');
+          const msg: string = i18n('Share link to article');
           if (isIOSPlatform()) {
             Share.share({url});
           } else {
@@ -165,10 +165,10 @@ const showArticleActions = (
         },
       },
       {
-        title: i18n('Copy article URL'),
+        title: i18n('Copy link to article'),
         execute: () => {
           Clipboard.setString(url);
-          logEvent({message: i18n('Copy article URL'), analyticsId: ANALYTICS_ARTICLE_PAGE});
+          logEvent({message: i18n('Copy link to article'), analyticsId: ANALYTICS_ARTICLE_PAGE});
         },
       },
     ];
@@ -435,15 +435,15 @@ const showArticleCommentActions = (
             params.title = commentText;
             params.message = url;
           }
-          Share.share(params, {dialogTitle: i18n('Share URL')});
+          Share.share(params, {dialogTitle: i18n('Share link')});
           logEvent({message: 'Share article', analyticsId: ANALYTICS_ARTICLE_PAGE});
           return this.title;
         },
       },
       {
-        title: i18n('Copy URL'),
+        title: i18n('Copy link'),
         execute: function (): string {
-          logEvent({message: 'Copy article URL', analyticsId: ANALYTICS_ARTICLE_PAGE});
+          logEvent({message: 'Copy link to article', analyticsId: ANALYTICS_ARTICLE_PAGE});
           Clipboard.setString(url);
           return this.title;
         },
