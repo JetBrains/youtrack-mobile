@@ -234,10 +234,6 @@ msgstr ""
 msgid "Comment updated"
 msgstr ""
 
-#: src/views/issue/activity/issue-activity__comment-actions.js
-msgid "Comment URL copied"
-msgstr ""
-
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "committed changes"
 msgstr ""
@@ -260,19 +256,19 @@ msgid "Copied"
 msgstr "Skopiowano"
 
 #: src/views/article/arcticle-actions.js
+#: src/views/issue/activity/issue-activity__comment-actions.js
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Copy link"
+msgstr ""
+
 #: src/views/article/arcticle-actions.js
-msgid "Copy article URL"
+#: src/views/article/arcticle-actions.js
+msgid "Copy link to article"
 msgstr ""
 
 #: src/views/issue/activity/issue-activity__comment-actions.js
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Copy text"
-msgstr ""
-
-#: src/views/article/arcticle-actions.js
-#: src/views/issue/activity/issue-activity__comment-actions.js
-#: src/views/issue/issue-base-actions-creater.js
-msgid "Copy URL"
 msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
@@ -383,12 +379,12 @@ msgstr ""
 msgid "Enter search request"
 msgstr "Wprowadź żądanie wyszukiwania"
 
-#: src/components/custom-fields-panel/custom-fields-panel.js
-msgid "Enter time value"
+#: src/views/enter-server/enter-server.js
+msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr ""
 
-#: src/views/enter-server/enter-server.js
-msgid "Enter your YouTrack server URL"
+#: src/components/custom-fields-panel/custom-fields-panel.js
+msgid "Enter time value"
 msgstr ""
 
 #: src/views/settings/settings-helper.js
@@ -433,6 +429,10 @@ msgstr "Filtrowanie użytkowników, grup i zespołów"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Find favorite projects"
+msgstr ""
+
+#: src/views/enter-server/enter-server.js
+msgid "Get help"
 msgstr ""
 
 #: src/components/error-boundary/error-boundary.js
@@ -509,6 +509,10 @@ msgstr ""
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Link issue"
 msgstr "Powiąż zgłoszenie"
+
+#: src/views/issue/activity/issue-activity__comment-actions.js
+msgid "Link to comment copied"
+msgstr ""
 
 #: src/components/linked-issues/linked-issues-title.js
 #: src/components/linked-issues/linked-issues.js
@@ -724,16 +728,16 @@ msgid "Share"
 msgstr "Udostępnij"
 
 #: src/views/article/arcticle-actions.js
-msgid "Share article URL"
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Share link"
+msgstr "Udostępnij link"
+
+#: src/views/article/arcticle-actions.js
+msgid "Share link to article"
 msgstr ""
 
 #: src/views/settings/settings.js
 msgid "Share logs"
-msgstr ""
-
-#: src/views/article/arcticle-actions.js
-#: src/views/issue/issue-base-actions-creater.js
-msgid "Share URL"
 msgstr ""
 
 #: src/views/article/arcticle-actions.js
