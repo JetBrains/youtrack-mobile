@@ -255,7 +255,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
         const api: Api = getApi();
         const {issue} = getState()[stateFieldName];
         Clipboard.setString(makeIssueWebUrl(api, issue, comment.id));
-        notify(i18n('Comment URL copied'));
+        notify(i18n('Link to comment copied'));
       };
 
       function makeIssueWebUrl(api: Api, issue: IssueFull, commentId: ?string) {
@@ -281,7 +281,7 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
             },
           },
           {
-            title: i18n('Copy URL'),
+            title: i18n('Copy link'),
             execute: () => {
               dispatch(actions.copyCommentUrl(comment));
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment URL');

@@ -23,6 +23,10 @@ export type User = {
   },
 };
 
+export type UserCurrent = User & {
+  ytCurrentUser?: User
+}
+
 export type IssueRelatedGroup = {
   $type: string,
   icon: string

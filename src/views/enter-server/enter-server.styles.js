@@ -31,6 +31,7 @@ export default EStyleSheet.create({
   title: {
     ...loginStylesForm.title,
     color: '$text',
+    textAlign: 'center',
   },
   errorContainer: {
     flexDirection: 'row',

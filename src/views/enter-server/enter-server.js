@@ -184,7 +184,7 @@ export class EnterServer extends Component<Props, State> {
                   </TouchableWithoutFeedback>
 
                   <View testID="enterServerHint">
-                    <Text style={styles.title}>{i18n('Enter your YouTrack server URL')}</Text>
+                    <Text style={styles.title}>{i18n('Enter the web address for a YouTrack installation where you have a registered account')}</Text>
                   </View>
 
                   <TextInput
@@ -196,7 +196,7 @@ export class EnterServer extends Component<Props, State> {
                     autoFocus={true}
                     selectTextOnFocus={true}
                     autoCorrect={false}
-                    placeholder="youtrack-server.com:PORT"
+                    placeholder="my-youtrack-server.com"
                     placeholderTextColor={styles.placeholder.color}
                     returnKeyType="done"
                     keyboardType="url"
@@ -237,6 +237,18 @@ export class EnterServer extends Component<Props, State> {
                     </View>
                   )}
 
+                </View>
+
+                <View
+                  testID="test:id/enterServerHelpLink"
+                  style={styles.supportLinkContent}
+                >
+                  <TouchableOpacity
+                    hitSlop={hitSlop}
+                    onPress={() => Linking.openURL('https://www.jetbrains.com/help/youtrack/incloud/youtrack-mobile.html#start-using-youtrack-mobile')}
+                  >
+                    <Text style={formStyles.link}>{i18n('Get help')}</Text>
+                  </TouchableOpacity>
                 </View>
 
                 <View

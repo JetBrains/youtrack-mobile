@@ -49,7 +49,7 @@ import type {AppConfig, EndUserAgreement} from 'flow/AppConfig';
 import type {AppState} from '../reducers';
 import type {Article} from 'flow/Article';
 import type {AuthConfig, AuthParams, OAuthParams2} from 'flow/Auth';
-import type {Folder, User, UserAppearanceProfile, UserArticlesProfile} from 'flow/User';
+import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserCurrent} from 'flow/User';
 import type {NetInfoState} from '@react-native-community/netinfo';
 import type {NotificationRouteData} from 'flow/Notification';
 import type {PermissionCacheItem} from 'flow/Permission';
@@ -160,40 +160,33 @@ export const cacheUserLastVisitedArticle = (article: Article | null, activities?
   }
 };
 
-export function applyAuthParamsAndInitAPI(): Action {
+export function loadCurrentUserAnsSetAPI(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const auth: OAuth2 = ((getState().app.auth: any): OAuth2);
-    const doUpdate = async () => {
-      await auth.loadCurrentUser(cachedAuthParams);
+    if (getState().app?.networkState?.isConnected === true) {
+      const auth: OAuth2 = ((getState().app.auth: any): OAuth2);
+      const authParams = auth.getAuthParams();
+      await auth.loadCurrentUser(authParams);
       await flushStoragePart({currentUser: {
           ...getStorageState().currentUser,
           ...auth.currentUser,
         }});
       setApi(new Api(auth));
-    };
-
-    const cachedCurrentUser: ?User = getStorageState().currentUser;
-    if (cachedCurrentUser) {
-      auth.setCurrentUser(cachedCurrentUser);
-    }
-
-    const cachedAuthParams: ?AuthParams = await auth.setAuthorizationFromCache();
-    if (cachedAuthParams) {
-      setApi(new Api(auth));
-    }
-
-    if (!cachedCurrentUser || !cachedAuthParams) {
-      await doUpdate();
-    } else {
-      doUpdate();
     }
   };
 }
 
-export function createAuthInstance(config: AppConfig): { type: string, auth: OAuth2 } {
-  const auth: OAuth2 = new OAuth2(config);
-  usage.init(config.statisticsEnabled);
+function setAuthInstance(auth: OAuth2) {
   return {type: types.INITIALIZE_AUTH, auth};
+}
+
+async function createAuthInstance(config: AppConfig): Promise<OAuth2> {
+  const auth: OAuth2 = new OAuth2(config);
+  try {
+    await auth.setAuthParamsFromCache();
+  } catch (e) {
+  }
+  usage.init(config.statisticsEnabled);
+  return auth;
 }
 
 function showUserAgreement(agreement) {
@@ -403,11 +396,10 @@ export function removeAccountOrLogOut(): Action {
 
 function setUserPermissions(permissions: Array<PermissionCacheItem>): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const auth: OAuth2 = ((getState().app.auth: any): OAuth2);
     dispatch({
       type: types.SET_PERMISSIONS,
       permissionsStore: new PermissionsStore(permissions),
-      currentUser: auth.currentUser || getStorageState().currentUser,
+      currentUser: getState().app?.auth?.currentUser || getStorageState().currentUser,
     });
   };
 }
@@ -497,8 +489,9 @@ export function declineUserAgreement(): Action {
 
 export function initializeAuth(config: AppConfig): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    dispatch(createAuthInstance(config));
-    await dispatch(applyAuthParamsAndInitAPI());
+    const auth: OAuth2 = await createAuthInstance(config);
+    dispatch(setAuthInstance(auth));
+    await dispatch(loadCurrentUserAnsSetAPI());
   };
 }
 
@@ -539,10 +532,11 @@ export function onLogIn(authParams: AuthParams): Action {
       [storageStateAuthParamsKey]: authStorageStateValue,
     });
     if (auth && authParams) {
+      auth.setAuthParams(authParams);
       await auth.cacheAuthParams((authParams: any), authStorageStateValue);
     }
 
-    await dispatch(applyAuthParamsAndInitAPI());
+    await dispatch(loadCurrentUserAnsSetAPI());
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
@@ -599,27 +593,18 @@ export function redirectToRoute(config: AppConfig, issueId: string | null, navig
     let isRedirected: boolean = false;
 
     try {
-      let authParams: ?AuthParams = null;
       if (config) {
-        //eslint-disable-next-line no-unused-vars
-        const oauthData: { type: string, auth: OAuth2 } = dispatch(createAuthInstance(config));
-        authParams = await oauthData.auth.getCachedAuthParams();
-        oauthData.auth.setAuthParams(authParams);
-        setApi(new Api(oauthData.auth));
-
-        const user: ?User = getStorageState().currentUser?.ytCurrentUser;
-        if (user && !user.guest) {
-          await dispatch(setYTCurrentUser(user));
-        } else {
-          await dispatch(loadYTCurrentUser());
-        }
+        const auth: OAuth2 = await createAuthInstance(config);
+        dispatch(setAuthInstance(auth));
+        const isGuest: boolean = await setUser();
+        setApi(new Api(auth));
 
         const cachedPermissions: ?Array<PermissionCacheItem> = getCachedPermissions();
         if (cachedPermissions) {
           await dispatch(setUserPermissions(cachedPermissions));
         }
 
-        if (authParams && cachedPermissions) {
+        if (cachedPermissions && !isGuest) {
           if ((isSplitView()) || !issueId) {
             isRedirected = true;
             Router.Issues({issueId, navigateToActivity});
@@ -636,8 +621,16 @@ export function redirectToRoute(config: AppConfig, issueId: string | null, navig
     if (!isRedirected) {
       redirectToHome(config.backendUrl);
     }
-
     return isRedirected;
+
+    async function setUser(): Promise<boolean> {
+      const hubCurrentUser: ?UserCurrent = getStorageState().currentUser;
+      const ytCurrentUser: ?User = hubCurrentUser?.ytCurrentUser;
+      if (ytCurrentUser) {
+        await dispatch(setYTCurrentUser(ytCurrentUser));
+      }
+      return ytCurrentUser?.guest === true;
+    }
   };
 }
 
@@ -651,7 +644,8 @@ function redirectToHome(backendUrl: string = '') {
 
 async function refreshConfig(backendUrl: string): Promise<AppConfig> {
   const updatedConfig: AuthConfig = await loadConfig(backendUrl);
-  await flushStoragePart({config: updatedConfig, currentAppVersion: packageJson.version});
+  await storeConfig(updatedConfig);
+  await flushStoragePart({currentAppVersion: packageJson.version});
   return updatedConfig;
 }
 
@@ -659,38 +653,40 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
     const isRedirectedToTargetRoute: boolean = await dispatch(redirectToRoute(config, issueId, navigateToActivity));
 
+    let _config = config;
+
     if (checkVersion(FEATURE_VERSION.translations)) {
       if (!config.l10n) {
-        const updatedConfig: AppConfig = await refreshConfig(config.backendUrl);
-        return await dispatch(initializeApp(updatedConfig, issueId, navigateToActivity));
+        _config = await refreshConfig(config.backendUrl);
+        return await dispatch(initializeApp(_config, issueId, navigateToActivity));
       } else {
         loadTranslation(config.l10n.locale, config.l10n.language);
       }
     }
 
-    const versionHasChanged: boolean = packageJson.version !== getStorageState().currentAppVersion;
+    const currentAppVersion: ?string = getStorageState().currentAppVersion;
+    const versionHasChanged: boolean = currentAppVersion != null && packageJson.version !== currentAppVersion;
     try {
       if (versionHasChanged) {
         log.info(
-          `App upgraded from ${getStorageState().currentAppVersion || 'NOTHING'} to "${packageJson.version}"; reloading config`
+          `App upgraded from ${currentAppVersion || 'NOTHING'} to "${packageJson.version}"; reloading config`
         );
-        await refreshConfig(config.backendUrl);
+        _config = await refreshConfig(config.backendUrl);
       }
 
-      await dispatch(initializeAuth(config));
+      await dispatch(initializeAuth(_config));
+
     } catch (error) {
       log.log('App failed to initialize auth. Reloading config...', error);
-      let reloadedConfig;
       try {
-        reloadedConfig = await loadConfig(config.backendUrl);
-        await storeConfig(reloadedConfig);
+        _config = await refreshConfig(config.backendUrl);
       } catch (err) {
         Router.Home({backendUrl: config.backendUrl, err});
         return;
       }
 
       try {
-        await dispatch(initializeAuth(reloadedConfig));
+        await dispatch(initializeAuth(_config));
       } catch (e) {
         Router.LogIn({config, errorMessage: getErrorMessage(e)});
         return;
@@ -706,7 +702,7 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
     dispatch(subscribeToURL());
 
     if (!versionHasChanged) {
-      refreshConfig(config.backendUrl);
+      refreshConfig(_config.backendUrl);
     }
   };
 }
@@ -715,7 +711,8 @@ export function connectToNewYoutrack(newURL: string): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const config = await loadConfig(newURL);
     await storeConfig(config);
-    dispatch(createAuthInstance(config));
+    const auth: OAuth2 = await createAuthInstance(config);
+    dispatch(setAuthInstance(auth));
     Router.LogIn({config});
   };
 }

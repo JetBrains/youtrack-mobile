@@ -16,10 +16,11 @@ import type {Article, ArticlesList} from 'flow/Article';
 import type {ArticleProject} from 'flow/Article';
 import type {OAuthParams2} from 'flow/Auth';
 import type {Board, Sprint} from 'flow/Agile';
-import type {Folder, User} from 'flow/User';
+import type {Folder} from 'flow/User';
 import type {IssueProject} from 'flow/CustomFields';
 import type {Notification} from 'flow/Inbox';
 import type {PermissionCacheItem} from 'flow/Permission';
+import type {UserCurrent} from 'flow/User';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 export const MAX_STORED_QUERIES = 5;
@@ -38,7 +39,7 @@ export type StorageState = {|
   projectId: ?string,
   projects: Array<IssueProject | ArticleProject>,
   draftId: ?string,
-  currentUser: ?User & {ytCurrentUser: User},
+  currentUser: ?UserCurrent,
   creationTimestamp: ?number,
   config: ?AppConfig,
   query: ?string,
