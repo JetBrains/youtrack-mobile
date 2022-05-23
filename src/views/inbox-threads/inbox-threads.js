@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import actions from './inbox-threads-actions';
 import ErrorMessage from 'components/error-message/error-message';
 import Header from 'components/header/header';
+import InboxThreadMention from './inbox-threads__mention';
 import InboxThreadReaction from './inbox-threads__reactions';
 import InboxThreadItemSubscription from './inbox-threads__subscription';
 import {guid} from 'util/util';
@@ -49,8 +50,14 @@ const InboxThreads: () => Node = (): Node => {
           />
         );
       case 'M':
-        // mention
-        return null;
+        return (
+        <InboxThreadMention
+          style={[styles.thread, isLast && styles.threadLast]}
+          thread={thread}
+          currentUser={currentUser}
+          uiTheme={theme.uiTheme}
+        />
+      );
       case 'S':
         return (
           <InboxThreadItemSubscription

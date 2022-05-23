@@ -58,13 +58,14 @@ export const inboxThreadFields: ToField = toField([
               'reactionOrder',
               {
                 issue: 'id',
-                article: 'id',
+                article: 'id,idReadable,summary',
                 reactions: issueFields.reaction,
                 mentionedUsers: issueFields.ISSUE_USER_FIELDS,
               },
             ]),
             issue: toField([
               'id',
+              'idReadable',
               'description',
               {
                 customFields: toField([
@@ -91,6 +92,8 @@ export const inboxThreadFields: ToField = toField([
             ]),
             article: toField([
               'id',
+              'idReadable',
+              'summary',
               'content',
               {
                 mentionedUsers: issueFields.ISSUE_USER_FIELDS,

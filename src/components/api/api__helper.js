@@ -61,21 +61,15 @@ const API = {
     });
   },
 
+  convertRelativeUrl: convertRelativeUrl,
+
   convertRelativeUrls: (items: Array<Object> = [], urlField: string, backendUrl: string): Array<Object> => {
-    return items.map(item => {
-      if (!item[urlField]) {
-        return item;
-      }
-      return {
-        ...item,
-        [urlField]: handleRelativeUrl(item[urlField], backendUrl),
-      };
-    });
+    return items.map(item => convertRelativeUrl(item, urlField, backendUrl));
   },
 
   convertAttachmentRelativeToAbsURLs(attachments: Array<Attachment>, backendUrl: string): Array<Attachment> {
     let convertedItems: Array<Attachment> = attachments;
-    ['url', 'thumbnailURL'].forEach(
+    ['url', 'thumbnailURL, avatarUrl'].forEach(
       (fieldName: string) => {convertedItems = this.convertRelativeUrls(convertedItems, fieldName, backendUrl);}
     );
     return convertedItems;
@@ -166,3 +160,14 @@ const API = {
 };
 
 export default API;
+
+
+function convertRelativeUrl (item: Object, urlField: string, backendUrl: string) {
+  if (!item || !item[urlField]) {
+    return item;
+  }
+  return {
+    ...item,
+    [urlField]: handleRelativeUrl(item[urlField], backendUrl),
+  };
+}

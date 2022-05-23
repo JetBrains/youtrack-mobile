@@ -1,7 +1,10 @@
 /* @flow */
 
 export const categoryName = {
+  ARTICLE_MENTION: 'ARTICLE_MENTION',
+  ARTICLE_COMMENT_MENTION: 'ARTICLE_COMMENT_MENTION',
   COMMENT: 'COMMENT',
+  COMMENT_MENTION: 'COMMENT_MENTION',
   COMMENT_TEXT: 'COMMENT_TEXT',
   ATTACHMENTS: 'ATTACHMENTS',
   ATTACHMENT_RENAME: 'ATTACHMENT_RENAME',
@@ -9,6 +12,7 @@ export const categoryName = {
   DESCRIPTION: 'DESCRIPTION',
   LINKS: 'LINKS',
   ISSUE_CREATED: 'ISSUE_CREATED',
+  ISSUE_MENTION: 'ISSUE_MENTION',
   ISSUE_RESOLVED: 'ISSUE_RESOLVED',
   PROJECT: 'PROJECT',
   PERMITTED_GROUP: 'PERMITTED_GROUP',
@@ -31,7 +35,10 @@ export const categoryName = {
 };
 
 export const activityCategory: Object = {
+  [categoryName.ARTICLE_MENTION]: 'ArticleMentionCategory',
+  [categoryName.ARTICLE_COMMENT_MENTION]: 'ArticleCommentMentionCategory',
   [categoryName.COMMENT]: 'CommentsCategory',
+  [categoryName.COMMENT_MENTION]: 'CommentMentionCategory',
   [categoryName.COMMENT_TEXT]: 'CommentTextCategory',
   [categoryName.ATTACHMENTS]: 'AttachmentsCategory',
   [categoryName.ATTACHMENT_RENAME]: 'AttachmentRenameCategory',
@@ -39,6 +46,7 @@ export const activityCategory: Object = {
   [categoryName.DESCRIPTION]: 'DescriptionCategory',
   [categoryName.LINKS]: 'LinksCategory',
   [categoryName.ISSUE_CREATED]: 'IssueCreatedCategory',
+  [categoryName.ISSUE_MENTION]: 'IssueMentionCategory',
   [categoryName.ISSUE_RESOLVED]: 'IssueResolvedCategory',
   [categoryName.PROJECT]: 'ProjectCategory',
   [categoryName.PERMITTED_GROUP]: 'PermittedGroupCategory',
@@ -147,6 +155,7 @@ export const isActivityCategories = function (categoryIds: Array<string>): ((act
 };
 
 isActivityCategory.comment = isActivityCategories([activityCategory.COMMENT, activityArticleCategory.COMMENT]);
+isActivityCategory.commentMention = isActivityCategory(activityCategory.COMMENT_MENTION);
 isActivityCategory.attachment = isActivityCategories([activityCategory.ATTACHMENTS, activityArticleCategory.ATTACHMENTS]);
 isActivityCategory.issueCreated = isActivityCategories([activityCategory.ISSUE_CREATED, activityArticleCategory.CREATED]);
 isActivityCategory.articleCreated = isActivityCategory(activityCategory.ARTICLE_CREATED);
@@ -161,12 +170,13 @@ isActivityCategory.commentText = isActivityCategory(activityCategory.COMMENT_TEX
 isActivityCategory.customField = isActivityCategory(activityCategory.CUSTOM_FIELD);
 isActivityCategory.date = isActivityCategory(activityCategory.ISSUE_RESOLVED);
 isActivityCategory.link = isActivityCategory(activityCategory.LINKS);
-isActivityCategory.tag = isActivityCategory(activityCategory.TAGS);
+isActivityCategory.tag = isActivityCategories([activityCategory.TAGS, activityCategory.STAR]);
 isActivityCategory.summary = isActivityCategories([activityCategory.SUMMARY, activityArticleCategory.SUMMARY]);
 isActivityCategory.description = isActivityCategories([activityCategory.DESCRIPTION, activityArticleCategory.DESCRIPTION]);
 isActivityCategory.sprint = isActivityCategory(activityCategory.SPRINT);
 isActivityCategory.star = isActivityCategory(activityCategory.SPRINT);
 isActivityCategory.project = isActivityCategories([activityCategory.PROJECT, activityArticleCategory.PROJECT]);
 isActivityCategory.visibility = isActivityCategories([activityCategory.VISIBILITY, activityArticleCategory.VISIBILITY]);
-
-
+isActivityCategory.articleCommentMention = isActivityCategory(activityCategory.ARTICLE_COMMENT_MENTION);
+isActivityCategory.articleMention = isActivityCategory(activityCategory.ARTICLE_MENTION);
+isActivityCategory.issueMention = isActivityCategory(activityCategory.ISSUE_MENTION);

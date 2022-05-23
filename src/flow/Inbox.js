@@ -2,7 +2,7 @@
 
 import type {Activity} from './Activity';
 import type {AnyIssue, IssueOnList} from './Issue';
-import type {IssueComment} from './CustomFields';
+import type {Article} from './Article';
 import type {User} from './User';
 
 type ChangeCategory = 'COMMENT' | 'CUSTOM_FIELD' | 'SPRINT' | 'SUMMARY' | 'DESCRIPTION';
@@ -109,7 +109,7 @@ export interface InboxThread {
   subject: {
     $type: string;
     id: string;
-    target: (AnyIssue | IssueComment);
+    target: (AnyIssue | IssueComment | Article);
   },
   messages: Array<InboxThreadMessage>;
 }
