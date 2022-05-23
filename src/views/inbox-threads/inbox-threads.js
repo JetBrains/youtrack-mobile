@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useContext, useEffect} from 'react';
-import {ActivityIndicator, ScrollView, StyleSheet, View} from 'react-native';
+import {RefreshControl, ScrollView, View} from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -31,11 +31,13 @@ const InboxThreads: () => Node = (): Node => {
   const currentUser: User = useSelector((state: AppState) => state.app.user);
   const inProgress: boolean = useSelector((state: AppState) => state.inboxThreads.inProgress);
   const error: ?CustomError = useSelector((state: AppState) => state.inboxThreads.error);
+  const doRefresh = () => {dispatch(actions.loadInboxThreads());};
 
-  useEffect(() => {
-    dispatch(actions.loadInboxThreads());
+  useEffect(
+    doRefresh,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    []
+  );
 
   function Thread({thread, isLast}: { thread: InboxThread, isLast: boolean }) {
     if (thread.id) {
@@ -79,12 +81,14 @@ const InboxThreads: () => Node = (): Node => {
         title="Notifications"
       />
 
-      {threads.length === 0 && !error && inProgress && (
-        <ActivityIndicator color={styles.link.color} style={StyleSheet.absoluteFillObject}/>
-      )}
-
       {threads.length > 0 && (
-        <ScrollView>
+        <ScrollView
+          refreshControl={<RefreshControl
+            refreshing={inProgress}
+            tintColor={styles.link.color}
+            onRefresh={doRefresh}
+          />}
+        >
           {threads.map((thread: InboxThread, index: number) => (
             thread.messages.length && <Thread key={guid()} thread={thread} isLast={index === threads.length - 1}/>
           ))}
