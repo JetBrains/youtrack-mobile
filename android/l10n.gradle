@@ -9,7 +9,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath 'org.jetbrains.ring:youtrack-crowdin:0.13'
+    classpath 'org.jetbrains.ring:youtrack-crowdin:0.14'
   }
 }
 
