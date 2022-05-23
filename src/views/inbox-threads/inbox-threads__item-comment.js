@@ -4,10 +4,12 @@ import React from 'react';
 import {Text, View} from 'react-native';
 
 import ActivityUserAvatar from 'components/activity-stream/activity__stream-avatar';
+import ApiHelper from 'components/api/api__helper';
 import CommentReactions from 'components/comment/comment-reactions';
 import StreamComment from 'components/activity-stream/activity__stream-comment';
 import StreamHistoryChange from 'components/activity-stream/activity__stream-history';
 import StreamTimestamp from 'components/activity-stream/activity__stream-timestamp';
+import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 
@@ -24,6 +26,10 @@ interface Props {
 }
 
 export default function ThreadCommentItem({group, isLast, currentUser}: Props): React$Element<typeof View> {
+  group.comment.author = ApiHelper.convertRelativeUrl(
+    group.comment.author, 'avatarUrl', getApi().config.backendUrl
+  );
+
   return (
     <View>
       {!isLast && <View style={styles.threadConnector}/>}
