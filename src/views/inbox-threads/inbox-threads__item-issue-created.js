@@ -3,22 +3,21 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 
-import MarkdownViewChunks from '../../components/wiki/markdown-view-chunks';
-import StreamHistoryTextChange from 'components/activity-stream/activity__stream-history__text-change';
+import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
+import StreamHistoryChange from 'components/activity-stream/activity__stream-history';
 import StreamTimestamp from 'components/activity-stream/activity__stream-timestamp';
 import {activityCategory} from 'components/activity/activity__category';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
-import {getTextValueChange} from 'components/activity/activity__history-value';
 import {i18n} from 'components/i18n/i18n';
 import {IconHistory} from 'components/icon/icon';
-import {markdownText} from '../../components/common-styles/typography';
+import {markdownText} from 'components/common-styles/typography';
 
 import styles from './inbox-threads.styles';
 
 import {InboxThreadGroup} from 'flow/Inbox';
 import type {AnyIssue} from 'flow/Issue';
 import type {CustomField} from 'flow/CustomFields';
-import type {UITheme} from '../../flow/Theme';
+import type {UITheme} from 'flow/Theme';
 
 interface Props {
   group: InboxThreadGroup;
@@ -26,23 +25,34 @@ interface Props {
   uiTheme: UITheme;
 }
 
-export default function ThreadIssueCreatedItem({group, isLast, uiTheme}: Props): React$Element<typeof View> {
+export default function ThreadIssueCreatedItem({group, isLast, uiTheme}: Props): ?React$Element<typeof View> {
   const actualActivity: Props['group']['issue'] = group.issue;
   const issue: AnyIssue = actualActivity.issue;
-  const assigneeField: ?CustomField = issue.customFields[0];
-  const assignees = assigneeField && (Array.isArray(assigneeField.value) ? assigneeField.value : [assigneeField.value]);
-  if (!assignees && !assigneeField) {
-    return null;
-  }
+  const assigneeFields: CustomField[] = (issue.customFields || []).map((it: CustomField) => {
+    return {
+      ...it,
+      projectCustomField: {
+        ...it.projectCustomField,
+        field: {id: it.id},
+      },
+    };
+  });
+  const added = assigneeFields.reduce((acc: CustomField[], it: CustomField) => acc.concat(it.value), []);
+
   const activity = {
     category: {id: activityCategory.CUSTOM_FIELD},
-    added: assignees,
+    added: added.length > 0 ? added : null,
+    removed: [],
     field: {
-      customField: assigneeField,
-      presentation: assigneeField.name,
+      presentation: assigneeFields[0].name,
+      customField: {
+        id: assigneeFields[0].id,
+        fieldType: {
+          isMultiValue: assigneeFields.length > 1,
+        },
+      },
     },
   };
-  const textValueChange = getTextValueChange({activity});
 
   return (
     <View>
@@ -73,7 +83,7 @@ export default function ThreadIssueCreatedItem({group, isLast, uiTheme}: Props):
             {issue.description.trim()}
           </MarkdownViewChunks>
         )}
-        <StreamHistoryTextChange activity={activity} textChange={{added: textValueChange}}/>
+        <StreamHistoryChange activity={activity} customFields={assigneeFields}/>
       </View>
     </View>
   );

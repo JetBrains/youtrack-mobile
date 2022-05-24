@@ -17,11 +17,13 @@ import {UNIT} from 'components/variables/variables';
 import styles from './activity__stream.styles';
 
 import type {Activity, ActivityChangeText} from 'flow/Activity';
+import type {CustomField} from 'flow/CustomFields';
 import type {TextValueChangeParams} from 'components/activity/activity__history-value';
 import type {WorkTimeSettings} from 'flow/Work';
 
 type Props = {
   activity: Activity,
+  customFields?: CustomField[],
   workTimeSettings?: WorkTimeSettings,
 }
 
@@ -54,7 +56,7 @@ const renderAttachmentChange = (activity: Object) => {
 };
 
 
-const StreamHistoryChange = ({activity, workTimeSettings = DEFAULT_WORK_TIME_SETTINGS}: Props) => {
+const StreamHistoryChange = ({activity, customFields, workTimeSettings = DEFAULT_WORK_TIME_SETTINGS}: Props) => {
   const getTextChange = (activity: Activity, issueFields: ?Array<Object>): ActivityChangeText => {
     const getParams = (isRemovedValue: boolean): TextValueChangeParams => ({
       activity,
@@ -115,7 +117,7 @@ const StreamHistoryChange = ({activity, workTimeSettings = DEFAULT_WORK_TIME_SET
       isActivityCategory.summary(activity) ||
       isActivityCategory.project(activity)
     ):
-      return renderTextValueChange(activity);
+      return renderTextValueChange(activity, customFields);
     case Boolean(isActivityCategory.link(activity)):
       return <StreamLink activity={activity}/>;
     case Boolean(isActivityCategory.attachment(activity)):
