@@ -8,9 +8,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import actions from './inbox-threads-actions';
 import ErrorMessage from 'components/error-message/error-message';
 import Header from 'components/header/header';
-import InboxThreadMention from './inbox-threads__mention';
-import InboxThreadReaction from './inbox-threads__reactions';
-import InboxThreadItemSubscription from './inbox-threads__subscription';
+import Thread from './inbox-threads__thread';
 import {guid} from 'util/util';
 import {ThemeContext} from 'components/theme/theme-context';
 
@@ -39,41 +37,6 @@ const InboxThreads: () => Node = (): Node => {
     []
   );
 
-  function Thread({thread, isLast}: { thread: InboxThread, isLast: boolean }) {
-    if (thread.id) {
-      switch (thread.id[0]) {
-      case 'R':
-        return (
-          <InboxThreadReaction
-            style={[styles.thread, isLast && styles.threadLast]}
-            thread={thread}
-            currentUser={currentUser}
-            uiTheme={theme.uiTheme}
-          />
-        );
-      case 'M':
-        return (
-        <InboxThreadMention
-          style={[styles.thread, isLast && styles.threadLast]}
-          thread={thread}
-          currentUser={currentUser}
-          uiTheme={theme.uiTheme}
-        />
-      );
-      case 'S':
-        return (
-          <InboxThreadItemSubscription
-            style={[styles.thread, isLast && styles.threadLast]}
-            thread={thread}
-            currentUser={currentUser}
-            uiTheme={theme.uiTheme}
-          />
-        );
-      }
-    }
-    return null;
-  }
-
   return (
     <View style={styles.container}>
       <Header
@@ -90,7 +53,15 @@ const InboxThreads: () => Node = (): Node => {
           />}
         >
           {threads.map((thread: InboxThread, index: number) => (
-            thread.messages.length && <Thread key={guid()} thread={thread} isLast={index === threads.length - 1}/>
+            thread.messages.length && (
+              <Thread
+                key={guid()}
+                thread={thread}
+                isLast={index === threads.length - 1}
+                currentUser={currentUser}
+                uiTheme={theme.uiTheme}
+              />
+            )
           ))}
         </ScrollView>
       )}
