@@ -101,7 +101,7 @@ msgstr ""
 
 #: src/views/create-issue/create-issue-actions.js
 #: src/views/issue/issue-base-actions-creater.js
-msgid "Apply command?"
+msgid "Apply command…"
 msgstr ""
 
 #: src/views/article/arcticle-helper.js
@@ -190,7 +190,7 @@ msgstr ""
 
 #: src/components/attach-file/attach-file-dialog.js
 #: src/components/attachments-row/attachment-actions.js
-msgid "Choose from library?"
+msgid "Choose from library…"
 msgstr ""
 
 #: src/components/debug-view/debug-view.js
@@ -743,7 +743,7 @@ msgstr ""
 #: src/views/article/arcticle-actions.js
 #: src/views/article/arcticle-actions.js
 #: src/views/issue/issue-base-actions-creater.js
-msgid "Share?"
+msgid "Share…"
 msgstr ""
 
 #: src/components/tags/tags.js
@@ -810,7 +810,7 @@ msgstr[3] ""
 
 #: src/components/attach-file/attach-file-dialog.js
 #: src/components/attachments-row/attachment-actions.js
-msgid "Take a picture?"
+msgid "Take a picture…"
 msgstr ""
 
 #: src/views/settings/settings__feedback-form.js

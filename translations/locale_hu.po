@@ -95,7 +95,7 @@ msgstr "Megjelenés"
 
 #: src/views/create-issue/create-issue-actions.js
 #: src/views/issue/issue-base-actions-creater.js
-msgid "Apply command?"
+msgid "Apply command…"
 msgstr ""
 
 #: src/views/article/arcticle-helper.js
@@ -182,8 +182,8 @@ msgstr "Mégsem"
 
 #: src/components/attach-file/attach-file-dialog.js
 #: src/components/attachments-row/attachment-actions.js
-msgid "Choose from library?"
-msgstr "Válasszon a könyvtárból?"
+msgid "Choose from library…"
+msgstr ""
 
 #: src/components/debug-view/debug-view.js
 #: src/components/popup/popup.js
@@ -733,7 +733,7 @@ msgstr ""
 #: src/views/article/arcticle-actions.js
 #: src/views/article/arcticle-actions.js
 #: src/views/issue/issue-base-actions-creater.js
-msgid "Share?"
+msgid "Share…"
 msgstr ""
 
 #: src/components/tags/tags.js
@@ -798,8 +798,8 @@ msgstr[1] ""
 
 #: src/components/attach-file/attach-file-dialog.js
 #: src/components/attachments-row/attachment-actions.js
-msgid "Take a picture?"
-msgstr "Készít egy fotót?"
+msgid "Take a picture…"
+msgstr ""
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Thank you for your feedback!"
