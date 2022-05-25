@@ -21,18 +21,13 @@ export default EStyleSheet.create({
     flexDirection: 'row',
   },
   thread: {
-    marginTop: UNIT * 1.5,
+    marginTop: UNIT * 2,
     marginLeft: UNIT * 2,
     marginBottom: UNIT,
-    paddingBottom: UNIT / 2,
     ...separatorBorder,
     borderColor: '$separator',
   },
   threadLast: {
-    marginTop: UNIT * 2,
-    marginLeft: UNIT * 2,
-    marginBottom: UNIT,
-    paddingBottom: UNIT / 2,
     borderBottomWidth: 0,
   },
   threadConnector: {
@@ -70,6 +65,7 @@ export default EStyleSheet.create({
   },
   threadRelatedChange: {
     ...activityStyles.activityRelatedChanges,
+    marginBottom: UNIT * 2,
     paddingTop: UNIT / 4,
     paddingBottom: UNIT,
   },
