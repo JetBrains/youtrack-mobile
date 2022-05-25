@@ -64,13 +64,14 @@ export default EStyleSheet.create({
     borderRadius: UNIT,
   },
   threadChange: {
+    marginLeft: UNIT * 5.5,
+    marginRight: UNIT * 2,
+    marginBottom: UNIT * 1.5,
+  },
+  threadRelatedChange: {
     ...activityStyles.activityRelatedChanges,
     paddingTop: UNIT / 4,
     paddingBottom: UNIT,
-
-    marginLeft: UNIT * 5.5,
-    marginRight: UNIT * 2,
-    marginBottom: UNIT * 3,
   },
   threadChangeMarkdown: {
     paddingTop: 0,

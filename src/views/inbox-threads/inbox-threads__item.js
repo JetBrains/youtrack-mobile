@@ -43,9 +43,11 @@ export default function ThreadItem({author, avatar, change, group, reason, times
 
       <View style={styles.threadChange}>
         {change}
-        {(group?.mergedActivities || []).map(
-          (activity: Activity) => <StreamHistoryChange key={activity.id} activity={activity}/>
-        )}
+        {!!group?.mergedActivities?.length && <View style={styles.threadRelatedChange}>
+          {group.mergedActivities.map(
+            (activity: Activity) => <StreamHistoryChange key={activity.id} activity={activity}/>
+          )}
+        </View>}
       </View>
     </View>
   );

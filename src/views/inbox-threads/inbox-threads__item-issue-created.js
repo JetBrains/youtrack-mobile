@@ -1,6 +1,7 @@
 /* @flow */
 
 import React from 'react';
+import {View} from 'react-native';
 
 import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
 import StreamHistoryChange from 'components/activity-stream/activity__stream-history';
@@ -69,7 +70,9 @@ export default function ThreadIssueCreatedItem({group, uiTheme}: Props) {
             {issue.description.trim()}
           </MarkdownViewChunks>
         )}
-        <StreamHistoryChange activity={activity} customFields={assigneeFields}/>
+        <View style={styles.threadRelatedChange}>
+          <StreamHistoryChange activity={activity} customFields={assigneeFields}/>
+        </View>
       </>}
       reason={i18n('created')}
       timestamp={actualActivity.timestamp}
