@@ -32,7 +32,6 @@ export default function InboxThreadReaction({
   thread,
   style,
   currentUser,
-  uiTheme,
 }: Props): React$Element<typeof View> {
   const activity: Activity = thread.messages[0].activities[0];
   const reaction: Reaction = activity.added[0] || activity.removed[0];

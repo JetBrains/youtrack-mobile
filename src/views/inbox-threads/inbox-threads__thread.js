@@ -2,46 +2,40 @@
 
 import React from 'react';
 
-import InboxThreadMention from './inbox-threads__mention';
-import InboxThreadReaction from './inbox-threads__reactions';
-import InboxThreadItemSubscription from './inbox-threads__subscription';
+import InboxEntity from '../inbox/inbox__entity';
+import Router from 'components/router/router';
+import styles from './inbox-threads.styles';
+import {getThreadData} from './inbox-threads-helper';
 
-import type {InboxThread} from 'flow/Inbox';
-import type {User} from 'flow/User';
+import type {InboxThread, ThreadData, ThreadEntity} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
+import type {User} from 'flow/User';
+
 
 export default function Thread({
   thread,
   currentUser,
   uiTheme,
 }: { thread: InboxThread, currentUser: User, uiTheme: UITheme }): React$Element<any> | null {
-  if (thread.id) {
-    switch (thread.id[0]) {
-    case 'R':
-      return (
-        <InboxThreadReaction
-          thread={thread}
-          currentUser={currentUser}
-          uiTheme={uiTheme}
-        />
-      );
-    case 'M':
-      return (
-        <InboxThreadMention
-          thread={thread}
-          currentUser={currentUser}
-          uiTheme={uiTheme}
-        />
-      );
-    case 'S':
-      return (
-        <InboxThreadItemSubscription
-          thread={thread}
-          currentUser={currentUser}
-          uiTheme={uiTheme}
-        />
-      );
-    }
+  if (!thread.id) {
+    return null;
   }
-  return null;
+
+  const threadData: ThreadData = getThreadData(thread);
+  const entity: ThreadEntity = threadData?.entity;
+  const ThreadComponent: any = threadData.component;
+  return entity ? (
+    <>
+      <InboxEntity
+        entity={entity}
+        onNavigate={() => Router.Issue({issueId: entity.id, navigateToActivity: true})}
+        style={styles.threadTitle}
+      />
+      <ThreadComponent
+        thread={thread}
+        currentUser={currentUser}
+        uiTheme={uiTheme}
+      />
+    </>
+  ) : null;
 }

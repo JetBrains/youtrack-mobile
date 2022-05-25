@@ -3,6 +3,7 @@
 import type {Activity} from './Activity';
 import type {AnyIssue, IssueOnList} from './Issue';
 import type {Article} from './Article';
+import type {IssueComment} from './CustomFields';
 import type {User} from './User';
 
 type ChangeCategory = 'COMMENT' | 'CUSTOM_FIELD' | 'SPRINT' | 'SUMMARY' | 'DESCRIPTION';
@@ -121,4 +122,11 @@ export interface InboxThreadGroup {
   comment?: Activity;
   issue?: (Activity & {issue: any});
   work?: Activity;
+}
+
+export type ThreadEntity = ?(AnyIssue | Article);
+
+export type ThreadData = {
+  entity: ThreadEntity,
+  component: any
 }
