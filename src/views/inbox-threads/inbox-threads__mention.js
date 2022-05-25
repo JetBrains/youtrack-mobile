@@ -2,12 +2,13 @@
 
 import React from 'react';
 
-import ActivityUserAvatar from 'components/activity-stream/activity__stream-avatar';
 import ApiHelper from 'components/api/api__helper';
+import Avatar from 'components/avatar/avatar';
 import CommentReactions from 'components/comment/comment-reactions';
 import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
 import ThreadItem from './inbox-threads__item';
 import {getApi} from 'components/api/api__instance';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {isActivityCategory} from 'components/activity/activity__category';
 import {markdownText} from 'components/common-styles/typography';
@@ -47,13 +48,10 @@ export default function InboxThreadMention({thread, currentUser, uiTheme}: Props
   return text ? (
     <ThreadItem
       author={activity.author}
-      avatar={<ActivityUserAvatar
-        activityGroup={{
-          author: activity.author,
-          timestamp: activity.timestamp,
-        }}
-        showAvatar={true}
-        size={32}
+      avatar={<Avatar
+        userName={getEntityPresentation(activity.author)}
+        size={30}
+        source={{uri: activity.author.avatarUrl}}
       />}
       change={
         <>

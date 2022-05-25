@@ -2,12 +2,13 @@
 
 import React from 'react';
 
-import ActivityUserAvatar from 'components/activity-stream/activity__stream-avatar';
 import ApiHelper from 'components/api/api__helper';
+import Avatar from 'components/avatar/avatar';
 import CommentReactions from 'components/comment/comment-reactions';
 import StreamComment from 'components/activity-stream/activity__stream-comment';
 import ThreadItem from './inbox-threads__item';
 import {getApi} from 'components/api/api__instance';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 
 import styles from './inbox-threads.styles';
@@ -28,14 +29,10 @@ export default function ThreadCommentItem({group, currentUser}: Props) {
   return (
     <ThreadItem
       author={group.comment.author}
-      avatar={<ActivityUserAvatar
-        activityGroup={{
-          author: group.comment.author,
-          timestamp: group.comment.timestamp,
-        }}
-        showAvatar={true}
+      avatar={<Avatar
+        userName={getEntityPresentation(group.comment.author)}
         size={30}
-        style={styles.threadTitleIcon}
+        source={{uri: group.comment.author.avatarUrl}}
       />}
       change={<>
         <StreamComment
