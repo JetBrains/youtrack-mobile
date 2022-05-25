@@ -21,7 +21,7 @@ export default function ThreadWorkItem({group}: Props) {
   return (
     <ThreadItem
       author={group.head.author}
-      avatar={<IconWork size={24} color={styles.icon.color} style={styles.activityWorkIcon}/>}
+      avatar={<IconWork size={22} color={styles.icon.color} style={styles.activityWorkIcon}/>}
       change={<StreamWork activityGroup={{work: group.work}}/>}
       group={group}
       reason={i18n('updated')}

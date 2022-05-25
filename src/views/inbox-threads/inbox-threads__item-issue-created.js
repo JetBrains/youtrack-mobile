@@ -57,7 +57,7 @@ export default function ThreadIssueCreatedItem({group, uiTheme}: Props) {
   return (
     <ThreadItem
       author={actualActivity.author}
-      avatar={<IconHistory size={16} color={styles.icon.color}/>}
+      avatar={<IconHistory size={20} color={styles.icon.color}/>}
       change={<>
         {Boolean(issue.description) && (
           <MarkdownViewChunks

@@ -18,7 +18,7 @@ export default function ThreadHistoryItem({group}: Props) {
   return (
     <ThreadItem
       author={group.head.author}
-      avatar={<IconHistory size={18} color={styles.icon.color}/>}
+      avatar={<IconHistory size={20} color={styles.icon.color}/>}
       group={group}
       reason={i18n('updated')}
       timestamp={group.head.timestamp}

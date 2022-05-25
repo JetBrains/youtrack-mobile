@@ -46,6 +46,7 @@ export default EStyleSheet.create({
   threadTitleIcon: {
     position: 'relative',
     zIndex: 1,
+    top: -UNIT / 4,
     marginLeft: -UNIT / 2,
     marginRight: UNIT * 1.5 - UNIT / 2,
     width: UNIT * 5,
