@@ -8,32 +8,33 @@ import {getReadableID} from 'components/issue-formatter/issue-formatter';
 import styles from './inbox.styles';
 
 import type {AnyIssue} from 'flow/Issue';
+import type {Article} from 'flow/Article';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-export default function InboxIssue({issue, onNavigateToIssue, style}: {
-  issue: AnyIssue,
-  onNavigateToIssue: () => void,
+export default function InboxEntity({entity, onNavigate, style}: {
+  entity: (AnyIssue | Article),
+  onNavigate: () => void,
   style?: ViewStyleProp,
 }) {
-  const readableID: ?string = getReadableID(issue);
+  const readableID: ?string = getReadableID(entity);
   return (
     <TouchableOpacity
       style={style}
-      onPress={onNavigateToIssue}
+      onPress={onNavigate}
     >
       <Text>
         {!!readableID && (
           <Text style={[
             styles.notificationIssueInfo,
-            issue.resolved ? styles.resolved : null,
+            entity.resolved ? styles.resolved : null,
           ]}>{readableID}</Text>
         )}
-        {!!issue.summary && (
+        {!!entity.summary && (
           <Text
             numberOfLines={2}
             style={[styles.notificationIssueInfo, styles.linkColor]}
           >
-            {` ${issue.summary}`}
+            {` ${entity.summary}`}
           </Text>
         )}
       </Text>

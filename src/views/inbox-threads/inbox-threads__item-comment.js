@@ -22,17 +22,15 @@ import type {User} from 'flow/User';
 interface Props {
   currentUser: User;
   group: InboxThreadGroup;
-  isLast: boolean;
 }
 
-export default function ThreadCommentItem({group, isLast, currentUser}: Props): React$Element<typeof View> {
+export default function ThreadCommentItem({group, currentUser}: Props): React$Element<typeof View> {
   group.comment.author = ApiHelper.convertRelativeUrl(
     group.comment.author, 'avatarUrl', getApi().config.backendUrl
   );
 
   return (
     <View>
-      {!isLast && <View style={styles.threadConnector}/>}
       <View style={styles.row}>
         <ActivityUserAvatar
           activityGroup={{
@@ -40,7 +38,7 @@ export default function ThreadCommentItem({group, isLast, currentUser}: Props): 
             timestamp: group.comment.timestamp,
           }}
           showAvatar={true}
-          size={32}
+          size={30}
           style={styles.threadTitleIcon}
         />
         <View>

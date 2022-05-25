@@ -16,16 +16,14 @@ import type {InboxThreadGroup} from 'flow/Inbox';
 
 interface Props {
   group: InboxThreadGroup;
-  isLast: boolean;
 }
 
-export default function ThreadHistoryItem({group, isLast}: Props) {
+export default function ThreadHistoryItem({group}: Props) {
   return (
     <View>
-      {!isLast && <View style={styles.threadConnector}/>}
       <View style={styles.row}>
         <View style={styles.threadTitleIcon}>
-          <IconHistory size={16} color={styles.icon.color}/>
+          <IconHistory size={18} color={styles.icon.color}/>
         </View>
         <View>
           <Text style={styles.threadChangeAuthor}>

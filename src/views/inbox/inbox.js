@@ -13,6 +13,7 @@ import CustomFieldChangeDelimiter from 'components/custom-field/custom-field__ch
 import Diff from 'components/diff/diff';
 import ErrorMessage from 'components/error-message/error-message';
 import getEventTitle from '../../components/activity/activity__history-title';
+import InboxEntity from './inbox__entity';
 import Issue from '../issue/issue';
 import log from 'components/log/log';
 import ReactionIcon from 'components/reactions/reaction-icon';
@@ -47,7 +48,6 @@ import type {ChangeEvent, ChangeValue, Metadata, Notification} from 'flow/Inbox'
 import type {Reaction} from 'flow/Reaction';
 import type {Theme} from 'flow/Theme';
 import type {User} from 'flow/User';
-import InboxIssue from './inbox__issue';
 
 
 type IssueActions = typeof inboxActions;
@@ -461,7 +461,7 @@ class Inbox extends Component<Props, State> {
   }
 
   renderIssue(issue: IssueOnList, isSummaryOrDescriptionChange: boolean, notificationId: string) {
-    return <InboxIssue issue={issue} onNavigateToIssue={() => {
+    return <InboxEntity entity={issue} onNavigate={() => {
       if (this.state.isSplitView) {
         this.updateFocusedNotificationId(notificationId, isSummaryOrDescriptionChange);
       } else {

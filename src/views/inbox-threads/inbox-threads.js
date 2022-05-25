@@ -8,7 +8,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import actions from './inbox-threads-actions';
 import ErrorMessage from 'components/error-message/error-message';
 import Header from 'components/header/header';
+import InboxEntity from '../inbox/inbox__entity';
+import Router from 'components/router/router';
 import Thread from './inbox-threads__thread';
+import {getThreadEntity} from './inbox-threads-helper';
 import {guid} from 'util/util';
 import {ThemeContext} from 'components/theme/theme-context';
 
@@ -20,6 +23,9 @@ import type {InboxThread} from 'flow/Inbox';
 import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {User} from 'flow/User';
+import type {AnyIssue} from '../../flow/Issue';
+import type {Article} from '../../flow/Article';
+
 
 const InboxThreads: () => Node = (): Node => {
   const theme: Theme = useContext(ThemeContext);
@@ -52,17 +58,29 @@ const InboxThreads: () => Node = (): Node => {
             onRefresh={doRefresh}
           />}
         >
-          {threads.map((thread: InboxThread, index: number) => (
-            thread.messages.length && (
+          {threads.map((thread: InboxThread, index: number) => {
+            const isLast: boolean = index === threads.length - 1;
+            if (!thread.messages.length) {
+              return null;
+            }
+            const entity: (AnyIssue | Article) = getThreadEntity(thread);
+            return <View
+              key={guid()}
+              style={[styles.thread, isLast && styles.threadLast]}
+            >
+              <InboxEntity
+                entity={entity}
+                onNavigate={() => Router.Issue({issueId: entity.id, navigateToActivity: true})}
+                style={styles.threadTitle}
+              />
               <Thread
                 key={guid()}
                 thread={thread}
-                isLast={index === threads.length - 1}
                 currentUser={currentUser}
                 uiTheme={theme.uiTheme}
               />
-            )
-          ))}
+            </View>;
+          })}
         </ScrollView>
       )}
 

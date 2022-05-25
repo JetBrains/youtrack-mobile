@@ -17,13 +17,12 @@ import StreamHistoryChange from '../../components/activity-stream/activity__stre
 
 interface Props {
   group: InboxThreadGroup;
-  isLast: boolean;
 }
 
-export default function ThreadWorkItem({group, isLast}: Props): React$Element<typeof View> {
+export default function ThreadWorkItem({group}: Props): React$Element<typeof View> {
   return (
     <View>
-      {!isLast && <View style={styles.threadConnector}/>}
+      <View style={styles.threadConnector}/>
       <View style={styles.row}>
         <View style={styles.threadTitleIcon}>
           <IconWork size={24} color={styles.icon.color} style={styles.activityWorkIcon}/>

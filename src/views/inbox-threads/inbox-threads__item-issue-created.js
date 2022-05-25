@@ -21,11 +21,10 @@ import type {UITheme} from 'flow/Theme';
 
 interface Props {
   group: InboxThreadGroup;
-  isLast: boolean;
   uiTheme: UITheme;
 }
 
-export default function ThreadIssueCreatedItem({group, isLast, uiTheme}: Props): ?React$Element<typeof View> {
+export default function ThreadIssueCreatedItem({group, uiTheme}: Props): ?React$Element<typeof View> {
   const actualActivity: Props['group']['issue'] = group.issue;
   const issue: AnyIssue = actualActivity.issue;
   const assigneeFields: CustomField[] = (issue.customFields || []).map((it: CustomField) => {
@@ -58,7 +57,6 @@ export default function ThreadIssueCreatedItem({group, isLast, uiTheme}: Props):
 
   return (
     <View>
-      {!isLast && <View style={styles.threadConnector}/>}
       <View style={styles.row}>
         <View style={styles.threadTitleIcon}>
           <IconHistory size={16} color={styles.icon.color}/>

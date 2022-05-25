@@ -3,8 +3,6 @@
 import React from 'react';
 import {View} from 'react-native';
 
-import InboxIssue from '../inbox/inbox__issue';
-import Router from 'components/router/router';
 import ThreadCommentItem from './inbox-threads__item-comment';
 import ThreadHistoryItem from './inbox-threads__item-history';
 import ThreadIssueCreatedItem from './inbox-threads__item-issue-created';
@@ -22,6 +20,7 @@ import type {InboxThread, InboxThreadGroup} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+
 
 export default function InboxThreadItemSubscription({
   thread,
@@ -61,11 +60,6 @@ export default function InboxThreadItemSubscription({
 
   return (
     <View style={style}>
-      <InboxIssue
-        issue={thread.subject.target}
-        onNavigateToIssue={() => Router.Issue({issueId: thread.subject.target.id, navigateToActivity: true})}
-        style={styles.threadTitle}
-      />
       {splittedMessageGroups.map((group: InboxThreadGroup, idx: number) => {
         return renderGroup(group, thread.subject.target, (splittedMessageGroups.length - 1) === idx);
       })}
@@ -88,13 +82,16 @@ export default function InboxThreadItemSubscription({
       Component = ThreadHistoryItem;
     }
     return (
-      <Component
-        key={guid()}
-        group={group}
-        isLast={isLast}
-        currentUser={currentUser}
-        uiTheme={uiTheme}
-      />
+      <View>
+        {!isLast && <View style={styles.threadConnector}/>}
+        <Component
+          key={guid()}
+          group={group}
+          isLast={isLast}
+          currentUser={currentUser}
+          uiTheme={uiTheme}
+        />
+      </View>
     );
   }
 }

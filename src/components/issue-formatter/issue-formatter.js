@@ -2,6 +2,7 @@
 
 import type {AnyIssue} from 'flow/Issue';
 import type {CustomField} from 'flow/CustomFields';
+import type {Article} from 'flow/Article';
 
 
 function findIssueField(issue: AnyIssue, predicate: (field: CustomField) => boolean): ?CustomField {
@@ -31,8 +32,8 @@ function getAssigneeField(issue: AnyIssue): ?CustomField {
   });
 }
 
-function getReadableID(issue: AnyIssue): string {
-  return !!issue && (issue.idReadable || issue.id) || '';
+function getReadableID(entity: AnyIssue | Article): string {
+  return !!entity && (entity.idReadable || entity.id) || '';
 }
 
 function getEntityPresentation(entity: Object): any | string {
