@@ -37,7 +37,9 @@ export default function ThreadIssueCreatedItem({group, isLast, uiTheme}: Props):
       },
     };
   });
-  const added = assigneeFields.reduce((acc: CustomField[], it: CustomField) => acc.concat(it.value), []);
+  const added = assigneeFields.reduce(
+    (acc: CustomField[], it: CustomField) => acc.concat(it.value), []
+  ).filter(Boolean);
 
   const activity = {
     category: {id: activityCategory.CUSTOM_FIELD},
