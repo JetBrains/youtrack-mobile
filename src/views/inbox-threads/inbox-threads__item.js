@@ -25,7 +25,6 @@ interface Props {
 export default function ThreadItem({author, avatar, change, group, reason, timestamp}: Props) {
   return (
     <View>
-      {!!group && <View style={styles.threadConnector}/>}
       <View style={styles.row}>
         <View style={styles.threadTitleIcon}>
           {avatar}
