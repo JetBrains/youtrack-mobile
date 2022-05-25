@@ -13,7 +13,6 @@ const light: UITheme = {
 
   colors: {
     $background: '#FFFFFF',
-    // $boxBackground: '#F3F3F3',
     $boxBackground: '#F7F9FA',
     $dimBackground: 'rgba(0,0,0,0.4)',
 
