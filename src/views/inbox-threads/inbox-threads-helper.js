@@ -67,10 +67,11 @@ function getThreadData(thread: InboxThread): ThreadData {
   let threadData: ThreadData = {entity: null, component: null};
   const activity: Activity = thread.messages[0].activities[0];
   if (thread.id) {
+    const target = thread.subject.target;
     switch (thread.id[0]) {
     case 'R':
       threadData = {
-        entity: thread.subject.target?.issue,
+        entity: target?.issue || target?.article,
         component: InboxThreadReaction,
       };
       break;
@@ -88,7 +89,7 @@ function getThreadData(thread: InboxThread): ThreadData {
       break;
     case 'S':
       threadData = {
-        entity: thread.subject.target,
+        entity: target,
         component: InboxThreadItemSubscription,
       };
     }
