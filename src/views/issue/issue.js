@@ -119,7 +119,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   componentWillUnmount() {
     super.componentWillUnmount();
-    this.goOnlineSubscription.remove();
+    this.goOnlineSubscription?.remove();
   }
 
   async UNSAFE_componentWillReceiveProps(nextProps: IssueProps): Promise<void> {
