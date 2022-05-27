@@ -85,14 +85,10 @@ export const inboxThreadFields: ToField = toField([
                     ],
                   },
                 ]),
-                mentionedUsers: issueFields.ISSUE_USER_FIELDS,
               },
             ]),
             article: toField([
               'id',
-              {
-                mentionedUsers: issueFields.ISSUE_USER_FIELDS,
-              },
             ]),
           },
         ]),
