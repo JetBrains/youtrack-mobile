@@ -41,12 +41,6 @@ if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-/*
-  Uncomment this string to debug network request in Chrome. Chrome should be run with --disable-web-security flag.
-  Or use React Native Debugger https://github.com/jhen0409/react-native-debugger
-  https://github.com/facebook/react-native/issues/934
-*/
-// GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 
 class YouTrackMobile extends Component<void, void> {
   routeHomeName = 'Home';
