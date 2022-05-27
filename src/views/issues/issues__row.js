@@ -81,7 +81,7 @@ export default class IssueRow extends Component<Props, void> {
 
                   {Boolean(issue.updated || issue.reporter) && <View style={styles.headRight}>
                     {!!issue.updated && <Text style={styles.secondaryText}>{`${ytDate(issue.updated)}  `}</Text>}
-                    {!issue.reporter && <Avatar
+                    {!!issue?.reporter && <Avatar
                       userName={getEntityPresentation(issue.reporter)}
                       size={20}
                       source={{uri: issue.reporter?.avatarUrl}}
