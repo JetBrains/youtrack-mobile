@@ -43,6 +43,14 @@ export default EStyleSheet.create({
     marginRight: UNIT * 2,
     marginBottom: UNIT * 2,
   },
+  threadSubTitle: {
+    marginTop: -UNIT,
+    marginLeft: UNIT * 5.5,
+  },
+  threadSubTitleText: {
+    ...secondaryText,
+    color: '$icon',
+  },
   threadTitleIcon: {
     position: 'relative',
     zIndex: 1,

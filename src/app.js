@@ -36,7 +36,10 @@ import type {Node} from 'react';
 import type {NotificationRouteData} from 'flow/Notification';
 import type {Ref} from 'react';
 import {checkVersion, FEATURE_VERSION} from './components/feature/feature';
-
+// eslint-disable-next-line no-console
+console.reportErrorsAsExceptions = false;
+// eslint-disable-next-line no-console
+console.disableYellowBox = true;
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }

@@ -89,6 +89,7 @@ export const inboxThreadFields: ToField = toField([
             ]),
             article: toField([
               'id',
+              'content',
             ]),
           },
         ]),

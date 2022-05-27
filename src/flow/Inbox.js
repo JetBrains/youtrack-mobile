@@ -128,5 +128,6 @@ export type ThreadEntity = ?(AnyIssue | Article);
 
 export type ThreadData = {
   entity: ThreadEntity,
-  component: any
+  component: any,
+  hideTarget?: boolean,
 }
