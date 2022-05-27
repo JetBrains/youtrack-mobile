@@ -64,34 +64,19 @@ function sortEvents(events: Activity[]): Activity[] {
 }
 
 function getThreadData(thread: InboxThread): ThreadData {
-  let threadData: ThreadData = {entity: null, component: null};
-  const activity: Activity = thread.messages[0].activities[0];
+  const threadData: ThreadData = {entity: null, component: null};
   if (thread.id) {
     const target = thread.subject.target;
+    threadData.entity = target?.issue || target?.article || target;
     switch (thread.id[0]) {
     case 'R':
-      threadData = {
-        entity: target?.issue || target?.article,
-        component: InboxThreadReaction,
-      };
+      threadData.component = InboxThreadReaction;
       break;
     case 'M':
-      if (isActivityCategory.commentMention(activity)) {
-        threadData.entity = activity?.comment?.issue;
-      } else if (isActivityCategory.issueMention(activity)) {
-        threadData.entity = activity?.issue;
-      } else if (isActivityCategory.articleCommentMention(activity)) {
-        threadData.entity = activity?.comment?.article;
-      } else if (isActivityCategory.articleMention(activity)) {
-        threadData.entity = activity?.article;
-      }
       threadData.component = InboxThreadMention;
       break;
     case 'S':
-      threadData = {
-        entity: target,
-        component: InboxThreadItemSubscription,
-      };
+      threadData.component = InboxThreadItemSubscription;
     }
   }
   return threadData;
