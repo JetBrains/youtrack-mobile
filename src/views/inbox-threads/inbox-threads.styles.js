@@ -32,8 +32,8 @@ export default EStyleSheet.create({
   },
   threadConnector: {
     position: 'absolute',
-    top: 4,
-    left: 16,
+    top: UNIT / 2,
+    left: 14,
     width: 3,
     height: '100%',
     paddingBottom: UNIT * 2,
