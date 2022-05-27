@@ -27,18 +27,18 @@ export default function Thread({
   const inboxEntity = <InboxEntity
     entity={entity}
     onNavigate={() => Router.Issue({issueId: entity.id, navigateToActivity: true})}
-    style={[styles.threadTitle, threadData.hideTarget && styles.threadSubTitle]}
-    styleText={threadData.hideTarget && styles.threadSubTitleText}
+    style={[styles.threadTitle, threadData.entityAtBottom && styles.threadSubTitle]}
+    styleText={threadData.entityAtBottom && styles.threadSubTitleText}
   />;
   return entity ? (
     <>
-      {!threadData.hideTarget && inboxEntity}
+      {!threadData.entityAtBottom && inboxEntity}
       <ThreadComponent
         thread={thread}
         currentUser={currentUser}
         uiTheme={uiTheme}
       />
-      {threadData.hideTarget && inboxEntity}
+      {threadData.entityAtBottom && inboxEntity}
     </>
   ) : null;
 }

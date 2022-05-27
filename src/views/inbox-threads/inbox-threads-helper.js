@@ -64,18 +64,18 @@ function sortEvents(events: Activity[]): Activity[] {
 }
 
 function getThreadData(thread: InboxThread): ThreadData {
-  const threadData: ThreadData = {entity: null, component: null, hideTarget: false};
+  const threadData: ThreadData = {entity: null, component: null, entityAtBottom: false};
   if (thread.id) {
     const target = thread.subject.target;
     threadData.entity = target?.issue || target?.article || target;
     switch (thread.id[0]) {
     case 'R':
       threadData.component = InboxThreadReaction;
-      threadData.hideTarget = true;
+      threadData.entityAtBottom = true;
       break;
     case 'M':
       threadData.component = InboxThreadMention;
-      threadData.hideTarget = true;
+      threadData.entityAtBottom = true;
       break;
     case 'S':
       threadData.component = InboxThreadItemSubscription;
