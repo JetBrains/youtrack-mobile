@@ -101,7 +101,7 @@ msgstr "Vzhled"
 
 #: src/views/create-issue/create-issue-actions.js
 #: src/views/issue/issue-base-actions-creater.js
-msgid "Apply command?"
+msgid "Apply command…"
 msgstr ""
 
 #: src/views/article/arcticle-helper.js
@@ -190,7 +190,7 @@ msgstr "Zrušit"
 
 #: src/components/attach-file/attach-file-dialog.js
 #: src/components/attachments-row/attachment-actions.js
-msgid "Choose from library?"
+msgid "Choose from library…"
 msgstr ""
 
 #: src/components/debug-view/debug-view.js
@@ -234,10 +234,6 @@ msgstr ""
 msgid "Comment updated"
 msgstr ""
 
-#: src/views/issue/activity/issue-activity__comment-actions.js
-msgid "Comment URL copied"
-msgstr ""
-
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "committed changes"
 msgstr ""
@@ -260,19 +256,19 @@ msgid "Copied"
 msgstr "Zkopírováno"
 
 #: src/views/article/arcticle-actions.js
+#: src/views/issue/activity/issue-activity__comment-actions.js
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Copy link"
+msgstr ""
+
 #: src/views/article/arcticle-actions.js
-msgid "Copy article URL"
+#: src/views/article/arcticle-actions.js
+msgid "Copy link to article"
 msgstr ""
 
 #: src/views/issue/activity/issue-activity__comment-actions.js
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Copy text"
-msgstr ""
-
-#: src/views/article/arcticle-actions.js
-#: src/views/issue/activity/issue-activity__comment-actions.js
-#: src/views/issue/issue-base-actions-creater.js
-msgid "Copy URL"
 msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
@@ -383,12 +379,12 @@ msgstr ""
 msgid "Enter search request"
 msgstr "Zadat vyhledávací dotaz"
 
-#: src/components/custom-fields-panel/custom-fields-panel.js
-msgid "Enter time value"
+#: src/views/enter-server/enter-server.js
+msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr ""
 
-#: src/views/enter-server/enter-server.js
-msgid "Enter your YouTrack server URL"
+#: src/components/custom-fields-panel/custom-fields-panel.js
+msgid "Enter time value"
 msgstr ""
 
 #: src/views/settings/settings-helper.js
@@ -433,6 +429,10 @@ msgstr "Filtrujte uživatele, skupiny a týmy"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Find favorite projects"
+msgstr ""
+
+#: src/views/enter-server/enter-server.js
+msgid "Get help"
 msgstr ""
 
 #: src/components/error-boundary/error-boundary.js
@@ -509,6 +509,10 @@ msgstr ""
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Link issue"
 msgstr "Propojit případ"
+
+#: src/views/issue/activity/issue-activity__comment-actions.js
+msgid "Link to comment copied"
+msgstr ""
 
 #: src/components/linked-issues/linked-issues-title.js
 #: src/components/linked-issues/linked-issues.js
@@ -724,7 +728,12 @@ msgid "Share"
 msgstr "Sdílet"
 
 #: src/views/article/arcticle-actions.js
-msgid "Share article URL"
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Share link"
+msgstr "Sdílet odkaz"
+
+#: src/views/article/arcticle-actions.js
+msgid "Share link to article"
 msgstr ""
 
 #: src/views/settings/settings.js
@@ -732,14 +741,9 @@ msgid "Share logs"
 msgstr ""
 
 #: src/views/article/arcticle-actions.js
-#: src/views/issue/issue-base-actions-creater.js
-msgid "Share URL"
-msgstr ""
-
-#: src/views/article/arcticle-actions.js
 #: src/views/article/arcticle-actions.js
 #: src/views/issue/issue-base-actions-creater.js
-msgid "Share?"
+msgid "Share…"
 msgstr ""
 
 #: src/components/tags/tags.js
@@ -806,7 +810,7 @@ msgstr[3] ""
 
 #: src/components/attach-file/attach-file-dialog.js
 #: src/components/attachments-row/attachment-actions.js
-msgid "Take a picture?"
+msgid "Take a picture…"
 msgstr ""
 
 #: src/views/settings/settings__feedback-form.js

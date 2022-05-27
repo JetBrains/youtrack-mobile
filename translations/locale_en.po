@@ -219,10 +219,6 @@ msgstr "Comment deleted"
 msgid "Comment updated"
 msgstr "Comment updated"
 
-#: src/views/issue/activity/issue-activity__comment-actions.js
-msgid "Comment URL copied"
-msgstr "Comment URL copied"
-
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "committed changes"
 msgstr "committed changes"
@@ -245,20 +241,20 @@ msgid "Copied"
 msgstr "Copied"
 
 #: src/views/article/arcticle-actions.js
+#: src/views/issue/activity/issue-activity__comment-actions.js
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Copy link"
+msgstr "Copy link"
+
 #: src/views/article/arcticle-actions.js
-msgid "Copy article URL"
-msgstr "Copy article URL"
+#: src/views/article/arcticle-actions.js
+msgid "Copy link to article"
+msgstr "Copy link to article"
 
 #: src/views/issue/activity/issue-activity__comment-actions.js
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Copy text"
 msgstr "Copy text"
-
-#: src/views/article/arcticle-actions.js
-#: src/views/issue/activity/issue-activity__comment-actions.js
-#: src/views/issue/issue-base-actions-creater.js
-msgid "Copy URL"
-msgstr "Copy URL"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "Could not apply specified command."
@@ -368,13 +364,13 @@ msgstr "Enter command"
 msgid "Enter search request"
 msgstr "Enter search request"
 
+#: src/views/enter-server/enter-server.js
+msgid "Enter the web address for a YouTrack installation where you have a registered account"
+msgstr "Enter the web address for a YouTrack installation where you have a registered account"
+
 #: src/components/custom-fields-panel/custom-fields-panel.js
 msgid "Enter time value"
 msgstr "Enter time value"
-
-#: src/views/enter-server/enter-server.js
-msgid "Enter your YouTrack server URL"
-msgstr "Enter your YouTrack server URL"
 
 #: src/views/settings/settings-helper.js
 msgid "Feature request"
@@ -419,6 +415,10 @@ msgstr "Filter users, groups, and teams"
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
+
+#: src/views/enter-server/enter-server.js
+msgid "Get help"
+msgstr "Get help"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Help us fix problems faster"
@@ -494,6 +494,10 @@ msgstr "Light theme"
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Link issue"
 msgstr "Link issue"
+
+#: src/views/issue/activity/issue-activity__comment-actions.js
+msgid "Link to comment copied"
+msgstr "Link to comment copied"
 
 #: src/components/linked-issues/linked-issues-title.js
 #: src/components/linked-issues/linked-issues.js
@@ -707,17 +711,17 @@ msgid "Share"
 msgstr "Share"
 
 #: src/views/article/arcticle-actions.js
-msgid "Share article URL"
-msgstr "Share article URL"
+#: src/views/issue/issue-base-actions-creater.js
+msgid "Share link"
+msgstr "Share link"
+
+#: src/views/article/arcticle-actions.js
+msgid "Share link to article"
+msgstr "Share link to article"
 
 #: src/views/settings/settings.js
 msgid "Share logs"
 msgstr "Share logs"
-
-#: src/views/article/arcticle-actions.js
-#: src/views/issue/issue-base-actions-creater.js
-msgid "Share URL"
-msgstr "Share URL"
 
 #: src/views/article/arcticle-actions.js
 #: src/views/article/arcticle-actions.js

@@ -107,7 +107,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
 
   componentWillUnmount() {
     this.props.setEditingComment(null);
-    this.goOnlineSubscription.remove();
+    this.goOnlineSubscription?.remove();
   }
 
   load = (issueId?: string) => {
