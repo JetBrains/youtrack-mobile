@@ -349,7 +349,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
 
         {!this.state.loaded && <View style={[styles.row, styles.loadingRow]}>
           <ActivityIndicator/>
-          <Text style={styles.loadingMessage}>{i18n('Loading values...')}</Text>
+          <Text style={styles.loadingMessage}>{i18n('Loading values…')}</Text>
         </View>}
         {this.state.loaded && this.state?.items?.length === 0 && (
           <View style={[styles.row, styles.loadingRow]}>

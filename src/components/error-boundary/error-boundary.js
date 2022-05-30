@@ -161,7 +161,7 @@ class ErrorBoundary extends Component<Props, State> {
                         styles.buttonSendReportText,
                       ]}
                     >
-                      {isReporting ? i18n('Sending crash report...') : i18n('Send crash report')}
+                      {isReporting ? i18n('Sending crash report…') : i18n('Send crash report')}
                     </Text>
                   </TouchableOpacity>
 
