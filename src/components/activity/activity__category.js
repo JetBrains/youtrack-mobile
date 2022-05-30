@@ -31,6 +31,7 @@ export const categoryName = {
   VCS_ITEM: 'VCS_ITEM',
   TOTAL_VOTES: 'TOTAL_VOTES',
   VISIBILITY: 'VISIBILITY',
+  VISIBILITY_ISSUE: 'VISIBILITY_ISSUE',
   STAR: 'STAR',
 };
 
@@ -65,6 +66,7 @@ export const activityCategory: Object = {
   [categoryName.PULL_REQUEST_CHANGE]: 'PullRequestChangeCategory',
   [categoryName.TOTAL_VOTES]: 'TotalVotesCategory',
   [categoryName.VISIBILITY]: 'PermittedGroupCategory',
+  [categoryName.VISIBILITY_ISSUE]: 'IssueVisibilityCategory',
   [categoryName.STAR]: 'StarCategory',
 };
 
@@ -176,7 +178,7 @@ isActivityCategory.description = isActivityCategories([activityCategory.DESCRIPT
 isActivityCategory.sprint = isActivityCategory(activityCategory.SPRINT);
 isActivityCategory.star = isActivityCategory(activityCategory.SPRINT);
 isActivityCategory.project = isActivityCategories([activityCategory.PROJECT, activityArticleCategory.PROJECT]);
-isActivityCategory.visibility = isActivityCategories([activityCategory.VISIBILITY, activityArticleCategory.VISIBILITY]);
+isActivityCategory.visibility = isActivityCategories([activityCategory.VISIBILITY, activityCategory.VISIBILITY_ISSUE, activityArticleCategory.VISIBILITY]);
 isActivityCategory.articleCommentMention = isActivityCategory(activityCategory.ARTICLE_COMMENT_MENTION);
 isActivityCategory.articleMention = isActivityCategory(activityCategory.ARTICLE_MENTION);
 isActivityCategory.issueMention = isActivityCategory(activityCategory.ISSUE_MENTION);
