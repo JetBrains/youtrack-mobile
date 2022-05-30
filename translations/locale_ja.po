@@ -14,153 +14,153 @@ msgstr ""
 
 #: src/components/linked-issues/linked-issues.js
 msgid " ({{amount}} unresolved)"
-msgstr ""
+msgstr " ({{amount}} 件解決)"
 
 #: src/components/comment/comment.js
 msgid " or "
-msgstr ""
+msgstr " または "
 
 #: src/views/agile-board/board-actions.js
 msgid "(archived)"
-msgstr ""
+msgstr "(アーカイブ済み)"
 
 #: src/components/custom-fields-panel/custom-fields-panel__date-picker.js
 msgid "(Clear value)"
-msgstr ""
+msgstr "(値をクリア)"
 
 #: src/components/activity/activity__history-title.js
 msgid "[Removed field]"
-msgstr ""
+msgstr "[削除されたフィールド]"
 
 #: src/views/article/article__details.js
 msgid "{{amount}} article"
 msgid_plural "{{amount}} articles"
-msgstr[0] ""
+msgstr[0] "{{amount}} 件の記事"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "{{amount}} file"
 msgid_plural "{{amount}} files"
-msgstr[0] ""
+msgstr[0] "{{amount}} 個のファイル"
 
 #: src/components/linked-issues/linked-issues.js
 msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
-msgstr[0] ""
+msgstr[0] "{{amount}} 件の課題"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "1w 1d 1h 1m"
-msgstr ""
+msgstr "1 週間 1 日 1 時間 1分"
 
 #: src/components/user-agreement/user-agreement.js
 msgid "Accept"
-msgstr ""
+msgstr "同意します"
 
 #: src/components/issue-tabbed/issue-tabbed.js
 msgid "Activity"
-msgstr ""
+msgstr "アクティビティ"
 
 #: src/views/issue/activity/issue__activity.js
 msgid "Activity Settings"
-msgstr ""
+msgstr "アクティビティの設定"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Add project to favorites"
-msgstr ""
+msgstr "プロジェクトをお気に入りに追加"
 
 #: src/components/comment/comment-edit.js
 msgid "Add spent time"
-msgstr ""
+msgstr "経過時間を追加"
 
 #: src/components/tags/tag-add-panel.js
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Add tag"
-msgstr ""
+msgstr "タグの追加"
 
 #: src/views/article/arcticle-actions.js
 msgid "Add to favorites"
-msgstr ""
+msgstr "お気に入りに追加"
 
 #: src/views/inbox/inbox.js
 msgid "added a reaction"
-msgstr ""
+msgstr "がリアクションを追加しました"
 
 #: src/views/settings/settings__appearance.js
 #: src/views/settings/settings.js
 msgid "Appearance"
-msgstr ""
+msgstr "外観"
 
 #: src/views/create-issue/create-issue-actions.js
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Apply command…"
-msgstr ""
+msgstr "コマンドを適用…"
 
 #: src/views/article/arcticle-helper.js
 msgid "Are you sure you want to delete all article drafts?"
-msgstr ""
+msgstr "記事の下書きをすべて削除してもよろしいですか？"
 
 #: src/views/article/arcticle-helper.js
 msgid "Are you sure you want to delete this article?"
-msgstr ""
+msgstr "この記事を削除してもよろしいですか？"
 
 #: src/views/article/arcticle-helper.js
 msgid "Are you sure you want to delete this draft?"
-msgstr ""
+msgstr "この下書きを削除してもよろしいですか？"
 
 #: src/views/issue/activity/issue-activity__actions.js
 msgid "Are you sure you want to delete this work item?"
-msgstr ""
+msgstr "この作業項目を削除してもよろしいですか？"
 
 #: src/views/article/arcticle-actions.js
 msgid "Article added to favorites"
-msgstr ""
+msgstr "記事がお気に入りに追加されました"
 
 #: src/views/article-create/article-create.js
 msgid "Article content"
-msgstr ""
+msgstr "記事の内容"
 
 #: src/views/article-create/arcticle-create-actions.js
 msgid "Article published"
-msgstr ""
+msgstr "記事が公開されました"
 
 #: src/views/article/arcticle-actions.js
 msgid "Article removed from favorites"
-msgstr ""
+msgstr "記事がお気に入りから削除されました"
 
 #: src/components/comment/comment-edit.js
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Attach file"
-msgstr ""
+msgstr "ファイルを添付"
 
 #: src/components/attach-file/attach-file-dialog.js
 #: src/components/attachments-row/attachments-add-panel.js
 msgid "Attach files"
-msgstr ""
+msgstr "ファイルの添付"
 
 #: src/components/activity/activity__history-title.js
 msgid "Attachment"
 msgid_plural "Attachments"
-msgstr[0] ""
+msgstr[0] "添付ファイル"
 
 #: src/components/attachments-row/attachment-actions.js
 msgid "Attachment deleted"
-msgstr ""
+msgstr "添付ファイルが削除されました"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Author"
-msgstr ""
+msgstr "作者"
 
 #: src/views/attachment-preview/attachment-preview.js
 msgid "Browser"
-msgstr ""
+msgstr "ブラウザー"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Bugsnag Privacy Policy"
-msgstr ""
+msgstr "Bugsnag プライバシーポリシー"
 
 #: src/views/log-in/log-in.js
 msgid "By logging in, you agree to the Privacy Policy."
-msgstr ""
+msgstr "ログインすることで、プライバシーポリシーに同意したことになります。"
 
 #: src/components/activity-stream/activity__stream-work.js
 #: src/components/confirmation/confirmation.js
@@ -174,118 +174,118 @@ msgstr ""
 #: src/views/knowledge-base/knowledge-base-actions.js
 #: src/views/settings/settings__feedback-form.js
 msgid "Cancel"
-msgstr ""
+msgstr "取り消す"
 
 #: src/components/attach-file/attach-file-dialog.js
 #: src/components/attachments-row/attachment-actions.js
 msgid "Choose from library…"
-msgstr ""
+msgstr "ライブラリから選択…"
 
 #: src/components/debug-view/debug-view.js
 #: src/components/popup/popup.js
 msgid "Close"
-msgstr ""
+msgstr "閉じる"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "closed the pull request"
-msgstr ""
+msgstr "がプルリクエストをクローズしました"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Collapse all"
-msgstr ""
+msgstr "すべて折りたたむ"
 
 #: src/views/agile-board/agile-board.js
 msgid "Column collapsed"
-msgstr ""
+msgstr "列が折りたたまれました"
 
 #: src/views/agile-board/agile-board.js
 msgid "Column expanded"
-msgstr ""
+msgstr "列が展開されました"
 
 #: src/components/command-dialog/command-dialog-helper.js
 msgid "Command applied"
-msgstr ""
+msgstr "コマンドが適用されました"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "Command was successfully applied."
-msgstr ""
+msgstr "コマンドが正常に適用されました。"
 
 #: src/components/activity/activity__history-title.js
 msgid "Comment changed"
-msgstr ""
+msgstr "コメントが変更されました"
 
 #: src/components/comment/comment.js
 msgid "Comment deleted"
-msgstr ""
+msgstr "コメントが削除されました"
 
 #: src/views/issue/activity/issue-activity__comment-actions.js
 msgid "Comment updated"
-msgstr ""
+msgstr "コメントが更新されました"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "committed changes"
-msgstr ""
+msgstr "コミットされた変更"
 
 #: src/components/error-boundary/error-boundary.js
 #: src/components/error-message/error-message-inline.js
 #: src/views/enter-server/enter-server.js
 msgid "Contact support"
-msgstr ""
+msgstr "サポートに問い合わせる"
 
 #: src/views/article/article.js
 msgid "Content"
-msgstr ""
+msgstr "コンテンツ"
 
 #: src/components/wiki/code-renderer.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
 #: src/views/issue/issue-base-actions-creater.js
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Copied"
-msgstr ""
+msgstr "コピーされました"
 
 #: src/views/article/arcticle-actions.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Copy link"
-msgstr ""
+msgstr "リンクのコピー"
 
 #: src/views/article/arcticle-actions.js
 #: src/views/article/arcticle-actions.js
 msgid "Copy link to article"
-msgstr ""
+msgstr "記事のリンクをコピー"
 
 #: src/views/issue/activity/issue-activity__comment-actions.js
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Copy text"
-msgstr ""
+msgstr "テキストのコピー"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "Could not apply specified command."
-msgstr ""
+msgstr "指定されたコマンドを適用できませんでした。"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Crash report sent"
-msgstr ""
+msgstr "クラッシュレポートが送信されました"
 
 #: src/views/issue/issue__details.js
 msgid "Created by"
-msgstr ""
+msgstr "作成者："
 
 #: src/views/create-issue/create-issue.js
 msgid "Current issue"
-msgstr ""
+msgstr "現在の課題"
 
 #: src/views/settings/settings__appearance.js
 msgid "Dark theme"
-msgstr ""
+msgstr "ダークテーマ"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Date"
-msgstr ""
+msgstr "日付"
 
 #: src/components/user-agreement/user-agreement.js
 msgid "Decline"
-msgstr ""
+msgstr "拒否"
 
 #: src/components/activity-stream/activity__stream-work.js
 #: src/views/article/arcticle-actions.js
@@ -295,52 +295,52 @@ msgstr ""
 #: src/views/issue/activity/issue-activity__comment-actions.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
 msgid "Delete"
-msgstr ""
+msgstr "削除"
 
 #: src/views/issue/activity/issue-activity__comment-actions.js
 msgid "Delete comment permanently?"
-msgstr ""
+msgstr "コメントを永久に削除しますか？"
 
 #: src/views/article-create/article-create.js
 msgid "Delete draft"
-msgstr ""
+msgstr "下書きを削除"
 
 #: src/components/comment/comment.js
 msgid "Delete permanently"
-msgstr ""
+msgstr "永久に削除"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Description"
-msgstr ""
+msgstr "説明"
 
 #: src/components/activity/activity__history-title.js
 msgid "Description changed"
-msgstr ""
+msgstr "説明が変更されました"
 
 #: src/components/issue-tabbed/issue-tabbed.js
 #: src/views/inbox/inbox.js
 msgid "Details"
-msgstr ""
+msgstr "詳細"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Discard and close"
-msgstr ""
+msgstr "破棄して閉じる"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Discard draft and close?"
-msgstr ""
+msgstr "下書きを破棄して閉じますか？"
 
 #: src/views/article-create/article-create.js
 msgid "Discard unpublished changes"
-msgstr ""
+msgstr "未公開の変更を破棄"
 
 #: src/views/settings/settings-helper.js
 msgid "Don't send logs"
-msgstr ""
+msgstr "ログを送信しない"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Drafts"
-msgstr ""
+msgstr "件の下書き"
 
 #: src/components/activity-stream/activity__stream-work.js
 #: src/components/activity-stream/activity__stream.js
@@ -348,661 +348,662 @@ msgstr ""
 #: src/views/issue/activity/issue-activity__comment-actions.js
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Edit"
-msgstr ""
+msgstr "編集"
 
 #: src/components/comment/comment-edit.js
 msgid "Edit comment"
-msgstr ""
+msgstr "コメントを編集"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Email address for follow-up"
-msgstr ""
+msgstr "連絡先メールアドレス"
 
 #: src/components/command-dialog/command-dialog.js
 msgid "Enter command"
-msgstr ""
+msgstr "コマンドを入力してください"
 
 #: src/components/query-assist/query-assist.js
 #: src/components/query-assist/query-preview.js
 msgid "Enter search request"
-msgstr ""
+msgstr "検索リクエストを入力"
 
 #: src/views/enter-server/enter-server.js
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
-msgstr ""
+msgstr "アカウントを登録している YouTrack インストール環境の Web アドレスを入力します"
 
 #: src/components/custom-fields-panel/custom-fields-panel.js
 msgid "Enter time value"
-msgstr ""
+msgstr "時間の値を入力してください"
 
 #: src/views/settings/settings-helper.js
 msgid "Feature request"
-msgstr ""
+msgstr "機能リクエスト"
 
 #: src/views/agile-board/board-actions.js
 msgid "Filter boards by name"
-msgstr ""
+msgstr "名前でボードを絞り込む"
 
 #: src/components/linked-issues/linked-issues-add-link.js
 #: src/components/select/select.js
 #: src/views/issue/activity/activity__add-spent-time.js
 #: src/views/issues/issues__sortby_add-attribute.js
 msgid "Filter items"
-msgstr ""
+msgstr "項目をフィルタリング"
 
 #: src/views/article-create/article-create.js
 msgid "Filter projects"
-msgstr ""
+msgstr "プロジェクトをフィルタリング"
 
 #: src/views/issues/issues-actions.js
 msgid "Filter projects, saved searches, and tags"
-msgstr ""
+msgstr "プロジェクト、保存した検索条件、タグで絞り込む"
 
 #: src/views/issues/issues-actions.js
 msgid "Filter saved searches"
-msgstr ""
+msgstr "保存した検索条件で絞り込む"
 
 #: src/views/agile-board/board-actions.js
 msgid "Filter sprints by name"
-msgstr ""
+msgstr "名前でスプリントを絞り込む"
 
 #: src/components/tags/tag-add-select.js
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Filter tags"
-msgstr ""
+msgstr "タグで絞り込む"
 
 #: src/components/visibility/visibility-control.js
 msgid "Filter users, groups, and teams"
-msgstr ""
+msgstr "ユーザー、グループ、チームを絞り込む"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Find favorite projects"
-msgstr ""
+msgstr "お気に入りプロジェクトを検索"
 
 #: src/views/enter-server/enter-server.js
 msgid "Get help"
-msgstr ""
+msgstr "ヘルプを表示"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Help us fix problems faster"
-msgstr ""
+msgstr "問題の迅速な解決に役立ちます"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Here you'll see a list of articles from your favorite projects"
-msgstr ""
+msgstr "ここにはお気に入りプロジェクトの記事がリスト表示されます"
 
 #: src/components/error/error-message-data.js
 msgid "If this isn't what you expected, you might try one of these solutions:"
-msgstr ""
+msgstr "期待した結果と異なる場合は、次のいずれかの解決方法をお試しください。"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
-msgstr ""
+msgstr "組み込みのエラー報告機能に加えて、YouTrack Mobile では問題の診断とアプリケーションの安定性監視に役立つサードパーティサービスである Bugsnag を使用しています。レポートデータは同意いただいた場合のみ Bugsnag と共有されます。"
 
 #: src/views/article/article.js
 msgid "in revision"
-msgstr ""
+msgstr "リビジョン内"
 
 #: src/components/error/error-message-data.js
 msgid "Invalid query"
-msgstr ""
+msgstr "クエリが無効です"
 
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Issue deleted"
-msgstr ""
+msgstr "課題が削除されました"
 
 #: src/components/issue-actions/issue-links-actions.js
 msgid "Issue link added"
-msgstr ""
+msgstr "課題リンクが追加されました"
 
 #: src/components/issue-actions/issue-links-actions.js
 msgid "Issue link removed"
-msgstr ""
+msgstr "問題リンクが削除されました"
 
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Issue updated"
-msgstr ""
+msgstr "課題が更新されました"
 
 #: src/views/issues/issues__sortby_list.js
 msgid "Issues can be sorted by up to 4 attributes"
-msgstr ""
+msgstr "課題は最大で 4 つの属性で並べ替えできます"
 
 #: src/components/error/error-message-data.js
 msgid "It could mean that the issue doesn't exist or you don't have permission to view it"
-msgstr ""
+msgstr "課題が存在しないか、課題を表示する権限がない可能性があります"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "JetBrains Privacy Policy"
-msgstr ""
+msgstr "JetBrains プライバシーポリシー"
 
 #: src/components/date/date.js
 msgid "just now"
-msgstr ""
+msgstr "たった今"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Knowledge Base"
-msgstr ""
+msgstr "ナレッジベース"
 
 #: src/components/error/error-message-data.js
 #: src/components/error/error-message-data.js
 msgid "License error"
-msgstr ""
+msgstr "ライセンスエラー"
 
 #: src/views/settings/settings__appearance.js
 msgid "Light theme"
-msgstr ""
+msgstr "ライトテーマ"
 
 #: src/components/linked-issues/linked-issues-add-link.js
 #: src/views/create-issue/create-issue.js
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Link issue"
-msgstr ""
+msgstr "課題のリンク"
 
 #: src/views/issue/activity/issue-activity__comment-actions.js
 msgid "Link to comment copied"
-msgstr ""
+msgstr "コメントのリンクをコピーしました"
 
 #: src/components/linked-issues/linked-issues-title.js
 #: src/components/linked-issues/linked-issues.js
 msgid "Linked issues"
-msgstr ""
+msgstr "リンクされた課題"
 
 #: src/components/select/select.js
 msgid "Loading values..."
-msgstr ""
+msgstr "値を読み込みんでいます..."
 
 #: src/views/log-in/log-in.js
 msgid "Log in"
-msgstr ""
+msgstr "ログイン"
 
 #: src/views/log-in/log-in.js
 msgid "Log in to YouTrack"
-msgstr ""
+msgstr "YouTrack にログイン"
 
 #: src/views/log-in/log-in.js
 msgid "Log in with Browser"
-msgstr ""
+msgstr "ブラウザーでログイン"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Logs"
-msgstr ""
+msgstr "ログ"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Manage Favorite Projects"
-msgstr ""
+msgstr "お気に入りプロジェクトの管理"
 
 #: src/views/issues/issues__count.js
 msgid "Matches {{issuesCount}} issue"
 msgid_plural "Matches {{issuesCount}} issues"
-msgstr[0] ""
+msgstr[0] "{{issuesCount}} 件の課題に一致"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "merged the pull request"
-msgstr ""
+msgstr "さんがプルリクエストをマージしました"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "New Article"
-msgstr ""
+msgstr "新しい記事"
 
 #: src/views/create-issue/create-issue.js
 msgid "New Issue"
-msgstr ""
+msgstr "新しい課題"
 
 #: src/views/enter-server/enter-server.js
 msgid "Next"
-msgstr ""
+msgstr "次"
 
 #: src/components/activity-stream/activity__stream.js
 msgid "No activity yet"
-msgstr ""
+msgstr "まだアクティビティはありません"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "No articles"
-msgstr ""
+msgstr "記事がありません"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "No articles found"
-msgstr ""
+msgstr "記事が見つかりません"
 
 #: src/views/knowledge-base/knowledge-base__drafts.js
 msgid "No drafts yet"
-msgstr ""
+msgstr "まだ下書きはありません"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "No favorites projects found"
-msgstr ""
+msgstr "お気に入りプロジェクトが見つかりません"
 
 #: src/components/error/error-message-data.js
 #: src/views/issues/issues.js
 msgid "No issues found"
-msgstr ""
+msgstr "課題が見つかりません"
 
 #: src/components/select/select.js
 msgid "No items"
-msgstr ""
+msgstr "項目がありません"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "No type"
-msgstr ""
+msgstr "タイプなし"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "No user information provided by Upsource."
-msgstr ""
+msgstr "Upsource が提供するユーザー情報はありません。"
 
 #: src/components/error/error-message-data.js
 msgid "Nope, can't find it!"
-msgstr ""
+msgstr "見つかりません！"
 
 #: src/views/inbox/inbox.js
 msgid "Notifications"
-msgstr ""
+msgstr "通知"
 
 #: src/views/settings/settings-helper.js
 msgid "Other"
-msgstr ""
+msgstr "その他"
 
 #: src/views/log-in/log-in.js
 msgid "Password"
-msgstr ""
+msgstr "パスワード"
 
 #: src/views/settings/settings-helper.js
 msgid "Problem"
-msgstr ""
+msgstr "問題"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
-msgstr ""
+msgstr "プロジェクトが折りたたまれました"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects expanded"
-msgstr ""
+msgstr "プロジェクトが展開されました"
 
 #: src/components/query-assist/query-assist-helper.js
 #: src/views/issues/issues-actions.js
 msgid "Recent searches"
-msgstr ""
+msgstr "最近の検索条件"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Remove"
-msgstr ""
+msgstr "削除"
 
 #: src/views/article/arcticle-actions.js
 msgid "Remove favorite"
-msgstr ""
+msgstr "お気に入りの削除"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Remove project from favorites?"
-msgstr ""
+msgstr "お気に入りからプロジェクトを削除しますか？"
 
 #: src/components/tags/tags.js
 msgid "Remove tag"
-msgstr ""
+msgstr "タグの削除"
 
 #: src/views/inbox/inbox.js
 msgid "removed a reaction"
-msgstr ""
+msgstr "がリアクションを削除しました"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "reopened the pull request"
-msgstr ""
+msgstr "さんがプルリクエストを再開しました"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Restart"
-msgstr ""
+msgstr "再起動"
 
 #: src/components/comment/comment.js
 msgid "Restore"
-msgstr ""
+msgstr "復元"
 
 #: src/views/home/home.js
 msgid "Retry"
-msgstr ""
+msgstr "再試行"
 
 #: src/views/knowledge-base/knowledge-base__search.js
 msgid "Search articles"
-msgstr ""
+msgstr "記事を検索"
 
 #: src/components/error/error-message-data.js
 msgid "Search for a different value"
-msgstr ""
+msgstr "別の月を検索"
 
 #: src/components/custom-fields-panel/custom-fields-panel.js
 msgid "Search for the project"
-msgstr ""
+msgstr "プロジェクトの検索"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Select an article from the list"
-msgstr ""
+msgstr "リストから記事を選択"
 
 #: src/views/inbox/inbox.js
 #: src/views/issues/issues.js
 msgid "Select an issue from the list"
-msgstr ""
+msgstr "リストから課題を選択"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Send crash report"
-msgstr ""
+msgstr "クラッシュレポートの送信"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Send extended report to Bugsnag"
-msgstr ""
+msgstr "Bugsnag に拡張レポートを送信"
 
 #: src/views/settings/settings.js
 msgid "Send feedback"
-msgstr ""
+msgstr "フィードバックを送信"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Send Feedback"
-msgstr ""
+msgstr "フィードバックの送信"
 
 #: src/views/settings/settings-helper.js
 msgid "Send logs"
-msgstr ""
+msgstr "ログを送信する"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Sending crash report..."
-msgstr ""
+msgstr "クラッシュレポートを送信中..."
 
 #: src/views/settings/settings.js
 msgid "Settings"
-msgstr ""
+msgstr "設定"
 
 #: src/components/debug-view/debug-view.js
 msgid "Share"
-msgstr ""
+msgstr "共有"
 
 #: src/views/article/arcticle-actions.js
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Share link"
-msgstr ""
+msgstr "リンクを共有"
 
 #: src/views/article/arcticle-actions.js
 msgid "Share link to article"
-msgstr ""
+msgstr "記事のリンクを共有"
 
 #: src/views/settings/settings.js
 msgid "Share logs"
-msgstr ""
+msgstr "ログの共有"
 
 #: src/views/article/arcticle-actions.js
 #: src/views/article/arcticle-actions.js
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Share…"
-msgstr ""
+msgstr "共有…"
 
 #: src/components/tags/tags.js
 msgid "Show all issues tagged with \"{{tagName}}\"..."
-msgstr ""
+msgstr "\"{{tagName}}\" のタグが付いた課題をすべて表示..."
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "Show more"
-msgstr ""
+msgstr "その他を表示"
 
 #: src/components/error/error-message-data.js
 #: src/components/error/error-messages.js
 msgid "Something went wrong"
-msgstr ""
+msgstr "不明なエラーが発生しました"
 
 #: src/views/issues/issues__sortby_list.js
 msgid "Sort Attributes"
-msgstr ""
+msgstr "並べ替え属性"
 
 #: src/views/issues/issues__sortby.js
 msgid "Sorted by"
-msgstr ""
+msgstr "並べ替え順"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Spent time"
-msgstr ""
+msgstr "経過時間"
 
 #: src/components/activity-stream/activity__stream-work.js
 msgid "Spent time:"
-msgstr ""
+msgstr "経過時間:"
 
 #: src/views/knowledge-base/knowledge-base__drafts.js
 msgid "Start a new article"
-msgstr ""
+msgstr "新しい記事を開始"
 
 #: src/views/article/article__details.js
 msgid "Sub-articles"
-msgstr ""
+msgstr "サブ記事"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "submitted a pull request"
-msgstr ""
+msgstr "さんがプルリクエストを送信しました"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Summary"
-msgstr ""
+msgstr "概要"
 
 #: src/components/activity/activity__history-title.js
 msgid "Summary changed"
-msgstr ""
+msgstr "概要が変更されました"
 
 #: src/views/settings/settings__appearance.js
 msgid "Sync with OS"
-msgstr ""
+msgstr "OS と同期"
 
 #: src/components/activity/activity__history-title.js
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] ""
+msgstr[0] "タグ"
 
 #: src/components/attach-file/attach-file-dialog.js
 #: src/components/attachments-row/attachment-actions.js
 msgid "Take a picture…"
-msgstr ""
+msgstr "撮影する…"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Thank you for your feedback!"
-msgstr ""
+msgstr "フィードバックをありがとうございます！"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "The application failed to restart automatically. Please try to restart it manually."
-msgstr ""
+msgstr "アプリケーションを自動的に再起動できませんでした。手動で再起動をお試しください。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
-msgstr ""
+msgstr "このコミットの作者は、YouTrack プロファイルでメールアドレスを指定していないため、特定されていません。"
 
 #: src/views/agile-board/agile-board.js
 msgid "The board {{boardName}} has configuration errors"
-msgstr ""
+msgstr "ボード \"{{boardName}}\" に構成エラーがあります"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The change has been detached from this issue. It is still displayed here because its comment mentions the issue."
-msgstr ""
+msgstr "変更はこの課題からデタッチされています。そのコメントでこの課題がメンションされているため、引き続きこちらに表示されています。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The change has been manually attached to this issue."
-msgstr ""
+msgstr "変更は手動でこの課題にアタッチされています。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The change was processed during the initial data fetching, thus no command has been applied."
-msgstr ""
+msgstr "変更は最初のデータ取得中に処理されたため、コマンドは適用されませんでした。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The commit author does not belong to the committers group."
-msgstr ""
+msgstr "コミット作者はコミット者のグループに属していません。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The commit author has not specified an email address."
-msgstr ""
+msgstr "コミット作者はメールアドレスを指定していません。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The commit author has specified an email address that is associated with a different user account."
-msgstr ""
+msgstr "コミット作者は別のユーザーアカウントに関連付けられているメールアドレスを指定しています。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The commit author is not an assignee in the project."
-msgstr ""
+msgstr "そのコミット作者は当該プロジェクトの担当者ではありません。"
 
 #: src/actions/app-actions.js
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
-msgstr ""
+msgstr "選択したアカウントではもう YouTrack Mobile を使用できません。もう一度ログインしてください。"
 
 #: src/components/error/error-message-data.js
 msgid "The server is overloaded or down for maintenance"
-msgstr ""
+msgstr "サーバーが過負荷状態またはメンテナンス状態になっています"
 
 #: src/views/agile-board/board-updaters.js
 msgid "The settings for this agile board have been updated. Please reload the board."
-msgstr ""
+msgstr "このアジャイルボードの設定が更新されました。ボードを再読み込みしてください。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The VCS user name does not match any user in YouTrack. To link future commits, add the VCS user name to the Hub account for this user."
-msgstr ""
+msgstr "VCS ユーザー名が YouTrack のユーザーと一致しません。将来のコミットをリンクするには、このユーザーの Hub アカウントにVCSユーザー名を追加します。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The VCS user name matches more than one user in YouTrack. To link future commits, remove the duplicate VCS user names from one or more Hub accounts or merge the duplicates into a single user account."
-msgstr ""
+msgstr "VCS ユーザー名が YouTrack の複数のユーザーと一致しています。今後のコミットをリンクするには、重複する VCS ユーザー名を1つ以上の Hub アカウントから削除するか、重複したものを単一のユーザーアカウントにマージします。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
-msgstr ""
+msgstr "TeamCity から変更者に関する情報を取得中にエラーが発生しました。最も可能性の高い理由は、代わりに統合を実行する TeamCity ユーザーに必要な権限がないことです。"
 
 #: src/views/article/arcticle-helper.js
 msgid "This action deletes all drafts, including unpublished sub-articles"
-msgstr ""
+msgstr "この操作は未公開のサブ記事を含むすべての下書きを削除します"
 
 #: src/views/article-create/article-create.js
 msgid "Title"
-msgstr ""
+msgstr "タイトル"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
-msgstr ""
+msgstr "特定プロジェクトのナレッジベースにある記事を表示するには、プロジェクトをお気に入りに追加してください"
 
 #: src/components/error-message/error-message.js
 msgid "Try Again"
-msgstr ""
+msgstr "やり直す"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Type"
-msgstr ""
+msgstr "タイプ"
 
 #: src/components/agile-row/agile-row.js
 msgid "Uncategorized Cards"
-msgstr ""
+msgstr "未分類のカード"
 
 #: src/components/articles/article-item-with-children.js
 msgid "Untitled"
-msgstr ""
+msgstr "無題"
 
 #: src/views/issue/issue__details.js
 msgid "Updated by"
-msgstr ""
+msgstr "更新ユーザー："
 
 #: src/components/error/error-message-data.js
 msgid "Use fewer search parameters"
-msgstr ""
+msgstr "使用する検索パラメータを減らしてください"
 
 #: src/components/error/error-message-data.js
 msgid "User account is banned"
-msgstr ""
+msgstr "ユーザーアカウントは禁止されています"
 
 #: src/views/log-in/log-in.js
 msgid "Username or email"
-msgstr ""
+msgstr "ユーザー名またはメールアドレス"
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
-msgstr ""
+msgstr "コメントとその他のアクティビティを表示"
 
 #: src/components/activity/activity__history-title.js
 msgid "Visibility"
-msgstr ""
+msgstr "表示対象"
 
 #: src/components/visibility/visibility-strings.js
 msgid "Visible to article readers"
-msgstr ""
+msgstr "記事の読者に表示する"
 
 #: src/components/visibility/visibility-strings.js
 msgid "Visible to issue readers"
-msgstr ""
+msgstr "課題の読者に表示する"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."
-msgstr ""
+msgstr "TeamCityとYouTrack を統合する際に、ユーザーはメールアドレスで結び付けられます。TeamCity はコミット者のメールアドレスを提供していません。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. There are two or more different YouTrack users that have the same email address as the commit's author has in TeamCity."
-msgstr ""
+msgstr "TeamCityとYouTrack を統合する際に、ユーザーはメールアドレスと照合されます。コミットの作者が TeamCity に有するのと同じメールアドレスを持つ、2人以上の異なる YouTrack ユーザーがいます。"
 
 #: src/components/error/error-message-data.js
 msgid "Woah, you can't touch this!"
-msgstr ""
+msgstr "これを触ることはできません！"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
-msgstr ""
+msgstr "まだ通知は届いていません。アカウントの通知設定を構成するには、Web アプリで YouTrack のプロフィールにアクセスしてください。"
 
 #: src/views/log-in/log-in.js
 msgid "You need a YouTrack account to use the app.\n"
-msgstr ""
+msgstr "アプリを使用するには YouTrack アカウントが必要です。\n"
 
 #: src/components/error/error-message-data.js
 msgid "Your account has insufficient permission to perform this operation."
-msgstr ""
+msgstr "あなたのアカウントにはこの操作を実行するのに必要な権限がありません。"
 
 #: src/components/error/error-message-data.js
 msgid "Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n\n"
 "To log in on this screen, enter your username and a one-time application password."
-msgstr ""
+msgstr "あなたのアカウントでログインするには二要素認証が必要です。このオプションはモバイルブラウザーでログインする場合のみ使用できます。モバイルブラウザーでは、サードパーティアカウント (ある場合) を使用してサインインすることもできます。\n\n"
+"この画面でログインするには、ユーザー名とワンタイムアプリケーションパスワードを入力してください。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not find a user that matches the user account in Bitbucket."
-msgstr ""
+msgstr "YouTrack は Bitbucket のユーザーアカウントと一致するユーザーを見つけられませんでした。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not find a user that matches the user account in GitHub."
-msgstr ""
+msgstr "YouTrack は GitHubのユーザーアカウントと一致するユーザーを見つけられませんでした。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not find a user that matches the user account in GitLab."
-msgstr ""
+msgstr "YouTrack は GitLab のユーザーアカウントと一致するユーザーを見つけられませんでした。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not receive an email address for the commit author from Bitbucket."
-msgstr ""
+msgstr "YouTrack は Bitbucket からコミット作者のメールアドレスを受け取れませんでした。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not receive an email address for the commit author from GitHub."
-msgstr ""
+msgstr "YouTrack は GitHub からコミット作者のメールアドレスを受け取れませんでした。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not receive an email address for the commit author from GitLab."
-msgstr ""
+msgstr "YouTrack は GitLab からコミット作者のメールアドレスを受け取れませんでした。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not receive user data for this commit author from Bitbucket."
-msgstr ""
+msgstr "YouTrack は Bitbucket からこのコミット作者のユーザーデータを受け取れませんでした。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not receive user data for this commit author from GitHub."
-msgstr ""
+msgstr "YouTrack は GitHub からこのコミット作者のユーザーデータを受け取れませんでした。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not receive user data for this commit author from GitLab."
-msgstr ""
+msgstr "YouTrack は GitLab からこのコミット作者のユーザーデータを受け取れませんでした。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack found multiple users with email addresses that match the registered email in Bitbucket."
-msgstr ""
+msgstr "YouTrack は Bitbucket の登録済みメールアドレスと一致するメールアドレスを持つ複数のユーザーを見つけました。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack found multiple users with email addresses that match the registered email in GitHub."
-msgstr ""
+msgstr "YouTrack は GitHub の登録済みメールアドレスと一致するメールアドレスを持つ複数のユーザーを見つけました。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack found multiple users with email addresses that match the registered email in GitLab."
-msgstr ""
+msgstr "YouTrack は GitLab の登録済みメールアドレスと一致するメールアドレスを持つ複数のユーザーを見つけました。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack was unable to match the VCS user name to a Hub account for an unknown reason. Check your server logs for details."
-msgstr ""
+msgstr "YouTrack は不明な理由により、VCS ユーザー名を Hub アカウントに一致させることができませんでした。詳細についてはサーバーログを確認してください。"
 
