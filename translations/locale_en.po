@@ -505,8 +505,8 @@ msgid "Linked issues"
 msgstr "Linked issues"
 
 #: src/components/select/select.js
-msgid "Loading values..."
-msgstr "Loading values..."
+msgid "Loading values?"
+msgstr "Loading values?"
 
 #: src/views/log-in/log-in.js
 msgid "Log in"
@@ -699,8 +699,8 @@ msgid "Send logs"
 msgstr "Send logs"
 
 #: src/components/error-boundary/error-boundary.js
-msgid "Sending crash report..."
-msgstr "Sending crash report..."
+msgid "Sending crash report?"
+msgstr "Sending crash report?"
 
 #: src/views/settings/settings.js
 msgid "Settings"

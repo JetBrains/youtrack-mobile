@@ -512,8 +512,8 @@ msgid "Linked issues"
 msgstr "Incidencias enlazadas"
 
 #: src/components/select/select.js
-msgid "Loading values..."
-msgstr "Cargando valores..."
+msgid "Loading values…"
+msgstr ""
 
 #: src/views/log-in/log-in.js
 msgid "Log in"
@@ -706,8 +706,8 @@ msgid "Send logs"
 msgstr "Enviar registros"
 
 #: src/components/error-boundary/error-boundary.js
-msgid "Sending crash report..."
-msgstr "Enviando informe de errores..."
+msgid "Sending crash report…"
+msgstr ""
 
 #: src/views/settings/settings.js
 msgid "Settings"

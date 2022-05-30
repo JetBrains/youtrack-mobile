@@ -512,8 +512,8 @@ msgid "Linked issues"
 msgstr "Verknüpfte Tickets"
 
 #: src/components/select/select.js
-msgid "Loading values..."
-msgstr "Werte werden geladen…"
+msgid "Loading values…"
+msgstr ""
 
 #: src/views/log-in/log-in.js
 msgid "Log in"
@@ -706,8 +706,8 @@ msgid "Send logs"
 msgstr "Protokolle senden"
 
 #: src/components/error-boundary/error-boundary.js
-msgid "Sending crash report..."
-msgstr "Fehlerbericht wird gesendet …"
+msgid "Sending crash report…"
+msgstr ""
 
 #: src/views/settings/settings.js
 msgid "Settings"
