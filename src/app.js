@@ -30,12 +30,12 @@ import WikiPage from 'views/wiki-page/wiki-page';
 import {ActionSheetProvider, connectActionSheet} from '@expo/react-native-action-sheet';
 import {Notifications} from 'react-native-notifications';
 import {onNavigateBack, setAccount} from 'actions/app-actions';
+import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 import {rootRoutesList, routeMap} from './app-routes';
 
 import type {Node} from 'react';
 import type {NotificationRouteData} from 'flow/Notification';
 import type {Ref} from 'react';
-import {checkVersion, FEATURE_VERSION} from './components/feature/feature';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
