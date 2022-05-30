@@ -1,12 +1,12 @@
 import { toField } from './to-field';
 
-describe('toField', function() {
-  it('should export toField service', function() {
+describe('toField', () => {
+  it('should export toField service', () => {
     expect(toField).toBeDefined();
   });
 
 
-  it('should convert list of fields to field string', function() {
+  it('should convert list of fields to field string', () => {
     expect(toField([
       'id',
       'type',
@@ -15,7 +15,7 @@ describe('toField', function() {
   });
 
 
-  it('should accept list collection as object', function() {
+  it('should accept list collection as object', () => {
     expect(toField({
       id: null,
       type: null,
@@ -24,7 +24,7 @@ describe('toField', function() {
   });
 
 
-  it('should support nested fields', function() {
+  it('should support nested fields', () => {
     expect(toField([
       'id',
 
@@ -40,7 +40,7 @@ describe('toField', function() {
   });
 
 
-  it('should convert nested field to string', function() {
+  it('should convert nested field to string', () => {
     expect(toField([
       'id',
 
@@ -56,7 +56,7 @@ describe('toField', function() {
   });
 
 
-  it('should ignore empty object', function() {
+  it('should ignore empty object', () => {
     expect(toField([
       'id',
       {},
@@ -93,7 +93,7 @@ describe('toField', function() {
   });
 
 
-  it('should allow remove fields', function() {
+  it('should allow remove fields', () => {
     expect(toField([
       'id',
       'type',
@@ -102,7 +102,7 @@ describe('toField', function() {
   });
 
 
-  it('should allow remove fields from object', function() {
+  it('should allow remove fields from object', () => {
     expect(toField([
       'id',
       'type',
@@ -114,7 +114,7 @@ describe('toField', function() {
   });
 
 
-  it('should allow remove fields from nested array', function() {
+  it('should allow remove fields from nested array', () => {
     expect(toField([
       'id',
       'type',
@@ -123,7 +123,7 @@ describe('toField', function() {
   });
 
 
-  it('should allow remove fields from another toField', function() {
+  it('should allow remove fields from another toField', () => {
     expect(toField([
       'id',
       'type',
@@ -131,7 +131,7 @@ describe('toField', function() {
     ]).exclude('name').toString()).toEqual('bar,id,type');
   });
 
-  it('should remove from inner toField object', function() {
+  it('should remove from inner toField object', () => {
     expect(toField([
       'id',
       'type',
@@ -139,7 +139,7 @@ describe('toField', function() {
     ]).exclude(toField(['name']).getNormalizedFields()).toString()).toEqual('bar,id,type');
   });
 
-  it('should remove whole sub-field', function() {
+  it('should remove whole sub-field', () => {
     const subfield = toField(['name', 'bar']);
     expect(toField([
       'id',
@@ -148,7 +148,7 @@ describe('toField', function() {
     ]).exclude(subfield.getNormalizedFields()).toString()).toEqual('id,type');
   });
 
-  it('should remove whole sub-field when it is wrapped to array', function() {
+  it('should remove whole sub-field when it is wrapped to array', () => {
     const subfield = toField(['id2']);
     expect(toField([
       'id',
@@ -246,7 +246,7 @@ describe('toField', function() {
     expect(originalToFiled.toString()).toEqual('field(value)');
   });
 
-  describe('parse', function() {
+  describe('parse', () => {
     it('should parse braced string', () => {
       expect(parse('field(value)')).toEqual({
         field: {
@@ -265,11 +265,11 @@ describe('toField', function() {
       });
     });
 
-    it('should throw exception if string has unmatched open brace', function() {
+    it('should throw exception if string has unmatched open brace', () => {
       expect(() => parse('foo(')).toThrow();
     });
 
-    it('should throw exception if string has unmatched close brace', function() {
+    it('should throw exception if string has unmatched close brace', () => {
       expect(() => parse('foo)')).toThrow();
     });
 
@@ -352,7 +352,7 @@ describe('toField', function() {
       });
     });
 
-    it('should correctly handle empty nesting', function() {
+    it('should correctly handle empty nesting', () => {
       expect(parse('foo((()))')).toEqual({
         foo: {},
       });
@@ -365,32 +365,32 @@ describe('toField', function() {
     }
   });
 
-  describe('zip', function() {
-    it('should move repeated fields to projection', function() {
+  describe('zip', () => {
+    it('should move repeated fields to projection', () => {
       expect(zip('foo(id,type,name),bar(id,type,name)'))
         .toEqual('bar(@1),foo(@1);@1:id,name,type');
     });
 
-    it('should remove duplications between nested fields and top fields', function() {
+    it('should remove duplications between nested fields and top fields', () => {
       expect(zip('foo(id,type,name),id,type,name'))
         .toEqual('foo(@1),@1;@1:id,name,type');
     });
 
-    it('should not produce unoptimized zipped string if it bigger than passed string', function() {
+    it('should not produce unoptimized zipped string if it bigger than passed string', () => {
       expect(zip('foo(id),id')).toEqual('foo(id),id');
     });
 
-    it('should correctly handle case when some field name contains is a part of another field name', function() {
+    it('should correctly handle case when some field name contains is a part of another field name', () => {
       expect(zip('x(foooooBooooo,foooooBoooooZoooooo)'))
         .toEqual('x(foooooBooooo,foooooBoooooZoooooo)');
     });
 
-    it('should correctly reduce parts with ()', function() {
+    it('should correctly reduce parts with ()', () => {
       expect(zip('foo(x,bar(foooooBooooo,foooooBoooooZoooooo)),zoo(x,bar(foooooBooooo,foooooBoooooZoooooo))'))
         .toEqual('foo(@1),zoo(@1);@1:bar(foooooBooooo,foooooBoooooZoooooo),x');
     });
 
-    it('should show example where zip algorithm would not produce the best solution', function() {
+    it('should show example where zip algorithm would not produce the best solution', () => {
       // The best solution would be
       // bar(@2),foo(@1),@1;@1:@2,time;@2:it,type,name
       // bar(id,name,type),foo(@1),@1;@1:id,name,time,type

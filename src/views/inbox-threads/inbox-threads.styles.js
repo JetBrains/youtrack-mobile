@@ -23,6 +23,9 @@ export default EStyleSheet.create({
   thread: {
     marginTop: UNIT * 2,
     marginLeft: UNIT * 2,
+  },
+  threadSeparator: {
+    marginLeft: UNIT * 2,
     marginBottom: UNIT,
     ...separatorBorder,
     borderColor: '$separator',

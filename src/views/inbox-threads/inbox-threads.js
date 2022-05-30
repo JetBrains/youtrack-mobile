@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useContext, useEffect} from 'react';
-import {RefreshControl, ScrollView, View} from 'react-native';
+import {FlatList, RefreshControl, View} from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -46,30 +46,29 @@ const InboxThreads: () => Node = (): Node => {
       />
 
       {threads.length > 0 && (
-        <ScrollView
+        <FlatList
+          data={threads}
+          ItemSeparatorComponent={() => <View style={styles.threadSeparator}/>}
+          keyExtractor={guid}
+          renderItem={({item, index}: {item: InboxThread, index: number}) => {
+            return item.messages.length && (
+              <View
+                style={[styles.thread, (index === threads.length - 1) && styles.threadLast]}
+              >
+                <Thread
+                  thread={item}
+                  currentUser={currentUser}
+                  uiTheme={theme.uiTheme}
+                />
+              </View>
+            );
+          }}
           refreshControl={<RefreshControl
             refreshing={inProgress}
             tintColor={styles.link.color}
             onRefresh={doRefresh}
           />}
-        >
-          {threads.map((thread: InboxThread, index: number) => {
-            if (!thread.messages.length) {
-              return null;
-            }
-            return <View
-              key={guid()}
-              style={[styles.thread, (index === threads.length - 1) && styles.threadLast]}
-            >
-              <Thread
-                key={guid()}
-                thread={thread}
-                currentUser={currentUser}
-                uiTheme={theme.uiTheme}
-              />
-            </View>;
-          })}
-        </ScrollView>
+        />
       )}
 
       {!!error && !inProgress && (
