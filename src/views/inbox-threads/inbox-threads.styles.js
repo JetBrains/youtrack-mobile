@@ -87,6 +87,12 @@ export default EStyleSheet.create({
   threadCommentReactions: {
     marginBottom: UNIT * 2,
   },
+  threadCommentButton: {
+    marginBottom: UNIT * 2,
+  },
+  threadCommentButtonText: {
+    color: '$icon',
+  },
   threadChangeReason: {
     marginRight: UNIT / 2,
     ...secondaryText,

@@ -1,9 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {Text, View} from 'react-native';
-
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Text, TouchableOpacity, View} from 'react-native';
 
 import StreamHistoryChange from 'components/activity-stream/activity__stream-history';
 import StreamTimestamp from 'components/activity-stream/activity__stream-timestamp';
@@ -22,10 +20,11 @@ interface Props {
   group?: InboxThreadGroup;
   reason: string;
   timestamp: number;
-  onPress: () => any;
+  onPress?: () => any;
 }
 
-export default function ThreadItem({author, avatar, change, group, reason, timestamp, onPress = () => {}}: Props) {
+export default function ThreadItem({author, avatar, change, group, reason, timestamp, onPress}: Props) {
+  const Wrapper = onPress ? TouchableOpacity : View;
   return (
     <View>
       <View style={styles.row}>
@@ -43,18 +42,16 @@ export default function ThreadItem({author, avatar, change, group, reason, times
         </View>
       </View>
 
-      <View style={styles.threadChange}>
-        <TouchableOpacity onPress={onPress}>
-          <>
-            {change}
-            {!!group?.mergedActivities?.length && <View style={styles.threadRelatedChange}>
-              {group.mergedActivities.map(
-                (activity: Activity) => <StreamHistoryChange key={activity.id} activity={activity}/>
-              )}
-            </View>}
-          </>
-        </TouchableOpacity>
-      </View>
+      <Wrapper style={styles.threadChange} {...Object.assign(onPress ? {onPress} : {})}>
+        <>
+          {change}
+          {!!group?.mergedActivities?.length && <View style={styles.threadRelatedChange}>
+            {group.mergedActivities.map(
+              (activity: Activity) => <StreamHistoryChange key={activity.id} activity={activity}/>
+            )}
+          </View>}
+        </>
+      </Wrapper>
     </View>
   );
 }

@@ -1,6 +1,7 @@
 /* @flow */
 
 import React from 'react';
+import {Text, TouchableOpacity} from 'react-native';
 
 import ApiHelper from 'components/api/api__helper';
 import Avatar from 'components/avatar/avatar';
@@ -44,13 +45,18 @@ export default function ThreadCommentItem({group, currentUser}: Props) {
           comment={group.comment.comment}
           currentUser={currentUser}
         />
+        <TouchableOpacity
+          style={styles.threadCommentButton}
+          onPress={() => {
+            return Router.Issue({issueId: group.comment?.added[0]?.issue?.id, navigateToActivity: true});
+          }}
+        >
+          <Text style={styles.threadCommentButtonText}>view comment</Text>
+        </TouchableOpacity>
       </>}
       group={group}
       reason={i18n('commented')}
       timestamp={group.comment.timestamp}
-      onPress={() => {
-        return Router.Issue({issueId: group.comment?.added[0]?.issue?.id, navigateToActivity: true});
-      }}
     />
   );
 }
