@@ -69,7 +69,7 @@ export default class Tags extends PureComponent<Props, void> {
     }
   }
 
-  isDefaultColorCoding: ((tag: Tag) => any | null) = (tag: Tag) => tag?.color.id === NO_COLOR_CODING_ID ? styles.tagNoColor : null;
+  isDefaultColorCoding: ((tag: Tag) => any | null) = (tag: Tag) => tag?.color?.id === NO_COLOR_CODING_ID ? styles.tagNoColor : null;
 
   render(): null | Node {
     const {tags, multiline, style} = this.props;
