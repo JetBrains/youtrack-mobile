@@ -1,8 +1,9 @@
 /* @flow */
 
-import {handleRelativeUrl} from '../config/config';
 import objectWalk from 'object-walk';
 import {getReadableID} from '../issue-formatter/issue-formatter';
+import {handleRelativeUrl} from '../config/config';
+import {toField} from 'util/to-field';
 
 import type {Attachment, CustomField} from 'flow/CustomFields';
 import type {
@@ -11,7 +12,6 @@ import type {
   TransformedSuggestion,
   ServersideSuggestionLegacy,
 } from 'flow/Issue';
-import type {ToField} from 'flow/ToField';
 
 const API = {
   makeFieldHash: (issue: AnyIssue): Object => {
@@ -75,50 +75,7 @@ const API = {
     return convertedItems;
   },
 
-  toField: function toFieldConstructor(fields: Object | Array<string | Object>): ToField {
-    const toArray = function (object) {
-      if (Array.isArray(object)) {
-        return object;
-      }
-
-      return [object];
-    };
-
-    const toFieldString = function (fields: Array<any>) {
-      return toArray(fields).map(function (field) {
-        if (typeof field === 'string') {
-          return field;
-        }
-
-        if (field.constructor === toFieldConstructor) {
-          return field.toString();
-        }
-
-        if (Array.isArray(field)) {
-          return toFieldString(field);
-        }
-
-        return Object.keys(field).map(function (key) {
-          const value = field[key];
-
-          if (value) {
-            return `${key}(${toFieldString(value)})`;
-          }
-
-          return key;
-        });
-      }).join(',');
-    };
-
-    const fieldsString = toFieldString(fields);
-
-    return {
-      constructor: toFieldConstructor,
-      toString: function () {
-        return fieldsString;
-      },
-    };
-  },
+  toField: toField,
 
   getIssueId(issue: AnyIssue): string {
     return getReadableID(issue);
