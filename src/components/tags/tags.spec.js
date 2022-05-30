@@ -54,6 +54,14 @@ describe('<Tags/>', () => {
       ).toEqual(styles.tagNoColor);
     });
 
+    it('should not throw', () => {
+      expect(() => instance.isDefaultColorCoding()).not.toThrow();
+    });
+
+    it('should return NULL if tag`s colo is not provided', () => {
+      expect(instance.isDefaultColorCoding({})).toEqual(null);
+    });
+
     it('should return NULL', () => {
       expect(
         instance.isDefaultColorCoding(tagMock)
