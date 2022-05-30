@@ -4,6 +4,7 @@ import React from 'react';
 import {View} from 'react-native';
 
 import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
+import Router from 'components/router/router';
 import StreamHistoryChange from 'components/activity-stream/activity__stream-history';
 import ThreadItem from './inbox-threads__item';
 import {activityCategory} from 'components/activity/activity__category';
@@ -74,6 +75,7 @@ export default function ThreadIssueCreatedItem({group, uiTheme}: Props) {
           <StreamHistoryChange activity={activity} customFields={assigneeFields}/>
         </View>
       </>}
+      onPress={() => Router.Issue({issueId: issue.id})}
       reason={i18n('created')}
       timestamp={actualActivity.timestamp}
     />

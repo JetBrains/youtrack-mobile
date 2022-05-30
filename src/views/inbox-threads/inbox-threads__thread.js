@@ -26,7 +26,7 @@ export default function Thread({
   const ThreadComponent: any = threadData.component;
   const inboxEntity = <InboxEntity
     entity={entity}
-    onNavigate={() => Router.Issue({issueId: entity.id, navigateToActivity: true})}
+    onNavigate={() => Router.Issue({issueId: entity.id})}
     style={[styles.threadTitle, threadData.entityAtBottom && styles.threadSubTitle]}
     styleText={threadData.entityAtBottom && styles.threadSubTitleText}
   />;

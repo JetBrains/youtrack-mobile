@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+import Router from 'components/router/router';
 import StreamWork from 'components/activity-stream/activity__stream-work';
 import {i18n} from 'components/i18n/i18n';
 import {IconWork} from 'components/icon/icon';
@@ -24,6 +25,7 @@ export default function ThreadWorkItem({group}: Props) {
       avatar={<IconWork size={22} color={styles.icon.color} style={styles.activityWorkIcon}/>}
       change={<StreamWork activityGroup={{work: group.work}}/>}
       group={group}
+      onPress={() => Router.Issue({issueId: group.head.target.id, navigateToActivity: true})}
       reason={i18n('updated')}
       timestamp={group.work.timestamp}
     />

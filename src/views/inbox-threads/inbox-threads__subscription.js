@@ -82,10 +82,9 @@ export default function InboxThreadItemSubscription({
       Component = ThreadHistoryItem;
     }
     return (
-      <View>
+      <View key={guid()}>
         {!isLast && <View style={styles.threadConnector}/>}
         <Component
-          key={guid()}
           group={group}
           isLast={isLast}
           currentUser={currentUser}

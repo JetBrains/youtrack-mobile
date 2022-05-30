@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, View} from 'react-native';
 
 import Router from '../router/router';
 import {getActivityEventTitle} from './activity__stream-helper';
@@ -26,7 +26,7 @@ const StreamLink = (props: Props) => {
   const linkedIssues: Array<LinkedIssue> = [].concat(added).concat(removed);
 
   return (
-    <TouchableOpacity key={props.activity.id}>
+    <>
       <View>
         <Text style={styles.activityLabel}>{getActivityEventTitle(props.activity)}</Text>
       </View>
@@ -55,7 +55,7 @@ const StreamLink = (props: Props) => {
           );
         })
       }
-    </TouchableOpacity>
+    </>
   );
 };
 

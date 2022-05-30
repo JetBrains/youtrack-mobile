@@ -3,6 +3,8 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 
+import {TouchableOpacity} from 'react-native-gesture-handler';
+
 import StreamHistoryChange from 'components/activity-stream/activity__stream-history';
 import StreamTimestamp from 'components/activity-stream/activity__stream-timestamp';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
@@ -20,9 +22,10 @@ interface Props {
   group?: InboxThreadGroup;
   reason: string;
   timestamp: number;
+  onPress: () => any;
 }
 
-export default function ThreadItem({author, avatar, change, group, reason, timestamp}: Props) {
+export default function ThreadItem({author, avatar, change, group, reason, timestamp, onPress = () => {}}: Props) {
   return (
     <View>
       <View style={styles.row}>
@@ -41,12 +44,16 @@ export default function ThreadItem({author, avatar, change, group, reason, times
       </View>
 
       <View style={styles.threadChange}>
-        {change}
-        {!!group?.mergedActivities?.length && <View style={styles.threadRelatedChange}>
-          {group.mergedActivities.map(
-            (activity: Activity) => <StreamHistoryChange key={activity.id} activity={activity}/>
-          )}
-        </View>}
+        <TouchableOpacity onPress={onPress}>
+          <>
+            {change}
+            {!!group?.mergedActivities?.length && <View style={styles.threadRelatedChange}>
+              {group.mergedActivities.map(
+                (activity: Activity) => <StreamHistoryChange key={activity.id} activity={activity}/>
+              )}
+            </View>}
+          </>
+        </TouchableOpacity>
       </View>
     </View>
   );

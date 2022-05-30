@@ -5,6 +5,7 @@ import React from 'react';
 import ApiHelper from 'components/api/api__helper';
 import Avatar from 'components/avatar/avatar';
 import CommentReactions from 'components/comment/comment-reactions';
+import Router from 'components/router/router';
 import StreamComment from 'components/activity-stream/activity__stream-comment';
 import ThreadItem from './inbox-threads__item';
 import {getApi} from 'components/api/api__instance';
@@ -47,6 +48,9 @@ export default function ThreadCommentItem({group, currentUser}: Props) {
       group={group}
       reason={i18n('commented')}
       timestamp={group.comment.timestamp}
+      onPress={() => {
+        return Router.Issue({issueId: group.comment?.added[0]?.issue?.id, navigateToActivity: true});
+      }}
     />
   );
 }

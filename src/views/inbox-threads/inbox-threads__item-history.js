@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+import Router from 'components/router/router';
 import ThreadItem from './inbox-threads__item';
 import {i18n} from 'components/i18n/i18n';
 import {IconHistory} from 'components/icon/icon';
@@ -20,6 +21,7 @@ export default function ThreadHistoryItem({group}: Props) {
       author={group.head.author}
       avatar={<IconHistory size={20} color={styles.icon.color}/>}
       group={group}
+      onPress={() => Router.Issue({issueId: group.head.target.id, navigateToActivity: true})}
       reason={i18n('updated')}
       timestamp={group.head.timestamp}
     />
