@@ -3,6 +3,7 @@
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
+import {HIT_SLOP} from '../../components/common-styles/button';
 import {getReadableID} from 'components/issue-formatter/issue-formatter';
 
 import styles from './inbox.styles';
@@ -20,6 +21,7 @@ export default function InboxEntity({entity, onNavigate, style, styleText}: {
   const readableID: ?string = getReadableID(entity);
   return (
     <TouchableOpacity
+      hitSlop={HIT_SLOP}
       style={style}
       onPress={onNavigate}
     >
