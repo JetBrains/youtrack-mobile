@@ -36,11 +36,11 @@ export default EStyleSheet.create({
   threadConnector: {
     position: 'absolute',
     top: UNIT / 2,
-    left: 14,
-    width: 3,
-    height: '100%',
+    left: 15,
+    width: 2,
+    height: '98.5%',
     paddingBottom: UNIT * 2,
-    backgroundColor: '$disabled',
+    backgroundColor: '$separator',
   },
   threadTitle: {
     marginRight: UNIT * 2,
@@ -87,10 +87,16 @@ export default EStyleSheet.create({
   threadCommentReactions: {
     marginBottom: UNIT * 2,
   },
-  threadCommentButton: {
-    marginBottom: UNIT * 2,
+  threadButton: {
+    marginBottom: UNIT,
+    padding: UNIT / 2,
+    paddingLeft: 0,
   },
-  threadCommentButtonText: {
+  threadButtonMore: {
+    marginTop: -UNIT,
+    marginLeft: UNIT * 5.5,
+  },
+  threadButtonText: {
     color: '$icon',
   },
   threadChangeReason: {

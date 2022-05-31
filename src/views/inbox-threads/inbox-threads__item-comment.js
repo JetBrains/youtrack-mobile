@@ -46,12 +46,12 @@ export default function ThreadCommentItem({group, currentUser}: Props) {
           currentUser={currentUser}
         />
         <TouchableOpacity
-          style={styles.threadCommentButton}
+          style={styles.threadButton}
           onPress={() => {
             return Router.Issue({issueId: group.comment?.added[0]?.issue?.id, navigateToActivity: true});
           }}
         >
-          <Text style={styles.threadCommentButtonText}>view comment</Text>
+          <Text style={styles.threadButtonText}>view comment</Text>
         </TouchableOpacity>
       </>}
       group={group}

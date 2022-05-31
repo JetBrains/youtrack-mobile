@@ -1,7 +1,7 @@
 /* @flow */
 
-import React from 'react';
-import {View} from 'react-native';
+import React, {useState} from 'react';
+import {Text, TouchableOpacity, View} from 'react-native';
 
 import ThreadCommentItem from './inbox-threads__item-comment';
 import ThreadHistoryItem from './inbox-threads__item-history';
@@ -9,6 +9,7 @@ import ThreadIssueCreatedItem from './inbox-threads__item-issue-created';
 import ThreadWorkItem from './inbox-threads__item-work';
 import {createMessagesMap, sortEvents} from './inbox-threads-helper';
 import {groupActivities} from 'components/activity/activity__group-activities';
+import {i18n} from 'components/i18n/i18n';
 import {mergeActivities} from 'components/activity/activity__merge-activities';
 import {splitActivities} from 'components/activity/activity__split-activities';
 
@@ -26,7 +27,10 @@ export default function InboxThreadItemSubscription({
   style,
   currentUser,
   uiTheme,
-}: { thread: InboxThread, style?: ViewStyleProp, currentUser: User, uiTheme: UITheme}): React$Element<typeof View> {
+}: { thread: InboxThread, style?: ViewStyleProp, currentUser: User, uiTheme: UITheme }): React$Element<typeof View> {
+  const [shownMessagesAmount, updateShownMessagesAmount] = useState(3);
+
+
   const activityToMessageMap = createMessagesMap(thread.messages);
   const activities: Array<Activity> = thread.messages.reduce((list, it) => list.concat(it.activities), []);
   const messageGroups = groupActivities(activities.reverse(), {
@@ -59,13 +63,25 @@ export default function InboxThreadItemSubscription({
 
   return (
     <View style={style}>
-      {splittedMessageGroups.map((group: InboxThreadGroup, idx: number) => {
-        return renderGroup(group, thread.subject.target, (splittedMessageGroups.length - 1) === idx);
+      {splittedMessageGroups.slice(0, shownMessagesAmount).map((group: InboxThreadGroup, idx: number) => {
+        return renderGroup(
+          group,
+          thread.subject.target,
+          (splittedMessageGroups.length - 1) === idx,
+          splittedMessageGroups.length > shownMessagesAmount && idx === (shownMessagesAmount - 1) && (
+            <TouchableOpacity
+              style={[styles.threadButton, styles.threadButtonMore]}
+              onPress={() => updateShownMessagesAmount(splittedMessageGroups.length + 1)}
+            >
+              <Text style={styles.threadButtonText}>{i18n('Show more')}</Text>
+            </TouchableOpacity>
+          )
+        );
       })}
     </View>
   );
 
-  function renderGroup(group: InboxThreadGroup, target: any, isLast: boolean) {
+  function renderGroup(group: InboxThreadGroup, target: any, isLast: boolean, showMoreButton?: any) {
     let Component: any;
     switch (true) {
     case !!group.issue:
@@ -89,6 +105,7 @@ export default function InboxThreadItemSubscription({
           currentUser={currentUser}
           uiTheme={uiTheme}
         />
+        {showMoreButton}
       </View>
     );
   }
