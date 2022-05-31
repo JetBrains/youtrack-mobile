@@ -513,7 +513,7 @@ msgstr "Tickets associés"
 
 #: src/components/select/select.js
 msgid "Loading values…"
-msgstr ""
+msgstr "Chargement des valeurs…"
 
 #: src/views/log-in/log-in.js
 msgid "Log in"
@@ -707,7 +707,7 @@ msgstr "Envoyer les journaux"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Sending crash report…"
-msgstr ""
+msgstr "Envoi du rapport d'incident…"
 
 #: src/views/settings/settings.js
 msgid "Settings"

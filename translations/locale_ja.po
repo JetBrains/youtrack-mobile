@@ -509,7 +509,7 @@ msgstr "リンクされた課題"
 
 #: src/components/select/select.js
 msgid "Loading values…"
-msgstr ""
+msgstr "値を読み込みんでいます…"
 
 #: src/views/log-in/log-in.js
 msgid "Log in"
@@ -702,7 +702,7 @@ msgstr "ログを送信する"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Sending crash report…"
-msgstr ""
+msgstr "クラッシュレポートを送信中…"
 
 #: src/views/settings/settings.js
 msgid "Settings"

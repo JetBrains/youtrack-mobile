@@ -513,7 +513,7 @@ msgstr "Verknüpfte Tickets"
 
 #: src/components/select/select.js
 msgid "Loading values…"
-msgstr ""
+msgstr "Werte werden geladen…"
 
 #: src/views/log-in/log-in.js
 msgid "Log in"
@@ -707,7 +707,7 @@ msgstr "Protokolle senden"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Sending crash report…"
-msgstr ""
+msgstr "Fehlerbericht wird gesendet…"
 
 #: src/views/settings/settings.js
 msgid "Settings"

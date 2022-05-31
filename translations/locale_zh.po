@@ -509,7 +509,7 @@ msgstr "链接的问题"
 
 #: src/components/select/select.js
 msgid "Loading values…"
-msgstr ""
+msgstr "正在加载值…"
 
 #: src/views/log-in/log-in.js
 msgid "Log in"
@@ -702,7 +702,7 @@ msgstr "发送日志"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Sending crash report…"
-msgstr ""
+msgstr "正在发送崩溃报告…"
 
 #: src/views/settings/settings.js
 msgid "Settings"

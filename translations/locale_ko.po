@@ -509,7 +509,7 @@ msgstr "연결된 이슈"
 
 #: src/components/select/select.js
 msgid "Loading values…"
-msgstr ""
+msgstr "값 로드 중…"
 
 #: src/views/log-in/log-in.js
 msgid "Log in"
@@ -702,7 +702,7 @@ msgstr "로그 보내기"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Sending crash report…"
-msgstr ""
+msgstr "충돌 보고서를 보내는 중…"
 
 #: src/views/settings/settings.js
 msgid "Settings"
