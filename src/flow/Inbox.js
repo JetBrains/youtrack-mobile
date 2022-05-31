@@ -124,7 +124,7 @@ export interface InboxThreadGroup {
   work?: Activity;
 }
 
-export type ThreadEntity = ?(AnyIssue | Article);
+export type ThreadEntity = (AnyIssue | Article);
 
 export type ThreadData = {
   entity: ThreadEntity,

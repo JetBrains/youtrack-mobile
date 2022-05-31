@@ -200,6 +200,57 @@ function createAuthMock(config) {
   };
 }
 
+function createActivityCustomFieldMock() {
+  return {
+    $type: 'CustomFieldActivityItem',
+    added: [{
+      $type: 'StateBundleElement',
+      color: {$type: 'FieldStyle', id: 3},
+      id: '0-1',
+      name: 'Fixed',
+    }],
+    author: {
+      $type: 'User',
+      avatarUrl: 'https://example.com/avatar',
+      fullName: 'John Dow',
+      id: '0-1',
+      login: 'John.Dow',
+      name: 'John Dow',
+      ringId: '1234',
+    },
+    category: {
+      $type: 'ActivityCategory',
+      id: 'CustomFieldCategory',
+    },
+    removed: [],
+    timestamp: 1,
+    target: {
+      $type: 'Issue',
+      created: 1,
+      id: '0-1',
+      usesMarkdown: true,
+    },
+  };
+}
+
+function createThreadMock(data = {}) {
+  return deepmerge(
+    {
+      id: 'S-id',
+      messages: [{
+        timestamp: 0,
+        activities: [createActivityCustomFieldMock()],
+      }],
+      subject: {
+        target: {
+          id: 'id',
+        },
+      },
+    },
+    data
+  );
+}
+
 export default {
   sandbox,
   mockStorage,
@@ -219,4 +270,6 @@ export default {
   createAuthMock,
   createAuthParamsMock,
   createUserMock,
+  createActivityCustomFieldMock,
+  createThreadMock,
 };

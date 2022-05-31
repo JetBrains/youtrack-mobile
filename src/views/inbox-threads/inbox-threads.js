@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useContext, useEffect} from 'react';
+import React, {useCallback, useContext, useEffect} from 'react';
 import {FlatList, RefreshControl, View} from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
@@ -9,7 +9,7 @@ import actions from './inbox-threads-actions';
 import ErrorMessage from 'components/error-message/error-message';
 import Header from 'components/header/header';
 import Thread from './inbox-threads__thread';
-import {guid} from 'util/util';
+import {i18n} from 'components/i18n/i18n';
 import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './inbox-threads.styles';
@@ -26,50 +26,67 @@ const InboxThreads: () => Node = (): Node => {
   const theme: Theme = useContext(ThemeContext);
   const dispatch = useDispatch();
 
-  const threads: Array<InboxThread> = useSelector((state: AppState) => state.inboxThreads.threads);
+  const threads: InboxThread[] = useSelector((state: AppState) => state.inboxThreads.threads);
+  const hasMore: boolean = useSelector((state: AppState) => state.inboxThreads.hasMore);
   const currentUser: User = useSelector((state: AppState) => state.app.user);
   const inProgress: boolean = useSelector((state: AppState) => state.inboxThreads.inProgress);
   const error: ?CustomError = useSelector((state: AppState) => state.inboxThreads.error);
-  const doRefresh = () => {dispatch(actions.loadInboxThreads());};
+  const loadThreads = useCallback(
+    (end?: number) => {dispatch(actions.loadInboxThreads(end));},
+    [dispatch]
+  );
 
-  useEffect(
-    doRefresh,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+  useEffect(loadThreads, [loadThreads]);
+
+  const getVisibleThreads = useCallback(() => {
+    return threads.slice(0, threads.length - (hasMore ? 1 : 0));
+  }, [hasMore, threads]);
+
+  const getNextThreadsEnd = useCallback(() => {
+    return threads[threads.length - 1].notified - 1;
+  }, [threads]);
+
+  const renderItem = ({item, index}: { item: InboxThread, index: number, ... }) => (
+    <Thread
+      testID="test:id/inboxThreadsThread"
+      accessibilityLabel="inboxThreadsThread"
+      accessible={true}
+      style={[styles.thread, (index === threads.length - (hasMore ? 2 : 1)) && styles.threadLast]}
+      thread={item}
+      currentUser={currentUser}
+      uiTheme={theme.uiTheme}
+    />
   );
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      testID="test:id/inboxThreads"
+      accessibilityLabel="inboxThreads"
+      accessible={true}
+    >
       <Header
         showShadow={true}
-        title="Notifications"
+        title={i18n('Notifications')}
       />
 
-      {threads.length > 0 && (
-        <FlatList
-          data={threads}
-          ItemSeparatorComponent={() => <View style={styles.threadSeparator}/>}
-          keyExtractor={guid}
-          renderItem={({item, index}: {item: InboxThread, index: number}) => {
-            return item.messages.length && (
-              <View
-                style={[styles.thread, (index === threads.length - 1) && styles.threadLast]}
-              >
-                <Thread
-                  thread={item}
-                  currentUser={currentUser}
-                  uiTheme={theme.uiTheme}
-                />
-              </View>
-            );
-          }}
-          refreshControl={<RefreshControl
-            refreshing={inProgress}
-            tintColor={styles.link.color}
-            onRefresh={doRefresh}
-          />}
-        />
-      )}
+      <FlatList
+        data={getVisibleThreads()}
+        ItemSeparatorComponent={() => <View style={styles.threadSeparator}/>}
+        keyExtractor={(it: InboxThread) => it.id}
+        onEndReachedThreshold={5}
+        onEndReached={() => {
+          if (hasMore && !inProgress) {
+            loadThreads(getNextThreadsEnd());
+          }
+        }}
+        refreshControl={<RefreshControl
+          refreshing={inProgress}
+          tintColor={styles.link.color}
+          onRefresh={loadThreads}
+        />}
+        renderItem={renderItem}
+      />
 
       {!!error && !inProgress && (
         <View style={styles.error}>

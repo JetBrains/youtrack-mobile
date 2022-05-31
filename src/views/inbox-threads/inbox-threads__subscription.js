@@ -9,7 +9,6 @@ import ThreadIssueCreatedItem from './inbox-threads__item-issue-created';
 import ThreadWorkItem from './inbox-threads__item-work';
 import {createMessagesMap, sortEvents} from './inbox-threads-helper';
 import {groupActivities} from 'components/activity/activity__group-activities';
-import {guid} from 'util/util';
 import {mergeActivities} from 'components/activity/activity__merge-activities';
 import {splitActivities} from 'components/activity/activity__split-activities';
 
@@ -82,7 +81,7 @@ export default function InboxThreadItemSubscription({
       Component = ThreadHistoryItem;
     }
     return (
-      <View key={guid()}>
+      <View key={`${group.head.id}${group.head.timestamp}`}>
         {!isLast && <View style={styles.threadConnector}/>}
         <Component
           group={group}

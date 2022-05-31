@@ -45,11 +45,20 @@ export default function ThreadItem({author, avatar, change, group, reason, times
       <Wrapper style={styles.threadChange} {...Object.assign(onPress ? {onPress} : {})}>
         <>
           {change}
-          {!!group?.mergedActivities?.length && <View style={styles.threadRelatedChange}>
-            {group.mergedActivities.map(
-              (activity: Activity) => <StreamHistoryChange key={activity.id} activity={activity}/>
-            )}
-          </View>}
+          {!!group?.mergedActivities?.length && (
+            <View
+              style={styles.threadRelatedChange}
+            >
+              {group.mergedActivities.map(
+                (activity: Activity) => (
+                  <StreamHistoryChange
+                    key={`${group.head.id}${group.head.timestamp}${activity.id}`}
+                    activity={activity}
+                  />
+                )
+              )}
+            </View>
+          )}
         </>
       </Wrapper>
     </View>

@@ -1,6 +1,8 @@
 /* @flow */
 
 import {createSlice} from '@reduxjs/toolkit';
+import {threadsPageSize} from 'components/api/api__inbox';
+
 import type {CustomError} from 'flow/Error';
 import type {InboxThread} from '../../flow/Inbox';
 
@@ -30,7 +32,8 @@ const {reducer, actions}: { reducer: any, actions: NotificationsActions } = crea
   initialState: initialState,
   reducers: {
     setNotifications: (state: InboxThreadState, action: { payload: { threads: Array<InboxThread> } }) => {
-      state.threads = action.payload.threads;
+      state.threads = state.threads.concat(action.payload.threads);
+      state.hasMore = action.payload.threads.length === threadsPageSize;
     },
     setError: (state: InboxThreadState, action: { payload: { error: CustomError } }) => {
       state.error = action.payload.error;
