@@ -3,13 +3,11 @@
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
-import ApiHelper from 'components/api/api__helper';
 import Avatar from 'components/avatar/avatar';
 import CommentReactions from 'components/comment/comment-reactions';
 import Router from 'components/router/router';
 import StreamComment from 'components/activity-stream/activity__stream-comment';
 import ThreadItem from './inbox-threads__item';
-import {getApi} from 'components/api/api__instance';
 import {hasType} from 'components/api/api__resource-types';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
@@ -26,15 +24,6 @@ interface Props {
 }
 
 export default function ThreadCommentItem({group, currentUser, target}: Props) {
-  group.comment.author = ApiHelper.convertRelativeUrl(
-    group.comment.author, 'avatarUrl', getApi().config.backendUrl
-  );
-  if (group.comment?.added[0]?.attachments) {
-    group.comment.added[0].attachments = ApiHelper.convertRelativeUrls(
-      group.comment.added[0].attachments, 'thumbnailURL', getApi().config.backendUrl
-    );
-  }
-
   return (
     <ThreadItem
       author={group.comment.author}
