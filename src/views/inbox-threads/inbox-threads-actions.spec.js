@@ -1,7 +1,8 @@
-import * as storage from '../../components/storage/storage';
 import actions from './inbox-threads-actions';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+import {__setStorageState} from '../../components/storage/storage';
+import {inboxThreadsNamespace, inboxThreadsReducersNamesMap} from './inbox-threads-reducers';
 
 
 describe('Inbox Threads', () => {
@@ -14,7 +15,7 @@ describe('Inbox Threads', () => {
   const storeMock = configureMockStore(middlewares);
 
   beforeEach(async () => {
-  responseMock = [{}];
+  responseMock = [{subject: {}}];
     apiMock = {
       inbox: {
         getThreads: jest.fn(() => Promise.resolve(responseMock)),
@@ -22,7 +23,7 @@ describe('Inbox Threads', () => {
     };
 
     store = storeMock({});
-    await storage.populateStorage();
+    __setStorageState({});
   });
 
   describe('loadInboxThreads', () => {
@@ -33,25 +34,25 @@ describe('Inbox Threads', () => {
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined);
       expect(store.getActions()).toEqual([
         {
-          'type': 'inboxThreads/setError',
+          'type': `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setError}`,
           'payload': {
             'error': null,
           },
         },
         {
-          'type': 'inboxThreads/toggleProgress',
+          'type': `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.toggleProgress}`,
           'payload': {
             'inProgress': true,
           },
         },
         {
-          'type': 'inboxThreads/toggleProgress',
+          'type': `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.toggleProgress}`,
           'payload': {
             'inProgress': false,
           },
         },
         {
-          'type': 'inboxThreads/setNotifications',
+          'type': `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
           'payload': {
             'threads': responseMock,
           },

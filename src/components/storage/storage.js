@@ -18,7 +18,7 @@ import type {OAuthParams2} from 'flow/Auth';
 import type {Board, Sprint} from 'flow/Agile';
 import type {Folder} from 'flow/User';
 import type {IssueProject} from 'flow/CustomFields';
-import type {Notification} from 'flow/Inbox';
+import type {InboxThread, Notification} from 'flow/Inbox';
 import type {PermissionCacheItem} from 'flow/Permission';
 import type {UserCurrent} from 'flow/User';
 
@@ -46,7 +46,7 @@ export type StorageState = {|
   searchContext: ?Folder,
   lastQueries: ?Array<string>,
   issuesCache: Array<AnyIssue> | null,
-  inboxCache: Array<Notification> | null,
+  inboxCache: (InboxThread | Notification)[] | null,
   isRegisteredForPush: boolean,
   deviceToken: ?string,
   agileZoomedIn: ?boolean,

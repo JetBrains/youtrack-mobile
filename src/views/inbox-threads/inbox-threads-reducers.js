@@ -1,6 +1,6 @@
 /* @flow */
 
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, createAction} from '@reduxjs/toolkit';
 import {threadsPageSize} from 'components/api/api__inbox';
 
 import type {CustomError} from 'flow/Error';
@@ -27,18 +27,34 @@ export interface NotificationsActions {
 }
 
 
+export const inboxThreadsNamespace = 'inboxThreads';
+export const inboxThreadsReducersNamesMap = {
+  setNotifications: 'setNotifications',
+  setError: 'setError',
+  toggleProgress: 'toggleProgress',
+};
+
 const {reducer, actions}: { reducer: any, actions: NotificationsActions } = createSlice({
-  name: 'inboxThreads',
+  name: inboxThreadsNamespace,
   initialState: initialState,
   reducers: {
-    setNotifications: (state: InboxThreadState, action: { payload: { threads: Array<InboxThread> } }) => {
+    [inboxThreadsReducersNamesMap.setNotifications]: (
+      state: InboxThreadState,
+      action: { payload: { threads: Array<InboxThread> } }
+    ) => {
       state.threads = state.threads.concat(action.payload.threads);
       state.hasMore = action.payload.threads.length === threadsPageSize;
     },
-    setError: (state: InboxThreadState, action: { payload: { error: CustomError } }) => {
+    [inboxThreadsReducersNamesMap.setError]: (
+      state: InboxThreadState,
+      action: { payload: { error: CustomError | null } }
+    ) => {
       state.error = action.payload.error;
     },
-    toggleProgress: (state: InboxThreadState, action: { payload: { inProgress: boolean } }) => {
+    [inboxThreadsReducersNamesMap.toggleProgress]: (
+      state: InboxThreadState,
+      action: { payload: { inProgress: boolean } }
+    ) => {
       state.inProgress = action.payload.inProgress;
     },
   },
@@ -49,6 +65,6 @@ export const {
   setNotifications,
   toggleProgress,
   setError,
-  } = actions;
+} = actions;
 
 export default reducer;

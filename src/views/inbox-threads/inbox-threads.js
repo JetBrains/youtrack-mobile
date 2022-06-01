@@ -10,7 +10,9 @@ import ErrorMessage from 'components/error-message/error-message';
 import Header from 'components/header/header';
 import Thread from './inbox-threads__thread';
 import {i18n} from 'components/i18n/i18n';
+import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
+import {UNIT} from 'components/variables/variables';
 
 import styles from './inbox-threads.styles';
 
@@ -58,6 +60,7 @@ const InboxThreads: () => Node = (): Node => {
     />
   );
 
+  const visibleThreads: InboxThread[] = getVisibleThreads();
   return (
     <View
       style={styles.container}
@@ -71,8 +74,11 @@ const InboxThreads: () => Node = (): Node => {
       />
 
       <FlatList
-        data={getVisibleThreads()}
+        data={visibleThreads}
         ItemSeparatorComponent={() => <View style={styles.threadSeparator}/>}
+        ListFooterComponent={() => inProgress && !error && !visibleThreads.length ? (
+          <SkeletonIssueActivities marginTop={UNIT * 2} marginLeft={UNIT} marginRight={UNIT}/>
+        ) : null}
         keyExtractor={(it: InboxThread) => it.id}
         onEndReachedThreshold={5}
         onEndReached={() => {
@@ -81,7 +87,7 @@ const InboxThreads: () => Node = (): Node => {
           }
         }}
         refreshControl={<RefreshControl
-          refreshing={inProgress}
+          refreshing={inProgress && visibleThreads.length > 0}
           tintColor={styles.link.color}
           onRefresh={loadThreads}
         />}
