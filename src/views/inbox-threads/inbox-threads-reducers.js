@@ -1,6 +1,6 @@
 /* @flow */
 
-import {createSlice, createAction} from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 import {threadsPageSize} from 'components/api/api__inbox';
 
 import type {CustomError} from 'flow/Error';
@@ -21,7 +21,7 @@ const initialState: InboxThreadState = {
 };
 
 export interface NotificationsActions {
-  setNotifications: (action: { threads: Array<InboxThread> }) => InboxThreadState,
+  setNotifications: (action: { threads: InboxThread[], reset?: boolean }) => InboxThreadState,
   setError: (action: { error: CustomError | null }) => InboxThreadState,
   toggleProgress: (action: { inProgress: boolean }) => InboxThreadState,
 }
@@ -40,9 +40,9 @@ const {reducer, actions}: { reducer: any, actions: NotificationsActions } = crea
   reducers: {
     [inboxThreadsReducersNamesMap.setNotifications]: (
       state: InboxThreadState,
-      action: { payload: { threads: Array<InboxThread> } }
+      action: { payload: { threads: InboxThread[], reset?: boolean } }
     ) => {
-      state.threads = state.threads.concat(action.payload.threads);
+      state.threads = action.payload.reset ? action.payload.threads : state.threads.concat(action.payload.threads);
       state.hasMore = action.payload.threads.length === threadsPageSize;
     },
     [inboxThreadsReducersNamesMap.setError]: (

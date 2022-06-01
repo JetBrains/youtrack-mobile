@@ -17,10 +17,10 @@ type StateGetter = () => AppState;
 
 const MAX_CACHED_THREADS: number = 30;
 
-const setThreads = (threads: InboxThread[] | null): ((dispatch: (any) => any) => Promise<void>) => {
+const setThreads = (threads: InboxThread[] | null, reset?: boolean): ((dispatch: (any) => any) => Promise<void>) => {
   return async (dispatch: (any) => any) => {
     if (threads && threads[0].subject) {
-      dispatch(setNotifications({threads}));
+      dispatch(setNotifications({threads, reset}));
     }
   };
 };
@@ -49,8 +49,10 @@ const loadInboxThreads = (end?: number): ((
     if (error) {
       dispatch(setError({error}));
     } else {
-      dispatch(setThreads(threads));
-      flushStoragePart({inboxCache: threads.slice(0, MAX_CACHED_THREADS)});
+      const reset: boolean = typeof end !== 'number';
+      dispatch(setThreads(threads, reset));
+      const inboxCache: InboxThread[] = (reset ? threads : (getStorageState().inboxCache || []).concat(threads)).slice(0, MAX_CACHED_THREADS);
+      flushStoragePart({inboxCache});
     }
   };
 };
