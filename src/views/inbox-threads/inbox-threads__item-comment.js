@@ -27,6 +27,11 @@ export default function ThreadCommentItem({group, currentUser}: Props) {
   group.comment.author = ApiHelper.convertRelativeUrl(
     group.comment.author, 'avatarUrl', getApi().config.backendUrl
   );
+  if (group.comment?.added[0]?.attachments) {
+    group.comment.added[0].attachments = ApiHelper.convertRelativeUrls(
+      group.comment.added[0].attachments, 'thumbnailURL', getApi().config.backendUrl
+    );
+  }
 
   return (
     <ThreadItem
