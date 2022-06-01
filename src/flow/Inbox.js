@@ -103,6 +103,8 @@ export interface InboxThreadMessage {
   timestamp: string;
 }
 
+export type InboxThreadTarget = (AnyIssue | IssueComment | Article);
+
 export interface InboxThread {
   $type: string;
   id: string;
@@ -110,7 +112,7 @@ export interface InboxThread {
   subject: {
     $type: string;
     id: string;
-    target: (AnyIssue | IssueComment | Article);
+    target: InboxThreadTarget;
   },
   messages: Array<InboxThreadMessage>;
 }

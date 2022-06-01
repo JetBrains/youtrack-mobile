@@ -82,7 +82,9 @@ class Article extends IssueTabbed<Props, IssueTabbedState & { modalChildren: any
     }
 
     const currentArticle: Article = this.getArticle();
-    if (currentArticle && (currentArticle.id || currentArticle.idReadable)) {
+    const canLoadArticle: boolean = currentArticle && (currentArticle.id || currentArticle.idReadable);
+
+    if (canLoadArticle) {
       this.switchToDetailsTab();
       this.props.loadArticleFromCache(currentArticle);
       this.loadArticle(currentArticle.id || currentArticle.idReadable, false);
@@ -92,7 +94,11 @@ class Article extends IssueTabbed<Props, IssueTabbedState & { modalChildren: any
           this.loadArticle(currentArticle.id, false);
         }
       });
-    } else {
+    }
+
+    if (canLoadArticle && this.props.navigateToActivity) {
+      this.switchToActivityTab();
+    } else if (!canLoadArticle && !this.props.navigateToActivity) {
       return Router.KnowledgeBase();
     }
 
@@ -157,7 +163,7 @@ class Article extends IssueTabbed<Props, IssueTabbedState & { modalChildren: any
 
   toggleModalChildren = (modalChildren: any = null) => {
     this.setState({modalChildren});
-  }
+  };
 
   createArticleDetails = (articleData: Article, scrollData: Object) => {
     const {

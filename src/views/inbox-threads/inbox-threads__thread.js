@@ -7,6 +7,7 @@ import InboxEntity from '../inbox/inbox__entity';
 import Router from 'components/router/router';
 import styles from './inbox-threads.styles';
 import {getThreadData} from './inbox-threads-helper';
+import {hasType} from 'components/api/api__resource-types';
 
 import type {InboxThread, ThreadData, ThreadEntity} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
@@ -31,7 +32,13 @@ function Thread({
   const ThreadComponent: any = threadData.component;
   const inboxEntity = <InboxEntity
     entity={entity}
-    onNavigate={() => Router.Issue({issueId: entity.id})}
+    onNavigate={() => {
+      if (hasType.article(entity)) {
+        Router.Article({articlePlaceholder: entity});
+      } else {
+        Router.Issue({issueId: entity.id});
+      }
+    }}
     style={[styles.threadTitle, threadData.entityAtBottom && styles.threadSubTitle]}
     styleText={threadData.entityAtBottom && styles.threadSubTitleText}
   />;

@@ -10,20 +10,22 @@ import Router from 'components/router/router';
 import StreamComment from 'components/activity-stream/activity__stream-comment';
 import ThreadItem from './inbox-threads__item';
 import {getApi} from 'components/api/api__instance';
+import {hasType} from 'components/api/api__resource-types';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 
 import styles from './inbox-threads.styles';
 
-import type {InboxThreadGroup} from 'flow/Inbox';
+import type {InboxThreadGroup, InboxThreadTarget} from 'flow/Inbox';
 import type {User} from 'flow/User';
 
 interface Props {
   currentUser: User;
   group: InboxThreadGroup;
+  target: InboxThreadTarget;
 }
 
-export default function ThreadCommentItem({group, currentUser}: Props) {
+export default function ThreadCommentItem({group, currentUser, target}: Props) {
   group.comment.author = ApiHelper.convertRelativeUrl(
     group.comment.author, 'avatarUrl', getApi().config.backendUrl
   );
@@ -53,7 +55,11 @@ export default function ThreadCommentItem({group, currentUser}: Props) {
         <TouchableOpacity
           style={styles.threadButton}
           onPress={() => {
-            return Router.Issue({issueId: group.comment?.added[0]?.issue?.id, navigateToActivity: true});
+            if (hasType.article(target)) {
+              Router.Article({articlePlaceholder: target, navigateToActivity: true});
+            } else {
+              Router.Issue({issueId: target.id, navigateToActivity: true});
+            }
           }}
         >
           <Text style={styles.threadButtonText}>view comment</Text>

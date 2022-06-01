@@ -100,6 +100,7 @@ export default function InboxThreadItemSubscription({
       <View key={`${group.head.id}${group.head.timestamp}`}>
         {!isLast && <View style={styles.threadConnector}/>}
         <Component
+          target={target}
           group={group}
           isLast={isLast}
           currentUser={currentUser}

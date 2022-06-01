@@ -17,14 +17,16 @@ import styles from './inbox-threads.styles';
 import {InboxThreadGroup} from 'flow/Inbox';
 import type {AnyIssue} from 'flow/Issue';
 import type {CustomField} from 'flow/CustomFields';
+import type {InboxThreadTarget} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
 
 interface Props {
   group: InboxThreadGroup;
+  target: InboxThreadTarget;
   uiTheme: UITheme;
 }
 
-export default function ThreadIssueCreatedItem({group, uiTheme}: Props) {
+export default function ThreadIssueCreatedItem({group, target, uiTheme}: Props) {
   const actualActivity: Props['group']['issue'] = group.issue;
   const issue: AnyIssue = actualActivity.issue;
   const assigneeFields: CustomField[] = (issue.customFields || []).map((it: CustomField) => {
@@ -75,7 +77,7 @@ export default function ThreadIssueCreatedItem({group, uiTheme}: Props) {
           <StreamHistoryChange activity={activity} customFields={assigneeFields}/>
         </View>
       </>}
-      onPress={() => Router.Issue({issueId: issue.id})}
+      onPress={() => Router.Issue({issueId: target.id})}
       reason={i18n('created')}
       timestamp={actualActivity.timestamp}
     />

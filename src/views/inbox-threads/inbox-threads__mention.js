@@ -72,7 +72,6 @@ export default function InboxThreadMention({thread, currentUser, uiTheme}: Props
           )}
         </>
       }
-      // group={null}
       reason={i18n('mentioned you')}
       timestamp={thread.notified}
     />

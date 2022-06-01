@@ -9,19 +9,20 @@ import {IconHistory} from 'components/icon/icon';
 
 import styles from './inbox-threads.styles';
 
-import type {InboxThreadGroup} from 'flow/Inbox';
+import type {InboxThreadGroup, InboxThreadTarget} from 'flow/Inbox';
 
 interface Props {
   group: InboxThreadGroup;
+  target: InboxThreadTarget;
 }
 
-export default function ThreadHistoryItem({group}: Props) {
+export default function ThreadHistoryItem({group, target}: Props) {
   return (
     <ThreadItem
       author={group.head.author}
       avatar={<IconHistory size={20} color={styles.icon.color}/>}
       group={group}
-      onPress={() => Router.Issue({issueId: group.head.target.id, navigateToActivity: true})}
+      onPress={() => Router.Issue({issueId: target.id, navigateToActivity: true})}
       reason={i18n('updated')}
       timestamp={group.head.timestamp}
     />

@@ -21,6 +21,7 @@ export type IssueTabbedState = {
   routes: Array<TabRoute>,
   isTransitionInProgress: boolean,
   isSplitView: boolean,
+  navigateToActivity: boolean,
 };
 
 
@@ -36,6 +37,7 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
     routes: this.tabRoutes,
     isTransitionInProgress: false,
     isSplitView: isSplitView(),
+    navigateToActivity: false,
   };
 
   componentDidMount() {

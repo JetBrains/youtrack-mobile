@@ -13,7 +13,7 @@ const excludeArray = [
   'commands(end,errorText,hasError,start)', 'userName', 'urls', 'shortName', 'fetched', 'hasEmail', 'state(id)',
 ];
 
-const entity = 'id,idReadable,summary,resolved';
+const entity = '$type,id,idReadable,summary,resolved';
 
 
 export const inboxThreadFields: ToField = toField([

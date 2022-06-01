@@ -63,7 +63,6 @@ type AdditionalProps = {
   createAttachActions: () => any,
   removeAttachment: (attach: Attachment) => any,
   isTagsSelectVisible: boolean,
-  navigateToActivity: boolean,
   onCommandApply: () => any,
 };
 
