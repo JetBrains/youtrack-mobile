@@ -67,7 +67,7 @@ msgstr "Принять"
 
 #: src/components/issue-tabbed/issue-tabbed.js
 msgid "Activity"
-msgstr "Лента событий"
+msgstr "События"
 
 #: src/views/issue/activity/issue__activity.js
 msgid "Activity Settings"
@@ -323,7 +323,7 @@ msgstr "Удалить окончательно"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Description"
-msgstr "Описание"
+msgstr "Расскажите подробнее"
 
 #: src/components/activity/activity__history-title.js
 msgid "Description changed"
@@ -332,7 +332,7 @@ msgstr "Описание было изменено"
 #: src/components/issue-tabbed/issue-tabbed.js
 #: src/views/inbox/inbox.js
 msgid "Details"
-msgstr ""
+msgstr "О задаче"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Discard and close"
@@ -441,11 +441,11 @@ msgstr "Помогите нам быстрее решать проблемы"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Here you'll see a list of articles from your favorite projects"
-msgstr ""
+msgstr "Здесь будет список статей из проектов, добавленных в избранное"
 
 #: src/components/error/error-message-data.js
 msgid "If this isn't what you expected, you might try one of these solutions:"
-msgstr ""
+msgstr "Если вы ожидали другого результата, попробуйте одно из этих решений:"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
@@ -477,11 +477,11 @@ msgstr "Задача обновлена"
 
 #: src/views/issues/issues__sortby_list.js
 msgid "Issues can be sorted by up to 4 attributes"
-msgstr ""
+msgstr "Задачи можно фильтровать не более чем по 4 атрибутам"
 
 #: src/components/error/error-message-data.js
 msgid "It could mean that the issue doesn't exist or you don't have permission to view it"
-msgstr ""
+msgstr "Возможно, задача не существует или у вас нет разрешения на ее просмотр"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "JetBrains Privacy Policy"
@@ -489,7 +489,7 @@ msgstr "Политика конфиденциальности JetBrains"
 
 #: src/components/date/date.js
 msgid "just now"
-msgstr ""
+msgstr "только что"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Knowledge Base"
@@ -498,7 +498,7 @@ msgstr "База знаний"
 #: src/components/error/error-message-data.js
 #: src/components/error/error-message-data.js
 msgid "License error"
-msgstr ""
+msgstr "Ошибка лицензии"
 
 #: src/views/settings/settings__appearance.js
 msgid "Light theme"
@@ -578,20 +578,20 @@ msgstr "Статей нет"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "No articles found"
-msgstr ""
+msgstr "Статьи не найдены"
 
 #: src/views/knowledge-base/knowledge-base__drafts.js
 msgid "No drafts yet"
-msgstr ""
+msgstr "Черновиков пока нет"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "No favorites projects found"
-msgstr ""
+msgstr "Избранные проекты не найдены"
 
 #: src/components/error/error-message-data.js
 #: src/views/issues/issues.js
 msgid "No issues found"
-msgstr ""
+msgstr "Задачи не найдены"
 
 #: src/components/select/select.js
 msgid "No items"
@@ -599,7 +599,7 @@ msgstr "Ничего не нашлось"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "No type"
-msgstr ""
+msgstr "Нет типа"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "No user information provided by Upsource."
@@ -607,7 +607,7 @@ msgstr "От Upsource не получены данные о пользовате
 
 #: src/components/error/error-message-data.js
 msgid "Nope, can't find it!"
-msgstr ""
+msgstr "Не удается найти!"
 
 #: src/views/inbox/inbox.js
 msgid "Notifications"
@@ -648,7 +648,7 @@ msgstr "Удалить из избранного"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Remove project from favorites?"
-msgstr ""
+msgstr "Удалить проект из избранного?"
 
 #: src/components/tags/tags.js
 msgid "Remove tag"
@@ -684,7 +684,7 @@ msgstr "Поищите другое значение"
 
 #: src/components/custom-fields-panel/custom-fields-panel.js
 msgid "Search for the project"
-msgstr ""
+msgstr "Искать проект"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "Select an article from the list"
@@ -790,7 +790,7 @@ msgstr "создал(а) пул-реквест"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Summary"
-msgstr ""
+msgstr "Что вы хотите сообщить"
 
 #: src/components/activity/activity__history-title.js
 msgid "Summary changed"
@@ -823,23 +823,23 @@ msgstr "Не удалось перезапустить приложение ав
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
-msgstr ""
+msgstr "Автор коммита не был идентифицирован, так как в его профиле YouTrack не указана электронная почта."
 
 #: src/views/agile-board/agile-board.js
 msgid "The board {{boardName}} has configuration errors"
-msgstr ""
+msgstr "Доска {{boardName}} содержит ошибки настройки"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The change has been detached from this issue. It is still displayed here because its comment mentions the issue."
-msgstr ""
+msgstr "Изменение было откреплено от этой задачи. Оно все еще отображается здесь, потому что задача упоминается в комментарии."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The change has been manually attached to this issue."
-msgstr ""
+msgstr "Изменение было вручную прикреплено к этой задаче."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The change was processed during the initial data fetching, thus no command has been applied."
-msgstr ""
+msgstr "Изменение было обработано во время исходного получения данных, поэтому команды не были применены."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The commit author does not belong to the committers group."
@@ -851,31 +851,31 @@ msgstr "Автор коммита не указал электронную по�
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The commit author has specified an email address that is associated with a different user account."
-msgstr ""
+msgstr "Автор коммита указал электронную почту, связанную с аккаунтом другого пользователя."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The commit author is not an assignee in the project."
-msgstr ""
+msgstr "Автор коммита не является исполнителем в проекте."
 
 #: src/actions/app-actions.js
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
-msgstr ""
+msgstr "Вы больше не можете пользоваться YouTrack Mobile через выбранный аккаунт. Выполните вход еще раз."
 
 #: src/components/error/error-message-data.js
 msgid "The server is overloaded or down for maintenance"
-msgstr ""
+msgstr "Сервер перегружен или находится на техническом обслуживании"
 
 #: src/views/agile-board/board-updaters.js
 msgid "The settings for this agile board have been updated. Please reload the board."
-msgstr ""
+msgstr "Настройки agile-доски обновлены. Перезагрузите страницу."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The VCS user name does not match any user in YouTrack. To link future commits, add the VCS user name to the Hub account for this user."
-msgstr ""
+msgstr "Имя пользователя в VCS не соответствует ни одному пользователю YouTrack. Для привязки будущих коммитов добавьте имя пользователя в VCS к аккаунту этого пользователя в Hub."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "The VCS user name matches more than one user in YouTrack. To link future commits, remove the duplicate VCS user names from one or more Hub accounts or merge the duplicates into a single user account."
-msgstr ""
+msgstr "Имя пользователя в VCS соответствует нескольким аккаунтам в YouTrack. Для привязки будущих коммитов удалите дублирующиеся имена пользователей из одного или нескольких аккаунтов Hub или объедините дубликаты в один аккаунт."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
@@ -883,7 +883,7 @@ msgstr "Не удалось получить информацию об авто�
 
 #: src/views/article/arcticle-helper.js
 msgid "This action deletes all drafts, including unpublished sub-articles"
-msgstr ""
+msgstr "Будут удалены все черновики, включая неопубликованные вложенные статьи"
 
 #: src/views/article-create/article-create.js
 msgid "Title"
@@ -895,7 +895,7 @@ msgstr "Чтобы просматривать в базе знаний стат�
 
 #: src/components/error-message/error-message.js
 msgid "Try Again"
-msgstr ""
+msgstr "Повторить попытку"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Type"
@@ -927,7 +927,7 @@ msgstr "Имя пользователя или адрес электронной
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
-msgstr ""
+msgstr "Просмотреть комментарии и другую активность"
 
 #: src/components/activity/activity__history-title.js
 msgid "Visibility"
@@ -939,15 +939,15 @@ msgstr "Отображается для всех читателей статьи
 
 #: src/components/visibility/visibility-strings.js
 msgid "Visible to issue readers"
-msgstr ""
+msgstr "Отображается для всех читателей задачи"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."
-msgstr ""
+msgstr "При интеграции TeamCity и YouTrack пользователи сопоставляются по адресам электронной почты. Сервер TeamCity не предоставил адрес электронной почты для этого коммитера."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. There are two or more different YouTrack users that have the same email address as the commit's author has in TeamCity."
-msgstr ""
+msgstr "При интеграции TeamCity и YouTrack пользователи сопоставляются по адресам электронной почты. В Youtrack есть два или более пользователя с таким же адресом электронной почты, как у автора коммита в TeamCity."
 
 #: src/components/error/error-message-data.js
 msgid "Woah, you can't touch this!"
@@ -955,7 +955,7 @@ msgstr "К сожалению, вам сюда нельзя."
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
-msgstr ""
+msgstr "Уведомлений пока нет. Чтобы настроить уведомления, перейдите в свой профиль в веб-версии YouTrack."
 
 #: src/views/log-in/log-in.js
 msgid "You need a YouTrack account to use the app.\n"
@@ -968,59 +968,60 @@ msgstr "У вас недостаточно разрешений, чтобы вы
 #: src/components/error/error-message-data.js
 msgid "Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n\n"
 "To log in on this screen, enter your username and a one-time application password."
-msgstr ""
+msgstr "Для входа в YouTrack нужно пройти двухфакторную аутентификацию. Это можно сделать только в мобильном браузере. Там также можно выполнить вход, используя сторонний аккаунт.\n\n"
+"Чтобы авторизоваться с этого экрана, укажите логин и одноразовый пароль."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not find a user that matches the user account in Bitbucket."
-msgstr ""
+msgstr "Не удалось найти пользователя, соответствующего аккаунту в Bitbucket."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not find a user that matches the user account in GitHub."
-msgstr ""
+msgstr "Не удалось найти пользователя, соответствующего аккаунту в GitHub."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not find a user that matches the user account in GitLab."
-msgstr ""
+msgstr "Не удалось найти пользователя, соответствующего аккаунту в GitLab."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not receive an email address for the commit author from Bitbucket."
-msgstr ""
+msgstr "Не удалось получить адрес электронной почты для автора этого коммита из Bitbucket."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not receive an email address for the commit author from GitHub."
-msgstr ""
+msgstr "Не удалось получить адрес электронной почты для автора этого коммита из GitHub."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not receive an email address for the commit author from GitLab."
-msgstr ""
+msgstr "Не удалось получить адрес электронной почты для автора этого коммита из GitLab."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not receive user data for this commit author from Bitbucket."
-msgstr ""
+msgstr "Не удалось получить данные пользователя для автора этого коммита из Bitbucket."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not receive user data for this commit author from GitHub."
-msgstr ""
+msgstr "Не удалось получить данные пользователя для автора этого коммита из GitHub."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack did not receive user data for this commit author from GitLab."
-msgstr ""
+msgstr "Не удалось получить данные об авторе этого коммита из GitLab."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack found multiple users with email addresses that match the registered email in Bitbucket."
-msgstr ""
+msgstr "Нашлось несколько пользователей с электронной почтой, которая совпадает с адресом, зарегистрированным в Bitbucket."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack found multiple users with email addresses that match the registered email in GitHub."
-msgstr ""
+msgstr "Нашлось несколько пользователей с электронной почтой, которая совпадает с адресом, зарегистрированным в GitHub."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack found multiple users with email addresses that match the registered email in GitLab."
-msgstr ""
+msgstr "Нашлось несколько пользователей с электронной почтой, которая совпадает с адресом, зарегистрированным в GitLab."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 #: src/components/activity-stream/activity__stream-vcs-helper.js
 msgid "YouTrack was unable to match the VCS user name to a Hub account for an unknown reason. Check your server logs for details."
-msgstr ""
+msgstr "Не удалось сопоставить имя пользователя в VCS с аккаунтом Hub. Попробуйте найти причину в логах сервера."
 
