@@ -51,7 +51,7 @@ export default function ThreadCommentItem({group, currentUser, target}: Props) {
             }
           }}
         >
-          <Text style={styles.threadButtonText}>view comment</Text>
+          <Text style={styles.threadButtonText}>{i18n('View comment')}</Text>
         </TouchableOpacity>
       </>}
       group={group}
