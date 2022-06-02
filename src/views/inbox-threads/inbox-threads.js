@@ -43,9 +43,6 @@ const InboxThreads: () => Node = (): Node => {
 
   const renderItem = ({item, index}: { item: InboxThread, index: number, ... }) => (
     <Thread
-      testID="test:id/inboxThreadsThread"
-      accessibilityLabel="inboxThreadsThread"
-      accessible={true}
       style={[styles.thread, (index === threads.length - (hasMore ? 2 : 1)) && styles.threadLast]}
       thread={item}
       currentUser={currentUser}

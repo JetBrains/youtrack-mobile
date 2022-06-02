@@ -45,7 +45,12 @@ function Thread({
     styleText={threadData.entityAtBottom && styles.threadSubTitleText}
   />;
   return (
-    <View {...otherProps}>
+    <View
+      testID="test:id/inboxThreadsThread"
+      accessibilityLabel="inboxThreadsThread"
+      accessible={true}
+      {...otherProps}
+    >
       {!threadData.entityAtBottom && inboxEntity}
       <ThreadComponent
         thread={thread}
