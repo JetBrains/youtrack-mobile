@@ -157,9 +157,9 @@ function getPastTime() {
   return date - 1000;
 }
 
-function uuid() {
+function uuid(isNumber) {
   uuid.id = (uuid.id || 1);
-  return `${uuid.id++}`;
+  return isNumber ? uuid.id++ : `${uuid.id++}`;
 }
 
 function randomWord() {
@@ -200,8 +200,8 @@ function createAuthMock(config) {
   };
 }
 
-function createActivityCustomFieldMock() {
-  return {
+function createActivityCustomFieldMock(data = {}) {
+  return deepmerge({
     $type: 'CustomFieldActivityItem',
     added: [{
       $type: 'StateBundleElement',
@@ -223,14 +223,14 @@ function createActivityCustomFieldMock() {
       id: 'CustomFieldCategory',
     },
     removed: [],
-    timestamp: 1,
+    timestamp: uuid(true),
     target: {
       $type: 'Issue',
       created: 1,
       id: '0-1',
       usesMarkdown: true,
     },
-  };
+  }, data);
 }
 
 function createActivityCommentMock() {
@@ -301,5 +301,6 @@ export default {
   createAuthParamsMock,
   createUserMock,
   createActivityCustomFieldMock,
+  createActivityCommentMock,
   createThreadMock,
 };

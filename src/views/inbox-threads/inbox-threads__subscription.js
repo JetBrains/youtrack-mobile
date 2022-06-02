@@ -62,7 +62,12 @@ export default function InboxThreadItemSubscription({
   }
 
   return (
-    <View style={style}>
+    <View
+      testID="test:id/inboxThreadsSubscription"
+      accessibilityLabel="inboxThreadsSubscription"
+      accessible={true}
+      style={style}
+    >
       {splittedMessageGroups.slice(0, shownMessagesAmount).map((group: InboxThreadGroup, idx: number) => {
         return renderGroup(
           group,
@@ -70,6 +75,9 @@ export default function InboxThreadItemSubscription({
           (splittedMessageGroups.length - 1) === idx,
           splittedMessageGroups.length > shownMessagesAmount && idx === (shownMessagesAmount - 1) && (
             <TouchableOpacity
+              testID="test:id/inboxThreadsSubscriptionShowMore"
+              accessibilityLabel="inboxThreadsSubscriptionShowMore"
+              accessible={true}
               style={[styles.threadButton, styles.threadButtonMore]}
               onPress={() => updateShownMessagesAmount(splittedMessageGroups.length + 1)}
             >
@@ -97,7 +105,12 @@ export default function InboxThreadItemSubscription({
       Component = ThreadHistoryItem;
     }
     return (
-      <View key={`${group.head.id}${group.head.timestamp}`}>
+      <View
+        testID="test:id/inboxThreadsSubscriptionGroup"
+        accessibilityLabel="inboxThreadsSubscriptionGroup"
+        accessible={true}
+        key={`${group.head.id}${group.head.timestamp}`}
+      >
         {!isLast && <View style={styles.threadConnector}/>}
         <Component
           target={target}
