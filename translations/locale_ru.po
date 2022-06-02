@@ -521,7 +521,7 @@ msgstr "Связанные задачи"
 
 #: src/components/select/select.js
 msgid "Loading values…"
-msgstr ""
+msgstr "Загрузка значений…"
 
 #: src/views/log-in/log-in.js
 msgid "Log in"
@@ -717,7 +717,7 @@ msgstr "Отправить логи"
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Sending crash report…"
-msgstr ""
+msgstr "Отправка отчета об ошибке…"
 
 #: src/views/settings/settings.js
 msgid "Settings"
