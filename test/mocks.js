@@ -233,10 +233,40 @@ function createActivityCustomFieldMock() {
   };
 }
 
+function createActivityCommentMock() {
+  return {
+    $type: 'CommentActivityItem',
+    added: [{
+      text: 'Fixed',
+    }],
+    author: {
+      $type: 'User',
+      avatarUrl: 'https://example.com/avatar',
+      fullName: 'John Dow',
+      id: '0-1',
+      login: 'John.Dow',
+      name: 'John Dow',
+      ringId: '1234',
+    },
+    category: {
+      $type: 'ActivityCategory',
+      id: 'CommentsCategory',
+    },
+    removed: [],
+    timestamp: 1,
+    target: {
+      $type: 'IssueComment',
+      created: 1,
+      id: '0-1',
+      usesMarkdown: true,
+    },
+  };
+}
+
 function createThreadMock(data = {}) {
   return deepmerge(
     {
-      id: 'S-id',
+      id: `S-${uuid()}`,
       messages: [{
         timestamp: 0,
         activities: [createActivityCustomFieldMock()],

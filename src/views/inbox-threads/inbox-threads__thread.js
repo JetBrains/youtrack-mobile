@@ -12,9 +12,8 @@ import {hasType} from 'components/api/api__resource-types';
 import type {InboxThread, ThreadData, ThreadEntity} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
-import type {ViewProps} from 'react-native/Libraries/Components/View/ViewPropTypes';
 
-type Props = { thread: InboxThread, currentUser: User, uiTheme: UITheme, otherProps: ViewProps };
+type Props = { thread: InboxThread, currentUser: User, uiTheme: UITheme, ... };
 
 
 function Thread({
@@ -43,9 +42,7 @@ function Thread({
     styleText={threadData.entityAtBottom && styles.threadSubTitleText}
   />;
   return (
-    <View
-      {...otherProps}
-    >
+    <View {...otherProps}>
       {!threadData.entityAtBottom && inboxEntity}
       <ThreadComponent
         thread={thread}

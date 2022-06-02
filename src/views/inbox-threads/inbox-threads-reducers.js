@@ -42,7 +42,11 @@ const {reducer, actions}: { reducer: any, actions: NotificationsActions } = crea
       state: InboxThreadState,
       action: { payload: { threads: InboxThread[], reset?: boolean } }
     ) => {
-      state.threads = action.payload.reset ? action.payload.threads : state.threads.concat(action.payload.threads);
+      if (action.payload.reset === true) {
+        state.threads = action.payload.threads;
+      } else {
+        state.threads = state.threads.slice(0, state.threads.length - 1).concat(action.payload.threads);
+      }
       state.hasMore = action.payload.threads.length === threadsPageSize;
     },
     [inboxThreadsReducersNamesMap.setError]: (

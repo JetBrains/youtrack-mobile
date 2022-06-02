@@ -17,10 +17,24 @@ type StateGetter = () => AppState;
 
 const MAX_CACHED_THREADS: number = 30;
 
-const setThreads = (threads: InboxThread[] | null, reset?: boolean): ((dispatch: (any) => any) => Promise<void>) => {
+const loadThreadsFromCache = (): ((dispatch: (any) => any) => Promise<void>) => {
   return async (dispatch: (any) => any) => {
+    const threads: InboxThread[] | null = getStorageState().inboxCache;
     if (threads && threads[0].subject) {
-      dispatch(setNotifications({threads, reset}));
+      dispatch(setNotifications({threads, reset: true}));
+    }
+  };
+};
+
+const updateThreadsCache = (): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) => {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const threads = getState().inboxThreads.threads;
+    if (threads.length) {
+      flushStoragePart({inboxCache: threads.slice(0, MAX_CACHED_THREADS)});
     }
   };
 };
@@ -41,7 +55,6 @@ const loadInboxThreads = (end?: number): ((
     }
 
     dispatch(setError({error: null}));
-    dispatch(setThreads(getStorageState().inboxCache));
     dispatch(toggleProgress({inProgress: true}));
     const [error, threads]: [?CustomError, Array<InboxThread>] = await until(api.inbox.getThreads(end));
     dispatch(toggleProgress({inProgress: false}));
@@ -49,15 +62,15 @@ const loadInboxThreads = (end?: number): ((
     if (error) {
       dispatch(setError({error}));
     } else {
-      const reset: boolean = typeof end !== 'number';
-      dispatch(setThreads(threads, reset));
-      const inboxCache: InboxThread[] = (reset ? threads : (getStorageState().inboxCache || []).concat(threads)).slice(0, MAX_CACHED_THREADS);
-      flushStoragePart({inboxCache});
+      dispatch(setNotifications({threads, reset: typeof end !== 'number'}));
+      await dispatch(updateThreadsCache());
     }
   };
 };
 
 
-export default {
+export {
   loadInboxThreads,
+  loadThreadsFromCache,
+  updateThreadsCache,
 };

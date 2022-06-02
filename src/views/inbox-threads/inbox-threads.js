@@ -5,7 +5,7 @@ import {FlatList, RefreshControl, View} from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
 
-import actions from './inbox-threads-actions';
+import * as actions from './inbox-threads-actions';
 import ErrorMessage from 'components/error-message/error-message';
 import Header from 'components/header/header';
 import Thread from './inbox-threads__thread';
@@ -40,13 +40,6 @@ const InboxThreads: () => Node = (): Node => {
 
   useEffect(loadThreads, [loadThreads]);
 
-  const getVisibleThreads = useCallback(() => {
-    return threads.slice(0, threads.length - (hasMore ? 1 : 0));
-  }, [hasMore, threads]);
-
-  const getNextThreadsEnd = useCallback(() => {
-    return threads[threads.length - 1].notified - 1;
-  }, [threads]);
 
   const renderItem = ({item, index}: { item: InboxThread, index: number, ... }) => (
     <Thread
@@ -60,7 +53,7 @@ const InboxThreads: () => Node = (): Node => {
     />
   );
 
-  const visibleThreads: InboxThread[] = getVisibleThreads();
+  const visibleThreads: InboxThread[] = hasMore ? threads.slice(0, threads.length - 1) : threads;
   return (
     <View
       style={styles.container}
@@ -83,7 +76,7 @@ const InboxThreads: () => Node = (): Node => {
         onEndReachedThreshold={5}
         onEndReached={() => {
           if (hasMore && !inProgress) {
-            loadThreads(getNextThreadsEnd());
+            loadThreads(threads.slice(-1)[0].notified);
           }
         }}
         refreshControl={<RefreshControl

@@ -1,34 +1,44 @@
-import actions from './inbox-threads-actions';
+import * as actions from './inbox-threads-actions';
+import * as storage from 'components/storage/storage';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import {__setStorageState, getStorageState} from '../../components/storage/storage';
 import {inboxThreadsNamespace, inboxThreadsReducersNamesMap} from './inbox-threads-reducers';
-
 
 describe('Inbox Threads', () => {
   let apiMock;
   let responseMock;
   let store;
+  let threadsMock;
 
   const getApi = () => apiMock;
   const middlewares = [thunk.withExtraArgument(getApi)];
   const storeMock = configureMockStore(middlewares);
 
-  beforeEach(async () => {
+  beforeEach(() => {
+    jest.restoreAllMocks();
     responseMock = [{subject: {}}];
     apiMock = {
       inbox: {
-        getThreads: jest.fn(() => Promise.resolve(responseMock)),
+        getThreads: jest.fn().mockResolvedValue(responseMock),
       },
     };
 
     store = storeMock({});
-    __setStorageState({});
+    storage.__setStorageState({});
+  });
+
+  beforeEach(() => {
+    threadsMock = [{}, {}, {}];
+    store = storeMock({
+      inboxThreads: {
+        threads: threadsMock,
+      },
+    });
   });
 
   describe('loadInboxThreads', () => {
     it('should load inbox threads for the first time', async () => {
-      await store.dispatch(actions.loadInboxThreads());
+      await store.dispatch(require('./inbox-threads-actions').loadInboxThreads());
 
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined);
       expect(store.getActions()).toEqual([
@@ -74,24 +84,21 @@ describe('Inbox Threads', () => {
 
     });
 
-    it('should cache inbox threads for at the first load', async () => {
-      __setStorageState({
-        inboxCache: [{}, {}],
+
+    describe('Cache', () => {
+      it('should update inbox threads cache', async () => {
+        await store.dispatch(actions.updateThreadsCache());
+
+        expect(storage.getStorageState().inboxCache.length).toEqual(threadsMock.length);
       });
 
-      await store.dispatch(actions.loadInboxThreads());
+      it('should update inbox threads cache after loading new threads', async () => {
+        jest.spyOn(storage, 'flushStoragePart').mockImplementationOnce(() => {});
 
-      expect(getStorageState().inboxCache.length).toEqual(1);
-    });
+        await store.dispatch(actions.loadInboxThreads());
 
-    it('should add threads to the cache', async () => {
-      __setStorageState({
-        inboxCache: [{}, {}],
+        expect(storage.flushStoragePart).toHaveBeenCalled();
       });
-
-      await store.dispatch(actions.loadInboxThreads(1));
-
-      expect(getStorageState().inboxCache.length).toEqual(3);
     });
 
   });
