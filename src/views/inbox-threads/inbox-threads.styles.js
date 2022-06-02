@@ -23,6 +23,7 @@ export default EStyleSheet.create({
   thread: {
     marginTop: UNIT * 2,
     marginLeft: UNIT * 2,
+    overflow: 'hidden',
   },
   threadSeparator: {
     marginLeft: UNIT * 2,
@@ -38,7 +39,7 @@ export default EStyleSheet.create({
     top: UNIT / 2,
     left: 15,
     width: 2,
-    height: '98.5%',
+    height: '100%',
     paddingBottom: UNIT * 2,
     backgroundColor: '$separator',
   },
@@ -88,12 +89,13 @@ export default EStyleSheet.create({
     marginBottom: UNIT * 2,
   },
   threadButton: {
-    marginBottom: UNIT,
+    marginBottom: UNIT * 1.5,
     padding: UNIT / 2,
     paddingLeft: 0,
   },
   threadButtonMore: {
-    marginTop: -UNIT,
+    marginTop: -UNIT * 1.5,
+    marginBottom: UNIT * 2,
     marginLeft: UNIT * 5.5,
   },
   threadButtonText: {
