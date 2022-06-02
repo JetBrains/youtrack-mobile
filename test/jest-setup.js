@@ -10,6 +10,7 @@ import sinonChai from 'sinon-chai';
 
 import {__setStorageState} from '../src/components/storage/storage';
 import {mockReactNativeNotification} from './jest-mock__react-native-notifications';
+import {buildStyles, DEFAULT_THEME} from '../src/components/theme/theme';
 
 Enzyme.configure({adapter: new Adapter()});
 
@@ -25,6 +26,7 @@ require('react-native-reanimated/lib/reanimated2/jestUtils').setUpTests();
 mockReactNativeNotification();
 
 beforeAll(() => {
+  buildStyles(DEFAULT_THEME.mode, DEFAULT_THEME);
   __setStorageState({});
 });
 

@@ -30,6 +30,9 @@ function Thread({
   const entity: ThreadEntity = threadData.entity;
   const ThreadComponent: any = threadData.component;
   const inboxEntity = <InboxEntity
+    testID="test:id/inboxEntity"
+    accessibilityLabel="inboxEntity"
+    accessible={true}
     entity={entity}
     onNavigate={() => {
       if (hasType.article(entity)) {
