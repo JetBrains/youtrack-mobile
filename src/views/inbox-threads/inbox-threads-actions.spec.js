@@ -3,6 +3,7 @@ import * as storage from 'components/storage/storage';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {inboxThreadsNamespace, inboxThreadsReducersNamesMap} from './inbox-threads-reducers';
+import {folderIdMap} from './inbox-threads-helper';
 
 describe('Inbox Threads', () => {
   let apiMock;
@@ -40,7 +41,7 @@ describe('Inbox Threads', () => {
     it('should load inbox threads for the first time', async () => {
       await store.dispatch(require('./inbox-threads-actions').loadInboxThreads());
 
-      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined);
+      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, undefined);
       expect(store.getActions()).toEqual([
         {
           type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setError}`,
@@ -71,9 +72,9 @@ describe('Inbox Threads', () => {
     });
 
     it('should load more threads', async () => {
-      await store.dispatch(actions.loadInboxThreads(123));
+      await store.dispatch(actions.loadInboxThreads(undefined, 1));
 
-      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(123);
+      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1);
       expect(store.getActions()[3]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {
@@ -81,15 +82,26 @@ describe('Inbox Threads', () => {
           reset: false,
         },
       });
-
     });
 
 
     describe('Cache', () => {
-      it('should update inbox threads cache', async () => {
-        await store.dispatch(actions.updateThreadsCache());
+      it('should update inbox threads `All` tab cache', async () => {
+        await store.dispatch(actions.loadInboxThreads(undefined, undefined));
 
-        expect(storage.getStorageState().inboxCache.length).toEqual(threadsMock.length);
+        expect(storage.getStorageState().inboxThreadsCache.all.length).toEqual(threadsMock.length);
+      });
+
+      it('should update inbox threads `Mentions & Reactions` tab cache', async () => {
+        await store.dispatch(actions.loadInboxThreads(folderIdMap[1]));
+
+        expect(storage.getStorageState().inboxThreadsCache[folderIdMap[1]].length).toEqual(threadsMock.length);
+      });
+
+      it('should update inbox threads `Subscriptions` tab cache', async () => {
+        await store.dispatch(actions.loadInboxThreads(folderIdMap[2]));
+
+        expect(storage.getStorageState().inboxThreadsCache[folderIdMap[2]].length).toEqual(threadsMock.length);
       });
 
       it('should update inbox threads cache after loading new threads', async () => {

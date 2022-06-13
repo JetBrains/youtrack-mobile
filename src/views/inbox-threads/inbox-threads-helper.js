@@ -4,6 +4,7 @@ import InboxThreadItemSubscription from './inbox-threads__subscription';
 import InboxThreadMention from './inbox-threads__mention';
 import InboxThreadReaction from './inbox-threads__reactions';
 import {isActivityCategory} from 'components/activity/activity__category';
+import {i18n} from 'components/i18n/i18n';
 
 import type {Activity} from 'flow/Activity';
 import type {InboxThread, InboxThreadMessage, ThreadData} from 'flow/Inbox';
@@ -84,9 +85,23 @@ function getThreadData(thread: InboxThread): ThreadData {
   return threadData;
 }
 
+const threadTabsTitles: string[] = [
+  i18n('All'),
+  i18n('Mentions & Reactions'),
+  i18n('Subscriptions'),
+];
+
+const folderIdMap: { [number]: string } = {
+  [0]: undefined,
+  [1]: 'direct',
+  [2]: 'subscription',
+};
+
 export {
   createMessagesMap,
+  folderIdMap,
   getThreadData,
   getTypes,
+  threadTabsTitles,
   sortEvents,
 };

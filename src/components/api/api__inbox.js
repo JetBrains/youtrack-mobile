@@ -22,7 +22,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async getThreads(end?: number): Promise<InboxThread[]> {
+  async getThreads(folder?: string, end?: number): Promise<InboxThread[]> {
     return this.makeAuthorizedRequest(
       [
         `${this.youTrackApiUrl}/inbox/threads?$top=${threadsPageSize}`,
@@ -31,6 +31,7 @@ export default class IssueAPI extends ApiBase {
         `reverse=true`,
         `fields=${inboxThreadFields.toString()}`,
         typeof end === 'number' ? `end=${end}` : undefined,
+        folder && `folder=${folder}`,
       ].filter(Boolean).join('&')
     );
   }

@@ -11,6 +11,10 @@ export default EStyleSheet.create({
     ...elevation1,
     backgroundColor: '$background',
   },
+  tabsBarFluid: {
+    width: 'auto',
+    minWidth: 60,
+  },
   tabLabel: {
     flexDirection: 'row',
     alignItems: 'center',

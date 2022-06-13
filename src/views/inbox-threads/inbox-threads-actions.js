@@ -15,18 +15,18 @@ type ApiGetter = () => Api;
 type StateGetter = () => AppState;
 
 
-const MAX_CACHED_THREADS: number = 30;
+const MAX_CACHED_THREADS: number = 10;
 
-const loadThreadsFromCache = (): ((dispatch: (any) => any) => Promise<void>) => {
+const loadThreadsFromCache = (folderId?: string = 'all'): ((dispatch: (any) => any) => Promise<void>) => {
   return async (dispatch: (any) => any) => {
-    const threads: InboxThread[] | null = getStorageState().inboxCache;
-    if (threads && threads[0].subject) {
-      dispatch(setNotifications({threads, reset: true}));
+    const inboxThreadsCache = getStorageState().inboxThreadsCache;
+    if (inboxThreadsCache && inboxThreadsCache[folderId]) {
+      dispatch(setNotifications({threads: inboxThreadsCache[folderId], reset: true}));
     }
   };
 };
 
-const updateThreadsCache = (): ((
+const updateThreadsCache = (folderId?: string = 'all'): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
@@ -34,12 +34,18 @@ const updateThreadsCache = (): ((
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const threads = getState().inboxThreads.threads;
     if (threads.length) {
-      flushStoragePart({inboxCache: threads.slice(0, MAX_CACHED_THREADS)});
+      const inboxThreadsCache = getStorageState().inboxThreadsCache;
+      flushStoragePart({
+        inboxThreadsCache: {
+          ...inboxThreadsCache,
+          [folderId]: threads.slice(0, MAX_CACHED_THREADS),
+        },
+      });
     }
   };
 };
 
-const loadInboxThreads = (end?: number): ((
+const loadInboxThreads = (folderId?: string, end?: number): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
@@ -52,18 +58,19 @@ const loadInboxThreads = (end?: number): ((
     const api: Api = getApi();
     if (!end) {
       usage.trackEvent(ANALYTICS_NOTIFICATIONS_THREADS_PAGE, 'Load inbox threads');
+      dispatch(loadThreadsFromCache(folderId));
     }
 
     dispatch(setError({error: null}));
     dispatch(toggleProgress({inProgress: true}));
-    const [error, threads]: [?CustomError, Array<InboxThread>] = await until(api.inbox.getThreads(end));
+    const [error, threads]: [?CustomError, Array<InboxThread>] = await until(api.inbox.getThreads(folderId, end));
     dispatch(toggleProgress({inProgress: false}));
 
     if (error) {
       dispatch(setError({error}));
     } else {
       dispatch(setNotifications({threads, reset: typeof end !== 'number'}));
-      await dispatch(updateThreadsCache());
+      dispatch(updateThreadsCache(folderId));
     }
   };
 };

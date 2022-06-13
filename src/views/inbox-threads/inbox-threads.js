@@ -1,94 +1,97 @@
 /* @flow */
 
-import React, {useCallback, useContext, useEffect} from 'react';
-import {FlatList, RefreshControl, View} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {Dimensions, Text, View} from 'react-native';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {TabBar, TabView} from 'react-native-tab-view';
+import {View as AnimatedView} from 'react-native-animatable';
+import {useSelector} from 'react-redux';
 
-import * as actions from './inbox-threads-actions';
-import ErrorMessage from 'components/error-message/error-message';
 import Header from 'components/header/header';
-import Thread from './inbox-threads__thread';
+import InboxThreadsList from './inbox-threads__list';
+import {folderIdMap, threadTabsTitles} from './inbox-threads-helper';
 import {i18n} from 'components/i18n/i18n';
-import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables/variables';
+import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 
 import styles from './inbox-threads.styles';
+import tabStyles from 'components/issue-tabbed/issue-tabbed.style';
 
 import type {AppState} from '../../reducers';
-import type {CustomError} from 'flow/Error';
-import type {InboxThread} from 'flow/Inbox';
 import type {Node} from 'react';
-import type {Theme} from 'flow/Theme';
-import type {User} from 'flow/User';
+import type {TabRoute} from 'flow/Issue';
+import type {Theme, UIThemeColors} from 'flow/Theme';
+import type {UserCurrent} from 'flow/User';
 
 
 const InboxThreads: () => Node = (): Node => {
   const theme: Theme = useContext(ThemeContext);
-  const dispatch = useDispatch();
+  const currentUser: UserCurrent = useSelector((state: AppState) => state.app.user);
+  const routes: TabRoute[] = threadTabsTitles.map((name: string, index: number) => ({key: index, title: name}));
 
-  const threads: InboxThread[] = useSelector((state: AppState) => state.inboxThreads.threads);
-  const hasMore: boolean = useSelector((state: AppState) => state.inboxThreads.hasMore);
-  const currentUser: User = useSelector((state: AppState) => state.app.user);
-  const inProgress: boolean = useSelector((state: AppState) => state.inboxThreads.inProgress);
-  const error: ?CustomError = useSelector((state: AppState) => state.inboxThreads.error);
-  const loadThreads = useCallback(
-    (end?: number) => {dispatch(actions.loadInboxThreads(end));},
-    [dispatch]
-  );
+  const [navigationState, updateNavigationState] = useState({
+    index: 0,
+    routes,
+  });
 
-  useEffect(loadThreads, [loadThreads]);
+  const renderScene = ({route}: { route: TabRoute }) => {
+    return (
+      route.key !== navigationState.index
+        ? <SkeletonIssueActivities marginTop={UNIT * 2} marginLeft={UNIT} marginRight={UNIT}/>
+        : (
+          <AnimatedView
+            animation="fadeIn"
+            duration={500}
+            useNativeDriver
+          >
+            <InboxThreadsList
+              currentUser={currentUser}
+              folderId={folderIdMap[route.key]}
+              theme={theme}
+            />
+          </AnimatedView>
+        )
+    );
+  };
 
+  const renderTabBar = (props: any) => {
+    const uiThemeColors: UIThemeColors = theme.uiTheme.colors;
+    return (
+      <TabBar
+        {...props}
+        pressColor={uiThemeColors.$disabled}
+        indicatorStyle={{backgroundColor: uiThemeColors.$link}}
+        style={[tabStyles.tabsBar, {shadowColor: uiThemeColors.$separator}]}
+        tabStyle={tabStyles.tabsBarFluid}
+        renderLabel={({route, focused}) => (
+          <Text style={[
+            tabStyles.tabLabelText,
+            {color: focused ? uiThemeColors.$link : uiThemeColors.$text},
+          ]}>
+            {route.title}
+          </Text>
+        )}
+      />
+    );
+  };
 
-  const renderItem = ({item, index}: { item: InboxThread, index: number, ... }) => (
-    <Thread
-      style={[styles.thread, (index === threads.length - (hasMore ? 2 : 1)) && styles.threadLast]}
-      thread={item}
-      currentUser={currentUser}
-      uiTheme={theme.uiTheme}
-    />
-  );
-
-  const visibleThreads: InboxThread[] = hasMore ? threads.slice(0, threads.length - 1) : threads;
   return (
-    <View
-      style={styles.container}
-      testID="test:id/inboxThreads"
-      accessibilityLabel="inboxThreads"
-      accessible={true}
-    >
-      <Header
-        showShadow={true}
-        title={i18n('Notifications')}
-      />
+    <View style={styles.container}>
+      <Header title={i18n('Notifications')}/>
 
-      <FlatList
-        data={visibleThreads}
-        ItemSeparatorComponent={() => <View style={styles.threadSeparator}/>}
-        ListFooterComponent={() => inProgress && !error && !visibleThreads.length ? (
-          <SkeletonIssueActivities marginTop={UNIT * 2} marginLeft={UNIT} marginRight={UNIT}/>
-        ) : null}
-        keyExtractor={(it: InboxThread) => it.id}
-        onEndReachedThreshold={5}
-        onEndReached={() => {
-          if (hasMore && !inProgress) {
-            loadThreads(threads.slice(-1)[0].notified);
-          }
+      <TabView
+        lazy={true}
+        swipeEnabled={true}
+        navigationState={navigationState}
+        renderScene={renderScene}
+        initialLayout={{
+          height: 0,
+          width: Dimensions.get('window').width,
         }}
-        refreshControl={<RefreshControl
-          refreshing={inProgress && visibleThreads.length > 0}
-          tintColor={styles.link.color}
-          onRefresh={loadThreads}
-        />}
-        renderItem={renderItem}
+        renderTabBar={renderTabBar}
+        onIndexChange={(index: number) => updateNavigationState({index, routes})}
       />
-
-      {!!error && !inProgress && (
-        <View style={styles.error}>
-          <ErrorMessage error={error}/>
-        </View>
-      )}
     </View>
   );
 };

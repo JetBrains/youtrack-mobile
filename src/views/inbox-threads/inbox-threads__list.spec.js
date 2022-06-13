@@ -3,12 +3,11 @@ import React from 'react';
 import {render} from '@testing-library/react-native';
 
 import configureMockStore from 'redux-mock-store';
-import InboxThreads from './inbox-threads';
+import InboxThreadsList from './inbox-threads__list';
 import mocks from '../../../test/mocks';
 import thunk from 'redux-thunk';
-import {buildStyles, DEFAULT_THEME} from 'components/theme/theme';
+import {DEFAULT_THEME} from 'components/theme/theme';
 import {Provider} from 'react-redux';
-import {ThemeContext} from 'components/theme/theme-context';
 
 let apiMock;
 jest.mock('components/api/api__instance', () => ({
@@ -19,7 +18,6 @@ jest.mock('components/api/api__instance', () => ({
 }));
 
 describe('Inbox Threads', () => {
-  beforeAll(() => buildStyles(DEFAULT_THEME.mode, DEFAULT_THEME));
 
   let storeMock;
   beforeAll(() => {
@@ -89,19 +87,11 @@ describe('Inbox Threads', () => {
     storeMock = createStoreMock(stateMock);
   }
 
-  function doRender() {
+  function doRender(folderId) {
     return render(
       <Provider store={storeMock}>
-        <ThemeContext.Provider
-          value={{
-            mode: 'light',
-            uiTheme: DEFAULT_THEME,
-            setMode: () => null,
-          }}
-        >
-          <InboxThreads/>
-        </ThemeContext.Provider>
-      </Provider>,
+        <InboxThreadsList currentUser={mocks.createUserMock()} folderId={folderId} theme={DEFAULT_THEME}/>
+      </Provider>
     );
   }
 

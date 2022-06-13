@@ -25,6 +25,9 @@ export default EStyleSheet.create({
     marginLeft: UNIT * 2,
     overflow: 'hidden',
   },
+  threadFirst: {
+    marginTop: UNIT,
+  },
   threadSeparator: {
     marginLeft: UNIT * 2,
     marginBottom: UNIT,
