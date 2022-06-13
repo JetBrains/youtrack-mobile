@@ -39,7 +39,7 @@ function getEntityPresentation(entity: Object): any | string {
   let userName: string = '';
   if (entity) {
     if (!entity.ringId) {
-      userName = entity.name || entity.userName || entity.login;
+      userName = entity.localizedName || entity.name || entity.userName || entity.login;
     }
     if (!userName) {
     userName = entity.fullName || entity.localizedName || entity.name || entity.login || entity.presentation || entity.text;

@@ -49,7 +49,6 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     getOptions: () => [],
     style: null,
     uiTheme: DEFAULT_THEME,
-    visibilityDefaultLabel: visibilityDefaultText,
   };
 
   constructor(props: Props) {
@@ -174,7 +173,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   }
 
   renderVisibilityButton(): Node {
-    const {onSubmit, visibilityDefaultLabel = ''} = this.props;
+    const {onSubmit, visibilityDefaultLabel = visibilityDefaultText} = this.props;
     const {visibility} = this.state;
 
     const isSecured: boolean = IssueVisibility.isSecured(visibility);
