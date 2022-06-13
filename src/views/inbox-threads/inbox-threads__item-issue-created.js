@@ -47,9 +47,9 @@ export default function ThreadIssueCreatedItem({group, target, uiTheme}: Props) 
     added: added.length > 0 ? added : null,
     removed: [],
     field: {
-      presentation: assigneeFields[0].name,
+      presentation: assigneeFields[0]?.name,
       customField: {
-        id: assigneeFields[0].id,
+        id: assigneeFields[0]?.id,
         fieldType: {
           isMultiValue: assigneeFields.length > 1,
         },
