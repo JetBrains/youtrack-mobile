@@ -539,8 +539,8 @@ msgstr ""
 #: src/views/issues/issues__count.js
 msgid "Matches {{issuesCount}} issue"
 msgid_plural "Matches {{issuesCount}} issues"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{{issuesCount}} hibajeggyel egyezik"
+msgstr[1] "{{issuesCount}} hibajeggyel egyezik"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "merged the pull request"
@@ -614,6 +614,10 @@ msgstr "Jelszó"
 #: src/views/settings/settings-helper.js
 msgid "Problem"
 msgstr "Probléma"
+
+#: src/components/custom-fields-panel/custom-fields-panel.js
+msgid "Project"
+msgstr "Projekt"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"

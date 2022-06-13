@@ -610,6 +610,10 @@ msgstr "密码"
 msgid "Problem"
 msgstr "问题"
 
+#: src/components/custom-fields-panel/custom-fields-panel.js
+msgid "Project"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
 msgstr "已收起项目"
