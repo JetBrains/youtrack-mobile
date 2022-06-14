@@ -467,11 +467,14 @@ class AgileBoard extends Component<Props, State> {
   };
 
   onShowAssist = async (clearQuery: boolean = false) => {
-    if (clearQuery) {
-      this.query = '';
+    const {networkState} = this.props;
+    if (networkState?.isConnected !== false) {
+      if (clearQuery) {
+        this.query = '';
+      }
+      this.setState({clearQuery});
+      this.toggleQueryAssist(true);
     }
-    this.setState({clearQuery});
-    this.toggleQueryAssist(true);
   };
 
   renderSearchPanel = () => {
@@ -497,12 +500,11 @@ class AgileBoard extends Component<Props, State> {
   };
 
   renderSearchPanelPreview = () => {
-    const {networkState} = this.props;
     return (
       <QueryPreview
         style={styles.searchQueryPreview}
         query={this.query}
-        onFocus={networkState?.isConnected !== false && this.onShowAssist}
+        onFocus={this.onShowAssist}
       />
     );
   };
