@@ -127,7 +127,7 @@ const initialEditorsState = {
 
 const DATE_AND_TIME_FIELD_VALUE_TYPE = 'date and time';
 const projectLabel: string = i18n('Project');
-const fieldFilterPlaceholder = i18n('Search for the field value');
+const fieldFilterPlaceholder = i18n('Filter items');
 
 export default class CustomFieldsPanel extends Component<Props, State> {
   api: Api = getApi();
