@@ -387,6 +387,7 @@ msgstr "Solicação de recurso"
 msgid "Filter boards by name"
 msgstr "Filtrar boards pelo nome"
 
+#: src/components/custom-fields-panel/custom-fields-panel.js
 #: src/components/linked-issues/linked-issues-add-link.js
 #: src/components/select/select.js
 #: src/views/issue/activity/activity__add-spent-time.js
