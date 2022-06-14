@@ -4,5 +4,4 @@ export default {
   knowledgeBase: '2020.2',
   searchAssist: '2020.1',
   issuesGetter: '2020.1',
-  translations: '9999.1',
 };

@@ -30,7 +30,6 @@ import {
   storageStateAuthParamsKey,
   storeAccounts,
 } from 'components/storage/storage';
-import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 import {getCachedPermissions, storeYTCurrentUser} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
@@ -649,19 +648,26 @@ async function refreshConfig(backendUrl: string): Promise<AppConfig> {
   return updatedConfig;
 }
 
-export function initializeApp(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
+export function initializeApp(
+  config: AppConfig,
+  issueId: string | null,
+  navigateToActivity: boolean,
+  isReinitializing: boolean = false,
+): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
     const isRedirectedToTargetRoute: boolean = await dispatch(redirectToRoute(config, issueId, navigateToActivity));
+    const reInitialize = async (cfg) => await dispatch(
+      initializeApp(cfg, issueId, navigateToActivity, true)
+    );
 
-    let _config = config;
+    let configCurrent = config;
+    if (!config.l10n && isReinitializing === false) {
+      configCurrent = await refreshConfig(config.backendUrl);
+      return await reInitialize(configCurrent);
+    }
 
-    if (checkVersion(FEATURE_VERSION.translations)) {
-      if (!config.l10n) {
-        _config = await refreshConfig(config.backendUrl);
-        return await dispatch(initializeApp(_config, issueId, navigateToActivity));
-      } else {
-        loadTranslation(config.l10n.locale, config.l10n.language);
-      }
+    if (configCurrent.l10n) {
+      loadTranslation(configCurrent.l10n.locale, configCurrent.l10n.language);
     }
 
     const currentAppVersion: ?string = getStorageState().currentAppVersion;
@@ -671,22 +677,22 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
         log.info(
           `App upgraded from ${currentAppVersion || 'NOTHING'} to "${packageJson.version}"; reloading config`
         );
-        _config = await refreshConfig(config.backendUrl);
+        configCurrent = await refreshConfig(config.backendUrl);
       }
 
-      await dispatch(initializeAuth(_config));
+      await dispatch(initializeAuth(configCurrent));
 
     } catch (error) {
       log.log('App failed to initialize auth. Reloading config...', error);
       try {
-        _config = await refreshConfig(config.backendUrl);
+        configCurrent = await refreshConfig(config.backendUrl);
       } catch (err) {
         Router.Home({backendUrl: config.backendUrl, err});
         return;
       }
 
       try {
-        await dispatch(initializeAuth(_config));
+        await dispatch(initializeAuth(configCurrent));
       } catch (e) {
         Router.LogIn({config, errorMessage: getErrorMessage(e)});
         return;
@@ -702,7 +708,11 @@ export function initializeApp(config: AppConfig, issueId: string | null, navigat
     dispatch(subscribeToURL());
 
     if (!versionHasChanged) {
-      refreshConfig(_config.backendUrl);
+      refreshConfig(configCurrent.backendUrl).then(async (updatedConfig) => {
+        if (configCurrent?.l10n?.language !== updatedConfig?.l10n?.language) {
+          await reInitialize(updatedConfig);
+        }
+      });
     }
   };
 }
