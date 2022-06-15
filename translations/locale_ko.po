@@ -508,7 +508,7 @@ msgid "Linked issues"
 msgstr "연결된 이슈"
 
 #: src/components/select/select.js
-msgid "Loading values..."
+msgid "Loading values…"
 msgstr "값 로드 중…"
 
 #: src/views/log-in/log-in.js
@@ -610,6 +610,10 @@ msgstr "비밀번호"
 msgid "Problem"
 msgstr "문제"
 
+#: src/components/custom-fields-panel/custom-fields-panel.js
+msgid "Project"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
 msgstr "접힌 프로젝트"
@@ -701,7 +705,7 @@ msgid "Send logs"
 msgstr "로그 보내기"
 
 #: src/components/error-boundary/error-boundary.js
-msgid "Sending crash report..."
+msgid "Sending crash report…"
 msgstr "충돌 보고서를 보내는 중…"
 
 #: src/views/settings/settings.js

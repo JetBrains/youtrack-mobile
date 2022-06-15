@@ -2,7 +2,7 @@
 
 import type {Node} from 'react';
 import {Text, View} from 'react-native';
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 
 import {i18n} from 'components/i18n/i18n';
 import {IconSearch} from '../icon/icon';
@@ -20,11 +20,15 @@ type Props = {
 };
 
 
-export default class QueryPreview extends PureComponent<Props, void> {
+export default class QueryPreview extends Component<Props, void> {
   static defaultProps: {onClearText: () => void, onFocus: () => void} = {
     onFocus: () => {},
     onClearText: () => {},
   };
+
+  componentDidUpdate(prevProps: Props): boolean {
+    return prevProps.query !== this.props.query;
+  }
 
   focusAndClear: (() => void) = () => {
     if (this.props.onFocus) {

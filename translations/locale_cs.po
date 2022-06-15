@@ -520,7 +520,7 @@ msgid "Linked issues"
 msgstr ""
 
 #: src/components/select/select.js
-msgid "Loading values..."
+msgid "Loading values…"
 msgstr ""
 
 #: src/views/log-in/log-in.js
@@ -625,6 +625,10 @@ msgstr "Heslo"
 msgid "Problem"
 msgstr ""
 
+#: src/components/custom-fields-panel/custom-fields-panel.js
+msgid "Project"
+msgstr "Projekt"
+
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
 msgstr ""
@@ -716,7 +720,7 @@ msgid "Send logs"
 msgstr ""
 
 #: src/components/error-boundary/error-boundary.js
-msgid "Sending crash report..."
+msgid "Sending crash report…"
 msgstr ""
 
 #: src/views/settings/settings.js

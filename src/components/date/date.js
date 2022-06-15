@@ -64,8 +64,8 @@ function isAbsoluteDates(): boolean {
   return !!currentUser?.profiles?.appearance?.useAbsoluteDates;
 }
 
-function formatDate(date: Date | number, pattern: string = USER_DATE_FORMAT_DEFAULT_PATTERN) {
-  return format(date, pattern);
+function formatDate(date: Date | number, pattern: string = USER_DATE_FORMAT_DEFAULT_PATTERN, locale) {
+  return format(date, pattern, {locale});
 }
 
 function formatTime(date: Date | number) {
@@ -80,7 +80,7 @@ function ytDate(date?: Date | number, noTime?: boolean): string {
   const locale: ?Locale = dateLocaleMap[getLanguage()];
 
   if (isAbsoluteDates()) {
-    return formatDate(date, noTime ? getDatePattern() : getPattern());
+    return formatDate(date, noTime ? getDatePattern() : getPattern(), locale);
   }
 
   if ((Date.now() - date) <= 60 * 1000) {

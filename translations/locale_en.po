@@ -505,8 +505,8 @@ msgid "Linked issues"
 msgstr "Linked issues"
 
 #: src/components/select/select.js
-msgid "Loading values..."
-msgstr "Loading values..."
+msgid "Loading values?"
+msgstr "Loading values?"
 
 #: src/views/log-in/log-in.js
 msgid "Log in"
@@ -608,6 +608,10 @@ msgstr "Password"
 msgid "Problem"
 msgstr "Problem"
 
+#: src/components/custom-fields-panel/custom-fields-panel.js
+msgid "Project"
+msgstr "Project"
+
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
 msgstr "Projects collapsed"
@@ -699,8 +703,8 @@ msgid "Send logs"
 msgstr "Send logs"
 
 #: src/components/error-boundary/error-boundary.js
-msgid "Sending crash report..."
-msgstr "Sending crash report..."
+msgid "Sending crash report?"
+msgstr "Sending crash report?"
 
 #: src/views/settings/settings.js
 msgid "Settings"

@@ -125,7 +125,9 @@ const initialEditorsState = {
   },
 };
 
-const DATE_AND_TIME = 'date and time';
+const DATE_AND_TIME_FIELD_VALUE_TYPE = 'date and time';
+const projectLabel: string = i18n('Project');
+const fieldFilterPlaceholder = i18n('Filter items');
 
 export default class CustomFieldsPanel extends Component<Props, State> {
   api: Api = getApi();
@@ -230,7 +232,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
   editDateField(field: IssueCustomField): void {
     this.trackEvent('Edit date field');
-    const withTime = field.projectCustomField.field.fieldType.valueType === DATE_AND_TIME;
+    const withTime = field.projectCustomField.field.fieldType.valueType === DATE_AND_TIME_FIELD_VALUE_TYPE;
     return this.setState({
       datePicker: {
         show: true,
@@ -317,7 +319,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         multi: isMultiValue,
         selectedItems: selectedItems,
         emptyValue: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
-        placeholder: i18n('Search for the field value'),
+        placeholder: fieldFilterPlaceholder,
         dataSource: () => {
           if (field.hasStateMachine) {
             return this.api.getStateMachineEvents(this.props.issueId, field.id)
@@ -355,7 +357,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       ...initialEditorsState,
     });
 
-    if (fieldType.valueType === 'date' || fieldType.valueType === DATE_AND_TIME) {
+    if (fieldType.valueType === 'date' || fieldType.valueType === DATE_AND_TIME_FIELD_VALUE_TYPE) {
       return this.editDateField(field);
     }
 
@@ -527,7 +529,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
                 disabled={!hasPermission.canEditProject || this.isConnected === false}
                 onPress={this.onSelectProject}
                 active={isEditingProject}
-                field={createNullProjectCustomField(issueProject.name, i18n('Project'))}
+                field={createNullProjectCustomField(issueProject.name, projectLabel)}
               />
               {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
             </View>

@@ -16,7 +16,7 @@ type Props = {
 const IssuesCount = (props: Props) => {
   const {issuesCount} = props;
   const text: string = (
-    issuesCount
+    typeof issuesCount === 'number'
       ? i18nPlural(
         issuesCount,
         'Matches {{issuesCount}} issue',

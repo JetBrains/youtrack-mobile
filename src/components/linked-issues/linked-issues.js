@@ -131,8 +131,9 @@ const LinkedIssues = (props: Props): Node => {
     const issuesAmount: number = section.data.length;
     return (
       <Text
-        numberOfLines={1}
-        style={styles.linkedIssueTypeTitle}>
+        numberOfLines={2}
+        style={styles.linkedIssueTypeTitle}
+      >
         {`${section.title} `}
         {i18nPlural(
           issuesAmount,
@@ -140,7 +141,7 @@ const LinkedIssues = (props: Props): Node => {
           '{{amount}} issues',
           {amount: issuesAmount}
         )}
-        {section?.unresolvedIssuesSize > 0 ? i18n(' ({{amount}} unresolved)') : null}
+        {section?.unresolvedIssuesSize > 0 ? i18n(' ({{amount}} unresolved)', {amount: section.unresolvedIssuesSize}) : null}
       </Text>
     );
   };

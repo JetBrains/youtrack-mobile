@@ -512,7 +512,7 @@ msgid "Linked issues"
 msgstr "Verknüpfte Tickets"
 
 #: src/components/select/select.js
-msgid "Loading values..."
+msgid "Loading values…"
 msgstr "Werte werden geladen…"
 
 #: src/views/log-in/log-in.js
@@ -615,6 +615,10 @@ msgstr "Kennwort"
 msgid "Problem"
 msgstr "Problem"
 
+#: src/components/custom-fields-panel/custom-fields-panel.js
+msgid "Project"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
 msgstr "Projekte reduziert"
@@ -706,8 +710,8 @@ msgid "Send logs"
 msgstr "Protokolle senden"
 
 #: src/components/error-boundary/error-boundary.js
-msgid "Sending crash report..."
-msgstr "Fehlerbericht wird gesendet …"
+msgid "Sending crash report…"
+msgstr "Fehlerbericht wird gesendet…"
 
 #: src/views/settings/settings.js
 msgid "Settings"
