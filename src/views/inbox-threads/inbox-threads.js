@@ -72,6 +72,7 @@ const InboxThreads: () => Node = (): Node => {
             {route.title}
           </Text>
         )}
+        scrollEnabled={true}
       />
     );
   };
