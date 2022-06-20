@@ -8,16 +8,22 @@ interface Params {
 }
 
 
-export function i18n(text: string = '', params?: Params): string {
+const i18n = (text: string = '', params?: Params): string => {
+  if (!params) {
+    return gt.gettext(text);
+  }
   return createGettextMessage(gt.gettext(text), params);
-}
+};
 
-export function i18nPlural(count: number, text: string, textPlural: string, params?: Params): string {
+const i18nPlural = (count: number, text: string, textPlural: string, params?: Params): string => {
+  if (!params) {
+    return gt.ngettext(text, textPlural, count);
+  }
   return createGettextMessage(gt.ngettext(text, textPlural, count), params);
-}
+};
 
 
-function createGettextMessage(message: string, params?: Params) {
+const createGettextMessage = (message: string, params?: Params) => {
   let msg: string = message.slice(0);
   if (params) {
     msg.replace(/{{([^}]+)}}/g, (match: string, paramKey: string): string => {
@@ -30,4 +36,10 @@ function createGettextMessage(message: string, params?: Params) {
     });
   }
   return msg;
-}
+};
+
+
+export {
+  i18n,
+  i18nPlural,
+};
