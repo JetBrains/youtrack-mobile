@@ -234,9 +234,17 @@ msgstr "Комментарий удален"
 msgid "Comment updated"
 msgstr "Комментарий обновлен"
 
+#: src/components/activity/activity-helper.js
+msgid "Comments"
+msgstr ""
+
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "committed changes"
 msgstr "сделал(а) коммит"
+
+#: src/actions/app-actions.js
+msgid "Connecting to YouTrack..."
+msgstr ""
 
 #: src/components/error-boundary/error-boundary.js
 #: src/components/error-message/error-message-inline.js
@@ -395,11 +403,7 @@ msgstr "Запросить функциональность"
 msgid "Filter boards by name"
 msgstr "Фильтровать доски по имени"
 
-#: src/components/custom-fields-panel/custom-fields-panel.js
-#: src/components/linked-issues/linked-issues-add-link.js
 #: src/components/select/select.js
-#: src/views/issue/activity/activity__add-spent-time.js
-#: src/views/issues/issues__sortby_add-attribute.js
 msgid "Filter items"
 msgstr "Фильтровать элементы"
 
@@ -463,6 +467,10 @@ msgstr "Некорректный запрос"
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Issue deleted"
 msgstr "Задача удалена"
+
+#: src/components/activity/activity-helper.js
+msgid "Issue history"
+msgstr ""
 
 #: src/components/issue-actions/issue-links-actions.js
 msgid "Issue link added"
@@ -768,10 +776,15 @@ msgstr "Что-то пошло не так"
 msgid "Sort Attributes"
 msgstr "Атрибуты сортировки"
 
+#: src/views/issue/activity/issue__activity-settings.js
+msgid "Sort: oldest first"
+msgstr ""
+
 #: src/views/issues/issues__sortby.js
 msgid "Sorted by"
 msgstr "Сортировка:"
 
+#: src/components/activity/activity-helper.js
 #: src/views/issue/activity/activity__add-spent-time.js
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Spent time"
@@ -957,6 +970,11 @@ msgstr "При интеграции TeamCity и YouTrack пользовател�
 #: src/components/error/error-message-data.js
 msgid "Woah, you can't touch this!"
 msgstr "К сожалению, вам сюда нельзя."
+
+#: src/components/comment/comment-edit.js
+#: src/views/issue/activity/activity__add-spent-time.js
+msgid "Write a comment, @mention people"
+msgstr ""
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."

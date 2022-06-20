@@ -219,9 +219,17 @@ msgstr "Comment deleted"
 msgid "Comment updated"
 msgstr "Comment updated"
 
+#: src/components/activity/activity-helper.js
+msgid "Comments"
+msgstr "Comments"
+
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "committed changes"
 msgstr "committed changes"
+
+#: src/actions/app-actions.js
+msgid "Connecting to YouTrack..."
+msgstr "Connecting to YouTrack..."
 
 #: src/components/error-boundary/error-boundary.js
 #: src/components/error-message/error-message-inline.js
@@ -380,11 +388,7 @@ msgstr "Feature request"
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
-#: src/components/custom-fields-panel/custom-fields-panel.js
-#: src/components/linked-issues/linked-issues-add-link.js
 #: src/components/select/select.js
-#: src/views/issue/activity/activity__add-spent-time.js
-#: src/views/issues/issues__sortby_add-attribute.js
 msgid "Filter items"
 msgstr "Filter items"
 
@@ -448,6 +452,10 @@ msgstr "Invalid query"
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Issue deleted"
 msgstr "Issue deleted"
+
+#: src/components/activity/activity-helper.js
+msgid "Issue history"
+msgstr "Issue history"
 
 #: src/components/issue-actions/issue-links-actions.js
 msgid "Issue link added"
@@ -751,10 +759,15 @@ msgstr "Something went wrong"
 msgid "Sort Attributes"
 msgstr "Sort Attributes"
 
+#: src/views/issue/activity/issue__activity-settings.js
+msgid "Sort: oldest first"
+msgstr "Sort: oldest first"
+
 #: src/views/issues/issues__sortby.js
 msgid "Sorted by"
 msgstr "Sorted by"
 
+#: src/components/activity/activity-helper.js
 #: src/views/issue/activity/activity__add-spent-time.js
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Spent time"
@@ -938,6 +951,11 @@ msgstr "When integrating TeamCity and YouTrack, the users are matched by their e
 #: src/components/error/error-message-data.js
 msgid "Woah, you can't touch this!"
 msgstr "Woah, you can't touch this!"
+
+#: src/components/comment/comment-edit.js
+#: src/views/issue/activity/activity__add-spent-time.js
+msgid "Write a comment, @mention people"
+msgstr "Write a comment, @mention people"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
