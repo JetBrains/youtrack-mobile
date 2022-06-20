@@ -931,6 +931,10 @@ msgstr ""
 msgid "Username or email"
 msgstr "Felhasználónév vagy e-mail cím"
 
+#: src/components/activity/activity-helper.js
+msgid "VCS changes"
+msgstr "VCS változások"
+
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
 msgstr ""

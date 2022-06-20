@@ -943,6 +943,10 @@ msgstr ""
 msgid "Username or email"
 msgstr ""
 
+#: src/components/activity/activity-helper.js
+msgid "VCS changes"
+msgstr ""
+
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
 msgstr ""

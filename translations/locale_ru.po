@@ -943,6 +943,10 @@ msgstr "Аккаунт заблокирован"
 msgid "Username or email"
 msgstr "Имя пользователя или адрес электронной почты"
 
+#: src/components/activity/activity-helper.js
+msgid "VCS changes"
+msgstr ""
+
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
 msgstr "Просмотреть комментарии и другую активность"

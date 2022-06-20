@@ -931,6 +931,10 @@ msgstr "Das Benutzerkonto ist gesperrt"
 msgid "Username or email"
 msgstr "Benutzername oder E-Mail"
 
+#: src/components/activity/activity-helper.js
+msgid "VCS changes"
+msgstr ""
+
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
 msgstr "Kommentare und andere Aktivitäten ansehen"

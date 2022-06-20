@@ -931,6 +931,10 @@ msgstr "La cuenta de usuario se ha bloqueado"
 msgid "Username or email"
 msgstr "Nombre de usuario o correo electrónico"
 
+#: src/components/activity/activity-helper.js
+msgid "VCS changes"
+msgstr ""
+
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
 msgstr "Ver comentarios y otra actividad"

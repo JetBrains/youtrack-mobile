@@ -925,6 +925,10 @@ msgstr "用户帐户被禁言"
 msgid "Username or email"
 msgstr "用户名或电子邮件"
 
+#: src/components/activity/activity-helper.js
+msgid "VCS changes"
+msgstr ""
+
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
 msgstr "查看评论和其他活动"

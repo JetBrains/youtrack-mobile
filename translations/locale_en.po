@@ -924,6 +924,10 @@ msgstr "User account is banned"
 msgid "Username or email"
 msgstr "Username or email"
 
+#: src/components/activity/activity-helper.js
+msgid "VCS changes"
+msgstr "VCS changes"
+
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
 msgstr "View comments and other activity"

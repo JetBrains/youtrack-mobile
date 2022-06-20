@@ -931,6 +931,10 @@ msgstr "Conta de usuário banida"
 msgid "Username or email"
 msgstr "Nome de usuário ou email"
 
+#: src/components/activity/activity-helper.js
+msgid "VCS changes"
+msgstr ""
+
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
 msgstr "Ver comentários e outras atividades"

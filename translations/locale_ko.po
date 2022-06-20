@@ -925,6 +925,10 @@ msgstr "사용자 계정이 금지됨"
 msgid "Username or email"
 msgstr "사용자 이름 또는 이메일"
 
+#: src/components/activity/activity-helper.js
+msgid "VCS changes"
+msgstr ""
+
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
 msgstr "댓글 및 기타 활동 보기"

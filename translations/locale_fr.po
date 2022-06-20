@@ -931,6 +931,10 @@ msgstr "Le compte utilisateur est exclu"
 msgid "Username or email"
 msgstr "Nom d'utilisateur ou adresse e-mail"
 
+#: src/components/activity/activity-helper.js
+msgid "VCS changes"
+msgstr ""
+
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
 msgstr "Consulter les commentaires et autres activités"
