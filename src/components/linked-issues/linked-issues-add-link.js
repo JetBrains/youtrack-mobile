@@ -183,7 +183,6 @@ const LinkedIssuesAddLink = (props: Props): Node => {
       multi: false,
       selectedItems: [currentIssueLinkTypeExtended],
       emptyValue: null,
-      placeholder: i18n('Filter items'),
       getTitle: (linkType: IssueLinkTypeExtended) => linkType.getPresentation(),
       dataSource: () => Promise.resolve(issueLinkTypes),
       onSelect: (linkType: IssueLinkTypeExtended) => {

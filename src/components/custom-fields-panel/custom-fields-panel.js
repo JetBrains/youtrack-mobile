@@ -127,7 +127,6 @@ const initialEditorsState = {
 
 const DATE_AND_TIME_FIELD_VALUE_TYPE = 'date and time';
 const projectLabel: string = i18n('Project');
-const fieldFilterPlaceholder = i18n('Filter items');
 
 export default class CustomFieldsPanel extends Component<Props, State> {
   api: Api = getApi();
@@ -319,7 +318,6 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         multi: isMultiValue,
         selectedItems: selectedItems,
         emptyValue: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
-        placeholder: fieldFilterPlaceholder,
         dataSource: () => {
           if (field.hasStateMachine) {
             return this.api.getStateMachineEvents(this.props.issueId, field.id)

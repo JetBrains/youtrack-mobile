@@ -22,7 +22,6 @@ import Router from '../router/router';
 import usage from '../usage/usage';
 import VisibilityControl from '../visibility/visibility-control';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
-import {commentPlaceholderText} from '../../app-text';
 import {composeSuggestionText, getSuggestWord} from '../mentions/mension-helper';
 import {getAttachmentActions} from '../attachments-row/attachment-actions';
 import {hasType} from '../api/api__resource-types';
@@ -390,7 +389,7 @@ const IssueCommentEdit = (props: Props) => {
             editCommentInput = instance;
           }
         }}
-        placeholder={commentPlaceholderText}
+        placeholder={i18n('Write a comment, @mention people')}
         value={state.editingComment.text}
         editable={!state.isSaving}
         underlineColorAndroid="transparent"

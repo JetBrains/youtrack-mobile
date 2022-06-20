@@ -35,23 +35,6 @@ import type {UserGroup} from 'flow/UserGroup';
 import type {User} from 'flow/User';
 import type {Visibility} from 'flow/Visibility';
 
-export const attachFileActions: Array<ActionSheetAction> = [
-  {
-    id: attachFileMethod.openPicker,
-    title: i18n('Choose from library…'),
-    icon: IconAttachment,
-    iconSize: 22,
-    execute: () => {},
-  },
-  {
-    id: attachFileMethod.openCamera,
-    title: i18n('Take a picture…'),
-    icon: IconCamera,
-    iconSize: 18,
-    execute: () => {},
-  },
-];
-
 
 type Props = {
   actions: {
@@ -74,7 +57,22 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
   const [isAttaching, updateAttaching] = useState(false);
 
   const createActions = useCallback((): Array<ActionSheetAction> => {
-    return attachFileActions.map((action: ActionSheetAction) => {
+    return [
+      {
+        id: attachFileMethod.openPicker,
+        title: i18n('Choose from library…'),
+        icon: IconAttachment,
+        iconSize: 22,
+        execute: () => {},
+      },
+      {
+        id: attachFileMethod.openCamera,
+        title: i18n('Take a picture…'),
+        icon: IconCamera,
+        iconSize: 18,
+        execute: () => {},
+      },
+    ].map((action: ActionSheetAction) => {
       if (action.id === attachFileMethod.openPicker) {
         action.execute = () => {
           logEvent({

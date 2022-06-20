@@ -13,7 +13,6 @@ import Router from 'components/router/router';
 import Select from 'components/select/select';
 import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
-import {commentPlaceholderText} from '../../../app-text';
 import {confirmation} from 'components/confirmation/confirmation';
 import {createIssueActivityActions} from './issue-activity__actions';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
@@ -148,7 +147,6 @@ const AddSpentTimeForm = (props: Props) => {
 
   const renderSelect = (selectProps: SelectProps) => {
     const defaultSelectProps: SelectProps = {
-      placeholder: i18n('Filter items'),
       multi: false,
       dataSource: () => Promise.resolve([]),
       selectedItems: [],
@@ -371,7 +369,7 @@ const AddSpentTimeForm = (props: Props) => {
             multiline
             textAlignVertical="top"
             style={[styles.feedbackFormInputDescription]}
-            placeholder={commentPlaceholderText}
+            placeholder={i18n('Write a comment, @mention people')}
             value={draft?.text}
             onChangeText={(comment: string) => updateDraftWorkItem({...draft, text: comment})}
           />

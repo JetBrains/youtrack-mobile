@@ -387,6 +387,7 @@ msgstr "Feature-Anfrage"
 msgid "Filter boards by name"
 msgstr "Boards nach Namen filtern"
 
+#: src/components/custom-fields-panel/custom-fields-panel.js
 #: src/components/linked-issues/linked-issues-add-link.js
 #: src/components/select/select.js
 #: src/views/issue/activity/activity__add-spent-time.js
