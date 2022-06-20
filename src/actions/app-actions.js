@@ -637,7 +637,7 @@ function redirectToHome(backendUrl: string = '') {
   Router.Home({
     backendUrl: backendUrl,
     error: null,
-    message: 'Connecting to YouTrack...',
+    message: i18n('Connecting to YouTrack...'),
   });
 }
 
