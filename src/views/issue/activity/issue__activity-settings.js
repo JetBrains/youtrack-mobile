@@ -5,7 +5,8 @@ import {View, Text} from 'react-native';
 
 import Switch from 'react-native-switch-pro';
 
-import {getIssueActivityIcon} from 'components/activity/activity-helper';
+import {getIssueActivityIcon, getIssueActivityLabel} from 'components/activity/activity-helper';
+import {i18n} from 'components/i18n/i18n';
 import {toggleIssueActivityEnabledType} from './issue-activity__helper';
 
 import styles from './issue-activity.styles';
@@ -49,7 +50,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
     };
 
     this.sortOrderOption = {
-      name: 'Sort: oldest first',
+      name: i18n('Sort: oldest first'),
       isNaturalCommentsOrder: props?.userAppearanceProfile?.naturalCommentsOrder,
     };
 
@@ -138,7 +139,8 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
               <View style={styles.settingsItemLabel}>
                 {!!Icon && <Icon size={22} color={this.props.uiTheme.colors.$iconAccent}/>}
                 <Text style={styles.settingsName}>
-                  {`  ${type.name}`}
+
+                  {`  ${getIssueActivityLabel(type.id)}`}
                 </Text>
               </View>
               <Switch
