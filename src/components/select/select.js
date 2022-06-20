@@ -54,9 +54,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
   header: () => null,
   noFilter: boolean,
   onChangeSelection: (items: Array<any>) => null,
-  placeholder: string,
 } = {
-    placeholder: i18n('Filter items'),
     autoFocus: false,
     onChangeSelection: (items: Array<Object>) => null,
     noFilter: false,
@@ -289,7 +287,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
   }
 
   renderContent: () => Node = (): Node => {
-    const {multi, autoFocus, style, placeholder, noFilter, header} = this.props;
+    const {multi, autoFocus, style, placeholder = i18n('Filter items'), noFilter, header} = this.props;
     const WrapperComponent: any = this.getWrapperComponent();
     const wrapperProps: Object = this.getWrapperProps({
       visible: true,

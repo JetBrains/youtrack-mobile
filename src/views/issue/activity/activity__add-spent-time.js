@@ -147,7 +147,6 @@ const AddSpentTimeForm = (props: Props) => {
 
   const renderSelect = (selectProps: SelectProps) => {
     const defaultSelectProps: SelectProps = {
-      placeholder: i18n('Filter items'),
       multi: false,
       dataSource: () => Promise.resolve([]),
       selectedItems: [],

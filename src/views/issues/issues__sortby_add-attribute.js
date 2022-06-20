@@ -9,7 +9,6 @@ import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {getApi} from 'components/api/api__instance';
 import {getCustomFieldName} from 'components/custom-field/custom-field-helper';
-import {i18n} from 'components/i18n/i18n';
 
 import type API from 'components/api/api';
 import type {Folder} from 'flow/User';
@@ -76,7 +75,6 @@ const IssuesSortByAddAttribute = (props: Props) => {
       getWrapperProps: () => ({}),
       selectedItems: props.selected,
       emptyValue: null,
-      placeholder: i18n('Filter items'),
       getTitle: (it: CustomFilterField | IssueFieldSortProperty) => getSortPropertyName(it),
       dataSource: loadSortProperties,
       onSelect: (selectedItems: Array<IssueFieldSortProperty>) => {
