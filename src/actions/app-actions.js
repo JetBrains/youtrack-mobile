@@ -217,7 +217,7 @@ async function connectToOneMoreServer(serverUrl: string, onBack: Function): Prom
     Router.EnterServer({
       onCancel: onBack,
       serverUrl,
-      connectToYoutrack: async (newURL) => resolve(await loadConfig(newURL)),
+      connectToYoutrack: async (newURL: string) => resolve(await doConnect(newURL)),
     });
   });
 }
@@ -346,6 +346,8 @@ export function changeAccount(account: StorageState, removeCurrentAccount?: bool
     dispatch(beginAccountChange());
 
     try {
+      loadTranslation(account?.config?.l10n?.locale, account?.config?.l10n?.language);
+
       await dispatch(updateOtherAccounts(account, removeCurrentAccount));
 
       await auth.cacheAuthParams(
@@ -637,12 +639,12 @@ function redirectToHome(backendUrl: string = '') {
   Router.Home({
     backendUrl: backendUrl,
     error: null,
-    message: 'Connecting to YouTrack...',
+    message: i18n('Connecting to YouTrack...'),
   });
 }
 
 async function refreshConfig(backendUrl: string): Promise<AppConfig> {
-  const updatedConfig: AuthConfig = await loadConfig(backendUrl);
+  const updatedConfig: AuthConfig = await doConnect(backendUrl);
   await storeConfig(updatedConfig);
   await flushStoragePart({currentAppVersion: packageJson.version});
   return updatedConfig;
@@ -709,7 +711,7 @@ export function initializeApp(
 
     if (!versionHasChanged) {
       refreshConfig(configCurrent.backendUrl).then(async (updatedConfig) => {
-        if (configCurrent?.l10n?.language !== updatedConfig?.l10n?.language) {
+        if (!issueId && configCurrent?.l10n?.language !== updatedConfig?.l10n?.language) {
           await reInitialize(updatedConfig);
         }
       });
@@ -717,9 +719,17 @@ export function initializeApp(
   };
 }
 
+export async function doConnect(newURL: string): Promise<any> {
+  const config = await loadConfig(newURL);
+  if (config.l10n) {
+    loadTranslation(config.l10n.locale, config.l10n.language);
+  }
+  return config;
+}
+
 export function connectToNewYoutrack(newURL: string): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const config = await loadConfig(newURL);
+    const config = await doConnect(newURL);
     await storeConfig(config);
     const auth: OAuth2 = await createAuthInstance(config);
     dispatch(setAuthInstance(auth));

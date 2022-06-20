@@ -8,6 +8,7 @@ import {mergeActivities} from './activity__merge-activities';
 
 import type {ActivityItem, ActivityPositionData, ActivityType, Activity} from 'flow/Activity';
 import type {IssueComment} from 'flow/CustomFields';
+import {i18n} from '../i18n/i18n';
 
 export interface GroupActivitiesParams {
   onCreateGroup?: (group) => void,
@@ -36,6 +37,15 @@ const getActivityCategories = (categoryTypes: Array<ActivityType> = []): Array<s
 
 const getIssueActivityIcon = (activityTypeName: string): React$Component<any> => {
   return activityIconMap[activityTypeName];
+};
+
+const getIssueActivityLabel = (activityTypeName: string): React$Component<any> => {
+  return {
+    [ActivityCategory.Source.COMMENT]: i18n('Comments'),
+    [ActivityCategory.Source.HISTORY]: i18n('Issue history'),
+    [ActivityCategory.Source.WORK_ITEM]: i18n('Spent time'),
+    [ActivityCategory.Source.VCS_ITEM]: 'VCS changes',
+  }[activityTypeName];
 };
 
 function createActivityFromComment(comment: IssueComment): Activity {
@@ -102,4 +112,5 @@ export {
   getActivityCategories,
   getActivityAllTypes,
   getIssueActivityIcon,
+  getIssueActivityLabel,
 };
