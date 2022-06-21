@@ -138,6 +138,9 @@ export const rowStyles = {
     position: 'relative',
     top: -2,
   },
+  activityStarTagIcon: {
+    marginBottom: -UNIT / 4,
+  },
   activityWorkTime: {
     marginLeft: UNIT / 2,
     color: '$icon',

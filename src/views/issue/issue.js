@@ -335,7 +335,6 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
           canStar={this.canStar()}
           hasStar={issue.watchers?.hasStar}
           onStarToggle={toggleStar}
-          uiTheme={this.uiTheme}
         />
       );
     }

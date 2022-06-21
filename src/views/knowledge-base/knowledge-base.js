@@ -212,7 +212,6 @@ export class KnowledgeBase extends Component<Props, State> {
                   this.updateFocusedArticle(null);
                 }
               }}
-              uiTheme={this.uiTheme}
             />}
           </View>
           {this.renderSeparator()}

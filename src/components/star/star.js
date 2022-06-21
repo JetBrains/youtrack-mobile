@@ -1,12 +1,14 @@
 /* @flow */
 
-import type {Node} from 'react';
 import React, {PureComponent} from 'react';
 import {TouchableOpacity} from 'react-native';
 
-import {IconStar, IconStarOutline} from '../icon/icon';
 import {HIT_SLOP} from '../common-styles/button';
-import type {UITheme} from 'flow/Theme';
+import {IconStar, IconStarOutline} from '../icon/icon';
+
+import styles from './star.styles';
+
+import type {Node} from 'react';
 
 type Props = {
   disabled?: boolean,
@@ -15,7 +17,6 @@ type Props = {
   onStarToggle: (starred: boolean) => any,
   style?: any,
   size?: number,
-  uiTheme: UITheme
 }
 
 export default class Star extends PureComponent<Props, void> {
@@ -26,7 +27,7 @@ export default class Star extends PureComponent<Props, void> {
   };
 
   render(): null | Node {
-    const {hasStar, canStar, style, uiTheme, size = 22, disabled = false} = this.props;
+    const {hasStar, canStar, style, size = 22, disabled = false} = this.props;
 
     if (!canStar) {
       return null;
@@ -39,8 +40,8 @@ export default class Star extends PureComponent<Props, void> {
         style={style}
         onPress={this.toggle}>
         {hasStar
-          ? <IconStar size={size} color={uiTheme.colors.$link}/>
-          : <IconStarOutline size={size} color={uiTheme.colors.$navigation}/>
+          ? <IconStar size={size} color={styles.link.color}/>
+          : <IconStarOutline size={size} color={styles.inactive.color}/>
         }
       </TouchableOpacity>
     );

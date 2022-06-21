@@ -5,10 +5,12 @@ import {Text, View} from 'react-native';
 
 import Diff from 'components/diff/diff';
 import getEventTitle from 'components/activity/activity__history-title';
+import Star from 'components/star/star';
 import StreamAttachments from './activity__stream-attachment';
 import StreamHistoryTextChange from './activity__stream-history__text-change';
 import StreamLink from './activity__stream-link';
 import {DEFAULT_WORK_TIME_SETTINGS} from 'components/time-tracking/time-tracking__default-settings';
+import {getActivityEventTitle} from './activity__stream-helper';
 import {getTextValueChange} from 'components/activity/activity__history-value';
 import {i18n} from 'components/i18n/i18n';
 import {isActivityCategory} from 'components/activity/activity__category';
@@ -108,6 +110,19 @@ const StreamHistoryChange = ({activity, customFields, workTimeSettings = DEFAULT
 
   const renderActivityByCategory = (activity: Activity) => {
     switch (true) {
+    case Boolean(isActivityCategory.star(activity)):
+      return (
+        <Text>
+          <Text style={styles.activityLabel}>{getActivityEventTitle(activity)}</Text>
+          <Star
+            style={styles.activityStarTagIcon}
+            size={16}
+            canStar={true}
+            hasStar={!!activity.added?.length}
+            onStarToggle={() => {}}
+          />
+        </Text>
+      );
     case Boolean(
       isActivityCategory.tag(activity) ||
       isActivityCategory.customField(activity) ||
