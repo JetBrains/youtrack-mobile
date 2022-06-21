@@ -47,15 +47,21 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
     }
   }
 
-  getHeaders: (() => any | void | {Authorization: string, "User-Agent": string}) = () => {
+  getHeaders: (() => any | void | { Authorization: string, 'User-Agent': string }) = () => {
     if (this.props.imageHeaders) {
       return this.props.imageHeaders;
     }
     const api: API = getApi();
+
+    let authorizationHeaders = null;
     if (api?.auth?.getAuthorizationHeaders) {
-      return api.auth.getAuthorizationHeaders();
+      try {
+        authorizationHeaders = api.auth.getAuthorizationHeaders();
+      } catch (e) {
+      }
     }
-  }
+    return authorizationHeaders;
+  };
 
   render(): null | Node {
     const {

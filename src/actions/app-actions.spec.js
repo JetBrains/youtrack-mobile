@@ -7,7 +7,7 @@ import * as Notification from 'components/notification/notification';
 import * as storage from 'components/storage/storage';
 import * as storageOauth from 'components/storage/storage__oauth';
 import * as types from './action-types';
-import AuthTest from 'components/auth/oauth2';
+import OAuth2 from 'components/auth/oauth2';
 import log from 'components/log/log';
 import mocks from '../../test/mocks';
 import permissionsHelper from 'components/permissions-store/permissions-helper';
@@ -292,10 +292,9 @@ describe('app-actions', () => {
     it('should initialize OAuth instance', async () => {
       await store.dispatch(actions.initializeApp(appConfigMock));
 
-      expect(store.getActions()[0]).toEqual({
-        type: types.INITIALIZE_AUTH,
-        auth: appStateMock.auth,
-      });
+      expect(store.getActions()[0].type).toEqual(types.INITIALIZE_AUTH);
+      expect(store.getActions()[0].auth instanceof OAuth2).toEqual(true);
+      expect(store.getActions()[0].auth.authParams).toEqual(authParamsMock);
     });
 
     it('should set YT current user from cache', async () => {
@@ -399,7 +398,7 @@ describe('app-actions', () => {
         serverUri: `${backendURLMock}/hub`,
       },
     };
-    const authMock = new AuthTest(appConfigMock);
+    const authMock = new OAuth2(appConfigMock);
 
     authParamsMock = {
       token_type: 'token_type',

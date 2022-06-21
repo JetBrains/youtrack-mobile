@@ -42,6 +42,7 @@ export class AuthBase {
     this.PERMISSIONS_CACHE_URL = urlJoin(
       this.config.auth.serverUri, `/api/rest/permissions/cache?${permissionsQueryString}`
     );
+    this.getAuthorizationHeaders = this.getAuthorizationHeaders.bind(this);
   }
 
   static getHeaders(config: AppConfig): {
@@ -125,15 +126,15 @@ export class AuthBase {
 
   async refreshToken(): Promise<any> {}
 
-  getAuthorizationHeaders(authParams: AuthParams = this.authParams): RequestHeaders {
-    if (!authParams) {
+  getAuthorizationHeaders(authParams: AuthParams): RequestHeaders {
+    const _authParams: ?AuthParams = authParams || this.authParams;
+    if (!_authParams) {
       throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
     }
-    const authHeaders: { 'Authorization': string, 'User-Agent': string } = {
-      'Authorization': `${authParams.token_type} ${authParams.access_token}`,
+    return {
+      'Authorization': `${_authParams.token_type} ${_authParams.access_token}`,
       'User-Agent': USER_AGENT,
     };
-    return authHeaders;
   }
 
   loadCurrentUser(authParams: any): Promise<any> {
