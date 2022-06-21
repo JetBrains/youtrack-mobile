@@ -224,7 +224,7 @@ msgstr "コメントが更新されました"
 
 #: src/components/activity/activity-helper.js
 msgid "Comments"
-msgstr ""
+msgstr "コメント"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "committed changes"
@@ -458,7 +458,7 @@ msgstr "課題が削除されました"
 
 #: src/components/activity/activity-helper.js
 msgid "Issue history"
-msgstr ""
+msgstr "課題履歴"
 
 #: src/components/issue-actions/issue-links-actions.js
 msgid "Issue link added"
@@ -763,7 +763,7 @@ msgstr "並べ替え属性"
 
 #: src/views/issue/activity/issue__activity-settings.js
 msgid "Sort: oldest first"
-msgstr ""
+msgstr "並べ替え：古いものから"
 
 #: src/views/issues/issues__sortby.js
 msgid "Sorted by"
@@ -960,7 +960,7 @@ msgstr "これを触ることはできません！"
 #: src/components/comment/comment-edit.js
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Write a comment, @mention people"
-msgstr ""
+msgstr "コメントを書くか、他のユーザーについて@メンションします"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."

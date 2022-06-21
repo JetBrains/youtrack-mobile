@@ -228,7 +228,7 @@ msgstr "Comando actualizado"
 
 #: src/components/activity/activity-helper.js
 msgid "Comments"
-msgstr ""
+msgstr "Comentarios"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "committed changes"
@@ -236,7 +236,7 @@ msgstr "cambios confirmados"
 
 #: src/actions/app-actions.js
 msgid "Connecting to YouTrack..."
-msgstr ""
+msgstr "Conectando a YouTrack..."
 
 #: src/components/error-boundary/error-boundary.js
 #: src/components/error-message/error-message-inline.js
@@ -462,7 +462,7 @@ msgstr "Incidencia eliminada"
 
 #: src/components/activity/activity-helper.js
 msgid "Issue history"
-msgstr ""
+msgstr "Historial de incidencia"
 
 #: src/components/issue-actions/issue-links-actions.js
 msgid "Issue link added"
@@ -768,7 +768,7 @@ msgstr "Ordenar atributos"
 
 #: src/views/issue/activity/issue__activity-settings.js
 msgid "Sort: oldest first"
-msgstr ""
+msgstr "Ordenar: la más antigua primero"
 
 #: src/views/issues/issues__sortby.js
 msgid "Sorted by"
@@ -966,7 +966,7 @@ msgstr "¡No, no lo toque!"
 #: src/components/comment/comment-edit.js
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Write a comment, @mention people"
-msgstr ""
+msgstr "Escribir un comentario, @mencionar personas"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
