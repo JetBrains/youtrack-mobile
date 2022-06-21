@@ -222,9 +222,17 @@ msgstr "已删除评论"
 msgid "Comment updated"
 msgstr "已更新评论"
 
+#: src/components/activity/activity-helper.js
+msgid "Comments"
+msgstr ""
+
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "committed changes"
 msgstr "已提交的更改"
+
+#: src/actions/app-actions.js
+msgid "Connecting to YouTrack..."
+msgstr ""
 
 #: src/components/error-boundary/error-boundary.js
 #: src/components/error-message/error-message-inline.js
@@ -383,11 +391,7 @@ msgstr "功能请求"
 msgid "Filter boards by name"
 msgstr "按名称筛选面板"
 
-#: src/components/custom-fields-panel/custom-fields-panel.js
-#: src/components/linked-issues/linked-issues-add-link.js
 #: src/components/select/select.js
-#: src/views/issue/activity/activity__add-spent-time.js
-#: src/views/issues/issues__sortby_add-attribute.js
 msgid "Filter items"
 msgstr "筛选条目"
 
@@ -451,6 +455,10 @@ msgstr "无效查询"
 #: src/views/issue/issue-base-actions-creater.js
 msgid "Issue deleted"
 msgstr "已删除问题"
+
+#: src/components/activity/activity-helper.js
+msgid "Issue history"
+msgstr ""
 
 #: src/components/issue-actions/issue-links-actions.js
 msgid "Issue link added"
@@ -753,10 +761,15 @@ msgstr "出错了"
 msgid "Sort Attributes"
 msgstr "排序属性"
 
+#: src/views/issue/activity/issue__activity-settings.js
+msgid "Sort: oldest first"
+msgstr ""
+
 #: src/views/issues/issues__sortby.js
 msgid "Sorted by"
 msgstr "排序方式"
 
+#: src/components/activity/activity-helper.js
 #: src/views/issue/activity/activity__add-spent-time.js
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Spent time"
@@ -912,6 +925,10 @@ msgstr "用户帐户被禁言"
 msgid "Username or email"
 msgstr "用户名或电子邮件"
 
+#: src/components/activity/activity-helper.js
+msgid "VCS changes"
+msgstr ""
+
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
 msgstr "查看评论和其他活动"
@@ -939,6 +956,11 @@ msgstr "当集成 TeamCity 和 YouTrack 时，会根据用户的电子邮件地�
 #: src/components/error/error-message-data.js
 msgid "Woah, you can't touch this!"
 msgstr "注意，不要碰这个！"
+
+#: src/components/comment/comment-edit.js
+#: src/views/issue/activity/activity__add-spent-time.js
+msgid "Write a comment, @mention people"
+msgstr ""
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."

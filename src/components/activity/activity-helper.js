@@ -44,7 +44,7 @@ const getIssueActivityLabel = (activityTypeName: string): React$Component<any> =
     [ActivityCategory.Source.COMMENT]: i18n('Comments'),
     [ActivityCategory.Source.HISTORY]: i18n('Issue history'),
     [ActivityCategory.Source.WORK_ITEM]: i18n('Spent time'),
-    [ActivityCategory.Source.VCS_ITEM]: 'VCS changes',
+    [ActivityCategory.Source.VCS_ITEM]: i18n('VCS changes'),
   }[activityTypeName];
 };
 
