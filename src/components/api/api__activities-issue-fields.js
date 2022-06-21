@@ -8,6 +8,7 @@ const toField = ApiHelper.toField;
 const ISSUE_ACTIVITIES_EVENT_BASE = toField([
   'id',
   'name',
+  'localizedName',
   'text',
   'color(id)',
 ]);
