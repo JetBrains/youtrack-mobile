@@ -621,7 +621,7 @@ msgstr "問題"
 
 #: src/components/custom-fields-panel/custom-fields-panel.js
 msgid "Project"
-msgstr ""
+msgstr "プロジェクト"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
@@ -927,7 +927,7 @@ msgstr "ユーザー名またはメールアドレス"
 
 #: src/components/activity/activity-helper.js
 msgid "VCS changes"
-msgstr ""
+msgstr "VCSの変更"
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"

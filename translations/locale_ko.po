@@ -224,7 +224,7 @@ msgstr "코멘트 업데이트됨"
 
 #: src/components/activity/activity-helper.js
 msgid "Comments"
-msgstr ""
+msgstr "코멘트"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "committed changes"
@@ -458,7 +458,7 @@ msgstr "이슈가 삭제되었습니다"
 
 #: src/components/activity/activity-helper.js
 msgid "Issue history"
-msgstr ""
+msgstr "이슈 기록"
 
 #: src/components/issue-actions/issue-links-actions.js
 msgid "Issue link added"
@@ -621,7 +621,7 @@ msgstr "문제"
 
 #: src/components/custom-fields-panel/custom-fields-panel.js
 msgid "Project"
-msgstr ""
+msgstr "프로젝트"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
@@ -763,7 +763,7 @@ msgstr "정렬 속성"
 
 #: src/views/issue/activity/issue__activity-settings.js
 msgid "Sort: oldest first"
-msgstr ""
+msgstr "정렬: 가장 오래된 항목을 첫 번째로 표시"
 
 #: src/views/issues/issues__sortby.js
 msgid "Sorted by"
@@ -927,7 +927,7 @@ msgstr "사용자 이름 또는 이메일"
 
 #: src/components/activity/activity-helper.js
 msgid "VCS changes"
-msgstr ""
+msgstr "VCS 변경사항"
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
@@ -960,7 +960,7 @@ msgstr "이런, 여기에 접근하실 수 없습니다."
 #: src/components/comment/comment-edit.js
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Write a comment, @mention people"
-msgstr ""
+msgstr "코멘트를 작성하거나, 다른 사람을 @멘션하세요"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."

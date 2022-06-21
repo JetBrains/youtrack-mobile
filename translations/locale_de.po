@@ -236,7 +236,7 @@ msgstr "ausgeführte Änderungen"
 
 #: src/actions/app-actions.js
 msgid "Connecting to YouTrack..."
-msgstr "Verbinden mit YouTrack..."
+msgstr "Verbindung mit YouTrack wird hergestellt..."
 
 #: src/components/error-boundary/error-boundary.js
 #: src/components/error-message/error-message-inline.js

@@ -636,7 +636,7 @@ msgstr "Сообщить о проблеме"
 
 #: src/components/custom-fields-panel/custom-fields-panel.js
 msgid "Project"
-msgstr ""
+msgstr "Проект"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
@@ -945,7 +945,7 @@ msgstr "Имя пользователя или адрес электронной
 
 #: src/components/activity/activity-helper.js
 msgid "VCS changes"
-msgstr ""
+msgstr "Изменения в VCS"
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"

@@ -236,7 +236,7 @@ msgstr "changements validés"
 
 #: src/actions/app-actions.js
 msgid "Connecting to YouTrack..."
-msgstr "Connexion à YouTrack..."
+msgstr "Connexion à YouTrack en cours..."
 
 #: src/components/error-boundary/error-boundary.js
 #: src/components/error-message/error-message-inline.js
@@ -626,7 +626,7 @@ msgstr "Problème"
 
 #: src/components/custom-fields-panel/custom-fields-panel.js
 msgid "Project"
-msgstr ""
+msgstr "Projet"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
@@ -933,7 +933,7 @@ msgstr "Nom d'utilisateur ou adresse e-mail"
 
 #: src/components/activity/activity-helper.js
 msgid "VCS changes"
-msgstr ""
+msgstr "Modifications VCS"
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
