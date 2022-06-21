@@ -228,7 +228,7 @@ msgstr "Commentaire mis à jour"
 
 #: src/components/activity/activity-helper.js
 msgid "Comments"
-msgstr ""
+msgstr "Commentaires"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "committed changes"
@@ -236,7 +236,7 @@ msgstr "changements validés"
 
 #: src/actions/app-actions.js
 msgid "Connecting to YouTrack..."
-msgstr ""
+msgstr "Connexion à YouTrack..."
 
 #: src/components/error-boundary/error-boundary.js
 #: src/components/error-message/error-message-inline.js
@@ -462,7 +462,7 @@ msgstr "Ticket supprimé"
 
 #: src/components/activity/activity-helper.js
 msgid "Issue history"
-msgstr ""
+msgstr "Historique des tickets"
 
 #: src/components/issue-actions/issue-links-actions.js
 msgid "Issue link added"
@@ -768,7 +768,7 @@ msgstr "Attributs de tri"
 
 #: src/views/issue/activity/issue__activity-settings.js
 msgid "Sort: oldest first"
-msgstr ""
+msgstr "Trier : plus anciens en premier"
 
 #: src/views/issues/issues__sortby.js
 msgid "Sorted by"
@@ -966,7 +966,7 @@ msgstr "Attention, vous ne pouvez pas toucher à ça !"
 #: src/components/comment/comment-edit.js
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Write a comment, @mention people"
-msgstr ""
+msgstr "Rédigez un commentaire, @mentionnez des personnes"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."

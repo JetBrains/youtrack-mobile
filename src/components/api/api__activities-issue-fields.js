@@ -4,6 +4,7 @@ import {toField} from 'util/to-field';
 const ISSUE_ACTIVITIES_EVENT_BASE = toField([
   'id',
   'name',
+  'localizedName',
   'text',
   'color(id)',
 ]);
