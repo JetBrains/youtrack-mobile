@@ -8,6 +8,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import * as actions from './inbox-threads-actions';
 import ErrorMessage from 'components/error-message/error-message';
 import Thread from './inbox-threads__thread';
+import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
+import {SkeletonIssueActivities, SkeletonIssues} from 'components/skeleton/skeleton';
+import {UNIT} from '../../components/variables/variables';
 
 import styles from './inbox-threads.styles';
 
@@ -27,8 +30,9 @@ interface Props {
 
 const InboxThreadsList = ({currentUser, folderId, theme, ...other}: Props): Node => {
   const dispatch = useDispatch();
-  const threads: InboxThread[] = useSelector((state: AppState) => state.inboxThreads.threads);
-  const hasMore: boolean = useSelector((state: AppState) => state.inboxThreads.hasMore);
+  const threadsData: { threads: InboxThread[], hasMore: boolean } = useSelector(
+    (state: AppState) => state.inboxThreads.threadsData[folderId || folderIdAllKey] || {threads: []}
+  );
   const inProgress: boolean = useSelector((state: AppState) => state.inboxThreads.inProgress);
   const error: ?CustomError = useSelector((state: AppState) => state.inboxThreads.error);
 
@@ -44,14 +48,21 @@ const InboxThreadsList = ({currentUser, folderId, theme, ...other}: Props): Node
 
   const renderItem = ({item, index}: { item: InboxThread, index: number, ... }) => (
     <Thread
-      style={[styles.thread, (index === threads.length - (hasMore ? 2 : 1)) && styles.threadLast]}
+      style={[
+        styles.thread,
+        (index === threadsData.threads.length - (threadsData.hasMore ? 2 : 1)) && styles.threadLast,
+      ]}
       thread={item}
       currentUser={currentUser}
       uiTheme={theme.uiTheme}
     />
   );
 
-  const visibleThreads: InboxThread[] = hasMore ? threads.slice(0, threads.length - 1) : threads;
+  const visibleThreads: InboxThread[] = (
+    threadsData.hasMore
+      ? threadsData.threads.slice(0, threadsData.threads.length - 1)
+      : threadsData.threads
+  );
   return <View
     testID="test:id/inboxThreads"
     accessibilityLabel="inboxThreads"
@@ -63,6 +74,11 @@ const InboxThreadsList = ({currentUser, folderId, theme, ...other}: Props): Node
       data={visibleThreads}
       ItemSeparatorComponent={() => <View style={styles.threadSeparator}/>}
       ListFooterComponent={() => {
+        if (!visibleThreads.length) {
+          return folderId !== folderIdMap[1]
+            ? <SkeletonIssues marginTop={UNIT * 1.5}/>
+            : <SkeletonIssueActivities marginTop={UNIT * 2} marginLeft={UNIT} marginRight={UNIT}/>;
+        }
         if (error && !inProgress) {
           return <ErrorMessage error={error} style={styles.error}/>;
         }
@@ -71,8 +87,8 @@ const InboxThreadsList = ({currentUser, folderId, theme, ...other}: Props): Node
       keyExtractor={(it: InboxThread) => it.id}
       onEndReachedThreshold={5}
       onEndReached={() => {
-        if (hasMore && !inProgress) {
-          loadThreads(threads.slice(-1)[0].notified);
+        if (threadsData.hasMore && !inProgress) {
+          loadThreads(threadsData.threads.slice(-1)[0].notified);
         }
       }}
       refreshControl={<RefreshControl
@@ -86,10 +102,4 @@ const InboxThreadsList = ({currentUser, folderId, theme, ...other}: Props): Node
 };
 
 
-export default React.memo<Props>(InboxThreadsList, (prev: Props, next: Props) => {
-  return (
-    prev.currentUser?.id === next.currentUser?.id &&
-    prev.folderId === next.folderId &&
-    prev.theme === next.theme
-  );
-});
+export default InboxThreadsList;

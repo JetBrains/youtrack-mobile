@@ -91,6 +91,8 @@ const threadTabsTitles: string[] = [
   i18n('Subscriptions'),
 ];
 
+export const folderIdAllKey: string = 'all';
+
 const folderIdMap: { [number]: string } = {
   [0]: undefined,
   [1]: 'direct',

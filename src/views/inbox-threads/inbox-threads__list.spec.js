@@ -1,5 +1,6 @@
 import React from 'react';
 
+import {Provider} from 'react-redux';
 import {render} from '@testing-library/react-native';
 
 import configureMockStore from 'redux-mock-store';
@@ -7,7 +8,7 @@ import InboxThreadsList from './inbox-threads__list';
 import mocks from '../../../test/mocks';
 import thunk from 'redux-thunk';
 import {DEFAULT_THEME} from 'components/theme/theme';
-import {Provider} from 'react-redux';
+import {folderIdAllKey} from './inbox-threads-helper';
 
 let apiMock;
 jest.mock('components/api/api__instance', () => ({
@@ -17,7 +18,9 @@ jest.mock('components/api/api__instance', () => ({
   }),
 }));
 
-describe('Inbox Threads', () => {
+const threadTestId = 'test:id/inboxThreadsThread';
+
+describe('Inbox Threads List', () => {
 
   let storeMock;
   beforeAll(() => {
@@ -25,10 +28,13 @@ describe('Inbox Threads', () => {
   });
 
   describe('Render', () => {
-    const threadTestId = 'test:id/inboxThreadsThread';
     let threadsMock;
     beforeEach(() => {
-      threadsMock = [mocks.createThreadMock(), mocks.createThreadMock(), mocks.createThreadMock()];
+      threadsMock = [
+        mocks.createThreadMock(),
+        mocks.createThreadMock({id: 'M-1'}),
+        mocks.createThreadMock({id: 'R-1'}),
+      ];
     });
 
     it('should render Inbox Threads view', () => {
@@ -38,30 +44,21 @@ describe('Inbox Threads', () => {
     });
 
     it('should render thread item', () => {
-      createStore(
-        [threadsMock[0]],
-        false
-        );
+      createStore(createThreadsData([threadsMock[0]]));
       const {getAllByTestId} = doRender();
 
       expect(getAllByTestId(threadTestId).length).toEqual(1);
     });
 
     it('should render all threads', () => {
-      createStore(
-        threadsMock,
-        false
-      );
+      createStore(createThreadsData(threadsMock));
       const {getAllByTestId} = doRender();
 
       expect(getAllByTestId(threadTestId).length).toEqual(3);
     });
 
     it('should render `length - 1` threads if there are more threads to load', () => {
-      createStore(
-        threadsMock,
-        true
-      );
+      createStore(createThreadsData(threadsMock, true));
       const {getAllByTestId} = doRender();
 
       expect(getAllByTestId(threadTestId).length).toEqual(2);
@@ -69,7 +66,11 @@ describe('Inbox Threads', () => {
   });
 
 
-  function createStore(threads = [], hasMore = false) {
+  function createThreadsData(threads = [], hasMore = false, key = folderIdAllKey) {
+    return {[key]: {threads, hasMore}};
+  }
+
+  function createStore(threadsData = createThreadsData()) {
     const getApi = () => apiMock;
     const createStoreMock = mocks.createMockStore(getApi);
     const middlewares = [thunk.withExtraArgument(getApi)];
@@ -79,10 +80,7 @@ describe('Inbox Threads', () => {
       app: {
         otherAccounts: [],
       },
-      inboxThreads: {
-        threads,
-        hasMore,
-      },
+      inboxThreads: {threadsData},
     };
     storeMock = createStoreMock(stateMock);
   }

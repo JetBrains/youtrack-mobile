@@ -2,14 +2,14 @@ import * as actions from './inbox-threads-actions';
 import * as storage from 'components/storage/storage';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+import {__setStorageState} from 'components/storage/storage';
 import {inboxThreadsNamespace, inboxThreadsReducersNamesMap} from './inbox-threads-reducers';
-import {folderIdMap} from './inbox-threads-helper';
+import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
 
 describe('Inbox Threads', () => {
   let apiMock;
   let responseMock;
   let store;
-  let threadsMock;
 
   const getApi = () => apiMock;
   const middlewares = [thunk.withExtraArgument(getApi)];
@@ -28,14 +28,6 @@ describe('Inbox Threads', () => {
     storage.__setStorageState({});
   });
 
-  beforeEach(() => {
-    threadsMock = [{}, {}, {}];
-    store = storeMock({
-      inboxThreads: {
-        threads: threadsMock,
-      },
-    });
-  });
 
   describe('loadInboxThreads', () => {
     it('should load inbox threads for the first time', async () => {
@@ -64,6 +56,7 @@ describe('Inbox Threads', () => {
         {
           type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
           payload: {
+            folderId: folderIdAllKey,
             threads: responseMock,
             reset: true,
           },
@@ -78,6 +71,7 @@ describe('Inbox Threads', () => {
       expect(store.getActions()[3]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {
+          folderId: folderIdAllKey,
           threads: responseMock,
           reset: false,
         },
@@ -87,29 +81,60 @@ describe('Inbox Threads', () => {
 
     describe('Cache', () => {
       it('should update inbox threads `All` tab cache', async () => {
+        apiMock.inbox.getThreads.mockResolvedValueOnce([{}, {}]);
         await store.dispatch(actions.loadInboxThreads(undefined, undefined));
 
-        expect(storage.getStorageState().inboxThreadsCache.all.length).toEqual(threadsMock.length);
+        expect(storage.getStorageState().inboxThreadsCache[folderIdAllKey].length).toEqual(2);
       });
 
       it('should update inbox threads `Mentions & Reactions` tab cache', async () => {
+        apiMock.inbox.getThreads.mockResolvedValueOnce([{}, {}, {}]);
         await store.dispatch(actions.loadInboxThreads(folderIdMap[1]));
 
-        expect(storage.getStorageState().inboxThreadsCache[folderIdMap[1]].length).toEqual(threadsMock.length);
+        expect(storage.getStorageState().inboxThreadsCache[folderIdMap[1]].length).toEqual(3);
       });
 
       it('should update inbox threads `Subscriptions` tab cache', async () => {
+        apiMock.inbox.getThreads.mockResolvedValueOnce([{}, {}, {}, {}]);
         await store.dispatch(actions.loadInboxThreads(folderIdMap[2]));
 
-        expect(storage.getStorageState().inboxThreadsCache[folderIdMap[2]].length).toEqual(threadsMock.length);
+        expect(storage.getStorageState().inboxThreadsCache[folderIdMap[2]].length).toEqual(4);
       });
 
-      it('should update inbox threads cache after loading new threads', async () => {
-        jest.spyOn(storage, 'flushStoragePart').mockImplementationOnce(() => {});
+      it('should set threads from the cache before loading for the  first time', async () => {
+        const threadsMock = [{}, {}];
+        __setStorageState({
+          inboxThreadsCache: {
+            [folderIdMap[1]]: threadsMock,
+          },
+        });
 
-        await store.dispatch(actions.loadInboxThreads());
+        await store.dispatch(actions.loadInboxThreads(folderIdMap[1], null));
 
-        expect(storage.flushStoragePart).toHaveBeenCalled();
+        expect(store.getActions()[0]).toEqual({
+          type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
+          payload: {
+            folderId: folderIdMap[1],
+            threads: threadsMock,
+            reset: true,
+          },
+        });
+
+      });
+
+      it('should not set threads from the cache before loading for the  first time', async () => {
+        apiMock.inbox.getThreads.mockResolvedValueOnce([{}, {}, {}]);
+        const threadsMock = [{}, {}];
+        __setStorageState({
+          inboxThreadsCache: {
+            [folderIdMap[1]]: threadsMock,
+          },
+        });
+
+        await store.dispatch(actions.loadInboxThreads(folderIdMap[1], 1));
+
+        expect(store.getActions()[0].type).not.toEqual(`${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`);
+
       });
     });
 

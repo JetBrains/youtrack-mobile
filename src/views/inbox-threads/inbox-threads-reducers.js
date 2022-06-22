@@ -8,20 +8,18 @@ import type {InboxThread} from '../../flow/Inbox';
 
 export interface InboxThreadState {
   error: CustomError | null,
-  hasMore: boolean,
-  threads: Array<InboxThread>,
+  threadsData: { [string]: {threads: InboxThread[], hasMore: boolean} },
   inProgress: boolean,
 }
 
 const initialState: InboxThreadState = {
   error: null,
-  hasMore: false,
-  threads: [],
+  threadsData: {},
   inProgress: false,
 };
 
 export interface NotificationsActions {
-  setNotifications: (action: { threads: InboxThread[], reset?: boolean }) => InboxThreadState,
+  setNotifications: (action: { threads: InboxThread[], reset?: boolean, folderId: string }) => InboxThreadState,
   setError: (action: { error: CustomError | null }) => InboxThreadState,
   toggleProgress: (action: { inProgress: boolean }) => InboxThreadState,
 }
@@ -40,14 +38,20 @@ const {reducer, actions}: { reducer: any, actions: NotificationsActions } = crea
   reducers: {
     [inboxThreadsReducersNamesMap.setNotifications]: (
       state: InboxThreadState,
-      action: { payload: { threads: InboxThread[], reset?: boolean } }
+      action: { payload: { threads: InboxThread[], reset?: boolean, folderId: string } }
     ) => {
-      if (action.payload.reset === true) {
-        state.threads = action.payload.threads;
-      } else {
-        state.threads = state.threads.slice(0, state.threads.length - 1).concat(action.payload.threads);
+      const {threads, reset, folderId} = action.payload;
+      if (!state.threadsData[folderId]) {
+        state.threadsData[folderId] = {threads: [], hasMore: false};
       }
-      state.hasMore = action.payload.threads.length === threadsPageSize;
+      state.threadsData[folderId] = {
+        threads: (
+          reset === true
+            ? threads
+            : state.threadsData[folderId].threads.slice(0, state.threadsData[folderId].threads.length - 1).concat(threads)
+        ),
+        hasMore: threads.length === threadsPageSize,
+      };
     },
     [inboxThreadsReducersNamesMap.setError]: (
       state: InboxThreadState,

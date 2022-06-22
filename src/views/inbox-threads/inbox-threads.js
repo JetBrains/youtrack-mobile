@@ -4,7 +4,6 @@ import React, {useContext, useState} from 'react';
 import {Dimensions, Text, View} from 'react-native';
 
 import {TabBar, TabView} from 'react-native-tab-view';
-import {View as AnimatedView} from 'react-native-animatable';
 import {useSelector} from 'react-redux';
 
 import Header from 'components/header/header';
@@ -12,8 +11,6 @@ import InboxThreadsList from './inbox-threads__list';
 import {folderIdMap, threadTabsTitles} from './inbox-threads-helper';
 import {i18n} from 'components/i18n/i18n';
 import {ThemeContext} from 'components/theme/theme-context';
-import {UNIT} from 'components/variables/variables';
-import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 
 import styles from './inbox-threads.styles';
 import tabStyles from 'components/issue-tabbed/issue-tabbed.style';
@@ -35,25 +32,13 @@ const InboxThreads: () => Node = (): Node => {
     routes,
   });
 
-  const renderScene = ({route}: { route: TabRoute }) => {
-    return (
-      route.key !== navigationState.index
-        ? <SkeletonIssueActivities marginTop={UNIT * 2} marginLeft={UNIT} marginRight={UNIT}/>
-        : (
-          <AnimatedView
-            animation="fadeIn"
-            duration={500}
-            useNativeDriver
-          >
-            <InboxThreadsList
-              currentUser={currentUser}
-              folderId={folderIdMap[route.key]}
-              theme={theme}
-            />
-          </AnimatedView>
-        )
-    );
-  };
+  const renderScene = ({route}: { route: TabRoute }) => (
+    <InboxThreadsList
+      currentUser={currentUser}
+      folderId={folderIdMap[route.key]}
+      theme={theme}
+    />
+  );
 
   const renderTabBar = (props: any) => {
     const uiThemeColors: UIThemeColors = theme.uiTheme.colors;

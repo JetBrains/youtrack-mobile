@@ -261,9 +261,9 @@ function skeletonIssue(key: string) {
 export const SkeletonIssues = (props: SkeletonProps): Node => {
   return <SkeletonPlaceholder
     {...skeletonPlaceholderDefaultProps}
-    {...props}
   >
     <SkeletonPlaceholder.Item
+      {...props}
       fleDirection="column"
       marginLeft={UNIT * 2}
       marginRight={UNIT * 2}

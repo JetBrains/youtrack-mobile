@@ -3,6 +3,7 @@
 import usage from 'components/usage/usage';
 import {ANALYTICS_NOTIFICATIONS_THREADS_PAGE} from 'components/analytics/analytics-ids';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
+import {folderIdAllKey} from './inbox-threads-helper';
 import {setError, setNotifications, toggleProgress} from './inbox-threads-reducers';
 import {until} from 'util/util';
 
@@ -17,24 +18,23 @@ type StateGetter = () => AppState;
 
 const MAX_CACHED_THREADS: number = 10;
 
-const loadThreadsFromCache = (folderId?: string = 'all'): ((dispatch: (any) => any) => Promise<void>) => {
+const loadThreadsFromCache = (folderId: string = folderIdAllKey): ((dispatch: (any) => any) => Promise<void>) => {
   return async (dispatch: (any) => any) => {
-    const inboxThreadsCache = getStorageState().inboxThreadsCache;
+    const inboxThreadsCache: ?{ [string]: InboxThread[] } = getStorageState().inboxThreadsCache;
     if (inboxThreadsCache && inboxThreadsCache[folderId]) {
-      dispatch(setNotifications({threads: inboxThreadsCache[folderId], reset: true}));
+      dispatch(setNotifications({threads: inboxThreadsCache[folderId], reset: true, folderId}));
     }
   };
 };
 
-const updateThreadsCache = (folderId?: string = 'all'): ((
+const updateThreadsCache = (threads: InboxThread[], folderId: string = folderIdAllKey): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
 ) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const threads = getState().inboxThreads.threads;
     if (threads.length) {
-      const inboxThreadsCache = getStorageState().inboxThreadsCache;
+      const inboxThreadsCache: ?{ [string]: InboxThread[] } = getStorageState().inboxThreadsCache;
       flushStoragePart({
         inboxThreadsCache: {
           ...inboxThreadsCache,
@@ -69,8 +69,8 @@ const loadInboxThreads = (folderId?: string, end?: number): ((
     if (error) {
       dispatch(setError({error}));
     } else {
-      dispatch(setNotifications({threads, reset: typeof end !== 'number'}));
-      dispatch(updateThreadsCache(folderId));
+      dispatch(setNotifications({threads, reset: typeof end !== 'number', folderId: folderId || folderIdAllKey}));
+      dispatch(updateThreadsCache(threads, folderId));
     }
   };
 };
