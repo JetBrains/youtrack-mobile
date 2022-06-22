@@ -232,7 +232,7 @@ msgstr "커밋된 변경사항"
 
 #: src/actions/app-actions.js
 msgid "Connecting to YouTrack..."
-msgstr ""
+msgstr "YouTrack에 연결하는 중..."
 
 #: src/components/error-boundary/error-boundary.js
 #: src/components/error-message/error-message-inline.js

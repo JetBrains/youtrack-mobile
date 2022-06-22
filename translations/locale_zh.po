@@ -232,7 +232,7 @@ msgstr "已提交的更改"
 
 #: src/actions/app-actions.js
 msgid "Connecting to YouTrack..."
-msgstr ""
+msgstr "正在连接到 YouTrack..."
 
 #: src/components/error-boundary/error-boundary.js
 #: src/components/error-message/error-message-inline.js
