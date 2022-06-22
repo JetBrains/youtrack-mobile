@@ -91,7 +91,7 @@ const threadTabsTitles: string[] = [
   i18n('Subscriptions'),
 ];
 
-export const folderIdAllKey: string = 'all';
+const folderIdAllKey: string = 'all';
 
 const folderIdMap: { [number]: string } = {
   [0]: undefined,
@@ -101,6 +101,7 @@ const folderIdMap: { [number]: string } = {
 
 export {
   createMessagesMap,
+  folderIdAllKey,
   folderIdMap,
   getThreadData,
   getTypes,
