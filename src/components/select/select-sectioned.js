@@ -46,6 +46,10 @@ export default class SelectSectioned extends Select {
     this.setState({filteredItems});
   }
 
+  renderHeader() {
+    return null;
+  }
+
   renderItems(): any {
     const {header = () => null} = this.props;
     return (

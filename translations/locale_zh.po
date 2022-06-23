@@ -224,7 +224,7 @@ msgstr "已更新评论"
 
 #: src/components/activity/activity-helper.js
 msgid "Comments"
-msgstr ""
+msgstr "评论"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "committed changes"
@@ -232,7 +232,7 @@ msgstr "已提交的更改"
 
 #: src/actions/app-actions.js
 msgid "Connecting to YouTrack..."
-msgstr ""
+msgstr "正在连接到 YouTrack..."
 
 #: src/components/error-boundary/error-boundary.js
 #: src/components/error-message/error-message-inline.js
@@ -458,7 +458,7 @@ msgstr "已删除问题"
 
 #: src/components/activity/activity-helper.js
 msgid "Issue history"
-msgstr ""
+msgstr "议题历史记录"
 
 #: src/components/issue-actions/issue-links-actions.js
 msgid "Issue link added"
@@ -621,7 +621,7 @@ msgstr "问题"
 
 #: src/components/custom-fields-panel/custom-fields-panel.js
 msgid "Project"
-msgstr ""
+msgstr "项目"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
@@ -763,7 +763,7 @@ msgstr "排序属性"
 
 #: src/views/issue/activity/issue__activity-settings.js
 msgid "Sort: oldest first"
-msgstr ""
+msgstr "排序：旧->新"
 
 #: src/views/issues/issues__sortby.js
 msgid "Sorted by"
@@ -927,7 +927,7 @@ msgstr "用户名或电子邮件"
 
 #: src/components/activity/activity-helper.js
 msgid "VCS changes"
-msgstr ""
+msgstr "VCS 变更"
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
@@ -960,7 +960,7 @@ msgstr "注意，不要碰这个！"
 #: src/components/comment/comment-edit.js
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Write a comment, @mention people"
-msgstr ""
+msgstr "写评论，提及人（@）"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
