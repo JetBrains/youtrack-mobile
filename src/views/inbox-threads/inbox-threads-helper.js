@@ -19,7 +19,7 @@ function getTypes(activity: Activity): { [string]: boolean } {
     summary: isActivityCategory.summary(activity),
     description: isActivityCategory.description(activity),
     sprint: isActivityCategory.sprint(activity),
-    date: isActivityCategory.date(activity),
+    issueResolved: isActivityCategory.issueResolved(activity),
     project: isActivityCategory.project(activity),
     customField: isActivityCategory.customField(activity),
     work: isActivityCategory.work(activity),

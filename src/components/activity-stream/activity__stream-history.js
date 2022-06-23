@@ -130,7 +130,8 @@ const StreamHistoryChange = ({activity, customFields, workTimeSettings = DEFAULT
       isActivityCategory.work(activity) ||
       isActivityCategory.description(activity) ||
       isActivityCategory.summary(activity) ||
-      isActivityCategory.project(activity)
+      isActivityCategory.project(activity) ||
+      isActivityCategory.issueResolved(activity)
     ):
       return renderTextValueChange(activity, customFields);
     case Boolean(isActivityCategory.link(activity)):

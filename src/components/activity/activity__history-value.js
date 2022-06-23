@@ -37,7 +37,7 @@ export function getTextValueChange(params: TextValueChangeParams): string {
   case isActivityCategory.project(params.activity):
     value.presentation = getProjectPresentation(eventValue);
     break;
-  case isActivityCategory.date(params.activity):
+  case isActivityCategory.issueResolved(params.activity):
     value.presentation = ytDate(eventValue);
     break;
   case isActivityCategory.attachment(params.activity) || isActivityCategory.tag(params.activity):
