@@ -619,10 +619,6 @@ msgstr "비밀번호"
 msgid "Problem"
 msgstr "문제"
 
-#: src/components/custom-fields-panel/custom-fields-panel.js
-msgid "Project"
-msgstr "프로젝트"
-
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
 msgstr "접힌 프로젝트"
