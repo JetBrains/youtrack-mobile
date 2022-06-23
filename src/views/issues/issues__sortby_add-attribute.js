@@ -9,6 +9,7 @@ import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {getApi} from 'components/api/api__instance';
 import {getCustomFieldName} from 'components/custom-field/custom-field-helper';
+import {SELECT_ITEM_HEIGHT} from 'components/select/select.styles';
 
 import type API from 'components/api/api';
 import type {Folder} from 'flow/User';
@@ -82,6 +83,7 @@ const IssuesSortByAddAttribute = (props: Props) => {
         props.onHide();
       },
       onCancel: props.onHide,
+      style: {marginBottom: SELECT_ITEM_HEIGHT},
     };
     return (
       <Select {...selectProps}/>
