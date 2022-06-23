@@ -1,17 +1,17 @@
 /* @flow */
 
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Dimensions} from 'react-native';
 
-import {connect} from 'react-redux';
 import {View as AnimatedView} from 'react-native-animatable';
+import {useSelector} from 'react-redux';
 
 import Router from '../router/router';
-import {checkVersion, FEATURE_VERSION} from '../feature/feature';
-import {DEFAULT_THEME} from '../theme/theme';
-import {getStorageState} from '../storage/storage';
-import {IconBell, IconBoard, IconSettings, IconTask, IconKnowledgeBase} from '../icon/icon';
-import {isSplitView} from '../responsive/responsive-helper';
+import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
+import {DEFAULT_THEME} from 'components/theme/theme';
+import {getStorageState} from 'components/storage/storage';
+import {IconBell, IconBoard, IconSettings, IconTask, IconKnowledgeBase} from 'components/icon/icon';
+import {isSplitView} from 'components/responsive/responsive-helper';
 import {MenuItem} from './menu__item';
 import {routeMap} from '../../app-routes';
 
@@ -22,228 +22,184 @@ import type {Article} from 'flow/Article';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
 import type {UITheme} from 'flow/Theme';
 
-type Props = {
-  isDisabled: boolean,
-  isVisible: boolean,
-  lastVisitedArticle?: Article,
-  uiTheme: UITheme,
-}
 
-type State = {
-  prevRouteName: ?string,
-  currentRouteName: ?string,
-  isSplitView: boolean,
-}
+export default function ({uiTheme = DEFAULT_THEME}: { uiTheme: UITheme }) {
+  const isDisabled: boolean = useSelector((appState: AppState) => appState.app.isChangingAccount);
 
-class Menu extends Component<Props, State> {
-  static defaultProps: $Shape<Props> = {
-    isVisible: true,
-    isDisabled: false,
-    uiTheme: DEFAULT_THEME,
-  };
-
-  unsubscribeOnDispatch: Function;
-  unsubscribeOnDimensionsChange: EventSubscription;
-
-  constructor(props: Props) {
-    super(props);
-
-    this.state = {
-      prevRouteName: null,
-      currentRouteName: null,
-      isSplitView: isSplitView(),
-    };
-
-    this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: ?string, prevRouteName: ?string) => {
-      this.setCurrentRouteName(routeName, prevRouteName);
-    });
-  }
-
-  setSplitView: () => void = (): void => {
-    this.setState({isSplitView: isSplitView()});
-  }
-
-  componentDidMount() {
-    this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.setSplitView);
-  }
-
-  componentWillUnmount() {
-    this.unsubscribeOnDispatch();
-    this.unsubscribeOnDimensionsChange.remove();
-  }
-
-  setCurrentRouteName = (routeName: ?string, prevRouteName: ?string) => this.setState({
-    prevRouteName: prevRouteName,
-    currentRouteName: routeName,
+  const [routes, updateRoutes] = useState({
+    prevRouteName: null,
+    currentRouteName: null,
   });
+  const [splitView, updateSplitView] = useState(isSplitView());
 
-  isInboxThreadsEnabled(): boolean {
-    return checkVersion(FEATURE_VERSION.inboxThreads, true);
-  }
+  useEffect(() => {
+    const unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: ?string, prevRouteName: ?string) => {
+      updateRoutes({
+        currentRouteName: routeName,
+        prevRouteName: prevRouteName,
+      });
+    });
+    return () => unsubscribeOnDispatch();
+  }, []);
 
-  isActiveRoute = (routeName: string) => {
-    if (this.state.currentRouteName === routeMap.Issue) {
-      return this.state.prevRouteName === routeName;
+  useEffect(() => {
+    const unsubscribeOnDimensionsChange: EventSubscription = Dimensions.addEventListener(
+      'change', () => updateSplitView(isSplitView()));
+    return () => unsubscribeOnDimensionsChange.remove();
+  }, []);
+
+  const isActiveRoute = (routeName: string) => {
+    if (routes.currentRouteName === routeMap.Issue) {
+      return routes.prevRouteName === routeName;
     }
 
-    if (this.state.currentRouteName === routeMap.Article) {
+    if (routes.currentRouteName === routeMap.Article) {
       return (
-        this.state.prevRouteName === routeName ||
-        (this.state.prevRouteName === routeMap.Page && routeMap.KnowledgeBase === routeName)
+        routes.prevRouteName === routeName ||
+        (routes.prevRouteName === routeMap.Page && routeMap.KnowledgeBase === routeName)
       );
     }
 
-    if (this.state.currentRouteName === routeMap.ArticleSingle) {
+    if (routes.currentRouteName === routeMap.ArticleSingle) {
       return routeMap.KnowledgeBase === routeName;
     }
 
-    if (this.state.currentRouteName === routeMap.ArticleCreate) {
+    if (routes.currentRouteName === routeMap.ArticleCreate) {
       return routeMap.KnowledgeBase === routeName;
     }
 
-    if (this.state.currentRouteName === routeMap.Page) {
+    if (routes.currentRouteName === routeMap.Page) {
       return routeMap.KnowledgeBase === routeName && (
-        this.state.prevRouteName === routeMap.Article ||
-        this.state.prevRouteName === routeMap.KnowledgeBase ||
-        this.state.prevRouteName === routeMap.PageModal
+        routes.prevRouteName === routeMap.Article ||
+        routes.prevRouteName === routeMap.KnowledgeBase ||
+        routes.prevRouteName === routeMap.PageModal
       );
     }
 
-    if (this.state.currentRouteName === routeMap.PageModal) {
+    if (routes.currentRouteName === routeMap.PageModal) {
       return routeMap.KnowledgeBase === routeName && (
-        this.state.prevRouteName === routeMap.Article ||
-        this.state.prevRouteName === routeMap.Page
+        routes.prevRouteName === routeMap.Article ||
+        routes.prevRouteName === routeMap.Page
       );
     }
 
-    return this.state.currentRouteName === routeName;
+    return routes.currentRouteName === routeName;
   };
 
-  canNavigateTo = (routeName: string) => {
-    if (this.props.isDisabled) {
+  const canNavigateTo = (routeName: string) => {
+    if (isDisabled) {
       return false;
     }
     if (
-      this.state.currentRouteName === routeMap.Issue ||
-      this.state.currentRouteName === routeMap.Page ||
-      this.state.currentRouteName === routeMap.Article ||
-      this.state.currentRouteName === routeMap.ArticleSingle
+      routes.currentRouteName === routeMap.Issue ||
+      routes.currentRouteName === routeMap.Page ||
+      routes.currentRouteName === routeMap.Article ||
+      routes.currentRouteName === routeMap.ArticleSingle
     ) {
       return true;
     }
 
-    return !this.isActiveRoute(routeName);
+    return !isActiveRoute(routeName);
   };
 
-  openIssueList = () => {
-    if (this.canNavigateTo(routeMap.Issues)) {
+  const openIssueList = () => {
+    if (canNavigateTo(routeMap.Issues)) {
       Router.Issues();
     }
   };
 
-  openAgileBoard = () => {
-    if (this.canNavigateTo(routeMap.AgileBoard)) {
+  const openAgileBoard = () => {
+    if (canNavigateTo(routeMap.AgileBoard)) {
       Router.AgileBoard();
     }
   };
 
-  openInbox = () => {
-    const routeName: string = this.isInboxThreadsEnabled() ? routeMap.InboxThreads : routeMap.Inbox;
-    if (this.canNavigateTo(routeName) && Router[routeName]) {
+  const openInbox = () => {
+    const routeName: string = isInboxThreadsEnabled() ? routeMap.InboxThreads : routeMap.Inbox;
+    if (canNavigateTo(routeName) && Router[routeName]) {
       Router[routeName]();
     }
   };
 
-  openSettings = () => {
-    if (this.canNavigateTo(routeMap.Settings)) {
+  const openSettings = () => {
+    if (canNavigateTo(routeMap.Settings)) {
       Router.Settings();
     }
   };
 
-  openKnowledgeBase = () => {
+  const openKnowledgeBase = () => {
     const isNotArticleView: boolean = (
-      this.state.currentRouteName !== routeMap.ArticleSingle &&
-      this.state.currentRouteName !== routeMap.Article
+      routes.currentRouteName !== routeMap.ArticleSingle &&
+      routes.currentRouteName !== routeMap.Article
     );
-    if (this.canNavigateTo(routeMap.KnowledgeBase)) {
+    if (canNavigateTo(routeMap.KnowledgeBase)) {
       const articleLastVisited = getStorageState().articleLastVisited;
       const article: ?Article = articleLastVisited && articleLastVisited.article;
-      if (article && isNotArticleView && !this.state.isSplitView) {
+      if (article && isNotArticleView && !splitView) {
         Router.ArticleSingle({articlePlaceholder: article});
       } else {
-        Router.KnowledgeBase(this.state.isSplitView ? {lastVisitedArticle: article} : undefined);
+        Router.KnowledgeBase(splitView ? {lastVisitedArticle: article} : undefined);
       }
     }
   };
 
-  render() {
-    const {isDisabled, uiTheme} = this.props;
-    const isKBEnabled: boolean = checkVersion(FEATURE_VERSION.knowledgeBase, true);
-    const isInboxEnabled: boolean = checkVersion(FEATURE_VERSION.inbox, true);
-    const color = (routeName: string) => {
-      return (
-        isDisabled
-          ? uiTheme.colors.$disabled
-          : this.isActiveRoute(routeName) ? uiTheme.colors.$link : uiTheme.colors.$navigation
-      );
-    };
-
+  const isInboxThreadsEnabled = () => checkVersion(FEATURE_VERSION.inboxThreads, true);
+  const isKBEnabled: boolean = checkVersion(FEATURE_VERSION.knowledgeBase, true);
+  const isInboxEnabled: boolean = checkVersion(FEATURE_VERSION.inbox, true);
+  const color = (routeName: string) => {
     return (
-      <AnimatedView
-        useNativeDriver
-        duration={300}
-        animation="fadeIn"
-
-        testID="menu"
-        style={styles.menu}
-      >
-        <MenuItem
-          testID="test:id/menuIssues"
-          icon={<IconTask
-            testID="menuIssuesIcon"
-            isActive={this.isActiveRoute(routeMap.Issues)}
-            size={23}
-            color={color(routeMap.Issues)}
-          />}
-          onPress={this.openIssueList}
-        />
-
-        <MenuItem
-          testID="test:id/menuAgile"
-          icon={<IconBoard size={28} color={color(routeMap.AgileBoard)}/>}
-          onPress={this.openAgileBoard}
-        />
-
-        <MenuItem
-          disabled={!isInboxEnabled && !this.isInboxThreadsEnabled()}
-          testID="test:id/menuNotifications"
-          icon={<IconBell size={22} color={color(this.isInboxThreadsEnabled() ? routeMap.InboxThreads : routeMap.Inbox)}/>}
-          onPress={this.openInbox}
-        />
-
-        <MenuItem
-          disabled={!isKBEnabled}
-          testID="menuKnowledgeBase"
-          icon={<IconKnowledgeBase size={22} color={color(routeMap.KnowledgeBase)}/>}
-          onPress={this.openKnowledgeBase}
-        />
-
-        <MenuItem
-          testID="test:id/menuSettings"
-          icon={<IconSettings size={21} color={color(routeMap.Settings)}/>}
-          onPress={this.openSettings}
-        />
-
-      </AnimatedView>
+      isDisabled
+        ? uiTheme.colors.$disabled
+        : isActiveRoute(routeName) ? uiTheme.colors.$link : uiTheme.colors.$navigation
     );
-  }
-}
-
-const mapStateToProps = (state: AppState) => {
-  return {
-    isDisabled: state.app.isChangingAccount,
   };
-};
 
-export default (connect(mapStateToProps, null)(Menu): any);
+  return (
+    <AnimatedView
+      useNativeDriver
+      duration={300}
+      animation="fadeIn"
 
+      testID="menu"
+      style={styles.menu}
+    >
+      <MenuItem
+        testID="test:id/menuIssues"
+        icon={<IconTask
+          testID="menuIssuesIcon"
+          isActive={isActiveRoute(routeMap.Issues)}
+          size={23}
+          color={color(routeMap.Issues)}
+        />}
+        onPress={openIssueList}
+      />
+
+      <MenuItem
+        testID="test:id/menuAgile"
+        icon={<IconBoard size={28} color={color(routeMap.AgileBoard)}/>}
+        onPress={openAgileBoard}
+      />
+
+      <MenuItem
+        disabled={!isInboxEnabled && !isInboxThreadsEnabled()}
+        testID="test:id/menuNotifications"
+        icon={<IconBell size={22} color={color(isInboxThreadsEnabled() ? routeMap.InboxThreads : routeMap.Inbox)}/>}
+        onPress={openInbox}
+      />
+
+      <MenuItem
+        disabled={!isKBEnabled}
+        testID="menuKnowledgeBase"
+        icon={<IconKnowledgeBase size={22} color={color(routeMap.KnowledgeBase)}/>}
+        onPress={openKnowledgeBase}
+      />
+
+      <MenuItem
+        testID="test:id/menuSettings"
+        icon={<IconSettings size={21} color={color(routeMap.Settings)}/>}
+        onPress={openSettings}
+      />
+
+    </AnimatedView>
+  );
+}
