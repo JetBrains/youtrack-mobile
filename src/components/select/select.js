@@ -286,8 +286,12 @@ export class Select extends PureComponent<SelectProps, SelectState> {
     this.props.onCancel();
   }
 
+  renderHeader() {
+    return this.props.header ? <View style={styles.note}>{this.props.header()}</View> : null;
+  }
+
   renderContent: () => Node = (): Node => {
-    const {multi, autoFocus, style, placeholder = i18n('Filter items'), noFilter, header} = this.props;
+    const {multi, autoFocus, style, placeholder = i18n('Filter items'), noFilter} = this.props;
     const WrapperComponent: any = this.getWrapperComponent();
     const wrapperProps: Object = this.getWrapperProps({
       visible: true,
@@ -300,7 +304,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
         {...wrapperProps}
         style={style}
       >
-        {!!header && <View style={styles.note}>{header()}</View>}
+        {this.renderHeader()}
         {!noFilter && (
           <View style={styles.inputWrapper}>
 
