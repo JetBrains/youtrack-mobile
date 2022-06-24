@@ -5,7 +5,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 
 import ThreadCommentItem from './inbox-threads__item-comment';
 import ThreadHistoryItem from './inbox-threads__item-history';
-import ThreadIssueCreatedItem from './inbox-threads__item-issue-created';
+import ThreadEntityCreatedItem from './inbox-threads__item-issue-created';
 import ThreadWorkItem from './inbox-threads__item-work';
 import {createMessagesMap, sortEvents} from './inbox-threads-helper';
 import {groupActivities} from 'components/activity/activity__group-activities';
@@ -93,7 +93,7 @@ export default function InboxThreadItemSubscription({
     let Component: any;
     switch (true) {
     case !!group.issue:
-      Component = ThreadIssueCreatedItem;
+      Component = ThreadEntityCreatedItem;
       break;
     case !!group.comment:
       Component = ThreadCommentItem;

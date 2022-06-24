@@ -10,14 +10,13 @@ import ThreadItem from './inbox-threads__item';
 import {activityCategory} from 'components/activity/activity__category';
 import {i18n} from 'components/i18n/i18n';
 import {IconHistory} from 'components/icon/icon';
+import {InboxThreadGroup} from 'flow/Inbox';
 import {markdownText} from 'components/common-styles/typography';
 
 import styles from './inbox-threads.styles';
 
-import {InboxThreadGroup} from 'flow/Inbox';
-import type {AnyIssue} from 'flow/Issue';
 import type {CustomField} from 'flow/CustomFields';
-import type {InboxThreadTarget} from 'flow/Inbox';
+import type {InboxThreadTarget, ThreadEntity} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
 
 interface Props {
@@ -26,10 +25,10 @@ interface Props {
   uiTheme: UITheme;
 }
 
-export default function ThreadIssueCreatedItem({group, target, uiTheme}: Props) {
+export default function ThreadEntityCreatedItem({group, target, uiTheme}: Props) {
   const actualActivity: Props['group']['issue'] = group.issue;
-  const issue: AnyIssue = actualActivity.issue;
-  const assigneeFields: CustomField[] = (issue.customFields || []).map((it: CustomField) => {
+  const entity: ThreadEntity = actualActivity.issue || actualActivity.article;
+  const assigneeFields: CustomField[] = (entity.customFields || []).map((it: CustomField) => {
     return {
       ...it,
       projectCustomField: {
@@ -57,20 +56,21 @@ export default function ThreadIssueCreatedItem({group, target, uiTheme}: Props) 
     },
   };
 
+  const description: string = entity.description || entity.content;
   return (
     <ThreadItem
       author={actualActivity.author}
       avatar={<IconHistory size={20} color={styles.icon.color}/>}
       change={<>
-        {Boolean(issue.description) && (
+        {Boolean(description) && (
           <MarkdownViewChunks
             textStyle={markdownText}
-            attachments={issue.attachments}
+            attachments={entity.attachments}
             chunkSize={3}
             maxChunks={1}
             uiTheme={uiTheme}
           >
-            {issue.description.trim()}
+            {description.trim()}
           </MarkdownViewChunks>
         )}
         <View style={styles.threadRelatedChange}>
