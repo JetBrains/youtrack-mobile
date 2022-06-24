@@ -126,6 +126,7 @@ const initialEditorsState = {
 };
 
 const DATE_AND_TIME_FIELD_VALUE_TYPE = 'date and time';
+const getProjectLabel = () => i18n('Project');
 
 
 export default class CustomFieldsPanel extends Component<Props, State> {
@@ -527,7 +528,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
                 disabled={!hasPermission.canEditProject || this.isConnected === false}
                 onPress={this.onSelectProject}
                 active={isEditingProject}
-                field={createNullProjectCustomField(issueProject.name, i18n('Project'))}
+                field={createNullProjectCustomField(issueProject.name, getProjectLabel())}
               />
               {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
             </View>
