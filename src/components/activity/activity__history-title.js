@@ -1,6 +1,7 @@
 /* @flow */
 
 import {i18n, i18nPlural} from 'components/i18n/i18n';
+import {isActivityCategory} from './activity__category';
 
 export default function getEventTitle(event: Object, omitFormatting?: boolean): ?string {
   const title = getTitle(event);
@@ -20,7 +21,7 @@ export function getTitle(event) {
     label = i18n('[Removed field]');
     break;
   case eventField.id === 'description':
-    label = i18n('Description changed');
+    label = isActivityCategory.articleDescription ? i18n('Content changed') : i18n('Description changed');
     break;
   case eventField.id === 'summary':
     label = i18n('Summary changed');

@@ -175,6 +175,7 @@ isActivityCategory.link = isActivityCategory(activityCategory.LINKS);
 isActivityCategory.tag = isActivityCategories([activityCategory.TAGS, activityCategory.STAR]);
 isActivityCategory.summary = isActivityCategories([activityCategory.SUMMARY, activityArticleCategory.SUMMARY]);
 isActivityCategory.description = isActivityCategories([activityCategory.DESCRIPTION, activityArticleCategory.DESCRIPTION]);
+isActivityCategory.articleDescription = isActivityCategory(activityArticleCategory.DESCRIPTION);
 isActivityCategory.sprint = isActivityCategory(activityCategory.SPRINT);
 isActivityCategory.star = isActivityCategory(activityCategory.STAR);
 isActivityCategory.project = isActivityCategories([activityCategory.PROJECT, activityArticleCategory.PROJECT]);
