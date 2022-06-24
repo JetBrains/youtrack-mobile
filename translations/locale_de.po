@@ -624,6 +624,10 @@ msgstr "Kennwort"
 msgid "Problem"
 msgstr "Problem"
 
+#: src/components/custom-fields-panel/custom-fields-panel.js
+msgid "Project"
+msgstr "Projekt"
+
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
 msgstr "Projekte reduziert"

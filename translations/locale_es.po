@@ -624,6 +624,10 @@ msgstr "Contraseña"
 msgid "Problem"
 msgstr "Problema"
 
+#: src/components/custom-fields-panel/custom-fields-panel.js
+msgid "Project"
+msgstr "Proyecto"
+
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
 msgstr "Proyectos contraídos"

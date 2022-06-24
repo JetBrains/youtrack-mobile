@@ -619,6 +619,10 @@ msgstr "パスワード"
 msgid "Problem"
 msgstr "問題"
 
+#: src/components/custom-fields-panel/custom-fields-panel.js
+msgid "Project"
+msgstr "プロジェクト"
+
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "Projects collapsed"
 msgstr "プロジェクトが折りたたまれました"
