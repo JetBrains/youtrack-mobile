@@ -3,12 +3,14 @@
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
+import ApiHelper from 'components/api/api__helper';
 import Avatar from 'components/avatar/avatar';
 import CommentReactions from 'components/comment/comment-reactions';
 import Router from 'components/router/router';
 import StreamComment from 'components/activity-stream/activity__stream-comment';
 import ThreadItem from './inbox-threads__item';
 import {hasType} from 'components/api/api__resource-types';
+import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 
@@ -31,7 +33,9 @@ export default function ThreadCommentItem({group, currentUser, target, onPress}:
       avatar={<Avatar
         userName={getEntityPresentation(group.comment.author)}
         size={30}
-        source={{uri: group.comment.author.avatarUrl}}
+        source={{uri: ApiHelper.convertRelativeUrl(
+            group.comment.author, 'avatarUrl', getApi().config.backendUrl
+          ).avatarUrl}}
       />}
       change={<>
         <StreamComment
