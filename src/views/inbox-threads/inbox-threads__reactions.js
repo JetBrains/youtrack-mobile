@@ -13,19 +13,18 @@ import styles from './inbox-threads.styles';
 import stylesInbox from '../inbox/inbox.styles';
 
 import type {Activity} from 'flow/Activity';
-import type {InboxThread} from 'flow/Inbox';
+import type {InboxThread, ThreadEntity} from 'flow/Inbox';
 import type {IssueComment} from 'flow/CustomFields';
 import type {Reaction} from 'flow/Reaction';
-import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
 
 interface Props {
   currentUser: User;
+  onPress?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
   thread: InboxThread;
-  uiTheme: UITheme;
 }
 
-export default function InboxThreadReaction({thread, currentUser}: Props) {
+export default function InboxThreadReaction({thread, currentUser, onPress}: Props) {
   const activity: Activity = thread.messages[0].activities[0];
   const reaction: Reaction = activity.added[0] || activity.removed[0];
   const comment: ?IssueComment = activity?.comment;
@@ -56,6 +55,7 @@ export default function InboxThreadReaction({thread, currentUser}: Props) {
           />
         </>
       )}
+      onPress={onPress}
       reason={isAdded && comment?.reactions?.length > 1
         ? comment?.reactions?.length === 1 ? i18n('added a reaction') : i18n('added reactions')
         : i18n('removed a reaction')}

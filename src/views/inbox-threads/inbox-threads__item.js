@@ -10,7 +10,7 @@ import {getEntityPresentation} from 'components/issue-formatter/issue-formatter'
 import styles from './inbox-threads.styles';
 
 import type {Activity} from 'flow/Activity';
-import type {InboxThreadGroup} from 'flow/Inbox';
+import type {InboxThreadGroup, ThreadEntity} from 'flow/Inbox';
 import type {User} from 'flow/User';
 
 interface Props {
@@ -20,7 +20,7 @@ interface Props {
   group?: InboxThreadGroup;
   reason: string;
   timestamp: number;
-  onPress?: () => any;
+  onPress?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
 }
 
 export default function ThreadItem({author, avatar, change, group, reason, timestamp, onPress}: Props) {

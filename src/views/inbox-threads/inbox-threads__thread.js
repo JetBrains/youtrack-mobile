@@ -15,7 +15,7 @@ import type {User} from 'flow/User';
 
 interface Props {
   currentUser: User;
-  onPress: (entity: any) => any,
+  onPress: (entity: any, navigateToActivity?: boolean) => any,
   thread: InboxThread;
   uiTheme: UITheme;
 }
@@ -41,12 +41,12 @@ function Thread({
     entity={threadData.entity}
     onNavigate={() => {
       if (onPress) {
-        onPress(threadData.entity);
+        onPress(threadData.entity, threadData.entityAtBottom);
       } else {
         if (hasType.article(threadData.entity)) {
-          Router.Article({articlePlaceholder: threadData.entity});
+          Router.Article({articlePlaceholder: threadData.entity, navigateToActivity: threadData.entityAtBottom});
         } else {
-          Router.Issue({issueId: threadData.entity.id});
+          Router.Issue({issueId: threadData.entity.id, navigateToActivity: threadData.entityAtBottom});
         }
       }
     }}

@@ -16,18 +16,19 @@ import {markdownText} from 'components/common-styles/typography';
 import styles from './inbox-threads.styles';
 
 import type {Activity} from 'flow/Activity';
-import type {InboxThread} from 'flow/Inbox';
+import type {InboxThread, ThreadEntity} from 'flow/Inbox';
 import type {IssueComment} from 'flow/CustomFields';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
 
 interface Props {
   currentUser: User;
+  onPress?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
   thread: InboxThread;
   uiTheme: UITheme;
 }
 
-export default function InboxThreadMention({thread, currentUser, uiTheme}: Props) {
+export default function InboxThreadMention({thread, currentUser, uiTheme, onPress}: Props) {
   const activity: Activity = thread.messages[0].activities[0];
   activity.author = ApiHelper.convertRelativeUrl(activity.author, 'avatarUrl', getApi().config.backendUrl);
   let comment: ?IssueComment;
@@ -45,6 +46,7 @@ export default function InboxThreadMention({thread, currentUser, uiTheme}: Props
     text = activity?.article?.content;
   }
 
+  const target = thread.subject.target;
   return text ? (
     <ThreadItem
       author={activity.author}
@@ -72,6 +74,7 @@ export default function InboxThreadMention({thread, currentUser, uiTheme}: Props
           )}
         </>
       }
+      onPress={() => onPress(target.issue || target.article, true)}
       reason={i18n('mentioned you')}
       timestamp={thread.notified}
     />
