@@ -23,9 +23,10 @@ interface Props {
   group: InboxThreadGroup;
   target: InboxThreadTarget;
   uiTheme: UITheme;
+  onPress?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
 }
 
-export default function ThreadEntityCreatedItem({group, target, uiTheme}: Props) {
+export default function ThreadEntityCreatedItem({group, target, uiTheme, onPress}: Props) {
   const actualActivity: Props['group']['issue'] = group.issue;
   const entity: ThreadEntity = actualActivity.issue || actualActivity.article;
   const assigneeFields: CustomField[] = (entity.customFields || []).map((it: CustomField) => {
@@ -77,7 +78,13 @@ export default function ThreadEntityCreatedItem({group, target, uiTheme}: Props)
           <StreamHistoryChange activity={activity} customFields={assigneeFields}/>
         </View>
       </>}
-      onPress={() => Router.Issue({issueId: target.id})}
+      onPress={() => {
+        if (onPress) {
+          onPress(target);
+        } else {
+          Router.Issue({issueId: target.id});
+        }
+      }}
       reason={i18n('created')}
       timestamp={actualActivity.timestamp}
     />

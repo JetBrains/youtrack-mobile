@@ -14,16 +14,17 @@ import {i18n} from 'components/i18n/i18n';
 
 import styles from './inbox-threads.styles';
 
-import type {InboxThreadGroup, InboxThreadTarget} from 'flow/Inbox';
+import type {InboxThreadGroup, InboxThreadTarget, ThreadEntity} from 'flow/Inbox';
 import type {User} from 'flow/User';
 
 interface Props {
   currentUser: User;
   group: InboxThreadGroup;
   target: InboxThreadTarget;
+  onPress?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
 }
 
-export default function ThreadCommentItem({group, currentUser, target}: Props) {
+export default function ThreadCommentItem({group, currentUser, target, onPress}: Props) {
   return (
     <ThreadItem
       author={group.comment.author}
@@ -44,10 +45,14 @@ export default function ThreadCommentItem({group, currentUser, target}: Props) {
         <TouchableOpacity
           style={styles.threadButton}
           onPress={() => {
-            if (hasType.article(target)) {
-              Router.Article({articlePlaceholder: target, navigateToActivity: true});
+            if (onPress) {
+              onPress(target, true);
             } else {
-              Router.Issue({issueId: target.id, navigateToActivity: true});
+              if (hasType.article(target)) {
+                Router.Article({articlePlaceholder: target, navigateToActivity: true});
+              } else {
+                Router.Issue({issueId: target.id, navigateToActivity: true});
+              }
             }
           }}
         >

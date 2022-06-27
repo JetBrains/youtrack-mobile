@@ -11,22 +11,29 @@ import styles from './inbox-threads.styles';
 
 import ThreadItem from './inbox-threads__item';
 
-import type {InboxThreadGroup, InboxThreadTarget} from 'flow/Inbox';
+import type {InboxThreadGroup, InboxThreadTarget, ThreadEntity} from 'flow/Inbox';
 
 interface Props {
   group: InboxThreadGroup;
   target: InboxThreadTarget;
+  onPress?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
 }
 
 
-export default function ThreadWorkItem({group, target}: Props) {
+export default function ThreadWorkItem({group, target, onPress}: Props) {
   return (
     <ThreadItem
       author={group.head.author}
       avatar={<IconWork size={22} color={styles.icon.color} style={styles.activityWorkIcon}/>}
       change={<StreamWork activityGroup={{work: group.work}}/>}
       group={group}
-      onPress={() => Router.Issue({issueId: target.id, navigateToActivity: true})}
+      onPress={() => {
+        if (onPress) {
+          onPress(target, true);
+        } else {
+          Router.Issue({issueId: target.id, navigateToActivity: true});
+        }
+      }}
       reason={i18n('updated')}
       timestamp={group.work.timestamp}
     />

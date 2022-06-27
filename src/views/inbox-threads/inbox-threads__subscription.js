@@ -16,18 +16,27 @@ import {splitActivities} from 'components/activity/activity__split-activities';
 import styles from './inbox-threads.styles';
 
 import type {Activity} from 'flow/Activity';
-import type {InboxThread, InboxThreadGroup} from 'flow/Inbox';
+import type {InboxThread, InboxThreadGroup, ThreadEntity} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
+
+interface Props {
+  thread: InboxThread;
+  style?: ViewStyleProp;
+  currentUser: User;
+  uiTheme: UITheme;
+  onPress?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
+}
 
 export default function InboxThreadItemSubscription({
   thread,
   style,
   currentUser,
   uiTheme,
-}: { thread: InboxThread, style?: ViewStyleProp, currentUser: User, uiTheme: UITheme }): React$Element<typeof View> {
+  onPress,
+}: Props): React$Element<typeof View> {
   const [shownMessagesAmount, updateShownMessagesAmount] = useState(3);
 
 
@@ -118,6 +127,7 @@ export default function InboxThreadItemSubscription({
           isLast={isLast}
           currentUser={currentUser}
           uiTheme={uiTheme}
+          onPress={onPress}
         />
         {showMoreButton}
       </View>

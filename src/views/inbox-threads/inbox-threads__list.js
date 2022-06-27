@@ -16,7 +16,7 @@ import styles from './inbox-threads.styles';
 
 import type {AppState} from '../../reducers';
 import type {CustomError} from 'flow/Error';
-import type {InboxThread} from 'flow/Inbox';
+import type {InboxThread, ThreadEntity} from 'flow/Inbox';
 import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {UserCurrent} from 'flow/User';
@@ -25,10 +25,11 @@ interface Props {
   currentUser: UserCurrent;
   folderId: string;
   theme: Theme;
+  onPress?: ?(entity: ThreadEntity, navigateToActivity?: boolean) => any,
 }
 
 
-const InboxThreadsList = ({currentUser, folderId, theme, ...other}: Props): Node => {
+const InboxThreadsList = ({currentUser, folderId, theme, onPress, ...other}: Props): Node => {
   const dispatch = useDispatch();
   const threadsData: { threads: InboxThread[], hasMore: boolean } = useSelector(
     (state: AppState) => state.inboxThreads.threadsData[folderId || folderIdAllKey] || {threads: []}
@@ -55,6 +56,7 @@ const InboxThreadsList = ({currentUser, folderId, theme, ...other}: Props): Node
       thread={item}
       currentUser={currentUser}
       uiTheme={theme.uiTheme}
+      onPress={onPress}
     />
   );
 

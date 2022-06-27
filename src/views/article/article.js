@@ -54,8 +54,10 @@ type Props = ArticleState & {
   lastVisitedArticle: ?Article,
 } & typeof articleActions;
 
+type State = IssueTabbedState & { modalChildren: any };
+
 //$FlowFixMe
-class Article extends IssueTabbed<Props, IssueTabbedState & { modalChildren: any }> {
+class Article extends IssueTabbed<Props, State> {
   static contextTypes = {
     actionSheet: Function,
   };
@@ -73,6 +75,16 @@ class Article extends IssueTabbed<Props, IssueTabbedState & { modalChildren: any
     }
     this.goOnlineSubscription.remove();
   };
+
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.navigateToActivity !== this.props.navigateToActivity) {
+      if (this.props.navigateToActivity === true) {
+        this.switchToActivityTab();
+      } else {
+        this.switchToDetailsTab();
+      }
+    }
+  }
 
   componentDidMount() {
     logEvent({message: 'Navigate to article', analyticsId: ANALYTICS_ARTICLE_PAGE});

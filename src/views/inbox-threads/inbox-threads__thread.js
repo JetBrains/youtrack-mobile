@@ -9,17 +9,23 @@ import styles from './inbox-threads.styles';
 import {getThreadData} from './inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
 
-import type {InboxThread, ThreadData, ThreadEntity} from 'flow/Inbox';
+import type {InboxThread, ThreadData} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
 
-type Props = { thread: InboxThread, currentUser: User, uiTheme: UITheme, ... };
+interface Props {
+  currentUser: User;
+  onPress: (entity: any) => any,
+  thread: InboxThread;
+  uiTheme: UITheme;
+}
 
 
 function Thread({
   thread,
   currentUser,
   uiTheme,
+  onPress,
   ...otherProps
 }: Props): React$Element<any> | null {
   if (!thread.id || !thread?.messages?.length) {
@@ -27,18 +33,21 @@ function Thread({
   }
 
   const threadData: ThreadData = getThreadData(thread);
-  const entity: ThreadEntity = threadData.entity;
   const ThreadComponent: any = threadData.component;
-  const inboxEntity = <InboxEntity
+  const renderedEntity = <InboxEntity
     testID="test:id/inboxEntity"
     accessibilityLabel="inboxEntity"
     accessible={true}
-    entity={entity}
+    entity={threadData.entity}
     onNavigate={() => {
-      if (hasType.article(entity)) {
-        Router.Article({articlePlaceholder: entity});
+      if (onPress) {
+        onPress(threadData.entity);
       } else {
-        Router.Issue({issueId: entity.id});
+        if (hasType.article(threadData.entity)) {
+          Router.Article({articlePlaceholder: threadData.entity});
+        } else {
+          Router.Issue({issueId: threadData.entity.id});
+        }
       }
     }}
     style={[styles.threadTitle, threadData.entityAtBottom && styles.threadSubTitle]}
@@ -51,13 +60,14 @@ function Thread({
       accessible={true}
       {...otherProps}
     >
-      {!threadData.entityAtBottom && inboxEntity}
+      {!threadData.entityAtBottom && renderedEntity}
       <ThreadComponent
         thread={thread}
         currentUser={currentUser}
         uiTheme={uiTheme}
+        onPress={onPress}
       />
-      {threadData.entityAtBottom && inboxEntity}
+      {threadData.entityAtBottom && renderedEntity}
     </View>
   );
 }
