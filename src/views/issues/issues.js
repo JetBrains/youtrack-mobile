@@ -22,6 +22,7 @@ import IssuesCount from './issues__count';
 import IssuesSortBy from './issues__sortby';
 import log from '../../components/log/log';
 import ModalPortal from '../../components/modal-view/modal-portal';
+import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
 import QueryAssistPanel from '../../components/query-assist/query-assist-panel';
 import QueryPreview from '../../components/query-assist/query-preview';
 import Router from '../../components/router/router';
@@ -35,7 +36,7 @@ import {getIssueFromCache} from './issues-actions';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {i18n} from 'components/i18n/i18n';
 import {IconAdd, IconAngleDown, IconBookmark} from 'components/icon/icon';
-import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound, IconNothingSelected} from 'components/icon/icon-pictogram';
+import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound} from 'components/icon/icon-pictogram';
 import {initialState} from './issues-reducers';
 import {isReactElement} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
@@ -558,12 +559,7 @@ export class Issues extends Component<Props, State> {
     const {focusedIssue} = this.state;
 
     if (!focusedIssue || !this.hasIssues()) {
-      return (
-        <View style={styles.splitViewMainEmpty}>
-          {<IconNothingSelected size={ICON_PICTOGRAM_DEFAULT_SIZE}/>}
-          <Text style={styles.splitViewMessage}>{i18n('Select an issue from the list')}</Text>
-        </View>
-      );
+      return <NothingSelectedIconWithText text={i18n('Select an issue from the list')}/>;
     }
 
     return (

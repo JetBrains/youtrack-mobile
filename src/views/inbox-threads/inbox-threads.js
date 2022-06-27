@@ -10,6 +10,7 @@ import Article from 'views/article/article';
 import Header from 'components/header/header';
 import InboxThreadsList from './inbox-threads__list';
 import Issue from '../issue/issue';
+import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
 import {folderIdMap, threadTabsTitles} from './inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
@@ -25,7 +26,6 @@ import type {TabRoute} from 'flow/Issue';
 import type {Theme, UIThemeColors} from 'flow/Theme';
 import type {ThreadEntity} from 'flow/Inbox';
 import type {UserCurrent} from 'flow/User';
-import NothingSelectedIconWithText from '../../components/icon/nothing-selected-icon-with-text';
 
 
 const InboxThreads: () => Node = (): Node => {

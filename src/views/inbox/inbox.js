@@ -16,6 +16,7 @@ import getEventTitle from '../../components/activity/activity__history-title';
 import InboxEntity from './inbox__entity';
 import Issue from '../issue/issue';
 import log from 'components/log/log';
+import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
 import ReactionIcon from 'components/reactions/reaction-icon';
 import Router from 'components/router/router';
 import StreamWork from 'components/activity-stream/activity__stream-work';
@@ -27,7 +28,7 @@ import {ANALYTICS_NOTIFICATIONS_PAGE} from 'components/analytics/analytics-ids';
 import {getStorageState} from 'components/storage/storage';
 import {handleRelativeUrl} from 'components/config/config';
 import {hasType} from 'components/api/api__resource-types';
-import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound, IconNothingSelected} from 'components/icon/icon-pictogram';
+import {IconNothingFound} from 'components/icon/icon-pictogram';
 import {i18n} from 'components/i18n/i18n';
 import {isReactElement} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
@@ -633,12 +634,7 @@ class Inbox extends Component<Props, State> {
   }
 
   renderSelectIssueIcon = () => {
-    return (
-      <View style={styles.splitViewMainEmpty}>
-        {<IconNothingSelected size={ICON_PICTOGRAM_DEFAULT_SIZE}/>}
-        <Text style={styles.splitViewMessage}>{i18n('Select an issue from the list')}</Text>
-      </View>
-    );
+    return <NothingSelectedIconWithText text={i18n('Select an issue from the list')}/>;
   }
 
   renderFocusedIssue = () => {

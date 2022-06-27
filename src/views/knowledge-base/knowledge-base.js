@@ -14,6 +14,7 @@ import ErrorMessage from 'components/error-message/error-message';
 import KnowledgeBaseDrafts from './knowledge-base__drafts';
 import KnowledgeBaseSearchPanel from './knowledge-base__search';
 import ModalPortal from 'components/modal-view/modal-portal';
+import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
 import Router from 'components/router/router';
 import SelectSectioned from 'components/select/select-sectioned';
 import Star from 'components/star/star';
@@ -27,12 +28,7 @@ import {getStorageState} from 'components/storage/storage';
 import {IconAngleDown, IconAngleRight, IconBack, IconClose, IconContextActions} from 'components/icon/icon';
 import {i18n} from 'components/i18n/i18n';
 import {isSplitView} from 'components/responsive/responsive-helper';
-import {
-  ICON_PICTOGRAM_DEFAULT_SIZE,
-  IconNoProjectFound,
-  IconNothingFound,
-  IconNothingSelected,
-} from 'components/icon/icon-pictogram';
+import {IconNoProjectFound, IconNothingFound} from 'components/icon/icon-pictogram';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
@@ -610,12 +606,7 @@ export class KnowledgeBase extends Component<Props, State> {
     return (
       focusedArticle
         ? <View style={styles.content}><Article articlePlaceholder={focusedArticle}/></View>
-        : (
-          <View style={styles.splitViewMainEmpty}>
-            {<IconNothingSelected size={ICON_PICTOGRAM_DEFAULT_SIZE}/>}
-            <Text style={styles.splitViewMessage}>{i18n('Select an article from the list')}</Text>
-          </View>
-        )
+        : <NothingSelectedIconWithText text={i18n('Select an article from the list')}/>
     );
   };
 
