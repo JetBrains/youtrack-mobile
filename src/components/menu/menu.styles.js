@@ -25,4 +25,18 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  link: {
+    color: '$link',
+  },
+  disabled: {
+    color: '$disabled',
+  },
+  icon: {
+    color: '$navigation',
+  },
+  circleIcon: {
+    position: 'absolute',
+    top: -10,
+    left: 18,
+  },
 });

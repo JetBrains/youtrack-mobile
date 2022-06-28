@@ -9,6 +9,7 @@ import {notify, notifyError} from 'components/notification/notification';
 import {setError, setNotifications, toggleProgress} from './inbox-threads-reducers';
 import {until} from 'util/util';
 
+import * as types from '../../actions/action-types';
 import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
 import type {CustomError} from 'flow/Error';
@@ -73,7 +74,25 @@ const loadInboxThreads = (folderId?: string, end?: number): ((
     } else {
       dispatch(setNotifications({threads, reset: typeof end !== 'number', folderId: folderId || folderIdAllKey}));
       dispatch(updateThreadsCache(threads, folderId));
+      if (!folderId) {
+        dispatch(saveAllSeen(threads[0].notified));
+        dispatch({
+          type: types.INBOX_THREADS_HAS_UPDATE,
+          hasUpdate: false,
+        });
+      }
     }
+  };
+};
+
+const saveAllSeen = (lastSeen: number): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+    const api: Api = getApi();
+    until(api.inbox.saveAllAsSeen(lastSeen));
   };
 };
 

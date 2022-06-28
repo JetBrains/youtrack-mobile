@@ -1,16 +1,17 @@
 /* @flow */
 
-import React, {useEffect, useState} from 'react';
-import {Dimensions} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Dimensions, View} from 'react-native';
 
 import {View as AnimatedView} from 'react-native-animatable';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import Router from '../router/router';
+import useInterval from 'components/hooks/use-interval';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
-import {DEFAULT_THEME} from 'components/theme/theme';
 import {getStorageState} from 'components/storage/storage';
-import {IconBell, IconBoard, IconSettings, IconTask, IconKnowledgeBase} from 'components/icon/icon';
+import {IconBell, IconBoard, IconSettings, IconTask, IconKnowledgeBase, IconCircle} from 'components/icon/icon';
+import {inboxSetUpdateStatus} from '../../actions/app-actions';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {MenuItem} from './menu__item';
 import {routeMap} from '../../app-routes';
@@ -20,17 +21,32 @@ import styles from './menu.styles';
 import type {AppState} from '../../reducers';
 import type {Article} from 'flow/Article';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
-import type {UITheme} from 'flow/Theme';
+
+const defaultStatusDelay: number = 60 * 1000;
 
 
-export default function ({uiTheme = DEFAULT_THEME}: { uiTheme: UITheme }) {
+export default function () {
+  const dispatch = useDispatch();
+  const isInboxThreadsEnabled: boolean = checkVersion(FEATURE_VERSION.inboxThreads, true);
+
+  const hasInboxUpdate: boolean = useSelector((appState: AppState) => appState.app.inboxThreadsHasUpdate);
   const isDisabled: boolean = useSelector((appState: AppState) => appState.app.isChangingAccount);
+  const setInboxHasUpdateStatus = useCallback(
+    () => {
+      dispatch(inboxSetUpdateStatus());
+    },
+    [dispatch]
+  );
 
   const [routes, updateRoutes] = useState({
     prevRouteName: null,
     currentRouteName: null,
   });
   const [splitView, updateSplitView] = useState(isSplitView());
+  const [pollInboxStatusDelay, updatePollInboxStatusDelay] = useState(defaultStatusDelay);
+
+
+  useInterval(setInboxHasUpdateStatus, pollInboxStatusDelay);
 
   useEffect(() => {
     const unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: ?string, prevRouteName: ?string) => {
@@ -46,7 +62,14 @@ export default function ({uiTheme = DEFAULT_THEME}: { uiTheme: UITheme }) {
     const unsubscribeOnDimensionsChange: EventSubscription = Dimensions.addEventListener(
       'change', () => updateSplitView(isSplitView()));
     return () => unsubscribeOnDimensionsChange.remove();
-  }, []);
+  }, [setInboxHasUpdateStatus]);
+
+  const startPollingInboxUpdateStatus = () => {
+    if (pollInboxStatusDelay === null) {
+      setInboxHasUpdateStatus();
+      updatePollInboxStatusDelay(defaultStatusDelay);
+    }
+  };
 
   const isActiveRoute = (routeName: string) => {
     if (routes.currentRouteName === routeMap.Issue) {
@@ -105,25 +128,29 @@ export default function ({uiTheme = DEFAULT_THEME}: { uiTheme: UITheme }) {
   const openIssueList = () => {
     if (canNavigateTo(routeMap.Issues)) {
       Router.Issues();
+      startPollingInboxUpdateStatus();
     }
   };
 
   const openAgileBoard = () => {
     if (canNavigateTo(routeMap.AgileBoard)) {
       Router.AgileBoard();
+      startPollingInboxUpdateStatus();
     }
   };
 
   const openInbox = () => {
-    const routeName: string = isInboxThreadsEnabled() ? routeMap.InboxThreads : routeMap.Inbox;
+    const routeName: string = isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox;
     if (canNavigateTo(routeName) && Router[routeName]) {
       Router[routeName]();
+      updatePollInboxStatusDelay(null);
     }
   };
 
   const openSettings = () => {
     if (canNavigateTo(routeMap.Settings)) {
       Router.Settings();
+      startPollingInboxUpdateStatus();
     }
   };
 
@@ -140,17 +167,17 @@ export default function ({uiTheme = DEFAULT_THEME}: { uiTheme: UITheme }) {
       } else {
         Router.KnowledgeBase(splitView ? {lastVisitedArticle: article} : undefined);
       }
+      startPollingInboxUpdateStatus();
     }
   };
 
-  const isInboxThreadsEnabled = () => checkVersion(FEATURE_VERSION.inboxThreads, true);
   const isKBEnabled: boolean = checkVersion(FEATURE_VERSION.knowledgeBase, true);
   const isInboxEnabled: boolean = checkVersion(FEATURE_VERSION.inbox, true);
   const color = (routeName: string) => {
     return (
       isDisabled
-        ? uiTheme.colors.$disabled
-        : isActiveRoute(routeName) ? uiTheme.colors.$link : uiTheme.colors.$navigation
+        ? styles.disabled.color
+        : isActiveRoute(routeName) ? styles.link.color : styles.icon.color
     );
   };
 
@@ -181,9 +208,23 @@ export default function ({uiTheme = DEFAULT_THEME}: { uiTheme: UITheme }) {
       />
 
       <MenuItem
-        disabled={!isInboxEnabled && !isInboxThreadsEnabled()}
+        disabled={!isInboxEnabled && !isInboxThreadsEnabled}
         testID="test:id/menuNotifications"
-        icon={<IconBell size={22} color={color(isInboxThreadsEnabled() ? routeMap.InboxThreads : routeMap.Inbox)}/>}
+        icon={
+          <View>
+            {isInboxThreadsEnabled && hasInboxUpdate && (
+              <AnimatedView
+                useNativeDriver
+                duration={1000}
+                animation="fadeIn"
+                style={styles.circleIcon}
+              >
+                <IconCircle size={10} color={styles.link.color}/>
+              </AnimatedView>
+            )}
+            <IconBell size={22} color={color(isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox)}/>
+          </View>
+        }
         onPress={openInbox}
       />
 

@@ -100,6 +100,11 @@ export const IconShare = (props?: Props) => <DefaultIcon {...{
   ...props,
 }} />;
 
+export const IconCircle = (props?: Props) => <DefaultIcon {...{
+  name: 'circle',
+  ...props,
+}} />;
+
 
 /* FontAwesome icons */
 

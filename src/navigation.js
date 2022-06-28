@@ -65,7 +65,7 @@ export default class Navigation extends PureComponent<{}, State> {
           ]}>
 
           <ThemeContext.Consumer>
-            {(theme: Theme) => <Menu uiTheme={theme.uiTheme}/>}
+            {(theme: Theme) => <Menu/>}
           </ThemeContext.Consumer>
         </View>
 

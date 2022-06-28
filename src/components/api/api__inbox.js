@@ -3,6 +3,7 @@
 import ApiBase from './api__base';
 import {inboxThreadFields} from './api__inbox-fields';
 
+import {InboxFolders} from 'flow/Inbox';
 import type Auth from '../auth/oauth2';
 import type {InboxThread} from 'flow/Inbox';
 
@@ -41,6 +42,18 @@ export default class IssueAPI extends ApiBase {
       `${this.youTrackApiUrl}/inbox/threads/${id}?fields=muted`,
       'POST',
       {muted}
+    );
+  }
+
+  async inboxFolders(start: number): Promise<InboxFolders> {
+    return this.makeAuthorizedRequest(`${this.youTrackApiUrl}/inbox/folders?fields=id,lastNotified,lastSeen&${start}`);
+  }
+
+  async saveAllAsSeen(lastSeen: number): Promise<void> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/inbox/lastSeen`,
+      'POST',
+      {lastSeen}
     );
   }
 }

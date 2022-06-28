@@ -33,8 +33,9 @@ import {
 import {getCachedPermissions, storeYTCurrentUser} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
+import {folderIdAllKey, folderIdMap} from 'views/inbox-threads/inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
-import {isIOSPlatform} from 'util/util';
+import {isIOSPlatform, until} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {loadConfig} from 'components/config/config';
 import {loadTranslation} from 'components/i18n/i18n-translation';
@@ -48,7 +49,9 @@ import type {AppConfig, EndUserAgreement} from 'flow/AppConfig';
 import type {AppState} from '../reducers';
 import type {Article} from 'flow/Article';
 import type {AuthConfig, AuthParams, OAuthParams2} from 'flow/Auth';
+import type {CustomError} from '../flow/Error';
 import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserCurrent} from 'flow/User';
+import type {InboxFolders} from '../flow/Inbox';
 import type {NetInfoState} from '@react-native-community/netinfo';
 import type {NotificationRouteData} from 'flow/Notification';
 import type {PermissionCacheItem} from 'flow/Permission';
@@ -56,9 +59,10 @@ import type {StorageState} from 'components/storage/storage';
 import type {WorkTimeSettings} from 'flow/Work';
 
 type Action = (
-  (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) =>
-    Promise<void> | Promise<mixed> | typeof undefined
-  );
+  dispatch: (any) => any,
+  getState: () => AppState,
+  getApi: () => Api
+) => Promise<void | boolean | mixed> | typeof undefined;
 
 export function setNetworkState(networkState: NetInfoState): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
@@ -442,6 +446,7 @@ export function completeInitialization(
 
     dispatch(loadWorkTimeSettings());
     dispatch(subscribeToPushNotifications());
+    dispatch(inboxSetUpdateStatus());
   };
 }
 
@@ -819,3 +824,41 @@ function setRegisteredForPush(isRegistered: boolean) {
     flushStoragePart({isRegisteredForPush: isRegistered});
   }
 }
+
+function receiveInboxUpdateStatus(hasUpdate): { type: string, hasUpdate: boolean } {
+  return {
+    type: types.INBOX_THREADS_HAS_UPDATE,
+    hasUpdate,
+  };
+}
+
+const inboxSetUpdateStatus = (hasUpdate?: boolean): Action => {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+    const isOnline: boolean = getState().app?.networkState?.isConnected === true;
+    if (typeof hasUpdate === 'boolean') {
+      dispatch(receiveInboxUpdateStatus(hasUpdate));
+    } else if (isOnline) {
+      const inboxThreadsCache = getStorageState()?.inboxThreadsCache || {[folderIdAllKey]: []};
+      const firstItem = inboxThreadsCache[folderIdAllKey][0];
+
+      if (!firstItem.notified) {
+        dispatch(receiveInboxUpdateStatus(true));
+      } else {
+        const api: Api = getApi();
+        const [error, folders]: [?CustomError, Array<InboxFolders>] = await until(
+          api.inbox.inboxFolders(firstItem.notified + 1)
+        );
+        const targetFolders = folders.filter((it) => it.id === folderIdMap[1] || it.id === folderIdMap[2]) || [];
+        const hasUpdate_ = !error && targetFolders.some(it => it.lastNotified > it.lastSeen);
+        dispatch(
+          receiveInboxUpdateStatus(hasUpdate_)
+        );
+      }
+    }
+  };
+};
+
+
+export {
+  inboxSetUpdateStatus,
+};

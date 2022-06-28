@@ -27,6 +27,7 @@ export type RootState = {
   user: User | null,
   issuePermissions: IssuePermissions,
   networkState: NetInfoState | null,
+  inboxThreadsHasUpdate: boolean,
 };
 
 const initialState: RootState = {
@@ -41,6 +42,8 @@ const initialState: RootState = {
   workTimeSettings: {},
   user: null,
   issuePermissions: issuePermissionsNull,
+  networkState: {isConnected: true},
+  inboxThreadsHasUpdate: false,
 };
 
 export default (createReducer(initialState, {
@@ -144,6 +147,12 @@ export default (createReducer(initialState, {
     return {
       ...state,
       networkState: action.networkState,
+    };
+  },
+  [types.INBOX_THREADS_HAS_UPDATE](state: RootState, action: {hasUpdate: boolean}) {
+    return {
+      ...state,
+      inboxThreadsHasUpdate: action.hasUpdate,
     };
   },
 }): any);

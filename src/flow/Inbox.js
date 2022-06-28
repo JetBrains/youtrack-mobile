@@ -134,3 +134,9 @@ export type ThreadData = {
   component: any,
   entityAtBottom?: boolean,
 }
+
+export interface InboxFolders {
+  id: string;
+  lastNotified: number;
+  lastSeen: number;
+}

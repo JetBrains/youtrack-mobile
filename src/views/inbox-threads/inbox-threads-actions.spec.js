@@ -5,6 +5,7 @@ import thunk from 'redux-thunk';
 import {__setStorageState} from 'components/storage/storage';
 import {inboxThreadsNamespace, inboxThreadsReducersNamesMap} from './inbox-threads-reducers';
 import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
+import {INBOX_THREADS_HAS_UPDATE} from '../../actions/action-types';
 
 describe('Inbox Threads', () => {
   let apiMock;
@@ -60,6 +61,10 @@ describe('Inbox Threads', () => {
             threads: responseMock,
             reset: true,
           },
+        },
+        {
+          type: INBOX_THREADS_HAS_UPDATE,
+          hasUpdate: false,
         },
       ]);
     });
@@ -133,7 +138,8 @@ describe('Inbox Threads', () => {
 
         await store.dispatch(actions.loadInboxThreads(folderIdMap[1], 1));
 
-        expect(store.getActions()[0].type).not.toEqual(`${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`);
+        expect(store.getActions()[0].type).not.toEqual(
+          `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`);
 
       });
     });
