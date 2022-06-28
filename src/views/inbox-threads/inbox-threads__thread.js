@@ -1,14 +1,19 @@
 /* @flow */
 
-import React from 'react';
-import {View} from 'react-native';
+import React, {useState} from 'react';
+import {TouchableOpacity, View} from 'react-native';
+
+import {useDispatch, useSelector} from 'react-redux';
 
 import InboxEntity from '../inbox/inbox__entity';
+import IconBellCrossed from 'components/icon/assets/bell-crossed.svg';
 import Router from 'components/router/router';
 import styles from './inbox-threads.styles';
 import {getThreadData} from './inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
+import {muteToggle} from './inbox-threads-actions';
 
+import type {AppState} from '../../reducers';
 import type {InboxThread, ThreadData} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
@@ -28,6 +33,10 @@ function Thread({
   onPress,
   ...otherProps
 }: Props): React$Element<any> | null {
+  const dispatch = useDispatch();
+  const isOnline = useSelector((state: AppState) => state.app.networkState?.isConnected === true);
+  const [isMuted, updateMuted] = useState(thread.muted);
+
   if (!thread.id || !thread?.messages?.length) {
     return null;
   }
@@ -53,6 +62,8 @@ function Thread({
     style={[styles.threadTitle, threadData.entityAtBottom && styles.threadSubTitle]}
     styleText={threadData.entityAtBottom && styles.threadSubTitleText}
   />;
+  const isIssue: boolean = hasType.issue(threadData.entity);
+
   return (
     <View
       testID="test:id/inboxThreadsThread"
@@ -60,7 +71,37 @@ function Thread({
       accessible={true}
       {...otherProps}
     >
-      {!threadData.entityAtBottom && renderedEntity}
+      {!threadData.entityAtBottom && (
+        <View style={isIssue && styles.threadTitleWrapper}>
+          {renderedEntity}
+          {isIssue && (
+            <TouchableOpacity
+              testID="test:id/inboxThreadsThreadMuteToggle"
+              accessibilityLabel="inboxThreadsThreadMuteToggle"
+              accessible={true}
+              disabled={!isOnline}
+              onPress={() => {
+                updateMuted(!isMuted);
+                dispatch(muteToggle(thread.id, !isMuted)).then((muted: boolean) => {
+                  updateMuted(muted);
+                });
+              }}
+              style={styles.threadMuteToggle}
+            >
+              <IconBellCrossed
+                fill={(
+                  isOnline
+                    ? (isMuted ? styles.link.color : styles.icon.color)
+                    : (isMuted ? styles.threadButtonText.color : styles.container.backgroundColor)
+                )}
+                width={17}
+                height={17}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
+
       <ThreadComponent
         thread={thread}
         currentUser={currentUser}

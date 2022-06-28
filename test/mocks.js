@@ -1,25 +1,15 @@
 import configureMockStore from 'redux-mock-store';
-import MockedStorage from '@react-native-community/async-storage';
-import sinon from 'sinon';
 import thunk from 'redux-thunk';
+import {deepmerge} from 'deepmerge-ts';
 
 import * as storage from '../src/components/storage/storage';
 import Auth from '../src/components/auth/oauth2';
 import {createProjectCustomFieldMock} from './mocks__custom-fields';
-import {deepmerge} from 'deepmerge-ts';
 import {ResourceTypes} from '../src/components/api/api__resource-types';
-
-const sandbox = sinon.createSandbox();
-
-async function mockStorage() {
-  sandbox.stub(MockedStorage, 'multiGet').callsFake(Promise.resolve([]));
-  return await storage.populateStorage();
-}
 
 async function setStorage(state = {}) {
   return await storage.__setStorageState(state);
 }
-
 
 function createIssuePriorityFieldMock(...args) {
   return Object.assign({
@@ -267,12 +257,14 @@ function createThreadMock(data = {}) {
   return deepmerge(
     {
       id: `S-${uuid()}`,
+      muted: false,
       messages: [{
         timestamp: 0,
         activities: [createActivityCustomFieldMock()],
       }],
       subject: {
         target: {
+          $type: 'jetbrains.charisma.persistent.Issue',
           id: 'id',
         },
       },
@@ -281,9 +273,17 @@ function createThreadMock(data = {}) {
   );
 }
 
+function reactReduxMockFn() {
+  return () => jest.mock('react-redux', () => {
+    return {
+      ...jest.requireActual('react-redux'),
+      useSelector: jest.fn().mockImplementation(() => true),
+      useDispatch: jest.fn().mockImplementation(() => {}),
+    };
+  });
+}
+
 export default {
-  sandbox,
-  mockStorage,
   setStorage,
 
   createIssueMock,
@@ -303,4 +303,6 @@ export default {
   createActivityCustomFieldMock,
   createActivityCommentMock,
   createThreadMock,
+
+  reactReduxMockFn,
 };

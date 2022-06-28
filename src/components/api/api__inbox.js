@@ -35,4 +35,12 @@ export default class IssueAPI extends ApiBase {
       ].filter(Boolean).join('&')
     );
   }
+
+  async muteToggle(id: string, muted: boolean): Promise<InboxThread> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/inbox/threads/${id}?fields=muted`,
+      'POST',
+      {muted}
+    );
+  }
 }

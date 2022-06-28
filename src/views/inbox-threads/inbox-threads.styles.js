@@ -18,6 +18,9 @@ export default EStyleSheet.create({
   link: {
     color: '$link',
   },
+  disabled: {
+    color: '$disabled',
+  },
   row: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -48,13 +51,23 @@ export default EStyleSheet.create({
     paddingBottom: UNIT * 2,
     backgroundColor: '$separator',
   },
+  threadTitleWrapper: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
   threadTitle: {
-    marginRight: UNIT * 2,
+    width: '100%',
     marginBottom: UNIT * 2,
+    paddingRight: UNIT * 5,
   },
   threadSubTitle: {
     marginTop: -UNIT,
     marginLeft: UNIT * 5.5,
+  },
+  threadMuteToggle: {
+    padding: UNIT / 2,
+    marginTop: -UNIT / 2,
+    marginLeft: -UNIT * 4.5,
   },
   threadSubTitleText: {
     ...secondaryText,

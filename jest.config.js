@@ -8,7 +8,8 @@ module.exports = {
     '^[./a-zA-Z0-9$_-]+\\.(gif|jpg|jpeg|png|svg)$': 'jest-transform-stub',
   },
   'moduleNameMapper': {
-    '^.+.(svg)$': 'jest-transform-stub',
+    '^.+.(svg)$': '<rootDir>/test/svg-mock.js',
+    '^@jetbrains/icons/(.*)$': '<rootDir>/test/svg-mock.js',
   },
   'setupFilesAfterEnv': [
     '<rootDir>/test/jest-setup.js',

@@ -108,6 +108,7 @@ export type InboxThreadTarget = (AnyIssue | IssueComment | Article);
 export interface InboxThread {
   $type: string;
   id: string;
+  muted: boolean;
   notified: number;
   subject: {
     $type: string;

@@ -4,6 +4,8 @@ import usage from 'components/usage/usage';
 import {ANALYTICS_NOTIFICATIONS_THREADS_PAGE} from 'components/analytics/analytics-ids';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {folderIdAllKey} from './inbox-threads-helper';
+import {i18n} from 'components/i18n/i18n';
+import {notify, notifyError} from 'components/notification/notification';
 import {setError, setNotifications, toggleProgress} from './inbox-threads-reducers';
 import {until} from 'util/util';
 
@@ -75,9 +77,32 @@ const loadInboxThreads = (folderId?: string, end?: number): ((
   };
 };
 
+const muteToggle = (id: string, muted: boolean): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<boolean>) => {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    if (isOffline) {
+      return !muted;
+    }
+    const api: Api = getApi();
+    const [error, inboxThread]: [?CustomError, Array<InboxThread>] = await until(api.inbox.muteToggle(id, muted));
+    if (error) {
+      notifyError(error);
+      return !muted;
+    } else {
+      notify(inboxThread?.muted === true ? i18n('Thread muted') : i18n('Thread unmuted'));
+      return error ? muted : inboxThread.muted;
+    }
+  };
+};
+
 
 export {
   loadInboxThreads,
   loadThreadsFromCache,
+  muteToggle,
   updateThreadsCache,
 };
