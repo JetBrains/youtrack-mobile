@@ -257,6 +257,7 @@ function createThreadMock(data = {}) {
   return deepmerge(
     {
       id: `S-${uuid()}`,
+      notified: 1,
       muted: false,
       messages: [{
         timestamp: 0,

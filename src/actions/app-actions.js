@@ -839,9 +839,10 @@ const inboxSetUpdateStatus = (hasUpdate?: boolean): Action => {
       dispatch(receiveInboxUpdateStatus(hasUpdate));
     } else if (isOnline) {
       const inboxThreadsCache = getStorageState()?.inboxThreadsCache || {[folderIdAllKey]: []};
-      const firstItem = inboxThreadsCache[folderIdAllKey][0];
+      const inboxThreadsCacheElement = inboxThreadsCache[folderIdAllKey];
+      const firstItem = inboxThreadsCacheElement[0];
 
-      if (!firstItem.notified) {
+      if (!firstItem?.notified) {
         dispatch(receiveInboxUpdateStatus(true));
       } else {
         const api: Api = getApi();
