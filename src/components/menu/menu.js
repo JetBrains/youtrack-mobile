@@ -22,12 +22,15 @@ import type {AppState} from '../../reducers';
 import type {Article} from 'flow/Article';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
 
-const defaultStatusDelay: number = 60 * 1000;
+export const menuPollInboxStatusDelay: number = 60 * 1000;
 
 
 export default function () {
   const dispatch = useDispatch();
+
+  const isInboxEnabled: boolean = checkVersion(FEATURE_VERSION.inbox, true);
   const isInboxThreadsEnabled: boolean = checkVersion(FEATURE_VERSION.inboxThreads, true);
+  const isKBEnabled: boolean = checkVersion(FEATURE_VERSION.knowledgeBase, true);
 
   const hasInboxUpdate: boolean = useSelector((appState: AppState) => appState.app.inboxThreadsHasUpdate);
   const isDisabled: boolean = useSelector((appState: AppState) => appState.app.isChangingAccount);
@@ -43,10 +46,10 @@ export default function () {
     currentRouteName: null,
   });
   const [splitView, updateSplitView] = useState(isSplitView());
-  const [pollInboxStatusDelay, updatePollInboxStatusDelay] = useState(defaultStatusDelay);
+  const [pollDelay, updatePollDelay] = useState(menuPollInboxStatusDelay);
 
 
-  useInterval(setInboxHasUpdateStatus, pollInboxStatusDelay);
+  useInterval(setInboxHasUpdateStatus, pollDelay);
 
   useEffect(() => {
     const unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: ?string, prevRouteName: ?string) => {
@@ -65,9 +68,11 @@ export default function () {
   }, [setInboxHasUpdateStatus]);
 
   const startPollingInboxUpdateStatus = () => {
-    if (pollInboxStatusDelay === null) {
+    if (isInboxThreadsEnabled) {
       setInboxHasUpdateStatus();
-      updatePollInboxStatusDelay(defaultStatusDelay);
+      updatePollDelay(menuPollInboxStatusDelay);
+    } else {
+      updatePollDelay(null);
     }
   };
 
@@ -143,7 +148,7 @@ export default function () {
     const routeName: string = isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox;
     if (canNavigateTo(routeName) && Router[routeName]) {
       Router[routeName]();
-      updatePollInboxStatusDelay(null);
+      updatePollDelay(null);
     }
   };
 
@@ -171,8 +176,6 @@ export default function () {
     }
   };
 
-  const isKBEnabled: boolean = checkVersion(FEATURE_VERSION.knowledgeBase, true);
-  const isInboxEnabled: boolean = checkVersion(FEATURE_VERSION.inbox, true);
   const color = (routeName: string) => {
     return (
       isDisabled
@@ -230,7 +233,7 @@ export default function () {
 
       <MenuItem
         disabled={!isKBEnabled}
-        testID="menuKnowledgeBase"
+        testID="test:id/menuKnowledgeBase"
         icon={<IconKnowledgeBase size={22} color={color(routeMap.KnowledgeBase)}/>}
         onPress={openKnowledgeBase}
       />

@@ -3,10 +3,11 @@ import React from 'react';
 import {Provider} from 'react-redux';
 import {render, cleanup, fireEvent} from '@testing-library/react-native';
 
-import Menu from './menu';
+import * as appActions from '../../actions/app-actions';
+import Menu, {menuPollInboxStatusDelay} from './menu';
 import mocks from '../../../test/mocks';
 import Router from '../router/router';
-import {buildStyles, DEFAULT_THEME} from '../theme/theme';
+import {DEFAULT_THEME} from '../theme/theme';
 import {rootRoutesList, routeMap} from '../../app-routes';
 
 jest.mock('../feature/feature');
@@ -23,8 +24,6 @@ describe('<Menu/>', () => {
   let stateMock;
   let ownPropsMock;
   let router;
-
-  beforeAll(() => buildStyles(DEFAULT_THEME.mode, DEFAULT_THEME));
 
   beforeEach(() => {
     jest.restoreAllMocks();
@@ -73,7 +72,7 @@ describe('<Menu/>', () => {
 
       const {getByTestId} = doRender();
 
-      expect(getByTestId('menuKnowledgeBase')).toBeTruthy();
+      expect(getByTestId('test:id/menuKnowledgeBase')).toBeTruthy();
     });
 
     it('should not render menu `Knowledge Base` item', async () => {
@@ -83,14 +82,14 @@ describe('<Menu/>', () => {
       const {getByTestId} = doRender();
 
       expect(() => {
-        getByTestId('menuKnowledgeBase');
+        getByTestId('test:id/menuKnowledgeBase');
       }).toThrow();
     });
 
 
     it('should render menu `Notifications` item', async () => {
       const feature = require('../feature/feature');
-      feature.checkVersion.mockReturnValue(true);
+      feature.checkVersion.mockReturnValueOnce(true);
 
       const {getByTestId} = doRender();
 
@@ -135,17 +134,8 @@ describe('<Menu/>', () => {
 
   describe('Navigation', () => {
     beforeEach(() => {
-      Router.setNavigator(mocks.navigatorMock);
-
-      rootRoutesList
-        .map(routeName => {
-          Router.registerRoute({name: routeName, component: null});
-          return routeName;
-        });
-      Router.registerRoute({name: routeMap.Issue, component: null});
-
+      mockRouter();
       jest.spyOn(router, 'navigate');
-
     });
 
     it('should not navigate if `Menu` disabled', () => {
@@ -158,7 +148,7 @@ describe('<Menu/>', () => {
       expect(Router.navigate).toHaveBeenCalledTimes(0);
     });
 
-    it('should navigate to the root route', async () => {
+    it('should navigate to the root route', () => {
       const {getByTestId} = doRender();
       fireEvent.press(getByTestId('test:id/menuIssues'));
       fireEvent.press(getByTestId('test:id/menuAgile'));
@@ -166,7 +156,7 @@ describe('<Menu/>', () => {
       expect(Router.navigate).toHaveBeenCalledTimes(2);
     });
 
-    it('should not navigate to the same root route', async () => {
+    it('should not navigate to the same root route', () => {
       const {getByTestId} = doRender();
 
       fireEvent.press(getByTestId('test:id/menuIssues'));
@@ -175,7 +165,7 @@ describe('<Menu/>', () => {
       expect(Router.navigate).toHaveBeenCalledTimes(1);
     });
 
-    it('should navigate to a root route if current route is `Issue`', async () => {
+    it('should navigate to a root route if current route is `Issue`', () => {
       const {getByTestId} = doRender();
 
       fireEvent.press(getByTestId('test:id/menuIssues'));
@@ -185,7 +175,7 @@ describe('<Menu/>', () => {
       expect(Router.navigate).toHaveBeenCalledTimes(3);
     });
 
-    it('should activate pressed root route', async () => {
+    it('should activate pressed root route', () => {
       const {getByTestId} = doRender();
 
       fireEvent.press(getByTestId('test:id/menuIssues'));
@@ -196,6 +186,78 @@ describe('<Menu/>', () => {
     });
   });
 
+
+  describe('Inbox status polling', () => {
+    beforeAll(() => {
+      jest.useFakeTimers('legacy');
+    });
+
+    afterAll(() => {
+      jest.useRealTimers();
+    });
+
+    beforeEach(() => {
+      mockRouter();
+      jest.spyOn(appActions, 'inboxSetUpdateStatus');
+    });
+    describe('Inbox threads is available', () => {
+      beforeEach(() => {
+        const feature = require('../feature/feature');
+        feature.checkVersion.mockReturnValue(true);
+      });
+
+      it('should start polling without waiting', () => {
+        const {getByTestId} = doRender();
+        fireEvent.press(getByTestId('test:id/menuIssues'));
+
+        expect(appActions.inboxSetUpdateStatus).toHaveBeenCalledTimes(1);
+      });
+
+      it('should poll status', async () => {
+        const {getByTestId} = doRender();
+        fireEvent.press(getByTestId('test:id/menuIssues'));
+
+        jest.advanceTimersByTime(menuPollInboxStatusDelay);
+        expect(appActions.inboxSetUpdateStatus).toHaveBeenCalledTimes(2);
+      });
+
+      it('should stop polling status', async () => {
+        const {getByTestId} = doRender();
+        fireEvent.press(getByTestId('test:id/menuNotifications'));
+
+        expect(appActions.inboxSetUpdateStatus).not.toHaveBeenCalled();
+
+        jest.advanceTimersByTime(menuPollInboxStatusDelay);
+        expect(appActions.inboxSetUpdateStatus).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('Inbox threads is unavailable', () => {
+      beforeEach(() => {
+        const feature = require('../feature/feature');
+        feature.checkVersion.mockReturnValue(false);
+      });
+
+      it('should not poll status if the feature is unavailable', () => {
+        const {getByTestId} = doRender();
+        fireEvent.press(getByTestId('test:id/menuIssues'));
+        jest.advanceTimersByTime(menuPollInboxStatusDelay);
+
+        expect(appActions.inboxSetUpdateStatus).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+
+  function mockRouter() {
+    Router.setNavigator(mocks.navigatorMock);
+    rootRoutesList
+      .map(routeName => {
+        Router.registerRoute({name: routeName, component: null});
+        return routeName;
+      });
+    Router.registerRoute({name: routeMap.Issue, component: null});
+  }
 
   function doRender(agileUserProfile = {}) {
     return render(
