@@ -113,7 +113,4 @@ function Thread({
   );
 }
 
-export default (React.memo<Props>(
-  Thread,
-  (prev: Props, next: Props) => prev?.thread?.notified === next?.thread?.notified
-): React$AbstractComponent<Props, mixed>);
+export default Thread;
