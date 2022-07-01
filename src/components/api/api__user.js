@@ -56,6 +56,10 @@ export default class UserAPI extends ApiBase {
               'datePattern',
               'pattern',
             ],
+            locale: [
+              'language',
+              'locale',
+            ],
           },
           appearance: ['naturalCommentsOrder', 'useAbsoluteDates'],
           articles: {

@@ -76,6 +76,11 @@ export type UserProfileDateFieldFormat = {
   pattern: string,
 };
 
+export interface UserGeneralProfileLocale {
+  language: string;
+  locale: string;
+}
+
 export type UserGeneralProfile = {
   $type: string,
   id: string,
@@ -87,6 +92,7 @@ export type UserGeneralProfile = {
   star: {
     id: string,
   },
+  locale: UserGeneralProfileLocale,
 }
 
 export type Folder = {
