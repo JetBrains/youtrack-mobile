@@ -88,8 +88,8 @@ msgstr "Appearance"
 
 #: src/views/create-issue/create-issue-actions.js
 #: src/views/issue/issue-base-actions-creater.js
-msgid "Apply command…"
-msgstr "Apply command…"
+msgid "Apply command?"
+msgstr "Apply command?"
 
 #: src/views/article/arcticle-helper.js
 msgid "Are you sure you want to delete all article drafts?"
@@ -175,8 +175,8 @@ msgstr "Cancel"
 
 #: src/components/attach-file/attach-file-dialog.js
 #: src/components/attachments-row/attachment-actions.js
-msgid "Choose from library…"
-msgstr "Choose from library…"
+msgid "Choose from library?"
+msgstr "Choose from library?"
 
 #: src/components/debug-view/debug-view.js
 #: src/components/popup/popup.js
@@ -514,8 +514,8 @@ msgid "Linked issues"
 msgstr "Linked issues"
 
 #: src/components/select/select.js
-msgid "Loading values…"
-msgstr "Loading values…"
+msgid "Loading values?"
+msgstr "Loading values?"
 
 #: src/views/log-in/log-in.js
 msgid "Log in"
@@ -712,8 +712,8 @@ msgid "Send logs"
 msgstr "Send logs"
 
 #: src/components/error-boundary/error-boundary.js
-msgid "Sending crash report…"
-msgstr "Sending crash report…"
+msgid "Sending crash report?"
+msgstr "Sending crash report?"
 
 #: src/views/settings/settings.js
 msgid "Settings"
@@ -739,8 +739,8 @@ msgstr "Share logs"
 #: src/views/article/arcticle-actions.js
 #: src/views/article/arcticle-actions.js
 #: src/views/issue/issue-base-actions-creater.js
-msgid "Share…"
-msgstr "Share…"
+msgid "Share?"
+msgstr "Share?"
 
 #: src/components/tags/tags.js
 msgid "Show all issues tagged with \"{{tagName}}\"..."
@@ -809,8 +809,8 @@ msgstr[1] "Tags"
 
 #: src/components/attach-file/attach-file-dialog.js
 #: src/components/attachments-row/attachment-actions.js
-msgid "Take a picture…"
-msgstr "Take a picture…"
+msgid "Take a picture?"
+msgstr "Take a picture?"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Thank you for your feedback!"
