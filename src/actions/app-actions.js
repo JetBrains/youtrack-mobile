@@ -347,7 +347,10 @@ export function changeAccount(account: StorageState, removeCurrentAccount?: bool
     dispatch(beginAccountChange());
 
     try {
-      loadTranslation(account?.config?.l10n?.locale, account?.config?.l10n?.language);
+      const userLocale: ?UserGeneralProfileLocale = account.currentUser?.ytCurrentUser?.profiles?.general?.locale;
+      if (userLocale) {
+        loadTranslation(userLocale?.locale, userLocale?.language);
+      }
 
       await dispatch(updateOtherAccounts(account, removeCurrentAccount));
 
