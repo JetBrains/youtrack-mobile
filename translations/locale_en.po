@@ -228,7 +228,7 @@ msgstr "Comments"
 msgid "committed changes"
 msgstr "committed changes"
 
-#: src/actions/app-actions.js:642
+#: src/actions/app-actions.js:662
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -482,7 +482,7 @@ msgstr "It could mean that the issue doesn't exist or you don't have permission 
 msgid "JetBrains Privacy Policy"
 msgstr "JetBrains Privacy Policy"
 
-#: src/components/date/date.js:87
+#: src/components/date/date.js:91
 msgid "just now"
 msgstr "just now"
 
@@ -857,7 +857,7 @@ msgstr "The commit author has specified an email address that is associated with
 msgid "The commit author is not an assignee in the project."
 msgstr "The commit author is not an assignee in the project."
 
-#: src/actions/app-actions.js:340
+#: src/actions/app-actions.js:341
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
