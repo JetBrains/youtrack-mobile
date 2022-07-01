@@ -38,7 +38,7 @@ const InboxThreadsList = ({currentUser, folderId, theme, onPress, ...other}: Pro
   const error: ?CustomError = useSelector((state: AppState) => state.inboxThreads.error);
 
   const loadThreads = useCallback(
-    (end?: number) => {dispatch(actions.loadInboxThreads(folderId, end));},
+    (end?: number | null) => {dispatch(actions.loadInboxThreads(folderId, end));},
     [dispatch, folderId]
   );
 
@@ -96,7 +96,7 @@ const InboxThreadsList = ({currentUser, folderId, theme, onPress, ...other}: Pro
       refreshControl={<RefreshControl
         refreshing={false}
         tintColor={styles.link.color}
-        onRefresh={loadThreads}
+        onRefresh={() => loadThreads(null)}
       />}
       renderItem={renderItem}
     />

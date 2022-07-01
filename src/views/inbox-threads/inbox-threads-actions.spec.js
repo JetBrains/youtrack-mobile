@@ -114,7 +114,7 @@ describe('Inbox Threads', () => {
           },
         });
 
-        await store.dispatch(actions.loadInboxThreads(folderIdMap[1], null));
+        await store.dispatch(actions.loadInboxThreads(folderIdMap[1], undefined));
 
         expect(store.getActions()[0]).toEqual({
           type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
@@ -122,6 +122,18 @@ describe('Inbox Threads', () => {
             folderId: folderIdMap[1],
             threads: threadsMock,
             reset: true,
+          },
+        });
+
+      });
+
+      it('should not set threads from the cache while refreshing threads', async () => {
+        await store.dispatch(actions.loadInboxThreads(folderIdMap[0], null));
+
+        expect(store.getActions()[0]).toEqual({
+          type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setError}`,
+          payload: {
+            error: null,
           },
         });
 

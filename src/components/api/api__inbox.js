@@ -23,7 +23,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async getThreads(folder?: string, end?: number): Promise<InboxThread[]> {
+  async getThreads(folder?: string, end?: ?number): Promise<InboxThread[]> {
     return this.makeAuthorizedRequest(
       [
         `${this.youTrackApiUrl}/inbox/threads?$top=${threadsPageSize}`,

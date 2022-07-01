@@ -48,7 +48,7 @@ const updateThreadsCache = (threads: InboxThread[], folderId: string = folderIdA
   };
 };
 
-const loadInboxThreads = (folderId?: string, end?: number): ((
+const loadInboxThreads = (folderId?: string, end?: number | null): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
@@ -59,7 +59,8 @@ const loadInboxThreads = (folderId?: string, end?: number): ((
       return;
     }
     const api: Api = getApi();
-    if (!end) {
+    const isLoadingFirstTime: boolean = typeof end === 'undefined';
+    if (isLoadingFirstTime) {
       usage.trackEvent(ANALYTICS_NOTIFICATIONS_THREADS_PAGE, 'Load inbox threads');
       dispatch(loadThreadsFromCache(folderId));
     }
@@ -74,7 +75,7 @@ const loadInboxThreads = (folderId?: string, end?: number): ((
     } else {
       dispatch(setNotifications({threads, reset: typeof end !== 'number', folderId: folderId || folderIdAllKey}));
       dispatch(updateThreadsCache(threads, folderId));
-      if (!folderId) {
+      if (!folderId && isLoadingFirstTime) {
         dispatch(saveAllSeen(threads[0].notified));
         dispatch({
           type: types.INBOX_THREADS_HAS_UPDATE,
