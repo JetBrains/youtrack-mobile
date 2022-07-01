@@ -56,7 +56,7 @@ function getDatePattern() {
 }
 
 function getLanguage(): ?string {
-  return getStorageState().config?.l10n?.language;
+  return getStorageState().currentUser?.ytCurrentUser?.profiles?.general?.locale?.language;
 }
 
 function isAbsoluteDates(): boolean {

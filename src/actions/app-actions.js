@@ -54,6 +54,7 @@ import type {NotificationRouteData} from 'flow/Notification';
 import type {PermissionCacheItem} from 'flow/Permission';
 import type {StorageState} from 'components/storage/storage';
 import type {WorkTimeSettings} from 'flow/Work';
+import {UserGeneralProfileLocale} from 'flow/User';
 
 type Action = (
   (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) =>
@@ -431,12 +432,27 @@ export function completeInitialization(
 ): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     log.debug('Completing initialization');
-    await dispatch(loadYTCurrentUser());
+    const cachedCurrentUser: ?UserCurrent = getStorageState()?.currentUser?.ytCurrentUser;
+    const cachedLocale: ?UserGeneralProfileLocale = cachedCurrentUser?.profiles?.general?.locale;
+    const currentUser: UserCurrent = await dispatch(loadYTCurrentUser());
+    const userProfileLocale: ?UserGeneralProfileLocale = currentUser?.profiles?.general?.locale;
+    const isLanguageChanged: boolean = !cachedLocale?.language || (
+      cachedLocale?.language &&
+      userProfileLocale?.language &&
+      (cachedLocale?.language !== userProfileLocale?.language)
+    );
+    if (isLanguageChanged && userProfileLocale?.language) {
+      loadTranslation(userProfileLocale?.locale, userProfileLocale?.language);
+      if (!issueId) {
+        redirectToHome(getStorageState()?.config?.backendUrl);
+      }
+    }
+
     await dispatch(loadUserPermissions());
     await dispatch(cacheProjects());
     log.debug('Initialization completed');
 
-    if (!skipNavigateToRoute) {
+    if (!skipNavigateToRoute || (isLanguageChanged && !issueId)) {
       Router.navigateToDefaultRoute(issueId ? {issueId, navigateToActivity} : null);
     }
 
@@ -456,6 +472,7 @@ export function loadYTCurrentUser(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const user: User = await getApi().user.getUser();
     await dispatch(setYTCurrentUser(user));
+    return user;
   };
 }
 
@@ -654,23 +671,15 @@ export function initializeApp(
   config: AppConfig,
   issueId: string | null,
   navigateToActivity: boolean,
-  isReinitializing: boolean = false,
 ): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
+    const cachedCurrentUser: ?UserCurrent = getStorageState()?.currentUser?.ytCurrentUser;
+    const userProfileLocale: ?UserGeneralProfileLocale = cachedCurrentUser?.profiles?.general?.locale;
+    if (userProfileLocale?.language) {
+      loadTranslation(userProfileLocale.locale, userProfileLocale.language);
+    }
     const isRedirectedToTargetRoute: boolean = await dispatch(redirectToRoute(config, issueId, navigateToActivity));
-    const reInitialize = async (cfg) => await dispatch(
-      initializeApp(cfg, issueId, navigateToActivity, true)
-    );
-
     let configCurrent = config;
-    if (!config.l10n && isReinitializing === false) {
-      configCurrent = await refreshConfig(config.backendUrl);
-      return await reInitialize(configCurrent);
-    }
-
-    if (configCurrent.l10n) {
-      loadTranslation(configCurrent.l10n.locale, configCurrent.l10n.language);
-    }
 
     const currentAppVersion: ?string = getStorageState().currentAppVersion;
     const versionHasChanged: boolean = currentAppVersion != null && packageJson.version !== currentAppVersion;
@@ -710,21 +719,13 @@ export function initializeApp(
     dispatch(subscribeToURL());
 
     if (!versionHasChanged) {
-      refreshConfig(configCurrent.backendUrl).then(async (updatedConfig) => {
-        if (!issueId && configCurrent?.l10n?.language !== updatedConfig?.l10n?.language) {
-          await reInitialize(updatedConfig);
-        }
-      });
+      refreshConfig(configCurrent.backendUrl);
     }
   };
 }
 
 export async function doConnect(newURL: string): Promise<any> {
-  const config = await loadConfig(newURL);
-  if (config.l10n) {
-    loadTranslation(config.l10n.locale, config.l10n.language);
-  }
-  return config;
+  return await loadConfig(newURL);
 }
 
 export function connectToNewYoutrack(newURL: string): Action {
