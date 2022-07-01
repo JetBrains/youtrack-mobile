@@ -17,6 +17,8 @@ import koLocale from 'date-fns/locale/ko';
 import zhLocale from 'date-fns/locale/zh-CN';
 import ptLocale from 'date-fns/locale/pt';
 import plLocale from 'date-fns/locale/pl';
+import itLocale from 'date-fns/locale/it';
+import ukLocale from 'date-fns/locale/uk';
 
 import type {Locale} from 'date-fns';
 import type {User, UserProfileDateFieldFormat} from 'flow/User';
@@ -34,6 +36,8 @@ const dateLocaleMap: {[key: string]: Locale} = {
   zh: zhLocale,
   pt: ptLocale,
   pl: plLocale,
+  it: itLocale,
+  uk: ukLocale,
 };
 
 const USER_DATE_FORMAT_DEFAULT_PATTERN: string = 'd MMM yyyy HH:mm';

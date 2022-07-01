@@ -25,6 +25,8 @@ export function loadTranslation(localeString: string = '', language: string = ''
       zh: require('../../../translations/locale_zh.json'),
       pt: require('../../../translations/locale_pt.json'),
       pl: require('../../../translations/locale_pl.json'),
+      it: require('../../../translations/locale_it.json'),
+      uk: require('../../../translations/locale_uk.json'),
     };
 
     const lang: string = language.toLowerCase();
