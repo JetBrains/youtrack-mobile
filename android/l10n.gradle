@@ -9,7 +9,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath 'org.jetbrains.ring:youtrack-crowdin:0.15'
+    classpath 'org.jetbrains.ring:youtrack-crowdin:0.17'
   }
 }
 
@@ -20,8 +20,9 @@ task crowdinUpload(type: org.jetbrains.crowdin.CrowdinUploadTask) {
   ]
 }
 
-task generateEnglishLocale(type: org.jetbrains.crowdin.GenerateEnglishLocaleTask) {
-  folders = ["$projectDir/../translations"]
+task generateEnglishLocale(type: org.jetbrains.crowdin.GenerateEnglishFileTask){
+  from new File("$projectDir/../translations/default.pot")
+  into new File("$projectDir/../translations/locale_en.po")
 }
 
 task crowdinDownload(type: org.jetbrains.crowdin.CrowdinDownloadTask) {
