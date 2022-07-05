@@ -260,6 +260,8 @@ function createThreadMock(data = {}) {
       notified: 1,
       muted: false,
       messages: [{
+        id: `S-message-${uuid()}`,
+        read: false,
         timestamp: 0,
         activities: [createActivityCustomFieldMock()],
       }],

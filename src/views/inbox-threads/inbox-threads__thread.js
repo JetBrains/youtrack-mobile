@@ -6,15 +6,16 @@ import {TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
 import InboxEntity from '../inbox/inbox__entity';
+import InboxThreadReadToggleButton from './inbox-threads__read-toggle-button';
 import IconBellCrossed from 'components/icon/assets/bell-crossed.svg';
 import Router from 'components/router/router';
 import styles from './inbox-threads.styles';
 import {getThreadData} from './inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
-import {muteToggle} from './inbox-threads-actions';
+import {muteToggle, readMessageToggle} from './inbox-threads-actions';
 
 import type {AppState} from '../../reducers';
-import type {InboxThread, ThreadData} from 'flow/Inbox';
+import type {InboxThread, InboxThreadMessage, ThreadData} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
 
@@ -35,13 +36,16 @@ function Thread({
 }: Props): React$Element<any> | null {
   const dispatch = useDispatch();
   const isOnline = useSelector((state: AppState) => state.app.networkState?.isConnected === true);
-  const [isMuted, updateMuted] = useState(thread.muted);
+  const [_thread, updateThread] = useState(thread);
 
-  if (!thread.id || !thread?.messages?.length) {
+  if (!_thread.id || !_thread?.messages?.length) {
     return null;
   }
 
-  const threadData: ThreadData = getThreadData(thread);
+  const toggleMessagesRead = (messages: InboxThreadMessage[] = [], read: boolean): void => {
+    dispatch(readMessageToggle(messages, read));
+  };
+  const threadData: ThreadData = getThreadData(_thread);
   const ThreadComponent: any = threadData.component;
   const renderedEntity = <InboxEntity
     testID="test:id/inboxEntity"
@@ -63,6 +67,7 @@ function Thread({
     styleText={threadData.entityAtBottom && styles.threadSubTitleText}
   />;
   const isIssue: boolean = hasType.issue(threadData.entity);
+  const hasReadActions: boolean = isIssue || hasType.article(threadData.entity);
 
   return (
     <View
@@ -72,41 +77,65 @@ function Thread({
       {...otherProps}
     >
       {!threadData.entityAtBottom && (
-        <View style={isIssue && styles.threadTitleWrapper}>
+        <View style={hasReadActions && styles.threadTitleWrapper}>
           {renderedEntity}
-          {isIssue && (
-            <TouchableOpacity
-              testID="test:id/inboxThreadsThreadMuteToggle"
-              accessibilityLabel="inboxThreadsThreadMuteToggle"
-              accessible={true}
-              disabled={!isOnline}
-              onPress={() => {
-                updateMuted(!isMuted);
-                dispatch(muteToggle(thread.id, !isMuted)).then((muted: boolean) => {
-                  updateMuted(muted);
-                });
-              }}
-              style={styles.threadMuteToggle}
-            >
-              <IconBellCrossed
-                fill={(
-                  isOnline
-                    ? (isMuted ? styles.link.color : styles.icon.color)
-                    : (isMuted ? styles.threadButtonText.color : styles.container.backgroundColor)
-                )}
-                width={17}
-                height={17}
+          {hasReadActions && (
+            <View style={styles.threadTitleActions}>
+              <InboxThreadReadToggleButton
+                testID="test:id/inboxThreadsThreadReadToggle"
+                accessibilityLabel="inboxThreadsThreadReadToggle"
+                accessible={true}
+                messages={_thread.messages}
+                style={styles.threadTitleAction}
+                onReadChange={(messages: InboxThreadMessage[], isRead: boolean) => {
+                  updateThread({
+                    ..._thread,
+                    messages: messages.map((it: InboxThreadMessage) => {
+                      it.read = isRead;
+                      return it;
+                    }),
+                  });
+                  toggleMessagesRead(_thread.messages, isRead);
+                }}
               />
-            </TouchableOpacity>
+
+              {isIssue && <TouchableOpacity
+                testID="test:id/inboxThreadsThreadMuteToggle"
+                accessibilityLabel="inboxThreadsThreadMuteToggle"
+                accessible={true}
+                disabled={!isOnline}
+                onPress={() => {
+                  const isMuted: boolean = _thread.muted;
+                  updateThread({..._thread, muted: !isMuted});
+                  dispatch(muteToggle(_thread.id, !isMuted)).then((muted: boolean) => {
+                    if (muted !== !isMuted) {
+                      updateThread({..._thread, muted});
+                    }
+                  });
+                }}
+                style={[styles.threadTitleAction, styles.threadMuteToggle]}
+              >
+                <IconBellCrossed
+                  fill={(
+                    isOnline
+                      ? (_thread.muted ? styles.link.color : styles.icon.color)
+                      : (_thread.muted ? styles.threadButtonText.color : styles.container.backgroundColor)
+                  )}
+                  width={17}
+                  height={17}
+                />
+              </TouchableOpacity>}
+            </View>
           )}
         </View>
       )}
 
       <ThreadComponent
-        thread={thread}
+        thread={_thread}
         currentUser={currentUser}
         uiTheme={uiTheme}
         onPress={onPress}
+        onReadChange={(messages: InboxThreadMessage[], read: boolean) => toggleMessagesRead(messages, read)}
       />
       {threadData.entityAtBottom && renderedEntity}
     </View>

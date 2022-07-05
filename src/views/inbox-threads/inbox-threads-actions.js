@@ -13,7 +13,7 @@ import * as types from '../../actions/action-types';
 import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
 import type {CustomError} from 'flow/Error';
-import type {InboxThread} from 'flow/Inbox';
+import type {InboxThread, InboxThreadMessage} from 'flow/Inbox';
 
 type ApiGetter = () => Api;
 type StateGetter = () => AppState;
@@ -119,10 +119,38 @@ const muteToggle = (id: string, muted: boolean): ((
   };
 };
 
+const readMessageToggle = (messages: InboxThreadMessage[], read: boolean): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<boolean>) => {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    if (isOffline) {
+      return !read;
+    }
+    const api: Api = getApi();
+    const [error, response]: [?CustomError, { read: boolean }] = await until(
+      api.inbox.markMessages(
+        messages.map((it: InboxThreadMessage) => ({id: it.id})),
+        read
+      )
+    );
+    if (error) {
+      notifyError(error);
+      return !read;
+    } else {
+      notify(read === true ? i18n('Marked as read') : i18n('Marked as unread'));
+      return error ? !read : response.read;
+    }
+  };
+};
+
 
 export {
   loadInboxThreads,
   loadThreadsFromCache,
   muteToggle,
+  readMessageToggle,
   updateThreadsCache,
 };

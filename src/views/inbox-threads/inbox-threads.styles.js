@@ -28,7 +28,6 @@ export default EStyleSheet.create({
   thread: {
     marginTop: UNIT * 2,
     marginLeft: UNIT * 2,
-    overflow: 'hidden',
   },
   threadFirst: {
     marginTop: UNIT,
@@ -47,18 +46,41 @@ export default EStyleSheet.create({
     top: UNIT / 2,
     left: 15,
     width: 2,
-    height: '100%',
+    height: '98%',
     paddingBottom: UNIT * 2,
     backgroundColor: '$separator',
   },
   threadTitleWrapper: {
     flexDirection: 'row',
     alignItems: 'flex-start',
+    overflow: 'hidden',
   },
   threadTitle: {
-    width: '100%',
+    flexGrow: 1,
+    marginRight: UNIT * 8,
     marginBottom: UNIT * 2,
-    paddingRight: UNIT * 5,
+  },
+  threadTitleActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginTop: -UNIT / 4,
+    marginRight: UNIT,
+    marginLeft: -UNIT * 8,
+  },
+  threadTitleAction: {
+    width: 24,
+    height: 24,
+    marginLeft: UNIT,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  threadItemAction: {
+    position: 'absolute',
+    zIndex: 1,
+    top: UNIT / 4,
+    right: UNIT / 1.5,
+    padding: UNIT,
   },
   threadSubTitle: {
     marginTop: -UNIT,
@@ -66,8 +88,6 @@ export default EStyleSheet.create({
   },
   threadMuteToggle: {
     padding: UNIT / 2,
-    marginTop: -UNIT / 2,
-    marginLeft: -UNIT * 4.5,
   },
   threadSubTitleText: {
     ...secondaryText,

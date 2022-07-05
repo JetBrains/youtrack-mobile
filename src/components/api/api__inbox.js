@@ -56,4 +56,15 @@ export default class IssueAPI extends ApiBase {
       {lastSeen}
     );
   }
+
+  async markMessages(ids: { id: string }[], read: boolean): Promise<void> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/inbox/markMessages?fields=read`,
+      'POST',
+      {
+        messages: ids,
+        read,
+      }
+    );
+  }
 }

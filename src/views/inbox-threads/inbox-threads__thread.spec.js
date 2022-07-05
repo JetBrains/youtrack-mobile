@@ -20,6 +20,7 @@ describe('Inbox Thread', () => {
     apiMock = {
       inbox: {
         muteToggle: jest.fn(),
+        markMessages: jest.fn(),
       },
     };
     threadMock = mocks.createThreadMock();
@@ -79,6 +80,47 @@ describe('Inbox Thread', () => {
         fireEvent.press(getByTestId(threadMuteToggleId));
 
         expect(apiMock.inbox.muteToggle).not.toHaveBeenCalled();
+      });
+    });
+
+
+    describe('Read/Unread', () => {
+      it('should mark a thread as read', () => {
+        const {getByTestId} = doRender(threadMock);
+
+        fireEvent.press(getByTestId('test:id/inboxThreadsThreadReadToggle'));
+
+        expect(apiMock.inbox.markMessages).toHaveBeenCalledWith(
+          [{id: threadMock.messages[0].id}],
+          true,
+        );
+      });
+
+      it('should mark a thread as unread', () => {
+        const {getByTestId} = doRender({
+          ...threadMock,
+          messages: [{
+            ...threadMock.messages[0],
+            read: true,
+          }],
+        });
+
+        fireEvent.press(getByTestId('test:id/inboxThreadsThreadReadToggle'));
+
+        expect(apiMock.inbox.markMessages).toHaveBeenCalledWith(
+          [{id: threadMock.messages[0].id}],
+          false,
+        );
+      });
+
+      it('should disable a thread read toggle', () => {
+        networkStateMock = {isConnected: false};
+        createStore();
+        const {getByTestId} = doRender(threadMock);
+
+        fireEvent.press(getByTestId('test:id/inboxThreadsThreadReadToggle'));
+
+        expect(apiMock.inbox.markMessages).not.toHaveBeenCalled();
       });
     });
   });

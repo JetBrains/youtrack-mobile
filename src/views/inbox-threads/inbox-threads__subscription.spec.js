@@ -1,5 +1,5 @@
 import React from 'react';
-import {render} from '@testing-library/react-native';
+import {fireEvent, render} from '@testing-library/react-native';
 
 import InboxThreadItemSubscription from './inbox-threads__subscription';
 import mocks from '../../../test/mocks';
@@ -44,7 +44,7 @@ describe('InboxThreadItemSubscription', () => {
       it('should show button', () => {
         module.splitActivities.mockImplementationOnce(() => splittedActivitiesMock);
 
-        const {getByTestId} = renderAnGetMatcher();
+        const {getByTestId} = renderAndGetMatcher();
 
         expect(getByTestId('test:id/inboxThreadsSubscriptionShowMore')).toBeTruthy();
       });
@@ -52,26 +52,59 @@ describe('InboxThreadItemSubscription', () => {
       it('should not show button', () => {
         module.splitActivities.mockImplementationOnce(() => splittedActivitiesMock.slice(0, 2));
 
-        const {queryByTestId} = renderAnGetMatcher();
+        const {queryByTestId} = renderAndGetMatcher();
 
         expect(queryByTestId('test:id/inboxThreadsSubscriptionShowMore')).toBeNull();
       });
 
-      function renderAnGetMatcher() {
+      function renderAndGetMatcher() {
         return doRender(mocks.createThreadMock({messages: []}));
       }
     });
 
   });
+
+
+  describe('Read/Unread', () => {
+    let onReadToggleMockFn;
+    let threadMock;
+
+    beforeEach(() => {
+      onReadToggleMockFn = jest.fn();
+      threadMock = mocks.createThreadMock();
+    });
+
+    it('should mark a thread as read', () => {
+      const {getByTestId} = doRender(threadMock, onReadToggleMockFn);
+
+      fireEvent.press(getByTestId('test:id/inboxThreadsSubscriptionGroupReadToggle'));
+      expect(onReadToggleMockFn).toHaveBeenCalled();
+    });
+
+    it('should mark a thread as unread', () => {
+      const {getByTestId} = doRender({
+        ...threadMock,
+        messages: [{
+          ...threadMock.messages[0],
+          read: true,
+        }],
+      }, onReadToggleMockFn);
+
+      fireEvent.press(getByTestId('test:id/inboxThreadsSubscriptionGroupReadToggle'));
+
+      expect(onReadToggleMockFn).toHaveBeenCalled();
+    });
+  });
 });
 
 
-function doRender(thread) {
+function doRender(thread, onReadToggle) {
   return render(
     <InboxThreadItemSubscription
       thread={thread}
       currentUser={mocks.createUserMock()}
       uiTheme={DEFAULT_THEME}
+      onReadChange={onReadToggle}
     />
   );
 }

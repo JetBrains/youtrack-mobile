@@ -105,6 +105,11 @@ export const IconCircle = (props?: Props) => <DefaultIcon {...{
   ...props,
 }} />;
 
+export const IconCircleOutline = (props?: Props) => <DefaultIcon {...{
+  name: 'checkbox-blank-circle-outline',
+  ...props,
+}} />;
+
 
 /* FontAwesome icons */
 

@@ -3,9 +3,10 @@
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
+import InboxThreadReadToggleButton from './inbox-threads__read-toggle-button';
 import ThreadCommentItem from './inbox-threads__item-comment';
-import ThreadHistoryItem from './inbox-threads__item-history';
 import ThreadEntityCreatedItem from './inbox-threads__item-issue-created';
+import ThreadHistoryItem from './inbox-threads__item-history';
 import ThreadWorkItem from './inbox-threads__item-work';
 import {createMessagesMap, sortEvents} from './inbox-threads-helper';
 import {groupActivities} from 'components/activity/activity__group-activities';
@@ -16,26 +17,28 @@ import {splitActivities} from 'components/activity/activity__split-activities';
 import styles from './inbox-threads.styles';
 
 import type {Activity} from 'flow/Activity';
-import type {InboxThread, InboxThreadGroup, ThreadEntity} from 'flow/Inbox';
+import type {InboxThread, InboxThreadGroup, InboxThreadMessage, ThreadEntity} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
 interface Props {
-  thread: InboxThread;
-  style?: ViewStyleProp;
   currentUser: User;
-  uiTheme: UITheme;
   onPress?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
+  onReadChange: (messages: InboxThreadMessage[], read: boolean) => any;
+  style?: ViewStyleProp;
+  thread: InboxThread;
+  uiTheme: UITheme;
 }
 
 export default function InboxThreadItemSubscription({
-  thread,
-  style,
   currentUser,
-  uiTheme,
   onPress,
+  onReadChange,
+  style,
+  thread,
+  uiTheme,
 }: Props): React$Element<typeof View> {
   const [shownMessagesAmount, updateShownMessagesAmount] = useState(3);
 
@@ -98,7 +101,7 @@ export default function InboxThreadItemSubscription({
     </View>
   );
 
-  function renderGroup(group: InboxThreadGroup, target: any, isLast: boolean, showMoreButton?: any) {
+  function renderGroup(group: InboxThreadGroup, target: any, isLast: boolean, showMoreButtonEl?: any) {
     let Component: any;
     switch (true) {
     case !!group.issue:
@@ -121,6 +124,16 @@ export default function InboxThreadItemSubscription({
         key={`${group.head.id}${group.head.timestamp}`}
       >
         {!isLast && <View style={styles.threadConnector}/>}
+
+        <InboxThreadReadToggleButton
+          testID="test:id/inboxThreadsSubscriptionGroupReadToggle"
+          accessibilityLabel="inboxThreadsSubscriptionGroupReadToggle"
+          accessible={true}
+          messages={group.messages}
+          onReadChange={onReadChange}
+          style={styles.threadItemAction}
+        />
+
         <Component
           target={target}
           group={group}
@@ -129,7 +142,7 @@ export default function InboxThreadItemSubscription({
           uiTheme={uiTheme}
           onPress={onPress}
         />
-        {showMoreButton}
+        {showMoreButtonEl}
       </View>
     );
   }

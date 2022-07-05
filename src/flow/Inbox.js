@@ -98,6 +98,7 @@ export interface InboxThreadMessage {
   id: string;
   muted: string;
   notified: string;
+  read: boolean,
   reasons: InboxMessageReasons,
   threadId: string;
   timestamp: string;
