@@ -47,7 +47,7 @@ export type StorageState = {|
   lastQueries: ?Array<string>,
   issuesCache: Array<AnyIssue> | null,
   inboxCache: Notification[] | null,
-  inboxThreadsCache: { [string]: InboxThread[]} | null,
+  inboxThreadsCache: { ['all' | 'direct' | 'subscription' | 'unreadOnly']: (InboxThread[] | boolean) } | null,
   isRegisteredForPush: boolean,
   deviceToken: ?string,
   agileZoomedIn: ?boolean,

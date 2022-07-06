@@ -1,21 +1,26 @@
 /* @flow */
 
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {Dimensions, Text, View} from 'react-native';
+import {Dimensions, Linking, Text, TouchableOpacity, View} from 'react-native';
 
 import {TabBar, TabView} from 'react-native-tab-view';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import Article from 'views/article/article';
 import Header from 'components/header/header';
 import InboxThreadsList from './inbox-threads__list';
 import Issue from '../issue/issue';
 import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
+import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
+import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {folderIdMap, threadTabsTitles} from './inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
+import {IconMoreOptions} from 'components/icon/icon';
 import {isSplitView as hasSplitView} from 'components/responsive/responsive-helper';
+import {markAllAsRead} from './inbox-threads-actions';
 import {ThemeContext} from 'components/theme/theme-context';
+import {useActionSheet} from '@expo/react-native-action-sheet';
 
 import styles from './inbox-threads.styles';
 import tabStyles from 'components/issue-tabbed/issue-tabbed.style';
@@ -29,6 +34,9 @@ import type {UserCurrent} from 'flow/User';
 
 
 const InboxThreads: () => Node = (): Node => {
+  const dispatch = useDispatch();
+  const {showActionSheetWithOptions} = useActionSheet();
+
   const theme: Theme = useContext(ThemeContext);
   const currentUser: UserCurrent = useSelector((state: AppState) => state.app.user);
   const routes: TabRoute[] = threadTabsTitles.map((name: string, index: number) => ({key: index, title: name}));
@@ -116,20 +124,80 @@ const InboxThreads: () => Node = (): Node => {
     />
   );
 
-  const header = <Header title={i18n('Notifications')}/>;
+  const renderHeader = () => (
+    <Header
+      title={i18n('Notifications')}
+      rightButton={<TouchableOpacity
+        testID="test:id/inboxSettings"
+        accessibilityLabel="inboxSettings"
+        accessible={true}
+        onPress={() => {
+          const inboxThreadsCache = getStorageState().inboxThreadsCache;
+          const options = [
+            {
+              title: inboxThreadsCache?.unreadOnly ? i18n('Show all') : i18n('Show unread only'),
+              execute: async () => {
+                flushStoragePart({
+                  inboxThreadsCache: {
+                    ...inboxThreadsCache,
+                    unreadOnly: !inboxThreadsCache?.unreadOnly,
+                  },
+                });
+              },
+            },
+            {
+              title: i18n('Mark all as read'),
+              execute: () => {
+                dispatch(markAllAsRead());
+              },
+            },
+            {
+              title: i18n('Notification settings…'),
+              execute: () => Linking.openURL(
+                `${getStorageState().config.backendUrl}/users/me?tab=notifications`
+              ),
+            },
+            {
+              title: i18n('Cancel'),
+            },
+          ];
+
+          showActionSheetWithOptions(
+            {
+              ...defaultActionsOptions,
+              options: options.map(action => action.title),
+              cancelButtonIndex: options.length - 1,
+            },
+            (index: number) => options[index]?.execute && options[index].execute()
+          );
+        }}
+        style={styles.threadTitleAction}
+      >
+        <IconMoreOptions
+          size={18}
+          color={styles.link.color}
+        />
+      </TouchableOpacity>}
+    />
+  );
+
   return (
-    <View style={[
+    <View
+      testID="test:id/inboxThreads"
+      accessibilityLabel="inboxThreads"
+      accessible={true}
+      style={[
       styles.container,
       isSplitView ? styles.splitViewContainer : null,
     ]}>
 
       {!isSplitView && <>
-        {header}
+        {renderHeader()}
         {renderTabs()}
       </>}
       {isSplitView && <>
         <View style={styles.splitViewSide}>
-          {header}
+          {renderHeader()}
           {renderTabs()}
         </View>
         <View style={styles.splitViewMain}>

@@ -18,7 +18,7 @@ jest.mock('components/api/api__instance', () => ({
   }),
 }));
 
-const threadTestId = 'test:id/inboxThreadsThread';
+const threadTestId = 'test:id/inboxThreadsListThread';
 
 describe('Inbox Threads List', () => {
 
@@ -40,7 +40,7 @@ describe('Inbox Threads List', () => {
     it('should render Inbox Threads view', () => {
       const {getByTestId} = doRender();
 
-      expect(getByTestId('test:id/inboxThreads')).toBeTruthy();
+      expect(getByTestId('test:id/inboxThreadsList')).toBeTruthy();
     });
 
     it('should render thread item', () => {

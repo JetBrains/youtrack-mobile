@@ -73,7 +73,6 @@ describe('Inbox Thread', () => {
         expect(actionSheetConfig.options).toEqual([
           'Mute thread',
           'Mark as read',
-          'Notifications settings',
           'Cancel',
         ]);
       });

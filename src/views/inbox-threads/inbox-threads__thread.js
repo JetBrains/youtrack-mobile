@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useState} from 'react';
-import {Linking, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useDispatch} from 'react-redux';
@@ -10,7 +10,6 @@ import InboxEntity from '../inbox/inbox__entity';
 import Router from 'components/router/router';
 import styles from './inbox-threads.styles';
 import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
-import {getStorageState} from 'components/storage/storage';
 import {getThreadData} from './inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
@@ -73,8 +72,8 @@ function Thread({
 
   return (
     <View
-      testID="test:id/inboxThreadsThread"
-      accessibilityLabel="inboxThreadsThread"
+      testID="test:id/inboxThreadsListThread"
+      accessibilityLabel="inboxThreadsListThread"
       accessible={true}
       {...otherProps}
     >
@@ -123,12 +122,6 @@ function Thread({
           });
           toggleMessagesRead(_thread.messages, hasUnreadMessage);
         },
-      },
-      {
-        title: i18n('Notifications settings'),
-        execute: () => Linking.openURL(
-          `${getStorageState().config.backendUrl}/users/me?tab=notifications`
-        ),
       },
       {
         title: i18n('Cancel'),

@@ -66,8 +66,8 @@ const InboxThreadsList = ({currentUser, folderId, theme, onPress, ...other}: Pro
       : threadsData.threads
   );
   return <View
-    testID="test:id/inboxThreads"
-    accessibilityLabel="inboxThreads"
+    testID="test:id/inboxThreadsList"
+    accessibilityLabel="inboxThreadsList"
     accessible={true}
     {...other}
   >

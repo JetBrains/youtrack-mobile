@@ -146,10 +146,31 @@ const readMessageToggle = (messages: InboxThreadMessage[], read: boolean): ((
   };
 };
 
+const markAllAsRead = (): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<boolean>) => {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    if (isOffline) {
+      return;
+    }
+    const api: Api = getApi();
+    const [error]: [?CustomError, { read: boolean }] = await until(api.inbox.markAllAsRead());
+    if (error) {
+      notifyError(error);
+    } else {
+      notify(i18n('Marked as read'));
+    }
+  };
+};
+
 
 export {
   loadInboxThreads,
   loadThreadsFromCache,
+  markAllAsRead,
   muteToggle,
   readMessageToggle,
   updateThreadsCache,
