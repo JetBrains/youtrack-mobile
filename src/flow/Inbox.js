@@ -85,11 +85,11 @@ export type Metadata = {
   text: string,
 };
 
-export interface InboxMessageReasons {
-  $type?: string;
+export interface InboxMessageReason {
+  $type: string;
   id: string;
   name: string;
-  type: string;
+  type: ('search' | 'tag');
 }
 
 export interface InboxThreadMessage {
@@ -99,7 +99,7 @@ export interface InboxThreadMessage {
   muted: string;
   notified: string;
   read: boolean,
-  reasons: InboxMessageReasons,
+  reasons: InboxMessageReason[],
   threadId: string;
   timestamp: string;
 }

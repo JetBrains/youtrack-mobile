@@ -1,15 +1,35 @@
 /* @flow */
 
-import {getThemeMode, getUITheme} from '../theme/theme';
-
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 
+import {DEFAULT_THEME} from '../theme/theme';
+
+import styles from './action-sheet.styles';
+
 import type {ActionSheetOptions} from '@expo/react-native-action-sheet';
-import type {UIThemeColors} from 'flow/Theme';
 
 export type ActionSheetOption = { title: string, execute?: Function }
 // $FlowFixMe: any-typed ActionSheetOptions
 export type ShowActionSheetWithOptions = (options: ActionSheetOptions, callback: (i: number) => void) => void;
+
+export const defaultActionsOptions = {
+  titleTextStyle: {
+    color: styles.icon?.color || DEFAULT_THEME.colors.$icon,
+  },
+  messageTextStyle: {
+    color: styles.icon?.color || DEFAULT_THEME.colors.$icon,
+  },
+  separatorStyle: {
+    backgroundColor: styles.separator?.backgroundColor || DEFAULT_THEME.colors.$boxBackground,
+  },
+  containerStyle: {
+    backgroundColor: styles.container?.backgroundColor || DEFAULT_THEME.colors.$background,
+  },
+  textStyle: {
+    color: styles.text?.color || DEFAULT_THEME.colors.$text,
+  },
+  showSeparators: true,
+};
 
 async function doShowActions(
   options: Array<ActionSheetOption>,
@@ -18,8 +38,6 @@ async function doShowActions(
   message?: string | null,
 ) {
   const cancelIndex: number = options.length - 1;
-  const themeMode: string = await getThemeMode();
-  const uiThemeColors: UIThemeColors = getUITheme(themeMode).colors;
 
   return new Promise((resolve: Function) => {
     showActionSheetWithOptions(
@@ -28,22 +46,7 @@ async function doShowActions(
         message,
         options: options.map(action => action.title),
         cancelButtonIndex: cancelIndex,
-        titleTextStyle: {
-          color: uiThemeColors.$icon,
-        },
-        messageTextStyle: {
-          color: uiThemeColors.$icon,
-        },
-        separatorStyle: {
-          backgroundColor: uiThemeColors.$boxBackground,
-        },
-        containerStyle: {
-          backgroundColor: uiThemeColors.$background,
-        },
-        textStyle: {
-          color: uiThemeColors.$text,
-        },
-        showSeparators: true,
+        ...defaultActionsOptions,
       },
       (actionIndex) => {
         const action = options[actionIndex];

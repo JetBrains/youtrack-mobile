@@ -57,7 +57,7 @@ export default EStyleSheet.create({
   },
   threadTitle: {
     flexGrow: 1,
-    marginRight: UNIT * 8,
+    marginRight: UNIT * 10,
     marginBottom: UNIT * 2,
   },
   threadTitleActions: {
@@ -85,6 +85,7 @@ export default EStyleSheet.create({
   threadSubTitle: {
     marginTop: -UNIT,
     marginLeft: UNIT * 5.5,
+    marginRight: UNIT * 2,
   },
   threadMuteToggle: {
     padding: UNIT / 2,

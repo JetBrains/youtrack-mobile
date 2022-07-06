@@ -269,6 +269,8 @@ function createThreadMock(data = {}) {
         target: {
           $type: 'jetbrains.charisma.persistent.Issue',
           id: 'id',
+          idReadable: 'ISSUE-1',
+          summary: 'Lorem ipsum',
         },
       },
     },

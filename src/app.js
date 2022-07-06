@@ -41,7 +41,6 @@ if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-
 class YouTrackMobile extends Component<void, void> {
   routeHomeName = 'Home';
 

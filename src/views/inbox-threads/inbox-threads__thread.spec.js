@@ -7,7 +7,10 @@ import mocks from '../../../test/mocks';
 import Thread from './inbox-threads__thread';
 import {DEFAULT_THEME} from 'components/theme/theme';
 
-const threadMuteToggleId = 'test:id/inboxThreadsThreadMuteToggle';
+jest.mock('@expo/react-native-action-sheet', () => ({
+  ...jest.requireActual('@expo/react-native-action-sheet'),
+}));
+
 
 describe('Inbox Thread', () => {
   let apiMock;
@@ -35,12 +38,6 @@ describe('Inbox Thread', () => {
       expect(getByTestId('test:id/inboxEntity')).toBeTruthy();
     });
 
-    it('should render Thread mute toggle', () => {
-      const {getByTestId} = doRender(threadMock);
-
-      expect(getByTestId(threadMuteToggleId)).toBeTruthy();
-    });
-
     it('should render Thread`s readable id', () => {
       const {getByTestId} = doRender(threadMock);
 
@@ -54,74 +51,98 @@ describe('Inbox Thread', () => {
     });
 
 
-    describe('Mute/Unmute', () => {
-      it('should mute a thread', () => {
-        const {getByTestId} = doRender(threadMock);
+    describe('Thread actions', () => {
+      let ActionSheet;
+      let showActionSheetWithOptions;
 
-        fireEvent.press(getByTestId(threadMuteToggleId));
-
-        expect(apiMock.inbox.muteToggle).toHaveBeenCalledWith(threadMock.id, true);
+      beforeEach(() => {
+        ActionSheet = require('@expo/react-native-action-sheet');
+        showActionSheetWithOptions = jest.fn();
+        jest.spyOn(ActionSheet, 'useActionSheet').mockReturnValue({showActionSheetWithOptions});
       });
 
-      it('should unmute a thread', () => {
-        threadMock = mocks.createThreadMock({muted: true});
-        const {getByTestId} = doRender(threadMock);
+      it('should render action sheet', async () => {
+        getActionSheetCallbacksArray(threadMock);
 
-        fireEvent.press(getByTestId(threadMuteToggleId));
+        expect(showActionSheetWithOptions).toBeCalledTimes(1);
 
-        expect(apiMock.inbox.muteToggle).toHaveBeenCalledWith(threadMock.id, false);
-      });
-
-      it('should disable a thread toggle', () => {
-        networkStateMock = {isConnected: false};
-        createStore();
-        const {getByTestId} = doRender(threadMock);
-
-        fireEvent.press(getByTestId(threadMuteToggleId));
-
-        expect(apiMock.inbox.muteToggle).not.toHaveBeenCalled();
-      });
-    });
-
-
-    describe('Read/Unread', () => {
-      it('should mark a thread as read', () => {
-        const {getByTestId} = doRender(threadMock);
-
-        fireEvent.press(getByTestId('test:id/inboxThreadsThreadReadToggle'));
-
-        expect(apiMock.inbox.markMessages).toHaveBeenCalledWith(
-          [{id: threadMock.messages[0].id}],
-          true,
+        const actionSheetConfig = showActionSheetWithOptions.mock.calls[0][0];
+        expect(actionSheetConfig.title).toEqual(
+          `${threadMock.subject.target.idReadable} ${threadMock.subject.target.summary}`
         );
+        expect(actionSheetConfig.options).toEqual([
+          'Mute thread',
+          'Mark as read',
+          'Notifications settings',
+          'Cancel',
+        ]);
       });
 
-      it('should mark a thread as unread', () => {
-        const {getByTestId} = doRender({
-          ...threadMock,
-          messages: [{
-            ...threadMock.messages[0],
-            read: true,
-          }],
+
+      describe('Mute/Unmute', () => {
+        it('should mute a thread', async () => {
+          await getActionSheetCallbacksArray(threadMock)(0);
+
+          expect(apiMock.inbox.muteToggle).toHaveBeenCalledWith(threadMock.id, true);
         });
 
-        fireEvent.press(getByTestId('test:id/inboxThreadsThreadReadToggle'));
+        it('should unmute a thread', async () => {
+          threadMock = mocks.createThreadMock({muted: true});
+          await getActionSheetCallbacksArray(threadMock)(0);
 
-        expect(apiMock.inbox.markMessages).toHaveBeenCalledWith(
-          [{id: threadMock.messages[0].id}],
-          false,
-        );
+          expect(apiMock.inbox.muteToggle).toHaveBeenCalledWith(threadMock.id, false);
+        });
       });
 
-      it('should disable a thread read toggle', () => {
-        networkStateMock = {isConnected: false};
-        createStore();
-        const {getByTestId} = doRender(threadMock);
 
-        fireEvent.press(getByTestId('test:id/inboxThreadsThreadReadToggle'));
+      describe('Read/Unread', () => {
+        let message;
+        beforeEach(() => {
+          message = threadMock.messages[0];
+        });
 
-        expect(apiMock.inbox.markMessages).not.toHaveBeenCalled();
+        it('should mark a thread as read if there is an unread message', async () => {
+          await getActionSheetCallbacksArray({
+            ...threadMock,
+            messages: [{
+              ...message,
+              read: false,
+            }, {
+              ...message,
+              read: true,
+            }],
+          })(1);
+
+          expect(apiMock.inbox.markMessages).toHaveBeenCalledWith(
+            [{id: message.id}, {id: message.id}],
+            true,
+          );
+        });
+
+        it('should mark a thread as unread if there are all messages read', async () => {
+          await getActionSheetCallbacksArray({
+            ...threadMock,
+            messages: [{
+              ...message,
+              read: true,
+            }, {
+              ...message,
+              read: true,
+            }],
+          })(1);
+
+          expect(apiMock.inbox.markMessages).toHaveBeenCalledWith(
+            [{id: message.id}, {id: message.id}],
+            false,
+          );
+        });
       });
+
+      function getActionSheetCallbacksArray(thread) {
+        const {getByTestId} = doRender(thread);
+        fireEvent.press(getByTestId('test:id/inboxThreadsThreadSettings'));
+        return showActionSheetWithOptions.mock.calls[0][1];
+      }
     });
   });
 

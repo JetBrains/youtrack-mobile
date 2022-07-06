@@ -1,20 +1,22 @@
 /* @flow */
 
 import React, {useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Linking, TouchableOpacity, View} from 'react-native';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useActionSheet} from '@expo/react-native-action-sheet';
+import {useDispatch} from 'react-redux';
 
 import InboxEntity from '../inbox/inbox__entity';
-import InboxThreadReadToggleButton from './inbox-threads__read-toggle-button';
-import IconBellCrossed from 'components/icon/assets/bell-crossed.svg';
 import Router from 'components/router/router';
 import styles from './inbox-threads.styles';
+import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
+import {getStorageState} from 'components/storage/storage';
 import {getThreadData} from './inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
+import {i18n} from 'components/i18n/i18n';
+import {IconMoreOptions} from 'components/icon/icon';
 import {muteToggle, readMessageToggle} from './inbox-threads-actions';
 
-import type {AppState} from '../../reducers';
 import type {InboxThread, InboxThreadMessage, ThreadData} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
@@ -34,8 +36,8 @@ function Thread({
   onPress,
   ...otherProps
 }: Props): React$Element<any> | null {
+  const {showActionSheetWithOptions} = useActionSheet();
   const dispatch = useDispatch();
-  const isOnline = useSelector((state: AppState) => state.app.networkState?.isConnected === true);
   const [_thread, updateThread] = useState(thread);
 
   if (!_thread.id || !_thread?.messages?.length) {
@@ -79,54 +81,7 @@ function Thread({
       {!threadData.entityAtBottom && (
         <View style={hasReadActions && styles.threadTitleWrapper}>
           {renderedEntity}
-          {hasReadActions && (
-            <View style={styles.threadTitleActions}>
-              <InboxThreadReadToggleButton
-                testID="test:id/inboxThreadsThreadReadToggle"
-                accessibilityLabel="inboxThreadsThreadReadToggle"
-                accessible={true}
-                messages={_thread.messages}
-                style={styles.threadTitleAction}
-                onReadChange={(messages: InboxThreadMessage[], isRead: boolean) => {
-                  updateThread({
-                    ..._thread,
-                    messages: messages.map((it: InboxThreadMessage) => {
-                      it.read = isRead;
-                      return it;
-                    }),
-                  });
-                  toggleMessagesRead(_thread.messages, isRead);
-                }}
-              />
-
-              {isIssue && <TouchableOpacity
-                testID="test:id/inboxThreadsThreadMuteToggle"
-                accessibilityLabel="inboxThreadsThreadMuteToggle"
-                accessible={true}
-                disabled={!isOnline}
-                onPress={() => {
-                  const isMuted: boolean = _thread.muted;
-                  updateThread({..._thread, muted: !isMuted});
-                  dispatch(muteToggle(_thread.id, !isMuted)).then((muted: boolean) => {
-                    if (muted !== !isMuted) {
-                      updateThread({..._thread, muted});
-                    }
-                  });
-                }}
-                style={[styles.threadTitleAction, styles.threadMuteToggle]}
-              >
-                <IconBellCrossed
-                  fill={(
-                    isOnline
-                      ? (_thread.muted ? styles.link.color : styles.icon.color)
-                      : (_thread.muted ? styles.threadButtonText.color : styles.container.backgroundColor)
-                  )}
-                  width={17}
-                  height={17}
-                />
-              </TouchableOpacity>}
-            </View>
-          )}
+          {hasReadActions && renderSettings()}
         </View>
       )}
 
@@ -140,6 +95,74 @@ function Thread({
       {threadData.entityAtBottom && renderedEntity}
     </View>
   );
+
+  function renderSettings() {
+    const hasUnreadMessage: boolean = _thread.messages.some(it => it.read === false);
+    const options = [
+      {
+        title: _thread.muted ? i18n('Unmute thread') : i18n('Mute thread'),
+        execute: () => {
+          const isMuted: boolean = _thread.muted;
+          updateThread({..._thread, muted: !isMuted});
+          dispatch(muteToggle(_thread.id, !isMuted)).then((muted: boolean) => {
+            if (muted !== !isMuted) {
+              updateThread({..._thread, muted});
+            }
+          });
+        },
+      },
+      {
+        title: hasUnreadMessage ? i18n('Mark as read') : i18n('Mark as unread'),
+        execute: () => {
+          updateThread({
+            ..._thread,
+            messages: _thread.messages.map((it: InboxThreadMessage) => {
+              it.read = hasUnreadMessage;
+              return it;
+            }),
+          });
+          toggleMessagesRead(_thread.messages, hasUnreadMessage);
+        },
+      },
+      {
+        title: i18n('Notifications settings'),
+        execute: () => Linking.openURL(
+          `${getStorageState().config.backendUrl}/users/me?tab=notifications`
+        ),
+      },
+      {
+        title: i18n('Cancel'),
+      },
+    ];
+
+    return (
+      <View style={styles.threadTitleActions}>
+        <TouchableOpacity
+          testID="test:id/inboxThreadsThreadSettings"
+          accessibilityLabel="inboxThreadsThreadSettings"
+          accessible={true}
+          onPress={() => {
+            showActionSheetWithOptions(
+              {
+                ...defaultActionsOptions,
+                options: options.map(action => action.title),
+                title: `${threadData.entity?.idReadable} ${threadData.entity?.summary}`,
+                cancelButtonIndex: options.length - 1,
+              },
+              (index: number) => options[index]?.execute && options[index].execute()
+            );
+          }}
+          style={styles.threadTitleAction}
+        >
+          <IconMoreOptions
+            size={18}
+            color={styles.icon.color}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  }
 }
+
 
 export default Thread;
