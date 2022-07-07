@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useCallback, useEffect} from 'react';
-import {FlatList, RefreshControl, View} from 'react-native';
+import {FlatList, RefreshControl, Text, View} from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -9,8 +9,11 @@ import * as actions from './inbox-threads-actions';
 import ErrorMessage from 'components/error-message/error-message';
 import Thread from './inbox-threads__thread';
 import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
+import {getStorageState} from 'components/storage/storage';
+import {i18n} from 'components/i18n/i18n';
+import {IconNothingFound} from 'components/icon/icon-pictogram';
 import {SkeletonIssueActivities, SkeletonIssues} from 'components/skeleton/skeleton';
-import {UNIT} from '../../components/variables/variables';
+import {UNIT} from 'components/variables/variables';
 
 import styles from './inbox-threads.styles';
 
@@ -76,13 +79,25 @@ const InboxThreadsList = ({currentUser, folderId, theme, onPress, ...other}: Pro
       data={visibleThreads}
       ItemSeparatorComponent={() => <View style={styles.threadSeparator}/>}
       ListFooterComponent={() => {
-        if (!visibleThreads.length) {
+        if (error) {
+          return <ErrorMessage error={error} style={styles.error}/>;
+        }
+        if (inProgress) {
           return folderId !== folderIdMap[1]
             ? <SkeletonIssues marginTop={UNIT * 1.5}/>
             : <SkeletonIssueActivities marginTop={UNIT * 2} marginLeft={UNIT} marginRight={UNIT}/>;
         }
-        if (error && !inProgress) {
-          return <ErrorMessage error={error} style={styles.error}/>;
+
+        if (!visibleThreads.length) {
+          return <View style={styles.threadsEmpty}>
+            <IconNothingFound/>
+            <Text style={styles.threadsEmptyMessage}>
+              {getStorageState()?.inboxThreadsCache?.unreadOnly === true
+                ? i18n('You don’t have any unread notifications')
+                : i18n('No notifications')
+              }
+            </Text>
+          </View>;
         }
         return null;
       }}

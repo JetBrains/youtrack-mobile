@@ -88,7 +88,11 @@ describe('Inbox Threads List', () => {
   function doRender(folderId) {
     return render(
       <Provider store={storeMock}>
-        <InboxThreadsList currentUser={mocks.createUserMock()} folderId={folderId} theme={DEFAULT_THEME}/>
+        <InboxThreadsList
+          currentUser={mocks.createUserMock()}
+          folderId={folderId}
+          theme={DEFAULT_THEME}
+        />
       </Provider>
     );
   }

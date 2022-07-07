@@ -10,6 +10,7 @@ import NothingFound from 'assets/not-found.svg';
 import NothingFoundDark from 'assets/not-found-dark.svg';
 import NothingSelected from 'assets/nothing-selected.svg';
 import NothingSelectedDark from 'assets/nothing-selected-dark.svg';
+import {DEFAULT_THEME} from '../theme/theme';
 
 import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
@@ -23,9 +24,9 @@ type Props = {
 export const ICON_PICTOGRAM_DEFAULT_SIZE: number = 240;
 
 const Icon = (props: {...Props, icon: { dark: any, default: any } }) => {
-  const theme: Theme = useContext(ThemeContext);
+  const theme: ?Theme = useContext(ThemeContext);
   const size: number = props.size || ICON_PICTOGRAM_DEFAULT_SIZE;
-  const ThemedIcon: any = theme.uiTheme.dark ? props.icon.dark : props.icon.default;
+  const ThemedIcon: any = (theme?.uiTheme || DEFAULT_THEME).dark ? props.icon.dark : props.icon.default;
 
   return (
     <ThemedIcon

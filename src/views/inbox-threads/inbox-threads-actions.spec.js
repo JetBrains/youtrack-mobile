@@ -2,7 +2,7 @@ import * as actions from './inbox-threads-actions';
 import * as storage from 'components/storage/storage';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import {__setStorageState} from 'components/storage/storage';
+import {__setStorageState, getStorageState} from 'components/storage/storage';
 import {inboxThreadsNamespace, inboxThreadsReducersNamesMap} from './inbox-threads-reducers';
 import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
 import {INBOX_THREADS_HAS_UPDATE} from '../../actions/action-types';
@@ -34,7 +34,7 @@ describe('Inbox Threads', () => {
     it('should load inbox threads for the first time', async () => {
       await store.dispatch(require('./inbox-threads-actions').loadInboxThreads());
 
-      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, undefined);
+      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, undefined, undefined);
       expect(store.getActions()).toEqual([
         {
           type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setError}`,
@@ -72,7 +72,28 @@ describe('Inbox Threads', () => {
     it('should load more threads', async () => {
       await store.dispatch(actions.loadInboxThreads(undefined, 1));
 
-      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1);
+      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, undefined);
+      expect(store.getActions()[3]).toEqual({
+        type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
+        payload: {
+          folderId: folderIdAllKey,
+          threads: responseMock,
+          reset: false,
+        },
+      });
+    });
+
+    it('should load readOnly threads', async () => {
+      __setStorageState({
+        ...getStorageState(),
+        inboxThreadsCache: {
+          ...getStorageState().inboxThreadsCache,
+          unreadOnly: true,
+        },
+      });
+      await store.dispatch(actions.loadInboxThreads(undefined, 1));
+
+      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, true);
       expect(store.getActions()[3]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {

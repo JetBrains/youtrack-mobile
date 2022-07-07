@@ -67,7 +67,10 @@ const loadInboxThreads = (folderId?: string, end?: number | null): ((
 
     dispatch(setError({error: null}));
     dispatch(toggleProgress({inProgress: true}));
-    const [error, threads]: [?CustomError, Array<InboxThread>] = await until(api.inbox.getThreads(folderId, end));
+    const unreadOnly: ?boolean = getStorageState()?.inboxThreadsCache?.unreadOnly;
+    const [error, threads]: [?CustomError, Array<InboxThread>] = await until(
+      api.inbox.getThreads(folderId, end, unreadOnly)
+    );
     dispatch(toggleProgress({inProgress: false}));
 
     if (error) {

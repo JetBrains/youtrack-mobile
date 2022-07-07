@@ -66,6 +66,7 @@ const InboxThreads: () => Node = (): Node => {
       onPress={(isSplitView
         ? (entity: ThreadEntity, navigateToActivity?: boolean) => updateSelectedEntity({entity, navigateToActivity})
         : null)}
+      style={styles.container}
     />
   );
 

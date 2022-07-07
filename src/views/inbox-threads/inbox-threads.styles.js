@@ -25,6 +25,13 @@ export default EStyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
+  threadsEmpty: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  threadsEmptyMessage: {
+    color: '$text',
+  },
   thread: {
     marginTop: UNIT * 2,
     marginLeft: UNIT * 2,
