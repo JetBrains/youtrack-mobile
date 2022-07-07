@@ -3,6 +3,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Dimensions, View} from 'react-native';
 
+import * as Progress from 'react-native-progress';
 import {View as AnimatedView} from 'react-native-animatable';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -34,6 +35,7 @@ export default function () {
 
   const hasInboxUpdate: boolean = useSelector((appState: AppState) => appState.app.inboxThreadsHasUpdate);
   const isDisabled: boolean = useSelector((appState: AppState) => appState.app.isChangingAccount);
+  const isInProgress: boolean = useSelector((appState: AppState) => appState.app.isInProgress);
   const setInboxHasUpdateStatus = useCallback(
     () => {
       dispatch(inboxSetUpdateStatus());
@@ -189,60 +191,74 @@ export default function () {
       useNativeDriver
       duration={300}
       animation="fadeIn"
-
       testID="menu"
-      style={styles.menu}
     >
-      <MenuItem
-        testID="test:id/menuIssues"
-        icon={<IconTask
-          testID="menuIssuesIcon"
-          isActive={isActiveRoute(routeMap.Issues)}
-          size={23}
-          color={color(routeMap.Issues)}
-        />}
-        onPress={openIssueList}
-      />
+      <View style={styles.menuProgressContainer}>
+        <Progress.Bar
+          animated={true}
+          indeterminate={true}
+          indeterminateAnimationDuration={1000}
+          useNativeDriver={true}
+          color={isInProgress ? styles.link.color : 'transparent'}
+          borderWidth={0}
+          unfilledColor={isInProgress ? styles.linkLight.color : 'transparent'}
+          width={null}
+          height={2}
+          borderRadius={0}
+        />
+      </View>
+      <View style={styles.menu}>
+        <MenuItem
+          testID="test:id/menuIssues"
+          icon={<IconTask
+            testID="menuIssuesIcon"
+            isActive={isActiveRoute(routeMap.Issues)}
+            size={23}
+            color={color(routeMap.Issues)}
+          />}
+          onPress={openIssueList}
+        />
 
-      <MenuItem
-        testID="test:id/menuAgile"
-        icon={<IconBoard size={28} color={color(routeMap.AgileBoard)}/>}
-        onPress={openAgileBoard}
-      />
+        <MenuItem
+          testID="test:id/menuAgile"
+          icon={<IconBoard size={28} color={color(routeMap.AgileBoard)}/>}
+          onPress={openAgileBoard}
+        />
 
-      <MenuItem
-        disabled={!isInboxEnabled && !isInboxThreadsEnabled}
-        testID="test:id/menuNotifications"
-        icon={
-          <View>
-            {isInboxThreadsEnabled && hasInboxUpdate && (
-              <AnimatedView
-                useNativeDriver
-                duration={1000}
-                animation="fadeIn"
-                style={styles.circleIcon}
-              >
-                <IconCircle size={10} color={styles.link.color}/>
-              </AnimatedView>
-            )}
-            <IconBell size={22} color={color(isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox)}/>
-          </View>
-        }
-        onPress={openInbox}
-      />
+        <MenuItem
+          disabled={!isInboxEnabled && !isInboxThreadsEnabled}
+          testID="test:id/menuNotifications"
+          icon={
+            <View>
+              {isInboxThreadsEnabled && hasInboxUpdate && (
+                <AnimatedView
+                  useNativeDriver
+                  duration={1000}
+                  animation="fadeIn"
+                  style={styles.circleIcon}
+                >
+                  <IconCircle size={10} color={styles.link.color}/>
+                </AnimatedView>
+              )}
+              <IconBell size={22} color={color(isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox)}/>
+            </View>
+          }
+          onPress={openInbox}
+        />
 
-      <MenuItem
-        disabled={!isKBEnabled}
-        testID="test:id/menuKnowledgeBase"
-        icon={<IconKnowledgeBase size={22} color={color(routeMap.KnowledgeBase)}/>}
-        onPress={openKnowledgeBase}
-      />
+        <MenuItem
+          disabled={!isKBEnabled}
+          testID="test:id/menuKnowledgeBase"
+          icon={<IconKnowledgeBase size={22} color={color(routeMap.KnowledgeBase)}/>}
+          onPress={openKnowledgeBase}
+        />
 
-      <MenuItem
-        testID="test:id/menuSettings"
-        icon={<IconSettings size={21} color={color(routeMap.Settings)}/>}
-        onPress={openSettings}
-      />
+        <MenuItem
+          testID="test:id/menuSettings"
+          icon={<IconSettings size={21} color={color(routeMap.Settings)}/>}
+          onPress={openSettings}
+        />
+      </View>
 
     </AnimatedView>
   );

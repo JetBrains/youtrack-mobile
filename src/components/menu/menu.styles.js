@@ -25,8 +25,17 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  menuProgressContainer: {
+    position: 'absolute',
+    top: -1,
+    height: 2,
+    width: '100%',
+  },
   link: {
     color: '$link',
+  },
+  linkLight: {
+    color: '$linkLight',
   },
   disabled: {
     color: '$disabled',
