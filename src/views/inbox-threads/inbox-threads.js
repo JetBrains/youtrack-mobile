@@ -135,7 +135,7 @@ const InboxThreads: () => Node = (): Node => {
           const inboxThreadsCache = getStorageState().inboxThreadsCache;
           const options = [
             {
-              title: inboxThreadsCache?.unreadOnly ? i18n('Show all') : i18n('Show unread only'),
+              title: inboxThreadsCache?.unreadOnly ? i18n('Show all') : i18n('Unread only'),
               execute: async () => {
                 flushStoragePart({
                   inboxThreadsCache: {
