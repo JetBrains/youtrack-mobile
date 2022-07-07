@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
@@ -40,15 +40,9 @@ const InboxThreadsList = ({currentUser, folderId, theme, onPress, ...other}: Pro
   const inProgress: boolean = useSelector((state: AppState) => state.inboxThreads.inProgress);
   const error: ?CustomError = useSelector((state: AppState) => state.inboxThreads.error);
 
-  const loadThreads = useCallback(
-    (end?: number | null) => {dispatch(actions.loadInboxThreads(folderId, end));},
-    [dispatch, folderId]
-  );
-
-  useEffect(() => {
-    loadThreads();
-  }, [folderId, loadThreads]);
-
+  const loadThreads = (_folderId?: ?string, end?: number | null) => {
+    dispatch(actions.loadInboxThreads(_folderId, end));
+  };
 
   const renderItem = ({item, index}: { item: InboxThread, index: number, ... }) => (
     <Thread
@@ -88,7 +82,7 @@ const InboxThreadsList = ({currentUser, folderId, theme, onPress, ...other}: Pro
             : <SkeletonIssueActivities marginTop={UNIT * 2} marginLeft={UNIT} marginRight={UNIT}/>;
         }
 
-        if (!visibleThreads.length) {
+        if (!visibleThreads.length && !inProgress) {
           return <View style={styles.threadsEmpty}>
             <IconNothingFound/>
             <Text style={styles.threadsEmptyMessage}>
@@ -105,13 +99,13 @@ const InboxThreadsList = ({currentUser, folderId, theme, onPress, ...other}: Pro
       onEndReachedThreshold={5}
       onEndReached={() => {
         if (threadsData.hasMore && !inProgress) {
-          loadThreads(threadsData.threads.slice(-1)[0].notified);
+          loadThreads(folderId, threadsData.threads.slice(-1)[0].notified);
         }
       }}
       refreshControl={<RefreshControl
         refreshing={false}
         tintColor={styles.link.color}
-        onRefresh={() => loadThreads(null)}
+        onRefresh={() => loadThreads(folderId, null)}
       />}
       renderItem={renderItem}
     />

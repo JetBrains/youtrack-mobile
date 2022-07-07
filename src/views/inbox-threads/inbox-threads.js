@@ -1,9 +1,10 @@
 /* @flow */
 
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {Dimensions, Linking, Text, TouchableOpacity, View} from 'react-native';
 
 import {TabBar, TabView} from 'react-native-tab-view';
+import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 
 import Article from 'views/article/article';
@@ -18,9 +19,9 @@ import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {IconMoreOptions} from 'components/icon/icon';
 import {isSplitView as hasSplitView} from 'components/responsive/responsive-helper';
+import {loadInboxThreads} from './inbox-threads-actions';
 import {markAllAsRead} from './inbox-threads-actions';
 import {ThemeContext} from 'components/theme/theme-context';
-import {useActionSheet} from '@expo/react-native-action-sheet';
 
 import styles from './inbox-threads.styles';
 import tabStyles from 'components/issue-tabbed/issue-tabbed.style';
@@ -46,12 +47,20 @@ const InboxThreads: () => Node = (): Node => {
   const [isSplitView, updateIsSplitView] = useState(hasSplitView());
   const dimensionsChangeListener = useRef();
 
+  const loadThreads = useCallback(
+    (index: number) => {
+      dispatch(loadInboxThreads(folderIdMap[index]));
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
+    loadThreads(0);
     dimensionsChangeListener.current = Dimensions.addEventListener('change', () => {
       updateIsSplitView(hasSplitView());
     });
     return () => dimensionsChangeListener.current?.remove();
-  }, []);
+  }, [loadThreads]);
 
   const [navigationState, updateNavigationState] = useState({
     index: 0,
@@ -121,7 +130,10 @@ const InboxThreads: () => Node = (): Node => {
         width: Dimensions.get('window').width,
       }}
       renderTabBar={renderTabBar}
-      onIndexChange={(index: number) => updateNavigationState({index, routes})}
+      onIndexChange={(index: number) => {
+        loadThreads(index);
+        updateNavigationState({index, routes});
+      }}
     />
   );
 
@@ -188,9 +200,9 @@ const InboxThreads: () => Node = (): Node => {
       accessibilityLabel="inboxThreads"
       accessible={true}
       style={[
-      styles.container,
-      isSplitView ? styles.splitViewContainer : null,
-    ]}>
+        styles.container,
+        isSplitView ? styles.splitViewContainer : null,
+      ]}>
 
       {!isSplitView && <>
         {renderHeader()}

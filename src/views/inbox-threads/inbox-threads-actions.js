@@ -21,7 +21,7 @@ type StateGetter = () => AppState;
 
 const MAX_CACHED_THREADS: number = 10;
 
-const loadThreadsFromCache = (folderId: string = folderIdAllKey): ((dispatch: (any) => any) => Promise<void>) => {
+const loadThreadsFromCache = (folderId: ?string = folderIdAllKey): ((dispatch: (any) => any) => Promise<void>) => {
   return async (dispatch: (any) => any) => {
     const inboxThreadsCache: ?{ [string]: InboxThread[] } = getStorageState().inboxThreadsCache;
     if (inboxThreadsCache && inboxThreadsCache[folderId]) {
@@ -48,7 +48,7 @@ const updateThreadsCache = (threads: InboxThread[], folderId: string = folderIdA
   };
 };
 
-const loadInboxThreads = (folderId?: string, end?: number | null): ((
+const loadInboxThreads = (folderId?: ?string, end?: number | null): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
