@@ -34,7 +34,7 @@ describe('Inbox Threads', () => {
     it('should load inbox threads for the first time', async () => {
       await store.dispatch(require('./inbox-threads-actions').loadInboxThreads());
 
-      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, undefined, undefined);
+      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, undefined, false);
       expect(store.getActions()).toEqual([
         {
           type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setError}`,
@@ -72,7 +72,7 @@ describe('Inbox Threads', () => {
     it('should load more threads', async () => {
       await store.dispatch(actions.loadInboxThreads(undefined, 1));
 
-      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, undefined);
+      expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, false);
       expect(store.getActions()[3]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {

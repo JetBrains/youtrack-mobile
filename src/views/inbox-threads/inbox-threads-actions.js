@@ -2,10 +2,11 @@
 
 import usage from 'components/usage/usage';
 import {ANALYTICS_NOTIFICATIONS_THREADS_PAGE} from 'components/analytics/analytics-ids';
-import {flushStoragePart, getStorageState} from 'components/storage/storage';
+import {flushStoragePart, getStorageState, InboxThreadsCache} from 'components/storage/storage';
 import {folderIdAllKey} from './inbox-threads-helper';
 import {i18n} from 'components/i18n/i18n';
 import {notify, notifyError} from 'components/notification/notification';
+import {SET_PROGRESS} from '../../actions/action-types';
 import {setError, setNotifications, toggleProgress} from './inbox-threads-reducers';
 import {until} from 'util/util';
 
@@ -20,35 +21,64 @@ type StateGetter = () => AppState;
 
 
 const MAX_CACHED_THREADS: number = 10;
+const DEFAULT_CACHE_DATA = {
+  lastVisited: 0,
+  unreadOnly: false,
+};
 
-const loadThreadsFromCache = (folderId: ?string = folderIdAllKey): ((dispatch: (any) => any) => Promise<void>) => {
+const getCache = (): InboxThreadsCache => getStorageState().inboxThreadsCache || DEFAULT_CACHE_DATA;
+
+const updateCache = (data: Object) => {
+  flushStoragePart({
+    inboxThreadsCache: {
+      ...DEFAULT_CACHE_DATA,
+      ...getCache(),
+      ...data,
+    },
+  });
+};
+
+const loadThreadsFromCache = (folderId: string = folderIdAllKey): ((dispatch: (any) => any) => Promise<void>) => {
   return async (dispatch: (any) => any) => {
-    const inboxThreadsCache: ?{ [string]: InboxThread[] } = getStorageState().inboxThreadsCache;
-    if (inboxThreadsCache && inboxThreadsCache[folderId]) {
+    const inboxThreadsCache: InboxThreadsCache = getCache();
+    if (inboxThreadsCache[folderId]) {
       dispatch(setNotifications({threads: inboxThreadsCache[folderId], reset: true, folderId}));
     }
   };
 };
 
-const updateThreadsCache = (threads: InboxThread[], folderId: string = folderIdAllKey): ((
+const lastVisitedTabIndex = (index?: number): number => {
+  if (typeof index === 'number') {
+    updateCache({lastVisited: index});
+  }
+  return getCache().lastVisited;
+};
+
+const toggleUnreadOnly = (): void => {
+  const inboxThreadsCache: InboxThreadsCache = getCache();
+  updateCache({unreadOnly: !inboxThreadsCache.unreadOnly});
+};
+
+const isUnreadOnly = (): boolean => getCache().unreadOnly;
+
+const updateThreadsCache = (threads: InboxThread[] = [], folderId: string = folderIdAllKey): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
 ) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     if (threads.length) {
-      const inboxThreadsCache: ?{ [string]: InboxThread[] } = getStorageState().inboxThreadsCache;
-      flushStoragePart({
-        inboxThreadsCache: {
-          ...inboxThreadsCache,
-          [folderId]: threads.slice(0, MAX_CACHED_THREADS),
-        },
-      });
+      updateCache({[folderId]: threads.slice(0, MAX_CACHED_THREADS)});
     }
   };
 };
 
-const loadInboxThreads = (folderId?: ?string, end?: number | null): ((
+const setGlobalInProgress = (isInProgress: boolean) => ({
+  type: SET_PROGRESS,
+  isInProgress,
+});
+
+const loadInboxThreads = (folderId?: string | null, end?: number | null): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
@@ -67,16 +97,25 @@ const loadInboxThreads = (folderId?: ?string, end?: number | null): ((
 
     dispatch(setError({error: null}));
     dispatch(toggleProgress({inProgress: true}));
-    const unreadOnly: ?boolean = getStorageState()?.inboxThreadsCache?.unreadOnly;
+    if (end === null) {
+      dispatch(setGlobalInProgress(true));
+    }
     const [error, threads]: [?CustomError, Array<InboxThread>] = await until(
-      api.inbox.getThreads(folderId, end, unreadOnly)
+      api.inbox.getThreads(folderId, end, isUnreadOnly())
     );
     dispatch(toggleProgress({inProgress: false}));
+    if (end === null) {
+      dispatch(setGlobalInProgress(false));
+    }
 
     if (error) {
       dispatch(setError({error}));
     } else {
-      dispatch(setNotifications({threads, reset: typeof end !== 'number', folderId: folderId || folderIdAllKey}));
+      dispatch(setNotifications({
+        threads,
+        reset: typeof end !== 'number',
+        folderId: folderId || folderIdAllKey,
+      }));
       dispatch(updateThreadsCache(threads, folderId));
       if (!folderId && isLoadingFirstTime) {
         dispatch(saveAllSeen(threads[0].notified));
@@ -171,10 +210,13 @@ const markAllAsRead = (): ((
 
 
 export {
+  isUnreadOnly,
   loadInboxThreads,
   loadThreadsFromCache,
   markAllAsRead,
   muteToggle,
   readMessageToggle,
+  lastVisitedTabIndex,
+  toggleUnreadOnly,
   updateThreadsCache,
 };

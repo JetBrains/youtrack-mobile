@@ -34,7 +34,7 @@ export const inboxThreadsReducersNamesMap = {
 
 const {reducer, actions}: { reducer: any, actions: NotificationsActions } = createSlice({
   name: inboxThreadsNamespace,
-  initialState: initialState,
+  initialState,
   reducers: {
     [inboxThreadsReducersNamesMap.setNotifications]: (
       state: InboxThreadState,

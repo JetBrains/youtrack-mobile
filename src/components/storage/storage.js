@@ -29,6 +29,12 @@ export const STORAGE_AUTH_PARAMS_KEY: string = 'yt_mobile_auth_key';
 export const storageStateAuthParamsKey: string = 'authParamsKey';
 export const THEME_MODE_KEY = 'YT_THEME_MODE';
 
+export interface InboxThreadsCache {
+  ['all' | 'direct' | 'subscription']: InboxThread[];
+  unreadOnly: boolean;
+  lastVisited: number;
+}
+
 export type StorageState = {|
   articles: ?Array<Article>,
   articlesList: ArticlesList | null,
@@ -47,7 +53,7 @@ export type StorageState = {|
   lastQueries: ?Array<string>,
   issuesCache: Array<AnyIssue> | null,
   inboxCache: Notification[] | null,
-  inboxThreadsCache: { ['all' | 'direct' | 'subscription' | 'unreadOnly']: (InboxThread[] | boolean) } | null,
+  inboxThreadsCache: InboxThreadsCache | null,
   isRegisteredForPush: boolean,
   deviceToken: ?string,
   agileZoomedIn: ?boolean,
