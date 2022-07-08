@@ -25,7 +25,8 @@ describe('Inbox Threads', () => {
       },
     };
 
-    store = storeMock({});
+    createStore(true);
+
     storage.__setStorageState({});
   });
 
@@ -178,4 +179,34 @@ describe('Inbox Threads', () => {
     });
 
   });
+
+
+  describe('Offline mode', () => {
+    it('should set folder data from a cache without any requests to a server', async () => {
+      createStore(false);
+      const threadsMock = [{}, {}];
+      __setStorageState({
+        inboxThreadsCache: {
+          [folderIdAllKey]: threadsMock,
+        },
+      });
+
+      await store.dispatch(actions.loadInboxThreads(folderIdMap[0]));
+
+      expect(store.getActions().length).toEqual(1);
+      expect(store.getActions()[0]).toEqual({
+        type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
+        payload: {
+          folderId: folderIdAllKey,
+          threads: threadsMock,
+          reset: true,
+        },
+      });
+    });
+  });
+
+
+  function createStore(isConnected = true) {
+    store = storeMock({app: {networkState: {isConnected}}});
+  }
 });

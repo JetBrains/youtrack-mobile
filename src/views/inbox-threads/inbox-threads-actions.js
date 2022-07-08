@@ -27,6 +27,7 @@ const DEFAULT_CACHE_DATA = {
 };
 
 const getCache = (): InboxThreadsCache => getStorageState().inboxThreadsCache || DEFAULT_CACHE_DATA;
+const isOnline = (state: AppState): boolean => state?.app?.networkState?.isConnected === true;
 
 const updateCache = (data: Object) => {
   flushStoragePart({
@@ -84,15 +85,13 @@ const loadInboxThreads = (folderId?: string | null, end?: number | null): ((
   getApi: ApiGetter
 ) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
-    if (isOffline) {
-      return;
-    }
-    const api: Api = getApi();
     const isLoadingFirstTime: boolean = typeof end === 'undefined';
     if (isLoadingFirstTime) {
       usage.trackEvent(ANALYTICS_NOTIFICATIONS_THREADS_PAGE, 'Load inbox threads');
       dispatch(loadThreadsFromCache(folderId));
+    }
+    if (!isOnline(getState())) {
+      return;
     }
 
     dispatch(setError({error: null}));
@@ -101,7 +100,7 @@ const loadInboxThreads = (folderId?: string | null, end?: number | null): ((
       dispatch(setGlobalInProgress(true));
     }
     const [error, threads]: [?CustomError, Array<InboxThread>] = await until(
-      api.inbox.getThreads(folderId, end, isUnreadOnly())
+      getApi().inbox.getThreads(folderId, end, isUnreadOnly())
     );
     dispatch(toggleProgress({inProgress: false}));
     if (end === null) {
@@ -134,8 +133,9 @@ const saveAllSeen = (lastSeen: number): ((
   getApi: ApiGetter
 ) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const api: Api = getApi();
-    until(api.inbox.saveAllAsSeen(lastSeen));
+    if (isOnline(getState())) {
+      until(getApi().inbox.saveAllAsSeen(lastSeen));
+    }
   };
 };
 
@@ -145,12 +145,10 @@ const muteToggle = (id: string, muted: boolean): ((
   getApi: ApiGetter
 ) => Promise<boolean>) => {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
-    if (isOffline) {
+    if (!isOnline(getState())) {
       return !muted;
     }
-    const api: Api = getApi();
-    const [error, inboxThread]: [?CustomError, Array<InboxThread>] = await until(api.inbox.muteToggle(id, muted));
+    const [error, inboxThread]: [?CustomError, Array<InboxThread>] = await until(getApi().inbox.muteToggle(id, muted));
     if (error) {
       notifyError(error);
       return !muted;
@@ -166,14 +164,12 @@ const readMessageToggle = (messages: InboxThreadMessage[], read: boolean): ((
   getState: () => any,
   getApi: ApiGetter
 ) => Promise<boolean>) => {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
-    if (isOffline) {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<boolean> => {
+    if (!isOnline(getState())) {
       return !read;
     }
-    const api: Api = getApi();
     const [error, response]: [?CustomError, { read: boolean }] = await until(
-      api.inbox.markMessages(
+      getApi().inbox.markMessages(
         messages.map((it: InboxThreadMessage) => ({id: it.id})),
         read
       )
@@ -192,18 +188,15 @@ const markAllAsRead = (): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
-) => Promise<boolean>) => {
-  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
-    if (isOffline) {
-      return;
-    }
-    const api: Api = getApi();
-    const [error]: [?CustomError, { read: boolean }] = await until(api.inbox.markAllAsRead());
-    if (error) {
-      notifyError(error);
-    } else {
-      notify(i18n('Marked as read'));
+) => Promise<void>) => {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<void> => {
+    if (isOnline(getState())) {
+      const [error]: [?CustomError, { read: boolean }] = await until(getApi().inbox.markAllAsRead());
+      if (error) {
+        notifyError(error);
+      } else {
+        notify(i18n('Marked as read'));
+      }
     }
   };
 };
