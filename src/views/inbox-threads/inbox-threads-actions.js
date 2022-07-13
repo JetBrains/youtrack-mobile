@@ -74,6 +74,20 @@ const updateThreadsCache = (threads: InboxThread[] = [], folderId: string = fold
   };
 };
 
+const resetThreads = (folderId: string = folderIdAllKey): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) => {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    dispatch(setNotifications({
+      threads: [],
+      reset: true,
+      folderId,
+    }));
+  };
+};
+
 const setGlobalInProgress = (isInProgress: boolean) => ({
   type: SET_PROGRESS,
   isInProgress,
@@ -210,6 +224,7 @@ export {
   muteToggle,
   readMessageToggle,
   lastVisitedTabIndex,
+  resetThreads,
   toggleUnreadOnly,
   updateThreadsCache,
 };
