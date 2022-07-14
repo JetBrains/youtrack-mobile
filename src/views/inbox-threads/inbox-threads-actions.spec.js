@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import {__setStorageState, getStorageState} from 'components/storage/storage';
 import {inboxThreadsNamespace, inboxThreadsReducersNamesMap} from './inbox-threads-reducers';
 import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
-import {INBOX_THREADS_HAS_UPDATE} from '../../actions/action-types';
+import {INBOX_THREADS_HAS_UPDATE, SET_PROGRESS} from '../../actions/action-types';
 
 describe('Inbox Threads', () => {
   let apiMock;
@@ -50,10 +50,18 @@ describe('Inbox Threads', () => {
           },
         },
         {
+          type: SET_PROGRESS,
+          isInProgress: true,
+        },
+        {
           type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.toggleProgress}`,
           payload: {
             inProgress: false,
           },
+        },
+        {
+          type: SET_PROGRESS,
+          isInProgress: false,
         },
         {
           type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
@@ -74,7 +82,7 @@ describe('Inbox Threads', () => {
       await store.dispatch(actions.loadInboxThreads(undefined, 1));
 
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, false);
-      expect(store.getActions()[3]).toEqual({
+      expect(store.getActions()[5]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {
           folderId: folderIdAllKey,
@@ -95,7 +103,7 @@ describe('Inbox Threads', () => {
       await store.dispatch(actions.loadInboxThreads(undefined, 1));
 
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, true);
-      expect(store.getActions()[3]).toEqual({
+      expect(store.getActions()[5]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {
           folderId: folderIdAllKey,
@@ -138,7 +146,7 @@ describe('Inbox Threads', () => {
 
         await store.dispatch(actions.loadInboxThreads(folderIdMap[1], undefined));
 
-        expect(store.getActions()[0]).toEqual({
+        expect(store.getActions()[1]).toEqual({
           type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
           payload: {
             folderId: folderIdMap[1],
@@ -193,15 +201,23 @@ describe('Inbox Threads', () => {
 
       await store.dispatch(actions.loadInboxThreads(folderIdMap[0]));
 
-      expect(store.getActions().length).toEqual(1);
-      expect(store.getActions()[0]).toEqual({
-        type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
-        payload: {
-          folderId: folderIdAllKey,
-          threads: threadsMock,
-          reset: true,
+      expect(store.getActions().length).toEqual(2);
+      expect(store.getActions()).toEqual([
+        {
+          type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setError}`,
+          payload: {
+            error: null,
+          },
         },
-      });
+        {
+          type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
+          payload: {
+            folderId: folderIdAllKey,
+            threads: threadsMock,
+            reset: true,
+          },
+        },
+      ]);
     });
   });
 

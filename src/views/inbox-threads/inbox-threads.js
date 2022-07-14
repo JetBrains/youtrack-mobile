@@ -31,16 +31,14 @@ import type {Node} from 'react';
 import type {TabRoute} from 'flow/Issue';
 import type {Theme, UIThemeColors} from 'flow/Theme';
 import type {ThreadEntity} from 'flow/Inbox';
-import type {UserCurrent} from 'flow/User';
 
+const routes: TabRoute[] = threadTabsTitles.map((name: string, index: number) => ({key: index, title: name}));
 
 const InboxThreads: () => Node = (): Node => {
   const dispatch = useDispatch();
   const {showActionSheetWithOptions} = useActionSheet();
 
   const theme: Theme = useContext(ThemeContext);
-  const currentUser: UserCurrent = useSelector((state: AppState) => state.app.user);
-  const routes: TabRoute[] = threadTabsTitles.map((name: string, index: number) => ({key: index, title: name}));
 
   const [selectedEntity, updateSelectedEntity] = useState({entity: null, navigateToActivity: false});
 
@@ -72,15 +70,17 @@ const InboxThreads: () => Node = (): Node => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const threadsData: { threads: InboxThread[], hasMore: boolean } = useSelector(
+    (state: AppState) => state.inboxThreads.threadsData
+  );
+
   const renderScene = ({route}: { route: TabRoute }) => (
     <InboxThreadsList
-      currentUser={currentUser}
       folderId={folderIdMap[route.key]}
+      onLoadMore={(end: number) => loadThreads(route.key, end)}
+      onPress={(isSplitView ? (entity: ThreadEntity, navigateToActivity?: boolean) => updateSelectedEntity({entity, navigateToActivity}) : null)}
       theme={theme}
-      onPress={(isSplitView
-        ? (entity: ThreadEntity, navigateToActivity?: boolean) => updateSelectedEntity({entity, navigateToActivity})
-        : null)}
-      style={styles.container}
+      threadsData={threadsData}
     />
   );
 
@@ -154,8 +154,7 @@ const InboxThreads: () => Node = (): Node => {
           const options = [
             {
               title: actions.isUnreadOnly() ? i18n('Show all') : i18n('Unread only'),
-              execute: async () => {
-                await dispatch(actions.resetThreads(folderIdMap[navigationState.index]));
+              execute: () => {
                 actions.toggleUnreadOnly();
                 loadThreads(navigationState.index, null);
               },

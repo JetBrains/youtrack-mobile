@@ -137,7 +137,7 @@ export type SavedQuery = {
   }
 }
 
-export type TabRoute = { key: string | number, title: string };
+export type TabRoute = { key: string | number, title: string, id?: string };
 
 export type OpenNestedViewParams = {
   issue?: IssueFull,

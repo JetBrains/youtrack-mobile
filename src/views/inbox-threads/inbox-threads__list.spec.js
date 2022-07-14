@@ -44,22 +44,19 @@ describe('Inbox Threads List', () => {
     });
 
     it('should render thread item', () => {
-      createStore(createThreadsData([threadsMock[0]]));
-      const {getAllByTestId} = doRender();
+      const {getAllByTestId} = doRender(undefined, threadsMock.slice(-1));
 
       expect(getAllByTestId(threadTestId).length).toEqual(1);
     });
 
     it('should render all threads', () => {
-      createStore(createThreadsData(threadsMock));
-      const {getAllByTestId} = doRender();
+      const {getAllByTestId} = doRender(undefined, threadsMock);
 
       expect(getAllByTestId(threadTestId).length).toEqual(3);
     });
 
     it('should render `length - 1` threads if there are more threads to load', () => {
-      createStore(createThreadsData(threadsMock, true));
-      const {getAllByTestId} = doRender();
+      const {getAllByTestId} = doRender(undefined, threadsMock, true);
 
       expect(getAllByTestId(threadTestId).length).toEqual(2);
     });
@@ -70,7 +67,7 @@ describe('Inbox Threads List', () => {
     return {[key]: {threads, hasMore}};
   }
 
-  function createStore(threadsData = createThreadsData()) {
+  function createStore() {
     const getApi = () => apiMock;
     const createStoreMock = mocks.createMockStore(getApi);
     const middlewares = [thunk.withExtraArgument(getApi)];
@@ -80,15 +77,16 @@ describe('Inbox Threads List', () => {
       app: {
         otherAccounts: [],
       },
-      inboxThreads: {threadsData},
+      inboxThreads: {},
     };
     storeMock = createStoreMock(stateMock);
   }
 
-  function doRender(folderId) {
+  function doRender(folderId, threads = [], hasMore) {
     return render(
       <Provider store={storeMock}>
         <InboxThreadsList
+          threadsData={createThreadsData(threads, hasMore)}
           currentUser={mocks.createUserMock()}
           folderId={folderId}
           theme={DEFAULT_THEME}
