@@ -3,7 +3,7 @@
 import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {Dimensions, Linking, Text, TouchableOpacity, View} from 'react-native';
 
-import {TabBar, TabView} from 'react-native-tab-view';
+import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -74,15 +74,16 @@ const InboxThreads: () => Node = (): Node => {
     (state: AppState) => state.inboxThreads.threadsData
   );
 
-  const renderScene = ({route}: { route: TabRoute }) => (
-    <InboxThreadsList
-      folderId={folderIdMap[route.key]}
-      onLoadMore={(end: number) => loadThreads(route.key, end)}
-      onPress={(isSplitView ? (entity: ThreadEntity, navigateToActivity?: boolean) => updateSelectedEntity({entity, navigateToActivity}) : null)}
-      theme={theme}
-      threadsData={threadsData}
-    />
-  );
+  const Tab = (index: number) => <InboxThreadsList
+    folderId={folderIdMap[index]}
+    onLoadMore={(end: number) => loadThreads(index, end)}
+    onPress={(
+      isSplitView
+        ? (entity: ThreadEntity, navigateToActivity?: boolean) => updateSelectedEntity({entity, navigateToActivity})
+        : null)}
+    theme={theme}
+    threadsData={threadsData}
+  />;
 
   const renderTabBar = (props: any) => {
     const uiThemeColors: UIThemeColors = theme.uiTheme.colors;
@@ -129,7 +130,14 @@ const InboxThreads: () => Node = (): Node => {
       lazy={true}
       swipeEnabled={true}
       navigationState={navigationState}
-      renderScene={renderScene}
+      renderScene={
+        SceneMap(routes.reduce((map, it: TabRoute, index: number) => {
+          return ({
+            ...map,
+            [index]: Tab.bind(null, index),
+          });
+        }, {}))
+      }
       initialLayout={{
         height: 0,
         width: Dimensions.get('window').width,
