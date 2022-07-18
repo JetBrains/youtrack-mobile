@@ -14,6 +14,9 @@ import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
 import type {CustomError} from 'flow/Error';
 import type {InboxFolder, InboxThread, InboxThreadMessage} from 'flow/Inbox';
+import type {Reaction} from 'flow/Reaction';
+import type {User} from 'flow/User';
+import type {IssueComment} from '../../flow/CustomFields';
 
 type ApiGetter = () => Api;
 type StateGetter = () => AppState;
@@ -247,6 +250,32 @@ const markAllAsRead = (): ((
   };
 };
 
+const onReactionSelect = (issueId: string, comment: IssueComment, reaction: Reaction, onAfterSelect: Function): ((
+  dispatch: (any) => any,
+  getState: StateGetter,
+  getApi: ApiGetter
+) => Promise<void>) => {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<void> => {
+    const currentUser: User = getState().app.user;
+    usage.trackEvent(ANALYTICS_NOTIFICATIONS_THREADS_PAGE, 'Reaction select');
+    const reactionName: string = reaction.reaction;
+    const existReaction: Reaction = (comment.reactions || []).filter(
+      it => it.reaction === reactionName && it.author.id === currentUser.id
+    )[0];
+    const api: Api = getApi();
+    const [error, response] = await until(
+      existReaction
+        ? api.issue.removeCommentReaction(issueId, comment.id, existReaction.id)
+        : api.issue.addCommentReaction(issueId, comment.id, reactionName)
+    );
+    if (error) {
+      notifyError(error);
+    } else {
+      onAfterSelect(existReaction ? null : response, !!existReaction);
+    }
+  };
+};
+
 
 export {
   isUnreadOnly,
@@ -257,6 +286,7 @@ export {
   markFolderSeen,
   markSeen,
   muteToggle,
+  onReactionSelect,
   readMessageToggle,
   resetThreads,
   toggleUnreadOnly,

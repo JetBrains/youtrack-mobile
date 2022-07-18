@@ -152,6 +152,15 @@ export default EStyleSheet.create({
     ...secondaryText,
     color: '$icon',
   },
+  threadReactions: {
+    marginRight: UNIT,
+  },
+  threadAddReactionsIcon: {
+    position: 'absolute',
+    right: 0,
+    bottom: UNIT * 2.2,
+    marginLeft: UNIT,
+  },
   threadChangeAuthor: {
     flexGrow: 1,
     flexShrink: 0,
