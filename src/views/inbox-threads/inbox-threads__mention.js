@@ -4,16 +4,14 @@ import React from 'react';
 
 import ApiHelper from 'components/api/api__helper';
 import Avatar from 'components/avatar/avatar';
-import CommentReactions from 'components/comment/comment-reactions';
 import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
+import ThreadCommentReactions from './inbox-threads__item-comment-reactions';
 import ThreadItem from './inbox-threads__item';
 import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {isActivityCategory} from 'components/activity/activity__category';
 import {markdownText} from 'components/common-styles/typography';
-
-import styles from './inbox-threads.styles';
 
 import type {Activity} from 'flow/Activity';
 import type {InboxThread, ThreadEntity} from 'flow/Inbox';
@@ -65,13 +63,7 @@ export default function InboxThreadMention({thread, currentUser, uiTheme, onPres
           >
             {text}
           </MarkdownViewChunks>
-          {!!comment && (
-            <CommentReactions
-              style={styles.threadCommentReactions}
-              comment={comment}
-              currentUser={currentUser}
-            />
-          )}
+          {!!comment && <ThreadCommentReactions activity={activity} currentUser={currentUser}/>}
         </>
       }
       onPress={() => onPress(target.issue || target.article, true)}
