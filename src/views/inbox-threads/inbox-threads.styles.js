@@ -153,7 +153,7 @@ export default EStyleSheet.create({
     color: '$icon',
   },
   threadReactions: {
-    marginRight: UNIT,
+    marginRight: UNIT * 2,
   },
   threadAddReactionsIcon: {
     position: 'absolute',
