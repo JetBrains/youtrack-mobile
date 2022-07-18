@@ -162,4 +162,9 @@ export default EStyleSheet.create({
     fontWeight: '500',
     letterSpacing: -0.3,
   },
+  tabTitleIconUnread: {
+    position: 'absolute',
+    top: UNIT - 1,
+    right: -UNIT / 2,
+  },
 });

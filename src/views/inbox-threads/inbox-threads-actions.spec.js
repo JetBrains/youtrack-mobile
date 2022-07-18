@@ -3,9 +3,9 @@ import * as storage from 'components/storage/storage';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {__setStorageState, getStorageState} from 'components/storage/storage';
-import {inboxThreadsNamespace, inboxThreadsReducersNamesMap} from './inbox-threads-reducers';
 import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
-import {INBOX_THREADS_HAS_UPDATE, SET_PROGRESS} from '../../actions/action-types';
+import {SET_PROGRESS} from '../../actions/action-types';
+import {inboxThreadsNamespace, inboxThreadsReducersNamesMap} from './inbox-threads-reducers';
 
 describe('Inbox Threads', () => {
   let apiMock;
@@ -22,6 +22,8 @@ describe('Inbox Threads', () => {
     apiMock = {
       inbox: {
         getThreads: jest.fn().mockResolvedValue(responseMock),
+        updateFolders: jest.fn(),
+        saveAllAsSeen: jest.fn(),
       },
     };
 
@@ -71,10 +73,6 @@ describe('Inbox Threads', () => {
             reset: true,
           },
         },
-        {
-          type: INBOX_THREADS_HAS_UPDATE,
-          hasUpdate: false,
-        },
       ]);
     });
 
@@ -111,6 +109,50 @@ describe('Inbox Threads', () => {
           reset: false,
         },
       });
+    });
+
+
+    describe('Save as seen', () => {
+      let folderId;
+      let lastKnownNotified;
+      beforeEach(() => {
+        folderId = folderIdMap[1];
+        lastKnownNotified = 10;
+
+        doCreateStore([{id: folderId, lastNotified: 1, lastSeen: 0}]);
+        apiMock.inbox.updateFolders.mockResolvedValueOnce({lastSeen: 100});
+        apiMock.inbox.saveAllAsSeen.mockResolvedValueOnce({});
+      });
+
+      it('should mark folder as seen', async () => {
+        await store.dispatch(require('./inbox-threads-actions').loadInboxThreads(folderId));
+
+        expect(apiMock.inbox.updateFolders).toHaveBeenCalledWith(folderId, {lastSeen: lastKnownNotified});
+      });
+
+      it('should mark all as seen', async () => {
+        apiMock.inbox.saveAllAsSeen.mockResolvedValueOnce({});
+
+        await store.dispatch(require('./inbox-threads-actions').markFolderSeen(folderIdMap[0], lastKnownNotified));
+
+        expect(apiMock.inbox.saveAllAsSeen).toHaveBeenCalledWith(lastKnownNotified);
+      });
+
+      function doCreateStore(inboxThreadFolders = [], id = folderId) {
+        createStore(
+          true,
+          inboxThreadFolders,
+          {
+            inboxThreads: {
+              threadsData: {
+                [id]: {
+                  threads: [{notified: lastKnownNotified}],
+                },
+              },
+            },
+          },
+        );
+      }
     });
 
 
@@ -222,7 +264,13 @@ describe('Inbox Threads', () => {
   });
 
 
-  function createStore(isConnected = true) {
-    store = storeMock({app: {networkState: {isConnected}}});
+  function createStore(isConnected = true, inboxThreadsFolders, inboxThreads = {}) {
+    store = storeMock({
+      ...inboxThreads,
+      app: {
+        networkState: {isConnected},
+        inboxThreadsFolders,
+      },
+    });
   }
 });

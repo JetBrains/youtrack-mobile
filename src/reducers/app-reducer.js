@@ -13,6 +13,7 @@ import type {PermissionsStore} from 'components/permissions-store/permissions-st
 import type {StorageState} from 'components/storage/storage';
 import type {User, UserAppearanceProfile, UserArticlesProfile} from 'flow/User';
 import type {WorkTimeSettings} from 'flow/Work';
+import {InboxFolder} from '/flow/Inbox';
 
 export type RootState = {
   auth: OAuth2 | null,
@@ -27,7 +28,7 @@ export type RootState = {
   user: User | null,
   issuePermissions: IssuePermissions,
   networkState: NetInfoState | null,
-  inboxThreadsHasUpdate: boolean,
+  inboxThreadsFolders: InboxFolder[],
   isInProgress?: boolean,
 };
 
@@ -44,7 +45,7 @@ const initialState: RootState = {
   user: null,
   issuePermissions: issuePermissionsNull,
   networkState: {isConnected: true},
-  inboxThreadsHasUpdate: false,
+  inboxThreadsFolders: [],
   isInProgress: false,
 };
 
@@ -151,10 +152,10 @@ export default (createReducer(initialState, {
       networkState: action.networkState,
     };
   },
-  [types.INBOX_THREADS_HAS_UPDATE](state: RootState, action: {hasUpdate: boolean}) {
+  [types.INBOX_THREADS_FOLDERS](state: RootState, action: {inboxThreadsFolders: InboxFolder[]}) {
     return {
       ...state,
-      inboxThreadsHasUpdate: action.hasUpdate,
+      inboxThreadsFolders: action.inboxThreadsFolders,
     };
   },
   [types.SET_PROGRESS](state: RootState, action: {isInProgress: boolean}) {

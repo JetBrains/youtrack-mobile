@@ -30,9 +30,10 @@ describe('<Menu/>', () => {
 
     stateMock = {
       app: {
-        otherAccounts: [],
-        isChangingAccount: false,
         auth: {},
+        inboxThreadsFolders: [],
+        isChangingAccount: false,
+        otherAccounts: [],
         user: {},
       },
     };
@@ -221,18 +222,17 @@ describe('<Menu/>', () => {
         expect(appActions.inboxSetUpdateStatus).toHaveBeenCalledTimes(2);
       });
 
-      it('should stop polling status', async () => {
+
+      it('should not stop polling status inside inbox threads', async () => {
         const {getByTestId} = doRender();
         fireEvent.press(getByTestId('test:id/menuNotifications'));
-
-        expect(appActions.inboxSetUpdateStatus).not.toHaveBeenCalled();
-
         jest.advanceTimersByTime(menuPollInboxStatusDelay);
-        expect(appActions.inboxSetUpdateStatus).not.toHaveBeenCalled();
+
+        expect(appActions.inboxSetUpdateStatus).toHaveBeenCalled();
       });
     });
 
-    describe('Inbox threads is unavailable', () => {
+    describe('Inbox threads unavailable', () => {
       beforeEach(() => {
         const feature = require('../feature/feature');
         feature.checkVersion.mockReturnValue(false);

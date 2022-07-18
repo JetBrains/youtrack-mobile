@@ -10,11 +10,10 @@ import {SET_PROGRESS} from '../../actions/action-types';
 import {setError, setNotifications, toggleProgress} from './inbox-threads-reducers';
 import {until} from 'util/util';
 
-import * as types from '../../actions/action-types';
 import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
 import type {CustomError} from 'flow/Error';
-import type {InboxThread, InboxThreadMessage} from 'flow/Inbox';
+import type {InboxFolder, InboxThread, InboxThreadMessage} from 'flow/Inbox';
 
 type ApiGetter = () => Api;
 type StateGetter = () => AppState;
@@ -93,7 +92,56 @@ const setGlobalInProgress = (isInProgress: boolean) => ({
   isInProgress,
 });
 
-const loadInboxThreads = (folderId?: string, end?: number | null): ((
+const markFolderSeen = (folderId?: string, lastSeen: number): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<number | null>) => {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    if (isOnline(getState())) {
+      const api: Api = getApi();
+      const all: boolean = folderId === folderIdMap[0];
+      const [error, response] = await until(
+        all ? api.inbox.saveAllAsSeen(lastSeen) : api.inbox.updateFolders(folderId, {lastSeen})
+      );
+      return error ? null : response.lastSeen;
+    }
+  };
+};
+
+const getLatestThreadByFolderId = (id: string = folderIdAllKey): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<?InboxThread>) => {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const threadsData = getState()?.inboxThreads?.threadsData;
+    const inboxThreadsCache = getStorageState().inboxThreadsCache;
+    return (
+      threadsData[id]?.threads && threadsData[id]?.threads[0] ||
+      inboxThreadsCache && inboxThreadsCache[id] && inboxThreadsCache[id][0]
+    );
+  };
+};
+
+const markSeen = (folderId?: string): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) => {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const inboxThreadsFolders: InboxFolder[] = getState().app?.inboxThreadsFolders;
+    if (!isOnline(getState()) || !inboxThreadsFolders.length) {
+      return;
+    }
+    const latestThread: ?InboxThread = await dispatch(getLatestThreadByFolderId(folderId));
+    if (latestThread) {
+      await dispatch(markFolderSeen(folderId, latestThread.notified));
+    }
+  };
+};
+
+const loadInboxThreads = (folderId?: string | null, end?: number | null): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
@@ -107,7 +155,7 @@ const loadInboxThreads = (folderId?: string, end?: number | null): ((
     }
     dispatch(setError({error: null}));
 
-    if (!end) {
+    if (end === undefined) {
       dispatch(loadThreadsFromCache(folderId));
     }
     if (!isOnline(getState())) {
@@ -130,29 +178,12 @@ const loadInboxThreads = (folderId?: string, end?: number | null): ((
         reset,
         folderId: folderKey,
       }));
+      dispatch(markSeen(folderId));
       dispatch(updateThreadsCache(threads, folderId));
-      if (folderId === folderIdMap[0] && reset) {
-        dispatch(saveAllSeen(threads[0].notified));
-        dispatch({
-          type: types.INBOX_THREADS_HAS_UPDATE,
-          hasUpdate: false,
-        });
-      }
     }
   };
 };
 
-const saveAllSeen = (lastSeen: number): ((
-  dispatch: (any) => any,
-  getState: () => any,
-  getApi: ApiGetter
-) => Promise<void>) => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    if (isOnline(getState())) {
-      until(getApi().inbox.saveAllAsSeen(lastSeen));
-    }
-  };
-};
 
 const muteToggle = (id: string, muted: boolean): ((
   dispatch: (any) => any,
@@ -219,12 +250,14 @@ const markAllAsRead = (): ((
 
 export {
   isUnreadOnly,
+  lastVisitedTabIndex,
   loadInboxThreads,
   loadThreadsFromCache,
   markAllAsRead,
+  markFolderSeen,
+  markSeen,
   muteToggle,
   readMessageToggle,
-  lastVisitedTabIndex,
   resetThreads,
   toggleUnreadOnly,
   updateThreadsCache,

@@ -30,10 +30,10 @@ import {
   storageStateAuthParamsKey,
   storeAccounts,
 } from 'components/storage/storage';
+import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
 import {getCachedPermissions, storeYTCurrentUser} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
-import {folderIdAllKey, folderIdMap} from 'views/inbox-threads/inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
 import {isIOSPlatform, until} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
@@ -49,9 +49,9 @@ import type {AppConfig, EndUserAgreement} from 'flow/AppConfig';
 import type {AppState} from '../reducers';
 import type {Article} from 'flow/Article';
 import type {AuthConfig, AuthParams, OAuthParams2} from 'flow/Auth';
-import type {CustomError} from '../flow/Error';
+import type {CustomError} from 'flow/Error';
 import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserCurrent} from 'flow/User';
-import type {InboxFolders} from '../flow/Inbox';
+import type {InboxFolder, InboxThread} from 'flow/Inbox';
 import type {NetInfoState} from '@react-native-community/netinfo';
 import type {NotificationRouteData} from 'flow/Notification';
 import type {PermissionCacheItem} from 'flow/Permission';
@@ -829,35 +829,27 @@ function setRegisteredForPush(isRegistered: boolean) {
   }
 }
 
-function receiveInboxUpdateStatus(hasUpdate): { type: string, hasUpdate: boolean } {
+function receiveInboxUpdateStatus(inboxThreadsFolders: InboxFolder[]): { type: string, inboxThreadsFolders: InboxFolder[] } {
   return {
-    type: types.INBOX_THREADS_HAS_UPDATE,
-    hasUpdate,
+    type: types.INBOX_THREADS_FOLDERS,
+    inboxThreadsFolders,
   };
 }
 
-const inboxSetUpdateStatus = (hasUpdate?: boolean): Action => {
+const inboxSetUpdateStatus = (): Action => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const isOnline: boolean = getState().app?.networkState?.isConnected === true;
-    if (typeof hasUpdate === 'boolean') {
-      dispatch(receiveInboxUpdateStatus(hasUpdate));
-    } else if (isOnline) {
+    if (getState().app?.networkState?.isConnected === true) {
       const inboxThreadsCache = getStorageState()?.inboxThreadsCache || {[folderIdAllKey]: []};
-      const inboxThreadsCacheElement = inboxThreadsCache[folderIdAllKey];
-      const firstItem = inboxThreadsCacheElement[0];
-
+      const firstItem: ?InboxThread = inboxThreadsCache[folderIdAllKey] && inboxThreadsCache[folderIdAllKey][0];
       if (!firstItem?.notified) {
-        dispatch(receiveInboxUpdateStatus(true));
+        dispatch(receiveInboxUpdateStatus([]));
       } else {
-        const api: Api = getApi();
-        const [error, folders]: [?CustomError, Array<InboxFolders>] = await until(
-          api.inbox.inboxFolders(firstItem.notified + 1)
+        const [error, folders]: [?CustomError, Array<InboxFolder>] = await until(
+          getApi().inbox.getFolders(firstItem.notified + 1)
         );
-        const targetFolders = folders.filter((it) => it.id === folderIdMap[1] || it.id === folderIdMap[2]) || [];
-        const hasUpdate_ = !error && targetFolders.some(it => it.lastNotified > it.lastSeen);
-        dispatch(
-          receiveInboxUpdateStatus(hasUpdate_)
-        );
+        if (!error) {
+          dispatch(receiveInboxUpdateStatus(folders));
+        }
       }
     }
   };

@@ -18,7 +18,7 @@ import {getStorageState} from 'components/storage/storage';
 import {folderIdMap, threadTabsTitles} from './inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {IconMoreOptions} from 'components/icon/icon';
+import {IconCircle, IconMoreOptions} from 'components/icon/icon';
 import {isSplitView as hasSplitView} from 'components/responsive/responsive-helper';
 import {markAllAsRead} from './inbox-threads-actions';
 import {ThemeContext} from 'components/theme/theme-context';
@@ -27,18 +27,23 @@ import styles from './inbox-threads.styles';
 import tabStyles from 'components/issue-tabbed/issue-tabbed.style';
 
 import type {AppState} from '../../reducers';
+import type {InboxFolder, ThreadEntity} from 'flow/Inbox';
 import type {Node} from 'react';
 import type {TabRoute} from 'flow/Issue';
 import type {Theme, UIThemeColors} from 'flow/Theme';
-import type {ThreadEntity} from 'flow/Inbox';
 
-const routes: TabRoute[] = threadTabsTitles.map((name: string, index: number) => ({key: index, title: name}));
+const routes: TabRoute[] = threadTabsTitles.map((name: string, index: number) => ({
+  key: index,
+  title: name,
+  id: folderIdMap[index],
+}));
 
 const InboxThreads: () => Node = (): Node => {
   const dispatch = useDispatch();
   const {showActionSheetWithOptions} = useActionSheet();
 
   const theme: Theme = useContext(ThemeContext);
+  const inboxThreadsFolders: InboxFolder[] = useSelector((state: AppState) => state.app.inboxThreadsFolders);
 
   const [selectedEntity, updateSelectedEntity] = useState({entity: null, navigateToActivity: false});
 
@@ -56,6 +61,11 @@ const InboxThreads: () => Node = (): Node => {
     index: 0,
     routes,
   });
+
+  const hasTabUpdates = (inboxFolders: InboxFolder[], folderId?: string): boolean => {
+    const folder: ?InboxFolder = inboxFolders.find((it: InboxFolder) => it.id === folderId);
+    return !!folder && folder.lastNotified > folder.lastSeen;
+  };
 
   useEffect(() => {
     const index: number = actions.lastVisitedTabIndex();
@@ -94,14 +104,27 @@ const InboxThreads: () => Node = (): Node => {
         indicatorStyle={{backgroundColor: uiThemeColors.$link}}
         style={[tabStyles.tabsBar, {shadowColor: uiThemeColors.$separator}]}
         tabStyle={tabStyles.tabsBarFluid}
-        renderLabel={({route, focused}) => (
-          <Text style={[
-            tabStyles.tabLabelText,
-            {color: focused ? uiThemeColors.$link : uiThemeColors.$text},
-          ]}>
-            {route.title}
-          </Text>
-        )}
+        renderLabel={({route, focused}: {route: TabRoute, focused: boolean}) => {
+          return (
+            <View>
+              <Text
+                style={[
+                  tabStyles.tabLabelText,
+                  {color: focused ? uiThemeColors.$link : uiThemeColors.$text},
+                ]}
+              >
+                {route.title}
+              </Text>
+              {route.key !== navigationState.index && hasTabUpdates(inboxThreadsFolders, route.id) && (
+                <IconCircle
+                  size={9}
+                  color={styles.link.color}
+                  style={styles.tabTitleIconUnread}
+                />
+              )}
+            </View>
+          );
+        }}
         scrollEnabled={true}
       />
     );

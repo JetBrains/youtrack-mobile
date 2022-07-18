@@ -136,7 +136,7 @@ export type ThreadData = {
   entityAtBottom?: boolean,
 }
 
-export interface InboxFolders {
+export interface InboxFolder {
   id: string;
   lastNotified: number;
   lastSeen: number;

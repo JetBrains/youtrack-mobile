@@ -3,7 +3,7 @@
 import ApiBase from './api__base';
 import {inboxThreadFields} from './api__inbox-fields';
 
-import {InboxFolders} from 'flow/Inbox';
+import {InboxFolder} from 'flow/Inbox';
 import type Auth from '../auth/oauth2';
 import type {InboxThread} from 'flow/Inbox';
 
@@ -46,13 +46,21 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async inboxFolders(start: number): Promise<InboxFolders> {
+  async getFolders(start: number): Promise<InboxFolder> {
     return this.makeAuthorizedRequest(`${this.youTrackApiUrl}/inbox/folders?fields=id,lastNotified,lastSeen&${start}`);
+  }
+
+  async updateFolders(folderId: string = '', body: any): Promise<InboxFolder> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/inbox/folders/${folderId}?fields=id,lastNotified,lastSeen`,
+      'POST',
+      body
+    );
   }
 
   async saveAllAsSeen(lastSeen: number): Promise<void> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/inbox/lastSeen`,
+      `${this.youTrackApiUrl}/inbox/lastSeen?fields=id,lastNotified,lastSeen`,
       'POST',
       {lastSeen}
     );

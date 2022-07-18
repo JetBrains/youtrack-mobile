@@ -349,8 +349,8 @@ describe('app-actions', () => {
       await store.dispatch(actions.completeInitialization());
 
       expect(store.getActions()[1]).toEqual({
-        type: types.INBOX_THREADS_HAS_UPDATE,
-        hasUpdate: expect.any(Boolean),
+        type: types.INBOX_THREADS_FOLDERS,
+        inboxThreadsFolders: [],
       });
     });
   });
@@ -373,8 +373,8 @@ describe('app-actions', () => {
       await store.dispatch(actions.inboxSetUpdateStatus(false));
 
       expect(store.getActions()[0]).toEqual({
-        type: types.INBOX_THREADS_HAS_UPDATE,
-        hasUpdate: false,
+        type: types.INBOX_THREADS_FOLDERS,
+        inboxThreadsFolders: [],
       });
     });
 
@@ -382,8 +382,8 @@ describe('app-actions', () => {
       await store.dispatch(actions.inboxSetUpdateStatus());
 
       expect(store.getActions()[0]).toEqual({
-        type: types.INBOX_THREADS_HAS_UPDATE,
-        hasUpdate: true,
+        type: types.INBOX_THREADS_FOLDERS,
+        inboxThreadsFolders: [],
       });
     });
 
@@ -397,95 +397,42 @@ describe('app-actions', () => {
             [folderIdAllKey]: [threadMock],
           },
         });
+
+        foldersMock = [
+          {
+            id: 'direct',
+            lastNotified: 2,
+            lastSeen: 1,
+          },
+          {
+            id: 'subscription',
+            lastNotified: 1,
+            lastSeen: 1,
+          },
+        ];
       });
 
       it('should load inbox thread folders to check the status', async () => {
         await store.dispatch(actions.inboxSetUpdateStatus());
 
-        expect(apiMock.inbox.inboxFolders).toHaveBeenCalledWith(threadMock.notified + 1);
+        expect(apiMock.inbox.getFolders).toHaveBeenCalledWith(threadMock.notified + 1);
       });
 
-      it('should set inbox thread folders status to TRUE if there is an update in `direct`', async () => {
-        foldersMock = [
-          {
-            id: 'direct',
-            lastNotified: 2,
-            lastSeen: 1,
-          },
-          {
-            id: 'subscription',
-            lastNotified: 1,
-            lastSeen: 1,
-          },
-        ];
-        apiMock.inbox.inboxFolders.mockResolvedValueOnce(foldersMock);
+      it('should set inbox thread folders', async () => {
+        apiMock.inbox.getFolders.mockResolvedValueOnce(foldersMock);
         await store.dispatch(actions.inboxSetUpdateStatus());
 
         expect(store.getActions()[0]).toEqual({
-          type: types.INBOX_THREADS_HAS_UPDATE,
-          hasUpdate: true,
+          type: types.INBOX_THREADS_FOLDERS,
+          inboxThreadsFolders: foldersMock,
         });
       });
 
-      it('should set inbox thread folders status to TRUE if there is an update in `subscription`', async () => {
-        foldersMock = [
-          {
-            id: 'direct',
-            lastNotified: 1,
-            lastSeen: 1,
-          },
-          {
-            id: 'subscription',
-            lastNotified: 2,
-            lastSeen: 1,
-          },
-        ];
-        apiMock.inbox.inboxFolders.mockResolvedValueOnce(foldersMock);
+      it('should not set inbox thread folders on error', async () => {
+        apiMock.inbox.getFolders.mockRejectedValueOnce(new Error());
         await store.dispatch(actions.inboxSetUpdateStatus());
 
-        expect(store.getActions()[0]).toEqual({
-          type: types.INBOX_THREADS_HAS_UPDATE,
-          hasUpdate: true,
-        });
-      });
-
-      it('should set inbox thread folders status to FALSE if there are no updates in `direct` or `subscription`', async () => {
-        foldersMock = [
-          {
-            id: 'direct',
-            lastNotified: 1,
-            lastSeen: 1,
-          },
-          {
-            id: 'subscription',
-            lastNotified: 1,
-            lastSeen: 1,
-          },
-        ];
-        apiMock.inbox.inboxFolders.mockResolvedValueOnce(foldersMock);
-        await store.dispatch(actions.inboxSetUpdateStatus());
-
-        expect(store.getActions()[0]).toEqual({
-          type: types.INBOX_THREADS_HAS_UPDATE,
-          hasUpdate: false,
-        });
-      });
-
-      it('should set inbox thread folders status to FALSE if no updates in `direct` or `subscription`', async () => {
-        foldersMock = [
-          {
-            id: 'whatsnew',
-            lastNotified: 22,
-            lastSeen: 1,
-          },
-        ];
-        apiMock.inbox.inboxFolders.mockResolvedValueOnce(foldersMock);
-        await store.dispatch(actions.inboxSetUpdateStatus());
-
-        expect(store.getActions()[0]).toEqual({
-          type: types.INBOX_THREADS_HAS_UPDATE,
-          hasUpdate: false,
-        });
+        expect(store.getActions().length).toEqual(0);
       });
     });
   });
@@ -567,7 +514,7 @@ describe('app-actions', () => {
         getUserFolders: jest.fn(() => Promise.resolve([{}])),
       },
       inbox: {
-        inboxFolders: jest.fn(() => Promise.resolve([])),
+        getFolders: jest.fn(() => Promise.resolve([])),
       },
     };
   }
