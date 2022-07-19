@@ -131,8 +131,14 @@ export default EStyleSheet.create({
   threadChangeMarkdown: {
     paddingTop: 0,
   },
-  threadCommentReactions: {
+  threadReactions: {
+    marginRight: UNIT * 3,
     marginBottom: UNIT * 2,
+  },
+  threadReactionsAddIcon: {
+    position: 'absolute',
+    right: 0,
+    bottom: UNIT * 2.2,
   },
   threadButton: {
     marginBottom: UNIT * 1.5,
@@ -151,15 +157,6 @@ export default EStyleSheet.create({
     marginRight: UNIT / 2,
     ...secondaryText,
     color: '$icon',
-  },
-  threadReactions: {
-    marginRight: UNIT * 2,
-  },
-  threadAddReactionsIcon: {
-    position: 'absolute',
-    right: 0,
-    bottom: UNIT * 2.2,
-    marginLeft: UNIT,
   },
   threadChangeAuthor: {
     flexGrow: 1,

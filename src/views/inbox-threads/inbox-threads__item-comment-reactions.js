@@ -70,9 +70,9 @@ const ThreadCommentReactions = ({activity, currentUser}: Props) => {
   };
 
   return (
-    <View style={styles.threadReactions}>
+    <>
       <CommentReactions
-        style={styles.threadCommentReactions}
+        style={styles.threadReactions}
         comment={comment}
         currentUser={currentUser}
         onReactionSelect={(targetComment: IssueComment, reaction: Reaction) => {
@@ -80,7 +80,7 @@ const ThreadCommentReactions = ({activity, currentUser}: Props) => {
         }}
       />
       <TouchableOpacity
-        style={styles.threadAddReactionsIcon}
+        style={styles.threadReactionsAddIcon}
         hitSlop={HIT_SLOP}
         onPress={() => updateReactionPanelVisible(true)}
       >
@@ -93,7 +93,7 @@ const ThreadCommentReactions = ({activity, currentUser}: Props) => {
         }}
         onHide={updateReactionPanelVisible}
       />}
-    </View>
+    </>
   );
 };
 
