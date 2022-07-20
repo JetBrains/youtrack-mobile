@@ -4,7 +4,6 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {__setStorageState, getStorageState} from 'components/storage/storage';
 import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
-import {SET_PROGRESS} from '../../actions/action-types';
 import {inboxThreadsNamespace, inboxThreadsReducersNamesMap} from './inbox-threads-reducers';
 
 describe('Inbox Threads', () => {
@@ -52,18 +51,10 @@ describe('Inbox Threads', () => {
           },
         },
         {
-          type: SET_PROGRESS,
-          isInProgress: true,
-        },
-        {
           type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.toggleProgress}`,
           payload: {
             inProgress: false,
           },
-        },
-        {
-          type: SET_PROGRESS,
-          isInProgress: false,
         },
         {
           type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
@@ -80,7 +71,7 @@ describe('Inbox Threads', () => {
       await store.dispatch(actions.loadInboxThreads(undefined, 1));
 
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, false);
-      expect(store.getActions()[5]).toEqual({
+      expect(store.getActions()[3]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {
           folderId: folderIdAllKey,
@@ -101,7 +92,7 @@ describe('Inbox Threads', () => {
       await store.dispatch(actions.loadInboxThreads(undefined, 1));
 
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, true);
-      expect(store.getActions()[5]).toEqual({
+      expect(store.getActions()[3]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {
           folderId: folderIdAllKey,

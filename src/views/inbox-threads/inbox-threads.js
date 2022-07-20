@@ -5,12 +5,12 @@ import {Dimensions, Linking, TouchableOpacity, View} from 'react-native';
 
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 import {useActionSheet} from '@expo/react-native-action-sheet';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import * as actions from './inbox-threads-actions';
 import Article from 'views/article/article';
 import Header from 'components/header/header';
-import InboxThreadsList from './inbox-threads__list';
+import InboxThreadsTab from './inbox-threads__tab';
 import InboxThreadsTabBar from './inbox-threads__tab-bar';
 import Issue from '../issue/issue';
 import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
@@ -27,8 +27,6 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './inbox-threads.styles';
 import tabStyles from 'components/issue-tabbed/issue-tabbed.style';
 
-import type {AppState} from '../../reducers';
-import type {InboxThread, ThreadEntity} from 'flow/Inbox';
 import type {Node} from 'react';
 import type {TabRoute} from 'flow/Issue';
 import type {Theme, UIThemeColors} from 'flow/Theme';
@@ -51,8 +49,8 @@ const InboxThreads: () => Node = (): Node => {
   const dimensionsChangeListener = useRef();
 
   const loadThreads = useCallback(
-    (index: number, end?: null) => {
-      dispatch(actions.loadInboxThreads(folderIdMap[index], end));
+    (folderId?: string, end?: number | null) => {
+      dispatch(actions.loadInboxThreads(folderId, end));
     },
     [dispatch]
   );
@@ -67,28 +65,13 @@ const InboxThreads: () => Node = (): Node => {
     if (index > 0) {
       updateNavigationState({index, routes});
     }
-    loadThreads(index);
+    loadThreads(folderIdMap[index]);
     dimensionsChangeListener.current = Dimensions.addEventListener('change', () => {
       updateIsSplitView(hasSplitView());
     });
     return () => dimensionsChangeListener.current?.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const threadsData: { threads: InboxThread[], hasMore: boolean } = useSelector(
-    (state: AppState) => state.inboxThreads.threadsData
-  );
-
-  const Tab = (index: number) => <InboxThreadsList
-    folderId={folderIdMap[index]}
-    onLoadMore={(end: number) => loadThreads(index, end)}
-    onPress={(
-      isSplitView
-        ? (entity: ThreadEntity, navigateToActivity?: boolean) => updateSelectedEntity({entity, navigateToActivity})
-        : null)}
-    theme={theme}
-    threadsData={threadsData}
-  />;
 
   const renderTabBar = (props: any) => {
     const uiThemeColors: UIThemeColors = theme.uiTheme.colors;
@@ -99,9 +82,9 @@ const InboxThreads: () => Node = (): Node => {
         indicatorStyle={{backgroundColor: uiThemeColors.$link}}
         style={[tabStyles.tabsBar, {shadowColor: uiThemeColors.$separator}]}
         tabStyle={tabStyles.tabsBarFluid}
-        renderLabel={({route, focused}: {route: TabRoute, focused: boolean}) => {
-          return <InboxThreadsTabBar route={route} focused={focused} index={navigationState.index}/>;
-        }}
+        renderLabel={({route, focused}: { route: TabRoute, focused: boolean }) => (
+          <InboxThreadsTabBar route={route} focused={focused} index={navigationState.index}/>
+        )}
         scrollEnabled={true}
       />
     );
@@ -125,31 +108,43 @@ const InboxThreads: () => Node = (): Node => {
     );
   };
 
-  const renderTabs = () => (
-    <TabView
-      lazy={true}
-      swipeEnabled={true}
-      navigationState={navigationState}
-      renderScene={
-        SceneMap(routes.reduce((map, it: TabRoute, index: number) => {
-          return ({
-            ...map,
-            [index]: Tab.bind(null, index),
-          });
-        }, {}))
-      }
-      initialLayout={{
-        height: 0,
-        width: Dimensions.get('window').width,
-      }}
-      renderTabBar={renderTabBar}
-      onIndexChange={(index: number) => {
-        loadThreads(index);
-        updateNavigationState({index, routes});
-        actions.lastVisitedTabIndex(index);
-      }}
-    />
-  );
+  const renderTabs = () => {
+    return (
+      <TabView
+        lazy={true}
+        swipeEnabled={true}
+        navigationState={navigationState}
+        renderScene={SceneMap(
+          routes.reduce((map, it: TabRoute, index: number) => {
+            return ({
+              ...map,
+              [index]: () => (
+                <InboxThreadsTab
+                  folderId={folderIdMap[index]}
+                  onLoadMore={(folderId?: string, end?: null) => loadThreads(folderId, end)}
+                  onSelect={(entity, navigateToActivity) => {
+                    if (isSplitView) {
+                      updateSelectedEntity({entity, navigateToActivity});
+                    }
+                  }}
+                />
+              ),
+            });
+          }, {})
+        )}
+        initialLayout={{
+          height: 0,
+          width: Dimensions.get('window').width,
+        }}
+        renderTabBar={renderTabBar}
+        onIndexChange={(index: number) => {
+          loadThreads(folderIdMap[index]);
+          updateNavigationState({index, routes});
+          actions.lastVisitedTabIndex(index);
+        }}
+      />
+    );
+  };
 
   const renderHeader = () => (
     <Header
@@ -164,7 +159,7 @@ const InboxThreads: () => Node = (): Node => {
               title: actions.isUnreadOnly() ? i18n('Show all') : i18n('Unread only'),
               execute: () => {
                 actions.toggleUnreadOnly();
-                loadThreads(navigationState.index, null);
+                loadThreads(folderIdMap[navigationState.index], null);
               },
             },
             {

@@ -1,14 +1,15 @@
 import React from 'react';
 
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 import {Provider} from 'react-redux';
 import {render} from '@testing-library/react-native';
 
-import configureMockStore from 'redux-mock-store';
 import InboxThreadsList from './inbox-threads__list';
 import mocks from '../../../test/mocks';
-import thunk from 'redux-thunk';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import {folderIdAllKey} from './inbox-threads-helper';
+import {ThemeContext} from 'components/theme/theme-context';
 
 let apiMock;
 jest.mock('components/api/api__instance', () => ({
@@ -85,12 +86,14 @@ describe('Inbox Threads List', () => {
   function doRender(folderId, threads = [], hasMore) {
     return render(
       <Provider store={storeMock}>
-        <InboxThreadsList
-          threadsData={createThreadsData(threads, hasMore)}
-          currentUser={mocks.createUserMock()}
-          folderId={folderId}
-          theme={DEFAULT_THEME}
-        />
+        <ThemeContext.Provider value={DEFAULT_THEME}>
+          <InboxThreadsList
+            folderId={folderId}
+            onLoadMore={(end?: number | null) => null}
+            threadsData={createThreadsData(threads, hasMore)}
+            currentUser={mocks.createUserMock()}
+          />
+        </ThemeContext.Provider>
       </Provider>
     );
   }

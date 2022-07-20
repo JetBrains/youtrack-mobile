@@ -1,6 +1,6 @@
 /* @flow */
 
-import React from 'react';
+import React, {useContext} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
 
 import {useSelector} from 'react-redux';
@@ -12,6 +12,7 @@ import {getStorageState} from 'components/storage/storage';
 import {i18n} from 'components/i18n/i18n';
 import {IconNothingFound} from 'components/icon/icon-pictogram';
 import {SkeletonIssueActivities, SkeletonIssues} from 'components/skeleton/skeleton';
+import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables/variables';
 
 import styles from './inbox-threads.styles';
@@ -26,18 +27,16 @@ interface Props {
   folderId: string;
   onLoadMore: (end: number) => any,
   onPress?: ?(entity: ThreadEntity, navigateToActivity?: boolean) => any,
-  theme: Theme;
   threadsData: any,
 }
 
-const InboxThreadsList: () => Node = ({
+const InboxThreadsList = ({
   folderId,
-  theme,
-  onPress,
   onLoadMore,
+  onPress,
   threadsData,
-  ...other
 }: Props): Node => {
+  const theme: Theme = useContext(ThemeContext);
 
   const currentUser: UserCurrent = useSelector((state: AppState) => state.app.user);
   const error: UserCurrent = useSelector((state: AppState) => state.inboxThreads.error);
@@ -69,7 +68,6 @@ const InboxThreadsList: () => Node = ({
       testID="test:id/inboxThreadsList"
       accessibilityLabel="inboxThreadsList"
       accessible={true}
-      {...other}
     >
       <FlatList
         removeClippedSubviews={false}
@@ -99,7 +97,7 @@ const InboxThreadsList: () => Node = ({
           return null;
         }}
         keyExtractor={(it: InboxThread) => it.id}
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={1}
         onEndReached={() => {
           if (getData().hasMore && !inProgress) {
             onLoadMore(getData().threads.slice(-1)[0].notified);
@@ -117,6 +115,6 @@ const InboxThreadsList: () => Node = ({
 };
 
 
-export default React.memo(InboxThreadsList, (prev: Props, next: Props) => {
+export default React.memo<Props>(InboxThreadsList, (prev: Props, next: Props) => {
   return prev?.threadsData === next?.threadsData;
 });
