@@ -8,6 +8,7 @@ import {useSelector} from 'react-redux';
 import ErrorMessage from 'components/error-message/error-message';
 import Thread from './inbox-threads__thread';
 import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
+import {getFolderCachedThreads} from './inbox-threads-actions';
 import {getStorageState} from 'components/storage/storage';
 import {i18n} from 'components/i18n/i18n';
 import {IconNothingFound} from 'components/icon/icon-pictogram';
@@ -25,7 +26,7 @@ import type {UserCurrent} from 'flow/User';
 
 interface Props {
   folderId: string;
-  onLoadMore: (end: number) => any,
+  onLoadMore: (end?: number) => any,
   onPress?: ?(entity: ThreadEntity, navigateToActivity?: boolean) => any,
   threadsData: any,
 }
@@ -83,7 +84,7 @@ const InboxThreadsList = ({
               : <SkeletonIssueActivities marginTop={UNIT * 2} marginLeft={UNIT} marginRight={UNIT}/>;
           }
 
-          if (!getData().threads.length && !inProgress) {
+          if (!getData().threads.length && !inProgress && !getFolderCachedThreads(folderId).length) {
             return <View style={styles.threadsEmpty}>
               <IconNothingFound/>
               <Text style={styles.threadsEmptyMessage}>
@@ -106,7 +107,7 @@ const InboxThreadsList = ({
         refreshControl={<RefreshControl
           refreshing={false}
           tintColor={styles.link.color}
-          onRefresh={() => onLoadMore(null)}
+          onRefresh={onLoadMore}
         />}
         renderItem={renderItem}
       />

@@ -28,6 +28,11 @@ const DEFAULT_CACHE_DATA = {
 };
 
 const getCachedData = (): InboxThreadsCache => getStorageState().inboxThreadsCache || DEFAULT_CACHE_DATA;
+
+const getFolderCachedThreads = (folderId: string = folderIdAllKey): InboxThread[] => {
+  return (getCachedData()[folderId] || []);
+};
+
 const isOnline = (state: AppState): boolean => state?.app?.networkState?.isConnected === true;
 
 const updateCache = (data: Object) => {
@@ -255,6 +260,7 @@ const onReactionSelect = (issueId: string, comment: IssueComment, reaction: Reac
 
 
 export {
+  getFolderCachedThreads,
   isUnreadOnly,
   lastVisitedTabIndex,
   loadInboxThreads,
