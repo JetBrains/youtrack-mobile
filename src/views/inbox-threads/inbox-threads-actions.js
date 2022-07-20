@@ -27,6 +27,14 @@ const DEFAULT_CACHE_DATA = {
   unreadOnly: false,
 };
 
+const trackEvent = (event: string, params?: Object) => {
+  usage.trackEvent(
+    ANALYTICS_NOTIFICATIONS_THREADS_PAGE,
+    `Inbox threads: ${event}`,
+    params
+  );
+};
+
 const getCachedData = (): InboxThreadsCache => getStorageState().inboxThreadsCache || DEFAULT_CACHE_DATA;
 
 const getFolderCachedThreads = (folderId: string = folderIdAllKey): InboxThread[] => {
@@ -55,14 +63,18 @@ const loadThreadsFromCache = (folderId: string = folderIdAllKey): ((dispatch: (a
 };
 
 const lastVisitedTabIndex = (index?: number): number => {
-  if (typeof index === 'number') {
+  const hasIndex: boolean = typeof index === 'number';
+  if (hasIndex) {
     updateCache({lastVisited: index});
   }
-  return getCachedData().lastVisited;
+  const lastVisited: number = getCachedData().lastVisited;
+  trackEvent(hasIndex ? 'visit tab' : 'load tab', {lastVisited});
+  return lastVisited;
 };
 
 const toggleUnreadOnly = (): void => {
   const inboxThreadsCache: InboxThreadsCache = getCachedData();
+  trackEvent('toggle unreadOnly', {unreadOnly: !inboxThreadsCache.unreadOnly});
   updateCache({unreadOnly: !inboxThreadsCache.unreadOnly});
 };
 
@@ -86,9 +98,10 @@ const markFolderSeen = (folderId?: string, lastSeen: number): ((
   getApi: ApiGetter
 ) => Promise<number | null>) => {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const all: boolean = folderId === folderIdMap[0];
+    trackEvent('mark folder seen', {all});
     if (isOnline(getState())) {
       const api: Api = getApi();
-      const all: boolean = folderId === folderIdMap[0];
       const [error, response] = await until(
         all ? api.inbox.saveAllAsSeen(lastSeen) : api.inbox.updateFolders(folderId, {lastSeen})
       );
@@ -176,6 +189,7 @@ const muteToggle = (id: string, muted: boolean): ((
   getApi: ApiGetter
 ) => Promise<boolean>) => {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    trackEvent('mute thread', {muted});
     if (!isOnline(getState())) {
       return !muted;
     }
@@ -196,6 +210,7 @@ const readMessageToggle = (messages: InboxThreadMessage[], read: boolean): ((
   getApi: ApiGetter
 ) => Promise<boolean>) => {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<boolean> => {
+    trackEvent('mark message read', {read});
     if (!isOnline(getState())) {
       return !read;
     }
@@ -221,6 +236,7 @@ const markAllAsRead = (): ((
   getApi: ApiGetter
 ) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<void> => {
+    trackEvent('Inbox threads: mark all as read');
     if (isOnline(getState())) {
       const [error]: [?CustomError, { read: boolean }] = await until(getApi().inbox.markAllAsRead());
       if (error) {
@@ -239,7 +255,7 @@ const onReactionSelect = (issueId: string, comment: IssueComment, reaction: Reac
 ) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<void> => {
     const currentUser: User = getState().app.user;
-    usage.trackEvent(ANALYTICS_NOTIFICATIONS_THREADS_PAGE, 'Reaction select');
+    trackEvent('Inbox threads: make reaction');
     const reactionName: string = reaction.reaction;
     const existReaction: Reaction = (comment.reactions || []).filter(
       it => it.reaction === reactionName && it.author.id === currentUser.id
