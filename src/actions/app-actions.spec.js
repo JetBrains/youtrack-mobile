@@ -13,7 +13,7 @@ import mocks from '../../test/mocks';
 import permissionsHelper from 'components/permissions-store/permissions-helper';
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
-import {folderIdAllKey} from '../views/inbox-threads/inbox-threads-helper';
+import {folderIdAllKey, folderIdMap} from '../views/inbox-threads/inbox-threads-helper';
 
 jest.mock('components/router/router', () => ({
   navigateToDefaultRoute: jest.fn(),
@@ -350,7 +350,11 @@ describe('app-actions', () => {
 
       expect(store.getActions()[1]).toEqual({
         type: types.INBOX_THREADS_FOLDERS,
-        inboxThreadsFolders: [],
+        inboxThreadsFolders: [{
+          id: folderIdMap[1],
+          lastNotified: 1,
+          lastSeen: 0,
+        }],
       });
     });
   });
@@ -366,24 +370,6 @@ describe('app-actions', () => {
             isConnected: true,
           },
         },
-      });
-    });
-
-    it('should set inbox thread update', async () => {
-      await store.dispatch(actions.inboxSetUpdateStatus(false));
-
-      expect(store.getActions()[0]).toEqual({
-        type: types.INBOX_THREADS_FOLDERS,
-        inboxThreadsFolders: [],
-      });
-    });
-
-    it('should set inbox thread update status to TRUE if there is no threads cache data', async () => {
-      await store.dispatch(actions.inboxSetUpdateStatus());
-
-      expect(store.getActions()[0]).toEqual({
-        type: types.INBOX_THREADS_FOLDERS,
-        inboxThreadsFolders: [],
       });
     });
 

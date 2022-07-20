@@ -25,12 +25,13 @@ import {
   flushStoragePart,
   getOtherAccounts,
   getStorageState,
+  InboxThreadsCache,
   initialState,
   populateStorage,
   storageStateAuthParamsKey,
   storeAccounts,
 } from 'components/storage/storage';
-import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
+import {folderIdAllKey, folderIdMap} from 'views/inbox-threads/inbox-threads-helper';
 import {getCachedPermissions, storeYTCurrentUser} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
@@ -839,10 +840,14 @@ function receiveInboxUpdateStatus(inboxThreadsFolders: InboxFolder[]): { type: s
 const inboxSetUpdateStatus = (): Action => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     if (getState().app?.networkState?.isConnected === true) {
-      const inboxThreadsCache = getStorageState()?.inboxThreadsCache || {[folderIdAllKey]: []};
+      const inboxThreadsCache: InboxThreadsCache = getStorageState()?.inboxThreadsCache || {[folderIdAllKey]: []};
       const firstItem: ?InboxThread = inboxThreadsCache[folderIdAllKey] && inboxThreadsCache[folderIdAllKey][0];
       if (!firstItem?.notified) {
-        dispatch(receiveInboxUpdateStatus([]));
+        dispatch(receiveInboxUpdateStatus([{
+          id: folderIdMap[1],
+          lastNotified: 1,
+          lastSeen: 0,
+        }]));
       } else {
         const [error, folders]: [?CustomError, Array<InboxFolder>] = await until(
           getApi().inbox.getFolders(firstItem.notified + 1)

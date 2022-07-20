@@ -39,7 +39,7 @@ export default function () {
     const inboxFolders: InboxFolder[] = appState.app.inboxThreadsFolders.filter(
       (it) => it?.id === folderIdMap[1] || it?.id === folderIdMap[2]
     ) || [];
-    return inboxFolders.length === 0 || inboxFolders.some(it => it?.lastNotified > it?.lastSeen);
+    return inboxFolders.length > 0 && inboxFolders.some(it => it?.lastNotified > it?.lastSeen);
   });
   const isDisabled: boolean = useSelector((appState: AppState) => appState.app.isChangingAccount);
   const isInProgress: boolean = useSelector((appState: AppState) => appState.app.isInProgress);
