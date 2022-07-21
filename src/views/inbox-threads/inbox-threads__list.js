@@ -6,15 +6,14 @@ import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {useSelector} from 'react-redux';
 
 import ErrorMessage from 'components/error-message/error-message';
+import InboxThreadsProgressPlaceholder from './inbox-threads__progress-placeholder';
 import Thread from './inbox-threads__thread';
-import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
+import {folderIdAllKey} from './inbox-threads-helper';
 import {getFolderCachedThreads} from './inbox-threads-actions';
 import {getStorageState} from 'components/storage/storage';
 import {i18n} from 'components/i18n/i18n';
 import {IconNothingFound} from 'components/icon/icon-pictogram';
-import {SkeletonIssueActivities, SkeletonIssues} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
-import {UNIT} from 'components/variables/variables';
 
 import styles from './inbox-threads.styles';
 
@@ -79,12 +78,10 @@ const InboxThreadsList = ({
             return <ErrorMessage error={error} style={styles.error}/>;
           }
           if (inProgress) {
-            return folderId !== folderIdMap[1]
-              ? <SkeletonIssues marginTop={UNIT * 1.5}/>
-              : <SkeletonIssueActivities marginTop={UNIT * 2} marginLeft={UNIT} marginRight={UNIT}/>;
+            return <InboxThreadsProgressPlaceholder/>;
           }
 
-          if (!getData().threads.length && !inProgress && !getFolderCachedThreads(folderId).length) {
+          if (!Object.keys(threadsData).length && !inProgress && !getFolderCachedThreads(folderId).length && !getData().threads.length) {
             return <View style={styles.threadsEmpty}>
               <IconNothingFound/>
               <Text style={styles.threadsEmptyMessage}>

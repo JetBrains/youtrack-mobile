@@ -10,6 +10,7 @@ import {useDispatch} from 'react-redux';
 import * as actions from './inbox-threads-actions';
 import Article from 'views/article/article';
 import Header from 'components/header/header';
+import InboxThreadsProgressPlaceholder from './inbox-threads__progress-placeholder';
 import InboxThreadsTab from './inbox-threads__tab';
 import InboxThreadsTabBar from './inbox-threads__tab-bar';
 import Issue from '../issue/issue';
@@ -112,6 +113,7 @@ const InboxThreads: () => Node = (): Node => {
     return (
       <TabView
         lazy={true}
+        renderLazyPlaceholder={() => <InboxThreadsProgressPlaceholder/>}
         swipeEnabled={true}
         navigationState={navigationState}
         renderScene={SceneMap(
