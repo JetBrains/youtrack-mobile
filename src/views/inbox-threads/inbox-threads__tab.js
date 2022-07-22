@@ -9,16 +9,16 @@ import InboxThreadsList from './inbox-threads__list';
 import type {AnyIssue} from 'flow/Issue';
 import type {AppState} from '../../reducers';
 import type {Article} from 'flow/Article';
-import type {InboxThread, ThreadEntity} from 'flow/Inbox';
+import type {InboxThread} from 'flow/Inbox';
 
 interface Props {
   folderId?: string,
-  onSelect: (entity: AnyIssue | Article, navigateToActivity: boolean) => any,
+  onNavigate: (entity: AnyIssue | Article, navigateToActivity: boolean) => any,
   onLoadMore: (end?: number | null) => any;
 }
 
 
-const InboxThreadsTab = ({folderId, onSelect, onLoadMore}: Props) => {
+const InboxThreadsTab = ({folderId, onNavigate, onLoadMore}: Props) => {
   const threadsData: { threads: InboxThread[], hasMore: boolean } = useSelector(
     (state: AppState) => state.inboxThreads.threadsData
   );
@@ -27,7 +27,7 @@ const InboxThreadsTab = ({folderId, onSelect, onLoadMore}: Props) => {
     <InboxThreadsList
       folderId={folderId}
       onLoadMore={(end?: number | null) => onLoadMore(folderId, end)}
-      onPress={(entity: ThreadEntity, navigateToActivity?: boolean) => onSelect(entity, navigateToActivity)}
+      onNavigate={onNavigate}
       threadsData={threadsData}
     />
   );

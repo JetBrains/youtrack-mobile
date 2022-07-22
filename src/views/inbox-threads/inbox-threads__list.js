@@ -26,14 +26,14 @@ import type {UserCurrent} from 'flow/User';
 interface Props {
   folderId: string;
   onLoadMore: (end?: number) => any,
-  onPress?: ?(entity: ThreadEntity, navigateToActivity?: boolean) => any,
+  onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any,
   threadsData: any,
 }
 
 const InboxThreadsList = ({
   folderId,
   onLoadMore,
-  onPress,
+  onNavigate,
   threadsData,
 }: Props): Node => {
   const theme: Theme = useContext(ThemeContext);
@@ -53,7 +53,7 @@ const InboxThreadsList = ({
       thread={item}
       currentUser={currentUser}
       uiTheme={theme.uiTheme}
-      onPress={onPress}
+      onNavigate={onNavigate}
     />
   );
 

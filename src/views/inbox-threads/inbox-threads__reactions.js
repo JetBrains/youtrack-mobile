@@ -3,6 +3,8 @@
 import React from 'react';
 import {View} from 'react-native';
 
+import {TouchableOpacity} from 'react-native-gesture-handler';
+
 import ReactionIcon from 'components/reactions/reaction-icon';
 import StreamComment from 'components/activity-stream/activity__stream-comment';
 import ThreadCommentReactions from './inbox-threads__item-comment-reactions';
@@ -19,11 +21,11 @@ import type {User} from 'flow/User';
 
 interface Props {
   currentUser: User;
-  onPress?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
+  onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
   thread: InboxThread;
 }
 
-const InboxThreadReaction = ({thread, currentUser, onPress}: Props) => {
+const InboxThreadReaction = ({thread, currentUser, onNavigate}: Props) => {
   const activity: Activity = thread.messages[0].activities[0];
   const reaction: Reaction = activity.added[0] || activity.removed[0];
   const comment: ?IssueComment = activity?.comment;
@@ -41,16 +43,24 @@ const InboxThreadReaction = ({thread, currentUser, onPress}: Props) => {
       }
       change={!!comment && (
         <>
-          <StreamComment
-            activity={{
-              ...activity,
-              added: [comment],
+          <TouchableOpacity
+            onPress={() => {
+              const entity: ThreadEntity = activity?.comment?.issue || activity?.comment?.article;
+              if (entity?.id) {
+                onNavigate(entity, true);
+              }
             }}
-          />
+          >
+            <StreamComment
+              activity={{
+                ...activity,
+                added: [comment],
+              }}
+            />
+          </TouchableOpacity>
           <ThreadCommentReactions activity={activity} currentUser={currentUser}/>
         </>
       )}
-      onPress={onPress}
       reason={isAdded && comment?.reactions?.length > 1
         ? comment?.reactions?.length === 1 ? i18n('added a reaction') : i18n('added reactions')
         : i18n('removed a reaction')}

@@ -7,7 +7,6 @@ import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useDispatch} from 'react-redux';
 
 import InboxEntity from '../inbox/inbox__entity';
-import Router from 'components/router/router';
 import styles from './inbox-threads.styles';
 import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
 import {getThreadData} from './inbox-threads-helper';
@@ -22,7 +21,7 @@ import type {User} from 'flow/User';
 
 interface Props {
   currentUser: User;
-  onPress: (entity: any, navigateToActivity?: boolean) => any,
+  onNavigate: (entity: any, navigateToActivity?: boolean) => any,
   thread: InboxThread;
   uiTheme: UITheme;
 }
@@ -32,7 +31,7 @@ function Thread({
   thread,
   currentUser,
   uiTheme,
-  onPress,
+  onNavigate,
   ...otherProps
 }: Props): React$Element<any> | null {
   const {showActionSheetWithOptions} = useActionSheet();
@@ -53,17 +52,7 @@ function Thread({
     accessibilityLabel="inboxEntity"
     accessible={true}
     entity={threadData.entity}
-    onNavigate={() => {
-      if (onPress) {
-        onPress(threadData.entity, threadData.entityAtBottom);
-      } else {
-        if (hasType.article(threadData.entity)) {
-          Router.Article({articlePlaceholder: threadData.entity, navigateToActivity: threadData.entityAtBottom});
-        } else {
-          Router.Issue({issueId: threadData.entity.id, navigateToActivity: threadData.entityAtBottom});
-        }
-      }
-    }}
+    onNavigate={() => onNavigate(threadData.entity, threadData.entityAtBottom)}
     style={[styles.threadTitle, threadData.entityAtBottom && styles.threadSubTitle]}
     styleText={threadData.entityAtBottom && styles.threadSubTitleText}
   />;
@@ -88,7 +77,7 @@ function Thread({
         thread={_thread}
         currentUser={currentUser}
         uiTheme={uiTheme}
-        onPress={onPress}
+        onNavigate={onNavigate}
         onReadChange={(messages: InboxThreadMessage[], read: boolean) => toggleMessagesRead(messages, read)}
       />
       {threadData.entityAtBottom && renderedEntity}

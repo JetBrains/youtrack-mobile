@@ -20,13 +20,16 @@ interface Props {
   group?: InboxThreadGroup;
   reason: string;
   timestamp: number;
-  onPress?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
+  onNavigate?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
 }
 
-export default function ThreadItem({author, avatar, change, group, reason, timestamp, onPress}: Props) {
-  const Wrapper = onPress ? TouchableOpacity : View;
+export default function ThreadItem({author, avatar, change, group, reason, timestamp, onNavigate}: Props) {
   return (
-    <View>
+    <View
+      testID="test:id/inboxThreadItem"
+      accessibilityLabel="inboxThreadItem"
+      accessible={true}
+    >
       <View style={styles.row}>
         <View style={styles.threadTitleIcon}>
           {avatar}
@@ -36,17 +39,33 @@ export default function ThreadItem({author, avatar, change, group, reason, times
             {getEntityPresentation(author)}
           </Text>
           <View style={styles.row}>
-            <Text style={styles.threadChangeReason}>{reason}</Text>
+            <Text
+              testID="test:id/inboxThreadItemReason"
+              accessibilityLabel="inboxThreadItemReason"
+              accessible={true}
+              style={styles.threadChangeReason}>
+              {reason}
+            </Text>
             <StreamTimestamp timestamp={timestamp}/>
           </View>
         </View>
       </View>
 
-      <Wrapper style={styles.threadChange} {...Object.assign(onPress ? {onPress} : {})}>
+      <TouchableOpacity
+        testID="test:id/inboxThreadItemNavigateButton"
+        accessibilityLabel="inboxThreadItemNavigateButton"
+        accessible={true}
+        style={styles.threadChange}
+        disabled={typeof onNavigate !== 'function'}
+        onPress={onNavigate}
+      >
         <>
           {change}
           {!!group?.mergedActivities?.length && (
             <View
+              testID="test:id/inboxThreadItemMergedActivities"
+              accessibilityLabel="inboxThreadItemMergedActivities"
+              accessible={true}
               style={styles.threadRelatedChange}
             >
               {group.mergedActivities.map(
@@ -60,7 +79,7 @@ export default function ThreadItem({author, avatar, change, group, reason, times
             </View>
           )}
         </>
-      </Wrapper>
+      </TouchableOpacity>
     </View>
   );
 }

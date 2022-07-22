@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-import Router from 'components/router/router';
 import StreamWork from 'components/activity-stream/activity__stream-work';
 import {i18n} from 'components/i18n/i18n';
 import {IconWork} from 'components/icon/icon';
@@ -16,24 +15,18 @@ import type {InboxThreadGroup, InboxThreadTarget, ThreadEntity} from 'flow/Inbox
 interface Props {
   group: InboxThreadGroup;
   target: InboxThreadTarget;
-  onPress?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
+  onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
 }
 
 
-export default function ThreadWorkItem({group, target, onPress}: Props) {
+export default function ThreadWorkItem({group, target, onNavigate}: Props) {
   return (
     <ThreadItem
       author={group.head.author}
       avatar={<IconWork size={22} color={styles.icon.color} style={styles.activityWorkIcon}/>}
       change={<StreamWork activityGroup={{work: group.work}}/>}
       group={group}
-      onPress={() => {
-        if (onPress) {
-          onPress(target, true);
-        } else {
-          Router.Issue({issueId: target.id, navigateToActivity: true});
-        }
-      }}
+      onNavigate={() => onNavigate(target, true)}
       reason={i18n('updated')}
       timestamp={group.work.timestamp}
     />

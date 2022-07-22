@@ -25,7 +25,7 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 interface Props {
   currentUser: User;
-  onPress?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
+  onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
   onReadChange: (messages: InboxThreadMessage[], read: boolean) => any;
   style?: ViewStyleProp;
   thread: InboxThread;
@@ -34,7 +34,7 @@ interface Props {
 
 export default function InboxThreadItemSubscription({
   currentUser,
-  onPress,
+  onNavigate,
   onReadChange,
   style,
   thread,
@@ -140,7 +140,7 @@ export default function InboxThreadItemSubscription({
           isLast={isLast}
           currentUser={currentUser}
           uiTheme={uiTheme}
-          onPress={onPress}
+          onNavigate={onNavigate}
         />
         {showMoreButtonEl}
       </View>

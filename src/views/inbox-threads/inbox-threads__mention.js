@@ -21,12 +21,12 @@ import type {User} from 'flow/User';
 
 interface Props {
   currentUser: User;
-  onPress?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
+  onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
   thread: InboxThread;
   uiTheme: UITheme;
 }
 
-export default function InboxThreadMention({thread, currentUser, uiTheme, onPress}: Props) {
+export default function InboxThreadMention({thread, currentUser, uiTheme, onNavigate}: Props) {
   const activity: Activity = thread.messages[0].activities[0];
   activity.author = ApiHelper.convertRelativeUrl(activity.author, 'avatarUrl', getApi().config.backendUrl);
   let comment: ?IssueComment;
@@ -66,7 +66,7 @@ export default function InboxThreadMention({thread, currentUser, uiTheme, onPres
           {!!comment && <ThreadCommentReactions activity={activity} currentUser={currentUser}/>}
         </>
       }
-      onPress={() => onPress(target.issue || target.article, true)}
+      onNavigate={() => onNavigate(target.issue || target.article, true)}
       reason={i18n('mentioned you')}
       timestamp={thread.notified}
     />

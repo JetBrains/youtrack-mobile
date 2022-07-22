@@ -4,7 +4,6 @@ import React from 'react';
 import {View} from 'react-native';
 
 import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
-import Router from 'components/router/router';
 import StreamHistoryChange from 'components/activity-stream/activity__stream-history';
 import ThreadItem from './inbox-threads__item';
 import {activityCategory} from 'components/activity/activity__category';
@@ -23,10 +22,10 @@ interface Props {
   group: InboxThreadGroup;
   target: InboxThreadTarget;
   uiTheme: UITheme;
-  onPress?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
+  onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
 }
 
-export default function ThreadEntityCreatedItem({group, target, uiTheme, onPress}: Props) {
+export default function ThreadEntityCreatedItem({group, target, uiTheme, onNavigate}: Props) {
   const actualActivity: Props['group']['issue'] = group.issue;
   const entity: ThreadEntity = actualActivity.issue || actualActivity.article;
   const assigneeFields: CustomField[] = (entity.customFields || []).map((it: CustomField) => {
@@ -78,13 +77,7 @@ export default function ThreadEntityCreatedItem({group, target, uiTheme, onPress
           <StreamHistoryChange activity={activity} customFields={assigneeFields}/>
         </View>
       </>}
-      onPress={() => {
-        if (onPress) {
-          onPress(target);
-        } else {
-          Router.Issue({issueId: target.id});
-        }
-      }}
+      onNavigate={() => onNavigate(target)}
       reason={i18n('created')}
       timestamp={actualActivity.timestamp}
     />

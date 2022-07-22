@@ -15,6 +15,7 @@ import InboxThreadsTab from './inbox-threads__tab';
 import InboxThreadsTabBar from './inbox-threads__tab-bar';
 import Issue from '../issue/issue';
 import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
+import Router from 'components/router/router';
 import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
 import {folderIdMap, threadTabsTitles} from './inbox-threads-helper';
 import {getStorageState} from 'components/storage/storage';
@@ -124,9 +125,15 @@ const InboxThreads: () => Node = (): Node => {
                 <InboxThreadsTab
                   folderId={folderIdMap[index]}
                   onLoadMore={(folderId?: string, end?: null) => loadThreads(folderId, end)}
-                  onSelect={(entity, navigateToActivity) => {
+                  onNavigate={(entity, navigateToActivity) => {
                     if (isSplitView) {
                       updateSelectedEntity({entity, navigateToActivity});
+                    } else {
+                      if (hasType.article(entity)) {
+                        Router.Article({articlePlaceholder: entity, navigateToActivity});
+                      } else {
+                        Router.Issue({issueId: entity.id, navigateToActivity});
+                      }
                     }
                   }}
                 />

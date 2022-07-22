@@ -223,8 +223,8 @@ function createActivityCustomFieldMock(data = {}) {
   }, data);
 }
 
-function createActivityCommentMock() {
-  return {
+function createActivityCommentMock(data = {}) {
+  return deepmerge({
     $type: 'CommentActivityItem',
     added: [{
       text: 'Fixed',
@@ -250,7 +250,7 @@ function createActivityCommentMock() {
       id: '0-1',
       usesMarkdown: true,
     },
-  };
+  }, data);
 }
 
 function createThreadMock(data = {}) {
