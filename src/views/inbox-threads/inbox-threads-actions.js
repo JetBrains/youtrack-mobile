@@ -156,9 +156,6 @@ const loadInboxThreads = (folderId?: string | null, end?: number | null): ((
     }
     dispatch(setError({error: null}));
 
-    if (end === undefined) {
-      dispatch(loadThreadsFromCache(folderId));
-    }
     if (!isOnline(getState())) {
       return;
     }

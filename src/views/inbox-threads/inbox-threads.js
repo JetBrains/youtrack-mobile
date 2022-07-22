@@ -56,6 +56,12 @@ const InboxThreads: () => Node = (): Node => {
     },
     [dispatch]
   );
+  const setThreadsFromCache = useCallback(
+    (folderId?: string) => {
+      dispatch(actions.loadThreadsFromCache(folderId));
+    },
+    [dispatch]
+  );
 
   const [navigationState, updateNavigationState] = useState({
     index: 0,
@@ -67,6 +73,7 @@ const InboxThreads: () => Node = (): Node => {
     if (index > 0) {
       updateNavigationState({index, routes});
     }
+    setThreadsFromCache(folderIdMap[index]);
     loadThreads(folderIdMap[index]);
     dimensionsChangeListener.current = Dimensions.addEventListener('change', () => {
       updateIsSplitView(hasSplitView());
@@ -147,6 +154,7 @@ const InboxThreads: () => Node = (): Node => {
         }}
         renderTabBar={renderTabBar}
         onIndexChange={(index: number) => {
+          setThreadsFromCache(folderIdMap[index]);
           loadThreads(folderIdMap[index]);
           updateNavigationState({index, routes});
           actions.lastVisitedTabIndex(index);

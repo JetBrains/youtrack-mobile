@@ -148,6 +148,27 @@ describe('Inbox Threads', () => {
 
 
     describe('Cache', () => {
+      it('should set folder data from the cache', async () => {
+        createStore(false);
+        const threadsMock = [{}, {}];
+        __setStorageState({
+          inboxThreadsCache: {
+            [folderIdAllKey]: threadsMock,
+          },
+        });
+
+        await store.dispatch(actions.loadThreadsFromCache(folderIdMap[0]));
+
+        expect(store.getActions()[0]).toEqual({
+          type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
+          payload: {
+            folderId: folderIdAllKey,
+            threads: threadsMock,
+            reset: true,
+          },
+        });
+      });
+
       it('should update inbox threads `All` tab cache', async () => {
         apiMock.inbox.getThreads.mockResolvedValueOnce([{}, {}]);
         await store.dispatch(actions.loadInboxThreads(undefined, undefined));
@@ -167,27 +188,6 @@ describe('Inbox Threads', () => {
         await store.dispatch(actions.loadInboxThreads(folderIdMap[2]));
 
         expect(storage.getStorageState().inboxThreadsCache[folderIdMap[2]].length).toEqual(4);
-      });
-
-      it('should set threads from the cache before loading for the  first time', async () => {
-        const threadsMock = [{}, {}];
-        __setStorageState({
-          inboxThreadsCache: {
-            [folderIdMap[1]]: threadsMock,
-          },
-        });
-
-        await store.dispatch(actions.loadInboxThreads(folderIdMap[1], undefined));
-
-        expect(store.getActions()[1]).toEqual({
-          type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
-          payload: {
-            folderId: folderIdMap[1],
-            threads: threadsMock,
-            reset: true,
-          },
-        });
-
       });
 
       it('should not set threads from the cache while refreshing threads', async () => {
@@ -219,39 +219,6 @@ describe('Inbox Threads', () => {
       });
     });
 
-  });
-
-
-  describe('Offline mode', () => {
-    it('should set folder data from a cache without any requests to a server', async () => {
-      createStore(false);
-      const threadsMock = [{}, {}];
-      __setStorageState({
-        inboxThreadsCache: {
-          [folderIdAllKey]: threadsMock,
-        },
-      });
-
-      await store.dispatch(actions.loadInboxThreads(folderIdMap[0]));
-
-      expect(store.getActions().length).toEqual(2);
-      expect(store.getActions()).toEqual([
-        {
-          type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setError}`,
-          payload: {
-            error: null,
-          },
-        },
-        {
-          type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
-          payload: {
-            folderId: folderIdAllKey,
-            threads: threadsMock,
-            reset: true,
-          },
-        },
-      ]);
-    });
   });
 
 
