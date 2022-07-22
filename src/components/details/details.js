@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useState} from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 
 import {HIT_SLOP} from '../common-styles/button';
 import {IconCaretDownUp} from '../icon/icon';
@@ -25,20 +25,22 @@ const Details = (props: Props): Node => {
 
   return (
     <>
-      <TouchableOpacity
-        testID="details"
-        style={styles.button}
-        onPress={() => updateExpanded(!expanded)}
-        hitSlop={HIT_SLOP}
-      >
+      <View style={styles.container}>
         {!!props.title && <Text style={styles.title}>
           {`${props.title}: `}
         </Text>}
-        <Text style={[styles.toggle, props.style]}>
-          <IconCaretDownUp size={12} isDown={!expanded} color={props?.style?.color || styles.toggle.color}/>
-          <Text style={styles.toggleText}>{' '}{toggler}</Text>
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          testID="details"
+          style={styles.button}
+          onPress={() => updateExpanded(!expanded)}
+          hitSlop={HIT_SLOP}
+        >
+          <Text style={[styles.toggle, props.style]}>
+            <IconCaretDownUp size={12} isDown={!expanded} color={props?.style?.color || styles.toggle.color}/>
+            <Text style={styles.toggleText}>{' '}{toggler}</Text>
+          </Text>
+        </TouchableOpacity>
+      </View>
 
     {expanded && props.renderer()}
     </>
