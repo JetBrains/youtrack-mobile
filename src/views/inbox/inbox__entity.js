@@ -16,7 +16,6 @@ export default function InboxEntity({entity, onNavigate, styleText, ...otherProp
   entity: (AnyIssue | Article),
   onNavigate: () => void,
   styleText?: TextStyleProp,
-  ...,
 }) {
   const readableID: ?string = getReadableID(entity);
   return (
@@ -25,7 +24,7 @@ export default function InboxEntity({entity, onNavigate, styleText, ...otherProp
       onPress={onNavigate}
       {...otherProps}
     >
-      <Text>
+      <Text numberOfLines={1}>
         {!!readableID && (
           <Text
             testID="test:id/inboxEntityReadableId"
@@ -39,7 +38,6 @@ export default function InboxEntity({entity, onNavigate, styleText, ...otherProp
         )}
         {!!entity.summary && (
           <Text
-            numberOfLines={2}
             testID="test:id/inboxEntitySummary"
             accessibilityLabel="inboxEntitySummary"
             accessible={true}
