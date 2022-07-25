@@ -6,6 +6,7 @@ import {flushStoragePart, getStorageState, InboxThreadsCache} from 'components/s
 import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
 import {i18n} from 'components/i18n/i18n';
 import {notify, notifyError} from 'components/notification/notification';
+import {SET_PROGRESS} from '../../actions/action-types';
 import {setError, setNotifications, toggleProgress} from './inbox-threads-reducers';
 import {until} from 'util/util';
 
@@ -34,6 +35,11 @@ const trackEvent = (event: string, params?: Object) => {
     params
   );
 };
+
+const setGlobalInProgress = (isInProgress: boolean) => ({
+  type: SET_PROGRESS,
+  isInProgress,
+});
 
 const getCachedData = (): InboxThreadsCache => {
   const inboxThreadsCache = getStorageState().inboxThreadsCache;
@@ -151,7 +157,7 @@ const markSeen = (folderId?: string): ((
   };
 };
 
-const loadInboxThreads = (folderId?: string | null, end?: number | null): ((
+const loadInboxThreads = (folderId?: string | null, end?: number): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
@@ -170,10 +176,16 @@ const loadInboxThreads = (folderId?: string | null, end?: number | null): ((
     }
 
     dispatch(toggleProgress({inProgress: true}));
+    if (reset && !getFolderCachedThreads(folderId).length) {
+      dispatch(setGlobalInProgress(true));
+    }
     const [error, threads]: [?CustomError, Array<InboxThread>] = await until(
       getApi().inbox.getThreads(folderId, end, isUnreadOnly())
     );
     dispatch(toggleProgress({inProgress: false}));
+    if (reset) {
+      dispatch(setGlobalInProgress(false));
+    }
 
     if (error) {
       dispatch(setError({error}));

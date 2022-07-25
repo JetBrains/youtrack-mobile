@@ -5,6 +5,7 @@ import thunk from 'redux-thunk';
 import {__setStorageState, getStorageState} from 'components/storage/storage';
 import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
 import {inboxThreadsNamespace, inboxThreadsReducersNamesMap} from './inbox-threads-reducers';
+import {SET_PROGRESS} from '../../actions/action-types';
 
 describe('Inbox Threads', () => {
   let apiMock;
@@ -51,10 +52,18 @@ describe('Inbox Threads', () => {
           },
         },
         {
+          type: SET_PROGRESS,
+          isInProgress: true,
+        },
+        {
           type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.toggleProgress}`,
           payload: {
             inProgress: false,
           },
+        },
+        {
+          type: SET_PROGRESS,
+          isInProgress: false,
         },
         {
           type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
@@ -188,18 +197,6 @@ describe('Inbox Threads', () => {
         await store.dispatch(actions.loadInboxThreads(folderIdMap[2]));
 
         expect(storage.getStorageState().inboxThreadsCache[folderIdMap[2]].length).toEqual(4);
-      });
-
-      it('should not set threads from the cache while refreshing threads', async () => {
-        await store.dispatch(actions.loadInboxThreads(folderIdMap[0], null));
-
-        expect(store.getActions()[0]).toEqual({
-          type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setError}`,
-          payload: {
-            error: null,
-          },
-        });
-
       });
 
       it('should not set threads from the cache before loading for the  first time', async () => {
