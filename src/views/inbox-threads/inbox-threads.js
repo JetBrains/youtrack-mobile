@@ -51,8 +51,8 @@ const InboxThreads: () => Node = (): Node => {
   const dimensionsChangeListener = useRef();
 
   const loadThreads = useCallback(
-    (folderId?: string, end?: number | null) => {
-      dispatch(actions.loadInboxThreads(folderId, end));
+    (folderId?: string, end?: number, showProgress?: boolean) => {
+      dispatch(actions.loadInboxThreads(folderId, end, showProgress));
     },
     [dispatch]
   );
@@ -131,7 +131,7 @@ const InboxThreads: () => Node = (): Node => {
               [index]: () => (
                 <InboxThreadsTab
                   folderId={folderIdMap[index]}
-                  onLoadMore={(folderId?: string, end?: null) => loadThreads(folderId, end)}
+                  onLoadMore={(folderId?: string, end?: number) => loadThreads(folderId, end)}
                   onNavigate={(entity, navigateToActivity) => {
                     if (isSplitView) {
                       updateSelectedEntity({entity, navigateToActivity});
@@ -155,7 +155,7 @@ const InboxThreads: () => Node = (): Node => {
         renderTabBar={renderTabBar}
         onIndexChange={(index: number) => {
           setThreadsFromCache(folderIdMap[index]);
-          loadThreads(folderIdMap[index]);
+          loadThreads(folderIdMap[index], undefined, true);
           updateNavigationState({index, routes});
           actions.lastVisitedTabIndex(index);
         }}
@@ -176,7 +176,7 @@ const InboxThreads: () => Node = (): Node => {
               title: actions.isUnreadOnly() ? i18n('Show all') : i18n('Unread only'),
               execute: async () => {
                 await actions.toggleUnreadOnly();
-                loadThreads(folderIdMap[navigationState.index], null);
+                loadThreads(folderIdMap[navigationState.index], undefined, true);
               },
             },
             {

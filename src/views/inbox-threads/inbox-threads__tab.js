@@ -26,7 +26,7 @@ const InboxThreadsTab = ({folderId, onNavigate, onLoadMore}: Props) => {
   return (
     <InboxThreadsList
       folderId={folderId}
-      onLoadMore={(end?: number | null) => onLoadMore(folderId, end)}
+      onLoadMore={(end?: number) => onLoadMore(folderId, end)}
       onNavigate={onNavigate}
       threadsData={threadsData}
     />

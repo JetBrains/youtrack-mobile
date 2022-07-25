@@ -157,7 +157,7 @@ const markSeen = (folderId?: string): ((
   };
 };
 
-const loadInboxThreads = (folderId?: string | null, end?: number): ((
+const loadInboxThreads = (folderId?: string | null, end?: number, showProgress: boolean = false): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
@@ -176,16 +176,14 @@ const loadInboxThreads = (folderId?: string | null, end?: number): ((
     }
 
     dispatch(toggleProgress({inProgress: true}));
-    if (reset && !getFolderCachedThreads(folderId).length) {
+    if (showProgress) {
       dispatch(setGlobalInProgress(true));
     }
     const [error, threads]: [?CustomError, Array<InboxThread>] = await until(
       getApi().inbox.getThreads(folderId, end, isUnreadOnly())
     );
     dispatch(toggleProgress({inProgress: false}));
-    if (reset) {
-      dispatch(setGlobalInProgress(false));
-    }
+    dispatch(setGlobalInProgress(false));
 
     if (error) {
       dispatch(setError({error}));

@@ -52,10 +52,6 @@ describe('Inbox Threads', () => {
           },
         },
         {
-          type: SET_PROGRESS,
-          isInProgress: true,
-        },
-        {
           type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.toggleProgress}`,
           payload: {
             inProgress: false,
@@ -76,11 +72,20 @@ describe('Inbox Threads', () => {
       ]);
     });
 
+    it('should activate global `isInProgress`', async () => {
+      await store.dispatch(require('./inbox-threads-actions').loadInboxThreads(undefined, 1, true));
+
+      expect(store.getActions()[2]).toEqual({
+        type: SET_PROGRESS,
+        isInProgress: true,
+      });
+    });
+
     it('should load more threads', async () => {
       await store.dispatch(actions.loadInboxThreads(undefined, 1));
 
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, false);
-      expect(store.getActions()[3]).toEqual({
+      expect(store.getActions()[4]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {
           folderId: folderIdAllKey,
@@ -101,7 +106,7 @@ describe('Inbox Threads', () => {
       await store.dispatch(actions.loadInboxThreads(undefined, 1));
 
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, true);
-      expect(store.getActions()[3]).toEqual({
+      expect(store.getActions()[4]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {
           folderId: folderIdAllKey,
