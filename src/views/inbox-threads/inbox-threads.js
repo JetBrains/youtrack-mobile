@@ -174,8 +174,8 @@ const InboxThreads: () => Node = (): Node => {
           const options = [
             {
               title: actions.isUnreadOnly() ? i18n('Show all') : i18n('Unread only'),
-              execute: () => {
-                actions.toggleUnreadOnly();
+              execute: async () => {
+                await actions.toggleUnreadOnly();
                 loadThreads(folderIdMap[navigationState.index], null);
               },
             },

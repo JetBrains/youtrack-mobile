@@ -126,12 +126,8 @@ export default function InboxThreadItemSubscription({
         {!isLast && <View style={styles.threadConnector}/>}
 
         <InboxThreadReadToggleButton
-          testID="test:id/inboxThreadsSubscriptionGroupReadToggle"
-          accessibilityLabel="inboxThreadsSubscriptionGroupReadToggle"
-          accessible={true}
           messages={group.messages}
           onReadChange={onReadChange}
-          style={styles.threadItemAction}
         />
 
         <Component

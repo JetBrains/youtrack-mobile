@@ -113,6 +113,4 @@ const InboxThreadsList = ({
 };
 
 
-export default React.memo<Props>(InboxThreadsList, (prev: Props, next: Props) => {
-  return prev?.threadsData === next?.threadsData;
-});
+export default InboxThreadsList;

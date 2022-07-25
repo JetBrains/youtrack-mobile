@@ -13,7 +13,7 @@ import type {PermissionsStore} from 'components/permissions-store/permissions-st
 import type {StorageState} from 'components/storage/storage';
 import type {User, UserAppearanceProfile, UserArticlesProfile} from 'flow/User';
 import type {WorkTimeSettings} from 'flow/Work';
-import {InboxFolder} from '/flow/Inbox';
+import {InboxFolder} from 'flow/Inbox';
 
 export type RootState = {
   auth: OAuth2 | null,

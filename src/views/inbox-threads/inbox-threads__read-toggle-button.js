@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useState} from 'react';
+import React from 'react';
 import {TouchableOpacity} from 'react-native';
 
 import {IconCircle, IconCircleOutline} from 'components/icon/icon';
@@ -15,23 +15,24 @@ interface Props {
   onReadChange: (messages: InboxThreadMessage[], read: boolean) => any;
 }
 
-export default function InboxThreadReadToggleButton({messages = [], onReadChange, ...otherProps}: Props) {
-  const [hasUnread, updateHasUnread] = useState(messages.some(it => it.read === false));
+export default function InboxThreadReadToggleButton({messages = [], onReadChange}: Props) {
 
   return (
     <TouchableOpacity
-      {...otherProps}
-      onPress={async () => {
-        onReadChange(messages, hasUnread);
-        updateHasUnread(!hasUnread);
+      testID="test:id/inboxThreadsSubscriptionGroupReadToggle"
+      accessibilityLabel="inboxThreadsSubscriptionGroupReadToggle"
+      accessible={true}
+      style={styles.threadItemAction}
+      onPress={() => {
+        onReadChange(messages, !messages[0].read);
       }}
     >
-      {(hasUnread
-        ? <IconCircle
+      {(messages[0].read
+        ? <IconCircleOutline
           size={10}
           color={styles.link.color}
         />
-        : <IconCircleOutline
+        : <IconCircle
           size={10}
           color={styles.link.color}
         />)}

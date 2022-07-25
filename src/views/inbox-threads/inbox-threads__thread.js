@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 import {useActionSheet} from '@expo/react-native-action-sheet';
@@ -13,7 +13,7 @@ import {getThreadData} from './inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {IconMoreOptions} from 'components/icon/icon';
-import {muteToggle, readMessageToggle} from './inbox-threads-actions';
+import {muteToggle, readMessageToggle, updateThreadInCache} from './inbox-threads-actions';
 
 import type {InboxThread, InboxThreadMessage, ThreadData} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
@@ -36,7 +36,11 @@ function Thread({
 }: Props): React$Element<any> | null {
   const {showActionSheetWithOptions} = useActionSheet();
   const dispatch = useDispatch();
-  const [_thread, updateThread] = useState(thread);
+  const [_thread, updateThread]: [InboxThread, Function] = useState(thread);
+
+  useEffect(() => {
+    updateThread(thread);
+  }, [thread]);
 
   if (!_thread.id || !_thread?.messages?.length) {
     return null;
@@ -45,6 +49,30 @@ function Thread({
   const toggleMessagesRead = (messages: InboxThreadMessage[] = [], read: boolean): void => {
     dispatch(readMessageToggle(messages, read));
   };
+
+  const doToggleMessagesRead = async (messages: InboxThreadMessage[], read: boolean) => {
+    const messagesMap: { [string]: InboxThreadMessage } = messages.reduce(
+      (map: { [string]: InboxThreadMessage }, it: InboxThreadMessage) => {
+        return {
+          ...map,
+          [it.id]: {...it, read},
+        };
+      },
+      {}
+    );
+    const updatedThread: InboxThread = {
+      ..._thread,
+      messages: _thread.messages.reduce((list: InboxThreadMessage[], it: InboxThreadMessage) => {
+        return list.concat(
+          messagesMap[it.id] ? messagesMap[it.id] : it
+        );
+      }, []),
+    };
+    updateThread(updatedThread);
+    updateThreadInCache(updatedThread);
+    toggleMessagesRead(messages, read);
+  };
+
   const threadData: ThreadData = getThreadData(_thread);
   const ThreadComponent: any = threadData.component;
   const renderedEntity = <InboxEntity
@@ -78,7 +106,9 @@ function Thread({
         currentUser={currentUser}
         uiTheme={uiTheme}
         onNavigate={onNavigate}
-        onReadChange={(messages: InboxThreadMessage[], read: boolean) => toggleMessagesRead(messages, read)}
+        onReadChange={(messages: InboxThreadMessage[], read: boolean) => {
+          doToggleMessagesRead(messages, read);
+        }}
       />
       {threadData.entityAtBottom && renderedEntity}
     </View>
@@ -101,16 +131,7 @@ function Thread({
       },
       {
         title: hasUnreadMessage ? i18n('Mark as read') : i18n('Mark as unread'),
-        execute: () => {
-          updateThread({
-            ..._thread,
-            messages: _thread.messages.map((it: InboxThreadMessage) => {
-              it.read = hasUnreadMessage;
-              return it;
-            }),
-          });
-          toggleMessagesRead(_thread.messages, hasUnreadMessage);
-        },
+        execute: () => doToggleMessagesRead(_thread.messages, hasUnreadMessage),
       },
       {
         title: i18n('Cancel'),

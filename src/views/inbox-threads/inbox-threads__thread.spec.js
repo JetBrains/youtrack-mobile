@@ -50,6 +50,12 @@ describe('Inbox Thread', () => {
       expect(getByTestId('test:id/inboxEntitySummary')).toBeTruthy();
     });
 
+    it('should render read/unread toggle', () => {
+      const {getByTestId} = doRender(threadMock);
+
+      expect(getByTestId('test:id/inboxThreadsSubscriptionGroupReadToggle')).toBeTruthy();
+    });
+
 
     describe('Thread actions', () => {
       let ActionSheet;
@@ -79,15 +85,15 @@ describe('Inbox Thread', () => {
 
 
       describe('Mute/Unmute', () => {
-        it('should mute a thread', async () => {
-          await getActionSheetCallbacksArray(threadMock)(0);
+        it('should mute a thread', () => {
+          getActionSheetCallbacksArray(threadMock)(0);
 
           expect(apiMock.inbox.muteToggle).toHaveBeenCalledWith(threadMock.id, true);
         });
 
-        it('should unmute a thread', async () => {
+        it('should unmute a thread', () => {
           threadMock = mocks.createThreadMock({muted: true});
-          await getActionSheetCallbacksArray(threadMock)(0);
+          getActionSheetCallbacksArray(threadMock)(0);
 
           expect(apiMock.inbox.muteToggle).toHaveBeenCalledWith(threadMock.id, false);
         });
@@ -100,8 +106,8 @@ describe('Inbox Thread', () => {
           message = threadMock.messages[0];
         });
 
-        it('should mark a thread as read if there is an unread message', async () => {
-          await getActionSheetCallbacksArray({
+        it('should mark a thread as read if there is an unread message', () => {
+          getActionSheetCallbacksArray({
             ...threadMock,
             messages: [{
               ...message,
@@ -118,8 +124,8 @@ describe('Inbox Thread', () => {
           );
         });
 
-        it('should mark a thread as unread if there are all messages read', async () => {
-          await getActionSheetCallbacksArray({
+        it('should mark a thread as unread if there are all messages read', () => {
+          getActionSheetCallbacksArray({
             ...threadMock,
             messages: [{
               ...message,
@@ -133,6 +139,24 @@ describe('Inbox Thread', () => {
           expect(apiMock.inbox.markMessages).toHaveBeenCalledWith(
             [{id: message.id}, {id: message.id}],
             false,
+          );
+        });
+
+        it('should toggle thread message `read` field', async () => {
+          const isRead = true;
+
+          const {getByTestId} = doRender({
+            ...threadMock,
+            messages: [{
+              ...message,
+              read: isRead,
+            }],
+          });
+          fireEvent.press(getByTestId('test:id/inboxThreadsSubscriptionGroupReadToggle'));
+
+          await expect(apiMock.inbox.markMessages).toHaveBeenCalledWith(
+            [{id: message.id}],
+            !isRead,
           );
         });
       });

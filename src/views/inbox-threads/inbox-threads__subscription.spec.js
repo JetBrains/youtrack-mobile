@@ -32,12 +32,9 @@ describe('InboxThreadItemSubscription', () => {
       let module;
       beforeEach(() => {
         module = require('components/activity/activity__split-activities');
-        splittedActivitiesMock = [
-          {head: {id: 'id1'}},
-          {head: {id: 'id2'}},
-          {head: {id: 'id3'}},
-          {head: {id: 'id4'}},
-        ];
+        splittedActivitiesMock = Array(4).fill(0).map((it, index) => (
+          {head: {id: `id${index}`}, messages: [{}]})
+        );
         jest.spyOn(module, 'splitActivities');
       });
 
@@ -58,7 +55,7 @@ describe('InboxThreadItemSubscription', () => {
       });
 
       function renderAndGetMatcher() {
-        return doRender(mocks.createThreadMock({messages: []}));
+        return doRender(mocks.createThreadMock());
       }
     });
 

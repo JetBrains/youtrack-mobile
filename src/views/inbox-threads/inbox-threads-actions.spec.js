@@ -222,7 +222,7 @@ describe('Inbox Threads', () => {
   });
 
 
-  function createStore(isConnected = true, inboxThreadsFolders, inboxThreads = {}) {
+  function createStore(isConnected = true, inboxThreadsFolders = [], inboxThreads = {}) {
     store = storeMock({
       ...inboxThreads,
       app: {
