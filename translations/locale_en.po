@@ -349,7 +349,7 @@ msgid "Drafts"
 msgstr "Drafts"
 
 #: src/components/activity-stream/activity__stream-work.js:111
-#: src/components/activity-stream/activity__stream.js:334
+#: src/components/activity-stream/activity__stream.js:330
 #: src/views/article/arcticle-actions.js:197
 #: src/views/issue/activity/issue-activity__comment-actions.js:293
 #: src/views/issue/issue-base-actions-creater.js:470
@@ -561,7 +561,7 @@ msgstr "New Issue"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.js:530
+#: src/components/activity-stream/activity__stream.js:525
 msgid "No activity yet"
 msgstr "No activity yet"
 
