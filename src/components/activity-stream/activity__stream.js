@@ -277,10 +277,6 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
   const renderTimestamp = (timestamp, style) => <StreamTimestamp timestamp={timestamp} style={style}/>;
 
-  const renderUserInfo = (activityGroup: Object, noTimestamp?: boolean) => (
-    <StreamUserInfo activityGroup={activityGroup} noTimestamp={noTimestamp}/>
-  );
-
   const getCommentFromActivityGroup = (activityGroup: Object): IssueComment | null => (
     firstActivityChange(activityGroup.comment)
   );
@@ -382,47 +378,46 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
     return (
       <View key={comment.id}>
-        {!activityGroup.merged && renderUserInfo(activityGroup)}
+        {activityGroup.merged
+          ? <StreamTimestamp timestamp={activityGroup.timestamp}/>
+          : <StreamUserInfo activityGroup={activityGroup}/>}
 
-        <View>
-
-          <Comment
-            attachments={allAttachments}
-            canDeletePermanently={!!commentActions?.canDeleteCommentPermanently}
-            canRestore={commentActions?.canRestoreComment ? commentActions.canRestoreComment(comment) : false}
-            comment={comment}
-            key={comment.id}
-            onDeletePermanently={() => {
-              if (commentActions?.onDeleteCommentPermanently) {
-                commentActions.onDeleteCommentPermanently(comment, activityGroup.comment.id);
-              }
-            }}
-            onRestore={() => { if (commentActions?.onRestoreComment) {commentActions.onRestoreComment(comment);} }}
-            onLongPress={() => onShowCommentActions(activityGroup, comment)}
-            uiTheme={props.uiTheme}
-            youtrackWiki={props.youtrackWiki}
-            onCheckboxUpdate={
-              (checked: boolean, position: number) => (
-                props.onCheckboxUpdate && comment && props.onCheckboxUpdate(checked, position, comment)
-              )
+        <Comment
+          attachments={allAttachments}
+          canDeletePermanently={!!commentActions?.canDeleteCommentPermanently}
+          canRestore={commentActions?.canRestoreComment ? commentActions.canRestoreComment(comment) : false}
+          comment={comment}
+          key={comment.id}
+          onDeletePermanently={() => {
+            if (commentActions?.onDeleteCommentPermanently) {
+              commentActions.onDeleteCommentPermanently(comment, activityGroup.comment.id);
             }
-          />
+          }}
+          onRestore={() => { if (commentActions?.onRestoreComment) {commentActions.onRestoreComment(comment);} }}
+          onLongPress={() => onShowCommentActions(activityGroup, comment)}
+          uiTheme={props.uiTheme}
+          youtrackWiki={props.youtrackWiki}
+          onCheckboxUpdate={
+            (checked: boolean, position: number) => (
+              props.onCheckboxUpdate && comment && props.onCheckboxUpdate(checked, position, comment)
+            )
+          }
+        />
 
-          {!comment.deleted && (comment?.attachments || []).length > 0 && (
-            <View
-              style={styles.activityCommentAttachments}
-            >
-              {renderAttachments(comment.attachments, props.uiTheme)}
-            </View>
-          )}
+        {!comment.deleted && (comment?.attachments || []).length > 0 && (
+          <View
+            style={styles.activityCommentAttachments}
+          >
+            {renderAttachments(comment.attachments, props.uiTheme)}
+          </View>
+        )}
 
-          {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
+        {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
           <CommentVisibility
             style={styles.activityVisibility}
             visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
             color={props.uiTheme.colors.$iconAccent}
           />}
-        </View>
       </View>
     );
   };
@@ -472,7 +467,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
     if (activityGroup?.events?.length > 0) {
       return (
         <View style={isRelatedChange ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
-          {Boolean(!activityGroup.merged && !isRelatedChange) && renderUserInfo(activityGroup)}
+          {Boolean(!activityGroup.merged && !isRelatedChange) && <StreamUserInfo activityGroup={activityGroup}/>}
           {activityGroup.merged && renderTimestamp(activityGroup.timestamp)}
 
           {activityGroup.events.map((event) => (

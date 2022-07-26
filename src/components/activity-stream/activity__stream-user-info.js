@@ -12,7 +12,6 @@ import type {Activity} from 'flow/Activity';
 
 type Props = {
   activityGroup: Activity,
-  noTimestamp?: boolean
 }
 
 const StreamUserInfo = (props: Props) => {
@@ -21,7 +20,7 @@ const StreamUserInfo = (props: Props) => {
       <Text style={styles.activityAuthorName}>
         {getEntityPresentation(props.activityGroup.author)}
       </Text>
-      {!props.noTimestamp && !!props.activityGroup.timestamp && (
+      {!!props.activityGroup.timestamp && (
         <Text><StreamTimestamp timestamp={props.activityGroup.timestamp}/></Text>
       )}
     </View>
