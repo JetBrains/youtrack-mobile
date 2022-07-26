@@ -112,6 +112,9 @@ export const rowStyles = {
     color: '$iconAccent',
   },
 
+  activityCommentDate: {
+    marginTop: UNIT * 2,
+  },
   activityCommentReactions: {
     marginTop: -UNIT / 1.5,
   },

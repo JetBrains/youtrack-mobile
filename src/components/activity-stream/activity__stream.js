@@ -170,7 +170,9 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
     ).concat(props.attachments || []);
 
     return <>
-      {!activityGroup.merged && <StreamUserInfo activityGroup={activityGroup}/>}
+      {activityGroup.merged
+        ? <StreamTimestamp timestamp={activityGroup.timestamp} style={styles.activityCommentDate}/>
+        : <StreamUserInfo activityGroup={activityGroup}/>}
       <StreamComment
         activity={activity}
         attachments={allAttachments}
