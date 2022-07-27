@@ -141,3 +141,5 @@ export interface InboxFolder {
   lastNotified: number;
   lastSeen: number;
 }
+
+export type ThreadsStateDataKey = 'all' | 'direct' | 'subscription';

@@ -20,6 +20,7 @@ import type {Folder} from 'flow/User';
 import type {IssueProject} from 'flow/CustomFields';
 import type {InboxThread, Notification} from 'flow/Inbox';
 import type {PermissionCacheItem} from 'flow/Permission';
+import type {ThreadsStateDataKey} from 'flow/Inbox';
 import type {UserCurrent} from 'flow/User';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
@@ -30,7 +31,7 @@ export const storageStateAuthParamsKey: string = 'authParamsKey';
 export const THEME_MODE_KEY = 'YT_THEME_MODE';
 
 export interface InboxThreadsCache {
-  ['all' | 'direct' | 'subscription']: InboxThread[];
+  [ThreadsStateDataKey]: InboxThread[];
   unreadOnly: boolean;
   lastVisited: number;
 }

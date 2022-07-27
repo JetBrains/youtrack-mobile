@@ -13,7 +13,7 @@ import {getThreadData} from './inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {IconMoreOptions} from 'components/icon/icon';
-import {muteToggle, readMessageToggle, updateThreadInCache} from './inbox-threads-actions';
+import {muteToggle, readMessageToggle, updateThreadsStateAndCache} from './inbox-threads-actions';
 
 import type {InboxThread, InboxThreadMessage, ThreadData} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
@@ -46,20 +46,15 @@ function Thread({
     return null;
   }
 
-  const toggleMessagesRead = (messages: InboxThreadMessage[] = [], read: boolean): void => {
-    dispatch(readMessageToggle(messages, read));
-  };
-
-  const doToggleMessagesRead = async (messages: InboxThreadMessage[], read: boolean) => {
+  const doToggleMessagesRead = async (messages: InboxThreadMessage[], read: boolean, toggleThread: boolean = false) => {
     const messagesMap: { [string]: InboxThreadMessage } = messages.reduce(
-      (map: { [string]: InboxThreadMessage }, it: InboxThreadMessage) => {
-        return {
-          ...map,
-          [it.id]: {...it, read},
-        };
-      },
+      (map: { [string]: InboxThreadMessage }, it: InboxThreadMessage) => ({
+        ...map,
+        [it.id]: {...it, read},
+      }),
       {}
     );
+
     const updatedThread: InboxThread = {
       ..._thread,
       messages: _thread.messages.reduce((list: InboxThreadMessage[], it: InboxThreadMessage) => {
@@ -68,9 +63,10 @@ function Thread({
         );
       }, []),
     };
+
     updateThread(updatedThread);
-    updateThreadInCache(updatedThread);
-    toggleMessagesRead(messages, read);
+    dispatch(readMessageToggle(messages, read));
+    dispatch(updateThreadsStateAndCache(updatedThread, toggleThread && read === true));
   };
 
   const threadData: ThreadData = getThreadData(_thread);
@@ -131,7 +127,7 @@ function Thread({
       },
       {
         title: hasUnreadMessage ? i18n('Mark as read') : i18n('Mark as unread'),
-        execute: () => doToggleMessagesRead(_thread.messages, hasUnreadMessage),
+          execute: () => doToggleMessagesRead(_thread.messages, hasUnreadMessage, true),
       },
       {
         title: i18n('Cancel'),

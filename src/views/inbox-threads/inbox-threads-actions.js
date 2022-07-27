@@ -8,6 +8,7 @@ import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
 import {i18n} from 'components/i18n/i18n';
 import {notify, notifyError} from 'components/notification/notification';
 import {SET_PROGRESS} from '../../actions/action-types';
+import {ThreadsStateData} from './inbox-threads-reducers';
 import {setError, setNotifications, toggleProgress} from './inbox-threads-reducers';
 import {until} from 'util/util';
 
@@ -43,7 +44,7 @@ const setGlobalInProgress = (isInProgress: boolean) => ({
 });
 
 const getCachedData = (): InboxThreadsCache => {
-  const inboxThreadsCache = getStorageState().inboxThreadsCache;
+  const inboxThreadsCache: ?InboxThreadsCache = getStorageState().inboxThreadsCache;
   return inboxThreadsCache || DEFAULT_CACHE_DATA;
 };
 
@@ -57,28 +58,59 @@ const isOnline = (state: AppState): boolean => state?.app?.networkState?.isConne
 const updateCache = async (data: Object): Promise<void> => {
   await flushStoragePart({
     inboxThreadsCache: {
+      ...DEFAULT_CACHE_DATA,
       ...getCachedData(),
       ...data,
     },
   });
 };
 
-const updateThreadInCache = async (thread: InboxThread) => {
-  const index: number = lastVisitedTabIndex();
-  if (index === 0 || index === 2) {
-    const updatedCacheData = [folderIdAllKey, folderIdMap[2]].reduce((map, folderId) => {
-      return {
-        ...map,
-        [folderId]: getFolderCachedThreads(folderId).reduce(
-          (list: InboxThread[], it: InboxThread) => list.concat(
-            thread.id === it.id ? thread : it
-          ),
-          []
-        ),
-      };
-    }, {});
-    await updateCache(updatedCacheData);
-  }
+const updateThreadsStateAndCache = (thread: InboxThread, setThreadRead: boolean) => {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    const storedFolderIds: string[] = [folderIdAllKey, folderIdMap[2]];
+    if (lastVisitedTabIndex() !== 1) {
+      const updatedState: ThreadsStateData = updateState();
+      const updatedCacheData: $Shape<InboxThreadsCache> = storedFolderIds.reduce(
+        (map: $Shape<InboxThreadsCache>, folderId: string) => {
+          return Object.assign(
+            map,
+            (updatedState[folderId]
+              ? {[folderId]: updatedState[folderId].threads || getCachedData()[folderId]}
+              : {})
+          );
+        },
+        {}
+      );
+      updateCache(updatedCacheData);
+    }
+
+    function updateState(): ThreadsStateData {
+      const unreadOnly: boolean = getCachedData().unreadOnly;
+      const threadsData: ThreadsStateData = getState()?.inboxThreads?.threadsData;
+      return storedFolderIds.reduce((map: ThreadsStateData, folderId: string) => {
+        let data = {};
+        if (threadsData[folderId]) {
+          const threads: InboxThread[] = threadsData[folderId].threads.reduce(
+            (list: InboxThread[], it: InboxThread) => list.concat(
+              (thread.id === it.id
+                ? (unreadOnly && setThreadRead ? [] : thread)
+                : it)
+            ),
+            []
+          );
+          dispatch(setNotifications({threads, reset: true, folderId}));
+          data = {
+            [folderId]: {
+              ...threadsData[folderId],
+              threads,
+            },
+          };
+        }
+
+        return {...map, ...data};
+      }, {});
+    }
+  };
 };
 
 const loadThreadsFromCache = (folderId: string = folderIdAllKey): ((dispatch: (any) => any) => Promise<void>) => {
@@ -95,18 +127,18 @@ const lastVisitedTabIndex = (index?: number): number => {
   if (hasIndex) {
     updateCache({lastVisited: index});
   }
-  const lastVisited: number = getCachedData().lastVisited;
+  const lastVisited: number = hasIndex ? index : getCachedData().lastVisited;
   trackEvent(hasIndex ? 'visit tab' : 'load tab', {lastVisited});
   return lastVisited;
 };
 
 const toggleUnreadOnly = async (): Promise<void> => {
   const inboxThreadsCache: InboxThreadsCache = getCachedData();
-  trackEvent('toggle unreadOnly', {unreadOnly: !inboxThreadsCache.unreadOnly});
+  trackEvent('set unreadOnly', {unreadOnly: !inboxThreadsCache.unreadOnly});
   await updateCache({unreadOnly: !inboxThreadsCache.unreadOnly});
 };
 
-const isUnreadOnly = (): boolean => getCachedData().unreadOnly;
+const isUnreadOnly = (): boolean => getCachedData().unreadOnly === true;
 
 const markFolderSeen = (folderId?: string, lastSeen: number): ((
   dispatch: (any) => any,
@@ -133,7 +165,7 @@ const getLatestThreadByFolderId = (id: string = folderIdAllKey): ((
 ) => Promise<?InboxThread>) => {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const threadsData = getState()?.inboxThreads?.threadsData;
-    const inboxThreadsCache = getStorageState().inboxThreadsCache;
+    const inboxThreadsCache = getStorageState()?.inboxThreadsCache;
     return (
       threadsData[id]?.threads && threadsData[id]?.threads[0] ||
       inboxThreadsCache && inboxThreadsCache[id] && inboxThreadsCache[id][0]
@@ -303,5 +335,5 @@ export {
   onReactionSelect,
   readMessageToggle,
   toggleUnreadOnly,
-  updateThreadInCache,
+  updateThreadsStateAndCache,
 };

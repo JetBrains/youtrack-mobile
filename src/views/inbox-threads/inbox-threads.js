@@ -69,7 +69,7 @@ const InboxThreads: () => Node = (): Node => {
   });
 
   useEffect(() => {
-    const index: number = actions.lastVisitedTabIndex();
+    const index: number = actions.lastVisitedTabIndex() || 0;
     if (index > 0) {
       updateNavigationState({index, routes});
     }

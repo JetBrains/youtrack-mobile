@@ -4,11 +4,18 @@ import {createSlice} from '@reduxjs/toolkit';
 import {threadsPageSize} from 'components/api/api__inbox';
 
 import type {CustomError} from 'flow/Error';
-import type {InboxThread} from '../../flow/Inbox';
+import type {InboxThread, ThreadsStateDataKey} from 'flow/Inbox';
+
+export interface ThreadsStateData {
+  [ThreadsStateDataKey]: {
+    threads: InboxThread[],
+    hasMore: boolean
+  };
+}
 
 export interface InboxThreadState {
   error: CustomError | null,
-  threadsData: { [string]: {threads: InboxThread[], hasMore: boolean} },
+  threadsData: ThreadsStateData,
   inProgress: boolean,
 }
 
