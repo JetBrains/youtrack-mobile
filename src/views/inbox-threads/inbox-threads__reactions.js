@@ -31,6 +31,11 @@ const InboxThreadReaction = ({thread, currentUser, onNavigate}: Props) => {
   const comment: ?IssueComment = activity?.comment;
   const isRemoved: boolean = !!activity?.removed[0]?.reaction;
   const isAdded: boolean = !!activity?.added[0]?.reaction;
+  const reason: string = (
+    isAdded
+      ? comment?.reactions?.length > 0 ? i18n('added a reaction') : ''
+      : isRemoved ? i18n('removed a reaction') : ''
+  );
 
   return (
     <ThreadItem
@@ -61,9 +66,7 @@ const InboxThreadReaction = ({thread, currentUser, onNavigate}: Props) => {
           <ThreadCommentReactions activity={activity} currentUser={currentUser}/>
         </>
       )}
-      reason={isAdded && comment?.reactions?.length > 1
-        ? comment?.reactions?.length === 1 ? i18n('added a reaction') : i18n('added reactions')
-        : i18n('removed a reaction')}
+      reason={reason}
       timestamp={thread.notified}
     />
   );
