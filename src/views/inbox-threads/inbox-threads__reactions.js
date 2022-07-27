@@ -37,6 +37,10 @@ const InboxThreadReaction = ({thread, currentUser, onNavigate}: Props) => {
       : isRemoved ? i18n('removed a reaction') : ''
   );
 
+  const _activity: Activity = {
+    ...activity,
+    added: [comment],
+  };
   return (
     <ThreadItem
       author={activity.author}
@@ -57,13 +61,10 @@ const InboxThreadReaction = ({thread, currentUser, onNavigate}: Props) => {
             }}
           >
             <StreamComment
-              activity={{
-                ...activity,
-                added: [comment],
-              }}
+              activity={_activity}
             />
           </TouchableOpacity>
-          <ThreadCommentReactions activity={activity} currentUser={currentUser}/>
+          <ThreadCommentReactions activity={_activity} currentUser={currentUser}/>
         </>
       )}
       reason={reason}

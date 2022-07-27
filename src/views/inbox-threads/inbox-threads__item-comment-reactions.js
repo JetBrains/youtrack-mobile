@@ -17,7 +17,8 @@ import styles from './inbox-threads.styles';
 import type {User} from 'flow/User';
 import type {Reaction} from 'flow/Reaction';
 import type {Activity} from 'flow/Activity';
-import type {IssueComment} from '../../flow/CustomFields';
+import type {IssueComment} from 'flow/CustomFields';
+import type {ThreadEntity} from 'flow/Inbox';
 
 interface Props {
   activity: Activity;
@@ -30,11 +31,12 @@ const ThreadCommentReactions = ({activity, currentUser}: Props) => {
   const [isReactionPanelVisible, updateReactionPanelVisible] = useState(false);
 
   const onSelect = (reaction: Reaction) => {
-    if (!comment?.issue?.id) {
+    const entity: ?ThreadEntity = comment?.issue || comment?.article;
+    if (!entity?.id) {
       return;
     }
     dispatch(onReactionSelect(
-      comment?.issue?.id,
+      entity,
       comment,
       reaction,
       (added: Reaction, isRemoved: boolean) => {

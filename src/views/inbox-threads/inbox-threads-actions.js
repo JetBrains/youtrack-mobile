@@ -2,6 +2,7 @@
 
 import usage from 'components/usage/usage';
 import {ANALYTICS_NOTIFICATIONS_THREADS_PAGE} from 'components/analytics/analytics-ids';
+import {hasType} from 'components/api/api__resource-types';
 import {flushStoragePart, getStorageState, InboxThreadsCache} from 'components/storage/storage';
 import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
 import {i18n} from 'components/i18n/i18n';
@@ -13,7 +14,7 @@ import {until} from 'util/util';
 import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
 import type {CustomError} from 'flow/Error';
-import type {InboxFolder, InboxThread, InboxThreadMessage} from 'flow/Inbox';
+import type {InboxFolder, InboxThread, InboxThreadMessage, ThreadEntity} from 'flow/Inbox';
 import type {Reaction} from 'flow/Reaction';
 import type {User} from 'flow/User';
 import type {IssueComment} from '../../flow/CustomFields';
@@ -262,7 +263,7 @@ const markAllAsRead = (): ((
   };
 };
 
-const onReactionSelect = (issueId: string, comment: IssueComment, reaction: Reaction, onAfterSelect: Function): ((
+const onReactionSelect = (entity: ThreadEntity, comment: IssueComment, reaction: Reaction, onAfterSelect: Function): ((
   dispatch: (any) => any,
   getState: StateGetter,
   getApi: ApiGetter
@@ -274,11 +275,11 @@ const onReactionSelect = (issueId: string, comment: IssueComment, reaction: Reac
     const existReaction: Reaction = (comment.reactions || []).filter(
       it => it.reaction === reactionName && it.author.id === currentUser.id
     )[0];
-    const api: Api = getApi();
+    const entityApi = hasType.article(entity) ? getApi().articles : getApi().issue;
     const [error, response] = await until(
       existReaction
-        ? api.issue.removeCommentReaction(issueId, comment.id, existReaction.id)
-        : api.issue.addCommentReaction(issueId, comment.id, reactionName)
+        ? entityApi.removeCommentReaction(entity.id, comment.id, existReaction.id)
+        : entityApi.addCommentReaction(entity.id, comment.id, reactionName)
     );
     if (error) {
       notifyError(error);
