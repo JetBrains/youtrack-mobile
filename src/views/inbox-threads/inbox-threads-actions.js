@@ -271,8 +271,6 @@ const readMessageToggle = (messages: InboxThreadMessage[], read: boolean): ((
     );
     if (error) {
       notifyError(error);
-    } else {
-      flushStoragePart({inboxThreadsCache: {}});
     }
   };
 };
