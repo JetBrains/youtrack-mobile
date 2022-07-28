@@ -93,7 +93,11 @@ const updateThreadsStateAndCache = (thread: InboxThread, setThreadRead: boolean)
           const threads: InboxThread[] = threadsData[folderId].threads.reduce(
             (list: InboxThread[], it: InboxThread) => list.concat(
               (thread.id === it.id
-                ? (unreadOnly && setThreadRead ? [] : thread)
+                ? (
+                  unreadOnly && setThreadRead
+                    ? []
+                    : unreadOnly ? {...thread, messages: thread.messages.filter((it: InboxThread) => !it.read)} : thread
+                )
                 : it)
             ),
             []
