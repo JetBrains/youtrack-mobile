@@ -170,6 +170,21 @@ describe('Inbox Thread', () => {
   });
 
 
+  describe('Offline mode', () => {
+    beforeEach(() => {
+      networkStateMock = {isConnected: false};
+      createStore();
+    });
+
+    it('should disable thread`s settings', async () => {
+      const {getByTestId} = doRender(threadMock);
+
+      expect(getByTestId('test:id/inboxThreadsThreadSettings')).toBeDisabled();
+      expect(getByTestId('test:id/inboxThreadsSubscriptionGroupReadToggle')).toBeDisabled();
+    });
+  });
+
+
   function doRender(thread) {
     return render(
       <Provider store={storeMock}>

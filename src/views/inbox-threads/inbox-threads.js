@@ -5,7 +5,7 @@ import {Dimensions, Linking, TouchableOpacity, View} from 'react-native';
 
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 import {useActionSheet} from '@expo/react-native-action-sheet';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import * as actions from './inbox-threads-actions';
 import Article from 'views/article/article';
@@ -29,6 +29,7 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './inbox-threads.styles';
 import tabStyles from 'components/issue-tabbed/issue-tabbed.style';
 
+import type {AppState} from '../../reducers';
 import type {Node} from 'react';
 import type {TabRoute} from 'flow/Issue';
 import type {Theme, UIThemeColors} from 'flow/Theme';
@@ -44,6 +45,7 @@ const InboxThreads: () => Node = (): Node => {
   const {showActionSheetWithOptions} = useActionSheet();
 
   const theme: Theme = useContext(ThemeContext);
+  const isOnline: boolean = useSelector((state: AppState) => state.app.networkState?.isConnected);
 
   const [selectedEntity, updateSelectedEntity] = useState({entity: null, navigateToActivity: false});
 
@@ -167,6 +169,7 @@ const InboxThreads: () => Node = (): Node => {
     <Header
       title={i18n('Notifications')}
       rightButton={<TouchableOpacity
+        disabled={!isOnline}
         testID="test:id/inboxSettings"
         accessibilityLabel="inboxSettings"
         accessible={true}
@@ -207,7 +210,7 @@ const InboxThreads: () => Node = (): Node => {
       >
         <IconMoreOptions
           size={18}
-          color={styles.link.color}
+          color={isOnline ? styles.link.color : styles.disabled.color}
         />
       </TouchableOpacity>}
     />

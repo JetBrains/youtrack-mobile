@@ -3,7 +3,7 @@
 import React, {useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import CommentReactions from 'components/comment/comment-reactions';
 import ReactionAddIcon from 'components/reactions/new-reaction.svg';
@@ -14,6 +14,7 @@ import {onReactionSelect} from './inbox-threads-actions';
 
 import styles from './inbox-threads.styles';
 
+import type {AppState} from '../../reducers';
 import type {User} from 'flow/User';
 import type {Reaction} from 'flow/Reaction';
 import type {Activity} from 'flow/Activity';
@@ -27,6 +28,7 @@ interface Props {
 
 const ThreadCommentReactions = ({activity, currentUser}: Props) => {
   const dispatch = useDispatch();
+  const isOnline: boolean = useSelector((state: AppState) => state.app.networkState?.isConnected);
   const [comment, updateComment] = useState(activity.comment);
   const [isReactionPanelVisible, updateReactionPanelVisible] = useState(false);
 
@@ -84,9 +86,10 @@ const ThreadCommentReactions = ({activity, currentUser}: Props) => {
       <TouchableOpacity
         style={styles.threadReactionsAddIcon}
         hitSlop={HIT_SLOP}
+        disabled={!isOnline}
         onPress={() => updateReactionPanelVisible(true)}
       >
-        <ReactionAddIcon style={styles.icon}/>
+        <ReactionAddIcon color={isOnline ? styles.icon.color : styles.disabled.color}/>
       </TouchableOpacity>
       {isReactionPanelVisible && <ReactionsPanel
         onSelect={(reaction: Reaction) => {

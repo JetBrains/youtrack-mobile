@@ -6,10 +6,12 @@ import BottomSheetModal from '../modal-panel-bottom/bottom-sheet-modal';
 import ReactionIcon from '../reactions/reaction-icon';
 import reactionNames from '../reactions/reactions-name-list';
 import SelectItem from '../select/select__item';
-
 import {UNIT} from '../variables/variables';
+import {useSelector} from 'react-redux';
+
 import styles from './comment.styles';
 
+import type {AppState} from '../../reducers';
 import type {IssueComment} from 'flow/CustomFields';
 import type {Reaction} from 'flow/Reaction';
 import type {User} from 'flow/User';
@@ -27,6 +29,7 @@ type ReactionsMap = { key: string, value: Reaction };
 
 
 const CommentReactions = (props: ReactionsType) => {
+  const isOnline: boolean = useSelector((state: AppState) => state.app.networkState?.isConnected);
   const [selectedReaction, setSelectedReaction] = useState(null);
 
   if (!props.comment || !props.comment.reactionOrder || props.comment?.reactions?.length === 0) {
@@ -52,7 +55,7 @@ const CommentReactions = (props: ReactionsType) => {
             return (
               <TouchableOpacity
                 key={reaction.id}
-                disabled={!onReactionSelect}
+                disabled={!onReactionSelect || !isOnline}
                 style={{
                   ...styles.reactionsReaction,
                   ...(isUserReacted ? styles.reactionsReactionSelected : null),

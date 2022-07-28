@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 import {useActionSheet} from '@expo/react-native-action-sheet';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import InboxEntity from '../inbox/inbox__entity';
 import styles from './inbox-threads.styles';
@@ -15,6 +15,7 @@ import {i18n} from 'components/i18n/i18n';
 import {IconMoreOptions} from 'components/icon/icon';
 import {muteToggle, readMessageToggle, updateThreadsStateAndCache} from './inbox-threads-actions';
 
+import type {AppState} from '../../reducers';
 import type {InboxThread, InboxThreadMessage, ThreadData} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
@@ -35,6 +36,7 @@ function Thread({
   ...otherProps
 }: Props): React$Element<any> | null {
   const {showActionSheetWithOptions} = useActionSheet();
+  const isOnline: boolean = useSelector((state: AppState) => state.app.networkState?.isConnected);
   const dispatch = useDispatch();
   const [_thread, updateThread]: [InboxThread, Function] = useState(thread);
 
@@ -137,6 +139,7 @@ function Thread({
     return (
       <View style={styles.threadTitleActions}>
         <TouchableOpacity
+          disabled={!isOnline}
           testID="test:id/inboxThreadsThreadSettings"
           accessibilityLabel="inboxThreadsThreadSettings"
           accessible={true}
@@ -155,7 +158,7 @@ function Thread({
         >
           <IconMoreOptions
             size={18}
-            color={styles.icon.color}
+            color={isOnline ? styles.icon.color : styles.disabled.color}
           />
         </TouchableOpacity>
       </View>

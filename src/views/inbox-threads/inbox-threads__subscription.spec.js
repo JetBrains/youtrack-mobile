@@ -1,14 +1,27 @@
 import React from 'react';
 import {fireEvent, render} from '@testing-library/react-native';
 
+import thunk from 'redux-thunk';
+import {Provider} from 'react-redux';
+
 import InboxThreadItemSubscription from './inbox-threads__subscription';
 import mocks from '../../../test/mocks';
 import {DEFAULT_THEME} from 'components/theme/theme';
 
 
+let apiMock;
+let storeMock;
+const getApi = () => apiMock;
+
 describe('InboxThreadItemSubscription', () => {
   beforeEach(() => {
     jest.restoreAllMocks();
+    apiMock = {};
+    storeMock = mocks.createMockStore([thunk.withExtraArgument(getApi)])({
+      app: {
+        networkState: {isConnected: true},
+      },
+    });
   });
 
 
@@ -97,11 +110,13 @@ describe('InboxThreadItemSubscription', () => {
 
 function doRender(thread, onReadToggle) {
   return render(
-    <InboxThreadItemSubscription
-      thread={thread}
-      currentUser={mocks.createUserMock()}
-      uiTheme={DEFAULT_THEME}
-      onReadChange={onReadToggle}
-    />
+    <Provider store={storeMock}>
+      <InboxThreadItemSubscription
+        thread={thread}
+        currentUser={mocks.createUserMock()}
+        uiTheme={DEFAULT_THEME}
+        onReadChange={onReadToggle}
+      />
+    </Provider>
   );
 }
