@@ -153,9 +153,32 @@ export default (createReducer(initialState, {
     };
   },
   [types.INBOX_THREADS_FOLDERS](state: RootState, action: {inboxThreadsFolders: InboxFolder[]}) {
+    const map: { [key: string]: InboxFolder } = state.inboxThreadsFolders.reduce(
+      (mf: { [key: string]: InboxFolder }, it: InboxFolder) => ({
+        ...mf,
+        [it.id]: it,
+      }),
+      {}
+    );
     return {
       ...state,
-      inboxThreadsFolders: action.inboxThreadsFolders,
+      inboxThreadsFolders: action.inboxThreadsFolders.map((it: InboxFolder) => ({
+        ...it,
+        lastSeen: Math.max(it.lastSeen, map[it.id]?.lastSeen || 0),
+        lastNotified: Math.max(it.lastNotified, map[it.id]?.lastNotified || 0),
+      })),
+    };
+  },
+  [types.INBOX_THREADS_FOLDER_SEEN](state: RootState, action: { folderId: string, lasSeen: number }) {
+    return {
+      ...state,
+      inboxThreadsFolders: state.inboxThreadsFolders.reduce((list: InboxFolder[], it: InboxFolder) => {
+        return list.concat(
+          !action.folderId || it.id === action.folderId
+            ? {...it, lastSeen: Math.max(action.lastSeen, it.lastSeen) }
+            : it
+        );
+      }, []),
     };
   },
   [types.SET_PROGRESS](state: RootState, action: {isInProgress: boolean}) {

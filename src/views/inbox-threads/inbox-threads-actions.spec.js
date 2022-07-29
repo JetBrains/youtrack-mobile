@@ -5,7 +5,7 @@ import mocks from '../../../test/mocks';
 import thunk from 'redux-thunk';
 import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
 import {inboxThreadsNamespace, inboxThreadsReducersNamesMap} from './inbox-threads-reducers';
-import {SET_PROGRESS} from '../../actions/action-types';
+import {INBOX_THREADS_FOLDER_SEEN, SET_PROGRESS} from '../../actions/action-types';
 
 describe('Inbox Threads', () => {
   let apiMock;
@@ -124,23 +124,46 @@ describe('Inbox Threads', () => {
         folderId = folderIdMap[1];
         lastKnownNotified = 10;
 
-        prepareStore([{id: folderId, lastNotified: 1, lastSeen: 0}]);
-        apiMock.inbox.updateFolders.mockResolvedValueOnce({lastSeen: 100});
+        prepareStore([{id: folderId, lastNotified: lastKnownNotified, lastSeen: 1}]);
+        apiMock.inbox.updateFolders.mockResolvedValueOnce({});
         apiMock.inbox.saveAllAsSeen.mockResolvedValueOnce({});
       });
 
-      it('should mark folder as seen', async () => {
+      it('should send request to mark one folder as seen', async () => {
         await store.dispatch(actions.loadInboxThreads(folderId));
 
         expect(apiMock.inbox.updateFolders).toHaveBeenCalledWith(folderId, {lastSeen: lastKnownNotified});
       });
 
-      it('should mark all as seen', async () => {
-        apiMock.inbox.saveAllAsSeen.mockResolvedValueOnce({});
-
+      it('should send request to mark all folders as seen', async () => {
         await store.dispatch(actions.markFolderSeen(folderIdMap[0], lastKnownNotified));
 
         expect(apiMock.inbox.saveAllAsSeen).toHaveBeenCalledWith(lastKnownNotified);
+      });
+
+      it('should update folder`s lastSeen in the state', async () => {
+        await store.dispatch(actions.markSeen(folderId));
+
+        expect(store.getActions()[0]).toEqual({
+          type: INBOX_THREADS_FOLDER_SEEN,
+          folderId,
+          lastSeen: lastKnownNotified,
+        });
+      });
+
+      it('should set max lastSeen for `All` notifications in the state', async () => {
+        prepareStore([
+          {id: folderIdMap[1], lastNotified: lastKnownNotified, lastSeen: 1},
+          {id: folderIdMap[2], lastNotified: lastKnownNotified + 1, lastSeen: 1},
+        ]);
+
+        await store.dispatch(actions.markSeen(folderIdMap[0]));
+
+        expect(store.getActions()[0]).toEqual({
+          type: INBOX_THREADS_FOLDER_SEEN,
+          folderId: undefined,
+          lastSeen: lastKnownNotified + 1,
+        });
       });
 
       function prepareStore(inboxThreadFolders = [], id = folderId) {

@@ -1,15 +1,16 @@
 /* @flow */
 
+import log from 'components/log/log';
 import usage from 'components/usage/usage';
 import {ANALYTICS_NOTIFICATIONS_THREADS_PAGE} from 'components/analytics/analytics-ids';
-import {hasType} from 'components/api/api__resource-types';
 import {flushStoragePart, getStorageState, InboxThreadsCache} from 'components/storage/storage';
 import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
+import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
+import {INBOX_THREADS_FOLDER_SEEN, SET_PROGRESS} from '../../actions/action-types';
 import {notify, notifyError} from 'components/notification/notification';
-import {SET_PROGRESS} from '../../actions/action-types';
-import {ThreadsStateData} from './inbox-threads-reducers';
 import {setError, setNotifications, toggleProgress} from './inbox-threads-reducers';
+import {ThreadsStateData} from './inbox-threads-reducers';
 import {until} from 'util/util';
 
 import type Api from 'components/api/api';
@@ -24,7 +25,7 @@ type ApiGetter = () => Api;
 type StateGetter = () => AppState;
 
 
-const MAX_CACHED_THREADS: number = 100;
+const MAX_CACHED_THREADS: number = 10;
 const DEFAULT_CACHE_DATA = {
   lastVisited: 0,
   unreadOnly: false,
@@ -148,32 +149,45 @@ const markFolderSeen = (folderId?: string, lastSeen: number): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
-) => Promise<number | null>) => {
+) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const all: boolean = folderId === folderIdMap[0];
     trackEvent('mark folder seen', {all});
     if (isOnline(getState())) {
       const api: Api = getApi();
-      const [error, response] = await until(
+      const [error] = await until(
         all ? api.inbox.saveAllAsSeen(lastSeen) : api.inbox.updateFolders(folderId, {lastSeen})
       );
-      return error ? null : response.lastSeen;
+      if (error) {
+        log.warn(error);
+      }
     }
   };
 };
 
-const getLatestThreadByFolderId = (id: string = folderIdAllKey): ((
+const setFolderSeen = (folderId?: string): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
-) => Promise<?InboxThread>) => {
+) => Promise<number>) => {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const threadsData = getState()?.inboxThreads?.threadsData;
-    const inboxThreadsCache = getStorageState()?.inboxThreadsCache;
-    return (
-      threadsData[id]?.threads && threadsData[id]?.threads[0] ||
-      inboxThreadsCache && inboxThreadsCache[id] && inboxThreadsCache[id][0]
+    const inboxThreadsFolders: InboxFolder[] = getState().app?.inboxThreadsFolders || [];
+    const lastNotified: number = (
+      folderId
+        ? inboxThreadsFolders.find(it => it.id === folderId)?.lastNotified || 0
+        : Math.max.apply(null, inboxThreadsFolders.reduce(
+          (numbers: number[], it: InboxFolder) => (
+            numbers.concat(
+              it.id === folderIdMap[1] || it.id === folderIdMap[2] ? it.lastNotified : -1
+            )
+          ), []))
     );
+    dispatch({
+      type: INBOX_THREADS_FOLDER_SEEN,
+      folderId: folderId,
+      lastSeen: lastNotified,
+    });
+    return lastNotified;
   };
 };
 
@@ -187,13 +201,10 @@ const markSeen = (folderId?: string): ((
     if (!isOnline(getState()) || !inboxThreadsFolders.length) {
       return;
     }
-    const latestThread: ?InboxThread = await dispatch(getLatestThreadByFolderId(folderId));
-    if (latestThread) {
-      await dispatch(markFolderSeen(folderId, latestThread.notified));
-    }
+    const lastNotified: number = await dispatch(setFolderSeen(folderId));
+    dispatch(markFolderSeen(folderId, lastNotified));
   };
 };
-
 const loadInboxThreads = (folderId?: string | null, end?: number, showProgress: boolean = false): ((
   dispatch: (any) => any,
   getState: () => any,
@@ -230,8 +241,14 @@ const loadInboxThreads = (folderId?: string | null, end?: number, showProgress: 
         reset,
         folderId: folderKey,
       }));
-      await dispatch(markSeen(folderId));
       await updateCache({[folderId || folderIdAllKey]: threads.slice(0, MAX_CACHED_THREADS)});
+      await doMarkSeen();
+    }
+
+    async function doMarkSeen() {
+      (folderId === folderIdMap[0] ? [folderIdMap[1], folderIdMap[2]] : [folderId]).forEach(
+        (id: string) => dispatch(markSeen(id))
+      );
     }
   };
 };
