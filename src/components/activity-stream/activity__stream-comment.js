@@ -75,7 +75,7 @@ const StreamComment = ({
         <View
           style={styles.activityCommentAttachments}
         >
-          <StreamAttachments attachments={comment.attachments}/>
+          <StreamAttachments attachments={attachments}/>
         </View>
       )}
 

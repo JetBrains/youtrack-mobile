@@ -36,7 +36,7 @@ export default function ThreadCommentItem({group, currentUser, target, onNavigat
           ).avatarUrl}}
       />}
       change={<View style={styles.threadChangeWrapper}>
-        <StreamComment activity={group.comment}/>
+        <StreamComment activity={group.comment} attachments={group.comment.attachments}/>
         <ThreadCommentReactions activity={group.comment} currentUser={currentUser}/>
         <TouchableOpacity
           style={styles.threadButton}
