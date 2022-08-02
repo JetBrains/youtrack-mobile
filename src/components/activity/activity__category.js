@@ -114,6 +114,8 @@ export const ActivityCategory: {
     activityCategory.SPRINT,
     activityCategory.SUMMARY,
     activityCategory.TAGS,
+    activityCategory.VISIBILITY,
+    activityCategory.VISIBILITY_ISSUE,
   ], 'Issue history'],
   ['WORK_ITEM', 'TimeTracking', [
     activityCategory.WORK_ITEM,
