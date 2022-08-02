@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useEffect, useState, useCallback} from 'react';
-import {ScrollView} from 'react-native';
+import {View} from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {useActionSheet} from '@expo/react-native-action-sheet';
@@ -147,10 +147,7 @@ const ArticleActivities = (props: Props) => {
 
   return (
     <>
-      <ScrollView
-        refreshControl={renderRefreshControl(() => loadActivities(false), !activities)}
-        contentContainerStyle={styles.articleActivities}
-      >
+      <View style={styles.articleActivities}>
         <ArticleActivityStream
           activities={activities}
           attachments={article?.attachments}
@@ -160,8 +157,9 @@ const ArticleActivities = (props: Props) => {
           onCheckboxUpdate={(checked: boolean, position: number, comment: IssueComment) => (
             dispatch(articleActions.updateArticleComment(comment))
           )}
+          refreshControl={() => renderRefreshControl(() => loadActivities(false), !activities)}
         />
-      </ScrollView>
+      </View>
       {issuePermissions.articleCanCommentOn(article) && (
         <>
           <ArticleAddComment

@@ -28,7 +28,6 @@ export type ActivityItem = IssueProject | IssueComment | Attachment | IssueFull 
 export interface Activity {
   $type?: string;
   id: string;
-  hidden?: boolean;
   category: {id: string; $type?: string};
   timestamp: number;
   targetMember: Object;
@@ -42,16 +41,18 @@ export interface Activity {
   field: Object;
   added: ActivityItem | Array<ActivityItem>;
   removed: ActivityItem | Array<ActivityItem>;
+  pullRequest?: PullRequest;
+}
 
+export interface ActivityGroup extends Activity {
   comment?: IssueComment;
-  work?: ActivityWork;
-  vcs?: VCSActivity;
-  merged?: boolean;
-
+  hidden?: boolean;
   key?: boolean;
   lastGroup?: boolean;
+  merged?: boolean;
   root?: boolean;
-  pullRequest?: PullRequest;
+  vcs?: VCSActivity;
+  work?: ActivityWork;
 }
 
 export type ActivityType = {

@@ -14,7 +14,6 @@ import {attachmentActions} from './issue-activity__attachment-actions-and-types'
 import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {IssueContext} from '../issue-context';
-import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 
 import type {ActivityStreamProps} from 'components/activity-stream/activity__stream';
 import type {Activity, ActivityStreamCommentActions} from 'flow/Activity';
@@ -28,6 +27,8 @@ type Props = {
   ...ActivityStreamProps,
   issueId: string,
   actionSheet: Function,
+  headerRenderer: () => any,
+  refreshControl: () => any,
 };
 
 
@@ -113,9 +114,6 @@ const IssueActivityStream = (props: Props) => {
     };
   };
 
-  if (!props.activities) {
-    return <SkeletonIssueActivities/>;
-  }
   return (
     <>
       <IssueStream

@@ -25,6 +25,8 @@ type Props = {
   user: User,
   commentActions: ActivityStreamCommentActions,
   onCheckboxUpdate?: (checked: boolean, position: number, comment: IssueComment) => void,
+  renderHeader?: () => any,
+  refreshControl: () => any,
 };
 
 
@@ -64,6 +66,8 @@ const ArticleActivityStream = (props: Props) => {
           });
         }
       }}
+      refreshControl={props.refreshControl}
+      renderHeader={props.renderHeader}
     />
   );
 };

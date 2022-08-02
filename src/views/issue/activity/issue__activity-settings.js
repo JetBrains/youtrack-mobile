@@ -15,7 +15,6 @@ import type {ActivityType} from 'flow/Activity';
 import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
 import type {UserAppearanceProfile} from 'flow/User';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   issueActivityTypes: Array<ActivityType>,
@@ -23,7 +22,6 @@ type Props = {
   onApply: Function,
   userAppearanceProfile: UserAppearanceProfile,
   disabled?: boolean,
-  style?: ViewStyleProp,
   uiTheme: UITheme
 };
 

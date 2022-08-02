@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -35,6 +35,7 @@ import {IssueContext} from '../issue-context';
 import {logEvent} from 'components/log/log-helper';
 import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
+import {UNIT} from 'components/variables/variables';
 
 import styles from './issue-activity.styles';
 
@@ -75,6 +76,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   props: IssueActivityProps;
   issueContext: IssueContextData;
   goOnlineSubscription: EventSubscription;
+  theme: Theme;
 
   state: State = {
     modalChildren: null,
@@ -150,14 +152,13 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
         >
           <IssueActivitiesSettings
             disabled={disabled}
-            style={styles.settings}
             issueActivityTypes={issueActivityTypes}
             issueActivityEnabledTypes={issueActivityEnabledTypes}
             onApply={(userAppearanceProfile: UserAppearanceProfile) => {
               if (userAppearanceProfile) {
                 return updateUserAppearanceProfile(userAppearanceProfile);
               }
-              this.loadIssueActivities();
+              this.loadIssueActivities(true);
             }}
             userAppearanceProfile={this.getUserAppearanceProfile()}
             uiTheme={uiTheme}
@@ -173,7 +174,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     return user?.profiles?.appearance || DEFAULT_USER_APPEARANCE_PROFILE;
   }
 
-  _renderActivities(uiTheme: UITheme) {
+  _renderActivities() {
     const {
       activityPage,
       issue,
@@ -201,7 +202,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     };
 
     if (!activityPage && isLoading) {
-      return <SkeletonIssueActivities/>;
+      return <SkeletonIssueActivities marginTop={UNIT * 6} marginLeft={UNIT}/>;
     }
 
     return (
@@ -212,7 +213,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
           actionSheet={this.context.actionSheet}
           issueFields={issue?.fields}
           issueId={issue?.id}
-          uiTheme={uiTheme}
+          uiTheme={this.theme.uiTheme}
           workTimeSettings={workTimeSettings}
           youtrackWiki={youtrackWiki}
           onReactionSelect={onReactionSelect}
@@ -234,6 +235,22 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
           onCheckboxUpdate={(checked: boolean, position: number, comment: IssueComment) => (
             onCheckboxUpdate(checked, position, comment)
           )}
+
+          refreshControl={this.renderRefreshControl}
+          headerRenderer={() => {
+            const hasError: boolean = this.hasLoadingError();
+            if (hasError) {
+              return <ErrorMessage error={this.props.activitiesLoadingError}/>;
+            } else {
+              const activitiesApiEnabled: boolean = isIssueActivitiesAPIEnabled();
+              const activityLoaded: boolean = this.isActivityLoaded();
+              const showLoading: boolean = !activityLoaded && !hasError;
+              const isActivitySettingEnabled: boolean = (
+                activitiesApiEnabled && !showLoading && !hasError && activityLoaded
+              );
+              return this.renderActivitySettings(!isActivitySettingEnabled, this.theme.uiTheme);
+            }
+          }}
         />
       </View>
     );
@@ -359,14 +376,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   };
 
   render(): Node {
-    const {isVisibilitySelectShown, activitiesLoadingError, editingComment} = this.props;
-    const activitiesApiEnabled: boolean = isIssueActivitiesAPIEnabled();
-    const hasError: boolean = this.hasLoadingError();
-    const activityLoaded: boolean = this.isActivityLoaded();
-    const showLoading: boolean = !activityLoaded && !hasError;
-    const isActivitySettingEnabled: boolean = (
-      activitiesApiEnabled && !showLoading && !hasError && activityLoaded
-    );
+    const {isVisibilitySelectShown, editingComment} = this.props;
 
     return (
       <IssueContext.Consumer>
@@ -375,25 +385,15 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
           this.issuePermissions = issueContext.issuePermissions;
           return <ThemeContext.Consumer>
             {(theme: Theme) => {
+              this.theme = theme;
               return (
                 <View style={styles.activities}>
 
                   {isVisibilitySelectShown && this.renderCommentVisibilitySelect()}
 
-                  <ScrollView
-                    refreshControl={this.renderRefreshControl()}
-                    keyboardDismissMode="interactive"
-                    keyboardShouldPersistTaps="handled"
-                    scrollEventThrottle={16}
-                  >
-
-                    {!hasError && this.renderActivitySettings(!isActivitySettingEnabled, theme.uiTheme)}
-
-                    {hasError && <ErrorMessage error={activitiesLoadingError}/>}
-
-                    {!hasError && this._renderActivities(theme.uiTheme)}
-
-                  </ScrollView>
+                  <View style={styles.container}>
+                    {!this.hasLoadingError() && this._renderActivities()}
+                  </View>
 
                   {Boolean(this.canAddComment()) && !editingComment?.isEdit && this.renderAddCommentInput()}
                   {editingComment?.isEdit && this.renderEditCommentInput()}

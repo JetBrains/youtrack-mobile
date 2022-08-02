@@ -22,6 +22,7 @@ export default EStyleSheet.create({
     paddingTop: 0,
   },
   articleActivities: {
+    flex: 1,
     padding: UNIT * 2,
     paddingLeft: UNIT,
   },

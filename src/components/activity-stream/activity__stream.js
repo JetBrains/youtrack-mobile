@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, ScrollView, View} from 'react-native';
 
 import ActivityUserAvatar from './activity__stream-avatar';
 import ApiHelper from '../api/api__helper';
@@ -15,7 +15,7 @@ import StreamUserInfo from './activity__stream-user-info';
 import StreamVCS from './activity__stream-vcs';
 import StreamWork from './activity__stream-work';
 import {firstActivityChange} from './activity__stream-helper';
-import {guid, isIOSPlatform} from 'util/util';
+import {isIOSPlatform} from 'util/util';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {i18n} from 'components/i18n/i18n';
 import {IconDrag, IconMoreOptions} from 'components/icon/icon';
@@ -23,7 +23,7 @@ import {IconDrag, IconMoreOptions} from 'components/icon/icon';
 import styles from './activity__stream.styles';
 
 import type {
-  Activity,
+  ActivityGroup,
   ActivityItem,
   ActivityStreamCommentActions,
 } from 'flow/Activity';
@@ -38,7 +38,7 @@ import type {YouTrackWiki} from 'flow/Wiki';
 
 
 type Props = {
-  activities: Array<Activity> | null,
+  activities: Array<ActivityGroup> | null,
   attachments: Array<Attachment>,
   commentActions?: ActivityStreamCommentActions,
   currentUser: User,
@@ -57,6 +57,8 @@ type Props = {
   onWorkUpdate?: (workItem?: WorkItem) => void,
   onWorkEdit?: (workItem: WorkItem) => void,
   onCheckboxUpdate?: (checked: boolean, position: number, comment: IssueComment) => Function,
+  renderHeader?: () => any,
+  refreshControl: () => any,
 };
 
 export type ActivityStreamPropsReaction = {
@@ -70,18 +72,19 @@ export type ActivityStreamProps = {
 }
 
 export const ActivityStream = (props: ActivityStreamProps): Node => {
+  const {headerRenderer: renderHeader = () => null} = props;
 
-  const getCommentFromActivityGroup = (activityGroup: Object): IssueComment | null => (
+  const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment | null => (
     firstActivityChange(activityGroup.comment)
   );
 
-  const onShowCommentActions = (activityGroup: Activity, comment: IssueComment): void => {
+  const onShowCommentActions = (activityGroup: ActivityGroup, comment: IssueComment): void => {
     if (props.commentActions?.onShowCommentActions) {
-      props.commentActions.onShowCommentActions(comment, activityGroup.comment.id);
+      props.commentActions.onShowCommentActions(comment, activityGroup.comment?.id);
     }
   };
 
-  const renderCommentActions = (activityGroup: Object) => {
+  const renderCommentActions = (activityGroup: ActivityGroup) => {
     const comment: IssueComment | null = getCommentFromActivityGroup(activityGroup);
     if (!comment) {
       return null;
@@ -188,70 +191,82 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
   };
 
-  return (
-    <>
-      {props.activities?.length > 0
-        ? props.activities.map((activityGroup: Activity, index) => {
-          if (activityGroup.hidden) {
-            return null;
-          }
+  const renderActivity = (activityGroup: ActivityGroup, index: number) => {
+    if (activityGroup.hidden) {
+      return null;
+    }
 
-          const isCommentActivity: boolean = !!activityGroup.comment;
-          const isRelatedChange: boolean = !!activityGroup.comment || !!activityGroup.work || !!activityGroup.vcs;
-          return (
-            <View key={activityGroup.timestamp ? `${activityGroup.timestamp}_${index}` : guid()}>
-              {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
+    const isRelatedChange: boolean = Boolean(activityGroup?.comment || activityGroup?.work || activityGroup?.vcs);
+    let renderedItem: any = null;
+    switch (true) {
+    case !!activityGroup.comment:
+      renderedItem = renderCommentActivity(activityGroup);
+      break;
+    case !!activityGroup.work:
+      renderedItem = <StreamWork
+        activityGroup={activityGroup}
+        onDelete={props.onWorkDelete}
+        onUpdate={props.onWorkUpdate}
+        onEdit={props.onWorkEdit}
+      />;
+      break;
+    case !!activityGroup.vcs:
+      renderedItem = <StreamVCS activityGroup={activityGroup}/>;
+    }
 
-              <View style={[
-                styles.activity,
-                activityGroup.merged && !activityGroup.comment ? styles.activityMerged : null,
-              ]}>
+    return (
+      <View key={activityGroup.id}>
+        {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
 
-                <ActivityUserAvatar
-                  activityGroup={activityGroup}
-                  showAvatar={!!activityGroup.comment}
-                />
+        <View style={[
+          styles.activity,
+          activityGroup.merged && !activityGroup.comment ? styles.activityMerged : null,
+        ]}>
 
-                <View style={styles.activityItem}>
-                  {isCommentActivity && renderCommentActivity(activityGroup)}
+          <ActivityUserAvatar
+            activityGroup={activityGroup}
+            showAvatar={!!activityGroup.comment}
+          />
 
-                  {activityGroup.work && (
-                    <StreamWork
-                      activityGroup={activityGroup}
-                      onDelete={props.onWorkDelete}
-                      onUpdate={props.onWorkUpdate}
-                      onEdit={props.onWorkEdit}
-                    />)
-                  }
+          <View style={styles.activityItem}>
+            {renderedItem}
+            {activityGroup?.events?.length > 0 && (
+              <View style={isRelatedChange ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
+                {Boolean(!activityGroup.merged && !isRelatedChange) && <StreamUserInfo activityGroup={activityGroup}/>}
+                {activityGroup.merged && <StreamTimestamp timestamp={activityGroup.timestamp}/>}
 
-                  {activityGroup.vcs && <StreamVCS activityGroup={activityGroup}/>}
-
-                  {activityGroup?.events?.length > 0 && (
-                    <View style={isRelatedChange ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
-                      {Boolean(!activityGroup.merged && !isRelatedChange) && <StreamUserInfo activityGroup={activityGroup}/>}
-                      {activityGroup.merged && <StreamTimestamp timestamp={activityGroup.timestamp}/>}
-
-                      {activityGroup.events.map(
-                        (event) => (
-                          <StreamHistoryChange
-                            key={event.id}
-                            activity={event}
-                            workTimeSettings={props.workTimeSettings}/>
-                        )
-                      )}
-                    </View>
-                  )}
-
-                  {isCommentActivity && !!props.onSelectReaction && renderCommentActivityReactions(activityGroup)}
-                  {isCommentActivity && renderCommentActions(activityGroup)}
-                </View>
-
+                {activityGroup.events.map(
+                  (event) => (
+                    <StreamHistoryChange
+                      key={event.id}
+                      activity={event}
+                      workTimeSettings={props.workTimeSettings}/>
+                  )
+                )}
               </View>
-            </View>
-          );
-        })
-        : !!props.activities && <Text style={styles.activityNoActivity}>{i18n('No activity yet')}</Text>
+            )}
+
+            {!!activityGroup.comment && <>
+              {!!props.onSelectReaction && renderCommentActivityReactions(activityGroup)}
+              {renderCommentActions(activityGroup)}
+            </>}
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <ScrollView
+      keyboardDismissMode="interactive"
+      keyboardShouldPersistTaps="handled"
+      scrollEventThrottle={16}
+      refreshControl={props.refreshControl()}
+    >
+      {renderHeader()}
+      {(props.activities || []).map(renderActivity)}
+      {props.activities?.length === 0 && <Text style={styles.activityNoActivity}>{i18n('No activity yet')}</Text>
       }
-    </>
+    </ScrollView>
   );
 };

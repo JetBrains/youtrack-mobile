@@ -22,12 +22,12 @@ export default EStyleSheet.create({
     margin: UNIT * 1.5,
   },
   settingsButton: {
+    alignSelf: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: UNIT * 2,
-    marginBottom: UNIT,
-    paddingVertical: UNIT,
+    marginVertical: UNIT * 1.5,
+    paddingVertical: UNIT / 2,
   },
   settingsButtonText: {
     color: '$icon',
