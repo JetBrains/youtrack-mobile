@@ -18,9 +18,6 @@ export default EStyleSheet.create({
     paddingRight: UNIT,
   },
 
-  settings: {
-    margin: UNIT * 1.5,
-  },
   settingsButton: {
     alignSelf: 'center',
     flexDirection: 'row',

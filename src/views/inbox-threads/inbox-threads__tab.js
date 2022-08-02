@@ -13,7 +13,7 @@ import type {InboxThread} from 'flow/Inbox';
 
 interface Props {
   folderId?: string,
-  onNavigate: (entity: AnyIssue | Article, navigateToActivity: boolean) => any,
+  onNavigate: (entity: AnyIssue | Article, navigateToActivity: string) => any,
   onLoadMore: (end?: number | null) => any;
 }
 

@@ -58,6 +58,7 @@ type IssueActivityProps = $Shape<IssueActivityState
   canAttach: boolean,
   onAttach: () => any,
   stateFieldName: string,
+  activityId?: string,
 }>;
 
 type State = {
@@ -251,6 +252,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
               return this.renderActivitySettings(!isActivitySettingEnabled, this.theme.uiTheme);
             }
           }}
+          activityId={this.props.activityId}
         />
       </View>
     );

@@ -29,6 +29,7 @@ type Props = {
   actionSheet: Function,
   headerRenderer: () => any,
   refreshControl: () => any,
+  activityId?: string,
 };
 
 

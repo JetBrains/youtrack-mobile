@@ -1,7 +1,7 @@
 /* @flow */
 
-import React from 'react';
-import {Text, TouchableOpacity, ScrollView, View} from 'react-native';
+import React, {useCallback, useRef} from 'react';
+import {Animated, Text, TouchableOpacity, ScrollView, View, useWindowDimensions} from 'react-native';
 
 import ActivityUserAvatar from './activity__stream-avatar';
 import ApiHelper from '../api/api__helper';
@@ -35,6 +35,7 @@ import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
 import type {WorkItem, WorkTimeSettings} from 'flow/Work';
 import type {YouTrackWiki} from 'flow/Wiki';
+import {menuHeight} from '../common-styles/header';
 
 
 type Props = {
@@ -59,6 +60,7 @@ type Props = {
   onCheckboxUpdate?: (checked: boolean, position: number, comment: IssueComment) => Function,
   renderHeader?: () => any,
   refreshControl: () => any,
+  activityId?: string,
 };
 
 export type ActivityStreamPropsReaction = {
@@ -72,7 +74,29 @@ export type ActivityStreamProps = {
 }
 
 export const ActivityStream = (props: ActivityStreamProps): Node => {
-  const {headerRenderer: renderHeader = () => null} = props;
+  const window = useWindowDimensions();
+
+  const {headerRenderer: renderHeader = () => null, activities, activityId} = props;
+
+  const scrollRef = useRef(null);
+  const bgColor = useRef(new Animated.Value(0));
+  const color = useRef(bgColor.current.interpolate({
+    inputRange: [0, 300],
+    outputRange: [styles.activityHighlighted.backgroundColor, 'transparent'],
+  }));
+
+  const navigateToActivity = useCallback((id: string, layout: { y: number, height: number}) => {
+    if (activityId && id && id === activityId && activities?.length && scrollRef?.current?.scrollTo) {
+      if ((layout.y + layout.height) > (window.height - menuHeight * 5)) {
+        scrollRef.current.scrollTo({y: layout.y, animated: true});
+      }
+      Animated.timing(bgColor.current, {
+        toValue: 300,
+        duration: 3000,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [activities?.length, activityId, window.height]);
 
   const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment | null => (
     firstActivityChange(activityGroup.comment)
@@ -94,7 +118,8 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
     const isAuthor = commentActions && commentActions.isAuthor && commentActions.isAuthor(comment);
 
     const canComment: boolean = !!commentActions?.canCommentOn;
-    const canUpdate: boolean = !!commentActions && !!commentActions.canUpdateComment && commentActions.canUpdateComment(comment);
+    const canUpdate: boolean = !!commentActions && !!commentActions.canUpdateComment && commentActions.canUpdateComment(
+      comment);
 
     if (!comment.deleted) {
       // $FlowFixMe
@@ -214,13 +239,27 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
       renderedItem = <StreamVCS activityGroup={activityGroup}/>;
     }
 
+    const id: string = (
+      activityGroup?.comment?.id ||
+      activityGroup?.work?.id ||
+      activityGroup?.vcs?.id ||
+      (activityGroup?.events && activityGroup.events[0]?.id)
+    );
+
+    const hasHighlightedActivity: boolean = activityId && id === activityId;
+    const Component = hasHighlightedActivity ? Animated.View : View;
+
     return (
-      <View key={activityGroup.id}>
+      <View
+        key={`${index}-${activityGroup.id}`}
+        onLayout={(event) => navigateToActivity(id, event.nativeEvent.layout)}
+      >
         {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
 
-        <View style={[
+        <Component style={[
           styles.activity,
           activityGroup.merged && !activityGroup.comment ? styles.activityMerged : null,
+          hasHighlightedActivity && {backgroundColor: color.current},
         ]}>
 
           <ActivityUserAvatar
@@ -251,7 +290,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
               {renderCommentActions(activityGroup)}
             </>}
           </View>
-        </View>
+        </Component>
       </View>
     );
   };
@@ -262,6 +301,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
       keyboardShouldPersistTaps="handled"
       scrollEventThrottle={16}
       refreshControl={props.refreshControl()}
+      ref={instance => instance != null && (scrollRef.current = instance)}
     >
       {renderHeader()}
       {(props.activities || []).map(renderActivity)}

@@ -22,7 +22,7 @@ export default function ThreadHistoryItem({group, target, onNavigate}: Props) {
       author={group.head.author}
       avatar={<IconHistory size={20} color={styles.icon.color}/>}
       group={group}
-      onNavigate={() => onNavigate(target, true)}
+      onNavigate={() => onNavigate(target, group.head.id)}
       reason={i18n('updated')}
       timestamp={group.head.timestamp}/>
   );

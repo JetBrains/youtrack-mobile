@@ -53,6 +53,7 @@ export interface ActivityGroup extends Activity {
   root?: boolean;
   vcs?: VCSActivity;
   work?: ActivityWork;
+  events?: Activity[],
 }
 
 export type ActivityType = {

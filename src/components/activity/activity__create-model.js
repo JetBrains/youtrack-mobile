@@ -1,9 +1,9 @@
 /* @flow */
 
-import {ResourceTypes, hasType} from '../api/api__resource-types';
 import {ActivityCategory, isActivityCategory} from './activity__category';
+import {ResourceTypes, hasType} from '../api/api__resource-types';
 
-import type {Activity} from 'flow/Activity';
+import type {Activity, ActivityGroup} from 'flow/Activity';
 
 
 export const createActivitiesModel = (activityGroups: Array<Object> = []): Array<Activity> => {
@@ -19,7 +19,7 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
   );
 
 
-  function getStream(activityGroups) {
+  function getStream(activityGroups: ActivityGroup[]) {
     const createGroup = (event, timestamp, authorGroup) => {
       const streamGroup = {
         $type: ResourceTypes.EVENT_GROUP,
@@ -32,6 +32,7 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
         comment: null,
         vcs: null,
         target: null,
+        id: event.id,
       };
 
       switch (true) {

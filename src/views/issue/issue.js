@@ -280,6 +280,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       updateUserAppearanceProfile,
       openNestedIssueView,
       issuePlaceholder,
+      navigateToActivity,
     } = this.props;
 
     return (
@@ -293,6 +294,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         selectProps={selectProps}
         updateUserAppearanceProfile={updateUserAppearanceProfile}
         renderRefreshControl={(loadActivities: () => any) => this.renderRefreshControl(loadActivities, uiTheme)}
+        activityId={navigateToActivity}
       />
     );
   };

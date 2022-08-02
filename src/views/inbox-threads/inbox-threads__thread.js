@@ -22,7 +22,7 @@ import type {User} from 'flow/User';
 
 interface Props {
   currentUser: User;
-  onNavigate: (entity: any, navigateToActivity?: boolean) => any,
+  onNavigate: (entity: any, navigateToActivity?: string) => any,
   thread: InboxThread;
   uiTheme: UITheme;
 }
@@ -78,7 +78,12 @@ function Thread({
     accessibilityLabel="inboxEntity"
     accessible={true}
     entity={threadData.entity}
-    onNavigate={() => onNavigate(threadData.entity, threadData.entityAtBottom)}
+    onNavigate={() => {
+      onNavigate(
+        threadData.entity,
+        threadData.entityAtBottom ? ((_thread.messages || [])[0].activities || [])[0]?.id : undefined
+      );
+    }}
     style={[styles.threadTitle, threadData.entityAtBottom && styles.threadSubTitle]}
     styleText={threadData.entityAtBottom && styles.threadSubTitleText}
   />;

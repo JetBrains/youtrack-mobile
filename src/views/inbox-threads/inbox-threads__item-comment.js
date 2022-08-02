@@ -20,7 +20,7 @@ interface Props {
   currentUser: UserCurrent;
   group: InboxThreadGroup;
   target: InboxThreadTarget;
-  onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
+  onNavigate: (entity: ThreadEntity, navigateToActivity?: string) => any;
 }
 
 export default function ThreadCommentItem({group, currentUser, target, onNavigate}: Props) {
@@ -40,7 +40,9 @@ export default function ThreadCommentItem({group, currentUser, target, onNavigat
         <ThreadCommentReactions activity={group.comment} currentUser={currentUser}/>
         <TouchableOpacity
           style={styles.threadButton}
-          onPress={() => onNavigate(target, true)}
+          onPress={() => {
+            onNavigate(target, group.comment.id);
+          }}
         >
           <Text style={styles.threadButtonText}>{i18n('View comment')}</Text>
         </TouchableOpacity>

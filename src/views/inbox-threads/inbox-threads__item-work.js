@@ -26,7 +26,7 @@ export default function ThreadWorkItem({group, target, onNavigate}: Props) {
       avatar={<IconWork size={22} color={styles.icon.color} style={styles.activityWorkIcon}/>}
       change={<StreamWork activityGroup={{work: group.work}}/>}
       group={group}
-      onNavigate={() => onNavigate(target, true)}
+      onNavigate={() => onNavigate(target, group.work.id)}
       reason={i18n('updated')}
       timestamp={group.work.timestamp}
     />

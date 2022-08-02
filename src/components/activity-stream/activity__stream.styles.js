@@ -156,6 +156,9 @@ export const rowStyles = {
     position: 'absolute',
     right: 0,
   },
+  activityHighlighted: {
+    backgroundColor: '$yellowBackground',
+  },
 
   vcsInfo: {
     flexDirection: 'row',
