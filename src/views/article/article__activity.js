@@ -1,7 +1,6 @@
 /* @flow */
 
 import React, {useEffect, useState, useCallback} from 'react';
-import {View} from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {useActionSheet} from '@expo/react-native-action-sheet';
@@ -19,8 +18,6 @@ import {ANALYTICS_ARTICLE_PAGE_STREAM} from 'components/analytics/analytics-ids'
 import {convertCommentsToActivityPage, createActivityModel} from 'components/activity/activity-helper';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {setArticleCommentDraft,} from './article-reducers';
-
-import styles from './article.styles';
 
 import type {Activity, ActivityStreamCommentActions} from 'flow/Activity';
 import type {AppState} from '../../reducers';
