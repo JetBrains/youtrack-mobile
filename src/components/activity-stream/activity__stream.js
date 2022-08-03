@@ -297,6 +297,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
   return (
     <ScrollView
+      contentContainerStyle={styles.activityStream}
       keyboardDismissMode="interactive"
       keyboardShouldPersistTaps="handled"
       scrollEventThrottle={16}

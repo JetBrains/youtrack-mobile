@@ -148,20 +148,18 @@ const ArticleActivities = (props: Props) => {
 
   return (
     <>
-      <View style={styles.articleActivities}>
-        <ArticleActivityStream
-          activities={activities}
-          attachments={article?.attachments}
-          uiTheme={uiTheme}
-          user={user}
-          commentActions={createCommentActions()}
-          onCheckboxUpdate={(checked: boolean, position: number, comment: IssueComment) => (
-            dispatch(articleActions.updateArticleComment(comment))
-          )}
-          refreshControl={() => renderRefreshControl(() => loadActivities(false), !activities)}
-          activityId={props.activityId}
-        />
-      </View>
+      <ArticleActivityStream
+        activities={activities}
+        attachments={article?.attachments}
+        uiTheme={uiTheme}
+        user={user}
+        commentActions={createCommentActions()}
+        onCheckboxUpdate={(checked: boolean, position: number, comment: IssueComment) => (
+          dispatch(articleActions.updateArticleComment(comment))
+        )}
+        refreshControl={() => renderRefreshControl(() => loadActivities(false), !activities)}
+        activityId={props.activityId}
+      />
       {issuePermissions.articleCanCommentOn(article) && (
         <>
           <ArticleAddComment

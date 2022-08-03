@@ -21,11 +21,6 @@ export default EStyleSheet.create({
     padding: detailsHorizontalPadding,
     paddingTop: 0,
   },
-  articleActivities: {
-    flex: 1,
-    padding: UNIT * 2,
-    paddingLeft: UNIT,
-  },
   articleDetailsHeader: {
     marginTop: UNIT * 3,
     flexDirection: 'row',

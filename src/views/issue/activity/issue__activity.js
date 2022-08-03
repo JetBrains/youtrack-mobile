@@ -207,54 +207,52 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     }
 
     return (
-      <View style={styles.activitiesContainer}>
-        <IssueActivityStream
-          activities={createActivityModel(activityPage, this.getUserAppearanceProfile().naturalCommentsOrder)}
-          attachments={issue?.attachments}
-          actionSheet={this.context.actionSheet}
-          issueFields={issue?.fields}
-          issueId={issue?.id}
-          uiTheme={this.theme.uiTheme}
-          workTimeSettings={workTimeSettings}
-          youtrackWiki={youtrackWiki}
-          onReactionSelect={onReactionSelect}
-          currentUser={user}
-          onWorkUpdate={onWorkUpdate}
-          onWorkDelete={async (workItem: WorkItem) => {
-            const isDeleted = await deleteWorkItem(workItem);
-            if (isDeleted) {
-              onWorkUpdate();
-            }
-          }}
-          onWorkEdit={(work: WorkItem) => {
-            logEvent({
-              message: 'SpentTime: actions:update',
-              analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
-            });
-            this.renderAddSpentTimePage(work);
-          }}
-          onCheckboxUpdate={(checked: boolean, position: number, comment: IssueComment) => (
-            onCheckboxUpdate(checked, position, comment)
-          )}
+      <IssueActivityStream
+        activities={createActivityModel(activityPage, this.getUserAppearanceProfile().naturalCommentsOrder)}
+        attachments={issue?.attachments}
+        actionSheet={this.context.actionSheet}
+        issueFields={issue?.fields}
+        issueId={issue?.id}
+        uiTheme={this.theme.uiTheme}
+        workTimeSettings={workTimeSettings}
+        youtrackWiki={youtrackWiki}
+        onReactionSelect={onReactionSelect}
+        currentUser={user}
+        onWorkUpdate={onWorkUpdate}
+        onWorkDelete={async (workItem: WorkItem) => {
+          const isDeleted = await deleteWorkItem(workItem);
+          if (isDeleted) {
+            onWorkUpdate();
+          }
+        }}
+        onWorkEdit={(work: WorkItem) => {
+          logEvent({
+            message: 'SpentTime: actions:update',
+            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
+          });
+          this.renderAddSpentTimePage(work);
+        }}
+        onCheckboxUpdate={(checked: boolean, position: number, comment: IssueComment) => (
+          onCheckboxUpdate(checked, position, comment)
+        )}
 
-          refreshControl={this.renderRefreshControl}
-          headerRenderer={() => {
-            const hasError: boolean = this.hasLoadingError();
-            if (hasError) {
-              return <ErrorMessage error={this.props.activitiesLoadingError}/>;
-            } else {
-              const activitiesApiEnabled: boolean = isIssueActivitiesAPIEnabled();
-              const activityLoaded: boolean = this.isActivityLoaded();
-              const showLoading: boolean = !activityLoaded && !hasError;
-              const isActivitySettingEnabled: boolean = (
-                activitiesApiEnabled && !showLoading && !hasError && activityLoaded
-              );
-              return this.renderActivitySettings(!isActivitySettingEnabled, this.theme.uiTheme);
-            }
-          }}
-          activityId={this.props.activityId}
-        />
-      </View>
+        refreshControl={this.renderRefreshControl}
+        headerRenderer={() => {
+          const hasError: boolean = this.hasLoadingError();
+          if (hasError) {
+            return <ErrorMessage error={this.props.activitiesLoadingError}/>;
+          } else {
+            const activitiesApiEnabled: boolean = isIssueActivitiesAPIEnabled();
+            const activityLoaded: boolean = this.isActivityLoaded();
+            const showLoading: boolean = !activityLoaded && !hasError;
+            const isActivitySettingEnabled: boolean = (
+              activitiesApiEnabled && !showLoading && !hasError && activityLoaded
+            );
+            return this.renderActivitySettings(!isActivitySettingEnabled, this.theme.uiTheme);
+          }
+        }}
+        activityId={this.props.activityId}
+      />
     );
   }
 

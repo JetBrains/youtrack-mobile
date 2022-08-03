@@ -12,19 +12,13 @@ export default EStyleSheet.create({
     flexDirection: 'column',
     flex: 1,
   },
-  activitiesContainer: {
-    paddingLeft: UNIT,
-    paddingBottom: UNIT * 3,
-    paddingRight: UNIT,
-  },
 
   settingsButton: {
     alignSelf: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: UNIT * 1.5,
-    paddingVertical: UNIT / 2,
+    padding: UNIT / 2,
   },
   settingsButtonText: {
     color: '$icon',

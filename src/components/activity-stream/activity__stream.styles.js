@@ -37,6 +37,11 @@ export const rowStyles = {
     marginTop: UNIT / 2,
     marginBottom: UNIT / 4,
   },
+  activityStream: {
+    paddingTop: UNIT * 2,
+    paddingBottom: UNIT * 3,
+    paddingHorizontal: UNIT,
+  },
   activityItem: {
     flex: 1,
     marginLeft: UNIT * 2,
