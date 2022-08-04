@@ -60,7 +60,7 @@ type Props = {
   onCheckboxUpdate?: (checked: boolean, position: number, comment: IssueComment) => Function,
   renderHeader?: () => any,
   refreshControl: () => any,
-  activityId?: string,
+  highlight?: { activityId: string, commentId?: string },
 };
 
 export type ActivityStreamPropsReaction = {
@@ -76,7 +76,7 @@ export type ActivityStreamProps = {
 export const ActivityStream = (props: ActivityStreamProps): Node => {
   const window = useWindowDimensions();
 
-  const {headerRenderer: renderHeader = () => null, activities, activityId} = props;
+  const {headerRenderer: renderHeader = () => null, activities, highlight} = props;
 
   const scrollRef = useRef(null);
   const bgColor = useRef(new Animated.Value(0));
@@ -85,8 +85,17 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
     outputRange: [styles.activityHighlighted.backgroundColor, 'transparent'],
   }));
 
-  const navigateToActivity = useCallback((id: string, layout: { y: number, height: number}) => {
-    if (activityId && id && id === activityId && activities?.length && scrollRef?.current?.scrollTo) {
+  const getTargetActivityId = useCallback(() => {
+    return typeof highlight === 'object' ? highlight.activityId : highlight;
+  }, [highlight]);
+
+  const getTargetActivityCommentId = useCallback(() => {
+    return typeof highlight === 'object' ? highlight?.commentId : null;
+  }, [highlight]);
+
+  const navigateToActivity = useCallback((id: string, layout: { y: number, height: number}, commentId?: string) => {
+    const _activityId = getTargetActivityId();
+    if ((_activityId && id && id === _activityId || (commentId && commentId === getTargetActivityCommentId())) && activities?.length && scrollRef?.current?.scrollTo) {
       if ((layout.y + layout.height) > (window.height - menuHeight * 5)) {
         scrollRef.current.scrollTo({y: layout.y, animated: true});
       }
@@ -96,7 +105,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
         useNativeDriver: false,
       }).start();
     }
-  }, [activities?.length, activityId, window.height]);
+  }, [activities?.length, getTargetActivityCommentId, getTargetActivityId, window.height]);
 
   const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment | null => (
     firstActivityChange(activityGroup.comment)
@@ -246,13 +255,21 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
       (activityGroup?.events && activityGroup.events[0]?.id)
     );
 
-    const hasHighlightedActivity: boolean = activityId && id === activityId;
+    const comment: ?IssueComment = getCommentFromActivityGroup(activityGroup);
+    const commentId = getTargetActivityCommentId();
+    const activityChange = firstActivityChange(activityGroup.comment);
+
+    const targetActivityId = getTargetActivityId();
+    const hasHighlightedActivity: boolean = (
+      targetActivityId && id === targetActivityId ||
+      commentId && activityChange && commentId === activityChange.id
+    );
     const Component = hasHighlightedActivity ? Animated.View : View;
 
     return (
       <View
         key={`${index}-${activityGroup.id}`}
-        onLayout={(event) => navigateToActivity(id, event.nativeEvent.layout)}
+        onLayout={(event) => navigateToActivity(id, event.nativeEvent.layout, comment?.id)}
       >
         {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
 

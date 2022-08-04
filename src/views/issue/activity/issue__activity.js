@@ -58,7 +58,7 @@ type IssueActivityProps = $Shape<IssueActivityState
   canAttach: boolean,
   onAttach: () => any,
   stateFieldName: string,
-  activityId?: string,
+  highlight?: { activityId: string, commentId?: string },
 }>;
 
 type State = {
@@ -187,6 +187,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
       onCheckboxUpdate,
       doUpdateWorkItem,
       isLoading,
+      highlight,
     } = this.props;
 
     const youtrackWiki: YouTrackWiki = {
@@ -251,7 +252,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
             return this.renderActivitySettings(!isActivitySettingEnabled, this.theme.uiTheme);
           }
         }}
-        activityId={this.props.activityId}
+        highlight={highlight}
       />
     );
   }

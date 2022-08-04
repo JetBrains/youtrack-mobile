@@ -26,7 +26,7 @@ import type {UserCurrent} from 'flow/User';
 interface Props {
   folderId: string;
   onLoadMore: (end?: number) => any,
-  onNavigate: (entity: ThreadEntity, navigateToActivity?: string) => any,
+  onNavigate: (entity: ThreadEntity, navigateToActivity?: string, commentId?: string) => any,
   threadsData: any,
 }
 

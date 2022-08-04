@@ -20,7 +20,7 @@ interface Props {
   group?: InboxThreadGroup;
   reason: string;
   timestamp: number;
-  onNavigate?: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
+  onNavigate?: (entity: ThreadEntity, navigateToActivity?: string) => any;
 }
 
 export default function ThreadItem({author, avatar, change, group, reason, timestamp, onNavigate}: Props) {

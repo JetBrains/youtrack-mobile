@@ -29,7 +29,7 @@ type Props = {
   actionSheet: Function,
   headerRenderer: () => any,
   refreshControl: () => any,
-  activityId?: string,
+  highlight?: { activityId: string, commentId?: string },
 };
 
 

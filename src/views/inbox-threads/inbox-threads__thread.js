@@ -22,7 +22,7 @@ import type {User} from 'flow/User';
 
 interface Props {
   currentUser: User;
-  onNavigate: (entity: any, navigateToActivity?: string) => any,
+  onNavigate: (entity: any, navigateToActivity?: string, commentId?: string) => any,
   thread: InboxThread;
   uiTheme: UITheme;
 }

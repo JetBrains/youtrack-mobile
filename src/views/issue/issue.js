@@ -64,6 +64,7 @@ type AdditionalProps = {
   removeAttachment: (attach: Attachment) => any,
   isTagsSelectVisible: boolean,
   onCommandApply: () => any,
+  commentId?: string,
 };
 
 export type IssueProps = {
@@ -281,6 +282,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       openNestedIssueView,
       issuePlaceholder,
       navigateToActivity,
+      commentId,
     } = this.props;
 
     return (
@@ -294,7 +296,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         selectProps={selectProps}
         updateUserAppearanceProfile={updateUserAppearanceProfile}
         renderRefreshControl={(loadActivities: () => any) => this.renderRefreshControl(loadActivities, uiTheme)}
-        activityId={navigateToActivity}
+        highlight={{activityId: navigateToActivity, commentId}}
       />
     );
   };

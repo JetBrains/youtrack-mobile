@@ -21,7 +21,7 @@ import type {User} from 'flow/User';
 
 interface Props {
   currentUser: User;
-  onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
+  onNavigate: (entity: ThreadEntity, navigateToActivity?: string) => any;
   thread: InboxThread;
   uiTheme: UITheme;
 }
@@ -66,7 +66,9 @@ export default function InboxThreadMention({thread, currentUser, uiTheme, onNavi
           {!!comment && <ThreadCommentReactions activity={activity} currentUser={currentUser}/>}
         </>
       }
-      onNavigate={() => onNavigate(target.issue || target.article, true)}
+      onNavigate={() => {
+        onNavigate(target.issue || target.article, activity.id, comment?.id);
+      }}
       reason={i18n('mentioned you')}
       timestamp={thread.notified}
     />

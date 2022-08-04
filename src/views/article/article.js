@@ -52,6 +52,7 @@ type Props = ArticleState & {
   storePrevArticle?: boolean,
   updateArticlesList: () => Function,
   lastVisitedArticle: ?Article,
+  commentId?: string,
 } & typeof articleActions;
 
 type State = IssueTabbedState & { modalChildren: any };
@@ -303,7 +304,7 @@ class Article extends IssueTabbed<Props, State> {
   };
 
   renderActivity = (uiTheme: UITheme) => {
-    const {article, error, issuePermissions, navigateToActivity} = this.props;
+    const {article, error, issuePermissions, navigateToActivity, commentId} = this.props;
     if (error) {
       return this.renderError(error);
     }
@@ -313,7 +314,7 @@ class Article extends IssueTabbed<Props, State> {
         issuePermissions={issuePermissions}
         renderRefreshControl={this.renderRefreshControl}
         uiTheme={uiTheme}
-        activityId={navigateToActivity}
+        highlight={{activityId: navigateToActivity, commentId}}
       />
     );
   };

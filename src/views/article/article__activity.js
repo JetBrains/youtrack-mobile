@@ -32,7 +32,7 @@ type Props = {
   renderRefreshControl: (onRefresh: Function, showActivityIndicator: boolean) => React$Element<any>,
   uiTheme: UITheme,
   onCheckboxUpdate?: (articleContent: string) => Function,
-  activityId?: string,
+  highlight?: { activityId: string, commentId?: string },
 };
 
 
@@ -155,7 +155,7 @@ const ArticleActivities = (props: Props) => {
           dispatch(articleActions.updateArticleComment(comment))
         )}
         refreshControl={() => renderRefreshControl(() => loadActivities(false), !activities)}
-        activityId={props.activityId}
+        highlight={props.highlight}
       />
       {issuePermissions.articleCanCommentOn(article) && (
         <>

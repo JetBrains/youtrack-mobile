@@ -134,14 +134,14 @@ const InboxThreads: () => Node = (): Node => {
                 <InboxThreadsTab
                   folderId={folderIdMap[index]}
                   onLoadMore={(folderId?: string, end?: number) => loadThreads(folderId, end)}
-                  onNavigate={(entity, navigateToActivity) => {
+                  onNavigate={(entity, navigateToActivity, commentId) => {
                     if (isSplitView) {
                       updateSelectedEntity({entity, navigateToActivity});
                     } else {
                       if (hasType.article(entity)) {
-                        Router.Article({articlePlaceholder: entity, navigateToActivity});
+                        Router.Article({articlePlaceholder: entity, navigateToActivity, commentId});
                       } else {
-                        Router.Issue({issueId: entity.id, navigateToActivity});
+                        Router.Issue({issueId: entity.id, navigateToActivity, commentId});
                       }
                     }
                   }}

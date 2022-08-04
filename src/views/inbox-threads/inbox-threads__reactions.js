@@ -54,9 +54,9 @@ const InboxThreadReaction = ({thread, currentUser, onNavigate}: Props) => {
         <>
           <TouchableOpacity
             onPress={() => {
-              const entity: ThreadEntity = activity?.comment?.issue || activity?.comment?.article;
+              const entity: ThreadEntity = comment?.issue || comment?.article;
               if (entity?.id) {
-                onNavigate(entity, true);
+                onNavigate(entity, activity.id, comment?.id);
               }
             }}
           >
