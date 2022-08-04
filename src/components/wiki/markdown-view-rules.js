@@ -73,7 +73,6 @@ function getMarkdownRules(
     );
   }
 
-  const imageHeaders = getApi().auth.getAuthorizationHeaders();
 
   const markdownImage = ({key, uri, alt, imageDimensions}) => {
     if (uri.indexOf('badgen.net/badge') !== -1) {//TODO: temporary solution to remove HTML image from link label
@@ -90,6 +89,12 @@ function getMarkdownRules(
       return renderVideo(youtubeVideoId, key);
     }
 
+    let imageHeaders;
+    try {
+      imageHeaders = getApi().auth.getAuthorizationHeaders();
+    } catch (e) {
+      imageHeaders = {};
+    }
     const imageProps: Object = {
       key,
       style: dimensions,
@@ -187,7 +192,7 @@ function getMarkdownRules(
   };
 
   function isFigmaImage(url: string): boolean {
-    return url.indexOf('figma.com') !== 0;
+    return url.indexOf('figma.com') >= 0;
   }
 
 
