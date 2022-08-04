@@ -61,7 +61,7 @@ function Comment(props: Props) {
                   {i18n('Restore')}
                 </Text>
               )}
-              {canDeletePermanently && <Text>{i18n(' or ')}</Text>}
+              {canDeletePermanently && <Text style={styles.text}>{i18n(' or ')}</Text>}
               {canDeletePermanently &&
               <Text
                 onPress={onDeletePermanently}

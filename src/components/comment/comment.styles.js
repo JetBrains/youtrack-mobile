@@ -28,6 +28,7 @@ export default EStyleSheet.create({
   deletedCommentText: {
     ...mainText,
     color: '$icon',
+    fontStyle: 'italic',
   },
   actions: {
     marginTop: UNIT,
@@ -73,7 +74,7 @@ export default EStyleSheet.create({
     color: '$text',
   },
   reactionTitle: {
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
   },
 
   commentVisibility: {
@@ -85,13 +86,16 @@ export default EStyleSheet.create({
     marginBottom: UNIT * 2,
   },
   link: {
-    color: '$link'
+    color: '$link',
   },
   disabled: {
-    color: '$disabled'
+    color: '$disabled',
   },
   iconAccent: {
-    color: '$iconAccent'
+    color: '$iconAccent',
+  },
+  text: {
+    color: '$text',
   },
 
 });
