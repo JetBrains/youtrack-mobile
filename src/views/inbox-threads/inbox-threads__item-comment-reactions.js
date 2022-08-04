@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useState} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -74,9 +74,9 @@ const ThreadCommentReactions = ({activity, currentUser}: Props) => {
   };
 
   return (
-    <>
+    <View style={styles.threadReactions}>
       <CommentReactions
-        style={styles.threadReactions}
+        style={styles.threadReactionsList}
         comment={comment}
         currentUser={currentUser}
         onReactionSelect={(targetComment: IssueComment, reaction: Reaction) => {
@@ -98,7 +98,7 @@ const ThreadCommentReactions = ({activity, currentUser}: Props) => {
         }}
         onHide={updateReactionPanelVisible}
       />}
-    </>
+    </View>
   );
 };
 

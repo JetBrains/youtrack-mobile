@@ -136,13 +136,19 @@ export default EStyleSheet.create({
     paddingTop: 0,
   },
   threadReactions: {
-    marginRight: UNIT * 3,
-    marginBottom: UNIT * 2,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    marginBottom: UNIT * 1.5,
+  },
+  threadReactionsList: {
+    marginRight: UNIT,
+    alignItems: 'center',
   },
   threadReactionsAddIcon: {
-    position: 'absolute',
-    right: 0,
-    bottom: UNIT * 2.2,
+    marginTop: UNIT / 2,
+    padding: UNIT / 2,
+    paddingLeft: 0,
   },
   threadButton: {
     marginBottom: UNIT * 1.5,
