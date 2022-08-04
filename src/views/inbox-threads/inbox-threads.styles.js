@@ -124,6 +124,7 @@ export default EStyleSheet.create({
   },
   threadChangeWrapper: {
     alignItems: 'baseline',
+    marginRight: UNIT * 4,
   },
   threadRelatedChange: {
     ...activityStyles.activityRelatedChanges,
