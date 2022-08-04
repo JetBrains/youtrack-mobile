@@ -60,9 +60,7 @@ const InboxThreadReaction = ({thread, currentUser, onNavigate}: Props) => {
               }
             }}
           >
-            <StreamComment
-              activity={_activity}
-            />
+            <StreamComment activity={_activity}/>
           </TouchableOpacity>
           <ThreadCommentReactions activity={_activity} currentUser={currentUser}/>
         </>

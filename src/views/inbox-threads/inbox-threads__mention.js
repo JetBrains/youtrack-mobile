@@ -4,14 +4,13 @@ import React from 'react';
 
 import ApiHelper from 'components/api/api__helper';
 import Avatar from 'components/avatar/avatar';
-import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
+import StreamComment from 'components/activity-stream/activity__stream-comment';
 import ThreadCommentReactions from './inbox-threads__item-comment-reactions';
 import ThreadItem from './inbox-threads__item';
 import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {isActivityCategory} from 'components/activity/activity__category';
-import {markdownText} from 'components/common-styles/typography';
 
 import type {Activity} from 'flow/Activity';
 import type {InboxThread, ThreadEntity} from 'flow/Inbox';
@@ -55,14 +54,7 @@ export default function InboxThreadMention({thread, currentUser, uiTheme, onNavi
       />}
       change={
         <>
-          <MarkdownViewChunks
-            textStyle={markdownText}
-            chunkSize={3}
-            maxChunks={1}
-            uiTheme={uiTheme}
-          >
-            {text}
-          </MarkdownViewChunks>
+          <StreamComment activity={{added: [comment]}}/>
           {!!comment && <ThreadCommentReactions activity={activity} currentUser={currentUser}/>}
         </>
       }
