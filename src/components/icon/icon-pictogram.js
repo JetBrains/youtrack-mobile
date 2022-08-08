@@ -10,6 +10,8 @@ import NothingFound from 'assets/not-found.svg';
 import NothingFoundDark from 'assets/not-found-dark.svg';
 import NothingSelected from 'assets/nothing-selected.svg';
 import NothingSelectedDark from 'assets/nothing-selected-dark.svg';
+import NoNotifications from './assets/notifications-light.svg';
+import NoNotificationsDark from './assets/notifications-dark.svg';
 import {DEFAULT_THEME} from '../theme/theme';
 
 import type {Node} from 'react';
@@ -64,8 +66,18 @@ const IconNothingSelected = (props: Props): Node =>
     },
   }} />;
 
+const IconNoNotifications = (props: Props): Node =>
+  <Icon {...{
+    ...props,
+    icon: {
+      dark: NoNotificationsDark,
+      default: NoNotifications,
+    },
+  }} />;
+
 export {
   IconNothingFound,
   IconNoProjectFound,
   IconNothingSelected,
+  IconNoNotifications,
 };

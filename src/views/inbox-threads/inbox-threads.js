@@ -11,7 +11,7 @@ import * as actions from './inbox-threads-actions';
 import Article from 'views/article/article';
 import Header from 'components/header/header';
 import InboxThreadsProgressPlaceholder from './inbox-threads__progress-placeholder';
-import InboxThreadsTab from './inbox-threads__tab';
+import InboxThreadsList from './inbox-threads__list';
 import InboxThreadsTabBar from './inbox-threads__tab-bar';
 import Issue from '../issue/issue';
 import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
@@ -33,6 +33,7 @@ import type {AppState} from '../../reducers';
 import type {Node} from 'react';
 import type {TabRoute} from 'flow/Issue';
 import type {Theme, UIThemeColors} from 'flow/Theme';
+import type {ThreadEntity} from 'flow/Inbox';
 
 const routes: TabRoute[] = threadTabsTitles.map((name: string, index: number) => ({
   key: index,
@@ -47,42 +48,45 @@ const InboxThreads: () => Node = (): Node => {
   const theme: Theme = useContext(ThemeContext);
   const isOnline: boolean = useSelector((state: AppState) => state.app.networkState?.isConnected);
 
-  const [selectedEntity, updateSelectedEntity] = useState({entity: null, navigateToActivity: false});
+  const [selectedEntity, updateSelectedEntity] = useState({
+    entity: null,
+    navigateToActivity: null,
+    commentId: null,
+  });
 
   const [isSplitView, updateIsSplitView] = useState(hasSplitView());
   const dimensionsChangeListener = useRef();
 
   const loadThreads = useCallback(
-    (folderId?: string, end?: number, showProgress?: boolean) => {
+    (folderId?: string, end?: number, showProgress?: boolean): void => {
       dispatch(actions.loadInboxThreads(folderId, end, showProgress));
     },
     [dispatch]
   );
+
   const setThreadsFromCache = useCallback(
-    (folderId?: string) => {
-      dispatch(actions.loadThreadsFromCache(folderId));
-    },
+    (folderId?: string): void => {dispatch(actions.loadThreadsFromCache(folderId));},
     [dispatch]
   );
 
+  const getLastIndex = (): number => actions.lastVisitedTabIndex() || 0;
+
   const [navigationState, updateNavigationState] = useState({
-    index: 0,
+    index: getLastIndex(),
     routes,
   });
 
+  const isArticle = (entity: ThreadEntity): boolean => hasType.article(entity);
+
   useEffect(() => {
-    const index: number = actions.lastVisitedTabIndex() || 0;
-    if (index > 0) {
-      updateNavigationState({index, routes});
-    }
-    setThreadsFromCache(folderIdMap[index]);
-    loadThreads(folderIdMap[index]);
+    setThreadsFromCache(folderIdMap[getLastIndex()]);
     dimensionsChangeListener.current = Dimensions.addEventListener('change', () => {
       updateIsSplitView(hasSplitView());
     });
     return () => dimensionsChangeListener.current?.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   const renderTabBar = (props: any) => {
     const uiThemeColors: UIThemeColors = theme.uiTheme.colors;
@@ -101,23 +105,51 @@ const InboxThreads: () => Node = (): Node => {
     );
   };
 
-  const renderEntity = () => {
-    if (!selectedEntity?.entity) {
-      return <NothingSelectedIconWithText text={i18n('Select an issue, article or change from the list')}/>;
-    }
+  const renderEntity = useCallback(
+    () => {
+      if (!selectedEntity?.entity) {
+        return <NothingSelectedIconWithText text={i18n('Select an issue, article or change from the list')}/>;
+      }
+      const entityProps = {
+        ...(isArticle(selectedEntity.entity)
+          ? {articlePlaceholder: selectedEntity.entity}
+          : {issuePlaceholder: selectedEntity.entity}),
+        navigateToActivity: selectedEntity.navigateToActivity,
+        commentId: selectedEntity.commentId,
+      };
+      return isArticle ? <Article {...entityProps}/> : <Issue {...entityProps}/>;
+    },
+    [selectedEntity.commentId, selectedEntity.entity, selectedEntity.navigateToActivity]
+  );
 
-    return (
-      hasType.article(selectedEntity.entity)
-        ? <Article articlePlaceholder={selectedEntity.entity} navigateToActivity={selectedEntity.navigateToActivity}/>
-        : (
-          <Issue
-            issuePlaceholder={selectedEntity.entity}
-            issueId={selectedEntity.entity.id}
-            navigateToActivity={selectedEntity.navigateToActivity}
-          />
-        )
-    );
-  };
+  const onNavigate = useCallback(
+    (entity, navigateToActivity, commentId) => {
+      if (hasSplitView()) {
+        updateSelectedEntity({entity, navigateToActivity, commentId});
+      } else {
+        (isArticle(entity) ? Router.Article : Router.Issue)({
+          navigateToActivity,
+          commentId,
+          ...(isArticle(entity) ? {articlePlaceholder: entity} : {issueId: entity.id}),
+        });
+      }
+    },
+    []
+  );
+
+  const AllTab = useCallback(
+    () => <InboxThreadsList onNavigate={onNavigate} folderId={folderIdMap[0]}/>,
+    [onNavigate]
+  );
+  const MentionsAndReactionsTab = useCallback(
+    () => <InboxThreadsList onNavigate={onNavigate} folderId={folderIdMap[1]}/>,
+    [onNavigate]
+  );
+  const SubscriptionsTab = useCallback(
+    () => <InboxThreadsList onNavigate={onNavigate} folderId={folderIdMap[2]}/>,
+    [onNavigate]
+  );
+
 
   const renderTabs = () => {
     return (
@@ -126,30 +158,11 @@ const InboxThreads: () => Node = (): Node => {
         renderLazyPlaceholder={() => <InboxThreadsProgressPlaceholder/>}
         swipeEnabled={true}
         navigationState={navigationState}
-        renderScene={SceneMap(
-          routes.reduce((map, it: TabRoute, index: number) => {
-            return ({
-              ...map,
-              [index]: () => (
-                <InboxThreadsTab
-                  folderId={folderIdMap[index]}
-                  onLoadMore={(folderId?: string, end?: number) => loadThreads(folderId, end)}
-                  onNavigate={(entity, navigateToActivity, commentId) => {
-                    if (isSplitView) {
-                      updateSelectedEntity({entity, navigateToActivity});
-                    } else {
-                      if (hasType.article(entity)) {
-                        Router.Article({articlePlaceholder: entity, navigateToActivity, commentId});
-                      } else {
-                        Router.Issue({issueId: entity.id, navigateToActivity, commentId});
-                      }
-                    }
-                  }}
-                />
-              ),
-            });
-          }, {})
-        )}
+        renderScene={SceneMap({
+          [0]: AllTab,
+          [1]: MentionsAndReactionsTab,
+          [2]: SubscriptionsTab,
+        })}
         initialLayout={{
           height: 0,
           width: Dimensions.get('window').width,
@@ -157,7 +170,6 @@ const InboxThreads: () => Node = (): Node => {
         renderTabBar={renderTabBar}
         onIndexChange={(index: number) => {
           setThreadsFromCache(folderIdMap[index]);
-          loadThreads(folderIdMap[index], undefined, true);
           updateNavigationState({index, routes});
           actions.lastVisitedTabIndex(index);
         }}
