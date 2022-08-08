@@ -35,7 +35,7 @@ export default function () {
   const isInboxThreadsEnabled: boolean = checkVersion(FEATURE_VERSION.inboxThreads, true);
   const isKBEnabled: boolean = checkVersion(FEATURE_VERSION.knowledgeBase, true);
 
-  const hasInboxUpdate: boolean = useSelector((appState: AppState) => {
+  const hasInboxUpdate: boolean = isInboxThreadsEnabled && useSelector((appState: AppState) => {
     const inboxFolders: InboxFolder[] = appState.app.inboxThreadsFolders.filter(
       (it) => it?.id === folderIdMap[1] || it?.id === folderIdMap[2]
     ) || [];
@@ -228,7 +228,7 @@ export default function () {
           testID="test:id/menuNotifications"
           icon={
             <View>
-              {isInboxThreadsEnabled && hasInboxUpdate && !isActiveRoute(isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox) && (
+              {hasInboxUpdate && !isActiveRoute(isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox) && (
                 <AnimatedView
                   useNativeDriver
                   duration={1000}

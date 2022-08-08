@@ -236,13 +236,13 @@ const loadInboxThreads = (folderId?: string | null, end?: number, showProgress: 
     if (error) {
       dispatch(setError({error}));
     } else {
+      doMarkSeen();
       dispatch(setNotifications({
         threads,
         reset,
         folderId: folderKey,
       }));
       await updateCache({[folderId || folderIdAllKey]: threads.slice(0, MAX_CACHED_THREADS)});
-      await doMarkSeen();
     }
 
     async function doMarkSeen() {

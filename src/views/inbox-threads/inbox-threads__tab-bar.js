@@ -23,7 +23,7 @@ const InboxThreadsTabBar = ({route, focused, index}: {route: TabRoute, focused: 
 
   const hasTabUpdates = (inboxFolders: InboxFolder[], folderId?: string): boolean => {
     const folder: ?InboxFolder = inboxFolders.find((it: InboxFolder) => it.id === folderId);
-    return !!folder && folder.lastNotified > folder.lastSeen;
+    return !!folder && (folder.lastNotified > folder.lastSeen);
   };
 
 
