@@ -171,6 +171,7 @@ const InboxThreads: () => Node = (): Node => {
         onIndexChange={(index: number) => {
           setThreadsFromCache(folderIdMap[index]);
           updateNavigationState({index, routes});
+          loadThreads(folderIdMap[index], undefined, true);
           actions.lastVisitedTabIndex(index);
         }}
       />

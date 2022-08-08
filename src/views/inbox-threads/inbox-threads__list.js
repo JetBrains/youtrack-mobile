@@ -147,7 +147,7 @@ const InboxThreadsList = ({
         refreshControl={<RefreshControl
           refreshing={false}
           tintColor={styles.link.color}
-          onRefresh={loadThreads}
+          onRefresh={() => loadThreads(folderId)}
         />}
         renderItem={renderItem}
       />
