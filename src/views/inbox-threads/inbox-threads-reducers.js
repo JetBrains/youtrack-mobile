@@ -7,7 +7,7 @@ import type {CustomError} from 'flow/Error';
 import type {InboxThread, ThreadsStateDataKey} from 'flow/Inbox';
 
 export interface ThreadsStateData {
-  [ThreadsStateDataKey]: {
+  [key: ThreadsStateDataKey]: {
     threads: InboxThread[],
     hasMore: boolean
   };

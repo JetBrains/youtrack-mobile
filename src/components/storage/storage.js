@@ -31,7 +31,7 @@ export const storageStateAuthParamsKey: string = 'authParamsKey';
 export const THEME_MODE_KEY = 'YT_THEME_MODE';
 
 export interface InboxThreadsCache {
-  [ThreadsStateDataKey]: InboxThread[];
+  [key: ThreadsStateDataKey]: InboxThread[];
   unreadOnly: boolean;
   lastVisited: number;
 }
