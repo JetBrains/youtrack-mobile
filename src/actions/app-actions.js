@@ -31,7 +31,7 @@ import {
   storageStateAuthParamsKey,
   storeAccounts,
 } from 'components/storage/storage';
-import {folderIdAllKey, folderIdMap} from 'views/inbox-threads/inbox-threads-helper';
+import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
 import {getCachedPermissions, storeYTCurrentUser} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
@@ -466,7 +466,7 @@ export function completeInitialization(
 
     dispatch(loadWorkTimeSettings());
     dispatch(subscribeToPushNotifications());
-    dispatch(inboxSetUpdateStatus());
+    dispatch(inboxCheckUpdateStatus());
   };
 }
 
@@ -837,24 +837,22 @@ function receiveInboxUpdateStatus(inboxThreadsFolders: InboxFolder[]): { type: s
   };
 }
 
-const inboxSetUpdateStatus = (): Action => {
+const getFirstCachedThread = (): ?InboxThread => {
+  const inboxThreadsCache: ?InboxThreadsCache = getStorageState()?.inboxThreadsCache;
+  return inboxThreadsCache && inboxThreadsCache[folderIdAllKey] && inboxThreadsCache[folderIdAllKey][0];
+};
+
+const inboxCheckUpdateStatus = (): Action => {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     if (getState().app?.networkState?.isConnected === true) {
-      const inboxThreadsCache: InboxThreadsCache = getStorageState()?.inboxThreadsCache || {[folderIdAllKey]: []};
-      const firstItem: ?InboxThread = inboxThreadsCache[folderIdAllKey] && inboxThreadsCache[folderIdAllKey][0];
-      if (!firstItem?.notified) {
-        dispatch(receiveInboxUpdateStatus([{
-          id: folderIdMap[1],
-          lastNotified: 1,
-          lastSeen: 0,
-        }]));
-      } else {
-        const [error, folders]: [?CustomError, Array<InboxFolder>] = await until(
-          getApi().inbox.getFolders(firstItem.notified + 1)
-        );
-        if (!error) {
-          dispatch(receiveInboxUpdateStatus(folders));
-        }
+      const firstCachedThread: ?InboxThread = getFirstCachedThread();
+      const [error, folders]: [?CustomError, Array<InboxFolder>] = await until(
+        getApi().inbox.getFolders(
+          typeof firstCachedThread?.notified === 'number' ? firstCachedThread?.notified + 1 : undefined
+        )
+      );
+      if (!error) {
+        dispatch(receiveInboxUpdateStatus(folders));
       }
     }
   };
@@ -862,5 +860,5 @@ const inboxSetUpdateStatus = (): Action => {
 
 
 export {
-  inboxSetUpdateStatus,
+  inboxCheckUpdateStatus,
 };

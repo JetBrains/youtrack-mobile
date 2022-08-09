@@ -164,8 +164,8 @@ export default (createReducer(initialState, {
       ...state,
       inboxThreadsFolders: action.inboxThreadsFolders.map((it: InboxFolder) => ({
         ...it,
-        lastSeen: Math.max(it.lastSeen, map[it.id]?.lastSeen || 0),
-        lastNotified: Math.max(it.lastNotified, map[it.id]?.lastNotified || 0),
+        lastSeen: Math.max(it.lastSeen, map[it.id]?.lastSeen) || -1,
+        lastNotified: Math.max(it.lastNotified, map[it.id]?.lastNotified) || -1,
       })),
     };
   },

@@ -46,7 +46,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async getFolders(start: number): Promise<InboxFolder> {
+  async getFolders(start: number | string = ''): Promise<InboxFolder> {
     return this.makeAuthorizedRequest(`${this.youTrackApiUrl}/inbox/folders?fields=id,lastNotified,lastSeen&${start}`);
   }
 

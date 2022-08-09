@@ -14,7 +14,7 @@ import {folderIdMap} from 'views/inbox-threads/inbox-threads-helper';
 import {getStorageState} from 'components/storage/storage';
 import {IconBell, IconBoard, IconSettings, IconTask, IconKnowledgeBase, IconCircle} from 'components/icon/icon';
 import {InboxFolder} from 'flow/Inbox';
-import {inboxSetUpdateStatus} from '../../actions/app-actions';
+import {inboxCheckUpdateStatus} from '../../actions/app-actions';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {MenuItem} from './menu__item';
 import {routeMap} from '../../app-routes';
@@ -45,7 +45,7 @@ export default function () {
   const isInProgress: boolean = useSelector((appState: AppState) => appState.app.isInProgress);
   const setInboxHasUpdateStatus = useCallback(
     () => {
-      dispatch(inboxSetUpdateStatus());
+      dispatch(inboxCheckUpdateStatus());
     },
     [dispatch]
   );

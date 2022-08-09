@@ -13,7 +13,7 @@ import mocks from '../../test/mocks';
 import permissionsHelper from 'components/permissions-store/permissions-helper';
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
-import {folderIdAllKey, folderIdMap} from '../views/inbox-threads/inbox-threads-helper';
+import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
 
 jest.mock('components/router/router', () => ({
   navigateToDefaultRoute: jest.fn(),
@@ -346,21 +346,23 @@ describe('app-actions', () => {
         },
       });
 
+      const foldersMock = createInboxFoldersMock();
+      apiMock.inbox.getFolders.mockResolvedValueOnce(foldersMock);
+
       await store.dispatch(actions.completeInitialization());
 
-      expect(store.getActions()[1]).toEqual({
-        type: types.INBOX_THREADS_FOLDERS,
-        inboxThreadsFolders: [{
-          id: folderIdMap[1],
-          lastNotified: 1,
-          lastSeen: 0,
-        }],
-      });
+      setTimeout(() => {
+        expect(store.getActions()[1]).toEqual({
+          type: types.INBOX_THREADS_FOLDERS,
+          inboxThreadsFolders: foldersMock,
+        });
+      }, 0);
+
     });
   });
 
 
-  describe('inboxSetUpdateStatus', () => {
+  describe('inboxCheckUpdateStatus', () => {
     let foldersMock;
     beforeEach(() => {
       updateStore({
@@ -371,57 +373,64 @@ describe('app-actions', () => {
           },
         },
       });
+      foldersMock = createInboxFoldersMock();
     });
 
 
-    describe('inboxSetUpdateStatus/check status', () => {
-      let threadMock;
-      beforeEach(async () => {
-        threadMock = mocks.createThreadMock();
-        await mocks.setStorage({
-          inboxThreadsCache: {
-            [folderIdAllKey]: [threadMock],
-          },
-        });
+    it('should load inbox thread folders without `start` parameter', async () => {
+      mocks.setStorage({inboxThreadsCache: {[folderIdAllKey]: []}});
+      await store.dispatch(actions.inboxCheckUpdateStatus());
 
-        foldersMock = [
-          {
-            id: 'direct',
-            lastNotified: 2,
-            lastSeen: 1,
-          },
-          {
-            id: 'subscription',
-            lastNotified: 1,
-            lastSeen: 1,
-          },
-        ];
+      expect(apiMock.inbox.getFolders).toHaveBeenCalledWith(undefined);
+    });
+
+    it('should load inbox thread folders with `start` parameter - a max value from all folders` lasSeen', async () => {
+      const notifiedMock = 3;
+      mocks.setStorage({
+        inboxThreadsCache: {
+          [folderIdAllKey]: [
+            mocks.createThreadMock({notified: notifiedMock}),
+            mocks.createThreadMock({notified: 2}),
+          ],
+        },
       });
+      await store.dispatch(actions.inboxCheckUpdateStatus());
 
-      it('should load inbox thread folders to check the status', async () => {
-        await store.dispatch(actions.inboxSetUpdateStatus());
+      expect(apiMock.inbox.getFolders).toHaveBeenCalledWith(notifiedMock + 1);
+    });
 
-        expect(apiMock.inbox.getFolders).toHaveBeenCalledWith(threadMock.notified + 1);
+    it('should set inbox thread folders', async () => {
+      apiMock.inbox.getFolders.mockResolvedValueOnce(foldersMock);
+      await store.dispatch(actions.inboxCheckUpdateStatus());
+
+      expect(store.getActions()[0]).toEqual({
+        type: types.INBOX_THREADS_FOLDERS,
+        inboxThreadsFolders: foldersMock,
       });
+    });
 
-      it('should set inbox thread folders', async () => {
-        apiMock.inbox.getFolders.mockResolvedValueOnce(foldersMock);
-        await store.dispatch(actions.inboxSetUpdateStatus());
+    it('should not set inbox thread folders on error', async () => {
+      apiMock.inbox.getFolders.mockRejectedValueOnce(new Error());
+      await store.dispatch(actions.inboxCheckUpdateStatus());
 
-        expect(store.getActions()[0]).toEqual({
-          type: types.INBOX_THREADS_FOLDERS,
-          inboxThreadsFolders: foldersMock,
-        });
-      });
-
-      it('should not set inbox thread folders on error', async () => {
-        apiMock.inbox.getFolders.mockRejectedValueOnce(new Error());
-        await store.dispatch(actions.inboxSetUpdateStatus());
-
-        expect(store.getActions().length).toEqual(0);
-      });
+      expect(store.getActions().length).toEqual(0);
     });
   });
+
+  function createInboxFoldersMock() {
+    return [
+      {
+        id: 'direct',
+        lastNotified: 2,
+        lastSeen: 1,
+      },
+      {
+        id: 'subscription',
+        lastNotified: 1,
+        lastSeen: 1,
+      },
+    ];
+  }
 
 
   describe('redirectToRoute', () => {

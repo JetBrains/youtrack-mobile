@@ -202,7 +202,7 @@ const markSeen = (folderId?: string): ((
       return;
     }
     const lastNotified: number = await dispatch(setFolderSeen(folderId));
-    dispatch(markFolderSeen(folderId, lastNotified));
+    dispatch(markFolderSeen(folderId, Math.max(lastNotified, 0)));
   };
 };
 const loadInboxThreads = (folderId?: string | null, end?: number, showProgress: boolean = false): ((

@@ -199,7 +199,7 @@ describe('<Menu/>', () => {
 
     beforeEach(() => {
       mockRouter();
-      jest.spyOn(appActions, 'inboxSetUpdateStatus');
+      jest.spyOn(appActions, 'inboxCheckUpdateStatus');
     });
     describe('Inbox threads is available', () => {
       beforeEach(() => {
@@ -211,7 +211,7 @@ describe('<Menu/>', () => {
         const {getByTestId} = doRender();
         fireEvent.press(getByTestId('test:id/menuIssues'));
 
-        expect(appActions.inboxSetUpdateStatus).toHaveBeenCalledTimes(1);
+        expect(appActions.inboxCheckUpdateStatus).toHaveBeenCalledTimes(1);
       });
 
       it('should poll status', async () => {
@@ -219,7 +219,7 @@ describe('<Menu/>', () => {
         fireEvent.press(getByTestId('test:id/menuIssues'));
 
         jest.advanceTimersByTime(menuPollInboxStatusDelay);
-        expect(appActions.inboxSetUpdateStatus).toHaveBeenCalledTimes(2);
+        expect(appActions.inboxCheckUpdateStatus).toHaveBeenCalledTimes(2);
       });
 
 
@@ -228,7 +228,7 @@ describe('<Menu/>', () => {
         fireEvent.press(getByTestId('test:id/menuNotifications'));
         jest.advanceTimersByTime(menuPollInboxStatusDelay);
 
-        expect(appActions.inboxSetUpdateStatus).toHaveBeenCalled();
+        expect(appActions.inboxCheckUpdateStatus).toHaveBeenCalled();
       });
     });
 
@@ -243,7 +243,7 @@ describe('<Menu/>', () => {
         fireEvent.press(getByTestId('test:id/menuIssues'));
         jest.advanceTimersByTime(menuPollInboxStatusDelay);
 
-        expect(appActions.inboxSetUpdateStatus).not.toHaveBeenCalled();
+        expect(appActions.inboxCheckUpdateStatus).not.toHaveBeenCalled();
       });
     });
   });
