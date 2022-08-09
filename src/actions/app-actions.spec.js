@@ -337,14 +337,7 @@ describe('app-actions', () => {
 
   describe('completeInitialization', () => {
     it('should check for inbox thread update', async () => {
-      updateStore({
-        app: {
-          ...appStateMock,
-          networkState: {
-            isConnected: true,
-          },
-        },
-      });
+      setAppStateNetworkConnected(true);
 
       const foldersMock = createInboxFoldersMock();
       apiMock.inbox.getFolders.mockResolvedValueOnce(foldersMock);
@@ -365,14 +358,7 @@ describe('app-actions', () => {
   describe('inboxCheckUpdateStatus', () => {
     let foldersMock;
     beforeEach(() => {
-      updateStore({
-        app: {
-          ...appStateMock,
-          networkState: {
-            isConnected: true,
-          },
-        },
-      });
+      setAppStateNetworkConnected(true);
       foldersMock = createInboxFoldersMock();
     });
 
@@ -514,4 +500,14 @@ describe('app-actions', () => {
     };
   }
 
+  function setAppStateNetworkConnected(isConnected = true) {
+    updateStore({
+      app: {
+        ...appStateMock,
+        networkState: {
+          isConnected,
+        },
+      },
+    });
+  }
 });
