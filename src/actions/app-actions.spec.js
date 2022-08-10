@@ -344,13 +344,7 @@ describe('app-actions', () => {
 
       await store.dispatch(actions.completeInitialization());
 
-      setTimeout(() => {
-        expect(store.getActions()[1]).toEqual({
-          type: types.INBOX_THREADS_FOLDERS,
-          inboxThreadsFolders: foldersMock,
-        });
-      }, 0);
-
+      expect(apiMock.inbox.getFolders).toHaveBeenCalled();
     });
   });
 
