@@ -38,4 +38,23 @@ const ModalPortal = (props: Props): Node => {
   </Portal>;
 };
 
+export const ModalPortalPart = ({
+  children,
+  isVisible,
+  style,
+}: {
+  children: any,
+  isVisible: boolean,
+  style?: ViewStyleProp,
+}): Node => {
+  return <Portal>
+    {!!children && isVisible && (
+      <View style={style}>
+        {children}
+      </View>
+    )}
+  </Portal>;
+};
+
+
 export default ModalPortal;

@@ -1,3 +1,5 @@
+import {Platform} from 'react-native';
+
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {mainText, secondaryText} from 'components/common-styles/typography';
@@ -190,5 +192,33 @@ export default EStyleSheet.create({
     position: 'absolute',
     top: UNIT - 1,
     right: -UNIT / 2,
+  },
+  threadUpdateButton: {
+    position: 'absolute',
+    zIndex: 1,
+    top: UNIT * 3,
+    alignSelf: 'center',
+    paddingVertical: UNIT / 1.5,
+    paddingHorizontal: UNIT * 3,
+    borderRadius: UNIT * 3,
+    backgroundColor: '$link',
+    ...Platform.select({
+      ios: {
+        shadowColor: '$icon',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+      },
+      android: {
+        elevation: 9,
+      },
+    }),
+  },
+  threadUpdateButtonText: {
+    ...secondaryText,
+    color: '$textButton',
   },
 });

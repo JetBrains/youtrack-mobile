@@ -27,7 +27,7 @@ export default EStyleSheet.create({
     paddingRight: UNIT,
     fontWeight: '500',
     textTransform: 'none',
-
+    color: '$text',
     ...Platform.select({
       ios: {},
       android: {

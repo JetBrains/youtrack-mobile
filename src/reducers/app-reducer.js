@@ -162,11 +162,14 @@ export default (createReducer(initialState, {
     );
     return {
       ...state,
-      inboxThreadsFolders: action.inboxThreadsFolders.map((it: InboxFolder) => ({
-        ...it,
-        lastSeen: Math.max(it.lastSeen, map[it.id]?.lastSeen) || -1,
-        lastNotified: Math.max(it.lastNotified, map[it.id]?.lastNotified) || -1,
-      })),
+      inboxThreadsFolders: action.inboxThreadsFolders.map((it: InboxFolder) => {
+        const me = map[it.id];
+        return {
+          ...it,
+          lastSeen: Math.max(it.lastSeen, typeof me?.lastSeen === 'number' ? me.lastSeen : -1),
+          lastNotified: Math.max(it.lastNotified, typeof me?.lastNotified === 'number' ? me.lastNotified : -1),
+        };
+      }),
     };
   },
   [types.INBOX_THREADS_FOLDER_SEEN](state: RootState, action: { folderId: string, lasSeen: number }) {
