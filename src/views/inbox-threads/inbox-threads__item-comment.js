@@ -38,7 +38,7 @@ export default function ThreadCommentItem({group, currentUser, target, onNavigat
           ).avatarUrl}}
       />}
       change={<>
-        <StreamComment activity={group.comment} attachments={attachments}/>
+        <StreamComment activity={group.comment} attachments={attachments} hideVisibility={true}/>
         <ThreadCommentReactions activity={group.comment} currentUser={currentUser}/>
         <View style={styles.threadChangeWrapper}>
           <TouchableOpacity

@@ -23,6 +23,7 @@ interface Props {
   activity: Activity,
   attachments?: Array<Attachment>;
   commentActions?: ActivityStreamCommentActions;
+  hideVisibility?: boolean;
   youtrackWiki?: YouTrackWiki;
   onCheckboxUpdate?: (checked: boolean, position: number, comment: IssueComment) => any;
   onShowCommentActions?: (comment: IssueComment) => any;
@@ -32,6 +33,7 @@ const StreamComment = ({
   activity,
   attachments = [],
   commentActions,
+  hideVisibility,
   onCheckboxUpdate,
   onShowCommentActions = () => {},
   youtrackWiki,
@@ -79,7 +81,7 @@ const StreamComment = ({
         </View>
       )}
 
-      {!comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
+      {!hideVisibility && !comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
         <CommentVisibility
           style={styles.activityVisibility}
           visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
