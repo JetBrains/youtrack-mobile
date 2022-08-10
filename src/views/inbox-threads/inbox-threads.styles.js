@@ -4,7 +4,6 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {mainText, secondaryText} from 'components/common-styles/typography';
 import {rowStyles as activityStyles} from 'components/activity-stream/activity__stream.styles';
-import {separatorBorder} from 'components/common-styles/list';
 import {splitViewStyles} from 'components/common-styles/split-view';
 import {UNIT} from 'components/variables/variables';
 
@@ -43,7 +42,7 @@ export default EStyleSheet.create({
     color: '$text',
   },
   thread: {
-    marginTop: UNIT * 2,
+    marginTop: UNIT * 1.5,
     marginLeft: UNIT * 2,
   },
   threadFirst: {
@@ -52,8 +51,8 @@ export default EStyleSheet.create({
   threadSeparator: {
     marginLeft: UNIT * 2,
     marginBottom: UNIT,
-    ...separatorBorder,
-    borderColor: '$separator',
+    borderBottomWidth: 1,
+    borderColor: '$greyBackground',
   },
   threadLast: {
     borderBottomWidth: 0,
@@ -63,7 +62,7 @@ export default EStyleSheet.create({
     top: UNIT / 2,
     left: 15,
     width: 2,
-    height: '98%',
+    height: '99%',
     paddingBottom: UNIT * 2,
     backgroundColor: '$separator',
   },
@@ -134,7 +133,10 @@ export default EStyleSheet.create({
   },
   threadChangeWrapper: {
     alignItems: 'baseline',
-    marginRight: UNIT * 4,
+    marginTop: -UNIT,
+    marginBottom: UNIT,
+    marginLeft: UNIT * 5.5,
+    marginRight: UNIT * 2,
   },
   threadRelatedChange: {
     ...activityStyles.activityRelatedChanges,
@@ -149,7 +151,7 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    marginBottom: UNIT * 1.5,
+    marginBottom: UNIT / 2,
   },
   threadReactionsList: {
     marginRight: UNIT,

@@ -28,32 +28,34 @@ interface Props {
 export default function ThreadCommentItem({group, currentUser, target, onNavigate}: Props) {
   const attachments: Attachment[] = firstActivityChange(group.comment)?.attachments || [];
   return (
-    <ThreadItem
-      author={group.comment.author}
-      avatar={<Avatar
-        userName={getEntityPresentation(group.comment.author)}
-        size={30}
-        source={{uri: ApiHelper.convertRelativeUrl(
-            group.comment.author, 'avatarUrl', getApi().config.backendUrl
-          ).avatarUrl}}
-      />}
-      change={<>
-        <StreamComment activity={group.comment} attachments={attachments} hideVisibility={true}/>
-        <ThreadCommentReactions activity={group.comment} currentUser={currentUser}/>
-        <View style={styles.threadChangeWrapper}>
-          <TouchableOpacity
-            style={styles.threadButton}
-            onPress={() => {
-              onNavigate(target, group.comment.id);
-            }}
-          >
-            <Text style={styles.threadButtonText}>{i18n('View comment')}</Text>
-          </TouchableOpacity>
-        </View>
-      </>}
-      group={group}
-      reason={i18n('commented')}
-      timestamp={group.comment.timestamp}
-    />
+    <>
+      <ThreadItem
+        author={group.comment.author}
+        avatar={<Avatar
+          userName={getEntityPresentation(group.comment.author)}
+          size={30}
+          source={{uri: ApiHelper.convertRelativeUrl(
+              group.comment.author, 'avatarUrl', getApi().config.backendUrl
+            ).avatarUrl}}
+        />}
+        change={<>
+          <StreamComment activity={group.comment} attachments={attachments} hideVisibility={true}/>
+          <ThreadCommentReactions activity={group.comment} currentUser={currentUser}/>
+        </>}
+        group={group}
+        reason={i18n('commented')}
+        timestamp={group.comment.timestamp}
+      />
+      <View style={styles.threadChangeWrapper}>
+        <TouchableOpacity
+          style={styles.threadButton}
+          onPress={() => {
+            onNavigate(target, group.comment.id);
+          }}
+        >
+          <Text style={styles.threadButtonText}>{i18n('View comment')}</Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 }
