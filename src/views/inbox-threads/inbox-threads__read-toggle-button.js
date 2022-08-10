@@ -34,7 +34,7 @@ export default function InboxThreadReadToggleButton({messages = [], onReadChange
       {(messages[0].read
         ? <IconCircleOutline
           size={10}
-          color={styles.link.color}
+          color={styles.icon.color}
         />
         : <IconCircle
           size={10}
