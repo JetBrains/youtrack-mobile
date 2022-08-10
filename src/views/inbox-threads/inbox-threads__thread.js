@@ -98,9 +98,11 @@ function Thread({
       {...otherProps}
     >
       {!threadData.entityAtBottom && (
-        <View style={hasReadActions && styles.threadTitleWrapper}>
-          {renderedEntity}
-          {hasReadActions && renderSettings()}
+        <View style={hasReadActions && styles.threadTitleContainer}>
+          <View style={styles.threadTitleContent}>
+            {renderedEntity}
+            {hasReadActions && renderSettings()}
+          </View>
         </View>
       )}
 
@@ -113,7 +115,9 @@ function Thread({
           doToggleMessagesRead(messages, read);
         }}
       />
-      {threadData.entityAtBottom && renderedEntity}
+      {threadData.entityAtBottom && <View style={styles.threadTitleContainer}>
+        {renderedEntity}
+      </View>}
     </View>
   );
 

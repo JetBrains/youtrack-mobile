@@ -66,10 +66,12 @@ export default EStyleSheet.create({
     paddingBottom: UNIT * 2,
     backgroundColor: '$separator',
   },
-  threadTitleWrapper: {
+  threadTitleContainer: {
+    alignItems: 'baseline',
+  },
+  threadTitleContent: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    overflow: 'hidden',
   },
   threadTitle: {
     flexGrow: 1,
@@ -88,6 +90,7 @@ export default EStyleSheet.create({
     width: 24,
     height: 24,
     marginLeft: UNIT,
+    marginRight: UNIT / 4,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -131,8 +134,9 @@ export default EStyleSheet.create({
     marginRight: UNIT * 2,
     marginBottom: UNIT * 1.5,
   },
-  threadChangeWrapper: {
-    alignItems: 'baseline',
+  threadChangeActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: -UNIT,
     marginBottom: UNIT,
     marginLeft: UNIT * 5.5,
@@ -156,6 +160,11 @@ export default EStyleSheet.create({
   threadReactionsList: {
     marginRight: UNIT,
     alignItems: 'center',
+  },
+  threadReactionsAddButton: {
+    position:'absolute',
+    bottom: UNIT * 2,
+    right: UNIT * 2,
   },
   threadReactionsAddIcon: {
     marginTop: UNIT / 2,

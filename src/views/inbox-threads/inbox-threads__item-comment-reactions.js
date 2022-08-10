@@ -1,20 +1,17 @@
 /* @flow */
 
-import React, {useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import CommentReactions from 'components/comment/comment-reactions';
-import ReactionAddIcon from 'components/reactions/new-reaction.svg';
 import ReactionsPanel from '../issue/activity/issue__activity-reactions-dialog';
 import {COMMENT_REACTIONS_SEPARATOR} from 'components/reactions/reactions';
-import {HIT_SLOP} from 'components/common-styles/button';
 import {onReactionSelect} from './inbox-threads-actions';
 
 import styles from './inbox-threads.styles';
 
-import type {AppState} from '../../reducers';
 import type {User} from 'flow/User';
 import type {Reaction} from 'flow/Reaction';
 import type {Activity} from 'flow/Activity';
@@ -24,13 +21,19 @@ import type {ThreadEntity} from 'flow/Inbox';
 interface Props {
   activity: Activity;
   currentUser: User;
+  isPanelVisible: boolean;
 }
 
-const ThreadCommentReactions = ({activity, currentUser}: Props) => {
+const ThreadCommentReactions = ({activity, currentUser, isPanelVisible}: Props) => {
   const dispatch = useDispatch();
-  const isOnline: boolean = useSelector((state: AppState) => state.app.networkState?.isConnected);
   const [comment, updateComment] = useState(activity.comment);
   const [isReactionPanelVisible, updateReactionPanelVisible] = useState(false);
+
+  useEffect(() => {
+    if (typeof isPanelVisible === 'boolean') {
+      updateReactionPanelVisible(isPanelVisible);
+    }
+  }, [isPanelVisible]);
 
   const onSelect = (reaction: Reaction) => {
     const entity: ?ThreadEntity = comment?.issue || comment?.article;
@@ -83,14 +86,6 @@ const ThreadCommentReactions = ({activity, currentUser}: Props) => {
           onSelect(reaction);
         }}
       />
-      <TouchableOpacity
-        style={styles.threadReactionsAddIcon}
-        hitSlop={HIT_SLOP}
-        disabled={!isOnline}
-        onPress={() => updateReactionPanelVisible(true)}
-      >
-        <ReactionAddIcon color={isOnline ? styles.icon.color : styles.disabled.color}/>
-      </TouchableOpacity>
       {isReactionPanelVisible && <ReactionsPanel
         onSelect={(reaction: Reaction) => {
           onSelect(reaction);

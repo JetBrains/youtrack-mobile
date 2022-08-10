@@ -1,16 +1,19 @@
 /* @flow */
 
-import React from 'react';
+import React, {useState} from 'react';
 
 import ApiHelper from 'components/api/api__helper';
 import Avatar from 'components/avatar/avatar';
 import StreamComment from 'components/activity-stream/activity__stream-comment';
+import ThreadAddReactionButton from './inbox-threads__item-comment-add-reaction-button';
 import ThreadCommentReactions from './inbox-threads__item-comment-reactions';
 import ThreadItem from './inbox-threads__item';
 import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {isActivityCategory} from 'components/activity/activity__category';
+
+import styles from './inbox-threads.styles';
 
 import type {Activity} from 'flow/Activity';
 import type {InboxThread, ThreadEntity} from 'flow/Inbox';
@@ -26,6 +29,8 @@ interface Props {
 }
 
 export default function InboxThreadMention({thread, currentUser, uiTheme, onNavigate}: Props) {
+  const [isReactionPanelVisible, updateReactionPanelVisible] = useState(false);
+
   const activity: Activity = thread.messages[0].activities[0];
   activity.author = ApiHelper.convertRelativeUrl(activity.author, 'avatarUrl', getApi().config.backendUrl);
   let comment: ?IssueComment;
@@ -45,24 +50,35 @@ export default function InboxThreadMention({thread, currentUser, uiTheme, onNavi
 
   const target = thread.subject.target;
   return text ? (
-    <ThreadItem
-      author={activity.author}
-      avatar={<Avatar
-        userName={getEntityPresentation(activity.author)}
-        size={30}
-        source={{uri: activity.author.avatarUrl}}
-      />}
-      change={
-        <>
-          <StreamComment activity={{added: [comment]}}/>
-          {!!comment && <ThreadCommentReactions activity={activity} currentUser={currentUser}/>}
-        </>
-      }
-      onNavigate={() => {
-        onNavigate(target.issue || target.article, activity.id, comment?.id);
-      }}
-      reason={i18n('mentioned you')}
-      timestamp={thread.notified}
-    />
+    <>
+      <ThreadItem
+        author={activity.author}
+        avatar={<Avatar
+          userName={getEntityPresentation(activity.author)}
+          size={30}
+          source={{uri: activity.author.avatarUrl}}
+        />}
+        change={
+          <>
+            <StreamComment activity={{added: [comment]}}/>
+            {!!comment && (
+              <ThreadCommentReactions
+                activity={activity}
+                currentUser={currentUser}
+                isPanelVisible={isReactionPanelVisible}
+              />
+            )}
+          </>
+        }
+        onNavigate={() => {
+          onNavigate(target.issue || target.article, activity.id, comment?.id);
+        }}
+        reason={i18n('mentioned you')}
+        timestamp={thread.notified}
+      />
+      <ThreadAddReactionButton
+        style={styles.threadReactionsAddButton}
+        onPress={() => updateReactionPanelVisible(true)}/>
+    </>
   ) : null;
 }
