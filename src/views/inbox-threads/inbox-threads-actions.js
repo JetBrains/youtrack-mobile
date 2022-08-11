@@ -300,7 +300,7 @@ const readMessageToggle = (messages: InboxThreadMessage[], read: boolean): ((
   };
 };
 
-const markAllAsRead = (): ((
+const markAllAsRead = (index: number): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
@@ -308,7 +308,14 @@ const markAllAsRead = (): ((
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<void> => {
     trackEvent('Inbox threads: mark all as read');
     if (isOnline(getState())) {
+      dispatch(toggleProgress({inProgress: true}));
+      dispatch(setNotifications({
+        threads: [],
+        reset: true,
+        folderId: folderIdMap[index],
+      }));
       const [error]: [?CustomError, { read: boolean }] = await until(getApi().inbox.markAllAsRead());
+      dispatch(toggleProgress({inProgress: false}));
       if (error) {
         notifyError(error);
       } else {

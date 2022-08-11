@@ -197,7 +197,10 @@ const InboxThreads: () => Node = (): Node => {
             },
             {
               title: i18n('Mark all as read'),
-              execute: () => dispatch(markAllAsRead()),
+              execute: async () => {
+                await dispatch(markAllAsRead(navigationState.index));
+                loadThreads(folderIdMap[navigationState.index], null, true);
+              },
             },
             {
               title: i18n('Notification settings…'),
