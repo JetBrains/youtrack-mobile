@@ -25,6 +25,14 @@ describe('Inbox Threads', () => {
         updateFolders: jest.fn(),
         saveAllAsSeen: jest.fn(),
       },
+      articles: {
+        addCommentReaction: jest.fn().mockResolvedValue({}),
+        removeCommentReaction: jest.fn().mockResolvedValue({}),
+      },
+      issue: {
+        addCommentReaction: jest.fn().mockResolvedValue({}),
+        removeCommentReaction: jest.fn().mockResolvedValue({}),
+      },
     };
 
     createStore(true);
@@ -62,6 +70,16 @@ describe('Inbox Threads', () => {
           isInProgress: false,
         },
         {
+          type: INBOX_THREADS_FOLDER_SEEN,
+          folderId: folderIdMap[1],
+          lastSeen: 0,
+        },
+        {
+          type: INBOX_THREADS_FOLDER_SEEN,
+          folderId: folderIdMap[2],
+          lastSeen: 0,
+        },
+        {
           type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
           payload: {
             folderId: folderIdAllKey,
@@ -85,7 +103,7 @@ describe('Inbox Threads', () => {
       await store.dispatch(actions.loadInboxThreads(undefined, 1));
 
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, false);
-      expect(store.getActions()[4]).toEqual({
+      expect(store.getActions()[6]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {
           folderId: folderIdAllKey,
@@ -106,7 +124,7 @@ describe('Inbox Threads', () => {
       await store.dispatch(actions.loadInboxThreads(undefined, 1));
 
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, true);
-      expect(store.getActions()[4]).toEqual({
+      expect(store.getActions()[6]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {
           folderId: folderIdAllKey,
@@ -117,7 +135,7 @@ describe('Inbox Threads', () => {
     });
 
 
-    describe('Save as seen', () => {
+    describe('Mark and save a folder as seen', () => {
       let folderId;
       let lastKnownNotified;
       beforeEach(() => {
@@ -129,40 +147,90 @@ describe('Inbox Threads', () => {
         apiMock.inbox.saveAllAsSeen.mockResolvedValueOnce({});
       });
 
-      it('should send request to mark one folder as seen', async () => {
-        await store.dispatch(actions.loadInboxThreads(folderId));
 
-        expect(apiMock.inbox.updateFolders).toHaveBeenCalledWith(folderId, {lastSeen: lastKnownNotified});
-      });
+      describe('saveFolderSeen', () => {
+        it('should send request to mark one folder as seen', async () => {
+          await store.dispatch(actions.loadInboxThreads(folderId));
 
-      it('should send request to mark all folders as seen', async () => {
-        await store.dispatch(actions.markFolderSeen(folderIdMap[0], lastKnownNotified));
+          expect(apiMock.inbox.updateFolders).toHaveBeenCalledWith(folderId, {lastSeen: lastKnownNotified});
+        });
 
-        expect(apiMock.inbox.saveAllAsSeen).toHaveBeenCalledWith(lastKnownNotified);
-      });
+        it('should send request to mark all folders as seen', async () => {
+          await store.dispatch(actions.saveFolderSeen(folderIdMap[0], lastKnownNotified));
 
-      it('should update folder`s lastSeen in the state', async () => {
-        await store.dispatch(actions.markSeen(folderId));
-
-        expect(store.getActions()[0]).toEqual({
-          type: INBOX_THREADS_FOLDER_SEEN,
-          folderId,
-          lastSeen: lastKnownNotified,
+          expect(apiMock.inbox.saveAllAsSeen).toHaveBeenCalledWith(lastKnownNotified);
         });
       });
 
-      it('should set max lastSeen for `All` notifications in the state', async () => {
-        prepareStore([
-          {id: folderIdMap[1], lastNotified: lastKnownNotified, lastSeen: 1},
-          {id: folderIdMap[2], lastNotified: lastKnownNotified + 1, lastSeen: 1},
-        ]);
 
-        await store.dispatch(actions.markSeen(folderIdMap[0]));
+      describe('markFolderSeen', () => {
+        it('should update folder`s lastSeen in the state', async () => {
+          await store.dispatch(actions.markFolderSeen(folderIdMap[0], lastKnownNotified));
 
-        expect(store.getActions()[0]).toEqual({
-          type: INBOX_THREADS_FOLDER_SEEN,
-          folderId: undefined,
-          lastSeen: lastKnownNotified + 1,
+          expect(store.getActions().length).toEqual(1);
+          expect(store.getActions()[0]).toEqual({
+            type: INBOX_THREADS_FOLDER_SEEN,
+            folderId: folderIdMap[0],
+            lastSeen: lastKnownNotified,
+          });
+        });
+
+        it('should set maximal lastSeen for `All` notifications in the state', async () => {
+          prepareStore([
+            {id: folderIdMap[1], lastNotified: lastKnownNotified, lastSeen: 1},
+            {id: folderIdMap[2], lastNotified: lastKnownNotified + 1, lastSeen: 1},
+          ]);
+
+          await store.dispatch(actions.markFolderSeen(folderIdMap[0]));
+
+          expect(store.getActions().length).toEqual(1);
+          expect(store.getActions()[0]).toEqual({
+            type: INBOX_THREADS_FOLDER_SEEN,
+            folderId: folderIdMap[0],
+            lastSeen: lastKnownNotified + 1,
+          });
+        });
+
+        it('should set provided lastSeen date', async () => {
+          prepareStore([
+            {id: folderIdMap[1], lastNotified: 0, lastSeen: 1},
+            {id: folderIdMap[2], lastNotified: 1, lastSeen: 1},
+          ]);
+
+          await store.dispatch(actions.markFolderSeen(folderIdMap[1], 123));
+
+          expect(store.getActions().length).toEqual(1);
+          expect(store.getActions()[0]).toEqual({
+            type: INBOX_THREADS_FOLDER_SEEN,
+            folderId: folderIdMap[1],
+            lastSeen: 123,
+          });
+        });
+
+        it('should set lastSeen to `0` for any folder', async () => {
+          prepareStore([]);
+
+          await store.dispatch(actions.markFolderSeen(folderIdMap[1]));
+
+          expect(store.getActions().length).toEqual(1);
+          expect(store.getActions()[0]).toEqual({
+            type: INBOX_THREADS_FOLDER_SEEN,
+            folderId: folderIdMap[1],
+            lastSeen: 0,
+          });
+        });
+
+        it('should set lastSeen to `0` for `All`', async () => {
+          prepareStore([]);
+
+          await store.dispatch(actions.markFolderSeen(folderIdMap[0]));
+
+          expect(store.getActions().length).toEqual(1);
+          expect(store.getActions()[0]).toEqual({
+            type: INBOX_THREADS_FOLDER_SEEN,
+            folderId: folderIdMap[0],
+            lastSeen: 0,
+          });
         });
       });
 
@@ -179,6 +247,82 @@ describe('Inbox Threads', () => {
           },
         );
       }
+    });
+
+
+    describe('onReactionSelect', () => {
+      let onAfterSelectCallback;
+      let issueMock;
+      let articleMock;
+      let commentMock;
+      let commentMock2;
+      let userMock;
+      const reactionMock = {reaction: 'thumb', id: 'reactionId', author: {}};
+
+      beforeEach(() => {
+        issueMock = mocks.createIssueMock();
+        articleMock = mocks.createArticleMock();
+        commentMock = mocks.createCommentMock();
+        userMock = mocks.createUserMock();
+        commentMock2 = {
+          ...commentMock,
+          reactions: [{reaction: '1', author: {id: 0}}, {...reactionMock, author: userMock}],
+        };
+        onAfterSelectCallback = jest.fn();
+      });
+
+      function setStore() {
+        store = storeMock({
+          app: {
+            networkState: {isConnected: true},
+            user: userMock,
+          },
+        });
+      }
+
+      async function doSelect(_entity, comment) {
+        await store.dispatch(actions.onReactionSelect(
+          _entity,
+          comment,
+          reactionMock,
+          onAfterSelectCallback
+        ));
+      }
+
+      it('should add a reaction to an issue comment', async () => {
+        await doSelect(issueMock, commentMock);
+
+        expect(apiMock.issue.addCommentReaction).toHaveBeenCalledWith(issueMock.id, commentMock.id, reactionMock.reaction);
+      });
+
+      it('should remove a reaction from an issue comment', async () => {
+        setStore();
+
+        await doSelect(issueMock, commentMock2);
+
+        expect(apiMock.issue.removeCommentReaction).toHaveBeenCalledWith(issueMock.id, commentMock.id, reactionMock.id);
+      });
+
+      it('should add a reaction to an article comment', async () => {
+        await doSelect(articleMock, commentMock);
+
+        expect(apiMock.articles.addCommentReaction).toHaveBeenCalledWith(articleMock.id, commentMock.id, reactionMock.reaction);
+      });
+
+      it('should remove a reaction from an article comment', async () => {
+        setStore();
+
+        await doSelect(articleMock, commentMock2);
+
+        expect(apiMock.articles.removeCommentReaction).toHaveBeenCalledWith(
+          articleMock.id, commentMock.id, reactionMock.id);
+      });
+
+      it('should mark folder seen after add/remove a reaction', async () => {
+        await doSelect(articleMock, commentMock);
+
+        expect(apiMock.inbox.updateFolders).toHaveBeenCalledWith(folderIdMap[1], {lastSeen: expect.any(Number)});
+      });
     });
 
 
@@ -239,6 +383,12 @@ describe('Inbox Threads', () => {
         expect(store.getActions()[0].type).not.toEqual(
           `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`);
 
+      });
+
+      it('should mark a folder as seen after loading threads', async () => {
+        await store.dispatch(actions.loadInboxThreads(folderIdMap[1]));
+
+        expect(apiMock.inbox.updateFolders).toHaveBeenCalledWith(folderIdMap[1], {lastSeen: expect.any(Number)});
       });
     });
 

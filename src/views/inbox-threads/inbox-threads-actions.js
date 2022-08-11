@@ -145,7 +145,7 @@ const toggleUnreadOnly = async (): Promise<void> => {
 
 const isUnreadOnly = (): boolean => getCachedData().unreadOnly === true;
 
-const markFolderSeen = (folderId?: string, lastSeen: number): ((
+const saveFolderSeen = (folderId?: string, lastSeen: number): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
@@ -165,14 +165,14 @@ const markFolderSeen = (folderId?: string, lastSeen: number): ((
   };
 };
 
-const setFolderSeen = (folderId?: string): ((
+const setFolderSeen = (folderId?: string, date?: number): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
-) => Promise<number>) => {
+) => Promise<?number>) => {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
     const inboxThreadsFolders: InboxFolder[] = getState().app?.inboxThreadsFolders || [];
-    const lastNotified: number = (
+    const lastNotified: number = typeof date === 'number' ? date : (
       folderId
         ? inboxThreadsFolders.find(it => it.id === folderId)?.lastNotified || 0
         : Math.max.apply(null, inboxThreadsFolders.reduce(
@@ -180,31 +180,35 @@ const setFolderSeen = (folderId?: string): ((
             numbers.concat(
               it.id === folderIdMap[1] || it.id === folderIdMap[2] ? it.lastNotified : -1
             )
-          ), []))
+          ), [0]))
     );
-    dispatch({
-      type: INBOX_THREADS_FOLDER_SEEN,
-      folderId: folderId,
-      lastSeen: lastNotified,
-    });
+    if (typeof lastNotified === 'number') {
+      dispatch({
+        type: INBOX_THREADS_FOLDER_SEEN,
+        folderId,
+        lastSeen: lastNotified,
+      });
+    }
     return lastNotified;
   };
 };
 
-const markSeen = (folderId?: string): ((
+const markFolderSeen = (folderId?: string, date?: number): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
 ) => Promise<void>) => {
   return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-    const inboxThreadsFolders: InboxFolder[] = getState().app?.inboxThreadsFolders;
-    if (!isOnline(getState()) || !inboxThreadsFolders.length) {
+    if (!isOnline(getState())) {
       return;
     }
-    const lastNotified: number = await dispatch(setFolderSeen(folderId));
-    dispatch(markFolderSeen(folderId, Math.max(lastNotified, 0)));
+    const lastNotified: ?number = await dispatch(setFolderSeen(folderId, date));
+    if (typeof lastNotified === 'number') {
+      dispatch(saveFolderSeen(folderId, Math.max(lastNotified, 0)));
+    }
   };
 };
+
 const loadInboxThreads = (folderId?: string | null, end?: number, showProgress: boolean = false): ((
   dispatch: (any) => any,
   getState: () => any,
@@ -247,7 +251,7 @@ const loadInboxThreads = (folderId?: string | null, end?: number, showProgress: 
 
     async function doMarkSeen() {
       (folderId === folderIdMap[0] ? [folderIdMap[1], folderIdMap[2]] : [folderId]).forEach(
-        (id: string) => dispatch(markSeen(id))
+        (id: string) => dispatch(markFolderSeen(id))
       );
     }
   };
@@ -335,6 +339,7 @@ const onReactionSelect = (entity: ThreadEntity, comment: IssueComment, reaction:
     if (error) {
       notifyError(error);
     } else {
+      dispatch(markFolderSeen(folderIdMap[1], Date.now()));
       onAfterSelect(existReaction ? null : response, !!existReaction);
     }
   };
@@ -348,8 +353,8 @@ export {
   loadInboxThreads,
   loadThreadsFromCache,
   markAllAsRead,
+  saveFolderSeen,
   markFolderSeen,
-  markSeen,
   muteToggle,
   onReactionSelect,
   readMessageToggle,

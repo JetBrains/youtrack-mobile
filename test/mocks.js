@@ -51,6 +51,16 @@ function createIssueMock(...args) {
   );
 }
 
+function createArticleMock(...args) {
+  return Object.assign(
+    createIssueMock(),
+    {
+      $type: 'Article',
+    },
+    ...args
+  );
+}
+
 function createMockStore(middlewareArgument) {
   const middleware = [thunk.withExtraArgument(middlewareArgument)];
   return configureMockStore(middleware);
@@ -117,7 +127,7 @@ function createProjectMock(data) {
 
 
 function createCommentMock(data = {}) {
-  return Object.assign(
+  return deepmerge(
     {
       $type: ResourceTypes.ISSUE_COMMENT,
       id: uuid(),
@@ -132,7 +142,6 @@ function createCommentMock(data = {}) {
       issue: {
         project: createProjectMock(),
       },
-
     },
     data
   );
@@ -292,6 +301,7 @@ export default {
   setStorage,
 
   createIssueMock,
+  createArticleMock,
   createIssueFieldMock: createIssuePriorityFieldMock,
   createProjectCustomFieldMock,
   createMockStore,
