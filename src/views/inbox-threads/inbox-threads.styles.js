@@ -163,6 +163,7 @@ export default EStyleSheet.create({
   },
   threadReactionsAddButton: {
     position:'absolute',
+    zIndex: 1,
     bottom: UNIT * 2,
     right: UNIT * 2,
   },
