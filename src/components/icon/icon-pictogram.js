@@ -6,9 +6,9 @@ import {ThemeContext} from '../theme/theme-context';
 
 import NoProjectFound from 'assets/no-project-found.svg';
 import NoProjectFoundDark from 'assets/no-project-found-dark.svg';
-import NothingFound from 'assets/not-found.svg';
+import NothingFound from 'assets/not-found-light.svg';
 import NothingFoundDark from 'assets/not-found-dark.svg';
-import NothingSelected from 'assets/nothing-selected.svg';
+import NothingSelected from 'assets/nothing-selected-light.svg';
 import NothingSelectedDark from 'assets/nothing-selected-dark.svg';
 import NoNotifications from './assets/notifications-light.svg';
 import NoNotificationsDark from './assets/notifications-dark.svg';
@@ -23,7 +23,7 @@ type Props = {
   style?: ViewStyleProp
 }
 
-export const ICON_PICTOGRAM_DEFAULT_SIZE: number = 240;
+export const ICON_PICTOGRAM_DEFAULT_SIZE: number = 200;
 
 const Icon = (props: {...Props, icon: { dark: any, default: any } }) => {
   const theme: ?Theme = useContext(ThemeContext);
