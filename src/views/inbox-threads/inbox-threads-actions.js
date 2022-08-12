@@ -209,7 +209,20 @@ const markFolderSeen = (folderId?: string, date?: number): ((
   };
 };
 
-const loadInboxThreads = (folderId?: string | null, end?: number, showProgress: boolean = false): ((
+const setInProgress = (inProgress: boolean, setGlobalProgress?: boolean): ((
+  dispatch: (any) => any,
+  getState: () => any,
+  getApi: ApiGetter
+) => Promise<void>) => {
+  return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    dispatch(toggleProgress({inProgress}));
+    if (setGlobalProgress) {
+      dispatch(setGlobalInProgress(inProgress));
+    }
+  };
+};
+
+const loadInboxThreads = (folderId?: string | null, end?: number, setGlobalProgress: boolean = false): ((
   dispatch: (any) => any,
   getState: () => any,
   getApi: ApiGetter
@@ -227,15 +240,11 @@ const loadInboxThreads = (folderId?: string | null, end?: number, showProgress: 
       return;
     }
 
-    dispatch(toggleProgress({inProgress: true}));
-    if (showProgress) {
-      dispatch(setGlobalInProgress(true));
-    }
+    dispatch(setInProgress(true, setGlobalProgress));
     const [error, threads]: [?CustomError, Array<InboxThread>] = await until(
       getApi().inbox.getThreads(folderId, end, isUnreadOnly())
     );
-    dispatch(toggleProgress({inProgress: false}));
-    dispatch(setGlobalInProgress(false));
+    dispatch(setInProgress(false, setGlobalProgress));
 
     if (error) {
       dispatch(setError({error}));
@@ -365,6 +374,7 @@ export {
   muteToggle,
   onReactionSelect,
   readMessageToggle,
+  setInProgress,
   toggleUnreadOnly,
   updateThreadsStateAndCache,
 };

@@ -43,7 +43,7 @@ describe('Inbox Threads', () => {
 
   describe('loadInboxThreads', () => {
     it('should load inbox threads for the first time', async () => {
-      await store.dispatch(actions.loadInboxThreads());
+      await store.dispatch(actions.loadInboxThreads(undefined, undefined, false));
 
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, undefined, false);
       expect(store.getActions()).toEqual([
@@ -64,10 +64,6 @@ describe('Inbox Threads', () => {
           payload: {
             inProgress: false,
           },
-        },
-        {
-          type: SET_PROGRESS,
-          isInProgress: false,
         },
         {
           type: INBOX_THREADS_FOLDER_SEEN,
@@ -97,13 +93,17 @@ describe('Inbox Threads', () => {
         type: SET_PROGRESS,
         isInProgress: true,
       });
+      expect(store.getActions()[4]).toEqual({
+        type: SET_PROGRESS,
+        isInProgress: false,
+      });
     });
 
     it('should load more threads', async () => {
       await store.dispatch(actions.loadInboxThreads(undefined, 1));
 
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, false);
-      expect(store.getActions()[6]).toEqual({
+      expect(store.getActions()[5]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {
           folderId: folderIdAllKey,
@@ -124,7 +124,7 @@ describe('Inbox Threads', () => {
       await store.dispatch(actions.loadInboxThreads(undefined, 1));
 
       expect(apiMock.inbox.getThreads).toHaveBeenCalledWith(undefined, 1, true);
-      expect(store.getActions()[6]).toEqual({
+      expect(store.getActions()[5]).toEqual({
         type: `${inboxThreadsNamespace}/${inboxThreadsReducersNamesMap.setNotifications}`,
         payload: {
           folderId: folderIdAllKey,

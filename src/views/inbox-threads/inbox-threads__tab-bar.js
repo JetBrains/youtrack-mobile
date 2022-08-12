@@ -10,7 +10,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {folderIdMap} from './inbox-threads-helper';
 import {i18n} from 'components/i18n/i18n';
 import {isSplitView} from 'components/responsive/responsive-helper';
-import {loadInboxThreads} from './inbox-threads-actions';
+import {loadInboxThreads, markFolderSeen, setInProgress} from './inbox-threads-actions';
 import {ModalPortalPart} from 'components/modal-view/modal-portal';
 import {splitViewLeftSideBarWidth} from 'components/common-styles/split-view';
 
@@ -86,17 +86,19 @@ const InboxThreadsTabBar = ({route, focused, index}: { route: TabRoute, focused:
           opacity: !topPosition ? 0 : 1,
           width: isSplitView() ? splitViewLeftSideBarWidth : null,
         }}
-        isVisible={!inProgress && focused && isUpdateButtonVisible()}
+        isVisible={!inProgress && index === route.key && isUpdateButtonVisible()}
       >
         <TouchableOpacity
           disabled={inProgress}
-          onPress={() => {
+          onPress={async () => {
+            dispatch(setInProgress(true));
+            await dispatch(markFolderSeen(folderIdMap[index]), Date.now());
             dispatch(loadInboxThreads(folderIdMap[index], null, true));
+            dispatch(setInProgress(false));
           }}
           style={styles.threadUpdateButton}>
           <Text style={styles.threadUpdateButtonText}>{i18n('Update')}</Text>
         </TouchableOpacity>
-
       </ModalPortalPart>
     </View>
   );
