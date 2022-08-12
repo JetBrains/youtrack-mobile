@@ -248,20 +248,15 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
       renderedItem = <StreamVCS activityGroup={activityGroup}/>;
     }
 
-    const id: string = (
-      activityGroup?.comment?.id ||
-      activityGroup?.work?.id ||
-      activityGroup?.vcs?.id ||
-      (activityGroup?.events && activityGroup.events[0]?.id)
-    );
-
+    const id: string = activityGroup?.comment?.id || activityGroup?.work?.id || activityGroup?.vcs?.id;
     const comment: ?IssueComment = getCommentFromActivityGroup(activityGroup);
     const commentId = getTargetActivityCommentId();
     const activityChange = firstActivityChange(activityGroup.comment);
 
     const targetActivityId = getTargetActivityId();
     const hasHighlightedActivity: boolean = (
-      targetActivityId && id === targetActivityId ||
+      targetActivityId && id && id === targetActivityId ||
+      targetActivityId && (activityGroup?.events || []).some(it => it.id === targetActivityId) ||
       commentId && activityChange && commentId === activityChange.id
     );
     const Component = hasHighlightedActivity ? Animated.View : View;

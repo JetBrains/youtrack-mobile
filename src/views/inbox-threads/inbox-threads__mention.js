@@ -2,6 +2,8 @@
 
 import React, {useState} from 'react';
 
+import {TouchableOpacity} from 'react-native-gesture-handler';
+
 import ApiHelper from 'components/api/api__helper';
 import Avatar from 'components/avatar/avatar';
 import StreamComment from 'components/activity-stream/activity__stream-comment';
@@ -60,7 +62,13 @@ export default function InboxThreadMention({thread, currentUser, uiTheme, onNavi
         />}
         change={
           <>
-            <StreamComment activity={{added: [comment]}}/>
+            <TouchableOpacity
+              onPress={() => {
+                onNavigate(target.issue || target.article, activity.id, comment?.id);
+              }}
+            >
+              <StreamComment activity={{added: [comment]}}/>
+            </TouchableOpacity>
             {!!comment && (
               <ThreadCommentReactions
                 activity={activity}
@@ -70,9 +78,6 @@ export default function InboxThreadMention({thread, currentUser, uiTheme, onNavi
             )}
           </>
         }
-        onNavigate={() => {
-          onNavigate(target.issue || target.article, activity.id, comment?.id);
-        }}
         reason={i18n('mentioned you')}
         timestamp={thread.notified}
       />

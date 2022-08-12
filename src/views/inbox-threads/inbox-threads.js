@@ -110,14 +110,15 @@ const InboxThreads: () => Node = (): Node => {
       if (!selectedEntity?.entity) {
         return <NothingSelectedIconWithText text={i18n('Select an issue, article or change from the list')}/>;
       }
+      const isNavigateToArticle: boolean = isArticle(selectedEntity.entity);
       const entityProps = {
-        ...(isArticle(selectedEntity.entity)
+        ...(isNavigateToArticle
           ? {articlePlaceholder: selectedEntity.entity}
           : {issuePlaceholder: selectedEntity.entity}),
         navigateToActivity: selectedEntity.navigateToActivity,
         commentId: selectedEntity.commentId,
       };
-      return isArticle ? <Article {...entityProps}/> : <Issue {...entityProps}/>;
+      return isNavigateToArticle ? <Article {...entityProps}/> : <Issue {...entityProps}/>;
     },
     [selectedEntity.commentId, selectedEntity.entity, selectedEntity.navigateToActivity]
   );
