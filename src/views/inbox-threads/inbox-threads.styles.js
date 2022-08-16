@@ -70,15 +70,17 @@ export default EStyleSheet.create({
     alignItems: 'baseline',
   },
   threadTitleContent: {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'flex-start',
+    justifyContent: 'space-between',
   },
   threadTitle: {
-    flexGrow: 1,
+    maxWidth: '80%',
     marginBottom: UNIT * 2,
   },
   threadSubTitle: {
-    maxWidth: '75%',
+    maxWidth: '76%',
     marginTop: -UNIT,
     marginLeft: UNIT * 5.5,
   },
