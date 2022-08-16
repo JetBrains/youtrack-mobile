@@ -74,8 +74,13 @@ export default EStyleSheet.create({
     alignItems: 'flex-start',
   },
   threadTitle: {
-    maxWidth: '75%',
+    flexGrow: 1,
     marginBottom: UNIT * 2,
+  },
+  threadSubTitle: {
+    maxWidth: '75%',
+    marginTop: -UNIT,
+    marginLeft: UNIT * 5.5,
   },
   threadTitleActions: {
     flexDirection: 'row',
@@ -99,11 +104,6 @@ export default EStyleSheet.create({
     top: UNIT / 4,
     right: UNIT / 1.5,
     padding: UNIT,
-  },
-  threadSubTitle: {
-    marginTop: -UNIT,
-    marginLeft: UNIT * 5.5,
-    marginRight: UNIT * 2,
   },
   threadMuteToggle: {
     padding: UNIT / 2,
