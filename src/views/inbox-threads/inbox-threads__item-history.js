@@ -13,7 +13,7 @@ import type {InboxThreadGroup, InboxThreadTarget, ThreadEntity} from 'flow/Inbox
 interface Props {
   group: InboxThreadGroup;
   target: InboxThreadTarget;
-  onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
+  onNavigate: (entity: ThreadEntity, navigateToActivity?: string) => any;
 }
 
 export default function ThreadHistoryItem({group, target, onNavigate}: Props) {

@@ -78,8 +78,11 @@ class Article extends IssueTabbed<Props, State> {
   };
 
   componentDidUpdate(prevProps: Props) {
+    if (prevProps.articlePlaceholder !== this.props.articlePlaceholder) {
+      this.loadArticle(this.props.articlePlaceholder.id || this.props.articlePlaceholder.idReadable);
+    }
     if (prevProps.navigateToActivity !== this.props.navigateToActivity) {
-      if (this.props.navigateToActivity === true) {
+      if (this.props.navigateToActivity) {
         this.switchToActivityTab();
       } else {
         this.switchToDetailsTab();

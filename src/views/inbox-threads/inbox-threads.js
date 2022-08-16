@@ -105,23 +105,20 @@ const InboxThreads: () => Node = (): Node => {
     );
   };
 
-  const renderEntity = useCallback(
-    () => {
-      if (!selectedEntity?.entity) {
-        return <NothingSelectedIconWithText text={i18n('Select an issue, article or change from the list')}/>;
-      }
-      const isNavigateToArticle: boolean = isArticle(selectedEntity.entity);
-      const entityProps = {
-        ...(isNavigateToArticle
-          ? {articlePlaceholder: selectedEntity.entity}
-          : {issuePlaceholder: selectedEntity.entity}),
-        navigateToActivity: selectedEntity.navigateToActivity,
-        commentId: selectedEntity.commentId,
-      };
-      return isNavigateToArticle ? <Article {...entityProps}/> : <Issue {...entityProps}/>;
-    },
-    [selectedEntity.commentId, selectedEntity.entity, selectedEntity.navigateToActivity]
-  );
+  const renderEntity = () => {
+    if (!selectedEntity?.entity) {
+      return <NothingSelectedIconWithText text={i18n('Select an issue, article or change from the list')}/>;
+    }
+    const isNavigateToArticle: boolean = isArticle(selectedEntity.entity);
+    const entityProps = {
+      ...(isNavigateToArticle
+        ? {articlePlaceholder: selectedEntity.entity}
+        : {issuePlaceholder: selectedEntity.entity, issueId: selectedEntity.entity.id}),
+      navigateToActivity: selectedEntity.navigateToActivity,
+      commentId: selectedEntity.commentId,
+    };
+    return isNavigateToArticle ? <Article {...entityProps}/> : <Issue {...entityProps}/>;
+  };
 
   const onNavigate = useCallback(
     (entity, navigateToActivity, commentId) => {

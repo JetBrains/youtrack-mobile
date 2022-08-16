@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {Animated, Text, TouchableOpacity, ScrollView, View, useWindowDimensions} from 'react-native';
 
 import ActivityUserAvatar from './activity__stream-avatar';
@@ -84,6 +84,10 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
     inputRange: [0, 300],
     outputRange: [styles.activityHighlighted.backgroundColor, 'transparent'],
   }));
+
+  useEffect(() => {
+    Animated.timing(bgColor.current).reset();
+  }, [props.highlight]);
 
   const getTargetActivityId = useCallback(() => {
     return typeof highlight === 'object' ? highlight.activityId : highlight;
