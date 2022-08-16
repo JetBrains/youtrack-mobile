@@ -76,7 +76,7 @@ export default EStyleSheet.create({
     justifyContent: 'space-between',
   },
   threadTitle: {
-    maxWidth: '80%',
+    maxWidth: '85%',
     marginBottom: UNIT * 2,
   },
   threadSubTitle: {
