@@ -74,8 +74,7 @@ export default EStyleSheet.create({
     alignItems: 'flex-start',
   },
   threadTitle: {
-    flexGrow: 1,
-    marginRight: UNIT * 10,
+    maxWidth: '75%',
     marginBottom: UNIT * 2,
   },
   threadTitleActions: {
