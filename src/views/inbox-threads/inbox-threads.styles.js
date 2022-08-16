@@ -52,7 +52,7 @@ export default EStyleSheet.create({
     marginLeft: UNIT * 2,
     marginBottom: UNIT,
     borderBottomWidth: 1,
-    borderColor: '$greyBackground',
+    borderColor: '$separator',
   },
   threadLast: {
     borderBottomWidth: 0,
