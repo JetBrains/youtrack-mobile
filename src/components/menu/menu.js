@@ -201,7 +201,7 @@ export default function () {
           borderWidth={0}
           unfilledColor={isInProgress ? styles.linkLight.color : 'transparent'}
           width={null}
-          height={2}
+          height={3}
           borderRadius={0}
         />
       </View>
