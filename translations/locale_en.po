@@ -74,7 +74,7 @@ msgstr "Add spent time"
 msgid "Add tag"
 msgstr "Add tag"
 
-#: src/views/article/arcticle-actions.js:177
+#: src/views/article/arcticle-actions.js:184
 msgid "Add to favorites"
 msgstr "Add to favorites"
 
@@ -108,7 +108,7 @@ msgstr "Are you sure you want to delete this draft?"
 msgid "Are you sure you want to delete this work item?"
 msgstr "Are you sure you want to delete this work item?"
 
-#: src/views/article/arcticle-actions.js:188
+#: src/views/article/arcticle-actions.js:195
 msgid "Article added to favorites"
 msgstr "Article added to favorites"
 
@@ -120,7 +120,7 @@ msgstr "Article content"
 msgid "Article published"
 msgstr "Article published"
 
-#: src/views/article/arcticle-actions.js:187
+#: src/views/article/arcticle-actions.js:194
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
@@ -163,8 +163,8 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/components/activity-stream/activity__stream-work.js:130
 #: src/components/confirmation/confirmation.js:13
 #: src/components/tags/tags.js:53
-#: src/views/article/arcticle-actions.js:233
-#: src/views/article/arcticle-actions.js:464
+#: src/views/article/arcticle-actions.js:240
+#: src/views/article/arcticle-actions.js:471
 #: src/views/create-issue/create-issue-actions.js:334
 #: src/views/issue/activity/issue-activity__comment-actions.js:309
 #: src/views/issue/issue-base-actions-creater.js:519
@@ -249,14 +249,14 @@ msgstr "Content"
 msgid "Copied"
 msgstr "Copied"
 
-#: src/views/article/arcticle-actions.js:444
+#: src/views/article/arcticle-actions.js:451
 #: src/views/issue/activity/issue-activity__comment-actions.js:284
 #: src/views/issue/issue-base-actions-creater.js:459
 msgid "Copy link"
 msgstr "Copy link"
 
-#: src/views/article/arcticle-actions.js:168
-#: src/views/article/arcticle-actions.js:171
+#: src/views/article/arcticle-actions.js:175
+#: src/views/article/arcticle-actions.js:178
 msgid "Copy link to article"
 msgstr "Copy link to article"
 
@@ -294,8 +294,8 @@ msgid "Decline"
 msgstr "Decline"
 
 #: src/components/activity-stream/activity__stream-work.js:117
-#: src/views/article/arcticle-actions.js:219
-#: src/views/article/arcticle-actions.js:455
+#: src/views/article/arcticle-actions.js:226
+#: src/views/article/arcticle-actions.js:462
 #: src/views/article/arcticle-helper.js:7
 #: src/views/issue/activity/issue-activity__actions.js:280
 #: src/views/issue/activity/issue-activity__comment-actions.js:232
@@ -349,8 +349,8 @@ msgid "Drafts"
 msgstr "Drafts"
 
 #: src/components/activity-stream/activity__stream-work.js:111
-#: src/components/activity-stream/activity__stream.js:330
-#: src/views/article/arcticle-actions.js:197
+#: src/components/activity-stream/activity__stream.js:334
+#: src/views/article/arcticle-actions.js:204
 #: src/views/issue/activity/issue-activity__comment-actions.js:293
 #: src/views/issue/issue-base-actions-creater.js:470
 msgid "Edit"
@@ -561,7 +561,7 @@ msgstr "New Issue"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.js:525
+#: src/components/activity-stream/activity__stream.js:531
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -639,7 +639,7 @@ msgstr "Recent searches"
 msgid "Remove"
 msgstr "Remove"
 
-#: src/views/article/arcticle-actions.js:177
+#: src/views/article/arcticle-actions.js:184
 msgid "Remove favorite"
 msgstr "Remove favorite"
 
@@ -724,12 +724,12 @@ msgstr "Settings"
 msgid "Share"
 msgstr "Share"
 
-#: src/views/article/arcticle-actions.js:438
+#: src/views/article/arcticle-actions.js:445
 #: src/views/issue/issue-base-actions-creater.js:453
 msgid "Share link"
 msgstr "Share link"
 
-#: src/views/article/arcticle-actions.js:158
+#: src/views/article/arcticle-actions.js:165
 msgid "Share link to article"
 msgstr "Share link to article"
 
@@ -737,8 +737,8 @@ msgstr "Share link to article"
 msgid "Share logs"
 msgstr "Share logs"
 
-#: src/views/article/arcticle-actions.js:156
-#: src/views/article/arcticle-actions.js:427
+#: src/views/article/arcticle-actions.js:163
+#: src/views/article/arcticle-actions.js:434
 #: src/views/issue/issue-base-actions-creater.js:447
 msgid "Share…"
 msgstr "Share…"
