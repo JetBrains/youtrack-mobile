@@ -127,7 +127,7 @@ function createProjectMock(data) {
 
 
 function createCommentMock(data = {}) {
-  return Object.assign(
+  return deepmerge(
     {
       $type: ResourceTypes.ISSUE_COMMENT,
       id: uuid(),
@@ -142,7 +142,6 @@ function createCommentMock(data = {}) {
       issue: {
         project: createProjectMock(),
       },
-
     },
     data
   );

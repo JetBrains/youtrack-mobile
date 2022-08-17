@@ -327,5 +327,15 @@ export default class ArticlesAPI extends ApiBase {
     return ApiHelper.convertAttachmentRelativeToAbsURLs(addedAttachments, this.config.backendUrl);
   }
 
+  async addCommentReaction(articleId: string, commentId: string, reactionName: string): Promise<any> {
+    const queryString = qs.stringify({fields: issueFields.reaction.toString()});
+    const url: string = `${this.youTrackApiUrl}/articles/${articleId}/comments/${commentId}/reactions?${queryString}`;
+    return this.makeAuthorizedRequest(url, 'POST', {reaction: reactionName});
+  }
+
+  async removeCommentReaction(articleId: string, commentId: string, reactionId: string): Promise<any> {
+    const url: string = `${this.youTrackApiUrl}/articles/${articleId}/comments/${commentId}/reactions/${reactionId}`;
+    return this.makeAuthorizedRequest(url, 'DELETE', null, {parseJson: false});
+  }
 
 }

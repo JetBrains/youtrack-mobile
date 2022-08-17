@@ -152,6 +152,7 @@ const ArticleActivities = (props: Props) => {
         contentContainerStyle={styles.articleActivities}
       >
         <ArticleActivityStream
+          articleId={article?.id}
           activities={activities}
           attachments={article?.attachments}
           uiTheme={uiTheme}

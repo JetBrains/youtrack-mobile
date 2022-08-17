@@ -29,6 +29,7 @@ import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
 import {DEFAULT_WORK_TIME_SETTINGS} from '../time-tracking/time-tracking__default-settings';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {getTextValueChange} from '../activity/activity__history-value';
+import {hasType} from '../api/api__resource-types';
 import {firstActivityChange, getActivityEventTitle} from './activity__stream-helper';
 import {i18n} from 'components/i18n/i18n';
 import {IconDrag, IconHistory, IconMoreOptions, IconWork} from '../icon/icon';
@@ -298,6 +299,9 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
     const canComment: boolean = !!commentActions?.canCommentOn;
     const canUpdate: boolean = !!commentActions && !!commentActions.canUpdateComment && commentActions.canUpdateComment(comment);
+    const reactionSupportVersion: string = (
+      hasType.articleComment(comment) ? FEATURE_VERSION.articleReactions : FEATURE_VERSION.reactions
+    );
 
     if (!comment.deleted) {
       // $FlowFixMe
@@ -333,14 +337,16 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
             )}
           </View>
 
-          {!!props.onReactionPanelOpen && <Feature version={FEATURE_VERSION.reactions}>
-            <TouchableOpacity
-              hitSlop={HIT_SLOP}
-              onPress={() => {if (props.onReactionPanelOpen) {props.onReactionPanelOpen(comment);}}}
-            >
-              {reactionAddIcon}
-            </TouchableOpacity>
-          </Feature>}
+          {typeof props.onReactionPanelOpen === 'function' && (
+            <Feature version={reactionSupportVersion}>
+              <TouchableOpacity
+                hitSlop={HIT_SLOP}
+                onPress={() => {props.onReactionPanelOpen(comment);}}
+              >
+                {reactionAddIcon}
+              </TouchableOpacity>
+            </Feature>
+          )}
 
           {Boolean(commentActions && commentActions.onShowCommentActions) && <TouchableOpacity
             hitSlop={HIT_SLOP}
