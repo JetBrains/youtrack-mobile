@@ -41,7 +41,7 @@ type Props = {
   fields: Array<IssueCustomField>,
 
   hasPermission: {
-    canUpdateField: (field: IssueCustomField) => boolean,
+    canUpdateField?: (field: IssueCustomField) => boolean,
     canCreateIssueToProject: (project: IssueProject) => boolean,
     canEditProject: boolean
   },
@@ -535,7 +535,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
             {fields.map((field: IssueCustomField, index: number) => {
               const isDisabled: boolean = (
-                !hasPermission.canUpdateField(field) ||
+                !(hasPermission.canUpdateField && hasPermission.canUpdateField(field)) ||
                 !field?.projectCustomField?.field?.fieldType ||
                 this.isConnected === false
               );

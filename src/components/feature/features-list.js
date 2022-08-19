@@ -1,8 +1,9 @@
 export default {
+  reactions: '2020.1',
+  articleReactions: '2022.1',
   inbox: '2018.3',
   inboxThreads: '2021.1',
   knowledgeBase: '2020.2',
-  reactions: '2020.1',
   searchAssist: '2020.1',
   issuesGetter: '2020.1',
 };

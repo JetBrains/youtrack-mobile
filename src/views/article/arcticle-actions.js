@@ -1,19 +1,22 @@
 /* @flow */
 
-import {ANALYTICS_ARTICLE_PAGE} from 'components/analytics/analytics-ids';
+import {ANALYTICS_ARTICLE_PAGE, ANALYTICS_ARTICLE_PAGE_STREAM} from 'components/analytics/analytics-ids';
 import {Alert, Clipboard, Share} from 'react-native';
 
+import ArticlesAPI from 'components/api/api__articles';
 import Router from 'components/router/router';
+import usage from 'components/usage/usage';
+import {cacheUserLastVisitedArticle} from 'actions/app-actions';
 import {confirmDeleteArticle} from './arcticle-helper';
-import {getStorageState} from 'components/storage/storage';
-import {i18n} from 'components/i18n/i18n';
+import {findActivityInGroupedActivities} from 'components/activity/activity-helper';
 import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+import {getStorageState} from 'components/storage/storage';
 import {hasType} from 'components/api/api__resource-types';
+import {i18n} from 'components/i18n/i18n';
 import {isIOSPlatform, until} from 'util/util';
 import {logEvent} from 'components/log/log-helper';
 import {notify, notifyError} from 'components/notification/notification';
-import type {ArticleState} from './article-reducers';
 import {
   setActivityPage,
   setArticle,
@@ -23,17 +26,21 @@ import {
   setPrevArticle,
   setProcessing,
 } from './article-reducers';
-import {cacheUserLastVisitedArticle} from 'actions/app-actions';
-import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
 import {showActions, showActionSheet} from 'components/action-sheet/action-sheet';
+import {updateActivityCommentReactions} from '../../components/activity-stream/activity__stream-helper';
 
 import type ActionSheet from '@expo/react-native-action-sheet';
-import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
 import type Api from 'components/api/api';
-import type {Activity} from 'flow/Activity';
+import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
+import type {Activity, ActivityPositionData} from 'flow/Activity';
 import type {AppState} from '../../reducers';
 import type {Article, ArticleDraft} from 'flow/Article';
+import type {ArticleState} from './article-reducers';
 import type {Attachment, IssueComment} from 'flow/CustomFields';
+import type {CustomError} from 'flow/Error';
+import type {Reaction} from 'flow/Reaction';
+import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
+import type {User} from 'flow/User';
 
 type ApiGetter = () => Api;
 
@@ -568,6 +575,49 @@ const onCheckboxUpdate = (articleContent: string): Function =>
     }
   };
 
+function onReactionSelect(
+  articleId: string,
+  comment: IssueComment,
+  reaction: Reaction,
+  activities: Array<Activity>,
+  onReactionUpdate: (activities: Array<Activity>, error?: CustomError) => void,
+): (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => Promise<void> {
+  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+    const api: ArticlesAPI = getApi().articles;
+    const currentUser: User = getState().app.user;
+    usage.trackEvent(ANALYTICS_ARTICLE_PAGE_STREAM, 'Reaction select');
+
+    const reactionName: string = reaction.reaction;
+    const existReaction: Reaction = (comment.reactions || []).filter(
+      (it: Reaction) => it.reaction === reactionName && it.author.id === currentUser.id
+    )[0];
+    const [error, commentReaction] = await until(
+      existReaction
+        ? api.removeCommentReaction(articleId, comment.id, existReaction.id)
+        : api.addCommentReaction(articleId, comment.id, reactionName)
+    );
+
+    if (error) {
+      notifyError(error);
+    } else {
+      const targetActivityData: ?ActivityPositionData = findActivityInGroupedActivities(activities, comment.id);
+      if (targetActivityData) {
+        const _comment = updateActivityCommentReactions({
+          comment,
+          currentUser,
+          reaction: existReaction ? reaction : commentReaction,
+        });
+        const newActivities: Array<Activity> = activities.slice(0);
+        const targetActivity: ?Activity = newActivities[targetActivityData.index];
+        if (targetActivity && Array.isArray(targetActivity?.comment?.added)) {
+          targetActivity.comment.added = [_comment];
+          onReactionUpdate(newActivities);
+        }
+      }
+    }
+  };
+}
+
 
 export {
   clearArticle,
@@ -595,4 +645,5 @@ export {
   deleteAttachment,
 
   onCheckboxUpdate,
+  onReactionSelect,
 };

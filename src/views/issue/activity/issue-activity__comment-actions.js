@@ -3,26 +3,24 @@
 import {Clipboard} from 'react-native';
 
 import * as activityHelper from './issue-activity__helper';
+import * as types from '../issue-action-types';
 import log from 'components/log/log';
 import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
 import {confirmation} from 'components/confirmation/confirmation';
+import {convertCommentsToActivityPage, findActivityInGroupedActivities} from 'components/activity/activity-helper';
 import {createIssueActivityActions, receiveActivityAPIAvailability, receiveActivityPage} from './issue-activity__actions';
-import {COMMENT_REACTIONS_SEPARATOR} from 'components/reactions/reactions';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from '../issue-base-actions-creater';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+import {i18n} from 'components/i18n/i18n';
 import {notify, notifyError} from 'components/notification/notification';
 import {showActions} from 'components/action-sheet/action-sheet';
 import {until} from 'util/util';
-import {
-  convertCommentsToActivityPage,
-  findActivityInGroupedActivities,
-} from 'components/activity/activity-helper';
+import {updateActivityCommentReactions} from 'components/activity-stream/activity__stream-helper';
 
-import * as types from '../issue-action-types';
 import type Api from 'components/api/api';
 import type IssueAPI from 'components/api/api__issue';
-import type {ActivityItem, ActivityPositionData} from 'flow/Activity';
+import type {Activity, ActivityItem, ActivityPositionData} from 'flow/Activity';
 import type {CustomError} from 'flow/Error';
 import type {IssueComment} from 'flow/CustomFields';
 import type {IssueFull} from 'flow/Issue';
@@ -30,9 +28,8 @@ import type {Reaction} from 'flow/Reaction';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
 import type {State as SingleIssueState} from '../issue-reducers';
-import type {User} from 'flow/User';
 import type {UserGroup} from 'flow/UserGroup';
-import {i18n} from 'components/i18n/i18n';
+import type {User} from 'flow/User';
 
 
 type ApiGetter = () => Api;
@@ -390,42 +387,19 @@ export const createActivityCommentActions = (stateFieldName: string = DEFAULT_IS
           return;
         }
 
-        const targetActivityData: ?ActivityPositionData = findActivityInGroupedActivities(
-          activities, comment.id
-        );
+        const targetActivityData: ?ActivityPositionData = findActivityInGroupedActivities(activities, comment.id);
         if (targetActivityData) {
-          onReactionUpdate(updateActivities());
-        }
-
-        function updateActivities() {
-          const targetComment: IssueComment = targetActivityData?.activity?.comment.added[0];
-          if (existReaction) {
-            const selectedReactionEntity: Reaction = targetComment.reactions.find(
-              (it: Reaction) => it.reaction === reactionName && it?.author?.id === currentUser?.id
-            );
-            targetComment.reactions = targetComment.reactions.filter(
-              (it: Reaction) => it?.id !== selectedReactionEntity?.id && selectedReactionEntity?.author?.id === currentUser?.id);
-
-            if (!targetComment.reactions.some((it: Reaction) => it.reaction === reactionName)) {
-              targetComment.reactionOrder = (targetComment.reactionOrder
-                .split(COMMENT_REACTIONS_SEPARATOR)
-                .filter((name: string) => name !== reactionName)
-                .join(COMMENT_REACTIONS_SEPARATOR));
-            }
-          } else {
-            targetComment.reactions.push(commentReaction);
-            targetComment.reactionOrder = targetComment.reactionOrder || '';
-            if (!(targetComment.reactionOrder).split(COMMENT_REACTIONS_SEPARATOR).some(
-              (it: string) => it === reactionName)) {
-              targetComment.reactionOrder = `${targetComment.reactionOrder}|${reactionName}`;
-            }
+          const _comment = updateActivityCommentReactions({
+            comment,
+            currentUser,
+            reaction: existReaction ? reaction : commentReaction,
+          });
+          const newActivities: Array<Activity> = activities.slice(0);
+          const targetActivity: ?Activity = newActivities[targetActivityData.index];
+          if (targetActivity && Array.isArray(targetActivity?.comment?.added)) {
+            targetActivity.comment.added = [_comment];
+            onReactionUpdate(newActivities);
           }
-
-          const newActivities: Array<ActivityItem> = activities.slice(0);
-          const targetIndex: ?number = targetActivityData?.index;
-          const targetActivity = targetIndex && newActivities[targetIndex];
-          targetActivity && (targetActivity.comment.added[0] = targetComment);
-          return newActivities;
         }
       };
     },

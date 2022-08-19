@@ -15,10 +15,12 @@ import StreamUserInfo from './activity__stream-user-info';
 import StreamVCS from './activity__stream-vcs';
 import StreamWork from './activity__stream-work';
 import {firstActivityChange} from './activity__stream-helper';
-import {isIOSPlatform} from 'util/util';
+import {hasType} from '../api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {i18n} from 'components/i18n/i18n';
 import {IconDrag, IconMoreOptions} from 'components/icon/icon';
+import {isIOSPlatform} from 'util/util';
+import {menuHeight} from '../common-styles/header';
 
 import styles from './activity__stream.styles';
 
@@ -35,7 +37,6 @@ import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
 import type {WorkItem, WorkTimeSettings} from 'flow/Work';
 import type {YouTrackWiki} from 'flow/Wiki';
-import {menuHeight} from '../common-styles/header';
 
 
 type Props = {
@@ -131,8 +132,10 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
     const isAuthor = commentActions && commentActions.isAuthor && commentActions.isAuthor(comment);
 
     const canComment: boolean = !!commentActions?.canCommentOn;
-    const canUpdate: boolean = !!commentActions && !!commentActions.canUpdateComment && commentActions.canUpdateComment(
-      comment);
+    const canUpdate: boolean = !!commentActions && !!commentActions.canUpdateComment && commentActions.canUpdateComment(comment);
+    const reactionSupportVersion: string = (
+      hasType.articleComment(comment) ? FEATURE_VERSION.articleReactions : FEATURE_VERSION.reactions
+    );
 
     if (!comment.deleted) {
       // $FlowFixMe
@@ -168,14 +171,16 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
             )}
           </View>
 
-          {!!props.onReactionPanelOpen && <Feature version={FEATURE_VERSION.reactions}>
-            <TouchableOpacity
-              hitSlop={HIT_SLOP}
-              onPress={() => {if (props.onReactionPanelOpen) {props.onReactionPanelOpen(comment);}}}
-            >
-              {reactionAddIcon}
-            </TouchableOpacity>
-          </Feature>}
+          {typeof props.onReactionPanelOpen === 'function' && (
+            <Feature version={reactionSupportVersion}>
+              <TouchableOpacity
+                hitSlop={HIT_SLOP}
+                onPress={() => {props.onReactionPanelOpen(comment);}}
+              >
+                {reactionAddIcon}
+              </TouchableOpacity>
+            </Feature>
+          )}
 
           {Boolean(commentActions && commentActions.onShowCommentActions) && <TouchableOpacity
             hitSlop={HIT_SLOP}

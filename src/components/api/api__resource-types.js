@@ -3,6 +3,7 @@
 export const ResourceTypes = {
   AGILE: 'jetbrains.youtrack.agile.settings.Agile',
   ARTICLE: 'Article',
+  ARTICLE_COMMENT: 'ArticleComment',
   ARTICLE_DRAFT: 'ArticleDraft',
   BITBUCKET: 'BitBucketServer',
   BITBUCKET_MAPPING: 'BitBucketChangesProcessor',
@@ -51,6 +52,7 @@ export const hasType: Object = function (type: string) {
 
 hasType.agile = hasType(ResourceTypes.ISSUE_FOLDER_TAG);
 hasType.article = hasType(ResourceTypes.ARTICLE);
+hasType.articleComment = hasType(ResourceTypes.ARTICLE_COMMENT);
 hasType.articleDraft = hasType(ResourceTypes.ARTICLE_DRAFT);
 hasType.comment = hasType(ResourceTypes.ISSUE_COMMENT);
 hasType.commentDraft = hasType(ResourceTypes.DRAFT_ISSUE_COMMENT) || hasType(ResourceTypes.DRAFT_ARTICLE_COMMENT);
