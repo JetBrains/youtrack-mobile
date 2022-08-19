@@ -146,8 +146,9 @@ export const rowStyles = {
     position: 'relative',
     top: -2,
   },
-  activityStarTagIcon: {
-    marginBottom: -UNIT / 4,
+  activityStarTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   activityWorkTime: {
     marginLeft: UNIT / 2,

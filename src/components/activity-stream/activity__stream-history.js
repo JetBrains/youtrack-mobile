@@ -112,16 +112,15 @@ const StreamHistoryChange = ({activity, customFields, workTimeSettings = DEFAULT
     switch (true) {
     case Boolean(isActivityCategory.star(activity)):
       return (
-        <Text>
+        <View style={styles.activityStarTag}>
           <Text style={styles.activityLabel}>{getActivityEventTitle(activity)}</Text>
           <Star
-            style={styles.activityStarTagIcon}
             size={16}
             canStar={true}
             hasStar={!!activity.added?.length}
             onStarToggle={() => {}}
           />
-        </Text>
+        </View>
       );
     case Boolean(
       isActivityCategory.tag(activity) ||
