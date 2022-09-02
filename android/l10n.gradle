@@ -7,13 +7,15 @@ buildscript {
         password = spacePassword
       }
     }
+    maven { url 'https://jitpack.io'}
   }
   dependencies {
-    classpath 'org.jetbrains.ring:youtrack-crowdin:0.17'
+    classpath 'org.jetbrains.ring:youtrack-crowdin:0.18.2'
   }
 }
 
 task crowdinUpload(type: org.jetbrains.crowdin.CrowdinUploadTask) {
+  loadAllFiles = false
   projects = [YOUTRACK, YOUTRACK_COMMUNITY]
   files = [
     [name: 'youtrack-mobile.po', source: { "$projectDir/../translations/default.pot" }]
