@@ -90,9 +90,14 @@ msgstr "Добавить тег"
 msgid "Add to favorites"
 msgstr "Добавить в избранное"
 
+#: src/views/inbox-threads/inbox-threads__reactions.js
 #: src/views/inbox/inbox.js
 msgid "added a reaction"
 msgstr "добавил(а) реакцию"
+
+#: src/views/inbox-threads/inbox-threads-helper.js
+msgid "All"
+msgstr ""
 
 #: src/views/settings/settings__appearance.js
 #: src/views/settings/settings.js
@@ -180,6 +185,8 @@ msgstr "Входя в систему, вы соглашаетесь с Поли�
 #: src/views/article/arcticle-actions.js
 #: src/views/article/arcticle-actions.js
 #: src/views/create-issue/create-issue-actions.js
+#: src/views/inbox-threads/inbox-threads__thread.js
+#: src/views/inbox-threads/inbox-threads.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
 #: src/views/issue/issue-base-actions-creater.js
 #: src/views/issue/issue-base-actions-creater.js
@@ -234,6 +241,10 @@ msgstr "Комментарий удален"
 msgid "Comment updated"
 msgstr "Комментарий обновлен"
 
+#: src/views/inbox-threads/inbox-threads__item-comment.js
+msgid "commented"
+msgstr ""
+
 #: src/components/activity/activity-helper.js
 msgid "Comments"
 msgstr "Комментарии"
@@ -255,6 +266,10 @@ msgstr "Связаться с техподдержкой"
 #: src/views/article/article.js
 msgid "Content"
 msgstr "Содержимое"
+
+#: src/components/activity/activity__history-title.js
+msgid "Content changed"
+msgstr ""
 
 #: src/components/wiki/code-renderer.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
@@ -286,6 +301,10 @@ msgstr "Не удалось применить указанную команду
 #: src/components/error-boundary/error-boundary.js
 msgid "Crash report sent"
 msgstr "Отчет об ошибке отправлен"
+
+#: src/views/inbox-threads/inbox-threads__item-issue-created.js
+msgid "created"
+msgstr ""
 
 #: src/views/issue/issue__details.js
 msgid "Created by"
@@ -553,6 +572,22 @@ msgstr "Логи"
 msgid "Manage Favorite Projects"
 msgstr "Изменить список избранных проектов"
 
+#: src/views/inbox-threads/inbox-threads.js
+msgid "Mark all as read"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads__thread.js
+msgid "Mark as read"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads__thread.js
+msgid "Mark as unread"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads-actions.js
+msgid "Marked as read"
+msgstr ""
+
 #: src/views/issues/issues__count.js
 msgid "Matches {{issuesCount}} issue"
 msgid_plural "Matches {{issuesCount}} issues"
@@ -561,9 +596,21 @@ msgstr[1] "{{issuesCount}} совпадающие задачи"
 msgstr[2] "{{issuesCount}} совпадающих задач"
 msgstr[3] "{{issuesCount}} совпадающих задач"
 
+#: src/views/inbox-threads/inbox-threads__mention.js
+msgid "mentioned you"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads-helper.js
+msgid "Mentions & Reactions"
+msgstr ""
+
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "merged the pull request"
 msgstr "выполнил(а) мердж пул-реквеста"
+
+#: src/views/inbox-threads/inbox-threads__thread.js
+msgid "Mute thread"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "New Article"
@@ -606,6 +653,10 @@ msgstr "Задачи не найдены"
 msgid "No items"
 msgstr "Ничего не нашлось"
 
+#: src/views/inbox-threads/inbox-threads__list.js
+msgid "No notifications"
+msgstr ""
+
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "No type"
 msgstr "Нет типа"
@@ -618,6 +669,11 @@ msgstr "От Upsource не получены данные о пользовате
 msgid "Nope, can't find it!"
 msgstr "Не удается найти!"
 
+#: src/views/inbox-threads/inbox-threads.js
+msgid "Notification settings…"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads.js
 #: src/views/inbox/inbox.js
 msgid "Notifications"
 msgstr "Уведомления"
@@ -667,6 +723,7 @@ msgstr "Удалить проект из избранного?"
 msgid "Remove tag"
 msgstr "Снять тег"
 
+#: src/views/inbox-threads/inbox-threads__reactions.js
 #: src/views/inbox/inbox.js
 msgid "removed a reaction"
 msgstr "удалил(а) реакцию"
@@ -707,6 +764,10 @@ msgstr "Выберите статью из списка"
 #: src/views/issues/issues.js
 msgid "Select an issue from the list"
 msgstr "Выбрать задачу из списка"
+
+#: src/views/inbox-threads/inbox-threads.js
+msgid "Select an issue, article or change from the list"
+msgstr ""
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Send crash report"
@@ -759,11 +820,16 @@ msgstr "Поделиться логами"
 msgid "Share…"
 msgstr "Поделиться..."
 
+#: src/views/inbox-threads/inbox-threads.js
+msgid "Show all"
+msgstr ""
+
 #: src/components/tags/tags.js
 msgid "Show all issues tagged with \"{{tagName}}\"..."
 msgstr "Показать все задачи с тегом «{{tagName}}»..."
 
 #: src/components/activity-stream/activity__stream-vcs.js
+#: src/views/inbox-threads/inbox-threads__subscription.js
 msgid "Show more"
 msgstr "Показать больше"
 
@@ -805,6 +871,10 @@ msgstr "Подстатьи"
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "submitted a pull request"
 msgstr "создал(а) пул-реквест"
+
+#: src/views/inbox-threads/inbox-threads-helper.js
+msgid "Subscriptions"
+msgstr ""
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Summary"
@@ -903,6 +973,14 @@ msgstr "Не удалось получить информацию об авто�
 msgid "This action deletes all drafts, including unpublished sub-articles"
 msgstr "Будут удалены все черновики, включая неопубликованные вложенные статьи"
 
+#: src/views/inbox-threads/inbox-threads-actions.js
+msgid "Thread muted"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads-actions.js
+msgid "Thread unmuted"
+msgstr ""
+
 #: src/views/article-create/article-create.js
 msgid "Title"
 msgstr "Заголовок"
@@ -910,6 +988,10 @@ msgstr "Заголовок"
 #: src/views/knowledge-base/knowledge-base.js
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
 msgstr "Чтобы просматривать в базе знаний статьи из определенного проекта, добавьте его в избранное"
+
+#: src/components/activity-stream/activity__stream-history.js
+msgid "Total votes"
+msgstr ""
 
 #: src/components/error-message/error-message.js
 msgid "Try Again"
@@ -923,9 +1005,26 @@ msgstr "Тип"
 msgid "Uncategorized Cards"
 msgstr "Карточки без категории"
 
+#: src/views/inbox-threads/inbox-threads__thread.js
+msgid "Unmute thread"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads.js
+msgid "Unread only"
+msgstr ""
+
 #: src/components/articles/article-item-with-children.js
 msgid "Untitled"
 msgstr "Без названия"
+
+#: src/views/inbox-threads/inbox-threads__tab-bar.js
+msgid "Update"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads__item-history.js
+#: src/views/inbox-threads/inbox-threads__item-work.js
+msgid "updated"
+msgstr ""
 
 #: src/views/issue/issue__details.js
 msgid "Updated by"
@@ -946,6 +1045,10 @@ msgstr "Имя пользователя или адрес электронной
 #: src/components/activity/activity-helper.js
 msgid "VCS changes"
 msgstr "Изменения в VCS"
+
+#: src/views/inbox-threads/inbox-threads__item-comment.js
+msgid "View comment"
+msgstr ""
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
@@ -979,6 +1082,10 @@ msgstr "К сожалению, вам сюда нельзя."
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Write a comment, @mention people"
 msgstr "Введите текст комментария, @упоминайте людей"
+
+#: src/views/inbox-threads/inbox-threads__list.js
+msgid "You don’t have any unread notifications"
+msgstr ""
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."

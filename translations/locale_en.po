@@ -18,11 +18,11 @@ msgstr " or "
 msgid "(archived)"
 msgstr "(archived)"
 
-#: src/components/custom-fields-panel/custom-fields-panel__date-picker.js:58
+#: src/components/custom-fields-panel/custom-fields-panel__date-picker.js:65
 msgid "(Clear value)"
 msgstr "(Clear value)"
 
-#: src/components/activity/activity__history-title.js:20
+#: src/components/activity/activity__history-title.js:21
 msgid "[Removed field]"
 msgstr "[Removed field]"
 
@@ -53,15 +53,15 @@ msgstr "1w 1d 1h 1m"
 msgid "Accept"
 msgstr "Accept"
 
-#: src/components/issue-tabbed/issue-tabbed.js:54
+#: src/components/issue-tabbed/issue-tabbed.js:56
 msgid "Activity"
 msgstr "Activity"
 
-#: src/views/issue/activity/issue__activity.js:142
+#: src/views/issue/activity/issue__activity.js:145
 msgid "Activity Settings"
 msgstr "Activity Settings"
 
-#: src/views/knowledge-base/knowledge-base.js:81
+#: src/views/knowledge-base/knowledge-base.js:77
 msgid "Add project to favorites"
 msgstr "Add project to favorites"
 
@@ -78,9 +78,14 @@ msgstr "Add tag"
 msgid "Add to favorites"
 msgstr "Add to favorites"
 
-#: src/views/inbox/inbox.js:517
+#: src/views/inbox-threads/inbox-threads__reactions.js:40
+#: src/views/inbox/inbox.js:498
 msgid "added a reaction"
 msgstr "added a reaction"
+
+#: src/views/inbox-threads/inbox-threads-helper.js:89
+msgid "All"
+msgstr "All"
 
 #: src/views/settings/settings__appearance.js:61
 #: src/views/settings/settings.js:106
@@ -134,7 +139,7 @@ msgstr "Attach file"
 msgid "Attach files"
 msgstr "Attach files"
 
-#: src/components/activity/activity__history-title.js:39
+#: src/components/activity/activity__history-title.js:40
 msgid "Attachment"
 msgid_plural "Attachments"
 msgstr[0] "Attachment"
@@ -166,6 +171,8 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/views/article/arcticle-actions.js:240
 #: src/views/article/arcticle-actions.js:471
 #: src/views/create-issue/create-issue-actions.js:334
+#: src/views/inbox-threads/inbox-threads__thread.js:144
+#: src/views/inbox-threads/inbox-threads.js:210
 #: src/views/issue/activity/issue-activity__comment-actions.js:306
 #: src/views/issue/issue-base-actions-creater.js:519
 #: src/views/issue/issue-base-actions-creater.js:550
@@ -188,7 +195,7 @@ msgstr "Close"
 msgid "closed the pull request"
 msgstr "closed the pull request"
 
-#: src/views/knowledge-base/knowledge-base.js:429
+#: src/views/knowledge-base/knowledge-base.js:424
 msgid "Collapse all"
 msgstr "Collapse all"
 
@@ -208,7 +215,7 @@ msgstr "Command applied"
 msgid "Command was successfully applied."
 msgstr "Command was successfully applied."
 
-#: src/components/activity/activity__history-title.js:29
+#: src/components/activity/activity__history-title.js:30
 msgid "Comment changed"
 msgstr "Comment changed"
 
@@ -220,7 +227,11 @@ msgstr "Comment deleted"
 msgid "Comment updated"
 msgstr "Comment updated"
 
-#: src/components/activity/activity-helper.js:38
+#: src/views/inbox-threads/inbox-threads__item-comment.js:55
+msgid "commented"
+msgstr "commented"
+
+#: src/components/activity/activity-helper.js:44
 msgid "Comments"
 msgstr "Comments"
 
@@ -228,7 +239,7 @@ msgstr "Comments"
 msgid "committed changes"
 msgstr "committed changes"
 
-#: src/actions/app-actions.js:662
+#: src/actions/app-actions.js:668
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -238,9 +249,13 @@ msgstr "Connecting to YouTrack..."
 msgid "Contact support"
 msgstr "Contact support"
 
-#: src/views/article/article.js:105
+#: src/views/article/article.js:127
 msgid "Content"
 msgstr "Content"
+
+#: src/components/activity/activity__history-title.js:24
+msgid "Content changed"
+msgstr "Content changed"
 
 #: src/components/wiki/code-renderer.js:134
 #: src/views/issue/activity/issue-activity__comment-actions.js:277
@@ -272,6 +287,10 @@ msgstr "Could not apply specified command."
 #: src/components/error-boundary/error-boundary.js:78
 msgid "Crash report sent"
 msgstr "Crash report sent"
+
+#: src/views/inbox-threads/inbox-threads__item-issue-created.js:81
+msgid "created"
+msgstr "created"
 
 #: src/views/issue/issue__details.js:216
 msgid "Created by"
@@ -319,12 +338,12 @@ msgstr "Delete permanently"
 msgid "Description"
 msgstr "Description"
 
-#: src/components/activity/activity__history-title.js:23
+#: src/components/activity/activity__history-title.js:24
 msgid "Description changed"
 msgstr "Description changed"
 
-#: src/components/issue-tabbed/issue-tabbed.js:50
-#: src/views/inbox/inbox.js:253
+#: src/components/issue-tabbed/issue-tabbed.js:52
+#: src/views/inbox/inbox.js:254
 msgid "Details"
 msgstr "Details"
 
@@ -344,12 +363,12 @@ msgstr "Discard unpublished changes"
 msgid "Don't send logs"
 msgstr "Don't send logs"
 
-#: src/views/knowledge-base/knowledge-base.js:456
+#: src/views/knowledge-base/knowledge-base.js:451
 msgid "Drafts"
 msgstr "Drafts"
 
 #: src/components/activity-stream/activity__stream-work.js:111
-#: src/components/activity-stream/activity__stream.js:334
+#: src/components/activity-stream/activity__stream.js:168
 #: src/views/article/arcticle-actions.js:204
 #: src/views/issue/activity/issue-activity__comment-actions.js:290
 #: src/views/issue/issue-base-actions-creater.js:470
@@ -418,7 +437,7 @@ msgstr "Filter tags"
 msgid "Filter users, groups, and teams"
 msgstr "Filter users, groups, and teams"
 
-#: src/views/knowledge-base/knowledge-base.js:533
+#: src/views/knowledge-base/knowledge-base.js:528
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
@@ -430,7 +449,7 @@ msgstr "Get help"
 msgid "Help us fix problems faster"
 msgstr "Help us fix problems faster"
 
-#: src/views/knowledge-base/knowledge-base.js:525
+#: src/views/knowledge-base/knowledge-base.js:520
 msgid "Here you'll see a list of articles from your favorite projects"
 msgstr "Here you'll see a list of articles from your favorite projects"
 
@@ -442,7 +461,7 @@ msgstr "If this isn't what you expected, you might try one of these solutions:"
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
 msgstr "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
 
-#: src/views/article/article.js:196
+#: src/views/article/article.js:218
 msgid "in revision"
 msgstr "in revision"
 
@@ -454,7 +473,7 @@ msgstr "Invalid query"
 msgid "Issue deleted"
 msgstr "Issue deleted"
 
-#: src/components/activity/activity-helper.js:39
+#: src/components/activity/activity-helper.js:45
 msgid "Issue history"
 msgstr "Issue history"
 
@@ -486,7 +505,7 @@ msgstr "JetBrains Privacy Policy"
 msgid "just now"
 msgstr "just now"
 
-#: src/views/knowledge-base/knowledge-base.js:569
+#: src/views/knowledge-base/knowledge-base.js:564
 msgid "Knowledge Base"
 msgstr "Knowledge Base"
 
@@ -535,9 +554,25 @@ msgid "Logs"
 msgstr "Logs"
 
 #: src/views/knowledge-base/knowledge-base-actions.js:384
-#: src/views/knowledge-base/knowledge-base.js:385
+#: src/views/knowledge-base/knowledge-base.js:380
 msgid "Manage Favorite Projects"
 msgstr "Manage Favorite Projects"
+
+#: src/views/inbox-threads/inbox-threads.js:197
+msgid "Mark all as read"
+msgstr "Mark all as read"
+
+#: src/views/inbox-threads/inbox-threads__thread.js:140
+msgid "Mark as read"
+msgstr "Mark as read"
+
+#: src/views/inbox-threads/inbox-threads__thread.js:140
+msgid "Mark as unread"
+msgstr "Mark as unread"
+
+#: src/views/inbox-threads/inbox-threads-actions.js:331
+msgid "Marked as read"
+msgstr "Marked as read"
 
 #: src/views/issues/issues__count.js:20
 msgid "Matches {{issuesCount}} issue"
@@ -545,9 +580,21 @@ msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] "Matches {{issuesCount}} issue"
 msgstr[1] "Matches {{issuesCount}} issues"
 
+#: src/views/inbox-threads/inbox-threads__mention.js:81
+msgid "mentioned you"
+msgstr "mentioned you"
+
+#: src/views/inbox-threads/inbox-threads-helper.js:90
+msgid "Mentions & Reactions"
+msgstr "Mentions & Reactions"
+
 #: src/components/activity-stream/activity__stream-vcs.js:83
 msgid "merged the pull request"
 msgstr "merged the pull request"
+
+#: src/views/inbox-threads/inbox-threads__thread.js:128
+msgid "Mute thread"
+msgstr "Mute thread"
 
 #: src/views/knowledge-base/knowledge-base-actions.js:392
 msgid "New Article"
@@ -561,15 +608,15 @@ msgstr "New Issue"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.js:531
+#: src/components/activity-stream/activity__stream.js:330
 msgid "No activity yet"
 msgstr "No activity yet"
 
-#: src/views/knowledge-base/knowledge-base.js:224
+#: src/views/knowledge-base/knowledge-base.js:219
 msgid "No articles"
 msgstr "No articles"
 
-#: src/views/knowledge-base/knowledge-base.js:84
+#: src/views/knowledge-base/knowledge-base.js:80
 msgid "No articles found"
 msgstr "No articles found"
 
@@ -577,18 +624,22 @@ msgstr "No articles found"
 msgid "No drafts yet"
 msgstr "No drafts yet"
 
-#: src/views/knowledge-base/knowledge-base.js:80
+#: src/views/knowledge-base/knowledge-base.js:76
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
 #: src/components/error/error-message-data.js:32
-#: src/views/issues/issues.js:501
+#: src/views/issues/issues.js:502
 msgid "No issues found"
 msgstr "No issues found"
 
 #: src/components/select/select.js:358
 msgid "No items"
 msgstr "No items"
+
+#: src/views/inbox-threads/inbox-threads__list.js:132
+msgid "No notifications"
+msgstr "No notifications"
 
 #: src/views/issue/activity/activity__add-spent-time.js:58
 msgid "No type"
@@ -602,7 +653,12 @@ msgstr "No user information provided by Upsource."
 msgid "Nope, can't find it!"
 msgstr "Nope, can't find it!"
 
-#: src/views/inbox/inbox.js:622
+#: src/views/inbox-threads/inbox-threads.js:204
+msgid "Notification settings…"
+msgstr "Notification settings…"
+
+#: src/views/inbox-threads/inbox-threads.js:181
+#: src/views/inbox/inbox.js:603
 msgid "Notifications"
 msgstr "Notifications"
 
@@ -651,7 +707,8 @@ msgstr "Remove project from favorites?"
 msgid "Remove tag"
 msgstr "Remove tag"
 
-#: src/views/inbox/inbox.js:517
+#: src/views/inbox-threads/inbox-threads__reactions.js:41
+#: src/views/inbox/inbox.js:498
 msgid "removed a reaction"
 msgstr "removed a reaction"
 
@@ -683,14 +740,18 @@ msgstr "Search for a different value"
 msgid "Search for the project"
 msgstr "Search for the project"
 
-#: src/views/knowledge-base/knowledge-base.js:617
+#: src/views/knowledge-base/knowledge-base.js:609
 msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
-#: src/views/inbox/inbox.js:659
-#: src/views/issues/issues.js:564
+#: src/views/inbox/inbox.js:637
+#: src/views/issues/issues.js:562
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
+
+#: src/views/inbox-threads/inbox-threads.js:110
+msgid "Select an issue, article or change from the list"
+msgstr "Select an issue, article or change from the list"
 
 #: src/components/error-boundary/error-boundary.js:164
 msgid "Send crash report"
@@ -743,11 +804,16 @@ msgstr "Share logs"
 msgid "Share…"
 msgstr "Share…"
 
+#: src/views/inbox-threads/inbox-threads.js:190
+msgid "Show all"
+msgstr "Show all"
+
 #: src/components/tags/tags.js:43
 msgid "Show all issues tagged with \"{{tagName}}\"..."
 msgstr "Show all issues tagged with \"{{tagName}}\"..."
 
 #: src/components/activity-stream/activity__stream-vcs.js:185
+#: src/views/inbox-threads/inbox-threads__subscription.js:96
 msgid "Show more"
 msgstr "Show more"
 
@@ -760,7 +826,7 @@ msgstr "Something went wrong"
 msgid "Sort Attributes"
 msgstr "Sort Attributes"
 
-#: src/views/issue/activity/issue__activity-settings.js:53
+#: src/views/issue/activity/issue__activity-settings.js:51
 msgid "Sort: oldest first"
 msgstr "Sort: oldest first"
 
@@ -768,7 +834,7 @@ msgstr "Sort: oldest first"
 msgid "Sorted by"
 msgstr "Sorted by"
 
-#: src/components/activity/activity-helper.js:40
+#: src/components/activity/activity-helper.js:46
 #: src/views/issue/activity/activity__add-spent-time.js:246
 #: src/views/issue/activity/activity__add-spent-time.js:339
 msgid "Spent time"
@@ -790,11 +856,15 @@ msgstr "Sub-articles"
 msgid "submitted a pull request"
 msgstr "submitted a pull request"
 
+#: src/views/inbox-threads/inbox-threads-helper.js:91
+msgid "Subscriptions"
+msgstr "Subscriptions"
+
 #: src/views/settings/settings__feedback-form.js:205
 msgid "Summary"
 msgstr "Summary"
 
-#: src/components/activity/activity__history-title.js:26
+#: src/components/activity/activity__history-title.js:27
 msgid "Summary changed"
 msgstr "Summary changed"
 
@@ -802,7 +872,7 @@ msgstr "Summary changed"
 msgid "Sync with OS"
 msgstr "Sync with OS"
 
-#: src/components/activity/activity__history-title.js:32
+#: src/components/activity/activity__history-title.js:33
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tag"
@@ -857,7 +927,7 @@ msgstr "The commit author has specified an email address that is associated with
 msgid "The commit author is not an assignee in the project."
 msgstr "The commit author is not an assignee in the project."
 
-#: src/actions/app-actions.js:341
+#: src/actions/app-actions.js:346
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
@@ -885,13 +955,25 @@ msgstr "There was an error retrieving information about the change's author from
 msgid "This action deletes all drafts, including unpublished sub-articles"
 msgstr "This action deletes all drafts, including unpublished sub-articles"
 
+#: src/views/inbox-threads/inbox-threads-actions.js:284
+msgid "Thread muted"
+msgstr "Thread muted"
+
+#: src/views/inbox-threads/inbox-threads-actions.js:284
+msgid "Thread unmuted"
+msgstr "Thread unmuted"
+
 #: src/views/article-create/article-create.js:311
 msgid "Title"
 msgstr "Title"
 
-#: src/views/knowledge-base/knowledge-base.js:476
+#: src/views/knowledge-base/knowledge-base.js:471
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
 msgstr "To view articles in the knowledge base for a specific project, mark it as a favorite"
+
+#: src/components/activity-stream/activity__stream-history.js:105
+msgid "Total votes"
+msgstr "Total votes"
 
 #: src/components/error-message/error-message.js:96
 msgid "Try Again"
@@ -905,9 +987,26 @@ msgstr "Type"
 msgid "Uncategorized Cards"
 msgstr "Uncategorized Cards"
 
+#: src/views/inbox-threads/inbox-threads__thread.js:128
+msgid "Unmute thread"
+msgstr "Unmute thread"
+
+#: src/views/inbox-threads/inbox-threads.js:190
+msgid "Unread only"
+msgstr "Unread only"
+
 #: src/components/articles/article-item-with-children.js:41
 msgid "Untitled"
 msgstr "Untitled"
+
+#: src/views/inbox-threads/inbox-threads__tab-bar.js:100
+msgid "Update"
+msgstr "Update"
+
+#: src/views/inbox-threads/inbox-threads__item-history.js:26
+#: src/views/inbox-threads/inbox-threads__item-work.js:30
+msgid "updated"
+msgstr "updated"
 
 #: src/views/issue/issue__details.js:223
 msgid "Updated by"
@@ -925,15 +1024,19 @@ msgstr "User account is banned"
 msgid "Username or email"
 msgstr "Username or email"
 
-#: src/components/activity/activity-helper.js:41
+#: src/components/activity/activity-helper.js:47
 msgid "VCS changes"
 msgstr "VCS changes"
+
+#: src/views/inbox-threads/inbox-threads__item-comment.js:66
+msgid "View comment"
+msgstr "View comment"
 
 #: src/views/issue/issue__details.js:465
 msgid "View comments and other activity"
 msgstr "View comments and other activity"
 
-#: src/components/activity/activity__history-title.js:46
+#: src/components/activity/activity__history-title.js:47
 msgid "Visibility"
 msgstr "Visibility"
 
@@ -962,7 +1065,11 @@ msgstr "Woah, you can't touch this!"
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
 
-#: src/views/inbox/inbox.js:586
+#: src/views/inbox-threads/inbox-threads__list.js:131
+msgid "You don’t have any unread notifications"
+msgstr "You don’t have any unread notifications"
+
+#: src/views/inbox/inbox.js:567
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 msgstr "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 

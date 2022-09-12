@@ -81,9 +81,14 @@ msgstr "添加标记"
 msgid "Add to favorites"
 msgstr "添加到收藏"
 
+#: src/views/inbox-threads/inbox-threads__reactions.js
 #: src/views/inbox/inbox.js
 msgid "added a reaction"
 msgstr "已添加回应"
+
+#: src/views/inbox-threads/inbox-threads-helper.js
+msgid "All"
+msgstr ""
 
 #: src/views/settings/settings__appearance.js
 #: src/views/settings/settings.js
@@ -168,6 +173,8 @@ msgstr "登录，即表示您同意《隐私政策》。"
 #: src/views/article/arcticle-actions.js
 #: src/views/article/arcticle-actions.js
 #: src/views/create-issue/create-issue-actions.js
+#: src/views/inbox-threads/inbox-threads__thread.js
+#: src/views/inbox-threads/inbox-threads.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
 #: src/views/issue/issue-base-actions-creater.js
 #: src/views/issue/issue-base-actions-creater.js
@@ -222,6 +229,10 @@ msgstr "已删除评论"
 msgid "Comment updated"
 msgstr "已更新评论"
 
+#: src/views/inbox-threads/inbox-threads__item-comment.js
+msgid "commented"
+msgstr ""
+
 #: src/components/activity/activity-helper.js
 msgid "Comments"
 msgstr "评论"
@@ -243,6 +254,10 @@ msgstr "联系支持团队"
 #: src/views/article/article.js
 msgid "Content"
 msgstr "内容"
+
+#: src/components/activity/activity__history-title.js
+msgid "Content changed"
+msgstr ""
 
 #: src/components/wiki/code-renderer.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
@@ -274,6 +289,10 @@ msgstr "无法应用指定的命令。"
 #: src/components/error-boundary/error-boundary.js
 msgid "Crash report sent"
 msgstr "已发送崩溃报告"
+
+#: src/views/inbox-threads/inbox-threads__item-issue-created.js
+msgid "created"
+msgstr ""
 
 #: src/views/issue/issue__details.js
 msgid "Created by"
@@ -541,14 +560,42 @@ msgstr "日志"
 msgid "Manage Favorite Projects"
 msgstr "管理收藏的项目"
 
+#: src/views/inbox-threads/inbox-threads.js
+msgid "Mark all as read"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads__thread.js
+msgid "Mark as read"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads__thread.js
+msgid "Mark as unread"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads-actions.js
+msgid "Marked as read"
+msgstr ""
+
 #: src/views/issues/issues__count.js
 msgid "Matches {{issuesCount}} issue"
 msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] "匹配 {{issuesCount}} 个问题"
 
+#: src/views/inbox-threads/inbox-threads__mention.js
+msgid "mentioned you"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads-helper.js
+msgid "Mentions & Reactions"
+msgstr ""
+
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "merged the pull request"
 msgstr "已合并 Pull Request"
+
+#: src/views/inbox-threads/inbox-threads__thread.js
+msgid "Mute thread"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "New Article"
@@ -591,6 +638,10 @@ msgstr "没有找到问题"
 msgid "No items"
 msgstr "没有条目"
 
+#: src/views/inbox-threads/inbox-threads__list.js
+msgid "No notifications"
+msgstr ""
+
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "No type"
 msgstr "无类型"
@@ -603,6 +654,11 @@ msgstr "Upsource 没有提供用户信息."
 msgid "Nope, can't find it!"
 msgstr "不， 没有找到！"
 
+#: src/views/inbox-threads/inbox-threads.js
+msgid "Notification settings…"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads.js
 #: src/views/inbox/inbox.js
 msgid "Notifications"
 msgstr "通知"
@@ -652,6 +708,7 @@ msgstr "是否从收藏夹中移除项目?"
 msgid "Remove tag"
 msgstr "移除标签"
 
+#: src/views/inbox-threads/inbox-threads__reactions.js
 #: src/views/inbox/inbox.js
 msgid "removed a reaction"
 msgstr "已移除回应"
@@ -692,6 +749,10 @@ msgstr "从列表中选择文章"
 #: src/views/issues/issues.js
 msgid "Select an issue from the list"
 msgstr "从列表中选择问题"
+
+#: src/views/inbox-threads/inbox-threads.js
+msgid "Select an issue, article or change from the list"
+msgstr ""
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Send crash report"
@@ -744,11 +805,16 @@ msgstr "共享日志"
 msgid "Share…"
 msgstr "分享…"
 
+#: src/views/inbox-threads/inbox-threads.js
+msgid "Show all"
+msgstr ""
+
 #: src/components/tags/tags.js
 msgid "Show all issues tagged with \"{{tagName}}\"..."
 msgstr "显示所有标记为“{{tagName}}”的问题…"
 
 #: src/components/activity-stream/activity__stream-vcs.js
+#: src/views/inbox-threads/inbox-threads__subscription.js
 msgid "Show more"
 msgstr "显示更多"
 
@@ -790,6 +856,10 @@ msgstr "子文章"
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "submitted a pull request"
 msgstr "提交 Pull Request"
+
+#: src/views/inbox-threads/inbox-threads-helper.js
+msgid "Subscriptions"
+msgstr ""
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Summary"
@@ -885,6 +955,14 @@ msgstr "从 TeamCity 检索有关变更作者的信息时出错。最可能的�
 msgid "This action deletes all drafts, including unpublished sub-articles"
 msgstr "此操作将删除所有草稿，包括未发布的子文章"
 
+#: src/views/inbox-threads/inbox-threads-actions.js
+msgid "Thread muted"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads-actions.js
+msgid "Thread unmuted"
+msgstr ""
+
 #: src/views/article-create/article-create.js
 msgid "Title"
 msgstr "标题"
@@ -892,6 +970,10 @@ msgstr "标题"
 #: src/views/knowledge-base/knowledge-base.js
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
 msgstr "要查看特定项目的知识库中的文章，请将其标记为收藏项"
+
+#: src/components/activity-stream/activity__stream-history.js
+msgid "Total votes"
+msgstr ""
 
 #: src/components/error-message/error-message.js
 msgid "Try Again"
@@ -905,9 +987,26 @@ msgstr "类型"
 msgid "Uncategorized Cards"
 msgstr "未分类的卡片"
 
+#: src/views/inbox-threads/inbox-threads__thread.js
+msgid "Unmute thread"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads.js
+msgid "Unread only"
+msgstr ""
+
 #: src/components/articles/article-item-with-children.js
 msgid "Untitled"
 msgstr "未命名"
+
+#: src/views/inbox-threads/inbox-threads__tab-bar.js
+msgid "Update"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads__item-history.js
+#: src/views/inbox-threads/inbox-threads__item-work.js
+msgid "updated"
+msgstr ""
 
 #: src/views/issue/issue__details.js
 msgid "Updated by"
@@ -928,6 +1027,10 @@ msgstr "用户名或电子邮件"
 #: src/components/activity/activity-helper.js
 msgid "VCS changes"
 msgstr "VCS 变更"
+
+#: src/views/inbox-threads/inbox-threads__item-comment.js
+msgid "View comment"
+msgstr ""
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
@@ -961,6 +1064,10 @@ msgstr "注意，不要碰这个！"
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Write a comment, @mention people"
 msgstr "写评论，提及人（@）"
+
+#: src/views/inbox-threads/inbox-threads__list.js
+msgid "You don’t have any unread notifications"
+msgstr ""
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
