@@ -39,26 +39,17 @@ describe('<CustomField/>', () => {
   });
 
   it('should render localized field name', () => {
-    const localizedFieldMock = {
-      projectCustomField: {
-        emptyFieldText: 'im empty',
-        field: {
-          name: 'Test custom field',
-          localizedName: 'Test custom field localized',
-          fieldType: {
-            valueType: 'some-type',
-          },
-        },
-      },
-      value: {
-        name: 'Test value',
-        localizedName: 'Test value localized',
-      },
-      color: {id: 4},
-    };
-    const wrapper = shallow(<CustomField field={localizedFieldMock}/>);
+    fakeField.projectCustomField.field.localizedName = 'Test custom field name';
+    const wrapper = shallow(<CustomField field={fakeField}/>);
     const name = wrapper.find({testID: 'test:id/name'});
-    name.children().should.have.text(localizedFieldMock.projectCustomField.field.localizedName);
+    name.children().should.have.text(fakeField.projectCustomField.field.localizedName);
+  });
+
+  it('should render shortened field name', () => {
+    fakeField.projectCustomField.field.localizedName = 'Test custom field long-long-long name';
+    const wrapper = shallow(<CustomField field={fakeField}/>);
+    const name = wrapper.find({testID: 'test:id/name'});
+    name.children().should.have.text('Test custom field long-long-lo…');
   });
 
   it('should render field value', () => {
@@ -68,25 +59,12 @@ describe('<CustomField/>', () => {
   });
 
   it('should render localized field value', () => {
-    const localizedFieldMock = {
-      projectCustomField: {
-        emptyFieldText: 'im empty',
-        field: {
-          name: 'Test custom field',
-          localizedName: 'Test custom field localized',
-          fieldType: {
-            valueType: 'some-type',
-          },
-        },
-      },
-      value: {
-        name: 'Test value',
-        localizedName: 'Test value localized',
-      },
-      color: {id: 4},
+    fakeField.value = {
+      name: 'Test value',
+      localizedName: 'Test value localized',
     };
 
-    const wrapper = shallow(<CustomField field={localizedFieldMock}/>);
+    const wrapper = shallow(<CustomField field={fakeField}/>);
     const value = wrapper.find({testID: 'test:id/value'});
     value.children().should.have.text(fakeField.value.localizedName);
   });

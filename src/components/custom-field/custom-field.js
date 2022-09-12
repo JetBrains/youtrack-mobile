@@ -25,6 +25,9 @@ type Props = {
   active: boolean
 };
 
+const maxValueStringWidth: number = 30;
+
+
 export default class CustomField extends Component<Props, void> {
   _getFieldType(field: CustomFieldType) {
     if (!field?.projectCustomField?.field?.fieldType) {
@@ -56,13 +59,14 @@ export default class CustomField extends Component<Props, void> {
 
   getLabel() {
     const field: CustomFieldType = this.props.field;
-    return (
+    const label: string = (
       field?.projectCustomField?.field?.localizedName ||
       field?.localizedName ||
       field?.projectCustomField?.field?.name ||
       field?.name ||
       ''
     );
+    return label.length > maxValueStringWidth ? `${label.substring(0, maxValueStringWidth)}…` : label;
   }
 
   _renderColorMaker(value: ?FieldValue | ?Array<FieldValue>) {
@@ -103,9 +107,9 @@ export default class CustomField extends Component<Props, void> {
             accessible={true}
             style={textStyle}
           >
-            {
-              valuePresentation?.length > 203 ? `${valuePresentation.substr(0, 200)}...` : valuePresentation
-            }
+            {valuePresentation?.length > maxValueStringWidth
+              ? `${valuePresentation.substring(0, maxValueStringWidth)}…`
+              : valuePresentation}
           </Text>
           {isURLPattern(valuePresentation) && <TouchableOpacity
             hitSlop={HIT_SLOP}
