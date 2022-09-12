@@ -5,12 +5,15 @@ import React, {useEffect, useState} from 'react';
 import {Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import {Calendar} from 'react-native-calendars';
+import {useSelector} from 'react-redux';
 
 import Header from '../header/header';
 import {i18n} from 'components/i18n/i18n';
 import {IconClose, IconBack} from '../icon/icon';
 
 import styles from './custom-fields-panel.styles';
+
+import type {AppState} from '../../reducers';
 
 type Props = {
   modal?: boolean,
@@ -26,7 +29,11 @@ type Props = {
 }
 
 
-const DatePicker = (props: Props) => {
+const DatePickerField = (props: Props) => {
+  const firstDay: number = useSelector((state: AppState) => {
+    const firstDayOfWeek: ?number = state?.app?.user?.profiles?.appearance?.firstDayOfWeek;
+    return typeof firstDayOfWeek === 'number' ? firstDayOfWeek : 1;
+  });
   const [value, updateValue] = useState('');
   const [time, updateTime] = useState('');
 
@@ -86,7 +93,7 @@ const DatePicker = (props: Props) => {
           onDayPress={(day) => {
             onApply(new Date(day.timestamp), time);
           }}
-          firstDay={1}
+          firstDay={firstDay}
           theme={props.theme}
         />
       </View>
@@ -94,4 +101,4 @@ const DatePicker = (props: Props) => {
   );
 };
 
-export default (React.memo<Props>(DatePicker): React$AbstractComponent<Props, mixed>);
+export default (React.memo<Props>(DatePickerField): React$AbstractComponent<Props, mixed>);

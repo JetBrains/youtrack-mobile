@@ -8,7 +8,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 
 import Api from '../api/api';
 import CustomField from '../custom-field/custom-field';
-import DatePicker from './custom-fields-panel__date-picker';
+import DatePickerField from './custom-fields-panel__date-picker';
 import Header from '../header/header';
 import ModalPortal from '../modal-view/modal-portal';
 import ModalView from '../modal-view/modal-view';
@@ -426,7 +426,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         this.closeEditor();
       };
       return (
-        <DatePicker
+        <DatePickerField
           modal={modal}
           emptyValueName={datePicker.emptyValueName}
           onApply={(date, time) => {

@@ -61,7 +61,7 @@ export default class UserAPI extends ApiBase {
               'locale',
             ],
           },
-          appearance: ['naturalCommentsOrder', 'useAbsoluteDates'],
+          appearance: ['naturalCommentsOrder', 'useAbsoluteDates', 'firstDayOfWeek'],
           articles: {
             lastVisitedArticle: ['id,idReadable,summary,project(id,ringId)'],
           },
