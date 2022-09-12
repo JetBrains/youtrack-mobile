@@ -2,7 +2,7 @@
 
 
 import React, {useEffect, useState} from 'react';
-import {TextInput, View} from 'react-native';
+import {Text, TextInput, View} from 'react-native';
 
 import Header from '../header/header';
 import {IconBack, IconCheck, IconClose} from '../icon/icon';
@@ -39,9 +39,9 @@ const SimpleValueEditor = (props: Props) => {
         rightButton={value.trim() ? <IconCheck size={21} color={styles.link.color}/> : null}
         onRightButtonClick={() => {
           props.onApply(value);
-        }}
-        title={props.title}
-      />
+        }}>
+        <Text style={styles.savingFieldTitle}>{props.title}</Text>
+      </Header>
       <View style={styles.customFieldSimpleEditor}>
         <TextInput
           multiline

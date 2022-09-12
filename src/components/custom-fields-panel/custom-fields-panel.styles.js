@@ -1,6 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {elevation1} from '../common-styles/shadow';
+import {headerTitlePresentation} from '../header/header.styles';
 import {rowFormStyles} from '../common-styles/form';
 import {UNIT} from '../variables/variables';
 
@@ -55,6 +56,7 @@ export default EStyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  savingFieldTitle: headerTitlePresentation,
   link: {
     color: '$link',
   },
