@@ -166,7 +166,7 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/views/article/arcticle-actions.js:240
 #: src/views/article/arcticle-actions.js:471
 #: src/views/create-issue/create-issue-actions.js:334
-#: src/views/issue/activity/issue-activity__comment-actions.js:309
+#: src/views/issue/activity/issue-activity__comment-actions.js:306
 #: src/views/issue/issue-base-actions-creater.js:519
 #: src/views/issue/issue-base-actions-creater.js:550
 #: src/views/knowledge-base/knowledge-base-actions.js:387
@@ -216,7 +216,7 @@ msgstr "Comment changed"
 msgid "Comment deleted"
 msgstr "Comment deleted"
 
-#: src/views/issue/activity/issue-activity__comment-actions.js:183
+#: src/views/issue/activity/issue-activity__comment-actions.js:180
 msgid "Comment updated"
 msgstr "Comment updated"
 
@@ -243,14 +243,14 @@ msgid "Content"
 msgstr "Content"
 
 #: src/components/wiki/code-renderer.js:134
-#: src/views/issue/activity/issue-activity__comment-actions.js:280
+#: src/views/issue/activity/issue-activity__comment-actions.js:277
 #: src/views/issue/issue-base-actions-creater.js:463
 #: src/views/issue/issue-base-actions-creater.js:547
 msgid "Copied"
 msgstr "Copied"
 
 #: src/views/article/arcticle-actions.js:451
-#: src/views/issue/activity/issue-activity__comment-actions.js:284
+#: src/views/issue/activity/issue-activity__comment-actions.js:281
 #: src/views/issue/issue-base-actions-creater.js:459
 msgid "Copy link"
 msgstr "Copy link"
@@ -260,7 +260,7 @@ msgstr "Copy link"
 msgid "Copy link to article"
 msgstr "Copy link to article"
 
-#: src/views/issue/activity/issue-activity__comment-actions.js:276
+#: src/views/issue/activity/issue-activity__comment-actions.js:273
 #: src/views/issue/issue-base-actions-creater.js:543
 msgid "Copy text"
 msgstr "Copy text"
@@ -298,12 +298,12 @@ msgstr "Decline"
 #: src/views/article/arcticle-actions.js:462
 #: src/views/article/arcticle-helper.js:7
 #: src/views/issue/activity/issue-activity__actions.js:280
-#: src/views/issue/activity/issue-activity__comment-actions.js:232
-#: src/views/issue/activity/issue-activity__comment-actions.js:302
+#: src/views/issue/activity/issue-activity__comment-actions.js:229
+#: src/views/issue/activity/issue-activity__comment-actions.js:299
 msgid "Delete"
 msgstr "Delete"
 
-#: src/views/issue/activity/issue-activity__comment-actions.js:232
+#: src/views/issue/activity/issue-activity__comment-actions.js:229
 msgid "Delete comment permanently?"
 msgstr "Delete comment permanently?"
 
@@ -351,7 +351,7 @@ msgstr "Drafts"
 #: src/components/activity-stream/activity__stream-work.js:111
 #: src/components/activity-stream/activity__stream.js:334
 #: src/views/article/arcticle-actions.js:204
-#: src/views/issue/activity/issue-activity__comment-actions.js:293
+#: src/views/issue/activity/issue-activity__comment-actions.js:290
 #: src/views/issue/issue-base-actions-creater.js:470
 msgid "Edit"
 msgstr "Edit"
@@ -505,7 +505,7 @@ msgstr "Light theme"
 msgid "Link issue"
 msgstr "Link issue"
 
-#: src/views/issue/activity/issue-activity__comment-actions.js:258
+#: src/views/issue/activity/issue-activity__comment-actions.js:255
 msgid "Link to comment copied"
 msgstr "Link to comment copied"
 
