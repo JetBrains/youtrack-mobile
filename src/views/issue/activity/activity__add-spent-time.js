@@ -275,8 +275,8 @@ const AddSpentTimeForm = (props: Props) => {
     const isSplitModeView: boolean = isSplitView();
     const datePicker: any = <DatePicker
       current={draft.date}
-      onDateSelect={(date: Date) => {
-        update({date: date.getTime()});
+      onDateSelect={(timestamp: number) => {
+        update({date: timestamp});
         if (isSplitModeView) {
           updateModalChildren(null);
         } else {

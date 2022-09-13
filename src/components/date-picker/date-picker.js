@@ -10,12 +10,13 @@ import {useSelector} from 'react-redux';
 import styles, {calendarTheme} from './date-picker.styles';
 
 import type {AppState} from '../../reducers';
+import type {DateData} from 'react-native-calendars';
 import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   current?: number,
-  onDateSelect: (date: Date) => any,
+  onDateSelect: (timestamp: number) => any,
   style?: ViewStyleProp,
 };
 
@@ -33,10 +34,9 @@ const DatePicker = (props: Props) => {
       style={[styles.container, props.style]}
       current={date}
       selected={[date]}
-      onDayPress={(day) => {
+      onDayPress={({timestamp}: DateData) => {
         updateDate();
-        const newDate: Date = new Date(day.timestamp);
-        props.onDateSelect(newDate);
+        props.onDateSelect(timestamp);
       }}
       firstDay={firstDay}
       theme={calendarTheme(theme.uiTheme)}
