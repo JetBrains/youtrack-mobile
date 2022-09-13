@@ -7,10 +7,10 @@ import ApiHelper from '../api/api__helper';
 import Avatar from '../avatar/avatar';
 import ColorField from '../color-field/color-field';
 import IconUrl from '@jetbrains/icons/new-window.svg';
+import {absDate} from 'components/date/date';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {getHUBUrl, isURLPattern} from 'util/util';
 import {HIT_SLOP} from '../common-styles/button';
-import {ytDate} from 'components/date/date';
 
 import styles from './custom-field.styles';
 
@@ -43,10 +43,10 @@ export default class CustomField extends Component<Props, void> {
 
     if (value != null) {
       if (fieldType === 'date') {
-        return ytDate(((value: any): number), true);
+        return absDate(((value: any): number), true);
       }
       if (fieldType === 'date and time') {
-        return ytDate(((value: any): Date));
+        return absDate(((value: any): Date));
       }
       if (fieldType === 'integer' || fieldType === 'string' || fieldType === 'float') {
         return `${(value: any)}`;

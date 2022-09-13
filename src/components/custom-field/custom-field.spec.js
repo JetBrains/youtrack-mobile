@@ -2,8 +2,8 @@ import React from 'react';
 import {shallow} from 'enzyme';
 
 import CustomField from './custom-field';
-import {__setStorageState} from '../storage/storage';
-import {ytDate} from 'components/date/date';
+import {absDate} from 'components/date/date';
+import {__setStorageState} from 'components/storage/storage';
 
 describe('<CustomField/>', () => {
   let fakeField;
@@ -99,7 +99,7 @@ describe('<CustomField/>', () => {
 
     const wrapper = shallow(<CustomField field={fakeField}/>);
     const value = wrapper.find({testID: 'test:id/value'});
-    value.children().should.have.text(ytDate(timestamp, true));
+    value.children().should.have.text(absDate(timestamp, true));
   });
 
   it('should render value of type integer', () => {

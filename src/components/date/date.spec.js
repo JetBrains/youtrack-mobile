@@ -1,7 +1,7 @@
 import * as storage from 'components/storage/storage';
 import mocks from '../../../test/mocks';
 import {__setStorageState} from 'components/storage/storage';
-import {USER_DATE_FORMAT_DEFAULT_DATE_PATTERN, USER_DATE_FORMAT_DEFAULT_PATTERN, ytDate} from 'components/date/date';
+import {USER_DATE_FORMAT_DEFAULT_DATE_PATTERN, USER_DATE_FORMAT_DEFAULT_PATTERN, ytDate, absDate} from 'components/date/date';
 
 
 describe('Date', () => {
@@ -28,6 +28,16 @@ describe('Date', () => {
     });
 
     describe('Absolute dates', () => {
+      describe('absDate', () => {
+        it('should return abs date', () => {
+          expect(absDate(new Date(0))).toEqual('1 Jan 1970 01:00');
+        });
+
+        it('should return abs date - 2 min before', () => {
+          expect(absDate(new Date(0) - 60 * 1000 * 2)).toEqual('1 Jan 1970 00:58');
+        });
+      });
+
 
       describe('default format', () => {
         beforeEach(() => {

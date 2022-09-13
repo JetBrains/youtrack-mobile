@@ -59,12 +59,12 @@ function getDatePattern() {
   return getUserProfileDateFieldFormat()?.datePattern || USER_DATE_FORMAT_DEFAULT_DATE_PATTERN;
 }
 
-function getLanguage(): ?string {
-  return getStorageState().currentUser?.ytCurrentUser?.profiles?.general?.locale?.language;
+function getLanguage(): string {
+  return getStorageState().currentUser?.ytCurrentUser?.profiles?.general?.locale?.language || '';
 }
 
 function isAbsoluteDates(): boolean {
-  const currentUser: User = getYTCurrentUser();
+  const currentUser: ?User = getYTCurrentUser();
   return !!currentUser?.profiles?.appearance?.useAbsoluteDates;
 }
 
@@ -72,8 +72,16 @@ function formatDate(date: Date | number, pattern: string = USER_DATE_FORMAT_DEFA
   return format(date, pattern, {locale});
 }
 
-function formatTime(date: Date | number) {
+function formatTime(date: Date | number): string {
   return format(date, getPattern().split(getDatePattern()).pop().trim());
+}
+
+function getLocale() {
+  return dateLocaleMap[getLanguage()];
+}
+
+function absDate(date?: Date | number, noTime?: boolean): string {
+  return date == null ? '' : formatDate(date, noTime ? getDatePattern() : getPattern(), getLocale());
 }
 
 function ytDate(date?: Date | number, noTime?: boolean): string {
@@ -81,22 +89,21 @@ function ytDate(date?: Date | number, noTime?: boolean): string {
     return '';
   }
 
-  const locale: ?Locale = dateLocaleMap[getLanguage()];
-
   if (isAbsoluteDates()) {
-    return formatDate(date, noTime ? getDatePattern() : getPattern(), locale);
+    return absDate(date, noTime);
   }
 
-  if ((Date.now() - date) <= 60 * 1000) {
-    return i18n('just now');
-  }
-
-  return formatDistanceToNow(date, {addSuffix: true, locale});
+  return (
+    (Date.now() - date) <= 60 * 1000
+      ? i18n('just now')
+      : formatDistanceToNow(date, {addSuffix: true, locale: getLocale()})
+  );
 }
 
 export {
   USER_DATE_FORMAT_DEFAULT_DATE_PATTERN,
   USER_DATE_FORMAT_DEFAULT_PATTERN,
+  absDate,
   formatTime,
   ytDate,
 };
