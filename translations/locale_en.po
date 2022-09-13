@@ -18,7 +18,7 @@ msgstr " or "
 msgid "(archived)"
 msgstr "(archived)"
 
-#: src/components/custom-fields-panel/custom-fields-panel__date-picker.js:65
+#: src/components/custom-fields-panel/custom-fields-panel__date-picker.js:57
 msgid "(Clear value)"
 msgstr "(Clear value)"
 
@@ -501,7 +501,7 @@ msgstr "It could mean that the issue doesn't exist or you don't have permission 
 msgid "JetBrains Privacy Policy"
 msgstr "JetBrains Privacy Policy"
 
-#: src/components/date/date.js:91
+#: src/components/date/date.js:98
 msgid "just now"
 msgstr "just now"
 
