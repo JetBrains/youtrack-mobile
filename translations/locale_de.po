@@ -91,7 +91,7 @@ msgstr "reagierte"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #: src/views/settings/settings__appearance.js
 #: src/views/settings/settings.js
@@ -235,7 +235,7 @@ msgstr "Kommentar aktualisiert"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.js
 msgid "commented"
-msgstr ""
+msgstr "kommentiert"
 
 #: src/components/activity/activity-helper.js
 msgid "Comments"
@@ -296,7 +296,7 @@ msgstr "Absturzbericht gesendet"
 
 #: src/views/inbox-threads/inbox-threads__item-issue-created.js
 msgid "created"
-msgstr ""
+msgstr "erstellt"
 
 #: src/views/issue/issue__details.js
 msgid "Created by"
@@ -566,15 +566,15 @@ msgstr "Projektfavoriten verwalten"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Mark all as read"
-msgstr ""
+msgstr "Alle als gelesen markieren"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mark as read"
-msgstr ""
+msgstr "Als gelesen markieren"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mark as unread"
-msgstr ""
+msgstr "Als ungelesen markieren"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Marked as read"
@@ -588,11 +588,11 @@ msgstr[1] "Trifft auf {{issuesCount}} Tickets zu"
 
 #: src/views/inbox-threads/inbox-threads__mention.js
 msgid "mentioned you"
-msgstr ""
+msgstr "hat Sie erwähnt"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "Mentions & Reactions"
-msgstr ""
+msgstr "Erwähnungen und Reaktionen"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "merged the pull request"
@@ -600,7 +600,7 @@ msgstr "hat den Pull-Request zusammengeführt"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mute thread"
-msgstr ""
+msgstr "Thread stummschalten"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "New Article"
@@ -645,7 +645,7 @@ msgstr "Keine Elemente"
 
 #: src/views/inbox-threads/inbox-threads__list.js
 msgid "No notifications"
-msgstr ""
+msgstr "Keine Benachrichtigungen"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "No type"
@@ -812,7 +812,7 @@ msgstr "Freigeben…"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Show all"
-msgstr ""
+msgstr "Alle anzeigen"
 
 #: src/components/tags/tags.js
 msgid "Show all issues tagged with \"{{tagName}}\"..."
@@ -864,7 +864,7 @@ msgstr "hat einen Pull-Request eingereicht"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "Subscriptions"
-msgstr ""
+msgstr "Abonnements"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Summary"
@@ -975,11 +975,11 @@ msgstr "Titel"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
-msgstr "Um in der Knowledge Base die Artikel eines bestimmten Projekts anzuzeigen, markieren Sie es als Favoriten"
+msgstr "Um in der Wissensdatenbank die Artikel eines bestimmten Projekts anzuzeigen, markieren Sie es als Favoriten"
 
 #: src/components/activity-stream/activity__stream-history.js
 msgid "Total votes"
-msgstr ""
+msgstr "Stimmen gesamt"
 
 #: src/components/error-message/error-message.js
 msgid "Try Again"
@@ -995,17 +995,17 @@ msgstr "Karten ohne Kategorie"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Unmute thread"
-msgstr ""
+msgstr "Thread-Stummschaltung aufheben"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Unread only"
-msgstr ""
+msgstr "Nur ungelesene"
 
 #: src/components/articles/article-item-with-children.js
 msgid "Untitled"
 msgstr "Kein Titel"
 
-#: src/views/inbox-threads/inbox-threads__tab-bar.js
+#: src/views/inbox-threads/inbox-threads__update-button.js
 msgid "Update"
 msgstr ""
 
@@ -1036,7 +1036,7 @@ msgstr "VCS-Änderungen"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.js
 msgid "View comment"
-msgstr ""
+msgstr "Kommentar anzeigen"
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
@@ -1073,7 +1073,7 @@ msgstr "Einen Kommentar schreiben und @Personen erwähnen"
 
 #: src/views/inbox-threads/inbox-threads__list.js
 msgid "You don’t have any unread notifications"
-msgstr ""
+msgstr "Sie haben keine ungelesenen Benachrichtigungen"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."

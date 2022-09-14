@@ -999,7 +999,7 @@ msgstr ""
 msgid "Untitled"
 msgstr "제목 없음"
 
-#: src/views/inbox-threads/inbox-threads__tab-bar.js
+#: src/views/inbox-threads/inbox-threads__update-button.js
 msgid "Update"
 msgstr ""
 

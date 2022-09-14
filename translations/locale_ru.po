@@ -1017,7 +1017,7 @@ msgstr ""
 msgid "Untitled"
 msgstr "Без названия"
 
-#: src/views/inbox-threads/inbox-threads__tab-bar.js
+#: src/views/inbox-threads/inbox-threads__update-button.js
 msgid "Update"
 msgstr ""
 

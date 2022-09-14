@@ -1005,7 +1005,7 @@ msgstr ""
 msgid "Untitled"
 msgstr "Sem título"
 
-#: src/views/inbox-threads/inbox-threads__tab-bar.js
+#: src/views/inbox-threads/inbox-threads__update-button.js
 msgid "Update"
 msgstr ""
 

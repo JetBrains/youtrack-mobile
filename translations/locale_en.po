@@ -172,7 +172,7 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/views/article/arcticle-actions.js:471
 #: src/views/create-issue/create-issue-actions.js:334
 #: src/views/inbox-threads/inbox-threads__thread.js:144
-#: src/views/inbox-threads/inbox-threads.js:210
+#: src/views/inbox-threads/inbox-threads.js:211
 #: src/views/issue/activity/issue-activity__comment-actions.js:306
 #: src/views/issue/issue-base-actions-creater.js:519
 #: src/views/issue/issue-base-actions-creater.js:550
@@ -558,7 +558,7 @@ msgstr "Logs"
 msgid "Manage Favorite Projects"
 msgstr "Manage Favorite Projects"
 
-#: src/views/inbox-threads/inbox-threads.js:197
+#: src/views/inbox-threads/inbox-threads.js:198
 msgid "Mark all as read"
 msgstr "Mark all as read"
 
@@ -653,11 +653,11 @@ msgstr "No user information provided by Upsource."
 msgid "Nope, can't find it!"
 msgstr "Nope, can't find it!"
 
-#: src/views/inbox-threads/inbox-threads.js:204
+#: src/views/inbox-threads/inbox-threads.js:205
 msgid "Notification settings…"
 msgstr "Notification settings…"
 
-#: src/views/inbox-threads/inbox-threads.js:181
+#: src/views/inbox-threads/inbox-threads.js:182
 #: src/views/inbox/inbox.js:603
 msgid "Notifications"
 msgstr "Notifications"
@@ -749,7 +749,7 @@ msgstr "Select an article from the list"
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
-#: src/views/inbox-threads/inbox-threads.js:110
+#: src/views/inbox-threads/inbox-threads.js:111
 msgid "Select an issue, article or change from the list"
 msgstr "Select an issue, article or change from the list"
 
@@ -804,7 +804,7 @@ msgstr "Share logs"
 msgid "Share…"
 msgstr "Share…"
 
-#: src/views/inbox-threads/inbox-threads.js:190
+#: src/views/inbox-threads/inbox-threads.js:191
 msgid "Show all"
 msgstr "Show all"
 
@@ -991,7 +991,7 @@ msgstr "Uncategorized Cards"
 msgid "Unmute thread"
 msgstr "Unmute thread"
 
-#: src/views/inbox-threads/inbox-threads.js:190
+#: src/views/inbox-threads/inbox-threads.js:191
 msgid "Unread only"
 msgstr "Unread only"
 
@@ -999,7 +999,7 @@ msgstr "Unread only"
 msgid "Untitled"
 msgstr "Untitled"
 
-#: src/views/inbox-threads/inbox-threads__tab-bar.js:100
+#: src/views/inbox-threads/inbox-threads__update-button.js:43
 msgid "Update"
 msgstr "Update"
 
