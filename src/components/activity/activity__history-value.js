@@ -1,11 +1,11 @@
 /* @flow */
 
+import {absDate} from 'components/date/date';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {getPeriodPresentationFor} from '../time-tracking/time-tracking';
 import {getSimpleCustomFieldType} from '../custom-field/custom-field-helper';
 import {hasType} from '../api/api__resource-types';
 import {isActivityCategory} from './activity__category';
-import {ytDate} from 'components/date/date';
 
 import type {IssueProject} from 'flow/CustomFields';
 import type {WorkTimeSettings} from 'flow/Work';
@@ -38,7 +38,7 @@ export function getTextValueChange(params: TextValueChangeParams): string {
     value.presentation = getProjectPresentation(eventValue);
     break;
   case isActivityCategory.issueResolved(params.activity):
-    value.presentation = ytDate(eventValue);
+    value.presentation = absDate(eventValue);
     break;
   case isActivityCategory.attachment(params.activity) || isActivityCategory.tag(params.activity):
     value.presentation = eventValue;
@@ -72,10 +72,10 @@ export function getTextValueChange(params: TextValueChangeParams): string {
       value.presentation = getPeriodPresentationFor(eventValue, workTimeSettings);
       break;
     case SIMPLE_CUSTOM_FIELDS_TYPES.date:
-      value.presentation = ytDate(eventValue);
+      value.presentation = absDate(eventValue);
       break;
     case SIMPLE_CUSTOM_FIELDS_TYPES.dateTime:
-      value.presentation = ytDate(eventValue);
+      value.presentation = absDate(eventValue);
       break;
     }
   }

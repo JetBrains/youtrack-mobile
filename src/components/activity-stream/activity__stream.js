@@ -293,7 +293,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
             {activityGroup?.events?.length > 0 && (
               <View style={isRelatedChange ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
                 {Boolean(!activityGroup.merged && !isRelatedChange) && <StreamUserInfo activityGroup={activityGroup}/>}
-                {activityGroup.merged && <StreamTimestamp timestamp={activityGroup.timestamp}/>}
+                {activityGroup.merged && <StreamTimestamp isAbs={true} timestamp={activityGroup.timestamp}/>}
 
                 {activityGroup.events.map(
                   (event) => (

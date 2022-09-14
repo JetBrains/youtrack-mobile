@@ -3,13 +3,14 @@
 import React from 'react';
 import {Text} from 'react-native';
 
-import {ytDate} from 'components/date/date';
+import {absDate, ytDate} from 'components/date/date';
 
 import styles from './activity__stream.styles';
 
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
+  isAbs?: boolean,
   timestamp?: number,
   style?: ViewStyleProp
 }
@@ -21,7 +22,7 @@ const StreamTimestamp = (props: Props) => {
   }
   return (
     <Text style={[styles.activityTimestamp, props.style]}>
-      {ytDate(props.timestamp)}
+      {props.isAbs ? absDate(props.timestamp) : ytDate(props.timestamp)}
     </Text>
   );
 
