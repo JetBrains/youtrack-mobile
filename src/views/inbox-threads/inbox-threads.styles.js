@@ -206,10 +206,13 @@ export default EStyleSheet.create({
     top: UNIT - 1,
     right: -UNIT / 2,
   },
+  threadUpdateButtonContainer: {
+    zIndex: 1,
+  },
   threadUpdateButton: {
     position: 'absolute',
     zIndex: 1,
-    top: UNIT * 3,
+    top: UNIT * 7.5,
     width: UNIT * 12,
     alignSelf: 'center',
     paddingVertical: UNIT / 1.5,

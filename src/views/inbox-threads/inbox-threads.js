@@ -13,6 +13,7 @@ import Header from 'components/header/header';
 import InboxThreadsProgressPlaceholder from './inbox-threads__progress-placeholder';
 import InboxThreadsList from './inbox-threads__list';
 import InboxThreadsTabBar from './inbox-threads__tab-bar';
+import InboxThreadsUpdateButton from './inbox-threads__update-button';
 import Issue from '../issue/issue';
 import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
 import Router from 'components/router/router';
@@ -230,6 +231,7 @@ const InboxThreads: () => Node = (): Node => {
     />
   );
 
+  const Container = isSplitView ? View : React.Fragment;
   return (
     <View
       testID="test:id/inboxThreads"
@@ -240,19 +242,15 @@ const InboxThreads: () => Node = (): Node => {
         isSplitView ? styles.splitViewContainer : null,
       ]}>
 
-      {!isSplitView && <>
+      <Container style={isSplitView && styles.splitViewSide}>
         {renderHeader()}
+        <InboxThreadsUpdateButton index={navigationState.index}/>
         {renderTabs()}
-      </>}
-      {isSplitView && <>
-        <View style={styles.splitViewSide}>
-          {renderHeader()}
-          {renderTabs()}
-        </View>
-        <View style={styles.splitViewMain}>
-          {renderEntity()}
-        </View>
-      </>}
+      </Container>
+      {isSplitView && <View style={isSplitView && styles.splitViewMain}>
+        {renderEntity()}
+      </View>}
+
     </View>
   );
 };

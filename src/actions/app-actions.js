@@ -31,7 +31,7 @@ import {
   storageStateAuthParamsKey,
   storeAccounts,
 } from 'components/storage/storage';
-import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
+import {folderIdAllKey, folderIdMap} from 'views/inbox-threads/inbox-threads-helper';
 import {getCachedPermissions, storeYTCurrentUser} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
@@ -852,7 +852,16 @@ const inboxCheckUpdateStatus = (): Action => {
         )
       );
       if (!error) {
-        dispatch(receiveInboxUpdateStatus(folders));
+        const sorted: Array<InboxFolder> = folders.reduce((flds: Array<InboxFolder>, folder: InboxFolder) => {
+          if (folder.id === folderIdMap[2]) {
+            flds.push(folder);
+          }
+          if (folder.id === folderIdMap[1]) {
+            flds.unshift(folder);
+          }
+          return flds;
+        }, []);
+        dispatch(receiveInboxUpdateStatus(sorted));
       }
     }
   };
