@@ -62,7 +62,7 @@ export default EStyleSheet.create({
     top: UNIT / 2,
     left: 15,
     width: 2,
-    height: '99%',
+    height: '98%',
     paddingBottom: UNIT * 2,
     backgroundColor: '$separator',
   },
