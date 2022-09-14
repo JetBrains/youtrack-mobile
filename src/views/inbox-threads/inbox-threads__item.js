@@ -1,6 +1,6 @@
 /* @flow */
 
-import React from 'react';
+import React, {useContext} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 import StreamHistoryChange from 'components/activity-stream/activity__stream-history';
@@ -12,6 +12,8 @@ import styles from './inbox-threads.styles';
 import type {Activity} from 'flow/Activity';
 import type {InboxThreadGroup, ThreadEntity} from 'flow/Inbox';
 import type {User} from 'flow/User';
+import type {Theme} from '../../flow/Theme';
+import {ThemeContext} from '../../components/theme/theme-context';
 
 interface Props {
   author: User;
@@ -24,6 +26,9 @@ interface Props {
 }
 
 export default function ThreadItem({author, avatar, change, group, reason, timestamp, onNavigate}: Props) {
+  // eslint-disable-next-line no-unused-vars
+  const theme: Theme = useContext(ThemeContext);
+
   return (
     <View
       testID="test:id/inboxThreadItem"
