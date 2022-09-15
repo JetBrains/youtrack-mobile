@@ -39,7 +39,9 @@ type TextData = {
 
 const issueId: RegExp = new RegExp(`[a-zA-Z0-9_]+\\-\\d+`);
 const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
-const imgRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
+const imageRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
+const imageWidth: RegExp = /{width=\d+(%|px)?}/i;
+const imageHeight: RegExp = /{height=\d+(%|px)?}/i;
 const youTubeURL: RegExp = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/i;
 
 function getYouTubeId(url: string): ?string {
@@ -137,13 +139,13 @@ function getMarkdownRules(
   };
 
   const textRenderer = (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}): any => {
-    const text: string = node.content;
+    const text: string = node.content.replace(imageHeight, '').replace(imageWidth, '');
 
     if (mentions && mentions.articles.concat(mentions.issues).length > 0) {
       return renderArticleMentions(node, mentions, uiTheme, style, inheritedStyles, textStyle);
     }
 
-    if (node.content.match(imageEmbedRegExp)) {
+    if (text.match(imageEmbedRegExp)) {
       const attach: ?Attachment = attachments.find((it: Attachment) => it.name && text.includes(it.name));
       if (attach && attach.url && hasMimeType.image(attach)) {
         return markdownImage({
@@ -236,7 +238,7 @@ function getMarkdownRules(
       const child: ?Object = node?.children[0];
       const content: string = (child && child.content) || children;
 
-      if (imgRegExp.test(content)) { //TODO: temporary solution to remove HTML image from link label
+      if (imageRegExp.test(content)) { //TODO: temporary solution to remove HTML image from link label
         return null;
       }
 
