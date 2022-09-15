@@ -171,7 +171,7 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/views/article/arcticle-actions.js:240
 #: src/views/article/arcticle-actions.js:471
 #: src/views/create-issue/create-issue-actions.js:334
-#: src/views/inbox-threads/inbox-threads__thread.js:144
+#: src/views/inbox-threads/inbox-threads__thread.js:139
 #: src/views/inbox-threads/inbox-threads.js:211
 #: src/views/issue/activity/issue-activity__comment-actions.js:306
 #: src/views/issue/issue-base-actions-creater.js:519
@@ -368,7 +368,7 @@ msgid "Drafts"
 msgstr "Drafts"
 
 #: src/components/activity-stream/activity__stream-work.js:111
-#: src/components/activity-stream/activity__stream.js:168
+#: src/components/activity-stream/activity__stream.js:164
 #: src/views/article/arcticle-actions.js:204
 #: src/views/issue/activity/issue-activity__comment-actions.js:290
 #: src/views/issue/issue-base-actions-creater.js:470
@@ -562,11 +562,11 @@ msgstr "Manage Favorite Projects"
 msgid "Mark all as read"
 msgstr "Mark all as read"
 
-#: src/views/inbox-threads/inbox-threads__thread.js:140
+#: src/views/inbox-threads/inbox-threads__thread.js:135
 msgid "Mark as read"
 msgstr "Mark as read"
 
-#: src/views/inbox-threads/inbox-threads__thread.js:140
+#: src/views/inbox-threads/inbox-threads__thread.js:135
 msgid "Mark as unread"
 msgstr "Mark as unread"
 
@@ -592,7 +592,7 @@ msgstr "Mentions & Reactions"
 msgid "merged the pull request"
 msgstr "merged the pull request"
 
-#: src/views/inbox-threads/inbox-threads__thread.js:128
+#: src/views/inbox-threads/inbox-threads__thread.js:123
 msgid "Mute thread"
 msgstr "Mute thread"
 
@@ -608,7 +608,7 @@ msgstr "New Issue"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.js:330
+#: src/components/activity-stream/activity__stream.js:337
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -987,7 +987,7 @@ msgstr "Type"
 msgid "Uncategorized Cards"
 msgstr "Uncategorized Cards"
 
-#: src/views/inbox-threads/inbox-threads__thread.js:128
+#: src/views/inbox-threads/inbox-threads__thread.js:123
 msgid "Unmute thread"
 msgstr "Unmute thread"
 
