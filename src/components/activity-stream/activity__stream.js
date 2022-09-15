@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useLayoutEffect, useRef} from 'react';
 import {Animated, Text, TouchableOpacity, ScrollView, View, useWindowDimensions} from 'react-native';
 
 import ActivityUserAvatar from './activity__stream-avatar';
@@ -86,31 +86,27 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
     outputRange: [styles.activityHighlighted.backgroundColor, 'transparent'],
   }));
 
-  useEffect(() => {
-    Animated.timing(bgColor.current).reset();
-  }, [props.highlight]);
-
-  const getTargetActivityId = useCallback(() => {
-    return typeof highlight === 'object' ? highlight.activityId : highlight;
+  useLayoutEffect(() => {
+    Animated.timing(bgColor.current, {
+      toValue: 300,
+      duration: 3000,
+      useNativeDriver: false,
+    }).start();
   }, [highlight]);
 
-  const getTargetActivityCommentId = useCallback(() => {
-    return typeof highlight === 'object' ? highlight?.commentId : null;
-  }, [highlight]);
-
-  const navigateToActivity = useCallback((id: string, layout: { y: number, height: number}, commentId?: string) => {
-    const _activityId = getTargetActivityId();
-    if ((_activityId && id && id === _activityId || (commentId && commentId === getTargetActivityCommentId())) && activities?.length && scrollRef?.current?.scrollTo) {
+  const navigateToActivity = (layout: { y: number, height: number }, id: string, commentId?: string) => {
+    if (!scrollRef?.current?.scrollTo) {
+      return;
+    }
+    if (
+      id && id === highlight?.activityId ||
+      commentId && commentId === highlight?.commentId
+    ) {
       if ((layout.y + layout.height) > (window.height - menuHeight * 5)) {
         scrollRef.current.scrollTo({y: layout.y, animated: true});
       }
-      Animated.timing(bgColor.current, {
-        toValue: 300,
-        duration: 3000,
-        useNativeDriver: false,
-      }).start();
     }
-  }, [activities?.length, getTargetActivityCommentId, getTargetActivityId, window.height]);
+  };
 
   const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment | null => (
     firstActivityChange(activityGroup.comment)
@@ -257,30 +253,38 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
       renderedItem = <StreamVCS activityGroup={activityGroup}/>;
     }
 
-    const id: string = activityGroup?.comment?.id || activityGroup?.work?.id || activityGroup?.vcs?.id;
+    const events = activityGroup?.events || [];
+    const id: string = (
+      activityGroup?.comment?.id ||
+      activityGroup?.work?.id ||
+      activityGroup?.vcs?.id ||
+      events[0]?.id
+    );
     const comment: ?IssueComment = getCommentFromActivityGroup(activityGroup);
-    const commentId = getTargetActivityCommentId();
+    const commentId = highlight?.commentId;
     const activityChange = firstActivityChange(activityGroup.comment);
 
-    const targetActivityId = getTargetActivityId();
-    const hasHighlightedActivity: boolean = (
-      targetActivityId && id && id === targetActivityId ||
-      targetActivityId && (activityGroup?.events || []).some(it => it.id === targetActivityId) ||
-      commentId && activityChange && commentId === activityChange.id
-    );
+    const targetActivityId = highlight?.activityId;
+    const hasHighlightedActivity: boolean = !!targetActivityId && (
+      id === targetActivityId ||
+      events.some(it => it.id === targetActivityId)
+    ) || commentId && activityChange && commentId === activityChange.id;
     const Component = hasHighlightedActivity ? Animated.View : View;
 
     return (
       <View
         key={`${index}-${activityGroup.id}`}
-        onLayout={(event) => navigateToActivity(id, event.nativeEvent.layout, comment?.id)}
+        onLayout={(event) => {
+          if (activities?.length) {
+            navigateToActivity(event.nativeEvent.layout, id, comment?.id);
+          }
+        }}
       >
         {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
 
-        <Component style={[
+        <View style={[
           styles.activity,
           activityGroup.merged && !activityGroup.comment ? styles.activityMerged : null,
-          hasHighlightedActivity && {backgroundColor: color.current},
         ]}>
 
           <ActivityUserAvatar
@@ -288,7 +292,10 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
             showAvatar={!!activityGroup.comment}
           />
 
-          <View style={styles.activityItem}>
+          <Component style={[
+            styles.activityItem,
+            hasHighlightedActivity && {backgroundColor: color.current},
+          ]}>
             {renderedItem}
             {activityGroup?.events?.length > 0 && (
               <View style={isRelatedChange ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
@@ -310,8 +317,8 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
               {!!props.onSelectReaction && renderCommentActivityReactions(activityGroup)}
               {renderCommentActions(activityGroup)}
             </>}
-          </View>
-        </Component>
+          </Component>
+        </View>
       </View>
     );
   };
@@ -326,8 +333,8 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
       ref={instance => instance != null && (scrollRef.current = instance)}
     >
       {renderHeader()}
-      {(props.activities || []).map(renderActivity)}
-      {props.activities?.length === 0 && <Text style={styles.activityNoActivity}>{i18n('No activity yet')}</Text>
+      {(activities || []).map(renderActivity)}
+      {activities?.length === 0 && <Text style={styles.activityNoActivity}>{i18n('No activity yet')}</Text>
       }
     </ScrollView>
   );
