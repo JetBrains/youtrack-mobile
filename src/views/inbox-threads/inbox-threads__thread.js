@@ -78,12 +78,7 @@ function Thread({
     accessibilityLabel="inboxEntity"
     accessible={true}
     entity={threadData.entity}
-    onNavigate={() => {
-      onNavigate(
-        threadData.entity,
-        threadData.entityAtBottom ? ((_thread.messages || [])[0].activities || [])[0]?.id : undefined
-      );
-    }}
+    onNavigate={() => onNavigate(threadData.entity)}
     style={[styles.threadTitle, threadData.entityAtBottom && styles.threadSubTitle]}
     styleText={threadData.entityAtBottom && styles.threadSubTitleText}
   />;
