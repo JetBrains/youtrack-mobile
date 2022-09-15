@@ -23,7 +23,9 @@ export default class Star extends PureComponent<Props, void> {
 
   toggle: (() => void) = () => {
     const {hasStar, onStarToggle} = this.props;
-    onStarToggle(!hasStar);
+    if (onStarToggle) {
+      onStarToggle(!hasStar);
+    }
   };
 
   render(): null | Node {

@@ -118,7 +118,7 @@ const StreamHistoryChange = ({activity, customFields, workTimeSettings = DEFAULT
             size={16}
             canStar={true}
             hasStar={!!activity.added?.length}
-            onStarToggle={() => {}}
+            disabled={true}
           />
         </View>
       );
