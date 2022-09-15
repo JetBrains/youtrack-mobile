@@ -140,6 +140,9 @@ function getMarkdownRules(
 
   const textRenderer = (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}): any => {
     const text: string = node.content.replace(imageHeight, '').replace(imageWidth, '');
+    if (!text) {
+      return null;
+    }
 
     if (mentions && mentions.articles.concat(mentions.issues).length > 0) {
       return renderArticleMentions(node, mentions, uiTheme, style, inheritedStyles, textStyle);
