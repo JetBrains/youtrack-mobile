@@ -205,11 +205,11 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
   const renderCommentActivity = (activityGroup: Object) => {
     const activity: ?Activity = activityGroup.comment;
-    const commentAttachments = (firstActivityChange(activity) || {}).attachmets || [];
-    const allAttachments: Array<Attachment> = ApiHelper.convertAttachmentRelativeToAbsURLs(
+    const commentAttachments: Attachment[] = firstActivityChange(activity)?.attachments || [];
+    const attachments: Array<Attachment> = ApiHelper.convertAttachmentRelativeToAbsURLs(
       commentAttachments,
       props.youtrackWiki.backendUrl
-    ).concat(props.attachments || []);
+    );
 
     return <>
       {activityGroup.merged
@@ -217,7 +217,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
         : <StreamUserInfo activityGroup={activityGroup}/>}
       <StreamComment
         activity={activity}
-        attachments={allAttachments}
+        attachments={attachments}
         commentActions={props.commentActions}
         onShowCommentActions={(comment: IssueComment) => {
           if (props.commentActions?.onShowCommentActions) {
