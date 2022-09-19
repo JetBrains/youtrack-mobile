@@ -40,7 +40,7 @@ const InboxThreadsUpdateButton = ({index}: { index: number }) => {
           dispatch(setInProgress(false));
         }}
       >
-        <Text style={styles.threadUpdateButtonText}>{i18n('Update')}</Text>
+        <Text style={styles.threadUpdateButtonText}>{i18n('New messages')}</Text>
       </TouchableOpacity>
     </View>
   );

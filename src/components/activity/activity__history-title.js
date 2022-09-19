@@ -21,7 +21,7 @@ export function getTitle(event) {
     label = i18n('[Removed field]');
     break;
   case eventField.id === 'description':
-    label = isActivityCategory.articleDescription ? i18n('Content changed') : i18n('Description changed');
+    label = isActivityCategory.articleDescription ? i18n('Article content') : i18n('Description changed');
     break;
   case eventField.id === 'summary':
     label = i18n('Summary changed');

@@ -108,7 +108,7 @@ const InboxThreads: () => Node = (): Node => {
 
   const renderEntity = () => {
     if (!selectedEntity?.entity) {
-      return <NothingSelectedIconWithText text={i18n('Select an issue, article or change from the list')}/>;
+      return <NothingSelectedIconWithText text={i18n('To view an item in context, select an issue, article, or update from the list')}/>;
     }
     const isNavigateToArticle: boolean = isArticle(selectedEntity.entity);
     const entityProps = {
