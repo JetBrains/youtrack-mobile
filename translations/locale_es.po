@@ -91,7 +91,7 @@ msgstr "ha añadido una reacción"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "All"
-msgstr ""
+msgstr "Todo"
 
 #: src/views/settings/settings__appearance.js
 #: src/views/settings/settings.js
@@ -235,7 +235,7 @@ msgstr "Comando actualizado"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.js
 msgid "commented"
-msgstr ""
+msgstr "comentado"
 
 #: src/components/activity/activity-helper.js
 msgid "Comments"
@@ -260,7 +260,7 @@ msgid "Content"
 msgstr "Contenido"
 
 #: src/components/activity/activity__history-title.js
-msgid "Content changed"
+msgid "Content revised"
 msgstr ""
 
 #: src/components/wiki/code-renderer.js
@@ -296,7 +296,7 @@ msgstr "Informe de errores enviado"
 
 #: src/views/inbox-threads/inbox-threads__item-issue-created.js
 msgid "created"
-msgstr ""
+msgstr "creada"
 
 #: src/views/issue/issue__details.js
 msgid "Created by"
@@ -566,15 +566,15 @@ msgstr "Gestionar proyectos favoritos"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Mark all as read"
-msgstr ""
+msgstr "Marcar todo como leído"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mark as read"
-msgstr ""
+msgstr "Marcar como leído"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mark as unread"
-msgstr ""
+msgstr "Marcar como no leído"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Marked as read"
@@ -588,11 +588,11 @@ msgstr[1] "Coincide con {{issuesCount}} incidencias"
 
 #: src/views/inbox-threads/inbox-threads__mention.js
 msgid "mentioned you"
-msgstr ""
+msgstr "le ha mencionado"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "Mentions & Reactions"
-msgstr ""
+msgstr "Menciones y reacciones"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "merged the pull request"
@@ -600,7 +600,7 @@ msgstr "ha combinado la solicitud de incorporación de cambios"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mute thread"
-msgstr ""
+msgstr "Silenciar hilo"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "New Article"
@@ -609,6 +609,10 @@ msgstr "Nuevo Artículo"
 #: src/views/create-issue/create-issue.js
 msgid "New Issue"
 msgstr "Incidencia nueva"
+
+#: src/views/inbox-threads/inbox-threads__update-button.js
+msgid "New messages"
+msgstr ""
 
 #: src/views/enter-server/enter-server.js
 msgid "Next"
@@ -645,7 +649,7 @@ msgstr "Ningún elemento"
 
 #: src/views/inbox-threads/inbox-threads__list.js
 msgid "No notifications"
-msgstr ""
+msgstr "Sin notificaciones"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "No type"
@@ -755,10 +759,6 @@ msgstr "Seleccione un artículo de la lista"
 msgid "Select an issue from the list"
 msgstr "Seleccione una incidencia de la lista"
 
-#: src/views/inbox-threads/inbox-threads.js
-msgid "Select an issue, article or change from the list"
-msgstr ""
-
 #: src/components/error-boundary/error-boundary.js
 msgid "Send crash report"
 msgstr "Enviar informe de errores"
@@ -812,7 +812,7 @@ msgstr "Compartir…"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Show all"
-msgstr ""
+msgstr "Mostrar todas"
 
 #: src/components/tags/tags.js
 msgid "Show all issues tagged with \"{{tagName}}\"..."
@@ -864,7 +864,7 @@ msgstr "ha enviado una solicitud de incorporación de cambios"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "Subscriptions"
-msgstr ""
+msgstr "Suscripciones"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Summary"
@@ -973,13 +973,21 @@ msgstr ""
 msgid "Title"
 msgstr "Título"
 
+#: src/components/activity/activity__history-title.js
+msgid "Title changed"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads.js
+msgid "To view an item in context, select an issue, article, or update from the list"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base.js
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
 msgstr "Para ver artículos en la base de conocimiento para un proyecto concreto, márquelo como favorito"
 
 #: src/components/activity-stream/activity__stream-history.js
 msgid "Total votes"
-msgstr ""
+msgstr "Votos totales"
 
 #: src/components/error-message/error-message.js
 msgid "Try Again"
@@ -995,24 +1003,20 @@ msgstr "Tarjetas sin categoría"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Unmute thread"
-msgstr ""
+msgstr "Dejar de silenciar hilo"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Unread only"
-msgstr ""
+msgstr "Solo no leídos"
 
 #: src/components/articles/article-item-with-children.js
 msgid "Untitled"
 msgstr "Sin título"
 
-#: src/views/inbox-threads/inbox-threads__update-button.js
-msgid "Update"
-msgstr ""
-
 #: src/views/inbox-threads/inbox-threads__item-history.js
 #: src/views/inbox-threads/inbox-threads__item-work.js
 msgid "updated"
-msgstr ""
+msgstr "actualizada"
 
 #: src/views/issue/issue__details.js
 msgid "Updated by"
@@ -1073,7 +1077,7 @@ msgstr "Escribir un comentario, @mencionar personas"
 
 #: src/views/inbox-threads/inbox-threads__list.js
 msgid "You don’t have any unread notifications"
-msgstr ""
+msgstr "No tiene ninguna notificación sin leer"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."

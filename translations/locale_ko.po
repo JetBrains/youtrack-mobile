@@ -256,7 +256,7 @@ msgid "Content"
 msgstr "내용"
 
 #: src/components/activity/activity__history-title.js
-msgid "Content changed"
+msgid "Content revised"
 msgstr ""
 
 #: src/components/wiki/code-renderer.js
@@ -605,6 +605,10 @@ msgstr "새 자료"
 msgid "New Issue"
 msgstr "새 이슈"
 
+#: src/views/inbox-threads/inbox-threads__update-button.js
+msgid "New messages"
+msgstr ""
+
 #: src/views/enter-server/enter-server.js
 msgid "Next"
 msgstr "다음"
@@ -749,10 +753,6 @@ msgstr "목록에서 기사 선택"
 #: src/views/issues/issues.js
 msgid "Select an issue from the list"
 msgstr "목록에서 이슈 선택"
-
-#: src/views/inbox-threads/inbox-threads.js
-msgid "Select an issue, article or change from the list"
-msgstr ""
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Send crash report"
@@ -967,6 +967,14 @@ msgstr ""
 msgid "Title"
 msgstr "제목"
 
+#: src/components/activity/activity__history-title.js
+msgid "Title changed"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads.js
+msgid "To view an item in context, select an issue, article, or update from the list"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base.js
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
 msgstr "특정 프로젝트에 대한 지식 기반의 자료를 보려면 즐겨찾기로 표시하십시오."
@@ -998,10 +1006,6 @@ msgstr ""
 #: src/components/articles/article-item-with-children.js
 msgid "Untitled"
 msgstr "제목 없음"
-
-#: src/views/inbox-threads/inbox-threads__update-button.js
-msgid "Update"
-msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__item-history.js
 #: src/views/inbox-threads/inbox-threads__item-work.js

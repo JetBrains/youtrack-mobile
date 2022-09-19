@@ -22,7 +22,7 @@ msgstr "(archived)"
 msgid "(Clear value)"
 msgstr "(Clear value)"
 
-#: src/components/activity/activity__history-title.js:21
+#: src/components/activity/activity__history-title.js:23
 msgid "[Removed field]"
 msgstr "[Removed field]"
 
@@ -139,7 +139,7 @@ msgstr "Attach file"
 msgid "Attach files"
 msgstr "Attach files"
 
-#: src/components/activity/activity__history-title.js:40
+#: src/components/activity/activity__history-title.js:42
 msgid "Attachment"
 msgid_plural "Attachments"
 msgstr[0] "Attachment"
@@ -215,7 +215,7 @@ msgstr "Command applied"
 msgid "Command was successfully applied."
 msgstr "Command was successfully applied."
 
-#: src/components/activity/activity__history-title.js:30
+#: src/components/activity/activity__history-title.js:32
 msgid "Comment changed"
 msgstr "Comment changed"
 
@@ -253,9 +253,9 @@ msgstr "Contact support"
 msgid "Content"
 msgstr "Content"
 
-#: src/components/activity/activity__history-title.js:24
-msgid "Content changed"
-msgstr "Content changed"
+#: src/components/activity/activity__history-title.js:26
+msgid "Content revised"
+msgstr "Content revised"
 
 #: src/components/wiki/code-renderer.js:134
 #: src/views/issue/activity/issue-activity__comment-actions.js:277
@@ -338,7 +338,7 @@ msgstr "Delete permanently"
 msgid "Description"
 msgstr "Description"
 
-#: src/components/activity/activity__history-title.js:24
+#: src/components/activity/activity__history-title.js:26
 msgid "Description changed"
 msgstr "Description changed"
 
@@ -604,6 +604,10 @@ msgstr "New Article"
 msgid "New Issue"
 msgstr "New Issue"
 
+#: src/views/inbox-threads/inbox-threads__update-button.js:43
+msgid "New messages"
+msgstr "New messages"
+
 #: src/views/enter-server/enter-server.js:215
 msgid "Next"
 msgstr "Next"
@@ -749,10 +753,6 @@ msgstr "Select an article from the list"
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
-#: src/views/inbox-threads/inbox-threads.js:111
-msgid "Select an issue, article or change from the list"
-msgstr "Select an issue, article or change from the list"
-
 #: src/components/error-boundary/error-boundary.js:164
 msgid "Send crash report"
 msgstr "Send crash report"
@@ -864,7 +864,7 @@ msgstr "Subscriptions"
 msgid "Summary"
 msgstr "Summary"
 
-#: src/components/activity/activity__history-title.js:27
+#: src/components/activity/activity__history-title.js:29
 msgid "Summary changed"
 msgstr "Summary changed"
 
@@ -872,7 +872,7 @@ msgstr "Summary changed"
 msgid "Sync with OS"
 msgstr "Sync with OS"
 
-#: src/components/activity/activity__history-title.js:33
+#: src/components/activity/activity__history-title.js:35
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tag"
@@ -967,6 +967,14 @@ msgstr "Thread unmuted"
 msgid "Title"
 msgstr "Title"
 
+#: src/components/activity/activity__history-title.js:29
+msgid "Title changed"
+msgstr "Title changed"
+
+#: src/views/inbox-threads/inbox-threads.js:111
+msgid "To view an item in context, select an issue, article, or update from the list"
+msgstr "To view an item in context, select an issue, article, or update from the list"
+
 #: src/views/knowledge-base/knowledge-base.js:471
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
 msgstr "To view articles in the knowledge base for a specific project, mark it as a favorite"
@@ -998,10 +1006,6 @@ msgstr "Unread only"
 #: src/components/articles/article-item-with-children.js:41
 msgid "Untitled"
 msgstr "Untitled"
-
-#: src/views/inbox-threads/inbox-threads__update-button.js:43
-msgid "Update"
-msgstr "Update"
 
 #: src/views/inbox-threads/inbox-threads__item-history.js:26
 #: src/views/inbox-threads/inbox-threads__item-work.js:30
@@ -1036,7 +1040,7 @@ msgstr "View comment"
 msgid "View comments and other activity"
 msgstr "View comments and other activity"
 
-#: src/components/activity/activity__history-title.js:47
+#: src/components/activity/activity__history-title.js:49
 msgid "Visibility"
 msgstr "Visibility"
 

@@ -260,7 +260,7 @@ msgid "Content"
 msgstr "Contenuto"
 
 #: src/components/activity/activity__history-title.js
-msgid "Content changed"
+msgid "Content revised"
 msgstr ""
 
 #: src/components/wiki/code-renderer.js
@@ -610,6 +610,10 @@ msgstr "Nuovo articolo"
 msgid "New Issue"
 msgstr "Nuovo ticket"
 
+#: src/views/inbox-threads/inbox-threads__update-button.js
+msgid "New messages"
+msgstr ""
+
 #: src/views/enter-server/enter-server.js
 msgid "Next"
 msgstr "Avanti"
@@ -754,10 +758,6 @@ msgstr "Seleziona un articolo dall'elenco"
 #: src/views/issues/issues.js
 msgid "Select an issue from the list"
 msgstr "Seleziona un ticket dall'elenco"
-
-#: src/views/inbox-threads/inbox-threads.js
-msgid "Select an issue, article or change from the list"
-msgstr ""
 
 #: src/components/error-boundary/error-boundary.js
 msgid "Send crash report"
@@ -973,6 +973,14 @@ msgstr ""
 msgid "Title"
 msgstr "Titolo"
 
+#: src/components/activity/activity__history-title.js
+msgid "Title changed"
+msgstr ""
+
+#: src/views/inbox-threads/inbox-threads.js
+msgid "To view an item in context, select an issue, article, or update from the list"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base.js
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
 msgstr "Per visualizzare gli articoli dalle Conoscenze di base relativi a un progetto specifico, contrassegnarlo come preferito"
@@ -1004,10 +1012,6 @@ msgstr "Solo non lette"
 #: src/components/articles/article-item-with-children.js
 msgid "Untitled"
 msgstr "Senza titolo"
-
-#: src/views/inbox-threads/inbox-threads__update-button.js
-msgid "Update"
-msgstr "Aggiorna"
 
 #: src/views/inbox-threads/inbox-threads__item-history.js
 #: src/views/inbox-threads/inbox-threads__item-work.js
