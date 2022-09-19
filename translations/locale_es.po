@@ -1036,7 +1036,7 @@ msgstr "Cambios VCS"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.js
 msgid "View comment"
-msgstr ""
+msgstr "Ver comentario"
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
