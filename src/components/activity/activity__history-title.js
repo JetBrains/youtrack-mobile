@@ -3,28 +3,30 @@
 import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {isActivityCategory} from './activity__category';
 
-export default function getEventTitle(event: Object, omitFormatting?: boolean): ?string {
-  const title = getTitle(event);
+import type {Activity} from '../../flow/Activity';
+
+
+export default function getEventTitle(activity: Activity, omitFormatting?: boolean): ?string {
+  const title = getTitle(activity);
   if (omitFormatting) {
     return title;
   }
   return format(title);
 }
 
-export function getTitle(event) {
-  const eventField = event.field;
+export function getTitle(activity: Activity) {
+  const eventField = activity.field;
   let label;
-
-  const eventsCount: number = (event.added || []).length + (event.removed || []).length;
+  const eventsCount: number = (activity.added || []).length + (activity.removed || []).length;
   switch (true) {
   case !eventField:
     label = i18n('[Removed field]');
     break;
   case eventField.id === 'description':
-    label = isActivityCategory.articleDescription ? i18n('Article content') : i18n('Description changed');
+    label = isActivityCategory.articleDescription(activity) ? i18n('Content revised') : i18n('Description changed');
     break;
   case eventField.id === 'summary':
-    label = i18n('Summary changed');
+    label = isActivityCategory.articleSummary(activity) ? i18n('Title changed') : i18n('Summary changed');
     break;
   case eventField.id === 'comment':
     label = i18n('Comment changed');

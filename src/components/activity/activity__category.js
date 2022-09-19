@@ -178,6 +178,7 @@ isActivityCategory.tag = isActivityCategories([activityCategory.TAGS, activityCa
 isActivityCategory.summary = isActivityCategories([activityCategory.SUMMARY, activityArticleCategory.SUMMARY]);
 isActivityCategory.description = isActivityCategories([activityCategory.DESCRIPTION, activityArticleCategory.DESCRIPTION]);
 isActivityCategory.articleDescription = isActivityCategory(activityArticleCategory.DESCRIPTION);
+isActivityCategory.articleSummary = isActivityCategory(activityArticleCategory.SUMMARY);
 isActivityCategory.sprint = isActivityCategory(activityCategory.SPRINT);
 isActivityCategory.star = isActivityCategory(activityCategory.STAR);
 isActivityCategory.project = isActivityCategories([activityCategory.PROJECT, activityArticleCategory.PROJECT]);
