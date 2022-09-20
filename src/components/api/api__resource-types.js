@@ -8,6 +8,7 @@ export const ResourceTypes = {
   BITBUCKET: 'BitBucketServer',
   BITBUCKET_MAPPING: 'BitBucketChangesProcessor',
   COMMENT_REACTIONS_FEED_ITEM: 'CommentReactionsFeedItem',
+  CUSTOM_FIELD_TEXT: 'TextCustomFieldActivityItem',
   DRAFT_ARTICLE_COMMENT: 'DraftArticleComment',
   DRAFT_ISSUE_COMMENT: 'DraftIssueComment',
   DRAFT_WORK_ITEM: 'DraftWorkItem',
@@ -57,6 +58,7 @@ hasType.articleDraft = hasType(ResourceTypes.ARTICLE_DRAFT);
 hasType.comment = hasType(ResourceTypes.ISSUE_COMMENT);
 hasType.commentDraft = hasType(ResourceTypes.DRAFT_ISSUE_COMMENT) || hasType(ResourceTypes.DRAFT_ARTICLE_COMMENT);
 hasType.commentReaction = hasType(ResourceTypes.COMMENT_REACTIONS_FEED_ITEM);
+hasType.customFieldText = hasType(ResourceTypes.CUSTOM_FIELD_TEXT);
 hasType.issue = hasType(ResourceTypes.ISSUE);
 hasType.project = hasType(ResourceTypes.PROJECT);
 hasType.savedSearch = hasType(ResourceTypes.ISSUE_FOLDER_SAVED_QUERY);

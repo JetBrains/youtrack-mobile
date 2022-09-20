@@ -22,6 +22,7 @@ import type {Activity, ActivityChangeText} from 'flow/Activity';
 import type {CustomField} from 'flow/CustomFields';
 import type {TextValueChangeParams} from 'components/activity/activity__history-value';
 import type {WorkTimeSettings} from 'flow/Work';
+import {hasType} from '../api/api__resource-types';
 
 type Props = {
   activity: Activity,
@@ -77,7 +78,8 @@ const StreamHistoryChange = ({activity, customFields, workTimeSettings = DEFAULT
     const textChange: ActivityChangeText = getTextChange(activity, issueFields);
     const isTextDiff: boolean = (
       isActivityCategory.description(activity) ||
-      isActivityCategory.summary(activity)
+      isActivityCategory.summary(activity) ||
+      (isActivityCategory.customField(activity) && hasType.customFieldText(activity))
     );
 
     return (
