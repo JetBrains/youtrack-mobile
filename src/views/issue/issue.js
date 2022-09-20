@@ -129,8 +129,11 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   }
 
   componentDidUpdate(prevProps: IssueProps): void {
-    if (prevProps.navigateToActivity !== this.props.navigateToActivity) {
-      if (this.props.navigateToActivity) {
+    if (
+      prevProps.navigateToActivity !== this.props.navigateToActivity ||
+      prevProps.commentId || this.props.commentId
+    ) {
+      if (this.props.navigateToActivity || this.props.commentId) {
         this.switchToActivityTab();
       } else {
         this.switchToDetailsTab();

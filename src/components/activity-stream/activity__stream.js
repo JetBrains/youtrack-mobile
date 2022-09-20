@@ -87,6 +87,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
   }));
 
   useLayoutEffect(() => {
+    bgColor.current.setValue(0);
     Animated.timing(bgColor.current, {
       toValue: 300,
       duration: 3000,
@@ -94,14 +95,11 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
     }).start();
   }, [highlight]);
 
-  const navigateToActivity = (layout: { y: number, height: number }, id: string, commentId?: string) => {
+  const navigateToActivity = (layout: { y: number, height: number }, id: string) => {
     if (!scrollRef?.current?.scrollTo) {
       return;
     }
-    if (
-      id && id === highlight?.activityId ||
-      commentId && commentId === highlight?.commentId
-    ) {
+    if (id && (id === highlight?.activityId || id === highlight?.commentId)) {
       if ((layout.y + layout.height) > (window.height - menuHeight * 5)) {
         scrollRef.current.scrollTo({y: layout.y, animated: true});
       }
@@ -260,15 +258,12 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
       activityGroup?.vcs?.id ||
       events[0]?.id
     );
-    const comment: ?IssueComment = getCommentFromActivityGroup(activityGroup);
-    const commentId = highlight?.commentId;
-    const activityChange = firstActivityChange(activityGroup.comment);
 
-    const targetActivityId = highlight?.activityId;
+    const targetActivityId: ?string = highlight?.commentId || highlight?.activityId;
     const hasHighlightedActivity: boolean = !!targetActivityId && (
       id === targetActivityId ||
       events.some(it => it.id === targetActivityId)
-    ) || commentId && activityChange && commentId === activityChange.id;
+    );
     const Component = hasHighlightedActivity ? Animated.View : View;
 
     return (
@@ -276,7 +271,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
         key={`${index}-${activityGroup.id}`}
         onLayout={(event) => {
           if (activities?.length) {
-            navigateToActivity(event.nativeEvent.layout, id, comment?.id);
+            navigateToActivity(event.nativeEvent.layout, id);
           }
         }}
       >
