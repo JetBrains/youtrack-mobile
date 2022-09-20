@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useLayoutEffect, useRef} from 'react';
+import React, {useCallback, useLayoutEffect, useRef} from 'react';
 import {Animated, Text, TouchableOpacity, ScrollView, View, useWindowDimensions} from 'react-native';
 
 import ActivityUserAvatar from './activity__stream-avatar';
@@ -37,6 +37,7 @@ import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
 import type {WorkItem, WorkTimeSettings} from 'flow/Work';
 import type {YouTrackWiki} from 'flow/Wiki';
+import {Activity} from 'flow/Activity';
 
 
 type Props = {
@@ -74,17 +75,34 @@ export type ActivityStreamProps = {
   ...ActivityStreamPropsReaction,
 }
 
+type ElementLayout = { y: number, height: number };
+
+
 export const ActivityStream = (props: ActivityStreamProps): Node => {
   const window = useWindowDimensions();
 
   const {headerRenderer: renderHeader = () => null, activities, highlight} = props;
 
+  const onScroll = (event) => scrollOffset.current = event.nativeEvent.contentOffset.y;
   const scrollRef = useRef(null);
+  const scrollOffset = useRef(0);
   const bgColor = useRef(new Animated.Value(0));
   const color = useRef(bgColor.current.interpolate({
     inputRange: [0, 300],
     outputRange: [styles.activityHighlighted.backgroundColor, 'transparent'],
   }));
+  const layoutMap = useRef({});
+  const scrollToActivity = useCallback((layout: ElementLayout) => {
+    if (
+      scrollRef.current?.scrollTo && (
+        layout.y < scrollOffset.current ||
+        layout.y > window.height ||
+        (layout.y + layout.height) > (window.height - menuHeight * 5)
+      )
+    ) {
+      scrollRef.current.scrollTo({y: layout.y, animated: true});
+    }
+  }, [window.height]);
 
   useLayoutEffect(() => {
     bgColor.current.setValue(0);
@@ -95,16 +113,14 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
     }).start();
   }, [highlight]);
 
-  const navigateToActivity = (layout: { y: number, height: number }, id: string) => {
-    if (!scrollRef?.current?.scrollTo) {
-      return;
-    }
-    if (id && (id === highlight?.activityId || id === highlight?.commentId)) {
-      if ((layout.y + layout.height) > (window.height - menuHeight * 5)) {
-        scrollRef.current.scrollTo({y: layout.y, animated: true});
+  useLayoutEffect(() => {
+    setTimeout(() => {
+      const layout: ?ElementLayout = layoutMap.current[highlight?.commentId || highlight?.activityId];
+      if (layout) {
+        scrollToActivity(layout);
       }
-    }
-  };
+    }, 100);
+  }, [highlight, scrollToActivity]);
 
   const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment | null => (
     firstActivityChange(activityGroup.comment)
@@ -251,7 +267,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
       renderedItem = <StreamVCS activityGroup={activityGroup}/>;
     }
 
-    const events = activityGroup?.events || [];
+    const events: Activity[] = activityGroup?.events || [];
     const id: string = (
       activityGroup?.comment?.id ||
       activityGroup?.work?.id ||
@@ -261,8 +277,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
     const targetActivityId: ?string = highlight?.commentId || highlight?.activityId;
     const hasHighlightedActivity: boolean = !!targetActivityId && (
-      id === targetActivityId ||
-      events.some(it => it.id === targetActivityId)
+      id === targetActivityId || events.some(it => it.id === targetActivityId)
     );
     const Component = hasHighlightedActivity ? Animated.View : View;
 
@@ -271,7 +286,8 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
         key={`${index}-${activityGroup.id}`}
         onLayout={(event) => {
           if (activities?.length) {
-            navigateToActivity(event.nativeEvent.layout, id);
+            layoutMap.current[id] = event.nativeEvent.layout;
+            events.forEach((it: Activity) => layoutMap.current[it.id] = event.nativeEvent.layout);
           }
         }}
       >
@@ -295,6 +311,9 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
             {activityGroup?.events?.length > 0 && (
               <View style={isRelatedChange ? styles.activityRelatedChanges : styles.activityHistoryChanges}>
                 {Boolean(!activityGroup.merged && !isRelatedChange) && <StreamUserInfo activityGroup={activityGroup}/>}
+                <Text>
+                  {activityGroup.id}
+                </Text>
                 {activityGroup.merged && <StreamTimestamp isAbs={true} timestamp={activityGroup.timestamp}/>}
 
                 {activityGroup.events.map(
@@ -326,6 +345,7 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
       scrollEventThrottle={16}
       refreshControl={props.refreshControl()}
       ref={instance => instance != null && (scrollRef.current = instance)}
+      onScroll={onScroll}
     >
       {renderHeader()}
       {(activities || []).map(renderActivity)}
