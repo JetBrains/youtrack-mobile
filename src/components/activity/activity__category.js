@@ -1,38 +1,38 @@
 /* @flow */
 
 export const categoryName = {
-  ARTICLE_MENTION: 'ARTICLE_MENTION',
   ARTICLE_COMMENT_MENTION: 'ARTICLE_COMMENT_MENTION',
+  ARTICLE_MENTION: 'ARTICLE_MENTION',
+  ATTACHMENT_RENAME: 'ATTACHMENT_RENAME',
+  ATTACHMENTS: 'ATTACHMENTS',
   COMMENT: 'COMMENT',
   COMMENT_MENTION: 'COMMENT_MENTION',
   COMMENT_TEXT: 'COMMENT_TEXT',
-  ATTACHMENTS: 'ATTACHMENTS',
-  ATTACHMENT_RENAME: 'ATTACHMENT_RENAME',
   CUSTOM_FIELD: 'CUSTOM_FIELD',
   DESCRIPTION: 'DESCRIPTION',
-  LINKS: 'LINKS',
   ISSUE_CREATED: 'ISSUE_CREATED',
   ISSUE_MENTION: 'ISSUE_MENTION',
   ISSUE_RESOLVED: 'ISSUE_RESOLVED',
-  PROJECT: 'PROJECT',
+  LINKS: 'LINKS',
   PERMITTED_GROUP: 'PERMITTED_GROUP',
+  PROJECT: 'PROJECT',
   PULL_REQUEST_CHANGE: 'PULL_REQUEST_CHANGE',
   SPRINT: 'SPRINT',
+  STAR: 'STAR',
   SUMMARY: 'SUMMARY',
   TAGS: 'TAGS',
-  WORK_ITEM: 'WORK_ITEM',
-  WORK_ITEM_TYPE: 'WORK_ITEM_TYPE',
-  WORK_ITEM_DESCRIPTION: 'WORK_ITEM_DESCRIPTION',
-  WORK_ITEM_USES_MARKDOWN: 'WORK_ITEM_USES_MARKDOWN',
-  WORK_ITEM_DURATION: 'WORK_ITEM_DURATION',
-  WORK_ITEM_DATE: 'WORK_ITEM_DATE',
-  WORK_ITEM_AUTHOR: 'WORK_ITEM_AUTHOR',
-  VOTERS: 'VOTERS',
-  VCS_ITEM: 'VCS_ITEM',
   TOTAL_VOTES: 'TOTAL_VOTES',
+  VCS_ITEM: 'VCS_ITEM',
   VISIBILITY: 'VISIBILITY',
   VISIBILITY_ISSUE: 'VISIBILITY_ISSUE',
-  STAR: 'STAR',
+  VOTERS: 'VOTERS',
+  WORK_ITEM: 'WORK_ITEM',
+  WORK_ITEM_AUTHOR: 'WORK_ITEM_AUTHOR',
+  WORK_ITEM_DATE: 'WORK_ITEM_DATE',
+  WORK_ITEM_DESCRIPTION: 'WORK_ITEM_DESCRIPTION',
+  WORK_ITEM_DURATION: 'WORK_ITEM_DURATION',
+  WORK_ITEM_TYPE: 'WORK_ITEM_TYPE',
+  WORK_ITEM_USES_MARKDOWN: 'WORK_ITEM_USES_MARKDOWN',
 };
 
 export const activityCategory: Object = {
@@ -71,6 +71,7 @@ export const activityCategory: Object = {
 };
 
 export const activityArticleCategory = {
+  ARTICLE_CREATED: 'ArticleCreatedCategory',
   ATTACHMENTS: 'ArticleAttachmentsCategory',
   COMMENT: 'ArticleCommentsCategory',
   CREATED: 'ArticleCreatedCategory',
@@ -78,8 +79,6 @@ export const activityArticleCategory = {
   PROJECT: 'ArticleProjectCategory',
   SUMMARY: 'ArticleSummaryCategory',
   VISIBILITY: 'ArticleVisibilityCategory',
-
-  ARTICLE_CREATED: 'ArticleCreatedCategory',
 };
 
 
@@ -87,14 +86,14 @@ export const ActivityCategory: {
   ActivityCategories: {
     IssueComments: Array<string>,
     IssueHistory: Array<string>,
-    TimeTracking: Array<string>,
     IssueVcs: Array<string>,
+    TimeTracking: Array<string>,
   },
   CategoryPresentation: {
     IssueComments: string,
     IssueHistory: string,
-    TimeTracking: string,
     IssueVcs: string,
+    TimeTracking: string,
   },
   Source: { COMMENT: string, HISTORY: string, WORK_ITEM: string, VCS_ITEM: string },
 } = [
@@ -102,15 +101,15 @@ export const ActivityCategory: {
     activityCategory.COMMENT,
   ], 'Comments'],
   ['HISTORY', 'IssueHistory', [
-    activityCategory.ATTACHMENTS,
     activityCategory.ATTACHMENT_RENAME,
+    activityCategory.ATTACHMENTS,
     activityCategory.CUSTOM_FIELD,
     activityCategory.DESCRIPTION,
     activityCategory.ISSUE_CREATED,
     activityCategory.ISSUE_RESOLVED,
     activityCategory.LINKS,
-    activityCategory.PROJECT,
     activityCategory.PERMITTED_GROUP,
+    activityCategory.PROJECT,
     activityCategory.SPRINT,
     activityCategory.SUMMARY,
     activityCategory.TAGS,
@@ -121,13 +120,13 @@ export const ActivityCategory: {
     activityCategory.WORK_ITEM,
   ], 'Spent time'],
   ['VCS_ITEM', 'IssueVcs', [
-    activityCategory.VCS_ITEM,
     activityCategory.PULL_REQUEST_CHANGE,
+    activityCategory.VCS_ITEM,
   ], 'VCS changes'],
 ].reduce(function (Activity: {
-  Source: Object,
-  CategoryPresentation: Object,
   ActivityCategories: Object,
+  CategoryPresentation: Object,
+  Source: Object,
 }, source) {
   const sourceName = source[0];
   const sourceKey = source[1];
@@ -158,31 +157,31 @@ export const isActivityCategories = function (categoryIds: Array<string>): ((act
   };
 };
 
+isActivityCategory.articleCommentMention = isActivityCategory(activityCategory.ARTICLE_COMMENT_MENTION);
+isActivityCategory.articleCreated = isActivityCategory(activityCategory.ARTICLE_CREATED);
+isActivityCategory.articleDescription = isActivityCategory(activityArticleCategory.DESCRIPTION);
+isActivityCategory.articleMention = isActivityCategory(activityCategory.ARTICLE_MENTION);
+isActivityCategory.articleSummary = isActivityCategory(activityArticleCategory.SUMMARY);
+isActivityCategory.attachment = isActivityCategories([activityCategory.ATTACHMENTS, activityArticleCategory.ATTACHMENTS]);
 isActivityCategory.comment = isActivityCategories([activityCategory.COMMENT, activityArticleCategory.COMMENT]);
 isActivityCategory.commentMention = isActivityCategory(activityCategory.COMMENT_MENTION);
-isActivityCategory.attachment = isActivityCategories([activityCategory.ATTACHMENTS, activityArticleCategory.ATTACHMENTS]);
-isActivityCategory.issueCreated = isActivityCategories([activityCategory.ISSUE_CREATED, activityArticleCategory.CREATED]);
-isActivityCategory.articleCreated = isActivityCategory(activityCategory.ARTICLE_CREATED);
-isActivityCategory.work = isActivityCategory(activityCategory.WORK_ITEM);
-isActivityCategory.voters = isActivityCategory(activityCategory.VOTERS);
-isActivityCategory.vote = isActivityCategory(activityCategory.VOTERS);
-isActivityCategory.vcsItem = isActivityCategories([activityCategory.VCS_ITEM, activityCategory.PULL_REQUEST_CHANGE]);
-isActivityCategory.pullRequest = isActivityCategory(activityCategory.PULL_REQUEST_CHANGE);
-isActivityCategory.vcs = isActivityCategory(activityCategory.VCS_ITEM);
-isActivityCategory.totalVotes = isActivityCategory(activityCategory.TOTAL_VOTES);
 isActivityCategory.commentText = isActivityCategory(activityCategory.COMMENT_TEXT);
 isActivityCategory.customField = isActivityCategory(activityCategory.CUSTOM_FIELD);
+isActivityCategory.description = isActivityCategories([activityCategory.DESCRIPTION, activityArticleCategory.DESCRIPTION]);
+isActivityCategory.issueCreated = isActivityCategories([activityCategory.ISSUE_CREATED, activityArticleCategory.CREATED]);
+isActivityCategory.issueMention = isActivityCategory(activityCategory.ISSUE_MENTION);
 isActivityCategory.issueResolved = isActivityCategory(activityCategory.ISSUE_RESOLVED);
 isActivityCategory.link = isActivityCategory(activityCategory.LINKS);
-isActivityCategory.tag = isActivityCategories([activityCategory.TAGS, activityCategory.STAR]);
-isActivityCategory.summary = isActivityCategories([activityCategory.SUMMARY, activityArticleCategory.SUMMARY]);
-isActivityCategory.description = isActivityCategories([activityCategory.DESCRIPTION, activityArticleCategory.DESCRIPTION]);
-isActivityCategory.articleDescription = isActivityCategory(activityArticleCategory.DESCRIPTION);
-isActivityCategory.articleSummary = isActivityCategory(activityArticleCategory.SUMMARY);
+isActivityCategory.project = isActivityCategories([activityCategory.PROJECT, activityArticleCategory.PROJECT]);
+isActivityCategory.pullRequest = isActivityCategory(activityCategory.PULL_REQUEST_CHANGE);
 isActivityCategory.sprint = isActivityCategory(activityCategory.SPRINT);
 isActivityCategory.star = isActivityCategory(activityCategory.STAR);
-isActivityCategory.project = isActivityCategories([activityCategory.PROJECT, activityArticleCategory.PROJECT]);
+isActivityCategory.summary = isActivityCategories([activityCategory.SUMMARY, activityArticleCategory.SUMMARY]);
+isActivityCategory.tag = isActivityCategories([activityCategory.TAGS, activityCategory.STAR]);
+isActivityCategory.totalVotes = isActivityCategory(activityCategory.TOTAL_VOTES);
+isActivityCategory.vcs = isActivityCategory(activityCategory.VCS_ITEM);
+isActivityCategory.vcsItem = isActivityCategories([activityCategory.VCS_ITEM, activityCategory.PULL_REQUEST_CHANGE]);
 isActivityCategory.visibility = isActivityCategories([activityCategory.VISIBILITY, activityCategory.VISIBILITY_ISSUE, activityArticleCategory.VISIBILITY]);
-isActivityCategory.articleCommentMention = isActivityCategory(activityCategory.ARTICLE_COMMENT_MENTION);
-isActivityCategory.articleMention = isActivityCategory(activityCategory.ARTICLE_MENTION);
-isActivityCategory.issueMention = isActivityCategory(activityCategory.ISSUE_MENTION);
+isActivityCategory.vote = isActivityCategory(activityCategory.VOTERS);
+isActivityCategory.voters = isActivityCategory(activityCategory.VOTERS);
+isActivityCategory.work = isActivityCategory(activityCategory.WORK_ITEM);
