@@ -85,12 +85,13 @@ function update(mergedActivity: MergedActivity, activity: Activity): MergedActiv
     const removedAdded = disjoint(mergedActivity.removed, activity.added);
     mergedActivity.added = merge(addedRemoved[0], removedAdded[1]);
     mergedActivity.removed = merge(addedRemoved[1], removedAdded[0]);
-  } else {
-    mergedActivity.added = activity.added;
   }
 
-  mergedActivity.timestamp = activity.timestamp;
-  mergedActivity.id = activity.id;
+  if (activity.timestamp > mergedActivity.timestamp) {
+    mergedActivity.added = activity.added;
+    mergedActivity.timestamp = activity.timestamp;
+    mergedActivity.id = activity.id;
+  }
 
   return mergedActivity;
 }
