@@ -155,6 +155,10 @@ msgstr[1] ""
 msgid "Attachment deleted"
 msgstr ""
 
+#: src/components/activity/activity__history-title.js
+msgid "Attachment name"
+msgstr ""
+
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Author"
 msgstr "Szerző"

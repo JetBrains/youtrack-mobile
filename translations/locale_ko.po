@@ -88,7 +88,7 @@ msgstr "감정 이모티콘이 추가됨"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "All"
-msgstr ""
+msgstr "전체"
 
 #: src/views/settings/settings__appearance.js
 #: src/views/settings/settings.js
@@ -150,6 +150,10 @@ msgstr[0] "첨부 파일"
 #: src/components/attachments-row/attachment-actions.js
 msgid "Attachment deleted"
 msgstr "첨부 삭제됨"
+
+#: src/components/activity/activity__history-title.js
+msgid "Attachment name"
+msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Author"
@@ -231,7 +235,7 @@ msgstr "코멘트 업데이트됨"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.js
 msgid "commented"
-msgstr ""
+msgstr "코멘트 달림"
 
 #: src/components/activity/activity-helper.js
 msgid "Comments"
@@ -660,7 +664,7 @@ msgstr "찾을 수 없습니다."
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Notification settings…"
-msgstr ""
+msgstr "알림 설정…"
 
 #: src/views/inbox-threads/inbox-threads.js
 #: src/views/inbox/inbox.js

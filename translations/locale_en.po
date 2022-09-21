@@ -22,7 +22,7 @@ msgstr "(archived)"
 msgid "(Clear value)"
 msgstr "(Clear value)"
 
-#: src/components/activity/activity__history-title.js:23
+#: src/components/activity/activity__history-title.js:26
 msgid "[Removed field]"
 msgstr "[Removed field]"
 
@@ -139,7 +139,7 @@ msgstr "Attach file"
 msgid "Attach files"
 msgstr "Attach files"
 
-#: src/components/activity/activity__history-title.js:42
+#: src/components/activity/activity__history-title.js:45
 msgid "Attachment"
 msgid_plural "Attachments"
 msgstr[0] "Attachment"
@@ -148,6 +148,10 @@ msgstr[1] "Attachments"
 #: src/components/attachments-row/attachment-actions.js:29
 msgid "Attachment deleted"
 msgstr "Attachment deleted"
+
+#: src/components/activity/activity__history-title.js:52
+msgid "Attachment name"
+msgstr "Attachment name"
 
 #: src/views/issue/activity/activity__add-spent-time.js:313
 msgid "Author"
@@ -215,7 +219,7 @@ msgstr "Command applied"
 msgid "Command was successfully applied."
 msgstr "Command was successfully applied."
 
-#: src/components/activity/activity__history-title.js:32
+#: src/components/activity/activity__history-title.js:35
 msgid "Comment changed"
 msgstr "Comment changed"
 
@@ -253,7 +257,7 @@ msgstr "Contact support"
 msgid "Content"
 msgstr "Content"
 
-#: src/components/activity/activity__history-title.js:26
+#: src/components/activity/activity__history-title.js:29
 msgid "Content revised"
 msgstr "Content revised"
 
@@ -338,7 +342,7 @@ msgstr "Delete permanently"
 msgid "Description"
 msgstr "Description"
 
-#: src/components/activity/activity__history-title.js:26
+#: src/components/activity/activity__history-title.js:29
 msgid "Description changed"
 msgstr "Description changed"
 
@@ -368,7 +372,7 @@ msgid "Drafts"
 msgstr "Drafts"
 
 #: src/components/activity-stream/activity__stream-work.js:111
-#: src/components/activity-stream/activity__stream.js:164
+#: src/components/activity-stream/activity__stream.js:178
 #: src/views/article/arcticle-actions.js:204
 #: src/views/issue/activity/issue-activity__comment-actions.js:290
 #: src/views/issue/issue-base-actions-creater.js:470
@@ -612,7 +616,7 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.js:337
+#: src/components/activity-stream/activity__stream.js:352
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -864,7 +868,7 @@ msgstr "Subscriptions"
 msgid "Summary"
 msgstr "Summary"
 
-#: src/components/activity/activity__history-title.js:29
+#: src/components/activity/activity__history-title.js:32
 msgid "Summary changed"
 msgstr "Summary changed"
 
@@ -872,7 +876,7 @@ msgstr "Summary changed"
 msgid "Sync with OS"
 msgstr "Sync with OS"
 
-#: src/components/activity/activity__history-title.js:35
+#: src/components/activity/activity__history-title.js:38
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tag"
@@ -967,7 +971,7 @@ msgstr "Thread unmuted"
 msgid "Title"
 msgstr "Title"
 
-#: src/components/activity/activity__history-title.js:29
+#: src/components/activity/activity__history-title.js:32
 msgid "Title changed"
 msgstr "Title changed"
 
@@ -979,7 +983,7 @@ msgstr "To view an item in context, select an issue, article, or update from the
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
 msgstr "To view articles in the knowledge base for a specific project, mark it as a favorite"
 
-#: src/components/activity-stream/activity__stream-history.js:105
+#: src/components/activity-stream/activity__stream-history.js:108
 msgid "Total votes"
 msgstr "Total votes"
 
@@ -1040,7 +1044,7 @@ msgstr "View comment"
 msgid "View comments and other activity"
 msgstr "View comments and other activity"
 
-#: src/components/activity/activity__history-title.js:49
+#: src/components/activity/activity__history-title.js:55
 msgid "Visibility"
 msgstr "Visibility"
 

@@ -88,7 +88,7 @@ msgstr "已添加回应"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "All"
-msgstr ""
+msgstr "全部"
 
 #: src/views/settings/settings__appearance.js
 #: src/views/settings/settings.js
@@ -150,6 +150,10 @@ msgstr[0] "附件"
 #: src/components/attachments-row/attachment-actions.js
 msgid "Attachment deleted"
 msgstr "已删除附件"
+
+#: src/components/activity/activity__history-title.js
+msgid "Attachment name"
+msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Author"
@@ -231,7 +235,7 @@ msgstr "已更新评论"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.js
 msgid "commented"
-msgstr ""
+msgstr "评论"
 
 #: src/components/activity/activity-helper.js
 msgid "Comments"
@@ -257,7 +261,7 @@ msgstr "内容"
 
 #: src/components/activity/activity__history-title.js
 msgid "Content revised"
-msgstr ""
+msgstr "已修改内容"
 
 #: src/components/wiki/code-renderer.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
@@ -292,7 +296,7 @@ msgstr "已发送崩溃报告"
 
 #: src/views/inbox-threads/inbox-threads__item-issue-created.js
 msgid "created"
-msgstr ""
+msgstr "创建时间"
 
 #: src/views/issue/issue__details.js
 msgid "Created by"
@@ -562,19 +566,19 @@ msgstr "管理收藏的项目"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Mark all as read"
-msgstr ""
+msgstr "全部标记为已读"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mark as read"
-msgstr ""
+msgstr "标记为已读"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mark as unread"
-msgstr ""
+msgstr "标记为未读"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Marked as read"
-msgstr ""
+msgstr "标记为已读"
 
 #: src/views/issues/issues__count.js
 msgid "Matches {{issuesCount}} issue"
@@ -583,11 +587,11 @@ msgstr[0] "匹配 {{issuesCount}} 个问题"
 
 #: src/views/inbox-threads/inbox-threads__mention.js
 msgid "mentioned you"
-msgstr ""
+msgstr "已提及您"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "Mentions & Reactions"
-msgstr ""
+msgstr "提及和回应"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "merged the pull request"
@@ -595,7 +599,7 @@ msgstr "已合并 Pull Request"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mute thread"
-msgstr ""
+msgstr "忽略话题"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "New Article"
@@ -607,7 +611,7 @@ msgstr "新建问题"
 
 #: src/views/inbox-threads/inbox-threads__update-button.js
 msgid "New messages"
-msgstr ""
+msgstr "新消息"
 
 #: src/views/enter-server/enter-server.js
 msgid "Next"
@@ -644,7 +648,7 @@ msgstr "没有条目"
 
 #: src/views/inbox-threads/inbox-threads__list.js
 msgid "No notifications"
-msgstr ""
+msgstr "无通知"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "No type"
@@ -660,7 +664,7 @@ msgstr "不， 没有找到！"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Notification settings…"
-msgstr ""
+msgstr "通知设置…"
 
 #: src/views/inbox-threads/inbox-threads.js
 #: src/views/inbox/inbox.js
@@ -807,7 +811,7 @@ msgstr "分享…"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Show all"
-msgstr ""
+msgstr "全部显示"
 
 #: src/components/tags/tags.js
 msgid "Show all issues tagged with \"{{tagName}}\"..."
@@ -859,7 +863,7 @@ msgstr "提交 Pull Request"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "Subscriptions"
-msgstr ""
+msgstr "订阅"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Summary"
@@ -957,11 +961,11 @@ msgstr "此操作将删除所有草稿，包括未发布的子文章"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Thread muted"
-msgstr ""
+msgstr "已忽略话题"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Thread unmuted"
-msgstr ""
+msgstr "已取消忽略话题"
 
 #: src/views/article-create/article-create.js
 msgid "Title"
@@ -969,11 +973,11 @@ msgstr "标题"
 
 #: src/components/activity/activity__history-title.js
 msgid "Title changed"
-msgstr ""
+msgstr "已更改标题"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "To view an item in context, select an issue, article, or update from the list"
-msgstr ""
+msgstr "要在上下文中查看条目，请从列表中选择问题、文章或更新"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
@@ -981,7 +985,7 @@ msgstr "要查看特定项目的知识库中的文章，请将其标记为收藏
 
 #: src/components/activity-stream/activity__stream-history.js
 msgid "Total votes"
-msgstr ""
+msgstr "总票数"
 
 #: src/components/error-message/error-message.js
 msgid "Try Again"
@@ -997,11 +1001,11 @@ msgstr "未分类的卡片"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Unmute thread"
-msgstr ""
+msgstr "取消忽略话题"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Unread only"
-msgstr ""
+msgstr "仅未读"
 
 #: src/components/articles/article-item-with-children.js
 msgid "Untitled"
@@ -1010,7 +1014,7 @@ msgstr "未命名"
 #: src/views/inbox-threads/inbox-threads__item-history.js
 #: src/views/inbox-threads/inbox-threads__item-work.js
 msgid "updated"
-msgstr ""
+msgstr "更新时间"
 
 #: src/views/issue/issue__details.js
 msgid "Updated by"
@@ -1034,7 +1038,7 @@ msgstr "VCS 变更"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.js
 msgid "View comment"
-msgstr ""
+msgstr "查看注释"
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
@@ -1071,7 +1075,7 @@ msgstr "写评论，提及人（@）"
 
 #: src/views/inbox-threads/inbox-threads__list.js
 msgid "You don’t have any unread notifications"
-msgstr ""
+msgstr "您没有未读通知"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."

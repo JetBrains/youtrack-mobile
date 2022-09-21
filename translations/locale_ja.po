@@ -88,7 +88,7 @@ msgstr "がリアクションを追加しました"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "All"
-msgstr ""
+msgstr "すべて"
 
 #: src/views/settings/settings__appearance.js
 #: src/views/settings/settings.js
@@ -150,6 +150,10 @@ msgstr[0] "添付ファイル"
 #: src/components/attachments-row/attachment-actions.js
 msgid "Attachment deleted"
 msgstr "添付ファイルが削除されました"
+
+#: src/components/activity/activity__history-title.js
+msgid "Attachment name"
+msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Author"
@@ -231,7 +235,7 @@ msgstr "コメントが更新されました"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.js
 msgid "commented"
-msgstr ""
+msgstr "がコメントをしました"
 
 #: src/components/activity/activity-helper.js
 msgid "Comments"
@@ -257,7 +261,7 @@ msgstr "コンテンツ"
 
 #: src/components/activity/activity__history-title.js
 msgid "Content revised"
-msgstr ""
+msgstr "内容が変更されました"
 
 #: src/components/wiki/code-renderer.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
@@ -292,7 +296,7 @@ msgstr "クラッシュレポートが送信されました"
 
 #: src/views/inbox-threads/inbox-threads__item-issue-created.js
 msgid "created"
-msgstr ""
+msgstr "作成日時"
 
 #: src/views/issue/issue__details.js
 msgid "Created by"
@@ -562,19 +566,19 @@ msgstr "お気に入りプロジェクトの管理"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Mark all as read"
-msgstr ""
+msgstr "すべて既読にする"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mark as read"
-msgstr ""
+msgstr "既読にする"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mark as unread"
-msgstr ""
+msgstr "未読にする"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Marked as read"
-msgstr ""
+msgstr "既読にされました"
 
 #: src/views/issues/issues__count.js
 msgid "Matches {{issuesCount}} issue"
@@ -583,11 +587,11 @@ msgstr[0] "{{issuesCount}} 件の課題に一致"
 
 #: src/views/inbox-threads/inbox-threads__mention.js
 msgid "mentioned you"
-msgstr ""
+msgstr "さんがあなたをメンションしました"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "Mentions & Reactions"
-msgstr ""
+msgstr "メンションとリアクション"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "merged the pull request"
@@ -595,7 +599,7 @@ msgstr "さんがプルリクエストをマージしました"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mute thread"
-msgstr ""
+msgstr "スレッドのミュート"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "New Article"
@@ -607,7 +611,7 @@ msgstr "新しい課題"
 
 #: src/views/inbox-threads/inbox-threads__update-button.js
 msgid "New messages"
-msgstr ""
+msgstr "新着メッセージ"
 
 #: src/views/enter-server/enter-server.js
 msgid "Next"
@@ -644,7 +648,7 @@ msgstr "項目がありません"
 
 #: src/views/inbox-threads/inbox-threads__list.js
 msgid "No notifications"
-msgstr ""
+msgstr "通知はありません"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "No type"
@@ -660,7 +664,7 @@ msgstr "見つかりません！"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Notification settings…"
-msgstr ""
+msgstr "通知設定…"
 
 #: src/views/inbox-threads/inbox-threads.js
 #: src/views/inbox/inbox.js
@@ -807,7 +811,7 @@ msgstr "共有…"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Show all"
-msgstr ""
+msgstr "すべて表示"
 
 #: src/components/tags/tags.js
 msgid "Show all issues tagged with \"{{tagName}}\"..."
@@ -859,7 +863,7 @@ msgstr "さんがプルリクエストを送信しました"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "Subscriptions"
-msgstr ""
+msgstr "サブスクリプション"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Summary"
@@ -957,11 +961,11 @@ msgstr "この操作は未公開のサブ記事を含むすべての下書きを
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Thread muted"
-msgstr ""
+msgstr "スレッドがミュートされました"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Thread unmuted"
-msgstr ""
+msgstr "スレッドのミュートが解除されました"
 
 #: src/views/article-create/article-create.js
 msgid "Title"
@@ -969,11 +973,11 @@ msgstr "タイトル"
 
 #: src/components/activity/activity__history-title.js
 msgid "Title changed"
-msgstr ""
+msgstr "タイトルが変更されました"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "To view an item in context, select an issue, article, or update from the list"
-msgstr ""
+msgstr "コンテキスト内の項目を表示するにはリストから課題、記事、または更新を選択してください"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
@@ -981,7 +985,7 @@ msgstr "特定プロジェクトのナレッジベースにある記事を表示
 
 #: src/components/activity-stream/activity__stream-history.js
 msgid "Total votes"
-msgstr ""
+msgstr "合計投票数"
 
 #: src/components/error-message/error-message.js
 msgid "Try Again"
@@ -997,11 +1001,11 @@ msgstr "未分類のカード"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Unmute thread"
-msgstr ""
+msgstr "スレッドのミュートを解除"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Unread only"
-msgstr ""
+msgstr "未読のみ"
 
 #: src/components/articles/article-item-with-children.js
 msgid "Untitled"
@@ -1010,7 +1014,7 @@ msgstr "無題"
 #: src/views/inbox-threads/inbox-threads__item-history.js
 #: src/views/inbox-threads/inbox-threads__item-work.js
 msgid "updated"
-msgstr ""
+msgstr "更新日時"
 
 #: src/views/issue/issue__details.js
 msgid "Updated by"
@@ -1034,7 +1038,7 @@ msgstr "VCSの変更"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.js
 msgid "View comment"
-msgstr ""
+msgstr "コメントを表示"
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
@@ -1071,7 +1075,7 @@ msgstr "コメントを書くか、他のユーザーについて@メンショ�
 
 #: src/views/inbox-threads/inbox-threads__list.js
 msgid "You don’t have any unread notifications"
-msgstr ""
+msgstr "未読の通知はありません"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."

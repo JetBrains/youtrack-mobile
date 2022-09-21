@@ -91,7 +91,7 @@ msgstr "a ajouté une réaction"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "All"
-msgstr ""
+msgstr "Tout"
 
 #: src/views/settings/settings__appearance.js
 #: src/views/settings/settings.js
@@ -154,6 +154,10 @@ msgstr[1] "Pièces jointes"
 #: src/components/attachments-row/attachment-actions.js
 msgid "Attachment deleted"
 msgstr "Pièce jointe supprimée"
+
+#: src/components/activity/activity__history-title.js
+msgid "Attachment name"
+msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Author"
@@ -235,7 +239,7 @@ msgstr "Commentaire mis à jour"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.js
 msgid "commented"
-msgstr ""
+msgstr "commenté"
 
 #: src/components/activity/activity-helper.js
 msgid "Comments"
@@ -261,7 +265,7 @@ msgstr "Contenu"
 
 #: src/components/activity/activity__history-title.js
 msgid "Content revised"
-msgstr ""
+msgstr "Contenu révisé"
 
 #: src/components/wiki/code-renderer.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
@@ -296,7 +300,7 @@ msgstr "Rapport d’incident envoyé"
 
 #: src/views/inbox-threads/inbox-threads__item-issue-created.js
 msgid "created"
-msgstr ""
+msgstr "créé"
 
 #: src/views/issue/issue__details.js
 msgid "Created by"
@@ -566,19 +570,19 @@ msgstr "Gérer les projets favoris"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Mark all as read"
-msgstr ""
+msgstr "Tout marquer comme lu"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mark as read"
-msgstr ""
+msgstr "Signaler comme lu"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mark as unread"
-msgstr ""
+msgstr "Signaler comme non lu"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Marked as read"
-msgstr ""
+msgstr "Signaler comme lu"
 
 #: src/views/issues/issues__count.js
 msgid "Matches {{issuesCount}} issue"
@@ -588,11 +592,11 @@ msgstr[1] "Correspond à {{issuesCount}} tickets"
 
 #: src/views/inbox-threads/inbox-threads__mention.js
 msgid "mentioned you"
-msgstr ""
+msgstr "vous a mentionné·e"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "Mentions & Reactions"
-msgstr ""
+msgstr "Mentions et réactions"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "merged the pull request"
@@ -600,7 +604,7 @@ msgstr "a fusionné la requête d'extraction"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mute thread"
-msgstr ""
+msgstr "Activer le mode silencieux du thread"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "New Article"
@@ -612,7 +616,7 @@ msgstr "Nouveau ticket"
 
 #: src/views/inbox-threads/inbox-threads__update-button.js
 msgid "New messages"
-msgstr ""
+msgstr "Nouveaux messages"
 
 #: src/views/enter-server/enter-server.js
 msgid "Next"
@@ -649,7 +653,7 @@ msgstr "Aucun élément"
 
 #: src/views/inbox-threads/inbox-threads__list.js
 msgid "No notifications"
-msgstr ""
+msgstr "Pas de notifications"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "No type"
@@ -665,7 +669,7 @@ msgstr "Non, aucun résultat trouvé !"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Notification settings…"
-msgstr ""
+msgstr "Paramètres des notifications…"
 
 #: src/views/inbox-threads/inbox-threads.js
 #: src/views/inbox/inbox.js
@@ -812,7 +816,7 @@ msgstr "Partager…"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Show all"
-msgstr ""
+msgstr "Tout afficher"
 
 #: src/components/tags/tags.js
 msgid "Show all issues tagged with \"{{tagName}}\"..."
@@ -864,7 +868,7 @@ msgstr "a envoyé une requête d'extraction"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "Subscriptions"
-msgstr ""
+msgstr "Abonnements"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Summary"
@@ -963,11 +967,11 @@ msgstr "Cette action supprime tous les brouillons, y compris les sous-articles n
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Thread muted"
-msgstr ""
+msgstr "Thread silencieux"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Thread unmuted"
-msgstr ""
+msgstr "Son du thread activé"
 
 #: src/views/article-create/article-create.js
 msgid "Title"
@@ -975,11 +979,11 @@ msgstr "Titre"
 
 #: src/components/activity/activity__history-title.js
 msgid "Title changed"
-msgstr ""
+msgstr "Titre modifié"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "To view an item in context, select an issue, article, or update from the list"
-msgstr ""
+msgstr "Pour afficher un élément en contexte, sélectionnez un ticket, un article ou une mise à jour dans la liste"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
@@ -987,7 +991,7 @@ msgstr "Pour consulter les articles d'un projet particulier dans la base de conn
 
 #: src/components/activity-stream/activity__stream-history.js
 msgid "Total votes"
-msgstr ""
+msgstr "Total des votes"
 
 #: src/components/error-message/error-message.js
 msgid "Try Again"
@@ -1003,11 +1007,11 @@ msgstr "Cartes sans catégorie"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Unmute thread"
-msgstr ""
+msgstr "Annuler le mode silencieux du thread"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Unread only"
-msgstr ""
+msgstr "Non lues uniquement"
 
 #: src/components/articles/article-item-with-children.js
 msgid "Untitled"
@@ -1016,7 +1020,7 @@ msgstr "Sans titre"
 #: src/views/inbox-threads/inbox-threads__item-history.js
 #: src/views/inbox-threads/inbox-threads__item-work.js
 msgid "updated"
-msgstr ""
+msgstr "mis à jour"
 
 #: src/views/issue/issue__details.js
 msgid "Updated by"
@@ -1040,7 +1044,7 @@ msgstr "Modifications VCS"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.js
 msgid "View comment"
-msgstr ""
+msgstr "Afficher le commentaire"
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
@@ -1077,7 +1081,7 @@ msgstr "Rédigez un commentaire, @mentionnez des personnes"
 
 #: src/views/inbox-threads/inbox-threads__list.js
 msgid "You don’t have any unread notifications"
-msgstr ""
+msgstr "Vous n'avez pas de notifications non lues"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."

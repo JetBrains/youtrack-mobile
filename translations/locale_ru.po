@@ -97,7 +97,7 @@ msgstr "добавил(а) реакцию"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "All"
-msgstr ""
+msgstr "Все"
 
 #: src/views/settings/settings__appearance.js
 #: src/views/settings/settings.js
@@ -162,6 +162,10 @@ msgstr[3] "Вложения"
 #: src/components/attachments-row/attachment-actions.js
 msgid "Attachment deleted"
 msgstr "Вложение удалено"
+
+#: src/components/activity/activity__history-title.js
+msgid "Attachment name"
+msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Author"
@@ -243,7 +247,7 @@ msgstr "Комментарий обновлен"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.js
 msgid "commented"
-msgstr ""
+msgstr "прокомментировал(а)"
 
 #: src/components/activity/activity-helper.js
 msgid "Comments"
@@ -269,7 +273,7 @@ msgstr "Содержимое"
 
 #: src/components/activity/activity__history-title.js
 msgid "Content revised"
-msgstr ""
+msgstr "Содержимое изменено"
 
 #: src/components/wiki/code-renderer.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
@@ -304,7 +308,7 @@ msgstr "Отчет об ошибке отправлен"
 
 #: src/views/inbox-threads/inbox-threads__item-issue-created.js
 msgid "created"
-msgstr ""
+msgstr "создано"
 
 #: src/views/issue/issue__details.js
 msgid "Created by"
@@ -574,19 +578,19 @@ msgstr "Изменить список избранных проектов"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Mark all as read"
-msgstr ""
+msgstr "Отметить все как прочитанные"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mark as read"
-msgstr ""
+msgstr "Отметить как прочитанное"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mark as unread"
-msgstr ""
+msgstr "Отметить как непрочитанное"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Marked as read"
-msgstr ""
+msgstr "Помечено как прочитанное"
 
 #: src/views/issues/issues__count.js
 msgid "Matches {{issuesCount}} issue"
@@ -598,11 +602,11 @@ msgstr[3] "{{issuesCount}} совпадающих задач"
 
 #: src/views/inbox-threads/inbox-threads__mention.js
 msgid "mentioned you"
-msgstr ""
+msgstr "упомянул(а) вас"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "Mentions & Reactions"
-msgstr ""
+msgstr "Упоминания и реакции"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "merged the pull request"
@@ -610,7 +614,7 @@ msgstr "выполнил(а) мердж пул-реквеста"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mute thread"
-msgstr ""
+msgstr "Игнорировать тему"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "New Article"
@@ -622,7 +626,7 @@ msgstr "Новая задача"
 
 #: src/views/inbox-threads/inbox-threads__update-button.js
 msgid "New messages"
-msgstr ""
+msgstr "Новые сообщения"
 
 #: src/views/enter-server/enter-server.js
 msgid "Next"
@@ -659,7 +663,7 @@ msgstr "Ничего не нашлось"
 
 #: src/views/inbox-threads/inbox-threads__list.js
 msgid "No notifications"
-msgstr ""
+msgstr "Уведомлений нет"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "No type"
@@ -675,7 +679,7 @@ msgstr "Не удается найти!"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Notification settings…"
-msgstr ""
+msgstr "Настройки уведомлений…"
 
 #: src/views/inbox-threads/inbox-threads.js
 #: src/views/inbox/inbox.js
@@ -822,7 +826,7 @@ msgstr "Поделиться..."
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Show all"
-msgstr ""
+msgstr "Показать все"
 
 #: src/components/tags/tags.js
 msgid "Show all issues tagged with \"{{tagName}}\"..."
@@ -874,7 +878,7 @@ msgstr "создал(а) пул-реквест"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "Subscriptions"
-msgstr ""
+msgstr "Подписки"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Summary"
@@ -975,11 +979,11 @@ msgstr "Будут удалены все черновики, включая не
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Thread muted"
-msgstr ""
+msgstr "Тема игнорируется"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Thread unmuted"
-msgstr ""
+msgstr "Тема не игнорируется"
 
 #: src/views/article-create/article-create.js
 msgid "Title"
@@ -987,11 +991,11 @@ msgstr "Заголовок"
 
 #: src/components/activity/activity__history-title.js
 msgid "Title changed"
-msgstr ""
+msgstr "Заголовок изменен"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "To view an item in context, select an issue, article, or update from the list"
-msgstr ""
+msgstr "Для просмотра контекста выберите задачу, статью или обновление из списка"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
@@ -999,7 +1003,7 @@ msgstr "Чтобы просматривать в базе знаний стат�
 
 #: src/components/activity-stream/activity__stream-history.js
 msgid "Total votes"
-msgstr ""
+msgstr "Всего голосов"
 
 #: src/components/error-message/error-message.js
 msgid "Try Again"
@@ -1015,11 +1019,11 @@ msgstr "Карточки без категории"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Unmute thread"
-msgstr ""
+msgstr "Не игнорировать тему"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Unread only"
-msgstr ""
+msgstr "Только непрочитанные"
 
 #: src/components/articles/article-item-with-children.js
 msgid "Untitled"
@@ -1028,7 +1032,7 @@ msgstr "Без названия"
 #: src/views/inbox-threads/inbox-threads__item-history.js
 #: src/views/inbox-threads/inbox-threads__item-work.js
 msgid "updated"
-msgstr ""
+msgstr "обновлено"
 
 #: src/views/issue/issue__details.js
 msgid "Updated by"
@@ -1052,7 +1056,7 @@ msgstr "Изменения в VCS"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.js
 msgid "View comment"
-msgstr ""
+msgstr "Посмотреть комментарий"
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
@@ -1089,7 +1093,7 @@ msgstr "Введите текст комментария, @упоминайте 
 
 #: src/views/inbox-threads/inbox-threads__list.js
 msgid "You don’t have any unread notifications"
-msgstr ""
+msgstr "У вас нет непрочитанных уведомлений"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
