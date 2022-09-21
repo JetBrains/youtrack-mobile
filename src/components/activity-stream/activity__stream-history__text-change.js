@@ -20,7 +20,11 @@ const isMultiValueActivity = (activity: Activity) => {
     return field.customField && field.customField.fieldType && field.customField.fieldType.isMultiValue;
   }
 
-  if (activity?.added?.length > 1 || activity?.removed?.length > 1) {
+  if (
+    Array.isArray(activity?.added)
+      ? activity?.added?.length > 1
+      : Array.isArray(activity?.removed) ? activity?.removed?.length > 1 : false
+  ) {
     return true;
   }
 

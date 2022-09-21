@@ -39,12 +39,13 @@ const renderAttachmentChange = (activity: Object) => {
 
   return (
     <View key={activity.id}>
+      <Text style={styles.activityLabel}>{getActivityEventTitle(activity)}</Text>
       {hasAddedAttachments && (
         <StreamAttachments attachments={addedAndAvailable}/>
       )}
-      {addedAndLaterRemoved.length > 0 && addedAndLaterRemoved.map(
-        it => <Text style={styles.activityAdded} key={it.id}>{it.name}</Text>
-      )}
+      {addedAndLaterRemoved.length > 0 && <Text style={styles.activityAdded}>
+        {addedAndLaterRemoved.map(it => it.name).join(', ')}
+      </Text>}
 
       {removed.length > 0 &&
         <Text style={hasAddedAttachments && {marginTop: UNIT / 2}}>{activity.removed.map((it, index) =>
@@ -132,7 +133,8 @@ const StreamHistoryChange = ({activity, customFields, workTimeSettings = DEFAULT
       isActivityCategory.description(activity) ||
       isActivityCategory.summary(activity) ||
       isActivityCategory.project(activity) ||
-      isActivityCategory.issueResolved(activity)
+      isActivityCategory.issueResolved(activity) ||
+      isActivityCategory.attachmentRename(activity)
     ):
       return renderTextValueChange(activity, customFields);
     case Boolean(isActivityCategory.link(activity)):

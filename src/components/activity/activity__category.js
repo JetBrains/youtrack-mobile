@@ -163,6 +163,7 @@ isActivityCategory.articleDescription = isActivityCategory(activityArticleCatego
 isActivityCategory.articleMention = isActivityCategory(activityCategory.ARTICLE_MENTION);
 isActivityCategory.articleSummary = isActivityCategory(activityArticleCategory.SUMMARY);
 isActivityCategory.attachment = isActivityCategories([activityCategory.ATTACHMENTS, activityArticleCategory.ATTACHMENTS]);
+isActivityCategory.attachmentRename = isActivityCategory(activityCategory.ATTACHMENT_RENAME);
 isActivityCategory.comment = isActivityCategories([activityCategory.COMMENT, activityArticleCategory.COMMENT]);
 isActivityCategory.commentMention = isActivityCategory(activityCategory.COMMENT_MENTION);
 isActivityCategory.commentText = isActivityCategory(activityCategory.COMMENT_TEXT);

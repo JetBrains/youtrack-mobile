@@ -17,7 +17,10 @@ export default function getEventTitle(activity: Activity, omitFormatting?: boole
 export function getTitle(activity: Activity) {
   const eventField = activity.field;
   let label;
-  const eventsCount: number = (activity.added || []).length + (activity.removed || []).length;
+  const getCount = () => (
+    (Array.isArray(activity.added) ? activity.added.length : 0) +
+    (Array.isArray(activity.removed) ? activity.removed.length : 0)
+  );
   switch (true) {
   case !eventField:
     label = i18n('[Removed field]');
@@ -33,17 +36,20 @@ export function getTitle(activity: Activity) {
     break;
   case eventField.id === 'tag':
     label = i18nPlural(
-      eventsCount,
+      getCount(),
       'Tag',
       'Tags',
     );
     break;
   case eventField.id === 'attachments':
     label = i18nPlural(
-      eventsCount,
+      getCount(),
       'Attachment',
       'Attachments',
     );
+    break;
+  case eventField.id === 'attachment name':
+    label = i18n('Attachment name');
     break;
   case eventField.id === 'visible to':
     label = i18n('Visibility');
