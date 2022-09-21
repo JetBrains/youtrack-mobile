@@ -14,18 +14,12 @@ import type {Theme} from 'flow/Theme';
 import type {Node} from 'react';
 
 
-const StreamAttachments = ({attachments}: { attachments: ?Array<Attachment> }): Node => {
-  const files: Array<Attachment> = attachments || [];
+const StreamAttachments = ({attachments}: { attachments: Attachment[] }): Node => {
   const theme: Theme = useContext(ThemeContext);
-  const backendUrl: string = getApi().config.backendUrl;
 
-  return (
+  return attachments?.length && (
     <AttachmentsRow
-      attachments={(
-        files.length
-          ? ApiHelper.convertAttachmentRelativeToAbsURLs(files, backendUrl)
-          : []
-      )}
+      attachments={ApiHelper.convertAttachmentRelativeToAbsURLs(attachments, getApi().config.backendUrl)}
       attachingImage={null}
       onOpenAttachment={(type: string) => (
         usage.trackEvent(

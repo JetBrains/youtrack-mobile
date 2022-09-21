@@ -122,6 +122,7 @@ export const ISSUE_ACTIVITIES_FIELDS = toField([
       },
 
       VCS_INTEGRATION_FIELDS,
+      IssueFields.attachmentsBase,
     ],
     removed: [
       ISSUE_PROJECT_FIELDS,
@@ -130,8 +131,7 @@ export const ISSUE_ACTIVITIES_FIELDS = toField([
       IssueFields.ISSUE_COMMENTS_REMOVED_FIELDS,
 
       IssueFields.ISSUE_XSHORT_FIELDS,
-
-      'reaction',
+      IssueFields.attachmentsBase,
     ],
   },
 ]);

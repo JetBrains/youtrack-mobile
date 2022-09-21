@@ -154,13 +154,17 @@ const ISSUE_TAGS_FIELDS: any = toField([
   },
 ]);
 
-const ISSUE_ATTACHMENTS_FIELDS: any = toField([
-  'id',
-  'name',
-  'localizedName',
+const ISSUE_ATTACHMENTS_BASE_FIELDS: any = toField([
   'url',
   'thumbnailURL',
   'mimeType',
+]);
+
+const ISSUE_ATTACHMENTS_FIELDS: any = toField([
+  ISSUE_ATTACHMENTS_BASE_FIELDS,
+  'id',
+  'name',
+  'localizedName',
   'imageDimension(width,height)',
   'imageDimensions(width,height)',
   {author: ['ringId']},
@@ -369,6 +373,7 @@ const ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS: any = toField([
 
 export default {
   attachments: ISSUE_ATTACHMENTS_FIELDS,
+  attachmentsBase: ISSUE_ATTACHMENTS_BASE_FIELDS,
   issuesOnList: ISSUE_SHORT_FIELDS,
   singleIssueLinks: ISSUE_LINKS_FIELDS,
   issueLinkBase: ISSUE_LINKS_FIELDS_BASE,
