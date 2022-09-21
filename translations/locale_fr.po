@@ -157,7 +157,7 @@ msgstr "Pièce jointe supprimée"
 
 #: src/components/activity/activity__history-title.js
 msgid "Attachment name"
-msgstr ""
+msgstr "Nom de la pièce jointe"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Author"

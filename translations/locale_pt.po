@@ -157,7 +157,7 @@ msgstr "Anexo excluído"
 
 #: src/components/activity/activity__history-title.js
 msgid "Attachment name"
-msgstr ""
+msgstr "Nome do anexo"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Author"

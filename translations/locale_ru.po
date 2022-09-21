@@ -165,7 +165,7 @@ msgstr "Вложение удалено"
 
 #: src/components/activity/activity__history-title.js
 msgid "Attachment name"
-msgstr ""
+msgstr "Имя вложения"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Author"

@@ -157,7 +157,7 @@ msgstr "Anhang gelöscht"
 
 #: src/components/activity/activity__history-title.js
 msgid "Attachment name"
-msgstr ""
+msgstr "Name des Anhangs"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Author"
@@ -265,7 +265,7 @@ msgstr "Inhalt"
 
 #: src/components/activity/activity__history-title.js
 msgid "Content revised"
-msgstr ""
+msgstr "Inhalt überarbeitet"
 
 #: src/components/wiki/code-renderer.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
@@ -582,7 +582,7 @@ msgstr "Als ungelesen markieren"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Marked as read"
-msgstr ""
+msgstr "Als gelesen markiert"
 
 #: src/views/issues/issues__count.js
 msgid "Matches {{issuesCount}} issue"
@@ -616,7 +616,7 @@ msgstr "Neues Ticket"
 
 #: src/views/inbox-threads/inbox-threads__update-button.js
 msgid "New messages"
-msgstr ""
+msgstr "Neue Nachrichten"
 
 #: src/views/enter-server/enter-server.js
 msgid "Next"
@@ -967,11 +967,11 @@ msgstr "Diese Aktion löscht alle Entwürfe, einschließlich unveröffentlichter
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Thread muted"
-msgstr ""
+msgstr "Thread stummgeschaltet"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Thread unmuted"
-msgstr ""
+msgstr "Thread-Stummschaltung aufgehoben"
 
 #: src/views/article-create/article-create.js
 msgid "Title"
@@ -979,11 +979,11 @@ msgstr "Titel"
 
 #: src/components/activity/activity__history-title.js
 msgid "Title changed"
-msgstr ""
+msgstr "Titel geändert"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "To view an item in context, select an issue, article, or update from the list"
-msgstr ""
+msgstr "Um ein Element im Kontext anzuzeigen, wählen Sie ein Ticket, einen Artikel oder ein Update aus der Liste aus"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"

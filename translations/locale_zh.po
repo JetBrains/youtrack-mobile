@@ -153,7 +153,7 @@ msgstr "已删除附件"
 
 #: src/components/activity/activity__history-title.js
 msgid "Attachment name"
-msgstr ""
+msgstr "附件名称"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Author"

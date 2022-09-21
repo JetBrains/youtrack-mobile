@@ -157,7 +157,7 @@ msgstr "Archivo adjunto eliminado"
 
 #: src/components/activity/activity__history-title.js
 msgid "Attachment name"
-msgstr ""
+msgstr "Nombre del archivo adjunto"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "Author"
