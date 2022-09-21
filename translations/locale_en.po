@@ -817,7 +817,7 @@ msgid "Show all issues tagged with \"{{tagName}}\"..."
 msgstr "Show all issues tagged with \"{{tagName}}\"..."
 
 #: src/components/activity-stream/activity__stream-vcs.js:185
-#: src/views/inbox-threads/inbox-threads__subscription.js:96
+#: src/views/inbox-threads/inbox-threads__subscription.js:97
 msgid "Show more"
 msgstr "Show more"
 

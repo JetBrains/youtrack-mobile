@@ -296,7 +296,7 @@ msgstr "충돌 보고서 전송됨"
 
 #: src/views/inbox-threads/inbox-threads__item-issue-created.js
 msgid "created"
-msgstr ""
+msgstr "생성 일시"
 
 #: src/views/issue/issue__details.js
 msgid "Created by"
@@ -1014,7 +1014,7 @@ msgstr "제목 없음"
 #: src/views/inbox-threads/inbox-threads__item-history.js
 #: src/views/inbox-threads/inbox-threads__item-work.js
 msgid "updated"
-msgstr ""
+msgstr "업데이트 일시"
 
 #: src/views/issue/issue__details.js
 msgid "Updated by"
