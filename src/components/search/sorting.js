@@ -34,6 +34,10 @@ export function sortByTimestampReverse(a: Object & { timestamp: number }, b: Obj
   return doSortBy(a, b, 'timestamp', true);
 }
 
+export function sortByTimestamp(a: Object & { timestamp: number }, b: Object & { timestamp: number }): number {
+  return doSortBy(a, b, 'timestamp');
+}
+
 export function sortByUpdatedReverse(a: Object & { updated: number }, b: Object & { updated: number }): number {
   return doSortBy(a, b, 'updated', true);
 }

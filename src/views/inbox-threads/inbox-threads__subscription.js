@@ -12,6 +12,7 @@ import {createMessagesMap, sortEvents} from './inbox-threads-helper';
 import {groupActivities} from 'components/activity/activity__group-activities';
 import {i18n} from 'components/i18n/i18n';
 import {mergeActivities} from 'components/activity/activity__merge-activities';
+import {sortByTimestamp} from 'components/search/sorting';
 import {splitActivities} from 'components/activity/activity__split-activities';
 
 import styles from './inbox-threads.styles';
@@ -65,7 +66,7 @@ export default function InboxThreadItemSubscription({
 
   const splittedMessageGroups = messageGroups.map(group => {
     group.events = sortEvents(group.events);
-    const mergedActivities = mergeActivities(group.events);
+    const mergedActivities = mergeActivities(group.events).sort(sortByTimestamp);
     return splitActivities(mergedActivities, group.activityToMessageMap);
   }).filter(splittedGroup => splittedGroup.length > 0).reduce((acc, it) => acc.concat(it), []);
 
