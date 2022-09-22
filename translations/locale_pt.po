@@ -265,7 +265,7 @@ msgstr "Conteúdo"
 
 #: src/components/activity/activity__history-title.js
 msgid "Content revised"
-msgstr ""
+msgstr "Conteúdo revisado"
 
 #: src/components/wiki/code-renderer.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
@@ -582,7 +582,7 @@ msgstr "Marcar como não lido"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Marked as read"
-msgstr ""
+msgstr "Marcado como lido"
 
 #: src/views/issues/issues__count.js
 msgid "Matches {{issuesCount}} issue"
@@ -616,7 +616,7 @@ msgstr "Nova Issue"
 
 #: src/views/inbox-threads/inbox-threads__update-button.js
 msgid "New messages"
-msgstr ""
+msgstr "Novas mensagens"
 
 #: src/views/enter-server/enter-server.js
 msgid "Next"
@@ -967,11 +967,11 @@ msgstr "Esta ação exclui todos os rascunhos, inclusive sub-artigos não public
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Thread muted"
-msgstr ""
+msgstr "Tópico silenciado"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Thread unmuted"
-msgstr ""
+msgstr "Tópico não silenciado"
 
 #: src/views/article-create/article-create.js
 msgid "Title"
@@ -979,11 +979,11 @@ msgstr "Título"
 
 #: src/components/activity/activity__history-title.js
 msgid "Title changed"
-msgstr ""
+msgstr "Título alterado"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "To view an item in context, select an issue, article, or update from the list"
-msgstr ""
+msgstr "Para visualizar um item em contexto, selecione um issue, artigo ou atualização da lista"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"

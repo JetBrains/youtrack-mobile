@@ -261,7 +261,7 @@ msgstr "내용"
 
 #: src/components/activity/activity__history-title.js
 msgid "Content revised"
-msgstr ""
+msgstr "내용 수정됨"
 
 #: src/components/wiki/code-renderer.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
@@ -566,19 +566,19 @@ msgstr "즐겨찾는 프로젝트 관리"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Mark all as read"
-msgstr ""
+msgstr "모두 읽음으로 표시"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mark as read"
-msgstr ""
+msgstr "읽음으로 표시"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mark as unread"
-msgstr ""
+msgstr "읽지 않음으로 표시"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Marked as read"
-msgstr ""
+msgstr "읽음으로 표시됨"
 
 #: src/views/issues/issues__count.js
 msgid "Matches {{issuesCount}} issue"
@@ -587,11 +587,11 @@ msgstr[0] " {{issuesCount}} 건이 존재합니다."
 
 #: src/views/inbox-threads/inbox-threads__mention.js
 msgid "mentioned you"
-msgstr ""
+msgstr "사용자를 멘션함"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "Mentions & Reactions"
-msgstr ""
+msgstr "멘션 및 감정 이모티콘"
 
 #: src/components/activity-stream/activity__stream-vcs.js
 msgid "merged the pull request"
@@ -599,7 +599,7 @@ msgstr "풀 리퀘스트가 병합됨"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Mute thread"
-msgstr ""
+msgstr "스레드 끄기"
 
 #: src/views/knowledge-base/knowledge-base-actions.js
 msgid "New Article"
@@ -611,7 +611,7 @@ msgstr "새 이슈"
 
 #: src/views/inbox-threads/inbox-threads__update-button.js
 msgid "New messages"
-msgstr ""
+msgstr "새 메시지"
 
 #: src/views/enter-server/enter-server.js
 msgid "Next"
@@ -648,7 +648,7 @@ msgstr "항목 없음"
 
 #: src/views/inbox-threads/inbox-threads__list.js
 msgid "No notifications"
-msgstr ""
+msgstr "알림 없음"
 
 #: src/views/issue/activity/activity__add-spent-time.js
 msgid "No type"
@@ -811,7 +811,7 @@ msgstr "공유…"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Show all"
-msgstr ""
+msgstr "모두 표시"
 
 #: src/components/tags/tags.js
 msgid "Show all issues tagged with \"{{tagName}}\"..."
@@ -863,7 +863,7 @@ msgstr "풀 리퀘스트를 제출함"
 
 #: src/views/inbox-threads/inbox-threads-helper.js
 msgid "Subscriptions"
-msgstr ""
+msgstr "구독"
 
 #: src/views/settings/settings__feedback-form.js
 msgid "Summary"
@@ -961,11 +961,11 @@ msgstr "이 액션은 게시되지 않은 하위 자료를 포함해 모든 초�
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Thread muted"
-msgstr ""
+msgstr "스레드 꺼짐"
 
 #: src/views/inbox-threads/inbox-threads-actions.js
 msgid "Thread unmuted"
-msgstr ""
+msgstr "스레드 끄기 해제됨"
 
 #: src/views/article-create/article-create.js
 msgid "Title"
@@ -973,11 +973,11 @@ msgstr "제목"
 
 #: src/components/activity/activity__history-title.js
 msgid "Title changed"
-msgstr ""
+msgstr "제목 변경됨"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "To view an item in context, select an issue, article, or update from the list"
-msgstr ""
+msgstr "컨텍스트 내 항목을 보려면 목록에서 이슈나 자료, 업데이트를 선택하세요"
 
 #: src/views/knowledge-base/knowledge-base.js
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
@@ -985,7 +985,7 @@ msgstr "특정 프로젝트에 대한 지식 기반의 자료를 보려면 즐�
 
 #: src/components/activity-stream/activity__stream-history.js
 msgid "Total votes"
-msgstr ""
+msgstr "총 투표"
 
 #: src/components/error-message/error-message.js
 msgid "Try Again"
@@ -1001,11 +1001,11 @@ msgstr "분류되지 않은 카드"
 
 #: src/views/inbox-threads/inbox-threads__thread.js
 msgid "Unmute thread"
-msgstr ""
+msgstr "스레드 켜기"
 
 #: src/views/inbox-threads/inbox-threads.js
 msgid "Unread only"
-msgstr ""
+msgstr "읽지 않은 항목만"
 
 #: src/components/articles/article-item-with-children.js
 msgid "Untitled"
@@ -1038,7 +1038,7 @@ msgstr "VCS 변경사항"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.js
 msgid "View comment"
-msgstr ""
+msgstr "주석 보기"
 
 #: src/views/issue/issue__details.js
 msgid "View comments and other activity"
@@ -1075,7 +1075,7 @@ msgstr "코멘트를 작성하거나, 다른 사람을 @멘션하세요"
 
 #: src/views/inbox-threads/inbox-threads__list.js
 msgid "You don’t have any unread notifications"
-msgstr ""
+msgstr "읽지 않은 알림이 없습니다"
 
 #: src/views/inbox/inbox.js
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
