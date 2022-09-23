@@ -18,7 +18,7 @@ import Issue from '../issue/issue';
 import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
 import Router from 'components/router/router';
 import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
-import {folderIdMap, threadTabsTitles} from './inbox-threads-helper';
+import {folderIdMap, getThreadTabsTitles} from './inbox-threads-helper';
 import {getStorageState} from 'components/storage/storage';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
@@ -36,13 +36,12 @@ import type {TabRoute} from 'flow/Issue';
 import type {Theme, UIThemeColors} from 'flow/Theme';
 import type {ThreadEntity} from 'flow/Inbox';
 
-const routes: TabRoute[] = threadTabsTitles.map((name: string, index: number) => ({
-  key: index,
-  title: name,
-  id: folderIdMap[index],
-}));
-
 const InboxThreads: () => Node = (): Node => {
+  const routes: TabRoute[] = getThreadTabsTitles().map((name: string, index: number) => ({
+    key: index,
+    title: name,
+    id: folderIdMap[index],
+  }));
   const dispatch = useDispatch();
   const {showActionSheetWithOptions} = useActionSheet();
 

@@ -85,7 +85,7 @@ function getThreadData(thread: InboxThread): ThreadData {
   return threadData;
 }
 
-const threadTabsTitles: string[] = [
+const getThreadTabsTitles: () => string[] = () => [
   i18n('All'),
   i18n('Mentions & Reactions'),
   i18n('Subscriptions'),
@@ -105,6 +105,6 @@ export {
   folderIdMap,
   getThreadData,
   getTypes,
-  threadTabsTitles,
+  getThreadTabsTitles,
   sortEvents,
 };
