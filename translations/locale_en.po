@@ -176,7 +176,7 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/views/article/arcticle-actions.js:471
 #: src/views/create-issue/create-issue-actions.js:334
 #: src/views/inbox-threads/inbox-threads__thread.js:139
-#: src/views/inbox-threads/inbox-threads.js:211
+#: src/views/inbox-threads/inbox-threads.js:210
 #: src/views/issue/activity/issue-activity__comment-actions.js:306
 #: src/views/issue/issue-base-actions-creater.js:519
 #: src/views/issue/issue-base-actions-creater.js:550
@@ -562,7 +562,7 @@ msgstr "Logs"
 msgid "Manage Favorite Projects"
 msgstr "Manage Favorite Projects"
 
-#: src/views/inbox-threads/inbox-threads.js:198
+#: src/views/inbox-threads/inbox-threads.js:197
 msgid "Mark all as read"
 msgstr "Mark all as read"
 
@@ -616,7 +616,7 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.js:352
+#: src/components/activity-stream/activity__stream.js:349
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -661,11 +661,11 @@ msgstr "No user information provided by Upsource."
 msgid "Nope, can't find it!"
 msgstr "Nope, can't find it!"
 
-#: src/views/inbox-threads/inbox-threads.js:205
+#: src/views/inbox-threads/inbox-threads.js:204
 msgid "Notification settings…"
 msgstr "Notification settings…"
 
-#: src/views/inbox-threads/inbox-threads.js:182
+#: src/views/inbox-threads/inbox-threads.js:181
 #: src/views/inbox/inbox.js:603
 msgid "Notifications"
 msgstr "Notifications"
@@ -808,7 +808,7 @@ msgstr "Share logs"
 msgid "Share…"
 msgstr "Share…"
 
-#: src/views/inbox-threads/inbox-threads.js:191
+#: src/views/inbox-threads/inbox-threads.js:190
 msgid "Show all"
 msgstr "Show all"
 
@@ -975,7 +975,7 @@ msgstr "Title"
 msgid "Title changed"
 msgstr "Title changed"
 
-#: src/views/inbox-threads/inbox-threads.js:111
+#: src/views/inbox-threads/inbox-threads.js:110
 msgid "To view an item in context, select an issue, article, or update from the list"
 msgstr "To view an item in context, select an issue, article, or update from the list"
 
@@ -1003,7 +1003,7 @@ msgstr "Uncategorized Cards"
 msgid "Unmute thread"
 msgstr "Unmute thread"
 
-#: src/views/inbox-threads/inbox-threads.js:191
+#: src/views/inbox-threads/inbox-threads.js:190
 msgid "Unread only"
 msgstr "Unread only"
 
