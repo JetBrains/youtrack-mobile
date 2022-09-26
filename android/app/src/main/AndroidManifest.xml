@@ -25,45 +25,91 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/notification_icon"/>
+            android:resource="@drawable/notification_icon" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/notification_icon_color"/>
+            android:resource="@color/notification_icon_color" />
 
         <activity
             android:name="com.jetbrains.youtrack.mobile.app.MainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleInstance"
-            android:windowSoftInputMode="adjustResize"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
-          <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-          </intent-filter>
+            android:windowSoftInputMode="adjustResize">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="*.jetbrains.com"
+                    android:pathPattern="/issues.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.jetbrains.com"
+                    android:pathPattern="/issue/.*"
+                    android:scheme="https" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="*.myjetbrains.com"
+                    android:pathPattern="/issues.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.myjetbrains.com"
+                    android:pathPattern="/youtrack/issues.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.myjetbrains.com"
+                    android:pathPattern="/issue/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.myjetbrains.com"
+                    android:pathPattern="/youtrack/issue/.*"
+                    android:scheme="https" />
+            </intent-filter>
+
             <intent-filter android:label="YouTrack Mobile">
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
 
-          <data android:scheme="https" android:host="*" android:pathPattern="/.*issue/.*"/>
-          <data android:scheme="http" android:host="*" android:pathPattern="/.*issue/.*"/>
-          <data android:scheme="http" android:host="*" android:pathPattern="/.*issue/.*"/>
-          <data android:scheme="https" android:host="*" android:pathPattern="/.*youtrack/issues"/>
-          <data android:scheme="http" android:host="*" android:pathPattern="/.*youtrack/issues"/>
-          <data android:scheme="https" android:host="*" android:pathPattern="/.*issueMobile/.*"/>
-          <data android:scheme="http" android:host="*" android:pathPattern="/.*issueMobile/.*"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-          <data android:scheme="https" android:host="*.jetbrains.com" android:pathPattern="/.*issues"/>
-          <data android:scheme="http" android:host="*.jetbrains.com" android:pathPattern="/.*issues"/>
+                <data
+                    android:host="*.youtrack.cloud"
+                    android:pathPattern="/issues.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.youtrack.cloud"
+                    android:pathPattern="/youtrack/issues.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.youtrack.cloud"
+                    android:pathPattern="/issue/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.youtrack.cloud"
+                    android:pathPattern="/youtrack/issue/.*"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
 
-          <data android:scheme="https" android:host="*.myjetbrains.com" android:pathPattern="/.*issues"/>
-          <data android:scheme="http" android:host="*.myjetbrains.com" android:pathPattern="/.*issues"/>
-          <data android:scheme="https" android:host="*.youtrack.cloud" android:pathPattern="/.*issues"/>
-          <data android:scheme="http" android:host="*.youtrack.cloud" android:pathPattern="/.*issues"/>
-        </intent-filter>
-      </activity>
-
-      <meta-data android:name="com.bugsnag.android.API_KEY" android:value="7556455bdf436a79d8bd19eb7cacc0ce" />
+        <meta-data
+            android:name="com.bugsnag.android.API_KEY"
+            android:value="7556455bdf436a79d8bd19eb7cacc0ce" />
     </application>
 </manifest>
