@@ -57,6 +57,10 @@
                     android:host="*.jetbrains.com"
                     android:pathPattern="/issue/.*"
                     android:scheme="https" />
+                <data
+                    android:host="*.jetbrains.com"
+                    android:pathPattern="/articles/.*"
+                    android:scheme="https" />
             </intent-filter>
 
             <intent-filter>
@@ -81,6 +85,14 @@
                     android:host="*.myjetbrains.com"
                     android:pathPattern="/youtrack/issue/.*"
                     android:scheme="https" />
+                <data
+                    android:host="*.myjetbrains.com"
+                    android:pathPattern="/articles/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.myjetbrains.com"
+                    android:pathPattern="/youtrack/articles/.*"
+                    android:scheme="https" />
             </intent-filter>
 
             <intent-filter android:label="YouTrack Mobile">
@@ -104,6 +116,14 @@
                 <data
                     android:host="*.youtrack.cloud"
                     android:pathPattern="/youtrack/issue/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.youtrack.cloud"
+                    android:pathPattern="/articles/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.youtrack.cloud"
+                    android:pathPattern="/youtrack/articles/.*"
                     android:scheme="https" />
             </intent-filter>
         </activity>
