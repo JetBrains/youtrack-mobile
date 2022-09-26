@@ -276,8 +276,11 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
     );
 
     const targetActivityId: ?string = highlight?.commentId || highlight?.activityId;
+    const _comment: ?IssueComment = getCommentFromActivityGroup(activityGroup);
     const hasHighlightedActivity: boolean = !!targetActivityId && (
-      id === targetActivityId || events.some(it => it.id === targetActivityId)
+      id === targetActivityId ||
+      events.some(it => it.id === targetActivityId) ||
+      (!!_comment && _comment.id === highlight?.commentId)
     );
     const Component = hasHighlightedActivity ? Animated.View : View;
 
@@ -287,6 +290,9 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
         onLayout={(event) => {
           if (activities?.length) {
             layoutMap.current[id] = event.nativeEvent.layout;
+            if (_comment?.id) {
+              layoutMap.current[_comment.id] = event.nativeEvent.layout;
+            }
             events.forEach((it: Activity) => layoutMap.current[it.id] = event.nativeEvent.layout);
           }
         }}
