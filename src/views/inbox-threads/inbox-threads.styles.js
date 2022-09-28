@@ -212,9 +212,9 @@ export default EStyleSheet.create({
   threadUpdateButton: {
     position: 'absolute',
     zIndex: 1,
-    top: UNIT * 7.5,
+    top: UNIT * 8.5,
     alignSelf: 'center',
-    paddingVertical: UNIT / 1.5,
+    paddingVertical: UNIT,
     paddingHorizontal: UNIT * 2.5,
     borderRadius: UNIT * 3,
     backgroundColor: '$link',
