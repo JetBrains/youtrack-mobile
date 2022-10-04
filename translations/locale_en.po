@@ -79,7 +79,7 @@ msgid "Add to favorites"
 msgstr "Add to favorites"
 
 #: src/views/inbox-threads/inbox-threads__reactions.js:40
-#: src/views/inbox/inbox.js:498
+#: src/views/inbox/inbox.js:499
 msgid "added a reaction"
 msgstr "added a reaction"
 
@@ -608,7 +608,7 @@ msgstr "New Article"
 msgid "New Issue"
 msgstr "New Issue"
 
-#: src/views/inbox-threads/inbox-threads__update-button.js:43
+#: src/views/inbox-threads/inbox-threads__update-button.js:44
 msgid "New messages"
 msgstr "New messages"
 
@@ -666,7 +666,7 @@ msgid "Notification settings…"
 msgstr "Notification settings…"
 
 #: src/views/inbox-threads/inbox-threads.js:181
-#: src/views/inbox/inbox.js:603
+#: src/views/inbox/inbox.js:604
 msgid "Notifications"
 msgstr "Notifications"
 
@@ -716,7 +716,7 @@ msgid "Remove tag"
 msgstr "Remove tag"
 
 #: src/views/inbox-threads/inbox-threads__reactions.js:41
-#: src/views/inbox/inbox.js:498
+#: src/views/inbox/inbox.js:499
 msgid "removed a reaction"
 msgstr "removed a reaction"
 
@@ -752,7 +752,7 @@ msgstr "Search for the project"
 msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
-#: src/views/inbox/inbox.js:637
+#: src/views/inbox/inbox.js:638
 #: src/views/issues/issues.js:562
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
@@ -1077,7 +1077,7 @@ msgstr "Write a comment, @mention people"
 msgid "You don’t have any unread notifications"
 msgstr "You don’t have any unread notifications"
 
-#: src/views/inbox/inbox.js:567
+#: src/views/inbox/inbox.js:568
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 msgstr "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 
