@@ -147,7 +147,7 @@ export const ActivityCategory: {
 
 export const isActivityCategory = (function (categoryId: string): ((activity: any) => boolean) {
   return function (activity: Object) {
-    return activity ? activity.category.id === categoryId : false;
+    return activity?.category ? activity.category?.id === categoryId : false;
   };
 }: any);
 

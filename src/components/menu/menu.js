@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Dimensions, View} from 'react-native';
 
 import * as Progress from 'react-native-progress';
@@ -8,7 +8,6 @@ import {View as AnimatedView} from 'react-native-animatable';
 import {useDispatch, useSelector} from 'react-redux';
 
 import Router from '../router/router';
-import useInterval from 'components/hooks/use-interval';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 import {folderIdMap} from 'views/inbox-threads/inbox-threads-helper';
 import {getStorageState} from 'components/storage/storage';
@@ -30,18 +29,22 @@ export const menuPollInboxStatusDelay: number = 60 * 1000;
 
 export default function () {
   const dispatch = useDispatch();
+  const interval = useRef();
 
-  const isInboxEnabled: boolean = checkVersion(FEATURE_VERSION.inbox, true);
-  const isInboxThreadsEnabled: boolean = checkVersion(FEATURE_VERSION.inboxThreads, true);
-  const isKBEnabled: boolean = checkVersion(FEATURE_VERSION.knowledgeBase, true);
+  const isInboxEnabled: boolean = checkVersion(FEATURE_VERSION.inbox);
+  const isInboxThreadsEnabled: boolean = checkVersion(FEATURE_VERSION.inboxThreads);
+  const isKBEnabled: boolean = checkVersion(FEATURE_VERSION.knowledgeBase);
 
-  const hasInboxUpdate: boolean = isInboxThreadsEnabled && useSelector((appState: AppState) => {
+  const hasNewNotifications: boolean = useSelector((appState: AppState) => {
+    if (!isInboxThreadsEnabled) {
+      return false;
+    }
     const inboxFolders: InboxFolder[] = appState.app.inboxThreadsFolders.filter(
       (it) => it?.id === folderIdMap[1] || it?.id === folderIdMap[2]
     ) || [];
     return inboxFolders.length > 0 && inboxFolders.some(it => it?.lastNotified > it?.lastSeen);
   });
-  const isDisabled: boolean = useSelector((appState: AppState) => appState.app.isChangingAccount);
+  const isChangingAccount: boolean = useSelector((appState: AppState) => appState.app.isChangingAccount);
   const isInProgress: boolean = useSelector((appState: AppState) => appState.app.isInProgress);
   const setInboxHasUpdateStatus = useCallback(
     () => {
@@ -57,14 +60,24 @@ export default function () {
   const [splitView, updateSplitView] = useState(isSplitView());
 
 
-  if (isInboxThreadsEnabled) {
-    useInterval(setInboxHasUpdateStatus, menuPollInboxStatusDelay);
-  }
-
   useEffect(() => {
-    if (isInboxThreadsEnabled) {
+    const unsubscribe = () => {
+      if (interval.current) {
+        clearInterval(interval.current);
+        interval.current = null;
+      }
+    };
+    if (isInboxThreadsEnabled && !isChangingAccount) {
+      unsubscribe();
+      interval.current = setInterval(setInboxHasUpdateStatus, menuPollInboxStatusDelay);
       setInboxHasUpdateStatus();
     }
+    return unsubscribe;
+
+  }, [isInboxThreadsEnabled, setInboxHasUpdateStatus, isChangingAccount]);
+
+
+  useEffect(() => {
     const unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: ?string, prevRouteName: ?string) => {
       updateRoutes({
         currentRouteName: routeName,
@@ -72,7 +85,6 @@ export default function () {
       });
     });
     return () => unsubscribeOnDispatch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -120,7 +132,7 @@ export default function () {
   };
 
   const canNavigateTo = (routeName: string) => {
-    if (isDisabled) {
+    if (isChangingAccount) {
       return false;
     }
     if (
@@ -178,7 +190,7 @@ export default function () {
 
   const color = (routeName: string) => {
     return (
-      isDisabled
+      isChangingAccount
         ? styles.disabled.color
         : isActiveRoute(routeName) ? styles.link.color : styles.icon.color
     );
@@ -228,7 +240,7 @@ export default function () {
           testID="test:id/menuNotifications"
           icon={
             <View>
-              {hasInboxUpdate && !isActiveRoute(isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox) && (
+              {isInboxThreadsEnabled && hasNewNotifications && !isActiveRoute(isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox) && (
                 <AnimatedView
                   useNativeDriver
                   duration={1000}

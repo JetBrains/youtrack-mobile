@@ -30,7 +30,6 @@ import WikiPage from 'views/wiki-page/wiki-page';
 import {ActionSheetProvider, connectActionSheet} from '@expo/react-native-action-sheet';
 import {Notifications} from 'react-native-notifications';
 import {onNavigateBack, setAccount} from 'actions/app-actions';
-import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 import {rootRoutesList, routeMap} from './app-routes';
 
 import type {Node} from 'react';
@@ -113,9 +112,7 @@ class YouTrackMobile extends Component<void, void> {
     Router.registerRoute({name: routeMap.CreateIssue, component: CreateIssue, modal: true});
     Router.registerRoute({name: routeMap.PreviewFile, component: PreviewFile, modal: true});
     Router.registerRoute({name: routeMap.Inbox, component: Inbox, type: 'reset'});
-    if (checkVersion(FEATURE_VERSION.inboxThreads, true)) {
-      Router.registerRoute({name: routeMap.InboxThreads, component: InboxThreads, type: 'reset'});
-    }
+    Router.registerRoute({name: routeMap.InboxThreads, component: InboxThreads, type: 'reset'});
     Router.registerRoute({
       name: routeMap.Issue,
       component: Issue,

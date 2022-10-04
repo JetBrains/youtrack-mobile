@@ -15,7 +15,6 @@ import issueList from 'views/issues/issues-reducers';
 import issueModalState from 'views/issue/modal/issue.modal-reducers';
 import issueState from 'views/issue/issue-reducers';
 import inboxThreads from 'views/inbox-threads/inbox-threads-reducers';
-import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 
 import type {AgilePageState} from 'views/agile-board/board-reducers';
 import type {RootState} from './app-reducer';
@@ -46,21 +45,18 @@ export type AppState = {
   inboxThreads: InboxThreadState,
 };
 
-export default (combineReducers(Object.assign(
-  {
-    agile,
-    app,
-    article,
-    articleCreate,
-    articles,
-    creation,
-    inbox,
-    issueActivity,
-    issueCommentActivity,
-    issueList,
-    issueState,
-    issueModalState,
-    inboxThreads,
-  },
-  checkVersion(FEATURE_VERSION.inboxThreads, false) ? inboxThreads : {}
-)): any);
+export default (combineReducers({
+  agile,
+  app,
+  article,
+  articleCreate,
+  articles,
+  creation,
+  inbox,
+  issueActivity,
+  issueCommentActivity,
+  issueList,
+  issueState,
+  issueModalState,
+  inboxThreads,
+}): any);

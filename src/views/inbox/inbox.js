@@ -295,6 +295,7 @@ class Inbox extends Component<Props, State> {
     const {issueLinkTypes} = this.props;
     const textChangeEventName = (e: ChangeEvent): string => getEventTitle(
       {
+        ...e,
         field: {
           id: e.category.toLowerCase(),
           presentation: e.name,

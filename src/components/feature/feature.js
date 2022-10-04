@@ -22,14 +22,14 @@ function convertToNumber(semverVersion: string) {
   }, 0);
 }
 
-export const checkVersion = (version?: string, returnOnThrow?: boolean): boolean => {
+export const checkVersion = (versionToCheck?: string, returnOnThrow?: boolean): boolean => {
   try {
-    const {version: serverVersion} = getApi().config;
+    const {version} = getApi().config;
 
-    if (version) {
-      return convertToNumber(serverVersion) >= convertToNumber(version);
+    if (versionToCheck && version) {
+      return convertToNumber(version) >= convertToNumber(versionToCheck);
     } else {
-      return true;
+      return false;
     }
   } catch (e) {
     return returnOnThrow !== undefined ? returnOnThrow : false;
