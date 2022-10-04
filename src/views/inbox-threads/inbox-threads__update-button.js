@@ -25,7 +25,8 @@ const InboxThreadsUpdateButton = ({index}: { index: number }) => {
     if (index === 0) {
       return inboxThreadsFolders.some((it: InboxFolder) => it.lastNotified > it.lastSeen);
     }
-    return inboxThreadsFolders[index - 1].lastNotified > inboxThreadsFolders[index - 1].lastSeen;
+    const inboxFolder: ?InboxFolder = inboxThreadsFolders[index - 1];
+    return inboxFolder ? inboxFolder.lastNotified > inboxFolder.lastSeen : false;
   };
 
   return !inProgress && isUpdateButtonVisible() && (
