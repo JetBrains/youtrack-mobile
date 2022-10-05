@@ -3,14 +3,17 @@ import {DeviceEventEmitter, Linking} from 'react-native';
 import qs from 'qs';
 import log from '../log/log';
 
-const issueIdReg = /issue(Mobile)?\/([\w-\d]+)/;
+const issueIdReg = /issue\/([\w-\d]+)/;
+const articleIdReg = /articles\/([\w-\d]+)/;
 
-export function extractId(issueUrl: ?string): null | RegExp$matchResult | string {
-  if (issueUrl) {
-    const match = decodeURIComponent(issueUrl).match(issueIdReg);
-    return match && match[2];
-  }
-  return null;
+export function extractIssueId(issueUrl: string = ''): string | null {
+  const match = decodeURIComponent(issueUrl).match(issueIdReg);
+  return match && match[1];
+}
+
+export function extractArticleId(issueUrl: string = ''): string | null {
+  const match = decodeURIComponent(issueUrl).match(articleIdReg);
+  return match && match[1];
 }
 
 function extractIssuesQuery(issuesUrl: ?string) {
@@ -29,13 +32,18 @@ function extractIssuesQuery(issuesUrl: ?string) {
   return query;
 }
 
-function parseUrl(url, onIssueIdDetected, onQueryDetected) {
-  const id = extractId(url);
-  if (id) {
-    log.info(`Issue ID detected in URL: ${id}`);
-    return onIssueIdDetected(url, id);
+function parseUrl(url: string, onIssueIdDetected, onQueryDetected) {
+  const issueId: ?string = extractIssueId(url);
+  const articleId: ?string = extractArticleId(url);
+  if (issueId || articleId) {
+    log.info(
+      issueId
+        ? `Issue ID detected in URL: ${issueId}`
+        : articleId ? `Article ID detected in URL: ${articleId}` : ''
+    );
+    return onIssueIdDetected(url, issueId, articleId);
   } else {
-    log.info(`(parseUrl): cannot extract issue id from ${url}`);
+    log.info(`(parseUrl): cannot extract entity id from ${url}`);
   }
 
   const query = extractIssuesQuery(url);
@@ -48,8 +56,8 @@ function parseUrl(url, onIssueIdDetected, onQueryDetected) {
 }
 
 export default function openByUrlDetector(
-  onIssueIdDetected: (url: ?string, issueId: string) => any,
-  onQueryDetected: (url: ?string, query: string) => any
+  onIssueIdDetected: (url: string, issueId: ?string, articleId: ?string) => any,
+  onQueryDetected: (url: string, query: string) => any
 ): (() => void) {
   Linking.getInitialURL().then((url: ?string) => {
     log.debug(`App has been initially started with URL "${url || 'NOPE'}"`);
@@ -60,8 +68,8 @@ export default function openByUrlDetector(
     return parseUrl(url, onIssueIdDetected, onQueryDetected);
   });
 
-  function onOpenWithUrl(event) {
-    const url = event.url || event;
+  function onOpenWithUrl(event: any) {
+    const url: string = event.url || event;
     log.debug(`Linking URL event fired with URL "${url}"`);
 
     return parseUrl(url, onIssueIdDetected, onQueryDetected);

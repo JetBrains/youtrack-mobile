@@ -9,7 +9,7 @@ import Router from '../router/router';
 import {renderWikiCode} from './code-renderer';
 import {renderImage, renderTable, renderTableRow, renderTableCell} from './youtrack-wiki__renderers';
 import {getBaseUrl} from '../config/config';
-import {extractId} from '../open-url-handler/open-url-handler';
+import {extractIssueId} from '../open-url-handler/open-url-handler';
 import {hasMimeType} from '../mime-type/mime-type';
 import {nodeHasType} from './youtrack-wiki__node-type';
 import {showMoreInlineText} from '../text-view/text-view';
@@ -48,7 +48,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
 
 
   handleLinkPress: ((url: string) => any | Promise<void>) = (url: string) => {
-    const issueId = extractId(url);
+    const issueId = extractIssueId(url);
 
     if (issueId) {
       return this.props.onIssueIdTap(issueId);

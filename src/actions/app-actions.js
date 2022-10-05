@@ -591,13 +591,19 @@ export function cacheProjects(): ((
 function subscribeToURL(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     openByUrlDetector(
-      (url, issueId) => {
+      (url, issueId: ?string, articleId: ?string) => {
         if (!getIsAuthorized()) {
           log.debug('User is not authorized, URL won\'t be opened');
           return;
         }
         usage.trackEvent('app', 'Open issue in app by URL');
-        Router.Issue({issueId}, {forceReset: true});
+        if (issueId) {
+          Router.Issue({issueId}, {forceReset: true});
+        } else if (articleId) {
+          Router.Article({articlePlaceholder: {id: articleId}}, {forceReset: true});
+        } else {
+          Router.navigateToDefaultRoute();
+        }
       },
       (url, searchQuery) => {
         if (!getIsAuthorized()) {
