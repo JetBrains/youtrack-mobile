@@ -90,7 +90,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async getArticleDrafts(original?: string): Promise<Array<ArticleDraft>> {
     const originalParam: string = `&original=${original || 'null'}`;
-    const url: string = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/?${this.articleFieldsQuery}${originalParam}&$top=1000`;
+    const url: string = `${this.youTrackApiUrl}/users/me/articleDrafts/?${this.articleFieldsQuery}${originalParam}&$top=1000`;
     const articleDrafts: Array<ArticleDraft> = await this.makeAuthorizedRequest(url, 'GET');
     return articleDrafts.map((it: ArticleDraft) => {
       it.attachments = this.convertAttachmentsURL(it.attachments);
@@ -100,7 +100,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async createArticleDraft(articleId?: string): Promise<ArticleDraft> {
     const draft: ArticleDraft = await this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/admin/users/me/articleDrafts?${this.articleFieldsQuery}`,
+      `${this.youTrackApiUrl}/users/me/articleDrafts?${this.articleFieldsQuery}`,
       'POST',
       (articleId
         ? {originalArticle: {id: articleId}}
@@ -114,7 +114,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async createSubArticleDraft(article: Article): Promise<Article> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/admin/users/me/articleDrafts?${this.articleFieldsQuery}`,
+      `${this.youTrackApiUrl}/users/me/articleDrafts?${this.articleFieldsQuery}`,
       'POST',
       {
         content: '',
@@ -128,7 +128,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async updateArticleDraft(articleDraft: Article): Promise<Article> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleDraft.id}?${this.articleFieldsQuery}`,
+      `${this.youTrackApiUrl}/users/me/articleDrafts/${articleDraft.id}?${this.articleFieldsQuery}`,
       'POST',
       {
         content: articleDraft.content,
@@ -160,7 +160,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async deleteDraft(articleId: string): Promise<any> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleId}`,
+      `${this.youTrackApiUrl}/users/me/articleDrafts/${articleId}`,
       'DELETE',
       null,
       {parseJson: false}
@@ -184,7 +184,7 @@ export default class ArticlesAPI extends ApiBase {
 
   getDraftVisibilityOptions: ((articleId: string) => Promise<Article>) = async (articleId: string,): Promise<Article> => (
     this.getVisibilityOptions(
-      articleId, `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleId}/visibilityOptions`)
+      articleId, `${this.youTrackApiUrl}/users/me/articleDrafts/${articleId}/visibilityOptions`)
   );
 
   async getCommentDraft(articleId: string): Promise<IssueComment | null> {
@@ -255,20 +255,20 @@ export default class ArticlesAPI extends ApiBase {
   }
 
   async deleteDraftAttachment(articleId: string, attachmentId: string): Promise<IssueComment> {
-    const url: string = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleId}/attachments/${attachmentId}`;
+    const url: string = `${this.youTrackApiUrl}/users/me/articleDrafts/${articleId}/attachments/${attachmentId}`;
     return this.deleteAttachment(articleId, attachmentId, url);
   }
 
   async getAttachments(articleId: string): Promise<Array<Attachment>> {
     const queryString = ApiBase.createFieldsQuery(ISSUE_ATTACHMENT_FIELDS);
     const attachments: Array<Attachment> = await this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleId}/attachments?${queryString}`
+      `${this.youTrackApiUrl}/users/me/articleDrafts/${articleId}/attachments?${queryString}`
     );
     return this.convertAttachmentsURL(attachments);
   }
 
   async attachFile(articleId: string, fileUri: string, fileName: string): Promise<XMLHttpRequest> {
-    const url = `${this.youTrackApiUrl}/admin/users/me/articleDrafts/${articleId}/attachments?fields=id,name`;
+    const url = `${this.youTrackApiUrl}/users/me/articleDrafts/${articleId}/attachments?fields=id,name`;
     const headers = this.auth.getAuthorizationHeaders();
     const formData = new FormData();
     // $FlowFixMe

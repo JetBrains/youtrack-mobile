@@ -34,6 +34,22 @@ describe('API', () => {
     createApiInstance().config.should.equal(authMock.config);
   });
 
+  it('should be TRUE if the server version > than 2019', () => {
+    authMock.config.version = '2020.2';
+    const api = createApiInstance();
+    api.isActualAPI.should.equal(true);
+    api.user.apiUrl.should.equal(`${serverUrl}/api/users`);
+    api.projects.projectsURL.should.equal(`${serverUrl}/api/projects`);
+  });
+
+  it('should be FALSE if the server version <= 2019 ', () => {
+    authMock.config.version = '2019';
+    const api = createApiInstance();
+    api.isActualAPI.should.equal(false);
+    api.user.apiUrl.should.equal(`${serverUrl}/api/admin/users`);
+    api.projects.projectsURL.should.equal(`${serverUrl}/api/admin/projects`);
+  });
+
   it('should construct issue URL', () => {
     createApiInstance().youTrackIssueUrl.should.equal('http://foo.bar/api/issues');
   });

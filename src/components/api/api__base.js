@@ -54,6 +54,7 @@ requestController.init();
 export default class BaseAPI {
   auth: Auth;
   config: AppConfig;
+  isActualAPI: boolean;
 
   youTrackUrl: string;
   youTrackIssueUrl: string;
@@ -62,6 +63,7 @@ export default class BaseAPI {
   constructor(auth: Auth) {
     this.auth = auth;
     this.config = auth.config;
+    this.isActualAPI = parseInt((this.config.version || '').split('.')[0], 10) > 2019;
 
     this.youTrackUrl = this.config.backendUrl;
     this.youTrackApiUrl = `${this.youTrackUrl}/api`;

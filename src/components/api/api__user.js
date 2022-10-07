@@ -12,7 +12,6 @@ import type {Folder, User, UserAppearanceProfile} from 'flow/User';
 
 export default class UserAPI extends ApiBase {
 
-  adminApiUrl: string;
   apiUrl: string;
   SEARCH_CONTEXT_FIELDS: Array<string> = [
     'id',
@@ -33,8 +32,7 @@ export default class UserAPI extends ApiBase {
 
   constructor(auth: Auth) {
     super(auth);
-    this.apiUrl = `${this.youTrackApiUrl}/users`;
-    this.adminApiUrl = `${this.youTrackApiUrl}/admin/users`;
+    this.apiUrl = `${this.youTrackApiUrl}${this.isActualAPI ? '' : '/admin'}/users`;
   }
 
   async getUser(userId: string = 'me'): Promise<User> {
@@ -69,7 +67,7 @@ export default class UserAPI extends ApiBase {
       },
     ]);
 
-    const user: User = await this.makeAuthorizedRequest(`${this.adminApiUrl}/${userId}?${queryString}`);
+    const user: User = await this.makeAuthorizedRequest(`${this.apiUrl}/${userId}?${queryString}`);
     user.avatarUrl = handleRelativeUrl(user.avatarUrl, this.config.backendUrl);
     return user;
   }
@@ -84,7 +82,7 @@ export default class UserAPI extends ApiBase {
     const queryString = ApiBase.createFieldsQuery(['naturalCommentsOrder']);
 
     return await this.makeAuthorizedRequest(
-      `${this.adminApiUrl}/${userId}/profiles/appearance?${queryString}`,
+      `${this.apiUrl}/${userId}/profiles/appearance?${queryString}`,
       'POST',
       appearanceProfile.$type
         ? appearanceProfile

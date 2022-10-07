@@ -12,7 +12,7 @@ export default class UserGroupAPI extends ApiBase {
 
   constructor(auth: Auth) {
     super(auth);
-    this.url = `${this.youTrackApiUrl}/admin/groups`;
+    this.url = `${this.youTrackApiUrl}${this.isActualAPI ? '' : '/admin'}/groups`;
   }
 
 
