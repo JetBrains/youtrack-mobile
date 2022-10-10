@@ -127,14 +127,16 @@ export class AuthBase {
   async refreshToken(): Promise<any> {}
 
   getAuthorizationHeaders(authParams: AuthParams): RequestHeaders {
-    const _authParams: ?AuthParams = authParams || this.authParams;
-    if (!_authParams) {
-      throw new Error('Auth: getAuthorizationHeaders called before authParams initialization');
-    }
-    return {
-      'Authorization': `${_authParams.token_type} ${_authParams.access_token}`,
+    const headers: RequestHeaders = {
       'User-Agent': USER_AGENT,
     };
+    const _authParams: ?AuthParams = authParams || this.authParams;
+    if (_authParams) {
+      headers['Authorization'] = `${_authParams.token_type} ${_authParams.access_token}`;
+    } else {
+      log.warn('Auth: getAuthorizationHeaders called before authParams initialization');
+    }
+    return headers;
   }
 
   loadCurrentUser(authParams: any): Promise<any> {

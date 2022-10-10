@@ -43,6 +43,6 @@ export type OAuthParams2 = {
 };
 
 export type RequestHeaders = {
-  Authorization: string,
+  Authorization?: string,
   'User-Agent': string
 };
