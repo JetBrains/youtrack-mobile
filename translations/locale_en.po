@@ -249,7 +249,7 @@ msgstr "Connecting to YouTrack..."
 
 #: src/components/error-boundary/error-boundary.js:202
 #: src/components/error-message/error-message-inline.js:66
-#: src/views/enter-server/enter-server.js:262
+#: src/views/enter-server/enter-server.js:265
 msgid "Contact support"
 msgstr "Contact support"
 
@@ -396,7 +396,7 @@ msgstr "Enter command"
 msgid "Enter search request"
 msgstr "Enter search request"
 
-#: src/views/enter-server/enter-server.js:187
+#: src/views/enter-server/enter-server.js:189
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr "Enter the web address for a YouTrack installation where you have a registered account"
 
@@ -445,7 +445,7 @@ msgstr "Filter users, groups, and teams"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/enter-server/enter-server.js:250
+#: src/views/enter-server/enter-server.js:253
 msgid "Get help"
 msgstr "Get help"
 
@@ -612,7 +612,7 @@ msgstr "New Issue"
 msgid "New messages"
 msgstr "New messages"
 
-#: src/views/enter-server/enter-server.js:215
+#: src/views/enter-server/enter-server.js:218
 msgid "Next"
 msgstr "Next"
 
