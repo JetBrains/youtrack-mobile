@@ -30,7 +30,6 @@ import {NETWORK_PROBLEM_TIPS} from 'components/error-message/error-text-messages
 import {resolveErrorMessage} from 'components/error/error-resolver';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables/variables';
-import {VERSION_DETECT_FALLBACK_URL} from 'components/config/config';
 
 import styles from './enter-server.styles';
 
@@ -38,9 +37,9 @@ import type {AppConfig} from 'flow/AppConfig';
 import type {Node} from 'react';
 import type {Theme, UIThemeColors} from 'flow/Theme';
 
-const CATEGORY_NAME = 'Choose server';
-const protocolRegExp = /^https?:/i;
-const CLOUD_DOMAIN = ['myjetbrains.com', 'youtrack.cloud'];
+const CATEGORY_NAME: string = 'Choose server';
+const protocolRegExp = /^http(s?):\/\//i;
+const CLOUD_DOMAINS: string[] = ['myjetbrains.com', 'youtrack.cloud'];
 
 type Props = {
   serverUrl: string,
@@ -73,26 +72,28 @@ export class EnterServer extends Component<Props, State> {
   }
 
   getPossibleUrls(enteredUrl: string): Array<string> {
-    if (protocolRegExp.test(enteredUrl)) {
-      if (enteredUrl.indexOf('http:') === 0 && CLOUD_DOMAIN.some((it) => enteredUrl.indexOf(it) !== -1)) {
-        enteredUrl = enteredUrl.replace('http:', 'https:');
-        log.info('HTTP protocol was replaced for cloud instance', enteredUrl);
+    const targetURL: string = enteredUrl.toLowerCase();
+    const isCloudURL: boolean = CLOUD_DOMAINS.some((it: string) => targetURL.indexOf(`.${it}`) !== -1);
+    let urls: string[];
+    if (isCloudURL) {
+      const url: string = targetURL.replace(protocolRegExp, '');
+      urls = [`https://${url}`, `https://${url}/youtrack`];
+    } else {
+      if (!protocolRegExp.test(targetURL)) {
+        urls = [
+          `https://${targetURL}`,
+          `https://${targetURL}/youtrack`,
+          `http://${targetURL}`,
+          `http://${targetURL}/youtrack`,
+        ];
+      } else {
+        urls = [targetURL, `${targetURL}/youtrack`];
       }
-      return [`${enteredUrl}/youtrack`, enteredUrl, `${enteredUrl}${VERSION_DETECT_FALLBACK_URL}`];
     }
-
-    return [
-      `https://${enteredUrl}/youtrack`,
-      `https://${enteredUrl}`,
-
-      `http://${enteredUrl}/youtrack`,
-      `http://${enteredUrl}`,
-
-      `http://${enteredUrl}${VERSION_DETECT_FALLBACK_URL}`,
-    ];
+    return urls;
   }
 
-  async onApplyServerUrlChange() {
+  async onApplyServerUrlChange(): Promise<?string> {
     if (!this.isValidInput()) {
       return;
     }
@@ -123,6 +124,7 @@ export class EnterServer extends Component<Props, State> {
 
     const errorMessage = await resolveErrorMessage(errorToShow);
     this.setState({error: errorMessage, connecting: false});
+    return errorMessage;
   }
 
   isValidInput(): any {
@@ -157,7 +159,7 @@ export class EnterServer extends Component<Props, State> {
 
           return (
             <ScrollView
-              testID="enterServer"
+              testID="test:id/enterServer"
               keyboardShouldPersistTaps="handled"
               keyboardDismissMode="on-drag"
               contentContainerStyle={styles.scrollContainer}
@@ -166,7 +168,7 @@ export class EnterServer extends Component<Props, State> {
                 <View style={styles.backIconButtonContainer}>
                   {onCancel && (
                     <TouchableOpacity
-                      testID="enterServerBackButton"
+                      testID="test:id/enterServerBackButton"
                       onPress={onCancel}
                       style={styles.backIconButton}
                     >
@@ -183,8 +185,9 @@ export class EnterServer extends Component<Props, State> {
                     <Image style={styles.logoImage} source={logo}/>
                   </TouchableWithoutFeedback>
 
-                  <View testID="enterServerHint">
-                    <Text style={styles.title}>{i18n('Enter the web address for a YouTrack installation where you have a registered account')}</Text>
+                  <View testID="test:id/enterServerHint">
+                    <Text style={styles.title}>{i18n(
+                      'Enter the web address for a YouTrack installation where you have a registered account')}</Text>
                   </View>
 
                   <TextInput
@@ -203,7 +206,7 @@ export class EnterServer extends Component<Props, State> {
                     underlineColorAndroid="transparent"
                     onSubmitEditing={() => this.onApplyServerUrlChange()}
                     value={serverUrl}
-                    onChangeText={(serverUrl) => this.setState({serverUrl})}/>
+                    onChangeText={(serverUrl) => this.setState({serverUrl, error: null})}/>
 
                   <TouchableOpacity
                     style={[formStyles.button, isDisabled ? formStyles.buttonDisabled : null]}

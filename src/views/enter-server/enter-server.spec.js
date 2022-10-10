@@ -1,164 +1,195 @@
 import React from 'react';
 
-import {shallow} from 'enzyme';
-import sinon from 'sinon';
-import toJson from 'enzyme-to-json';
+import {fireEvent, render} from '@testing-library/react-native';
 
+import {DEFAULT_THEME} from 'components/theme/theme';
 import {EnterServer} from './enter-server';
+import {ThemeContext} from 'components/theme/theme-context';
 
-xdescribe('EnterServer', () => {
+describe('EnterServer', () => {
   const serverUrl = 'http://example.com';
   let connectToYouTrack;
   let onCancel;
-  let wrapper;
-  let waitForNextTick;
   let connectPromise;
-
-  function renderComponent(url = serverUrl) {
-    wrapper = shallow(<EnterServer serverUrl={url} connectToYoutrack={connectToYouTrack} onCancel={onCancel}/>);
-  }
 
   beforeEach(() => {
     connectPromise = Promise.resolve({foo: 'bar'});
-    waitForNextTick = () => new Promise(resolve => setTimeout(resolve));
-
-    connectToYouTrack = sinon.spy(() => connectPromise);
-    onCancel = sinon.spy();
-
-    renderComponent();
+    connectToYouTrack = jest.fn(() => connectPromise);
+    onCancel = jest.fn();
   });
+
+  function doRender(url = '') {
+    return render(
+      <ThemeContext.Provider value={{uiTheme: DEFAULT_THEME}}>
+        <EnterServer serverUrl={url} connectToYoutrack={connectToYouTrack} onCancel={onCancel}/>
+      </ThemeContext.Provider>
+    );
+  }
+
 
   describe('Render', () => {
 
-    it('should render', () => {
-      expect(toJson(wrapper)).toMatchSnapshot();
-    });
+    it('should render screen', () => {
+      const {getByTestId} = doRender();
 
-    it('should render element', () => {
-      expect(findByTestId('enterServer')).toHaveLength(1);
-      expect(findByTestId('enterServerBackButton')).toHaveLength(1);
-      expect(findByTestId('server-url')).toHaveLength(1);
-      expect(findByTestId('enterServerLogo')).toHaveLength(1);
-      expect(findByTestId('next')).toHaveLength(1);
-      expect(findByTestId('enterServerHint')).toHaveLength(1);
-      expect(findByTestId('enterServerSupportLink')).toHaveLength(1);
+      expect(getByTestId('test:id/enterServer')).toBeTruthy();
+      expect(getByTestId('test:id/enterServerBackButton')).toBeTruthy();
+      expect(getByTestId('test:id/server-url')).toBeTruthy();
+      expect(getByTestId('test:id/enterServerHint')).toBeTruthy();
+      expect(getByTestId('test:id/next')).toBeTruthy();
+      expect(getByTestId('test:id/enterServerHint')).toBeTruthy();
+      expect(getByTestId('test:id/enterServerHelpLink')).toBeTruthy();
     });
   });
 
-  it('should connect to server', async () => {
-    const connectButton = wrapper.find({testID: 'next'});
-    connectButton.simulate('press');
-    await waitForNextTick();
 
-    connectToYouTrack.should.have.been.calledWith(serverUrl);
-  });
+  describe('Connect to a server', () => {
+    it('should connect to server', () => {
+      const {getByTestId} = doRender(serverUrl);
+      fireEvent.press(getByTestId('test:id/next'));
 
-  it('should add protocol for entered URL', async () => {
-    renderComponent('foo.bar');
-    wrapper.find({testID: 'next'}).simulate('press');
-    await waitForNextTick();
-
-    connectToYouTrack.should.have.been.calledWith('https://foo.bar');
-  });
-
-  it('should replace HTTP with HTTPS for a cloud instance', async () => {
-    renderComponent('http://foo.myjetbrains.com');
-    wrapper.find({testID: 'next'}).simulate('press');
-    await waitForNextTick();
-
-    connectToYouTrack.should.have.been.calledWith('https://foo.myjetbrains.com');
-  });
-
-  it('should strip wrapping spaces', async () => {
-    renderComponent('   foo.bar ');
-    wrapper.find({testID: 'next'}).simulate('press');
-    await waitForNextTick();
-
-    connectToYouTrack.should.have.been.calledWith('https://foo.bar');
-  });
-
-  it('should strip tailing slash', async () => {
-    renderComponent('http://foo.bar/');
-    wrapper.find({testID: 'next'}).simulate('press');
-    await waitForNextTick();
-
-    connectToYouTrack.should.have.been.calledWith('http://foo.bar');
-  });
-
-  it('should try next URL on failure if protocol is entered', async () => {
-    connectPromise = Promise.reject({message: 'test reject'});
-    const connectButton = wrapper.find({testID: 'next'});
-
-    connectButton.simulate('press');
-    await waitForNextTick();
-    connectButton.simulate('press');
-    await waitForNextTick();
-
-    connectToYouTrack.should.have.been.calledWith(serverUrl);
-    connectToYouTrack.should.have.been.calledWith(`${serverUrl}/youtrack`);
-    connectToYouTrack.should.have.been.calledWith(`${serverUrl}/rest/workflow/version`);
-  });
-
-
-  it('should try next URL on failure if no protocol entered', async () => {
-    connectPromise = Promise.reject({message: 'test reject'});
-    renderComponent('foo.bar');
-    const connectButton = wrapper.find({testID: 'next'});
-
-    connectButton.simulate('press');
-    await waitForNextTick();
-    connectButton.simulate('press');
-    await waitForNextTick();
-    connectButton.simulate('press');
-    await waitForNextTick();
-    connectButton.simulate('press');
-    await waitForNextTick();
-
-    connectToYouTrack.should.have.been.calledWith('https://foo.bar');
-    connectToYouTrack.should.have.been.calledWith('https://foo.bar/youtrack');
-    connectToYouTrack.should.have.been.calledWith('http://foo.bar');
-    connectToYouTrack.should.have.been.calledWith('http://foo.bar/youtrack');
-    connectToYouTrack.should.have.been.calledWith('http://foo.bar/rest/workflow/version');
-  });
-
-  it('should stop and display error if `IncompatibleYouTrackError` is thrown', async () => {
-    const incompatibleYoutrackMsg = 'Incompatible youtrack';
-    connectPromise = Promise.reject({
-      isIncompatibleYouTrackError: true,
-      message: incompatibleYoutrackMsg,
+      expect(connectToYouTrack).toHaveBeenCalledWith(serverUrl);
     });
 
-    wrapper.find({testID: 'next'}).simulate('press');
-    await waitForNextTick();
+    it('should add protocol for entered URL', () => {
+      const {getByTestId} = doRender(serverUrl);
+      fireEvent.press(getByTestId('test:id/next'));
 
-    wrapper.state('error').should.equal(incompatibleYoutrackMsg);
+      expect(connectToYouTrack).toHaveBeenCalledWith(serverUrl);
+    });
+
+    it('should replace HTTP with HTTPS for a cloud instance', () => {
+      const {getByTestId} = doRender('http://foo.myjetbrains.com');
+      fireEvent.press(getByTestId('test:id/next'));
+
+      expect(connectToYouTrack).toHaveBeenCalledWith('https://foo.myjetbrains.com');
+    });
+
+    it('should trim white spaces', () => {
+      const {getByTestId} = doRender('   foo.bar ');
+      fireEvent.press(getByTestId('test:id/next'));
+
+      expect(connectToYouTrack).toHaveBeenCalledWith('https://foo.bar');
+    });
+
+    it('should remove tailing slash from URL', () => {
+      const {getByTestId} = doRender('http://foo.bar/');
+      fireEvent.press(getByTestId('test:id/next'));
+
+      expect(connectToYouTrack).toHaveBeenCalledWith('http://foo.bar');
+    });
+
+    it('should try next URL on failure if protocol is entered', async () => {
+      connectPromise = Promise.reject('ERROR');
+      const {getByTestId} = doRender('http://foo.bar/');
+
+      fireEvent.press(getByTestId('test:id/next'));
+
+      await expect(connectToYouTrack).toHaveBeenCalledWith('http://foo.bar');
+      await expect(connectToYouTrack).toHaveBeenCalledWith('http://foo.bar/youtrack');
+      await expect(connectToYouTrack).toBeCalledTimes(2);
+    });
+
+    it('should try next URL on failure if no protocol entered', async () => {
+      connectPromise = Promise.reject('ERROR');
+      const {getByTestId} = doRender('foo.bar');
+
+      fireEvent.press(getByTestId('test:id/next'));
+
+      await expect(connectToYouTrack).toHaveBeenCalledWith('https://foo.bar');
+      await expect(connectToYouTrack).toHaveBeenCalledWith('https://foo.bar/youtrack');
+      await expect(connectToYouTrack).toHaveBeenCalledWith('http://foo.bar');
+      await expect(connectToYouTrack).toHaveBeenCalledWith('http://foo.bar/youtrack');
+      await expect(connectToYouTrack).toBeCalledTimes(4);
+    });
   });
 
-  it('should not allow empty input', () => {
-    const instance = shallow(
-      <EnterServer serverUrl={''} connectToYoutrack={connectToYouTrack} onCancel={onCancel}/>
-    ).instance();
-    instance.isValidInput().should.be.false;
+
+  describe('EnterServer', () => {
+    let instance;
+    beforeEach(() => {
+      instance = new EnterServer({});
+    });
+
+
+    describe('onApplyServerUrlChange', () => {
+      it('should throw `Incompatible` error', async () => {
+        const incompatibleError = {
+          isIncompatibleYouTrackError: true,
+          message: 'Incompatible youtrack',
+        };
+        connectPromise = Promise.reject(incompatibleError);
+        instance = new EnterServer({serverUrl: 'foo.bar', connectToYoutrack: connectToYouTrack});
+        const msg = await instance.onApplyServerUrlChange();
+
+        expect(msg).toEqual(incompatibleError.message);
+      });
+    });
+
+
+    describe('isValidInput', () => {
+      it('should allow not empty URL', async () => {
+        expect(createInstance('').isValidInput()).toEqual(false);
+        expect(createInstance(' ').isValidInput()).toEqual(false);
+      });
+
+      it('should validate server URL', () => {
+        expect(createInstance('ab/').isValidInput()).toEqual(true);
+        expect(createInstance('ab.c').isValidInput()).toEqual(true);
+        expect(createInstance('ab.cd').isValidInput()).toEqual(true);
+        expect(createInstance('a.aus').isValidInput()).toEqual(true);
+        expect(createInstance('a.youtrack.i/').isValidInput()).toEqual(true);
+        expect(createInstance('www.a.au').isValidInput()).toEqual(true);
+        expect(createInstance('www.a.b.cd').isValidInput()).toEqual(true);
+        expect(createInstance('www.a.bc/youtrack/me').isValidInput()).toEqual(true);
+        expect(createInstance('https://www.a.bc').isValidInput()).toEqual(true);
+        expect(createInstance('https://a.bc').isValidInput()).toEqual(true);
+        expect(createInstance('http://www.a.bc').isValidInput()).toEqual(true);
+        expect(createInstance('http://a.bc').isValidInput()).toEqual(true);
+      });
+
+      function createInstance(serverUrl) {
+        return new EnterServer({serverUrl});
+      }
+    });
+
+
+    describe('getPossibleUrls', () => {
+      it('should return possible base URLs for a custom domain', () => {
+        expect(
+          instance.getPossibleUrls('myyOutrack.com')
+        ).toEqual([
+          'https://myyoutrack.com',
+          'https://myyoutrack.com/youtrack',
+          'http://myyoutrack.com',
+          'http://myyoutrack.com/youtrack',
+        ]);
+      });
+
+      it('should return possible base URLs for `youtrack.cloud` instances', () => {
+        ['htTp://example.yOutrack.CLOUD', 'htTps://example.yOutrack.CLOUD'].forEach((utl) => {
+          expect(
+            instance.getPossibleUrls(utl)
+          ).toEqual([
+            'https://example.youtrack.cloud',
+            'https://example.youtrack.cloud/youtrack',
+          ]);
+        });
+
+      });
+
+      it('should return possible base URLs for `myjetbrains.com` instances', () => {
+        ['htTp://exAmple.MyJetbrains.Com', 'htTps://exAmple.MyJetbrains.Com'].forEach((utl) => {
+
+          expect(
+            instance.getPossibleUrls(utl)
+          ).toEqual([
+            'https://example.myjetbrains.com',
+            'https://example.myjetbrains.com/youtrack',
+          ]);
+        });
+      });
+    });
   });
 
-  it('should not allow `@` character in server input (to not confuse users with email)', () => {
-    const instance = shallow(
-      <EnterServer serverUrl={'foo@bar.com'} connectToYoutrack={connectToYouTrack} onCancel={onCancel}/>
-    ).instance();
-
-    instance.isValidInput().should.be.false;
-  });
-
-  it('should allow not empty input', () => {
-    const instance = shallow(
-      <EnterServer serverUrl={'someserver'} connectToYoutrack={connectToYouTrack} onCancel={onCancel}/>
-    ).instance();
-
-    instance.isValidInput().should.be.true;
-  });
-
-
-  function findByTestId(testId) {
-    return wrapper && wrapper.find({testID: testId});
-  }
 });
