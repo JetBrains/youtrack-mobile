@@ -10,7 +10,7 @@ buildscript {
     maven { url 'https://jitpack.io'}
   }
   dependencies {
-    classpath 'org.jetbrains.ring:youtrack-crowdin:0.18.2'
+    classpath 'org.jetbrains.ring:youtrack-crowdin:0.18.8'
   }
 }
 
@@ -20,6 +20,9 @@ task crowdinUpload(type: org.jetbrains.crowdin.CrowdinUploadTask) {
   files = [
     [name: 'youtrack-mobile.po', source: { "$projectDir/../translations/default.pot" }]
   ]
+  if (project.hasProperty("crowdinToken")){
+    token = crowdinToken
+  }
 }
 
 task generateEnglishLocale(type: org.jetbrains.crowdin.GenerateEnglishFileTask){
@@ -30,6 +33,9 @@ task generateEnglishLocale(type: org.jetbrains.crowdin.GenerateEnglishFileTask){
 task crowdinDownload(type: org.jetbrains.crowdin.CrowdinDownloadTask) {
   projects = [YOUTRACK, YOUTRACK_COMMUNITY]
   fileMapping = ['youtrack-mobile' : "$projectDir/../translations"]
+  if (project.hasProperty("crowdinToken")){
+    token = crowdinToken
+  }
   finalizedBy tasks.generateEnglishLocale
 }
 
