@@ -126,6 +126,61 @@
                     android:pathPattern="/youtrack/articles/.*"
                     android:scheme="https" />
             </intent-filter>
+            <intent-filter android:label="YouTrack Mobile">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="*"
+                    android:pathPattern="/issues.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/youtrack/issues.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/issues.*"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/youtrack/issues.*"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/issue/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/youtrack/issue/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/issue/.*"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/youtrack/issue/.*"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/articles/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/youtrack/articles/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/articles/.*"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/youtrack/articles/.*"
+                    android:scheme="http" />
+            </intent-filter>
         </activity>
 
         <meta-data
