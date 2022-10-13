@@ -1,9 +1,10 @@
 /* @flow */
 
 import React from 'react';
-import {ActivityIndicator, Linking, Text, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Dimensions, Linking, Text, TouchableOpacity, View} from 'react-native';
 
 import Hyperlink from 'react-native-hyperlink';
+import RenderHtml from 'react-native-render-html';
 import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
 
@@ -15,6 +16,7 @@ import {getApi} from '../api/api__instance';
 import {guid, isURLPattern} from 'util/util';
 import {hasMimeType} from '../mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from '../icon/icon';
+import {prepareMarkdown} from './markdown-helper';
 import {ResourceTypes} from '../api/api__resource-types';
 import {WebView} from 'react-native-webview';
 
@@ -43,6 +45,7 @@ const imageRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
 const imageWidth: RegExp = /{width=\d+(%|px)?}/i;
 const imageHeight: RegExp = /{height=\d+(%|px)?}/i;
 const youTubeURL: RegExp = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/i;
+const htmlTagRegex = /(<([^>]+)>)/gi;
 
 function getYouTubeId(url: string): ?string {
   const arr = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
@@ -179,7 +182,7 @@ function getMarkdownRules(
       if (matched[0] && typeof matched?.index === 'number') {
         const textWithoutIssueId: string = text.split(matched[0]).join('');
         return (
-          <Text selectable={true} key={`${node.key}`} style={[inheritedStyles, style.text, textStyle]}>
+          <Text selectable={true} key={node.key} style={[inheritedStyles, style.text, textStyle]}>
             {renderHyperLink(textWithoutIssueId.slice(0, matched.index), `${node.key}0`)}
             {renderIssueIdLink(matched[0], [inheritedStyles, style.text, textStyle, styles.link], `${node.key}1`)}
             {renderHyperLink(textWithoutIssueId.slice(matched.index, text.length - 1), `${node.key}2`)}
@@ -239,10 +242,14 @@ function getMarkdownRules(
 
     link: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
       const child: ?Object = node?.children[0];
-      const content: string = (child && child.content) || children;
+      let content: string = (child && child.content) || children;
 
       if (imageRegExp.test(content)) { //TODO: temporary solution to remove HTML image from link label
         return null;
+      }
+
+      if (!content.replace(htmlTagRegex, '')) {
+        content = node.children.map(it => it.content).join('').replace(htmlTagRegex, '');
       }
 
       return (
@@ -345,10 +352,27 @@ function getMarkdownRules(
         textStyle,
       ));
     },
+
+    html_inline: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+      return renderHTML(node.content);
+    },
+
+    html_block: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+      return renderHTML(node.content);
+    },
   };
 }
 
 export default getMarkdownRules;
+
+
+function renderHTML(html: string) {
+  return <RenderHtml
+    contentWidth={Dimensions.get('window').width}
+    enableCSSInlineProcessing={true}
+    source={{html: prepareMarkdown(html)}}
+  />;
+}
 
 function createMentionRegExp(mention: string) {
   const punctuationMarks = ['.', ',', '!', ':', '\\-'].join('');
