@@ -354,6 +354,10 @@ function getMarkdownRules(
     },
 
     html_inline: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+      if (['<br>', '<br/>'].some((tagName: string) => tagName === node.content.toLowerCase())) {
+        return textRenderer({...node, content: '\n'}, children, parent, style, inheritedStyles
+        );
+      }
       return renderHTML(node.content);
     },
 
