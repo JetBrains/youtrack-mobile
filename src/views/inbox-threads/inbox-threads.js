@@ -241,7 +241,7 @@ const InboxThreads: () => Node = (): Node => {
         isSplitView ? styles.splitViewContainer : null,
       ]}>
 
-      <Container style={isSplitView && styles.splitViewSide}>
+      <Container {...(isSplitView ? styles.splitViewSide : {})}>
         {renderHeader()}
         <InboxThreadsUpdateButton index={navigationState.index}/>
         {renderTabs()}
