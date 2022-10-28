@@ -79,7 +79,7 @@ const InboxThreadsList = ({
     getData().hasMore
       ? getData().threads.slice(0, getData().threads.length - 1)
       : getData().threads
-  );
+  ).filter((it: InboxThread) => it.messages.length > 0);
 
   const hasVisibleMessages: boolean = (
     visibleThreads.length > 0 &&
