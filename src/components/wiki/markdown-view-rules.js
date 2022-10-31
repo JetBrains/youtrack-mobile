@@ -46,6 +46,9 @@ const imageWidth: RegExp = /{width=\d+(%|px)?}/i;
 const imageHeight: RegExp = /{height=\d+(%|px)?}/i;
 const youTubeURL: RegExp = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/i;
 const htmlTagRegex = /(<([^>]+)>)/gi;
+const googleCalendarURL: RegExp = /^http(s?):\/\/calendar.google.([a-z]{2,})\/calendar/i;
+const googleDocsURL: RegExp = /^http(s?):\/\/docs.google.([a-z]{2,})\/document/i;
+const figmaURL: RegExp = /^http(s?):\/\/(www\.)?figma.com/i;
 
 function getYouTubeId(url: string): ?string {
   const arr = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
@@ -80,7 +83,7 @@ function getMarkdownRules(
 
 
   const markdownImage = ({key, uri, alt, imageDimensions}) => {
-    if (uri.indexOf('badgen.net/badge') !== -1) {//TODO: temporary solution to remove HTML image from link label
+    if (isGitHubBadge(uri)) {
       return null;
     }
 
@@ -141,6 +144,20 @@ function getMarkdownRules(
     );
   };
 
+  const renderHyperLink: (link: string, style: any) => React$Element<typeof Hyperlink> = (
+    linkText: string,
+    style: any
+  ): React$Element<typeof Hyperlink> => (
+    <Hyperlink
+      key={guid()}
+      linkStyle={style.link}
+      linkDefault={true}>
+      <Text selectable={true} style={style}>
+        {linkText}
+      </Text>
+    </Hyperlink>
+  );
+
   const textRenderer = (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}): any => {
     const text: string = node.content.replace(imageHeight, '').replace(imageWidth, '');
     if (!text) {
@@ -163,29 +180,16 @@ function getMarkdownRules(
       }
     }
 
-    const renderHyperLink: (txt: string, key: string) => React$Element<typeof Hyperlink> = (
-      txt: string,
-      key: string,
-    ): React$Element<typeof Hyperlink> => (
-      <Hyperlink
-        key={key}
-        linkStyle={style.link}
-        linkDefault={true}>
-        <Text selectable={true} style={[inheritedStyles, style.text, textStyle]}>
-          {txt}
-        </Text>
-      </Hyperlink>
-    );
-
     if (issueId.test(text) && !isURLPattern(text)) {
       const matched: RegExp$matchResult | null = text.match(issueId);
       if (matched[0] && typeof matched?.index === 'number') {
         const textWithoutIssueId: string = text.split(matched[0]).join('');
+        const linkStyle = [inheritedStyles, style.text, textStyle];
         return (
           <Text selectable={true} key={node.key} style={[inheritedStyles, style.text, textStyle]}>
-            {renderHyperLink(textWithoutIssueId.slice(0, matched.index), `${node.key}0`)}
+            {renderHyperLink(textWithoutIssueId.slice(0, matched.index), linkStyle)}
             {renderIssueIdLink(matched[0], [inheritedStyles, style.text, textStyle, styles.link], `${node.key}1`)}
-            {renderHyperLink(textWithoutIssueId.slice(matched.index, text.length - 1), `${node.key}2`)}
+            {renderHyperLink(textWithoutIssueId.slice(matched.index, text.length - 1), linkStyle)}
           </Text>
         );
       }
@@ -199,10 +203,6 @@ function getMarkdownRules(
     );
   };
 
-  function isFigmaImage(url: string): boolean {
-    return url.indexOf('figma.com') >= 0;
-  }
-
 
   return {
 
@@ -212,14 +212,18 @@ function getMarkdownRules(
       </View>
     ),
 
-    image: (node: MarkdownNode) => {
+    image: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
       const {src = '', alt} = node.attributes;
       const targetAttach: ?Attachment = attachments.find((it: Attachment) => it.name && it.name.includes(src));
 
       const parsedURL = UrlParse(src);
       const url: ?string = parsedURL?.protocol && parsedURL?.origin ? src : targetAttach?.url;
-      if (!url || hasMimeType.svg(targetAttach) || isFigmaImage(url)) {
+      if (!url || hasMimeType.svg(targetAttach)) {
         return null;
+      }
+
+      if (isGoogleShared(url) || isFigmaImage(url)) {
+        return renderHyperLink(url, [inheritedStyles, style.link, textStyle]);
       }
 
       return markdownImage({
@@ -481,4 +485,16 @@ function renderArticleMentions(
     return <Text selectable={true} key={node.key} style={textStyle}>{composed}</Text>;
   }
 
+}
+
+function isFigmaImage(url: string = ''): boolean {
+  return figmaURL.test(url);
+}
+
+function isGoogleShared(url: string = ''): boolean {
+  return googleCalendarURL.test(url) || googleDocsURL.test(url);
+}
+
+function isGitHubBadge(url: string = ''): boolean {
+  return url.indexOf('badgen.net/badge');
 }
