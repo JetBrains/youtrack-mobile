@@ -64,6 +64,7 @@ export const inboxThreadFields: ToField = toField([
             ]),
             issue: toField([
               'id',
+              'description',
               {
                 customFields: toField([
                   'id',
