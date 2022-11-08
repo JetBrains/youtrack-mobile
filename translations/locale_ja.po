@@ -1092,7 +1092,7 @@ msgstr "あなたのアカウントにはこの操作を実行するのに必要
 #: src/components/error/error-message-data.js
 msgid "Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n\n"
 "To log in on this screen, enter your username and a one-time application password."
-msgstr "あなたのアカウントでログインするには二要素認証が必要です。このオプションはモバイルブラウザーでログインする場合のみ使用できます。モバイルブラウザーでは、サードパーティアカウント (ある場合) を使用してサインインすることもできます。\n\n"
+msgstr "あなたのアカウントでログインするには 2 要素認証が必要です。このオプションはモバイルブラウザーでログインする場合のみ使用できます。モバイルブラウザーでは、サードパーティアカウント (ある場合) を使用してサインインすることもできます。\n\n"
 "この画面でログインするには、ユーザー名とワンタイムアプリケーションパスワードを入力してください。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.js
