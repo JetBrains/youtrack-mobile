@@ -83,6 +83,7 @@ export default EStyleSheet.create({
   },
   commentInput: {
     flex: 1,
+    maxHeight: 106,
     padding: 0,
     backgroundColor: '$background',
     ...mainText,

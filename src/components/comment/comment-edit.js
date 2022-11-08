@@ -1,12 +1,11 @@
 /* @flow */
 
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, View, Text, TouchableOpacity, TextInput, Dimensions} from 'react-native';
 
 import InputScrollView from 'react-native-input-scroll-view';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import debounce from 'lodash.debounce';
-import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import {useDispatch} from 'react-redux';
 
 import AttachFileDialog from '../attach-file/attach-file-dialog';
@@ -99,9 +98,10 @@ const IssueCommentEdit = (props: Props) => {
     mentionsLoading: false,
     mentionsQuery: '',
     mentionsVisible: false,
+    height: null,
   });
 
-  let editCommentInput: typeof AutoGrowingTextInput;
+  const editCommentInput = useRef(null);
 
   const changeState = (statePart: $Shape<State>): void => {
     updateState((prevState: State) => ({...prevState, ...statePart}));
@@ -170,7 +170,7 @@ const IssueCommentEdit = (props: Props) => {
     state.editingCommentText,
   ]);
 
-  const focus = (): void => {editCommentInput.focus();};
+  const focus = (): void => {editCommentInput?.current?.focus();};
 
   const toggleVisibilityControl = (isVisibilityControlVisible: boolean): void => {
     changeState({isVisibilityControlVisible});
@@ -375,20 +375,11 @@ const IssueCommentEdit = (props: Props) => {
   };
 
   const renderCommentInput = (autoFocus: boolean, onFocus: Function, onBlur: Function): Node => {
-    const Component: typeof TextInput | typeof AutoGrowingTextInput = props.isEditMode ? TextInput : AutoGrowingTextInput;
-    const inputProps: Object = !props.isEditMode ? {
-      minHeight: MIN_INPUT_SIZE,
-      maxHeight: 106,
-    } : {multiline: true};
     return (
-      <Component
-        {...inputProps}
+      <TextInput
+        multiline={true}
         autoFocus={autoFocus || props.isEditMode}
-        ref={(instance: typeof AutoGrowingTextInput) => {
-          if (instance) {
-            editCommentInput = instance;
-          }
-        }}
+        ref={editCommentInput}
         placeholder={i18n('Write a comment, @mention people')}
         value={state.editingComment.text}
         editable={!state.isSaving}
@@ -408,9 +399,12 @@ const IssueCommentEdit = (props: Props) => {
           suggestionsNeededDetector(text, state.commentCaret);
           !props.isEditMode && delayedChange(updatedDraftComment);
         }}
+        onContentSizeChange={(event) => {
+          changeState({height: event.nativeEvent.contentSize.height});
+        }}
         onFocus={onFocus}
         onBlur={onBlur}
-        style={styles.commentInput}
+        style={[styles.commentInput, {height: Math.max(MIN_INPUT_SIZE, state.height + 8)}]}
       />
     );
   };
