@@ -52,6 +52,7 @@ export type IssueFull = {
   wikifiedDescription: string,
   usesMarkdown: boolean,
   visibility: Visibility,
+  hasEmail?: boolean,
 };
 
 export type AnyIssue = (IssueOnList | IssueFull | IssueLink);

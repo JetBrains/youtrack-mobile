@@ -5,11 +5,13 @@ import {View, Text, TouchableWithoutFeedback} from 'react-native';
 import React from 'react';
 
 import Avatar from '../avatar/avatar';
-import MarkdownView from '../wiki/markdown-view';
-import YoutrackWiki from '../wiki/youtrack-wiki';
-import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import HTML from 'components/wiki/renderers/renderer__html';
+import MarkdownView from 'components/wiki/markdown-view';
+import YoutrackWiki from 'components/wiki/youtrack-wiki';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
-import {markdownText} from '../common-styles/typography';
+import {isPureHTMLBlock, prepareHTML} from 'components/wiki/markdown-helper';
+import {markdownText} from 'components/common-styles/typography';
 import {ytDate} from 'components/date/date';
 
 import styles from './comment.styles';
@@ -94,6 +96,11 @@ function Comment(props: Props) {
   };
 
   const renderMarkdown = () => {
+    if (props.comment.hasEmail || isPureHTMLBlock(props.comment.text)) {
+      return (
+        <HTML html={prepareHTML(props.comment.text)}/>
+      );
+    }
     return (
       <MarkdownView
         textStyle={markdownText}

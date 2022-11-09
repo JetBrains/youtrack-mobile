@@ -56,12 +56,6 @@ export default EStyleSheet.create({
   deleted: {
     textDecorationLine: 'line-through',
   },
-  blockQuote: {
-    color: '$textSecondary',
-    borderLeftWidth: 2,
-    borderLeftColor: '$textSecondary',
-    paddingLeft: UNIT,
-  },
   unspaced: {
     margin: 0,
   },

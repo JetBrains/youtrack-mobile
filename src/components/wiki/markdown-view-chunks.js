@@ -35,6 +35,7 @@ type Props = {
   scrollData?: Object,
   onCheckboxUpdate?: (markdown: string) => Function,
   textStyle?: TextStyleProp,
+  isHTML?: boolean,
 };
 
 const DEFAULT_CHUNK_SIZE: number = 10;

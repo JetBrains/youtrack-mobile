@@ -8,13 +8,13 @@ import MarkdownItInstance from './markdown-instance';
 import markdownStyles from './markdown-view-styles';
 import {ThemeContext} from '../theme/theme-context';
 
-import type {MarkdownNode} from 'flow/Markdown';
+import type {MarkdownASTNode} from 'flow/Markdown';
 import type {Theme} from 'flow/Theme';
 import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
 type Props = {
-  ast: Array<MarkdownNode>,
+  ast: MarkdownASTNode[],
   rules: Object,
   textStyle?: TextStyleProp,
 };

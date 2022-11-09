@@ -15,211 +15,262 @@ const vSpace = {
   marginBottom: UNIT,
 };
 
-// Source: 'react-native-markdown-display/src/lib/styles'
-const markdownStyles = (uiTheme: UITheme = DEFAULT_THEME, textStyle: ?TextStyleProp = {}) => {
-  const uiThemeColors: UIThemeColors = uiTheme.colors;
-  const code = {
-    borderWidth: 0,
-    backgroundColor: uiThemeColors.$boxBackground,
-    padding: UNIT,
-    borderRadius: 4,
-  };
+const code = {
+  borderWidth: 0,
+  backgroundColor: DEFAULT_THEME.colors.$boxBackground,
+  padding: UNIT,
+  borderRadius: 4,
+};
 
+export const baseMarkdownStyles = {
+  body: {
+    color: DEFAULT_THEME.colors.$text,
+    fontSize: SECONDARY_FONT_SIZE,
+  },
+  heading1: {
+    flexDirection: 'row',
+    fontSize: 32,
+    ...vSpace,
+  },
+  heading2: {
+    flexDirection: 'row',
+    fontSize: 24,
+    ...vSpace,
+  },
+  heading3: {
+    flexDirection: 'row',
+    fontSize: 18,
+    ...vSpace,
+  },
+  heading4: {
+    flexDirection: 'row',
+    fontSize: 16,
+    ...vSpace,
+  },
+  heading5: {
+    flexDirection: 'row',
+    fontSize: 13,
+    ...vSpace,
+  },
+  heading6: {
+    flexDirection: 'row',
+    fontSize: 11,
+    ...vSpace,
+  },
+  hr: {
+    height: 1,
+    marginHorizontal: 0,
+    backgroundColor: DEFAULT_THEME.colors.$textSecondary,
+  },
+  strong: {
+    fontWeight: 'bold',
+  },
+  em: {
+    fontStyle: 'italic',
+  },
+  s: {
+    textDecorationLine: 'line-through',
+  },
+  blockquote: {
+    margin: 0,
+    padding: 0,
+    paddingLeft: UNIT,
+    backgroundColor: 'transparent',
+    borderLeftColor: DEFAULT_THEME.colors.$textSecondary,
+    borderLeftWidth: 2,
+  },
+  bullet_list: {},
+  ordered_list: {},
+  list_item: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  // @pseudo class, does not have a unique render rule
+  bullet_list_icon: {
+    marginLeft: UNIT * 3,
+    marginRight: UNIT * 1.5,
+    ...Platform.select({
+      ios: {
+        fontSize: 30,
+        lineHeight: 32,
+      },
+      android: {
+        fontSize: MAIN_FONT_SIZE,
+        lineHeight: 28,
+      },
+      default: {
+        marginTop: 0,
+        lineHeight: 30,
+      },
+    }),
+  },
+  bullet_list_icon_checkbox: {
+    color: 'transparent',
+    marginLeft: -14,
+  },
+  // @pseudo class, does not have a unique render rule
+  bullet_list_content: {
+    flex: 1,
+    flexWrap: 'wrap',
+  },
+  // @pseudo class, does not have a unique render rule
+  ordered_list_icon: {
+    marginLeft: UNIT,
+    marginRight: UNIT,
+    ...Platform.select({
+      android: {
+        lineHeight: 27,
+      },
+      ios: {
+        lineHeight: 33,
+      },
+      default: {
+        lineHeight: 33,
+      },
+    }),
+  },
+  // @pseudo class, does not have a unique render rule
+  ordered_list_content: {
+    flex: 1,
+    flexWrap: 'wrap',
+  },
+  code_inline: {
+    ...code,
+  },
+  code_block: {
+    ...code,
+  },
+  fence: {
+    ...code,
+  },
+  table: {
+    borderWidth: 1,
+    borderColor: DEFAULT_THEME.colors.$text,
+    borderRadius: 3,
+  },
+  thead: {},
+  tbody: {},
+  th: {
+    flex: 1,
+    padding: 5,
+  },
+  tr: {
+    // borderBottomWidth: 1,
+    borderColor: DEFAULT_THEME.colors.$text,
+    flexDirection: 'row',
+  },
+  td: {
+    flex: 1,
+    padding: 5,
+  },
+  link: {
+    textDecorationLine: 'none',
+    color: DEFAULT_THEME.colors.$link,
+  },
+  blocklink: {
+    flex: 1,
+    borderColor: DEFAULT_THEME.colors.$text,
+    borderBottomWidth: 1,
+    backgroundColor: 'yellow',
+  },
+  image: {
+    flex: 1,
+  },
+  text: {
+    color: DEFAULT_THEME.colors.$text,
+  },
+  textgroup: {},
+  paragraph: {
+    marginTop: UNIT,
+    marginBottom: UNIT,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    width: '100%',
+  },
+  hardbreak: {
+    width: '100%',
+    height: 1,
+  },
+  softbreak: {},
+  // Believe these are never used but retained for completeness
+  pre: {},
+  inline: {},
+  span: {},
+};
+
+
+const markdownStyles = (uiTheme: UITheme = DEFAULT_THEME, textStyle: TextStyleProp = {}) => {
+  const uiThemeColors: UIThemeColors = uiTheme.colors;
   return {
-    // The main container
     body: {
+      ...baseMarkdownStyles.body,
       color: uiThemeColors.$text,
-      fontSize: SECONDARY_FONT_SIZE,
       ...textStyle,
     },
-
-    // Headings
-    heading1: {
-      flexDirection: 'row',
-      fontSize: 32,
-      ...vSpace,
-    },
-    heading2: {
-      flexDirection: 'row',
-      fontSize: 24,
-      ...vSpace,
-    },
-    heading3: {
-      flexDirection: 'row',
-      fontSize: 18,
-      ...vSpace,
-    },
-    heading4: {
-      flexDirection: 'row',
-      fontSize: 16,
-      ...vSpace,
-    },
-    heading5: {
-      flexDirection: 'row',
-      fontSize: 13,
-      ...vSpace,
-    },
-    heading6: {
-      flexDirection: 'row',
-      fontSize: 11,
-      ...vSpace,
-    },
-
-    // Horizontal Rule
     hr: {
+      ...baseMarkdownStyles.hr,
       backgroundColor: uiThemeColors.$textSecondary,
-      height: 1,
     },
-
-    // Emphasis
-    strong: {
-      fontWeight: 'bold',
-    },
-    em: {
-      fontStyle: 'italic',
-    },
-    s: {
-      textDecorationLine: 'line-through',
-    },
-
-    // Blockquotes
     blockquote: {
-      paddingHorizontal: 14,
-      paddingVertical: 4,
-      backgroundColor: uiThemeColors.$text,
+      ...baseMarkdownStyles.blockquote,
+      borderLeftColor: uiThemeColors.$textSecondary,
     },
-
-    // Lists
-    bullet_list: {},
-    ordered_list: {},
-    list_item: {
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-    },
-    // @pseudo class, does not have a unique render rule
-    bullet_list_icon: {
-      marginLeft: UNIT * 3,
-      marginRight: UNIT * 1.5,
-      ...Platform.select({
-        ios: {
-          fontSize: 30,
-          lineHeight: 32,
-        },
-        android: {
-          fontSize: MAIN_FONT_SIZE,
-          lineHeight: 28,
-        },
-        default: {
-          marginTop: 0,
-          lineHeight: 30,
-        },
-      }),
-    },
-    bullet_list_icon_checkbox: {
-      color: 'transparent',
-      marginLeft: -14,
-    },
-    // @pseudo class, does not have a unique render rule
-    bullet_list_content: {
-      flex: 1,
-      flexWrap: 'wrap',
-    },
-    // @pseudo class, does not have a unique render rule
-    ordered_list_icon: {
-      marginLeft: UNIT,
-      marginRight: UNIT,
-      ...Platform.select({
-        android: {
-          lineHeight: 27,
-        },
-        ios: {
-          lineHeight: 33,
-        },
-        default: {
-          lineHeight: 33,
-        },
-      }),
-    },
-    // @pseudo class, does not have a unique render rule
-    ordered_list_content: {
-      flex: 1,
-      flexWrap: 'wrap',
-    },
-
-    // Code
     code_inline: {
       ...code,
+      backgroundColor: uiThemeColors.$boxBackground,
     },
     code_block: {
       ...code,
+      backgroundColor: uiThemeColors.$boxBackground,
     },
     fence: {
       ...code,
+      backgroundColor: uiThemeColors.$boxBackground,
     },
-
-    // Tables
     table: {
-      borderWidth: 1,
+      ...baseMarkdownStyles.table,
       borderColor: uiThemeColors.$text,
-      borderRadius: 3,
-    },
-    thead: {},
-    tbody: {},
-    th: {
-      flex: 1,
-      padding: 5,
     },
     tr: {
-      borderBottomWidth: 1,
+      ...baseMarkdownStyles.tr,
       borderColor: uiThemeColors.$text,
-      flexDirection: 'row',
     },
-    td: {
-      flex: 1,
-      padding: 5,
-    },
-
-    // Links
     link: {
-      textDecorationLine: 'none',
+      ...baseMarkdownStyles.link,
       color: uiThemeColors.$link,
     },
     blocklink: {
-      flex: 1,
+      ...baseMarkdownStyles.blocklink,
       borderColor: uiThemeColors.$text,
-      borderBottomWidth: 1,
     },
-
-    // Images
-    image: {
-      flex: 1,
-    },
-
-    // Text Output
     text: {
+      ...baseMarkdownStyles.text,
       color: uiThemeColors.$text,
       ...textStyle,
     },
-    textgroup: {},
+    textgroup: {
+      ...baseMarkdownStyles.textgroup,
+    },
     paragraph: {
-      marginTop: UNIT,
-      marginBottom: UNIT,
-      flexWrap: 'wrap',
-      flexDirection: 'row',
-      alignItems: 'flex-start',
-      justifyContent: 'flex-start',
-      width: '100%',
+      ...baseMarkdownStyles.paragraph,
     },
     hardbreak: {
-      width: '100%',
-      height: 1,
+      ...baseMarkdownStyles.hardbreak,
     },
-    softbreak: {},
-
-    // Believe these are never used but retained for completeness
-    pre: {},
-    inline: {},
-    span: {},
+    softbreak: {
+      ...baseMarkdownStyles.softbreak,
+    },
+    pre: {
+      ...baseMarkdownStyles.pre,
+    },
+    inline: {
+      ...baseMarkdownStyles.inline,
+    },
+    span: {
+      ...baseMarkdownStyles.span,
+    },
   };
 };
 

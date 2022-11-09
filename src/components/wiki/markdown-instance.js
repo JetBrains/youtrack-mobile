@@ -2,12 +2,13 @@
 
 import {MarkdownIt} from 'react-native-markdown-display';
 
-
-export default (
-  (new MarkdownIt('commonmark', {typographer: true, breaks: true, linkify: true, html: true})
+function MarkdownItInstance() {
+  const markdownIt: MarkdownIt = MarkdownIt({typographer: true, breaks: true, linkify: true})
     .use(require('markdown-it-checkbox'), {})
     .use(require('markdown-it-inline-comments'))
     .enable('table')
-    .enable('strikethrough')
-  ): typeof MarkdownIt
-);
+    .enable('strikethrough');
+  return markdownIt;
+}
+
+export default new MarkdownItInstance();

@@ -6,6 +6,7 @@ import React, {Component} from 'react';
 import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
 import AttachmentsRow from 'components/attachments-row/attachments-row';
 import CustomFieldsPanel from 'components/custom-fields-panel/custom-fields-panel';
+import HTML from 'components/wiki/renderers/renderer__html';
 import IssueCustomFieldText from 'components/custom-field/issue-custom-field-text';
 import IssueMarkdown from './issue__markdown';
 import IssueVotes from 'components/issue-actions/issue-votes';
@@ -25,6 +26,7 @@ import {getEntityPresentation, getReadableID} from 'components/issue-formatter/i
 import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {i18n} from 'components/i18n/i18n';
+import {isPureHTMLBlock, prepareHTML} from 'components/wiki/markdown-helper';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 import {ytDate} from 'components/date/date';
@@ -42,7 +44,7 @@ import type {
   IssueLink,
   IssueProject,
 } from 'flow/CustomFields';
-import type {Node} from 'react';
+import type {Node} from 'React';
 import type {ScrollData} from 'flow/Markdown';
 import type {Theme, UITheme} from 'flow/Theme';
 import type {Visibility} from 'flow/Visibility';
@@ -102,6 +104,7 @@ export type IssueDetailsProps = {
 export default class IssueDetails extends Component<IssueDetailsProps, void> {
   imageHeaders: any = getApi().auth.getAuthorizationHeaders();
   backendUrl: any = getApi().config.backendUrl;
+  uiTheme: UITheme;
 
   constructor(props: IssueDetailsProps) {
     super(props);
@@ -159,7 +162,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   };
 
-  renderAttachments(attachments: Array<Attachment> | null, uiTheme: UITheme): null | Node {
+  renderAttachments(attachments: Array<Attachment> | null): null | Node {
     if (!attachments || !attachments.length) {
       return null;
     }
@@ -182,13 +185,13 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
             this.props.analyticCategory,
             type === 'image' ? 'Showing image' : 'Open attachment by URL')
           }
-          uiTheme={uiTheme}
+          uiTheme={this.uiTheme}
         />
       </View>
     );
   }
 
-  renderIssueVotes(uiTheme: UITheme): Node {
+  renderIssueVotes(): Node {
     const {issue, issuePermissions, onVoteToggle} = this.props;
 
     return (
@@ -198,7 +201,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
           votes={issue?.votes}
           voted={issue?.voters?.hasVote}
           onVoteToggle={onVoteToggle}
-          uiTheme={uiTheme}
+          uiTheme={this.uiTheme}
         />
       </View>
     );
@@ -227,7 +230,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  renderIssueVisibility(uiTheme: UITheme): Node {
+  renderIssueVisibility(): Node {
     const {onVisibilityChange} = this.props;
     const issue: AnyIssue = this.getIssue();
 
@@ -237,7 +240,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
           <VisibilityControl
             visibility={issue.visibility}
             onSubmit={onVisibilityChange}
-            uiTheme={uiTheme}
+            uiTheme={this.uiTheme}
             getOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
           />
         </View>
@@ -254,7 +257,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
       return (
         <TouchableWithoutFeedback
           key={`issueCustomFieldText${index}`}
-          onLongPress={() => {textField?.value?.text && onLongPress(textField.value.text, `Copy field text`);}}
+          onLongPress={() => {textField?.value?.text && onLongPress(textField.value.text, i18n('Copy field text'));}}
           delayLongPress={250}
         >
           <View>
@@ -275,19 +278,21 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     });
   }
 
-  renderIssueContent(): Node {
+  renderMarkdown() {
     const {
-      openIssueListWithSearch,
+      issue,
       openNestedIssueView,
-      onTagRemove,
       onCheckboxUpdate,
-      onLongPress,
       scrollData,
     } = this.props;
-
-    const issue: AnyIssue = this.getIssue();
     if (!issue) {
-      return <SkeletonIssueContent/>;
+      return null;
+    }
+
+    if (issue.description && (issue.hasEmail || isPureHTMLBlock(issue.description))) {
+      return (
+        <HTML html={prepareHTML(issue.description)}/>
+      );
     }
 
     const ytWikiProps: {
@@ -305,6 +310,22 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
       },
       attachments: issue.attachments,
     };
+    return <IssueMarkdown
+      {...ytWikiProps}
+      scrollData={scrollData}
+      attachments={issue.attachments}
+      markdown={issue.usesMarkdown ? issue.description : null}
+      onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(
+        checked, position, description)}
+    />;
+  }
+
+  renderIssueContent(): Node {
+    const {openIssueListWithSearch, onTagRemove, onLongPress} = this.props;
+    const issue: AnyIssue = this.getIssue();
+    if (!issue) {
+      return <SkeletonIssueContent/>;
+    }
 
     return (
       <View>
@@ -327,21 +348,14 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         {this.renderLinksBlock()}
 
         <TouchableWithoutFeedback
-          onLongPress={() => {onLongPress(issue.description, 'Copy description');}}
+          onLongPress={() => {onLongPress(issue.description, i18n('Copy description'));}}
           delayLongPress={250}
           testID="test:id/issue-description"
           accessibilityLabel="issue-description"
           accessible={true}
         >
           <View style={styles.description}>
-            <IssueMarkdown
-              {...ytWikiProps}
-              scrollData={scrollData}
-              attachments={issue.attachments}
-              markdown={issue.usesMarkdown ? issue.description : null}
-              onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(
-                checked, position, description)}
-            />
+            {this.renderMarkdown()}
           </View>
         </TouchableWithoutFeedback>
 
@@ -366,15 +380,15 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     </>;
   }
 
-  renderIssueView(uiTheme: UITheme): Node {
+  renderIssueView(): Node {
     const {issue, editMode, onAttach} = this.props;
 
     return (
       <View style={styles.issueView}>
 
         <View style={styles.issueTopActions}>
-          {this.renderIssueVisibility(uiTheme)}
-          {this.renderIssueVotes(uiTheme)}
+          {this.renderIssueVisibility()}
+          {this.renderIssueVotes()}
         </View>
         {this.renderAdditionalInfo()}
 
@@ -390,7 +404,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
           </>
         )}
 
-        {issue?.attachments && this.renderAttachments(issue.attachments, uiTheme)}
+        {issue?.attachments && this.renderAttachments(issue.attachments)}
 
         {editMode && <KeyboardSpacerIOS/>}
       </View>
@@ -419,7 +433,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
 
   onUpdateProject: ((project: IssueProject) => Promise<any>) = async (project: IssueProject) => await this.props.updateProject(project);
 
-  renderCustomFieldPanel: ((uiTheme: UITheme) => Node) = (uiTheme: UITheme) => {
+  renderCustomFieldPanel: (() => Node) = () => {
     const _issue: AnyIssue = this.getIssue();
 
     return <CustomFieldsPanel
@@ -439,12 +453,12 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
       onUpdate={this.onFieldUpdate}
       onUpdateProject={this.onUpdateProject}
 
-      uiTheme={uiTheme}
+      uiTheme={this.uiTheme}
       modal={this.props.modal}
     />;
   };
 
-  renderContent(uiTheme: UITheme): Node {
+  renderContent(): Node {
     const {renderRefreshControl, onSwitchToActivity} = this.props;
 
     return (
@@ -454,8 +468,8 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         keyboardShouldPersistTaps="handled"
         scrollEventThrottle={16}
       >
-        {this.renderCustomFieldPanel(uiTheme)}
-        {this.renderIssueView(uiTheme)}
+        {this.renderCustomFieldPanel()}
+        {this.renderIssueView()}
 
         <TouchableOpacity
           style={styles.switchToActivityButton}
@@ -472,9 +486,11 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   render(): Node {
     return (
       <ThemeContext.Consumer>
-        {(theme: Theme) => this.renderContent(theme.uiTheme)}
+        {(theme: Theme) => {
+          this.uiTheme = theme.uiTheme;
+          return this.renderContent();
+        }}
       </ThemeContext.Consumer>
     );
   }
 }
-

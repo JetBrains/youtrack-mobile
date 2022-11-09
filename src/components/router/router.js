@@ -14,7 +14,7 @@ import {
 import log from '../log/log';
 import {flushStoragePart} from '../storage/storage';
 import {isSplitView} from '../responsive/responsive-helper';
-import {uuid} from 'util/util';
+import {guid} from 'util/util';
 import {routeMap} from '../../app-routes';
 
 import type {
@@ -147,7 +147,7 @@ class Router {
     const navigationData: NavigationNavigateAction = NavigationActions.navigate({
       routeName,
       params: newRoute.props,
-      key: uuid(),
+      key: guid(),
     });
 
     if (newRoute.type === 'reset' || forceReset) {

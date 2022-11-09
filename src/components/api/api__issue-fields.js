@@ -214,6 +214,7 @@ const ISSUE_COMMENTS_FIELDS: any = toField([
   ISSUE_COMMENTS_BASE_FIELDS,
   'created',
   'deleted',
+  'hasEmail',
   {
     attachments: ISSUE_ATTACHMENTS_FIELDS,
   },
@@ -390,6 +391,7 @@ export default {
     'updated',
     'wikifiedDescription',
     'usesMarkdown',
+    'hasEmail',
     'comments(id)',
     {watchers: 'hasStar'},
     {voters: 'hasVote'},
