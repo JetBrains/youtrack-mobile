@@ -270,6 +270,14 @@ msgstr "内容が変更されました"
 msgid "Copied"
 msgstr "コピーされました"
 
+#: src/views/issue/issue__details.js
+msgid "Copy description"
+msgstr ""
+
+#: src/views/issue/issue__details.js
+msgid "Copy field text"
+msgstr ""
+
 #: src/views/article/arcticle-actions.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
 #: src/views/issue/issue-base-actions-creater.js

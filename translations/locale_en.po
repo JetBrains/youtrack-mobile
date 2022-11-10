@@ -10,11 +10,11 @@ msgstr ""
 msgid " ({{amount}} unresolved)"
 msgstr " ({{amount}} unresolved)"
 
-#: src/components/comment/comment.js:64
+#: src/components/comment/comment.js:66
 msgid " or "
 msgstr " or "
 
-#: src/views/agile-board/board-actions.js:535
+#: src/views/agile-board/board-actions.js:532
 msgid "(archived)"
 msgstr "(archived)"
 
@@ -203,11 +203,11 @@ msgstr "closed the pull request"
 msgid "Collapse all"
 msgstr "Collapse all"
 
-#: src/views/agile-board/agile-board.js:320
+#: src/views/agile-board/agile-board.js:322
 msgid "Column collapsed"
 msgstr "Column collapsed"
 
-#: src/views/agile-board/agile-board.js:320
+#: src/views/agile-board/agile-board.js:322
 msgid "Column expanded"
 msgstr "Column expanded"
 
@@ -223,7 +223,7 @@ msgstr "Command was successfully applied."
 msgid "Comment changed"
 msgstr "Comment changed"
 
-#: src/components/comment/comment.js:49
+#: src/components/comment/comment.js:51
 msgid "Comment deleted"
 msgstr "Comment deleted"
 
@@ -268,6 +268,14 @@ msgstr "Content revised"
 msgid "Copied"
 msgstr "Copied"
 
+#: src/views/issue/issue__details.js:351
+msgid "Copy description"
+msgstr "Copy description"
+
+#: src/views/issue/issue__details.js:260
+msgid "Copy field text"
+msgstr "Copy field text"
+
 #: src/views/article/arcticle-actions.js:451
 #: src/views/issue/activity/issue-activity__comment-actions.js:281
 #: src/views/issue/issue-base-actions-creater.js:459
@@ -296,7 +304,7 @@ msgstr "Crash report sent"
 msgid "created"
 msgstr "created"
 
-#: src/views/issue/issue__details.js:216
+#: src/views/issue/issue__details.js:219
 msgid "Created by"
 msgstr "Created by"
 
@@ -334,7 +342,7 @@ msgstr "Delete comment permanently?"
 msgid "Delete draft"
 msgstr "Delete draft"
 
-#: src/components/comment/comment.js:70
+#: src/components/comment/comment.js:72
 msgid "Delete permanently"
 msgstr "Delete permanently"
 
@@ -408,7 +416,7 @@ msgstr "Enter time value"
 msgid "Feature request"
 msgstr "Feature request"
 
-#: src/views/agile-board/board-actions.js:557
+#: src/views/agile-board/board-actions.js:554
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
@@ -420,15 +428,15 @@ msgstr "Filter items"
 msgid "Filter projects"
 msgstr "Filter projects"
 
-#: src/views/issues/issues-actions.js:182
+#: src/views/issues/issues-actions.js:188
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
-#: src/views/issues/issues-actions.js:140
+#: src/views/issues/issues-actions.js:146
 msgid "Filter saved searches"
 msgstr "Filter saved searches"
 
-#: src/views/agile-board/board-actions.js:529
+#: src/views/agile-board/board-actions.js:526
 msgid "Filter sprints by name"
 msgstr "Filter sprints by name"
 
@@ -465,7 +473,7 @@ msgstr "If this isn't what you expected, you might try one of these solutions:"
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
 msgstr "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
 
-#: src/views/article/article.js:218
+#: src/views/article/article.js:220
 msgid "in revision"
 msgstr "in revision"
 
@@ -695,7 +703,7 @@ msgid "Projects expanded"
 msgstr "Projects expanded"
 
 #: src/components/query-assist/query-assist-helper.js:53
-#: src/views/issues/issues-actions.js:149
+#: src/views/issues/issues-actions.js:155
 msgid "Recent searches"
 msgstr "Recent searches"
 
@@ -728,7 +736,7 @@ msgstr "reopened the pull request"
 msgid "Restart"
 msgstr "Restart"
 
-#: src/components/comment/comment.js:61
+#: src/components/comment/comment.js:63
 msgid "Restore"
 msgstr "Restore"
 
@@ -899,7 +907,7 @@ msgstr "The application failed to restart automatically. Please try to restart i
 msgid "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
 msgstr "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
 
-#: src/views/agile-board/agile-board.js:378
+#: src/views/agile-board/agile-board.js:380
 msgid "The board {{boardName}} has configuration errors"
 msgstr "The board {{boardName}} has configuration errors"
 
@@ -1016,7 +1024,7 @@ msgstr "Untitled"
 msgid "updated"
 msgstr "updated"
 
-#: src/views/issue/issue__details.js:223
+#: src/views/issue/issue__details.js:226
 msgid "Updated by"
 msgstr "Updated by"
 
@@ -1040,7 +1048,7 @@ msgstr "VCS changes"
 msgid "View comment"
 msgstr "View comment"
 
-#: src/views/issue/issue__details.js:465
+#: src/views/issue/issue__details.js:479
 msgid "View comments and other activity"
 msgstr "View comments and other activity"
 
