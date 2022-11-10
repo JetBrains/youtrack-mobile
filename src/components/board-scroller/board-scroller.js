@@ -89,7 +89,7 @@ class BoardScroller extends Component<Props, State> {
   };
 
   performAutoScroll = () => {
-    const SPEED_DIVIDE = 30;
+    const SPEED_DIVIDE = 10;
     const {dx, dy, active} = this.unmanagedState.autoScroll;
     if (!active) {
       return;
@@ -185,7 +185,7 @@ class BoardScroller extends Component<Props, State> {
 
         <ScrollView
           horizontal
-          scrollEventThrottle={10}
+          // scrollEventThrottle={10}
           decelerationRate="fast"
           ref={this.horizontalScrollRef}
           {...horizontalScrollProps}
