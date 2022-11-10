@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import AgileCard from 'components/agile-card/agile-card';
 import BoardRow from 'components/agile-row/agile-row';
 import {AGILE_TABLET_CARD_WIDTH} from 'components/agile-common/agile-common';
-import {Draggable} from 'components/draggable/';
+import Draggable from 'components/draggable/draggable';
 import {isSplitView} from 'components/responsive/responsive-helper';
 
 import type {AgileBoardRow, Board, SprintFull} from 'flow/Agile';
