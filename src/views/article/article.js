@@ -207,14 +207,16 @@ class Article extends IssueTabbed<Props, State> {
         {!!articleData && (
           <>
             <View style={styles.articleDetailsHeader}>
-              <VisibilityControl
-                style={breadCrumbsElement ? null : styles.visibility}
-                visibility={visibility}
-                onSubmit={(visibility: Visibility) => getApi().articles.updateArticle(articleData.id, {visibility})}
-                uiTheme={this.uiTheme}
-                getOptions={() => getApi().articles.getVisibilityOptions(articleData.idReadable)}
-                visibilityDefaultLabel={visibilityArticleDefaultText}
-              />
+              {issuePermissions.canUpdateArticle(article) && (
+                <VisibilityControl
+                  style={breadCrumbsElement ? null : styles.visibility}
+                  visibility={visibility}
+                  onSubmit={(visibility: Visibility) => getApi().articles.updateArticle(articleData.id, {visibility})}
+                  uiTheme={this.uiTheme}
+                  getOptions={() => getApi().articles.getVisibilityOptions(articleData.idReadable)}
+                  visibilityDefaultLabel={visibilityArticleDefaultText}
+                />
+              )}
               {articleData?.hasUnpublishedChanges && <Badge valid={true} text={i18n('in revision')}/>}
             </View>
 
