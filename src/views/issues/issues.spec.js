@@ -6,6 +6,7 @@ import * as types from './issues-action-types';
 import * as Feature from 'components/feature/feature';
 import {flushStoragePart, getStorageState, __setStorageState} from 'components/storage/storage';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
+import {SET_PROGRESS} from '../../actions/action-types';
 
 let dispatch;
 let stateMock;
@@ -207,7 +208,7 @@ describe('Issue list reducers', () => {
   });
 
   it('should start issue loading', () => {
-    const newState = reducer({}, {type: types.START_ISSUES_LOADING});
+    const newState = reducer({}, {type: SET_PROGRESS, isInProgress: true});
     newState.should.deep.equal({
       loadingError: null,
       isListEndReached: false,
@@ -217,7 +218,7 @@ describe('Issue list reducers', () => {
   });
 
   it('should stop issues loading', () => {
-    reducer({}, {type: types.STOP_ISSUES_LOADING})
+    reducer({}, {type: SET_PROGRESS, isInProgress: false})
       .should.deep.equal({isRefreshing: false});
   });
 

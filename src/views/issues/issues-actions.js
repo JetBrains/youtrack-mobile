@@ -12,6 +12,7 @@ import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from 'components/
 import {getAssistSuggestions, getCachedUserQueries} from 'components/query-assist/query-assist-helper';
 import {i18n} from 'components/i18n/i18n';
 import {notifyError} from 'components/notification/notification';
+import {SET_PROGRESS} from '../../actions/action-types';
 import {until} from 'util/util';
 
 import type Api from 'components/api/api';
@@ -27,6 +28,11 @@ type ApiGetter = () => Api;
 function trackEvent(msg: string, additionalParam: ?string) {
   usage.trackEvent(ANALYTICS_ISSUES_PAGE, msg, additionalParam);
 }
+
+const setGlobalInProgress = (isInProgress: boolean) => ({
+  type: SET_PROGRESS,
+  isInProgress,
+});
 
 export function setIssuesQuery(query: string): {query: string, type: any} {
   return {
@@ -79,12 +85,12 @@ export function listEndReached(): {type: any} {
   return {type: types.LIST_END_REACHED};
 }
 
-export function startIssuesLoading(): {type: any} {
-  return {type: types.START_ISSUES_LOADING};
+export function startIssuesLoading(): { isInProgress: boolean, type: any } {
+  return setGlobalInProgress(true);
 }
 
-export function stopIssuesLoading(): {type: any} {
-  return {type: types.STOP_ISSUES_LOADING};
+export function stopIssuesLoading(): { isInProgress: boolean, type: any } {
+  return setGlobalInProgress(false);
 }
 
 export function startMoreIssuesLoading(newSkip: number): {newSkip: number, type: any} {

@@ -4,7 +4,7 @@ import {createReducer} from 'redux-create-reducer';
 import {EVERYTHING_CONTEXT} from 'components/search/search-context';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
-import {LOG_OUT} from 'actions/action-types';
+import {LOG_OUT, SET_PROGRESS} from 'actions/action-types';
 
 import * as types from './issues-action-types';
 import type {Folder} from 'flow/User';
@@ -65,13 +65,17 @@ export default (createReducer(initialState, {
   [types.CLEAR_SUGGESTIONS]: (state: IssuesState, action: Object) => {
     return {...state, queryAssistSuggestions: []};
   },
-  [types.START_ISSUES_LOADING]: (state: IssuesState, action: Object) => {
+  [SET_PROGRESS]: (state: IssuesState, action: { isInProgress: boolean }) => {
+    const isRefreshing: boolean = action.isInProgress;
     return {
-      ...state, loadingError: null, isListEndReached: false, isRefreshing: true, skip: 0,
+      ...state,
+      isRefreshing,
+      ...(isRefreshing === true ? {
+        loadingError: null,
+        isListEndReached: false,
+        skip: 0,
+      } : {}),
     };
-  },
-  [types.STOP_ISSUES_LOADING]: (state: IssuesState, action: Object) => {
-    return {...state, isRefreshing: false};
   },
   [types.START_LOADING_MORE]: (state: IssuesState, action: Object) => {
     return {...state, isLoadingMore: true, skip: action.newSkip};
