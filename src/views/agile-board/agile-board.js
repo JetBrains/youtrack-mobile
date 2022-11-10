@@ -50,6 +50,7 @@ import type {CustomError} from 'flow/Error';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {SprintFull, AgileBoardRow, BoardColumn, BoardOnList, Sprint} from 'flow/Agile';
 import type {Theme, UITheme} from 'flow/Theme';
+import DeviceInfo from 'react-native-device-info';
 
 const CATEGORY_NAME = 'Agile board';
 
@@ -141,8 +142,9 @@ class AgileBoard extends Component<Props, State> {
     this.goOnlineSubscription.remove();
   }
 
-  onDimensionsChange: () => void = (): void => {
-    this.setState({isSplitView: isSplitView()});
+  onDimensionsChange: () => Promise<void> = async (): Promise<void> => {
+    const isLandscape: boolean = await DeviceInfo.isLandscape();
+    this.setState({isSplitView: isSplitView(), zoomedIn: !isLandscape});
   }
 
   loadBoard = (refresh: boolean = false) => {
