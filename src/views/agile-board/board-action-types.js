@@ -1,7 +1,5 @@
 export const RECEIVE_AGILE_PROFILE = 'agile.RECEIVE_AGILE_PROFILE';
 
-export const START_SPRINT_LOADING = 'agile.START_SPRINT_LOADING';
-export const STOP_SPRINT_LOADING = 'agile.STOP_SPRINT_LOADING';
 export const RECEIVE_SPRINT = 'agile.RECEIVE_SPRINT';
 
 export const START_SWIMLANES_LOADING = 'agile.START_SWIMLANES_LOADING';
@@ -13,7 +11,6 @@ export const ROW_COLLAPSE_TOGGLE = 'agile.ROW_COLLAPSE_TOGGLE';
 export const COLUMN_COLLAPSE_TOGGLE = 'agile.COLUMN_COLLAPSE_TOGGLE';
 
 export const OPEN_AGILE_SELECT = 'agile.OPEN_AGILE_SELECT';
-export const OPEN_BOARD_SELECT = 'agile.OPEN_BOARD_SELECT';
 export const CLOSE_AGILE_SELECT = 'agile.CLOSE_AGILE_SELECT';
 
 export const ADD_CARD_TO_CELL = 'agile.ADD_CARD_TO_CELL';
@@ -23,8 +20,6 @@ export const REMOVE_ISSUE_FROM_BOARD = 'agile.REMOVE_ISSUE_FROM_BOARD';
 export const REORDER_SWIMLANES_OR_CELLS = 'agile.REORDER_SWIMLANES_OR_CELLS';
 export const UPDATE_SWIMLANE = 'agile.UPDATE_SWIMLANE';
 export const MOVE_ISSUE = 'agile.MOVE_ISSUE';
-
-export const IS_OUT_OF_DATE = 'agile.IS_OUT_OF_DATE';
 
 export const START_LOADING_AGILE = 'agile.START_LOADING_AGILE';
 export const STOP_LOADING_AGILE = 'agile.STOP_LOADING_AGILE';

@@ -11,6 +11,8 @@ import * as types from './board-action-types';
 
 import mocks from '../../../test/mocks';
 
+import {SET_PROGRESS} from '../../actions/action-types';
+
 let apiMock;
 let store;
 let agileUserProfileMock: AgileUserProfile;
@@ -227,7 +229,8 @@ describe('Agile board async actions', () => {
 
       it('should stop loading sprint', async () => {
         expect(storeActions[2]).toEqual({
-          type: types.STOP_SPRINT_LOADING,
+          type: SET_PROGRESS,
+          isLoading: false,
         });
       });
 
@@ -254,7 +257,8 @@ describe('Agile board async actions', () => {
 
       it('should show loading sprint', () => {
         expect(storeActions[1]).toEqual({
-          type: types.START_SPRINT_LOADING,
+          type: SET_PROGRESS,
+          isLoading: true,
         });
       });
 
@@ -277,21 +281,24 @@ describe('Agile board async actions', () => {
           error: null,
         });
         expect(storeActions[1]).toEqual({
-          type: types.START_SPRINT_LOADING,
+          type: SET_PROGRESS,
+          isLoading: true,
         });
         expect(storeActions[2]).toEqual({
           type: types.RECEIVE_SPRINT,
           sprint: null,
         });
         expect(storeActions[3]).toEqual({//loading sprint issues
-          type: types.START_SPRINT_LOADING,
+          type: SET_PROGRESS,
+          isLoading: true,
         });
         expect(storeActions[4]).toEqual({
           type: types.AGILE_ERROR,
           error: new Error('Could not load requested sprint issues'),
         });
         expect(storeActions[5]).toEqual({
-          type: types.STOP_SPRINT_LOADING,
+          type: SET_PROGRESS,
+          isLoading: false,
         });
       });
     });

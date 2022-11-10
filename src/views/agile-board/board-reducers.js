@@ -1,6 +1,7 @@
 /* @flow */
+
 import * as types from './board-action-types';
-import {LOG_OUT} from 'actions/action-types';
+import {LOG_OUT, SET_PROGRESS} from 'actions/action-types';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {createReducer} from 'redux-create-reducer';
@@ -130,11 +131,8 @@ const agilePageReducer = createReducer(initialPageState, {
   [types.RECEIVE_AGILE_PROFILE](state: AgilePageState, action: { profile: AgileUserProfile }): AgilePageState {
     return {...state, profile: action.profile};
   },
-  [types.START_SPRINT_LOADING](state: AgilePageState) {
-    return {...state, isLoading: true};
-  },
-  [types.STOP_SPRINT_LOADING](state: AgilePageState) {
-    return {...state, isLoading: false};
+  [SET_PROGRESS](state: AgilePageState, action: { isInProgress: boolean }) {
+    return {...state, isLoading: action.isInProgress};
   },
   [types.RECEIVE_SPRINT](state: AgilePageState, action: Object) {
     return {...state, sprint: action.sprint};

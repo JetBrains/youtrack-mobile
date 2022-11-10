@@ -19,6 +19,7 @@ import {isIOSPlatform, until} from 'util/util';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {notify, notifyError} from 'components/notification/notification';
 import {routeMap} from '../../app-routes';
+import {SET_PROGRESS} from '../../actions/action-types';
 import {sortAlphabetically} from 'components/search/sorting';
 
 import type Api from 'components/api/api';
@@ -45,12 +46,8 @@ let serverSideEventsInstance: ServersideEvents;
 let serverSideEventsInstanceErrorTimer = null;
 export const DEFAULT_ERROR_AGILE_WITH_INVALID_STATUS = {status: {valid: false, errors: [DEFAULT_ERROR_MESSAGE]}};
 
-function startSprintLoad() {
-  return {type: types.START_SPRINT_LOADING};
-}
-
-function stopSprintLoad() {
-  return {type: types.STOP_SPRINT_LOADING};
+function toggleSprintLoad(isLoading: boolean) {
+  return {type: SET_PROGRESS, isLoading};
 }
 
 function receiveSprint(sprint) {
@@ -113,7 +110,7 @@ export function loadAgileWithStatus(agileId: string): ((dispatch: (any) => any) 
 
       if (!agileWithStatus.status.valid) {
         dispatch(receiveSprint(null));
-        dispatch(stopSprintLoad());
+        dispatch(toggleSprintLoad(false));
       }
     }
   };
@@ -226,7 +223,7 @@ export function loadSprint(agileId: string, sprintId: string, query: string): ((
   return async (dispatch: (any) => any, getState: () => AgilePageState, getApi: ApiGetter) => {
     const api: Api = getApi();
     dispatch(setError(null));
-    dispatch(startSprintLoad());
+    dispatch(toggleSprintLoad(true));
     destroySSE();
     try {
       const sprint = await api.agile.getSprint(agileId, sprintId, PAGE_SIZE, 0, query);
@@ -262,7 +259,7 @@ export function loadSprint(agileId: string, sprintId: string, query: string): ((
       dispatch(setError(error));
       trackError('Load sprint');
       log.info(message, e);
-      dispatch(stopSprintLoad());
+      dispatch(toggleSprintLoad(false));
     }
   };
 }
@@ -274,7 +271,7 @@ export function loadSprintIssues(sprint: SprintFull): ((
 ) => Promise<void>) {
   return async (dispatch: (any) => any, getState: () => AgilePageState, getApi: ApiGetter) => {
     const api: Api = getApi();
-    dispatch(startSprintLoad());
+    dispatch(toggleSprintLoad(true));
     try {
       const allIssuesIds: Array<{id: string}> = getSprintAllIssues(sprint);
       const sprintIssues: Array<IssueFull> = await api.agile.getAgileIssues(allIssuesIds);
@@ -295,7 +292,7 @@ export function loadSprintIssues(sprint: SprintFull): ((
       dispatch(setError(error));
       log.info(message, e);
     } finally {
-      dispatch(stopSprintLoad());
+      dispatch(toggleSprintLoad(false));
     }
   };
 }
@@ -577,7 +574,7 @@ export function openBoardSelect(): ((dispatch: (any) => any, getState: () => any
         onSelect: async (selectedBoard: BoardOnList, query: string = '') => {
           dispatch(closeSelect());
           dispatch(receiveSprint(null));
-          dispatch(startSprintLoad());
+          dispatch(toggleSprintLoad(true));
           await flushStoragePart({agileQuery: null});
           dispatch(loadBoard(selectedBoard, query));
           trackEvent('Change board');
