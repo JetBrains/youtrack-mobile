@@ -3,7 +3,7 @@
 import {MarkdownIt} from 'react-native-markdown-display';
 
 function MarkdownItInstance() {
-  const markdownIt: MarkdownIt = MarkdownIt({typographer: true, breaks: true, linkify: true})
+  const markdownIt: typeof MarkdownIt = MarkdownIt({typographer: true, breaks: true, linkify: true, html: true})
     .use(require('markdown-it-checkbox'), {})
     .use(require('markdown-it-inline-comments'))
     .enable('table')

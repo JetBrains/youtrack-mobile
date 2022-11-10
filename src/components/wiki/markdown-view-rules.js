@@ -3,10 +3,12 @@
 import React from 'react';
 import {ActivityIndicator, Linking, Text, TouchableOpacity, View} from 'react-native';
 
+import {WebView} from 'react-native-webview';
+
+import HTML from './renderers/renderer__html';
 import Hyperlink from 'react-native-hyperlink';
 import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
-import {WebView} from 'react-native-webview';
 
 import calculateAspectRatio from 'components/aspect-ratio/aspect-ratio';
 import CodeHighlighter from './code-renderer';
@@ -355,6 +357,10 @@ function getMarkdownRules(
         inheritedStyles,
         textStyle,
       ));
+    },
+
+    html_block: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+      return <HTML html={node.content}/>;
     },
 
   };
