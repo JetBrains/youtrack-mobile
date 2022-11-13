@@ -36,7 +36,7 @@ export type Mentions = {
 }
 
 
-const issueIdRegExp: RegExp = new RegExp(`[a-zA-Z0-9_]+\\-\\d+`);
+const issueIdRegExp: RegExp = /([a-zA-Z]+-)+\d+/g;
 const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
 const imageRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
 const imageWidth: RegExp = /{width=\d+(%|px)?}/i;
