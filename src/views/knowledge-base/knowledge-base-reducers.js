@@ -26,9 +26,6 @@ const {reducer, actions} = (createSlice({
   name: 'knowledgeBase',
   initialState: articlesInitialState,
   reducers: {
-    setLoading(state: KnowledgeBaseState, action: { payload: boolean }) {
-      state.isLoading = action.payload;
-    },
     setExpandingProjectId(state: KnowledgeBaseState, action: { payload: string }) {
       state.expandingProjectId = action.payload;
     },
@@ -44,5 +41,5 @@ const {reducer, actions} = (createSlice({
   },
 }): typeof Slice);
 
-export const {setLoading, setError, setList, setArticles, setExpandingProjectId} = actions;
+export const {setError, setList, setArticles, setExpandingProjectId} = actions;
 export default reducer;

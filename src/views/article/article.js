@@ -146,12 +146,12 @@ class Article extends IssueTabbed<Props, State> {
     return <ErrorMessage error={error}/>;
   };
 
-  renderRefreshControl = (onRefresh: Function = this.refresh, showActivityIndicator: boolean = true) => {
+  renderRefreshControl = (onRefresh: Function = this.refresh) => {
     return <RefreshControl
       testID="refresh-control"
       accessibilityLabel="refresh-control"
       accessible={true}
-      refreshing={showActivityIndicator && this.props.isLoading}
+      refreshing={false}
       tintColor={this.uiTheme.colors.$link}
       onRefresh={onRefresh}
     />;
@@ -298,7 +298,7 @@ class Article extends IssueTabbed<Props, State> {
         data={[0]}
         ref={(instance: ?Object) => instance && (this.articleDetailsList = instance)}
         removeClippedSubviews={false}
-        refreshControl={this.renderRefreshControl(this.refresh, !!articleData?.content)}
+        refreshControl={this.renderRefreshControl(this.refresh)}
         keyExtractor={() => 'article-details'}
         renderItem={() => this.createArticleDetails(articleData, scrollData)}
 

@@ -14,12 +14,13 @@ import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {logEvent} from 'components/log/log-helper';
 import {notify, notifyError} from 'components/notification/notification';
-import {setArticles, setError, setExpandingProjectId, setList, setLoading} from './knowledge-base-reducers';
+import {setArticles, setError, setExpandingProjectId, setList} from './knowledge-base-reducers';
 import {
   cacheProjects,
   cacheUserLastVisitedArticle,
   resetUserArticlesProfile,
 } from 'actions/app-actions';
+import {SET_PROGRESS} from '../../actions/action-types';
 import {showActions} from 'components/action-sheet/action-sheet';
 import {sortByUpdatedReverse} from 'components/search/sorting';
 import {until} from 'util/util';
@@ -55,6 +56,11 @@ const getArticlesQuery = (): string | null => getStorageState().articlesQuery;
 const createArticleList = (articles: Array<Article>, isExpanded?: boolean): ArticlesList => (
   treeHelper.createArticleList(articles, isExpanded)
 );
+
+const setLoading = (isInProgress) => ({
+  type: SET_PROGRESS,
+  isInProgress,
+});
 
 export const getPinnedNonTemplateProjects = async (api: Api): Promise<Array<Folder>> => {
   const [error, pinnedFolders]: [?CustomError, Folder] = await until(api.issueFolder.getPinnedIssueFolder());

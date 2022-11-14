@@ -40,9 +40,6 @@ const {reducer, actions} = (createSlice({
   name: 'article',
   initialState: articleInitialState,
   reducers: {
-    setLoading(state: ArticleState, action: PayloadAction<boolean>) {
-      state.isLoading = action.payload;
-    },
     setProcessing(state: ArticleState, action: PayloadAction<boolean>) {
       state.isProcessing = action.payload;
     },
@@ -77,7 +74,6 @@ const {reducer, actions} = (createSlice({
 
 
 export const {
-  setLoading,
   setError,
   setArticle,
   setActivityPage,

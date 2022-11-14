@@ -22,10 +22,10 @@ import {
   setArticle,
   setArticleCommentDraft,
   setError,
-  setLoading,
   setPrevArticle,
   setProcessing,
 } from './article-reducers';
+import {SET_PROGRESS} from '../../actions/action-types';
 import {showActions, showActionSheet} from 'components/action-sheet/action-sheet';
 import {updateActivityCommentReactions} from '../../components/activity-stream/activity__stream-helper';
 
@@ -44,6 +44,10 @@ import type {User} from 'flow/User';
 
 type ApiGetter = () => Api;
 
+const setLoading = (isInProgress) => ({
+  type: SET_PROGRESS,
+  isInProgress,
+});
 
 const clearArticle = (): ((dispatch: (any) => any) => Promise<any>) => async (dispatch: (any) => any) => dispatch(setArticle(null));
 

@@ -327,7 +327,7 @@ export class KnowledgeBase extends Component<Props, State> {
       testID="refresh-control"
       accessibilityLabel="refresh-control"
       accessible={true}
-      refreshing={this.props.isLoading}
+      refreshing={false}
       tintColor={styles.link.color}
       onRefresh={this.loadArticlesList}
     />;

@@ -29,7 +29,7 @@ import type {User} from 'flow/User';
 type Props = {
   article: Article,
   issuePermissions: IssuePermissions,
-  renderRefreshControl: (onRefresh: Function, showActivityIndicator: boolean) => React$Element<any>,
+  renderRefreshControl: (onRefresh: Function) => React$Element<any>,
   uiTheme: UITheme,
   onCheckboxUpdate?: (articleContent: string) => Function,
   highlight?: { activityId: string, commentId?: string },
@@ -154,7 +154,7 @@ const ArticleActivities = (props: Props) => {
         onCheckboxUpdate={(checked: boolean, position: number, comment: IssueComment) => (
           dispatch(articleActions.updateArticleComment(comment))
         )}
-        refreshControl={() => renderRefreshControl(() => loadActivities(false), !activities)}
+        refreshControl={() => renderRefreshControl(() => loadActivities(false))}
         highlight={props.highlight}
       />
       {issuePermissions.articleCanCommentOn(article) && (
