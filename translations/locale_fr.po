@@ -276,11 +276,11 @@ msgstr "Copié"
 
 #: src/views/issue/issue__details.js
 msgid "Copy description"
-msgstr ""
+msgstr "Copier la description"
 
 #: src/views/issue/issue__details.js
 msgid "Copy field text"
-msgstr ""
+msgstr "Copier le texte de champ"
 
 #: src/views/article/arcticle-actions.js
 #: src/views/issue/activity/issue-activity__comment-actions.js

@@ -272,11 +272,11 @@ msgstr "복사됨"
 
 #: src/views/issue/issue__details.js
 msgid "Copy description"
-msgstr ""
+msgstr "설명 복사"
 
 #: src/views/issue/issue__details.js
 msgid "Copy field text"
-msgstr ""
+msgstr "필드 텍스트 복사"
 
 #: src/views/article/arcticle-actions.js
 #: src/views/issue/activity/issue-activity__comment-actions.js

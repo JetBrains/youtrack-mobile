@@ -284,11 +284,11 @@ msgstr "Скопировано"
 
 #: src/views/issue/issue__details.js
 msgid "Copy description"
-msgstr ""
+msgstr "Копировать описание"
 
 #: src/views/issue/issue__details.js
 msgid "Copy field text"
-msgstr ""
+msgstr "Копировать текст в поле"
 
 #: src/views/article/arcticle-actions.js
 #: src/views/issue/activity/issue-activity__comment-actions.js
