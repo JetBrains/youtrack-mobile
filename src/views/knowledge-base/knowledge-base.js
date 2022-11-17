@@ -142,7 +142,7 @@ export class KnowledgeBase extends Component<Props, State> {
 
   setSplitView: () => void = (): void => {
     this.setState({isSplitView: isSplitView()});
-  }
+  };
 
   loadArticlesList: ((reset?: boolean) => Promise<any>) = async (reset?: boolean) => this.props.loadArticleList(reset);
 

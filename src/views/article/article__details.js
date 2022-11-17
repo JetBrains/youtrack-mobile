@@ -88,8 +88,7 @@ const ArticleDetails = (props: Props) => {
             }
           }}
           onShowSubArticles={(childArticle: Article) => navigateToSubArticlePage(childArticle)}
-        >
-        </ArticleWithChildren>
+         />
       );
     };
 

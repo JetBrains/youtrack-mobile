@@ -106,7 +106,7 @@ export class Issues extends Component<Props, State> {
       isSplitView: isSplit,
       focusedIssue: isSplit ? this.state.focusedIssue : null,
     });
-  }
+  };
 
   refresh() {
     this.props.initializeIssuesList(this.props.searchQuery);

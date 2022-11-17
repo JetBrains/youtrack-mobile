@@ -34,13 +34,13 @@ export default class QueryPreview extends Component<Props, void> {
     if (this.props.onFocus) {
       this.props.onFocus(true);
     }
-  }
+  };
 
   focus: (() => void) = () => {
     if (this.props.onFocus) {
       this.props.onFocus(false);
     }
-  }
+  };
 
   render(): Node {
     const {query, style} = this.props;

@@ -132,7 +132,7 @@ export class AuthBase {
     };
     const _authParams: ?AuthParams = authParams || this.authParams;
     if (_authParams) {
-      headers['Authorization'] = `${_authParams.token_type} ${_authParams.access_token}`;
+      headers.Authorization = `${_authParams.token_type} ${_authParams.access_token}`;
     } else {
       log.warn('Auth: getAuthorizationHeaders called before authParams initialization');
     }

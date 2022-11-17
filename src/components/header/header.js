@@ -48,7 +48,7 @@ export default class Header extends PureComponent<HeaderProps, void> {
     if (this.props.onRightButtonClick) {
       return this.props.onRightButtonClick();
     }
-  }
+  };
 
   render(): Node {
     const {leftButton, children, extraButton, rightButton, style, title, showShadow} = this.props;

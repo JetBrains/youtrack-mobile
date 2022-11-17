@@ -145,11 +145,11 @@ class AgileBoard extends Component<Props, State> {
   onDimensionsChange: () => Promise<void> = async (): Promise<void> => {
     const isLandscape: boolean = await DeviceInfo.isLandscape();
     this.setState({isSplitView: isSplitView(), zoomedIn: !isLandscape});
-  }
+  };
 
   loadBoard = (refresh: boolean = false) => {
     this.props.onLoadBoard(this.query, refresh);
-  }
+  };
 
   onVerticalScroll = (event) => {
     const {nativeEvent} = event;
@@ -195,7 +195,7 @@ class AgileBoard extends Component<Props, State> {
       tintColor={styles.link.color}
       onRefresh={() => this.loadBoard(true)}
     />;
-  }
+  };
 
   toggleModalChildren(modalChildren: any = null) {
     this.setState({modalChildren});

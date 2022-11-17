@@ -94,7 +94,7 @@ export class QueryAssist extends Component<Props, State> {
   onSubmitEditing = () => {
     this.blurInput();
     this.props.onApplyQuery(this.state.inputValue || '');
-  }
+  };
 
   UNSAFE_componentWillReceiveProps(newProps: Props) {
     if (newProps.currentQuery !== this.props.currentQuery) {
@@ -125,7 +125,7 @@ export class QueryAssist extends Component<Props, State> {
   onClose = (): void => {
     this.cancelSearch();
     this.props.onClose(this.state.inputValue);
-  }
+  };
 
   renderClearIcon(): Node {
     return (
@@ -241,7 +241,7 @@ export class QueryAssistModal extends QueryAssist<Props, State> {
 
   onHide = (): void => {
     this.setState({ visible: false });
-  }
+  };
 
   onClose(): void {
     super.onClose();

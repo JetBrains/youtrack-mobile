@@ -37,7 +37,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
 
   getCollapsedColumnIds: (() => Array<string>) = () => {
     return (this.props.sprint?.board?.columns || []).filter(col => col.collapsed).map(col => col.id);
-  }
+  };
 
   createCommonRowProps: (() => {
   collapsedColumnIds: Array<string>,

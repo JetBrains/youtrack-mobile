@@ -318,7 +318,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   renderBackIcon: () => (null | React$Element<any>) = () => {
     return isSplitView() ? null : <IconBack color={this.uiTheme.colors.$link}/>;
-  }
+  };
 
   canStar: () => boolean = (): boolean => {
     const {issue, issuePermissions} = this.props;

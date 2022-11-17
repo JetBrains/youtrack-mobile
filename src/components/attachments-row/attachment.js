@@ -118,7 +118,7 @@ export default class Attach extends PureComponent<Props, State> {
         onRemoveImage: onRemoveImage ? () => onRemoveImage(attach) : undefined,
       });
     }
-  }
+  };
 
   openAttachmentUrl(name: string, url: string): void | Promise<null> {
     this.props.onOpenAttachment('file', name);

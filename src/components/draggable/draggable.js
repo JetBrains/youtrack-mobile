@@ -31,7 +31,7 @@ class Draggable extends React.Component<PropsWithContext, void> {
         this.props.children,
         this.props.data
       );}
-  }
+  };
 
   static defaultProps = {
     dragOn: 'onLongPress',

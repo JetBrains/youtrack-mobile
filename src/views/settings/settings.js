@@ -66,7 +66,7 @@ class Settings extends PureComponent<Props, State> {
 
   onDimensionsChange: () => void = (): void => {
     this.setState({isSplitView: isSplitView()});
-  }
+  };
 
   componentDidMount() {
     this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.onDimensionsChange);

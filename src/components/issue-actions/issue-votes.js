@@ -26,7 +26,7 @@ export default class IssueVotes extends PureComponent<Props, void> {
   toggle: (() => void) = () => {
     const {voted, onVoteToggle} = this.props;
     onVoteToggle(!voted);
-  }
+  };
 
   render(): Node {
     const {voted, votes, canVote, uiTheme} = this.props;

@@ -119,11 +119,11 @@ class DragContainer extends React.Component<Props, State> {
       const i = this.dropZones.indexOf(zone);
       this.dropZones.splice(i, 1, details);
     }
-  }
+  };
 
   removeZone = (ref: React.Ref<DropZone>) => {
     this.dropZones = this.dropZones.filter(z => z.ref !== ref);
-  }
+  };
 
   inZone({x, y}: {x: number, y: number}, zone: ZoneInfo): boolean {
     return (
@@ -136,7 +136,7 @@ class DragContainer extends React.Component<Props, State> {
 
   registerOnDragStart: ((onDragStart: any) => void) = (onDragStart: Function) => {
     this.reportOnDragStart = onDragStart;
-  }
+  };
 
   registerOnDrag: ((onDrag: any) => void) = (onDrag: Function) => {
     this.reportOnDrag = onDrag;
@@ -144,7 +144,7 @@ class DragContainer extends React.Component<Props, State> {
 
   registerOnDrop: ((onDrop: any) => void) = (onDrop: Function) => {
     this.reportOnDrop = onDrop;
-  }
+  };
 
   _addLocationOffset(cornerPoint) {
     if (!this.state.draggingComponent) {
@@ -170,7 +170,7 @@ class DragContainer extends React.Component<Props, State> {
         zone.onLeave(point);
       }
     });
-  }
+  };
 
   _handleDrop = () => {
     this.reportOnDrop();
@@ -212,7 +212,7 @@ class DragContainer extends React.Component<Props, State> {
     }
 
     this.setState({draggingComponent: null});
-  }
+  };
 
   UNSAFE_componentWillMount() {
     this._panResponder = PanResponder.create({
@@ -287,7 +287,7 @@ class DragContainer extends React.Component<Props, State> {
         }
       );
     });
-  }
+  };
 
   render(): React.Node {
     return (

@@ -231,7 +231,7 @@ export default class IssuePermissions {
     this.canCreateWorkNotOwn(entity)
   );
 
-  canDeleteWork: ((entity: AnyIssue, workItem: WorkItem) => boolean) = (entity: AnyIssue, workItem: WorkItem) => this.canUpdateWork(entity, workItem)
+  canDeleteWork: ((entity: AnyIssue, workItem: WorkItem) => boolean) = (entity: AnyIssue, workItem: WorkItem) => this.canUpdateWork(entity, workItem);
 
   canLink: ((entity: AnyIssue) => boolean) = (entity: AnyIssue) => {
     return this.hasPermissionFor(entity, CAN_LINK_ISSUE);
@@ -265,11 +265,11 @@ export default class IssuePermissions {
 
   articleCanCreateArticle: ((projectRingId?: string) => any) = (projectRingId?: string) => (
     this.permissionsStore.has(CREATE_ARTICLE, projectRingId)
-  )
+  );
 
   articleCanDeleteArticle: ((projectRingId?: string) => any) = (projectRingId?: string) => (
     this.permissionsStore.has(DELETE_ARTICLE, projectRingId)
-  )
+  );
 
   articleCanAddAttachment: ((article: Article) => boolean) = (article: Article): boolean => this.hasPermissionFor(article, CREATE_ARTICLE_COMMENT);
 

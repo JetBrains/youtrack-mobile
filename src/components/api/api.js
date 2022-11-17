@@ -34,7 +34,7 @@ class API extends BaseAPI {
   customFields: CustomFieldsAPI;
   inbox: InboxAPI;
   issue: IssueAPI;
-  issueFolder: IssueFolderAPI
+  issueFolder: IssueFolderAPI;
   issues: IssuesAPI;
   mentions: MentionsAPI;
   projects: ProjectsAPI;

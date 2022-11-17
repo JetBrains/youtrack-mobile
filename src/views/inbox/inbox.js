@@ -274,7 +274,7 @@ class Inbox extends Component<Props, State> {
                   style={[
                     styles.link,
                     issue.resolved && styles.resolved,
-                    Array.isArray(event.removedValues) && event.removedValues.length > 0 && styles.changeRemoved
+                    Array.isArray(event.removedValues) && event.removedValues.length > 0 && styles.changeRemoved,
                   ]}>
                   {issue.id}
                 </Text>
@@ -460,7 +460,7 @@ class Inbox extends Component<Props, State> {
       focusedNotificationId,
       isSummaryOrDescriptionChange,
     });
-  }
+  };
 
   renderIssue(issue: IssueOnList, isSummaryOrDescriptionChange: boolean, notificationId: string) {
     return <InboxEntity entity={issue} onNavigate={() => {
@@ -632,11 +632,11 @@ class Inbox extends Component<Props, State> {
         stickyHeaderIndices={[0]}
       />
     );
-  }
+  };
 
   renderSelectIssueIcon = () => {
     return <NothingSelectedIconWithText text={i18n('Select an issue from the list')}/>;
-  }
+  };
 
   renderFocusedIssue = () => {
     const {items} = this.props;

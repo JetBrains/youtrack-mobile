@@ -88,7 +88,7 @@ describe('Issue list actions', () => {
       jest.spyOn(Feature, 'checkVersion').mockReturnValueOnce(true);
       const searchContextMock = {id: 'searchContext'};
       __setStorageState({
-        searchContext: searchContextMock
+        searchContext: searchContextMock,
       });
 
       await doSuggest(5);

@@ -102,7 +102,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
     });
 
     return [].concat(sortData.selected).concat(sortData.other);
-  }
+  };
 
   componentDidMount() {
     const selectedItems = this.props.selectedItems ? this.props.selectedItems : [];
@@ -219,7 +219,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
 
   onClearValue: (() => any) = () => {
     return this.onSelect(this.props.multi ? [] : null);
-  }
+  };
 
   _onSave() {
     return this.onSelect(this.state.selectedItems);
@@ -244,7 +244,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
     );
   };
 
-  getItemKey: (item: any) => any = (item: Object) => item.key || item.ringId || item.id
+  getItemKey: (item: any) => any = (item: Object) => item.key || item.ringId || item.id;
 
   renderItems(): Node {
     return (
@@ -284,7 +284,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
 
   onCancel: () => void = (): void => {
     this.props.onCancel();
-  }
+  };
 
   renderHeader() {
     return this.props.header ? <View style={styles.note}>{this.props.header()}</View> : null;
@@ -363,7 +363,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
 
       </WrapperComponent>
     );
-  }
+  };
 
   render(): Node {
     return this.renderContent();
@@ -386,25 +386,25 @@ export class SelectModal extends Select<SelectProps, SelectState & { visible: bo
 
   onHide: () => void = (): void => {
     this.setState({ visible: false });
-  }
+  };
 
   onCancel: () => void = (): void => {
     this.props.onCancel();
     this.onHide();
-  }
+  };
 
   onSelect: (items: any) => void = (item: any): void => {
     this.props.onSelect(item);
     this.onHide();
-  }
+  };
 
   getWrapperProps: () => null = (): null => {
     return null;
-  }
+  };
 
   getWrapperComponent: () => any = (): any => {
     return View;
-  }
+  };
 
   render: () => Node = (): Node => {
     const {visible} = this.state;
@@ -416,7 +416,7 @@ export class SelectModal extends Select<SelectProps, SelectState & { visible: bo
         {visible && this.renderContent()}
       </ModalPortal>
     );
-  }
+  };
 }
 
 export default (Select: React$AbstractComponent<SelectProps, mixed>);

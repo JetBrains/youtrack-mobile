@@ -118,7 +118,7 @@ export class LogIn extends Component<Props, State> {
       );
       this.setState({errorMessage: errorMessage, loggingIn: false});
     }
-  }
+  };
 
   changeYouTrackUrl() {
     this.props.onChangeServerUrl(this.props.config.backendUrl);

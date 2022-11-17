@@ -70,7 +70,7 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
 
   setSplitView: () => void = (): void => {
     this.setState({isSplitView: isSplitView()});
-  }
+  };
 
   getRouteBadge(route: TabRoute): any {
     return null;

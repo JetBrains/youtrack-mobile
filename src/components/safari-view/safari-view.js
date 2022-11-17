@@ -19,5 +19,5 @@ export default {
           resolve(result);
         });
     });
-  }
+  },
 };

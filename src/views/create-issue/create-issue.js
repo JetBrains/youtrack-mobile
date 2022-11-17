@@ -280,7 +280,7 @@ class CreateIssue extends PureComponent<Props, State> {
     } else {
       Router.pop(true);
     }
-  }
+  };
 
   renderLinkedIssuesAddLink = () => {
     const {loadIssuesXShort, onLinkIssue, getIssueLinksTitle, processing} = this.props;
@@ -329,7 +329,7 @@ class CreateIssue extends PureComponent<Props, State> {
         )}
       </>
     );
-  }
+  };
 
   render() {
     const {

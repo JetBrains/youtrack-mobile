@@ -59,7 +59,7 @@ export default EStyleSheet.create({
     marginBottom: UNIT,
   },
   reactionButton: {
-    paddingHorizontal: UNIT / 2
+    paddingHorizontal: UNIT / 2,
   },
   editCommentCloseButton: {
     position: 'absolute',

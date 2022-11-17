@@ -19,7 +19,7 @@ export default EStyleSheet.create({
       android: {
         borderTopWidth: 0.5,
         borderTopColor: '$separator',
-      }
+      },
     }),
   },
 
@@ -36,7 +36,7 @@ export default EStyleSheet.create({
     color: '$link',
   },
   disabled: {
-    color: '$disabled'
+    color: '$disabled',
   },
   suggestionButton: {
     flexDirection: 'row',
@@ -137,10 +137,10 @@ export default EStyleSheet.create({
     alignItems: 'center',
     paddingVertical: UNIT / 2,
     paddingHorizontal: UNIT / 2,
-    color: '$iconAccent'
+    color: '$iconAccent',
   },
   actionsContainerButtonDisabled: {
-    color: '$disabled'
+    color: '$disabled',
   },
   actionsContainerButtonText: {
     marginLeft: UNIT,
@@ -165,7 +165,7 @@ export default EStyleSheet.create({
     flex: 1,
   },
   commentEditHeader: {
-    ...elevation1
+    ...elevation1,
   },
   commentEditContentTopOffset: {
     marginTop: UNIT * 9,

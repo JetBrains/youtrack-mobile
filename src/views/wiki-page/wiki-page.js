@@ -46,7 +46,7 @@ type State = {
 export default class WikiPage extends PureComponent<Props, State> {
   state: State = {
     isPinned: false,
-  }
+  };
 
   static defaultProps: DefaultProps = {
     onIssueIdTap: () => {},

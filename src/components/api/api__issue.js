@@ -354,7 +354,7 @@ export default class IssueAPI extends ApiBase {
     const visibilityOptions = await this.makeAuthorizedRequest(url, 'POST', {issues: [{id: issueId}]});
     visibilityOptions.visibilityUsers = ApiHelper.convertRelativeUrls((visibilityOptions.visibilityUsers || []), 'avatarUrl', this.config.backendUrl);
     return visibilityOptions;
-  }
+  };
 
   async getMentionSuggests(issueIds: Array<string>, query: string): Promise<any> {
     const $top = 10;

@@ -28,7 +28,7 @@ type SearchPanelProps = {
 export default class QueryAssistPanel extends PureComponent<SearchPanelProps, void> {
   static defaultProps: {onClose: () => null} = {
     onClose: () => null,
-  }
+  };
 
   node: Object;
 
@@ -42,7 +42,7 @@ export default class QueryAssistPanel extends PureComponent<SearchPanelProps, vo
 
   applyQuery: ((query: string) => any) = (query: string) => {
     return this.props.onQueryUpdate(query);
-  }
+  };
 
   render(): Node {
     const {queryAssistSuggestions, query, style, clearButtonMode} = this.props;

@@ -58,7 +58,7 @@ class ManageThemeProvider extends PureComponent<Props, State> {
       androidVersion = parseFloat(systemVersion);
     }
     return typeof androidVersion === 'number' && androidVersion >= 8;
-  }
+  };
 
   componentDidMount = () => {
     this._isMounted = true;

@@ -171,7 +171,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     if (this.props.analyticsId) {
       usage.trackEvent(this.props.analyticsId, message);
     }
-  }
+  };
 
   saveUpdatedField(field: IssueCustomField, value: null | number | Object | Array<Object>): Promise<boolean> {
     const updateSavingState = (value) => this.isComponentMounted && this.setState({savingField: value});

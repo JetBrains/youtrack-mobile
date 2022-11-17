@@ -43,7 +43,7 @@ export default class SelectItem extends PureComponent<Props, void> {
   onSelect: (() => void) = () => {
     const {item, onPress} = this.props;
     onPress(item);
-  }
+  };
 
   render(): null | Node {
     const {item, isSelected, style, onLongPress = () => {}, disabled = false} = this.props;

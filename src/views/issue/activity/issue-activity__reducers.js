@@ -60,13 +60,13 @@ const attachmentReducers = {
   [attachmentTypes.ATTACH_START_ADDING](state: State, action: {attachingImage: Object}) {
     return {
       ...state,
-      attachingImage: {...action.attachingImage, id: guid()}
+      attachingImage: {...action.attachingImage, id: guid()},
     };
   },
   [attachmentTypes.ATTACH_CANCEL_ADDING](state: State, action: {attachingImage: Object}) {
     return {
       ...state,
-      attachingImage: null
+      attachingImage: null,
     };
   },
   [attachmentTypes.ATTACH_REMOVE](state: State, action: { attachmentId: string }) {
@@ -78,13 +78,13 @@ const attachmentReducers = {
   [attachmentTypes.ATTACH_STOP_ADDING](state: State) {
     return {
       ...state,
-      attachingImage: null
+      attachingImage: null,
     };
   },
   [attachmentTypes.ATTACH_TOGGLE_ADD_FILE_DIALOG](state: State, action: {isAttachFileDialogVisible: boolean}) {
     return {
       ...state,
-      isAttachFileDialogVisible: action.isAttachFileDialogVisible
+      isAttachFileDialogVisible: action.isAttachFileDialogVisible,
     };
   },
 };
