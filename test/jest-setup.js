@@ -47,9 +47,6 @@ jest.mock('react-native-gesture-handler', () => ({}));
 
 jest.mock('react-native-tab-view', () => ({}));
 
-jest.mock('react-native-appearance', () => ({
-  Appearance: {getColorScheme: () => 'light'},
-}));
 
 jest.mock('react-native-encrypted-storage', () => ({
   getItem: jest.fn(() => Promise.resolve()),

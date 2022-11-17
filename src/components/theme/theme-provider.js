@@ -1,12 +1,10 @@
 /* @flow */
 
-import type {Node} from 'react';
+import {Appearance} from 'react-native';
 import React, {PureComponent} from 'react';
 
 import DeviceInfo from 'react-native-device-info';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
-
-import {Appearance, AppearanceProvider} from 'react-native-appearance';
 
 import {flushStoragePart, getStorageState} from '../storage/storage';
 import {isAndroidPlatform} from 'util/util';
@@ -14,6 +12,7 @@ import {isAndroidPlatform} from 'util/util';
 import {ThemeContext} from './theme-context';
 import {buildStyles, getSystemThemeMode, getUITheme, themes} from './theme';
 
+import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
 
 type State = {
@@ -143,9 +142,7 @@ class ManageThemeProvider extends PureComponent<Props, State> {
 }
 
 const ThemeProvider = (props: {children: any, mode: string}): Node => (
-  <AppearanceProvider>
-    <ManageThemeProvider mode={props.mode}>{props.children}</ManageThemeProvider>
-  </AppearanceProvider>
+  <ManageThemeProvider mode={props.mode}>{props.children}</ManageThemeProvider>
 );
 
 export default ThemeProvider;

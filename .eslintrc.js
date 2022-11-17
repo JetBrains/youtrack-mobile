@@ -20,7 +20,7 @@ module.exports = {
     'no-useless-escape': 'off',
     'no-unused-vars': [error, {'vars': 'local', 'args': 'none'}],
     'quotes': [error, 'single', {'allowTemplateLiterals': true}],
-    'semi': error,
+    'semi': 'off',
     // 'indent': [error, 2],
     'no-multi-spaces': error,
     'eqeqeq': error,
@@ -36,7 +36,6 @@ module.exports = {
     'react-native/no-unused-styles': error,
     'react-native/split-platform-components': error,
 
-    'flowtype/define-flow-type': 1,
     'flowtype/no-weak-types': 0,
 
     //Jest

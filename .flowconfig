@@ -13,6 +13,8 @@ node_modules/react-native/Libraries/polyfills/.*
 
 .*/node_modules/babel-plugin-module-resolver/.*/.*
 
+.*/node_modules/resolve/test/resolver/malformed_package_json/package\.json$
+
 [untyped]
 .*/node_modules/@react-native-community/cli/.*/.*
 
@@ -73,4 +75,4 @@ untyped-import
 untyped-type-import
 
 [version]
-^0.162.0
+^0.170.0

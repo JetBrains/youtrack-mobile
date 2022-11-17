@@ -1,6 +1,6 @@
 /* @flow */
 
-import {Appearance} from 'react-native-appearance';
+import {Appearance} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import AsyncStorage from '@react-native-community/async-storage';

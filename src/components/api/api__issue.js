@@ -231,7 +231,7 @@ export default class IssueAPI extends ApiBase {
   async attachFile(issueId: string, fileUri: string, fileName: string, mimeType: string): Promise<XMLHttpRequest> {
     const url = `${this.youTrackIssueUrl}/${issueId}/attachments?fields=id,name`;
     const headers = this.auth.getAuthorizationHeaders();
-    const formData = new FormData(); //eslint-disable-line no-undef
+    const formData = new FormData();
     // $FlowFixMe
     formData.append('photo', {
       uri: fileUri,
