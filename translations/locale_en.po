@@ -26,7 +26,7 @@ msgstr "(Clear value)"
 msgid "[Removed field]"
 msgstr "[Removed field]"
 
-#: src/views/article/article__details.js:143
+#: src/views/article/article__details.js:142
 msgid "{{amount}} article"
 msgid_plural "{{amount}} articles"
 msgstr[0] "{{amount}} article"
@@ -860,7 +860,7 @@ msgstr "Spent time:"
 msgid "Start a new article"
 msgstr "Start a new article"
 
-#: src/views/article/article__details.js:128
+#: src/views/article/article__details.js:127
 msgid "Sub-articles"
 msgstr "Sub-articles"
 
