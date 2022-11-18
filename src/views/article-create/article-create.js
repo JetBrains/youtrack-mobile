@@ -326,7 +326,6 @@ const ArticleCreate = (props: Props) => {
               <AttachmentsRow
                 attachments={articleDraft.attachments}
                 attachingImage={attachingImage}
-                imageHeaders={getApi().auth.getAuthorizationHeaders()}
                 canRemoveAttachment={true}
                 onRemoveImage={(attachment: Attachment) => dispatch(
                   articleCreateActions.deleteDraftAttachment(attachment.id))}

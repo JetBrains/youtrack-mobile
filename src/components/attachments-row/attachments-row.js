@@ -7,7 +7,6 @@ import styles from './attachments-row.styles';
 
 import Attach from './attachment';
 import AttachmentErrorBoundary from './attachment-error-boundary';
-import API from '../api/api';
 import {getApi} from '../api/api__instance';
 import {View} from 'react-native-animatable';
 
@@ -51,18 +50,13 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
     if (this.props.imageHeaders) {
       return this.props.imageHeaders;
     }
-    const api: API = getApi();
-
     let authorizationHeaders = null;
-    if (api?.auth?.getAuthorizationHeaders) {
-      try {
-        authorizationHeaders = api.auth.getAuthorizationHeaders();
-      } catch (e) {
-      }
+    try {
+      authorizationHeaders = getApi().auth.getAuthorizationHeaders();
+    } catch (e) {
     }
     return authorizationHeaders;
   };
-
   render(): null | Node {
     const {
       attachments,

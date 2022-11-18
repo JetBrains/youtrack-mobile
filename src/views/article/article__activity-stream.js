@@ -4,7 +4,6 @@ import React, {useEffect, useState} from 'react';
 
 import {useDispatch, useSelector} from 'react-redux';
 
-import API from 'components/api/api';
 import ReactionsPanel from '../issue/activity/issue__activity-reactions-dialog';
 import usage from 'components/usage/usage';
 import {ActivityStream} from 'components/activity-stream/activity__stream';
@@ -38,10 +37,19 @@ type Props = {
 
 
 const getYoutrackWikiProps = (): YouTrackWiki => {
-  const api: API = getApi();
+  let imageHeaders = null;
+  let backendUrl = '';
+  try {
+    imageHeaders = getApi().auth.getAuthorizationHeaders();
+  } catch (e) {
+  }
+  try {
+    backendUrl = getApi().config.backendUrl;
+  } catch (e) {
+  }
   return {
-    backendUrl: api.config.backendUrl,
-    imageHeaders: api.auth.getAuthorizationHeaders(),
+    backendUrl,
+    imageHeaders,
   };
 };
 
