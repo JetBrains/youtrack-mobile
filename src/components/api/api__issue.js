@@ -24,6 +24,8 @@ import type {Visibility} from 'flow/Visibility';
 import type {WorkItem} from 'flow/Work';
 
 export default class IssueAPI extends ApiBase {
+  draftsURL: string = `${this.youTrackApiUrl}${this.isActualAPI ? '' : '/admin'}/users/me/drafts`;
+
   constructor(auth: Auth) {
     super(auth);
   }
@@ -111,7 +113,7 @@ export default class IssueAPI extends ApiBase {
 
   async loadIssueDraft(draftId: string): Promise<IssueFull> {
     const queryString = qs.stringify({fields: issueFields.singleIssue.toString()});
-    const issue = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${draftId}?${queryString}`);
+    const issue = await this.makeAuthorizedRequest(`${this.draftsURL}/${draftId}?${queryString}`);
     issue.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(issue.attachments, this.config.backendUrl);
     return issue;
   }
@@ -124,7 +126,7 @@ export default class IssueAPI extends ApiBase {
   async updateIssueDraft(issue: $Shape<IssueFull>): Promise<IssueFull> {
     const queryString = qs.stringify({fields: issueFields.singleIssue.toString()});
 
-    const updatedIssue = await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issue.id || ''}?${queryString}`, 'POST', issue);
+    const updatedIssue = await this.makeAuthorizedRequest(`${this.draftsURL}/${issue.id || ''}?${queryString}`, 'POST', issue);
     updatedIssue.attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(updatedIssue.attachments, this.config.backendUrl);
     return updatedIssue;
   }
@@ -132,7 +134,7 @@ export default class IssueAPI extends ApiBase {
   async updateIssueDraftFieldValue(issueId: string, fieldId: string, value: FieldValue): Promise<any> {
     const queryString = qs.stringify({fields: 'id,ringId,value'});
     const body = {id: fieldId, value};
-    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/admin/users/me/drafts/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
+    return await this.makeAuthorizedRequest(`${this.draftsURL}/${issueId}/fields/${fieldId}?${queryString}`, 'POST', body);
   }
 
   async getDraftComment(issueId: string): Promise<IssueComment> {
