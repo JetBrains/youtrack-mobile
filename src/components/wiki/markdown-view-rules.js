@@ -360,7 +360,17 @@ function getMarkdownRules(
     },
 
     html_block: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+      if (isHTMLLinebreak(node.content)) {
+        return renderHTMLLinebreak(node, children, parent, style);
+      }
       return <HTML html={node.content}/>;
+    },
+
+    html_inline: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+      if (isHTMLLinebreak(node.content)) {
+        return renderHTMLLinebreak(node, children, parent, style, inheritedStyles);
+      }
+      return textRenderer(node, children, parent, style);
     },
 
   };
@@ -380,4 +390,13 @@ function isGoogleShared(url: string = ''): boolean {
 
 function isGitHubBadge(url: string = ''): boolean {
   return url.indexOf('badgen.net/badge') !== -1;
+}
+
+function isHTMLLinebreak(text: string): boolean {
+  return (['<br>', '<br/>'].some((tagName: string) => tagName === text.toLowerCase()));
+}
+
+
+function renderHTMLLinebreak(node: MarkdownNode, children: Object, parent: Object, style: Object) {
+  return renderRules.softbreak(node, children, parent, style);
 }
