@@ -219,9 +219,9 @@ export const ActivityStream = (props: ActivityStreamProps): Node => {
 
   const renderCommentActivity = (activityGroup: Object) => {
     const activity: ?Activity = activityGroup.comment;
-    const commentAttachments: Attachment[] = firstActivityChange(activity)?.attachments || [];
+    const _attachments: Attachment[] = props.attachments || firstActivityChange(activity)?.attachments || [];
     const attachments: Array<Attachment> = ApiHelper.convertAttachmentRelativeToAbsURLs(
-      commentAttachments,
+      _attachments,
       props.youtrackWiki.backendUrl
     );
 

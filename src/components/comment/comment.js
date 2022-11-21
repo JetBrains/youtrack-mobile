@@ -85,7 +85,7 @@ function Comment(props: Props) {
         <YoutrackWiki
           backendUrl={backendUrl}
           onIssueIdTap={issueId => onIssueIdTap(issueId)}
-          attachments={attachments}
+          attachments={props.attachments}
           imageHeaders={imageHeaders}
           uiTheme={props.uiTheme}
         >
@@ -131,7 +131,7 @@ function Comment(props: Props) {
   };
 
 
-  const {comment, attachments, uiTheme, activitiesEnabled = true} = props;
+  const {comment, uiTheme, activitiesEnabled = true} = props;
 
   if (activitiesEnabled) {
     return renderComment();

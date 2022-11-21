@@ -45,6 +45,7 @@ const StreamComment = ({
     return null;
   }
 
+  const commentAttachments: Attachment[] = comment?.attachments || [];
   return (
     <>
       <Comment
@@ -73,11 +74,11 @@ const StreamComment = ({
         }
       />
 
-      {!comment.deleted && (comment?.attachments || []).length > 0 && (
+      {!comment.deleted && commentAttachments.length > 0 && (
         <View
           style={styles.activityCommentAttachments}
         >
-          <StreamAttachments attachments={attachments}/>
+          <StreamAttachments attachments={commentAttachments}/>
         </View>
       )}
 
