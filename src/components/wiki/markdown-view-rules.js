@@ -141,10 +141,7 @@ function getMarkdownRules(
     );
   };
 
-  const renderHyperLink: (link: string, style: any) => React$Element<typeof Hyperlink> = (
-    linkText: string,
-    style: any
-  ): React$Element<typeof Hyperlink> => (
+  const renderHyperLink = (linkText: string, style: any): React$Element<typeof Hyperlink> => (
     <Hyperlink
       key={guid()}
       linkStyle={style.link}
@@ -184,23 +181,23 @@ function getMarkdownRules(
     }
 
     if (issueIdRegExp.test(text) && !isURLPattern(text)) {
-      const matched: RegExp$matchResult | null = text.match(issueIdRegExp);
-      if (matched[0] && typeof matched?.index === 'number') {
-        const textWithoutIssueId: string = text.split(matched[0]).join('');
+      const matched: RegExpMatchArray | null = text.match(issueIdRegExp);
+      if (matched && matched[0]) {
+        const matchedIndex: number = text.search(matched[0]);
         const linkStyle = [inheritedStyles, style.text, textStyle];
         return (
           <Text selectable={true} key={node.key} style={[inheritedStyles, style.text, textStyle]}>
-            {renderHyperLink(textWithoutIssueId.slice(0, matched.index), linkStyle)}
+            {renderHyperLink(text.slice(0, matchedIndex), linkStyle)}
             {renderIssueIdLink(matched[0], [inheritedStyles, style.text, textStyle, styles.link], `${node.key}1`)}
-            {renderHyperLink(textWithoutIssueId.slice(matched.index, text.length - 1), linkStyle)}
+            {renderHyperLink(text.slice(matchedIndex + matched[0].length, text.length - 1), linkStyle)}
           </Text>
         );
       }
-      return renderIssueIdLink(text, [inheritedStyles, style.text, textStyle, styles.link], node.key);
+      return renderHyperLink(text, [inheritedStyles, style.text, textStyle, styles.link]);
     }
 
     return (
-      <Text key={node.key} style={[inheritedStyles, style.text, textStyle]}>
+      <Text key={node.key} style={{...inheritedStyles, ...style.text, ...textStyle}}>
         {text}
       </Text>
     );
