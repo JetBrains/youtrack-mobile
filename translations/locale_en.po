@@ -65,7 +65,7 @@ msgstr "Activity Settings"
 msgid "Add project to favorites"
 msgstr "Add project to favorites"
 
-#: src/components/comment/comment-edit.js:512
+#: src/components/comment/comment-edit.js:513
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -129,7 +129,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.js:491
+#: src/components/comment/comment-edit.js:492
 #: src/views/issue/issue-base-actions-creater.js:490
 msgid "Attach file"
 msgstr "Attach file"
@@ -387,7 +387,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.js:530
+#: src/components/comment/comment-edit.js:531
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -1076,7 +1076,7 @@ msgstr "When integrating TeamCity and YouTrack, the users are matched by their e
 msgid "Woah, you can't touch this!"
 msgstr "Woah, you can't touch this!"
 
-#: src/components/comment/comment-edit.js:383
+#: src/components/comment/comment-edit.js:384
 #: src/views/issue/activity/activity__add-spent-time.js:372
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
