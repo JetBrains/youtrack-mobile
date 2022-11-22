@@ -377,6 +377,7 @@ const IssueCommentEdit = (props: Props) => {
   const renderCommentInput = (autoFocus: boolean, onFocus: Function, onBlur: Function): Node => {
     return (
       <TextInput
+        autoCorrect={false}
         multiline={true}
         autoFocus={autoFocus || props.isEditMode}
         ref={editCommentInput}
