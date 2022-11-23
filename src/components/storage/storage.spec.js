@@ -1,4 +1,4 @@
-import MockedStorage from '@react-native-community/async-storage';
+import MockedStorage from '@react-native-async-storage/async-storage';
 import sinon from 'sinon';
 
 import * as storage from './storage';

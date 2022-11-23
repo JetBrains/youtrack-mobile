@@ -4,7 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 import chaiEnzyme from 'chai-enzyme';
 import Enzyme from 'enzyme';
 import log from '../src/components/log/log';
-import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock';
+import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 import mockDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
 import sinonChai from 'sinon-chai';
 
@@ -41,7 +41,7 @@ jest.mock('react-native-device-log', () => ({
   options: {logToConsole: false},
 }));
 
-jest.mock('@react-native-community/async-storage', () => mockAsyncStorage);
+jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 
 jest.mock('react-native-gesture-handler', () => ({}));
 

@@ -2,7 +2,7 @@ import {loadConfig, formatYouTrackURL} from './config';
 import {YT_SUPPORTED_VERSION} from '../error-message/error-text-messages';
 import {__setStorageState} from '../storage/storage';
 import sinon from 'sinon';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 describe('Config', () => {
   describe('Loading', () => {

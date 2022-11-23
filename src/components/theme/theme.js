@@ -3,7 +3,7 @@
 import {Appearance} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import darkTheme from './theme-dark';
 import lightTheme from './theme-light';
 import {THEME_MODE_KEY} from '../storage/storage';
