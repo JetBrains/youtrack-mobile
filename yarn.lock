@@ -8738,9 +8738,9 @@ react-native-navigation-bar-color@2.0.1:
   resolved "https://registry.yarnpkg.com/react-native-navigation-bar-color/-/react-native-navigation-bar-color-2.0.1.tgz#ee2be25cc37105f7da355717b0a9a32c9c059ae6"
   integrity sha512-1kE/oxWt+HYjRxdZdvke9tJ365xaee5n3+euOQA1En8zQuSbOxiE4SYEGM7TeaWnmLJ0l37mRnPHaB2H4mGh0A==
 
-react-native-notifications@anisimov74/react-native-notifications.git#8613886:
+react-native-notifications@anisimov74/react-native-notifications.git#fd47b17:
   version "3.1.4"
-  resolved "https://codeload.github.com/anisimov74/react-native-notifications/tar.gz/861388664c25ebc88b6d2fbeda60c1413648956d"
+  resolved "https://codeload.github.com/anisimov74/react-native-notifications/tar.gz/fd47b17436a22e619afef8bc094f5cefe45d5b79"
 
 react-native-pager-view@5.4.9:
   version "5.4.9"
