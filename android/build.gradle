@@ -6,7 +6,6 @@ buildscript {
         minSdkVersion = 23
         compileSdkVersion = 31
         targetSdkVersion = 31
-        kotlinVersion = "1.6.0" //required for RNN
         androidXCore = "1.7.0"
 
         if (System.properties['os.arch'] == "aarch64") {
@@ -28,8 +27,7 @@ buildscript {
         classpath("de.undercouch:gradle-download-task:4.1.2")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-        classpath 'com.google.gms:google-services:4.3.10'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion" //required for RNN
+        classpath 'com.google.gms:google-services:4.3.14'
     }
 }
 

@@ -117,7 +117,7 @@
     "react-native-markdown-display": "6.1.6",
     "react-native-modalize": "2.0.13",
     "react-native-navigation-bar-color": "2.0.1",
-    "react-native-notifications": "anisimov74/react-native-notifications.git#fd47b17",
+    "react-native-notifications": "^4.3.3",
     "react-native-pager-view": "5.4.9",
     "react-native-portalize": "1.0.7",
     "react-native-progress": "^5.0.0",
