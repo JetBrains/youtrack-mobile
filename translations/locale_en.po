@@ -176,7 +176,7 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/views/article/arcticle-actions.js:475
 #: src/views/create-issue/create-issue-actions.js:334
 #: src/views/inbox-threads/inbox-threads__thread.js:139
-#: src/views/inbox-threads/inbox-threads.js:210
+#: src/views/inbox-threads/inbox-threads.js:213
 #: src/views/issue/activity/issue-activity__comment-actions.js:306
 #: src/views/issue/issue-base-actions-creater.js:519
 #: src/views/issue/issue-base-actions-creater.js:550
@@ -570,7 +570,7 @@ msgstr "Logs"
 msgid "Manage Favorite Projects"
 msgstr "Manage Favorite Projects"
 
-#: src/views/inbox-threads/inbox-threads.js:197
+#: src/views/inbox-threads/inbox-threads.js:200
 msgid "Mark all as read"
 msgstr "Mark all as read"
 
@@ -669,11 +669,11 @@ msgstr "No user information provided by Upsource."
 msgid "Nope, can't find it!"
 msgstr "Nope, can't find it!"
 
-#: src/views/inbox-threads/inbox-threads.js:204
+#: src/views/inbox-threads/inbox-threads.js:207
 msgid "Notification settings…"
 msgstr "Notification settings…"
 
-#: src/views/inbox-threads/inbox-threads.js:181
+#: src/views/inbox-threads/inbox-threads.js:184
 #: src/views/inbox/inbox.js:604
 msgid "Notifications"
 msgstr "Notifications"
@@ -816,7 +816,7 @@ msgstr "Share logs"
 msgid "Share…"
 msgstr "Share…"
 
-#: src/views/inbox-threads/inbox-threads.js:190
+#: src/views/inbox-threads/inbox-threads.js:193
 msgid "Show all"
 msgstr "Show all"
 
@@ -983,7 +983,7 @@ msgstr "Title"
 msgid "Title changed"
 msgstr "Title changed"
 
-#: src/views/inbox-threads/inbox-threads.js:110
+#: src/views/inbox-threads/inbox-threads.js:113
 msgid "To view an item in context, select an issue, article, or update from the list"
 msgstr "To view an item in context, select an issue, article, or update from the list"
 
@@ -1011,7 +1011,7 @@ msgstr "Uncategorized Cards"
 msgid "Unmute thread"
 msgstr "Unmute thread"
 
-#: src/views/inbox-threads/inbox-threads.js:190
+#: src/views/inbox-threads/inbox-threads.js:193
 msgid "Unread only"
 msgstr "Unread only"
 
