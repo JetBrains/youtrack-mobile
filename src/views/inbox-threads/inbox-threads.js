@@ -17,6 +17,8 @@ import InboxThreadsUpdateButton from './inbox-threads__update-button';
 import Issue from '../issue/issue';
 import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
 import Router from 'components/router/router';
+import usage from 'components/usage/usage';
+import {ANALYTICS_NOTIFICATIONS_THREADS_PAGE} from 'components/analytics/analytics-ids';
 import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
 import {folderIdMap, getThreadTabsTitles} from './inbox-threads-helper';
 import {getStorageState} from 'components/storage/storage';
@@ -79,6 +81,7 @@ const InboxThreads: () => Node = (): Node => {
   const isArticle = (entity: ThreadEntity): boolean => hasType.article(entity);
 
   useEffect(() => {
+    usage.trackScreenView(ANALYTICS_NOTIFICATIONS_THREADS_PAGE);
     setThreadsFromCache(folderIdMap[getLastIndex()]);
     dimensionsChangeListener.current = Dimensions.addEventListener('change', () => {
       updateIsSplitView(hasSplitView());

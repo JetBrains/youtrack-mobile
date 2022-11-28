@@ -326,8 +326,8 @@ PODS:
     - React
   - react-native-netinfo (8.2.0):
     - React-Core
-  - react-native-notifications (3.1.4):
-    - React
+  - react-native-notifications (4.3.3):
+    - React-Core
   - react-native-pager-view (5.4.9):
     - React-Core
   - react-native-restart (0.0.24):
@@ -736,7 +736,7 @@ SPEC CHECKSUMS:
   react-native-encrypted-storage: e78d848ce0fb663c2ce306e37921d026809322e6
   react-native-eventsource: fea4e2c2505d19660b312406ce45dbb3fe68fd35
   react-native-netinfo: e922cb2e3eaf9ccdf16b8d4744a89657377aa4a1
-  react-native-notifications: 36929512507417ba0021659bd2f9e0184dda2489
+  react-native-notifications: 83b4fd4a127a6c918fc846cae90da60f84819e44
   react-native-pager-view: 3ee7d4c7697fb3ef788346e834a60cca97ed8540
   react-native-restart: 45c8dca02491980f2958595333cbccd6877cb57e
   react-native-safe-area-context: 4a34aba6110f050b5eacf14d23525b1d95158898

@@ -2,7 +2,11 @@
 
 import ApiBase from './api__base';
 import ApiHelper from './api__helper';
-import issueActivityPageFields, {ISSUE_ATTACHMENT_FIELDS} from './api__activities-issue-fields';
+import {
+  ISSUE_ATTACHMENT_FIELDS,
+  ISSUE_ACTIVITIES_FIELDS_OBSOLETE,
+  issueActivitiesFields,
+} from './api__activities-issue-fields';
 import issueFields from './api__issue-fields';
 import qs from 'qs';
 import {handleRelativeUrl} from '../config/config';
@@ -375,8 +379,9 @@ export default class IssueAPI extends ApiBase {
       reverse: true,
     });
 
+    const fields: string = this.isModernGAP ? issueActivitiesFields : ISSUE_ACTIVITIES_FIELDS_OBSOLETE.toString();
     const response = await this.makeAuthorizedRequest(
-      `${this.youTrackIssueUrl}/${issueId}/activitiesPage?${categories}&${queryString}&fields=${issueActivityPageFields.toString()}`
+      `${this.youTrackIssueUrl}/${issueId}/activitiesPage?${categories}&${queryString}&fields=${fields}`
     );
     return ApiHelper.patchAllRelativeAvatarUrls(response.activities, this.config.backendUrl);
   }
