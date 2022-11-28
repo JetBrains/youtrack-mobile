@@ -5,7 +5,10 @@ import qs from 'qs';
 import ApiBase from './api__base';
 import ApiHelper from './api__helper';
 import {articleChildrenAndSubChildren, articleFields, articlesFields} from './api__articles-fields';
-import issueActivityPageFields, {ISSUE_ATTACHMENT_FIELDS} from './api__activities-issue-fields';
+import {
+  ISSUE_ATTACHMENT_FIELDS,
+  issueActivitiesFields,
+} from './api__activities-issue-fields';
 import issueFields from './api__issue-fields';
 import {activityArticleCategory} from '../activity/activity__category';
 
@@ -83,7 +86,7 @@ export default class ArticlesAPI extends ApiBase {
     });
 
     const activityPage: Array<ActivityItem> = await this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/articles/${articleId}/activitiesPage?${categories}&${queryString}&fields=${issueActivityPageFields.toString()}`
+      `${this.youTrackApiUrl}/articles/${articleId}/activitiesPage?${categories}&${queryString}&fields=${issueActivitiesFields}`
     );
     return ApiHelper.patchAllRelativeAvatarUrls(activityPage, this.config.backendUrl);
   }
