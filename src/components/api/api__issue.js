@@ -4,7 +4,7 @@ import ApiBase from './api__base';
 import ApiHelper from './api__helper';
 import {
   ISSUE_ATTACHMENT_FIELDS,
-  ISSUE_ACTIVITIES_FIELDS_OBSOLETE,
+  ISSUE_ACTIVITIES_FIELDS_LEGACY,
   issueActivitiesFields,
 } from './api__activities-issue-fields';
 import issueFields from './api__issue-fields';
@@ -379,7 +379,11 @@ export default class IssueAPI extends ApiBase {
       reverse: true,
     });
 
-    const fields: string = this.isModernGAP ? issueActivitiesFields : ISSUE_ACTIVITIES_FIELDS_OBSOLETE.toString();
+    const fields: string = (
+      this.isModernGAP
+        ? issueActivitiesFields
+        : ApiHelper.toField({activities: ISSUE_ACTIVITIES_FIELDS_LEGACY}).toString()
+    );
     const response = await this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/activitiesPage?${categories}&${queryString}&fields=${fields}`
     );
