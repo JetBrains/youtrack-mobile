@@ -70,7 +70,7 @@ msgid "Add spent time"
 msgstr "Add spent time"
 
 #: src/components/tags/tag-add-panel.js:39
-#: src/views/issue/issue-base-actions-creater.js:480
+#: src/views/issue/issue-base-actions-creater.js:479
 msgid "Add tag"
 msgstr "Add tag"
 
@@ -93,7 +93,7 @@ msgid "Appearance"
 msgstr "Appearance"
 
 #: src/views/create-issue/create-issue-actions.js:328
-#: src/views/issue/issue-base-actions-creater.js:511
+#: src/views/issue/issue-base-actions-creater.js:510
 msgid "Apply command…"
 msgstr "Apply command…"
 
@@ -130,7 +130,7 @@ msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
 #: src/components/comment/comment-edit.js:492
-#: src/views/issue/issue-base-actions-creater.js:490
+#: src/views/issue/issue-base-actions-creater.js:489
 msgid "Attach file"
 msgstr "Attach file"
 
@@ -178,8 +178,8 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/views/inbox-threads/inbox-threads__thread.js:139
 #: src/views/inbox-threads/inbox-threads.js:213
 #: src/views/issue/activity/issue-activity__comment-actions.js:306
-#: src/views/issue/issue-base-actions-creater.js:519
-#: src/views/issue/issue-base-actions-creater.js:550
+#: src/views/issue/issue-base-actions-creater.js:518
+#: src/views/issue/issue-base-actions-creater.js:549
 #: src/views/knowledge-base/knowledge-base-actions.js:393
 #: src/views/settings/settings__feedback-form.js:95
 msgid "Cancel"
@@ -243,7 +243,7 @@ msgstr "Comments"
 msgid "committed changes"
 msgstr "committed changes"
 
-#: src/actions/app-actions.js:674
+#: src/actions/app-actions.js:678
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -263,8 +263,8 @@ msgstr "Content revised"
 
 #: src/components/wiki/code-renderer.js:134
 #: src/views/issue/activity/issue-activity__comment-actions.js:277
-#: src/views/issue/issue-base-actions-creater.js:463
-#: src/views/issue/issue-base-actions-creater.js:547
+#: src/views/issue/issue-base-actions-creater.js:462
+#: src/views/issue/issue-base-actions-creater.js:546
 msgid "Copied"
 msgstr "Copied"
 
@@ -278,7 +278,7 @@ msgstr "Copy field text"
 
 #: src/views/article/arcticle-actions.js:455
 #: src/views/issue/activity/issue-activity__comment-actions.js:281
-#: src/views/issue/issue-base-actions-creater.js:459
+#: src/views/issue/issue-base-actions-creater.js:458
 msgid "Copy link"
 msgstr "Copy link"
 
@@ -288,7 +288,7 @@ msgid "Copy link to article"
 msgstr "Copy link to article"
 
 #: src/views/issue/activity/issue-activity__comment-actions.js:273
-#: src/views/issue/issue-base-actions-creater.js:543
+#: src/views/issue/issue-base-actions-creater.js:542
 msgid "Copy text"
 msgstr "Copy text"
 
@@ -383,7 +383,7 @@ msgstr "Drafts"
 #: src/components/activity-stream/activity__stream.js:178
 #: src/views/article/arcticle-actions.js:208
 #: src/views/issue/activity/issue-activity__comment-actions.js:290
-#: src/views/issue/issue-base-actions-creater.js:470
+#: src/views/issue/issue-base-actions-creater.js:469
 msgid "Edit"
 msgstr "Edit"
 
@@ -441,7 +441,7 @@ msgid "Filter sprints by name"
 msgstr "Filter sprints by name"
 
 #: src/components/tags/tag-add-select.js:31
-#: src/views/issue/issue-base-actions-creater.js:403
+#: src/views/issue/issue-base-actions-creater.js:402
 msgid "Filter tags"
 msgstr "Filter tags"
 
@@ -481,7 +481,7 @@ msgstr "in revision"
 msgid "Invalid query"
 msgstr "Invalid query"
 
-#: src/views/issue/issue-base-actions-creater.js:642
+#: src/views/issue/issue-base-actions-creater.js:641
 msgid "Issue deleted"
 msgstr "Issue deleted"
 
@@ -497,7 +497,7 @@ msgstr "Issue link added"
 msgid "Issue link removed"
 msgstr "Issue link removed"
 
-#: src/views/issue/issue-base-actions-creater.js:198
+#: src/views/issue/issue-base-actions-creater.js:197
 msgid "Issue updated"
 msgstr "Issue updated"
 
@@ -532,7 +532,7 @@ msgstr "Light theme"
 
 #: src/components/linked-issues/linked-issues-add-link.js:204
 #: src/views/create-issue/create-issue.js:319
-#: src/views/issue/issue-base-actions-creater.js:501
+#: src/views/issue/issue-base-actions-creater.js:500
 msgid "Link issue"
 msgstr "Link issue"
 
@@ -798,7 +798,7 @@ msgid "Share"
 msgstr "Share"
 
 #: src/views/article/arcticle-actions.js:449
-#: src/views/issue/issue-base-actions-creater.js:453
+#: src/views/issue/issue-base-actions-creater.js:452
 msgid "Share link"
 msgstr "Share link"
 
@@ -812,7 +812,7 @@ msgstr "Share logs"
 
 #: src/views/article/arcticle-actions.js:167
 #: src/views/article/arcticle-actions.js:438
-#: src/views/issue/issue-base-actions-creater.js:447
+#: src/views/issue/issue-base-actions-creater.js:446
 msgid "Share…"
 msgstr "Share…"
 
