@@ -643,8 +643,7 @@ export function redirectToRoute(config: AppConfig, issueId: string | null, navig
             Router.Issues({issueId, navigateToActivity});
           } else if (issueId) {
             isRedirected = true;
-            Router.Issues();
-            Router.Issue({issueId, navigateToActivity});
+            Router.Issue({issueId, navigateToActivity, forceReset: true});
           }
         }
       }

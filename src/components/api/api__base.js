@@ -9,6 +9,7 @@ import {routeMap} from '../../app-routes';
 
 import type Auth from '../auth/oauth2';
 import type {AppConfig} from 'flow/AppConfig';
+import type {RequestHeaders} from 'flow/Auth';
 
 const MAX_QUERY_LENGTH = 2048;
 
@@ -98,12 +99,16 @@ export default class BaseAPI {
     assertLongQuery(url);
 
     const sendRequest = async () => {
+      const authHeaders: RequestHeaders = this.auth.getAuthorizationHeaders();
+      if (!authHeaders.Authorization) {
+        log.warn(`Missing auth header in a request: "${method || 'GET'}":${url}`);
+      }
       return await fetch2(url, {
           method,
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json, text/plain, */*',
-            ...this.auth.getAuthorizationHeaders(),
+            ...authHeaders,
           },
           body: JSON.stringify(body),
         },
@@ -113,10 +118,14 @@ export default class BaseAPI {
 
     let response = await sendRequest();
 
+    if (response.status !== HTTP_STATUS.SUCCESS) {
+      log.warn('Request failed with response', response);
+    }
     if (response.status === HTTP_STATUS.UNAUTHORIZED) {
-      log.info('Token is expired, refreshing token', response);
+      log.info('Token is expired, refreshing token');
       await this.auth.refreshToken();
       response = await sendRequest();
+      log.info('Re-do request', url);
     }
 
     if (response.status < HTTP_STATUS.SUCCESS || response.status >= HTTP_STATUS.REDIRECT) {
