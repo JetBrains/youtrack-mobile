@@ -629,9 +629,14 @@ export function redirectToRoute(config: AppConfig, issueId: string | null, navig
       if (config) {
         const auth: OAuth2 = await createAuthInstance(config);
         dispatch(setAuthInstance(auth));
-        const isGuest: boolean = await setUser();
         setApi(new Api(auth));
 
+        const authParams: AuthParams = auth.getAuthParams();
+        if (authParams && getState().app?.networkState?.isConnected === true) {
+          await auth.loadCurrentUser(auth.getAuthParams());
+        }
+
+        const isGuest: boolean = await setUser();
         const cachedPermissions: ?Array<PermissionCacheItem> = getCachedPermissions();
         if (cachedPermissions) {
           await dispatch(setUserPermissions(cachedPermissions));
