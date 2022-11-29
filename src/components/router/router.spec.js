@@ -1,4 +1,5 @@
 import Router from './router';
+import {routeMap} from '../../app-routes';
 
 describe('Router', () => {
   let navigatorMock;
@@ -101,6 +102,34 @@ describe('Router', () => {
         prevRouteNameMock,
         options
       );
+    });
+  });
+
+
+  describe('hasNoParentRoute', () => {
+
+    it('should return TRUE if there is only one route left', () => {
+      jest.spyOn(Router, 'getRoutes').mockReturnValueOnce([{}]);
+
+      expect(Router.hasNoParentRoute()).toEqual(true);
+    });
+
+    it('should return TRUE if prev route is a `Home`', () => {
+      jest.spyOn(Router, 'getRoutes').mockReturnValueOnce([{routeName: routeMap.Home}, {}]);
+
+      expect(Router.hasNoParentRoute()).toEqual(true);
+    });
+
+    it('should return FALSE if prev route is not a `Home`', () => {
+      jest.spyOn(Router, 'getRoutes').mockReturnValueOnce([{routeName: routeMap.Issues}, {}]);
+
+      expect(Router.hasNoParentRoute()).toEqual(false);
+    });
+
+    it('should return FALSE if there are more than one route left', () => {
+      jest.spyOn(Router, 'getRoutes').mockReturnValueOnce([{}, {}, {}]);
+
+      expect(Router.hasNoParentRoute()).toEqual(false);
     });
   });
 

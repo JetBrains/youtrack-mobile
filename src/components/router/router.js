@@ -171,7 +171,10 @@ class Router {
 
   getRoutes: Array<NavigationRoute> = () => this._navigator.state.nav.routes;
 
-  hasNoParentRoute: Array<NavigationRoute> = () => this.getRoutes().length <= 1;
+  hasNoParentRoute: Array<NavigationRoute> = () => {
+    const routes: NavigationRoute[] = this.getRoutes();
+    return routes.length <= 1 || (routes[routes.length - 2] && routes[routes.length - 2].routeName === routeMap.Home);
+  };
 
   pop(isModalTransition?: boolean, options?: Object) {
     if (this.hasNoParentRoute()) {
