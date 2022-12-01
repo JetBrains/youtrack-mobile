@@ -119,16 +119,15 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           updateCache(issue);
           return issue;
         } catch (err) {
-          const isOffline: boolean = getState().app?.networkState?.isConnected === false;
-          if (isOffline) {
+          if (getState().app?.networkState?.isConnected === false) {
             const cachedIssue: ?AnyIssue = (getStorageState().issuesCache || []).find((issue: AnyIssue) => {
               return issue.id === issueId || issue.idReadable === issueId;
             }) || issuePlaceholder;
             cachedIssue && doUpdate(cachedIssue);
           } else {
+            log.warn('Failed to load issue', error);
             const error = await resolveError(err);
             dispatch(dispatchActions.setError(error));
-            log.warn('Failed to load issue', error);
           }
         }
       };

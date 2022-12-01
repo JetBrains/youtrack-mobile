@@ -2,7 +2,7 @@
 
 import {toField} from 'util/to-field';
 
-import {ISSUE_ACTIVITIES_FIELDS_OBSOLETE, PULL_REQUEST_FIELDS} from './api__activities-issue-fields';
+import {ISSUE_ACTIVITIES_FIELDS_LEGACY, PULL_REQUEST_FIELDS} from './api__activities-issue-fields';
 import issueFields from './api__issue-fields';
 
 import type {ToField} from 'flow/ToField';
@@ -43,7 +43,7 @@ export const inboxThreadFields: ToField = toField([
         activities: toField([
           'emptyFieldText',
           'pseudo',
-          ISSUE_ACTIVITIES_FIELDS_OBSOLETE
+          ISSUE_ACTIVITIES_FIELDS_LEGACY
             .exclude(toField([
               {authorGroup: ['icon', 'name']},
               {pullRequest: PULL_REQUEST_FIELDS},

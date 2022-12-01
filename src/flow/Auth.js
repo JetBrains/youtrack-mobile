@@ -4,10 +4,12 @@ import type {AuthConfiguration} from 'react-native-app-auth';
 
 export type AuthParams = {
   access_token: string,
+  accessTokenExpirationDate: string,
   error_code?: string,
+  expires_in?: string,
   refresh_token: string,
-  token_type: string,
   scope: string,
+  token_type: string,
 };
 
 export type AuthConfig = {

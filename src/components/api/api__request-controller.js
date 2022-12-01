@@ -43,7 +43,7 @@ function fetch2(
   controller?: {
     [$Keys<typeof routeMap>]: AbortController,
   },
-): typeof fetch {
+): Promise<Response> {
   const routeId: ?$Keys<typeof routeMap> = controller && Object.keys(controller)[0];
   if (controller && routeId) {
     requestController.add(routeId, controller[routeId]);

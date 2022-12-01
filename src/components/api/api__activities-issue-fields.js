@@ -72,70 +72,66 @@ const VCS_INTEGRATION_FIELDS = toField([
   'urls',
 ]);
 
-export const ISSUE_ACTIVITIES_FIELDS_OBSOLETE: string = toField([
+export const ISSUE_ACTIVITIES_FIELDS_LEGACY: string = toField([
+  'id',
+  'timestamp',
+  'targetMember',
+  'targetSubMember',
   {
-    activities: [
+    authorGroup: ['icon', 'name'],
+    author: IssueFields.ISSUE_USER_FIELDS,
+    category: ['id'],
+    target: ['id', 'created', 'usesMarkdown'],
+    field: [
+      'linkId',
       'id',
-      'timestamp',
-      'targetMember',
-      'targetSubMember',
+      'presentation',
       {
-        authorGroup: ['icon', 'name'],
-        author: IssueFields.ISSUE_USER_FIELDS,
-        category: ['id'],
-        target: ['id', 'created', 'usesMarkdown'],
-        field: [
-          'linkId',
+        customField: [
           'id',
-          'presentation',
           {
-            customField: [
-              'id',
-              {
-                fieldType: [
-                  'isMultiValue',
-                  'valueType',
-                ],
-              },
+            fieldType: [
+              'isMultiValue',
+              'valueType',
             ],
           },
-        ],
-        pullRequest: PULL_REQUEST_FIELDS,
-        added: [
-          ISSUE_PROJECT_FIELDS,
-
-          ISSUE_ACTIVITIES_EVENT_BASE,
-
-          IssueFields.issueComment,
-          'usesMarkdown',
-
-          IssueFields.ISSUE_XSHORT_FIELDS,
-
-          ISSUE_WORK_ITEMS_FIELDS,
-
-          'reactionOrder',
-          'reaction',
-          {
-            reactions: [
-              'id',
-              'reaction',
-              'author(id,fullName,avatarUrl)',
-            ],
-          },
-
-          VCS_INTEGRATION_FIELDS,
-          IssueFields.attachmentsBase,
-        ],
-        removed: [
-          ISSUE_PROJECT_FIELDS,
-
-          ISSUE_ACTIVITIES_EVENT_BASE,
-          IssueFields.ISSUE_COMMENTS_REMOVED_FIELDS,
-
-          IssueFields.ISSUE_XSHORT_FIELDS,
-          IssueFields.attachmentsBase,
         ],
       },
+    ],
+    pullRequest: PULL_REQUEST_FIELDS,
+    added: [
+      ISSUE_PROJECT_FIELDS,
+
+      ISSUE_ACTIVITIES_EVENT_BASE,
+
+      IssueFields.issueComment,
+      'usesMarkdown',
+
+      IssueFields.ISSUE_XSHORT_FIELDS,
+
+      ISSUE_WORK_ITEMS_FIELDS,
+
+      'reactionOrder',
+      'reaction',
+      {
+        reactions: [
+          'id',
+          'reaction',
+          'author(id,fullName,avatarUrl)',
+        ],
+      },
+
+      VCS_INTEGRATION_FIELDS,
+      IssueFields.attachmentsBase,
+    ],
+    removed: [
+      ISSUE_PROJECT_FIELDS,
+
+      ISSUE_ACTIVITIES_EVENT_BASE,
+      IssueFields.ISSUE_COMMENTS_REMOVED_FIELDS,
+
+      IssueFields.ISSUE_XSHORT_FIELDS,
+      IssueFields.attachmentsBase,
     ],
   },
 ]);

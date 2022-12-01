@@ -8,7 +8,6 @@ import {getStorageState} from '../storage/storage';
 import {ResourceTypes, getShortEntityType} from '../api/api__resource-types';
 
 import type {AppConfig} from 'flow/AppConfig';
-import type {HTTPResponse} from 'flow/Error';
 
 export type ReportErrorData = { summary: string, description: string };
 
@@ -24,7 +23,7 @@ export const YOUTRACK_MOBILE_PROJECT_ID = '22-174';
 
 
 export async function sendReport(summary: string, description: string): Promise<string> {
-  const response: HTTPResponse = await fetch(SERVER_URI, {
+  const response: Response = await fetch(SERVER_URI, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
