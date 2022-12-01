@@ -126,7 +126,7 @@ export class AuthBase {
 
   async refreshToken(): Promise<any> {}
 
-  getAuthorizationHeaders(authParams: AuthParams): RequestHeaders {
+  getAuthorizationHeaders(authParams?: AuthParams): RequestHeaders {
     const headers: RequestHeaders = {
       'User-Agent': USER_AGENT,
     };

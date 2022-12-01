@@ -14,18 +14,6 @@ export type CustomError = Error & {
   localizedDescription?: string
 };
 
-export type HTTPResponse = {
-  headers: HTTPHeaders,
-  ok: boolean,
-  status: number,
-  statusText: string,
-  type: string,
-  url: string,
-  _bodyInit?: string,
-  _bodyText: string,
-  json: () => Object,
-}
-
 export type HTTPHeaders = {
     map: {
       'access-control-expose-headers': string,

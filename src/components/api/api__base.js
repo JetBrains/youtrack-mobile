@@ -88,6 +88,19 @@ export default class BaseAPI {
     );
   }
 
+  shouldRefreshToken(response: Response): boolean {
+    const err: string = typeof response?.error === 'string' ? typeof response?.error : '';
+    return (
+      response.status === HTTP_STATUS.UNAUTHORIZED ||
+      ['invalid_grant', 'invalid_request', 'invalid_token'].includes(err) ||
+      this.auth.isTokenInvalid()
+    );
+  }
+
+  isError(response: Response): boolean {
+    return response.status < HTTP_STATUS.SUCCESS || response.status >= HTTP_STATUS.REDIRECT;
+  }
+
   async makeAuthorizedRequest(
     url: string,
     method: ?string,
@@ -98,9 +111,9 @@ export default class BaseAPI {
     log.debug(`"${method || 'GET'}" to ${url}${body ? ` with body |${JSON.stringify(body)}|` : ''}`);
     assertLongQuery(url);
 
-    const sendRequest = async () => {
-      const authHeaders: RequestHeaders = this.auth.getAuthorizationHeaders();
-      if (!authHeaders.Authorization) {
+    const sendRequest = async (): Promise<Response> => {
+      const requestHeaders: RequestHeaders = this.auth.getAuthorizationHeaders();
+      if (!requestHeaders.Authorization) {
         log.warn(`Missing auth header in a request: "${method || 'GET'}":${url}`);
       }
       return await fetch2(url, {
@@ -108,7 +121,7 @@ export default class BaseAPI {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json, text/plain, */*',
-            ...authHeaders,
+            ...requestHeaders,
           },
           body: JSON.stringify(body),
         },
@@ -116,26 +129,20 @@ export default class BaseAPI {
       );
     };
 
-    let response = await sendRequest();
+    let response: Response = await sendRequest();
 
-    if (response.status !== HTTP_STATUS.SUCCESS) {
-      log.warn('Request failed with response', response);
-    }
-    if (response.status === HTTP_STATUS.UNAUTHORIZED) {
-      log.info('Token is expired, refreshing token');
+    if (response.status !== HTTP_STATUS.SUCCESS && this.shouldRefreshToken(response)) {
+      log.debug('Token has expired');
       await this.auth.refreshToken();
       response = await sendRequest();
-      log.info('Re-do request', url);
+      log.debug('Repeat a request', url);
     }
 
-    if (response.status < HTTP_STATUS.SUCCESS || response.status >= HTTP_STATUS.REDIRECT) {
+    if (this.isError(response)) {
+      log.warn('Request failed', response);
       throw response;
     }
 
-    if (options.parseJson === false) {
-      return response;
-    }
-
-    return await response.json();
+    return options.parseJson === false ? response : await response.json();
   }
 }

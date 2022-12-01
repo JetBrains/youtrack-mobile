@@ -165,7 +165,7 @@ export const cacheUserLastVisitedArticle = (article: Article | null, activities?
   }
 };
 
-export function loadCurrentUserAnsSetAPI(): Action {
+export function loadCurrentUserAndSetAPI(): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     if (getState().app?.networkState?.isConnected === true) {
       const auth: OAuth2 = ((getState().app.auth: any): OAuth2);
@@ -518,7 +518,7 @@ export function initializeAuth(config: AppConfig): Action {
   return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
     const auth: OAuth2 = await createAuthInstance(config);
     dispatch(setAuthInstance(auth));
-    await dispatch(loadCurrentUserAnsSetAPI());
+    await dispatch(loadCurrentUserAndSetAPI());
   };
 }
 
@@ -563,7 +563,7 @@ export function onLogIn(authParams: AuthParams): Action {
       await auth.cacheAuthParams((authParams: any), authStorageStateValue);
     }
 
-    await dispatch(loadCurrentUserAnsSetAPI());
+    await dispatch(loadCurrentUserAndSetAPI());
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
@@ -631,17 +631,12 @@ export function redirectToRoute(config: AppConfig, issueId: string | null, navig
         dispatch(setAuthInstance(auth));
         setApi(new Api(auth));
 
-        const authParams: AuthParams = auth.getAuthParams();
-        if (authParams && getState().app?.networkState?.isConnected === true) {
-          await auth.loadCurrentUser(auth.getAuthParams());
-        }
-
-        const isGuest: boolean = await setUser();
         const cachedPermissions: ?Array<PermissionCacheItem> = getCachedPermissions();
         if (cachedPermissions) {
           await dispatch(setUserPermissions(cachedPermissions));
         }
 
+        const isGuest: boolean = await setUser();
         if (cachedPermissions && !isGuest) {
           if ((isSplitView()) || !issueId) {
             isRedirected = true;

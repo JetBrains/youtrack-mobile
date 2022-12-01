@@ -63,4 +63,16 @@ export default class OAuth2 extends AuthBase {
     return authParams;
   }
 
+  isTokenInvalid(): boolean {
+    const authParams: ?AuthParams = this.getAuthParams();
+    if (!authParams?.access_token || authParams?.accessTokenExpirationDate) {
+      return true;
+    }
+    if (authParams?.accessTokenExpirationDate) {
+      return (
+        new Date(authParams.accessTokenExpirationDate).getTime() < Date.now()
+      );
+    }
+    return false;
+  }
 }

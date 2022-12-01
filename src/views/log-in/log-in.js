@@ -108,6 +108,9 @@ export class LogIn extends Component<Props, State> {
       Keystore.setInternetCredentials(config.auth.serverUri, username, password).catch(noop);
       usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Success');
       authParams.inAppLogin = true;
+      if (!authParams.accessTokenExpirationDate && authParams.expires_in) {
+        authParams.accessTokenExpirationDate = Date.now() + (authParams.expires_in * 1000);
+      }
       onLogIn(authParams);
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Error');
