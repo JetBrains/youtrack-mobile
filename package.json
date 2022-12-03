@@ -165,6 +165,7 @@
     "cheerio": "0.22.0",
     "core-util-is": "1.0.2",
     "deepmerge-ts": "4.0.3",
+    "deprecated-react-native-prop-types": "^3.0.1",
     "detox": "18.23.1",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.6",

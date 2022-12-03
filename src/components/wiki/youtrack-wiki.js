@@ -13,6 +13,7 @@ import {extractIssueId} from '../open-url-handler/open-url-handler';
 import {hasMimeType} from '../mime-type/mime-type';
 import {nodeHasType} from './youtrack-wiki__node-type';
 import {showMoreInlineText} from '../text-view/text-view';
+import {TextPropTypes} from 'deprecated-react-native-prop-types';
 
 import styles, {htmlViewStyles} from './youtrack-wiki.styles';
 
@@ -20,7 +21,7 @@ import type {Node as Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from 'flow/Theme';
 
-HTMLView.propTypes.style = Text.propTypes.style;
+HTMLView.propTypes.style = TextPropTypes.style;
 
 type Props = {
   style?: ViewStyleProp,

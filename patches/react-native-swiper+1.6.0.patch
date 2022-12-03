@@ -1,0 +1,19 @@
+diff --git a/node_modules/react-native-swiper/src/index.js b/node_modules/react-native-swiper/src/index.js
+index 3e63ca7..36e6418 100644
+--- a/node_modules/react-native-swiper/src/index.js
++++ b/node_modules/react-native-swiper/src/index.js
+@@ -7,13 +7,13 @@ import PropTypes from 'prop-types'
+ import {
+   Text,
+   View,
+-  ViewPropTypes,
+   ScrollView,
+   Dimensions,
+   TouchableOpacity,
+   Platform,
+   ActivityIndicator
+ } from 'react-native'
++import {ViewPropTypes} from 'deprecated-react-native-prop-types';
+ 
+ /**
+  * Default styles

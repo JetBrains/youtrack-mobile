@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-fit-image/dist/FitImage.js b/node_modules/react-native-fit-image/dist/FitImage.js
+index 37d834e..937698c 100644
+--- a/node_modules/react-native-fit-image/dist/FitImage.js
++++ b/node_modules/react-native-fit-image/dist/FitImage.js
+@@ -22,7 +22,7 @@ var PropTypes = require("prop-types");
+ var React = require("react");
+ var react_1 = require("react");
+ var react_native_1 = require("react-native");
+-var propTypes = __assign({}, react_native_1.Image.propTypes, { indicator: PropTypes.bool, indicatorColor: PropTypes.string, indicatorSize: PropTypes.oneOfType([
++var propTypes = __assign({}, require('deprecated-react-native-prop-types').ImagePropTypes, { indicator: PropTypes.bool, indicatorColor: PropTypes.string, indicatorSize: PropTypes.oneOfType([
+         PropTypes.oneOf(['small', 'large']),
+         PropTypes.number,
+     ]), originalHeight: PropTypes.number, originalWidth: PropTypes.number });

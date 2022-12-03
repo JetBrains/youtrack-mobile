@@ -1,0 +1,16 @@
+diff --git a/node_modules/react-native-keyboard-spacer/KeyboardSpacer.js b/node_modules/react-native-keyboard-spacer/KeyboardSpacer.js
+index 14560d8..0de62d2 100644
+--- a/node_modules/react-native-keyboard-spacer/KeyboardSpacer.js
++++ b/node_modules/react-native-keyboard-spacer/KeyboardSpacer.js
+@@ -8,10 +8,10 @@ import {
+   LayoutAnimation,
+   View,
+   Dimensions,
+-  ViewPropTypes,
+   Platform,
+   StyleSheet
+ } from 'react-native';
++import {ViewPropTypes} from 'deprecated-react-native-prop-types';
+ 
+ const styles = StyleSheet.create({
+   container: {

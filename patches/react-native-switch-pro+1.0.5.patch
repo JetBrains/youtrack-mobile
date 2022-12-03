@@ -1,0 +1,20 @@
+diff --git a/node_modules/react-native-switch-pro/lib/index.js b/node_modules/react-native-switch-pro/lib/index.js
+index 7715b57..273ad82 100644
+--- a/node_modules/react-native-switch-pro/lib/index.js
++++ b/node_modules/react-native-switch-pro/lib/index.js
+@@ -1,13 +1,12 @@
+ import React, { Component } from 'react'
+ import PropTypes from "prop-types"
+ import {
+-  ViewPropTypes,
+-  ColorPropType,
+   StyleSheet,
+   Animated,
+   Easing,
+   PanResponder,
+-} from 'react-native'
++} from 'react-native';
++import {ViewPropTypes, ColorPropType} from 'deprecated-react-native-prop-types';
+ 
+ const SCALE = 6 / 5
+ 
