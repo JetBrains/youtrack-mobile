@@ -78,7 +78,7 @@
     "cssfilter": "^0.0.10",
     "date-fns": "^2.29.3",
     "diff-match-patch": "1.0.5",
-    "entities": "2.2.0",
+    "entities": "4.4.0",
     "htmlparser-to-html": "0.0.6",
     "lodash.debounce": "4.0.8",
     "lodash.once": "4.1.1",
