@@ -165,7 +165,7 @@ msgstr "Browser"
 msgid "Bugsnag Privacy Policy"
 msgstr "Bugsnag Privacy Policy"
 
-#: src/views/log-in/log-in.js:252
+#: src/views/log-in/log-in.js:255
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "By logging in, you agree to the Privacy Policy."
 
@@ -243,7 +243,7 @@ msgstr "Comments"
 msgid "committed changes"
 msgstr "committed changes"
 
-#: src/actions/app-actions.js:678
+#: src/actions/app-actions.js:673
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -549,15 +549,15 @@ msgstr "Linked issues"
 msgid "Loading values…"
 msgstr "Loading values…"
 
-#: src/views/log-in/log-in.js:237
+#: src/views/log-in/log-in.js:240
 msgid "Log in"
 msgstr "Log in"
 
-#: src/views/log-in/log-in.js:184
+#: src/views/log-in/log-in.js:187
 msgid "Log in to YouTrack"
 msgstr "Log in to YouTrack"
 
-#: src/views/log-in/log-in.js:274
+#: src/views/log-in/log-in.js:277
 msgid "Log in with Browser"
 msgstr "Log in with Browser"
 
@@ -682,7 +682,7 @@ msgstr "Notifications"
 msgid "Other"
 msgstr "Other"
 
-#: src/views/log-in/log-in.js:213
+#: src/views/log-in/log-in.js:216
 msgid "Password"
 msgstr "Password"
 
@@ -1036,7 +1036,7 @@ msgstr "Use fewer search parameters"
 msgid "User account is banned"
 msgstr "User account is banned"
 
-#: src/views/log-in/log-in.js:197
+#: src/views/log-in/log-in.js:200
 msgid "Username or email"
 msgstr "Username or email"
 
@@ -1089,7 +1089,7 @@ msgstr "You don’t have any unread notifications"
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 msgstr "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 
-#: src/views/log-in/log-in.js:248
+#: src/views/log-in/log-in.js:251
 msgid ""
 "You need a YouTrack account to use the app.\n"
 ""

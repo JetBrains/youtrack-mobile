@@ -51,15 +51,15 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="*.jetbrains.com"
+                    android:host="youtrack.jetbrains.com"
                     android:pathPattern="/issues.*"
                     android:scheme="https" />
                 <data
-                    android:host="*.jetbrains.com"
+                    android:host="youtrack.jetbrains.com"
                     android:pathPattern="/issue/.*"
                     android:scheme="https" />
                 <data
-                    android:host="*.jetbrains.com"
+                    android:host="youtrack.jetbrains.com"
                     android:pathPattern="/articles/.*"
                     android:scheme="https" />
             </intent-filter>
@@ -127,7 +127,7 @@
                     android:pathPattern="/youtrack/articles/.*"
                     android:scheme="https" />
             </intent-filter>
-            <intent-filter android:autoVerify="true">
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />

@@ -27,7 +27,8 @@ export default EStyleSheet.create({
   },
   menuProgressContainer: {
     position: 'absolute',
-    top: -1,
+    zIndex: 1,
+    top: 0,
     height: 3,
     width: '100%',
   },

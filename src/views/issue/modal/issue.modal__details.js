@@ -91,8 +91,9 @@ export default class IssueModalDetails extends IssueDetails<IssueDetailsProps & 
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
+          this.uiTheme = theme.uiTheme;
           return <>
-            {this.renderContent(theme.uiTheme)}
+            {this.renderContent()}
             <ModalPortal
               hasOverlay={!this.props.stacked}
               onHide={() => this.toggleModalChildren()}
