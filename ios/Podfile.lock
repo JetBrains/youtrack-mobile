@@ -319,7 +319,7 @@ PODS:
   - React-jsinspector (0.69.1)
   - React-logger (0.69.1):
     - glog
-  - react-native-app-auth (6.4.2):
+  - react-native-app-auth (6.4.3):
     - AppAuth (= 1.4.0)
     - React-Core
   - react-native-encrypted-storage (4.0.2):
@@ -744,7 +744,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 758e70947c232828a66b5ddc42d02b4d010fa26e
   React-jsinspector: 55605caf04e02f9b0e05842b786f1c12dde08f4b
   React-logger: ca970551cb7eea2fd814d0d5f6fc1a471eb53b76
-  react-native-app-auth: 1f1b595bf4122f95e0f766404c8621054238e313
+  react-native-app-auth: fd1eaa667c0bc014199456d14a6440cb74de814e
   react-native-encrypted-storage: e78d848ce0fb663c2ce306e37921d026809322e6
   react-native-eventsource: fea4e2c2505d19660b312406ce45dbb3fe68fd35
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983

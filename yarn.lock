@@ -8665,10 +8665,10 @@ react-native-animatable@1.3.3:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-app-auth@6.4.2:
-  version "6.4.2"
-  resolved "https://registry.yarnpkg.com/react-native-app-auth/-/react-native-app-auth-6.4.2.tgz#15d4ffdce8504b27410a297e39f9f9cbaaa628bd"
-  integrity sha512-GMZol6Z9Jq3rHMOOLHqS8yGV5S5hRTyTh5dSWNghY/XKoU0QB0AMVRP7kBFoOWiN11DxfNYk1yfTbBzxIkqCGg==
+react-native-app-auth@6.4.3:
+  version "6.4.3"
+  resolved "https://registry.yarnpkg.com/react-native-app-auth/-/react-native-app-auth-6.4.3.tgz#14e6d0b66087c60fd72cd98cc0219f0420195071"
+  integrity sha512-3Qi9D11WwB96h56UBkdUPfemOxhsp+lLryPy7YRmETrC0Our4AfgyHMfackJp7eCMKO/oB5LxU99Yh19ueIriA==
   dependencies:
     invariant "2.2.4"
     react-native-base64 "0.0.2"
