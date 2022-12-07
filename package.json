@@ -87,7 +87,7 @@
     "markdown-it-inline-comments": "1.0.1",
     "node-gettext": "3.0.0",
     "object-walk": "0.1.1",
-    "performant-array-to-tree": "1.9.1",
+    "performant-array-to-tree": "1.11.0",
     "qs": "6.10.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
