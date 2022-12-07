@@ -326,7 +326,7 @@ PODS:
     - React-Core
   - react-native-eventsource (0.0.1):
     - React
-  - react-native-netinfo (8.2.0):
+  - react-native-netinfo (9.3.7):
     - React-Core
   - react-native-notifications (4.3.3):
     - React-Core
@@ -747,7 +747,7 @@ SPEC CHECKSUMS:
   react-native-app-auth: 1f1b595bf4122f95e0f766404c8621054238e313
   react-native-encrypted-storage: e78d848ce0fb663c2ce306e37921d026809322e6
   react-native-eventsource: fea4e2c2505d19660b312406ce45dbb3fe68fd35
-  react-native-netinfo: e922cb2e3eaf9ccdf16b8d4744a89657377aa4a1
+  react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
   react-native-notifications: 83b4fd4a127a6c918fc846cae90da60f84819e44
   react-native-pager-view: 3ee7d4c7697fb3ef788346e834a60cca97ed8540
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
