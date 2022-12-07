@@ -70,7 +70,7 @@
     "@bugsnag/react-native": "7.16.1",
     "@expo/react-native-action-sheet": "4.0.1",
     "@gpsgate/react-native-eventsource": "ExpandoPakistan/react-native-eventsource.git",
-    "@jetbrains/icons": "3.18.0",
+    "@jetbrains/icons": "^3.20.0",
     "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-native-community/netinfo": "8.2.0",
     "@reduxjs/toolkit": "1.7.2",

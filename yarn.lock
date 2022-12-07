@@ -1632,10 +1632,10 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
-"@jetbrains/icons@3.18.0":
-  version "3.18.0"
-  resolved "https://registry.yarnpkg.com/@jetbrains/icons/-/icons-3.18.0.tgz#96d3ff8f9029b9f196a9a936cd2c6797aa2c17f2"
-  integrity sha512-aaKe4KVwjbnnbXEdWCVWMNwHrE1WCdwpVZYt468NXHukPX8KfnE8pGGuUcyEC/j4lXm+V8N24yGZ3GGMfq/wFA==
+"@jetbrains/icons@^3.20.0":
+  version "3.20.0"
+  resolved "https://registry.yarnpkg.com/@jetbrains/icons/-/icons-3.20.0.tgz#71fa5dba3313764f6b914da1d9e91a0eabc89fc3"
+  integrity sha512-EktLK+wnysLMilK4WW10vsqTFooWNXNnK9VUysjGkR/YOJHic+1C9uLYH/YSKpIhhLyxJ1W9wiCtYwGf5c8NXA==
 
 "@jridgewell/gen-mapping@^0.3.2":
   version "0.3.2"
