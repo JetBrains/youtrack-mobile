@@ -76,7 +76,7 @@
     "@reduxjs/toolkit": "1.7.2",
     "base64-js": "1.5.1",
     "cssfilter": "^0.0.10",
-    "date-fns": "2.28.0",
+    "date-fns": "^2.29.3",
     "diff-match-patch": "1.0.5",
     "entities": "2.2.0",
     "htmlparser-to-html": "0.0.6",
