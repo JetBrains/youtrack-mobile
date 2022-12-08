@@ -10,7 +10,7 @@ import {UNIT} from 'components/variables/variables';
 export default (EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1A1A1C',
+    backgroundColor: '#000000',
   },
   header: {
     backgroundColor: 'transparent',
@@ -45,7 +45,7 @@ export default (EStyleSheet.create({
     color: '$link',
   },
   fullScreen: {
-    ...StyleSheet.absoluteFillObject,
+    // ...StyleSheet.absoluteFillObject,
     width: '100%',
     height: '100%',
   },
