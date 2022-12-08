@@ -15,6 +15,7 @@ import styles from './user-agreement.styles';
 
 import type {EndUserAgreement} from 'flow/AppConfig';
 import type {Node} from 'react';
+import MarkdownView from '../wiki/markdown-view';
 
 type Props = {
   show: boolean,
@@ -24,10 +25,6 @@ type Props = {
 };
 
 export class UserAgreementView extends Component<Props, void> {
-
-  onLinkPress: ((url: string) => void) = (url: string) => {
-    Linking.openURL(url);
-  };
 
   render(): null | Node {
     const {show, agreement, onAccept, onDecline} = this.props;
@@ -45,10 +42,9 @@ export class UserAgreementView extends Component<Props, void> {
           <ScrollView
             contentContainerStyle={styles.markdownScroll}
           >
-            <Markdown
-            >
+            <MarkdownView>
               {agreement.text}
-            </Markdown>
+            </MarkdownView>
           </ScrollView>
           <View style={styles.buttons}>
             <TouchableOpacity
