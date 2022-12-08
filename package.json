@@ -171,6 +171,7 @@
     "enzyme-to-json": "3.3.4",
     "eslint": "^8.27.0",
     "eslint-plugin-flowtype": "^8.0.3",
+    "eslint-plugin-ft-flow": "^2.0.3",
     "fetch-mock": "5.6.0",
     "flow-bin": "0.176.3",
     "gettext-extractor": "3.5.4",
