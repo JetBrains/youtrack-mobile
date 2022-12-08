@@ -330,7 +330,7 @@ PODS:
     - React-Core
   - react-native-notifications (4.3.3):
     - React-Core
-  - react-native-pager-view (5.4.9):
+  - react-native-pager-view (6.1.2):
     - React-Core
   - react-native-render-html (6.3.4):
     - React-Core
@@ -749,7 +749,7 @@ SPEC CHECKSUMS:
   react-native-eventsource: fea4e2c2505d19660b312406ce45dbb3fe68fd35
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
   react-native-notifications: 83b4fd4a127a6c918fc846cae90da60f84819e44
-  react-native-pager-view: 3ee7d4c7697fb3ef788346e834a60cca97ed8540
+  react-native-pager-view: 54bed894cecebe28cede54c01038d9d1e122de43
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-restart: 45c8dca02491980f2958595333cbccd6877cb57e
   react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
