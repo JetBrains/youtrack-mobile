@@ -135,7 +135,7 @@
     "react-native-tab-view": "^3.3.3",
     "react-native-vector-icons": "^9.2.0",
     "react-native-video": "^5.2.1",
-    "react-native-webview": "11.17.2",
+    "react-native-webview": "^11.25.1",
     "react-navigation": "3.13.0",
     "react-navigation-stack": "1.10.3",
     "react-redux": "7.2.6",
