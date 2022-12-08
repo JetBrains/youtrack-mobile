@@ -169,7 +169,7 @@
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.6",
     "enzyme-to-json": "3.3.4",
-    "eslint": "^8.27.0",
+    "eslint": "^8.29.0",
     "eslint-plugin-flowtype": "^8.0.3",
     "eslint-plugin-ft-flow": "^2.0.3",
     "fetch-mock": "5.6.0",
