@@ -2,7 +2,6 @@
 
 import EncryptedStorage from 'react-native-encrypted-storage';
 import qs from 'qs';
-import urlJoin from 'url-join';
 
 import log from '../log/log';
 import PermissionsStore from '../permissions-store/permissions-store';
@@ -31,17 +30,12 @@ export class AuthBase {
   constructor(config: AppConfig) {
     this.authParams = null;
     this.config = config;
-    this.LOAD_USER_URL = urlJoin(
-      this.config.auth.serverUri,
-      '/api/rest/users/me?fields=id,guest,name,profile/avatar/url,endUserAgreementConsent(accepted,majorVersion,minorVersion)'
-    );
+    this.LOAD_USER_URL = `${this.config.auth.serverUri}/api/rest/users/me?fields=id,guest,name,profile/avatar/url,endUserAgreementConsent(accepted,majorVersion,minorVersion)`;
     const permissionsQueryString = qs.stringify({
       query: `service:{0-0-0-0-0} or service:{${config.auth.youtrackServiceId}}`,
       fields: 'permission/key,global,projects(id)',
     });
-    this.PERMISSIONS_CACHE_URL = urlJoin(
-      this.config.auth.serverUri, `/api/rest/permissions/cache?${permissionsQueryString}`
-    );
+    this.PERMISSIONS_CACHE_URL = `${this.config.auth.serverUri}/api/rest/permissions/cache?${permissionsQueryString}`;
     this.getAuthorizationHeaders = this.getAuthorizationHeaders.bind(this);
   }
 
@@ -63,7 +57,7 @@ export class AuthBase {
   }
 
   static obtainToken(body: string, config: AppConfig): Promise<AuthParams> {
-    const hubTokenUrl = urlJoin(config.auth.serverUri, '/api/rest/oauth2/token');
+    const hubTokenUrl = `${config.auth.serverUri}/api/rest/oauth2/token`;
     return fetch(hubTokenUrl, {
       method: 'POST',
       headers: AuthBase.getHeaders(config),

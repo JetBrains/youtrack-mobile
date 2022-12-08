@@ -1,7 +1,6 @@
 /* @flow */
 
 import qs from 'qs';
-import urlJoin from 'url-join';
 
 import AgileAPI from './api__agile';
 import ApiHelper from './api__helper';
@@ -65,7 +64,7 @@ class API extends BaseAPI {
   async getUserAgreement(): Promise<?EndUserAgreement> {
     const queryString = qs.stringify({fields: 'endUserAgreement(enabled,text,majorVersion,minorVersion)'});
     const res = await this.makeAuthorizedRequest(
-      urlJoin(this.auth.config.auth.serverUri, `/api/rest/settings/public?${queryString}`),
+      `${this.auth.config.auth.serverUri}/api/rest/settings/public?${queryString}`,
       'GET'
     );
 
@@ -75,7 +74,7 @@ class API extends BaseAPI {
   async acceptUserAgreement(): Promise<Object> {
     const body = {fields: issueFields.userConsent};
     return await this.makeAuthorizedRequest(
-      urlJoin(this.auth.config.auth.serverUri, '/api/rest/users/endUserAgreementConsent'),
+      `${this.auth.config.auth.serverUri}/api/rest/users/endUserAgreementConsent`,
       'POST',
       {body}
     );
