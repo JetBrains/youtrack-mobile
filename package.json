@@ -100,7 +100,7 @@
     "react-native-device-log": "Trihydro/react-native-device-log",
     "react-native-draggable-dynamic-flatlist": "1.0.4",
     "react-native-easy-toast": "^2.3.0",
-    "react-native-encrypted-storage": "4.0.2",
+    "react-native-encrypted-storage": "^4.0.3",
     "react-native-extended-stylesheet": "0.12.0",
     "react-native-fast-image": "8.6.3",
     "react-native-gesture-handler": "2.8.0",
