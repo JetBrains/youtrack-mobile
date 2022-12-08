@@ -1,9 +1,8 @@
 /* @flow */
 
 import React, {Component} from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 
-import Markdown from 'react-native-markdown-display';
 import {connect} from 'react-redux';
 
 import ModalView from '../modal-view/modal-view';
