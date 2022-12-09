@@ -15,11 +15,6 @@
     "version": "0.1.0",
     "token": " "
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn run lint && yarn run test-dev-data && yarn test && yarn run i18n:check"
-    }
-  },
   "license": "Apache-2.0",
   "scripts": {
     "android": "YT_MOBILE_VERSION=$npm_package_version react-native run-android",
@@ -175,7 +170,7 @@
     "fetch-mock": "5.6.0",
     "flow-bin": "0.176.3",
     "gettext-extractor": "3.5.4",
-    "husky": "2.4.0",
+    "husky": "^8.0.2",
     "jest": "27.5.1",
     "jest-circus": "27.5.1",
     "jest-fetch-mock": "3.0.3",
