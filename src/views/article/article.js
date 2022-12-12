@@ -92,6 +92,9 @@ class Article extends IssueTabbed<Props, State> {
 
   componentDidMount() {
     logEvent({message: 'Navigate to article', analyticsId: ANALYTICS_ARTICLE_PAGE});
+    this.goOnlineSubscription = addListenerGoOnline(() => {
+      this.loadArticle(currentArticle.id, false);
+    });
 
     if (this.props.storePrevArticle) {
       this.props.setPreviousArticle();
@@ -117,10 +120,6 @@ class Article extends IssueTabbed<Props, State> {
     } else if (!canLoadArticle && !this.props.navigateToActivity) {
       return Router.KnowledgeBase();
     }
-
-    this.goOnlineSubscription = addListenerGoOnline(() => {
-      this.loadArticle(currentArticle.id, false);
-    });
   }
 
   getMainTabText(): string {

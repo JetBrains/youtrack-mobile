@@ -67,10 +67,11 @@ export default class BaseAPI {
     this.config = auth.config;
     const parts: string[] = (this.config.version || '').split('.') || [];
     const majorVersion: number = parseInt(parts[0], 10) || 0;
-    this.isActualAPI = majorVersion > 2019;
+    const minorVersion: number = parseInt(parts[1] || '', 10);
+    this.isActualAPI = majorVersion >= 2022 && minorVersion >= 3;
     this.isModernGAP = (
       majorVersion > 2020 ||
-      majorVersion === 2020 && parseInt(parts[1] || '', 10) >= 6
+      majorVersion === 2020 && minorVersion >= 6
     );
 
     this.youTrackUrl = this.config.backendUrl;

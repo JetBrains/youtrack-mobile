@@ -12,6 +12,7 @@ import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
 import Select from 'components/select/select';
 import usage from 'components/usage/usage';
+import {absDate} from 'components/date/date';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
 import {confirmation} from 'components/confirmation/confirmation';
 import {createIssueActivityActions} from './issue-activity__actions';
@@ -24,7 +25,6 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 import {logEvent} from 'components/log/log-helper';
 import {ThemeContext} from 'components/theme/theme-context';
 import {useDispatch, useSelector} from 'react-redux';
-import {ytDate} from 'components/date/date';
 
 import styles from './activity__add-spent-time.styles';
 
@@ -38,11 +38,11 @@ import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {WorkItem, TimeTracking, WorkItemType} from 'flow/Work';
 
 type Props = {
-  issue?: IssueFull,
+  issue: IssueFull,
   workItem?: WorkItem,
-  onAdd?: () => any,
+  onAdd: () => any,
   onHide: () => any,
-  canCreateNotOwn?: boolean,
+  canCreateNotOwn: boolean,
 }
 
 const AddSpentTimeForm = (props: Props) => {
@@ -59,7 +59,7 @@ const AddSpentTimeForm = (props: Props) => {
     },
     text: null,
     usesMarkdown: true,
-    issue: {project: {}},
+    issue: {id: props.issue.id, project: {id: props.issue.project.id}},
   }: any));
 
   const theme: Theme = useContext(ThemeContext);
@@ -327,7 +327,7 @@ const AddSpentTimeForm = (props: Props) => {
             <Text
               style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
             >
-              {ytDate(draft.date, true)}
+              {absDate(draft.date, true)}
             </Text>
             {iconAngleRight}
           </TouchableOpacity>

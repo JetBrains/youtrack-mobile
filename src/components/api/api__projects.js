@@ -6,7 +6,7 @@ import type Auth from '../auth/oauth2';
 import type {IssueProject} from 'flow/CustomFields';
 
 export default class ProjectsAPI extends ApiBase {
-  projectsURL: string = `${this.youTrackApiUrl}${this.isActualAPI ? '' : '/admin'}/projects`;
+  projectsURL: string = `${this.youTrackApiUrl}/admin/projects`;
   pinProjectURL: string = `${this.youTrackApiUrl}/users/me/pinnedProjects`;
 
   constructor(auth: Auth) {
