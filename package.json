@@ -54,7 +54,7 @@
   "tmp": ".tmp",
   "dependencies": {
     "@babel/preset-typescript": "^7.18.6",
-    "@bugsnag/react-native": "7.16.1",
+    "@bugsnag/react-native": "^7.18.2",
     "@expo/react-native-action-sheet": "4.0.1",
     "@gpsgate/react-native-eventsource": "ExpandoPakistan/react-native-eventsource.git",
     "@jetbrains/icons": "^3.20.0",
