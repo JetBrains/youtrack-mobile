@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npm run lint
-npm run test-dev-data
-npm test
-npm run i18n:check
+yarn run lint
+yarn run test-dev-data
+yarn run test
+yarn run i18n:check
