@@ -253,7 +253,7 @@ msgstr "Connecting to YouTrack..."
 msgid "Contact support"
 msgstr "Contact support"
 
-#: src/views/article/article.js:127
+#: src/views/article/article.js:126
 msgid "Content"
 msgstr "Content"
 
@@ -473,7 +473,7 @@ msgstr "If this isn't what you expected, you might try one of these solutions:"
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
 msgstr "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
 
-#: src/views/article/article.js:220
+#: src/views/article/article.js:219
 msgid "in revision"
 msgstr "in revision"
 
