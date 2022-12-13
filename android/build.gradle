@@ -5,8 +5,7 @@ buildscript {
         buildToolsVersion = "31.0.0"
         minSdkVersion = 23
         compileSdkVersion = 32
-        targetSdkVersion = 32
-        kotlinVersion = "1.6.0" //required for RNN
+        targetSdkVersion = 31
         androidXCore = "1.7.0"
 
         if (System.properties['os.arch'] == "aarch64") {
@@ -26,7 +25,7 @@ buildscript {
         classpath("com.bugsnag:bugsnag-android-gradle-plugin:7.+")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("de.undercouch:gradle-download-task:5.0.1")
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion" //required for RNN
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$androidXCore"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
         classpath 'com.google.gms:google-services:4.3.14'
