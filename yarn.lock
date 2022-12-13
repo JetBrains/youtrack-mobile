@@ -8814,10 +8814,9 @@ react-native-modalize@^2.1.1:
   resolved "https://registry.yarnpkg.com/react-native-modalize/-/react-native-modalize-2.1.1.tgz#dcb67d208f4c5bdc76f45075e727be43fd008561"
   integrity sha512-4/7EZWsrUqAAkkAVEnOsSdpAPQaEBewX7TvwFuzgvGDzxKpq3O58I9SnSeU8QtG/r91XYHJNaU5dAuDrcLjUaQ==
 
-react-native-navigation-bar-color@2.0.1:
+react-native-navigation-bar-color@anisimov74/react-native-navigation-bar-color.git#5c384f8:
   version "2.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-navigation-bar-color/-/react-native-navigation-bar-color-2.0.1.tgz#ee2be25cc37105f7da355717b0a9a32c9c059ae6"
-  integrity sha512-1kE/oxWt+HYjRxdZdvke9tJ365xaee5n3+euOQA1En8zQuSbOxiE4SYEGM7TeaWnmLJ0l37mRnPHaB2H4mGh0A==
+  resolved "https://codeload.github.com/anisimov74/react-native-navigation-bar-color/tar.gz/5c384f897159470b23aee4cd251937fa2f20a846"
 
 react-native-notifications@^4.3.3:
   version "4.3.3"
