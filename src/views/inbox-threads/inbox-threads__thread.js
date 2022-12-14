@@ -7,13 +7,16 @@ import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 
 import InboxEntity from '../inbox/inbox__entity';
-import styles from './inbox-threads.styles';
+import InboxThreadItemSubscription from './inbox-threads__subscription';
+import InboxThreadMention from './inbox-threads__mention';
+import InboxThreadReaction from './inbox-threads__reactions';
 import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
-import {getThreadData} from './inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {IconMoreOptions} from 'components/icon/icon';
 import {muteToggle, readMessageToggle, updateThreadsStateAndCache} from './inbox-threads-actions';
+
+import styles from './inbox-threads.styles';
 
 import type {AppState} from '../../reducers';
 import type {InboxThread, InboxThreadMessage, ThreadData} from 'flow/Inbox';
@@ -71,7 +74,7 @@ function Thread({
     dispatch(updateThreadsStateAndCache(updatedThread, toggleThread && read === true));
   };
 
-  const threadData: ThreadData = getThreadData(_thread);
+  const threadData: ThreadData = createThreadData(_thread);
   const ThreadComponent: any = threadData.component;
   const renderedEntity = <InboxEntity
     testID="test:id/inboxEntity"
@@ -82,8 +85,7 @@ function Thread({
     style={[styles.threadTitle, threadData.entityAtBottom && styles.threadSubTitle]}
     styleText={threadData.entityAtBottom && styles.threadSubTitleText}
   />;
-  const isIssue: boolean = hasType.issue(threadData.entity);
-  const hasReadActions: boolean = isIssue || hasType.article(threadData.entity);
+  const hasReadActions: boolean = hasType.issue(threadData.entity) || hasType.article(threadData.entity);
 
   return (
     <View
@@ -170,5 +172,27 @@ function Thread({
   }
 }
 
+function createThreadData(thread: InboxThread): ThreadData {
+  const threadData: ThreadData = {entity: null, component: null, entityAtBottom: false};
+  if (thread.id) {
+    const target = thread.subject.target;
+    threadData.entity = target?.issue || target?.article || target;
+    switch (thread.id[0]) {
+    case 'R':
+      threadData.component = InboxThreadReaction;
+      threadData.entityAtBottom = true;
+      break;
+    case 'M':
+      threadData.component = InboxThreadMention;
+      threadData.entityAtBottom = true;
+      break;
+    case 'S':
+      threadData.component = InboxThreadItemSubscription;
+    }
+  }
+  return threadData;
+}
+
 
 export default Thread;
+export {createThreadData};

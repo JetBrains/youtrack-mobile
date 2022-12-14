@@ -4,8 +4,11 @@ import {fireEvent, render} from '@testing-library/react-native';
 import {Provider} from 'react-redux';
 
 import mocks from '../../../test/mocks';
-import Thread from './inbox-threads__thread';
+import Thread, {createThreadData} from './inbox-threads__thread';
 import {DEFAULT_THEME} from 'components/theme/theme';
+import InboxThreadItemSubscription from './inbox-threads__subscription';
+import InboxThreadReaction from './inbox-threads__reactions';
+import InboxThreadMention from './inbox-threads__mention';
 
 jest.mock('@expo/react-native-action-sheet', () => ({
   ...jest.requireActual('@expo/react-native-action-sheet'),
@@ -181,6 +184,39 @@ describe('Inbox Thread', () => {
 
       expect(getByTestId('test:id/inboxThreadsThreadSettings')).toBeDisabled();
       expect(getByTestId('test:id/inboxThreadsSubscriptionGroupReadToggle')).toBeDisabled();
+    });
+  });
+
+
+  describe('getThreadData', () => {
+    it('should create subscription item', async () => {
+      threadMock = mocks.createThreadMock({id: 'S-thread'});
+
+      expect(createThreadData(threadMock)).toEqual({
+        entity: threadMock.subject.target,
+        component: InboxThreadItemSubscription,
+        entityAtBottom: false,
+      });
+    });
+
+    it('should create reaction item', async () => {
+      threadMock = mocks.createThreadMock({id: 'R-thread'});
+
+      expect(createThreadData(threadMock)).toEqual({
+        entity: threadMock.subject.target,
+        component: InboxThreadReaction,
+        entityAtBottom: true,
+      });
+    });
+
+    it('should create mention item', async () => {
+      threadMock = mocks.createThreadMock({id: 'M-thread'});
+
+      expect(createThreadData(threadMock)).toEqual({
+        entity: threadMock.subject.target,
+        component: InboxThreadMention,
+        entityAtBottom: true,
+      });
     });
   });
 

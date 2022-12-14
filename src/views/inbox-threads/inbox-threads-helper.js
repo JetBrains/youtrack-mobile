@@ -1,15 +1,31 @@
 /* @flow */
 
-import InboxThreadItemSubscription from './inbox-threads__subscription';
-import InboxThreadMention from './inbox-threads__mention';
-import InboxThreadReaction from './inbox-threads__reactions';
 import {isActivityCategory} from 'components/activity/activity__category';
 import {i18n} from 'components/i18n/i18n';
 
 import type {Activity} from 'flow/Activity';
-import type {InboxThread, InboxThreadMessage, ThreadData} from 'flow/Inbox';
+import type {InboxThreadMessage} from 'flow/Inbox';
 
-function getTypes(activity: Activity): { [string]: boolean } {
+function getTypes(activity: Activity): {
+  articleCreated: boolean,
+  attach: boolean,
+  comment: boolean,
+  commentText: boolean,
+  customField: boolean,
+  description: boolean,
+  issueCreated: boolean,
+  issueResolved: boolean,
+  link: boolean,
+  project: boolean,
+  sprint: boolean,
+  star: boolean,
+  summary: boolean,
+  tag: boolean,
+  totalVotes: boolean,
+  visibility: boolean,
+  voter: boolean,
+  work: any,
+} {
   return {
     attach: isActivityCategory.attachment(activity),
     comment: isActivityCategory.comment(activity),
@@ -34,7 +50,7 @@ function getTypes(activity: Activity): { [string]: boolean } {
 
 
 function createMessagesMap(messages: InboxThreadMessage[] = []): ?{ [string]: Activity } {
-  if (!messages.length) {
+  if (!messages?.length) {
     return null;
   }
   const map: { [string]: Object } = {};
@@ -64,27 +80,6 @@ function sortEvents(events: Activity[]): Activity[] {
   return sortedEvents.concat(events.slice(0, i)).concat(events.slice(i + 1, events.length));
 }
 
-function getThreadData(thread: InboxThread): ThreadData {
-  const threadData: ThreadData = {entity: null, component: null, entityAtBottom: false};
-  if (thread.id) {
-    const target = thread.subject.target;
-    threadData.entity = target?.issue || target?.article || target;
-    switch (thread.id[0]) {
-    case 'R':
-      threadData.component = InboxThreadReaction;
-      threadData.entityAtBottom = true;
-      break;
-    case 'M':
-      threadData.component = InboxThreadMention;
-      threadData.entityAtBottom = true;
-      break;
-    case 'S':
-      threadData.component = InboxThreadItemSubscription;
-    }
-  }
-  return threadData;
-}
-
 const getThreadTabsTitles: () => string[] = () => [
   i18n('All'),
   i18n('Mentions & Reactions'),
@@ -103,7 +98,6 @@ export {
   createMessagesMap,
   folderIdAllKey,
   folderIdMap,
-  getThreadData,
   getTypes,
   getThreadTabsTitles,
   sortEvents,

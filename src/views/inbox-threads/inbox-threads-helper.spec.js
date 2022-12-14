@@ -1,42 +1,36 @@
-import InboxThreadItemSubscription from './inbox-threads__subscription';
-import InboxThreadMention from './inbox-threads__mention';
-import InboxThreadReaction from './inbox-threads__reactions';
-import mocks from '../../../test/mocks';
-import {getThreadData} from './inbox-threads-helper';
+import {createMessagesMap} from './inbox-threads-helper';
 
 
 describe('Inbox Threads Helper', () => {
-  let threadMock;
-
-  describe('getThreadData', () => {
-    it('should create subscription item', async () => {
-      threadMock = mocks.createThreadMock({id: 'S-thread'});
-
-      expect(getThreadData(threadMock)).toEqual({
-        entity: threadMock.subject.target,
-        component: InboxThreadItemSubscription,
-        entityAtBottom: false,
-      });
+  describe('createMessagesMap', () => {
+    let messages;
+    beforeEach(() => {
+      messages = [{
+        id: 'm1',
+        activities: [{id: 'm1a1'}],
+      }, {
+        id: 'm2',
+        activities: [{id: 'm2a1'}, {id: 'm2a2'}],
+      }];
     });
 
-    it('should create reaction item', async () => {
-      threadMock = mocks.createThreadMock({id: 'R-thread'});
-
-      expect(getThreadData(threadMock)).toEqual({
-        entity: threadMock.subject.target,
-        component: InboxThreadReaction,
-        entityAtBottom: true,
-      });
+    it('should handle case when no messages array', () => {
+      expect(createMessagesMap(null)).toEqual(null);
     });
 
-    it('should create mention item', async () => {
-      threadMock = mocks.createThreadMock({id: 'M-thread'});
+    it('should return NULL if messages array is empty', () => {
+      expect(createMessagesMap([])).toEqual(null);
+    });
 
-      expect(getThreadData(threadMock)).toEqual({
-        entity: threadMock.subject.target,
-        component: InboxThreadMention,
-        entityAtBottom: true,
-      });
+    it('should return empty map if no activities', () => {
+      expect(createMessagesMap([{}])).toEqual({});
+    });
+
+    it('should create map activity to message', () => {
+      const activityToMessageMap = createMessagesMap(messages);
+      expect(activityToMessageMap?.m1a1).toEqual(messages[0]);
+      expect(activityToMessageMap?.m2a1).toEqual(messages[1]);
+      expect(activityToMessageMap?.m2a2).toEqual(messages[1]);
     });
   });
 
