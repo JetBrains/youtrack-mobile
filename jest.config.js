@@ -1,5 +1,6 @@
 module.exports = {
   globalSetup: '<rootDir>/test/jest-global.js',
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   'preset': 'react-native',
   'automock': false,
   'resetMocks': false,
