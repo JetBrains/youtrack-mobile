@@ -35,6 +35,7 @@ local.properties
 *.hprof
 test/teamsysdata
 out*.txt
+.cxx/
 
 # node.js
 #

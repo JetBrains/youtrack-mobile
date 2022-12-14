@@ -5,7 +5,7 @@ import {Dimensions, FlatList, RefreshControl, Text, TouchableOpacity, View} from
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
+import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 
 import * as inboxActions from './inbox-actions';
 import CommentReactions from 'components/comment/comment-reactions';

@@ -60,3 +60,17 @@ index 70f609a..4484808 100644
      }
  
      public static boolean canHandleTrampolineActivity(Context appContext) {
+diff --git a/node_modules/react-native-notifications/react-native.config.js b/node_modules/react-native-notifications/react-native.config.js
+index 437783b..41a91c4 100644
+--- a/node_modules/react-native-notifications/react-native.config.js
++++ b/node_modules/react-native-notifications/react-native.config.js
+@@ -6,8 +6,7 @@ module.exports = {
+         sourceDir: './lib/android/app',
+         packageInstance: 'new RNNotificationsPackage(reactNativeHost.getApplication())',
+       }
+-    },
+-    assets: []
++    }
+   },
+   project: {
+     ios: {
