@@ -7,19 +7,23 @@ import {resolveErrorMessage} from '../error/error-resolver';
 const NOTIFY_DURATION: number = 3000;
 let toastComponentRef: any;
 
-const showErrorMessage = function (message: string, error?: ?Object, duration?: number) {
-  log.warn(message, error);
+const showMessage = function (message: string, duration?: number = NOTIFY_DURATION) {
   showNotification(message, null, toastComponentRef, duration);
 };
 
 export function notifyError(err: Object, duration: number = NOTIFY_DURATION * 2): void {
   resolveErrorMessage(err, true).then(
-    (errorMessage: string) => showErrorMessage(errorMessage, err, duration)
+    (message: string) => {
+      if (err) {
+        log.warn(message, err);
+      }
+      showMessage(message, duration);
+    }
   );
 }
 
-export function notify(message: string, duration: number = NOTIFY_DURATION): void {
-  showErrorMessage(message, null, duration);
+export function notify(message: string, duration?: number): void {
+  showMessage(message, duration);
 }
 
 export function setNotificationComponent(reference: any) {
