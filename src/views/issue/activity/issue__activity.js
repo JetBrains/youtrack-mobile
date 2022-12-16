@@ -442,6 +442,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps)(IssueActivity): any);
+export default (connect(mapStateToProps, mapDispatchToProps)(IssueActivity));
 
 

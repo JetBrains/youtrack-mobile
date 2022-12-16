@@ -633,4 +633,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps)(AgileBoard): any);
+export default (connect(mapStateToProps, mapDispatchToProps)(AgileBoard));

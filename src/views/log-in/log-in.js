@@ -316,4 +316,4 @@ const mergeProps = (stateProps, dispatchProps) => {
   };
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps, mergeProps)(LogIn): any);
+export default (connect(mapStateToProps, mapDispatchToProps, mergeProps)(LogIn));

@@ -718,4 +718,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps)(Inbox): any);
+export default (connect(mapStateToProps, mapDispatchToProps)(Inbox));

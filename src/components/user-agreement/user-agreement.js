@@ -80,4 +80,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps)(UserAgreementView): any);
+export default (connect(mapStateToProps, mapDispatchToProps)(UserAgreementView));

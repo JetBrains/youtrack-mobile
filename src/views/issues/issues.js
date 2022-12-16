@@ -632,4 +632,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps)(Issues): any);
+export default (connect(mapStateToProps, mapDispatchToProps)(Issues));

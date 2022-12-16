@@ -302,4 +302,4 @@ const mergeProps = (stateProps, dispatchProps) => {
   };
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps, mergeProps)(EnterServer): any);
+export default (connect(mapStateToProps, mapDispatchToProps, mergeProps)(EnterServer));

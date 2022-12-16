@@ -674,4 +674,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps)(KnowledgeBase): any);
+export default (connect(mapStateToProps, mapDispatchToProps)(KnowledgeBase));

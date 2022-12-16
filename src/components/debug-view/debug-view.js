@@ -70,4 +70,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps)(DebugView): any);
+export default (connect(mapStateToProps, mapDispatchToProps)(DebugView));
