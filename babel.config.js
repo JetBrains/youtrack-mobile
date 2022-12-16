@@ -3,7 +3,7 @@ module.exports = {
   plugins: [
     ['module-resolver', {
       root: ['.', './src', '../..', '../../src'],
-      extensions: ['.js', '.jsx', '.ts', '.json'],
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
         actions: './src/actions',
         assets: './src/assets',
