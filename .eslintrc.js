@@ -1,56 +1,46 @@
-const error = 'error';
-
 module.exports = {
   root: true,
-  extends: '@react-native-community',
+  extends: [
+    '@react-native-community',
+    'plugin:import/typescript',
+    'plugin:jest/recommended',
+  ],
+  parser: '@typescript-eslint/parser',
+  plugins: [
+    'import',
+  ],
   rules: {
     'prettier/prettier': 0,
-    'no-trailing-spaces': 0,
-    'no-console': error,
-    'no-debugger': error,
-    'constructor-super': error,
-    'arrow-spacing': error,
-    'no-const-assign': error,
-    'no-var': error,
-    'prefer-const': error,
-    'prefer-spread': error,
-    'prefer-template': error,
-    'no-dupe-class-members': error,
-    'no-this-before-super': error,
+    '@typescript-eslint/no-shadow': 'error',
+    '@typescript-eslint/no-unused-vars': ['error', {'vars': 'local', 'args': 'none'}],
+    'arrow-spacing': 'error',
+    'constructor-super': 'error',
+    'jest/no-disabled-tests': 'warn',
+    'jest/no-focused-tests': 'error',
+    'jest/no-identical-title': 'error',
+    'jest/prefer-to-have-length': 'warn',
+    'jest/valid-expect': 'error',
+    'no-console': 'error',
+    'no-const-assign': 'error',
+    'no-debugger': 'error',
+    'no-dupe-class-members': 'error',
     'no-shadow': 'off',
+    'no-this-before-super': 'error',
+    'no-trailing-spaces': 0,
+    'no-undef': 'off',
     'no-useless-escape': 'off',
-    'no-unused-vars': [error, {'vars': 'local', 'args': 'none'}],
-    'quotes': [error, 'single', {'allowTemplateLiterals': true}],
-    'semi': error,
-    // 'indent': [error, 2],
-    'no-multi-spaces': error,
-    'eqeqeq': error,
-
-    //React
-    'react/jsx-uses-react': error,
-    'react/jsx-key': error,
-    'react/no-deprecated': error,
-    'react/jsx-max-props-per-line': [error, {maximum: 4}],
-    'react/jsx-uses-vars': error,
-
-    //React Native
-    'react-native/no-unused-styles': error,
-    'react-native/split-platform-components': error,
-
-    'flowtype/no-weak-types': 0,
-
-    //Jest
-    'jest/no-focused-tests': error,
-    'jest/no-identical-title': error,
-    'jest/valid-expect': error,
-
+    'no-var': 'error',
+    'prefer-const': 'error',
+    'prefer-spread': 'error',
+    'prefer-template': 'error',
+    'quotes': ['error', 'single', {'allowTemplateLiterals': true}],
   },
-  'env': {
-    'jest/globals': true,
-    'jasmine': true,
+  env: {
+    es6: true,
+    jest: true,
   },
 
-  'globals': {
-    'AbortController': true,
+  globals: {
+    AbortController: true,
   },
 };
