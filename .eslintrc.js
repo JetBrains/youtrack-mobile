@@ -10,7 +10,12 @@ module.exports = {
     'import',
   ],
   rules: {
-    'prettier/prettier': 0,
+    'prettier/prettier': [
+      'error',
+      {
+        singleQuote: true,
+      },
+    ],
     '@typescript-eslint/no-shadow': 'warn', //TODO: must be an error
     '@typescript-eslint/no-unused-vars': ['error', {'vars': 'local', 'args': 'none'}],
     'arrow-spacing': 'error',
