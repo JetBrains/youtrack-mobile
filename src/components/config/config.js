@@ -73,7 +73,7 @@ function formatYouTrackURL(url: string): string {
 }
 
 async function loadConfig(ytUrl: string): Promise<any> {
-  const url: string = `${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled,l10n(language,locale)`;
+  const url: string = `${ytUrl}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,build,statisticsEnabled,l10n(language,locale)`;
   return fetch(url, {
     method: 'GET',
     headers: {
