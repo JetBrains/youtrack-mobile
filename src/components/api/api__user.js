@@ -82,7 +82,7 @@ export default class UserAPI extends ApiBase {
     const queryString = ApiBase.createFieldsQuery(['naturalCommentsOrder']);
 
     return await this.makeAuthorizedRequest(
-      `${this.apiUrl}/${userId}/profiles/appearance?${queryString}`,
+      `${this.youTrackApiUrl}/users/${userId}/profiles/appearance?${queryString}`,
       'POST',
       appearanceProfile.$type
         ? appearanceProfile
@@ -94,7 +94,7 @@ export default class UserAPI extends ApiBase {
     const queryString = `$skip=${skip}&$top=${top}&ignoreLicenseErrors=true&fields=added,comment(created,deleted,id,issue(id,idReadable,resolved,summary),reactionOrder,reactions(author(fullName,id,isLocked),id,reaction),text),id,reaction(author(fullName,id,isLocked),reaction),timestamp`;
 
     return await this.makeAuthorizedRequest(
-      `${this.apiUrl}/me/reactionsFeed?${queryString}`,
+      `${this.youTrackApiUrl}/users/me/reactionsFeed?${queryString}`,
       'GET',
     );
   }
