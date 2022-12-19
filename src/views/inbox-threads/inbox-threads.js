@@ -125,14 +125,16 @@ const InboxThreads: () => Node = (): Node => {
 
   const onNavigate = useCallback(
     (entity, navigateToActivity, commentId) => {
-      if (hasSplitView()) {
-        updateSelectedEntity({entity, navigateToActivity, commentId});
-      } else {
-        (isArticle(entity) ? Router.Article : Router.Issue)({
-          navigateToActivity,
-          commentId,
-          ...(isArticle(entity) ? {articlePlaceholder: entity} : {issueId: entity.id}),
-        });
+      if (entity) {
+        if (hasSplitView()) {
+          updateSelectedEntity({entity, navigateToActivity, commentId});
+        } else {
+          (isArticle(entity) ? Router.Article : Router.Issue)({
+            navigateToActivity,
+            commentId,
+            ...(isArticle(entity) ? {articlePlaceholder: entity} : {issueId: entity?.id || entity?.idReadable}),
+          });
+        }
       }
     },
     []
