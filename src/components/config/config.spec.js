@@ -77,7 +77,7 @@ describe('Config', () => {
     it('should go for config to correct URL', async () => {
       await loadConfig('http://fake.backend');
       fetch.should.have.been.calledWith(
-        'http://fake.backend/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,statisticsEnabled,l10n(language,locale)',
+        'http://fake.backend/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,build,statisticsEnabled,l10n(language,locale)',
         {
           method: 'GET',
           headers: {
