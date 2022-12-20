@@ -170,7 +170,7 @@ export function receiveUserAppearanceProfile(
           },
         });
       } catch (error) {
-        log.info("Can't update user appearance profile.");
+        log.info('Can\'t update user appearance profile.');
       }
     }
   };
@@ -841,7 +841,7 @@ function subscribeToURL(): Action {
         articleId: string | null | undefined,
       ) => {
         if (!getIsAuthorized()) {
-          log.debug("User is not authorized, URL won't be opened");
+          log.debug('User is not authorized, URL won\'t be opened');
           return;
         }
 
@@ -873,7 +873,7 @@ function subscribeToURL(): Action {
       },
       (url, searchQuery) => {
         if (!getIsAuthorized()) {
-          log.debug("User is not authorized, URL won't be opened");
+          log.debug('User is not authorized, URL won\'t be opened');
           return;
         }
 

@@ -17,12 +17,15 @@ export const userNotFoundMessageMap: Record<string, string> = {
     'When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer.',
   ),
   TEAMCITY_NO_USER_IN_YOUTRACK_BY_EMAIL: i18n(
+    // eslint-disable-next-line quotes
     "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile.",
   ),
   TEAMCITY_USER_IS_NOT_UNIQUE_BY_EMAIL: i18n(
+    // eslint-disable-next-line quotes
     "When integrating TeamCity and YouTrack, the users are matched by their email addresses. There are two or more different YouTrack users that have the same email address as the commit's author has in TeamCity.",
   ),
   TEAMCITY_ERROR_RETRIEVING_USER: i18n(
+    // eslint-disable-next-line quotes
     "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions.",
   ),
   UPSOURCE_NO_USER: i18n('No user information provided by Upsource.'),

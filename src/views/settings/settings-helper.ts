@@ -36,6 +36,7 @@ export const feedbackTypeOptions: Array<FeedbackType> = [
 ];
 export const feedbackLogsOptions: Array<FeedbackLogs> = [
   {
+    // eslint-disable-next-line
     title: i18n("Don't send logs"),
     value: false,
   },

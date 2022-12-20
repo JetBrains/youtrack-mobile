@@ -4,6 +4,7 @@ import {i18n} from 'components/i18n/i18n';
 import {IconAccountAlert} from '../icon/icon';
 import type {ErrorMessageData} from 'types/Error';
 const unauthorizedErrorMessageData: ErrorMessageData = {
+  // eslint-disable-next-line
   title: i18n("Woah, you can't touch this!"),
   description: i18n(
     'Your account has insufficient permission to perform this operation.',
@@ -11,14 +12,17 @@ const unauthorizedErrorMessageData: ErrorMessageData = {
 };
 const noIssueFoundDescriptionMessages: Array<string> = [
   i18n(
+    // eslint-disable-next-line
     "If this isn't what you expected, you might try one of these solutions:",
   ),
   i18n('Search for a different value'),
   i18n('Use fewer search parameters'),
 ];
 const notFoundMessageData: ErrorMessageData = {
+  // eslint-disable-next-line
   title: i18n("Nope, can't find it!"),
   description: i18n(
+    // eslint-disable-next-line
     "It could mean that the issue doesn't exist or you don't have permission to view it",
   ),
 };

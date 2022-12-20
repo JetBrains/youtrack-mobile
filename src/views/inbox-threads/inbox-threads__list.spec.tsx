@@ -42,12 +42,12 @@ describe('Inbox Threads List', () => {
     });
     it('should render all threads', () => {
       const {getAllByTestId} = doRender();
-      expect(getAllByTestId(threadTestId).length).toEqual(3);
+      expect(getAllByTestId(threadTestId)).toHaveLength(3);
     });
     it('should render `length - 1` threads if there are more threads to load', () => {
       createStore(createInboxThreadsData(undefined, threadsMock, true));
       const {getAllByTestId} = doRender(undefined, threadsMock, true);
-      expect(getAllByTestId(threadTestId).length).toEqual(2);
+      expect(getAllByTestId(threadTestId)).toHaveLength(2);
     });
     it('should render error', async () => {
       createStore({

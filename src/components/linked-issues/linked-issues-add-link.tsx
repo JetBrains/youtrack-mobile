@@ -46,7 +46,7 @@ type Props = {
 
 const LinkedIssuesAddLink = (props: Props): React.ReactNode => {
   // update UI on theme change
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const theme: Theme = useContext(ThemeContext);
   const [issues, updateIssues] = useState([]);
   const [isLoading, updateLoading] = useState(false);

@@ -338,7 +338,7 @@ const getUnpublishedArticleDraft = async (
   article: Article,
 ): Promise<ArticleDraft | null> => {
   let articleDraft: ArticleDraft;
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, articleDrafts] = await until(
     api.articles.getArticleDrafts(article.id),
   );
@@ -614,7 +614,7 @@ const showArticleCommentActions = (
     const api: Api = getApi();
     const {article} = getState().article;
     logEvent({
-      message: "Show article's comment actions",
+      message: 'Show article\'s comment actions',
       analyticsId: ANALYTICS_ARTICLE_PAGE,
     });
     const url: string = `${api.config.backendUrl}/articles/${article.idReadable}#comment${activityId}`;

@@ -45,12 +45,13 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
       description,
       summaryPlaceholder = 'Summary',
       descriptionPlaceholder = 'Description',
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       onSummaryChange,
-      //eslint-disable-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       onDescriptionChange,
-      //eslint-disable-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       analyticsId,
-      //eslint-disable-line no-unused-vars
+
       ...rest
     } = this.props;
     return (

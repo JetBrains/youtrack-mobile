@@ -648,6 +648,7 @@ export class KnowledgeBase extends Component<Props, State> {
         <IconNoProjectFound style={styles.noProjectsIcon} />
         <Text style={styles.noProjectsMessage}>
           {i18n(
+            // eslint-disable-next-line quotes
             "Here you'll see a list of articles from your favorite projects",
           )}
         </Text>

@@ -4,7 +4,8 @@ import {
   requestsMap,
 } from './api__request-controller';
 import {routeMap} from '../../app-routes';
-describe('', () => {
+
+describe('requestController', () => {
   beforeEach(() => {
     requestController.init();
   });
@@ -59,7 +60,7 @@ describe('', () => {
     });
   });
   describe('Fetch', () => {
-    it('should ', () => {
+    it('should', () => {
       global.fetch = jest.fn();
       const add = requestController.add;
       requestController.add = jest.fn();

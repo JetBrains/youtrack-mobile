@@ -50,17 +50,17 @@ describe('<Accounts/>', () => {
 
       instance._onChangeAccount(accountsMock[1]);
 
-      expect(onChangeAccountMock).not.toBeCalled();
+      expect(onChangeAccountMock).not.toHaveBeenCalled();
     });
     it('should not change a current account to the same one', () => {
       instance._onChangeAccount(accountsMock[0]);
 
-      expect(onChangeAccountMock).not.toBeCalled();
+      expect(onChangeAccountMock).not.toHaveBeenCalled();
     });
     it('should change an account', () => {
       instance._onChangeAccount(accountsMock[1]);
 
-      expect(onChangeAccountMock).toBeCalled();
+      expect(onChangeAccountMock).toHaveBeenCalled();
     });
   });
   describe('Render', () => {

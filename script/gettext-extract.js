@@ -25,7 +25,7 @@ extractor
       },
     }),
   ])
-  .parseFilesGlob('./src/**/!(*.spec).js');
+  .parseFilesGlob('./src/**/!(*.spec).@(ts|js|tsx|jsx)');
 
 extractor.savePotFile('./translations/default.pot');
 

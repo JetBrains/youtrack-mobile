@@ -1,5 +1,6 @@
 import {i18n} from 'components/i18n/i18n';
 export const CUSTOM_ERROR_MESSAGE = {
+  // eslint-disable-next-line quotes
   NO_ENTITY_FOUND: "Can't find entity with id",
   BAD_REQUEST: 'Bad Request',
 };

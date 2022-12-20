@@ -667,6 +667,7 @@ class Inbox extends Component<Props, State> {
           <IconNothingFound style={styles.listFooterMessageIcon} />
           <Text style={styles.listFooterMessageText} testID="no-notifications">
             {i18n(
+              // eslint-disable-next-line
               "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app.",
             )}
           </Text>

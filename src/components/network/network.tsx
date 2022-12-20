@@ -19,7 +19,7 @@ export default function Network(): React.ReactNode {
   const updateNetworkState = useCallback(
     async (state: NetInfoState) => {
       if (state.isConnected !== prevConnected?.current?.isConnected) {
-        // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const {details, ...rest} = state;
         await dispatch(setNetworkState(rest));
         const wasOffline = !prevConnected?.current?.isConnected;

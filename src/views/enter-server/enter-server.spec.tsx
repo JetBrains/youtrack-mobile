@@ -80,7 +80,7 @@ describe('EnterServer', () => {
       await expect(connectToYouTrack).toHaveBeenCalledWith(
         'http://foo.bar/youtrack',
       );
-      await expect(connectToYouTrack).toBeCalledTimes(2);
+      await expect(connectToYouTrack).toHaveBeenCalledTimes(2);
     });
     it('should try next URL on failure if no protocol entered', async () => {
       connectPromise = Promise.reject('ERROR');
@@ -94,7 +94,7 @@ describe('EnterServer', () => {
       await expect(connectToYouTrack).toHaveBeenCalledWith(
         'http://foo.bar/youtrack',
       );
-      await expect(connectToYouTrack).toBeCalledTimes(4);
+      await expect(connectToYouTrack).toHaveBeenCalledTimes(4);
     });
   });
   describe('EnterServer', () => {

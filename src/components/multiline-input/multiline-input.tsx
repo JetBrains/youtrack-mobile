@@ -79,9 +79,9 @@ export default class MultilineInput extends PureComponent<Props, State> {
   render(): React.ReactNode {
     const {
       style,
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       maxInputHeight,
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       minInputHeight,
       adaptive,
       ...rest

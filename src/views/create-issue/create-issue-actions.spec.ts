@@ -55,7 +55,7 @@ describe('<CreateIssue/>', () => {
         projectId: null,
       });
       await store.dispatch(actions.loadStoredProject());
-      expect(store.getActions().length).toEqual(0);
+      expect(store.getActions()).toHaveLength(0);
     });
   });
   describe('loadIssueFromDraft', () => {
@@ -223,7 +223,7 @@ describe('<CreateIssue/>', () => {
         ),
       );
       expect(apiMock.issue.createIssue).toHaveBeenCalledWith(issueMock);
-      expect(store.getActions().length).toEqual(4);
+      expect(store.getActions()).toHaveLength(4);
       expect(store.getActions()[0]).toEqual({
         type: 'IssueCreate/startIssueCreation',
       });
@@ -315,7 +315,7 @@ describe('<CreateIssue/>', () => {
         .spyOn(commandDialogHelper, 'loadIssueCommandSuggestions')
         .mockRejectedValueOnce(new Error('cannot load suggestions'));
       await loadSuggestions();
-      expect(store.getActions().length).toEqual(0);
+      expect(store.getActions()).toHaveLength(0);
     });
 
     async function loadSuggestions() {

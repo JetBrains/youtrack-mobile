@@ -70,7 +70,7 @@ describe('Inbox Thread', () => {
       });
       it('should render action sheet', async () => {
         getActionSheetCallbacksArray(threadMock);
-        expect(showActionSheetWithOptions).toBeCalledTimes(1);
+        expect(showActionSheetWithOptions).toHaveBeenCalledTimes(1);
         const actionSheetConfig = showActionSheetWithOptions.mock.calls[0][0];
         expect(actionSheetConfig.title).toEqual(
           `${threadMock.subject.target.idReadable} ${threadMock.subject.target.summary}`,

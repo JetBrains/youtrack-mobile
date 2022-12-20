@@ -6,7 +6,7 @@ describe('Issues list', () => {
     await loginPage.connectToServer();
     await loginPage.logIn();
 
-    await expect(element(by.id('issue-list-page'))).toExist();
+    await waitFor(element(by.id('issue-list-page'))).toExist();
   });
 
   beforeEach(async () => {

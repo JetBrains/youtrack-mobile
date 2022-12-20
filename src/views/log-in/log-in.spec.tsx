@@ -3,7 +3,7 @@ import {NativeModules} from 'react-native';
 import {LogIn} from './log-in';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
-xdescribe('LogIn', () => {
+describe.skip('LogIn', () => {
   let defaultProps;
   beforeEach(() => {
     const fakeAuth = {

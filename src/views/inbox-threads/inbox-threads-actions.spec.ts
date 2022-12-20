@@ -182,7 +182,7 @@ describe('Inbox Threads', () => {
           await store.dispatch(
             actions.markFolderSeen(folderIdMap[0], lastKnownNotified),
           );
-          expect(store.getActions().length).toEqual(1);
+          expect(store.getActions()).toHaveLength(1);
           expect(store.getActions()[0]).toEqual({
             type: INBOX_THREADS_FOLDER_SEEN,
             folderId: folderIdMap[0],
@@ -203,7 +203,7 @@ describe('Inbox Threads', () => {
             },
           ]);
           await store.dispatch(actions.markFolderSeen(folderIdMap[0]));
-          expect(store.getActions().length).toEqual(1);
+          expect(store.getActions()).toHaveLength(1);
           expect(store.getActions()[0]).toEqual({
             type: INBOX_THREADS_FOLDER_SEEN,
             folderId: folderIdMap[0],
@@ -224,7 +224,7 @@ describe('Inbox Threads', () => {
             },
           ]);
           await store.dispatch(actions.markFolderSeen(folderIdMap[1], 123));
-          expect(store.getActions().length).toEqual(1);
+          expect(store.getActions()).toHaveLength(1);
           expect(store.getActions()[0]).toEqual({
             type: INBOX_THREADS_FOLDER_SEEN,
             folderId: folderIdMap[1],
@@ -234,7 +234,7 @@ describe('Inbox Threads', () => {
         it('should set lastSeen to `0` for any folder', async () => {
           prepareStore([]);
           await store.dispatch(actions.markFolderSeen(folderIdMap[1]));
-          expect(store.getActions().length).toEqual(1);
+          expect(store.getActions()).toHaveLength(1);
           expect(store.getActions()[0]).toEqual({
             type: INBOX_THREADS_FOLDER_SEEN,
             folderId: folderIdMap[1],
@@ -244,7 +244,7 @@ describe('Inbox Threads', () => {
         it('should set lastSeen to `0` for `All`', async () => {
           prepareStore([]);
           await store.dispatch(actions.markFolderSeen(folderIdMap[0]));
-          expect(store.getActions().length).toEqual(1);
+          expect(store.getActions()).toHaveLength(1);
           expect(store.getActions()[0]).toEqual({
             type: INBOX_THREADS_FOLDER_SEEN,
             folderId: folderIdMap[0],
@@ -390,22 +390,22 @@ describe('Inbox Threads', () => {
         apiMock.inbox.getThreads.mockResolvedValueOnce([{}, {}]);
         await store.dispatch(actions.loadInboxThreads(undefined, undefined));
         expect(
-          storage.getStorageState().inboxThreadsCache[folderIdAllKey].length,
-        ).toEqual(2);
+          storage.getStorageState().inboxThreadsCache[folderIdAllKey],
+        ).toHaveLength(2);
       });
       it('should update inbox threads `Mentions & Reactions` tab cache', async () => {
         apiMock.inbox.getThreads.mockResolvedValueOnce([{}, {}, {}]);
         await store.dispatch(actions.loadInboxThreads(folderIdMap[1]));
         expect(
-          storage.getStorageState().inboxThreadsCache[folderIdMap[1]].length,
-        ).toEqual(3);
+          storage.getStorageState().inboxThreadsCache[folderIdMap[1]],
+        ).toHaveLength(3);
       });
       it('should update inbox threads `Subscriptions` tab cache', async () => {
         apiMock.inbox.getThreads.mockResolvedValueOnce([{}, {}, {}, {}]);
         await store.dispatch(actions.loadInboxThreads(folderIdMap[2]));
         expect(
-          storage.getStorageState().inboxThreadsCache[folderIdMap[2]].length,
-        ).toEqual(4);
+          storage.getStorageState().inboxThreadsCache[folderIdMap[2]],
+        ).toHaveLength(4);
       });
       it('should not set threads from the cache before loading for the  first time', async () => {
         apiMock.inbox.getThreads.mockResolvedValueOnce([{}, {}, {}]);
@@ -455,7 +455,7 @@ describe('Inbox Threads', () => {
       await store.dispatch(
         actions.updateThreadsStateAndCache(updatedThread, false),
       );
-      expect(store.getActions().length).toEqual(0);
+      expect(store.getActions()).toHaveLength(0);
       expect(storage.flushStoragePart).not.toHaveBeenCalled();
     });
     it('should update the threads state and a cache for All notifications', async () => {
@@ -463,7 +463,7 @@ describe('Inbox Threads', () => {
       await store.dispatch(
         actions.updateThreadsStateAndCache(updatedThread, false),
       );
-      expect(store.getActions().length).toEqual(1);
+      expect(store.getActions()).toHaveLength(1);
       expect(store.getActions()[0]).toEqual({
         payload: {
           folderId: folderIdAllKey,
@@ -485,7 +485,7 @@ describe('Inbox Threads', () => {
       await store.dispatch(
         actions.updateThreadsStateAndCache(updatedThread, false),
       );
-      expect(store.getActions().length).toEqual(1);
+      expect(store.getActions()).toHaveLength(1);
       expect(store.getActions()[0]).toEqual({
         payload: {
           folderId: folderIdMap[2],

@@ -347,7 +347,7 @@ describe('app-actions', () => {
     it('should not set inbox thread folders on error', async () => {
       apiMock.inbox.getFolders.mockRejectedValueOnce(new Error());
       await store.dispatch(actions.inboxCheckUpdateStatus());
-      expect(store.getActions().length).toEqual(0);
+      expect(store.getActions()).toHaveLength(0);
     });
   });
 
