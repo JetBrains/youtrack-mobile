@@ -30,7 +30,7 @@ import {
   showActions,
   showActionSheet,
 } from 'components/action-sheet/action-sheet';
-import {updateActivityCommentReactions} from '../../components/activity-stream/activity__stream-helper';
+import {updateActivityCommentReactions} from 'components/activity-stream/activity__stream-helper';
 import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from 'components/api/api';
 import type {ActionSheetOption} from 'components/action-sheet/action-sheet';

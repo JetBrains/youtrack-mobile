@@ -19,7 +19,7 @@ import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
 import Star from 'components/star/star';
 import usage from 'components/usage/usage';
-import {addListenerGoOnline} from '../../components/network/network-events';
+import {addListenerGoOnline} from 'components/network/network-events';
 import {attachmentActions} from './issue__attachment-actions-and-types';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from './issue-base-actions-creater';
 import {getApi} from 'components/api/api__instance';

@@ -21,7 +21,7 @@ import IssueTabbed from 'components/issue-tabbed/issue-tabbed';
 import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
 import VisibilityControl from 'components/visibility/visibility-control';
-import {addListenerGoOnline} from '../../components/network/network-events';
+import {addListenerGoOnline} from 'components/network/network-events';
 import {ANALYTICS_ARTICLE_PAGE} from 'components/analytics/analytics-ids';
 import {createArticleList} from '../knowledge-base/knowledge-base-actions';
 import {findArticleNode} from 'components/articles/articles-tree-helper';

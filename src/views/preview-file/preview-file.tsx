@@ -11,7 +11,7 @@ import Video from 'react-native-video';
 import {SvgFromUri} from 'react-native-svg';
 import {View as AnimatedView} from 'react-native-animatable';
 import Header from 'components/header/header';
-import ImageWithProgress from '../../components/image/image-with-progress';
+import ImageWithProgress from 'components/image/image-with-progress';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
 import {ANALYTICS_PREVIEW_PAGE} from 'components/analytics/analytics-ids';

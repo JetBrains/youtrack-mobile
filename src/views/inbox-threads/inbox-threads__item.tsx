@@ -8,7 +8,7 @@ import type {Activity} from 'flow/Activity';
 import type {InboxThreadGroup, ThreadEntity} from 'flow/Inbox';
 import type {User} from 'flow/User';
 import type {Theme} from '../../flow/Theme';
-import {ThemeContext} from '../../components/theme/theme-context';
+import {ThemeContext} from 'components/theme/theme-context';
 type Props = {
   author: User;
   avatar: any;

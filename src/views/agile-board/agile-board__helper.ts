@@ -1,4 +1,4 @@
-import {ResourceTypes} from '../../components/api/api__resource-types';
+import {ResourceTypes} from 'components/api/api__resource-types';
 import type {
   BoardColumn,
   Cell,

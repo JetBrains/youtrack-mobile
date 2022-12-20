@@ -23,7 +23,7 @@ import Router from 'components/router/router';
 import SelectSectioned from 'components/select/select-sectioned';
 import Star from 'components/star/star';
 import usage from 'components/usage/usage';
-import {addListenerGoOnline} from '../../components/network/network-events';
+import {addListenerGoOnline} from 'components/network/network-events';
 import {ANALYTICS_ARTICLES_PAGE} from 'components/analytics/analytics-ids';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import {HIT_SLOP} from 'components/common-styles/button';

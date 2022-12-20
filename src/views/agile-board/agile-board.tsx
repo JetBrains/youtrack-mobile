@@ -24,7 +24,7 @@ import QueryAssistPanel from 'components/query-assist/query-assist-panel';
 import QueryPreview from 'components/query-assist/query-preview';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
-import {addListenerGoOnline} from '../../components/network/network-events';
+import {addListenerGoOnline} from 'components/network/network-events';
 import {ANALYTICS_AGILE_PAGE} from 'components/analytics/analytics-ids';
 import {DragContainer} from 'components/draggable';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
