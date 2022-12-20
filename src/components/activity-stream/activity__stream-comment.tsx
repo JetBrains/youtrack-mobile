@@ -19,7 +19,7 @@ import type {Theme} from 'flow/Theme';
 import type {YouTrackWiki} from 'flow/Wiki';
 
 
-interface Props {
+type Props = {
   activity: Activity,
   attachments?: Array<Attachment>;
   commentActions?: ActivityStreamCommentActions;

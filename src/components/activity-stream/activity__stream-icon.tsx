@@ -11,7 +11,7 @@ import {pullRequestState} from './activity__stream-vcs-helper';
 
 import styles from './activity__stream.styles';
 
-interface Props {
+type Props = {
   activityGroup: Object
 }
 

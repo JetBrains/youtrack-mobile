@@ -24,7 +24,7 @@ import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {UserCurrent} from 'flow/User';
 
-interface Props {
+type Props = {
   folderId: string;
   onNavigate: (entity: ThreadEntity, navigateToActivity?: string, commentId?: string) => any,
 }

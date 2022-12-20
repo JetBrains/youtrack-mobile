@@ -15,7 +15,7 @@ import type {User} from 'flow/User';
 import type {Theme} from '../../flow/Theme';
 import {ThemeContext} from '../../components/theme/theme-context';
 
-interface Props {
+type Props = {
   author: User;
   avatar: any;
   change?: any;

@@ -10,7 +10,7 @@ import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import styles from './activity__stream.styles';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
-interface Props {
+type Props = {
   activityGroup: Object,
   showAvatar: boolean,
   size?: number,

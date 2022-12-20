@@ -50,7 +50,7 @@ type State = {
 
 
 export default class SettingsFeedbackForm extends PureComponent<Props, State> {
-  static contextTypes: any | {actionSheet: typeof Function} = {
+  static contextTypes: any = {
     actionSheet: Function,
   };
 

@@ -12,7 +12,7 @@ import ThreadItem from './inbox-threads__item';
 
 import type {InboxThreadGroup, InboxThreadTarget, ThreadEntity} from 'flow/Inbox';
 
-interface Props {
+type Props = {
   group: InboxThreadGroup;
   target: InboxThreadTarget;
   onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;

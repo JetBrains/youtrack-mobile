@@ -23,7 +23,7 @@ import type {IssueComment} from 'flow/CustomFields';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
 
-interface Props {
+type Props = {
   currentUser: User;
   onNavigate: (entity: ThreadEntity, navigateToActivity?: string) => any;
   thread: InboxThread;

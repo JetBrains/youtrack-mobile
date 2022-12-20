@@ -12,7 +12,7 @@ import type {AppState} from '../../reducers';
 import type {InboxThreadMessage} from 'flow/Inbox';
 
 
-interface Props {
+type Props = {
   messages: InboxThreadMessage[];
   onReadChange: (messages: InboxThreadMessage[], read: boolean) => any;
 }

@@ -51,10 +51,7 @@ import type {User, UserAppearanceProfile} from 'flow/User';
 import type {WorkItem} from 'flow/Work';
 import type {YouTrackWiki} from 'flow/Wiki';
 
-type IssueActivityProps = $Shape<IssueActivityState
-  & IssueCommentActivityState
-  & typeof attachmentActions
-  & {
+type IssueActivityProps = $Shape<IssueActivityState & IssueCommentActivityState & typeof attachmentActions & {
   canAttach: boolean,
   onAttach: () => any,
   stateFieldName: string,
@@ -67,7 +64,7 @@ type State = {
 };
 
 export class IssueActivity extends PureComponent<IssueActivityProps, State> {
-  static contextTypes: any | { actionSheet: typeof Function } = {
+  static contextTypes: any = {
     actionSheet: Function,
   };
 

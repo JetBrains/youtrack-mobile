@@ -139,7 +139,7 @@ class YouTrackMobile extends Component<void, void> {
 const AppActionSheetConnected = connectActionSheet<{}>(YouTrackMobile);
 
 class AppContainer extends Component<void, void> {
-  static childContextTypes: any | {actionSheet: typeof Function} = {
+  static childContextTypes: any = {
     actionSheet: Function,
   };
 

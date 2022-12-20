@@ -7,5 +7,5 @@ import type {AttachmentActions} from 'components/attachments-row/attachment-acti
 
 const PREFIX: string = 'issueState';
 
-export const attachmentTypes: typeof attachmentActionMap = createAttachmentTypes(PREFIX);
+export const attachmentTypes: any = createAttachmentTypes(PREFIX);
 export const attachmentActions: AttachmentActions = getAttachmentActions(PREFIX);

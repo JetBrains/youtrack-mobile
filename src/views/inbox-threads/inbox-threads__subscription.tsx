@@ -24,7 +24,7 @@ import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 
-interface Props {
+type Props = {
   currentUser: User;
   onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
   onReadChange: (messages: InboxThreadMessage[], read: boolean) => any;

@@ -23,7 +23,7 @@ import type {InboxThread, InboxThreadMessage, ThreadData} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
 
-interface Props {
+type Props = {
   currentUser: User;
   onNavigate: (entity: any, navigateToActivity?: string, commentId?: string) => any,
   thread: InboxThread;

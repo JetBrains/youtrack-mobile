@@ -10,7 +10,7 @@ import styles from './inbox-threads.styles';
 import {useSelector} from 'react-redux';
 import type {AppState} from '../../reducers';
 
-interface Props {
+type Props = {
   onPress: () => any;
   style?: any;
 }

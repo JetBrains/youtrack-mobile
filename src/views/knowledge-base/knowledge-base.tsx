@@ -54,9 +54,7 @@ import type {Node} from 'react';
 import type {SelectProps} from 'components/select/select';
 import type {Theme, UITheme} from 'flow/Theme';
 
-type Props = {
-  ...KnowledgeBaseActions,
-  ...KnowledgeBaseState,
+type Props = KnowledgeBaseActions & KnowledgeBaseState & {
   issuePermissions: IssuePermissions,
   project?: ArticleProject,
   preventReload?: boolean,
@@ -82,11 +80,11 @@ const ERROR_MESSAGE_DATA: Object = {
 };
 
 export class KnowledgeBase extends Component<Props, State> {
-  static contextTypes: any | { actionSheet: typeof Function } = {
+  static contextTypes: any = {
     actionSheet: Function,
   };
 
-  listRef: ?Object;
+  listRef: any;
   uiTheme: UITheme;
   unsubscribe: Function = () => null;
   unsubscribeOnDimensionsChange: EventSubscription;
@@ -333,9 +331,9 @@ export class KnowledgeBase extends Component<Props, State> {
     />;
   };
 
-  getListItemKey: ((item: ArticleNode, index: number) => string) = (item: ArticleNode, index: number) => item?.data?.id || `${index}`;
+  getListItemKey = (item: ArticleNode, index: number) => item?.data?.id || `${index}`;
 
-  setListRef: ((listRef?: any) => void) = (listRef?: Object) => {
+  setListRef = (listRef: any) => {
     if (listRef) {
       this.listRef = listRef;
     }

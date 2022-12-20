@@ -18,7 +18,7 @@ import type {Activity} from 'flow/Activity';
 import type {IssueComment} from 'flow/CustomFields';
 import type {ThreadEntity} from 'flow/Inbox';
 
-interface Props {
+type Props = {
   activity: Activity;
   currentUser: User;
   isPanelVisible: boolean;

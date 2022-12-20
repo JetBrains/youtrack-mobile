@@ -21,7 +21,7 @@ import type {IssueComment} from 'flow/CustomFields';
 import type {Reaction} from 'flow/Reaction';
 import type {User} from 'flow/User';
 
-interface Props {
+type Props = {
   currentUser: User;
   onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
   thread: InboxThread;

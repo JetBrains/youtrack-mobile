@@ -33,7 +33,7 @@ export default class Tags extends PureComponent<Props, void> {
   static defaultProps: DefaultProps = {
     onTagPress: () => {},
   };
-  static contextTypes: any | {actionSheet: typeof Function} = {
+  static contextTypes: any = {
     actionSheet: Function,
   };
 

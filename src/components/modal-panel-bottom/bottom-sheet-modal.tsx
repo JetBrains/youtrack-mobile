@@ -8,7 +8,7 @@ import { Modalize } from 'react-native-modalize';
 import styles from './bottom-sheet.style';
 
 
-interface Props {
+type Props = {
   children: any;
   height?: number;
   header?: any;

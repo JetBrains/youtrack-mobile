@@ -21,7 +21,7 @@ import type {Attachment} from 'flow/Attachment';
 import type {InboxThreadGroup, InboxThreadTarget, ThreadEntity} from 'flow/Inbox';
 import type {UserCurrent} from 'flow/User';
 
-interface Props {
+type Props = {
   currentUser: UserCurrent;
   group: InboxThreadGroup;
   target: InboxThreadTarget;

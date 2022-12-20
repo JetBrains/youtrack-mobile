@@ -6,14 +6,14 @@ import {threadsPageSize} from 'components/api/api__inbox';
 import type {CustomError} from 'flow/Error';
 import type {InboxThread, ThreadsStateDataKey} from 'flow/Inbox';
 
-export interface ThreadsStateData {
+export type ThreadsStateData = {
   [key: ThreadsStateDataKey]: {
     threads: InboxThread[],
     hasMore: boolean
   };
 }
 
-export interface InboxThreadState {
+export type InboxThreadState = {
   error: CustomError | null,
   threadsData: ThreadsStateData,
   inProgress: boolean,

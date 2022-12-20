@@ -3,7 +3,7 @@
 import gt from './i18n-gettext';
 import log from 'components/log/log';
 
-interface Params {
+type Params = {
   [p: string]: string | number;
 }
 

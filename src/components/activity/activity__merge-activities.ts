@@ -6,7 +6,7 @@ import type {Activity} from 'flow/Activity';
 
 type MergedActivity = Activity;
 
-interface activityMapItem {
+type activityMapItem = {
   [key: string]: Activity;
 }
 

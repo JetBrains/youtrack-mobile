@@ -10,7 +10,7 @@ import {UNIT} from 'components/variables/variables';
 
 import type {Theme} from 'flow/Theme';
 
-interface Props {
+type Props = {
   html: string;
 }
 

@@ -18,7 +18,7 @@ import type {CustomField} from 'flow/CustomFields';
 import type {InboxThreadTarget, ThreadEntity} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
 
-interface Props {
+type Props = {
   group: InboxThreadGroup;
   target: InboxThreadTarget;
   uiTheme: UITheme;
@@ -26,7 +26,7 @@ interface Props {
 }
 
 export default function ThreadEntityCreatedItem({group, target, uiTheme, onNavigate}: Props) {
-  const actualActivity: Props['group']['issue'] = group.issue;
+  const actualActivity = group.issue;
   const entity: ThreadEntity = actualActivity.issue || actualActivity.article;
   const assigneeFields: CustomField[] = (entity.customFields || []).map((it: CustomField) => {
     return {
