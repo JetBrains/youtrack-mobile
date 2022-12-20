@@ -360,7 +360,6 @@ export default class ArticlesAPI extends ApiBase {
     const url = `${this.youTrackApiUrl}/users/me/articleDrafts/${articleId}/attachments?fields=id,name`;
     const headers = this.auth.getAuthorizationHeaders();
     const formData = new FormData();
-    // $FlowFixMe
     formData.append('photo', {
       uri: fileUri,
       name: fileName,
@@ -405,7 +404,6 @@ export default class ArticlesAPI extends ApiBase {
       : 'draftComment';
     const url = `${this.youTrackApiUrl}/articles/${articleId}/${resourcePath}/attachments?fields=id,name,url,thumbnailURL,mimeType,imageDimensions(height,width)`;
     const formData = new FormData();
-    // $FlowFixMe
     formData.append('photo', {
       uri: fileUri,
       name: fileName,

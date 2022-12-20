@@ -321,8 +321,7 @@ class CreateIssue extends PureComponent<Props, State> {
       getIssueLinksTitle,
       processing,
     } = this.props;
-    //$FlowFixMe
-    const iconLink: any = (
+        const iconLink: any = (
       <IconLink
         width={24}
         height={24}

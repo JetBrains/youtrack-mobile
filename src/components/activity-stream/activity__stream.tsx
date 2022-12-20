@@ -178,7 +178,6 @@ export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
       : FEATURE_VERSION.reactions;
 
     if (!comment.deleted) {
-      // $FlowFixMe
       const reactionAddIcon: string = (
         <ReactionAddIcon style={styles.activityCommentActionsAddReaction} />
       );

@@ -27,14 +27,12 @@ type Props = IssueProps & {
 }; //@ts-expect-error
 
 class IssueModal extends Issue<Props> {
-  //$FlowFixMe
-  handleOnBack = () => {
+    handleOnBack = () => {
     if (this.props.onBack) {
       this.props.onBack();
     } else if (this.props.onHide) {
       this.props.onHide();
     } else {
-      //$FlowFixMe
       super.handleOnBack();
     }
   };
@@ -176,8 +174,7 @@ const mapStateToProps = (
   },
   ownProps: OwnProps,
 ): IssueState & OwnProps => {
-  //$FlowFixMe
-  return {
+    return {
     issuePermissions: state.app.issuePermissions,
     ...state.issueModalState,
     issuePlaceholder: ownProps.issuePlaceholder,

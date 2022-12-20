@@ -289,8 +289,7 @@ export class Issues extends Component<Props, State> {
   _renderRefreshControl() {
     return (
       <RefreshControl
-        refreshing={false} //$FlowFixMe
-        onRefresh={this.props.refreshIssues}
+        refreshing={false}   onRefresh={this.props.refreshIssues}
         tintColor={this.theme.uiTheme.colors.$link}
         testID="refresh-control"
         accessibilityLabel="refresh-control"

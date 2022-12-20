@@ -373,7 +373,6 @@ export default class IssueAPI extends ApiBase {
     const url = `${this.youTrackIssueUrl}/${issueId}/attachments?fields=id,name`;
     const headers = this.auth.getAuthorizationHeaders();
     const formData = new FormData();
-    // $FlowFixMe
     formData.append('photo', {
       uri: fileUri,
       name: fileName,
@@ -400,7 +399,6 @@ export default class IssueAPI extends ApiBase {
       : 'draftComment';
     const url = `${this.youTrackIssueUrl}/${issueId}/${resourcePath}/attachments?fields=id,name,url,thumbnailURL,mimeType,imageDimensions(height,width)`;
     const formData = new FormData();
-    // $FlowFixMe
     formData.append('photo', {
       uri: fileUri,
       name: fileName,

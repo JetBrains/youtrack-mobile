@@ -260,7 +260,6 @@ export async function populateStorage(): Promise<StorageState> {
     acc[pair[PAIR_KEY]] = pair[PAIR_VALUE];
     return acc;
   }, {});
-  // $FlowFixMe Flow doesn't get that it is the same object
   const initialStateCopy: StorageState = {...initialState};
   storageState = Object.entries(storageKeys).reduce(
     (state: StorageState, [key, storageKey]) => {
@@ -290,7 +289,6 @@ export function getStorageState(): StorageState {
 export async function flushStorage(
   newState: StorageState,
 ): Promise<StorageState> {
-  // $FlowFixMe Flow doesn't get that it is the same object
   storageState = {...newState};
   const pairsToRemove = Object.entries(storageState).filter(
     ([key, value]) => !hasValue(value),

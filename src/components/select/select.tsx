@@ -443,9 +443,7 @@ export class SelectModal extends Select<
     visible: boolean;
   }
 > {
-  //$FlowFixMe
-  constructor(props: SelectProps) {
-    //$FlowFixMe
+    constructor(props: SelectProps) {
     super(props);
     this.state = {...this.state, visible: true};
   }

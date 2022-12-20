@@ -222,7 +222,6 @@ class AppContainer extends Component<void, void> {
 
   render(): React.ReactNode {
     return (
-      //$FlowFixMe
       <ActionSheetProvider ref={this.setActionSheetRef} useModal={true}>
         <AppActionSheetConnected />
       </ActionSheetProvider>

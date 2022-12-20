@@ -46,7 +46,6 @@ const IssueActivityStream = (props: Props) => {
   const selectReaction = (comment: IssueComment, reaction: Reaction) => {
     usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Add reaction to comment');
     hideReactionsPanel();
-    // $FlowFixMe
     return props.onReactionSelect(
       props.issueId,
       comment,

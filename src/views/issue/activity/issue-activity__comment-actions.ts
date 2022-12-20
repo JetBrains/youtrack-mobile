@@ -520,8 +520,7 @@ export const createActivityCommentActions = (
         getApi: ApiGetter,
       ) => {
         const issueApi: IssueAPI = getApi().issue;
-        //$FlowFixMe
-        const currentUser: User = getState().app.user;
+          const currentUser: User = getState().app.user;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Reaction select');
         const reactionName: string = reaction.reaction;
         const existReaction: Reaction = (comment.reactions || []).filter(

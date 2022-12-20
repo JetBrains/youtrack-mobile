@@ -85,12 +85,9 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   goOnlineSubscription: EventSubscription;
 
   constructor(props: IssueProps) {
-    //$FlowFixMe
-    super(props);
-    //$FlowFixMe
-    this.onAddIssueLink = this.onAddIssueLink.bind(this);
-    //$FlowFixMe
-    this.toggleModalChildren = this.toggleModalChildren.bind(this);
+        super(props);
+        this.onAddIssueLink = this.onAddIssueLink.bind(this);
+        this.toggleModalChildren = this.toggleModalChildren.bind(this);
   }
 
   async init() {
@@ -109,8 +106,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   }
 
   async componentDidMount() {
-    //$FlowFixMe
-    super.componentDidMount();
+        super.componentDidMount();
     await this.init();
     this.goOnlineSubscription = addListenerGoOnline(() => {
       this.loadIssue(this.props?.issuePlaceholder);

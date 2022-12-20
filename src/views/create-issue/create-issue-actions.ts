@@ -202,8 +202,7 @@ export function updateIssueDraft(
       );
 
       if (ignoreFields) {
-        //$FlowFixMe
-        delete updatedDraftIssue.fields;
+          delete updatedDraftIssue.fields;
       }
 
       log.info('Issue draft updated', draftIssue.id);
