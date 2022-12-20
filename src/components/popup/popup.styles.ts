@@ -1,26 +1,21 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
-
 const extendedReportModalText = {
   letterSpacing: 0.08,
   fontSize: 16,
   lineHeight: 26,
 };
-
 const alignCenter = {
   justifyContent: 'center',
   alignItems: 'center',
 };
-
 export default EStyleSheet.create({
   link: {
     marginTop: UNIT,
     marginBottom: UNIT,
     color: '$link',
   },
-  modal: {
-    ...alignCenter,
-  },
+  modal: {...alignCenter},
   container: {
     flex: 1,
     backgroundColor: '$mask',
@@ -33,7 +28,10 @@ export default EStyleSheet.create({
     backgroundColor: '$background',
     shadowOpacity: 0.6,
     borderRadius: 6,
-    shadowOffset: {width: 0, height: 0},
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
     shadowColor: 'rgba(0, 0, 0, 0.6)',
     shadowRadius: UNIT * 2,
   },

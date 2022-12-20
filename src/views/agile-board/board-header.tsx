@@ -1,55 +1,47 @@
-/* @flow */
-
 import React, {PureComponent} from 'react';
-
 import {View, Text, TouchableOpacity} from 'react-native';
-
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {UNIT} from 'components/variables/variables';
 import {isAllColumnsCollapsed} from './agile-board__helper';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from 'components/agile-common/agile-common';
-
 import {secondaryText} from 'components/common-styles/typography';
-
 import type {BoardColumn} from 'flow/Agile';
 import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
 type Props = {
-  style?: ViewStyleProp,
-  columns?: Array<BoardColumn>,
-  onCollapseToggle: (column: BoardColumn) => any,
+  style?: ViewStyleProp;
+  columns?: Array<BoardColumn>;
+  onCollapseToggle: (column: BoardColumn) => any;
 };
-
 export default class BoardHeader extends PureComponent<Props, void> {
-  node: ?Object;
+  node: Record<string, any> | null | undefined;
 
   setNativeProps(...args: Array<any>) {
     if (!this.node) {
       return;
     }
+
     this.node.setNativeProps(...args);
   }
 
   render(): null | Node {
     const {columns, onCollapseToggle, style} = this.props;
 
-    if (!columns || !columns.length) { //YTM-835
+    if (!columns || !columns.length) {
+      //YTM-835
       return null;
     }
 
     return (
       <View
         style={[styles.tableHeader, style]}
-        ref={component => this.node = component}
+        ref={component => (this.node = component)}
       >
         {columns.map((col, index) => {
           const agileColumn = col.agileColumn || {};
           const columnPresentation = (agileColumn.fieldValues || [])
             .map(val => val.presentation)
             .join(', ');
-
           return (
             <TouchableOpacity
               testID="agile-column-header"
@@ -57,16 +49,27 @@ export default class BoardHeader extends PureComponent<Props, void> {
               accessible={true}
               style={[
                 styles.tableHeaderItem,
-                index === columns.length - 1 ? styles.tableHeaderItemWithoutBorder : null,
+                index === columns.length - 1
+                  ? styles.tableHeaderItemWithoutBorder
+                  : null,
                 col.collapsed && styles.collapsedHeaderItem,
-                isAllColumnsCollapsed(columns) && styles.collapsedHeaderItemAllCollapsed,
+                isAllColumnsCollapsed(columns) &&
+                  styles.collapsedHeaderItemAllCollapsed,
               ]}
               key={col.id}
               onPress={() => onCollapseToggle(col)}
             >
-              <Text numberOfLines={1} style={[styles.columnText, col.collapsed ? styles.columnTextCollapsed : null]}>
+              <Text
+                numberOfLines={1}
+                style={[
+                  styles.columnText,
+                  col.collapsed ? styles.columnTextCollapsed : null,
+                ]}
+              >
                 {columnPresentation}
-                {col.collapsed && <Text style={styles.columnTextCollapsed}>...</Text>}
+                {col.collapsed && (
+                  <Text style={styles.columnTextCollapsed}>...</Text>
+                )}
               </Text>
             </TouchableOpacity>
           );
@@ -75,7 +78,6 @@ export default class BoardHeader extends PureComponent<Props, void> {
     );
   }
 }
-
 const styles = EStyleSheet.create({
   tableHeader: {
     flexDirection: 'row',
@@ -99,11 +101,7 @@ const styles = EStyleSheet.create({
     flex: 1,
     width: null,
   },
-  columnText: {
-    ...secondaryText,
-    color: '$icon',
-    textTransform: 'uppercase',
-  },
+  columnText: {...secondaryText, color: '$icon', textTransform: 'uppercase'},
   columnTextCollapsed: {
     color: '$link',
   },

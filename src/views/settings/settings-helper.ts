@@ -1,31 +1,52 @@
-/* @flow */
-
-import {getAppAndDeviceData, getDeviceLogs, sendReport} from 'components/error/error-reporter';
+import {
+  getAppAndDeviceData,
+  getDeviceLogs,
+  sendReport,
+} from 'components/error/error-reporter';
 import {i18n} from 'components/i18n/i18n';
-
-export type FeedbackType = { title: string, marker: string };
-export type FeedbackLogs = { title: string, value: boolean };
+export type FeedbackType = {
+  title: string;
+  marker: string;
+};
+export type FeedbackLogs = {
+  title: string;
+  value: boolean;
+};
 export type FeedbackData = {
-  summary: ?string,
-  email: ?string,
-  type: FeedbackType,
-  logs: FeedbackLogs,
-  description: ?string,
-}
-
-
+  summary: string | null | undefined;
+  email: string | null | undefined;
+  type: FeedbackType;
+  logs: FeedbackLogs;
+  description: string | null | undefined;
+};
 const feedbackTypeMarker: string = '[InAppFeedback]';
 export const feedbackTypeOptions: Array<FeedbackType> = [
-  {title: i18n('Problem'), marker: feedbackTypeMarker},
-  {title: i18n('Feature request'), marker: feedbackTypeMarker},
-  {title: i18n('Other'), marker: feedbackTypeMarker},
+  {
+    title: i18n('Problem'),
+    marker: feedbackTypeMarker,
+  },
+  {
+    title: i18n('Feature request'),
+    marker: feedbackTypeMarker,
+  },
+  {
+    title: i18n('Other'),
+    marker: feedbackTypeMarker,
+  },
 ];
 export const feedbackLogsOptions: Array<FeedbackLogs> = [
-  {title: i18n('Don\'t send logs'), value: false},
-  {title: i18n('Send logs'), value: true},
+  {
+    title: i18n("Don't send logs"),
+    value: false,
+  },
+  {
+    title: i18n('Send logs'),
+    value: true,
+  },
 ];
-
-export const sendFeedback = async (feedbackData: FeedbackData): Promise<string> => {
+export const sendFeedback = async (
+  feedbackData: FeedbackData,
+): Promise<string> => {
   let description: string = `
   ##### ${feedbackData.type.marker}::${feedbackData.type.title}
   ##### email: ${feedbackData?.email || ''}
@@ -38,5 +59,6 @@ export const sendFeedback = async (feedbackData: FeedbackData): Promise<string> 
     const deviceLogs = await getDeviceLogs();
     description = `${description}\n\n\`\`\`${deviceLogs}\`\`\``;
   }
+
   return sendReport(feedbackData?.summary || '', description);
 };

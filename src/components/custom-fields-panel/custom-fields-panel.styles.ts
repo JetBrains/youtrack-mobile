@@ -1,18 +1,10 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {elevation1} from '../common-styles/shadow';
 import {headerTitlePresentation} from '../header/header.styles';
 import {rowFormStyles} from '../common-styles/form';
 import {UNIT} from '../variables/variables';
-
 import type {UITheme, UIThemeColors} from 'flow/Theme';
-
-
-const simpleValueInput = {
-  ...rowFormStyles.input,
-  color: '$text',
-};
-
+const simpleValueInput = {...rowFormStyles.input, color: '$text'};
 export default EStyleSheet.create({
   customFieldDateEditor: {
     flex: 1,
@@ -64,9 +56,8 @@ export default EStyleSheet.create({
     color: '$icon',
   },
 });
-
 export const calendarTheme = (uiTheme: UITheme) => {
-  const uiThemeColors:UIThemeColors = uiTheme.colors;
+  const uiThemeColors: UIThemeColors = uiTheme.colors;
   return {
     calendarBackground: uiThemeColors.$background,
     textSectionTitleColor: uiThemeColors.$icon,

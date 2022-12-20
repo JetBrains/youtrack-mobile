@@ -1,52 +1,53 @@
-/* @flow */
-
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-
 import ApiHelper from '../api/api__helper';
 import AgileRowColumn from './agile-row__column';
 import {getPriotityField} from '../issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {IconAngleDownRight} from '../icon/icon';
 import {isAllColumnsCollapsed} from 'views/agile-board/agile-board__helper';
-
 import styles from './agile-row.styles';
-
 import type {AgileBoardRow, BoardCell, BoardColumn} from 'flow/Agile';
 import type {IssueOnList} from 'flow/Issue';
 import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from 'flow/Theme';
-
 type RenderIssueCard = (issue: IssueOnList) => any;
-
 type Props = {
-  style?: ViewStyleProp,
-  row: AgileBoardRow,
-  collapsedColumnIds: Array<string>,
-  onTapIssue: (issue: IssueOnList) => any,
-  onTapCreateIssue?: (columnId: string, cellId: string) => any,
-  onCollapseToggle: (row: AgileBoardRow) => any,
-  renderIssueCard: RenderIssueCard,
-  zoomedIn?: boolean,
-  columns: Array<BoardColumn>,
-  uiTheme: UITheme,
+  style?: ViewStyleProp;
+  row: AgileBoardRow;
+  collapsedColumnIds: Array<string>;
+  onTapIssue: (issue: IssueOnList) => any;
+  onTapCreateIssue?: (columnId: string, cellId: string) => any;
+  onCollapseToggle: (row: AgileBoardRow) => any;
+  renderIssueCard: RenderIssueCard;
+  zoomedIn?: boolean;
+  columns: Array<BoardColumn>;
+  uiTheme: UITheme;
 };
 
 function renderCollapsedCard(issue: IssueOnList) {
   const priorityField = getPriotityField(issue);
-
   const color = priorityField?.value?.color;
   return (
     <View
       testID="agileRowColumnCollapsedCard"
       key={issue.id}
-      style={[styles.issueSquare, color && {backgroundColor: color.background}]}
+      style={[
+        styles.issueSquare,
+        color && {
+          backgroundColor: color.background,
+        },
+      ]}
     />
   );
 }
 
-function renderCollapsedColumn(cell: BoardCell, columnPositionData: Object, isAllCollapsed: boolean) {
+function renderCollapsedColumn(
+  cell: BoardCell,
+  columnPositionData: Record<string, any>,
+  isAllCollapsed: boolean,
+) {
   if (cell.issues) {
     return (
       <View
@@ -58,7 +59,8 @@ function renderCollapsedColumn(cell: BoardCell, columnPositionData: Object, isAl
           isAllCollapsed ? styles.columnCollapsedAll : null,
           columnPositionData.firstColumn ? styles.columnFirst : null,
           columnPositionData.lastColumn ? styles.columnWithoutBorder : null,
-        ]}>
+        ]}
+      >
         <View style={styles.columnCollapsed}>
           {cell.issues.map(renderCollapsedCard)}
         </View>
@@ -86,21 +88,14 @@ export default function BoardRow(props: Props): null | Node {
   }
 
   const isResolved: boolean = !!row?.issue?.resolved;
-
   return (
-    <View
-      testID="agileRow"
-      style={style}
-    >
+    <View testID="agileRow" style={style}>
       <View
         testID="agile-row-header"
         accessibilityLabel="agile-row-header"
         accessible={true}
-        style={[
-          styles.rowHeader,
-          !zoomedIn ? styles.rowHeaderZoomedOut : null,
-        ]}>
-
+        style={[styles.rowHeader, !zoomedIn ? styles.rowHeaderZoomedOut : null]}
+      >
         <TouchableOpacity
           testID="agileRowCollapseButton"
           style={styles.collapseButton}
@@ -112,12 +107,16 @@ export default function BoardRow(props: Props): null | Node {
             size={19}
             color={uiTheme.colors.$text}
           />
-          <Text style={[
-            styles.rowHeaderText,
-            !zoomedIn ? styles.rowHeaderTextZoomedOut : null,
-            isResolved && styles.issueIdResolved,
-          ]}>
-            {row.id === 'orphans' ? i18n('Uncategorized Cards') : (row.issue && row.issue.summary || row.name)}
+          <Text
+            style={[
+              styles.rowHeaderText,
+              !zoomedIn ? styles.rowHeaderTextZoomedOut : null,
+              isResolved && styles.issueIdResolved,
+            ]}
+          >
+            {row.id === 'orphans'
+              ? i18n('Uncategorized Cards')
+              : (row.issue && row.issue.summary) || row.name}
           </Text>
         </TouchableOpacity>
 
@@ -135,23 +134,23 @@ export default function BoardRow(props: Props): null | Node {
             </Text>
           </TouchableOpacity>
         )}
-
       </View>
 
       {Boolean(!row.collapsed && row.cells) && (
-        <View
-          testID="agileRowCells"
-          style={styles.row}
-        >
+        <View testID="agileRowCells" style={styles.row}>
           {row.cells.map((cell, index) => {
             const isCellCollapsed = collapsedColumnIds.includes(cell.column.id);
             const lastColumn = index === row.cells.length - 1;
 
             if (isCellCollapsed) {
-              return renderCollapsedColumn(cell, {
-                firstColumn: index === 0,
-                lastColumn: index === row.cells.length - 1,
-              }, isAllColumnsCollapsed(columns));
+              return renderCollapsedColumn(
+                cell,
+                {
+                  firstColumn: index === 0,
+                  lastColumn: index === row.cells.length - 1,
+                },
+                isAllColumnsCollapsed(columns),
+              );
             }
 
             return (
@@ -170,7 +169,6 @@ export default function BoardRow(props: Props): null | Node {
           })}
         </View>
       )}
-
     </View>
   );
 }

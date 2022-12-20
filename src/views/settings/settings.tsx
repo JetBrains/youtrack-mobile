@@ -1,10 +1,6 @@
-/* @flow */
-
 import React, {PureComponent} from 'react';
 import {View, Text, TouchableOpacity, Linking, Dimensions} from 'react-native';
-
 import {connect} from 'react-redux';
-
 import * as AppActions from '../../actions/app-actions';
 import Accounts from '../../components/account/accounts';
 import clicksToShowCounter from '../../components/debug-view/clicks-to-show-counter';
@@ -20,37 +16,30 @@ import {i18n} from 'components/i18n/i18n';
 import {IconBack, IconClose} from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {ThemeContext} from 'components/theme/theme-context';
-
 import styles from './settings.styles';
-
 import type {StorageState} from 'components/storage/storage';
 import type {Theme, UITheme} from 'flow/Theme';
 import type {AppState} from '../../reducers';
-
 type Props = {
-  onLogOut: () => any,
-  onAddAccount: () => any,
-  onChangeAccount: (account: StorageState) => any,
-  openDebugView: () => any,
-
-  otherAccounts: Array<StorageState>,
-  isChangingAccount: ?boolean,
-
-  features: Array<Object>,
-  setFeatures: Function,
+  onLogOut: () => any;
+  onAddAccount: () => any;
+  onChangeAccount: (account: StorageState) => any;
+  openDebugView: () => any;
+  otherAccounts: Array<StorageState>;
+  isChangingAccount: boolean | null | undefined;
+  features: Array<Record<string, any>>;
+  setFeatures: (...args: Array<any>) => any;
 };
-
 type State = {
-  appearanceSettingsVisible: boolean,
-  featuresSettingsVisible: boolean,
-  modalChildren: any,
-  isSplitView: boolean,
-}
+  appearanceSettingsVisible: boolean;
+  featuresSettingsVisible: boolean;
+  modalChildren: any;
+  isSplitView: boolean;
+};
 
 class Settings extends PureComponent<Props, State> {
   CATEGORY_NAME: string = 'Settings';
-  unsubscribeOnDimensionsChange: Function;
-
+  unsubscribeOnDimensionsChange: (...args: Array<any>) => any;
   state = {
     appearanceSettingsVisible: false,
     featuresSettingsVisible: false,
@@ -65,26 +54,34 @@ class Settings extends PureComponent<Props, State> {
   }
 
   onDimensionsChange: () => void = (): void => {
-    this.setState({isSplitView: isSplitView()});
+    this.setState({
+      isSplitView: isSplitView(),
+    });
   };
 
   componentDidMount() {
-    this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.onDimensionsChange);
+    this.unsubscribeOnDimensionsChange = Dimensions.addEventListener(
+      'change',
+      this.onDimensionsChange,
+    );
   }
 
   componentWillUnmount() {
     this.unsubscribeOnDimensionsChange.remove();
   }
 
-  toggleModalChildren = (modalChildren: any = null) => this.setState({modalChildren});
+  toggleModalChildren = (modalChildren: any = null) =>
+    this.setState({
+      modalChildren,
+    });
 
   renderModalPortal() {
-    return this.state.isSplitView && (
-      <ModalPortal
-        onHide={() => this.toggleModalChildren()}
-      >
-        {this.state.modalChildren}
-      </ModalPortal>
+    return (
+      this.state.isSplitView && (
+        <ModalPortal onHide={() => this.toggleModalChildren()}>
+          {this.state.modalChildren}
+        </ModalPortal>
+      )
     );
   }
 
@@ -97,39 +94,54 @@ class Settings extends PureComponent<Props, State> {
       otherAccounts,
       isChangingAccount,
     } = this.props;
-
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
           const uiTheme: UITheme = theme.uiTheme;
-          const settingItems: Array<{ title: string, onPress: Function }> = [{
-            title: i18n('Appearance'),
-            onPress: () => {
-              const backIcon: any = (
-                isSplitView()
-                  ? <IconClose size={21} color={theme.uiTheme.colors.$link}/>
-                  : <IconBack color={theme.uiTheme.colors.$link}/>
-              );
-              if (this.state.isSplitView) {
-                this.toggleModalChildren(<SettingsAppearance backIcon={backIcon} onHide={this.toggleModalChildren} />);
-              } else {
-                Router.Page({
-                  children: <SettingsAppearance onHide={() => Router.pop()}/>});
-              }},
-          }, {
-            title: i18n('Share logs'),
-            onPress: openDebugView,
-          }, {
-            title: i18n('Send feedback'),
-            onPress: () => Router.PageModal({children: <SettingsFeedbackForm uiTheme={uiTheme}/>}),
-          }];
+          const settingItems: Array<{
+            title: string;
+            onPress: (...args: Array<any>) => any;
+          }> = [
+            {
+              title: i18n('Appearance'),
+              onPress: () => {
+                const backIcon: any = isSplitView() ? (
+                  <IconClose size={21} color={theme.uiTheme.colors.$link} />
+                ) : (
+                  <IconBack color={theme.uiTheme.colors.$link} />
+                );
 
+                if (this.state.isSplitView) {
+                  this.toggleModalChildren(
+                    <SettingsAppearance
+                      backIcon={backIcon}
+                      onHide={this.toggleModalChildren}
+                    />,
+                  );
+                } else {
+                  Router.Page({
+                    children: (
+                      <SettingsAppearance onHide={() => Router.pop()} />
+                    ),
+                  });
+                }
+              },
+            },
+            {
+              title: i18n('Share logs'),
+              onPress: openDebugView,
+            },
+            {
+              title: i18n('Send feedback'),
+              onPress: () =>
+                Router.PageModal({
+                  children: <SettingsFeedbackForm uiTheme={uiTheme} />,
+                }),
+            },
+          ];
           return (
-            <View
-              testID="settings"
-              style={styles.settings}
-            >
-              <Header title={i18n('Settings')}/>
+            <View testID="settings" style={styles.settings}>
+              <Header title={i18n('Settings')} />
 
               <View style={styles.settingsContent}>
                 <Accounts
@@ -137,9 +149,13 @@ class Settings extends PureComponent<Props, State> {
                   onChangeAccount={onChangeAccount}
                   onClose={() => {}}
                   onLogOut={onLogOut}
-                  openDebugView={() => clicksToShowCounter(
-                    () => Router.PageModal({children: <FeaturesDebugSettings/>})
-                  )}
+                  openDebugView={() =>
+                    clicksToShowCounter(() =>
+                      Router.PageModal({
+                        children: <FeaturesDebugSettings />,
+                      }),
+                    )
+                  }
                   otherAccounts={otherAccounts}
                   isChangingAccount={isChangingAccount}
                   uiTheme={uiTheme}
@@ -147,33 +163,38 @@ class Settings extends PureComponent<Props, State> {
 
                 <View style={styles.settingsList}>
                   {settingItems.map(it => (
-                    <View
-                      key={it.title}
-                      style={styles.settingsListItem}
-                    >
+                    <View key={it.title} style={styles.settingsListItem}>
                       <TouchableOpacity
                         style={styles.settingsListItemTitle}
                         hitSlop={HIT_SLOP}
-                        onPress={it.onPress}>
-                        <Text style={styles.settingsListItemTitleText}>{it.title}</Text>
+                        onPress={it.onPress}
+                      >
+                        <Text style={styles.settingsListItemTitleText}>
+                          {it.title}
+                        </Text>
                       </TouchableOpacity>
                     </View>
                   ))}
                 </View>
 
-                <View
-                  testID="settingsFooter"
-                  style={styles.settingsFooter}
-                >
-                  <Text style={styles.settingsFooterTitle}>YouTrack Mobile</Text>
+                <View testID="settingsFooter" style={styles.settingsFooter}>
+                  <Text style={styles.settingsFooterTitle}>
+                    YouTrack Mobile
+                  </Text>
 
                   <TouchableOpacity
-                    onPress={() => Linking.openURL('https://jetbrains.com/youtrack')}>
-                    <Text style={styles.settingsFooterLink}>jetbrains.com/youtrack</Text>
+                    onPress={() =>
+                      Linking.openURL('https://jetbrains.com/youtrack')
+                    }
+                  >
+                    <Text style={styles.settingsFooterLink}>
+                      jetbrains.com/youtrack
+                    </Text>
                   </TouchableOpacity>
 
-                  <Text style={styles.settingsFooterBuild}>{VERSION_STRING}</Text>
-
+                  <Text style={styles.settingsFooterBuild}>
+                    {VERSION_STRING}
+                  </Text>
                 </View>
               </View>
               {this.renderModalPortal()}
@@ -185,7 +206,6 @@ class Settings extends PureComponent<Props, State> {
   }
 }
 
-
 const mapStateToProps = (state: AppState, ownProps) => {
   return {
     ...ownProps,
@@ -194,13 +214,14 @@ const mapStateToProps = (state: AppState, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     onLogOut: () => dispatch(AppActions.removeAccountOrLogOut()),
     onAddAccount: () => dispatch(AppActions.addAccount()),
-    onChangeAccount: (account: StorageState) => dispatch(AppActions.switchAccount(account)),
+    onChangeAccount: (account: StorageState) =>
+      dispatch(AppActions.switchAccount(account)),
     openDebugView: () => dispatch(AppActions.openDebugView()),
   };
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps)(Settings));
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);

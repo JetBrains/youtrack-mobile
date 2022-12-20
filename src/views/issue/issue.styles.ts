@@ -1,19 +1,19 @@
 import {Platform} from 'react-native';
-
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {issueIdResolved} from 'components/common-styles/issue';
-import {headerTitle, mainText, secondaryText} from 'components/common-styles/typography';
+import {
+  headerTitle,
+  mainText,
+  secondaryText,
+} from 'components/common-styles/typography';
 import {separatorBorder} from 'components/common-styles/list';
 import {summary} from 'components/form/summary-description-form.style';
 import {UNIT} from 'components/variables/variables';
-
 const centered = {
   flex: 1,
   alignItems: 'center',
   justifyContent: 'center',
 };
-
 export default EStyleSheet.create({
   secondaryText: secondaryText,
   container: {
@@ -23,14 +23,8 @@ export default EStyleSheet.create({
   header: {
     paddingHorizontal: UNIT * 2,
   },
-  headerText: {
-    ...headerTitle,
-    color: '$text',
-  },
-  headerTextResolved: {
-    ...issueIdResolved,
-    color: '$icon',
-  },
+  headerText: {...headerTitle, color: '$text'},
+  headerTextResolved: {...issueIdResolved, color: '$icon'},
   issueStar: {
     marginLeft: UNIT * 2,
     marginRight: UNIT * 2,
@@ -48,10 +42,7 @@ export default EStyleSheet.create({
     paddingTop: UNIT / 4,
     marginBottom: UNIT * 2,
   },
-  issueTopPanelText: {
-    ...secondaryText,
-    color: '$icon',
-  },
+  issueTopPanelText: {...secondaryText, color: '$icon'},
   tags: {
     marginTop: UNIT * 1.5,
     paddingTop: UNIT / 2,
@@ -62,11 +53,7 @@ export default EStyleSheet.create({
   topPanelUpdatedInformation: {
     marginTop: UNIT * 0.75,
   },
-  summary: {
-    ...summary,
-    paddingTop: UNIT,
-    color: '$text',
-  },
+  summary: {...summary, paddingTop: UNIT, color: '$text'},
   summaryResolved: {
     color: '$icon',
   },
@@ -84,7 +71,6 @@ export default EStyleSheet.create({
   disabledSaveButton: {
     color: '$icon',
   },
-
   row: {
     flexDirection: 'row',
     flex: 1,
@@ -92,7 +78,6 @@ export default EStyleSheet.create({
   alignedRight: {
     marginRight: UNIT,
   },
-
   tabBadge: {
     flexDirection: 'row',
     alignItems: 'center',

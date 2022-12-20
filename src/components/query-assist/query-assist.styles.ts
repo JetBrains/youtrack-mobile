@@ -1,10 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {clearIcon, inputWrapper, searchInput} from '../common-styles/search';
 import {elevation1} from '../common-styles/shadow';
 import {UNIT} from '../variables/variables';
-
-
 export default EStyleSheet.create({
   placeHolder: {
     height: UNIT * 6,
@@ -19,7 +16,7 @@ export default EStyleSheet.create({
     flexShrink: 1,
     justifyContent: 'flex-start',
     position: 'relative',
-    zIndex:1,
+    zIndex: 1,
   },
   inputWrapper: inputWrapper,
   inputWrapperActive: {

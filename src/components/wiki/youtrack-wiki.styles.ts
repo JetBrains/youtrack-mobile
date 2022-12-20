@@ -1,13 +1,16 @@
 import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
-import {MAIN_FONT_SIZE, mainText, monospace, SECONDARY_FONT_SIZE} from '../common-styles/typography';
-
+import {
+  MAIN_FONT_SIZE,
+  mainText,
+  monospace,
+  SECONDARY_FONT_SIZE,
+} from '../common-styles/typography';
 const showMoreLink = {
   fontSize: SECONDARY_FONT_SIZE,
   color: '$link',
 };
-
 export default EStyleSheet.create({
   codeToolbar: {
     flexDirection: 'row',
@@ -90,11 +93,7 @@ export default EStyleSheet.create({
     paddingRight: UNIT * 1.5,
     alignItems: 'center',
   },
-  code: {
-    ...monospace,
-    fontSize: SECONDARY_FONT_SIZE,
-    fontWeight: '500',
-  },
+  code: {...monospace, fontSize: SECONDARY_FONT_SIZE, fontWeight: '500'},
   codeLanguage: {
     fontSize: SECONDARY_FONT_SIZE,
     color: '$icon',
@@ -145,14 +144,12 @@ export default EStyleSheet.create({
     flexWrap: 'wrap',
     maxWidth: '80%',
   },
-
   video: {
     width: 315,
     height: 240,
     alignSelf: 'stretch',
   },
 });
-
 export const htmlViewStyles = EStyleSheet.create({
   a: {
     color: '$link',

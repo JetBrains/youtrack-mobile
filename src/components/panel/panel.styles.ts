@@ -1,9 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {separator} from '../common-styles/list';
 import {UNIT} from '../variables/variables';
-
-
 export default EStyleSheet.create({
   panelWithSeparator: {
     position: 'relative',
@@ -12,8 +9,5 @@ export default EStyleSheet.create({
     height: UNIT * 12,
     paddingLeft: UNIT,
   },
-  separator: {
-    ...separator,
-    borderColor: '$separator',
-  },
+  separator: {...separator, borderColor: '$separator'},
 });

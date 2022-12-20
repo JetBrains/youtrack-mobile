@@ -1,25 +1,17 @@
-/* @flow */
-
 import {ActivityCategory, isActivityCategory} from './activity__category';
 import {ResourceTypes, hasType} from '../api/api__resource-types';
-
 import {sortByTimestamp} from 'components/search/sorting';
-
 import type {Activity, ActivityGroup} from 'flow/Activity';
-
-
-export const createActivitiesModel = (activityGroups: Array<Object> = []): Array<Activity> => {
-
-  const activities = getStream(activityGroups)
-    .map(streamGroup => {
-      streamGroup.events = streamGroup.events.sort(sortByCategory).sort(sortByTimestamp);
-      return streamGroup;
-    });
-
-  return addMergeMetaDataToActivities(
-    removeHiddenActivities(activities)
-  );
-
+export const createActivitiesModel = (
+  activityGroups: Array<Record<string, any>> = [],
+): Array<Activity> => {
+  const activities = getStream(activityGroups).map(streamGroup => {
+    streamGroup.events = streamGroup.events
+      .sort(sortByCategory)
+      .sort(sortByTimestamp);
+    return streamGroup;
+  });
+  return addMergeMetaDataToActivities(removeHiddenActivities(activities));
 
   function getStream(activityGroups: ActivityGroup[]) {
     const createGroup = (event, timestamp, authorGroup) => {
@@ -38,22 +30,26 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
       };
 
       switch (true) {
-      case isActivityCategory.work(event):
-        streamGroup.work = event;
-        streamGroup.key = ActivityCategory.Source.WORK_ITEM;
-        break;
-      case isActivityCategory.comment(event):
-        streamGroup.comment = event;
-        streamGroup.target = event?.target;
-        streamGroup.key = ActivityCategory.Source.COMMENT;
-        break;
-      case isActivityCategory.vcs(event) || isActivityCategory.pullRequest(event):
-        streamGroup.vcs = event;
-        streamGroup.target = event?.target;
-        streamGroup.key = ActivityCategory.Source.VCS_ITEM;
-        break;
-      default:
-        streamGroup.key = ActivityCategory.Source.HISTORY;
+        case isActivityCategory.work(event):
+          streamGroup.work = event;
+          streamGroup.key = ActivityCategory.Source.WORK_ITEM;
+          break;
+
+        case isActivityCategory.comment(event):
+          streamGroup.comment = event;
+          streamGroup.target = event?.target;
+          streamGroup.key = ActivityCategory.Source.COMMENT;
+          break;
+
+        case isActivityCategory.vcs(event) ||
+          isActivityCategory.pullRequest(event):
+          streamGroup.vcs = event;
+          streamGroup.target = event?.target;
+          streamGroup.key = ActivityCategory.Source.VCS_ITEM;
+          break;
+
+        default:
+          streamGroup.key = ActivityCategory.Source.HISTORY;
       }
 
       return streamGroup;
@@ -61,11 +57,10 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
 
     const streamDataModel = [];
 
-    const filterOutUnnecessaryEvents = (event) => (
+    const filterOutUnnecessaryEvents = event =>
       !isActivityCategory.voters(event) &&
       !isActivityCategory.totalVotes(event) &&
-      !isActivityCategory.commentText(event)
-    );
+      !isActivityCategory.commentText(event);
 
     activityGroups.forEach(rawGroup => {
       let currentGroup;
@@ -78,7 +73,7 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
 
       let historyChanges = [];
       let isFirst = true;
-      events.forEach((event) => {
+      events.forEach(event => {
         if (
           isActivityCategory.comment(event) ||
           isActivityCategory.work(event) ||
@@ -90,7 +85,11 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
             historyChanges = [];
           }
 
-          currentGroup = createGroup(event, rawGroup.timestamp, rawGroup.authorGroup);
+          currentGroup = createGroup(
+            event,
+            rawGroup.timestamp,
+            rawGroup.authorGroup,
+          );
           isFirst = false;
           streamDataModel.push(currentGroup);
         } else {
@@ -106,10 +105,10 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
         if (isComment(rawGroup)) {
           rawGroup.comment = {...rawGroup.events[0]};
         }
+
         streamDataModel.push(rawGroup);
       }
     });
-
     return streamDataModel.map(mergeAttachmentEvents);
   }
 
@@ -119,6 +118,7 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
     }
 
     let entity = rawGroup;
+
     if (Array.isArray(rawGroup.events) && rawGroup.events.length) {
       entity = (rawGroup.events[0] || {}).target;
     }
@@ -126,9 +126,10 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
     return hasType.comment(entity);
   }
 
-
-  function removeHiddenActivities(activities: Array<Object>): Array<Object> {
-    return activities.filter((it: Object) => !it.hidden);
+  function removeHiddenActivities(
+    activities: Array<Record<string, any>>,
+  ): Array<Record<string, any>> {
+    return activities.filter((it: Record<string, any>) => !it.hidden);
   }
 
   function addMergeMetaDataToActivities(activities = []) {
@@ -136,7 +137,6 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
     let activity = null;
     let prevActivity = null;
     let lastGroup = true;
-
     reset();
 
     while (currentIndex >= 0) {
@@ -157,6 +157,7 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
 
       if (lastGroup) {
         activity.lastGroup = true;
+
         if (!activity.merged && activity.root) {
           lastGroup = null;
         }
@@ -167,9 +168,8 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
 
     return activities;
 
-
     function reset() {
-      activities.forEach((it) => {
+      activities.forEach(it => {
         delete it.root;
         delete it.merged;
         delete it.lastGroup;
@@ -181,11 +181,9 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
         prevActivity &&
         activity.author.id === prevActivity.author.id &&
         getActivityTypeId(activity) === getActivityTypeId(prevActivity) &&
-        (
-          (!activity.comment && !activity.vcs) || (!activity?.vcs?.pullRequest && !prevActivity?.vcs?.pullRequest)
-        )
+        ((!activity.comment && !activity.vcs) ||
+          (!activity?.vcs?.pullRequest && !prevActivity?.vcs?.pullRequest))
       );
-
     }
 
     function getActivityTypeId(item: Activity) {
@@ -197,6 +195,7 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
     if (item1.category.id < item2.category.id) {
       return 1;
     }
+
     if (item1.category.id > item2.category.id) {
       return -1;
     }
@@ -204,31 +203,35 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
     return 0;
   }
 
-  function mergeAttachmentEvents(streamGroup: Object) {
+  function mergeAttachmentEvents(streamGroup: Record<string, any>) {
     if (!streamGroup.events.length) {
       return streamGroup;
     }
 
-    let attachmentEvents = streamGroup.events.filter(
-      (event) => isActivityCategory.attachment(event)
+    let attachmentEvents = streamGroup.events.filter(event =>
+      isActivityCategory.attachment(event),
     );
 
     if (!attachmentEvents.length) {
       return streamGroup;
     }
 
-    streamGroup.events = streamGroup.events.reduce((list, event) => { //remove attachmentEvents
+    streamGroup.events = streamGroup.events.reduce((list, event) => {
+      //remove attachmentEvents
       if (!attachmentEvents.some(it => it.id === event.id)) {
         list.push(event);
       }
+
       return list;
     }, []);
-
-
     const commentEvent = streamGroup.comment;
+
     if (commentEvent && commentEvent.added.length) {
       const comment = commentEvent.added[0];
-      attachmentEvents = removeAddEventsAboutCommentAttachments(comment, attachmentEvents);
+      attachmentEvents = removeAddEventsAboutCommentAttachments(
+        comment,
+        attachmentEvents,
+      );
     }
 
     if (attachmentEvents.length) {
@@ -236,7 +239,9 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
       const mergedAttachEvent = reversedAttachEvents.pop();
       reversedAttachEvents.forEach(event => {
         mergedAttachEvent.added = mergedAttachEvent.added.concat(event.added);
-        mergedAttachEvent.removed = mergedAttachEvent.removed.concat(event.removed);
+        mergedAttachEvent.removed = mergedAttachEvent.removed.concat(
+          event.removed,
+        );
       });
       streamGroup.events.push(mergedAttachEvent);
     }
@@ -246,6 +251,7 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
 
   function removeAddEventsAboutCommentAttachments(comment, attachEvents) {
     const attachments = comment.attachments;
+
     if (attachments && attachments.length) {
       const idsMap = attachments
         .filter(attachment => !attachment.removed)
@@ -253,14 +259,13 @@ export const createActivitiesModel = (activityGroups: Array<Object> = []): Array
           idsMap[attachment.id] = true;
           return idsMap;
         }, {});
-      return attachEvents.filter(activity => (attachEvents.removed && attachEvents.removed.length)
-        || !idsMap[activity.target.id]);
+      return attachEvents.filter(
+        activity =>
+          (attachEvents.removed && attachEvents.removed.length) ||
+          !idsMap[activity.target.id],
+      );
     }
 
     return attachEvents;
   }
 };
-
-
-
-

@@ -1,7 +1,5 @@
 import {Platform} from 'react-native';
 import {UNIT} from '../variables/variables';
-
-
 export const separatorBorder = {
   ...Platform.select({
     ios: {
@@ -12,7 +10,6 @@ export const separatorBorder = {
     },
   }),
 };
-
 export const separatorTopBorder = {
   ...Platform.select({
     ios: {
@@ -23,18 +20,9 @@ export const separatorTopBorder = {
     },
   }),
 };
-
 const separatorCommon = {
   height: 1,
   marginLeft: UNIT * 2,
 };
-
-export const separator = {
-  ...separatorCommon,
-  ...separatorBorder,
-};
-
-export const separatorTop = {
-  ...separatorCommon,
-  ...separatorTopBorder,
-};
+export const separator = {...separatorCommon, ...separatorBorder};
+export const separatorTop = {...separatorCommon, ...separatorTopBorder};

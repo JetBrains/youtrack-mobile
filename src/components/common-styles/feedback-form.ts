@@ -1,11 +1,7 @@
-/* @flow */
-
 import {elevation1} from './shadow';
 import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from './typography';
 import {rowFormStyles} from './form';
 import {UNIT} from '../variables/variables';
-
-
 const feedbackFormStyles = {
   feedbackContainer: {
     flexGrow: 1,
@@ -74,5 +70,4 @@ const feedbackFormStyles = {
   },
   elevation1: elevation1,
 };
-
 export default feedbackFormStyles;

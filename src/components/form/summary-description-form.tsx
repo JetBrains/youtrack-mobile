@@ -1,48 +1,39 @@
-/* @flow */
-
 import React, {Component} from 'react';
 import {View, TextInput} from 'react-native';
-
 import once from 'lodash.once';
 import throttle from 'lodash.throttle';
-
 import TextEditForm from './text-edit-form';
 import usage from '../usage/usage';
 import {ThemeContext} from '../theme/theme-context';
-
 import styles from './summary-description-form.style';
-
 import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
 type Props = {
-  analyticsId?: string,
-  editable: boolean,
-  summary: string,
-  description: string,
-  onSummaryChange: (summary: string) => any,
-  onDescriptionChange: (description: string) => any,
-  summaryPlaceholder?: string,
-  descriptionPlaceholder?: string,
-  style?: ViewStyleProp,
-  testID?: string,
-}
-
+  analyticsId?: string;
+  editable: boolean;
+  summary: string;
+  description: string;
+  onSummaryChange: (summary: string) => any;
+  onDescriptionChange: (description: string) => any;
+  summaryPlaceholder?: string;
+  descriptionPlaceholder?: string;
+  style?: ViewStyleProp;
+  testID?: string;
+};
 const DELAY: number = 300;
-
 export default class SummaryDescriptionForm extends Component<Props, void> {
-  trackChange: ((message: string) => any | boolean) = (message: string) => (
-    typeof this.props.analyticsId === 'string' && usage.trackEvent(this.props.analyticsId, message)
-  );
+  trackChange: (message: string) => any | boolean = (message: string) =>
+    typeof this.props.analyticsId === 'string' &&
+    usage.trackEvent(this.props.analyticsId, message);
   trackSummaryChange: any = once(() => this.trackChange('Summary updated'));
-  trackDescriptionChange: any = once(() => this.trackChange('Description updated'));
-
+  trackDescriptionChange: any = once(() =>
+    this.trackChange('Description updated'),
+  );
   onSummaryChange: any = throttle((text: string) => {
     this.trackSummaryChange();
     return this.props.onSummaryChange(text);
   }, DELAY);
-
   onDescriptionChange: any = throttle((text: string) => {
     this.trackDescriptionChange();
     return this.props.onDescriptionChange(text);
@@ -55,12 +46,14 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
       description,
       summaryPlaceholder = 'Summary',
       descriptionPlaceholder = 'Description',
-      onSummaryChange, //eslint-disable-line no-unused-vars
-      onDescriptionChange, //eslint-disable-line no-unused-vars
-      analyticsId, //eslint-disable-line no-unused-vars
+      onSummaryChange,
+      //eslint-disable-line no-unused-vars
+      onDescriptionChange,
+      //eslint-disable-line no-unused-vars
+      analyticsId,
+      //eslint-disable-line no-unused-vars
       ...rest
     } = this.props;
-
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
@@ -84,7 +77,7 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
                 onChangeText={this.onSummaryChange}
               />
 
-              <View style={styles.separator}/>
+              <View style={styles.separator} />
 
               <TextEditForm
                 editable={editable}

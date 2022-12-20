@@ -1,11 +1,7 @@
-/* @flow */
-
 import React, {Component} from 'react';
 import {View, ActivityIndicator} from 'react-native';
-
 import {ScrollView} from 'react-native-gesture-handler';
 import {View as AnimatedView} from 'react-native-animatable';
-
 import Api from '../api/api';
 import CustomField from '../custom-field/custom-field';
 import DatePickerField from './custom-fields-panel__date-picker';
@@ -24,79 +20,71 @@ import {IssueContext} from '../../views/issue/issue-context';
 import {PanelWithSeparator} from '../panel/panel-with-separator';
 import {Select, SelectModal} from '../select/select';
 import {SkeletonIssueCustomFields} from '../skeleton/skeleton';
-
 import styles, {calendarTheme} from './custom-fields-panel.styles';
-
-import type {IssueProject, CustomField as IssueCustomField} from 'flow/CustomFields';
+import type {
+  IssueProject,
+  CustomField as IssueCustomField,
+} from 'flow/CustomFields';
 import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
 type Props = {
-  autoFocusSelect?: boolean,
-  style?: ViewStyleProp,
-
-  issueId: string,
-  issueProject: IssueProject,
-  fields: Array<IssueCustomField>,
-
+  autoFocusSelect?: boolean;
+  style?: ViewStyleProp;
+  issueId: string;
+  issueProject: IssueProject;
+  fields: Array<IssueCustomField>;
   hasPermission: {
-    canUpdateField?: (field: IssueCustomField) => boolean,
-    canCreateIssueToProject: (project: IssueProject) => boolean,
-    canEditProject: boolean
-  },
-
-  onUpdate: (field: IssueCustomField, value: null | number | Object | Array<Object>) => Promise<Object>,
-  onUpdateProject: (project: IssueProject) => Promise<Object>,
-
-  uiTheme: UITheme,
-
-  analyticsId?: string,
-  testID?: string,
-
-  modal?: boolean,
+    canUpdateField?: (field: IssueCustomField) => boolean;
+    canCreateIssueToProject: (project: IssueProject) => boolean;
+    canEditProject: boolean;
+  };
+  onUpdate: (
+    field: IssueCustomField,
+    value: null | number | Record<string, any> | Array<Record<string, any>>,
+  ) => Promise<Record<string, any>>;
+  onUpdateProject: (project: IssueProject) => Promise<Record<string, any>>;
+  uiTheme: UITheme;
+  analyticsId?: string;
+  testID?: string;
+  modal?: boolean;
 };
-
 type State = {
-  editingField: ?IssueCustomField,
-  savingField: ?IssueCustomField,
-  isEditingProject: boolean,
-  isSavingProject: boolean,
-  height: number,
-  topCoord: number,
-
+  editingField: IssueCustomField | null | undefined;
+  savingField: IssueCustomField | null | undefined;
+  isEditingProject: boolean;
+  isSavingProject: boolean;
+  height: number;
+  topCoord: number;
   select: {
-    show: boolean,
-    dataSource: (query: string) => Promise<Array<Object>>,
-    onSelect: (item: any) => any,
-    onChangeSelection?: (selectedItems: Array<Object>) => any,
-    multi: boolean,
-    emptyValue?: ?string,
-    selectedItems: Array<Object>,
-    placeholder?: string,
-    getValue?: (item: Object) => string,
-    getTitle?: (item: Object) => string
-  },
-
+    show: boolean;
+    dataSource: (query: string) => Promise<Array<Record<string, any>>>;
+    onSelect: (item: any) => any;
+    onChangeSelection?: (selectedItems: Array<Record<string, any>>) => any;
+    multi: boolean;
+    emptyValue?: string | null | undefined;
+    selectedItems: Array<Record<string, any>>;
+    placeholder?: string;
+    getValue?: (item: Record<string, any>) => string;
+    getTitle?: (item: Record<string, any>) => string;
+  };
   datePicker: {
-    show: boolean,
-    title: string,
-    withTime: boolean,
-    time: string | null,
-    value: Date,
-    emptyValueName?: ?string,
-    onSelect: (date: Date, time: string) => any,
-    placeholder: string,
-  },
-
+    show: boolean;
+    title: string;
+    withTime: boolean;
+    time: string | null;
+    value: Date;
+    emptyValueName?: string | null | undefined;
+    onSelect: (date: Date, time: string) => any;
+    placeholder: string;
+  };
   simpleValue: {
-    show: boolean,
-    value: string,
-    placeholder: string,
-    onApply: any => any
-  }
-}
-
+    show: boolean;
+    value: string;
+    placeholder: string;
+    onApply: (arg0: any) => any;
+  };
+};
 const initialEditorsState = {
   select: {
     show: false,
@@ -106,7 +94,6 @@ const initialEditorsState = {
     multi: false,
     selectedItems: [],
   },
-
   datePicker: {
     show: false,
     title: '',
@@ -116,7 +103,6 @@ const initialEditorsState = {
     onSelect: () => {},
     placeholder: '',
   },
-
   simpleValue: {
     show: false,
     value: '',
@@ -124,22 +110,19 @@ const initialEditorsState = {
     onApply: () => {},
   },
 };
-
 const DATE_AND_TIME_FIELD_VALUE_TYPE = 'date and time';
-const getProjectLabel = () => i18n('Project');
 
+const getProjectLabel = () => i18n('Project');
 
 export default class CustomFieldsPanel extends Component<Props, State> {
   api: Api = getApi();
   currentScrollX: number = 0;
-  isComponentMounted: ?boolean;
-  isConnected: ?boolean;
+  isComponentMounted: boolean | null | undefined;
+  isConnected: boolean | null | undefined;
 
   constructor() {
     super();
-
     this.closeEditor = this.closeEditor.bind(this);
-
     this.state = {
       topCoord: 0,
       height: 0,
@@ -167,18 +150,26 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     );
   }
 
-  trackEvent: ((message: string) => void) = (message: string) => {
+  trackEvent: (message: string) => void = (message: string) => {
     if (this.props.analyticsId) {
       usage.trackEvent(this.props.analyticsId, message);
     }
   };
 
-  saveUpdatedField(field: IssueCustomField, value: null | number | Object | Array<Object>): Promise<boolean> {
-    const updateSavingState = (value) => this.isComponentMounted && this.setState({savingField: value});
+  saveUpdatedField(
+    field: IssueCustomField,
+    value: null | number | Record<string, any> | Array<Record<string, any>>,
+  ): Promise<boolean> {
+    const updateSavingState = value =>
+      this.isComponentMounted &&
+      this.setState({
+        savingField: value,
+      });
+
     this.closeEditor();
     updateSavingState(field);
-
-    return this.props.onUpdate(field, value)
+    return this.props
+      .onUpdate(field, value)
       .then(res => {
         updateSavingState(null);
         return res;
@@ -186,14 +177,14 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       .catch(() => updateSavingState(null));
   }
 
-  onSelectProject: (() => void | Promise<any>) = () => {
+  onSelectProject: () => void | Promise<any> = () => {
     this.trackEvent('Update project: start');
+
     if (this.state.isEditingProject) {
       return this.closeEditor();
     }
 
     const {hasPermission} = this.props;
-
     this.closeEditor();
     this.setState({
       isEditingProject: true,
@@ -202,7 +193,6 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         getValue: project => project.name + project.shortName,
         dataSource: async query => {
           const projects = await this.api.getProjects(query);
-
           return projects
             .filter(project => !project.archived && !project.template)
             .filter(project => hasPermission.canCreateIssueToProject(project));
@@ -213,8 +203,14 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         onSelect: (project: IssueProject) => {
           this.trackEvent('Update project: updated');
           this.closeEditor();
-          this.setState({isSavingProject: true});
-          return this.props.onUpdateProject(project).then(() => this.setState({isSavingProject: false}));
+          this.setState({
+            isSavingProject: true,
+          });
+          return this.props.onUpdateProject(project).then(() =>
+            this.setState({
+              isSavingProject: false,
+            }),
+          );
         },
       },
     });
@@ -222,17 +218,22 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
   closeEditor(): Promise<any> {
     return new Promise(resolve => {
-      this.setState({
-        editingField: null,
-        isEditingProject: false,
-        ...initialEditorsState,
-      }, resolve);
+      this.setState(
+        {
+          editingField: null,
+          isEditingProject: false,
+          ...initialEditorsState,
+        },
+        resolve,
+      );
     });
   }
 
   editDateField(field: IssueCustomField): void {
     this.trackEvent('Edit date field');
-    const withTime = field.projectCustomField.field.fieldType.valueType === DATE_AND_TIME_FIELD_VALUE_TYPE;
+    const withTime =
+      field.projectCustomField.field.fieldType.valueType ===
+      DATE_AND_TIME_FIELD_VALUE_TYPE;
     return this.setState({
       datePicker: {
         show: true,
@@ -241,14 +242,18 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         time: field.value ? formatTime(new Date(field.value)) : null,
         title: field.projectCustomField.field.name,
         value: field.value ? new Date(field.value) : new Date(),
-        emptyValueName: field.projectCustomField.canBeEmpty ? field.projectCustomField.emptyFieldText : null,
+        emptyValueName: field.projectCustomField.canBeEmpty
+          ? field.projectCustomField.emptyFieldText
+          : null,
         onSelect: (date: Date, time?: string) => {
           if (!date) {
             return this.saveUpdatedField(field, null);
           }
+
           if (withTime && time) {
             try {
               const match = time.match(/(\d\d):(\d\d)/);
+
               if (match) {
                 const [, hours = 3, minutes = 0] = match;
                 date.setHours(hours, minutes);
@@ -273,44 +278,51 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       float: 'Type float value',
       default: '1w 1d 1h 1m',
     };
-
     const valueFormatters = {
       integer: value => parseInt(value),
       float: value => parseFloat(value),
       string: value => value,
-      text: value => ({text: value}),
-      default: value => ({presentation: value}),
+      text: value => ({
+        text: value,
+      }),
+      default: value => ({
+        presentation: value,
+      }),
     };
-
     const placeholder = placeholders[type] || placeholders.default;
     const valueFormatter = valueFormatters[type] || valueFormatters.default;
-
-    const value: string = field.value != null
-      ? field.value?.presentation || field.value.text || `${((field.value: any): string)}`
-      : '';
-
+    const value: string =
+      field.value != null
+        ? field.value?.presentation ||
+          field.value.text ||
+          `${(field.value as any) as string}`
+        : '';
     return this.setState({
       simpleValue: {
         show: true,
         placeholder,
         value,
-        onApply: (value) => this.saveUpdatedField(field, valueFormatter(value)),
+        onApply: value => this.saveUpdatedField(field, valueFormatter(value)),
       },
     });
   }
 
   editCustomField(field: IssueCustomField) {
     const projectCustomField = field.projectCustomField;
-    const projectCustomFieldName: ?string = projectCustomField?.field?.name;
-    this.trackEvent(`Edit custom field: ${projectCustomFieldName ? projectCustomFieldName.toLowerCase() : ''}`);
-
+    const projectCustomFieldName: string | null | undefined =
+      projectCustomField?.field?.name;
+    this.trackEvent(
+      `Edit custom field: ${
+        projectCustomFieldName ? projectCustomFieldName.toLowerCase() : ''
+      }`,
+    );
     const isMultiValue = projectCustomField.field.fieldType.isMultiValue;
     let selectedItems: Array<string>;
 
     if (isMultiValue) {
-      selectedItems = ((field.value: any): Array<string>);
+      selectedItems = (field.value as any) as Array<string>;
     } else {
-      selectedItems = field.value ? [((field.value: any): string)] : [];
+      selectedItems = field.value ? [(field.value as any) as string] : [];
     }
 
     this.setState({
@@ -318,32 +330,43 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         show: true,
         multi: isMultiValue,
         selectedItems: selectedItems,
-        emptyValue: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
+        emptyValue: projectCustomField.canBeEmpty
+          ? projectCustomField.emptyFieldText
+          : null,
         dataSource: () => {
           if (field.hasStateMachine) {
-            return this.api.getStateMachineEvents(this.props.issueId, field.id)
-              .then(items => items.map(it => Object.assign(it, {name: `${it.id} (${it.presentation})`})));
+            return this.api
+              .getStateMachineEvents(this.props.issueId, field.id)
+              .then(items =>
+                items.map(it =>
+                  Object.assign(it, {
+                    name: `${it.id} (${it.presentation})`,
+                  }),
+                ),
+              );
           }
+
           return this.api.getCustomFieldValues(
             projectCustomField?.bundle?.id,
-            projectCustomField.field.fieldType.valueType
+            projectCustomField.field.fieldType.valueType,
           );
         },
-        onChangeSelection: selectedItems => this.setState({
-          select: {
-            ...this.state.select,
-            selectedItems,
-          },
-        }),
-        onSelect: (value) => this.saveUpdatedField(field, value),
+        onChangeSelection: selectedItems =>
+          this.setState({
+            select: {...this.state.select, selectedItems},
+          }),
+        onSelect: value => this.saveUpdatedField(field, value),
       },
     });
   }
 
-  onEditField: ((field: IssueCustomField) => ?Promise<any>) = (field: IssueCustomField) => {
+  onEditField: (field: IssueCustomField) => Promise<any> | null | undefined = (
+    field: IssueCustomField,
+  ) => {
     if (field === this.state.editingField) {
       return this.closeEditor();
     }
+
     const {fieldType} = field.projectCustomField?.field;
 
     if (!fieldType) {
@@ -356,23 +379,31 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       ...initialEditorsState,
     });
 
-    if (fieldType.valueType === 'date' || fieldType.valueType === DATE_AND_TIME_FIELD_VALUE_TYPE) {
+    if (
+      fieldType.valueType === 'date' ||
+      fieldType.valueType === DATE_AND_TIME_FIELD_VALUE_TYPE
+    ) {
       return this.editDateField(field);
     }
 
-    if (['period', 'integer', 'string', 'text', 'float'].indexOf(fieldType.valueType) !== -1) {
+    if (
+      ['period', 'integer', 'string', 'text', 'float'].indexOf(
+        fieldType.valueType,
+      ) !== -1
+    ) {
       return this.editSimpleValueField(field, fieldType.valueType);
     }
 
     return this.editCustomField(field);
   };
-
-  storeScrollPosition: ((event: any) => void) = (event: Object) => {
+  storeScrollPosition: (event: any) => void = (event: Record<string, any>) => {
     const {nativeEvent} = event;
     this.currentScrollX = nativeEvent.contentOffset.x;
   };
-
-  restoreScrollPosition = (scrollNode: ?ScrollView, ensure: boolean = true) => {
+  restoreScrollPosition = (
+    scrollNode: ScrollView | null | undefined,
+    ensure: boolean = true,
+  ) => {
     if (!scrollNode || !this.currentScrollX) {
       return;
     }
@@ -391,23 +422,32 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   };
 
   _renderSelect() {
-    const Component: Select | SelectModal = isSplitView() ? SelectModal : Select;
-    return <Component
-      {...this.state.select}
-      autoFocus={this.props.autoFocusSelect}
-      onCancel={() => this.closeEditor()}
-    />;
+    const Component: Select | SelectModal = isSplitView()
+      ? SelectModal
+      : Select;
+    return (
+      <Component
+        {...this.state.select}
+        autoFocus={this.props.autoFocusSelect}
+        onCancel={() => this.closeEditor()}
+      />
+    );
   }
 
   renderHeader(title: string, uiTheme: UITheme): Node {
     const {simpleValue, editingField} = this.state;
-    const isSimpleValueEditorShown: boolean = simpleValue.show && !!editingField;
+    const isSimpleValueEditorShown: boolean =
+      simpleValue.show && !!editingField;
     return (
       <Header
         style={styles.customFieldEditorHeader}
-        leftButton={<IconClose size={21} color={uiTheme.colors.$link}/>}
+        leftButton={<IconClose size={21} color={uiTheme.colors.$link} />}
         onBack={() => this.closeEditor()}
-        rightButton={isSimpleValueEditorShown ? <IconCheck size={21} color={uiTheme.colors.$link}/> : null}
+        rightButton={
+          isSimpleValueEditorShown ? (
+            <IconCheck size={21} color={uiTheme.colors.$link} />
+          ) : null
+        }
         onRightButtonClick={() => {
           if (isSimpleValueEditorShown) {
             simpleValue.onApply(simpleValue.value);
@@ -421,10 +461,12 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   renderDatePicker(uiTheme: UITheme) {
     const {datePicker} = this.state;
     const {modal} = this.props;
+
     const render = (): Node => {
       const hideEditor = (): void => {
         this.closeEditor();
       };
+
       return (
         <DatePickerField
           modal={modal}
@@ -446,25 +488,19 @@ export default class CustomFieldsPanel extends Component<Props, State> {
 
     if (isSplitView()) {
       return (
-        <ModalPortal
-          hasOverlay={!this.props.modal}
-          onHide={this.closeEditor}
-        >
+        <ModalPortal hasOverlay={!this.props.modal} onHide={this.closeEditor}>
           {render()}
         </ModalPortal>
       );
     } else {
-      return (
-        <ModalView animationType="slide">
-          {render()}
-        </ModalView>
-      );
+      return <ModalView animationType="slide">{render()}</ModalView>;
     }
   }
 
   renderSimpleValueInput(): any {
     const {editingField} = this.state;
     const title: string = editingField?.projectCustomField?.field?.name || '';
+
     const render = (): Node => {
       return (
         <SimpleValueEditor
@@ -482,75 +518,92 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       );
     };
 
-  if (isSplitView()) {
-    return (
-      <ModalPortal
-        hasOverlay={!this.props.modal}
-        onHide={this.closeEditor}
-      >
-        {render()}
-      </ModalPortal>
-    );
-    } else {
+    if (isSplitView()) {
       return (
-        <ModalView
-          animationType="slide"
-        >
+        <ModalPortal hasOverlay={!this.props.modal} onHide={this.closeEditor}>
           {render()}
-        </ModalView>
+        </ModalPortal>
       );
+    } else {
+      return <ModalView animationType="slide">{render()}</ModalView>;
     }
   }
 
   renderFields(): Node {
-    const {hasPermission, fields, issueProject = {name: ''}} = this.props;
-    const {savingField, editingField, isEditingProject, isSavingProject} = this.state;
-
+    const {
+      hasPermission,
+      fields,
+      issueProject = {
+        name: '',
+      },
+    } = this.props;
+    const {
+      savingField,
+      editingField,
+      isEditingProject,
+      isSavingProject,
+    } = this.state;
     return (
       <>
-        {!fields && <SkeletonIssueCustomFields/>}
+        {!fields && <SkeletonIssueCustomFields />}
 
-        {!!fields && <PanelWithSeparator>
-          <ScrollView
-            ref={this.restoreScrollPosition}
-            onScroll={this.storeScrollPosition}
-            contentOffset={{
-              x: this.currentScrollX,
-              y: 0,
-            }}
-            scrollEventThrottle={100}
-            horizontal={true}
-            style={styles.customFieldsPanel}
-            keyboardShouldPersistTaps="always"
-          >
-            <View key="Project">
-              <CustomField
-                disabled={!hasPermission.canEditProject || this.isConnected === false}
-                onPress={this.onSelectProject}
-                active={isEditingProject}
-                field={createNullProjectCustomField(issueProject.name, getProjectLabel())}
-              />
-              {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator}/>}
-            </View>
-
-            {fields.map((field: IssueCustomField, index: number) => {
-              const isDisabled: boolean = (
-                !(hasPermission.canUpdateField && hasPermission.canUpdateField(field)) ||
-                !field?.projectCustomField?.field?.fieldType ||
-                this.isConnected === false
-              );
-              return <View key={field.id || `${field.name}-${index}`}>
+        {!!fields && (
+          <PanelWithSeparator>
+            <ScrollView
+              ref={this.restoreScrollPosition}
+              onScroll={this.storeScrollPosition}
+              contentOffset={{
+                x: this.currentScrollX,
+                y: 0,
+              }}
+              scrollEventThrottle={100}
+              horizontal={true}
+              style={styles.customFieldsPanel}
+              keyboardShouldPersistTaps="always"
+            >
+              <View key="Project">
                 <CustomField
-                  field={field}
-                  onPress={() => this.onEditField(field)}
-                  active={editingField === field}
-                  disabled={isDisabled}/>
+                  disabled={
+                    !hasPermission.canEditProject || this.isConnected === false
+                  }
+                  onPress={this.onSelectProject}
+                  active={isEditingProject}
+                  field={createNullProjectCustomField(
+                    issueProject.name,
+                    getProjectLabel(),
+                  )}
+                />
+                {isSavingProject && (
+                  <ActivityIndicator style={styles.savingFieldIndicator} />
+                )}
+              </View>
 
-                {savingField && savingField.id === field.id && <ActivityIndicator style={styles.savingFieldIndicator}/>}
-              </View>;
-            })}
-          </ScrollView>
-        </PanelWithSeparator>}
+              {fields.map((field: IssueCustomField, index: number) => {
+                const isDisabled: boolean =
+                  !(
+                    hasPermission.canUpdateField &&
+                    hasPermission.canUpdateField(field)
+                  ) ||
+                  !field?.projectCustomField?.field?.fieldType ||
+                  this.isConnected === false;
+                return (
+                  <View key={field.id || `${field.name}-${index}`}>
+                    <CustomField
+                      field={field}
+                      onPress={() => this.onEditField(field)}
+                      active={editingField === field}
+                      disabled={isDisabled}
+                    />
+
+                    {savingField && savingField.id === field.id && (
+                      <ActivityIndicator style={styles.savingFieldIndicator} />
+                    )}
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </PanelWithSeparator>
+        )}
       </>
     );
   }
@@ -558,19 +611,15 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   render(): Node {
     const {uiTheme, style, testID} = this.props;
     const {select, datePicker, simpleValue, editingField} = this.state;
-
     return (
       <IssueContext.Consumer>
-        {(issueDate) => {
+        {issueDate => {
           if (issueDate) {
             this.isConnected = issueDate.isConnected;
           }
-          return (
-            <View
-              testID={testID}
-              style={[styles.container, style]}
-            >
 
+          return (
+            <View testID={testID} style={[styles.container, style]}>
               {this.renderFields()}
 
               <AnimatedView
@@ -581,9 +630,10 @@ export default class CustomFieldsPanel extends Component<Props, State> {
               >
                 {select.show && this._renderSelect()}
                 {datePicker.show && this.renderDatePicker(uiTheme)}
-                {(simpleValue.show && !!editingField) && this.renderSimpleValueInput()}
+                {simpleValue.show &&
+                  !!editingField &&
+                  this.renderSimpleValueInput()}
               </AnimatedView>
-
             </View>
           );
         }}

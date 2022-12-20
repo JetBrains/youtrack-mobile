@@ -3,21 +3,11 @@ import {UNIT} from 'components/variables/variables';
 import {MAIN_FONT_SIZE} from 'components/common-styles/typography';
 import {rowFormStyles} from 'components/common-styles/form';
 import {loginStylesForm} from 'components/common-styles/login-form';
-
 export default EStyleSheet.create({
   ...loginStylesForm,
-
-  container: {
-    ...loginStylesForm.container,
-  },
-  title: {
-    ...loginStylesForm.title,
-    color: '$text',
-  },
-  hintText: {
-    ...loginStylesForm.hintText,
-    color: '$icon',
-  },
+  container: {...loginStylesForm.container},
+  title: {...loginStylesForm.title, color: '$text'},
+  hintText: {...loginStylesForm.hintText, color: '$icon'},
   inputUser: {
     ...rowFormStyles.input,
     marginTop: UNIT * 3,
@@ -43,10 +33,7 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
-  action: {
-    ...rowFormStyles.link,
-    fontSize: MAIN_FONT_SIZE,
-  },
+  action: {...rowFormStyles.link, fontSize: MAIN_FONT_SIZE},
   loadingContainer: {
     flexGrow: 1,
     alignItems: 'center',

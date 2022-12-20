@@ -1,6 +1,5 @@
 import {UNIT} from '../variables/variables';
 import {mainText} from './typography';
-
 export const inputWrapper = {
   flexDirection: 'row',
   alignItems: 'center',
@@ -9,7 +8,6 @@ export const inputWrapper = {
   borderRadius: UNIT,
   backgroundColor: '$boxBackground',
 };
-
 export const searchInput = {
   flex: 1,
   paddingLeft: UNIT / 1.5,
@@ -18,10 +16,8 @@ export const searchInput = {
   ...mainText,
   color: '$text',
 };
-
 export const clearIcon = {
   marginLeft: UNIT,
   marginRight: UNIT * 2,
   color: '$icon',
 };
-

@@ -3,15 +3,10 @@ import {UNIT} from 'components/variables/variables';
 import {rowFormStyles} from 'components/common-styles/form';
 import {loginStylesForm} from 'components/common-styles/login-form';
 import {mainText} from 'components/common-styles/typography';
-
-
 const buttonMaxWidth = 500;
 export default EStyleSheet.create({
   ...loginStylesForm,
-
-  container: {
-    ...loginStylesForm.container,
-  },
+  container: {...loginStylesForm.container},
   scrollContainer: {
     ...loginStylesForm.scrollContainer,
     alignItems: 'center',
@@ -24,15 +19,8 @@ export default EStyleSheet.create({
     color: '$text',
     backgroundColor: '$boxBackground',
   },
-  button: {
-    ...rowFormStyles.button,
-    maxWidth: buttonMaxWidth,
-  },
-  title: {
-    ...loginStylesForm.title,
-    color: '$text',
-    textAlign: 'center',
-  },
+  button: {...rowFormStyles.button, maxWidth: buttonMaxWidth},
+  title: {...loginStylesForm.title, color: '$text', textAlign: 'center'},
   errorContainer: {
     flexDirection: 'row',
     flex: 1,
@@ -48,10 +36,7 @@ export default EStyleSheet.create({
     marginTop: UNIT / 2,
     marginLeft: UNIT * 2,
   },
-  text: {
-    ...mainText,
-    color: '$text',
-  },
+  text: {...mainText, color: '$text'},
   placeholder: {
     color: '$icon',
   },

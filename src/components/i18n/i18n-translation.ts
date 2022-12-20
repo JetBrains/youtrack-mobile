@@ -1,16 +1,12 @@
-/* @flow */
-
 import gt from './i18n-gettext';
 import log from 'components/log/log';
-
 export const DEFAULT_DOMAIN: string = 'messages';
-
 gt.setTextDomain(DEFAULT_DOMAIN);
-
-
 const DEFAULT_LANGUAGE: string = 'en';
-
-export function loadTranslation(localeString: string = '', language: string = '') {
+export function loadTranslation(
+  localeString: string = '',
+  language: string = '',
+) {
   try {
     const translationsMap = {
       de: require('../../../translations/locale_de.json'),
@@ -28,14 +24,15 @@ export function loadTranslation(localeString: string = '', language: string = ''
       it: require('../../../translations/locale_it.json'),
       uk: require('../../../translations/locale_uk.json'),
     };
-
     const lang: string = language.toLowerCase();
-    const translations: ?Object = lang && lang !== DEFAULT_LANGUAGE ? translationsMap[lang] : null;
+    const translations: Record<string, any> | null | undefined =
+      lang && lang !== DEFAULT_LANGUAGE ? translationsMap[lang] : null;
     gt.setLocale(localeString);
+
     if (translations) {
       gt.addTranslations(localeString, DEFAULT_DOMAIN, translations);
     }
   } catch (e) {
-    log.warn('Translation for locale can\'t be loaded', localeString);
+    log.warn("Translation for locale can't be loaded", localeString);
   }
 }

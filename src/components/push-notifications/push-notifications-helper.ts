@@ -1,19 +1,13 @@
-/* @flow */
-
 import {Alert} from 'react-native';
-
 import appPackage from '../../../package.json';
 import log from '../log/log';
 import {categoryName} from '../activity/activity__category';
 import {flushStoragePart, getStorageState} from '../storage/storage';
 import {getApi} from '../api/api__instance';
 import {isAndroidPlatform} from 'util/util';
-
 import type Api from '../api/api';
 import type {Token} from 'flow/Notification';
 import type {StorageState} from '../storage/storage';
-
-
 export class PushNotifications {
   static deviceToken: null | string = null;
   static deviceTokenPromise: null | Promise<string> = null;
@@ -21,21 +15,27 @@ export class PushNotifications {
   static setDeviceToken(token: string) {
     this.deviceToken = token;
   }
+
   static async getDeviceToken(): Promise<string | null> {
     return this.deviceTokenPromise;
   }
-  static subscribeOnNotificationOpen(onSwitchAccount: (account: StorageState, issueId: string) => any): void {}
+
+  static subscribeOnNotificationOpen(
+    onSwitchAccount: (account: StorageState, issueId: string) => any,
+  ): void {}
+
   static unsubscribe(): void {}
+
   static init(): void {}
 }
-
-const messageDefaultButton: { text: string, onPress: () => void } = {
+const messageDefaultButton: {
+  text: string;
+  onPress: () => void;
+} = {
   text: 'Close',
   onPress: () => {},
 };
-
 const KONNECTOR_URL: string = appPackage.config.KONNECTOR_URL;
-
 const logPrefix: string = 'Push Notifications: ';
 const logMessages = {
   startSubscribing: `${logPrefix}subscribing...`,
@@ -50,7 +50,9 @@ const logMessages = {
 };
 
 async function storeDeviceToken(token: Token) {
-  await flushStoragePart({deviceToken: token});
+  await flushStoragePart({
+    deviceToken: token,
+  });
 }
 
 function getStoredDeviceToken(): Token {
@@ -62,30 +64,35 @@ function isDeviceTokenChanged(deviceToken: Token): any {
   return storedDeviceToken && deviceToken && storedDeviceToken !== deviceToken;
 }
 
-function showInfoMessage(title: string, message: string, buttons: Array<Object> = [messageDefaultButton]) {
-  Alert.alert(
-    title,
-    message,
-    buttons,
-    {cancelable: false}
-  );
+function showInfoMessage(
+  title: string,
+  message: string,
+  buttons: Array<Record<string, any>> = [messageDefaultButton],
+) {
+  Alert.alert(title, message, buttons, {
+    cancelable: false,
+  });
 }
 
-
-function getIssueId(notification: Object): ?string {
+function getIssueId(
+  notification: Record<string, any>,
+): string | null | undefined {
   return (
     notification?.payload?.issueId ||
     notification?.payload?.ytIssueId ||
     notification?.ytIssueId ||
     notification?.data?.ytIssueId ||
-    notification?.getData && notification.getData().ytIssueId ||
+    (notification?.getData && notification.getData().ytIssueId) ||
     notification?.issueId ||
     notification?.data?.issueId
   );
 }
 
-function getBackendUrl(notification: Object): ?string {
-  const data: Object = notification?.getData && notification.getData();
+function getBackendUrl(
+  notification: Record<string, any>,
+): string | null | undefined {
+  const data: Record<string, any> =
+    notification?.getData && notification.getData();
   return (
     data?.backendUrl ||
     notification?.backendUrl ||
@@ -94,41 +101,45 @@ function getBackendUrl(notification: Object): ?string {
   );
 }
 
-function isIssueDetailsNotification(notification: Object): boolean {
+function isIssueDetailsNotification(
+  notification: Record<string, any>,
+): boolean {
   const categories: Array<string> = (
     notification?.categories ||
     notification?.data?.categories ||
     notification?.payload?.categories ||
     ''
   ).split(',');
+
   if (categories.length === 0 || !categories[0]) {
     return false;
   }
+
   return [
     categoryName.DESCRIPTION,
     categoryName.SUMMARY,
     categoryName.ISSUE_CREATED,
     categoryName.ISSUE_CREATED.split('_').pop(),
-  ].some((it: string) => (
-    it.toLowerCase() === categories[0].toLowerCase())
-  );
+  ].some((it: string) => it.toLowerCase() === categories[0].toLowerCase());
 }
 
-async function subscribe(deviceToken: string, youtrackToken: string): Promise<any> {
+async function subscribe(
+  deviceToken: string,
+  youtrackToken: string,
+): Promise<any> {
   const isAndroid = isAndroidPlatform();
   const api: Api = getApi();
-  const resource: Function = (
-    isAndroid
-      ? api.subscribeToFCMNotifications
-      : api.subscribeToIOSNotifications
-  );
+  const resource: (...args: Array<any>) => any = isAndroid
+    ? api.subscribeToFCMNotifications
+    : api.subscribeToIOSNotifications;
+
   try {
     log.info(logMessages.startSubscribing);
     const response = await resource.call(
       api,
       KONNECTOR_URL,
       youtrackToken,
-      deviceToken
+      deviceToken,
     );
     log.info(logMessages.successSubscribing);
     return response;
@@ -141,11 +152,10 @@ async function subscribe(deviceToken: string, youtrackToken: string): Promise<an
 
 async function unsubscribe(deviceToken: string): Promise<any> {
   const api: Api = getApi();
-  const resource: Function = (
-    isAndroidPlatform()
-      ? api.unsubscribeFromFCMNotifications
-      : api.unsubscribeFromIOSNotifications
-  );
+  const resource: (...args: Array<any>) => any = isAndroidPlatform()
+    ? api.unsubscribeFromFCMNotifications
+    : api.unsubscribeFromIOSNotifications;
+
   try {
     log.info(logMessages.unsubscribeStart);
     const response = await resource.call(api, KONNECTOR_URL, deviceToken);
@@ -169,7 +179,6 @@ async function loadYouTrackToken(): Promise<string | null> {
     return null;
   }
 }
-
 
 export default {
   storeDeviceToken,

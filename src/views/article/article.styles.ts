@@ -1,17 +1,17 @@
 import {Platform} from 'react-native';
-
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {elevation1, elevationBottom} from 'components/common-styles/shadow';
-import {headerTitle, MAIN_FONT_SIZE, mainText} from 'components/common-styles/typography';
+import {
+  headerTitle,
+  MAIN_FONT_SIZE,
+  mainText,
+} from 'components/common-styles/typography';
 import {separator} from 'components/common-styles/list';
 import {summaryTitle} from 'components/common-styles/issue';
 import {UNIT} from 'components/variables/variables';
-
 const INPUT_BORDER_RADIUS = UNIT;
 const MIN_INPUT_SIZE = UNIT * 4;
 const detailsHorizontalPadding = UNIT * 2;
-
 export default EStyleSheet.create({
   container: {
     flex: 1,
@@ -27,10 +27,7 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  description: {
-    ...mainText,
-    color: '$text',
-  },
+  description: {...mainText, color: '$text'},
   summaryEdit: {
     ...Platform.select({
       ios: {
@@ -41,10 +38,7 @@ export default EStyleSheet.create({
       },
     }),
   },
-  summaryText: {
-    ...summaryTitle,
-    color: '$text',
-  },
+  summaryText: {...summaryTitle, color: '$text'},
   subArticles: {
     marginVertical: UNIT,
     marginTop: UNIT * 2,
@@ -67,20 +61,12 @@ export default EStyleSheet.create({
     position: 'relative',
     top: -UNIT,
   },
-  subArticlesHeader: {
-    ...elevation1,
-  },
-  articlesHeaderText: {
-    ...headerTitle,
-    color: '$text',
-  },
+  subArticlesHeader: {...elevation1},
+  articlesHeaderText: {...headerTitle, color: '$text'},
   subArticleItem: {
     marginLeft: UNIT * 2,
   },
-  subArticleItemText: {
-    ...mainText,
-    color: '$text',
-  },
+  subArticleItemText: {...mainText, color: '$text'},
   subArticlesCreate: {
     marginHorizontal: UNIT,
   },
@@ -90,7 +76,6 @@ export default EStyleSheet.create({
     padding: UNIT,
     color: '$iconAccent',
   },
-
   commentContainer: {
     maxHeight: '100%',
     paddingVertical: UNIT,
@@ -135,7 +120,6 @@ export default EStyleSheet.create({
     fontSize: MAIN_FONT_SIZE,
     color: '$link',
   },
-
   breadCrumbs: {
     height: UNIT * 7,
     marginHorizontal: -detailsHorizontalPadding,
@@ -158,21 +142,14 @@ export default EStyleSheet.create({
   breadCrumbsButton: {
     paddingVertical: UNIT,
   },
-  breadCrumbsButtonText: {
-    ...mainText,
-    marginHorizontal: UNIT,
-    color: '$link',
-  },
+  breadCrumbsButtonText: {...mainText, marginHorizontal: UNIT, color: '$link'},
   breadCrumbsButtonTextDisabled: {
     color: '$text',
   },
   breadCrumbsButtonTextSeparator: {
     color: '$icon',
   },
-  breadCrumbsSeparator: {
-    ...separator,
-    borderColor: '$separator',
-  },
+  breadCrumbsSeparator: {...separator, borderColor: '$separator'},
   link: {
     color: '$link',
   },

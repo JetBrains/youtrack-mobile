@@ -1,13 +1,10 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {mainText, secondaryText} from '../common-styles/typography';
 import {separator} from '../common-styles/list';
 import {UNIT} from '../variables/variables';
-
 const secondaryTextColor = {
   color: '$icon',
 };
-
 export const rowStyles = {
   activity: {
     flexDirection: 'row',
@@ -57,11 +54,7 @@ export const rowStyles = {
     letterSpacing: -0.22,
     color: '$text',
   },
-  activityTimestamp: {
-    ...secondaryText,
-    color: '$icon',
-    lineHeight: 16,
-  },
+  activityTimestamp: {...secondaryText, color: '$icon', lineHeight: 16},
   activityLabel: {
     color: '$icon',
   },
@@ -116,7 +109,6 @@ export const rowStyles = {
   activityCommentActionsOther: {
     color: '$iconAccent',
   },
-
   activityCommentDate: {
     marginTop: UNIT * 2,
   },
@@ -129,16 +121,12 @@ export const rowStyles = {
   activityIcon: {
     color: '$iconAccent',
   },
-  link: {
-    ...secondaryText,
-    color: '$link',
-  },
+  link: {...secondaryText, color: '$link'},
   secondaryTextColor: secondaryTextColor,
   activityVisibility: {
     marginTop: UNIT,
     marginBottom: UNIT,
   },
-
   activityWork: {
     flexDirection: 'row',
   },
@@ -165,7 +153,6 @@ export const rowStyles = {
   activityHighlighted: {
     backgroundColor: '$yellowBackground',
   },
-
   vcsInfo: {
     flexDirection: 'row',
   },
@@ -199,5 +186,4 @@ export const rowStyles = {
     color: '$icon',
   },
 };
-
 export default EStyleSheet.create(rowStyles);

@@ -1,38 +1,39 @@
-/* @flow */
-
 import type {Node} from 'react';
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, Platform, SectionList, ActivityIndicator} from 'react-native';
-
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+  SectionList,
+  ActivityIndicator,
+} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {uuid} from 'util/util';
 import Select from '../select/select';
-
 import {UNIT} from '../variables/variables';
 import {mainText, secondaryText} from '../common-styles/typography';
-
 import type {TransformedSuggestion, SavedQuery} from 'flow/Issue';
-
 type Props = {
-  style?: any,
-  suggestions: Array<TransformedSuggestion | SavedQuery>,
-  onApplySuggestion: (suggestion: TransformedSuggestion) => any,
-  onApplySavedQuery: (savedQuery?: SavedQuery) => any
+  style?: any;
+  suggestions: Array<TransformedSuggestion | SavedQuery>;
+  onApplySuggestion: (suggestion: TransformedSuggestion) => any;
+  onApplySavedQuery: (savedQuery?: SavedQuery) => any;
 };
-
-
 export default class QueryAssistSuggestionsList extends Component<Props, void> {
-
-  onApplySuggestion: ((suggestion: TransformedSuggestion | SavedQuery) => any) = (suggestion: TransformedSuggestion | SavedQuery) => {
+  onApplySuggestion: (suggestion: TransformedSuggestion | SavedQuery) => any = (
+    suggestion: TransformedSuggestion | SavedQuery,
+  ) => {
     const isSuggestion = suggestion.caret;
     const {onApplySuggestion, onApplySavedQuery} = this.props;
-    return isSuggestion ? onApplySuggestion(suggestion) : onApplySavedQuery(suggestion);
+    return isSuggestion
+      ? onApplySuggestion(suggestion)
+      : onApplySavedQuery(suggestion);
   };
-
-  renderRow: ((TransformedSuggestion | SavedQuery) => Node) = ({item}: TransformedSuggestion | SavedQuery) => {
+  renderRow: (arg0: TransformedSuggestion | SavedQuery) => Node = ({
+    item,
+  }: TransformedSuggestion | SavedQuery) => {
     const isSuggestion = item.caret;
-
     return (
       <TouchableOpacity
         style={styles.searchRow}
@@ -41,12 +42,15 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
         accessibilityLabel="suggestRow"
         accessible={true}
       >
-        <Text style={styles.searchText}>{isSuggestion ? item.option : item.name}</Text>
+        <Text style={styles.searchText}>
+          {isSuggestion ? item.option : item.name}
+        </Text>
       </TouchableOpacity>
     );
   };
-
-  renderSectionHeader: ((any) => void | Node) = ({section}: Object) => {
+  renderSectionHeader: (arg0: any) => void | Node = ({
+    section,
+  }: Record<string, any>) => {
     if (section.title) {
       return (
         <View style={styles.sectionHeader}>
@@ -58,36 +62,28 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
 
   render(): Node {
     const {suggestions, style} = this.props;
-
     return (
       <View style={[styles.container, style]}>
         <SectionList
           contentContainerStyle={styles.list}
-
           testID="test:id/selectItem"
           accessibilityLabel="selectItem"
           accessible={true}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"
-
           scrollEventThrottle={10}
-
           sections={suggestions}
           keyExtractor={uuid}
-
           renderItem={this.renderRow}
           renderSectionHeader={this.renderSectionHeader}
-          ListEmptyComponent={<ActivityIndicator color={styles.link.color}/>}
-
+          ListEmptyComponent={<ActivityIndicator color={styles.link.color} />}
           ItemSeparatorComponent={Select.renderSeparator}
-
           getItemLayout={Select.getItemLayout}
         />
       </View>
     );
   }
 }
-
 const styles = EStyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -113,11 +109,7 @@ const styles = EStyleSheet.create({
     padding: UNIT * 2,
     paddingBottom: UNIT,
   },
-  searchText: {
-    ...mainText,
-    fontWeight: '500',
-    color: '$text',
-  },
+  searchText: {...mainText, fontWeight: '500', color: '$text'},
   sectionHeaderText: {
     textTransform: 'uppercase',
     ...secondaryText,

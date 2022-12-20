@@ -1,28 +1,21 @@
-/* @flow */
-
 import React, {PureComponent} from 'react';
 import {TouchableOpacity} from 'react-native';
-
 import {HIT_SLOP} from '../common-styles/button';
 import {IconStar, IconStarOutline} from '../icon/icon';
-
 import styles from './star.styles';
-
 import type {Node} from 'react';
-
 type Props = {
-  disabled?: boolean,
-  canStar: boolean,
-  hasStar: boolean,
-  onStarToggle: (starred: boolean) => any,
-  style?: any,
-  size?: number,
-}
-
+  disabled?: boolean;
+  canStar: boolean;
+  hasStar: boolean;
+  onStarToggle: (starred: boolean) => any;
+  style?: any;
+  size?: number;
+};
 export default class Star extends PureComponent<Props, void> {
-
-  toggle: (() => void) = () => {
+  toggle: () => void = () => {
     const {hasStar, onStarToggle} = this.props;
+
     if (onStarToggle) {
       onStarToggle(!hasStar);
     }
@@ -40,11 +33,13 @@ export default class Star extends PureComponent<Props, void> {
         disabled={disabled}
         hitSlop={HIT_SLOP}
         style={style}
-        onPress={this.toggle}>
-        {hasStar
-          ? <IconStar size={size} color={styles.link.color}/>
-          : <IconStarOutline size={size} color={styles.inactive.color}/>
-        }
+        onPress={this.toggle}
+      >
+        {hasStar ? (
+          <IconStar size={size} color={styles.link.color} />
+        ) : (
+          <IconStarOutline size={size} color={styles.inactive.color} />
+        )}
       </TouchableOpacity>
     );
   }

@@ -1,5 +1,3 @@
-/* @flow */
-
 import {ANALYTICS_ARTICLE_CREATE_PAGE} from 'components/analytics/analytics-ids';
 import {attachmentActions} from './article-create__attachment-actions-and-types';
 import {confirmDeleteArticleDraft} from '../article/arcticle-helper';
@@ -14,22 +12,25 @@ import {
   setProcessing,
 } from './article-create-reducers';
 import usage from 'components/usage/usage';
-
 import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
 import type {Article, ArticleDraft} from 'flow/Article';
 import type {Attachment} from 'flow/CustomFields';
-
 type ApiGetter = () => Api;
 
-const updateArticleDraft = (articleDraft: Article): ((
-  dispatch: (any) => any,
+const updateArticleDraft = (
+  articleDraft: Article,
+): ((
+  dispatch: (arg0: any) => any,
   getState: () => AppState,
-  getApi: ApiGetter
+  getApi: ApiGetter,
 ) => Promise<void>) => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
     const api: Api = getApi();
-
     const [error] = await until(api.articles.updateArticleDraft(articleDraft));
 
     if (error) {
@@ -38,39 +39,56 @@ const updateArticleDraft = (articleDraft: Article): ((
   };
 };
 
-const createArticleDraft = (articleId?: string): ((
-  dispatch: (any) => any,
+const createArticleDraft = (
+  articleId?: string,
+): ((
+  dispatch: (arg0: any) => any,
   getState: () => AppState,
-  getApi: ApiGetter
+  getApi: ApiGetter,
 ) => Promise<void> | Promise<any>) => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
     const api: Api = getApi();
-
     dispatch(setProcessing(true));
-    const [error, articleDraft] = await until(api.articles.createArticleDraft(articleId));
+    const [error, articleDraft] = await until(
+      api.articles.createArticleDraft(articleId),
+    );
     dispatch(setProcessing(false));
 
     if (error) {
       notifyError(error);
     } else {
-      logEvent({message: 'Create article draft', analyticsId: ANALYTICS_ARTICLE_CREATE_PAGE});
+      logEvent({
+        message: 'Create article draft',
+        analyticsId: ANALYTICS_ARTICLE_CREATE_PAGE,
+      });
       dispatch(setDraft(articleDraft));
       return articleDraft;
     }
   };
 };
 
-const publishArticleDraft = (articleDraft: Article): ((
-  dispatch: (any) => any,
+const publishArticleDraft = (
+  articleDraft: Article,
+): ((
+  dispatch: (arg0: any) => any,
   getState: () => AppState,
-  getApi: ApiGetter
+  getApi: ApiGetter,
 ) => Promise<void> | Promise<any>) => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
     const api: Api = getApi();
-
     dispatch(setProcessing(true));
     await dispatch(updateArticleDraft(articleDraft));
-    const [error, article] = await until(api.articles.publishArticleDraft(articleDraft.id));
+    const [error, article] = await until(
+      api.articles.publishArticleDraft(articleDraft.id),
+    );
     dispatch(setProcessing(false));
 
     if (error) {
@@ -84,47 +102,70 @@ const publishArticleDraft = (articleDraft: Article): ((
   };
 };
 
-const setDraft = (articleDraft: Article | null): ((dispatch: (any) => any) => Promise<void>) => {
-  return async (dispatch: (any) => any) => {
+const setDraft = (
+  articleDraft: Article | null,
+): ((dispatch: (arg0: any) => any) => Promise<void>) => {
+  return async (dispatch: (arg0: any) => any) => {
     dispatch(setArticleDraft(articleDraft));
   };
 };
 
-const showAddAttachDialog = (): ((dispatch: (any) => any) => Promise<void>) => {
-  return async (dispatch: (any) => any) => {
+const showAddAttachDialog = (): ((
+  dispatch: (arg0: any) => any,
+) => Promise<void>) => {
+  return async (dispatch: (arg0: any) => any) => {
     dispatch(attachmentActions.toggleAttachFileDialog(true));
   };
 };
 
-const cancelAddAttach = (attach: Attachment): ((dispatch: (any) => any) => Promise<void>) => {
-  return async (dispatch: (any) => any) => {
+const cancelAddAttach = (
+  attach: Attachment,
+): ((dispatch: (arg0: any) => any) => Promise<void>) => {
+  return async (dispatch: (arg0: any) => any) => {
     await dispatch(attachmentActions.cancelImageAttaching(attach));
   };
 };
-const hideAddAttachDialog = (): ((dispatch: (any) => any) => Promise<void>) => {
-  return async (dispatch: (any) => any) => {
+
+const hideAddAttachDialog = (): ((
+  dispatch: (arg0: any) => any,
+) => Promise<void>) => {
+  return async (dispatch: (arg0: any) => any) => {
     dispatch(attachmentActions.toggleAttachFileDialog(false));
   };
 };
 
-const uploadFile = (attachments: Array<Attachment>): ((
-  dispatch: (any) => any,
+const uploadFile = (
+  attachments: Array<Attachment>,
+): ((
+  dispatch: (arg0: any) => any,
   getState: () => AppState,
-  getApi: ApiGetter
+  getApi: ApiGetter,
 ) => Promise<void>) => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
     const api: Api = getApi();
-    const articleDraft: ArticleDraft = getState().articleCreate.articleDraft || {};
-
+    const articleDraft: ArticleDraft =
+      getState().articleCreate.articleDraft || {};
     const [error, updatedDraft] = await until(
-      attachments.map((attach: Attachment) => api.articles.attachFile(articleDraft.id, attach.url, attach.name))
+      attachments.map((attach: Attachment) =>
+        api.articles.attachFile(articleDraft.id, attach.url, attach.name),
+      ),
     );
+
     if (error) {
       notifyError(error);
     } else {
-      logEvent({message: `Image attached to article ${updatedDraft.id}`});
-      usage.trackEvent(ANALYTICS_ARTICLE_CREATE_PAGE, 'Attach image', 'Success');
-
+      logEvent({
+        message: `Image attached to article ${updatedDraft.id}`,
+      });
+      usage.trackEvent(
+        ANALYTICS_ARTICLE_CREATE_PAGE,
+        'Attach image',
+        'Success',
+      );
       dispatch(attachmentActions.stopImageAttaching());
       dispatch(attachmentActions.toggleAttachFileDialog(false));
     }
@@ -132,15 +173,22 @@ const uploadFile = (attachments: Array<Attachment>): ((
 };
 
 const loadAttachments = (): ((
-  dispatch: (any) => any,
+  dispatch: (arg0: any) => any,
   getState: () => AppState,
-  getApi: ApiGetter
+  getApi: ApiGetter,
 ) => Promise<void>) => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
     const api: Api = getApi();
-    const articleDraft: ArticleDraft = getState().articleCreate.articleDraft || {};
+    const articleDraft: ArticleDraft =
+      getState().articleCreate.articleDraft || {};
+    const [error, draftAttachments] = await until(
+      api.articles.getAttachments(articleDraft.id),
+    );
 
-    const [error, draftAttachments] = await until(api.articles.getAttachments(articleDraft.id));
     if (error) {
       notifyError(error);
     } else {
@@ -149,32 +197,49 @@ const loadAttachments = (): ((
   };
 };
 
-const deleteDraftAttachment = (attachmentId: string): ((
-  dispatch: (any) => any,
+const deleteDraftAttachment = (
+  attachmentId: string,
+): ((
+  dispatch: (arg0: any) => any,
   getState: () => AppState,
-  getApi: ApiGetter
+  getApi: ApiGetter,
 ) => Promise<void>) => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
     const api: Api = getApi();
     const articleDraft: ArticleDraft = getState().articleCreate.articleDraft;
+    const [error] = await until(
+      api.articles.deleteDraftAttachment(articleDraft.id, attachmentId),
+    );
 
-    const [error] = await until(api.articles.deleteDraftAttachment(articleDraft.id, attachmentId));
     if (error) {
       notifyError(error);
     } else {
-      logEvent({message: 'Attachment deleted', analyticsId: ANALYTICS_ARTICLE_CREATE_PAGE});
-      dispatch(setDraft(
-        {
-          ...articleDraft, attachments: articleDraft.attachments.filter((it: Attachment) => it.id !== attachmentId),
-        }));
+      logEvent({
+        message: 'Attachment deleted',
+        analyticsId: ANALYTICS_ARTICLE_CREATE_PAGE,
+      });
+      dispatch(
+        setDraft({
+          ...articleDraft,
+          attachments: articleDraft.attachments.filter(
+            (it: Attachment) => it.id !== attachmentId,
+          ),
+        }),
+      );
     }
   };
 };
 
-const deleteDraft = (): ((dispatch: (any) => any, getState: () => AppState) => Promise<void>) => {
-  return async (dispatch: (any) => any, getState: () => AppState) => {
+const deleteDraft = (): ((
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+) => Promise<void>) => {
+  return async (dispatch: (arg0: any) => any, getState: () => AppState) => {
     const articleDraft: ArticleDraft = getState().articleCreate.articleDraft;
-
     return confirmDeleteArticleDraft().then(async () => {
       dispatch(setProcessing(true));
       await dispatch(deleteArticle(articleDraft));
@@ -189,7 +254,6 @@ export {
   publishArticleDraft,
   setDraft,
   updateArticleDraft,
-
   cancelAddAttach,
   deleteDraftAttachment,
   hideAddAttachDialog,

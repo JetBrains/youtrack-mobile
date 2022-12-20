@@ -1,20 +1,14 @@
-/* @flow */
-
 import React, {useContext} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-
 import StreamHistoryChange from 'components/activity-stream/activity__stream-history';
 import StreamTimestamp from 'components/activity-stream/activity__stream-timestamp';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
-
 import styles from './inbox-threads.styles';
-
 import type {Activity} from 'flow/Activity';
 import type {InboxThreadGroup, ThreadEntity} from 'flow/Inbox';
 import type {User} from 'flow/User';
 import type {Theme} from '../../flow/Theme';
 import {ThemeContext} from '../../components/theme/theme-context';
-
 type Props = {
   author: User;
   avatar: any;
@@ -23,12 +17,18 @@ type Props = {
   reason: string;
   timestamp: number;
   onNavigate?: (entity: ThreadEntity, navigateToActivity?: string) => any;
-}
-
-export default function ThreadItem({author, avatar, change, group, reason, timestamp, onNavigate}: Props) {
+};
+export default function ThreadItem({
+  author,
+  avatar,
+  change,
+  group,
+  reason,
+  timestamp,
+  onNavigate,
+}: Props) {
   // eslint-disable-next-line no-unused-vars
   const theme: Theme = useContext(ThemeContext);
-
   return (
     <View
       testID="test:id/inboxThreadItem"
@@ -36,9 +36,7 @@ export default function ThreadItem({author, avatar, change, group, reason, times
       accessible={true}
     >
       <View style={styles.row}>
-        <View style={styles.threadTitleIcon}>
-          {avatar}
-        </View>
+        <View style={styles.threadTitleIcon}>{avatar}</View>
         <View>
           <Text style={styles.threadChangeAuthor}>
             {getEntityPresentation(author)}
@@ -48,10 +46,11 @@ export default function ThreadItem({author, avatar, change, group, reason, times
               testID="test:id/inboxThreadItemReason"
               accessibilityLabel="inboxThreadItemReason"
               accessible={true}
-              style={styles.threadChangeReason}>
+              style={styles.threadChangeReason}
+            >
               {reason}
             </Text>
-            <StreamTimestamp timestamp={timestamp}/>
+            <StreamTimestamp timestamp={timestamp} />
           </View>
         </View>
       </View>
@@ -73,14 +72,12 @@ export default function ThreadItem({author, avatar, change, group, reason, times
               accessible={true}
               style={styles.threadRelatedChange}
             >
-              {group.mergedActivities.map(
-                (activity: Activity) => (
-                  <StreamHistoryChange
-                    key={`${group.head.id}${group.head.timestamp}${activity.id}`}
-                    activity={activity}
-                  />
-                )
-              )}
+              {group.mergedActivities.map((activity: Activity) => (
+                <StreamHistoryChange
+                  key={`${group.head.id}${group.head.timestamp}${activity.id}`}
+                  activity={activity}
+                />
+              ))}
             </View>
           )}
         </>

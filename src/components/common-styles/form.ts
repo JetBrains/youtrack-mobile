@@ -1,10 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {UNIT} from '../variables/variables';
 import {MAIN_FONT_SIZE} from './typography';
-
 export const containerPadding = UNIT * 4;
-
 export const rowFormStyles = {
   scrollContainer: {
     flexGrow: 1,
@@ -69,5 +66,4 @@ export const rowFormStyles = {
     color: '$link',
   },
 };
-
 export const formStyles = EStyleSheet.create(rowFormStyles);

@@ -1,57 +1,62 @@
 import MockedStorage from '@react-native-async-storage/async-storage';
 import sinon from 'sinon';
-
 import * as storage from './storage';
 import * as storageHelper from './storage__oauth';
 import EncryptedStorage from 'react-native-encrypted-storage';
-
 let queryMock;
 let sandbox;
 let configMock;
-
 describe('Storage', () => {
   beforeEach(() => jest.restoreAllMocks());
-
   describe('Change storage', () => {
     beforeEach(async () => {
       queryMock = 'for: me';
-      configMock = {foo: 'bar'};
-
+      configMock = {
+        foo: 'bar',
+      };
       sandbox = sinon.createSandbox();
       sandbox.spy(MockedStorage, 'multiSet');
       sandbox.spy(MockedStorage, 'multiRemove');
-      sandbox.stub(MockedStorage, 'multiGet').returns(Promise.resolve([
-        ['BACKEND_CONFIG_STORAGE_KEY', '{"foo": "bar"}'],
-        ['YT_QUERY_STORAGE', queryMock],
-        ['yt_mobile_auth_key', '123'],
-      ]));
-
+      sandbox.stub(MockedStorage, 'multiGet').returns(
+        Promise.resolve([
+          ['BACKEND_CONFIG_STORAGE_KEY', '{"foo": "bar"}'],
+          ['YT_QUERY_STORAGE', queryMock],
+          ['yt_mobile_auth_key', '123'],
+        ]),
+      );
       await storage.populateStorage();
     });
-
     afterEach(() => sandbox.restore());
-
     it('should populate storage', async () => {
       storage.getStorageState().config.should.deep.equal(configMock);
       storage.getStorageState().query.should.equal(queryMock);
     });
-
     it('should update state on full flush', async () => {
-      await storage.flushStorage({config: {}, query: 'bar'});
+      await storage.flushStorage({
+        config: {},
+        query: 'bar',
+      });
       storage.getStorageState().query.should.equal('bar');
     });
-
     it('should return prev state if flush throws', async () => {
-      jest.spyOn(storage, 'flushStorage').mockRejectedValueOnce('Device is running low on available storage space');
-      await storage.flushStorage({query: 'bar'}).catch(() => {
-        storage.getStorageState().query.should.equal(queryMock);
-      });
-
+      jest
+        .spyOn(storage, 'flushStorage')
+        .mockRejectedValueOnce(
+          'Device is running low on available storage space',
+        );
+      await storage
+        .flushStorage({
+          query: 'bar',
+        })
+        .catch(() => {
+          storage.getStorageState().query.should.equal(queryMock);
+        });
     });
-
     it('should remove empty values from storage on flush', async () => {
-      await storage.flushStoragePart({config: {}, query: 'bar'});
-
+      await storage.flushStoragePart({
+        config: {},
+        query: 'bar',
+      });
       expect(MockedStorage.multiRemove).toHaveBeenLastCalledWith([
         'YT_ARTICLES',
         'YT_ARTICLES_LIST',
@@ -83,30 +88,32 @@ describe('Storage', () => {
         'YT_HANDSET_MODE',
       ]);
     });
-
-
     it('should update field state on partial flush', async () => {
-      await storage.flushStorage({config: {}, query: 'bar'});
-      await storage.flushStoragePart({query: 'foo'});
-
+      await storage.flushStorage({
+        config: {},
+        query: 'bar',
+      });
+      await storage.flushStoragePart({
+        query: 'foo',
+      });
       MockedStorage.multiSet.should.have.been.called;
       storage.getStorageState().query.should.equal('foo');
     });
-
     it('should update boolean field state on partial flush', async () => {
-      await storage.flushStoragePart({agileZoomedIn: true});
+      await storage.flushStoragePart({
+        agileZoomedIn: true,
+      });
       storage.getStorageState().agileZoomedIn.should.equal(true);
     });
-
   });
-
   describe('Auth parameters', () => {
     let authParamsMock;
     let authParamsKeyMock;
     beforeEach(async () => {
-      authParamsMock = {token: 'token'};
+      authParamsMock = {
+        token: 'token',
+      };
       authParamsKeyMock = '0123';
-
       jest.spyOn(EncryptedStorage, 'setItem');
       jest.spyOn(EncryptedStorage, 'getItem');
       await storage.__setStorageState({
@@ -114,7 +121,6 @@ describe('Storage', () => {
         authParamsKey: authParamsKeyMock,
       });
     });
-
     describe('Secure accounts', () => {
       it('should secure current account', async () => {
         jest.spyOn(MockedStorage, 'multiGet').mockResolvedValueOnce([
@@ -125,34 +131,40 @@ describe('Storage', () => {
         expect(storage.getStorageState().authParams).toEqual(undefined);
       });
     });
-
     describe('storeAuthParams', () => {
       it('should cache encrypted auth params', async () => {
-        const cachedAuthParams = await storageHelper.storeSecurelyAuthParams(authParamsMock, authParamsKeyMock);
-
+        const cachedAuthParams = await storageHelper.storeSecurelyAuthParams(
+          authParamsMock,
+          authParamsKeyMock,
+        );
         await expect(EncryptedStorage.setItem).toHaveBeenCalledWith(
           authParamsKeyMock,
-          JSON.stringify(authParamsMock)
+          JSON.stringify(authParamsMock),
         );
         await expect(cachedAuthParams).toEqual(authParamsMock);
       });
     });
-
-
     describe('getStoredAuthParams', () => {
       it('should return cached auth params object', async () => {
-        EncryptedStorage.getItem.mockResolvedValueOnce(JSON.stringify(authParamsMock));
-        const cachedParams = await storageHelper.getStoredSecurelyAuthParams(authParamsKeyMock);
-
-        await expect(EncryptedStorage.getItem).toHaveBeenCalledWith(authParamsKeyMock);
+        EncryptedStorage.getItem.mockResolvedValueOnce(
+          JSON.stringify(authParamsMock),
+        );
+        const cachedParams = await storageHelper.getStoredSecurelyAuthParams(
+          authParamsKeyMock,
+        );
+        await expect(EncryptedStorage.getItem).toHaveBeenCalledWith(
+          authParamsKeyMock,
+        );
         await expect(cachedParams).toEqual(authParamsMock);
       });
-
       it('should return NULL if no data cached', async () => {
         EncryptedStorage.setItem.mockResolvedValueOnce(undefined);
-        const cachedParams = await storageHelper.getStoredSecurelyAuthParams(authParamsKeyMock);
-
-        await expect(EncryptedStorage.getItem).toHaveBeenCalledWith(authParamsKeyMock);
+        const cachedParams = await storageHelper.getStoredSecurelyAuthParams(
+          authParamsKeyMock,
+        );
+        await expect(EncryptedStorage.getItem).toHaveBeenCalledWith(
+          authParamsKeyMock,
+        );
         await expect(cachedParams).toEqual(null);
       });
     });

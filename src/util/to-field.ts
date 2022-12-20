@@ -8,13 +8,15 @@ function toField(fields) {
     if (!normalizedFields) {
       normalizedFields = normalize(isObject(fields) ? copy(fields) : fields);
     }
+
     return normalizedFields;
   };
 
-  const getFieldsString = (zip) => {
+  const getFieldsString = zip => {
     if (!fieldsString) {
       fieldsString = serialize(getNormalizedFields(), zip);
     }
+
     return fieldsString;
   };
 
@@ -33,11 +35,14 @@ function toField(fields) {
           if (excluded[key] && typeof excluded[key] === 'object') {
             res[key] = {};
             deleteKeys(original[key], excluded[key], res[key]);
+
             if (Object.keys(res[key]).length === 0) {
               delete res[key];
             }
+
             return;
           }
+
           if (!(key in excluded) || original[key] !== excluded[key]) {
             res[key] = original[key];
           }
@@ -46,7 +51,6 @@ function toField(fields) {
 
       const res = {};
       deleteKeys(getNormalizedFields(), excludedFields, res);
-
       return toField(res);
     },
     toString: getFieldsString,
@@ -55,59 +59,63 @@ function toField(fields) {
 
 function normalize(data) {
   switch (true) {
-  case (isToField(data)):
-    return copy(data.getNormalizedFields());
+    case isToField(data):
+      return copy(data.getNormalizedFields());
 
-  case (Array.isArray(data)):
-    return data.map((it) => normalize(it)).reduce(merge, {});
+    case Array.isArray(data):
+      return data.map(it => normalize(it)).reduce(merge, {});
 
-  case (isObject(data)):
-    return Object.keys(data).reduce((data, key) => {
-      data[key] = normalize(data[key]);
-      return data;
-    }, data);
+    case isObject(data):
+      return Object.keys(data).reduce((data, key) => {
+        data[key] = normalize(data[key]);
+        return data;
+      }, data);
 
-  case ((typeof data === 'string' && data !== '')): {
-    if (/[(,)]/.test(data)) {
-      return parse(data);
+    case typeof data === 'string' && data !== '': {
+      if (/[(,)]/.test(data)) {
+        return parse(data);
+      }
+
+      const it = {};
+      it[data] = null;
+      return it;
     }
-    const it = {};
-    it[data] = null;
-    return it;
-  }
 
-  case (typeof data === 'number'): {
-    const it = {};
-    it[data] = null;
-    return it;
-  }
+    case typeof data === 'number': {
+      const it = {};
+      it[data] = null;
+      return it;
+    }
 
-  default:
-    return null;
+    default:
+      return null;
   }
 }
 
 function parse(str) {
   const parents = [{}];
-
   str.replace(/([^,()]*)([,()])?/g, (_, part, separator) => {
     const parent = parents[0];
     part = part.trim();
-
     let value = null;
+
     switch (true) {
-    case separator === '(':
-      value = {};
-      parents.unshift(value);
-      break;
-    case separator === ')':
-      parents.shift();
-      if (parents.length === 0) {
-        throw Error(`Unmatched close brace in string "${str}"`);
-      }
-      break;
-    default:
-      break;
+      case separator === '(':
+        value = {};
+        parents.unshift(value);
+        break;
+
+      case separator === ')':
+        parents.shift();
+
+        if (parents.length === 0) {
+          throw Error(`Unmatched close brace in string "${str}"`);
+        }
+
+        break;
+
+      default:
+        break;
     }
 
     if (part) {
@@ -123,7 +131,6 @@ function parse(str) {
 
   return parents[0];
 }
-
 
 function serialize(fields, zip = false) {
   const matches = {};
@@ -144,11 +151,16 @@ function serialize(fields, zip = false) {
   function zipreduce([str, id], part) {
     const projectionId = `@${id}`;
     const br = '[,()]|\\s+';
-    let zipped = str.replace(new RegExp(`(^|${br})${escape(part)}(${br}|$)`, 'g'), `$1${projectionId}$2`);
+    let zipped = str.replace(
+      new RegExp(`(^|${br})${escape(part)}(${br}|$)`, 'g'),
+      `$1${projectionId}$2`,
+    );
     zipped = `${zipped};${projectionId}:${part}`;
+
     if (zipped.length < str.length) {
       return [zipped, id + 1];
     }
+
     return [str, id];
   }
 
@@ -159,11 +171,13 @@ function serialize(fields, zip = false) {
   function sortByLengthAndMatch(x, y) {
     const xl = x.length;
     const yl = y.length;
+
     if (xl === yl) {
       const xv = matches[x];
       const yv = matches[y];
       return xv > yv ? -1 : xv === yv ? 0 : 1;
     }
+
     return xl > yl ? -1 : 1;
   }
 }
@@ -173,14 +187,17 @@ function serializeTree(fields, visitor) {
     return '';
   }
 
-  const str = Object.keys(fields).sort().map(fieldName => {
-    const value = fields[fieldName];
-    const subFields = serializeTree(value, visitor);
-    const result = subFields === '' ? fieldName : `${fieldName}(${subFields})`;
-    visitor && visitor(result);
-    return result;
-  }).join(',');
-
+  const str = Object.keys(fields)
+    .sort()
+    .map(fieldName => {
+      const value = fields[fieldName];
+      const subFields = serializeTree(value, visitor);
+      const result =
+        subFields === '' ? fieldName : `${fieldName}(${subFields})`;
+      visitor && visitor(result);
+      return result;
+    })
+    .join(',');
   visitor && visitor(str);
   return str;
 }
@@ -189,7 +206,8 @@ function merge(x, y) {
   if (!x || !y) {
     return x || y;
   }
-  Object.keys(y).forEach((key) => {
+
+  Object.keys(y).forEach(key => {
     x[key] = merge(x[key], y[key]);
   });
   return x;
@@ -207,7 +225,4 @@ function copy(value) {
   return deepClone(value);
 }
 
-
-export {
-  toField,
-};
+export {toField};

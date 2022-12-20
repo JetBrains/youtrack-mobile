@@ -1,27 +1,20 @@
-/* @flow */
-
 import React, {useContext} from 'react';
-
 import {useDispatch} from 'react-redux';
-
 import IssueCommentEdit from 'components/comment/comment-edit';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import {attachmentActions} from './issue-activity__attachment-actions-and-types';
 import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {getApi} from 'components/api/api__instance';
 import {IssueContext} from '../issue-context';
-
 import type {IssueComment} from 'flow/CustomFields';
 import type {IssueContextData, IssueFull} from 'flow/Issue';
-
 type Props = {
-  comment: IssueComment,
-  onAddSpentTime: null | (() => void),
-  onCommentChange: (draftComment: IssueComment) => Promise<void>,
-  onSubmitComment: (draftComment: IssueComment) => Promise<void>,
-  stateFieldName: string,
+  comment: IssueComment;
+  onAddSpentTime: null | (() => void);
+  onCommentChange: (draftComment: IssueComment) => Promise<void>;
+  onSubmitComment: (draftComment: IssueComment) => Promise<void>;
+  stateFieldName: string;
 };
-
 
 const IssueActivityStreamCommentAdd = (props: Props) => {
   const dispatch = useDispatch();
@@ -29,14 +22,19 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
   const issue: IssueFull = issueContext.issue;
   const issuePermissions: IssuePermissions = issueContext.issuePermissions;
   const canAttach: boolean = issuePermissions.canAddAttachmentTo(issue);
-
   return (
     <IssueCommentEdit
       onCommentChange={props.onCommentChange}
       getVisibilityOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
       onSubmitComment={props.onSubmitComment}
       editingComment={props.comment}
-      getCommentSuggestions={(query: string) => dispatch(createActivityCommentActions(props.stateFieldName).loadCommentSuggestions(query))}
+      getCommentSuggestions={(query: string) =>
+        dispatch(
+          createActivityCommentActions(
+            props.stateFieldName,
+          ).loadCommentSuggestions(query),
+        )
+      }
       canAttach={canAttach}
       canRemoveAttach={() => canAttach}
       onAddSpentTime={props.onAddSpentTime}
@@ -45,5 +43,6 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
   );
 };
 
-export default (React.memo<Props>(IssueActivityStreamCommentAdd): React$AbstractComponent<Props, mixed>);
-
+export default React.memo<Props>(
+  IssueActivityStreamCommentAdd,
+) as React$AbstractComponent<Props, unknown>;

@@ -1,8 +1,5 @@
-/* @flow */
-
 import React from 'react';
 import {Text, View} from 'react-native';
-
 import Diff from 'components/diff/diff';
 import getEventTitle from 'components/activity/activity__history-title';
 import Star from 'components/star/star';
@@ -15,53 +12,67 @@ import {getTextValueChange} from 'components/activity/activity__history-value';
 import {i18n} from 'components/i18n/i18n';
 import {isActivityCategory} from 'components/activity/activity__category';
 import {UNIT} from 'components/variables/variables';
-
 import styles from './activity__stream.styles';
-
 import type {Activity, ActivityChangeText} from 'flow/Activity';
 import type {CustomField} from 'flow/CustomFields';
 import type {TextValueChangeParams} from 'components/activity/activity__history-value';
 import type {WorkTimeSettings} from 'flow/Work';
 import {hasType} from '../api/api__resource-types';
-
 type Props = {
-  activity: Activity,
-  customFields?: CustomField[],
-  workTimeSettings?: WorkTimeSettings,
-}
+  activity: Activity;
+  customFields?: CustomField[];
+  workTimeSettings?: WorkTimeSettings;
+};
 
-const renderAttachmentChange = (activity: Object) => {
+const renderAttachmentChange = (activity: Record<string, any>) => {
   const removed: Array<any> = activity.removed || [];
   const added: Array<any> = activity.added || [];
   const addedAndLaterRemoved: Array<any> = added.filter(it => !it.url);
   const addedAndAvailable: Array<any> = added.filter(it => it.url);
   const hasAddedAttachments: boolean = addedAndAvailable.length > 0;
-
   return (
     <View key={activity.id}>
-      <Text style={styles.activityLabel}>{getActivityEventTitle(activity)}</Text>
+      <Text style={styles.activityLabel}>
+        {getActivityEventTitle(activity)}
+      </Text>
       {hasAddedAttachments && (
-        <StreamAttachments attachments={addedAndAvailable}/>
+        <StreamAttachments attachments={addedAndAvailable} />
       )}
-      {addedAndLaterRemoved.length > 0 && <Text style={styles.activityAdded}>
-        {addedAndLaterRemoved.map(it => it.name).join(', ')}
-      </Text>}
+      {addedAndLaterRemoved.length > 0 && (
+        <Text style={styles.activityAdded}>
+          {addedAndLaterRemoved.map(it => it.name).join(', ')}
+        </Text>
+      )}
 
-      {removed.length > 0 &&
-        <Text style={hasAddedAttachments && {marginTop: UNIT / 2}}>{activity.removed.map((it, index) =>
-          <Text key={it.id}>
-            {index > 0 && ', '}
-            <Text style={styles.activityRemoved}>{it.name}</Text>
-          </Text>
-        )}
-        </Text>}
+      {removed.length > 0 && (
+        <Text
+          style={
+            hasAddedAttachments && {
+              marginTop: UNIT / 2,
+            }
+          }
+        >
+          {activity.removed.map((it, index) => (
+            <Text key={it.id}>
+              {index > 0 && ', '}
+              <Text style={styles.activityRemoved}>{it.name}</Text>
+            </Text>
+          ))}
+        </Text>
+      )}
     </View>
   );
 };
 
-
-const StreamHistoryChange = ({activity, customFields, workTimeSettings = DEFAULT_WORK_TIME_SETTINGS}: Props) => {
-  const getTextChange = (activity: Activity, issueFields: ?Array<Object>): ActivityChangeText => {
+const StreamHistoryChange = ({
+  activity,
+  customFields,
+  workTimeSettings = DEFAULT_WORK_TIME_SETTINGS,
+}: Props) => {
+  const getTextChange = (
+    activity: Activity,
+    issueFields: Array<Record<string, any>> | null | undefined,
+  ): ActivityChangeText => {
     const getParams = (isRemovedValue: boolean): TextValueChangeParams => ({
       activity,
       issueFields,
@@ -75,14 +86,16 @@ const StreamHistoryChange = ({activity, customFields, workTimeSettings = DEFAULT
     };
   };
 
-  const renderTextValueChange = (activity: Activity, issueFields?: Array<Object>) => {
+  const renderTextValueChange = (
+    activity: Activity,
+    issueFields?: Array<Record<string, any>>,
+  ) => {
     const textChange: ActivityChangeText = getTextChange(activity, issueFields);
-    const isTextDiff: boolean = (
+    const isTextDiff: boolean =
       isActivityCategory.description(activity) ||
       isActivityCategory.summary(activity) ||
-      (isActivityCategory.customField(activity) && hasType.customFieldText(activity))
-    );
-
+      (isActivityCategory.customField(activity) &&
+        hasType.customFieldText(activity));
     return (
       <View style={styles.activityTextValueChange}>
         {isTextDiff && (
@@ -92,16 +105,22 @@ const StreamHistoryChange = ({activity, customFields, workTimeSettings = DEFAULT
             text2={textChange.added}
           />
         )}
-        {!isTextDiff && <StreamHistoryTextChange activity={activity} textChange={textChange}/>}
+        {!isTextDiff && (
+          <StreamHistoryTextChange
+            activity={activity}
+            textChange={textChange}
+          />
+        )}
       </View>
     );
   };
 
   const renderVotesChange = (activity: Activity) => {
-    const votesBefore: number = activity.removed ? parseInt(activity.removed) : 0;
+    const votesBefore: number = activity.removed
+      ? parseInt(activity.removed)
+      : 0;
     const votesAfter: number = activity.added ? parseInt(activity.added) : 0;
     const isAdded: boolean = votesAfter > votesBefore;
-
     return (
       <View style={styles.activityTextValueChange}>
         <Text style={styles.activityAdded}>
@@ -113,43 +132,60 @@ const StreamHistoryChange = ({activity, customFields, workTimeSettings = DEFAULT
 
   const renderActivityByCategory = (activity: Activity) => {
     switch (true) {
-    case Boolean(isActivityCategory.star(activity)):
-      return (
-        <View style={styles.activityStarTag}>
-          <Text style={styles.activityLabel}>{getActivityEventTitle(activity)}</Text>
-          <Star
-            size={16}
-            canStar={true}
-            hasStar={!!activity.added?.length}
-            disabled={true}
+      case Boolean(isActivityCategory.star(activity)):
+        return (
+          <View style={styles.activityStarTag}>
+            <Text style={styles.activityLabel}>
+              {getActivityEventTitle(activity)}
+            </Text>
+            <Star
+              size={16}
+              canStar={true}
+              hasStar={!!activity.added?.length}
+              disabled={true}
+            />
+          </View>
+        );
+
+      case Boolean(
+        isActivityCategory.tag(activity) ||
+          isActivityCategory.customField(activity) ||
+          isActivityCategory.sprint(activity) ||
+          isActivityCategory.work(activity) ||
+          isActivityCategory.description(activity) ||
+          isActivityCategory.summary(activity) ||
+          isActivityCategory.project(activity) ||
+          isActivityCategory.issueResolved(activity) ||
+          isActivityCategory.attachmentRename(activity),
+      ):
+        return renderTextValueChange(activity, customFields);
+
+      case Boolean(isActivityCategory.link(activity)):
+        return <StreamLink activity={activity} />;
+
+      case Boolean(isActivityCategory.attachment(activity)):
+        return renderAttachmentChange(activity);
+
+      case Boolean(isActivityCategory.visibility(activity)):
+        return (
+          <StreamHistoryTextChange
+            activity={activity}
+            textChange={getTextChange(activity, [])}
           />
-        </View>
-      );
-    case Boolean(
-      isActivityCategory.tag(activity) ||
-      isActivityCategory.customField(activity) ||
-      isActivityCategory.sprint(activity) ||
-      isActivityCategory.work(activity) ||
-      isActivityCategory.description(activity) ||
-      isActivityCategory.summary(activity) ||
-      isActivityCategory.project(activity) ||
-      isActivityCategory.issueResolved(activity) ||
-      isActivityCategory.attachmentRename(activity)
-    ):
-      return renderTextValueChange(activity, customFields);
-    case Boolean(isActivityCategory.link(activity)):
-      return <StreamLink activity={activity}/>;
-    case Boolean(isActivityCategory.attachment(activity)):
-      return renderAttachmentChange(activity);
-    case Boolean(isActivityCategory.visibility(activity)):
-      return <StreamHistoryTextChange activity={activity} textChange={getTextChange(activity, [])}/>;
-    case Boolean(isActivityCategory.totalVotes(activity)):
-      return renderVotesChange(activity);
+        );
+
+      case Boolean(isActivityCategory.totalVotes(activity)):
+        return renderVotesChange(activity);
     }
+
     return null;
   };
 
-  return <View style={styles.activityChange}>{renderActivityByCategory(activity)}</View>;
+  return (
+    <View style={styles.activityChange}>
+      {renderActivityByCategory(activity)}
+    </View>
+  );
 };
 
 export default StreamHistoryChange;

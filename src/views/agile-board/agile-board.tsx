@@ -1,12 +1,14 @@
-/* @flow */
-
 import React, {Component} from 'react';
-import {View, RefreshControl, TouchableOpacity, ActivityIndicator, Dimensions} from 'react-native';
-
+import {
+  View,
+  RefreshControl,
+  TouchableOpacity,
+  ActivityIndicator,
+  Dimensions,
+} from 'react-native';
 import isEqual from 'react-fast-compare';
 import {connect} from 'react-redux';
 import {View as AnimatedView} from 'react-native-animatable';
-
 import * as boardActions from './board-actions';
 import AgileBoardSprint from './agile-board__sprint';
 import Api from 'components/api/api';
@@ -37,60 +39,64 @@ import {routeMap} from '../../app-routes';
 import {Select, SelectModal} from 'components/select/select';
 import {SkeletonAgile} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
-
 import {HIT_SLOP} from 'components/common-styles/button';
 import {UNIT} from 'components/variables/variables';
 import styles from './agile-board.styles';
-
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
 import type {AgilePageState} from './board-reducers';
 import type {AnyIssue, IssueOnList} from 'flow/Issue';
 import type {AppState} from '../../reducers';
 import type {CustomError} from 'flow/Error';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
-import type {SprintFull, AgileBoardRow, BoardColumn, BoardOnList, Sprint} from 'flow/Agile';
+import type {
+  SprintFull,
+  AgileBoardRow,
+  BoardColumn,
+  BoardOnList,
+  Sprint,
+} from 'flow/Agile';
 import type {Theme, UITheme} from 'flow/Theme';
 import DeviceInfo from 'react-native-device-info';
-
 const CATEGORY_NAME = 'Agile board';
-
 type Props = AgilePageState & {
-  auth: Auth,
-  api: Api,
-  isLoadingMore: boolean,
-  sprint: ?SprintFull,
-  isSprintSelectOpen: boolean,
-  selectProps: Object,
-  issuePermissions: IssuePermissions,
-  onLoadBoard: (query: string, refresh: boolean) => any,
-  onLoadMoreSwimlanes: (query?: string) => any,
-  onRowCollapseToggle: (row: AgileBoardRow) => any,
-  onColumnCollapseToggle: (column: BoardColumn) => any,
-  onOpenSprintSelect: (any) => any,
-  onOpenBoardSelect: (any) => any,
-  onCloseSelect: (any) => any,
-  createCardForCell: (columnId: string, cellId: string) => any,
-  onCardDrop: (any) => any,
-  refreshAgile: (agileId: string, sprintId: string, query?: string) => any,
-  suggestAgileQuery: (query: ?string, caret: number) => any,
-  storeLastQuery: (query: string) => any,
-  updateIssue: (issueId: string, sprint?: SprintFull) => any,
+  auth: Auth;
+  api: Api;
+  isLoadingMore: boolean;
+  sprint: SprintFull | null | undefined;
+  isSprintSelectOpen: boolean;
+  selectProps: Record<string, any>;
+  issuePermissions: IssuePermissions;
+  onLoadBoard: (query: string, refresh: boolean) => any;
+  onLoadMoreSwimlanes: (query?: string) => any;
+  onRowCollapseToggle: (row: AgileBoardRow) => any;
+  onColumnCollapseToggle: (column: BoardColumn) => any;
+  onOpenSprintSelect: (arg0: any) => any;
+  onOpenBoardSelect: (arg0: any) => any;
+  onCloseSelect: (arg0: any) => any;
+  createCardForCell: (columnId: string, cellId: string) => any;
+  onCardDrop: (arg0: any) => any;
+  refreshAgile: (agileId: string, sprintId: string, query?: string) => any;
+  suggestAgileQuery: (query: string | null | undefined, caret: number) => any;
+  storeLastQuery: (query: string) => any;
+  updateIssue: (issueId: string, sprint?: SprintFull) => any;
 };
-
 type State = {
-  zoomedIn: boolean,
-  stickElement: { agile: boolean, boardHeader: boolean },
-  offsetY: number,
-  showAssist: boolean,
-  clearQuery: boolean,
-  isSplitView: boolean,
-  modalChildren: any,
+  zoomedIn: boolean;
+  stickElement: {
+    agile: boolean;
+    boardHeader: boolean;
+  };
+  offsetY: number;
+  showAssist: boolean;
+  clearQuery: boolean;
+  isSplitView: boolean;
+  modalChildren: any;
 };
 
 class AgileBoard extends Component<Props, State> {
-  boardHeader: ?BoardHeader;
+  boardHeader: BoardHeader | null | undefined;
   query: string;
-  unsubscribeOnDispatch: Function;
+  unsubscribeOnDispatch: (...args: Array<any>) => any;
   uiTheme: UITheme;
   unsubscribeOnDimensionsChange: EventSubscription;
   goOnlineSubscription: EventSubscription;
@@ -99,7 +105,6 @@ class AgileBoard extends Component<Props, State> {
     super(props);
     this.updateZoomedInStorageState(true);
     this.query = getStorageState().agileQuery || '';
-
     this.state = {
       zoomedIn: true,
       stickElement: {
@@ -116,14 +121,27 @@ class AgileBoard extends Component<Props, State> {
 
   componentDidMount() {
     usage.trackScreenView(CATEGORY_NAME);
-    this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.onDimensionsChange);
+    this.unsubscribeOnDimensionsChange = Dimensions.addEventListener(
+      'change',
+      this.onDimensionsChange,
+    );
     this.loadBoard();
-
-    this.unsubscribeOnDispatch = Router.setOnDispatchCallback((routeName: string, prevRouteName: string, options: Object) => {
-      if (routeName === routeMap.AgileBoard && prevRouteName === routeMap.Issue && options?.issueId) {
-        options.issueId && this.props.updateIssue(options.issueId, this.props?.sprint);
-      }
-    });
+    this.unsubscribeOnDispatch = Router.setOnDispatchCallback(
+      (
+        routeName: string,
+        prevRouteName: string,
+        options: Record<string, any>,
+      ) => {
+        if (
+          routeName === routeMap.AgileBoard &&
+          prevRouteName === routeMap.Issue &&
+          options?.issueId
+        ) {
+          options.issueId &&
+            this.props.updateIssue(options.issueId, this.props?.sprint);
+        }
+      },
+    );
     this.goOnlineSubscription = addListenerGoOnline(() => {
       this.loadBoard(true);
     });
@@ -144,21 +162,22 @@ class AgileBoard extends Component<Props, State> {
 
   onDimensionsChange: () => Promise<void> = async (): Promise<void> => {
     const isLandscape: boolean = await DeviceInfo.isLandscape();
-    this.setState({isSplitView: isSplitView(), zoomedIn: !isLandscape});
+    this.setState({
+      isSplitView: isSplitView(),
+      zoomedIn: !isLandscape,
+    });
   };
-
   loadBoard = (refresh: boolean = false) => {
     this.props.onLoadBoard(this.query, refresh);
   };
-
-  onVerticalScroll = (event) => {
+  onVerticalScroll = event => {
     const {nativeEvent} = event;
     const newY = nativeEvent.contentOffset.y;
     const viewHeight = nativeEvent.layoutMeasurement.height;
     const contentHeight = nativeEvent.contentSize.height;
     const maxY = contentHeight - viewHeight;
 
-    if (maxY > 0 && newY > 0 && (maxY - newY) < 40) {
+    if (maxY > 0 && newY > 0 && maxY - newY < 40) {
       this.props.onLoadMoreSwimlanes(this.query);
     }
 
@@ -169,40 +188,44 @@ class AgileBoard extends Component<Props, State> {
       },
     });
   };
-
   onContentSizeChange = (width, height) => {
     const windowHeight = Dimensions.get('window').height;
+
     if (height < windowHeight) {
       this.props.onLoadMoreSwimlanes(this.query);
     }
   };
-
-  syncHeaderPosition = (event) => {
+  syncHeaderPosition = event => {
     const {nativeEvent} = event;
+
     if (this.boardHeader) {
       this.boardHeader.setNativeProps({
-        style: {left: -nativeEvent.contentOffset.x},
+        style: {
+          left: -nativeEvent.contentOffset.x,
+        },
       });
     }
   };
-
   _renderRefreshControl = () => {
-    return <RefreshControl
-      testID="refresh-control"
-      accessibilityLabel="refresh-control"
-      accessible={true}
-      refreshing={false}
-      tintColor={styles.link.color}
-      onRefresh={() => this.loadBoard(true)}
-    />;
+    return (
+      <RefreshControl
+        testID="refresh-control"
+        accessibilityLabel="refresh-control"
+        accessible={true}
+        refreshing={false}
+        tintColor={styles.link.color}
+        onRefresh={() => this.loadBoard(true)}
+      />
+    );
   };
 
   toggleModalChildren(modalChildren: any = null) {
-    this.setState({modalChildren});
+    this.setState({
+      modalChildren,
+    });
   }
 
   clearModalChildren = () => this.toggleModalChildren(null);
-
   _onTapIssue = (issue: IssueOnList) => {
     log.debug(`Opening issue "${issue.id}" from Agile Board`);
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
@@ -217,7 +240,7 @@ class AgileBoard extends Component<Props, State> {
           onCommandApply={() => {
             this.loadBoard(true);
           }}
-        />
+        />,
       );
     } else {
       Router.Issue({
@@ -226,7 +249,6 @@ class AgileBoard extends Component<Props, State> {
       });
     }
   };
-
   _getScrollableWidth = (): number | null => {
     const {sprint} = this.props;
 
@@ -234,13 +256,17 @@ class AgileBoard extends Component<Props, State> {
       return null;
     }
 
-    return getScrollableWidth(sprint.board.columns, this.state.isSplitView && this.state.zoomedIn);
+    return getScrollableWidth(
+      sprint.board.columns,
+      this.state.isSplitView && this.state.zoomedIn,
+    );
   };
 
   renderAgileSelector() {
     const {agile, onOpenBoardSelect, sprint, networkState} = this.props;
     const agileName: string = agile?.name || sprint?.agile?.name;
     const agileId: string = agile?.id || sprint?.agile?.id;
+
     if (agileName && agileId) {
       return renderSelector({
         key: agileId,
@@ -254,7 +280,8 @@ class AgileBoard extends Component<Props, State> {
         uiTheme: this.uiTheme,
       });
     }
-    return <View style={styles.agileSelector}/>;
+
+    return <View style={styles.agileSelector} />;
   }
 
   isSprintDisabled(): boolean {
@@ -263,7 +290,13 @@ class AgileBoard extends Component<Props, State> {
   }
 
   renderSprintSelector() {
-    const {agile, sprint, onOpenSprintSelect, isLoading, networkState} = this.props;
+    const {
+      agile,
+      sprint,
+      onOpenSprintSelect,
+      isLoading,
+      networkState,
+    } = this.props;
 
     if (!agile || !sprint) {
       return null;
@@ -272,6 +305,7 @@ class AgileBoard extends Component<Props, State> {
     if (this.isSprintDisabled()) {
       return null;
     }
+
     if (sprint) {
       return renderSelector({
         key: sprint.id,
@@ -303,7 +337,11 @@ class AgileBoard extends Component<Props, State> {
             hitSlop={HIT_SLOP}
             onPress={this.toggleZoom}
           >
-            <IconMagnifyZoom zoomedIn={zoomedIn} size={24} color={styles.link.color}/>
+            <IconMagnifyZoom
+              zoomedIn={zoomedIn}
+              size={24}
+              color={styles.link.color}
+            />
           </TouchableOpacity>
         </AnimatedView>
       );
@@ -312,14 +350,15 @@ class AgileBoard extends Component<Props, State> {
     return null;
   }
 
-  boardHeaderRef = (instance: ?BoardHeader) => {
+  boardHeaderRef = (instance: BoardHeader | null | undefined) => {
     if (instance) {
       this.boardHeader = instance;
     }
   };
-
   toggleColumn = (column: BoardColumn) => {
-    notify(column.collapsed ? i18n('Column expanded') : i18n('Column collapsed'));
+    notify(
+      column.collapsed ? i18n('Column expanded') : i18n('Column collapsed'),
+    );
     this.props.onColumnCollapseToggle(column);
   };
 
@@ -327,17 +366,21 @@ class AgileBoard extends Component<Props, State> {
     const {zoomedIn} = this.state;
     return (
       <View style={styles.boardHeaderContainer}>
-        {!!this.props.sprint && <BoardHeader
-          ref={this.boardHeaderRef}
-          style={{minWidth: zoomedIn ? this._getScrollableWidth() : null}}
-          columns={this.props.sprint.board?.columns}
-          onCollapseToggle={this.toggleColumn}
-        />}
+        {!!this.props.sprint && (
+          <BoardHeader
+            ref={this.boardHeaderRef}
+            style={{
+              minWidth: zoomedIn ? this._getScrollableWidth() : null,
+            }}
+            columns={this.props.sprint.board?.columns}
+            onCollapseToggle={this.toggleColumn}
+          />
+        )}
       </View>
     );
   }
 
-  updateQuery = (query: ?string) => {
+  updateQuery = (query: string | null | undefined) => {
     this.query = query || '';
   };
 
@@ -353,6 +396,7 @@ class AgileBoard extends Component<Props, State> {
           if (hasType.agile(selected)) {
             this.updateQuery(null);
           }
+
           return selectProps.onSelect(selected, this.query);
         }}
       />
@@ -365,57 +409,81 @@ class AgileBoard extends Component<Props, State> {
   }
 
   renderErrors() {
-    const error: ?CustomError = this.props.error;
+    const error: CustomError | null | undefined = this.props.error;
     const agileErrors: string | null = this.getAgileError();
 
     if (error) {
-      return <ErrorMessage style={styles.error} error={error}/>;
+      return <ErrorMessage style={styles.error} error={error} />;
     }
 
     if (agileErrors) {
       const boardName: string = this.props.agile?.name || '';
-      return <ErrorMessage
-        style={styles.error}
-        errorMessageData={{
-          title: i18n('The board {{boardName}} has configuration errors', {boardName}),
-          description: agileErrors,
-          icon: IconException,
-          iconSize: 56,
-        }}/>;
+      return (
+        <ErrorMessage
+          style={styles.error}
+          errorMessageData={{
+            title: i18n('The board {{boardName}} has configuration errors', {
+              boardName,
+            }),
+            description: agileErrors,
+            icon: IconException,
+            iconSize: 56,
+          }}
+        />
+      );
     }
   }
 
   canRunCommand = (issue: AnyIssue): boolean => {
     return this.props.issuePermissions.canRunCommand(issue);
   };
-
   renderSprint = () => {
-    const {sprint, createCardForCell, onRowCollapseToggle, agile, networkState} = this.props;
-
+    const {
+      sprint,
+      createCardForCell,
+      onRowCollapseToggle,
+      agile,
+      networkState,
+    } = this.props;
     return (
       <AgileBoardSprint
         testID="agileBoardSprint"
         sprint={{
           ...sprint,
-          agile: sprint?.agile ? {...sprint?.agile, hideOrphansSwimlane: agile?.hideOrphansSwimlane} : agile,
+          agile: sprint?.agile
+            ? {
+                ...sprint?.agile,
+                hideOrphansSwimlane: agile?.hideOrphansSwimlane,
+              }
+            : agile,
         }}
         zoomedIn={this.state.zoomedIn}
         canRunCommand={this.canRunCommand}
         onTapIssue={this._onTapIssue}
-        onTapCreateIssue={networkState?.isConnected === false ? null : async (...args): Promise<void> => {
-          const draft: $Shape<IssueOnList> = await createCardForCell.apply(null, [...args, this.state.isSplitView]);
-          if (this.state.isSplitView) {
-            this.toggleModalChildren(
-              <CreateIssue
-                isSplitView={this.state.isSplitView}
-                onHide={this.clearModalChildren}
-                predefinedDraftId={draft.id}
-              />
-            );
-          } else {
-            Router.CreateIssue({predefinedDraftId: draft.id});
-          }
-        }}
+        onTapCreateIssue={
+          networkState?.isConnected === false
+            ? null
+            : async (...args): Promise<void> => {
+                const draft: Partial<IssueOnList> = await createCardForCell.apply(
+                  null,
+                  [...args, this.state.isSplitView],
+                );
+
+                if (this.state.isSplitView) {
+                  this.toggleModalChildren(
+                    <CreateIssue
+                      isSplitView={this.state.isSplitView}
+                      onHide={this.clearModalChildren}
+                      predefinedDraftId={draft.id}
+                    />,
+                  );
+                } else {
+                  Router.CreateIssue({
+                    predefinedDraftId: draft.id,
+                  });
+                }
+              }
+        }
         onCollapseToggle={onRowCollapseToggle}
         uiTheme={this.uiTheme}
       />
@@ -426,9 +494,13 @@ class AgileBoard extends Component<Props, State> {
     usage.trackEvent(CATEGORY_NAME, 'Card drag start');
   }
 
-  onDragEnd = (draggingComponent: Object, hitZones: Array<Object>) => {
+  onDragEnd = (
+    draggingComponent: Record<string, any>,
+    hitZones: Array<Record<string, any>>,
+  ) => {
     const movedId = draggingComponent.data;
     const dropZone = hitZones[0];
+
     if (!dropZone) {
       return;
     }
@@ -436,52 +508,63 @@ class AgileBoard extends Component<Props, State> {
     this.props.onCardDrop({
       columnId: dropZone.data.columnId,
       cellId: dropZone.data.cellId,
-      leadingId: dropZone.data.issueIds
-        .filter(id => id !== movedId)[dropZone.placeholderIndex - 1],
+      leadingId: dropZone.data.issueIds.filter(id => id !== movedId)[
+        dropZone.placeholderIndex - 1
+      ],
       movedId,
     });
   };
 
   updateZoomedInStorageState(agileZoomedIn: boolean) {
-    flushStoragePart({agileZoomedIn});
+    flushStoragePart({
+      agileZoomedIn,
+    });
   }
 
   toggleZoom = () => {
     const zoomedIn: boolean = !this.state.zoomedIn;
-    this.setState({zoomedIn});
+    this.setState({
+      zoomedIn,
+    });
     this.updateZoomedInStorageState(zoomedIn);
-    usage.trackEvent(ANALYTICS_AGILE_PAGE, `Toggle zoom-in: ${zoomedIn.toString()}`);
+    usage.trackEvent(
+      ANALYTICS_AGILE_PAGE,
+      `Toggle zoom-in: ${zoomedIn.toString()}`,
+    );
   };
-
   toggleQueryAssist = (isAssistVisible: boolean = false) => {
-    this.setState({showAssist: isAssistVisible});
+    this.setState({
+      showAssist: isAssistVisible,
+    });
   };
-
   onQueryApply = (query: string) => {
     const {refreshAgile, sprint, storeLastQuery} = this.props;
     usage.trackEvent(ANALYTICS_AGILE_PAGE, 'Apply search');
     this.updateQuery(query);
     storeLastQuery(query);
+
     if (sprint && sprint.agile) {
       refreshAgile(sprint.agile.id, sprint.id, query);
     }
+
     this.toggleQueryAssist(false);
   };
-
   onShowAssist = async (clearQuery: boolean = false) => {
     const {networkState} = this.props;
+
     if (networkState?.isConnected !== false) {
       if (clearQuery) {
         this.query = '';
       }
-      this.setState({clearQuery});
+
+      this.setState({
+        clearQuery,
+      });
       this.toggleQueryAssist(true);
     }
   };
-
   renderSearchPanel = () => {
     const {suggestAgileQuery, queryAssistSuggestions} = this.props;
-
     return (
       <QueryAssistPanel
         queryAssistSuggestions={queryAssistSuggestions}
@@ -500,7 +583,6 @@ class AgileBoard extends Component<Props, State> {
       />
     );
   };
-
   renderSearchPanelPreview = () => {
     return (
       <QueryPreview
@@ -514,7 +596,10 @@ class AgileBoard extends Component<Props, State> {
   renderBoard() {
     const {sprint, isLoadingMore, error, agile} = this.props;
     const {zoomedIn} = this.state;
-    const renderAgileSelector = () => <View style={styles.agileNoSprint}>{this.renderAgileSelector()}</View>;
+
+    const renderAgileSelector = () => (
+      <View style={styles.agileNoSprint}>{this.renderAgileSelector()}</View>
+    );
 
     if (agile?.status?.errors?.length || error) {
       return renderAgileSelector();
@@ -524,10 +609,11 @@ class AgileBoard extends Component<Props, State> {
       if (error && error.noAgiles) {
         return null;
       }
+
       return (
         <View>
           {renderAgileSelector()}
-          <SkeletonAgile/>
+          <SkeletonAgile />
         </View>
       );
     }
@@ -553,17 +639,18 @@ class AgileBoard extends Component<Props, State> {
               minHeight: '100%',
             },
           }}
-
           agileSelector={this.renderAgileSelector()}
           sprintSelector={this.renderSprintSelector()}
           boardHeader={this.renderBoardHeader()}
           boardSearch={this.renderSearchPanelPreview()}
-
         >
-
           {this.renderSprint()}
-          {isLoadingMore && <ActivityIndicator color={styles.link.color} style={styles.loadingMoreIndicator}/>}
-
+          {isLoadingMore && (
+            <ActivityIndicator
+              color={styles.link.color}
+              style={styles.loadingMoreIndicator}
+            />
+          )}
         </BoardScroller>
       </DragContainer>
     );
@@ -572,17 +659,12 @@ class AgileBoard extends Component<Props, State> {
   render() {
     const {isSprintSelectOpen} = this.props;
     const {isSplitView, modalChildren, showAssist} = this.state;
-
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
           this.uiTheme = theme.uiTheme;
           return (
-            <View
-              testID="pageAgile"
-              style={styles.agile}
-            >
-
+            <View testID="pageAgile" style={styles.agile}>
               {this.renderZoomButton()}
 
               {this.renderBoard()}
@@ -598,7 +680,6 @@ class AgileBoard extends Component<Props, State> {
                   {modalChildren}
                 </ModalPortal>
               )}
-
             </View>
           );
         }}
@@ -607,30 +688,34 @@ class AgileBoard extends Component<Props, State> {
   }
 }
 
-
 const mapStateToProps = (state: AppState) => {
-  return {
-    ...state.agile,
-    ...state.app,
-  };
+  return {...state.agile, ...state.app};
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    onLoadBoard: (query: string, refresh: boolean) => dispatch(boardActions.loadDefaultAgileBoard(query, refresh)),
-    onLoadMoreSwimlanes: (query?: string) => dispatch(boardActions.fetchMoreSwimlanes(query)),
-    onRowCollapseToggle: (row) => dispatch(boardActions.rowCollapseToggle(row)),
-    onColumnCollapseToggle: (column: BoardColumn) => dispatch(boardActions.columnCollapseToggle(column)),
+    onLoadBoard: (query: string, refresh: boolean) =>
+      dispatch(boardActions.loadDefaultAgileBoard(query, refresh)),
+    onLoadMoreSwimlanes: (query?: string) =>
+      dispatch(boardActions.fetchMoreSwimlanes(query)),
+    onRowCollapseToggle: row => dispatch(boardActions.rowCollapseToggle(row)),
+    onColumnCollapseToggle: (column: BoardColumn) =>
+      dispatch(boardActions.columnCollapseToggle(column)),
     onOpenSprintSelect: () => dispatch(boardActions.openSprintSelect()),
     onOpenBoardSelect: () => dispatch(boardActions.openBoardSelect()),
     onCloseSelect: () => dispatch(boardActions.closeSelect()),
-    createCardForCell: (...args) => dispatch(boardActions.createCardForCell(...args)),
+    createCardForCell: (...args) =>
+      dispatch(boardActions.createCardForCell(...args)),
     onCardDrop: (...args) => dispatch(boardActions.onCardDrop(...args)),
-    refreshAgile: (agileId: string, sprintId: string, query: string = '') => dispatch(boardActions.refreshAgile(agileId, sprintId, query)),
-    suggestAgileQuery: (query: string, caret: number) => dispatch(boardActions.suggestAgileQuery(query, caret)),
-    storeLastQuery: (query: string) => dispatch(boardActions.storeLastQuery(query)),
-    updateIssue: (issueId: string, sprint?: SprintFull) => dispatch(boardActions.updateIssue(issueId, sprint)),
+    refreshAgile: (agileId: string, sprintId: string, query: string = '') =>
+      dispatch(boardActions.refreshAgile(agileId, sprintId, query)),
+    suggestAgileQuery: (query: string, caret: number) =>
+      dispatch(boardActions.suggestAgileQuery(query, caret)),
+    storeLastQuery: (query: string) =>
+      dispatch(boardActions.storeLastQuery(query)),
+    updateIssue: (issueId: string, sprint?: SprintFull) =>
+      dispatch(boardActions.updateIssue(issueId, sprint)),
   };
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps)(AgileBoard));
+export default connect(mapStateToProps, mapDispatchToProps)(AgileBoard);

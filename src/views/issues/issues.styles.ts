@@ -1,23 +1,22 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {Platform, StyleSheet} from 'react-native';
-
 import {COLOR_FIELD_SIZE} from 'components/color-field/color-field';
 import {elevation1} from 'components/common-styles/shadow';
-import {headerTitle, mainText, secondaryText} from 'components/common-styles/typography';
+import {
+  headerTitle,
+  mainText,
+  secondaryText,
+} from 'components/common-styles/typography';
 import {headerTitlePresentation} from 'components/header/header.styles';
 import {issueCard} from 'components/common-styles/issue';
 import {separator} from 'components/common-styles/list';
 import {splitViewStyles} from 'components/common-styles/split-view';
 import {UNIT} from 'components/variables/variables';
-
 const rowLine = {
   flexDirection: 'row',
   alignItems: 'center',
 };
-
 const searchContextHeight = UNIT * 7;
-
 export default EStyleSheet.create({
   listContainer: {
     flex: 1,
@@ -61,32 +60,12 @@ export default EStyleSheet.create({
     }),
   },
   rowLine: rowLine,
-  separator: {
-    ...separator,
-    borderBottomWidth: 0.75,
-    borderColor: '$separator',
-  },
-  secondaryText: {
-    ...secondaryText,
-    color: '$icon',
-  },
-  mainText: {
-    ...mainText,
-    color: '$text',
-  },
-  headLeft: {
-    ...issueCard.issueId,
-    color: '$icon',
-  },
-  headRight: {
-    ...rowLine,
-    flexGrow: 1,
-    justifyContent: 'flex-end',
-  },
-  summary: {
-    ...issueCard.issueSummary,
-    color: '$text',
-  },
+  separator: {...separator, borderBottomWidth: 0.75, borderColor: '$separator'},
+  secondaryText: {...secondaryText, color: '$icon'},
+  mainText: {...mainText, color: '$text'},
+  headLeft: {...issueCard.issueId, color: '$icon'},
+  headRight: {...rowLine, flexGrow: 1, justifyContent: 'flex-end'},
+  summary: {...issueCard.issueSummary, color: '$text'},
   subtext: {
     paddingTop: 6,
     fontSize: 14,
@@ -114,9 +93,7 @@ export default EStyleSheet.create({
     height: searchContextHeight,
     backgroundColor: '$background',
   },
-  searchContextPinned: {
-    ...elevation1,
-  },
+  searchContextPinned: {...elevation1},
   searchContextButton: {
     ...rowLine,
     marginTop: UNIT,
@@ -158,10 +135,7 @@ export default EStyleSheet.create({
   toolbarActionSortBy: {
     marginRight: -UNIT / 4,
   },
-  toolbarText: {
-    ...secondaryText,
-    color: '$icon',
-  },
+  toolbarText: {...secondaryText, color: '$icon'},
   toolbarSortByText: {
     textAlign: 'right',
   },
@@ -172,10 +146,7 @@ export default EStyleSheet.create({
   resolved: {
     color: '$resolved',
   },
-  headerTitle: {
-    ...headerTitlePresentation,
-    marginLeft: 0,
-  },
+  headerTitle: {...headerTitlePresentation, marginLeft: 0},
   link: {
     color: '$link',
   },

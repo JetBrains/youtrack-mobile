@@ -1,13 +1,9 @@
-/* @flow */
-
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {headerMinHeight} from 'components/header/header.styles';
 import {StyleSheet} from 'react-native';
 import {title} from 'components/common-styles/issue';
 import {UNIT} from 'components/variables/variables';
-
-export default (EStyleSheet.create({
+export default EStyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000000',
@@ -25,18 +21,12 @@ export default (EStyleSheet.create({
     maxWidth: '100%',
     maxHeight: '100%',
   },
-
-  loader: {
-    ...StyleSheet.absoluteFillObject,
-    color: '$link',
-  },
-
+  loader: {...StyleSheet.absoluteFillObject, color: '$link'},
   removeButton: {
     position: 'absolute',
     bottom: UNIT * 3,
     left: UNIT * 3,
   },
-
   closeIcon: {
     paddingVertical: UNIT / 2,
     paddingHorizontal: UNIT,
@@ -59,4 +49,4 @@ export default (EStyleSheet.create({
     ...title,
     color: '$text',
   },
-}): any);
+}) as any;

@@ -1,17 +1,16 @@
-/* @flow */
-
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
-
 import {DEFAULT_THEME} from '../theme/theme';
-
 import styles from './action-sheet.styles';
-
 import type {ActionSheetOptions} from '@expo/react-native-action-sheet';
-
-export type ActionSheetOption = { title: string, execute?: Function }
-// $FlowFixMe: any-typed ActionSheetOptions
-export type ShowActionSheetWithOptions = (options: ActionSheetOptions, callback: (i: number) => void) => void;
-
+export type ActionSheetOption = {
+  title: string;
+  execute?: (...args: Array<any>) => any;
+};
+// @ts-expect-error: any-typed ActionSheetOptions
+export type ShowActionSheetWithOptions = (
+  options: ActionSheetOptions,
+  callback: (i: number) => void,
+) => void;
 export const defaultActionsOptions = {
   titleTextStyle: {
     color: styles.icon?.color || DEFAULT_THEME.colors.$icon,
@@ -20,10 +19,12 @@ export const defaultActionsOptions = {
     color: styles.icon?.color || DEFAULT_THEME.colors.$icon,
   },
   separatorStyle: {
-    backgroundColor: styles.separator?.backgroundColor || DEFAULT_THEME.colors.$boxBackground,
+    backgroundColor:
+      styles.separator?.backgroundColor || DEFAULT_THEME.colors.$boxBackground,
   },
   containerStyle: {
-    backgroundColor: styles.container?.backgroundColor || DEFAULT_THEME.colors.$background,
+    backgroundColor:
+      styles.container?.backgroundColor || DEFAULT_THEME.colors.$background,
   },
   textStyle: {
     color: styles.text?.color || DEFAULT_THEME.colors.$text,
@@ -38,8 +39,7 @@ async function doShowActions(
   message?: string | null,
 ) {
   const cancelIndex: number = options.length - 1;
-
-  return new Promise((resolve: Function) => {
+  return new Promise((resolve: (...args: Array<any>) => any) => {
     showActionSheetWithOptions(
       {
         title,
@@ -48,15 +48,16 @@ async function doShowActions(
         cancelButtonIndex: cancelIndex,
         ...defaultActionsOptions,
       },
-      (actionIndex) => {
+      actionIndex => {
         const action = options[actionIndex];
+
         if (actionIndex === cancelIndex) {
           return resolve(null);
         }
-        return resolve(action);
-      }
-    );
 
+        return resolve(action);
+      },
+    );
   });
 }
 
@@ -64,16 +65,20 @@ export function showActions(
   options: Array<ActionSheetOption>,
   actionSheetInstance: typeof ActionSheetProvider,
   title?: string | null,
-  message?: string | null
+  message?: string | null,
 ): Promise<ActionSheetOption> {
-  return doShowActions(options, actionSheetInstance.getContext().showActionSheetWithOptions, title, message);
+  return doShowActions(
+    options,
+    actionSheetInstance.getContext().showActionSheetWithOptions,
+    title,
+    message,
+  );
 }
-
 export function showActionSheet(
   options: Array<ActionSheetOption>,
   showActionSheetWithOptions: ShowActionSheetWithOptions,
   title?: string | null,
-  message?: string | null
-): Promise<?ActionSheetOption> {
+  message?: string | null,
+): Promise<ActionSheetOption | null | undefined> {
   return doShowActions(options, showActionSheetWithOptions, title, message);
 }

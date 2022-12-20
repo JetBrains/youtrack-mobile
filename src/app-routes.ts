@@ -1,5 +1,3 @@
-/* @flow */
-
 export const routeMap = {
   AgileBoard: 'AgileBoard',
   Article: 'Article',
@@ -23,7 +21,6 @@ export const routeMap = {
   Issue2: 'Issue2',
   WikiPage: 'WikiPage',
 };
-
 export const rootRoutesList = [
   routeMap.Issues,
   routeMap.AgileBoard,

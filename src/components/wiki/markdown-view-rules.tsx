@@ -1,15 +1,16 @@
-/* @flow */
-
 import React from 'react';
-import {ActivityIndicator, Linking, Text, TouchableOpacity, View} from 'react-native';
-
+import {
+  ActivityIndicator,
+  Linking,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {WebView} from 'react-native-webview';
-
 import HTML from './renderers/renderer__html';
 import Hyperlink from 'react-native-hyperlink';
 import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
-
 import calculateAspectRatio from 'components/aspect-ratio/aspect-ratio';
 import CodeHighlighter from './code-renderer';
 import ImageWithProgress from 'components/image/image-with-progress';
@@ -20,22 +21,21 @@ import {guid, isURLPattern} from 'util/util';
 import {hasMimeType} from 'components/mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from 'components/icon/icon';
 import {whiteSpacesRegex} from './util/patterns';
-
 import styles from './youtrack-wiki.styles';
-
 import type {Article} from 'flow/Article';
-import type {Attachment, ImageDimensions, IssueProject} from 'flow/CustomFields';
+import type {
+  Attachment,
+  ImageDimensions,
+  IssueProject,
+} from 'flow/CustomFields';
 import type {IssueFull} from 'flow/Issue';
 import type {MarkdownASTNode} from 'flow/Markdown';
 import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from 'flow/Theme';
-
 export type Mentions = {
-  articles: Array<Article>,
-  issues: Array<IssueFull>,
-}
-
-
+  articles: Array<Article>;
+  issues: Array<IssueFull>;
+};
 const issueIdRegExp: RegExp = /([a-zA-Z]+-)+\d+/g;
 const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
 const imageRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
@@ -47,7 +47,7 @@ const googleCalendarURL: RegExp = /^http(s?):\/\/calendar.google.([a-z]{2,})\/ca
 const googleDocsURL: RegExp = /^http(s?):\/\/docs.google.([a-z]{2,})\/document/i;
 const figmaURL: RegExp = /^http(s?):\/\/(www\.)?figma.com/i;
 
-function getYouTubeId(url: string): ?string {
+function getYouTubeId(url: string): string | null | undefined {
   const arr = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
   return undefined !== arr[2] ? arr[2].split(/[^\w-]/i)[0] : arr[0];
 }
@@ -59,25 +59,28 @@ function getMarkdownRules(
   mentions?: Mentions,
   onCheckboxUpdate?: (checked: boolean, position: number) => void,
   textStyle: TextStyleProp = {},
-): Object {
-
-  function renderVideo(youtubeVideoId: string, key: string): React$Element<typeof WebView> {
+): Record<string, any> {
+  function renderVideo(
+    youtubeVideoId: string,
+    key: string,
+  ): React.ReactElement<React.ComponentProps<typeof WebView>, typeof WebView> {
     return (
       <WebView
         key={key}
         style={styles.video}
-        source={{uri: `https://youtube.com/embed/${youtubeVideoId}?playsinline=1&controls:1`}}
+        source={{
+          uri: `https://youtube.com/embed/${youtubeVideoId}?playsinline=1&controls:1`,
+        }}
         allowsFullscreenVideo={false}
         allowsInlineMediaPlayback={true}
-        renderLoading={() => <ActivityIndicator color={uiTheme.colors.$link}/>}
+        renderLoading={() => <ActivityIndicator color={uiTheme.colors.$link} />}
         mediaPlaybackRequiresUserAction={true}
-        androidLayerType= "hardware"
+        androidLayerType="hardware"
         mixedContentMode="always"
         javaScriptEnabled={true}
       />
     );
   }
-
 
   const markdownImage = ({key, uri, alt, imageDimensions}) => {
     if (isGitHubBadge(uri)) {
@@ -85,25 +88,32 @@ function getMarkdownRules(
     }
 
     const dimensions: ImageDimensions = calculateAspectRatio(
-      imageDimensions ||
-      {width: 250, height: 300}
+      imageDimensions || {
+        width: 250,
+        height: 300,
+      },
     );
+    const youtubeVideoId: string | null | undefined = getYouTubeId(uri);
 
-    const youtubeVideoId: ?string = getYouTubeId(uri);
     if (youTubeURL.test(uri) && youtubeVideoId) {
       return renderVideo(youtubeVideoId, key);
     }
 
     let imageHeaders;
+
     try {
       imageHeaders = getApi().auth.getAuthorizationHeaders();
     } catch (e) {
       imageHeaders = {};
     }
-    const imageProps: Object = {
+
+    const imageProps: Record<string, any> = {
       key,
       style: dimensions,
-      source: {uri, headers: imageHeaders},
+      source: {
+        uri,
+        headers: imageHeaders,
+      },
     };
 
     if (alt) {
@@ -117,59 +127,88 @@ function getMarkdownRules(
   const isNodeContainsCheckbox = (node: MarkdownASTNode): boolean => {
     let hasCheckbox: boolean = false;
     let nodeChildren: Array<MarkdownASTNode> = node.children || [];
+
     while (nodeChildren?.length > 0) {
-      hasCheckbox = nodeChildren.some((it) => it.type === 'checkbox');
+      hasCheckbox = nodeChildren.some(it => it.type === 'checkbox');
+
       if (hasCheckbox) {
         break;
       }
+
       nodeChildren = nodeChildren[0] && nodeChildren[0].children;
     }
+
     return hasCheckbox;
   };
 
-  const renderIssueIdLink = (issueId: string, styles: Array<Object>, key: string) => {
+  const renderIssueIdLink = (
+    issueId: string,
+    styles: Array<Record<string, any>>,
+    key: string,
+  ) => {
     return (
       <Text
         selectable={true}
         key={key}
         onPress={() => {
-          Router.Issue({issueId: issueId.trim()});
+          Router.Issue({
+            issueId: issueId.trim(),
+          });
         }}
-        style={[styles, textStyle]}>
+        style={[styles, textStyle]}
+      >
         {issueId}
       </Text>
     );
   };
 
-  const renderHyperLink = (linkText: string, style: any): React$Element<typeof Hyperlink> => (
-    <Hyperlink
-      key={guid()}
-      linkStyle={style.link}
-      linkDefault={true}>
+  const renderHyperLink = (
+    linkText: string,
+    style: any,
+  ): React.ReactElement<
+    React.ComponentProps<typeof Hyperlink>,
+    typeof Hyperlink
+  > => (
+    <Hyperlink key={guid()} linkStyle={style.link} linkDefault={true}>
       <Text selectable={true} style={style}>
         {linkText}
       </Text>
     </Hyperlink>
   );
 
-  const textRenderer = (node: MarkdownASTNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}): any => {
-    const text: string = (
-      node.content
-        .replace(imageHeight, '')
-        .replace(imageWidth, '')
-        .replace(whiteSpacesRegex, ' ')
-        .replace(htmlTagRegex, ' ')
-    );
+  const textRenderer = (
+    node: MarkdownASTNode,
+    children: Record<string, any>,
+    parent: Record<string, any>,
+    style: Record<string, any>,
+    inheritedStyles: Record<string, any> = {},
+  ): any => {
+    const text: string = node.content
+      .replace(imageHeight, '')
+      .replace(imageWidth, '')
+      .replace(whiteSpacesRegex, ' ')
+      .replace(htmlTagRegex, ' ');
+
     if (!text) {
       return null;
     }
 
     if (mentions && mentions.articles.concat(mentions.issues).length > 0) {
-      return renderArticleMentions(node, mentions, uiTheme, style, inheritedStyles, textStyle);
+      return renderArticleMentions(
+        node,
+        mentions,
+        uiTheme,
+        style,
+        inheritedStyles,
+        textStyle,
+      );
     }
 
     if (text.match(imageEmbedRegExp)) {
-      const attach: ?Attachment = attachments.find((it: Attachment) => it.name && text.includes(it.name));
+      const attach: Attachment | null | undefined = attachments.find(
+        (it: Attachment) => it.name && text.includes(it.name),
+      );
+
       if (attach && attach.url && hasMimeType.image(attach)) {
         return markdownImage({
           key: node.key,
@@ -182,41 +221,75 @@ function getMarkdownRules(
 
     if (issueIdRegExp.test(text) && !isURLPattern(text)) {
       const matched: RegExpMatchArray | null = text.match(issueIdRegExp);
+
       if (matched && matched[0]) {
         const matchedIndex: number = text.search(matched[0]);
         const linkStyle = [inheritedStyles, style.text, textStyle];
         return (
-          <Text selectable={true} key={node.key} style={[inheritedStyles, style.text, textStyle]}>
+          <Text
+            selectable={true}
+            key={node.key}
+            style={[inheritedStyles, style.text, textStyle]}
+          >
             {renderHyperLink(text.slice(0, matchedIndex), linkStyle)}
-            {renderIssueIdLink(matched[0], [inheritedStyles, style.text, textStyle, styles.link], `${node.key}1`)}
-            {renderHyperLink(text.slice(matchedIndex + matched[0].length, text.length - 1), linkStyle)}
+            {renderIssueIdLink(
+              matched[0],
+              [inheritedStyles, style.text, textStyle, styles.link],
+              `${node.key}1`,
+            )}
+            {renderHyperLink(
+              text.slice(matchedIndex + matched[0].length, text.length - 1),
+              linkStyle,
+            )}
           </Text>
         );
       }
-      return renderHyperLink(text, [inheritedStyles, style.text, textStyle, styles.link]);
+
+      return renderHyperLink(text, [
+        inheritedStyles,
+        style.text,
+        textStyle,
+        styles.link,
+      ]);
     }
 
     return (
-      <Text key={node.key} style={{...inheritedStyles, ...style.text, ...textStyle}}>
+      <Text
+        key={node.key}
+        style={{...inheritedStyles, ...style.text, ...textStyle}}
+      >
         {text}
       </Text>
     );
   };
 
-
   return {
-    blockquote: (node: MarkdownASTNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => (
+    blockquote: (
+      node: MarkdownASTNode,
+      children: Record<string, any>,
+      parent: Record<string, any>,
+      style: Record<string, any>,
+      inheritedStyles: Record<string, any> = {},
+    ) => (
       <View key={node.key} style={[style.blockquote, textStyle]}>
         {children}
       </View>
     ),
-
-    image: (node: MarkdownASTNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+    image: (
+      node: MarkdownASTNode,
+      children: Record<string, any>,
+      parent: Record<string, any>,
+      style: Record<string, any>,
+      inheritedStyles: Record<string, any> = {},
+    ) => {
       const {src = '', alt} = node.attributes;
-      const targetAttach: ?Attachment = attachments.find((it: Attachment) => it.name && it.name.includes(src));
-
+      const targetAttach: Attachment | null | undefined = attachments.find(
+        (it: Attachment) => it.name && it.name.includes(src),
+      );
       const parsedURL = UrlParse(src);
-      const url: ?string = parsedURL?.protocol && parsedURL?.origin ? src : targetAttach?.url;
+      const url: string | null | undefined =
+        parsedURL?.protocol && parsedURL?.origin ? src : targetAttach?.url;
+
       if (!url || hasMimeType.svg(targetAttach)) {
         return null;
       }
@@ -232,19 +305,34 @@ function getMarkdownRules(
         imageDimensions: targetAttach?.imageDimensions,
       });
     },
-
-    code_inline: (node: MarkdownASTNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+    code_inline: (
+      node: MarkdownASTNode,
+      children: Record<string, any>,
+      parent: Record<string, any>,
+      style: Record<string, any>,
+      inheritedStyles: Record<string, any> = {},
+    ) => {
       return (
-        <Text selectable={true} key={node.key} style={[inheritedStyles, styles.inlineCode]}>
+        <Text
+          selectable={true}
+          key={node.key}
+          style={[inheritedStyles, styles.inlineCode]}
+        >
           {node.content}
         </Text>
       );
     },
-
-    fence: (node: MarkdownASTNode) => <CodeHighlighter key={node.key} node={node} uiTheme={uiTheme}/>,
-
-    link: (node: MarkdownASTNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
-      const child: ?Object = node?.children[0];
+    fence: (node: MarkdownASTNode) => (
+      <CodeHighlighter key={node.key} node={node} uiTheme={uiTheme} />
+    ),
+    link: (
+      node: MarkdownASTNode,
+      children: Record<string, any>,
+      parent: Record<string, any>,
+      style: Record<string, any>,
+      inheritedStyles: Record<string, any> = {},
+    ) => {
+      const child: Record<string, any> | null | undefined = node?.children[0];
       let content: string = (child && child.content) || children;
 
       if (imageRegExp.test(content)) {
@@ -252,7 +340,10 @@ function getMarkdownRules(
       }
 
       if (content.replace && !content.replace(htmlTagRegex, '')) {
-        content = node.children.map(it => it.content).join('').replace(htmlTagRegex, '');
+        content = node.children
+          .map(it => it.content)
+          .join('')
+          .replace(htmlTagRegex, '');
       }
 
       return (
@@ -266,116 +357,175 @@ function getMarkdownRules(
         </Text>
       );
     },
-
-    list_item: (node: MarkdownASTNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+    list_item: (
+      node: MarkdownASTNode,
+      children: Record<string, any>,
+      parent: Record<string, any>,
+      style: Record<string, any>,
+      inheritedStyles: Record<string, any> = {},
+    ) => {
       const hasCheckbox: boolean = isNodeContainsCheckbox(node);
       return renderRules.list_item(
         node,
         children,
         parent,
-        (hasCheckbox ? {
-          ...style,
-          bullet_list_icon: {
-            ...style.bullet_list_icon,
-            ...style.bullet_list_icon_checkbox,
-            ...textStyle,
-          },
-        } : style),
-        inheritedStyles
+        hasCheckbox
+          ? {
+              ...style,
+              bullet_list_icon: {
+                ...style.bullet_list_icon,
+                ...style.bullet_list_icon_checkbox,
+                ...textStyle,
+              },
+            }
+          : style,
+        inheritedStyles,
       );
     },
-
-    inline: (node: MarkdownASTNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+    inline: (
+      node: MarkdownASTNode,
+      children: Record<string, any>,
+      parent: Record<string, any>,
+      style: Record<string, any>,
+      inheritedStyles: Record<string, any> = {},
+    ) => {
       return isNodeContainsCheckbox(node) ? (
-        <View key={node.key} style={[inheritedStyles, style.inline, styles.checkboxRow]}>
+        <View
+          key={node.key}
+          style={[inheritedStyles, style.inline, styles.checkboxRow]}
+        >
           {children}
         </View>
-      ) : (renderRules.inline(
-        node,
-        children,
-        parent,
-        style,
-        inheritedStyles
-      ));
+      ) : (
+        renderRules.inline(node, children, parent, style, inheritedStyles)
+      );
     },
-
-    textgroup: (node: MarkdownASTNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+    textgroup: (
+      node: MarkdownASTNode,
+      children: Record<string, any>,
+      parent: Record<string, any>,
+      style: Record<string, any>,
+      inheritedStyles: Record<string, any> = {},
+    ) => {
       return isNodeContainsCheckbox(node) ? (
-        <View key={node.key} style={[inheritedStyles, style.textgroup, styles.checkboxTextGroup]}>
+        <View
+          key={node.key}
+          style={[inheritedStyles, style.textgroup, styles.checkboxTextGroup]}
+        >
           {children}
         </View>
-      ) : (renderRules.textgroup(
-        node,
-        children,
-        parent,
-        style,
-        inheritedStyles,
-        textStyle,
-      ));
+      ) : (
+        renderRules.textgroup(
+          node,
+          children,
+          parent,
+          style,
+          inheritedStyles,
+          textStyle,
+        )
+      );
     },
-
-    checkbox: (node: MarkdownASTNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+    checkbox: (
+      node: MarkdownASTNode,
+      children: Record<string, any>,
+      parent: Record<string, any>,
+      style: Record<string, any>,
+      inheritedStyles: Record<string, any> = {},
+    ) => {
       const isChecked: boolean = node.attributes.checked === true;
       const position: number = node.attributes.position;
-      const CheckboxIcon: Object = isChecked ? IconCheckboxChecked : IconCheckboxBlank;
+      const CheckboxIcon: Record<string, any> = isChecked
+        ? IconCheckboxChecked
+        : IconCheckboxBlank;
       const text: string = node.content.trim();
       return (
         <TouchableOpacity
           key={node.key}
           style={[inheritedStyles, styles.checkboxRow]}
-          onPress={() => onCheckboxUpdate && onCheckboxUpdate(!isChecked, position)}
+          onPress={() =>
+            onCheckboxUpdate && onCheckboxUpdate(!isChecked, position)
+          }
         >
           <CheckboxIcon
             size={24}
             color={uiTheme.colors.$icon}
-            style={[styles.checkboxIcon, !isChecked && styles.checkboxIconBlank]}
+            style={[
+              styles.checkboxIcon,
+              !isChecked && styles.checkboxIconBlank,
+            ]}
           />
-          <Text selectable={true} style={[inheritedStyles, style.text, styles.checkboxLabel, textStyle]}>
+          <Text
+            selectable={true}
+            style={[
+              inheritedStyles,
+              style.text,
+              styles.checkboxLabel,
+              textStyle,
+            ]}
+          >
             {issueIdRegExp.test(text)
-              ? renderIssueIdLink(text, [inheritedStyles, style.text, styles.link], node.key)
+              ? renderIssueIdLink(
+                  text,
+                  [inheritedStyles, style.text, styles.link],
+                  node.key,
+                )
               : text}
           </Text>
         </TouchableOpacity>
       );
     },
-
     text: textRenderer,
-
-    s: (node: MarkdownASTNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+    s: (
+      node: MarkdownASTNode,
+      children: Record<string, any>,
+      parent: Record<string, any>,
+      style: Record<string, any>,
+      inheritedStyles: Record<string, any> = {},
+    ) => {
       return isNodeContainsCheckbox(node) ? (
         <View key={node.key} style={[inheritedStyles, style.textgroup]}>
           {children}
         </View>
-      ) : (renderRules.s(
-        node,
-        children,
-        parent,
-        style,
-        inheritedStyles,
-        textStyle,
-      ));
+      ) : (
+        renderRules.s(node, children, parent, style, inheritedStyles, textStyle)
+      );
     },
-
-    html_block: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+    html_block: (
+      node: MarkdownNode,
+      children: Record<string, any>,
+      parent: Record<string, any>,
+      style: Record<string, any>,
+      inheritedStyles: Record<string, any> = {},
+    ) => {
       if (isHTMLLinebreak(node.content)) {
         return renderHTMLLinebreak(node, children, parent, style);
       }
-      return <HTML html={node.content}/>;
-    },
 
-    html_inline: (node: MarkdownNode, children: Object, parent: Object, style: Object, inheritedStyles: Object = {}) => {
+      return <HTML html={node.content} />;
+    },
+    html_inline: (
+      node: MarkdownNode,
+      children: Record<string, any>,
+      parent: Record<string, any>,
+      style: Record<string, any>,
+      inheritedStyles: Record<string, any> = {},
+    ) => {
       if (isHTMLLinebreak(node.content)) {
-        return renderHTMLLinebreak(node, children, parent, style, inheritedStyles);
+        return renderHTMLLinebreak(
+          node,
+          children,
+          parent,
+          style,
+          inheritedStyles,
+        );
       }
+
       return textRenderer(node, children, parent, style);
     },
-
   };
 }
 
 export default getMarkdownRules;
-
-
 
 function isFigmaImage(url: string = ''): boolean {
   return figmaURL.test(url);
@@ -390,10 +540,16 @@ function isGitHubBadge(url: string = ''): boolean {
 }
 
 function isHTMLLinebreak(text: string): boolean {
-  return (['<br>', '<br/>'].some((tagName: string) => tagName === text.toLowerCase()));
+  return ['<br>', '<br/>'].some(
+    (tagName: string) => tagName === text.toLowerCase(),
+  );
 }
 
-
-function renderHTMLLinebreak(node: MarkdownNode, children: Object, parent: Object, style: Object) {
+function renderHTMLLinebreak(
+  node: MarkdownNode,
+  children: Record<string, any>,
+  parent: Record<string, any>,
+  style: Record<string, any>,
+) {
   return renderRules.softbreak(node, children, parent, style);
 }

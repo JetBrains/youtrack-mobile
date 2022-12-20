@@ -1,6 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
-
 export default EStyleSheet.create({
   attachesScroll: {
     paddingLeft: UNIT * 2,
@@ -65,7 +64,6 @@ export default EStyleSheet.create({
   removingAttach: {
     opacity: 0.3,
   },
-
   attachmentDefault: {
     color: '$greyColor',
     backgroundColor: '$greyBackground',

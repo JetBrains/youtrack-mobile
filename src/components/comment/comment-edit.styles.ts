@@ -1,14 +1,11 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {elevation1, elevationBottom} from '../common-styles/shadow';
 import {mainText, secondaryText} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
 import {Platform} from 'react-native';
 import {separatorTopBorder} from '../common-styles/list';
-
 const INPUT_BORDER_RADIUS = UNIT;
 export const MIN_INPUT_SIZE = UNIT * 4;
-
 export default EStyleSheet.create({
   container: {
     maxHeight: '100%',
@@ -22,7 +19,6 @@ export default EStyleSheet.create({
       },
     }),
   },
-
   suggestionsContainer: {
     flexGrow: 1,
     flexDirection: 'column',
@@ -55,7 +51,6 @@ export default EStyleSheet.create({
   suggestionLogin: {
     color: '$textSecondary',
   },
-
   commentHeaderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -105,13 +100,11 @@ export default EStyleSheet.create({
     fontSize: 16,
     color: '$link',
   },
-
   commentListContainer: {
     borderTopWidth: 1,
     borderColor: '$textSecondary',
     paddingTop: UNIT,
   },
-
   visibilityChangeButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -125,7 +118,6 @@ export default EStyleSheet.create({
     marginRight: UNIT,
     color: '$icon',
   },
-
   actionsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -154,19 +146,15 @@ export default EStyleSheet.create({
     paddingLeft: UNIT * 1.5,
     color: '$text',
   },
-
   attachmentsContainer: {
     paddingLeft: 0,
     marginLeft: -UNIT,
     marginVertical: UNIT,
   },
-
   commentEditContainer: {
     flex: 1,
   },
-  commentEditHeader: {
-    ...elevation1,
-  },
+  commentEditHeader: {...elevation1},
   commentEditContentTopOffset: {
     marginTop: UNIT * 9,
   },

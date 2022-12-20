@@ -1,10 +1,7 @@
-/* @flow */
-
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 import {secondaryText} from '../common-styles/typography';
-
-export default (EStyleSheet.create({
+export default EStyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -15,8 +12,5 @@ export default (EStyleSheet.create({
   buttonIcon: {
     marginRight: UNIT,
   },
-  buttonText: {
-    ...secondaryText,
-    color: '$icon',
-  },
-}): any);
+  buttonText: {...secondaryText, color: '$icon'},
+}) as any;

@@ -1,16 +1,7 @@
-/* @flow */
-
 import ApiHelper from './api__helper';
 import issueFields from './api__issue-fields';
-
 const toField = ApiHelper.toField;
-
-const childArticlesFields: Array<string> = [
-  'id',
-  'idReadable',
-  'summary',
-];
-
+const childArticlesFields: Array<string> = ['id', 'idReadable', 'summary'];
 export const articleChildrenAndSubChildren: any = toField([
   {
     childArticles: childArticlesFields.concat({
@@ -18,7 +9,6 @@ export const articleChildrenAndSubChildren: any = toField([
     }),
   },
 ]);
-
 export const articleFields: any = toField([
   '$type',
   'content',
@@ -31,42 +21,32 @@ export const articleFields: any = toField([
   'hasStar',
   'hasUnpublishedChanges',
   articleChildrenAndSubChildren,
-  {attachments: issueFields.attachments},
   {
-    mentionedArticles: [
-      '$type',
-      'idReadable',
-    ],
+    attachments: issueFields.attachments,
   },
   {
-    mentionedIssues: [
-      '$type',
-      'id',
-      'idReadable',
-      'resolved',
-    ],
-  },
-  {mentionedUsers: issueFields.user},
-  {
-    parentArticle: [
-      'id',
-      'idReadable',
-      'summary',
-    ],
+    mentionedArticles: ['$type', 'idReadable'],
   },
   {
-    project: [
-      'id',
-      'name',
-      'ringId',
-    ],
+    mentionedIssues: ['$type', 'id', 'idReadable', 'resolved'],
   },
-  {reporter: issueFields.user},
-  {updatedBy: issueFields.user},
-
+  {
+    mentionedUsers: issueFields.user,
+  },
+  {
+    parentArticle: ['id', 'idReadable', 'summary'],
+  },
+  {
+    project: ['id', 'name', 'ringId'],
+  },
+  {
+    reporter: issueFields.user,
+  },
+  {
+    updatedBy: issueFields.user,
+  },
   issueFields.VISIBILITY,
 ]);
-
 export const articlesFields: any = toField([
   'id',
   'idReadable',
@@ -77,11 +57,7 @@ export const articlesFields: any = toField([
     childArticles: childArticlesFields,
   },
   {
-    parentArticle: [
-      'id',
-      'visibility($type)',
-    ],
+    parentArticle: ['id', 'visibility($type)'],
   },
   'visibility($type)',
 ]);
-

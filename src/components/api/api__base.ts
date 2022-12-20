@@ -1,28 +1,22 @@
-/* @flow */
-
 import ApiHelper from './api__helper';
 import log from '../log/log';
 import qs from 'qs';
 import {HTTP_STATUS} from '../error/error-http-codes';
 import {fetch2, requestController} from './api__request-controller';
 import {routeMap} from '../../app-routes';
-
 import type Auth from '../auth/oauth2';
 import type {AppConfig} from 'flow/AppConfig';
 import type {RequestHeaders} from 'flow/Auth';
-
 const MAX_QUERY_LENGTH = 2048;
-
 type RequestOptions = {
-  controller?: {
-    [$Keys<typeof routeMap>]: AbortController,
-  },
-  parseJson?: boolean,
+  controller?: {[key in keyof typeof routeMap]?: AbortController};
+  parseJson?: boolean;
 };
 
 function updateQueryStringParameter(uri, key, value) {
   const re = new RegExp(`([?&])${key}=.*?(&|$)`, 'i');
   const separator = uri.indexOf('?') !== -1 ? '&' : '?';
+
   if (uri.match(re)) {
     return uri.replace(re, `$1${key}=${value}$2`);
   } else {
@@ -45,19 +39,21 @@ function patchTopParam(url: string) {
 function assertLongQuery(url: string) {
   const [, ...queryParts] = url.split('?');
   const query = queryParts.join('');
+
   if (query.length > MAX_QUERY_LENGTH) {
-    log.warn(`Query length (${query.length}) is longer than ${MAX_QUERY_LENGTH}. This doesn't work on some servers`, url);
+    log.warn(
+      `Query length (${query.length}) is longer than ${MAX_QUERY_LENGTH}. This doesn't work on some servers`,
+      url,
+    );
   }
 }
 
 requestController.init();
-
 export default class BaseAPI {
   auth: Auth;
   config: AppConfig;
   isActualAPI: boolean;
   isModernGAP: boolean;
-
   youTrackUrl: string;
   youTrackIssueUrl: string;
   youTrackApiUrl: string;
@@ -69,28 +65,32 @@ export default class BaseAPI {
     const majorVersion: number = parseInt(parts[0], 10) || 0;
     const minorVersion: number = parseInt(parts[1] || '', 10);
     this.isActualAPI = majorVersion >= 2022 && minorVersion >= 3;
-    this.isModernGAP = (
-      majorVersion > 2020 ||
-      majorVersion === 2020 && minorVersion >= 6
-    );
-
+    this.isModernGAP =
+      majorVersion > 2020 || (majorVersion === 2020 && minorVersion >= 6);
     this.youTrackUrl = this.config.backendUrl;
     this.youTrackApiUrl = `${this.youTrackUrl}/api`;
     this.youTrackIssueUrl = `${this.youTrackApiUrl}/issues`;
   }
 
-  static createFieldsQuery(fields: Object | Array<Object | string>, restParams?: ?Object, opts: ?Object): string {
+  static createFieldsQuery(
+    fields: Record<string, any> | Array<Record<string, any> | string>,
+    restParams?: Record<string, any> | null | undefined,
+    opts: Record<string, any> | null | undefined,
+  ): string {
     return qs.stringify(
       Object.assign({
         ...restParams,
-        ...{fields: ApiHelper.toField(fields).toString()},
+        ...{
+          fields: ApiHelper.toField(fields).toString(),
+        },
       }),
-      opts
+      opts,
     );
   }
 
   shouldRefreshToken(response: Response): boolean {
-    const err: string = typeof response?.error === 'string' ? typeof response?.error : '';
+    const err: string =
+      typeof response?.error === 'string' ? typeof response?.error : '';
     return (
       response.status === HTTP_STATUS.UNAUTHORIZED ||
       ['invalid_grant', 'invalid_request', 'invalid_token'].includes(err) ||
@@ -99,40 +99,58 @@ export default class BaseAPI {
   }
 
   isError(response: Response): boolean {
-    return response.status < HTTP_STATUS.SUCCESS || response.status >= HTTP_STATUS.REDIRECT;
+    return (
+      response.status < HTTP_STATUS.SUCCESS ||
+      response.status >= HTTP_STATUS.REDIRECT
+    );
   }
 
   async makeAuthorizedRequest(
     url: string,
-    method: ?string,
-    body: ?Object,
-    options: RequestOptions = {parseJson: true},
+    method: string | null | undefined,
+    body: Record<string, any> | null | undefined,
+    options: RequestOptions = {
+      parseJson: true,
+    },
   ): Promise<any> {
     url = patchTopParam(url);
-    log.debug(`"${method || 'GET'}" to ${url}${body ? ` with body |${JSON.stringify(body)}|` : ''}`);
+    log.debug(
+      `"${method || 'GET'}" to ${url}${
+        body ? ` with body |${JSON.stringify(body)}|` : ''
+      }`,
+    );
     assertLongQuery(url);
 
     const sendRequest = async (): Promise<Response> => {
       const requestHeaders: RequestHeaders = this.auth.getAuthorizationHeaders();
+
       if (!requestHeaders.Authorization) {
-        log.warn(`Missing auth header in a request: "${method || 'GET'}":${url}`);
+        log.warn(
+          `Missing auth header in a request: "${method || 'GET'}":${url}`,
+        );
       }
-      return await fetch2(url, {
+
+      return await fetch2(
+        url,
+        {
           method,
           headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json, text/plain, */*',
+            Accept: 'application/json, text/plain, */*',
             ...requestHeaders,
           },
           body: JSON.stringify(body),
         },
-        options.controller
+        options.controller,
       );
     };
 
     let response: Response = await sendRequest();
 
-    if (response.status !== HTTP_STATUS.SUCCESS && this.shouldRefreshToken(response)) {
+    if (
+      response.status !== HTTP_STATUS.SUCCESS &&
+      this.shouldRefreshToken(response)
+    ) {
       log.debug('Token has expired');
       await this.auth.refreshToken();
       response = await sendRequest();

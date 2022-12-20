@@ -1,7 +1,4 @@
-/* @flow */
-
 import {toField} from 'util/to-field';
-
 const ISSUE_PROJECT_FIELDS: any = toField([
   '$type',
   'id',
@@ -21,11 +18,7 @@ const ISSUE_PROJECT_FIELDS: any = toField([
     },
   },
 ]);
-
-const ISSUE_USER_BASE_FIELDS = toField([
-  'id',
-  'fullName',
-]);
+const ISSUE_USER_BASE_FIELDS = toField(['id', 'fullName']);
 const ISSUE_USER_FIELDS: any = toField([
   ISSUE_USER_BASE_FIELDS,
   'login',
@@ -34,7 +27,6 @@ const ISSUE_USER_FIELDS: any = toField([
   'name',
   'localizedName',
 ]);
-
 const BUNDLE_VALUE: any = toField([
   '$type',
   'id',
@@ -47,12 +39,13 @@ const BUNDLE_VALUE: any = toField([
   'released',
   'archived',
   'isResolved',
-
-  {owner: ['ringId', 'login']},
-
-  {color: ['id', 'background', 'foreground']},
+  {
+    owner: ['ringId', 'login'],
+  },
+  {
+    color: ['id', 'background', 'foreground'],
+  },
 ]);
-
 const ISSUE_FIELD_VALUE = toField([
   {
     value: [
@@ -68,14 +61,12 @@ const ISSUE_FIELD_VALUE = toField([
       'presentation',
       'text',
       'isResolved',
-
       {
         color: ['id', 'background', 'foreground'],
       },
     ],
   },
 ]);
-
 const PROJECT_CUSTOM_FIELD_FIELDS = toField([
   '$type',
   'id',
@@ -86,7 +77,6 @@ const PROJECT_CUSTOM_FIELD_FIELDS = toField([
   {
     bundle: ['id', 'isUpdateable'],
   },
-
   {
     field: [
       'id',
@@ -98,24 +88,21 @@ const PROJECT_CUSTOM_FIELD_FIELDS = toField([
       },
     ],
   },
-
-  {defaultValues: BUNDLE_VALUE},
+  {
+    defaultValues: BUNDLE_VALUE,
+  },
 ]);
-
 const ISSUE_FIELD_FIELDS = toField([
   '$type',
   'id',
   'name',
   'localizedName',
   'hasStateMachine',
-
   ISSUE_FIELD_VALUE,
-
   {
     projectCustomField: PROJECT_CUSTOM_FIELD_FIELDS,
   },
 ]);
-
 const ISSUE_FIELD_SHORT_FIELDS = toField([
   'id',
   'name',
@@ -143,7 +130,6 @@ const ISSUE_FIELD_SHORT_FIELDS = toField([
     ],
   },
 ]);
-
 const ISSUE_TAGS_FIELDS: any = toField([
   'name',
   'localizedName',
@@ -153,13 +139,11 @@ const ISSUE_TAGS_FIELDS: any = toField([
     color: ['id', 'background', 'foreground'],
   },
 ]);
-
 const ISSUE_ATTACHMENTS_BASE_FIELDS: any = toField([
   'url',
   'thumbnailURL',
   'mimeType',
 ]);
-
 const ISSUE_ATTACHMENTS_FIELDS: any = toField([
   ISSUE_ATTACHMENTS_BASE_FIELDS,
   'id',
@@ -167,9 +151,10 @@ const ISSUE_ATTACHMENTS_FIELDS: any = toField([
   'localizedName',
   'imageDimension(width,height)',
   'imageDimensions(width,height)',
-  {author: ['ringId']},
+  {
+    author: ['ringId'],
+  },
 ]);
-
 const USER_GROUP_FIELDS = toField([
   '$type',
   'id',
@@ -177,39 +162,40 @@ const USER_GROUP_FIELDS = toField([
   'localizedName',
   'allUsersGroup',
 ]);
-
-const VISIBILITY_FIELDS: any = toField([{
-  visibility: toField([
-    '$type',
-    {
-      permittedGroups: [USER_GROUP_FIELDS],
-    },
-    {
-      permittedUsers: [ISSUE_USER_FIELDS],
-    },
-    {
-      implicitPermittedUsers: [ISSUE_USER_FIELDS],
-    },
-  ]),
-}]);
-
+const VISIBILITY_FIELDS: any = toField([
+  {
+    visibility: toField([
+      '$type',
+      {
+        permittedGroups: [USER_GROUP_FIELDS],
+      },
+      {
+        permittedUsers: [ISSUE_USER_FIELDS],
+      },
+      {
+        implicitPermittedUsers: [ISSUE_USER_FIELDS],
+      },
+    ]),
+  },
+]);
 const GET_VISIBILITY_FIELDS: any = toField([
   '$type',
   {
     visibilityGroups: USER_GROUP_FIELDS,
-  }, {
+  },
+  {
     visibilityUsers: ISSUE_USER_FIELDS,
   },
 ]);
-
 const ISSUE_COMMENTS_BASE_FIELDS = toField([
   'id',
   'text',
   'usesMarkdown',
-  {author: ISSUE_USER_FIELDS},
+  {
+    author: ISSUE_USER_FIELDS,
+  },
   VISIBILITY_FIELDS,
 ]);
-
 const ISSUE_COMMENTS_FIELDS: any = toField([
   ISSUE_COMMENTS_BASE_FIELDS,
   'created',
@@ -219,13 +205,7 @@ const ISSUE_COMMENTS_FIELDS: any = toField([
     attachments: ISSUE_ATTACHMENTS_FIELDS,
   },
 ]);
-
-const ISSUE_COMMENTS_REMOVED: any = toField([
-  'id',
-  'created',
-  'deleted',
-]);
-
+const ISSUE_COMMENTS_REMOVED: any = toField(['id', 'created', 'deleted']);
 const ISSUE_BASE_FIELDS = toField([
   'id',
   'idReadable',
@@ -234,35 +214,40 @@ const ISSUE_BASE_FIELDS = toField([
   'created',
   'updated',
 ]);
-
 const ISSUE_XSHORT_FIELDS: any = toField([
   ISSUE_BASE_FIELDS,
-  {project: ISSUE_PROJECT_FIELDS},
+  {
+    project: ISSUE_PROJECT_FIELDS,
+  },
 ]);
-
 const ISSUE_SHORT_FIELDS: any = toField([
   ISSUE_XSHORT_FIELDS,
-  {reporter: ISSUE_USER_FIELDS},
-  {fields: ISSUE_FIELD_SHORT_FIELDS},
-  {tags: ISSUE_TAGS_FIELDS},
+  {
+    reporter: ISSUE_USER_FIELDS,
+  },
+  {
+    fields: ISSUE_FIELD_SHORT_FIELDS,
+  },
+  {
+    tags: ISSUE_TAGS_FIELDS,
+  },
 ]);
-
 const ISSUE_LINKED_ISSUE_FIELDS: any = toField([
   'id',
   'idReadable',
   'project(name,ringId)',
   'summary',
   'resolved',
-  {fields: ISSUE_FIELD_SHORT_FIELDS},
+  {
+    fields: ISSUE_FIELD_SHORT_FIELDS,
+  },
 ]);
-
 const ISSUE_LINK_TYPES_FIELDS_BASE: any = toField([
   'sourceToTarget',
   'localizedSourceToTarget',
   'targetToSource',
   'localizedTargetToSource',
 ]);
-
 const ISSUE_LINK_TYPES_FIELDS: any = toField([
   'id',
   'readOnly',
@@ -273,33 +258,31 @@ const ISSUE_LINK_TYPES_FIELDS: any = toField([
   'localizedName',
   ISSUE_LINK_TYPES_FIELDS_BASE,
 ]);
-
 const ISSUE_LINKS_FIELDS_BASE: any = toField([
   'direction',
   'issuesSize',
-  {linkType: ISSUE_LINK_TYPES_FIELDS_BASE},
+  {
+    linkType: ISSUE_LINK_TYPES_FIELDS_BASE,
+  },
 ]);
-
 const ISSUE_LINKS_FIELDS: any = toField([
   ISSUE_LINKS_FIELDS_BASE,
   'id',
   'unresolvedIssuesSize',
   {
-    trimmedIssues: [
-      ISSUE_LINKED_ISSUE_FIELDS,
-    ],
+    trimmedIssues: [ISSUE_LINKED_ISSUE_FIELDS],
   },
 ]);
-
 const ISSUE_FOLDER_FIELDS: any = toField([
   'id',
   'name',
   'localizedName',
   'query',
   'isUpdatable',
-  {owner: ['id', 'ringId']},
+  {
+    owner: ['id', 'ringId'],
+  },
 ]);
-
 const SUGGESTION_FIELDS = toField([
   'id',
   'caret',
@@ -313,37 +296,38 @@ const SUGGESTION_FIELDS = toField([
   'prefix',
   'suffix',
 ]);
-
 const COMMAND_SUGGESTION_FIELDS: any = toField([
   'query',
   'caret',
-  {commands: ['description', 'error', 'delete']},
-  {suggestions: SUGGESTION_FIELDS},
+  {
+    commands: ['description', 'error', 'delete'],
+  },
+  {
+    suggestions: SUGGESTION_FIELDS,
+  },
 ]);
-
-const USER_AGREEMENT_FIELDS = 'endUserAgreement(enabled,text,majorVersion,minorVersion)';
-const USER_CONSENT_FIELDS = 'endUserAgreementConsent(accepted,majorVersion,minorVersion)';
-
+const USER_AGREEMENT_FIELDS =
+  'endUserAgreement(enabled,text,majorVersion,minorVersion)';
+const USER_CONSENT_FIELDS =
+  'endUserAgreementConsent(accepted,majorVersion,minorVersion)';
 const REACTION: any = toField([
   'id',
   'reaction',
-  {author: ISSUE_USER_FIELDS},
+  {
+    author: ISSUE_USER_FIELDS,
+  },
 ]);
-
 const ISSUE_WORK_ITEMS_DURATION_FIELDS = toField([
   'id',
   'minutes',
   'presentation',
 ]);
-
 const ISSUE_WORK_ITEMS_BASE_FIELDS: any = toField({
   type: ['name', 'localizedName', 'id'],
   creator: ISSUE_USER_FIELDS,
   author: ISSUE_USER_FIELDS,
   issue: ['id,project(id,ringId)'],
 });
-
-
 const ISSUE_WORK_ITEMS_FIELDS: any = toField([
   'id',
   'text',
@@ -352,18 +336,21 @@ const ISSUE_WORK_ITEMS_FIELDS: any = toField([
   'date',
   'usesMarkdown',
   ISSUE_WORK_ITEMS_BASE_FIELDS,
-  {duration: ISSUE_WORK_ITEMS_DURATION_FIELDS},
+  {
+    duration: ISSUE_WORK_ITEMS_DURATION_FIELDS,
+  },
 ]);
-
 const ISSUE_WORK_ITEM_TEMPLATE = toField([
   {
     workItemTemplate: toField([
       'date',
       ISSUE_WORK_ITEMS_BASE_FIELDS,
-      {duration: ['presentation']},
+      {
+        duration: ['presentation'],
+      },
     ]),
-  }]);
-
+  },
+]);
 const ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS: any = toField([
   'enabled',
   {
@@ -371,7 +358,6 @@ const ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS: any = toField([
   },
   ISSUE_WORK_ITEM_TEMPLATE,
 ]);
-
 export default {
   attachments: ISSUE_ATTACHMENTS_FIELDS,
   attachmentsBase: ISSUE_ATTACHMENTS_BASE_FIELDS,
@@ -380,7 +366,7 @@ export default {
   issueLinkBase: ISSUE_LINKS_FIELDS_BASE,
   issueLinkTypes: ISSUE_LINK_TYPES_FIELDS,
   issueLinks: ISSUE_LINKED_ISSUE_FIELDS,
-  singleIssue: (toField([
+  singleIssue: toField([
     'id',
     'idReadable',
     'summary',
@@ -393,34 +379,60 @@ export default {
     'usesMarkdown',
     'hasEmail',
     'comments(id)',
-    {watchers: 'hasStar'},
-    {voters: 'hasVote'},
-    {project: ISSUE_PROJECT_FIELDS},
-    {reporter: ISSUE_USER_FIELDS},
-    {updater: ISSUE_USER_FIELDS},
-    {fields: ISSUE_FIELD_FIELDS},
-    {tags: ISSUE_TAGS_FIELDS},
-    {attachments: ISSUE_ATTACHMENTS_FIELDS},
+    {
+      watchers: 'hasStar',
+    },
+    {
+      voters: 'hasVote',
+    },
+    {
+      project: ISSUE_PROJECT_FIELDS,
+    },
+    {
+      reporter: ISSUE_USER_FIELDS,
+    },
+    {
+      updater: ISSUE_USER_FIELDS,
+    },
+    {
+      fields: ISSUE_FIELD_FIELDS,
+    },
+    {
+      tags: ISSUE_TAGS_FIELDS,
+    },
+    {
+      attachments: ISSUE_ATTACHMENTS_FIELDS,
+    },
     VISIBILITY_FIELDS,
-  ]): any),
+  ]) as any,
   projectOnList: ISSUE_PROJECT_FIELDS,
-  project: (toField([
+  project: toField([
     'id',
     'name',
     'localizedName',
     'shortName',
     'description',
-    {leader: ISSUE_USER_FIELDS},
-    {createdBy: ISSUE_USER_FIELDS},
+    {
+      leader: ISSUE_USER_FIELDS,
+    },
+    {
+      createdBy: ISSUE_USER_FIELDS,
+    },
     'ringId',
-    {fields: PROJECT_CUSTOM_FIELD_FIELDS},
-  ]): any),
-  bundle: (toField([
+    {
+      fields: PROJECT_CUSTOM_FIELD_FIELDS,
+    },
+  ]) as any,
+  bundle: toField([
     'id',
     'isUpdateable',
-    {values: BUNDLE_VALUE},
-    {aggregatedUsers: ISSUE_USER_FIELDS},
-  ]): any),
+    {
+      values: BUNDLE_VALUE,
+    },
+    {
+      aggregatedUsers: ISSUE_USER_FIELDS,
+    },
+  ]) as any,
   bundleValues: BUNDLE_VALUE,
   user: ISSUE_USER_FIELDS,
   issueComment: ISSUE_COMMENTS_FIELDS,
@@ -429,18 +441,13 @@ export default {
   userAgreement: USER_AGREEMENT_FIELDS,
   userConsent: USER_CONSENT_FIELDS,
   getVisibility: GET_VISIBILITY_FIELDS,
-
   ISSUE_USER_FIELDS,
   ISSUE_COMMENTS_FIELDS,
   ISSUE_COMMENTS_REMOVED_FIELDS: ISSUE_COMMENTS_REMOVED,
   ISSUE_XSHORT_FIELDS,
-
   VISIBILITY: VISIBILITY_FIELDS,
-
   ISSUE_TAGS_FIELDS,
-
   reaction: REACTION,
-
   timeTracking: ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS,
   workItems: ISSUE_WORK_ITEMS_FIELDS,
 };

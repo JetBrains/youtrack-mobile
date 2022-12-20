@@ -2,7 +2,6 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 import {secondaryText} from '../common-styles/typography';
 import {title} from '../common-styles/issue';
-
 export const styles = EStyleSheet.create({
   errorContainer: {
     padding: UNIT * 2,

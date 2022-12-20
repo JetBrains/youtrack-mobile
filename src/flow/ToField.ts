@@ -1,7 +1,5 @@
-/* @flow */
-
 export type ToField = {
-  constructor: Function,
-  toString: Function,
-  exclude: Function,
+  constructor: (...args: Array<any>) => any;
+  toString: (...args: Array<any>) => any;
+  exclude: (...args: Array<any>) => any;
 };

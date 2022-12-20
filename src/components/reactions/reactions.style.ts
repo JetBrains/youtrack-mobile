@@ -1,8 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {secondaryText} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
-
 export const styles = EStyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -22,9 +20,5 @@ export const styles = EStyleSheet.create({
     borderRadius: UNIT / 2,
     backgroundColor: '$boxBackground',
   },
-  reactionCount: {
-    ...secondaryText,
-    marginLeft: UNIT / 2,
-    color: '$icon',
-  },
+  reactionCount: {...secondaryText, marginLeft: UNIT / 2, color: '$icon'},
 });

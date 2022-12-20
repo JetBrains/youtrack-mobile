@@ -1,7 +1,4 @@
-/* @flow */
-
 import {combineReducers} from 'redux';
-
 import agile from 'views/agile-board/board-reducers';
 import app from './app-reducer';
 import article from 'views/article/article-reducers';
@@ -15,7 +12,6 @@ import issueList from 'views/issues/issues-reducers';
 import issueModalState from 'views/issue/modal/issue.modal-reducers';
 import issueState from 'views/issue/issue-reducers';
 import inboxThreads from 'views/inbox-threads/inbox-threads-reducers';
-
 import type {AgilePageState} from 'views/agile-board/board-reducers';
 import type {RootState} from './app-reducer';
 import type {ArticleState} from 'views/article/article-reducers';
@@ -28,24 +24,22 @@ import type {State as IssueCommentActivityState} from 'views/issue/activity/issu
 import type {IssuesState} from 'views/issues/issues-reducers';
 import type {IssueState} from 'views/issue/issue-base-reducer';
 import type {InboxThreadState} from 'views/inbox-threads/inbox-threads-reducers';
-
 export type AppState = {
-  agile: AgilePageState,
-  app: RootState,
-  article: ArticleState,
-  articleCreate: ArticleCreateState,
-  articles: KnowledgeBaseState,
-  creation: CreateIssueState,
-  inbox: InboxState,
-  issueActivity: ActivityState,
-  issueCommentActivity: IssueCommentActivityState,
-  issueList: IssuesState,
-  issueState: IssueState,
-  issueModalState: IssueState,
-  inboxThreads: InboxThreadState,
+  agile: AgilePageState;
+  app: RootState;
+  article: ArticleState;
+  articleCreate: ArticleCreateState;
+  articles: KnowledgeBaseState;
+  creation: CreateIssueState;
+  inbox: InboxState;
+  issueActivity: ActivityState;
+  issueCommentActivity: IssueCommentActivityState;
+  issueList: IssuesState;
+  issueState: IssueState;
+  issueModalState: IssueState;
+  inboxThreads: InboxThreadState;
 };
-
-export default (combineReducers({
+export default combineReducers({
   agile,
   app,
   article,
@@ -59,4 +53,4 @@ export default (combineReducers({
   issueState,
   issueModalState,
   inboxThreads,
-}): any);
+}) as any;

@@ -1,30 +1,29 @@
-/* @flow */
-
 import {isActivityCategory} from 'components/activity/activity__category';
 import {i18n} from 'components/i18n/i18n';
-
 import type {Activity} from 'flow/Activity';
 import type {InboxThreadMessage} from 'flow/Inbox';
 
-function getTypes(activity: Activity): {
-  articleCreated: boolean,
-  attach: boolean,
-  comment: boolean,
-  commentText: boolean,
-  customField: boolean,
-  description: boolean,
-  issueCreated: boolean,
-  issueResolved: boolean,
-  link: boolean,
-  project: boolean,
-  sprint: boolean,
-  star: boolean,
-  summary: boolean,
-  tag: boolean,
-  totalVotes: boolean,
-  visibility: boolean,
-  voter: boolean,
-  work: any,
+function getTypes(
+  activity: Activity,
+): {
+  articleCreated: boolean;
+  attach: boolean;
+  comment: boolean;
+  commentText: boolean;
+  customField: boolean;
+  description: boolean;
+  issueCreated: boolean;
+  issueResolved: boolean;
+  link: boolean;
+  project: boolean;
+  sprint: boolean;
+  star: boolean;
+  summary: boolean;
+  tag: boolean;
+  totalVotes: boolean;
+  visibility: boolean;
+  voter: boolean;
+  work: any;
 } {
   return {
     attach: isActivityCategory.attachment(activity),
@@ -48,23 +47,27 @@ function getTypes(activity: Activity): {
   };
 }
 
-
-function createMessagesMap(messages: InboxThreadMessage[] = []): ?{ [string]: Activity } {
+function createMessagesMap(
+  messages: InboxThreadMessage[] = [],
+): Record<string, Activity> | null | undefined {
   if (!messages?.length) {
     return null;
   }
-  const map: { [string]: Object } = {};
+
+  const map: Record<string, Record<string, any>> = {};
   messages.forEach(message => {
-    message.activities && message.activities.forEach(activity => {
-      map[activity.id] = message;
-    });
+    message.activities &&
+      message.activities.forEach(activity => {
+        map[activity.id] = message;
+      });
   });
   return map;
 }
 
 function sortEvents(events: Activity[]): Activity[] {
-  let projectEvent: ?Activity;
+  let projectEvent: Activity | null | undefined;
   let i;
+
   for (i = 0; i < events.length; i++) {
     if (getTypes(events[i]).project) {
       projectEvent = events[i];
@@ -77,7 +80,9 @@ function sortEvents(events: Activity[]): Activity[] {
   }
 
   const sortedEvents = [events[i]];
-  return sortedEvents.concat(events.slice(0, i)).concat(events.slice(i + 1, events.length));
+  return sortedEvents
+    .concat(events.slice(0, i))
+    .concat(events.slice(i + 1, events.length));
 }
 
 const getThreadTabsTitles: () => string[] = () => [
@@ -87,13 +92,11 @@ const getThreadTabsTitles: () => string[] = () => [
 ];
 
 const folderIdAllKey: string = 'all';
-
-const folderIdMap: { [number]: string } = {
+const folderIdMap: Record<number, string> = {
   [0]: undefined,
   [1]: 'direct',
   [2]: 'subscription',
 };
-
 export {
   createMessagesMap,
   folderIdAllKey,

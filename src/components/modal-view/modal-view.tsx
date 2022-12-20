@@ -1,46 +1,31 @@
-/* @flow */
-
 import React, {PureComponent} from 'react';
 import {Modal, View} from 'react-native';
-
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-
 import {ThemeContext} from '../theme/theme-context';
-
 import type {ModalOrientation, ModalAnimationType} from 'flow/ModalView';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
 import {Orientation, AnimationType} from 'flow/ModalView';
-
-
 import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
-
-
 type DefaultProps = {
-  onRequestClose: () => any,
-  supportedOrientations: Array<ModalOrientation>,
-  animationType: ModalAnimationType
-}
-
+  onRequestClose: () => any;
+  supportedOrientations: Array<ModalOrientation>;
+  animationType: ModalAnimationType;
+};
 type Props = {
-  visible?: boolean,
-  transparent?: boolean,
-  animationType?: ModalAnimationType,
-  supportedOrientations?: Array<ModalOrientation>,
-  onRequestClose?: () => any,
-  style?: ?ViewStyleProp,
-  children: any,
-  testID?: string,
-}
-
+  visible?: boolean;
+  transparent?: boolean;
+  animationType?: ModalAnimationType;
+  supportedOrientations?: Array<ModalOrientation>;
+  onRequestClose?: () => any;
+  style?: ViewStyleProp | null | undefined;
+  children: any;
+  testID?: string;
+};
 export default class ModalView extends PureComponent<Props, void> {
   static defaultProps: DefaultProps = {
     onRequestClose: () => {},
-    supportedOrientations: [
-      Orientation.PORTRAIT,
-      Orientation.LANDSCAPE,
-    ],
+    supportedOrientations: [Orientation.PORTRAIT, Orientation.LANDSCAPE],
     animationType: AnimationType.NONE,
   };
 
@@ -55,9 +40,9 @@ export default class ModalView extends PureComponent<Props, void> {
       style = {},
       testID = 'modalView',
     } = this.props;
-
-
-    const baseStyle: ViewStyleProp = {flex: 1};
+    const baseStyle: ViewStyleProp = {
+      flex: 1,
+    };
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
@@ -71,13 +56,17 @@ export default class ModalView extends PureComponent<Props, void> {
               onRequestClose={onRequestClose}
             >
               <SafeAreaProvider>
-                <SafeAreaView style={[
-                  baseStyle,
-                  transparent === true ? null : {backgroundColor: theme.uiTheme.colors.$background},
-                ]}>
-                  <View style={[baseStyle, style]}>
-                    {children}
-                  </View>
+                <SafeAreaView
+                  style={[
+                    baseStyle,
+                    transparent === true
+                      ? null
+                      : {
+                          backgroundColor: theme.uiTheme.colors.$background,
+                        },
+                  ]}
+                >
+                  <View style={[baseStyle, style]}>{children}</View>
                 </SafeAreaView>
               </SafeAreaProvider>
             </Modal>

@@ -1,33 +1,30 @@
-/* @flow */
-
 import React, {useContext} from 'react';
 import {View} from 'react-native';
-
 import Comment from 'components/comment/comment';
 import CommentVisibility from 'components/comment/comment__visibility';
 import IssueVisibility from 'components/visibility/issue-visibility';
 import StreamAttachments from './activity__stream-attachment';
 import {firstActivityChange} from './activity__stream-helper';
 import {ThemeContext} from '../theme/theme-context';
-
 import styles from './activity__stream.styles';
-
 import type {Activity, ActivityStreamCommentActions} from 'flow/Activity';
 import type {Attachment, IssueComment} from 'flow/CustomFields';
 import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {YouTrackWiki} from 'flow/Wiki';
-
-
 type Props = {
-  activity: Activity,
+  activity: Activity;
   attachments?: Array<Attachment>;
   commentActions?: ActivityStreamCommentActions;
   hideVisibility?: boolean;
   youtrackWiki?: YouTrackWiki;
-  onCheckboxUpdate?: (checked: boolean, position: number, comment: IssueComment) => any;
+  onCheckboxUpdate?: (
+    checked: boolean,
+    position: number,
+    comment: IssueComment,
+  ) => any;
   onShowCommentActions?: (comment: IssueComment) => any;
-}
+};
 
 const StreamComment = ({
   activity,
@@ -39,8 +36,10 @@ const StreamComment = ({
   youtrackWiki,
 }: Props): Node => {
   const theme: Theme = useContext(ThemeContext);
+  const comment: IssueComment | null | undefined = firstActivityChange(
+    activity,
+  );
 
-  const comment: ?IssueComment = firstActivityChange(activity);
   if (!comment) {
     return null;
   }
@@ -51,7 +50,11 @@ const StreamComment = ({
       <Comment
         attachments={attachments}
         canDeletePermanently={!!commentActions?.canDeleteCommentPermanently}
-        canRestore={commentActions?.canRestoreComment ? commentActions.canRestoreComment(comment) : false}
+        canRestore={
+          commentActions?.canRestoreComment
+            ? commentActions.canRestoreComment(comment)
+            : false
+        }
         comment={comment}
         key={comment.id}
         onDeletePermanently={() => {
@@ -67,30 +70,32 @@ const StreamComment = ({
         onLongPress={() => onShowCommentActions(comment)}
         uiTheme={theme.uiTheme}
         youtrackWiki={youtrackWiki}
-        onCheckboxUpdate={
-          (checked: boolean, position: number) => (
-            onCheckboxUpdate && comment && onCheckboxUpdate(checked, position, comment)
-          )
+        onCheckboxUpdate={(checked: boolean, position: number) =>
+          onCheckboxUpdate &&
+          comment &&
+          onCheckboxUpdate(checked, position, comment)
         }
       />
 
       {!comment.deleted && commentAttachments.length > 0 && (
-        <View
-          style={styles.activityCommentAttachments}
-        >
-          <StreamAttachments attachments={commentAttachments}/>
+        <View style={styles.activityCommentAttachments}>
+          <StreamAttachments attachments={commentAttachments} />
         </View>
       )}
 
-      {!hideVisibility && !comment.deleted && IssueVisibility.isSecured(comment.visibility) &&
-        <CommentVisibility
-          style={styles.activityVisibility}
-          visibility={IssueVisibility.getVisibilityPresentation(comment.visibility)}
-          color={theme.uiTheme.colors.$iconAccent}
-        />}
+      {!hideVisibility &&
+        !comment.deleted &&
+        IssueVisibility.isSecured(comment.visibility) && (
+          <CommentVisibility
+            style={styles.activityVisibility}
+            visibility={IssueVisibility.getVisibilityPresentation(
+              comment.visibility,
+            )}
+            color={theme.uiTheme.colors.$iconAccent}
+          />
+        )}
     </>
   );
 };
-
 
 export default StreamComment;

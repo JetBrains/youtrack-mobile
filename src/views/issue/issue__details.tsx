@@ -1,8 +1,11 @@
-/* @flow */
-
-import {ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import React, {Component} from 'react';
-
 import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
 import AttachmentsRow from 'components/attachments-row/attachments-row';
 import CustomFieldsPanel from 'components/custom-fields-panel/custom-fields-panel';
@@ -22,17 +25,24 @@ import usage from 'components/usage/usage';
 import VisibilityControl from 'components/visibility/visibility-control';
 import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
 import {getApi} from 'components/api/api__instance';
-import {getEntityPresentation, getReadableID} from 'components/issue-formatter/issue-formatter';
-import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
+import {
+  getEntityPresentation,
+  getReadableID,
+} from 'components/issue-formatter/issue-formatter';
+import {
+  getIssueCustomFieldsNotText,
+  getIssueTextCustomFields,
+} from 'components/custom-field/custom-field-helper';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {i18n} from 'components/i18n/i18n';
 import {isPureHTMLBlock, prepareHTML} from 'components/wiki/markdown-helper';
-import {SkeletonIssueContent, SkeletonIssueInfoLine} from 'components/skeleton/skeleton';
+import {
+  SkeletonIssueContent,
+  SkeletonIssueInfoLine,
+} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 import {ytDate} from 'components/date/date';
-
 import styles from './issue.styles';
-
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
 import type {AnyIssue, IssueFull, IssueOnList} from 'flow/Issue';
 import type {
@@ -49,58 +59,56 @@ import type {ScrollData} from 'flow/Markdown';
 import type {Theme, UITheme} from 'flow/Theme';
 import type {Visibility} from 'flow/Visibility';
 import type {YouTrackWiki} from 'flow/Wiki';
-
-
 export type IssueDetailsProps = {
-  loadIssue: () => any,
-  openNestedIssueView: ({ issue?: IssueFull, issueId?: string }) => any,
-  attachingImage: ?Object,
-  refreshIssue: () => any,
-
-  issuePermissions: IssuePermissions,
-  updateIssueFieldValue: (field: CustomField | CustomFieldText, value: FieldValue) => any,
-  updateProject: (project: IssueProject) => any,
-
-  issue: IssueFull,
-  issuePlaceholder: IssueOnList,
-  issueLoaded: boolean,
-
-  editMode: boolean,
-  isSavingEditedIssue: boolean,
-  summaryCopy: string,
-  descriptionCopy: string,
-  openIssueListWithSearch: (query: string) => any,
-  onTagRemove: (tagId: string) => any,
-  setIssueSummaryCopy: (summary: string) => any,
-  setIssueDescriptionCopy: (description: string) => any,
-
-  analyticCategory: string,
-
-  renderRefreshControl: () => any,
-
-  onVoteToggle: (voted: boolean) => any,
-
-  onSwitchToActivity: () => any,
-
-  onRemoveAttachment: () => any,
-
-  onVisibilityChange: (visibility: Visibility) => any,
-  onAttach: (isVisible: boolean) => any,
-
-  onCheckboxUpdate: (checked: boolean, position: number, description: string) => void,
-  onLongPress: (text: string, title?: string) => void,
-
-  getIssueLinksTitle: (linkedIssues?: Array<IssueLink>) => any,
-  issuesGetter: (linkTypeName: string, q: string) => any,
-  linksGetter: () => any,
-  onUnlink: (linkedIssue: IssueOnList, linkTypeId: string) => any,
-  onLinkIssue: (linkedIssueIdReadable: string, linkTypeName: string) => Promise<boolean>,
-
-  setCustomFieldValue: (field: CustomFieldText, value: CustomFieldTextValue) => any,
-  modal?: boolean,
-  scrollData: ScrollData,
-}
-
+  loadIssue: () => any;
+  openNestedIssueView: (arg0: {issue?: IssueFull; issueId?: string}) => any;
+  attachingImage: Record<string, any> | null | undefined;
+  refreshIssue: () => any;
+  issuePermissions: IssuePermissions;
+  updateIssueFieldValue: (
+    field: CustomField | CustomFieldText,
+    value: FieldValue,
+  ) => any;
+  updateProject: (project: IssueProject) => any;
+  issue: IssueFull;
+  issuePlaceholder: IssueOnList;
+  issueLoaded: boolean;
+  editMode: boolean;
+  isSavingEditedIssue: boolean;
+  summaryCopy: string;
+  descriptionCopy: string;
+  openIssueListWithSearch: (query: string) => any;
+  onTagRemove: (tagId: string) => any;
+  setIssueSummaryCopy: (summary: string) => any;
+  setIssueDescriptionCopy: (description: string) => any;
+  analyticCategory: string;
+  renderRefreshControl: () => any;
+  onVoteToggle: (voted: boolean) => any;
+  onSwitchToActivity: () => any;
+  onRemoveAttachment: () => any;
+  onVisibilityChange: (visibility: Visibility) => any;
+  onAttach: (isVisible: boolean) => any;
+  onCheckboxUpdate: (
+    checked: boolean,
+    position: number,
+    description: string,
+  ) => void;
+  onLongPress: (text: string, title?: string) => void;
+  getIssueLinksTitle: (linkedIssues?: Array<IssueLink>) => any;
+  issuesGetter: (linkTypeName: string, q: string) => any;
+  linksGetter: () => any;
+  onUnlink: (linkedIssue: IssueOnList, linkTypeId: string) => any;
+  onLinkIssue: (
+    linkedIssueIdReadable: string,
+    linkTypeName: string,
+  ) => Promise<boolean>;
+  setCustomFieldValue: (
+    field: CustomFieldText,
+    value: CustomFieldTextValue,
+  ) => any;
+  modal?: boolean;
+  scrollData: ScrollData;
+};
 export default class IssueDetails extends Component<IssueDetailsProps, void> {
   imageHeaders: any = getApi().auth.getAuthorizationHeaders();
   backendUrl: any = getApi().config.backendUrl;
@@ -121,43 +129,52 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     if (nextProps.issue !== this.props.issue) {
       return true;
     }
+
     if (nextProps.editMode !== this.props.editMode) {
       return true;
     }
+
     if (nextProps.isSavingEditedIssue !== this.props.isSavingEditedIssue) {
       return true;
     }
+
     return false;
   }
 
-  renderLinksBlock: (() => void | Node) = () => {
+  renderLinksBlock: () => void | Node = () => {
     const {issuePermissions, getIssueLinksTitle} = this.props;
     const issue: AnyIssue = this.getIssue();
     return (
       <LinkedIssuesTitle
         issueLinks={issue.links}
-        onPress={() => Router.Page({
-          children: (
-            <LinkedIssues
-              issuesGetter={this.props.issuesGetter}
-              linksGetter={this.props.linksGetter}
-              onUnlink={this.props.onUnlink}
-              onLinkIssue={this.props.onLinkIssue}
-              onUpdate={(issues?: Array<IssueLink>) => {
-                getIssueLinksTitle(issues);
-              }}
-              canLink={(
-                issuePermissions.canLink(issue)
-                  ? (linkedIssue: AnyIssue) => issuePermissions.canLink(linkedIssue)
-                  : undefined
-              )}
-              subTitle={`${issue.idReadable} ${issue.summary}`}
-              onHide={() => Router.pop()}
-              onAddLink={(renderChildren: (() => any) => any) => Router.Page({
-                children: renderChildren(),
-              })}
-            />),
-        })}
+        onPress={() =>
+          Router.Page({
+            children: (
+              <LinkedIssues
+                issuesGetter={this.props.issuesGetter}
+                linksGetter={this.props.linksGetter}
+                onUnlink={this.props.onUnlink}
+                onLinkIssue={this.props.onLinkIssue}
+                onUpdate={(issues?: Array<IssueLink>) => {
+                  getIssueLinksTitle(issues);
+                }}
+                canLink={
+                  issuePermissions.canLink(issue)
+                    ? (linkedIssue: AnyIssue) =>
+                        issuePermissions.canLink(linkedIssue)
+                    : undefined
+                }
+                subTitle={`${issue.idReadable} ${issue.summary}`}
+                onHide={() => Router.pop()}
+                onAddLink={(renderChildren: (arg0: () => any) => any) =>
+                  Router.Page({
+                    children: renderChildren(),
+                  })
+                }
+              />
+            ),
+          })
+        }
       />
     );
   };
@@ -168,7 +185,6 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     }
 
     const {onRemoveAttachment, issue, issuePermissions, editMode} = this.props;
-
     return (
       <View style={styles.attachments}>
         <AttachmentsRow
@@ -179,11 +195,15 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
             log.warn('onImageLoadingError', err.nativeEvent);
             this.props.refreshIssue();
           }}
-          canRemoveAttachment={editMode && issuePermissions.canRemoveAttachment(issue)}
+          canRemoveAttachment={
+            editMode && issuePermissions.canRemoveAttachment(issue)
+          }
           onRemoveImage={onRemoveAttachment}
-          onOpenAttachment={(type) => usage.trackEvent(
-            this.props.analyticCategory,
-            type === 'image' ? 'Showing image' : 'Open attachment by URL')
+          onOpenAttachment={type =>
+            usage.trackEvent(
+              this.props.analyticCategory,
+              type === 'image' ? 'Showing image' : 'Open attachment by URL',
+            )
           }
           uiTheme={this.uiTheme}
         />
@@ -193,7 +213,6 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
 
   renderIssueVotes(): Node {
     const {issue, issuePermissions, onVoteToggle} = this.props;
-
     return (
       <View style={styles.issueVote}>
         <IssueVotes
@@ -209,24 +228,23 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
 
   renderAdditionalInfo(): null | Node {
     const issue: AnyIssue = this.getIssue();
-    return (
-      issue
-        ? <View style={styles.issueTopPanel}>
-          <Text
-            style={styles.issueTopPanelText}
-            selectable={true}
-          >
-            {i18n('Created by')} {getEntityPresentation(issue.reporter)} {ytDate(issue?.created)}
-          </Text>
+    return issue ? (
+      <View style={styles.issueTopPanel}>
+        <Text style={styles.issueTopPanelText} selectable={true}>
+          {i18n('Created by')} {getEntityPresentation(issue.reporter)}{' '}
+          {ytDate(issue?.created)}
+        </Text>
 
-          <Text
-            style={[styles.issueTopPanelText, styles.topPanelUpdatedInformation]}
-            selectable={true}
-          >
-            {i18n('Updated by')} {getEntityPresentation(issue.updater)} {ytDate(issue?.updated)}
-          </Text>
-        </View>
-        : <SkeletonIssueInfoLine lines={2}/>
+        <Text
+          style={[styles.issueTopPanelText, styles.topPanelUpdatedInformation]}
+          selectable={true}
+        >
+          {i18n('Updated by')} {getEntityPresentation(issue.updater)}{' '}
+          {ytDate(issue?.updated)}
+        </Text>
+      </View>
+    ) : (
+      <SkeletonIssueInfoLine lines={2} />
     );
   }
 
@@ -247,35 +265,42 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
       );
     }
 
-    return <SkeletonIssueInfoLine/>;
+    return <SkeletonIssueInfoLine />;
   }
 
   renderIssueTextFields(): Node {
     const {editMode, onLongPress, setCustomFieldValue} = this.props;
     const issue: AnyIssue = this.getIssue();
-    return getIssueTextCustomFields(issue.fields).map((textField: CustomFieldText, index: number) => {
-      return (
-        <TouchableWithoutFeedback
-          key={`issueCustomFieldText${index}`}
-          onLongPress={() => {textField?.value?.text && onLongPress(textField.value.text, i18n('Copy field text'));}}
-          delayLongPress={250}
-        >
-          <View>
-            <IssueCustomFieldText
-              editMode={editMode}
-              onUpdateFieldValue={async (text: string): Promise<void> => {
-                setCustomFieldValue(textField, {
-                  ...(textField.value || {id: undefined}),
-                  text,
-                });
-              }}
-              textField={textField}
-              usesMarkdown={issue.usesMarkdown}
-            />
-          </View>
-        </TouchableWithoutFeedback>
-      );
-    });
+    return getIssueTextCustomFields(issue.fields).map(
+      (textField: CustomFieldText, index: number) => {
+        return (
+          <TouchableWithoutFeedback
+            key={`issueCustomFieldText${index}`}
+            onLongPress={() => {
+              textField?.value?.text &&
+                onLongPress(textField.value.text, i18n('Copy field text'));
+            }}
+            delayLongPress={250}
+          >
+            <View>
+              <IssueCustomFieldText
+                editMode={editMode}
+                onUpdateFieldValue={async (text: string): Promise<void> => {
+                  setCustomFieldValue(textField, {
+                    ...(textField.value || {
+                      id: undefined,
+                    }),
+                    text,
+                  });
+                }}
+                textField={textField}
+                usesMarkdown={issue.usesMarkdown}
+              />
+            </View>
+          </TouchableWithoutFeedback>
+        );
+      },
+    );
   }
 
   renderMarkdown() {
@@ -285,46 +310,57 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
       onCheckboxUpdate,
       scrollData,
     } = this.props;
+
     if (!issue) {
       return null;
     }
 
-    if (issue.description && (issue.hasEmail || isPureHTMLBlock(issue.description))) {
-      return (
-        <HTML html={prepareHTML(issue.description)}/>
-      );
+    if (
+      issue.description &&
+      (issue.hasEmail || isPureHTMLBlock(issue.description))
+    ) {
+      return <HTML html={prepareHTML(issue.description)} />;
     }
 
     const ytWikiProps: {
-      youtrackWiki: YouTrackWiki,
-      attachments: Array<Attachment>,
+      youtrackWiki: YouTrackWiki;
+      attachments: Array<Attachment>;
     } = {
       youtrackWiki: {
         style: styles.description,
         backendUrl: this.backendUrl,
         attachments: issue.attachments,
         imageHeaders: this.imageHeaders,
-        onIssueIdTap: (issueId: string) => openNestedIssueView({issueId}),
+        onIssueIdTap: (issueId: string) =>
+          openNestedIssueView({
+            issueId,
+          }),
         title: getReadableID(issue),
         description: issue.wikifiedDescription,
       },
       attachments: issue.attachments,
     };
-    return <IssueMarkdown
-      {...ytWikiProps}
-      scrollData={scrollData}
-      attachments={issue.attachments}
-      markdown={issue.usesMarkdown ? issue.description : null}
-      onCheckboxUpdate={(checked: boolean, position: number, description: string) => onCheckboxUpdate(
-        checked, position, description)}
-    />;
+    return (
+      <IssueMarkdown
+        {...ytWikiProps}
+        scrollData={scrollData}
+        attachments={issue.attachments}
+        markdown={issue.usesMarkdown ? issue.description : null}
+        onCheckboxUpdate={(
+          checked: boolean,
+          position: number,
+          description: string,
+        ) => onCheckboxUpdate(checked, position, description)}
+      />
+    );
   }
 
   renderIssueContent(): Node {
     const {openIssueListWithSearch, onTagRemove, onLongPress} = this.props;
     const issue: AnyIssue = this.getIssue();
+
     if (!issue) {
-      return <SkeletonIssueContent/>;
+      return <SkeletonIssueContent />;
     }
 
     return (
@@ -332,31 +368,33 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         <Text
           style={[styles.summary, issue.resolved && styles.summaryResolved]}
           selectable={true}
-          testID="issue-summary">
+          testID="issue-summary"
+        >
           {issue.summary}
         </Text>
 
-        {Boolean(issue?.tags?.length) && <Tags
-          style={styles.tags}
-          multiline={true}
-          tags={issue?.tags}
-          onTagPress={openIssueListWithSearch}
-          onTagRemove={onTagRemove}
-        />}
-
+        {Boolean(issue?.tags?.length) && (
+          <Tags
+            style={styles.tags}
+            multiline={true}
+            tags={issue?.tags}
+            onTagPress={openIssueListWithSearch}
+            onTagRemove={onTagRemove}
+          />
+        )}
 
         {this.renderLinksBlock()}
 
         <TouchableWithoutFeedback
-          onLongPress={() => {onLongPress(issue.description, i18n('Copy description'));}}
+          onLongPress={() => {
+            onLongPress(issue.description, i18n('Copy description'));
+          }}
           delayLongPress={250}
           testID="test:id/issue-description"
           accessibilityLabel="issue-description"
           accessible={true}
         >
-          <View style={styles.description}>
-            {this.renderMarkdown()}
-          </View>
+          <View style={styles.description}>{this.renderMarkdown()}</View>
         </TouchableWithoutFeedback>
 
         {this.renderIssueTextFields()}
@@ -366,26 +404,25 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
 
   renderIssueEditContent(): Node {
     const {isSavingEditedIssue, summaryCopy, descriptionCopy} = this.props;
-
-    return <>
-      <SummaryDescriptionForm
-        analyticsId={ANALYTICS_ISSUE_PAGE}
-        editable={!isSavingEditedIssue}
-        summary={summaryCopy}
-        description={descriptionCopy}
-        onSummaryChange={this.props.setIssueSummaryCopy}
-        onDescriptionChange={this.props.setIssueDescriptionCopy}
-      />
-      {this.renderIssueTextFields()}
-    </>;
+    return (
+      <>
+        <SummaryDescriptionForm
+          analyticsId={ANALYTICS_ISSUE_PAGE}
+          editable={!isSavingEditedIssue}
+          summary={summaryCopy}
+          description={descriptionCopy}
+          onSummaryChange={this.props.setIssueSummaryCopy}
+          onDescriptionChange={this.props.setIssueDescriptionCopy}
+        />
+        {this.renderIssueTextFields()}
+      </>
+    );
   }
 
   renderIssueView(): Node {
     const {issue, editMode, onAttach} = this.props;
-
     return (
       <View style={styles.issueView}>
-
         <View style={styles.issueTopActions}>
           {this.renderIssueVisibility()}
           {this.renderIssueVotes()}
@@ -397,16 +434,14 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
 
         {editMode && (
           <>
-            <Separator fitWindow indent/>
-            <AttachmentAddPanel
-              showAddAttachDialog={() => onAttach(true)}
-            />
+            <Separator fitWindow indent />
+            <AttachmentAddPanel showAddAttachDialog={() => onAttach(true)} />
           </>
         )}
 
         {issue?.attachments && this.renderAttachments(issue.attachments)}
 
-        {editMode && <KeyboardSpacerIOS/>}
+        {editMode && <KeyboardSpacerIOS />}
       </View>
     );
   }
@@ -415,52 +450,60 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     return this.props.issue || this.props.issuePlaceholder;
   }
 
-  getIssuePermissions: (() => IssuePermissions) = (): IssuePermissions => {
+  getIssuePermissions: () => IssuePermissions = (): IssuePermissions => {
     const noop = () => false;
-    return this.props.issuePermissions || {
-      canCreateIssueToProject: noop,
-      canUpdateField: noop,
-      canUpdateGeneralInfo: noop,
-      canEditProject: noop,
-    };
+
+    return (
+      this.props.issuePermissions || {
+        canCreateIssueToProject: noop,
+        canUpdateField: noop,
+        canUpdateGeneralInfo: noop,
+        canEditProject: noop,
+      }
+    );
   };
-
-  canUpdateField: ((field: CustomField) => any) = (field: CustomField) => this.getIssuePermissions().canUpdateField(this.getIssue(), field);
-
-  canCreateIssueToProject: ((project: IssueProject) => any) = (project: IssueProject) => this.getIssuePermissions().canCreateIssueToProject(project);
-
-  onFieldUpdate: ((field: CustomField | CustomFieldText, value: any) => Promise<any>) = async (field: CustomField | CustomFieldText, value: any) => await this.props.updateIssueFieldValue(field, value);
-
-  onUpdateProject: ((project: IssueProject) => Promise<any>) = async (project: IssueProject) => await this.props.updateProject(project);
-
-  renderCustomFieldPanel: (() => Node) = () => {
+  canUpdateField: (field: CustomField) => any = (field: CustomField) =>
+    this.getIssuePermissions().canUpdateField(this.getIssue(), field);
+  canCreateIssueToProject: (project: IssueProject) => any = (
+    project: IssueProject,
+  ) => this.getIssuePermissions().canCreateIssueToProject(project);
+  onFieldUpdate: (
+    field: CustomField | CustomFieldText,
+    value: any,
+  ) => Promise<any> = async (
+    field: CustomField | CustomFieldText,
+    value: any,
+  ) => await this.props.updateIssueFieldValue(field, value);
+  onUpdateProject: (project: IssueProject) => Promise<any> = async (
+    project: IssueProject,
+  ) => await this.props.updateProject(project);
+  renderCustomFieldPanel: () => Node = () => {
     const _issue: AnyIssue = this.getIssue();
 
-    return <CustomFieldsPanel
-      analyticsId={ANALYTICS_ISSUE_PAGE}
-      autoFocusSelect
-
-      issueId={_issue?.id}
-      issueProject={_issue?.project}
-      fields={getIssueCustomFieldsNotText(_issue?.fields || [])}
-
-      hasPermission={{
-        canUpdateField: this.canUpdateField,
-        canCreateIssueToProject: this.canCreateIssueToProject,
-        canEditProject: this.getIssuePermissions().canUpdateGeneralInfo(_issue),
-      }}
-
-      onUpdate={this.onFieldUpdate}
-      onUpdateProject={this.onUpdateProject}
-
-      uiTheme={this.uiTheme}
-      modal={this.props.modal}
-    />;
+    return (
+      <CustomFieldsPanel
+        analyticsId={ANALYTICS_ISSUE_PAGE}
+        autoFocusSelect
+        issueId={_issue?.id}
+        issueProject={_issue?.project}
+        fields={getIssueCustomFieldsNotText(_issue?.fields || [])}
+        hasPermission={{
+          canUpdateField: this.canUpdateField,
+          canCreateIssueToProject: this.canCreateIssueToProject,
+          canEditProject: this.getIssuePermissions().canUpdateGeneralInfo(
+            _issue,
+          ),
+        }}
+        onUpdate={this.onFieldUpdate}
+        onUpdateProject={this.onUpdateProject}
+        uiTheme={this.uiTheme}
+        modal={this.props.modal}
+      />
+    );
   };
 
   renderContent(): Node {
     const {renderRefreshControl, onSwitchToActivity} = this.props;
-
     return (
       <ScrollView
         refreshControl={renderRefreshControl()}
@@ -476,9 +519,10 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
           hitSlop={HIT_SLOP}
           onPress={onSwitchToActivity}
         >
-          <Text style={styles.switchToActivityButtonText}>{i18n('View comments and other activity')}</Text>
+          <Text style={styles.switchToActivityButtonText}>
+            {i18n('View comments and other activity')}
+          </Text>
         </TouchableOpacity>
-
       </ScrollView>
     );
   }

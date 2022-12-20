@@ -1,9 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {SELECT_ITEM_HEIGHT} from '../select/select.styles';
 import {UNIT} from '../variables/variables';
 import {mainText} from '../common-styles/typography';
-
 export const articleItemWithChildrenStyles = {
   row: {
     flex: 1,
@@ -15,11 +13,7 @@ export const articleItemWithChildrenStyles = {
     height: SELECT_ITEM_HEIGHT,
     backgroundColor: '$background',
   },
-  articleTitleText: {
-    ...mainText,
-    maxWidth: '87%',
-    color: '$text',
-  },
+  articleTitleText: {...mainText, maxWidth: '87%', color: '$text'},
   icon: {
     color: '$icon',
   },
@@ -45,14 +39,9 @@ export const articleItemWithChildrenStyles = {
     borderRadius: UNIT,
     backgroundColor: '$boxBackground',
   },
-  itemButtonText: {
-    ...mainText,
-    paddingRight: UNIT,
-    color: '$icon',
-  },
+  itemButtonText: {...mainText, paddingRight: UNIT, color: '$icon'},
   itemButtonIcon: {
     marginTop: -1,
   },
 };
-
 export default EStyleSheet.create(articleItemWithChildrenStyles);

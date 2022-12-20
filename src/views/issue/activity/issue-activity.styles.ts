@@ -1,18 +1,14 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {MAIN_FONT_SIZE} from 'components/common-styles/typography';
 import {UNIT} from 'components/variables/variables';
-
 export default EStyleSheet.create({
   container: {
     flex: 1,
   },
-
   activities: {
     flexDirection: 'column',
     flex: 1,
   },
-
   settingsButton: {
     alignSelf: 'center',
     flexDirection: 'row',
@@ -43,7 +39,6 @@ export default EStyleSheet.create({
     fontSize: MAIN_FONT_SIZE,
     fontWeight: '500',
   },
-
   reactionContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',

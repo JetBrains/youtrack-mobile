@@ -1,11 +1,14 @@
-/* @flow */
-
 import type {Node} from 'react';
-import {View, TouchableOpacity, Text, TextInput, FlatList, ActivityIndicator} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  TextInput,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import React, {Component} from 'react';
-
 import debounce from 'lodash.debounce';
-
 import ApiHelper from '../api/api__helper';
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
 import ModalPortal from '../modal-view/modal-portal';
@@ -14,33 +17,30 @@ import SelectItem from '../select/select__item';
 import {i18n} from 'components/i18n/i18n';
 import {guid} from 'util/util';
 import {IconBack, IconCheck} from '../icon/icon';
-
 import styles from './command-dialog.styles';
-
-import type {CommandSuggestionResponse, CommandSuggestion, SuggestedCommand} from 'flow/Issue';
+import type {
+  CommandSuggestionResponse,
+  CommandSuggestion,
+  SuggestedCommand,
+} from 'flow/Issue';
 import type {UITheme} from 'flow/Theme';
-
 type Props = {
-  suggestions: ?CommandSuggestionResponse,
-  initialCommand: string,
-  onApply: (command: string) => any,
-  onChange: (command: string, caret: number) => any,
-  isApplying: boolean,
-  onCancel: Function,
-  uiTheme: UITheme,
+  suggestions: CommandSuggestionResponse | null | undefined;
+  initialCommand: string;
+  onApply: (command: string) => any;
+  onChange: (command: string, caret: number) => any;
+  isApplying: boolean;
+  onCancel: (...args: Array<any>) => any;
+  uiTheme: UITheme;
 };
-
 type State = {
-  displayCancelSearch: boolean,
-  input: string,
-  caret: number
-}
-
+  displayCancelSearch: boolean;
+  input: string;
+  caret: number;
+};
 type DefaultProps = {
-  onChange: Function
-}
-
-
+  onChange: (...args: Array<any>) => any;
+};
 export default class CommandDialog extends Component<Props, State> {
   static defaultProps: DefaultProps = {
     onChange: () => {},
@@ -50,48 +50,79 @@ export default class CommandDialog extends Component<Props, State> {
     input: '',
     caret: 0,
   };
-  lastUsedParams: { command: ?string, caret: number } = {command: null, caret: 0};
+  lastUsedParams: {
+    command: string | null | undefined;
+    caret: number;
+  } = {
+    command: null,
+    caret: 0,
+  };
   onSearch: any = debounce((command: string, caret: number) => {
-    if (this.lastUsedParams.command === command && this.lastUsedParams.caret === caret) {
+    if (
+      this.lastUsedParams.command === command &&
+      this.lastUsedParams.caret === caret
+    ) {
       return;
     }
-    this.lastUsedParams = {command, caret};
 
-    this.setState({input: command, caret});
+    this.lastUsedParams = {
+      command,
+      caret,
+    };
+    this.setState({
+      input: command,
+      caret,
+    });
     this.props.onChange(command, caret);
   }, 150);
 
   componentDidMount() {
     const {initialCommand} = this.props;
+
     if (initialCommand) {
-      this.setState({input: initialCommand, caret: initialCommand.length});
+      this.setState({
+        input: initialCommand,
+        caret: initialCommand.length,
+      });
     }
 
     this.onSearch(initialCommand, initialCommand.length);
   }
 
-  onApplySuggestion: ((suggestion: CommandSuggestion) => void) = (suggestion: CommandSuggestion) => {
-    const suggestionText = `${suggestion.prefix || ''}${suggestion.option}${suggestion.suffix || ''}`;
+  onApplySuggestion: (suggestion: CommandSuggestion) => void = (
+    suggestion: CommandSuggestion,
+  ) => {
+    const suggestionText = `${suggestion.prefix || ''}${suggestion.option}${
+      suggestion.suffix || ''
+    }`;
     const oldQuery = this.state.input || '';
-    const newQuery = oldQuery.substring(0, suggestion.completionStart) + suggestionText + oldQuery.substring(suggestion.completionEnd);
-    this.setState({input: newQuery});
+    const newQuery =
+      oldQuery.substring(0, suggestion.completionStart) +
+      suggestionText +
+      oldQuery.substring(suggestion.completionEnd);
+    this.setState({
+      input: newQuery,
+    });
     this.onSearch(newQuery, suggestion.caret);
   };
-
-  onApply: (() => void) = () => {
+  onApply: () => void = () => {
     this.props.onApply(this.state.input);
   };
 
   canApplyCommand(): boolean {
     const {input} = this.state;
     const {isApplying, suggestions} = this.props;
-    return !!input && !isApplying && !!suggestions && suggestions.commands.every(command => !command.error);
+    return (
+      !!input &&
+      !isApplying &&
+      !!suggestions &&
+      suggestions.commands.every(command => !command.error)
+    );
   }
 
   _renderInput() {
     const {input} = this.state;
     const {isApplying, uiTheme} = this.props;
-
     return (
       <TextInput
         style={styles.searchInput}
@@ -111,8 +142,14 @@ export default class CommandDialog extends Component<Props, State> {
         onSubmitEditing={() => {
           this.canApplyCommand() && this.onApply();
         }}
-        onChangeText={text => this.setState({input: text})}
-        onSelectionChange={event => this.onSearch(input, event.nativeEvent.selection.start)}
+        onChangeText={text =>
+          this.setState({
+            input: text,
+          })
+        }
+        onSelectionChange={event =>
+          this.onSearch(input, event.nativeEvent.selection.start)
+        }
       />
     );
   }
@@ -120,19 +157,27 @@ export default class CommandDialog extends Component<Props, State> {
   _renderCommandPreview() {
     const {suggestions} = this.props;
     const {input} = this.state;
+
     if (!suggestions || !input) {
       return null;
     }
 
     return (
       <View style={styles.commandPreview}>
-        {suggestions.commands.map((command: SuggestedCommand, index: number) => (
-          <View key={command.description}>
-            <Text style={[styles.commandDescription, command.error && styles.commandDescriptionError]}>
-              {index + 1}: {ApiHelper.stripHtml(command.description)}
-            </Text>
-          </View>
-        ))}
+        {suggestions.commands.map(
+          (command: SuggestedCommand, index: number) => (
+            <View key={command.description}>
+              <Text
+                style={[
+                  styles.commandDescription,
+                  command.error && styles.commandDescriptionError,
+                ]}
+              >
+                {index + 1}: {ApiHelper.stripHtml(command.description)}
+              </Text>
+            </View>
+          ),
+        )}
       </View>
     );
   }
@@ -143,7 +188,9 @@ export default class CommandDialog extends Component<Props, State> {
         item={suggestion}
         titleRenderer={() => (
           <View style={styles.suggestion}>
-            <Text numberOfLines={2} style={styles.suggestionDescription}>{suggestion.description}</Text>
+            <Text numberOfLines={2} style={styles.suggestionDescription}>
+              {suggestion.description}
+            </Text>
             <Text style={styles.suggestionText}>{suggestion.option}</Text>
           </View>
         )}
@@ -161,7 +208,7 @@ export default class CommandDialog extends Component<Props, State> {
           <FlatList
             data={suggestions.suggestions}
             keyExtractor={guid}
-            renderItem={(listItem) => this._renderSuggestion(listItem.item)}
+            renderItem={listItem => this._renderSuggestion(listItem.item)}
             keyboardShouldPersistTaps="handled"
           />
         )}
@@ -172,18 +219,16 @@ export default class CommandDialog extends Component<Props, State> {
   renderContent(): Node {
     const {isApplying, uiTheme} = this.props;
     const canApply = this.canApplyCommand();
-
     return (
       <View style={styles.container}>
         <View style={styles.inputWrapper}>
-
           <TouchableOpacity
             testID="test:id/selectBackButton"
             accessibilityLabel="selectBackButton"
             accessible={true}
             onPress={this.props.onCancel}
           >
-            <IconBack size={28}/>
+            <IconBack size={28} />
           </TouchableOpacity>
 
           {this._renderInput()}
@@ -196,42 +241,36 @@ export default class CommandDialog extends Component<Props, State> {
             style={styles.applyButton}
             onPress={() => this.onApply()}
           >
-            {isApplying ? <ActivityIndicator color={uiTheme.colors.$link}/> : (
+            {isApplying ? (
+              <ActivityIndicator color={uiTheme.colors.$link} />
+            ) : (
               <IconCheck
                 size={20}
-                color={canApply ? uiTheme.colors.$link : uiTheme.colors.$disabled}
+                color={
+                  canApply ? uiTheme.colors.$link : uiTheme.colors.$disabled
+                }
               />
             )}
           </TouchableOpacity>
-
         </View>
 
         {this._renderCommandPreview()}
 
         {this._renderSuggestions()}
 
-        {<KeyboardSpacerIOS/>}
+        {<KeyboardSpacerIOS />}
       </View>
     );
   }
 
   render(): Node {
-    return (
-      <ModalView
-        animationType="slide"
-      >
-        {this.renderContent()}
-      </ModalView>
-    );
+    return <ModalView animationType="slide">{this.renderContent()}</ModalView>;
   }
 }
-
 export class CommandDialogModal extends CommandDialog {
   render(): Node {
     return (
-      <ModalPortal
-        onHide={this.props.onCancel}
-      >
+      <ModalPortal onHide={this.props.onCancel}>
         {this.renderContent()}
       </ModalPortal>
     );

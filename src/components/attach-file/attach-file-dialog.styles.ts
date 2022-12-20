@@ -1,11 +1,7 @@
-/* @flow */
-
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {headerTitle, mainText} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
-
-export default (EStyleSheet.create({
+export default EStyleSheet.create({
   container: {
     height: '100%',
     backgroundColor: '$background',
@@ -25,10 +21,7 @@ export default (EStyleSheet.create({
   imagePreview: {
     marginTop: UNIT,
   },
-  title: {
-    ...headerTitle,
-    color: '$text',
-  },
+  title: {...headerTitle, color: '$text'},
   button: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -39,10 +32,7 @@ export default (EStyleSheet.create({
     marginRight: UNIT * 2,
     color: '$iconAccent',
   },
-  buttonText: {
-    ...mainText,
-    color: '$text',
-  },
+  buttonText: {...mainText, color: '$text'},
   visibilityButton: {
     marginVertical: UNIT,
     marginLeft: UNIT * 2,
@@ -53,5 +43,4 @@ export default (EStyleSheet.create({
   disabled: {
     color: '$disabled',
   },
-
-}): any);
+}) as any;

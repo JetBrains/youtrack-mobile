@@ -1,11 +1,7 @@
 import {StyleSheet} from 'react-native';
-
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {boxShadow} from '../common-styles/shadow';
-
 const borderRadius = 22;
-
 export default EStyleSheet.create({
   container: {
     flex: 1,

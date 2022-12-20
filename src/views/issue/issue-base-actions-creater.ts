@@ -1,7 +1,4 @@
-/* @flow */
-
 import {Clipboard, Share} from 'react-native';
-
 import * as commandDialogHelper from 'components/command-dialog/command-dialog-helper';
 import ApiHelper from 'components/api/api__helper';
 import issueCommonLinksActions from 'components/issue-actions/issue-links-actions';
@@ -9,7 +6,10 @@ import log from 'components/log/log';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
-import {getEntityPresentation, getReadableID} from 'components/issue-formatter/issue-formatter';
+import {
+  getEntityPresentation,
+  getReadableID,
+} from 'components/issue-formatter/issue-formatter';
 import {getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {initialState} from './issue-base-reducer';
@@ -19,37 +19,59 @@ import {notify, notifyError} from 'components/notification/notification';
 import {receiveUserAppearanceProfile} from 'actions/app-actions';
 import {resolveError} from 'components/error/error-resolver';
 import {showActions} from 'components/action-sheet/action-sheet';
-
 import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
-import type {Attachment, CustomField, CustomFieldText, FieldValue, IssueProject, Tag} from 'flow/CustomFields';
-import type {AnyIssue, CommandSuggestionResponse, IssueFull, IssueOnList, OpenNestedViewParams} from 'flow/Issue';
+import type {
+  Attachment,
+  CustomField,
+  CustomFieldText,
+  FieldValue,
+  IssueProject,
+  Tag,
+} from 'flow/CustomFields';
+import type {
+  AnyIssue,
+  CommandSuggestionResponse,
+  IssueFull,
+  IssueOnList,
+  OpenNestedViewParams,
+} from 'flow/Issue';
 import type {IssueLink} from 'flow/CustomFields';
 import type {IssueState} from './issue-base-reducer';
 import type {NormalizedAttachment} from 'flow/Attachment';
 import type {UserAppearanceProfile} from 'flow/User';
 import type {Visibility} from 'flow/Visibility';
-
 type ApiGetter = () => Api;
 type StateGetter = () => IssueState;
 
-function makeIssueWebUrl(api: Api, issue: IssueFull, commentId: ?string) {
+function makeIssueWebUrl(
+  api: Api,
+  issue: IssueFull,
+  commentId: string | null | undefined,
+) {
   const commentHash = commentId ? `#comment=${commentId}` : '';
   return `${api.config.backendUrl}/issue/${issue.idReadable}${commentHash}`;
 }
 
 export const DEFAULT_ISSUE_STATE_FIELD_NAME: string = 'issueState';
-
-export const createActions = (dispatchActions: any, stateFieldName: string = DEFAULT_ISSUE_STATE_FIELD_NAME) : any => {
+export const createActions = (
+  dispatchActions: any,
+  stateFieldName: string = DEFAULT_ISSUE_STATE_FIELD_NAME,
+): any => {
   const actions = {
     loadIssueAttachments: function (): (
-      dispatch: (any) => any,
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
+      getApi: ApiGetter,
     ) => Promise<void> {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
         const issueId = getState()[stateFieldName].issueId;
+
         if (!issueId) {
           return;
         }
@@ -62,55 +84,81 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
         }
       };
     },
-
     loadIssueLinksTitle: function (): (
-      dispatch: (any) => any,
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
+      getApi: ApiGetter,
     ) => Promise<Array<IssueLink>> {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
         const issue: IssueFull = getState()[stateFieldName].issue;
         return await issueCommonLinksActions(issue).loadIssueLinksTitle();
       };
     },
-
-    getIssueLinksTitle: function (links?: Array<IssueLink>): ((
-      dispatch: (any) => any,
+    getIssueLinksTitle: function (
+      links?: Array<IssueLink>,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
-    ) => Promise<void>) {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
-        dispatch(dispatchActions.receiveIssueLinks(links || await dispatch(actions.loadIssueLinksTitle())));
+      getApi: ApiGetter,
+    ) => Promise<void> {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
+        dispatch(
+          dispatchActions.receiveIssueLinks(
+            links || (await dispatch(actions.loadIssueLinksTitle())),
+          ),
+        );
       };
     },
-
-    loadIssue: function (issuePlaceholder: ?$Shape<IssueFull>): ((
-      dispatch: (any) => any,
+    loadIssue: function (
+      issuePlaceholder: Partial<IssueFull> | null | undefined,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
-    ) => Promise<IssueFull | void>) {
-      return async (dispatch: (any) => any, getState: AppState, getApi: ApiGetter) => {
+      getApi: ApiGetter,
+    ) => Promise<IssueFull | void> {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: AppState,
+        getApi: ApiGetter,
+      ) => {
         const issueId = getState()[stateFieldName].issueId;
         const api: Api = getApi();
+
         const doUpdate = (issue: AnyIssue): void => {
-          dispatch(dispatchActions.setIssueId(issue.id));//Set issue ID again because first one could be readable id
+          dispatch(dispatchActions.setIssueId(issue.id)); //Set issue ID again because first one could be readable id
+
           dispatch(dispatchActions.receiveIssue(issue));
           dispatch(actions.getIssueLinksTitle());
         };
+
         const updateCache = (issue: AnyIssue) => {
-          const updatedCache: Array<AnyIssue> = (getStorageState().issuesCache || []).map((it: AnyIssue) => {
+          const updatedCache: Array<AnyIssue> = (
+            getStorageState().issuesCache || []
+          ).map((it: AnyIssue) => {
             if (it.id === issue.id) {
               return {...it, ...issue};
             }
+
             return it;
           });
-          flushStoragePart({issuesCache: updatedCache});
+          flushStoragePart({
+            issuesCache: updatedCache,
+          });
         };
 
         try {
           if (!issueId) {
             throw new Error('Attempt to load issue with no ID');
           }
+
           log.debug(`Loading issue "${issueId}"`);
           const issue = await api.issue.getIssue(issueId);
           log.info(`Issue "${issueId}" loaded`);
@@ -120,9 +168,10 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           return issue;
         } catch (err) {
           if (getState().app?.networkState?.isConnected === false) {
-            const cachedIssue: ?AnyIssue = (getStorageState().issuesCache || []).find((issue: AnyIssue) => {
-              return issue.id === issueId || issue.idReadable === issueId;
-            }) || issuePlaceholder;
+            const cachedIssue: AnyIssue | null | undefined =
+              (getStorageState().issuesCache || []).find((issue: AnyIssue) => {
+                return issue.id === issueId || issue.idReadable === issueId;
+              }) || issuePlaceholder;
             cachedIssue && doUpdate(cachedIssue);
           } else {
             log.warn('Failed to load issue', error);
@@ -132,72 +181,109 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
         }
       };
     },
-
     loadLinkedIssues: function (): (
-      dispatch: (any) => any,
+      dispatch: (arg0: any) => any,
       getState: () => AppState,
       getApi: ApiGetter,
     ) => Promise<Array<IssueLink>> {
-      return async (dispatch: (any) => any, getState: () => AppState, getApi: ApiGetter) => {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: () => AppState,
+        getApi: ApiGetter,
+      ) => {
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Load linked issue');
         const issue: IssueFull = getState()[stateFieldName].issue;
         return await issueCommonLinksActions(issue).loadLinkedIssues();
       };
     },
-
-    onUnlinkIssue: function (linkedIssue: IssueOnList, linkTypeId: string): (
-      dispatch: (any) => any,
+    onUnlinkIssue: function (
+      linkedIssue: IssueOnList,
+      linkTypeId: string,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
       getApi: ApiGetter,
     ) => Promise<boolean> {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
         const issue: IssueFull = getState()[stateFieldName].issue;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Remove linked issue');
-        return issueCommonLinksActions(issue).onUnlinkIssue(linkedIssue, linkTypeId);
+        return issueCommonLinksActions(issue).onUnlinkIssue(
+          linkedIssue,
+          linkTypeId,
+        );
       };
     },
-
-    loadIssuesXShort: function (linkTypeName: string, query: string = '', page?: number): (
-      dispatch: (any) => any,
+    loadIssuesXShort: function (
+      linkTypeName: string,
+      query: string = '',
+      page?: number,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
       getApi: ApiGetter,
     ) => Promise<IssueOnList> {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Search to link issues');
         const issue: IssueFull = getState()[stateFieldName].issue;
-        const searchQuery: string = encodeURIComponent([
-          `(project:${issue.project.shortName})`,
-          query.length > 0 ? `(${query})` : '',
-          `(${linkTypeName.split(' ').join(' ')}: -${getReadableID(issue)})`,
-        ].filter(Boolean).join(' and '));
-        return await issueCommonLinksActions(issue).loadIssuesXShort(searchQuery, page);
+        const searchQuery: string = encodeURIComponent(
+          [
+            `(project:${issue.project.shortName})`,
+            query.length > 0 ? `(${query})` : '',
+            `(${linkTypeName.split(' ').join(' ')}: -${getReadableID(issue)})`,
+          ]
+            .filter(Boolean)
+            .join(' and '),
+        );
+        return await issueCommonLinksActions(issue).loadIssuesXShort(
+          searchQuery,
+          page,
+        );
       };
     },
-
-    onLinkIssue: function (linkedIssueIdReadable: string, linkTypeName: string): (
-      dispatch: (any) => any,
+    onLinkIssue: function (
+      linkedIssueIdReadable: string,
+      linkTypeName: string,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
       getApi: ApiGetter,
     ) => Promise<boolean> {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
         const issue: IssueFull = getState()[stateFieldName].issue;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Link issue');
-        return await issueCommonLinksActions(issue).onLinkIssue(linkedIssueIdReadable, linkTypeName);
+        return await issueCommonLinksActions(issue).onLinkIssue(
+          linkedIssueIdReadable,
+          linkTypeName,
+        );
       };
     },
-
     refreshIssue: function (): (
-      dispatch: (any) => any,
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
+      getApi: ApiGetter,
     ) => Promise<void> {
-      return async (dispatch: (any) => any, getState: StateGetter) => {
+      return async (dispatch: (arg0: any) => any, getState: StateGetter) => {
         dispatch(dispatchActions.startIssueRefreshing());
+
         try {
           const successMessage = i18n('Issue updated');
           await dispatch(actions.loadIssue());
           notify(successMessage);
-          log.debug(`${successMessage} "${getState()[stateFieldName].issueId}" loaded`);
+          log.debug(
+            `${successMessage} "${getState()[stateFieldName].issueId}" loaded`,
+          );
         } catch (error) {
           notifyError(error);
         } finally {
@@ -205,19 +291,28 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
         }
       };
     },
-
     saveIssueSummaryAndDescriptionChange: function (): (
-      dispatch: (any) => any,
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
+      getApi: ApiGetter,
     ) => Promise<void> {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
         const api: Api = getApi();
         const {issue} = getState()[stateFieldName];
         const {summaryCopy, descriptionCopy} = getState()[stateFieldName];
-        const textCustomFields: Array<CustomFieldText> = getIssueTextCustomFields(issue.fields);
-
-        dispatch(dispatchActions.setIssueSummaryAndDescription(summaryCopy, descriptionCopy));
+        const textCustomFields: Array<CustomFieldText> = getIssueTextCustomFields(
+          issue.fields,
+        );
+        dispatch(
+          dispatchActions.setIssueSummaryAndDescription(
+            summaryCopy,
+            descriptionCopy,
+          ),
+        );
         dispatch(dispatchActions.startSavingEditedIssue());
 
         try {
@@ -229,10 +324,11 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           );
           log.info(`Issue (${issue.id}) summary/description has been updated`);
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update issue', 'Success');
-
           await dispatch(actions.loadIssue());
           dispatch(dispatchActions.stopEditingIssue());
-          dispatch(dispatchActions.issueUpdated(getState()[stateFieldName].issue));
+          dispatch(
+            dispatchActions.issueUpdated(getState()[stateFieldName].issue),
+          );
         } catch (err) {
           notifyError(err);
         } finally {
@@ -240,61 +336,92 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
         }
       };
     },
-
-    onCheckboxUpdate: function (checked: boolean, position: number, description: string): (
-      dispatch: (any) => any,
+    onCheckboxUpdate: function (
+      checked: boolean,
+      position: number,
+      description: string,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
+      getApi: ApiGetter,
     ) => Promise<void> {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
         const api: Api = getApi();
         const {issue} = getState()[stateFieldName];
-        dispatch(dispatchActions.setIssueSummaryAndDescription(issue.summary, description));
-        const [error, updated] = await until(api.issue.updateDescriptionCheckbox(
-          issue.id,
-          checked,
-          position,
-          issue.description,
-        ));
+        dispatch(
+          dispatchActions.setIssueSummaryAndDescription(
+            issue.summary,
+            description,
+          ),
+        );
+        const [error, updated] = await until(
+          api.issue.updateDescriptionCheckbox(
+            issue.id,
+            checked,
+            position,
+            issue.description,
+          ),
+        );
 
         if (error) {
-          dispatch(dispatchActions.setIssueSummaryAndDescription(issue.summary, updated.description));
+          dispatch(
+            dispatchActions.setIssueSummaryAndDescription(
+              issue.summary,
+              updated.description,
+            ),
+          );
           notifyError(error);
         } else {
-          usage.trackEvent(ANALYTICS_ISSUE_PAGE, `Checkbox: ${checked ? 'checked' : 'unchecked'}`);
+          usage.trackEvent(
+            ANALYTICS_ISSUE_PAGE,
+            `Checkbox: ${checked ? 'checked' : 'unchecked'}`,
+          );
         }
       };
     },
-
-    setCustomFieldValue: function (field: CustomField, value: FieldValue): ((
-      dispatch: (any) => any,
+    setCustomFieldValue: function (
+      field: CustomField,
+      value: FieldValue,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
       getApi: ApiGetter,
-    ) => Promise<void>) {
-      return async (dispatch: any => any, getState: StateGetter, getApi: ApiGetter) => {
+    ) => Promise<void> {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update field value');
         dispatch(dispatchActions.setIssueFieldValue(field, value));
       };
     },
-
-    updateIssueFieldValue: function (field: CustomField, value: FieldValue): ((
-      dispatch: (any) => any,
+    updateIssueFieldValue: function (
+      field: CustomField,
+      value: FieldValue,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
-    ) => Promise<void>) {
+      getApi: ApiGetter,
+    ) => Promise<void> {
       return async (
-        dispatch: any => any,
+        dispatch: (arg0: any) => any,
         getState: StateGetter,
-        getApi: ApiGetter
+        getApi: ApiGetter,
       ) => {
         const api: Api = getApi();
         const issue: IssueFull = getState()[stateFieldName].issue;
-
         dispatch(actions.setCustomFieldValue(field, value));
+
         const updateMethod = (...args) => {
           if (field.hasStateMachine) {
             return api.issue.updateIssueFieldEvent(...args);
           }
+
           return api.issue.updateIssueFieldValue(...args);
         };
 
@@ -302,13 +429,20 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           await updateMethod(issue.id, field.id, value);
           log.info('Field value updated', field, value);
           await dispatch(actions.loadIssue());
-          dispatch(dispatchActions.issueUpdated(getState()[stateFieldName].issue));
+          dispatch(
+            dispatchActions.issueUpdated(getState()[stateFieldName].issue),
+          );
         } catch (err) {
           const error = await resolveError(err);
 
-          if (error.error_type === 'workflow' && error.error_workflow_type === 'require') {
+          if (
+            error.error_type === 'workflow' &&
+            error.error_workflow_type === 'require'
+          ) {
             log.info('Workflow require received', error);
-            dispatch(dispatchActions.openCommandDialog(`${error.error_field} `));
+            dispatch(
+              dispatchActions.openCommandDialog(`${error.error_field} `),
+            );
           }
 
           notifyError(error);
@@ -316,19 +450,19 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
         }
       };
     },
-
-    updateProject: function (project: IssueProject): ((
-      dispatch: (any) => any,
+    updateProject: function (
+      project: IssueProject,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
-    ) => Promise<void>) {
+      getApi: ApiGetter,
+    ) => Promise<void> {
       return async (
-        dispatch: any => any,
+        dispatch: (arg0: any) => any,
         getState: StateGetter,
-        getApi: ApiGetter
+        getApi: ApiGetter,
       ) => {
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update project');
-
         const api: Api = getApi();
         const {issue} = getState()[stateFieldName];
         dispatch(dispatchActions.setProject(project));
@@ -337,28 +471,35 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           await api.issue.updateProject(issue, project);
           log.info('Project updated');
           await dispatch(actions.loadIssue());
-          dispatch(dispatchActions.issueUpdated(getState()[stateFieldName].issue));
+          dispatch(
+            dispatchActions.issueUpdated(getState()[stateFieldName].issue),
+          );
         } catch (err) {
           notifyError(err);
           dispatch(actions.loadIssue());
         }
       };
     },
-
-    toggleVote: function (voted: boolean): (
-      dispatch: (any) => any,
+    toggleVote: function (
+      voted: boolean,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
+      getApi: ApiGetter,
     ) => Promise<void> {
       return async (
-        dispatch: any => any,
+        dispatch: (arg0: any) => any,
         getState: StateGetter,
-        getApi: ApiGetter
+        getApi: ApiGetter,
       ) => {
         const api: Api = getApi();
         const {issue} = getState()[stateFieldName];
         dispatch(dispatchActions.setVoted(voted));
-        usage.trackEvent(ANALYTICS_ISSUE_PAGE, `Vote: ${voted ? 'voted' : 'unvoted'}`);
+        usage.trackEvent(
+          ANALYTICS_ISSUE_PAGE,
+          `Vote: ${voted ? 'voted' : 'unvoted'}`,
+        );
+
         try {
           await api.issue.updateIssueVoted(issue.id, voted);
         } catch (err) {
@@ -367,21 +508,22 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
         }
       };
     },
-
-    toggleStar: function (starred: boolean): (
-      dispatch: (any) => any,
+    toggleStar: function (
+      starred: boolean,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
+      getApi: ApiGetter,
     ) => Promise<void> {
       return async (
-        dispatch: any => any,
+        dispatch: (arg0: any) => any,
         getState: StateGetter,
-        getApi: ApiGetter
+        getApi: ApiGetter,
       ) => {
         const api: Api = getApi();
         const {issue} = getState()[stateFieldName];
-
         dispatch(dispatchActions.setStarred(starred));
+
         try {
           await api.issue.updateIssueStarred(issue.id, starred);
         } catch (err) {
@@ -390,67 +532,103 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
         }
       };
     },
-
-    onOpenTagsSelect: function (): (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => void {
-      return (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+    onOpenTagsSelect: function (): (
+      dispatch: (arg0: any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter,
+    ) => void {
+      return (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
         const api: Api = getApi();
         const issue: IssueFull = getState()[stateFieldName].issue;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open Tags select');
+        dispatch(
+          dispatchActions.openTagsSelect({
+            multi: true,
+            placeholder: i18n('Filter tags'),
+            dataSource: async () => {
+              const issueProjectId: string = issue.project.id;
+              const [error, relevantProjectTags] = await until(
+                api.issueFolder.getProjectRelevantTags(issueProjectId),
+              );
 
-        dispatch(dispatchActions.openTagsSelect({
-          multi: true,
-          placeholder: i18n('Filter tags'),
-          dataSource: async () => {
-            const issueProjectId: string = issue.project.id;
-            const [error, relevantProjectTags] = await until(api.issueFolder.getProjectRelevantTags(issueProjectId));
-            if (error) {
-              return [];
-            }
-            return relevantProjectTags;
-          },
+              if (error) {
+                return [];
+              }
 
-          selectedItems: issue?.tags || [],
-          getTitle: item => getEntityPresentation(item),
-          onCancel: () => dispatch(actions.onCloseTagsSelect()),
-          onSelect: async (tags: Array<Tag>) => {
-            const [error, issueWithTags] = await until(api.issue.addTags(issue.id, tags));
-            dispatch(dispatchActions.receiveIssue({...issue, tags: issueWithTags?.tags || []}));
+              return relevantProjectTags;
+            },
+            selectedItems: issue?.tags || [],
+            getTitle: item => getEntityPresentation(item),
+            onCancel: () => dispatch(actions.onCloseTagsSelect()),
+            onSelect: async (tags: Array<Tag>) => {
+              const [error, issueWithTags] = await until(
+                api.issue.addTags(issue.id, tags),
+              );
+              dispatch(
+                dispatchActions.receiveIssue({
+                  ...issue,
+                  tags: issueWithTags?.tags || [],
+                }),
+              );
+              dispatch(actions.onCloseTagsSelect());
 
-            dispatch(actions.onCloseTagsSelect());
-            if (error) {
-              dispatch(dispatchActions.receiveIssue(issue));
-              notifyError(error);
-            }
-
-          },
-        }));
+              if (error) {
+                dispatch(dispatchActions.receiveIssue(issue));
+                notifyError(error);
+              }
+            },
+          }),
+        );
       };
     },
-
     showIssueActions: function (
       actionSheet: ActionSheet,
-      permissions: { canAttach: boolean, canEdit: boolean, canApplyCommand: boolean, canTag: boolean },
+      permissions: {
+        canAttach: boolean;
+        canEdit: boolean;
+        canApplyCommand: boolean;
+        canTag: boolean;
+      },
       switchToDetailsTab: () => any,
       renderLinkIssues?: () => any,
     ): (
-      dispatch: (any) => any,
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
+      getApi: ApiGetter,
     ) => Promise<void> {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
         const api: Api = getApi();
         const {issue} = getState()[stateFieldName];
-
         const actionSheetActions = [
           {
             title: i18n('Share…'),
             execute: () => {
               const url = makeIssueWebUrl(api, issue);
+
               if (isIOSPlatform()) {
-                Share.share({url});
+                Share.share({
+                  url,
+                });
               } else {
-                Share.share({title: issue.summary, message: url}, {dialogTitle: i18n('Share link')});
+                Share.share(
+                  {
+                    title: issue.summary,
+                    message: url,
+                  },
+                  {
+                    dialogTitle: i18n('Share link'),
+                  },
+                );
               }
+
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Share URL');
             },
           },
@@ -515,13 +693,16 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
           });
         }
 
-        actionSheetActions.push({title: i18n('Cancel')});
-
+        actionSheetActions.push({
+          title: i18n('Cancel'),
+        });
         const selectedAction = await showActions(
           actionSheetActions,
           actionSheet,
           issue.idReadable,
-          issue.summary.length > 155 ? `${issue.summary.substr(0, 153)}…` : issue.summary
+          issue.summary.length > 155
+            ? `${issue.summary.substr(0, 153)}…`
+            : issue.summary,
         );
 
         if (selectedAction && selectedAction.execute) {
@@ -529,13 +710,20 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
         }
       };
     },
-
-    onShowCopyTextContextActions: function (actionSheet: ActionSheet, text: string, title?: string): (
-      dispatch: (any) => any,
+    onShowCopyTextContextActions: function (
+      actionSheet: ActionSheet,
+      text: string,
+      title?: string,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
+      getApi: ApiGetter,
     ) => Promise<void> {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
         const selectedAction = await showActions(
           [
             {
@@ -546,7 +734,9 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
                 notify(i18n('Copied'));
               },
             },
-            {title: i18n('Cancel')},
+            {
+              title: i18n('Cancel'),
+            },
           ],
           actionSheet,
         );
@@ -556,170 +746,239 @@ export const createActions = (dispatchActions: any, stateFieldName: string = DEF
         }
       };
     },
-
-    openNestedIssueView: function (params: OpenNestedViewParams): () => any | void {
+    openNestedIssueView: function (
+      params: OpenNestedViewParams,
+    ): () => any | void {
       return () => {
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Navigate to linked issue');
+
         if (!params.issue) {
-          return Router.Issue({issueId: params.issueId});
+          return Router.Issue({
+            issueId: params.issueId,
+          });
         }
 
         Router.Issue({
-          issuePlaceholder: {...params.issue, ...{fieldHash: ApiHelper.makeFieldHash(params.issue)}},
+          issuePlaceholder: {
+            ...params.issue,
+            ...{
+              fieldHash: ApiHelper.makeFieldHash(params.issue),
+            },
+          },
           issueId: params.issue?.id,
         });
       };
     },
-
     unloadIssueIfExist: function (): (
-      dispatch: (any) => any,
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
+      getApi: ApiGetter,
     ) => Promise<void> {
-      return async (dispatch: (any) => any, getState: StateGetter) => {
+      return async (dispatch: (arg0: any) => any, getState: StateGetter) => {
         const state = getState()[stateFieldName];
+
         if (state !== initialState) {
           dispatch(dispatchActions.unloadActiveIssueView());
         }
       };
     },
-
     openIssueListWithSearch: function (searchQuery: string): () => void {
       return () => {
-        Router.Issues({searchQuery});
+        Router.Issues({
+          searchQuery,
+        });
       };
     },
-
-    onTagRemove: function (tagId: string): (
-      dispatch: (any) => any,
+    onTagRemove: function (
+      tagId: string,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
+      getApi: ApiGetter,
     ) => Promise<void> {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
         const issue = getState()[stateFieldName].issue;
         const api: Api = getApi();
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Remove tag');
+
         try {
           await api.issue.removeTag(issue.id, tagId);
-          const updatedIssue: IssueFull = {...issue, tags: issue.tags.filter((tag: Tag) => tag.id !== tagId)};
+          const updatedIssue: IssueFull = {
+            ...issue,
+            tags: issue.tags.filter((tag: Tag) => tag.id !== tagId),
+          };
           dispatch(dispatchActions.receiveIssue(updatedIssue));
         } catch (err) {
           notifyError(err);
         }
       };
     },
-
-
-    getCommandSuggestions: function (command: string, caret: number): (
-      dispatch: (any) => any,
+    getCommandSuggestions: function (
+      command: string,
+      caret: number,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
+      getApi: ApiGetter,
     ) => Promise<void> {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
         const issueId = getState()[stateFieldName].issueId;
-        await commandDialogHelper.loadIssueCommandSuggestions([issueId], command, caret).then(
-          (suggestions: CommandSuggestionResponse) => {
-            suggestions && dispatch(dispatchActions.receiveCommandSuggestions(suggestions));
-          }).catch(() => {
-          //
-        });
+        await commandDialogHelper
+          .loadIssueCommandSuggestions([issueId], command, caret)
+          .then((suggestions: CommandSuggestionResponse) => {
+            suggestions &&
+              dispatch(dispatchActions.receiveCommandSuggestions(suggestions));
+          })
+          .catch(() => {
+            //
+          });
       };
     },
-
-    applyCommand: function (command: string): (
-      dispatch: (any) => any,
+    applyCommand: function (
+      command: string,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
+      getApi: ApiGetter,
     ) => Promise<void> {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter): Promise<void> => {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ): Promise<void> => {
         const issueId = getState()[stateFieldName].issueId;
-
         dispatch(dispatchActions.startApplyingCommand());
-        return await commandDialogHelper.applyCommand([issueId], command).then(async () => {
-          dispatch(dispatchActions.closeCommandDialog());
-          if (command.toLowerCase().trim() === 'delete') {
-            notify(i18n('Issue deleted'));
-            Router.Issues();
-          } else {
-            await dispatch(actions.loadIssue());
-            dispatch(dispatchActions.issueUpdated(getState()[stateFieldName].issue));
-          }
-        }).finally(() => {
-          dispatch(dispatchActions.stopApplyingCommand());
-        });
+        return await commandDialogHelper
+          .applyCommand([issueId], command)
+          .then(async () => {
+            dispatch(dispatchActions.closeCommandDialog());
+
+            if (command.toLowerCase().trim() === 'delete') {
+              notify(i18n('Issue deleted'));
+              Router.Issues();
+            } else {
+              await dispatch(actions.loadIssue());
+              dispatch(
+                dispatchActions.issueUpdated(getState()[stateFieldName].issue),
+              );
+            }
+          })
+          .finally(() => {
+            dispatch(dispatchActions.stopApplyingCommand());
+          });
       };
     },
-
-    updateUserAppearanceProfile: function (userAppearanceProfile: UserAppearanceProfile): (dispatch: (any) => any) => Promise<void> {
-      return async (dispatch: (any) => any) => {
+    updateUserAppearanceProfile: function (
+      userAppearanceProfile: UserAppearanceProfile,
+    ): (dispatch: (arg0: any) => any) => Promise<void> {
+      return async (dispatch: (arg0: any) => any) => {
         dispatch(receiveUserAppearanceProfile(userAppearanceProfile));
       };
     },
-
-    uploadIssueAttach: function (files: Array<NormalizedAttachment>): (
-      dispatch: (any) => any,
-      getState: StateGetter
-    ) => Promise<void> {
-      return async (dispatch: (any) => any, getState: StateGetter) => {
-        await dispatch(dispatchActions.uploadFile(files, getState()[stateFieldName].issueId));
+    uploadIssueAttach: function (
+      files: Array<NormalizedAttachment>,
+    ): (dispatch: (arg0: any) => any, getState: StateGetter) => Promise<void> {
+      return async (dispatch: (arg0: any) => any, getState: StateGetter) => {
+        await dispatch(
+          dispatchActions.uploadFile(files, getState()[stateFieldName].issueId),
+        );
       };
     },
-
-    cancelAddAttach: function (attach: Attachment): (dispatch: (any) => any) => Promise<void> {
-      return async (dispatch: (any) => any) => {
+    cancelAddAttach: function (
+      attach: Attachment,
+    ): (dispatch: (arg0: any) => any) => Promise<void> {
+      return async (dispatch: (arg0: any) => any) => {
         await dispatch(dispatchActions.cancelImageAttaching(attach));
       };
     },
-
-    loadAttachments: function (): (dispatch: (any) => any, getState: StateGetter) => Promise<void> {
-      return async (dispatch: (any) => any, getState: StateGetter) => {
-        dispatch(actions.loadIssueAttachments(getState()[stateFieldName].issueId));
+    loadAttachments: function (): (
+      dispatch: (arg0: any) => any,
+      getState: StateGetter,
+    ) => Promise<void> {
+      return async (dispatch: (arg0: any) => any, getState: StateGetter) => {
+        dispatch(
+          actions.loadIssueAttachments(getState()[stateFieldName].issueId),
+        );
       };
     },
-
-    toggleVisibleAddAttachDialog: function (isVisible: boolean): (dispatch: (any) => any) => Promise<void> {
-      return async (dispatch: (any) => any) => {
+    toggleVisibleAddAttachDialog: function (
+      isVisible: boolean,
+    ): (dispatch: (arg0: any) => any) => Promise<void> {
+      return async (dispatch: (arg0: any) => any) => {
         dispatch(dispatchActions.toggleAttachFileDialog(isVisible));
       };
     },
-
-    removeAttachment: function (attach: Attachment): (dispatch: (any) => any, getState: StateGetter) => Promise<void> {
-      return async (dispatch: (any) => any, getState: StateGetter) => {
-        await dispatch(dispatchActions.removeAttachment(attach, getState()[stateFieldName].issueId));
+    removeAttachment: function (
+      attach: Attachment,
+    ): (dispatch: (arg0: any) => any, getState: StateGetter) => Promise<void> {
+      return async (dispatch: (arg0: any) => any, getState: StateGetter) => {
+        await dispatch(
+          dispatchActions.removeAttachment(
+            attach,
+            getState()[stateFieldName].issueId,
+          ),
+        );
       };
     },
-
-    updateIssueVisibility: function (visibility: Visibility): (
-      dispatch: (any) => any,
+    updateIssueVisibility: function (
+      visibility: Visibility,
+    ): (
+      dispatch: (arg0: any) => any,
       getState: StateGetter,
-      getApi: ApiGetter
+      getApi: ApiGetter,
     ) => Promise<void> {
-      return async (dispatch: (any) => any, getState: StateGetter, getApi: ApiGetter) => {
+      return async (
+        dispatch: (arg0: any) => any,
+        getState: StateGetter,
+        getApi: ApiGetter,
+      ) => {
         const issueState: IssueFull = getState()[stateFieldName];
         const prevVisibility: Visibility = issueState.issue.visibility;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update visibility');
 
         try {
           const issueWithUpdatedVisibility: Visibility = await getApi().issue.updateVisibility(
-            issueState.issueId, visibility);
-          dispatch(dispatchActions.receiveIssueVisibility(issueWithUpdatedVisibility.visibility));
-
+            issueState.issueId,
+            visibility,
+          );
+          dispatch(
+            dispatchActions.receiveIssueVisibility(
+              issueWithUpdatedVisibility.visibility,
+            ),
+          );
         } catch (err) {
-          dispatch(dispatchActions.receiveIssueVisibility(Object.assign({timestamp: Date.now()}, prevVisibility)));
+          dispatch(
+            dispatchActions.receiveIssueVisibility(
+              Object.assign(
+                {
+                  timestamp: Date.now(),
+                },
+                prevVisibility,
+              ),
+            ),
+          );
           notifyError(err);
         }
       };
     },
-
-    onCloseTagsSelect: function (): (dispatch: (any) => any) => void {
-      return (dispatch: (any) => any) => {
-        dispatch(dispatchActions.closeTagsSelect({
-          selectProps: null,
-          isTagsSelectVisible: false,
-        }));
+    onCloseTagsSelect: function (): (dispatch: (arg0: any) => any) => void {
+      return (dispatch: (arg0: any) => any) => {
+        dispatch(
+          dispatchActions.closeTagsSelect({
+            selectProps: null,
+            isTagsSelectVisible: false,
+          }),
+        );
       };
     },
   };
-
   return actions;
 };

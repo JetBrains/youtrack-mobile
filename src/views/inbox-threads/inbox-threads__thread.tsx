@@ -1,11 +1,7 @@
-/* @flow */
-
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useDispatch, useSelector} from 'react-redux';
-
 import InboxEntity from '../inbox/inbox__entity';
 import InboxThreadItemSubscription from './inbox-threads__subscription';
 import InboxThreadMention from './inbox-threads__mention';
@@ -14,22 +10,26 @@ import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {IconMoreOptions} from 'components/icon/icon';
-import {muteToggle, readMessageToggle, updateThreadsStateAndCache} from './inbox-threads-actions';
-
+import {
+  muteToggle,
+  readMessageToggle,
+  updateThreadsStateAndCache,
+} from './inbox-threads-actions';
 import styles from './inbox-threads.styles';
-
 import type {AppState} from '../../reducers';
 import type {InboxThread, InboxThreadMessage, ThreadData} from 'flow/Inbox';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
-
 type Props = {
   currentUser: User;
-  onNavigate: (entity: any, navigateToActivity?: string, commentId?: string) => any,
+  onNavigate: (
+    entity: any,
+    navigateToActivity?: string,
+    commentId?: string,
+  ) => any;
   thread: InboxThread;
   uiTheme: UITheme;
-}
-
+};
 
 function Thread({
   thread,
@@ -37,12 +37,16 @@ function Thread({
   uiTheme,
   onNavigate,
   ...otherProps
-}: Props): React$Element<any> | null {
+}: Props): React.ReactElement<React.ComponentProps<any>, any> | null {
   const {showActionSheetWithOptions} = useActionSheet();
-  const isOnline: boolean = useSelector((state: AppState) => state.app.networkState?.isConnected);
+  const isOnline: boolean = useSelector(
+    (state: AppState) => state.app.networkState?.isConnected,
+  );
   const dispatch = useDispatch();
-  const [_thread, updateThread]: [InboxThread, Function] = useState(thread);
-
+  const [_thread, updateThread]: [
+    InboxThread,
+    (...args: Array<any>) => any,
+  ] = useState(thread);
   useEffect(() => {
     updateThread(thread);
   }, [thread]);
@@ -51,42 +55,52 @@ function Thread({
     return null;
   }
 
-  const doToggleMessagesRead = async (messages: InboxThreadMessage[], read: boolean, toggleThread: boolean = false) => {
-    const messagesMap: { [string]: InboxThreadMessage } = messages.reduce(
-      (map: { [string]: InboxThreadMessage }, it: InboxThreadMessage) => ({
+  const doToggleMessagesRead = async (
+    messages: InboxThreadMessage[],
+    read: boolean,
+    toggleThread: boolean = false,
+  ) => {
+    const messagesMap: Record<string, InboxThreadMessage> = messages.reduce(
+      (map: Record<string, InboxThreadMessage>, it: InboxThreadMessage) => ({
         ...map,
         [it.id]: {...it, read},
       }),
-      {}
+      {},
     );
-
     const updatedThread: InboxThread = {
       ..._thread,
-      messages: _thread.messages.reduce((list: InboxThreadMessage[], it: InboxThreadMessage) => {
-        return list.concat(
-          messagesMap[it.id] ? messagesMap[it.id] : it
-        );
-      }, []),
+      messages: _thread.messages.reduce(
+        (list: InboxThreadMessage[], it: InboxThreadMessage) => {
+          return list.concat(messagesMap[it.id] ? messagesMap[it.id] : it);
+        },
+        [],
+      ),
     };
-
     updateThread(updatedThread);
     dispatch(readMessageToggle(messages, read));
-    dispatch(updateThreadsStateAndCache(updatedThread, toggleThread && read === true));
+    dispatch(
+      updateThreadsStateAndCache(updatedThread, toggleThread && read === true),
+    );
   };
 
   const threadData: ThreadData = createThreadData(_thread);
   const ThreadComponent: any = threadData.component;
-  const renderedEntity = <InboxEntity
-    testID="test:id/inboxEntity"
-    accessibilityLabel="inboxEntity"
-    accessible={true}
-    entity={threadData.entity}
-    onNavigate={() => onNavigate(threadData.entity)}
-    style={[styles.threadTitle, threadData.entityAtBottom && styles.threadSubTitle]}
-    styleText={threadData.entityAtBottom && styles.threadSubTitleText}
-  />;
-  const hasReadActions: boolean = hasType.issue(threadData.entity) || hasType.article(threadData.entity);
-
+  const renderedEntity = (
+    <InboxEntity
+      testID="test:id/inboxEntity"
+      accessibilityLabel="inboxEntity"
+      accessible={true}
+      entity={threadData.entity}
+      onNavigate={() => onNavigate(threadData.entity)}
+      style={[
+        styles.threadTitle,
+        threadData.entityAtBottom && styles.threadSubTitle,
+      ]}
+      styleText={threadData.entityAtBottom && styles.threadSubTitleText}
+    />
+  );
+  const hasReadActions: boolean =
+    hasType.issue(threadData.entity) || hasType.article(threadData.entity);
   return (
     <View
       testID="test:id/inboxThreadsListThread"
@@ -112,14 +126,17 @@ function Thread({
           doToggleMessagesRead(messages, read);
         }}
       />
-      {threadData.entityAtBottom && <View style={styles.threadTitleContainer}>
-        {renderedEntity}
-      </View>}
+      {threadData.entityAtBottom && (
+        <View style={styles.threadTitleContainer}>{renderedEntity}</View>
+      )}
     </View>
   );
 
   function renderSettings() {
-    const hasUnreadMessage: boolean = _thread.messages.some(it => it.read === false);
+    const hasUnreadMessage: boolean = _thread.messages.some(
+      it => it.read === false,
+    );
+
     const options = [
       {
         title: _thread.muted ? i18n('Unmute thread') : i18n('Mute thread'),
@@ -135,13 +152,13 @@ function Thread({
       },
       {
         title: hasUnreadMessage ? i18n('Mark as read') : i18n('Mark as unread'),
-          execute: () => doToggleMessagesRead(_thread.messages, hasUnreadMessage, true),
+        execute: () =>
+          doToggleMessagesRead(_thread.messages, hasUnreadMessage, true),
       },
       {
         title: i18n('Cancel'),
       },
     ];
-
     return (
       <View style={styles.threadTitleActions}>
         <TouchableOpacity
@@ -157,7 +174,8 @@ function Thread({
                 title: `${threadData.entity?.idReadable} ${threadData.entity?.summary}`,
                 cancelButtonIndex: options.length - 1,
               },
-              (index: number) => options[index]?.execute && options[index].execute()
+              (index: number) =>
+                options[index]?.execute && options[index].execute(),
             );
           }}
           style={styles.threadTitleAction}
@@ -173,26 +191,34 @@ function Thread({
 }
 
 function createThreadData(thread: InboxThread): ThreadData {
-  const threadData: ThreadData = {entity: null, component: null, entityAtBottom: false};
+  const threadData: ThreadData = {
+    entity: null,
+    component: null,
+    entityAtBottom: false,
+  };
+
   if (thread.id) {
     const target = thread.subject.target;
     threadData.entity = target?.issue || target?.article || target;
+
     switch (thread.id[0]) {
-    case 'R':
-      threadData.component = InboxThreadReaction;
-      threadData.entityAtBottom = true;
-      break;
-    case 'M':
-      threadData.component = InboxThreadMention;
-      threadData.entityAtBottom = true;
-      break;
-    case 'S':
-      threadData.component = InboxThreadItemSubscription;
+      case 'R':
+        threadData.component = InboxThreadReaction;
+        threadData.entityAtBottom = true;
+        break;
+
+      case 'M':
+        threadData.component = InboxThreadMention;
+        threadData.entityAtBottom = true;
+        break;
+
+      case 'S':
+        threadData.component = InboxThreadItemSubscription;
     }
   }
+
   return threadData;
 }
-
 
 export default Thread;
 export {createThreadData};

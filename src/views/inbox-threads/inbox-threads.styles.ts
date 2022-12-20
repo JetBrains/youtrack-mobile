@@ -1,12 +1,9 @@
 import {Platform} from 'react-native';
-
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {mainText, secondaryText} from 'components/common-styles/typography';
 import {rowStyles as activityStyles} from 'components/activity-stream/activity__stream.styles';
 import {splitViewStyles} from 'components/common-styles/split-view';
 import {UNIT} from 'components/variables/variables';
-
 export default EStyleSheet.create({
   ...splitViewStyles,
   container: {
@@ -110,10 +107,7 @@ export default EStyleSheet.create({
   threadMuteToggle: {
     padding: UNIT / 2,
   },
-  threadSubTitleText: {
-    ...secondaryText,
-    color: '$icon',
-  },
+  threadSubTitleText: {...secondaryText, color: '$icon'},
   threadTitleIcon: {
     position: 'relative',
     zIndex: 1,
@@ -163,7 +157,7 @@ export default EStyleSheet.create({
     alignItems: 'center',
   },
   threadReactionsAddButton: {
-    position:'absolute',
+    position: 'absolute',
     zIndex: 1,
     bottom: UNIT * 2,
     right: UNIT * 2,
@@ -233,8 +227,5 @@ export default EStyleSheet.create({
       },
     }),
   },
-  threadUpdateButtonText: {
-    ...secondaryText,
-    color: '$textButton',
-  },
+  threadUpdateButtonText: {...secondaryText, color: '$textButton'},
 });

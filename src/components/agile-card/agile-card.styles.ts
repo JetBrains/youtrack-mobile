@@ -1,11 +1,7 @@
-/* @flow */
-
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {issueCard, issueIdResolved} from '../common-styles/issue';
 import {secondaryText} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
-
 export const agileCard = {
   flexDirection: 'row',
   marginLeft: UNIT * 2,
@@ -13,8 +9,7 @@ export const agileCard = {
   overflow: 'hidden',
   backgroundColor: '$boxBackground',
 };
-
-export default (EStyleSheet.create({
+export default EStyleSheet.create({
   card: agileCard,
   cardColorCoding: {
     flexShrink: 0,
@@ -57,7 +52,11 @@ export default (EStyleSheet.create({
   },
   dragging: {
     width: '80%',
-    transform: [{rotate: '-3deg'}],
+    transform: [
+      {
+        rotate: '-3deg',
+      },
+    ],
     borderWidth: 2,
     borderColor: '$iconAccent',
   },
@@ -71,13 +70,8 @@ export default (EStyleSheet.create({
     ...issueCard.issueSummary,
     marginTop: UNIT,
   },
-  issueId: {
-    ...issueCard.issueId,
-    color: '$icon',
-  },
-  issueIdResolved: {
-    ...issueIdResolved,
-  },
+  issueId: {...issueCard.issueId, color: '$icon'},
+  issueIdResolved: {...issueIdResolved},
   assignees: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -94,4 +88,4 @@ export default (EStyleSheet.create({
   zoomedInText: {
     fontSize: 11,
   },
-}): any);
+}) as any;

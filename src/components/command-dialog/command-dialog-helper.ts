@@ -1,16 +1,12 @@
-/* @flow */
-
 import {getApi} from '../api/api__instance';
 import {i18n} from 'components/i18n/i18n';
 import {notify, notifyError} from '../notification/notification';
-
 import type {CommandSuggestionResponse} from 'flow/Issue';
-
 
 const loadIssueCommandSuggestions = async (
   issueIds: Array<string>,
   command: string,
-  caret: number
+  caret: number,
 ): Promise<CommandSuggestionResponse> => {
   try {
     return await getApi().getCommandSuggestions(issueIds, command, caret);
@@ -20,9 +16,15 @@ const loadIssueCommandSuggestions = async (
   }
 };
 
-const applyCommand = async (issueIds: Array<string>, command: string): Promise<void> => {
+const applyCommand = async (
+  issueIds: Array<string>,
+  command: string,
+): Promise<void> => {
   try {
-    const response: any = await getApi().applyCommand({issueIds, command});
+    const response: any = await getApi().applyCommand({
+      issueIds,
+      command,
+    });
     notify(i18n('Command applied'));
     return response;
   } catch (err) {
@@ -31,7 +33,4 @@ const applyCommand = async (issueIds: Array<string>, command: string): Promise<v
   }
 };
 
-export {
-  applyCommand,
-  loadIssueCommandSuggestions,
-};
+export {applyCommand, loadIssueCommandSuggestions};

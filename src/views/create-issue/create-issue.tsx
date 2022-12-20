@@ -1,11 +1,13 @@
-/* @flow */
-
 import React, {PureComponent} from 'react';
-import {ScrollView, View, ActivityIndicator, Text, TouchableOpacity} from 'react-native';
-
+import {
+  ScrollView,
+  View,
+  ActivityIndicator,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-
 import * as createIssueActions from './create-issue-actions';
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
 import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
@@ -29,47 +31,57 @@ import usage from 'components/usage/usage';
 import VisibilityControl from 'components/visibility/visibility-control';
 import {ANALYTICS_ISSUE_CREATE_PAGE} from 'components/analytics/analytics-ids';
 import {getApi} from 'components/api/api__instance';
-import {getIssueCustomFieldsNotText, getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
+import {
+  getIssueCustomFieldsNotText,
+  getIssueTextCustomFields,
+} from 'components/custom-field/custom-field-helper';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {i18n} from 'components/i18n/i18n';
-import {IconCheck, IconClose, IconDrag, IconMoreOptions} from 'components/icon/icon';
+import {
+  IconCheck,
+  IconClose,
+  IconDrag,
+  IconMoreOptions,
+} from 'components/icon/icon';
 import {isIOSPlatform} from 'util/util';
 import {ThemeContext} from 'components/theme/theme-context';
-
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
 import type {AnyIssue} from 'flow/Issue';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import type {CreateIssueState} from './create-issue-reducers';
-import type {CustomField, CustomFieldText, IssueLink, IssueProject, Tag} from 'flow/CustomFields';
+import type {
+  CustomField,
+  CustomFieldText,
+  IssueLink,
+  IssueProject,
+  Tag,
+} from 'flow/CustomFields';
 import type {NormalizedAttachment} from 'flow/Attachment';
 import type {Theme, UITheme, UIThemeColors} from 'flow/Theme';
-
 import styles from './create-issue.styles';
-
-
 type AdditionalProps = {
-  issuePermissions: IssuePermissions,
-  predefinedDraftId: ?string,
-  onAddTags: (tags: Array<Tag>) => () => Promise<void>,
-  onHide?: () => void,
-  isMatchesQuery?: () => boolean,
-  isConnected?: boolean,
+  issuePermissions: IssuePermissions;
+  predefinedDraftId: string | null | undefined;
+  onAddTags: (tags: Array<Tag>) => () => Promise<void>;
+  onHide?: () => void;
+  isMatchesQuery?: () => boolean;
+  isConnected?: boolean;
 };
-
-type Props = CreateIssueState & typeof createIssueActions & AttachmentActions & AdditionalProps & {
-  isSplitView?: boolean,
-};
-
+type Props = CreateIssueState &
+  typeof createIssueActions &
+  AttachmentActions &
+  AdditionalProps & {
+    isSplitView?: boolean;
+  };
 type State = {
-  modalChildren: any,
-  showAddTagSelect: boolean,
+  modalChildren: any;
+  showAddTagSelect: boolean;
 };
 
 class CreateIssue extends PureComponent<Props, State> {
   static contextTypes = {
     actionSheet: Function,
   };
-
   uiTheme: UITheme;
   state = {
     modalChildren: null,
@@ -86,20 +98,24 @@ class CreateIssue extends PureComponent<Props, State> {
     this.props.initializeWithDraftOrProject(this.props.predefinedDraftId);
   }
 
-  onAddAttachment = async (files: Array<NormalizedAttachment>, onAttachingFinish: () => any) => {
+  onAddAttachment = async (
+    files: Array<NormalizedAttachment>,
+    onAttachingFinish: () => any,
+  ) => {
     const {uploadIssueAttach, loadAttachments} = this.props;
     await uploadIssueAttach(files);
     onAttachingFinish();
     loadAttachments();
   };
-
   cancelAddAttach = () => {
     const {cancelAddAttach, hideAddAttachDialog, attachingImage} = this.props;
     cancelAddAttach(attachingImage);
     hideAddAttachDialog();
   };
-
-  renderAttachFileDialog = (): React$Element<typeof AttachFileDialog> | null => {
+  renderAttachFileDialog = (): React.ReactElement<
+    React.ComponentProps<typeof AttachFileDialog>,
+    typeof AttachFileDialog
+  > | null => {
     const {issue} = this.props;
 
     if (!issue || !issue.id) {
@@ -108,7 +124,9 @@ class CreateIssue extends PureComponent<Props, State> {
 
     return (
       <AttachFileDialog
-        getVisibilityOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
+        getVisibilityOptions={() =>
+          getApi().issue.getVisibilityOptions(issue.id)
+        }
         actions={{
           onAttach: this.onAddAttachment,
           onCancel: this.cancelAddAttach,
@@ -116,39 +134,37 @@ class CreateIssue extends PureComponent<Props, State> {
       />
     );
   };
-
-  canUpdateField = (field: CustomField) => this.props.issuePermissions.canUpdateField(this.props.issue, field);
-
-  canCreateIssueToProject = (project: IssueProject) => this.props.issuePermissions.canCreateIssueToProject(project);
-
-  onFieldUpdate = async (field: CustomField, value: any) => await this.props.updateFieldValue(field, value);
-
-  onUpdateProject = async (project: IssueProject) => await this.props.updateProject(project);
+  canUpdateField = (field: CustomField) =>
+    this.props.issuePermissions.canUpdateField(this.props.issue, field);
+  canCreateIssueToProject = (project: IssueProject) =>
+    this.props.issuePermissions.canCreateIssueToProject(project);
+  onFieldUpdate = async (field: CustomField, value: any) =>
+    await this.props.updateFieldValue(field, value);
+  onUpdateProject = async (project: IssueProject) =>
+    await this.props.updateProject(project);
 
   renderCustomFieldPanel() {
     const {issue, isConnected} = this.props;
-
-    return <CustomFieldsPanel
-      analyticsId={ANALYTICS_ISSUE_CREATE_PAGE}
-      autoFocusSelect
-      testID="test:id/createIssueFields"
-      accessibilityLabel="createIssueFields"
-      accessible={true}
-      issueId={issue.id}
-      issueProject={issue.project}
-      fields={getIssueCustomFieldsNotText(issue.fields)}
-
-      hasPermission={{
-        canUpdateField: isConnected && this.canUpdateField,
-        canCreateIssueToProject: isConnected && this.canCreateIssueToProject,
-        canEditProject: isConnected,
-      }}
-
-      onUpdate={this.onFieldUpdate}
-      onUpdateProject={this.onUpdateProject}
-
-      uiTheme={this.uiTheme}
-    />;
+    return (
+      <CustomFieldsPanel
+        analyticsId={ANALYTICS_ISSUE_CREATE_PAGE}
+        autoFocusSelect
+        testID="test:id/createIssueFields"
+        accessibilityLabel="createIssueFields"
+        accessible={true}
+        issueId={issue.id}
+        issueProject={issue.project}
+        fields={getIssueCustomFieldsNotText(issue.fields)}
+        hasPermission={{
+          canUpdateField: isConnected && this.canUpdateField,
+          canCreateIssueToProject: isConnected && this.canCreateIssueToProject,
+          canEditProject: isConnected,
+        }}
+        onUpdate={this.onFieldUpdate}
+        onUpdateProject={this.onUpdateProject}
+        uiTheme={this.uiTheme}
+      />
+    );
   }
 
   renderIssueVisibility() {
@@ -173,34 +189,41 @@ class CreateIssue extends PureComponent<Props, State> {
       commandIsApplying,
       toggleCommandDialog,
     } = this.props;
-    return <CommandDialog
-      suggestions={commandSuggestions}
-      onCancel={() => toggleCommandDialog(false)}
-      onChange={getCommandSuggestions}
-      onApply={applyCommand}
-      isApplying={commandIsApplying}
-      initialCommand={''}
-      uiTheme={this.uiTheme}
-    />;
+    return (
+      <CommandDialog
+        suggestions={commandSuggestions}
+        onCancel={() => toggleCommandDialog(false)}
+        onChange={getCommandSuggestions}
+        onApply={applyCommand}
+        isApplying={commandIsApplying}
+        initialCommand={''}
+        uiTheme={this.uiTheme}
+      />
+    );
   }
 
   renderActionsIcon() {
     if (this.isProcessing() || !this.hasProject() || !this.props.isConnected) {
       return null;
     }
+
     return (
       <TouchableOpacity
         hitSlop={HIT_SLOP}
         onPress={() => {
-          !this.isProcessing() && this.props.showContextActions(this.context.actionSheet());
+          !this.isProcessing() &&
+            this.props.showContextActions(this.context.actionSheet());
         }}
       >
         <Text style={styles.iconMore}>
-          {isIOSPlatform()
-            ? <IconMoreOptions size={18} color={this.uiTheme.colors.$link}/>
-            : <Text><IconDrag size={18} color={this.uiTheme.colors.$link}/></Text>
-          }
-          <Text>{' '}</Text>
+          {isIOSPlatform() ? (
+            <IconMoreOptions size={18} color={this.uiTheme.colors.$link} />
+          ) : (
+            <Text>
+              <IconDrag size={18} color={this.uiTheme.colors.$link} />
+            </Text>
+          )}
+          <Text> </Text>
         </Text>
       </TouchableOpacity>
     );
@@ -217,7 +240,9 @@ class CreateIssue extends PureComponent<Props, State> {
   }
 
   toggleSetModalChildren(modalChildren: any = null) {
-    this.setState({modalChildren});
+    this.setState({
+      modalChildren,
+    });
   }
 
   renderLinksBlock() {
@@ -231,6 +256,7 @@ class CreateIssue extends PureComponent<Props, State> {
       getIssueLinksTitle,
       isSplitView,
     } = this.props;
+
     const renderLinkedIssues = (onHide: () => void) => (
       <LinkedIssues
         issuesGetter={loadIssuesXShort}
@@ -240,16 +266,18 @@ class CreateIssue extends PureComponent<Props, State> {
         onUpdate={(issues?: Array<IssueLink>) => {
           getIssueLinksTitle(issues);
         }}
-        canLink={(
+        canLink={
           issuePermissions.canLink(issue)
             ? (linkedIssue: AnyIssue) => issuePermissions.canLink(linkedIssue)
             : undefined
-        )}
+        }
         subTitle={i18n('Current issue')}
         onHide={onHide}
-        onAddLink={(renderChildren: (() => any) => any) => {
+        onAddLink={(renderChildren: (arg0: () => any) => any) => {
           if (isSplitView) {
-            this.toggleSetModalChildren(renderChildren(this.toggleSetModalChildren));
+            this.toggleSetModalChildren(
+              renderChildren(this.toggleSetModalChildren),
+            );
           } else {
             Router.Page({
               children: renderChildren(onHide),
@@ -259,37 +287,53 @@ class CreateIssue extends PureComponent<Props, State> {
       />
     );
 
-    return <LinkedIssuesTitle
-      issueLinks={issue.links}
-      onPress={() => {
-        if (this.props.isSplitView) {
-          this.toggleSetModalChildren(renderLinkedIssues(this.toggleSetModalChildren));
-        } else {
-          Router.Page({
-            children: renderLinkedIssues(() => Router.pop()),
-          });
-        }
-      }}
-    />;
+    return (
+      <LinkedIssuesTitle
+        issueLinks={issue.links}
+        onPress={() => {
+          if (this.props.isSplitView) {
+            this.toggleSetModalChildren(
+              renderLinkedIssues(this.toggleSetModalChildren),
+            );
+          } else {
+            Router.Page({
+              children: renderLinkedIssues(() => Router.pop()),
+            });
+          }
+        }}
+      />
+    );
   }
 
   onHide = async () => {
     await this.props.storeDraftAndGoBack();
+
     if (this.props.onHide) {
       this.props.onHide();
     } else {
       Router.pop(true);
     }
   };
-
   renderLinkedIssuesAddLink = () => {
-    const {loadIssuesXShort, onLinkIssue, getIssueLinksTitle, processing} = this.props;
+    const {
+      loadIssuesXShort,
+      onLinkIssue,
+      getIssueLinksTitle,
+      processing,
+    } = this.props;
     //$FlowFixMe
-    const iconLink: any = <IconLink
-      width={24}
-      height={24}
-      fill={processing ? styles.addLinkButtonTextDisabled.color : styles.addLinkButtonText.color}
-    />;
+    const iconLink: any = (
+      <IconLink
+        width={24}
+        height={24}
+        fill={
+          processing
+            ? styles.addLinkButtonTextDisabled.color
+            : styles.addLinkButtonText.color
+        }
+      />
+    );
+
     const renderAddLinkedIssue = (onHide: () => void) => (
       <LinkedIssuesAddLink
         issuesGetter={loadIssuesXShort}
@@ -307,10 +351,12 @@ class CreateIssue extends PureComponent<Props, State> {
           style={styles.addLinkButton}
           onPress={() => {
             if (this.props.isSplitView) {
-              this.toggleSetModalChildren(renderAddLinkedIssue(this.toggleSetModalChildren));
+              this.toggleSetModalChildren(
+                renderAddLinkedIssue(this.toggleSetModalChildren),
+              );
             } else {
               Router.Page({
-                children: (renderAddLinkedIssue(() => Router.pop())),
+                children: renderAddLinkedIssue(() => Router.pop()),
               });
             }
           }}
@@ -348,37 +394,42 @@ class CreateIssue extends PureComponent<Props, State> {
       isMatchesQuery,
       isConnected,
     } = this.props;
-
     const isAttaching = attachingImage !== null;
     const isProcessing = processing || isAttaching;
     const canCreateIssue = issue.summary && issue?.project?.id && !isProcessing;
-
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
           this.uiTheme = theme.uiTheme;
           const uiThemeColors: UIThemeColors = this.uiTheme.colors;
           const hasProject: boolean = this.hasProject();
-
-          const rightButton = (
-            processing
-              ? <ActivityIndicator color={uiThemeColors.$link}/>
-              : <IconCheck size={20} color={canCreateIssue && isConnected ? uiThemeColors.$link : uiThemeColors.$disabled}/>
+          const rightButton = processing ? (
+            <ActivityIndicator color={uiThemeColors.$link} />
+          ) : (
+            <IconCheck
+              size={20}
+              color={
+                canCreateIssue && isConnected
+                  ? uiThemeColors.$link
+                  : uiThemeColors.$disabled
+              }
+            />
           );
-
           return (
-            <View
-              testID="createIssue"
-              style={styles.container}
-            >
+            <View testID="createIssue" style={styles.container}>
               <Header
                 title={i18n('New Issue')}
                 showShadow={true}
-                leftButton={<IconClose size={21} color={uiThemeColors.$link}/>}
+                leftButton={<IconClose size={21} color={uiThemeColors.$link} />}
                 onBack={this.onHide}
                 rightButton={rightButton}
                 extraButton={this.renderActionsIcon()}
-                onRightButtonClick={() => canCreateIssue && isConnected && createIssue(onHide, isMatchesQuery)}/>
+                onRightButtonClick={() =>
+                  canCreateIssue &&
+                  isConnected &&
+                  createIssue(onHide, isMatchesQuery)
+                }
+              />
 
               {this.renderCustomFieldPanel()}
 
@@ -399,62 +450,72 @@ class CreateIssue extends PureComponent<Props, State> {
                   onDescriptionChange={setIssueDescription}
                 />
 
-                {hasProject && (
-                  getIssueTextCustomFields(this.props.issue.fields).map((textField: CustomFieldText, index: number) => {
-                    return (
-                      <IssueCustomFieldText
-                        testID="test:id/issue-custom-field"
-                        accessibilityLabel="issue-custom-field"
-                        accessible={true}
-                        key={`issueCustomFieldText${index}`}
-                        style={styles.textFields}
-                        editMode={true}
-                        onUpdateFieldValue={async (fieldValue: string): Promise<void> => {
-                          await this.props.updateFieldValue(textField, {text: fieldValue});
-                        }}
-                        textField={textField}
-                        usesMarkdown={issue.usesMarkdown}
-                      />
-                    );
-                  })
-                )}
+                {hasProject &&
+                  getIssueTextCustomFields(this.props.issue.fields).map(
+                    (textField: CustomFieldText, index: number) => {
+                      return (
+                        <IssueCustomFieldText
+                          testID="test:id/issue-custom-field"
+                          accessibilityLabel="issue-custom-field"
+                          accessible={true}
+                          key={`issueCustomFieldText${index}`}
+                          style={styles.textFields}
+                          editMode={true}
+                          onUpdateFieldValue={async (
+                            fieldValue: string,
+                          ): Promise<void> => {
+                            await this.props.updateFieldValue(textField, {
+                              text: fieldValue,
+                            });
+                          }}
+                          textField={textField}
+                          usesMarkdown={issue.usesMarkdown}
+                        />
+                      );
+                    },
+                  )}
 
                 {hasProject && (
                   <>
-                  <View style={[styles.separator, styles.separatorWithMargin]}/>
-                  <View
-                    testID="test:id/attachment-button"
-                    accessibilityLabel="attachment-button"
-                    accessible={true}
-                    style={styles.additionalData}
-                  >
-                    <AttachmentAddPanel
-                      isDisabled={processing}
-                      showAddAttachDialog={showAddAttachDialog}
+                    <View
+                      style={[styles.separator, styles.separatorWithMargin]}
                     />
-
                     <View
                       testID="test:id/attachment-button"
                       accessibilityLabel="attachment-button"
                       accessible={true}
+                      style={styles.additionalData}
                     >
-                      <AttachmentsRow
-                        style={[styles.additionalData, styles.issueAttachments]}
-                        attachments={issue.attachments}
-                        attachingImage={attachingImage}
-                        imageHeaders={getApi().auth.getAuthorizationHeaders()}
-                        canRemoveAttachment={true}
-                        onRemoveImage={removeAttachment}
-                        uiTheme={this.uiTheme}
+                      <AttachmentAddPanel
+                        isDisabled={processing}
+                        showAddAttachDialog={showAddAttachDialog}
                       />
+
+                      <View
+                        testID="test:id/attachment-button"
+                        accessibilityLabel="attachment-button"
+                        accessible={true}
+                      >
+                        <AttachmentsRow
+                          style={[
+                            styles.additionalData,
+                            styles.issueAttachments,
+                          ]}
+                          attachments={issue.attachments}
+                          attachingImage={attachingImage}
+                          imageHeaders={getApi().auth.getAuthorizationHeaders()}
+                          canRemoveAttachment={true}
+                          onRemoveImage={removeAttachment}
+                          uiTheme={this.uiTheme}
+                        />
+                      </View>
                     </View>
-                  </View>
                   </>
                 )}
 
                 {hasProject && (
                   <>
-                    <View style={styles.separator}/>
+                    <View style={styles.separator} />
                     <View
                       testID="test:id/attachment-button"
                       accessibilityLabel="attachment-button"
@@ -464,46 +525,58 @@ class CreateIssue extends PureComponent<Props, State> {
                       {hasProject && (
                         <TagAddPanel
                           disabled={processing}
-                          onAdd={() => this.setState({showAddTagSelect: true})}
+                          onAdd={() =>
+                            this.setState({
+                              showAddTagSelect: true,
+                            })
+                          }
                         />
                       )}
                       {!!issue.tags && (
-                        <Tags
-                          tags={issue.tags}
-                          multiline={true}
+                        <Tags tags={issue.tags} multiline={true} />
+                      )}
+                      {this.state.showAddTagSelect && (
+                        <TagAddSelect
+                          existed={issue?.tags}
+                          projectId={issue.project?.id}
+                          onAdd={(tags: Array<Tag>) =>
+                            this.props.onAddTags(tags)
+                          }
+                          onHide={() =>
+                            this.setState({
+                              showAddTagSelect: false,
+                            })
+                          }
                         />
                       )}
-                      {this.state.showAddTagSelect && <TagAddSelect
-                        existed={issue?.tags}
-                        projectId={issue.project?.id}
-                        onAdd={(tags: Array<Tag>) => this.props.onAddTags(tags)}
-                        onHide={() => this.setState({showAddTagSelect: false})}
-                      />}
                     </View>
                   </>
                 )}
 
                 {hasProject && (
                   <>
-                    <View style={styles.separator}/>
+                    <View style={styles.separator} />
                     <View
                       testID="test:id/link-issue-button"
                       accessibilityLabel="link-issue-button"
                       accessible={true}
                       style={styles.additionalData}
                     >
-                      {hasProject && issuePermissions.canLink(issue) && this.renderLinkedIssuesAddLink()}
+                      {hasProject &&
+                        issuePermissions.canLink(issue) &&
+                        this.renderLinkedIssuesAddLink()}
                       {hasProject && this.renderLinksBlock()}
                     </View>
                   </>
                 )}
-
               </ScrollView>
 
-              <KeyboardSpacerIOS/>
+              <KeyboardSpacerIOS />
 
               {isAttachFileDialogVisible && this.renderAttachFileDialog()}
-              {!this.isProcessing() && showCommandDialog && this.renderCommandDialog()}
+              {!this.isProcessing() &&
+                showCommandDialog &&
+                this.renderCommandDialog()}
             </View>
           );
         }}
@@ -521,11 +594,16 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     ...bindActionCreators(createIssueActions, dispatch),
-    onAddTags: (tags: Array<Tag>) => dispatch(createIssueActions.updateIssueDraft(true, {tags})),
+    onAddTags: (tags: Array<Tag>) =>
+      dispatch(
+        createIssueActions.updateIssueDraft(true, {
+          tags,
+        }),
+      ),
   };
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps)(CreateIssue));
+export default connect(mapStateToProps, mapDispatchToProps)(CreateIssue);

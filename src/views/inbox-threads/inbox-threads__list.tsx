@@ -1,10 +1,6 @@
-/* @flow */
-
 import React, {useCallback, useContext, useEffect} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
-
 import {useDispatch, useSelector} from 'react-redux';
-
 import * as actions from './inbox-threads-actions';
 import ErrorMessage from 'components/error-message/error-message';
 import InboxThreadsProgressPlaceholder from './inbox-threads__progress-placeholder';
@@ -14,59 +10,66 @@ import {isUnreadOnly} from './inbox-threads-actions';
 import {i18n} from 'components/i18n/i18n';
 import {IconNoNotifications} from 'components/icon/icon-pictogram';
 import {ThemeContext} from 'components/theme/theme-context';
-
 import styles from './inbox-threads.styles';
-
 import type {AppState} from '../../reducers';
 import type {CustomError} from 'flow/Error';
 import type {InboxThread, ThreadData, ThreadEntity} from 'flow/Inbox';
 import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {UserCurrent} from 'flow/User';
-
 type Props = {
   folderId: string;
-  onNavigate: (entity: ThreadEntity, navigateToActivity?: string, commentId?: string) => any,
-}
+  onNavigate: (
+    entity: ThreadEntity,
+    navigateToActivity?: string,
+    commentId?: string,
+  ) => any;
+};
 
-const InboxThreadsList = ({
-  folderId,
-  onNavigate,
-}: Props): Node => {
+const InboxThreadsList = ({folderId, onNavigate}: Props): Node => {
   const theme: Theme = useContext(ThemeContext);
   const dispatch = useDispatch();
+  const currentUser: UserCurrent = useSelector(
+    (state: AppState) => state.app.user,
+  );
+  const error: CustomError = useSelector(
+    (state: AppState) => state.inboxThreads.error,
+  );
+  const inProgress: boolean = useSelector(
+    (state: AppState) => state.inboxThreads.inProgress,
+  );
+  const threadsData: ThreadData =
+    useSelector((state: AppState) => state.inboxThreads.threadsData) || {};
 
-  const currentUser: UserCurrent = useSelector((state: AppState) => state.app.user);
-  const error: CustomError = useSelector((state: AppState) => state.inboxThreads.error);
-  const inProgress: boolean = useSelector((state: AppState) => state.inboxThreads.inProgress);
-  const threadsData: ThreadData = useSelector((state: AppState) => state.inboxThreads.threadsData) || {};
-
-  const getData = () => threadsData[folderId || folderIdAllKey] || {threads: [], hasMore: false};
+  const getData = () =>
+    threadsData[folderId || folderIdAllKey] || {
+      threads: [],
+      hasMore: false,
+    };
 
   const setThreadsFromCache = useCallback(
     (id?: string): void => {
       dispatch(actions.loadThreadsFromCache(id));
     },
-    [dispatch]
+    [dispatch],
   );
-
   const loadThreads = useCallback(
     (id?: string, end?: number, showProgress?: boolean) => {
       dispatch(actions.loadInboxThreads(id, end, showProgress));
     },
-    [dispatch]
+    [dispatch],
   );
-
   useEffect(() => {
     setThreadsFromCache(folderId);
     loadThreads(folderId);
   }, [folderId, loadThreads, setThreadsFromCache]);
 
-  const renderItem = ({item, index}: { item: InboxThread, index: number, ...}) => (
+  const renderItem = ({item, index}: {item: InboxThread; index: number}) => (
     <Thread
       style={[
         styles.thread,
-        (index === getData().threads.length - (getData().hasMore ? 2 : 1)) && styles.threadLast,
+        index === getData().threads.length - (getData().hasMore ? 2 : 1) &&
+          styles.threadLast,
       ]}
       thread={item}
       currentUser={currentUser}
@@ -75,17 +78,16 @@ const InboxThreadsList = ({
     />
   );
 
-  const visibleThreads: InboxThread[] = (
-    getData().hasMore
-      ? getData().threads.slice(0, getData().threads.length - 1)
-      : getData().threads
+  const visibleThreads: InboxThread[] = (getData().hasMore
+    ? getData().threads.slice(0, getData().threads.length - 1)
+    : getData().threads
   ).filter((it: InboxThread) => it.messages.length > 0);
-
-  const hasVisibleMessages: boolean = (
+  const hasVisibleMessages: boolean =
     visibleThreads.length > 0 &&
-    visibleThreads.reduce((amount: number, it: InboxThread) => (amount + it.messages.length), 0) > 0
-  );
-
+    visibleThreads.reduce(
+      (amount: number, it: InboxThread) => amount + it.messages.length,
+      0,
+    ) > 0;
   return (
     <View
       testID="test:id/inboxThreadsList"
@@ -97,7 +99,7 @@ const InboxThreadsList = ({
         contentContainerStyle={styles.threadsListContainer}
         removeClippedSubviews={false}
         data={visibleThreads}
-        ItemSeparatorComponent={() => <View style={styles.threadSeparator}/>}
+        ItemSeparatorComponent={() => <View style={styles.threadSeparator} />}
         ListFooterComponent={() => {
           if (error) {
             return (
@@ -108,8 +110,9 @@ const InboxThreadsList = ({
               />
             );
           }
+
           if (inProgress) {
-            return <InboxThreadsProgressPlaceholder/>;
+            return <InboxThreadsProgressPlaceholder />;
           }
 
           if (!hasVisibleMessages) {
@@ -120,7 +123,7 @@ const InboxThreadsList = ({
                 accessible={true}
                 style={styles.threadsEmpty}
               >
-                <IconNoNotifications/>
+                <IconNoNotifications />
                 <Text
                   testID="test:id/inboxThreadsListEmptyMessageText"
                   accessibilityLabel="inboxThreadsListEmptyMessageText"
@@ -129,12 +132,12 @@ const InboxThreadsList = ({
                 >
                   {isUnreadOnly()
                     ? i18n('You don’t have any unread notifications')
-                    : i18n('No notifications')
-                  }
+                    : i18n('No notifications')}
                 </Text>
               </View>
             );
           }
+
           return null;
         }}
         keyExtractor={(it: InboxThread) => it.id}
@@ -144,16 +147,17 @@ const InboxThreadsList = ({
             loadThreads(folderId, getData().threads.slice(-1)[0].notified);
           }
         }}
-        refreshControl={<RefreshControl
-          refreshing={false}
-          tintColor={styles.link.color}
-          onRefresh={() => loadThreads(folderId)}
-        />}
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            tintColor={styles.link.color}
+            onRefresh={() => loadThreads(folderId)}
+          />
+        }
         renderItem={renderItem}
       />
     </View>
   );
 };
-
 
 export default InboxThreadsList;

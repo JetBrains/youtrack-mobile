@@ -1,18 +1,17 @@
-/* @flow */
-
 import {Dimensions} from 'react-native';
-import {AGILE_COLLAPSED_COLUMN_WIDTH, AGILE_TABLET_EXPANDED_COLUMN_WIDTH} from '../agile-common/agile-common';
+import {
+  AGILE_COLLAPSED_COLUMN_WIDTH,
+  AGILE_TABLET_EXPANDED_COLUMN_WIDTH,
+} from '../agile-common/agile-common';
 import {UNIT} from '../variables/variables';
-
 import {isIOSPlatform} from 'util/util';
 import {isAllColumnsCollapsed} from 'views/agile-board/agile-board__helper';
-
 import type {BoardColumn} from 'flow/Agile';
-
-type WidthData = { windowWidth: number, cardWidth: number };
-
+type WidthData = {
+  windowWidth: number;
+  cardWidth: number;
+};
 export const COLUMN_VIEWPORT_WIDTH_FACTOR = 0.85;
-
 const MINIMAL_MOMENTUM_SPEED = 0.5;
 const AUTOSCROLL_GAP = 5;
 const LEFT_BOARD_SPACE: number = UNIT * 3.5;
@@ -28,19 +27,21 @@ function calculateWidthData(): WidthData {
 /**
  * Limits value to desired range
  */
-
 export function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
-
-export function getColumnsWidthAsArray(columns: Array<BoardColumn> = []): Array<number> {
+export function getColumnsWidthAsArray(
+  columns: Array<BoardColumn> = [],
+): Array<number> {
   const widthData: WidthData = calculateWidthData();
-
-  return columns
-    .map(col => col.collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : widthData.cardWidth);
+  return columns.map(col =>
+    col.collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : widthData.cardWidth,
+  );
 }
-
-export function getScrollableWidth(columns: Array<BoardColumn> = [], isSplitView: boolean): number {
+export function getScrollableWidth(
+  columns: Array<BoardColumn> = [],
+  isSplitView: boolean,
+): number {
   const widthData: WidthData = calculateWidthData();
 
   if (isAllColumnsCollapsed(columns)) {
@@ -55,15 +56,18 @@ export function getScrollableWidth(columns: Array<BoardColumn> = [], isSplitView
         } else {
           totalWidth += AGILE_TABLET_EXPANDED_COLUMN_WIDTH;
         }
+
         return totalWidth;
       }, 0),
-      widthData.windowWidth
+      widthData.windowWidth,
     );
   }
 
-  return getColumnsWidthAsArray(columns).reduce((totalWidth: number, item: number) => totalWidth + item, 0);
+  return getColumnsWidthAsArray(columns).reduce(
+    (totalWidth: number, item: number) => totalWidth + item,
+    0,
+  );
 }
-
 export function getSnapPoints(columns: Array<BoardColumn>): Array<number> {
   const widthData = calculateWidthData();
   return columns
@@ -74,7 +78,6 @@ export function getSnapPoints(columns: Array<BoardColumn>): Array<number> {
         width: collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : widthData.cardWidth,
       };
     })
-
     .reduce((acc, {collapsed, width}, index) => {
       const prev = acc[index - 1] || null;
       return [
@@ -82,28 +85,38 @@ export function getSnapPoints(columns: Array<BoardColumn>): Array<number> {
         {
           width,
           collapsed,
-          start: (prev?.start + prev?.width) || 0,
+          start: prev?.start + prev?.width || 0,
         },
       ];
     }, [])
     .filter(item => !item.collapsed || item.start === 0)
     .map(item => item.start);
 }
-
-export function getClosestSnapPoints(x: number, openColumnStarts: Array<number>): Array<number> {
+export function getClosestSnapPoints(
+  x: number,
+  openColumnStarts: Array<number>,
+): Array<number> {
   const prev = openColumnStarts.filter(it => it < x).pop() || 0;
   const next = openColumnStarts.filter(it => it > x).shift();
-  return [prev, next > x ? next : openColumnStarts[openColumnStarts.length - 1]];
+  return [
+    prev,
+    next > x ? next : openColumnStarts[openColumnStarts.length - 1],
+  ];
 }
-
-export function getSnapToX(scrollEvent: Object, columns: Array<BoardColumn>): number {
+export function getSnapToX(
+  scrollEvent: Record<string, any>,
+  columns: Array<BoardColumn>,
+): number {
   const openColumnStarts = getSnapPoints(columns);
   const x = scrollEvent.nativeEvent.contentOffset.x;
   const [prev, next] = getClosestSnapPoints(x, openColumnStarts);
-
   let xSpeed = scrollEvent.nativeEvent.velocity.x;
   xSpeed = isIOSPlatform() ? xSpeed : -xSpeed; // On android xSpeed is inverted by unknown reason
-  const snapToLeft = Math.abs(xSpeed) < MINIMAL_MOMENTUM_SPEED ? (x - prev < next - x) : xSpeed < 0;
+
+  const snapToLeft =
+    Math.abs(xSpeed) < MINIMAL_MOMENTUM_SPEED
+      ? x - prev < next - x
+      : xSpeed < 0;
   return snapToLeft ? prev + LEFT_BOARD_SPACE : next + LEFT_BOARD_SPACE;
 }
 
@@ -111,20 +124,34 @@ export function getSnapToX(scrollEvent: Object, columns: Array<BoardColumn>): nu
  * Calculates card edges position shift relative to scroll-sensitive borders
  */
 export function getPointShift(
-  dragData: {point: {x: number, y: number}, width: number, height: number},
-  layout: {width: number, height: number, top: number}
-): {dx: number, dy: number} {
+  dragData: {
+    point: {
+      x: number;
+      y: number;
+    };
+    width: number;
+    height: number;
+  },
+  layout: {
+    width: number;
+    height: number;
+    top: number;
+  },
+): {
+  dx: number;
+  dy: number;
+} {
   const {x, y: absolyteY} = dragData.point;
   const {width, height, top} = layout;
   const y = absolyteY - top;
-
   const diffLeft = x - AUTOSCROLL_GAP;
-  const diffRight = (x + dragData.width * 0.6) - (width - AUTOSCROLL_GAP);
-  const dx = diffLeft < 0 ? diffLeft : (diffRight > 0 ? diffRight : 0);
-
+  const diffRight = x + dragData.width * 0.6 - (width - AUTOSCROLL_GAP);
+  const dx = diffLeft < 0 ? diffLeft : diffRight > 0 ? diffRight : 0;
   const diffTop = y - AUTOSCROLL_GAP;
-  const diffBottom = (y + dragData.height) - (height - AUTOSCROLL_GAP);
-  const dy = diffTop < 0 ? diffTop : (diffBottom > 0 ? diffBottom : 0);
-
-  return {dx, dy};
+  const diffBottom = y + dragData.height - (height - AUTOSCROLL_GAP);
+  const dy = diffTop < 0 ? diffTop : diffBottom > 0 ? diffBottom : 0;
+  return {
+    dx,
+    dy,
+  };
 }

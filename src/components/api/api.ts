@@ -1,7 +1,4 @@
-/* @flow */
-
 import qs from 'qs';
-
 import AgileAPI from './api__agile';
 import ApiHelper from './api__helper';
 import ArticlesAPI from './api__articles';
@@ -17,7 +14,6 @@ import CustomFieldsAPI from './api__custom-fields';
 import SearchAPI from './api__search';
 import UserAPI from './api__user';
 import UserGroupAPI from './api__user-group';
-
 import type Auth from '../auth/oauth2';
 import type {EndUserAgreement} from 'flow/AppConfig';
 import type {IssueProject, Tag} from 'flow/CustomFields';
@@ -27,7 +23,6 @@ import type {User} from 'flow/User';
 class API extends BaseAPI {
   youTrackProjectUrl: string;
   youtTrackFieldBundleUrl: string;
-
   agile: AgileAPI;
   articles: ArticlesAPI;
   customFields: CustomFieldsAPI;
@@ -43,7 +38,6 @@ class API extends BaseAPI {
 
   constructor(auth: Auth) {
     super(auth);
-
     this.agile = new AgileAPI(auth);
     this.articles = new ArticlesAPI(auth);
     this.customFields = new CustomFieldsAPI(auth);
@@ -56,51 +50,64 @@ class API extends BaseAPI {
     this.search = new SearchAPI(auth);
     this.user = new UserAPI(auth);
     this.userGroup = new UserGroupAPI(auth);
-
     this.youTrackProjectUrl = `${this.youTrackUrl}/api/admin/projects`;
     this.youtTrackFieldBundleUrl = `${this.youTrackUrl}/api/admin/customFieldSettings/bundles`;
   }
 
-  async getUserAgreement(): Promise<?EndUserAgreement> {
-    const queryString = qs.stringify({fields: 'endUserAgreement(enabled,text,majorVersion,minorVersion)'});
+  async getUserAgreement(): Promise<EndUserAgreement | null | undefined> {
+    const queryString = qs.stringify({
+      fields: 'endUserAgreement(enabled,text,majorVersion,minorVersion)',
+    });
     const res = await this.makeAuthorizedRequest(
       `${this.auth.config.auth.serverUri}/api/rest/settings/public?${queryString}`,
-      'GET'
+      'GET',
     );
-
     return res.endUserAgreement;
   }
 
-  async acceptUserAgreement(): Promise<Object> {
-    const body = {fields: issueFields.userConsent};
+  async acceptUserAgreement(): Promise<Record<string, any>> {
+    const body = {
+      fields: issueFields.userConsent,
+    };
     return await this.makeAuthorizedRequest(
       `${this.auth.config.auth.serverUri}/api/rest/users/endUserAgreementConsent`,
       'POST',
-      {body}
+      {
+        body,
+      },
     );
   }
+
   async getProjects(query: string): Promise<Array<IssueProject>> {
     const queryString = qs.stringify({
       fields: issueFields.projectOnList.toString(),
       query: query,
     });
-    return await this.makeAuthorizedRequest(`${this.youTrackProjectUrl}?${queryString}`);
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackProjectUrl}?${queryString}`,
+    );
   }
+
   async getCustomFieldUserValues(bundleId: string): Promise<Array<User>> {
     const queryString = qs.stringify({
       banned: false,
       sort: true,
       fields: issueFields.user.toString(),
     });
-
     const values = await this.makeAuthorizedRequest(
-      `${this.youtTrackFieldBundleUrl}/user/${bundleId}/aggregatedUsers?${queryString}`
+      `${this.youtTrackFieldBundleUrl}/user/${bundleId}/aggregatedUsers?${queryString}`,
     );
-
-    return ApiHelper.convertRelativeUrls(values, 'avatarUrl', this.config.backendUrl);
+    return ApiHelper.convertRelativeUrls(
+      values,
+      'avatarUrl',
+      this.config.backendUrl,
+    );
   }
 
-  async getCustomFieldValues(bundleId: string, fieldValueType: string): Promise<Array<Object>> {
+  async getCustomFieldValues(
+    bundleId: string,
+    fieldValueType: string,
+  ): Promise<Array<Record<string, any>>> {
     if (fieldValueType === 'group') {
       return this.userGroup.getAllUserGroups();
     }
@@ -109,14 +116,12 @@ class API extends BaseAPI {
       return this.getCustomFieldUserValues(bundleId);
     }
 
-    const queryString = API.createFieldsQuery(
-      issueFields.bundleValues,
-      {
-        $includeArchived: false,
-        sort: true,
-      });
+    const queryString = API.createFieldsQuery(issueFields.bundleValues, {
+      $includeArchived: false,
+      sort: true,
+    });
     return await this.makeAuthorizedRequest(
-      `${this.youtTrackFieldBundleUrl}/${fieldValueType}/${bundleId}/values?${queryString}`
+      `${this.youtTrackFieldBundleUrl}/${fieldValueType}/${bundleId}/values?${queryString}`,
     );
   }
 
@@ -125,34 +130,57 @@ class API extends BaseAPI {
     return await this.makeAuthorizedRequest(url);
   }
 
-  async getCommandSuggestions(issueIds: Array<string>, query: string, caret: number): Promise<CommandSuggestionResponse> {
-    const queryString = qs.stringify({fields: issueFields.commandSuggestionFields.toString()});
-
+  async getCommandSuggestions(
+    issueIds: Array<string>,
+    query: string,
+    caret: number,
+  ): Promise<CommandSuggestionResponse> {
+    const queryString = qs.stringify({
+      fields: issueFields.commandSuggestionFields.toString(),
+    });
     return await this.makeAuthorizedRequest(
       `${this.youTrackUrl}/api/commands/assist?${queryString}`,
       'POST',
       {
         query,
         caret,
-        issues: issueIds.map(id => ({id})),
-      }
+        issues: issueIds.map(id => ({
+          id,
+        })),
+      },
     );
   }
 
-  async applyCommand(options: { issueIds: Array<string>, comment?: ?string, command: string }): Promise<any> {
-    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/commands`, 'POST', {
-      query: options.command,
-      comment: options.comment,
-      issues: options.issueIds.map(id => ({id})),
-    });
+  async applyCommand(options: {
+    issueIds: Array<string>;
+    comment?: string | null | undefined;
+    command: string;
+  }): Promise<any> {
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/commands`,
+      'POST',
+      {
+        query: options.command,
+        comment: options.comment,
+        issues: options.issueIds.map(id => ({
+          id,
+        })),
+      },
+    );
   }
 
   async getSavedQueries(): Promise<Array<SavedQuery>> {
-    const queryString = qs.stringify({fields: issueFields.issueFolder.toString()});
-    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/savedQueries?${queryString}`);
+    const queryString = qs.stringify({
+      fields: issueFields.issueFolder.toString(),
+    });
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/savedQueries?${queryString}`,
+    );
   }
 
-  async getIssueFolders(pinnedOnly: ?boolean = null): Promise<Array<IssueProject | SavedQuery | Tag>> {
+  async getIssueFolders(
+    pinnedOnly: boolean | null | undefined = null,
+  ): Promise<Array<IssueProject | SavedQuery | Tag>> {
     const fields = ApiHelper.toField([
       'id',
       '$type',
@@ -160,10 +188,7 @@ class API extends BaseAPI {
       'query',
       'pinned',
       {
-        owner: [
-          'id',
-          'ringId',
-        ],
+        owner: ['id', 'ringId'],
       },
       {
         color: ['id'],
@@ -173,8 +198,9 @@ class API extends BaseAPI {
       fields: fields.toString(),
       pinned: pinnedOnly,
     });
-
-    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/issueFolders?${queryString}`);
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/issueFolders?${queryString}`,
+    );
   }
 
   async getNotificationsToken(): Promise<string> {
@@ -183,47 +209,61 @@ class API extends BaseAPI {
     return res.token;
   }
 
-  async subscribeToFCMNotifications(konnectorURL: string, youtrackToken: string, deviceToken: string): Promise<string> {
+  async subscribeToFCMNotifications(
+    konnectorURL: string,
+    youtrackToken: string,
+    deviceToken: string,
+  ): Promise<string> {
     const url = `${konnectorURL}/ring/fcmPushNotifications`;
     return await this.makeAuthorizedRequest(url, 'POST', {
       youtrackToken: youtrackToken,
       deviceToken: deviceToken,
     });
   }
-  async unsubscribeFromFCMNotifications(konnectorURL: string, deviceToken: string): Promise<any> {
+
+  async unsubscribeFromFCMNotifications(
+    konnectorURL: string,
+    deviceToken: string,
+  ): Promise<any> {
     return this.makeAuthorizedRequest(
       `${konnectorURL}/ring/fcmPushNotifications/unsubscribe`,
       'POST',
-      {deviceToken: deviceToken}
+      {
+        deviceToken: deviceToken,
+      },
     );
   }
 
-  async subscribeToIOSNotifications(konnectorURL: string, youtrackToken: string, deviceToken: string): Promise<string> {
+  async subscribeToIOSNotifications(
+    konnectorURL: string,
+    youtrackToken: string,
+    deviceToken: string,
+  ): Promise<string> {
     const url = `${konnectorURL}/ring/pushNotifications`;
-    return await this.makeAuthorizedRequest(
-      url,
-      'POST',
-      {
-        token: youtrackToken,
-        appleDeviceId: deviceToken,
-      }
-      );
+    return await this.makeAuthorizedRequest(url, 'POST', {
+      token: youtrackToken,
+      appleDeviceId: deviceToken,
+    });
   }
 
-  async unsubscribeFromIOSNotifications(konnectorURL: string, deviceToken: string): Promise<any> {
+  async unsubscribeFromIOSNotifications(
+    konnectorURL: string,
+    deviceToken: string,
+  ): Promise<any> {
     return this.makeAuthorizedRequest(
       `${konnectorURL}/ring/pushNotifications/unsubscribe`,
       'POST',
-      {deviceToken: deviceToken}
+      {
+        deviceToken: deviceToken,
+      },
     );
   }
 
-  async getWorkTimeSettings(): Promise<Object> {
+  async getWorkTimeSettings(): Promise<Record<string, any>> {
     const fields = 'id,daysAWeek,workDays,minutesADay';
     const url = `${this.youTrackUrl}/api/admin/timeTrackingSettings/workTimeSettings?fields=${fields}`;
     return await this.makeAuthorizedRequest(url, 'GET');
   }
-
 }
 
 export default API;

@@ -1,16 +1,18 @@
 function deepClone(val) {
   switch (kindOf(val)) {
-  case 'Object':
-    return deepCloneObject(val);
-  case 'Array':
-    return deepCloneArray(val);
-  default:
-    return clone(val);
+    case 'Object':
+      return deepCloneObject(val);
+
+    case 'Array':
+      return deepCloneArray(val);
+
+    default:
+      return clone(val);
   }
 }
 
 function deepMixIn(target, ...args) {
-  args.forEach((obj) => {
+  args.forEach(obj => {
     if (obj) {
       Object.entries(obj).forEach(([key, val]) => {
         copyProp(target, val, key);
@@ -22,6 +24,7 @@ function deepMixIn(target, ...args) {
 
 function copyProp(target, val, key: string) {
   const existing = target[key];
+
   if (isPlainObject(val) && isPlainObject(existing)) {
     deepMixIn(existing, val);
   } else {
@@ -31,16 +34,20 @@ function copyProp(target, val, key: string) {
 
 function clone(val) {
   switch (kindOf(val)) {
-  case 'Object':
-    return cloneObject(val);
-  case 'Array':
-    return cloneArray(val);
-  case 'RegExp':
-    return cloneRegExp(val);
-  case 'Date':
-    return cloneDate(val);
-  default:
-    return val;
+    case 'Object':
+      return cloneObject(val);
+
+    case 'Array':
+      return cloneArray(val);
+
+    case 'RegExp':
+      return cloneRegExp(val);
+
+    case 'Date':
+      return cloneDate(val);
+
+    default:
+      return val;
   }
 }
 
@@ -83,12 +90,11 @@ function deepCloneObject(source) {
 }
 
 function deepCloneArray(arr) {
-  return arr.map((it) => deepClone(it));
+  return arr.map(it => deepClone(it));
 }
 
 function isPlainObject(value) {
-  return (!!value && typeof value === 'object' &&
-    value.constructor === Object);
+  return !!value && typeof value === 'object' && value.constructor === Object;
 }
 
 function kindOf(val) {
@@ -101,8 +107,4 @@ function kindOf(val) {
   }
 }
 
-
-export {
-  deepClone,
-  deepMixIn,
-};
+export {deepClone, deepMixIn};

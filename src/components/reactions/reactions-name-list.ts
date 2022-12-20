@@ -56,5 +56,4 @@ const availableReactionNames: Array<string> = [
   'eight',
   'nine',
 ];
-
 export default availableReactionNames;

@@ -1,9 +1,5 @@
-/* @flow */
-
 import {Linking} from 'react-native';
-
 import DeviceInfo from 'react-native-device-info';
-
 import * as appActionsHelper from './app-actions-helper';
 import * as types from './action-types';
 import Api from 'components/api/api';
@@ -18,7 +14,6 @@ import Router from 'components/router/router';
 import UrlParse from 'url-parse';
 import usage from 'components/usage/usage';
 import {i18n} from 'components/i18n/i18n';
-
 import {
   clearCachesAndDrafts,
   flushStorage,
@@ -31,7 +26,10 @@ import {
   storageStateAuthParamsKey,
   storeAccounts,
 } from 'components/storage/storage';
-import {folderIdAllKey, folderIdMap} from 'views/inbox-threads/inbox-threads-helper';
+import {
+  folderIdAllKey,
+  folderIdMap,
+} from 'views/inbox-threads/inbox-threads-helper';
 import {getCachedPermissions, storeYTCurrentUser} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
@@ -44,14 +42,19 @@ import {logEvent} from 'components/log/log-helper';
 import {normalizeAuthParams} from 'components/auth/oauth2-helper';
 import {notify, notifyError} from 'components/notification/notification';
 import {setApi} from 'components/api/api__instance';
-
 import type {Activity} from 'flow/Activity';
 import type {AppConfig, EndUserAgreement} from 'flow/AppConfig';
 import type {AppState} from '../reducers';
 import type {Article} from 'flow/Article';
 import type {AuthConfig, AuthParams, OAuthParams2} from 'flow/Auth';
 import type {CustomError} from 'flow/Error';
-import type {Folder, User, UserAppearanceProfile, UserArticlesProfile, UserCurrent} from 'flow/User';
+import type {
+  Folder,
+  User,
+  UserAppearanceProfile,
+  UserArticlesProfile,
+  UserCurrent,
+} from 'flow/User';
 import type {InboxFolder, InboxThread} from 'flow/Inbox';
 import type {NetInfoState} from '@react-native-community/netinfo';
 import type {NotificationRouteData} from 'flow/Notification';
@@ -59,176 +62,273 @@ import type {PermissionCacheItem} from 'flow/Permission';
 import type {StorageState} from 'components/storage/storage';
 import type {WorkTimeSettings} from 'flow/Work';
 import {UserGeneralProfileLocale} from 'flow/User';
-
 type Action = (
-  dispatch: (any) => any,
+  dispatch: (arg0: any) => any,
   getState: () => AppState,
-  getApi: () => Api
-) => Promise<void | boolean | mixed> | typeof undefined;
-
+  getApi: () => Api,
+) => Promise<void | boolean | unknown> | typeof undefined;
 export function setNetworkState(networkState: NetInfoState): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    dispatch({type: types.SET_NETWORK, networkState});
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
+    dispatch({
+      type: types.SET_NETWORK,
+      networkState,
+    });
   };
 }
-
 export function logOut(): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     clearCachesAndDrafts();
     const auth = getState().app.auth;
-    Router.EnterServer({serverUrl: auth?.config?.backendUrl});
+    Router.EnterServer({
+      serverUrl: auth?.config?.backendUrl,
+    });
+
     if (auth) {
       auth.logOut();
     }
+
     setApi(null);
-    dispatch({type: types.LOG_OUT});
+    dispatch({
+      type: types.LOG_OUT,
+    });
     log.info('User is logged out');
   };
 }
-
-export function openDebugView(): { type: string } {
-  return {type: types.OPEN_DEBUG_VIEW};
+export function openDebugView(): {
+  type: string;
+} {
+  return {
+    type: types.OPEN_DEBUG_VIEW,
+  };
 }
-
-export function closeDebugView(): { type: string } {
-  return {type: types.CLOSE_DEBUG_VIEW};
+export function closeDebugView(): {
+  type: string;
+} {
+  return {
+    type: types.CLOSE_DEBUG_VIEW,
+  };
 }
-
-export function setEnabledFeatures(features: Array<string>): { features: Array<string>, type: string } {
-  return {type: types.SET_FEATURES, features};
+export function setEnabledFeatures(
+  features: Array<string>,
+): {
+  features: Array<string>;
+  type: string;
+} {
+  return {
+    type: types.SET_FEATURES,
+    features,
+  };
 }
-
-export function onNavigateBack(closingView: Object): { closingView: any, type: string } {
-  return {type: types.ON_NAVIGATE_BACK, closingView};
+export function onNavigateBack(
+  closingView: Record<string, any>,
+): {
+  closingView: any;
+  type: string;
+} {
+  return {
+    type: types.ON_NAVIGATE_BACK,
+    closingView,
+  };
 }
-
-export function receiveOtherAccounts(otherAccounts: Array<StorageState>): { otherAccounts: Array<StorageState>, type: string } {
-  return {type: types.RECEIVE_OTHER_ACCOUNTS, otherAccounts};
+export function receiveOtherAccounts(
+  otherAccounts: Array<StorageState>,
+): {
+  otherAccounts: Array<StorageState>;
+  type: string;
+} {
+  return {
+    type: types.RECEIVE_OTHER_ACCOUNTS,
+    otherAccounts,
+  };
 }
-
-export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppearanceProfile): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+export function receiveUserAppearanceProfile(
+  userAppearanceProfile?: UserAppearanceProfile,
+): Action {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     if (userAppearanceProfile) {
       try {
         const appearanceProfile: UserAppearanceProfile = await getApi().user.updateUserAppearanceProfile(
           'me',
-          userAppearanceProfile
+          userAppearanceProfile,
         );
         dispatch({
           type: types.RECEIVE_USER_APPEARANCE_PROFILE,
-          ...{appearance: appearanceProfile},
+          ...{
+            appearance: appearanceProfile,
+          },
         });
       } catch (error) {
-        log.info('Can\'t update user appearance profile.');
+        log.info("Can't update user appearance profile.");
       }
     }
   };
 }
-
-export const updateUserArticlesProfile = (articlesProfile: UserArticlesProfile | { lastVisitedArticle: null }): Action =>
-  async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    dispatch({
-      type: types.RECEIVE_USER_ARTICLES_PROFILE,
-      ...{articles: articlesProfile},
-    });
-  };
-
-export const resetUserArticlesProfile = (): Action => async (
-  dispatch: (any) => any,
+export const updateUserArticlesProfile = (
+  articlesProfile:
+    | UserArticlesProfile
+    | {
+        lastVisitedArticle: null;
+      },
+): Action => async (
+  dispatch: (arg0: any) => any,
   getState: () => AppState,
-  getApi: () => Api
+  getApi: () => Api,
 ) => {
-  dispatch(updateUserArticlesProfile({lastVisitedArticle: null}));
+  dispatch({
+    type: types.RECEIVE_USER_ARTICLES_PROFILE,
+    ...{
+      articles: articlesProfile,
+    },
+  });
 };
-
-export const cacheUserLastVisitedArticle = (article: Article | null, activities?: Array<Activity>) => {
+export const resetUserArticlesProfile = (): Action => async (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: () => Api,
+) => {
+  dispatch(
+    updateUserArticlesProfile({
+      lastVisitedArticle: null,
+    }),
+  );
+};
+export const cacheUserLastVisitedArticle = (
+  article: Article | null,
+  activities?: Array<Activity>,
+) => {
   try {
     if (!article || !article.id) {
-      flushStoragePart({articleLastVisited: null});
+      flushStoragePart({
+        articleLastVisited: null,
+      });
     } else {
       const articleLastVisited: {
-        article?: Article,
-        activities?: Array<Activity>
+        article?: Article;
+        activities?: Array<Activity>;
       } | null = getStorageState().articleLastVisited;
-
       flushStoragePart({
         articleLastVisited: {
-          ...{article},
-          activities: activities || (
-            articleLastVisited?.article?.id === article.id ? articleLastVisited?.activities : null
-          ),
+          ...{
+            article,
+          },
+          activities:
+            activities ||
+            (articleLastVisited?.article?.id === article.id
+              ? articleLastVisited?.activities
+              : null),
         },
       });
     }
   } catch (e) {
-    logEvent({message: 'Failed to store locally the last visited article', isError: true});
+    logEvent({
+      message: 'Failed to store locally the last visited article',
+      isError: true,
+    });
   }
 };
-
 export function loadCurrentUserAndSetAPI(): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     if (getState().app?.networkState?.isConnected === true) {
-      const auth: OAuth2 = ((getState().app.auth: any): OAuth2);
+      const auth: OAuth2 = (getState().app.auth as any) as OAuth2;
       const authParams = auth.getAuthParams();
       await auth.loadCurrentUser(authParams);
-      await flushStoragePart({currentUser: {
-          ...getStorageState().currentUser,
-          ...auth.currentUser,
-        }});
+      await flushStoragePart({
+        currentUser: {...getStorageState().currentUser, ...auth.currentUser},
+      });
       setApi(new Api(auth));
     }
   };
 }
 
 function setAuthInstance(auth: OAuth2) {
-  return {type: types.INITIALIZE_AUTH, auth};
+  return {
+    type: types.INITIALIZE_AUTH,
+    auth,
+  };
 }
 
 async function createAuthInstance(config: AppConfig): Promise<OAuth2> {
   const auth: OAuth2 = new OAuth2(config);
+
   try {
     await auth.setAuthParamsFromCache();
-  } catch (e) {
-  }
+  } catch (e) {}
+
   usage.init(config.statisticsEnabled);
   return auth;
 }
 
 function showUserAgreement(agreement) {
   usage.trackEvent('EUA is shown');
-  return {type: types.SHOW_USER_AGREEMENT, agreement};
+  return {
+    type: types.SHOW_USER_AGREEMENT,
+    agreement,
+  };
 }
 
 async function storeConfig(config: AppConfig) {
-  await flushStoragePart({config});
+  await flushStoragePart({
+    config,
+  });
 }
 
 function populateAccounts() {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     const otherAccounts: Array<StorageState> = await getOtherAccounts();
     dispatch(receiveOtherAccounts(otherAccounts));
   };
 }
 
 function beginAccountChange() {
-  return {type: types.BEGIN_ACCOUNT_CHANGE};
+  return {
+    type: types.BEGIN_ACCOUNT_CHANGE,
+  };
 }
 
 function endAccountChange() {
-  return {type: types.END_ACCOUNT_CHANGE};
+  return {
+    type: types.END_ACCOUNT_CHANGE,
+  };
 }
 
-async function connectToOneMoreServer(serverUrl: string, onBack: Function): Promise<AppConfig> {
+async function connectToOneMoreServer(
+  serverUrl: string,
+  onBack: (...args: Array<any>) => any,
+): Promise<AppConfig> {
   return new Promise(resolve => {
     Router.EnterServer({
       onCancel: onBack,
       serverUrl,
-      connectToYoutrack: async (newURL: string) => resolve(await doConnect(newURL)),
+      connectToYoutrack: async (newURL: string) =>
+        resolve(await doConnect(newURL)),
     });
   });
 }
 
-async function authorizeOnOneMoreServer(config: AppConfig, onBack: (serverUrl: string) => any) {
+async function authorizeOnOneMoreServer(
+  config: AppConfig,
+  onBack: (serverUrl: string) => any,
+) {
   return new Promise(resolve => {
     Router.LogIn({
       config,
@@ -238,12 +338,23 @@ async function authorizeOnOneMoreServer(config: AppConfig, onBack: (serverUrl: s
   });
 }
 
-function applyAccount(config: AppConfig, auth: OAuth2, authParams: OAuthParams2): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const otherAccounts: Array<StorageState> = getState().app.otherAccounts || [];
+function applyAccount(
+  config: AppConfig,
+  auth: OAuth2,
+  authParams: OAuthParams2,
+): Action {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
+    const otherAccounts: Array<StorageState> =
+      getState().app.otherAccounts || [];
     const currentAccount: StorageState = getStorageState();
-    const newOtherAccounts: Array<StorageState> = [currentAccount, ...otherAccounts];
-
+    const newOtherAccounts: Array<StorageState> = [
+      currentAccount,
+      ...otherAccounts,
+    ];
     await storeAccounts(newOtherAccounts);
     dispatch(receiveOtherAccounts(newOtherAccounts));
     const creationTimestamp: number = Date.now();
@@ -252,10 +363,8 @@ function applyAccount(config: AppConfig, auth: OAuth2, authParams: OAuthParams2)
       creationTimestamp: creationTimestamp,
       [storageStateAuthParamsKey]: creationTimestamp.toString(),
     });
-
     await auth.cacheAuthParams(authParams, creationTimestamp.toString());
     await storeConfig(config);
-
     await dispatch(initializeAuth(config));
     await dispatch(checkUserAgreement());
 
@@ -266,7 +375,11 @@ function applyAccount(config: AppConfig, auth: OAuth2, authParams: OAuthParams2)
 }
 
 export function addAccount(serverUrl: string = ''): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     log.info('Adding new account started');
 
     try {
@@ -274,55 +387,83 @@ export function addAccount(serverUrl: string = ''): Action {
         log.info('Adding new server canceled by user');
         Router.navigateToDefaultRoute();
       });
-      log.info(`Config loaded for new server (${config.backendUrl}), logging in...`);
-
+      log.info(
+        `Config loaded for new server (${config.backendUrl}), logging in...`,
+      );
       const tmpAuthInstance: OAuth2 = new OAuth2(config); //NB! this temporary instance for Login screen code
-      const authParams: OAuthParams2 = await authorizeOnOneMoreServer(config, function onBack(url: string) {
-        log.info('Authorization canceled by user, going back');
-        dispatch(addAccount(url));
-      });
+
+      const authParams: OAuthParams2 = await authorizeOnOneMoreServer(
+        config,
+        function onBack(url: string) {
+          log.info('Authorization canceled by user, going back');
+          dispatch(addAccount(url));
+        },
+      );
       log.info('Authorized on new server, applying');
-
-      await dispatch(applyAccount(config, tmpAuthInstance, normalizeAuthParams(authParams)));
-
-      const user: ?User = getStorageState().currentUser;
+      await dispatch(
+        applyAccount(config, tmpAuthInstance, normalizeAuthParams(authParams)),
+      );
+      const user: User | null | undefined = getStorageState().currentUser;
       const userName: string = user?.name || '';
-      log.info(`Successfully added account, user "${userName}", server "${config.backendUrl}"`);
+      log.info(
+        `Successfully added account, user "${userName}", server "${config.backendUrl}"`,
+      );
     } catch (err) {
       notifyError(err);
       const {otherAccounts} = getState().app;
+
       if (!getStorageState().config && otherAccounts?.length) {
         log.info('Restoring prev account');
         await dispatch(switchAccount(otherAccounts[0], true));
       }
+
       Router.navigateToDefaultRoute();
     }
   };
 }
-
-export function switchAccount(account: StorageState, dropCurrentAccount: boolean = false, issueId?: string): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+export function switchAccount(
+  account: StorageState,
+  dropCurrentAccount: boolean = false,
+  issueId?: string,
+): Action {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     dispatch(resetUserArticlesProfile());
     cacheUserLastVisitedArticle(null);
+
     try {
       redirectToHome(account.config.backendUrl);
       await dispatch(changeAccount(account, dropCurrentAccount, issueId));
     } catch (e) {}
   };
 }
-
 export function updateOtherAccounts(
   account: StorageState,
-  removeCurrentAccount: boolean = false
-): (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => Promise<Array<StorageState>> {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  removeCurrentAccount: boolean = false,
+): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: () => Api,
+) => Promise<Array<StorageState>> {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     const state: AppState = getState();
-
     const currentAccount: StorageState = getStorageState();
-    log.info(`Changing account: ${currentAccount?.config?.backendUrl || ''} -> ${account?.config?.backendUrl || ''}`);
-
-    const otherAccounts: Array<StorageState> = (state.app.otherAccounts || []).filter(
-      (it: StorageState) => it.creationTimestamp !== account.creationTimestamp
+    log.info(
+      `Changing account: ${currentAccount?.config?.backendUrl || ''} -> ${
+        account?.config?.backendUrl || ''
+      }`,
+    );
+    const otherAccounts: Array<StorageState> = (
+      state.app.otherAccounts || []
+    ).filter(
+      (it: StorageState) => it.creationTimestamp !== account.creationTimestamp,
     );
     const prevAccount = removeCurrentAccount ? null : currentAccount;
     const updatedOtherAccounts = [
@@ -331,62 +472,81 @@ export function updateOtherAccounts(
     ];
     await storeAccounts(updatedOtherAccounts);
     await flushStorage(account);
-
     dispatch(receiveOtherAccounts(updatedOtherAccounts));
     return otherAccounts;
   };
 }
-
-export function changeAccount(account: StorageState, removeCurrentAccount?: boolean, issueId: ?string): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+export function changeAccount(
+  account: StorageState,
+  removeCurrentAccount?: boolean,
+  issueId: string | null | undefined,
+): Action {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     const state: AppState = getState();
-    const config: AppConfig = ((account.config: any): AppConfig);
-    const authParams: ?OAuthParams2 = await getStoredSecurelyAuthParams(account.authParamsKey);
+    const config: AppConfig = (account.config as any) as AppConfig;
+    const authParams:
+      | OAuthParams2
+      | null
+      | undefined = await getStoredSecurelyAuthParams(account.authParamsKey);
+
     if (!authParams) {
-      const errorMessage: string = i18n('The selected account is no longer authorized to use YouTrack Mobile. Please log in again.');
+      const errorMessage: string = i18n(
+        'The selected account is no longer authorized to use YouTrack Mobile. Please log in again.',
+      );
       notify(errorMessage);
       throw new Error(errorMessage);
     }
-    const auth: OAuth2 = new OAuth2(config);
 
+    const auth: OAuth2 = new OAuth2(config);
     dispatch(beginAccountChange());
 
     try {
-      const userLocale: ?UserGeneralProfileLocale = account.currentUser?.ytCurrentUser?.profiles?.general?.locale;
+      const userLocale: UserGeneralProfileLocale | null | undefined =
+        account.currentUser?.ytCurrentUser?.profiles?.general?.locale;
+
       if (userLocale) {
         loadTranslation(userLocale?.locale, userLocale?.language);
       }
 
       await dispatch(updateOtherAccounts(account, removeCurrentAccount));
-
       await auth.cacheAuthParams(
-        (authParams: any),
-        account.authParamsKey || ((account.creationTimestamp: any): number).toString()
+        authParams as any,
+        account.authParamsKey ||
+          ((account.creationTimestamp as any) as number).toString(),
       );
       await storeConfig(config);
-
       await dispatch(initializeAuth(config));
       await dispatch(checkUserAgreement());
 
       if (!state.app.showUserAgreement) {
         dispatch(completeInitialization(issueId));
       }
+
       log.info('Account changed, URL:', account?.config?.backendUrl);
     } catch (err) {
       notifyError(err);
-      throw (err);
+      throw err;
     }
 
     dispatch(endAccountChange());
   };
 }
-
 export function removeAccountOrLogOut(): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const otherAccounts: Array<StorageState> = getState().app.otherAccounts || [];
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
+    const otherAccounts: Array<StorageState> =
+      getState().app.otherAccounts || [];
 
     if (isRegisteredForPush()) {
       setRegisteredForPush(false);
+
       try {
         await PushNotifications.unregister();
       } catch (err) {
@@ -405,23 +565,33 @@ export function removeAccountOrLogOut(): Action {
 }
 
 function setUserPermissions(permissions: Array<PermissionCacheItem>): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     dispatch({
       type: types.SET_PERMISSIONS,
       permissionsStore: new PermissionsStore(permissions),
-      currentUser: getState().app?.auth?.currentUser || getStorageState().currentUser,
+      currentUser:
+        getState().app?.auth?.currentUser || getStorageState().currentUser,
     });
   };
 }
 
 export function loadUserPermissions(): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const auth: OAuth2 = ((getState().app.auth: any): OAuth2);
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
+    const auth: OAuth2 = (getState().app.auth as any) as OAuth2;
+
     try {
       const permissions: Array<PermissionCacheItem> = await appActionsHelper.loadPermissions(
         auth.getTokenType(),
         auth.getAccessToken(),
-        auth.getPermissionsCacheURL()
+        auth.getPermissionsCacheURL(),
       );
       await dispatch(setUserPermissions(permissions));
       log.info('PermissionsStore created');
@@ -432,25 +602,33 @@ export function loadUserPermissions(): Action {
     }
   };
 }
-
 export function completeInitialization(
   issueId: string | null = null,
   navigateToActivity: boolean = false,
   skipNavigateToRoute: boolean = false,
 ): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     log.debug('Completing initialization');
-    const cachedCurrentUser: ?UserCurrent = getStorageState()?.currentUser?.ytCurrentUser;
-    const cachedLocale: ?UserGeneralProfileLocale = cachedCurrentUser?.profiles?.general?.locale;
+    const cachedCurrentUser: UserCurrent | null | undefined = getStorageState()
+      ?.currentUser?.ytCurrentUser;
+    const cachedLocale: UserGeneralProfileLocale | null | undefined =
+      cachedCurrentUser?.profiles?.general?.locale;
     const currentUser: UserCurrent = await dispatch(loadYTCurrentUser());
-    const userProfileLocale: ?UserGeneralProfileLocale = currentUser?.profiles?.general?.locale;
-    const isLanguageChanged: boolean = !cachedLocale?.language || (
-      cachedLocale?.language &&
-      userProfileLocale?.language &&
-      (cachedLocale?.language !== userProfileLocale?.language)
-    );
+    const userProfileLocale: UserGeneralProfileLocale | null | undefined =
+      currentUser?.profiles?.general?.locale;
+    const isLanguageChanged: boolean =
+      !cachedLocale?.language ||
+      (cachedLocale?.language &&
+        userProfileLocale?.language &&
+        cachedLocale?.language !== userProfileLocale?.language);
+
     if (isLanguageChanged && userProfileLocale?.language) {
       loadTranslation(userProfileLocale?.locale, userProfileLocale?.language);
+
       if (!issueId) {
         redirectToHome(getStorageState()?.config?.backendUrl);
       }
@@ -461,7 +639,14 @@ export function completeInitialization(
     log.debug('Initialization completed');
 
     if (!skipNavigateToRoute || (isLanguageChanged && !issueId)) {
-      Router.navigateToDefaultRoute(issueId ? {issueId, navigateToActivity} : null);
+      Router.navigateToDefaultRoute(
+        issueId
+          ? {
+              issueId,
+              navigateToActivity,
+            }
+          : null,
+      );
     }
 
     dispatch(loadWorkTimeSettings());
@@ -469,16 +654,25 @@ export function completeInitialization(
     dispatch(inboxCheckUpdateStatus());
   };
 }
-
 export function setYTCurrentUser(user: User): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<void> => {
-    await dispatch({type: types.RECEIVE_USER, user});
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ): Promise<void> => {
+    await dispatch({
+      type: types.RECEIVE_USER,
+      user,
+    });
     await storeYTCurrentUser(user);
   };
 }
-
 export function loadYTCurrentUser(): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     const user: User = await getApi().user.getUser();
     await dispatch(setYTCurrentUser(user));
     return user;
@@ -486,36 +680,55 @@ export function loadYTCurrentUser(): Action {
 }
 
 function loadWorkTimeSettings(): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     const workTimeSettings: WorkTimeSettings = await getApi().getWorkTimeSettings();
-    await dispatch({type: types.RECEIVE_WORK_TIME_SETTINGS, workTimeSettings});
+    await dispatch({
+      type: types.RECEIVE_WORK_TIME_SETTINGS,
+      workTimeSettings,
+    });
   };
 }
 
 export function acceptUserAgreement(): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     log.info('User agreement accepted');
     usage.trackEvent('EUA is accepted');
     const api: Api = getApi();
-
     await api.acceptUserAgreement();
-
-    dispatch({type: types.HIDE_USER_AGREEMENT});
+    dispatch({
+      type: types.HIDE_USER_AGREEMENT,
+    });
     dispatch(completeInitialization());
   };
 }
-
 export function declineUserAgreement(): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     log.info('User agreement declined');
     usage.trackEvent('EUA is declined');
-    dispatch({type: types.HIDE_USER_AGREEMENT});
+    dispatch({
+      type: types.HIDE_USER_AGREEMENT,
+    });
     dispatch(removeAccountOrLogOut());
   };
 }
-
 export function initializeAuth(config: AppConfig): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     const auth: OAuth2 = await createAuthInstance(config);
     dispatch(setAuthInstance(auth));
     await dispatch(loadCurrentUserAndSetAPI());
@@ -523,34 +736,54 @@ export function initializeAuth(config: AppConfig): Action {
 }
 
 function checkUserAgreement(): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<void> => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ): Promise<void> => {
     const api: Api = getApi();
-    const auth: OAuth2 = ((getState().app.auth: any): OAuth2);
+    const auth: OAuth2 = (getState().app.auth as any) as OAuth2;
     const {currentUser} = auth;
-
     log.debug('Checking user agreement', currentUser);
-    if (currentUser && currentUser.endUserAgreementConsent && currentUser.endUserAgreementConsent.accepted) {
+
+    if (
+      currentUser &&
+      currentUser.endUserAgreementConsent &&
+      currentUser.endUserAgreementConsent.accepted
+    ) {
       log.info('The EUA already accepted, skip check');
       return;
     }
 
-    const agreement: ?EndUserAgreement = await api.getUserAgreement();
+    const agreement:
+      | EndUserAgreement
+      | null
+      | undefined = await api.getUserAgreement();
+
     if (!agreement) {
       log.debug('EUA is not supported, skip check');
       return;
     }
+
     if (!agreement.enabled) {
       log.debug('EUA is disabled, skip check');
       return;
     }
 
-    log.info('User agreement should be accepted', {...agreement, text: 'NOT_PRINTED'}, currentUser);
+    log.info(
+      'User agreement should be accepted',
+      {...agreement, text: 'NOT_PRINTED'},
+      currentUser,
+    );
     dispatch(showUserAgreement(agreement));
   };
 }
 
 export function onLogIn(authParams: AuthParams): Action {
-  return async (dispatch: Function, getState: () => AppState) => {
+  return async (
+    dispatch: (...args: Array<any>) => any,
+    getState: () => AppState,
+  ) => {
     const auth: OAuth2 | null = getState().app.auth;
     const creationTimestamp: number = Date.now();
     const authStorageStateValue: string = creationTimestamp.toString();
@@ -558,9 +791,10 @@ export function onLogIn(authParams: AuthParams): Action {
       creationTimestamp: creationTimestamp,
       [storageStateAuthParamsKey]: authStorageStateValue,
     });
+
     if (auth && authParams) {
       auth.setAuthParams(authParams);
-      await auth.cacheAuthParams((authParams: any), authStorageStateValue);
+      await auth.cacheAuthParams(authParams as any, authStorageStateValue);
     }
 
     await dispatch(loadCurrentUserAndSetAPI());
@@ -571,48 +805,83 @@ export function onLogIn(authParams: AuthParams): Action {
     }
   };
 }
-
-export function cacheProjects(): ((
-  dispatch: (any) => any,
+export function cacheProjects(): (
+  dispatch: (arg0: any) => any,
   getState: () => AppState,
-  getApi: () => Api
-) => Promise<Array<Folder>>) {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
-    const userFolders: Array<Folder> = await getApi().user.getUserFolders(
-      '',
-      ['$type,id,shortName,name,pinned']
+  getApi: () => Api,
+) => Promise<Array<Folder>> {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
+    const userFolders: Array<Folder> = await getApi().user.getUserFolders('', [
+      '$type,id,shortName,name,pinned',
+    ]);
+    const projects: Array<Folder> = userFolders.filter((it: Folder) =>
+      hasType.project(it),
     );
-    const projects: Array<Folder> = userFolders.filter((it: Folder) => hasType.project(it));
-    await flushStoragePart({projects: projects});
+    await flushStoragePart({
+      projects: projects,
+    });
     return projects;
   };
 }
 
 function subscribeToURL(): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     openByUrlDetector(
-      (url, issueId: ?string, articleId: ?string) => {
+      (
+        url,
+        issueId: string | null | undefined,
+        articleId: string | null | undefined,
+      ) => {
         if (!getIsAuthorized()) {
-          log.debug('User is not authorized, URL won\'t be opened');
+          log.debug("User is not authorized, URL won't be opened");
           return;
         }
+
         usage.trackEvent('app', 'Open issue in app by URL');
+
         if (issueId) {
-          Router.Issue({issueId}, {forceReset: true});
+          Router.Issue(
+            {
+              issueId,
+            },
+            {
+              forceReset: true,
+            },
+          );
         } else if (articleId) {
-          Router.Article({articlePlaceholder: {id: articleId}}, {forceReset: true});
+          Router.Article(
+            {
+              articlePlaceholder: {
+                id: articleId,
+              },
+            },
+            {
+              forceReset: true,
+            },
+          );
         } else {
           Router.navigateToDefaultRoute();
         }
       },
       (url, searchQuery) => {
         if (!getIsAuthorized()) {
-          log.debug('User is not authorized, URL won\'t be opened');
+          log.debug("User is not authorized, URL won't be opened");
           return;
         }
+
         usage.trackEvent('app', 'Open issues query in app by URL');
-        Router.Issues({searchQuery});
-      }
+        Router.Issues({
+          searchQuery,
+        });
+      },
     );
 
     function getIsAuthorized(): boolean {
@@ -621,8 +890,16 @@ function subscribeToURL(): Action {
   };
 }
 
-export function redirectToRoute(config: AppConfig, issueId: string | null, navigateToActivity: boolean): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<boolean> => {
+export function redirectToRoute(
+  config: AppConfig,
+  issueId: string | null,
+  navigateToActivity: boolean,
+): Action {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ): Promise<boolean> => {
     let isRedirected: boolean = false;
 
     try {
@@ -630,37 +907,52 @@ export function redirectToRoute(config: AppConfig, issueId: string | null, navig
         const auth: OAuth2 = await createAuthInstance(config);
         dispatch(setAuthInstance(auth));
         setApi(new Api(auth));
+        const cachedPermissions:
+          | Array<PermissionCacheItem>
+          | null
+          | undefined = getCachedPermissions();
 
-        const cachedPermissions: ?Array<PermissionCacheItem> = getCachedPermissions();
         if (cachedPermissions) {
           await dispatch(setUserPermissions(cachedPermissions));
         }
 
         const isGuest: boolean = await setUser();
+
         if (cachedPermissions && !isGuest) {
-          if ((isSplitView()) || !issueId) {
+          if (isSplitView() || !issueId) {
             isRedirected = true;
-            Router.Issues({issueId, navigateToActivity});
+            Router.Issues({
+              issueId,
+              navigateToActivity,
+            });
           } else if (issueId) {
             isRedirected = true;
-            Router.Issue({issueId, navigateToActivity, forceReset: true});
+            Router.Issue({
+              issueId,
+              navigateToActivity,
+              forceReset: true,
+            });
           }
         }
       }
-    } catch (e) {
-    }
+    } catch (e) {}
 
     if (!isRedirected) {
       redirectToHome(config.backendUrl);
     }
+
     return isRedirected;
 
     async function setUser(): Promise<boolean> {
-      const hubCurrentUser: ?UserCurrent = getStorageState().currentUser;
-      const ytCurrentUser: ?User = hubCurrentUser?.ytCurrentUser;
+      const hubCurrentUser: UserCurrent | null | undefined = getStorageState()
+        .currentUser;
+      const ytCurrentUser: User | null | undefined =
+        hubCurrentUser?.ytCurrentUser;
+
       if (ytCurrentUser) {
         await dispatch(setYTCurrentUser(ytCurrentUser));
       }
+
       return ytCurrentUser?.guest === true;
     }
   };
@@ -677,7 +969,9 @@ function redirectToHome(backendUrl: string = '') {
 async function refreshConfig(backendUrl: string): Promise<AppConfig> {
   const updatedConfig: AuthConfig = await doConnect(backendUrl);
   await storeConfig(updatedConfig);
-  await flushStoragePart({currentAppVersion: packageJson.version});
+  await flushStoragePart({
+    currentAppVersion: packageJson.version,
+  });
   return updatedConfig;
 }
 
@@ -686,40 +980,60 @@ export function initializeApp(
   issueId: string | null,
   navigateToActivity: boolean,
 ): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): any => {
-    const cachedCurrentUser: ?UserCurrent = getStorageState()?.currentUser?.ytCurrentUser;
-    const userProfileLocale: ?UserGeneralProfileLocale = cachedCurrentUser?.profiles?.general?.locale;
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ): any => {
+    const cachedCurrentUser: UserCurrent | null | undefined = getStorageState()
+      ?.currentUser?.ytCurrentUser;
+    const userProfileLocale: UserGeneralProfileLocale | null | undefined =
+      cachedCurrentUser?.profiles?.general?.locale;
+
     if (userProfileLocale?.language) {
       loadTranslation(userProfileLocale.locale, userProfileLocale.language);
     }
-    const isRedirectedToTargetRoute: boolean = await dispatch(redirectToRoute(config, issueId, navigateToActivity));
-    let configCurrent = config;
 
-    const currentAppVersion: ?string = getStorageState().currentAppVersion;
-    const versionHasChanged: boolean = currentAppVersion != null && packageJson.version !== currentAppVersion;
+    const isRedirectedToTargetRoute: boolean = await dispatch(
+      redirectToRoute(config, issueId, navigateToActivity),
+    );
+    let configCurrent = config;
+    const currentAppVersion: string | null | undefined = getStorageState()
+      .currentAppVersion;
+    const versionHasChanged: boolean =
+      currentAppVersion != null && packageJson.version !== currentAppVersion;
+
     try {
       if (versionHasChanged) {
         log.info(
-          `App upgraded from ${currentAppVersion || 'NOTHING'} to "${packageJson.version}"; reloading config`
+          `App upgraded from ${currentAppVersion || 'NOTHING'} to "${
+            packageJson.version
+          }"; reloading config`,
         );
         configCurrent = await refreshConfig(config.backendUrl);
       }
 
       await dispatch(initializeAuth(configCurrent));
-
     } catch (error) {
       log.log('App failed to initialize auth. Reloading config...', error);
+
       try {
         configCurrent = await refreshConfig(config.backendUrl);
       } catch (err) {
-        Router.Home({backendUrl: config.backendUrl, err});
+        Router.Home({
+          backendUrl: config.backendUrl,
+          err,
+        });
         return;
       }
 
       try {
         await dispatch(initializeAuth(configCurrent));
       } catch (e) {
-        Router.LogIn({config, errorMessage: getErrorMessage(e)});
+        Router.LogIn({
+          config,
+          errorMessage: getErrorMessage(e),
+        });
         return;
       }
     }
@@ -727,7 +1041,13 @@ export function initializeApp(
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
-      await dispatch(completeInitialization(issueId, navigateToActivity, isRedirectedToTargetRoute));
+      await dispatch(
+        completeInitialization(
+          issueId,
+          navigateToActivity,
+          isRedirectedToTargetRoute,
+        ),
+      );
     }
 
     dispatch(subscribeToURL());
@@ -737,49 +1057,78 @@ export function initializeApp(
     }
   };
 }
-
 export async function doConnect(newURL: string): Promise<any> {
   return await loadConfig(newURL);
 }
-
 export function connectToNewYoutrack(newURL: string): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     const config = await doConnect(newURL);
     await storeConfig(config);
     const auth: OAuth2 = await createAuthInstance(config);
     dispatch(setAuthInstance(auth));
-    Router.LogIn({config});
+    Router.LogIn({
+      config,
+    });
   };
 }
-
-export function setAccount(notificationRouteData: NotificationRouteData | Object = {}): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+export function setAccount(
+  notificationRouteData: NotificationRouteData | Record<string, any> = {},
+): Action {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     const state: StorageState = await populateStorage();
     await dispatch(populateAccounts());
+    const notificationBackendUrl: string | null | undefined =
+      notificationRouteData?.backendUrl;
 
-    const notificationBackendUrl: ?string = notificationRouteData?.backendUrl;
-    if (notificationBackendUrl && state?.config && notificationBackendUrl !== state.config?.backendUrl) {
-      const notificationIssueAccount: ?StorageState = await appActionsHelper.targetAccountToSwitchTo(
-        notificationBackendUrl
+    if (
+      notificationBackendUrl &&
+      state?.config &&
+      notificationBackendUrl !== state.config?.backendUrl
+    ) {
+      const notificationIssueAccount:
+        | StorageState
+        | null
+        | undefined = await appActionsHelper.targetAccountToSwitchTo(
+        notificationBackendUrl,
       );
+
       if (notificationIssueAccount) {
         await dispatch(updateOtherAccounts(notificationIssueAccount));
-        flushStoragePart({config: notificationIssueAccount.config});
+        flushStoragePart({
+          config: notificationIssueAccount.config,
+        });
       }
     }
 
-    const targetConfig: ?AppConfig = getStorageState().config;
+    const targetConfig: AppConfig | null | undefined = getStorageState().config;
+
     if (targetConfig) {
-      dispatch(initializeApp(
-        targetConfig,
-        notificationRouteData?.issueId || null,
-        notificationRouteData.navigateToActivity
-      ));
+      dispatch(
+        initializeApp(
+          targetConfig,
+          notificationRouteData?.issueId || null,
+          notificationRouteData.navigateToActivity,
+        ),
+      );
     } else {
       log.info('App is not configured, entering server URL');
-      const navigateTo = (serverUrl: string | null) => Router.EnterServer({serverUrl});
+
+      const navigateTo = (serverUrl: string | null) =>
+        Router.EnterServer({
+          serverUrl,
+        });
+
       try {
         const url = await Linking.getInitialURL();
+
         if (!url) {
           navigateTo(null);
         } else {
@@ -790,24 +1139,27 @@ export function setAccount(notificationRouteData: NotificationRouteData | Object
         navigateTo(null);
       }
     }
-
   };
 }
-
 export function subscribeToPushNotifications(): Action {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api): Promise<void> => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ): Promise<void> => {
     if (await DeviceInfo.isEmulator()) {
       return;
     }
 
     PushNotificationsProcessor.init();
 
-    const onSwitchAccount = async (account: StorageState, issueId: string) => (
-      await dispatch(switchAccount(account, false, issueId))
-    );
+    const onSwitchAccount = async (account: StorageState, issueId: string) =>
+      await dispatch(switchAccount(account, false, issueId));
 
     if (isRegisteredForPush()) {
-      log.info('Device was already registered for push notifications. Initializing.');
+      log.info(
+        'Device was already registered for push notifications. Initializing.',
+      );
       PushNotifications.initialize(onSwitchAccount);
       return;
     }
@@ -823,56 +1175,88 @@ export function subscribeToPushNotifications(): Action {
   };
 }
 
-
-function isRegisteredForPush(): boolean { //TODO: YTM-1267
+function isRegisteredForPush(): boolean {
+  //TODO: YTM-1267
   const storageState: StorageState = getStorageState();
-  return isIOSPlatform() ? storageState.isRegisteredForPush : Boolean(storageState.deviceToken);
+  return isIOSPlatform()
+    ? storageState.isRegisteredForPush
+    : Boolean(storageState.deviceToken);
 }
 
 function setRegisteredForPush(isRegistered: boolean) {
-  if (isIOSPlatform()) { //TODO: also use device token
-    flushStoragePart({isRegisteredForPush: isRegistered});
+  if (isIOSPlatform()) {
+    //TODO: also use device token
+    flushStoragePart({
+      isRegisteredForPush: isRegistered,
+    });
   }
 }
 
-function receiveInboxUpdateStatus(inboxThreadsFolders: InboxFolder[]): { type: string, inboxThreadsFolders: InboxFolder[] } {
+function receiveInboxUpdateStatus(
+  inboxThreadsFolders: InboxFolder[],
+): {
+  type: string;
+  inboxThreadsFolders: InboxFolder[];
+} {
   return {
     type: types.INBOX_THREADS_FOLDERS,
     inboxThreadsFolders,
   };
 }
 
-const getFirstCachedThread = (): ?InboxThread => {
-  const inboxThreadsCache: ?InboxThreadsCache = getStorageState()?.inboxThreadsCache;
-  return inboxThreadsCache && inboxThreadsCache[folderIdAllKey] && inboxThreadsCache[folderIdAllKey][0];
+const getFirstCachedThread = (): InboxThread | null | undefined => {
+  const inboxThreadsCache:
+    | InboxThreadsCache
+    | null
+    | undefined = getStorageState()?.inboxThreadsCache;
+  return (
+    inboxThreadsCache &&
+    inboxThreadsCache[folderIdAllKey] &&
+    inboxThreadsCache[folderIdAllKey][0]
+  );
 };
 
 const inboxCheckUpdateStatus = (): Action => {
-  return async (dispatch: (any) => any, getState: () => AppState, getApi: () => Api) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
     if (getState().app?.networkState?.isConnected === true) {
-      const firstCachedThread: ?InboxThread = getFirstCachedThread();
-      const [error, folders]: [?CustomError, Array<InboxFolder>] = await until(
+      const firstCachedThread:
+        | InboxThread
+        | null
+        | undefined = getFirstCachedThread();
+      const [error, folders]: [
+        CustomError | null | undefined,
+        Array<InboxFolder>,
+      ] = await until(
         getApi().inbox.getFolders(
-          typeof firstCachedThread?.notified === 'number' ? firstCachedThread?.notified + 1 : undefined
-        )
+          typeof firstCachedThread?.notified === 'number'
+            ? firstCachedThread?.notified + 1
+            : undefined,
+        ),
       );
+
       if (!error) {
-        const sorted: Array<InboxFolder> = folders.reduce((flds: Array<InboxFolder>, folder: InboxFolder) => {
-          if (folder.id === folderIdMap[2]) {
-            flds.push(folder);
-          }
-          if (folder.id === folderIdMap[1]) {
-            flds.unshift(folder);
-          }
-          return flds;
-        }, []);
+        const sorted: Array<InboxFolder> = folders.reduce(
+          (flds: Array<InboxFolder>, folder: InboxFolder) => {
+            if (folder.id === folderIdMap[2]) {
+              flds.push(folder);
+            }
+
+            if (folder.id === folderIdMap[1]) {
+              flds.unshift(folder);
+            }
+
+            return flds;
+          },
+          [],
+        );
         dispatch(receiveInboxUpdateStatus(sorted));
       }
     }
   };
 };
 
-
-export {
-  inboxCheckUpdateStatus,
-};
+export {inboxCheckUpdateStatus};

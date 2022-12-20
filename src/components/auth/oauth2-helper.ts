@@ -1,12 +1,12 @@
-/* @flow */
-
-import {authorize, prefetchConfiguration, refresh, revoke} from 'react-native-app-auth';
-
+import {
+  authorize,
+  prefetchConfiguration,
+  refresh,
+  revoke,
+} from 'react-native-app-auth';
 import log from '../log/log';
-
 import type {AppConfig} from 'flow/AppConfig';
 import type {AuthParams, OAuthConfig, OAuthParams2} from 'flow/Auth';
-
 const ACCEPT_HEADER: string = 'application/json, text/plain, */*';
 const URL_ENCODED_TYPE: string = 'application/x-www-form-urlencoded';
 
@@ -22,7 +22,10 @@ const normalizeAuthParams = (authParams: OAuthParams2): Promise<AuthParams> => {
   };
 };
 
-const createConfig = (config: AppConfig, isRefresh: boolean = false): OAuthConfig => {
+const createConfig = (
+  config: AppConfig,
+  isRefresh: boolean = false,
+): OAuthConfig => {
   let authConfiguration: OAuthConfig = {
     clientId: config.auth.clientId,
     clientSecret: config.auth.clientSecret,
@@ -33,6 +36,7 @@ const createConfig = (config: AppConfig, isRefresh: boolean = false): OAuthConfi
       tokenEndpoint: `${config.auth.serverUri}/api/rest/oauth2/token`,
     },
   };
+
   if (!isRefresh) {
     authConfiguration = {
       ...authConfiguration,
@@ -44,9 +48,11 @@ const createConfig = (config: AppConfig, isRefresh: boolean = false): OAuthConfi
       usePKCE: !config.auth.clientSecret,
     };
   }
+
   if (!config.auth.clientSecret) {
     delete authConfiguration.clientSecret;
   }
+
   return authConfiguration;
 };
 
@@ -57,7 +63,10 @@ const prefetch = (config: AppConfig): void => {
   });
 };
 
-const revokeToken = async (config: AppConfig, tokenToRevoke: string): Promise<void> => {
+const revokeToken = async (
+  config: AppConfig,
+  tokenToRevoke: string,
+): Promise<void> => {
   try {
     await revoke(createConfig(config), {
       tokenToRevoke,
@@ -69,9 +78,17 @@ const revokeToken = async (config: AppConfig, tokenToRevoke: string): Promise<vo
   }
 };
 
-const refreshToken = async (config: AppConfig, refreshToken: string): Promise<OAuthParams2> => {
+const refreshToken = async (
+  config: AppConfig,
+  refreshToken: string,
+): Promise<OAuthParams2> => {
   try {
-    const newOAuthParams: OAuthParams2 = await refresh(createConfig(config, true), {refreshToken});
+    const newOAuthParams: OAuthParams2 = await refresh(
+      createConfig(config, true),
+      {
+        refreshToken,
+      },
+    );
     log.log('Access token refreshed');
     return newOAuthParams;
   } catch (error) {
@@ -90,7 +107,6 @@ const doAuthorize = async (config: AppConfig): Promise<AuthParams> => {
     throw error;
   }
 };
-
 
 export {
   ACCEPT_HEADER,

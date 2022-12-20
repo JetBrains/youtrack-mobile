@@ -2,16 +2,13 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from '../variables/variables';
 import {headerTitle} from '../common-styles/typography';
 import {elevation1} from '../common-styles/shadow';
-
 const minButtonWidth = UNIT * 5;
 export const headerMinHeight = UNIT * 8;
-
 export const headerTitlePresentation = {
   ...headerTitle,
   marginLeft: UNIT,
   color: '$text',
 };
-
 export default EStyleSheet.create({
   header: {
     position: 'relative',

@@ -1,9 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {UNIT} from 'components/variables/variables';
 import {headerTitle} from 'components/common-styles/typography';
 import {separatorBorder} from 'components/common-styles/list';
-
 export default EStyleSheet.create({
   agile: {
     flex: 1,
@@ -75,10 +73,7 @@ export default EStyleSheet.create({
     marginLeft: UNIT * 2,
     color: '$text',
   },
-  agileSelectorText: {
-    ...headerTitle,
-    color: '$text',
-  },
+  agileSelectorText: {...headerTitle, color: '$text'},
   searchQueryPreview: {
     marginHorizontal: UNIT * 2,
   },

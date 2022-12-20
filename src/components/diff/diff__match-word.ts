@@ -1,17 +1,17 @@
-/* @flow */
-
 /* https://github.com/google/diff-match-patch/wiki/Line-or-Word-Diffs */
-
 import DiffMatchPatch from 'diff-match-patch';
 
 class DiffMatchWord {
   dmp: typeof DiffMatchPatch;
-  diffPatchType: {DIFF_DELETE: any, DIFF_EQUAL: any, DIFF_INSERT: any} = {
+  diffPatchType: {
+    DIFF_DELETE: any;
+    DIFF_EQUAL: any;
+    DIFF_INSERT: any;
+  } = {
     DIFF_INSERT: DiffMatchPatch.DIFF_INSERT,
     DIFF_DELETE: DiffMatchPatch.DIFF_DELETE,
     DIFF_EQUAL: DiffMatchPatch.DIFF_EQUAL,
   };
-
 
   constructor() {
     this.dmp = new DiffMatchPatch();
@@ -35,16 +35,23 @@ class DiffMatchWord {
 
   boundaryIndex(str: string, regExp: RegExp, fromIndex: number): number {
     let index = fromIndex;
+
     while (index < str.length) {
       if (regExp.test(str[index])) {
         return index;
       }
+
       index++;
     }
+
     return -1;
   }
 
-  encodeWordsToChars(text: string, wordArray: Array<string>, wordHash: Object): string {
+  encodeWordsToChars(
+    text: string,
+    wordArray: Array<string>,
+    wordHash: Record<string, any>,
+  ): string {
     let chars = '';
     let wordStart = 0;
     let wordEnd = 0;
@@ -54,9 +61,9 @@ class DiffMatchWord {
     const hasOwnProperty = Object.hasOwnProperty;
 
     while (wordEnd < textEnd) {
-      wordEnd = (wb.test(text[wordStart]) ? // Treat word breaks as separate words
-        Math.min(wordEnd + 1, textEnd) :
-        this.boundaryIndex(text, wb, wordStart));
+      wordEnd = wb.test(text[wordStart]) // Treat word breaks as separate words
+        ? Math.min(wordEnd + 1, textEnd)
+        : this.boundaryIndex(text, wb, wordStart);
 
       if (wordEnd === -1) {
         wordEnd = textEnd;
@@ -76,17 +83,22 @@ class DiffMatchWord {
     return chars;
   }
 
-  diffWordsToChars(text1: string, text2: string): {chars1: string, chars2: string, lineArray: Array<string>} {
+  diffWordsToChars(
+    text1: string,
+    text2: string,
+  ): {
+    chars1: string;
+    chars2: string;
+    lineArray: Array<string>;
+  } {
     // Split two texts into an array of strings. Reduce the texts to a string of
     // hashes where each Unicode character represents one word
     // @see https://github.com/google/diff-match-patch/wiki/Line-or-Word-Diffs
     const wordArray = [];
     const wordHash = {};
-
     // '\x00' is a valid character, but various debuggers don't like it.
     // So we'll insert a junk entry to avoid generating a null character.
     wordArray[0] = '';
-
     const chars1 = this.encodeWordsToChars(text1, wordArray, wordHash);
     const chars2 = this.encodeWordsToChars(text2, wordArray, wordHash);
     return {
@@ -95,7 +107,6 @@ class DiffMatchWord {
       lineArray: wordArray,
     };
   }
-
 }
 
-export default (new DiffMatchWord(): DiffMatchWord);
+export default new DiffMatchWord() as DiffMatchWord;

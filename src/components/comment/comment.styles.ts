@@ -1,8 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {mainText, secondaryText} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
-
 export default EStyleSheet.create({
   commentWrapper: {
     flexDirection: 'row',
@@ -11,7 +9,6 @@ export default EStyleSheet.create({
     paddingLeft: UNIT,
     paddingRight: UNIT,
   },
-
   authorName: {
     fontWeight: 'bold',
   },
@@ -25,19 +22,11 @@ export default EStyleSheet.create({
   commentText: {
     marginTop: UNIT,
   },
-  deletedCommentText: {
-    ...mainText,
-    color: '$icon',
-    fontStyle: 'italic',
-  },
+  deletedCommentText: {...mainText, color: '$icon', fontStyle: 'italic'},
   actions: {
     marginTop: UNIT,
   },
-  actionLink: {
-    ...mainText,
-    color: '$link',
-  },
-
+  actionLink: {...mainText, color: '$link'},
   reactionsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -76,7 +65,6 @@ export default EStyleSheet.create({
   reactionTitle: {
     textTransform: 'capitalize',
   },
-
   commentVisibility: {
     paddingVertical: UNIT / 2,
     marginTop: UNIT,
@@ -97,5 +85,4 @@ export default EStyleSheet.create({
   text: {
     color: '$text',
   },
-
 });

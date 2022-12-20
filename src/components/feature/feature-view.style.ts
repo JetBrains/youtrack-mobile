@@ -1,10 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {mainText} from '../common-styles/typography';
 import {separatorBorder} from '../common-styles/list';
 import {UNIT} from '../variables/variables';
-
-
 export default EStyleSheet.create({
   container: {
     flex: 1,
@@ -27,10 +24,5 @@ export default EStyleSheet.create({
     paddingLeft: UNIT,
     color: '$link',
   },
-  button: {
-    ...mainText,
-    color: '$link',
-    padding: UNIT,
-    paddingLeft: 0,
-  },
+  button: {...mainText, color: '$link', padding: UNIT, paddingLeft: 0},
 });

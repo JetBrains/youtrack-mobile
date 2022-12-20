@@ -1,24 +1,27 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {articleItemWithChildrenStyles} from 'components/articles/article-item-with-children.styles';
-import {clearIcon, inputWrapper, searchInput} from 'components/common-styles/search';
+import {
+  clearIcon,
+  inputWrapper,
+  searchInput,
+} from 'components/common-styles/search';
 import {elevation1} from 'components/common-styles/shadow';
-import {headerTitle, mainText, secondaryText} from 'components/common-styles/typography';
+import {
+  headerTitle,
+  mainText,
+  secondaryText,
+} from 'components/common-styles/typography';
 import {Platform} from 'react-native';
 import {SELECT_ITEM_HEIGHT} from 'components/select/select.styles';
 import {splitViewStyles} from 'components/common-styles/split-view';
 import {UNIT} from 'components/variables/variables';
-
 const wrapper = {
   marginHorizontal: UNIT * 2,
   marginVertical: UNIT,
 };
-
 export const noProjectsIconSize = 240;
-
 export default EStyleSheet.create({
   ...articleItemWithChildrenStyles,
-
   container: {
     flex: 1,
     backgroundColor: '$background',
@@ -41,10 +44,7 @@ export default EStyleSheet.create({
   headerTitle: {
     flex: 1,
   },
-  headerTitleText: {
-    ...headerTitle,
-    color: '$text',
-  },
+  headerTitleText: {...headerTitle, color: '$text'},
   headerButton: {
     flexGrow: 0,
   },
@@ -60,7 +60,6 @@ export default EStyleSheet.create({
       },
     }),
   },
-
   separator: {
     marginLeft: UNIT * 3,
     backgroundColor: '$background',
@@ -114,7 +113,6 @@ export default EStyleSheet.create({
   itemProjectIconCollapsed: {
     marginTop: -UNIT / 4,
   },
-
   projectTitleText: {
     paddingLeft: UNIT,
     ...headerTitle,
@@ -138,15 +136,9 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
-  searchPanelContainer: {
-    ...wrapper,
-    ...inputWrapper,
-    marginBottom: 0,
-  },
+  searchPanelContainer: {...wrapper, ...inputWrapper, marginBottom: 0},
   searchInput: searchInput,
   clearIcon: clearIcon,
-
   link: {
     color: '$link',
   },
@@ -170,7 +162,6 @@ export default EStyleSheet.create({
     ...secondaryText,
     color: '$link',
   },
-
   noDrafts: {
     flexGrow: 4,
     alignItems: 'center',
@@ -179,10 +170,7 @@ export default EStyleSheet.create({
   noDraftsButton: {
     marginTop: UNIT * 3,
   },
-  noDraftsButtonText: {
-    ...mainText,
-    color: '$link',
-  },
+  noDraftsButtonText: {...mainText, color: '$link'},
   noProjects: {
     flexGrow: 1,
     alignItems: 'center',
@@ -203,15 +191,11 @@ export default EStyleSheet.create({
   noProjectsButton: {
     marginTop: UNIT * 4,
   },
-  noProjectsButtonText: {
-    ...mainText,
-    color: '$link',
-  },
+  noProjectsButtonText: {...mainText, color: '$link'},
   noArticlesErrorIcon: {
     marginLeft: -UNIT * 4,
     marginBottom: -UNIT * 2,
   },
-
   manageFavoriteProjectsNote: {
     padding: UNIT * 2,
     textAlign: 'center',

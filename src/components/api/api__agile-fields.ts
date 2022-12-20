@@ -1,16 +1,7 @@
-/* @flow */
 import ApiHelper from './api__helper';
 import IssueFields from './api__issue-fields';
-
 const toField = ApiHelper.toField;
-
-const SPRINT: any = toField([
-  'id',
-  'name',
-  'start',
-  'finish',
-]);
-
+const SPRINT: any = toField(['id', 'name', 'start', 'finish']);
 const AGILE_SHORT_WITH_SPRINTS = toField([
   'id',
   'name',
@@ -21,7 +12,6 @@ const AGILE_SHORT_WITH_SPRINTS = toField([
     currentSprint: SPRINT,
   },
 ]);
-
 const AGILE_PROFILE: any = toField([
   {
     defaultAgile: AGILE_SHORT_WITH_SPRINTS.toString(),
@@ -34,12 +24,7 @@ const AGILE_PROFILE: any = toField([
     ],
   },
 ]);
-
-const AGILE_COLUMN_FIELD_VALUE = toField([
-  'presentation',
-  'id',
-]);
-
+const AGILE_COLUMN_FIELD_VALUE = toField(['presentation', 'id']);
 const AGILE_COLUMN = toField([
   'id',
   'collapsed',
@@ -48,7 +33,6 @@ const AGILE_COLUMN = toField([
     fieldValues: AGILE_COLUMN_FIELD_VALUE,
   },
 ]);
-
 const BOARD_COLUMN = toField([
   'id',
   'collapsed',
@@ -56,22 +40,20 @@ const BOARD_COLUMN = toField([
     agileColumn: AGILE_COLUMN,
   },
 ]);
-
-const BOARD_ISSUE_BASE_FIELDS = toField([
-  'id',
-  'idReadable',
-  'summary',
-]);
-
+const BOARD_ISSUE_BASE_FIELDS = toField(['id', 'idReadable', 'summary']);
 const BOARD_ROW: any = toField([
   'id',
   'name',
   'collapsed',
-  {issue: BOARD_ISSUE_BASE_FIELDS},
+  {
+    issue: BOARD_ISSUE_BASE_FIELDS,
+  },
   {
     cells: [
       'id',
-      {column: 'id'},
+      {
+        column: 'id',
+      },
       {
         issues: toField([
           BOARD_ISSUE_BASE_FIELDS,
@@ -80,18 +62,12 @@ const BOARD_ROW: any = toField([
               '$type',
               'id',
               {
-                value: [
-                  'id',
-                ],
+                value: ['id'],
               },
               {
                 projectCustomField: [
                   {
-                    field: [
-                      'id',
-                      'name',
-                      'localizedName',
-                    ],
+                    field: ['id', 'name', 'localizedName'],
                   },
                 ],
               },
@@ -102,13 +78,11 @@ const BOARD_ROW: any = toField([
     ],
   },
 ]);
-
 const COLOR_CODING = toField([
   'id',
   'prototype(id,name)', //FieldBasedColorCoding
   'projectColors(id,color(id,background),project(id))', //ProjectBasedColorCoding
 ]);
-
 const BOARD = toField([
   'id',
   'name',
@@ -118,19 +92,23 @@ const BOARD = toField([
   {
     orphanRow: BOARD_ROW,
   },
-  {trimmedSwimlanes: BOARD_ROW},
+  {
+    trimmedSwimlanes: BOARD_ROW,
+  },
 ]);
-
 const BOARD_ON_LIST: any = toField([
   'id',
   'name',
   'favorite',
-  {sprints: ['id', 'name']},
+  {
+    sprints: ['id', 'name'],
+  },
 ]);
-
 const SPRINT_WITH_BOARD: any = toField([
   SPRINT,
-  {board: BOARD},
+  {
+    board: BOARD,
+  },
   'eventSourceTicket',
   {
     agile: [
@@ -138,31 +116,58 @@ const SPRINT_WITH_BOARD: any = toField([
       'name',
       'orphansAtTheTop',
       'isUpdatable',
-      {estimationField: 'id'},
-      {colorCoding: COLOR_CODING},
+      {
+        estimationField: 'id',
+      },
+      {
+        colorCoding: COLOR_CODING,
+      },
     ],
   },
 ]);
-
 const SPRINT_LIVE_UPDATE: any = toField([
-  {swimlane: BOARD_ROW},
-  {issue: IssueFields.issuesOnList},
-  {removedIssue: 'id'},
-  {updatedIssue: 'id'},
-  {row: 'id'},
-  {column: 'id'},
+  {
+    swimlane: BOARD_ROW,
+  },
+  {
+    issue: IssueFields.issuesOnList,
+  },
+  {
+    removedIssue: 'id',
+  },
+  {
+    updatedIssue: 'id',
+  },
+  {
+    row: 'id',
+  },
+  {
+    column: 'id',
+  },
   'messages',
-  {reorders: [{leading: 'id'}, {moved: 'id'}]},
+  {
+    reorders: [
+      {
+        leading: 'id',
+      },
+      {
+        moved: 'id',
+      },
+    ],
+  },
   {
     changedIssue: ['id'],
   },
 ]);
-
 const SPRINT_ISSUES_FIELDS: any = toField([
   'id',
   'resolved',
-  {tags: IssueFields.ISSUE_TAGS_FIELDS},
-  {project: 'id,name'},
+  {
+    tags: IssueFields.ISSUE_TAGS_FIELDS,
+  },
+  {
+    project: 'id,name',
+  },
   {
     fields: [
       'id',
@@ -184,18 +189,15 @@ const SPRINT_ISSUES_FIELDS: any = toField([
               'id',
               'name',
               {
-                fieldType: [
-                  'isMultiValue',
-                ],
-              }],
+                fieldType: ['isMultiValue'],
+              },
+            ],
           },
         ],
       },
     ],
   },
 ]);
-
-
 export default {
   agileUserProfile: AGILE_PROFILE,
   sprint: SPRINT_WITH_BOARD,

@@ -1,34 +1,24 @@
-/* @flow */
-
 import {View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
-
 import ColorField from 'components/color-field/color-field';
 import {i18n} from 'components/i18n/i18n';
 import {showActions} from '../action-sheet/action-sheet';
-
 import styles from './tags.styles';
-
 import type {ActionSheetOption} from '../action-sheet/action-sheet';
 import type {Node} from 'react';
 import type {Tag} from 'flow/CustomFields';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
-
 type Props = {
-  tags: Array<Tag>,
-  onTagPress: (query: string) => void,
-  onTagRemove?: (id: string) => void,
-  style?: ViewStyleProp,
-  multiline?: boolean
-}
-
+  tags: Array<Tag>;
+  onTagPress: (query: string) => void;
+  onTagRemove?: (id: string) => void;
+  style?: ViewStyleProp;
+  multiline?: boolean;
+};
 type DefaultProps = {
-  onTagPress: () => any,
-}
-
+  onTagPress: () => any;
+};
 const NO_COLOR_CODING_ID = '0';
-
 export default class Tags extends PureComponent<Props, void> {
   static defaultProps: DefaultProps = {
     onTagPress: () => {},
@@ -37,28 +27,39 @@ export default class Tags extends PureComponent<Props, void> {
     actionSheet: Function,
   };
 
-  getContextActions(tag: Tag): Array<{execute?: () => any, title: string}> {
-    const actions: Array<{ title: string, execute?: () => any }> = [
+  getContextActions(
+    tag: Tag,
+  ): Array<{
+    execute?: () => any;
+    title: string;
+  }> {
+    const actions: Array<{
+      title: string;
+      execute?: () => any;
+    }> = [
       {
-        title: i18n('Show all issues tagged with "{{tagName}}"...', {tagName: tag.name}),
+        title: i18n('Show all issues tagged with "{{tagName}}"...', {
+          tagName: tag.name,
+        }),
         execute: () => this.props.onTagPress(tag.query),
       },
     ];
+
     if (this.props.onTagRemove) {
       actions.push({
         title: i18n('Remove tag'),
         execute: () => this.props.onTagRemove && this.props.onTagRemove(tag.id),
       });
     }
-    actions.push({title: i18n('Cancel')});
+
+    actions.push({
+      title: i18n('Cancel'),
+    });
     return actions;
   }
 
-  getSelectedActions(tag: Tag): Promise<?ActionSheetOption> {
-    return showActions(
-      this.getContextActions(tag),
-      this.context.actionSheet()
-    );
+  getSelectedActions(tag: Tag): Promise<ActionSheetOption | null | undefined> {
+    return showActions(this.getContextActions(tag), this.context.actionSheet());
   }
 
   async showContextActions(tag: Tag) {
@@ -69,7 +70,8 @@ export default class Tags extends PureComponent<Props, void> {
     }
   }
 
-  isDefaultColorCoding: ((tag: Tag) => any | null) = (tag: Tag) => tag?.color?.id === NO_COLOR_CODING_ID ? styles.tagNoColor : null;
+  isDefaultColorCoding: (tag: Tag) => any | null = (tag: Tag) =>
+    tag?.color?.id === NO_COLOR_CODING_ID ? styles.tagNoColor : null;
 
   render(): null | Node {
     const {tags, multiline, style} = this.props;
@@ -99,7 +101,9 @@ export default class Tags extends PureComponent<Props, void> {
                 testID="tagColor"
                 text={tag.name}
                 color={tag.color}
-                defaultColorCoding={this.isDefaultColorCoding(tag) ? styles.tagNoColor : null}
+                defaultColorCoding={
+                  this.isDefaultColorCoding(tag) ? styles.tagNoColor : null
+                }
                 fullText={true}
               />
             </TouchableOpacity>

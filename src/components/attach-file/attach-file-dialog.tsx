@@ -1,8 +1,19 @@
-/* @flow */
-
-import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
-import {ActivityIndicator, Dimensions, Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
-
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import {
+  ActivityIndicator,
+  Dimensions,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import attachFile, {attachFileMethod} from './attach-file';
 import AttachmentErrorBoundary from '../attachments-row/attachment-error-boundary';
 import calculateAspectRatio from '../aspect-ratio/aspect-ratio';
@@ -23,9 +34,7 @@ import {isSplitView} from '../responsive/responsive-helper';
 import {logEvent} from '../log/log-helper';
 import {notifyError} from '../notification/notification';
 import {ThemeContext} from '../theme/theme-context';
-
 import styles from './attach-file-dialog.styles';
-
 import type {ActionSheetAction} from 'flow/Action';
 import type {ImageDimensions} from 'flow/CustomFields';
 import type {DisplayMetrics} from 'react-native/Libraries/Utilities/NativeDeviceInfo';
@@ -34,28 +43,35 @@ import type {Theme} from 'flow/Theme';
 import type {UserGroup} from 'flow/UserGroup';
 import type {User} from 'flow/User';
 import type {Visibility} from 'flow/Visibility';
-
-
 type Props = {
   actions: {
-    onAttach: (attachments: Array<NormalizedAttachment>, onAttachingFinish: () => any) => any,
-    onCancel: () => any,
-  },
-  getVisibilityOptions: () => Array<User | UserGroup>,
-  hideVisibility?: boolean,
-  source?: $Keys<typeof attachFileMethod>,
+    onAttach: (
+      attachments: Array<NormalizedAttachment>,
+      onAttachingFinish: () => any,
+    ) => any;
+    onCancel: () => any;
+  };
+  getVisibilityOptions: () => Array<User | UserGroup>;
+  hideVisibility?: boolean;
+  source?: keyof typeof attachFileMethod;
 };
 
-
-const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
-  const mounted: { current: boolean } = useRef(false);
+const AttachFileDialog = (
+  props: Props,
+): React.ReactElement<
+  React.ComponentProps<typeof ModalView>,
+  typeof ModalView
+> => {
+  const mounted: {
+    current: boolean;
+  } = useRef(false);
   usage.trackScreenView('Attach file modal');
-
   const theme: Theme = useContext(ThemeContext);
-
-  const [attaches, updateAttaches] = useState<Array<NormalizedAttachment> | null>(null);
+  const [
+    attaches,
+    updateAttaches,
+  ] = useState<Array<NormalizedAttachment> | null>(null);
   const [isAttaching, updateAttaching] = useState(false);
-
   const createActions = useCallback((): Array<ActionSheetAction> => {
     return [
       {
@@ -90,27 +106,34 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
           showSystemDialog(attachFileMethod.openCamera);
         };
       }
+
       return action;
     });
   }, []);
-
   useEffect(() => {
     mounted.current = true;
-    return () => {mounted.current = false;};
+    return () => {
+      mounted.current = false;
+    };
   }, []);
-
   useEffect(() => {
     if (props.source) {
-      const action: ?ActionSheetAction = createActions().find((it: ActionSheetAction) => it.id === props.source);
+      const action: ActionSheetAction | null | undefined = createActions().find(
+        (it: ActionSheetAction) => it.id === props.source,
+      );
+
       if (action && action.execute) {
         action.execute();
       }
     }
   }, [createActions, props.source]);
 
-  const showSystemDialog = async (method: $Keys<typeof attachFileMethod>) => {
+  const showSystemDialog = async (method: keyof typeof attachFileMethod) => {
     try {
-      const attachedFiles: Array<NormalizedAttachment> | null = await attachFile(method);
+      const attachedFiles: Array<NormalizedAttachment> | null = await attachFile(
+        method,
+      );
+
       if (attachedFiles) {
         updateAttaches(attachedFiles);
       }
@@ -119,7 +142,9 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
     }
   };
 
-  const renderMedia: (file: NormalizedAttachment) => any = (file: NormalizedAttachment): React$Element<typeof Video> => {
+  const renderMedia: (file: NormalizedAttachment) => any = (
+    file: NormalizedAttachment,
+  ): React.ReactElement<React.ComponentProps<typeof Video>, typeof Video> => {
     const dimensions: DisplayMetrics = Dimensions.get('window');
     return (
       <Video
@@ -133,13 +158,20 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
         paused={false}
         rate={0.0}
         resizeMode="contain"
-        source={{uri: file?.url}}
+        source={{
+          uri: file?.url,
+        }}
       />
     );
   };
 
-  const renderImage: (file: NormalizedAttachment) => React$Element<any> = (file: NormalizedAttachment): React$Element<typeof Image> => {
-    const dimensions: ?ImageDimensions = file && calculateAspectRatio(file.dimensions);
+  const renderImage: (
+    file: NormalizedAttachment,
+  ) => React.ReactElement<React.ComponentProps<any>, any> = (
+    file: NormalizedAttachment,
+  ): React.ReactElement<React.ComponentProps<typeof Image>, typeof Image> => {
+    const dimensions: ImageDimensions | null | undefined =
+      file && calculateAspectRatio(file.dimensions);
     return (
       <Image
         style={styles.imagePreview}
@@ -154,9 +186,13 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
     );
   };
 
-  const renderPreview = (files: Array<NormalizedAttachment>): Array<React$Element<any>> => {
+  const renderPreview = (
+    files: Array<NormalizedAttachment>,
+  ): Array<React.ReactElement<React.ComponentProps<any>, any>> => {
     return files.map((file: NormalizedAttachment, index: number) => {
-      const isMediaMimeType: boolean = hasMimeType.audio(file) || hasMimeType.video(file);
+      const isMediaMimeType: boolean =
+        hasMimeType.audio(file) || hasMimeType.video(file);
+
       if (file?.url) {
         return (
           <AttachmentErrorBoundary
@@ -170,21 +206,26 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
           </AttachmentErrorBoundary>
         );
       }
-      return <View key={`file-${index}`} style={styles.filePreview}/>;
+
+      return <View key={`file-${index}`} style={styles.filePreview} />;
     });
   };
 
   const render: (onHide: () => any) => any = (onHide: () => any) => (
     <>
       <Header
-        leftButton={
-          <IconClose size={21} color={styles.link.color}/>
-        }
+        leftButton={<IconClose size={21} color={styles.link.color} />}
         onBack={onHide}
-        rightButton={(
-          isAttaching ? <ActivityIndicator color={styles.link.color}/> :
-            <IconCheck size={20} color={attaches ? styles.link.color : styles.disabled.color}/>
-        )}
+        rightButton={
+          isAttaching ? (
+            <ActivityIndicator color={styles.link.color} />
+          ) : (
+            <IconCheck
+              size={20}
+              color={attaches ? styles.link.color : styles.disabled.color}
+            />
+          )
+        }
         onRightButtonClick={() => {
           if (attaches) {
             updateAttaching(true);
@@ -192,8 +233,11 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
               mounted.current === true && updateAttaching(false);
             });
           }
-        }}>
-        <Text style={styles.title}>{attaches?.length === 1 ? attaches[0].name : i18n('Attach files')}</Text>
+        }}
+      >
+        <Text style={styles.title}>
+          {attaches?.length === 1 ? attaches[0].name : i18n('Attach files')}
+        </Text>
       </Header>
 
       <View style={styles.content}>
@@ -201,7 +245,12 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
           <VisibilityControl
             style={styles.visibilityButton}
             onApply={(visibility: Visibility | null) => {
-              updateAttaches(attaches.map((attach: NormalizedAttachment) => ({...attach, visibility})));
+              updateAttaches(
+                attaches.map((attach: NormalizedAttachment) => ({
+                  ...attach,
+                  visibility,
+                })),
+              );
             }}
             uiTheme={theme.uiTheme}
             getOptions={props.getVisibilityOptions}
@@ -211,56 +260,53 @@ const AttachFileDialog = (props: Props): React$Element<typeof ModalView> => {
           {attaches && <ScrollView>{renderPreview(attaches)}</ScrollView>}
         </View>
 
-        {!attaches && <View>
-          {createActions().map((action: ActionSheetAction) => {
-            const size: number = action.iconSize || 20;
-            return (
-              <TouchableOpacity
-                hitSlop={HIT_SLOP}
-                key={action.title}
-                onPress={action.execute}
-                style={styles.button}
-              >
-                {action.icon && (
-                  <action.icon
-                    size={size}
-                    width={size}
-                    height={size}
-                    color={styles.buttonIcon.color}
-                    fill={styles.buttonIcon.color}
-                    style={styles.buttonIcon}
-                  />
-                )}
-                <Text style={styles.buttonText}>{action.title}</Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>}
+        {!attaches && (
+          <View>
+            {createActions().map((action: ActionSheetAction) => {
+              const size: number = action.iconSize || 20;
+              return (
+                <TouchableOpacity
+                  hitSlop={HIT_SLOP}
+                  key={action.title}
+                  onPress={action.execute}
+                  style={styles.button}
+                >
+                  {action.icon && (
+                    <action.icon
+                      size={size}
+                      width={size}
+                      height={size}
+                      color={styles.buttonIcon.color}
+                      fill={styles.buttonIcon.color}
+                      style={styles.buttonIcon}
+                    />
+                  )}
+                  <Text style={styles.buttonText}>{action.title}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
       </View>
-
     </>
   );
 
   const children = render(props.actions.onCancel);
+
   if (isSplitView()) {
     return (
-      <ModalPortal
-        onHide={props.actions.onCancel}
-      >
-        {children}
-      </ModalPortal>
+      <ModalPortal onHide={props.actions.onCancel}>{children}</ModalPortal>
     );
   } else {
     return (
-      <ModalView
-        animationType="slide"
-        style={styles.container}
-      >
+      <ModalView animationType="slide" style={styles.container}>
         {children}
       </ModalView>
     );
   }
-
 };
 
-export default (React.memo<Props>(AttachFileDialog): React$AbstractComponent<Props, mixed>);
+export default React.memo<Props>(AttachFileDialog) as React$AbstractComponent<
+  Props,
+  unknown
+>;

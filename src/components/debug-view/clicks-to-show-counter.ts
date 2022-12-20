@@ -1,8 +1,5 @@
-/* @flow */
 import {notify} from '../notification/notification';
-
 const NEXT_CLICK_MAX_TIMEOUT = 1000;
-
 let timeoutId = null;
 let counter = 0;
 
@@ -14,13 +11,18 @@ function resetCounter() {
   counter = 0;
 }
 
-export default function clicksCounter(actionToPerform: () => any, message: ?string, numberOfTaps: number = 6): void {
+export default function clicksCounter(
+  actionToPerform: () => any,
+  message: string | null | undefined,
+  numberOfTaps: number = 6,
+): void {
   if (timeoutId) {
     clearTimeout(timeoutId);
   }
+
   increaseCounter();
 
-  if ((counter === numberOfTaps / 2) && message) {
+  if (counter === numberOfTaps / 2 && message) {
     notify(message);
   }
 

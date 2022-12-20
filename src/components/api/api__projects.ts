@@ -1,10 +1,6 @@
-/* @flow */
-
 import ApiBase from './api__base';
-
 import type Auth from '../auth/oauth2';
 import type {IssueProject} from 'flow/CustomFields';
-
 export default class ProjectsAPI extends ApiBase {
   projectsURL: string = `${this.youTrackApiUrl}/admin/projects`;
   pinProjectURL: string = `${this.youTrackApiUrl}/users/me/pinnedProjects`;
@@ -17,7 +13,9 @@ export default class ProjectsAPI extends ApiBase {
     return this.makeAuthorizedRequest(
       `${this.pinProjectURL}?fields=id,pinned`,
       'POST',
-      {id: projectId}
+      {
+        id: projectId,
+      },
     );
   }
 
@@ -26,11 +24,16 @@ export default class ProjectsAPI extends ApiBase {
       `${this.pinProjectURL}/${projectId}`,
       'DELETE',
       null,
-      {parseJson: false}
+      {
+        parseJson: false,
+      },
     );
   }
 
-  async toggleFavorite(projectId: string, pinned: boolean): Promise<IssueProject> {
+  async toggleFavorite(
+    projectId: string,
+    pinned: boolean,
+  ): Promise<IssueProject> {
     if (pinned) {
       return this.removeFavorite(projectId);
     } else {
@@ -42,8 +45,7 @@ export default class ProjectsAPI extends ApiBase {
     const fields: string = 'enabled,workItemTypes(id,name,ordinal,url)';
     return this.makeAuthorizedRequest(
       `${this.projectsURL}/${projectId}/timeTrackingSettings/?fields=${fields}`,
-      'GET'
+      'GET',
     );
   }
-
 }

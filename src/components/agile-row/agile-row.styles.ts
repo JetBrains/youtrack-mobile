@@ -1,21 +1,20 @@
 import {Platform} from 'react-native';
-
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {UNIT} from '../variables/variables';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../agile-common/agile-common';
 import {issueIdResolved} from '../common-styles/issue';
-import {headerTitle, MAIN_FONT_SIZE, mainText} from '../common-styles/typography';
+import {
+  headerTitle,
+  MAIN_FONT_SIZE,
+  mainText,
+} from '../common-styles/typography';
 import {separatorBorder} from '../common-styles/list';
-
 const ROW_TEXT_LINE_HEIGHT = 24;
-
 export default EStyleSheet.create({
   issueResolved: {
     color: '$icon',
   },
   issueIdResolved: issueIdResolved,
-
   rowHeader: {
     flexDirection: 'row',
     marginLeft: UNIT,
@@ -53,7 +52,6 @@ export default EStyleSheet.create({
     color: '$text',
     lineHeight: ROW_TEXT_LINE_HEIGHT,
     marginLeft: UNIT,
-
     ...Platform.select({
       ios: {
         fontWeight: '500',

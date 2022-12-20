@@ -1,25 +1,17 @@
-/* @flow */
-
 import React from 'react';
-
 import {TouchableOpacity, View} from 'react-native';
-
 import availableReactionNames from 'components/reactions/reactions-name-list';
 import BottomSheetModal from '../../../components/modal-panel-bottom/bottom-sheet-modal';
 import ReactionIcon from 'components/reactions/reaction-icon';
-
 import {HIT_SLOP} from 'components/common-styles/button';
 import styles from './issue-activity.styles';
-
 import type {Reaction} from 'flow/Reaction';
-
 type Props = {
-  onHide: () => void,
-  onSelect: (reaction: Reaction) => void,
-}
+  onHide: () => void;
+  onSelect: (reaction: Reaction) => void;
+};
 
 const ReactionsPanel = (props: Props) => {
-
   return (
     <BottomSheetModal
       isVisible={true}
@@ -33,8 +25,13 @@ const ReactionsPanel = (props: Props) => {
               <TouchableOpacity
                 style={styles.reactionButton}
                 hitSlop={HIT_SLOP}
-                onPress={() => props.onSelect({reaction: reactionName})}>
-                <ReactionIcon size={21} name={reactionName}/>
+                onPress={() =>
+                  props.onSelect({
+                    reaction: reactionName,
+                  })
+                }
+              >
+                <ReactionIcon size={21} name={reactionName} />
               </TouchableOpacity>
             </View>
           );
@@ -44,4 +41,7 @@ const ReactionsPanel = (props: Props) => {
   );
 };
 
-export default (React.memo<Props>(ReactionsPanel): React$AbstractComponent<Props, mixed>);
+export default React.memo<Props>(ReactionsPanel) as React$AbstractComponent<
+  Props,
+  unknown
+>;

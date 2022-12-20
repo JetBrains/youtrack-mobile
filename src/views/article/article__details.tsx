@@ -1,8 +1,5 @@
-/* @flow */
-
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
-
 import ArticleContent from './article__details-content';
 import ArticleWithChildren from 'components/articles/article-item-with-children';
 import AttachmentsRow from 'components/attachments-row/attachments-row';
@@ -14,70 +11,97 @@ import Separator from 'components/separator/separator';
 import usage from 'components/usage/usage';
 import {ANALYTICS_ARTICLE_PAGE} from 'components/analytics/analytics-ids';
 import {i18n, i18nPlural} from 'components/i18n/i18n';
-import {IconAdd, IconAngleRight, IconBack, IconClose} from 'components/icon/icon';
+import {
+  IconAdd,
+  IconAngleRight,
+  IconBack,
+  IconClose,
+} from 'components/icon/icon';
 import {logEvent} from 'components/log/log-helper';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssueContent} from 'components/skeleton/skeleton';
-
 import styles from './article.styles';
-
 import type {Article} from 'flow/Article';
 import type {Attachment} from 'flow/CustomFields';
 import type {CustomError} from 'flow/Error';
 import type {UITheme} from 'flow/Theme';
-
 type Props = {
-  article: Article,
-  error: CustomError,
-  isLoading: boolean,
-  onRemoveAttach?: (attachment: Attachment) => any,
-  onCreateArticle?: () => any,
-  uiTheme: UITheme,
-  scrollData: Object,
-  onCheckboxUpdate?: (articleContent: string) => Function,
-  isSplitView: boolean,
+  article: Article;
+  error: CustomError;
+  isLoading: boolean;
+  onRemoveAttach?: (attachment: Attachment) => any;
+  onCreateArticle?: () => any;
+  uiTheme: UITheme;
+  scrollData: Record<string, any>;
+  onCheckboxUpdate?: (articleContent: string) => (...args: Array<any>) => any;
+  isSplitView: boolean;
 };
 
 const ArticleDetails = (props: Props) => {
   const [modalStack, updateModalStack] = useState([]);
 
-
   function navigateToSubArticlePage(article: Article) {
     const update = () => {
-      updateModalStack(((prev: Array<{ id: string, children: any, onHide: () => any }>) => {
-        const onHide = () => updateModalStack(
-          (prev: Array<{ id: string, children: any, onHide: () => any }>) => prev.filter((it) => it.id !== article.id)
-        );
-        prev.push({
-          id: article.id,
-          onHide,
-          children: renderSubArticles(
-            article,
+      updateModalStack(
+        (
+          prev: Array<{
+            id: string;
+            children: any;
+            onHide: () => any;
+          }>,
+        ) => {
+          const onHide = () =>
+            updateModalStack(
+              (
+                prev: Array<{
+                  id: string;
+                  children: any;
+                  onHide: () => any;
+                }>,
+              ) => prev.filter(it => it.id !== article.id),
+            );
+
+          prev.push({
+            id: article.id,
             onHide,
-            prev.length === 0 ? <IconClose size={21} color={styles.link.color}/> : null
-          )});
-        return prev.slice();
-      }));
+            children: renderSubArticles(
+              article,
+              onHide,
+              prev.length === 0 ? (
+                <IconClose size={21} color={styles.link.color} />
+              ) : null,
+            ),
+          });
+          return prev.slice();
+        },
+      );
     };
 
     if (props.isSplitView) {
       update();
     } else {
-      Router.Page({children: renderSubArticles(article)});
+      Router.Page({
+        children: renderSubArticles(article),
+      });
     }
   }
 
-  function renderSubArticles(article: Article, onHide: () => any = () => Router.pop(), backIcon?: any) {
-
-    const renderArticle = ({item}: { item: Article }) => {
+  function renderSubArticles(
+    article: Article,
+    onHide: () => any = () => Router.pop(),
+    backIcon?: any,
+  ) {
+    const renderArticle = ({item}: {item: Article}) => {
       return (
         <ArticleWithChildren
           style={styles.subArticleItem}
           article={item}
           onArticlePress={(article: Article) => {
             if (props.isSplitView) {
-
-              Router.KnowledgeBase({lastVisitedArticle: article, preventReload: true});
+              Router.KnowledgeBase({
+                lastVisitedArticle: article,
+                preventReload: true,
+              });
             } else {
               Router.Article({
                 articlePlaceholder: article,
@@ -87,8 +111,10 @@ const ArticleDetails = (props: Props) => {
               });
             }
           }}
-          onShowSubArticles={(childArticle: Article) => navigateToSubArticlePage(childArticle)}
-         />
+          onShowSubArticles={(childArticle: Article) =>
+            navigateToSubArticlePage(childArticle)
+          }
+        />
       );
     };
 
@@ -96,10 +122,12 @@ const ArticleDetails = (props: Props) => {
       <>
         <Header
           style={styles.subArticlesHeader}
-          leftButton={backIcon || <IconBack color={styles.link.color}/>}
+          leftButton={backIcon || <IconBack color={styles.link.color} />}
           onBack={onHide}
         >
-          <Text numberOfLines={2} style={styles.articlesHeaderText}>{article.summary}</Text>
+          <Text numberOfLines={2} style={styles.articlesHeaderText}>
+            {article.summary}
+          </Text>
         </Header>
 
         <FlatList
@@ -131,27 +159,33 @@ const ArticleDetails = (props: Props) => {
                   onPress={onCreateArticle}
                   style={styles.subArticlesCreateIcon}
                 >
-                  <IconAdd size={18} color={styles.subArticlesCreateIcon.color}/>
+                  <IconAdd
+                    size={18}
+                    color={styles.subArticlesCreateIcon.color}
+                  />
                 </TouchableOpacity>
               </View>
             )}
           </View>
-          {hasSubArticles && <View style={styles.subArticlesContent}>
-            <Text
-              style={styles.subArticleItemText}>
-              {i18nPlural(
-                article?.childArticles?.length,
-                '{{amount}} article',
-                '{{amount}} articles',
-                {amount: article?.childArticles?.length}
-              )}
-            </Text>
-            <IconAngleRight
-              size={18}
-              color={uiTheme.colors.$text}
-              style={styles.subArticlesNavigateIcon}
-            />
-          </View>}
+          {hasSubArticles && (
+            <View style={styles.subArticlesContent}>
+              <Text style={styles.subArticleItemText}>
+                {i18nPlural(
+                  article?.childArticles?.length,
+                  '{{amount}} article',
+                  '{{amount}} articles',
+                  {
+                    amount: article?.childArticles?.length,
+                  },
+                )}
+              </Text>
+              <IconAngleRight
+                size={18}
+                color={uiTheme.colors.$text}
+                style={styles.subArticlesNavigateIcon}
+              />
+            </View>
+          )}
         </TouchableOpacity>
       );
     }
@@ -171,11 +205,14 @@ const ArticleDetails = (props: Props) => {
   if (!article) {
     return null;
   }
+
   return (
     <>
-      {!!article.summary && <Text style={styles.summaryText}>{article.summary}</Text>}
+      {!!article.summary && (
+        <Text style={styles.summaryText}>{article.summary}</Text>
+      )}
 
-      {isLoading && !error && !article?.content && <SkeletonIssueContent/>}
+      {isLoading && !error && !article?.content && <SkeletonIssueContent />}
 
       {renderSubArticlesButton()}
 
@@ -186,25 +223,37 @@ const ArticleDetails = (props: Props) => {
         mentionedIssues={article?.mentionedIssues}
         uiTheme={uiTheme}
         articleContent={article?.content}
-        onCheckboxUpdate={(checked: boolean, position: number, articleContent: string) => onCheckboxUpdate && onCheckboxUpdate(checked, position, articleContent)}
+        onCheckboxUpdate={(
+          checked: boolean,
+          position: number,
+          articleContent: string,
+        ) =>
+          onCheckboxUpdate &&
+          onCheckboxUpdate(checked, position, articleContent)
+        }
       />
 
       {article?.attachments?.length > 0 && (
         <>
-          <Separator fitWindow indent/>
+          <Separator fitWindow indent />
           <View style={styles.articleDetailsHeader}>
             <AttachmentsRow
               attachments={article.attachments}
               attachingImage={null}
-              onImageLoadingError={
-                (err: Object) => logEvent({message: err.nativeEvent, isError: true})
+              onImageLoadingError={(err: Record<string, any>) =>
+                logEvent({
+                  message: err.nativeEvent,
+                  isError: true,
+                })
               }
               canRemoveAttachment={!!onRemoveAttach}
               onRemoveImage={onRemoveAttach || undefined}
-              onOpenAttachment={(type) => usage.trackEvent(
-                ANALYTICS_ARTICLE_PAGE,
-                type === 'image' ? 'Showing image' : 'Open attachment by URL'
-              )}
+              onOpenAttachment={type =>
+                usage.trackEvent(
+                  ANALYTICS_ARTICLE_PAGE,
+                  type === 'image' ? 'Showing image' : 'Open attachment by URL',
+                )
+              }
               uiTheme={uiTheme}
             />
           </View>
@@ -212,12 +261,23 @@ const ArticleDetails = (props: Props) => {
       )}
 
       {props.isSplitView && (
-        <ModalPortal onHide={modalStack.length > 0 ? modalStack[modalStack.length - 1].onHide : () => {}}>
-          {modalStack.length > 0 ? modalStack[modalStack.length - 1].children : null}
+        <ModalPortal
+          onHide={
+            modalStack.length > 0
+              ? modalStack[modalStack.length - 1].onHide
+              : () => {}
+          }
+        >
+          {modalStack.length > 0
+            ? modalStack[modalStack.length - 1].children
+            : null}
         </ModalPortal>
       )}
     </>
   );
 };
 
-export default (React.memo<Props>(ArticleDetails): React$AbstractComponent<Props, mixed>);
+export default React.memo<Props>(ArticleDetails) as React$AbstractComponent<
+  Props,
+  unknown
+>;

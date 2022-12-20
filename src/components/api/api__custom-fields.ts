@@ -1,16 +1,13 @@
-/* @flow */
-
 import ApiBase from './api__base';
-
 import type Auth from '../auth/oauth2';
-
-
 export default class CustomFieldsAPI extends ApiBase {
   constructor(auth: Auth) {
     super(auth);
   }
 
-  async filterFields(queryParams: ?Object): Promise<any> {
+  async filterFields(
+    queryParams: Record<string, any> | null | undefined,
+  ): Promise<any> {
     const queryString: string = ApiBase.createFieldsQuery(
       [
         'id',
@@ -29,20 +26,22 @@ export default class CustomFieldsAPI extends ApiBase {
             'name',
             'localizedName',
             'ordinal',
-            {fieldType: ['id', 'isBundleType', 'valueType']},
+            {
+              fieldType: ['id', 'isBundleType', 'valueType'],
+            },
           ],
           projects: ['id', 'name'],
         },
       ],
       queryParams,
-      {encode: false, indices: false}
+      {
+        encode: false,
+        indices: false,
+      },
     );
     return this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/filterFields/?${queryString}`,
       'GET',
     );
   }
-
-
-
 }

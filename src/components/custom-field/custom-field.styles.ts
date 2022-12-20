@@ -1,20 +1,18 @@
 import {Platform} from 'react-native';
-
 import EStyleSheet from 'react-native-extended-stylesheet';
-
-import {MAIN_FONT_SIZE, mainText, secondaryText} from '../common-styles/typography';
+import {
+  MAIN_FONT_SIZE,
+  mainText,
+  secondaryText,
+} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
-
-
 const sidePadding = {
   paddingLeft: UNIT,
   paddingRight: UNIT,
 };
-
 const font = {
   fontFamily: 'System',
 };
-
 export default EStyleSheet.create({
   wrapper: {
     flex: 1,

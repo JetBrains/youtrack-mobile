@@ -1,23 +1,19 @@
 import {Platform} from 'react-native';
-
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {elevation1} from 'components/common-styles/shadow';
-import {headerTitle, mainText, secondaryText} from 'components/common-styles/typography';
+import {
+  headerTitle,
+  mainText,
+  secondaryText,
+} from 'components/common-styles/typography';
 import {issueIdResolved} from 'components/common-styles/issue';
 import {splitViewStyles} from 'components/common-styles/split-view';
 import {UNIT} from 'components/variables/variables';
-
 const font = {
   lineHeight: 18,
   fontSize: 14,
 };
-
-const textSecondary = {
-  ...font,
-  color: '$icon',
-};
-
+const textSecondary = {...font, color: '$icon'};
 export default EStyleSheet.create({
   container: {
     flex: 1,
@@ -50,11 +46,7 @@ export default EStyleSheet.create({
       },
     }),
   },
-  reason: {
-    ...secondaryText,
-    paddingRight: UNIT,
-    color: '$icon',
-  },
+  reason: {...secondaryText, paddingRight: UNIT, color: '$icon'},
   notificationChange: {
     marginTop: UNIT * 2,
     marginRight: -UNIT,
@@ -76,10 +68,7 @@ export default EStyleSheet.create({
   userInfoReaction: {
     marginBottom: UNIT * 2,
   },
-  textPrimary: {
-    ...font,
-    color: '$icon',
-  },
+  textPrimary: {...font, color: '$icon'},
   textSecondary,
   listFooterMessage: {
     flex: 1,
@@ -115,26 +104,17 @@ export default EStyleSheet.create({
     paddingBottom: UNIT * 2,
     backgroundColor: '$background',
   },
-  headerTitleText: {
-    ...headerTitle,
-    color: '$text',
-  },
+  headerTitleText: {...headerTitle, color: '$text'},
   error: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  link: {
-    ...font,
-    color: '$link',
-  },
+  link: {...font, color: '$link'},
   linkColor: {
     color: '$link',
   },
-  resolved: {
-    ...issueIdResolved,
-    color: '$icon',
-  },
+  resolved: {...issueIdResolved, color: '$icon'},
   secondaryText: {
     color: '$icon',
   },
@@ -151,7 +131,11 @@ export default EStyleSheet.create({
     width: 1,
     height: UNIT * 4,
     backgroundColor: '$error',
-    transform: [{rotate: '45deg'}],
+    transform: [
+      {
+        rotate: '45deg',
+      },
+    ],
   },
   titleShadow: elevation1,
 });

@@ -1,27 +1,19 @@
-/* @flow */
-
 import {Platform} from 'react-native';
-
 import {DEFAULT_THEME} from '../theme/theme';
 import {UNIT} from '../variables/variables';
 import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from '../common-styles/typography';
-
 import type {UITheme, UIThemeColors} from 'flow/Theme';
 import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
-
 const vSpace = {
   marginTop: UNIT * 2,
   marginBottom: UNIT,
 };
-
 const code = {
   borderWidth: 0,
   backgroundColor: DEFAULT_THEME.colors.$boxBackground,
   padding: UNIT,
   borderRadius: 4,
 };
-
 export const baseMarkdownStyles = {
   body: {
     color: DEFAULT_THEME.colors.$text,
@@ -134,15 +126,9 @@ export const baseMarkdownStyles = {
     flex: 1,
     flexWrap: 'wrap',
   },
-  code_inline: {
-    ...code,
-  },
-  code_block: {
-    ...code,
-  },
-  fence: {
-    ...code,
-  },
+  code_inline: {...code},
+  code_block: {...code},
+  fence: {...code},
   table: {
     borderWidth: 1,
     borderColor: DEFAULT_THEME.colors.$text,
@@ -200,8 +186,10 @@ export const baseMarkdownStyles = {
   span: {},
 };
 
-
-const markdownStyles = (uiTheme: UITheme = DEFAULT_THEME, textStyle: TextStyleProp = {}) => {
+const markdownStyles = (
+  uiTheme: UITheme = DEFAULT_THEME,
+  textStyle: TextStyleProp = {},
+) => {
   const uiThemeColors: UIThemeColors = uiTheme.colors;
   return {
     body: {
@@ -217,30 +205,12 @@ const markdownStyles = (uiTheme: UITheme = DEFAULT_THEME, textStyle: TextStylePr
       ...baseMarkdownStyles.blockquote,
       borderLeftColor: uiThemeColors.$textSecondary,
     },
-    code_inline: {
-      ...code,
-      backgroundColor: uiThemeColors.$boxBackground,
-    },
-    code_block: {
-      ...code,
-      backgroundColor: uiThemeColors.$boxBackground,
-    },
-    fence: {
-      ...code,
-      backgroundColor: uiThemeColors.$boxBackground,
-    },
-    table: {
-      ...baseMarkdownStyles.table,
-      borderColor: uiThemeColors.$text,
-    },
-    tr: {
-      ...baseMarkdownStyles.tr,
-      borderColor: uiThemeColors.$text,
-    },
-    link: {
-      ...baseMarkdownStyles.link,
-      color: uiThemeColors.$link,
-    },
+    code_inline: {...code, backgroundColor: uiThemeColors.$boxBackground},
+    code_block: {...code, backgroundColor: uiThemeColors.$boxBackground},
+    fence: {...code, backgroundColor: uiThemeColors.$boxBackground},
+    table: {...baseMarkdownStyles.table, borderColor: uiThemeColors.$text},
+    tr: {...baseMarkdownStyles.tr, borderColor: uiThemeColors.$text},
+    link: {...baseMarkdownStyles.link, color: uiThemeColors.$link},
     blocklink: {
       ...baseMarkdownStyles.blocklink,
       borderColor: uiThemeColors.$text,
@@ -250,27 +220,13 @@ const markdownStyles = (uiTheme: UITheme = DEFAULT_THEME, textStyle: TextStylePr
       color: uiThemeColors.$text,
       ...textStyle,
     },
-    textgroup: {
-      ...baseMarkdownStyles.textgroup,
-    },
-    paragraph: {
-      ...baseMarkdownStyles.paragraph,
-    },
-    hardbreak: {
-      ...baseMarkdownStyles.hardbreak,
-    },
-    softbreak: {
-      ...baseMarkdownStyles.softbreak,
-    },
-    pre: {
-      ...baseMarkdownStyles.pre,
-    },
-    inline: {
-      ...baseMarkdownStyles.inline,
-    },
-    span: {
-      ...baseMarkdownStyles.span,
-    },
+    textgroup: {...baseMarkdownStyles.textgroup},
+    paragraph: {...baseMarkdownStyles.paragraph},
+    hardbreak: {...baseMarkdownStyles.hardbreak},
+    softbreak: {...baseMarkdownStyles.softbreak},
+    pre: {...baseMarkdownStyles.pre},
+    inline: {...baseMarkdownStyles.inline},
+    span: {...baseMarkdownStyles.span},
   };
 };
 

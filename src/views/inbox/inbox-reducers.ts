@@ -1,21 +1,16 @@
-/* @flow */
-
 import * as types from './inbox-action-types';
 import {createReducer} from 'redux-create-reducer';
-
 import type {CustomError} from 'flow/Error';
 import type {Theme} from 'flow/Theme';
 import type {User} from 'flow/User';
-
 export type InboxState = {
-  loading: boolean,
-  items: Array<Object>,
-  hasMore: boolean,
-  error: CustomError | null,
-  theme: ?Theme,
-  currentUser: ?User
+  loading: boolean;
+  items: Array<Record<string, any>>;
+  hasMore: boolean;
+  error: CustomError | null;
+  theme: Theme | null | undefined;
+  currentUser: User | null | undefined;
 };
-
 const initialState: InboxState = {
   loading: false,
   hasMore: true,
@@ -24,14 +19,18 @@ const initialState: InboxState = {
   theme: null,
   currentUser: null,
 };
-
-export default (createReducer(initialState, {
+export default createReducer(initialState, {
   [types.SET_LOADING](state, {loading}): InboxState {
     return {...state, loading};
   },
 
   [types.ADD_ITEMS](state, {items, hasMore, issueLinkTypes}): InboxState {
-    return {...state, items: [...state.items, ...items], hasMore, issueLinkTypes};
+    return {
+      ...state,
+      items: [...state.items, ...items],
+      hasMore,
+      issueLinkTypes,
+    };
   },
 
   [types.RESET_ITEMS](state): InboxState {
@@ -43,9 +42,6 @@ export default (createReducer(initialState, {
   },
 
   [types.ERROR](state, {error}): InboxState {
-    return {
-      ...state,
-      error,
-    };
+    return {...state, error};
   },
-}): any);
+}) as any;

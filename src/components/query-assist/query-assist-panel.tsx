@@ -1,46 +1,43 @@
-/* @flow */
-
 import React, {PureComponent} from 'react';
 import {View} from 'react-native';
-
 import QueryAssist, {QueryAssistModal} from './query-assist';
 import {isSplitView} from '../responsive/responsive-helper';
-
 import styles from './query-assist.styles';
-
 import type {Node} from 'react';
 import type {TransformedSuggestion} from '../../flow/Issue';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
 type SearchPanelProps = {
-  queryAssistSuggestions: Array<TransformedSuggestion>,
-  query: string,
-  suggestIssuesQuery: (query: string, caret: number) => any,
-  onQueryUpdate: (query: string) => any,
-  onClose: (query: string) => any,
-
-  issuesCount?: ?number,
-  style?: ViewStyleProp,
-
-  clearButtonMode?: ('never' | 'while-editing' | 'unless-editing' | 'always')
+  queryAssistSuggestions: Array<TransformedSuggestion>;
+  query: string;
+  suggestIssuesQuery: (query: string, caret: number) => any;
+  onQueryUpdate: (query: string) => any;
+  onClose: (query: string) => any;
+  issuesCount?: number | null | undefined;
+  style?: ViewStyleProp;
+  clearButtonMode?: 'never' | 'while-editing' | 'unless-editing' | 'always';
 };
-
-export default class QueryAssistPanel extends PureComponent<SearchPanelProps, void> {
-  static defaultProps: {onClose: () => null} = {
+export default class QueryAssistPanel extends PureComponent<
+  SearchPanelProps,
+  void
+> {
+  static defaultProps: {
+    onClose: () => null;
+  } = {
     onClose: () => null,
   };
+  node: Record<string, any>;
 
-  node: Object;
-
-  setNativeProps(...args: Array<Object>): any {
+  setNativeProps(...args: Array<Record<string, any>>): any {
     return this.node && this.node.setNativeProps(...args);
   }
 
-  loadSuggests: ((query: string, caret: number) => any) = (query: string, caret: number) => {
+  loadSuggests: (query: string, caret: number) => any = (
+    query: string,
+    caret: number,
+  ) => {
     return this.props.suggestIssuesQuery(query, caret);
   };
-
-  applyQuery: ((query: string) => any) = (query: string) => {
+  applyQuery: (query: string) => any = (query: string) => {
     return this.props.onQueryUpdate(query);
   };
 
@@ -50,7 +47,7 @@ export default class QueryAssistPanel extends PureComponent<SearchPanelProps, vo
     return (
       <View
         style={[styles.searchPanel, style]}
-        ref={node => this.node = node}
+        ref={node => (this.node = node)}
       >
         <Component
           suggestions={queryAssistSuggestions}
@@ -60,7 +57,6 @@ export default class QueryAssistPanel extends PureComponent<SearchPanelProps, vo
           onClose={this.props.onClose}
           clearButtonMode={clearButtonMode}
         />
-
       </View>
     );
   }

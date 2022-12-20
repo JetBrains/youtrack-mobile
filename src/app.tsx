@@ -1,10 +1,6 @@
-/* @flow */
-
 import React, {Component} from 'react';
 import {UIManager} from 'react-native';
-
 import {Provider} from 'react-redux';
-
 import AgileBoard from 'views/agile-board/agile-board';
 import AppProvider from './app-provider';
 import Article from 'views/article/article';
@@ -27,11 +23,13 @@ import Router from 'components/router/router';
 import Settings from 'views/settings/settings';
 import store from './store';
 import WikiPage from 'views/wiki-page/wiki-page';
-import {ActionSheetProvider, connectActionSheet} from '@expo/react-native-action-sheet';
+import {
+  ActionSheetProvider,
+  connectActionSheet,
+} from '@expo/react-native-action-sheet';
 import {Notifications} from 'react-native-notifications';
 import {onNavigateBack, setAccount} from 'actions/app-actions';
 import {rootRoutesList, routeMap} from './app-routes';
-
 import type {Node} from 'react';
 import type {NotificationRouteData} from 'flow/Notification';
 import type {Ref} from 'react';
@@ -45,11 +43,10 @@ class YouTrackMobile extends Component<void, void> {
 
   constructor() {
     super();
-
     this.registerRoutes();
     YouTrackMobile.init(YouTrackMobile.getNotificationData);
 
-    Router.onBack = (closingView) => {
+    Router.onBack = closingView => {
       store.dispatch(onNavigateBack(closingView));
     };
 
@@ -57,20 +54,32 @@ class YouTrackMobile extends Component<void, void> {
   }
 
   static async getNotificationData(): Promise<NotificationRouteData> {
-    const notification: Promise<typeof Notification | ?PushNotificationIOS> = await Notifications.getInitialNotification();
-    log.info(`Initial notification(on start app):: ${JSON.stringify(notification)}`);
+    const notification: Promise<
+      typeof Notification | (PushNotificationIOS | null | undefined)
+    > = await Notifications.getInitialNotification();
+    log.info(
+      `Initial notification(on start app):: ${JSON.stringify(notification)}`,
+    );
     return {
       issueId: notificationsHelper.getIssueId(notification),
       backendUrl: notificationsHelper.getBackendUrl(notification),
-      navigateToActivity: !notificationsHelper.isIssueDetailsNotification(notification),
+      navigateToActivity: !notificationsHelper.isIssueDetailsNotification(
+        notification,
+      ),
     };
   }
 
-  static async init(getNotificationRouteData: () => Promise<?NotificationRouteData>) {
-    let notificationRouteData: ?NotificationRouteData;
+  static async init(
+    getNotificationRouteData: () => Promise<
+      NotificationRouteData | null | undefined
+    >,
+  ) {
+    let notificationRouteData: NotificationRouteData | null | undefined;
+
     if (getNotificationRouteData) {
       notificationRouteData = await getNotificationRouteData();
     }
+
     store.dispatch(setAccount(notificationRouteData));
   }
 
@@ -81,56 +90,108 @@ class YouTrackMobile extends Component<void, void> {
       type: 'reset',
       props: {
         message: 'Loading configuration...',
-        onChangeBackendUrl: oldUrl => Router.EnterServer({serverUrl: oldUrl}),
+        onChangeBackendUrl: oldUrl =>
+          Router.EnterServer({
+            serverUrl: oldUrl,
+          }),
         onRetry: YouTrackMobile.init,
       },
     });
-
     Router.registerRoute({
       name: routeMap.EnterServer,
       component: EnterServer,
       type: 'reset',
     });
-
     Router.registerRoute({
       name: routeMap.LogIn,
       component: LoginForm,
       type: 'reset',
     });
-
     Router.registerRoute({
       name: routeMap.Issues,
       component: Issues,
       type: 'reset',
     });
-
-    Router.registerRoute({name: routeMap.AgileBoard, component: AgileBoard, type: 'reset'});
-    Router.registerRoute({name: routeMap.Article, component: Article});
-    Router.registerRoute({name: routeMap.ArticleSingle, component: Article, type: 'reset'});
-    Router.registerRoute({name: routeMap.ArticleCreate, component: ArticleCreate, modal: true});
-    Router.registerRoute({name: routeMap.AttachmentPreview, component: AttachmentPreview, modal: true});
-    Router.registerRoute({name: routeMap.CreateIssue, component: CreateIssue, modal: true});
-    Router.registerRoute({name: routeMap.PreviewFile, component: PreviewFile, modal: true});
-    Router.registerRoute({name: routeMap.Inbox, component: Inbox, type: 'reset'});
-    Router.registerRoute({name: routeMap.InboxThreads, component: InboxThreads, type: 'reset'});
+    Router.registerRoute({
+      name: routeMap.AgileBoard,
+      component: AgileBoard,
+      type: 'reset',
+    });
+    Router.registerRoute({
+      name: routeMap.Article,
+      component: Article,
+    });
+    Router.registerRoute({
+      name: routeMap.ArticleSingle,
+      component: Article,
+      type: 'reset',
+    });
+    Router.registerRoute({
+      name: routeMap.ArticleCreate,
+      component: ArticleCreate,
+      modal: true,
+    });
+    Router.registerRoute({
+      name: routeMap.AttachmentPreview,
+      component: AttachmentPreview,
+      modal: true,
+    });
+    Router.registerRoute({
+      name: routeMap.CreateIssue,
+      component: CreateIssue,
+      modal: true,
+    });
+    Router.registerRoute({
+      name: routeMap.PreviewFile,
+      component: PreviewFile,
+      modal: true,
+    });
+    Router.registerRoute({
+      name: routeMap.Inbox,
+      component: Inbox,
+      type: 'reset',
+    });
+    Router.registerRoute({
+      name: routeMap.InboxThreads,
+      component: InboxThreads,
+      type: 'reset',
+    });
     Router.registerRoute({
       name: routeMap.Issue,
       component: Issue,
       tabletComponentName: routeMap.Issues,
     });
-    Router.registerRoute({name: routeMap.KnowledgeBase, component: KnowledgeBase, type: 'reset'});
-    Router.registerRoute({name: routeMap.Page, component: Page});
-    Router.registerRoute({name: routeMap.PageModal, component: Page, modal: true});
-    Router.registerRoute({name: routeMap.Settings, component: Settings, type: 'reset'});
-    Router.registerRoute({name: routeMap.WikiPage, component: WikiPage, modal: true});
-
+    Router.registerRoute({
+      name: routeMap.KnowledgeBase,
+      component: KnowledgeBase,
+      type: 'reset',
+    });
+    Router.registerRoute({
+      name: routeMap.Page,
+      component: Page,
+    });
+    Router.registerRoute({
+      name: routeMap.PageModal,
+      component: Page,
+      modal: true,
+    });
+    Router.registerRoute({
+      name: routeMap.Settings,
+      component: Settings,
+      type: 'reset',
+    });
+    Router.registerRoute({
+      name: routeMap.WikiPage,
+      component: WikiPage,
+      modal: true,
+    });
     Router.finalizeRoutes(this.routeHomeName);
   }
 
   render() {
     return (
       <Provider store={store}>
-        <AppProvider/>
+        <AppProvider />
       </Provider>
     );
   }
@@ -142,16 +203,19 @@ class AppContainer extends Component<void, void> {
   static childContextTypes: any = {
     actionSheet: Function,
   };
-
   actionSheetRef: Ref<typeof ActionSheetProvider>;
 
-  getChildContext(): { actionSheet: () => Ref<any> } {
+  getChildContext(): {
+    actionSheet: () => Ref<any>;
+  } {
     return {
       actionSheet: () => this.actionSheetRef,
     };
   }
 
-  setActionSheetRef: (component: Ref<empty>) => void = (component: Ref<typeof ActionSheetProvider>) => {
+  setActionSheetRef: (component: Ref<never>) => void = (
+    component: Ref<typeof ActionSheetProvider>,
+  ) => {
     if (component) {
       this.actionSheetRef = component;
     }
@@ -161,7 +225,7 @@ class AppContainer extends Component<void, void> {
     return (
       //$FlowFixMe
       <ActionSheetProvider ref={this.setActionSheetRef} useModal={true}>
-        <AppActionSheetConnected/>
+        <AppActionSheetConnected />
       </ActionSheetProvider>
     );
   }

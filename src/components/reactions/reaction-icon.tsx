@@ -1,18 +1,14 @@
 import React from 'react';
-
 import reactionsMap from './reactions';
 import {DEFAULT_THEME} from '../theme/theme';
 import {UNIT} from '../variables/variables';
-
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
 const iconDefaultSize: number = UNIT * 2;
-
 type Props = {
-  name: string,
-  size?: number,
-  style?: ViewStyleProp
-}
+  name: string;
+  size?: number;
+  style?: ViewStyleProp;
+};
 
 const ReactionIcon = (props: Props) => {
   const {name, size = iconDefaultSize, style} = props;
@@ -20,10 +16,12 @@ const ReactionIcon = (props: Props) => {
   return Icon ? (
     <Icon
       width={size}
-      style={{fill: DEFAULT_THEME.colors.$iconAccent, ...style}}
+      style={{
+        fill: DEFAULT_THEME.colors.$iconAccent,
+        ...style,
+      }}
     />
   ) : null;
 };
-
 
 export default ReactionIcon;

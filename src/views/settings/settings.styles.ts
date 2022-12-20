@@ -1,24 +1,14 @@
-/* @flow */
-
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {mainText, secondaryText} from 'components/common-styles/typography';
 import {separatorBorder} from 'components/common-styles/list';
 import {UNIT} from 'components/variables/variables';
 import {elevation1} from 'components/common-styles/shadow';
-
-
 const hPaddings = {
   paddingLeft: UNIT * 2,
   paddingRight: UNIT * 2,
 };
-const optionText = {
-  ...mainText,
-  color: '$text',
-  fontWeight: '500',
-};
-
-export default (EStyleSheet.create({
+const optionText = {...mainText, color: '$text', fontWeight: '500'};
+export default EStyleSheet.create({
   settings: {
     flex: 1,
     backgroundColor: '$background',
@@ -37,9 +27,7 @@ export default (EStyleSheet.create({
   settingsListItemTitle: {
     padding: UNIT,
   },
-  settingsListItemTitleText: {
-    ...optionText,
-  },
+  settingsListItemTitleText: {...optionText},
   settingsListItemOption: {
     flexDirection: 'row',
     paddingVertical: UNIT * 2,
@@ -72,11 +60,7 @@ export default (EStyleSheet.create({
     marginTop: UNIT,
     marginBottom: UNIT,
   },
-  settingsFooterBuild: {
-    ...secondaryText,
-    color: '$icon',
-  },
-
+  settingsFooterBuild: {...secondaryText, color: '$icon'},
   settingsAppearanceHeaderIcon: {
     marginLeft: UNIT * 1.5,
   },
@@ -84,4 +68,4 @@ export default (EStyleSheet.create({
     padding: UNIT * 2,
   },
   elevation1: elevation1,
-}): any);
+}) as any;

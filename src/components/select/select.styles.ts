@@ -1,16 +1,12 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {elevation1} from '../common-styles/shadow';
 import {inputWrapper, searchInput} from '../common-styles/search';
 import {MAIN_FONT_SIZE} from '../common-styles/typography';
 import {separator} from '../common-styles/list';
 import {UNIT} from '../variables/variables';
-
 const minButtonWidth = UNIT * 5;
-
 export const SELECT_ITEM_HEIGHT = UNIT * 7;
 export const SELECT_ITEM_SEPARATOR_HEIGHT = 1;
-
 export default EStyleSheet.create({
   inputWrapper: {
     ...inputWrapper,

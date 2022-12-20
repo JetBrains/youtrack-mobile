@@ -1,17 +1,14 @@
-/* @flow */
 import type {Node} from 'react';
 import {Text, View} from 'react-native';
-// $FlowFixMe: cannot typecheck react-native-linear-gradient module because of mistakes there
+// @ts-expect-error: cannot typecheck react-native-linear-gradient module because of mistakes there
 import LinearGradient from 'react-native-linear-gradient';
 import React, {PureComponent} from 'react';
-
 import styles from './default-avatar.styles';
-
-type Props = {|
-  text: string,
-  size: number,
-  style?: ?Object
-|};
+type Props = {
+  text: string;
+  size: number;
+  style?: Record<string, any> | null | undefined;
+};
 
 function extractLetters(name: string): string {
   const names = name.split(new RegExp('[\\s._]+')).filter(it => !!it);
@@ -53,45 +50,57 @@ const COLOR_PARIS = [
 ];
 
 function hashCode(value) {
-  let hash = 0, i, chr;
-  if (value.length === 0) {return hash;}
+  let hash = 0,
+    i,
+    chr;
+
+  if (value.length === 0) {
+    return hash;
+  }
+
   for (i = 0; i < value.length; i++) {
     chr = value.charCodeAt(i);
-    hash = ((hash << 5) - hash) + chr;
+    hash = (hash << 5) - hash + chr;
     hash |= 0; // Convert to 32bit integer
   }
+
   return hash;
 }
 
 export default class DefaultAvatar extends PureComponent<Props, void> {
   render(): null | Node {
     const {text, size, style} = this.props;
+
     if (!text) {
       return null;
     }
 
     const shortText = extractLetters(text);
-    const colors = COLOR_PARIS[Math.abs(hashCode(text.toLowerCase()) % COLOR_PARIS.length)];
-    const textStyle = [styles.text, {
-      fontSize: size / 2,
-      lineHeight: size / 2,
-    }];
-
+    const colors =
+      COLOR_PARIS[Math.abs(hashCode(text.toLowerCase()) % COLOR_PARIS.length)];
+    const textStyle = [
+      styles.text,
+      {
+        fontSize: size / 2,
+        lineHeight: size / 2,
+      },
+    ];
     return (
       <LinearGradient
         colors={colors}
-        style={
-          [
-            styles.common,
-            style,
-            size ? {width: size, height: size} : styles.size40,
-          ]
-        }
+        style={[
+          styles.common,
+          style,
+          size
+            ? {
+                width: size,
+                height: size,
+              }
+            : styles.size40,
+        ]}
       >
         <View>
-          <Text style={textStyle}>
-            {shortText}
-          </Text>
+          <Text style={textStyle}>{shortText}</Text>
         </View>
       </LinearGradient>
     );

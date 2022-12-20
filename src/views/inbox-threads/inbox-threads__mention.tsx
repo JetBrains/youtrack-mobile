@@ -1,9 +1,5 @@
-/* @flow */
-
 import React, {useState} from 'react';
-
 import {TouchableOpacity} from 'react-native-gesture-handler';
-
 import ApiHelper from 'components/api/api__helper';
 import Avatar from 'components/avatar/avatar';
 import StreamComment from 'components/activity-stream/activity__stream-comment';
@@ -14,29 +10,33 @@ import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {isActivityCategory} from 'components/activity/activity__category';
-
 import styles from './inbox-threads.styles';
-
 import type {Activity} from 'flow/Activity';
 import type {InboxThread, ThreadEntity} from 'flow/Inbox';
 import type {IssueComment} from 'flow/CustomFields';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
-
 type Props = {
   currentUser: User;
   onNavigate: (entity: ThreadEntity, navigateToActivity?: string) => any;
   thread: InboxThread;
   uiTheme: UITheme;
-}
-
-export default function InboxThreadMention({thread, currentUser, uiTheme, onNavigate}: Props) {
+};
+export default function InboxThreadMention({
+  thread,
+  currentUser,
+  uiTheme,
+  onNavigate,
+}: Props) {
   const [isReactionPanelVisible, updateReactionPanelVisible] = useState(false);
-
   const activity: Activity = thread.messages[0].activities[0];
-  activity.author = ApiHelper.convertRelativeUrl(activity.author, 'avatarUrl', getApi().config.backendUrl);
-  let comment: ?IssueComment;
-  let text: ?string;
+  activity.author = ApiHelper.convertRelativeUrl(
+    activity.author,
+    'avatarUrl',
+    getApi().config.backendUrl,
+  );
+  let comment: IssueComment | null | undefined;
+  let text: string | null | undefined;
 
   if (isActivityCategory.commentMention(activity)) {
     comment = activity.comment;
@@ -55,19 +55,31 @@ export default function InboxThreadMention({thread, currentUser, uiTheme, onNavi
     <>
       <ThreadItem
         author={activity.author}
-        avatar={<Avatar
-          userName={getEntityPresentation(activity.author)}
-          size={30}
-          source={{uri: activity.author.avatarUrl}}
-        />}
+        avatar={
+          <Avatar
+            userName={getEntityPresentation(activity.author)}
+            size={30}
+            source={{
+              uri: activity.author.avatarUrl,
+            }}
+          />
+        }
         change={
           <>
             <TouchableOpacity
               onPress={() => {
-                onNavigate(target.issue || target.article, activity.id, comment?.id);
+                onNavigate(
+                  target.issue || target.article,
+                  activity.id,
+                  comment?.id,
+                );
               }}
             >
-              <StreamComment activity={{added: [comment]}}/>
+              <StreamComment
+                activity={{
+                  added: [comment],
+                }}
+              />
             </TouchableOpacity>
             {!!comment && (
               <ThreadCommentReactions
@@ -83,7 +95,8 @@ export default function InboxThreadMention({thread, currentUser, uiTheme, onNavi
       />
       <ThreadAddReactionButton
         style={styles.threadReactionsAddButton}
-        onPress={() => updateReactionPanelVisible(true)}/>
+        onPress={() => updateReactionPanelVisible(true)}
+      />
     </>
   ) : null;
 }

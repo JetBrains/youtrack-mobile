@@ -1,5 +1,3 @@
-/* @flow */
-
 export const categoryName = {
   ARTICLE_COMMENT_MENTION: 'ARTICLE_COMMENT_MENTION',
   ARTICLE_MENTION: 'ARTICLE_MENTION',
@@ -34,8 +32,7 @@ export const categoryName = {
   WORK_ITEM_TYPE: 'WORK_ITEM_TYPE',
   WORK_ITEM_USES_MARKDOWN: 'WORK_ITEM_USES_MARKDOWN',
 };
-
-export const activityCategory: Object = {
+export const activityCategory: Record<string, any> = {
   [categoryName.ARTICLE_MENTION]: 'ArticleMentionCategory',
   [categoryName.ARTICLE_COMMENT_MENTION]: 'ArticleCommentMentionCategory',
   [categoryName.COMMENT]: 'CommentsCategory',
@@ -69,7 +66,6 @@ export const activityCategory: Object = {
   [categoryName.VISIBILITY_ISSUE]: 'IssueVisibilityCategory',
   [categoryName.STAR]: 'StarCategory',
 };
-
 export const activityArticleCategory = {
   ARTICLE_CREATED: 'ArticleCreatedCategory',
   ATTACHMENTS: 'ArticleAttachmentsCategory',
@@ -80,109 +76,177 @@ export const activityArticleCategory = {
   SUMMARY: 'ArticleSummaryCategory',
   VISIBILITY: 'ArticleVisibilityCategory',
 };
-
-
 export const ActivityCategory: {
   ActivityCategories: {
-    IssueComments: Array<string>,
-    IssueHistory: Array<string>,
-    IssueVcs: Array<string>,
-    TimeTracking: Array<string>,
-  },
+    IssueComments: Array<string>;
+    IssueHistory: Array<string>;
+    IssueVcs: Array<string>;
+    TimeTracking: Array<string>;
+  };
   CategoryPresentation: {
-    IssueComments: string,
-    IssueHistory: string,
-    IssueVcs: string,
-    TimeTracking: string,
-  },
-  Source: { COMMENT: string, HISTORY: string, WORK_ITEM: string, VCS_ITEM: string },
+    IssueComments: string;
+    IssueHistory: string;
+    IssueVcs: string;
+    TimeTracking: string;
+  };
+  Source: {
+    COMMENT: string;
+    HISTORY: string;
+    WORK_ITEM: string;
+    VCS_ITEM: string;
+  };
 } = [
-  ['COMMENT', 'IssueComments', [
-    activityCategory.COMMENT,
-  ], 'Comments'],
-  ['HISTORY', 'IssueHistory', [
-    activityCategory.ATTACHMENT_RENAME,
-    activityCategory.ATTACHMENTS,
-    activityCategory.CUSTOM_FIELD,
-    activityCategory.DESCRIPTION,
-    activityCategory.ISSUE_CREATED,
-    activityCategory.ISSUE_RESOLVED,
-    activityCategory.LINKS,
-    activityCategory.PERMITTED_GROUP,
-    activityCategory.PROJECT,
-    activityCategory.SPRINT,
-    activityCategory.SUMMARY,
-    activityCategory.TAGS,
-    activityCategory.VISIBILITY,
-    activityCategory.VISIBILITY_ISSUE,
-  ], 'Issue history'],
-  ['WORK_ITEM', 'TimeTracking', [
-    activityCategory.WORK_ITEM,
-  ], 'Spent time'],
-  ['VCS_ITEM', 'IssueVcs', [
-    activityCategory.PULL_REQUEST_CHANGE,
-    activityCategory.VCS_ITEM,
-  ], 'VCS changes'],
-].reduce(function (Activity: {
-  ActivityCategories: Object,
-  CategoryPresentation: Object,
-  Source: Object,
-}, source) {
-  const sourceName = source[0];
-  const sourceKey = source[1];
-  const activityCategories = source[2];
-  const presentation = source[3];
-
-  Activity.Source[sourceName] = sourceKey;
-  Activity.CategoryPresentation[sourceKey] = presentation;
-  Activity.ActivityCategories[sourceKey] = activityCategories;
-
-  return Activity;
-}, {
-  Source: {},
-  ActivityCategories: {},
-  CategoryPresentation: {},
-});
-
-
-export const isActivityCategory = (function (categoryId: string): ((activity: any) => boolean) {
-  return function (activity: Object) {
+  ['COMMENT', 'IssueComments', [activityCategory.COMMENT], 'Comments'],
+  [
+    'HISTORY',
+    'IssueHistory',
+    [
+      activityCategory.ATTACHMENT_RENAME,
+      activityCategory.ATTACHMENTS,
+      activityCategory.CUSTOM_FIELD,
+      activityCategory.DESCRIPTION,
+      activityCategory.ISSUE_CREATED,
+      activityCategory.ISSUE_RESOLVED,
+      activityCategory.LINKS,
+      activityCategory.PERMITTED_GROUP,
+      activityCategory.PROJECT,
+      activityCategory.SPRINT,
+      activityCategory.SUMMARY,
+      activityCategory.TAGS,
+      activityCategory.VISIBILITY,
+      activityCategory.VISIBILITY_ISSUE,
+    ],
+    'Issue history',
+  ],
+  ['WORK_ITEM', 'TimeTracking', [activityCategory.WORK_ITEM], 'Spent time'],
+  [
+    'VCS_ITEM',
+    'IssueVcs',
+    [activityCategory.PULL_REQUEST_CHANGE, activityCategory.VCS_ITEM],
+    'VCS changes',
+  ],
+].reduce(
+  function (
+    Activity: {
+      ActivityCategories: Record<string, any>;
+      CategoryPresentation: Record<string, any>;
+      Source: Record<string, any>;
+    },
+    source,
+  ) {
+    const sourceName = source[0];
+    const sourceKey = source[1];
+    const activityCategories = source[2];
+    const presentation = source[3];
+    Activity.Source[sourceName] = sourceKey;
+    Activity.CategoryPresentation[sourceKey] = presentation;
+    Activity.ActivityCategories[sourceKey] = activityCategories;
+    return Activity;
+  },
+  {
+    Source: {},
+    ActivityCategories: {},
+    CategoryPresentation: {},
+  },
+);
+export const isActivityCategory = function (
+  categoryId: string,
+): (activity: any) => boolean {
+  return function (activity: Record<string, any>) {
     return activity?.category ? activity.category?.id === categoryId : false;
   };
-}: any);
-
-export const isActivityCategories = function (categoryIds: Array<string>): ((activity: any) => boolean) {
-  return function (activity: Object) {
-    return activity ? categoryIds.some((categoryId: string) => categoryId === activity.category.id) : false;
+} as any;
+export const isActivityCategories = function (
+  categoryIds: Array<string>,
+): (activity: any) => boolean {
+  return function (activity: Record<string, any>) {
+    return activity
+      ? categoryIds.some(
+          (categoryId: string) => categoryId === activity.category.id,
+        )
+      : false;
   };
 };
-
-isActivityCategory.articleCommentMention = isActivityCategory(activityCategory.ARTICLE_COMMENT_MENTION);
-isActivityCategory.articleCreated = isActivityCategory(activityCategory.ARTICLE_CREATED);
-isActivityCategory.articleDescription = isActivityCategory(activityArticleCategory.DESCRIPTION);
-isActivityCategory.articleMention = isActivityCategory(activityCategory.ARTICLE_MENTION);
-isActivityCategory.articleSummary = isActivityCategory(activityArticleCategory.SUMMARY);
-isActivityCategory.attachment = isActivityCategories([activityCategory.ATTACHMENTS, activityArticleCategory.ATTACHMENTS]);
-isActivityCategory.attachmentRename = isActivityCategory(activityCategory.ATTACHMENT_RENAME);
-isActivityCategory.comment = isActivityCategories([activityCategory.COMMENT, activityArticleCategory.COMMENT]);
-isActivityCategory.commentMention = isActivityCategory(activityCategory.COMMENT_MENTION);
-isActivityCategory.commentText = isActivityCategory(activityCategory.COMMENT_TEXT);
-isActivityCategory.customField = isActivityCategory(activityCategory.CUSTOM_FIELD);
-isActivityCategory.description = isActivityCategories([activityCategory.DESCRIPTION, activityArticleCategory.DESCRIPTION]);
-isActivityCategory.issueCreated = isActivityCategories([activityCategory.ISSUE_CREATED, activityArticleCategory.CREATED]);
-isActivityCategory.issueMention = isActivityCategory(activityCategory.ISSUE_MENTION);
-isActivityCategory.issueResolved = isActivityCategory(activityCategory.ISSUE_RESOLVED);
+isActivityCategory.articleCommentMention = isActivityCategory(
+  activityCategory.ARTICLE_COMMENT_MENTION,
+);
+isActivityCategory.articleCreated = isActivityCategory(
+  activityCategory.ARTICLE_CREATED,
+);
+isActivityCategory.articleDescription = isActivityCategory(
+  activityArticleCategory.DESCRIPTION,
+);
+isActivityCategory.articleMention = isActivityCategory(
+  activityCategory.ARTICLE_MENTION,
+);
+isActivityCategory.articleSummary = isActivityCategory(
+  activityArticleCategory.SUMMARY,
+);
+isActivityCategory.attachment = isActivityCategories([
+  activityCategory.ATTACHMENTS,
+  activityArticleCategory.ATTACHMENTS,
+]);
+isActivityCategory.attachmentRename = isActivityCategory(
+  activityCategory.ATTACHMENT_RENAME,
+);
+isActivityCategory.comment = isActivityCategories([
+  activityCategory.COMMENT,
+  activityArticleCategory.COMMENT,
+]);
+isActivityCategory.commentMention = isActivityCategory(
+  activityCategory.COMMENT_MENTION,
+);
+isActivityCategory.commentText = isActivityCategory(
+  activityCategory.COMMENT_TEXT,
+);
+isActivityCategory.customField = isActivityCategory(
+  activityCategory.CUSTOM_FIELD,
+);
+isActivityCategory.description = isActivityCategories([
+  activityCategory.DESCRIPTION,
+  activityArticleCategory.DESCRIPTION,
+]);
+isActivityCategory.issueCreated = isActivityCategories([
+  activityCategory.ISSUE_CREATED,
+  activityArticleCategory.CREATED,
+]);
+isActivityCategory.issueMention = isActivityCategory(
+  activityCategory.ISSUE_MENTION,
+);
+isActivityCategory.issueResolved = isActivityCategory(
+  activityCategory.ISSUE_RESOLVED,
+);
 isActivityCategory.link = isActivityCategory(activityCategory.LINKS);
-isActivityCategory.project = isActivityCategories([activityCategory.PROJECT, activityArticleCategory.PROJECT]);
-isActivityCategory.pullRequest = isActivityCategory(activityCategory.PULL_REQUEST_CHANGE);
+isActivityCategory.project = isActivityCategories([
+  activityCategory.PROJECT,
+  activityArticleCategory.PROJECT,
+]);
+isActivityCategory.pullRequest = isActivityCategory(
+  activityCategory.PULL_REQUEST_CHANGE,
+);
 isActivityCategory.sprint = isActivityCategory(activityCategory.SPRINT);
 isActivityCategory.star = isActivityCategory(activityCategory.STAR);
-isActivityCategory.summary = isActivityCategories([activityCategory.SUMMARY, activityArticleCategory.SUMMARY]);
-isActivityCategory.tag = isActivityCategories([activityCategory.TAGS, activityCategory.STAR]);
-isActivityCategory.totalVotes = isActivityCategory(activityCategory.TOTAL_VOTES);
+isActivityCategory.summary = isActivityCategories([
+  activityCategory.SUMMARY,
+  activityArticleCategory.SUMMARY,
+]);
+isActivityCategory.tag = isActivityCategories([
+  activityCategory.TAGS,
+  activityCategory.STAR,
+]);
+isActivityCategory.totalVotes = isActivityCategory(
+  activityCategory.TOTAL_VOTES,
+);
 isActivityCategory.vcs = isActivityCategory(activityCategory.VCS_ITEM);
-isActivityCategory.vcsItem = isActivityCategories([activityCategory.VCS_ITEM, activityCategory.PULL_REQUEST_CHANGE]);
-isActivityCategory.visibility = isActivityCategories([activityCategory.VISIBILITY, activityCategory.VISIBILITY_ISSUE, activityArticleCategory.VISIBILITY]);
+isActivityCategory.vcsItem = isActivityCategories([
+  activityCategory.VCS_ITEM,
+  activityCategory.PULL_REQUEST_CHANGE,
+]);
+isActivityCategory.visibility = isActivityCategories([
+  activityCategory.VISIBILITY,
+  activityCategory.VISIBILITY_ISSUE,
+  activityArticleCategory.VISIBILITY,
+]);
 isActivityCategory.vote = isActivityCategory(activityCategory.VOTERS);
 isActivityCategory.voters = isActivityCategory(activityCategory.VOTERS);
 isActivityCategory.work = isActivityCategory(activityCategory.WORK_ITEM);

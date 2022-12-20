@@ -1,17 +1,11 @@
-/* @flow */
-
 import React from 'react';
-
 import {View} from 'react-native';
-
 import separatorStyles from './separator.styles';
-
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
 type Props = {
-  fitWindow?: boolean,
-  indent?: boolean,
-  styles?: ViewStyleProp,
+  fitWindow?: boolean;
+  indent?: boolean;
+  styles?: ViewStyleProp;
 };
 
 const Separator = (props: Props) => {
@@ -30,4 +24,7 @@ const Separator = (props: Props) => {
   );
 };
 
-export default (React.memo<Props>(Separator): React$AbstractComponent<Props, mixed>);
+export default React.memo<Props>(Separator) as React$AbstractComponent<
+  Props,
+  unknown
+>;

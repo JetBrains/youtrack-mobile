@@ -56,6 +56,5 @@ const reactionsMap = {
   eight: require('./assets/eight.svg').default,
   nine: require('./assets/nine.svg').default,
 };
-
 export const COMMENT_REACTIONS_SEPARATOR: string = '|';
 export default reactionsMap;

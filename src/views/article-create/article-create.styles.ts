@@ -1,18 +1,13 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {elevation1} from 'components/common-styles/shadow';
 import {UNIT} from 'components/variables/variables';
 import {mainText} from 'components/common-styles/typography';
-
 export default EStyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '$background',
   },
-  header: {
-    ...elevation1,
-    paddingHorizontal: UNIT * 2,
-  },
+  header: {...elevation1, paddingHorizontal: UNIT * 2},
   content: {
     flex: 1,
     paddingHorizontal: UNIT * 2,
@@ -44,11 +39,7 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  projectSelectorText: {
-    ...mainText,
-    marginRight: UNIT / 2,
-    color: '$link',
-  },
+  projectSelectorText: {...mainText, marginRight: UNIT / 2, color: '$link'},
   discard: {
     marginTop: UNIT * 2,
     marginLeft: UNIT * 2,
@@ -61,11 +52,7 @@ export default EStyleSheet.create({
     borderRadius: UNIT,
     borderWidth: 1,
   },
-  discardButtonText: {
-    ...mainText,
-    color: '$link',
-    textAlign: 'center',
-  },
+  discardButtonText: {...mainText, color: '$link', textAlign: 'center'},
   discardButtonTextDisabled: {
     color: '$disabled',
   },

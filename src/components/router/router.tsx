@@ -1,6 +1,5 @@
 import React, {createElement} from 'react';
 import {Easing, Animated} from 'react-native';
-
 import StackViewStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
 import {
   createStackNavigator,
@@ -10,13 +9,11 @@ import {
   NavigationNavigateAction,
   NavigationRoute,
 } from 'react-navigation';
-
 import log from '../log/log';
 import {flushStoragePart} from '../storage/storage';
 import {isSplitView} from '../responsive/responsive-helper';
 import {guid} from 'util/util';
 import {routeMap} from '../../app-routes';
-
 import type {
   NavigationNavigator,
   NavigationResetActionPayload,
@@ -24,22 +21,20 @@ import type {
   NavigationState,
   NavigationResetAction,
 } from 'react-navigation';
-
 const TransitionSpec = {
   duration: 500,
   easing: Easing.bezier(0.2833, 0.99, 0.31833, 0.99),
   timing: Animated.timing,
 };
-
 const SlideFromRight = {
   transitionSpec: TransitionSpec,
   screenInterpolator: StackViewStyleInterpolator.forHorizontal,
 };
-
 const SlideModal = {
   transitionSpec: TransitionSpec,
-  screenInterpolator: (sceneProps) => {
+  screenInterpolator: sceneProps => {
     const route = sceneProps.scenes[sceneProps.scenes.length - 1].route;
+
     if (route?.routeName === routeMap.Modal && sceneProps.scenes.length > 1) {
       return StackViewStyleInterpolator.forFade;
     }
@@ -47,18 +42,22 @@ const SlideModal = {
     return StackViewStyleInterpolator.forVertical;
   },
 };
-
 /**
  * Route singleton
  */
+
 class Router {
-  _navigator:NavigationNavigator = null;
-  _currentRoute:NavigationJumpToActionPayload = null;
+  _navigator: NavigationNavigator = null;
+  _currentRoute: NavigationJumpToActionPayload = null;
   rootRoutes: Array<NavigationJumpToActionPayload> = [];
-  onDispatchCallbacks: ?Array<Function> = [];
+  onDispatchCallbacks:
+    | Array<(...args: Array<any>) => any>
+    | null
+    | undefined = [];
 
   constructor() {
     this.onBack = () => {};
+
     this.routes = {};
   }
 
@@ -66,16 +65,16 @@ class Router {
     if (!navigator) {
       return;
     }
+
     this._navigator = navigator;
   };
-
   getTransitionConfig = () => {
     if (!this._navigator) {
       return null;
     }
+
     const {nav} = this._navigator.state;
     const currentRouteName = nav.routes[nav.index].routeName;
-
     const route = this.routes[currentRouteName];
 
     if (route.modal || this._modalTransition) {
@@ -87,7 +86,8 @@ class Router {
 
   registerRoute({name, component, props, type, modal, tabletComponentName}) {
     this.routes[name] = {
-      screen: ({navigation}) => createElement(component, navigation.state.params),
+      screen: ({navigation}) =>
+        createElement(component, navigation.state.params),
       type,
       props,
       modal,
@@ -98,7 +98,10 @@ class Router {
 
     if (!this[name]) {
       this[name] = (...args) => {
-        this.navigate(tabletComponentName && isSplitView() ? tabletComponentName : name, ...args);
+        this.navigate(
+          tabletComponentName && isSplitView() ? tabletComponentName : name,
+          ...args,
+        );
       };
     }
   }
@@ -109,11 +112,10 @@ class Router {
       headerMode: 'none',
       transitionConfig: this.getTransitionConfig,
     });
-
     this.AppNavigator = createAppContainer(MainNavigator);
   }
 
-  setOnDispatchCallback(onDispatch: Function<Object, ?string>) {
+  setOnDispatchCallback(onDispatch: (...args: Array<any>) => any) {
     this.onDispatchCallbacks.push(onDispatch);
     return () => {
       const index: number = this.onDispatchCallbacks.indexOf(onDispatch);
@@ -121,13 +123,25 @@ class Router {
     };
   }
 
-  dispatch(data: NavigationResetActionPayload, routeName?: string, prevRouteName?: string, options?: Object) {
+  dispatch(
+    data: NavigationResetActionPayload,
+    routeName?: string,
+    prevRouteName?: string,
+    options?: Record<string, any>,
+  ) {
     this._navigator.dispatch(data);
-    this.onDispatchCallbacks.forEach(onDispatch => onDispatch(routeName, prevRouteName, options));
+
+    this.onDispatchCallbacks.forEach(onDispatch =>
+      onDispatch(routeName, prevRouteName, options),
+    );
   }
 
-  navigate(routeName: string, props: Object, {forceReset} = {}) {
-    log.info(`Router(navigate) ${routeName}`, {...props, imageHeaders: 'CENSORED'});
+  navigate(routeName: string, props: Record<string, any>, {forceReset} = {}) {
+    log.info(`Router(navigate) ${routeName}`, {
+      ...props,
+      imageHeaders: 'CENSORED',
+    });
+
     if (!this._navigator) {
       throw 'Router(navigate): call setNavigator(navigator) first!';
     }
@@ -137,64 +151,91 @@ class Router {
     }
 
     if (this.rootRoutes.includes(routeName) || props?.store === true) {
-      flushStoragePart({lastRoute: props?.storeRouteName || routeName});
+      flushStoragePart({
+        lastRoute: props?.storeRouteName || routeName,
+      });
     }
 
     const newRoute = Object.assign({}, this.routes[routeName]);
     newRoute.props = Object.assign({}, newRoute.props, props);
-
-    const prevRouteName: ?string = this._currentRoute?.routeName;
-    const navigationData: NavigationNavigateAction = NavigationActions.navigate({
-      routeName,
-      params: newRoute.props,
-      key: guid(),
-    });
+    const prevRouteName: string | null | undefined = this._currentRoute
+      ?.routeName;
+    const navigationData: NavigationNavigateAction = NavigationActions.navigate(
+      {
+        routeName,
+        params: newRoute.props,
+        key: guid(),
+      },
+    );
 
     if (newRoute.type === 'reset' || forceReset) {
-      this.dispatch(StackActions.reset({
-        index: 0,
-        actions: [navigationData],
-      }), routeName, prevRouteName);
+      this.dispatch(
+        StackActions.reset({
+          index: 0,
+          actions: [navigationData],
+        }),
+        routeName,
+        prevRouteName,
+      );
     } else {
       this.dispatch(navigationData, routeName, prevRouteName);
     }
   }
 
-  navigateToDefaultRoute(props: Object & { issueId: string } = null) {
+  navigateToDefaultRoute(
+    props: Record<string, any> & {
+      issueId: string;
+    } = null,
+  ) {
     const defaultRoute: string = this.rootRoutes[0];
+
     if (props?.issueId) {
-      this.navigate(routeMap.Issue, props, {forceReset: true});
+      this.navigate(routeMap.Issue, props, {
+        forceReset: true,
+      });
     } else {
       this.navigate(defaultRoute, props);
     }
   }
 
   getRoutes: Array<NavigationRoute> = () => this._navigator.state.nav.routes;
-
   hasNoParentRoute: Array<NavigationRoute> = () => {
     const routes: NavigationRoute[] = this.getRoutes();
-    return routes.length <= 1 || (routes[routes.length - 2] && routes[routes.length - 2].routeName === routeMap.Home);
+    return (
+      routes.length <= 1 ||
+      (routes[routes.length - 2] &&
+        routes[routes.length - 2].routeName === routeMap.Home)
+    );
   };
 
-  pop(isModalTransition?: boolean, options?: Object) {
+  pop(isModalTransition?: boolean, options?: Record<string, any>) {
     if (this.hasNoParentRoute()) {
       return false;
     }
+
     this._modalTransition = isModalTransition;
     const routes: Array<NavigationRoute> = this.getRoutes();
-    this.dispatch(NavigationActions.back(), routes[routes.length - 2].routeName, this.getCurrentRouteName(), options);
+    this.dispatch(
+      NavigationActions.back(),
+      routes[routes.length - 2].routeName,
+      this.getCurrentRouteName(),
+      options,
+    );
     return true;
   }
 
   backTo(index: number) {
     let count = index;
+
     while (count > 0) {
       if (this.hasNoParentRoute()) {
         return false;
       }
+
       this.pop();
       count--;
     }
+
     return true;
   }
 
@@ -206,21 +247,33 @@ class Router {
     return this._currentRoute.routeName;
   }
 
-  onNavigationStateChange = (prevNav, nav, action, onRoute: (currentRoute: NavigationJumpToActionPayload) => any) => {
+  onNavigationStateChange = (
+    prevNav,
+    nav,
+    action,
+    onRoute: (currentRoute: NavigationJumpToActionPayload) => any,
+  ) => {
     this._currentRoute = nav.routes[nav.index];
     onRoute(this._currentRoute);
+
     if (action.type === NavigationActions.BACK) {
       const closingView = prevNav.routes[prevNav.index];
       this.onBack(closingView);
     }
   };
 
-  renderNavigatorView(onRoute?: (currentRoute: NavigationJumpToActionPayload) => any) {
+  renderNavigatorView(
+    onRoute?: (currentRoute: NavigationJumpToActionPayload) => any,
+  ) {
     const {AppNavigator} = this;
     return (
       <AppNavigator
         ref={this.setNavigator}
-        onNavigationStateChange={(prevNav: NavigationState, nav: NavigationState, action: NavigationResetAction) => {
+        onNavigationStateChange={(
+          prevNav: NavigationState,
+          nav: NavigationState,
+          action: NavigationResetAction,
+        ) => {
           this.onNavigationStateChange(prevNav, nav, action, onRoute);
         }}
       />

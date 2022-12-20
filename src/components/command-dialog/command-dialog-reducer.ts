@@ -1,5 +1,3 @@
-/* @flow */
-
 import {
   commandDialogActionMap,
   CLOSE_COMMAND_DIALOG,
@@ -8,18 +6,26 @@ import {
   START_APPLYING_COMMAND,
   STOP_APPLYING_COMMAND,
 } from './command-dialog-action-types';
-
 import type {CommandSuggestionResponse} from 'flow/Issue';
-
-export const createCommandDialogTypeMap: Object = (namespace: string = '') => Object.keys(
-  commandDialogActionMap
-).reduce((map: typeof commandDialogActionMap, it: string) => ({
-  ...map,
-  [it]: `${namespace}.${it}`,
-}), ({}: any));
-
-export const createCommandDialogReducers = (namespace: string = ''): Object => ({
-  [`${namespace}.${OPEN_COMMAND_DIALOG}`]: (state: any, action: { initialCommand: string }): any => {
+export const createCommandDialogTypeMap: Record<string, any> = (
+  namespace: string = '',
+) =>
+  Object.keys(commandDialogActionMap).reduce(
+    (map: typeof commandDialogActionMap, it: string) => ({
+      ...map,
+      [it]: `${namespace}.${it}`,
+    }),
+    {} as any,
+  );
+export const createCommandDialogReducers = (
+  namespace: string = '',
+): Record<string, any> => ({
+  [`${namespace}.${OPEN_COMMAND_DIALOG}`]: (
+    state: any,
+    action: {
+      initialCommand: string;
+    },
+  ): any => {
     return {
       ...state,
       showCommandDialog: true,
@@ -36,23 +42,16 @@ export const createCommandDialogReducers = (namespace: string = ''): Object => (
   },
   [`${namespace}.${RECEIVE_COMMAND_SUGGESTIONS}`]: (
     state: any,
-    action: { suggestions: CommandSuggestionResponse }
+    action: {
+      suggestions: CommandSuggestionResponse;
+    },
   ): any => {
-    return {
-      ...state,
-      commandSuggestions: action.suggestions,
-    };
+    return {...state, commandSuggestions: action.suggestions};
   },
   [`${namespace}.${START_APPLYING_COMMAND}`]: (state: any): any => {
-    return {
-      ...state,
-      commandIsApplying: true,
-    };
+    return {...state, commandIsApplying: true};
   },
   [`${namespace}.${STOP_APPLYING_COMMAND}`]: (state: any): any => {
-    return {
-      ...state,
-      commandIsApplying: false,
-    };
+    return {...state, commandIsApplying: false};
   },
 });

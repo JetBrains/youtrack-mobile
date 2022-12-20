@@ -1,29 +1,24 @@
-/* @flow */
-
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
-
 import {HIT_SLOP} from '../../components/common-styles/button';
 import {getReadableID} from 'components/issue-formatter/issue-formatter';
-
 import styles from './inbox.styles';
-
 import type {AnyIssue} from 'flow/Issue';
 import type {Article} from 'flow/Article';
 import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
-export default function InboxEntity({entity, onNavigate, styleText, ...otherProps}: {
-  entity: (AnyIssue | Article),
-  onNavigate: () => void,
-  styleText?: TextStyleProp,
+export default function InboxEntity({
+  entity,
+  onNavigate,
+  styleText,
+  ...otherProps
+}: {
+  entity: AnyIssue | Article;
+  onNavigate: () => void;
+  styleText?: TextStyleProp;
 }) {
-  const readableID: ?string = getReadableID(entity);
+  const readableID: string | null | undefined = getReadableID(entity);
   return (
-    <TouchableOpacity
-      hitSlop={HIT_SLOP}
-      onPress={onNavigate}
-      {...otherProps}
-    >
+    <TouchableOpacity hitSlop={HIT_SLOP} onPress={onNavigate} {...otherProps}>
       <Text numberOfLines={1}>
         {!!readableID && (
           <Text
@@ -31,10 +26,13 @@ export default function InboxEntity({entity, onNavigate, styleText, ...otherProp
             accessibilityLabel="inboxEntityReadableId"
             accessible={true}
             style={[
-            styles.notificationIssueInfo,
-            styleText,
-            entity.resolved ? styles.resolved : null,
-          ]}>{readableID}</Text>
+              styles.notificationIssueInfo,
+              styleText,
+              entity.resolved ? styles.resolved : null,
+            ]}
+          >
+            {readableID}
+          </Text>
         )}
         {!!entity.summary && (
           <Text
@@ -50,4 +48,3 @@ export default function InboxEntity({entity, onNavigate, styleText, ...otherProp
     </TouchableOpacity>
   );
 }
-

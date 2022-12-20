@@ -1,10 +1,7 @@
-/* @flow */
-
 export type ActionSheetAction = {
-  execute: () => any,
-  id?: string,
-  icon?: any,
-  iconSize?: number,
-  title: string,
+  execute: () => any;
+  id?: string;
+  icon?: any;
+  iconSize?: number;
+  title: string;
 };
-

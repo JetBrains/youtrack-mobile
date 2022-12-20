@@ -1,8 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {HEADER_FONT_SIZE} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
-
 export default EStyleSheet.create({
   container: {
     flex: 1,

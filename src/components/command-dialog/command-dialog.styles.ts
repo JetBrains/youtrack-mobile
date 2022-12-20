@@ -3,7 +3,6 @@ import {UNIT} from '../variables/variables';
 import {mainText} from '../common-styles/typography';
 import {elevation1} from '../common-styles/shadow';
 import {inputWrapper, searchInput} from '../common-styles/search';
-
 export default EStyleSheet.create({
   container: {
     height: '100%',
@@ -19,9 +18,7 @@ export default EStyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
-  searchInput: {
-    ...searchInput,
-  },
+  searchInput: {...searchInput},
   suggestion: {
     flexGrow: 1,
     flexDirection: 'row',
@@ -33,12 +30,7 @@ export default EStyleSheet.create({
     ...mainText,
     color: '$icon',
   },
-  suggestionText: {
-    ...mainText,
-    flex: 1,
-    fontWeight: '500',
-    color: '$text',
-  },
+  suggestionText: {...mainText, flex: 1, fontWeight: '500', color: '$text'},
   commandPreview: {
     paddingTop: UNIT * 2,
     paddingBottom: UNIT * 2,

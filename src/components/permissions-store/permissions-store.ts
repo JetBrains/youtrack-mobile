@@ -1,22 +1,29 @@
-/* @flow */
-
 import type {PermissionCacheItem} from 'flow/Permission';
 import type {IssueProject} from 'flow/CustomFields';
 
 class PermissionsStore {
-  permissionsMap: Object;
+  permissionsMap: Record<string, any>;
 
   constructor(permissions: Array<PermissionCacheItem>) {
-    const permissionsWithProjects = (Array.isArray(permissions) ? permissions : []).map((permission: PermissionCacheItem) => {
-      permission.projectIds = (permission.projects || []).map((project: IssueProject) => project.id);
+    const permissionsWithProjects = (Array.isArray(permissions)
+      ? permissions
+      : []
+    ).map((permission: PermissionCacheItem) => {
+      permission.projectIds = (permission.projects || []).map(
+        (project: IssueProject) => project.id,
+      );
       return permission;
     });
-
-    this.permissionsMap = new Map(permissionsWithProjects.map(it => [it.permission.key, it]));
+    this.permissionsMap = new Map(
+      permissionsWithProjects.map(it => [it.permission.key, it]),
+    );
   }
 
   has(permissionId: string, projectId?: string): boolean {
-    const permission: PermissionCacheItem = this.permissionsMap.get(permissionId);
+    const permission: PermissionCacheItem = this.permissionsMap.get(
+      permissionId,
+    );
+
     if (!permission) {
       return false;
     }
@@ -33,14 +40,17 @@ class PermissionsStore {
   }
 
   hasEvery(permissionIds: Array<string>, projectId: string): boolean {
-    return (permissionIds || []).every(permissionId => this.has(permissionId, projectId));
+    return (permissionIds || []).every(permissionId =>
+      this.has(permissionId, projectId),
+    );
   }
 
   hasSome(permissionIds: Array<string>, projectId: string): boolean {
-    return (permissionIds || []).some(permissionId => this.has(permissionId, projectId));
+    return (permissionIds || []).some(permissionId =>
+      this.has(permissionId, projectId),
+    );
   }
 }
 
-export type { PermissionsStore };
-
+export type {PermissionsStore};
 export default PermissionsStore;

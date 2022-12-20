@@ -1,5 +1,3 @@
-/* @flow */
-
 import {
   ActivityIndicator,
   Image,
@@ -13,7 +11,6 @@ import {
 } from 'react-native';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-
 import clicksToShowCounter from 'components/debug-view/clicks-to-show-counter';
 import ErrorMessageInline from 'components/error-message/error-message-inline';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -30,33 +27,31 @@ import {NETWORK_PROBLEM_TIPS} from 'components/error-message/error-text-messages
 import {resolveErrorMessage} from 'components/error/error-resolver';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables/variables';
-
 import styles from './enter-server.styles';
-
 import type {AppConfig} from 'flow/AppConfig';
 import type {Node} from 'react';
 import type {Theme, UIThemeColors} from 'flow/Theme';
-
 const CATEGORY_NAME: string = 'Choose server';
 const protocolRegExp = /^http(s?):\/\//i;
 const CLOUD_DOMAINS: string[] = ['myjetbrains.com', 'youtrack.cloud'];
-
 type Props = {
-  serverUrl: string,
-  connectToYoutrack: (newServerUrl: string) => Promise<AppConfig>,
-  onShowDebugView: Function,
-  onCancel: () => any
+  serverUrl: string;
+  connectToYoutrack: (newServerUrl: string) => Promise<AppConfig>;
+  onShowDebugView: (...args: Array<any>) => any;
+  onCancel: () => any;
 };
-
 type State = {
-  serverUrl: string,
-  connecting: boolean,
-  error: ?string,
-  isErrorInfoModalVisible: boolean
+  serverUrl: string;
+  connecting: boolean;
+  error: string | null | undefined;
+  isErrorInfoModalVisible: boolean;
 };
-
-const hitSlop = {top: UNIT, bottom: UNIT, left: UNIT, right: UNIT};
-
+const hitSlop = {
+  top: UNIT,
+  bottom: UNIT,
+  left: UNIT,
+  right: UNIT,
+};
 export class EnterServer extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -66,15 +61,17 @@ export class EnterServer extends Component<Props, State> {
       error: null,
       isErrorInfoModalVisible: false,
     };
-
     usage.trackScreenView(CATEGORY_NAME);
     log.info('Entering server URL view has been opened');
   }
 
   getPossibleUrls(enteredUrl: string): Array<string> {
     const targetURL: string = enteredUrl.toLowerCase();
-    const isCloudURL: boolean = CLOUD_DOMAINS.some((it: string) => targetURL.indexOf(`.${it}`) !== -1);
+    const isCloudURL: boolean = CLOUD_DOMAINS.some(
+      (it: string) => targetURL.indexOf(`.${it}`) !== -1,
+    );
     let urls: string[];
+
     if (isCloudURL) {
       const url: string = targetURL.replace(protocolRegExp, '');
       urls = [`https://${url}`, `https://${url}/youtrack`];
@@ -90,23 +87,31 @@ export class EnterServer extends Component<Props, State> {
         urls = [targetURL, `${targetURL}/youtrack`];
       }
     }
+
     return urls;
   }
 
-  async onApplyServerUrlChange(): Promise<?string> {
+  async onApplyServerUrlChange(): Promise<string | null | undefined> {
     if (!this.isValidInput()) {
       return;
     }
-    this.setState({connecting: true, error: null});
+
+    this.setState({
+      connecting: true,
+      error: null,
+    });
     const trimmedUrl = this.state.serverUrl.trim().replace(/\/$/i, '');
-
     const urlsToTry = this.getPossibleUrls(trimmedUrl);
-    log.log(`Entered: "${this.state.serverUrl}", will try that urls: ${urlsToTry.join(', ')}`);
-
+    log.log(
+      `Entered: "${this.state.serverUrl}", will try that urls: ${urlsToTry.join(
+        ', ',
+      )}`,
+    );
     let errorToShow = null;
 
     for (const url of urlsToTry) {
       log.log(`Trying: "${url}"`);
+
       try {
         await this.props.connectToYoutrack(url);
         log.log(`Successfully connected to ${url}`);
@@ -114,16 +119,21 @@ export class EnterServer extends Component<Props, State> {
       } catch (error) {
         log.log(`Failed to connect to ${url}`, error);
         log.log(`Connection error for ${url}: ${error && error.toString()}`);
+
         if (error && error.isIncompatibleYouTrackError) {
           errorToShow = error;
           break;
         }
+
         errorToShow = errorToShow || error;
       }
     }
 
     const errorMessage = await resolveErrorMessage(errorToShow);
-    this.setState({error: errorMessage, connecting: false});
+    this.setState({
+      error: errorMessage,
+      connecting: false,
+    });
     return errorMessage;
   }
 
@@ -136,27 +146,32 @@ export class EnterServer extends Component<Props, State> {
     return (
       <React.Fragment>
         {NETWORK_PROBLEM_TIPS.map((tip: string, index: number) => {
-          return <Text key={`errorInfoTips-${index}`} style={styles.text}>{`${tip}\n`}</Text>;
+          return (
+            <Text
+              key={`errorInfoTips-${index}`}
+              style={styles.text}
+            >{`${tip}\n`}</Text>
+          );
         })}
       </React.Fragment>
     );
   }
 
-  toggleErrorInfoModalVisibility: (() => void) = () => {
+  toggleErrorInfoModalVisibility: () => void = () => {
     const {isErrorInfoModalVisible} = this.state;
-    this.setState({isErrorInfoModalVisible: !isErrorInfoModalVisible});
+    this.setState({
+      isErrorInfoModalVisible: !isErrorInfoModalVisible,
+    });
   };
 
   render(): Node {
     const {onShowDebugView, onCancel} = this.props;
     const {error, connecting, serverUrl, isErrorInfoModalVisible} = this.state;
     const isDisabled = connecting || !this.isValidInput();
-
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
           const uiThemeColors: UIThemeColors = theme.uiTheme.colors;
-
           return (
             <ScrollView
               testID="test:id/enterServer"
@@ -172,7 +187,7 @@ export class EnterServer extends Component<Props, State> {
                       onPress={onCancel}
                       style={styles.backIconButton}
                     >
-                      <IconBack/>
+                      <IconBack />
                     </TouchableOpacity>
                   )}
                 </View>
@@ -182,12 +197,15 @@ export class EnterServer extends Component<Props, State> {
                     testID="enterServerLogo"
                     onPress={() => clicksToShowCounter(onShowDebugView)}
                   >
-                    <Image style={styles.logoImage} source={logo}/>
+                    <Image style={styles.logoImage} source={logo} />
                   </TouchableWithoutFeedback>
 
                   <View testID="test:id/enterServerHint">
-                    <Text style={styles.title}>{i18n(
-                      'Enter the web address for a YouTrack installation where you have a registered account')}</Text>
+                    <Text style={styles.title}>
+                      {i18n(
+                        'Enter the web address for a YouTrack installation where you have a registered account',
+                      )}
+                    </Text>
                   </View>
 
                   <TextInput
@@ -206,25 +224,41 @@ export class EnterServer extends Component<Props, State> {
                     underlineColorAndroid="transparent"
                     onSubmitEditing={() => this.onApplyServerUrlChange()}
                     value={serverUrl}
-                    onChangeText={(serverUrl) => this.setState({serverUrl, error: null})}/>
+                    onChangeText={serverUrl =>
+                      this.setState({
+                        serverUrl,
+                        error: null,
+                      })
+                    }
+                  />
 
                   <TouchableOpacity
-                    style={[formStyles.button, isDisabled ? formStyles.buttonDisabled : null]}
+                    style={[
+                      formStyles.button,
+                      isDisabled ? formStyles.buttonDisabled : null,
+                    ]}
                     disabled={isDisabled}
                     testID="test:id/next"
                     accessibilityLabel="next"
                     accessible={true}
-                    onPress={() => this.onApplyServerUrlChange()}>
-                    <Text style={[formStyles.buttonText, isDisabled && formStyles.buttonTextDisabled]}>{i18n('Next')}</Text>
-                    {connecting && <ActivityIndicator style={styles.progressIndicator}/>}
+                    onPress={() => this.onApplyServerUrlChange()}
+                  >
+                    <Text
+                      style={[
+                        formStyles.buttonText,
+                        isDisabled && formStyles.buttonTextDisabled,
+                      ]}
+                    >
+                      {i18n('Next')}
+                    </Text>
+                    {connecting && (
+                      <ActivityIndicator style={styles.progressIndicator} />
+                    )}
                   </TouchableOpacity>
 
                   {Boolean(error) && (
                     <View style={styles.errorContainer}>
-                      <ErrorMessageInline
-                        style={styles.error}
-                        error={error}
-                      />
+                      <ErrorMessageInline style={styles.error} error={error} />
 
                       <TouchableOpacity
                         style={styles.infoIcon}
@@ -239,7 +273,6 @@ export class EnterServer extends Component<Props, State> {
                       </TouchableOpacity>
                     </View>
                   )}
-
                 </View>
 
                 <View
@@ -248,7 +281,11 @@ export class EnterServer extends Component<Props, State> {
                 >
                   <TouchableOpacity
                     hitSlop={hitSlop}
-                    onPress={() => Linking.openURL('https://www.jetbrains.com/help/youtrack/incloud/youtrack-mobile.html#start-using-youtrack-mobile')}
+                    onPress={() =>
+                      Linking.openURL(
+                        'https://www.jetbrains.com/help/youtrack/incloud/youtrack-mobile.html#start-using-youtrack-mobile',
+                      )
+                    }
                   >
                     <Text style={formStyles.link}>{i18n('Get help')}</Text>
                   </TouchableOpacity>
@@ -260,9 +297,15 @@ export class EnterServer extends Component<Props, State> {
                 >
                   <TouchableOpacity
                     hitSlop={hitSlop}
-                    onPress={() => Linking.openURL('https://youtrack-support.jetbrains.com/hc/en-us/requests/new')}
+                    onPress={() =>
+                      Linking.openURL(
+                        'https://youtrack-support.jetbrains.com/hc/en-us/requests/new',
+                      )
+                    }
                   >
-                    <Text style={formStyles.link}>{i18n('Contact support')}</Text>
+                    <Text style={formStyles.link}>
+                      {i18n('Contact support')}
+                    </Text>
                   </TouchableOpacity>
                 </View>
 
@@ -273,7 +316,7 @@ export class EnterServer extends Component<Props, State> {
                   />
                 )}
 
-                <KeyboardSpacer/>
+                <KeyboardSpacer />
               </View>
             </ScrollView>
           );
@@ -287,7 +330,7 @@ const mapStateToProps = (state, ownProps) => {
   return {...ownProps};
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     connectToYoutrack: newURL => dispatch(connectToNewYoutrack(newURL)),
     onShowDebugView: () => dispatch(openDebugView()),
@@ -296,10 +339,11 @@ const mapDispatchToProps = (dispatch) => {
 
 // Needed to have a possibility to override callback by own props
 const mergeProps = (stateProps, dispatchProps) => {
-  return {
-    ...dispatchProps,
-    ...stateProps,
-  };
+  return {...dispatchProps, ...stateProps};
 };
 
-export default (connect(mapStateToProps, mapDispatchToProps, mergeProps)(EnterServer));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  mergeProps,
+)(EnterServer);

@@ -1,5 +1,4 @@
 import {Platform} from 'react-native';
-
 export const elevation1 = {
   ...Platform.select({
     ios: {
@@ -18,7 +17,6 @@ export const elevation1 = {
     },
   }),
 };
-
 export const elevationBottom = {
   backgroundColor: '$background',
   elevation: 5,
@@ -30,12 +28,10 @@ export const elevationBottom = {
     width: 0,
   },
 };
-
 export const elevationTop = {
   borderTopWidth: 0.6,
   borderColor: '$separator',
 };
-
 export const boxShadow = {
   ...Platform.select({
     ios: {

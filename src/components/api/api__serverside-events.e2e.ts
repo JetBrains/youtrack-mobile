@@ -1,7 +1,5 @@
-/* @flow */
-
 export default class ServersideEvents {
-  eventSource: Object;
+  eventSource: Record<string, any>;
 
   subscribeAgileBoardUpdates() {
     this.eventSource = {};

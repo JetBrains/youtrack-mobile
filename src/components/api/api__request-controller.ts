@@ -1,14 +1,16 @@
-/* @flow */
-
 import {routeMap} from '../../app-routes';
-
-let requestsMap: { [$Keys<typeof routeMap>]: Set<AbortController> };
-
+let requestsMap: {[key in keyof typeof routeMap]?: Set<AbortController>};
 const requestController: {
-  add: (routeId: $Keys<typeof routeMap>, abortController: AbortController) => void,
-  cancelIssuesRequests: () => void,
-  delete: (routeId: $Keys<typeof routeMap>, abortController: AbortController) => void,
-  init: () => typeof requestsMap,
+  add: (
+    routeId: keyof typeof routeMap,
+    abortController: AbortController,
+  ) => void;
+  cancelIssuesRequests: () => void;
+  delete: (
+    routeId: keyof typeof routeMap,
+    abortController: AbortController,
+  ) => void;
+  init: () => typeof requestsMap;
 } = {
   init: (): typeof requestsMap => {
     requestsMap = {
@@ -21,10 +23,16 @@ const requestController: {
     };
     return requestsMap;
   },
-  add: (routeId: $Keys<typeof routeMap>, abortController: AbortController): void => {
+  add: (
+    routeId: keyof typeof routeMap,
+    abortController: AbortController,
+  ): void => {
     requestsMap[routeId].add(abortController);
   },
-  delete: (routeId: $Keys<typeof routeMap>, abortController: AbortController): void => {
+  delete: (
+    routeId: keyof typeof routeMap,
+    abortController: AbortController,
+  ): void => {
     if (requestsMap[routeId].has(abortController)) {
       requestsMap[routeId].delete(abortController);
     }
@@ -40,19 +48,16 @@ const requestController: {
 function fetch2(
   url: string,
   params: any,
-  controller?: {
-    [$Keys<typeof routeMap>]: AbortController,
-  },
+  controller?: {[key in keyof typeof routeMap]?: AbortController},
 ): Promise<Response> {
-  const routeId: ?$Keys<typeof routeMap> = controller && Object.keys(controller)[0];
+  const routeId: keyof typeof routeMap | null | undefined =
+    controller && Object.keys(controller)[0];
+
   if (controller && routeId) {
     requestController.add(routeId, controller[routeId]);
   }
+
   return fetch(url, params);
 }
 
-export {
-  fetch2,
-  requestController,
-  requestsMap,
-};
+export {fetch2, requestController, requestsMap};

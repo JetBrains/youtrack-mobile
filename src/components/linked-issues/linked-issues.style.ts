@@ -1,25 +1,28 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {elevation1} from '../common-styles/shadow';
-import {headerMinHeight, headerTitlePresentation} from '../header/header.styles';
-import {markdownText, SECONDARY_FONT_SIZE, secondaryText} from '../common-styles/typography';
+import {
+  headerMinHeight,
+  headerTitlePresentation,
+} from '../header/header.styles';
+import {
+  markdownText,
+  SECONDARY_FONT_SIZE,
+  secondaryText,
+} from '../common-styles/typography';
 import {selectButtonMinHeight} from '../select/select-button.styles';
 import {separatorBorder} from '../common-styles/list';
 import {StyleSheet} from 'react-native';
 import {UNIT} from '../variables/variables';
-
 const linkTypeSelect = {
   marginTop: UNIT * 3,
   marginBottom: UNIT,
   marginHorizontal: UNIT * 2,
 };
-
 const searchPanel = {
   marginHorizontal: UNIT * 2,
   marginTop: UNIT,
   marginBottom: UNIT * 2,
 };
-
 export default EStyleSheet.create({
   container: {
     flexGrow: 1,
@@ -75,14 +78,16 @@ export default EStyleSheet.create({
   },
   linkTypeSelect: linkTypeSelect,
   issuesToLinkContainer: {
-    marginBottom: headerMinHeight + selectButtonMinHeight +
-      linkTypeSelect.marginTop + linkTypeSelect.marginBottom +
-      selectButtonMinHeight + searchPanel.marginTop + searchPanel.marginBottom,
+    marginBottom:
+      headerMinHeight +
+      selectButtonMinHeight +
+      linkTypeSelect.marginTop +
+      linkTypeSelect.marginBottom +
+      selectButtonMinHeight +
+      searchPanel.marginTop +
+      searchPanel.marginBottom,
   },
-  headerTitle: {
-    ...headerTitlePresentation,
-    marginLeft: 0,
-  },
+  headerTitle: {...headerTitlePresentation, marginLeft: 0},
   headerSubTitle: {
     lineHeight: SECONDARY_FONT_SIZE,
     color: '$icon',
@@ -97,7 +102,6 @@ export default EStyleSheet.create({
     marginLeft: -UNIT * 4,
     marginBottom: -UNIT * 2,
   },
-
   linkedIssuesButton: {
     flexDirection: 'row',
     justifyContent: 'space-between',

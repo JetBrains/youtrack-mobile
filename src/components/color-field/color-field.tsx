@@ -1,27 +1,23 @@
-/* @flow */
-
 import type {Node} from 'react';
 import React, {PureComponent} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-
 import {secondaryText} from '../common-styles/typography';
 import {UNIT} from '../variables/variables';
-
 type Props = {
-  text: string,
-  color?: Object,
-  defaultColorCoding?: ?Object,
-  fullText?: boolean,
-  style?: any
+  text: string;
+  color?: Record<string, any>;
+  defaultColorCoding?: Record<string, any> | null | undefined;
+  fullText?: boolean;
+  style?: any;
 };
-
 export const COLOR_FIELD_SIZE = 20;
 const NO_COLOR_CODING_ID = '0';
-
 export default class ColorField extends PureComponent<Props, void> {
   _getBackgroundColor() {
     const {defaultColorCoding, color} = this.props;
-    return defaultColorCoding ? defaultColorCoding.backgroundColor : color?.background;
+    return defaultColorCoding
+      ? defaultColorCoding.backgroundColor
+      : color?.background;
   }
 
   _getForegroundColor() {
@@ -33,11 +29,15 @@ export default class ColorField extends PureComponent<Props, void> {
     if (!this.props.text) {
       return null;
     }
-    return this.props.fullText ? this.props.text : Array.from(this.props.text)[0];
+
+    return this.props.fullText
+      ? this.props.text
+      : Array.from(this.props.text)[0];
   }
 
   render(): null | Node {
     const {color, fullText, style, defaultColorCoding} = this.props;
+
     if (color && color.id === NO_COLOR_CODING_ID && !fullText) {
       return null;
     }
@@ -45,16 +45,23 @@ export default class ColorField extends PureComponent<Props, void> {
     return (
       <View
         style={Object.assign(
-          {backgroundColor: this._getBackgroundColor()},
+          {
+            backgroundColor: this._getBackgroundColor(),
+          },
           styles.wrapper,
           !this.props.fullText ? styles.wrapperOneChar : null,
           style,
-          defaultColorCoding
+          defaultColorCoding,
         )}
         testID="color-field-value-wrapper"
       >
         <Text
-          style={Object.assign({color: this._getForegroundColor()}, styles.text)}
+          style={Object.assign(
+            {
+              color: this._getForegroundColor(),
+            },
+            styles.text,
+          )}
           numberOfLines={1}
           testID="color-field-value"
         >
@@ -64,7 +71,6 @@ export default class ColorField extends PureComponent<Props, void> {
     );
   }
 }
-
 const styles = StyleSheet.create({
   wrapper: {
     justifyContent: 'center',
@@ -76,10 +82,5 @@ const styles = StyleSheet.create({
     width: COLOR_FIELD_SIZE,
     height: COLOR_FIELD_SIZE,
   },
-  text: {
-    ...secondaryText,
-    fontSize: 13,
-    lineHeight: 15,
-    textAlign: 'center',
-  },
+  text: {...secondaryText, fontSize: 13, lineHeight: 15, textAlign: 'center'},
 });

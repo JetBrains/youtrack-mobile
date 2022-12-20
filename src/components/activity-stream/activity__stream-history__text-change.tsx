@@ -1,29 +1,32 @@
-/* @flow */
-
 import React from 'react';
 import {Text} from 'react-native';
-
 import CustomFieldChangeDelimiter from '../custom-field/custom-field__change-delimiter';
 import {getActivityEventTitle} from './activity__stream-helper';
 import {isActivityCategory} from '../activity/activity__category';
-
 import styles from './activity__stream.styles';
-
 import type {Activity, ActivityChangeText} from 'flow/Activity';
 
 const isMultiValueActivity = (activity: Activity) => {
   if (isActivityCategory.customField(activity)) {
     const field = activity.field;
+
     if (!field) {
       return false;
     }
-    return field.customField && field.customField.fieldType && field.customField.fieldType.isMultiValue;
+
+    return (
+      field.customField &&
+      field.customField.fieldType &&
+      field.customField.fieldType.isMultiValue
+    );
   }
 
   if (
     Array.isArray(activity?.added)
       ? activity?.added?.length > 1
-      : Array.isArray(activity?.removed) ? activity?.removed?.length > 1 : false
+      : Array.isArray(activity?.removed)
+      ? activity?.removed?.length > 1
+      : false
   ) {
     return true;
   }
@@ -31,17 +34,26 @@ const isMultiValueActivity = (activity: Activity) => {
   return false;
 };
 
-const StreamHistoryTextChange = ({activity, textChange}: { activity: Activity, textChange: ActivityChangeText }) => {
+const StreamHistoryTextChange = ({
+  activity,
+  textChange,
+}: {
+  activity: Activity;
+  textChange: ActivityChangeText;
+}) => {
   const isMultiValue: boolean = isMultiValueActivity(activity);
-
   return (
     <Text>
-      <Text style={styles.activityLabel}>{getActivityEventTitle(activity)}</Text>
+      <Text style={styles.activityLabel}>
+        {getActivityEventTitle(activity)}
+      </Text>
 
       <Text
         style={[
           styles.activityText,
-          isMultiValue || textChange.removed && !textChange.added ? styles.activityRemoved : null,
+          isMultiValue || (textChange.removed && !textChange.added)
+            ? styles.activityRemoved
+            : null,
         ]}
       >
         {textChange.removed}
@@ -57,6 +69,5 @@ const StreamHistoryTextChange = ({activity, textChange}: { activity: Activity, t
     </Text>
   );
 };
-
 
 export default StreamHistoryTextChange;

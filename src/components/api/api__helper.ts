@@ -1,10 +1,7 @@
-/* @flow */
-
 import objectWalk from 'object-walk';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 import {handleRelativeUrl} from '../config/config';
 import {toField} from 'util/to-field';
-
 import type {Attachment, CustomField} from 'flow/CustomFields';
 import type {
   AnyIssue,
@@ -12,10 +9,12 @@ import type {
   TransformedSuggestion,
   ServersideSuggestionLegacy,
 } from 'flow/Issue';
-
 const API = {
-  makeFieldHash: (issue: AnyIssue): Object => {
-    const fieldHash: $Shape<{ key: string, value: CustomField }> = {};
+  makeFieldHash: (issue: AnyIssue): Record<string, any> => {
+    const fieldHash: Partial<{
+      key: string;
+      value: CustomField;
+    }> = {};
     (issue.fields || []).forEach((field: CustomField) => {
       const _field: CustomField = field.projectCustomField.field;
       const fieldName: string = _field.localizedName || _field.name;
@@ -23,13 +22,15 @@ const API = {
     });
     return fieldHash;
   },
-
   fillIssuesFieldHash: (issues: Array<AnyIssue> = []): Array<AnyIssue> => {
-    issues.forEach((issue: AnyIssue) => {issue.fieldHash = API.makeFieldHash(issue);});
+    issues.forEach((issue: AnyIssue) => {
+      issue.fieldHash = API.makeFieldHash(issue);
+    });
     return issues;
   },
-
-  convertQueryAssistSuggestions: (suggestions: Array<ServersideSuggestion>): Array<TransformedSuggestion> => {
+  convertQueryAssistSuggestions: (
+    suggestions: Array<ServersideSuggestion>,
+  ): Array<TransformedSuggestion> => {
     return suggestions.map((suggestion: ServersideSuggestion) => {
       return {
         prefix: suggestion.prefix || '',
@@ -44,8 +45,9 @@ const API = {
       };
     });
   },
-
-  convertQueryAssistSuggestionsLegacy: (suggestions: Array<ServersideSuggestionLegacy>): Array<TransformedSuggestion> => {
+  convertQueryAssistSuggestionsLegacy: (
+    suggestions: Array<ServersideSuggestionLegacy>,
+  ): Array<TransformedSuggestion> => {
     return suggestions.map((suggestion: ServersideSuggestionLegacy) => {
       return {
         prefix: suggestion.pre || '',
@@ -60,18 +62,27 @@ const API = {
       };
     });
   },
-
   convertRelativeUrl: convertRelativeUrl,
-
-  convertRelativeUrls: (items: Array<Object> = [], urlField: string, backendUrl: string): Array<Object> => {
+  convertRelativeUrls: (
+    items: Array<Record<string, any>> = [],
+    urlField: string,
+    backendUrl: string,
+  ): Array<Record<string, any>> => {
     return items.map(item => convertRelativeUrl(item, urlField, backendUrl));
   },
 
-  convertAttachmentRelativeToAbsURLs(attachments: Array<Attachment>, backendUrl: string): Array<Attachment> {
+  convertAttachmentRelativeToAbsURLs(
+    attachments: Array<Attachment>,
+    backendUrl: string,
+  ): Array<Attachment> {
     let convertedItems: Array<Attachment> = attachments;
-    ['url', 'thumbnailURL', 'avatarUrl'].forEach(
-      (fieldName: string) => {convertedItems = this.convertRelativeUrls(convertedItems, fieldName, backendUrl);}
-    );
+    ['url', 'thumbnailURL', 'avatarUrl'].forEach((fieldName: string) => {
+      convertedItems = this.convertRelativeUrls(
+        convertedItems,
+        fieldName,
+        backendUrl,
+      );
+    });
     return convertedItems;
   },
 
@@ -81,14 +92,19 @@ const API = {
     return getReadableID(issue);
   },
 
-  patchAllRelativeAvatarUrls(data: Object, backendUrl: string): any {
+  patchAllRelativeAvatarUrls(
+    data: Record<string, any>,
+    backendUrl: string,
+  ): any {
     //TODO: potentially slow place
     objectWalk(data, (value, propertyName, obj) => {
-      if (typeof value === 'string' && value.indexOf('/hub/api/rest/avatar/') === 0) {
+      if (
+        typeof value === 'string' &&
+        value.indexOf('/hub/api/rest/avatar/') === 0
+      ) {
         obj[propertyName] = handleRelativeUrl(obj[propertyName], backendUrl);
       }
     });
-
     return data;
   },
 
@@ -96,35 +112,44 @@ const API = {
     return commandPreview.replace(/<\/?[^>]+(>|$)/g, '');
   },
 
-  removeDuplicatesByPropName(items: Array<Object>, valueName: string): Array<Object> {
+  removeDuplicatesByPropName(
+    items: Array<Record<string, any>>,
+    valueName: string,
+  ): Array<Record<string, any>> {
     if (!valueName) {
       return items;
     }
 
-    return (items || []).filter((item, index, it) =>
-      index === it.findIndex(i => i[valueName] === item[valueName])
+    return (items || []).filter(
+      (item, index, it) =>
+        index === it.findIndex(i => i[valueName] === item[valueName]),
     );
   },
 
-  equalsByProp(a: Array<Object>, b: Array<Object>, propName: string): boolean {
+  equalsByProp(
+    a: Array<Record<string, any>>,
+    b: Array<Record<string, any>>,
+    propName: string,
+  ): boolean {
     const _a = a.reduce((keys, it) => keys.concat(it[propName]), []);
+
     const _b = b.reduce((keys, it) => keys.concat(it[propName]), []);
 
-    return _a.length === _b.length && _a.every((value, index) => value === _b[index]);
-
+    return (
+      _a.length === _b.length && _a.every((value, index) => value === _b[index])
+    );
   },
-
 };
-
 export default API;
 
-
-function convertRelativeUrl (item: Object, urlField: string, backendUrl: string) {
+function convertRelativeUrl(
+  item: Record<string, any>,
+  urlField: string,
+  backendUrl: string,
+) {
   if (!item || !item[urlField]) {
     return item;
   }
-  return {
-    ...item,
-    [urlField]: handleRelativeUrl(item[urlField], backendUrl),
-  };
+
+  return {...item, [urlField]: handleRelativeUrl(item[urlField], backendUrl)};
 }
