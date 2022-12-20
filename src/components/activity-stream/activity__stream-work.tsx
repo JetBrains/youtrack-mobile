@@ -131,7 +131,7 @@ const StreamWork = (props: Props) => {
   }
 
   async function showContextActions() {
-    const options: Array<ActionSheetOption> = [];
+    const options: ActionSheetOption[] = [];
 
     if (workPermissions.canUpdate) {
       options.push({

@@ -99,7 +99,7 @@ export const createActions = (
       };
     },
     getIssueLinksTitle: function (
-      links?: Array<IssueLink>,
+      links?: IssueLink[],
     ): (
       dispatch: (arg0: any) => any,
       getState: StateGetter,
@@ -140,7 +140,7 @@ export const createActions = (
         };
 
         const updateCache = (issue: AnyIssue) => {
-          const updatedCache: Array<AnyIssue> = (
+          const updatedCache: AnyIssue[] = (
             getStorageState().issuesCache || []
           ).map((it: AnyIssue) => {
             if (it.id === issue.id) {
@@ -304,7 +304,7 @@ export const createActions = (
         const api: Api = getApi();
         const {issue} = getState()[stateFieldName];
         const {summaryCopy, descriptionCopy} = getState()[stateFieldName];
-        const textCustomFields: Array<CustomFieldText> = getIssueTextCustomFields(
+        const textCustomFields: CustomFieldText[] = getIssueTextCustomFields(
           issue.fields,
         );
         dispatch(
@@ -564,7 +564,7 @@ export const createActions = (
             selectedItems: issue?.tags || [],
             getTitle: item => getEntityPresentation(item),
             onCancel: () => dispatch(actions.onCloseTagsSelect()),
-            onSelect: async (tags: Array<Tag>) => {
+            onSelect: async (tags: Tag[]) => {
               const [error, issueWithTags] = await until(
                 api.issue.addTags(issue.id, tags),
               );
@@ -884,7 +884,7 @@ export const createActions = (
       };
     },
     uploadIssueAttach: function (
-      files: Array<NormalizedAttachment>,
+      files: NormalizedAttachment[],
     ): (dispatch: (arg0: any) => any, getState: StateGetter) => Promise<void> {
       return async (dispatch: (arg0: any) => any, getState: StateGetter) => {
         await dispatch(

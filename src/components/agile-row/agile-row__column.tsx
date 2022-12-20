@@ -10,7 +10,7 @@ import type {IssueFull} from 'types/Issue';
 import type {UITheme} from 'types/Theme';
 type ColumnProps = {
   cell: BoardCell;
-  onTapCreateIssue?: (...args: Array<any>) => any;
+  onTapCreateIssue?: (...args: any[]) => any;
   lastColumn: boolean;
   renderIssueCard: (issue: IssueFull) => any;
   uiTheme: UITheme;
@@ -19,7 +19,7 @@ type ColumnProps = {
 };
 export default function AgileRowColumn(props: ColumnProps): React.ReactNode {
   const {cell, uiTheme, zoomedIn, columnsLength} = props;
-  const issues: Array<IssueFull> = cell.issues || [];
+  const issues: IssueFull[] = cell.issues || [];
   return (
     <DropZone
       style={[styles.column, props.lastColumn && styles.columnWithoutBorder]}

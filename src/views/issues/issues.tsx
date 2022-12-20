@@ -76,7 +76,7 @@ type State = {
 };
 export class Issues extends Component<Props, State> {
   searchPanelNode: Record<string, any>;
-  unsubscribeOnDispatch: (...args: Array<any>) => any;
+  unsubscribeOnDispatch: (...args: any[]) => any;
   unsubscribeOnDimensionsChange: EventSubscription;
   theme: Theme;
   goOnlineSubscription: EventSubscription;
@@ -189,7 +189,7 @@ export class Issues extends Component<Props, State> {
 
   isMatchesQuery: (issueId: string) => Promise<boolean> = async (
     issueIdReadable: string,
-  ): ((...args: Array<any>) => any) => {
+  ): ((...args: any[]) => any) => {
     return await this.props.isIssueMatchesQuery(issueIdReadable);
   };
   renderModalPortal: ()=> React.ReactNode | null | undefined = ():

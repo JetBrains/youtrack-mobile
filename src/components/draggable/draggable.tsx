@@ -14,7 +14,7 @@ type Props = {
   data: String | Record<string, any>;
   style: any;
   activeOpacity: number;
-  onPress: (...args: Array<any>) => any;
+  onPress: (...args: any[]) => any;
 };
 type PropsWithContext = Props & {
   dragContext: DragContextType;

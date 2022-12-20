@@ -15,9 +15,9 @@ import type {
 } from 'types/Sorting';
 type Props = {
   context: Folder;
-  onApply: (sortProperties: Array<IssueFieldSortProperty>) => any;
+  onApply: (sortProperties: IssueFieldSortProperty[]) => any;
   query: string;
-  selected: Array<IssueFieldSortProperty>;
+  selected: IssueFieldSortProperty[];
   onHide: () => any;
 };
 
@@ -45,7 +45,7 @@ const IssuesSortByAddAttribute = (props: Props) => {
   const loadSortProperties = async (): Promise<
     Array<IssueFieldSortProperty>
   > => {
-    const filterFields: Array<CustomFilterField> = await api.customFields.filterFields(
+    const filterFields: CustomFilterField[] = await api.customFields.filterFields(
       {
         fld: props?.context?.id || undefined,
         getUnusedVisibleFields: true,
@@ -61,7 +61,7 @@ const IssuesSortByAddAttribute = (props: Props) => {
   };
 
   const applySorting = async (
-    sortProperties: Array<IssueFieldSortProperty>,
+    sortProperties: IssueFieldSortProperty[],
   ) => {
     usage.trackEvent(ANALYTICS_ISSUES_PAGE, 'issues-sort-by');
     props.onApply(sortProperties);
@@ -80,7 +80,7 @@ const IssuesSortByAddAttribute = (props: Props) => {
       getTitle: (it: CustomFilterField | IssueFieldSortProperty) =>
         getSortPropertyName(it),
       dataSource: loadSortProperties,
-      onSelect: (selectedItems: Array<IssueFieldSortProperty>) => {
+      onSelect: (selectedItems: IssueFieldSortProperty[]) => {
         applySorting(selectedItems);
         props.onHide();
       },

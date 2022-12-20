@@ -10,7 +10,7 @@ import type {UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   attachingImage: Record<string, any> | null | undefined;
-  attachments: Array<Attachment>;
+  attachments: Attachment[];
   canRemoveAttachment?: boolean;
   onOpenAttachment: (type: string, name: string) => any;
   onImageLoadingError: (error: any) => any;

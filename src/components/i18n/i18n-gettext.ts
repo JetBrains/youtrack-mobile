@@ -1,7 +1,7 @@
 import Gettext from 'node-gettext';
 export type GetText = {
-  on: (eventName: string, callback: (...args: Array<any>) => any) => void;
-  off: (eventName: string, callback: (...args: Array<any>) => any) => void;
+  on: (eventName: string, callback: (...args: any[]) => any) => void;
+  off: (eventName: string, callback: (...args: any[]) => any) => void;
   addTranslations: (
     locale: string,
     domain: string,

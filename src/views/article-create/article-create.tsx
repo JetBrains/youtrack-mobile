@@ -113,7 +113,7 @@ const ArticleCreate = (props: Props) => {
 
   const doUpdate = async (
     articleDraft: ArticleDraft,
-  ): ((...args: Array<any>) => any) => {
+  ): ((...args: any[]) => any) => {
     let draft: Partial<ArticleDraft> = articleDraft;
 
     if (props.originalArticleId && !draft.id) {
@@ -241,7 +241,7 @@ const ArticleCreate = (props: Props) => {
   };
 
   const onAddAttachment = async (
-    files: Array<NormalizedAttachment>,
+    files: NormalizedAttachment[],
     onAttachingFinish: () => any,
   ) => {
     await dispatch(articleCreateActions.uploadFile(files));
@@ -265,7 +265,7 @@ const ArticleCreate = (props: Props) => {
         }
         actions={{
           onAttach: async (
-            files: Array<NormalizedAttachment>,
+            files: NormalizedAttachment[],
             onAttachingFinish: () => any,
           ) => {
             onAddAttachment(files, onAttachingFinish);

@@ -27,7 +27,7 @@ type Props = {
   linksGetter: () => any;
   onUnlink: (linkedIssue: IssueOnList, linkTypeId: string) => any;
   onLinkIssue: (linkedIssueId: string, linkTypeName: string) => any;
-  onUpdate: (linkedIssues?: Array<IssueLink>) => void;
+  onUpdate: (linkedIssues?: IssueLink[]) => void;
   style?: ViewStyleProp;
   subTitle?: any;
   onHide: () => void;
@@ -44,8 +44,8 @@ const LinkedIssues = (props: Props): React.ReactNode => {
   const [pressedButtonId, updatePressedButtonId] = useState(null);
   const [isLoading, updateLoading] = useState(false);
   const getLinkedIssues = useCallback(async (): Promise<Array<IssueLink>> => {
-    const linkedIssues: Array<IssueLink> = await props.linksGetter();
-    const linksListData: Array<LinksListData> = createLinksList(linkedIssues);
+    const linkedIssues: IssueLink[] = await props.linksGetter();
+    const linksListData: LinksListData[] = createLinksList(linkedIssues);
     updateSections(linksListData);
     return linkedIssues;
   }, [props]);
@@ -59,8 +59,8 @@ const LinkedIssues = (props: Props): React.ReactNode => {
   const doUpdateSections = (
     removedLinkedIssue: IssueOnList,
     linkTypeId: string,
-  ): Array<LinksListData> => {
-    const _sections: Array<LinksListData> = sections
+  ): LinksListData[] => {
+    const _sections: LinksListData[] = sections
       .map((it: LinksListData) => {
         if (it.linkTypeId === linkTypeId) {
           it.data = it.data.filter(
@@ -114,7 +114,7 @@ const LinkedIssues = (props: Props): React.ReactNode => {
               updatePressedButtonId(null);
 
               if (isRemoved) {
-                const updatedLinksList: Array<LinksListData> = doUpdateSections(
+                const updatedLinksList: LinksListData[] = doUpdateSections(
                   linkedIssue,
                   linkTypeId,
                 );
@@ -169,7 +169,7 @@ const LinkedIssues = (props: Props): React.ReactNode => {
       onLinkIssue={props.onLinkIssue}
       issuesGetter={props.issuesGetter}
       onUpdate={async () => {
-        const linkedIssues: Array<IssueLink> = await getLinkedIssues();
+        const linkedIssues: IssueLink[] = await getLinkedIssues();
         props.onUpdate(linkedIssues);
       }}
       subTitle={props.subTitle}

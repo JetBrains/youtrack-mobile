@@ -18,10 +18,10 @@ export const loadIssue = async (issueId: string): Promise<IssueFull | null> => {
 };
 export const updateIssueInIssues = (
   issueToUpdate: AnyIssue,
-  currentIssues: Array<AnyIssue>,
-): Array<AnyIssue> => {
+  currentIssues: AnyIssue[],
+): AnyIssue[] => {
   return (currentIssues || []).reduce(
-    (issues: Array<AnyIssue>, issue: AnyIssue) => {
+    (issues: AnyIssue[], issue: AnyIssue) => {
       return issues.concat([
         issue?.id === issueToUpdate?.id ? issueToUpdate : issue,
       ]);

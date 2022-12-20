@@ -40,8 +40,8 @@ import type {WorkItem, WorkTimeSettings} from 'types/Work';
 import type {YouTrackWiki} from 'types/Wiki';
 import {Activity} from 'types/Activity';
 type Props = {
-  activities: Array<ActivityGroup> | null;
-  attachments: Array<Attachment>;
+  activities: ActivityGroup[] | null;
+  attachments: Attachment[];
   commentActions?: ActivityStreamCommentActions;
   currentUser: User;
   issueFields?: Array<Record<string, any>>;
@@ -49,9 +49,9 @@ type Props = {
     issueId: string,
     comment: IssueComment,
     reaction: Reaction,
-    activities: Array<ActivityItem>,
+    activities: ActivityItem[],
     onReactionUpdate: (
-      activities: Array<ActivityItem>,
+      activities: ActivityItem[],
       error?: CustomError,
     ) => void,
   ) => any;
@@ -65,7 +65,7 @@ type Props = {
     checked: boolean,
     position: number,
     comment: IssueComment,
-  ) => (...args: Array<any>) => any;
+  ) => (...args: any[]) => any;
   renderHeader?: () => any;
   refreshControl: () => any;
   highlight?: {
@@ -273,7 +273,7 @@ export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
     const _attachments: Attachment[] =
       props.attachments || firstActivityChange(activity)?.attachments || [];
 
-    const attachments: Array<Attachment> = ApiHelper.convertAttachmentRelativeToAbsURLs(
+    const attachments: Attachment[] = ApiHelper.convertAttachmentRelativeToAbsURLs(
       _attachments,
       props.youtrackWiki.backendUrl,
     );

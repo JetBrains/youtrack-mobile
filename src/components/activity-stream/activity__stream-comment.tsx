@@ -13,7 +13,7 @@ import type {Theme} from 'types/Theme';
 import type {YouTrackWiki} from 'types/Wiki';
 type Props = {
   activity: Activity;
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
   commentActions?: ActivityStreamCommentActions;
   hideVisibility?: boolean;
   youtrackWiki?: YouTrackWiki;

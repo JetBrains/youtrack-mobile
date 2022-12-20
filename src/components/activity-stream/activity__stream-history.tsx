@@ -25,10 +25,10 @@ type Props = {
 };
 
 const renderAttachmentChange = (activity: Record<string, any>) => {
-  const removed: Array<any> = activity.removed || [];
-  const added: Array<any> = activity.added || [];
-  const addedAndLaterRemoved: Array<any> = added.filter(it => !it.url);
-  const addedAndAvailable: Array<any> = added.filter(it => it.url);
+  const removed: any[] = activity.removed || [];
+  const added: any[] = activity.added || [];
+  const addedAndLaterRemoved: any[] = added.filter(it => !it.url);
+  const addedAndAvailable: any[] = added.filter(it => it.url);
   const hasAddedAttachments: boolean = addedAndAvailable.length > 0;
   return (
     <View key={activity.id}>

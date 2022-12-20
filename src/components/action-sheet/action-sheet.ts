@@ -4,7 +4,7 @@ import styles from './action-sheet.styles';
 import type {ActionSheetOptions} from '@expo/react-native-action-sheet';
 export type ActionSheetOption = {
   title: string;
-  execute?: (...args: Array<any>) => any;
+  execute?: (...args: any[]) => any;
 };
 // @ts-expect-error: any-typed ActionSheetOptions
 export type ShowActionSheetWithOptions = (
@@ -33,13 +33,13 @@ export const defaultActionsOptions = {
 };
 
 async function doShowActions(
-  options: Array<ActionSheetOption>,
+  options: ActionSheetOption[],
   showActionSheetWithOptions: ShowActionSheetWithOptions,
   title?: string | null,
   message?: string | null,
 ) {
   const cancelIndex: number = options.length - 1;
-  return new Promise((resolve: (...args: Array<any>) => any) => {
+  return new Promise((resolve: (...args: any[]) => any) => {
     showActionSheetWithOptions(
       {
         title,
@@ -62,7 +62,7 @@ async function doShowActions(
 }
 
 export function showActions(
-  options: Array<ActionSheetOption>,
+  options: ActionSheetOption[],
   actionSheetInstance: typeof ActionSheetProvider,
   title?: string | null,
   message?: string | null,
@@ -75,7 +75,7 @@ export function showActions(
   );
 }
 export function showActionSheet(
-  options: Array<ActionSheetOption>,
+  options: ActionSheetOption[],
   showActionSheetWithOptions: ShowActionSheetWithOptions,
   title?: string | null,
   message?: string | null,

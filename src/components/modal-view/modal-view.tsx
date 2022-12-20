@@ -8,14 +8,14 @@ import {Orientation, AnimationType} from 'types/ModalView';
 import type {Theme} from 'types/Theme';
 type DefaultProps = {
   onRequestClose: () => any;
-  supportedOrientations: Array<ModalOrientation>;
+  supportedOrientations: ModalOrientation[];
   animationType: ModalAnimationType;
 };
 type Props = {
   visible?: boolean;
   transparent?: boolean;
   animationType?: ModalAnimationType;
-  supportedOrientations?: Array<ModalOrientation>;
+  supportedOrientations?: ModalOrientation[];
   onRequestClose?: () => any;
   style?: ViewStyleProp | null | undefined;
   children: any;

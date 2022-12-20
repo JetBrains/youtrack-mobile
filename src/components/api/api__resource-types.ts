@@ -79,14 +79,14 @@ hasType.userGroup = hasType(ResourceTypes.USER_GROUP);
 hasType.visibilityLimited = hasType(ResourceTypes.VISIBILITY_LIMITED);
 hasType.work = hasType(ResourceTypes.WORK_ITEM);
 export function filterArrayByType(
-  array: Array<Entity>,
+  array: Entity[],
   methodName: HasMethodName,
-): Array<Entity> {
+): Entity[] {
   return (array || []).filter(
     (it: Entity) => hasType[methodName] && hasType[methodName](it),
   );
 }
-export const addTypes = function (type: string): Array<string> {
+export const addTypes = function (type: string): string[] {
   return [].concat(type).concat(getShortEntityType(type));
 };
 export function getShortEntityType(type: string): string {

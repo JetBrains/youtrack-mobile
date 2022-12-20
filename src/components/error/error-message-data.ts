@@ -10,7 +10,7 @@ const unauthorizedErrorMessageData: ErrorMessageData = {
     'Your account has insufficient permission to perform this operation.',
   ),
 };
-const noIssueFoundDescriptionMessages: Array<string> = [
+const noIssueFoundDescriptionMessages: string[] = [
   i18n(
     // eslint-disable-next-line
     "If this isn't what you expected, you might try one of these solutions:",

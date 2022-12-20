@@ -4,7 +4,7 @@ import {notify, notifyError} from '../notification/notification';
 import type {CommandSuggestionResponse} from 'types/Issue';
 
 const loadIssueCommandSuggestions = async (
-  issueIds: Array<string>,
+  issueIds: string[],
   command: string,
   caret: number,
 ): Promise<CommandSuggestionResponse> => {
@@ -17,7 +17,7 @@ const loadIssueCommandSuggestions = async (
 };
 
 const applyCommand = async (
-  issueIds: Array<string>,
+  issueIds: string[],
   command: string,
 ): Promise<void> => {
   try {

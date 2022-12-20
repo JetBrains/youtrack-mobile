@@ -4,7 +4,7 @@ import type {IssueProject} from 'types/CustomFields';
 class PermissionsStore {
   permissionsMap: Record<string, any>;
 
-  constructor(permissions: Array<PermissionCacheItem>) {
+  constructor(permissions: PermissionCacheItem[]) {
     const permissionsWithProjects = (Array.isArray(permissions)
       ? permissions
       : []
@@ -39,13 +39,13 @@ class PermissionsStore {
     return permission.projectIds.length > 0;
   }
 
-  hasEvery(permissionIds: Array<string>, projectId: string): boolean {
+  hasEvery(permissionIds: string[], projectId: string): boolean {
     return (permissionIds || []).every(permissionId =>
       this.has(permissionId, projectId),
     );
   }
 
-  hasSome(permissionIds: Array<string>, projectId: string): boolean {
+  hasSome(permissionIds: string[], projectId: string): boolean {
     return (permissionIds || []).some(permissionId =>
       this.has(permissionId, projectId),
     );

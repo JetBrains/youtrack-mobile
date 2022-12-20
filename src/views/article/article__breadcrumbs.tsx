@@ -28,7 +28,7 @@ const renderSeparator = () => (
 
 type ArticleBreadCrumbsItemProps = {
   article: Article;
-  onPress?: (...args: Array<any>) => any;
+  onPress?: (...args: any[]) => any;
   noSeparator?: boolean;
   style?: ViewStyleProp;
   isSplitView: boolean;

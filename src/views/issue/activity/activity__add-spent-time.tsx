@@ -195,7 +195,7 @@ const AddSpentTimeForm = (props: Props) => {
   const getWorkTypeSelectProps = (): Partial<SelectProps> => {
     return {
       dataSource: async () => {
-        const types: Array<WorkItemType> = await dispatch(
+        const types: WorkItemType[] = await dispatch(
           issueActivityActions.getWorkItemTypes(draft.issue.project.id),
         );
         return [draftDefault.type].concat(types);
@@ -292,7 +292,7 @@ const AddSpentTimeForm = (props: Props) => {
     );
   };
 
-  const buttonStyle: Array<ViewStyleProp> = [
+  const buttonStyle: ViewStyleProp[] = [
     styles.feedbackFormInput,
     styles.feedbackFormType,
   ];

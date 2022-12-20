@@ -9,7 +9,7 @@ import ModalView from '../modal-view/modal-view';
 import styles from './debug-view.styles';
 type Props = {
   show: boolean;
-  onHide: (...args: Array<any>) => any;
+  onHide: (...args: any[]) => any;
   backgroundColor: string;
   logsStyle: {
     textColor: string;

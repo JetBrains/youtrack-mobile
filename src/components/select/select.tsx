@@ -58,7 +58,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
     getTitle: (item: any) => any;
     header: () => null;
     noFilter: boolean;
-    onChangeSelection: (items: Array<any>) => null;
+    onChangeSelection: (items: any[]) => null;
   } = {
     autoFocus: false,
     onChangeSelection: (items: Array<Record<string, any>>) => null,
@@ -99,10 +99,10 @@ export class Select extends PureComponent<SelectProps, SelectState> {
     };
   }
 
-  getSortedItems: (items?: Array<any>) => Array<string> = (
+  getSortedItems: (items?: any[]) => Array<string> = (
     items: Array<Record<string, any>> = [],
-  ): Array<string> => {
-    const selectedItemsKey: Array<string> = this.state.selectedItems.map(
+  ): string[] => {
+    const selectedItemsKey: string[] = this.state.selectedItems.map(
       (it: Record<string, any>) => this.getItemKey(it),
     );
     const sortData: SelectItemsSortData = items.reduce(

@@ -10,14 +10,14 @@ import type {StorageState} from 'components/storage/storage';
 import type {User} from '../types/User';
 
 function updateCachedPermissions(
-  permissions: Array<PermissionCacheItem>,
+  permissions: PermissionCacheItem[],
 ): void {
   flushStoragePart({
     permissions,
   });
 }
 
-function getCachedPermissions(): Array<PermissionCacheItem> | null | undefined {
+function getCachedPermissions(): PermissionCacheItem[] | null | undefined {
   return getStorageState().permissions;
 }
 
@@ -48,7 +48,7 @@ async function targetAccountToSwitchTo(
     removeTrailingSlash(targetBackendUrl) !==
       removeTrailingSlash(storageState.config?.backendUrl || '')
   ) {
-    const otherAccounts: Array<StorageState> = await getOtherAccounts();
+    const otherAccounts: StorageState[] = await getOtherAccounts();
     targetAccount =
       otherAccounts.find(
         (account: StorageState) =>

@@ -30,7 +30,7 @@ const attachmentReducers = {
     },
   ) {
     const {attachingImage} = action;
-    const attachments: Array<Attachment> =
+    const attachments: Attachment[] =
       state?.articleDraft?.attachments || [];
     state.articleDraft = {
       ...state.articleDraft,
@@ -64,7 +64,7 @@ const attachmentReducers = {
       attachmentId: string;
     },
   ) {
-    const attachments: Array<Attachment> =
+    const attachments: Attachment[] =
       state?.articleDraft?.attachments || [];
     return {
       ...state,
@@ -93,7 +93,7 @@ const attachmentReducers = {
   [attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS](
     state: ArticleCreateState,
     action: {
-      attachments: Array<Attachment>;
+      attachments: Attachment[];
     },
   ) {
     state.articleDraft = {

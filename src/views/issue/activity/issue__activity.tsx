@@ -218,7 +218,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
 
     const onWorkUpdate = async (
       workItem?: WorkItem,
-    ): ((...args: Array<any>) => any) => {
+    ): ((...args: any[]) => any) => {
       if (workItem) {
         await doUpdateWorkItem(workItem);
       }
@@ -311,7 +311,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
         author: currentUser,
       },
     );
-    const newActivityPage: Array<Activity> = (activityPage || []).slice();
+    const newActivityPage: Activity[] = (activityPage || []).slice();
     newActivityPage.unshift(commentActivity);
     updateOptimisticallyActivityPage(newActivityPage);
     await submitDraftComment(comment);

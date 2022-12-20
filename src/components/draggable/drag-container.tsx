@@ -25,7 +25,7 @@ type DraggingInfo = {
   };
 };
 export type DragContextType = {
-  dropZones: Array<ZoneInfo>;
+  dropZones: ZoneInfo[];
   onInitiateDrag: (
     ref: Record<string, any>,
     children: React.ReactNode,
@@ -34,9 +34,9 @@ export type DragContextType = {
   dragging: DraggingInfo | null | undefined;
   updateZone: (arg0: ZoneInfo) => any;
   removeZone: (arg0: React.Ref<typeof DropZone>) => any;
-  registerOnDragStart: (...args: Array<any>) => any;
-  registerOnDrag: (...args: Array<any>) => any;
-  registerOnDrop: (...args: Array<any>) => any;
+  registerOnDragStart: (...args: any[]) => any;
+  registerOnDrag: (...args: any[]) => any;
+  registerOnDrop: (...args: any[]) => any;
 };
 export const DragContext: React.Context<
   DragContextType | null | undefined
@@ -59,11 +59,11 @@ class DragModal extends React.Component<any, void> {
 }
 
 type Props = {
-  onDragStart: (...args: Array<any>) => any;
-  reportOnDrop: (...args: Array<any>) => any;
+  onDragStart: (...args: any[]) => any;
+  reportOnDrop: (...args: any[]) => any;
   onDragEnd: (
     arg0: Record<string, any> | null | undefined,
-    arg1: Array<ZoneInfo>,
+    arg1: ZoneInfo[],
   ) => any;
   style?: any;
   children?: any;
@@ -109,9 +109,9 @@ class DragContainer extends React.Component<Props, State> {
     }
   }
 
-  reportOnDragStart: (...args: Array<any>) => any = () => {};
-  reportOnDrag: (...args: Array<any>) => any = () => {};
-  reportOnDrop: (...args: Array<any>) => any = () => {};
+  reportOnDragStart: (...args: any[]) => any = () => {};
+  reportOnDrag: (...args: any[]) => any = () => {};
+  reportOnDrop: (...args: any[]) => any = () => {};
 
   getDragContext(): DragContextType {
     return {
@@ -159,17 +159,17 @@ class DragContainer extends React.Component<Props, State> {
   }
 
   registerOnDragStart: (onDragStart: any) => void = (
-    onDragStart: (...args: Array<any>) => any,
+    onDragStart: (...args: any[]) => any,
   ) => {
     this.reportOnDragStart = onDragStart;
   };
   registerOnDrag: (onDrag: any) => void = (
-    onDrag: (...args: Array<any>) => any,
+    onDrag: (...args: any[]) => any,
   ) => {
     this.reportOnDrag = onDrag;
   };
   registerOnDrop: (onDrop: any) => void = (
-    onDrop: (...args: Array<any>) => any,
+    onDrop: (...args: any[]) => any,
   ) => {
     this.reportOnDrop = onDrop;
   };

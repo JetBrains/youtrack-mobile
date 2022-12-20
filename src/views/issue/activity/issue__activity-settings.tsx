@@ -12,15 +12,15 @@ import type {ActivityType} from 'types/Activity';
 import type {UITheme} from 'types/Theme';
 import type {UserAppearanceProfile} from 'types/User';
 type Props = {
-  issueActivityTypes: Array<ActivityType>;
-  issueActivityEnabledTypes: Array<ActivityType>;
-  onApply: (...args: Array<any>) => any;
+  issueActivityTypes: ActivityType[];
+  issueActivityEnabledTypes: ActivityType[];
+  onApply: (...args: any[]) => any;
   userAppearanceProfile: UserAppearanceProfile;
   disabled?: boolean;
   uiTheme: UITheme;
 };
 type State = {
-  settings: Array<ActivityType>;
+  settings: ActivityType[];
 };
 type SortOrder = {
   name: string;
@@ -78,12 +78,12 @@ export default class IssueActivitiesSettings extends PureComponent<
   }
 
   createSettingsList(
-    issueActivityTypes: Array<ActivityType> = [],
-    issueActivityEnabledTypes: Array<ActivityType> = [],
+    issueActivityTypes: ActivityType[] = [],
+    issueActivityEnabledTypes: ActivityType[] = [],
     naturalCommentsOrder: boolean,
   ): Array<Partial<ActivityType | SortOrder>> {
-    const list: Array<ActivityType> = issueActivityTypes.reduce(
-      (list: Array<ActivityType>, type: ActivityType) => {
+    const list: ActivityType[] = issueActivityTypes.reduce(
+      (list: ActivityType[], type: ActivityType) => {
         type.enabled = issueActivityEnabledTypes.some(
           (enabledType: ActivityType) => enabledType.id === type.id,
         );

@@ -1,4 +1,4 @@
-const availableReactionNames: Array<string> = [
+const availableReactionNames: string[] = [
   'yes',
   'thanks',
   'thumbs-up',

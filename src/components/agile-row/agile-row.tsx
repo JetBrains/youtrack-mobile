@@ -15,13 +15,13 @@ type RenderIssueCard = (issue: IssueOnList) => any;
 type Props = {
   style?: ViewStyleProp;
   row: AgileBoardRow;
-  collapsedColumnIds: Array<string>;
+  collapsedColumnIds: string[];
   onTapIssue: (issue: IssueOnList) => any;
   onTapCreateIssue?: (columnId: string, cellId: string) => any;
   onCollapseToggle: (row: AgileBoardRow) => any;
   renderIssueCard: RenderIssueCard;
   zoomedIn?: boolean;
-  columns: Array<BoardColumn>;
+  columns: BoardColumn[];
   uiTheme: UITheme;
 };
 

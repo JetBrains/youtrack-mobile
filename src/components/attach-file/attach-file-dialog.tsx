@@ -46,7 +46,7 @@ import type {Visibility} from 'types/Visibility';
 type Props = {
   actions: {
     onAttach: (
-      attachments: Array<NormalizedAttachment>,
+      attachments: NormalizedAttachment[],
       onAttachingFinish: () => any,
     ) => any;
     onCancel: () => any;
@@ -72,7 +72,7 @@ const AttachFileDialog = (
     updateAttaches,
   ] = useState<Array<NormalizedAttachment> | null>(null);
   const [isAttaching, updateAttaching] = useState(false);
-  const createActions = useCallback((): Array<ActionSheetAction> => {
+  const createActions = useCallback((): ActionSheetAction[] => {
     return [
       {
         id: attachFileMethod.openPicker,
@@ -130,7 +130,7 @@ const AttachFileDialog = (
 
   const showSystemDialog = async (method: keyof typeof attachFileMethod) => {
     try {
-      const attachedFiles: Array<NormalizedAttachment> | null = await attachFile(
+      const attachedFiles: NormalizedAttachment[] | null = await attachFile(
         method,
       );
 
@@ -187,7 +187,7 @@ const AttachFileDialog = (
   };
 
   const renderPreview = (
-    files: Array<NormalizedAttachment>,
+    files: NormalizedAttachment[],
   ): Array<React.ReactElement<React.ComponentProps<any>, any>> => {
     return files.map((file: NormalizedAttachment, index: number) => {
       const isMediaMimeType: boolean =

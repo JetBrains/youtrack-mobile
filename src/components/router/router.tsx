@@ -49,9 +49,9 @@ const SlideModal = {
 class Router {
   _navigator: NavigationNavigator = null;
   _currentRoute: NavigationJumpToActionPayload = null;
-  rootRoutes: Array<NavigationJumpToActionPayload> = [];
+  rootRoutes: NavigationJumpToActionPayload[] = [];
   onDispatchCallbacks:
-    | Array<(...args: Array<any>) => any>
+    | Array<(...args: any[]) => any>
     | null
     | undefined = [];
 
@@ -115,7 +115,7 @@ class Router {
     this.AppNavigator = createAppContainer(MainNavigator);
   }
 
-  setOnDispatchCallback(onDispatch: (...args: Array<any>) => any) {
+  setOnDispatchCallback(onDispatch: (...args: any[]) => any) {
     this.onDispatchCallbacks.push(onDispatch);
     return () => {
       const index: number = this.onDispatchCallbacks.indexOf(onDispatch);
@@ -198,8 +198,8 @@ class Router {
     }
   }
 
-  getRoutes: Array<NavigationRoute> = () => this._navigator.state.nav.routes;
-  hasNoParentRoute: Array<NavigationRoute> = () => {
+  getRoutes: NavigationRoute[] = () => this._navigator.state.nav.routes;
+  hasNoParentRoute: NavigationRoute[] = () => {
     const routes: NavigationRoute[] = this.getRoutes();
     return (
       routes.length <= 1 ||
@@ -214,7 +214,7 @@ class Router {
     }
 
     this._modalTransition = isModalTransition;
-    const routes: Array<NavigationRoute> = this.getRoutes();
+    const routes: NavigationRoute[] = this.getRoutes();
     this.dispatch(
       NavigationActions.back(),
       routes[routes.length - 2].routeName,

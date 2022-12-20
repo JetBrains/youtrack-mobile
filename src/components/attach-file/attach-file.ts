@@ -14,7 +14,7 @@ function extractFileNameFromPath(path: string): string {
 async function pickPhoto(
   method: keyof typeof attachFileMethod,
 ): Promise<Array<NormalizedAttachment>> {
-  const files: Array<Attachment> = await ImagePicker[method]({
+  const files: Attachment[] = await ImagePicker[method]({
     forceJpg: true,
     mediaType: 'any',
     multiple: true,

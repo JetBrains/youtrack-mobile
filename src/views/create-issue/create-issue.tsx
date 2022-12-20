@@ -62,7 +62,7 @@ import styles from './create-issue.styles';
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
   predefinedDraftId: string | null | undefined;
-  onAddTags: (tags: Array<Tag>) => () => Promise<void>;
+  onAddTags: (tags: Tag[]) => () => Promise<void>;
   onHide?: () => void;
   isMatchesQuery?: () => boolean;
   isConnected?: boolean;
@@ -99,7 +99,7 @@ class CreateIssue extends PureComponent<Props, State> {
   }
 
   onAddAttachment = async (
-    files: Array<NormalizedAttachment>,
+    files: NormalizedAttachment[],
     onAttachingFinish: () => any,
   ) => {
     const {uploadIssueAttach, loadAttachments} = this.props;
@@ -263,7 +263,7 @@ class CreateIssue extends PureComponent<Props, State> {
         linksGetter={loadLinkedIssues}
         onUnlink={onUnlinkIssue}
         onLinkIssue={onLinkIssue}
-        onUpdate={(issues?: Array<IssueLink>) => {
+        onUpdate={(issues?: IssueLink[]) => {
           getIssueLinksTitle(issues);
         }}
         canLink={
@@ -337,7 +337,7 @@ class CreateIssue extends PureComponent<Props, State> {
       <LinkedIssuesAddLink
         issuesGetter={loadIssuesXShort}
         onLinkIssue={onLinkIssue}
-        onUpdate={(issues?: Array<IssueLink>) => {
+        onUpdate={(issues?: IssueLink[]) => {
           getIssueLinksTitle(issues);
         }}
         onHide={onHide}
@@ -538,7 +538,7 @@ class CreateIssue extends PureComponent<Props, State> {
                         <TagAddSelect
                           existed={issue?.tags}
                           projectId={issue.project?.id}
-                          onAdd={(tags: Array<Tag>) =>
+                          onAdd={(tags: Tag[]) =>
                             this.props.onAddTags(tags)
                           }
                           onHide={() =>
@@ -596,7 +596,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
   return {
     ...bindActionCreators(createIssueActions, dispatch),
-    onAddTags: (tags: Array<Tag>) =>
+    onAddTags: (tags: Tag[]) =>
       dispatch(
         createIssueActions.updateIssueDraft(true, {
           tags,

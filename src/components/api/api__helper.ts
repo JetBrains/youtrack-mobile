@@ -22,15 +22,15 @@ const API = {
     });
     return fieldHash;
   },
-  fillIssuesFieldHash: (issues: Array<AnyIssue> = []): Array<AnyIssue> => {
+  fillIssuesFieldHash: (issues: AnyIssue[] = []): AnyIssue[] => {
     issues.forEach((issue: AnyIssue) => {
       issue.fieldHash = API.makeFieldHash(issue);
     });
     return issues;
   },
   convertQueryAssistSuggestions: (
-    suggestions: Array<ServersideSuggestion>,
-  ): Array<TransformedSuggestion> => {
+    suggestions: ServersideSuggestion[],
+  ): TransformedSuggestion[] => {
     return suggestions.map((suggestion: ServersideSuggestion) => {
       return {
         prefix: suggestion.prefix || '',
@@ -46,8 +46,8 @@ const API = {
     });
   },
   convertQueryAssistSuggestionsLegacy: (
-    suggestions: Array<ServersideSuggestionLegacy>,
-  ): Array<TransformedSuggestion> => {
+    suggestions: ServersideSuggestionLegacy[],
+  ): TransformedSuggestion[] => {
     return suggestions.map((suggestion: ServersideSuggestionLegacy) => {
       return {
         prefix: suggestion.pre || '',
@@ -72,10 +72,10 @@ const API = {
   },
 
   convertAttachmentRelativeToAbsURLs(
-    attachments: Array<Attachment>,
+    attachments: Attachment[],
     backendUrl: string,
-  ): Array<Attachment> {
-    let convertedItems: Array<Attachment> = attachments;
+  ): Attachment[] {
+    let convertedItems: Attachment[] = attachments;
     ['url', 'thumbnailURL', 'avatarUrl'].forEach((fieldName: string) => {
       convertedItems = this.convertRelativeUrls(
         convertedItems,

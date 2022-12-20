@@ -29,7 +29,7 @@ export function addItems(
   issueLinkTypes: Record<string, Partial<IssueLinkType>>,
 ): {
   hasMore: boolean;
-  items: Array<any>;
+  items: any[];
   type: any;
   issueLinkTypes: Record<string, string>;
 } {
@@ -70,7 +70,7 @@ const loadInboxCache = (): ((
   dispatch: (arg0: any) => any,
 ) => Promise<void>) => {
   return async (dispatch: (arg0: any) => any) => {
-    const inboxCache: Array<Notification> | null = getStorageState().inboxCache;
+    const inboxCache: Notification[] | null = getStorageState().inboxCache;
 
     if (inboxCache) {
       dispatch(addItems(inboxCache, false, {}));

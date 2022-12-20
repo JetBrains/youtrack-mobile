@@ -37,8 +37,8 @@ export type ChangeEvent = {
   entityId: string;
   category: ChangeCategory;
   name: string;
-  addedValues: Array<ChangeValue>;
-  removedValues: Array<ChangeValue>;
+  addedValues: ChangeValue[];
+  removedValues: ChangeValue[];
 };
 export type Reason = {
   type: string;
@@ -67,7 +67,7 @@ export type IssueChange = {
   humanReadableTimeStamp: string;
   startTimestamp: number;
   endTimestamp: number;
-  events: Array<ChangeEvent>;
+  events: ChangeEvent[];
 };
 export type Metadata = {
   type: string;
@@ -89,7 +89,7 @@ export interface InboxMessageReason {
 }
 export interface InboxThreadMessage {
   $type?: string;
-  activities: Array<Activity>;
+  activities: Activity[];
   id: string;
   muted: string;
   notified: string;
@@ -109,12 +109,12 @@ export interface InboxThread {
     id: string;
     target: InboxThreadTarget;
   };
-  messages: Array<InboxThreadMessage>;
+  messages: InboxThreadMessage[];
 }
 export interface InboxThreadGroup {
   head: Activity;
-  mergedActivities: Array<Activity>;
-  messages: Array<InboxThreadMessage>;
+  mergedActivities: Activity[];
+  messages: InboxThreadMessage[];
   comment?: Activity;
   issue?: Activity & {
     issue: any;

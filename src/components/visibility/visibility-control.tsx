@@ -80,14 +80,14 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   createSelectItems: (visibility: Visibility) => Array<User | UserGroup> = (
     visibility: Visibility,
   ): Array<User | UserGroup> => {
-    const visibilityGroups: Array<UserGroup> = (
+    const visibilityGroups: UserGroup[] = (
       visibility.visibilityGroups ||
       visibility.permittedGroups ||
       []
     )
       .filter((group: UserGroup) => !group.allUsersGroup)
       .sort(sortAlphabetically);
-    const visibilityUsers: Array<User> = (
+    const visibilityUsers: User[] = (
       visibility.visibilityUsers ||
       visibility.permittedUsers ||
       []

@@ -45,7 +45,7 @@ function getEstimation(
   estimationField: {
     id: string;
   },
-  fields: Array<CustomFieldShort> = [],
+  fields: CustomFieldShort[] = [],
 ) {
   const field = fields.filter(
     field => field.projectCustomField.field.id === estimationField.id,
@@ -73,7 +73,7 @@ export default class AgileCard extends PureComponent<Props, void> {
     const assigneeField: CustomField | null | undefined = getAssigneeField(
       issue,
     );
-    const assignees: Array<CustomFieldValue> = []
+    const assignees: CustomFieldValue[] = []
       .concat(assigneeField ? assigneeField.value : null)
       .filter(Boolean);
     return assignees.map((assignee: CustomFieldValue) => {

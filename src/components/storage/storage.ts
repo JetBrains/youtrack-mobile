@@ -32,12 +32,12 @@ export interface InboxThreadsCache {
 export type StorageState = {
   [key in typeof storageStateAuthParamsKey]?: string | null | undefined;
 } & {
-  articles: Array<Article> | null | undefined;
+  articles: Article[] | null | undefined;
   articlesList: ArticlesList | null;
   articlesQuery: string | null;
   articleLastVisited: {
     article?: Article;
-    activities?: Array<Activity>;
+    activities?: Activity[];
   } | null;
   authParams: OAuthParams2 | null | undefined;
   projectId: string | null | undefined;
@@ -48,8 +48,8 @@ export type StorageState = {
   config: AppConfig | null | undefined;
   query: string | null | undefined;
   searchContext: Folder | null | undefined;
-  lastQueries: Array<string> | null | undefined;
-  issuesCache: Array<AnyIssue> | null;
+  lastQueries: string[] | null | undefined;
+  issuesCache: AnyIssue[] | null;
   inboxCache: Notification[] | null;
   inboxThreadsCache: InboxThreadsCache | null;
   isRegisteredForPush: boolean;
@@ -69,8 +69,8 @@ export type StorageState = {
     | null
     | undefined;
   currentAppVersion: string | null | undefined;
-  issueActivitiesEnabledTypes: Array<ActivityType> | null | undefined;
-  permissions: Array<PermissionCacheItem> | null | undefined;
+  issueActivitiesEnabledTypes: ActivityType[] | null | undefined;
+  permissions: PermissionCacheItem[] | null | undefined;
   themeMode: string | null | undefined;
   vcsChanges: boolean | null;
   forceHandsetMode: boolean | null;
@@ -345,7 +345,7 @@ export async function cacheAuthParamsSecured(
   }
 }
 export async function secureAccounts(
-  otherAccounts: Array<StorageState>,
+  otherAccounts: StorageState[],
 ): Promise<void> {
   let isNotMigrated: boolean = false;
 
@@ -363,11 +363,11 @@ export async function secureAccounts(
 }
 export async function getOtherAccounts(): Promise<Array<StorageState>> {
   const value: string = await AsyncStorage.getItem(OTHER_ACCOUNTS_KEY);
-  const otherAccounts: Array<StorageState> = value ? JSON.parse(value) : [];
+  const otherAccounts: StorageState[] = value ? JSON.parse(value) : [];
   await secureAccounts(otherAccounts);
   return otherAccounts;
 }
-export async function storeAccounts(accounts: Array<StorageState>) {
+export async function storeAccounts(accounts: StorageState[]) {
   await AsyncStorage.setItem(OTHER_ACCOUNTS_KEY, JSON.stringify(accounts));
 }
 // For tests only!

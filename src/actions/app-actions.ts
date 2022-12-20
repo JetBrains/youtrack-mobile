@@ -117,9 +117,9 @@ export function closeDebugView(): {
   };
 }
 export function setEnabledFeatures(
-  features: Array<string>,
+  features: string[],
 ): {
-  features: Array<string>;
+  features: string[];
   type: string;
 } {
   return {
@@ -139,9 +139,9 @@ export function onNavigateBack(
   };
 }
 export function receiveOtherAccounts(
-  otherAccounts: Array<StorageState>,
+  otherAccounts: StorageState[],
 ): {
-  otherAccounts: Array<StorageState>;
+  otherAccounts: StorageState[];
   type: string;
 } {
   return {
@@ -206,7 +206,7 @@ export const resetUserArticlesProfile = (): Action => async (
 };
 export const cacheUserLastVisitedArticle = (
   article: Article | null,
-  activities?: Array<Activity>,
+  activities?: Activity[],
 ) => {
   try {
     if (!article || !article.id) {
@@ -216,7 +216,7 @@ export const cacheUserLastVisitedArticle = (
     } else {
       const articleLastVisited: {
         article?: Article;
-        activities?: Array<Activity>;
+        activities?: Activity[];
       } | null = getStorageState().articleLastVisited;
       flushStoragePart({
         articleLastVisited: {
@@ -294,7 +294,7 @@ function populateAccounts() {
     getState: () => AppState,
     getApi: () => Api,
   ) => {
-    const otherAccounts: Array<StorageState> = await getOtherAccounts();
+    const otherAccounts: StorageState[] = await getOtherAccounts();
     dispatch(receiveOtherAccounts(otherAccounts));
   };
 }
@@ -313,7 +313,7 @@ function endAccountChange() {
 
 async function connectToOneMoreServer(
   serverUrl: string,
-  onBack: (...args: Array<any>) => any,
+  onBack: (...args: any[]) => any,
 ): Promise<AppConfig> {
   return new Promise(resolve => {
     Router.EnterServer({
@@ -348,10 +348,10 @@ function applyAccount(
     getState: () => AppState,
     getApi: () => Api,
   ) => {
-    const otherAccounts: Array<StorageState> =
+    const otherAccounts: StorageState[] =
       getState().app.otherAccounts || [];
     const currentAccount: StorageState = getStorageState();
-    const newOtherAccounts: Array<StorageState> = [
+    const newOtherAccounts: StorageState[] = [
       currentAccount,
       ...otherAccounts,
     ];
@@ -460,7 +460,7 @@ export function updateOtherAccounts(
         account?.config?.backendUrl || ''
       }`,
     );
-    const otherAccounts: Array<StorageState> = (
+    const otherAccounts: StorageState[] = (
       state.app.otherAccounts || []
     ).filter(
       (it: StorageState) => it.creationTimestamp !== account.creationTimestamp,
@@ -541,7 +541,7 @@ export function removeAccountOrLogOut(): Action {
     getState: () => AppState,
     getApi: () => Api,
   ) => {
-    const otherAccounts: Array<StorageState> =
+    const otherAccounts: StorageState[] =
       getState().app.otherAccounts || [];
 
     if (isRegisteredForPush()) {
@@ -564,7 +564,7 @@ export function removeAccountOrLogOut(): Action {
   };
 }
 
-function setUserPermissions(permissions: Array<PermissionCacheItem>): Action {
+function setUserPermissions(permissions: PermissionCacheItem[]): Action {
   return async (
     dispatch: (arg0: any) => any,
     getState: () => AppState,
@@ -588,7 +588,7 @@ export function loadUserPermissions(): Action {
     const auth: OAuth2 = (getState().app.auth as any) as OAuth2;
 
     try {
-      const permissions: Array<PermissionCacheItem> = await appActionsHelper.loadPermissions(
+      const permissions: PermissionCacheItem[] = await appActionsHelper.loadPermissions(
         auth.getTokenType(),
         auth.getAccessToken(),
         auth.getPermissionsCacheURL(),
@@ -781,7 +781,7 @@ function checkUserAgreement(): Action {
 
 export function onLogIn(authParams: AuthParams): Action {
   return async (
-    dispatch: (...args: Array<any>) => any,
+    dispatch: (...args: any[]) => any,
     getState: () => AppState,
   ) => {
     const auth: OAuth2 | null = getState().app.auth;
@@ -815,10 +815,10 @@ export function cacheProjects(): (
     getState: () => AppState,
     getApi: () => Api,
   ) => {
-    const userFolders: Array<Folder> = await getApi().user.getUserFolders('', [
+    const userFolders: Folder[] = await getApi().user.getUserFolders('', [
       '$type,id,shortName,name,pinned',
     ]);
-    const projects: Array<Folder> = userFolders.filter((it: Folder) =>
+    const projects: Folder[] = userFolders.filter((it: Folder) =>
       hasType.project(it),
     );
     await flushStoragePart({
@@ -1239,8 +1239,8 @@ const inboxCheckUpdateStatus = (): Action => {
       );
 
       if (!error) {
-        const sorted: Array<InboxFolder> = folders.reduce(
-          (flds: Array<InboxFolder>, folder: InboxFolder) => {
+        const sorted: InboxFolder[] = folders.reduce(
+          (flds: InboxFolder[], folder: InboxFolder) => {
             if (folder.id === folderIdMap[2]) {
               flds.push(folder);
             }

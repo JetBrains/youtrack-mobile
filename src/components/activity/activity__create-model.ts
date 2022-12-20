@@ -4,7 +4,7 @@ import {sortByTimestamp} from 'components/search/sorting';
 import type {Activity, ActivityGroup} from 'types/Activity';
 export const createActivitiesModel = (
   activityGroups: Array<Record<string, any>> = [],
-): Array<Activity> => {
+): Activity[] => {
   const activities = getStream(activityGroups).map(streamGroup => {
     streamGroup.events = streamGroup.events
       .sort(sortByCategory)

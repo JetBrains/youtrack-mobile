@@ -30,11 +30,11 @@ import type {IssueFieldSortProperty, SearchSuggestions} from 'types/Sorting';
 type Props = {
   context: Folder;
   onApply: (
-    sortProperties: Array<IssueFieldSortProperty>,
+    sortProperties: IssueFieldSortProperty[],
     query: string,
   ) => any;
   query: string;
-  selectedSortProperties: Array<IssueFieldSortProperty>;
+  selectedSortProperties: IssueFieldSortProperty[];
   onBack?: () => any;
 };
 const MAX_SORT_ATTRIBUTES_AMOUNT: number = 4;
@@ -47,10 +47,10 @@ const IssuesSortByList = (props: Props) => {
   }, [props.selectedSortProperties]);
 
   const applySorting = async (
-    sortProperties: Array<IssueFieldSortProperty>,
+    sortProperties: IssueFieldSortProperty[],
   ) => {
     usage.trackEvent(ANALYTICS_ISSUES_PAGE, 'issues-sort-by');
-    const sProps: Array<IssueFieldSortProperty> = sortProperties.filter(
+    const sProps: IssueFieldSortProperty[] = sortProperties.filter(
       (sortProperty: IssueFieldSortProperty) => !sortProperty.readOnly,
     );
     return doAssist({
@@ -62,7 +62,7 @@ const IssuesSortByList = (props: Props) => {
     });
   };
 
-  const onUpdate = (sortProperties: Array<IssueFieldSortProperty>): void => {
+  const onUpdate = (sortProperties: IssueFieldSortProperty[]): void => {
     updateSelectedSortProperties(sortProperties);
   };
 
@@ -213,7 +213,7 @@ const IssuesSortByList = (props: Props) => {
         keyboardDismissMode="on-drag"
         scrollEventThrottle={50}
         data={selectedSortProperties}
-        onMoveEnd={({data}: {data: Array<IssueFieldSortProperty>}) => {
+        onMoveEnd={({data}: {data: IssueFieldSortProperty[]}) => {
           updateSelectedSortProperties(data);
         }}
         scrollPercent={5}

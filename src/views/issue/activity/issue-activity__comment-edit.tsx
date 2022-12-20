@@ -23,7 +23,7 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
   const issue: IssueFull = props.issueContext.issue;
   const issuePermissions: IssuePermissions =
     props.issueContext.issuePermissions;
-  const dispatch: (...args: Array<any>) => any = props.issueContext.dispatcher;
+  const dispatch: (...args: any[]) => any = props.issueContext.dispatcher;
   const {
     onCommentChange = () => {},
     onAddSpentTime = null,

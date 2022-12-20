@@ -6,7 +6,7 @@ import styles from './query-assist.styles';
 import type {TransformedSuggestion} from '../../types/Issue';
 import type {ViewStyleProp} from 'types/Internal';
 type SearchPanelProps = {
-  queryAssistSuggestions: Array<TransformedSuggestion>;
+  queryAssistSuggestions: TransformedSuggestion[];
   query: string;
   suggestIssuesQuery: (query: string, caret: number) => any;
   onQueryUpdate: (query: string) => any;

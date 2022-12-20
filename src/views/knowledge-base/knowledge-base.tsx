@@ -91,7 +91,7 @@ export class KnowledgeBase extends Component<Props, State> {
   };
   listRef: any;
   uiTheme: UITheme;
-  unsubscribe: (...args: Array<any>) => any = () => null;
+  unsubscribe: (...args: any[]) => any = () => null;
   unsubscribeOnDimensionsChange: EventSubscription;
   goOnlineSubscription: EventSubscription;
 
@@ -576,9 +576,9 @@ export class KnowledgeBase extends Component<Props, State> {
     });
   renderProjectSelect: ()=> React.ReactNode = () => {
     const {updateProjectsFavorites} = this.props;
-    const projects: Array<ArticleProject> = (getStorageState()
+    const projects: ArticleProject[] = (getStorageState()
       .projects as any) as Array<ArticleProject>;
-    const prevPinnedProjects: Array<ArticleProject> = projects.filter(
+    const prevPinnedProjects: ArticleProject[] = projects.filter(
       (it: ArticleProject) => it.pinned,
     );
     const selectProps: SelectProps = {
@@ -612,14 +612,14 @@ export class KnowledgeBase extends Component<Props, State> {
       onCancel: this.closeProjectSelect,
       onChangeSelection: () => null,
       onSelect: async (
-        selectedProjects: Array<ArticleProject> | null | undefined,
+        selectedProjects: ArticleProject[] | null | undefined,
       ) => {
-        const pinnedProjects: Array<ArticleProject> = (selectedProjects || [])
+        const pinnedProjects: ArticleProject[] = (selectedProjects || [])
           .map((it: ArticleProject) =>
             it.pinned ? null : {...it, pinned: true},
           )
           .filter(Boolean);
-        const unpinnedProjects: Array<ArticleProject> = prevPinnedProjects
+        const unpinnedProjects: ArticleProject[] = prevPinnedProjects
           .filter(
             (it: ArticleProject) => !(selectedProjects || []).includes(it),
           )

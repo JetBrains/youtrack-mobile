@@ -2,7 +2,7 @@ import {createSlice, Slice} from '@reduxjs/toolkit';
 import type {ArticlesList, ProjectArticlesData} from 'types/Article';
 import type {CustomError} from 'types/Error';
 export type KnowledgeBaseState = {
-  articles: Array<ProjectArticlesData> | null;
+  articles: ProjectArticlesData[] | null;
   articlesList: ArticlesList | null;
   isLoading: boolean;
   expandingProjectId: string | null;
@@ -53,7 +53,7 @@ const {reducer, actions} = createSlice({
     setArticles(
       state: KnowledgeBaseState,
       action: {
-        payload: Array<ProjectArticlesData>;
+        payload: ProjectArticlesData[];
       },
     ) {
       state.articles = action.payload;

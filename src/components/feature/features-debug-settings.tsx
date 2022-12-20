@@ -13,7 +13,7 @@ import {IconClose} from '../icon/icon';
 import {notify} from '../notification/notification';
 import styles from './feature-view.style';
 type Props = {
-  onHide?: (...args: Array<any>) => any;
+  onHide?: (...args: any[]) => any;
 };
 
 const FeaturesDebugSettings = (props: Props): React.ReactNode => {

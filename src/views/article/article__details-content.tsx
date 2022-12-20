@@ -8,13 +8,13 @@ import type {Attachment} from 'types/CustomFields';
 import type {IssueOnList} from 'types/Issue';
 import type {UITheme} from 'types/Theme';
 type Props = {
-  attachments: Array<Attachment>;
-  mentionedArticles: Array<Article>;
-  mentionedIssues: Array<IssueOnList>;
+  attachments: Attachment[];
+  mentionedArticles: Article[];
+  mentionedIssues: IssueOnList[];
   uiTheme: UITheme;
   articleContent: string;
   scrollData: Record<string, any>;
-  onCheckboxUpdate: (articleContent: string) => (...args: Array<any>) => any;
+  onCheckboxUpdate: (articleContent: string) => (...args: any[]) => any;
 };
 
 const ArticleContent = (props: Props) => {

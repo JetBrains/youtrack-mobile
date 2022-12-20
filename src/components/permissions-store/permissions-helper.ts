@@ -15,7 +15,7 @@ async function loadPermissions(
     },
   })
     .then(res => res.json())
-    .then((response: Array<PermissionCacheItem> | CustomError) => {
+    .then((response: PermissionCacheItem[] | CustomError) => {
       if (response.error) {
         throw response;
       }

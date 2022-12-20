@@ -8,7 +8,7 @@ import type {ActionSheetOption} from '../action-sheet/action-sheet';
 import type {Tag} from 'types/CustomFields';
 import type {ViewStyleProp} from 'types/Internal';
 type Props = {
-  tags: Array<Tag>;
+  tags: Tag[];
   onTagPress: (query: string) => void;
   onTagRemove?: (id: string) => void;
   style?: ViewStyleProp;

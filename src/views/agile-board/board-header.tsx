@@ -9,13 +9,13 @@ import type {BoardColumn} from 'types/Agile';
 import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   style?: ViewStyleProp;
-  columns?: Array<BoardColumn>;
+  columns?: BoardColumn[];
   onCollapseToggle: (column: BoardColumn) => any;
 };
 export default class BoardHeader extends PureComponent<Props, void> {
   node: Record<string, any> | null | undefined;
 
-  setNativeProps(...args: Array<any>) {
+  setNativeProps(...args: any[]) {
     if (!this.node) {
       return;
     }

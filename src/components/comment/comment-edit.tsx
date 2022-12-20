@@ -48,7 +48,7 @@ import type {UserGroup} from 'types/UserGroup';
 import type {User} from 'types/User';
 import type {Visibility} from 'types/Visibility';
 type UserMentions = {
-  users: Array<User>;
+  users: User[];
 };
 type EditingComment = Partial<
   IssueComment & {
@@ -386,7 +386,7 @@ const IssueCommentEdit = (props: Props) => {
         getVisibilityOptions={props.getVisibilityOptions}
         actions={{
           onAttach: async (
-            files: Array<NormalizedAttachment>,
+            files: NormalizedAttachment[],
             onAttachingFinish: () => any,
           ) => {
             let draftComment: IssueComment = state.editingComment;
@@ -398,7 +398,7 @@ const IssueCommentEdit = (props: Props) => {
               );
             }
 
-            const addedAttachments: Array<Attachment> = await dispatch(
+            const addedAttachments: Attachment[] = await dispatch(
               props.onAttach(files, state.editingComment),
             );
             onAttachingFinish();
@@ -442,7 +442,7 @@ const IssueCommentEdit = (props: Props) => {
           !state.isSaving && props.canRemoveAttach(attachment)
         }
         onRemoveImage={async (attachment: Attachment) => {
-          const resource: (...args: Array<any>) => any = props.isArticle
+          const resource: (...args: any[]) => any = props.isArticle
             ? attachmentActions.removeAttachmentFromArticleComment
             : attachmentActions.removeAttachmentFromIssueComment;
           await dispatch(
@@ -453,7 +453,7 @@ const IssueCommentEdit = (props: Props) => {
                 : state.editingComment.id,
             ),
           );
-          const attachments: Array<Attachment> = (
+          const attachments: Attachment[] = (
             state.editingComment.attachments || []
           ).filter((it: Attachment) => it.id !== attachment.id);
           const isDeleted: boolean =
@@ -476,8 +476,8 @@ const IssueCommentEdit = (props: Props) => {
 
   const renderCommentInput = (
     autoFocus: boolean,
-    onFocus: (...args: Array<any>) => any,
-    onBlur: (...args: Array<any>) => any,
+    onFocus: (...args: any[]) => any,
+    onBlur: (...args: any[]) => any,
   ): React.ReactNode => {
     return (
       <TextInput

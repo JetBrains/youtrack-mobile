@@ -43,7 +43,7 @@ const usage = {
     return getInstance().send(screenView);
   },
 
-  trackEvent(eventName: string, ...params: Array<any>): any | void {
+  trackEvent(eventName: string, ...params: any[]): any | void {
     if (!isAnalyticsEnabled) {
       return;
     }

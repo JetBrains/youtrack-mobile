@@ -96,7 +96,7 @@ type State = {
 class AgileBoard extends Component<Props, State> {
   boardHeader: BoardHeader | null | undefined;
   query: string;
-  unsubscribeOnDispatch: (...args: Array<any>) => any;
+  unsubscribeOnDispatch: (...args: any[]) => any;
   uiTheme: UITheme;
   unsubscribeOnDimensionsChange: EventSubscription;
   goOnlineSubscription: EventSubscription;
@@ -404,7 +404,7 @@ class AgileBoard extends Component<Props, State> {
   }
 
   getAgileError(): string | null {
-    const errors: Array<string> = this.props.agile?.status?.errors || [];
+    const errors: string[] = this.props.agile?.status?.errors || [];
     return errors.length > 0 ? errors.join('\n') : null;
   }
 

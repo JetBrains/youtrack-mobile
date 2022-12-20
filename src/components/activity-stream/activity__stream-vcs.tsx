@@ -39,7 +39,7 @@ const StreamVCS = (props: Props) => {
   function renderMessage(
     message: string,
     index: number,
-    arr: Array<string>,
+    arr: string[],
     isError: boolean = false,
   ) {
     return (
@@ -51,7 +51,7 @@ const StreamVCS = (props: Props) => {
     );
   }
 
-  function renderError(message: string, index: number, arr: Array<string>) {
+  function renderError(message: string, index: number, arr: string[]) {
     return renderMessage(message, index, arr, true);
   }
 
@@ -67,10 +67,10 @@ const StreamVCS = (props: Props) => {
     return null;
   }
 
-  const infoMessages: Array<string> = getInfoMessages(vcs).filter(Boolean);
-  const errorMessages: Array<string> = getErrorMessages(vcs).filter(Boolean);
+  const infoMessages: string[] = getInfoMessages(vcs).filter(Boolean);
+  const errorMessages: string[] = getErrorMessages(vcs).filter(Boolean);
   const date: number = vcs.fetched || vcs.date;
-  const processors: Array<VcsProcessor> = getProcessorsUrls(vcs);
+  const processors: VcsProcessor[] = getProcessorsUrls(vcs);
   let title: string = props.activityGroup.merged
     ? ''
     : i18n('committed changes');

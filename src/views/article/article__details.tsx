@@ -33,7 +33,7 @@ type Props = {
   onCreateArticle?: () => any;
   uiTheme: UITheme;
   scrollData: Record<string, any>;
-  onCheckboxUpdate?: (articleContent: string) => (...args: Array<any>) => any;
+  onCheckboxUpdate?: (articleContent: string) => (...args: any[]) => any;
   isSplitView: boolean;
 };
 

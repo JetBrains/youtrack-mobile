@@ -2,11 +2,11 @@ import type {IssueFull, IssueOnList} from './Issue';
 export type Cell = {
   id: string;
   column: AgileColumn;
-  issues: Array<IssueOnList>;
+  issues: IssueOnList[];
 };
 export type Swimlane = Record<string, any> & {
   issue: IssueFull;
-  cells: Array<Cell>;
+  cells: Cell[];
 };
 export type AgileUserProfile = {
   defaultAgile: Partial<Board>;
@@ -26,7 +26,7 @@ export type AgileColumn = {
   id: string;
   collapsed: boolean;
   isVisible: boolean;
-  fieldValues: Array<AgileColumnFieldValue>;
+  fieldValues: AgileColumnFieldValue[];
 };
 export type BoardCell = {
   id: string;
@@ -34,7 +34,7 @@ export type BoardCell = {
   column: {
     id: string;
   };
-  issues: Array<IssueOnList>;
+  issues: IssueOnList[];
 };
 export type AgileBoardRow = {
   $type: string;
@@ -42,7 +42,7 @@ export type AgileBoardRow = {
   name: string;
   collapsed: boolean;
   issue: IssueOnList;
-  cells: Array<BoardCell>;
+  cells: BoardCell[];
 };
 export type BoardColumn = {
   id: string;
@@ -71,19 +71,19 @@ type FieldBasedColorCoding = {
   };
 };
 type ProjectBasedColorCoding = FieldBasedColorCoding & {
-  projectColors: Array<ProjectColor>;
+  projectColors: ProjectColor[];
 };
 export type Board = {
   favorite: boolean;
   id: string;
   name: string;
-  columns: Array<BoardColumn>;
+  columns: BoardColumn[];
   orphanRow: AgileBoardRow;
-  trimmedSwimlanes: Array<AgileBoardRow>;
-  sprints: Array<Sprint>;
+  trimmedSwimlanes: AgileBoardRow[];
+  sprints: Sprint[];
   status: {
     valid: boolean;
-    errors?: Array<string>;
+    errors?: string[];
   };
   sprintsSettings: {
     disableSprints: boolean;

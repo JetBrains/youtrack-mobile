@@ -11,8 +11,8 @@ import MarkdownView from '../wiki/markdown-view';
 type Props = {
   show: boolean;
   agreement: EndUserAgreement;
-  onAccept: (...args: Array<any>) => any;
-  onDecline: (...args: Array<any>) => any;
+  onAccept: (...args: any[]) => any;
+  onDecline: (...args: any[]) => any;
 };
 export class UserAgreementView extends Component<Props, void> {
   render(): React.ReactNode {

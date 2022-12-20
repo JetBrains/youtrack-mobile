@@ -104,7 +104,7 @@ function getBackendUrl(
 function isIssueDetailsNotification(
   notification: Record<string, any>,
 ): boolean {
-  const categories: Array<string> = (
+  const categories: string[] = (
     notification?.categories ||
     notification?.data?.categories ||
     notification?.payload?.categories ||
@@ -129,7 +129,7 @@ async function subscribe(
 ): Promise<any> {
   const isAndroid = isAndroidPlatform();
   const api: Api = getApi();
-  const resource: (...args: Array<any>) => any = isAndroid
+  const resource: (...args: any[]) => any = isAndroid
     ? api.subscribeToFCMNotifications
     : api.subscribeToIOSNotifications;
 
@@ -152,7 +152,7 @@ async function subscribe(
 
 async function unsubscribe(deviceToken: string): Promise<any> {
   const api: Api = getApi();
-  const resource: (...args: Array<any>) => any = isAndroidPlatform()
+  const resource: (...args: any[]) => any = isAndroidPlatform()
     ? api.unsubscribeFromFCMNotifications
     : api.unsubscribeFromIOSNotifications;
 

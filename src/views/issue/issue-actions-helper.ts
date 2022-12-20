@@ -231,17 +231,17 @@ export const createDispatchActions = (
     });
   },
   receiveAllAttachments: (
-    attachments: Array<Attachment>,
+    attachments: Attachment[],
   ): {
     type: any;
-    attachments: Array<Attachment>;
+    attachments: Attachment[];
   } => {
     return {
       type: attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS,
       attachments,
     };
   },
-  receiveIssueLinks: (links: Array<IssueOnList>) => {
+  receiveIssueLinks: (links: IssueOnList[]) => {
     return actions.RECEIVE_ISSUE_LINKS({
       links,
     });

@@ -24,14 +24,14 @@ type NoUserReason = {
 };
 export type VcsChange = {
   idExternal?: string;
-  urls: Array<string>;
+  urls: string[];
   files: number | -1;
-  processors: Array<VcsProcessor>;
+  processors: VcsProcessor[];
   author: User;
   noHubUserReason?: NoHubUserReason;
   fetched: number;
   noUserReason: NoUserReason;
-  commands: Array<VcsCommand>;
+  commands: VcsCommand[];
   date: number;
   state: 0 | 1 | 2 | 3;
   userName: string;

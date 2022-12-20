@@ -8,7 +8,7 @@ import type {Article, ArticlesList} from 'types/Article';
 import type {CustomError} from 'types/Error';
 import type {IssueComment} from 'types/CustomFields';
 export type ArticleState = {
-  activityPage: Array<ActivityItem> | null;
+  activityPage: ActivityItem[] | null;
   article: Article;
   articleCommentDraft: IssueComment | null;
   articlesList: ArticlesList;

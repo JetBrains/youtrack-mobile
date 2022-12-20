@@ -58,7 +58,7 @@ const loadCachedArticleList = (): ((
 const getArticlesQuery = (): string | null => getStorageState().articlesQuery;
 
 const createArticleList = (
-  articles: Array<Article>,
+  articles: Article[],
   isExpanded?: boolean,
 ): ArticlesList => treeHelper.createArticleList(articles, isExpanded);
 
@@ -143,7 +143,7 @@ const getArticleList = (reset: boolean = true) => async (
     dispatch(setLoading(true));
   }
 
-  const pinnedProjects: Array<Folder> = await getPinnedNonTemplateProjects(api);
+  const pinnedProjects: Folder[] = await getPinnedNonTemplateProjects(api);
 
   if (pinnedProjects.length === 0) {
     dispatch(setLoading(false));
@@ -154,7 +154,7 @@ const getArticleList = (reset: boolean = true) => async (
       }),
     );
   } else {
-    const sortedProjects: Array<ArticleProject> = helper.createSortedProjects(
+    const sortedProjects: ArticleProject[] = helper.createSortedProjects(
       pinnedProjects,
       getCachedArticleList(),
     );
@@ -245,7 +245,7 @@ const filterArticles = (
     if (error) {
       notifyError(error);
     } else {
-      const projectData: Array<ProjectArticlesData> = helper.createProjectDataFromArticles(
+      const projectData: ProjectArticlesData[] = helper.createProjectDataFromArticles(
         articles,
       );
       const articlesList: ArticlesList = createArticleList(projectData, true);
@@ -339,7 +339,7 @@ const toggleProjectVisibility = (
 
     dispatch(storeArticlesList(updatedArticlesList));
     const updatedProjectData: ArticlesList = articles.reduce(
-      (list: Array<ProjectArticlesData>, it: ProjectArticlesData) =>
+      (list: ProjectArticlesData[], it: ProjectArticlesData) =>
         list.concat(
           it.project.id === listItem.title.id
             ? toggleProjectDataItem(it, isCollapsed)
@@ -385,11 +385,11 @@ const toggleProjectFavorite = (
   return confirmation(i18n('Remove project from favorites?'), i18n('Remove'))
     .then(async () => {
       const api: Api = getApi();
-      const articles: Array<ProjectArticlesData> =
+      const articles: ProjectArticlesData[] =
         getState().articles.articles || [];
-      const prevArticles: Array<ProjectArticlesData> = articles.slice();
+      const prevArticles: ProjectArticlesData[] = articles.slice();
       animation.layoutAnimation();
-      const updatedData: Array<ProjectArticlesData> = helper.removeProjectData(
+      const updatedData: ProjectArticlesData[] = helper.removeProjectData(
         articles,
         item.title,
       );
@@ -403,7 +403,7 @@ const toggleProjectFavorite = (
         update(prevArticles);
         return true;
       } else {
-        const projects: Array<ArticleProject> = await dispatch(cacheProjects());
+        const projects: ArticleProject[] = await dispatch(cacheProjects());
         const hasPinned: boolean = projects.some(
           (it: ArticleProject) => it.pinned,
         );
@@ -418,7 +418,7 @@ const toggleProjectFavorite = (
     })
     .catch(() => {});
 
-  function update(data: Array<ProjectArticlesData> | null) {
+  function update(data: ProjectArticlesData[] | null) {
     const hasData: boolean = data !== null && data?.length > 0;
     dispatch(storeProjectData(hasData ? data : null));
     dispatch(
@@ -432,8 +432,8 @@ const toggleProjectFavorite = (
 };
 
 const updateProjectsFavorites = (
-  pinnedProjects: Array<ArticleProject>,
-  unpinnedProjects: Array<ArticleProject>,
+  pinnedProjects: ArticleProject[],
+  unpinnedProjects: ArticleProject[],
   hasNoFavorites: boolean,
 ): ((
   dispatch: (arg0: any) => any,
@@ -485,10 +485,10 @@ const setNoFavoriteProjects = (): ((
 const showContextActions = (
   actionSheet: ActionSheet,
   canCreateArticle: boolean,
-  onShowMoreProjects: (...args: Array<any>) => any,
+  onShowMoreProjects: (...args: any[]) => any,
   onCreateArticle: () => any,
 ): (() => Promise<void>) => async () => {
-  const actions: Array<ActionSheetOption> = [
+  const actions: ActionSheetOption[] = [
     {
       title: i18n('Manage Favorite Projects'),
       execute: onShowMoreProjects,
@@ -533,7 +533,7 @@ const toggleAllProjects = (
     analyticsId: ANALYTICS_ARTICLES_PAGE,
   });
   const updatedProjectData: ArticlesList = (articles || []).reduce(
-    (list: Array<ProjectArticlesData>, item: ProjectArticlesData) =>
+    (list: ProjectArticlesData[], item: ProjectArticlesData) =>
       list.concat(toggleProjectDataItem(item, true)),
     [],
   );
@@ -583,7 +583,7 @@ export {
 };
 
 async function setArticlesCache(
-  articles: Array<ProjectArticlesData> | null | undefined,
+  articles: ProjectArticlesData[] | null | undefined,
 ) {
   await flushStoragePart({
     articles,
@@ -604,7 +604,7 @@ function storeArticlesList(articlesList: ArticlesList | null) {
 }
 
 function storeProjectData(
-  projectArticlesData: Array<ProjectArticlesData> | null,
+  projectArticlesData: ProjectArticlesData[] | null,
 ) {
   return async (dispatch: (arg0: any) => any) => {
     dispatch(setArticles(projectArticlesData));
@@ -614,7 +614,7 @@ function storeProjectData(
 
 function getProjectDataPromises(
   api: Api,
-  projects: Array<ArticleProject>,
+  projects: ArticleProject[],
 ): Array<Promise<ProjectArticlesData>> {
   return projects.map(async (project: ArticleProject) => {
     if (project.articles.collapsed === true) {

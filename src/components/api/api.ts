@@ -131,7 +131,7 @@ class API extends BaseAPI {
   }
 
   async getCommandSuggestions(
-    issueIds: Array<string>,
+    issueIds: string[],
     query: string,
     caret: number,
   ): Promise<CommandSuggestionResponse> {
@@ -152,7 +152,7 @@ class API extends BaseAPI {
   }
 
   async applyCommand(options: {
-    issueIds: Array<string>;
+    issueIds: string[];
     comment?: string | null | undefined;
     command: string;
   }): Promise<any> {

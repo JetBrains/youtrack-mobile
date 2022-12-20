@@ -345,7 +345,7 @@ function updateStore(state: Record<string, any> | null | undefined = {}) {
 
 function createSprintMock(
   id: string,
-  agileSprints: Array<Sprint> | null | undefined,
+  agileSprints: Sprint[] | null | undefined,
 ) {
   const agileId = `agileId-of-${id}`;
   const sprints =

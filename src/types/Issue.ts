@@ -22,12 +22,12 @@ export type IssueOnList = Partial<IssueFull> & {
     key: string;
     value: Record<string, any>;
   };
-  fields: Array<CustomFieldShort>;
+  fields: CustomFieldShort[];
 };
 export type IssueFull = {
   $type?: string;
-  attachments: Array<Attachment>;
-  comments?: Array<IssueComment>;
+  attachments: Attachment[];
+  comments?: IssueComment[];
   created: number;
   description: string;
   fieldHash?: any;
@@ -35,12 +35,12 @@ export type IssueFull = {
   _fields?: Array<CustomField | CustomFieldText>;
   id: string;
   idReadable: string;
-  links: Array<IssueLink>;
+  links: IssueLink[];
   project: IssueProject;
   reporter: User;
   resolved: boolean;
   summary: string;
-  tags: Array<Tag>;
+  tags: Tag[];
   updated: number;
   updater: User;
   voters: {
@@ -116,8 +116,8 @@ export type CommandSuggestion = {
 export type CommandSuggestionResponse = {
   query: string;
   caret: number;
-  commands: Array<SuggestedCommand>;
-  suggestions: Array<CommandSuggestion>;
+  commands: SuggestedCommand[];
+  suggestions: CommandSuggestion[];
 };
 export type SavedQuery = {
   id: string;

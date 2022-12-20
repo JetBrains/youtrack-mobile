@@ -504,9 +504,9 @@ export const createActivityCommentActions = (
       issueId: string,
       comment: IssueComment,
       reaction: Reaction,
-      activities: Array<ActivityItem>,
+      activities: ActivityItem[],
       onReactionUpdate: (
-        activities: Array<ActivityItem>,
+        activities: ActivityItem[],
         error?: CustomError,
       ) => void,
     ): (
@@ -554,7 +554,7 @@ export const createActivityCommentActions = (
             reaction: existReaction ? reaction : commentReaction,
           });
 
-          const newActivities: Array<Activity> = activities.slice(0);
+          const newActivities: Activity[] = activities.slice(0);
           const targetActivity: Activity | null | undefined =
             newActivities[targetActivityData.index];
 

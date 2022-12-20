@@ -16,7 +16,7 @@ type Props = {
   refreshControl: any;
   horizontalScrollProps: Record<string, any>;
   verticalScrollProps: Record<string, any>;
-  columns: Array<BoardColumn> | null | undefined;
+  columns: BoardColumn[] | null | undefined;
   snap: boolean;
   dragContext: DragContextType;
   boardHeader: React.ReactElement<React.ComponentProps<any>, any>;

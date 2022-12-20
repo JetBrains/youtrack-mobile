@@ -45,7 +45,7 @@ export default class IssueModalDetails extends IssueDetails<
           linksGetter={linksGetter}
           onUnlink={onUnlink}
           onLinkIssue={onLinkIssue}
-          onUpdate={(issues?: Array<IssueLink>) => {
+          onUpdate={(issues?: IssueLink[]) => {
             getIssueLinksTitle(issues);
           }}
           canLink={

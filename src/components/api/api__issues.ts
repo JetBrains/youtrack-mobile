@@ -32,7 +32,7 @@ export default class IssuesAPI extends ApiBase {
     $top: number,
     $skip?: number,
   ): Promise<Array<IssueOnList>> {
-    const issues: Array<IssueOnList> = await this._getIssues(
+    const issues: IssueOnList[] = await this._getIssues(
       encodeURIComponent(query),
       $top,
       $skip,

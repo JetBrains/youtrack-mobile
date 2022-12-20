@@ -93,7 +93,7 @@ export type IssueDetailsProps = {
     description: string,
   ) => void;
   onLongPress: (text: string, title?: string) => void;
-  getIssueLinksTitle: (linkedIssues?: Array<IssueLink>) => any;
+  getIssueLinksTitle: (linkedIssues?: IssueLink[]) => any;
   issuesGetter: (linkTypeName: string, q: string) => any;
   linksGetter: () => any;
   onUnlink: (linkedIssue: IssueOnList, linkTypeId: string) => any;
@@ -154,7 +154,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
                 linksGetter={this.props.linksGetter}
                 onUnlink={this.props.onUnlink}
                 onLinkIssue={this.props.onLinkIssue}
-                onUpdate={(issues?: Array<IssueLink>) => {
+                onUpdate={(issues?: IssueLink[]) => {
                   getIssueLinksTitle(issues);
                 }}
                 canLink={
@@ -178,7 +178,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   };
 
-  renderAttachments(attachments: Array<Attachment> | null): React.ReactNode {
+  renderAttachments(attachments: Attachment[] | null): React.ReactNode {
     if (!attachments || !attachments.length) {
       return null;
     }
@@ -323,7 +323,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
 
     const ytWikiProps: {
       youtrackWiki: YouTrackWiki;
-      attachments: Array<Attachment>;
+      attachments: Attachment[];
     } = {
       youtrackWiki: {
         style: styles.description,

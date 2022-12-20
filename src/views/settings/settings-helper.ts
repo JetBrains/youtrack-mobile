@@ -20,7 +20,7 @@ export type FeedbackData = {
   description: string | null | undefined;
 };
 const feedbackTypeMarker: string = '[InAppFeedback]';
-export const feedbackTypeOptions: Array<FeedbackType> = [
+export const feedbackTypeOptions: FeedbackType[] = [
   {
     title: i18n('Problem'),
     marker: feedbackTypeMarker,
@@ -34,7 +34,7 @@ export const feedbackTypeOptions: Array<FeedbackType> = [
     marker: feedbackTypeMarker,
   },
 ];
-export const feedbackLogsOptions: Array<FeedbackLogs> = [
+export const feedbackLogsOptions: FeedbackLogs[] = [
   {
     // eslint-disable-next-line
     title: i18n("Don't send logs"),

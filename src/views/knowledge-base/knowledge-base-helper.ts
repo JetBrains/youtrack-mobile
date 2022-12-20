@@ -8,10 +8,10 @@ import type {
 } from 'types/Article';
 import type {Folder} from 'types/User';
 export const createSortedProjects = (
-  projects: Array<Folder>,
+  projects: Folder[],
   cachedArticleList: ArticlesList,
   expandAll?: boolean,
-): Array<ArticleProject> => {
+): ArticleProject[] => {
   const cachedExpandedProjects: {
     key: string;
     value: ArticleProject;
@@ -50,9 +50,9 @@ export const createSortedProjects = (
   });
 };
 export const replaceProjectData = (
-  articles: Array<ProjectArticlesData>,
+  articles: ProjectArticlesData[],
   projectData: ProjectArticlesData,
-): Array<ProjectArticlesData> => {
+): ProjectArticlesData[] => {
   const index: number = articles.findIndex(
     (it: ProjectArticlesData) => it.project.id === projectData.project.id,
   );
@@ -61,9 +61,9 @@ export const replaceProjectData = (
   return updatedArticles;
 };
 export const removeProjectData = (
-  articles: Array<ProjectArticlesData>,
+  articles: ProjectArticlesData[],
   project: ArticleProject,
-): Array<ProjectArticlesData> => {
+): ProjectArticlesData[] => {
   const index: number = articles.findIndex(
     (it: ProjectArticlesData) => it.project.id === project.id,
   );
@@ -72,8 +72,8 @@ export const removeProjectData = (
   return updatedArticles;
 };
 export const createProjectDataFromArticles = (
-  articles: Array<ProjectArticlesData>,
-): Array<ProjectArticlesData> => {
+  articles: ProjectArticlesData[],
+): ProjectArticlesData[] => {
   const projectDataObj: Record<string, any> = (articles || []).reduce(
     (data: Record<string, any>, article: Article) => {
       if (!data[article.project.id]) {
@@ -89,7 +89,7 @@ export const createProjectDataFromArticles = (
     {},
   );
   return Object.keys(projectDataObj).reduce(
-    (list: Array<ProjectArticlesData>, key: string) =>
+    (list: ProjectArticlesData[], key: string) =>
       list.concat(projectDataObj[key]),
     [],
   );

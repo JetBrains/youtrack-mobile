@@ -22,9 +22,9 @@ export function updateRowCollapsedState(
 }
 
 function updateCellsIssuesIfNeeded(
-  cells: Array<BoardCell>,
+  cells: BoardCell[],
   issueId: string,
-  updateIssues: (arg0: Array<IssueOnList>) => Array<IssueOnList>,
+  updateIssues: (arg0: IssueOnList[]) => Array<IssueOnList>,
 ) {
   const isTargetIssueHere = cells.some(cell =>
     cell.issues.some(issue => issue.id === issueId),
@@ -99,7 +99,7 @@ export function findIssueOnBoard(
     }
   | null
   | undefined {
-  const rows: Array<AgileBoardRow> = [
+  const rows: AgileBoardRow[] = [
     ...board.trimmedSwimlanes,
     board.orphanRow,
   ];
@@ -220,7 +220,7 @@ function reorderCardsInRow(
     cells: updateCellsIssuesIfNeeded(
       row.cells,
       movedId,
-      (issues: Array<IssueOnList>) =>
+      (issues: IssueOnList[]) =>
         reorderCollection(issues, leadingId, movedId),
     ),
   };

@@ -32,7 +32,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
       .map(col => col.id);
   };
   createCommonRowProps: () => {
-    collapsedColumnIds: Array<string>;
+    collapsedColumnIds: string[];
     onCollapseToggle: (row: AgileBoardRow) => void;
     onTapCreateIssue?: (columnId: string, cellId: string) => void;
     onTapIssue: (issue: AnyIssue) => void;

@@ -19,7 +19,7 @@ import type {StorageState} from '../storage/storage';
 import type {UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
 type Props = {
-  otherAccounts: Array<StorageState>;
+  otherAccounts: StorageState[];
   isChangingAccount: boolean | null | undefined;
   onClose: () => any;
   onLogOut: () => any;
@@ -109,7 +109,7 @@ export default class Accounts extends PureComponent<Props, void> {
       uiTheme,
     } = this.props;
     const storageState: StorageState = getStorageState();
-    const accounts: Array<StorageState> = []
+    const accounts: StorageState[] = []
       .concat(storageState)
       .concat(otherAccounts || [])
       .filter(account => !!account.config) // Do not render if account is not ready

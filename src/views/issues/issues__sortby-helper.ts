@@ -8,7 +8,7 @@ import type {IssueFieldSortProperty, SearchSuggestions} from 'types/Sorting';
 const doAssist = async (params: {
   context: Folder | null | undefined;
   query: string;
-  sortProperties?: Array<IssueFieldSortProperty>;
+  sortProperties?: IssueFieldSortProperty[];
 }): Promise<SearchSuggestions | null | undefined> => {
   const api: API = getApi();
   const {context, query = '', sortProperties} = params;

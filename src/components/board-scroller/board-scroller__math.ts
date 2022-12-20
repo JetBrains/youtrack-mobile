@@ -31,15 +31,15 @@ export function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
 export function getColumnsWidthAsArray(
-  columns: Array<BoardColumn> = [],
-): Array<number> {
+  columns: BoardColumn[] = [],
+): number[] {
   const widthData: WidthData = calculateWidthData();
   return columns.map(col =>
     col.collapsed ? AGILE_COLLAPSED_COLUMN_WIDTH : widthData.cardWidth,
   );
 }
 export function getScrollableWidth(
-  columns: Array<BoardColumn> = [],
+  columns: BoardColumn[] = [],
   isSplitView: boolean,
 ): number {
   const widthData: WidthData = calculateWidthData();
@@ -68,7 +68,7 @@ export function getScrollableWidth(
     0,
   );
 }
-export function getSnapPoints(columns: Array<BoardColumn>): Array<number> {
+export function getSnapPoints(columns: BoardColumn[]): number[] {
   const widthData = calculateWidthData();
   return columns
     .map(c => c.collapsed)
@@ -94,8 +94,8 @@ export function getSnapPoints(columns: Array<BoardColumn>): Array<number> {
 }
 export function getClosestSnapPoints(
   x: number,
-  openColumnStarts: Array<number>,
-): Array<number> {
+  openColumnStarts: number[],
+): number[] {
   const prev = openColumnStarts.filter(it => it < x).pop() || 0;
   const next = openColumnStarts.filter(it => it > x).shift();
   return [
@@ -105,7 +105,7 @@ export function getClosestSnapPoints(
 }
 export function getSnapToX(
   scrollEvent: Record<string, any>,
-  columns: Array<BoardColumn>,
+  columns: BoardColumn[],
 ): number {
   const openColumnStarts = getSnapPoints(columns);
   const x = scrollEvent.nativeEvent.contentOffset.x;

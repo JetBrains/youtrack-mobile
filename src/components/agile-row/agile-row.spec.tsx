@@ -125,7 +125,7 @@ describe('<BoardRow/>', () => {
   function doShallow(
     row,
     zoomedIn: boolean = true,
-    collapsedColumnIds: Array<string> | null | undefined = [],
+    collapsedColumnIds: string[] | null | undefined = [],
   ) {
     wrapper = shallow(
       <BoardRow

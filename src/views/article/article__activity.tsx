@@ -27,10 +27,10 @@ type Props = {
   article: Article;
   issuePermissions: IssuePermissions;
   renderRefreshControl: (
-    onRefresh: (...args: Array<any>) => any,
+    onRefresh: (...args: any[]) => any,
   ) => React.ReactElement<React.ComponentProps<any>, any>;
   uiTheme: UITheme;
-  onCheckboxUpdate?: (articleContent: string) => (...args: Array<any>) => any;
+  onCheckboxUpdate?: (articleContent: string) => (...args: any[]) => any;
   highlight?: {
     activityId: string;
     commentId?: string;
@@ -39,11 +39,11 @@ type Props = {
 
 const ArticleActivities = (props: Props) => {
   const {article, uiTheme, renderRefreshControl, issuePermissions} = props;
-  const dispatch: (...args: Array<any>) => any = useDispatch();
+   const dispatch: (...args: any[]) => any = useDispatch();
   const {showActionSheetWithOptions} = useActionSheet();
   const [activities, updateActivityModel] = useState(null);
   const currentUser: User = useSelector(store => store.app.user);
-  const activityPage: Array<Activity> = useSelector(
+  const activityPage: Activity[] = useSelector(
     store => store.article.activityPage,
   );
   const articleCommentDraft: IssueComment | null = useSelector(
@@ -55,11 +55,11 @@ const ArticleActivities = (props: Props) => {
   const configBackendUrl: string = useSelector(
     (appState: AppState) => appState.app.auth?.config?.backendUrl || '',
   );
-  const refreshActivities: (...args: Array<any>) => any = useCallback(
+  const refreshActivities: (...args: any[]) => any = useCallback(
     (reset?: boolean) => dispatch(articleActions.loadActivitiesPage(reset)),
     [dispatch],
   );
-  const loadActivities: (...args: Array<any>) => any = useCallback(
+  const loadActivities: (...args: any[]) => any = useCallback(
     (reset: boolean) => {
       if (article?.idReadable) {
         dispatch(articleActions.loadCachedActivitiesPage());
@@ -69,7 +69,7 @@ const ArticleActivities = (props: Props) => {
     [article?.idReadable, dispatch, refreshActivities],
   );
   const doCreateActivityModel = useCallback(
-    (activitiesPage: Array<Activity>): void => {
+    (activitiesPage: Activity[]): void => {
       updateActivityModel(
         createActivityModel(activitiesPage, isNaturalSortOrder),
       );
@@ -90,7 +90,7 @@ const ArticleActivities = (props: Props) => {
       issuePermissions.articleCanDeleteComment(article, comment);
 
     const onEditComment = (comment: IssueComment): void => {
-      let attachments: Array<Attachment> = comment.attachments || [];
+      let attachments: Attachment[] = comment.attachments || [];
 
       if (comment.attachments && configBackendUrl) {
         attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(
@@ -103,7 +103,7 @@ const ArticleActivities = (props: Props) => {
 
       const onCommentChange: (
         comment: IssueComment,
-      ) => (...args: Array<any>) => any = (comment: IssueComment) =>
+      ) => (...args: any[]) => any = (comment: IssueComment) =>
         dispatch(articleActions.updateArticleComment(comment));
 
       Router.PageModal({
@@ -189,12 +189,12 @@ const ArticleActivities = (props: Props) => {
             comment={articleCommentDraft}
             onCommentChange={(
               comment: IssueComment,
-            ): ((...args: Array<any>) => any) =>
+            ): ((...args: any[]) => any) =>
               dispatch(articleActions.updateArticleCommentDraft(comment))
             }
             onSubmitComment={async (
               comment: IssueComment,
-            ): ((...args: Array<any>) => any) => {
+            ): ((...args: any[]) => any) => {
               updateActivities(comment);
               await dispatch(articleActions.submitArticleCommentDraft(comment));
               refreshActivities(false);

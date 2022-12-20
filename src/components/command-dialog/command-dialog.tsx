@@ -29,7 +29,7 @@ type Props = {
   onApply: (command: string) => any;
   onChange: (command: string, caret: number) => any;
   isApplying: boolean;
-  onCancel: (...args: Array<any>) => any;
+  onCancel: (...args: any[]) => any;
   uiTheme: UITheme;
 };
 type State = {
@@ -38,7 +38,7 @@ type State = {
   caret: number;
 };
 type DefaultProps = {
-  onChange: (...args: Array<any>) => any;
+  onChange: (...args: any[]) => any;
 };
 export default class CommandDialog extends Component<Props, State> {
   static defaultProps: DefaultProps = {

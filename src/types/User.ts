@@ -3,7 +3,7 @@ export type User = {
   $type: string;
   avatarUrl: string | null;
   email?: string;
-  featureFlags?: Array<FeatureFlags>;
+  featureFlags?: FeatureFlags[];
   fullName?: string;
   name?: string;
   guest?: boolean;

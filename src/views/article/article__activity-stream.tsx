@@ -22,8 +22,8 @@ import type {WorkTimeSettings} from 'types/Work';
 import type {YouTrackWiki} from 'types/Wiki';
 type Props = {
   articleId: string;
-  activities: Array<ActivityItem> | null;
-  attachments: Array<Attachment>;
+  activities: ActivityItem[] | null;
+  attachments: Attachment[];
   uiTheme: UITheme;
   user: User;
   commentActions: ActivityStreamCommentActions;
@@ -92,7 +92,7 @@ const ArticleActivityStream = (props: Props) => {
         comment,
         reaction,
         _activities,
-        (updatedActivities: Array<Activity>) =>
+        (updatedActivities: Activity[]) =>
           setActivities(updatedActivities),
       ),
     );

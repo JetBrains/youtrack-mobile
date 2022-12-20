@@ -49,7 +49,7 @@ class DiffMatchWord {
 
   encodeWordsToChars(
     text: string,
-    wordArray: Array<string>,
+    wordArray: string[],
     wordHash: Record<string, any>,
   ): string {
     let chars = '';
@@ -89,7 +89,7 @@ class DiffMatchWord {
   ): {
     chars1: string;
     chars2: string;
-    lineArray: Array<string>;
+    lineArray: string[];
   } {
     // Split two texts into an array of strings. Reduce the texts to a string of
     // hashes where each Unicode character represents one word

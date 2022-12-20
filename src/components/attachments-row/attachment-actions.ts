@@ -29,22 +29,22 @@ const notifySuccessAttachmentDeletion: () => void = () =>
   notify(i18n('Attachment deleted'));
 
 export type AttachmentActions = {
-  toggleAttachFileDialog: (...args: Array<any>) => any;
-  startImageAttaching: (...args: Array<any>) => any;
-  cancelImageAttaching: (...args: Array<any>) => any;
-  doRemoveAttach: (...args: Array<any>) => any;
-  stopImageAttaching: (...args: Array<any>) => any;
-  uploadFile: (...args: Array<any>) => any;
-  uploadFileToComment: (...args: Array<any>) => any;
-  uploadFileToIssueComment: (...args: Array<any>) => any;
-  uploadFileToArticleComment: (...args: Array<any>) => any;
-  removeAttachment: (...args: Array<any>) => any;
-  removeArticleAttachment: (...args: Array<any>) => any;
-  removeAttachmentFromIssueComment: (...args: Array<any>) => any;
-  removeAttachmentFromArticleComment: (...args: Array<any>) => any;
-  showAttachImageDialog: (...args: Array<any>) => any;
-  createAttachActions: (...args: Array<any>) => any;
-  loadIssueAttachments: (...args: Array<any>) => any;
+  toggleAttachFileDialog: (...args: any[]) => any;
+  startImageAttaching: (...args: any[]) => any;
+  cancelImageAttaching: (...args: any[]) => any;
+  doRemoveAttach: (...args: any[]) => any;
+  stopImageAttaching: (...args: any[]) => any;
+  uploadFile: (...args: any[]) => any;
+  uploadFileToComment: (...args: any[]) => any;
+  uploadFileToIssueComment: (...args: any[]) => any;
+  uploadFileToArticleComment: (...args: any[]) => any;
+  removeAttachment: (...args: any[]) => any;
+  removeArticleAttachment: (...args: any[]) => any;
+  removeAttachmentFromIssueComment: (...args: any[]) => any;
+  removeAttachmentFromArticleComment: (...args: any[]) => any;
+  showAttachImageDialog: (...args: any[]) => any;
+  createAttachActions: (...args: any[]) => any;
+  loadIssueAttachments: (...args: any[]) => any;
 };
 export const getAttachmentActions = (prefix: string): AttachmentActions => {
   const types: typeof attachmentActionMap = createAttachmentTypes(prefix);
@@ -81,7 +81,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
       };
     },
     uploadFile: function (
-      files: Array<NormalizedAttachment>,
+      files: NormalizedAttachment[],
       issueId?: string,
     ) {
       return async (
@@ -116,7 +116,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
       };
     },
     uploadFileToIssueComment: function (
-      files: Array<NormalizedAttachment>,
+      files: NormalizedAttachment[],
       comment: Partial<IssueComment>,
     ) {
       return async (
@@ -157,7 +157,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
       };
     },
     uploadFileToArticleComment: function (
-      files: Array<NormalizedAttachment>,
+      files: NormalizedAttachment[],
       comment: Partial<IssueComment>,
     ) {
       return async (
@@ -247,7 +247,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
       };
     },
     removeAttachmentFromComment: function (
-      apiResource: (...args: Array<any>) => any,
+      apiResource: (...args: any[]) => any,
       attachId: string,
     ) {
       return async (
@@ -323,8 +323,8 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
       };
     },
     createAttachActions: function (
-      dispatch: (arg0: (...args: Array<any>) => any) => any,
-    ): Array<ActionSheetAction> {
+      dispatch: (arg0: (...args: any[]) => any) => any,
+    ): ActionSheetAction[] {
       return [
         {
           title: i18n('Choose from library…'),

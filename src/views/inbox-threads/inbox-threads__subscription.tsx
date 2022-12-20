@@ -40,7 +40,7 @@ export default function InboxThreadItemSubscription({
 }: Props): React.ReactElement<React.ComponentProps<typeof View>, typeof View> {
   const [shownMessagesAmount, updateShownMessagesAmount] = useState(3);
   const activityToMessageMap = createMessagesMap(thread.messages);
-  const activities: Array<Activity> = thread.messages.reduce(
+  const activities: Activity[] = thread.messages.reduce(
     (list, it) => list.concat(it.activities),
     [],
   );

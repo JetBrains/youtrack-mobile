@@ -55,10 +55,10 @@ export default class SearchAPI extends ApiBase {
   async getQueryAssistSuggestions(
     query: string,
     caret: number,
-    folders: Array<Folder> | null = null,
+    folders: Folder[] | null = null,
   ): Promise<Array<TransformedSuggestion>> {
     const response: {
-      suggestions: Array<ServersideSuggestion>;
+      suggestions: ServersideSuggestion[];
     } = await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/search/assist?fields=caret,query,suggestions(auxiliaryIcon,caret,className,completionEnd,completionStart,description,group,icon,matchingEnd,matchingStart,option,prefix,suffix)`,
       'POST',
@@ -81,7 +81,7 @@ export default class SearchAPI extends ApiBase {
     });
     const response: {
       suggest: {
-        items: Array<ServersideSuggestionLegacy>;
+        items: ServersideSuggestionLegacy[];
       };
     } = await this.makeAuthorizedRequest(
       `${this.youTrackUrl}/rest/search/underlineAndSuggest?${queryString}`,

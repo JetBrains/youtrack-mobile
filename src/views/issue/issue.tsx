@@ -56,7 +56,7 @@ const isIOS: boolean = isIOSPlatform();
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
   issuePlaceholder: Record<string, any>;
-  uploadIssueAttach: (files: Array<NormalizedAttachment>) => any;
+  uploadIssueAttach: (files: NormalizedAttachment[]) => any;
   loadAttachments: () => any;
   hideAddAttachDialog: () => any;
   createAttachActions: () => any;
@@ -72,7 +72,7 @@ export type IssueProps = IssueState &
 //@ts-expect-error
 export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   static contextTypes: {
-    actionSheet: (...args: Array<any>) => any;
+    actionSheet: (...args: any[]) => any;
   } = {
     actionSheet: Function,
   };
@@ -80,7 +80,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   imageHeaders: RequestHeaders = getApi().auth.getAuthorizationHeaders();
   backendUrl: string = getApi().config.backendUrl;
   renderRefreshControl: (
-    ...args: Array<any>
+    ...args: any[]
   ) => any = this._renderRefreshControl.bind(this);
   goOnlineSubscription: EventSubscription;
 
@@ -446,7 +446,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       <LinkedIssuesAddLink
         onLinkIssue={onLinkIssue}
         issuesGetter={loadIssuesXShort}
-        onUpdate={(issues?: Array<IssueLink>) => {
+        onUpdate={(issues?: IssueLink[]) => {
           getIssueLinksTitle(issues);
         }}
         onHide={onHide}
@@ -541,7 +541,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   }
 
   _renderRefreshControl(
-    onRefresh?: (...args: Array<any>) => any,
+    onRefresh?: (...args: any[]) => any,
     uiTheme: UITheme,
   ) {
     return (
@@ -605,7 +605,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       }
       actions={{
         onAttach: async (
-          files: Array<NormalizedAttachment>,
+          files: NormalizedAttachment[],
           onAttachingFinish: () => any,
         ) => {
           await this.addAttachment(files, onAttachingFinish);
@@ -632,10 +632,10 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     toggleVisibleAddAttachDialog(false);
   };
   addAttachment: (
-    files: Array<NormalizedAttachment>,
+    files: NormalizedAttachment[],
     onAttachingFinish: () => any,
   ) => void = async (
-    files: Array<NormalizedAttachment>,
+    files: NormalizedAttachment[],
     onAttachingFinish: () => any,
   ): any => {
     const {uploadIssueAttach, loadAttachments} = this.props;

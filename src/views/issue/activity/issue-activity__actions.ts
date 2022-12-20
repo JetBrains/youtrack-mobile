@@ -46,9 +46,9 @@ export function receiveActivityAPIAvailability(
   };
 }
 export function receiveActivityPage(
-  activityPage: Array<Activity> | null,
+  activityPage: Activity[] | null,
 ): {
-  activityPage: Array<Activity> | null;
+  activityPage: Activity[] | null;
   type: any;
 } {
   return {
@@ -83,8 +83,8 @@ export const createIssueActivityActions = (
 ): any => {
   const actions = {
     receiveActivityEnabledTypes: function receiveActivityEnabledTypes(): {
-      issueActivityEnabledTypes: Array<ActivityType>;
-      issueActivityTypes: Array<ActivityType>;
+      issueActivityEnabledTypes: ActivityType[];
+      issueActivityTypes: ActivityType[];
       type: any;
     } {
       return {
@@ -141,7 +141,7 @@ export const createIssueActivityActions = (
         try {
           dispatch(loadingActivityPage(true));
           log.info('Loading activities...');
-          const activityPage: Array<Activity> = await api.issue.getActivitiesPage(
+          const activityPage: Activity[] = await api.issue.getActivitiesPage(
             targetIssueId,
             activityCategories,
           );
@@ -163,8 +163,8 @@ export const createIssueActivityActions = (
           return getStorageState().issuesCache || [];
         }
 
-        function updateCache(activityPage: Array<Activity>) {
-          const updatedCache: Array<AnyIssue> = getIssuesCache().map(
+        function updateCache(activityPage: Activity[]) {
+          const updatedCache: AnyIssue[] = getIssuesCache().map(
             (it: AnyIssue) => {
               if (it.id === targetIssueId) {
                 return {...it, activityPage};
@@ -240,7 +240,7 @@ export const createIssueActivityActions = (
     },
     doUpdateWorkItem: function doUpdateWorkItem(
       workItem: WorkItem,
-    ): (...args: Array<any>) => any {
+    ): (...args: any[]) => any {
       return async (
         dispatch: (arg0: any) => any,
         getState: StateGetter,
@@ -359,7 +359,7 @@ export const createIssueActivityActions = (
 
         return users
           .reduce(
-            (list: Array<User>, user: User) =>
+            (list: User[], user: User) =>
               list.some((it: User) => it.ringId === user.ringId)
                 ? list
                 : list.concat(user),

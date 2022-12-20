@@ -61,7 +61,7 @@ const loadArticleFromCache = (
   return async (dispatch: (arg0: any) => any) => {
     const cachedArticleLastVisited: {
       article?: Article;
-      activities?: Array<Activity>;
+      activities?: Activity[];
     } | null = getStorageState().articleLastVisited;
 
     if (
@@ -136,7 +136,7 @@ const loadCachedActivitiesPage = (): ((
   return async (dispatch: (arg0: any) => any) => {
     const cachedArticleLastVisited: {
       article?: Article;
-      activities?: Array<Activity>;
+      activities?: Activity[];
     } | null = getStorageState().articleLastVisited;
 
     if (cachedArticleLastVisited && cachedArticleLastVisited.activities) {
@@ -197,7 +197,7 @@ const showArticleActions = (
   actionSheet: ActionSheet,
   canUpdate: boolean,
   canDelete: boolean,
-  renderBreadCrumbs: (...args: Array<any>) => any,
+  renderBreadCrumbs: (...args: any[]) => any,
   canStar: boolean,
   hasStar: boolean,
   isTablet: boolean,
@@ -558,8 +558,8 @@ const deleteArticleComment = (
     try {
       await new Promise(
         (
-          resolve: (...args: Array<any>) => any,
-          reject: (...args: Array<any>) => any,
+          resolve: (...args: any[]) => any,
+          reject: (...args: any[]) => any,
         ) => {
           Alert.alert(
             'Are you sure you want to delete this comment?',
@@ -619,7 +619,7 @@ const showArticleCommentActions = (
     });
     const url: string = `${api.config.backendUrl}/articles/${article.idReadable}#comment${activityId}`;
     const commentText = comment.text;
-    const options: Array<ActionSheetOption> = [
+    const options: ActionSheetOption[] = [
       {
         title: i18n('Share…'),
         execute: function (): string {
@@ -822,7 +822,7 @@ const createSubArticleDraft = (): ((
 
 const onCheckboxUpdate = (
   articleContent: string,
-): ((...args: Array<any>) => any) => async (
+): ((...args: any[]) => any) => async (
   dispatch: (arg0: any) => any,
   getState: () => AppState,
   getApi: ApiGetter,
@@ -857,8 +857,8 @@ function onReactionSelect(
   articleId: string,
   comment: IssueComment,
   reaction: Reaction,
-  activities: Array<Activity>,
-  onReactionUpdate: (activities: Array<Activity>, error?: CustomError) => void,
+  activities: Activity[],
+  onReactionUpdate: (activities: Activity[], error?: CustomError) => void,
 ): (
   dispatch: (arg0: any) => any,
   getState: () => AppState,
@@ -898,7 +898,7 @@ function onReactionSelect(
           reaction: existReaction ? reaction : commentReaction,
         });
 
-        const newActivities: Array<Activity> = activities.slice(0);
+        const newActivities: Activity[] = activities.slice(0);
         const targetActivity: Activity | null | undefined =
           newActivities[targetActivityData.index];
 

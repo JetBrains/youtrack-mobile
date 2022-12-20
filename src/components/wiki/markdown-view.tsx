@@ -18,7 +18,7 @@ import type {Theme} from 'types/Theme';
 import type {TextStyleProp} from 'types/Internal';
 type Props = {
   textStyle?: TextStyleProp;
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
   children: string;
   mentions?: Mentions;
   onCheckboxUpdate?: (checked: boolean, position: number, md: string) => void;
@@ -37,7 +37,7 @@ function MarkdownView(props: Props) {
   const projects = (getStorageState().projects || []).map(
     (it: Folder) => hasType.project(it) && it,
   );
-  const attaches: Array<Attachment> = apiHelper.convertAttachmentRelativeToAbsURLs(
+  const attaches: Attachment[] = apiHelper.convertAttachmentRelativeToAbsURLs(
     attachments,
     getApi().config.backendUrl,
   );

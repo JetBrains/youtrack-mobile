@@ -8,19 +8,19 @@ deviceLog.init(new InMemoryAdapter(), {
   maxNumberToPersist: 2000,
 });
 export default {
-  log(...params: Array<any>): any {
+  log(...params: any[]): any {
     return deviceLog.log(...params);
   },
 
-  info(...params: Array<any>): any {
+  info(...params: any[]): any {
     return deviceLog.info(...params);
   },
 
-  debug(...params: Array<any>): any {
+  debug(...params: any[]): any {
     return deviceLog.debug(...params);
   },
 
-  warn(...params: Array<any>): any {
+  warn(...params: any[]): any {
     return deviceLog.error(...params);
   },
 

@@ -93,13 +93,13 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
   renderNode: (
     node: any,
     index: number,
-    siblings: Array<any>,
+    siblings: any[],
     parent: any,
     defaultRenderer: (arg0: any, arg1: any) => any,
   ) => (any | Node) | null | undefined = (
     node: Record<string, any>,
     index: number,
-    siblings: Array<any>,
+    siblings: any[],
     parent: Record<string, any>,
     defaultRenderer: (arg0: any, arg1: any) => any,
   ) => {

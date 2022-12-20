@@ -54,7 +54,7 @@ const Feature = (
     version,
     devOnly,
   } = props;
-  const features: Array<string> = useSelector(state => state.app.features);
+  const features: string[] = useSelector(state => state.app.features);
   const isFeatureEnabled: boolean = featureName
     ? features.indexOf(featureName) !== -1
     : true;

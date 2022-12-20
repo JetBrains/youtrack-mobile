@@ -6,7 +6,7 @@ function findIssueField(
   issue: AnyIssue,
   predicate: (field: CustomField) => boolean,
 ): CustomField | null | undefined {
-  const fields: Array<CustomField> = issue.fields || [];
+  const fields: CustomField[] = issue.fields || [];
 
   for (const field of fields) {
     if (predicate(field)) {

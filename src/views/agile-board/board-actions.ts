@@ -93,7 +93,7 @@ function animateLayout() {
 
 function getLastVisitedSprint(
   boardId: string,
-  visitedSprints: Array<Sprint> | null | undefined,
+  visitedSprints: Sprint[] | null | undefined,
 ): Sprint | null | undefined {
   return (visitedSprints || []).find(
     (sprint: Sprint) => sprint.agile?.id === boardId,
@@ -378,7 +378,7 @@ export function loadSprintIssues(
       const allIssuesIds: Array<{
         id: string;
       }> = getSprintAllIssues(sprint);
-      const sprintIssues: Array<IssueFull> = await api.agile.getAgileIssues(
+      const sprintIssues: IssueFull[] = await api.agile.getAgileIssues(
         allIssuesIds,
       );
       const updatedSprint: Sprint = updateSprintIssues(sprint, sprintIssues);
@@ -728,12 +728,12 @@ export function openBoardSelect(): (
         show: true,
         placeholder: i18n('Filter boards by name'),
         dataSource: async () => {
-          const agileBoardsList: Array<BoardOnList> = await api.agile.getAgileBoardsList();
+          const agileBoardsList: BoardOnList[] = await api.agile.getAgileBoardsList();
           const boards = agileBoardsList.sort(sortAlphabetically).reduce(
             (
               list: {
-                favorites: Array<Board>;
-                regular: Array<Board>;
+                favorites: Board[];
+                regular: Board[];
               },
               board: Board,
             ) => {

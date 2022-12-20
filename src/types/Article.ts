@@ -4,8 +4,8 @@ import type {User} from './User';
 import type {Visibility} from './Visibility';
 export type Article = {
   $type: string;
-  attachments: Array<Attachment>;
-  childArticles: Array<Article>;
+  attachments: Attachment[];
+  childArticles: Article[];
   content: string;
   created: number;
   hasStar: boolean;
@@ -27,7 +27,7 @@ export type Article = {
 };
 export type ArticleDraft = Partial<Article>;
 export type ArticleNode = {
-  children: Array<ArticleNode>;
+  children: ArticleNode[];
   data: Article & {
     parentId: string | null;
   };
@@ -46,5 +46,5 @@ export type ArticleProject = Partial<IssueProject> & {
 };
 export type ProjectArticlesData = {
   project: ArticleProject;
-  articles: Array<Article>;
+  articles: Article[];
 };

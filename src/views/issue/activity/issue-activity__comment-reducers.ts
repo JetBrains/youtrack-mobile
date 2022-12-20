@@ -8,8 +8,8 @@ export type State = {
   editingComment: IssueComment | null | undefined;
   isVisibilitySelectShown: boolean;
   suggestionsAreLoading: boolean;
-  tmpIssueComments: Array<IssueComment> | null | undefined;
-  updateUserAppearanceProfile: (...args: Array<any>) => any;
+  tmpIssueComments: IssueComment[] | null | undefined;
+  updateUserAppearanceProfile: (...args: any[]) => any;
 };
 export const initialState: State = {
   commentsLoadingError: null,

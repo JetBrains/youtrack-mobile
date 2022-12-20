@@ -78,10 +78,10 @@ export const activityArticleCategory = {
 };
 export const ActivityCategory: {
   ActivityCategories: {
-    IssueComments: Array<string>;
-    IssueHistory: Array<string>;
-    IssueVcs: Array<string>;
-    TimeTracking: Array<string>;
+    IssueComments: string[];
+    IssueHistory: string[];
+    IssueVcs: string[];
+    TimeTracking: string[];
   };
   CategoryPresentation: {
     IssueComments: string;
@@ -157,7 +157,7 @@ export const isActivityCategory = function (
   };
 } as any;
 export const isActivityCategories = function (
-  categoryIds: Array<string>,
+  categoryIds: string[],
 ): (activity: any) => boolean {
   return function (activity: Record<string, any>) {
     return activity

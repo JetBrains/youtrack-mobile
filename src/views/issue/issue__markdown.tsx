@@ -11,7 +11,7 @@ import type {ScrollData} from 'types/Markdown';
 type Props = {
   youtrackWiki?: YouTrackWiki;
   markdown?: string | null;
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
   onCheckboxUpdate?: (
     checked: boolean,
     position: number,

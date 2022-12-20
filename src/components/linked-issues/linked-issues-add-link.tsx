@@ -64,7 +64,7 @@ const LinkedIssuesAddLink = (props: Props): React.ReactNode => {
   const [isQASelectVisible, updateQASelectVisible] = useState(false);
   const [suggestions, updateSuggestions] = useState([]);
   const loadLinkTypes = useCallback(async (): Promise<Array<IssueLinkType>> => {
-    const linkTypes: Array<IssueLinkType> = await issueCommonLinksActions(
+    const linkTypes: IssueLinkType[] = await issueCommonLinksActions(
       {} as any,
     ).loadIssueLinkTypes();
     return linkTypes.filter((it: IssueLinkType) => !it.readOnly);
@@ -84,14 +84,14 @@ const LinkedIssuesAddLink = (props: Props): React.ReactNode => {
     },
     [currentIssueLinkTypeExtended, props],
   );
-  const getIssueToLink = useCallback((q: string, _issues: Array<IssueOnList>):
+  const getIssueToLink = useCallback((q: string, _issues: IssueOnList[]):
     | IssueOnList
     | null
     | undefined => {
     const issueToLinkIdReadable: string = (q[0] === '#' ? q.slice(1) : q)
       .trim()
       .toLowerCase();
-    const issueIdTokens: Array<string> = issueToLinkIdReadable.split('-');
+    const issueIdTokens: string[] = issueToLinkIdReadable.split('-');
     const isSingleIssueQuery: boolean =
       issueIdTokens.length === 2 &&
       issueIdTokens[1].length > 0 &&
@@ -113,7 +113,7 @@ const LinkedIssuesAddLink = (props: Props): React.ReactNode => {
       if (linkType) {
         updateLoading(true);
 
-        const _issues: Array<IssueOnList> = await props.issuesGetter(
+        const _issues: IssueOnList[] = await props.issuesGetter(
           linkType.getName(),
           q,
         );
@@ -136,8 +136,8 @@ const LinkedIssuesAddLink = (props: Props): React.ReactNode => {
   );
   useEffect(() => {
     updateLoading(true);
-    loadLinkTypes().then((linkTypes: Array<IssueLinkType>) => {
-      const issueLinkTypesExtended: Array<IssueLinkTypeExtended> = createLinkTypes(
+    loadLinkTypes().then((linkTypes: IssueLinkType[]) => {
+      const issueLinkTypesExtended: IssueLinkTypeExtended[] = createLinkTypes(
         linkTypes,
       );
       updateCurrentIssueLinkTypeExtended(issueLinkTypesExtended[0]);
@@ -150,7 +150,7 @@ const LinkedIssuesAddLink = (props: Props): React.ReactNode => {
     q: string,
     caret: number,
   ): Promise<Array<TransformedSuggestion>> => {
-    const _suggestions: Array<TransformedSuggestion> = await getAssistSuggestions(
+    const _suggestions: TransformedSuggestion[] = await getAssistSuggestions(
       getApi(),
       q,
       caret,

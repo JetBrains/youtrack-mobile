@@ -7,7 +7,7 @@ import {THEME_MODE_KEY} from '../storage/storage';
 import type {UITheme} from 'types/Theme';
 export const DEFAULT_THEME: UITheme = lightTheme;
 export const getSystemThemeMode = (): any => Appearance.getColorScheme();
-export const themes: Array<UITheme> = [lightTheme, darkTheme];
+export const themes: UITheme[] = [lightTheme, darkTheme];
 export const getUITheme = (mode: string): UITheme => {
   const theme: UITheme | null | undefined = themes.reduce(
     (theme: UITheme | null | undefined, it: UITheme) =>

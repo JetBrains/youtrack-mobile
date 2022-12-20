@@ -45,7 +45,7 @@ function Thread({
   const dispatch = useDispatch();
   const [_thread, updateThread]: [
     InboxThread,
-    (...args: Array<any>) => any,
+    (...args: any[]) => any,
   ] = useState(thread);
   useEffect(() => {
     updateThread(thread);

@@ -25,7 +25,7 @@ export type OAuthParams = {
   codeVerifier: string;
   idToken: string;
   refreshToken: string;
-  scopes: Array<string>;
+  scopes: string[];
   tokenAdditionalParameters: Record<string, any>;
   tokenType: string;
 };

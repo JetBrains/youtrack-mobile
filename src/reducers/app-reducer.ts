@@ -17,9 +17,9 @@ export type RootState = {
   showDebugView: boolean;
   showUserAgreement: boolean;
   endUserAgreement: EndUserAgreement | null | undefined;
-  otherAccounts: Array<StorageState> | null | undefined;
+  otherAccounts: StorageState[] | null | undefined;
   isChangingAccount: boolean;
-  features: Array<string>;
+  features: string[];
   workTimeSettings: WorkTimeSettings | {};
   user: User | null;
   issuePermissions: IssuePermissions;
@@ -119,7 +119,7 @@ export default createReducer(initialState, {
   [types.RECEIVE_OTHER_ACCOUNTS](
     state: RootState,
     action: {
-      otherAccounts: Array<StorageState>;
+      otherAccounts: StorageState[];
     },
   ) {
     return {...state, otherAccounts: action.otherAccounts};
@@ -128,7 +128,7 @@ export default createReducer(initialState, {
   [types.BEGIN_ACCOUNT_CHANGE](
     state: RootState,
     action: {
-      otherAccounts: Array<StorageState>;
+      otherAccounts: StorageState[];
     },
   ) {
     return {...state, isChangingAccount: true};
@@ -137,7 +137,7 @@ export default createReducer(initialState, {
   [types.END_ACCOUNT_CHANGE](
     state: RootState,
     action: {
-      otherAccounts: Array<StorageState>;
+      otherAccounts: StorageState[];
     },
   ) {
     return {...state, isChangingAccount: false};

@@ -152,7 +152,7 @@ const slice: typeof Slice = createSlice({
       state: CreateIssueState,
       action: {
         payload: {
-          links: Array<IssueLink>;
+          links: IssueLink[];
         };
       },
     ) => {
@@ -239,7 +239,7 @@ function createAttachmentReducers() {
     [attachmentTypes.ATTACH_RECEIVE_ALL_ATTACHMENTS](
       state: CreateIssueState,
       action: {
-        attachments: Array<Attachment>;
+        attachments: Attachment[];
       },
     ): CreateIssueState {
       return {

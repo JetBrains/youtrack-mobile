@@ -10,8 +10,8 @@ import type {MarkdownASTNode} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
 export type Mentions = {
-  articles: Array<Article>;
-  issues: Array<IssueFull>;
+  articles: Article[];
+  issues: IssueFull[];
 };
 type TextData = {
   text: string;
@@ -30,8 +30,8 @@ export default function renderArticleMentions(
   textStyle: TextStyleProp,
 ) {
   const PLAIN_TEXT_TYPE: string = '-=TEXT=-';
-  const textData: Array<TextData> = [];
-  const tokens: Array<string> = node.content.split(' ');
+  const textData: TextData[] = [];
+  const tokens: string[] = node.content.split(' ');
   const combinedMentions: Array<Article | IssueFull> = mentions.articles.concat(
     mentions.issues,
   );
@@ -75,7 +75,7 @@ export default function renderArticleMentions(
 
   if (textData.length > 0) {
     let index: number = -1;
-    let textTokensToJoin: Array<string> = [];
+    let textTokensToJoin: string[] = [];
     const composed: Array<
       React.ReactElement<React.ComponentProps<any>, any>
     > = [];

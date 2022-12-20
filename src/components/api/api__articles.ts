@@ -17,7 +17,7 @@ import type {Article, ArticleDraft} from 'types/Article';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 export default class ArticlesAPI extends ApiBase {
   articleFieldsQuery: string = ApiBase.createFieldsQuery(articleFields);
-  categories: Array<string> = Object.keys(activityArticleCategory).map(
+  categories: string[] = Object.keys(activityArticleCategory).map(
     (key: string) => activityArticleCategory[key],
   );
   commentFields: string = issueFields.issueComment.toString();
@@ -25,7 +25,7 @@ export default class ArticlesAPI extends ApiBase {
     this.commentFields,
   );
 
-  convertAttachmentsURL(attachments: Array<Attachment>): Array<Attachment> {
+  convertAttachmentsURL(attachments: Attachment[]): Attachment[] {
     return ApiHelper.convertAttachmentRelativeToAbsURLs(
       attachments,
       this.config.backendUrl,
@@ -110,7 +110,7 @@ export default class ArticlesAPI extends ApiBase {
       $top: 100,
       reverse: true,
     });
-    const activityPage: Array<ActivityItem> = await this.makeAuthorizedRequest(
+    const activityPage: ActivityItem[] = await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/articles/${articleId}/activitiesPage?${categories}&${queryString}&fields=${issueActivitiesFields}`,
     );
     return ApiHelper.patchAllRelativeAvatarUrls(
@@ -122,7 +122,7 @@ export default class ArticlesAPI extends ApiBase {
   async getArticleDrafts(original?: string): Promise<Array<ArticleDraft>> {
     const originalParam: string = `&original=${original || 'null'}`;
     const url: string = `${this.youTrackApiUrl}/users/me/articleDrafts/?${this.articleFieldsQuery}${originalParam}&$top=1000`;
-    const articleDrafts: Array<ArticleDraft> = await this.makeAuthorizedRequest(
+    const articleDrafts: ArticleDraft[] = await this.makeAuthorizedRequest(
       url,
       'GET',
     );
@@ -346,7 +346,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async getAttachments(articleId: string): Promise<Array<Attachment>> {
     const queryString = ApiBase.createFieldsQuery(ISSUE_ATTACHMENT_FIELDS);
-    const attachments: Array<Attachment> = await this.makeAuthorizedRequest(
+    const attachments: Attachment[] = await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/users/me/articleDrafts/${articleId}/attachments?${queryString}`,
     );
     return this.convertAttachmentsURL(attachments);
@@ -414,7 +414,7 @@ export default class ArticlesAPI extends ApiBase {
       body: formData,
       headers: this.auth.getAuthorizationHeaders(),
     });
-    const addedAttachments: Array<Attachment> = await response.json();
+    const addedAttachments: Attachment[] = await response.json();
     return ApiHelper.convertAttachmentRelativeToAbsURLs(
       addedAttachments,
       this.config.backendUrl,

@@ -11,7 +11,7 @@ import type {ViewStyleProp} from 'types/Internal';
 export type ErrorMessageProps = {
   error?: CustomError;
   errorMessageData?: ErrorMessageData | null;
-  onTryAgain?: (...args: Array<any>) => any;
+  onTryAgain?: (...args: any[]) => any;
   style?: ViewStyleProp;
   testID?: string;
 };

@@ -15,13 +15,13 @@ import type {UITheme} from 'types/Theme';
 import type {YouTrackWiki} from 'types/Wiki';
 type Props = {
   comment: IssueComment;
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
   youtrackWiki?: YouTrackWiki;
   canRestore: boolean;
-  onRestore: (...args: Array<any>) => any;
-  onLongPress: (...args: Array<any>) => any;
+  onRestore: (...args: any[]) => any;
+  onLongPress: (...args: any[]) => any;
   canDeletePermanently: boolean;
-  onDeletePermanently: (...args: Array<any>) => any;
+  onDeletePermanently: (...args: any[]) => any;
   activitiesEnabled?: boolean;
   uiTheme: UITheme;
   onCheckboxUpdate?: (checked: boolean, position: number) => void;

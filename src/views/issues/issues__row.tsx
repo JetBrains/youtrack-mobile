@@ -16,7 +16,7 @@ import type {BundleValue} from 'types/CustomFields';
 import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   issue: AnyIssue;
-  onClick: (...args: Array<any>) => any;
+  onClick: (...args: any[]) => any;
   onTagPress?: (query: string) => any;
   style?: ViewStyleProp;
 };
@@ -42,7 +42,7 @@ export default class IssueRow extends Component<Props, void> {
       return null;
     }
 
-    const values: Array<BundleValue> = [].concat(priorityField.value);
+    const values: BundleValue[] = [].concat(priorityField.value);
     const LAST = values.length - 1;
     return (
       <ColorField

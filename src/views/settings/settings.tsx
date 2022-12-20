@@ -25,10 +25,10 @@ type Props = {
   onAddAccount: () => any;
   onChangeAccount: (account: StorageState) => any;
   openDebugView: () => any;
-  otherAccounts: Array<StorageState>;
+  otherAccounts: StorageState[];
   isChangingAccount: boolean | null | undefined;
   features: Array<Record<string, any>>;
-  setFeatures: (...args: Array<any>) => any;
+  setFeatures: (...args: any[]) => any;
 };
 type State = {
   appearanceSettingsVisible: boolean;
@@ -39,7 +39,7 @@ type State = {
 
 class Settings extends PureComponent<Props, State> {
   CATEGORY_NAME: string = 'Settings';
-  unsubscribeOnDimensionsChange: (...args: Array<any>) => any;
+  unsubscribeOnDimensionsChange: (...args: any[]) => any;
   state = {
     appearanceSettingsVisible: false,
     featuresSettingsVisible: false,
@@ -100,7 +100,7 @@ class Settings extends PureComponent<Props, State> {
           const uiTheme: UITheme = theme.uiTheme;
           const settingItems: Array<{
             title: string;
-            onPress: (...args: Array<any>) => any;
+            onPress: (...args: any[]) => any;
           }> = [
             {
               title: i18n('Appearance'),

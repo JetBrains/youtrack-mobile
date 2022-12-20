@@ -11,7 +11,7 @@ import type {IssueLink, IssueLinkType} from 'types/CustomFields';
 const issueCommonLinksActions = (
   issue: Partial<IssueFull>,
 ): {
-  getIssueLinksTitle: (links?: Array<IssueLink>) => Promise<Array<IssueLink>>;
+  getIssueLinksTitle: (links?: IssueLink[]) => Promise<Array<IssueLink>>;
   loadIssueLinksTitle: () => Promise<Array<IssueLink>>;
   loadIssuesXShort: (query: string, page?: number) => Promise<IssueOnList>;
   loadLinkedIssues: () => Promise<Array<IssueLink>>;
@@ -61,7 +61,7 @@ const issueCommonLinksActions = (
       return !error;
     },
     loadLinkedIssues: async (): Promise<Array<IssueLink>> => {
-      let issueLinks: Array<IssueLink>;
+      let issueLinks: IssueLink[];
 
       try {
         issueLinks = await api.issue.getIssueLinks(issue.id);
@@ -91,7 +91,7 @@ const issueCommonLinksActions = (
       return !error;
     },
     loadIssueLinksTitle: async function (): Promise<Array<IssueLink>> {
-      let links: Array<IssueLink>;
+      let links: IssueLink[];
 
       try {
         links = await api.issue.getIssueLinksTitle(issue.id);
@@ -105,7 +105,7 @@ const issueCommonLinksActions = (
       return links;
     },
     getIssueLinksTitle: async function (
-      links?: Array<IssueLink>,
+      links?: IssueLink[],
     ): Promise<Array<IssueLink>> {
       return links || (await this.loadIssueLinksTitle());
     },

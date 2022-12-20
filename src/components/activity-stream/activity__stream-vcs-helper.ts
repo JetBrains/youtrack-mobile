@@ -166,7 +166,7 @@ function getCommandsWithError(change: VCSActivity) {
   });
 }
 
-function getUserNotFoundErrors(change: VCSActivity): Array<string> {
+function getUserNotFoundErrors(change: VCSActivity): string[] {
   if (!change.noHubUserReason || !change.noUserReason) {
     return [];
   }
@@ -203,15 +203,15 @@ function vcsChangeStateMessage(code: number): string {
   return message;
 }
 
-const getErrorMessages = (change: VCSActivity): Array<string> => {
-  const errors: Array<string> = [].concat(getUserNotFoundErrors(change));
-  const commandsWithError: Array<string> = getCommandsWithError(change).map(
+const getErrorMessages = (change: VCSActivity): string[] => {
+  const errors: string[] = [].concat(getUserNotFoundErrors(change));
+  const commandsWithError: string[] = getCommandsWithError(change).map(
     (command: VcsCommand) => command.errorText,
   );
   return errors.concat(commandsWithError);
 };
 
-const getInfoMessages = (change: VCSActivity): Array<string> => {
+const getInfoMessages = (change: VCSActivity): string[] => {
   if (typeof change.state !== 'number') {
     return [];
   }
@@ -220,14 +220,14 @@ const getInfoMessages = (change: VCSActivity): Array<string> => {
     COMMAND_APPLIED: i18n('Command was successfully applied.'),
     COMMAND_NOT_APPLIED: i18n('Could not apply specified command.'),
   };
-  const messages: Array<string> = [];
+  const messages: string[] = [];
   const stateMessage: string = vcsChangeStateMessage(change.state);
 
   if (stateMessage) {
     messages.push(stateMessage);
   }
 
-  const commands: Array<VcsCommand> = change?.commands || [];
+  const commands: VcsCommand[] = change?.commands || [];
 
   if (commands[0]) {
     const commandStateMessage = getCommandsWithError(change)[0]
@@ -247,8 +247,8 @@ const getVcsPresentation = (change: VCSActivity): string => {
   }
 };
 
-const getProcessorsUrls = function (change: VCSActivity): Array<VcsProcessor> {
-  const changeUrls: Array<string> = (change && change.urls) || [];
+const getProcessorsUrls = function (change: VCSActivity): VcsProcessor[] {
+  const changeUrls: string[] = (change && change.urls) || [];
   const urlsDistinct: Record<string, boolean> = {};
   return (change?.processors || [])
     .map((processor: VcsProcessor, index: number) => ({

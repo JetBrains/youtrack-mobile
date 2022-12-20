@@ -15,7 +15,7 @@ type Props = {
   isLoading: boolean;
   mentions:
     | {
-        users: Array<User>;
+        users: User[];
       }
     | null
     | undefined;

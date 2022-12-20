@@ -13,7 +13,7 @@ import type {EdgeInsets} from 'react-native-safe-area-context/src/SafeArea.types
 import type {NetInfoState} from '@react-native-community/netinfo';
 export default function Network(): React.ReactNode {
   const toastInstance = useRef(null);
-  const dispatch: (...args: Array<any>) => any = useDispatch();
+  const dispatch: (...args: any[]) => any = useDispatch();
   const prevConnected = useRef(null);
   const insets: EdgeInsets = useSafeAreaInsets();
   const updateNetworkState = useCallback(

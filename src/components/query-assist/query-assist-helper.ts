@@ -11,7 +11,7 @@ type CachedQueries = {
   name: string;
   query: string;
 };
-export function getCachedUserQueries(): Array<CachedQueries> {
+export function getCachedUserQueries(): CachedQueries[] {
   return (getStorageState().lastQueries || []).map(
     (query: string, index: number) => ({
       id: `lastQueries-${index}`,
@@ -27,7 +27,7 @@ export const getAssistSuggestions = async (
 ): Promise<Array<TransformedSuggestion>> => {
   let suggestions: Array<{
     title: string | null;
-    data: Array<TransformedSuggestion>;
+    data: TransformedSuggestion[];
   }> = [
     {
       title: null,
@@ -55,7 +55,7 @@ export const getAssistSuggestions = async (
         data: assistSuggestions,
       },
     ];
-    const cachedUserQueries: Array<CachedQueries> = getCachedUserQueries();
+    const cachedUserQueries: CachedQueries[] = getCachedUserQueries();
 
     if (cachedUserQueries.length) {
       suggestions.push({

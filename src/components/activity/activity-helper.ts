@@ -23,7 +23,7 @@ const activityIconMap = {
   [ActivityCategory.Source.VCS_ITEM]: IconVcs,
 };
 
-const getActivityAllTypes = (): Array<ActivityType> => {
+const getActivityAllTypes = (): ActivityType[] => {
   return Object.keys(ActivityCategory.ActivityCategories).map(key =>
     Object.assign({
       id: key,
@@ -33,10 +33,10 @@ const getActivityAllTypes = (): Array<ActivityType> => {
 };
 
 const getActivityCategories = (
-  categoryTypes: Array<ActivityType> = [],
-): Array<string> => {
+  categoryTypes: ActivityType[] = [],
+): string[] => {
   return categoryTypes.reduce(
-    (list: Array<string>, category: ActivityType) =>
+    (list: string[], category: ActivityType) =>
       list.concat(ActivityCategory.ActivityCategories[category.id]),
     [],
   );
@@ -92,15 +92,15 @@ function createActivityFromComment(comment: IssueComment): Activity {
 }
 
 const convertCommentsToActivityPage = (
-  comments: Array<IssueComment> = [],
-): Array<Activity> => {
+  comments: IssueComment[] = [],
+): Activity[] => {
   return comments.map((comment: IssueComment) =>
     createActivityFromComment(comment),
   );
 };
 
 const findActivityInGroupedActivities = (
-  groupedActivities: Array<Activity>,
+  groupedActivities: Activity[],
   targetId: string,
 ): ActivityPositionData | null => {
   for (let index = 0; index < groupedActivities.length; index++) {
@@ -118,9 +118,9 @@ const findActivityInGroupedActivities = (
 };
 
 const createActivityModel = (
-  activityPage: Array<Activity> | null,
+  activityPage: Activity[] | null,
   naturalCommentsOrder: boolean,
-): Array<ActivityItem> | null => {
+): ActivityItem[] | null => {
   if (!activityPage) {
     return null;
   }

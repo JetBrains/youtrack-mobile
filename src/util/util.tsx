@@ -78,7 +78,7 @@ export const until = (
         if (combine) {
           return [
             null,
-            data.reduce((list: Array<any>, it: any) => list.concat(it)),
+            data.reduce((list: any[], it: any) => list.concat(it)),
           ];
         }
 

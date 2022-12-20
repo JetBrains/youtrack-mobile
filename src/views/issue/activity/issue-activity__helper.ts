@@ -7,10 +7,10 @@ import type {StorageState} from 'components/storage/storage';
 export function isIssueActivitiesAPIEnabled(): any {
   return checkVersion('2018.3');
 }
-export function getIssueActivitiesEnabledTypes(): Array<ActivityType> {
-  let enabledTypes: Array<ActivityType> =
+export function getIssueActivitiesEnabledTypes(): ActivityType[] {
+  let enabledTypes: ActivityType[] =
     getStorageState().issueActivitiesEnabledTypes || [];
-  const activityAllTypes: Array<ActivityType> = getActivityAllTypes();
+  const activityAllTypes: ActivityType[] = getActivityAllTypes();
 
   if (!enabledTypes.length) {
     enabledTypes = activityAllTypes;
@@ -35,7 +35,7 @@ export function getIssueActivitiesEnabledTypes(): Array<ActivityType> {
   return enabledTypes;
 }
 export function saveIssueActivityEnabledTypes(
-  enabledTypes: Array<ActivityType>,
+  enabledTypes: ActivityType[],
 ) {
   enabledTypes &&
     flushStoragePart({
@@ -46,7 +46,7 @@ export async function toggleIssueActivityEnabledType(
   type: ActivityType,
   enable: boolean,
 ): Promise<StorageState> {
-  let enabledTypes: Array<ActivityType> = getIssueActivitiesEnabledTypes();
+  let enabledTypes: ActivityType[] = getIssueActivitiesEnabledTypes();
 
   if (enable) {
     enabledTypes.push(type);

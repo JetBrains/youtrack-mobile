@@ -92,21 +92,21 @@ export type ActivityStreamCommentActions = {
   canRestoreComment?: CommentAction;
   canUpdateComment?: CommentAction;
   isAuthor?: CommentAction;
-  onCopyCommentLink?: (comment: IssueComment) => (...args: Array<any>) => any;
-  onDeleteAttachment?: (attachment: Attachment) => (...args: Array<any>) => any;
-  onDeleteComment?: (comment: IssueComment) => (...args: Array<any>) => any;
+  onCopyCommentLink?: (comment: IssueComment) => (...args: any[]) => any;
+  onDeleteAttachment?: (attachment: Attachment) => (...args: any[]) => any;
+  onDeleteComment?: (comment: IssueComment) => (...args: any[]) => any;
   onDeleteCommentPermanently?: (
     comment: IssueComment,
     activityId?: string,
-  ) => (...args: Array<any>) => any;
+  ) => (...args: any[]) => any;
   onReply?: (comment: IssueComment) => any;
-  onRestoreComment?: (comment: IssueComment) => (...args: Array<any>) => any;
+  onRestoreComment?: (comment: IssueComment) => (...args: any[]) => any;
   onShowCommentActions?: (
     comment: IssueComment,
     activityId: string,
-  ) => (...args: Array<any>) => any;
+  ) => (...args: any[]) => any;
   onStartEditing?: (
     comment: IssueComment,
     backendUrl?: string,
-  ) => (...args: Array<any>) => any;
+  ) => (...args: any[]) => any;
 };

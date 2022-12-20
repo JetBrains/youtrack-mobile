@@ -48,24 +48,24 @@ const isRequiredCustomField = (
 };
 
 const getIssueTextCustomFields = (
-  issueCustomFields: Array<AnyCustomField> = [],
-): Array<CustomFieldText> =>
+  issueCustomFields: AnyCustomField[] = [],
+): CustomFieldText[] =>
   issueCustomFields.filter((field: AnyCustomField) =>
     isTextCustomField(field.projectCustomField),
   );
 
 const getIssueCustomFieldsNotText = (
-  issueCustomFields: Array<AnyCustomField> = [],
-): Array<CustomField> =>
+  issueCustomFields: AnyCustomField[] = [],
+): CustomField[] =>
   issueCustomFields.filter(
     (field: AnyCustomField) => !isTextCustomField(field.projectCustomField),
   );
 
 const updateCustomFieldValue = (
-  fields: Array<AnyCustomField> = [],
+  fields: AnyCustomField[] = [],
   cf: AnyCustomField,
   value: CustomFieldValue,
-): Array<AnyCustomField> => {
+): AnyCustomField[] => {
   const index: number = fields.findIndex((f: AnyCustomField) => f.id === cf.id);
   return index >= 0
     ? [

@@ -1,5 +1,5 @@
 export type ToField = {
-  constructor: (...args: Array<any>) => any;
-  toString: (...args: Array<any>) => any;
-  exclude: (...args: Array<any>) => any;
+  constructor: (...args: any[]) => any;
+  toString: (...args: any[]) => any;
+  exclude: (...args: any[]) => any;
 };

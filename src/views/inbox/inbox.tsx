@@ -148,7 +148,7 @@ class Inbox extends Component<Props, State> {
     }
   };
 
-  renderValues(values: Array<ChangeValue> = [], eventId: string) {
+  renderValues(values: ChangeValue[] = [], eventId: string) {
     return values.map(it => {
       const value = this.getChangeValue(it);
       return (
@@ -205,7 +205,7 @@ class Inbox extends Component<Props, State> {
   }
 
   renderMultiValueCustomFieldChange(event: ChangeEvent) {
-    const combinedChangeValue = (values: Array<ChangeValue> = []) =>
+    const combinedChangeValue = (values: ChangeValue[] = []) =>
       values
         .map(it => {
           it.category = event.category;
@@ -267,7 +267,7 @@ class Inbox extends Component<Props, State> {
   }
 
   renderLinks(event: ChangeEvent) {
-    const issues: Array<ChangeValue> = []
+    const issues: ChangeValue[] = []
       .concat(event.addedValues)
       .concat(event.removedValues);
     return issues.map((issue: ChangeValue, index: number) => {
@@ -399,7 +399,7 @@ class Inbox extends Component<Props, State> {
     }
   }
 
-  renderEvents(events: Array<ChangeEvent> = []) {
+  renderEvents(events: ChangeEvent[] = []) {
     const nodes = events.reduce((list, event) => {
       const item = this.renderEventItem(event);
       item && list.push(item);
@@ -603,7 +603,7 @@ class Inbox extends Component<Props, State> {
       return null;
     }
 
-    const events: Array<ChangeEvent> = (change?.events || []).filter(
+    const events: ChangeEvent[] = (change?.events || []).filter(
       event => !this.isCreateCategory(event),
     );
     const avatarURL: string | null = this.createAvatarUrl(sender);

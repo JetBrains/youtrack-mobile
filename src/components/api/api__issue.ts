@@ -355,7 +355,7 @@ export default class IssueAPI extends ApiBase {
     const queryString = qs.stringify({
       fields: ISSUE_ATTACHMENT_FIELDS.toString(),
     });
-    const attachments: Array<Attachment> = await this.makeAuthorizedRequest(
+    const attachments: Attachment[] = await this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/attachments?${queryString}`,
     );
     return ApiHelper.convertAttachmentRelativeToAbsURLs(
@@ -410,7 +410,7 @@ export default class IssueAPI extends ApiBase {
       body: formData,
       headers: this.auth.getAuthorizationHeaders(),
     });
-    const addedAttachments: Array<Attachment> = await response.json();
+    const addedAttachments: Attachment[] = await response.json();
     return ApiHelper.convertAttachmentRelativeToAbsURLs(
       addedAttachments,
       this.config.backendUrl,
@@ -456,7 +456,7 @@ export default class IssueAPI extends ApiBase {
     issueId: string,
     summary: string,
     description: string,
-    fields?: Array<CustomFieldText>,
+    fields?: CustomFieldText[],
   ): Promise<any> {
     const queryString = qs.stringify(
       {
@@ -571,7 +571,7 @@ export default class IssueAPI extends ApiBase {
   };
 
   async getMentionSuggests(
-    issueIds: Array<string>,
+    issueIds: string[],
     query: string,
   ): Promise<any> {
     const $top = 10;
@@ -599,7 +599,7 @@ export default class IssueAPI extends ApiBase {
 
   async getActivitiesPage(
     issueId: string,
-    sources: Array<string>,
+    sources: string[],
   ): Promise<Array<Activity>> {
     const categoryKey = 'categories=';
     const categories = `${categoryKey}${(sources || []).join(',')}`;
@@ -644,7 +644,7 @@ export default class IssueAPI extends ApiBase {
     return this.removeIssueEntity('attachments', issueId, attachmentId);
   }
 
-  addTags(issueId: string, tags: Array<Tag>): any {
+  addTags(issueId: string, tags: Tag[]): any {
     return this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}?${ApiBase.createFieldsQuery({
         tags: issueFields.ISSUE_TAGS_FIELDS,

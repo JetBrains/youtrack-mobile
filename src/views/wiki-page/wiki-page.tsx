@@ -23,7 +23,7 @@ type Props = {
   title?: string;
   style?: ViewStyleProp;
   onIssueIdTap: () => void;
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
 };
 type DefaultProps = {
   onIssueIdTap: () => void;

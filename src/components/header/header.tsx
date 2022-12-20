@@ -8,7 +8,7 @@ import type {ViewStyleProp} from 'types/Internal';
 import type {Theme} from 'types/Theme';
 export type HeaderProps = {
   onBack?: () => any;
-  onRightButtonClick?: (...args: Array<any>) => any;
+  onRightButtonClick?: (...args: any[]) => any;
   leftButton?:
     | (React.ReactElement<React.ComponentProps<any>, any> | null | undefined)
     | null;
@@ -24,7 +24,7 @@ export type HeaderProps = {
   showShadow?: boolean;
 };
 type DefaultProps = {
-  onRightButtonClick: (...args: Array<any>) => any;
+  onRightButtonClick: (...args: any[]) => any;
   showShadow: boolean;
 };
 export default class Header extends PureComponent<HeaderProps, void> {

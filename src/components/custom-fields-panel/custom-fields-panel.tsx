@@ -32,7 +32,7 @@ type Props = {
   style?: ViewStyleProp;
   issueId: string;
   issueProject: IssueProject;
-  fields: Array<IssueCustomField>;
+  fields: IssueCustomField[];
   hasPermission: {
     canUpdateField?: (field: IssueCustomField) => boolean;
     canCreateIssueToProject: (project: IssueProject) => boolean;
@@ -316,7 +316,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       }`,
     );
     const isMultiValue = projectCustomField.field.fieldType.isMultiValue;
-    let selectedItems: Array<string>;
+    let selectedItems: string[];
 
     if (isMultiValue) {
       selectedItems = (field.value as any) as Array<string>;

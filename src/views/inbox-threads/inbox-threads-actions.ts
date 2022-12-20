@@ -536,7 +536,7 @@ const onReactionSelect = (
   entity: ThreadEntity,
   comment: IssueComment,
   reaction: Reaction,
-  onAfterSelect: (...args: Array<any>) => any,
+  onAfterSelect: (...args: any[]) => any,
 ): ((
   dispatch: (arg0: any) => any,
   getState: StateGetter,

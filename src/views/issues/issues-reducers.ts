@@ -9,7 +9,7 @@ import type {IssueOnList, TransformedSuggestion} from 'types/Issue';
 export type IssuesState = {
   query: string;
   skip: number;
-  queryAssistSuggestions: Array<TransformedSuggestion>;
+  queryAssistSuggestions: TransformedSuggestion[];
   isLoadingMore: boolean;
   isListEndReached: boolean;
   loadingError: Record<string, any> | null | undefined;
@@ -17,7 +17,7 @@ export type IssuesState = {
   isRefreshing: boolean;
   isIssuesContextOpen: boolean;
   issuesCount: number | null;
-  issues: Array<IssueOnList>;
+  issues: IssueOnList[];
   selectProps: Record<string, any>;
   searchContext: Partial<Folder>;
   isSearchContextPinned: boolean;
@@ -99,7 +99,7 @@ export default createReducer(initialState, {
   [types.RECEIVE_ISSUES]: (
     state: IssuesState,
     action: {
-      issues: Array<IssueOnList>;
+      issues: IssueOnList[];
       pageSize: number;
     },
   ) => {
@@ -157,7 +157,7 @@ export default createReducer(initialState, {
       }, {});
     }
 
-    const issues: Array<IssueOnList> = state.issues.map((issue: IssueOnList) =>
+    const issues: IssueOnList[] = state.issues.map((issue: IssueOnList) =>
       issue.id === sourceIssue?.id ? updateIssue(issue) : issue,
     );
     return {...state, issues};

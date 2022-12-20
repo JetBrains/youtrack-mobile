@@ -2,9 +2,9 @@ import {isActivityCategory} from './activity__category';
 import type {Activity} from 'types/Activity';
 const IDLE_TIME = 60 * 1000;
 export const groupActivities = (
-  activities: Array<Activity>,
+  activities: Activity[],
   params: Record<string, any> = {},
-): Array<any> => {
+): any[] => {
   return (activities || []).reduce(
     (groups: Array<Record<string, any>>, activity: Activity, activityIndex) => {
       let group = last(groups);

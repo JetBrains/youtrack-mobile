@@ -29,7 +29,7 @@ type FileSource = {
   mimeType: string;
 };
 type Props = {
-  imageAttachments: Array<Attachment>;
+  imageAttachments: Attachment[];
   current: Attachment;
   imageHeaders: Record<string, any> | null | undefined;
   onRemoveImage?: (index: number) => any;

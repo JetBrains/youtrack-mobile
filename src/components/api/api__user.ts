@@ -7,8 +7,8 @@ import type {Reaction} from 'types/Reaction';
 import type {Folder, User, UserAppearanceProfile} from 'types/User';
 export default class UserAPI extends ApiBase {
   apiUrl: string;
-  SEARCH_CONTEXT_FIELDS: Array<string> = ['id', 'name', 'shortName', 'query'];
-  USER_FOLDERS_FIELDS: Array<string> = [
+  SEARCH_CONTEXT_FIELDS: string[] = ['id', 'name', 'shortName', 'query'];
+  USER_FOLDERS_FIELDS: string[] = [
     'id',
     '$type',
     'shortName',
@@ -63,7 +63,7 @@ export default class UserAPI extends ApiBase {
 
   async getUserFolders(
     folderId: string = '',
-    fields?: Array<string>,
+    fields?: string[],
   ): Promise<Array<Folder>> {
     const queryString = ApiBase.createFieldsQuery(
       fields || this.USER_FOLDERS_FIELDS,
@@ -112,7 +112,7 @@ export default class UserAPI extends ApiBase {
     const response: {
       skip: number;
       total: number;
-      users: Array<User>;
+      users: User[];
     } = await this.makeAuthorizedRequest(
       `${
         this.config.auth.serverUri

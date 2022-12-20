@@ -13,7 +13,7 @@ const isAndroid: boolean = isAndroidPlatform();
 type RenderImageOptions = {
   node: Record<string, any>;
   index: number;
-  attachments: Array<Attachment>;
+  attachments: Attachment[];
   imageHeaders: Record<string, any> | null | undefined;
   onImagePress: (arg0: string) => any;
 };
@@ -35,7 +35,7 @@ function getUrlParams(url: string): Record<string, any> {
 
 function findTargetAttach(
   src: string = '',
-  attachments: Array<Attachment> = [],
+  attachments: Attachment[] = [],
 ): Attachment | null | undefined {
   let attachId: string | null | undefined;
   let targetAttach: Attachment | null | undefined = null;
@@ -100,7 +100,7 @@ export function renderImage({
 export function renderTableRow(
   node: Record<string, any>,
   index: number,
-  defaultRenderer: (...args: Array<any>) => any,
+  defaultRenderer: (...args: any[]) => any,
 ): React.ReactNode {
   const isBold = node.parent.name === 'thead';
   return (
@@ -122,7 +122,7 @@ export function renderTableRow(
 export function renderTableCell(
   node: Record<string, any>,
   index: number,
-  defaultRenderer: (...args: Array<any>) => any,
+  defaultRenderer: (...args: any[]) => any,
 ): React.ReactNode {
   return (
     <Text
@@ -142,7 +142,7 @@ export function renderTableCell(
 export function renderTable(
   node: Record<string, any>,
   index: number,
-  defaultRenderer: (...args: Array<any>) => any,
+  defaultRenderer: (...args: any[]) => any,
 ): React.ReactNode {
   return (
     <Text

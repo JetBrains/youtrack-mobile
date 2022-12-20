@@ -14,7 +14,7 @@ import type {ViewStyleProp} from 'types/Internal';
 type ZoneInfoData = {
   columnId: string;
   cellId: string;
-  issueIds: Array<string>;
+  issueIds: string[];
   columnsLength: number;
 };
 export type ZoneInfo = {

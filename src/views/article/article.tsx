@@ -49,7 +49,7 @@ import type {Visibility} from 'types/Visibility';
 type Props = ArticleState & {
   articlePlaceholder: ArticleEntity;
   storePrevArticle?: boolean;
-  updateArticlesList: () => (...args: Array<any>) => any;
+  updateArticlesList: () => (...args: any[]) => any;
   lastVisitedArticle: Article | null | undefined;
   commentId?: string;
 } & typeof articleActions;
@@ -63,7 +63,7 @@ class Article extends IssueTabbed<Props, State> {
   };
   props: Props;
   uiTheme: UITheme;
-  unsubscribe: (...args: Array<any>) => any;
+  unsubscribe: (...args: any[]) => any;
   articleDetailsList: Record<string, any>;
   goOnlineSubscription: EventSubscription;
   componentWillUnmount = () => {
@@ -155,7 +155,7 @@ class Article extends IssueTabbed<Props, State> {
     return <ErrorMessage error={error} />;
   };
   renderRefreshControl = (
-    onRefresh: (...args: Array<any>) => any = this.refresh,
+    onRefresh: (...args: any[]) => any = this.refresh,
   ) => {
     return (
       <RefreshControl
@@ -329,7 +329,7 @@ class Article extends IssueTabbed<Props, State> {
 
     const articleData: ArticleEntity = article || articlePlaceholder;
     const scrollData: {
-      loadMore: (...args: Array<any>) => any;
+      loadMore: (...args: any[]) => any;
     } = {
       loadMore: () => null,
     };

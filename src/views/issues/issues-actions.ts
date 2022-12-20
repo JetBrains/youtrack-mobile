@@ -144,9 +144,9 @@ export function stopMoreIssuesLoading(): {
   };
 }
 export function receiveIssues(
-  issues: Array<AnyIssue>,
+  issues: AnyIssue[],
 ): {
-  issues: Array<AnyIssue>;
+  issues: AnyIssue[];
   pageSize: number;
   type: any;
 } {
@@ -275,7 +275,7 @@ export function openContextSelect(): (
       show: true,
       placeholder: i18n('Filter projects, saved searches, and tags'),
       dataSource: async () => {
-        let folders: Array<Folder> = [];
+        let folders: Folder[] = [];
 
         try {
           folders = await api.user.getUserFolders();
@@ -320,10 +320,10 @@ export function closeSelect(): (dispatch: (arg0: any) => any) => void {
     });
   };
 }
-export function cacheIssues(issues: Array<AnyIssue>): () => void {
+export function cacheIssues(issues: AnyIssue[]): () => void {
   return () => {
-    let updatedCache: Array<AnyIssue> = issues;
-    const cachedIssues: Array<AnyIssue> | null | undefined = getStorageState()
+    let updatedCache: AnyIssue[] = issues;
+    const cachedIssues: AnyIssue[] | null | undefined = getStorageState()
       .issuesCache;
 
     if (cachedIssues) {
@@ -394,7 +394,7 @@ export function loadIssues(
           dispatch(setIssuesError(error));
         }
       } else {
-        const issues: Array<AnyIssue> = ApiHelper.fillIssuesFieldHash(
+        const issues: AnyIssue[] = ApiHelper.fillIssuesFieldHash(
           listIssues,
         );
         log.info(`${issues?.length} issues loaded`);
@@ -437,7 +437,7 @@ export function isIssueMatchesQuery(
 export function getIssueFromCache(
   issueId: string,
 ): AnyIssue | null | undefined {
-  const cachedIssues: Array<AnyIssue> = getStorageState().issuesCache || [];
+  const cachedIssues: AnyIssue[] = getStorageState().issuesCache || [];
   return cachedIssues.find(
     (it: AnyIssue) => it.id === issueId || it?.idReadable === issueId,
   );
@@ -468,13 +468,13 @@ export function updateIssue(
     dispatch: (arg0: any) => any,
     getState: () => Record<string, any>,
   ) => {
-    const currentIssues: Array<AnyIssue> = getState().issueList.issues;
+    const currentIssues: AnyIssue[] = getState().issueList.issues;
     const issueToUpdate: IssueFull | null = await issueUpdater.loadIssue(
       issueId,
     );
 
     if (issueToUpdate) {
-      const updatedIssues: Array<AnyIssue> = issueUpdater.updateIssueInIssues(
+      const updatedIssues: AnyIssue[] = issueUpdater.updateIssueInIssues(
         issueToUpdate,
         currentIssues,
       );
@@ -533,7 +533,7 @@ export function initializeIssuesList(
     }
 
     await dispatch(setSearchContext(getSearchContext()));
-    const cachedIssues: Array<AnyIssue> | null = getStorageState().issuesCache;
+    const cachedIssues: AnyIssue[] | null = getStorageState().issuesCache;
 
     if (cachedIssues?.length) {
       log.debug(`Loaded ${cachedIssues.length} cached issues`);
@@ -589,7 +589,7 @@ export function loadMoreIssues(): (
 
       try {
         const searchQuery = getSearchQuery(query);
-        let moreIssues: Array<AnyIssue> = (await api.issues.getIssues(
+        let moreIssues: AnyIssue[] = (await api.issues.getIssues(
           searchQuery,
           PAGE_SIZE,
           newSkip,

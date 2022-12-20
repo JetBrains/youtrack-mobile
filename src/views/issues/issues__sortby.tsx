@@ -48,8 +48,8 @@ const IssuesSortBy = (props: Props) => {
   }, [loadSortingProperties, props.context, props.query]);
 
   const getUniqueSortProperties = (
-    sortProperties: Array<IssueFieldSortProperty>,
-  ): Array<IssueFieldSortProperty> => {
+    sortProperties: IssueFieldSortProperty[],
+  ): IssueFieldSortProperty[] => {
     const sortPropertiesIds = {};
     return sortProperties.filter((it: IssueFieldSortProperty) =>
       sortPropertiesIds[it.id] ? false : (sortPropertiesIds[it.id] = true),
@@ -57,7 +57,7 @@ const IssuesSortBy = (props: Props) => {
   };
 
   const createSortButtonTitle = (
-    sortProperties: Array<IssueFieldSortProperty>,
+    sortProperties: IssueFieldSortProperty[],
   ): string => {
     const uniqueSortProperties = getUniqueSortProperties(sortProperties);
     return uniqueSortProperties
@@ -91,7 +91,7 @@ const IssuesSortBy = (props: Props) => {
               <IssuesSortByList
                 context={props.context}
                 onApply={(
-                  sortProperties: Array<IssueFieldSortProperty>,
+                  sortProperties: IssueFieldSortProperty[],
                   query: string,
                 ) => {
                   updateSelectedSortProperties(sortProperties);

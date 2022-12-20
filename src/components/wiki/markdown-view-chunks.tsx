@@ -19,22 +19,22 @@ import type {MarkdownNode} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
 type Props = {
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
   children: string;
   chunkSize?: number;
   maxChunks?: number;
-  mentionedArticles?: Array<Article>;
-  mentionedIssues?: Array<IssueOnList>;
+  mentionedArticles?: Article[];
+  mentionedIssues?: IssueOnList[];
   uiTheme: UITheme;
   scrollData?: Record<string, any>;
-  onCheckboxUpdate?: (markdown: string) => (...args: Array<any>) => any;
+  onCheckboxUpdate?: (markdown: string) => (...args: any[]) => any;
   textStyle?: TextStyleProp;
   isHTML?: boolean;
 };
 const DEFAULT_CHUNK_SIZE: number = 10;
 let chunks: Array<Array<MarkdownNode>> = [];
 let rules: Record<string, any> = {};
-let tokens: Array<MarkdownNode> = [];
+let tokens: MarkdownNode[] = [];
 let md: string | null = null;
 
 const MarkdownViewChunks = (props: Props) => {
@@ -72,10 +72,10 @@ const MarkdownViewChunks = (props: Props) => {
   };
 
   const createRules = (): Record<string, any> => {
-    const projects: Array<Folder> = (getStorageState().projects || []).map(
+    const projects: Folder[] = (getStorageState().projects || []).map(
       (it: Folder) => hasType.project(it) && it,
     );
-    const attaches: Array<Attachment> = apiHelper.convertAttachmentRelativeToAbsURLs(
+    const attaches: Attachment[] = apiHelper.convertAttachmentRelativeToAbsURLs(
       props.attachments || [],
       getApi().config.backendUrl,
     );
@@ -106,7 +106,7 @@ const MarkdownViewChunks = (props: Props) => {
   }, [children, createMarkdown]);
 
   const renderAST = (
-    ast: Array<ASTNode>,
+    ast: ASTNode[],
     key: string,
   ): React.ReactElement<
     React.ComponentProps<typeof MarkdownAST>,
@@ -162,10 +162,10 @@ export default React.memo<Props>(MarkdownViewChunks) as React$AbstractComponent<
 >;
 
 function createChunks(
-  array: Array<ASTNode>,
+  array: ASTNode[],
   size: number = DEFAULT_CHUNK_SIZE,
-): Array<ASTNode> {
-  const chunked_arr: Array<ASTNode> = [];
+): ASTNode[] {
+  const chunked_arr: ASTNode[] = [];
   let index = 0;
 
   while (index < array.length) {

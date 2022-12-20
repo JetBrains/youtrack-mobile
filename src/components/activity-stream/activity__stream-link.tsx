@@ -14,10 +14,10 @@ type LinkedIssue = IssueFull & {
 };
 
 const StreamLink = (props: Props) => {
-  const added: Array<LinkedIssue> = props.activity.added as any;
-  const removed: Array<LinkedIssue> = (props.activity
+  const added: LinkedIssue[] = props.activity.added as any;
+  const removed: LinkedIssue[] = (props.activity
     .removed as any).map((issue: LinkedIssue) => ({...issue, isRemoved: true}));
-  const linkedIssues: Array<LinkedIssue> = [].concat(added).concat(removed);
+  const linkedIssues: LinkedIssue[] = [].concat(added).concat(removed);
   return (
     <>
       <View>

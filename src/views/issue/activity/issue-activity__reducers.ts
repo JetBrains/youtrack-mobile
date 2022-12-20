@@ -107,7 +107,7 @@ export default createReducer(initialState, {
   [types.RECEIVE_ACTIVITY_PAGE]: (
     state: State,
     action: {
-      activityPage: Array<Activity>;
+      activityPage: Activity[];
     },
   ): State => {
     const {activityPage} = action;

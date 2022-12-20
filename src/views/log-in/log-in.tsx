@@ -36,7 +36,7 @@ import type {Theme, UIThemeColors} from 'types/Theme';
 type Props = {
   config: AppConfig;
   onLogIn: (authParams: OAuthParams2) => any;
-  onShowDebugView: (...args: Array<any>) => any;
+  onShowDebugView: (...args: any[]) => any;
   onChangeServerUrl: (currentUrl: string) => any;
   errorMessage?: string;
   error?: CustomError;

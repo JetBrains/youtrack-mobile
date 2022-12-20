@@ -3,7 +3,7 @@ import type {IssueOnList} from 'types/Issue';
 export type LinksMap = Record<string, IssueLink>;
 export type LinksListData = {
   title: string;
-  data: Array<IssueOnList>;
+  data: IssueOnList[];
   linkTypeId: string;
   unresolvedIssuesSize: number;
 };
@@ -20,7 +20,7 @@ const getLinkTitle = (link: IssueLink): string => {
   return linkType.localizedTargetToSource || linkType.targetToSource;
 };
 
-const getLinkedIssuesMap = (links: Array<IssueLink>): LinksMap => {
+const getLinkedIssuesMap = (links: IssueLink[]): LinksMap => {
   return links.reduce((linksMap: LinksMap, link: IssueLink) => {
     if (link.issuesSize > 0) {
       linksMap[getLinkTitle(link)] = link;
@@ -30,7 +30,7 @@ const getLinkedIssuesMap = (links: Array<IssueLink>): LinksMap => {
   }, {} as LinksMap);
 };
 
-const getLinkedIssuesTitle = (links: Array<IssueLink>): string => {
+const getLinkedIssuesTitle = (links: IssueLink[]): string => {
   const linkedIssuesMap: LinksMap = getLinkedIssuesMap(links);
   return Object.keys(linkedIssuesMap)
     .map((key: string) => {
@@ -40,7 +40,7 @@ const getLinkedIssuesTitle = (links: Array<IssueLink>): string => {
     .join(', ');
 };
 
-const createLinksList = (links: Array<IssueLink>): Array<LinksListData> => {
+const createLinksList = (links: IssueLink[]): LinksListData[] => {
   const linkedIssuesMap: LinksMap = getLinkedIssuesMap(links);
   return Object.keys(linkedIssuesMap).map((title: string) => {
     const it: IssueLink = linkedIssuesMap[title];
@@ -89,10 +89,10 @@ export type IssueLinkTypeExtended = {
 };
 
 const createLinkTypes = (
-  linkTypes: Array<IssueLinkType>,
-): Array<IssueLinkTypeExtended> => {
+  linkTypes: IssueLinkType[],
+): IssueLinkTypeExtended[] => {
   return linkTypes.reduce(
-    (directions: Array<IssueLinkTypeExtended>, linkType: IssueLinkType) => {
+    (directions: IssueLinkTypeExtended[], linkType: IssueLinkType) => {
       directions.push(createIssueLink(linkType, true));
 
       if (linkType.directed) {

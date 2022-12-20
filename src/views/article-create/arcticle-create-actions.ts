@@ -135,7 +135,7 @@ const hideAddAttachDialog = (): ((
 };
 
 const uploadFile = (
-  attachments: Array<Attachment>,
+  attachments: Attachment[],
 ): ((
   dispatch: (arg0: any) => any,
   getState: () => AppState,

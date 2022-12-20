@@ -4,7 +4,7 @@ export type WorkTimeSettings =
       id: string;
       daysAWeek: number;
       minutesADay: number;
-      workDays: Array<number>;
+      workDays: number[];
     }
   | {};
 export type WorkItemType = {

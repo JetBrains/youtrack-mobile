@@ -20,7 +20,7 @@ type Props = {
 };
 
 const ArticleActivityStreamCommentEdit = (props: Props) => {
-  const dispatch: (...args: Array<any>) => any = useDispatch();
+  const dispatch: (...args: any[]) => any = useDispatch();
   const {article, issuePermissions, onCommentChange = () => {}} = props;
   return (
     <IssueCommentEdit

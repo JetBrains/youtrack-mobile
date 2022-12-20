@@ -29,5 +29,5 @@ export type CustomFilterField = {
 export type SearchSuggestions = {
   $type: 'SearchSuggestions';
   query: string;
-  sortProperties: Array<IssueFieldSortProperty>;
+  sortProperties: IssueFieldSortProperty[];
 };

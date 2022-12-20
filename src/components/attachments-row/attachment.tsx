@@ -33,7 +33,7 @@ type Props = {
   userCanRemoveImage?: (attachment: Attachment) => boolean;
   onRemoveImage: (attachment: Attachment) => any;
   attach: Attachment;
-  attachments: Array<Attachment>;
+  attachments: Attachment[];
   attachingImage: Record<string, any> | null | undefined;
   uiTheme: UITheme;
 };

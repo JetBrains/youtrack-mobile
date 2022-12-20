@@ -125,7 +125,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
       placeholderTextColor: uiThemeColors.$icon,
       keyboardAppearance: uiTheme.name,
     };
-    const buttonStyle: Array<ViewStyleProp> = [
+    const buttonStyle: ViewStyleProp[] = [
       styles.feedbackFormInput,
       styles.feedbackFormType,
     ];

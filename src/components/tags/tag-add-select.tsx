@@ -9,8 +9,8 @@ import API from '../api/api';
 import styles from './tags.styles';
 import type {Tag} from 'types/CustomFields';
 type Props = {
-  existed: Array<Tag>;
-  onAdd: (tags: Array<Tag>) => any;
+  existed: Tag[];
+  onAdd: (tags: Tag[]) => any;
   onHide: () => void;
   projectId: string;
 };
@@ -30,7 +30,7 @@ const TagAddSelect = (props: Props) => {
     selectedItems: existed,
     getTitle: (tag: Tag) => getEntityPresentation(tag),
     onCancel: onHide,
-    onSelect: async (tags: Array<Tag> | null | undefined) => {
+    onSelect: async (tags: Tag[] | null | undefined) => {
       await onAdd(tags || []);
       onHide();
     },

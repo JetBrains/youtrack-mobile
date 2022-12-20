@@ -36,7 +36,7 @@ const CLOUD_DOMAINS: string[] = ['myjetbrains.com', 'youtrack.cloud'];
 type Props = {
   serverUrl: string;
   connectToYoutrack: (newServerUrl: string) => Promise<AppConfig>;
-  onShowDebugView: (...args: Array<any>) => any;
+  onShowDebugView: (...args: any[]) => any;
   onCancel: () => any;
 };
 type State = {
@@ -64,7 +64,7 @@ export class EnterServer extends Component<Props, State> {
     log.info('Entering server URL view has been opened');
   }
 
-  getPossibleUrls(enteredUrl: string): Array<string> {
+  getPossibleUrls(enteredUrl: string): string[] {
     const targetURL: string = enteredUrl.toLowerCase();
     const isCloudURL: boolean = CLOUD_DOMAINS.some(
       (it: string) => targetURL.indexOf(`.${it}`) !== -1,

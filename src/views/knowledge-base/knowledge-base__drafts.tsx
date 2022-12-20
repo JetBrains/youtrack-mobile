@@ -44,7 +44,7 @@ const KnowledgeBaseDrafts = (props: Props) => {
   const [isDeleting, updateDeleting] = useState(false);
   const loadDrafts = useCallback(async () => {
     updateLoading(true);
-    const articleDrafts: Array<ArticleDraft> = await dispatch(
+    const articleDrafts: ArticleDraft[] = await dispatch(
       loadArticlesDrafts(),
     );
     updateLoading(false);

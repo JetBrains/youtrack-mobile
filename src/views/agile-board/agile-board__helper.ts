@@ -10,8 +10,8 @@ import type {
 } from 'types/Agile';
 import type {IssueFull, IssueOnList} from 'types/Issue';
 type GroupedSprints = {
-  active: Array<Sprint>;
-  archived: Array<Sprint>;
+  active: Sprint[];
+  archived: Sprint[];
 };
 
 function sprintComparator(sprint1: Sprint, sprint2: Sprint) {
@@ -33,7 +33,7 @@ function sprintComparator(sprint1: Sprint, sprint2: Sprint) {
   }
 }
 
-export function getGroupedSprints(sprints: Array<Sprint>): Array<Sprint> {
+export function getGroupedSprints(sprints: Sprint[]): Sprint[] {
   const groupedSprints: GroupedSprints = sprints.reduce(
     (group, sprint) => {
       group[sprint.archived ? 'archived' : 'active'].push(sprint);
@@ -49,7 +49,7 @@ export function getGroupedSprints(sprints: Array<Sprint>): Array<Sprint> {
     .concat(groupedSprints.archived.sort(sprintComparator));
 }
 export function isAllColumnsCollapsed(
-  columns: Array<BoardColumn> = [],
+  columns: BoardColumn[] = [],
 ): boolean {
   return !columns.some((column: BoardColumn) => !column.collapsed);
 }
@@ -68,7 +68,7 @@ export const getSprintAllIssues = (
   const cellsIssues = orphanCells
     .concat(trimmedSwimlanesCells)
     .reduce(
-      (list: Array<IssueOnList>, cell: Record<string, any>) =>
+      (list: IssueOnList[], cell: Record<string, any>) =>
         list.concat(cell.issues),
       [],
     );
@@ -95,7 +95,7 @@ export function updateSprintIssues(
   const updatedSprint: SprintFull = Object.assign({}, sprint);
   (updatedSprint.board?.orphanRow?.cells || []).forEach(updateCellIssues);
   (updatedSprint.board?.trimmedSwimlanes || []).forEach(
-    (swimlane: Swimlane, index: number, targetArray: Array<Swimlane>) => {
+    (swimlane: Swimlane, index: number, targetArray: Swimlane[]) => {
       if (swimlane.issue && sprintIssuesMap[swimlane.issue.id]) {
         targetArray[index].issue = {
           ...targetArray[index].issue,
@@ -110,7 +110,7 @@ export function updateSprintIssues(
 
   function updateCellIssues(cell: Cell) {
     cell.issues.forEach(
-      (issue: IssueOnList, index: number, targetArray: Array<IssueFull>) => {
+      (issue: IssueOnList, index: number, targetArray: IssueFull[]) => {
         if (sprintIssuesMap[issue.id]) {
           targetArray[index] = {...issue, ...sprintIssuesMap[issue.id]};
         }

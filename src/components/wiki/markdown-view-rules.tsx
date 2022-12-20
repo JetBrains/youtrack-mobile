@@ -33,8 +33,8 @@ import type {MarkdownASTNode} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
 export type Mentions = {
-  articles: Array<Article>;
-  issues: Array<IssueFull>;
+  articles: Article[];
+  issues: IssueFull[];
 };
 const issueIdRegExp: RegExp = /([a-zA-Z]+-)+\d+/g;
 const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
@@ -53,8 +53,8 @@ function getYouTubeId(url: string): string | null | undefined {
 }
 
 function getMarkdownRules(
-  attachments: Array<Attachment> = [],
-  projects: Array<IssueProject> = [],
+  attachments: Attachment[] = [],
+  projects: IssueProject[] = [],
   uiTheme: UITheme,
   mentions?: Mentions,
   onCheckboxUpdate?: (checked: boolean, position: number) => void,
@@ -126,7 +126,7 @@ function getMarkdownRules(
 
   const isNodeContainsCheckbox = (node: MarkdownASTNode): boolean => {
     let hasCheckbox: boolean = false;
-    let nodeChildren: Array<MarkdownASTNode> = node.children || [];
+    let nodeChildren: MarkdownASTNode[] = node.children || [];
 
     while (nodeChildren?.length > 0) {
       hasCheckbox = nodeChildren.some(it => it.type === 'checkbox');

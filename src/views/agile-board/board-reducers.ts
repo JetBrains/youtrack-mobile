@@ -37,7 +37,7 @@ export type AgilePageState = {
         noAgiles: boolean;
       })
     | null;
-  queryAssistSuggestions: Array<ServersideSuggestion>;
+  queryAssistSuggestions: ServersideSuggestion[];
   noMoreSwimlanes?: boolean;
 };
 const initialPageState: AgilePageState = {

@@ -370,7 +370,7 @@ export function updateFieldValue(
   };
 }
 export function uploadIssueAttach(
-  files: Array<NormalizedAttachment>,
+  files: NormalizedAttachment[],
 ): (dispatch: (arg0: any) => any, getState: () => any) => Promise<void> {
   return async (dispatch: (arg0: any) => any, getState: () => AppState) => {
     const draftId: string = getState().creation.issue.id;
@@ -630,7 +630,7 @@ export function loadIssueLinksTitle(): (
   };
 }
 export function getIssueLinksTitle(
-  links?: Array<IssueLink>,
+  links?: IssueLink[],
 ): (
   dispatch: (arg0: any) => any,
   getState: () => AppState,

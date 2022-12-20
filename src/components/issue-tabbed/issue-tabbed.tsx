@@ -10,14 +10,14 @@ import type {TabRoute} from 'types/Issue';
 import type {UITheme, UIThemeColors} from 'types/Theme';
 export type IssueTabbedState = {
   index: number;
-  routes: Array<TabRoute>;
+  routes: TabRoute[];
   isTransitionInProgress: boolean;
   isSplitView: boolean;
   navigateToActivity: boolean;
 };
 export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
   initialWindowDimensions: any = Dimensions.get('window');
-  tabRoutes: Array<TabRoute> = [
+  tabRoutes: TabRoute[] = [
     this.getMainTabText(),
     this.getSecondaryTabText(),
   ].map((name: string) => ({

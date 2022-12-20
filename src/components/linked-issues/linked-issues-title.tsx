@@ -7,7 +7,7 @@ import {getLinkedIssuesTitle} from './linked-issues-helper';
 import styles from './linked-issues.style';
 import type {IssueLink} from 'types/CustomFields';
 type Props = {
-  issueLinks: Array<IssueLink>;
+  issueLinks: IssueLink[];
   onPress: () => any;
 };
 

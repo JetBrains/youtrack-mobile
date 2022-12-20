@@ -26,11 +26,11 @@ export const createArticlesListItem = (
   };
 };
 export const createArticleList = (
-  projectData: Array<ProjectArticlesData>,
+  projectData: ProjectArticlesData[],
   isExpanded?: boolean,
 ): ArticlesList => {
   return projectData.reduce((list: ArticlesList, item: ProjectArticlesData) => {
-    const articles: Array<Article> = item.articles
+    const articles: Article[] = item.articles
       .map((it: Article) => {
         const parentId: string | null =
           isExpanded === true ? null : it?.parentArticle?.id || null;
@@ -81,8 +81,8 @@ export const toggleProject = (
 };
 export const flattenArticleListChildren = (
   nodes: ArticleNodeList,
-): Array<Article> => {
-  let list: Array<Article> = [];
+): Article[] => {
+  let list: Article[] = [];
 
   for (let i = 0; i < (nodes || []).length; i++) {
     const node = nodes[i];
@@ -158,7 +158,7 @@ export const createBreadCrumbs = (
   }
 
   let parentId: string | null = article?.parentArticle?.id;
-  const projectArticles: Array<Article> = flattenArticleListChildren(
+  const projectArticles: Article[] = flattenArticleListChildren(
     getProjectNodeData(projectNode),
   );
 

@@ -32,7 +32,7 @@ export type IssueState = {
   suggestionsAreLoading: boolean;
   summaryCopy: string;
   unloadedIssueState: IssueState | null | undefined;
-  updateUserAppearanceProfile: (...args: Array<any>) => any;
+  updateUserAppearanceProfile: (...args: any[]) => any;
   user: User | null;
 };
 export const initialState: IssueState = {
@@ -75,7 +75,7 @@ export type IssueBaseActions = {
   }) => IssueState;
   RECEIVE_ISSUE_LINKS: (action: {
     payload: {
-      links: Array<IssueLink>;
+      links: IssueLink[];
     };
   }) => IssueState;
   RECEIVE_ISSUE_VISIBILITY: (action: {
@@ -260,7 +260,7 @@ export const createIssueReduxSlice: (
         state: IssueState,
         action: {
           payload: {
-            links: Array<IssueLink>;
+            links: IssueLink[];
           };
         },
       ) => {

@@ -1,7 +1,7 @@
 import ApiHelper from './api__helper';
 import issueFields from './api__issue-fields';
 const toField = ApiHelper.toField;
-const childArticlesFields: Array<string> = ['id', 'idReadable', 'summary'];
+const childArticlesFields: string[] = ['id', 'idReadable', 'summary'];
 export const articleChildrenAndSubChildren: any = toField([
   {
     childArticles: childArticlesFields.concat({

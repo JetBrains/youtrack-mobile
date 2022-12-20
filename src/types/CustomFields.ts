@@ -22,7 +22,7 @@ export type IssueProject = {
     timeTrackingSettings: {
       enabled: boolean;
       timeSpent: TimeTrackingFieldInfo | null | undefined;
-      workItemTypes: Array<WorkItemType>;
+      workItemTypes: WorkItemType[];
     };
   };
   template: boolean;
@@ -81,7 +81,7 @@ export type ProjectCustomField = {
       isMultiValue: boolean;
     };
   };
-  defaultValues: Array<BundleValue>;
+  defaultValues: BundleValue[];
 };
 export type FieldValue = {
   $type: string;
@@ -154,9 +154,9 @@ export type IssueComment = {
   author: User;
   visibility: Visibility | null;
   reactionOrder?: string;
-  reactions?: Array<Reaction>;
+  reactions?: Reaction[];
   issue?: Partial<IssueFull>;
-  attachments?: Array<Attachment>;
+  attachments?: Attachment[];
 };
 export type IssueLinkType = {
   id: string;
@@ -175,7 +175,7 @@ export type IssueLink = {
   id: string;
   direction: string;
   linkType: IssueLinkType;
-  trimmedIssues: Array<IssueOnList>;
+  trimmedIssues: IssueOnList[];
   resolved: boolean;
   issuesSize: number;
   unresolvedIssuesSize: number;

@@ -19,7 +19,7 @@ import type {IssueContextData, IssueFull} from 'types/Issue';
 import type {Reaction} from 'types/Reaction';
 type Props = ActivityStreamProps & {
   issueId: string;
-  actionSheet: (...args: Array<any>) => any;
+  actionSheet: (...args: any[]) => any;
   headerRenderer: () => any;
   refreshControl: () => any;
   highlight?: {
@@ -51,7 +51,7 @@ const IssueActivityStream = (props: Props) => {
       comment,
       reaction,
       props.activities,
-      (activities: Array<Activity>, error: CustomError) => {
+      (activities: Activity[], error: CustomError) => {
         if (!error) {
           setActivities(activities);
         }
@@ -68,7 +68,7 @@ const IssueActivityStream = (props: Props) => {
   const createCommentActions = (): ActivityStreamCommentActions => {
     const issue: IssueFull = issueContext.issue;
     const issuePermissions: IssuePermissions = issueContext.issuePermissions;
-    const dispatch: (...args: Array<any>) => any = issueContext.dispatcher;
+    const dispatch: (...args: any[]) => any = issueContext.dispatcher;
 
     const canUpdateComment = (comment: IssueComment): boolean =>
       issuePermissions.canUpdateComment(issue, comment);
