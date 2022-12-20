@@ -12,12 +12,11 @@ import {confirmation} from '../confirmation/confirmation';
 import {IconClose} from '../icon/icon';
 import {notify} from '../notification/notification';
 import styles from './feature-view.style';
-import type {Node} from 'react';
 type Props = {
   onHide?: (...args: Array<any>) => any;
 };
 
-const FeaturesDebugSettings = (props: Props): Node => {
+const FeaturesDebugSettings = (props: Props): React.ReactNode => {
   const {onHide = () => Router.pop(true)} = props;
 
   const getForceHandsetMode: () => boolean = (): boolean =>

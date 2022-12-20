@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React from 'react';
 import {Text, Image, Dimensions} from 'react-native';
 import {hasMimeType} from '../mime-type/mime-type';
@@ -102,7 +101,7 @@ export function renderTableRow(
   node: Record<string, any>,
   index: number,
   defaultRenderer: (...args: Array<any>) => any,
-): Node {
+): React.ReactNode {
   const isBold = node.parent.name === 'thead';
   return (
     <Text
@@ -124,7 +123,7 @@ export function renderTableCell(
   node: Record<string, any>,
   index: number,
   defaultRenderer: (...args: Array<any>) => any,
-): Node {
+): React.ReactNode {
   return (
     <Text
       numberOfLines={1}
@@ -144,7 +143,7 @@ export function renderTable(
   node: Record<string, any>,
   index: number,
   defaultRenderer: (...args: Array<any>) => any,
-): Node {
+): React.ReactNode {
   return (
     <Text
       key={index}

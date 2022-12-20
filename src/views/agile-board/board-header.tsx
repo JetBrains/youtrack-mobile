@@ -6,7 +6,6 @@ import {isAllColumnsCollapsed} from './agile-board__helper';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from 'components/agile-common/agile-common';
 import {secondaryText} from 'components/common-styles/typography';
 import type {BoardColumn} from 'flow/Agile';
-import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
   style?: ViewStyleProp;
@@ -24,7 +23,7 @@ export default class BoardHeader extends PureComponent<Props, void> {
     this.node.setNativeProps(...args);
   }
 
-  render(): null | Node {
+  render(): React.ReactNode {
     const {columns, onCollapseToggle, style} = this.props;
 
     if (!columns || !columns.length) {

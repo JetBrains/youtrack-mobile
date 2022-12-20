@@ -14,7 +14,6 @@ import styles from './inbox-threads.styles';
 import type {AppState} from '../../reducers';
 import type {CustomError} from 'flow/Error';
 import type {InboxThread, ThreadData, ThreadEntity} from 'flow/Inbox';
-import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {UserCurrent} from 'flow/User';
 type Props = {
@@ -26,7 +25,7 @@ type Props = {
   ) => any;
 };
 
-const InboxThreadsList = ({folderId, onNavigate}: Props): Node => {
+const InboxThreadsList = ({folderId, onNavigate}: Props): React.ReactNode => {
   const theme: Theme = useContext(ThemeContext);
   const dispatch = useDispatch();
   const currentUser: UserCurrent = useSelector(

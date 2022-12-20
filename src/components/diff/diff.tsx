@@ -3,7 +3,6 @@ import {Text, View} from 'react-native';
 import Details from '../details/details';
 import DiffMatchWord from './diff__match-word';
 import styles from './diff.styles';
-import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type DiffInfo = {
   id: string;
@@ -47,7 +46,7 @@ const Diff = (props: Props) => {
     return diffInfo;
   };
 
-  const renderDiff = (): Node => {
+  const renderDiff = (): React.ReactNode => {
     const {text1, text2} = props;
     return (
       <Text style={styles.content} testID="diffText">

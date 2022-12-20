@@ -10,7 +10,6 @@ import {HIT_SLOP} from '../common-styles/button';
 import {i18n} from 'components/i18n/i18n';
 import {IconBack, IconClose} from '../icon/icon';
 import styles from './query-assist.styles';
-import type {Node} from 'react';
 import type {TransformedSuggestion, SavedQuery} from 'flow/Issue';
 const SHOW_LIST_ANIMATION_DURATION = 500;
 type Props = {
@@ -142,7 +141,7 @@ export class QueryAssist extends Component<Props, State> {
     this.props.onClose(this.state.inputValue);
   };
 
-  renderClearIcon(): Node {
+  renderClearIcon(): React.ReactNode {
     return (
       <TouchableOpacity
         onPress={this.resetState}
@@ -265,7 +264,7 @@ export class QueryAssistModal extends QueryAssist<Props, State> {
     return <IconClose size={21} color={styles.link.color} />;
   }
 
-  render(): Node {
+  render(): React.ReactNode {
     return (
       <ModalPortal onHide={this.onClose}>
         {this._renderInput()}

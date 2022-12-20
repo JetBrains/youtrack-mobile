@@ -4,7 +4,6 @@ import Avatar from '../avatar/avatar';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {ytDate} from 'components/date/date';
 import styles from './user-info.styles';
-import type {Node} from 'react';
 import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
@@ -15,7 +14,7 @@ type Props = {
   user: User;
 };
 export default class UserInfo extends PureComponent<Props, void> {
-  render(): Node {
+  render(): React.ReactNode {
     const {user, style, timestamp, avatar, additionalInfo} = this.props;
     const userName: string = getEntityPresentation(user);
     return (

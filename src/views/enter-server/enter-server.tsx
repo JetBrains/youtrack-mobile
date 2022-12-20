@@ -29,7 +29,6 @@ import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables/variables';
 import styles from './enter-server.styles';
 import type {AppConfig} from 'flow/AppConfig';
-import type {Node} from 'react';
 import type {Theme, UIThemeColors} from 'flow/Theme';
 const CATEGORY_NAME: string = 'Choose server';
 const protocolRegExp = /^http(s?):\/\//i;
@@ -142,7 +141,7 @@ export class EnterServer extends Component<Props, State> {
     return url.length > 0 && !url.match(/@/g);
   }
 
-  renderErrorInfoModalContent(): Node {
+  renderErrorInfoModalContent(): React.ReactNode {
     return (
       <React.Fragment>
         {NETWORK_PROBLEM_TIPS.map((tip: string, index: number) => {
@@ -164,7 +163,7 @@ export class EnterServer extends Component<Props, State> {
     });
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     const {onShowDebugView, onCancel} = this.props;
     const {error, connecting, serverUrl, isErrorInfoModalVisible} = this.state;
     const isDisabled = connecting || !this.isValidInput();

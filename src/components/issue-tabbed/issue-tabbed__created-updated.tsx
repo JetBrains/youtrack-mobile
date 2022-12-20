@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React from 'react';
 import {Text, View} from 'react-native';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
@@ -14,7 +13,7 @@ type Props = {
   style?: ViewStyleProp;
 };
 
-const CreateUpdateInfo = (props: Props): Node => {
+const CreateUpdateInfo = (props: Props): React.ReactNode => {
   return (
     <View style={[styles.createUpdateInfoPanel, props.style]}>
       {!!props.reporter && (

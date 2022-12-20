@@ -3,7 +3,6 @@ import {TouchableOpacity} from 'react-native';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconStar, IconStarOutline} from '../icon/icon';
 import styles from './star.styles';
-import type {Node} from 'react';
 type Props = {
   disabled?: boolean;
   canStar: boolean;
@@ -21,7 +20,7 @@ export default class Star extends PureComponent<Props, void> {
     }
   };
 
-  render(): null | Node {
+  render(): React.ReactNode {
     const {hasStar, canStar, style, size = 22, disabled = false} = this.props;
 
     if (!canStar) {

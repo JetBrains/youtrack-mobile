@@ -3,7 +3,6 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconCaretDownUp} from '../icon/icon';
 import styles from './details.styles';
-import type {Node} from 'react';
 import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
   renderer: () => any;
@@ -12,7 +11,7 @@ type Props = {
   toggler?: string | null | undefined;
 };
 
-const Details = (props: Props): Node => {
+const Details = (props: Props): React.ReactNode => {
   const {toggler = 'Details'} = props;
   const [expanded, updateExpanded] = useState(false);
   return (

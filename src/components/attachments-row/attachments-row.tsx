@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React, {PureComponent} from 'react';
 import {ScrollView} from 'react-native';
 import styles from './attachments-row.styles';
@@ -61,7 +60,7 @@ export default class AttachmentsRow extends PureComponent<Props, void> {
     return authorizationHeaders;
   };
 
-  render(): null | Node {
+  render(): React.ReactNode {
     const {
       attachments,
       attachingImage,

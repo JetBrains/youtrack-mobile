@@ -7,7 +7,6 @@ import {i18n} from 'components/i18n/i18n';
 import {UNIT} from '../variables/variables';
 import styles from './user-agreement.styles';
 import type {EndUserAgreement} from 'flow/AppConfig';
-import type {Node} from 'react';
 import MarkdownView from '../wiki/markdown-view';
 type Props = {
   show: boolean;
@@ -16,7 +15,7 @@ type Props = {
   onDecline: (...args: Array<any>) => any;
 };
 export class UserAgreementView extends Component<Props, void> {
-  render(): null | Node {
+  render(): React.ReactNode {
     const {show, agreement, onAccept, onDecline} = this.props;
 
     if (!show || !agreement?.text) {

@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import {Text, View} from 'react-native';
 import React, {PureComponent} from 'react';
 import {IconLock} from '../icon/icon';
@@ -10,7 +9,7 @@ type Props = {
   style?: ViewStyleProp;
 };
 export default class CommentVisibility extends PureComponent<Props, void> {
-  render(): null | Node {
+  render(): React.ReactNode {
     if (this.props.visibility) {
       return (
         <View

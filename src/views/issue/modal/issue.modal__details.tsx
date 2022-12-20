@@ -11,7 +11,6 @@ import stylesModal from './issue.modal.styles';
 import type {AnyIssue, IssueOnList} from 'flow/Issue';
 import type {IssueDetailsProps} from '../issue__details';
 import type {IssueLink} from 'flow/CustomFields';
-import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 type State = {
   modalChildren: any;
@@ -106,7 +105,7 @@ export default class IssueModalDetails extends IssueDetails<
     );
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {

@@ -5,7 +5,6 @@ import TextEditForm from '../form/text-edit-form';
 import {isRequiredCustomField} from './custom-field-helper';
 import styles from './custom-field.styles';
 import type {CustomFieldText} from 'flow/CustomFields';
-import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
   editMode: boolean;
@@ -15,7 +14,7 @@ type Props = {
   usesMarkdown: boolean;
 };
 
-const IssueCustomFieldText = (props: Props): Node => {
+const IssueCustomFieldText = (props: Props): React.ReactNode => {
   const timeout: {
     current: TimeoutID | null | undefined;
   } = useRef(null);

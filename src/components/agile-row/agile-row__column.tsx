@@ -7,7 +7,6 @@ import {isSplitView} from '../responsive/responsive-helper';
 import styles from './agile-row.styles';
 import type {BoardCell} from 'flow/Agile';
 import type {IssueFull} from 'flow/Issue';
-import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
 type ColumnProps = {
   cell: BoardCell;
@@ -18,7 +17,7 @@ type ColumnProps = {
   zoomedIn?: boolean;
   columnsLength: number;
 };
-export default function AgileRowColumn(props: ColumnProps): Node {
+export default function AgileRowColumn(props: ColumnProps): React.ReactNode {
   const {cell, uiTheme, zoomedIn, columnsLength} = props;
   const issues: Array<IssueFull> = cell.issues || [];
   return (

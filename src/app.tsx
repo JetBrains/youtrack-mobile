@@ -30,7 +30,6 @@ import {
 import {Notifications} from 'react-native-notifications';
 import {onNavigateBack, setAccount} from 'actions/app-actions';
 import {rootRoutesList, routeMap} from './app-routes';
-import type {Node} from 'react';
 import type {NotificationRouteData} from 'flow/Notification';
 import type {Ref} from 'react';
 
@@ -221,7 +220,7 @@ class AppContainer extends Component<void, void> {
     }
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     return (
       //$FlowFixMe
       <ActionSheetProvider ref={this.setActionSheetRef} useModal={true}>

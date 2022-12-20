@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React, {PureComponent} from 'react';
 import {Text} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -44,7 +43,7 @@ export default class TextView extends PureComponent<Props, State> {
     return text.substr(0, this.MAX_TO_SHOW);
   }
 
-  render(): Node {
+  render(): React.ReactNode {
     return (
       <Text testID="textMoreContent">
         <Text style={this.props.style}>{`${this._getText()}...`}</Text>

@@ -17,7 +17,6 @@ import {nodeHasType} from './youtrack-wiki__node-type';
 import {showMoreInlineText} from '../text-view/text-view';
 import {TextPropTypes} from 'deprecated-react-native-prop-types';
 import styles, {htmlViewStyles} from './youtrack-wiki.styles';
-import type {Node} from 'React';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from 'flow/Theme';
 HTMLView.propTypes.style = TextPropTypes.style;
@@ -226,7 +225,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
     }
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     const {children, style} = this.props;
     return (
       <HTMLView

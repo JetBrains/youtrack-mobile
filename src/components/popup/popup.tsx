@@ -4,13 +4,12 @@ import {HIT_SLOP} from '../common-styles/button';
 import {i18n} from 'components/i18n/i18n';
 import {View, Text, TouchableOpacity} from 'react-native';
 import styles from './popup.styles';
-import type {Node} from 'react';
 type Props = {
   childrenRenderer: () => any;
   onHide: () => any;
 };
 export default class Popup extends PureComponent<Props, void> {
-  render(): Node {
+  render(): React.ReactNode {
     const {onHide, childrenRenderer} = this.props;
     return (
       <ModalView

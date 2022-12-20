@@ -13,7 +13,6 @@ import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables/variables';
 import styles from './wiki-page.styles';
 import type {Attachment} from 'flow/CustomFields';
-import type {Node} from 'react';
 import type {Theme, UITheme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 const CATEGORY_NAME = 'WikiPage';
@@ -78,7 +77,7 @@ export default class WikiPage extends PureComponent<Props, State> {
     );
   }
 
-  render(): null | Node {
+  render(): React.ReactNode {
     const {wikiText, plainText, style, title} = this.props;
 
     if (!wikiText && !plainText) {

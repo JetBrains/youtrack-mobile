@@ -43,7 +43,6 @@ import type {Activity} from 'flow/Activity';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {IssueComment} from 'flow/CustomFields';
 import type {IssueContextData} from 'flow/Issue';
-import type {Node} from 'react';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
 import type {Theme, UITheme} from 'flow/Theme';
@@ -130,7 +129,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     }
   };
 
-  renderActivitySettings(disabled: boolean, uiTheme: UITheme): Node {
+  renderActivitySettings(disabled: boolean, uiTheme: UITheme): React.ReactNode {
     const {
       issueActivityTypes,
       issueActivityEnabledTypes,
@@ -318,7 +317,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     await submitDraftComment(comment);
   };
 
-  renderEditCommentInput(): Node {
+  renderEditCommentInput(): React.ReactNode {
     const {
       editingComment,
       submitEditedComment,
@@ -360,7 +359,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     );
   }
 
-  renderAddCommentInput(): Node {
+  renderAddCommentInput(): React.ReactNode {
     const {
       editingComment,
       issue,
@@ -424,7 +423,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     }
   };
 
-  renderCommentVisibilitySelect(): Node {
+  renderCommentVisibilitySelect(): React.ReactNode {
     const {selectProps, onCloseSelect} = this.props;
     return (
       <Select
@@ -454,7 +453,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     );
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     const {isVisibilitySelectShown, editingComment} = this.props;
     return (
       <IssueContext.Consumer>

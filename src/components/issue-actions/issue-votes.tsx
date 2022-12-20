@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -20,7 +19,7 @@ export default class IssueVotes extends PureComponent<Props, void> {
     onVoteToggle(!voted);
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     const {voted, votes, canVote, uiTheme} = this.props;
     return (
       <TouchableOpacity

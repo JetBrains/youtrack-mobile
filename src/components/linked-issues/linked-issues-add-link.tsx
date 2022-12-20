@@ -32,7 +32,6 @@ import styles from './linked-issues.style';
 import type {IssueLinkTypeExtended} from './linked-issues-helper';
 import type {IssueLinkType} from 'flow/CustomFields';
 import type {IssueOnList, TransformedSuggestion} from 'flow/Issue';
-import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
@@ -45,7 +44,7 @@ type Props = {
   closeIcon?: any;
 };
 
-const LinkedIssuesAddLink = (props: Props): Node => {
+const LinkedIssuesAddLink = (props: Props): React.ReactNode => {
   // update UI on theme change
   // eslint-disable-next-line no-unused-vars
   const theme: Theme = useContext(ThemeContext);

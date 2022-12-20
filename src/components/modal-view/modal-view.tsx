@@ -5,7 +5,6 @@ import {ThemeContext} from '../theme/theme-context';
 import type {ModalOrientation, ModalAnimationType} from 'flow/ModalView';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {Orientation, AnimationType} from 'flow/ModalView';
-import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 type DefaultProps = {
   onRequestClose: () => any;
@@ -29,7 +28,7 @@ export default class ModalView extends PureComponent<Props, void> {
     animationType: AnimationType.NONE,
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     const {
       visible,
       transparent,

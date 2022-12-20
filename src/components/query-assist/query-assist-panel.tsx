@@ -3,7 +3,6 @@ import {View} from 'react-native';
 import QueryAssist, {QueryAssistModal} from './query-assist';
 import {isSplitView} from '../responsive/responsive-helper';
 import styles from './query-assist.styles';
-import type {Node} from 'react';
 import type {TransformedSuggestion} from '../../flow/Issue';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type SearchPanelProps = {
@@ -41,7 +40,7 @@ export default class QueryAssistPanel extends PureComponent<
     return this.props.onQueryUpdate(query);
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     const {queryAssistSuggestions, query, style, clearButtonMode} = this.props;
     const Component: any = isSplitView() ? QueryAssistModal : QueryAssist;
     return (

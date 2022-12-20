@@ -11,7 +11,6 @@ import type {
   ArticleProject,
   ArticlesList,
 } from 'flow/Article';
-import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
   article: Article;
@@ -36,7 +35,7 @@ type ArticleBreadCrumbsItemProps = {
 };
 export const ArticleBreadCrumbsItem = (
   props: ArticleBreadCrumbsItemProps,
-): Node => {
+): React.ReactNode => {
   const breadcrumbText: string = props.article.name || props.article.summary;
   return (
     <View style={[styles.breadCrumbsItem, props.style]}>

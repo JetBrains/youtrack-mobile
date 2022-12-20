@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -21,7 +20,7 @@ export function renderSelector(params: {
   isDisabled?: boolean;
   showLoader?: boolean;
   uiTheme: UITheme;
-}): Node {
+}): React.ReactNode {
   return (
     <View
       style={[

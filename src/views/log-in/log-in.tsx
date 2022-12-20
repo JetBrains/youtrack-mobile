@@ -32,7 +32,6 @@ import styles from './log-in.styles';
 import type {AppConfig} from 'flow/AppConfig';
 import type {AuthParams, OAuthParams2} from 'flow/Auth';
 import type {CustomError} from 'flow/Error';
-import type {Node} from 'react';
 import type {Theme, UIThemeColors} from 'flow/Theme';
 type Props = {
   config: AppConfig;
@@ -163,7 +162,7 @@ export class LogIn extends Component<Props, State> {
     }
   }
 
-  render(): Node {
+  render(): React.ReactNode {
     const {onShowDebugView, config} = this.props;
     const {password, username, loggingIn, errorMessage} = this.state;
     const isLoginWithCreds: boolean = this.isConfigHasClientSecret();

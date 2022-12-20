@@ -57,7 +57,6 @@ import type {ErrorMessageProps} from 'components/error-message/error-message';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {Folder} from 'flow/User';
 import type {IssuesState} from './issues-reducers';
-import type {Node} from 'react';
 import type {Theme, UIThemeColors} from 'flow/Theme';
 type IssuesActions = typeof issueActions;
 type Props = IssuesState &
@@ -539,7 +538,7 @@ export class Issues extends Component<Props, State> {
     return this.renderError();
   };
 
-  renderIssueList(): Node {
+  renderIssueList(): React.ReactNode {
     const {issues, isRefreshing} = this.props;
     const contextButton = this.renderContextButton();
     const searchQuery = this.renderSearchQuery();
@@ -582,7 +581,7 @@ export class Issues extends Component<Props, State> {
     );
   }
 
-  renderError(): null | Node {
+  renderError(): React.ReactNode {
     const {isRefreshing, loadingError, isInitialized} = this.props;
 
     if (isRefreshing || !isInitialized) {
@@ -662,7 +661,7 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     const {isSplitView} = this.state;
     return (
       <ThemeContext.Consumer>

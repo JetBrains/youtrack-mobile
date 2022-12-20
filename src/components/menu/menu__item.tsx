@@ -2,7 +2,6 @@ import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {HIT_SLOP} from '../common-styles/button';
 import styles from './menu.styles';
-import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
   disabled?: boolean;
@@ -11,7 +10,7 @@ type Props = {
   style?: ViewStyleProp;
   testID?: string;
 };
-export const MenuItem = (props: Props): Node => {
+export const MenuItem = (props: Props): React.ReactNode => {
   const {icon, onPress, style, testID, disabled = false} = props;
   return disabled ? null : (
     <View style={[styles.menuItem, style]}>

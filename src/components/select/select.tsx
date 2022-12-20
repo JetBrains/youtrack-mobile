@@ -19,7 +19,6 @@ import styles, {
   SELECT_ITEM_HEIGHT,
   SELECT_ITEM_SEPARATOR_HEIGHT,
 } from './select.styles';
-import type {Node} from 'react';
 export type SelectProps = {
   dataSource: (query: string) => Promise<Array<Record<string, any>>>;
   onSelect: (item: any) => any;
@@ -85,7 +84,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
     };
   }
 
-  static renderSeparator(): Node {
+  static renderSeparator(): React.ReactNode {
     return <View style={styles.rowSeparator} />;
   }
 
@@ -301,7 +300,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
   getItemKey: (item: any) => any = (item: Record<string, any>) =>
     item.key || item.ringId || item.id;
 
-  renderItems(): Node {
+  renderItems(): React.ReactNode {
     return (
       <FlatList
         testID="test:id/selectItem"
@@ -346,7 +345,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
     ) : null;
   }
 
-  renderContent: () => Node = (): Node => {
+  renderContent: () => Node = (): React.ReactNode => {
     const {
       multi,
       autoFocus,
@@ -433,7 +432,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
     );
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     return this.renderContent();
   }
 }
@@ -470,7 +469,7 @@ export class SelectModal extends Select<
   getWrapperComponent: () => any = (): any => {
     return View;
   };
-  render: () => Node = (): Node => {
+  render: () => Node = (): React.ReactNode => {
     const {visible} = this.state;
     return (
       <ModalPortal

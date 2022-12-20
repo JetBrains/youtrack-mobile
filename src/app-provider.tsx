@@ -22,7 +22,6 @@ import {
 } from 'components/theme/theme';
 import {setNotificationComponent} from 'components/notification/notification';
 import {ThemeContext} from 'components/theme/theme-context';
-import type {Node} from 'React';
 import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 export default class AppProvider extends Component<
@@ -43,7 +42,7 @@ export default class AppProvider extends Component<
     });
   }
 
-  render(): null | Node {
+  render(): React.ReactNode {
     if (!this?.state?.mode) {
       return null;
     }

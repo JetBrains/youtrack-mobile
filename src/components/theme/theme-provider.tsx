@@ -6,7 +6,6 @@ import {flushStoragePart, getStorageState} from '../storage/storage';
 import {isAndroidPlatform} from 'util/util';
 import {ThemeContext} from './theme-context';
 import {buildStyles, getSystemThemeMode, getUITheme, themes} from './theme';
-import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
 type State = {
   mode: string | null | undefined;
@@ -141,7 +140,7 @@ class ManageThemeProvider extends PureComponent<Props, State> {
   }
 }
 
-const ThemeProvider = (props: {children: any; mode: string}): Node => (
+const ThemeProvider = (props: {children: any; mode: string}): React.ReactNode => (
   <ManageThemeProvider mode={props.mode}>{props.children}</ManageThemeProvider>
 );
 

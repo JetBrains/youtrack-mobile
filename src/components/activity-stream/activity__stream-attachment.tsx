@@ -7,13 +7,12 @@ import {getApi} from 'components/api/api__instance';
 import {ThemeContext} from 'components/theme/theme-context';
 import type {Attachment} from 'flow/CustomFields';
 import type {Theme} from 'flow/Theme';
-import type {Node} from 'react';
 
 const StreamAttachments = ({
   attachments,
 }: {
   attachments: Attachment[];
-}): Node => {
+}): React.ReactNode => {
   const theme: Theme = useContext(ThemeContext);
   return (
     attachments?.length && (

@@ -9,7 +9,6 @@ import {isAllColumnsCollapsed} from 'views/agile-board/agile-board__helper';
 import styles from './agile-row.styles';
 import type {AgileBoardRow, BoardCell, BoardColumn} from 'flow/Agile';
 import type {IssueOnList} from 'flow/Issue';
-import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from 'flow/Theme';
 type RenderIssueCard = (issue: IssueOnList) => any;
@@ -69,7 +68,7 @@ function renderCollapsedColumn(
   }
 }
 
-export default function BoardRow(props: Props): null | Node {
+export default function BoardRow(props: Props): React.ReactNode {
   const {
     row,
     style,

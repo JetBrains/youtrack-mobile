@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React, {PureComponent} from 'react';
 import {TextInput} from 'react-native';
 import {isIOSPlatform} from 'util/util';
@@ -77,7 +76,7 @@ export default class MultilineInput extends PureComponent<Props, State> {
     }
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     const {
       style,
       // eslint-disable-next-line no-unused-vars

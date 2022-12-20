@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React from 'react';
 import {SectionList, Text, View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';

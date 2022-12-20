@@ -3,7 +3,6 @@ import {View, Text, Linking} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {i18n} from 'components/i18n/i18n';
 import {UNIT} from '../variables/variables';
-import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
   error?: string | null | undefined;
@@ -25,7 +24,7 @@ const styles = EStyleSheet.create({
   },
 });
 export default class ErrorMessageInline extends PureComponent<Props, void> {
-  render(): null | Node {
+  render(): React.ReactNode {
     const {error, tips, showSupportLink, style} = this.props;
 
     if (!error) {

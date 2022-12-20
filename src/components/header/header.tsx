@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 import Router from '../router/router';
@@ -48,7 +47,7 @@ export default class Header extends PureComponent<HeaderProps, void> {
     }
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     const {
       leftButton,
       children,

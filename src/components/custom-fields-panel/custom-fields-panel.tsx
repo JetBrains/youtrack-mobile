@@ -25,7 +25,6 @@ import type {
   IssueProject,
   CustomField as IssueCustomField,
 } from 'flow/CustomFields';
-import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
@@ -434,7 +433,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     );
   }
 
-  renderHeader(title: string, uiTheme: UITheme): Node {
+  renderHeader(title: string, uiTheme: UITheme): React.ReactNode {
     const {simpleValue, editingField} = this.state;
     const isSimpleValueEditorShown: boolean =
       simpleValue.show && !!editingField;
@@ -462,7 +461,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     const {datePicker} = this.state;
     const {modal} = this.props;
 
-    const render = (): Node => {
+    const render = (): React.ReactNode => {
       const hideEditor = (): void => {
         this.closeEditor();
       };
@@ -501,7 +500,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     const {editingField} = this.state;
     const title: string = editingField?.projectCustomField?.field?.name || '';
 
-    const render = (): Node => {
+    const render = (): React.ReactNode => {
       return (
         <SimpleValueEditor
           modal={this.props.modal}
@@ -529,7 +528,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     }
   }
 
-  renderFields(): Node {
+  renderFields(): React.ReactNode {
     const {
       hasPermission,
       fields,
@@ -608,7 +607,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     );
   }
 
-  render(): Node {
+  render(): React.ReactNode {
     const {uiTheme, style, testID} = this.props;
     const {select, datePicker, simpleValue, editingField} = this.state;
     return (

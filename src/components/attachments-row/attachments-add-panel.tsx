@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 import IconAttachment from '@jetbrains/icons/attachment.svg';
@@ -12,7 +11,7 @@ type Props = {
   style?: ViewStyleProp;
 };
 
-const AttachmentAddPanel = (props: Props): Node => {
+const AttachmentAddPanel = (props: Props): React.ReactNode => {
   return (
     <View style={[styles.attachButtonsContainer, props.style]}>
       <TouchableOpacity

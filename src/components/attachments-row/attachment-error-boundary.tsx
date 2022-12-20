@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React, {PureComponent} from 'react';
 import {Text, View} from 'react-native';
 import log from '../log/log';
@@ -25,7 +24,7 @@ export default class AttachmentErrorBoundary extends PureComponent<
     log.warn('Could not render attach', error);
   }
 
-  render(): Node {
+  render(): React.ReactNode {
     if (this.state.hasError) {
       return (
         <View

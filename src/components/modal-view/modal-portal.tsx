@@ -2,7 +2,6 @@ import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {Portal} from 'react-native-portalize';
 import modalStyles from './modal.view.styles';
-import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
   children: any;
@@ -12,7 +11,7 @@ type Props = {
   style?: ViewStyleProp;
 };
 
-const ModalPortal = (props: Props): Node => {
+const ModalPortal = (props: Props): React.ReactNode => {
   const {hasOverlay = true, onHide = () => {}} = props;
   return (
     <Portal>
@@ -55,7 +54,7 @@ export const ModalPortalPart = ({
   children: any;
   isVisible: boolean;
   style?: ViewStyleProp;
-}): Node => {
+}): React.ReactNode => {
   return (
     <Portal>
       {!!children && isVisible && <View style={style}>{children}</View>}

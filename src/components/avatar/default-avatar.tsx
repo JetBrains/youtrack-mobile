@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import {Text, View} from 'react-native';
 // @ts-expect-error: cannot typecheck react-native-linear-gradient module because of mistakes there
 import LinearGradient from 'react-native-linear-gradient';
@@ -68,7 +67,7 @@ function hashCode(value) {
 }
 
 export default class DefaultAvatar extends PureComponent<Props, void> {
-  render(): null | Node {
+  render(): React.ReactNode {
     const {text, size, style} = this.props;
 
     if (!text) {

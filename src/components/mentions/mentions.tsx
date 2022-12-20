@@ -9,7 +9,6 @@ import {
 import Avatar from '../avatar/avatar';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import styles from './mentions.styles';
-import type {Node} from 'react';
 import type {User} from 'flow/User';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
@@ -23,7 +22,7 @@ type Props = {
   onApply: (user: User) => any;
   style?: ViewStyleProp;
 };
-export default function Mentions(props: Props): Node {
+export default function Mentions(props: Props): React.ReactNode {
   const AVATAR_SIZE: number = 24;
   const {mentions, isLoading, onApply, style} = props;
   return (

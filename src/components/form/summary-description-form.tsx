@@ -6,7 +6,6 @@ import TextEditForm from './text-edit-form';
 import usage from '../usage/usage';
 import {ThemeContext} from '../theme/theme-context';
 import styles from './summary-description-form.style';
-import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
@@ -39,7 +38,7 @@ export default class SummaryDescriptionForm extends Component<Props, void> {
     return this.props.onDescriptionChange(text);
   }, DELAY);
 
-  render(): Node {
+  render(): React.ReactNode {
     const {
       editable,
       summary,

@@ -6,7 +6,6 @@ import {HIT_SLOP} from 'components/common-styles/button';
 import {i18n} from 'components/i18n/i18n';
 import {logo, IconPencil} from 'components/icon/icon';
 import styles from './home.styles';
-import type {Node} from 'react';
 type Props = {
   backendUrl: string;
   message?: string;
@@ -17,7 +16,7 @@ type Props = {
   onRetry: () => any;
 };
 
-const Home = (props: Props): Node => {
+const Home = (props: Props): React.ReactNode => {
   usage.trackScreenView('Loading');
   const {backendUrl, onChangeBackendUrl, error, message, onRetry} = props;
   const errorMessage: string | null | undefined = error?.message || message;

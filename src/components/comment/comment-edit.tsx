@@ -42,7 +42,6 @@ import {ThemeContext} from '../theme/theme-context';
 import styles, {MIN_INPUT_SIZE} from './comment-edit.styles';
 import type {Attachment, IssueComment} from 'flow/CustomFields';
 import type {AttachmentActions} from '../attachments-row/attachment-actions';
-import type {Node} from 'react';
 import type {NormalizedAttachment} from 'flow/Attachment';
 import type {Theme} from 'flow/Theme';
 import type {UserGroup} from 'flow/UserGroup';
@@ -295,7 +294,7 @@ const IssueCommentEdit = (props: Props) => {
     }
   };
 
-  const renderUserMentions = (): Node | null | undefined => {
+  const renderUserMentions = (): React.ReactNode | undefined => {
     if (state.mentionsVisible) {
       return (
         <Mentions
@@ -316,7 +315,7 @@ const IssueCommentEdit = (props: Props) => {
     }
   };
 
-  const renderVisibility = (): Node => {
+  const renderVisibility = (): React.ReactNode => {
     const toggleSelectVisibility = (isVisibilitySelectVisible: boolean) =>
       changeState({
         isVisibilitySelectVisible,
@@ -347,7 +346,7 @@ const IssueCommentEdit = (props: Props) => {
     });
   };
 
-  const renderSendButton = (): Node => {
+  const renderSendButton = (): React.ReactNode => {
     const {editingComment, isSaving} = state;
     const draftHasId: boolean = !!state.editingComment.id;
     const isDisabled: boolean =
@@ -425,7 +424,7 @@ const IssueCommentEdit = (props: Props) => {
     );
   };
 
-  const renderAttachments = (): Node | null => {
+  const renderAttachments = (): React.ReactNode => {
     return (
       <AttachmentsRow
         attachments={state.editingComment.attachments}
@@ -479,7 +478,7 @@ const IssueCommentEdit = (props: Props) => {
     autoFocus: boolean,
     onFocus: (...args: Array<any>) => any,
     onBlur: (...args: Array<any>) => any,
-  ): Node => {
+  ): React.ReactNode => {
     return (
       <TextInput
         autoCorrect={false}
@@ -533,7 +532,7 @@ const IssueCommentEdit = (props: Props) => {
   const hasAttachments = (): boolean =>
     !!state.editingComment?.attachments?.length;
 
-  const renderAddNewComment = (): Node => {
+  const renderAddNewComment = (): React.ReactNode => {
     const {
       isSaving,
       mentionsVisible,
@@ -671,7 +670,7 @@ const IssueCommentEdit = (props: Props) => {
     );
   };
 
-  const renderEditComment = (): Node => {
+  const renderEditComment = (): React.ReactNode => {
     const {isSaving, editingComment} = state;
     const isSubmitEnabled: boolean = !!editingComment.text || hasAttachments();
     return (

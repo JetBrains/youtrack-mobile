@@ -22,7 +22,6 @@ import {isAndroidPlatform} from 'util/util';
 import {logEvent} from 'components/log/log-helper';
 import styles from './preview-file.styles';
 import type {Attachment} from 'flow/CustomFields';
-import type {Node} from 'react';
 type FileSource = {
   id: string;
   uri: string;
@@ -48,7 +47,7 @@ type VideoError = {
   };
 };
 
-const ImagePreview = (props: Props): Node => {
+const ImagePreview = (props: Props): React.ReactNode => {
   const [index, updateCurrentIndex] = useState(0);
   const [error, updateError] = useState(null);
   const [isLoading, updateIsLoading] = useState(false);
@@ -84,7 +83,7 @@ const ImagePreview = (props: Props): Node => {
 
   const renderImage: (imageProps: any) => Node = (imageProps: {
     source: Attachment;
-  }): Node | null => {
+  }): React.ReactNode => {
     usage.trackEvent(ANALYTICS_PREVIEW_PAGE, 'Open image');
 
     if (error) {
@@ -164,7 +163,7 @@ const ImagePreview = (props: Props): Node => {
 
   const isImageAttach = (): boolean => !!props.imageAttachments?.length;
 
-  const renderError = (): Node => (
+  const renderError = (): React.ReactNode => (
     <View style={[styles.container, styles.error]}>
       <IconNoProjectFound />
       <Text style={styles.errorTitle}>{error || ERROR_MESSAGE}</Text>

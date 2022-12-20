@@ -7,7 +7,6 @@ import {i18n} from 'components/i18n/i18n';
 import {IconSearch} from '../icon/icon';
 import {styles} from './error-message.style';
 import type {CustomError, ErrorMessageData} from 'flow/Error';
-import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 export type ErrorMessageProps = {
   error?: CustomError;
@@ -53,7 +52,7 @@ export default class ErrorMessage extends PureComponent<
     this.setError();
   }
 
-  render(): null | Node {
+  render(): React.ReactNode {
     const {errorMessageData} = this.state;
     const {onTryAgain, style, testID} = this.props;
 

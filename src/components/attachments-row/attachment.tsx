@@ -22,7 +22,6 @@ import {View as AnimatedView} from 'react-native-animatable';
 import styles from './attachments-row.styles';
 import type {Attachment} from 'flow/CustomFields';
 import type {FileCategoryKey} from './attachment-helper';
-import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type StyleMap = Record<FileCategoryKey, ViewStyleProp>;
@@ -129,7 +128,7 @@ export default class Attach extends PureComponent<Props, State> {
     });
   }
 
-  renderSVG(): Node {
+  renderSVG(): React.ReactNode {
     return (
       <View testID="attachmentSvg" style={styles.attachmentThumbContainer}>
         <SvgUri
@@ -144,7 +143,7 @@ export default class Attach extends PureComponent<Props, State> {
   renderThumb(
     fileTypeStyle: ViewStyleProp & Record<string, any> = {},
     testId: string = 'attachmentFile',
-  ): Node {
+  ): React.ReactNode {
     const {attach} = this.props;
     return (
       <View
@@ -175,7 +174,7 @@ export default class Attach extends PureComponent<Props, State> {
     );
   }
 
-  renderImage(): null | Node {
+  renderImage(): React.ReactNode {
     const {attachingImage, imageHeaders, attach} = this.props;
     const isAttachingImage = attachingImage === attach;
     const source = {
@@ -218,7 +217,7 @@ export default class Attach extends PureComponent<Props, State> {
     );
   }
 
-  renderFile(): Node {
+  renderFile(): React.ReactNode {
     const {attach} = this.props;
     const fileExt: string | null | undefined = attach.name.split('.').pop();
     let thumbStyle: ViewStyleProp = this.thumbStyleMap.default;
@@ -301,7 +300,7 @@ export default class Attach extends PureComponent<Props, State> {
     return !!this.props.canRemoveImage;
   }
 
-  renderAttach(): Node {
+  renderAttach(): React.ReactNode {
     if (this.isMedia()) {
       return this.renderThumb(styles.attachmentMedia, 'attachmentMedia');
     } else if (this.isSVG()) {
@@ -313,7 +312,7 @@ export default class Attach extends PureComponent<Props, State> {
     return this.renderFile();
   }
 
-  render(): Node {
+  render(): React.ReactNode {
     const {attach, uiTheme} = this.props;
     const {modalChildren} = this.state;
     return (

@@ -6,13 +6,12 @@ import {IconAngleRight} from '../icon/icon';
 import {getLinkedIssuesTitle} from './linked-issues-helper';
 import styles from './linked-issues.style';
 import type {IssueLink} from 'flow/CustomFields';
-import type {Node} from 'react';
 type Props = {
   issueLinks: Array<IssueLink>;
   onPress: () => any;
 };
 
-const LinkedIssuesTitle = (props: Props): Node => {
+const LinkedIssuesTitle = (props: Props): React.ReactNode => {
   const {issueLinks = [], onPress} = props;
   const linkedIssuesTitle: string =
     issueLinks.length > 0 ? getLinkedIssuesTitle(issueLinks) : '';

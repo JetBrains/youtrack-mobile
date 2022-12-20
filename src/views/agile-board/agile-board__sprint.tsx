@@ -6,7 +6,6 @@ import Draggable from 'components/draggable/draggable';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import type {AgileBoardRow, Board, SprintFull} from 'flow/Agile';
 import type {AnyIssue} from 'flow/Issue';
-import type {Node} from 'react';
 import type {UIThemeName, UIThemeColors, BarStyle} from 'flow/Theme';
 import type {UITheme} from 'flow/Theme';
 type Props = {
@@ -106,7 +105,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
     );
   };
 
-  render(): null | Node {
+  render(): React.ReactNode {
     const {sprint, zoomedIn} = this.props;
     const board: Board = sprint?.board;
 

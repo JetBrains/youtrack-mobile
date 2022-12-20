@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {sortAlphabetically} from '../search/sorting';
@@ -150,7 +149,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   getItemTitle: (item: any) => any = (item: Record<string, any>) =>
     getEntityPresentation(item);
 
-  renderSelect(): Node {
+  renderSelect(): React.ReactNode {
     return (
       <Select
         testID="test:id/visibility-control-button"
@@ -180,7 +179,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
       .join(', ');
   }
 
-  renderVisibilityButton(): Node {
+  renderVisibilityButton(): React.ReactNode {
     const {
       onSubmit,
       visibilityDefaultLabel = visibilityDefaultText,
@@ -228,7 +227,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     );
   }
 
-  render(): Node {
+  render(): React.ReactNode {
     return (
       <View testID="visibilityControl">
         {this.renderVisibilityButton()}

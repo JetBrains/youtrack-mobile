@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React, {Component} from 'react';
 import {
   View,
@@ -60,7 +59,7 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
     }
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     const {suggestions, style} = this.props;
     return (
       <View style={[styles.container, style]}>

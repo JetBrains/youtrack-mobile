@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -216,7 +215,7 @@ export default class CommandDialog extends Component<Props, State> {
     );
   }
 
-  renderContent(): Node {
+  renderContent(): React.ReactNode {
     const {isApplying, uiTheme} = this.props;
     const canApply = this.canApplyCommand();
     return (
@@ -263,12 +262,12 @@ export default class CommandDialog extends Component<Props, State> {
     );
   }
 
-  render(): Node {
+  render(): React.ReactNode {
     return <ModalView animationType="slide">{this.renderContent()}</ModalView>;
   }
 }
 export class CommandDialogModal extends CommandDialog {
-  render(): Node {
+  render(): React.ReactNode {
     return (
       <ModalPortal onHide={this.props.onCancel}>
         {this.renderContent()}

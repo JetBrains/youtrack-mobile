@@ -19,7 +19,6 @@ import styles from './linked-issues.style';
 import type {IssueLink} from 'flow/CustomFields';
 import type {IssueOnList} from 'flow/Issue';
 import type {LinksListData} from './linked-issues-helper';
-import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
@@ -37,7 +36,7 @@ type Props = {
   onIssueLinkPress?: (issue: IssueOnList) => any;
 };
 
-const LinkedIssues = (props: Props): Node => {
+const LinkedIssues = (props: Props): React.ReactNode => {
   // update UI on theme change
   // eslint-disable-next-line no-unused-vars
   const theme: Theme = useContext(ThemeContext);

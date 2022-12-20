@@ -13,7 +13,6 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './issues.styles';
 import type {AnyIssue} from 'flow/Issue';
 import type {BundleValue} from 'flow/CustomFields';
-import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
   issue: AnyIssue;
@@ -32,7 +31,7 @@ export default class IssueRow extends Component<Props, void> {
     );
   }
 
-  renderPriority(): null | Node {
+  renderPriority(): React.ReactNode {
     const priorityField = getPriotityField(this.props.issue);
 
     if (
@@ -54,7 +53,7 @@ export default class IssueRow extends Component<Props, void> {
     );
   }
 
-  render(): Node {
+  render(): React.ReactNode {
     const {issue, onTagPress, style} = this.props;
     return (
       <ThemeContext.Consumer>

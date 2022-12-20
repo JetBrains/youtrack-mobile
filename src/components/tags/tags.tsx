@@ -5,7 +5,6 @@ import {i18n} from 'components/i18n/i18n';
 import {showActions} from '../action-sheet/action-sheet';
 import styles from './tags.styles';
 import type {ActionSheetOption} from '../action-sheet/action-sheet';
-import type {Node} from 'react';
 import type {Tag} from 'flow/CustomFields';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
@@ -73,7 +72,7 @@ export default class Tags extends PureComponent<Props, void> {
   isDefaultColorCoding: (tag: Tag) => any | null = (tag: Tag) =>
     tag?.color?.id === NO_COLOR_CODING_ID ? styles.tagNoColor : null;
 
-  render(): null | Node {
+  render(): React.ReactNode {
     const {tags, multiline, style} = this.props;
 
     if (!tags || tags?.length === 0) {

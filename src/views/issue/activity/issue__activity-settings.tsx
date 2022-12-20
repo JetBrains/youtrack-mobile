@@ -9,7 +9,6 @@ import {i18n} from 'components/i18n/i18n';
 import {toggleIssueActivityEnabledType} from './issue-activity__helper';
 import styles from './issue-activity.styles';
 import type {ActivityType} from 'flow/Activity';
-import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
 import type {UserAppearanceProfile} from 'flow/User';
 type Props = {
@@ -100,7 +99,7 @@ export default class IssueActivitiesSettings extends PureComponent<
     this.props.onApply(userAppearanceProfile);
   }
 
-  renderOrderItem(): Node {
+  renderOrderItem(): React.ReactNode {
     const {userAppearanceProfile, onApply, disabled} = this.props;
     return (
       <View style={styles.settingsItem}>
@@ -123,7 +122,7 @@ export default class IssueActivitiesSettings extends PureComponent<
     );
   }
 
-  renderTypesList(): Node {
+  renderTypesList(): React.ReactNode {
     const {
       issueActivityTypes,
       issueActivityEnabledTypes,
@@ -166,7 +165,7 @@ export default class IssueActivitiesSettings extends PureComponent<
     );
   }
 
-  render(): Node {
+  render(): React.ReactNode {
     return (
       <>
         {this.renderOrderItem()}

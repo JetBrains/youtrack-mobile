@@ -9,7 +9,6 @@ import {ThemeContext} from '../theme/theme-context';
 import styles from './activity__stream.styles';
 import type {Activity, ActivityStreamCommentActions} from 'flow/Activity';
 import type {Attachment, IssueComment} from 'flow/CustomFields';
-import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {YouTrackWiki} from 'flow/Wiki';
 type Props = {
@@ -34,7 +33,7 @@ const StreamComment = ({
   onCheckboxUpdate,
   onShowCommentActions = () => {},
   youtrackWiki,
-}: Props): Node => {
+}: Props): React.ReactNode => {
   const theme: Theme = useContext(ThemeContext);
   const comment: IssueComment | null | undefined = firstActivityChange(
     activity,

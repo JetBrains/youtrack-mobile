@@ -9,7 +9,6 @@ import NothingSelectedDark from 'assets/nothing-selected-dark.svg';
 import NoNotifications from './assets/notifications-light.svg';
 import NoNotificationsDark from './assets/notifications-dark.svg';
 import {DEFAULT_THEME} from '../theme/theme';
-import type {Node} from 'react';
 import type {Theme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
@@ -34,7 +33,7 @@ const Icon = (
   return <ThemedIcon width={size} height={size} style={props.style} />;
 };
 
-const IconNothingFound = (props: Props): Node => (
+const IconNothingFound = (props: Props): React.ReactNode => (
   <Icon
     {...{
       ...props,
@@ -46,7 +45,7 @@ const IconNothingFound = (props: Props): Node => (
   />
 );
 
-const IconNoProjectFound = (props: Props): Node => (
+const IconNoProjectFound = (props: Props): React.ReactNode => (
   <Icon
     {...{
       ...props,
@@ -58,7 +57,7 @@ const IconNoProjectFound = (props: Props): Node => (
   />
 );
 
-const IconNothingSelected = (props: Props): Node => (
+const IconNothingSelected = (props: Props): React.ReactNode => (
   <Icon
     {...{
       ...props,
@@ -70,7 +69,7 @@ const IconNothingSelected = (props: Props): Node => (
   />
 );
 
-const IconNoNotifications = (props: Props): Node => (
+const IconNoNotifications = (props: Props): React.ReactNode => (
   <Icon
     {...{
       ...props,

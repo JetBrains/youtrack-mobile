@@ -33,7 +33,6 @@ import type {
 } from 'flow/Activity';
 import type {Attachment, IssueComment} from 'flow/CustomFields';
 import type {CustomError} from 'flow/Error';
-import type {Node} from 'react';
 import type {Reaction} from 'flow/Reaction';
 import type {UITheme} from 'flow/Theme';
 import type {User} from 'flow/User';
@@ -83,7 +82,7 @@ type ElementLayout = {
   y: number;
   height: number;
 };
-export const ActivityStream = (props: ActivityStreamProps): Node => {
+export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
   const window = useWindowDimensions();
   const {
     headerRenderer: renderHeader = () => null,

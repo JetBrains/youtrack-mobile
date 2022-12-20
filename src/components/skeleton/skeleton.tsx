@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {agileCard} from '../agile-card/agile-card.styles';
@@ -28,14 +27,14 @@ const defaultSkeletonProps: SkeletonProps = {
   height: SKELETON_HEIGHT,
   borderRadius: SKELETON_DEFAULT_BORDER_RADIUS,
 };
-export const Skeleton = (props: SkeletonProps): Node => {
+export const Skeleton = (props: SkeletonProps): React.ReactNode => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
       <SkeletonPlaceholder.Item {...defaultSkeletonProps} {...props} />
     </SkeletonPlaceholder>
   );
 };
-export const SkeletonSecondaryLine = (props: SkeletonProps): Node => {
+export const SkeletonSecondaryLine = (props: SkeletonProps): React.ReactNode => {
   return (
     <SkeletonPlaceholder.Item
       {...defaultSkeletonProps}
@@ -45,7 +44,7 @@ export const SkeletonSecondaryLine = (props: SkeletonProps): Node => {
     />
   );
 };
-export const SkeletonLine = (props: SkeletonProps): Node => {
+export const SkeletonLine = (props: SkeletonProps): React.ReactNode => {
   return (
     <SkeletonPlaceholder.Item
       {...defaultSkeletonProps}
@@ -55,7 +54,7 @@ export const SkeletonLine = (props: SkeletonProps): Node => {
     />
   );
 };
-export const SkeletonList = (props: SkeletonProps): Node => {
+export const SkeletonList = (props: SkeletonProps): React.ReactNode => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps} {...props}>
       <SkeletonPlaceholder.Item
@@ -108,7 +107,7 @@ function skeletonActivityLine(width?: number) {
   });
 }
 
-export const SkeletonIssueContent = (): Node => {
+export const SkeletonIssueContent = (): React.ReactNode => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
       {SkeletonLine({
@@ -136,7 +135,7 @@ export const SkeletonIssueContent = (): Node => {
     </SkeletonPlaceholder>
   );
 };
-export const SkeletonIssueCustomFields = (): Node => {
+export const SkeletonIssueCustomFields = (): React.ReactNode => {
   const props = {
     width: 90,
     height: 36,
@@ -164,7 +163,7 @@ export const SkeletonIssueCustomFields = (): Node => {
     </SkeletonPlaceholder>
   );
 };
-export const SkeletonIssueInfoLine = (props: {lines?: number}): Node => {
+export const SkeletonIssueInfoLine = (props: {lines?: number}): React.ReactNode => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
       <SkeletonPlaceholder.Item flexDirection="column">
@@ -211,7 +210,7 @@ function skeletonIssueActivity(marginTop: number = 0, key: string) {
   );
 }
 
-export const SkeletonIssueActivities = (props?: SkeletonProps): Node => {
+export const SkeletonIssueActivities = (props?: SkeletonProps): React.ReactNode => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
       <SkeletonPlaceholder.Item {...props}>
@@ -250,7 +249,7 @@ function skeletonIssue(key: string) {
   );
 }
 
-export const SkeletonIssues = (props: SkeletonProps): Node => {
+export const SkeletonIssues = (props: SkeletonProps): React.ReactNode => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
       <SkeletonPlaceholder.Item
@@ -281,7 +280,7 @@ function skeletonCard(key: string) {
   );
 }
 
-export const SkeletonAgile = (props: SkeletonProps): Node => {
+export const SkeletonAgile = (props: SkeletonProps): React.ReactNode => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps} {...props}>
       <SkeletonPlaceholder.Item
@@ -321,7 +320,7 @@ export const SkeletonAgile = (props: SkeletonProps): Node => {
     </SkeletonPlaceholder>
   );
 };
-export const SkeletonCreateArticle = (): Node => {
+export const SkeletonCreateArticle = (): React.ReactNode => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
       <SkeletonPlaceholder.Item fleDirection="column">

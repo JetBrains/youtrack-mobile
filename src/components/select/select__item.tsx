@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import {View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
 import Avatar from '../avatar/avatar';
@@ -41,7 +40,7 @@ export default class SelectItem extends PureComponent<Props, void> {
     onPress(item);
   };
 
-  render(): null | Node {
+  render(): React.ReactNode {
     const {
       item,
       isSelected,

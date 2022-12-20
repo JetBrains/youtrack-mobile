@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import {Text, View} from 'react-native';
 import React, {Component} from 'react';
 import {i18n} from 'components/i18n/i18n';
@@ -36,7 +35,7 @@ export default class QueryPreview extends Component<Props, void> {
     }
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     const {query, style} = this.props;
     return (
       <View style={[styles.placeHolder, style]}>

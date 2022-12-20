@@ -60,7 +60,6 @@ import type {
 } from 'flow/Article';
 import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
-import type {Node} from 'react';
 import type {SelectProps} from 'components/select/select';
 import type {Theme, UITheme} from 'flow/Theme';
 type Props = KnowledgeBaseActions &
@@ -334,7 +333,7 @@ export class KnowledgeBase extends Component<Props, State> {
         </TouchableOpacity>
       ),
     });
-    const tree: Node = this.renderArticlesList(
+    const tree: React.ReactNode = this.renderArticlesList(
       [
         {
           title: null,
@@ -406,7 +405,7 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
-  renderSeparator(): Node {
+  renderSeparator(): React.ReactNode {
     return (
       <View style={styles.separator}>{SelectSectioned.renderSeparator()}</View>
     );
@@ -693,7 +692,7 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   }
 
-  renderArticleList: () => Node = (): Node => {
+  renderArticleList: () => Node = (): React.ReactNode => {
     const {
       isLoading,
       articlesList,
@@ -737,7 +736,7 @@ export class KnowledgeBase extends Component<Props, State> {
       </>
     );
   };
-  renderFocusedArticle: () => Node = (): Node => {
+  renderFocusedArticle: () => Node = (): React.ReactNode => {
     const {focusedArticle} = this.state;
 
     if (!this.props?.articlesList || this.props.articlesList.length === 0) {
@@ -754,7 +753,7 @@ export class KnowledgeBase extends Component<Props, State> {
       />
     );
   };
-  renderSplitView: () => Node = (): Node => {
+  renderSplitView: () => Node = (): React.ReactNode => {
     return (
       <View style={styles.splitViewContainer}>
         <View style={styles.splitViewSide}>{this.renderArticleList()}</View>
@@ -763,7 +762,7 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     const {isSplitView} = this.state;
     return (
       <ThemeContext.Consumer>

@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React, {PureComponent} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {secondaryText} from '../common-styles/typography';
@@ -35,7 +34,7 @@ export default class ColorField extends PureComponent<Props, void> {
       : Array.from(this.props.text)[0];
   }
 
-  render(): null | Node {
+  render(): React.ReactNode {
     const {color, fullText, style, defaultColorCoding} = this.props;
 
     if (color && color.id === NO_COLOR_CODING_ID && !fullText) {

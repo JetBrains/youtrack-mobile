@@ -16,7 +16,6 @@ import avatarStyles from '../avatar/default-avatar.styles';
 import styles, {SWIPER_HEIGHT} from './accounts.styles';
 import type {AppConfig} from 'flow/AppConfig';
 import type {StorageState} from '../storage/storage';
-import type {Node} from 'react';
 import type {UITheme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
@@ -68,7 +67,7 @@ export default class Accounts extends PureComponent<Props, void> {
     this.props.onChangeAccount(account);
   };
 
-  renderAccount(account: StorageState): Node {
+  renderAccount(account: StorageState): React.ReactNode {
     const config: AppConfig = account.config;
     const user = account.currentUser;
 
@@ -134,7 +133,7 @@ export default class Accounts extends PureComponent<Props, void> {
     );
   }
 
-  render(): Node {
+  render(): React.ReactNode {
     const {onAddAccount, isChangingAccount, uiTheme} = this.props;
     return (
       <View style={styles.accountContainer} testID="accounts">

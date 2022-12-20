@@ -6,7 +6,6 @@ import Header from 'components/header/header';
 import {i18n} from 'components/i18n/i18n';
 import {IconClose} from 'components/icon/icon';
 import {UNIT} from 'components/variables/variables';
-import type {Node} from 'react';
 type Props = {
   name: string;
   url: string;
@@ -17,7 +16,7 @@ function renderLoading() {
   return <ActivityIndicator style={styles.loadingIndicator} size="large" />;
 }
 
-export function AttachmentPreview(props: Props): Node {
+export function AttachmentPreview(props: Props): React.ReactNode {
   const {url, name, headers} = props;
   return (
     <View style={styles.container}>

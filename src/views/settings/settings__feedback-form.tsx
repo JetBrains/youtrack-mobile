@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React, {PureComponent} from 'react';
 import {
   View,
@@ -115,7 +114,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
     }
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     const {uiTheme} = this.props;
     const {feedback, isFeedbackFormSending} = this.state;
     const uiThemeColors: UIThemeColors = uiTheme.colors;

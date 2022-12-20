@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React, {Component} from 'react';
 import {Dimensions, ScrollView, UIManager} from 'react-native';
 import debounce from 'lodash.debounce';
@@ -250,7 +249,7 @@ class BoardScroller extends Component<Props, State> {
   }
 }
 
-export default (props: Record<string, any>): Node => (
+export default (props: Record<string, any>): React.ReactNode => (
   <DragContext.Consumer>
     {dragContext => <BoardScroller {...props} dragContext={dragContext} />}
   </DragContext.Consumer>

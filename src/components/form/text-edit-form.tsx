@@ -2,7 +2,6 @@ import React, {useCallback, useContext, useEffect, useRef} from 'react';
 import MultilineInput from '../multiline-input/multiline-input';
 import {ThemeContext} from '../theme/theme-context';
 import styles from './summary-description-form.style';
-import type {Node} from 'react';
 import type {Theme, UITheme} from 'flow/Theme';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 type Props = {
@@ -18,7 +17,7 @@ type Props = {
   uiTheme?: UITheme;
 };
 
-const TextEditForm = (props: Props): Node => {
+const TextEditForm = (props: Props): React.ReactNode => {
   const {onDescriptionChange = (text: string) => {}} = props;
   const timeout: {
     current: TimeoutID | null | undefined;

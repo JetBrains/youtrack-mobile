@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import {Image} from 'react-native';
 import React, {PureComponent} from 'react';
 import DefaultAvatar from './default-avatar';
@@ -24,7 +23,7 @@ export default class Avatar extends PureComponent<Props, State> {
     });
   };
 
-  render(): Node {
+  render(): React.ReactNode {
     const {source, userName = 'A', size, style} = this.props;
     const {renderDefault} = this.state;
 

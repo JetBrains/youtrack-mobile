@@ -13,7 +13,6 @@ import type {
   CustomField as CustomFieldType,
   FieldValue,
 } from 'flow/CustomFields';
-import type {Node} from 'react';
 import type {User} from 'flow/User';
 type Props = {
   field: CustomFieldType;
@@ -150,7 +149,7 @@ export default class CustomField extends Component<Props, void> {
     return render(value);
   }
 
-  renderAvatar(fieldValue: User): Node {
+  renderAvatar(fieldValue: User): React.ReactNode {
     const user: User = ApiHelper.convertRelativeUrls(
       [fieldValue],
       'avatarUrl',
@@ -172,7 +171,7 @@ export default class CustomField extends Component<Props, void> {
     );
   }
 
-  render(): Node {
+  render(): React.ReactNode {
     const {field, active} = this.props;
     return (
       <TouchableOpacity

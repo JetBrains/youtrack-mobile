@@ -18,7 +18,6 @@ import type {
   CustomFieldValue,
 } from 'flow/CustomFields';
 import type {FieldStyle} from '../../flow/Agile';
-import type {Node} from 'react';
 import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import type {UITheme} from 'flow/Theme';
 type Props = {
@@ -93,7 +92,7 @@ export default class AgileCard extends PureComponent<Props, void> {
     });
   }
 
-  render(): Node {
+  render(): React.ReactNode {
     const {
       issue,
       style,

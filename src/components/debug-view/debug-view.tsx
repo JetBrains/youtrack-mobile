@@ -1,4 +1,3 @@
-import type {Node} from 'react';
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
@@ -19,7 +18,7 @@ type Props = {
   };
 };
 export class DebugView extends PureComponent<Props, void> {
-  render(): null | Node {
+  render(): React.ReactNode {
     const {show, onHide, logsStyle} = this.props;
 
     if (!show) {

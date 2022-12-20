@@ -54,7 +54,6 @@ import type {
   IssueLink,
   IssueProject,
 } from 'flow/CustomFields';
-import type {Node} from 'React';
 import type {ScrollData} from 'flow/Markdown';
 import type {Theme, UITheme} from 'flow/Theme';
 import type {Visibility} from 'flow/Visibility';
@@ -179,7 +178,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   };
 
-  renderAttachments(attachments: Array<Attachment> | null): null | Node {
+  renderAttachments(attachments: Array<Attachment> | null): React.ReactNode {
     if (!attachments || !attachments.length) {
       return null;
     }
@@ -211,7 +210,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  renderIssueVotes(): Node {
+  renderIssueVotes(): React.ReactNode {
     const {issue, issuePermissions, onVoteToggle} = this.props;
     return (
       <View style={styles.issueVote}>
@@ -226,7 +225,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  renderAdditionalInfo(): null | Node {
+  renderAdditionalInfo(): React.ReactNode {
     const issue: AnyIssue = this.getIssue();
     return issue ? (
       <View style={styles.issueTopPanel}>
@@ -248,7 +247,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  renderIssueVisibility(): Node {
+  renderIssueVisibility(): React.ReactNode {
     const {onVisibilityChange} = this.props;
     const issue: AnyIssue = this.getIssue();
 
@@ -268,7 +267,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     return <SkeletonIssueInfoLine />;
   }
 
-  renderIssueTextFields(): Node {
+  renderIssueTextFields(): React.ReactNode {
     const {editMode, onLongPress, setCustomFieldValue} = this.props;
     const issue: AnyIssue = this.getIssue();
     return getIssueTextCustomFields(issue.fields).map(
@@ -355,7 +354,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  renderIssueContent(): Node {
+  renderIssueContent(): React.ReactNode {
     const {openIssueListWithSearch, onTagRemove, onLongPress} = this.props;
     const issue: AnyIssue = this.getIssue();
 
@@ -402,7 +401,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  renderIssueEditContent(): Node {
+  renderIssueEditContent(): React.ReactNode {
     const {isSavingEditedIssue, summaryCopy, descriptionCopy} = this.props;
     return (
       <>
@@ -419,7 +418,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  renderIssueView(): Node {
+  renderIssueView(): React.ReactNode {
     const {issue, editMode, onAttach} = this.props;
     return (
       <View style={styles.issueView}>
@@ -502,7 +501,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   };
 
-  renderContent(): Node {
+  renderContent(): React.ReactNode {
     const {renderRefreshControl, onSwitchToActivity} = this.props;
     return (
       <ScrollView
@@ -527,7 +526,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  render(): Node {
+  render(): React.ReactNode {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
