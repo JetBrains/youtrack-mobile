@@ -192,7 +192,7 @@ export class Issues extends Component<Props, State> {
   ): ((...args: Array<any>) => any) => {
     return await this.props.isIssueMatchesQuery(issueIdReadable);
   };
-  renderModalPortal: () => Node | null | undefined = ():
+  renderModalPortal: ()=> React.ReactNode | null | undefined = ():
     | Node
     | null
     | undefined => {
@@ -213,7 +213,7 @@ export class Issues extends Component<Props, State> {
       </ModalPortal>
     ) : null;
   };
-  renderCreateIssueButton: (isDisabled: boolean) => Node = (
+  renderCreateIssueButton: (isDisabled: boolean)=> React.ReactNode = (
     isDisabled: boolean,
   ) => {
     return (
@@ -314,7 +314,7 @@ export class Issues extends Component<Props, State> {
     return this.theme.uiTheme.colors;
   }
 
-  renderContextButton: () => Node = () => {
+  renderContextButton: ()=> React.ReactNode = () => {
     const {
       onOpenContextSelect,
       isRefreshing,
@@ -447,7 +447,7 @@ export class Issues extends Component<Props, State> {
     this.props.setIssuesCount(null);
     this.props.onQueryUpdate(query);
   };
-  renderSearchPanel: () => Node = () => {
+  renderSearchPanel: ()=> React.ReactNode = () => {
     const {query, suggestIssuesQuery, queryAssistSuggestions} = this.props;
 
     const _query = this.state.clearSearchQuery ? '' : query;
@@ -478,7 +478,7 @@ export class Issues extends Component<Props, State> {
     );
   };
   hasIssues: () => boolean = (): boolean => this.props.issues?.length > 0;
-  renderSearchQuery: () => Node = () => {
+  renderSearchQuery: ()=> React.ReactNode = () => {
     const {
       query,
       issuesCount,
@@ -616,7 +616,7 @@ export class Issues extends Component<Props, State> {
     return null;
   }
 
-  renderIssues: () => Node = () => {
+  renderIssues: ()=> React.ReactNode = () => {
     const {isIssuesContextOpen, isRefreshing} = this.props;
     return (
       <View style={styles.listContainer} testID="test:id/issueListPhone">
@@ -629,7 +629,7 @@ export class Issues extends Component<Props, State> {
       </View>
     );
   };
-  renderFocusedIssue: () => Node = () => {
+  renderFocusedIssue: ()=> React.ReactNode = () => {
     const {focusedIssue} = this.state;
 
     if (!focusedIssue || !this.hasIssues()) {
@@ -652,7 +652,7 @@ export class Issues extends Component<Props, State> {
       </View>
     );
   };
-  renderSplitView: () => Node = () => {
+  renderSplitView: ()=> React.ReactNode = () => {
     return (
       <>
         <View style={styles.splitViewSide}>{this.renderIssues()}</View>

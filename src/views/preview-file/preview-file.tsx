@@ -81,7 +81,7 @@ const ImagePreview = (props: Props): React.ReactNode => {
     typeof ActivityIndicator
   > => <ActivityIndicator color={styles.loader.color} style={styles.loader} />;
 
-  const renderImage: (imageProps: any) => Node = (imageProps: {
+  const renderImage: (imageProps: any)=> React.ReactNode = (imageProps: {
     source: Attachment;
   }): React.ReactNode => {
     usage.trackEvent(ANALYTICS_PREVIEW_PAGE, 'Open image');

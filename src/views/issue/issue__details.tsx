@@ -476,7 +476,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   onUpdateProject: (project: IssueProject) => Promise<any> = async (
     project: IssueProject,
   ) => await this.props.updateProject(project);
-  renderCustomFieldPanel: () => Node = () => {
+  renderCustomFieldPanel: ()=> React.ReactNode = () => {
     const _issue: AnyIssue = this.getIssue();
 
     return (

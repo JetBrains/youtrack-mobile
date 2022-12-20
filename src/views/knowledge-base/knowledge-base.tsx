@@ -361,7 +361,7 @@ export class KnowledgeBase extends Component<Props, State> {
     title: string;
     customTitleComponent?: React.ReactElement<React.ComponentProps<any>, any>;
     rightButton?: React.ReactElement<React.ComponentProps<any>, any>;
-  }) => Node = ({
+  })=> React.ReactNode = ({
     leftButton,
     title,
     customTitleComponent,
@@ -441,7 +441,7 @@ export class KnowledgeBase extends Component<Props, State> {
   renderArticlesList: (
     articlesList: ArticlesList | Partial<ArticlesList>,
     hideSearchPanel?: boolean,
-  ) => Node = (
+  ) => React.ReactNode = (
     articlesList: ArticlesList,
     hideSearchPanel: boolean = false,
   ) => {
@@ -503,7 +503,7 @@ export class KnowledgeBase extends Component<Props, State> {
   };
   getSearchQuery: () => string | null = (): string | null =>
     knowledgeBaseActions.getArticlesQuery();
-  renderSearchPanel: () => Node = () => (
+  renderSearchPanel: ()=> React.ReactNode = () => (
     <KnowledgeBaseSearchPanel
       query={this.getSearchQuery()}
       onSearch={(query: string) => {
@@ -511,7 +511,7 @@ export class KnowledgeBase extends Component<Props, State> {
       }}
     />
   );
-  renderActionsBar: () => Node = () => {
+  renderActionsBar: ()=> React.ReactNode = () => {
     const {isLoading, articlesList} = this.props;
     const list: ArticlesList = articlesList || [];
     const hasSearchQuery: boolean = !!this.getSearchQuery();
@@ -574,7 +574,7 @@ export class KnowledgeBase extends Component<Props, State> {
     this.setState({
       isSelectVisible: true,
     });
-  renderProjectSelect: () => Node = () => {
+  renderProjectSelect: ()=> React.ReactNode = () => {
     const {updateProjectsFavorites} = this.props;
     const projects: Array<ArticleProject> = (getStorageState()
       .projects as any) as Array<ArticleProject>;
@@ -642,7 +642,7 @@ export class KnowledgeBase extends Component<Props, State> {
     };
     return <SelectSectioned {...selectProps} />;
   };
-  renderNoFavouriteProjects: () => Node = () => {
+  renderNoFavouriteProjects: ()=> React.ReactNode = () => {
     return (
       <View style={styles.noProjects}>
         <IconNoProjectFound style={styles.noProjectsIcon} />
@@ -693,7 +693,7 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   }
 
-  renderArticleList: () => Node = (): React.ReactNode => {
+  renderArticleList: ()=> React.ReactNode = (): React.ReactNode => {
     const {
       isLoading,
       articlesList,
@@ -737,7 +737,7 @@ export class KnowledgeBase extends Component<Props, State> {
       </>
     );
   };
-  renderFocusedArticle: () => Node = (): React.ReactNode => {
+  renderFocusedArticle: ()=> React.ReactNode = (): React.ReactNode => {
     const {focusedArticle} = this.state;
 
     if (!this.props?.articlesList || this.props.articlesList.length === 0) {
@@ -754,7 +754,7 @@ export class KnowledgeBase extends Component<Props, State> {
       />
     );
   };
-  renderSplitView: () => Node = (): React.ReactNode => {
+  renderSplitView: ()=> React.ReactNode = (): React.ReactNode => {
     return (
       <View style={styles.splitViewContainer}>
         <View style={styles.splitViewSide}>{this.renderArticleList()}</View>

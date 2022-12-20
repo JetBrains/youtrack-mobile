@@ -29,7 +29,7 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
       ? onApplySuggestion(suggestion)
       : onApplySavedQuery(suggestion);
   };
-  renderRow: (arg0: TransformedSuggestion | SavedQuery) => Node = ({
+  renderRow: (arg0: TransformedSuggestion | SavedQuery)=> React.ReactNode = ({
     item,
   }: TransformedSuggestion | SavedQuery) => {
     const isSuggestion = item.caret;

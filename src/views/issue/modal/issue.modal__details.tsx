@@ -95,7 +95,7 @@ export default class IssueModalDetails extends IssueDetails<
     });
     this.forceUpdate(); //TODO: investigate
   };
-  renderLinksBlock: () => Node = () => {
+  renderLinksBlock: ()=> React.ReactNode = () => {
     const issue: AnyIssue = this.getIssue();
     return (
       <LinkedIssuesTitle

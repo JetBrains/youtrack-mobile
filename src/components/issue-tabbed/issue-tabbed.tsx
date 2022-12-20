@@ -77,7 +77,7 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
   renderTabBar(
     uiTheme: UITheme,
     editMode: boolean = false,
-  ): (props: any) => Node {
+  ): (props: any)=> React.ReactNode {
     return (props: Record<string, any>) => {
       const uiThemeColors: UIThemeColors = uiTheme.colors;
       return (
@@ -135,7 +135,7 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
 
     return this.renderActivity(uiTheme);
   };
-  renderTabs: (uiTheme: UITheme) => Node = (uiTheme: UITheme) => {
+  renderTabs: (uiTheme: UITheme)=> React.ReactNode = (uiTheme: UITheme) => {
     return (
       <TabView
         lazy

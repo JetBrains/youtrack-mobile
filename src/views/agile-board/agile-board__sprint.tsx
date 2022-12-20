@@ -61,7 +61,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
       uiTheme,
     };
   };
-  renderCard: (issue: AnyIssue) => Node = (issue: AnyIssue) => {
+  renderCard: (issue: AnyIssue)=> React.ReactNode = (issue: AnyIssue) => {
     const {sprint, zoomedIn, canRunCommand, onTapIssue, uiTheme} = this.props;
     const canDrag: boolean = sprint.agile.isUpdatable || canRunCommand(issue);
     const cardWidth: number | null | undefined =
@@ -91,7 +91,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
       </Draggable>
     );
   };
-  renderOrphan: (board: Board) => Node = (board: Board) => {
+  renderOrphan: (board: Board)=> React.ReactNode = (board: Board) => {
     const {zoomedIn} = this.props;
     return (
       <BoardRow

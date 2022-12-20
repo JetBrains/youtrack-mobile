@@ -64,7 +64,7 @@ export default class YoutrackWiki extends PureComponent<Props, void> {
       imageHeaders: this.props.imageHeaders,
     });
   };
-  renderShowFullExceptionLink: (node: Node, index: number) => Node = (
+  renderShowFullExceptionLink: (node: Node, index: number)=> React.ReactNode = (
     node: Node,
     index: number,
   ) => {

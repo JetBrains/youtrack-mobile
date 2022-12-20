@@ -281,7 +281,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
     };
   }
 
-  renderItem: (arg0: any) => Node = ({item}: Record<string, any>) => {
+  renderItem: (arg0: any)=> React.ReactNode = ({item}: Record<string, any>) => {
     return (
       <SelectItem
         item={item}
@@ -345,7 +345,7 @@ export class Select extends PureComponent<SelectProps, SelectState> {
     ) : null;
   }
 
-  renderContent: () => Node = (): React.ReactNode => {
+  renderContent: ()=> React.ReactNode = (): React.ReactNode => {
     const {
       multi,
       autoFocus,
@@ -469,7 +469,7 @@ export class SelectModal extends Select<
   getWrapperComponent: () => any = (): any => {
     return View;
   };
-  render: () => Node = (): React.ReactNode => {
+  render: ()=> React.ReactNode = (): React.ReactNode => {
     const {visible} = this.state;
     return (
       <ModalPortal

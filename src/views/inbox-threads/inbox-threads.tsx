@@ -37,7 +37,7 @@ import type {TabRoute} from 'types/Issue';
 import type {Theme, UIThemeColors} from 'types/Theme';
 import type {ThreadEntity} from 'types/Inbox';
 
-const InboxThreads: () => Node = (): React.ReactNode => {
+const InboxThreads: ()=> React.ReactNode = (): React.ReactNode => {
   const routes: TabRoute[] = getThreadTabsTitles().map(
     (name: string, index: number) => ({
       key: index,
