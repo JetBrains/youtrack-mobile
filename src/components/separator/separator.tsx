@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import separatorStyles from './separator.styles';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   fitWindow?: boolean;
   indent?: boolean;

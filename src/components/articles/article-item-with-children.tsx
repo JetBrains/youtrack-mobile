@@ -6,7 +6,7 @@ import {i18n} from 'components/i18n/i18n';
 import {IconAngleRight, IconLock} from '../icon/icon';
 import styles from './article-item-with-children.styles';
 import type {Article} from 'flow/Article';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   article: Article;
   onArticlePress: (article: Article) => void;

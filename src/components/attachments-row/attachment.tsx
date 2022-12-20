@@ -23,7 +23,7 @@ import styles from './attachments-row.styles';
 import type {Attachment} from 'flow/CustomFields';
 import type {FileCategoryKey} from './attachment-helper';
 import type {UITheme} from 'flow/Theme';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type StyleMap = Record<FileCategoryKey, ViewStyleProp>;
 type Props = {
   imageHeaders: Record<string, any> | null | undefined;

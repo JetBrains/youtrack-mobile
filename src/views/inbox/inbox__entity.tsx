@@ -5,7 +5,7 @@ import {getReadableID} from 'components/issue-formatter/issue-formatter';
 import styles from './inbox.styles';
 import type {AnyIssue} from 'flow/Issue';
 import type {Article} from 'flow/Article';
-import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {TextStyleProp} from 'flow/Internal';
 export default function InboxEntity({
   entity,
   onNavigate,

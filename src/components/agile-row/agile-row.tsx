@@ -9,7 +9,7 @@ import {isAllColumnsCollapsed} from 'views/agile-board/agile-board__helper';
 import styles from './agile-row.styles';
 import type {AgileBoardRow, BoardCell, BoardColumn} from 'flow/Agile';
 import type {IssueOnList} from 'flow/Issue';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 import type {UITheme} from 'flow/Theme';
 type RenderIssueCard = (issue: IssueOnList) => any;
 type Props = {

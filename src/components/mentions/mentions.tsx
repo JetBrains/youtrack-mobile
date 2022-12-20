@@ -10,7 +10,7 @@ import Avatar from '../avatar/avatar';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import styles from './mentions.styles';
 import type {User} from 'flow/User';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   isLoading: boolean;
   mentions:

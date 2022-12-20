@@ -7,7 +7,7 @@ import usage from '../usage/usage';
 import {ThemeContext} from '../theme/theme-context';
 import styles from './summary-description-form.style';
 import type {Theme} from 'flow/Theme';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   analyticsId?: string;
   editable: boolean;

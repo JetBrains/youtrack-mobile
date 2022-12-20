@@ -13,7 +13,7 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './issues.styles';
 import type {AnyIssue} from 'flow/Issue';
 import type {BundleValue} from 'flow/CustomFields';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   issue: AnyIssue;
   onClick: (...args: Array<any>) => any;

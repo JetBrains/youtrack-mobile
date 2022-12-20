@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Text} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   maxLength?: number;
   text: string;

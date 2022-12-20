@@ -20,7 +20,7 @@ import type {IssueLink} from 'flow/CustomFields';
 import type {IssueOnList} from 'flow/Issue';
 import type {LinksListData} from './linked-issues-helper';
 import type {Theme} from 'flow/Theme';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   canLink?: (issue: IssueOnList) => boolean;
   issuesGetter: (linkTypeName: string, query: string) => any;

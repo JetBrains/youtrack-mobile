@@ -4,7 +4,7 @@ import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {ytDate} from 'components/date/date';
 import styles from './issue-tabbed.style';
 import type {User} from 'flow/User';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   reporter: User;
   updater: User;

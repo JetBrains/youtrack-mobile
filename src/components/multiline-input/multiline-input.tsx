@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {TextInput} from 'react-native';
 import {isIOSPlatform} from 'util/util';
 import {UNIT} from '../variables/variables';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 const iOSPlatform: boolean = isIOSPlatform();
 const MAX_DEFAULT_HEIGHT = 200;
 const MIN_DEFAULT_HEIGHT = UNIT * 4;

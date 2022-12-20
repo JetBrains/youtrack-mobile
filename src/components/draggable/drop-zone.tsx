@@ -10,7 +10,7 @@ import {DragContext} from './drag-container';
 import {getAgileCardHeight} from '../agile-card/agile-card';
 import {UNIT} from '../variables/variables';
 import type {DragContextType} from './drag-container';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type ZoneInfoData = {
   columnId: string;
   cellId: string;

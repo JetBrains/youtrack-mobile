@@ -17,7 +17,7 @@ import styles, {SWIPER_HEIGHT} from './accounts.styles';
 import type {AppConfig} from 'flow/AppConfig';
 import type {StorageState} from '../storage/storage';
 import type {UITheme} from 'flow/Theme';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   otherAccounts: Array<StorageState>;
   isChangingAccount: boolean | null | undefined;

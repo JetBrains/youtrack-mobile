@@ -30,7 +30,7 @@ import type {
 } from 'flow/CustomFields';
 import type {IssueFull} from 'flow/Issue';
 import type {MarkdownASTNode} from 'flow/Markdown';
-import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {TextStyleProp} from 'flow/Internal';
 import type {UITheme} from 'flow/Theme';
 export type Mentions = {
   articles: Array<Article>;

@@ -14,7 +14,7 @@ import {UNIT} from 'components/variables/variables';
 import styles from './wiki-page.styles';
 import type {Attachment} from 'flow/CustomFields';
 import type {Theme, UITheme} from 'flow/Theme';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 const CATEGORY_NAME = 'WikiPage';
 const isAndroid: boolean = isAndroidPlatform();
 type Props = {

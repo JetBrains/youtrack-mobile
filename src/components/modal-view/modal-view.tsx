@@ -3,7 +3,7 @@ import {Modal, View} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {ThemeContext} from '../theme/theme-context';
 import type {ModalOrientation, ModalAnimationType} from 'flow/ModalView';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 import {Orientation, AnimationType} from 'flow/ModalView';
 import type {Theme} from 'flow/Theme';
 type DefaultProps = {

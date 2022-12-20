@@ -23,7 +23,7 @@ import {
 import {setNotificationComponent} from 'components/notification/notification';
 import {ThemeContext} from 'components/theme/theme-context';
 import type {Theme} from 'flow/Theme';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 export default class AppProvider extends Component<
   {},
   {

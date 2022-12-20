@@ -10,7 +10,7 @@ import NoNotifications from './assets/notifications-light.svg';
 import NoNotificationsDark from './assets/notifications-dark.svg';
 import {DEFAULT_THEME} from '../theme/theme';
 import type {Theme} from 'flow/Theme';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   size?: number;
   style?: ViewStyleProp;

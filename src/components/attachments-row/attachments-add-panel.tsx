@@ -4,7 +4,7 @@ import IconAttachment from '@jetbrains/icons/attachment.svg';
 import {i18n} from 'components/i18n/i18n';
 import {View} from 'react-native-animatable';
 import styles from './attachment-add-panel.styles';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   isDisabled?: boolean;
   showAddAttachDialog: () => any;

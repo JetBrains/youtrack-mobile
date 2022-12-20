@@ -33,7 +33,7 @@ import type {IssueLinkTypeExtended} from './linked-issues-helper';
 import type {IssueLinkType} from 'flow/CustomFields';
 import type {IssueOnList, TransformedSuggestion} from 'flow/Issue';
 import type {Theme} from 'flow/Theme';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   issuesGetter: (linkTypeName: string, q: string) => any;
   onLinkIssue: (linkedIssueIdReadable: string, linkTypeName: string) => any;

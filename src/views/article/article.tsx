@@ -44,7 +44,7 @@ import type {IssueTabbedState} from 'components/issue-tabbed/issue-tabbed';
 import type {KnowledgeBaseState} from '../knowledge-base/knowledge-base-reducers';
 import type {RootState} from 'reducers/app-reducer';
 import type {Theme, UITheme, UIThemeColors} from 'flow/Theme';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 import type {Visibility} from 'flow/Visibility';
 type Props = ArticleState & {
   articlePlaceholder: ArticleEntity;

@@ -7,7 +7,7 @@ import {getApi} from '../api/api__instance';
 import {View} from 'react-native-animatable';
 import type {Attachment} from 'flow/CustomFields';
 import type {UITheme} from 'flow/Theme';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   attachingImage: Record<string, any> | null | undefined;
   attachments: Array<Attachment>;

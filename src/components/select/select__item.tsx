@@ -4,7 +4,7 @@ import Avatar from '../avatar/avatar';
 import {IconCheck} from '../icon/icon';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import styles from './select.styles';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 export type Props = {
   item: Record<string, any>;
   isSelected: boolean;

@@ -6,7 +6,7 @@ import styles, {calendarTheme} from './date-picker.styles';
 import type {AppState} from '../../reducers';
 import type {DateData} from 'react-native-calendars';
 import type {Theme} from 'flow/Theme';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   current?: number;
   onDateSelect: (timestamp: number) => any;

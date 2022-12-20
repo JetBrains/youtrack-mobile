@@ -19,7 +19,7 @@ import {ytDate} from 'components/date/date';
 import styles from './activity__stream.styles';
 import type {Activity} from 'flow/Activity';
 import type {PullRequest, VCSActivity, VcsProcessor} from 'flow/Vcs';
-import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {TextStyleProp} from 'flow/Internal';
 type Props = {
   activityGroup: Activity;
 };

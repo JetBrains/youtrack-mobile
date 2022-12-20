@@ -6,7 +6,7 @@ import {showActions} from '../action-sheet/action-sheet';
 import styles from './tags.styles';
 import type {ActionSheetOption} from '../action-sheet/action-sheet';
 import type {Tag} from 'flow/CustomFields';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   tags: Array<Tag>;
   onTagPress: (query: string) => void;

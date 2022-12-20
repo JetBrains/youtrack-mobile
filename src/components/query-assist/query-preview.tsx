@@ -4,7 +4,7 @@ import {i18n} from 'components/i18n/i18n';
 import {IconSearch} from '../icon/icon';
 import {iconClearText} from '../icon/icon-clear-text';
 import styles from './query-assist.styles';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   query: string;
   onFocus?: (clear: boolean) => any;

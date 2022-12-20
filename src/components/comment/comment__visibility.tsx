@@ -2,7 +2,7 @@ import {Text, View} from 'react-native';
 import React, {PureComponent} from 'react';
 import {IconLock} from '../icon/icon';
 import styles from './comment__visibility.styles';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   visibility: string | null | undefined;
   color: string;

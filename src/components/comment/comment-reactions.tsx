@@ -11,7 +11,7 @@ import type {AppState} from '../../reducers';
 import type {IssueComment} from 'flow/CustomFields';
 import type {Reaction} from 'flow/Reaction';
 import type {User} from 'flow/User';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type ReactionsType = {
   comment: IssueComment;
   currentUser: User;

@@ -34,7 +34,7 @@ import type {IssueProject} from 'flow/CustomFields';
 import type {SelectProps} from 'components/select/select';
 import type {Theme} from 'flow/Theme';
 import type {User} from 'flow/User';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 import type {WorkItem, TimeTracking, WorkItemType} from 'flow/Work';
 type Props = {
   issue: IssueFull;

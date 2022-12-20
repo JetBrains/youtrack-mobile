@@ -26,7 +26,7 @@ import type {
   CustomField as IssueCustomField,
 } from 'flow/CustomFields';
 import type {UITheme} from 'flow/Theme';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   autoFocusSelect?: boolean;
   style?: ViewStyleProp;

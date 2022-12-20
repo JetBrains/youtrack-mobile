@@ -15,7 +15,7 @@ import type {Attachment} from 'flow/CustomFields';
 import type {Folder} from 'flow/User';
 import type {Mentions} from './markdown-view-rules';
 import type {Theme} from 'flow/Theme';
-import type {TextStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {TextStyleProp} from 'flow/Internal';
 type Props = {
   textStyle?: TextStyleProp;
   attachments?: Array<Attachment>;

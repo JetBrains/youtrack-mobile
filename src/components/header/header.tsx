@@ -4,7 +4,7 @@ import Router from '../router/router';
 import {ThemeContext} from '../theme/theme-context';
 import {HIT_SLOP} from '../common-styles/button';
 import styles from './header.styles';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 import type {Theme} from 'flow/Theme';
 export type HeaderProps = {
   onBack?: () => any;

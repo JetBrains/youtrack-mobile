@@ -11,7 +11,7 @@ import type {
   ArticleProject,
   ArticlesList,
 } from 'flow/Article';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import type {ViewStyleProp} from 'flow/Internal';
 type Props = {
   article: Article;
   articlesList: ArticlesList;
