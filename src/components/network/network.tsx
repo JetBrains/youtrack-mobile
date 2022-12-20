@@ -5,7 +5,7 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 import {useDispatch} from 'react-redux';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {emitGoOnlineEvent} from './network-events';
-import {isIOSPlatform} from '../../util/util';
+import {isIOSPlatform} from 'util/util';
 import {setNetworkState} from '../../actions/app-actions';
 import styles from './network.styles';
 import type {AppStateValues} from 'react-native/Libraries/AppState/AppState';

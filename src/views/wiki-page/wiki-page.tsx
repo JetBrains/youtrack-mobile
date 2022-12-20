@@ -8,7 +8,7 @@ import YoutrackWiki from 'components/wiki/youtrack-wiki';
 import {getApi} from 'components/api/api__instance';
 import {IconClose} from 'components/icon/icon';
 import {IconShare} from 'components/icon/icon';
-import {isAndroidPlatform, isIOSPlatform} from '../../util/util';
+import {isAndroidPlatform, isIOSPlatform} from 'util/util';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables/variables';
 import styles from './wiki-page.styles';
