@@ -22,16 +22,16 @@ import {hasMimeType} from 'components/mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from 'components/icon/icon';
 import {whiteSpacesRegex} from './util/patterns';
 import styles from './youtrack-wiki.styles';
-import type {Article} from 'flow/Article';
+import type {Article} from 'types/Article';
 import type {
   Attachment,
   ImageDimensions,
   IssueProject,
-} from 'flow/CustomFields';
-import type {IssueFull} from 'flow/Issue';
-import type {MarkdownASTNode} from 'flow/Markdown';
-import type {TextStyleProp} from 'flow/Internal';
-import type {UITheme} from 'flow/Theme';
+} from 'types/CustomFields';
+import type {IssueFull} from 'types/Issue';
+import type {MarkdownASTNode} from 'types/Markdown';
+import type {TextStyleProp} from 'types/Internal';
+import type {UITheme} from 'types/Theme';
 export type Mentions = {
   articles: Array<Article>;
   issues: Array<IssueFull>;

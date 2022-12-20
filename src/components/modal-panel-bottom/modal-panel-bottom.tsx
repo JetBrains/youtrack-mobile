@@ -4,7 +4,7 @@ import ModalView from '../modal-view/modal-view';
 import {IconClose} from '../icon/icon';
 import {Text, View} from 'react-native';
 import styles from './modal-panel-bottom.style';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   children?: any;
   onHide: () => void;

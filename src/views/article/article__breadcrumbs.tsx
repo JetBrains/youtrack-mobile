@@ -10,8 +10,8 @@ import type {
   Article as ArticleEntity,
   ArticleProject,
   ArticlesList,
-} from 'flow/Article';
-import type {ViewStyleProp} from 'flow/Internal';
+} from 'types/Article';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   article: Article;
   articlesList: ArticlesList;

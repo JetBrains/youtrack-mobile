@@ -10,7 +10,7 @@ import {createCommandDialogReducers} from 'components/command-dialog/command-dia
 import {ON_NAVIGATE_BACK} from 'actions/action-types';
 import {routeMap} from '../../app-routes';
 import * as types from './issue-action-types';
-import type {Activity} from 'flow/Activity';
+import type {Activity} from 'types/Activity';
 import type {IssueState} from './issue-base-reducer';
 import type {Slice} from '@reduxjs/toolkit';
 export type {IssueState as State}; //TODO

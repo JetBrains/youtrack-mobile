@@ -10,7 +10,7 @@ import {
 } from './inbox-threads-actions';
 import styles from './inbox-threads.styles';
 import type {AppState} from '../../reducers';
-import type {InboxFolder} from 'flow/Inbox';
+import type {InboxFolder} from 'types/Inbox';
 
 const InboxThreadsUpdateButton = ({index}: {index: number}) => {
   const dispatch = useDispatch();

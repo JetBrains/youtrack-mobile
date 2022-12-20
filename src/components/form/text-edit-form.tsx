@@ -2,8 +2,8 @@ import React, {useCallback, useContext, useEffect, useRef} from 'react';
 import MultilineInput from '../multiline-input/multiline-input';
 import {ThemeContext} from '../theme/theme-context';
 import styles from './summary-description-form.style';
-import type {Theme, UITheme} from 'flow/Theme';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {Theme, UITheme} from 'types/Theme';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   adaptive?: boolean;
   autoFocus?: boolean;

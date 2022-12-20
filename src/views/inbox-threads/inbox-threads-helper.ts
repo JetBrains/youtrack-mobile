@@ -1,7 +1,7 @@
 import {isActivityCategory} from 'components/activity/activity__category';
 import {i18n} from 'components/i18n/i18n';
-import type {Activity} from 'flow/Activity';
-import type {InboxThreadMessage} from 'flow/Inbox';
+import type {Activity} from 'types/Activity';
+import type {InboxThreadMessage} from 'types/Inbox';
 
 function getTypes(
   activity: Activity,

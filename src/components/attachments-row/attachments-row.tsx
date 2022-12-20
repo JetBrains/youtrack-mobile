@@ -5,9 +5,9 @@ import Attach from './attachment';
 import AttachmentErrorBoundary from './attachment-error-boundary';
 import {getApi} from '../api/api__instance';
 import {View} from 'react-native-animatable';
-import type {Attachment} from 'flow/CustomFields';
-import type {UITheme} from 'flow/Theme';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {Attachment} from 'types/CustomFields';
+import type {UITheme} from 'types/Theme';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   attachingImage: Record<string, any> | null | undefined;
   attachments: Array<Attachment>;

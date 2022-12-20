@@ -13,10 +13,10 @@ import {i18n} from 'components/i18n/i18n';
 import {isActivityCategory} from 'components/activity/activity__category';
 import {UNIT} from 'components/variables/variables';
 import styles from './activity__stream.styles';
-import type {Activity, ActivityChangeText} from 'flow/Activity';
-import type {CustomField} from 'flow/CustomFields';
+import type {Activity, ActivityChangeText} from 'types/Activity';
+import type {CustomField} from 'types/CustomFields';
 import type {TextValueChangeParams} from 'components/activity/activity__history-value';
-import type {WorkTimeSettings} from 'flow/Work';
+import type {WorkTimeSettings} from 'types/Work';
 import {hasType} from '../api/api__resource-types';
 type Props = {
   activity: Activity;

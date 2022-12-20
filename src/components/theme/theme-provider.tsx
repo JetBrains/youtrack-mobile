@@ -6,7 +6,7 @@ import {flushStoragePart, getStorageState} from '../storage/storage';
 import {isAndroidPlatform} from 'util/util';
 import {ThemeContext} from './theme-context';
 import {buildStyles, getSystemThemeMode, getUITheme, themes} from './theme';
-import type {UITheme} from 'flow/Theme';
+import type {UITheme} from 'types/Theme';
 type State = {
   mode: string | null | undefined;
   uiTheme: UITheme;

@@ -9,7 +9,7 @@ import issueFields from './api__issue-fields';
 import qs from 'qs';
 import {handleRelativeUrl} from '../config/config';
 import type Auth from '../auth/oauth2';
-import type {Activity} from 'flow/Activity';
+import type {Activity} from 'types/Activity';
 import type {
   Attachment,
   CustomFieldText,
@@ -19,10 +19,10 @@ import type {
   IssueLinkType,
   IssueProject,
   Tag,
-} from 'flow/CustomFields';
-import type {AnyIssue, IssueFull} from 'flow/Issue';
-import type {Visibility} from 'flow/Visibility';
-import type {WorkItem} from 'flow/Work';
+} from 'types/CustomFields';
+import type {AnyIssue, IssueFull} from 'types/Issue';
+import type {Visibility} from 'types/Visibility';
+import type {WorkItem} from 'types/Work';
 export default class IssueAPI extends ApiBase {
   draftsURL: string = `${this.youTrackApiUrl}${
     this.isActualAPI ? '' : '/admin'

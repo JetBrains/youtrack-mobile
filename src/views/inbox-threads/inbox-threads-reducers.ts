@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {threadsPageSize} from 'components/api/api__inbox';
-import type {CustomError} from 'flow/Error';
-import type {InboxThread, ThreadsStateDataKey} from 'flow/Inbox';
+import type {CustomError} from 'types/Error';
+import type {InboxThread, ThreadsStateDataKey} from 'types/Inbox';
 export type ThreadsStateData = Record<
   ThreadsStateDataKey,
   {

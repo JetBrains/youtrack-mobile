@@ -1,15 +1,15 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {attachmentActionMap} from 'components/attachments-row/attachment-helper';
-import type {CommandSuggestionResponse, IssueFull} from 'flow/Issue';
+import type {CommandSuggestionResponse, IssueFull} from 'types/Issue';
 import type {
   CustomField,
   FieldValue,
   IssueLink,
   IssueProject,
-} from 'flow/CustomFields';
+} from 'types/CustomFields';
 import type {SliceCaseReducers} from '@reduxjs/toolkit';
-import type {User} from 'flow/User';
-import type {Visibility} from 'flow/Visibility';
+import type {User} from 'types/User';
+import type {Visibility} from 'types/Visibility';
 export type IssueState = {
   attachingImage: Record<string, any> | null | undefined;
   commandIsApplying: boolean;

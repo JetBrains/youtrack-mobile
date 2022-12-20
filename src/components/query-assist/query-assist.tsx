@@ -10,7 +10,7 @@ import {HIT_SLOP} from '../common-styles/button';
 import {i18n} from 'components/i18n/i18n';
 import {IconBack, IconClose} from '../icon/icon';
 import styles from './query-assist.styles';
-import type {TransformedSuggestion, SavedQuery} from 'flow/Issue';
+import type {TransformedSuggestion, SavedQuery} from 'types/Issue';
 const SHOW_LIST_ANIMATION_DURATION = 500;
 type Props = {
   suggestions: Array<TransformedSuggestion | SavedQuery>;

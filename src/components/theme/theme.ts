@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import darkTheme from './theme-dark';
 import lightTheme from './theme-light';
 import {THEME_MODE_KEY} from '../storage/storage';
-import type {UITheme} from 'flow/Theme';
+import type {UITheme} from 'types/Theme';
 export const DEFAULT_THEME: UITheme = lightTheme;
 export const getSystemThemeMode = (): any => Appearance.getColorScheme();
 export const themes: Array<UITheme> = [lightTheme, darkTheme];

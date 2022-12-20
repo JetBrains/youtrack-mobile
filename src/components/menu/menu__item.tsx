@@ -2,7 +2,7 @@ import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {HIT_SLOP} from '../common-styles/button';
 import styles from './menu.styles';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   disabled?: boolean;
   icon: React.ReactElement<React.ComponentProps<any>, any>;

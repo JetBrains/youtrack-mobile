@@ -25,8 +25,8 @@ import {
 import {i18n} from 'components/i18n/i18n';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import styles from './issues.styles';
-import type {Folder} from 'flow/User';
-import type {IssueFieldSortProperty, SearchSuggestions} from 'flow/Sorting';
+import type {Folder} from 'types/User';
+import type {IssueFieldSortProperty, SearchSuggestions} from 'types/Sorting';
 type Props = {
   context: Folder;
   onApply: (

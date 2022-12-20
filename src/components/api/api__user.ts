@@ -2,9 +2,9 @@ import ApiBase from './api__base';
 import {handleRelativeUrl} from '../config/config';
 import {ResourceTypes} from './api__resource-types';
 import type Auth from '../auth/oauth2';
-import type {IssueComment} from 'flow/CustomFields';
-import type {Reaction} from 'flow/Reaction';
-import type {Folder, User, UserAppearanceProfile} from 'flow/User';
+import type {IssueComment} from 'types/CustomFields';
+import type {Reaction} from 'types/Reaction';
+import type {Folder, User, UserAppearanceProfile} from 'types/User';
 export default class UserAPI extends ApiBase {
   apiUrl: string;
   SEARCH_CONTEXT_FIELDS: Array<string> = ['id', 'name', 'shortName', 'query'];

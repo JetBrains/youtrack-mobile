@@ -6,8 +6,8 @@ import {extractErrorMessage, resolveError} from '../error/error-resolver';
 import {i18n} from 'components/i18n/i18n';
 import {IconSearch} from '../icon/icon';
 import {styles} from './error-message.style';
-import type {CustomError, ErrorMessageData} from 'flow/Error';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {CustomError, ErrorMessageData} from 'types/Error';
+import type {ViewStyleProp} from 'types/Internal';
 export type ErrorMessageProps = {
   error?: CustomError;
   errorMessageData?: ErrorMessageData | null;

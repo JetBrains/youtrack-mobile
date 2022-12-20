@@ -6,7 +6,7 @@ import {flushStoragePart, getStorageState} from '../storage/storage';
 import {getApi} from '../api/api__instance';
 import {isAndroidPlatform} from 'util/util';
 import type Api from '../api/api';
-import type {Token} from 'flow/Notification';
+import type {Token} from 'types/Notification';
 import type {StorageState} from '../storage/storage';
 export class PushNotifications {
   static deviceToken: null | string = null;

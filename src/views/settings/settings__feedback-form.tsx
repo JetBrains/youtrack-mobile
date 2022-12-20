@@ -22,8 +22,8 @@ import {until} from 'util/util';
 import {HIT_SLOP} from 'components/common-styles/button';
 import styles from './settings__feedback-form.styles';
 import type {FeedbackLogs, FeedbackType} from './settings-helper';
-import type {UITheme, UIThemeColors} from 'flow/Theme';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {UITheme, UIThemeColors} from 'types/Theme';
+import type {ViewStyleProp} from 'types/Internal';
 type Feedback = {
   summary: string | null | undefined;
   email: string | null | undefined;

@@ -6,7 +6,7 @@ import {
 import {UNIT} from '../variables/variables';
 import {isIOSPlatform} from 'util/util';
 import {isAllColumnsCollapsed} from 'views/agile-board/agile-board__helper';
-import type {BoardColumn} from 'flow/Agile';
+import type {BoardColumn} from 'types/Agile';
 type WidthData = {
   windowWidth: number;
   cardWidth: number;

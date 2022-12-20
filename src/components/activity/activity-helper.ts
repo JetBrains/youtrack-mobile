@@ -8,8 +8,8 @@ import type {
   ActivityPositionData,
   ActivityType,
   Activity,
-} from 'flow/Activity';
-import type {IssueComment} from 'flow/CustomFields';
+} from 'types/Activity';
+import type {IssueComment} from 'types/CustomFields';
 import {i18n} from '../i18n/i18n';
 export interface GroupActivitiesParams {
   onCreateGroup?: (arg0: group) => void;

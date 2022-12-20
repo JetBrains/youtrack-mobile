@@ -7,10 +7,10 @@ import {i18n} from 'components/i18n/i18n';
 import {IconAngleDownRight} from '../icon/icon';
 import {isAllColumnsCollapsed} from 'views/agile-board/agile-board__helper';
 import styles from './agile-row.styles';
-import type {AgileBoardRow, BoardCell, BoardColumn} from 'flow/Agile';
-import type {IssueOnList} from 'flow/Issue';
-import type {ViewStyleProp} from 'flow/Internal';
-import type {UITheme} from 'flow/Theme';
+import type {AgileBoardRow, BoardCell, BoardColumn} from 'types/Agile';
+import type {IssueOnList} from 'types/Issue';
+import type {ViewStyleProp} from 'types/Internal';
+import type {UITheme} from 'types/Theme';
 type RenderIssueCard = (issue: IssueOnList) => any;
 type Props = {
   style?: ViewStyleProp;

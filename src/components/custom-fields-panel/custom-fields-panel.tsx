@@ -24,9 +24,9 @@ import styles, {calendarTheme} from './custom-fields-panel.styles';
 import type {
   IssueProject,
   CustomField as IssueCustomField,
-} from 'flow/CustomFields';
-import type {UITheme} from 'flow/Theme';
-import type {ViewStyleProp} from 'flow/Internal';
+} from 'types/CustomFields';
+import type {UITheme} from 'types/Theme';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   autoFocusSelect?: boolean;
   style?: ViewStyleProp;

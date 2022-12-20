@@ -4,8 +4,8 @@ import {doAuthorize, normalizeAuthParams, refreshToken} from './oauth2-helper';
 import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
 import {getAuthParamsKey} from '../storage/storage__oauth';
 import {logEvent} from '../log/log-helper';
-import type {AppConfig} from 'flow/AppConfig';
-import type {AuthParams, OAuthParams} from 'flow/Auth';
+import type {AppConfig} from 'types/AppConfig';
+import type {AuthParams, OAuthParams} from 'types/Auth';
 export default class OAuth2 extends AuthBase {
   authParams: AuthParams;
 

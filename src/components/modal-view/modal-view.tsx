@@ -2,10 +2,10 @@ import React, {PureComponent} from 'react';
 import {Modal, View} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {ThemeContext} from '../theme/theme-context';
-import type {ModalOrientation, ModalAnimationType} from 'flow/ModalView';
-import type {ViewStyleProp} from 'flow/Internal';
-import {Orientation, AnimationType} from 'flow/ModalView';
-import type {Theme} from 'flow/Theme';
+import type {ModalOrientation, ModalAnimationType} from 'types/ModalView';
+import type {ViewStyleProp} from 'types/Internal';
+import {Orientation, AnimationType} from 'types/ModalView';
+import type {Theme} from 'types/Theme';
 type DefaultProps = {
   onRequestClose: () => any;
   supportedOrientations: Array<ModalOrientation>;

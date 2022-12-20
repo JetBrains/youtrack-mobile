@@ -4,8 +4,8 @@ import IssueMarkdown from 'views/issue/issue__markdown';
 import TextEditForm from '../form/text-edit-form';
 import {isRequiredCustomField} from './custom-field-helper';
 import styles from './custom-field.styles';
-import type {CustomFieldText} from 'flow/CustomFields';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {CustomFieldText} from 'types/CustomFields';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   editMode: boolean;
   onUpdateFieldValue: (textValue: string) => Promise<any>;

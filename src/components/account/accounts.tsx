@@ -14,10 +14,10 @@ import {getStorageState} from '../storage/storage';
 import {HIT_SLOP} from '../common-styles/button';
 import avatarStyles from '../avatar/default-avatar.styles';
 import styles, {SWIPER_HEIGHT} from './accounts.styles';
-import type {AppConfig} from 'flow/AppConfig';
+import type {AppConfig} from 'types/AppConfig';
 import type {StorageState} from '../storage/storage';
-import type {UITheme} from 'flow/Theme';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {UITheme} from 'types/Theme';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   otherAccounts: Array<StorageState>;
   isChangingAccount: boolean | null | undefined;

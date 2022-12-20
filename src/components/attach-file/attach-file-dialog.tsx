@@ -35,14 +35,14 @@ import {logEvent} from '../log/log-helper';
 import {notifyError} from '../notification/notification';
 import {ThemeContext} from '../theme/theme-context';
 import styles from './attach-file-dialog.styles';
-import type {ActionSheetAction} from 'flow/Action';
-import type {ImageDimensions} from 'flow/CustomFields';
+import type {ActionSheetAction} from 'types/Action';
+import type {ImageDimensions} from 'types/CustomFields';
 import type {DisplayMetrics} from 'react-native/Libraries/Utilities/NativeDeviceInfo';
-import type {NormalizedAttachment} from 'flow/Attachment';
-import type {Theme} from 'flow/Theme';
-import type {UserGroup} from 'flow/UserGroup';
-import type {User} from 'flow/User';
-import type {Visibility} from 'flow/Visibility';
+import type {NormalizedAttachment} from 'types/Attachment';
+import type {Theme} from 'types/Theme';
+import type {UserGroup} from 'types/UserGroup';
+import type {User} from 'types/User';
+import type {Visibility} from 'types/Visibility';
 type Props = {
   actions: {
     onAttach: (

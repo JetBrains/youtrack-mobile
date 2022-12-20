@@ -3,8 +3,8 @@ import {View} from 'react-native';
 import QueryAssist, {QueryAssistModal} from './query-assist';
 import {isSplitView} from '../responsive/responsive-helper';
 import styles from './query-assist.styles';
-import type {TransformedSuggestion} from '../../flow/Issue';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {TransformedSuggestion} from '../../types/Issue';
+import type {ViewStyleProp} from 'types/Internal';
 type SearchPanelProps = {
   queryAssistSuggestions: Array<TransformedSuggestion>;
   query: string;

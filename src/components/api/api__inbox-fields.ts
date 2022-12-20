@@ -4,7 +4,7 @@ import {
   PULL_REQUEST_FIELDS,
 } from './api__activities-issue-fields';
 import issueFields from './api__issue-fields';
-import type {ToField} from 'flow/ToField';
+import type {ToField} from 'types/ToField';
 const excludeArray = [
   'noUserReason(id)',
   'noHubUserReason(id)',

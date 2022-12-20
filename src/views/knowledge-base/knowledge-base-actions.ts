@@ -35,9 +35,9 @@ import type {
   ArticlesList,
   ArticlesListItem,
   ProjectArticlesData,
-} from 'flow/Article';
-import type {CustomError} from 'flow/Error';
-import type {Folder} from 'flow/User';
+} from 'types/Article';
+import type {CustomError} from 'types/Error';
+import type {Folder} from 'types/User';
 type ApiGetter = () => Api;
 export const getCachedArticleList = (): ArticlesList =>
   getStorageState().articlesList || [];

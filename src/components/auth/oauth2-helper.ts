@@ -5,8 +5,8 @@ import {
   revoke,
 } from 'react-native-app-auth';
 import log from '../log/log';
-import type {AppConfig} from 'flow/AppConfig';
-import type {AuthParams, OAuthConfig, OAuthParams2} from 'flow/Auth';
+import type {AppConfig} from 'types/AppConfig';
+import type {AuthParams, OAuthConfig, OAuthParams2} from 'types/Auth';
 const ACCEPT_HEADER: string = 'application/json, text/plain, */*';
 const URL_ENCODED_TYPE: string = 'application/x-www-form-urlencoded';
 

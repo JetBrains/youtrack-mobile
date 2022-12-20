@@ -4,8 +4,8 @@ import ApiHelper from './api__helper';
 import issueFields from './api__issue-fields';
 import {checkVersion, FEATURE_VERSION} from '../feature/feature';
 import {routeMap} from '../../app-routes';
-import type {IssueOnList} from 'flow/Issue';
-import type {Folder} from 'flow/User';
+import type {IssueOnList} from 'types/Issue';
+import type {Folder} from 'types/User';
 export default class IssuesAPI extends ApiBase {
   async _getIssues(
     query: string = '',

@@ -5,8 +5,8 @@ import {UNIT} from 'components/variables/variables';
 import {isAllColumnsCollapsed} from './agile-board__helper';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from 'components/agile-common/agile-common';
 import {secondaryText} from 'components/common-styles/typography';
-import type {BoardColumn} from 'flow/Agile';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {BoardColumn} from 'types/Agile';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   style?: ViewStyleProp;
   columns?: Array<BoardColumn>;

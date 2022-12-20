@@ -9,8 +9,8 @@ import {
 import Avatar from '../avatar/avatar';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import styles from './mentions.styles';
-import type {User} from 'flow/User';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {User} from 'types/User';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   isLoading: boolean;
   mentions:

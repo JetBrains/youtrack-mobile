@@ -8,9 +8,9 @@ import {sortByTimestampReverse} from 'components/search/sorting';
 import {until} from 'util/util';
 import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
-import type {CustomError} from 'flow/Error';
-import type {IssueLinkType} from '../../flow/CustomFields';
-import type {Notification} from 'flow/Inbox';
+import type {CustomError} from 'types/Error';
+import type {IssueLinkType} from '../../types/CustomFields';
+import type {Notification} from 'types/Inbox';
 type ApiGetter = () => Api;
 export function setLoading(
   loading: boolean,

@@ -18,9 +18,9 @@ import type {
   AgileBoardRow,
   Board,
   AgileUserProfile,
-} from 'flow/Agile';
-import type {IssueOnList, IssueFull, ServersideSuggestion} from 'flow/Issue';
-import type {CustomError} from 'flow/Error';
+} from 'types/Agile';
+import type {IssueOnList, IssueFull, ServersideSuggestion} from 'types/Issue';
+import type {CustomError} from 'types/Error';
 type BoardState = Board;
 export type AgilePageState = {
   isLoading: boolean;

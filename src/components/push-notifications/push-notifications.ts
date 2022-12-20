@@ -3,7 +3,7 @@ import PNHelper from './push-notifications-helper';
 import PushNotificationsProcessor from './push-notifications-processor';
 import {isAndroidPlatform} from 'util/util';
 import type {StorageState} from '../storage/storage';
-import type {Token} from 'flow/Notification';
+import type {Token} from 'types/Notification';
 
 async function getDeviceToken(): Promise<Token> {
   let deviceToken: Token = null;

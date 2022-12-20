@@ -25,7 +25,7 @@ import type {
   CommandSuggestionResponse,
   IssueFull,
   IssueOnList,
-} from 'flow/Issue';
+} from 'types/Issue';
 import type {CreateIssueState} from './create-issue-reducers';
 import type {
   CustomField,
@@ -33,10 +33,10 @@ import type {
   Attachment,
   CustomFieldText,
   IssueLink,
-} from 'flow/CustomFields';
-import type {NormalizedAttachment} from 'flow/Attachment';
+} from 'types/CustomFields';
+import type {NormalizedAttachment} from 'types/Attachment';
 import type {StorageState} from 'components/storage/storage';
-import type {Visibility} from 'flow/Visibility';
+import type {Visibility} from 'types/Visibility';
 type ApiGetter = () => Api;
 export const CATEGORY_NAME = 'Create issue view';
 export function setIssueSummary(summary: string): CreateIssueState {

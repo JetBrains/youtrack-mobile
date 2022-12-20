@@ -1,8 +1,8 @@
 import ApiBase from './api__base';
 import {inboxThreadFields} from './api__inbox-fields';
-import {InboxFolder} from 'flow/Inbox';
+import {InboxFolder} from 'types/Inbox';
 import type Auth from '../auth/oauth2';
-import type {InboxThread} from 'flow/Inbox';
+import type {InboxThread} from 'types/Inbox';
 export const threadsPageSize: number = 16;
 export default class IssueAPI extends ApiBase {
   constructor(auth: Auth) {

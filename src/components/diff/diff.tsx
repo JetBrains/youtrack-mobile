@@ -3,7 +3,7 @@ import {Text, View} from 'react-native';
 import Details from '../details/details';
 import DiffMatchWord from './diff__match-word';
 import styles from './diff.styles';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {ViewStyleProp} from 'types/Internal';
 type DiffInfo = {
   id: string;
   style: ViewStyleProp;

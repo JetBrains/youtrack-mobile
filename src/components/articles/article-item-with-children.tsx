@@ -5,8 +5,8 @@ import {hasType} from '../api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {IconAngleRight, IconLock} from '../icon/icon';
 import styles from './article-item-with-children.styles';
-import type {Article} from 'flow/Article';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {Article} from 'types/Article';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   article: Article;
   onArticlePress: (article: Article) => void;

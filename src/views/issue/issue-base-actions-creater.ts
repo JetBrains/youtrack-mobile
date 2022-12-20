@@ -29,19 +29,19 @@ import type {
   FieldValue,
   IssueProject,
   Tag,
-} from 'flow/CustomFields';
+} from 'types/CustomFields';
 import type {
   AnyIssue,
   CommandSuggestionResponse,
   IssueFull,
   IssueOnList,
   OpenNestedViewParams,
-} from 'flow/Issue';
-import type {IssueLink} from 'flow/CustomFields';
+} from 'types/Issue';
+import type {IssueLink} from 'types/CustomFields';
 import type {IssueState} from './issue-base-reducer';
-import type {NormalizedAttachment} from 'flow/Attachment';
-import type {UserAppearanceProfile} from 'flow/User';
-import type {Visibility} from 'flow/Visibility';
+import type {NormalizedAttachment} from 'types/Attachment';
+import type {UserAppearanceProfile} from 'types/User';
+import type {Visibility} from 'types/Visibility';
 type ApiGetter = () => Api;
 type StateGetter = () => IssueState;
 

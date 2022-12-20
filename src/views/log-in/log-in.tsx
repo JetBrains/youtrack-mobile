@@ -29,10 +29,10 @@ import {openDebugView, onLogIn} from 'actions/app-actions';
 import {resolveErrorMessage} from 'components/error/error-resolver';
 import {ThemeContext} from 'components/theme/theme-context';
 import styles from './log-in.styles';
-import type {AppConfig} from 'flow/AppConfig';
-import type {AuthParams, OAuthParams2} from 'flow/Auth';
-import type {CustomError} from 'flow/Error';
-import type {Theme, UIThemeColors} from 'flow/Theme';
+import type {AppConfig} from 'types/AppConfig';
+import type {AuthParams, OAuthParams2} from 'types/Auth';
+import type {CustomError} from 'types/Error';
+import type {Theme, UIThemeColors} from 'types/Theme';
 type Props = {
   config: AppConfig;
   onLogIn: (authParams: OAuthParams2) => any;

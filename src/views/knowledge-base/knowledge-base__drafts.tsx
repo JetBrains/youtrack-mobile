@@ -27,7 +27,7 @@ import {SkeletonList} from 'components/skeleton/skeleton';
 import {until} from 'util/util';
 import {View as AnimatedView} from 'react-native-animatable';
 import styles from './knowledge-base.styles';
-import type {Article, ArticleDraft} from 'flow/Article';
+import type {Article, ArticleDraft} from 'types/Article';
 type Props = {
   backIcon?: any;
   onBack?: () => any;

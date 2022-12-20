@@ -6,8 +6,8 @@ import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/Even
 import {i18n} from 'components/i18n/i18n';
 import {isSplitView} from '../responsive/responsive-helper';
 import styles from './issue-tabbed.style';
-import type {TabRoute} from 'flow/Issue';
-import type {UITheme, UIThemeColors} from 'flow/Theme';
+import type {TabRoute} from 'types/Issue';
+import type {UITheme, UIThemeColors} from 'types/Theme';
 export type IssueTabbedState = {
   index: number;
   routes: Array<TabRoute>;

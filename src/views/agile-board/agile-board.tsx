@@ -44,9 +44,9 @@ import {UNIT} from 'components/variables/variables';
 import styles from './agile-board.styles';
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
 import type {AgilePageState} from './board-reducers';
-import type {AnyIssue, IssueOnList} from 'flow/Issue';
+import type {AnyIssue, IssueOnList} from 'types/Issue';
 import type {AppState} from '../../reducers';
-import type {CustomError} from 'flow/Error';
+import type {CustomError} from 'types/Error';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {
   SprintFull,
@@ -54,8 +54,8 @@ import type {
   BoardColumn,
   BoardOnList,
   Sprint,
-} from 'flow/Agile';
-import type {Theme, UITheme} from 'flow/Theme';
+} from 'types/Agile';
+import type {Theme, UITheme} from 'types/Theme';
 import DeviceInfo from 'react-native-device-info';
 const CATEGORY_NAME = 'Agile board';
 type Props = AgilePageState & {

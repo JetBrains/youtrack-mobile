@@ -39,16 +39,16 @@ import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables/variables';
 import styles from './issue-activity.styles';
-import type {Activity} from 'flow/Activity';
+import type {Activity} from 'types/Activity';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
-import type {IssueComment} from 'flow/CustomFields';
-import type {IssueContextData} from 'flow/Issue';
+import type {IssueComment} from 'types/CustomFields';
+import type {IssueContextData} from 'types/Issue';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
-import type {Theme, UITheme} from 'flow/Theme';
-import type {User, UserAppearanceProfile} from 'flow/User';
-import type {WorkItem} from 'flow/Work';
-import type {YouTrackWiki} from 'flow/Wiki';
+import type {Theme, UITheme} from 'types/Theme';
+import type {User, UserAppearanceProfile} from 'types/User';
+import type {WorkItem} from 'types/Work';
+import type {YouTrackWiki} from 'types/Wiki';
 type IssueActivityProps = Partial<
   IssueActivityState &
     IssueCommentActivityState &

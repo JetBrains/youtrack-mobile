@@ -16,11 +16,11 @@ import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {IconAdd, IconBack, IconClose} from '../icon/icon';
 import {ThemeContext} from '../theme/theme-context';
 import styles from './linked-issues.style';
-import type {IssueLink} from 'flow/CustomFields';
-import type {IssueOnList} from 'flow/Issue';
+import type {IssueLink} from 'types/CustomFields';
+import type {IssueOnList} from 'types/Issue';
 import type {LinksListData} from './linked-issues-helper';
-import type {Theme} from 'flow/Theme';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {Theme} from 'types/Theme';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   canLink?: (issue: IssueOnList) => boolean;
   issuesGetter: (linkTypeName: string, query: string) => any;

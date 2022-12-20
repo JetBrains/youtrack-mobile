@@ -30,10 +30,10 @@ import {UNIT} from '../variables/variables';
 import {View as AnimatedView} from 'react-native-animatable';
 import styles from './linked-issues.style';
 import type {IssueLinkTypeExtended} from './linked-issues-helper';
-import type {IssueLinkType} from 'flow/CustomFields';
-import type {IssueOnList, TransformedSuggestion} from 'flow/Issue';
-import type {Theme} from 'flow/Theme';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {IssueLinkType} from 'types/CustomFields';
+import type {IssueOnList, TransformedSuggestion} from 'types/Issue';
+import type {Theme} from 'types/Theme';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   issuesGetter: (linkTypeName: string, q: string) => any;
   onLinkIssue: (linkedIssueIdReadable: string, linkTypeName: string) => any;

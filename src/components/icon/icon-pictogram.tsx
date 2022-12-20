@@ -9,8 +9,8 @@ import NothingSelectedDark from 'assets/nothing-selected-dark.svg';
 import NoNotifications from './assets/notifications-light.svg';
 import NoNotificationsDark from './assets/notifications-dark.svg';
 import {DEFAULT_THEME} from '../theme/theme';
-import type {Theme} from 'flow/Theme';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {Theme} from 'types/Theme';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   size?: number;
   style?: ViewStyleProp;

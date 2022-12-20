@@ -11,11 +11,11 @@ import {visibilityDefaultText} from './visibility-strings';
 import {HIT_SLOP} from '../common-styles/button';
 import {DEFAULT_THEME} from '../theme/theme';
 import styles from './visibility-control.styles';
-import type {User} from 'flow/User';
-import type {UserGroup} from 'flow/UserGroup';
-import type {Visibility} from 'flow/Visibility';
-import type {ViewStyleProp} from 'flow/Internal';
-import type {UITheme} from 'flow/Theme';
+import type {User} from 'types/User';
+import type {UserGroup} from 'types/UserGroup';
+import type {Visibility} from 'types/Visibility';
+import type {ViewStyleProp} from 'types/Internal';
+import type {UITheme} from 'types/Theme';
 type Props = {
   getOptions: () => Array<User | UserGroup>;
   onApply: (visibility: Visibility) => any;

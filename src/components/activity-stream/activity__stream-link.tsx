@@ -4,8 +4,8 @@ import Router from '../router/router';
 import {getActivityEventTitle} from './activity__stream-helper';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 import styles from './activity__stream.styles';
-import type {Activity} from 'flow/Activity';
-import type {IssueFull} from 'flow/Issue';
+import type {Activity} from 'types/Activity';
+import type {IssueFull} from 'types/Issue';
 type Props = {
   activity: Activity;
 };

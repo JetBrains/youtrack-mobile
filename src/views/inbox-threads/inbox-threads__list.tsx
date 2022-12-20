@@ -12,10 +12,10 @@ import {IconNoNotifications} from 'components/icon/icon-pictogram';
 import {ThemeContext} from 'components/theme/theme-context';
 import styles from './inbox-threads.styles';
 import type {AppState} from '../../reducers';
-import type {CustomError} from 'flow/Error';
-import type {InboxThread, ThreadData, ThreadEntity} from 'flow/Inbox';
-import type {Theme} from 'flow/Theme';
-import type {UserCurrent} from 'flow/User';
+import type {CustomError} from 'types/Error';
+import type {InboxThread, ThreadData, ThreadEntity} from 'types/Inbox';
+import type {Theme} from 'types/Theme';
+import type {UserCurrent} from 'types/User';
 type Props = {
   folderId: string;
   onNavigate: (

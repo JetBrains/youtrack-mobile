@@ -4,10 +4,10 @@ import StreamHistoryChange from 'components/activity-stream/activity__stream-his
 import StreamTimestamp from 'components/activity-stream/activity__stream-timestamp';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import styles from './inbox-threads.styles';
-import type {Activity} from 'flow/Activity';
-import type {InboxThreadGroup, ThreadEntity} from 'flow/Inbox';
-import type {User} from 'flow/User';
-import type {Theme} from '../../flow/Theme';
+import type {Activity} from 'types/Activity';
+import type {InboxThreadGroup, ThreadEntity} from 'types/Inbox';
+import type {User} from 'types/User';
+import type {Theme} from '../../types/Theme';
 import {ThemeContext} from 'components/theme/theme-context';
 type Props = {
   author: User;

@@ -17,7 +17,7 @@ import {ThemeContext} from '../theme/theme-context';
 import {HIT_SLOP} from '../common-styles/button';
 import styles from './error-boundary.styles';
 import type {ReportErrorData} from '../error/error-reporter';
-import type {Theme, UIThemeColors} from 'flow/Theme';
+import type {Theme, UIThemeColors} from 'types/Theme';
 type Props = {
   openDebugView: (arg0: any) => any;
   children: React.ReactElement<React.ComponentProps<any>, any>;

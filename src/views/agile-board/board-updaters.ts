@@ -1,8 +1,8 @@
 import log from 'components/log/log';
 import {i18n} from 'components/i18n/i18n';
 import {notify} from 'components/notification/notification';
-import type {BoardCell, AgileBoardRow, Board, AgileColumn} from 'flow/Agile';
-import type {IssueOnList, IssueFull} from 'flow/Issue';
+import type {BoardCell, AgileBoardRow, Board, AgileColumn} from 'types/Agile';
+import type {IssueOnList, IssueFull} from 'types/Issue';
 export function updateRowCollapsedState(
   board: Board,
   row: AgileBoardRow,

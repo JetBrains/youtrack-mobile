@@ -1,6 +1,6 @@
 import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {isActivityCategory} from './activity__category';
-import type {Activity} from '../../flow/Activity';
+import type {Activity} from '../../types/Activity';
 export default function getEventTitle(
   activity: Activity,
   omitFormatting?: boolean,

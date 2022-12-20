@@ -3,7 +3,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import {HIT_SLOP} from '../common-styles/button';
 import {IconCaretDownUp} from '../icon/icon';
 import styles from './details.styles';
-import type {TextStyleProp} from 'flow/Internal';
+import type {TextStyleProp} from 'types/Internal';
 type Props = {
   renderer: () => any;
   style?: TextStyleProp;

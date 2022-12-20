@@ -23,16 +23,16 @@ import {ThreadsStateData} from './inbox-threads-reducers';
 import {until} from 'util/util';
 import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
-import type {CustomError} from 'flow/Error';
+import type {CustomError} from 'types/Error';
 import type {
   InboxFolder,
   InboxThread,
   InboxThreadMessage,
   ThreadEntity,
-} from 'flow/Inbox';
-import type {Reaction} from 'flow/Reaction';
-import type {User} from 'flow/User';
-import type {IssueComment} from '../../flow/CustomFields';
+} from 'types/Inbox';
+import type {Reaction} from 'types/Reaction';
+import type {User} from 'types/User';
+import type {IssueComment} from '../../types/CustomFields';
 type ApiGetter = () => Api;
 type StateGetter = () => AppState;
 const MAX_CACHED_THREADS: number = 10;

@@ -7,7 +7,7 @@ import {i18n} from 'components/i18n/i18n';
 import {until} from 'util/util';
 import API from '../api/api';
 import styles from './tags.styles';
-import type {Tag} from 'flow/CustomFields';
+import type {Tag} from 'types/CustomFields';
 type Props = {
   existed: Array<Tag>;
   onAdd: (tags: Array<Tag>) => any;

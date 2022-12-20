@@ -3,10 +3,10 @@ import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import {issuePermissionsNull} from 'components/issue-permissions/issue-permissions-helper';
 import {ON_NAVIGATE_BACK} from 'actions/action-types';
 import {routeMap} from '../../app-routes';
-import type {ActivityItem} from 'flow/Activity';
-import type {Article, ArticlesList} from 'flow/Article';
-import type {CustomError} from 'flow/Error';
-import type {IssueComment} from 'flow/CustomFields';
+import type {ActivityItem} from 'types/Activity';
+import type {Article, ArticlesList} from 'types/Article';
+import type {CustomError} from 'types/Error';
+import type {IssueComment} from 'types/CustomFields';
 export type ArticleState = {
   activityPage: Array<ActivityItem> | null;
   article: Article;

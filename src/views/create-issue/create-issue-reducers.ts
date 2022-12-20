@@ -9,8 +9,8 @@ import type {
   FieldValue,
   IssueLink,
   IssueProject,
-} from 'flow/CustomFields';
-import type {CommandSuggestionResponse, IssueFull} from 'flow/Issue';
+} from 'types/CustomFields';
+import type {CommandSuggestionResponse, IssueFull} from 'types/Issue';
 export type CreateIssueState = {
   processing: boolean;
   attachingImage: Record<string, any> | null | undefined;

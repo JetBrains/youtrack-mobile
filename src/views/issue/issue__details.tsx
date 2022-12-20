@@ -44,7 +44,7 @@ import {ThemeContext} from 'components/theme/theme-context';
 import {ytDate} from 'components/date/date';
 import styles from './issue.styles';
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
-import type {AnyIssue, IssueFull, IssueOnList} from 'flow/Issue';
+import type {AnyIssue, IssueFull, IssueOnList} from 'types/Issue';
 import type {
   Attachment,
   CustomField,
@@ -53,11 +53,11 @@ import type {
   FieldValue,
   IssueLink,
   IssueProject,
-} from 'flow/CustomFields';
-import type {ScrollData} from 'flow/Markdown';
-import type {Theme, UITheme} from 'flow/Theme';
-import type {Visibility} from 'flow/Visibility';
-import type {YouTrackWiki} from 'flow/Wiki';
+} from 'types/CustomFields';
+import type {ScrollData} from 'types/Markdown';
+import type {Theme, UITheme} from 'types/Theme';
+import type {Visibility} from 'types/Visibility';
+import type {YouTrackWiki} from 'types/Wiki';
 export type IssueDetailsProps = {
   loadIssue: () => any;
   openNestedIssueView: (arg0: {issue?: IssueFull; issueId?: string}) => any;

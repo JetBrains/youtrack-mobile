@@ -6,9 +6,9 @@ import {useSelector} from 'react-redux';
 import styles from './inbox-threads.styles';
 import tabStyles from 'components/issue-tabbed/issue-tabbed.style';
 import type {AppState} from '../../reducers';
-import type {InboxFolder} from 'flow/Inbox';
-import type {TabRoute} from 'flow/Issue';
-import type {Theme} from 'flow/Theme';
+import type {InboxFolder} from 'types/Inbox';
+import type {TabRoute} from 'types/Issue';
+import type {Theme} from 'types/Theme';
 
 const InboxThreadsTabBar = ({
   route,

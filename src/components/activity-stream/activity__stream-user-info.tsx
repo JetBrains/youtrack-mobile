@@ -3,7 +3,7 @@ import {Text, View} from 'react-native';
 import StreamTimestamp from './activity__stream-timestamp';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import styles from './activity__stream.styles';
-import type {Activity} from 'flow/Activity';
+import type {Activity} from 'types/Activity';
 type Props = {
   activityGroup: Activity;
 };

@@ -4,7 +4,7 @@ import {IconCircle, IconCircleOutline} from 'components/icon/icon';
 import {useSelector} from 'react-redux';
 import styles from './inbox-threads.styles';
 import type {AppState} from '../../reducers';
-import type {InboxThreadMessage} from 'flow/Inbox';
+import type {InboxThreadMessage} from 'types/Inbox';
 type Props = {
   messages: InboxThreadMessage[];
   onReadChange: (messages: InboxThreadMessage[], read: boolean) => any;

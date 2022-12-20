@@ -17,12 +17,12 @@ import {
 } from 'components/activity/activity-helper';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {setArticleCommentDraft} from './article-reducers';
-import type {Activity, ActivityStreamCommentActions} from 'flow/Activity';
+import type {Activity, ActivityStreamCommentActions} from 'types/Activity';
 import type {AppState} from '../../reducers';
-import type {Article} from 'flow/Article';
-import type {Attachment, IssueComment} from 'flow/CustomFields';
-import type {UITheme} from 'flow/Theme';
-import type {User} from 'flow/User';
+import type {Article} from 'types/Article';
+import type {Attachment, IssueComment} from 'types/CustomFields';
+import type {UITheme} from 'types/Theme';
+import type {User} from 'types/User';
 type Props = {
   article: Article;
   issuePermissions: IssuePermissions;

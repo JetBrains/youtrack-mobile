@@ -21,10 +21,10 @@ import {logEvent} from 'components/log/log-helper';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssueContent} from 'components/skeleton/skeleton';
 import styles from './article.styles';
-import type {Article} from 'flow/Article';
-import type {Attachment} from 'flow/CustomFields';
-import type {CustomError} from 'flow/Error';
-import type {UITheme} from 'flow/Theme';
+import type {Article} from 'types/Article';
+import type {Attachment} from 'types/CustomFields';
+import type {CustomError} from 'types/Error';
+import type {UITheme} from 'types/Theme';
 type Props = {
   article: Article;
   error: CustomError;

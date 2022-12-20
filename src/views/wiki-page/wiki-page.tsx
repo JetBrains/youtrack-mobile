@@ -12,9 +12,9 @@ import {isAndroidPlatform, isIOSPlatform} from 'util/util';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables/variables';
 import styles from './wiki-page.styles';
-import type {Attachment} from 'flow/CustomFields';
-import type {Theme, UITheme} from 'flow/Theme';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {Attachment} from 'types/CustomFields';
+import type {Theme, UITheme} from 'types/Theme';
+import type {ViewStyleProp} from 'types/Internal';
 const CATEGORY_NAME = 'WikiPage';
 const isAndroid: boolean = isAndroidPlatform();
 type Props = {

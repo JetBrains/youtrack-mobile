@@ -9,7 +9,7 @@ import type {
   TextStyleProp,
   ViewStyleProp,
 } from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {UITheme} from 'flow/Theme';
+import type {UITheme} from 'types/Theme';
 export function renderSelector(params: {
   key: string;
   label: string;

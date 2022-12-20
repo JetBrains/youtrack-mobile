@@ -11,12 +11,12 @@ import {CommandDialogModal} from 'components/command-dialog/command-dialog';
 import {IconClose} from 'components/icon/icon';
 import {Issue} from '../issue';
 import styles from '../issue.styles';
-import type {IssueOnList} from 'flow/Issue';
+import type {IssueOnList} from 'types/Issue';
 import type {IssueProps, OwnProps} from '../issue';
 import type {RootState} from 'reducers/app-reducer';
-import type {ScrollData} from 'flow/Markdown';
+import type {ScrollData} from 'types/Markdown';
 import type {State as IssueState} from '../issue-reducers';
-import type {UITheme} from 'flow/Theme';
+import type {UITheme} from 'types/Theme';
 type Props = IssueProps & {
   onHide: () => any;
   onBack?: () => any;

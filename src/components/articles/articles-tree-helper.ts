@@ -9,9 +9,9 @@ import type {
   ArticlesList,
   ArticlesListItem,
   ProjectArticlesData,
-} from 'flow/Article';
-import type {IssueProject} from 'flow/CustomFields';
-import type {Visibility} from 'flow/Visibility';
+} from 'types/Article';
+import type {IssueProject} from 'types/CustomFields';
+import type {Visibility} from 'types/Visibility';
 export const createArticlesListItem = (
   project: ArticleProject | null,
   data: ArticleNodeList,

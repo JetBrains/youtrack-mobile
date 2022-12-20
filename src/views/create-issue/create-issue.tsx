@@ -46,7 +46,7 @@ import {
 import {isIOSPlatform} from 'util/util';
 import {ThemeContext} from 'components/theme/theme-context';
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
-import type {AnyIssue} from 'flow/Issue';
+import type {AnyIssue} from 'types/Issue';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import type {CreateIssueState} from './create-issue-reducers';
 import type {
@@ -55,9 +55,9 @@ import type {
   IssueLink,
   IssueProject,
   Tag,
-} from 'flow/CustomFields';
-import type {NormalizedAttachment} from 'flow/Attachment';
-import type {Theme, UITheme, UIThemeColors} from 'flow/Theme';
+} from 'types/CustomFields';
+import type {NormalizedAttachment} from 'types/Attachment';
+import type {Theme, UITheme, UIThemeColors} from 'types/Theme';
 import styles from './create-issue.styles';
 type AdditionalProps = {
   issuePermissions: IssuePermissions;

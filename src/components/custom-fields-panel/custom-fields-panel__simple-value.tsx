@@ -3,7 +3,7 @@ import {Text, TextInput, View} from 'react-native';
 import Header from '../header/header';
 import {IconBack, IconCheck, IconClose} from '../icon/icon';
 import styles from './custom-fields-panel.styles';
-import type {CustomField as IssueCustomField} from 'flow/CustomFields';
+import type {CustomField as IssueCustomField} from 'types/CustomFields';
 type Props = {
   modal?: boolean;
   editingField: IssueCustomField | null | undefined;

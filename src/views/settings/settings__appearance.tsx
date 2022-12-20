@@ -8,7 +8,7 @@ import {i18n} from 'components/i18n/i18n';
 import {IconBack, IconCheck} from 'components/icon/icon';
 import {ThemeContext} from 'components/theme/theme-context';
 import styles from './settings.styles';
-import type {Theme} from 'flow/Theme';
+import type {Theme} from 'types/Theme';
 type Props = {
   onHide: () => any;
   backIcon?: any;

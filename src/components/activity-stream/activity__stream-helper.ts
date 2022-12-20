@@ -1,9 +1,9 @@
 import getEventTitle from '../activity/activity__history-title';
 import {COMMENT_REACTIONS_SEPARATOR} from '../reactions/reactions';
-import type {Activity} from 'flow/Activity';
-import type {IssueComment} from 'flow/CustomFields';
-import type {Reaction} from 'flow/Reaction';
-import type {User} from 'flow/User';
+import type {Activity} from 'types/Activity';
+import type {IssueComment} from 'types/CustomFields';
+import type {Reaction} from 'types/Reaction';
+import type {User} from 'types/User';
 
 const firstActivityChange = (
   activity: Activity | null | undefined,

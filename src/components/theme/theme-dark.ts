@@ -1,5 +1,5 @@
 import {themeColorsPalette} from './theme-common';
-import type {UITheme} from 'flow/Theme';
+import type {UITheme} from 'types/Theme';
 const dark: UITheme = {
   dark: true,
   mode: 'ytdark',

@@ -8,9 +8,9 @@ import {
 import {i18n} from 'components/i18n/i18n';
 import {toggleIssueActivityEnabledType} from './issue-activity__helper';
 import styles from './issue-activity.styles';
-import type {ActivityType} from 'flow/Activity';
-import type {UITheme} from 'flow/Theme';
-import type {UserAppearanceProfile} from 'flow/User';
+import type {ActivityType} from 'types/Activity';
+import type {UITheme} from 'types/Theme';
+import type {UserAppearanceProfile} from 'types/User';
 type Props = {
   issueActivityTypes: Array<ActivityType>;
   issueActivityEnabledTypes: Array<ActivityType>;

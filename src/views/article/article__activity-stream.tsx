@@ -12,14 +12,14 @@ import type {
   Activity,
   ActivityItem,
   ActivityStreamCommentActions,
-} from 'flow/Activity';
-import type {Attachment, IssueComment} from 'flow/CustomFields';
+} from 'types/Activity';
+import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {AppState} from '../../reducers';
-import type {Reaction} from 'flow/Reaction';
-import type {UITheme} from 'flow/Theme';
-import type {User} from 'flow/User';
-import type {WorkTimeSettings} from 'flow/Work';
-import type {YouTrackWiki} from 'flow/Wiki';
+import type {Reaction} from 'types/Reaction';
+import type {UITheme} from 'types/Theme';
+import type {User} from 'types/User';
+import type {WorkTimeSettings} from 'types/Work';
+import type {YouTrackWiki} from 'types/Wiki';
 type Props = {
   articleId: string;
   activities: Array<ActivityItem> | null;

@@ -2,7 +2,7 @@ import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {Portal} from 'react-native-portalize';
 import modalStyles from './modal.view.styles';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   children: any;
   fullscreen?: boolean;

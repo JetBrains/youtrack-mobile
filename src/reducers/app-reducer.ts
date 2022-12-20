@@ -4,13 +4,13 @@ import OAuth2 from 'components/auth/oauth2';
 import {createReducer} from 'redux-create-reducer';
 import {issuePermissionsNull} from 'components/issue-permissions/issue-permissions-helper';
 import type Auth from 'components/auth/oauth2';
-import type {EndUserAgreement} from 'flow/AppConfig';
+import type {EndUserAgreement} from 'types/AppConfig';
 import type {NetInfoState} from '@react-native-community/netinfo';
 import type {PermissionsStore} from 'components/permissions-store/permissions-store';
 import type {StorageState} from 'components/storage/storage';
-import type {User, UserAppearanceProfile, UserArticlesProfile} from 'flow/User';
-import type {WorkTimeSettings} from 'flow/Work';
-import {InboxFolder} from 'flow/Inbox';
+import type {User, UserAppearanceProfile, UserArticlesProfile} from 'types/User';
+import type {WorkTimeSettings} from 'types/Work';
+import {InboxFolder} from 'types/Inbox';
 export type RootState = {
   auth: OAuth2 | null;
   showMenu: boolean;

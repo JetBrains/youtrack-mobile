@@ -1,6 +1,6 @@
 import {i18n} from '../i18n/i18n';
 import {ResourceTypes} from '../api/api__resource-types';
-import type {VCSActivity, VcsCommand, VcsProcessor} from 'flow/Vcs';
+import type {VCSActivity, VcsCommand, VcsProcessor} from 'types/Vcs';
 const vcsChangeState = {
   auto: 0,
   attached: 1,

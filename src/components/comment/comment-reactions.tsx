@@ -8,10 +8,10 @@ import {UNIT} from '../variables/variables';
 import {useSelector} from 'react-redux';
 import styles from './comment.styles';
 import type {AppState} from '../../reducers';
-import type {IssueComment} from 'flow/CustomFields';
-import type {Reaction} from 'flow/Reaction';
-import type {User} from 'flow/User';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {IssueComment} from 'types/CustomFields';
+import type {Reaction} from 'types/Reaction';
+import type {User} from 'types/User';
+import type {ViewStyleProp} from 'types/Internal';
 type ReactionsType = {
   comment: IssueComment;
   currentUser: User;

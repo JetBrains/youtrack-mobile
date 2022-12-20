@@ -3,9 +3,9 @@ import {Text, TouchableOpacity} from 'react-native';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {getReadableID} from 'components/issue-formatter/issue-formatter';
 import styles from './inbox.styles';
-import type {AnyIssue} from 'flow/Issue';
-import type {Article} from 'flow/Article';
-import type {TextStyleProp} from 'flow/Internal';
+import type {AnyIssue} from 'types/Issue';
+import type {Article} from 'types/Article';
+import type {TextStyleProp} from 'types/Internal';
 export default function InboxEntity({
   entity,
   onNavigate,

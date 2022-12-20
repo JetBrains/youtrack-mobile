@@ -41,20 +41,20 @@ import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables/variables';
 import {ytDate} from 'components/date/date';
 import styles from './inbox.styles';
-import type {AppConfig} from 'flow/AppConfig';
+import type {AppConfig} from 'types/AppConfig';
 import type {AppState} from '../../reducers';
 import type {InboxState} from './inbox-reducers';
-import type {IssueComment} from 'flow/CustomFields';
-import type {IssueOnList} from 'flow/Issue';
+import type {IssueComment} from 'types/CustomFields';
+import type {IssueOnList} from 'types/Issue';
 import type {
   ChangeEvent,
   ChangeValue,
   Metadata,
   Notification,
-} from 'flow/Inbox';
-import type {Reaction} from 'flow/Reaction';
-import type {Theme} from 'flow/Theme';
-import type {User} from 'flow/User';
+} from 'types/Inbox';
+import type {Reaction} from 'types/Reaction';
+import type {Theme} from 'types/Theme';
+import type {User} from 'types/User';
 type IssueActions = typeof inboxActions;
 type Props = InboxState & IssueActions;
 type State = {

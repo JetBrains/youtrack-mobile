@@ -21,7 +21,7 @@ import {IconNoProjectFound} from 'components/icon/icon-pictogram';
 import {isAndroidPlatform} from 'util/util';
 import {logEvent} from 'components/log/log-helper';
 import styles from './preview-file.styles';
-import type {Attachment} from 'flow/CustomFields';
+import type {Attachment} from 'types/CustomFields';
 type FileSource = {
   id: string;
   uri: string;

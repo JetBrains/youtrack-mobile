@@ -4,8 +4,8 @@ import {getPeriodPresentationFor} from '../time-tracking/time-tracking';
 import {getSimpleCustomFieldType} from '../custom-field/custom-field-helper';
 import {hasType} from '../api/api__resource-types';
 import {isActivityCategory} from './activity__category';
-import type {IssueProject} from 'flow/CustomFields';
-import type {WorkTimeSettings} from 'flow/Work';
+import type {IssueProject} from 'types/CustomFields';
+import type {WorkTimeSettings} from 'types/Work';
 export type TextValueChangeParams = {
   activity: Record<string, any>;
   issueFields: Array<Record<string, any>> | null | undefined;

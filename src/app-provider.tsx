@@ -22,8 +22,8 @@ import {
 } from 'components/theme/theme';
 import {setNotificationComponent} from 'components/notification/notification';
 import {ThemeContext} from 'components/theme/theme-context';
-import type {Theme} from 'flow/Theme';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {Theme} from 'types/Theme';
+import type {ViewStyleProp} from 'types/Internal';
 export default class AppProvider extends Component<
   {},
   {

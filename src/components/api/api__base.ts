@@ -5,8 +5,8 @@ import {HTTP_STATUS} from '../error/error-http-codes';
 import {fetch2, requestController} from './api__request-controller';
 import {routeMap} from '../../app-routes';
 import type Auth from '../auth/oauth2';
-import type {AppConfig} from 'flow/AppConfig';
-import type {RequestHeaders} from 'flow/Auth';
+import type {AppConfig} from 'types/AppConfig';
+import type {RequestHeaders} from 'types/Auth';
 const MAX_QUERY_LENGTH = 2048;
 type RequestOptions = {
   controller?: {[key in keyof typeof routeMap]?: AbortController};

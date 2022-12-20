@@ -9,11 +9,11 @@ import ThreadItem from './inbox-threads__item';
 import {i18n} from 'components/i18n/i18n';
 import styles from './inbox-threads.styles';
 import stylesInbox from '../inbox/inbox.styles';
-import type {Activity} from 'flow/Activity';
-import type {InboxThread, ThreadEntity} from 'flow/Inbox';
-import type {IssueComment} from 'flow/CustomFields';
-import type {Reaction} from 'flow/Reaction';
-import type {User} from 'flow/User';
+import type {Activity} from 'types/Activity';
+import type {InboxThread, ThreadEntity} from 'types/Inbox';
+import type {IssueComment} from 'types/CustomFields';
+import type {Reaction} from 'types/Reaction';
+import type {User} from 'types/User';
 type Props = {
   currentUser: User;
   onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;

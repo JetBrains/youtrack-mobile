@@ -34,15 +34,15 @@ import {updateActivityCommentReactions} from 'components/activity-stream/activit
 import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from 'components/api/api';
 import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
-import type {Activity, ActivityPositionData} from 'flow/Activity';
+import type {Activity, ActivityPositionData} from 'types/Activity';
 import type {AppState} from '../../reducers';
-import type {Article, ArticleDraft} from 'flow/Article';
+import type {Article, ArticleDraft} from 'types/Article';
 import type {ArticleState} from './article-reducers';
-import type {Attachment, IssueComment} from 'flow/CustomFields';
-import type {CustomError} from 'flow/Error';
-import type {Reaction} from 'flow/Reaction';
+import type {Attachment, IssueComment} from 'types/CustomFields';
+import type {CustomError} from 'types/Error';
+import type {Reaction} from 'types/Reaction';
 import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
-import type {User} from 'flow/User';
+import type {User} from 'types/User';
 type ApiGetter = () => Api;
 
 const setLoading = isInProgress => ({

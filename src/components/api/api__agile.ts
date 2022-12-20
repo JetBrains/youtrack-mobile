@@ -9,8 +9,8 @@ import type {
   AgileBoardRow,
   BoardOnList,
   Board,
-} from 'flow/Agile';
-import type {IssueFull} from 'flow/Issue';
+} from 'types/Agile';
+import type {IssueFull} from 'types/Issue';
 export default class AgileAPI extends ApiBase {
   constructor(auth: Auth) {
     super(auth);

@@ -1,4 +1,4 @@
-import type {UIThemeColorsPaletteColors} from 'flow/Theme';
+import type {UIThemeColorsPaletteColors} from 'types/Theme';
 export const themeColorsPalette: UIThemeColorsPaletteColors = {
   $greyBackground: 'rgba(184, 209, 229, 0.15)',
   $greyColor: '#b8d1e5',

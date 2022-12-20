@@ -12,9 +12,9 @@ import {
 } from './api__activities-issue-fields';
 import issueFields from './api__issue-fields';
 import {activityArticleCategory} from '../activity/activity__category';
-import type {Activity, ActivityItem} from 'flow/Activity';
-import type {Article, ArticleDraft} from 'flow/Article';
-import type {Attachment, IssueComment} from 'flow/CustomFields';
+import type {Activity, ActivityItem} from 'types/Activity';
+import type {Article, ArticleDraft} from 'types/Article';
+import type {Attachment, IssueComment} from 'types/CustomFields';
 export default class ArticlesAPI extends ApiBase {
   articleFieldsQuery: string = ApiBase.createFieldsQuery(articleFields);
   categories: Array<string> = Object.keys(activityArticleCategory).map(

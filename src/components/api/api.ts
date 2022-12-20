@@ -15,10 +15,10 @@ import SearchAPI from './api__search';
 import UserAPI from './api__user';
 import UserGroupAPI from './api__user-group';
 import type Auth from '../auth/oauth2';
-import type {EndUserAgreement} from 'flow/AppConfig';
-import type {IssueProject, Tag} from 'flow/CustomFields';
-import type {SavedQuery, CommandSuggestionResponse} from 'flow/Issue';
-import type {User} from 'flow/User';
+import type {EndUserAgreement} from 'types/AppConfig';
+import type {IssueProject, Tag} from 'types/CustomFields';
+import type {SavedQuery, CommandSuggestionResponse} from 'types/Issue';
+import type {User} from 'types/User';
 
 class API extends BaseAPI {
   youTrackProjectUrl: string;

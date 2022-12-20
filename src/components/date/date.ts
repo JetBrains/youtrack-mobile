@@ -16,7 +16,7 @@ import plLocale from 'date-fns/locale/pl';
 import itLocale from 'date-fns/locale/it';
 import ukLocale from 'date-fns/locale/uk';
 import type {Locale} from 'date-fns';
-import type {User, UserProfileDateFieldFormat} from 'flow/User';
+import type {User, UserProfileDateFieldFormat} from 'types/User';
 const dateLocaleMap: Record<string, Locale> = {
   de: deLocale,
   ru: ruLocale,

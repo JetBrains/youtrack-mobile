@@ -2,7 +2,7 @@ import React from 'react';
 import {Text} from 'react-native';
 import {absDate, ytDate} from 'components/date/date';
 import styles from './activity__stream.styles';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   isAbs?: boolean;
   timestamp?: number;

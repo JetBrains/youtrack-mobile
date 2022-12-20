@@ -30,7 +30,7 @@ import {
 import {Notifications} from 'react-native-notifications';
 import {onNavigateBack, setAccount} from 'actions/app-actions';
 import {rootRoutesList, routeMap} from './app-routes';
-import type {NotificationRouteData} from 'flow/Notification';
+import type {NotificationRouteData} from 'types/Notification';
 import type {Ref} from 'react';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {

@@ -12,7 +12,7 @@ import {uuid} from 'util/util';
 import Select from '../select/select';
 import {UNIT} from '../variables/variables';
 import {mainText, secondaryText} from '../common-styles/typography';
-import type {TransformedSuggestion, SavedQuery} from 'flow/Issue';
+import type {TransformedSuggestion, SavedQuery} from 'types/Issue';
 type Props = {
   style?: any;
   suggestions: Array<TransformedSuggestion | SavedQuery>;

@@ -4,10 +4,10 @@ import MarkdownView from 'components/wiki/markdown-view';
 import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
 import {markdownText} from 'components/common-styles/typography';
 import {ThemeContext} from 'components/theme/theme-context';
-import type {Attachment} from 'flow/CustomFields';
-import type {Theme} from 'flow/Theme';
-import type {YouTrackWiki} from 'flow/Wiki';
-import type {ScrollData} from 'flow/Markdown';
+import type {Attachment} from 'types/CustomFields';
+import type {Theme} from 'types/Theme';
+import type {YouTrackWiki} from 'types/Wiki';
+import type {ScrollData} from 'types/Markdown';
 type Props = {
   youtrackWiki?: YouTrackWiki;
   markdown?: string | null;

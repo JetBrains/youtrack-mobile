@@ -5,8 +5,8 @@ import {useSelector} from 'react-redux';
 import styles, {calendarTheme} from './date-picker.styles';
 import type {AppState} from '../../reducers';
 import type {DateData} from 'react-native-calendars';
-import type {Theme} from 'flow/Theme';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {Theme} from 'types/Theme';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   current?: number;
   onDateSelect: (timestamp: number) => any;

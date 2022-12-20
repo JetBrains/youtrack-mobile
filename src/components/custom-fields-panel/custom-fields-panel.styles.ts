@@ -3,7 +3,7 @@ import {elevation1} from '../common-styles/shadow';
 import {headerTitlePresentation} from '../header/header.styles';
 import {rowFormStyles} from '../common-styles/form';
 import {UNIT} from '../variables/variables';
-import type {UITheme, UIThemeColors} from 'flow/Theme';
+import type {UITheme, UIThemeColors} from 'types/Theme';
 const simpleValueInput = {...rowFormStyles.input, color: '$text'};
 export default EStyleSheet.create({
   customFieldDateEditor: {

@@ -42,26 +42,26 @@ import {logEvent} from 'components/log/log-helper';
 import {normalizeAuthParams} from 'components/auth/oauth2-helper';
 import {notify, notifyError} from 'components/notification/notification';
 import {setApi} from 'components/api/api__instance';
-import type {Activity} from 'flow/Activity';
-import type {AppConfig, EndUserAgreement} from 'flow/AppConfig';
+import type {Activity} from 'types/Activity';
+import type {AppConfig, EndUserAgreement} from 'types/AppConfig';
 import type {AppState} from '../reducers';
-import type {Article} from 'flow/Article';
-import type {AuthConfig, AuthParams, OAuthParams2} from 'flow/Auth';
-import type {CustomError} from 'flow/Error';
+import type {Article} from 'types/Article';
+import type {AuthConfig, AuthParams, OAuthParams2} from 'types/Auth';
+import type {CustomError} from 'types/Error';
 import type {
   Folder,
   User,
   UserAppearanceProfile,
   UserArticlesProfile,
   UserCurrent,
-} from 'flow/User';
-import type {InboxFolder, InboxThread} from 'flow/Inbox';
+} from 'types/User';
+import type {InboxFolder, InboxThread} from 'types/Inbox';
 import type {NetInfoState} from '@react-native-community/netinfo';
-import type {NotificationRouteData} from 'flow/Notification';
-import type {PermissionCacheItem} from 'flow/Permission';
+import type {NotificationRouteData} from 'types/Notification';
+import type {PermissionCacheItem} from 'types/Permission';
 import type {StorageState} from 'components/storage/storage';
-import type {WorkTimeSettings} from 'flow/Work';
-import {UserGeneralProfileLocale} from 'flow/User';
+import type {WorkTimeSettings} from 'types/Work';
+import {UserGeneralProfileLocale} from 'types/User';
 type Action = (
   dispatch: (arg0: any) => any,
   getState: () => AppState,

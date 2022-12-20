@@ -31,13 +31,13 @@ import {ThemeContext} from 'components/theme/theme-context';
 import {View as AnimatedView} from 'react-native-animatable';
 import styles from './article-create.styles';
 import type {AppState} from '../../reducers';
-import type {Article, ArticleDraft, ArticleProject} from 'flow/Article';
+import type {Article, ArticleDraft, ArticleProject} from 'types/Article';
 import type {ArticleCreateState} from './article-create-reducers';
-import type {Attachment, IssueProject} from 'flow/CustomFields';
-import type {CustomError} from 'flow/Error';
-import type {NormalizedAttachment} from 'flow/Attachment';
-import type {Theme, UIThemeColors} from 'flow/Theme';
-import type {Visibility} from 'flow/Visibility';
+import type {Attachment, IssueProject} from 'types/CustomFields';
+import type {CustomError} from 'types/Error';
+import type {NormalizedAttachment} from 'types/Attachment';
+import type {Theme, UIThemeColors} from 'types/Theme';
+import type {Visibility} from 'types/Visibility';
 type Props = {
   articleDraft?:
     | (Article & {

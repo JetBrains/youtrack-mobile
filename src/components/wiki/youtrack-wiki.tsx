@@ -17,8 +17,8 @@ import {nodeHasType} from './youtrack-wiki__node-type';
 import {showMoreInlineText} from '../text-view/text-view';
 import {TextPropTypes} from 'deprecated-react-native-prop-types';
 import styles, {htmlViewStyles} from './youtrack-wiki.styles';
-import type {ViewStyleProp} from 'flow/Internal';
-import type {UITheme} from 'flow/Theme';
+import type {ViewStyleProp} from 'types/Internal';
+import type {UITheme} from 'types/Theme';
 HTMLView.propTypes.style = TextPropTypes.style;
 type Props = {
   style?: ViewStyleProp;

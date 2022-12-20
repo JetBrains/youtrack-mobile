@@ -4,7 +4,7 @@ import CustomFieldChangeDelimiter from '../custom-field/custom-field__change-del
 import {getActivityEventTitle} from './activity__stream-helper';
 import {isActivityCategory} from '../activity/activity__category';
 import styles from './activity__stream.styles';
-import type {Activity, ActivityChangeText} from 'flow/Activity';
+import type {Activity, ActivityChangeText} from 'types/Activity';
 
 const isMultiValueActivity = (activity: Activity) => {
   if (isActivityCategory.customField(activity)) {

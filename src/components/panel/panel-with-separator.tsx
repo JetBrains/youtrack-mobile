@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import styles from './panel.styles';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {ViewStyleProp} from 'types/Internal';
 export const PanelWithSeparator = (props: {
   children: any;
   style?: ViewStyleProp;

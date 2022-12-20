@@ -2,8 +2,8 @@ import {getApi} from 'components/api/api__instance';
 import {getCustomFieldName} from 'components/custom-field/custom-field-helper';
 import {until} from 'util/util';
 import type API from 'components/api/api';
-import type {Folder} from 'flow/User';
-import type {IssueFieldSortProperty, SearchSuggestions} from 'flow/Sorting';
+import type {Folder} from 'types/User';
+import type {IssueFieldSortProperty, SearchSuggestions} from 'types/Sorting';
 
 const doAssist = async (params: {
   context: Folder | null | undefined;

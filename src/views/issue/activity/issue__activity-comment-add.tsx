@@ -6,8 +6,8 @@ import {attachmentActions} from './issue-activity__attachment-actions-and-types'
 import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {getApi} from 'components/api/api__instance';
 import {IssueContext} from '../issue-context';
-import type {IssueComment} from 'flow/CustomFields';
-import type {IssueContextData, IssueFull} from 'flow/Issue';
+import type {IssueComment} from 'types/CustomFields';
+import type {IssueContextData, IssueFull} from 'types/Issue';
 type Props = {
   comment: IssueComment;
   onAddSpentTime: null | (() => void);

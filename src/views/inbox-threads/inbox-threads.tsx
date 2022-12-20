@@ -33,9 +33,9 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './inbox-threads.styles';
 import tabStyles from 'components/issue-tabbed/issue-tabbed.style';
 import type {AppState} from '../../reducers';
-import type {TabRoute} from 'flow/Issue';
-import type {Theme, UIThemeColors} from 'flow/Theme';
-import type {ThreadEntity} from 'flow/Inbox';
+import type {TabRoute} from 'types/Issue';
+import type {Theme, UIThemeColors} from 'types/Theme';
+import type {ThreadEntity} from 'types/Inbox';
 
 const InboxThreads: () => Node = (): React.ReactNode => {
   const routes: TabRoute[] = getThreadTabsTitles().map(

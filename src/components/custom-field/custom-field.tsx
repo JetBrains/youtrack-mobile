@@ -12,8 +12,8 @@ import styles from './custom-field.styles';
 import type {
   CustomField as CustomFieldType,
   FieldValue,
-} from 'flow/CustomFields';
-import type {User} from 'flow/User';
+} from 'types/CustomFields';
+import type {User} from 'types/User';
 type Props = {
   field: CustomFieldType;
   onPress: (arg0: any) => any;

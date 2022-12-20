@@ -8,7 +8,7 @@ import type {
   InboxThreadGroup,
   InboxThreadTarget,
   ThreadEntity,
-} from 'flow/Inbox';
+} from 'types/Inbox';
 type Props = {
   group: InboxThreadGroup;
   target: InboxThreadTarget;

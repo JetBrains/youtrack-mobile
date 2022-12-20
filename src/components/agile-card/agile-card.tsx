@@ -11,15 +11,15 @@ import {getAssigneeField} from '../issue-formatter/issue-formatter';
 import {getStorageState} from '../storage/storage';
 import {UNIT} from '../variables/variables';
 import styles from './agile-card.styles';
-import type {IssueOnList} from 'flow/Issue';
+import type {IssueOnList} from 'types/Issue';
 import type {
   CustomFieldShort,
   CustomField,
   CustomFieldValue,
-} from 'flow/CustomFields';
-import type {FieldStyle} from '../../flow/Agile';
-import type {ViewStyleProp} from 'flow/Internal';
-import type {UITheme} from 'flow/Theme';
+} from 'types/CustomFields';
+import type {FieldStyle} from '../../types/Agile';
+import type {ViewStyleProp} from 'types/Internal';
+import type {UITheme} from 'types/Theme';
 type Props = {
   cardWidth?: number | null | undefined;
   dragging?: boolean;

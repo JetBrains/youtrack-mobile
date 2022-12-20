@@ -2,8 +2,8 @@ import {Platform} from 'react-native';
 import {DEFAULT_THEME} from '../theme/theme';
 import {UNIT} from '../variables/variables';
 import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from '../common-styles/typography';
-import type {UITheme, UIThemeColors} from 'flow/Theme';
-import type {TextStyleProp} from 'flow/Internal';
+import type {UITheme, UIThemeColors} from 'types/Theme';
+import type {TextStyleProp} from 'types/Internal';
 const vSpace = {
   marginTop: UNIT * 2,
   marginBottom: UNIT,

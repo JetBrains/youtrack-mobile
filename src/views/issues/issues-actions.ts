@@ -21,9 +21,9 @@ import {SET_PROGRESS} from '../../actions/action-types';
 import {until} from 'util/util';
 import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
-import type {Folder} from 'flow/User';
-import type {AnyIssue, IssueFull, SavedQuery} from 'flow/Issue';
-import type {IssueProject, Tag} from 'flow/CustomFields';
+import type {Folder} from 'types/User';
+import type {AnyIssue, IssueFull, SavedQuery} from 'types/Issue';
+import type {IssueProject, Tag} from 'types/CustomFields';
 const PAGE_SIZE = 10;
 type ApiGetter = () => Api;
 

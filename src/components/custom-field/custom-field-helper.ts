@@ -4,7 +4,7 @@ import type {
   CustomFieldText,
   CustomFieldValue,
   ProjectCustomField,
-} from 'flow/CustomFields';
+} from 'types/CustomFields';
 type AnyCustomField = Partial<CustomField & CustomFieldText>;
 
 const isProjectCustomField = (customField: ProjectCustomField): boolean => {

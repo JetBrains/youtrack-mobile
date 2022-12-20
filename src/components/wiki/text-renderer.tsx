@@ -1,7 +1,7 @@
 import React from 'react';
 import {TextInput} from 'react-native';
 import {decodeHTML} from 'entities';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   style?: ViewStyleProp;
   children: any;

@@ -1,4 +1,4 @@
-import type {User} from 'flow/User';
+import type {User} from 'types/User';
 
 const getSuggestWord = (
   text: string,

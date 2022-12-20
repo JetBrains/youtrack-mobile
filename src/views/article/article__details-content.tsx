@@ -3,10 +3,10 @@ import {View} from 'react-native';
 import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
 import {markdownText} from 'components/common-styles/typography';
 import styles from './article.styles';
-import type {Article} from 'flow/Article';
-import type {Attachment} from 'flow/CustomFields';
-import type {IssueOnList} from 'flow/Issue';
-import type {UITheme} from 'flow/Theme';
+import type {Article} from 'types/Article';
+import type {Attachment} from 'types/CustomFields';
+import type {IssueOnList} from 'types/Issue';
+import type {UITheme} from 'types/Theme';
 type Props = {
   attachments: Array<Attachment>;
   mentionedArticles: Array<Article>;

@@ -6,8 +6,8 @@ import {attachmentActions} from './article__activity__attachment-actions-and-typ
 import {getApi} from 'components/api/api__instance';
 import {getArticleCommentDraft, getMentions} from './arcticle-actions';
 import {visibilityArticleDefaultText} from 'components/visibility/visibility-strings';
-import type {Article} from 'flow/Article';
-import type {IssueComment} from 'flow/CustomFields';
+import type {Article} from 'types/Article';
+import type {IssueComment} from 'types/CustomFields';
 type Props = {
   article: Article;
   issuePermissions: IssuePermissions;

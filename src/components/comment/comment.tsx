@@ -10,9 +10,9 @@ import {isPureHTMLBlock, prepareHTML} from 'components/wiki/markdown-helper';
 import {markdownText} from 'components/common-styles/typography';
 import {ytDate} from 'components/date/date';
 import styles from './comment.styles';
-import type {IssueComment, Attachment} from 'flow/CustomFields';
-import type {UITheme} from 'flow/Theme';
-import type {YouTrackWiki} from 'flow/Wiki';
+import type {IssueComment, Attachment} from 'types/CustomFields';
+import type {UITheme} from 'types/Theme';
+import type {YouTrackWiki} from 'types/Wiki';
 type Props = {
   comment: IssueComment;
   attachments?: Array<Attachment>;

@@ -6,8 +6,8 @@ import TextEditForm from './text-edit-form';
 import usage from '../usage/usage';
 import {ThemeContext} from '../theme/theme-context';
 import styles from './summary-description-form.style';
-import type {Theme} from 'flow/Theme';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {Theme} from 'types/Theme';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   analyticsId?: string;
   editable: boolean;

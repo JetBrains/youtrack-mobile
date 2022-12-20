@@ -4,11 +4,11 @@ import Router from 'components/router/router';
 import {createMentionRegExp} from '../util/patterns';
 import {guid} from 'util/util';
 import {ResourceTypes} from 'components/api/api__resource-types';
-import type {Article} from 'flow/Article';
-import type {IssueFull} from 'flow/Issue';
-import type {MarkdownASTNode} from 'flow/Markdown';
-import type {TextStyleProp} from 'flow/Internal';
-import type {UITheme} from 'flow/Theme';
+import type {Article} from 'types/Article';
+import type {IssueFull} from 'types/Issue';
+import type {MarkdownASTNode} from 'types/Markdown';
+import type {TextStyleProp} from 'types/Internal';
+import type {UITheme} from 'types/Theme';
 export type Mentions = {
   articles: Array<Article>;
   issues: Array<IssueFull>;

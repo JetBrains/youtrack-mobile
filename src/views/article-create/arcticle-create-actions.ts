@@ -14,8 +14,8 @@ import {
 import usage from 'components/usage/usage';
 import type Api from 'components/api/api';
 import type {AppState} from '../../reducers';
-import type {Article, ArticleDraft} from 'flow/Article';
-import type {Attachment} from 'flow/CustomFields';
+import type {Article, ArticleDraft} from 'types/Article';
+import type {Attachment} from 'types/CustomFields';
 type ApiGetter = () => Api;
 
 const updateArticleDraft = (

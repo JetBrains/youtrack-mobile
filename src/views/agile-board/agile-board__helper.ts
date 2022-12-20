@@ -7,8 +7,8 @@ import type {
   Sprint,
   SprintFull,
   Swimlane,
-} from 'flow/Agile';
-import type {IssueFull, IssueOnList} from 'flow/Issue';
+} from 'types/Agile';
+import type {IssueFull, IssueOnList} from 'types/Issue';
 type GroupedSprints = {
   active: Array<Sprint>;
   archived: Array<Sprint>;

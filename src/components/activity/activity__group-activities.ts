@@ -1,5 +1,5 @@
 import {isActivityCategory} from './activity__category';
-import type {Activity} from 'flow/Activity';
+import type {Activity} from 'types/Activity';
 const IDLE_TIME = 60 * 1000;
 export const groupActivities = (
   activities: Array<Activity>,

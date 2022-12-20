@@ -11,11 +11,11 @@ import {hasType} from '../api/api__resource-types';
 import {prepareHTML} from 'components/wiki/markdown-helper';
 import {ThemeContext} from '../theme/theme-context';
 import {updateMarkdownCheckbox} from './markdown-helper';
-import type {Attachment} from 'flow/CustomFields';
-import type {Folder} from 'flow/User';
+import type {Attachment} from 'types/CustomFields';
+import type {Folder} from 'types/User';
 import type {Mentions} from './markdown-view-rules';
-import type {Theme} from 'flow/Theme';
-import type {TextStyleProp} from 'flow/Internal';
+import type {Theme} from 'types/Theme';
+import type {TextStyleProp} from 'types/Internal';
 type Props = {
   textStyle?: TextStyleProp;
   attachments?: Array<Attachment>;

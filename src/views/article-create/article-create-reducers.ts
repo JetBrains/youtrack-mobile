@@ -1,9 +1,9 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {attachmentTypes} from './article-create__attachment-actions-and-types';
 import {guid} from 'util/util';
-import type {Article, ArticleDraft} from 'flow/Article';
-import type {Attachment} from 'flow/CustomFields';
-import type {CustomError} from 'flow/Error';
+import type {Article, ArticleDraft} from 'types/Article';
+import type {Attachment} from 'types/CustomFields';
+import type {CustomError} from 'types/Error';
 export type ArticleCreateState = {
   articleDraft: ArticleDraft | null;
   breadCrumbs: React.ReactElement<React.ComponentProps<any>, any> | null;

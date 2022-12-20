@@ -15,14 +15,14 @@ import {
   IconKnowledgeBase,
   IconCircle,
 } from 'components/icon/icon';
-import {InboxFolder} from 'flow/Inbox';
+import {InboxFolder} from 'types/Inbox';
 import {inboxCheckUpdateStatus} from '../../actions/app-actions';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {MenuItem} from './menu__item';
 import {routeMap} from '../../app-routes';
 import styles from './menu.styles';
 import type {AppState} from '../../reducers';
-import type {Article} from 'flow/Article';
+import type {Article} from 'types/Article';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
 export const menuPollInboxStatusDelay: number = 60 * 1000;
 export default function () {

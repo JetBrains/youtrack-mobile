@@ -10,7 +10,7 @@ import Router from '../router/router';
 import {isSplitView} from '../responsive/responsive-helper';
 import {targetAccountToSwitchTo} from 'actions/app-actions-helper';
 import type EmitterSubscription from 'react-native/Libraries/vendor/emitter/_EmitterSubscription';
-import type {NotificationCompletion, TokenHandler} from 'flow/Notification';
+import type {NotificationCompletion, TokenHandler} from 'types/Notification';
 import type {StorageState} from '../storage/storage';
 export default class PushNotificationsProcessor extends PushNotifications {
   static registerNotificationOpenListener:

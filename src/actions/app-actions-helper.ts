@@ -5,9 +5,9 @@ import {
   getStorageState,
 } from 'components/storage/storage';
 import {removeTrailingSlash} from 'util/util';
-import type {PermissionCacheItem} from 'flow/Permission';
+import type {PermissionCacheItem} from 'types/Permission';
 import type {StorageState} from 'components/storage/storage';
-import type {User} from '../flow/User';
+import type {User} from '../types/User';
 
 function updateCachedPermissions(
   permissions: Array<PermissionCacheItem>,

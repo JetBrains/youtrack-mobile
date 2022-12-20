@@ -1,11 +1,11 @@
-import type {CustomField, FieldValue, IssueProject} from 'flow/CustomFields';
+import type {CustomField, FieldValue, IssueProject} from 'types/CustomFields';
 import type {
   CommandSuggestionResponse,
   IssueFull,
   IssueOnList,
-} from 'flow/Issue';
-import type {Visibility} from 'flow/Visibility';
-import type {CustomError} from 'flow/Error';
+} from 'types/Issue';
+import type {Visibility} from 'types/Visibility';
+import type {CustomError} from 'types/Error';
 import type {IssueBaseActions} from './issue-base-reducer';
 import {commandDialogActionMap} from 'components/command-dialog/command-dialog-action-types';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';

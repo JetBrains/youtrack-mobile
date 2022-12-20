@@ -1,5 +1,5 @@
 import {isActivityCategory} from './activity__category';
-import type {Activity} from 'flow/Activity';
+import type {Activity} from 'types/Activity';
 type MergedActivity = Activity;
 type activityMapItem = Record<string, Activity>;
 export function mergeActivities(activities: Activity[]): MergedActivity[] {

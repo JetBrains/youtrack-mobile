@@ -2,7 +2,7 @@ import {DEFAULT_ERROR_MESSAGE} from './error-messages';
 import {HTTP_STATUS} from './error-http-codes';
 import {i18n} from 'components/i18n/i18n';
 import {IconAccountAlert} from '../icon/icon';
-import type {ErrorMessageData} from 'flow/Error';
+import type {ErrorMessageData} from 'types/Error';
 const unauthorizedErrorMessageData: ErrorMessageData = {
   title: i18n("Woah, you can't touch this!"),
   description: i18n(

@@ -11,12 +11,12 @@ import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {IssueContext} from '../issue-context';
 import type {ActivityStreamProps} from 'components/activity-stream/activity__stream';
-import type {Activity, ActivityStreamCommentActions} from 'flow/Activity';
+import type {Activity, ActivityStreamCommentActions} from 'types/Activity';
 import type {AppState} from '../../../reducers';
-import type {Attachment, IssueComment} from 'flow/CustomFields';
-import type {CustomError} from 'flow/Error';
-import type {IssueContextData, IssueFull} from 'flow/Issue';
-import type {Reaction} from 'flow/Reaction';
+import type {Attachment, IssueComment} from 'types/CustomFields';
+import type {CustomError} from 'types/Error';
+import type {IssueContextData, IssueFull} from 'types/Issue';
+import type {Reaction} from 'types/Reaction';
 type Props = ActivityStreamProps & {
   issueId: string;
   actionSheet: (...args: Array<any>) => any;

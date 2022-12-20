@@ -8,10 +8,10 @@ import {IconBack, IconClose} from 'components/icon/icon';
 import {ThemeContext} from 'components/theme/theme-context';
 import styles from '../issue.styles';
 import stylesModal from './issue.modal.styles';
-import type {AnyIssue, IssueOnList} from 'flow/Issue';
+import type {AnyIssue, IssueOnList} from 'types/Issue';
 import type {IssueDetailsProps} from '../issue__details';
-import type {IssueLink} from 'flow/CustomFields';
-import type {Theme} from 'flow/Theme';
+import type {IssueLink} from 'types/CustomFields';
+import type {Theme} from 'types/Theme';
 type State = {
   modalChildren: any;
 }; //@ts-expect-error

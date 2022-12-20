@@ -17,9 +17,9 @@ import {
 } from './inbox-threads-actions';
 import styles from './inbox-threads.styles';
 import type {AppState} from '../../reducers';
-import type {InboxThread, InboxThreadMessage, ThreadData} from 'flow/Inbox';
-import type {UITheme} from 'flow/Theme';
-import type {User} from 'flow/User';
+import type {InboxThread, InboxThreadMessage, ThreadData} from 'types/Inbox';
+import type {UITheme} from 'types/Theme';
+import type {User} from 'types/User';
 type Props = {
   currentUser: User;
   onNavigate: (

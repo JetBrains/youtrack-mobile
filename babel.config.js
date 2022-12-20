@@ -10,7 +10,7 @@ module.exports = {
           actions: './src/actions',
           assets: './src/assets',
           components: './src/components',
-          flow: './src/flow',
+          types: './src/types',
           util: './src/util',
           views: './src/views',
         },

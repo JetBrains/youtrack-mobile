@@ -1,5 +1,5 @@
 import {DEFAULT_ERROR_MESSAGE} from './error-messages';
-import type {CustomError} from 'flow/Error';
+import type {CustomError} from 'types/Error';
 export const extractErrorMessage = function (
   err: Record<string, any> | string,
   isDescriptionOnly: boolean | null | undefined,

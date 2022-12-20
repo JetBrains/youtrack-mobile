@@ -22,14 +22,14 @@ import {
   WORK_ITEM_UPDATE,
 } from 'components/issue-permissions/issue-permissions';
 import type Api from 'components/api/api';
-import type {Activity, ActivityType} from 'flow/Activity';
-import type {AnyIssue} from '../../../flow/Issue';
+import type {Activity, ActivityType} from 'types/Activity';
+import type {AnyIssue} from '../../../types/Issue';
 import type {AppState} from '../../../reducers';
-import type {CustomError} from 'flow/Error';
+import type {CustomError} from 'types/Error';
 import type {State as SingleIssueState} from '../issue-reducers';
-import type {TimeTracking} from 'flow/Work';
-import type {User} from 'flow/User';
-import type {WorkItem} from 'flow/Work';
+import type {TimeTracking} from 'types/Work';
+import type {User} from 'types/User';
+import type {WorkItem} from 'types/Work';
 type ApiGetter = () => Api;
 type StateGetter = () => {
   issueState: SingleIssueState;

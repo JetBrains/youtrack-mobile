@@ -5,7 +5,7 @@ import BottomSheetModal from '../../../components/modal-panel-bottom/bottom-shee
 import ReactionIcon from 'components/reactions/reaction-icon';
 import {HIT_SLOP} from 'components/common-styles/button';
 import styles from './issue-activity.styles';
-import type {Reaction} from 'flow/Reaction';
+import type {Reaction} from 'types/Reaction';
 type Props = {
   onHide: () => void;
   onSelect: (reaction: Reaction) => void;

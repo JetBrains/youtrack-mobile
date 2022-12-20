@@ -11,11 +11,11 @@ import {getEntityPresentation} from 'components/issue-formatter/issue-formatter'
 import {i18n} from 'components/i18n/i18n';
 import {isActivityCategory} from 'components/activity/activity__category';
 import styles from './inbox-threads.styles';
-import type {Activity} from 'flow/Activity';
-import type {InboxThread, ThreadEntity} from 'flow/Inbox';
-import type {IssueComment} from 'flow/CustomFields';
-import type {UITheme} from 'flow/Theme';
-import type {User} from 'flow/User';
+import type {Activity} from 'types/Activity';
+import type {InboxThread, ThreadEntity} from 'types/Inbox';
+import type {IssueComment} from 'types/CustomFields';
+import type {UITheme} from 'types/Theme';
+import type {User} from 'types/User';
 type Props = {
   currentUser: User;
   onNavigate: (entity: ThreadEntity, navigateToActivity?: string) => any;

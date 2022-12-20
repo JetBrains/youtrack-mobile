@@ -4,8 +4,8 @@ import {getStorageState} from '../storage/storage';
 import {i18n} from 'components/i18n/i18n';
 import {until} from 'util/util';
 import type Api from '../api/api';
-import type {Folder} from 'flow/User';
-import type {TransformedSuggestion} from 'flow/Issue';
+import type {Folder} from 'types/User';
+import type {TransformedSuggestion} from 'types/Issue';
 type CachedQueries = {
   id: string;
   name: string;

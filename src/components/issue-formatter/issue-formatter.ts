@@ -1,6 +1,6 @@
-import type {AnyIssue} from 'flow/Issue';
-import type {CustomField} from 'flow/CustomFields';
-import type {Article} from 'flow/Article';
+import type {AnyIssue} from 'types/Issue';
+import type {CustomField} from 'types/CustomFields';
+import type {Article} from 'types/Article';
 
 function findIssueField(
   issue: AnyIssue,

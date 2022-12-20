@@ -1,6 +1,6 @@
 import ApiBase from './api__base';
 import type Auth from '../auth/oauth2';
-import type {IssueProject} from 'flow/CustomFields';
+import type {IssueProject} from 'types/CustomFields';
 export default class ProjectsAPI extends ApiBase {
   projectsURL: string = `${this.youTrackApiUrl}/admin/projects`;
   pinProjectURL: string = `${this.youTrackApiUrl}/users/me/pinnedProjects`;

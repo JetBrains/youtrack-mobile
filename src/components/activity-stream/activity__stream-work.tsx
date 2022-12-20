@@ -19,10 +19,10 @@ import {showActionSheet} from '../action-sheet/action-sheet';
 import {ytDate} from 'components/date/date';
 import styles from './activity__stream.styles';
 import type {ActionSheetOption} from '../action-sheet/action-sheet';
-import type {Activity} from 'flow/Activity';
+import type {Activity} from 'types/Activity';
 import type {AppState} from '../../reducers';
-import type {IssueFull} from 'flow/Issue';
-import type {WorkItem} from 'flow/Work';
+import type {IssueFull} from 'types/Issue';
+import type {WorkItem} from 'types/Work';
 type Props = {
   activityGroup: Activity;
   onDelete?: (workItem: WorkItem) => any;

@@ -3,7 +3,7 @@ import {
   DEFAULT_WORK_TIME_SETTINGS,
   getPeriodName,
 } from './time-tracking__default-settings';
-import type {WorkTimeSettings} from 'flow/Work';
+import type {WorkTimeSettings} from 'types/Work';
 export function getPeriodPresentationFor(
   minutes: number,
   workTimeSettings: WorkTimeSettings,

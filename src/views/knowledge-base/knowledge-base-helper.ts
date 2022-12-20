@@ -5,8 +5,8 @@ import type {
   ArticlesList,
   ArticlesListItem,
   ProjectArticlesData,
-} from 'flow/Article';
-import type {Folder} from 'flow/User';
+} from 'types/Article';
+import type {Folder} from 'types/User';
 export const createSortedProjects = (
   projects: Array<Folder>,
   cachedArticleList: ArticlesList,

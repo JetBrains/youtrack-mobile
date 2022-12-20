@@ -18,7 +18,7 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 import {ThemeContext} from 'components/theme/theme-context';
 import styles from './settings.styles';
 import type {StorageState} from 'components/storage/storage';
-import type {Theme, UITheme} from 'flow/Theme';
+import type {Theme, UITheme} from 'types/Theme';
 import type {AppState} from '../../reducers';
 type Props = {
   onLogOut: () => any;

@@ -4,8 +4,8 @@ import Avatar from '../avatar/avatar';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {ytDate} from 'components/date/date';
 import styles from './user-info.styles';
-import type {User} from 'flow/User';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {User} from 'types/User';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   additionalInfo?: string;
   avatar?: React.ReactElement<React.ComponentProps<any>, any>;

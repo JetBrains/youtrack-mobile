@@ -5,7 +5,7 @@ import {i18n} from 'components/i18n/i18n';
 import {IconAngleRight} from '../icon/icon';
 import {getLinkedIssuesTitle} from './linked-issues-helper';
 import styles from './linked-issues.style';
-import type {IssueLink} from 'flow/CustomFields';
+import type {IssueLink} from 'types/CustomFields';
 type Props = {
   issueLinks: Array<IssueLink>;
   onPress: () => any;

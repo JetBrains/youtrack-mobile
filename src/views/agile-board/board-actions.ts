@@ -35,11 +35,11 @@ import type {
   BoardOnList,
   Sprint,
   SprintFull,
-} from 'flow/Agile';
+} from 'types/Agile';
 import type {AgilePageState} from './board-reducers';
 import type {AppState} from '../../reducers';
-import type {CustomError} from 'flow/Error';
-import type {IssueFull, IssueOnList} from 'flow/Issue';
+import type {CustomError} from 'types/Error';
+import type {IssueFull, IssueOnList} from 'types/Issue';
 type ApiGetter = () => Api;
 export const PAGE_SIZE = 15;
 const RECONNECT_TIMEOUT = 60000;

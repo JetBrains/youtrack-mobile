@@ -4,8 +4,8 @@ import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {LOG_OUT, SET_PROGRESS} from 'actions/action-types';
 import * as types from './issues-action-types';
-import type {Folder} from 'flow/User';
-import type {IssueOnList, TransformedSuggestion} from 'flow/Issue';
+import type {Folder} from 'types/User';
+import type {IssueOnList, TransformedSuggestion} from 'types/Issue';
 export type IssuesState = {
   query: string;
   skip: number;

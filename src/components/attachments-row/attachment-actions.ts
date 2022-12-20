@@ -13,11 +13,11 @@ import {notify, notifyError} from '../notification/notification';
 import {ResourceTypes} from '../api/api__resource-types';
 import {until} from 'util/util';
 import type Api from '../api/api';
-import type {ActionSheetAction} from 'flow/Action';
+import type {ActionSheetAction} from 'types/Action';
 import type {AppState} from '../../reducers';
-import type {Article} from 'flow/Article';
-import type {Attachment, IssueComment} from 'flow/CustomFields';
-import type {NormalizedAttachment} from 'flow/Attachment';
+import type {Article} from 'types/Article';
+import type {Attachment, IssueComment} from 'types/CustomFields';
+import type {NormalizedAttachment} from 'types/Attachment';
 type ApiGetter = () => Api;
 type StateGetter = () => AppState;
 const attachFileMethod: Record<string, any> = {

@@ -51,13 +51,13 @@ import {UNIT} from 'components/variables/variables';
 import styles from './issues.styles';
 import type Api from 'components/api/api';
 import type Auth from 'components/auth/oauth2';
-import type {AnyIssue, IssueOnList} from 'flow/Issue';
+import type {AnyIssue, IssueOnList} from 'types/Issue';
 import type {AppState} from '../../reducers';
 import type {ErrorMessageProps} from 'components/error-message/error-message';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
-import type {Folder} from 'flow/User';
+import type {Folder} from 'types/User';
 import type {IssuesState} from './issues-reducers';
-import type {Theme, UIThemeColors} from 'flow/Theme';
+import type {Theme, UIThemeColors} from 'types/Theme';
 type IssuesActions = typeof issueActions;
 type Props = IssuesState &
   IssuesActions & {

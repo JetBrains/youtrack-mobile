@@ -57,11 +57,11 @@ import type {
   ArticleProject,
   ArticleNodeList,
   ArticleDraft,
-} from 'flow/Article';
+} from 'types/Article';
 import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {SelectProps} from 'components/select/select';
-import type {Theme, UITheme} from 'flow/Theme';
+import type {Theme, UITheme} from 'types/Theme';
 type Props = KnowledgeBaseActions &
   KnowledgeBaseState & {
     issuePermissions: IssuePermissions;

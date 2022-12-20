@@ -20,10 +20,10 @@ import {isAndroidPlatform} from 'util/util';
 import {isSplitView} from '../responsive/responsive-helper';
 import {View as AnimatedView} from 'react-native-animatable';
 import styles from './attachments-row.styles';
-import type {Attachment} from 'flow/CustomFields';
+import type {Attachment} from 'types/CustomFields';
 import type {FileCategoryKey} from './attachment-helper';
-import type {UITheme} from 'flow/Theme';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {UITheme} from 'types/Theme';
+import type {ViewStyleProp} from 'types/Internal';
 type StyleMap = Record<FileCategoryKey, ViewStyleProp>;
 type Props = {
   imageHeaders: Record<string, any> | null | undefined;

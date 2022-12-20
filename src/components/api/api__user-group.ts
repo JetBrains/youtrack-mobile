@@ -1,5 +1,5 @@
 import ApiBase from './api__base';
-import type {UserGroup} from 'flow/UserGroup';
+import type {UserGroup} from 'types/UserGroup';
 import type Auth from '../auth/oauth2';
 export default class UserGroupAPI extends ApiBase {
   url: string;

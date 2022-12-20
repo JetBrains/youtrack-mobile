@@ -2,7 +2,7 @@ import {Dimensions} from 'react-native';
 import {isSplitView} from '../responsive/responsive-helper';
 import {splitViewLeftSideBarWidth} from '../common-styles/split-view';
 import {UNIT} from '../variables/variables';
-import type {ImageDimensions} from 'flow/CustomFields';
+import type {ImageDimensions} from 'types/CustomFields';
 export default function calculateAspectRatio(
   dimensions: ImageDimensions = {},
 ): ImageDimensions {

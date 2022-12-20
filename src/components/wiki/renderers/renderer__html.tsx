@@ -5,7 +5,7 @@ import {baseMarkdownStyles} from '../markdown-view-styles';
 import {MAIN_FONT_SIZE} from 'components/common-styles/typography';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables/variables';
-import type {Theme} from 'flow/Theme';
+import type {Theme} from 'types/Theme';
 type Props = {
   html: string;
 };

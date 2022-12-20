@@ -12,13 +12,13 @@ import {getEntityPresentation} from 'components/issue-formatter/issue-formatter'
 import {HIT_SLOP} from 'components/common-styles/button';
 import {i18n} from 'components/i18n/i18n';
 import styles from './inbox-threads.styles';
-import type {Attachment} from 'flow/Attachment';
+import type {Attachment} from 'types/Attachment';
 import type {
   InboxThreadGroup,
   InboxThreadTarget,
   ThreadEntity,
-} from 'flow/Inbox';
-import type {UserCurrent} from 'flow/User';
+} from 'types/Inbox';
+import type {UserCurrent} from 'types/User';
 type Props = {
   currentUser: UserCurrent;
   group: InboxThreadGroup;

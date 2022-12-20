@@ -7,10 +7,10 @@ import StreamAttachments from './activity__stream-attachment';
 import {firstActivityChange} from './activity__stream-helper';
 import {ThemeContext} from '../theme/theme-context';
 import styles from './activity__stream.styles';
-import type {Activity, ActivityStreamCommentActions} from 'flow/Activity';
-import type {Attachment, IssueComment} from 'flow/CustomFields';
-import type {Theme} from 'flow/Theme';
-import type {YouTrackWiki} from 'flow/Wiki';
+import type {Activity, ActivityStreamCommentActions} from 'types/Activity';
+import type {Attachment, IssueComment} from 'types/CustomFields';
+import type {Theme} from 'types/Theme';
+import type {YouTrackWiki} from 'types/Wiki';
 type Props = {
   activity: Activity;
   attachments?: Array<Attachment>;

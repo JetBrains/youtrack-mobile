@@ -1,5 +1,5 @@
-import type {PermissionCacheItem} from 'flow/Permission';
-import type {IssueProject} from 'flow/CustomFields';
+import type {PermissionCacheItem} from 'types/Permission';
+import type {IssueProject} from 'types/CustomFields';
 
 class PermissionsStore {
   permissionsMap: Record<string, any>;

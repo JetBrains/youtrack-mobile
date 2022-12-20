@@ -6,11 +6,11 @@ import ReactionsPanel from '../issue/activity/issue__activity-reactions-dialog';
 import {COMMENT_REACTIONS_SEPARATOR} from 'components/reactions/reactions';
 import {onReactionSelect} from './inbox-threads-actions';
 import styles from './inbox-threads.styles';
-import type {User} from 'flow/User';
-import type {Reaction} from 'flow/Reaction';
-import type {Activity} from 'flow/Activity';
-import type {IssueComment} from 'flow/CustomFields';
-import type {ThreadEntity} from 'flow/Inbox';
+import type {User} from 'types/User';
+import type {Reaction} from 'types/Reaction';
+import type {Activity} from 'types/Activity';
+import type {IssueComment} from 'types/CustomFields';
+import type {ThreadEntity} from 'types/Inbox';
 type Props = {
   activity: Activity;
   currentUser: User;

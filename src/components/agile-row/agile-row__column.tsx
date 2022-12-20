@@ -5,9 +5,9 @@ import {DropZone} from '../draggable';
 import {IconAdd} from '../icon/icon';
 import {isSplitView} from '../responsive/responsive-helper';
 import styles from './agile-row.styles';
-import type {BoardCell} from 'flow/Agile';
-import type {IssueFull} from 'flow/Issue';
-import type {UITheme} from 'flow/Theme';
+import type {BoardCell} from 'types/Agile';
+import type {IssueFull} from 'types/Issue';
+import type {UITheme} from 'types/Theme';
 type ColumnProps = {
   cell: BoardCell;
   onTapCreateIssue?: (...args: Array<any>) => any;

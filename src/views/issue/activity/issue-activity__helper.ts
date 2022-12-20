@@ -2,7 +2,7 @@ import {ActivityCategory} from 'components/activity/activity__category';
 import {checkVersion} from 'components/feature/feature';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {getActivityAllTypes} from 'components/activity/activity-helper';
-import type {ActivityType} from 'flow/Activity';
+import type {ActivityType} from 'types/Activity';
 import type {StorageState} from 'components/storage/storage';
 export function isIssueActivitiesAPIEnabled(): any {
   return checkVersion('2018.3');

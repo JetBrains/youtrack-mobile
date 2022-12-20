@@ -5,8 +5,8 @@ import {i18n} from 'components/i18n/i18n';
 import {showActions} from '../action-sheet/action-sheet';
 import styles from './tags.styles';
 import type {ActionSheetOption} from '../action-sheet/action-sheet';
-import type {Tag} from 'flow/CustomFields';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {Tag} from 'types/CustomFields';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   tags: Array<Tag>;
   onTagPress: (query: string) => void;

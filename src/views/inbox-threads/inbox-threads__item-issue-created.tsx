@@ -6,12 +6,12 @@ import ThreadItem from './inbox-threads__item';
 import {activityCategory} from 'components/activity/activity__category';
 import {i18n} from 'components/i18n/i18n';
 import {IconHistory} from 'components/icon/icon';
-import {InboxThreadGroup} from 'flow/Inbox';
+import {InboxThreadGroup} from 'types/Inbox';
 import {markdownText} from 'components/common-styles/typography';
 import styles from './inbox-threads.styles';
-import type {CustomField} from 'flow/CustomFields';
-import type {InboxThreadTarget, ThreadEntity} from 'flow/Inbox';
-import type {UITheme} from 'flow/Theme';
+import type {CustomField} from 'types/CustomFields';
+import type {InboxThreadTarget, ThreadEntity} from 'types/Inbox';
+import type {UITheme} from 'types/Theme';
 type Props = {
   group: InboxThreadGroup;
   target: InboxThreadTarget;

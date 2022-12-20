@@ -10,7 +10,7 @@ import {
 import type {DragContextType} from '../draggable/drag-container';
 import {DragContext} from '../draggable/drag-container';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../agile-common/agile-common';
-import type {BoardColumn} from 'flow/Agile';
+import type {BoardColumn} from 'types/Agile';
 type Props = {
   children: any;
   refreshControl: any;

@@ -30,15 +30,15 @@ import type {
   ActivityGroup,
   ActivityItem,
   ActivityStreamCommentActions,
-} from 'flow/Activity';
-import type {Attachment, IssueComment} from 'flow/CustomFields';
-import type {CustomError} from 'flow/Error';
-import type {Reaction} from 'flow/Reaction';
-import type {UITheme} from 'flow/Theme';
-import type {User} from 'flow/User';
-import type {WorkItem, WorkTimeSettings} from 'flow/Work';
-import type {YouTrackWiki} from 'flow/Wiki';
-import {Activity} from 'flow/Activity';
+} from 'types/Activity';
+import type {Attachment, IssueComment} from 'types/CustomFields';
+import type {CustomError} from 'types/Error';
+import type {Reaction} from 'types/Reaction';
+import type {UITheme} from 'types/Theme';
+import type {User} from 'types/User';
+import type {WorkItem, WorkTimeSettings} from 'types/Work';
+import type {YouTrackWiki} from 'types/Wiki';
+import {Activity} from 'types/Activity';
 type Props = {
   activities: Array<ActivityGroup> | null;
   attachments: Array<Attachment>;

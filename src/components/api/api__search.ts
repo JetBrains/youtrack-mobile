@@ -2,12 +2,12 @@ import qs from 'qs';
 import ApiBase from './api__base';
 import ApiHelper from './api__helper';
 import type Auth from '../auth/oauth2';
-import type {Folder} from 'flow/User';
+import type {Folder} from 'types/User';
 import type {
   ServersideSuggestion,
   ServersideSuggestionLegacy,
   TransformedSuggestion,
-} from 'flow/Issue';
+} from 'types/Issue';
 export default class SearchAPI extends ApiBase {
   constructor(auth: Auth) {
     super(auth);

@@ -12,16 +12,16 @@ import {mergeActivities} from 'components/activity/activity__merge-activities';
 import {sortByTimestamp} from 'components/search/sorting';
 import {splitActivities} from 'components/activity/activity__split-activities';
 import styles from './inbox-threads.styles';
-import type {Activity} from 'flow/Activity';
+import type {Activity} from 'types/Activity';
 import type {
   InboxThread,
   InboxThreadGroup,
   InboxThreadMessage,
   ThreadEntity,
-} from 'flow/Inbox';
-import type {UITheme} from 'flow/Theme';
-import type {User} from 'flow/User';
-import type {ViewStyleProp} from 'flow/Internal';
+} from 'types/Inbox';
+import type {UITheme} from 'types/Theme';
+import type {User} from 'types/User';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   currentUser: User;
   onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;

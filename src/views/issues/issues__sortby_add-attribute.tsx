@@ -7,12 +7,12 @@ import {getApi} from 'components/api/api__instance';
 import {getCustomFieldName} from 'components/custom-field/custom-field-helper';
 import {SELECT_ITEM_HEIGHT} from 'components/select/select.styles';
 import type API from 'components/api/api';
-import type {Folder} from 'flow/User';
+import type {Folder} from 'types/User';
 import type {
   CustomFilterField,
   IssueFieldSortProperty,
   PredefinedFilterField,
-} from 'flow/Sorting';
+} from 'types/Sorting';
 type Props = {
   context: Folder;
   onApply: (sortProperties: Array<IssueFieldSortProperty>) => any;

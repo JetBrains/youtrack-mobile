@@ -1,5 +1,5 @@
-import type {CustomError} from 'flow/Error';
-import type {PermissionCacheItem} from 'flow/Permission';
+import type {CustomError} from 'types/Error';
+import type {PermissionCacheItem} from 'types/Permission';
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
 
 async function loadPermissions(

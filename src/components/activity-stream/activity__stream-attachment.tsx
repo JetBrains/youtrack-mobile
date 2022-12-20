@@ -5,8 +5,8 @@ import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
 import {getApi} from 'components/api/api__instance';
 import {ThemeContext} from 'components/theme/theme-context';
-import type {Attachment} from 'flow/CustomFields';
-import type {Theme} from 'flow/Theme';
+import type {Attachment} from 'types/CustomFields';
+import type {Theme} from 'types/Theme';
 
 const StreamAttachments = ({
   attachments,

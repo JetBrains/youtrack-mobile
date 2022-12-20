@@ -21,8 +21,8 @@ import type {
   CommandSuggestionResponse,
   CommandSuggestion,
   SuggestedCommand,
-} from 'flow/Issue';
-import type {UITheme} from 'flow/Theme';
+} from 'types/Issue';
+import type {UITheme} from 'types/Theme';
 type Props = {
   suggestions: CommandSuggestionResponse | null | undefined;
   initialCommand: string;

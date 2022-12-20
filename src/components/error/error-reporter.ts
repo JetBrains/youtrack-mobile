@@ -3,7 +3,7 @@ import appPackage from '../../../package.json';
 import log, {getLogs} from '../log/log';
 import {getStorageState} from '../storage/storage';
 import {ResourceTypes, getShortEntityType} from '../api/api__resource-types';
-import type {AppConfig} from 'flow/AppConfig';
+import type {AppConfig} from 'types/AppConfig';
 export type ReportErrorData = {
   summary: string;
   description: string;

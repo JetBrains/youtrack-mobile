@@ -1,7 +1,7 @@
 import {Text} from 'react-native';
 import React from 'react';
 import styles from './badge.styles';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   text: string;
   valid?: boolean;

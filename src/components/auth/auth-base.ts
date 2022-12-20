@@ -13,10 +13,10 @@ import {
 import {HTTP_STATUS} from '../error/error-http-codes';
 import {STORAGE_AUTH_PARAMS_KEY} from '../storage/storage';
 import {USER_AGENT} from '../usage/usage';
-import type {AppConfig} from 'flow/AppConfig';
-import type {AuthParams, RequestHeaders} from 'flow/Auth';
-import type {CustomError} from 'flow/Error';
-import type {User} from 'flow/User';
+import type {AppConfig} from 'types/AppConfig';
+import type {AuthParams, RequestHeaders} from 'types/Auth';
+import type {CustomError} from 'types/Error';
+import type {User} from 'types/User';
 export class AuthBase {
   authParams: AuthParams;
   LOAD_USER_URL: string;

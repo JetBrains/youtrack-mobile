@@ -1,8 +1,8 @@
-import type {Visibility} from 'flow/Visibility';
+import type {Visibility} from 'types/Visibility';
 import {ResourceTypes, addTypes} from '../api/api__resource-types';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
-import type {UserGroup} from 'flow/UserGroup';
-import type {User} from 'flow/User';
+import type {UserGroup} from 'types/UserGroup';
+import type {User} from 'types/User';
 export default class IssueVisibility {
   static visibility(
     visibility: Visibility,

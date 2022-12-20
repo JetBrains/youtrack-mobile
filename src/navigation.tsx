@@ -5,7 +5,7 @@ import Router from 'components/router/router';
 import {menuHeight} from 'components/common-styles/header';
 import {routeMap} from './app-routes';
 import {ThemeContext} from 'components/theme/theme-context';
-import type {Theme} from 'flow/Theme';
+import type {Theme} from 'types/Theme';
 const styles = StyleSheet.create({
   flexBox: {
     flex: 1,

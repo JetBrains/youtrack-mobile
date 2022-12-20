@@ -2,13 +2,13 @@ import objectWalk from 'object-walk';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 import {handleRelativeUrl} from '../config/config';
 import {toField} from 'util/to-field';
-import type {Attachment, CustomField} from 'flow/CustomFields';
+import type {Attachment, CustomField} from 'types/CustomFields';
 import type {
   AnyIssue,
   ServersideSuggestion,
   TransformedSuggestion,
   ServersideSuggestionLegacy,
-} from 'flow/Issue';
+} from 'types/Issue';
 const API = {
   makeFieldHash: (issue: AnyIssue): Record<string, any> => {
     const fieldHash: Partial<{

@@ -17,9 +17,9 @@ import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {IconCaretDownUp} from '../icon/icon';
 import {ytDate} from 'components/date/date';
 import styles from './activity__stream.styles';
-import type {Activity} from 'flow/Activity';
-import type {PullRequest, VCSActivity, VcsProcessor} from 'flow/Vcs';
-import type {TextStyleProp} from 'flow/Internal';
+import type {Activity} from 'types/Activity';
+import type {PullRequest, VCSActivity, VcsProcessor} from 'types/Vcs';
+import type {TextStyleProp} from 'types/Internal';
 type Props = {
   activityGroup: Activity;
 };

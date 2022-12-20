@@ -4,8 +4,8 @@ import Router from '../router/router';
 import {ThemeContext} from '../theme/theme-context';
 import {HIT_SLOP} from '../common-styles/button';
 import styles from './header.styles';
-import type {ViewStyleProp} from 'flow/Internal';
-import type {Theme} from 'flow/Theme';
+import type {ViewStyleProp} from 'types/Internal';
+import type {Theme} from 'types/Theme';
 export type HeaderProps = {
   onBack?: () => any;
   onRightButtonClick?: (...args: Array<any>) => any;

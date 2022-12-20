@@ -4,7 +4,7 @@ import ActivityIcon from './activity__stream-icon';
 import Avatar from 'components/avatar/avatar';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import styles from './activity__stream.styles';
-import type {ViewStyleProp} from 'flow/Internal';
+import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   activityGroup: Record<string, any>;
   showAvatar: boolean;
