@@ -65,6 +65,7 @@ export const getAppAndDeviceData = (): string => {
     config = {
       version: notDefined,
       backendUrl: notDefined,
+      build: notDefined,
     };
   }
 
@@ -76,6 +77,7 @@ export const getAppAndDeviceData = (): string => {
   Device: ${DeviceInfo.getBrand()} ${DeviceInfo.getDeviceId()};
 
   YouTrack version: ${config.version};
+  YouTrack build: ${config?.build};
   YouTrack URL: ${config.backendUrl};
   `;
 };

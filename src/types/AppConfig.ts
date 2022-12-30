@@ -4,6 +4,7 @@ export type AppConfig = {
   auth: AuthConfig;
   statisticsEnabled: boolean;
   version: string;
+  build: string;
   l10n: {
     language: string;
     locale: string;
