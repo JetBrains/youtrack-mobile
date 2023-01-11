@@ -10,7 +10,7 @@ msgstr ""
 msgid " ({{amount}} unresolved)"
 msgstr " ({{amount}} unresolved)"
 
-#: src/components/comment/comment.tsx:55
+#: src/components/comment/comment.tsx:59
 msgid " or "
 msgstr " or "
 
@@ -223,7 +223,7 @@ msgstr "Command was successfully applied."
 msgid "Comment changed"
 msgstr "Comment changed"
 
-#: src/components/comment/comment.tsx:42
+#: src/components/comment/comment.tsx:46
 msgid "Comment deleted"
 msgstr "Comment deleted"
 
@@ -342,7 +342,7 @@ msgstr "Delete comment permanently?"
 msgid "Delete draft"
 msgstr "Delete draft"
 
-#: src/components/comment/comment.tsx:59
+#: src/components/comment/comment.tsx:63
 msgid "Delete permanently"
 msgstr "Delete permanently"
 
@@ -380,7 +380,7 @@ msgid "Drafts"
 msgstr "Drafts"
 
 #: src/components/activity-stream/activity__stream-work.tsx:138
-#: src/components/activity-stream/activity__stream.tsx:208
+#: src/components/activity-stream/activity__stream.tsx:200
 #: src/views/article/arcticle-actions.ts:284
 #: src/views/issue/activity/issue-activity__comment-actions.ts:415
 #: src/views/issue/issue-base-actions-creater.ts:647
@@ -629,7 +629,7 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.tsx:453
+#: src/components/activity-stream/activity__stream.tsx:444
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -745,7 +745,7 @@ msgstr "reopened the pull request"
 msgid "Restart"
 msgstr "Restart"
 
-#: src/components/comment/comment.tsx:51
+#: src/components/comment/comment.tsx:55
 msgid "Restore"
 msgstr "Restore"
 
