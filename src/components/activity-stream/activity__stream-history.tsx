@@ -21,7 +21,7 @@ import {hasType} from '../api/api__resource-types';
 type Props = {
   activity: Activity;
   customFields?: CustomField[];
-  workTimeSettings?: WorkTimeSettings;
+  workTimeSettings: WorkTimeSettings | null | undefined;
 };
 
 const renderAttachmentChange = (activity: Record<string, any>) => {

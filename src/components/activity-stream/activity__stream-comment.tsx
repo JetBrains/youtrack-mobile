@@ -7,7 +7,7 @@ import StreamAttachments from './activity__stream-attachment';
 import {firstActivityChange} from './activity__stream-helper';
 import {ThemeContext} from '../theme/theme-context';
 import styles from './activity__stream.styles';
-import type {Activity, ActivityStreamCommentActions} from 'types/Activity';
+import type {Activity, ActivityItem, ActivityStreamCommentActions} from 'types/Activity';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {Theme} from 'types/Theme';
 import type {YouTrackWiki} from 'types/Wiki';
@@ -33,11 +33,11 @@ const StreamComment = ({
   onCheckboxUpdate,
   onShowCommentActions = () => {},
   youtrackWiki,
-}: Props): React.ReactNode => {
+}: Props): JSX.Element | null => {
   const theme: Theme = useContext(ThemeContext);
-  const comment: IssueComment | null | undefined = firstActivityChange(
+  const comment: ActivityItem | null = firstActivityChange(
     activity,
-  );
+  ) as IssueComment | null;
 
   if (!comment) {
     return null;

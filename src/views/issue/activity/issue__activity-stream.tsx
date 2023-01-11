@@ -10,6 +10,7 @@ import {attachmentActions} from './issue-activity__attachment-actions-and-types'
 import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {IssueContext} from '../issue-context';
+
 import type {ActivityStreamProps} from 'components/activity-stream/activity__stream';
 import type {Activity, ActivityStreamCommentActions} from 'types/Activity';
 import type {AppState} from '../../../reducers';
@@ -17,10 +18,10 @@ import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {CustomError} from 'types/Error';
 import type {IssueContextData, IssueFull} from 'types/Issue';
 import type {Reaction} from 'types/Reaction';
+
 type Props = ActivityStreamProps & {
   issueId: string;
   actionSheet: (...args: any[]) => any;
-  headerRenderer: () => any;
   refreshControl: () => any;
   highlight?: {
     activityId: string;
@@ -28,7 +29,7 @@ type Props = ActivityStreamProps & {
   };
 };
 
-const IssueActivityStream = (props: Props) => {
+const IssueActivityStream: React.FC<Props> = (props: Props) => {
   const configBackendUrl: string = useSelector(
     (appState: AppState) => appState.app.auth?.config?.backendUrl || '',
   );
@@ -179,15 +180,10 @@ const IssueActivityStream = (props: Props) => {
   );
 };
 
-const isActivitiesEqual = (prev, next): boolean => {
-  return !!prev && !!next && prev.activities === next.activities;
-};
+const isActivitiesEqual = (prev: Props, next: Props): boolean => (
+  !!prev && !!next && prev.activities === next.activities
+);
 
-export const IssueStream: React$AbstractComponent<
-  ActivityStreamProps,
-  unknown
-> = React.memo<ActivityStreamProps>(ActivityStream, isActivitiesEqual);
-export default React.memo<Props>(
-  IssueActivityStream,
-  isActivitiesEqual,
-) as React$AbstractComponent<Props, unknown>;
+export const IssueStream: React.FC<Props> = React.memo<Props>(ActivityStream, isActivitiesEqual);
+
+export default React.memo<Props>(IssueActivityStream, isActivitiesEqual);

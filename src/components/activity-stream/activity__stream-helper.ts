@@ -1,13 +1,13 @@
 import getEventTitle from '../activity/activity__history-title';
 import {COMMENT_REACTIONS_SEPARATOR} from '../reactions/reactions';
+import {ActivityItem} from 'types/Activity';
+
 import type {Activity} from 'types/Activity';
 import type {IssueComment} from 'types/CustomFields';
 import type {Reaction} from 'types/Reaction';
 import type {User} from 'types/User';
 
-const firstActivityChange = (
-  activity: Activity | null | undefined,
-): any | null => {
+const firstActivityChange = (activity: Activity | undefined): ActivityItem | null => {
   if (!activity || !activity.added) {
     return null;
   }

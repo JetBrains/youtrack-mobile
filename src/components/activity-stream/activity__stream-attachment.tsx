@@ -12,25 +12,28 @@ const StreamAttachments = ({
   attachments,
 }: {
   attachments: Attachment[];
-}): React.ReactNode => {
+}): JSX.Element => {
   const theme: Theme = useContext(ThemeContext);
   return (
-    attachments?.length && (
-      <AttachmentsRow
-        attachments={ApiHelper.convertAttachmentRelativeToAbsURLs(
-          attachments,
-          getApi().config.backendUrl,
-        )}
-        attachingImage={null}
-        onOpenAttachment={(type: string) =>
-          usage.trackEvent(
-            ANALYTICS_ISSUE_STREAM_SECTION,
-            type === 'image' ? 'Showing image' : 'Open attachment by URL',
-          )
-        }
-        uiTheme={theme.uiTheme}
-      />
-    )
+    <>
+      {attachments?.length && (
+        <AttachmentsRow
+          attachments={ApiHelper.convertAttachmentRelativeToAbsURLs(
+            attachments,
+            getApi().config.backendUrl,
+          )}
+          attachingImage={null}
+          onOpenAttachment={(type: string) =>
+            usage.trackEvent(
+              ANALYTICS_ISSUE_STREAM_SECTION,
+              type === 'image' ? 'Showing image' : 'Open attachment by URL',
+            )
+          }
+          uiTheme={theme.uiTheme}
+        />
+      )
+      }
+    </>
   );
 };
 

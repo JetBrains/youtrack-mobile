@@ -1,5 +1,6 @@
-import {View, Text, TouchableWithoutFeedback} from 'react-native';
 import React from 'react';
+import {View, Text, TouchableWithoutFeedback} from 'react-native';
+
 import Avatar from '../avatar/avatar';
 import HTML from 'components/wiki/renderers/renderer__html';
 import MarkdownView from 'components/wiki/markdown-view';
@@ -9,10 +10,13 @@ import {i18n} from 'components/i18n/i18n';
 import {isPureHTMLBlock, prepareHTML} from 'components/wiki/markdown-helper';
 import {markdownText} from 'components/common-styles/typography';
 import {ytDate} from 'components/date/date';
+
 import styles from './comment.styles';
+
 import type {IssueComment, Attachment} from 'types/CustomFields';
 import type {UITheme} from 'types/Theme';
 import type {YouTrackWiki} from 'types/Wiki';
+
 type Props = {
   comment: IssueComment;
   attachments?: Attachment[];
@@ -162,7 +166,4 @@ function Comment(props: Props) {
   );
 }
 
-export default React.memo<Props>(Comment) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(Comment);
