@@ -266,7 +266,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
           comment: IssueComment,
         ) => onCheckboxUpdate(checked, position, comment)}
         refreshControl={this.renderRefreshControl}
-        headerRenderer={() => {
+        renderHeader={() => {
           const hasError: boolean = this.hasLoadingError();
 
           if (hasError) {
