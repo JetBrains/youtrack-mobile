@@ -1,12 +1,14 @@
-import React, {useCallback, useLayoutEffect, useRef} from 'react';
+import React, {MutableRefObject, useCallback, useLayoutEffect, useRef} from 'react';
 import {
-  Animated,
+  Animated, LayoutRectangle,
+  NativeScrollEvent,
+  ScrollView,
   Text,
   TouchableOpacity,
-  ScrollView,
-  View,
   useWindowDimensions,
+  View,
 } from 'react-native';
+
 import ActivityUserAvatar from './activity__stream-avatar';
 import ApiHelper from '../api/api__helper';
 import CommentReactions from 'components/comment/comment-reactions';
@@ -25,12 +27,11 @@ import {i18n} from 'components/i18n/i18n';
 import {IconDrag, IconMoreOptions} from 'components/icon/icon';
 import {isIOSPlatform} from 'util/util';
 import {menuHeight} from '../common-styles/header';
+
 import styles from './activity__stream.styles';
-import type {
-  ActivityGroup,
-  ActivityItem,
-  ActivityStreamCommentActions,
-} from 'types/Activity';
+
+import type {ActivityGroup, ActivityItem, ActivityStreamCommentActions} from 'types/Activity';
+import {Activity} from 'types/Activity';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {CustomError} from 'types/Error';
 import type {Reaction} from 'types/Reaction';
@@ -38,7 +39,7 @@ import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {WorkItem, WorkTimeSettings} from 'types/Work';
 import type {YouTrackWiki} from 'types/Wiki';
-import {Activity} from 'types/Activity';
+
 type Props = {
   activities: ActivityGroup[] | null;
   attachments: Attachment[];
@@ -78,23 +79,20 @@ export type ActivityStreamPropsReaction = {
   onSelectReaction?: (comment: IssueComment, reaction: Reaction) => void;
 };
 export type ActivityStreamProps = Props & ActivityStreamPropsReaction;
-type ElementLayout = {
-  y: number;
-  height: number;
-};
-export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
+
+export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStreamProps) => {
   const window = useWindowDimensions();
   const {
-    headerRenderer: renderHeader = () => null,
+    renderHeader = () => null,
     activities,
     highlight,
   } = props;
 
-  const onScroll = event =>
-    (scrollOffset.current = event.nativeEvent.contentOffset.y);
+  const onScroll = ({nativeEvent}: { nativeEvent: NativeScrollEvent }) =>
+    (scrollOffset.current = nativeEvent.contentOffset.y);
 
-  const scrollRef = useRef(null);
-  const scrollOffset = useRef(0);
+  const scrollRef: MutableRefObject<ScrollView | null> = useRef(null);
+  const scrollOffset: MutableRefObject<number> = useRef(0);
   const bgColor = useRef(new Animated.Value(0));
   const color = useRef(
     bgColor.current.interpolate({
@@ -102,9 +100,9 @@ export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
       outputRange: [styles.activityHighlighted.backgroundColor, 'transparent'],
     }),
   );
-  const layoutMap = useRef({});
+  const layoutMap: MutableRefObject<{ [key: string]: LayoutRectangle | undefined}> = useRef({});
   const scrollToActivity = useCallback(
-    (layout: ElementLayout) => {
+    (layout: LayoutRectangle) => {
       if (
         scrollRef.current?.scrollTo &&
         (layout.y < scrollOffset.current ||
@@ -129,18 +127,16 @@ export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
   }, [highlight]);
   useLayoutEffect(() => {
     setTimeout(() => {
-      const layout: ElementLayout | null | undefined =
-        layoutMap.current[highlight?.commentId || highlight?.activityId];
-
+      const layout: LayoutRectangle | undefined = layoutMap.current[highlight!.commentId || highlight!.activityId];
       if (layout) {
         scrollToActivity(layout);
       }
     }, 100);
   }, [highlight, scrollToActivity]);
 
-  const getCommentFromActivityGroup = (
-    activityGroup: ActivityGroup,
-  ): IssueComment | null => firstActivityChange(activityGroup.comment);
+  const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment | null => (
+    firstActivityChange(activityGroup.comment) as IssueComment
+  );
 
   const onShowCommentActions = (
     activityGroup: ActivityGroup,
@@ -149,15 +145,13 @@ export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
     if (props.commentActions?.onShowCommentActions) {
       props.commentActions.onShowCommentActions(
         comment,
-        activityGroup.comment?.id,
+        activityGroup?.comment?.id as string,
       );
     }
   };
 
   const renderCommentActions = (activityGroup: ActivityGroup) => {
-    const comment: IssueComment | null = getCommentFromActivityGroup(
-      activityGroup,
-    );
+    const comment: ActivityItem | null = getCommentFromActivityGroup(activityGroup);
 
     if (!comment) {
       return null;
@@ -178,9 +172,7 @@ export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
       : FEATURE_VERSION.reactions;
 
     if (!comment.deleted) {
-      const reactionAddIcon: string = (
-        <ReactionAddIcon style={styles.activityCommentActionsAddReaction} />
-      );
+      const reactionAddIcon: React.ReactNode = <ReactionAddIcon style={styles.activityCommentActionsAddReaction}/>;
       return (
         <View style={styles.activityCommentActions}>
           <View style={styles.activityCommentActionsMain}>
@@ -215,7 +207,7 @@ export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
               <TouchableOpacity
                 hitSlop={HIT_SLOP}
                 onPress={() => {
-                  props.onReactionPanelOpen(comment);
+                  props?.onReactionPanelOpen?.(comment);
                 }}
               >
                 {reactionAddIcon}
@@ -246,32 +238,23 @@ export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
     }
   };
 
-  const renderCommentActivityReactions = (
-    activityGroup: Record<string, any>,
-  ) => {
-    const comment: IssueComment | null = getCommentFromActivityGroup(
-      activityGroup,
-    );
-
-    if (!comment || comment.deleted) {
-      return null;
-    }
-
-    return (
+  const renderCommentActivityReactions = (activityGroup: ActivityGroup): React.ReactNode => {
+    const comment: IssueComment | null = getCommentFromActivityGroup(activityGroup);
+    return comment && !comment.deleted ? (
       <CommentReactions
         style={styles.commentReactions}
         comment={comment}
         currentUser={props.currentUser}
         onReactionSelect={props.onSelectReaction}
       />
-    );
+    ) : null;
   };
 
-  const renderCommentActivity = (activityGroup: Record<string, any>) => {
-    const activity: Activity | null | undefined = activityGroup.comment;
+  const renderCommentActivity = (activityGroup: ActivityGroup) => {
+    const activity: Activity = activityGroup.comment as Activity;
 
     const _attachments: Attachment[] =
-      props.attachments || firstActivityChange(activity)?.attachments || [];
+      props.attachments || (firstActivityChange(activity) as IssueComment)?.attachments || [];
 
     const attachments: Attachment[] = ApiHelper.convertAttachmentRelativeToAbsURLs(
       _attachments,
@@ -285,7 +268,7 @@ export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
             style={styles.activityCommentDate}
           />
         ) : (
-          <StreamUserInfo activityGroup={activityGroup} />
+          <StreamUserInfo activityGroup={activityGroup}/>
         )}
         <StreamComment
           activity={activity}
@@ -293,7 +276,7 @@ export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
           commentActions={props.commentActions}
           onShowCommentActions={(comment: IssueComment) => {
             if (props.commentActions?.onShowCommentActions) {
-              props.commentActions.onShowCommentActions(comment, activity.id);
+              props.commentActions.onShowCommentActions(comment, activity.id as string);
             }
           }}
           youtrackWiki={props.youtrackWiki}
@@ -302,11 +285,16 @@ export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
     );
   };
 
-  const renderActivity = (activityGroup: ActivityGroup, index: number) => {
-    if (activityGroup.hidden) {
-      return null;
-    }
+  const getActivityGroupEvents = (activityGroup: ActivityGroup) => activityGroup?.events || [];
 
+  const getActivityGroupId = (activityGroup: ActivityGroup) => (
+    activityGroup?.comment?.id ||
+    activityGroup?.work?.id ||
+    activityGroup?.vcs?.id ||
+    getActivityGroupEvents(activityGroup)[0]?.id
+  );
+
+  const doRenderActivity = (activityGroup: ActivityGroup) => {
     const isRelatedChange: boolean = Boolean(
       activityGroup?.comment || activityGroup?.work || activityGroup?.vcs,
     );
@@ -329,41 +317,103 @@ export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
         break;
 
       case !!activityGroup.vcs:
-        renderedItem = <StreamVCS activityGroup={activityGroup} />;
+        renderedItem = <StreamVCS activityGroup={activityGroup}/>;
     }
 
-    const events: Activity[] = activityGroup?.events || [];
-    const id: string =
-      activityGroup?.comment?.id ||
-      activityGroup?.work?.id ||
-      activityGroup?.vcs?.id ||
-      events[0]?.id;
-    const targetActivityId: string | null | undefined =
-      highlight?.commentId || highlight?.activityId;
+    const targetActivityId: string | null | undefined = highlight?.commentId || highlight?.activityId;
 
     const _comment:
       | IssueComment
       | null
       | undefined = getCommentFromActivityGroup(activityGroup);
 
-    const hasHighlightedActivity: boolean =
-      !!targetActivityId &&
-      (id === targetActivityId ||
-        events.some(it => it.id === targetActivityId) ||
-        (!!_comment && _comment.id === highlight?.commentId));
+    const activityGroupEvents: Activity[] = getActivityGroupEvents(activityGroup);
+    const hasHighlightedActivity: boolean = (
+      !!targetActivityId && (getActivityGroupId(activityGroup) === targetActivityId ||
+        activityGroupEvents.some(it => it.id === targetActivityId) ||
+        (!!_comment && _comment.id === highlight?.commentId))
+    );
+
     const Component = hasHighlightedActivity ? Animated.View : View;
+    return (
+      <View
+        style={[
+          styles.activity,
+          activityGroup.merged && !activityGroup.comment
+            ? styles.activityMerged
+            : null,
+        ]}
+      >
+        <ActivityUserAvatar
+          activityGroup={activityGroup}
+          showAvatar={!!activityGroup.comment}
+        />
+
+        <Component
+          style={[
+            styles.activityItem,
+            hasHighlightedActivity && {
+              backgroundColor: color.current,
+            },
+          ]}
+        >
+          {renderedItem}
+          {activityGroupEvents.length > 0 && (
+            <View
+              style={
+                isRelatedChange
+                  ? styles.activityRelatedChanges
+                  : styles.activityHistoryChanges
+              }
+            >
+              {Boolean(!activityGroup.merged && !isRelatedChange) && (
+                <StreamUserInfo activityGroup={activityGroup}/>
+              )}
+              {activityGroup.merged && (
+                <StreamTimestamp
+                  isAbs={true}
+                  timestamp={activityGroup.timestamp}
+                />
+              )}
+
+              {activityGroupEvents.map(event => (
+                <StreamHistoryChange
+                  key={event.id}
+                  activity={event}
+                  workTimeSettings={props.workTimeSettings}
+                />
+              ))}
+            </View>
+          )}
+
+          {!!activityGroup.comment && (
+            <>
+              {!!props.onSelectReaction && renderCommentActivityReactions(activityGroup)}
+              {renderCommentActions(activityGroup)}
+            </>
+          )}
+        </Component>
+      </View>
+    );
+  };
+
+  const renderActivityGroup = (activityGroup: ActivityGroup, index: number) => {
+    if (activityGroup.hidden) {
+      return null;
+    }
+    const _comment: | IssueComment | null | undefined = getCommentFromActivityGroup(activityGroup);
     return (
       <View
         key={`${index}-${activityGroup.id}`}
         onLayout={event => {
           if (activities?.length) {
-            layoutMap.current[id] = event.nativeEvent.layout;
+            layoutMap.current[getActivityGroupId(activityGroup)] = event.nativeEvent.layout;
 
             if (_comment?.id) {
               layoutMap.current[_comment.id] = event.nativeEvent.layout;
             }
 
-            events.forEach(
+            getActivityGroupEvents(activityGroup).forEach(
               (it: Activity) =>
                 (layoutMap.current[it.id] = event.nativeEvent.layout),
             );
@@ -371,68 +421,9 @@ export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
         }}
       >
         {index > 0 && !activityGroup.merged && (
-          <View style={styles.activitySeparator} />
+          <View style={styles.activitySeparator}/>
         )}
-
-        <View
-          style={[
-            styles.activity,
-            activityGroup.merged && !activityGroup.comment
-              ? styles.activityMerged
-              : null,
-          ]}
-        >
-          <ActivityUserAvatar
-            activityGroup={activityGroup}
-            showAvatar={!!activityGroup.comment}
-          />
-
-          <Component
-            style={[
-              styles.activityItem,
-              hasHighlightedActivity && {
-                backgroundColor: color.current,
-              },
-            ]}
-          >
-            {renderedItem}
-            {activityGroup?.events?.length > 0 && (
-              <View
-                style={
-                  isRelatedChange
-                    ? styles.activityRelatedChanges
-                    : styles.activityHistoryChanges
-                }
-              >
-                {Boolean(!activityGroup.merged && !isRelatedChange) && (
-                  <StreamUserInfo activityGroup={activityGroup} />
-                )}
-                {activityGroup.merged && (
-                  <StreamTimestamp
-                    isAbs={true}
-                    timestamp={activityGroup.timestamp}
-                  />
-                )}
-
-                {activityGroup.events.map(event => (
-                  <StreamHistoryChange
-                    key={event.id}
-                    activity={event}
-                    workTimeSettings={props.workTimeSettings}
-                  />
-                ))}
-              </View>
-            )}
-
-            {!!activityGroup.comment && (
-              <>
-                {!!props.onSelectReaction &&
-                  renderCommentActivityReactions(activityGroup)}
-                {renderCommentActions(activityGroup)}
-              </>
-            )}
-          </Component>
-        </View>
+        {doRenderActivity(activityGroup)}
       </View>
     );
   };
@@ -448,7 +439,7 @@ export const ActivityStream = (props: ActivityStreamProps): React.ReactNode => {
       onScroll={onScroll}
     >
       {renderHeader()}
-      {(activities || []).map(renderActivity)}
+      {(activities || []).map(renderActivityGroup)}
       {activities?.length === 0 && (
         <Text style={styles.activityNoActivity}>{i18n('No activity yet')}</Text>
       )}
