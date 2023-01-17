@@ -5,7 +5,7 @@ import * as types from './action-types';
 import Api from 'components/api/api';
 import OAuth2 from 'components/auth/oauth2';
 import log from 'components/log/log';
-import openByUrlDetector from 'components/open-url-handler/open-url-handler';
+import {openByUrlDetector} from 'components/open-url-handler/open-url-handler';
 import packageJson from '../../package.json';
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
@@ -828,7 +828,7 @@ export function cacheProjects(): (
   };
 }
 
-function subscribeToURL(): Action {
+export function subscribeToURL(): Action {
   return async (
     dispatch: (arg0: any) => any,
     getState: () => AppState,
@@ -846,27 +846,11 @@ function subscribeToURL(): Action {
         }
 
         usage.trackEvent('app', 'Open issue in app by URL');
-
+        const navigateToActivity: string | undefined = url.split('#focus=Comments-')?.[1];
         if (issueId) {
-          Router.Issue(
-            {
-              issueId,
-            },
-            {
-              forceReset: true,
-            },
-          );
+          Router.Issue({issueId, navigateToActivity}, {forceReset: true});
         } else if (articleId) {
-          Router.Article(
-            {
-              articlePlaceholder: {
-                id: articleId,
-              },
-            },
-            {
-              forceReset: true,
-            },
-          );
+          Router.Article({articlePlaceholder: {id: articleId}, navigateToActivity}, {forceReset: true});
         } else {
           Router.navigateToDefaultRoute();
         }
@@ -878,9 +862,7 @@ function subscribeToURL(): Action {
         }
 
         usage.trackEvent('app', 'Open issues query in app by URL');
-        Router.Issues({
-          searchQuery,
-        });
+        Router.Issues({searchQuery});
       },
     );
 

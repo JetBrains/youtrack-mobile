@@ -1,23 +1,34 @@
+import {Linking} from 'react-native';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+
 import * as actions from './app-actions';
 import * as appActionHelper from './app-actions-helper';
 import * as Notification from 'components/notification/notification';
 import * as storage from 'components/storage/storage';
 import * as storageOauth from 'components/storage/storage__oauth';
 import * as types from './action-types';
+import * as urlUtils from '../components/open-url-handler/open-url-handler';
 import OAuth2 from 'components/auth/oauth2';
 import log from 'components/log/log';
 import mocks from '../../test/mocks';
 import permissionsHelper from 'components/permissions-store/permissions-helper';
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
+import Router from 'components/router/router';
 import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
+
 jest.mock('components/router/router', () => ({
   navigateToDefaultRoute: jest.fn(),
   Home: jest.fn(),
   EnterServer: jest.fn(),
 }));
+
+jest.mock('react-native/Libraries/Linking/Linking', () => ({
+  getInitialURL: jest.fn(),
+  addEventListener: jest.fn(),
+}));
+
 const backendURLMock = 'https://example.com';
 let appConfigMock;
 let apiMock;
@@ -405,10 +416,84 @@ describe('app-actions', () => {
     });
   });
 
+
+  describe('subscribeToURL', () => {
+    const activityIdMock = `1`;
+    let subscribeToURLHandler;
+    beforeEach(async () => {
+      setStoreAndCurrentUser({});
+      subscribeToURLHandler = actions.subscribeToURL();
+    });
+
+    afterEach(() => jest.restoreAllMocks());
+
+    it('should invoke URL handler', async () => {
+      jest.spyOn(urlUtils, 'openByUrlDetector');
+
+      await assert();
+
+      expect(urlUtils.openByUrlDetector).toHaveBeenCalled();
+    });
+
+
+    describe('Navigate to an issue', () => {
+      const issueIdMock = `I-1`;
+      beforeEach(() => {
+        Router.Issue = jest.fn();
+      });
+
+      it('should navigate to an issue', async () => {
+        await assert(`${backendURLMock}/issue/${issueIdMock}`);
+
+        expect(Router.Issue).toHaveBeenCalledWith(
+          {issueId: issueIdMock}, {forceReset: true}
+        );
+      });
+
+      it('should navigate to an issue and switch to `Activity` tab', async () => {
+        await assert(`${backendURLMock}/issue/${issueIdMock}#focus=Comments-${activityIdMock}`);
+
+        expect(Router.Issue).toHaveBeenCalledWith(
+          {issueId: issueIdMock, navigateToActivity: activityIdMock}, {forceReset: true}
+        );
+      });
+    });
+
+
+    describe('Navigate to an article', () => {
+      const articleIdMock = `A-A-1`;
+      beforeEach(() => {
+        Router.Article = jest.fn();
+      });
+
+      it('should navigate to an article', async () => {
+        await assert(`${backendURLMock}/articles/${articleIdMock}`);
+
+        expect(Router.Article).toHaveBeenCalledWith(
+          {articlePlaceholder: {id: articleIdMock}}, {forceReset: true}
+        );
+      });
+
+      it('should navigate to an article and switch to `Activity` tab', async () => {
+        await assert(`${backendURLMock}/articles/${articleIdMock}#focus=Comments-${activityIdMock}`);
+
+        expect(Router.Article).toHaveBeenCalledWith(
+          {articlePlaceholder: {id: articleIdMock}, navigateToActivity: activityIdMock}, {forceReset: true}
+        );
+      });
+    });
+
+    async function assert(url = '') {
+      Linking.getInitialURL.mockResolvedValueOnce(url);
+      await subscribeToURLHandler(jest.fn(), store.getState, () => {});
+    }
+  });
+
+
   function setStoreAndCurrentUser(ytCurrentUser) {
     updateStore({
       app: {
-        auth: createAuthInstanceMock(),
+        auth: createAuthInstanceMock(ytCurrentUser),
       },
     });
     setYTCurrentUser(ytCurrentUser);
@@ -432,7 +517,7 @@ describe('app-actions', () => {
     store = storeMock(state);
   }
 
-  function createAuthInstanceMock() {
+  function createAuthInstanceMock(currentUser) {
     appConfigMock = {
       l10n: {},
       backendUrl: backendURLMock,
@@ -446,6 +531,9 @@ describe('app-actions', () => {
       access_token: 'access_token',
     };
     authMock.setAuthParams(authParamsMock);
+    if (currentUser) {
+      authMock.setCurrentUser(currentUser);
+    }
     return authMock;
   }
 
