@@ -55,13 +55,14 @@ type EditingComment = Partial<
     reply: boolean;
   }
 >;
-type Props = {
+
+interface Props {
   canAttach: boolean;
   canRemoveAttach: (attachment: Attachment) => boolean;
   editingComment?: EditingComment;
   focus?: boolean;
   getCommentSuggestions: (query: string) => Promise<UserMentions>;
-  getVisibilityOptions: () => Array<User | UserGroup>;
+  getVisibilityOptions: () => Promise<(User | UserGroup)[]>;
   isArticle?: boolean;
   isEditMode?: boolean;
   onAddSpentTime?: (() => any) | null;
@@ -73,7 +74,8 @@ type Props = {
   onSubmitComment: (comment: IssueComment) => any;
   visibilityLabel?: string;
   header?: React.ReactElement<React.ComponentProps<any>, any>;
-};
+}
+
 type State = {
   attachFileSource: string | null;
   commentCaret: number;
@@ -767,7 +769,4 @@ const IssueCommentEdit = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(IssueCommentEdit) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(IssueCommentEdit);

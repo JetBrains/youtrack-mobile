@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+
 import ReactionsPanel from '../issue/activity/issue__activity-reactions-dialog';
 import usage from 'components/usage/usage';
 import {ActivityStream} from 'components/activity-stream/activity__stream';
@@ -8,6 +9,7 @@ import {getApi} from 'components/api/api__instance';
 import {onReactionSelect} from './arcticle-actions';
 import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 import {updateMarkdownCheckbox} from 'components/wiki/markdown-helper';
+
 import type {
   Activity,
   ActivityItem,
@@ -20,7 +22,8 @@ import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {WorkTimeSettings} from 'types/Work';
 import type {YouTrackWiki} from 'types/Wiki';
-type Props = {
+
+interface Props {
   articleId: string;
   activities: ActivityItem[] | null;
   attachments: Attachment[];
@@ -38,7 +41,7 @@ type Props = {
     activityId: string;
     commentId?: string;
   };
-};
+}
 
 const getYoutrackWikiProps = (): YouTrackWiki => {
   let imageHeaders = null;
@@ -159,6 +162,4 @@ const ArticleActivityStream = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(
-  ArticleActivityStream,
-) as React$AbstractComponent<Props, unknown>;
+export default React.memo<Props>(ArticleActivityStream);
