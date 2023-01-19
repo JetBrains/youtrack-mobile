@@ -1,5 +1,5 @@
 import * as patterns from './util/patterns';
-export function isPureHTMLBlock(md: string) {
+export function isPureHTMLBlock(md: string = '') {
   const text: string = md.toLowerCase().trim();
   return (
     (text.startsWith('<html') || text.startsWith('{html}')) &&

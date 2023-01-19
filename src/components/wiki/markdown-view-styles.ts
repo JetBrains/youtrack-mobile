@@ -66,7 +66,7 @@ export const baseMarkdownStyles = {
   blockquote: {
     margin: 0,
     padding: 0,
-    paddingLeft: UNIT,
+    paddingLeft: UNIT * 1.5,
     backgroundColor: 'transparent',
     borderLeftColor: DEFAULT_THEME.colors.$textSecondary,
     borderLeftWidth: 2,
