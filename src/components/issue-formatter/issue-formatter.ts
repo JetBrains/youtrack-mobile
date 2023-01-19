@@ -37,7 +37,7 @@ function getReadableID(entity: AnyIssue | Article): string {
   return (!!entity && (entity.idReadable || entity.id)) || '';
 }
 
-function getEntityPresentation(entity: Record<string, any>): any | string {
+function getEntityPresentation(entity: Record<string, any>): string {
   let userName: string = '';
 
   if (entity) {
