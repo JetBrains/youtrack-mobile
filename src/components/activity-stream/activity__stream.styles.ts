@@ -11,6 +11,7 @@ export const rowStyles = {
     paddingTop: UNIT,
     paddingLeft: UNIT,
     paddingRight: UNIT,
+    backgroundColor: '$background',
   },
   activityMerged: {
     marginBottom: 0,
@@ -19,7 +20,8 @@ export const rowStyles = {
   activitySeparator: {
     ...separator,
     borderColor: '$separator',
-    margin: UNIT * 2,
+    marginTop: UNIT * 3,
+    marginBottom: UNIT * 2,
     marginLeft: UNIT * 7,
     marginRight: -UNIT,
   },
@@ -113,7 +115,8 @@ export const rowStyles = {
     marginTop: UNIT * 2,
   },
   activityCommentReactions: {
-    marginTop: -UNIT / 1.5,
+    alignItems: 'center',
+    width: '100%',
   },
   activityCommentAttachments: {
     marginVertical: UNIT,
@@ -184,6 +187,23 @@ export const rowStyles = {
   vcsSourceSubTitle: {
     fontSize: 12,
     color: '$icon',
+  },
+  contextMenu: {
+    flexDirection: 'row',
+    padding: UNIT / 2,
+    alignItems: 'center',
+  },
+  contextMenuItem: {
+    padding: UNIT,
+    paddingRight: 0,
+    color: '$text',
+  },
+  contextMenuItemDestructive: {
+    color: '$error',
+  },
+  contextMenuItemIcon: {
+    width: UNIT * 2,
+    height: UNIT * 2,
   },
 };
 export default EStyleSheet.create(rowStyles);

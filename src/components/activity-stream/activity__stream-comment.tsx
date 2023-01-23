@@ -7,14 +7,14 @@ import StreamAttachments from './activity__stream-attachment';
 import {firstActivityChange} from './activity__stream-helper';
 import {ThemeContext} from '../theme/theme-context';
 import styles from './activity__stream.styles';
-import type {Activity, ActivityItem, ActivityStreamCommentActions} from 'types/Activity';
+import type {Activity, ActivityStreamCommentActions} from 'types/Activity';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {Theme} from 'types/Theme';
 import type {YouTrackWiki} from 'types/Wiki';
 type Props = {
   activity: Activity;
   attachments?: Attachment[];
-  commentActions?: ActivityStreamCommentActions;
+  commentActions: ActivityStreamCommentActions;
   hideVisibility?: boolean;
   youtrackWiki?: YouTrackWiki;
   onCheckboxUpdate?: (
@@ -22,7 +22,7 @@ type Props = {
     position: number,
     comment: IssueComment,
   ) => any;
-  onShowCommentActions?: (comment: IssueComment) => any;
+  onLongPress?: (comment: IssueComment) => any;
 };
 
 const StreamComment = ({
@@ -31,11 +31,11 @@ const StreamComment = ({
   commentActions,
   hideVisibility,
   onCheckboxUpdate,
-  onShowCommentActions = () => {},
+  onLongPress = () => {},
   youtrackWiki,
 }: Props): JSX.Element | null => {
   const theme: Theme = useContext(ThemeContext);
-  const comment: ActivityItem | null = firstActivityChange(
+  const comment: IssueComment | null = firstActivityChange(
     activity,
   ) as IssueComment | null;
 
@@ -56,17 +56,9 @@ const StreamComment = ({
         }
         comment={comment}
         key={comment.id}
-        onDeletePermanently={() => {
-          if (commentActions?.onDeleteCommentPermanently) {
-            commentActions.onDeleteCommentPermanently(comment, activity.id);
-          }
-        }}
-        onRestore={() => {
-          if (commentActions?.onRestoreComment) {
-            commentActions.onRestoreComment(comment);
-          }
-        }}
-        onLongPress={() => onShowCommentActions(comment)}
+        onDeletePermanently={() => commentActions?.onDeleteCommentPermanently?.(comment, activity.id)}
+        onRestore={() => commentActions?.onRestoreComment?.(comment)}
+        onLongPress={() => onLongPress(comment)}
         uiTheme={theme.uiTheme}
         youtrackWiki={youtrackWiki}
         onCheckboxUpdate={(checked: boolean, position: number) =>

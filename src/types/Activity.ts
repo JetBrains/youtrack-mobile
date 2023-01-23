@@ -3,6 +3,7 @@ import type {IssueFull} from './Issue';
 import type {User} from './User';
 import type {PullRequest, VCSActivity} from './Vcs';
 import type {Reaction} from './Reaction';
+import type {ContextMenuConfig} from 'types/MenuConfig';
 
 type ActivityWork = {
   id: string;
@@ -46,7 +47,7 @@ export interface Activity {
     $type?: string;
   };
   timestamp: number;
-  targetMember: Record<string, any>;
+  targetMember: Record<string, any> | null;
   targetSubMember?: Record<string, any>;
   authorGroup: {
     icon: string;
@@ -73,8 +74,8 @@ export interface Activity {
       }
     };
   };
-  added: ActivityItem | Array<ActivityItem>;
-  removed: ActivityItem | Array<ActivityItem>;
+  added: ActivityItem | ActivityItem[];
+  removed: ActivityItem | ActivityItem[];
   pullRequest?: PullRequest;
 }
 
@@ -107,29 +108,14 @@ export type ActivityChangeText = {
 
 type CommentAction = (comment: IssueComment) => boolean;
 
-export type ActivityStreamCommentActions = {
-  canCommentOn?: boolean;
-  canDeleteComment?: CommentAction;
+export interface ActivityStreamCommentActions {
   canDeleteCommentAttachment?: (attachment: Attachment) => boolean;
   canDeleteCommentPermanently?: boolean;
   canRestoreComment?: CommentAction;
-  canUpdateComment?: CommentAction;
-  isAuthor?: CommentAction;
-  onCopyCommentLink?: (comment: IssueComment) => (...args: any[]) => any;
-  onDeleteAttachment?: (attachment: Attachment) => (...args: any[]) => any;
-  onDeleteComment?: (comment: IssueComment) => (...args: any[]) => any;
-  onDeleteCommentPermanently?: (
-    comment: IssueComment,
-    activityId?: string,
-  ) => (...args: any[]) => any;
-  onReply?: (comment: IssueComment) => any;
-  onRestoreComment?: (comment: IssueComment) => (...args: any[]) => any;
-  onShowCommentActions?: (
-    comment: IssueComment,
-    activityId: string,
-  ) => (...args: any[]) => any;
-  onStartEditing?: (
-    comment: IssueComment,
-    backendUrl?: string,
-  ) => (...args: any[]) => any;
-};
+  contextMenuConfig: (comment: IssueComment, activityId?: string) => ContextMenuConfig;
+  onDeleteAttachment?: (attachment: Attachment) => Promise<void>;
+  onDeleteComment?: (comment: IssueComment) => void;
+  onDeleteCommentPermanently?: (comment: IssueComment, activityId?: string) => void;
+  onLongPress?: (comment: IssueComment, activityId: string) => void;
+  onRestoreComment?: (comment: IssueComment) => void;
+}

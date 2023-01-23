@@ -1,34 +1,42 @@
 import React, {useState} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
-import BottomSheetModal from '../modal-panel-bottom/bottom-sheet-modal';
-import ReactionIcon from '../reactions/reaction-icon';
-import reactionNames from '../reactions/reactions-name-list';
-import SelectItem from '../select/select__item';
-import {UNIT} from '../variables/variables';
+
 import {useSelector} from 'react-redux';
+
+import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
+import ReactionIcon from 'components/reactions/reaction-icon';
+import reactionNames from 'components/reactions/reactions-name-list';
+import SelectItem from 'components/select/select__item';
+import {UNIT} from 'components/variables/variables';
+
 import styles from './comment.styles';
-import type {AppState} from '../../reducers';
+
+import type {AppState} from 'reducers';
 import type {IssueComment} from 'types/CustomFields';
 import type {Reaction} from 'types/Reaction';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
-type ReactionsType = {
+
+interface ReactionsType {
+  children: JSX.Element | null;
   comment: IssueComment;
-  currentUser: User;
+  currentUser: User | null;
   onReactionSelect?: (comment: IssueComment, reaction: Reaction) => any;
   size?: number;
   style?: ViewStyleProp;
-};
-type ReactionsMap = {
-  key: string;
-  value: Reaction;
-};
+}
+
+interface ReactionsMap {
+  [key: string]: Reaction;
+}
+
+type SelectedReaction = Reaction | null;
 
 const CommentReactions = (props: ReactionsType) => {
   const isOnline: boolean = useSelector(
     (state: AppState) => state.app.networkState?.isConnected,
-  );
-  const [selectedReaction, setSelectedReaction] = useState(null);
+  ) || true;
+  const [selectedReaction, setSelectedReaction] = useState<SelectedReaction>(null);
 
   if (
     !props.comment ||
@@ -38,14 +46,14 @@ const CommentReactions = (props: ReactionsType) => {
     return null;
   }
 
-  const reactionsMap: ReactionsMap = {};
-  props.comment.reactions.map(
-    (reaction: Reaction) => (reactionsMap[reaction.reaction] = reaction),
-  );
+  const reactionsMap: ReactionsMap = props.comment.reactions.reduce((map: ReactionsMap, r: Reaction) => {
+    return {...map, [r.reaction]: r};
+  }, {});
+
   const {comment, onReactionSelect, size = UNIT * 2, style} = props;
   return (
     <>
-      <View style={{...styles.reactionsContainer, ...style}}>
+      <View style={[styles.reactionsContainer, style]}>
         {comment.reactionOrder.split('|').map((reactionName: string) => {
           if (!reactionNames.includes(reactionName)) {
             return null;
@@ -54,8 +62,7 @@ const CommentReactions = (props: ReactionsType) => {
           const count: number = comment.reactions.filter(
             (it: Reaction) => it.reaction === reactionName,
           ).length;
-          const reaction: Reaction | null | undefined =
-            reactionsMap[reactionName];
+          const reaction: Reaction | undefined = reactionsMap[reactionName];
 
           if (reaction && props.currentUser) {
             const isUserReacted: boolean =
@@ -64,11 +71,8 @@ const CommentReactions = (props: ReactionsType) => {
               <TouchableOpacity
                 key={reaction.id}
                 disabled={!onReactionSelect || !isOnline}
-                style={{
-                  ...styles.reactionsReaction,
-                  ...(isUserReacted ? styles.reactionsReactionSelected : null),
-                }}
-                onPress={() => onReactionSelect(props.comment, reaction)}
+                style={[styles.reactionsReaction, isUserReacted && styles.reactionsReactionSelected]}
+                onPress={() => onReactionSelect?.(props.comment, reaction)}
                 onLongPress={() => {
                   setSelectedReaction(reaction);
                 }}
@@ -81,15 +85,11 @@ const CommentReactions = (props: ReactionsType) => {
             );
           }
         })}
+        {props?.children}
       </View>
       {!!selectedReaction && (
         <BottomSheetModal
           isVisible={!!selectedReaction}
-          title={
-            <Text style={styles.reactionTitle}>
-              {selectedReaction.reaction}
-            </Text>
-          }
           onClose={() => setSelectedReaction(null)}
         >
           {comment.reactions

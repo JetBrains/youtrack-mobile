@@ -96,6 +96,7 @@
     "react-native-image-gallery": "2.1.5",
     "react-native-image-progress": "1.2.0",
     "react-native-input-scroll-view": "1.11.0",
+    "react-native-ios-context-menu": "^1.15.1",
     "react-native-keyboard-spacer": "0.4.1",
     "react-native-keychain": "8.1.1",
     "react-native-linear-gradient": "2.6.2",

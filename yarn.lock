@@ -875,6 +875,11 @@
     glob "^7.1.6"
     read-pkg-up "^7.0.1"
 
+"@dominicstop/ts-event-emitter@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@dominicstop/ts-event-emitter/-/ts-event-emitter-1.1.0.tgz#1f3d3fa878a1ccab686931280757954719cf88e4"
+  integrity sha512-CcxmJIvUb1vsFheuGGVSQf4KdPZC44XolpUT34+vlal+LyQoBUOn31pjFET5M9ctOxEpt8xa0M3/2M7uUiAoJw==
+
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
   resolved "https://registry.yarnpkg.com/@egjs/hammerjs/-/hammerjs-2.0.17.tgz#5dc02af75a6a06e4c2db0202cae38c9263895124"
@@ -8202,6 +8207,13 @@ react-native-invertible-scroll-view@^1.1.0:
     prop-types "^15.5.10"
     react-clone-referenced-element "^1.0.1"
     react-native-scrollable-mixin "^1.0.1"
+
+react-native-ios-context-menu@^1.15.1:
+  version "1.15.2"
+  resolved "https://registry.yarnpkg.com/react-native-ios-context-menu/-/react-native-ios-context-menu-1.15.2.tgz#ea75ed1b8412739cb42f8ee8adc6eec45853a53d"
+  integrity sha512-q8SnSwfwATWeK0rq/z1tcOte0GEHS+Opk6U0tIfEHT1ImdDmRGFM0yLgvVBBQOl/SjYXVPtNT4OPx6iSxEULHA==
+  dependencies:
+    "@dominicstop/ts-event-emitter" "^1.1.0"
 
 react-native-keyboard-spacer@0.4.1:
   version "0.4.1"

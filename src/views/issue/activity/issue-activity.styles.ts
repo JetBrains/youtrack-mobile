@@ -68,4 +68,10 @@ export default EStyleSheet.create({
   link: {
     color: '$link',
   },
+  text: {
+    color: '$icon',
+  },
+  error: {
+    color: '$error',
+  },
 });

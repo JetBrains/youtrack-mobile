@@ -1,6 +1,7 @@
-import React, {MutableRefObject, useCallback, useLayoutEffect, useRef} from 'react';
+import React, {MutableRefObject, useCallback, useLayoutEffect, useRef, useState} from 'react';
 import {
-  Animated, LayoutRectangle,
+  Animated,
+  LayoutRectangle,
   NativeScrollEvent,
   ScrollView,
   Text,
@@ -12,6 +13,9 @@ import {
 import ActivityUserAvatar from './activity__stream-avatar';
 import ApiHelper from '../api/api__helper';
 import CommentReactions from 'components/comment/comment-reactions';
+
+import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
+import ContextMenu from 'components/context-menu/context-menu';
 import Feature, {FEATURE_VERSION} from '../feature/feature';
 import ReactionAddIcon from 'components/reactions/new-reaction.svg';
 import StreamComment from './activity__stream-comment';
@@ -24,35 +28,35 @@ import {firstActivityChange} from './activity__stream-helper';
 import {hasType} from '../api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {i18n} from 'components/i18n/i18n';
-import {IconDrag, IconMoreOptions} from 'components/icon/icon';
-import {isIOSPlatform} from 'util/util';
+import {isAndroidPlatform} from 'util/util';
 import {menuHeight} from '../common-styles/header';
 
 import styles from './activity__stream.styles';
 
-import type {ActivityGroup, ActivityItem, ActivityStreamCommentActions} from 'types/Activity';
-import {Activity} from 'types/Activity';
+import type {ActivityGroup, ActivityStreamCommentActions} from 'types/Activity';
 import type {Attachment, IssueComment} from 'types/CustomFields';
+import type {ContextMenuConfig, ContextMenuConfigItem} from 'types/MenuConfig';
 import type {CustomError} from 'types/Error';
 import type {Reaction} from 'types/Reaction';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {WorkItem, WorkTimeSettings} from 'types/Work';
 import type {YouTrackWiki} from 'types/Wiki';
+import {Activity} from 'types/Activity';
 
-type Props = {
+interface Props {
   activities: ActivityGroup[] | null;
   attachments: Attachment[];
-  commentActions?: ActivityStreamCommentActions;
+  commentActions: ActivityStreamCommentActions;
   currentUser: User;
   issueFields?: Array<Record<string, any>>;
-  onReactionSelect: (
+  onReactionSelect?: (
     issueId: string,
     comment: IssueComment,
     reaction: Reaction,
-    activities: ActivityItem[],
+    activities: Activity[],
     onReactionUpdate: (
-      activities: ActivityItem[],
+      activities: Activity[],
       error?: CustomError,
     ) => void,
   ) => any;
@@ -62,22 +66,22 @@ type Props = {
   onWorkDelete?: (workItem: WorkItem) => any;
   onWorkUpdate?: (workItem?: WorkItem) => void;
   onWorkEdit?: (workItem: WorkItem) => void;
-  onCheckboxUpdate?: (
-    checked: boolean,
-    position: number,
-    comment: IssueComment,
-  ) => (...args: any[]) => any;
+  onCheckboxUpdate: (checked: boolean, position: number, comment: IssueComment) => void;
   renderHeader?: () => any;
   refreshControl: () => any;
   highlight?: {
     activityId: string;
     commentId?: string;
   };
-};
-export type ActivityStreamPropsReaction = {
+}
+
+const isAndroid: boolean = isAndroidPlatform();
+
+export interface ActivityStreamPropsReaction {
   onReactionPanelOpen?: (comment: IssueComment) => void;
   onSelectReaction?: (comment: IssueComment, reaction: Reaction) => void;
-};
+}
+
 export type ActivityStreamProps = Props & ActivityStreamPropsReaction;
 
 export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStreamProps) => {
@@ -88,8 +92,11 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     highlight,
   } = props;
 
-  const onScroll = ({nativeEvent}: { nativeEvent: NativeScrollEvent }) =>
-    (scrollOffset.current = nativeEvent.contentOffset.y);
+  const [menuChildren, updateMenuChildren] = useState<any>(null);
+
+  const onScroll = ({nativeEvent}: { nativeEvent: NativeScrollEvent }) => (
+    scrollOffset.current = nativeEvent.contentOffset.y
+  );
 
   const scrollRef: MutableRefObject<ScrollView | null> = useRef(null);
   const scrollOffset: MutableRefObject<number> = useRef(0);
@@ -100,7 +107,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
       outputRange: [styles.activityHighlighted.backgroundColor, 'transparent'],
     }),
   );
-  const layoutMap: MutableRefObject<{ [key: string]: LayoutRectangle | undefined}> = useRef({});
+  const layoutMap: MutableRefObject<{ [key: string]: LayoutRectangle | undefined }> = useRef({});
   const scrollToActivity = useCallback(
     (layout: LayoutRectangle) => {
       if (
@@ -117,6 +124,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     },
     [window.height],
   );
+
   useLayoutEffect(() => {
     bgColor.current.setValue(0);
     Animated.timing(bgColor.current, {
@@ -125,6 +133,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
       useNativeDriver: false,
     }).start();
   }, [highlight]);
+
   useLayoutEffect(() => {
     setTimeout(() => {
       const layout: LayoutRectangle | undefined = layoutMap.current[highlight!.commentId || highlight!.activityId];
@@ -135,120 +144,37 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
   }, [highlight, scrollToActivity]);
 
   const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment | null => (
-    firstActivityChange(activityGroup.comment) as IssueComment
+    firstActivityChange(activityGroup.comment) as (IssueComment | null)
   );
 
-  const onShowCommentActions = (
-    activityGroup: ActivityGroup,
-    comment: IssueComment,
-  ): void => {
-    if (props.commentActions?.onShowCommentActions) {
-      props.commentActions.onShowCommentActions(
-        comment,
-        activityGroup?.comment?.id as string,
-      );
-    }
-  };
-
-  const renderCommentActions = (activityGroup: ActivityGroup) => {
-    const comment: ActivityItem | null = getCommentFromActivityGroup(activityGroup);
-
-    if (!comment) {
-      return null;
-    }
-
-    const commentActions = props.commentActions;
-    const isAuthor =
-      commentActions &&
-      commentActions.isAuthor &&
-      commentActions.isAuthor(comment);
-    const canComment: boolean = !!commentActions?.canCommentOn;
-    const canUpdate: boolean =
-      !!commentActions &&
-      !!commentActions.canUpdateComment &&
-      commentActions.canUpdateComment(comment);
-    const reactionSupportVersion: string = hasType.articleComment(comment)
-      ? FEATURE_VERSION.articleReactions
-      : FEATURE_VERSION.reactions;
-
-    if (!comment.deleted) {
-      const reactionAddIcon: React.ReactNode = <ReactionAddIcon style={styles.activityCommentActionsAddReaction}/>;
-      return (
-        <View style={styles.activityCommentActions}>
-          <View style={styles.activityCommentActionsMain}>
-            {canComment && !isAuthor && (
-              <TouchableOpacity
-                hitSlop={HIT_SLOP}
-                onPress={() => {
-                  if (commentActions && commentActions.onReply) {
-                    commentActions.onReply(comment);
-                  }
-                }}
-              >
-                <Text style={styles.link}>Reply</Text>
-              </TouchableOpacity>
-            )}
-            {canUpdate && isAuthor && (
-              <TouchableOpacity
-                hitSlop={HIT_SLOP}
-                onPress={() => {
-                  if (commentActions && commentActions.onStartEditing) {
-                    commentActions.onStartEditing(comment);
-                  }
-                }}
-              >
-                <Text style={styles.link}>{i18n('Edit')}</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-
-          {typeof props.onReactionPanelOpen === 'function' && (
-            <Feature version={reactionSupportVersion}>
-              <TouchableOpacity
-                hitSlop={HIT_SLOP}
-                onPress={() => {
-                  props?.onReactionPanelOpen?.(comment);
-                }}
-              >
-                {reactionAddIcon}
-              </TouchableOpacity>
-            </Feature>
-          )}
-
-          {Boolean(commentActions && commentActions.onShowCommentActions) && (
-            <TouchableOpacity
-              hitSlop={HIT_SLOP}
-              onPress={() => onShowCommentActions(activityGroup, comment)}
-            >
-              {isIOSPlatform() ? (
-                <IconMoreOptions
-                  size={18}
-                  color={styles.activityCommentActionsOther.color}
-                />
-              ) : (
-                <IconDrag
-                  size={18}
-                  color={styles.activityCommentActionsOther.color}
-                />
-              )}
-            </TouchableOpacity>
-          )}
-        </View>
-      );
-    }
-  };
-
-  const renderCommentActivityReactions = (activityGroup: ActivityGroup): React.ReactNode => {
+  const renderCommentReactions = (activityGroup: ActivityGroup): React.ReactNode => {
     const comment: IssueComment | null = getCommentFromActivityGroup(activityGroup);
     return comment && !comment.deleted ? (
-      <CommentReactions
-        style={styles.commentReactions}
-        comment={comment}
-        currentUser={props.currentUser}
-        onReactionSelect={props.onSelectReaction}
-      />
+      <View style={styles.activityCommentReactions}>
+        <CommentReactions
+          style={styles.activityCommentReactions}
+          comment={comment}
+          currentUser={props.currentUser}
+          onReactionSelect={props.onSelectReaction}
+        >
+          <Feature
+            version={hasType.articleComment(comment) ? FEATURE_VERSION.articleReactions : FEATURE_VERSION.reactions}
+          >
+            <TouchableOpacity
+              hitSlop={HIT_SLOP}
+              onPress={() => props?.onReactionPanelOpen?.(comment)}
+            >
+              <ReactionAddIcon style={styles.activityCommentActionsAddReaction}/>
+            </TouchableOpacity>
+          </Feature>
+        </CommentReactions>
+      </View>
     ) : null;
   };
+
+  const getMenuConfig = (commentActions: ActivityStreamCommentActions, comment: IssueComment, activityId: string): ContextMenuConfig => (
+    commentActions?.contextMenuConfig?.(comment, activityId) || {menuTitle: '', menuItems: []}
+  );
 
   const renderCommentActivity = (activityGroup: ActivityGroup) => {
     const activity: Activity = activityGroup.comment as Activity;
@@ -274,14 +200,54 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
           activity={activity}
           attachments={attachments}
           commentActions={props.commentActions}
-          onShowCommentActions={(comment: IssueComment) => {
-            if (props.commentActions?.onShowCommentActions) {
-              props.commentActions.onShowCommentActions(comment, activity.id as string);
+          onLongPress={(comment: IssueComment) => {
+            props.commentActions?.onLongPress?.(comment, activity.id as string);
+            if (isAndroid) {
+              updateMenuChildren(
+                getMenuConfig(props.commentActions, getCommentFromActivityGroup(activityGroup) as IssueComment, activity.id as string).menuItems.map(
+                  (it: ContextMenuConfigItem) => (
+                    <TouchableOpacity
+                      style={styles.contextMenu}
+                      onPress={() => {
+                        it?.execute?.();
+                        updateMenuChildren(null);
+                      }}
+                    >
+                      <Text style={[styles.contextMenuItem, it.menuAttributes?.includes('destructive') && styles.contextMenuItemDestructive]}>
+                        {it.actionTitle}
+                      </Text>
+                    </TouchableOpacity>
+                  )
+                )
+              );
             }
           }}
           youtrackWiki={props.youtrackWiki}
         />
+        {!!props.onSelectReaction && renderCommentReactions(activityGroup)}
       </>
+    );
+  };
+
+  const ContextActionsProvider = ({
+                                    children,
+                                    comment,
+                                    activityId,
+                                  }: { children: React.ReactNode, comment: IssueComment, activityId: string }) => {
+    const {commentActions} = props;
+    const menuConfig: ContextMenuConfig = getMenuConfig(commentActions, comment, activityId);
+    return (
+      <ContextMenu
+        menuConfig={menuConfig}
+        onPress={(actionKey: string) => {
+          const targetItem: ContextMenuConfigItem | undefined = menuConfig.menuItems.find(
+            (it: ContextMenuConfigItem) => it.actionKey === actionKey
+          );
+          targetItem?.execute?.();
+        }}
+      >
+        {children}
+      </ContextMenu>
     );
   };
 
@@ -322,10 +288,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
 
     const targetActivityId: string | null | undefined = highlight?.commentId || highlight?.activityId;
 
-    const _comment:
-      | IssueComment
-      | null
-      | undefined = getCommentFromActivityGroup(activityGroup);
+    const _comment: IssueComment | null = getCommentFromActivityGroup(activityGroup);
 
     const activityGroupEvents: Activity[] = getActivityGroupEvents(activityGroup);
     const hasHighlightedActivity: boolean = (
@@ -385,13 +348,6 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
               ))}
             </View>
           )}
-
-          {!!activityGroup.comment && (
-            <>
-              {!!props.onSelectReaction && renderCommentActivityReactions(activityGroup)}
-              {renderCommentActions(activityGroup)}
-            </>
-          )}
         </Component>
       </View>
     );
@@ -401,7 +357,8 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     if (activityGroup.hidden) {
       return null;
     }
-    const _comment: | IssueComment | null | undefined = getCommentFromActivityGroup(activityGroup);
+    const _comment: | IssueComment | null = getCommentFromActivityGroup(activityGroup);
+    const Wrapper: any = _comment ? ContextActionsProvider : React.Fragment;
     return (
       <View
         key={`${index}-${activityGroup.id}`}
@@ -423,7 +380,9 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
         {index > 0 && !activityGroup.merged && (
           <View style={styles.activitySeparator}/>
         )}
-        {doRenderActivity(activityGroup)}
+        <Wrapper {...(_comment && {comment: getCommentFromActivityGroup(activityGroup), activityId: activityGroup?.comment?.id})}>
+          {doRenderActivity(activityGroup)}
+        </Wrapper>
       </View>
     );
   };
@@ -443,6 +402,13 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
       {activities?.length === 0 && (
         <Text style={styles.activityNoActivity}>{i18n('No activity yet')}</Text>
       )}
+
+      {isAndroid && <BottomSheetModal
+        isVisible={!!menuChildren}
+        onClose={() => updateMenuChildren(null)}
+      >
+        {menuChildren}
+      </BottomSheetModal>}
     </ScrollView>
   );
 };
