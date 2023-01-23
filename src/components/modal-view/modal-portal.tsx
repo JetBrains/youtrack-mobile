@@ -11,7 +11,7 @@ type Props = {
   style?: ViewStyleProp;
 };
 
-const ModalPortal = (props: Props): React.ReactNode => {
+const ModalPortal = (props: Props): JSX.Element => {
   const {hasOverlay = true, onHide = () => {}} = props;
   return (
     <Portal>

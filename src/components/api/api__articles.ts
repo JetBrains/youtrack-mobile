@@ -12,9 +12,12 @@ import {
 } from './api__activities-issue-fields';
 import issueFields from './api__issue-fields';
 import {activityArticleCategory} from '../activity/activity__category';
-import type {Activity, ActivityItem} from 'types/Activity';
+
+import type {Activity} from 'types/Activity';
 import type {Article, ArticleDraft} from 'types/Article';
 import type {Attachment, IssueComment} from 'types/CustomFields';
+import {UserGroup} from 'types/UserGroup';
+import {User} from 'types/User';
 export default class ArticlesAPI extends ApiBase {
   articleFieldsQuery: string = ApiBase.createFieldsQuery(articleFields);
   categories: string[] = Object.keys(activityArticleCategory).map(
@@ -104,13 +107,13 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
-  async getActivitiesPage(articleId: string): Promise<Array<Activity>> {
+  async getActivitiesPage(articleId: string): Promise<Activity[]> {
     const categories = `categories=${this.categories.join(',')}`;
     const queryString = qs.stringify({
       $top: 100,
       reverse: true,
     });
-    const activityPage: ActivityItem[] = await this.makeAuthorizedRequest(
+    const activityPage: Activity[] = await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/articles/${articleId}/activitiesPage?${categories}&${queryString}&fields=${issueActivitiesFields}`,
     );
     return ApiHelper.patchAllRelativeAvatarUrls(
@@ -216,13 +219,7 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
-  getVisibilityOptions: (
-    articleId: string,
-    url?: string,
-  ) => Promise<Article> = async (
-    articleId: string,
-    url?: string,
-  ): Promise<Article> => {
+  getVisibilityOptions = async (articleId: string, url?: string): Promise<(User | UserGroup)[]> => {
     const queryString = ApiBase.createFieldsQuery(
       issueFields.getVisibility.toString(),
       {

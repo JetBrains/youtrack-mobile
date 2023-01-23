@@ -3,12 +3,12 @@ import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import {issuePermissionsNull} from 'components/issue-permissions/issue-permissions-helper';
 import {ON_NAVIGATE_BACK} from 'actions/action-types';
 import {routeMap} from '../../app-routes';
-import type {ActivityItem} from 'types/Activity';
+import type {Activity} from 'types/Activity';
 import type {Article, ArticlesList} from 'types/Article';
 import type {CustomError} from 'types/Error';
 import type {IssueComment} from 'types/CustomFields';
 export type ArticleState = {
-  activityPage: ActivityItem[] | null;
+  activityPage: Activity[] | null;
   article: Article;
   articleCommentDraft: IssueComment | null;
   articlesList: ArticlesList;
@@ -47,7 +47,7 @@ const {reducer, actions} = createSlice({
 
     setActivityPage(
       state: ArticleState,
-      action: PayloadAction<Array<ActivityItem>>,
+      action: PayloadAction<Activity[]>,
     ) {
       state.activityPage = action.payload;
     },

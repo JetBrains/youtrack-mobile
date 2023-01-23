@@ -23,7 +23,7 @@ import {until} from 'util/util';
 import {updateActivityCommentReactions} from 'components/activity-stream/activity__stream-helper';
 import type Api from 'components/api/api';
 import type IssueAPI from 'components/api/api__issue';
-import type {Activity, ActivityItem, ActivityPositionData} from 'types/Activity';
+import type {Activity, ActivityPositionData} from 'types/Activity';
 import type {CustomError} from 'types/Error';
 import type {IssueComment} from 'types/CustomFields';
 import type {IssueFull} from 'types/Issue';
@@ -227,9 +227,7 @@ export const createActivityCommentActions = (
         }
       };
     },
-    setEditingComment: function setEditingComment(
-      comment: IssueComment | null,
-    ): (
+    setEditingComment: function setEditingComment(comment: (IssueComment | {text: string, reply: boolean }) | null): (
       dispatch: (arg0: any) => any,
       getState: StateGetter,
       getApi: ApiGetter,
@@ -504,9 +502,9 @@ export const createActivityCommentActions = (
       issueId: string,
       comment: IssueComment,
       reaction: Reaction,
-      activities: ActivityItem[],
+      activities: Activity[],
       onReactionUpdate: (
-        activities: ActivityItem[],
+        activities: Activity[],
         error?: CustomError,
       ) => void,
     ): (

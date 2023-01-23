@@ -857,13 +857,9 @@ function onReactionSelect(
   articleId: string,
   comment: IssueComment,
   reaction: Reaction,
-  activities: Activity[],
+  activities: Activity[] | null,
   onReactionUpdate: (activities: Activity[], error?: CustomError) => void,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void> {
+): (dispatch: (arg0: any) => any, getState: () => AppState, getApi: ApiGetter) => Promise<void> {
   return async (
     dispatch: (arg0: any) => any,
     getState: () => AppState,

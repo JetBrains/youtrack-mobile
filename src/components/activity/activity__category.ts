@@ -76,7 +76,8 @@ export const activityArticleCategory = {
   SUMMARY: 'ArticleSummaryCategory',
   VISIBILITY: 'ArticleVisibilityCategory',
 };
-export const ActivityCategory: {
+
+export interface IActivityCategory {
   ActivityCategories: {
     IssueComments: string[];
     IssueHistory: string[];
@@ -95,7 +96,9 @@ export const ActivityCategory: {
     WORK_ITEM: string;
     VCS_ITEM: string;
   };
-} = [
+}
+
+export const ActivityCategory: IActivityCategory = [
   ['COMMENT', 'IssueComments', [activityCategory.COMMENT], 'Comments'],
   [
     'HISTORY',

@@ -1,21 +1,16 @@
 import {ActivityCategory, isActivityCategory} from './activity__category';
 import {createActivitiesModel} from './activity__create-model';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {groupActivities} from './activity__group-activities';
-import {IconComment, IconHistory, IconHourGlass, IconVcs} from '../icon/icon';
+import {i18n} from 'components/i18n/i18n';
+import {IconComment, IconHistory, IconHourGlass, IconVcs} from 'components/icon/icon';
 import {mergeActivities} from './activity__merge-activities';
-import type {
-  ActivityItem,
-  ActivityPositionData,
-  ActivityType,
-  Activity,
-} from 'types/Activity';
+
+import type {Activity, ActivityPositionData, ActivityType} from 'types/Activity';
 import type {IssueComment} from 'types/CustomFields';
-import {i18n} from '../i18n/i18n';
-export interface GroupActivitiesParams {
-  onCreateGroup?: (arg0: group) => void;
-  onAddActivityToGroup?: (arg0: group, arg1: activity) => void;
-  onCompleteGroup?: (arg0: group) => void;
-}
+import {User} from 'types/User';
+
+
 const activityIconMap = {
   [ActivityCategory.Source.COMMENT]: IconComment,
   [ActivityCategory.Source.HISTORY]: IconHistory,
@@ -42,15 +37,11 @@ const getActivityCategories = (
   );
 };
 
-const getIssueActivityIcon = (
-  activityTypeName: string,
-): React.Component<any> => {
+const getIssueActivityIcon = (activityTypeName: string): {} => {
   return activityIconMap[activityTypeName];
 };
 
-const getIssueActivityLabel = (
-  activityTypeName: string,
-): React.Component<any> => {
+const getIssueActivityLabel = (activityTypeName: string): string => {
   return {
     [ActivityCategory.Source.COMMENT]: i18n('Comments'),
     [ActivityCategory.Source.HISTORY]: i18n('Issue history'),
@@ -120,7 +111,7 @@ const findActivityInGroupedActivities = (
 const createActivityModel = (
   activityPage: Activity[] | null,
   naturalCommentsOrder: boolean,
-): ActivityItem[] | null => {
+): Activity[] | null => {
   if (!activityPage) {
     return null;
   }
@@ -142,6 +133,15 @@ const createActivityModel = (
   );
 };
 
+const getReplyToText = (text: string, author: User) => {
+  const quote: string = text.length > 120 ? `${text.substring(0, 120)}…` : text;
+  const userMentionName: string = author?.login || getEntityPresentation(author);
+  return {
+    reply: true,
+    text: `>${quote.split('\n').join('\n >')}\n\n\n@${userMentionName} `,
+  };
+};
+
 export {
   convertCommentsToActivityPage,
   createActivityModel,
@@ -150,4 +150,5 @@ export {
   getActivityAllTypes,
   getIssueActivityIcon,
   getIssueActivityLabel,
+  getReplyToText,
 };

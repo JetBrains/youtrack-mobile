@@ -153,8 +153,8 @@ export type IssueComment = {
   usesMarkdown: boolean;
   author: User;
   visibility: Visibility | null;
-  reactionOrder?: string;
-  reactions?: Reaction[];
+  reactionOrder: string;
+  reactions: Reaction[];
   issue?: Partial<IssueFull>;
   attachments?: Attachment[];
 };

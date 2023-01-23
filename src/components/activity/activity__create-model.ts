@@ -1,10 +1,11 @@
 import {ActivityCategory, isActivityCategory} from './activity__category';
 import {ResourceTypes, hasType} from '../api/api__resource-types';
 import {sortByTimestamp} from 'components/search/sorting';
-import type {Activity, ActivityGroup} from 'types/Activity';
-export const createActivitiesModel = (
-  activityGroups: Array<Record<string, any>> = [],
-): Activity[] => {
+
+import {Activity, ActivityGroup} from 'types/Activity';
+
+
+export const createActivitiesModel = (activityGroups: ActivityGroup[] = []): Activity[] => {
   const activities = getStream(activityGroups).map(streamGroup => {
     streamGroup.events = streamGroup.events
       .sort(sortByCategory)

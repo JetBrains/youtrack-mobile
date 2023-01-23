@@ -75,7 +75,7 @@ export default class BaseAPI {
   static createFieldsQuery(
     fields: Record<string, any> | Array<Record<string, any> | string>,
     restParams?: Record<string, any> | null | undefined,
-    opts: Record<string, any> | null | undefined,
+    opts?: Record<string, any> | null | undefined,
   ): string {
     return qs.stringify(
       Object.assign({
@@ -108,7 +108,7 @@ export default class BaseAPI {
   async makeAuthorizedRequest(
     url: string,
     method: string | null | undefined,
-    body: Record<string, any> | null | undefined,
+    body?: Record<string, any> | null | undefined,
     options: RequestOptions = {
       parseJson: true,
     },

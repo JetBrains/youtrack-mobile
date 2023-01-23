@@ -16,8 +16,8 @@ interface Props {
   article: Article;
   comment: IssueComment;
   issuePermissions: IssuePermissions;
-  onCommentChange?: (comment: IssueComment, isAttachmentChange: boolean) => Promise<void> | void;
-  onSubmitComment: (comment: IssueComment) => Promise<void>;
+  onCommentChange?: (comment: IssueComment, isAttachmentChange: boolean) => void;
+  onSubmitComment: (comment: IssueComment) => void;
 }
 
 

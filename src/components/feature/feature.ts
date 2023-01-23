@@ -2,6 +2,8 @@
 import {useSelector} from 'react-redux';
 import featureList from './features-list';
 import {getApi} from '../api/api__instance';
+import {AppState} from 'reducers';
+
 type Props = {
   children: any;
   devOnly?: boolean;
@@ -36,17 +38,7 @@ export const checkVersion = (
 export const checkDev = (): boolean => __DEV__;
 export const FEATURE_VERSION = featureList;
 
-const Feature = (
-  props: Props,
-):
-  | any
-  | null
-  | {
-      readonly key: React$Key | null;
-      readonly props: React$ElementProps<any>;
-      readonly ref: any;
-      readonly type: any;
-    } => {
+const Feature = (props: Props): JSX.Element | null => {
   const {
     fallbackComponent = null,
     children,
@@ -54,7 +46,7 @@ const Feature = (
     version,
     devOnly,
   } = props;
-  const features: string[] = useSelector(state => state.app.features);
+  const features: string[] = useSelector((state: AppState) => state.app.features);
   const isFeatureEnabled: boolean = featureName
     ? features.indexOf(featureName) !== -1
     : true;

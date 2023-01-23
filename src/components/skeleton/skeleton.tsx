@@ -27,14 +27,14 @@ const defaultSkeletonProps: SkeletonProps = {
   height: SKELETON_HEIGHT,
   borderRadius: SKELETON_DEFAULT_BORDER_RADIUS,
 };
-export const Skeleton = (props: SkeletonProps): React.ReactNode => {
+export const Skeleton = (props: SkeletonProps): JSX.Element => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
       <SkeletonPlaceholder.Item {...defaultSkeletonProps} {...props} />
     </SkeletonPlaceholder>
   );
 };
-export const SkeletonSecondaryLine = (props: SkeletonProps): React.ReactNode => {
+export const SkeletonSecondaryLine = (props: SkeletonProps): JSX.Element => {
   return (
     <SkeletonPlaceholder.Item
       {...defaultSkeletonProps}
@@ -44,7 +44,7 @@ export const SkeletonSecondaryLine = (props: SkeletonProps): React.ReactNode => 
     />
   );
 };
-export const SkeletonLine = (props: SkeletonProps): React.ReactNode => {
+export const SkeletonLine = (props: SkeletonProps): JSX.Element => {
   return (
     <SkeletonPlaceholder.Item
       {...defaultSkeletonProps}
@@ -54,11 +54,11 @@ export const SkeletonLine = (props: SkeletonProps): React.ReactNode => {
     />
   );
 };
-export const SkeletonList = (props: SkeletonProps): React.ReactNode => {
+export const SkeletonList = (props: SkeletonProps): JSX.Element => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps} {...props}>
       <SkeletonPlaceholder.Item
-        fleDirection="column"
+        flexDirection="column"
         marginLeft={UNIT * 2}
         marginRight={UNIT * 2}
       >
@@ -107,7 +107,7 @@ function skeletonActivityLine(width?: number) {
   });
 }
 
-export const SkeletonIssueContent = (): React.ReactNode => {
+export const SkeletonIssueContent = (): JSX.Element => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
       {SkeletonLine({
@@ -135,7 +135,7 @@ export const SkeletonIssueContent = (): React.ReactNode => {
     </SkeletonPlaceholder>
   );
 };
-export const SkeletonIssueCustomFields = (): React.ReactNode => {
+export const SkeletonIssueCustomFields = (): JSX.Element => {
   const props = {
     width: 90,
     height: 36,
@@ -163,7 +163,7 @@ export const SkeletonIssueCustomFields = (): React.ReactNode => {
     </SkeletonPlaceholder>
   );
 };
-export const SkeletonIssueInfoLine = (props: {lines?: number}): React.ReactNode => {
+export const SkeletonIssueInfoLine = (props: {lines?: number}): JSX.Element => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
       <SkeletonPlaceholder.Item flexDirection="column">
@@ -210,7 +210,7 @@ function skeletonIssueActivity(marginTop: number = 0, key: string) {
   );
 }
 
-export const SkeletonIssueActivities = (props?: SkeletonProps): React.ReactNode => {
+export const SkeletonIssueActivities = (props?: SkeletonProps): JSX.Element => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
       <SkeletonPlaceholder.Item {...props}>
@@ -249,12 +249,12 @@ function skeletonIssue(key: string) {
   );
 }
 
-export const SkeletonIssues = (props: SkeletonProps): React.ReactNode => {
+export const SkeletonIssues = (props: SkeletonProps): JSX.Element => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
       <SkeletonPlaceholder.Item
         {...props}
-        fleDirection="column"
+        flexDirection="column"
         marginLeft={UNIT * 2}
         marginRight={UNIT * 2}
       >
@@ -268,7 +268,7 @@ export const SkeletonIssues = (props: SkeletonProps): React.ReactNode => {
   );
 };
 
-function skeletonCard(key: string) {
+function skeletonCard(key: string): JSX.Element {
   return (
     <SkeletonPlaceholder.Item key={key} marginTop={UNIT * 1.5}>
       {SkeletonLine({
@@ -280,11 +280,11 @@ function skeletonCard(key: string) {
   );
 }
 
-export const SkeletonAgile = (props: SkeletonProps): React.ReactNode => {
+export const SkeletonAgile = (props: SkeletonProps): JSX.Element => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps} {...props}>
       <SkeletonPlaceholder.Item
-        fleDirection="column"
+        flexDirection="column"
         marginLeft={UNIT * 2}
         marginRight={UNIT * 2}
       >
@@ -310,20 +310,19 @@ export const SkeletonAgile = (props: SkeletonProps): React.ReactNode => {
           marginBottom: UNIT * 2,
           borderRadius: 0,
         })}
-
-        {Array(3)
-          .fill(0)
-          .map((marginTop: number, index) =>
+        <>
+          {Array(3).fill(0).map((marginTop: number, index) =>
             skeletonCard(`skeletonCard-${index}`),
           )}
+        </>
       </SkeletonPlaceholder.Item>
     </SkeletonPlaceholder>
   );
 };
-export const SkeletonCreateArticle = (): React.ReactNode => {
+export const SkeletonCreateArticle = (): JSX.Element => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
-      <SkeletonPlaceholder.Item fleDirection="column">
+      <SkeletonPlaceholder.Item flexDirection="column">
         {SkeletonLine({
           width: SKELETON_WIDTH * 1.5,
           height: SKELETON_HEIGHT,
