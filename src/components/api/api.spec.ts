@@ -197,6 +197,16 @@ describe('API', () => {
         `${serverUrl}/api/admin/projects`,
       );
     });
+
+    it('should be TRUE if the server version >= than 2022', () => {
+      authMock.config.version = '2023.1';
+      api = createApiInstance();
+      expect(api.isActualAPI).toEqual(true);
+      expect(api.user.apiUrl).toEqual(`${serverUrl}/api/users`);
+      expect(api.issue.draftsURL).toEqual(`${serverUrl}/api/users/me/drafts`);
+      expect(api.projects.projectsURL).toEqual(`${serverUrl}/api/admin/projects`);
+    });
+
     it('should be TRUE if the server version < than 2022.3', () => {
       authMock.config.version = '2022.2';
       api = createApiInstance();
