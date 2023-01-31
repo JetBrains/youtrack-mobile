@@ -71,6 +71,11 @@ msgstr "Configurações de atividade"
 msgid "Add project to favorites"
 msgstr "Adicionar projeto aos favoritos"
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Add reaction"
+msgstr ""
+
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
 msgstr "Adicionar tempo gasto"
@@ -268,6 +273,9 @@ msgid "Content revised"
 msgstr "Conteúdo revisado"
 
 #: src/components/wiki/code-renderer.tsx
+#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -283,6 +291,8 @@ msgid "Copy field text"
 msgstr "Copiar texto do campo"
 
 #: src/views/article/arcticle-actions.ts
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy link"
@@ -293,6 +303,8 @@ msgstr "Copiar link"
 msgid "Copy link to article"
 msgstr "Copiar link para o artigo"
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy text"
@@ -334,6 +346,8 @@ msgstr "Recusar"
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-helper.ts
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -386,8 +400,9 @@ msgid "Drafts"
 msgstr "Rascunhos"
 
 #: src/components/activity-stream/activity__stream-work.tsx
-#: src/components/activity-stream/activity__stream.tsx
 #: src/views/article/arcticle-actions.ts
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Edit"
@@ -747,6 +762,11 @@ msgstr "uma reação foi removida"
 msgid "reopened the pull request"
 msgstr "reabriu a solicitação de pull"
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Reply"
+msgstr ""
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
 msgstr "Reiniciar"
@@ -813,6 +833,10 @@ msgid "Share"
 msgstr "Compartilhar"
 
 #: src/views/article/arcticle-actions.ts
+#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Share link"
 msgstr "Compartilhar link"

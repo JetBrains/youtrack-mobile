@@ -77,6 +77,11 @@ msgstr ""
 msgid "Add project to favorites"
 msgstr ""
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Add reaction"
+msgstr "Додати реакцію"
+
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
 msgstr "Додати витрачений час"
@@ -276,6 +281,9 @@ msgid "Content revised"
 msgstr ""
 
 #: src/components/wiki/code-renderer.tsx
+#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -291,6 +299,8 @@ msgid "Copy field text"
 msgstr ""
 
 #: src/views/article/arcticle-actions.ts
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy link"
@@ -301,6 +311,8 @@ msgstr "Копіювати посилання"
 msgid "Copy link to article"
 msgstr ""
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy text"
@@ -342,6 +354,8 @@ msgstr "Відхилити"
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-helper.ts
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -394,8 +408,9 @@ msgid "Drafts"
 msgstr "Чернетки"
 
 #: src/components/activity-stream/activity__stream-work.tsx
-#: src/components/activity-stream/activity__stream.tsx
 #: src/views/article/arcticle-actions.ts
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Edit"
@@ -757,6 +772,11 @@ msgstr ""
 msgid "reopened the pull request"
 msgstr ""
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Reply"
+msgstr "Відповісти"
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
 msgstr ""
@@ -823,6 +843,10 @@ msgid "Share"
 msgstr "Спільний доступ"
 
 #: src/views/article/arcticle-actions.ts
+#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Share link"
 msgstr "Поширити посилання"

@@ -68,6 +68,11 @@ msgstr "アクティビティの設定"
 msgid "Add project to favorites"
 msgstr "プロジェクトをお気に入りに追加"
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Add reaction"
+msgstr ""
+
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
 msgstr "経過時間を追加"
@@ -264,6 +269,9 @@ msgid "Content revised"
 msgstr "内容が変更されました"
 
 #: src/components/wiki/code-renderer.tsx
+#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -279,6 +287,8 @@ msgid "Copy field text"
 msgstr "フィールドテキストのコピー"
 
 #: src/views/article/arcticle-actions.ts
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy link"
@@ -289,6 +299,8 @@ msgstr "リンクのコピー"
 msgid "Copy link to article"
 msgstr "記事のリンクをコピー"
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy text"
@@ -330,6 +342,8 @@ msgstr "拒否"
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-helper.ts
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -382,8 +396,9 @@ msgid "Drafts"
 msgstr "件の下書き"
 
 #: src/components/activity-stream/activity__stream-work.tsx
-#: src/components/activity-stream/activity__stream.tsx
 #: src/views/article/arcticle-actions.ts
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Edit"
@@ -742,6 +757,11 @@ msgstr "がリアクションを削除しました"
 msgid "reopened the pull request"
 msgstr "さんがプルリクエストを再開しました"
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Reply"
+msgstr ""
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
 msgstr "再起動"
@@ -808,6 +828,10 @@ msgid "Share"
 msgstr "共有"
 
 #: src/views/article/arcticle-actions.ts
+#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Share link"
 msgstr "リンクを共有"
