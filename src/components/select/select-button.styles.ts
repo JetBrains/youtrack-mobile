@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from '../common-styles/typography';
+import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from 'components/common-styles/typography';
 import {UNIT} from 'components/variables';
 import {rowFormStyles} from '../common-styles/form';
 export const selectButtonMinHeight: number = UNIT * 5.5;

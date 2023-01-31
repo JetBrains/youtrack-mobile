@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {elevation1} from '../common-styles/shadow';
+import {elevation1} from 'components/common-styles';
 import {inputWrapper, searchInput} from '../common-styles/search';
-import {MAIN_FONT_SIZE} from '../common-styles/typography';
+import {MAIN_FONT_SIZE} from 'components/common-styles/typography';
 import {separator} from '../common-styles/list';
 import {UNIT} from 'components/variables';
 const minButtonWidth = UNIT * 5;

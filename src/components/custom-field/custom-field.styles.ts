@@ -4,7 +4,7 @@ import {
   MAIN_FONT_SIZE,
   mainText,
   secondaryText,
-} from '../common-styles/typography';
+} from 'components/common-styles/typography';
 import {UNIT} from 'components/variables';
 const sidePadding = {
   paddingLeft: UNIT,

@@ -7,7 +7,7 @@ import {
   headerTitle,
   MAIN_FONT_SIZE,
   mainText,
-} from '../common-styles/typography';
+} from 'components/common-styles/typography';
 import {separatorBorder} from '../common-styles/list';
 const ROW_TEXT_LINE_HEIGHT = 24;
 export default EStyleSheet.create({

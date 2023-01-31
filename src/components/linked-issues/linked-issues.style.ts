@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {elevation1} from '../common-styles/shadow';
+import {elevation1} from 'components/common-styles';
 import {
   headerMinHeight,
   headerTitlePresentation,
@@ -8,7 +8,7 @@ import {
   markdownText,
   SECONDARY_FONT_SIZE,
   secondaryText,
-} from '../common-styles/typography';
+} from 'components/common-styles/typography';
 import {selectButtonMinHeight} from '../select/select-button.styles';
 import {separatorBorder} from '../common-styles/list';
 import {StyleSheet} from 'react-native';

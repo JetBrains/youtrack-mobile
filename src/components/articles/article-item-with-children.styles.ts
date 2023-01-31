@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {SELECT_ITEM_HEIGHT} from '../select/select.styles';
 import {UNIT} from 'components/variables';
-import {mainText} from '../common-styles/typography';
+import {mainText} from 'components/common-styles/typography';
 export const articleItemWithChildrenStyles = {
   row: {
     flex: 1,

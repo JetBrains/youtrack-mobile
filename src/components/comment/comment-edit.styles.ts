@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {elevation1, elevationBottom} from '../common-styles/shadow';
-import {mainText, secondaryText} from '../common-styles/typography';
+import {elevation1, elevationBottom} from 'components/common-styles';
+import {mainText, secondaryText} from 'components/common-styles/typography';
 import {UNIT} from 'components/variables';
 import {Platform} from 'react-native';
 import {separatorTopBorder} from '../common-styles/list';

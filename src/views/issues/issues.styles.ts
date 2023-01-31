@@ -1,12 +1,12 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {Platform, StyleSheet} from 'react-native';
 import {COLOR_FIELD_SIZE} from 'components/color-field/color-field';
-import {elevation1} from 'components/common-styles/shadow';
+import {elevation1} from 'components/common-styles';
 import {
   headerTitle,
   mainText,
   secondaryText,
-} from 'components/common-styles/typography';
+} from 'components/common-styles';
 import {headerTitlePresentation} from 'components/header/header.styles';
 import {issueCard} from 'components/common-styles/issue';
 import {separator} from 'components/common-styles/list';

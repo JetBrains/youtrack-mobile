@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {mainText} from '../common-styles/typography';
+import {mainText} from 'components/common-styles/typography';
 import {UNIT} from 'components/variables';
 export default EStyleSheet.create({
   tags: {

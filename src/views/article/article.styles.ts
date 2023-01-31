@@ -1,11 +1,11 @@
 import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {elevation1, elevationBottom} from 'components/common-styles/shadow';
+import {elevation1, elevationBottom} from 'components/common-styles';
 import {
   headerTitle,
   MAIN_FONT_SIZE,
   mainText,
-} from 'components/common-styles/typography';
+} from 'components/common-styles';
 import {separator} from 'components/common-styles/list';
 import {summaryTitle} from 'components/common-styles/issue';
 import {UNIT} from 'components/variables';

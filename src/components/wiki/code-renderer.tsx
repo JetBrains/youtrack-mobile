@@ -17,7 +17,7 @@ import {
   monospaceFontAndroid,
   monospaceFontIOS,
   SECONDARY_FONT_SIZE,
-} from '../common-styles/typography';
+} from 'components/common-styles/typography';
 import {notify} from '../notification/notification';
 import {showMoreText} from '../text-view/text-view';
 import styles from './youtrack-wiki.styles';

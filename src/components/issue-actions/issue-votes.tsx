@@ -4,7 +4,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {IconThumbUp} from '../icon/icon';
 import {UNIT} from 'components/variables';
 import {HIT_SLOP} from '../common-styles/button';
-import {secondaryText} from '../common-styles/typography';
+import {secondaryText} from 'components/common-styles/typography';
 import type {UITheme} from 'types/Theme';
 type Props = {
   voted: boolean;

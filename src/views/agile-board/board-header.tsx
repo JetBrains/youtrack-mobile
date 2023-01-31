@@ -4,7 +4,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
 import {isAllColumnsCollapsed} from './agile-board__helper';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from 'components/agile-common/agile-common';
-import {secondaryText} from 'components/common-styles/typography';
+import {secondaryText} from 'components/common-styles';
 import type {BoardColumn} from 'types/Agile';
 import type {ViewStyleProp} from 'types/Internal';
 type Props = {

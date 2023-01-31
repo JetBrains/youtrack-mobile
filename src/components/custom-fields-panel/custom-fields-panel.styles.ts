@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {elevation1} from '../common-styles/shadow';
+import {elevation1} from 'components/common-styles';
 import {headerTitlePresentation} from '../header/header.styles';
 import {rowFormStyles} from '../common-styles/form';
 import {UNIT} from 'components/variables';

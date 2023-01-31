@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {headerTitle} from '../common-styles/typography';
-import {elevation1} from '../common-styles/shadow';
+import {headerTitle} from 'components/common-styles/typography';
+import {elevation1} from 'components/common-styles';
 const minButtonWidth = UNIT * 5;
 export const headerMinHeight = UNIT * 8;
 export const headerTitlePresentation = {

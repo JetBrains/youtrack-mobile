@@ -5,12 +5,12 @@ import {
   inputWrapper,
   searchInput,
 } from 'components/common-styles/search';
-import {elevation1} from 'components/common-styles/shadow';
+import {elevation1} from 'components/common-styles';
 import {
   headerTitle,
   mainText,
   secondaryText,
-} from 'components/common-styles/typography';
+} from 'components/common-styles';
 import {Platform} from 'react-native';
 import {SELECT_ITEM_HEIGHT} from 'components/select/select.styles';
 import {splitViewStyles} from 'components/common-styles/split-view';

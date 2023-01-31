@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {issueCard, issueIdResolved} from '../common-styles/issue';
-import {secondaryText} from '../common-styles/typography';
+import {secondaryText} from 'components/common-styles/typography';
 import {UNIT} from 'components/variables';
 export const agileCard = {
   flexDirection: 'row',

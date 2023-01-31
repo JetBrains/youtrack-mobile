@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {mainText} from '../common-styles/typography';
+import {mainText} from 'components/common-styles/typography';
 export default EStyleSheet.create({
   attachButtonsContainer: {
     flexDirection: 'row',

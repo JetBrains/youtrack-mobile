@@ -3,8 +3,8 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {IconAngleDown} from 'components/icon/icon';
 import {UNIT} from 'components/variables';
-import {mainText} from 'components/common-styles/typography';
-import {elevation1} from 'components/common-styles/shadow';
+import {mainText} from 'components/common-styles';
+import {elevation1} from 'components/common-styles';
 import type {
   TextStyleProp,
   ViewStyleProp,

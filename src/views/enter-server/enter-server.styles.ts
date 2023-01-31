@@ -2,7 +2,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
 import {rowFormStyles} from 'components/common-styles/form';
 import {loginStylesForm} from 'components/common-styles/login-form';
-import {mainText} from 'components/common-styles/typography';
+import {mainText} from 'components/common-styles';
 const buttonMaxWidth = 500;
 export default EStyleSheet.create({
   ...loginStylesForm,

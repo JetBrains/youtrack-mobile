@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {clearIcon, inputWrapper, searchInput} from '../common-styles/search';
-import {elevation1} from '../common-styles/shadow';
+import {elevation1} from 'components/common-styles';
 import {UNIT} from 'components/variables';
 export default EStyleSheet.create({
   placeHolder: {

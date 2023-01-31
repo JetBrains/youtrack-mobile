@@ -7,7 +7,7 @@ import {activityCategory} from 'components/activity/activity__category';
 import {i18n} from 'components/i18n/i18n';
 import {IconHistory} from 'components/icon/icon';
 import {InboxThreadGroup} from 'types/Inbox';
-import {markdownText} from 'components/common-styles/typography';
+import {markdownText} from 'components/common-styles';
 import styles from './inbox-threads.styles';
 import type {CustomField} from 'types/CustomFields';
 import type {InboxThreadTarget, ThreadEntity} from 'types/Inbox';

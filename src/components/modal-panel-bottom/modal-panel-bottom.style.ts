@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {HEADER_FONT_SIZE} from '../common-styles/typography';
+import {HEADER_FONT_SIZE} from 'components/common-styles/typography';
 import {UNIT} from 'components/variables';
 export default EStyleSheet.create({
   container: {

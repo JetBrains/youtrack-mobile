@@ -1,7 +1,7 @@
 import {Platform} from 'react-native';
 import {DEFAULT_THEME} from '../theme/theme';
 import {UNIT} from 'components/variables';
-import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from '../common-styles/typography';
+import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from 'components/common-styles/typography';
 import type {UITheme, UIThemeColors} from 'types/Theme';
 import type {TextStyleProp} from 'types/Internal';
 const vSpace = {

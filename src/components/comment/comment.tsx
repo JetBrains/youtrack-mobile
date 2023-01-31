@@ -8,7 +8,7 @@ import YoutrackWiki from 'components/wiki/youtrack-wiki';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {isPureHTMLBlock, prepareHTML} from 'components/wiki/markdown-helper';
-import {markdownText} from 'components/common-styles/typography';
+import {markdownText} from 'components/common-styles';
 import {ytDate} from 'components/date/date';
 
 import styles from './comment.styles';

@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {HEADER_FONT_SIZE} from '../common-styles/typography';
+import {HEADER_FONT_SIZE} from 'components/common-styles/typography';
 const alignCenter = {
   justifyContent: 'center',
   alignItems: 'center',

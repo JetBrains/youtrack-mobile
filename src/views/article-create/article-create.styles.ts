@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {elevation1} from 'components/common-styles/shadow';
+import {elevation1} from 'components/common-styles';
 import {UNIT} from 'components/variables';
-import {mainText} from 'components/common-styles/typography';
+import {mainText} from 'components/common-styles';
 export default EStyleSheet.create({
   container: {
     flex: 1,

@@ -1,6 +1,9 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {MAIN_FONT_SIZE} from './typography';
+
+import {MAIN_FONT_SIZE} from './index';
+
 export const splitViewLeftSideBarWidth = 375;
+
 export const splitViewStyles = {
   splitViewContainer: {
     flex: 1,

@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import YoutrackWiki from 'components/wiki/youtrack-wiki';
 import MarkdownView from 'components/wiki/markdown-view';
 import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
-import {markdownText} from 'components/common-styles/typography';
+import {markdownText} from 'components/common-styles';
 import {ThemeContext} from 'components/theme/theme-context';
 import type {Attachment} from 'types/CustomFields';
 import type {Theme} from 'types/Theme';

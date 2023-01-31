@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
-import {markdownText} from 'components/common-styles/typography';
+import {markdownText} from 'components/common-styles';
 import styles from './article.styles';
 import type {Article} from 'types/Article';
 import type {Attachment} from 'types/CustomFields';

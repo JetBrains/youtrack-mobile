@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {MAIN_FONT_SIZE} from 'components/common-styles/typography';
+import {MAIN_FONT_SIZE} from 'components/common-styles';
 import {rowFormStyles} from 'components/common-styles/form';
 import {loginStylesForm} from 'components/common-styles/login-form';
 export default EStyleSheet.create({

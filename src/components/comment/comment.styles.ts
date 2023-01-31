@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {mainText, secondaryText} from '../common-styles/typography';
+import {mainText, secondaryText} from 'components/common-styles/typography';
 import {UNIT} from 'components/variables';
 export default EStyleSheet.create({
   commentWrapper: {

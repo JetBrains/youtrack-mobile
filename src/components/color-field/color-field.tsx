@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {secondaryText} from '../common-styles/typography';
+import {secondaryText} from 'components/common-styles/typography';
 import {UNIT} from 'components/variables';
 type Props = {
   text: string;

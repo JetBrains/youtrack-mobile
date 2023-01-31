@@ -5,7 +5,7 @@ import {
   headerTitle,
   mainText,
   secondaryText,
-} from 'components/common-styles/typography';
+} from 'components/common-styles';
 import {separatorBorder} from 'components/common-styles/list';
 import {summary} from 'components/form/summary-description-form.style';
 import {UNIT} from 'components/variables';

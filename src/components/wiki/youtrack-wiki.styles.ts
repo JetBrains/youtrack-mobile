@@ -6,7 +6,7 @@ import {
   mainText,
   monospace,
   SECONDARY_FONT_SIZE,
-} from '../common-styles/typography';
+} from 'components/common-styles/typography';
 const showMoreLink = {
   fontSize: SECONDARY_FONT_SIZE,
   color: '$link',

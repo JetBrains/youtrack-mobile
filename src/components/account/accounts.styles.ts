@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {mainText, secondaryText} from '../common-styles/typography';
+import {mainText, secondaryText} from 'components/common-styles/typography';
 export const SWIPER_HEIGHT = 178;
 export default EStyleSheet.create({
   accountContainer: {

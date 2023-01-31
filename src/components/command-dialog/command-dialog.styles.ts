@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {mainText} from '../common-styles/typography';
-import {elevation1} from '../common-styles/shadow';
+import {mainText} from 'components/common-styles/typography';
+import {elevation1} from 'components/common-styles';
 import {inputWrapper, searchInput} from '../common-styles/search';
 export default EStyleSheet.create({
   container: {

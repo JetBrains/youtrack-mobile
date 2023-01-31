@@ -1,8 +1,8 @@
 import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {elevation1} from '../common-styles/shadow';
-import {mainText, secondaryText} from '../common-styles/typography';
+import {elevation1} from 'components/common-styles';
+import {mainText, secondaryText} from 'components/common-styles/typography';
 export default EStyleSheet.create({
   tabsBar: {...elevation1, backgroundColor: '$background'},
   tabsBarFluid: {

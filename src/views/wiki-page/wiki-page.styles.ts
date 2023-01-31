@@ -4,7 +4,7 @@ import {
   headerTitle,
   monospace,
   SECONDARY_FONT_SIZE,
-} from 'components/common-styles/typography';
+} from 'components/common-styles';
 export default EStyleSheet.create({
   headerTitle: headerTitle,
   container: {

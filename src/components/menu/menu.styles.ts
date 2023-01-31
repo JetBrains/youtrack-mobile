@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {menuHeight} from '../common-styles/header';
-import {elevationTop} from '../common-styles/shadow';
+import {elevationTop} from 'components/common-styles';
 import {UNIT} from 'components/variables';
 export default EStyleSheet.create({
   menu: {
