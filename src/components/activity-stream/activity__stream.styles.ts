@@ -192,9 +192,11 @@ export const rowStyles = {
     flexDirection: 'row',
     padding: UNIT / 2,
     alignItems: 'center',
+    alignSelf: 'flex-start',
   },
   contextMenuItem: {
     padding: UNIT,
+    minWidth: 160,
     paddingRight: 0,
     color: '$text',
   },
@@ -204,6 +206,17 @@ export const rowStyles = {
   contextMenuItemIcon: {
     width: UNIT * 2,
     height: UNIT * 2,
+  },
+  contextMenuTitle: {
+    paddingHorizontal: UNIT * 2.5,
+    maxHeight: 200,
+    borderBottomWidth: 1,
+    borderColor: '$separator',
+  },
+  contextMenuTitleItem: {
+    paddingTop: UNIT,
+    paddingBottom: UNIT * 1.5,
+    ...secondaryText,
   },
 };
 export default EStyleSheet.create(rowStyles);

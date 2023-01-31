@@ -6,6 +6,7 @@ import AppProvider from './app-provider';
 import Article from 'views/article/article';
 import ArticleCreate from 'views/article-create/article-create';
 import AttachmentPreview from 'views/attachment-preview/attachment-preview';
+import {BottomSheetProvider} from 'components/bottom-sheet';
 import CreateIssue from 'views/create-issue/create-issue';
 import EnterServer from 'views/enter-server/enter-server';
 import Home from 'views/home/home';
@@ -29,9 +30,8 @@ import {
 } from '@expo/react-native-action-sheet';
 import {Notifications} from 'react-native-notifications';
 import {onNavigateBack, setAccount} from 'actions/app-actions';
-import {rootRoutesList, routeMap} from './app-routes';
+import {rootRoutesList, routeMap} from 'app-routes';
 import type {NotificationRouteData} from 'types/Notification';
-import type {Ref} from 'react';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -198,23 +198,21 @@ class YouTrackMobile extends Component<void, void> {
 
 const AppActionSheetConnected = connectActionSheet<{}>(YouTrackMobile);
 
+type ActionSheetRef = React.Ref<unknown> | undefined;
+
 class AppContainer extends Component<void, void> {
   static childContextTypes: any = {
     actionSheet: Function,
   };
-  actionSheetRef: Ref<typeof ActionSheetProvider>;
+  private actionSheetRef: ActionSheetRef;
 
-  getChildContext(): {
-    actionSheet: () => Ref<any>;
-  } {
+  getChildContext(): { actionSheet: () => ActionSheetRef; } {
     return {
       actionSheet: () => this.actionSheetRef,
     };
   }
 
-  setActionSheetRef: (component: Ref<never>) => void = (
-    component: Ref<typeof ActionSheetProvider>,
-  ) => {
+  setActionSheetRef = (component: ActionSheetRef) => {
     if (component) {
       this.actionSheetRef = component;
     }
@@ -222,9 +220,11 @@ class AppContainer extends Component<void, void> {
 
   render(): React.ReactNode {
     return (
-      <ActionSheetProvider ref={this.setActionSheetRef} useModal={true}>
-        <AppActionSheetConnected />
-      </ActionSheetProvider>
+      <BottomSheetProvider>
+        <ActionSheetProvider ref={this.setActionSheetRef} useModal={true}>
+          <AppActionSheetConnected/>
+        </ActionSheetProvider>
+      </BottomSheetProvider>
     );
   }
 }

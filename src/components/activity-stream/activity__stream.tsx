@@ -1,4 +1,4 @@
-import React, {MutableRefObject, useCallback, useLayoutEffect, useRef, useState} from 'react';
+import React, {MutableRefObject, useCallback, useLayoutEffect, useRef} from 'react';
 import {
   Animated,
   LayoutRectangle,
@@ -14,7 +14,6 @@ import ActivityUserAvatar from './activity__stream-avatar';
 import ApiHelper from '../api/api__helper';
 import CommentReactions from 'components/comment/comment-reactions';
 
-import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import ContextMenu from 'components/context-menu/context-menu';
 import Feature, {FEATURE_VERSION} from '../feature/feature';
 import ReactionAddIcon from 'components/reactions/new-reaction.svg';
@@ -25,11 +24,13 @@ import StreamUserInfo from './activity__stream-user-info';
 import StreamVCS from './activity__stream-vcs';
 import StreamWork from './activity__stream-work';
 import {firstActivityChange} from './activity__stream-helper';
-import {hasType} from '../api/api__resource-types';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+import {guid, isAndroidPlatform} from 'util/util';
+import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {i18n} from 'components/i18n/i18n';
-import {isAndroidPlatform} from 'util/util';
-import {menuHeight} from '../common-styles/header';
+import {menuHeight} from 'components/common-styles/header';
+import {useBottomSheetContext} from 'components/bottom-sheet';
 
 import styles from './activity__stream.styles';
 
@@ -92,7 +93,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     highlight,
   } = props;
 
-  const [menuChildren, updateMenuChildren] = useState<any>(null);
+  const {openBottomSheet, closeBottomSheet} = useBottomSheetContext();
 
   const onScroll = ({nativeEvent}: { nativeEvent: NativeScrollEvent }) => (
     scrollOffset.current = nativeEvent.contentOffset.y
@@ -172,9 +173,41 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     ) : null;
   };
 
-  const getMenuConfig = (commentActions: ActivityStreamCommentActions, comment: IssueComment, activityId: string): ContextMenuConfig => (
+  const getMenuConfig = (
+    commentActions: ActivityStreamCommentActions,
+    comment: IssueComment,
+    activityId: string
+  ): ContextMenuConfig => (
     commentActions?.contextMenuConfig?.(comment, activityId) || {menuTitle: '', menuItems: []}
   );
+
+  const renderBottomSheetContent = (activityGroup: ActivityGroup, activityId: string): React.ReactNode => {
+    const comment: IssueComment = getCommentFromActivityGroup(activityGroup) as IssueComment;
+    return (
+      <>
+        {getMenuConfig(props.commentActions, comment, activityId).menuItems.map(
+          (it: ContextMenuConfigItem) => (
+            <TouchableOpacity
+              key={guid()}
+              style={styles.contextMenu}
+              onPress={() => {
+                closeBottomSheet();
+                it?.execute?.();
+              }}
+            >
+              <Text
+                style={[
+                  styles.contextMenuItem,
+                  it.menuAttributes?.includes('destructive') && styles.contextMenuItemDestructive,
+                ]}>
+                {it.actionTitle}
+              </Text>
+            </TouchableOpacity>
+          )
+        )}
+      </>
+    );
+  };
 
   const renderCommentActivity = (activityGroup: ActivityGroup) => {
     const activity: Activity = activityGroup.comment as Activity;
@@ -203,23 +236,21 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
           onLongPress={(comment: IssueComment) => {
             props.commentActions?.onLongPress?.(comment, activity.id as string);
             if (isAndroid) {
-              updateMenuChildren(
-                getMenuConfig(props.commentActions, getCommentFromActivityGroup(activityGroup) as IssueComment, activity.id as string).menuItems.map(
-                  (it: ContextMenuConfigItem) => (
-                    <TouchableOpacity
-                      style={styles.contextMenu}
-                      onPress={() => {
-                        it?.execute?.();
-                        updateMenuChildren(null);
-                      }}
-                    >
-                      <Text style={[styles.contextMenuItem, it.menuAttributes?.includes('destructive') && styles.contextMenuItemDestructive]}>
-                        {it.actionTitle}
-                      </Text>
-                    </TouchableOpacity>
-                  )
-                )
-              );
+              const comment: IssueComment = getCommentFromActivityGroup(activityGroup) as IssueComment;
+              openBottomSheet({
+                children: renderBottomSheetContent(activityGroup, activity.id),
+                snapPoint: 1,
+                header: (
+                  <ScrollView
+                    style={[styles.contextMenuTitle, styles.contextMenuTitleItem]}
+                  >
+                    <Text style={styles.contextMenuTitleItem}>{getEntityPresentation(comment?.author)}</Text>
+                    <Text style={styles.contextMenuTitleItem} selectable={true}>
+                      {comment.text}
+                    </Text>
+                  </ScrollView>
+                ),
+              });
             }
           }}
           youtrackWiki={props.youtrackWiki}
@@ -229,11 +260,11 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     );
   };
 
-  const ContextActionsProvider = ({
-                                    children,
-                                    comment,
-                                    activityId,
-                                  }: { children: React.ReactNode, comment: IssueComment, activityId: string }) => {
+  const ContextActionsProvider = ({children, comment, activityId}: {
+    children: React.ReactNode,
+    comment: IssueComment,
+    activityId: string
+  }) => {
     const {commentActions} = props;
     const menuConfig: ContextMenuConfig = getMenuConfig(commentActions, comment, activityId);
     return (
@@ -380,7 +411,10 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
         {index > 0 && !activityGroup.merged && (
           <View style={styles.activitySeparator}/>
         )}
-        <Wrapper {...(_comment && {comment: getCommentFromActivityGroup(activityGroup), activityId: activityGroup?.comment?.id})}>
+        <Wrapper {...(_comment && {
+          comment: getCommentFromActivityGroup(activityGroup),
+          activityId: activityGroup?.comment?.id,
+        })}>
           {doRenderActivity(activityGroup)}
         </Wrapper>
       </View>
@@ -402,13 +436,8 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
       {activities?.length === 0 && (
         <Text style={styles.activityNoActivity}>{i18n('No activity yet')}</Text>
       )}
-
-      {isAndroid && <BottomSheetModal
-        isVisible={!!menuChildren}
-        onClose={() => updateMenuChildren(null)}
-      >
-        {menuChildren}
-      </BottomSheetModal>}
     </ScrollView>
   );
 };
+
+export default ActivityStream;
