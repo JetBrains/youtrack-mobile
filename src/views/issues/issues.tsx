@@ -47,7 +47,7 @@ import {requestController} from 'components/api/api__request-controller';
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 import styles from './issues.styles';
 import type Api from 'components/api/api';
 import type Auth from 'components/auth/oauth2';

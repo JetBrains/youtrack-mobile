@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 const extendedReportModalText = {
   letterSpacing: 0.08,
   fontSize: 16,

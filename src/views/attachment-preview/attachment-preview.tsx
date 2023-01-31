@@ -5,7 +5,7 @@ import {WebView} from 'react-native-webview';
 import Header from 'components/header/header';
 import {i18n} from 'components/i18n/i18n';
 import {IconClose} from 'components/icon/icon';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 type Props = {
   name: string;
   url: string;

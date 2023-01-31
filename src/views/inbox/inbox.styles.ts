@@ -8,7 +8,7 @@ import {
 } from 'components/common-styles/typography';
 import {issueIdResolved} from 'components/common-styles/issue';
 import {splitViewStyles} from 'components/common-styles/split-view';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 const font = {
   lineHeight: 18,
   fontSize: 14,

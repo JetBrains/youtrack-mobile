@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {mainText} from '../common-styles/typography';
 import {separatorBorder} from '../common-styles/list';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 export default EStyleSheet.create({
   container: {
     flex: 1,

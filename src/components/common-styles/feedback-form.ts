@@ -1,7 +1,7 @@
 import {elevation1} from './shadow';
 import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from './typography';
 import {rowFormStyles} from './form';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 const feedbackFormStyles = {
   feedbackContainer: {
     flexGrow: 1,

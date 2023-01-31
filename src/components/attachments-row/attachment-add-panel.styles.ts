@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import {mainText} from '../common-styles/typography';
 export default EStyleSheet.create({
   attachButtonsContainer: {

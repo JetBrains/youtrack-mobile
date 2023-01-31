@@ -1,6 +1,6 @@
 import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import {
   MAIN_FONT_SIZE,
   mainText,

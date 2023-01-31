@@ -1,4 +1,4 @@
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import {mainText} from './typography';
 export const inputWrapper = {
   flexDirection: 'row',

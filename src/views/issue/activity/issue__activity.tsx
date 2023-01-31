@@ -37,7 +37,7 @@ import {IssueContext} from '../issue-context';
 import {logEvent} from 'components/log/log-helper';
 import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 import styles from './issue-activity.styles';
 import type {Activity} from 'types/Activity';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';

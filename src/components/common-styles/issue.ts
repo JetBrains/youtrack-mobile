@@ -1,4 +1,4 @@
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import {HEADER_FONT_SIZE, mainText, secondaryText} from './typography';
 import {Platform} from 'react-native';
 export const title = {

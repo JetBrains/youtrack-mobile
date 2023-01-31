@@ -1,5 +1,5 @@
 import {formStyles, containerPadding, rowFormStyles} from './form';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 export const loginStylesForm = {
   scrollContainer: {...rowFormStyles.scrollContainer},
   container: {

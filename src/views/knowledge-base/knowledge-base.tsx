@@ -45,7 +45,7 @@ import {
 import {routeMap} from '../../app-routes';
 import {SkeletonIssues} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 import styles from './knowledge-base.styles';
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
 import type {AppState} from '../../reducers';

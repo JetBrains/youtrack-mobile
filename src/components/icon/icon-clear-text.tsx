@@ -1,7 +1,7 @@
 import {TouchableOpacity, StyleSheet} from 'react-native';
 import React from 'react';
 import {IconClose} from './icon';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import {HIT_SLOP} from '../common-styles/button';
 export function iconClearText(onPress: (arg0: any) => any, color: string) {
   return (

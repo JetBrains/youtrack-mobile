@@ -8,7 +8,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import Draggable from './draggable';
 import {DragContext} from './drag-container';
 import {getAgileCardHeight} from '../agile-card/agile-card';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import type {DragContextType} from './drag-container';
 import type {ViewStyleProp} from 'types/Internal';
 type ZoneInfoData = {

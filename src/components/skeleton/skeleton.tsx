@@ -2,7 +2,7 @@ import React from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {agileCard} from '../agile-card/agile-card.styles';
 import {getAgileCardHeight} from '../agile-card/agile-card';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 type SkeletonProps = {
   width?: number;
   height?: number;

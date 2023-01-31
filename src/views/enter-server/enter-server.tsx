@@ -26,7 +26,7 @@ import {logo, IconBack} from 'components/icon/icon';
 import {NETWORK_PROBLEM_TIPS} from 'components/error-message/error-text-messages';
 import {resolveErrorMessage} from 'components/error/error-resolver';
 import {ThemeContext} from 'components/theme/theme-context';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 import styles from './enter-server.styles';
 import type {AppConfig} from 'types/AppConfig';
 import type {Theme, UIThemeColors} from 'types/Theme';

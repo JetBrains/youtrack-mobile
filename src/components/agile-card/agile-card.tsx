@@ -9,7 +9,7 @@ import {
 } from '../../views/agile-board/agile-board__helper';
 import {getAssigneeField} from '../issue-formatter/issue-formatter';
 import {getStorageState} from '../storage/storage';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import styles from './agile-card.styles';
 import type {IssueOnList} from 'types/Issue';
 import type {

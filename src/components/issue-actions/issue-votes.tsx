@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {IconThumbUp} from '../icon/icon';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import {HIT_SLOP} from '../common-styles/button';
 import {secondaryText} from '../common-styles/typography';
 import type {UITheme} from 'types/Theme';

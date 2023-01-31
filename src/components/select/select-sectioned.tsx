@@ -3,7 +3,7 @@ import {SectionList, Text, View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Select, {SelectModal} from './select';
 import {mainText, secondaryText} from '../common-styles/typography';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 //@ts-expect-error
 export class SelectSectionedModal extends SelectModal {
   constructor(props) {

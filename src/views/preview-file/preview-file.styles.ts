@@ -2,7 +2,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {headerMinHeight} from 'components/header/header.styles';
 import {StyleSheet} from 'react-native';
 import {title} from 'components/common-styles/issue';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 export default EStyleSheet.create({
   container: {
     flex: 1,

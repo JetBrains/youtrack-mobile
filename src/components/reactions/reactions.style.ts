@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {secondaryText} from '../common-styles/typography';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 export const styles = EStyleSheet.create({
   container: {
     flexDirection: 'row',

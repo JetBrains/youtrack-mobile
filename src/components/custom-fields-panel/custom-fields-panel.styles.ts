@@ -2,7 +2,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {elevation1} from '../common-styles/shadow';
 import {headerTitlePresentation} from '../header/header.styles';
 import {rowFormStyles} from '../common-styles/form';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import type {UITheme, UIThemeColors} from 'types/Theme';
 const simpleValueInput = {...rowFormStyles.input, color: '$text'};
 export default EStyleSheet.create({

@@ -5,7 +5,7 @@ import {
   mainText,
   secondaryText,
 } from '../common-styles/typography';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 const sidePadding = {
   paddingLeft: UNIT,
   paddingRight: UNIT,

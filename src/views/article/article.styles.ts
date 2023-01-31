@@ -8,7 +8,7 @@ import {
 } from 'components/common-styles/typography';
 import {separator} from 'components/common-styles/list';
 import {summaryTitle} from 'components/common-styles/issue';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 const INPUT_BORDER_RADIUS = UNIT;
 const MIN_INPUT_SIZE = UNIT * 4;
 const detailsHorizontalPadding = UNIT * 2;

@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {View, Text, Linking} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {i18n} from 'components/i18n/i18n';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import type {ViewStyleProp} from 'types/Internal';
 type Props = {
   error?: string | null | undefined;

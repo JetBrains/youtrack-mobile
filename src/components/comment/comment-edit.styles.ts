@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {elevation1, elevationBottom} from '../common-styles/shadow';
 import {mainText, secondaryText} from '../common-styles/typography';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import {Platform} from 'react-native';
 import {separatorTopBorder} from '../common-styles/list';
 const INPUT_BORDER_RADIUS = UNIT;

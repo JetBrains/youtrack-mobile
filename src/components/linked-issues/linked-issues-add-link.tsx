@@ -26,7 +26,7 @@ import {
 } from '../icon/icon-pictogram';
 import {IconBack} from '../icon/icon';
 import {ThemeContext} from '../theme/theme-context';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import {View as AnimatedView} from 'react-native-animatable';
 import styles from './linked-issues.style';
 import type {IssueLinkTypeExtended} from './linked-issues-helper';

@@ -11,7 +11,7 @@ import {headerTitlePresentation} from 'components/header/header.styles';
 import {issueCard} from 'components/common-styles/issue';
 import {separator} from 'components/common-styles/list';
 import {splitViewStyles} from 'components/common-styles/split-view';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 const rowLine = {
   flexDirection: 'row',
   alignItems: 'center',

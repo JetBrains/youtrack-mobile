@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {secondaryText} from '../common-styles/typography';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 type Props = {
   text: string;
   color?: Record<string, any>;

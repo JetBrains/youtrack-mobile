@@ -12,7 +12,7 @@ import {
 import {selectButtonMinHeight} from '../select/select-button.styles';
 import {separatorBorder} from '../common-styles/list';
 import {StyleSheet} from 'react-native';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 const linkTypeSelect = {
   marginTop: UNIT * 3,
   marginBottom: UNIT,

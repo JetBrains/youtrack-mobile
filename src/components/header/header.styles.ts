@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import {headerTitle} from '../common-styles/typography';
 import {elevation1} from '../common-styles/shadow';
 const minButtonWidth = UNIT * 5;

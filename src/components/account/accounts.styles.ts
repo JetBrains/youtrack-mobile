@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import {mainText, secondaryText} from '../common-styles/typography';
 export const SWIPER_HEIGHT = 178;
 export default EStyleSheet.create({

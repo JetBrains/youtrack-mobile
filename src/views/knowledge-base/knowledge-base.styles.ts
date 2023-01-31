@@ -14,7 +14,7 @@ import {
 import {Platform} from 'react-native';
 import {SELECT_ITEM_HEIGHT} from 'components/select/select.styles';
 import {splitViewStyles} from 'components/common-styles/split-view';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 const wrapper = {
   marginHorizontal: UNIT * 2,
   marginVertical: UNIT,

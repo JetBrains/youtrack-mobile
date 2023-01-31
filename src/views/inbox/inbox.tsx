@@ -38,7 +38,7 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 import {LoadMoreList} from 'components/progress/load-more-list';
 import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 import {ytDate} from 'components/date/date';
 import styles from './inbox.styles';
 import type {AppConfig} from 'types/AppConfig';

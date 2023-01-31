@@ -3,7 +3,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {mainText, secondaryText} from 'components/common-styles/typography';
 import {rowStyles as activityStyles} from 'components/activity-stream/activity__stream.styles';
 import {splitViewStyles} from 'components/common-styles/split-view';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 export default EStyleSheet.create({
   ...splitViewStyles,
   container: {

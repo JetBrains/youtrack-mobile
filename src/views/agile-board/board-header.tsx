@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 import {isAllColumnsCollapsed} from './agile-board__helper';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from 'components/agile-common/agile-common';
 import {secondaryText} from 'components/common-styles/typography';

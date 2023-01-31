@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {headerTitle, mainText} from '../common-styles/typography';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 export default EStyleSheet.create({
   container: {
     height: '100%',

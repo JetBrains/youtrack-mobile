@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {mainText, secondaryText} from '../common-styles/typography';
 import {separator} from '../common-styles/list';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 const secondaryTextColor = {
   color: '$icon',
 };

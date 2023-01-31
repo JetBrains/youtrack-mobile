@@ -1,4 +1,4 @@
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 export const HIT_SLOP = {
   top: UNIT,
   left: UNIT,

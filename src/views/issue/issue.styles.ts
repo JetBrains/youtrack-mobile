@@ -8,7 +8,7 @@ import {
 } from 'components/common-styles/typography';
 import {separatorBorder} from 'components/common-styles/list';
 import {summary} from 'components/form/summary-description-form.style';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 const centered = {
   flex: 1,
   alignItems: 'center',

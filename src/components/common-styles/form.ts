@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import {MAIN_FONT_SIZE} from './typography';
 export const containerPadding = UNIT * 4;
 export const rowFormStyles = {

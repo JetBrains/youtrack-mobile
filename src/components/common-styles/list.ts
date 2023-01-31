@@ -1,5 +1,5 @@
 import {Platform} from 'react-native';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 export const separatorBorder = {
   ...Platform.select({
     ios: {

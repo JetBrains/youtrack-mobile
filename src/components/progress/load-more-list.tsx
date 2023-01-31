@@ -2,7 +2,7 @@ import React from 'react';
 import {ActivityIndicator} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {DEFAULT_THEME} from '../theme/theme';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 export const LoadMoreList = function () {
   return (
     <ActivityIndicator

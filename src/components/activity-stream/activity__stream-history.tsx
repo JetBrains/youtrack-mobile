@@ -11,7 +11,7 @@ import {getActivityEventTitle} from './activity__stream-helper';
 import {getTextValueChange} from 'components/activity/activity__history-value';
 import {i18n} from 'components/i18n/i18n';
 import {isActivityCategory} from 'components/activity/activity__category';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 import styles from './activity__stream.styles';
 import type {Activity, ActivityChangeText} from 'types/Activity';
 import type {CustomField} from 'types/CustomFields';

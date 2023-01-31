@@ -10,7 +10,7 @@ import {IconClose} from 'components/icon/icon';
 import {IconShare} from 'components/icon/icon';
 import {isAndroidPlatform, isIOSPlatform} from 'util/util';
 import {ThemeContext} from 'components/theme/theme-context';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 import styles from './wiki-page.styles';
 import type {Attachment} from 'types/CustomFields';
 import type {Theme, UITheme} from 'types/Theme';

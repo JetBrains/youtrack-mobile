@@ -7,7 +7,7 @@ import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import ReactionIcon from 'components/reactions/reaction-icon';
 import reactionNames from 'components/reactions/reactions-name-list';
 import SelectItem from 'components/select/select__item';
-import {UNIT} from 'components/variables/variables';
+import {UNIT} from 'components/variables';
 
 import styles from './comment.styles';
 

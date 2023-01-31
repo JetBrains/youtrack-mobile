@@ -1,7 +1,7 @@
 import React from 'react';
 import reactionsMap from './reactions';
 import {DEFAULT_THEME} from '../theme/theme';
-import {UNIT} from '../variables/variables';
+import {UNIT} from 'components/variables';
 import type {ViewStyleProp} from 'types/Internal';
 const iconDefaultSize: number = UNIT * 2;
 type Props = {
