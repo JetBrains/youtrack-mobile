@@ -1,7 +1,7 @@
-import type {
-  ViewStyleProp as _ViewStyleProp,
-  TextStyleProp as _TextStyleProp,
-} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 
-export type ViewStyleProp = _ViewStyleProp;
-export type TextStyleProp = _TextStyleProp;
+export type ViewStyleProp = ViewStyle;
+export type TextStyleProp = TextStyle;

@@ -1,4 +1,4 @@
-import {Appearance} from 'react-native';
+import {Appearance, NativeEventSubscription} from 'react-native';
 import React, {PureComponent} from 'react';
 import DeviceInfo from 'react-native-device-info';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
@@ -7,6 +7,7 @@ import {isAndroidPlatform} from 'util/util';
 import {ThemeContext} from './theme-context';
 import {buildStyles, getSystemThemeMode, getUITheme, themes} from './theme';
 import type {UITheme} from 'types/Theme';
+
 type State = {
   mode: string | null | undefined;
   uiTheme: UITheme;
@@ -19,7 +20,7 @@ const isAndroid: boolean = isAndroidPlatform();
 
 class ManageThemeProvider extends PureComponent<Props, State> {
   _isMounted = false;
-  subscription = () => {};
+  subscription: NativeEventSubscription | undefined;
   canChangeAndroidNavBar = false;
 
   constructor(props: Props) {
@@ -41,13 +42,13 @@ class ManageThemeProvider extends PureComponent<Props, State> {
       return false;
     }
 
-    let androidVersion: number;
+    let androidVersion: number | null;
     const systemVersion: string = DeviceInfo.getSystemVersion();
 
     try {
       androidVersion = Number(systemVersion);
     } catch (error) {
-      androidVersion = parseFloat(systemVersion);
+      androidVersion = systemVersion ? parseFloat(systemVersion) : null;
     }
 
     return typeof androidVersion === 'number' && androidVersion >= 8;
@@ -55,8 +56,8 @@ class ManageThemeProvider extends PureComponent<Props, State> {
   componentDidMount = () => {
     this._isMounted = true;
     this.subscription = Appearance.addChangeListener(
-      (settings: {colorScheme: string}) => {
-        this.setMode(settings.colorScheme);
+      (preferences: Appearance.AppearancePreferences) => {
+        this.setMode(preferences.colorScheme);
       },
     );
   };
@@ -140,7 +141,7 @@ class ManageThemeProvider extends PureComponent<Props, State> {
   }
 }
 
-const ThemeProvider = (props: {children: any; mode: string}): React.ReactNode => (
+const ThemeProvider = (props: {children: React.ReactNode; mode: string}): JSX.Element => (
   <ManageThemeProvider mode={props.mode}>{props.children}</ManageThemeProvider>
 );
 

@@ -21,14 +21,15 @@ type Props = {
   children: any;
   testID?: string;
 };
-export default class ModalView extends PureComponent<Props, void> {
+
+export default class ModalView extends PureComponent<Props, Readonly<{}>> {
   static defaultProps: DefaultProps = {
     onRequestClose: () => {},
     supportedOrientations: [Orientation.PORTRAIT, Orientation.LANDSCAPE],
     animationType: AnimationType.NONE,
   };
 
-  render(): React.ReactNode {
+  render(): JSX.Element {
     const {
       visible,
       transparent,

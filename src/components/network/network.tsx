@@ -11,7 +11,7 @@ import styles from './network.styles';
 import type {AppStateValues} from 'react-native/Libraries/AppState/AppState';
 import type {EdgeInsets} from 'react-native-safe-area-context/src/SafeArea.types';
 import type {NetInfoState} from '@react-native-community/netinfo';
-export default function Network(): React.ReactNode {
+export default function Network(): JSX.Element {
   const toastInstance = useRef(null);
   const dispatch: (...args: any[]) => any = useDispatch();
   const prevConnected = useRef(null);
