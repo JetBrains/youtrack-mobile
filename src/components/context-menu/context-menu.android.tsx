@@ -1,5 +1,4 @@
 import React from 'react';
-import {View} from 'react-native';
 
 import {ContextMenuConfig, ContextMenuConfigItem} from 'types/MenuConfig';
 
@@ -10,7 +9,6 @@ interface Props {
   onToggle: () => any;
 }
 
-const ContextMenu: React.FC<Props> = ({children}: Props) =>
-  <View>{children}</View>;
+const ContextMenu: React.FC<Props> = ({children}: Props) => <>{children}</>;
 
 export default React.memo(ContextMenu);
