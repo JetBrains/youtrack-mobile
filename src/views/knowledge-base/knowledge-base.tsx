@@ -26,7 +26,7 @@ import usage from 'components/usage/usage';
 import {addListenerGoOnline} from 'components/network/network-events';
 import {ANALYTICS_ARTICLES_PAGE} from 'components/analytics/analytics-ids';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
-import {HIT_SLOP} from 'components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles';
 import {getGroupedByFieldNameAlphabetically} from 'components/search/sorting';
 import {getStorageState} from 'components/storage/storage';
 import {

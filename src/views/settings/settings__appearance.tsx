@@ -3,7 +3,7 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import Header from 'components/header/header';
 import {getStorageState} from 'components/storage/storage';
 import {getSystemThemeMode, themes} from 'components/theme/theme';
-import {HIT_SLOP} from 'components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconBack, IconCheck} from 'components/icon/icon';
 import {ThemeContext} from 'components/theme/theme-context';

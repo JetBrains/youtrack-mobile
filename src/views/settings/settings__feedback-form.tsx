@@ -19,7 +19,7 @@ import {IconAngleRight, IconCheck, IconClose} from 'components/icon/icon';
 import {notify, notifyError} from 'components/notification/notification';
 import {showActions} from 'components/action-sheet/action-sheet';
 import {until} from 'util/util';
-import {HIT_SLOP} from 'components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles';
 import styles from './settings__feedback-form.styles';
 import type {FeedbackLogs, FeedbackType} from './settings-helper';
 import type {UITheme, UIThemeColors} from 'types/Theme';

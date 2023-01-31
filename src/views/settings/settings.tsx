@@ -11,7 +11,7 @@ import Router from 'components/router/router';
 import SettingsAppearance from './settings__appearance';
 import SettingsFeedbackForm from './settings__feedback-form';
 import usage, {VERSION_STRING} from 'components/usage/usage';
-import {HIT_SLOP} from 'components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconBack, IconClose} from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';

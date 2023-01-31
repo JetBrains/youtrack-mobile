@@ -33,7 +33,7 @@ import {
   getIssueCustomFieldsNotText,
   getIssueTextCustomFields,
 } from 'components/custom-field/custom-field-helper';
-import {HIT_SLOP} from 'components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {isPureHTMLBlock, prepareHTML} from 'components/wiki/markdown-helper';
 import {

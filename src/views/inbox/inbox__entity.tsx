@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
-import {HIT_SLOP} from 'components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles';
 import {getReadableID} from 'components/issue-formatter/issue-formatter';
 import styles from './inbox.styles';
 import type {AnyIssue} from 'types/Issue';

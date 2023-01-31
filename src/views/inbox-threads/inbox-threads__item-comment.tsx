@@ -9,7 +9,7 @@ import ThreadItem from './inbox-threads__item';
 import {firstActivityChange} from 'components/activity-stream/activity__stream-helper';
 import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
-import {HIT_SLOP} from 'components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import styles from './inbox-threads.styles';
 import type {Attachment} from 'types/Attachment';

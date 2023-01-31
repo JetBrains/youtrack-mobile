@@ -3,7 +3,7 @@ import {TouchableOpacity, View} from 'react-native';
 import availableReactionNames from 'components/reactions/reactions-name-list';
 import BottomSheetModal from '../../../components/modal-panel-bottom/bottom-sheet-modal';
 import ReactionIcon from 'components/reactions/reaction-icon';
-import {HIT_SLOP} from 'components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles';
 import styles from './issue-activity.styles';
 import type {Reaction} from 'types/Reaction';
 type Props = {

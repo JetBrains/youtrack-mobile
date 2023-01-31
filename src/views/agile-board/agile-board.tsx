@@ -39,7 +39,7 @@ import {routeMap} from '../../app-routes';
 import {Select, SelectModal} from 'components/select/select';
 import {SkeletonAgile} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
-import {HIT_SLOP} from 'components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles';
 import {UNIT} from 'components/variables/variables';
 import styles from './agile-board.styles';
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';

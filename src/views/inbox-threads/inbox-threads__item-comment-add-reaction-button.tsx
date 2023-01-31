@@ -1,7 +1,7 @@
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import ReactionAddIcon from 'components/reactions/new-reaction.svg';
-import {HIT_SLOP} from 'components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles';
 import styles from './inbox-threads.styles';
 import {useSelector} from 'react-redux';
 import type {AppState} from '../../reducers';

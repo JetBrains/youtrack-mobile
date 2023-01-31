@@ -27,7 +27,7 @@ import {firstActivityChange} from './activity__stream-helper';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {guid, isAndroidPlatform} from 'util/util';
 import {hasType} from 'components/api/api__resource-types';
-import {HIT_SLOP} from 'components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {menuHeight} from 'components/common-styles/header';
 import {useBottomSheetContext} from 'components/bottom-sheet';

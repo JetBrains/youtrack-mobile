@@ -22,7 +22,7 @@ import {connect} from 'react-redux';
 import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {formatYouTrackURL} from 'components/config/config';
 import {formStyles} from 'components/common-styles/form';
-import {HIT_SLOP} from 'components/common-styles/button';
+import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {logo, IconBack} from 'components/icon/icon';
 import {openDebugView, onLogIn} from 'actions/app-actions';
