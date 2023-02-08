@@ -23,6 +23,7 @@ import type {
 import type {AnyIssue, IssueFull} from 'types/Issue';
 import type {Visibility} from 'types/Visibility';
 import type {WorkItem} from 'types/Work';
+
 export default class IssueAPI extends ApiBase {
   draftsURL: string = `${this.youTrackApiUrl}${
     this.isActualAPI ? '' : '/admin'
@@ -132,7 +133,7 @@ export default class IssueAPI extends ApiBase {
     const comments = await this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/comments?${queryString}`,
     );
-    comments.forEach(comment => {
+    comments.forEach((comment: IssueComment) => {
       comment.author.avatarUrl = handleRelativeUrl(
         comment.author.avatarUrl,
         this.config.backendUrl,
@@ -229,14 +230,11 @@ export default class IssueAPI extends ApiBase {
     return response.draftComment;
   }
 
-  async updateDraftComment(
-    issueId: string,
-    draftComment: Partial<IssueComment>,
-  ): Promise<IssueComment> {
+  async updateDraftComment(issueId: string, draftComment: IssueComment): Promise<IssueComment> {
     const queryString = qs.stringify({
       fields: issueFields.issueComment.toString(),
     });
-    const draft: Partial<IssueComment> = await this.makeAuthorizedRequest(
+    const draft: IssueComment = await this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/draftComment/?${queryString}`,
       draftComment.id ? 'POST' : 'PUT',
       draftComment,
@@ -390,7 +388,7 @@ export default class IssueAPI extends ApiBase {
     issueId: string,
     fileUri: string,
     fileName: string,
-    commentId?: string,
+    commentId: string,
     mimeType: string,
     visibility: Visibility | null | undefined = null,
   ): Promise<Array<Attachment>> {
@@ -547,9 +545,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  getVisibilityOptions: (issueId: string) => Promise<any> = async (
-    issueId: string,
-  ): Promise<any> => {
+  getVisibilityOptions = async (issueId: string, prefix: string = ''): Promise<any> => {
     const queryString = qs.stringify({
       $top: 50,
       fields: issueFields.getVisibility.toString(),
@@ -561,6 +557,7 @@ export default class IssueAPI extends ApiBase {
           id: issueId,
         },
       ],
+      prefix,
     });
     visibilityOptions.visibilityUsers = ApiHelper.convertRelativeUrls(
       visibilityOptions.visibilityUsers || [],

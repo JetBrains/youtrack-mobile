@@ -1,19 +1,23 @@
-import ApiHelper from './api__helper';
-import log from '../log/log';
 import qs from 'qs';
-import {HTTP_STATUS} from '../error/error-http-codes';
+
+import ApiHelper from './api__helper';
+import log from 'components/log/log';
 import {fetch2, requestController} from './api__request-controller';
+import {HTTP_STATUS} from 'components/error/error-http-codes';
 import {routeMap} from '../../app-routes';
-import type Auth from '../auth/oauth2';
+
+import Auth from 'components/auth/oauth2';
 import type {AppConfig} from 'types/AppConfig';
+import type {CustomError} from 'types/Error';
 import type {RequestHeaders} from 'types/Auth';
+
 const MAX_QUERY_LENGTH = 2048;
 type RequestOptions = {
   controller?: {[key in keyof typeof routeMap]?: AbortController};
   parseJson?: boolean;
 };
 
-function updateQueryStringParameter(uri, key, value) {
+function updateQueryStringParameter(uri: string, key: string, value: string) {
   const re = new RegExp(`([?&])${key}=.*?(&|$)`, 'i');
   const separator = uri.indexOf('?') !== -1 ? '&' : '?';
 
@@ -49,6 +53,7 @@ function assertLongQuery(url: string) {
 }
 
 requestController.init();
+
 export default class BaseAPI {
   auth: Auth;
   config: AppConfig;
@@ -91,12 +96,15 @@ export default class BaseAPI {
     );
   }
 
-  shouldRefreshToken(response: Response): boolean {
-    const err: string =
-      typeof response?.error === 'string' ? typeof response?.error : '';
+  shouldRefreshToken(response: Response | CustomError): boolean {
+    let errText: string = '';
+    const responseError: CustomError = response as CustomError;
+    if (typeof responseError?.error === 'string') {
+      errText = responseError.error;
+    }
     return (
       response.status === HTTP_STATUS.UNAUTHORIZED ||
-      ['invalid_grant', 'invalid_request', 'invalid_token'].includes(err) ||
+      ['invalid_grant', 'invalid_request', 'invalid_token'].includes(errText) ||
       this.auth.isTokenInvalid()
     );
   }
@@ -110,7 +118,7 @@ export default class BaseAPI {
 
   async makeAuthorizedRequest(
     url: string,
-    method: string | null | undefined,
+    method?: string | null | undefined,
     body?: Record<string, any> | null | undefined,
     options: RequestOptions = {
       parseJson: true,
