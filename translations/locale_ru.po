@@ -80,7 +80,7 @@ msgstr "Добавить проект в избранное"
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
-msgstr ""
+msgstr "Добавить реакцию"
 
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
@@ -443,7 +443,7 @@ msgstr "Введите время"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
-msgstr ""
+msgstr "Избранное"
 
 #: src/views/settings/settings-helper.ts
 msgid "Feature request"
@@ -732,7 +732,7 @@ msgstr "Проект"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Projects"
-msgstr ""
+msgstr "Проекты"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Projects collapsed"

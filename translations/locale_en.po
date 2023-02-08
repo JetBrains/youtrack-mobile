@@ -139,7 +139,7 @@ msgstr "Article removed from favorites"
 msgid "Attach file"
 msgstr "Attach file"
 
-#: src/components/attach-file/attach-file-dialog.tsx:239
+#: src/components/attach-file/attach-file-dialog.tsx:242
 #: src/components/attachments-row/attachments-add-panel.tsx:40
 msgid "Attach files"
 msgstr "Attach files"
@@ -190,7 +190,7 @@ msgstr "By logging in, you agree to the Privacy Policy."
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/components/attach-file/attach-file-dialog.tsx:79
+#: src/components/attach-file/attach-file-dialog.tsx:83
 #: src/components/attachments-row/attachment-actions.ts:330
 msgid "Choose from library…"
 msgstr "Choose from library…"
@@ -923,7 +923,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/components/attach-file/attach-file-dialog.tsx:86
+#: src/components/attach-file/attach-file-dialog.tsx:90
 #: src/components/attachments-row/attachment-actions.ts:343
 msgid "Take a picture…"
 msgstr "Take a picture…"
