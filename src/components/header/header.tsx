@@ -47,7 +47,7 @@ export default class Header extends PureComponent<HeaderProps, void> {
     }
   };
 
-  render(): React.ReactNode {
+  render(): JSX.Element {
     const {
       leftButton,
       children,

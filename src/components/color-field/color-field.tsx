@@ -1,17 +1,22 @@
 import React, {PureComponent} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+
 import {secondaryText} from 'components/common-styles/typography';
 import {UNIT} from 'components/variables';
-type Props = {
+
+interface Props {
   text: string;
   color?: Record<string, any>;
   defaultColorCoding?: Record<string, any> | null | undefined;
   fullText?: boolean;
   style?: any;
-};
+}
+
 export const COLOR_FIELD_SIZE = 20;
 const NO_COLOR_CODING_ID = '0';
-export default class ColorField extends PureComponent<Props, void> {
+
+
+export default class ColorField extends PureComponent<Props, Readonly<{}>> {
   _getBackgroundColor() {
     const {defaultColorCoding, color} = this.props;
     return defaultColorCoding
@@ -55,12 +60,7 @@ export default class ColorField extends PureComponent<Props, void> {
         testID="color-field-value-wrapper"
       >
         <Text
-          style={Object.assign(
-            {
-              color: this._getForegroundColor(),
-            },
-            styles.text,
-          )}
+          style={[{color: this._getForegroundColor()}, styles.text]}
           numberOfLines={1}
           testID="color-field-value"
         >
@@ -70,6 +70,7 @@ export default class ColorField extends PureComponent<Props, void> {
     );
   }
 }
+
 const styles = StyleSheet.create({
   wrapper: {
     justifyContent: 'center',

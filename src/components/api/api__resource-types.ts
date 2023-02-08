@@ -53,7 +53,7 @@ type HasMethodName =
 type Entity = Partial<{
   $type: string;
 }>;
-export const hasType: Record<string, any> = function (type: string) {
+export const hasType = function (type: string) {
   return function (it: Entity): boolean {
     return it
       ? it.$type === type || it.$type === getShortEntityType(type)

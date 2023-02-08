@@ -1,6 +1,7 @@
 import log from '../log/log';
 import showNotification from './notification_show';
 import {resolveErrorMessage} from '../error/error-resolver';
+import {CustomError} from 'types/Error';
 const NOTIFY_DURATION: number = 3000;
 let toastComponentRef: any;
 
@@ -12,7 +13,7 @@ const showMessage = function (
 };
 
 export function notifyError(
-  err: Record<string, any>,
+  err: CustomError,
   duration: number = NOTIFY_DURATION * 2,
 ): void {
   resolveErrorMessage(err, true).then((message: string) => {
