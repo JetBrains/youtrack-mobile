@@ -9,40 +9,44 @@ import {
   ActivityIndicator,
   Dimensions,
   Image,
+  ScaledSize,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import attachFile, {attachFileMethod} from './attach-file';
-import AttachmentErrorBoundary from '../attachments-row/attachment-error-boundary';
-import calculateAspectRatio from '../aspect-ratio/aspect-ratio';
-import Header from '../header/header';
-import IconAttachment from '@jetbrains/icons/attachment.svg';
-import ModalPortal from '../modal-view/modal-portal';
-import ModalView from '../modal-view/modal-view';
-import usage from '../usage/usage';
+// @ts-ignore
 import Video from 'react-native-video';
-import VisibilityControl from '../visibility/visibility-control';
-import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
-import {getApi} from '../api/api__instance';
-import {hasMimeType} from '../mime-type/mime-type';
-import {HIT_SLOP} from '../common-styles/button';
+
+import attachFile, {attachFileMethod} from './attach-file';
+import AttachmentErrorBoundary from 'components/attachments-row/attachment-error-boundary';
+import calculateAspectRatio from 'components/aspect-ratio/aspect-ratio';
+import Header from 'components/header/header';
+import IconAttachment from '@jetbrains/icons/attachment.svg';
+import ModalPortal from 'components/modal-view/modal-portal';
+import ModalView from 'components/modal-view/modal-view';
+import usage from 'components/usage/usage';
+import VisibilityControl from 'components/visibility/visibility-control';
+import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
+import {getApi} from 'components/api/api__instance';
+import {hasMimeType} from 'components/mime-type/mime-type';
+import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
-import {IconCamera, IconCheck, IconClose} from '../icon/icon';
-import {isSplitView} from '../responsive/responsive-helper';
-import {logEvent} from '../log/log-helper';
-import {notifyError} from '../notification/notification';
-import {ThemeContext} from '../theme/theme-context';
+import {IconCamera, IconCheck, IconClose} from 'components/icon/icon';
+import {isSplitView} from 'components/responsive/responsive-helper';
+import {logEvent} from 'components/log/log-helper';
+import {notifyError} from 'components/notification/notification';
+import {ThemeContext} from 'components/theme/theme-context';
+
 import styles from './attach-file-dialog.styles';
+
 import type {ActionSheetAction} from 'types/Action';
+import type {CustomError} from 'types/Error';
 import type {ImageDimensions} from 'types/CustomFields';
-import type {DisplayMetrics} from 'react-native/Libraries/Utilities/NativeDeviceInfo';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Theme} from 'types/Theme';
-import type {UserGroup} from 'types/UserGroup';
-import type {User} from 'types/User';
-import type {Visibility} from 'types/Visibility';
+import type {Visibility, VisibilityGroups} from 'types/Visibility';
+
 type Props = {
   actions: {
     onAttach: (
@@ -51,7 +55,7 @@ type Props = {
     ) => any;
     onCancel: () => any;
   };
-  getVisibilityOptions: () => Array<User | UserGroup>;
+  getVisibilityOptions: () => Promise<VisibilityGroups>;
   hideVisibility?: boolean;
   source?: keyof typeof attachFileMethod;
 };
@@ -138,14 +142,14 @@ const AttachFileDialog = (
         updateAttaches(attachedFiles);
       }
     } catch (err) {
-      notifyError(err);
+      notifyError(err as CustomError);
     }
   };
 
   const renderMedia: (file: NormalizedAttachment) => any = (
     file: NormalizedAttachment,
   ): React.ReactElement<React.ComponentProps<typeof Video>, typeof Video> => {
-    const dimensions: DisplayMetrics = Dimensions.get('window');
+    const dimensions: ScaledSize = Dimensions.get('window');
     return (
       <Video
         style={{
@@ -177,7 +181,6 @@ const AttachFileDialog = (
         style={styles.imagePreview}
         resizeMode="contain"
         source={{
-          isStatic: true,
           uri: file?.url,
           width: dimensions?.width,
           height: dimensions?.height,
@@ -306,7 +309,4 @@ const AttachFileDialog = (
   }
 };
 
-export default React.memo<Props>(AttachFileDialog) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(AttachFileDialog);

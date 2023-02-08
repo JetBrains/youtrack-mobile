@@ -1,14 +1,16 @@
+import qs from 'qs';
+
 import ApiBase from './api__base';
 import ApiHelper from './api__helper';
+import issueFields from './api__issue-fields';
+import {handleRelativeUrl} from 'components/config/config';
 import {
   ISSUE_ATTACHMENT_FIELDS,
   ISSUE_ACTIVITIES_FIELDS_LEGACY,
   issueActivitiesFields,
 } from './api__activities-issue-fields';
-import issueFields from './api__issue-fields';
-import qs from 'qs';
-import {handleRelativeUrl} from '../config/config';
-import type Auth from '../auth/oauth2';
+
+import type Auth from 'components/auth/oauth2';
 import type {Activity} from 'types/Activity';
 import type {
   Attachment,
