@@ -1,10 +1,14 @@
-import {View, TouchableOpacity} from 'react-native';
 import React, {PureComponent} from 'react';
-import Avatar from '../avatar/avatar';
-import {IconCheck} from '../icon/icon';
-import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {View, TouchableOpacity} from 'react-native';
+
+import Avatar from 'components/avatar/avatar';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+import {IconCheck} from 'components/icon/icon';
+
 import styles from './select.styles';
+
 import type {ViewStyleProp} from 'types/Internal';
+
 export type Props = {
   item: Record<string, any>;
   isSelected: boolean;
@@ -14,7 +18,9 @@ export type Props = {
   titleRenderer?: (item: Record<string, any>) => any;
   style?: ViewStyleProp;
 };
-export default class SelectItem extends PureComponent<Props, void> {
+
+
+export default class SelectItem extends PureComponent<Props, Readonly<{}>> {
   static defaultProps: {
     isSelected: boolean;
     onPress: (item: any) => void;

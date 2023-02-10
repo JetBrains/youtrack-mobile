@@ -2,6 +2,7 @@ import {
   getEntityPresentation,
   getVisibilityPresentation,
 } from './issue-formatter';
+
 describe('Issue formatter', () => {
   describe('getEntityPresentation', function () {
     it('should return empty string if no parameter is provided', () => {
@@ -10,6 +11,7 @@ describe('Issue formatter', () => {
     it('should return empty string if no parameter has no field to return', () => {
       getEntityPresentation({}).should.equal('');
     });
+
     describe('Has ringId', () => {
       it('should return `fullName`', () => {
         const item = {
@@ -51,6 +53,7 @@ describe('Issue formatter', () => {
         getEntityPresentation(item).should.equal(item.presentation);
       });
     });
+
     describe('Has no ringId', () => {
       it('should return `name` if `ringId` is missing', () => {
         const item = {
@@ -75,6 +78,7 @@ describe('Issue formatter', () => {
       });
     });
   });
+
   describe('getVisibilityPresentation', function () {
     it('should return null if no parameter is provided', () => {
       const visibilityPresentation = getVisibilityPresentation() === null;

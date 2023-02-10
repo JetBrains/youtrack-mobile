@@ -40,10 +40,9 @@ function getReadableID(entity: AnyIssue | Article): string {
 function getEntityPresentation(entity?: Record<string, any>): string {
   let userName: string = '';
 
-  if (typeof entity === 'object') {
+  if (entity) {
     if (!entity.ringId) {
-      userName =
-        entity.localizedName || entity.name || entity.userName || entity.login;
+      userName = entity.localizedName || entity.name || entity.userName || entity.login;
     }
 
     if (!userName) {
@@ -57,7 +56,7 @@ function getEntityPresentation(entity?: Record<string, any>): string {
     }
   }
 
-  return userName;
+  return userName || '';
 }
 
 function getVisibilityPresentation(entity: Record<string, any>): null | string {

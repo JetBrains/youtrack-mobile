@@ -1,6 +1,13 @@
 import {deepClone} from './deepClone';
 
-function toField(fields) {
+export interface ToFieldImpl {
+  constructor: Function;
+  getNormalizedFields: () => Record<string, any>;
+  exclude: (excludedFields: string) => string;
+  toString: (zip?: boolean) => string;
+}
+
+function toField(fields: any): (fields: any) => ToFieldImpl {
   let normalizedFields;
   let fieldsString;
 
