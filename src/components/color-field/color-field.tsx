@@ -48,15 +48,13 @@ export default class ColorField extends PureComponent<Props, Readonly<{}>> {
 
     return (
       <View
-        style={Object.assign(
-          {
-            backgroundColor: this._getBackgroundColor(),
-          },
+        style={[
+          {backgroundColor: this._getBackgroundColor()},
           styles.wrapper,
           !this.props.fullText ? styles.wrapperOneChar : null,
           style,
           defaultColorCoding,
-        )}
+        ]}
         testID="color-field-value-wrapper"
       >
         <Text

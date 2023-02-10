@@ -1,9 +1,12 @@
 import React from 'react';
+
 import {shallow} from 'enzyme';
+
 import ColorField from '../color-field/color-field';
 const fieldBackgroundColorMock = '#000';
 const fieldForegroundColorMock = '#FFF';
 const fieldTextMock = 'Test custom field';
+
 describe('<ColorField/>', () => {
   let fieldMock;
   beforeEach(() => {
@@ -16,6 +19,7 @@ describe('<ColorField/>', () => {
       },
     };
   });
+
   it('should render a component', () => {
     const wrapper = doShallow();
     wrapper.should.be.defined;
@@ -23,6 +27,7 @@ describe('<ColorField/>', () => {
   it('should not throw an exception if `text` prop is not provided', () => {
     expect(() => doShallow(null)).not.toThrow();
   });
+
   describe('Render text', () => {
     it('should render first letter of color field', () => {
       const wrapper = doShallow();
@@ -49,22 +54,23 @@ describe('<ColorField/>', () => {
         .should.have.text(fieldMock.name);
     });
   });
+
   describe('Colorize', () => {
     it('should set background color', () => {
       const container = doShallow().find({
         testID: 'color-field-value-wrapper',
       });
       const values = Object.values(container.props().style);
-      const backgroundColor = values[0];
-      backgroundColor.should.equal(backgroundColor);
+      const backgroundColorStyle = values[0];
+      backgroundColorStyle.backgroundColor.should.equal(fieldBackgroundColorMock);
     });
     it('should set foreground color', () => {
       const container = doShallow().find({
         testID: 'color-field-value',
       });
       const values = Object.values(container.props().style);
-      const foregroundColor = values[0];
-      foregroundColor.should.equal(fieldForegroundColorMock);
+      const foregroundColorStyle = values[0];
+      foregroundColorStyle.color.should.equal(fieldForegroundColorMock);
     });
   });
 
