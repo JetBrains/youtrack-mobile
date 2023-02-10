@@ -1,57 +1,109 @@
-import React from 'react';
-import {SectionList, Text, View} from 'react-native';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import Select, {SelectModal} from './select';
-import {mainText, secondaryText} from 'components/common-styles/typography';
-import {UNIT} from 'components/variables';
-//@ts-expect-error
+import * as React from 'react';
+import {SectionList, SectionListData, Text, View} from 'react-native';
+
+import Select, {SelectModal, ISelectProps, ISelectState, IItem} from './select';
+
+import styles from './select.styles';
+
+
+interface ListSection {
+  title: string;
+}
+
+export type SLItem = SectionListData<IItem, ListSection>;
+
+type State = Omit<ISelectState, 'filteredItems' | 'items'> & {
+  filteredItems: SLItem[];
+  items: SLItem[];
+}
+
+interface Props extends Omit<ISelectProps, 'dataSource'> {
+  dataSource: (query: string) => Promise<SLItem[]>;
+}
+
+
 export class SelectSectionedModal extends SelectModal {
-  constructor(props) {
+  constructor(props: ISelectProps) {
     super(props);
   }
-} //@ts-expect-error
+}
 
-export default class SelectSectioned extends Select {
-  renderSectionHeader: (arg0: any) => void | Node = ({
-    section,
-  }: Record<string, any>) => {
-    if (section.title) {
-      return (
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionHeaderText}>{section.title}</Text>
-        </View>
-      );
-    }
+class SelectSectioned extends Select<Props, State> {
+
+  constructor(props: Props) {
+    super(props);
+    // @ts-ignore
+    this.state = {
+      filteredItems: [],
+      items: [],
+      loaded: false,
+      query: '',
+      selectedItems: props.selectedItems || [],
+    };
+  }
+
+  renderSectionHeader = ({section}: { section: SLItem }): React.ReactNode => {
+    return section.title ? (
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionHeaderText}>{section.title}</Text>
+      </View>
+    ) : null;
   };
 
-  _onSearch(query: string = '') {
-    const {getValue, getTitle} = this.props;
-    const filteredItems = (this.state.items || []).reduce(
-      (filteredSections, section) => {
-        const selectedItems = section.data.filter(item => {
-          const label = (getValue && getValue(item)) || getTitle(item) || '';
-          return label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-        });
-        filteredSections.push({
-          title: section.title,
-          data: selectedItems,
-        });
-        return filteredSections;
-      },
-      [],
+  removeDuplicateItems(source: SLItem[], duplicates: IItem[]): SLItem[] {
+    const selectedMap: Record<string, string> = duplicates.reduce(
+      (akk: Record<string, string>, it: IItem) => (
+        {...akk, [it.id]: it.id}),
+      {}
     );
+    return source?.reduce(
+      (akk: SLItem[], it: SLItem) => [
+        ...akk,
+        {
+          ...it,
+          data: it.data.filter((it: IItem) => !(it.id in selectedMap)),
+        },
+      ],
+        [] as SLItem[]
+    ).filter(
+      (it: SLItem) => it.data.length > 0
+    );
+  }
+
+  setFilteredItems(selected?: IItem[]) {
+    const {items, selectedItems} = this.state;
     this.setState({
-      filteredItems,
+      filteredItems: [
+        {title: '', data: selected || selectedItems},
+        ...this.removeDuplicateItems(items, selected || selectedItems),
+      ],
     });
+  }
+
+  async _onSearch(query: string = '') {
+    this.setState({loaded: false});
+    const items: SLItem[] = await this.props.dataSource(query);
+    this.setState({
+      items,
+      loaded: true,
+    });
+    this.setFilteredItems();
   }
 
   renderHeader() {
     return null;
   }
 
-  renderItems(): any {
+  _onTouchItem(item: IItem) {
+    const selectedItems: IItem[] = super._onTouchItem(item);
+    this.setFilteredItems(selectedItems);
+    return selectedItems;
+  }
+
+  renderItems() {
     const {header = () => null} = this.props;
     return (
+      // @ts-ignore
       <SectionList
         contentContainerStyle={styles.list}
         testID="test:id/selectItem"
@@ -72,22 +124,6 @@ export default class SelectSectioned extends Select {
     );
   }
 }
-const styles = EStyleSheet.create({
-  sectionHeader: {
-    padding: UNIT * 2,
-    paddingBottom: UNIT,
-    backgroundColor: '$background',
-  },
-  searchText: {...mainText, fontWeight: '500', color: '$text'},
-  sectionHeaderText: {
-    textTransform: 'uppercase',
-    ...secondaryText,
-    color: '$icon',
-  },
-  link: {
-    color: '$link',
-  },
-  list: {
-    paddingBottom: UNIT * 4,
-  },
-});
+
+
+export default SelectSectioned;
