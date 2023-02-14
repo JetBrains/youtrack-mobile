@@ -31,7 +31,7 @@ import styles from './activity__add-spent-time.styles';
 import type {AppState} from '../../../reducers';
 import type {IssueFull} from 'types/Issue';
 import type {IssueProject} from 'types/CustomFields';
-import type {SelectProps} from 'components/select/select';
+import type {ISelectProps} from 'components/select/select';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
@@ -154,8 +154,8 @@ const AddSpentTimeForm = (props: Props) => {
     }
   };
 
-  const renderSelect = (selectProps: SelectProps) => {
-    const defaultSelectProps: SelectProps = {
+  const renderSelect = (selectProps: ISelectProps) => {
+    const defaultSelectProps: ISelectProps = {
       multi: false,
       dataSource: () => Promise.resolve([]),
       selectedItems: [],
@@ -173,7 +173,7 @@ const AddSpentTimeForm = (props: Props) => {
     return <Select {...Object.assign({}, defaultSelectProps, selectProps)} />;
   };
 
-  const getUserSelectProps = (): Partial<SelectProps> => {
+  const getUserSelectProps = (): Partial<ISelectProps> => {
     return {
       dataSource: async () =>
         await dispatch(
@@ -192,7 +192,7 @@ const AddSpentTimeForm = (props: Props) => {
     };
   };
 
-  const getWorkTypeSelectProps = (): Partial<SelectProps> => {
+  const getWorkTypeSelectProps = (): Partial<ISelectProps> => {
     return {
       dataSource: async () => {
         const types: WorkItemType[] = await dispatch(

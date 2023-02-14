@@ -3,14 +3,14 @@ import chai, {should} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import chaiEnzyme from 'chai-enzyme';
 import Enzyme from 'enzyme';
-import log from '../src/components/log/log';
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 import mockDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
 import sinonChai from 'sinon-chai';
 
-import {__setStorageState} from '../src/components/storage/storage';
+import log from 'components/log/log';
+import {__setStorageState} from 'components/storage/storage';
+import {buildStyles, DEFAULT_THEME} from 'components/theme/theme';
 import {mockReactNativeNotification} from './jest-mock__react-native-notifications';
-import {buildStyles, DEFAULT_THEME} from '../src/components/theme/theme';
 
 Enzyme.configure({adapter: new Adapter()});
 
@@ -64,3 +64,5 @@ global.AbortController = jest.fn().mockReturnValue({
   signal: {},
   abort: jest.fn(),
 });
+
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');

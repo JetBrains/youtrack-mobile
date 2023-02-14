@@ -44,9 +44,8 @@ import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {AttachmentActions} from '../attachments-row/attachment-actions';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Theme} from 'types/Theme';
-import type {UserGroup} from 'types/UserGroup';
 import type {User} from 'types/User';
-import type {Visibility} from 'types/Visibility';
+import type {Visibility, VisibilityGroups} from 'types/Visibility';
 type UserMentions = {
   users: User[];
 };
@@ -62,7 +61,7 @@ interface Props {
   editingComment?: EditingComment;
   focus?: boolean;
   getCommentSuggestions: (query: string) => Promise<UserMentions>;
-  getVisibilityOptions: () => Promise<(User | UserGroup)[]>;
+  getVisibilityOptions: () => Promise<VisibilityGroups>;
   isArticle?: boolean;
   isEditMode?: boolean;
   onAddSpentTime?: (() => any) | null;

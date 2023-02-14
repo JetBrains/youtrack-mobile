@@ -181,9 +181,9 @@ const VISIBILITY_FIELDS: any = toField([
 const GET_VISIBILITY_FIELDS: any = toField([
   '$type',
   {
+    groupsWithoutRecommended: USER_GROUP_FIELDS,
+    recommendedGroups: USER_GROUP_FIELDS,
     visibilityGroups: USER_GROUP_FIELDS,
-  },
-  {
     visibilityUsers: ISSUE_USER_FIELDS,
   },
 ]);

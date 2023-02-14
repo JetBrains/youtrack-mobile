@@ -60,7 +60,7 @@ import type {
 } from 'types/Article';
 import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
-import type {SelectProps} from 'components/select/select';
+import type {ISelectProps} from 'components/select/select';
 import type {Theme, UITheme} from 'types/Theme';
 type Props = KnowledgeBaseActions &
   KnowledgeBaseState & {
@@ -576,12 +576,11 @@ export class KnowledgeBase extends Component<Props, State> {
     });
   renderProjectSelect: ()=> React.ReactNode = () => {
     const {updateProjectsFavorites} = this.props;
-    const projects: ArticleProject[] = (getStorageState()
-      .projects as any) as Array<ArticleProject>;
+    const projects: ArticleProject[] = getStorageState().projects as ArticleProject[];
     const prevPinnedProjects: ArticleProject[] = projects.filter(
       (it: ArticleProject) => it.pinned,
     );
-    const selectProps: SelectProps = {
+    const selectProps: ISelectProps = {
       placeholder: i18n('Filter projects'),
       multi: true,
       header: () => (
@@ -591,9 +590,9 @@ export class KnowledgeBase extends Component<Props, State> {
           )}
         </Text>
       ),
-      dataSource: () => {
+      dataSource: (q: string = '') => {
         const sortedProjects = getGroupedByFieldNameAlphabetically(
-          projects,
+          projects.filter((it: ArticleProject) => it.name?.indexOf(q) !== -1),
           'pinned',
         );
         return Promise.resolve([

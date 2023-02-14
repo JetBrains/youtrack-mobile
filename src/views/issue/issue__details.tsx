@@ -258,7 +258,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
             visibility={issue.visibility}
             onSubmit={onVisibilityChange}
             uiTheme={this.uiTheme}
-            getOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
+            getOptions={(q: string) => getApi().issue.getVisibilityOptions(issue.id, q)}
           />
         </View>
       );

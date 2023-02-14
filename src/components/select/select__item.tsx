@@ -20,7 +20,7 @@ export type Props = {
 };
 
 
-export default class SelectItem extends PureComponent<Props, Readonly<{}>> {
+export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
   static defaultProps: {
     isSelected: boolean;
     onPress: (item: any) => void;
@@ -61,8 +61,8 @@ export default class SelectItem extends PureComponent<Props, Readonly<{}>> {
 
     return (
       <TouchableOpacity
-        testID="test:id/selectItem"
-        accessibilityLabel="selectItem"
+        testID="test:id/selectListItem"
+        accessibilityLabel="selectListItem"
         accessible={true}
         key={item.id}
         style={[styles.row, style]}

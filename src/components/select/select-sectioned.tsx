@@ -1,6 +1,9 @@
 import * as React from 'react';
 import {SectionList, SectionListData, Text, View} from 'react-native';
 
+import Animated, {FadeIn} from 'react-native-reanimated';
+import debounce from 'lodash.debounce';
+
 import Select, {SelectModal, ISelectProps, ISelectState, IItem} from './select';
 
 import styles from './select.styles';
@@ -80,7 +83,7 @@ class SelectSectioned extends Select<Props, State> {
     });
   }
 
-  async _onSearch(query: string = '') {
+  _onSearch = async (query: string = '') => {
     this.setState({loaded: false});
     const items: SLItem[] = await this.props.dataSource(query);
     this.setState({
@@ -88,7 +91,14 @@ class SelectSectioned extends Select<Props, State> {
       loaded: true,
     });
     this.setFilteredItems();
-  }
+  };
+
+  _onSearchDebounced = debounce(this._onSearch, 300);
+
+  onChangeText = (text: string) => {
+    this.setState({query: text});
+    this._onSearchDebounced(text);
+  };
 
   renderHeader() {
     return null;
@@ -103,24 +113,27 @@ class SelectSectioned extends Select<Props, State> {
   renderItems() {
     const {header = () => null} = this.props;
     return (
-      // @ts-ignore
-      <SectionList
-        contentContainerStyle={styles.list}
-        testID="test:id/selectItem"
-        accessibilityLabel="selectItem"
-        accessible={true}
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
-        scrollEventThrottle={10}
-        sections={this.state.filteredItems}
-        keyExtractor={this.getItemKey}
-        renderItem={this.renderItem}
-        renderSectionHeader={this.renderSectionHeader}
-        ListEmptyComponent={null}
-        ListHeaderComponent={header()}
-        ItemSeparatorComponent={Select.renderSeparator}
-        getItemLayout={Select.getItemLayout}
-      />
+      <Animated.View
+        layout={FadeIn.duration(500)}
+      >
+        <SectionList
+          contentContainerStyle={styles.list}
+          testID="test:id/selectListSectioned"
+          accessibilityLabel="selectListSectioned"
+          accessible={true}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          scrollEventThrottle={10}
+          sections={this.state.filteredItems}
+          keyExtractor={this.getItemKey}
+          renderItem={this.renderItem}
+          renderSectionHeader={this.renderSectionHeader}
+          ListEmptyComponent={null}
+          ListHeaderComponent={header()}
+          ItemSeparatorComponent={Select.renderSeparator}
+          getItemLayout={Select.getItemLayout}
+        />
+      </Animated.View>
     );
   }
 }

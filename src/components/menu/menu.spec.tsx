@@ -142,7 +142,7 @@ describe('<Menu/>', () => {
   });
   describe('Inbox status polling', () => {
     beforeAll(() => {
-      jest.useFakeTimers('legacy');
+      jest.useFakeTimers({advanceTimers: true});
     });
     afterAll(() => {
       jest.useRealTimers();

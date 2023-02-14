@@ -5,7 +5,7 @@ module.exports = {
   'automock': false,
   'resetMocks': false,
   'transform': {
-    '^.+\\.(js|ts)$': 'babel-jest',
+    '^.+\\.(js|ts|tsx)$': 'babel-jest',
     '^[./a-zA-Z0-9$_-]+\\.(gif|jpg|jpeg|png|svg)$': 'jest-transform-stub',
   },
   'moduleNameMapper': {

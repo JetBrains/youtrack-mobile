@@ -1,41 +1,47 @@
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {sortAlphabetically} from '../search/sorting';
-import {hasType} from '../api/api__resource-types';
-import {getEntityPresentation} from '../issue-formatter/issue-formatter';
-import {i18n} from 'components/i18n/i18n';
-import {IconAngleDown, IconClose, IconLock} from '../icon/icon';
-import Select from '../select/select';
+
 import IssueVisibility from './issue-visibility';
+import SelectSectioned, {SLItem} from 'components/select/select-sectioned';
+import {DEFAULT_THEME} from 'components/theme/theme';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+import {hasType} from 'components/api/api__resource-types';
+import {HIT_SLOP} from 'components/common-styles';
+import {i18n} from 'components/i18n/i18n';
+import {IconAngleDown, IconClose, IconLock} from 'components/icon/icon';
+import {sortAlphabetically} from '../search/sorting';
 import {visibilityDefaultText} from './visibility-strings';
-import {HIT_SLOP} from '../common-styles/button';
-import {DEFAULT_THEME} from '../theme/theme';
+
 import styles from './visibility-control.styles';
-import type {User} from 'types/User';
-import type {UserGroup} from 'types/UserGroup';
-import type {Visibility} from 'types/Visibility';
-import type {ViewStyleProp} from 'types/Internal';
+
 import type {UITheme} from 'types/Theme';
-type Props = {
-  getOptions: () => Array<User | UserGroup>;
+import type {User} from 'types/User';
+import type {ViewStyleProp} from 'types/Internal';
+import type {Visibility, VisibilityGroups, VisibilityItem} from 'types/Visibility';
+
+interface Props {
+  getOptions: (q: string | undefined) => Promise<VisibilityGroups>;
   onApply: (visibility: Visibility) => any;
   onHide?: () => any;
   onShow?: () => any;
   onSubmit?: ((visibility: Visibility) => any) | null | undefined;
-  style?: ViewStyleProp;
+  style: ViewStyleProp | null;
   uiTheme: UITheme;
   visibility: Visibility | null;
   visibilityDefaultLabel?: string;
-};
+}
+
 type State = {
-  visibility: Visibility | null;
   isSelectVisible: boolean;
+  visibility: Visibility | null;
 };
+
+
 export default class VisibilityControl extends PureComponent<Props, State> {
   static defaultProps: Partial<Props> = {
     visibility: null,
     onApply: (visibility: Visibility) => null,
-    getOptions: () => [],
+    getOptions: () => Promise.resolve({} as VisibilityGroups),
     style: null,
     uiTheme: DEFAULT_THEME,
   };
@@ -70,36 +76,54 @@ export default class VisibilityControl extends PureComponent<Props, State> {
 
     this.props.onApply(visibility);
   };
-  getVisibilityOptions: () => Array<User | UserGroup> = async () => {
+  getVisibilityOptions = async (q: string | undefined): Promise<VisibilityGroups> => {
     try {
-      return this.props.getOptions();
+      return await this.props.getOptions(q);
     } catch (e) {
-      return {};
+      return {} as VisibilityGroups;
     }
   };
-  createSelectItems: (visibility: Visibility) => Array<User | UserGroup> = (
-    visibility: Visibility,
-  ): Array<User | UserGroup> => {
-    const visibilityGroups: UserGroup[] = (
-      visibility.visibilityGroups ||
-      visibility.permittedGroups ||
-      []
-    )
-      .filter((group: UserGroup) => !group.allUsersGroup)
-      .sort(sortAlphabetically);
-    const visibilityUsers: User[] = (
-      visibility.visibilityUsers ||
-      visibility.permittedUsers ||
-      []
-    ).sort(sortAlphabetically);
-    return visibilityGroups.concat(visibilityUsers);
+
+  getGroupedData = async (q: string) => {
+    const vg: VisibilityGroups = await this.getVisibilityOptions(q);
+    const sort = (data: VisibilityItem[] = []): VisibilityItem[] => (
+      data
+        .filter((group: VisibilityItem & { allUsersGroup?: boolean }) => !group.allUsersGroup)
+        .sort(sortAlphabetically)
+    );
+    const recommendedGroups: VisibilityItem[] = sort(vg.recommendedGroups);
+    const groupsWithoutRecommended: VisibilityItem[] = (
+      vg.groupsWithoutRecommended != null
+        ? vg.groupsWithoutRecommended
+        : vg.visibilityGroups
+    );
+    const grouped: {
+      groups: { data: VisibilityItem[]; title: string };
+      users: { data: VisibilityItem[]; title: string };
+      recommended: { data: VisibilityItem[]; title: string }
+    } = {
+      recommended: {
+        title: i18n('Recommended groups and teams'),
+        data: recommendedGroups,
+      },
+      groups: {
+        title: recommendedGroups.length > 0 ? i18n('Other groups and teams') : i18n('Groups and teams'),
+        data: sort(groupsWithoutRecommended),
+      },
+      users: {
+        title: i18n('Users'),
+        data: sort(vg.visibilityUsers),
+      },
+    };
+
+    return Object.keys(grouped).reduce(
+      (akk: SLItem[], key: string) => [
+        ...akk,
+        ...(grouped[key as keyof typeof grouped].data.length > 0 ? [grouped[key as keyof typeof grouped]] : [])],
+      [] as SLItem[]
+    );
   };
-  getVisibilitySelectItems: () => Promise<
-    Array<User | UserGroup>
-  > = async () => {
-    const visibility: Visibility = await this.getVisibilityOptions();
-    return this.createSelectItems(visibility);
-  };
+
   setSelectVisible: (isVisible: boolean) => void = (isVisible: boolean) => {
     const noop: () => void = (): void => {};
 
@@ -121,37 +145,36 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   closeSelect: () => void = () => {
     this.setSelectVisible(false);
   };
-  onSelect: (
-    selectedItems: Array<User | UserGroup> | null | undefined,
-  ) => void = (selectedItems: Array<User | UserGroup> | null | undefined) => {
+  onSelect = (selectedItems: VisibilityItem[] | null) => {
+    const selected: VisibilityItem[] = selectedItems || [];
     const visibility: Visibility = IssueVisibility.visibility({
-      permittedGroups: (selectedItems || []).filter(it =>
-        hasType.userGroup(it),
-      ),
-      permittedUsers: (selectedItems || []).filter(it => hasType.user(it)),
+      permittedGroups: selected.filter((it: VisibilityItem) => hasType.userGroup(it)),
+      permittedUsers: selected.filter((it: VisibilityItem) => hasType.user(it)),
     });
-    this.updateVisibility(visibility);
+    this.updateVisibility({
+      ...this.props.visibility,
+      ...visibility,
+    });
     this.closeSelect();
   };
   resetVisibility: () => void = () => {
     this.updateVisibility(null);
   };
-  getVisibilitySelectedItems: () => Array<User | UserGroup> = (): Array<
-    User | UserGroup
-  > => {
+  getVisibilitySelectedItems: () => VisibilityItem[] = () => {
     const {visibility} = this.state;
-    return visibility
-      ? []
-          .concat(visibility.permittedGroups || [])
-          .concat(visibility.permittedUsers || [])
-      : [];
+    const v: VisibilityItem[] = [];
+    return (
+      visibility
+        ? v.concat(visibility?.permittedGroups || []).concat(visibility?.permittedUsers || [])
+        : v
+    );
   };
-  getItemTitle: (item: any) => any = (item: Record<string, any>) =>
-    getEntityPresentation(item);
+
+  getItemTitle: (item: any) => any = (item: Record<string, any>) => getEntityPresentation(item);
 
   renderSelect(): React.ReactNode {
     return (
-      <Select
+      <SelectSectioned
         testID="test:id/visibility-control-button"
         accessibilityLabel="visibility-control-button"
         accessible={true}
@@ -160,7 +183,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
         placeholder={i18n('Filter users, groups, and teams')}
         selectedItems={this.getVisibilitySelectedItems()}
         getTitle={this.getItemTitle}
-        dataSource={this.getVisibilitySelectItems}
+        dataSource={this.getGroupedData}
         onSelect={this.onSelect}
         onCancel={this.closeSelect}
       />
@@ -168,9 +191,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   }
 
   getVisibilityPresentation(visibility: Visibility): string {
-    const author: User | null | undefined =
-      visibility?.implicitPermittedUsers &&
-      visibility.implicitPermittedUsers[0];
+    const author: User | undefined = visibility?.implicitPermittedUsers && visibility.implicitPermittedUsers[0];
     return [
       getEntityPresentation(author),
       IssueVisibility.getVisibilityShortPresentation(visibility),
@@ -189,8 +210,8 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     const label: string = visibility?.inherited
       ? 'Inherited restrictions'
       : isSecured
-      ? this.getVisibilityPresentation(visibility)
-      : visibilityDefaultLabel;
+        ? this.getVisibilityPresentation(visibility)
+        : visibilityDefaultLabel;
     return (
       <View
         testID="test:id/visibilityControlButton"
@@ -204,7 +225,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
             onPress={this.resetVisibility}
             hitSlop={HIT_SLOP}
           >
-            <IconClose size={16} color={this.props.uiTheme.colors.$link} />
+            <IconClose size={16} color={this.props.uiTheme.colors.$link}/>
           </TouchableOpacity>
         )}
 
@@ -221,7 +242,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
             />
           )}
           <Text style={styles.buttonText}>{label}</Text>
-          <IconAngleDown size={20} color={this.props.uiTheme.colors.$icon} />
+          <IconAngleDown size={20} color={this.props.uiTheme.colors.$icon}/>
         </TouchableOpacity>
       </View>
     );

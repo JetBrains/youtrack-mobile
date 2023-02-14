@@ -10,6 +10,7 @@ module.exports = {
           actions: './src/actions',
           assets: './src/assets',
           components: './src/components',
+          test: './test',
           types: './src/types',
           util: './src/util',
           views: './src/views',

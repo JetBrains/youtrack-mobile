@@ -280,8 +280,8 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     return (
       // @ts-ignore
       <FlatList
-        testID="test:id/selectItem"
-        accessibilityLabel="selectItem"
+        testID="test:id/selectList"
+        accessibilityLabel="selectList"
         accessible={true}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
@@ -315,9 +315,14 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
 
   renderHeader() {
     return this.props.header ? (
-      <View style={styles.note}>{this.props.header()}</View>
+      <View testID="test:id/selectHeader" style={styles.note}>{this.props.header()}</View>
     ) : null;
   }
+
+  onChangeText = (text: string) => {
+    this.setState({query: text});
+    this._onSearch(text);
+  };
 
   renderContent = (): React.ReactNode => {
     const {
@@ -333,7 +338,11 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
       animationType: 'slide',
     });
     return (
-      <WrapperComponent testID="select" {...wrapperProps} style={style}>
+      <WrapperComponent
+        testID="test:id/select"
+        {...wrapperProps}
+        style={style}
+      >
         {this.renderHeader()}
         {!noFilter && (
           <View style={styles.inputWrapper}>
@@ -362,10 +371,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
               underlineColorAndroid="transparent"
               onSubmitEditing={() => multi ? this._onSave() : this._onSearch(this.state.query)}
               value={this.state.query}
-              onChangeText={(text: string) => {
-                this.setState({query: text});
-                this._onSearch(text);
-              }}
+              onChangeText={this.onChangeText}
               autoCapitalize="none"
               style={styles.searchInput}
             />
@@ -436,6 +442,7 @@ export class SelectModal extends Select<ISelectProps, ISelectState & { visible: 
     const {visible} = this.state;
     return (
       <ModalPortal
+        testID="test:id/selectModalContainer"
         style={styles.modalPortalSelectContent}
         onHide={this.onCancel}
       >

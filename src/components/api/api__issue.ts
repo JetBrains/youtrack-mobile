@@ -547,7 +547,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  getVisibilityOptions = async (issueId: string, prefix: string = ''): Promise<any> => {
+  getVisibilityOptions = async (issueId: string, prefix: string = '', skip: number = 0, top: number = 20): Promise<any> => {
     const queryString = qs.stringify({
       $top: 50,
       fields: issueFields.getVisibility.toString(),
@@ -560,6 +560,8 @@ export default class IssueAPI extends ApiBase {
         },
       ],
       prefix,
+      skip,
+      top,
     });
     visibilityOptions.visibilityUsers = ApiHelper.convertRelativeUrls(
       visibilityOptions.visibilityUsers || [],

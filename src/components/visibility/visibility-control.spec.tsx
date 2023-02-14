@@ -2,6 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import {ResourceTypes} from '../api/api__resource-types';
 import VisibilityControl from './visibility-control';
+import {VisibilityGroups} from 'types/Visibility';
 describe('<VisibilityControl/>', () => {
   let wrapper;
   let instance;
@@ -86,7 +87,7 @@ describe('<VisibilityControl/>', () => {
         visibility={visibility}
         onApply={onApply}
         onSubmit={onSubmit}
-        getOptions={() => []}
+        getOptions={() => Promise.resolve({} as VisibilityGroups)}
       />,
     );
   }
