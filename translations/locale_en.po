@@ -70,7 +70,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:665
+#: src/components/comment/comment-edit.tsx:664
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -134,7 +134,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:634
+#: src/components/comment/comment-edit.tsx:633
 #: src/views/issue/issue-base-actions-creater.ts:667
 msgid "Attach file"
 msgstr "Attach file"
@@ -402,7 +402,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:683
+#: src/components/comment/comment-edit.tsx:682
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -427,7 +427,7 @@ msgstr "Enter the web address for a YouTrack installation where you have a regis
 msgid "Enter time value"
 msgstr "Enter time value"
 
-#: src/views/knowledge-base/knowledge-base.tsx:601
+#: src/views/knowledge-base/knowledge-base.tsx:600
 msgid "Favorites"
 msgstr "Favorites"
 
@@ -439,12 +439,12 @@ msgstr "Feature request"
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
-#: src/components/select/select.tsx:353
+#: src/components/select/select.tsx:332
 msgid "Filter items"
 msgstr "Filter items"
 
 #: src/views/article-create/article-create.tsx:146
-#: src/views/knowledge-base/knowledge-base.tsx:585
+#: src/views/knowledge-base/knowledge-base.tsx:584
 msgid "Filter projects"
 msgstr "Filter projects"
 
@@ -465,11 +465,11 @@ msgstr "Filter sprints by name"
 msgid "Filter tags"
 msgstr "Filter tags"
 
-#: src/components/visibility/visibility-control.tsx:160
+#: src/components/visibility/visibility-control.tsx:183
 msgid "Filter users, groups, and teams"
 msgstr "Filter users, groups, and teams"
 
-#: src/views/knowledge-base/knowledge-base.tsx:661
+#: src/views/knowledge-base/knowledge-base.tsx:660
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
@@ -477,11 +477,15 @@ msgstr "Find favorite projects"
 msgid "Get help"
 msgstr "Get help"
 
+#: src/components/visibility/visibility-control.tsx:110
+msgid "Groups and teams"
+msgstr "Groups and teams"
+
 #: src/components/error-boundary/error-boundary.tsx:97
 msgid "Help us fix problems faster"
 msgstr "Help us fix problems faster"
 
-#: src/views/knowledge-base/knowledge-base.tsx:650
+#: src/views/knowledge-base/knowledge-base.tsx:649
 msgid "Here you'll see a list of articles from your favorite projects"
 msgstr "Here you'll see a list of articles from your favorite projects"
 
@@ -537,7 +541,7 @@ msgstr "JetBrains Privacy Policy"
 msgid "just now"
 msgstr "just now"
 
-#: src/views/knowledge-base/knowledge-base.tsx:707
+#: src/views/knowledge-base/knowledge-base.tsx:706
 msgid "Knowledge Base"
 msgstr "Knowledge Base"
 
@@ -565,7 +569,7 @@ msgstr "Link to comment copied"
 msgid "Linked issues"
 msgstr "Linked issues"
 
-#: src/components/select/select.tsx:421
+#: src/components/select/select.tsx:396
 msgid "Loading values…"
 msgstr "Loading values…"
 
@@ -669,7 +673,7 @@ msgstr "No favorites projects found"
 msgid "No issues found"
 msgstr "No issues found"
 
-#: src/components/select/select.tsx:426
+#: src/components/select/select.tsx:401
 msgid "No items"
 msgstr "No items"
 
@@ -702,6 +706,10 @@ msgstr "Notifications"
 msgid "Other"
 msgstr "Other"
 
+#: src/components/visibility/visibility-control.tsx:110
+msgid "Other groups and teams"
+msgstr "Other groups and teams"
+
 #: src/views/log-in/log-in.tsx:253
 msgid "Password"
 msgstr "Password"
@@ -714,7 +722,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/knowledge-base/knowledge-base.tsx:605
+#: src/views/knowledge-base/knowledge-base.tsx:604
 msgid "Projects"
 msgstr "Projects"
 
@@ -730,6 +738,10 @@ msgstr "Projects expanded"
 #: src/views/issues/issues-actions.ts:236
 msgid "Recent searches"
 msgstr "Recent searches"
+
+#: src/components/visibility/visibility-control.tsx:106
+msgid "Recommended groups and teams"
+msgstr "Recommended groups and teams"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts:385
 msgid "Remove"
@@ -785,7 +797,7 @@ msgstr "Search for a different value"
 msgid "Search for the project"
 msgstr "Search for the project"
 
-#: src/views/knowledge-base/knowledge-base.tsx:753
+#: src/views/knowledge-base/knowledge-base.tsx:752
 msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
@@ -1020,7 +1032,7 @@ msgstr "Title changed"
 msgid "To view an item in context, select an issue, article, or update from the list"
 msgstr "To view an item in context, select an issue, article, or update from the list"
 
-#: src/views/knowledge-base/knowledge-base.tsx:589
+#: src/views/knowledge-base/knowledge-base.tsx:588
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
 msgstr "To view articles in the knowledge base for a specific project, mark it as a favorite"
 
@@ -1073,6 +1085,10 @@ msgstr "User account is banned"
 msgid "Username or email"
 msgstr "Username or email"
 
+#: src/components/visibility/visibility-control.tsx:114
+msgid "Users"
+msgstr "Users"
+
 #: src/components/activity/activity-helper.ts:49
 msgid "VCS changes"
 msgstr "VCS changes"
@@ -1109,7 +1125,7 @@ msgstr "When integrating TeamCity and YouTrack, the users are matched by their e
 msgid "Woah, you can't touch this!"
 msgstr "Woah, you can't touch this!"
 
-#: src/components/comment/comment-edit.tsx:490
+#: src/components/comment/comment-edit.tsx:489
 #: src/views/issue/activity/activity__add-spent-time.tsx:426
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"

@@ -479,6 +479,10 @@ msgstr "즐겨찾는 프로젝트 찾기"
 msgid "Get help"
 msgstr "도움 받기"
 
+#: src/components/visibility/visibility-control.tsx
+msgid "Groups and teams"
+msgstr ""
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
 msgstr "문제를 더 빨리 해결할 수 있도록 도움 받기"
@@ -703,6 +707,10 @@ msgstr "알림"
 msgid "Other"
 msgstr "기타"
 
+#: src/components/visibility/visibility-control.tsx
+msgid "Other groups and teams"
+msgstr ""
+
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "비밀번호"
@@ -731,6 +739,10 @@ msgstr "확장된 프로젝트"
 #: src/views/issues/issues-actions.ts
 msgid "Recent searches"
 msgstr "최근 검색"
+
+#: src/components/visibility/visibility-control.tsx
+msgid "Recommended groups and teams"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
@@ -1072,6 +1084,10 @@ msgstr "사용자 계정이 금지됨"
 #: src/views/log-in/log-in.tsx
 msgid "Username or email"
 msgstr "사용자 이름 또는 이메일"
+
+#: src/components/visibility/visibility-control.tsx
+msgid "Users"
+msgstr ""
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"

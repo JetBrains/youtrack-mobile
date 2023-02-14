@@ -483,6 +483,10 @@ msgstr "Projektfavoriten finden"
 msgid "Get help"
 msgstr "Hilfe erhalten"
 
+#: src/components/visibility/visibility-control.tsx
+msgid "Groups and teams"
+msgstr ""
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
 msgstr "Helfen Sie uns, Probleme schneller zu lösen"
@@ -708,6 +712,10 @@ msgstr "Benachrichtigungen"
 msgid "Other"
 msgstr "Sonstiges"
 
+#: src/components/visibility/visibility-control.tsx
+msgid "Other groups and teams"
+msgstr ""
+
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "Kennwort"
@@ -736,6 +744,10 @@ msgstr "Projekte erweitert"
 #: src/views/issues/issues-actions.ts
 msgid "Recent searches"
 msgstr "Letzte Suchanfragen"
+
+#: src/components/visibility/visibility-control.tsx
+msgid "Recommended groups and teams"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
@@ -1078,6 +1090,10 @@ msgstr "Das Benutzerkonto ist gesperrt"
 #: src/views/log-in/log-in.tsx
 msgid "Username or email"
 msgstr "Benutzername oder E-Mail"
+
+#: src/components/visibility/visibility-control.tsx
+msgid "Users"
+msgstr ""
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"

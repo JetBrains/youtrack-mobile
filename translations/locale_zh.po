@@ -479,6 +479,10 @@ msgstr "查找收藏的项目"
 msgid "Get help"
 msgstr "获取帮助"
 
+#: src/components/visibility/visibility-control.tsx
+msgid "Groups and teams"
+msgstr ""
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
 msgstr "帮助我们更快地修正问题"
@@ -703,6 +707,10 @@ msgstr "通知"
 msgid "Other"
 msgstr "其他"
 
+#: src/components/visibility/visibility-control.tsx
+msgid "Other groups and teams"
+msgstr ""
+
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "密码"
@@ -731,6 +739,10 @@ msgstr "已展开项目"
 #: src/views/issues/issues-actions.ts
 msgid "Recent searches"
 msgstr "最近的搜索"
+
+#: src/components/visibility/visibility-control.tsx
+msgid "Recommended groups and teams"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
@@ -1072,6 +1084,10 @@ msgstr "用户帐户被禁言"
 #: src/views/log-in/log-in.tsx
 msgid "Username or email"
 msgstr "用户名或电子邮件"
+
+#: src/components/visibility/visibility-control.tsx
+msgid "Users"
+msgstr ""
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"

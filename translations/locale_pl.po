@@ -491,6 +491,10 @@ msgstr ""
 msgid "Get help"
 msgstr ""
 
+#: src/components/visibility/visibility-control.tsx
+msgid "Groups and teams"
+msgstr "Grupy i zespoły"
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
 msgstr ""
@@ -718,6 +722,10 @@ msgstr "Powiadomienia"
 msgid "Other"
 msgstr "Inne"
 
+#: src/components/visibility/visibility-control.tsx
+msgid "Other groups and teams"
+msgstr "Inne grupy i zespoły"
+
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "Hasło"
@@ -746,6 +754,10 @@ msgstr ""
 #: src/views/issues/issues-actions.ts
 msgid "Recent searches"
 msgstr ""
+
+#: src/components/visibility/visibility-control.tsx
+msgid "Recommended groups and teams"
+msgstr "Polecane grupy i zespoły"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
@@ -1090,6 +1102,10 @@ msgstr ""
 #: src/views/log-in/log-in.tsx
 msgid "Username or email"
 msgstr ""
+
+#: src/components/visibility/visibility-control.tsx
+msgid "Users"
+msgstr "Użytkownicy"
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"

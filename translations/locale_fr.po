@@ -483,6 +483,10 @@ msgstr "Retrouver vos projets favoris"
 msgid "Get help"
 msgstr "Obtenir de l'aide"
 
+#: src/components/visibility/visibility-control.tsx
+msgid "Groups and teams"
+msgstr ""
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
 msgstr "Aidez-nous à résoudre les problèmes plus rapidement"
@@ -708,6 +712,10 @@ msgstr "Notifications"
 msgid "Other"
 msgstr "Autre"
 
+#: src/components/visibility/visibility-control.tsx
+msgid "Other groups and teams"
+msgstr ""
+
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "Mot de passe"
@@ -736,6 +744,10 @@ msgstr "Projets développés"
 #: src/views/issues/issues-actions.ts
 msgid "Recent searches"
 msgstr "Recherches récentes"
+
+#: src/components/visibility/visibility-control.tsx
+msgid "Recommended groups and teams"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
@@ -1078,6 +1090,10 @@ msgstr "Le compte utilisateur est exclu"
 #: src/views/log-in/log-in.tsx
 msgid "Username or email"
 msgstr "Nom d'utilisateur ou adresse e-mail"
+
+#: src/components/visibility/visibility-control.tsx
+msgid "Users"
+msgstr ""
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"

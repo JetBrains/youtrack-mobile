@@ -479,6 +479,10 @@ msgstr "お気に入りプロジェクトを検索"
 msgid "Get help"
 msgstr "ヘルプを表示"
 
+#: src/components/visibility/visibility-control.tsx
+msgid "Groups and teams"
+msgstr ""
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
 msgstr "問題の迅速な解決に役立ちます"
@@ -703,6 +707,10 @@ msgstr "通知"
 msgid "Other"
 msgstr "その他"
 
+#: src/components/visibility/visibility-control.tsx
+msgid "Other groups and teams"
+msgstr ""
+
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "パスワード"
@@ -731,6 +739,10 @@ msgstr "プロジェクトが展開されました"
 #: src/views/issues/issues-actions.ts
 msgid "Recent searches"
 msgstr "最近の検索条件"
+
+#: src/components/visibility/visibility-control.tsx
+msgid "Recommended groups and teams"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
@@ -1072,6 +1084,10 @@ msgstr "ユーザーアカウントは禁止されています"
 #: src/views/log-in/log-in.tsx
 msgid "Username or email"
 msgstr "ユーザー名またはメールアドレス"
+
+#: src/components/visibility/visibility-control.tsx
+msgid "Users"
+msgstr ""
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"
