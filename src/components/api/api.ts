@@ -1,4 +1,4 @@
-import qs from 'qs';
+import * as qs from 'qs';
 import AgileAPI from './api__agile';
 import ApiHelper from './api__helper';
 import ArticlesAPI from './api__articles';

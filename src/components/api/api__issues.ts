@@ -58,7 +58,7 @@ export default class IssuesAPI extends ApiBase {
     query: string | null = null,
     folder: Folder | null | undefined,
     unresolvedOnly: boolean = false,
-    abortController: AbortController,
+    abortController?: AbortController,
   ): Promise<number> {
     const isActualVersion: boolean = checkVersion(FEATURE_VERSION.issuesGetter);
     type Count = 'count' | 'value';
@@ -72,7 +72,7 @@ export default class IssuesAPI extends ApiBase {
 
   issuesCountLegacy(
     query: string | null,
-    abortController: AbortController,
+    abortController?: AbortController,
   ): Promise<number> {
     const queryString = qs.stringify({
       sync: false,
@@ -93,7 +93,7 @@ export default class IssuesAPI extends ApiBase {
     query: string | null = null,
     folder: Folder | null | undefined,
     unresolvedOnly: boolean = false,
-    abortController: AbortController,
+    abortController?: AbortController,
   ): Promise<number> {
     return this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/issuesGetter/count?fields=count`,
