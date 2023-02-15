@@ -16,8 +16,9 @@ import {activityArticleCategory} from '../activity/activity__category';
 import type {Activity} from 'types/Activity';
 import type {Article, ArticleDraft} from 'types/Article';
 import type {Attachment, IssueComment} from 'types/CustomFields';
-import {UserGroup} from 'types/UserGroup';
-import {User} from 'types/User';
+import {VisibilityGroups} from 'types/Visibility';
+
+
 export default class ArticlesAPI extends ApiBase {
   articleFieldsQuery: string = ApiBase.createFieldsQuery(articleFields);
   categories: string[] = Object.keys(activityArticleCategory).map(
@@ -27,6 +28,7 @@ export default class ArticlesAPI extends ApiBase {
   articleCommentFieldsQuery: string = ApiBase.createFieldsQuery(
     this.commentFields,
   );
+  currentUserAPIUrl: string = `${this.youTrackApiUrl}${this.isActualAPI ? '' : '/admin'}/users/me`;
 
   convertAttachmentsURL(attachments: Attachment[]): Attachment[] {
     return ApiHelper.convertAttachmentRelativeToAbsURLs(
@@ -57,20 +59,10 @@ export default class ArticlesAPI extends ApiBase {
     $skip: number = 0,
   ): Promise<Array<Article>> {
     const fields: string = ApiBase.createFieldsQuery(articlesFields, {
-      ...{
-        $top,
-      },
-      ...{
-        $skip,
-      },
-      ...(folder
-        ? {
-            folder,
-          }
-        : {}),
-      ...{
-        query,
-      },
+      $top,
+      $skip,
+      ...(folder ? {folder} : {}),
+      query,
     });
     return this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/articles?${fields}`,
@@ -124,7 +116,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async getArticleDrafts(original?: string): Promise<Array<ArticleDraft>> {
     const originalParam: string = `&original=${original || 'null'}`;
-    const url: string = `${this.youTrackApiUrl}/users/me/articleDrafts/?${this.articleFieldsQuery}${originalParam}&$top=1000`;
+    const url: string = `${this.currentUserAPIUrl}/articleDrafts/?${this.articleFieldsQuery}${originalParam}&$top=1000`;
     const articleDrafts: ArticleDraft[] = await this.makeAuthorizedRequest(
       url,
       'GET',
@@ -137,7 +129,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async createArticleDraft(articleId?: string): Promise<ArticleDraft> {
     const draft: ArticleDraft = await this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/users/me/articleDrafts?${this.articleFieldsQuery}`,
+      `${this.currentUserAPIUrl}/articleDrafts?${this.articleFieldsQuery}`,
       'POST',
       articleId
         ? {
@@ -160,7 +152,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async createSubArticleDraft(article: Article): Promise<Article> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/users/me/articleDrafts?${this.articleFieldsQuery}`,
+      `${this.currentUserAPIUrl}/articleDrafts?${this.articleFieldsQuery}`,
       'POST',
       {
         content: '',
@@ -176,7 +168,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async updateArticleDraft(articleDraft: Article): Promise<Article> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/users/me/articleDrafts/${articleDraft.id}?${this.articleFieldsQuery}`,
+      `${this.currentUserAPIUrl}/articleDrafts/${articleDraft.id}?${this.articleFieldsQuery}`,
       'POST',
       {
         content: articleDraft.content,
@@ -210,7 +202,7 @@ export default class ArticlesAPI extends ApiBase {
 
   async deleteDraft(articleId: string): Promise<any> {
     return this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/users/me/articleDrafts/${articleId}`,
+      `${this.currentUserAPIUrl}/articleDrafts/${articleId}`,
       'DELETE',
       null,
       {
@@ -219,7 +211,7 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
-  getVisibilityOptions = async (articleId: string, url?: string): Promise<(User | UserGroup)[]> => {
+  getVisibilityOptions = async (articleId: string, url?: string): Promise<VisibilityGroups> => {
     const queryString = ApiBase.createFieldsQuery(
       issueFields.getVisibility.toString(),
       {
@@ -234,12 +226,12 @@ export default class ArticlesAPI extends ApiBase {
       'GET',
     );
   };
-  getDraftVisibilityOptions: (articleId: string) => Promise<Article> = async (
+  getDraftVisibilityOptions: (articleId: string) => Promise<VisibilityGroups> = async (
     articleId: string,
   ): Promise<Article> =>
     this.getVisibilityOptions(
       articleId,
-      `${this.youTrackApiUrl}/users/me/articleDrafts/${articleId}/visibilityOptions`,
+      `${this.currentUserAPIUrl}/articleDrafts/${articleId}/visibilityOptions`,
     );
 
   async getCommentDraft(articleId: string): Promise<IssueComment | null> {
@@ -337,14 +329,14 @@ export default class ArticlesAPI extends ApiBase {
     articleId: string,
     attachmentId: string,
   ): Promise<IssueComment> {
-    const url: string = `${this.youTrackApiUrl}/users/me/articleDrafts/${articleId}/attachments/${attachmentId}`;
+    const url: string = `${this.currentUserAPIUrl}/articleDrafts/${articleId}/attachments/${attachmentId}`;
     return this.deleteAttachment(articleId, attachmentId, url);
   }
 
   async getAttachments(articleId: string): Promise<Array<Attachment>> {
     const queryString = ApiBase.createFieldsQuery(ISSUE_ATTACHMENT_FIELDS);
     const attachments: Attachment[] = await this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/users/me/articleDrafts/${articleId}/attachments?${queryString}`,
+      `${this.currentUserAPIUrl}/articleDrafts/${articleId}/attachments?${queryString}`,
     );
     return this.convertAttachmentsURL(attachments);
   }
@@ -354,7 +346,7 @@ export default class ArticlesAPI extends ApiBase {
     fileUri: string,
     fileName: string,
   ): Promise<XMLHttpRequest> {
-    const url = `${this.youTrackApiUrl}/users/me/articleDrafts/${articleId}/attachments?fields=id,name`;
+    const url = `${this.currentUserAPIUrl}/articleDrafts/${articleId}/attachments?fields=id,name`;
     const headers = this.auth.getAuthorizationHeaders();
     const formData = new FormData();
     formData.append('photo', {

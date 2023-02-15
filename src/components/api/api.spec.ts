@@ -187,7 +187,7 @@ describe('API', () => {
   });
   describe('Support legacy API entry points', () => {
     let api;
-    it('should be TRUE if the server version >= than 2022.3', () => {
+    it('should be TRUE if the server version === 2022.3', () => {
       authMock.config.version = '2022.3';
       api = createApiInstance();
       expect(api.isActualAPI).toEqual(true);
@@ -196,6 +196,7 @@ describe('API', () => {
       expect(api.projects.projectsURL).toEqual(
         `${serverUrl}/api/admin/projects`,
       );
+      expect(api.articles.currentUserAPIUrl).toEqual(`${serverUrl}/api/users/me`);
     });
 
     it('should be TRUE if the server version >= than 2022', () => {
@@ -205,6 +206,7 @@ describe('API', () => {
       expect(api.user.apiUrl).toEqual(`${serverUrl}/api/users`);
       expect(api.issue.draftsURL).toEqual(`${serverUrl}/api/users/me/drafts`);
       expect(api.projects.projectsURL).toEqual(`${serverUrl}/api/admin/projects`);
+      expect(api.articles.currentUserAPIUrl).toEqual(`${serverUrl}/api/users/me`);
     });
 
     it('should be TRUE if the server version < than 2022.3', () => {
@@ -212,12 +214,19 @@ describe('API', () => {
       api = createApiInstance();
       expect(api.isActualAPI).toEqual(false);
       expect(api.user.apiUrl).toEqual(`${serverUrl}/api/admin/users`);
-      expect(api.issue.draftsURL).toEqual(
-        `${serverUrl}/api/admin/users/me/drafts`,
-      );
-      expect(api.projects.projectsURL).toEqual(
-        `${serverUrl}/api/admin/projects`,
-      );
+      expect(api.issue.draftsURL).toEqual(`${serverUrl}/api/admin/users/me/drafts`);
+      expect(api.projects.projectsURL).toEqual(`${serverUrl}/api/admin/projects`);
+      expect(api.articles.currentUserAPIUrl).toEqual(`${serverUrl}/api/admin/users/me`);
+    });
+
+    it('should be TRUE if the server version < than 2022', () => {
+      authMock.config.version = '2021.3';
+      api = createApiInstance();
+      expect(api.isActualAPI).toEqual(false);
+      expect(api.user.apiUrl).toEqual(`${serverUrl}/api/admin/users`);
+      expect(api.issue.draftsURL).toEqual(`${serverUrl}/api/admin/users/me/drafts`);
+      expect(api.projects.projectsURL).toEqual(`${serverUrl}/api/admin/projects`);
+      expect(api.articles.currentUserAPIUrl).toEqual(`${serverUrl}/api/admin/users/me`);
     });
   });
 });
