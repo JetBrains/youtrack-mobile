@@ -36,7 +36,7 @@ import type {NotificationRouteData} from 'types/Notification';
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-require('react-native/Libraries/LogBox/LogBox').ignoreAllLogs();
+
 class YouTrackMobile extends Component<void, void> {
   routeHomeName = 'Home';
 
