@@ -248,7 +248,7 @@ msgstr "Comments"
 msgid "committed changes"
 msgstr "committed changes"
 
-#: src/actions/app-actions.ts:947
+#: src/actions/app-actions.ts:942
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -984,7 +984,7 @@ msgstr "The commit author has specified an email address that is associated with
 msgid "The commit author is not an assignee in the project."
 msgstr "The commit author is not an assignee in the project."
 
-#: src/actions/app-actions.ts:497
+#: src/actions/app-actions.ts:493
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
@@ -1150,7 +1150,7 @@ msgstr ""
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Your account has insufficient permission to perform this operation."
 
-#: src/components/storage/storage.ts:327
+#: src/components/storage/storage.ts:332
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 msgstr "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 
