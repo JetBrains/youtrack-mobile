@@ -27,7 +27,7 @@ const createGettextMessage = (message: string, params?: Params) => {
   let msg: string = message.slice(0);
 
   if (params) {
-    msg.replace(/{{([^}]+)}}/g, (match: string, paramKey: string): string => {
+    msg.replace(/{{([^}]+)}}/g, (match: string, paramKey: string) => {
       const key: string = paramKey.trim();
 
       if (params.hasOwnProperty(key)) {

@@ -1,7 +1,7 @@
 import {DEFAULT_ERROR_MESSAGE} from './error-messages';
 import type {CustomError} from 'types/Error';
 export const extractErrorMessage = function (
-  err: Record<string, any> | string,
+  err: CustomError | string,
   isDescriptionOnly: boolean | null | undefined,
 ): string {
   if (!err) {

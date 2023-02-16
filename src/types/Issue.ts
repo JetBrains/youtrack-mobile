@@ -17,7 +17,7 @@ export type IssueContextData = {
   issuePermissions: IssuePermissions;
   dispatcher: () => any;
 };
-export type IssueOnList = Partial<IssueFull> & {
+export type IssueOnList = Partial<Omit<IssueFull, 'fields'>> & {
   fieldHash: {
     key: string;
     value: Record<string, any>;

@@ -2008,6 +2008,11 @@
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.5.tgz#1001cc5e6a3704b83c236027e77f2f58ea010f40"
   integrity sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==
 
+"@types/node-gettext@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@types/node-gettext/-/node-gettext-3.0.3.tgz#13bb783e308387b1a023e9330e59b12f226d2bc9"
+  integrity sha512-SA5ojwtVq4kVjJDriE20y4BYoS+m6wMJmARsDBF11qock6WNixoYEJH79sHuXLQSjMsmvvwqxrnjZLB5cWDLgg==
+
 "@types/node@*":
   version "17.0.17"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.17.tgz#a8ddf6e0c2341718d74ee3dc413a13a042c45a0c"

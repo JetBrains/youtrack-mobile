@@ -1,4 +1,5 @@
 import log from '../log/log';
+// @ts-ignore
 import showNotification from './notification_show';
 import {resolveErrorMessage} from '../error/error-resolver';
 import {CustomError} from 'types/Error';

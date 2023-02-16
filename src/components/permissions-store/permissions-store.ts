@@ -1,5 +1,4 @@
-import type {PermissionCacheItem} from 'types/Permission';
-import type {IssueProject} from 'types/CustomFields';
+import type {CacheItemProject, PermissionCacheItem} from 'types/Permission';
 
 class PermissionsStore {
   permissionsMap: Record<string, any>;
@@ -10,7 +9,7 @@ class PermissionsStore {
       : []
     ).map((permission: PermissionCacheItem) => {
       permission.projectIds = (permission.projects || []).map(
-        (project: IssueProject) => project.id,
+        (project: CacheItemProject) => project.id,
       );
       return permission;
     });

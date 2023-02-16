@@ -1,5 +1,5 @@
 export type CustomError = Error & {
-  json: Record<string, any>;
+  json: () => Promise<any>;
   status: number;
   error?: string;
   error_message: string;

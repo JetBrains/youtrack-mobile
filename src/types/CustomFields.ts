@@ -112,7 +112,7 @@ export type CustomField = {
   $type: string;
   id: string;
   name: string;
-  hasStateMachine: boolean;
+  hasStateMachine?: boolean;
   value: CustomFieldValue;
   localizedName?: string;
   projectCustomField: ProjectCustomField;
@@ -173,6 +173,8 @@ export type IssueLinkType = {
 export type IssueLink = {
   $type: string;
   id: string;
+  idReadable: string;
+  fields: CustomField[];
   direction: string;
   linkType: IssueLinkType;
   trimmedIssues: IssueOnList[];

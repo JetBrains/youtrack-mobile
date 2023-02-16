@@ -37,7 +37,7 @@ export async function getLogs(): Promise<string> {
   const rows = await deviceLog.store.getRows();
   return rows
     .reverse() // They store comments in reverse order
-    .map(row => `${row.timeStamp._i}: ${row.message}`)
+    .map((row: { timeStamp: Record<any, any>, message: string }) => `${row.timeStamp._i}: ${row.message}`)
     .join('\n');
 }
 export async function copyRawLogs() {
