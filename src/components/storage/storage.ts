@@ -1,63 +1,68 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import log from '../log/log';
+
+import log from 'components/log/log';
 import {getAuthParamsKey} from './storage__oauth';
 import {i18n} from 'components/i18n/i18n';
-import {notify} from '../notification/notification';
+import {notify} from 'components/notification/notification';
 import {routeMap} from '../../app-routes';
+
 import type {Activity, ActivityType} from 'types/Activity';
 import type {AnyIssue} from 'types/Issue';
 import type {AppConfig} from 'types/AppConfig';
 import type {Article, ArticlesList} from 'types/Article';
 import type {ArticleProject} from 'types/Article';
-import type {OAuthParams2} from 'types/Auth';
 import type {Board, Sprint} from 'types/Agile';
 import type {Folder} from 'types/User';
-import type {IssueProject} from 'types/CustomFields';
 import type {InboxThread, Notification} from 'types/Inbox';
+import type {IssueProject} from 'types/CustomFields';
+import type {OAuthParams2} from 'types/Auth';
 import type {PermissionCacheItem} from 'types/Permission';
 import type {ThreadsStateDataKey} from 'types/Inbox';
 import type {UserCurrent} from 'types/User';
+
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 export const MAX_STORED_QUERIES = 5;
 export const STORAGE_AUTH_PARAMS: string = 'yt_mobile_auth';
 export const STORAGE_AUTH_PARAMS_KEY: string = 'yt_mobile_auth_key';
 export const storageStateAuthParamsKey: string = 'authParamsKey';
 export const THEME_MODE_KEY = 'YT_THEME_MODE';
-export interface InboxThreadsCache {
+
+export type InboxThreadsCache = {
+  [key in ThreadsStateDataKey]: InboxThread[];
+} & {
   unreadOnly: boolean;
   lastVisited: number;
-  [key: ThreadsStateDataKey]: InboxThread[];
-}
+};
 export type StorageState = {
-  [key in typeof storageStateAuthParamsKey]?: string | null | undefined;
+  [key in typeof storageStateAuthParamsKey]: string | null;
 } & {
-  articles: Article[] | null | undefined;
+  articles: Article[] | null;
   articlesList: ArticlesList | null;
   articlesQuery: string | null;
   articleLastVisited: {
     article?: Article;
     activities?: Activity[];
   } | null;
-  authParams: OAuthParams2 | null | undefined;
-  projectId: string | null | undefined;
+  authParams: OAuthParams2 | null;
+  projectId: string | null;
   projects: Array<IssueProject | ArticleProject>;
-  draftId: string | null | undefined;
-  currentUser: UserCurrent | null | undefined;
-  creationTimestamp: number | null | undefined;
-  config: AppConfig | null | undefined;
-  query: string | null | undefined;
-  searchContext: Folder | null | undefined;
-  lastQueries: string[] | null | undefined;
+  draftId: string | null;
+  currentUser: UserCurrent | null;
+  creationTimestamp: number | null;
+  config: AppConfig | null;
+  query: string | null;
+  searchContext: Folder | null;
+  lastQueries: string[] | null;
   issuesCache: AnyIssue[] | null;
   inboxCache: Notification[] | null;
   inboxThreadsCache: InboxThreadsCache | null;
   isRegisteredForPush: boolean;
-  deviceToken: string | null | undefined;
-  agileZoomedIn: boolean | null | undefined;
-  agileLastSprint: Sprint | null | undefined;
-  agileDefaultBoard: Board | null | undefined;
-  agileQuery: string | null | undefined;
+  deviceToken: string | null;
+  agileZoomedIn: boolean | null;
+  agileLastSprint: Sprint | null;
+  agileDefaultBoard: Board | null;
+  agileQuery: string | null;
   lastRoute:
     | (
         | typeof routeMap.Issues
@@ -68,14 +73,14 @@ export type StorageState = {
       )
     | null
     | undefined;
-  currentAppVersion: string | null | undefined;
-  issueActivitiesEnabledTypes: ActivityType[] | null | undefined;
-  permissions: PermissionCacheItem[] | null | undefined;
-  themeMode: string | null | undefined;
+  currentAppVersion: string | null;
+  issueActivitiesEnabledTypes: ActivityType[] | null;
+  permissions: PermissionCacheItem[] | null;
+  themeMode: string | null;
   vcsChanges: boolean | null;
   forceHandsetMode: boolean | null;
 };
-type StorageStateKeys = Partial<$ObjMap<StorageState, () => string>>;
+type StorageStateKeys = Partial<Record<keyof StorageState, string>>;
 const storageKeys: StorageStateKeys = {
   articles: 'YT_ARTICLES',
   articlesList: 'YT_ARTICLES_LIST',
@@ -113,7 +118,7 @@ let storageState: StorageState | null | undefined = null;
 
 const hasValue = (v: any): boolean => v !== null && v !== undefined;
 
-export const initialState: StorageState = Object.freeze({
+export const initialState: Readonly<StorageState> = {
   articles: null,
   articlesList: null,
   articlesQuery: null,
@@ -145,7 +150,7 @@ export const initialState: StorageState = Object.freeze({
   themeMode: null,
   vcsChanges: null,
   forceHandsetMode: null,
-});
+};
 
 function cleanAndLogState(message, state?: StorageState) {
   const CENSORED: string = 'CENSORED';
@@ -172,7 +177,7 @@ function cleanAndLogState(message, state?: StorageState) {
       : undefined),
     ...(state?.articleLastVisited
       ? {
-          articleLastVisited: state.articleLastVisited.id,
+          articleLastVisited: state.articleLastVisited,
         }
       : undefined),
     ...(state?.articlesList
@@ -227,7 +232,7 @@ export async function clearCachesAndDrafts(): Promise<StorageState> {
     storageKeys.permissions,
     storageKeys.agileDefaultBoard,
     storageKeys.projects,
-  ]);
+  ] as string[]);
   return populateStorage();
 }
 
@@ -362,7 +367,7 @@ export async function secureAccounts(
   }
 }
 export async function getOtherAccounts(): Promise<Array<StorageState>> {
-  const value: string = await AsyncStorage.getItem(OTHER_ACCOUNTS_KEY);
+  const value: string | null = await AsyncStorage.getItem(OTHER_ACCOUNTS_KEY);
   const otherAccounts: StorageState[] = value ? JSON.parse(value) : [];
   await secureAccounts(otherAccounts);
   return otherAccounts;

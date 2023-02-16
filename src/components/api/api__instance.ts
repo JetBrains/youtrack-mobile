@@ -1,7 +1,9 @@
 import log from '../log/log';
 import type Api from './api';
-let api = null;
-export function setApi(newApi?: Api) {
+
+let api: Api | null = null;
+
+export function setApi(newApi: Api | null) {
   log.debug(
     newApi
       ? `New API instance received (${newApi.youTrackIssueUrl})`

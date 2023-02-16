@@ -9,7 +9,7 @@ import {
   NavigationNavigateAction,
   NavigationRoute,
 } from 'react-navigation';
-import log from '../log/log';
+import log from 'components/log/log';
 import {flushStoragePart} from '../storage/storage';
 import {isSplitView} from '../responsive/responsive-helper';
 import {guid} from 'util/util';
@@ -21,18 +21,21 @@ import type {
   NavigationState,
   NavigationResetAction,
 } from 'react-navigation';
+
 const TransitionSpec = {
   duration: 500,
   easing: Easing.bezier(0.2833, 0.99, 0.31833, 0.99),
   timing: Animated.timing,
 };
+
 const SlideFromRight = {
   transitionSpec: TransitionSpec,
   screenInterpolator: StackViewStyleInterpolator.forHorizontal,
 };
+
 const SlideModal = {
   transitionSpec: TransitionSpec,
-  screenInterpolator: sceneProps => {
+  screenInterpolator: (sceneProps: { scenes: string | any[]; }) => {
     const route = sceneProps.scenes[sceneProps.scenes.length - 1].route;
 
     if (route?.routeName === routeMap.Modal && sceneProps.scenes.length > 1) {
@@ -42,23 +45,20 @@ const SlideModal = {
     return StackViewStyleInterpolator.forVertical;
   },
 };
+
 /**
  * Route singleton
  */
 
 class Router {
-  _navigator: NavigationNavigator = null;
-  _currentRoute: NavigationJumpToActionPayload = null;
+  _navigator: NavigationNavigator | null = null;
+  _currentRoute: NavigationJumpToActionPayload | null = null;
   rootRoutes: NavigationJumpToActionPayload[] = [];
-  onDispatchCallbacks:
-    | Array<(...args: any[]) => any>
-    | null
-    | undefined = [];
+  onDispatchCallbacks: ((...args: any[]) => any)[] | null = [];
+  routes = {};
 
-  constructor() {
-    this.onBack = () => {};
-
-    this.routes = {};
+  onBack() {
+    return {};
   }
 
   setNavigator = (navigator?: NavigationNavigator) => {
@@ -182,11 +182,7 @@ class Router {
     }
   }
 
-  navigateToDefaultRoute(
-    props: Record<string, any> & {
-      issueId: string;
-    } = null,
-  ) {
+  navigateToDefaultRoute(props: Record<string, any> & { issueId: string; } | null = null) {
     const defaultRoute: string = this.rootRoutes[0];
 
     if (props?.issueId) {

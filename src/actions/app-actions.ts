@@ -46,7 +46,7 @@ import type {Activity} from 'types/Activity';
 import type {AppConfig, EndUserAgreement} from 'types/AppConfig';
 import type {AppState} from '../reducers';
 import type {Article} from 'types/Article';
-import type {AuthConfig, AuthParams, OAuthParams2} from 'types/Auth';
+import type {AuthParams, OAuthParams2} from 'types/Auth';
 import type {CustomError} from 'types/Error';
 import type {
   Folder,
@@ -274,7 +274,7 @@ async function createAuthInstance(config: AppConfig): Promise<OAuth2> {
   return auth;
 }
 
-function showUserAgreement(agreement) {
+function showUserAgreement(agreement: Agreement) {
   usage.trackEvent('EUA is shown');
   return {
     type: types.SHOW_USER_AGREEMENT,
@@ -328,7 +328,7 @@ async function connectToOneMoreServer(
 async function authorizeOnOneMoreServer(
   config: AppConfig,
   onBack: (serverUrl: string) => any,
-) {
+): Promise<OAuthParams2> {
   return new Promise(resolve => {
     Router.LogIn({
       config,
@@ -362,7 +362,7 @@ function applyAccount(
       ...initialState,
       creationTimestamp: creationTimestamp,
       [storageStateAuthParamsKey]: creationTimestamp.toString(),
-    });
+    } as StorageState);
     await auth.cacheAuthParams(authParams, creationTimestamp.toString());
     await storeConfig(config);
     await dispatch(initializeAuth(config));
@@ -409,7 +409,7 @@ export function addAccount(serverUrl: string = ''): Action {
         `Successfully added account, user "${userName}", server "${config.backendUrl}"`,
       );
     } catch (err) {
-      notifyError(err);
+      notifyError(err as CustomError);
       const {otherAccounts} = getState().app;
 
       if (!getStorageState().config && otherAccounts?.length) {
@@ -435,7 +435,7 @@ export function switchAccount(
     cacheUserLastVisitedArticle(null);
 
     try {
-      redirectToHome(account.config.backendUrl);
+      redirectToHome(account.config?.backendUrl);
       await dispatch(changeAccount(account, dropCurrentAccount, issueId));
     } catch (e) {}
   };
@@ -478,20 +478,16 @@ export function updateOtherAccounts(
 }
 export function changeAccount(
   account: StorageState,
-  removeCurrentAccount?: boolean,
+  removeCurrentAccount: boolean,
   issueId: string | null | undefined,
 ): Action {
   return async (
     dispatch: (arg0: any) => any,
     getState: () => AppState,
-    getApi: () => Api,
   ) => {
     const state: AppState = getState();
     const config: AppConfig = (account.config as any) as AppConfig;
-    const authParams:
-      | OAuthParams2
-      | null
-      | undefined = await getStoredSecurelyAuthParams(account.authParamsKey);
+    const authParams: AuthParams | null = await getStoredSecurelyAuthParams(account.authParamsKey);
 
     if (!authParams) {
       const errorMessage: string = i18n(
@@ -528,7 +524,7 @@ export function changeAccount(
 
       log.info('Account changed, URL:', account?.config?.backendUrl);
     } catch (err) {
-      notifyError(err);
+      notifyError(err as CustomError);
       throw err;
     }
 
@@ -620,11 +616,11 @@ export function completeInitialization(
     const currentUser: UserCurrent = await dispatch(loadYTCurrentUser());
     const userProfileLocale: UserGeneralProfileLocale | null | undefined =
       currentUser?.profiles?.general?.locale;
-    const isLanguageChanged: boolean =
-      !cachedLocale?.language ||
-      (cachedLocale?.language &&
-        userProfileLocale?.language &&
-        cachedLocale?.language !== userProfileLocale?.language);
+    const isLanguageChanged: boolean = !cachedLocale?.language || (
+      !!cachedLocale?.language &&
+      !!userProfileLocale?.language &&
+      cachedLocale?.language !== userProfileLocale?.language
+    );
 
     if (isLanguageChanged && userProfileLocale?.language) {
       loadTranslation(userProfileLocale?.locale, userProfileLocale?.language);
@@ -735,6 +731,8 @@ export function initializeAuth(config: AppConfig): Action {
   };
 }
 
+type Agreement = | EndUserAgreement | null | undefined;
+
 function checkUserAgreement(): Action {
   return async (
     dispatch: (arg0: any) => any,
@@ -755,10 +753,7 @@ function checkUserAgreement(): Action {
       return;
     }
 
-    const agreement:
-      | EndUserAgreement
-      | null
-      | undefined = await api.getUserAgreement();
+    const agreement: Agreement = await api.getUserAgreement();
 
     if (!agreement) {
       log.debug('EUA is not supported, skip check');
@@ -949,7 +944,7 @@ function redirectToHome(backendUrl: string = '') {
 }
 
 async function refreshConfig(backendUrl: string): Promise<AppConfig> {
-  const updatedConfig: AuthConfig = await doConnect(backendUrl);
+  const updatedConfig: AppConfig = await doConnect(backendUrl);
   await storeConfig(updatedConfig);
   await flushStoragePart({
     currentAppVersion: packageJson.version,
@@ -966,7 +961,7 @@ export function initializeApp(
     dispatch: (arg0: any) => any,
     getState: () => AppState,
     getApi: () => Api,
-  ): any => {
+  ): Promise<void> => {
     const cachedCurrentUser: UserCurrent | null | undefined = getStorageState()
       ?.currentUser?.ytCurrentUser;
     const userProfileLocale: UserGeneralProfileLocale | null | undefined =
@@ -1014,7 +1009,7 @@ export function initializeApp(
       } catch (e) {
         Router.LogIn({
           config,
-          errorMessage: getErrorMessage(e),
+          errorMessage: getErrorMessage(e as CustomError),
         });
         return;
       }
@@ -1152,7 +1147,7 @@ export function subscribeToPushNotifications(): Action {
       setRegisteredForPush(true);
       log.info('Successfully registered for push notifications');
     } catch (err) {
-      notifyError(err);
+      notifyError(err as CustomError);
     }
   };
 }
@@ -1186,16 +1181,9 @@ function receiveInboxUpdateStatus(
   };
 }
 
-const getFirstCachedThread = (): InboxThread | null | undefined => {
-  const inboxThreadsCache:
-    | InboxThreadsCache
-    | null
-    | undefined = getStorageState()?.inboxThreadsCache;
-  return (
-    inboxThreadsCache &&
-    inboxThreadsCache[folderIdAllKey] &&
-    inboxThreadsCache[folderIdAllKey][0]
-  );
+const getFirstCachedThread = (): InboxThread | null => {
+  const inboxThreadsCache: | InboxThreadsCache | null = getStorageState()?.inboxThreadsCache;
+  return inboxThreadsCache?.[folderIdAllKey as unknown]?.[0];
 };
 
 const inboxCheckUpdateStatus = (): Action => {

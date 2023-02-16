@@ -16,14 +16,9 @@ const storeSecurelyAuthParams = async (
   return authParams;
 };
 
-const getStoredSecurelyAuthParams = async (
-  authParamsKey: string,
-): Promise<AuthParams | null | undefined> => {
+const getStoredSecurelyAuthParams = async (authParamsKey: string | null): Promise<AuthParams | null> => {
   if (authParamsKey) {
-    const authParams:
-      | string
-      | null
-      | undefined = await EncryptedStorage.getItem(authParamsKey);
+    const authParams: | string | null = await EncryptedStorage.getItem(authParamsKey);
     return typeof authParams === 'string' ? JSON.parse(authParams) : null;
   }
 
