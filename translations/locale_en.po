@@ -170,7 +170,7 @@ msgstr "Browser"
 msgid "Bugsnag Privacy Policy"
 msgstr "Bugsnag Privacy Policy"
 
-#: src/views/log-in/log-in.tsx:319
+#: src/views/log-in/log-in.tsx:302
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "By logging in, you agree to the Privacy Policy."
 
@@ -248,7 +248,7 @@ msgstr "Comments"
 msgid "committed changes"
 msgstr "committed changes"
 
-#: src/actions/app-actions.ts:942
+#: src/actions/app-actions.ts:944
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -573,15 +573,15 @@ msgstr "Linked issues"
 msgid "Loading values…"
 msgstr "Loading values…"
 
-#: src/views/log-in/log-in.tsx:289
+#: src/views/log-in/log-in.tsx:272
 msgid "Log in"
 msgstr "Log in"
 
-#: src/views/log-in/log-in.tsx:215
+#: src/views/log-in/log-in.tsx:198
 msgid "Log in to YouTrack"
 msgstr "Log in to YouTrack"
 
-#: src/views/log-in/log-in.tsx:342
+#: src/views/log-in/log-in.tsx:325
 msgid "Log in with Browser"
 msgstr "Log in with Browser"
 
@@ -710,7 +710,7 @@ msgstr "Other"
 msgid "Other groups and teams"
 msgstr "Other groups and teams"
 
-#: src/views/log-in/log-in.tsx:253
+#: src/views/log-in/log-in.tsx:236
 msgid "Password"
 msgstr "Password"
 
@@ -984,7 +984,7 @@ msgstr "The commit author has specified an email address that is associated with
 msgid "The commit author is not an assignee in the project."
 msgstr "The commit author is not an assignee in the project."
 
-#: src/actions/app-actions.ts:493
+#: src/actions/app-actions.ts:490
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
@@ -1081,7 +1081,7 @@ msgstr "Use fewer search parameters"
 msgid "User account is banned"
 msgstr "User account is banned"
 
-#: src/views/log-in/log-in.tsx:231
+#: src/views/log-in/log-in.tsx:214
 msgid "Username or email"
 msgstr "Username or email"
 
@@ -1138,7 +1138,7 @@ msgstr "You don’t have any unread notifications"
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 msgstr "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 
-#: src/views/log-in/log-in.tsx:310
+#: src/views/log-in/log-in.tsx:293
 msgid ""
 "You need a YouTrack account to use the app.\n"
 ""
