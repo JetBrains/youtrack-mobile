@@ -1,16 +1,24 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 import {enableFetchMocks} from 'jest-fetch-mock';
-import mocks from '../../../test/mocks';
+
+import mocks from 'test/mocks';
 import * as storageHelper from '../storage/storage__oauth';
 import Auth from './oauth2';
 import {__setStorageState} from '../storage/storage';
 import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
+import OAuth2 from './oauth2';
+import {AppConfig} from 'types/AppConfig';
+import {AuthParams} from 'types/Auth';
+import {CustomError} from 'types/Error';
+
 jest.mock('react-native-app-auth');
 enableFetchMocks();
-let configMock;
-let authParamsMock;
-let authParamsMockKey;
-let auth;
+let configMock: AppConfig;
+let authParamsMock: AuthParams;
+let authParamsMockKey: string;
+let auth: OAuth2;
+
+
 describe('OAuth', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -34,8 +42,10 @@ describe('OAuth', () => {
   it('should create OAuth instance', () => {
     expect(auth).toBeDefined();
   });
+
+
   describe('loadCurrentUser', () => {
-    let errorMock;
+    let errorMock: CustomError | Error;
     beforeEach(() => {
       errorMock = new Error('Invalid');
       jest.spyOn(auth, 'getRefreshToken');
@@ -47,6 +57,7 @@ describe('OAuth', () => {
         errorMock,
       );
     });
+
     it('should throw if the current user is banned', async () => {
       mockResponse({
         banned: true,
@@ -55,6 +66,7 @@ describe('OAuth', () => {
         new Error(ERROR_MESSAGE_DATA.USER_BANNED.title),
       );
     });
+
     it('should not refresh a token if user has no required permissions', async () => {
       errorMock.status = 403;
       auth.getRefreshToken.mockImplementationOnce(() => 'prevToken');
@@ -62,6 +74,7 @@ describe('OAuth', () => {
       await expect(auth.loadCurrentUser(authParamsMock)).rejects.toThrow();
       expect(auth.refreshToken).not.toHaveBeenCalled();
     });
+
     it('should refresh a token if a token is out of date', async () => {
       errorMock.status = 401;
       auth.getRefreshToken.mockImplementationOnce(() => 'prevToken');
@@ -69,6 +82,7 @@ describe('OAuth', () => {
       await auth.loadCurrentUser(authParamsMock);
       expect(auth.refreshToken).toHaveBeenCalled();
     });
+
     it('should not refresh a token if there is no auth params in a cache', async () => {
       errorMock.status = 401;
       auth.getRefreshToken.mockImplementationOnce(() => '');
@@ -76,6 +90,7 @@ describe('OAuth', () => {
       await expect(auth.loadCurrentUser(authParamsMock)).rejects.toThrow();
       expect(auth.refreshToken).not.toHaveBeenCalled();
     });
+
     it('should set the current user', async () => {
       const userMock = {
         id: 'currentUser',
@@ -104,12 +119,15 @@ describe('OAuth', () => {
       }
     }
   });
+
+
   describe('Authorize & Refresh Token', () => {
     let AppAuth;
     beforeEach(() => {
       AppAuth = require('react-native-app-auth');
       jest.spyOn(auth, 'getCachedAuthParams');
     });
+
     describe('Authorize', () => {
       it('should authorize via login/password', async () => {
         jest
@@ -127,6 +145,7 @@ describe('OAuth', () => {
           configMock,
         );
       });
+
       it('should authorize with OAuth2 code flow', async () => {
         const oauthCodeFlowParamsMock = {
           accessToken: 'accessToken',
@@ -159,6 +178,8 @@ describe('OAuth', () => {
         });
       });
     });
+
+
     describe('refreshToken', () => {
       it('should refresh token', async () => {
         const responseMock = {
@@ -193,6 +214,8 @@ describe('OAuth', () => {
       });
     });
   });
+
+
   describe('Get/Save cached auth parameters', () => {
     describe('cacheAuthParams', () => {
       it('should cache encrypted auth params', async () => {
@@ -206,6 +229,7 @@ describe('OAuth', () => {
         ).toHaveBeenCalledWith(authParamsMock, authParamsMockKey);
         await expect(cachedAuthParams).toEqual(authParamsMock);
       });
+
       it('should cache encrypted auth params with particular key', async () => {
         jest.spyOn(storageHelper, 'storeSecurelyAuthParams');
         const keyMock = 'datestamp';
@@ -219,13 +243,17 @@ describe('OAuth', () => {
         await expect(cachedAuthParams).toEqual(authParamsMock);
       });
     });
+
+
     describe('getCachedAuthParams', () => {
       beforeEach(() => {
         jest.spyOn(storageHelper, 'getStoredSecurelyAuthParams');
       });
+
       it('should throw if there is no cached auth parameters', async () => {
         await expect(auth.getCachedAuthParams()).rejects.toThrow('');
       });
+
       it('should get auth parameters', async () => {
         jest
           .spyOn(EncryptedStorage, 'getItem')
@@ -238,8 +266,47 @@ describe('OAuth', () => {
       });
     });
   });
+
+
+  describe('isTokenInvalid', () => {
+    it('should be TRUE if token is malformed', async () => {
+      jest.spyOn(auth, 'getAuthParams').mockReturnValueOnce({});
+
+      expect(auth.isTokenInvalid()).toEqual(true);
+    });
+
+    it('should be TRUE if token has no field `access_token`', async () => {
+      jest.spyOn(auth, 'getAuthParams').mockReturnValueOnce({accessTokenExpirationDate: '0'});
+
+      expect(auth.isTokenInvalid()).toEqual(true);
+    });
+
+    it('should be TRUE if token has no field `accessTokenExpirationDate`', async () => {
+      jest.spyOn(auth, 'getAuthParams').mockReturnValueOnce({access_token: '0'});
+
+      expect(auth.isTokenInvalid()).toEqual(true);
+    });
+
+    it('should be TRUE if token is outdated', async () => {
+      jest.spyOn(auth, 'getAuthParams').mockReturnValueOnce({access_token: '0', accessTokenExpirationDate: new Date(0)});
+
+      expect(auth.isTokenInvalid()).toEqual(true);
+    });
+
+    it('should be FALSE if token is actual', async () => {
+      jest.spyOn(auth, 'getAuthParams').mockReturnValueOnce({access_token: '0', accessTokenExpirationDate: new Date(10000000000000).getTime()});
+
+      expect(auth.isTokenInvalid()).toEqual(false);
+    });
+
+    it('should be TRUE if `accessTokenExpirationDate` is not valid Date', async () => {
+      jest.spyOn(auth, 'getAuthParams').mockReturnValueOnce({access_token: '0', accessTokenExpirationDate: 'string'});
+
+      expect(auth.isTokenInvalid()).toEqual(true);
+    });
+  });
 });
 
-function createAuthMock(config) {
+function createAuthMock(config: AppConfig) {
   return new Auth(config || configMock);
 }

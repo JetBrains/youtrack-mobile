@@ -6,6 +6,7 @@ import {getAuthParamsKey} from '../storage/storage__oauth';
 import {logEvent} from '../log/log-helper';
 import type {AppConfig} from 'types/AppConfig';
 import type {AuthParams, OAuthParams} from 'types/Auth';
+
 export default class OAuth2 extends AuthBase {
   authParams: AuthParams;
 
@@ -75,16 +76,11 @@ export default class OAuth2 extends AuthBase {
   isTokenInvalid(): boolean {
     const authParams: AuthParams | null | undefined = this.getAuthParams();
 
-    if (!authParams?.access_token || authParams?.accessTokenExpirationDate) {
+    if (!authParams?.access_token || !authParams?.accessTokenExpirationDate) {
       return true;
     }
 
-    if (authParams?.accessTokenExpirationDate) {
-      return (
-        new Date(authParams.accessTokenExpirationDate).getTime() < Date.now()
-      );
-    }
-
-    return false;
+    const date: Date = new Date(authParams.accessTokenExpirationDate);
+    return isNaN(date.getTime()) ? true : date.getTime() < Date.now();
   }
 }

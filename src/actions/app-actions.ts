@@ -15,7 +15,7 @@ import UrlParse from 'url-parse';
 import usage from 'components/usage/usage';
 import {i18n} from 'components/i18n/i18n';
 import {
-  clearCachesAndDrafts,
+  clearStorage,
   flushStorage,
   flushStoragePart,
   getOtherAccounts,
@@ -62,6 +62,7 @@ import type {PermissionCacheItem} from 'types/Permission';
 import type {StorageState} from 'components/storage/storage';
 import type {WorkTimeSettings} from 'types/Work';
 import {UserGeneralProfileLocale} from 'types/User';
+
 type Action = (
   dispatch: (arg0: any) => any,
   getState: () => AppState,
@@ -85,15 +86,11 @@ export function logOut(): Action {
     getState: () => AppState,
     getApi: () => Api,
   ) => {
-    clearCachesAndDrafts();
     const auth = getState().app.auth;
-    Router.EnterServer({
-      serverUrl: auth?.config?.backendUrl,
-    });
-
     if (auth) {
       auth.logOut();
     }
+    clearStorage();
 
     setApi(null);
     dispatch({
@@ -550,12 +547,17 @@ export function removeAccountOrLogOut(): Action {
       }
     }
 
-    if (otherAccounts.length === 0) {
-      log.info('No more accounts left, logging out.');
-      dispatch(logOut());
-    } else {
-      log.info('Removing account, choosing another one.');
+    await getApi().user.logout();
+    dispatch(logOut());
+    await clearStorage();
+
+    log.info('Logging out from the curren account');
+    if (otherAccounts.length > 0) {
+      log.info('Switching an account');
+      redirectToHome(otherAccounts[0].config?.backendUrl);
       await dispatch(switchAccount(otherAccounts[0], true));
+    } else {
+      Router.EnterServer();
     }
   };
 }

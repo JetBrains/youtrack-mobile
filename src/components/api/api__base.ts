@@ -160,6 +160,7 @@ export default class BaseAPI {
 
     if (
       response.status !== HTTP_STATUS.SUCCESS &&
+      response.status !== HTTP_STATUS.SUCCESS_NO_CONTENT &&
       this.shouldRefreshToken(response)
     ) {
       log.debug('Token has expired');

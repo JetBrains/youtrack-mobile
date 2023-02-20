@@ -13,7 +13,6 @@ import React, {Component} from 'react';
 import clicksToShowCounter from 'components/debug-view/clicks-to-show-counter';
 import ErrorMessageInline from 'components/error-message/error-message-inline';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import Keystore from 'components/keystore/keystore';
 import log from 'components/log/log';
 import OAuth2 from 'components/auth/oauth2';
 import Router from 'components/router/router';
@@ -49,8 +48,6 @@ type State = {
   youTrackBackendUrl: string;
 };
 
-const noop = () => {};
-
 const CATEGORY_NAME = 'Login form';
 export class LogIn extends Component<Props, State> {
   passInputRef: any;
@@ -64,15 +61,6 @@ export class LogIn extends Component<Props, State> {
       loggingIn: false,
       youTrackBackendUrl: props.config.backendUrl,
     };
-    const config: AppConfig = props.config;
-    Keystore.getInternetCredentials(config.auth.serverUri).then(
-      ({username, password}) =>
-        this.setState({
-          username,
-          password,
-        }),
-      noop,
-    );
     this.passInputRef = React.createRef();
     usage.trackScreenView('Login form');
   }
@@ -103,11 +91,6 @@ export class LogIn extends Component<Props, State> {
         password,
         config,
       );
-      Keystore.setInternetCredentials(
-        config.auth.serverUri,
-        username,
-        password,
-      ).catch(noop);
       usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Success');
       authParams.inAppLogin = true;
 

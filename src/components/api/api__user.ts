@@ -127,4 +127,8 @@ export default class UserAPI extends ApiBase {
       name: hubUser.name,
     }));
   }
+
+  async logout(): Promise<User> {
+    return await this.makeAuthorizedRequest(`${this.apiUrl}/me/logout`, 'POST', null, {parseJson: false});
+  }
 }

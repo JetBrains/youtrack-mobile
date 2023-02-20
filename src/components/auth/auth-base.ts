@@ -1,27 +1,28 @@
-import EncryptedStorage from 'react-native-encrypted-storage';
 import qs from 'qs';
-import log from '../log/log';
-import PermissionsStore from '../permissions-store/permissions-store';
-import {ACCEPT_HEADER, revokeToken, URL_ENCODED_TYPE} from './oauth2-helper';
+
+import log from 'components/log/log';
+import PermissionsStore from 'components/permissions-store/permissions-store';
+import {ACCEPT_HEADER, URL_ENCODED_TYPE} from './oauth2-helper';
 import {createBtoa} from 'util/util';
-import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
+import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {
   getAuthParamsKey,
   getStoredSecurelyAuthParams,
   storeSecurelyAuthParams,
 } from '../storage/storage__oauth';
-import {HTTP_STATUS} from '../error/error-http-codes';
-import {STORAGE_AUTH_PARAMS_KEY} from '../storage/storage';
-import {USER_AGENT} from '../usage/usage';
+import {HTTP_STATUS} from 'components/error/error-http-codes';
+import {USER_AGENT} from 'components/usage/usage';
+
 import type {AppConfig} from 'types/AppConfig';
 import type {AuthParams, RequestHeaders} from 'types/Auth';
 import type {CustomError} from 'types/Error';
 import type {User} from 'types/User';
+
 export class AuthBase {
-  authParams: AuthParams;
+  authParams: AuthParams | null;
   LOAD_USER_URL: string;
   config: AppConfig;
-  currentUser: User;
+  currentUser: User | null;
   PERMISSIONS_CACHE_URL: string;
   permissionsStore: PermissionsStore;
 
@@ -78,7 +79,7 @@ export class AuthBase {
       });
   }
 
-  static async obtainTokenWithOAuthCode(config: AppConfig): any {}
+  static async obtainTokenWithOAuthCode(config: AppConfig): Promise<void> {}
 
   static obtainTokenByCredentials(
     login: string,
@@ -105,31 +106,24 @@ export class AuthBase {
   }
 
   getTokenType(): string {
-    return this.authParams?.token_type;
+    return (this.authParams as AuthParams)?.token_type;
   }
 
   getAccessToken(): string {
-    return this.authParams?.access_token;
+    return (this.authParams as AuthParams)?.access_token;
   }
 
   getRefreshToken(authParams: AuthParams): string {
     return authParams.refresh_token;
   }
 
-  setCurrentUser(user: User): void {
+  setCurrentUser(user: User | null): void {
     this.currentUser = user;
   }
 
-  async logOut(): Promise<void> {
-    await EncryptedStorage.removeItem(STORAGE_AUTH_PARAMS_KEY, () => {
-      EncryptedStorage.setItem(STORAGE_AUTH_PARAMS_KEY, '');
-    });
-
-    if (this.getAccessToken()) {
-      await revokeToken(this.config, this.getAccessToken());
-    }
-
+  logOut(): void {
     this.authParams = null;
+    this.setCurrentUser(null);
   }
 
   async refreshToken(): Promise<any> {}

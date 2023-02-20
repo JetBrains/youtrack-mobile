@@ -18,6 +18,14 @@ import PushNotifications from 'components/push-notifications/push-notifications'
 import Router from 'components/router/router';
 import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
 
+jest.mock('components/storage/storage', () => {
+  const st = jest.requireActual('components/storage/storage');
+  return {
+    ...st,
+    clearStorage: jest.fn(),
+  };
+});
+
 jest.mock('components/router/router', () => ({
   navigateToDefaultRoute: jest.fn(),
   Home: jest.fn(),
@@ -125,6 +133,8 @@ describe('app-actions', () => {
       }
     });
   });
+
+
   describe('removeAccountOrLogOut', () => {
     beforeEach(() => {
       jest.spyOn(PushNotifications, 'unregister').mockResolvedValueOnce({});
@@ -132,30 +142,41 @@ describe('app-actions', () => {
         app: {...appStateMock, otherAccounts: []},
       });
     });
+
     it('should logout from the only account', async () => {
       jest.spyOn(appStateMock.auth, 'logOut');
       await store.dispatch(actions.removeAccountOrLogOut());
+
       expect(appStateMock.auth.logOut).toHaveBeenCalled();
     });
+
     it('should not logout from the account', async () => {
       updateStore({
         app: {...appStateMock, otherAccounts: [{}]},
       });
       jest.spyOn(appStateMock.auth, 'logOut');
       await store.dispatch(actions.removeAccountOrLogOut());
-      expect(appStateMock.auth.logOut).not.toHaveBeenCalled();
+
+      expect(appStateMock.auth.logOut).toHaveBeenCalled();
+      expect(apiMock.user.logout).toHaveBeenCalled();
     });
+
     it('should not unsubscribe from push notifications', async () => {
       setRegistered(false);
       await store.dispatch(actions.removeAccountOrLogOut());
+
       expect(PushNotifications.unregister).not.toHaveBeenCalled();
     });
+
     it('should unsubscribe from push notifications', async () => {
       setRegistered(true);
       await store.dispatch(actions.removeAccountOrLogOut());
+
       expect(PushNotifications.unregister).toHaveBeenCalled();
     });
   });
+
+
   describe('Permissions', () => {
     let actualPermissionsMock;
     let cachedPermissionsMock;
@@ -220,26 +241,24 @@ describe('app-actions', () => {
   });
   describe('setYTCurrentUser', () => {
     let currentUserMock;
-    let dispatchedObj;
     beforeEach(() => {
       currentUserMock = {};
-
       storage.__setStorageState({
         currentUser: currentUserMock,
       });
 
-      jest.spyOn(storage, 'flushStoragePart');
       userMock = mocks.createUserMock();
-      dispatchedObj = {
-        type: types.RECEIVE_USER,
-        user: userMock,
-      };
     });
     it('should set user and cache it', async () => {
       await store.dispatch(actions.setYTCurrentUser(userMock));
-      expect(store.getActions()[0]).toEqual(dispatchedObj);
-      expect(storage.flushStoragePart).toHaveBeenCalledWith({
-        currentUser: {...currentUserMock, ytCurrentUser: userMock},
+
+      expect(store.getActions()[0]).toEqual({
+        type: types.RECEIVE_USER,
+        user: userMock,
+      });
+      expect(storage.getStorageState().currentUser).toEqual({
+        ...currentUserMock,
+        ytCurrentUser: userMock,
       });
     });
   });
@@ -543,6 +562,7 @@ describe('app-actions', () => {
       user: {
         getUser: jest.fn(() => Promise.resolve({})),
         getUserFolders: jest.fn(() => Promise.resolve([{}])),
+        logout: jest.fn(() => Promise.resolve()),
       },
       inbox: {
         getFolders: jest.fn(() => Promise.resolve([])),

@@ -375,7 +375,21 @@ export async function getOtherAccounts(): Promise<Array<StorageState>> {
 export async function storeAccounts(accounts: StorageState[]) {
   await AsyncStorage.setItem(OTHER_ACCOUNTS_KEY, JSON.stringify(accounts));
 }
+
+const clearStorage = async () => {
+  await EncryptedStorage.removeItem(STORAGE_AUTH_PARAMS_KEY, () => {
+    EncryptedStorage.setItem(STORAGE_AUTH_PARAMS_KEY, '');
+  });
+  await flushStorage(initialState);
+  await AsyncStorage.multiRemove(Object.keys(initialState));
+};
+
+
 // For tests only!
 export async function __setStorageState(state: StorageState) {
   storageState = state;
 }
+
+export {
+  clearStorage,
+};
