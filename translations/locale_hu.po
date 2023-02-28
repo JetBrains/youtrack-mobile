@@ -180,7 +180,6 @@ msgstr ""
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr ""
 
-#: src/components/activity-stream/activity__stream-work.tsx
 #: src/components/confirmation/confirmation.ts
 #: src/components/tags/tags.tsx
 #: src/views/article/arcticle-actions.ts
@@ -342,12 +341,12 @@ msgstr "Dátum"
 msgid "Decline"
 msgstr "Elutasítás"
 
-#: src/components/activity-stream/activity__stream-work.tsx
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-helper.ts
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
+#: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -399,10 +398,10 @@ msgstr ""
 msgid "Drafts"
 msgstr "Piszkozatok"
 
-#: src/components/activity-stream/activity__stream-work.tsx
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
+#: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Edit"

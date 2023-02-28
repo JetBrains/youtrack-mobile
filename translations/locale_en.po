@@ -57,7 +57,7 @@ msgstr "Accept"
 msgid "Activity"
 msgstr "Activity"
 
-#: src/views/issue/activity/issue__activity.tsx:151
+#: src/views/issue/activity/issue__activity.tsx:156
 msgid "Activity Settings"
 msgstr "Activity Settings"
 
@@ -66,7 +66,7 @@ msgid "Add project to favorites"
 msgstr "Add project to favorites"
 
 #: src/views/article/article__activity-stream.tsx:198
-#: src/views/issue/activity/issue__activity-stream.tsx:118
+#: src/views/issue/activity/issue__activity-stream.tsx:119
 msgid "Add reaction"
 msgstr "Add reaction"
 
@@ -174,7 +174,6 @@ msgstr "Bugsnag Privacy Policy"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "By logging in, you agree to the Privacy Policy."
 
-#: src/components/activity-stream/activity__stream-work.tsx:160
 #: src/components/confirmation/confirmation.ts:14
 #: src/components/tags/tags.tsx:55
 #: src/views/article/arcticle-actions.ts:326
@@ -182,7 +181,7 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/views/create-issue/create-issue-actions.ts:475
 #: src/views/inbox-threads/inbox-threads__thread.tsx:159
 #: src/views/inbox-threads/inbox-threads.tsx:273
-#: src/views/issue/activity/issue-activity__comment-actions.ts:432
+#: src/views/issue/activity/issue-activity__comment-actions.ts:422
 #: src/views/issue/issue-base-actions-creater.ts:697
 #: src/views/issue/issue-base-actions-creater.ts:738
 #: src/views/knowledge-base/knowledge-base-actions.ts:497
@@ -269,8 +268,8 @@ msgstr "Content revised"
 #: src/components/wiki/code-renderer.tsx:164
 #: src/views/article/article__activity-stream.tsx:210
 #: src/views/article/article__activity-stream.tsx:219
-#: src/views/issue/activity/issue__activity-stream.tsx:133
-#: src/views/issue/activity/issue-activity__comment-actions.ts:399
+#: src/views/issue/activity/issue__activity-stream.tsx:134
+#: src/views/issue/activity/issue-activity__comment-actions.ts:389
 #: src/views/issue/issue-base-actions-creater.ts:640
 #: src/views/issue/issue-base-actions-creater.ts:734
 msgid "Copied"
@@ -286,8 +285,8 @@ msgstr "Copy field text"
 
 #: src/views/article/arcticle-actions.ts:647
 #: src/views/article/article__activity-stream.tsx:215
-#: src/views/issue/activity/issue__activity-stream.tsx:138
-#: src/views/issue/activity/issue-activity__comment-actions.ts:403
+#: src/views/issue/activity/issue__activity-stream.tsx:139
+#: src/views/issue/activity/issue-activity__comment-actions.ts:393
 #: src/views/issue/issue-base-actions-creater.ts:636
 msgid "Copy link"
 msgstr "Copy link"
@@ -298,8 +297,8 @@ msgid "Copy link to article"
 msgstr "Copy link to article"
 
 #: src/views/article/article__activity-stream.tsx:206
-#: src/views/issue/activity/issue__activity-stream.tsx:129
-#: src/views/issue/activity/issue-activity__comment-actions.ts:395
+#: src/views/issue/activity/issue__activity-stream.tsx:130
+#: src/views/issue/activity/issue-activity__comment-actions.ts:385
 #: src/views/issue/issue-base-actions-creater.ts:730
 msgid "Copy text"
 msgstr "Copy text"
@@ -336,15 +335,15 @@ msgstr "Date"
 msgid "Decline"
 msgstr "Decline"
 
-#: src/components/activity-stream/activity__stream-work.tsx:145
 #: src/views/article/arcticle-actions.ts:310
 #: src/views/article/arcticle-actions.ts:661
 #: src/views/article/arcticle-helper.ts:3
 #: src/views/article/article__activity-stream.tsx:241
-#: src/views/issue/activity/issue__activity-stream.tsx:163
+#: src/views/issue/activity/issue__activity-stream.tsx:164
+#: src/views/issue/activity/issue__activity.tsx:270
 #: src/views/issue/activity/issue-activity__actions.ts:419
 #: src/views/issue/activity/issue-activity__comment-actions.ts:341
-#: src/views/issue/activity/issue-activity__comment-actions.ts:423
+#: src/views/issue/activity/issue-activity__comment-actions.ts:413
 msgid "Delete"
 msgstr "Delete"
 
@@ -393,11 +392,11 @@ msgstr "Don't send logs"
 msgid "Drafts"
 msgstr "Drafts"
 
-#: src/components/activity-stream/activity__stream-work.tsx:138
 #: src/views/article/arcticle-actions.ts:284
 #: src/views/article/article__activity-stream.tsx:161
-#: src/views/issue/activity/issue__activity-stream.tsx:96
-#: src/views/issue/activity/issue-activity__comment-actions.ts:413
+#: src/views/issue/activity/issue__activity-stream.tsx:97
+#: src/views/issue/activity/issue__activity.tsx:259
+#: src/views/issue/activity/issue-activity__comment-actions.ts:403
 #: src/views/issue/issue-base-actions-creater.ts:647
 msgid "Edit"
 msgstr "Edit"
@@ -560,7 +559,7 @@ msgstr "Light theme"
 msgid "Link issue"
 msgstr "Link issue"
 
-#: src/views/issue/activity/issue-activity__comment-actions.ts:374
+#: src/views/issue/activity/issue-activity__comment-actions.ts:372
 msgid "Link to comment copied"
 msgstr "Link to comment copied"
 
@@ -648,7 +647,7 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.tsx:437
+#: src/components/activity-stream/activity__stream.tsx:416
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -769,7 +768,7 @@ msgid "reopened the pull request"
 msgstr "reopened the pull request"
 
 #: src/views/article/article__activity-stream.tsx:190
-#: src/views/issue/activity/issue__activity-stream.tsx:110
+#: src/views/issue/activity/issue__activity-stream.tsx:111
 msgid "Reply"
 msgstr "Reply"
 
@@ -841,8 +840,8 @@ msgstr "Share"
 #: src/views/article/arcticle-actions.ts:637
 #: src/views/article/article__activity-stream.tsx:224
 #: src/views/article/article__activity-stream.tsx:231
-#: src/views/issue/activity/issue__activity-stream.tsx:146
-#: src/views/issue/activity/issue__activity-stream.tsx:153
+#: src/views/issue/activity/issue__activity-stream.tsx:147
+#: src/views/issue/activity/issue__activity-stream.tsx:154
 #: src/views/issue/issue-base-actions-creater.ts:627
 msgid "Share link"
 msgstr "Share link"
@@ -897,7 +896,7 @@ msgstr "Sorted by"
 msgid "Spent time"
 msgstr "Spent time"
 
-#: src/components/activity-stream/activity__stream-work.tsx:69
+#: src/components/activity-stream/activity__stream-work.tsx:44
 msgid "Spent time:"
 msgstr "Spent time:"
 

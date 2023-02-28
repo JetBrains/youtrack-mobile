@@ -188,7 +188,6 @@ msgstr "Политикa конфиденциальности Bugsnag"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "Входя в систему, вы соглашаетесь с Политикой конфиденциальности."
 
-#: src/components/activity-stream/activity__stream-work.tsx
 #: src/components/confirmation/confirmation.ts
 #: src/components/tags/tags.tsx
 #: src/views/article/arcticle-actions.ts
@@ -350,12 +349,12 @@ msgstr "Дата"
 msgid "Decline"
 msgstr "Отклонить"
 
-#: src/components/activity-stream/activity__stream-work.tsx
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-helper.ts
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
+#: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -407,10 +406,10 @@ msgstr "Не отправлять логи"
 msgid "Drafts"
 msgstr "Черновики"
 
-#: src/components/activity-stream/activity__stream-work.tsx
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
+#: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Edit"

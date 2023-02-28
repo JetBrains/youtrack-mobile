@@ -176,7 +176,6 @@ msgstr "Bugsnag 개인정보 보호정책"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "로그인하면 개인정보 보호정책에 동의하는 것입니다."
 
-#: src/components/activity-stream/activity__stream-work.tsx
 #: src/components/confirmation/confirmation.ts
 #: src/components/tags/tags.tsx
 #: src/views/article/arcticle-actions.ts
@@ -338,12 +337,12 @@ msgstr "날짜"
 msgid "Decline"
 msgstr "취소"
 
-#: src/components/activity-stream/activity__stream-work.tsx
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-helper.ts
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
+#: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -395,10 +394,10 @@ msgstr "로그를 보내지 않음"
 msgid "Drafts"
 msgstr "이슈 초안"
 
-#: src/components/activity-stream/activity__stream-work.tsx
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
+#: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Edit"
