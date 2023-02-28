@@ -130,9 +130,6 @@ export const rowStyles = {
     marginTop: UNIT,
     marginBottom: UNIT,
   },
-  activityWork: {
-    flexDirection: 'row',
-  },
   activityWorkIcon: {
     position: 'relative',
     top: -2,

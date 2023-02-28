@@ -40,17 +40,17 @@ const StreamWork = (props: Props) => {
             </Text>
           )}
 
-          <View style={styles.activityWork}>
+          <Text>
             <Text style={styles.activityLabel}>{i18n('Spent time:')}</Text>
             <Text style={styles.activityWorkTime}>
-              {getDurationPresentation(work.duration)}
+              {` ${getDurationPresentation(work.duration)}`}
             </Text>
             {work.type && (
               <Text
                 style={styles.secondaryTextColor}
               >{`, ${work.type.name}`}</Text>
             )}
-          </View>
+          </Text>
 
           {!!work.text && (
             <View style={work.id && styles.activityWorkComment}>
