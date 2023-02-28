@@ -1,9 +1,11 @@
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
+
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+
 import AddSpentTimeForm from './activity__add-spent-time';
-import BottomSheetModal from '../../../components/modal-panel-bottom/bottom-sheet-modal';
+import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import ErrorMessage from 'components/error-message/error-message';
 import IssueActivitiesSettings from './issue__activity-settings';
 import IssueActivityCommentAdd from './issue__activity-comment-add';
@@ -16,7 +18,7 @@ import Router from 'components/router/router';
 import Select from 'components/select/select';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
-import {addListenerGoOnline} from '../../../components/network/network-events';
+import {addListenerGoOnline} from 'components/network/network-events';
 import {bindActionCreatorsExt} from 'util/redux-ext';
 import {
   convertCommentsToActivityPage,
@@ -28,7 +30,8 @@ import {
   receiveActivityPage,
 } from './issue-activity__actions';
 import {getApi} from 'components/api/api__instance';
-import {HIT_SLOP} from '../../../components/common-styles/button';
+import {guid} from 'util/util';
+import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconAngleDown, IconClose} from 'components/icon/icon';
 import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
@@ -42,13 +45,15 @@ import styles from './issue-activity.styles';
 import type {Activity} from 'types/Activity';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {IssueComment} from 'types/CustomFields';
-import type {IssueContextData} from 'types/Issue';
+import type {AnyIssue, IssueContextData} from 'types/Issue';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
 import type {Theme, UITheme} from 'types/Theme';
 import type {User, UserAppearanceProfile} from 'types/User';
 import type {WorkItem} from 'types/Work';
 import type {YouTrackWiki} from 'types/Wiki';
+import {ContextMenuConfigItem} from 'types/MenuConfig';
+
 type IssueActivityProps = Partial<
   IssueActivityState &
     IssueCommentActivityState &
@@ -230,6 +235,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
       return <SkeletonIssueActivities marginTop={UNIT * 6} marginLeft={UNIT} />;
     }
 
+    const issPermissions: IssuePermissions = this.issuePermissions;
     return (
       <IssueActivityStream
         activities={createActivityModel(
@@ -245,20 +251,36 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
         youtrackWiki={youtrackWiki}
         onReactionSelect={onReactionSelect}
         currentUser={user}
-        onWorkUpdate={onWorkUpdate}
-        onWorkDelete={async (workItem: WorkItem) => {
-          const isDeleted = await deleteWorkItem(workItem);
-
-          if (isDeleted) {
-            onWorkUpdate();
-          }
-        }}
-        onWorkEdit={(work: WorkItem) => {
-          logEvent({
-            message: 'SpentTime: actions:update',
-            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
-          });
-          this.renderAddSpentTimePage(work);
+        work={{
+          onWorkUpdate,
+          createContextActions: (workItem: WorkItem): ContextMenuConfigItem[] => {
+            return [
+              ...(issPermissions.canUpdateWork(issue as AnyIssue, workItem) ? [{
+                actionTitle: i18n('Edit'),
+                actionKey: guid(),
+                execute: () => {
+                  logEvent({
+                    message: 'SpentTime: actions:update',
+                    analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
+                  });
+                  this.renderAddSpentTimePage(workItem);
+                },
+              }] : []),
+              ...(issPermissions.canDeleteWork(issue as AnyIssue, workItem) ? [{
+                actionTitle: i18n('Delete'),
+                actionKey: guid(),
+                execute: async () => {
+                  logEvent({
+                    message: 'SpentTime: actions:delete',
+                    analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
+                  });
+                  const isDeleted = await deleteWorkItem(workItem);
+                  if (isDeleted) {
+                    onWorkUpdate();
+                  }
+                },
+              }] : [])];
+          },
         }}
         onCheckboxUpdate={(
           checked: boolean,
@@ -291,11 +313,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     );
   }
 
-  canAddComment: () => boolean = () =>
-    this.issuePermissions.canCommentOn(this.props.issue);
-  onSubmitComment: (comment: IssueComment) => any = async (
-    comment: IssueComment,
-  ) => {
+  canAddComment: () => boolean = () => this.issuePermissions.canCommentOn(this.props.issue);
+
+  onSubmitComment: (comment: IssueComment) => any = async (comment: IssueComment) => {
     const {
       submitDraftComment,
       activityPage,
@@ -366,9 +386,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
       updateDraftComment,
       stateFieldName,
     } = this.props;
-    const canAddWork: boolean =
+    const canAddWork: boolean = (
       issue?.project?.plugins?.timeTrackingSettings?.enabled &&
-      this.issuePermissions.canCreateWork(issue);
+      this.issuePermissions.canCreateWork(issue)
+    );
     return (
       <View>
         <IssueActivityCommentAdd

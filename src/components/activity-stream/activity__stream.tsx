@@ -11,11 +11,10 @@ import {
 } from 'react-native';
 
 import ActivityUserAvatar from './activity__stream-avatar';
-import ApiHelper from '../api/api__helper';
+import ApiHelper from 'components/api/api__helper';
 import CommentReactions from 'components/comment/comment-reactions';
-
-import ContextMenu from 'components/context-menu/context-menu';
-import Feature, {FEATURE_VERSION} from '../feature/feature';
+import ContextActionsProvider from 'components/activity-stream/activity__stream-actions-provider';
+import Feature, {FEATURE_VERSION} from 'components/feature/feature';
 import ReactionAddIcon from 'components/reactions/new-reaction.svg';
 import StreamComment from './activity__stream-comment';
 import StreamHistoryChange from './activity__stream-history';
@@ -24,7 +23,6 @@ import StreamUserInfo from './activity__stream-user-info';
 import StreamVCS from './activity__stream-vcs';
 import StreamWork from './activity__stream-work';
 import {firstActivityChange} from './activity__stream-helper';
-import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {guid, isAndroidPlatform} from 'util/util';
 import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles';
@@ -34,7 +32,7 @@ import {useBottomSheetContext} from 'components/bottom-sheet';
 
 import styles from './activity__stream.styles';
 
-import type {ActivityGroup, ActivityStreamCommentActions} from 'types/Activity';
+import type {ActivityGroup, ActivityItem, ActivityStreamCommentActions} from 'types/Activity';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {ContextMenuConfig, ContextMenuConfigItem} from 'types/MenuConfig';
 import type {CustomError} from 'types/Error';
@@ -64,9 +62,10 @@ interface Props {
   uiTheme: UITheme;
   workTimeSettings: WorkTimeSettings | null | undefined;
   youtrackWiki: YouTrackWiki;
-  onWorkDelete?: (workItem: WorkItem) => any;
-  onWorkUpdate?: (workItem?: WorkItem) => void;
-  onWorkEdit?: (workItem: WorkItem) => void;
+  work: {
+    onWorkUpdate?: (workItem?: WorkItem) => void;
+    createContextActions: (workItem: WorkItem) => ContextMenuConfigItem[];
+  };
   onCheckboxUpdate: (checked: boolean, position: number, comment: IssueComment) => void;
   renderHeader?: () => any;
   refreshControl: () => any;
@@ -173,40 +172,44 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     ) : null;
   };
 
-  const getMenuConfig = (
-    commentActions: ActivityStreamCommentActions,
-    comment: IssueComment,
-    activityId: string
-  ): ContextMenuConfig => (
-    commentActions?.contextMenuConfig?.(comment, activityId) || {menuTitle: '', menuItems: []}
-  );
-
-  const renderBottomSheetContent = (activityGroup: ActivityGroup, activityId: string): React.ReactNode => {
-    const comment: IssueComment = getCommentFromActivityGroup(activityGroup) as IssueComment;
-    return (
-      <>
-        {getMenuConfig(props.commentActions, comment, activityId).menuItems.map(
-          (it: ContextMenuConfigItem) => (
-            <TouchableOpacity
-              key={guid()}
-              style={styles.contextMenu}
-              onPress={() => {
-                closeBottomSheet();
-                it?.execute?.();
-              }}
-            >
-              <Text
-                style={[
-                  styles.contextMenuItem,
-                  it.menuAttributes?.includes('destructive') && styles.contextMenuItemDestructive,
-                ]}>
-                {it.actionTitle}
-              </Text>
-            </TouchableOpacity>
-          )
-        )}
-      </>
-    );
+  const onShowContextActions = (
+    activityGroup: ActivityGroup,
+    menuConfig: ContextMenuConfig = {menuTitle: '', menuItems: []}
+  ) => {
+    if (!isAndroid) {
+      return;
+    }
+    const activity: Activity = activityGroup.comment || activityGroup.work;
+    const entity: ActivityItem | undefined = activity && firstActivityChange(activity);
+    if (entity) {
+      openBottomSheet({
+        header: null,
+        children: (
+          <>
+            {menuConfig.menuItems.map(
+              (it: ContextMenuConfigItem) => (
+                <TouchableOpacity
+                  key={guid()}
+                  style={styles.contextMenu}
+                  onPress={() => {
+                    closeBottomSheet();
+                    it?.execute?.();
+                  }}
+                >
+                  <Text
+                    style={[
+                      styles.contextMenuItem,
+                      it.menuAttributes?.includes('destructive') && styles.contextMenuItemDestructive,
+                    ]}>
+                    {it.actionTitle}
+                  </Text>
+                </TouchableOpacity>
+              )
+            )}
+          </>
+        ),
+      });
+    }
   };
 
   const renderCommentActivity = (activityGroup: ActivityGroup) => {
@@ -235,50 +238,12 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
           commentActions={props.commentActions}
           onLongPress={(comment: IssueComment) => {
             props.commentActions?.onLongPress?.(comment, activity.id as string);
-            if (isAndroid) {
-              const comment: IssueComment = getCommentFromActivityGroup(activityGroup) as IssueComment;
-              openBottomSheet({
-                children: renderBottomSheetContent(activityGroup, activity.id),
-                snapPoint: 1,
-                header: (
-                  <ScrollView
-                    style={[styles.contextMenuTitle, styles.contextMenuTitleItem]}
-                  >
-                    <Text style={styles.contextMenuTitleItem}>{getEntityPresentation(comment?.author)}</Text>
-                    <Text style={styles.contextMenuTitleItem} selectable={true}>
-                      {comment.text}
-                    </Text>
-                  </ScrollView>
-                ),
-              });
-            }
+            onShowContextActions(activityGroup, props.commentActions?.contextMenuConfig?.(comment, activity.id));
           }}
           youtrackWiki={props.youtrackWiki}
         />
         {!!props.onSelectReaction && renderCommentReactions(activityGroup)}
       </>
-    );
-  };
-
-  const ContextActionsProvider = ({children, comment, activityId}: {
-    children: React.ReactNode,
-    comment: IssueComment,
-    activityId: string
-  }) => {
-    const {commentActions} = props;
-    const menuConfig: ContextMenuConfig = getMenuConfig(commentActions, comment, activityId);
-    return (
-      <ContextMenu
-        menuConfig={menuConfig}
-        onPress={(actionKey: string) => {
-          const targetItem: ContextMenuConfigItem | undefined = menuConfig.menuItems.find(
-            (it: ContextMenuConfigItem) => it.actionKey === actionKey
-          );
-          targetItem?.execute?.();
-        }}
-      >
-        {children}
-      </ContextMenu>
     );
   };
 
@@ -305,10 +270,15 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
       case !!activityGroup.work:
         renderedItem = (
           <StreamWork
+            onLongPress={() => onShowContextActions(
+              activityGroup,
+              {
+                menuTitle: '',
+                menuItems: props.work.createContextActions(firstActivityChange(activityGroup.work)),
+              }
+            )}
             activityGroup={activityGroup}
-            onDelete={props.onWorkDelete}
-            onUpdate={props.onWorkUpdate}
-            onEdit={props.onWorkEdit}
+            onUpdate={props.work.onWorkUpdate}
           />
         );
         break;
@@ -384,39 +354,48 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     );
   };
 
+  const addActionsWrapper = (activityGroup: ActivityGroup): React.ReactNode => {
+    const entity: ActivityItem = firstActivityChange((activityGroup.comment || activityGroup.work) as Activity);
+    let menuConfig: ContextMenuConfig | null = null;
+
+    if (activityGroup.comment) {
+      menuConfig = props.commentActions?.contextMenuConfig?.(entity as IssueComment, activityGroup?.comment?.id);
+    } else if (activityGroup.work) {
+      menuConfig = {
+        menuTitle: '',
+        menuItems: props.work.createContextActions(entity),
+      };
+    }
+    const children = doRenderActivity(activityGroup);
+    return (
+      menuConfig
+        ? <ContextActionsProvider menuConfig={menuConfig}>{children}</ContextActionsProvider>
+        : <>{children}</>
+    );
+  };
+
   const renderActivityGroup = (activityGroup: ActivityGroup, index: number) => {
     if (activityGroup.hidden) {
       return null;
     }
     const _comment: | IssueComment | null = getCommentFromActivityGroup(activityGroup);
-    const Wrapper: any = _comment ? ContextActionsProvider : React.Fragment;
     return (
       <View
         key={`${index}-${activityGroup.id}`}
         onLayout={event => {
           if (activities?.length) {
             layoutMap.current[getActivityGroupId(activityGroup)] = event.nativeEvent.layout;
-
             if (_comment?.id) {
               layoutMap.current[_comment.id] = event.nativeEvent.layout;
             }
-
             getActivityGroupEvents(activityGroup).forEach(
-              (it: Activity) =>
-                (layoutMap.current[it.id] = event.nativeEvent.layout),
+              (it: Activity) => layoutMap.current[it.id] = event.nativeEvent.layout,
             );
           }
         }}
       >
-        {index > 0 && !activityGroup.merged && (
-          <View style={styles.activitySeparator}/>
-        )}
-        <Wrapper {...(_comment && {
-          comment: getCommentFromActivityGroup(activityGroup),
-          activityId: activityGroup?.comment?.id,
-        })}>
-          {doRenderActivity(activityGroup)}
-        </Wrapper>
+        {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
+        {addActionsWrapper(activityGroup)}
       </View>
     );
   };

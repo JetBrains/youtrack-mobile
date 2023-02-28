@@ -356,9 +356,7 @@ export const createActivityCommentActions = (
           .catch(() => {});
       };
     },
-    copyCommentUrl: function copyCommentUrl(
-      comment: IssueComment,
-    ): (
+    copyCommentUrl: function copyCommentUrl(id: string): (
       dispatch: (arg0: any) => any,
       getState: StateGetter,
       getApi: ApiGetter,
@@ -370,18 +368,10 @@ export const createActivityCommentActions = (
       ) => {
         const api: Api = getApi();
         const {issue} = getState()[stateFieldName];
-        Clipboard.setString(makeIssueWebUrl(api, issue, comment.id));
+        Clipboard.setString(activityHelper.makeIssueWebUrl(api, issue, id));
         notify(i18n('Link to comment copied'));
       };
 
-      function makeIssueWebUrl(
-        api: Api,
-        issue: IssueFull,
-        commentId: string | null | undefined,
-      ) {
-        const commentHash = commentId ? `#comment=${commentId}` : '';
-        return `${api.config.backendUrl}/issue/${issue.idReadable}${commentHash}`;
-      }
     },
     showIssueCommentActions: function showIssueCommentActions(
       actionSheet: Record<string, any>,

@@ -7,7 +7,7 @@ import ApiHelper from 'components/api/api__helper';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import ReactionsPanel from './issue__activity-reactions-dialog';
 import usage from 'components/usage/usage';
-import {ActivityStream} from 'components/activity-stream/activity__stream';
+import ActivityStream from 'components/activity-stream/activity__stream';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
 import {attachmentActions} from './issue-activity__attachment-actions-and-types';
 import {createActivityCommentActions} from './issue-activity__comment-actions';
@@ -17,6 +17,7 @@ import {guid} from 'util/util';
 import {i18n} from 'components/i18n/i18n';
 import {IssueContext} from '../issue-context';
 import {logEvent} from 'components/log/log-helper';
+import {makeIssueWebUrl} from 'views/issue/activity/issue-activity__helper';
 import {notify} from 'components/notification/notification';
 
 import type {Activity, ActivityStreamCommentActions} from 'types/Activity';
@@ -137,7 +138,7 @@ const IssueActivityStream: React.FC<Props> = (props: Props) => {
             actionKey: guid(),
             actionTitle: i18n('Copy link'),
             execute: () => {
-              dispatch(commentActions.copyCommentUrl(comment));
+              dispatch(commentActions.copyCommentUrl(activityId));
               usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Copy comment URL');
             },
           },
@@ -145,7 +146,7 @@ const IssueActivityStream: React.FC<Props> = (props: Props) => {
             actionKey: guid(),
             actionTitle: i18n('Share link'),
             execute: () => {
-              const url: string = `${getApi().config.backendUrl}/issue/${issue.idReadable}#comment${activityId}`;
+              const url: string = makeIssueWebUrl(getApi(), issue, activityId);
               Share.share({
                 url,
                 message: url,

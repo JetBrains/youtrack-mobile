@@ -1,12 +1,17 @@
+import Api from 'components/api/api';
 import {ActivityCategory} from 'components/activity/activity__category';
 import {checkVersion} from 'components/feature/feature';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {getActivityAllTypes} from 'components/activity/activity-helper';
+
 import type {ActivityType} from 'types/Activity';
 import type {StorageState} from 'components/storage/storage';
+import {IssueFull} from 'types/Issue';
+
 export function isIssueActivitiesAPIEnabled(): any {
   return checkVersion('2018.3');
 }
+
 export function getIssueActivitiesEnabledTypes(): ActivityType[] {
   let enabledTypes: ActivityType[] =
     getStorageState().issueActivitiesEnabledTypes || [];
@@ -57,4 +62,13 @@ export async function toggleIssueActivityEnabledType(
   return flushStoragePart({
     issueActivitiesEnabledTypes: enabledTypes,
   });
+}
+
+export function makeIssueWebUrl(
+  api: Api,
+  issue: IssueFull,
+  id: string | undefined,
+): string {
+  const commentHash: string = id ? `#focus=Comments-${id}` : '';
+  return `${api.config.backendUrl}/issue/${issue.idReadable}${commentHash}`;
 }
