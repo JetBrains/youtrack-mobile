@@ -292,12 +292,12 @@ export const createActivityCommentActions = (
         const issueId = getState()[stateFieldName].issueId;
 
         try {
-          dispatch(updateComment({...comment, deleted}));
-          await getApi().issue.updateCommentDeleted(
+          const _comment: IssueComment = await getApi().issue.updateCommentDeleted(
             issueId,
             comment.id,
             deleted,
           );
+          dispatch(updateComment({...comment, ..._comment}));
           log.info(
             `Comment ${
               comment.id

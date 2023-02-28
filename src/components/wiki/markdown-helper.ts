@@ -1,6 +1,6 @@
 import * as patterns from './util/patterns';
-export function isPureHTMLBlock(md: string = '') {
-  const text: string = md.toLowerCase().trim();
+export function isPureHTMLBlock(md: string | null) {
+  const text: string = (md || '').toLowerCase().trim();
   return (
     (text.startsWith('<html') || text.startsWith('{html}')) &&
     (text.endsWith('</html>') || text.endsWith('{html}'))
