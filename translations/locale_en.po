@@ -57,7 +57,7 @@ msgstr "Accept"
 msgid "Activity"
 msgstr "Activity"
 
-#: src/views/issue/activity/issue__activity.tsx:156
+#: src/views/issue/activity/issue__activity.tsx:157
 msgid "Activity Settings"
 msgstr "Activity Settings"
 
@@ -340,7 +340,7 @@ msgstr "Decline"
 #: src/views/article/arcticle-helper.ts:3
 #: src/views/article/article__activity-stream.tsx:241
 #: src/views/issue/activity/issue__activity-stream.tsx:164
-#: src/views/issue/activity/issue__activity.tsx:270
+#: src/views/issue/activity/issue__activity.tsx:271
 #: src/views/issue/activity/issue-activity__actions.ts:419
 #: src/views/issue/activity/issue-activity__comment-actions.ts:341
 #: src/views/issue/activity/issue-activity__comment-actions.ts:413
@@ -395,7 +395,7 @@ msgstr "Drafts"
 #: src/views/article/arcticle-actions.ts:284
 #: src/views/article/article__activity-stream.tsx:161
 #: src/views/issue/activity/issue__activity-stream.tsx:97
-#: src/views/issue/activity/issue__activity.tsx:259
+#: src/views/issue/activity/issue__activity.tsx:260
 #: src/views/issue/activity/issue-activity__comment-actions.ts:403
 #: src/views/issue/issue-base-actions-creater.ts:647
 msgid "Edit"
@@ -1039,6 +1039,10 @@ msgstr "To view articles in the knowledge base for a specific project, mark it a
 msgid "Total votes"
 msgstr "Total votes"
 
+#: src/components/tip/tips/activity-touch-actions.tsx:28
+msgid "Touch and hold an item to view a list of available actions"
+msgstr "Touch and hold an item to view a list of available actions"
+
 #: src/components/error-message/error-message.tsx:87
 msgid "Try Again"
 msgstr "Try Again"
@@ -1149,7 +1153,7 @@ msgstr ""
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Your account has insufficient permission to perform this operation."
 
-#: src/components/storage/storage.ts:332
+#: src/components/storage/storage.ts:351
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 msgstr "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 

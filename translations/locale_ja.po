@@ -1039,6 +1039,10 @@ msgstr "特定プロジェクトのナレッジベースにある記事を表示
 msgid "Total votes"
 msgstr "合計投票数"
 
+#: src/components/tip/tips/activity-touch-actions.tsx
+msgid "Touch and hold an item to view a list of available actions"
+msgstr ""
+
 #: src/components/error-message/error-message.tsx
 msgid "Try Again"
 msgstr "やり直す"

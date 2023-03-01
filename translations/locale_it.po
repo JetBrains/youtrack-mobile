@@ -1045,6 +1045,10 @@ msgstr "Per visualizzare gli articoli dalle Conoscenze di base relativi a un pro
 msgid "Total votes"
 msgstr "Numero totale di voti"
 
+#: src/components/tip/tips/activity-touch-actions.tsx
+msgid "Touch and hold an item to view a list of available actions"
+msgstr ""
+
 #: src/components/error-message/error-message.tsx
 msgid "Try Again"
 msgstr "Riprova"

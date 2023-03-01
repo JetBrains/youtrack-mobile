@@ -1045,6 +1045,10 @@ msgstr "Para visualizar artigos na base de conhecimento de um projeto específic
 msgid "Total votes"
 msgstr "Total de votos"
 
+#: src/components/tip/tips/activity-touch-actions.tsx
+msgid "Touch and hold an item to view a list of available actions"
+msgstr ""
+
 #: src/components/error-message/error-message.tsx
 msgid "Try Again"
 msgstr "Tentar novamente"

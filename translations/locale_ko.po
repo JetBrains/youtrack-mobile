@@ -1039,6 +1039,10 @@ msgstr "특정 프로젝트에 대한 지식 기반의 자료를 보려면 즐�
 msgid "Total votes"
 msgstr "총 투표"
 
+#: src/components/tip/tips/activity-touch-actions.tsx
+msgid "Touch and hold an item to view a list of available actions"
+msgstr ""
+
 #: src/components/error-message/error-message.tsx
 msgid "Try Again"
 msgstr "다시 시도"
