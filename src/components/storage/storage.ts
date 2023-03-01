@@ -34,7 +34,12 @@ export type InboxThreadsCache = {
   unreadOnly: boolean;
   lastVisited: number;
 };
-export type StorageState = {
+
+type TipsState = {
+  dismissActivityActionAccessTouch: boolean | null,
+}
+
+export type StorageState = TipsState & {
   [key in typeof storageStateAuthParamsKey]: string | null;
 } & {
   articles: Article[] | null;
@@ -80,8 +85,16 @@ export type StorageState = {
   vcsChanges: boolean | null;
   forceHandsetMode: boolean | null;
 };
+
 type StorageStateKeys = Partial<Record<keyof StorageState, string>>;
-const storageKeys: StorageStateKeys = {
+type TipsStateKeys = Partial<Record<keyof TipsState, string>>;
+
+const storageTipsKeys: TipsStateKeys = {
+  dismissActivityActionAccessTouch: 'YT_dismissActivityActionAccessTouch',
+};
+
+const storageKeys: StorageStateKeys & TipsStateKeys = {
+  ...storageTipsKeys,
   articles: 'YT_ARTICLES',
   articlesList: 'YT_ARTICLES_LIST',
   articlesQuery: 'YT_ARTICLES_QUERY',
@@ -114,11 +127,16 @@ const storageKeys: StorageStateKeys = {
   vcsChanges: 'YT_VCS_CHANGES',
   forceHandsetMode: 'YT_HANDSET_MODE',
 };
-let storageState: StorageState | null | undefined = null;
+let storageState: StorageState | null = null;
 
 const hasValue = (v: any): boolean => v !== null && v !== undefined;
 
+export const initialTipsState: Readonly<TipsState> = {
+  dismissActivityActionAccessTouch: null,
+};
+
 export const initialState: Readonly<StorageState> = {
+  ...initialTipsState,
   articles: null,
   articlesList: null,
   articlesQuery: null,
@@ -232,6 +250,7 @@ export async function clearCachesAndDrafts(): Promise<StorageState> {
     storageKeys.permissions,
     storageKeys.agileDefaultBoard,
     storageKeys.projects,
+    ...Object.values(storageTipsKeys),
   ] as string[]);
   return populateStorage();
 }
@@ -318,7 +337,7 @@ export async function flushStorage(
   return storageState;
 }
 export async function flushStoragePart(
-  part: Record<string, any>,
+  part: Record<keyof StorageState, any>,
 ): Promise<StorageState> {
   const currentState: StorageState = getStorageState();
   let newState: Promise<StorageState>;

@@ -15,6 +15,7 @@ import type {Article} from 'types/Article';
 import type {IssueComment} from 'types/CustomFields';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
+import TipActivityActionAccessTouch from 'components/tip/tips/activity-touch-actions';
 
 interface Props {
   article: Article;
@@ -93,6 +94,7 @@ const ArticleActivities = (props: Props) => {
     );
   };
 
+  const canCommentOn: boolean = issuePermissions.articleCanCommentOn(article);
   return (
     <>
       <ArticleActivityStream
@@ -109,7 +111,8 @@ const ArticleActivities = (props: Props) => {
         refreshControl={() => renderRefreshControl(() => loadActivities(false))}
         highlight={props.highlight}
       />
-      {issuePermissions.articleCanCommentOn(article) && (
+
+      {canCommentOn && (
         <>
           <ArticleAddComment
             article={article}
@@ -132,6 +135,7 @@ const ArticleActivities = (props: Props) => {
           <KeyboardSpacerIOS top={98}/>
         </>
       )}
+      <TipActivityActionAccessTouch canAddComment={canCommentOn}/>
     </>
   );
 };

@@ -53,6 +53,7 @@ import type {User, UserAppearanceProfile} from 'types/User';
 import type {WorkItem} from 'types/Work';
 import type {YouTrackWiki} from 'types/Wiki';
 import {ContextMenuConfigItem} from 'types/MenuConfig';
+import TipActivityActionAccessTouch from 'components/tip/tips/activity-touch-actions';
 
 type IssueActivityProps = Partial<
   IssueActivityState &
@@ -494,10 +495,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
                       {!this.hasLoadingError() && this._renderActivities()}
                     </View>
 
-                    {Boolean(this.canAddComment()) &&
-                      !editingComment?.isEdit &&
-                      this.renderAddCommentInput()}
+                    {Boolean(this.canAddComment()) && !editingComment?.isEdit && this.renderAddCommentInput()}
                     {editingComment?.isEdit && this.renderEditCommentInput()}
+                    <TipActivityActionAccessTouch canAddComment={this.canAddComment()}/>
 
                     {this.state.modalChildren && (
                       <ModalPortal

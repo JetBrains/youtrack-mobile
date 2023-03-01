@@ -46,7 +46,4 @@ const ArticleAddComment = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(ArticleAddComment) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(ArticleAddComment);
