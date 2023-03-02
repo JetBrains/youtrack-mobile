@@ -36,7 +36,7 @@ export default EStyleSheet.create({
   createUpdateInfoText: {
     paddingTop: UNIT * 0.75,
     ...secondaryText,
-    color: '$icon',
+    color: '$textSecondary',
   },
   visibility: {
     flexShrink: 1,

@@ -107,7 +107,7 @@ export default EStyleSheet.create({
   threadMuteToggle: {
     padding: UNIT / 2,
   },
-  threadSubTitleText: {...secondaryText, color: '$icon'},
+  threadSubTitleText: {...secondaryText, color: '$textSecondary'},
   threadTitleIcon: {
     position: 'relative',
     zIndex: 1,
@@ -178,12 +178,12 @@ export default EStyleSheet.create({
     marginLeft: UNIT * 5.5,
   },
   threadButtonText: {
-    color: '$icon',
+    color: '$textSecondary',
   },
   threadChangeReason: {
     marginRight: UNIT / 2,
     ...secondaryText,
-    color: '$icon',
+    color: '$textSecondary',
   },
   threadChangeAuthor: {
     flexGrow: 1,

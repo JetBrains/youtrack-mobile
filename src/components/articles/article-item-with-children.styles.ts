@@ -39,7 +39,7 @@ export const articleItemWithChildrenStyles = {
     borderRadius: UNIT,
     backgroundColor: '$boxBackground',
   },
-  itemButtonText: {...mainText, paddingRight: UNIT, color: '$icon'},
+  itemButtonText: {...mainText, paddingRight: UNIT, color: '$textSecondary'},
   itemButtonIcon: {
     marginTop: -1,
   },

@@ -199,6 +199,6 @@ export default EStyleSheet.create({
   manageFavoriteProjectsNote: {
     padding: UNIT * 2,
     textAlign: 'center',
-    color: '$icon',
+    color: '$textSecondary',
   },
 });

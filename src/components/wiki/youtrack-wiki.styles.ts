@@ -96,7 +96,7 @@ export default EStyleSheet.create({
   code: {...monospace, fontSize: SECONDARY_FONT_SIZE, fontWeight: '500'},
   codeLanguage: {
     fontSize: SECONDARY_FONT_SIZE,
-    color: '$icon',
+    color: '$textSecondary',
   },
   inlineCode: {
     ...monospace,

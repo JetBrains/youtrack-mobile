@@ -26,7 +26,7 @@ export default EStyleSheet.create({
   accountProfileServerURL: {
     lineHeight: 14,
     ...secondaryText,
-    color: '$icon',
+    color: '$textSecondary',
   },
   accountAction: {
     width: UNIT * 4,

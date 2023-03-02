@@ -28,7 +28,7 @@ export default EStyleSheet.create({
     flex: 1,
     marginRight: UNIT,
     ...mainText,
-    color: '$icon',
+    color: '$textSecondary',
   },
   suggestionText: {...mainText, flex: 1, fontWeight: '500', color: '$text'},
   commandPreview: {

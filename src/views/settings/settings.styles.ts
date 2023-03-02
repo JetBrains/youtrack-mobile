@@ -60,7 +60,7 @@ export default EStyleSheet.create({
     marginTop: UNIT,
     marginBottom: UNIT,
   },
-  settingsFooterBuild: {...secondaryText, color: '$icon'},
+  settingsFooterBuild: {...secondaryText, color: '$textSecondary'},
   settingsAppearanceHeaderIcon: {
     marginLeft: UNIT * 1.5,
   },

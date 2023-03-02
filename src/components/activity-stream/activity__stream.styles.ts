@@ -3,7 +3,7 @@ import {mainText, secondaryText} from 'components/common-styles/typography';
 import {separator} from '../common-styles/list';
 import {UNIT} from 'components/variables';
 const secondaryTextColor = {
-  color: '$icon',
+  color: '$textSecondary',
 };
 export const rowStyles = {
   activity: {
@@ -56,12 +56,12 @@ export const rowStyles = {
     letterSpacing: -0.22,
     color: '$text',
   },
-  activityTimestamp: {...secondaryText, color: '$icon', lineHeight: 16},
+  activityTimestamp: {...secondaryText, color: '$textSecondary', lineHeight: 16},
   activityLabel: {
-    color: '$icon',
+    color: '$textSecondary',
   },
   activityText: {
-    color: '$icon',
+    color: '$textSecondary',
   },
   activityRelatedChanges: {
     flex: 1,
@@ -86,11 +86,11 @@ export const rowStyles = {
     ...secondaryTextColor,
   },
   activityAdded: {
-    color: '$icon',
+    color: '$textSecondary',
   },
   activityRemoved: {
     textDecorationLine: 'line-through',
-    color: '$icon',
+    color: '$textSecondary',
   },
   activityTextValueChange: {
     flexGrow: 2,
@@ -140,7 +140,7 @@ export const rowStyles = {
   },
   activityWorkTime: {
     marginLeft: UNIT / 2,
-    color: '$icon',
+    color: '$textSecondary',
     fontWeight: 'bold',
   },
   activityWorkComment: {
@@ -183,7 +183,7 @@ export const rowStyles = {
   },
   vcsSourceSubTitle: {
     fontSize: 12,
-    color: '$icon',
+    color: '$textSecondary',
   },
   contextMenu: {
     flexDirection: 'row',

@@ -55,7 +55,7 @@ export default EStyleSheet.create({
     justifyContent: 'space-between',
   },
   subArticlesTitle: {
-    color: '$icon',
+    color: '$textSecondary',
   },
   subArticlesNavigateIcon: {
     position: 'relative',

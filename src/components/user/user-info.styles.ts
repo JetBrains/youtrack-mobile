@@ -8,7 +8,7 @@ export default EStyleSheet.create({
     flex: 0,
     marginRight: UNIT / 2,
     marginLeft: UNIT * 2,
-    color: '$icon',
+    color: '$textSecondary',
   },
   userAvatar: {
     flex: 0,

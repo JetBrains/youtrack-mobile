@@ -12,7 +12,7 @@ import {separatorBorder} from '../common-styles/list';
 const ROW_TEXT_LINE_HEIGHT = 24;
 export default EStyleSheet.create({
   issueResolved: {
-    color: '$icon',
+    color: '$textSecondary',
   },
   issueIdResolved: issueIdResolved,
   rowHeader: {

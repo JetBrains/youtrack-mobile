@@ -13,7 +13,7 @@ const font = {
   lineHeight: 18,
   fontSize: 14,
 };
-const textSecondary = {...font, color: '$icon'};
+const textSecondary = {...font, color: '$textSecondary'};
 export default EStyleSheet.create({
   container: {
     flex: 1,
@@ -68,7 +68,7 @@ export default EStyleSheet.create({
   userInfoReaction: {
     marginBottom: UNIT * 2,
   },
-  textPrimary: {...font, color: '$icon'},
+  textPrimary: {...font, color: '$textSecondary'},
   textSecondary,
   listFooterMessage: {
     flex: 1,
@@ -114,7 +114,7 @@ export default EStyleSheet.create({
   linkColor: {
     color: '$link',
   },
-  resolved: {...issueIdResolved, color: '$icon'},
+  resolved: {...issueIdResolved, color: '$textSecondary'},
   secondaryText: {
     color: '$icon',
   },

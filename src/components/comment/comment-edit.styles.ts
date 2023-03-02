@@ -116,7 +116,7 @@ export default EStyleSheet.create({
   visibilityChangeButtonText: {
     ...secondaryText,
     marginRight: UNIT,
-    color: '$icon',
+    color: '$textSecondary',
   },
   actionsContainer: {
     flexDirection: 'row',

@@ -31,6 +31,6 @@ export default EStyleSheet.create({
     color: '$text',
   },
   suggestionDescription: {
-    color: '$icon',
+    color: '$textSecondary',
   },
 });

@@ -63,14 +63,14 @@ export default EStyleSheet.create({
   estimation: {
     marginRight: UNIT,
     ...secondaryText,
-    color: '$icon',
+    color: '$textSecondary',
   },
   summary: {
     flexGrow: 1,
     ...issueCard.issueSummary,
     marginTop: UNIT,
   },
-  issueId: {...issueCard.issueId, color: '$icon'},
+  issueId: {...issueCard.issueId, color: '$textSecondary'},
   issueIdResolved: {...issueIdResolved},
   assignees: {
     flexDirection: 'row',

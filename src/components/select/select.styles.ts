@@ -107,7 +107,7 @@ export default EStyleSheet.create({
   sectionHeaderText: {
     textTransform: 'uppercase',
     ...secondaryText,
-    color: '$icon',
+    color: '$textSecondary',
   },
   list: {
     paddingBottom: UNIT * 4,

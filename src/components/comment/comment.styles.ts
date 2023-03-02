@@ -53,7 +53,7 @@ export default EStyleSheet.create({
     ...secondaryText,
     lineHeight: secondaryText.fontSize + 2,
     marginLeft: UNIT / 2,
-    color: '$icon',
+    color: '$textSecondary',
   },
   reactionAuthor: {
     marginLeft: UNIT,

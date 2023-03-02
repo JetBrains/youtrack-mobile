@@ -17,7 +17,7 @@ export default EStyleSheet.create({
     padding: UNIT / 2,
   },
   settingsButtonText: {
-    color: '$icon',
+    color: '$textSecondary',
   },
   settingsSwitchDisabled: {
     opacity: 0.4,
@@ -69,7 +69,7 @@ export default EStyleSheet.create({
     color: '$link',
   },
   text: {
-    color: '$icon',
+    color: '$textSecondary',
   },
   error: {
     color: '$error',

@@ -37,7 +37,7 @@ export default EStyleSheet.create({
     marginBottom: UNIT / 2,
     ...secondaryText,
     ...font,
-    color: '$icon',
+    color: '$textSecondary',
   },
   value: {
     minWidth: UNIT * 4,

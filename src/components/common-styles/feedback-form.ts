@@ -31,7 +31,7 @@ const feedbackFormStyles = {
     top: UNIT / 2,
     left: UNIT,
     fontSize: SECONDARY_FONT_SIZE - 2,
-    color: '$icon',
+    color: '$textSecondary',
   },
   feedbackFormTextMain: {
     marginBottom: -UNIT,

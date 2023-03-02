@@ -119,7 +119,7 @@ export default EStyleSheet.create({
     flex: 0.95,
   },
   linkedIssuesTitleText: {
-    color: '$icon',
+    color: '$textSecondary',
     marginBottom: UNIT / 2,
   },
   linkedIssuesTitleTextDetails: {

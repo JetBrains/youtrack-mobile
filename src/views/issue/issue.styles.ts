@@ -24,7 +24,7 @@ export default EStyleSheet.create({
     paddingHorizontal: UNIT * 2,
   },
   headerText: {...headerTitle, color: '$text'},
-  headerTextResolved: {...issueIdResolved, color: '$icon'},
+  headerTextResolved: {...issueIdResolved, color: '$textSecondary'},
   issueStar: {
     marginLeft: UNIT * 2,
     marginRight: UNIT * 2,
@@ -42,7 +42,7 @@ export default EStyleSheet.create({
     paddingTop: UNIT / 4,
     marginBottom: UNIT * 2,
   },
-  issueTopPanelText: {...secondaryText, color: '$icon'},
+  issueTopPanelText: {...secondaryText, color: '$textSecondary'},
   tags: {
     marginTop: UNIT * 1.5,
     paddingTop: UNIT / 2,
@@ -55,7 +55,7 @@ export default EStyleSheet.create({
   },
   summary: {...summary, paddingTop: UNIT, color: '$text'},
   summaryResolved: {
-    color: '$icon',
+    color: '$textSecondary',
   },
   description: {
     marginTop: UNIT,

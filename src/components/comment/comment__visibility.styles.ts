@@ -7,7 +7,7 @@ export default EStyleSheet.create({
     alignItems: 'center',
   },
   commentVisibilityText: {
-    color: '$icon',
+    color: '$textSecondary',
     marginLeft: UNIT / 1.5,
   },
 });
