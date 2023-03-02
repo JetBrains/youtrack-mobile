@@ -1,4 +1,5 @@
 export {HIT_SLOP} from './button';
+export {UNIT} from 'components/variables';
 
 export {
   markdownText,

@@ -1,50 +1,52 @@
-import React, {PureComponent} from 'react';
+import * as React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
+
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {IconThumbUp} from '../icon/icon';
-import {UNIT} from 'components/variables';
-import {HIT_SLOP} from '../common-styles/button';
-import {secondaryText} from 'components/common-styles/typography';
-import type {UITheme} from 'types/Theme';
-type Props = {
+
+import {HIT_SLOP, secondaryText, UNIT} from 'components/common-styles';
+import {IconThumbUp} from 'components/icon/icon';
+import {ThemeContext} from 'components/theme/theme-context';
+
+import {Theme} from 'types/Theme';
+
+interface Props {
   voted: boolean;
   votes: number;
   canVote: boolean;
   onVoteToggle: (voted: boolean) => any;
-  uiTheme: UITheme;
-};
-export default class IssueVotes extends PureComponent<Props, void> {
-  toggle: () => void = () => {
-    const {voted, onVoteToggle} = this.props;
-    onVoteToggle(!voted);
-  };
-
-  render(): React.ReactNode {
-    const {voted, votes, canVote, uiTheme} = this.props;
-    return (
-      <TouchableOpacity
-        hitSlop={HIT_SLOP}
-        disabled={!canVote}
-        style={styles.button}
-        onPress={this.toggle}
-      >
-        <Text style={styles.counter}>{votes || 0}</Text>
-        <IconThumbUp
-          isActive={voted}
-          size={20}
-          color={
-            canVote ? uiTheme.colors.$iconAccent : uiTheme.colors.$disabled
-          }
-        />
-      </TouchableOpacity>
-    );
-  }
 }
+
+
+export default function (props: Props) {
+  const theme: Theme = React.useContext(ThemeContext);
+  const {voted, votes, canVote, onVoteToggle} = props;
+
+  const toggle = () => onVoteToggle(!voted);
+
+  return (
+    <TouchableOpacity
+      hitSlop={HIT_SLOP}
+      disabled={!canVote}
+      style={styles.button}
+      onPress={toggle}
+    >
+      <Text style={styles.counter}>{votes || 0}</Text>
+      <IconThumbUp
+        isActive={voted}
+        size={20}
+        color={
+          canVote ? theme.uiTheme.colors.$iconAccent : theme.uiTheme.colors.$disabled
+        }
+      />
+    </TouchableOpacity>
+  );
+}
+
 const styles = EStyleSheet.create({
   button: {
     marginLeft: UNIT * 0.75,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'flex-end',
   },
   counter: {

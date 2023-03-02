@@ -219,7 +219,6 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
           votes={issue?.votes}
           voted={issue?.voters?.hasVote}
           onVoteToggle={onVoteToggle}
-          uiTheme={this.uiTheme}
         />
       </View>
     );
