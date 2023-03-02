@@ -102,7 +102,6 @@ export default EStyleSheet.create({
   issueTopActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: UNIT * 1.5,
   },
   issueVote: {
     flexShrink: 0,

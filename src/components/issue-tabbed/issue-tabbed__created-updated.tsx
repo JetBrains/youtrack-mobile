@@ -1,34 +1,49 @@
-import React from 'react';
-import {Text, View} from 'react-native';
-import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import * as React from 'react';
+import {Text, TouchableOpacity, View} from 'react-native';
+
+import usage from 'components/usage/usage';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+import {i18n} from 'components/i18n/i18n';
+import {IconAngleDown} from 'components/icon/icon';
 import {ytDate} from 'components/date/date';
+
 import styles from './issue-tabbed.style';
+
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
-type Props = {
+
+interface Props {
+  analyticId: string;
   reporter: User;
   updater: User;
   created: number;
   updated: number;
   style?: ViewStyleProp;
-};
+}
 
-const CreateUpdateInfo = (props: Props): React.ReactNode => {
+const CreateUpdateInfo = (props: Props): JSX.Element => {
+  const [expanded, updateExpanded] = React.useState(false);
+
+  const createLine = (user: User, label: string, date: number) => {
+    return <Text style={styles.createUpdateInfoText} selectable={true}>
+      {`${label} ${getEntityPresentation(user)} `}
+      <Text style={styles.createUpdateInfoTextSecondary}>{props.created ? ytDate(date) : ''}</Text>
+    </Text>;
+  };
+
   return (
     <View style={[styles.createUpdateInfoPanel, props.style]}>
-      {!!props.reporter && (
-        <Text style={styles.createUpdateInfoText} selectable={true}>
-          Created by {getEntityPresentation(props.reporter)}{' '}
-          {props.created ? ytDate(props.created) : ''}
-        </Text>
-      )}
-
-      {!!props.updater && (
-        <Text style={styles.createUpdateInfoText} selectable={true}>
-          Updated by {getEntityPresentation(props.updater)}{' '}
-          {props.updated ? ytDate(props.updated) : ''}
-        </Text>
-      )}
+      <TouchableOpacity
+        style={styles.createUpdateInfoPanelButton}
+        onPress={() => {
+          usage.trackEvent(props.analyticId, 'toggleCreatedUpdated');
+          updateExpanded(!expanded);
+        }}
+      >
+        {props.reporter && createLine(props.reporter, i18n('Created by'), props.created)}
+        <IconAngleDown size={20} color={styles.icon.color}/>
+      </TouchableOpacity>
+      <View>{props.updater && expanded && createLine(props.updater, i18n('Updated by'), props.updated)}</View>
     </View>
   );
 };

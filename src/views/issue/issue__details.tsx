@@ -8,6 +8,7 @@ import {
 import React, {Component} from 'react';
 import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
 import AttachmentsRow from 'components/attachments-row/attachments-row';
+import CreateUpdateInfo from 'components/issue-tabbed/issue-tabbed__created-updated';
 import CustomFieldsPanel from 'components/custom-fields-panel/custom-fields-panel';
 import HTML from 'components/wiki/renderers/renderer__html';
 import IssueCustomFieldText from 'components/custom-field/issue-custom-field-text';
@@ -25,10 +26,7 @@ import usage from 'components/usage/usage';
 import VisibilityControl from 'components/visibility/visibility-control';
 import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
 import {getApi} from 'components/api/api__instance';
-import {
-  getEntityPresentation,
-  getReadableID,
-} from 'components/issue-formatter/issue-formatter';
+import {getReadableID} from 'components/issue-formatter/issue-formatter';
 import {
   getIssueCustomFieldsNotText,
   getIssueTextCustomFields,
@@ -41,8 +39,9 @@ import {
   SkeletonIssueInfoLine,
 } from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
-import {ytDate} from 'components/date/date';
+
 import styles from './issue.styles';
+
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
 import type {AnyIssue, IssueFull, IssueOnList} from 'types/Issue';
 import type {
@@ -54,10 +53,12 @@ import type {
   IssueLink,
   IssueProject,
 } from 'types/CustomFields';
+
 import type {ScrollData} from 'types/Markdown';
 import type {Theme, UITheme} from 'types/Theme';
 import type {Visibility} from 'types/Visibility';
 import type {YouTrackWiki} from 'types/Wiki';
+
 export type IssueDetailsProps = {
   loadIssue: () => any;
   openNestedIssueView: (arg0: {issue?: IssueFull; issueId?: string}) => any;
@@ -225,47 +226,32 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   }
 
   renderAdditionalInfo(): React.ReactNode {
-    const issue: AnyIssue = this.getIssue();
-    return issue ? (
-      <View style={styles.issueTopPanel}>
-        <Text style={styles.issueTopPanelText} selectable={true}>
-          {i18n('Created by')} {getEntityPresentation(issue.reporter)}{' '}
-          {ytDate(issue?.created)}
-        </Text>
-
-        <Text
-          style={[styles.issueTopPanelText, styles.topPanelUpdatedInformation]}
-          selectable={true}
-        >
-          {i18n('Updated by')} {getEntityPresentation(issue.updater)}{' '}
-          {ytDate(issue?.updated)}
-        </Text>
-      </View>
-    ) : (
-      <SkeletonIssueInfoLine lines={2} />
+    const issue: IssueFull = this.getIssue() as IssueFull;
+    return issue ? <CreateUpdateInfo
+      analyticId={ANALYTICS_ISSUE_PAGE}
+      reporter={issue.reporter}
+      updater={issue.updater}
+      created={issue.created}
+      updated={issue.updated}
+    /> : (
+      <SkeletonIssueInfoLine lines={2}/>
     );
   }
 
   renderIssueVisibility(): React.ReactNode {
     const {onVisibilityChange} = this.props;
-    const issue: AnyIssue = this.getIssue();
-
-    if (issue) {
-      return (
-        <View style={styles.visibility}>
-          <VisibilityControl
-            visibility={issue.visibility}
-            onSubmit={onVisibilityChange}
-            uiTheme={this.uiTheme}
-            getOptions={(q: string) => getApi().issue.getVisibilityOptions(issue.id, q)}
-          />
-        </View>
-      );
-    }
-
-    return <SkeletonIssueInfoLine />;
+    const issue: IssueFull = this.getIssue() as IssueFull;
+    return issue ? (
+      <View style={styles.visibility}>
+        <VisibilityControl
+          visibility={issue.visibility}
+          onSubmit={onVisibilityChange}
+          uiTheme={this.uiTheme}
+          getOptions={(q: string) => getApi().issue.getVisibilityOptions(issue.id, q)}
+        />
+      </View>
+    ) : <SkeletonIssueInfoLine/>;
   }
-
   renderIssueTextFields(): React.ReactNode {
     const {editMode, onLongPress, setCustomFieldValue} = this.props;
     const issue: AnyIssue = this.getIssue();

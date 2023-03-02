@@ -31,15 +31,27 @@ export default EStyleSheet.create({
     }),
   },
   createUpdateInfoPanel: {
-    marginVertical: UNIT,
+    marginTop: UNIT,
+    marginBottom: UNIT * 1.5,
+  },
+  createUpdateInfoPanelButton: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
   },
   createUpdateInfoText: {
     paddingTop: UNIT * 0.75,
     ...secondaryText,
+    color: '$icon',
+  },
+  createUpdateInfoTextSecondary: {
+    ...this.createUpdateInfoText,
     color: '$textSecondary',
   },
   visibility: {
     flexShrink: 1,
     flex: 1,
+  },
+  icon: {
+    color: '$icon',
   },
 });

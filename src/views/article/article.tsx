@@ -198,7 +198,7 @@ class Article extends IssueTabbed<Props, State> {
     });
   };
   createArticleDetails = (
-    articleData: Article,
+    articleData: ArticleEntity,
     scrollData: Record<string, any>,
   ) => {
     const {
@@ -214,7 +214,7 @@ class Article extends IssueTabbed<Props, State> {
     const breadCrumbsElement = article ? this.renderBreadCrumbs() : null;
     const articleNode: ArticleNode | null | undefined =
       articleData?.project &&
-      findArticleNode(articlesList, articleData.project.id, articleData?.id);
+      findArticleNode(articlesList, articleData.project.id as string, articleData?.id);
     let visibility: Visibility | null | undefined = articleData?.visibility;
 
     if (articleData?.visibility) {
@@ -254,6 +254,7 @@ class Article extends IssueTabbed<Props, State> {
             </View>
 
             <CreateUpdateInfo
+              analyticId={ANALYTICS_ARTICLE_PAGE}
               reporter={articleData.reporter}
               updater={articleData.updatedBy}
               created={articleData.created}

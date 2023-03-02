@@ -12,5 +12,5 @@ export default EStyleSheet.create({
   buttonIcon: {
     marginRight: UNIT,
   },
-  buttonText: {...secondaryText, color: '$textSecondary'},
+  buttonText: {...secondaryText, color: '$icon'},
 }) as any;
