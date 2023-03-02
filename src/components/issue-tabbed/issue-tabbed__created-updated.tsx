@@ -2,6 +2,7 @@ import * as React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 import usage from 'components/usage/usage';
+import {HIT_SLOP} from 'components/common-styles';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {IconAngleDown} from 'components/icon/icon';
@@ -27,13 +28,14 @@ const CreateUpdateInfo = (props: Props): JSX.Element => {
   const createLine = (user: User, label: string, date: number) => {
     return <Text style={styles.createUpdateInfoText} selectable={true}>
       {`${label} ${getEntityPresentation(user)} `}
-      <Text style={styles.createUpdateInfoTextSecondary}>{props.created ? ytDate(date) : ''}</Text>
+      <Text style={styles.createUpdateInfoText}>{props.created ? ytDate(date) : ''}</Text>
     </Text>;
   };
 
   return (
     <View style={[styles.createUpdateInfoPanel, props.style]}>
       <TouchableOpacity
+        hitSlop={HIT_SLOP}
         style={styles.createUpdateInfoPanelButton}
         onPress={() => {
           usage.trackEvent(props.analyticId, 'toggleCreatedUpdated');
@@ -41,7 +43,7 @@ const CreateUpdateInfo = (props: Props): JSX.Element => {
         }}
       >
         {props.reporter && createLine(props.reporter, i18n('Created by'), props.created)}
-        <IconAngleDown size={20} color={styles.icon.color}/>
+        <IconAngleDown size={20} color={styles.createUpdateInfoText.color}/>
       </TouchableOpacity>
       <View>{props.updater && expanded && createLine(props.updater, i18n('Updated by'), props.updated)}</View>
     </View>

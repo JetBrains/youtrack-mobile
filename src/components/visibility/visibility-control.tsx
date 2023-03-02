@@ -242,7 +242,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
             />
           )}
           <Text style={styles.buttonText}>{label}</Text>
-          <IconAngleDown size={20} color={this.props.uiTheme.colors.$icon}/>
+          <IconAngleDown size={20} color={styles.buttonText.color}/>
         </TouchableOpacity>
       </View>
     );

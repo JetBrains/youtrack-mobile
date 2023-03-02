@@ -41,10 +41,6 @@ export default EStyleSheet.create({
   createUpdateInfoText: {
     paddingTop: UNIT * 0.75,
     ...secondaryText,
-    color: '$icon',
-  },
-  createUpdateInfoTextSecondary: {
-    ...this.createUpdateInfoText,
     color: '$textSecondary',
   },
   visibility: {
