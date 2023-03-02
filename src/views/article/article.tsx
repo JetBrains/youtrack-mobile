@@ -245,7 +245,7 @@ class Article extends IssueTabbed<Props, State> {
                       articleData.idReadable,
                     )
                   }
-                  visibilityDefaultLabel={visibilityArticleDefaultText}
+                  visibilityDefaultLabel={visibilityArticleDefaultText()}
                 />
               )}
               {articleData?.hasUnpublishedChanges && (

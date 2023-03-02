@@ -36,7 +36,7 @@ const ArticleActivityStreamCommentEdit = (props: Props) => {
       getCommentSuggestions={(query: string) => dispatch(getMentions(query))}
       canAttach={issuePermissions.articleCanAddAttachment(article)}
       canRemoveAttach={(attachment: Attachment) => issuePermissions.articleCanDeleteAttachment(article)}
-      visibilityLabel={visibilityArticleDefaultText}
+      visibilityLabel={visibilityArticleDefaultText()}
     />
   );
 };

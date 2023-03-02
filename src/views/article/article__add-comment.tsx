@@ -41,7 +41,7 @@ const ArticleAddComment = (props: Props) => {
       canAttach={canAttach}
       canRemoveAttach={() => canAttach}
       onAttach={attachmentActions.uploadFileToArticleComment}
-      visibilityLabel={visibilityArticleDefaultText}
+      visibilityLabel={visibilityArticleDefaultText()}
     />
   );
 };

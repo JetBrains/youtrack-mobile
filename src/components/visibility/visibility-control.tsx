@@ -203,7 +203,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   renderVisibilityButton(): React.ReactNode {
     const {
       onSubmit,
-      visibilityDefaultLabel = visibilityDefaultText,
+      visibilityDefaultLabel = visibilityDefaultText(),
     } = this.props;
     const {visibility} = this.state;
     const isSecured: boolean = IssueVisibility.isSecured(visibility);
