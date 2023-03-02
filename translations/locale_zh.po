@@ -1041,7 +1041,7 @@ msgstr "总票数"
 
 #: src/components/tip/tips/activity-touch-actions.tsx
 msgid "Touch and hold an item to view a list of available actions"
-msgstr ""
+msgstr "轻触并按住条目可以查看可用操作列表"
 
 #: src/components/error-message/error-message.tsx
 msgid "Try Again"
@@ -1151,7 +1151,7 @@ msgstr "您的帐户权限不足，无法执行此操作。"
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
-msgstr ""
+msgstr "您的移动设备可用存储空间不足。某些应用功能可能不可用。"
 
 #: src/components/error/error-message-data.ts
 msgid "Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n\n"

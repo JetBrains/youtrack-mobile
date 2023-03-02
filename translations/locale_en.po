@@ -179,7 +179,7 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/views/article/arcticle-actions.ts:326
 #: src/views/article/arcticle-actions.ts:674
 #: src/views/create-issue/create-issue-actions.ts:475
-#: src/views/inbox-threads/inbox-threads__thread.tsx:159
+#: src/views/inbox-threads/inbox-threads__thread.tsx:160
 #: src/views/inbox-threads/inbox-threads.tsx:273
 #: src/views/issue/activity/issue-activity__comment-actions.ts:422
 #: src/views/issue/issue-base-actions-creater.ts:697
@@ -597,11 +597,11 @@ msgstr "Manage Favorite Projects"
 msgid "Mark all as read"
 msgstr "Mark all as read"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx:154
+#: src/views/inbox-threads/inbox-threads__thread.tsx:155
 msgid "Mark as read"
 msgstr "Mark as read"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx:154
+#: src/views/inbox-threads/inbox-threads__thread.tsx:155
 msgid "Mark as unread"
 msgstr "Mark as unread"
 
@@ -627,7 +627,7 @@ msgstr "Mentions & Reactions"
 msgid "merged the pull request"
 msgstr "merged the pull request"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx:142
+#: src/views/inbox-threads/inbox-threads__thread.tsx:143
 msgid "Mute thread"
 msgstr "Mute thread"
 
@@ -1055,7 +1055,7 @@ msgstr "Type"
 msgid "Uncategorized Cards"
 msgstr "Uncategorized Cards"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx:142
+#: src/views/inbox-threads/inbox-threads__thread.tsx:143
 msgid "Unmute thread"
 msgstr "Unmute thread"
 
