@@ -321,7 +321,7 @@ msgstr "Informe de errores enviado"
 msgid "created"
 msgstr "creada"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Created by"
 msgstr "Creado por"
 
@@ -1078,7 +1078,7 @@ msgstr "Sin título"
 msgid "updated"
 msgstr "actualizada"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Updated by"
 msgstr "Actualizado por"
 

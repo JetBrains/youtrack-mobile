@@ -321,7 +321,7 @@ msgstr "Absturzbericht gesendet"
 msgid "created"
 msgstr "erstellt"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Created by"
 msgstr "Erstellt von"
 
@@ -1078,7 +1078,7 @@ msgstr "Kein Titel"
 msgid "updated"
 msgstr "aktualisiert"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Updated by"
 msgstr "Aktualisiert von"
 

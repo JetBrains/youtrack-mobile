@@ -71,7 +71,7 @@ msgstr "将项目添加到收藏夹"
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
-msgstr ""
+msgstr "添加回应"
 
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
@@ -317,7 +317,7 @@ msgstr "已发送崩溃报告"
 msgid "created"
 msgstr "创建时间"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Created by"
 msgstr "创建者"
 
@@ -430,7 +430,7 @@ msgstr "输入时间值"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
-msgstr ""
+msgstr "收藏"
 
 #: src/views/settings/settings-helper.ts
 msgid "Feature request"
@@ -480,7 +480,7 @@ msgstr "获取帮助"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Groups and teams"
-msgstr ""
+msgstr "组和团队"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
@@ -708,7 +708,7 @@ msgstr "其他"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Other groups and teams"
-msgstr ""
+msgstr "其他组和团队"
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
@@ -724,7 +724,7 @@ msgstr "项目"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Projects"
-msgstr ""
+msgstr "项目"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Projects collapsed"
@@ -741,7 +741,7 @@ msgstr "最近的搜索"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Recommended groups and teams"
-msgstr ""
+msgstr "推荐的小组和团队"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
@@ -771,7 +771,7 @@ msgstr "已重新打开 Pull Request"
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
-msgstr ""
+msgstr "回复"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -1072,7 +1072,7 @@ msgstr "未命名"
 msgid "updated"
 msgstr "更新时间"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Updated by"
 msgstr "更新者"
 
@@ -1090,7 +1090,7 @@ msgstr "用户名或电子邮件"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Users"
-msgstr ""
+msgstr "用户"
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"

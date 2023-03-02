@@ -74,7 +74,7 @@ msgstr "Ajouter le projet aux favoris"
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
-msgstr ""
+msgstr "Ajouter une réaction"
 
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
@@ -321,7 +321,7 @@ msgstr "Rapport d’incident envoyé"
 msgid "created"
 msgstr "créé"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Created by"
 msgstr "Créé par"
 
@@ -434,7 +434,7 @@ msgstr "Saisir la valeur temporelle"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
-msgstr ""
+msgstr "Favoris"
 
 #: src/views/settings/settings-helper.ts
 msgid "Feature request"
@@ -484,7 +484,7 @@ msgstr "Obtenir de l'aide"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Groups and teams"
-msgstr ""
+msgstr "Groupes et équipes"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
@@ -713,7 +713,7 @@ msgstr "Autre"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Other groups and teams"
-msgstr ""
+msgstr "Autres groupes et équipes"
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
@@ -729,7 +729,7 @@ msgstr "Projet"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Projects"
-msgstr ""
+msgstr "Projets"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Projects collapsed"
@@ -746,7 +746,7 @@ msgstr "Recherches récentes"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Recommended groups and teams"
-msgstr ""
+msgstr "Groupes et équipes recommandés"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
@@ -776,7 +776,7 @@ msgstr "a rouvert la requête d'extraction"
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
-msgstr ""
+msgstr "Répondre"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -1078,7 +1078,7 @@ msgstr "Sans titre"
 msgid "updated"
 msgstr "mis à jour"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Updated by"
 msgstr "Mis à jour par"
 
@@ -1096,7 +1096,7 @@ msgstr "Nom d'utilisateur ou adresse e-mail"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Users"
-msgstr ""
+msgstr "Utilisateurs"
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"

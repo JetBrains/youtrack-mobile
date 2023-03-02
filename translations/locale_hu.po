@@ -321,7 +321,7 @@ msgstr ""
 msgid "created"
 msgstr "létrehozva"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Created by"
 msgstr "Készítette"
 
@@ -1078,7 +1078,7 @@ msgstr "Névtelen"
 msgid "updated"
 msgstr "frissítve"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Updated by"
 msgstr "Frissítette:"
 

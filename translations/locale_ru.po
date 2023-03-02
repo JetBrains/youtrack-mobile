@@ -329,7 +329,7 @@ msgstr "Отчет об ошибке отправлен"
 msgid "created"
 msgstr "создано"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Created by"
 msgstr "Создал(а)"
 
@@ -492,7 +492,7 @@ msgstr "Помощь"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Groups and teams"
-msgstr ""
+msgstr "Группы и команды"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
@@ -723,7 +723,7 @@ msgstr "Другое"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Other groups and teams"
-msgstr ""
+msgstr "Другие группы и команды"
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
@@ -756,7 +756,7 @@ msgstr "Недавние поиски"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Recommended groups and teams"
-msgstr ""
+msgstr "Рекомендуемые группы и команды"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
@@ -786,7 +786,7 @@ msgstr "заново открыл(а) пул-реквест"
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
-msgstr ""
+msgstr "Ответить"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -1090,7 +1090,7 @@ msgstr "Без названия"
 msgid "updated"
 msgstr "обновлено"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Updated by"
 msgstr "Обновил(а)"
 
@@ -1108,7 +1108,7 @@ msgstr "Имя пользователя или адрес электронной
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Users"
-msgstr ""
+msgstr "Пользователи"
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"

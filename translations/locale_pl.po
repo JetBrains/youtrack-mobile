@@ -329,7 +329,7 @@ msgstr ""
 msgid "created"
 msgstr "utworzono"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Created by"
 msgstr "Utworzone przez"
 
@@ -1090,7 +1090,7 @@ msgstr "Bez tytułu"
 msgid "updated"
 msgstr "zaktualizowano"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Updated by"
 msgstr "Zaktualizowany przez"
 

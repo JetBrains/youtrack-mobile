@@ -321,7 +321,7 @@ msgstr "Rapporto sugli arresti anomali inviato"
 msgid "created"
 msgstr "creato"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Created by"
 msgstr "Creato da"
 
@@ -1078,7 +1078,7 @@ msgstr "Senza titolo"
 msgid "updated"
 msgstr "aggiornato"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Updated by"
 msgstr "Aggiornato da"
 

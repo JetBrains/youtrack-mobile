@@ -329,7 +329,7 @@ msgstr ""
 msgid "created"
 msgstr "vytvořeno"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Created by"
 msgstr "Autor"
 
@@ -1090,7 +1090,7 @@ msgstr "Bez názvu"
 msgid "updated"
 msgstr "aktualizováno"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Updated by"
 msgstr "Aktualizováno uživatelem"
 

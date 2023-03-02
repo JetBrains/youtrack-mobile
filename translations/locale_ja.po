@@ -71,7 +71,7 @@ msgstr "プロジェクトをお気に入りに追加"
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
-msgstr ""
+msgstr "リアクションを追加"
 
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
@@ -317,7 +317,7 @@ msgstr "クラッシュレポートが送信されました"
 msgid "created"
 msgstr "作成日時"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Created by"
 msgstr "作成者："
 
@@ -430,7 +430,7 @@ msgstr "時間の値を入力してください"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
-msgstr ""
+msgstr "お気に入り"
 
 #: src/views/settings/settings-helper.ts
 msgid "Feature request"
@@ -480,7 +480,7 @@ msgstr "ヘルプを表示"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Groups and teams"
-msgstr ""
+msgstr "グループとチーム"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
@@ -708,7 +708,7 @@ msgstr "その他"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Other groups and teams"
-msgstr ""
+msgstr "その他のグループとチーム"
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
@@ -724,7 +724,7 @@ msgstr "プロジェクト"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Projects"
-msgstr ""
+msgstr "プロジェクト"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Projects collapsed"
@@ -741,7 +741,7 @@ msgstr "最近の検索条件"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Recommended groups and teams"
-msgstr ""
+msgstr "推奨するグループとチーム"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
@@ -771,7 +771,7 @@ msgstr "さんがプルリクエストを再開しました"
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
-msgstr ""
+msgstr "返信"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -1072,7 +1072,7 @@ msgstr "無題"
 msgid "updated"
 msgstr "更新日時"
 
-#: src/views/issue/issue__details.tsx
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx
 msgid "Updated by"
 msgstr "更新ユーザー："
 
@@ -1090,7 +1090,7 @@ msgstr "ユーザー名またはメールアドレス"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Users"
-msgstr ""
+msgstr "ユーザー"
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"

@@ -275,11 +275,11 @@ msgstr "Content revised"
 msgid "Copied"
 msgstr "Copied"
 
-#: src/views/issue/issue__details.tsx:389
+#: src/views/issue/issue__details.tsx:374
 msgid "Copy description"
 msgstr "Copy description"
 
-#: src/views/issue/issue__details.tsx:280
+#: src/views/issue/issue__details.tsx:265
 msgid "Copy field text"
 msgstr "Copy field text"
 
@@ -315,7 +315,7 @@ msgstr "Crash report sent"
 msgid "created"
 msgstr "created"
 
-#: src/views/issue/issue__details.tsx:233
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx:43
 msgid "Created by"
 msgstr "Created by"
 
@@ -1072,7 +1072,7 @@ msgstr "Untitled"
 msgid "updated"
 msgstr "updated"
 
-#: src/views/issue/issue__details.tsx:241
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx:46
 msgid "Updated by"
 msgstr "Updated by"
 
@@ -1100,7 +1100,7 @@ msgstr "VCS changes"
 msgid "View comment"
 msgstr "View comment"
 
-#: src/views/issue/issue__details.tsx:522
+#: src/views/issue/issue__details.tsx:507
 msgid "View comments and other activity"
 msgstr "View comments and other activity"
 
