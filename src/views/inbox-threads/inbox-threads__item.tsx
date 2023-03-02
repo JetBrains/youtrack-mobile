@@ -1,14 +1,19 @@
 import React, {useContext} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
+
 import StreamHistoryChange from 'components/activity-stream/activity__stream-history';
 import StreamTimestamp from 'components/activity-stream/activity__stream-timestamp';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+import {HIT_SLOP2} from 'components/common-styles';
+import {ThemeContext} from 'components/theme/theme-context';
+
 import styles from './inbox-threads.styles';
+
 import type {Activity} from 'types/Activity';
 import type {InboxThreadGroup, ThreadEntity} from 'types/Inbox';
 import type {User} from 'types/User';
 import type {Theme} from '../../types/Theme';
-import {ThemeContext} from 'components/theme/theme-context';
+
 type Props = {
   author: User;
   avatar: any;
@@ -18,6 +23,8 @@ type Props = {
   timestamp: number;
   onNavigate?: (entity: ThreadEntity, navigateToActivity?: string) => any;
 };
+
+
 export default function ThreadItem({
   author,
   avatar,
@@ -62,6 +69,7 @@ export default function ThreadItem({
         style={styles.threadChange}
         disabled={typeof onNavigate !== 'function'}
         onPress={onNavigate}
+        hitSlop={HIT_SLOP2}
       >
         <>
           {change}

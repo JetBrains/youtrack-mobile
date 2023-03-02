@@ -8,6 +8,7 @@ import InboxThreadMention from './inbox-threads__mention';
 import InboxThreadReaction from './inbox-threads__reactions';
 import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
 import {hasType} from 'components/api/api__resource-types';
+import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconMoreOptions} from 'components/icon/icon';
 import {
@@ -162,6 +163,7 @@ function Thread({
     return (
       <View style={styles.threadTitleActions}>
         <TouchableOpacity
+          hitSlop={HIT_SLOP}
           disabled={!isOnline}
           testID="test:id/inboxThreadsThreadSettings"
           accessibilityLabel="inboxThreadsThreadSettings"
@@ -174,8 +176,9 @@ function Thread({
                 title: `${threadData.entity?.idReadable} ${threadData.entity?.summary}`,
                 cancelButtonIndex: options.length - 1,
               },
-              (index: number) =>
-                options[index]?.execute && options[index].execute(),
+              (index: number) => {
+                options[index]?.execute?.();
+              },
             );
           }}
           style={styles.threadTitleAction}

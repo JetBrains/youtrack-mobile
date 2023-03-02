@@ -98,11 +98,12 @@ export default EStyleSheet.create({
     justifyContent: 'center',
   },
   threadItemAction: {
+    borderRadius: UNIT * 2,
     position: 'absolute',
     zIndex: 1,
     top: UNIT / 4,
-    right: UNIT / 1.5,
-    padding: UNIT,
+    right: 1,
+    padding: UNIT * 1.5,
   },
   threadMuteToggle: {
     padding: UNIT / 2,

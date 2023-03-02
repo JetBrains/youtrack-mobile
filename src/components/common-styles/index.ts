@@ -1,4 +1,4 @@
-export {HIT_SLOP} from './button';
+export {HIT_SLOP, HIT_SLOP2, HIT_SLOP3} from './button';
 export {UNIT} from 'components/variables';
 
 export {
