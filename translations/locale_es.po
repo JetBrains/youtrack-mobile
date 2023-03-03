@@ -74,7 +74,7 @@ msgstr "Añadir proyecto a favoritos"
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
-msgstr ""
+msgstr "Añadir reacción"
 
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
@@ -434,7 +434,7 @@ msgstr "Introduzca el tiempo"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
-msgstr ""
+msgstr "Favoritos"
 
 #: src/views/settings/settings-helper.ts
 msgid "Feature request"
@@ -484,7 +484,7 @@ msgstr "Obtener ayuda"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Groups and teams"
-msgstr ""
+msgstr "Grupos y equipos"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
@@ -713,7 +713,7 @@ msgstr "Otro"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Other groups and teams"
-msgstr ""
+msgstr "Otros grupos y equipos"
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
@@ -729,7 +729,7 @@ msgstr "Proyecto"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Projects"
-msgstr ""
+msgstr "Proyectos"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Projects collapsed"
@@ -746,7 +746,7 @@ msgstr "Búsquedas recientes"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Recommended groups and teams"
-msgstr ""
+msgstr "Grupos y equipos recomendados"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
@@ -776,7 +776,7 @@ msgstr "ha reabierto la solicitud de incorporación de cambios"
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
-msgstr ""
+msgstr "Responder"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -1047,7 +1047,7 @@ msgstr "Votos totales"
 
 #: src/components/tip/tips/activity-touch-actions.tsx
 msgid "Touch and hold an item to view a list of available actions"
-msgstr ""
+msgstr "Toque y mantenga pulsado un elemento para ver una lista con las acciones disponibles"
 
 #: src/components/error-message/error-message.tsx
 msgid "Try Again"
@@ -1096,7 +1096,7 @@ msgstr "Nombre de usuario o correo electrónico"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Users"
-msgstr ""
+msgstr "Usuarios"
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"
@@ -1157,7 +1157,7 @@ msgstr "Su cuenta no tiene los permisos necesarios para realizar esta operación
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
-msgstr ""
+msgstr "Su dispositivo móvil se está quedando sin espacio de almacenamiento disponible. Es posible que algunas funcionalidades de la aplicación no estén disponibles."
 
 #: src/components/error/error-message-data.ts
 msgid "Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n\n"
