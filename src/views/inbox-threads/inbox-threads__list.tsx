@@ -31,7 +31,7 @@ type Props = {
 };
 
 
-const InboxThreadsList = ({folderId = folderIdAllKey, onNavigate}: Props): JSX.Element => {
+const InboxThreadsList = ({folderId, onNavigate}: Props): JSX.Element => {
   const theme: Theme = useContext(ThemeContext);
   const dispatch = useDispatch();
   const currentUser: User = useSelector(
@@ -47,7 +47,7 @@ const InboxThreadsList = ({folderId = folderIdAllKey, onNavigate}: Props): JSX.E
     useSelector((state: AppState) => state.inboxThreads.threadsData) || {};
 
   const getData = () =>
-    threadsData[folderId] || {
+    threadsData[folderId || folderIdAllKey] || {
       threads: [],
       hasMore: false,
     };
