@@ -7,6 +7,8 @@ import {DEFAULT_THEME} from 'components/theme/theme';
 import InboxThreadItemSubscription from './inbox-threads__subscription';
 import InboxThreadReaction from './inbox-threads__reactions';
 import InboxThreadMention from './inbox-threads__mention';
+
+jest.mock('components/swipeable/swipeable-row');
 jest.mock('@expo/react-native-action-sheet', () => ({
   ...jest.requireActual('@expo/react-native-action-sheet'),
 }));

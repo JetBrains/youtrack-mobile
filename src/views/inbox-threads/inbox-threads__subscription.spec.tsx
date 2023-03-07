@@ -1,10 +1,15 @@
 import React from 'react';
-import {fireEvent, render} from '@testing-library/react-native';
+
 import thunk from 'redux-thunk';
+import {fireEvent, render} from '@testing-library/react-native';
 import {Provider} from 'react-redux';
+
 import InboxThreadItemSubscription from './inbox-threads__subscription';
-import mocks from '../../../test/mocks';
+import mocks from 'test/mocks';
 import {DEFAULT_THEME} from 'components/theme/theme';
+
+jest.mock('components/swipeable/swipeable-row');
+
 let apiMock;
 let storeMock;
 

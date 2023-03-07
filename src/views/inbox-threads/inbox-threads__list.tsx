@@ -1,23 +1,28 @@
 import React, {useCallback, useContext, useEffect} from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
+
 import {useDispatch, useSelector} from 'react-redux';
+
 import * as actions from './inbox-threads-actions';
 import ErrorMessage from 'components/error-message/error-message';
 import InboxThreadsProgressPlaceholder from './inbox-threads__progress-placeholder';
 import Thread from './inbox-threads__thread';
 import {folderIdAllKey} from './inbox-threads-helper';
-import {isUnreadOnly} from './inbox-threads-actions';
 import {i18n} from 'components/i18n/i18n';
 import {IconNoNotifications} from 'components/icon/icon-pictogram';
+import {isUnreadOnly} from './inbox-threads-actions';
 import {ThemeContext} from 'components/theme/theme-context';
+
 import styles from './inbox-threads.styles';
-import type {AppState} from '../../reducers';
+
+import type {AppState} from 'reducers';
 import type {CustomError} from 'types/Error';
 import type {InboxThread, ThreadData, ThreadEntity} from 'types/Inbox';
 import type {Theme} from 'types/Theme';
-import type {UserCurrent} from 'types/User';
+import type {User} from 'types/User';
+
 type Props = {
-  folderId: string;
+  folderId: string | undefined;
   onNavigate: (
     entity: ThreadEntity,
     navigateToActivity?: string,
@@ -25,10 +30,11 @@ type Props = {
   ) => any;
 };
 
-const InboxThreadsList = ({folderId, onNavigate}: Props): React.ReactNode => {
+
+const InboxThreadsList = ({folderId = folderIdAllKey, onNavigate}: Props): JSX.Element => {
   const theme: Theme = useContext(ThemeContext);
   const dispatch = useDispatch();
-  const currentUser: UserCurrent = useSelector(
+  const currentUser: User = useSelector(
     (state: AppState) => state.app.user,
   );
   const error: CustomError = useSelector(
@@ -41,7 +47,7 @@ const InboxThreadsList = ({folderId, onNavigate}: Props): React.ReactNode => {
     useSelector((state: AppState) => state.inboxThreads.threadsData) || {};
 
   const getData = () =>
-    threadsData[folderId || folderIdAllKey] || {
+    threadsData[folderId] || {
       threads: [],
       hasMore: false,
     };

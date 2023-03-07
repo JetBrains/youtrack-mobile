@@ -1,17 +1,20 @@
-import React, {useState} from 'react';
+import * as React from 'react';
 import {View, Text, Switch, ScrollView, TouchableOpacity} from 'react-native';
-import Header from '../header/header';
-import ModalView from '../modal-view/modal-view';
-import Router from '../router/router';
+
+import Header from 'components/header/header';
+import ModalView from 'components/modal-view/modal-view';
+import Router from 'components/router/router';
 import {
   clearCachesAndDrafts,
   flushStoragePart,
   getStorageState,
-} from '../storage/storage';
-import {confirmation} from '../confirmation/confirmation';
-import {IconClose} from '../icon/icon';
-import {notify} from '../notification/notification';
+} from 'components/storage/storage';
+import {confirmation} from 'components/confirmation/confirmation';
+import {IconClose} from 'components/icon/icon';
+import {notify} from 'components/notification/notification';
+
 import styles from './feature-view.style';
+
 type Props = {
   onHide?: (...args: any[]) => any;
 };
@@ -19,12 +22,14 @@ type Props = {
 const FeaturesDebugSettings = (props: Props): React.ReactNode => {
   const {onHide = () => Router.pop(true)} = props;
 
-  const getForceHandsetMode: () => boolean = (): boolean =>
-    !!getStorageState().forceHandsetMode;
+  const [featuresState, updateFeaturesState] = React.useState<{
+    forceHandsetMode: boolean,
+    noTabsNotifications: boolean,
+  }>({
+    forceHandsetMode: !!getStorageState().forceHandsetMode,
+    noTabsNotifications: !!getStorageState().noTabsNotifications,
+  });
 
-  const [forceHandsetMode, updateForceHandsetMode] = useState(
-    getForceHandsetMode(),
-  );
   return (
     <ModalView animationType="slide">
       <View style={styles.container}>
@@ -45,12 +50,22 @@ const FeaturesDebugSettings = (props: Props): React.ReactNode => {
           <View style={styles.featuresListItem}>
             <Text style={styles.featuresListItemText}>Force handset mode</Text>
             <Switch
-              value={forceHandsetMode}
+              value={featuresState.forceHandsetMode}
               onValueChange={async () => {
-                await flushStoragePart({
-                  forceHandsetMode: !forceHandsetMode,
-                });
-                updateForceHandsetMode(!forceHandsetMode);
+                await flushStoragePart({forceHandsetMode: !featuresState.forceHandsetMode});
+                updateFeaturesState(state => ({...state, forceHandsetMode: !featuresState.forceHandsetMode}));
+              }}
+            />
+          </View>
+          <View style={styles.featuresListItem}>
+            <Text style={styles.featuresListItemText}>Non-tab Notifications</Text>
+            <Switch
+              value={featuresState.noTabsNotifications}
+              onValueChange={async () => {
+                await flushStoragePart({noTabsNotifications: !featuresState.noTabsNotifications});
+                updateFeaturesState(state => (
+                  {...state, noTabsNotifications: !featuresState.noTabsNotifications})
+                );
               }}
             />
           </View>

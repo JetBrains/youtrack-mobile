@@ -18,7 +18,7 @@ import type {InboxThread, Notification} from 'types/Inbox';
 import type {IssueProject} from 'types/CustomFields';
 import type {OAuthParams2} from 'types/Auth';
 import type {PermissionCacheItem} from 'types/Permission';
-import type {ThreadsStateDataKey} from 'types/Inbox';
+import type {ThreadsStateFilterId} from 'types/Inbox';
 import type {UserCurrent} from 'types/User';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
@@ -29,17 +29,25 @@ export const storageStateAuthParamsKey: string = 'authParamsKey';
 export const THEME_MODE_KEY = 'YT_THEME_MODE';
 
 export type InboxThreadsCache = {
-  [key in ThreadsStateDataKey]: InboxThread[];
+  [folderId in ThreadsStateFilterId]: InboxThread[];
 } & {
   unreadOnly: boolean;
   lastVisited: number;
 };
 
-type TipsState = {
-  dismissActivityActionAccessTouch: boolean | null,
-}
+const tipsKeys = {
+  dismissActivityActionAccessTouch: 'YT_dismissActivityActionAccessTouch',
+};
+type TipsState = Record<keyof typeof tipsKeys, boolean | null>
 
-export type StorageState = TipsState & {
+export const featuresKeys = {
+  noTabsNotifications: 'YT_noTabsNotifications',
+};
+type FeatureState = Record<keyof typeof featuresKeys, boolean | null>
+
+type StorageStateKeys = Partial<Record<keyof StorageState, string>>;
+
+export type StorageState = TipsState & FeatureState & {
   [key in typeof storageStateAuthParamsKey]: string | null;
 } & {
   articles: Article[] | null;
@@ -86,15 +94,9 @@ export type StorageState = TipsState & {
   forceHandsetMode: boolean | null;
 };
 
-type StorageStateKeys = Partial<Record<keyof StorageState, string>>;
-type TipsStateKeys = Partial<Record<keyof TipsState, string>>;
-
-const storageTipsKeys: TipsStateKeys = {
-  dismissActivityActionAccessTouch: 'YT_dismissActivityActionAccessTouch',
-};
-
-const storageKeys: StorageStateKeys & TipsStateKeys = {
-  ...storageTipsKeys,
+const storageKeys: StorageStateKeys & (typeof tipsKeys) & (typeof featuresKeys) = {
+  ...tipsKeys,
+  ...featuresKeys,
   articles: 'YT_ARTICLES',
   articlesList: 'YT_ARTICLES_LIST',
   articlesQuery: 'YT_ARTICLES_QUERY',
@@ -135,8 +137,13 @@ export const initialTipsState: Readonly<TipsState> = {
   dismissActivityActionAccessTouch: null,
 };
 
+export const initialFeaturesState: Readonly<FeatureState> = {
+  noTabsNotifications: null,
+};
+
 export const initialState: Readonly<StorageState> = {
   ...initialTipsState,
+  ...initialFeaturesState,
   articles: null,
   articlesList: null,
   articlesQuery: null,
@@ -250,7 +257,8 @@ export async function clearCachesAndDrafts(): Promise<StorageState> {
     storageKeys.permissions,
     storageKeys.agileDefaultBoard,
     storageKeys.projects,
-    ...Object.values(storageTipsKeys),
+    ...Object.values(tipsKeys),
+    ...Object.values(featuresKeys),
   ] as string[]);
   return populateStorage();
 }
@@ -385,12 +393,14 @@ export async function secureAccounts(
     await storeAccounts(otherAccounts);
   }
 }
+
 export async function getOtherAccounts(): Promise<Array<StorageState>> {
   const value: string | null = await AsyncStorage.getItem(OTHER_ACCOUNTS_KEY);
   const otherAccounts: StorageState[] = value ? JSON.parse(value) : [];
   await secureAccounts(otherAccounts);
   return otherAccounts;
 }
+
 export async function storeAccounts(accounts: StorageState[]) {
   await AsyncStorage.setItem(OTHER_ACCOUNTS_KEY, JSON.stringify(accounts));
 }

@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
+
 import InboxThreadReadToggleButton from './inbox-threads__read-toggle-button';
+import SwipeableRow from 'components/swipeable/swipeable-row';
 import ThreadCommentItem from './inbox-threads__item-comment';
 import ThreadEntityCreatedItem from './inbox-threads__item-issue-created';
 import ThreadHistoryItem from './inbox-threads__item-history';
@@ -11,7 +13,9 @@ import {i18n} from 'components/i18n/i18n';
 import {mergeActivities} from 'components/activity/activity__merge-activities';
 import {sortByTimestamp} from 'components/search/sorting';
 import {splitActivities} from 'components/activity/activity__split-activities';
+
 import styles from './inbox-threads.styles';
+
 import type {Activity} from 'types/Activity';
 import type {
   InboxThread,
@@ -22,6 +26,8 @@ import type {
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
+
+
 type Props = {
   currentUser: User;
   onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
@@ -150,14 +156,27 @@ export default function InboxThreadItemSubscription({
           onReadChange={onReadChange}
         />
 
-        <Component
-          target={target}
-          group={group}
-          isLast={isLast}
-          currentUser={currentUser}
-          uiTheme={uiTheme}
-          onNavigate={onNavigate}
-        />
+        <SwipeableRow
+          leftActionText={i18n('Mark as unread')}
+          onSwipeLeft={() => onReadChange(group.messages, false)}
+          onSwipeRight={() => onReadChange(group.messages, true)}
+          rightActionText={i18n('Mark as read')}
+        >
+          <View style={styles.threadContainer}>
+            <>
+              {!isLast && <View style={styles.threadConnector}/>}
+              <Component
+                target={target}
+                group={group}
+                isLast={isLast}
+                currentUser={currentUser}
+                uiTheme={uiTheme}
+                onNavigate={onNavigate}
+              />
+            </>
+          </View>
+        </SwipeableRow>
+
         {showMoreButtonEl}
       </View>
     );

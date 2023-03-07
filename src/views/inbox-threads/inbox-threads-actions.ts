@@ -12,17 +12,17 @@ import {i18n} from 'components/i18n/i18n';
 import {
   INBOX_THREADS_FOLDER_SEEN,
   SET_PROGRESS,
-} from '../../actions/action-types';
+} from 'actions/action-types';
 import {notify, notifyError} from 'components/notification/notification';
 import {
   setError,
   setNotifications,
   toggleProgress,
 } from './inbox-threads-reducers';
-import {ThreadsStateData} from './inbox-threads-reducers';
 import {until} from 'util/util';
+
 import type Api from 'components/api/api';
-import type {AppState} from '../../reducers';
+import type {AppState} from 'reducers';
 import type {CustomError} from 'types/Error';
 import type {
   InboxFolder,
@@ -30,16 +30,22 @@ import type {
   InboxThreadMessage,
   ThreadEntity,
 } from 'types/Inbox';
+import type {IssueComment} from 'types/CustomFields';
 import type {Reaction} from 'types/Reaction';
 import type {User} from 'types/User';
-import type {IssueComment} from '../../types/CustomFields';
+import {ReduxAction} from 'types/Redux';
+import {ThreadsStateData} from './inbox-threads-reducers';
+import {ThreadsStateFilterId} from 'types/Inbox';
+
 type ApiGetter = () => Api;
 type StateGetter = () => AppState;
+
+
 const MAX_CACHED_THREADS: number = 10;
 const DEFAULT_CACHE_DATA = {
   lastVisited: 0,
   unreadOnly: false,
-};
+} as InboxThreadsCache;
 
 const trackEvent = (event: string, params?: Record<string, any>) => {
   usage.trackEvent(
@@ -54,23 +60,14 @@ const setGlobalInProgress = (isInProgress: boolean) => ({
   isInProgress,
 });
 
-const getCachedData = (): InboxThreadsCache => {
-  const inboxThreadsCache:
-    | InboxThreadsCache
-    | null
-    | undefined = getStorageState().inboxThreadsCache;
-  return inboxThreadsCache || DEFAULT_CACHE_DATA;
+const getCachedData = (): InboxThreadsCache => getStorageState().inboxThreadsCache || DEFAULT_CACHE_DATA;
+
+const getFolderCachedThreads = (folderId: string = folderIdAllKey): InboxThread[] => {
+  const cachedData: InboxThreadsCache = getCachedData();
+  return cachedData[folderId as ThreadsStateFilterId] || [];
 };
 
-const getFolderCachedThreads = (
-  folderId: string = folderIdAllKey,
-): InboxThread[] => {
-  const cachedData = getCachedData();
-  return cachedData[folderId] || [];
-};
-
-const isOnline = (state: AppState): boolean =>
-  state?.app?.networkState?.isConnected === true;
+const isOnline = (state: AppState): boolean => state?.app?.networkState?.isConnected === true;
 
 const updateCache = async (data: Record<string, any>): Promise<void> => {
   await flushStoragePart({
@@ -81,18 +78,18 @@ const updateCache = async (data: Record<string, any>): Promise<void> => {
 const updateThreadsStateAndCache = (
   thread: InboxThread,
   setThreadRead: boolean,
-) => {
+): ReduxAction => {
   return async (
     dispatch: (arg0: any) => any,
     getState: StateGetter,
     getApi: ApiGetter,
   ) => {
-    const storedFolderIds: string[] = [folderIdAllKey, folderIdMap[2]];
+    const storedFolderIds: ThreadsStateFilterId[] = [folderIdAllKey, folderIdMap[2]] as ThreadsStateFilterId[];
 
     if (lastVisitedTabIndex() !== 1) {
       const updatedState: ThreadsStateData = updateState();
       const updatedCacheData: Partial<InboxThreadsCache> = storedFolderIds.reduce(
-        (map: Partial<InboxThreadsCache>, folderId: string) => {
+        (map: Partial<InboxThreadsCache>, folderId: ThreadsStateFilterId) => {
           return Object.assign(
             map,
             updatedState[folderId]
@@ -110,10 +107,9 @@ const updateThreadsStateAndCache = (
 
     function updateState(): ThreadsStateData {
       const unreadOnly: boolean = getCachedData().unreadOnly;
-      const threadsData: ThreadsStateData = getState()?.inboxThreads
-        ?.threadsData;
+      const threadsData: ThreadsStateData = getState()?.inboxThreads?.threadsData;
       return storedFolderIds.reduce(
-        (map: ThreadsStateData, folderId: string) => {
+        (map: ThreadsStateData, folderId: ThreadsStateFilterId) => {
           let data = {};
 
           if (threadsData[folderId]) {
@@ -126,9 +122,7 @@ const updateThreadsStateAndCache = (
                       : unreadOnly
                       ? {
                           ...thread,
-                          messages: thread.messages.filter(
-                            (it: InboxThread) => !it.read,
-                          ),
+                          messages: thread.messages.filter((it: InboxThreadMessage) => !it.read),
                         }
                       : thread
                     : it,
@@ -149,7 +143,7 @@ const updateThreadsStateAndCache = (
 
           return {...map, ...data};
         },
-        {},
+        {} as ThreadsStateData,
       );
     }
   };
@@ -173,7 +167,7 @@ const loadThreadsFromCache = (
   };
 };
 
-const lastVisitedTabIndex = (index?: number): number => {
+const lastVisitedTabIndex = (index?: number): number | undefined => {
   const hasIndex: boolean = typeof index === 'number';
 
   if (hasIndex) {
@@ -182,7 +176,7 @@ const lastVisitedTabIndex = (index?: number): number => {
     });
   }
 
-  const lastVisited: number = hasIndex ? index : getCachedData().lastVisited;
+  const lastVisited: number | undefined = hasIndex ? index : getCachedData().lastVisited;
   trackEvent(hasIndex ? 'visit tab' : 'load tab', {
     lastVisited,
   });
@@ -202,13 +196,9 @@ const toggleUnreadOnly = async (): Promise<void> => {
 const isUnreadOnly = (): boolean => getCachedData().unreadOnly === true;
 
 const saveFolderSeen = (
-  folderId?: string,
+  folderId: string,
   lastSeen: number,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => Promise<void>) => {
+): ReduxAction => {
   return async (
     dispatch: (arg0: any) => any,
     getState: StateGetter,
@@ -282,13 +272,9 @@ const setFolderSeen = (
 };
 
 const markFolderSeen = (
-  folderId?: string,
+  folderId: string,
   date?: number,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => Promise<void>) => {
+): ReduxAction => {
   return async (
     dispatch: (arg0: any) => any,
     getState: StateGetter,
@@ -311,21 +297,13 @@ const markFolderSeen = (
 const setInProgress = (
   inProgress: boolean,
   setGlobalProgress?: boolean,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => Promise<void>) => {
+): ReduxAction => {
   return async (
     dispatch: (arg0: any) => any,
     getState: StateGetter,
     getApi: ApiGetter,
   ) => {
-    dispatch(
-      toggleProgress({
-        inProgress,
-      }),
-    );
+    dispatch(toggleProgress({inProgress}));
 
     if (setGlobalProgress) {
       dispatch(setGlobalInProgress(inProgress));
@@ -334,14 +312,10 @@ const setInProgress = (
 };
 
 const loadInboxThreads = (
-  folderId?: string | null,
+  folderId?: ThreadsStateFilterId | null,
   end?: number,
   setGlobalProgress: boolean = false,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => Promise<void>) => {
+): ReduxAction => {
   return async (
     dispatch: (arg0: any) => any,
     getState: StateGetter,
@@ -357,11 +331,7 @@ const loadInboxThreads = (
       );
     }
 
-    dispatch(
-      setError({
-        error: null,
-      }),
-    );
+    dispatch(setError({error: null}));
 
     if (!isOnline(getState())) {
       return;
@@ -376,9 +346,7 @@ const loadInboxThreads = (
 
     if (error) {
       dispatch(
-        setError({
-          error,
-        }),
+        setError({error}),
       );
     } else {
       doMarkSeen();
@@ -395,10 +363,11 @@ const loadInboxThreads = (
     }
 
     async function doMarkSeen() {
-      (folderId === folderIdMap[0]
-        ? [folderIdMap[1], folderIdMap[2]]
-        : [folderId]
-      ).forEach((id: string) => dispatch(markFolderSeen(id)));
+      (folderId === folderIdMap[0] ? [folderIdMap[1], folderIdMap[2]] : [folderId]).forEach(
+        (id: string) => {
+          dispatch(markFolderSeen(id));
+        }
+      );
     }
   };
 };
@@ -426,7 +395,7 @@ const muteToggle = (
 
     const [error, inboxThread]: [
       CustomError | null | undefined,
-      Array<InboxThread>,
+      InboxThread,
     ] = await until(getApi().inbox.muteToggle(id, muted));
 
     if (error) {
@@ -446,11 +415,7 @@ const muteToggle = (
 const readMessageToggle = (
   messages: InboxThreadMessage[],
   read: boolean,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => Promise<void>) => {
+): ReduxAction => {
   return async (
     dispatch: (arg0: any) => any,
     getState: StateGetter,
@@ -486,11 +451,7 @@ const readMessageToggle = (
 
 const markAllAsRead = (
   index: number,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => Promise<void>) => {
+): ReduxAction => {
   return async (
     dispatch: (arg0: any) => any,
     getState: StateGetter,
@@ -499,11 +460,7 @@ const markAllAsRead = (
     trackEvent('Inbox threads: mark all as read');
 
     if (isOnline(getState())) {
-      dispatch(
-        toggleProgress({
-          inProgress: true,
-        }),
-      );
+      dispatch(toggleProgress({inProgress: true}));
       dispatch(
         setNotifications({
           threads: [],
@@ -547,23 +504,21 @@ const onReactionSelect = (
     getState: StateGetter,
     getApi: ApiGetter,
   ): Promise<void> => {
-    const currentUser: User = getState().app.user;
+    const currentUser: User = getState().app.user as User;
     trackEvent('Inbox threads: make reaction');
     const reactionName: string = reaction.reaction;
     const existReaction: Reaction = (comment.reactions || []).filter(
       it => it.reaction === reactionName && it.author.id === currentUser.id,
     )[0];
-    const entityApi = hasType.article(entity)
-      ? getApi().articles
-      : getApi().issue;
+    const entityApi = hasType.article(entity) ? getApi().articles : getApi().issue;
     const [error, response] = await until(
       existReaction
         ? entityApi.removeCommentReaction(
-            entity.id,
+            (entity.id as string),
             comment.id,
             existReaction.id,
           )
-        : entityApi.addCommentReaction(entity.id, comment.id, reactionName),
+        : entityApi.addCommentReaction((entity.id as string), comment.id, reactionName),
     );
 
     if (error) {

@@ -1,22 +1,17 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import {Dimensions, Linking, TouchableOpacity, View} from 'react-native';
+import * as React from 'react';
+import {Dimensions, Linking, Text, TouchableOpacity, View} from 'react-native';
+
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useDispatch, useSelector} from 'react-redux';
+
 import * as actions from './inbox-threads-actions';
 import Article from 'views/article/article';
-import Header from 'components/header/header';
 import InboxThreadsProgressPlaceholder from './inbox-threads__progress-placeholder';
 import InboxThreadsList from './inbox-threads__list';
 import InboxThreadsTabBar from './inbox-threads__tab-bar';
 import InboxThreadsUpdateButton from './inbox-threads__update-button';
-import Issue from '../issue/issue';
+import Issue from 'views/issue/issue';
 import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
@@ -27,17 +22,22 @@ import {getStorageState} from 'components/storage/storage';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {IconMoreOptions} from 'components/icon/icon';
+import {isAndroidPlatform} from 'util/util';
 import {isSplitView as hasSplitView} from 'components/responsive/responsive-helper';
 import {markAllAsRead} from './inbox-threads-actions';
 import {ThemeContext} from 'components/theme/theme-context';
+
 import styles from './inbox-threads.styles';
 import tabStyles from 'components/issue-tabbed/issue-tabbed.style';
-import type {AppState} from '../../reducers';
+
+import type {AppState} from 'reducers';
 import type {TabRoute} from 'types/Issue';
 import type {Theme, UIThemeColors} from 'types/Theme';
 import type {ThreadEntity} from 'types/Inbox';
+import {AppConfig} from 'types/AppConfig';
 
-const InboxThreads: ()=> React.ReactNode = (): React.ReactNode => {
+const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
+  const segmentTabs: string[] = getThreadTabsTitles().slice(0,2);
   const routes: TabRoute[] = getThreadTabsTitles().map(
     (name: string, index: number) => ({
       key: index,
@@ -45,26 +45,29 @@ const InboxThreads: ()=> React.ReactNode = (): React.ReactNode => {
       id: folderIdMap[index],
     }),
   );
+
   const dispatch = useDispatch();
   const {showActionSheetWithOptions} = useActionSheet();
-  const theme: Theme = useContext(ThemeContext);
-  const isOnline: boolean = useSelector(
-    (state: AppState) => state.app.networkState?.isConnected,
-  );
-  const [selectedEntity, updateSelectedEntity] = useState({
+  const theme: Theme = React.useContext(ThemeContext);
+  const dimensionsChangeListener = React.useRef();
+
+  const isnoTabsNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().noTabsNotifications);
+  const isOnline: boolean = useSelector((state: AppState) => !!state.app.networkState?.isConnected);
+
+  const [selectedEntity, updateSelectedEntity] = React.useState({
     entity: null,
     navigateToActivity: null,
     commentId: null,
   });
-  const [isSplitView, updateIsSplitView] = useState(hasSplitView());
-  const dimensionsChangeListener = useRef();
-  const loadThreads = useCallback(
-    (folderId?: string, end?: number, showProgress?: boolean): void => {
+  const [isSplitView, updateIsSplitView] = React.useState(hasSplitView());
+
+  const loadThreads = React.useCallback(
+    (folderId?: string, end?: number | null, showProgress?: boolean): void => {
       dispatch(actions.loadInboxThreads(folderId, end, showProgress));
     },
     [dispatch],
   );
-  const setThreadsFromCache = useCallback(
+  const setThreadsFromCache = React.useCallback(
     (folderId?: string): void => {
       dispatch(actions.loadThreadsFromCache(folderId));
     },
@@ -73,14 +76,14 @@ const InboxThreads: ()=> React.ReactNode = (): React.ReactNode => {
 
   const getLastIndex = (): number => actions.lastVisitedTabIndex() || 0;
 
-  const [navigationState, updateNavigationState] = useState({
+  const [navigationState, updateNavigationState] = React.useState({
     index: getLastIndex(),
     routes,
   });
 
   const isArticle = (entity: ThreadEntity): boolean => hasType.article(entity);
 
-  useEffect(() => {
+  React.useEffect(() => {
     usage.trackScreenView(ANALYTICS_NOTIFICATIONS_THREADS_PAGE);
     setThreadsFromCache(folderIdMap[getLastIndex()]);
     dimensionsChangeListener.current = Dimensions.addEventListener(
@@ -141,23 +144,19 @@ const InboxThreads: ()=> React.ReactNode = (): React.ReactNode => {
     const entityProps = {
       ...(isNavigateToArticle
         ? {
-            articlePlaceholder: selectedEntity.entity,
-          }
+          articlePlaceholder: selectedEntity.entity,
+        }
         : {
-            issuePlaceholder: selectedEntity.entity,
-            issueId: selectedEntity.entity.id,
-          }),
+          issuePlaceholder: selectedEntity.entity,
+          issueId: selectedEntity.entity?.id,
+        }),
       navigateToActivity: selectedEntity.navigateToActivity,
       commentId: selectedEntity.commentId,
     };
-    return isNavigateToArticle ? (
-      <Article {...entityProps} />
-    ) : (
-      <Issue {...entityProps} />
-    );
+    return isNavigateToArticle ? <Article {...entityProps} /> : <Issue {...entityProps} />;
   };
 
-  const onNavigate = useCallback((entity, navigateToActivity, commentId) => {
+  const onNavigate = React.useCallback((entity, navigateToActivity, commentId) => {
     if (entity) {
       if (hasSplitView()) {
         updateSelectedEntity({
@@ -169,33 +168,21 @@ const InboxThreads: ()=> React.ReactNode = (): React.ReactNode => {
         (isArticle(entity) ? Router.Article : Router.Issue)({
           navigateToActivity,
           commentId,
-          ...(isArticle(entity)
-            ? {
-                articlePlaceholder: entity,
-              }
-            : {
-                issueId: entity.id,
-              }),
+          ...(isArticle(entity) ? {articlePlaceholder: entity} : {issueId: entity.id}),
         });
       }
     }
   }, []);
-  const AllTab = useCallback(
-    () => (
-      <InboxThreadsList onNavigate={onNavigate} folderId={folderIdMap[0]} />
-    ),
+  const AllTab = React.useCallback(
+    () => <InboxThreadsList onNavigate={onNavigate} folderId={folderIdMap[0]}/>,
     [onNavigate],
   );
-  const MentionsAndReactionsTab = useCallback(
-    () => (
-      <InboxThreadsList onNavigate={onNavigate} folderId={folderIdMap[1]} />
-    ),
+  const MentionsAndReactionsTab = React.useCallback(
+    () => <InboxThreadsList onNavigate={onNavigate} folderId={folderIdMap[1]}/>,
     [onNavigate],
   );
-  const SubscriptionsTab = useCallback(
-    () => (
-      <InboxThreadsList onNavigate={onNavigate} folderId={folderIdMap[2]} />
-    ),
+  const SubscriptionsTab = React.useCallback(
+    () => <InboxThreadsList onNavigate={onNavigate} folderId={folderIdMap[2]}/>,
     [onNavigate],
   );
 
@@ -229,10 +216,37 @@ const InboxThreads: ()=> React.ReactNode = (): React.ReactNode => {
     );
   };
 
+  const renderHeaderSegmentControl = () => {
+    const SegmentedControl = require('@react-native-segmented-control/segmented-control').default;
+    return (
+      <View style={theme.mode === 'dark' && isAndroidPlatform() && styles.threadSwitcherContainerAndroid}>
+        <SegmentedControl
+          appearance={theme.mode}
+          activeFontStyle={styles.threadSwitcherActiveColor}
+          fontStyle={styles.threadSubTitleText}
+          style={styles.threadSwitcher}
+          values={segmentTabs}
+          selectedIndex={navigationState.index}
+          onChange={(event: {nativeEvent: {selectedSegmentIndex: number}}) => {
+            updateNavigationState({
+              index: event.nativeEvent.selectedSegmentIndex,
+              routes,
+            });
+          }}
+        />
+      </View>
+    );
+  };
+
   const renderHeader = () => (
-    <Header
-      title={i18n('Notifications')}
-      rightButton={
+    <View style={styles.header}>
+      <Text style={styles.headerTitle}>
+        {i18n('Notifications')}
+      </Text>
+
+      {isnoTabsNotifications && renderHeaderSegmentControl()}
+
+      <View style={[styles.headerButton, styles.headerRightButton]}>
         <TouchableOpacity
           disabled={!isOnline}
           testID="test:id/inboxSettings"
@@ -265,7 +279,7 @@ const InboxThreads: ()=> React.ReactNode = (): React.ReactNode => {
                 execute: () =>
                   Linking.openURL(
                     `${
-                      getStorageState().config.backendUrl
+                      (getStorageState().config as AppConfig).backendUrl
                     }/users/me?tab=notifications`,
                   ),
               },
@@ -279,8 +293,9 @@ const InboxThreads: ()=> React.ReactNode = (): React.ReactNode => {
                 options: options.map(action => action.title),
                 cancelButtonIndex: options.length - 1,
               },
-              (index: number) =>
-                options[index]?.execute && options[index].execute(),
+              (index: number) => {
+                options[index]?.execute?.();
+              },
             );
           }}
           style={styles.threadTitleAction}
@@ -290,8 +305,8 @@ const InboxThreads: ()=> React.ReactNode = (): React.ReactNode => {
             color={isOnline ? styles.link.color : styles.disabled.color}
           />
         </TouchableOpacity>
-      }
-    />
+      </View>
+    </View>
   );
 
   const Container = isSplitView ? View : React.Fragment;
@@ -305,8 +320,17 @@ const InboxThreads: ()=> React.ReactNode = (): React.ReactNode => {
       <Container {...(isSplitView ? styles.splitViewSide : {})}>
         {renderHeader()}
         <InboxThreadsUpdateButton index={navigationState.index} />
-        {renderTabs()}
+
+        {!isnoTabsNotifications.current && renderTabs()}
+        {isnoTabsNotifications.current && <>
+          {renderHeaderSegmentControl()}
+          <InboxThreadsList
+            onNavigate={onNavigate}
+            folderId={folderIdMap[Math.min(navigationState.index, segmentTabs.length)]}
+          />
+        </>}
       </Container>
+
       {isSplitView && (
         <View style={isSplitView && styles.splitViewMain}>
           {renderEntity()}

@@ -58,6 +58,7 @@
     "@jetbrains/icons": "^3.20.0",
     "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-native-community/netinfo": "9.3.7",
+    "@react-native-segmented-control/segmented-control": "^2.4.0",
     "@reduxjs/toolkit": "1.7.2",
     "base64-js": "1.5.1",
     "cssfilter": "^0.0.10",

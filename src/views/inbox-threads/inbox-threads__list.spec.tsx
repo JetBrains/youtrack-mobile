@@ -8,6 +8,9 @@ import mocks from '../../../test/mocks';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import {folderIdAllKey} from './inbox-threads-helper';
 import {ThemeContext} from 'components/theme/theme-context';
+
+jest.mock('components/swipeable/swipeable-row');
+
 let apiMock;
 jest.mock('components/api/api__instance', () => ({
   getApi: () => ({

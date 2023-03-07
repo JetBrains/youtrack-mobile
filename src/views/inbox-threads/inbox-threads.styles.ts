@@ -1,11 +1,15 @@
 import {Platform} from 'react-native';
+
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {mainText, secondaryText} from 'components/common-styles';
+
+import {baseHeaderStyles} from 'components/header/header.styles';
+import {elevation1, mainText, secondaryText, UNIT} from 'components/common-styles';
 import {rowStyles as activityStyles} from 'components/activity-stream/activity__stream.styles';
 import {splitViewStyles} from 'components/common-styles/split-view';
-import {UNIT} from 'components/variables';
+
 export default EStyleSheet.create({
   ...splitViewStyles,
+  ...baseHeaderStyles,
   container: {
     flex: 1,
     backgroundColor: '$background',
@@ -28,6 +32,7 @@ export default EStyleSheet.create({
   },
   threadsListContainer: {
     flexGrow: 1,
+    paddingTop: UNIT * 2,
   },
   threadsEmpty: {
     height: '100%',
@@ -41,6 +46,19 @@ export default EStyleSheet.create({
   thread: {
     marginTop: UNIT * 1.5,
     marginLeft: UNIT * 2,
+  },
+  threadContainer: {
+    backgroundColor: '$background',
+  },
+  threadSwitcherContainerAndroid: {
+    ...elevation1,
+  },
+  threadSwitcher: {
+    height: UNIT * 4,
+    marginHorizontal: UNIT * 1.5,
+  },
+  threadSwitcherActiveColor: {
+    color: '$text',
   },
   threadFirst: {
     marginTop: UNIT,
@@ -57,9 +75,9 @@ export default EStyleSheet.create({
   threadConnector: {
     position: 'absolute',
     top: UNIT / 2,
-    left: 15,
+    left: 17,
     width: 2,
-    height: '98%',
+    height: '98.5%',
     paddingBottom: UNIT * 2,
     backgroundColor: '$separator',
   },
@@ -113,6 +131,7 @@ export default EStyleSheet.create({
     position: 'relative',
     zIndex: 1,
     top: -UNIT / 4,
+    left: 3,
     marginLeft: -UNIT / 2,
     marginRight: UNIT * 1.5 - UNIT / 2,
     width: UNIT * 5,

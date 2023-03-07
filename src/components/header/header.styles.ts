@@ -1,15 +1,20 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from 'components/variables';
-import {headerTitle} from 'components/common-styles/typography';
+
 import {elevation1} from 'components/common-styles';
-const minButtonWidth = UNIT * 5;
+import {headerTitle} from 'components/common-styles/typography';
+import {UNIT} from 'components/variables';
+
+const minButtonWidth: number = UNIT * 5;
+
 export const headerMinHeight = UNIT * 8;
+
 export const headerTitlePresentation = {
   ...headerTitle,
   marginLeft: UNIT,
   color: '$text',
 };
-export default EStyleSheet.create({
+
+export const baseHeaderStyles = {
   header: {
     position: 'relative',
     zIndex: 1,
@@ -42,4 +47,6 @@ export default EStyleSheet.create({
     padding: 0,
     paddingLeft: UNIT * 2,
   },
-});
+};
+
+export default EStyleSheet.create(baseHeaderStyles);

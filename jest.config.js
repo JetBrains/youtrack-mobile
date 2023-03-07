@@ -15,6 +15,7 @@ module.exports = {
   'setupFilesAfterEnv': [
     '<rootDir>/test/jest-setup.js',
     '@testing-library/jest-native/extend-expect',
+    './node_modules/react-native-gesture-handler/jestSetup.js',
   ],
   'testResultsProcessor': 'jest-teamcity-reporter',
   'coverageReporters': [

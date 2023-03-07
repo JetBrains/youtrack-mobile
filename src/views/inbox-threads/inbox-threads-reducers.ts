@@ -1,46 +1,39 @@
 import {createSlice} from '@reduxjs/toolkit';
+
 import {threadsPageSize} from 'components/api/api__inbox';
+
 import type {CustomError} from 'types/Error';
-import type {InboxThread, ThreadsStateDataKey} from 'types/Inbox';
+import type {InboxThread, ThreadsStateFilterId} from 'types/Inbox';
+
 export type ThreadsStateData = Record<
-  ThreadsStateDataKey,
+  ThreadsStateFilterId,
   {
     threads: InboxThread[];
     hasMore: boolean;
   }
 >;
+
 export type InboxThreadState = {
   error: CustomError | null;
   threadsData: ThreadsStateData;
   inProgress: boolean;
 };
+
 const initialState: InboxThreadState = {
   error: null,
-  threadsData: {},
+  threadsData: {} as ThreadsStateData,
   inProgress: false,
 };
-export interface NotificationsActions {
-  setNotifications: (action: {
-    threads: InboxThread[];
-    reset?: boolean;
-    folderId: string;
-  }) => InboxThreadState;
-  setError: (action: {error: CustomError | null}) => InboxThreadState;
-  toggleProgress: (action: {inProgress: boolean}) => InboxThreadState;
-}
+
 export const inboxThreadsNamespace = 'inboxThreads';
+
 export const inboxThreadsReducersNamesMap = {
   setNotifications: 'setNotifications',
   setError: 'setError',
   toggleProgress: 'toggleProgress',
 };
-const {
-  reducer,
-  actions,
-}: {
-  reducer: any;
-  actions: NotificationsActions;
-} = createSlice({
+
+const {reducer, actions} = createSlice({
   name: inboxThreadsNamespace,
   initialState,
   reducers: {
@@ -50,7 +43,7 @@ const {
         payload: {
           threads: InboxThread[];
           reset?: boolean;
-          folderId: string;
+          folderId: ThreadsStateFilterId;
         };
       },
     ) => {
@@ -68,8 +61,8 @@ const {
           reset === true
             ? threads
             : state.threadsData[folderId].threads
-                .slice(0, state.threadsData[folderId].threads.length - 1)
-                .concat(threads),
+              .slice(0, state.threadsData[folderId].threads.length - 1)
+              .concat(threads),
         hasMore: threads.length === threadsPageSize,
       };
     },
@@ -95,5 +88,7 @@ const {
     },
   },
 });
-export const {setNotifications, toggleProgress, setError} = actions;
+
+
+export const {setNotifications, toggleProgress, setError}: { [key: string]: (payload: any) => any } = actions;
 export default reducer;
