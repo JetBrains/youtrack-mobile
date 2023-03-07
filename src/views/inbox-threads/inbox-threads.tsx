@@ -186,6 +186,13 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
     [onNavigate],
   );
 
+  const onFolderChange = (index: number): void => {
+    setThreadsFromCache(folderIdMap[index]);
+    updateNavigationState({index, routes});
+    loadThreads(folderIdMap[index], undefined, true);
+    actions.lastVisitedTabIndex(index);
+  };
+
   const renderTabs = () => {
     return (
       <TabView
@@ -203,15 +210,7 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
           width: Dimensions.get('window').width,
         }}
         renderTabBar={renderTabBar}
-        onIndexChange={(index: number) => {
-          setThreadsFromCache(folderIdMap[index]);
-          updateNavigationState({
-            index,
-            routes,
-          });
-          loadThreads(folderIdMap[index], undefined, true);
-          actions.lastVisitedTabIndex(index);
-        }}
+        onIndexChange={onFolderChange}
       />
     );
   };
@@ -228,10 +227,7 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
           values={segmentTabs}
           selectedIndex={navigationState.index}
           onChange={(event: {nativeEvent: {selectedSegmentIndex: number}}) => {
-            updateNavigationState({
-              index: event.nativeEvent.selectedSegmentIndex,
-              routes,
-            });
+            onFolderChange(event.nativeEvent.selectedSegmentIndex);
           }}
         />
       </View>
