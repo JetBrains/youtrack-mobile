@@ -238,7 +238,7 @@ function getMarkdownRules(
               `${node.key}1`,
             )}
             {renderHyperLink(
-              text.slice(matchedIndex + matched[0].length, text.length - 1),
+              text.slice(matchedIndex + matched[0].length, text.length),
               linkStyle,
             )}
           </Text>
