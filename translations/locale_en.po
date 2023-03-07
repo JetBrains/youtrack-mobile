@@ -180,7 +180,7 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/views/article/arcticle-actions.ts:674
 #: src/views/create-issue/create-issue-actions.ts:475
 #: src/views/inbox-threads/inbox-threads__thread.tsx:160
-#: src/views/inbox-threads/inbox-threads.tsx:273
+#: src/views/inbox-threads/inbox-threads.tsx:283
 #: src/views/issue/activity/issue-activity__comment-actions.ts:422
 #: src/views/issue/issue-base-actions-creater.ts:697
 #: src/views/issue/issue-base-actions-creater.ts:738
@@ -315,7 +315,7 @@ msgstr "Crash report sent"
 msgid "created"
 msgstr "created"
 
-#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx:43
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx:45
 msgid "Created by"
 msgstr "Created by"
 
@@ -593,19 +593,21 @@ msgstr "Logs"
 msgid "Manage Favorite Projects"
 msgstr "Manage Favorite Projects"
 
-#: src/views/inbox-threads/inbox-threads.tsx:257
+#: src/views/inbox-threads/inbox-threads.tsx:267
 msgid "Mark all as read"
 msgstr "Mark all as read"
 
+#: src/views/inbox-threads/inbox-threads__subscription.tsx:163
 #: src/views/inbox-threads/inbox-threads__thread.tsx:155
 msgid "Mark as read"
 msgstr "Mark as read"
 
+#: src/views/inbox-threads/inbox-threads__subscription.tsx:160
 #: src/views/inbox-threads/inbox-threads__thread.tsx:155
 msgid "Mark as unread"
 msgstr "Mark as unread"
 
-#: src/views/inbox-threads/inbox-threads-actions.ts:529
+#: src/views/inbox-threads/inbox-threads-actions.ts:486
 msgid "Marked as read"
 msgstr "Marked as read"
 
@@ -676,7 +678,7 @@ msgstr "No issues found"
 msgid "No items"
 msgstr "No items"
 
-#: src/views/inbox-threads/inbox-threads__list.tsx:134
+#: src/views/inbox-threads/inbox-threads__list.tsx:140
 msgid "No notifications"
 msgstr "No notifications"
 
@@ -692,11 +694,11 @@ msgstr "No user information provided by Upsource."
 msgid "Nope, can't find it!"
 msgstr "Nope, can't find it!"
 
-#: src/views/inbox-threads/inbox-threads.tsx:264
+#: src/views/inbox-threads/inbox-threads.tsx:274
 msgid "Notification settings…"
 msgstr "Notification settings…"
 
-#: src/views/inbox-threads/inbox-threads.tsx:234
+#: src/views/inbox-threads/inbox-threads.tsx:240
 #: src/views/inbox/inbox.tsx:707
 msgid "Notifications"
 msgstr "Notifications"
@@ -860,7 +862,7 @@ msgstr "Share logs"
 msgid "Share…"
 msgstr "Share…"
 
-#: src/views/inbox-threads/inbox-threads.tsx:245
+#: src/views/inbox-threads/inbox-threads.tsx:255
 msgid "Show all"
 msgstr "Show all"
 
@@ -869,7 +871,7 @@ msgid "Show all issues tagged with \"{{tagName}}\"..."
 msgstr "Show all issues tagged with \"{{tagName}}\"..."
 
 #: src/components/activity-stream/activity__stream-vcs.tsx:208
-#: src/views/inbox-threads/inbox-threads__subscription.tsx:105
+#: src/views/inbox-threads/inbox-threads__subscription.tsx:111
 msgid "Show more"
 msgstr "Show more"
 
@@ -1011,11 +1013,11 @@ msgstr "There was an error retrieving information about the change's author from
 msgid "This action deletes all drafts, including unpublished sub-articles"
 msgstr "This action deletes all drafts, including unpublished sub-articles"
 
-#: src/views/inbox-threads/inbox-threads-actions.ts:438
+#: src/views/inbox-threads/inbox-threads-actions.ts:407
 msgid "Thread muted"
 msgstr "Thread muted"
 
-#: src/views/inbox-threads/inbox-threads-actions.ts:439
+#: src/views/inbox-threads/inbox-threads-actions.ts:408
 msgid "Thread unmuted"
 msgstr "Thread unmuted"
 
@@ -1027,7 +1029,7 @@ msgstr "Title"
 msgid "Title changed"
 msgstr "Title changed"
 
-#: src/views/inbox-threads/inbox-threads.tsx:133
+#: src/views/inbox-threads/inbox-threads.tsx:136
 msgid "To view an item in context, select an issue, article, or update from the list"
 msgstr "To view an item in context, select an issue, article, or update from the list"
 
@@ -1059,7 +1061,7 @@ msgstr "Uncategorized Cards"
 msgid "Unmute thread"
 msgstr "Unmute thread"
 
-#: src/views/inbox-threads/inbox-threads.tsx:246
+#: src/views/inbox-threads/inbox-threads.tsx:256
 msgid "Unread only"
 msgstr "Unread only"
 
@@ -1072,7 +1074,7 @@ msgstr "Untitled"
 msgid "updated"
 msgstr "updated"
 
-#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx:46
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx:48
 msgid "Updated by"
 msgstr "Updated by"
 
@@ -1133,7 +1135,7 @@ msgstr "Woah, you can't touch this!"
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
 
-#: src/views/inbox-threads/inbox-threads__list.tsx:133
+#: src/views/inbox-threads/inbox-threads__list.tsx:139
 msgid "You don’t have any unread notifications"
 msgstr "You don’t have any unread notifications"
 
@@ -1153,7 +1155,7 @@ msgstr ""
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Your account has insufficient permission to perform this operation."
 
-#: src/components/storage/storage.ts:351
+#: src/components/storage/storage.ts:359
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 msgstr "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 

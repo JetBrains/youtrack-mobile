@@ -603,10 +603,12 @@ msgstr "Gérer les projets favoris"
 msgid "Mark all as read"
 msgstr "Tout marquer comme lu"
 
+#: src/views/inbox-threads/inbox-threads__subscription.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as read"
 msgstr "Signaler comme lu"
 
+#: src/views/inbox-threads/inbox-threads__subscription.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as unread"
 msgstr "Signaler comme non lu"

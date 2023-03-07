@@ -603,10 +603,12 @@ msgstr "Gestisci i progetti preferiti"
 msgid "Mark all as read"
 msgstr "Contrassegna tutte come lette"
 
+#: src/views/inbox-threads/inbox-threads__subscription.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as read"
 msgstr "Contrassegna come letto"
 
+#: src/views/inbox-threads/inbox-threads__subscription.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as unread"
 msgstr "Contrassegna come non letto"

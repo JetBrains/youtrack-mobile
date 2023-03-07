@@ -603,10 +603,12 @@ msgstr ""
 msgid "Mark all as read"
 msgstr "Az összes megjelölése olvasottként"
 
+#: src/views/inbox-threads/inbox-threads__subscription.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as read"
 msgstr "Megjelölés olvasottként"
 
+#: src/views/inbox-threads/inbox-threads__subscription.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as unread"
 msgstr "Megjelölés olvasatlanként"

@@ -599,10 +599,12 @@ msgstr "즐겨찾는 프로젝트 관리"
 msgid "Mark all as read"
 msgstr "모두 읽음으로 표시"
 
+#: src/views/inbox-threads/inbox-threads__subscription.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as read"
 msgstr "읽음으로 표시"
 
+#: src/views/inbox-threads/inbox-threads__subscription.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as unread"
 msgstr "읽지 않음으로 표시"

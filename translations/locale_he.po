@@ -611,10 +611,12 @@ msgstr ""
 msgid "Mark all as read"
 msgstr ""
 
+#: src/views/inbox-threads/inbox-threads__subscription.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as read"
 msgstr ""
 
+#: src/views/inbox-threads/inbox-threads__subscription.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as unread"
 msgstr ""
