@@ -185,6 +185,11 @@ export const rowStyles = {
     fontSize: 12,
     color: '$textSecondary',
   },
+  vcsBottomSheetHeader: {
+    paddingTop: UNIT * 2,
+    paddingBottom: UNIT,
+    paddingHorizontal: UNIT * 4,
+  },
   contextMenu: {
     flexDirection: 'row',
     padding: UNIT / 2,

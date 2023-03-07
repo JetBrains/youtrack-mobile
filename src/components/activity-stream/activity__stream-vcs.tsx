@@ -129,7 +129,15 @@ const StreamVCS = (props: Props) => {
     return (
       <BottomSheetModal
         isVisible={sourcesVisible}
-        title={getVcsPresentation(vcs)}
+        header={!!vcs.files && vcs.files !== -1 && (
+          <View style={styles.vcsBottomSheetHeader}>
+            <Text style={styles.activityLabel}>
+              {i18nPlural(vcs.files, '{{amount}} file', '{{amount}} files', {
+                amount: vcs.files,
+              })}
+            </Text>
+          </View>
+        )}
         onClose={() => updateSourcesVisible(false)}
       >
         {processors.map((processor: VcsProcessor) =>
@@ -186,16 +194,6 @@ const StreamVCS = (props: Props) => {
 
         {renderMarkdown(vcs.title, !!vcs.id)}
         {renderMarkdown(vcs.text, !!vcs.id)}
-
-        {!!vcs.files && vcs.files !== -1 && (
-          <View>
-            <Text style={styles.activityLabel}>
-              {i18nPlural(vcs.files, '{{amount}} file', '{{amount}} files', {
-                amount: vcs.files,
-              })}
-            </Text>
-          </View>
-        )}
 
         {(infoMessages.length > 0 || errorMessages.length > 0) && (
           <Details
