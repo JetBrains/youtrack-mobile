@@ -1,7 +1,9 @@
-import {isActivityCategory} from 'components/activity/activity__category';
+import {doSortBy, sortByTimestamp} from 'components/search/sorting';
 import {i18n} from 'components/i18n/i18n';
+import {isActivityCategory} from 'components/activity/activity__category';
+
 import type {Activity} from 'types/Activity';
-import type {InboxThreadMessage} from 'types/Inbox';
+import type {InboxThread, InboxThreadMessage, InboxThreadTarget} from 'types/Inbox';
 
 function getTypes(
   activity: Activity,
@@ -97,11 +99,62 @@ const folderIdMap: Record<number, string> = {
   [1]: 'direct',
   [2]: 'subscription',
 };
+
+export type ThreadTypeData = {
+  isMention: boolean,
+  isReaction: boolean,
+  isSubscription: boolean,
+};
+
+const getThreadTypeData = (it: InboxThread | InboxThreadMessage): ThreadTypeData => {
+  return {
+    isSubscription: it.id[0] === 'S',
+    isMention: it.id[0] === 'M',
+    isReaction: it.id[0] === 'R',
+  };
+};
+
+function mergeThreads(threads: InboxThread[]): InboxThread[] {
+  const subscriptionThreads: InboxThread[] = threads.filter((it: InboxThread) => getThreadTypeData(it).isSubscription);
+  const directThreads: InboxThread[] = threads.filter((it: InboxThread) => !getThreadTypeData(it).isSubscription);
+  let mergedThreads: InboxThread[] = subscriptionThreads;
+
+  if (directThreads.length > 0) {
+    mergedThreads = subscriptionThreads.reduce((akk: InboxThread[], it: InboxThread) => {
+      const target: InboxThreadTarget = it.subject.target;
+      const entity = target?.issue || target?.article || target;
+
+      const its: InboxThread[] = directThreads.filter((t: InboxThread) => {
+        const iTarget: InboxThreadTarget = t.subject.target;
+        const iEntity = iTarget?.issue || iTarget?.article || iTarget;
+        return iEntity.id === entity.id;
+      });
+
+      if (its.length > 0) {
+        const filteredMessages: InboxThreadMessage[] = its.reduce(
+          (arr: InboxThreadMessage[], i: InboxThread) => arr.concat(i.messages),
+          []
+        );
+        it.messages = [...it.messages, ...filteredMessages].sort(sortByTimestamp);
+      }
+      it.lastTimestamp = it.messages.slice(-1)[0].timestamp;
+      it.messages = it.messages.reverse();
+      return [...akk, it];
+    }, [] as InboxThread[]);
+  }
+
+  return mergedThreads.sort((a, b) => {
+    return doSortBy(a, b, 'lastTimestamp', true);
+  });
+}
+
 export {
   createMessagesMap,
   folderIdAllKey,
   folderIdMap,
   getTypes,
+  getThreadTypeData,
   getThreadTabsTitles,
+  mergeThreads,
   sortEvents,
 };

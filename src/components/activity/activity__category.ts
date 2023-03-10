@@ -5,6 +5,7 @@ export const categoryName = {
   ATTACHMENTS: 'ATTACHMENTS',
   COMMENT: 'COMMENT',
   COMMENT_MENTION: 'COMMENT_MENTION',
+  COMMENT_REACTION: 'COMMENT_REACTION',
   COMMENT_TEXT: 'COMMENT_TEXT',
   CUSTOM_FIELD: 'CUSTOM_FIELD',
   DESCRIPTION: 'DESCRIPTION',
@@ -38,6 +39,7 @@ export const activityCategory: Record<string, any> = {
   [categoryName.COMMENT]: 'CommentsCategory',
   [categoryName.COMMENT_MENTION]: 'CommentMentionCategory',
   [categoryName.COMMENT_TEXT]: 'CommentTextCategory',
+  [categoryName.COMMENT_REACTION]: 'CommentReactionCategory',
   [categoryName.ATTACHMENTS]: 'AttachmentsCategory',
   [categoryName.ATTACHMENT_RENAME]: 'AttachmentRenameCategory',
   [categoryName.CUSTOM_FIELD]: 'CustomFieldCategory',
@@ -205,6 +207,10 @@ isActivityCategory.commentText = isActivityCategory(
 isActivityCategory.customField = isActivityCategory(
   activityCategory.CUSTOM_FIELD,
 );
+isActivityCategory.commentReaction = isActivityCategory(
+  activityCategory.COMMENT_REACTION
+);
+
 isActivityCategory.description = isActivityCategories([
   activityCategory.DESCRIPTION,
   activityArticleCategory.DESCRIPTION,

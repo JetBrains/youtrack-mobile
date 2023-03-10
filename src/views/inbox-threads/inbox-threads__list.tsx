@@ -8,6 +8,7 @@ import ErrorMessage from 'components/error-message/error-message';
 import InboxThreadsProgressPlaceholder from './inbox-threads__progress-placeholder';
 import Thread from './inbox-threads__thread';
 import {folderIdAllKey} from './inbox-threads-helper';
+import {getStorageState} from 'components/storage/storage';
 import {i18n} from 'components/i18n/i18n';
 import {IconNoNotifications} from 'components/icon/icon-pictogram';
 import {isUnreadOnly} from './inbox-threads-actions';
@@ -28,10 +29,11 @@ type Props = {
     navigateToActivity?: string,
     commentId?: string,
   ) => any;
+  merger?: (threads: InboxThread[]) => InboxThread[];
 };
 
 
-const InboxThreadsList = ({folderId, onNavigate}: Props): JSX.Element => {
+const InboxThreadsList = ({folderId, onNavigate, merger}: Props): JSX.Element => {
   const theme: Theme = useContext(ThemeContext);
   const dispatch = useDispatch();
   const currentUser: User = useSelector(
@@ -60,28 +62,32 @@ const InboxThreadsList = ({folderId, onNavigate}: Props): JSX.Element => {
   );
   const loadThreads = useCallback(
     (id?: string, end?: number, showProgress?: boolean) => {
-      dispatch(actions.loadInboxThreads(id, end, showProgress));
+      dispatch(actions.loadInboxThreads(id, end, showProgress, merger));
     },
-    [dispatch],
+    [dispatch, merger],
   );
   useEffect(() => {
     setThreadsFromCache(folderId);
     loadThreads(folderId);
   }, [folderId, loadThreads, setThreadsFromCache]);
 
-  const renderItem = ({item, index}: {item: InboxThread; index: number}) => (
-    <Thread
-      style={[
-        styles.thread,
-        index === getData().threads.length - (getData().hasMore ? 2 : 1) &&
-          styles.threadLast,
-      ]}
-      thread={item}
-      currentUser={currentUser}
-      uiTheme={theme.uiTheme}
-      onNavigate={onNavigate}
-    />
-  );
+  const renderItem = ({item, index}: {item: InboxThread; index: number}) => {
+    const mergedNotifications: boolean = !!getStorageState().mergedNotifications;
+    return (
+      <Thread
+        style={[
+          styles.thread,
+          index === 0 && !mergedNotifications && styles.threadFirst,
+          index === 0 && mergedNotifications && styles.threadFirstMerged,
+          index === getData().threads.length - (getData().hasMore ? 2 : 1) && styles.threadLast,
+        ]}
+        thread={item}
+        currentUser={currentUser}
+        uiTheme={theme.uiTheme}
+        onNavigate={onNavigate}
+      />
+    );
+  };
 
   const visibleThreads: InboxThread[] = (getData().hasMore
     ? getData().threads.slice(0, getData().threads.length - 1)

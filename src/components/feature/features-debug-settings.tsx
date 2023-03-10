@@ -24,10 +24,10 @@ const FeaturesDebugSettings = (props: Props): React.ReactNode => {
 
   const [featuresState, updateFeaturesState] = React.useState<{
     forceHandsetMode: boolean,
-    noTabsNotifications: boolean,
+    mergedNotifications: boolean,
   }>({
     forceHandsetMode: !!getStorageState().forceHandsetMode,
-    noTabsNotifications: !!getStorageState().noTabsNotifications,
+    mergedNotifications: !!getStorageState().mergedNotifications,
   });
 
   return (
@@ -58,13 +58,13 @@ const FeaturesDebugSettings = (props: Props): React.ReactNode => {
             />
           </View>
           <View style={styles.featuresListItem}>
-            <Text style={styles.featuresListItemText}>Non-tab Notifications</Text>
+            <Text style={styles.featuresListItemText}>Merged Notifications</Text>
             <Switch
-              value={featuresState.noTabsNotifications}
+              value={featuresState.mergedNotifications}
               onValueChange={async () => {
-                await flushStoragePart({noTabsNotifications: !featuresState.noTabsNotifications});
+                await flushStoragePart({mergedNotifications: !featuresState.mergedNotifications});
                 updateFeaturesState(state => (
-                  {...state, noTabsNotifications: !featuresState.noTabsNotifications})
+                  {...state, mergedNotifications: !featuresState.mergedNotifications})
                 );
               }}
             />

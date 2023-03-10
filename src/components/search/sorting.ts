@@ -1,12 +1,8 @@
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 
-function doSortBy(
-  a: Record<string, any> & {
-    timestamp: number;
-  },
-  b: Record<string, any> & {
-    timestamp: number;
-  },
+export function doSortBy(
+  a: Record<string, any>,
+  b: Record<string, any>,
   fieldName: string,
   reverse: boolean = false,
 ) {
@@ -39,32 +35,20 @@ export function sortAlphabetically(
   return 0;
 }
 export function sortByTimestampReverse(
-  a: Record<string, any> & {
-    timestamp: number;
-  },
-  b: Record<string, any> & {
-    timestamp: number;
-  },
+  a: Record<string, any>,
+  b: Record<string, any>,
 ): number {
   return doSortBy(a, b, 'timestamp', true);
 }
 export function sortByTimestamp(
-  a: Record<string, any> & {
-    timestamp: number;
-  },
-  b: Record<string, any> & {
-    timestamp: number;
-  },
+  a: Record<string, any>,
+  b: Record<string, any>,
 ): number {
   return doSortBy(a, b, 'timestamp');
 }
 export function sortByUpdatedReverse(
-  a: Record<string, any> & {
-    updated: number;
-  },
-  b: Record<string, any> & {
-    updated: number;
-  },
+  a: Record<string, any>,
+  b: Record<string, any>,
 ): number {
   return doSortBy(a, b, 'updated', true);
 }

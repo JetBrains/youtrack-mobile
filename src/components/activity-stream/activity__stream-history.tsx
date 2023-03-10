@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, View} from 'react-native';
+
 import Diff from 'components/diff/diff';
 import getEventTitle from 'components/activity/activity__history-title';
 import Star from 'components/star/star';
@@ -8,21 +9,27 @@ import StreamHistoryTextChange from './activity__stream-history__text-change';
 import StreamLink from './activity__stream-link';
 import {DEFAULT_WORK_TIME_SETTINGS} from 'components/time-tracking/time-tracking__default-settings';
 import {getActivityEventTitle} from './activity__stream-helper';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {getTextValueChange} from 'components/activity/activity__history-value';
+import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {isActivityCategory} from 'components/activity/activity__category';
 import {UNIT} from 'components/variables';
+import {ytDate} from 'components/date/date';
+
 import styles from './activity__stream.styles';
+
 import type {Activity, ActivityChangeText} from 'types/Activity';
 import type {CustomField} from 'types/CustomFields';
 import type {TextValueChangeParams} from 'components/activity/activity__history-value';
 import type {WorkTimeSettings} from 'types/Work';
-import {hasType} from '../api/api__resource-types';
+
 type Props = {
   activity: Activity;
   customFields?: CustomField[];
   workTimeSettings: WorkTimeSettings | null | undefined;
 };
+
 
 const renderAttachmentChange = (activity: Record<string, any>) => {
   const removed: any[] = activity.removed || [];
@@ -176,6 +183,20 @@ const StreamHistoryChange = ({
 
       case Boolean(isActivityCategory.totalVotes(activity)):
         return renderVotesChange(activity);
+
+      case Boolean(
+        isActivityCategory.commentMention(activity) ||
+        isActivityCategory.issueMention(activity) ||
+        isActivityCategory.articleCommentMention(activity) ||
+        isActivityCategory.articleMention(activity)
+      ):
+        return <View>
+          <Text style={styles.activityTimestamp}>
+            <Text style={styles.activityWorkTime}>{getEntityPresentation(activity.author)}</Text>
+            <Text>{`\n${i18n('mentioned you')} `}</Text>
+            <Text>{ytDate(activity.timestamp)}</Text>
+          </Text>
+        </View>;
     }
 
     return null;

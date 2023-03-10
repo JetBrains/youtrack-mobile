@@ -59,7 +59,7 @@ describe('Storage', () => {
       });
       expect(MockedStorage.multiRemove).toHaveBeenLastCalledWith([
         'YT_dismissActivityActionAccessTouch',
-        'YT_noTabsNotifications',
+        'YT_mergedNotifications',
         'YT_ARTICLES',
         'YT_ARTICLES_LIST',
         'YT_ARTICLES_QUERY',

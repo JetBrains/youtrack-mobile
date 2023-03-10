@@ -3,7 +3,7 @@ import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {baseHeaderStyles} from 'components/header/header.styles';
-import {elevation1, mainText, secondaryText, UNIT} from 'components/common-styles';
+import {mainText, secondaryText, UNIT} from 'components/common-styles';
 import {rowStyles as activityStyles} from 'components/activity-stream/activity__stream.styles';
 import {splitViewStyles} from 'components/common-styles/split-view';
 
@@ -32,7 +32,6 @@ export default EStyleSheet.create({
   },
   threadsListContainer: {
     flexGrow: 1,
-    paddingTop: UNIT * 2,
   },
   threadsEmpty: {
     height: '100%',
@@ -50,18 +49,11 @@ export default EStyleSheet.create({
   threadContainer: {
     backgroundColor: '$background',
   },
-  threadSwitcherContainerAndroid: {
-    ...elevation1,
-  },
-  threadSwitcher: {
-    height: UNIT * 4,
-    marginHorizontal: UNIT * 1.5,
-  },
-  threadSwitcherActiveColor: {
-    color: '$text',
-  },
   threadFirst: {
-    marginTop: UNIT,
+    paddingTop: UNIT,
+  },
+  threadFirstMerged: {
+    marginTop: 0,
   },
   threadSeparator: {
     marginLeft: UNIT * 2,

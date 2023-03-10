@@ -8,6 +8,7 @@ import {RectButton} from 'react-native-gesture-handler';
 import styles from './swipeable.styles';
 
 interface Props {
+  enabled?: boolean;
   children: React.ReactNode;
   leftActionText: string;
   rightActionText: string;
@@ -24,6 +25,7 @@ export default function SwipeableRow(props: Props) {
 
   return (
     <Swipeable
+      enabled={typeof props.enabled === 'boolean' ? props.enabled : true}
       containerStyle={styles.container}
       ref={swipeableRow}
       overshootLeft={false}

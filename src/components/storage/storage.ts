@@ -41,7 +41,7 @@ const tipsKeys = {
 type TipsState = Record<keyof typeof tipsKeys, boolean | null>
 
 export const featuresKeys = {
-  noTabsNotifications: 'YT_noTabsNotifications',
+  mergedNotifications: 'YT_mergedNotifications',
 };
 type FeatureState = Record<keyof typeof featuresKeys, boolean | null>
 
@@ -138,7 +138,7 @@ export const initialTipsState: Readonly<TipsState> = {
 };
 
 export const initialFeaturesState: Readonly<FeatureState> = {
-  noTabsNotifications: null,
+  mergedNotifications: null,
 };
 
 export const initialState: Readonly<StorageState> = {

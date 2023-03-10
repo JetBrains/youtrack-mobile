@@ -95,6 +95,7 @@ export const ISSUE_ACTIVITIES_FIELDS_LEGACY: string = toField([
       IssueFields.attachmentsBase,
     ],
     removed: [
+      'reaction',
       ISSUE_PROJECT_FIELDS,
       ISSUE_ACTIVITIES_EVENT_BASE,
       IssueFields.ISSUE_COMMENTS_REMOVED_FIELDS,

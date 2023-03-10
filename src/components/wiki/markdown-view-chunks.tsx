@@ -1,15 +1,20 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
+
 import {stringToTokens, tokensToAST} from 'react-native-markdown-display';
+
 import apiHelper from 'components/api/api__helper';
 import getMarkdownRules from './markdown-view-rules';
 import MarkdownAST from 'components/wiki/markdown-ast';
 import MarkdownItInstance from './markdown-instance';
-import {getApi} from '../api/api__instance';
-import {getStorageState} from '../storage/storage';
-import {hasType} from '../api/api__resource-types';
-import {SkeletonIssueContent} from '../skeleton/skeleton';
+import {getApi} from 'components/api/api__instance';
+import {getStorageState} from 'components/storage/storage';
+import {hasType} from 'components/api/api__resource-types';
+import {SkeletonIssueContent} from 'components/skeleton/skeleton';
+import {ThemeContext} from 'components/theme/theme-context';
+import {Theme} from 'types/Theme';
 import {updateMarkdownCheckbox} from './markdown-helper';
+
 import type {Article} from 'types/Article';
 import type {ASTNode} from 'react-native-markdown-display';
 import type {Attachment} from 'types/CustomFields';
@@ -18,6 +23,7 @@ import type {IssueOnList} from 'types/Issue';
 import type {MarkdownNode} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
+
 type Props = {
   attachments?: Attachment[];
   children: string;
@@ -25,7 +31,7 @@ type Props = {
   maxChunks?: number;
   mentionedArticles?: Article[];
   mentionedIssues?: IssueOnList[];
-  uiTheme: UITheme;
+  uiTheme?: UITheme;
   scrollData?: Record<string, any>;
   onCheckboxUpdate?: (markdown: string) => (...args: any[]) => any;
   textStyle?: TextStyleProp;
@@ -38,6 +44,8 @@ let tokens: MarkdownNode[] = [];
 let md: string | null = null;
 
 const MarkdownViewChunks = (props: Props) => {
+  const theme: Theme = useContext(ThemeContext);
+
   const {
     children,
     scrollData = {},
@@ -82,7 +90,7 @@ const MarkdownViewChunks = (props: Props) => {
     return getMarkdownRules(
       attaches,
       projects,
-      props.uiTheme,
+      props?.uiTheme || theme.uiTheme,
       {
         articles: mentionedArticles,
         issues: mentionedIssues,
@@ -156,10 +164,8 @@ const MarkdownViewChunks = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(MarkdownViewChunks) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(MarkdownViewChunks);
+
 
 function createChunks(
   array: ASTNode[],

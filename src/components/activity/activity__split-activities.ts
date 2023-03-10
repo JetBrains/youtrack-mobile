@@ -1,12 +1,26 @@
-import {getTypes} from '../../views/inbox-threads/inbox-threads-helper';
-export function splitActivities(activities, activityToMessageMap) {
-  const splittedActivities = [];
-  let mergedItem = {
+import {getTypes} from 'views/inbox-threads/inbox-threads-helper';
+
+import {Activity} from 'types/Activity';
+
+interface MergedItem {
+  mergedActivities: Activity[];
+  messages: Activity[];
+  issue?: Activity;
+  head?: Activity;
+  article?: Activity;
+  comment?: Activity;
+  work?: Activity;
+}
+
+
+export function splitActivities(activities: Activity[], activityToMessageMap: Record<string, Activity>) {
+  let mergedItem: MergedItem = {
     mergedActivities: [],
     messages: [],
   };
+  const splittedActivities: MergedItem[] = [];
   let hasTerminated = false;
-  activities.forEach((activity, index) => {
+  activities.forEach((activity: Activity, index: number) => {
     const isType = getTypes(activity);
     const activityId = activity.id;
 

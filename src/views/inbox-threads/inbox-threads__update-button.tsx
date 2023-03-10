@@ -1,6 +1,8 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
+
 import {useDispatch, useSelector} from 'react-redux';
+
 import {folderIdMap} from './inbox-threads-helper';
 import {i18n} from 'components/i18n/i18n';
 import {
@@ -8,18 +10,21 @@ import {
   markFolderSeen,
   setInProgress,
 } from './inbox-threads-actions';
-import styles from './inbox-threads.styles';
-import type {AppState} from '../../reducers';
-import type {InboxFolder} from 'types/Inbox';
 
-const InboxThreadsUpdateButton = ({index}: {index: number}) => {
+import styles from './inbox-threads.styles';
+
+import type {AppState} from 'reducers';
+import type {InboxFolder} from 'types/Inbox';
+import {InboxThread} from 'types/Inbox';
+
+
+const InboxThreadsUpdateButton = ({
+  index,
+  merger,
+}: { index: number, merger?: (threads: InboxThread[]) => InboxThread[] }) => {
   const dispatch = useDispatch();
-  const inboxThreadsFolders: InboxFolder[] = useSelector(
-    (state: AppState) => state.app.inboxThreadsFolders,
-  );
-  const inProgress: boolean = useSelector(
-    (state: AppState) => state.inboxThreads.inProgress,
-  );
+  const inboxThreadsFolders: InboxFolder[] = useSelector((state: AppState) => state.app.inboxThreadsFolders);
+  const inProgress: boolean = useSelector((state: AppState) => state.inboxThreads.inProgress);
 
   const isUpdateButtonVisible = (): boolean => {
     if (index === 0) {
@@ -27,12 +32,8 @@ const InboxThreadsUpdateButton = ({index}: {index: number}) => {
         (it: InboxFolder) => it.lastNotified > it.lastSeen,
       );
     }
-
-    const inboxFolder: InboxFolder | null | undefined =
-      inboxThreadsFolders[index - 1];
-    return inboxFolder
-      ? inboxFolder.lastNotified > inboxFolder.lastSeen
-      : false;
+    const inboxFolder: InboxFolder | null | undefined = inboxThreadsFolders[index - 1];
+    return inboxFolder ? inboxFolder.lastNotified > inboxFolder.lastSeen : false;
   };
 
   return (
@@ -45,7 +46,7 @@ const InboxThreadsUpdateButton = ({index}: {index: number}) => {
           onPress={async () => {
             dispatch(setInProgress(true));
             await dispatch(markFolderSeen(folderIdMap[index]), Date.now());
-            dispatch(loadInboxThreads(folderIdMap[index], null, true));
+            dispatch(loadInboxThreads(folderIdMap[index], null, true, merger));
             dispatch(setInProgress(false));
           }}
         >

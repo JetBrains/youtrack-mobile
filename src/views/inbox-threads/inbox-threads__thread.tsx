@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
+
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useDispatch, useSelector} from 'react-redux';
+
 import InboxEntity from '../inbox/inbox__entity';
 import InboxThreadItemSubscription from './inbox-threads__subscription';
 import InboxThreadMention from './inbox-threads__mention';
 import InboxThreadReaction from './inbox-threads__reactions';
 import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
+import {getThreadTypeData, ThreadTypeData} from 'views/inbox-threads/inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
@@ -16,11 +19,14 @@ import {
   readMessageToggle,
   updateThreadsStateAndCache,
 } from './inbox-threads-actions';
+
 import styles from './inbox-threads.styles';
-import type {AppState} from '../../reducers';
+
+import type {AppState} from 'reducers';
 import type {InboxThread, InboxThreadMessage, ThreadData} from 'types/Inbox';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
+
 type Props = {
   currentUser: User;
   onNavigate: (
@@ -71,14 +77,17 @@ function Thread({
     const updatedThread: InboxThread = {
       ..._thread,
       messages: _thread.messages.reduce(
-        (list: InboxThreadMessage[], it: InboxThreadMessage) => {
-          return list.concat(messagesMap[it.id] ? messagesMap[it.id] : it);
-        },
+        (list: InboxThreadMessage[], it: InboxThreadMessage) => list.concat(
+          messagesMap[it.id] ? messagesMap[it.id] : it
+        ),
         [],
       ),
     };
     updateThread(updatedThread);
-    dispatch(readMessageToggle(messages, read));
+    const filteredMessages: InboxThreadMessage[] = messages.filter(
+      (it: InboxThreadMessage) => getThreadTypeData(it).isSubscription
+    );
+    dispatch(readMessageToggle(filteredMessages, read));
     dispatch(
       updateThreadsStateAndCache(updatedThread, toggleThread && read === true),
     );
@@ -203,21 +212,14 @@ function createThreadData(thread: InboxThread): ThreadData {
   if (thread.id) {
     const target = thread.subject.target;
     threadData.entity = target?.issue || target?.article || target;
+    const threadTypeData: ThreadTypeData = getThreadTypeData(thread);
 
-    switch (thread.id[0]) {
-      case 'R':
-        threadData.component = InboxThreadReaction;
-        threadData.entityAtBottom = true;
-        break;
-
-      case 'M':
-        threadData.component = InboxThreadMention;
-        threadData.entityAtBottom = true;
-        break;
-
-      case 'S':
-        threadData.component = InboxThreadItemSubscription;
-    }
+    threadData.component = (
+      threadTypeData.isReaction
+        ? InboxThreadReaction
+        : threadTypeData.isMention ? InboxThreadMention : InboxThreadItemSubscription
+    );
+    threadData.entityAtBottom = threadTypeData.isReaction || threadTypeData.isMention;
   }
 
   return threadData;

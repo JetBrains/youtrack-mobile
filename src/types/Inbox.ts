@@ -1,7 +1,6 @@
 import type {Activity} from './Activity';
 import type {AnyIssue, IssueOnList} from './Issue';
 import type {Article} from './Article';
-import type {IssueComment} from './CustomFields';
 import type {User} from './User';
 type ChangeCategory =
   | 'COMMENT'
@@ -88,17 +87,21 @@ export interface InboxMessageReason {
   type: 'search' | 'tag';
 }
 export interface InboxThreadMessage {
-  $type?: string;
+  $type: string;
   activities: Activity[];
   id: string;
-  muted: string;
-  notified: string;
   read: boolean;
   reasons: InboxMessageReason[];
   threadId: string;
-  timestamp: string;
+  timestamp: number;
 }
-export type InboxThreadTarget = AnyIssue | IssueComment | Article;
+export type InboxThreadTarget = {
+  $type: string,
+  id: string,
+  issue?: AnyIssue,
+  article?: Article,
+};
+
 export interface InboxThread {
   $type: string;
   id: string;
