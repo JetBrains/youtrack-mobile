@@ -28,10 +28,7 @@ export default EStyleSheet.create({
     flexDirection: 'row',
   },
   threadsList: {
-    flexGrow: 1,
-  },
-  threadsListContainer: {
-    flexGrow: 1,
+    flex: 1,
   },
   threadsEmpty: {
     height: '100%',

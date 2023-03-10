@@ -107,7 +107,6 @@ const InboxThreadsList = ({folderId, onNavigate, merger}: Props): JSX.Element =>
       style={styles.threadsList}
     >
       <FlatList
-        contentContainerStyle={styles.threadsListContainer}
         removeClippedSubviews={false}
         data={visibleThreads}
         ItemSeparatorComponent={() => <View style={styles.threadSeparator} />}
