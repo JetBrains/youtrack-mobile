@@ -482,7 +482,7 @@ const IssueCommentEdit = (props: Props) => {
   ): React.ReactNode => {
     return (
       <TextInput
-        autoCorrect={false}
+        autoCorrect={true}
         multiline={true}
         autoFocus={autoFocus || props.isEditMode}
         ref={editCommentInput}
