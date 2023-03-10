@@ -151,7 +151,7 @@ export const rowStyles = {
     right: 0,
   },
   activityHighlighted: {
-    backgroundColor: '$yellowBackground',
+    backgroundColor: '$blueBackground',
   },
   vcsInfo: {
     flexDirection: 'row',
