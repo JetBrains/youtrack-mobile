@@ -618,6 +618,7 @@ msgid "Matches {{issuesCount}} issue"
 msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] " {{issuesCount}} 건이 존재합니다."
 
+#: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
 msgid "mentioned you"
 msgstr "사용자를 멘션함"

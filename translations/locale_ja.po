@@ -618,6 +618,7 @@ msgid "Matches {{issuesCount}} issue"
 msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] "{{issuesCount}} 件の課題に一致"
 
+#: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
 msgid "mentioned you"
 msgstr "さんがあなたをメンションしました"

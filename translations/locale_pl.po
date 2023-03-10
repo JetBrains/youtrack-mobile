@@ -633,6 +633,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
+#: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
 msgid "mentioned you"
 msgstr ""

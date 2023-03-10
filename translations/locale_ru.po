@@ -633,6 +633,7 @@ msgstr[1] "{{issuesCount}} совпадающие задачи"
 msgstr[2] "{{issuesCount}} совпадающих задач"
 msgstr[3] "{{issuesCount}} совпадающих задач"
 
+#: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
 msgid "mentioned you"
 msgstr "упомянул(а) вас"

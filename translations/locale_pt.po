@@ -623,6 +623,7 @@ msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] "Corresponde a {{issuesCount}} issue"
 msgstr[1] "Corresponde a {{issuesCount}} issues"
 
+#: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
 msgid "mentioned you"
 msgstr "mencionou você"

@@ -633,6 +633,7 @@ msgstr[1] "Відповідає {{issuesCount}} завданням"
 msgstr[2] "Відповідає {{issuesCount}} завданням"
 msgstr[3] "Збігається з {{issuesCount}} завдання"
 
+#: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
 msgid "mentioned you"
 msgstr ""
