@@ -347,12 +347,12 @@ const loadInboxThreads = (
     dispatch(setInProgress(false, setGlobalProgress));
 
     if (error) {
-      dispatch(
-        setError({error}),
-      );
+      dispatch(setError({error}));
     } else {
       doMarkSeen();
-      const _threads: InboxThread[] = typeof merger === 'function' ? merger(threads) : threads;
+      const _threads: InboxThread[] = (typeof merger === 'function' ? merger(threads) : threads).filter(
+        (it: InboxThread) => it.subject.target
+      );
       dispatch(
         setNotifications({
           threads: _threads,

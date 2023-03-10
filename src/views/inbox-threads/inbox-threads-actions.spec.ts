@@ -16,6 +16,7 @@ describe('Inbox Threads', () => {
   let apiMock;
   let responseMock;
   let store;
+  let threadMock;
 
   const getApi = () => apiMock;
 
@@ -23,11 +24,12 @@ describe('Inbox Threads', () => {
   const storeMock = configureMockStore(middlewares);
   beforeEach(() => {
     jest.restoreAllMocks();
-    responseMock = [
-      {
-        subject: {},
+    threadMock = {
+      subject: {
+        target: {},
       },
-    ];
+    };
+    responseMock = [threadMock];
     apiMock = {
       inbox: {
         getThreads: jest.fn().mockResolvedValue(responseMock),
@@ -387,28 +389,28 @@ describe('Inbox Threads', () => {
         });
       });
       it('should update inbox threads `All` tab cache', async () => {
-        apiMock.inbox.getThreads.mockResolvedValueOnce([{}, {}]);
+        apiMock.inbox.getThreads.mockResolvedValueOnce([threadMock, threadMock]);
         await store.dispatch(actions.loadInboxThreads(undefined, undefined));
         expect(
           storage.getStorageState().inboxThreadsCache[folderIdAllKey],
         ).toHaveLength(2);
       });
       it('should update inbox threads `Mentions & Reactions` tab cache', async () => {
-        apiMock.inbox.getThreads.mockResolvedValueOnce([{}, {}, {}]);
+        apiMock.inbox.getThreads.mockResolvedValueOnce([threadMock, threadMock, threadMock]);
         await store.dispatch(actions.loadInboxThreads(folderIdMap[1]));
         expect(
           storage.getStorageState().inboxThreadsCache[folderIdMap[1]],
         ).toHaveLength(3);
       });
       it('should update inbox threads `Subscriptions` tab cache', async () => {
-        apiMock.inbox.getThreads.mockResolvedValueOnce([{}, {}, {}, {}]);
+        apiMock.inbox.getThreads.mockResolvedValueOnce([threadMock, threadMock, threadMock, threadMock]);
         await store.dispatch(actions.loadInboxThreads(folderIdMap[2]));
         expect(
           storage.getStorageState().inboxThreadsCache[folderIdMap[2]],
         ).toHaveLength(4);
       });
       it('should not set threads from the cache before loading for the  first time', async () => {
-        apiMock.inbox.getThreads.mockResolvedValueOnce([{}, {}, {}]);
+        apiMock.inbox.getThreads.mockResolvedValueOnce([threadMock, threadMock, threadMock]);
         const threadsMock = [{}, {}];
 
         storage.__setStorageState({
