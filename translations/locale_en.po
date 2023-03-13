@@ -179,8 +179,8 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/views/article/arcticle-actions.ts:326
 #: src/views/article/arcticle-actions.ts:674
 #: src/views/create-issue/create-issue-actions.ts:475
-#: src/views/inbox-threads/inbox-threads__thread.tsx:169
-#: src/views/inbox-threads/inbox-threads.tsx:265
+#: src/views/inbox-threads/inbox-threads__thread.tsx:171
+#: src/views/inbox-threads/inbox-threads.tsx:266
 #: src/views/issue/activity/issue-activity__comment-actions.ts:422
 #: src/views/issue/issue-base-actions-creater.ts:697
 #: src/views/issue/issue-base-actions-creater.ts:738
@@ -593,21 +593,21 @@ msgstr "Logs"
 msgid "Manage Favorite Projects"
 msgstr "Manage Favorite Projects"
 
-#: src/views/inbox-threads/inbox-threads.tsx:249
+#: src/views/inbox-threads/inbox-threads.tsx:250
 msgid "Mark all as read"
 msgstr "Mark all as read"
 
 #: src/views/inbox-threads/inbox-threads__subscription.tsx:185
-#: src/views/inbox-threads/inbox-threads__thread.tsx:164
+#: src/views/inbox-threads/inbox-threads__thread.tsx:166
 msgid "Mark as read"
 msgstr "Mark as read"
 
 #: src/views/inbox-threads/inbox-threads__subscription.tsx:182
-#: src/views/inbox-threads/inbox-threads__thread.tsx:164
+#: src/views/inbox-threads/inbox-threads__thread.tsx:166
 msgid "Mark as unread"
 msgstr "Mark as unread"
 
-#: src/views/inbox-threads/inbox-threads-actions.ts:489
+#: src/views/inbox-threads/inbox-threads-actions.ts:484
 msgid "Marked as read"
 msgstr "Marked as read"
 
@@ -630,7 +630,7 @@ msgstr "Mentions & Reactions"
 msgid "merged the pull request"
 msgstr "merged the pull request"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx:152
+#: src/views/inbox-threads/inbox-threads__thread.tsx:154
 msgid "Mute thread"
 msgstr "Mute thread"
 
@@ -695,11 +695,11 @@ msgstr "No user information provided by Upsource."
 msgid "Nope, can't find it!"
 msgstr "Nope, can't find it!"
 
-#: src/views/inbox-threads/inbox-threads.tsx:256
+#: src/views/inbox-threads/inbox-threads.tsx:257
 msgid "Notification settings…"
 msgstr "Notification settings…"
 
-#: src/views/inbox-threads/inbox-threads.tsx:226
+#: src/views/inbox-threads/inbox-threads.tsx:227
 #: src/views/inbox/inbox.tsx:707
 msgid "Notifications"
 msgstr "Notifications"
@@ -863,7 +863,7 @@ msgstr "Share logs"
 msgid "Share…"
 msgstr "Share…"
 
-#: src/views/inbox-threads/inbox-threads.tsx:237
+#: src/views/inbox-threads/inbox-threads.tsx:238
 msgid "Show all"
 msgstr "Show all"
 
@@ -1014,11 +1014,11 @@ msgstr "There was an error retrieving information about the change's author from
 msgid "This action deletes all drafts, including unpublished sub-articles"
 msgstr "This action deletes all drafts, including unpublished sub-articles"
 
-#: src/views/inbox-threads/inbox-threads-actions.ts:410
+#: src/views/inbox-threads/inbox-threads-actions.ts:405
 msgid "Thread muted"
 msgstr "Thread muted"
 
-#: src/views/inbox-threads/inbox-threads-actions.ts:411
+#: src/views/inbox-threads/inbox-threads-actions.ts:406
 msgid "Thread unmuted"
 msgstr "Thread unmuted"
 
@@ -1058,11 +1058,11 @@ msgstr "Type"
 msgid "Uncategorized Cards"
 msgstr "Uncategorized Cards"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx:152
+#: src/views/inbox-threads/inbox-threads__thread.tsx:154
 msgid "Unmute thread"
 msgstr "Unmute thread"
 
-#: src/views/inbox-threads/inbox-threads.tsx:238
+#: src/views/inbox-threads/inbox-threads.tsx:239
 msgid "Unread only"
 msgstr "Unread only"
 
