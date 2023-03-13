@@ -34,6 +34,7 @@ type Props = {
 
 
 const InboxThreadsList = ({folderId, onNavigate, merger}: Props): JSX.Element => {
+  const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
   const theme: Theme = useContext(ThemeContext);
   const dispatch = useDispatch();
   const currentUser: User = useSelector(
@@ -62,9 +63,9 @@ const InboxThreadsList = ({folderId, onNavigate, merger}: Props): JSX.Element =>
   );
   const loadThreads = useCallback(
     (id?: string, end?: number, showProgress?: boolean) => {
-      dispatch(actions.loadInboxThreads(id, end, showProgress, merger));
+      dispatch(actions.loadInboxThreads(id, end, showProgress));
     },
-    [dispatch, merger],
+    [dispatch],
   );
   useEffect(() => {
     setThreadsFromCache(folderId);
@@ -72,13 +73,12 @@ const InboxThreadsList = ({folderId, onNavigate, merger}: Props): JSX.Element =>
   }, [folderId, loadThreads, setThreadsFromCache]);
 
   const renderItem = ({item, index}: {item: InboxThread; index: number}) => {
-    const mergedNotifications: boolean = !!getStorageState().mergedNotifications;
     return (
       <Thread
         style={[
           styles.thread,
-          index === 0 && !mergedNotifications && styles.threadFirst,
-          index === 0 && mergedNotifications && styles.threadFirstMerged,
+          index === 0 && !isMergedNotifications.current && styles.threadFirst,
+          index === 0 && isMergedNotifications.current && styles.threadFirstMerged,
           index === getData().threads.length - (getData().hasMore ? 2 : 1) && styles.threadLast,
         ]}
         thread={item}
@@ -92,7 +92,7 @@ const InboxThreadsList = ({folderId, onNavigate, merger}: Props): JSX.Element =>
   const visibleThreads: InboxThread[] = (getData().hasMore
     ? getData().threads.slice(0, getData().threads.length - 1)
     : getData().threads
-  ).filter((it: InboxThread) => it.messages.length > 0);
+  ).filter((it: InboxThread) => it.subject.target && it.messages.length > 0);
   const hasVisibleMessages: boolean =
     visibleThreads.length > 0 &&
     visibleThreads.reduce(
@@ -108,7 +108,7 @@ const InboxThreadsList = ({folderId, onNavigate, merger}: Props): JSX.Element =>
     >
       <FlatList
         removeClippedSubviews={false}
-        data={visibleThreads}
+        data={merger ? merger(visibleThreads) : visibleThreads}
         ItemSeparatorComponent={() => <View style={styles.threadSeparator} />}
         ListFooterComponent={() => {
           if (error) {

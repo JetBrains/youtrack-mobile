@@ -151,7 +151,6 @@ const updateThreadsStateAndCache = (
 
 const loadThreadsFromCache = (
   folderId: string = folderIdAllKey,
-  merger?: (threads: InboxThread[]) => InboxThread[],
 ): ((dispatch: (arg0: any) => any) => Promise<void>) => {
   return async (dispatch: (arg0: any) => any) => {
     const cachedThreads: InboxThread[] = getFolderCachedThreads(folderId);
@@ -159,7 +158,7 @@ const loadThreadsFromCache = (
     if (cachedThreads?.length) {
       dispatch(
         setNotifications({
-          threads: typeof merger === 'function' ? merger(cachedThreads) : cachedThreads,
+          threads: cachedThreads,
           reset: true,
           folderId,
         }),
@@ -316,7 +315,6 @@ const loadInboxThreads = (
   folderId?: ThreadsStateFilterId | null,
   end?: number,
   setGlobalProgress: boolean = false,
-  merger?: (threads: InboxThread[]) => InboxThread[],
 ): ReduxAction => {
   return async (
     dispatch: (arg0: any) => any,
@@ -350,18 +348,15 @@ const loadInboxThreads = (
       dispatch(setError({error}));
     } else {
       doMarkSeen();
-      const _threads: InboxThread[] = (typeof merger === 'function' ? merger(threads) : threads).filter(
-        (it: InboxThread) => it.subject.target
-      );
       dispatch(
         setNotifications({
-          threads: _threads,
+          threads,
           reset,
           folderId: folderKey,
         }),
       );
       await updateCache({
-        [folderId || folderIdAllKey]: _threads.slice(0, MAX_CACHED_THREADS),
+        [folderId || folderIdAllKey]: threads.slice(0, MAX_CACHED_THREADS),
       });
     }
 

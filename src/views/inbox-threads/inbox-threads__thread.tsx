@@ -9,6 +9,7 @@ import InboxThreadItemSubscription from './inbox-threads__subscription';
 import InboxThreadMention from './inbox-threads__mention';
 import InboxThreadReaction from './inbox-threads__reactions';
 import {defaultActionsOptions} from 'components/action-sheet/action-sheet';
+import {getStorageState} from 'components/storage/storage';
 import {getThreadTypeData, ThreadTypeData} from 'views/inbox-threads/inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles';
@@ -45,6 +46,7 @@ function Thread({
   onNavigate,
   ...otherProps
 }: Props): React.ReactElement<React.ComponentProps<any>, any> | null {
+  const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
   const {showActionSheetWithOptions} = useActionSheet();
   const isOnline: boolean = useSelector(
     (state: AppState) => state.app.networkState?.isConnected,
@@ -93,7 +95,7 @@ function Thread({
     );
   };
 
-  const threadData: ThreadData = createThreadData(_thread);
+  const threadData: ThreadData = createThreadData(_thread, isMergedNotifications.current);
   const ThreadComponent: any = threadData.component;
   const renderedEntity = (
     <InboxEntity
@@ -202,7 +204,7 @@ function Thread({
   }
 }
 
-function createThreadData(thread: InboxThread): ThreadData {
+function createThreadData(thread: InboxThread, mergedNotifications: boolean): ThreadData {
   const threadData: ThreadData = {
     entity: null,
     component: null,
@@ -213,13 +215,12 @@ function createThreadData(thread: InboxThread): ThreadData {
     const target = thread.subject.target;
     threadData.entity = target?.issue || target?.article || target;
     const threadTypeData: ThreadTypeData = getThreadTypeData(thread);
-
     threadData.component = (
       threadTypeData.isReaction
         ? InboxThreadReaction
         : threadTypeData.isMention ? InboxThreadMention : InboxThreadItemSubscription
     );
-    threadData.entityAtBottom = threadTypeData.isReaction || threadTypeData.isMention;
+    threadData.entityAtBottom = mergedNotifications ? false : threadTypeData.isReaction || threadTypeData.isMention;
   }
 
   return threadData;

@@ -117,33 +117,46 @@ const getThreadTypeData = (it: InboxThread | InboxThreadMessage): ThreadTypeData
 function mergeThreads(threads: InboxThread[]): InboxThread[] {
   const subscriptionThreads: InboxThread[] = threads.filter((it: InboxThread) => getThreadTypeData(it).isSubscription);
   const directThreads: InboxThread[] = threads.filter((it: InboxThread) => !getThreadTypeData(it).isSubscription);
-  let mergedThreads: InboxThread[] = subscriptionThreads;
+  let mergedSubscriptionsThreads: InboxThread[] = subscriptionThreads;
+  const sMap: Record<string, InboxThread> = {};
+  const dMap: Record<string, InboxThread> = directThreads.reduce(
+    (akk: Record<string, InboxThread>, it: InboxThread) => {
+      const iTarget: InboxThreadTarget = it.subject.target;
+      const iEntity = iTarget?.issue || iTarget?.article || iTarget;
+      const curr = akk[iEntity.id];
+      if (curr) {
+        curr.messages = curr.messages.concat(it.messages);
+        curr.latestTimestamp = Math.max.apply(null, curr.messages.map((it: InboxThreadMessage) => it.timestamp));
+      } else {
+        akk[iEntity.id] = it;
+      }
+      return akk;
+    }, {});
 
   if (directThreads.length > 0) {
-    mergedThreads = subscriptionThreads.reduce((akk: InboxThread[], it: InboxThread) => {
+    mergedSubscriptionsThreads = subscriptionThreads.reduce((akk: InboxThread[], it: InboxThread) => {
       const target: InboxThreadTarget = it.subject.target;
       const entity = target?.issue || target?.article || target;
+      sMap[entity.id] = it;
 
-      const its: InboxThread[] = directThreads.filter((t: InboxThread) => {
-        const iTarget: InboxThreadTarget = t.subject.target;
-        const iEntity = iTarget?.issue || iTarget?.article || iTarget;
-        return iEntity.id === entity.id;
-      });
-
-      if (its.length > 0) {
-        const filteredMessages: InboxThreadMessage[] = its.reduce(
-          (arr: InboxThreadMessage[], i: InboxThread) => arr.concat(i.messages),
-          []
-        );
-        it.messages = [...it.messages, ...filteredMessages].sort(sortByTimestamp);
-      }
-      it.lastTimestamp = it.messages.slice(-1)[0].timestamp;
-      it.messages = it.messages.reverse();
-      return [...akk, it];
+      const direct: InboxThread | undefined = dMap[entity?.id];
+      const inboxThreadMessages = it.messages.slice(0);
+      const messages = direct ? [...inboxThreadMessages, ...direct.messages].sort(sortByTimestamp).reverse() : inboxThreadMessages;
+      return [...akk, {
+        ...it,
+        messages,
+        lastTimestamp: it.messages.slice(0, 1)[0].timestamp,
+      }];
     }, [] as InboxThread[]);
   }
 
-  return mergedThreads.sort((a, b) => {
+  const orphans = Object.keys(dMap).reduce((akk, id: string) => {
+    if (!sMap[id]) {
+      akk.push({...dMap[id], lastTimestamp: dMap[id].notified});
+    }
+    return akk;
+  }, []);
+  return mergedSubscriptionsThreads.concat(orphans).sort((a, b) => {
     return doSortBy(a, b, 'lastTimestamp', true);
   });
 }

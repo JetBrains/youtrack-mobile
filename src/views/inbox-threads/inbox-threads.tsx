@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Dimensions, Linking, TouchableOpacity, View} from 'react-native';
 
-import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
+import {SceneMap, SceneRendererProps, TabBar, TabView} from 'react-native-tab-view';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -65,14 +65,14 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
   const loadThreads = React.useCallback(
     (folderId?: string, end?: number | null, showProgress?: boolean): void => {
       dispatch(
-        actions.loadInboxThreads(folderId, end, showProgress, isMergedNotifications.current && mergeThreads)
+        actions.loadInboxThreads(folderId, end, showProgress)
       );
     },
     [dispatch],
   );
   const setThreadsFromCache = React.useCallback(
     (folderId?: string): void => {
-      dispatch(actions.loadThreadsFromCache(folderId, isMergedNotifications.current && mergeThreads));
+      dispatch(actions.loadThreadsFromCache(folderId));
     },
     [dispatch],
   );
@@ -179,8 +179,9 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
     }
   }, []);
   const AllTab = React.useCallback(
-    (merger?: (threads: InboxThread[]) => InboxThread[]) =>
-      <InboxThreadsList merger={merger} onNavigate={onNavigate} folderId={folderIdMap[0]}/>,
+    (scene: SceneRendererProps | null, _: unknown, merger?: (threads: InboxThread[]) => InboxThread[]) => (
+      <InboxThreadsList merger={merger} onNavigate={onNavigate} folderId={folderIdMap[0]}/>
+    ),
     [onNavigate],
   );
   const MentionsAndReactionsTab = React.useCallback(
@@ -298,7 +299,7 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
         {renderHeader()}
         <InboxThreadsUpdateButton index={navigationState.index} merger={mergeThreads}/>
 
-        {isMergedNotifications.current && AllTab(mergeThreads)}
+        {isMergedNotifications.current && AllTab(null, null, mergeThreads)}
         {!isMergedNotifications.current && renderTabs()}
       </Container>
 

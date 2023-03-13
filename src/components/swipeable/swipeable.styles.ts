@@ -10,9 +10,10 @@ export default EStyleSheet.create({
     zIndex: 2,
     flex: 1,
     maxWidth: '70%',
+    paddingTop: UNIT * 4,
     paddingLeft: UNIT * 2,
     alignItems: 'flex-start',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     backgroundColor: '$blueBackground',
   },
   leftActionText: {
@@ -21,9 +22,10 @@ export default EStyleSheet.create({
   rightAction: {
     flex: 1,
     maxWidth: '70%',
+    paddingTop: UNIT * 4,
     paddingRight: UNIT * 2,
     alignItems: 'flex-end',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     backgroundColor: '$greenBackground',
   },
   rightActionText: {
