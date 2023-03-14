@@ -7,7 +7,7 @@ import Router from 'components/router/router';
 import {
   clearCachesAndDrafts,
   flushStoragePart,
-  getStorageState,
+  getStorageState, InboxThreadsCache,
 } from 'components/storage/storage';
 import {confirmation} from 'components/confirmation/confirmation';
 import {IconClose} from 'components/icon/icon';
@@ -62,7 +62,14 @@ const FeaturesDebugSettings = (props: Props): React.ReactNode => {
             <Switch
               value={featuresState.mergedNotifications}
               onValueChange={async () => {
-                await flushStoragePart({mergedNotifications: !featuresState.mergedNotifications});
+                const inboxThreadsCache: InboxThreadsCache | null = getStorageState().inboxThreadsCache;
+                await flushStoragePart({
+                  mergedNotifications: !featuresState.mergedNotifications,
+                  inboxThreadsCache: {
+                    unreadOnly: inboxThreadsCache?.unreadOnly,
+                    lastVisited: inboxThreadsCache?.lastVisited,
+                  },
+                });
                 updateFeaturesState(state => (
                   {...state, mergedNotifications: !featuresState.mergedNotifications})
                 );
