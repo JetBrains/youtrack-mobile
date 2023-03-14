@@ -61,6 +61,7 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
     commentId: null,
   });
   const [isSplitView, updateIsSplitView] = React.useState(hasSplitView());
+  const [isHeaderShadowVisible, updateHeaderShadowVisible] = React.useState(false);
 
   const loadThreads = React.useCallback(
     (folderId?: string, end?: number | null, showProgress?: boolean): void => {
@@ -180,7 +181,13 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
   }, []);
   const AllTab = React.useCallback(
     (scene: SceneRendererProps | null, _: unknown, merger?: (threads: InboxThread[]) => InboxThread[]) => (
-      <InboxThreadsList merger={merger} onNavigate={onNavigate} folderId={folderIdMap[0]}/>
+      <InboxThreadsList
+        merger={merger}
+        onNavigate={onNavigate}
+        folderId={folderIdMap[0]}
+        onScroll={
+        isMergedNotifications.current ? (isVisible: boolean) => updateHeaderShadowVisible(isVisible) : undefined
+      }/>
     ),
     [onNavigate],
   );
@@ -224,6 +231,7 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
 
   const renderHeader = () => (
     <Header
+      showShadow={isHeaderShadowVisible}
       title={i18n('Notifications')}
       rightButton={
         <TouchableOpacity

@@ -13,6 +13,7 @@ import {i18n} from 'components/i18n/i18n';
 import {IconNoNotifications} from 'components/icon/icon-pictogram';
 import {isUnreadOnly} from './inbox-threads-actions';
 import {ThemeContext} from 'components/theme/theme-context';
+import {UNIT} from 'components/common-styles';
 
 import styles from './inbox-threads.styles';
 
@@ -22,7 +23,7 @@ import type {InboxThread, ThreadData, ThreadEntity} from 'types/Inbox';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
 
-type Props = {
+interface Props {
   folderId: string | undefined;
   onNavigate: (
     entity: ThreadEntity,
@@ -30,10 +31,11 @@ type Props = {
     commentId?: string,
   ) => any;
   merger?: (threads: InboxThread[]) => InboxThread[];
-};
+  onScroll?: (isShadowVisible: boolean) => void;
+}
 
 
-const InboxThreadsList = ({folderId, onNavigate, merger}: Props): JSX.Element => {
+const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.Element => {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
   const theme: Theme = useContext(ThemeContext);
   const dispatch = useDispatch();
@@ -165,6 +167,8 @@ const InboxThreadsList = ({folderId, onNavigate, merger}: Props): JSX.Element =>
           />
         }
         renderItem={renderItem}
+        scrollEventThrottle={10}
+        onScroll={(event) => onScroll?.(event.nativeEvent.contentOffset.y > UNIT / 4)}
       />
     </View>
   );
