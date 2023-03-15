@@ -242,7 +242,6 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
           }}
           youtrackWiki={props.youtrackWiki}
         />
-        {!!props.onSelectReaction && renderCommentReactions(activityGroup)}
       </>
     );
   };
@@ -396,6 +395,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
       >
         {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
         {addActionsWrapper(activityGroup)}
+        {!!props.onSelectReaction && renderCommentReactions(activityGroup)}
       </View>
     );
   };
