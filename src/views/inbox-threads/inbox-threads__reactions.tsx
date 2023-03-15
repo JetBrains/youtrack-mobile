@@ -9,7 +9,6 @@ import ThreadCommentReactions from './inbox-threads__item-comment-reactions';
 import ThreadItem from './inbox-threads__item';
 import {i18n} from 'components/i18n/i18n';
 
-import styles from './inbox-threads.styles';
 import stylesInbox from '../inbox/inbox.styles';
 
 import type {Activity} from 'types/Activity';
@@ -81,23 +80,19 @@ const InboxThreadReaction = ({thread, group, currentUser, onNavigate}: Props) =>
     {messagesHolder.messages.map((message) => {
       const activity = message.activities[0];
       return (
-        <>
-          <ThreadReaction
-            key={activity.id}
+        <ThreadReaction
+          key={activity.id}
+          activity={activity}
+          currentUser={currentUser}
+          timestamp={thread?.notified || group?.head?.timestamp}
+          onNavigate={onNavigate}
+        >
+          <ThreadCommentReactions
             activity={activity}
             currentUser={currentUser}
-            timestamp={thread?.notified || group?.head?.timestamp}
-            onNavigate={onNavigate}
-          >
-            <View style={styles.threadReactions}>
-              <ThreadCommentReactions
-                activity={activity}
-                currentUser={currentUser}
-                isPanelVisible={false}
-              />
-            </View>
-          </ThreadReaction>
-        </>
+            isPanelVisible={false}
+          />
+        </ThreadReaction>
       );
     })}
   </>;

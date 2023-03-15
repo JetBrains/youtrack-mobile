@@ -116,7 +116,8 @@ export const rowStyles = {
   },
   activityCommentReactions: {
     alignItems: 'center',
-    width: '100%',
+    paddingLeft: UNIT * 7,
+    marginRight: UNIT,
   },
   activityCommentAttachments: {
     marginVertical: UNIT,

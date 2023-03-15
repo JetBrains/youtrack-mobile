@@ -144,7 +144,7 @@ export default EStyleSheet.create({
     marginTop: -UNIT,
     marginBottom: UNIT,
     marginLeft: UNIT * 5.5,
-    marginRight: UNIT * 2,
+    marginRight: UNIT * 1.5,
   },
   threadRelatedChange: {
     ...activityStyles.activityRelatedChanges,
@@ -156,9 +156,6 @@ export default EStyleSheet.create({
     paddingTop: 0,
   },
   threadReactions: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
     marginBottom: UNIT / 2,
   },
   threadReactionsList: {

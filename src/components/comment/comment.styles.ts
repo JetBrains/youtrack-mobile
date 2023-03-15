@@ -30,7 +30,6 @@ export default EStyleSheet.create({
   reactionsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: UNIT * 7,
   },
   reactionsReaction: {
     flexDirection: 'row',

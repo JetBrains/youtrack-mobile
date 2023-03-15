@@ -150,25 +150,23 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
   const renderCommentReactions = (activityGroup: ActivityGroup): React.ReactNode => {
     const comment: IssueComment | null = getCommentFromActivityGroup(activityGroup);
     return comment && !comment.deleted ? (
-      <View style={styles.activityCommentReactions}>
-        <CommentReactions
-          style={styles.activityCommentReactions}
-          comment={comment}
-          currentUser={props.currentUser}
-          onReactionSelect={props.onSelectReaction}
+      <CommentReactions
+        style={styles.activityCommentReactions}
+        comment={comment}
+        currentUser={props.currentUser}
+        onReactionSelect={props.onSelectReaction}
+      >
+        <Feature
+          version={hasType.articleComment(comment) ? FEATURE_VERSION.articleReactions : FEATURE_VERSION.reactions}
         >
-          <Feature
-            version={hasType.articleComment(comment) ? FEATURE_VERSION.articleReactions : FEATURE_VERSION.reactions}
+          <TouchableOpacity
+            hitSlop={HIT_SLOP}
+            onPress={() => props?.onReactionPanelOpen?.(comment)}
           >
-            <TouchableOpacity
-              hitSlop={HIT_SLOP}
-              onPress={() => props?.onReactionPanelOpen?.(comment)}
-            >
-              <ReactionAddIcon style={styles.activityCommentActionsAddReaction}/>
-            </TouchableOpacity>
-          </Feature>
-        </CommentReactions>
-      </View>
+            <ReactionAddIcon style={styles.activityCommentActionsAddReaction}/>
+          </TouchableOpacity>
+        </Feature>
+      </CommentReactions>
     ) : null;
   };
 
