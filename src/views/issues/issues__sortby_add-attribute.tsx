@@ -52,7 +52,7 @@ const IssuesSortByAddAttribute = (props: Props) => {
         fieldTypes: ['custom', 'predefined'],
       },
     );
-    return filterFields.map((filterField: any) => ({
+    return filterFields.filter((it: CustomFilterField) => it.sortable).map((filterField: any) => ({
       $type: 'IssueFieldSortProperty',
       asc: filterField.defaultSortAsc,
       id: filterField.id,
