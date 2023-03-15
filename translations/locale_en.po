@@ -83,7 +83,7 @@ msgstr "Add tag"
 msgid "Add to favorites"
 msgstr "Add to favorites"
 
-#: src/views/inbox-threads/inbox-threads__reactions.tsx:36
+#: src/views/inbox-threads/inbox-threads__reactions.tsx:35
 #: src/views/inbox/inbox.tsx:573
 msgid "added a reaction"
 msgstr "added a reaction"
@@ -650,7 +650,7 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.tsx:416
+#: src/components/activity-stream/activity__stream.tsx:414
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -761,7 +761,7 @@ msgstr "Remove project from favorites?"
 msgid "Remove tag"
 msgstr "Remove tag"
 
-#: src/views/inbox-threads/inbox-threads__reactions.tsx:39
+#: src/views/inbox-threads/inbox-threads__reactions.tsx:38
 #: src/views/inbox/inbox.tsx:574
 msgid "removed a reaction"
 msgstr "removed a reaction"
