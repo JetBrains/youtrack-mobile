@@ -739,8 +739,7 @@ const mapStateToProps = (
   },
   ownProps: OwnProps,
 ): Partial<IssueState & OwnProps> => {
-  const isConnected: boolean | null | undefined =
-    state.app?.networkState?.isConnected;
+  const isConnected: boolean = !!state.app?.networkState?.isConnected;
   return {
     issuePermissions: state.app.issuePermissions,
     ...state.issueState,

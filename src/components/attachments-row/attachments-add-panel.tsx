@@ -11,7 +11,7 @@ type Props = {
   style?: ViewStyleProp;
 };
 
-const AttachmentAddPanel = (props: Props): React.ReactNode => {
+const AttachmentAddPanel = (props: Props): JSX.Element => {
   return (
     <View style={[styles.attachButtonsContainer, props.style]}>
       <TouchableOpacity

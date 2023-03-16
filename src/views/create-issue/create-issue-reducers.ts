@@ -1,8 +1,10 @@
 import {createSlice, Slice} from '@reduxjs/toolkit';
+
 import {attachmentTypes} from './create-issue__attachment-actions-and-types';
 import {createCommandDialogReducers} from 'components/command-dialog/command-dialog-reducer';
 import {createIssueNamespace} from './create-issue-action-types';
 import {LOG_OUT} from 'actions/action-types';
+
 import type {
   Attachment,
   CustomField,
@@ -10,21 +12,26 @@ import type {
   IssueLink,
   IssueProject,
 } from 'types/CustomFields';
-import type {CommandSuggestionResponse, IssueFull} from 'types/Issue';
+import type {CommandSuggestionResponse, IssueCreate, IssueFull} from 'types/Issue';
+import {AnyCustomField} from 'components/custom-field/custom-field-helper';
+
 export type CreateIssueState = {
   processing: boolean;
-  attachingImage: Record<string, any> | null | undefined;
-  predefinedDraftId: string | null | undefined;
-  issue: Partial<IssueFull>;
+  attachingImage: Attachment | null;
+  predefinedDraftId: string | null;
+  issue: IssueCreate;
   isAttachFileDialogVisible: boolean;
   commandIsApplying: boolean;
   commandSuggestions: CommandSuggestionResponse | null | undefined;
   showCommandDialog: boolean;
 };
+
+
 const notSelectedProject: Partial<IssueProject> = {
   id: '',
   name: 'Not selected',
 };
+
 const initialState: CreateIssueState = {
   processing: false,
   attachingImage: null,
@@ -36,13 +43,15 @@ const initialState: CreateIssueState = {
     attachments: [],
     fields: [],
     project: notSelectedProject,
-  },
+  } as unknown as IssueCreate,
   isAttachFileDialogVisible: false,
   commandIsApplying: false,
   commandSuggestions: null,
   showCommandDialog: false,
 };
-const slice: typeof Slice = createSlice({
+
+
+const slice: Slice = createSlice({
   name: createIssueNamespace,
   initialState,
   extraReducers: {
@@ -129,7 +138,7 @@ const slice: typeof Slice = createSlice({
     stopIssueCreation: (state: CreateIssueState) => {
       state.processing = false;
     },
-    resetCreation: (state: CreateIssueState) => initialState,
+    resetCreation: () => initialState,
     setIssueFieldValue: (
       state: CreateIssueState,
       action: {
@@ -141,7 +150,7 @@ const slice: typeof Slice = createSlice({
     ) => {
       state.issue = {
         ...state.issue,
-        fields: [...state.issue.fields].map((it: CustomField) =>
+        fields: [...state.issue.fields].map((it: AnyCustomField) =>
           it === action.payload.field
             ? {...it, value: action.payload.value}
             : it,
@@ -168,7 +177,7 @@ function createAttachmentReducers() {
     [attachmentTypes.ATTACH_START_ADDING](
       state: CreateIssueState,
       action: {
-        attachingImage: Record<string, any>;
+        attachingImage: Attachment;
       },
     ): CreateIssueState {
       const {attachingImage} = action;

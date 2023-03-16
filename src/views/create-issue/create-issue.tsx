@@ -6,8 +6,10 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+
 import * as createIssueActions from './create-issue-actions';
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
 import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
@@ -35,6 +37,7 @@ import {
   getIssueCustomFieldsNotText,
   getIssueTextCustomFields,
 } from 'components/custom-field/custom-field-helper';
+import {DEFAULT_THEME} from 'components/theme/theme';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {
@@ -46,52 +49,68 @@ import {
 import {isIOSPlatform} from 'util/util';
 import {ThemeContext} from 'components/theme/theme-context';
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
-import type {AnyIssue} from 'types/Issue';
+import type {AnyIssue, IssueFull} from 'types/Issue';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import type {CreateIssueState} from './create-issue-reducers';
 import type {
+  Attachment,
   CustomField,
   CustomFieldText,
   IssueLink,
   IssueProject,
   Tag,
 } from 'types/CustomFields';
+
+import styles from './create-issue.styles';
+
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Theme, UITheme, UIThemeColors} from 'types/Theme';
-import styles from './create-issue.styles';
+import {AppState} from 'reducers';
+
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
   predefinedDraftId: string | null | undefined;
   onAddTags: (tags: Tag[]) => () => Promise<void>;
   onHide?: () => void;
   isMatchesQuery?: () => boolean;
-  isConnected?: boolean;
+  isConnected: boolean;
 };
+
 type Props = CreateIssueState &
   typeof createIssueActions &
   AttachmentActions &
   AdditionalProps & {
-    isSplitView?: boolean;
-  };
+  isSplitView?: boolean;
+};
+
 type State = {
   modalChildren: any;
   showAddTagSelect: boolean;
 };
 
+
 class CreateIssue extends PureComponent<Props, State> {
   static contextTypes = {
     actionSheet: Function,
   };
-  uiTheme: UITheme;
+  private uiTheme: UITheme | undefined;
   state = {
     modalChildren: null,
     showAddTagSelect: false,
   };
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     usage.trackScreenView(ANALYTICS_ISSUE_CREATE_PAGE);
     this.toggleSetModalChildren = this.toggleSetModalChildren.bind(this);
+  }
+
+  getUITheme(): UITheme {
+    return this.uiTheme || DEFAULT_THEME;
+  }
+
+  getUIThemeColors(): UIThemeColors {
+    return this.getUITheme().colors;
   }
 
   UNSAFE_componentWillMount() {
@@ -109,7 +128,7 @@ class CreateIssue extends PureComponent<Props, State> {
   };
   cancelAddAttach = () => {
     const {cancelAddAttach, hideAddAttachDialog, attachingImage} = this.props;
-    cancelAddAttach(attachingImage);
+    cancelAddAttach(attachingImage as Attachment);
     hideAddAttachDialog();
   };
   renderAttachFileDialog = (): React.ReactElement<
@@ -134,14 +153,10 @@ class CreateIssue extends PureComponent<Props, State> {
       />
     );
   };
-  canUpdateField = (field: CustomField) =>
-    this.props.issuePermissions.canUpdateField(this.props.issue, field);
-  canCreateIssueToProject = (project: IssueProject) =>
-    this.props.issuePermissions.canCreateIssueToProject(project);
-  onFieldUpdate = async (field: CustomField, value: any) =>
-    await this.props.updateFieldValue(field, value);
-  onUpdateProject = async (project: IssueProject) =>
-    await this.props.updateProject(project);
+  canUpdateField = (field: CustomField) => this.props.issuePermissions.canUpdateField(this.props.issue as IssueFull, field);
+  canCreateIssueToProject = (project: IssueProject) => this.props.issuePermissions.canCreateIssueToProject(project);
+  onFieldUpdate = async (field: CustomField, value: any) => await this.props.updateFieldValue(field, value);
+  onUpdateProject = async (project: IssueProject) => await this.props.updateProject(project);
 
   renderCustomFieldPanel() {
     const {issue, isConnected} = this.props;
@@ -153,16 +168,16 @@ class CreateIssue extends PureComponent<Props, State> {
         accessibilityLabel="createIssueFields"
         accessible={true}
         issueId={issue.id}
-        issueProject={issue.project}
+        issueProject={issue.project as IssueProject}
         fields={getIssueCustomFieldsNotText(issue.fields)}
         hasPermission={{
-          canUpdateField: isConnected && this.canUpdateField,
-          canCreateIssueToProject: isConnected && this.canCreateIssueToProject,
+          canUpdateField: isConnected ? this.canUpdateField : undefined,
+          canCreateIssueToProject: isConnected ? this.canCreateIssueToProject : undefined,
           canEditProject: isConnected,
         }}
         onUpdate={this.onFieldUpdate}
         onUpdateProject={this.onUpdateProject}
-        uiTheme={this.uiTheme}
+        uiTheme={this.getUITheme()}
       />
     );
   }
@@ -174,7 +189,7 @@ class CreateIssue extends PureComponent<Props, State> {
         <VisibilityControl
           visibility={issue.visibility}
           onSubmit={updateVisibility}
-          uiTheme={this.uiTheme}
+          uiTheme={this.getUITheme()}
           getOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
         />
       </View>
@@ -197,7 +212,7 @@ class CreateIssue extends PureComponent<Props, State> {
         onApply={applyCommand}
         isApplying={commandIsApplying}
         initialCommand={''}
-        uiTheme={this.uiTheme}
+        uiTheme={this.getUITheme()}
       />
     );
   }
@@ -212,15 +227,15 @@ class CreateIssue extends PureComponent<Props, State> {
         hitSlop={HIT_SLOP}
         onPress={() => {
           !this.isProcessing() &&
-            this.props.showContextActions(this.context.actionSheet());
+          this.props.showContextActions(this.context.actionSheet());
         }}
       >
         <Text style={styles.iconMore}>
           {isIOSPlatform() ? (
-            <IconMoreOptions size={18} color={this.uiTheme.colors.$link} />
+            <IconMoreOptions size={18} color={this.getUIThemeColors().$link}/>
           ) : (
             <Text>
-              <IconDrag size={18} color={this.uiTheme.colors.$link} />
+              <IconDrag size={18} color={this.getUIThemeColors().$link}/>
             </Text>
           )}
           <Text> </Text>
@@ -321,7 +336,7 @@ class CreateIssue extends PureComponent<Props, State> {
       getIssueLinksTitle,
       processing,
     } = this.props;
-        const iconLink: any = (
+    const iconLink: any = (
       <IconLink
         width={24}
         height={24}
@@ -400,10 +415,10 @@ class CreateIssue extends PureComponent<Props, State> {
       <ThemeContext.Consumer>
         {(theme: Theme) => {
           this.uiTheme = theme.uiTheme;
-          const uiThemeColors: UIThemeColors = this.uiTheme.colors;
+          const uiThemeColors: UIThemeColors = this.getUIThemeColors();
           const hasProject: boolean = this.hasProject();
           const rightButton = processing ? (
-            <ActivityIndicator color={uiThemeColors.$link} />
+            <ActivityIndicator color={uiThemeColors.$link}/>
           ) : (
             <IconCheck
               size={20}
@@ -419,7 +434,7 @@ class CreateIssue extends PureComponent<Props, State> {
               <Header
                 title={i18n('New Issue')}
                 showShadow={true}
-                leftButton={<IconClose size={21} color={uiThemeColors.$link} />}
+                leftButton={<IconClose size={21} color={uiThemeColors.$link}/>}
                 onBack={this.onHide}
                 rightButton={rightButton}
                 extraButton={this.renderActionsIcon()}
@@ -505,7 +520,7 @@ class CreateIssue extends PureComponent<Props, State> {
                           imageHeaders={getApi().auth.getAuthorizationHeaders()}
                           canRemoveAttachment={true}
                           onRemoveImage={removeAttachment}
-                          uiTheme={this.uiTheme}
+                          uiTheme={this.getUITheme()}
                         />
                       </View>
                     </View>
@@ -514,7 +529,7 @@ class CreateIssue extends PureComponent<Props, State> {
 
                 {hasProject && (
                   <>
-                    <View style={styles.separator} />
+                    <View style={styles.separator}/>
                     <View
                       testID="test:id/attachment-button"
                       accessibilityLabel="attachment-button"
@@ -532,7 +547,7 @@ class CreateIssue extends PureComponent<Props, State> {
                         />
                       )}
                       {!!issue.tags && (
-                        <Tags tags={issue.tags} multiline={true} />
+                        <Tags tags={issue.tags} multiline={true}/>
                       )}
                       {this.state.showAddTagSelect && (
                         <TagAddSelect
@@ -554,7 +569,7 @@ class CreateIssue extends PureComponent<Props, State> {
 
                 {hasProject && (
                   <>
-                    <View style={styles.separator} />
+                    <View style={styles.separator}/>
                     <View
                       testID="test:id/link-issue-button"
                       accessibilityLabel="link-issue-button"
@@ -570,7 +585,7 @@ class CreateIssue extends PureComponent<Props, State> {
                 )}
               </ScrollView>
 
-              <KeyboardSpacerIOS />
+              <KeyboardSpacerIOS/>
 
               {isAttachFileDialogVisible && this.renderAttachFileDialog()}
               {!this.isProcessing() &&
@@ -584,12 +599,12 @@ class CreateIssue extends PureComponent<Props, State> {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: AppState, ownProps: { predefinedDraftId?: string }) => {
   return {
     ...state.creation,
     predefinedDraftId: ownProps.predefinedDraftId,
     issuePermissions: state.app.issuePermissions,
-    isConnected: state.app.networkState.isConnected,
+    isConnected: !!state.app.networkState?.isConnected,
   };
 };
 

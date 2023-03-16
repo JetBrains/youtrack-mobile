@@ -14,13 +14,13 @@ type Props = {
   canRemoveAttachment?: boolean;
   onOpenAttachment: (type: string, name: string) => any;
   onImageLoadingError: (error: any) => any;
-  imageHeaders?: Record<string, any>;
+  imageHeaders?: Record<string, any> | null;
   userCanRemoveAttachment?: (attachment: Attachment) => any;
   onRemoveImage?: (attachment: Attachment) => any;
-  style?: ViewStyleProp;
+  style?: ViewStyleProp | ViewStyleProp[];
   uiTheme: UITheme;
 };
-export default class AttachmentsRow extends PureComponent<Props, void> {
+export default class AttachmentsRow extends PureComponent<Props, Readonly<{}>> {
   scrollView: any;
   static defaultProps: Partial<Props> = {
     attachments: [],

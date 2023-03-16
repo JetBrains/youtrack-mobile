@@ -1,32 +1,37 @@
 import React, {Component} from 'react';
 import {View, ActivityIndicator} from 'react-native';
+
 import {ScrollView} from 'react-native-gesture-handler';
 import {View as AnimatedView} from 'react-native-animatable';
-import Api from '../api/api';
-import CustomField from '../custom-field/custom-field';
+
+import Api from 'components/api/api';
+import CustomField from 'components/custom-field/custom-field';
 import DatePickerField from './custom-fields-panel__date-picker';
-import Header from '../header/header';
-import ModalPortal from '../modal-view/modal-portal';
-import ModalView from '../modal-view/modal-view';
+import Header from 'components/header/header';
+import ModalPortal from 'components/modal-view/modal-portal';
+import ModalView from 'components/modal-view/modal-view';
 import SimpleValueEditor from './custom-fields-panel__simple-value';
-import usage from '../usage/usage';
+import usage from 'components/usage/usage';
 import {createNullProjectCustomField} from 'util/util';
 import {getApi} from '../api/api__instance';
-import {formatTime} from '../date/date';
+import {formatTime} from 'components/date/date';
 import {i18n} from 'components/i18n/i18n';
-import {IconCheck, IconClose} from '../icon/icon';
-import {isSplitView} from '../responsive/responsive-helper';
-import {IssueContext} from '../../views/issue/issue-context';
-import {PanelWithSeparator} from '../panel/panel-with-separator';
-import {Select, SelectModal} from '../select/select';
-import {SkeletonIssueCustomFields} from '../skeleton/skeleton';
+import {IconCheck, IconClose} from 'components/icon/icon';
+import {isSplitView} from 'components/responsive/responsive-helper';
+import {IssueContext} from 'views/issue/issue-context';
+import {PanelWithSeparator} from 'components/panel/panel-with-separator';
+import {Select, SelectModal} from 'components/select/select';
+import {SkeletonIssueCustomFields} from 'components/skeleton/skeleton';
+
 import styles, {calendarTheme} from './custom-fields-panel.styles';
+
 import type {
   IssueProject,
   CustomField as IssueCustomField,
 } from 'types/CustomFields';
 import type {UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
+import {IssueContextData} from 'types/Issue';
 type Props = {
   autoFocusSelect?: boolean;
   style?: ViewStyleProp;
@@ -35,7 +40,7 @@ type Props = {
   fields: IssueCustomField[];
   hasPermission: {
     canUpdateField?: (field: IssueCustomField) => boolean;
-    canCreateIssueToProject: (project: IssueProject) => boolean;
+    canCreateIssueToProject?: (project: IssueProject) => boolean;
     canEditProject: boolean;
   };
   onUpdate: (
@@ -46,6 +51,8 @@ type Props = {
   uiTheme: UITheme;
   analyticsId?: string;
   testID?: string;
+  accessible?: boolean;
+  accessibilityLabel?: string;
   modal?: boolean;
 };
 type State = {
@@ -119,8 +126,8 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   isComponentMounted: boolean | null | undefined;
   isConnected: boolean | null | undefined;
 
-  constructor() {
-    super();
+  constructor(props: Props) {
+    super(props);
     this.closeEditor = this.closeEditor.bind(this);
     this.state = {
       topCoord: 0,
@@ -194,7 +201,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
           const projects = await this.api.getProjects(query);
           return projects
             .filter(project => !project.archived && !project.template)
-            .filter(project => hasPermission.canCreateIssueToProject(project));
+            .filter(project => hasPermission?.canCreateIssueToProject?.(project));
         },
         multi: false,
         placeholder: i18n('Search for the project'),
@@ -608,17 +615,22 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   }
 
   render(): React.ReactNode {
-    const {uiTheme, style, testID} = this.props;
+    const {uiTheme, style, testID, accessible, accessibilityLabel} = this.props;
     const {select, datePicker, simpleValue, editingField} = this.state;
     return (
       <IssueContext.Consumer>
-        {issueDate => {
+        {(issueDate: IssueContextData) => {
           if (issueDate) {
             this.isConnected = issueDate.isConnected;
           }
 
           return (
-            <View testID={testID} style={[styles.container, style]}>
+            <View
+              accessible={accessible}
+              accessibilityLabel={accessibilityLabel}
+              testID={testID}
+              style={[styles.container, style]}
+            >
               {this.renderFields()}
 
               <AnimatedView

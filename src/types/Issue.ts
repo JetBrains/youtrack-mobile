@@ -2,20 +2,21 @@ import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import type {
   IssueProject,
   CustomFieldShort,
-  CustomField,
   Tag,
   Attachment,
   IssueComment,
   IssueLink,
-  CustomFieldText,
 } from './CustomFields';
-import type {User} from './User';
 import type {UserGroup} from './UserGroup';
+import type {User} from './User';
 import type {Visibility} from './Visibility';
+import {AnyCustomField} from 'components/custom-field/custom-field-helper';
+
 export type IssueContextData = {
+  dispatcher: () => any;
+  isConnected: boolean;
   issue: IssueFull;
   issuePermissions: IssuePermissions;
-  dispatcher: () => any;
 };
 export type IssueOnList = Partial<Omit<IssueFull, 'fields'>> & {
   fieldHash: {
@@ -31,8 +32,8 @@ export type IssueFull = {
   created: number;
   description: string;
   fieldHash?: any;
-  fields: Array<CustomField | CustomFieldText>;
-  _fields?: Array<CustomField | CustomFieldText>;
+  fields: AnyCustomField[];
+  _fields?: AnyCustomField[];
   id: string;
   idReadable: string;
   links: IssueLink[];
@@ -55,7 +56,21 @@ export type IssueFull = {
   visibility: Visibility;
   hasEmail?: boolean;
 };
-export type AnyIssue = IssueOnList | IssueFull | IssueLink;
+export type IssueCreate = Omit<
+  IssueFull,
+  | 'comments'
+  | 'hasEmail'
+  | 'idReadable'
+  | 'project'
+  | 'reporter'
+  | 'resolved'
+  | 'updated'
+  | 'updater'
+  | 'voters'
+  | 'watchers'
+  | 'wikifiedDescription'
+> & { project: Partial<IssueProject>; };
+export type AnyIssue = IssueOnList | IssueFull | IssueLink | IssueCreate;
 export type TransformedSuggestion = {
   prefix: string;
   option: string;

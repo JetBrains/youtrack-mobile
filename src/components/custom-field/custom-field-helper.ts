@@ -5,7 +5,8 @@ import type {
   CustomFieldValue,
   ProjectCustomField,
 } from 'types/CustomFields';
-type AnyCustomField = Partial<CustomField & CustomFieldText>;
+
+export type AnyCustomField = Partial<CustomField & CustomFieldText>;
 
 const isProjectCustomField = (customField: ProjectCustomField): boolean => {
   return customField?.$type

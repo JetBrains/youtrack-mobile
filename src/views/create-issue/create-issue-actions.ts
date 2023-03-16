@@ -1,4 +1,5 @@
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
+
 import * as commandDialogHelper from 'components/command-dialog/command-dialog-helper';
 import ApiHelper from 'components/api/api__helper';
 import issueCommonLinksActions from 'components/issue-actions/issue-links-actions';
@@ -17,13 +18,14 @@ import {i18n} from 'components/i18n/i18n';
 import {notifyError} from 'components/notification/notification';
 import {resolveError} from 'components/error/error-resolver';
 import {showActions} from 'components/action-sheet/action-sheet';
+
 import type Api from 'components/api/api';
 import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
-import type {AppState} from '../../reducers';
+import type {AppState} from 'reducers';
 import type {
   AnyIssue,
   CommandSuggestionResponse,
-  IssueFull,
+  IssueCreate,
   IssueOnList,
 } from 'types/Issue';
 import type {CreateIssueState} from './create-issue-reducers';
@@ -37,23 +39,29 @@ import type {
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {StorageState} from 'components/storage/storage';
 import type {Visibility} from 'types/Visibility';
+import {CustomError} from 'types/Error';
+
 type ApiGetter = () => Api;
+
 export const CATEGORY_NAME = 'Create issue view';
+
 export function setIssueSummary(summary: string): CreateIssueState {
   return actions.setIssueSummary({
     summary,
   });
 }
+
 export function setIssueDescription(description: string): CreateIssueState {
   return actions.setIssueDescription({
     description,
   });
 }
+
 export function propagateCreatedIssue(
-  issue: IssueFull,
+  issue: IssueCreate,
   preDefinedDraftId: string | null | undefined,
 ): {
-  issue: IssueFull;
+  issue: IssueCreate;
   preDefinedDraftId: string | null | undefined;
   type: string;
 } {
@@ -91,6 +99,7 @@ export function storeDraftAndGoBack(): (
     setTimeout(() => dispatch(actions.resetCreation()), 500);
   };
 }
+
 export function loadStoredProject(): (
   dispatch: (arg0: any) => any,
 ) => Promise<void> {
@@ -108,6 +117,7 @@ export function loadStoredProject(): (
     }
   };
 }
+
 export function loadIssueFromDraft(
   draftId: string,
 ): (
@@ -138,6 +148,7 @@ export function loadIssueFromDraft(
     }
   };
 }
+
 export function applyCommand(
   command: string,
 ): (
@@ -167,6 +178,7 @@ export function applyCommand(
       });
   };
 }
+
 export function updateIssueDraft(
   ignoreFields: boolean = false,
   draftData?: Record<string, any>,
@@ -194,15 +206,13 @@ export function updateIssueDraft(
       project: issue.project,
       fields: ignoreFields ? undefined : issue.fields,
       ...draftData,
-    };
+    } as unknown as IssueCreate;
 
     try {
-      const updatedDraftIssue: Partial<IssueFull> = await api.issue.updateIssueDraft(
-        draftIssue,
-      );
+      const updatedDraftIssue: IssueCreate = await api.issue.updateIssueDraft(draftIssue);
 
       if (ignoreFields) {
-          delete updatedDraftIssue.fields;
+        delete updatedDraftIssue.fields;
       }
 
       log.info('Issue draft updated', draftIssue.id);
@@ -217,13 +227,13 @@ export function updateIssueDraft(
       }
     } catch (err) {
       const error =
-        (await resolveError(err)) || new Error(DEFAULT_ERROR_MESSAGE);
+        (await resolveError(err as CustomError)) || new Error(DEFAULT_ERROR_MESSAGE);
       const {error_description} = error;
 
       if (
         (error_description &&
           error_description.indexOf(CUSTOM_ERROR_MESSAGE.NO_ENTITY_FOUND) !==
-            -1) ||
+          -1) ||
         (error &&
           (error.error === 'bad_request' ||
             error.error === CUSTOM_ERROR_MESSAGE.BAD_REQUEST))
@@ -238,6 +248,7 @@ export function updateIssueDraft(
     }
   };
 }
+
 export function initializeWithDraftOrProject(
   preDefinedDraftId: string | null | undefined,
 ): (dispatch: (arg0: any) => any) => Promise<void> {
@@ -266,6 +277,7 @@ export function initializeWithDraftOrProject(
     }
   };
 }
+
 export function createIssue(
   onHide: () => any,
   isMatchesQuery: (issueIdReadable: string) => boolean = () => true,
@@ -306,12 +318,13 @@ export function createIssue(
       clearIssueDraftStorage();
     } catch (err) {
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Error');
-      notifyError(err);
+      notifyError(err as CustomError);
     } finally {
       dispatch(actions.stopIssueCreation());
     }
   };
 }
+
 export function updateProject(
   project: Record<string, any>,
 ): (dispatch: (arg0: any) => any, getState: () => any) => Promise<void> {
@@ -331,6 +344,7 @@ export function updateProject(
     storeProjectId(project.id);
   };
 }
+
 export function updateFieldValue(
   field: CustomField | CustomFieldText,
   value: Partial<FieldValue>,
@@ -365,10 +379,11 @@ export function updateFieldValue(
       log.info('Issue field value updated');
       dispatch(loadIssueFromDraft(issue.id));
     } catch (err) {
-      notifyError(err);
+      notifyError(err as CustomError);
     }
   };
 }
+
 export function uploadIssueAttach(
   files: NormalizedAttachment[],
 ): (dispatch: (arg0: any) => any, getState: () => any) => Promise<void> {
@@ -377,6 +392,7 @@ export function uploadIssueAttach(
     await dispatch(attachmentActions.uploadFile(files, draftId));
   };
 }
+
 export function cancelAddAttach(
   attach: Attachment,
 ): (dispatch: (arg0: any) => any) => Promise<void> {
@@ -384,6 +400,7 @@ export function cancelAddAttach(
     await dispatch(attachmentActions.cancelImageAttaching(attach));
   };
 }
+
 export function loadAttachments(): (
   dispatch: (arg0: any) => any,
   getState: () => any,
@@ -393,6 +410,7 @@ export function loadAttachments(): (
     dispatch(attachmentActions.loadIssueAttachments(draftId));
   };
 }
+
 export function showAddAttachDialog(): (
   dispatch: (arg0: any) => any,
 ) => Promise<void> {
@@ -400,6 +418,7 @@ export function showAddAttachDialog(): (
     dispatch(attachmentActions.toggleAttachFileDialog(true));
   };
 }
+
 export function hideAddAttachDialog(): (
   dispatch: (arg0: any) => any,
 ) => Promise<void> {
@@ -407,6 +426,7 @@ export function hideAddAttachDialog(): (
     dispatch(attachmentActions.toggleAttachFileDialog(false));
   };
 }
+
 export function removeAttachment(
   attach: Attachment,
 ): (dispatch: (arg0: any) => any, getState: () => any) => Promise<void> {
@@ -415,6 +435,7 @@ export function removeAttachment(
     dispatch(attachmentActions.removeAttachment(attach, draftId));
   };
 }
+
 export function updateVisibility(
   visibility: Visibility,
 ): (
@@ -427,8 +448,8 @@ export function updateVisibility(
     getState: () => AppState,
     getApi: ApiGetter,
   ) => {
-    const draftIssue: IssueFull = getState().creation.issue;
-    const draftIssueCopy: IssueFull = {...draftIssue};
+    const draftIssue: IssueCreate = getState().creation.issue;
+    const draftIssueCopy: IssueCreate = {...draftIssue};
 
     try {
       const draftWithVisibility: Visibility = await getApi().issue.updateVisibility(
@@ -446,10 +467,11 @@ export function updateVisibility(
           issue: draftIssueCopy,
         }),
       );
-      notifyError(err);
+      notifyError(err as CustomError);
     }
   };
 }
+
 export function showContextActions(
   actionSheet: typeof ActionSheetProvider,
 ): (
@@ -483,6 +505,7 @@ export function showContextActions(
     }
   };
 }
+
 export function getCommandSuggestions(
   command: string,
   caret: number,
@@ -501,16 +524,17 @@ export function getCommandSuggestions(
       .loadIssueCommandSuggestions([issueId], command, caret)
       .then((suggestions: CommandSuggestionResponse | null) => {
         suggestions &&
-          dispatch({
-            type: commandDialogTypes.RECEIVE_COMMAND_SUGGESTIONS,
-            suggestions,
-          });
+        dispatch({
+          type: commandDialogTypes.RECEIVE_COMMAND_SUGGESTIONS,
+          suggestions,
+        });
       })
       .catch(() => {
         //
       });
   };
 }
+
 export function toggleCommandDialog(
   isVisible: boolean = false,
 ): (
@@ -530,6 +554,7 @@ export function toggleCommandDialog(
     });
   };
 }
+
 export function loadIssuesXShort(
   linkTypeName: string,
   query: string = '',
@@ -544,7 +569,7 @@ export function loadIssuesXShort(
     getState: () => AppState,
     getApi: ApiGetter,
   ) => {
-    const issue: IssueFull = getState().creation.issue;
+    const issue: IssueCreate = getState().creation.issue;
     const searchQuery: string = encodeURIComponent(
       [
         `(project:${issue.project.shortName})`,
@@ -559,6 +584,7 @@ export function loadIssuesXShort(
     );
   };
 }
+
 export function onLinkIssue(
   linkedIssueIdReadable: string,
   linkTypeName: string,
@@ -572,7 +598,7 @@ export function onLinkIssue(
     getState: () => AppState,
     getApi: ApiGetter,
   ) => {
-    const issue: IssueFull = getState().creation.issue;
+    const issue: IssueCreate = getState().creation.issue;
     usage.trackEvent(ANALYTICS_ISSUE_CREATE_PAGE, 'Link issue');
     return await issueCommonLinksActions(issue).onLinkIssue(
       linkedIssueIdReadable,
@@ -580,6 +606,7 @@ export function onLinkIssue(
     );
   };
 }
+
 export function loadLinkedIssues(): (
   dispatch: (arg0: any) => any,
   getState: () => AppState,
@@ -590,10 +617,11 @@ export function loadLinkedIssues(): (
     getState: () => AppState,
     getApi: ApiGetter,
   ) => {
-    const issue: IssueFull = getState().creation.issue;
+    const issue: IssueCreate = getState().creation.issue;
     return await issueCommonLinksActions(issue).loadLinkedIssues();
   };
 }
+
 export function onUnlinkIssue(
   linkedIssue: IssueOnList,
   linkTypeId: string,
@@ -607,7 +635,7 @@ export function onUnlinkIssue(
     getState: () => AppState,
     getApi: ApiGetter,
   ) => {
-    const issue: IssueFull = getState().creation.issue;
+    const issue: IssueCreate = getState().creation.issue;
     usage.trackEvent(ANALYTICS_ISSUE_CREATE_PAGE, 'Remove linked issue');
     return issueCommonLinksActions(issue).onUnlinkIssue(
       linkedIssue,
@@ -615,6 +643,7 @@ export function onUnlinkIssue(
     );
   };
 }
+
 export function loadIssueLinksTitle(): (
   dispatch: (arg0: any) => any,
   getState: () => AppState,
@@ -625,10 +654,11 @@ export function loadIssueLinksTitle(): (
     getState: () => AppState,
     getApi: ApiGetter,
   ) => {
-    const issue: IssueFull = getState().creation.issue;
+    const issue: IssueCreate = getState().creation.issue;
     return await issueCommonLinksActions(issue).loadIssueLinksTitle();
   };
 }
+
 export function getIssueLinksTitle(
   links?: IssueLink[],
 ): (
@@ -641,7 +671,7 @@ export function getIssueLinksTitle(
     getState: () => AppState,
     getApi: ApiGetter,
   ) => {
-    const issue: IssueFull = getState().creation.issue;
+    const issue: IssueCreate = getState().creation.issue;
     dispatch(
       actions.setIssueLinks({
         links: await issueCommonLinksActions(issue).getIssueLinksTitle(links),

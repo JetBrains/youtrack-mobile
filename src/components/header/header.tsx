@@ -27,7 +27,9 @@ type DefaultProps = {
   onRightButtonClick: (...args: any[]) => any;
   showShadow: boolean;
 };
-export default class Header extends PureComponent<HeaderProps, void> {
+
+
+export default class Header extends PureComponent<HeaderProps, Readonly<{}>> {
   static defaultProps: DefaultProps = {
     onRightButtonClick: () => undefined,
     showShadow: false,

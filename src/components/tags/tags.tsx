@@ -18,7 +18,9 @@ type DefaultProps = {
   onTagPress: () => any;
 };
 const NO_COLOR_CODING_ID = '0';
-export default class Tags extends PureComponent<Props, void> {
+
+
+export default class Tags extends PureComponent<Props, Readonly<{}>> {
   static defaultProps: DefaultProps = {
     onTagPress: () => {},
   };

@@ -415,8 +415,8 @@ const clearStorage = async () => {
 
 
 // For tests only!
-export async function __setStorageState(state: StorageState) {
-  storageState = state;
+export async function __setStorageState(state: StorageState | Partial<StorageState>) {
+  storageState = state as StorageState;
 }
 
 export {

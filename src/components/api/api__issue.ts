@@ -22,7 +22,7 @@ import type {
   IssueProject,
   Tag,
 } from 'types/CustomFields';
-import type {AnyIssue, IssueFull} from 'types/Issue';
+import type {AnyIssue, IssueCreate, IssueFull} from 'types/Issue';
 import type {Visibility} from 'types/Visibility';
 import type {WorkItem} from 'types/Work';
 
@@ -175,7 +175,7 @@ export default class IssueAPI extends ApiBase {
    * @param issue
    * @returns {Promise}
    */
-  async updateIssueDraft(issue: Partial<IssueFull>): Promise<IssueFull> {
+  async updateIssueDraft(issue: IssueCreate): Promise<IssueFull> {
     const queryString = qs.stringify({
       fields: issueFields.singleIssue.toString(),
     });

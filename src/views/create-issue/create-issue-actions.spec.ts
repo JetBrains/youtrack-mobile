@@ -9,7 +9,8 @@ import {
 import {CUSTOM_ERROR_MESSAGE} from 'components/error/error-messages';
 import {ISSUE_CREATED} from './create-issue-action-types';
 import {setApi} from 'components/api/api__instance';
-let apiMock;
+import API from 'components/api/api';
+let apiMock: API;
 
 const getApi = () => apiMock;
 

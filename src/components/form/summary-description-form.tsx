@@ -21,7 +21,9 @@ type Props = {
   testID?: string;
 };
 const DELAY: number = 300;
-export default class SummaryDescriptionForm extends Component<Props, void> {
+
+
+export default class SummaryDescriptionForm extends Component<Props, Readonly<{}>> {
   trackChange: (message: string) => any | boolean = (message: string) =>
     typeof this.props.analyticsId === 'string' &&
     usage.trackEvent(this.props.analyticsId, message);
