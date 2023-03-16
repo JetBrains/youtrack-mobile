@@ -14,6 +14,7 @@ import {
   DEFAULT_ERROR_MESSAGE,
 } from 'components/error/error-messages';
 import {getStorageState, flushStoragePart} from 'components/storage/storage';
+import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {notifyError} from 'components/notification/notification';
 import {resolveError} from 'components/error/error-resolver';
@@ -40,6 +41,7 @@ import type {NormalizedAttachment} from 'types/Attachment';
 import type {StorageState} from 'components/storage/storage';
 import type {Visibility} from 'types/Visibility';
 import {CustomError} from 'types/Error';
+import {Folder} from 'types/User';
 
 type ApiGetter = () => Api;
 
@@ -102,9 +104,20 @@ export function storeDraftAndGoBack(): (
 
 export function loadStoredProject(): (
   dispatch: (arg0: any) => any,
+  getState: () => AppState,
 ) => Promise<void> {
-  return async (dispatch: (arg0: any) => any) => {
-    const projectId = getStorageState().projectId;
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    ) => {
+    let projectId: string | null | undefined = getStorageState().projectId;
+
+    if (!projectId) {
+      const searchContext: Partial<Folder> | null = getState().issueList?.searchContext;
+      if (searchContext && hasType.project(searchContext)) {
+        projectId = searchContext.id;
+      }
+    }
 
     if (projectId) {
       log.info(`Stored project loaded, id=${projectId}`);

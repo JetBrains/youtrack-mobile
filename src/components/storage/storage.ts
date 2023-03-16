@@ -59,7 +59,7 @@ export type StorageState = TipsState & FeatureState & {
   } | null;
   authParams: OAuthParams2 | null;
   projectId: string | null;
-  projects: Array<IssueProject | ArticleProject>;
+  projects: (IssueProject | ArticleProject)[];
   draftId: string | null;
   currentUser: UserCurrent | null;
   creationTimestamp: number | null;

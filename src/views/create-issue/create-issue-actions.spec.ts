@@ -10,8 +10,11 @@ import {CUSTOM_ERROR_MESSAGE} from 'components/error/error-messages';
 import {ISSUE_CREATED} from './create-issue-action-types';
 import {setApi} from 'components/api/api__instance';
 import API from 'components/api/api';
-let apiMock: API;
+import Store from 'store';
+import {IssueCreate} from 'types/Issue';
 
+
+let apiMock: API;
 const getApi = () => apiMock;
 
 const createStoreMock = mocks.createMockStore(getApi);
@@ -19,9 +22,9 @@ const PROJECT_ID_MOCK = 'PROJECT_ID';
 describe('<CreateIssue/>', () => {
   let stateMock;
   let ownPropsMock;
-  let issueMock;
-  let store;
-  let issueDraftBase;
+  let issueMock: IssueCreate;
+  let store: typeof Store;
+  let issueDraftBase: Partial<IssueCreate>;
   beforeEach(async () => {
     await storage.__setStorageState({});
     issueMock = mocks.createIssueMock({
@@ -38,6 +41,8 @@ describe('<CreateIssue/>', () => {
     };
     createStore();
   });
+
+
   describe('loadStoredProject', () => {
     it('should set cached draft project id', async () => {
       await storage.__setStorageState({
@@ -51,6 +56,7 @@ describe('<CreateIssue/>', () => {
         type: `${createIssueNamespace}/setDraftProjectId`,
       });
     });
+
     it('should not set draft project id', async () => {
       await storage.__setStorageState({
         projectId: null,
@@ -58,12 +64,41 @@ describe('<CreateIssue/>', () => {
       await store.dispatch(actions.loadStoredProject());
       expect(store.getActions()).toHaveLength(0);
     });
+
+    it('should set project id from the issues context', async () => {
+      const contextProjectIdMock = 'issuesContextProjectId';
+      createStore({
+        issueList: {
+          searchContext: {
+            $type: 'Project',
+            id: contextProjectIdMock,
+          },
+        },
+      });
+      await storage.__setStorageState({
+        projectId: undefined,
+      });
+
+      await store.dispatch(actions.loadStoredProject());
+
+      expect(store.getActions()[0]).toEqual({
+        payload: {
+          projectId: contextProjectIdMock,
+        },
+        type: `${createIssueNamespace}/setDraftProjectId`,
+      });
+    });
+
   });
+
+
   describe('loadIssueFromDraft', () => {
     it('should load issue draft', async () => {
       const draftIdMock = 'draftId';
       apiMock.issue.loadIssueDraft.mockResolvedValueOnce(issueMock);
+
       await store.dispatch(actions.loadIssueFromDraft(draftIdMock));
+
       expect(apiMock.issue.loadIssueDraft).toHaveBeenCalledWith(draftIdMock);
       expect(store.getActions()[0]).toEqual({
         payload: {
@@ -75,8 +110,11 @@ describe('<CreateIssue/>', () => {
     it('should reset issue draft id on failed request', async () => {
       const draftIdMock = 'draftId';
       apiMock.issue.loadIssueDraft.mockRejectedValueOnce();
+
       expect(store.getState().creation.issue.id).toEqual(issueMock.id);
+
       await store.dispatch(actions.loadIssueFromDraft(draftIdMock));
+
       expect(apiMock.issue.loadIssueDraft).toHaveBeenCalledWith(draftIdMock);
       expect(store.getActions()[0]).toEqual({
         payload: undefined,
@@ -84,6 +122,8 @@ describe('<CreateIssue/>', () => {
       });
     });
   });
+
+
   describe('updateIssueDraft', () => {
     it('should update a draft', async () => {
       const draftMockData = {
@@ -178,6 +218,8 @@ describe('<CreateIssue/>', () => {
       });
     });
   });
+
+
   describe('createIssue', () => {
     let createdIssueMock;
     beforeEach(async () => {
@@ -343,7 +385,7 @@ describe('<CreateIssue/>', () => {
     });
   });
 
-  function createStore() {
+  function createStore(stateData: Record<string, any> = {}) {
     apiMock = {
       auth: {
         getAuthorizationHeaders: jest.fn(),
@@ -368,6 +410,6 @@ describe('<CreateIssue/>', () => {
       },
     };
     ownPropsMock = {};
-    store = createStoreMock(stateMock, ownPropsMock);
+    store = createStoreMock({...stateMock, ...stateData}, ownPropsMock);
   }
 });
