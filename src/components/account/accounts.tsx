@@ -1,3 +1,4 @@
+import React, {PureComponent} from 'react';
 import {
   View,
   Text,
@@ -5,19 +6,24 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import React, {PureComponent} from 'react';
+
 import Swiper from 'react-native-swiper';
-import Avatar from '../avatar/avatar';
-import {IconLogout, IconAdd} from '../icon/icon';
-import {formatYouTrackURL} from '../config/config';
-import {getStorageState} from '../storage/storage';
-import {HIT_SLOP} from '../common-styles/button';
-import avatarStyles from '../avatar/default-avatar.styles';
+
+import Avatar from 'components/avatar/avatar';
+import {formatYouTrackURL} from 'components/config/config';
+import {getStorageState} from 'components/storage/storage';
+import {HIT_SLOP} from 'components/common-styles/button';
+import {IconLogout, IconAdd} from 'components/icon/icon';
+
+import avatarStyles from 'components/avatar/default-avatar.styles';
 import styles, {SWIPER_HEIGHT} from './accounts.styles';
+
 import type {AppConfig} from 'types/AppConfig';
-import type {StorageState} from '../storage/storage';
+import type {StorageState} from 'components/storage/storage';
 import type {UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
+import {i18n} from 'components/i18n/i18n';
+
 type Props = {
   otherAccounts: StorageState[];
   isChangingAccount: boolean | null | undefined;
@@ -29,22 +35,24 @@ type Props = {
   style?: ViewStyleProp;
   uiTheme: UITheme;
 };
+
+
 export default class Accounts extends PureComponent<Props, void> {
   _logOut = () => {
     const {otherAccounts, onLogOut, onClose} = this.props;
     const hasOtherAccounts = otherAccounts.length > 0;
     Alert.alert(
-      hasOtherAccounts ? 'Confirmation required' : 'Confirm logout',
+      hasOtherAccounts ? i18n('Confirmation required') : i18n('Confirm logout'),
       hasOtherAccounts
-        ? 'Do you really want to remove this account?'
-        : 'Do you really want to log out?',
+        ? i18n('Do you really want to remove this account?')
+        : i18n('Do you really want to log out?'),
       [
         {
-          text: 'Cancel',
+          text: i18n('Cancel'),
           style: 'cancel',
         },
         {
-          text: 'Yes',
+          text: i18n('Yes'),
           onPress: () => {
             onLogOut();
 
@@ -122,9 +130,7 @@ export default class Accounts extends PureComponent<Props, void> {
         loop={false}
         scrollEnabled={!isChangingAccount}
         index={accounts.indexOf(storageState)}
-        onIndexChanged={(index: number) =>
-          this._onChangeAccount(accounts[index])
-        }
+        onIndexChanged={(index: number) => this._onChangeAccount(accounts[index])}
         onTouchStart={openDebugView}
         paginationStyle={styles.accountPager}
       >

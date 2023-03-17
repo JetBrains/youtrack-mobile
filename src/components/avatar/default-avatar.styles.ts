@@ -6,7 +6,10 @@ const commonStyle = {
   borderRadius: 3,
 };
 export default EStyleSheet.create({
-  common: {...commonStyle},
+  common: {
+    ...commonStyle,
+    backgroundColor: '$disabled',
+  },
   size80: {
     width: defaultSize * 2,
     height: defaultSize * 2,
