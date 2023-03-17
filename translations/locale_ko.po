@@ -176,6 +176,7 @@ msgstr "Bugsnag 개인정보 보호정책"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "로그인하면 개인정보 보호정책에 동의하는 것입니다."
 
+#: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
 #: src/components/tags/tags.tsx
 #: src/views/article/arcticle-actions.ts
@@ -248,6 +249,14 @@ msgstr "코멘트"
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "committed changes"
 msgstr "커밋된 변경사항"
+
+#: src/components/account/accounts.tsx
+msgid "Confirm logout"
+msgstr ""
+
+#: src/components/account/accounts.tsx
+msgid "Confirmation required"
+msgstr ""
 
 #: src/actions/app-actions.ts
 msgid "Connecting to YouTrack..."
@@ -385,6 +394,14 @@ msgstr "초안을 취소하고 닫으시겠습니까?"
 #: src/views/article-create/article-create.tsx
 msgid "Discard unpublished changes"
 msgstr "게시되지 않은 변경 내용 무시"
+
+#: src/components/account/accounts.tsx
+msgid "Do you really want to log out?"
+msgstr ""
+
+#: src/components/account/accounts.tsx
+msgid "Do you really want to remove this account?"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -1135,6 +1152,10 @@ msgstr "이런, 여기에 접근하실 수 없습니다."
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Write a comment, @mention people"
 msgstr "코멘트를 작성하거나, 다른 사람을 @멘션하세요"
+
+#: src/components/account/accounts.tsx
+msgid "Yes"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

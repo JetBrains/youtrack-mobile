@@ -174,6 +174,7 @@ msgstr "Bugsnag Privacy Policy"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "By logging in, you agree to the Privacy Policy."
 
+#: src/components/account/accounts.tsx:51
 #: src/components/confirmation/confirmation.ts:14
 #: src/components/tags/tags.tsx:57
 #: src/views/article/arcticle-actions.ts:326
@@ -246,6 +247,14 @@ msgstr "Comments"
 #: src/components/activity-stream/activity__stream-vcs.tsx:76
 msgid "committed changes"
 msgstr "committed changes"
+
+#: src/components/account/accounts.tsx:45
+msgid "Confirm logout"
+msgstr "Confirm logout"
+
+#: src/components/account/accounts.tsx:45
+msgid "Confirmation required"
+msgstr "Confirmation required"
 
 #: src/actions/app-actions.ts:944
 msgid "Connecting to YouTrack..."
@@ -383,6 +392,14 @@ msgstr "Discard draft and close?"
 #: src/views/article-create/article-create.tsx:307
 msgid "Discard unpublished changes"
 msgstr "Discard unpublished changes"
+
+#: src/components/account/accounts.tsx:48
+msgid "Do you really want to log out?"
+msgstr "Do you really want to log out?"
+
+#: src/components/account/accounts.tsx:47
+msgid "Do you really want to remove this account?"
+msgstr "Do you really want to remove this account?"
 
 #: src/views/settings/settings-helper.ts:40
 msgid "Don't send logs"
@@ -1135,6 +1152,10 @@ msgstr "Woah, you can't touch this!"
 #: src/views/issue/activity/activity__add-spent-time.tsx:426
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
+
+#: src/components/account/accounts.tsx:55
+msgid "Yes"
+msgstr "Yes"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx:146
 msgid "You don’t have any unread notifications"

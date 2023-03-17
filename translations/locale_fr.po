@@ -180,6 +180,7 @@ msgstr "Charte de confidentialité de Bugsnag"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "En vous connectant, vous acceptez la Charte de confidentialité."
 
+#: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
 #: src/components/tags/tags.tsx
 #: src/views/article/arcticle-actions.ts
@@ -252,6 +253,14 @@ msgstr "Commentaires"
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "committed changes"
 msgstr "changements validés"
+
+#: src/components/account/accounts.tsx
+msgid "Confirm logout"
+msgstr ""
+
+#: src/components/account/accounts.tsx
+msgid "Confirmation required"
+msgstr ""
 
 #: src/actions/app-actions.ts
 msgid "Connecting to YouTrack..."
@@ -389,6 +398,14 @@ msgstr "Abandonner le brouillon et fermer ?"
 #: src/views/article-create/article-create.tsx
 msgid "Discard unpublished changes"
 msgstr "Supprimer les modifications non publiées"
+
+#: src/components/account/accounts.tsx
+msgid "Do you really want to log out?"
+msgstr ""
+
+#: src/components/account/accounts.tsx
+msgid "Do you really want to remove this account?"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -1141,6 +1158,10 @@ msgstr "Attention, vous ne pouvez pas toucher à ça !"
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Write a comment, @mention people"
 msgstr "Rédigez un commentaire, @mentionnez des personnes"
+
+#: src/components/account/accounts.tsx
+msgid "Yes"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

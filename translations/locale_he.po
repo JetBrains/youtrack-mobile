@@ -188,6 +188,7 @@ msgstr ""
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr ""
 
+#: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
 #: src/components/tags/tags.tsx
 #: src/views/article/arcticle-actions.ts
@@ -259,6 +260,14 @@ msgstr "הערות/ תגובות"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "committed changes"
+msgstr ""
+
+#: src/components/account/accounts.tsx
+msgid "Confirm logout"
+msgstr ""
+
+#: src/components/account/accounts.tsx
+msgid "Confirmation required"
 msgstr ""
 
 #: src/actions/app-actions.ts
@@ -396,6 +405,14 @@ msgstr ""
 
 #: src/views/article-create/article-create.tsx
 msgid "Discard unpublished changes"
+msgstr ""
+
+#: src/components/account/accounts.tsx
+msgid "Do you really want to log out?"
+msgstr ""
+
+#: src/components/account/accounts.tsx
+msgid "Do you really want to remove this account?"
 msgstr ""
 
 #: src/views/settings/settings-helper.ts
@@ -1152,6 +1169,10 @@ msgstr "לא ניתן לגעת בזה!"
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Write a comment, @mention people"
+msgstr ""
+
+#: src/components/account/accounts.tsx
+msgid "Yes"
 msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
