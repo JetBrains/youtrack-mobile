@@ -9,6 +9,7 @@ import {
 import {WebView} from 'react-native-webview';
 import HTML from './renderers/renderer__html';
 import Hyperlink from 'react-native-hyperlink';
+// @ts-ignore
 import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
 import calculateAspectRatio from 'components/aspect-ratio/aspect-ratio';
@@ -29,7 +30,7 @@ import type {
   IssueProject,
 } from 'types/CustomFields';
 import type {IssueFull} from 'types/Issue';
-import type {MarkdownASTNode} from 'types/Markdown';
+import type {MarkdownNode} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
 export type Mentions = {
@@ -124,9 +125,9 @@ function getMarkdownRules(
     return <ImageWithProgress {...imageProps} />;
   };
 
-  const isNodeContainsCheckbox = (node: MarkdownASTNode): boolean => {
+  const isNodeContainsCheckbox = (node: MarkdownNode): boolean => {
     let hasCheckbox: boolean = false;
-    let nodeChildren: MarkdownASTNode[] = node.children || [];
+    let nodeChildren: MarkdownNode[] = node.children || [];
 
     while (nodeChildren?.length > 0) {
       hasCheckbox = nodeChildren.some(it => it.type === 'checkbox');
@@ -162,13 +163,7 @@ function getMarkdownRules(
     );
   };
 
-  const renderHyperLink = (
-    linkText: string,
-    style: any,
-  ): React.ReactElement<
-    React.ComponentProps<typeof Hyperlink>,
-    typeof Hyperlink
-  > => (
+  const renderHyperLink = (linkText: string, style: any): React.ReactNode => (
     <Hyperlink key={guid()} linkStyle={style.link} linkDefault={true}>
       <Text selectable={true} style={style}>
         {linkText}
@@ -177,12 +172,13 @@ function getMarkdownRules(
   );
 
   const textRenderer = (
-    node: MarkdownASTNode,
+    node: MarkdownNode,
     children: Record<string, any>,
     parent: Record<string, any>,
     style: Record<string, any>,
     inheritedStyles: Record<string, any> = {},
   ): any => {
+    const baseTextStyle = [inheritedStyles, style.text];
     const text: string = node.content
       .replace(imageHeight, '')
       .replace(imageWidth, '')
@@ -200,7 +196,6 @@ function getMarkdownRules(
         uiTheme,
         style,
         inheritedStyles,
-        textStyle,
       );
     }
 
@@ -224,31 +219,28 @@ function getMarkdownRules(
 
       if (matched && matched[0]) {
         const matchedIndex: number = text.search(matched[0]);
-        const linkStyle = [inheritedStyles, style.text, textStyle];
         return (
           <Text
             selectable={true}
             key={node.key}
-            style={[inheritedStyles, style.text, textStyle]}
+            style={baseTextStyle}
           >
-            {renderHyperLink(text.slice(0, matchedIndex), linkStyle)}
+            {renderHyperLink(text.slice(0, matchedIndex), baseTextStyle)}
             {renderIssueIdLink(
               matched[0],
-              [inheritedStyles, style.text, textStyle, styles.link],
+              [...baseTextStyle, styles.link],
               `${node.key}1`,
             )}
             {renderHyperLink(
               text.slice(matchedIndex + matched[0].length, text.length),
-              linkStyle,
+              baseTextStyle,
             )}
           </Text>
         );
       }
 
       return renderHyperLink(text, [
-        inheritedStyles,
-        style.text,
-        textStyle,
+        baseTextStyle,
         styles.link,
       ]);
     }
@@ -256,7 +248,7 @@ function getMarkdownRules(
     return (
       <Text
         key={node.key}
-        style={{...inheritedStyles, ...style.text, ...textStyle}}
+        style={baseTextStyle}
       >
         {text}
       </Text>
@@ -265,18 +257,18 @@ function getMarkdownRules(
 
   return {
     blockquote: (
-      node: MarkdownASTNode,
+      node: MarkdownNode,
       children: Record<string, any>,
       parent: Record<string, any>,
       style: Record<string, any>,
       inheritedStyles: Record<string, any> = {},
     ) => (
-      <View key={node.key} style={[style.blockquote, textStyle]}>
+      <View key={node.key} style={[inheritedStyles, style.blockquote]}>
         {children}
       </View>
     ),
     image: (
-      node: MarkdownASTNode,
+      node: MarkdownNode,
       children: Record<string, any>,
       parent: Record<string, any>,
       style: Record<string, any>,
@@ -295,7 +287,7 @@ function getMarkdownRules(
       }
 
       if (isGoogleShared(url) || isFigmaImage(url)) {
-        return renderHyperLink(url, [inheritedStyles, style.link, textStyle]);
+        return renderHyperLink(url, [inheritedStyles, style.link]);
       }
 
       return markdownImage({
@@ -306,7 +298,7 @@ function getMarkdownRules(
       });
     },
     code_inline: (
-      node: MarkdownASTNode,
+      node: MarkdownNode,
       children: Record<string, any>,
       parent: Record<string, any>,
       style: Record<string, any>,
@@ -322,11 +314,11 @@ function getMarkdownRules(
         </Text>
       );
     },
-    fence: (node: MarkdownASTNode) => (
+    fence: (node: MarkdownNode) => (
       <CodeHighlighter key={node.key} node={node} uiTheme={uiTheme} />
     ),
     link: (
-      node: MarkdownASTNode,
+      node: MarkdownNode,
       children: Record<string, any>,
       parent: Record<string, any>,
       style: Record<string, any>,
@@ -350,7 +342,7 @@ function getMarkdownRules(
         <Text
           selectable={true}
           key={node.key}
-          style={[inheritedStyles, style.text, styles.link, textStyle]}
+          style={[inheritedStyles, textStyle, style.text, styles.link]}
           onPress={() => Linking.openURL(node.attributes.href)}
         >
           {content}
@@ -358,7 +350,7 @@ function getMarkdownRules(
       );
     },
     list_item: (
-      node: MarkdownASTNode,
+      node: MarkdownNode,
       children: Record<string, any>,
       parent: Record<string, any>,
       style: Record<string, any>,
@@ -375,15 +367,14 @@ function getMarkdownRules(
               bullet_list_icon: {
                 ...style.bullet_list_icon,
                 ...style.bullet_list_icon_checkbox,
-                ...textStyle,
               },
             }
           : style,
-        inheritedStyles,
+        inheritedStyles
       );
     },
     inline: (
-      node: MarkdownASTNode,
+      node: MarkdownNode,
       children: Record<string, any>,
       parent: Record<string, any>,
       style: Record<string, any>,
@@ -401,7 +392,7 @@ function getMarkdownRules(
       );
     },
     textgroup: (
-      node: MarkdownASTNode,
+      node: MarkdownNode,
       children: Record<string, any>,
       parent: Record<string, any>,
       style: Record<string, any>,
@@ -426,7 +417,7 @@ function getMarkdownRules(
       );
     },
     checkbox: (
-      node: MarkdownASTNode,
+      node: MarkdownNode,
       children: Record<string, any>,
       parent: Record<string, any>,
       style: Record<string, any>,
@@ -476,7 +467,7 @@ function getMarkdownRules(
     },
     text: textRenderer,
     s: (
-      node: MarkdownASTNode,
+      node: MarkdownNode,
       children: Record<string, any>,
       parent: Record<string, any>,
       style: Record<string, any>,

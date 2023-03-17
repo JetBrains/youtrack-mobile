@@ -7,8 +7,8 @@ import {
   monospace,
   SECONDARY_FONT_SIZE,
 } from 'components/common-styles/typography';
+
 const showMoreLink = {
-  fontSize: SECONDARY_FONT_SIZE,
   color: '$link',
 };
 export default EStyleSheet.create({
@@ -64,17 +64,15 @@ export default EStyleSheet.create({
   },
   link: {
     color: '$link',
-    fontSize: SECONDARY_FONT_SIZE,
     marginTop: UNIT / 4,
   },
   text: {
     color: '$link',
-    fontSize: SECONDARY_FONT_SIZE,
   },
   showMoreLink: {
     ...showMoreLink,
     lineHeight: SECONDARY_FONT_SIZE * 2,
-    fontSize: SECONDARY_FONT_SIZE,
+
   },
   exceptionLink: showMoreLink,
   codeContainer: {
@@ -93,22 +91,19 @@ export default EStyleSheet.create({
     paddingRight: UNIT * 1.5,
     alignItems: 'center',
   },
-  code: {...monospace, fontSize: SECONDARY_FONT_SIZE, fontWeight: '500'},
+  code: {...monospace, fontWeight: '500'},
   codeLanguage: {
-    fontSize: SECONDARY_FONT_SIZE,
     color: '$textSecondary',
   },
   inlineCode: {
     ...monospace,
     backgroundColor: '$boxBackground',
     color: '$text',
-    fontSize: SECONDARY_FONT_SIZE,
   },
   exception: {
     ...monospace,
     padding: 0,
     color: '$text',
-    fontSize: SECONDARY_FONT_SIZE,
     lineHeight: mainText.lineHeight,
   },
   checkboxRow: {

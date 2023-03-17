@@ -22,31 +22,39 @@ export const baseMarkdownStyles = {
   heading1: {
     flexDirection: 'row',
     fontSize: 32,
+    lineHeight: null,
     ...vSpace,
   },
   heading2: {
     flexDirection: 'row',
     fontSize: 24,
+    lineHeight: null,
     ...vSpace,
   },
   heading3: {
     flexDirection: 'row',
-    fontSize: 18,
+    fontSize: 20,
+    lineHeight: null,
     ...vSpace,
   },
   heading4: {
     flexDirection: 'row',
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+    lineHeight: null,
     ...vSpace,
   },
   heading5: {
     flexDirection: 'row',
     fontSize: 13,
+    lineHeight: null,
     ...vSpace,
   },
   heading6: {
     flexDirection: 'row',
     fontSize: 11,
+    lineHeight: null,
     ...vSpace,
   },
   hr: {
@@ -68,7 +76,7 @@ export const baseMarkdownStyles = {
     padding: 0,
     paddingLeft: UNIT * 1.5,
     backgroundColor: 'transparent',
-    borderLeftColor: DEFAULT_THEME.colors.$textSecondary,
+    borderLeftColor: DEFAULT_THEME.colors.$iconAccent,
     borderLeftWidth: 2,
   },
   bullet_list: {},
@@ -192,6 +200,7 @@ const markdownStyles = (
 ) => {
   const uiThemeColors: UIThemeColors = uiTheme.colors;
   return {
+    ...baseMarkdownStyles,
     body: {
       ...baseMarkdownStyles.body,
       color: uiThemeColors.$text,
@@ -203,7 +212,7 @@ const markdownStyles = (
     },
     blockquote: {
       ...baseMarkdownStyles.blockquote,
-      borderLeftColor: uiThemeColors.$textSecondary,
+      borderLeftColor: uiThemeColors.$iconAccent,
     },
     code_inline: {...code, backgroundColor: uiThemeColors.$boxBackground},
     code_block: {...code, backgroundColor: uiThemeColors.$boxBackground},
@@ -218,7 +227,6 @@ const markdownStyles = (
     text: {
       ...baseMarkdownStyles.text,
       color: uiThemeColors.$text,
-      ...textStyle,
     },
     textgroup: {...baseMarkdownStyles.textgroup},
     paragraph: {...baseMarkdownStyles.paragraph},

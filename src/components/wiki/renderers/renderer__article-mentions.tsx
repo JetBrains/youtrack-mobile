@@ -6,8 +6,7 @@ import {guid} from 'util/util';
 import {ResourceTypes} from 'components/api/api__resource-types';
 import type {Article} from 'types/Article';
 import type {IssueFull} from 'types/Issue';
-import type {MarkdownASTNode} from 'types/Markdown';
-import type {TextStyleProp} from 'types/Internal';
+import type {MarkdownNode} from 'types/Markdown';
 import type {UITheme} from 'types/Theme';
 export type Mentions = {
   articles: Article[];
@@ -22,19 +21,17 @@ type TextData = {
     | typeof ResourceTypes.ISSUE;
 };
 export default function renderArticleMentions(
-  node: MarkdownASTNode,
+  node: MarkdownNode,
   mentions: Mentions,
   uiTheme: UITheme,
   style: Record<string, any>,
   inheritedStyles: Record<string, any>,
-  textStyle: TextStyleProp,
 ) {
   const PLAIN_TEXT_TYPE: string = '-=TEXT=-';
   const textData: TextData[] = [];
   const tokens: string[] = node.content.split(' ');
-  const combinedMentions: Array<Article | IssueFull> = mentions.articles.concat(
-    mentions.issues,
-  );
+  const combinedMentions: Array<Article | IssueFull> = mentions.articles.concat(mentions.issues);
+  const baseTextStyle = [inheritedStyles, style.text];
 
   parseNodeContent: for (let i = 0; i < tokens.length; i++) {
     const token: string = tokens[i];
@@ -95,16 +92,16 @@ export default function renderArticleMentions(
             {textTokensToJoin.length > 0 && (
               <Text
                 selectable={true}
-                style={[style.text, textStyle]}
+                style={baseTextStyle}
               >{`${textTokensToJoin.join(' ')} `}</Text>
             )}
             <Text
               selectable={true}
               style={[
+                baseTextStyle,
                 {
                   color: uiTheme.colors.$link,
                 },
-                textStyle,
               ]}
               onPress={() =>
                 td.type === ResourceTypes.ARTICLE
@@ -131,7 +128,7 @@ export default function renderArticleMentions(
       composed.push(
         <Text
           selectable={true}
-          style={[inheritedStyles, style.text, textStyle]}
+          style={baseTextStyle}
           key={guid()}
         >
           {textTokensToJoin.join(' ')}
@@ -140,7 +137,7 @@ export default function renderArticleMentions(
     }
 
     return (
-      <Text selectable={true} key={node.key} style={textStyle}>
+      <Text selectable={true} key={node.key} style={baseTextStyle}>
         {composed}
       </Text>
     );
