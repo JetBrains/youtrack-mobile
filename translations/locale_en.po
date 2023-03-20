@@ -256,7 +256,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:944
+#: src/actions/app-actions.ts:941
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -284,7 +284,7 @@ msgstr "Content revised"
 msgid "Copied"
 msgstr "Copied"
 
-#: src/views/issue/issue__details.tsx:374
+#: src/views/issue/issue__details.tsx:376
 msgid "Copy description"
 msgstr "Copy description"
 
@@ -1120,7 +1120,7 @@ msgstr "VCS changes"
 msgid "View comment"
 msgstr "View comment"
 
-#: src/views/issue/issue__details.tsx:507
+#: src/views/issue/issue__details.tsx:509
 msgid "View comments and other activity"
 msgstr "View comments and other activity"
 
