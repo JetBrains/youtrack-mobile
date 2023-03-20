@@ -831,37 +831,34 @@ export function subscribeToURL(): Action {
     getState: () => AppState,
     getApi: () => Api,
   ) => {
-    openByUrlDetector(
-      (
-        url,
-        issueId: string | null | undefined,
-        articleId: string | null | undefined,
-      ) => {
-        if (!getIsAuthorized()) {
-          log.debug('User is not authorized, URL won\'t be opened');
-          return;
-        }
+    const onIdDetected = (url: string, issueId?: string, articleId?: string) => {
+      if (!getIsAuthorized()) {
+        log.debug('User is not authorized, URL won\'t be opened');
+        return;
+      }
 
-        usage.trackEvent('app', 'Open issue in app by URL');
-        const navigateToActivity: string | undefined = url.split('#focus=Comments-')?.[1];
-        if (issueId) {
-          Router.Issue({issueId, navigateToActivity}, {forceReset: true});
-        } else if (articleId) {
-          Router.Article({articlePlaceholder: {id: articleId}, navigateToActivity}, {forceReset: true});
-        } else {
-          Router.navigateToDefaultRoute();
-        }
-      },
-      (url, searchQuery) => {
-        if (!getIsAuthorized()) {
-          log.debug('User is not authorized, URL won\'t be opened');
-          return;
-        }
+      usage.trackEvent('app', 'Open issue in app by URL');
+      const navigateToActivity: string | undefined = url.split('#focus=Comments-')?.[1];
+      if (issueId) {
+        Router.Issue({issueId, navigateToActivity}, {forceReset: true});
+      } else if (articleId) {
+        Router.Article({articlePlaceholder: {id: articleId}, navigateToActivity}, {forceReset: true});
+      } else {
+        Router.navigateToDefaultRoute();
+      }
+    };
 
-        usage.trackEvent('app', 'Open issues query in app by URL');
-        Router.Issues({searchQuery});
-      },
-    );
+    const onQueryDetected = (url: string, searchQuery: string) => {
+      if (!getIsAuthorized()) {
+        log.debug('User is not authorized, URL won\'t be opened');
+        return;
+      }
+
+      usage.trackEvent('app', 'Open issues query in app by URL');
+      Router.Issues({searchQuery});
+    };
+
+    openByUrlDetector(onIdDetected, onQueryDetected);
 
     function getIsAuthorized(): boolean {
       return !!getState().app?.auth?.currentUser;

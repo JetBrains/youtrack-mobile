@@ -1,6 +1,10 @@
-import {DeviceEventEmitter, Linking} from 'react-native';
+import {DeviceEventEmitter, EmitterSubscription, Linking} from 'react-native';
+
 import qs from 'qs';
-import log from '../log/log';
+
+import log from 'components/log/log';
+
+
 const issueIdReg = /issue\/([\w-\d]+)/;
 
 const articleIdReg = /articles\/([\w-\d]+)/;
@@ -14,7 +18,7 @@ const extractArticleId = (issueUrl: string = ''): string | null => {
   return match && match[1];
 };
 
-function extractIssuesQuery(issuesUrl: string | null | undefined) {
+function extractIssuesQuery(issuesUrl: string | null | undefined): string | null {
   if (!issuesUrl) {
     return null;
   }
@@ -29,65 +33,70 @@ function extractIssuesQuery(issuesUrl: string | null | undefined) {
   const queryString: string = match[1];
   const query = qs.parse(queryString).q;
   log.info(`extractIssuesQuery: ${query} :: from URL: "${issuesUrl}"`);
-  return query;
+  return query as string;
 }
 
-function parseUrl(url: string, onIssueIdDetected, onQueryDetected) {
-  const issueId: string | null | undefined = extractIssueId(url);
-  const articleId: string | null | undefined = extractArticleId(url);
+function parseUrl(
+  url: string,
+  onIdDetected: (
+    url: string,
+    issueId?: string | null,
+    articleId?: string | null,
+  ) => void,
+  onQueryDetected: (
+    url: string,
+    searchQuery: string
+  ) => void,
+) {
+  const issueId: string | null = extractIssueId(url);
+  const articleId: string | null = extractArticleId(url);
 
   if (issueId || articleId) {
     log.info(
       issueId
-        ? `Issue ID detected in URL: ${issueId}`
-        : articleId
-        ? `Article ID detected in URL: ${articleId}`
-        : '',
+        ? `Issue ID detected in URL: ${issueId}` : (articleId
+          ? `Article ID detected in URL: ${articleId}`
+          : ''),
     );
-    return onIssueIdDetected(url, issueId, articleId);
-  } else {
-    log.info(`(parseUrl): cannot extract entity id from ${url}`);
+    return onIdDetected(url, issueId, articleId);
   }
 
-  const query = extractIssuesQuery(url);
-
+  const query: string | null = extractIssuesQuery(url);
   if (query) {
-    log.info(`Issues query detected in open URL: ${query}`);
+    log.info(`Query detected in URL: ${query}`);
     return onQueryDetected(url, query);
+  } else {
+    log.info(`No entity ID or query detected in URL ${url}`);
   }
 
   DeviceEventEmitter.emit('openWithUrl', decodeURIComponent(url));
 }
 
-const openByUrlDetector = (
-  onIssueIdDetected: (
-    url: string,
-    issueId: string | null | undefined,
-    articleId: string | null | undefined,
-  ) => any,
+const openByUrlDetector = async (
+  onIdDetected: (url: string, issueId?: string | null, articleId?: string | null) => any,
   onQueryDetected: (url: string, query: string) => any,
-): () => void => {
-  Linking.getInitialURL().then((url: string | null | undefined) => {
-    log.debug(`App has been initially started with URL "${url || 'NOPE'}"`);
+) => {
+  setTimeout(() => {
+    Linking.getInitialURL().then((url: string | null) => {
+      log.debug(`App has been initially started with URL "${url || 'NOPE'}"`);
+      if (url) {
+        return parseUrl(url, onIdDetected, onQueryDetected);
+      }
+    });
+  }, 100);
 
-    if (!url) {
-      return;
+  const onURLOpen = (event: { url: string } | string) => {
+    const url: string = event?.url || event;
+    if (url) {
+      log.debug(`Linking URL event fired with URL "${url}"`);
+      parseUrl(url, onIdDetected, onQueryDetected);
     }
-
-    return parseUrl(url, onIssueIdDetected, onQueryDetected);
-  });
-
-  function onOpenWithUrl(event: any) {
-    const url: string = event.url || event;
-    log.debug(`Linking URL event fired with URL "${url}"`);
-    return parseUrl(url, onIssueIdDetected, onQueryDetected);
-  }
-
-  Linking.addEventListener('url', onOpenWithUrl);
-  return function unsubscribe() {
-    Linking.removeEventListener('url', onOpenWithUrl);
   };
+
+  const unsubscribe: EmitterSubscription = Linking.addEventListener('url', onURLOpen);
+  return () => unsubscribe?.remove?.();
 };
+
 
 export {
   extractArticleId,

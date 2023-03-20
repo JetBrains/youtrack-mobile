@@ -439,7 +439,9 @@ describe('app-actions', () => {
   describe('subscribeToURL', () => {
     const activityIdMock = `1`;
     let subscribeToURLHandler;
+    beforeAll(async () => jest.useFakeTimers({advanceTimers: true}));
     beforeEach(async () => {
+      jest.clearAllTimers();
       setStoreAndCurrentUser({});
       subscribeToURLHandler = actions.subscribeToURL();
     });
@@ -463,6 +465,7 @@ describe('app-actions', () => {
 
       it('should navigate to an issue', async () => {
         await assert(`${backendURLMock}/issue/${issueIdMock}`);
+        jest.advanceTimersByTime(100);
 
         expect(Router.Issue).toHaveBeenCalledWith(
           {issueId: issueIdMock}, {forceReset: true}
@@ -471,6 +474,7 @@ describe('app-actions', () => {
 
       it('should navigate to an issue and switch to `Activity` tab', async () => {
         await assert(`${backendURLMock}/issue/${issueIdMock}#focus=Comments-${activityIdMock}`);
+        jest.advanceTimersByTime(100);
 
         expect(Router.Issue).toHaveBeenCalledWith(
           {issueId: issueIdMock, navigateToActivity: activityIdMock}, {forceReset: true}
@@ -487,6 +491,7 @@ describe('app-actions', () => {
 
       it('should navigate to an article', async () => {
         await assert(`${backendURLMock}/articles/${articleIdMock}`);
+        jest.advanceTimersByTime(100);
 
         expect(Router.Article).toHaveBeenCalledWith(
           {articlePlaceholder: {id: articleIdMock}}, {forceReset: true}
@@ -495,6 +500,7 @@ describe('app-actions', () => {
 
       it('should navigate to an article and switch to `Activity` tab', async () => {
         await assert(`${backendURLMock}/articles/${articleIdMock}#focus=Comments-${activityIdMock}`);
+        jest.advanceTimersByTime(100);
 
         expect(Router.Article).toHaveBeenCalledWith(
           {articlePlaceholder: {id: articleIdMock}, navigateToActivity: activityIdMock}, {forceReset: true}
@@ -503,7 +509,7 @@ describe('app-actions', () => {
     });
 
     async function assert(url = '') {
-      Linking.getInitialURL.mockResolvedValueOnce(url);
+      Linking.getInitialURL.mockResolvedValue(url);
       await subscribeToURLHandler(jest.fn(), store.getState, () => {});
     }
   });
