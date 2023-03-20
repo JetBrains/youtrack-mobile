@@ -1,6 +1,10 @@
 import {Dimensions} from 'react-native';
+
 import DeviceInfo from 'react-native-device-info';
+
 import {getStorageState} from '../storage/storage';
+
+
 const tabletSplitViewFactor: number = 0.66;
 
 const isSplitView = (): boolean => {
@@ -17,6 +21,7 @@ const isSplitView = (): boolean => {
   const windowWidth: number = Dimensions.get('window').width;
   const screenWidth: number = Dimensions.get('screen').width;
   return (
+    DeviceInfo.getDeviceType() === 'Desktop' ||
     DeviceInfo.isTablet() && windowWidth >= screenWidth * tabletSplitViewFactor
   );
 };
