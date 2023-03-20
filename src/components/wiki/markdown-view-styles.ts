@@ -1,19 +1,25 @@
 import {Platform} from 'react-native';
-import {DEFAULT_THEME} from '../theme/theme';
-import {UNIT} from 'components/variables';
+
+import {DEFAULT_THEME} from 'components/theme/theme';
 import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from 'components/common-styles/typography';
+import {UNIT} from 'components/variables';
+
 import type {UITheme, UIThemeColors} from 'types/Theme';
 import type {TextStyleProp} from 'types/Internal';
+
 const vSpace = {
   marginTop: UNIT * 2,
   marginBottom: UNIT,
 };
+
 const code = {
   borderWidth: 0,
   backgroundColor: DEFAULT_THEME.colors.$boxBackground,
   padding: UNIT,
   borderRadius: 4,
 };
+
+
 export const baseMarkdownStyles = {
   body: {
     color: DEFAULT_THEME.colors.$text,
@@ -92,21 +98,17 @@ export const baseMarkdownStyles = {
     ...Platform.select({
       ios: {
         fontSize: 30,
-        lineHeight: 32,
       },
       android: {
         fontSize: MAIN_FONT_SIZE,
-        lineHeight: 28,
       },
       default: {
         marginTop: 0,
-        lineHeight: 30,
       },
     }),
   },
   bullet_list_icon_checkbox: {
     color: 'transparent',
-    marginLeft: -14,
   },
   // @pseudo class, does not have a unique render rule
   bullet_list_content: {
@@ -115,19 +117,9 @@ export const baseMarkdownStyles = {
   },
   // @pseudo class, does not have a unique render rule
   ordered_list_icon: {
+    marginTop: 1,
     marginLeft: UNIT,
     marginRight: UNIT,
-    ...Platform.select({
-      android: {
-        lineHeight: 27,
-      },
-      ios: {
-        lineHeight: 33,
-      },
-      default: {
-        lineHeight: 33,
-      },
-    }),
   },
   // @pseudo class, does not have a unique render rule
   ordered_list_content: {
@@ -149,7 +141,6 @@ export const baseMarkdownStyles = {
     padding: 5,
   },
   tr: {
-    // borderBottomWidth: 1,
     borderColor: DEFAULT_THEME.colors.$text,
     flexDirection: 'row',
   },
@@ -165,7 +156,6 @@ export const baseMarkdownStyles = {
     flex: 1,
     borderColor: DEFAULT_THEME.colors.$text,
     borderBottomWidth: 1,
-    backgroundColor: 'yellow',
   },
   image: {
     flex: 1,

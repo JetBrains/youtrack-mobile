@@ -8,8 +8,6 @@ import getMarkdownRules from './markdown-view-rules';
 import MarkdownAST from 'components/wiki/markdown-ast';
 import MarkdownItInstance from './markdown-instance';
 import {getApi} from 'components/api/api__instance';
-import {getStorageState} from 'components/storage/storage';
-import {hasType} from 'components/api/api__resource-types';
 import {SkeletonIssueContent} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 import {Theme} from 'types/Theme';
@@ -18,9 +16,8 @@ import {updateMarkdownCheckbox} from './markdown-helper';
 import type {Article} from 'types/Article';
 import type {ASTNode} from 'react-native-markdown-display';
 import type {Attachment} from 'types/CustomFields';
-import type {Folder} from 'types/User';
 import type {IssueOnList} from 'types/Issue';
-import type {MarkdownNode} from 'types/Markdown';
+import type {MarkdownToken} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
 
@@ -33,14 +30,14 @@ type Props = {
   mentionedIssues?: IssueOnList[];
   uiTheme?: UITheme;
   scrollData?: Record<string, any>;
-  onCheckboxUpdate?: (markdown: string) => (...args: any[]) => any;
+  onCheckboxUpdate?: (checked: boolean, position: number, markdown: string) => (...args: any[]) => any;
   textStyle?: TextStyleProp;
   isHTML?: boolean;
 };
 const DEFAULT_CHUNK_SIZE: number = 10;
-let chunks: Array<Array<MarkdownNode>> = [];
+let chunks: ASTNode[] = [];
 let rules: Record<string, any> = {};
-let tokens: MarkdownNode[] = [];
+let tokens: MarkdownToken[] = [];
 let md: string | null = null;
 
 const MarkdownViewChunks = (props: Props) => {
@@ -59,7 +56,7 @@ const MarkdownViewChunks = (props: Props) => {
     maxChunks,
   } = props;
   const [chunksToRender, updateChunksToRender] = useState(1);
-  const [astToRender, updateAstToRender] = useState([]);
+  const [astToRender, updateAstToRender] = useState<ASTNode[]>([]);
   const createMarkdown = useCallback(
     (markdown: string): void => {
       tokens = stringToTokens(markdown, MarkdownItInstance);
@@ -80,16 +77,12 @@ const MarkdownViewChunks = (props: Props) => {
   };
 
   const createRules = (): Record<string, any> => {
-    const projects: Folder[] = (getStorageState().projects || []).map(
-      (it: Folder) => hasType.project(it) && it,
-    );
     const attaches: Attachment[] = apiHelper.convertAttachmentRelativeToAbsURLs(
       props.attachments || [],
       getApi().config.backendUrl,
     );
     return getMarkdownRules(
       attaches,
-      projects,
       props?.uiTheme || theme.uiTheme,
       {
         articles: mentionedArticles,

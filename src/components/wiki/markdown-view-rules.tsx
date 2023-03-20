@@ -3,17 +3,18 @@ import {
   ActivityIndicator,
   Linking,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
+
 import {WebView} from 'react-native-webview';
-import HTML from './renderers/renderer__html';
 import Hyperlink from 'react-native-hyperlink';
 // @ts-ignore
 import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
+
 import calculateAspectRatio from 'components/aspect-ratio/aspect-ratio';
 import CodeHighlighter from './code-renderer';
+import HTML from './renderers/renderer__html';
 import ImageWithProgress from 'components/image/image-with-progress';
 import renderArticleMentions from './renderers/renderer__article-mentions';
 import Router from 'components/router/router';
@@ -22,13 +23,11 @@ import {guid, isURLPattern} from 'util/util';
 import {hasMimeType} from 'components/mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from 'components/icon/icon';
 import {whiteSpacesRegex} from './util/patterns';
+
 import styles from './youtrack-wiki.styles';
+
 import type {Article} from 'types/Article';
-import type {
-  Attachment,
-  ImageDimensions,
-  IssueProject,
-} from 'types/CustomFields';
+import type {Attachment, ImageDimensions} from 'types/CustomFields';
 import type {IssueFull} from 'types/Issue';
 import type {MarkdownNode} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
@@ -55,7 +54,6 @@ function getYouTubeId(url: string): string | null | undefined {
 
 function getMarkdownRules(
   attachments: Attachment[] = [],
-  projects: IssueProject[] = [],
   uiTheme: UITheme,
   mentions?: Mentions,
   onCheckboxUpdate?: (checked: boolean, position: number) => void,
@@ -164,11 +162,7 @@ function getMarkdownRules(
   };
 
   const renderHyperLink = (linkText: string, style: any): React.ReactNode => (
-    <Hyperlink key={guid()} linkStyle={style.link} linkDefault={true}>
-      <Text selectable={true} style={style}>
-        {linkText}
-      </Text>
-    </Hyperlink>
+    <Hyperlink key={guid()} linkStyle={style.link} linkDefault={true} linkText={linkText}/>
   );
 
   const textRenderer = (
@@ -189,10 +183,10 @@ function getMarkdownRules(
       return null;
     }
 
-    if (mentions && mentions.articles.concat(mentions.issues).length > 0) {
+    if ((mentions?.articles || []).length > 0 || (mentions?.issues || []).length > 0) {
       return renderArticleMentions(
         node,
-        mentions,
+        (mentions as Mentions),
         uiTheme,
         style,
         inheritedStyles,
@@ -429,40 +423,45 @@ function getMarkdownRules(
         ? IconCheckboxChecked
         : IconCheckboxBlank;
       const text: string = node.content.trim();
+      const onPress = () => onCheckboxUpdate?.(!isChecked, position);
       return (
-        <TouchableOpacity
-          key={node.key}
-          style={[inheritedStyles, styles.checkboxRow]}
-          onPress={() =>
-            onCheckboxUpdate && onCheckboxUpdate(!isChecked, position)
-          }
-        >
-          <CheckboxIcon
-            size={24}
-            color={uiTheme.colors.$icon}
-            style={[
-              styles.checkboxIcon,
-              !isChecked && styles.checkboxIconBlank,
-            ]}
-          />
+        <>
           <Text
-            selectable={true}
-            style={[
-              inheritedStyles,
-              style.text,
-              styles.checkboxLabel,
-              textStyle,
-            ]}
+            onPress={onPress}
+            style={styles.checkboxIconContainer}
           >
-            {issueIdRegExp.test(text)
-              ? renderIssueIdLink(
+            <CheckboxIcon
+              size={24}
+              style={[
+                styles.checkboxIcon,
+                !isChecked && styles.checkboxIconBlank,
+              ]}
+            />
+          </Text>
+          <Text
+            key={node.key}
+            style={[inheritedStyles, styles.checkboxRow]}
+            onPress={onPress}
+          >
+            <Text
+              selectable={true}
+              style={[
+                inheritedStyles,
+                style.text,
+                textStyle,
+              ]}
+            >
+              {issueIdRegExp.test(text)
+                ? renderIssueIdLink(
                   text,
                   [inheritedStyles, style.text, styles.link],
                   node.key,
                 )
-              : text}
+                : text}
+              {' '}
+            </Text>
           </Text>
-        </TouchableOpacity>
+        </>
       );
     },
     text: textRenderer,

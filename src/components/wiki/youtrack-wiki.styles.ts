@@ -64,7 +64,6 @@ export default EStyleSheet.create({
   },
   link: {
     color: '$link',
-    marginTop: UNIT / 4,
   },
   text: {
     color: '$link',
@@ -107,35 +106,24 @@ export default EStyleSheet.create({
     lineHeight: mainText.lineHeight,
   },
   checkboxRow: {
-    flex: 0.96,
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginVertical: -UNIT / 2,
-    marginRight: UNIT / 2,
+    flexWrap: 'wrap',
+    flexShrink: 1,
+  },
+  checkboxIconContainer: {
+    position: 'absolute',
+    left: -28,
+    backgroundColor: '$background',
   },
   checkboxIcon: {
-    flexGrow: 0,
     color: '$link',
-    padding: UNIT / 2,
-    paddingRight: UNIT / 4,
-    marginRight: UNIT,
-    ...Platform.select({
-      ios: {
-        marginTop: -UNIT / 4,
-      },
-      android: {
-        marginTop: 0,
-      },
-    }),
   },
   checkboxIconBlank: {
     color: '$icon',
   },
-  checkboxLabel: {
-    marginTop: 6,
-  },
   checkboxTextGroup: {
     flexDirection: 'row',
+    flexShrink: 1,
     flexWrap: 'wrap',
     maxWidth: '80%',
   },
