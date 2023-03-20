@@ -403,6 +403,12 @@ export default {
     {
       attachments: ISSUE_ATTACHMENTS_FIELDS,
     },
+    {
+      mentionedArticles: ['$type', 'idReadable'],
+    },
+    {
+      mentionedIssues: ['$type', 'id', 'idReadable', 'resolved'],
+    },
     VISIBILITY_FIELDS,
   ]) as any,
   projectOnList: ISSUE_PROJECT_FIELDS,

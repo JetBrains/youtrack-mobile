@@ -8,6 +8,8 @@ import type {Attachment} from 'types/CustomFields';
 import type {Theme} from 'types/Theme';
 import type {YouTrackWiki} from 'types/Wiki';
 import type {ScrollData} from 'types/Markdown';
+import {Article} from 'types/Article';
+import {IssueOnList} from 'types/Issue';
 type Props = {
   youtrackWiki?: YouTrackWiki;
   markdown?: string | null;
@@ -18,6 +20,8 @@ type Props = {
     description: string,
   ) => void;
   scrollData?: ScrollData;
+  mentionedArticles?: Article[];
+  mentionedIssues?: IssueOnList[];
 };
 
 function IssueMarkdown(props: Props) {
@@ -32,6 +36,8 @@ function IssueMarkdown(props: Props) {
       description: string,
     ): void => {},
     scrollData,
+    mentionedArticles,
+    mentionedIssues,
   } = props;
   const Component: any = scrollData ? MarkdownViewChunks : MarkdownView;
 
@@ -47,6 +53,8 @@ function IssueMarkdown(props: Props) {
         scrollData={scrollData}
         uiTheme={theme.uiTheme}
         textStyle={markdownText}
+        mentionedIssues={mentionedIssues}
+        mentionedArticles={mentionedArticles}
       >
         {markdown}
       </Component>
@@ -70,7 +78,4 @@ function IssueMarkdown(props: Props) {
   return null;
 }
 
-export default React.memo<Props>(IssueMarkdown) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(IssueMarkdown);

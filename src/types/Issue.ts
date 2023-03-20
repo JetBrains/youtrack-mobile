@@ -11,6 +11,7 @@ import type {UserGroup} from './UserGroup';
 import type {User} from './User';
 import type {Visibility} from './Visibility';
 import {AnyCustomField} from 'components/custom-field/custom-field-helper';
+import {Article} from 'types/Article';
 
 export type IssueContextData = {
   dispatcher: () => any;
@@ -55,6 +56,8 @@ export type IssueFull = {
   usesMarkdown: boolean;
   visibility: Visibility;
   hasEmail?: boolean;
+  mentionedArticles?: Article[];
+  mentionedIssues?: IssueOnList[];
 };
 export type IssueCreate = Omit<
   IssueFull,
