@@ -6,7 +6,7 @@ import {Alert, Clipboard, Share} from 'react-native';
 import ArticlesAPI from 'components/api/api__articles';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
-import {cacheUserLastVisitedArticle} from 'actions/app-actions';
+import {cacheUserLastVisitedArticle, setGlobalInProgress} from 'actions/app-actions';
 import {confirmDeleteArticle} from './arcticle-helper';
 import {findActivityInGroupedActivities} from 'components/activity/activity-helper';
 import {getApi} from 'components/api/api__instance';
@@ -25,7 +25,6 @@ import {
   setPrevArticle,
   setProcessing,
 } from './article-reducers';
-import {SET_PROGRESS} from '../../actions/action-types';
 import {
   showActions,
   showActionSheet,
@@ -44,11 +43,6 @@ import type {Reaction} from 'types/Reaction';
 import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
 import type {User} from 'types/User';
 type ApiGetter = () => Api;
-
-const setLoading = isInProgress => ({
-  type: SET_PROGRESS,
-  isInProgress,
-});
 
 const clearArticle = (): ((
   dispatch: (arg0: any) => any,
@@ -105,14 +99,14 @@ const loadArticle = (
     logEvent({
       message: 'Loading article',
     });
-    dispatch(setLoading(true));
+    dispatch(setGlobalInProgress(true));
 
     if (reset) {
       dispatch(setArticle(null));
     }
 
     const [error, article] = await until(api.articles.getArticle(articleId));
-    dispatch(setLoading(false));
+    dispatch(setGlobalInProgress(false));
 
     if (error) {
       dispatch(setError(error));
@@ -166,7 +160,7 @@ const loadActivitiesPage = (
 
     const api: Api = getApi();
     const article: Article = getState().article.article;
-    dispatch(setLoading(true));
+    dispatch(setGlobalInProgress(true));
 
     if (reset) {
       dispatch(setActivityPage(null));
@@ -175,7 +169,7 @@ const loadActivitiesPage = (
     const [error, activityPage] = await until(
       api.articles.getActivitiesPage(article.id),
     );
-    dispatch(setLoading(false));
+    dispatch(setGlobalInProgress(false));
 
     if (error) {
       dispatch(setError(error));

@@ -20,14 +20,15 @@ import {
   cacheProjects,
   cacheUserLastVisitedArticle,
   resetUserArticlesProfile,
+  setGlobalInProgress,
 } from 'actions/app-actions';
-import {SET_PROGRESS} from '../../actions/action-types';
 import {showActions} from 'components/action-sheet/action-sheet';
 import {sortByUpdatedReverse} from 'components/search/sorting';
 import {until} from 'util/util';
+
 import type Api from 'components/api/api';
 import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
-import type {AppState} from '../../reducers';
+import type {AppState} from 'reducers';
 import type {
   Article,
   ArticleNodeList,
@@ -38,7 +39,10 @@ import type {
 } from 'types/Article';
 import type {CustomError} from 'types/Error';
 import type {Folder} from 'types/User';
+
 type ApiGetter = () => Api;
+
+
 export const getCachedArticleList = (): ArticlesList =>
   getStorageState().articlesList || [];
 
@@ -62,10 +66,6 @@ const createArticleList = (
   isExpanded?: boolean,
 ): ArticlesList => treeHelper.createArticleList(articles, isExpanded);
 
-const setLoading = isInProgress => ({
-  type: SET_PROGRESS,
-  isInProgress,
-});
 
 export const getPinnedNonTemplateProjects = async (
   api: Api,
@@ -140,13 +140,13 @@ const getArticleList = (reset: boolean = true) => async (
   setError(null);
 
   if (reset) {
-    dispatch(setLoading(true));
+    dispatch(setGlobalInProgress(true));
   }
 
   const pinnedProjects: Folder[] = await getPinnedNonTemplateProjects(api);
 
   if (pinnedProjects.length === 0) {
-    dispatch(setLoading(false));
+    dispatch(setGlobalInProgress(false));
     dispatch(storeArticlesList(null));
     dispatch(
       setError({
@@ -162,7 +162,7 @@ const getArticleList = (reset: boolean = true) => async (
       CustomError | null | undefined,
       ProjectArticlesData,
     ] = await until(getProjectDataPromises(api, sortedProjects));
-    dispatch(setLoading(false));
+    dispatch(setGlobalInProgress(false));
     dispatch(setError(error || null));
 
     if (error) {
@@ -235,12 +235,12 @@ const filterArticles = (
     dispatch(loadArticleList(true));
   } else {
     setError(null);
-    dispatch(setLoading(true));
+    dispatch(setGlobalInProgress(true));
     const [error, articles]: [
       CustomError | null | undefined,
       Array<Article>,
     ] = await until(getApi().articles.getArticles(query));
-    dispatch(setLoading(false));
+    dispatch(setGlobalInProgress(false));
 
     if (error) {
       notifyError(error);
@@ -450,7 +450,7 @@ const updateProjectsFavorites = (
     analyticsId: ANALYTICS_ARTICLES_PAGE,
   });
   dispatch(setError(null));
-  dispatch(setLoading(true));
+  dispatch(setGlobalInProgress(true));
   const [error] = await until(
     pinnedProjects
       .map((it: ArticleProject) => api.projects.addFavorite(it.id))
@@ -474,7 +474,7 @@ const updateProjectsFavorites = (
 const setNoFavoriteProjects = (): ((
   dispatch: (arg0: any) => any,
 ) => Promise<void>) => async (dispatch: (arg0: any) => any) => {
-  dispatch(setLoading(false));
+  dispatch(setGlobalInProgress(false));
   dispatch(
     setError({
       noFavoriteProjects: true,

@@ -224,7 +224,7 @@ describe('Agile board async actions', () => {
       it('should stop loading sprint', async () => {
         expect(storeActions[2]).toEqual({
           type: SET_PROGRESS,
-          isLoading: false,
+          isInProgress: false,
         });
       });
       it('should cache a sprint with loaded issues', async () => {
@@ -249,7 +249,7 @@ describe('Agile board async actions', () => {
       it('should show loading sprint', () => {
         expect(storeActions[1]).toEqual({
           type: SET_PROGRESS,
-          isLoading: true,
+          isInProgress: true,
         });
       });
       it('should receive sprint', () => {
@@ -272,7 +272,7 @@ describe('Agile board async actions', () => {
         });
         expect(storeActions[1]).toEqual({
           type: SET_PROGRESS,
-          isLoading: true,
+          isInProgress: true,
         });
         expect(storeActions[2]).toEqual({
           type: types.RECEIVE_SPRINT,
@@ -281,7 +281,7 @@ describe('Agile board async actions', () => {
         expect(storeActions[3]).toEqual({
           //loading sprint issues
           type: SET_PROGRESS,
-          isLoading: true,
+          isInProgress: true,
         });
         expect(storeActions[4]).toEqual({
           type: types.AGILE_ERROR,
@@ -289,7 +289,7 @@ describe('Agile board async actions', () => {
         });
         expect(storeActions[5]).toEqual({
           type: SET_PROGRESS,
-          isLoading: false,
+          isInProgress: false,
         });
       });
     });

@@ -9,10 +9,8 @@ import {
 import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {
-  INBOX_THREADS_FOLDER_SEEN,
-  SET_PROGRESS,
-} from 'actions/action-types';
+import {INBOX_THREADS_FOLDER_SEEN} from 'actions/action-types';
+import {setGlobalInProgress} from 'actions/app-actions';
 import {notify, notifyError} from 'components/notification/notification';
 import {
   setError,
@@ -54,11 +52,6 @@ const trackEvent = (event: string, params?: Record<string, any>) => {
     params,
   );
 };
-
-const setGlobalInProgress = (isInProgress: boolean) => ({
-  type: SET_PROGRESS,
-  isInProgress,
-});
 
 const getCachedData = (): InboxThreadsCache => getStorageState().inboxThreadsCache || DEFAULT_CACHE_DATA;
 

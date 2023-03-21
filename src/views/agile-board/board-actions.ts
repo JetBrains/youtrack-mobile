@@ -24,8 +24,9 @@ import {isIOSPlatform, until} from 'util/util';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {notify, notifyError} from 'components/notification/notification';
 import {routeMap} from '../../app-routes';
-import {SET_PROGRESS} from '../../actions/action-types';
+import {setGlobalInProgress} from 'actions/app-actions';
 import {sortAlphabetically} from 'components/search/sorting';
+
 import type Api from 'components/api/api';
 import type {
   AgileBoardRow,
@@ -37,10 +38,12 @@ import type {
   SprintFull,
 } from 'types/Agile';
 import type {AgilePageState} from './board-reducers';
-import type {AppState} from '../../reducers';
+import type {AppState} from 'reducers';
 import type {CustomError} from 'types/Error';
 import type {IssueFull, IssueOnList} from 'types/Issue';
+
 type ApiGetter = () => Api;
+
 export const PAGE_SIZE = 15;
 const RECONNECT_TIMEOUT = 60000;
 let serverSideEventsInstance: ServersideEvents;
@@ -51,13 +54,6 @@ export const DEFAULT_ERROR_AGILE_WITH_INVALID_STATUS = {
     errors: [DEFAULT_ERROR_MESSAGE],
   },
 };
-
-function toggleSprintLoad(isLoading: boolean) {
-  return {
-    type: SET_PROGRESS,
-    isLoading,
-  };
-}
 
 function receiveSprint(sprint) {
   return {
@@ -143,7 +139,7 @@ export function loadAgileWithStatus(
 
       if (!agileWithStatus.status.valid) {
         dispatch(receiveSprint(null));
-        dispatch(toggleSprintLoad(false));
+        dispatch(setGlobalInProgress(false));
       }
     }
   };
@@ -307,7 +303,7 @@ export function loadSprint(
   ) => {
     const api: Api = getApi();
     dispatch(setError(null));
-    dispatch(toggleSprintLoad(true));
+    dispatch(setGlobalInProgress(true));
     destroySSE();
 
     try {
@@ -355,7 +351,7 @@ export function loadSprint(
       dispatch(setError(error));
       trackError('Load sprint');
       log.info(message, e);
-      dispatch(toggleSprintLoad(false));
+      dispatch(setGlobalInProgress(false));
     }
   };
 }
@@ -372,7 +368,7 @@ export function loadSprintIssues(
     getApi: ApiGetter,
   ) => {
     const api: Api = getApi();
-    dispatch(toggleSprintLoad(true));
+    dispatch(setGlobalInProgress(true));
 
     try {
       const allIssuesIds: Array<{
@@ -394,7 +390,7 @@ export function loadSprintIssues(
       dispatch(setError(error));
       log.info(message, e);
     } finally {
-      dispatch(toggleSprintLoad(false));
+      dispatch(setGlobalInProgress(false));
     }
   };
 }
@@ -756,7 +752,7 @@ export function openBoardSelect(): (
         onSelect: async (selectedBoard: BoardOnList, query: string = '') => {
           dispatch(closeSelect());
           dispatch(receiveSprint(null));
-          dispatch(toggleSprintLoad(true));
+          dispatch(setGlobalInProgress(true));
           await flushStoragePart({
             agileQuery: null,
           });

@@ -17,7 +17,7 @@ import {
 } from 'components/query-assist/query-assist-helper';
 import {i18n} from 'components/i18n/i18n';
 import {notifyError} from 'components/notification/notification';
-import {SET_PROGRESS} from 'actions/action-types';
+import {setGlobalInProgress} from 'actions/app-actions';
 import {until} from 'util/util';
 
 import type Api from 'components/api/api';
@@ -32,11 +32,6 @@ const PAGE_SIZE = 10;
 function trackEvent(msg: string, additionalParam: string | null | undefined) {
   usage.trackEvent(ANALYTICS_ISSUES_PAGE, msg, additionalParam);
 }
-
-const setGlobalInProgress = (isInProgress: boolean) => ({
-  type: SET_PROGRESS,
-  isInProgress,
-});
 
 export function setIssuesQuery(
   query: string,

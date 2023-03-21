@@ -41,6 +41,7 @@ import {loadTranslation} from 'components/i18n/i18n-translation';
 import {logEvent} from 'components/log/log-helper';
 import {normalizeAuthParams} from 'components/auth/oauth2-helper';
 import {notify, notifyError} from 'components/notification/notification';
+import {SET_PROGRESS} from './action-types';
 import {setApi} from 'components/api/api__instance';
 import type {Activity} from 'types/Activity';
 import type {AppConfig, EndUserAgreement} from 'types/AppConfig';
@@ -1228,4 +1229,13 @@ const inboxCheckUpdateStatus = (): Action => {
   };
 };
 
-export {inboxCheckUpdateStatus};
+const setGlobalInProgress = (isInProgress: boolean) => ({
+  type: SET_PROGRESS,
+  isInProgress,
+});
+
+
+export {
+  inboxCheckUpdateStatus,
+  setGlobalInProgress,
+};
