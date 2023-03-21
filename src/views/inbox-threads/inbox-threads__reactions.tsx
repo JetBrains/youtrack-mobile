@@ -81,7 +81,7 @@ const InboxThreadReaction = ({thread, group, currentUser, onNavigate}: Props) =>
       const activity = message.activities[0];
       return (
         <ThreadReaction
-          key={activity.id}
+          key={message.id}
           activity={activity}
           currentUser={currentUser}
           timestamp={thread?.notified || group?.head?.timestamp}
