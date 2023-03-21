@@ -27,6 +27,7 @@ import {guid, isAndroidPlatform} from 'util/util';
 import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
+import {isDesktop} from 'components/responsive/responsive-helper';
 import {menuHeight} from 'components/common-styles/header';
 import {useBottomSheetContext} from 'components/bottom-sheet';
 
@@ -75,7 +76,7 @@ interface Props {
   };
 }
 
-const isAndroid: boolean = isAndroidPlatform();
+const isAndroidOrDesktop: boolean = isAndroidPlatform() || isDesktop();
 
 export interface ActivityStreamPropsReaction {
   onReactionPanelOpen?: (comment: IssueComment) => void;
@@ -174,7 +175,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     activityGroup: ActivityGroup,
     menuConfig: ContextMenuConfig = {menuTitle: '', menuItems: []}
   ) => {
-    if (!isAndroid) {
+    if (!isAndroidOrDesktop) {
       return;
     }
     const activity: Activity = activityGroup.comment || activityGroup.work;

@@ -7,6 +7,8 @@ import {getStorageState} from '../storage/storage';
 
 const tabletSplitViewFactor: number = 0.66;
 
+const isDesktop = (): boolean => DeviceInfo.getDeviceType() === 'Desktop';
+
 const isSplitView = (): boolean => {
   let isHandsetModeForced: boolean = false;
 
@@ -21,9 +23,12 @@ const isSplitView = (): boolean => {
   const windowWidth: number = Dimensions.get('window').width;
   const screenWidth: number = Dimensions.get('screen').width;
   return (
-    DeviceInfo.getDeviceType() === 'Desktop' ||
+    isDesktop() ||
     DeviceInfo.isTablet() && windowWidth >= screenWidth * tabletSplitViewFactor
   );
 };
 
-export {isSplitView};
+export {
+  isDesktop,
+  isSplitView,
+};
