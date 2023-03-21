@@ -23,9 +23,7 @@ import QueryAssistPanel from 'components/query-assist/query-assist-panel';
 import QueryPreview from 'components/query-assist/query-preview';
 import Router from 'components/router/router';
 import Select, {SelectModal} from 'components/select/select';
-import SelectSectioned, {
-  SelectSectionedModal,
-} from 'components/select/select-sectioned';
+import SelectSectioned from 'components/select/select-sectioned';
 import usage from 'components/usage/usage';
 import {addListenerGoOnline} from 'components/network/network-events';
 import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
@@ -365,15 +363,10 @@ export class Issues extends Component<Props, State> {
         onSelect(selectedContext);
       },
     };
-    const isSplitViewMode: boolean = isSplitView();
-    let SelectComponent: any;
 
     if (selectProps.isOwnSearches) {
-      SelectComponent = isSplitViewMode
-        ? SelectSectionedModal
-        : SelectSectioned;
       return (
-        <SelectComponent
+        <SelectSectioned
           getTitle={item =>
             item.name + (item.shortName ? ` (${item.shortName})` : '')
           }
@@ -382,7 +375,7 @@ export class Issues extends Component<Props, State> {
       );
     }
 
-    SelectComponent = isSplitViewMode ? SelectModal : Select;
+    const SelectComponent = isSplitView() ? SelectModal : Select;
     return (
       <SelectComponent
         getTitle={item =>

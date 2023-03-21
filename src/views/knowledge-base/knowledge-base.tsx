@@ -590,16 +590,18 @@ export class KnowledgeBase extends Component<Props, State> {
           )}
         </Text>
       ),
+      cacheResults: true,
       dataSource: (q: string = '') => {
         const sortedProjects = getGroupedByFieldNameAlphabetically(
           projects.filter((it: ArticleProject) => it.name?.indexOf(q) !== -1),
           'pinned',
         );
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const favorites = {//TODO: remove it if `Favorite` string is not needed
+          title: i18n('Favorites'),
+          data: sortedProjects.favorites,
+        };
         return Promise.resolve([
-          {
-            title: i18n('Favorites'),
-            data: sortedProjects.favorites,
-          },
           {
             title: i18n('Projects'),
             data: sortedProjects.others,

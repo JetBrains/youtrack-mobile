@@ -40,6 +40,7 @@ export interface ISelectProps {
   noFilter?: boolean;
   getWrapperComponent?: () => any;
   getWrapperProps?: () => any;
+  cacheResults?: boolean;
 }
 
 export interface ISelectState {
@@ -143,7 +144,14 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
 
   async _loadItems(query: string) {
     try {
-      this.setState({loaded: false, items: await this.props.dataSource(query)});
+      this.setState({
+        loaded: false,
+        items: (
+          this.props.cacheResults && (this.state?.items || []).length > 0
+            ? this.state.items
+            : await this.props.dataSource(query)
+        ),
+      });
       this._onSearch(query);
       this.setState({loaded: true});
     } catch (err) {
@@ -172,12 +180,14 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     );
   }
 
-  _onSearch(query: string = '') {
+  filterItemByLabel(item: any, query: string): boolean {
     const {getValue, getTitle} = this.props;
-    const filteredItems = (this.state.items || []).filter((item: any) => {
-      const label: string = (getValue && getValue(item)) || getTitle(item) || '';
-      return label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-    });
+    const label: string = (getValue && getValue(item)) || getTitle(item) || '';
+    return label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+  }
+
+  _onSearch(query: string = '') {
+    const filteredItems: IItem[] = (this.state.items || []).filter((it: IItem) => this.filterItemByLabel(it, query));
     this.setState({
       filteredItems: this.getSortedItems(filteredItems),
     });

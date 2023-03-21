@@ -4,7 +4,7 @@ import {SectionList, SectionListData, Text, View} from 'react-native';
 import Animated, {FadeIn} from 'react-native-reanimated';
 import debounce from 'lodash.debounce';
 
-import Select, {SelectModal, ISelectProps, ISelectState, IItem} from './select';
+import Select, {ISelectProps, ISelectState, IItem} from './select';
 
 import styles from './select.styles';
 
@@ -15,25 +15,20 @@ interface ListSection {
 
 export type SLItem = SectionListData<IItem, ListSection>;
 
-type State = Omit<ISelectState, 'filteredItems' | 'items'> & {
+export type ISectionedState = Omit<ISelectState, 'filteredItems' | 'items' | 'selectedItems'> & {
   filteredItems: SLItem[];
   items: SLItem[];
+  selectedItems: SLItem[];
 }
 
-interface Props extends Omit<ISelectProps, 'dataSource'> {
+export interface ISectionedProps extends Omit<ISelectProps, 'dataSource'> {
   dataSource: (query: string) => Promise<SLItem[]>;
 }
 
 
-export class SelectSectionedModal extends SelectModal {
-  constructor(props: ISelectProps) {
-    super(props);
-  }
-}
+class SelectSectioned<P extends ISectionedProps, S extends ISectionedState> extends Select<P, S> {
 
-class SelectSectioned extends Select<Props, State> {
-
-  constructor(props: Props) {
+  constructor(props: P) {
     super(props);
     // @ts-ignore
     this.state = {
@@ -73,24 +68,44 @@ class SelectSectioned extends Select<Props, State> {
     );
   }
 
-  setFilteredItems(selected?: IItem[]) {
-    const {items, selectedItems} = this.state;
-    this.setState({
-      filteredItems: [
-        {title: '', data: selected || selectedItems},
-        ...this.removeDuplicateItems(items, selected || selectedItems),
-      ],
-    });
+  getFilteredItems(items: SLItem[], selected?: IItem[]) {
+    const {selectedItems} = this.state;
+    return [
+      {title: '', data: selected || selectedItems},
+    ...this.removeDuplicateItems(items, selected || selectedItems),
+    ];
   }
 
   _onSearch = async (query: string = '') => {
+    let filteredItems: SLItem[];
+    let items: SLItem[] = this.state.items;
     this.setState({loaded: false});
-    const items: SLItem[] = await this.props.dataSource(query);
+
+    if (this.props.cacheResults && items.length > 0) {
+      const doFilter = (data: SLItem[]): SLItem[] => (data || []).filter(
+        (it: SLItem) => this.filterItemByLabel(it, query)
+      );
+      filteredItems = this.getFilteredItems(items).reduce((akk: SLItem[], it: IItem) => {
+        const data: IItem[] = doFilter(it.data);
+        if (data.length > 0) {
+          akk.push({
+            title: it.title,
+            data,
+          });
+        }
+        return akk;
+      }, []);
+
+    } else {
+      items = await this.props.dataSource(query);
+      filteredItems = this.getFilteredItems(items);
+    }
+
     this.setState({
+      filteredItems,
       items,
       loaded: true,
     });
-    this.setFilteredItems();
   };
 
   _onSearchDebounced = debounce(this._onSearch, 300);
@@ -106,7 +121,9 @@ class SelectSectioned extends Select<Props, State> {
 
   _onTouchItem(item: IItem) {
     const selectedItems: IItem[] = super._onTouchItem(item);
-    this.setFilteredItems(selectedItems);
+    this.setState({
+      filteredItems: this.getFilteredItems(this.state.items, selectedItems),
+    });
     return selectedItems;
   }
 

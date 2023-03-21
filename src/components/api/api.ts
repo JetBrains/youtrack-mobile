@@ -14,11 +14,13 @@ import CustomFieldsAPI from './api__custom-fields';
 import SearchAPI from './api__search';
 import UserAPI from './api__user';
 import UserGroupAPI from './api__user-group';
+
 import type Auth from '../auth/oauth2';
 import type {EndUserAgreement} from 'types/AppConfig';
-import type {IssueProject, Tag} from 'types/CustomFields';
+import type {IssueProject} from 'types/CustomFields';
 import type {SavedQuery, CommandSuggestionResponse} from 'types/Issue';
-import type {User} from 'types/User';
+import type {Folder, User} from 'types/User';
+
 
 class API extends BaseAPI {
   youTrackProjectUrl: string;
@@ -180,7 +182,7 @@ class API extends BaseAPI {
 
   async getIssueFolders(
     pinnedOnly: boolean | null | undefined = null,
-  ): Promise<Array<IssueProject | SavedQuery | Tag>> {
+  ): Promise<Folder[]> {
     const fields = ApiHelper.toField([
       'id',
       '$type',

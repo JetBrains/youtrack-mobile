@@ -17,15 +17,17 @@ import {
 } from 'components/query-assist/query-assist-helper';
 import {i18n} from 'components/i18n/i18n';
 import {notifyError} from 'components/notification/notification';
-import {SET_PROGRESS} from '../../actions/action-types';
+import {SET_PROGRESS} from 'actions/action-types';
 import {until} from 'util/util';
+
 import type Api from 'components/api/api';
-import type {AppState} from '../../reducers';
+import type {AppState} from 'reducers';
 import type {Folder} from 'types/User';
-import type {AnyIssue, IssueFull, SavedQuery} from 'types/Issue';
-import type {IssueProject, Tag} from 'types/CustomFields';
-const PAGE_SIZE = 10;
+import type {AnyIssue, IssueFull} from 'types/Issue';
+
 type ApiGetter = () => Api;
+
+const PAGE_SIZE = 10;
 
 function trackEvent(msg: string, additionalParam: string | null | undefined) {
   usage.trackEvent(ANALYTICS_ISSUES_PAGE, msg, additionalParam);
@@ -220,13 +222,12 @@ export function openSavedSearchesSelect(): (
       isOwnSearches: true,
       show: true,
       placeholder: i18n('Filter saved searches'),
+      cacheResults: true,
       dataSource: async () => {
         let folders: Array<Record<string, any>> = getCachedUserQueries();
 
         try {
-          const issueFolders: Array<
-            IssueProject | SavedQuery | Tag
-          > = await getApi().getIssueFolders(true);
+          const issueFolders: Folder[] = await getApi().getIssueFolders(true);
           folders = [
             {
               title: null,

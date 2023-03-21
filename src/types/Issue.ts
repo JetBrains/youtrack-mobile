@@ -138,6 +138,7 @@ export type CommandSuggestionResponse = {
   suggestions: CommandSuggestion[];
 };
 export type SavedQuery = {
+  $type: string;
   id: string;
   name: string;
   query: string;
