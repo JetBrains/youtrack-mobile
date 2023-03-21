@@ -14,7 +14,7 @@ const light: UITheme = {
     $text: '#1F2326',
     $textSecondary: '#737577',
     $textButton: '#FFF',
-    $link: '#008EFF',
+    $link: 'rgba(15, 91, 153, 1)',
     $linkLight: 'rgba(0, 142, 255, 0.3)',
     $disabled: '#e9e9e9',
     $icon: 'rgb(153, 153, 153)',
