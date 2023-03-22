@@ -33,7 +33,7 @@ const Icon = (
   return <ThemedIcon width={size} height={size} style={props.style} />;
 };
 
-const IconNothingFound = (props: Props): React.ReactNode => (
+const IconNothingFound = (props: Props): JSX.Element => (
   <Icon
     {...{
       ...props,
@@ -45,7 +45,7 @@ const IconNothingFound = (props: Props): React.ReactNode => (
   />
 );
 
-const IconNoProjectFound = (props: Props): React.ReactNode => (
+const IconNoProjectFound = (props: Props): JSX.Element => (
   <Icon
     {...{
       ...props,
@@ -57,7 +57,7 @@ const IconNoProjectFound = (props: Props): React.ReactNode => (
   />
 );
 
-const IconNothingSelected = (props: Props): React.ReactNode => (
+const IconNothingSelected = (props: Props): JSX.Element => (
   <Icon
     {...{
       ...props,
@@ -69,7 +69,7 @@ const IconNothingSelected = (props: Props): React.ReactNode => (
   />
 );
 
-const IconNoNotifications = (props: Props): React.ReactNode => (
+const IconNoNotifications = (props: Props): JSX.Element => (
   <Icon
     {...{
       ...props,
