@@ -226,7 +226,8 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
 
   _onTouchItem(item: IItem): IItem[] {
     if (!this.props.multi) {
-      return this.onSelect(item);
+      this.onSelect(item);
+      return [item];
     }
 
     let selectedItems = this._isSelected(item)
