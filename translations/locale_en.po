@@ -455,7 +455,7 @@ msgstr "Feature request"
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
-#: src/components/select/select.tsx:342
+#: src/components/select/select.tsx:343
 msgid "Filter items"
 msgstr "Filter items"
 
@@ -585,7 +585,7 @@ msgstr "Link to comment copied"
 msgid "Linked issues"
 msgstr "Linked issues"
 
-#: src/components/select/select.tsx:406
+#: src/components/select/select.tsx:407
 msgid "Loading values…"
 msgstr "Loading values…"
 
@@ -692,7 +692,7 @@ msgstr "No favorites projects found"
 msgid "No issues found"
 msgstr "No issues found"
 
-#: src/components/select/select.tsx:411
+#: src/components/select/select.tsx:412
 msgid "No items"
 msgstr "No items"
 
