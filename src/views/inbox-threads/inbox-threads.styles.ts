@@ -31,9 +31,7 @@ export default EStyleSheet.create({
     flex: 1,
   },
   threadsEmpty: {
-    height: '100%',
     alignItems: 'center',
-    marginTop: -UNIT * 5,
     justifyContent: 'center',
   },
   threadsEmptyText: {
