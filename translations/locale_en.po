@@ -614,12 +614,12 @@ msgstr "Manage Favorite Projects"
 msgid "Mark all as read"
 msgstr "Mark all as read"
 
-#: src/views/inbox-threads/inbox-threads__subscription.tsx:185
+#: src/views/inbox-threads/inbox-threads__subscription.tsx:187
 #: src/views/inbox-threads/inbox-threads__thread.tsx:166
 msgid "Mark as read"
 msgstr "Mark as read"
 
-#: src/views/inbox-threads/inbox-threads__subscription.tsx:182
+#: src/views/inbox-threads/inbox-threads__subscription.tsx:184
 #: src/views/inbox-threads/inbox-threads__thread.tsx:166
 msgid "Mark as unread"
 msgstr "Mark as unread"
@@ -889,7 +889,7 @@ msgid "Show all issues tagged with \"{{tagName}}\"..."
 msgstr "Show all issues tagged with \"{{tagName}}\"..."
 
 #: src/components/activity-stream/activity__stream-vcs.tsx:206
-#: src/views/inbox-threads/inbox-threads__subscription.tsx:115
+#: src/views/inbox-threads/inbox-threads__subscription.tsx:116
 msgid "Show more"
 msgstr "Show more"
 
@@ -1177,7 +1177,7 @@ msgstr ""
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Your account has insufficient permission to perform this operation."
 
-#: src/components/storage/storage.ts:359
+#: src/components/storage/storage.ts:362
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 msgstr "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 
