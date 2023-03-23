@@ -1,7 +1,8 @@
 import * as React from 'react';
-import {Text} from 'react-native';
+import {Animated} from 'react-native';
 
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+// import Swipeable from './sw';
 import {RectButton} from 'react-native-gesture-handler';
 
 
@@ -23,6 +24,25 @@ export default function SwipeableRow(props: Props) {
   const close = () => swipeableRow?.current?.close?.();
   const getTextPresentation = (text: string) => text.split(' ').join('\n');
 
+  const renderActions = (dragX: Animated.AnimatedInterpolation<number | string>, isLeftAction: boolean) => {
+    const trans = dragX.interpolate({
+      inputRange: [-10, 5, 250, 251],
+      outputRange: [-1, 1, 30, 1],
+    });
+    return (
+      <RectButton style={isLeftAction ? styles.leftAction : styles.rightAction} onPress={close}>
+        <Animated.Text
+          style={[
+            isLeftAction ? styles.leftActionText : styles.rightActionText,
+            {transform: [{ translateX: trans }]},
+          ]}
+        >
+          {getTextPresentation(isLeftAction  ? props.leftActionText : props.rightActionText)}
+        </Animated.Text>
+      </RectButton>
+    );
+  };
+
   return (
     <Swipeable
       enabled={typeof props.enabled === 'boolean' ? props.enabled : true}
@@ -30,40 +50,26 @@ export default function SwipeableRow(props: Props) {
       ref={swipeableRow}
       overshootLeft={false}
       overshootRight={false}
-      friction={2}
-      leftThreshold={80}
       enableTrackpadTwoFingerGesture
-      rightThreshold={80}
+      friction={2}
+      leftThreshold={20}
+      rightThreshold={20}
       overshootFriction={8}
-
+      animationOptions={{
+        delay: 0,
+        speed: 140,
+      }}
       onSwipeableOpen={(direction: 'left' | 'right', swipeable: Swipeable) => {
+        swipeable.close();
         if (direction === 'left') {
           props.onSwipeLeft();
         } else {
           props.onSwipeRight();
         }
-        swipeable.close();
       }}
-      renderLeftActions={() => (
-        <RectButton
-          style={styles.leftAction}
-          onPress={close}
-        >
-          <Text style={styles.leftActionText}>
-            {getTextPresentation(props.leftActionText)}
-          </Text>
-        </RectButton>
-      )}
-      renderRightActions={() => (
-        <RectButton
-          style={styles.rightAction}
-          onPress={close}
-        >
-          <Text style={styles.rightActionText}>
-            {getTextPresentation(props.rightActionText)}
-          </Text>
-        </RectButton>
-      )}>
+      renderLeftActions={(progress, dragX) => renderActions(dragX, true)}
+      renderRightActions={(progress, dragX) => renderActions(dragX, false)}
+    >
       {props.children}
     </Swipeable>
   );

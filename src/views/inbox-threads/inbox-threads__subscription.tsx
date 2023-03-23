@@ -50,6 +50,7 @@ export default function InboxThreadItemSubscription({
   uiTheme,
 }: Props): React.ReactElement<React.ComponentProps<typeof View>, typeof View> {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
+  const isSwipeEnabled: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().notificationsSwipe);
   const [shownMessagesAmount, updateShownMessagesAmount] = useState(3);
   const activityToMessageMap = createMessagesMap(thread.messages);
   const activities: Activity[] = thread.messages.reduce(
@@ -151,6 +152,7 @@ export default function InboxThreadItemSubscription({
         Component = ThreadHistoryItem;
     }
 
+
     const renderedComponent = (
       <Component
         target={target}
@@ -175,8 +177,8 @@ export default function InboxThreadItemSubscription({
           onReadChange={onReadChange}
         />}
 
-        {!isMergedNotifications.current && renderedComponent}
-        {isMergedNotifications.current && (
+        {(!isMergedNotifications.current && !isSwipeEnabled.current) && renderedComponent}
+        {(isMergedNotifications.current || isSwipeEnabled.current) && (
           <SwipeableRow
             enabled={!isCommentReaction}
             leftActionText={i18n('Mark as unread')}

@@ -41,7 +41,9 @@ const tipsKeys = {
 type TipsState = Record<keyof typeof tipsKeys, boolean | null>
 
 export const featuresKeys = {
+  forceHandsetMode: 'YT_HANDSET_MODE',
   mergedNotifications: 'YT_mergedNotifications',
+  notificationsSwipe: 'YT_notificationsSwipe',
 };
 type FeatureState = Record<keyof typeof featuresKeys, boolean | null>
 
@@ -127,7 +129,6 @@ const storageKeys: StorageStateKeys & (typeof tipsKeys) & (typeof featuresKeys) 
   permissions: 'YT_USER_PERMISSIONS',
   themeMode: THEME_MODE_KEY,
   vcsChanges: 'YT_VCS_CHANGES',
-  forceHandsetMode: 'YT_HANDSET_MODE',
 };
 let storageState: StorageState | null = null;
 
@@ -139,6 +140,8 @@ export const initialTipsState: Readonly<TipsState> = {
 
 export const initialFeaturesState: Readonly<FeatureState> = {
   mergedNotifications: null,
+  forceHandsetMode: null,
+  notificationsSwipe: null,
 };
 
 export const initialState: Readonly<StorageState> = {

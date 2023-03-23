@@ -95,19 +95,19 @@ export default EStyleSheet.create({
     marginLeft: -UNIT * 8,
   },
   threadTitleAction: {
-    width: 24,
-    height: 24,
+    width: 30,
+    height: 29,
     marginLeft: UNIT,
-    marginRight: UNIT / 4,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: UNIT * 2,
   },
   threadItemAction: {
     borderRadius: UNIT * 2,
     position: 'absolute',
     zIndex: 1,
     top: UNIT / 4,
-    right: 1,
+    right: 2,
     padding: UNIT * 1.5,
   },
   threadMuteToggle: {

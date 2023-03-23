@@ -60,6 +60,8 @@ describe('Storage', () => {
       expect(MockedStorage.multiRemove).toHaveBeenLastCalledWith([
         'YT_dismissActivityActionAccessTouch',
         'YT_mergedNotifications',
+        'YT_HANDSET_MODE',
+        'YT_notificationsSwipe',
         'YT_ARTICLES',
         'YT_ARTICLES_LIST',
         'YT_ARTICLES_QUERY',
@@ -87,7 +89,6 @@ describe('Storage', () => {
         'YT_AGILE_DEFAULT_BOARD',
         'YT_THEME_MODE',
         'YT_VCS_CHANGES',
-        'YT_HANDSET_MODE',
       ]);
     });
     it('should update field state on partial flush', async () => {
