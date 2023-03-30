@@ -1,7 +1,8 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {mainText, secondaryText} from 'components/common-styles/typography';
+
+import {mainText, secondaryText, UNIT} from 'components/common-styles';
 import {separator} from '../common-styles/list';
-import {UNIT} from 'components/variables';
+
 const secondaryTextColor = {
   color: '$textSecondary',
 };

@@ -46,6 +46,7 @@ describe('InboxThreadItemSubscription', () => {
           .map((it, index) => ({
             head: {
               id: `id${index}`,
+              author: mocks.createUserMock(),
             },
             messages: [{}],
           }));

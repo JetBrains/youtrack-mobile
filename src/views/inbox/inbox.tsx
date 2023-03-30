@@ -481,27 +481,31 @@ class Inbox extends Component<Props, State> {
     return text || PARSE_ERROR_NOTIFICATION;
   }
 
-  renderItem = ({item}: Record<string, any>) => {
+  renderItem = ({item, index}: { item: Record<string, any>, index: number }) => {
+    const separator = index > 1 ? <View style={styles.notificationSeparator}/> : null;
     if (isReactElement(item)) {
-      return item;
+      return <>
+        {separator}
+        {item}
+      </>;
     }
 
     const metadata: Metadata = item?.metadata;
-    let renderer = null;
+    let row = null;
 
     if (hasType.commentReaction(item)) {
-      renderer = this.renderReactionChange(item);
+      row = this.renderReactionChange(item);
     } else if (metadata && this.isIssueDigestChange(metadata)) {
-      renderer = metadata.issue
+      row = metadata.issue
         ? this.renderIssueChange(metadata, item.sender, item.id)
         : null;
     } else if (metadata && this.isWorkflowNotification(metadata)) {
-      renderer = this.renderWorkflowNotification(
+      row = this.renderWorkflowNotification(
         this.getWorkflowNotificationText(metadata),
       );
     }
 
-    return renderer;
+    return <>{separator}{row}</>;
   };
 
   createAvatarUrl(sender: Partial<User> = {}): string | null {
@@ -529,6 +533,7 @@ class Inbox extends Component<Props, State> {
   ) {
     return (
       <InboxEntity
+        style={styles.notificationIssue}
         entity={issue}
         onNavigate={() => {
           if (this.state.isSplitView) {
@@ -561,28 +566,28 @@ class Inbox extends Component<Props, State> {
         accessible={true}
         style={styles.notification}
       >
+        {this.renderIssue(issue, false, reactionData.id)}
         <UserInfo
           avatar={
             <View style={styles.reactionIcon}>
-              <ReactionIcon name={reaction.reaction} size={24} />
+              <ReactionIcon name={reaction.reaction} size={28} />
               {!added && <View style={styles.reactionIconRemoved} />}
             </View>
           }
-          additionalInfo={`\n${
-            reactionData.added
-              ? i18n('added a reaction')
-              : i18n('removed a reaction')
-          }`}
-          style={[styles.userInfo, styles.userInfoReaction]}
+          additionalInfo={reactionData.added
+            ? i18n('added a reaction')
+            : i18n('removed a reaction')
+          }
+          style={styles.userInfo}
           timestamp={timestamp}
           user={reaction.author}
         />
 
         <View style={styles.notificationContent}>
-          {this.renderIssue(issue, false, reactionData.id)}
           <View style={styles.notificationChange}>
             <Text style={styles.secondaryText}>{comment.text}</Text>
             <CommentReactions
+              style={styles.notificationReactions}
               comment={comment}
               currentUser={this.props.currentUser}
             />
@@ -619,18 +624,17 @@ class Inbox extends Component<Props, State> {
         accessible={true}
         style={styles.notification}
       >
+        {this.renderIssue(
+          issue,
+          this.isSummaryOrDescriptionChange(events[0]),
+          notificationId,
+        )}
         <UserInfo
           style={styles.userInfo}
           user={sender}
           timestamp={change?.endTimestamp}
         />
-
         <View style={styles.notificationContent}>
-          {this.renderIssue(
-            issue,
-            this.isSummaryOrDescriptionChange(events[0]),
-            notificationId,
-          )}
           {events.length > 0 && (
             <View style={styles.notificationChange}>
               {this.renderEvents(events)}

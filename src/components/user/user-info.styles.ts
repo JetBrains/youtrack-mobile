@@ -1,25 +1,40 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from 'components/variables';
+
+import {secondaryText, UNIT} from 'components/common-styles';
+
+
 export default EStyleSheet.create({
   user: {
     flexDirection: 'row',
   },
   userName: {
-    flex: 0,
-    marginRight: UNIT / 2,
-    marginLeft: UNIT * 2,
-    color: '$textSecondary',
+    flexGrow: 1,
+    flexShrink: 0,
+    fontSize: 18,
+    fontWeight: '500',
+    letterSpacing: -0.22,
+    color: '$text',
   },
   userAvatar: {
-    flex: 0,
-    borderRadius: UNIT / 2,
+    minWidth: UNIT * 5,
+    minHeight: UNIT * 5,
+    marginLeft: -UNIT / 2,
+    marginTop: -UNIT / 4,
+    marginRight: UNIT,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '$boxBackground',
+    borderWidth: UNIT / 2,
+    borderColor: '$background',
+    borderRadius: UNIT,
   },
   timestampContainer: {
     flexGrow: 1,
     marginRight: UNIT * 2,
     alignItems: 'flex-end',
   },
-  timestamp: {
+  additionalInfo: {
+    ...secondaryText,
     color: '$icon',
   },
 });

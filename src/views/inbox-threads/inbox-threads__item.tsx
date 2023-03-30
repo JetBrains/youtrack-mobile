@@ -1,9 +1,8 @@
 import React, {useContext} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 
 import StreamHistoryChange from 'components/activity-stream/activity__stream-history';
-import StreamTimestamp from 'components/activity-stream/activity__stream-timestamp';
-import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+import UserInfo from 'components/user/user-info';
 import {HIT_SLOP2} from 'components/common-styles';
 import {ThemeContext} from 'components/theme/theme-context';
 
@@ -11,8 +10,8 @@ import styles from './inbox-threads.styles';
 
 import type {Activity} from 'types/Activity';
 import type {InboxThreadGroup, ThreadEntity} from 'types/Inbox';
+import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
-import type {Theme} from '../../types/Theme';
 
 type Props = {
   author: User;
@@ -42,26 +41,12 @@ export default function ThreadItem({
       accessibilityLabel="inboxThreadItem"
       accessible={true}
     >
-      <View style={styles.row}>
-        <View style={styles.threadTitleIcon}>{avatar}</View>
-        <View>
-          <Text style={styles.threadChangeAuthor}>
-            {getEntityPresentation(author)}
-          </Text>
-          <View style={styles.row}>
-            <Text
-              testID="test:id/inboxThreadItemReason"
-              accessibilityLabel="inboxThreadItemReason"
-              accessible={true}
-              style={styles.threadChangeReason}
-            >
-              {reason}
-            </Text>
-            <StreamTimestamp timestamp={timestamp} />
-          </View>
-        </View>
-      </View>
-
+      <UserInfo
+        additionalInfo={reason}
+        avatar={avatar}
+        timestamp={timestamp}
+        user={author}
+      />
       <TouchableOpacity
         testID="test:id/inboxThreadItemNavigateButton"
         accessibilityLabel="inboxThreadItemNavigateButton"

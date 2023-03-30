@@ -3,8 +3,8 @@ import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {baseHeaderStyles} from 'components/header/header.styles';
-import {mainText, secondaryText, UNIT} from 'components/common-styles';
 import {rowStyles as activityStyles} from 'components/activity-stream/activity__stream.styles';
+import {secondaryText, UNIT} from 'components/common-styles';
 import {splitViewStyles} from 'components/common-styles/split-view';
 
 export default EStyleSheet.create({
@@ -62,7 +62,7 @@ export default EStyleSheet.create({
   threadConnector: {
     position: 'absolute',
     top: UNIT / 2,
-    left: 17,
+    left: 15,
     width: 2,
     height: '98.5%',
     paddingBottom: UNIT * 2,
@@ -114,23 +114,6 @@ export default EStyleSheet.create({
     padding: UNIT / 2,
   },
   threadSubTitleText: {...secondaryText, color: '$textSecondary'},
-  threadTitleIcon: {
-    position: 'relative',
-    zIndex: 1,
-    top: -UNIT / 4,
-    left: 3,
-    marginLeft: -UNIT / 2,
-    marginRight: UNIT * 1.5 - UNIT / 2,
-    width: UNIT * 5,
-    height: UNIT * 5,
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '$boxBackground',
-    borderWidth: UNIT / 2,
-    borderColor: '$background',
-    borderRadius: UNIT,
-  },
   threadChange: {
     marginLeft: UNIT * 5.5,
     marginRight: UNIT * 2,
@@ -183,21 +166,6 @@ export default EStyleSheet.create({
   },
   threadButtonText: {
     color: '$textSecondary',
-  },
-  threadChangeReason: {
-    marginRight: UNIT / 2,
-    ...secondaryText,
-    color: '$textSecondary',
-  },
-  threadChangeAuthor: {
-    flexGrow: 1,
-    flexShrink: 0,
-    ...mainText,
-    color: '$text',
-    fontSize: 18,
-    lineHeight: 24,
-    fontWeight: '500',
-    letterSpacing: -0.3,
   },
   tabTitleIconUnread: {
     position: 'absolute',

@@ -26,13 +26,19 @@ export default EStyleSheet.create({
   notification: {
     paddingLeft: UNIT * 2,
   },
+  notificationIssue: {
+    marginTop: UNIT * 2,
+    marginBottom: -UNIT / 2,
+  },
+  notificationSeparator: {
+    marginLeft: UNIT * 2,
+    borderBottomColor: '$separator',
+    borderBottomWidth: 1,
+  },
   notificationContent: {
-    marginTop: -UNIT,
-    marginLeft: UNIT * 6,
+    marginLeft: UNIT * 5.5,
     paddingBottom: UNIT * 2,
     paddingRight: UNIT * 2,
-    borderBottomColor: '$separator',
-    borderBottomWidth: 0.5,
   },
   notificationIssueInfo: {
     ...mainText,
@@ -48,8 +54,7 @@ export default EStyleSheet.create({
   },
   reason: {...secondaryText, paddingRight: UNIT, color: '$icon'},
   notificationChange: {
-    marginTop: UNIT * 2,
-    marginRight: -UNIT,
+    marginTop: UNIT * 1.5,
     marginBottom: UNIT,
     padding: UNIT * 1.5,
     paddingRight: UNIT * 2,
@@ -57,16 +62,15 @@ export default EStyleSheet.create({
     color: '$text',
     backgroundColor: '$boxBackground',
   },
+  notificationReactions: {
+    marginTop: UNIT,
+  },
   notificationContentWorkflow: {
     marginTop: UNIT,
     marginLeft: 0,
   },
   userInfo: {
-    marginTop: UNIT,
-    paddingTop: UNIT * 1.5,
-  },
-  userInfoReaction: {
-    marginBottom: UNIT * 2,
+    marginTop: UNIT * 2.5,
   },
   textPrimary: {...font, color: '$textSecondary'},
   textSecondary,
@@ -119,12 +123,9 @@ export default EStyleSheet.create({
     color: '$icon',
   },
   reactionIcon: {
-    width: UNIT * 4,
-    height: UNIT * 4,
+    marginTop: -UNIT / 4,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '$boxBackground',
-    borderRadius: UNIT / 2,
   },
   reactionIconRemoved: {
     position: 'absolute',

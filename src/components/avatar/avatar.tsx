@@ -1,19 +1,25 @@
+import React from 'react';
 import {Image} from 'react-native';
-import React, {PureComponent} from 'react';
+
 import DefaultAvatar from './default-avatar';
+
 import styles from './default-avatar.styles';
-type Props = {
+
+interface Props {
   userName: string;
   size: number;
   source: {
     uri: string;
   };
-  style?: Record<string, any> | null | undefined;
-};
-type State = {
+  style?: Record<string, any>;
+}
+
+interface State {
   renderDefault: boolean;
-};
-export default class Avatar extends PureComponent<Props, State> {
+}
+
+
+export default class Avatar extends React.PureComponent<Props, State> {
   state: State = {
     renderDefault: false,
   };
