@@ -141,62 +141,53 @@ export const createActivityCommentActions = (
         }
       };
     },
-    getDraftComment: function getDraftComment(): (
+    getDraftComment: (): (
       dispatch: (arg0: any) => any,
       getState: StateGetter,
       getApi: ApiGetter,
-    ) => Promise<void> {
-      return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
-      ) => {
-        const issueState: SingleIssueState = getState()[stateFieldName];
-        const {issue} = issueState;
+    ) => Promise<IssueComment | null> => async (
+      dispatch: (arg0: any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter,
+    ) => {
+      const issueState: SingleIssueState = getState()[stateFieldName];
+      const {issue} = issueState;
 
-        if (issue && issue.id) {
-          try {
-            const draftComment: IssueComment = await getApi().issue.getDraftComment(
-              issue.id,
-            );
-            dispatch(actions.setEditingComment(draftComment));
-          } catch (error) {
-            log.warn('Failed to receive issue comment draft', error);
-          }
+      let draftComment: IssueComment | null = null;
+      if (issue && issue.id) {
+        try {
+          draftComment = await getApi().issue.getDraftComment(issue.id);
+        } catch (error) {
+          log.warn('Failed to receive issue comment draft', error);
         }
-      };
+      }
+      return draftComment;
     },
-    updateDraftComment: function updateDraftComment(
-      draftComment: IssueComment,
-      doNotFlush: boolean = false,
-    ): (
+    updateDraftComment: (draftComment: IssueComment, doNotFlush: boolean = false): (
       dispatch: (arg0: any) => any,
       getState: StateGetter,
       getApi: ApiGetter,
-    ) => Promise<null | IssueComment> {
-      return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
-      ): Promise<null | IssueComment> => {
-        const {issue} = getState()[stateFieldName];
+    ) => Promise<null | IssueComment> => async (
+      dispatch: (arg0: any) => any,
+      getState: StateGetter,
+      getApi: ApiGetter,
+    ): Promise<null | IssueComment> => {
+      const {issue} = getState()[stateFieldName];
+      if (draftComment && issue) {
+        const [error, draft] = await until(
+          getApi().issue.updateDraftComment(issue.id, draftComment),
+        );
 
-        if (draftComment && issue) {
-          const [error, draft] = await until(
-            getApi().issue.updateDraftComment(issue.id, draftComment),
-          );
-
-          if (error) {
-            log.warn('Failed to update a comment draft', error);
-          } else if (!doNotFlush) {
-            dispatch(actions.setEditingComment(draft));
-          }
-
-          return error ? null : draft;
-        } else {
-          return null;
+        if (error) {
+          log.warn('Failed to update a comment draft', error);
+        } else if (!doNotFlush) {
+          dispatch(actions.setEditingComment(draft));
         }
-      };
+
+        return error ? null : draft;
+      } else {
+        return null;
+      }
     },
     submitDraftComment: function submitDraftComment(
       draftComment: IssueComment,

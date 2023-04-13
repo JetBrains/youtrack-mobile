@@ -3,8 +3,9 @@ import qs from 'qs';
 import ApiHelper from './api__helper';
 import log from 'components/log/log';
 import {fetch2, requestController} from './api__request-controller';
+import {handleRelativeUrl} from 'components/config/config';
 import {HTTP_STATUS} from 'components/error/error-http-codes';
-import {routeMap} from '../../app-routes';
+import {routeMap} from 'app-routes';
 
 import Auth from 'components/auth/oauth2';
 import type {AppConfig} from 'types/AppConfig';
@@ -94,6 +95,10 @@ export default class BaseAPI {
       }),
       opts,
     );
+  }
+
+  convertToAbsURL(url: string): string {
+    return handleRelativeUrl(url, this.config.backendUrl) as string;
   }
 
   shouldRefreshToken(response: Response | CustomError): boolean {

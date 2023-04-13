@@ -1,31 +1,20 @@
 import {Linking} from 'react-native';
+
 import DeviceInfo from 'react-native-device-info';
+import UrlParse from 'url-parse';
+
 import * as appActionsHelper from './app-actions-helper';
+import * as storage from 'components/storage/storage';
 import * as types from './action-types';
 import Api from 'components/api/api';
-import OAuth2 from 'components/auth/oauth2';
 import log from 'components/log/log';
-import {openByUrlDetector} from 'components/open-url-handler/open-url-handler';
+import OAuth2 from 'components/auth/oauth2';
 import packageJson from '../../package.json';
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
 import PushNotificationsProcessor from 'components/push-notifications/push-notifications-processor';
 import Router from 'components/router/router';
-import UrlParse from 'url-parse';
 import usage from 'components/usage/usage';
-import {i18n} from 'components/i18n/i18n';
-import {
-  clearStorage,
-  flushStorage,
-  flushStoragePart,
-  getOtherAccounts,
-  getStorageState,
-  InboxThreadsCache,
-  initialState,
-  populateStorage,
-  storageStateAuthParamsKey,
-  storeAccounts,
-} from 'components/storage/storage';
 import {
   folderIdAllKey,
   folderIdMap,
@@ -34,6 +23,7 @@ import {getCachedPermissions, storeYTCurrentUser} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
 import {hasType} from 'components/api/api__resource-types';
+import {i18n} from 'components/i18n/i18n';
 import {isIOSPlatform, until} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {loadConfig} from 'components/config/config';
@@ -41,11 +31,13 @@ import {loadTranslation} from 'components/i18n/i18n-translation';
 import {logEvent} from 'components/log/log-helper';
 import {normalizeAuthParams} from 'components/auth/oauth2-helper';
 import {notify, notifyError} from 'components/notification/notification';
-import {SET_PROGRESS} from './action-types';
+import {openByUrlDetector} from 'components/open-url-handler/open-url-handler';
+import {SET_DRAFT_COMMENT_DATA, SET_PROGRESS} from './action-types';
 import {setApi} from 'components/api/api__instance';
+
 import type {Activity} from 'types/Activity';
 import type {AppConfig, EndUserAgreement} from 'types/AppConfig';
-import type {AppState} from '../reducers';
+import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
 import type {AuthParams, OAuthParams2} from 'types/Auth';
 import type {CustomError} from 'types/Error';
@@ -62,13 +54,12 @@ import type {NotificationRouteData} from 'types/Notification';
 import type {PermissionCacheItem} from 'types/Permission';
 import type {StorageState} from 'components/storage/storage';
 import type {WorkTimeSettings} from 'types/Work';
+import {DraftCommentData, IssueComment} from 'types/CustomFields';
 import {UserGeneralProfileLocale} from 'types/User';
+import {AnyIssue} from 'types/Issue';
 
-type Action = (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: () => Api,
-) => Promise<void | boolean | unknown> | typeof undefined;
+type Action = (dispatch: (arg0: any) => any, getState: () => AppState, getApi: () => Api) => Promise<any>;
+
 export function setNetworkState(networkState: NetInfoState): Action {
   return async (
     dispatch: (arg0: any) => any,
@@ -91,7 +82,7 @@ export function logOut(): Action {
     if (auth) {
       auth.logOut();
     }
-    clearStorage();
+    storage.clearStorage();
 
     setApi(null);
     dispatch({
@@ -208,15 +199,15 @@ export const cacheUserLastVisitedArticle = (
 ) => {
   try {
     if (!article || !article.id) {
-      flushStoragePart({
+      storage.flushStoragePart({
         articleLastVisited: null,
       });
     } else {
       const articleLastVisited: {
         article?: Article;
         activities?: Activity[];
-      } | null = getStorageState().articleLastVisited;
-      flushStoragePart({
+      } | null = storage.getStorageState().articleLastVisited;
+      storage.flushStoragePart({
         articleLastVisited: {
           ...{
             article,
@@ -246,8 +237,8 @@ export function loadCurrentUserAndSetAPI(): Action {
       const auth: OAuth2 = (getState().app.auth as any) as OAuth2;
       const authParams = auth.getAuthParams();
       await auth.loadCurrentUser(authParams);
-      await flushStoragePart({
-        currentUser: {...getStorageState().currentUser, ...auth.currentUser},
+      await storage.flushStoragePart({
+        currentUser: {...storage.getStorageState().currentUser, ...auth.currentUser},
       });
       setApi(new Api(auth));
     }
@@ -281,7 +272,7 @@ function showUserAgreement(agreement: Agreement) {
 }
 
 async function storeConfig(config: AppConfig) {
-  await flushStoragePart({
+  await storage.flushStoragePart({
     config,
   });
 }
@@ -292,7 +283,7 @@ function populateAccounts() {
     getState: () => AppState,
     getApi: () => Api,
   ) => {
-    const otherAccounts: StorageState[] = await getOtherAccounts();
+    const otherAccounts: StorageState[] = await storage.getOtherAccounts();
     dispatch(receiveOtherAccounts(otherAccounts));
   };
 }
@@ -348,18 +339,18 @@ function applyAccount(
   ) => {
     const otherAccounts: StorageState[] =
       getState().app.otherAccounts || [];
-    const currentAccount: StorageState = getStorageState();
+    const currentAccount: StorageState = storage.getStorageState();
     const newOtherAccounts: StorageState[] = [
       currentAccount,
       ...otherAccounts,
     ];
-    await storeAccounts(newOtherAccounts);
+    await storage.storeAccounts(newOtherAccounts);
     dispatch(receiveOtherAccounts(newOtherAccounts));
     const creationTimestamp: number = Date.now();
-    await flushStorage({
-      ...initialState,
+    await storage.flushStorage({
+      ...storage.initialState,
       creationTimestamp: creationTimestamp,
-      [storageStateAuthParamsKey]: creationTimestamp.toString(),
+      [storage.storageStateAuthParamsKey]: creationTimestamp.toString(),
     } as StorageState);
     await auth.cacheAuthParams(authParams, creationTimestamp.toString());
     await storeConfig(config);
@@ -401,7 +392,7 @@ export function addAccount(serverUrl: string = ''): Action {
       await dispatch(
         applyAccount(config, tmpAuthInstance, normalizeAuthParams(authParams)),
       );
-      const user: User | null | undefined = getStorageState().currentUser;
+      const user: User | null | undefined = storage.getStorageState().currentUser;
       const userName: string = user?.name || '';
       log.info(
         `Successfully added account, user "${userName}", server "${config.backendUrl}"`,
@@ -410,7 +401,7 @@ export function addAccount(serverUrl: string = ''): Action {
       notifyError(err as CustomError);
       const {otherAccounts} = getState().app;
 
-      if (!getStorageState().config && otherAccounts?.length) {
+      if (!storage.getStorageState().config && otherAccounts?.length) {
         log.info('Restoring prev account');
         await dispatch(switchAccount(otherAccounts[0], true));
       }
@@ -452,7 +443,7 @@ export function updateOtherAccounts(
     getApi: () => Api,
   ) => {
     const state: AppState = getState();
-    const currentAccount: StorageState = getStorageState();
+    const currentAccount: StorageState = storage.getStorageState();
     log.info(
       `Changing account: ${currentAccount?.config?.backendUrl || ''} -> ${
         account?.config?.backendUrl || ''
@@ -468,8 +459,8 @@ export function updateOtherAccounts(
       ...(prevAccount && currentAccount !== account ? [prevAccount] : []),
       ...otherAccounts,
     ];
-    await storeAccounts(updatedOtherAccounts);
-    await flushStorage(account);
+    await storage.storeAccounts(updatedOtherAccounts);
+    await storage.flushStorage(account);
     dispatch(receiveOtherAccounts(updatedOtherAccounts));
     return otherAccounts;
   };
@@ -550,7 +541,7 @@ export function removeAccountOrLogOut(): Action {
 
     await getApi().user.logout();
     dispatch(logOut());
-    await clearStorage();
+    await storage.clearStorage();
 
     log.info('Logging out from the curren account');
     if (otherAccounts.length > 0) {
@@ -573,7 +564,7 @@ function setUserPermissions(permissions: PermissionCacheItem[]): Action {
       type: types.SET_PERMISSIONS,
       permissionsStore: new PermissionsStore(permissions),
       currentUser:
-        getState().app?.auth?.currentUser || getStorageState().currentUser,
+        getState().app?.auth?.currentUser || storage.getStorageState().currentUser,
     });
   };
 }
@@ -612,7 +603,7 @@ export function completeInitialization(
     getApi: () => Api,
   ) => {
     log.debug('Completing initialization');
-    const cachedCurrentUser: UserCurrent | null | undefined = getStorageState()
+    const cachedCurrentUser: UserCurrent | null | undefined = storage.getStorageState()
       ?.currentUser?.ytCurrentUser;
     const cachedLocale: UserGeneralProfileLocale | null | undefined =
       cachedCurrentUser?.profiles?.general?.locale;
@@ -629,7 +620,7 @@ export function completeInitialization(
       loadTranslation(userProfileLocale?.locale, userProfileLocale?.language);
 
       if (!issueId) {
-        redirectToHome(getStorageState()?.config?.backendUrl);
+        redirectToHome(storage.getStorageState()?.config?.backendUrl);
       }
     }
 
@@ -785,9 +776,9 @@ export function onLogIn(authParams: AuthParams): Action {
     const auth: OAuth2 | null = getState().app.auth;
     const creationTimestamp: number = Date.now();
     const authStorageStateValue: string = creationTimestamp.toString();
-    await flushStoragePart({
+    await storage.flushStoragePart({
       creationTimestamp: creationTimestamp,
-      [storageStateAuthParamsKey]: authStorageStateValue,
+      [storage.storageStateAuthParamsKey]: authStorageStateValue,
     });
 
     if (auth && authParams) {
@@ -819,7 +810,7 @@ export function cacheProjects(): (
     const projects: Folder[] = userFolders.filter((it: Folder) =>
       hasType.project(it),
     );
-    await flushStoragePart({
+    await storage.flushStoragePart({
       projects: projects,
     });
     return projects;
@@ -921,7 +912,7 @@ export function redirectToRoute(
     return isRedirected;
 
     async function setUser(): Promise<boolean> {
-      const hubCurrentUser: UserCurrent | null | undefined = getStorageState()
+      const hubCurrentUser: UserCurrent | null | undefined = storage.getStorageState()
         .currentUser;
       const ytCurrentUser: User | null | undefined =
         hubCurrentUser?.ytCurrentUser;
@@ -946,7 +937,7 @@ function redirectToHome(backendUrl: string = '') {
 async function refreshConfig(backendUrl: string): Promise<AppConfig> {
   const updatedConfig: AppConfig = await doConnect(backendUrl);
   await storeConfig(updatedConfig);
-  await flushStoragePart({
+  await storage.flushStoragePart({
     currentAppVersion: packageJson.version,
   });
   return updatedConfig;
@@ -962,7 +953,7 @@ export function initializeApp(
     getState: () => AppState,
     getApi: () => Api,
   ): Promise<void> => {
-    const cachedCurrentUser: UserCurrent | null | undefined = getStorageState()
+    const cachedCurrentUser: UserCurrent | null | undefined = storage.getStorageState()
       ?.currentUser?.ytCurrentUser;
     const userProfileLocale: UserGeneralProfileLocale | null | undefined =
       cachedCurrentUser?.profiles?.general?.locale;
@@ -975,7 +966,7 @@ export function initializeApp(
       redirectToRoute(config, issueId, navigateToActivity),
     );
     let configCurrent = config;
-    const currentAppVersion: string | null | undefined = getStorageState()
+    const currentAppVersion: string | null | undefined = storage.getStorageState()
       .currentAppVersion;
     const versionHasChanged: boolean =
       currentAppVersion != null && packageJson.version !== currentAppVersion;
@@ -1060,7 +1051,7 @@ export function setAccount(
     getState: () => AppState,
     getApi: () => Api,
   ) => {
-    const state: StorageState = await populateStorage();
+    const state: StorageState = await storage.populateStorage();
     await dispatch(populateAccounts());
     const notificationBackendUrl: string | null | undefined =
       notificationRouteData?.backendUrl;
@@ -1079,13 +1070,13 @@ export function setAccount(
 
       if (notificationIssueAccount) {
         await dispatch(updateOtherAccounts(notificationIssueAccount));
-        flushStoragePart({
+        storage.flushStoragePart({
           config: notificationIssueAccount.config,
         });
       }
     }
 
-    const targetConfig: AppConfig | null | undefined = getStorageState().config;
+    const targetConfig: AppConfig | null | undefined = storage.getStorageState().config;
 
     if (targetConfig) {
       dispatch(
@@ -1154,7 +1145,7 @@ export function subscribeToPushNotifications(): Action {
 
 function isRegisteredForPush(): boolean {
   //TODO: YTM-1267
-  const storageState: StorageState = getStorageState();
+  const storageState: StorageState = storage.getStorageState();
   return isIOSPlatform()
     ? storageState.isRegisteredForPush
     : Boolean(storageState.deviceToken);
@@ -1163,7 +1154,7 @@ function isRegisteredForPush(): boolean {
 function setRegisteredForPush(isRegistered: boolean) {
   if (isIOSPlatform()) {
     //TODO: also use device token
-    flushStoragePart({
+    storage.flushStoragePart({
       isRegisteredForPush: isRegistered,
     });
   }
@@ -1182,8 +1173,8 @@ function receiveInboxUpdateStatus(
 }
 
 const getFirstCachedThread = (): InboxThread | null => {
-  const inboxThreadsCache: | InboxThreadsCache | null = getStorageState()?.inboxThreadsCache;
-  return inboxThreadsCache?.[folderIdAllKey as unknown]?.[0];
+  const inboxThreadsCache: storage.InboxThreadsCache | null = storage.getStorageState()?.inboxThreadsCache;
+  return inboxThreadsCache?.[folderIdAllKey]?.[0];
 };
 
 const inboxCheckUpdateStatus = (): Action => {
@@ -1234,8 +1225,61 @@ const setGlobalInProgress = (isInProgress: boolean) => ({
   isInProgress,
 });
 
+export function setDraftCommentData(setDraft: Function, getCommentDraft: () => () => Promise<IssueComment | null>, entity: AnyIssue | Article) {
+  return {
+    entity,
+    getCommentDraft,
+    setDraft,
+    type: SET_DRAFT_COMMENT_DATA,
+  };
+}
+
+const addMentionToDraftComment = (userLogin: string): Action => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
+    if (getState().app?.networkState?.isConnected !== true) {
+      return;
+    }
+
+    try {
+      const draftData: DraftCommentData = await getState().app.draftCommentData;
+      if (draftData.getCommentDraft && draftData.setDraft) {
+        const commentDraft: IssueComment | null = await dispatch(draftData.getCommentDraft());
+        const draftText: string = commentDraft?.text ? `${commentDraft.text}\n\n` : '';
+        const text: string = `${draftText}@${userLogin} `;
+        dispatch(
+          draftData.setDraft({
+            ...commentDraft,
+            text,
+          }, false)
+        );
+      }
+    } catch (e) {
+    }
+  };
+};
+
+const getDraftCommentData = () => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ): Promise<DraftCommentData | null> => {
+    try {
+      return await getState().app.draftCommentData;
+    } catch (e) {
+      return null;
+    }
+  };
+};
+
 
 export {
+  addMentionToDraftComment,
+  getDraftCommentData,
   inboxCheckUpdateStatus,
   setGlobalInProgress,
 };

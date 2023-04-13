@@ -3,6 +3,7 @@ import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import OAuth2 from 'components/auth/oauth2';
 import {createReducer} from 'redux-create-reducer';
 import {issuePermissionsNull} from 'components/issue-permissions/issue-permissions-helper';
+
 import type Auth from 'components/auth/oauth2';
 import type {EndUserAgreement} from 'types/AppConfig';
 import type {NetInfoState} from '@react-native-community/netinfo';
@@ -10,7 +11,10 @@ import type {PermissionsStore} from 'components/permissions-store/permissions-st
 import type {StorageState} from 'components/storage/storage';
 import type {User, UserAppearanceProfile, UserArticlesProfile} from 'types/User';
 import type {WorkTimeSettings} from 'types/Work';
+import {DraftCommentData} from 'types/CustomFields';
 import {InboxFolder} from 'types/Inbox';
+
+
 export type RootState = {
   auth: OAuth2 | null;
   showMenu: boolean;
@@ -26,7 +30,9 @@ export type RootState = {
   networkState: NetInfoState | null;
   inboxThreadsFolders: InboxFolder[];
   isInProgress?: boolean;
+  draftCommentData: DraftCommentData,
 };
+
 const initialState: RootState = {
   auth: null,
   showMenu: false,
@@ -44,7 +50,10 @@ const initialState: RootState = {
   },
   inboxThreadsFolders: [],
   isInProgress: false,
+  draftCommentData: {} as DraftCommentData,
 };
+
+
 export default createReducer(initialState, {
   [types.INITIALIZE_AUTH](
     state: RootState,
@@ -295,4 +304,19 @@ export default createReducer(initialState, {
   ) {
     return {...state, isInProgress: action.isInProgress};
   },
-}) as any;
+
+  [types.SET_DRAFT_COMMENT_DATA](
+    state: RootState,
+    action: DraftCommentData,
+  ) {
+    const {setDraft, getCommentDraft, entity} = action;
+    return {
+      ...state,
+      draftCommentData: {
+        entity,
+        getCommentDraft,
+        setDraft,
+      },
+    };
+  },
+});

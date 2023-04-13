@@ -3,7 +3,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {secondaryText, UNIT} from 'components/common-styles';
 
 
-export default EStyleSheet.create({
+export const rowStyles = {
   user: {
     flexDirection: 'row',
   },
@@ -37,4 +37,7 @@ export default EStyleSheet.create({
     ...secondaryText,
     color: '$icon',
   },
-});
+};
+
+
+export default EStyleSheet.create(rowStyles);

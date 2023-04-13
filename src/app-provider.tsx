@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {StatusBar} from 'react-native';
 
-import Toast from 'react-native-easy-toast';
 import {Host} from 'react-native-portalize';
 import {
   SafeAreaView,
@@ -20,7 +19,6 @@ import {
   getUITheme,
   getThemeMode,
 } from 'components/theme/theme';
-import {setNotificationComponent} from 'components/notification/notification';
 import {ThemeContext} from 'components/theme/theme-context';
 
 import type {Theme, UITheme} from 'types/Theme';
@@ -72,12 +70,6 @@ export default class AppProvider extends Component<void, State> {
                       />
                     </Host>
                   </ErrorBoundary>
-
-                  <Toast
-                    ref={toast =>
-                      toast ? setNotificationComponent(toast) : null
-                    }
-                  />
                   <Network/>
                 </SafeAreaView>
               </SafeAreaProvider>

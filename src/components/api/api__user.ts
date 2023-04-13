@@ -1,10 +1,11 @@
 import ApiBase from './api__base';
-import {handleRelativeUrl} from '../config/config';
 import {ResourceTypes} from './api__resource-types';
+
 import type Auth from '../auth/oauth2';
+import type {Folder, User, UserAppearanceProfile} from 'types/User';
 import type {IssueComment} from 'types/CustomFields';
 import type {Reaction} from 'types/Reaction';
-import type {Folder, User, UserAppearanceProfile} from 'types/User';
+
 export default class UserAPI extends ApiBase {
   apiUrl: string;
   SEARCH_CONTEXT_FIELDS: string[] = ['id', 'name', 'shortName', 'query'];
@@ -26,8 +27,11 @@ export default class UserAPI extends ApiBase {
     }/users`;
   }
 
-  async getUser(userId: string = 'me'): Promise<User> {
-    const queryString = ApiBase.createFieldsQuery([
+  async getUserCard(userId: string): Promise<User> {
+    return this.getUser(userId, 'avatarUrl,email,fullName,login,issueRelatedGroup(icon)');
+  }
+  async getUser(userId: string = 'me', fields?: string): Promise<User> {
+    const queryString = ApiBase.createFieldsQuery(fields ? [fields] : [
       'id',
       'ringId',
       'avatarUrl',
@@ -54,11 +58,14 @@ export default class UserAPI extends ApiBase {
         },
       },
     ]);
-    const user: User = await this.makeAuthorizedRequest(
-      `${this.apiUrl}/${userId}?${queryString}`,
-    );
-    user.avatarUrl = handleRelativeUrl(user.avatarUrl, this.config.backendUrl);
-    return user;
+    const user: User = await this.makeAuthorizedRequest(`${this.apiUrl}/${userId}?${queryString}`);
+    if (user?.issueRelatedGroup?.icon) {
+      user.issueRelatedGroup.icon = this.convertToAbsURL(user.issueRelatedGroup.icon);
+    }
+    return {
+      ...user,
+      avatarUrl: this.convertToAbsURL(user.avatarUrl),
+    };
   }
 
   async getUserFolders(

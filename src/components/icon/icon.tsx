@@ -1,11 +1,15 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
+
+import EStyleSheet from 'react-native-extended-stylesheet';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconVCS from '@jetbrains/icons/pr-merged.svg';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import {isAndroidPlatform} from 'util/util';
+
 import IconYTM from './youtrack-icon';
+import {isAndroidPlatform} from 'util/util';
+
 export {default as logo} from './youtrack-logo-512.png';
+
 type Props = {
   name?: string;
   size?: number;
@@ -22,22 +26,19 @@ const defaultProps = () => ({
   isFontAwesome: false,
 });
 
-class DefaultIcon extends PureComponent<Props, void> {
-  static defaultProps: Props = defaultProps;
-
-  render() {
-    if (!this.props.name) {
-      return null;
-    }
-
-    const Icon = this.props.isFontAwesome ? IconFA : IconMaterial;
-    return <Icon {...this.props} />;
+export function IconFont(props: Props): JSX.Element | null {
+  if (!props.name) {
+    return null;
   }
+
+  const Icon = props.isFontAwesome ? IconFA : IconMaterial;
+  return <Icon {...{...defaultProps(), ...props}} />;
 }
+
 /* Main menu icons */
 
 export const IconAccountAlert = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: 'account-alert',
       ...props,
@@ -47,7 +48,7 @@ export const IconAccountAlert = (props?: Props) => (
 
 /* Material icons */
 export const IconMagnify = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: 'magnify',
       ...props,
@@ -59,7 +60,7 @@ export const IconMagnifyZoom = (
     zoomedIn?: boolean;
   },
 ) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: props.zoomedIn ? 'magnify-minus-outline' : 'magnify-plus-outline',
       ...props,
@@ -67,7 +68,7 @@ export const IconMagnifyZoom = (
   />
 );
 export const IconLogout = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: 'logout',
       ...props,
@@ -75,7 +76,7 @@ export const IconLogout = (props?: Props) => (
   />
 );
 export const IconLock = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: 'lock',
       ...props,
@@ -83,7 +84,7 @@ export const IconLock = (props?: Props) => (
   />
 );
 export const IconArrowUp = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: 'arrow-up',
       ...props,
@@ -91,7 +92,7 @@ export const IconArrowUp = (props?: Props) => (
   />
 );
 export const IconPlus = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: 'plus',
       ...props,
@@ -99,7 +100,7 @@ export const IconPlus = (props?: Props) => (
   />
 );
 export const IconActions = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: 'dots-horizontal',
       ...props,
@@ -111,7 +112,7 @@ export const IconThumbUp = (
     isActive?: boolean;
   },
 ) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: props.isActive ? 'thumb-up' : 'thumb-up-outline',
       ...props,
@@ -119,7 +120,7 @@ export const IconThumbUp = (
   />
 );
 export const IconBookmark = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: 'bookmark',
       ...props,
@@ -127,7 +128,7 @@ export const IconBookmark = (props?: Props) => (
   />
 );
 export const IconShare = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: 'export-variant',
       ...props,
@@ -135,7 +136,7 @@ export const IconShare = (props?: Props) => (
   />
 );
 export const IconCircle = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: 'circle',
       ...props,
@@ -143,7 +144,7 @@ export const IconCircle = (props?: Props) => (
   />
 );
 export const IconCircleOutline = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: 'checkbox-blank-circle-outline',
       ...props,
@@ -153,7 +154,7 @@ export const IconCircleOutline = (props?: Props) => (
 
 /* FontAwesome icons */
 export const EllipsisVertical = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       isFontAwesome: true,
       name: 'ellipsis-v',
@@ -162,7 +163,7 @@ export const EllipsisVertical = (props?: Props) => (
   />
 );
 export const IconAngleRight = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       isFontAwesome: true,
       name: 'angle-right',
@@ -171,7 +172,7 @@ export const IconAngleRight = (props?: Props) => (
   />
 );
 export const IconCamera = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       isFontAwesome: true,
       name: 'camera',
@@ -180,7 +181,7 @@ export const IconCamera = (props?: Props) => (
   />
 );
 export const IconCheckboxBlank = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: 'checkbox-blank-outline',
       ...props,
@@ -188,7 +189,7 @@ export const IconCheckboxBlank = (props?: Props) => (
   />
 );
 export const IconCheckboxChecked = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: 'checkbox-marked',
       ...props,
@@ -196,7 +197,7 @@ export const IconCheckboxChecked = (props?: Props) => (
   />
 );
 export const IconClone = (props?: Props) => (
-  <DefaultIcon
+  <IconFont
     {...{
       isFontAwesome: true,
       name: 'clone',
@@ -247,7 +248,7 @@ export const IconCaretDownUp = (
     isDown?: boolean;
   },
 ) => (
-  <DefaultIcon
+  <IconFont
     {...{
       name: props.isDown ? 'caret-down' : 'caret-up',
       isFontAwesome: true,
@@ -266,7 +267,7 @@ export const IconAttachment = (props?: Props) => (
 export const IconBack = (props?: Props) => {
   if (isAndroid) {
     return (
-      <DefaultIcon
+      <IconFont
         {...{
           name: 'arrow-left',
           size: 24,

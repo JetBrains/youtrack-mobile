@@ -1,19 +1,23 @@
 import React, {Component} from 'react';
 import {UIManager} from 'react-native';
+
+import Toast from 'react-native-easy-toast';
+import {ActionSheetProvider, connectActionSheet} from '@expo/react-native-action-sheet';
+import {Notifications} from 'react-native-notifications';
 import {Provider} from 'react-redux';
+
 import AgileBoard from 'views/agile-board/agile-board';
 import AppProvider from './app-provider';
 import Article from 'views/article/article';
 import ArticleCreate from 'views/article-create/article-create';
 import AttachmentPreview from 'views/attachment-preview/attachment-preview';
-import {BottomSheetProvider} from 'components/bottom-sheet';
 import CreateIssue from 'views/create-issue/create-issue';
 import EnterServer from 'views/enter-server/enter-server';
 import Home from 'views/home/home';
 import Inbox from 'views/inbox/inbox';
+import InboxThreads from 'views/inbox-threads/inbox-threads';
 import Issue from 'views/issue/issue';
 import Issues from 'views/issues/issues';
-import InboxThreads from 'views/inbox-threads/inbox-threads';
 import KnowledgeBase from 'views/knowledge-base/knowledge-base';
 import log from 'components/log/log';
 import LoginForm from 'views/log-in/log-in';
@@ -24,13 +28,11 @@ import Router from 'components/router/router';
 import Settings from 'views/settings/settings';
 import store from './store';
 import WikiPage from 'views/wiki-page/wiki-page';
-import {
-  ActionSheetProvider,
-  connectActionSheet,
-} from '@expo/react-native-action-sheet';
-import {Notifications} from 'react-native-notifications';
+import {BottomSheetProvider} from 'components/bottom-sheet';
 import {onNavigateBack, setAccount} from 'actions/app-actions';
 import {rootRoutesList, routeMap} from 'app-routes';
+import {setNotificationComponent} from 'components/notification/notification';
+
 import type {NotificationRouteData} from 'types/Notification';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -221,9 +223,14 @@ class AppContainer extends Component<void, void> {
   render(): React.ReactNode {
     return (
       <BottomSheetProvider>
-        <ActionSheetProvider ref={this.setActionSheetRef} useModal={true}>
-          <AppActionSheetConnected/>
-        </ActionSheetProvider>
+        <>
+          <ActionSheetProvider ref={this.setActionSheetRef} useModal={true}>
+            <AppActionSheetConnected/>
+          </ActionSheetProvider>
+          <Toast
+            ref={toast => toast ? setNotificationComponent(toast) : null}
+          />
+        </>
       </BottomSheetProvider>
     );
   }

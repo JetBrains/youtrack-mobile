@@ -7,7 +7,9 @@ import ArticleActivityStream from './article__activity-stream';
 import ArticleAddComment from './article__add-comment';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
+import TipActivityActionAccessTouch from 'components/tip/tips/activity-touch-actions';
 import {convertCommentsToActivityPage, createActivityModel} from 'components/activity/activity-helper';
+import {setDraftCommentData} from 'actions/app-actions';
 
 import type {Activity} from 'types/Activity';
 import type {AppState} from 'reducers';
@@ -15,7 +17,6 @@ import type {Article} from 'types/Article';
 import type {IssueComment} from 'types/CustomFields';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
-import TipActivityActionAccessTouch from 'components/tip/tips/activity-touch-actions';
 
 interface Props {
   article: Article;
@@ -69,6 +70,14 @@ const ArticleActivities = (props: Props) => {
     },
     [isNaturalSortOrder],
   );
+
+  useEffect(() => {
+    dispatch(setDraftCommentData(
+      articleActions.updateArticleCommentDraft,
+      () => async () => await articleCommentDraft,
+      article,
+    ));
+  }, [article, articleCommentDraft, dispatch]);
 
   useEffect(() => {
     loadActivities(false);

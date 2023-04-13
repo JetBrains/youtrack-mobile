@@ -3,6 +3,8 @@ import type {Reaction} from './Reaction';
 import type {User} from './User';
 import type {Visibility} from './Visibility';
 import type {WorkItemType} from './Work';
+import {Entity} from 'components/issue-permissions/issue-permissions';
+
 export type TimeTrackingFieldInfo = {
   id: string;
   field: {
@@ -182,3 +184,9 @@ export type IssueLink = {
   issuesSize: number;
   unresolvedIssuesSize: number;
 };
+
+export interface DraftCommentData {
+  entity: Entity;
+  getCommentDraft: () => Promise<IssueComment | null>,
+  setDraft: Function;
+}

@@ -162,7 +162,13 @@ const IssueCommentEdit = (props: Props) => {
     return () => setComment();
   }, [setComment]);
   useEffect(() => {
-    if (state.editingComment.id === undefined && props.editingComment?.id) {
+    if (
+      state.editingComment.id === undefined && props.editingComment?.id ||
+      (
+        state.editingComment.id &&
+        state.editingComment.text !== props.editingComment?.text
+      )
+    ) {
       // set draft id
       changeState({
         editingComment: {...state.editingComment, ...props.editingComment},

@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
-import {bindActionCreators} from 'redux';
+import {bindActionCreators, Dispatch} from 'redux';
 import {connect} from 'react-redux';
 
 import AddSpentTimeForm from './activity__add-spent-time';
@@ -16,6 +16,7 @@ import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
 import Select from 'components/select/select';
+import TipActivityActionAccessTouch from 'components/tip/tips/activity-touch-actions';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
 import {addListenerGoOnline} from 'components/network/network-events';
@@ -38,14 +39,17 @@ import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {IssueContext} from '../issue-context';
 import {logEvent} from 'components/log/log-helper';
+import {setDraftCommentData} from 'actions/app-actions';
 import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables';
+
 import styles from './issue-activity.styles';
+
 import type {Activity} from 'types/Activity';
-import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
-import type {IssueComment} from 'types/CustomFields';
 import type {AnyIssue, IssueContextData} from 'types/Issue';
+import type {EventSubscription} from 'react-native';
+import type {IssueComment} from 'types/CustomFields';
 import type {State as IssueActivityState} from './issue-activity__reducers';
 import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
 import type {Theme, UITheme} from 'types/Theme';
@@ -53,7 +57,6 @@ import type {User, UserAppearanceProfile} from 'types/User';
 import type {WorkItem} from 'types/Work';
 import type {YouTrackWiki} from 'types/Wiki';
 import {ContextMenuConfigItem} from 'types/MenuConfig';
-import TipActivityActionAccessTouch from 'components/tip/tips/activity-touch-actions';
 
 type IssueActivityProps = Partial<
   IssueActivityState &
@@ -124,9 +127,12 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
 
   load = (issueId?: string) => {
     this.loadIssueActivities(false, issueId);
-    this.loadDraftComment(issueId);
+    this.loadDraftComment();
   };
-  loadDraftComment: () => any = () => this.props.getDraftComment();
+  loadDraftComment = async () => {
+    const draft: IssueComment | null = await this.props.getDraftComment();
+    this.props.setEditingComment(draft);
+  };
   loadIssueActivities = (doNotReset?: boolean, issueId?: string) => {
     if (isIssueActivitiesAPIEnabled()) {
       this.props.loadActivitiesPage(doNotReset, issueId);
@@ -538,8 +544,13 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch: Dispatch, ownProps: IssueActivityProps) => {
   const commentActions = createActivityCommentActions(ownProps.stateFieldName);
+  dispatch(setDraftCommentData(
+    commentActions.updateDraftComment,
+    commentActions.getDraftComment,
+    ownProps?.issue
+  ));
   return {
     ...bindActionCreatorsExt(
       createIssueActivityActions(ownProps.stateFieldName),
@@ -547,10 +558,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     ),
     ...bindActionCreators(attachmentActions, dispatch),
     ...bindActionCreatorsExt(commentActions, dispatch),
-    updateOptimisticallyActivityPage: activityPage =>
-      dispatch(receiveActivityPage(activityPage)),
-    onGetCommentVisibilityOptions: () =>
-      dispatch(commentActions.getCommentVisibilityOptions()),
+    updateOptimisticallyActivityPage: (activityPage: Activity[]) => dispatch(receiveActivityPage(activityPage)),
+    onGetCommentVisibilityOptions: () => dispatch(commentActions.getCommentVisibilityOptions()),
   };
 };
 

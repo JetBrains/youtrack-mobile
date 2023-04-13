@@ -44,7 +44,7 @@ export const WORK_ITEM_CREATE_NOT_OWN =
 export const WORK_ITEM_UPDATE = 'JetBrains.YouTrack.UPDATE_WORK_ITEM';
 export const WORK_ITEM_UPDATE_NOT_OWN =
   'JetBrains.YouTrack.UPDATE_NOT_OWN_WORK_ITEM';
-type Entity = AnyIssue | Article;
+export type Entity = AnyIssue | Article;
 export default class IssuePermissions {
   permissionsStore: PermissionsStore;
   currentUser: User;
@@ -296,6 +296,12 @@ export default class IssuePermissions {
   canLink: (entity: AnyIssue) => boolean = (entity: AnyIssue) => {
     return this.hasPermissionFor(entity, CAN_LINK_ISSUE);
   };
+  canReadUser(user: User) {
+    return this.isCurrentUser(user) || this.permissionsStore.has('jetbrains.jetpass.user-read');
+  }
+  canReadUserBasic(user: User) {
+    return this.isCurrentUser(user) || this.permissionsStore.has('jetbrains.jetpass.user-read-basic');
+  }
 
   /*
    Articles

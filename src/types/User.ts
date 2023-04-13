@@ -23,7 +23,7 @@ export type UserCurrent = User & {
   ytCurrentUser?: User;
 };
 export type IssueRelatedGroup = {
-  $type: string;
+  $type?: string;
   icon: string;
 };
 export type FeatureFlags = {
