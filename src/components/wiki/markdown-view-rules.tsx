@@ -32,6 +32,7 @@ import type {IssueFull} from 'types/Issue';
 import type {MarkdownNode} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
+import YoutubeVideo from 'components/wiki/markdown/markdown-video';
 export type Mentions = {
   articles: Article[];
   issues: IssueFull[];
@@ -59,27 +60,6 @@ function getMarkdownRules(
   onCheckboxUpdate?: (checked: boolean, position: number) => void,
   textStyle: TextStyleProp = {},
 ): Record<string, any> {
-  function renderVideo(
-    youtubeVideoId: string,
-    key: string,
-  ): React.ReactElement<React.ComponentProps<typeof WebView>, typeof WebView> {
-    return (
-      <WebView
-        key={key}
-        style={styles.video}
-        source={{
-          uri: `https://youtube.com/embed/${youtubeVideoId}?playsinline=1&controls:1`,
-        }}
-        allowsFullscreenVideo={false}
-        allowsInlineMediaPlayback={true}
-        renderLoading={() => <ActivityIndicator color={uiTheme.colors.$link} />}
-        mediaPlaybackRequiresUserAction={true}
-        androidLayerType="hardware"
-        mixedContentMode="always"
-        javaScriptEnabled={true}
-      />
-    );
-  }
 
   const markdownImage = ({key, uri, alt, imageDimensions}) => {
     if (isGitHubBadge(uri)) {
@@ -95,7 +75,7 @@ function getMarkdownRules(
     const youtubeVideoId: string | null | undefined = getYouTubeId(uri);
 
     if (youTubeURL.test(uri) && youtubeVideoId) {
-      return renderVideo(youtubeVideoId, key);
+      return <YoutubeVideo videoId={youtubeVideoId}/>;
     }
 
     let imageHeaders;
