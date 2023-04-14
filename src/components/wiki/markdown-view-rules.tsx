@@ -10,7 +10,7 @@ import Hyperlink from 'react-native-hyperlink';
 import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
 
-import CodeHighlighter from './code-renderer';
+import CodeHighlighter from './renderers/renderer__code';
 import HTML from './renderers/renderer__html';
 import MarkdownMention from 'components/wiki/markdown/markdown-mention';
 import renderArticleMentions from './renderers/renderer__article-mentions';

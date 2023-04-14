@@ -6,41 +6,41 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
 import SyntaxHighlighter from 'react-native-syntax-highlighter';
+import {decodeHTML} from 'entities';
 import {idea, darcula} from 'react-syntax-highlighter/dist/esm/styles/hljs';
+
 import IconCopy from '@jetbrains/icons/copy.svg';
 import IconFullscreen from '@jetbrains/icons/fullscreen.svg';
-import Router from '../router/router';
-import {decodeHTML} from 'entities';
+import Router from '../../router/router';
+import {i18n} from 'components/i18n/i18n';
 import {isAndroidPlatform} from 'util/util';
 import {
   monospaceFontAndroid,
   monospaceFontIOS,
   SECONDARY_FONT_SIZE,
-} from 'components/common-styles/typography';
-import {notify} from '../notification/notification';
-import {showMoreText} from '../text-view/text-view';
-import styles from './youtrack-wiki.styles';
-import type {MarkdownNode} from '../../types/Markdown';
-import type {Node as ReactNode} from 'React';
+} from 'components/common-styles';
+import {notify} from 'components/notification/notification';
+import {showMoreText} from 'components/text-view/text-view';
+
+import styles from '../youtrack-wiki.styles';
+
+import type {MarkdownNode} from 'types/Markdown';
 import type {UITheme} from 'types/Theme';
-import type {ViewStyleProp} from 'types/Internal';
-import {i18n} from 'components/i18n/i18n';
-const isAndroid: boolean = isAndroidPlatform();
-const MAX_CODE_LENGTH: number = 630;
-type Node = {
-  content?: string;
-  children?: any;
-};
+
 type CodeData = {
   code: string;
   snippet: string;
   hasMore: boolean;
 };
+type MarkdownNodeExt = MarkdownNode & { sourceInfo?: string; data?: string[]; };
 
-function getCodeData(node: Node): CodeData {
-  let code: string =
-    node.content || (node?.children || []).map(it => it.data).join('\n') || '';
+const isAndroid: boolean = isAndroidPlatform();
+const MAX_CODE_LENGTH: number = 630;
+
+function getCodeData(node: MarkdownNode): CodeData {
+  let code: string = node.content || (node?.children || []).map((it: MarkdownNodeExt) => it.data).join('\n') || '';
   code = code.replace(/(\n){4,}/g, '\n\n').replace(/[ \t]+$/g, '');
   const hasMore: boolean = code.length > MAX_CODE_LENGTH; //https://github.com/facebook/react-native/issues/19453
 
@@ -51,12 +51,9 @@ function getCodeData(node: Node): CodeData {
   };
 }
 
-function getNodeLanguage(
-  node: MarkdownNode & {
-    sourceInfo: string | null | undefined;
-  },
-): string | null | undefined {
-  return node.sourceInfo;
+
+function getNodeLanguage(node: MarkdownNodeExt): string {
+  return node.sourceInfo || '';
 }
 
 function isStacktraceOrException(language?: string): boolean {
@@ -64,9 +61,7 @@ function isStacktraceOrException(language?: string): boolean {
 }
 
 function onShowFullCode(code: string) {
-  Router.WikiPage({
-    plainText: code,
-  });
+  Router.WikiPage({plainText: code});
 }
 
 function Highlighter({
@@ -93,13 +88,11 @@ function Highlighter({
   );
 }
 
-function getCodeStyle(uiTheme: UITheme): ViewStyleProp {
-  const codeStyle: ViewStyleProp = uiTheme.dark ? darcula : idea;
-
+function getCodeStyle(uiTheme: UITheme) {
+  const codeStyle = uiTheme.dark ? darcula : idea;
   for (const i in codeStyle) {
     codeStyle[i].lineHeight = '1em';
   }
-
   return {
     ...codeStyle,
     ...{
@@ -112,10 +105,10 @@ function getCodeStyle(uiTheme: UITheme): ViewStyleProp {
 }
 
 export function renderWikiCode(
-  node: Node,
-  language?: string | null | undefined,
+  node: MarkdownNode,
+  language: string,
   uiTheme: UITheme,
-): ReactNode {
+): JSX.Element {
   const codeData: CodeData = getCodeData(node);
   return (
     <Text onStartShouldSetResponder={() => true}>
@@ -138,7 +131,7 @@ export function renderWikiCode(
   );
 }
 
-function CodeHighlighter(props: {node: Node; uiTheme: UITheme}) {
+function CodeHighlighter(props: {node: MarkdownNode; uiTheme: UITheme}) {
   const {node, uiTheme} = props;
   const codeData: CodeData = getCodeData(node);
   const language: string = getNodeLanguage(node);
