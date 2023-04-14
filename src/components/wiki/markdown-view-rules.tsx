@@ -1,38 +1,34 @@
 import React from 'react';
 import {
-  ActivityIndicator,
   Linking,
   Text,
   View,
 } from 'react-native';
 
-import {WebView} from 'react-native-webview';
 import Hyperlink from 'react-native-hyperlink';
 // @ts-ignore
 import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
 
-import calculateAspectRatio from 'components/aspect-ratio/aspect-ratio';
 import CodeHighlighter from './code-renderer';
 import HTML from './renderers/renderer__html';
-import ImageWithProgress from 'components/image/image-with-progress';
 import renderArticleMentions from './renderers/renderer__article-mentions';
 import Router from 'components/router/router';
-import {getApi} from 'components/api/api__instance';
 import {guid, isURLPattern} from 'util/util';
 import {hasMimeType} from 'components/mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from 'components/icon/icon';
+import {MarkdownEmbedLink} from 'components/wiki/markdown';
 import {whiteSpacesRegex} from './util/patterns';
 
 import styles from './youtrack-wiki.styles';
 
 import type {Article} from 'types/Article';
-import type {Attachment, ImageDimensions} from 'types/CustomFields';
+import type {Attachment} from 'types/CustomFields';
 import type {IssueFull} from 'types/Issue';
 import type {MarkdownNode} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
-import YoutubeVideo from 'components/wiki/markdown/markdown-video';
+
 export type Mentions = {
   articles: Article[];
   issues: IssueFull[];
@@ -42,16 +38,11 @@ const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
 const imageRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
 const imageWidth: RegExp = /{width=\d+(%|px)?}/i;
 const imageHeight: RegExp = /{height=\d+(%|px)?}/i;
-const youTubeURL: RegExp = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/i;
 const htmlTagRegex = /(<([^>]+)>)/gi;
 const googleCalendarURL: RegExp = /^http(s?):\/\/calendar.google.([a-z]{2,})\/calendar/i;
 const googleDocsURL: RegExp = /^http(s?):\/\/docs.google.([a-z]{2,})\/document/i;
 const figmaURL: RegExp = /^http(s?):\/\/(www\.)?figma.com/i;
 
-function getYouTubeId(url: string): string | null | undefined {
-  const arr = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-  return undefined !== arr[2] ? arr[2].split(/[^\w-]/i)[0] : arr[0];
-}
 
 function getMarkdownRules(
   attachments: Attachment[] = [],
@@ -60,48 +51,6 @@ function getMarkdownRules(
   onCheckboxUpdate?: (checked: boolean, position: number) => void,
   textStyle: TextStyleProp = {},
 ): Record<string, any> {
-
-  const markdownImage = ({key, uri, alt, imageDimensions}) => {
-    if (isGitHubBadge(uri)) {
-      return null;
-    }
-
-    const dimensions: ImageDimensions = calculateAspectRatio(
-      imageDimensions || {
-        width: 250,
-        height: 300,
-      },
-    );
-    const youtubeVideoId: string | null | undefined = getYouTubeId(uri);
-
-    if (youTubeURL.test(uri) && youtubeVideoId) {
-      return <YoutubeVideo videoId={youtubeVideoId}/>;
-    }
-
-    let imageHeaders;
-
-    try {
-      imageHeaders = getApi().auth.getAuthorizationHeaders();
-    } catch (e) {
-      imageHeaders = {};
-    }
-
-    const imageProps: Record<string, any> = {
-      key,
-      style: dimensions,
-      source: {
-        uri,
-        headers: imageHeaders,
-      },
-    };
-
-    if (alt) {
-      imageProps.accessible = true;
-      imageProps.accessibilityLabel = alt;
-    }
-
-    return <ImageWithProgress {...imageProps} />;
-  };
 
   const isNodeContainsCheckbox = (node: MarkdownNode): boolean => {
     let hasCheckbox: boolean = false;
@@ -179,12 +128,11 @@ function getMarkdownRules(
       );
 
       if (attach && attach.url && hasMimeType.image(attach)) {
-        return markdownImage({
-          key: node.key,
-          uri: attach.url,
-          alt: node?.attributes?.alt,
-          imageDimensions: attach.imageDimensions,
-        });
+        return <MarkdownEmbedLink
+          uri={attach.url}
+          alt={node?.attributes?.alt}
+          imageDimensions={attach.imageDimensions}
+        />;
       }
     }
 
@@ -264,12 +212,11 @@ function getMarkdownRules(
         return renderHyperLink(url, [inheritedStyles, style.link]);
       }
 
-      return markdownImage({
-        key: node.key,
-        uri: url,
-        alt: alt,
-        imageDimensions: targetAttach?.imageDimensions,
-      });
+      return <MarkdownEmbedLink
+        uri={url}
+        alt={alt}
+        imageDimensions={targetAttach?.imageDimensions}
+      />;
     },
     code_inline: (
       node: MarkdownNode,
@@ -503,10 +450,6 @@ function isFigmaImage(url: string = ''): boolean {
 
 function isGoogleShared(url: string = ''): boolean {
   return googleCalendarURL.test(url) || googleDocsURL.test(url);
-}
-
-function isGitHubBadge(url: string = ''): boolean {
-  return url.indexOf('badgen.net/badge') !== -1;
 }
 
 function isHTMLLinebreak(text: string): boolean {
