@@ -28,6 +28,7 @@ import type {IssueFull} from 'types/Issue';
 import type {MarkdownNode} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
+import MarkdownMention from 'components/wiki/markdown/markdown-mention';
 
 export type Mentions = {
   articles: Article[];
@@ -67,27 +68,6 @@ function getMarkdownRules(
     }
 
     return hasCheckbox;
-  };
-
-  const renderIssueIdLink = (
-    issueId: string,
-    styles: Array<Record<string, any>>,
-    key: string,
-  ) => {
-    return (
-      <Text
-        selectable={true}
-        key={key}
-        onPress={() => {
-          Router.Issue({
-            issueId: issueId.trim(),
-          });
-        }}
-        style={[styles, textStyle]}
-      >
-        {issueId}
-      </Text>
-    );
   };
 
   const renderHyperLink = (linkText: string, style: any): React.ReactNode => (
@@ -148,11 +128,11 @@ function getMarkdownRules(
             style={baseTextStyle}
           >
             {renderHyperLink(text.slice(0, matchedIndex), baseTextStyle)}
-            {renderIssueIdLink(
-              matched[0],
-              [...baseTextStyle, styles.link],
-              `${node.key}1`,
-            )}
+            <MarkdownMention
+              mention={matched[0]}
+              onPress={() => Router.Issue({issueId: matched[0].trim()})}
+              style={[...baseTextStyle, styles.link]}
+            />
             {renderHyperLink(
               text.slice(matchedIndex + matched[0].length, text.length),
               baseTextStyle,
@@ -379,11 +359,11 @@ function getMarkdownRules(
               ]}
             >
               {issueIdRegExp.test(text)
-                ? renderIssueIdLink(
-                  text,
-                  [inheritedStyles, style.text, styles.link],
-                  node.key,
-                )
+                ? <MarkdownMention
+                  mention={text}
+                  onPress={() => Router.Issue({issueId: text.trim()})}
+                  style={[inheritedStyles, style.text, styles.link]}
+                />
                 : text}
               {' '}
             </Text>
