@@ -12,11 +12,13 @@ import UrlParse from 'url-parse';
 
 import CodeHighlighter from './code-renderer';
 import HTML from './renderers/renderer__html';
+import MarkdownMention from 'components/wiki/markdown/markdown-mention';
 import renderArticleMentions from './renderers/renderer__article-mentions';
 import Router from 'components/router/router';
 import {guid, isURLPattern} from 'util/util';
 import {hasMimeType} from 'components/mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from 'components/icon/icon';
+import {isMarkdownNodeContainsCheckbox} from 'components/wiki/markdown-helper';
 import {MarkdownEmbedLink} from 'components/wiki/markdown';
 import {whiteSpacesRegex} from './util/patterns';
 
@@ -28,7 +30,6 @@ import type {IssueFull} from 'types/Issue';
 import type {MarkdownNode} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
-import MarkdownMention from 'components/wiki/markdown/markdown-mention';
 
 export type Mentions = {
   articles: Article[];
@@ -52,23 +53,6 @@ function getMarkdownRules(
   onCheckboxUpdate?: (checked: boolean, position: number) => void,
   textStyle: TextStyleProp = {},
 ): Record<string, any> {
-
-  const isNodeContainsCheckbox = (node: MarkdownNode): boolean => {
-    let hasCheckbox: boolean = false;
-    let nodeChildren: MarkdownNode[] = node.children || [];
-
-    while (nodeChildren?.length > 0) {
-      hasCheckbox = nodeChildren.some(it => it.type === 'checkbox');
-
-      if (hasCheckbox) {
-        break;
-      }
-
-      nodeChildren = nodeChildren[0] && nodeChildren[0].children;
-    }
-
-    return hasCheckbox;
-  };
 
   const renderHyperLink = (linkText: string, style: any): React.ReactNode => (
     <Hyperlink key={guid()} linkStyle={style.link} linkDefault={true} linkText={linkText}/>
@@ -257,7 +241,7 @@ function getMarkdownRules(
       style: Record<string, any>,
       inheritedStyles: Record<string, any> = {},
     ) => {
-      const hasCheckbox: boolean = isNodeContainsCheckbox(node);
+      const hasCheckbox: boolean = isMarkdownNodeContainsCheckbox(node);
       return renderRules.list_item(
         node,
         children,
@@ -281,7 +265,7 @@ function getMarkdownRules(
       style: Record<string, any>,
       inheritedStyles: Record<string, any> = {},
     ) => {
-      return isNodeContainsCheckbox(node) ? (
+      return isMarkdownNodeContainsCheckbox(node) ? (
         <View
           key={node.key}
           style={[inheritedStyles, style.inline, styles.checkboxRow]}
@@ -299,7 +283,7 @@ function getMarkdownRules(
       style: Record<string, any>,
       inheritedStyles: Record<string, any> = {},
     ) => {
-      return isNodeContainsCheckbox(node) ? (
+      return isMarkdownNodeContainsCheckbox(node) ? (
         <View
           key={node.key}
           style={[inheritedStyles, style.textgroup, styles.checkboxTextGroup]}
@@ -379,7 +363,7 @@ function getMarkdownRules(
       style: Record<string, any>,
       inheritedStyles: Record<string, any> = {},
     ) => {
-      return isNodeContainsCheckbox(node) ? (
+      return isMarkdownNodeContainsCheckbox(node) ? (
         <View key={node.key} style={[inheritedStyles, style.textgroup]}>
           {children}
         </View>

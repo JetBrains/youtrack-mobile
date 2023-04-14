@@ -1,4 +1,5 @@
 import * as patterns from './util/patterns';
+import {MarkdownNode} from 'types/Markdown';
 export function isPureHTMLBlock(md: string | null) {
   const text: string = (md || '').toLowerCase().trim();
   return (
@@ -33,4 +34,19 @@ export function prepareHTML(md: string = ''): string {
     .replace(patterns.whiteSpacesInHTMLRegex, '><')
     .replace(patterns.htmlCodeStartRegex, '')
     .replace(patterns.htmlCodeEndRegex, '');
+}
+
+export function isMarkdownNodeContainsCheckbox(node: MarkdownNode): boolean {
+  let hasCheckbox: boolean = false;
+  let nodeChildren: MarkdownNode[] = node.children || [];
+
+  while (nodeChildren?.length > 0) {
+    hasCheckbox = nodeChildren.some(it => it.type === 'checkbox');
+    if (hasCheckbox) {
+      break;
+    }
+    nodeChildren = nodeChildren[0] && nodeChildren[0].children;
+  }
+
+  return hasCheckbox;
 }
