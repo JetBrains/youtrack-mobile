@@ -26,7 +26,7 @@ export default function renderArticleMentions(
   uiTheme: UITheme,
   style: Record<string, any>,
   inheritedStyles: Record<string, any>,
-) {
+): JSX.Element | null {
   const PLAIN_TEXT_TYPE: string = '-=TEXT=-';
   const textData: TextData[] = [];
   const tokens: string[] = node.content.split(' ');
@@ -142,4 +142,6 @@ export default function renderArticleMentions(
       </Text>
     );
   }
+
+  return null;
 }
