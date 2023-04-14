@@ -29,11 +29,12 @@ import styles from '../youtrack-wiki.styles';
 import type {MarkdownNode} from 'types/Markdown';
 import type {UITheme} from 'types/Theme';
 
-type CodeData = {
+interface CodeData {
   code: string;
   snippet: string;
   hasMore: boolean;
-};
+}
+
 type MarkdownNodeExt = MarkdownNode & { sourceInfo?: string; data?: string[]; };
 
 const isAndroid: boolean = isAndroidPlatform();
@@ -131,7 +132,7 @@ export function renderWikiCode(
   );
 }
 
-function CodeHighlighter(props: {node: MarkdownNode; uiTheme: UITheme}) {
+function MarkdownCodeHighlighter(props: {node: MarkdownNode; uiTheme: UITheme}) {
   const {node, uiTheme} = props;
   const codeData: CodeData = getCodeData(node);
   const language: string = getNodeLanguage(node);
@@ -205,4 +206,5 @@ function CodeHighlighter(props: {node: MarkdownNode; uiTheme: UITheme}) {
   );
 }
 
-export default React.memo(CodeHighlighter);
+
+export default React.memo(MarkdownCodeHighlighter);

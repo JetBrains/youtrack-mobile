@@ -10,7 +10,7 @@ import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel
 import AttachmentsRow from 'components/attachments-row/attachments-row';
 import CreateUpdateInfo from 'components/issue-tabbed/issue-tabbed__created-updated';
 import CustomFieldsPanel from 'components/custom-fields-panel/custom-fields-panel';
-import HTML from 'components/wiki/renderers/renderer__html';
+import HTML from 'components/wiki/markdown/markdown-html';
 import IssueCustomFieldText from 'components/custom-field/issue-custom-field-text';
 import IssueMarkdown from './issue__markdown';
 import IssueVotes from 'components/issue-actions/issue-votes';

@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, TouchableWithoutFeedback} from 'react-native';
 
 import Avatar from '../avatar/avatar';
-import HTML from 'components/wiki/renderers/renderer__html';
+import HTML from 'components/wiki/markdown/markdown-html';
 import MarkdownView from 'components/wiki/markdown-view';
 import YoutrackWiki from 'components/wiki/youtrack-wiki';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';

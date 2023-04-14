@@ -3,7 +3,7 @@ import React, {PureComponent} from 'react';
 import HTMLView from 'react-native-htmlview';
 import toHtml from 'htmlparser-to-html';
 import Router from '../router/router';
-import {renderWikiCode} from './renderers/renderer__code';
+import {renderWikiCode} from './markdown/markdown-code-highlighter';
 import {
   renderImage,
   renderTable,

@@ -10,16 +10,14 @@ import Hyperlink from 'react-native-hyperlink';
 import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
 
-import CodeHighlighter from './renderers/renderer__code';
-import HTML from './renderers/renderer__html';
+import HTML from './markdown/markdown-html';
 import MarkdownMention from 'components/wiki/markdown/markdown-mention';
-import MarkdownText from 'components/wiki/markdown/markdown-text';
 import Router from 'components/router/router';
 import {guid} from 'util/util';
 import {hasMimeType} from 'components/mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from 'components/icon/icon';
 import {isMarkdownNodeContainsCheckbox} from 'components/wiki/markdown-helper';
-import {MarkdownEmbedLink} from 'components/wiki/markdown';
+import {MarkdownCodeHighlighter, MarkdownEmbedLink, MarkdownText} from 'components/wiki/markdown';
 
 import styles from './youtrack-wiki.styles';
 
@@ -131,7 +129,7 @@ function getMarkdownRules(
       );
     },
     fence: (node: MarkdownNode) => (
-      <CodeHighlighter key={node.key} node={node} uiTheme={uiTheme} />
+      <MarkdownCodeHighlighter node={node} uiTheme={uiTheme} />
     ),
     link: (
       node: MarkdownNode,

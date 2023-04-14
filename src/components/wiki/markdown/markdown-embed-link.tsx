@@ -18,9 +18,15 @@ function getYouTubeId(url: string): string | undefined {
 const youTubeURL: RegExp = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/i;
 
 
-export default function MarkdownEmbedLink({uri, alt, imageDimensions}: {
-  uri: string, alt: string | undefined, imageDimensions: ImageDimensions | undefined
-}): JSX.Element | null {
+const MarkdownEmbedLink = ({
+  uri,
+  alt,
+  imageDimensions,
+}: {
+  uri: string;
+  alt: string | undefined;
+  imageDimensions: ImageDimensions | undefined;
+}): JSX.Element | null => {
 
   if (isGitHubBadge(uri)) {
     return null;
@@ -33,4 +39,7 @@ export default function MarkdownEmbedLink({uri, alt, imageDimensions}: {
   }
 
   return <MarkdownImage uri={uri} alt={alt} imageDimensions={imageDimensions}/>;
-}
+};
+
+
+export default React.memo(MarkdownEmbedLink);

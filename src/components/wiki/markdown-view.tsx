@@ -4,7 +4,7 @@ import Markdown from 'react-native-markdown-display';
 
 import apiHelper from 'components/api/api__helper';
 import getMarkdownRules from './markdown-view-rules';
-import HTML from './renderers/renderer__html';
+import HTML from './markdown/markdown-html';
 import MarkdownItInstance from './markdown-instance';
 import markdownStyles from './markdown-view-styles';
 import {getApi} from 'components/api/api__instance';
