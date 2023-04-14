@@ -129,7 +129,7 @@ const UserCard = ({
           style={styles.button}
         >
           <Text style={styles.buttonText}>
-            {i18n('Mention in a comment')}
+            {i18n('@Mention in a comment')}
           </Text>
         </TouchableOpacity>
       )}
