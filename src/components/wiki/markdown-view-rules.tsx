@@ -13,7 +13,6 @@ import UrlParse from 'url-parse';
 import HTML from './markdown/markdown-html';
 import MarkdownMention from 'components/wiki/markdown/markdown-mention';
 import Router from 'components/router/router';
-import {guid} from 'util/util';
 import {hasMimeType} from 'components/mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from 'components/icon/icon';
 import {isMarkdownNodeContainsCheckbox} from 'components/wiki/markdown-helper';
@@ -48,28 +47,6 @@ function getMarkdownRules(
   textStyle: TextStyleProp = {},
 ): Record<string, any> {
 
-  const renderHyperLink = (linkText: string, style: any): React.ReactNode => (
-    <Hyperlink key={guid()} linkStyle={style.link} linkDefault={true} linkText={linkText}/>
-  );
-
-  const textRenderer = (
-    node: MarkdownNode,
-    children: React.ReactElement,
-    parent: Record<string, any>,
-    style: Record<string, any>,
-    inheritedStyles: Record<string, any> = {},
-  ): any => {
-
-    return <MarkdownText
-      attachments={attachments}
-      inheritedStyles={inheritedStyles}
-      mentions={mentions}
-      node={node}
-      style={style}
-      uiTheme={uiTheme}
-    />;
-  };
-
   return {
     blockquote: (
       node: MarkdownNode,
@@ -102,10 +79,18 @@ function getMarkdownRules(
       }
 
       if (isGoogleShared(url) || isFigmaImage(url)) {
-        return renderHyperLink(url, [inheritedStyles, style.link]);
+        return (
+          <Hyperlink
+            key={node.key}
+            linkStyle={{...inheritedStyles, ...style.link}}
+            linkDefault={true}
+            linkText={url}
+          />
+        );
       }
 
       return <MarkdownEmbedLink
+        key={node.key}
         uri={url}
         alt={alt}
         imageDimensions={targetAttach?.imageDimensions}
@@ -120,8 +105,8 @@ function getMarkdownRules(
     ) => {
       return (
         <Text
-          selectable={true}
           key={node.key}
+          selectable={true}
           style={[inheritedStyles, styles.inlineCode]}
         >
           {node.content}
@@ -129,7 +114,7 @@ function getMarkdownRules(
       );
     },
     fence: (node: MarkdownNode) => (
-      <MarkdownCodeHighlighter node={node} uiTheme={uiTheme} />
+      <MarkdownCodeHighlighter key={node.key} node={node} uiTheme={uiTheme} />
     ),
     link: (
       node: MarkdownNode,
@@ -243,7 +228,7 @@ function getMarkdownRules(
       const text: string = node.content.trim();
       const onPress = () => onCheckboxUpdate?.(!isChecked, position);
       return (
-        <>
+        <React.Fragment key={node.key}>
           <Text
             onPress={onPress}
             style={styles.checkboxIconContainer}
@@ -279,10 +264,26 @@ function getMarkdownRules(
               {' '}
             </Text>
           </Text>
-        </>
+        </React.Fragment>
       );
     },
-    text: textRenderer,
+    text: (
+      node: MarkdownNode,
+      children: React.ReactElement,
+      parent: Record<string, any>,
+      style: Record<string, any>,
+      inheritedStyles: Record<string, any> = {},
+    ) => {
+      return <MarkdownText
+        key={node.key}
+        attachments={attachments}
+        inheritedStyles={inheritedStyles}
+        mentions={mentions}
+        node={node}
+        style={style}
+        uiTheme={uiTheme}
+      />;
+    },
     s: (
       node: MarkdownNode,
       children: React.ReactElement,
@@ -308,7 +309,7 @@ function getMarkdownRules(
         return renderHTMLLinebreak(node, children, parent, style);
       }
 
-      return <HTML html={node.content} />;
+      return <HTML key={node.key} html={node.content} />;
     },
     html_inline: (
       node: MarkdownNode,
@@ -325,8 +326,15 @@ function getMarkdownRules(
           {...style, ...inheritedStyles},
         );
       }
-
-      return textRenderer(node, children, parent, style);
+      return <MarkdownText
+        key={node.key}
+        attachments={attachments}
+        inheritedStyles={inheritedStyles}
+        mentions={mentions}
+        node={node}
+        style={style}
+        uiTheme={uiTheme}
+      />;
     },
   };
 }
