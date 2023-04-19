@@ -176,7 +176,6 @@ export class QueryAssist extends Component<Props, State> {
         <TextInput
           ref="searchInput"
           testID="test:id/query-assist-input"
-          accessibilityLabel="query-assist-input"
           accessible={true}
           style={styles.searchInput}
           placeholderTextColor={styles.clearIcon.color}

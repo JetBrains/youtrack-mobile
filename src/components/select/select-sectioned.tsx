@@ -137,7 +137,7 @@ class SelectSectioned<P extends ISectionedProps, S extends ISectionedState> exte
           contentContainerStyle={styles.list}
           testID="test:id/selectListSectioned"
           accessibilityLabel="selectListSectioned"
-          accessible={true}
+          accessible={false}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"
           scrollEventThrottle={10}

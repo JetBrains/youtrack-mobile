@@ -51,7 +51,6 @@ export default class QueryPreview extends Component<Props, void> {
             onPress={this.focus}
             accessible={true}
             testID="test:id/query-assist-input"
-            accessibilityLabel="query-assist-input"
             style={[
               styles.searchInput,
               styles.searchInputPlaceholder,
