@@ -190,11 +190,7 @@ class YouTrackMobile extends Component<void, void> {
   }
 
   render() {
-    return (
-      <Provider store={store}>
-        <AppProvider />
-      </Provider>
-    );
+    return <AppProvider />;
   }
 }
 
@@ -222,16 +218,16 @@ class AppContainer extends Component<void, void> {
 
   render(): React.ReactNode {
     return (
-      <BottomSheetProvider>
-        <>
-          <ActionSheetProvider ref={this.setActionSheetRef} useModal={true}>
-            <AppActionSheetConnected/>
-          </ActionSheetProvider>
-          <Toast
-            ref={toast => toast ? setNotificationComponent(toast) : null}
-          />
-        </>
-      </BottomSheetProvider>
+      <Provider store={store}>
+        <BottomSheetProvider>
+          <>
+            <ActionSheetProvider ref={this.setActionSheetRef} useModal={true}>
+              <AppActionSheetConnected/>
+            </ActionSheetProvider>
+            <Toast ref={toast => toast ? setNotificationComponent(toast) : null}/>
+          </>
+        </BottomSheetProvider>
+      </Provider>
     );
   }
 }
