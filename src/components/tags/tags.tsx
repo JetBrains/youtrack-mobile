@@ -85,7 +85,7 @@ export default class Tags extends PureComponent<Props, Readonly<{}>> {
       <View
         testID="test:id/tagsList"
         accessibilityLabel="tagsList"
-        accessible={true}
+        accessible={false}
         style={[styles.tags, multiline ? styles.tagsMultiline : null, style]}
       >
         {(tags || []).map((tag: Tag) => {
@@ -93,8 +93,7 @@ export default class Tags extends PureComponent<Props, Readonly<{}>> {
             <TouchableOpacity
               style={[styles.tag, multiline ? styles.tagMultiline : null]}
               testID="test:id/tagsListTag"
-              accessibilityLabel="tagsListTag"
-              accessible={true}
+              accessible={false}
               onPress={() => this.showContextActions(tag)}
               key={tag.id}
             >
