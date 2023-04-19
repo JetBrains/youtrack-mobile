@@ -10,7 +10,7 @@ export type User = {
   banned: boolean;
   id: string;
   issueRelatedGroup?: IssueRelatedGroup;
-  login?: string;
+  login: string;
   profiles?: UserProfiles;
   ringId?: string;
   endUserAgreementConsent?: {

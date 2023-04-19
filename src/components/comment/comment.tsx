@@ -94,6 +94,11 @@ function Comment(props: Props) {
 
     return (
       <MarkdownView
+        mentions={{
+          articles: comment.mentionedArticles,
+          issues: comment.mentionedIssues,
+          users: comment.mentionedUsers,
+      }}
         textStyle={markdownText}
         testID="commentMarkdown"
         attachments={props.attachments}

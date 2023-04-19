@@ -27,7 +27,7 @@ export type IssueOnList = Partial<Omit<IssueFull, 'fields'>> & {
   fields: CustomFieldShort[];
 };
 export type IssueFull = {
-  $type?: string;
+  $type: string;
   attachments: Attachment[];
   comments?: IssueComment[];
   created: number;

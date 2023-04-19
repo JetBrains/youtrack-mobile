@@ -10,6 +10,7 @@ import type {YouTrackWiki} from 'types/Wiki';
 import type {ScrollData} from 'types/Markdown';
 import {Article} from 'types/Article';
 import {IssueOnList} from 'types/Issue';
+import {Mentions} from 'components/wiki/markdown-view-rules';
 type Props = {
   youtrackWiki?: YouTrackWiki;
   markdown?: string | null;
@@ -22,6 +23,7 @@ type Props = {
   scrollData?: ScrollData;
   mentionedArticles?: Article[];
   mentionedIssues?: IssueOnList[];
+  mentions?: Mentions;
 };
 
 function IssueMarkdown(props: Props) {
@@ -38,6 +40,7 @@ function IssueMarkdown(props: Props) {
     scrollData,
     mentionedArticles,
     mentionedIssues,
+    mentions,
   } = props;
   const Component: any = scrollData ? MarkdownViewChunks : MarkdownView;
 
@@ -55,6 +58,7 @@ function IssueMarkdown(props: Props) {
         textStyle={markdownText}
         mentionedIssues={mentionedIssues}
         mentionedArticles={mentionedArticles}
+        mentions={mentions}
       >
         {markdown}
       </Component>

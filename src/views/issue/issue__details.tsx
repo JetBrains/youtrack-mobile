@@ -337,6 +337,11 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         ) => onCheckboxUpdate(checked, position, description)}
         mentionedIssues={issue.mentionedIssues}
         mentionedArticles={issue.mentionedArticles}
+        mentions={{
+          articles: issue.mentionedArticles,
+          issues: issue.mentionedIssues,
+          users: issue.mentionedUsers,
+        }}
       />
     );
   }

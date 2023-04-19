@@ -14,6 +14,8 @@ import styles from './user-card.styles';
 
 import {User} from 'types/User';
 import {getStorageState} from 'components/storage/storage';
+import IssuePermissions from 'components/issue-permissions/issue-permissions';
+import {usePermissions} from 'components/hooks/use-permissions';
 
 
 const UserCard = ({
@@ -22,14 +24,18 @@ const UserCard = ({
   onMention,
 }: {
   user: User,
-  onShowReportedIssues: (query: string) => void,
-  onMention: ((userLogin: string) => void) | null
-}): JSX.Element => {
+  onShowReportedIssues?: (query: string) => void,
+  onMention?: (userLogin: string) => void,
+}): JSX.Element | null => {
+  const issuePermissions: IssuePermissions = usePermissions();
+  const canReadUserBasic: boolean = !!issuePermissions?.canReadUserBasic?.(user);
+  const canReadUser: boolean = !!issuePermissions?.canReadUser?.(user);
+
   const loadedUser: User | null = useUserCardAsync(user.id);
   const serverURL: string | undefined = getStorageState()?.config?.backendUrl;
   const usr: User = {...loadedUser, ...user};
 
-  return (
+  return canReadUserBasic || canReadUser ? (
     <View
       testID="test:id/userCard"
       accessibilityLabel="userCard"
@@ -78,7 +84,7 @@ const UserCard = ({
         </Text>
       </View>
 
-      {!!usr?.email && <>
+      {!!usr?.email && canReadUser && <>
         <Text style={styles.label}>{i18n('Email')}</Text>
         <View style={styles.blockInfo}>
           <Text
@@ -106,7 +112,7 @@ const UserCard = ({
         </View>
       </>}
 
-      {!!usr.login && (
+      {!!usr.login && onShowReportedIssues && (
         <TouchableOpacity
           testID="test:id/userCardReportedIssuesButton"
           accessibilityLabel="userCardReportedIssuesButton"
@@ -135,7 +141,7 @@ const UserCard = ({
       )}
 
     </View>
-  );
+  ) : null;
 };
 
 

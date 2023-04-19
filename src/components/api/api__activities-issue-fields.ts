@@ -7,7 +7,7 @@ const ISSUE_ACTIVITIES_EVENT_BASE = toField([
   'text',
   'color(id)',
 ]);
-const ISSUE_PROJECT_FIELDS = toField(['shortName']);
+const ISSUE_PROJECT_FIELDS = toField(['$type', 'id', 'shortName', 'name', 'localizedName']);
 const ISSUE_WORK_ITEMS_FIELDS = toField([
   '$type',
   'date',
@@ -104,8 +104,7 @@ export const ISSUE_ACTIVITIES_FIELDS_LEGACY: string = toField([
     ],
   },
 ]);
-export const ISSUE_ATTACHMENT_FIELDS: Record<string, any> =
-  IssueFields.attachments;
+export const ISSUE_ATTACHMENT_FIELDS: Record<string, any> = IssueFields.attachments;
 export const issueActivitiesFields: string = toField([
   {
     activities: [
@@ -143,11 +142,11 @@ export const issueActivitiesFields: string = toField([
   .toString()
   .concat(
     `;@addedRemovedCommon:${toField([
-      ISSUE_PROJECT_FIELDS,
       ISSUE_ACTIVITIES_EVENT_BASE,
       IssueFields.issueComment,
       'usesMarkdown',
-      IssueFields.ISSUE_XSHORT_FIELDS,
+      IssueFields.ISSUE_BASE_FIELDS,
+      {project: ISSUE_PROJECT_FIELDS},
       ISSUE_WORK_ITEMS_FIELDS,
       'reactionOrder',
       'reaction',
@@ -156,7 +155,7 @@ export const issueActivitiesFields: string = toField([
       },
       VCS_INTEGRATION_FIELDS,
       IssueFields.attachmentsBase,
-      ISSUE_ACTIVITIES_EVENT_BASE,
       IssueFields.ISSUE_COMMENTS_REMOVED_FIELDS,
+      IssueFields.MENTIONS_FIELDS,
     ]).toString()}`,
   );

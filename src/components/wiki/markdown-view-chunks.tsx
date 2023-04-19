@@ -4,7 +4,7 @@ import {Text, View} from 'react-native';
 import {stringToTokens, tokensToAST} from 'react-native-markdown-display';
 
 import apiHelper from 'components/api/api__helper';
-import getMarkdownRules from './markdown-view-rules';
+import getMarkdownRules, {Mentions} from './markdown-view-rules';
 import MarkdownAST from 'components/wiki/markdown-ast';
 import MarkdownItInstance from './markdown-instance';
 import {getApi} from 'components/api/api__instance';
@@ -28,6 +28,7 @@ type Props = {
   maxChunks?: number;
   mentionedArticles?: Article[];
   mentionedIssues?: IssueOnList[];
+  mentions?: Mentions;
   uiTheme?: UITheme;
   scrollData?: Record<string, any>;
   onCheckboxUpdate?: (checked: boolean, position: number, markdown: string) => (...args: any[]) => any;
@@ -48,6 +49,7 @@ const MarkdownViewChunks = (props: Props) => {
     scrollData = {},
     mentionedArticles = [],
     mentionedIssues = [],
+    mentions,
     onCheckboxUpdate = (
       checked: boolean,
       position: number,
@@ -84,9 +86,10 @@ const MarkdownViewChunks = (props: Props) => {
     return getMarkdownRules(
       attaches,
       props?.uiTheme || theme.uiTheme,
-      {
+      mentions || {
         articles: mentionedArticles,
         issues: mentionedIssues,
+        users: [],
       },
       onCheckboxPress,
       props.textStyle,

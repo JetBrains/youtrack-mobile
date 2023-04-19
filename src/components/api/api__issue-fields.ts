@@ -358,6 +358,34 @@ const ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS: any = toField([
   },
   ISSUE_WORK_ITEM_TEMPLATE,
 ]);
+const MENTIONS_FIELDS: any = toField([
+  {
+    mentionedUsers: [
+      '$type',
+      'fullName',
+      'id',
+      'login',
+      'name',
+      'ringId',
+    ],
+  },
+  {
+    mentionedArticles: [
+      '$type',
+      'id',
+      'idReadable',
+    ],
+  },
+  {
+    mentionedIssues: [
+      '$type',
+      'id',
+      'idReadable',
+      'resolved',
+      'ringId',
+    ],
+  },
+]);
 export default {
   attachments: ISSUE_ATTACHMENTS_FIELDS,
   attachmentsBase: ISSUE_ATTACHMENTS_BASE_FIELDS,
@@ -403,12 +431,7 @@ export default {
     {
       attachments: ISSUE_ATTACHMENTS_FIELDS,
     },
-    {
-      mentionedArticles: ['$type', 'idReadable'],
-    },
-    {
-      mentionedIssues: ['$type', 'id', 'idReadable', 'resolved'],
-    },
+    MENTIONS_FIELDS,
     VISIBILITY_FIELDS,
   ]) as any,
   projectOnList: ISSUE_PROJECT_FIELDS,
@@ -456,4 +479,6 @@ export default {
   reaction: REACTION,
   timeTracking: ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS,
   workItems: ISSUE_WORK_ITEMS_FIELDS,
+  MENTIONS_FIELDS,
+  ISSUE_BASE_FIELDS,
 };

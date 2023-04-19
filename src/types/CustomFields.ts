@@ -4,6 +4,7 @@ import type {User} from './User';
 import type {Visibility} from './Visibility';
 import type {WorkItemType} from './Work';
 import {Entity} from 'components/issue-permissions/issue-permissions';
+import {Mentions} from 'components/wiki/markdown-view-rules';
 
 export type TimeTrackingFieldInfo = {
   id: string;
@@ -159,6 +160,7 @@ export type IssueComment = {
   reactions: Reaction[];
   issue?: Partial<IssueFull>;
   attachments?: Attachment[];
+  mentions?: Mentions;
 };
 export type IssueLinkType = {
   id: string;

@@ -26,10 +26,14 @@ import type {IssueFull} from 'types/Issue';
 import type {MarkdownNode} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
+import {User} from 'types/User';
 
+
+export type Mention = Article | IssueFull | User;
 export type Mentions = {
   articles: Article[];
   issues: IssueFull[];
+  users: User[];
 };
 const issueIdRegExp: RegExp = /([a-zA-Z]+-)+\d+/g;
 const imageRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
@@ -277,10 +281,9 @@ function getMarkdownRules(
       return <MarkdownText
         key={node.key}
         attachments={attachments}
-        inheritedStyles={inheritedStyles}
         mentions={mentions}
         node={node}
-        style={style}
+        style={[inheritedStyles, style.text]}
         uiTheme={uiTheme}
       />;
     },

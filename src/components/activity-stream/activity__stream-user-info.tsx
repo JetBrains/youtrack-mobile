@@ -56,7 +56,7 @@ const StreamUserInfo = ({activityGroup}: { activityGroup: Activity }): JSX.Eleme
           onMention={canComment() ? async () => {
             closeBottomSheet();
             dispatch(addMentionToDraftComment(getUser().login));
-          } : null}
+          } : undefined}
         />
       ),
     });

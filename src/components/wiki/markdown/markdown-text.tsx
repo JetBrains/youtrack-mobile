@@ -4,7 +4,7 @@ import {Text, TextStyle} from 'react-native';
 import Hyperlink from 'react-native-hyperlink';
 
 import MarkdownMention from 'components/wiki/markdown/markdown-mention';
-import renderArticleMentions from 'components/wiki/renderers/renderer__article-mentions';
+import MarkdownTextWithMentions from 'components/wiki/markdown/markdown-text-with-mentions';
 import Router from 'components/router/router';
 import {guid, isURLPattern} from 'util/util';
 import {hasMimeType} from 'components/mime-type/mime-type';
@@ -24,7 +24,7 @@ const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
 const imageHeight: RegExp = /{height=\d+(%|px)?}/i;
 const imageWidth: RegExp = /{width=\d+(%|px)?}/i;
 const issueIdRegExp: RegExp = /([a-zA-Z]+-)+\d+/g;
-const renderHyperLink = (linkText: string, style: TextStyle | TextStyle[]) => (
+const renderHyperLink = (linkText: string, style: TextStyle[] | TextStyle) => (
   <Hyperlink
     key={guid()}
     linkDefault={true}
@@ -37,20 +37,16 @@ const renderHyperLink = (linkText: string, style: TextStyle | TextStyle[]) => (
 const MarkdownText = ({
   node,
   style,
-  inheritedStyles,
   attachments,
   mentions,
-  uiTheme,
 }: {
   node: MarkdownNode,
-  style: Record<string, any>,
-  inheritedStyles: Record<string, any>,
+  style: TextStyle[] | TextStyle,
   attachments: Attachment[],
   mentions: Mentions | undefined,
   uiTheme: UITheme,
 }): JSX.Element | null => {
 
-  const baseTextStyle: TextStyle[] = [inheritedStyles, style.text];
   const text: string = (
     node.content
       .replace(imageHeight, '')
@@ -63,13 +59,13 @@ const MarkdownText = ({
     return null;
   }
 
-  if ((mentions?.articles || []).length > 0 || (mentions?.issues || []).length > 0) {
-    return renderArticleMentions(
-      node,
-      (mentions as Mentions),
-      uiTheme,
-      style,
-      inheritedStyles,
+  if (mentions?.articles?.length || mentions?.issues?.length || mentions?.users?.length) {
+    return (
+      <MarkdownTextWithMentions
+        node={node}
+        mentions={mentions}
+        style={style}
+      />
     );
   }
 
@@ -96,29 +92,29 @@ const MarkdownText = ({
         <Text
           selectable={true}
           key={node.key}
-          style={baseTextStyle}
+          style={style}
         >
-          {renderHyperLink(text.slice(0, matchedIndex), baseTextStyle)}
+          {renderHyperLink(text.slice(0, matchedIndex), style)}
           <MarkdownMention
             mention={matched[0]}
             onPress={() => Router.Issue({issueId: matched[0].trim()})}
-            style={[...baseTextStyle, styles.link]}
+            style={[...style, styles.link]}
           />
           {renderHyperLink(
             text.slice(matchedIndex + matched[0].length, text.length),
-            baseTextStyle,
+            style,
           )}
         </Text>
       );
     }
 
-    return renderHyperLink(text, baseTextStyle);
+    return renderHyperLink(text, style);
   }
 
   return (
     <Text
       key={node.key}
-      style={baseTextStyle}
+      style={style}
     >
       {text}
     </Text>
