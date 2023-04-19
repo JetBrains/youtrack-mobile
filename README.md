@@ -12,7 +12,7 @@ YouTrack Mobile is written in React Native together with Redux and Flow. The app
 
 ## Installation
 * [Google Play](https://play.google.com/store/apps/details?id=com.jetbrains.youtrack.mobile.app)
-* [Apple AppStore](https://itunes.apple.com/us/app/youtrack/id1028024655?ls=1&mt=8)
+* [Apple App Store](https://itunes.apple.com/us/app/youtrack/id1028024655?ls=1&mt=8)
 
 ## Bug and Issue Tracker
 Should you have any problems, report them to the [YouTrack Mobile issue tracker](https://youtrack.jetbrains.com/newissue?project=YTM&clearDraft=true).
@@ -46,4 +46,4 @@ yarn install
 1. Start a development server `yarn start`
 2. Perform `yarn ios` or `yarn android-emulator && yarn android`.
 3. Perform error check `yarn lint`
-3. Run tests `yarn test`
+4. Run tests `yarn test`
