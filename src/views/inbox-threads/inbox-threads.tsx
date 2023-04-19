@@ -300,7 +300,7 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
     <View
       testID="test:id/inboxThreads"
       accessibilityLabel="inboxThreads"
-      accessible={true}
+      accessible={false}
       style={[styles.container, isSplitView ? styles.splitViewContainer : null]}
     >
       <Container {...(isSplitView ? styles.splitViewSide : {})}>

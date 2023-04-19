@@ -61,6 +61,8 @@ export default class ColorField extends PureComponent<Props, Readonly<{}>> {
           style={[{color: this._getForegroundColor()}, styles.text]}
           numberOfLines={1}
           testID="color-field-value"
+          accessibilityLabel="color-field-value"
+          accessible={true}
         >
           {this.getText()}
         </Text>

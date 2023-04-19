@@ -39,9 +39,11 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
         onPress={() => this.onApplySuggestion(item)}
         testID="test:id/suggestRow"
         accessibilityLabel="suggestRow"
-        accessible={true}
+        accessible={false}
       >
-        <Text style={styles.searchText}>
+        <Text style={styles.searchText}
+          testID="test:id/suggestRowText"
+        >
           {isSuggestion ? item.option : item.name}
         </Text>
       </TouchableOpacity>
@@ -67,7 +69,7 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
           contentContainerStyle={styles.list}
           testID="test:id/selectItem"
           accessibilityLabel="selectItem"
-          accessible={true}
+          accessible={false}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"
           scrollEventThrottle={10}

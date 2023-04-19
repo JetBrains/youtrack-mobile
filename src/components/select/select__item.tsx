@@ -63,14 +63,17 @@ export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
       <TouchableOpacity
         testID="test:id/selectListItem"
         accessibilityLabel="selectListItem"
-        accessible={true}
+        accessible={false}
         key={item.id}
         style={[styles.row, style]}
         onPress={this.onSelect}
         onLongPress={onLongPress}
         disabled={disabled}
       >
-        <View style={styles.selectItemValue}>
+        <View style={styles.selectItemValue}
+          testID="test:id/selectListItemText"
+          accessible={true}
+        >
           {item.avatarUrl && (
             <Avatar
               userName={this.getDefaultTitle(item)}

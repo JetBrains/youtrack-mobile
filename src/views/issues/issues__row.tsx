@@ -64,7 +64,7 @@ export default class IssueRow extends Component<Props, void> {
               onPress={() => this.props.onClick(issue)}
               testID="test:id/issueRow"
               accessibilityLabel="issue-row"
-              accessible={true}
+              accessible={false}
             >
               <View>
                 <View testID="test:id/issueRowDetails" style={styles.rowLine}>
@@ -109,6 +109,7 @@ export default class IssueRow extends Component<Props, void> {
                   ]}
                   numberOfLines={2}
                   testID="test:id/issueRowSummary"
+                  accessible={true}
                 >
                   {issue.summary}
                 </Text>

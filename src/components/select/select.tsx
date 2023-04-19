@@ -293,7 +293,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
       <FlatList
         testID="test:id/selectList"
         accessibilityLabel="selectList"
-        accessible={true}
+        accessible={false}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         ListHeaderComponent={this.renderEmptyValueItem()}

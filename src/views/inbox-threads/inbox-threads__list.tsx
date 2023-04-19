@@ -105,7 +105,7 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.
     <View
       testID="test:id/inboxThreadsList"
       accessibilityLabel="inboxThreadsList"
-      accessible={true}
+      accessible={false}
       style={styles.threadsList}
     >
       <FlatList

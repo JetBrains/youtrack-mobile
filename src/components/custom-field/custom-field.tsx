@@ -107,11 +107,10 @@ export default class CustomField extends Component<Props, void> {
     const render = (val: Record<string, any> | null) => {
       const valuePresentation: string = this._getValue(val, fieldType) || '';
       return (
-        <View style={styles.value} key="value">
+        <View style={styles.value} key="value" accessible={false}>
           {val && fieldType === 'user' ? this.renderAvatar(val) : null}
           <Text
             testID="test:id/value"
-            accessibilityLabel="value"
             accessible={true}
             style={textStyle}
           >
@@ -178,19 +177,19 @@ export default class CustomField extends Component<Props, void> {
         style={[styles.wrapper, active ? styles.wrapperActive : null]}
         onPress={this.props.onPress}
         disabled={this.props.disabled}
+        accessible={false}
       >
-        <View style={styles.keyWrapper}>
+        <View style={styles.keyWrapper} accessible={false}>
           <Text
             style={styles.keyText}
             testID="test:id/name"
-            accessibilityLabel="name"
             accessible={true}
           >
             {this.getLabel()}
           </Text>
         </View>
 
-        <View style={styles.valuesWrapper}>
+        <View style={styles.valuesWrapper} accessible={false}>
           {this._renderColorMaker((field.value as any) as FieldValue)}
           {this._renderValue(field.value, this._getFieldType(field))}
         </View>
