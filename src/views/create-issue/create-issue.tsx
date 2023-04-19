@@ -166,7 +166,7 @@ class CreateIssue extends PureComponent<Props, State> {
         autoFocusSelect
         testID="test:id/createIssueFields"
         accessibilityLabel="createIssueFields"
-        accessible={true}
+        accessible={false}
         issueId={issue.id}
         issueProject={issue.project as IssueProject}
         fields={getIssueCustomFieldsNotText(issue.fields)}
@@ -533,7 +533,7 @@ class CreateIssue extends PureComponent<Props, State> {
                     <View
                       testID="test:id/attachment-button"
                       accessibilityLabel="attachment-button"
-                      accessible={true}
+                      accessible={false}
                       style={styles.additionalData}
                     >
                       {hasProject && (
