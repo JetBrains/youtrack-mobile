@@ -1,6 +1,8 @@
 import React from 'react';
 import {Text, TextStyle} from 'react-native';
 
+import ArticleIcon from '@jetbrains/icons/article.svg';
+
 import Router from 'components/router/router';
 import UserCard from 'components/user/user-card';
 import {createMentionRegExp, createUserMentionRegexp} from 'components/wiki/util/patterns';
@@ -16,19 +18,24 @@ import type {Mention, Mentions} from 'components/wiki/markdown-view-rules';
 import {User} from 'types/User';
 
 type Node = {
-  text: string;
-  mention?: Mention,
   $type: string | null;
+  icon: React.ReactNode;
+  mention?: Mention,
+  text: string;
 };
 
 const PLAIN_TEXT_TYPE: string = 'plainText';
 
 const getMentionPresentation = (mention: Mention): string => {
-  return hasType.user(mention) ? `@${getEntityPresentation(mention)}` : mention.idReadable;
+  return hasType.user(mention) ? `@${getEntityPresentation(mention)}` : mention.summary || mention.idReadable;
 };
 
 const getMentionValue = (mention: Mention): string => {
   return hasType.user(mention) ? `@${mention.login}` : mention.idReadable;
+};
+
+const getMentionIcon = (mention: Mention): string => {
+  return mention.summary ? <ArticleIcon width={15} height={15} fill={styles.link.color}/> : null;
 };
 
 const getMatchRegex = (mention: Mention): RegExp => {
@@ -55,11 +62,10 @@ const MarkdownTextWithMentions = ({mentions, node, style}: Props): JSX.Element |
           styles.link,
         ]}
         onPress={() => {
-          const id: string = td.text.trim();
           if (hasType.article(td)) {
-            Router.Article({articlePlaceholder: {idReadable: id}, storePrevArticle: true});
+            Router.Article({articlePlaceholder: {id: td.mention.id}, storePrevArticle: true});
           } else if (hasType.issue(td)) {
-            Router.Issue({issueId: id});
+            Router.Issue({issueId: td.mention.id});
           } if (hasType.user(td)) {
             openBottomSheet({
               withHandle: false,
@@ -92,11 +98,13 @@ const MarkdownTextWithMentions = ({mentions, node, style}: Props): JSX.Element |
         }
 
         const mentionValue: string = getMentionValue(mention);
+        const icon: React.ReactNode = getMentionIcon(mention);
         if (token === mentionValue) {
           td.push({
             mention,
             text: getMentionPresentation(mention),
             $type: mention.$type,
+            icon,
           });
         } else {
           token.split(mentionValue).forEach((str: string) => {
@@ -104,6 +112,7 @@ const MarkdownTextWithMentions = ({mentions, node, style}: Props): JSX.Element |
               mention,
               text: str || getMentionPresentation(mention),
               $type: str ? PLAIN_TEXT_TYPE : mention.$type,
+              icon,
             });
           });
         }
@@ -148,6 +157,7 @@ const MarkdownTextWithMentions = ({mentions, node, style}: Props): JSX.Element |
                 </Text>
               )
             }
+            {td.icon}
             {
               renderMention(td)
             }

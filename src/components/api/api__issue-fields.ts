@@ -374,6 +374,7 @@ const MENTIONS_FIELDS: any = toField([
       '$type',
       'id',
       'idReadable',
+      'summary',
     ],
   },
   {
@@ -383,6 +384,7 @@ const MENTIONS_FIELDS: any = toField([
       'idReadable',
       'resolved',
       'ringId',
+      'summary',
     ],
   },
 ]);
