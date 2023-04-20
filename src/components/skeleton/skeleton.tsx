@@ -12,6 +12,8 @@ type SkeletonProps = {
   marginBottom?: number;
   marginLeft?: number;
   key?: string;
+  speed?: number;
+  shimmerWidth?: number;
 };
 export const SKELETON_WIDTH: number = 100;
 export const SKELETON_HEIGHT: number = 20;
@@ -19,8 +21,9 @@ export const SKELETON_SECONDARY_HEIGHT: number = 14;
 export const SKELETON_DEFAULT_BORDER_RADIUS: number = UNIT / 2;
 const cv: number = 200;
 export const skeletonPlaceholderDefaultProps = {
-  backgroundColor: `rgba(${cv},${cv},${cv},${0.2})`,
-  highlightColor: `rgba(${cv},${cv},${cv},${0.1})`,
+  backgroundColor: `rgba(${cv},${cv},${cv},${0.3})`,
+  highlightColor: `rgba(${cv},${cv},${cv},${1})`,
+  speed: 1200,
 };
 const defaultSkeletonProps: SkeletonProps = {
   width: SKELETON_WIDTH,
@@ -28,9 +31,10 @@ const defaultSkeletonProps: SkeletonProps = {
   borderRadius: SKELETON_DEFAULT_BORDER_RADIUS,
 };
 export const Skeleton = (props: SkeletonProps): JSX.Element => {
+  const {speed, shimmerWidth, ...rest} = props;
   return (
-    <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
-      <SkeletonPlaceholder.Item {...defaultSkeletonProps} {...props} />
+    <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps} speed={speed} shimmerWidth={shimmerWidth}>
+      <SkeletonPlaceholder.Item {...defaultSkeletonProps} {...rest} />
     </SkeletonPlaceholder>
   );
 };
@@ -110,28 +114,30 @@ function skeletonActivityLine(width?: number) {
 export const SkeletonIssueContent = (): JSX.Element => {
   return (
     <SkeletonPlaceholder {...skeletonPlaceholderDefaultProps}>
-      {SkeletonLine({
-        marginTop: UNIT * 3,
-      })}
+      <>
+        {SkeletonLine({
+          marginTop: UNIT * 3,
+        })}
 
-      {SkeletonSecondaryLine({
-        marginTop: UNIT * 3,
-      })}
+        {SkeletonSecondaryLine({
+          marginTop: UNIT * 3,
+        })}
 
-      {SkeletonSecondaryLine({
-        width: 300,
-        marginTop: UNIT,
-      })}
+        {SkeletonSecondaryLine({
+          width: 300,
+          marginTop: UNIT,
+        })}
 
-      {SkeletonSecondaryLine({
-        width: 180,
-        marginTop: UNIT,
-      })}
+        {SkeletonSecondaryLine({
+          width: 180,
+          marginTop: UNIT,
+        })}
 
-      {SkeletonSecondaryLine({
-        width: 220,
-        marginTop: UNIT,
-      })}
+        {SkeletonSecondaryLine({
+          width: 220,
+          marginTop: UNIT,
+        })}
+      </>
     </SkeletonPlaceholder>
   );
 };
