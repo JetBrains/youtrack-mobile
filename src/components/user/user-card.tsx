@@ -3,37 +3,36 @@ import {Clipboard, Linking, Text, TouchableOpacity, View} from 'react-native';
 
 import Avatar from 'components/avatar/avatar';
 import ImageWithProgress from 'components/image/image-with-progress';
+import IssuePermissions from 'components/issue-permissions/issue-permissions';
+import Router from 'components/router/router';
+import usage from 'components/usage/usage';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+import {getStorageState} from 'components/storage/storage';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconClone} from 'components/icon/icon';
 import {notify} from 'components/notification/notification';
+import {useBottomSheetContext} from 'components/bottom-sheet';
+import {usePermissions} from 'components/hooks/use-permissions';
 import {useUserCardAsync} from 'components/hooks/use-user-card-async';
 
 import styles from './user-card.styles';
 
 import {User} from 'types/User';
-import {getStorageState} from 'components/storage/storage';
-import IssuePermissions from 'components/issue-permissions/issue-permissions';
-import {usePermissions} from 'components/hooks/use-permissions';
 
 
-const UserCard = ({
-  user,
-  onShowReportedIssues,
-  onMention,
-}: {
-  user: User,
-  onShowReportedIssues?: (query: string) => void,
-  onMention?: (userLogin: string) => void,
-}): JSX.Element | null => {
+const UserCard = ({user, onMention}: { user: User, onMention?: (userLogin: string) => void}): JSX.Element | null => {
+  const {closeBottomSheet} = useBottomSheetContext();
   const issuePermissions: IssuePermissions = usePermissions();
   const canReadUserBasic: boolean = !!issuePermissions?.canReadUserBasic?.(user);
   const canReadUser: boolean = !!issuePermissions?.canReadUser?.(user);
 
   const loadedUser: User | null = useUserCardAsync(user.id);
-  const serverURL: string | undefined = getStorageState()?.config?.backendUrl;
   const usr: User = {...loadedUser, ...user};
+
+  React.useEffect(() => {
+    usage.trackEvent('Show user card');
+  }, []);
 
   return canReadUserBasic || canReadUser ? (
     <View
@@ -67,6 +66,8 @@ const UserCard = ({
           accessibilityLabel="userCardName"
           accessible={true}
           onPress={() => {
+            usage.trackEvent('User card: press visit profile');
+            const serverURL: string | undefined = getStorageState()?.config?.backendUrl;
             if (serverURL) {
               Linking.openURL(`${serverURL}/users/${usr.login}`);
             }
@@ -112,12 +113,16 @@ const UserCard = ({
         </View>
       </>}
 
-      {!!usr.login && onShowReportedIssues && (
+      {!!usr.login && (
         <TouchableOpacity
           testID="test:id/userCardReportedIssuesButton"
           accessibilityLabel="userCardReportedIssuesButton"
           accessible={true}
-          onPress={() => onShowReportedIssues(`created by: ${usr.login}`)}
+          onPress={() => {
+            usage.trackEvent('User card: view reported issues');
+            Router.Issues({searchQuery: `created by: ${usr.login}`});
+            closeBottomSheet();
+          }}
           style={styles.button}
         >
           <Text style={styles.buttonText}>
@@ -131,7 +136,10 @@ const UserCard = ({
           testID="test:id/userCardMentionButton"
           accessibilityLabel="userCardMentionButton"
           accessible={true}
-          onPress={() => onMention(`@${usr.login} `)}
+          onPress={() => {
+            usage.trackEvent('User card: mention in a comment');
+            onMention(`@${usr.login} `);
+          }}
           style={styles.button}
         >
           <Text style={styles.buttonText}>

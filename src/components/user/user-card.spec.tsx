@@ -12,6 +12,7 @@ import UserCard from './user-card';
 import {User} from 'types/User';
 import {__setStorageState} from 'components/storage/storage';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
+import Router from 'components/router/router';
 
 jest.mock('react-native/Libraries/Linking/Linking', () => ({
   openURL: jest.fn().mockResolvedValue(null),
@@ -121,6 +122,7 @@ describe('<UserCard/>', () => {
   describe('User full read permission', () => {
     beforeEach(() => {
       jest.spyOn(issuePermissionsMock, 'canReadUser').mockReturnValueOnce(true);
+      Router.Issues = jest.fn();
     });
 
 
@@ -141,35 +143,22 @@ describe('<UserCard/>', () => {
       expect(onMentionMock).toHaveBeenCalledWith(`@${userMock.login} `);
     });
 
-    it('should invoke reported issues button callback', () => {
-      const onShowReportedIssuesMock = jest.fn();
-      const {getByTestId} = doRender({
-        user: userMock,
-        onShowReportedIssues: onShowReportedIssuesMock,
-      });
+    it('should invoke reported issues button', () => {
+      const {getByTestId} = doRender({user: userMock});
 
       fireEvent.press(getByTestId('test:id/userCardReportedIssuesButton'));
 
-      expect(onShowReportedIssuesMock).toHaveBeenCalledWith(`created by: ${userMock.login}`);
+      expect(Router.Issues).toHaveBeenCalledWith({searchQuery: `created by: ${userMock.login}`});
     });
   });
 });
 
-function doRender({
-  user,
-  onShowReportedIssues = jest.fn(),
-  onMention,
-}: {
-  user: User,
-  onShowReportedIssues?: (query: string) => void,
-  onMention?: (userLogin: string) => void
-}) {
+function doRender({user, onMention}: { user: User, onMention?: (userLogin: string) => void }) {
   return render(
     <Provider store={storeMock}>
       <UserCard
         user={user}
         onMention={onMention}
-        onShowReportedIssues={onShowReportedIssues}
       />
     </Provider>
   );

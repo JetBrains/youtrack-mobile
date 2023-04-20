@@ -4,7 +4,6 @@ import {Text, TouchableOpacity} from 'react-native';
 import {useDispatch} from 'react-redux';
 
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
-import Router from 'components/router/router';
 import StreamTimestamp from './activity__stream-timestamp';
 import UserCard from 'components/user/user-card';
 import {addMentionToDraftComment} from 'actions/app-actions';
@@ -49,10 +48,6 @@ const StreamUserInfo = ({activityGroup}: { activityGroup: Activity }): JSX.Eleme
       children: (
         <UserCard
           user={getUser()}
-          onShowReportedIssues={(searchQuery: string) => {
-            closeBottomSheet();
-            Router.Issues({searchQuery});
-          }}
           onMention={canComment() ? async () => {
             closeBottomSheet();
             dispatch(addMentionToDraftComment(getUser().login));
