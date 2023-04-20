@@ -47,6 +47,10 @@ msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} 件の課題"
 
+#: src/components/user/user-card.tsx
+msgid "@Mention in a comment"
+msgstr "コメントでの@メンション"
+
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "1w 1d 1h 1m"
@@ -252,11 +256,11 @@ msgstr "コミットされた変更"
 
 #: src/components/account/accounts.tsx
 msgid "Confirm logout"
-msgstr ""
+msgstr "ログアウトの確認"
 
 #: src/components/account/accounts.tsx
 msgid "Confirmation required"
-msgstr ""
+msgstr "確認が必要です"
 
 #: src/actions/app-actions.ts
 msgid "Connecting to YouTrack..."
@@ -276,7 +280,8 @@ msgstr "コンテンツ"
 msgid "Content revised"
 msgstr "内容が変更されました"
 
-#: src/components/wiki/code-renderer.tsx
+#: src/components/user/user-card.tsx
+#: src/components/wiki/markdown/markdown-code-highlighter.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -397,11 +402,11 @@ msgstr "未公開の変更を破棄"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to log out?"
-msgstr ""
+msgstr "本当にログアウトしますか？"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to remove this account?"
-msgstr ""
+msgstr "本当にこのアカウントを除去しますか？"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -423,6 +428,10 @@ msgstr "編集"
 #: src/components/comment/comment-edit.tsx
 msgid "Edit comment"
 msgstr "コメントを編集"
+
+#: src/components/user/user-card.tsx
+msgid "Email"
+msgstr "メールアドレス"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
@@ -1124,6 +1133,10 @@ msgstr "コメントを表示"
 msgid "View comments and other activity"
 msgstr "コメントとその他のアクティビティを表示"
 
+#: src/components/user/user-card.tsx
+msgid "View reported issues"
+msgstr "報告された課題を表示"
+
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "表示対象"
@@ -1155,7 +1168,7 @@ msgstr "コメントを書くか、他のユーザーについて@メンショ�
 
 #: src/components/account/accounts.tsx
 msgid "Yes"
-msgstr ""
+msgstr "はい"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

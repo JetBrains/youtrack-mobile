@@ -14,7 +14,7 @@ msgstr ""
 
 #: src/components/linked-issues/linked-issues.tsx
 msgid " ({{amount}} unresolved)"
-msgstr ""
+msgstr " ({{amount}} לא נפתרו)"
 
 #: src/components/comment/comment.tsx
 msgid " or "
@@ -30,7 +30,7 @@ msgstr ""
 
 #: src/components/activity/activity__history-title.ts
 msgid "[Removed field]"
-msgstr ""
+msgstr "[שדה שהוסר]"
 
 #: src/views/article/article__details.tsx
 msgid "{{amount}} article"
@@ -51,10 +51,14 @@ msgstr[3] ""
 #: src/components/linked-issues/linked-issues.tsx
 msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "בעיה {{amount}}"
+msgstr[1] "{{amount}} בעיות"
+msgstr[2] "{{amount}} בעיות"
+msgstr[3] "{{amount}} בעיות"
+
+#: src/components/user/user-card.tsx
+msgid "@Mention in a comment"
+msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
@@ -80,7 +84,7 @@ msgstr ""
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
-msgstr ""
+msgstr "הוספת תגובה"
 
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
@@ -89,11 +93,11 @@ msgstr ""
 #: src/components/tags/tag-add-panel.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Add tag"
-msgstr ""
+msgstr "הוספת תגית"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Add to favorites"
-msgstr ""
+msgstr "הוספה למועדפים"
 
 #: src/views/inbox-threads/inbox-threads__reactions.tsx
 #: src/views/inbox/inbox.tsx
@@ -136,7 +140,7 @@ msgstr ""
 
 #: src/views/article-create/article-create.tsx
 msgid "Article content"
-msgstr ""
+msgstr "תוכן המאמר"
 
 #: src/views/article-create/arcticle-create-actions.ts
 msgid "Article published"
@@ -154,15 +158,15 @@ msgstr ""
 #: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachments-add-panel.tsx
 msgid "Attach files"
-msgstr ""
+msgstr "צירוף קבצים"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Attachment"
 msgid_plural "Attachments"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "קובץ מצורף"
+msgstr[1] "קבצים מצורפים"
+msgstr[2] "קבצים מצורפים"
+msgstr[3] "קבצים מצורפים"
 
 #: src/components/attachments-row/attachment-actions.ts
 msgid "Attachment deleted"
@@ -202,7 +206,7 @@ msgstr ""
 #: src/views/knowledge-base/knowledge-base-actions.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Cancel"
-msgstr ""
+msgstr "ביטול"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachment-actions.ts
@@ -220,7 +224,7 @@ msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Collapse all"
-msgstr ""
+msgstr "לצמצם הכל"
 
 #: src/views/agile-board/agile-board.tsx
 msgid "Column collapsed"
@@ -252,7 +256,7 @@ msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__item-comment.tsx
 msgid "commented"
-msgstr ""
+msgstr "הגיב/ה"
 
 #: src/components/activity/activity-helper.ts
 msgid "Comments"
@@ -282,13 +286,14 @@ msgstr ""
 
 #: src/views/article/article.tsx
 msgid "Content"
-msgstr ""
+msgstr "תוכן"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Content revised"
-msgstr ""
+msgstr "התוכן שונה"
 
-#: src/components/wiki/code-renderer.tsx
+#: src/components/user/user-card.tsx
+#: src/components/wiki/markdown/markdown-code-highlighter.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -296,7 +301,7 @@ msgstr ""
 #: src/views/issue/issue-base-actions-creater.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copied"
-msgstr ""
+msgstr "הועתק"
 
 #: src/views/issue/issue__details.tsx
 msgid "Copy description"
@@ -312,7 +317,7 @@ msgstr ""
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy link"
-msgstr ""
+msgstr "להעתיק קישור"
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
@@ -356,7 +361,7 @@ msgstr "תאריך"
 
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
-msgstr ""
+msgstr "דחייה"
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
@@ -372,7 +377,7 @@ msgstr "מחק"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Delete comment permanently?"
-msgstr ""
+msgstr "למחוק את התגובה לצמיתות?"
 
 #: src/views/article-create/article-create.tsx
 msgid "Delete draft"
@@ -393,7 +398,7 @@ msgstr ""
 #: src/components/issue-tabbed/issue-tabbed.tsx
 #: src/views/inbox/inbox.tsx
 msgid "Details"
-msgstr ""
+msgstr "פרטים"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Discard and close"
@@ -421,7 +426,7 @@ msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Drafts"
-msgstr ""
+msgstr "טיוטות"
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity-stream.tsx
@@ -435,6 +440,10 @@ msgstr "ערוך"
 #: src/components/comment/comment-edit.tsx
 msgid "Edit comment"
 msgstr ""
+
+#: src/components/user/user-card.tsx
+msgid "Email"
+msgstr "אימייל"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
@@ -459,7 +468,7 @@ msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
-msgstr ""
+msgstr "מועדפים"
 
 #: src/views/settings/settings-helper.ts
 msgid "Feature request"
@@ -471,12 +480,12 @@ msgstr ""
 
 #: src/components/select/select.tsx
 msgid "Filter items"
-msgstr ""
+msgstr "סינון פריטים"
 
 #: src/views/article-create/article-create.tsx
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Filter projects"
-msgstr ""
+msgstr "סינון פרויקטים"
 
 #: src/views/issues/issues-actions.ts
 msgid "Filter projects, saved searches, and tags"
@@ -497,7 +506,7 @@ msgstr ""
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
-msgstr ""
+msgstr "סינון משתמשים, קבוצות וצוותים"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Find favorite projects"
@@ -509,7 +518,7 @@ msgstr ""
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Groups and teams"
-msgstr ""
+msgstr "קבוצות וצוותים"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
@@ -533,27 +542,27 @@ msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Invalid query"
-msgstr ""
+msgstr "שאילתה לא חוקית"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
-msgstr ""
+msgstr "הבעיה נמחקה"
 
 #: src/components/activity/activity-helper.ts
 msgid "Issue history"
-msgstr ""
+msgstr "היסטוריית בעיות"
 
 #: src/components/issue-actions/issue-links-actions.ts
 msgid "Issue link added"
-msgstr ""
+msgstr "קישור הבעיה נוסף"
 
 #: src/components/issue-actions/issue-links-actions.ts
 msgid "Issue link removed"
-msgstr ""
+msgstr "קישור הבעיה הוסר"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue updated"
-msgstr ""
+msgstr "הבעיה עודכנה"
 
 #: src/views/issues/issues__sortby_list.tsx
 msgid "Issues can be sorted by up to 4 attributes"
@@ -706,7 +715,7 @@ msgstr ""
 #: src/components/error/error-message-data.ts
 #: src/views/issues/issues.tsx
 msgid "No issues found"
-msgstr ""
+msgstr "לא נמצאו בעיות"
 
 #: src/components/select/select.tsx
 msgid "No items"
@@ -718,7 +727,7 @@ msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "No type"
-msgstr ""
+msgstr "ללא סוג"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "No user information provided by Upsource."
@@ -743,7 +752,7 @@ msgstr ""
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Other groups and teams"
-msgstr ""
+msgstr "קבוצות וצוותים אחרים"
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
@@ -776,7 +785,7 @@ msgstr ""
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Recommended groups and teams"
-msgstr ""
+msgstr "קבוצות וצוותים מומלצים"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
@@ -880,7 +889,7 @@ msgstr "שתף"
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Share link"
-msgstr ""
+msgstr "שיתוף קישור"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Share link to article"
@@ -907,12 +916,12 @@ msgstr ""
 #: src/components/activity-stream/activity__stream-vcs.tsx
 #: src/views/inbox-threads/inbox-threads__subscription.tsx
 msgid "Show more"
-msgstr ""
+msgstr "להציג עוד"
 
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-messages.ts
 msgid "Something went wrong"
-msgstr ""
+msgstr "משהו השתבש"
 
 #: src/views/issues/issues__sortby_list.tsx
 msgid "Sort Attributes"
@@ -934,7 +943,7 @@ msgstr "זמן שהושקע"
 
 #: src/components/activity-stream/activity__stream-work.tsx
 msgid "Spent time:"
-msgstr ""
+msgstr "זמן שהושקע:"
 
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "Start a new article"
@@ -1059,7 +1068,7 @@ msgstr ""
 
 #: src/views/article-create/article-create.tsx
 msgid "Title"
-msgstr ""
+msgstr "כותרת"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Title changed"
@@ -1132,7 +1141,7 @@ msgstr "משתמשים"
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"
-msgstr ""
+msgstr "שינויים ב-VCS"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.tsx
 msgid "View comment"
@@ -1140,6 +1149,10 @@ msgstr ""
 
 #: src/views/issue/issue__details.tsx
 msgid "View comments and other activity"
+msgstr ""
+
+#: src/components/user/user-card.tsx
+msgid "View reported issues"
 msgstr ""
 
 #: src/components/activity/activity__history-title.ts

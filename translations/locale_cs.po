@@ -56,6 +56,10 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
+#: src/components/user/user-card.tsx
+msgid "@Mention in a comment"
+msgstr ""
+
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "1w 1d 1h 1m"
@@ -288,7 +292,8 @@ msgstr ""
 msgid "Content revised"
 msgstr ""
 
-#: src/components/wiki/code-renderer.tsx
+#: src/components/user/user-card.tsx
+#: src/components/wiki/markdown/markdown-code-highlighter.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -435,6 +440,10 @@ msgstr "Upravit"
 #: src/components/comment/comment-edit.tsx
 msgid "Edit comment"
 msgstr "Upravit komentář"
+
+#: src/components/user/user-card.tsx
+msgid "Email"
+msgstr "E-mail"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
@@ -1140,6 +1149,10 @@ msgstr "Zobrazit komentář"
 
 #: src/views/issue/issue__details.tsx
 msgid "View comments and other activity"
+msgstr ""
+
+#: src/components/user/user-card.tsx
+msgid "View reported issues"
 msgstr ""
 
 #: src/components/activity/activity__history-title.ts

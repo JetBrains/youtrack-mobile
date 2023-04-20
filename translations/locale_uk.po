@@ -56,6 +56,10 @@ msgstr[1] "{{amount}} завдання"
 msgstr[2] "{{amount}} завдань"
 msgstr[3] "{{amount}} завдання"
 
+#: src/components/user/user-card.tsx
+msgid "@Mention in a comment"
+msgstr "@згадка в коментарі"
+
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "1w 1d 1h 1m"
@@ -288,7 +292,8 @@ msgstr "Вміст"
 msgid "Content revised"
 msgstr ""
 
-#: src/components/wiki/code-renderer.tsx
+#: src/components/user/user-card.tsx
+#: src/components/wiki/markdown/markdown-code-highlighter.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -435,6 +440,10 @@ msgstr "Редагувати"
 #: src/components/comment/comment-edit.tsx
 msgid "Edit comment"
 msgstr "Редагувати коментар"
+
+#: src/components/user/user-card.tsx
+msgid "Email"
+msgstr "Електронна пошта"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
@@ -1140,6 +1149,10 @@ msgstr ""
 
 #: src/views/issue/issue__details.tsx
 msgid "View comments and other activity"
+msgstr ""
+
+#: src/components/user/user-card.tsx
+msgid "View reported issues"
 msgstr ""
 
 #: src/components/activity/activity__history-title.ts

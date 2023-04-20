@@ -47,6 +47,10 @@ msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} 个问题"
 
+#: src/components/user/user-card.tsx
+msgid "@Mention in a comment"
+msgstr "在评论中@提及"
+
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "1w 1d 1h 1m"
@@ -115,7 +119,7 @@ msgstr "确定要删除此文章吗?"
 
 #: src/views/article/arcticle-helper.ts
 msgid "Are you sure you want to delete this draft?"
-msgstr "是否确实要删除此草稿？"
+msgstr "是否确实要删除此草稿?"
 
 #: src/views/issue/activity/issue-activity__actions.ts
 msgid "Are you sure you want to delete this work item?"
@@ -252,15 +256,15 @@ msgstr "已提交的更改"
 
 #: src/components/account/accounts.tsx
 msgid "Confirm logout"
-msgstr ""
+msgstr "确认退出登录"
 
 #: src/components/account/accounts.tsx
 msgid "Confirmation required"
-msgstr ""
+msgstr "需要确认"
 
 #: src/actions/app-actions.ts
 msgid "Connecting to YouTrack..."
-msgstr "正在连接到 YouTrack..."
+msgstr "正在连接到 YouTrack…"
 
 #: src/components/error-boundary/error-boundary.tsx
 #: src/components/error-message/error-message-inline.tsx
@@ -276,7 +280,8 @@ msgstr "内容"
 msgid "Content revised"
 msgstr "已修改内容"
 
-#: src/components/wiki/code-renderer.tsx
+#: src/components/user/user-card.tsx
+#: src/components/wiki/markdown/markdown-code-highlighter.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -344,7 +349,7 @@ msgstr "日期"
 
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
-msgstr "数据库大小<br>（不带 blobs）"
+msgstr "数据库大小<br>(不带 blobs)"
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
@@ -360,7 +365,7 @@ msgstr "删除"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Delete comment permanently?"
-msgstr "永久删除评论？"
+msgstr "永久删除评论?"
 
 #: src/views/article-create/article-create.tsx
 msgid "Delete draft"
@@ -397,11 +402,11 @@ msgstr "放弃未发布的更改"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to log out?"
-msgstr ""
+msgstr "确实要退出登录吗?"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to remove this account?"
-msgstr ""
+msgstr "确实要移除此帐户吗?"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -423,6 +428,10 @@ msgstr "编辑"
 #: src/components/comment/comment-edit.tsx
 msgid "Edit comment"
 msgstr "编辑评论"
+
+#: src/components/user/user-card.tsx
+msgid "Email"
+msgstr "电子邮件"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
@@ -485,7 +494,7 @@ msgstr "筛选标签"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
-msgstr "筛选用户、组和团队"
+msgstr "筛选用户、群组和团队"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Find favorite projects"
@@ -497,7 +506,7 @@ msgstr "获取帮助"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Groups and teams"
-msgstr "组和团队"
+msgstr "群组和团队"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
@@ -509,7 +518,7 @@ msgstr "您将在这里看到您收藏的项目的文章列表"
 
 #: src/components/error/error-message-data.ts
 msgid "If this isn't what you expected, you might try one of these solutions:"
-msgstr "如果这不是您所期望的，您可以尝试以下解决方案之一："
+msgstr "如果这不是您所期望的，您可以尝试以下解决方案之一:"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
@@ -691,7 +700,7 @@ msgstr "未找到收藏的项目"
 #: src/components/error/error-message-data.ts
 #: src/views/issues/issues.tsx
 msgid "No issues found"
-msgstr "没有找到问题"
+msgstr "找不到问题"
 
 #: src/components/select/select.tsx
 msgid "No items"
@@ -711,7 +720,7 @@ msgstr "Upsource 没有提供用户信息."
 
 #: src/components/error/error-message-data.ts
 msgid "Nope, can't find it!"
-msgstr "不， 没有找到！"
+msgstr "不， 找不到!"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Notification settings…"
@@ -728,7 +737,7 @@ msgstr "其他"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Other groups and teams"
-msgstr "其他组和团队"
+msgstr "其他群组和团队"
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
@@ -761,7 +770,7 @@ msgstr "最近的搜索"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Recommended groups and teams"
-msgstr "推荐的小组和团队"
+msgstr "推荐的群组和团队"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
@@ -905,7 +914,7 @@ msgstr "排序属性"
 
 #: src/views/issue/activity/issue__activity-settings.tsx
 msgid "Sort: oldest first"
-msgstr "排序：旧->新"
+msgstr "排序: 旧->新"
 
 #: src/views/issues/issues__sortby.tsx
 msgid "Sorted by"
@@ -977,19 +986,19 @@ msgstr "面板“{{boardName}}”存在配置错误"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The change has been detached from this issue. It is still displayed here because its comment mentions the issue."
-msgstr "变更已从此问题分离。它仍然显示在这里，是因为它的注释提到了这个问题。"
+msgstr "更改已从此问题分离。它仍然显示在这里，是因为它的注释提到了这个问题。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The change has been manually attached to this issue."
-msgstr "变更已手动附加到此问题。"
+msgstr "更改已手动附加到此问题。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The change was processed during the initial data fetching, thus no command has been applied."
-msgstr "变更在初始数据获取期间处理，因此未应用任何命令。"
+msgstr "更改在初始数据获取期间处理，因此未应用任何命令。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The commit author does not belong to the committers group."
-msgstr "提交作者不属于提交者组."
+msgstr "提交作者不属于提交者群组。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The commit author has not specified an email address."
@@ -997,7 +1006,7 @@ msgstr "提交作者未指定电子邮件地址."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The commit author has specified an email address that is associated with a different user account."
-msgstr "提交作者指定了与其他账户关联的电子邮件地址."
+msgstr "提交作者指定了与其他帐户关联的电子邮件地址."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The commit author is not an assignee in the project."
@@ -1025,7 +1034,7 @@ msgstr "VCS 用户名与 YouTrack 中的多个用户匹配。要链接未来的�
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
-msgstr "从 TeamCity 检索有关变更作者的信息时出错。最可能的原因是代表集成运行的 TeamCity 用户没有所需的权限。"
+msgstr "从 TeamCity 检索有关更改作者的信息时出错。最可能的原因是代表集成运行的 TeamCity 用户没有所需的权限。"
 
 #: src/views/article/arcticle-helper.ts
 msgid "This action deletes all drafts, including unpublished sub-articles"
@@ -1114,7 +1123,7 @@ msgstr "用户"
 
 #: src/components/activity/activity-helper.ts
 msgid "VCS changes"
-msgstr "VCS 变更"
+msgstr "VCS 更改"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.tsx
 msgid "View comment"
@@ -1124,13 +1133,17 @@ msgstr "查看注释"
 msgid "View comments and other activity"
 msgstr "查看评论和其他活动"
 
+#: src/components/user/user-card.tsx
+msgid "View reported issues"
+msgstr "查看报告的问题"
+
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "可见性"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"
-msgstr "文章读者可见"
+msgstr "对文章读者可见"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to issue readers"
@@ -1146,16 +1159,16 @@ msgstr "当集成 TeamCity 和 YouTrack 时，会根据用户的电子邮件地�
 
 #: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
-msgstr "注意，不要碰这个！"
+msgstr "注意，不要碰这个!"
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Write a comment, @mention people"
-msgstr "写评论，提及人（@）"
+msgstr "写评论，提及人(@)"
 
 #: src/components/account/accounts.tsx
 msgid "Yes"
-msgstr ""
+msgstr "是"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"
@@ -1185,15 +1198,15 @@ msgstr "您需要提供第二重身份验证才能登录您的 YouTrack 帐户�
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not find a user that matches the user account in Bitbucket."
-msgstr "YouTrack 没有找到与之相匹配的 Bitbucket 账户。"
+msgstr "YouTrack 找不到与之相匹配的 Bitbucket 帐户。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not find a user that matches the user account in GitHub."
-msgstr "YouTrack 没有找到与之相匹配的 GitHub 账户。"
+msgstr "YouTrack 找不到与之相匹配的 GitHub 帐户。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not find a user that matches the user account in GitLab."
-msgstr "YouTrack 没有找到与之相匹配的 GitLab 账户。"
+msgstr "YouTrack 找不到与之相匹配的 GitLab 帐户。"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive an email address for the commit author from Bitbucket."

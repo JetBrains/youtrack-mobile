@@ -22,7 +22,7 @@ msgstr ""
 
 #: src/views/agile-board/board-actions.ts
 msgid "(archived)"
-msgstr ""
+msgstr "(zarchiwizowano)"
 
 #: src/components/custom-fields-panel/custom-fields-panel__date-picker.tsx
 msgid "(Clear value)"
@@ -51,10 +51,14 @@ msgstr[3] ""
 #: src/components/linked-issues/linked-issues.tsx
 msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{{amount}} zgłoszenie"
+msgstr[1] "{{amount}} zgłoszenia"
+msgstr[2] "{{amount}} zgłoszeń"
+msgstr[3] "{{amount}} zgłoszenia"
+
+#: src/components/user/user-card.tsx
+msgid "@Mention in a comment"
+msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
@@ -107,7 +111,7 @@ msgstr "Wszystkie"
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
 msgid "Appearance"
-msgstr ""
+msgstr "Wygląd"
 
 #: src/views/create-issue/create-issue-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -149,7 +153,7 @@ msgstr ""
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Attach file"
-msgstr ""
+msgstr "Załącz plik"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachments-add-panel.tsx
@@ -159,10 +163,10 @@ msgstr "Załącz pliki"
 #: src/components/activity/activity__history-title.ts
 msgid "Attachment"
 msgid_plural "Attachments"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Załącznik"
+msgstr[1] "Załączniki"
+msgstr[2] "Załączników"
+msgstr[3] "Załącznika"
 
 #: src/components/attachments-row/attachment-actions.ts
 msgid "Attachment deleted"
@@ -288,7 +292,8 @@ msgstr "Zawartość"
 msgid "Content revised"
 msgstr ""
 
-#: src/components/wiki/code-renderer.tsx
+#: src/components/user/user-card.tsx
+#: src/components/wiki/markdown/markdown-code-highlighter.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -436,6 +441,10 @@ msgstr "Edytuj"
 msgid "Edit comment"
 msgstr "Edytuj komentarz"
 
+#: src/components/user/user-card.tsx
+msgid "Email"
+msgstr "E-mail"
+
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
 msgstr ""
@@ -459,7 +468,7 @@ msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
-msgstr ""
+msgstr "Ulubione"
 
 #: src/views/settings/settings-helper.ts
 msgid "Feature request"
@@ -645,10 +654,10 @@ msgstr ""
 #: src/views/issues/issues__count.tsx
 msgid "Matches {{issuesCount}} issue"
 msgid_plural "Matches {{issuesCount}} issues"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Pasuje do {{issuesCount}} zgłoszenia"
+msgstr[1] "Pasuje do {{issuesCount}} zgłoszeń"
+msgstr[2] "Pasuje do {{issuesCount}} zgłoszeń"
+msgstr[3] "Pasuje do {{issuesCount}} zgłoszenia"
 
 #: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
@@ -718,7 +727,7 @@ msgstr ""
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "No type"
-msgstr ""
+msgstr "Brak typu"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "No user information provided by Upsource."
@@ -912,7 +921,7 @@ msgstr "Pokaż więcej"
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-messages.ts
 msgid "Something went wrong"
-msgstr ""
+msgstr "Coś poszło nie tak"
 
 #: src/views/issues/issues__sortby_list.tsx
 msgid "Sort Attributes"
@@ -934,7 +943,7 @@ msgstr "Poświęcony czas"
 
 #: src/components/activity-stream/activity__stream-work.tsx
 msgid "Spent time:"
-msgstr ""
+msgstr "Spędzony czas:"
 
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "Start a new article"
@@ -1124,7 +1133,7 @@ msgstr ""
 
 #: src/views/log-in/log-in.tsx
 msgid "Username or email"
-msgstr ""
+msgstr "Nazwa użytkownika lub adres e-mail"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Users"
@@ -1140,6 +1149,10 @@ msgstr ""
 
 #: src/views/issue/issue__details.tsx
 msgid "View comments and other activity"
+msgstr ""
+
+#: src/components/user/user-card.tsx
+msgid "View reported issues"
 msgstr ""
 
 #: src/components/activity/activity__history-title.ts

@@ -50,6 +50,10 @@ msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} issue"
 msgstr[1] "{{amount}} issues"
 
+#: src/components/user/user-card.tsx
+msgid "@Mention in a comment"
+msgstr "@Menção em um comentário"
+
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "1w 1d 1h 1m"
@@ -256,11 +260,11 @@ msgstr "submeteu alterações"
 
 #: src/components/account/accounts.tsx
 msgid "Confirm logout"
-msgstr ""
+msgstr "Confirmar saída"
 
 #: src/components/account/accounts.tsx
 msgid "Confirmation required"
-msgstr ""
+msgstr "Confirmação necessária"
 
 #: src/actions/app-actions.ts
 msgid "Connecting to YouTrack..."
@@ -280,7 +284,8 @@ msgstr "Conteúdo"
 msgid "Content revised"
 msgstr "Conteúdo revisado"
 
-#: src/components/wiki/code-renderer.tsx
+#: src/components/user/user-card.tsx
+#: src/components/wiki/markdown/markdown-code-highlighter.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -401,11 +406,11 @@ msgstr "Descartar alterações não publicadas"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to log out?"
-msgstr ""
+msgstr "Você quer mesmo encerrar a sessão?"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to remove this account?"
-msgstr ""
+msgstr "Você realmente deseja excluir esta conta?"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -427,6 +432,10 @@ msgstr "Editar"
 #: src/components/comment/comment-edit.tsx
 msgid "Edit comment"
 msgstr "Editar comentário"
+
+#: src/components/user/user-card.tsx
+msgid "Email"
+msgstr "Email"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
@@ -1130,6 +1139,10 @@ msgstr "Visualizar comentário"
 msgid "View comments and other activity"
 msgstr "Ver comentários e outras atividades"
 
+#: src/components/user/user-card.tsx
+msgid "View reported issues"
+msgstr "Ver issues relatados"
+
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "Visibilidade"
@@ -1161,7 +1174,7 @@ msgstr "Escreva um comentário, @mencionar pessoas"
 
 #: src/components/account/accounts.tsx
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

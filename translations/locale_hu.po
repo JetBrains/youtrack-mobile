@@ -14,19 +14,19 @@ msgstr ""
 
 #: src/components/linked-issues/linked-issues.tsx
 msgid " ({{amount}} unresolved)"
-msgstr ""
+msgstr " ({{amount}} megoldatlan)"
 
 #: src/components/comment/comment.tsx
 msgid " or "
-msgstr ""
+msgstr " vagy "
 
 #: src/views/agile-board/board-actions.ts
 msgid "(archived)"
-msgstr ""
+msgstr "(archivált)"
 
 #: src/components/custom-fields-panel/custom-fields-panel__date-picker.tsx
 msgid "(Clear value)"
-msgstr ""
+msgstr "(Érték törlése)"
 
 #: src/components/activity/activity__history-title.ts
 msgid "[Removed field]"
@@ -35,8 +35,8 @@ msgstr "[Eltávolított mező]"
 #: src/views/article/article__details.tsx
 msgid "{{amount}} article"
 msgid_plural "{{amount}} articles"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{{amount}} cikk"
+msgstr[1] "{{amount}} cikk"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "{{amount}} file"
@@ -47,13 +47,17 @@ msgstr[1] ""
 #: src/components/linked-issues/linked-issues.tsx
 msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{{amount}} hibajegy"
+msgstr[1] "{{amount}} hibajegy"
+
+#: src/components/user/user-card.tsx
+msgid "@Mention in a comment"
+msgstr "@Említés egy hozzászólásban"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "1w 1d 1h 1m"
-msgstr ""
+msgstr "1h 1n 1ó 1p"
 
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Accept"
@@ -61,15 +65,15 @@ msgstr "Elfogadás"
 
 #: src/components/issue-tabbed/issue-tabbed.tsx
 msgid "Activity"
-msgstr ""
+msgstr "Tevékenység"
 
 #: src/views/issue/activity/issue__activity.tsx
 msgid "Activity Settings"
-msgstr ""
+msgstr "Tevékenység beállításai"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Add project to favorites"
-msgstr ""
+msgstr "Projekt hozzáadása a kedvencekhez"
 
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -106,15 +110,15 @@ msgstr "Megjelenés"
 #: src/views/create-issue/create-issue-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Apply command…"
-msgstr ""
+msgstr "Parancs alkalmazása…"
 
 #: src/views/article/arcticle-helper.ts
 msgid "Are you sure you want to delete all article drafts?"
-msgstr ""
+msgstr "Biztos. hogy törli az összes cikkvázlatot?"
 
 #: src/views/article/arcticle-helper.ts
 msgid "Are you sure you want to delete this article?"
-msgstr ""
+msgstr "Biztos, hogy törli ezt a cikket?"
 
 #: src/views/article/arcticle-helper.ts
 msgid "Are you sure you want to delete this draft?"
@@ -122,28 +126,28 @@ msgstr "Biztosan törli ezt a piszkozatot?"
 
 #: src/views/issue/activity/issue-activity__actions.ts
 msgid "Are you sure you want to delete this work item?"
-msgstr ""
+msgstr "Biztosan törli ezt a munkaelemet?"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Article added to favorites"
-msgstr ""
+msgstr "A cikk hozzáadva a kedvencekhez"
 
 #: src/views/article-create/article-create.tsx
 msgid "Article content"
-msgstr ""
+msgstr "Cikk tartalma"
 
 #: src/views/article-create/arcticle-create-actions.ts
 msgid "Article published"
-msgstr ""
+msgstr "Cikk publikálva"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Article removed from favorites"
-msgstr ""
+msgstr "Cikk eltávolítva a kedvencekből"
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Attach file"
-msgstr ""
+msgstr "Fájl csatolása"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachments-add-panel.tsx
@@ -153,16 +157,16 @@ msgstr "Fájlok csatolása"
 #: src/components/activity/activity__history-title.ts
 msgid "Attachment"
 msgid_plural "Attachments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Melléklet"
+msgstr[1] "Csatolmányok"
 
 #: src/components/attachments-row/attachment-actions.ts
 msgid "Attachment deleted"
-msgstr ""
+msgstr "Csatolmány törölve"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Attachment name"
-msgstr ""
+msgstr "Csatolmány neve"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Author"
@@ -170,15 +174,15 @@ msgstr "Szerző"
 
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
-msgstr ""
+msgstr "Böngésző"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Bugsnag Privacy Policy"
-msgstr ""
+msgstr "Bugsnag adatvédelmi szabályzata"
 
 #: src/views/log-in/log-in.tsx
 msgid "By logging in, you agree to the Privacy Policy."
-msgstr ""
+msgstr "Bejelentkezésével elfogadja az Adatvédelmi szabályzatot."
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
@@ -199,7 +203,7 @@ msgstr "Mégsem"
 #: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachment-actions.ts
 msgid "Choose from library…"
-msgstr ""
+msgstr "Válasszon a könyvtárból…"
 
 #: src/components/debug-view/debug-view.tsx
 #: src/components/popup/popup.tsx
@@ -208,23 +212,23 @@ msgstr "Bezár"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "closed the pull request"
-msgstr ""
+msgstr "lezárta az áthúzási kérelmet"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Collapse all"
-msgstr ""
+msgstr "Mindet összecsukja"
 
 #: src/views/agile-board/agile-board.tsx
 msgid "Column collapsed"
-msgstr ""
+msgstr "Oszlop összecsukva"
 
 #: src/views/agile-board/agile-board.tsx
 msgid "Column expanded"
-msgstr ""
+msgstr "Oszlop kibontva"
 
 #: src/components/command-dialog/command-dialog-helper.ts
 msgid "Command applied"
-msgstr ""
+msgstr "A parancs alkalmazva"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "Command was successfully applied."
@@ -232,15 +236,15 @@ msgstr "Parancs sikeresen végrehajtva."
 
 #: src/components/activity/activity__history-title.ts
 msgid "Comment changed"
-msgstr ""
+msgstr "Megjegyzés módosítva"
 
 #: src/components/comment/comment.tsx
 msgid "Comment deleted"
-msgstr ""
+msgstr "Megjegyzés törölve"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Comment updated"
-msgstr ""
+msgstr "Hozzászólás frissítve"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.tsx
 msgid "commented"
@@ -264,13 +268,13 @@ msgstr ""
 
 #: src/actions/app-actions.ts
 msgid "Connecting to YouTrack..."
-msgstr ""
+msgstr "Csatlakozás a YouTrackhez..."
 
 #: src/components/error-boundary/error-boundary.tsx
 #: src/components/error-message/error-message-inline.tsx
 #: src/views/enter-server/enter-server.tsx
 msgid "Contact support"
-msgstr ""
+msgstr "Kapcsolatfelvétel az ügyfélszolgálattal"
 
 #: src/views/article/article.tsx
 msgid "Content"
@@ -278,9 +282,10 @@ msgstr "Tartalom"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Content revised"
-msgstr ""
+msgstr "Módosított tartalom"
 
-#: src/components/wiki/code-renderer.tsx
+#: src/components/user/user-card.tsx
+#: src/components/wiki/markdown/markdown-code-highlighter.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -309,14 +314,14 @@ msgstr "Link másolása"
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
 msgid "Copy link to article"
-msgstr ""
+msgstr "Cikkre mutató hivatkozás másolása"
 
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy text"
-msgstr ""
+msgstr "Szöveg másolása"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "Could not apply specified command."
@@ -324,7 +329,7 @@ msgstr "A megadott parancs nem használható."
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Crash report sent"
-msgstr ""
+msgstr "Összeomlási jelentés elküldve"
 
 #: src/views/inbox-threads/inbox-threads__item-issue-created.tsx
 msgid "created"
@@ -336,11 +341,11 @@ msgstr "Készítette"
 
 #: src/views/create-issue/create-issue.tsx
 msgid "Current issue"
-msgstr ""
+msgstr "Aktuális hibajegy"
 
 #: src/views/settings/settings__appearance.tsx
 msgid "Dark theme"
-msgstr ""
+msgstr "Sötét téma"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Date"
@@ -389,11 +394,11 @@ msgstr "Részletek"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Discard and close"
-msgstr ""
+msgstr "Elvetés és bezárás"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Discard draft and close?"
-msgstr ""
+msgstr "Változtatások elvetése és bezárás?"
 
 #: src/views/article-create/article-create.tsx
 msgid "Discard unpublished changes"
@@ -409,7 +414,7 @@ msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
-msgstr ""
+msgstr "Napló-küldés mellőzése"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Drafts"
@@ -428,13 +433,17 @@ msgstr "Szerkeszt"
 msgid "Edit comment"
 msgstr "Hozzászólás szerkesztése"
 
+#: src/components/user/user-card.tsx
+msgid "Email"
+msgstr "E-mail"
+
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
-msgstr ""
+msgstr "E-mail-cím a nyomon követéshez"
 
 #: src/components/command-dialog/command-dialog.tsx
 msgid "Enter command"
-msgstr ""
+msgstr "Parancs megadása"
 
 #: src/components/query-assist/query-assist.tsx
 #: src/components/query-assist/query-preview.tsx
@@ -443,19 +452,19 @@ msgstr "Írja be a keresési kérelmet"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
-msgstr ""
+msgstr "Adja meg annak a YouTrack-telepítésnek a webcímét, amelyben regisztrált fiókja van"
 
 #: src/components/custom-fields-panel/custom-fields-panel.tsx
 msgid "Enter time value"
-msgstr ""
+msgstr "Időérték megadása"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
-msgstr ""
+msgstr "Kedvencek"
 
 #: src/views/settings/settings-helper.ts
 msgid "Feature request"
-msgstr ""
+msgstr "Funkció kérés"
 
 #: src/views/agile-board/board-actions.ts
 msgid "Filter boards by name"
@@ -497,7 +506,7 @@ msgstr ""
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Get help"
-msgstr ""
+msgstr "Segítség kérése"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Groups and teams"
@@ -517,7 +526,7 @@ msgstr "Ha nem erre számított, akkor megpróbálhatja a következő megoldáso
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
-msgstr ""
+msgstr "A beépített hibajelentések mellett a YouTrack Mobile a Bugsnag harmadik fél által nyújtott szolgáltatást használja, amely segít nekünk a problémák diagnosztizálásában és az alkalmazások stabilitásának felügyeletében. Csak akkor osztjuk meg a jelentési adatokat a Bugsnag szolgáltatással, ha beleegyezésével ezt lehetővé teszi számunkra."
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -529,7 +538,7 @@ msgstr ""
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
-msgstr ""
+msgstr "Hibajegy törölve"
 
 #: src/components/activity/activity-helper.ts
 msgid "Issue history"
@@ -557,7 +566,7 @@ msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "JetBrains Privacy Policy"
-msgstr ""
+msgstr "JetBrains adatvédelmi szabályzat"
 
 #: src/components/date/date.ts
 msgid "just now"
@@ -574,7 +583,7 @@ msgstr ""
 
 #: src/views/settings/settings__appearance.tsx
 msgid "Light theme"
-msgstr ""
+msgstr "Világos téma"
 
 #: src/components/linked-issues/linked-issues-add-link.tsx
 #: src/views/create-issue/create-issue.tsx
@@ -584,7 +593,7 @@ msgstr "Hivatkozás hibajegyre"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Link to comment copied"
-msgstr ""
+msgstr "Megjegyzésre mutató hivatkozás másolva"
 
 #: src/components/linked-issues/linked-issues-title.tsx
 #: src/components/linked-issues/linked-issues.tsx
@@ -632,7 +641,7 @@ msgstr "Megjelölés olvasatlanként"
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Marked as read"
-msgstr ""
+msgstr "Megjelölés olvasottként"
 
 #: src/views/issues/issues__count.tsx
 msgid "Matches {{issuesCount}} issue"
@@ -643,7 +652,7 @@ msgstr[1] "{{issuesCount}} hibajeggyel egyezik"
 #: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
 msgid "mentioned you"
-msgstr ""
+msgstr "megemlített téged"
 
 #: src/views/inbox-threads/inbox-threads-helper.ts
 msgid "Mentions & Reactions"
@@ -667,7 +676,7 @@ msgstr "Új hibajegy"
 
 #: src/views/inbox-threads/inbox-threads__update-button.tsx
 msgid "New messages"
-msgstr ""
+msgstr "Új üzenetek"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Next"
@@ -720,7 +729,7 @@ msgstr "Nem, nem találom!"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Notification settings…"
-msgstr ""
+msgstr "Értesítési beállítások…"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 #: src/views/inbox/inbox.tsx
@@ -841,7 +850,7 @@ msgstr ""
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
-msgstr ""
+msgstr "Visszajelzés küldése"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Send Feedback"
@@ -874,7 +883,7 @@ msgstr "Link megosztása"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Share link to article"
-msgstr ""
+msgstr "Cikkre mutató hivatkozás megosztása"
 
 #: src/views/settings/settings.tsx
 msgid "Share logs"
@@ -924,7 +933,7 @@ msgstr "Időráfordítás"
 
 #: src/components/activity-stream/activity__stream-work.tsx
 msgid "Spent time:"
-msgstr ""
+msgstr "Időráfordítás:"
 
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "Start a new article"
@@ -952,13 +961,13 @@ msgstr "Az összegzés megváltozott"
 
 #: src/views/settings/settings__appearance.tsx
 msgid "Sync with OS"
-msgstr ""
+msgstr "Szinkronizálás az operációs rendszerrel"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Címke"
+msgstr[1] "Címkék"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachment-actions.ts
@@ -971,7 +980,7 @@ msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "The application failed to restart automatically. Please try to restart it manually."
-msgstr ""
+msgstr "Az alkalmazás nem tudott automatikusan újraindulni. Próbálja meg manuálisan újraindítani."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
@@ -1011,7 +1020,7 @@ msgstr "A közzététel végrehajtó nem a projekt egyik felelőse."
 
 #: src/actions/app-actions.ts
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
-msgstr ""
+msgstr "A kiválasztott fiók már nem jogosult a YouTrack Mobile használatára. Kérjük, jelentkezzen be újra."
 
 #: src/components/error/error-message-data.ts
 msgid "The server is overloaded or down for maintenance"
@@ -1019,7 +1028,7 @@ msgstr ""
 
 #: src/views/agile-board/board-updaters.ts
 msgid "The settings for this agile board have been updated. Please reload the board."
-msgstr ""
+msgstr "Az agilis tábla beállításai frissültek. Kérem, töltse be újra a táblát."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The VCS user name does not match any user in YouTrack. To link future commits, add the VCS user name to the Hub account for this user."
@@ -1039,11 +1048,11 @@ msgstr "Ez a művelet törli az összes piszkozatot, beleértve a kiadatlan rés
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Thread muted"
-msgstr ""
+msgstr "Szál elnémítva"
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Thread unmuted"
-msgstr ""
+msgstr "Szál némítása feloldva"
 
 #: src/views/article-create/article-create.tsx
 msgid "Title"
@@ -1051,11 +1060,11 @@ msgstr "Cím"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Title changed"
-msgstr ""
+msgstr "A cím megváltozott"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "To view an item in context, select an issue, article, or update from the list"
-msgstr ""
+msgstr "Ha egy elemet kontextusban szeretne megtekinteni, válasszon ki egy hibajegyet, cikket vagy frissítést a listából"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
@@ -1130,6 +1139,10 @@ msgstr "Hozzászólás megtekintése"
 msgid "View comments and other activity"
 msgstr ""
 
+#: src/components/user/user-card.tsx
+msgid "View reported issues"
+msgstr ""
+
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "Láthatóság"
@@ -1165,19 +1178,19 @@ msgstr "Igen"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"
-msgstr ""
+msgstr "Nincs olvasatlan értesítése"
 
 #: src/views/inbox/inbox.tsx
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
-msgstr ""
+msgstr "Még nem kapott értesítést. A fiók értesítési beállításainak konfigurálásához nyissa meg saját YouTrack profilját a webalkalmazásban."
 
 #: src/views/log-in/log-in.tsx
 msgid "You need a YouTrack account to use the app.\n"
-msgstr ""
+msgstr "Az alkalmazás használatához YouTrack-fiókra van szüksége.\n"
 
 #: src/components/error/error-message-data.ts
 msgid "Your account has insufficient permission to perform this operation."
-msgstr ""
+msgstr "A fiók engedélye nem elegendő ezen művelet végrehajtásához."
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."

@@ -47,6 +47,10 @@ msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
 msgstr[0] "이슈 {{amount}}개"
 
+#: src/components/user/user-card.tsx
+msgid "@Mention in a comment"
+msgstr "코멘트 내의 @멘션"
+
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "1w 1d 1h 1m"
@@ -252,11 +256,11 @@ msgstr "커밋된 변경사항"
 
 #: src/components/account/accounts.tsx
 msgid "Confirm logout"
-msgstr ""
+msgstr "로그아웃 확인"
 
 #: src/components/account/accounts.tsx
 msgid "Confirmation required"
-msgstr ""
+msgstr "확인 필요"
 
 #: src/actions/app-actions.ts
 msgid "Connecting to YouTrack..."
@@ -276,7 +280,8 @@ msgstr "내용"
 msgid "Content revised"
 msgstr "내용 수정됨"
 
-#: src/components/wiki/code-renderer.tsx
+#: src/components/user/user-card.tsx
+#: src/components/wiki/markdown/markdown-code-highlighter.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -397,11 +402,11 @@ msgstr "게시되지 않은 변경 내용 무시"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to log out?"
-msgstr ""
+msgstr "로그아웃하시겠어요?"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to remove this account?"
-msgstr ""
+msgstr "이 계정을 삭제하시겠어요?"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -423,6 +428,10 @@ msgstr "편집"
 #: src/components/comment/comment-edit.tsx
 msgid "Edit comment"
 msgstr "코멘트 편집"
+
+#: src/components/user/user-card.tsx
+msgid "Email"
+msgstr "이메일"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
@@ -1124,6 +1133,10 @@ msgstr "주석 보기"
 msgid "View comments and other activity"
 msgstr "댓글 및 기타 활동 보기"
 
+#: src/components/user/user-card.tsx
+msgid "View reported issues"
+msgstr "보고된 이슈 보기"
+
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "가시성"
@@ -1155,7 +1168,7 @@ msgstr "코멘트를 작성하거나, 다른 사람을 @멘션하세요"
 
 #: src/components/account/accounts.tsx
 msgid "Yes"
-msgstr ""
+msgstr "예"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

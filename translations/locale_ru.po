@@ -56,6 +56,10 @@ msgstr[1] "{{amount}} задачи"
 msgstr[2] "{{amount}} задач"
 msgstr[3] "{{amount}} задачи"
 
+#: src/components/user/user-card.tsx
+msgid "@Mention in a comment"
+msgstr "@Упоминание в комментарии"
+
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "1w 1d 1h 1m"
@@ -264,11 +268,11 @@ msgstr "сделал(а) коммит"
 
 #: src/components/account/accounts.tsx
 msgid "Confirm logout"
-msgstr ""
+msgstr "Подтвердите выход из приложения"
 
 #: src/components/account/accounts.tsx
 msgid "Confirmation required"
-msgstr ""
+msgstr "Требуется подтверждение"
 
 #: src/actions/app-actions.ts
 msgid "Connecting to YouTrack..."
@@ -288,7 +292,8 @@ msgstr "Содержимое"
 msgid "Content revised"
 msgstr "Содержимое изменено"
 
-#: src/components/wiki/code-renderer.tsx
+#: src/components/user/user-card.tsx
+#: src/components/wiki/markdown/markdown-code-highlighter.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -409,11 +414,11 @@ msgstr "Отменить неопубликованные изменения"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to log out?"
-msgstr ""
+msgstr "Вы действительно хотите выйти?"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to remove this account?"
-msgstr ""
+msgstr "Вы действительно хотите удалить этот аккаунт?"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -435,6 +440,10 @@ msgstr "Изменить"
 #: src/components/comment/comment-edit.tsx
 msgid "Edit comment"
 msgstr "Редактировать комментарий"
+
+#: src/components/user/user-card.tsx
+msgid "Email"
+msgstr "Адрес эл. почты"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
@@ -1142,6 +1151,10 @@ msgstr "Посмотреть комментарий"
 msgid "View comments and other activity"
 msgstr "Просмотреть комментарии и другую активность"
 
+#: src/components/user/user-card.tsx
+msgid "View reported issues"
+msgstr "Просмотреть созданные задачи"
+
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "Видимость"
@@ -1173,7 +1186,7 @@ msgstr "Введите текст комментария, @упоминайте 
 
 #: src/components/account/accounts.tsx
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"
