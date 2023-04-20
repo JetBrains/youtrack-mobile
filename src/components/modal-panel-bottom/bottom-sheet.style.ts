@@ -3,7 +3,7 @@ import {UNIT} from 'components/variables';
 export default EStyleSheet.create({
   modal: {
     margin: 0,
-    backgroundColor: '$boxBackground',
+    backgroundColor: '$background',
   },
   container: {
     flex: 1,
