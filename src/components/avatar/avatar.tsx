@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, ImageErrorEventData, NativeSyntheticEvent} from 'react-native';
+import {Image, ImageErrorEventData, NativeSyntheticEvent, View} from 'react-native';
 
 import {SvgUri} from 'react-native-svg';
 
@@ -31,47 +31,59 @@ const Avatar = (props: Props) => {
   });
 
 
-  if (state.renderSVG) {
-    return (
-      <SvgUri
-        width={size}
-        height={size}
-        uri={source.uri}
-        onError={() => setState({
-          renderSVG: false,
-          renderDefault: true,
-        })}
-      />
-    );
-  } else if (state.renderDefault) {
-    return (
-      <DefaultAvatar
-        size={size}
-        text={userName}
-        style={[styles.common, style]}
-      />
-    );
-  }
-
   return (
-    <Image
-      source={source}
+    <View
       style={[
         styles.common,
-        {width: size, height: size},
-        style,
+        {
+          width: size,
+          height: size,
+          borderRadius: size,
+          overflow: 'hidden',
+        },
       ]}
-      onError={(e: NativeSyntheticEvent<ImageErrorEventData>) => {
-        const error: unknown | undefined = e?.nativeEvent?.error;
-        if (error) {
-          const isDecodeError: boolean = typeof error === 'string' && error.indexOf('Error decoding image data') !== -1;
-          setState({
-            renderSVG: isDecodeError,
-            renderDefault: !isDecodeError,
-          });
-        }
-      }}
-    />
+    >
+      {state.renderSVG && (
+        <SvgUri
+          width={size}
+          height={size}
+          uri={source.uri}
+          onError={() => setState({
+            renderSVG: false,
+            renderDefault: true,
+          })}
+        />
+      )}
+      {state.renderDefault && (
+        <DefaultAvatar
+          size={size}
+          text={userName}
+          style={[styles.common, style]}
+        />
+      )}
+      {!state.renderSVG && !state.renderDefault && (
+        <Image
+          source={source}
+          style={[
+            styles.common,
+            {width: size, height: size, borderRadius: size},
+            style,
+          ]}
+          onError={(e: NativeSyntheticEvent<ImageErrorEventData>) => {
+            const error: unknown | undefined = e?.nativeEvent?.error;
+            if (error) {
+              const isDecodeError: boolean = typeof error === 'string' && error.indexOf(
+                'Error decoding image data'
+              ) !== -1;
+              setState({
+                renderSVG: isDecodeError,
+                renderDefault: !isDecodeError,
+              });
+            }
+          }}
+        />
+      )}
+    </View>
   );
 };
 

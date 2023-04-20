@@ -1,12 +1,14 @@
+import React from 'react';
 import {Text, View} from 'react-native';
-// @ts-expect-error: cannot typecheck react-native-linear-gradient module because of mistakes there
+
 import LinearGradient from 'react-native-linear-gradient';
-import React, {PureComponent} from 'react';
+
 import styles from './default-avatar.styles';
+
 type Props = {
   text: string;
   size: number;
-  style?: Record<string, any> | null | undefined;
+  style?: Record<string, any>;
 };
 
 function extractLetters(name: string): string {
@@ -48,7 +50,7 @@ const COLOR_PARIS = [
   ['#ED358C', '#F9902E'],
 ];
 
-function hashCode(value) {
+function hashCode(value: string) {
   let hash = 0,
     i,
     chr;
@@ -66,7 +68,7 @@ function hashCode(value) {
   return hash;
 }
 
-export default class DefaultAvatar extends PureComponent<Props, void> {
+export default class DefaultAvatar extends React.PureComponent<Props, void> {
   render(): React.ReactNode {
     const {text, size, style} = this.props;
 
@@ -75,8 +77,7 @@ export default class DefaultAvatar extends PureComponent<Props, void> {
     }
 
     const shortText = extractLetters(text);
-    const colors =
-      COLOR_PARIS[Math.abs(hashCode(text.toLowerCase()) % COLOR_PARIS.length)];
+    const colors = COLOR_PARIS[Math.abs(hashCode(text.toLowerCase()) % COLOR_PARIS.length)];
     const textStyle = [
       styles.text,
       {
@@ -90,12 +91,11 @@ export default class DefaultAvatar extends PureComponent<Props, void> {
         style={[
           styles.common,
           style,
-          size
-            ? {
-                width: size,
-                height: size,
-              }
-            : styles.size40,
+          {
+            width: size,
+            height: size,
+            borderRadius: size,
+          },
         ]}
       >
         <View>

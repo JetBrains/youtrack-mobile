@@ -1,9 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from 'components/variables';
 const defaultSize = 40;
 const commonStyle = {
   justifyContent: 'center',
-  borderRadius: 3,
 };
 export default EStyleSheet.create({
   common: {
@@ -13,15 +11,17 @@ export default EStyleSheet.create({
   size80: {
     width: defaultSize * 2,
     height: defaultSize * 2,
-    borderRadius: UNIT,
+    borderRadius: defaultSize * 2,
   },
   size40: {
     width: defaultSize,
     height: defaultSize,
+    borderRadius: defaultSize,
   },
   size20: {
     width: defaultSize / 2,
     height: defaultSize / 2,
+    borderRadius: defaultSize / 2,
   },
   text: {
     fontFamily: 'Arial',
