@@ -143,6 +143,9 @@ export default EStyleSheet.create({
     marginLeft: UNIT * 2,
     marginBottom: -UNIT * 2,
   },
+  bookmarkIcon: {
+    marginRight: UNIT / 4,
+  },
   resolved: {
     color: '$resolved',
   },

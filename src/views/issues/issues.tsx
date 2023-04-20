@@ -12,7 +12,8 @@ import {connect} from 'react-redux';
 import * as issueActions from './issues-actions';
 import CreateIssue from 'views/create-issue/create-issue';
 import ErrorMessage from 'components/error-message/error-message';
-import Issue from '../issue/issue';
+import IconBookmark from 'components/icon/assets/bookmark.svg';
+import Issue from 'views/issue/issue';
 import IssueRow from './issues__row';
 import IssuesCount from './issues__count';
 import IssuesSortBy from './issues__sortby';
@@ -31,7 +32,7 @@ import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {getIssueFromCache} from './issues-actions';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
-import {IconAdd, IconAngleDown, IconBookmark} from 'components/icon/icon';
+import {IconAdd, IconAngleDown} from 'components/icon/icon';
 import {
   ICON_PICTOGRAM_DEFAULT_SIZE,
   IconNothingFound,
@@ -42,7 +43,7 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 import {logEvent} from 'components/log/log-helper';
 import {notify} from 'components/notification/notification';
 import {requestController} from 'components/api/api__request-controller';
-import {routeMap} from '../../app-routes';
+import {routeMap} from 'app-routes';
 import {SkeletonIssues} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables';
@@ -50,7 +51,7 @@ import styles from './issues.styles';
 import type Api from 'components/api/api';
 import type Auth from 'components/auth/oauth2';
 import type {AnyIssue, IssueOnList} from 'types/Issue';
-import type {AppState} from '../../reducers';
+import type {AppState} from 'reducers';
 import type {ErrorMessageProps} from 'components/error-message/error-message';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {Folder} from 'types/User';
@@ -495,7 +496,9 @@ export class Issues extends Component<Props, State> {
             disabled={!networkState?.isConnected}
           >
             <IconBookmark
-              size={28}
+              style={styles.bookmarkIcon}
+              width={22}
+              height={22}
               color={
                 networkState?.isConnected
                   ? this.getThemeColors().$link
