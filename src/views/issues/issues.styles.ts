@@ -135,7 +135,7 @@ export default EStyleSheet.create({
   toolbarActionSortBy: {
     marginRight: -UNIT / 4,
   },
-  toolbarText: {...secondaryText, color: '$icon'},
+  toolbarText: {...secondaryText, color: '$textSecondary'},
   toolbarSortByText: {
     textAlign: 'right',
   },
