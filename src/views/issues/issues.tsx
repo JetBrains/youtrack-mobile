@@ -327,7 +327,6 @@ export class Issues extends Component<Props, State> {
         key="issueListContext"
         accessible={true}
         testID="test:id/issue-list-context"
-        accessibilityLabel="search-context"
         style={[
           styles.searchContext,
           isSearchContextPinned ? styles.searchContextPinned : null,
