@@ -44,7 +44,7 @@ msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} issue"
 msgstr[1] "{{amount}} issues"
 
-#: src/components/user/user-card.tsx:146
+#: src/components/user/user-card.tsx:162
 msgid "@Mention in a comment"
 msgstr "@Mention in a comment"
 
@@ -278,7 +278,7 @@ msgstr "Content"
 msgid "Content revised"
 msgstr "Content revised"
 
-#: src/components/user/user-card.tsx:105
+#: src/components/user/user-card.tsx:120
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx:158
 #: src/views/article/article__activity-stream.tsx:210
 #: src/views/article/article__activity-stream.tsx:219
@@ -427,7 +427,7 @@ msgstr "Edit"
 msgid "Edit comment"
 msgstr "Edit comment"
 
-#: src/components/user/user-card.tsx:89
+#: src/components/user/user-card.tsx:104
 msgid "Email"
 msgstr "Email"
 
@@ -697,7 +697,7 @@ msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
 #: src/components/error/error-message-data.ts:34
-#: src/views/issues/issues.tsx:567
+#: src/views/issues/issues.tsx:566
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -830,7 +830,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:633
+#: src/views/issues/issues.tsx:632
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -1133,7 +1133,7 @@ msgstr "View comment"
 msgid "View comments and other activity"
 msgstr "View comments and other activity"
 
-#: src/components/user/user-card.tsx:129
+#: src/components/user/user-card.tsx:144
 msgid "View reported issues"
 msgstr "View reported issues"
 
