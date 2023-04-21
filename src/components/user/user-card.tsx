@@ -1,11 +1,14 @@
 import React from 'react';
 import {Clipboard, Linking, Text, TouchableOpacity, View} from 'react-native';
 
+import {useDispatch} from 'react-redux';
+
 import Avatar from 'components/avatar/avatar';
 import ImageWithProgress from 'components/image/image-with-progress';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
+import {addMentionToDraftComment} from 'actions/app-actions';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {getStorageState} from 'components/storage/storage';
 import {HIT_SLOP} from 'components/common-styles';
@@ -18,17 +21,29 @@ import {useUserCardAsync} from 'components/hooks/use-user-card-async';
 
 import styles from './user-card.styles';
 
+import {AnyIssue} from 'types/Issue';
+import {Article} from 'types/Article';
+import {DraftCommentData} from 'types/CustomFields';
+import {useCardData} from 'components/hooks/use-card-data';
 import {User} from 'types/User';
 
 
-const UserCard = ({user, onMention}: { user: User, onMention?: (userLogin: string) => void}): JSX.Element | null => {
+const UserCard = ({user}: { user: User}): JSX.Element | null => {
+  const dispatch = useDispatch();
   const {closeBottomSheet} = useBottomSheetContext();
-  const issuePermissions: IssuePermissions = usePermissions();
-  const canReadUserBasic: boolean = !!issuePermissions?.canReadUserBasic?.(user);
-  const canReadUser: boolean = !!issuePermissions?.canReadUser?.(user);
 
   const loadedUser: User | null = useUserCardAsync(user.id);
   const usr: User = {...loadedUser, ...user};
+
+  const data: DraftCommentData = useCardData();
+  const issuePermissions: IssuePermissions = usePermissions();
+  const canComment = !!data?.entity && (
+    issuePermissions.canCommentOn(data.entity as AnyIssue) ||
+    issuePermissions.articleCanCommentOn(data.entity as Article)
+  );
+  const canReadUserBasic: boolean = !!issuePermissions?.canReadUserBasic?.(user);
+  const canReadUser: boolean = !!issuePermissions?.canReadUser?.(user);
+
 
   React.useEffect(() => {
     usage.trackEvent('Show user card');
@@ -131,14 +146,15 @@ const UserCard = ({user, onMention}: { user: User, onMention?: (userLogin: strin
         </TouchableOpacity>
       )}
 
-      {typeof onMention === 'function' && (
+      {canComment && (
         <TouchableOpacity
           testID="test:id/userCardMentionButton"
           accessibilityLabel="userCardMentionButton"
           accessible={true}
           onPress={() => {
             usage.trackEvent('User card: mention in a comment');
-            onMention(`@${usr.login} `);
+            dispatch(addMentionToDraftComment(usr.login));
+            closeBottomSheet();
           }}
           style={styles.button}
         >

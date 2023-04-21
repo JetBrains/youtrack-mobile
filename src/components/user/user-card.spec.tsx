@@ -7,12 +7,14 @@ import {Store} from 'redux';
 
 import mocks from 'test/mocks';
 
+import * as appActions from 'actions/app-actions';
 import UserCard from './user-card';
 
 import {User} from 'types/User';
 import {__setStorageState} from 'components/storage/storage';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import Router from 'components/router/router';
+import {AnyIssue} from 'types/Issue';
 
 jest.mock('react-native/Libraries/Linking/Linking', () => ({
   openURL: jest.fn().mockResolvedValue(null),
@@ -40,6 +42,10 @@ describe('<UserCard/>', () => {
           isConnected: true,
         },
         issuePermissions: issuePermissionsMock,
+        draftCommentData: {
+          entity: {} as AnyIssue,
+          setDraft: jest.fn(),
+        },
       },
     });
 
@@ -52,7 +58,7 @@ describe('<UserCard/>', () => {
 
   describe('No read user permission', () => {
     it('should not render user card', () => {
-      const {queryByTestId} = doRender({user: userMock});
+      const {queryByTestId} = doRender();
 
       expect(queryByTestId('test:id/userCard')).toBeNull();
     });
@@ -65,24 +71,22 @@ describe('<UserCard/>', () => {
     });
 
     it('should render user card', () => {
-      const {getByTestId} = doRender({user: userMock});
+      const {getByTestId} = doRender();
 
       expect(getByTestId('test:id/userCard')).toBeTruthy();
     });
 
     it('should render user`s login', () => {
-      const {getByTestId} = doRender({user: userMock});
+      const {getByTestId} = doRender();
 
       expect(getByTestId('test:id/userCardName')).toBeTruthy();
     });
 
     it('should render user`s related group icon', () => {
       const {getByTestId} = doRender({
-        user: {
-          ...userMock,
-          issueRelatedGroup: {
-            icon: 'https://',
-          },
+        ...userMock,
+        issueRelatedGroup: {
+          icon: 'https://',
         },
       });
 
@@ -90,13 +94,13 @@ describe('<UserCard/>', () => {
     });
 
     it('should not render user`s email', () => {
-      const {queryByTestId} = doRender({user: userMock});
+      const {queryByTestId} = doRender();
 
       expect(queryByTestId('test:id/userCardEmail')).toBeNull();
     });
 
     it('should navigate to the user profile', () => {
-      const {getByTestId} = doRender({user: userMock});
+      const {getByTestId} = doRender();
       const userName = getByTestId('test:id/userCardName');
 
       expect(userName).toBeTruthy();
@@ -106,13 +110,13 @@ describe('<UserCard/>', () => {
 
 
     it('should not render mention button', () => {
-      const {queryByTestId} = doRender({user: userMock});
+      const {queryByTestId} = doRender();
 
       expect(queryByTestId('test:id/userCardMentionButton')).toBeNull();
     });
 
     it('should not render reported issues button', () => {
-      const {queryByTestId} = doRender({user: {} as User});
+      const {queryByTestId} = doRender({} as User);
 
       expect(queryByTestId('test:id/userCardReportedIssuesButton')).toBeNull();
     });
@@ -128,38 +132,37 @@ describe('<UserCard/>', () => {
 
     it('should render user`s email', () => {
       const emailMock = 'me@me.me';
-      const {getByTestId, findAllByText} = doRender({user: {...userMock, email: emailMock}});
+      const {getByTestId, findAllByText} = doRender({...userMock, email: emailMock});
 
       expect(getByTestId('test:id/userCardEmail')).toBeTruthy();
       expect(findAllByText(emailMock)).toBeTruthy();
     });
 
     it('should invoke mention button callback', () => {
-      const onMentionMock = jest.fn();
-      const {getByTestId} = doRender({user: userMock, onMention: onMentionMock});
+      jest.spyOn(issuePermissionsMock, 'canCommentOn').mockReturnValueOnce(true);
+      jest.spyOn(appActions, 'addMentionToDraftComment');
+      const {getByTestId} = doRender();
 
       fireEvent.press(getByTestId('test:id/userCardMentionButton'));
 
-      expect(onMentionMock).toHaveBeenCalledWith(`@${userMock.login} `);
+      expect(appActions.addMentionToDraftComment).toHaveBeenCalledWith(userMock.login);
     });
 
     it('should invoke reported issues button', () => {
-      const {getByTestId} = doRender({user: userMock});
+      const {getByTestId} = doRender();
 
       fireEvent.press(getByTestId('test:id/userCardReportedIssuesButton'));
 
       expect(Router.Issues).toHaveBeenCalledWith({searchQuery: `created by: ${userMock.login}`});
     });
   });
+
+  function doRender(user: User = userMock) {
+    return render(
+      <Provider store={storeMock}>
+        <UserCard user={user}/>
+      </Provider>
+    );
+  }
 });
 
-function doRender({user, onMention}: { user: User, onMention?: (userLogin: string) => void }) {
-  return render(
-    <Provider store={storeMock}>
-      <UserCard
-        user={user}
-        onMention={onMention}
-      />
-    </Provider>
-  );
-}
