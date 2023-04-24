@@ -74,7 +74,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:670
+#: src/components/comment/comment-edit.tsx:677
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -138,7 +138,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:639
+#: src/components/comment/comment-edit.tsx:646
 #: src/views/issue/issue-base-actions-creater.ts:667
 msgid "Attach file"
 msgstr "Attach file"
@@ -260,7 +260,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:933
+#: src/actions/app-actions.ts:936
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -423,7 +423,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:688
+#: src/components/comment/comment-edit.tsx:695
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -1012,7 +1012,7 @@ msgstr "The commit author has specified an email address that is associated with
 msgid "The commit author is not an assignee in the project."
 msgstr "The commit author is not an assignee in the project."
 
-#: src/actions/app-actions.ts:482
+#: src/actions/app-actions.ts:483
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
@@ -1161,7 +1161,7 @@ msgstr "When integrating TeamCity and YouTrack, the users are matched by their e
 msgid "Woah, you can't touch this!"
 msgstr "Woah, you can't touch this!"
 
-#: src/components/comment/comment-edit.tsx:495
+#: src/components/comment/comment-edit.tsx:499
 #: src/views/issue/activity/activity__add-spent-time.tsx:426
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
