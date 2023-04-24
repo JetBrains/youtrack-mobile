@@ -15,7 +15,6 @@ import {
 } from 'react-native';
 import InputScrollView from 'react-native-input-scroll-view';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
-import debounce from 'lodash.debounce';
 import {useDispatch} from 'react-redux';
 import AttachFileDialog from '../attach-file/attach-file-dialog';
 import AttachmentAddPanel from '../attachments-row/attachments-add-panel';
@@ -46,6 +45,7 @@ import type {NormalizedAttachment} from 'types/Attachment';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
+
 type UserMentions = {
   users: User[];
 };
@@ -89,6 +89,7 @@ type State = {
   mentionsLoading: boolean;
   mentionsQuery: string;
   mentionsVisible: boolean;
+  timer: ReturnType<typeof setTimeout> | null;
 };
 const EMPTY_COMMENT: EditingComment = {
   text: '',
@@ -116,6 +117,7 @@ const IssueCommentEdit = (props: Props) => {
     mentionsQuery: '',
     mentionsVisible: false,
     height: null,
+    timer: null,
   });
   const editCommentInput = useRef(null);
 
@@ -148,15 +150,16 @@ const IssueCommentEdit = (props: Props) => {
     },
     [],
   );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   const delayedChange = useCallback(
-    debounce(
       (draft: Partial<IssueComment>, isAttachmentChange: boolean = false) => {
-        props.onCommentChange(draft, isAttachmentChange);
+        const timer = setTimeout(() => {
+          props.onCommentChange(draft, isAttachmentChange);
+          changeState({timer: null});
+        }, 300);
+        changeState({timer});
       },
-      100,
-    ),
-    [],
+    [props],
   );
   useEffect(() => {
     return () => setComment();
@@ -166,7 +169,7 @@ const IssueCommentEdit = (props: Props) => {
       state.editingComment.id === undefined && props.editingComment?.id ||
       (
         state.editingComment.id &&
-        state.editingComment.text !== props.editingComment?.text
+        state.editingComment.updated < props.editingComment.updated
       )
     ) {
       // set draft id
@@ -354,12 +357,13 @@ const IssueCommentEdit = (props: Props) => {
   };
 
   const renderSendButton = (): React.ReactNode => {
-    const {editingComment, isSaving} = state;
+    const {editingComment, isSaving, timer} = state;
     const draftHasId: boolean = !!state.editingComment.id;
     const isDisabled: boolean =
       !draftHasId ||
-      state.isSaving ||
-      (!state.editingComment.text && !editingComment.attachments);
+      isSaving ||
+      !!timer ||
+      (!editingComment.text && !editingComment.attachments);
     return (
       <TouchableOpacity
         style={[
@@ -505,15 +509,18 @@ const IssueCommentEdit = (props: Props) => {
           });
         }}
         onChangeText={(text: string) => {
-          const updatedDraftComment: Partial<IssueComment> = getCurrentComment({
-            text,
-          });
+          if (state.timer && !props.isEditMode) {
+            clearTimeout(state.timer);
+          }
+          const updatedDraftComment: Partial<IssueComment> = getCurrentComment({text});
           changeState({
             editingComment: updatedDraftComment,
             editingCommentText: text,
           });
           suggestionsNeededDetector(text, state.commentCaret);
-          !props.isEditMode && delayedChange(updatedDraftComment);
+          if (!props.isEditMode) {
+            delayedChange(updatedDraftComment);
+          }
         }}
         onContentSizeChange={event => {
           changeState({
@@ -617,7 +624,7 @@ const IssueCommentEdit = (props: Props) => {
                   styles.actionsContainerButton,
                   styles.floatContextButton,
                 ]}
-                disabled={isSaving || mentionsVisible}
+                disabled={isSaving || mentionsVisible || !!state.timer}
                 onPress={() => {
                   changeState({
                     isAttachActionsVisible: false,
@@ -747,7 +754,8 @@ const IssueCommentEdit = (props: Props) => {
                     isDisabled={
                       state.isSaving ||
                       state.isAttachFileDialogVisible ||
-                      state.mentionsLoading
+                      state.mentionsLoading ||
+                      !!state.timer
                     }
                     showAddAttachDialog={() => toggleAttachFileDialog(true)}
                   />

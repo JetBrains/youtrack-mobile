@@ -199,6 +199,7 @@ const ISSUE_COMMENTS_BASE_FIELDS = toField([
 const ISSUE_COMMENTS_FIELDS: any = toField([
   ISSUE_COMMENTS_BASE_FIELDS,
   'created',
+  'updated',
   'deleted',
   'hasEmail',
   {

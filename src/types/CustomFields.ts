@@ -150,6 +150,7 @@ export type IssueComment = {
   $type: string;
   id: string;
   created: number;
+  updated: number;
   textPreview: string;
   deleted: boolean;
   text: string;
