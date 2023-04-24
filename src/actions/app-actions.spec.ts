@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 
 import * as actions from './app-actions';
 import * as appActionHelper from './app-actions-helper';
+import * as feature from 'components/feature/feature';
 import * as Notification from 'components/notification/notification';
 import * as storage from 'components/storage/storage';
 import * as storageOauth from 'components/storage/storage__oauth';
@@ -326,12 +327,22 @@ describe('app-actions', () => {
     });
   });
   describe('completeInitialization', () => {
-    it('should check for inbox thread update', async () => {
+    beforeEach(() => {
       setAppStateNetworkConnected(true);
       const foldersMock = createInboxFoldersMock();
       apiMock.inbox.getFolders.mockResolvedValueOnce(foldersMock);
+    });
+
+    it('should check for inbox thread update', async () => {
+      jest.spyOn(feature, 'checkVersion').mockReturnValueOnce(true);
       await store.dispatch(actions.completeInitialization());
       expect(apiMock.inbox.getFolders).toHaveBeenCalled();
+    });
+
+    it('should not check for inbox thread update', async () => {
+      jest.spyOn(feature, 'checkVersion').mockReturnValueOnce(false);
+      await store.dispatch(actions.completeInitialization());
+      expect(apiMock.inbox.getFolders).not.toHaveBeenCalled();
     });
   });
   describe('inboxCheckUpdateStatus', () => {

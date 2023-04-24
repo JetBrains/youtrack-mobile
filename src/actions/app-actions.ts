@@ -19,6 +19,7 @@ import {
   folderIdAllKey,
   folderIdMap,
 } from 'views/inbox-threads/inbox-threads-helper';
+import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 import {getCachedPermissions, storeYTCurrentUser} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
@@ -641,7 +642,9 @@ export function completeInitialization(
 
     dispatch(loadWorkTimeSettings());
     dispatch(subscribeToPushNotifications());
-    dispatch(inboxCheckUpdateStatus());
+    if (checkVersion(FEATURE_VERSION.inboxThreads)) {
+      dispatch(inboxCheckUpdateStatus());
+    }
   };
 }
 export function setYTCurrentUser(user: User): Action {
