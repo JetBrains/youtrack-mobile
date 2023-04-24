@@ -24,7 +24,7 @@ export default EStyleSheet.create({
   },
   ...splitViewStyles,
   list: {
-    minHeight: 160,
+    minHeight: '100%',
     paddingBottom: UNIT * 4,
   },
   tryAgainButton: {
