@@ -1,10 +1,10 @@
 import {UNIT} from 'components/variables';
-import {HEADER_FONT_SIZE, mainText, secondaryText} from './typography';
+import {HEADER_FONT_SIZE, MAIN_FONT_SIZE, mainText, secondaryText} from './typography';
 import {Platform} from 'react-native';
 export const title = {
-  fontSize: 18,
+  fontSize: MAIN_FONT_SIZE + 2,
   fontWeight: '500',
-  lineHeight: 21,
+  lineHeight: HEADER_FONT_SIZE + 1,
   letterSpacing: -0.22,
 };
 export const issueCard = {
@@ -34,7 +34,7 @@ export const summaryTitle = {
   flex: 1,
   marginTop: UNIT,
   fontSize: HEADER_FONT_SIZE,
-  lineHeight: 24,
+  lineHeight: HEADER_FONT_SIZE + 4,
   letterSpacing: -0.19,
   ...Platform.select({
     ios: {

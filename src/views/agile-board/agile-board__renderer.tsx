@@ -3,7 +3,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {IconAngleDown} from 'components/icon/icon';
 import {UNIT} from 'components/variables';
-import {mainText} from 'components/common-styles';
+import {HEADER_FONT_SIZE, mainText} from 'components/common-styles';
 import {elevation1} from 'components/common-styles';
 import type {
   TextStyleProp,
@@ -81,6 +81,6 @@ const styles = EStyleSheet.create({
     color: '$icon',
   },
   selectorIcon: {
-    lineHeight: 20,
+    lineHeight: HEADER_FONT_SIZE,
   },
 });

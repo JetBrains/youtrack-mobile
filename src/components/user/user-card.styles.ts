@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {secondaryText, UNIT} from 'components/common-styles';
+import {HEADER_FONT_SIZE, secondaryText, UNIT} from 'components/common-styles';
 
 import {rowStyles as userInfoStyles} from './user-info.styles';
 
@@ -58,7 +58,7 @@ export default EStyleSheet.create({
   },
   label: {
     ...secondaryText,
-    lineHeight: 28,
+    lineHeight: HEADER_FONT_SIZE + 8,
     color: '$textSecondary',
   },
   iconCopy: {

@@ -1,9 +1,9 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {mainText} from 'components/common-styles/typography';
+import {HEADER_FONT_SIZE, mainText} from 'components/common-styles/typography';
 export const summary = {
-  fontSize: 20,
-  lineHeight: 24,
+  fontSize: HEADER_FONT_SIZE,
+  lineHeight: HEADER_FONT_SIZE + 4,
   letterSpacing: -0.19,
   fontWeight: '500',
 };

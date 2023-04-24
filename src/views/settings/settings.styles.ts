@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {mainText, secondaryText} from 'components/common-styles';
+import {MAIN_FONT_SIZE, mainText, secondaryText} from 'components/common-styles';
 import {separatorBorder} from 'components/common-styles/list';
 import {UNIT} from 'components/variables';
 import {elevation1} from 'components/common-styles';
@@ -51,7 +51,7 @@ export default EStyleSheet.create({
   settingsFooterTitle: {
     ...mainText,
     color: '$text',
-    fontSize: 18,
+    fontSize: MAIN_FONT_SIZE + 2,
     fontWeight: '500',
   },
   settingsFooterLink: {

@@ -1,6 +1,6 @@
 import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {elevation1} from 'components/common-styles';
+import {elevation1, HEADER_FONT_SIZE, MAIN_FONT_SIZE} from 'components/common-styles';
 import {
   headerTitle,
   mainText,
@@ -10,8 +10,8 @@ import {issueIdResolved} from 'components/common-styles/issue';
 import {splitViewStyles} from 'components/common-styles/split-view';
 import {UNIT} from 'components/variables';
 const font = {
-  lineHeight: 18,
-  fontSize: 14,
+  lineHeight: MAIN_FONT_SIZE + 2,
+  fontSize: MAIN_FONT_SIZE - 2,
 };
 const textSecondary = {...font, color: '$textSecondary'};
 export default EStyleSheet.create({
@@ -21,7 +21,7 @@ export default EStyleSheet.create({
   },
   ...splitViewStyles,
   arrowImage: {
-    lineHeight: 22,
+    lineHeight: HEADER_FONT_SIZE + 2,
   },
   notification: {
     paddingLeft: UNIT * 2,
@@ -85,7 +85,7 @@ export default EStyleSheet.create({
   listFooterMessageText: {
     color: '$text',
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: MAIN_FONT_SIZE + 2,
     fontWeight: '500',
   },
   change: {

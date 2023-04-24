@@ -89,8 +89,9 @@ export default EStyleSheet.create({
   },
   headerTitle: {...headerTitlePresentation, marginLeft: 0},
   headerSubTitle: {
+    ...secondaryText,
     lineHeight: SECONDARY_FONT_SIZE,
-    color: '$icon',
+    color: '$textSecondary',
   },
   searchPanelContainer: {
     backgroundColor: '$background',
@@ -119,6 +120,7 @@ export default EStyleSheet.create({
     flex: 0.95,
   },
   linkedIssuesTitleText: {
+    fontSize: SECONDARY_FONT_SIZE,
     color: '$textSecondary',
     marginBottom: UNIT / 2,
   },

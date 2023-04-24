@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {headerTitle} from 'components/common-styles';
+import {headerTitle, MAIN_FONT_SIZE} from 'components/common-styles';
 import {separatorBorder} from 'components/common-styles/list';
 export default EStyleSheet.create({
   agile: {
@@ -17,7 +17,7 @@ export default EStyleSheet.create({
     color: '$link',
   },
   title: {
-    fontSize: 17,
+    fontSize: MAIN_FONT_SIZE + 1,
     color: '$text',
   },
   headerIconDisabled: {
@@ -51,12 +51,12 @@ export default EStyleSheet.create({
   },
   agileBoardMessageText: {
     paddingTop: UNIT,
-    fontSize: 18,
+    fontSize: MAIN_FONT_SIZE + 2,
     color: '$text',
   },
   selectBoardMessage: {
     paddingTop: UNIT * 2,
-    fontSize: 18,
+    fontSize: MAIN_FONT_SIZE + 2,
     color: '$link',
   },
   agileSelector: {

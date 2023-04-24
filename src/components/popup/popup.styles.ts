@@ -1,9 +1,10 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
+import {HEADER_FONT_SIZE} from 'components/common-styles';
 const extendedReportModalText = {
   letterSpacing: 0.08,
   fontSize: 16,
-  lineHeight: 26,
+  lineHeight: HEADER_FONT_SIZE + 6,
 };
 const alignCenter = {
   justifyContent: 'center',

@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {headerTitle, mainText} from 'components/common-styles';
+import {headerTitle, MAIN_FONT_SIZE, mainText} from 'components/common-styles';
 import {separator} from 'components/common-styles/list';
 export default EStyleSheet.create({
   container: {
@@ -58,7 +58,7 @@ export default EStyleSheet.create({
   },
   selectProjectText: {
     color: '$text',
-    fontSize: UNIT * 2,
+    fontSize: MAIN_FONT_SIZE,
     flexShrink: 2,
   },
   selectProjectIcon: {

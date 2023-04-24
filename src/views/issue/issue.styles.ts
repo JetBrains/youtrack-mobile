@@ -3,6 +3,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {issueIdResolved} from 'components/common-styles/issue';
 import {
   headerTitle,
+  MAIN_FONT_SIZE,
   mainText,
   secondaryText,
 } from 'components/common-styles';
@@ -92,7 +93,7 @@ export default EStyleSheet.create({
     color: '$icon',
     ...Platform.select({
       android: {
-        lineHeight: 17,
+        lineHeight: MAIN_FONT_SIZE + 1,
       },
     }),
   },

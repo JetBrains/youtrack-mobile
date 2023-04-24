@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {mainText, secondaryText, UNIT} from 'components/common-styles';
+import {MAIN_FONT_SIZE, mainText, SECONDARY_FONT_SIZE, secondaryText, UNIT} from 'components/common-styles';
 import {separator} from '../common-styles/list';
 
 const secondaryTextColor = {
@@ -51,17 +51,23 @@ export const rowStyles = {
     flexShrink: 0,
     marginRight: UNIT / 2,
     ...secondaryTextColor,
-    fontSize: 18,
-    lineHeight: 17,
+    fontSize: MAIN_FONT_SIZE + 2,
+    lineHeight: MAIN_FONT_SIZE + 1,
     fontWeight: '500',
     letterSpacing: -0.22,
     color: '$text',
   },
-  activityTimestamp: {...secondaryText, color: '$textSecondary', lineHeight: 16},
+  activityTimestamp: {
+    ...secondaryText,
+    color: '$textSecondary',
+    lineHeight: MAIN_FONT_SIZE,
+  },
   activityLabel: {
+    fontSize: SECONDARY_FONT_SIZE,
     color: '$textSecondary',
   },
   activityText: {
+    fontSize: SECONDARY_FONT_SIZE,
     color: '$textSecondary',
   },
   activityRelatedChanges: {
@@ -72,11 +78,11 @@ export const rowStyles = {
     marginBottom: UNIT,
     backgroundColor: '$boxBackground',
     borderRadius: UNIT,
-    lineHeight: 14,
+    lineHeight: SECONDARY_FONT_SIZE,
   },
   activityHistoryChanges: {
     flex: 1,
-    lineHeight: 14,
+    lineHeight: SECONDARY_FONT_SIZE,
   },
   activityChange: {
     marginTop: UNIT / 2,
@@ -184,7 +190,7 @@ export const rowStyles = {
     marginRight: UNIT * 2,
   },
   vcsSourceSubTitle: {
-    fontSize: 12,
+    fontSize: SECONDARY_FONT_SIZE - 2,
     color: '$textSecondary',
   },
   vcsBottomSheetHeader: {

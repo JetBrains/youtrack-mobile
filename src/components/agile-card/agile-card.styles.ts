@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {issueCard, issueIdResolved} from '../common-styles/issue';
-import {secondaryText} from 'components/common-styles/typography';
+import {SECONDARY_FONT_SIZE, secondaryText} from 'components/common-styles/typography';
 import {UNIT} from 'components/variables';
 export const agileCard = {
   flexDirection: 'row',
@@ -86,6 +86,6 @@ export default EStyleSheet.create({
     marginTop: UNIT / 2,
   },
   zoomedInText: {
-    fontSize: 11,
+    fontSize: SECONDARY_FONT_SIZE - 3,
   },
 }) as any;

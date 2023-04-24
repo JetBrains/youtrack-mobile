@@ -4,6 +4,7 @@ import {UNIT} from 'components/variables';
 import {AGILE_COLLAPSED_COLUMN_WIDTH} from '../agile-common/agile-common';
 import {issueIdResolved} from '../common-styles/issue';
 import {
+  HEADER_FONT_SIZE,
   headerTitle,
   MAIN_FONT_SIZE,
   mainText,
@@ -58,7 +59,7 @@ export default EStyleSheet.create({
       },
       android: {
         fontWeight: '400',
-        fontSize: 20.5,
+        fontSize: HEADER_FONT_SIZE,
       },
     }),
   },

@@ -1,5 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
+import {SECONDARY_FONT_SIZE} from 'components/common-styles';
 export default EStyleSheet.create({
   attachesScroll: {
     paddingLeft: UNIT * 2,
@@ -21,7 +22,7 @@ export default EStyleSheet.create({
     alignItems: 'center',
   },
   attachmentFileText: {
-    fontSize: 10,
+    fontSize: SECONDARY_FONT_SIZE - 4,
     color: '$text',
   },
   attachmentTypeContainer: {
@@ -38,7 +39,7 @@ export default EStyleSheet.create({
   attachmentText: {
     textTransform: 'uppercase',
     color: '$textButton',
-    fontSize: 12,
+    fontSize: SECONDARY_FONT_SIZE - 2,
     fontWeight: '500',
   },
   attachmentName: {

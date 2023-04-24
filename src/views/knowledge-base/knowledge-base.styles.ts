@@ -5,7 +5,7 @@ import {
   inputWrapper,
   searchInput,
 } from 'components/common-styles/search';
-import {elevation1} from 'components/common-styles';
+import {elevation1, HEADER_FONT_SIZE, MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from 'components/common-styles';
 import {
   headerTitle,
   mainText,
@@ -116,8 +116,8 @@ export default EStyleSheet.create({
   projectTitleText: {
     paddingLeft: UNIT,
     ...headerTitle,
-    fontSize: 19,
-    lineHeight: 20,
+    fontSize: HEADER_FONT_SIZE - 1,
+    lineHeight: HEADER_FONT_SIZE,
     color: '$text',
     ...Platform.select({
       ios: {
@@ -185,7 +185,7 @@ export default EStyleSheet.create({
   noProjectsMessage: {
     color: '$text',
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: MAIN_FONT_SIZE + 2,
     fontWeight: '500',
   },
   noProjectsButton: {
@@ -200,5 +200,9 @@ export default EStyleSheet.create({
     padding: UNIT * 2,
     textAlign: 'center',
     color: '$textSecondary',
+  },
+  manageFavoriteProjectsLink: {
+    fontSize: SECONDARY_FONT_SIZE,
+    color: '$link',
   },
 });

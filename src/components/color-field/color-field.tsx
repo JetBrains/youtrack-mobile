@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-import {secondaryText} from 'components/common-styles/typography';
+import {SECONDARY_FONT_SIZE, secondaryText} from 'components/common-styles/typography';
 import {UNIT} from 'components/variables';
 
 interface Props {
@@ -81,5 +81,10 @@ const styles = StyleSheet.create({
     width: COLOR_FIELD_SIZE,
     height: COLOR_FIELD_SIZE,
   },
-  text: {...secondaryText, fontSize: 13, lineHeight: 15, textAlign: 'center'},
+  text: {
+    ...secondaryText,
+    fontSize: SECONDARY_FONT_SIZE - 1,
+    lineHeight: SECONDARY_FONT_SIZE + 1,
+    textAlign: 'center',
+  },
 });

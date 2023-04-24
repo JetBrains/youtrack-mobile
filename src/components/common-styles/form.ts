@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {MAIN_FONT_SIZE} from './typography';
+import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from './typography';
 export const containerPadding = UNIT * 4;
 export const rowFormStyles = {
   scrollContainer: {
@@ -50,14 +50,14 @@ export const rowFormStyles = {
     color: '$textButton',
   },
   title: {
-    fontSize: 18,
+    fontSize: MAIN_FONT_SIZE + 2,
     fontWeight: '500',
     textAlign: 'center',
   },
   hintText: {
     textAlign: 'center',
     color: '$icon',
-    fontSize: 12,
+    fontSize: SECONDARY_FONT_SIZE - 2,
   },
   errorText: {
     color: 'red',

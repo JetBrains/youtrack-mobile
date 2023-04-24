@@ -1,8 +1,8 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {MAIN_FONT_SIZE} from './index';
-
-export const splitViewLeftSideBarWidth = 375;
+import DeviceInfo from 'react-native-device-info';
+export const splitViewLeftSideBarWidth = DeviceInfo.getDeviceType() === 'Desktop' ? 500 : 375;
 
 export const splitViewStyles = {
   splitViewContainer: {

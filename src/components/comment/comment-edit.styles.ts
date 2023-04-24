@@ -1,5 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {elevation1, elevationBottom} from 'components/common-styles';
+import {elevation1, elevationBottom, MAIN_FONT_SIZE} from 'components/common-styles';
 import {mainText, secondaryText} from 'components/common-styles/typography';
 import {UNIT} from 'components/variables';
 import {Platform} from 'react-native';
@@ -97,7 +97,7 @@ export default EStyleSheet.create({
     backgroundColor: '$textSecondary',
   },
   commentSendButtonText: {
-    fontSize: 16,
+    fontSize: MAIN_FONT_SIZE,
     color: '$link',
   },
   commentListContainer: {

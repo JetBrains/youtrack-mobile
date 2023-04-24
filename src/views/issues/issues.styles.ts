@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {Platform, StyleSheet} from 'react-native';
 import {COLOR_FIELD_SIZE} from 'components/color-field/color-field';
-import {elevation1} from 'components/common-styles';
+import {elevation1, MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from 'components/common-styles';
 import {
   headerTitle,
   mainText,
@@ -32,12 +32,12 @@ export default EStyleSheet.create({
     paddingTop: UNIT * 2,
   },
   tryAgainText: {
-    fontSize: 18,
+    fontSize: MAIN_FONT_SIZE + 2,
     color: '$link',
   },
   headerText: {
     color: '$text',
-    fontSize: 17,
+    fontSize: MAIN_FONT_SIZE + 1,
   },
   row: {
     flexDirection: 'column',
@@ -68,7 +68,7 @@ export default EStyleSheet.create({
   summary: {...issueCard.issueSummary, color: '$text'},
   subtext: {
     paddingTop: 6,
-    fontSize: 14,
+    fontSize: SECONDARY_FONT_SIZE,
     color: '$textSecondary',
   },
   tags: {

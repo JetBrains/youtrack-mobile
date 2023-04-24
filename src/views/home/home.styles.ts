@@ -1,5 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
+import {MAIN_FONT_SIZE} from 'components/common-styles';
 export default EStyleSheet.create({
   container: {
     flex: 1,
@@ -18,7 +19,7 @@ export default EStyleSheet.create({
   retry: {
     textAlign: 'center',
     padding: UNIT,
-    fontSize: 17,
+    fontSize: MAIN_FONT_SIZE + 1,
     color: '$link',
   },
   message: {

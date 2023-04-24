@@ -1,24 +1,30 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
+import {SECONDARY_FONT_SIZE} from 'components/common-styles';
 export default EStyleSheet.create({
   button: {
     flexDirection: 'row',
   },
   diffInsert: {
-    color: '$icon',
+    fontSize: SECONDARY_FONT_SIZE,
+    color: '$textSecondary',
     backgroundColor: '#E6FFE6',
   },
   diffDelete: {
-    color: '$icon',
+    fontSize: SECONDARY_FONT_SIZE,
+    color: '$textSecondary',
     backgroundColor: '#FFE6E6',
   },
   diffEqual: {
-    color: '$icon',
+    fontSize: SECONDARY_FONT_SIZE,
+    color: '$textSecondary',
   },
   title: {
+    fontSize: SECONDARY_FONT_SIZE,
     color: '$icon',
   },
   toggle: {
+    fontSize: SECONDARY_FONT_SIZE,
     color: '$link',
   },
   content: {

@@ -1,6 +1,6 @@
 import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {elevation1, elevationBottom} from 'components/common-styles';
+import {elevation1, elevationBottom, SECONDARY_FONT_SIZE} from 'components/common-styles';
 import {
   headerTitle,
   MAIN_FONT_SIZE,
@@ -55,6 +55,7 @@ export default EStyleSheet.create({
     justifyContent: 'space-between',
   },
   subArticlesTitle: {
+    fontSize: SECONDARY_FONT_SIZE,
     color: '$textSecondary',
   },
   subArticlesNavigateIcon: {

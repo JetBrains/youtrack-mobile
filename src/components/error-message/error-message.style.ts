@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {secondaryText} from 'components/common-styles/typography';
+import {HEADER_FONT_SIZE, MAIN_FONT_SIZE, secondaryText} from 'components/common-styles/typography';
 import {title} from '../common-styles/issue';
 export const styles = EStyleSheet.create({
   errorContainer: {
@@ -18,7 +18,7 @@ export const styles = EStyleSheet.create({
     paddingTop: UNIT * 2,
     ...secondaryText,
     color: '$icon',
-    lineHeight: 20,
+    lineHeight: HEADER_FONT_SIZE,
     textAlign: 'center',
   },
   tryAgainButton: {
@@ -26,7 +26,7 @@ export const styles = EStyleSheet.create({
     paddingTop: UNIT * 2,
   },
   tryAgainText: {
-    fontSize: 18,
+    fontSize: MAIN_FONT_SIZE + 2,
     color: '$link',
   },
 });

@@ -479,7 +479,7 @@ export class KnowledgeBase extends Component<Props, State> {
                 hitSlop={HIT_SLOP}
                 onPress={this.openProjectSelect}
               >
-                <Text style={styles.link}>
+                <Text style={styles.manageFavoriteProjectsLink}>
                   {i18n('Manage Favorite Projects')}
                 </Text>
               </TouchableOpacity>

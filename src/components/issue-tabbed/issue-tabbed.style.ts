@@ -1,7 +1,7 @@
 import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {elevation1} from 'components/common-styles';
+import {elevation1, MAIN_FONT_SIZE} from 'components/common-styles';
 import {mainText, secondaryText} from 'components/common-styles/typography';
 export default EStyleSheet.create({
   tabsBar: {...elevation1, backgroundColor: '$background'},
@@ -25,7 +25,7 @@ export default EStyleSheet.create({
     ...Platform.select({
       ios: {},
       android: {
-        fontSize: 18,
+        fontSize: MAIN_FONT_SIZE + 2,
         fontWeight: '400',
       },
     }),

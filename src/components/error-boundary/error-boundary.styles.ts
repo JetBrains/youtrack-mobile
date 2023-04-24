@@ -1,14 +1,14 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {HEADER_FONT_SIZE} from 'components/common-styles/typography';
+import {HEADER_FONT_SIZE, MAIN_FONT_SIZE} from 'components/common-styles/typography';
 const alignCenter = {
   justifyContent: 'center',
   alignItems: 'center',
 };
 const extendedReportModalText = {
   letterSpacing: 0.08,
-  fontSize: 16,
-  lineHeight: 26,
+  fontSize: MAIN_FONT_SIZE,
+  lineHeight: HEADER_FONT_SIZE + 6,
 };
 export default EStyleSheet.create({
   container: {
@@ -42,7 +42,7 @@ export default EStyleSheet.create({
     opacity: 0.6,
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: MAIN_FONT_SIZE,
     color: '$link',
   },
   buttonSendReport: {

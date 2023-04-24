@@ -1,9 +1,14 @@
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {HIT_SLOP} from '../common-styles/button';
-import {IconCaretDownUp} from '../icon/icon';
+
+import {HIT_SLOP} from 'components/common-styles/button';
+import {IconCaretDownUp} from 'components/icon/icon';
+import {SECONDARY_FONT_SIZE} from 'components/common-styles';
+
 import styles from './details.styles';
+
 import type {TextStyleProp} from 'types/Internal';
+
 type Props = {
   renderer: () => any;
   style?: TextStyleProp;
@@ -28,7 +33,7 @@ const Details = (props: Props): React.ReactNode => {
         >
           <Text style={[styles.toggle, props.style]}>
             <IconCaretDownUp
-              size={12}
+              size={SECONDARY_FONT_SIZE - 4}
               isDown={!expanded}
               color={props?.style?.color || styles.toggle.color}
             />
