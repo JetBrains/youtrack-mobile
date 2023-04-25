@@ -26,11 +26,11 @@ import type {
   InboxFolder,
   InboxThread,
   InboxThreadMessage,
-  ThreadEntity,
 } from 'types/Inbox';
 import type {IssueComment} from 'types/CustomFields';
 import type {Reaction} from 'types/Reaction';
 import type {User} from 'types/User';
+import {Entity} from 'types/Global';
 import {ReduxAction} from 'types/Redux';
 import {ThreadsStateData} from './inbox-threads-reducers';
 import {ThreadsStateFilterId} from 'types/Inbox';
@@ -481,7 +481,7 @@ const markAllAsRead = (
 };
 
 const onReactionSelect = (
-  entity: ThreadEntity,
+  entity: Entity,
   comment: IssueComment,
   reaction: Reaction,
   onAfterSelect: (...args: any[]) => any,

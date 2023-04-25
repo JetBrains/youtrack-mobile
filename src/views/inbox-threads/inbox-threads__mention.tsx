@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
+
 import {TouchableOpacity} from 'react-native-gesture-handler';
+
 import ApiHelper from 'components/api/api__helper';
 import Avatar from 'components/avatar/avatar';
 import StreamComment from 'components/activity-stream/activity__stream-comment';
@@ -10,24 +12,30 @@ import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {isActivityCategory} from 'components/activity/activity__category';
+
 import styles from './inbox-threads.styles';
+
 import type {Activity} from 'types/Activity';
-import type {InboxThread, ThreadEntity} from 'types/Inbox';
+import type {InboxThread} from 'types/Inbox';
 import type {IssueComment} from 'types/CustomFields';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
+import {Entity} from 'types/Global';
+
 type Props = {
   currentUser: User;
-  onNavigate: (entity: ThreadEntity, navigateToActivity?: string) => any;
+  onNavigate: (entity: Entity, navigateToActivity?: string) => any;
   thread: InboxThread;
   uiTheme: UITheme;
 };
+
+
 export default function InboxThreadMention({
   thread,
   currentUser,
   uiTheme,
   onNavigate,
-}: Props) {
+}: Props): JSX.Element | null {
   const [isReactionPanelVisible, updateReactionPanelVisible] = useState(false);
   const activity: Activity = thread.messages[0].activities[0];
   activity.author = ApiHelper.convertRelativeUrl(

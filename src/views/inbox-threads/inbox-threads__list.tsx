@@ -19,14 +19,15 @@ import styles from './inbox-threads.styles';
 
 import type {AppState} from 'reducers';
 import type {CustomError} from 'types/Error';
-import type {InboxThread, ThreadData, ThreadEntity} from 'types/Inbox';
+import type {InboxThread, ThreadData} from 'types/Inbox';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
+import {Entity} from 'types/Global';
 
 interface Props {
   folderId: string | undefined;
   onNavigate: (
-    entity: ThreadEntity,
+    entity: Entity,
     navigateToActivity?: string,
     commentId?: string,
   ) => any;

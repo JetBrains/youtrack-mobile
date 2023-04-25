@@ -12,15 +12,16 @@ import {i18n} from 'components/i18n/i18n';
 import stylesInbox from '../inbox/inbox.styles';
 
 import type {Activity} from 'types/Activity';
-import type {InboxThread, ThreadEntity} from 'types/Inbox';
+import type {InboxThread} from 'types/Inbox';
 import type {IssueComment} from 'types/CustomFields';
 import type {Reaction} from 'types/Reaction';
 import type {User} from 'types/User';
 import {InboxThreadGroup} from 'types/Inbox';
+import {Entity} from 'types/Global';
 
 type Props = {
   currentUser: User;
-  onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
+  onNavigate: (entity: Entity, navigateToActivity?: boolean) => any;
   thread: InboxThread;
   group?: InboxThreadGroup;
 };
@@ -55,7 +56,7 @@ const ThreadReaction = ({activity, currentUser, timestamp, onNavigate, children}
           <>
             <TouchableOpacity
               onPress={() => {
-                const entity: ThreadEntity = comment?.issue || comment?.article;
+                const entity: Entity = comment?.issue || comment?.article;
                 if (entity?.id) {
                   onNavigate(entity, activity.id, comment?.id);
                 }
@@ -74,7 +75,7 @@ const ThreadReaction = ({activity, currentUser, timestamp, onNavigate, children}
 };
 
 
-const InboxThreadReaction = ({thread, group, currentUser, onNavigate}: Props) => {
+const InboxThreadReaction = ({thread, group, currentUser, onNavigate}: Props): JSX.Element => {
   const messagesHolder = thread || group;
   return <>
     {messagesHolder.messages.map((message) => {

@@ -12,6 +12,8 @@ import type {
   IssueProject,
 } from 'types/CustomFields';
 import type {WorkItem} from 'types/Work';
+import {Entity} from 'types/Global';
+
 export const CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_ISSUE';
 export const READ_ISSUE = 'JetBrains.YouTrack.READ_ISSUE';
 export const UPDATE_ISSUE = 'JetBrains.YouTrack.UPDATE_ISSUE';
@@ -44,7 +46,6 @@ export const WORK_ITEM_CREATE_NOT_OWN =
 export const WORK_ITEM_UPDATE = 'JetBrains.YouTrack.UPDATE_WORK_ITEM';
 export const WORK_ITEM_UPDATE_NOT_OWN =
   'JetBrains.YouTrack.UPDATE_NOT_OWN_WORK_ITEM';
-export type Entity = AnyIssue | Article;
 export default class IssuePermissions {
   permissionsStore: PermissionsStore;
   currentUser: User;

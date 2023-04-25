@@ -3,8 +3,8 @@ import type {Reaction} from './Reaction';
 import type {User} from './User';
 import type {Visibility} from './Visibility';
 import type {WorkItemType} from './Work';
-import {Entity} from 'components/issue-permissions/issue-permissions';
 import {Mentions} from 'components/wiki/markdown-view-rules';
+import {Entity} from 'types/Global';
 
 export type TimeTrackingFieldInfo = {
   id: string;

@@ -9,9 +9,10 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './inbox-threads.styles';
 
 import type {Activity} from 'types/Activity';
-import type {InboxThreadGroup, ThreadEntity} from 'types/Inbox';
+import type {InboxThreadGroup} from 'types/Inbox';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
+import {Entity} from 'types/Global';
 
 type Props = {
   author: User;
@@ -20,7 +21,7 @@ type Props = {
   group?: InboxThreadGroup;
   reason: string;
   timestamp: number;
-  onNavigate?: (entity: ThreadEntity, navigateToActivity?: string) => any;
+  onNavigate?: (entity: Entity, navigateToActivity?: string) => any;
 };
 
 

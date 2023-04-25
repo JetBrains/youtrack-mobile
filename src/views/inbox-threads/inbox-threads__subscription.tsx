@@ -24,16 +24,16 @@ import type {
   InboxThread,
   InboxThreadGroup,
   InboxThreadMessage,
-  ThreadEntity,
 } from 'types/Inbox';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
+import {Entity} from 'types/Global';
 
 
 type Props = {
   currentUser: User;
-  onNavigate: (entity: ThreadEntity, navigateToActivity?: boolean) => any;
+  onNavigate: (entity: Entity, navigateToActivity?: boolean) => any;
   onReadChange: (messages: InboxThreadMessage[], read: boolean) => any;
   style?: ViewStyleProp;
   thread: InboxThread;
@@ -48,7 +48,7 @@ export default function InboxThreadItemSubscription({
   style,
   thread,
   uiTheme,
-}: Props): React.ReactElement<React.ComponentProps<typeof View>, typeof View> {
+}: Props): JSX.Element {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
   const isSwipeEnabled: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().notificationsSwipe);
   const [shownMessagesAmount, updateShownMessagesAmount] = useState(3);

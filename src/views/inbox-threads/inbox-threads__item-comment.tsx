@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
+
 import ApiHelper from 'components/api/api__helper';
 import Avatar from 'components/avatar/avatar';
 import StreamComment from 'components/activity-stream/activity__stream-comment';
@@ -11,19 +12,23 @@ import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
+
 import styles from './inbox-threads.styles';
+
 import type {Attachment} from 'types/Attachment';
+import {Entity} from 'types/Global';
 import type {
   InboxThreadGroup,
   InboxThreadTarget,
-  ThreadEntity,
 } from 'types/Inbox';
 import type {UserCurrent} from 'types/User';
+
+
 type Props = {
   currentUser: UserCurrent;
   group: InboxThreadGroup;
   target: InboxThreadTarget;
-  onNavigate: (entity: ThreadEntity, navigateToActivity?: string) => any;
+  onNavigate: (entity: Entity, navigateToActivity?: string) => any;
 };
 export default function ThreadCommentItem({
   group,

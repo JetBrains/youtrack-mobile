@@ -33,8 +33,8 @@ import tabStyles from 'components/issue-tabbed/issue-tabbed.style';
 import type {AppState} from 'reducers';
 import type {TabRoute} from 'types/Issue';
 import type {Theme, UIThemeColors} from 'types/Theme';
-import type {ThreadEntity} from 'types/Inbox';
 import {AppConfig} from 'types/AppConfig';
+import {Entity} from 'types/Global';
 import {InboxThread} from 'types/Inbox';
 import {NavigationState} from 'react-navigation';
 
@@ -55,7 +55,11 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
   const isOnline: boolean = useSelector((state: AppState) => !!state.app.networkState?.isConnected);
 
-  const [selectedEntity, updateSelectedEntity] = React.useState({
+  const [selectedEntity, updateSelectedEntity] = React.useState<{
+    entity: Entity | null,
+    navigateToActivity: string | null,
+    commentId: string | null
+  }>({
     entity: null,
     navigateToActivity: null,
     commentId: null,
@@ -87,7 +91,7 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
     routes,
   });
 
-  const isArticle = (entity: ThreadEntity): boolean => hasType.article(entity);
+  const isArticle = (entity: Entity): boolean => hasType.article(entity);
 
   React.useEffect(() => {
     usage.trackScreenView(ANALYTICS_NOTIFICATIONS_THREADS_PAGE);
@@ -162,7 +166,7 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
     return isNavigateToArticle ? <Article {...entityProps} /> : <Issue {...entityProps} />;
   };
 
-  const onNavigate = React.useCallback((entity, navigateToActivity, commentId) => {
+  const onNavigate = React.useCallback((entity: Entity, navigateToActivity: string, commentId: string) => {
     if (entity) {
       if (hasSplitView()) {
         updateSelectedEntity({

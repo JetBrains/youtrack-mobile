@@ -1,21 +1,27 @@
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
+
 import {useDispatch} from 'react-redux';
+
 import CommentReactions from 'components/comment/comment-reactions';
 import ReactionsPanel from '../issue/activity/issue__activity-reactions-dialog';
 import {COMMENT_REACTIONS_SEPARATOR} from 'components/reactions/reactions';
 import {onReactionSelect} from './inbox-threads-actions';
+
 import styles from './inbox-threads.styles';
-import type {User} from 'types/User';
-import type {Reaction} from 'types/Reaction';
+
 import type {Activity} from 'types/Activity';
 import type {IssueComment} from 'types/CustomFields';
-import type {ThreadEntity} from 'types/Inbox';
+import type {Reaction} from 'types/Reaction';
+import type {User} from 'types/User';
+import {Entity} from 'types/Global';
+
 type Props = {
   activity: Activity;
   currentUser: User;
   isPanelVisible: boolean;
 };
+
 
 const ThreadCommentReactions = ({
   activity,
@@ -32,8 +38,7 @@ const ThreadCommentReactions = ({
   }, [isPanelVisible]);
 
   const onSelect = (reaction: Reaction) => {
-    const entity: ThreadEntity | null | undefined =
-      comment?.issue || comment?.article;
+    const entity: Entity | undefined = comment?.issue || comment?.article;
 
     if (!entity?.id) {
       return;

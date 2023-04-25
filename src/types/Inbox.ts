@@ -2,6 +2,7 @@ import type {Activity} from './Activity';
 import type {AnyIssue, IssueOnList} from './Issue';
 import type {Article} from './Article';
 import type {User} from './User';
+import {Entity} from 'types/Global';
 type ChangeCategory =
   | 'COMMENT'
   | 'CUSTOM_FIELD'
@@ -124,10 +125,9 @@ export interface InboxThreadGroup {
   };
   work?: Activity;
 }
-export type ThreadEntity = AnyIssue | Article;
 export type ThreadData = {
-  entity: ThreadEntity;
-  component: any;
+  entity: Entity;
+  component: JSX.Element;
   entityAtBottom?: boolean;
 };
 export interface InboxFolder {
