@@ -8,16 +8,19 @@ import styles from './inbox-threads.styles';
 
 import type {AppState} from 'reducers';
 import type {InboxThreadMessage} from 'types/Inbox';
+import {ViewStyleProp} from 'types/Internal';
 
 type Props = {
   messages: InboxThreadMessage[];
   onReadChange: (messages: InboxThreadMessage[], read: boolean) => any;
+  style?: ViewStyleProp;
 };
 
 
 export default function InboxThreadReadToggleButton({
   messages = [],
   onReadChange,
+  style,
 }: Props) {
   const isOnline: boolean = useSelector((state: AppState) => !!state.app.networkState?.isConnected);
 
@@ -27,7 +30,7 @@ export default function InboxThreadReadToggleButton({
       testID="test:id/inboxThreadsSubscriptionGroupReadToggle"
       accessibilityLabel="inboxThreadsSubscriptionGroupReadToggle"
       accessible={true}
-      style={styles.threadItemAction}
+      style={[styles.threadItemAction, style]}
       onPress={() => {
         onReadChange(messages, !messages[0].read);
       }}

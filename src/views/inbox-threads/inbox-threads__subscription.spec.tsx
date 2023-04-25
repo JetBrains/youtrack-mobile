@@ -1,12 +1,14 @@
 import React from 'react';
 
 import thunk from 'redux-thunk';
-import {fireEvent, render} from '@testing-library/react-native';
 import {Provider} from 'react-redux';
+import {render} from '@testing-library/react-native';
 
 import InboxThreadItemSubscription from './inbox-threads__subscription';
 import mocks from 'test/mocks';
 import {DEFAULT_THEME} from 'components/theme/theme';
+
+import {InboxThread} from 'types/Inbox';
 
 jest.mock('components/swipeable/swipeable-row');
 
@@ -76,41 +78,16 @@ describe('InboxThreadItemSubscription', () => {
       }
     });
   });
-  describe('Read/Unread', () => {
-    let onReadToggleMockFn;
-    let threadMock;
-    beforeEach(() => {
-      onReadToggleMockFn = jest.fn();
-      threadMock = mocks.createThreadMock();
-    });
-    it('should mark a thread as read', () => {
-      const {getByTestId} = doRender(threadMock, onReadToggleMockFn);
-      fireEvent.press(
-        getByTestId('test:id/inboxThreadsSubscriptionGroupReadToggle'),
-      );
-      expect(onReadToggleMockFn).toHaveBeenCalled();
-    });
-    it('should mark a thread as unread', () => {
-      const {getByTestId} = doRender(
-        {...threadMock, messages: [{...threadMock.messages[0], read: true}]},
-        onReadToggleMockFn,
-      );
-      fireEvent.press(
-        getByTestId('test:id/inboxThreadsSubscriptionGroupReadToggle'),
-      );
-      expect(onReadToggleMockFn).toHaveBeenCalled();
-    });
-  });
 });
 
-function doRender(thread, onReadToggle) {
+function doRender(thread: InboxThread) {
   return render(
     <Provider store={storeMock}>
       <InboxThreadItemSubscription
         thread={thread}
         currentUser={mocks.createUserMock()}
         uiTheme={DEFAULT_THEME}
-        onReadChange={onReadToggle}
+        onNavigate={jest.fn()}
       />
     </Provider>,
   );

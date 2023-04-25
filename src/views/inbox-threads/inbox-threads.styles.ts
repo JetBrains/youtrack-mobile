@@ -28,7 +28,7 @@ export default EStyleSheet.create({
     flexDirection: 'row',
   },
   threadsList: {
-    flex: 1,
+    paddingTop: UNIT,
   },
   threadsEmpty: {
     alignItems: 'center',
@@ -43,9 +43,6 @@ export default EStyleSheet.create({
   },
   threadContainer: {
     backgroundColor: '$background',
-  },
-  threadFirst: {
-    paddingTop: UNIT,
   },
   threadFirstMerged: {
     marginTop: 0,
@@ -109,6 +106,9 @@ export default EStyleSheet.create({
     top: UNIT / 4,
     right: 2,
     padding: UNIT * 1.5,
+  },
+  threadItemActionWithSettings: {
+    top: UNIT * 5,
   },
   threadMuteToggle: {
     padding: UNIT / 2,

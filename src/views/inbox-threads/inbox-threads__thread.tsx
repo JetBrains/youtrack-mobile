@@ -27,6 +27,8 @@ import type {AppState} from 'reducers';
 import type {InboxThread, InboxThreadMessage, ThreadData} from 'types/Inbox';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
+import InboxThreadReadToggleButton from 'views/inbox-threads/inbox-threads__read-toggle-button';
+import SwipeableRow from 'components/swipeable/swipeable-row';
 
 type Props = {
   currentUser: User;
@@ -47,10 +49,10 @@ function Thread({
   ...otherProps
 }: Props): React.ReactElement<React.ComponentProps<any>, any> | null {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
+  const isSwipeEnabled: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().notificationsSwipe);
   const {showActionSheetWithOptions} = useActionSheet();
-  const isOnline: boolean = useSelector(
-    (state: AppState) => state.app.networkState?.isConnected,
-  );
+  const isOnline: boolean = useSelector((state: AppState) => !!state.app.networkState?.isConnected);
+
   const dispatch = useDispatch();
   const [_thread, updateThread]: [
     InboxThread,
@@ -86,10 +88,7 @@ function Thread({
       ),
     };
     updateThread(updatedThread);
-    const filteredMessages: InboxThreadMessage[] = messages.filter(
-      (it: InboxThreadMessage) => getThreadTypeData(it).isSubscription
-    );
-    dispatch(readMessageToggle(filteredMessages, read));
+    dispatch(readMessageToggle(messages, read));
     dispatch(
       updateThreadsStateAndCache(updatedThread, toggleThread && read === true),
     );
@@ -111,24 +110,10 @@ function Thread({
       styleText={threadData.entityAtBottom && styles.threadSubTitleText}
     />
   );
-  const hasReadActions: boolean =
-    hasType.issue(threadData.entity) || hasType.article(threadData.entity);
-  return (
-    <View
-      testID="test:id/inboxThreadsListThread"
-      accessibilityLabel="inboxThreadsListThread"
-      accessible={true}
-      {...otherProps}
-    >
-      {!threadData.entityAtBottom && (
-        <View style={hasReadActions && styles.threadTitleContainer}>
-          <View style={styles.threadTitleContent}>
-            {renderedEntity}
-            {hasReadActions && renderSettings()}
-          </View>
-        </View>
-      )}
-
+  const hasSettings: boolean = hasType.issue(threadData.entity) || hasType.article(threadData.entity);
+  const hasMarkReadField: boolean = typeof _thread.messages?.[0]?.read === 'boolean';
+  const renderedComponent = (
+    <>
       <ThreadComponent
         thread={_thread}
         currentUser={currentUser}
@@ -140,6 +125,48 @@ function Thread({
       />
       {threadData.entityAtBottom && (
         <View style={styles.threadTitleContainer}>{renderedEntity}</View>
+      )}
+    </>
+  );
+  return (
+    <View
+      testID="test:id/inboxThreadsListThread"
+      accessibilityLabel="inboxThreadsListThread"
+      accessible={true}
+      {...otherProps}
+    >
+      {!threadData.entityAtBottom && (
+        <View style={hasSettings && styles.threadTitleContainer}>
+          <View style={styles.threadTitleContent}>
+            {renderedEntity}
+            {hasSettings && renderSettings()}
+          </View>
+        </View>
+      )}
+
+      {hasMarkReadField && (
+        <InboxThreadReadToggleButton
+          style={!threadData.entityAtBottom && styles.threadItemActionWithSettings}
+          messages={_thread.messages}
+          onReadChange={(messages: InboxThreadMessage[], read: boolean) => {
+            doToggleMessagesRead(messages, read);
+          }}
+        />
+      )}
+
+      {(!isMergedNotifications.current && !isSwipeEnabled.current) && renderedComponent}
+      {(isMergedNotifications.current || isSwipeEnabled.current) && (
+        <SwipeableRow
+          enabled={hasMarkReadField}
+          leftActionText={i18n('Mark as unread')}
+          onSwipeLeft={() => doToggleMessagesRead(_thread.messages, false)}
+          onSwipeRight={() => doToggleMessagesRead(_thread.messages, true)}
+          rightActionText={i18n('Mark as read')}
+        >
+          <View style={styles.threadContainer}>
+            {renderedComponent}
+          </View>
+        </SwipeableRow>
       )}
     </View>
   );
@@ -204,7 +231,7 @@ function Thread({
   }
 }
 
-function createThreadData(thread: InboxThread, mergedNotifications: boolean): ThreadData {
+function createThreadData(thread: InboxThread, mergedNotifications?: boolean): ThreadData {
   const threadData: ThreadData = {
     entity: null,
     component: null,

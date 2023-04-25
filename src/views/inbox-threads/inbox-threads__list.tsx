@@ -80,7 +80,6 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.
       <Thread
         style={[
           styles.thread,
-          index === 0 && !isMergedNotifications.current && styles.threadFirst,
           index === 0 && isMergedNotifications.current && styles.threadFirstMerged,
           index === getData().threads.length - (getData().hasMore ? 2 : 1) && styles.threadLast,
         ]}
@@ -107,9 +106,10 @@ const InboxThreadsList = ({folderId, onNavigate, merger, onScroll}: Props): JSX.
       testID="test:id/inboxThreadsList"
       accessibilityLabel="inboxThreadsList"
       accessible={false}
-      style={styles.threadsList}
+      style={styles.container}
     >
       <FlatList
+        contentContainerStyle={styles.threadsList}
         removeClippedSubviews={false}
         data={merger ? merger(visibleThreads) : visibleThreads}
         ItemSeparatorComponent={() => <View style={styles.threadSeparator} />}

@@ -2,8 +2,6 @@ import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 import InboxThreadReaction from 'views/inbox-threads/inbox-threads__reactions';
-import InboxThreadReadToggleButton from './inbox-threads__read-toggle-button';
-import SwipeableRow from 'components/swipeable/swipeable-row';
 import ThreadCommentItem from './inbox-threads__item-comment';
 import ThreadEntityCreatedItem from './inbox-threads__item-issue-created';
 import ThreadHistoryItem from './inbox-threads__item-history';
@@ -20,11 +18,7 @@ import {splitActivities} from 'components/activity/activity__split-activities';
 import styles from './inbox-threads.styles';
 
 import type {Activity} from 'types/Activity';
-import type {
-  InboxThread,
-  InboxThreadGroup,
-  InboxThreadMessage,
-} from 'types/Inbox';
+import type {InboxThread, InboxThreadGroup} from 'types/Inbox';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
@@ -34,7 +28,6 @@ import {Entity} from 'types/Global';
 type Props = {
   currentUser: User;
   onNavigate: (entity: Entity, navigateToActivity?: boolean) => any;
-  onReadChange: (messages: InboxThreadMessage[], read: boolean) => any;
   style?: ViewStyleProp;
   thread: InboxThread;
   uiTheme: UITheme;
@@ -44,13 +37,11 @@ type Props = {
 export default function InboxThreadItemSubscription({
   currentUser,
   onNavigate,
-  onReadChange,
   style,
   thread,
   uiTheme,
-}: Props): JSX.Element {
+}: Props): JSX.Element | null {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
-  const isSwipeEnabled: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().notificationsSwipe);
   const [shownMessagesAmount, updateShownMessagesAmount] = useState(3);
   const activityToMessageMap = createMessagesMap(thread.messages);
   const activities: Activity[] = thread.messages.reduce(
@@ -152,17 +143,6 @@ export default function InboxThreadItemSubscription({
         Component = ThreadHistoryItem;
     }
 
-
-    const renderedComponent = (
-      <Component
-        target={target}
-        group={group}
-        isLast={isLast}
-        currentUser={currentUser}
-        uiTheme={uiTheme}
-        onNavigate={onNavigate}
-      />);
-
     return (
       <View
         testID="test:id/inboxThreadsSubscriptionGroup"
@@ -170,29 +150,14 @@ export default function InboxThreadItemSubscription({
         accessible={true}
         key={`${group.head.id}${group.head.timestamp}`}
       >
-        {!isLast && <View style={styles.threadConnector} />}
-
-        {!isCommentReaction && <InboxThreadReadToggleButton
-          messages={group.messages}
-          onReadChange={onReadChange}
-        />}
-
-        {(!isMergedNotifications.current && !isSwipeEnabled.current) && renderedComponent}
-        {(isMergedNotifications.current || isSwipeEnabled.current) && (
-          <SwipeableRow
-            enabled={!isCommentReaction}
-            leftActionText={i18n('Mark as unread')}
-            onSwipeLeft={() => onReadChange(group.messages, false)}
-            onSwipeRight={() => onReadChange(group.messages, true)}
-            rightActionText={i18n('Mark as read')}
-          >
-            <View style={styles.threadContainer}>
-              {!isLast && <View style={styles.threadConnector}/>}
-              {renderedComponent}
-            </View>
-          </SwipeableRow>
-        )}
-
+        {!isLast && <View style={styles.threadConnector}/>}
+        <Component
+          target={target}
+          group={group}
+          currentUser={currentUser}
+          uiTheme={uiTheme}
+          onNavigate={onNavigate}
+        />
         {showMoreButtonEl}
       </View>
     );

@@ -1,22 +1,30 @@
 import React from 'react';
+
 import {fireEvent, render} from '@testing-library/react-native';
 import {Provider} from 'react-redux';
-import mocks from '../../../test/mocks';
+
+import mocks from 'test/mocks';
+
+import * as actions from './inbox-threads-actions';
 import Thread, {createThreadData} from './inbox-threads__thread';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import InboxThreadItemSubscription from './inbox-threads__subscription';
 import InboxThreadReaction from './inbox-threads__reactions';
 import InboxThreadMention from './inbox-threads__mention';
+import {InboxThread, InboxThreadMessage} from 'types/Inbox';
+import {Store} from 'redux';
 
 jest.mock('components/swipeable/swipeable-row');
 jest.mock('@expo/react-native-action-sheet', () => ({
   ...jest.requireActual('@expo/react-native-action-sheet'),
 }));
+
+
 describe('Inbox Thread', () => {
-  let apiMock;
-  let threadMock;
-  let storeMock;
-  let networkStateMock;
+  let apiMock: Record<string, any>;
+  let threadMock: InboxThread;
+  let storeMock: Store;
+  let networkStateMock: Record<string, any>;
 
   const getApi = () => apiMock;
 
@@ -33,6 +41,8 @@ describe('Inbox Thread', () => {
     threadMock = mocks.createThreadMock();
     createStore();
   });
+
+
   describe('Render', () => {
     it('should render Thread entity', () => {
       const {getByTestId} = doRender(threadMock);
@@ -42,6 +52,7 @@ describe('Inbox Thread', () => {
       const {getByTestId} = doRender(threadMock);
       expect(getByTestId('test:id/inboxEntityReadableId')).toBeTruthy();
     });
+
     it('should render Thread`s summary', () => {
       const {getByTestId} = doRender(
         mocks.createThreadMock({
@@ -52,17 +63,21 @@ describe('Inbox Thread', () => {
           },
         }),
       );
+
       expect(getByTestId('test:id/inboxEntitySummary')).toBeTruthy();
     });
+
     it('should render read/unread toggle', () => {
       const {getByTestId} = doRender(threadMock);
       expect(
         getByTestId('test:id/inboxThreadsSubscriptionGroupReadToggle'),
       ).toBeTruthy();
     });
+
+
     describe('Thread actions', () => {
       let ActionSheet;
-      let showActionSheetWithOptions;
+      let showActionSheetWithOptions: jest.MockedFunction<any>;
       beforeEach(() => {
         ActionSheet = require('@expo/react-native-action-sheet');
         showActionSheetWithOptions = jest.fn();
@@ -70,6 +85,7 @@ describe('Inbox Thread', () => {
           showActionSheetWithOptions,
         });
       });
+
       it('should render action sheet', async () => {
         getActionSheetCallbacksArray(threadMock);
         expect(showActionSheetWithOptions).toHaveBeenCalledTimes(1);
@@ -102,8 +118,10 @@ describe('Inbox Thread', () => {
           );
         });
       });
+
+
       describe('Read/Unread', () => {
-        let message;
+        let message: InboxThreadMessage;
         beforeEach(() => {
           message = threadMock.messages[0];
         });
@@ -127,6 +145,7 @@ describe('Inbox Thread', () => {
             true,
           );
         });
+
         it('should mark a thread as unread if there are all messages read', () => {
           getActionSheetCallbacksArray({
             ...threadMock,
@@ -135,6 +154,7 @@ describe('Inbox Thread', () => {
               {...message, read: true},
             ],
           })(1);
+
           expect(apiMock.inbox.markMessages).toHaveBeenCalledWith(
             [
               {
@@ -147,6 +167,7 @@ describe('Inbox Thread', () => {
             false,
           );
         });
+
         it('should toggle thread message `read` field', async () => {
           const isRead = true;
           const {getByTestId} = doRender({
@@ -167,13 +188,15 @@ describe('Inbox Thread', () => {
         });
       });
 
-      function getActionSheetCallbacksArray(thread) {
+      function getActionSheetCallbacksArray(thread: InboxThread) {
         const {getByTestId} = doRender(thread);
         fireEvent.press(getByTestId('test:id/inboxThreadsThreadSettings'));
         return showActionSheetWithOptions.mock.calls[0][1];
       }
     });
   });
+
+
   describe('Offline mode', () => {
     beforeEach(() => {
       networkStateMock = {
@@ -181,6 +204,7 @@ describe('Inbox Thread', () => {
       };
       createStore();
     });
+
     it('should disable thread`s settings', async () => {
       const {getByTestId} = doRender(threadMock);
       expect(getByTestId('test:id/inboxThreadsThreadSettings')).toBeDisabled();
@@ -189,31 +213,38 @@ describe('Inbox Thread', () => {
       ).toBeDisabled();
     });
   });
+
+
   describe('getThreadData', () => {
     it('should create subscription item', async () => {
       threadMock = mocks.createThreadMock({
         id: 'S-thread',
       });
+
       expect(createThreadData(threadMock)).toEqual({
         entity: threadMock.subject.target,
         component: InboxThreadItemSubscription,
         entityAtBottom: false,
       });
     });
+
     it('should create reaction item', async () => {
       threadMock = mocks.createThreadMock({
         id: 'R-thread',
       });
+
       expect(createThreadData(threadMock)).toEqual({
         entity: threadMock.subject.target,
         component: InboxThreadReaction,
         entityAtBottom: true,
       });
     });
+
     it('should create mention item', async () => {
       threadMock = mocks.createThreadMock({
         id: 'M-thread',
       });
+
       expect(createThreadData(threadMock)).toEqual({
         entity: threadMock.subject.target,
         component: InboxThreadMention,
@@ -222,10 +253,41 @@ describe('Inbox Thread', () => {
     });
   });
 
-  function doRender(thread) {
+
+  describe('Read/Unread', () => {
+    let threadMock: InboxThread;
+
+    beforeEach(() => {
+      threadMock = mocks.createThreadMock();
+      jest.spyOn(actions, 'readMessageToggle');
+    });
+
+    it('should mark a thread as read', () => {
+      const {getByTestId} = doRender(threadMock);
+      fireEvent.press(
+        getByTestId('test:id/inboxThreadsSubscriptionGroupReadToggle'),
+      );
+
+      expect(actions.readMessageToggle).toHaveBeenCalledWith(threadMock.messages, true);
+    });
+
+    it('should mark a thread as unread', () => {
+      const thread = {...threadMock, messages: [{...threadMock.messages[0], read: true}]};
+      const {getByTestId} = doRender(thread);
+      fireEvent.press(
+        getByTestId('test:id/inboxThreadsSubscriptionGroupReadToggle'),
+      );
+
+      expect(actions.readMessageToggle).toHaveBeenCalledWith(thread.messages, false);
+    });
+  });
+
+
+  function doRender(thread: InboxThread) {
     return render(
       <Provider store={storeMock}>
         <Thread
+          onNavigate={jest.fn()}
           thread={thread}
           currentUser={mocks.createUserMock()}
           uiTheme={DEFAULT_THEME}
