@@ -132,7 +132,5 @@ const IssuesSortBy = (props: Props) => {
   ) : null;
 };
 
-export default React.memo<Props>(IssuesSortBy) as React$AbstractComponent<
-  Props,
-  unknown
->;
+
+export default React.memo<Props>(IssuesSortBy);

@@ -496,8 +496,8 @@ export class Issues extends Component<Props, State> {
           >
             <IconBookmark
               style={styles.bookmarkIcon}
-              width={22}
-              height={22}
+              width={20}
+              height={20}
               color={
                 networkState?.isConnected
                   ? this.getThemeColors().$link

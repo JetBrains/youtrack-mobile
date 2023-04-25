@@ -115,7 +115,7 @@ export default EStyleSheet.create({
   createIssueButton: {
     position: 'absolute',
     top: UNIT,
-    right: UNIT / 2,
+    right: UNIT / 4,
     height: UNIT * 5,
     width: UNIT * 5,
     padding: UNIT,
@@ -133,7 +133,7 @@ export default EStyleSheet.create({
     marginRight: UNIT * 2,
   },
   toolbarActionSortBy: {
-    marginRight: -UNIT / 4,
+    marginRight: -1,
   },
   toolbarText: {...secondaryText, color: '$textSecondary'},
   toolbarSortByText: {
@@ -144,7 +144,7 @@ export default EStyleSheet.create({
     marginBottom: -UNIT * 2,
   },
   bookmarkIcon: {
-    marginRight: UNIT / 4,
+    marginRight: 3,
   },
   resolved: {
     color: '$resolved',
