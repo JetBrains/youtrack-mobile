@@ -87,7 +87,7 @@ msgstr "Add tag"
 msgid "Add to favorites"
 msgstr "Add to favorites"
 
-#: src/views/inbox-threads/inbox-threads__reactions.tsx:35
+#: src/views/inbox-threads/inbox-threads__reactions.tsx:36
 #: src/views/inbox/inbox.tsx:578
 msgid "added a reaction"
 msgstr "added a reaction"
@@ -184,8 +184,8 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/views/article/arcticle-actions.ts:320
 #: src/views/article/arcticle-actions.ts:668
 #: src/views/create-issue/create-issue-actions.ts:510
-#: src/views/inbox-threads/inbox-threads__thread.tsx:171
-#: src/views/inbox-threads/inbox-threads.tsx:274
+#: src/views/inbox-threads/inbox-threads__thread.tsx:198
+#: src/views/inbox-threads/inbox-threads.tsx:278
 #: src/views/issue/activity/issue-activity__comment-actions.ts:413
 #: src/views/issue/issue-base-actions-creater.ts:697
 #: src/views/issue/issue-base-actions-creater.ts:738
@@ -240,7 +240,7 @@ msgstr "Comment deleted"
 msgid "Comment updated"
 msgstr "Comment updated"
 
-#: src/views/inbox-threads/inbox-threads__item-comment.tsx:69
+#: src/views/inbox-threads/inbox-threads__item-comment.tsx:74
 msgid "commented"
 msgstr "commented"
 
@@ -325,7 +325,7 @@ msgstr "Could not apply specified command."
 msgid "Crash report sent"
 msgstr "Crash report sent"
 
-#: src/views/inbox-threads/inbox-threads__item-issue-created.tsx:88
+#: src/views/inbox-threads/inbox-threads__item-issue-created.tsx:96
 msgid "created"
 msgstr "created"
 
@@ -619,17 +619,17 @@ msgstr "Logs"
 msgid "Manage Favorite Projects"
 msgstr "Manage Favorite Projects"
 
-#: src/views/inbox-threads/inbox-threads.tsx:258
+#: src/views/inbox-threads/inbox-threads.tsx:262
 msgid "Mark all as read"
 msgstr "Mark all as read"
 
-#: src/views/inbox-threads/inbox-threads__subscription.tsx:187
-#: src/views/inbox-threads/inbox-threads__thread.tsx:166
+#: src/views/inbox-threads/inbox-threads__thread.tsx:164
+#: src/views/inbox-threads/inbox-threads__thread.tsx:193
 msgid "Mark as read"
 msgstr "Mark as read"
 
-#: src/views/inbox-threads/inbox-threads__subscription.tsx:184
-#: src/views/inbox-threads/inbox-threads__thread.tsx:166
+#: src/views/inbox-threads/inbox-threads__thread.tsx:161
+#: src/views/inbox-threads/inbox-threads__thread.tsx:193
 msgid "Mark as unread"
 msgstr "Mark as unread"
 
@@ -644,7 +644,7 @@ msgstr[0] "Matches {{issuesCount}} issue"
 msgstr[1] "Matches {{issuesCount}} issues"
 
 #: src/components/activity-stream/activity__stream-history.tsx:196
-#: src/views/inbox-threads/inbox-threads__mention.tsx:93
+#: src/views/inbox-threads/inbox-threads__mention.tsx:101
 msgid "mentioned you"
 msgstr "mentioned you"
 
@@ -656,7 +656,7 @@ msgstr "Mentions & Reactions"
 msgid "merged the pull request"
 msgstr "merged the pull request"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx:154
+#: src/views/inbox-threads/inbox-threads__thread.tsx:181
 msgid "Mute thread"
 msgstr "Mute thread"
 
@@ -705,7 +705,7 @@ msgstr "No issues found"
 msgid "No items"
 msgstr "No items"
 
-#: src/views/inbox-threads/inbox-threads__list.tsx:147
+#: src/views/inbox-threads/inbox-threads__list.tsx:148
 msgid "No notifications"
 msgstr "No notifications"
 
@@ -721,11 +721,11 @@ msgstr "No user information provided by Upsource."
 msgid "Nope, can't find it!"
 msgstr "Nope, can't find it!"
 
-#: src/views/inbox-threads/inbox-threads.tsx:265
+#: src/views/inbox-threads/inbox-threads.tsx:269
 msgid "Notification settings…"
 msgstr "Notification settings…"
 
-#: src/views/inbox-threads/inbox-threads.tsx:235
+#: src/views/inbox-threads/inbox-threads.tsx:239
 #: src/views/inbox/inbox.tsx:711
 msgid "Notifications"
 msgstr "Notifications"
@@ -787,7 +787,7 @@ msgstr "Remove project from favorites?"
 msgid "Remove tag"
 msgstr "Remove tag"
 
-#: src/views/inbox-threads/inbox-threads__reactions.tsx:38
+#: src/views/inbox-threads/inbox-threads__reactions.tsx:39
 #: src/views/inbox/inbox.tsx:579
 msgid "removed a reaction"
 msgstr "removed a reaction"
@@ -889,7 +889,7 @@ msgstr "Share logs"
 msgid "Share…"
 msgstr "Share…"
 
-#: src/views/inbox-threads/inbox-threads.tsx:246
+#: src/views/inbox-threads/inbox-threads.tsx:250
 msgid "Show all"
 msgstr "Show all"
 
@@ -898,7 +898,7 @@ msgid "Show all issues tagged with \"{{tagName}}\"..."
 msgstr "Show all issues tagged with \"{{tagName}}\"..."
 
 #: src/components/activity-stream/activity__stream-vcs.tsx:206
-#: src/views/inbox-threads/inbox-threads__subscription.tsx:116
+#: src/views/inbox-threads/inbox-threads__subscription.tsx:107
 msgid "Show more"
 msgstr "Show more"
 
@@ -1056,7 +1056,7 @@ msgstr "Title"
 msgid "Title changed"
 msgstr "Title changed"
 
-#: src/views/inbox-threads/inbox-threads.tsx:142
+#: src/views/inbox-threads/inbox-threads.tsx:146
 msgid "To view an item in context, select an issue, article, or update from the list"
 msgstr "To view an item in context, select an issue, article, or update from the list"
 
@@ -1084,11 +1084,11 @@ msgstr "Type"
 msgid "Uncategorized Cards"
 msgstr "Uncategorized Cards"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx:154
+#: src/views/inbox-threads/inbox-threads__thread.tsx:181
 msgid "Unmute thread"
 msgstr "Unmute thread"
 
-#: src/views/inbox-threads/inbox-threads.tsx:247
+#: src/views/inbox-threads/inbox-threads.tsx:251
 msgid "Unread only"
 msgstr "Unread only"
 
@@ -1096,8 +1096,8 @@ msgstr "Unread only"
 msgid "Untitled"
 msgstr "Untitled"
 
-#: src/views/inbox-threads/inbox-threads__item-history.tsx:23
-#: src/views/inbox-threads/inbox-threads__item-work.tsx:37
+#: src/views/inbox-threads/inbox-threads__item-history.tsx:29
+#: src/views/inbox-threads/inbox-threads__item-work.tsx:43
 msgid "updated"
 msgstr "updated"
 
@@ -1125,7 +1125,7 @@ msgstr "Users"
 msgid "VCS changes"
 msgstr "VCS changes"
 
-#: src/views/inbox-threads/inbox-threads__item-comment.tsx:80
+#: src/views/inbox-threads/inbox-threads__item-comment.tsx:85
 msgid "View comment"
 msgstr "View comment"
 
@@ -1170,7 +1170,7 @@ msgstr "Write a comment, @mention people"
 msgid "Yes"
 msgstr "Yes"
 
-#: src/views/inbox-threads/inbox-threads__list.tsx:146
+#: src/views/inbox-threads/inbox-threads__list.tsx:147
 msgid "You don’t have any unread notifications"
 msgstr "You don’t have any unread notifications"
 

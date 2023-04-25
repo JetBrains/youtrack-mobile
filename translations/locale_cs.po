@@ -637,12 +637,12 @@ msgstr ""
 msgid "Mark all as read"
 msgstr "Označit vše jako přečtené"
 
-#: src/views/inbox-threads/inbox-threads__subscription.tsx
+#: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as read"
 msgstr "Označit jako přečtené"
 
-#: src/views/inbox-threads/inbox-threads__subscription.tsx
+#: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as unread"
 msgstr ""

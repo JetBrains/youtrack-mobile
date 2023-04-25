@@ -629,12 +629,12 @@ msgstr "Gestionar proyectos favoritos"
 msgid "Mark all as read"
 msgstr "Marcar todo como leído"
 
-#: src/views/inbox-threads/inbox-threads__subscription.tsx
+#: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as read"
 msgstr "Marcar como leído"
 
-#: src/views/inbox-threads/inbox-threads__subscription.tsx
+#: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as unread"
 msgstr "Marcar como no leído"
