@@ -7,7 +7,7 @@ export default EStyleSheet.create({
   ...loginStylesForm,
   container: {...loginStylesForm.container},
   title: {...loginStylesForm.title, color: '$text'},
-  hintText: {...loginStylesForm.hintText, color: '$icon'},
+  hintText: {...loginStylesForm.hintText, color: '$textSecondary'},
   inputUser: {
     ...rowFormStyles.input,
     marginTop: UNIT * 3,

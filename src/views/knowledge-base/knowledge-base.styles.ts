@@ -94,7 +94,7 @@ export default EStyleSheet.create({
     backgroundColor: '$background',
   },
   itemNoArticleText: {
-    color: '$icon',
+    color: '$textSecondary',
   },
   itemDraft: {
     marginRight: UNIT,

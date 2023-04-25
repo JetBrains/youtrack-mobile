@@ -100,7 +100,7 @@ const styles = EStyleSheet.create({
     flex: 1,
     width: null,
   },
-  columnText: {...secondaryText, color: '$icon', textTransform: 'uppercase'},
+  columnText: {...secondaryText, color: '$textSecondary', textTransform: 'uppercase'},
   columnTextCollapsed: {
     color: '$link',
   },

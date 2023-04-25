@@ -39,9 +39,6 @@ export default EStyleSheet.create({
     flexGrow: 1,
     ...optionText,
   },
-  settingsListItemOptionTextSecondary: {
-    color: '$icon',
-  },
   settingsFooter: {
     flexDirection: 'column',
     alignItems: 'center',

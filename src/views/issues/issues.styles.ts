@@ -177,7 +177,7 @@ export default EStyleSheet.create({
     backgroundColor: '$boxBackground',
   },
   sortByListWarning: {
-    color: '$icon',
+    color: '$textSecondary',
     margin: UNIT * 2.5,
     marginBottom: UNIT,
   },

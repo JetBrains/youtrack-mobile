@@ -35,7 +35,7 @@ export const rowStyles = {
   },
   additionalInfo: {
     ...secondaryText,
-    color: '$icon',
+    color: '$textSecondary',
   },
 };
 
