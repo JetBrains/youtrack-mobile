@@ -5,7 +5,6 @@ import {
   View,
 } from 'react-native';
 
-import Hyperlink from 'react-native-hyperlink';
 // @ts-ignore
 import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
