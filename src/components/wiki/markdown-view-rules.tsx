@@ -21,17 +21,17 @@ import styles from './youtrack-wiki.styles';
 
 import type {Article} from 'types/Article';
 import type {Attachment} from 'types/CustomFields';
-import type {IssueFull} from 'types/Issue';
+import type {AnyIssue} from 'types/Issue';
 import type {MarkdownNode} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
 import {User} from 'types/User';
 
 
-export type Mention = Article | IssueFull | User;
+export type Mention = Article | AnyIssue | User;
 export type Mentions = {
   articles: Article[];
-  issues: IssueFull[];
+  issues: AnyIssue[];
   users: User[];
 };
 const issueIdRegExp: RegExp = /([a-zA-Z]+-)+\d+/g;
@@ -320,21 +320,21 @@ function getMarkdownRules(
       style: Record<string, any>,
       inheritedStyles: Record<string, any> = {},
     ) => {
+      const _style = {...inheritedStyles, ...style};
       if (isHTMLLinebreak(node.content)) {
         return renderHTMLLinebreak(
           node,
           children,
           parent,
-          {...style, ...inheritedStyles},
+          _style,
         );
       }
       return <MarkdownText
         key={node.key}
         attachments={attachments}
-        inheritedStyles={inheritedStyles}
         mentions={mentions}
         node={node}
-        style={style}
+        style={_style}
         uiTheme={uiTheme}
       />;
     },

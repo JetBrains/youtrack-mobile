@@ -6,8 +6,10 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+
 import * as articleActions from './arcticle-actions';
 import ArticleActivities from './article__activity';
 import ArticleBreadCrumbs from './article__breadcrumbs';
@@ -30,10 +32,12 @@ import {getStorageState} from 'components/storage/storage';
 import {i18n} from 'components/i18n/i18n';
 import {IconBack, IconContextActions} from 'components/icon/icon';
 import {logEvent} from 'components/log/log-helper';
-import {routeMap} from '../../app-routes';
+import {routeMap} from 'app-routes';
 import {ThemeContext} from 'components/theme/theme-context';
 import {visibilityArticleDefaultText} from 'components/visibility/visibility-strings';
+
 import styles from './article.styles';
+
 import type {Article as ArticleEntity, ArticleNode} from 'types/Article';
 import type {ArticleState} from './article-reducers';
 import type {Attachment} from 'types/CustomFields';
@@ -46,6 +50,7 @@ import type {RootState} from 'reducers/app-reducer';
 import type {Theme, UITheme, UIThemeColors} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
 import type {Visibility} from 'types/Visibility';
+
 type Props = ArticleState & {
   articlePlaceholder: ArticleEntity;
   storePrevArticle?: boolean;
@@ -315,7 +320,9 @@ class Article extends IssueTabbed<Props, State> {
             checked: boolean,
             position: number,
             articleContent: string,
-          ) => onCheckboxUpdate(articleContent)}
+          ) => {
+            onCheckboxUpdate(articleContent);
+          }}
           isSplitView={this.state.isSplitView}
         />
       </View>
