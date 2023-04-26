@@ -15,7 +15,7 @@ type Props = {
   size?: number;
   color?: string;
   isFontAwesome?: boolean;
-  style?: Record<string, string>;
+  style?: Record<string, string> | Record<string, string>[];
 };
 const isAndroid = isAndroidPlatform();
 
