@@ -84,12 +84,12 @@ function getMarkdownRules(
 
       if (isGoogleShared(url) || isFigmaImage(url)) {
         return (
-          <Hyperlink
-            key={node.key}
-            linkStyle={{...inheritedStyles, ...style.link}}
-            linkDefault={true}
-            linkText={url}
-          />
+          <Text
+            style={[inheritedStyles, style.link]}
+            onPress={() => Linking.openURL(url)}
+          >
+            {url}
+          </Text>
         );
       }
 
