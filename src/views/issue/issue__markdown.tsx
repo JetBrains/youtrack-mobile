@@ -1,16 +1,17 @@
 import React, {useContext} from 'react';
+
 import YoutrackWiki from 'components/wiki/youtrack-wiki';
 import MarkdownView from 'components/wiki/markdown-view';
 import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
 import {markdownText} from 'components/common-styles';
 import {ThemeContext} from 'components/theme/theme-context';
+
 import type {Attachment} from 'types/CustomFields';
+import type {Mentions} from 'components/wiki/markdown-view-rules';
+import type {ScrollData} from 'types/Markdown';
 import type {Theme} from 'types/Theme';
 import type {YouTrackWiki} from 'types/Wiki';
-import type {ScrollData} from 'types/Markdown';
-import {Article} from 'types/Article';
-import {IssueOnList} from 'types/Issue';
-import {Mentions} from 'components/wiki/markdown-view-rules';
+
 type Props = {
   youtrackWiki?: YouTrackWiki;
   markdown?: string | null;
@@ -21,8 +22,6 @@ type Props = {
     description: string,
   ) => void;
   scrollData?: ScrollData;
-  mentionedArticles?: Article[];
-  mentionedIssues?: IssueOnList[];
   mentions?: Mentions;
 };
 
@@ -38,8 +37,6 @@ function IssueMarkdown(props: Props) {
       description: string,
     ): void => {},
     scrollData,
-    mentionedArticles,
-    mentionedIssues,
     mentions,
   } = props;
   const Component: any = scrollData ? MarkdownViewChunks : MarkdownView;
@@ -56,8 +53,6 @@ function IssueMarkdown(props: Props) {
         scrollData={scrollData}
         uiTheme={theme.uiTheme}
         textStyle={markdownText}
-        mentionedIssues={mentionedIssues}
-        mentionedArticles={mentionedArticles}
         mentions={mentions}
       >
         {markdown}

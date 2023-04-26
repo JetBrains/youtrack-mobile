@@ -1,31 +1,30 @@
 import React from 'react';
 import {View} from 'react-native';
+
 import MarkdownViewChunks from 'components/wiki/markdown-view-chunks';
 import {markdownText} from 'components/common-styles';
+
 import styles from './article.styles';
-import type {Article} from 'types/Article';
+
 import type {Attachment} from 'types/CustomFields';
-import type {IssueOnList} from 'types/Issue';
-import type {UITheme} from 'types/Theme';
+import type {Mentions} from 'components/wiki/markdown-view-rules';
+
 type Props = {
   attachments: Attachment[];
-  mentionedArticles: Article[];
-  mentionedIssues: IssueOnList[];
-  uiTheme: UITheme;
+  mentions: Mentions;
   articleContent: string;
   scrollData: Record<string, any>;
-  onCheckboxUpdate: (articleContent: string) => (...args: any[]) => any;
+  onCheckboxUpdate: (checked: boolean, position: number, articleContent: string) => void;
 };
+
 
 const ArticleContent = (props: Props) => {
   const {
     articleContent,
     attachments,
-    mentionedArticles,
-    mentionedIssues,
     scrollData,
-    uiTheme,
     onCheckboxUpdate,
+    mentions,
   } = props;
 
   if (!articleContent) {
@@ -38,9 +37,7 @@ const ArticleContent = (props: Props) => {
         textStyle={markdownText}
         scrollData={scrollData}
         attachments={attachments}
-        mentionedArticles={mentionedArticles}
-        mentionedIssues={mentionedIssues}
-        uiTheme={uiTheme}
+        mentions={mentions}
         onCheckboxUpdate={(
           checked: boolean,
           position: number,
@@ -53,7 +50,5 @@ const ArticleContent = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(ArticleContent) as React$AbstractComponent<
-  Props,
-  unknown
->;
+
+export default React.memo<Props>(ArticleContent);

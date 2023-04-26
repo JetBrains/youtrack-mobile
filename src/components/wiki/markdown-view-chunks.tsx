@@ -13,25 +13,19 @@ import {ThemeContext} from 'components/theme/theme-context';
 import {Theme} from 'types/Theme';
 import {updateMarkdownCheckbox} from './markdown-helper';
 
-import type {Article} from 'types/Article';
 import type {ASTNode} from 'react-native-markdown-display';
 import type {Attachment} from 'types/CustomFields';
-import type {IssueOnList} from 'types/Issue';
 import type {MarkdownToken} from 'types/Markdown';
 import type {TextStyleProp} from 'types/Internal';
-import type {UITheme} from 'types/Theme';
 
 type Props = {
   attachments?: Attachment[];
   children: string;
   chunkSize?: number;
   maxChunks?: number;
-  mentionedArticles?: Article[];
-  mentionedIssues?: IssueOnList[];
   mentions?: Mentions;
-  uiTheme?: UITheme;
   scrollData?: Record<string, any>;
-  onCheckboxUpdate?: (checked: boolean, position: number, markdown: string) => (...args: any[]) => any;
+  onCheckboxUpdate?: (checked: boolean, position: number, markdown: string) => void;
   textStyle?: TextStyleProp;
   isHTML?: boolean;
 };
@@ -41,14 +35,13 @@ let rules: Record<string, any> = {};
 let tokens: MarkdownToken[] = [];
 let md: string | null = null;
 
+
 const MarkdownViewChunks = (props: Props) => {
   const theme: Theme = useContext(ThemeContext);
 
   const {
     children,
     scrollData = {},
-    mentionedArticles = [],
-    mentionedIssues = [],
     mentions,
     onCheckboxUpdate = (
       checked: boolean,
@@ -59,6 +52,17 @@ const MarkdownViewChunks = (props: Props) => {
   } = props;
   const [chunksToRender, updateChunksToRender] = useState(1);
   const [astToRender, updateAstToRender] = useState<ASTNode[]>([]);
+
+  const createChunks = (astNodes: ASTNode[], size: number = DEFAULT_CHUNK_SIZE): ASTNode[] => {
+    const nodes: ASTNode[] = [];
+    let index = 0;
+    while (index < astNodes.length) {
+      nodes.push(astNodes.slice(index, size + index));
+      index += size;
+    }
+    return nodes;
+  };
+
   const createMarkdown = useCallback(
     (markdown: string): void => {
       tokens = stringToTokens(markdown, MarkdownItInstance);
@@ -85,12 +89,8 @@ const MarkdownViewChunks = (props: Props) => {
     );
     return getMarkdownRules(
       attaches,
-      props?.uiTheme || theme.uiTheme,
-      mentions || {
-        articles: mentionedArticles,
-        issues: mentionedIssues,
-        users: [],
-      },
+      theme.uiTheme,
+      mentions,
       onCheckboxPress,
       props.textStyle,
     );
@@ -160,20 +160,5 @@ const MarkdownViewChunks = (props: Props) => {
   );
 };
 
+
 export default React.memo<Props>(MarkdownViewChunks);
-
-
-function createChunks(
-  array: ASTNode[],
-  size: number = DEFAULT_CHUNK_SIZE,
-): ASTNode[] {
-  const chunked_arr: ASTNode[] = [];
-  let index = 0;
-
-  while (index < array.length) {
-    chunked_arr.push(array.slice(index, size + index));
-    index += size;
-  }
-
-  return chunked_arr;
-}

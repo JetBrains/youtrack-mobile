@@ -1,16 +1,21 @@
 import React from 'react';
+
 import {render, cleanup} from '@testing-library/react-native';
-import Api from '../api/api';
+
+import Api from 'components/api/api';
 import MarkdownViewChunks from './markdown-view-chunks';
 import mocks from '../../../test/mocks';
+import ThemeProvider from 'components/theme/theme-provider';
+
 import {__setStorageState} from '../storage/storage';
-import {DEFAULT_THEME} from '../theme/theme';
 import {setApi} from '../api/api__instance';
+import OAuth2 from 'components/auth/oauth2';
+
 let apiMock;
 describe('<Menu/>', () => {
   beforeEach(() => {
     jest.restoreAllMocks();
-    apiMock = new Api(mocks.createAuthMock(mocks.createConfigMock()));
+    apiMock = new Api(mocks.createAuthMock(mocks.createConfigMock()) as OAuth2);
     setApi(apiMock);
 
     __setStorageState({});
@@ -25,29 +30,34 @@ describe('<Menu/>', () => {
 
   function doRender(
     {
-      children,
-      attachments,
-      chunkSize,
-      onCheckboxUpdate,
-      mentionedArticles,
-      mentionedIssues,
-      scrollData,
+      children = '@root',
+      attachments = [],
+      chunkSize = 11,
+      onCheckboxUpdate = jest.fn(),
+      mentionedArticles = [],
+      mentionedIssues = [],
+      mentionedUsers = [],
+      scrollData = {},
     } = {
       children: '`code snippet`',
     },
   ) {
     return render(
-      <MarkdownViewChunks
-        attachments={attachments}
-        chunkSize={chunkSize}
-        onCheckboxUpdate={onCheckboxUpdate}
-        mentionedArticles={mentionedArticles}
-        mentionedIssues={mentionedIssues}
-        scrollData={scrollData}
-        uiTheme={DEFAULT_THEME}
-      >
-        {children}
-      </MarkdownViewChunks>,
+      <ThemeProvider mode={'dark'}>
+        <MarkdownViewChunks
+          attachments={attachments}
+          chunkSize={chunkSize}
+          onCheckboxUpdate={onCheckboxUpdate}
+          mentions={{
+            articles: mentionedArticles,
+            issues: mentionedIssues,
+            users: mentionedUsers,
+          }}
+          scrollData={scrollData}
+        >
+          {children}
+        </MarkdownViewChunks>,
+      </ThemeProvider>
     );
   }
 });

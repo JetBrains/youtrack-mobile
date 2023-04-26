@@ -56,8 +56,9 @@ export type IssueFull = {
   usesMarkdown: boolean;
   visibility: Visibility;
   hasEmail?: boolean;
-  mentionedArticles?: Article[];
-  mentionedIssues?: IssueOnList[];
+  mentionedArticles: Article[];
+  mentionedIssues: AnyIssue[];
+  mentionedUsers: User[];
 };
 export type IssueCreate = Omit<
   IssueFull,

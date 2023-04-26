@@ -29,7 +29,6 @@ type Props = {
 export default function ThreadEntityCreatedItem({
   group,
   target,
-  uiTheme,
   onNavigate,
 }: Props) {
   const actualActivity = group.issue;
@@ -79,7 +78,6 @@ export default function ThreadEntityCreatedItem({
               attachments={entity.attachments}
               chunkSize={3}
               maxChunks={1}
-              uiTheme={uiTheme}
             >
               {description.trim()}
             </MarkdownViewChunks>

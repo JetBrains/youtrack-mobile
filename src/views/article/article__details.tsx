@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
+
 import ArticleContent from './article__details-content';
 import ArticleWithChildren from 'components/articles/article-item-with-children';
 import AttachmentsRow from 'components/attachments-row/attachments-row';
@@ -18,13 +19,16 @@ import {
   IconClose,
 } from 'components/icon/icon';
 import {logEvent} from 'components/log/log-helper';
-import {routeMap} from '../../app-routes';
+import {routeMap} from 'app-routes';
 import {SkeletonIssueContent} from 'components/skeleton/skeleton';
+
 import styles from './article.styles';
+
 import type {Article} from 'types/Article';
 import type {Attachment} from 'types/CustomFields';
 import type {CustomError} from 'types/Error';
 import type {UITheme} from 'types/Theme';
+
 type Props = {
   article: Article;
   error: CustomError;
@@ -33,7 +37,7 @@ type Props = {
   onCreateArticle?: () => any;
   uiTheme: UITheme;
   scrollData: Record<string, any>;
-  onCheckboxUpdate?: (articleContent: string) => (...args: any[]) => any;
+  onCheckboxUpdate?: (checked: boolean, position: number, articleContent: string) => void;
   isSplitView: boolean;
 };
 
@@ -219,18 +223,19 @@ const ArticleDetails = (props: Props) => {
       <ArticleContent
         scrollData={scrollData}
         attachments={article?.attachments}
-        mentionedArticles={article?.mentionedArticles}
-        mentionedIssues={article?.mentionedIssues}
-        uiTheme={uiTheme}
+        mentions={{
+          articles: article?.mentionedArticles,
+          issues: article?.mentionedIssues,
+          users: article?.mentionedUsers,
+        }}
         articleContent={article?.content}
         onCheckboxUpdate={(
           checked: boolean,
           position: number,
           articleContent: string,
-        ) =>
-          onCheckboxUpdate &&
-          onCheckboxUpdate(checked, position, articleContent)
-        }
+        ) => {
+          onCheckboxUpdate?.(checked, position, articleContent);
+        }}
       />
 
       {article?.attachments?.length > 0 && (
@@ -277,7 +282,5 @@ const ArticleDetails = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(ArticleDetails) as React$AbstractComponent<
-  Props,
-  unknown
->;
+
+export default React.memo<Props>(ArticleDetails);
