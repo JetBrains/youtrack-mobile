@@ -1,5 +1,5 @@
 import type {Attachment, IssueProject} from './CustomFields';
-import type {IssueOnList} from './Issue';
+import type {AnyIssue} from './Issue';
 import type {User} from './User';
 import type {Visibility} from './Visibility';
 export type Article = {
@@ -12,9 +12,9 @@ export type Article = {
   hasUnpublishedChanges: boolean;
   id: string;
   idReadable: string;
-  mentionedArticles: Article;
-  mentionedIssues: IssueOnList;
-  mentionedUsers: User;
+  mentionedArticles: Article[];
+  mentionedIssues: AnyIssue[];
+  mentionedUsers: User[];
   ordinal: number;
   parentId: string | null;
   parentArticle: Article;
