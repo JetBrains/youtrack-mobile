@@ -1,38 +1,42 @@
 import React from 'react';
 import {Text, TextStyle} from 'react-native';
 
-import Hyperlink from 'react-native-hyperlink';
-
-import MarkdownMention from 'components/wiki/markdown/markdown-mention';
-import MarkdownTextWithMentions from 'components/wiki/markdown/markdown-text-with-mentions';
-import Router from 'components/router/router';
-import {guid, isURLPattern} from 'util/util';
+import * as regExps from 'components/wiki/util/patterns';
+import {doSortBy} from 'components/search/sorting';
 import {hasMimeType} from 'components/mime-type/mime-type';
+import {hasType, ResourceTypes} from 'components/api/api__resource-types';
+import {imageEmbedRegExp, imageHeight, imageWidth} from 'components/wiki/util/patterns';
 import {MarkdownEmbedLink} from 'components/wiki/markdown/index';
-import {Mentions} from 'components/wiki/markdown-view-rules';
-import {whiteSpacesRegex} from 'components/wiki/util/patterns';
+import {MarkdownMentionWithUserCard} from 'components/wiki/markdown/markdown-mention';
+import {Mention, Mentions} from 'components/wiki/markdown-view-rules';
 
-import styles from 'components/wiki/youtrack-wiki.styles';
-
+import {Article} from 'types/Article';
 import {Attachment} from 'types/CustomFields';
 import {MarkdownNode} from 'types/Markdown';
 import {UITheme} from 'types/Theme';
+import {User} from 'types/User';
+import MarkdownHyperLink from 'components/wiki/markdown/markdown-hyper-link';
+
+type Matcher = { regex: RegExp, mention: Mention, startPos: number | undefined };
+type TextNodes = (string | React.ReactNode)[] | string;
 
 
-const htmlTagRegex = /(<([^>]+)>)/gi;
-const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
-const imageHeight: RegExp = /{height=\d+(%|px)?}/i;
-const imageWidth: RegExp = /{width=\d+(%|px)?}/i;
-const issueIdRegExp: RegExp = /([a-zA-Z]+-)+\d+/g;
-const renderHyperLink = (linkText: string, style: TextStyle[] | TextStyle) => (
-  <Hyperlink
-    key={guid()}
-    linkDefault={true}
-    linkStyle={[styles.link, ...(Array.isArray(style) ? style : [style])]}
-    linkText={linkText}
-  />
+const getMatchRegex = (mention: Mention): RegExp => {
+  const mentionValue: string = hasType.user(mention) ? `@${(mention as User).login}` : (mention as Article).idReadable;
+  return (hasType.user(mention) ? regExps.createUserMentionRegexp : regExps.createMentionRegExp)(mentionValue);
+};
+
+const createSortedRegexps = (mentions: Mention[], md: string): Matcher[] => (
+  mentions.map((mention: Mention): Matcher => {
+    const regex = getMatchRegex(mention);
+    return {
+      mention,
+      regex,
+      startPos: md.search(regex),
+    };
+  }).filter((it: Matcher) => typeof it.startPos === 'number')
+    .sort((a: Matcher, b: Matcher) => doSortBy(a, b, 'startPos'))
 );
-
 
 const MarkdownText = ({
   node,
@@ -51,22 +55,12 @@ const MarkdownText = ({
     node.content
       .replace(imageHeight, '')
       .replace(imageWidth, '')
-      .replace(whiteSpacesRegex, ' ')
-      .replace(htmlTagRegex, ' ')
+      .replace(regExps.whiteSpacesRegex, ' ')
+      .replace(regExps.htmlTagRegex, ' ')
   );
 
   if (!text) {
     return null;
-  }
-
-  if (mentions?.articles?.length || mentions?.issues?.length || mentions?.users?.length) {
-    return (
-      <MarkdownTextWithMentions
-        node={node}
-        mentions={mentions}
-        style={style}
-      />
-    );
   }
 
   if (text.match(imageEmbedRegExp)) {
@@ -83,32 +77,48 @@ const MarkdownText = ({
     }
   }
 
-  if (issueIdRegExp.test(text) && !isURLPattern(text)) {
-    const matched: RegExpMatchArray | null = text.match(issueIdRegExp);
+  const {articles = [], issues = [], users = []} = mentions || {};
+  const mergedMentions = [...articles, ...issues, ...users];
+  let textWithMentions: TextNodes;
 
-    if (matched && matched[0]) {
-      const matchedIndex: number = text.search(matched[0]);
-      return (
-        <Text
-          selectable={true}
-          key={node.key}
-          style={style}
-        >
-          {renderHyperLink(text.slice(0, matchedIndex), style)}
-          <MarkdownMention
-            mention={matched[0]}
-            onPress={() => Router.Issue({issueId: matched[0].trim()})}
-            style={[...style, styles.link]}
-          />
-          {renderHyperLink(
-            text.slice(matchedIndex + matched[0].length, text.length),
-            style,
-          )}
-        </Text>
-      );
-    }
+  if (mergedMentions.length === 0) {
+    textWithMentions = text.split(' ').reduce((akk: TextNodes, str: string) => {
+      const matchedIssue: RegExpMatchArray | null = str.match(regExps.issueIdRegExp);
+      const matchedUser: RegExpMatchArray | null = str.match(regExps.userLoginRegExp);
+      const userLogin: string | undefined = matchedUser?.[0];
+      const idReadable: string | undefined = matchedIssue?.[0];
+      const mention = idReadable || userLogin ? {
+        $type: idReadable ? ResourceTypes.ISSUE : userLogin ? ResourceTypes.USER : '',
+        idReadable,
+        login: userLogin?.slice(1),
+        name: userLogin?.slice(1),
+        id: idReadable || userLogin,
+      } : null;
+      return [
+        ...akk,
+      ...(mention ? [<MarkdownMentionWithUserCard mention={mention} style={style}/>] : [str]),
+        ' ',
+      ];
+    }, []);
 
-    return renderHyperLink(text, style);
+  } else {
+
+    textWithMentions = text.split(' ').reduce((akk: TextNodes, str: string) => {
+      const textNodes: TextNodes = createSortedRegexps(mergedMentions, text).reduce((arr: TextNodes, it: Matcher) => {
+      const match: RegExpMatchArray | null = str.match(it.regex);
+        let mdParts: any[] = [];
+        if (match?.[0]) {
+          mdParts = match[0].length === str.length
+            ? [<MarkdownMentionWithUserCard mention={it.mention} style={style}/>]
+            : str.split(it.regex).map(
+              (s: string) => <MarkdownHyperLink uri={s} style={style}/> || <MarkdownMentionWithUserCard mention={it.mention} style={style}/>
+            );
+        }
+        return [...arr, ...mdParts];
+      }, []);
+
+      return str ? [...akk, ...(textNodes.length > 0 ? textNodes : [str]), ' '] : akk;
+    }, []);
   }
 
   return (
@@ -116,7 +126,7 @@ const MarkdownText = ({
       key={node.key}
       style={style}
     >
-      {text}
+      {textWithMentions}
     </Text>
   );
 };

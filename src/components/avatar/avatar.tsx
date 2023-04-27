@@ -26,7 +26,7 @@ const Avatar = (props: Props) => {
   const {source, userName = 'A', size, style} = props;
 
   const [state, setState] = React.useState<State>({
-    renderDefault: false,
+    renderDefault: !source.uri,
     renderSVG: false,
   });
 

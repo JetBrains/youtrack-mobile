@@ -1,26 +1,47 @@
-export const mdCheckboxRegex = /(?:[-*]\s)(\[(x|\s)\])/gi;
-export const htmlTagRegex = /<\/?[^>]+(>|$)/gi;
-export const whiteSpacesInHTMLRegex: RegExp = />\s+</g;
-export const whiteSpacesRegex: RegExp = /\s+/g;
-export const linebreakRegex: RegExp = /(\r\n|\r|\n)/g;
-export const htmlCodeStartRegex: RegExp = /^{html}/;
-export const htmlCodeEndRegex: RegExp = /{html}$/;
+const htmlCodeEndRegex: RegExp = /{html}$/;
+const htmlCodeStartRegex: RegExp = /^{html}/;
+const htmlTagRegex = /<\/?[^>]+(>|$)/gi;
+const issueIdRegExp: RegExp = /([a-zA-Z]+-)+\d+/g;
+const linebreakRegex: RegExp = /(\r\n|\r|\n)/g;
+const mdCheckboxRegex = /(?:[-*]\s)(\[(x|\s)\])/gi;
+const whiteSpacesInHTMLRegex: RegExp = />\s+</g;
+const whiteSpacesRegex: RegExp = /\s+/g;
+const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
+const imageHeight: RegExp = /{height=\d+(%|px)?}/i;
+const imageWidth: RegExp = /{width=\d+(%|px)?}/i;
 
-export function escapeRegExp(str: string): string {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
+const escapeRegExp = (str: string): string => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-export function createUserMentionRegexp(mention: string): RegExp {
-  const wrappingMarks = [',', '?', '!', ':', '\\-', '#'].join('');
-  const prefix = `(?:[\\s.${wrappingMarks}([]|^)`;
-  const suffix = `(?=(\\.\\s)|(\\.$)|[\\s${wrappingMarks})\\]]|$)`;
-  return new RegExp(`${prefix}${escapeRegExp(mention)}${suffix}`, 'igu');
-}
+const usrWrappingMarks = [',', '?', '!', ':', '\\-', '#'].join('');
+const usrPrefix = `(?:[\\s.${usrWrappingMarks}([]|^)`;
+const usrSuffix = `(?=(\\.\\s)|(\\.$)|[\\s${usrWrappingMarks})\\]]|$)`;
+const createUserMentionRegexp = (mention: string): RegExp => {
+  return new RegExp(`${usrPrefix}${escapeRegExp(mention)}${usrSuffix}`, 'igu');
+};
 
-export function createMentionRegExp(mention: string): RegExp {
-  const punctuationMarks = ['.', ',', '?', '!', ':', '#'].join('');
+const userLoginRegExp = /@[\w\d]+([._])?[\w\d]+/gui;
+
+const createMentionRegExp = (mention: string): RegExp => {
+  const punctuationMarks = ['.', ',', '?', '!', ':', '#', '_'].join('');
   const prefix = `(?:[\\s${punctuationMarks}([]|^)`;
   const suffix = `(?=[\\s${punctuationMarks})\\]]|$)`;
   return new RegExp(`${prefix}${escapeRegExp(mention)}${suffix}`, 'igu');
-}
+};
 
+export {
+  createMentionRegExp,
+  createUserMentionRegexp,
+  escapeRegExp,
+  htmlCodeEndRegex,
+  htmlCodeStartRegex,
+  htmlTagRegex,
+  imageEmbedRegExp,
+  imageHeight,
+  imageWidth,
+  issueIdRegExp,
+  linebreakRegex,
+  mdCheckboxRegex,
+  userLoginRegExp,
+  whiteSpacesInHTMLRegex,
+  whiteSpacesRegex,
+};

@@ -22,6 +22,11 @@ export default EStyleSheet.create({
   },
   avatar: {
     borderRadius: UNIT * 8,
+    width: UNIT * 8,
+    height: UNIT * 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '$disabled',
     overflow: 'hidden',
   },
   avatarImage: {

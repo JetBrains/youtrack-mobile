@@ -146,7 +146,7 @@ const UserCard = ({user}: { user: User}): JSX.Element | null => {
         </TouchableOpacity>
       )}
 
-      {canComment && (
+      {canComment && loadedUser && (
         <TouchableOpacity
           testID="test:id/userCardMentionButton"
           accessibilityLabel="userCardMentionButton"

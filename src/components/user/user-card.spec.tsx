@@ -8,6 +8,7 @@ import {Store} from 'redux';
 import mocks from 'test/mocks';
 
 import * as appActions from 'actions/app-actions';
+import * as useUserCard from 'components/hooks/use-user-card-async';
 import UserCard from './user-card';
 
 import {User} from 'types/User';
@@ -110,6 +111,7 @@ describe('<UserCard/>', () => {
 
 
     it('should not render mention button', () => {
+      jest.spyOn(useUserCard, 'useUserCardAsync').mockResolvedValue(null);
       const {queryByTestId} = doRender();
 
       expect(queryByTestId('test:id/userCardMentionButton')).toBeNull();
@@ -139,6 +141,7 @@ describe('<UserCard/>', () => {
     });
 
     it('should invoke mention button callback', () => {
+      jest.spyOn(useUserCard, 'useUserCardAsync').mockResolvedValue({});
       jest.spyOn(issuePermissionsMock, 'canCommentOn').mockReturnValueOnce(true);
       jest.spyOn(appActions, 'addMentionToDraftComment');
       const {getByTestId} = doRender();

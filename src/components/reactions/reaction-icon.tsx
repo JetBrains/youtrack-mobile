@@ -16,6 +16,7 @@ const ReactionIcon = (props: Props) => {
   return Icon ? (
     <Icon
       width={size}
+      height={size}
       style={{
         fill: DEFAULT_THEME.colors.$iconAccent,
         ...style,

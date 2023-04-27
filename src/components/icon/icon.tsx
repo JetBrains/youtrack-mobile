@@ -153,6 +153,16 @@ export const IconCircleOutline = (props?: Props) => (
 );
 
 /* FontAwesome icons */
+export const IconFileText = (props?: Props) => (
+  <IconFont
+    {...{
+      isFontAwesome: true,
+      name: 'file-text-o',
+      ...props,
+    }}
+  />
+);
+
 export const EllipsisVertical = (props?: Props) => (
   <IconFont
     {...{
@@ -192,6 +202,14 @@ export const IconCheckboxChecked = (props?: Props) => (
   <IconFont
     {...{
       name: 'checkbox-marked',
+      ...props,
+    }}
+  />
+);
+export const IconFileCheck = (props?: Props) => (
+  <IconFont
+    {...{
+      name: 'file-check-outline',
       ...props,
     }}
   />
