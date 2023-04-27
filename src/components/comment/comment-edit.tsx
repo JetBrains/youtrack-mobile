@@ -169,7 +169,7 @@ const IssueCommentEdit = (props: Props) => {
       state.editingComment.id === undefined && props.editingComment?.id ||
       (
         state.editingComment.id &&
-        state.editingComment.updated < props.editingComment.updated
+        state.editingComment?.updated < props.editingComment?.updated
       )
     ) {
       // set draft id
