@@ -35,6 +35,7 @@ const Avatar = (props: Props) => {
     <View
       style={[
         styles.common,
+        style,
         {
           width: size,
           height: size,
@@ -67,7 +68,6 @@ const Avatar = (props: Props) => {
           style={[
             styles.common,
             {width: size, height: size, borderRadius: size},
-            style,
           ]}
           onError={(e: NativeSyntheticEvent<ImageErrorEventData>) => {
             const error: unknown | undefined = e?.nativeEvent?.error;
