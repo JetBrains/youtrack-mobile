@@ -676,7 +676,7 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.tsx:415
+#: src/components/activity-stream/activity__stream.tsx:421
 msgid "No activity yet"
 msgstr "No activity yet"
 
