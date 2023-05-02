@@ -290,11 +290,17 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     const _comment: IssueComment | null = getCommentFromActivityGroup(activityGroup);
 
     const activityGroupEvents: Activity[] = getActivityGroupEvents(activityGroup);
-    const hasHighlightedActivity: boolean = (
-      !!targetActivityId && (getActivityGroupId(activityGroup) === targetActivityId ||
-        activityGroupEvents.some(it => it.id === targetActivityId) ||
-        (!!_comment && _comment.id === highlight?.commentId))
-    );
+
+    let hasHighlightedActivity: boolean = false;
+    if (targetActivityId) {
+      const activityGroupId: string = getActivityGroupId(activityGroup);
+      hasHighlightedActivity = (
+        targetActivityId === activityGroupId ||
+        targetActivityId === activityGroupId.split('.')?.[0] ||
+       activityGroupEvents.some(it => it.id === targetActivityId) ||
+       (!!_comment && _comment.id === highlight?.commentId)
+     );
+    }
 
     const Component = hasHighlightedActivity ? Animated.View : View;
     return (

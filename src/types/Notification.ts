@@ -7,7 +7,7 @@ export type NotificationCompletion = {
 export type Token = string | null | typeof undefined;
 export type TokenHandler = (token: string) => void;
 export type NotificationRouteData = {
-  issueId: string | null | undefined;
-  backendUrl: string | null | undefined;
-  navigateToActivity: boolean;
+  issueId: string | undefined;
+  backendUrl: string | undefined;
+  navigateToActivity: string | undefined;
 };

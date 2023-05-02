@@ -101,26 +101,34 @@ function getBackendUrl(
   );
 }
 
-function isIssueDetailsNotification(
-  notification: Record<string, any>,
-): boolean {
-  const categories: string[] = (
-    notification?.categories ||
-    notification?.data?.categories ||
-    notification?.payload?.categories ||
+function getNotificationDataByField(notification: Record<string, any>, fieldName: string) {
+  return (
+    notification?.[fieldName] ||
+    notification?.data?.[fieldName] ||
+    notification?.payload?.[fieldName] ||
     ''
   ).split(',');
+}
 
-  if (categories.length === 0 || !categories[0]) {
-    return false;
+function getActivityId(
+  notification: Record<string, any>,
+): string | undefined {
+  const categories: string[] = getNotificationDataByField(notification, 'categories');
+  const eventIds: string[] = getNotificationDataByField(notification, 'eventIds');
+  if (!categories?.[0] || !eventIds?.[0]) {
+    return undefined;
   }
 
-  return [
-    categoryName.DESCRIPTION,
-    categoryName.SUMMARY,
-    categoryName.ISSUE_CREATED,
-    categoryName.ISSUE_CREATED.split('_').pop(),
-  ].some((it: string) => it.toLowerCase() === categories[0].toLowerCase());
+  const targetEventIdIndex: number = categories.findIndex((it: string) => {
+    return ![
+      categoryName.DESCRIPTION,
+      categoryName.SUMMARY,
+      categoryName.ISSUE_CREATED,
+      categoryName.ISSUE_CREATED.split('_').pop(),
+    ].join(',').toLowerCase().split(',').includes(it.toLowerCase());
+  });
+
+  return eventIds[targetEventIdIndex] || eventIds[0] || '';
 }
 
 async function subscribe(
@@ -191,6 +199,6 @@ export default {
   unsubscribe,
   logPrefix,
   KONNECTOR_URL,
-  isIssueDetailsNotification,
+  getActivityId,
   getBackendUrl,
 };

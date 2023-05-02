@@ -4,6 +4,8 @@ import * as util from 'util/util';
 import helper from './push-notifications-helper';
 import {categoryName} from '../activity/activity__category';
 import {mockEventsRegistry} from '../../../test/jest-mock__react-native-notifications';
+
+
 describe('push-notifications-helper', () => {
   const youTrackTokenMock: string = 'youTrackTokenMock';
   const successResponseMock: string = 'OK';
@@ -21,6 +23,8 @@ describe('push-notifications-helper', () => {
     jest.spyOn(API, 'getApi').mockReturnValue(apiMock);
     jest.spyOn(util, 'isAndroidPlatform');
   });
+
+
   describe('loadYouTrackToken', () => {
     it('should return a YouTrack subscription token', async () => {
       apiMock.getNotificationsToken.mockResolvedValueOnce(youTrackTokenMock);
@@ -33,7 +37,10 @@ describe('push-notifications-helper', () => {
       await expect(helper.loadYouTrackToken()).resolves.toEqual(null);
     });
   });
+
+
   describe('Subscribe', () => {
+
     describe('Success subscription', () => {
       it('should subscribe Android', async () => {
         util.isAndroidPlatform.mockReturnValueOnce(true);
@@ -60,6 +67,8 @@ describe('push-notifications-helper', () => {
         );
       });
     });
+
+
     describe('Subscription error', () => {
       it('should NOT subscribe Android', async () => {
         util.isAndroidPlatform.mockReturnValueOnce(true);
@@ -115,6 +124,8 @@ describe('push-notifications-helper', () => {
         );
       });
     });
+
+
     describe('Error unsubscription', () => {
       it('should not unsubscribe Android', async () => {
         util.isAndroidPlatform.mockReturnValueOnce(true);
@@ -144,6 +155,8 @@ describe('push-notifications-helper', () => {
       return await helper.unsubscribe(mockEventsRegistry.deviceTokenMock);
     }
   });
+
+
   describe('getIssueId', () => {
     it('should return iOS push notification issue id', () => {
       expect(
@@ -187,6 +200,8 @@ describe('push-notifications-helper', () => {
       ).toEqual('X-5');
     });
   });
+
+
   describe('getBackendUrl', () => {
     it('should return iOS push notification getBackendUrl', () => {
       expect(
@@ -230,6 +245,8 @@ describe('push-notifications-helper', () => {
       ).toEqual('https://5');
     });
   });
+
+
   describe('isDeviceTokenChanged', () => {
     it('should return TRUE', () => {
       storage.__setStorageState({
@@ -246,6 +263,8 @@ describe('push-notifications-helper', () => {
       expect(helper.isDeviceTokenChanged('a')).toEqual(false);
     });
   });
+
+
   describe('storeDeviceToken', () => {
     it('should safe in the async storage', () => {
       jest.spyOn(storage, 'flushStoragePart');
@@ -255,6 +274,8 @@ describe('push-notifications-helper', () => {
       });
     });
   });
+
+
   describe('getStoredDeviceToken', () => {
     it('should get a device token from the async storage', () => {
       jest.spyOn(storage, 'getStorageState');
@@ -268,61 +289,75 @@ describe('push-notifications-helper', () => {
       );
     });
   });
+
+
   describe('isIssueDetailsNotification', () => {
     it('should return FALSE if no `data` or `payload` provided', () => {
-      expect(helper.isIssueDetailsNotification()).toEqual(false);
+      expect(helper.getActivityId()).toEqual(undefined);
     });
-    it('should return FALSE if there is no any category', () => {
-      expect(helper.isIssueDetailsNotification({})).toEqual(false);
+    it('should return `undefined` if there is no any category', () => {
+      expect(helper.getActivityId({})).toEqual(undefined);
     });
-    it('should return FALSE if it is not summary or description category', () => {
+    it('should return first activity event id', () => {
+      const eventIdMock: string = 'id1';
       expect(
-        helper.isIssueDetailsNotification({
+        helper.getActivityId({
           categories: categoryName.CUSTOM_FIELD,
+          eventIds: `${eventIdMock},id2`,
         }),
-      ).toEqual(false);
+      ).toEqual(eventIdMock);
     });
-    it('should return TRUE if it is a summary category', () => {
+
+    it('should return second activity event id', () => {
+      const eventIdMock: string = 'id2';
       expect(
-        helper.isIssueDetailsNotification({
+        helper.getActivityId({
+          categories: [categoryName.SUMMARY, categoryName.CUSTOM_FIELD, categoryName.CUSTOM_FIELD].join(','),
+          eventIds: `id1,${eventIdMock},id3`,
+        }),
+      ).toEqual(eventIdMock);
+    });
+    it('should return `undefined` if it is a summary category', () => {
+      expect(
+        helper.getActivityId({
           categories: categoryName.SUMMARY,
         }),
-      ).toEqual(true);
+      ).toEqual(undefined);
     });
-    it('should return TRUE if it is a description category', () => {
+    it('should return `undefined` if it is a description category', () => {
       expect(
-        helper.isIssueDetailsNotification({
+        helper.getActivityId({
           categories: categoryName.DESCRIPTION,
         }),
-      ).toEqual(true);
+      ).toEqual(undefined);
     });
-    it('should return TRUE if the first category is a description one', () => {
+    it('should return `undefined` if the first category is a description one', () => {
       expect(
-        helper.isIssueDetailsNotification({
+        helper.getActivityId({
           categories: `${categoryName.DESCRIPTION},${categoryName.CUSTOM_FIELD}`,
         }),
-      ).toEqual(true);
+      ).toEqual(undefined);
     });
-    it('should return TRUE if the first category is a summary one', () => {
+    it('should return `undefined` if the first category is a summary one', () => {
       expect(
-        helper.isIssueDetailsNotification({
+        helper.getActivityId({
           categories: `${categoryName.SUMMARY},${categoryName.CUSTOM_FIELD}`,
         }),
-      ).toEqual(true);
+      ).toEqual(undefined);
     });
-    it('should return TRUE if the first category is a create issue category', () => {
+    it('should return `undefined` if the first category is a create issue category', () => {
       expect(
-        helper.isIssueDetailsNotification({
+        helper.getActivityId({
           categories: `${categoryName.ISSUE_CREATED},${categoryName.LINKS}`,
         }),
-      ).toEqual(true);
+      ).toEqual(undefined);
     });
-    it('should return FALSE if the first category is not a description or summary', () => {
+    it('should return `undefined` if the first category is not a description or summary', () => {
       expect(
-        helper.isIssueDetailsNotification({
+        helper.getActivityId({
           categories: `${categoryName.CUSTOM_FIELD},${categoryName.DESCRIPTION},${categoryName.LINKS}`,
         }),
-      ).toEqual(false);
+      ).toEqual(undefined);
     });
   });
 });

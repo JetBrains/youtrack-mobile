@@ -98,7 +98,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
 
     if (this.props.navigateToActivity) {
-      this.loadIssue(this.props?.issuePlaceholder);
+      await this.loadIssue(this.props?.issuePlaceholder);
       this.switchToActivityTab();
     } else {
       await this.loadIssue(this.props?.issuePlaceholder);
@@ -106,7 +106,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   }
 
   async componentDidMount() {
-        super.componentDidMount();
+    super.componentDidMount();
     await this.init();
     this.goOnlineSubscription = addListenerGoOnline(() => {
       this.loadIssue(this.props?.issuePlaceholder);
@@ -729,7 +729,7 @@ export type OwnProps = {
   issuePlaceholder: Partial<IssueFull>;
   issueId: string;
   user: User;
-  navigateToActivity: boolean | null | undefined;
+  navigateToActivity: string | undefined;
 };
 
 const mapStateToProps = (
@@ -747,9 +747,7 @@ const mapStateToProps = (
     issueId: ownProps.issueId,
     user: state.app.user,
     isConnected,
-    navigateToActivity:
-      (isConnected === true || isConnected === undefined) &&
-      ownProps.navigateToActivity,
+    navigateToActivity: isConnected === true || isConnected === undefined ? ownProps.navigateToActivity : undefined,
   };
 };
 
