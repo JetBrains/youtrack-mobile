@@ -460,6 +460,7 @@ describe('app-actions', () => {
     afterEach(() => jest.restoreAllMocks());
 
     it('should invoke URL handler', async () => {
+      jest.advanceTimersByTime(101);
       jest.spyOn(urlUtils, 'openByUrlDetector');
 
       await assert();
@@ -476,7 +477,7 @@ describe('app-actions', () => {
 
       it('should navigate to an issue', async () => {
         await assert(`${backendURLMock}/issue/${issueIdMock}`);
-        jest.advanceTimersByTime(100);
+        jest.advanceTimersByTime(101);
 
         expect(Router.Issue).toHaveBeenCalledWith(
           {issueId: issueIdMock}, {forceReset: true}
@@ -485,7 +486,7 @@ describe('app-actions', () => {
 
       it('should navigate to an issue and switch to `Activity` tab', async () => {
         await assert(`${backendURLMock}/issue/${issueIdMock}#focus=Comments-${activityIdMock}`);
-        jest.advanceTimersByTime(100);
+        jest.advanceTimersByTime(101);
 
         expect(Router.Issue).toHaveBeenCalledWith(
           {issueId: issueIdMock, navigateToActivity: activityIdMock}, {forceReset: true}
@@ -502,7 +503,7 @@ describe('app-actions', () => {
 
       it('should navigate to an article', async () => {
         await assert(`${backendURLMock}/articles/${articleIdMock}`);
-        jest.advanceTimersByTime(100);
+        jest.advanceTimersByTime(101);
 
         expect(Router.Article).toHaveBeenCalledWith(
           {articlePlaceholder: {id: articleIdMock}}, {forceReset: true}
@@ -511,7 +512,7 @@ describe('app-actions', () => {
 
       it('should navigate to an article and switch to `Activity` tab', async () => {
         await assert(`${backendURLMock}/articles/${articleIdMock}#focus=Comments-${activityIdMock}`);
-        jest.advanceTimersByTime(100);
+        jest.advanceTimersByTime(101);
 
         expect(Router.Article).toHaveBeenCalledWith(
           {articlePlaceholder: {id: articleIdMock}, navigateToActivity: activityIdMock}, {forceReset: true}
