@@ -1,20 +1,30 @@
 import React from 'react';
-import {TextStyle} from 'react-native';
-
-import Hyperlink from 'react-native-hyperlink';
+import {Linking, Text, TextStyle} from 'react-native';
 
 import {guid} from 'util/util';
 
 import styles from 'components/wiki/youtrack-wiki.styles';
 
 
-const MarkdownHyperLink = ({uri, style}: { uri: string; style: TextStyle | TextStyle[]; }): JSX.Element | null => {
-  return <Hyperlink
-    key={guid()}
-    linkDefault={true}
-    linkStyle={[...(Array.isArray(style) ? style : [style]), styles.link]}
-    linkText={uri}
-  />;
+const MarkdownHyperLink = ({
+  children,
+  uri,
+  style,
+}: {
+  children?: any;
+  uri: string;
+  style: TextStyle | TextStyle[];
+}): JSX.Element => {
+  return (
+    <Text
+      selectable={true}
+      key={guid()}
+      style={[...(Array.isArray(style) ? style : [style]), styles.link]}
+      onPress={() => Linking.openURL(uri)}
+    >
+      {children || uri}
+    </Text>
+  );
 };
 
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Linking,
   Text,
   View,
 } from 'react-native';
@@ -10,6 +9,7 @@ import renderRules from 'react-native-markdown-display/src/lib/renderRules';
 import UrlParse from 'url-parse';
 
 import HTML from './markdown/markdown-html';
+import MarkdownHyperLink from 'components/wiki/markdown/markdown-hyper-link';
 import MarkdownMention from 'components/wiki/markdown/markdown-mention';
 import Router from 'components/router/router';
 import {hasMimeType} from 'components/mime-type/mime-type';
@@ -74,8 +74,7 @@ function getMarkdownRules(
         (it: Attachment) => it.name && it.name.includes(src),
       );
       const parsedURL = UrlParse(src);
-      const url: string | null | undefined =
-        parsedURL?.protocol && parsedURL?.origin ? src : targetAttach?.url;
+      const url: string | null | undefined = parsedURL?.protocol && parsedURL?.origin ? src : targetAttach?.url;
 
       if (!url || hasMimeType.svg(targetAttach)) {
         return null;
@@ -83,12 +82,10 @@ function getMarkdownRules(
 
       if (isGoogleShared(url) || isFigmaImage(url)) {
         return (
-          <Text
-            style={[inheritedStyles, style.link]}
-            onPress={() => Linking.openURL(url)}
-          >
-            {url}
-          </Text>
+          <MarkdownHyperLink
+            uri={url}
+            style={[inheritedStyles, textStyle, style.text]}
+          />
         );
       }
 
@@ -141,14 +138,11 @@ function getMarkdownRules(
       }
 
       return (
-        <Text
-          selectable={true}
-          key={node.key}
-          style={[inheritedStyles, textStyle, style.text, styles.link]}
-          onPress={() => Linking.openURL(node.attributes.href)}
-        >
+        <MarkdownHyperLink
+          uri={node.attributes.href}
+          style={[inheritedStyles, textStyle, style.text]}>
           {content}
-        </Text>
+        </MarkdownHyperLink>
       );
     },
     list_item: (

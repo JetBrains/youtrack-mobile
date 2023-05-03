@@ -15,7 +15,6 @@ import {Attachment} from 'types/CustomFields';
 import {MarkdownNode} from 'types/Markdown';
 import {UITheme} from 'types/Theme';
 import {User} from 'types/User';
-import MarkdownHyperLink from 'components/wiki/markdown/markdown-hyper-link';
 
 type Matcher = { regex: RegExp, mention: Mention, startPos: number | undefined };
 type TextNodes = (string | React.ReactNode)[] | string;
@@ -110,8 +109,8 @@ const MarkdownText = ({
         if (match?.[0]) {
           mdParts = match[0].length === str.length
             ? [<MarkdownMentionWithUserCard mention={it.mention} style={style}/>]
-            : str.split(it.regex).map(
-              (s: string) => <MarkdownHyperLink uri={s} style={style}/> || <MarkdownMentionWithUserCard mention={it.mention} style={style}/>
+            : str.split(it.regex).filter(i => i !== undefined).map(
+              (s: string) => s === '' ? <MarkdownMentionWithUserCard mention={it.mention} style={style}/> : s
             );
         }
         return [...arr, ...mdParts];

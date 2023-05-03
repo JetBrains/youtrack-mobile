@@ -92,7 +92,6 @@
     "react-native-gesture-handler": "^2.9.0",
     "react-native-google-analytics": "1.3.2",
     "react-native-htmlview": "0.16.0",
-    "react-native-hyperlink": "anisimov74/react-native-hyperlink.git#aaa91f8",
     "react-native-image-crop-picker": "^0.38.1",
     "react-native-image-gallery": "2.1.5",
     "react-native-image-progress": "1.2.0",
