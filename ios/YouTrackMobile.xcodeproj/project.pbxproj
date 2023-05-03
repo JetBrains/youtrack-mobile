@@ -202,7 +202,8 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				EE8F4A8155759AF6BD791CFE /* [CP] Embed Pods Frameworks */,
 				7AF8E23357090BE137D09391 /* [CP] Copy Pods Resources */,
-				1E24D3782A026266000BEFEC /* ShellScript */,
+				3651E87BF2C94591829866D7 /* Upload source maps to Bugsnag */,
+				1E24D3782A026266000BEFEC /* Stripe Hermes bitcode */,
 			);
 			buildRules = (
 			);
@@ -302,7 +303,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-YouTrackMobile-YouTrackMobileTests/Pods-YouTrackMobile-YouTrackMobileTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		1E24D3782A026266000BEFEC /* ShellScript */ = {
+		1E24D3782A026266000BEFEC /* Stripe Hermes bitcode */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
 			files = (
@@ -311,13 +312,28 @@
 			);
 			inputPaths = (
 			);
+			name = "Stripe Hermes bitcode";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Stripping bitcode for Hermes, since bitcode is depricated\nBITCODE_STRIP=\"$(xcrun -sdk iphoneos --find bitcode_strip)\"\n\nfunction strip_framework_bitcode {\n    FRAMEWORK=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Frameworks/$1.framework/$1\"\n    \"${BITCODE_STRIP}\" -r \"${FRAMEWORK}\" -o \"${FRAMEWORK}\" \n}\n\nstrip_framework_bitcode \"hermes\"\n";
+			shellScript = "# Stripe Hermes bitcode, since bitcode is depricated\nBITCODE_STRIP=\"$(xcrun -sdk iphoneos --find bitcode_strip)\"\n\nfunction strip_framework_bitcode {\n    FRAMEWORK=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Frameworks/$1.framework/$1\"\n    \"${BITCODE_STRIP}\" -r \"${FRAMEWORK}\" -o \"${FRAMEWORK}\" \n}\n\nstrip_framework_bitcode \"hermes\"\n";
+		};
+		3651E87BF2C94591829866D7 /* Upload source maps to Bugsnag */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Upload source maps to Bugsnag";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "SOURCE_MAP=\"$TMPDIR/$(md5 -qs \"$CONFIGURATION_BUILD_DIR\")-main.jsbundle.map\" ../node_modules/@bugsnag/react-native/bugsnag-react-native-xcode.sh\n";
 		};
 		5822F9D3D64634C4D0CCE0E2 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
