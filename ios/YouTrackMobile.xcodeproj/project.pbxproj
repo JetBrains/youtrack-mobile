@@ -319,7 +319,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Stripe Hermes bitcode, since bitcode is depricated\nBITCODE_STRIP=\"$(xcrun -sdk iphoneos --find bitcode_strip)\"\n\nfunction strip_framework_bitcode {\n    FRAMEWORK=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Frameworks/$1.framework/$1\"\n    \"${BITCODE_STRIP}\" -r \"${FRAMEWORK}\" -o \"${FRAMEWORK}\" \n}\n\nstrip_framework_bitcode \"hermes\"\n";
+			shellScript = "if [[ \"${__IS_NOT_SIMULATOR}\" == \"NO\" ]]\nthen\n    # Stripping bitcode for the real devices only, since it's depricated\n    exit 0 \nfi\n\nBITCODE_STRIP=\"$(xcrun -sdk iphoneos --find bitcode_strip)\"\n\nfunction strip_framework_bitcode {\n    FRAMEWORK=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Frameworks/$1.framework/$1\"\n    \"${BITCODE_STRIP}\" -r \"${FRAMEWORK}\" -o \"${FRAMEWORK}\" \n}\n\nstrip_framework_bitcode \"hermes\"\n";
 		};
 		3651E87BF2C94591829866D7 /* Upload source maps to Bugsnag */ = {
 			isa = PBXShellScriptBuildPhase;
