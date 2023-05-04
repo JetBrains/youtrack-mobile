@@ -10,12 +10,9 @@ import UrlParse from 'url-parse';
 
 import HTML from './markdown/markdown-html';
 import MarkdownHyperLink from 'components/wiki/markdown/markdown-hyper-link';
-import MarkdownMention from 'components/wiki/markdown/markdown-mention';
-import Router from 'components/router/router';
 import {hasMimeType} from 'components/mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from 'components/icon/icon';
 import {isMarkdownNodeContainsCheckbox} from 'components/wiki/markdown-helper';
-import {issueIdRegExp} from 'components/wiki/util/patterns';
 import {MarkdownCodeHighlighter, MarkdownEmbedLink, MarkdownText} from 'components/wiki/markdown';
 
 import styles from './youtrack-wiki.styles';
@@ -222,7 +219,6 @@ function getMarkdownRules(
       const isChecked: boolean = node.attributes.checked === true;
       const position: number = node.attributes.position;
       const CheckboxIcon = isChecked ? IconCheckboxChecked : IconCheckboxBlank;
-      const text: string = node.content.trim();
       const onPress = () => onCheckboxUpdate?.(!isChecked, position);
       return (
         <React.Fragment key={node.key}>
@@ -238,29 +234,14 @@ function getMarkdownRules(
               ]}
             />
           </Text>
-          <Text
+          <MarkdownText
+            attachments={attachments}
             key={node.key}
-            style={[inheritedStyles, styles.checkboxRow]}
-            onPress={onPress}
-          >
-            <Text
-              selectable={true}
-              style={[
-                inheritedStyles,
-                style.text,
-                textStyle,
-              ]}
-            >
-              {issueIdRegExp.test(text)
-                ? <MarkdownMention
-                  mention={text}
-                  onPress={() => Router.Issue({issueId: text.trim()})}
-                  style={[inheritedStyles, style.text, styles.link]}
-                />
-                : text}
-              {' '}
-            </Text>
-          </Text>
+            mentions={mentions}
+            node={node}
+            style={[textStyle, inheritedStyles, styles.checkboxRow]}
+            uiTheme={uiTheme}
+          />
         </React.Fragment>
       );
     },

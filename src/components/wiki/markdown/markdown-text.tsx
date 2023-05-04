@@ -17,7 +17,7 @@ import {UITheme} from 'types/Theme';
 import {User} from 'types/User';
 
 type Matcher = { regex: RegExp, mention: Mention, startPos: number | undefined };
-type TextNodes = (string | React.ReactNode)[] | string;
+type TextNodes = (string | React.ReactNode)[];
 
 
 const getMatchRegex = (mention: Mention): RegExp => {
@@ -78,7 +78,7 @@ const MarkdownText = ({
 
   const {articles = [], issues = [], users = []} = mentions || {};
   const mergedMentions = [...articles, ...issues, ...users];
-  let textWithMentions: TextNodes = text;
+  let textWithMentions: TextNodes = [text];
 
   if (mergedMentions.length !== 0) {
     textWithMentions = text.split(/(\s+)/).reduce((akk: TextNodes, str: string) => {
@@ -93,7 +93,7 @@ const MarkdownText = ({
             );
         }
         return [...arr, ...mdParts];
-      }, []) : str;
+      }, []) : [str];
 
       return str ? [...akk, ...(textNodes.length > 0 ? textNodes : [str]), ''] : akk;
     }, []);
@@ -104,7 +104,7 @@ const MarkdownText = ({
       key={node.key}
       style={style}
     >
-      {textWithMentions}
+      {textWithMentions.filter(Boolean)}
     </Text>
   );
 };
