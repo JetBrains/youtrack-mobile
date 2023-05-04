@@ -4,7 +4,7 @@ import {Text, TextStyle} from 'react-native';
 import * as regExps from 'components/wiki/util/patterns';
 import {doSortBy} from 'components/search/sorting';
 import {hasMimeType} from 'components/mime-type/mime-type';
-import {hasType, ResourceTypes} from 'components/api/api__resource-types';
+import {hasType} from 'components/api/api__resource-types';
 import {imageEmbedRegExp, imageHeight, imageWidth} from 'components/wiki/util/patterns';
 import {MarkdownEmbedLink} from 'components/wiki/markdown/index';
 import {MarkdownMentionWithUserCard} from 'components/wiki/markdown/markdown-mention';
@@ -78,33 +78,12 @@ const MarkdownText = ({
 
   const {articles = [], issues = [], users = []} = mentions || {};
   const mergedMentions = [...articles, ...issues, ...users];
-  let textWithMentions: TextNodes;
+  let textWithMentions: TextNodes = text;
 
-  if (mergedMentions.length === 0) {
-    textWithMentions = text.split(' ').reduce((akk: TextNodes, str: string) => {
-      const matchedIssue: RegExpMatchArray | null = str.match(regExps.issueIdRegExp);
-      const matchedUser: RegExpMatchArray | null = str.match(regExps.userLoginRegExp);
-      const userLogin: string | undefined = matchedUser?.[0];
-      const idReadable: string | undefined = matchedIssue?.[0];
-      const mention = idReadable || userLogin ? {
-        $type: idReadable ? ResourceTypes.ISSUE : userLogin ? ResourceTypes.USER : '',
-        idReadable,
-        login: userLogin?.slice(1),
-        name: userLogin?.slice(1),
-        id: idReadable || userLogin,
-      } : null;
-      return [
-        ...akk,
-      ...(mention ? [<MarkdownMentionWithUserCard mention={mention} style={style}/>] : [str]),
-        ' ',
-      ];
-    }, []);
-
-  } else {
-
-    textWithMentions = text.split(' ').reduce((akk: TextNodes, str: string) => {
-      const textNodes: TextNodes = createSortedRegexps(mergedMentions, text).reduce((arr: TextNodes, it: Matcher) => {
-      const match: RegExpMatchArray | null = str.match(it.regex);
+  if (mergedMentions.length !== 0) {
+    textWithMentions = text.split(/(\s+)/).reduce((akk: TextNodes, str: string) => {
+      const textNodes: TextNodes = str ? createSortedRegexps(mergedMentions, text).reduce((arr: TextNodes, it: Matcher) => {
+        const match: RegExpMatchArray | null = str.match(it.regex);
         let mdParts: any[] = [];
         if (match?.[0]) {
           mdParts = match[0].length === str.length
@@ -114,9 +93,9 @@ const MarkdownText = ({
             );
         }
         return [...arr, ...mdParts];
-      }, []);
+      }, []) : str;
 
-      return str ? [...akk, ...(textNodes.length > 0 ? textNodes : [str]), ' '] : akk;
+      return str ? [...akk, ...(textNodes.length > 0 ? textNodes : [str]), ''] : akk;
     }, []);
   }
 

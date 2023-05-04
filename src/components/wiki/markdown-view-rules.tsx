@@ -15,6 +15,7 @@ import Router from 'components/router/router';
 import {hasMimeType} from 'components/mime-type/mime-type';
 import {IconCheckboxBlank, IconCheckboxChecked} from 'components/icon/icon';
 import {isMarkdownNodeContainsCheckbox} from 'components/wiki/markdown-helper';
+import {issueIdRegExp} from 'components/wiki/util/patterns';
 import {MarkdownCodeHighlighter, MarkdownEmbedLink, MarkdownText} from 'components/wiki/markdown';
 
 import styles from './youtrack-wiki.styles';
@@ -34,7 +35,6 @@ export type Mentions = {
   issues: AnyIssue[];
   users: User[];
 };
-const issueIdRegExp: RegExp = /([a-zA-Z]+-)+\d+/g;
 const imageRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
 const htmlTagRegex = /(<([^>]+)>)/gi;
 const googleCalendarURL: RegExp = /^http(s?):\/\/calendar.google.([a-z]{2,})\/calendar/i;

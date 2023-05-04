@@ -19,8 +19,6 @@ const createUserMentionRegexp = (mention: string): RegExp => {
   return new RegExp(`${usrPrefix}${escapeRegExp(mention)}${usrSuffix}`, 'igu');
 };
 
-const userLoginRegExp = /@[\w\d]+([._])?[\w\d]+/gui;
-
 const createMentionRegExp = (mention: string): RegExp => {
   const punctuationMarks = ['.', ',', '?', '!', ':', '#', '_'].join('');
   const prefix = `(?:[\\s${punctuationMarks}([]|^)`;
@@ -41,7 +39,6 @@ export {
   issueIdRegExp,
   linebreakRegex,
   mdCheckboxRegex,
-  userLoginRegExp,
   whiteSpacesInHTMLRegex,
   whiteSpacesRegex,
 };
