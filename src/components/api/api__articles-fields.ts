@@ -20,6 +20,7 @@ export const articleFields: any = toField([
   'updated',
   'hasStar',
   'hasUnpublishedChanges',
+  'comments(id)',
   articleChildrenAndSubChildren,
   {
     attachments: issueFields.attachments,

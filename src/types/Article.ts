@@ -1,4 +1,4 @@
-import type {Attachment, IssueProject} from './CustomFields';
+import type {Attachment, IssueComment, IssueProject} from './CustomFields';
 import type {AnyIssue} from './Issue';
 import type {User} from './User';
 import type {Visibility} from './Visibility';
@@ -6,6 +6,7 @@ export type Article = {
   $type: string;
   attachments: Attachment[];
   childArticles: Article[];
+  comments?: IssueComment[];
   content: string;
   created: number;
   hasStar: boolean;

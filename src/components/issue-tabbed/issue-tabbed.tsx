@@ -1,13 +1,16 @@
 import React, {PureComponent} from 'react';
-import {Text, Dimensions, View} from 'react-native';
-// @ts-expect-error: module throws on type check
-import {TabView, TabBar} from 'react-native-tab-view';
-import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
+import {Text, Dimensions, View, EventSubscription} from 'react-native';
+
 import {i18n} from 'components/i18n/i18n';
+import {IconComment} from 'components/icon/icon';
 import {isSplitView} from '../responsive/responsive-helper';
+import {TabView, TabBar} from 'react-native-tab-view';
+
 import styles from './issue-tabbed.style';
+
 import type {TabRoute} from 'types/Issue';
 import type {UITheme, UIThemeColors} from 'types/Theme';
+
 export type IssueTabbedState = {
   index: number;
   routes: TabRoute[];
@@ -15,6 +18,8 @@ export type IssueTabbedState = {
   isSplitView: boolean;
   navigateToActivity: boolean;
 };
+
+
 export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
   initialWindowDimensions: any = Dimensions.get('window');
   tabRoutes: TabRoute[] = [
@@ -70,8 +75,21 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
     });
   };
 
-  getRouteBadge(route: TabRoute): any {
-    return null;
+  getRouteBadge(isVisible: boolean, children: string | React.ReactNode): any {
+    if (!isVisible) {
+      return null;
+    }
+
+    return children ? (
+      <View style={styles.tabBadge}>
+        <IconComment
+          size={17}
+          color={styles.tabBadgeIcon.color}
+          style={styles.tabBadgeIcon}
+        />
+        <Text style={styles.tabBadgeText}>{children}</Text>
+      </View>
+    ) : null;
   }
 
   renderTabBar(

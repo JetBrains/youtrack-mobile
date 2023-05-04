@@ -50,6 +50,7 @@ import type {RootState} from 'reducers/app-reducer';
 import type {Theme, UITheme, UIThemeColors} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
 import type {Visibility} from 'types/Visibility';
+import {TabRoute} from 'types/Issue';
 
 type Props = ArticleState & {
   articlePlaceholder: ArticleEntity;
@@ -141,6 +142,13 @@ class Article extends IssueTabbed<Props, State> {
   getMainTabText(): string {
     return i18n('Content');
   }
+
+  getRouteBadge(
+    route: TabRoute,
+  ): React.ReactElement<React.ComponentProps<typeof View>, typeof View> | null {
+    return super.getRouteBadge(route.title === this.tabRoutes[1].title, this.props?.article?.comments?.length);
+  }
+
 
   loadArticle = (articleId: string, reset: boolean) =>
     this.props.loadArticle(articleId, reset);

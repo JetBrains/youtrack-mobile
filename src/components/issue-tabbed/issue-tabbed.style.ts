@@ -50,4 +50,25 @@ export default EStyleSheet.create({
   icon: {
     color: '$icon',
   },
+  tabBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: UNIT / 1.75,
+    paddingVertical: UNIT / 4,
+    borderRadius: UNIT / 2,
+    backgroundColor: '$greyBackground',
+  },
+  tabBadgeText: {
+    paddingLeft: UNIT / 2,
+    color: '$icon',
+    ...Platform.select({
+      android: {
+        lineHeight: MAIN_FONT_SIZE + 1,
+      },
+    }),
+  },
+  tabBadgeIcon: {
+    color: '$iconAccent',
+  },
 });

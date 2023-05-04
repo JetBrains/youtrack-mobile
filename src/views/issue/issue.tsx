@@ -28,7 +28,6 @@ import {
   IconBack,
   IconCheck,
   IconClose,
-  IconComment,
   IconDrag,
   IconMoreOptions,
 } from 'components/icon/icon';
@@ -149,21 +148,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   getRouteBadge(
     route: TabRoute,
   ): React.ReactElement<React.ComponentProps<typeof View>, typeof View> | null {
-    if (route.title !== this.tabRoutes[1].title) {
-      return null;
-    }
-
-    const {commentsCounter} = this.props;
-    return commentsCounter > 0 ? (
-      <View style={styles.tabBadge}>
-        <IconComment
-          size={17}
-          color={styles.tabBadgeIcon.color}
-          style={styles.tabBadgeIcon}
-        />
-        <Text style={styles.tabBadgeText}>{commentsCounter}</Text>
-      </View>
-    ) : null;
+    return super.getRouteBadge(route.title === this.tabRoutes[1].title, this.props?.commentsCounter);
   }
 
   async loadIssue(issuePlaceholder: Partial<IssueFull> | null | undefined) {

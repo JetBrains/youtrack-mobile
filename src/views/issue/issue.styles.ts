@@ -1,9 +1,7 @@
-import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {issueIdResolved} from 'components/common-styles/issue';
 import {
   headerTitle,
-  MAIN_FONT_SIZE,
   mainText,
   secondaryText,
 } from 'components/common-styles';
@@ -78,27 +76,6 @@ export default EStyleSheet.create({
   },
   alignedRight: {
     marginRight: UNIT,
-  },
-  tabBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: UNIT / 1.75,
-    paddingVertical: UNIT / 4,
-    borderRadius: UNIT / 2,
-    backgroundColor: '$greyBackground',
-  },
-  tabBadgeText: {
-    paddingLeft: UNIT / 2,
-    color: '$icon',
-    ...Platform.select({
-      android: {
-        lineHeight: MAIN_FONT_SIZE + 1,
-      },
-    }),
-  },
-  tabBadgeIcon: {
-    color: '$iconAccent',
   },
   issueTopActions: {
     flexDirection: 'row',
