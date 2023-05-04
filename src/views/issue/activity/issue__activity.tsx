@@ -97,7 +97,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   constructor(props: IssueActivityProps) {
     super(props);
     this.goOnlineSubscription = addListenerGoOnline(() => {
-      this.load(this.props.issuePlaceholder.id);
+      this.load(this.props.issuePlaceholder?.id);
     });
   }
 
@@ -126,8 +126,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   }
 
   load = (issueId?: string) => {
-    this.loadIssueActivities(false, issueId);
-    this.loadDraftComment();
+    if (issueId) {
+      this.loadIssueActivities(false, issueId);
+      this.loadDraftComment();
+    }
   };
   loadDraftComment = async () => {
     const draft: IssueComment | null = await this.props.getDraftComment();
