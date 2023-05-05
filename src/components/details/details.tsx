@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
-import {HIT_SLOP} from 'components/common-styles/button';
+import animation from 'components/animation/animation';
+import {HIT_SLOP, SECONDARY_FONT_SIZE} from 'components/common-styles';
 import {IconCaretDownUp} from 'components/icon/icon';
-import {SECONDARY_FONT_SIZE} from 'components/common-styles';
 
 import styles from './details.styles';
 
@@ -16,22 +16,25 @@ type Props = {
   toggler?: string | null | undefined;
 };
 
-const Details = (props: Props): React.ReactNode => {
-  const {toggler = 'Details'} = props;
-  const [expanded, updateExpanded] = useState(false);
+const Details = (props: Props): JSX.Element => {
+  const {toggler = 'Details', title, style, renderer} = props;
+  const [expanded, updateExpanded] = React.useState(false);
   return (
     <>
       <View style={styles.container}>
-        {!!props.title && (
-          <Text style={styles.title}>{`${props.title}: `}</Text>
+        {!!title && (
+          <Text style={styles.title}>{`${title}: `}</Text>
         )}
         <TouchableOpacity
           testID="details"
           style={styles.button}
-          onPress={() => updateExpanded(!expanded)}
+          onPress={() => {
+            animation.layoutAnimation();
+            updateExpanded(!expanded);
+          }}
           hitSlop={HIT_SLOP}
         >
-          <Text style={[styles.toggle, props.style]}>
+          <Text style={[styles.toggle, style]}>
             <IconCaretDownUp
               size={SECONDARY_FONT_SIZE - 4}
               isDown={!expanded}
@@ -42,12 +45,9 @@ const Details = (props: Props): React.ReactNode => {
         </TouchableOpacity>
       </View>
 
-      {expanded && props.renderer()}
+      {expanded && renderer()}
     </>
   );
 };
 
-export default React.memo<Props>(Details) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(Details);
