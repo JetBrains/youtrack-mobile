@@ -30,6 +30,10 @@ const Avatar = (props: Props) => {
     renderSVG: false,
   });
 
+  React.useEffect(() => {
+    setState((st: State) => ({...st, renderDefault: !source.uri}));
+  }, [source.uri]);
+
 
   return (
     <View
