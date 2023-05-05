@@ -61,7 +61,7 @@ msgstr "Accept"
 msgid "Activity"
 msgstr "Activity"
 
-#: src/views/issue/activity/issue__activity.tsx:163
+#: src/views/issue/activity/issue__activity.tsx:165
 msgid "Activity Settings"
 msgstr "Activity Settings"
 
@@ -354,7 +354,7 @@ msgstr "Decline"
 #: src/views/article/arcticle-helper.ts:3
 #: src/views/article/article__activity-stream.tsx:241
 #: src/views/issue/activity/issue__activity-stream.tsx:164
-#: src/views/issue/activity/issue__activity.tsx:277
+#: src/views/issue/activity/issue__activity.tsx:279
 #: src/views/issue/activity/issue-activity__actions.ts:419
 #: src/views/issue/activity/issue-activity__comment-actions.ts:332
 #: src/views/issue/activity/issue-activity__comment-actions.ts:404
@@ -417,7 +417,7 @@ msgstr "Drafts"
 #: src/views/article/arcticle-actions.ts:278
 #: src/views/article/article__activity-stream.tsx:161
 #: src/views/issue/activity/issue__activity-stream.tsx:97
-#: src/views/issue/activity/issue__activity.tsx:266
+#: src/views/issue/activity/issue__activity.tsx:268
 #: src/views/issue/activity/issue-activity__comment-actions.ts:394
 #: src/views/issue/issue-base-actions-creater.ts:647
 msgid "Edit"
