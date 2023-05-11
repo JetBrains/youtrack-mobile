@@ -20,7 +20,7 @@ describe('<Accounts/>', () => {
     accountsMock = [createAccountMock(), createAccountMock()];
   });
   const testIdWrapper = 'accounts';
-  const testIdAccountElement = 'accountsAccount';
+  const testIdAccountElement = 'test:id/accountsAccount';
   const testIdAddAccountButton = 'test:id/accountsAddAccount';
   describe('Account', () => {
     beforeEach(() => {

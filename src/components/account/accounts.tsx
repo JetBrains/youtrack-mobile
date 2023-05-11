@@ -85,7 +85,8 @@ export default class Accounts extends PureComponent<Props, void> {
 
     return (
       <View
-        testID="accountsAccount"
+        testID="test:id/accountsAccount"
+        accessible={true}
         key={`${config?.backendUrl}_${account.creationTimestamp || ''}`}
         style={[styles.accountProfile, this.props.style]}
       >
