@@ -156,7 +156,7 @@ const IssueCommentEdit = (props: Props) => {
         const timer = setTimeout(() => {
           props.onCommentChange(draft, isAttachmentChange);
           changeState({timer: null});
-        }, 300);
+        }, 1000);
         changeState({timer});
       },
     [props],
