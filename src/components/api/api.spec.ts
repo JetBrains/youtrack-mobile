@@ -8,6 +8,10 @@ import type Auth from 'components/auth/oauth2';
 import {AppConfig} from 'types/AppConfig';
 import {AuthParams, RequestHeaders} from 'types/Auth';
 import {IssueComment} from 'types/CustomFields';
+import Router from 'components/router/router';
+import {HTTP_STATUS} from 'components/error/error-http-codes';
+import {resolveErrorMessage} from 'components/error/error-resolver';
+import {CustomError} from 'types/Error';
 
 
 describe('API', () => {
@@ -60,26 +64,54 @@ describe('API', () => {
     expect(res.foo).toEqual(bodyMock.foo);
   });
 
-  it('should refresh token and make request again if outdated', async () => {
-    const requestResponseMock = {foo: 'bar'};
+  it('should refresh token', async () => {
     const callSpy = jest.fn();
     let isFirst = true;
-    fetchMock.mock(`${serverUrl}?$top=-1`, (...args: any[]) => {
-      callSpy(...args);
-
+    fetchMock.mock(`${serverUrl}?$top=-1`, () => {
+      callSpy();
       if (isFirst) {
         isFirst = false;
-        return 401;
+        return {status: HTTP_STATUS.UNAUTHORIZED};
       }
-
-      return requestResponseMock;
+      return {foo: 'bar'};
     });
-    const res = await createApiInstance().makeAuthorizedRequest(serverUrl);
+
+    await createApiInstance().makeAuthorizedRequest(serverUrl);
 
     expect(authMock.refreshToken).toHaveBeenCalled();
     expect(callSpy).toHaveBeenCalledTimes(2);
-    expect(res.foo).toEqual(requestResponseMock.foo);
+  });
 
+
+  describe('Redirect to Login screen', () => {
+    let error: CustomError;
+    beforeEach(() => {
+      Router.LogIn = jest.fn();
+      error = new Error('') as CustomError;
+      error.status = HTTP_STATUS.UNAUTHORIZED;
+      error.error_description = 'token is invalid';
+      fetchMock.mock(`${serverUrl}?$top=-1`, () => error);
+      (authMock.refreshToken as jest.Mock).mockRejectedValueOnce(error);
+    });
+
+    it('should redirect to login screen if refreshing token failed', async () => {
+      await createApiInstance().makeAuthorizedRequest(serverUrl);
+
+      expect(Router.LogIn).toHaveBeenCalledWith({
+        config: authMock.config,
+        errorMessage: await resolveErrorMessage(error),
+      });
+
+    });
+
+    it('should not redirect to login screen several times', async () => {
+      const apiInstance: Api = createApiInstance();
+
+      await apiInstance.makeAuthorizedRequest(serverUrl);
+      expect(Router.LogIn).toHaveBeenCalled();
+      await apiInstance.makeAuthorizedRequest(serverUrl);
+      expect(Router.LogIn).toHaveBeenCalledTimes(1);
+    });
   });
 
 

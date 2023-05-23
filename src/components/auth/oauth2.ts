@@ -1,9 +1,10 @@
-import log from '../log/log';
+import log from 'components/log/log';
 import {AuthBase} from './auth-base';
 import {doAuthorize, normalizeAuthParams, refreshToken} from './oauth2-helper';
-import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
-import {getAuthParamsKey} from '../storage/storage__oauth';
-import {logEvent} from '../log/log-helper';
+import {getAuthParamsKey} from 'components/storage/storage__oauth';
+import {getErrorMessage} from 'components/error/error-resolver';
+import {logEvent} from 'components/log/log-helper';
+
 import type {AppConfig} from 'types/AppConfig';
 import type {AuthParams, OAuthParams} from 'types/Auth';
 
@@ -46,17 +47,9 @@ export default class OAuth2 extends AuthBase {
         prevAuthParams.refresh_token,
       );
       log.info('OAuth2 token refresh: success', authParams);
-    } catch (e) {
-      const message: string = `OAuth2 token refresh: failed. ${e.message || e}`;
-      logEvent({
-        message,
-        isError: true,
-      });
-
-      if (e.error === 'banned_user') {
-        e.error_description = ERROR_MESSAGE_DATA.USER_BANNED.title;
-      }
-
+    } catch (e: any) {
+      const message: string = `OAuth2 token refresh failed. ${getErrorMessage(e) || e}`;
+      logEvent({message, isError: true});
       throw e;
     }
 
@@ -73,7 +66,8 @@ export default class OAuth2 extends AuthBase {
     return authParams;
   }
 
-  isTokenInvalid(): boolean {
+
+  isTokenOutdated(): boolean {
     const authParams: AuthParams | null | undefined = this.getAuthParams();
 
     if (!authParams?.access_token || !authParams?.accessTokenExpirationDate) {

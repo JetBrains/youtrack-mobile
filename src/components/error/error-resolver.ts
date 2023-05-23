@@ -53,7 +53,7 @@ export async function resolveErrorMessage(
 }
 export function getErrorMessage(
   error: CustomError | null | undefined,
-): string | null | undefined {
+): string {
   return (
     error?.message ||
     error?.localizedDescription ||

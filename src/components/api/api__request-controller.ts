@@ -1,18 +1,20 @@
-import {routeMap} from '../../app-routes';
-let requestsMap: {[key in keyof typeof routeMap]?: Set<AbortController>};
+import {routeMap} from 'app-routes';
+
+type RouteName = keyof typeof routeMap;
+type RequestsMap = { [key in RouteName]?: Set<AbortController> };
+export type RequestController = { [key in RouteName]?: AbortController };
+
+
+let requestsMap: RequestsMap;
+
 const requestController: {
-  add: (
-    routeId: keyof typeof routeMap,
-    abortController: AbortController,
-  ) => void;
+  add: (routeId: RouteName, abortController: AbortController) => void;
+  delete: (routeId: RouteName, abortController: AbortController) => void;
+  init: () => RequestsMap;
   cancelIssuesRequests: () => void;
-  delete: (
-    routeId: keyof typeof routeMap,
-    abortController: AbortController,
-  ) => void;
-  init: () => typeof requestsMap;
+  cancelAllRequests: () => void;
 } = {
-  init: (): typeof requestsMap => {
+  init: (): RequestsMap => {
     requestsMap = {
       [routeMap.AgileBoard]: new Set(),
       [routeMap.Article]: new Set(),
@@ -23,37 +25,42 @@ const requestController: {
     };
     return requestsMap;
   },
-  add: (
-    routeId: keyof typeof routeMap,
-    abortController: AbortController,
-  ): void => {
-    requestsMap[routeId].add(abortController);
+  add: (routeId: RouteName, abortController: AbortController): void => {
+    requestsMap?.[routeId]?.add(abortController);
   },
-  delete: (
-    routeId: keyof typeof routeMap,
-    abortController: AbortController,
-  ): void => {
-    if (requestsMap[routeId].has(abortController)) {
-      requestsMap[routeId].delete(abortController);
+  delete: (routeId: RouteName, abortController: AbortController): void => {
+    if (requestsMap?.[routeId]?.has(abortController)) {
+      requestsMap?.[routeId]?.delete(abortController);
     }
   },
   cancelIssuesRequests: (): void => {
-    requestsMap[routeMap.Issues].forEach((it: AbortController) => {
+    // @ts-ignore
+    requestsMap?.[routeMap.Issues]?.forEach((it: AbortController) => {
       it.abort();
     });
-    requestsMap[routeMap.Issues].clear();
+    // @ts-ignore
+    requestsMap?.[routeMap.Issues]?.clear();
+  },
+  cancelAllRequests: (): void => {
+    Object.keys(requestsMap).forEach((routeName: string) => {
+      // @ts-ignore
+      requestsMap?.[routeName]?.forEach((it: AbortController) => {
+        it.abort();
+      });
+      // @ts-ignore
+      requestsMap?.[routeName]?.clear();
+    });
   },
 };
 
 function fetch2(
   url: string,
   params: any,
-  controller?: {[key in keyof typeof routeMap]?: AbortController},
+  controller?: RequestController,
 ): Promise<Response> {
-  const routeId: keyof typeof routeMap | null | undefined =
-    controller && Object.keys(controller)[0];
 
-  if (controller && routeId) {
+  if (controller) {
+    const routeId: RouteName = Object.keys(controller)[0] as RouteName;
     requestController.add(routeId, controller[routeId]);
   }
 
