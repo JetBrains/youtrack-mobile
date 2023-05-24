@@ -69,7 +69,7 @@ msgstr "Activity Settings"
 msgid "Add project to favorites"
 msgstr "Add project to favorites"
 
-#: src/views/article/article__activity-stream.tsx:198
+#: src/views/article/article__activity-stream.tsx:197
 #: src/views/issue/activity/issue__activity-stream.tsx:119
 msgid "Add reaction"
 msgstr "Add reaction"
@@ -280,8 +280,8 @@ msgstr "Content revised"
 
 #: src/components/user/user-card.tsx:120
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx:158
-#: src/views/article/article__activity-stream.tsx:210
-#: src/views/article/article__activity-stream.tsx:219
+#: src/views/article/article__activity-stream.tsx:209
+#: src/views/article/article__activity-stream.tsx:218
 #: src/views/issue/activity/issue__activity-stream.tsx:134
 #: src/views/issue/activity/issue-activity__comment-actions.ts:380
 #: src/views/issue/issue-base-actions-creater.ts:640
@@ -298,7 +298,7 @@ msgid "Copy field text"
 msgstr "Copy field text"
 
 #: src/views/article/arcticle-actions.ts:641
-#: src/views/article/article__activity-stream.tsx:215
+#: src/views/article/article__activity-stream.tsx:214
 #: src/views/issue/activity/issue__activity-stream.tsx:139
 #: src/views/issue/activity/issue-activity__comment-actions.ts:384
 #: src/views/issue/issue-base-actions-creater.ts:636
@@ -310,7 +310,7 @@ msgstr "Copy link"
 msgid "Copy link to article"
 msgstr "Copy link to article"
 
-#: src/views/article/article__activity-stream.tsx:206
+#: src/views/article/article__activity-stream.tsx:205
 #: src/views/issue/activity/issue__activity-stream.tsx:130
 #: src/views/issue/activity/issue-activity__comment-actions.ts:376
 #: src/views/issue/issue-base-actions-creater.ts:730
@@ -352,7 +352,7 @@ msgstr "Decline"
 #: src/views/article/arcticle-actions.ts:304
 #: src/views/article/arcticle-actions.ts:655
 #: src/views/article/arcticle-helper.ts:3
-#: src/views/article/article__activity-stream.tsx:241
+#: src/views/article/article__activity-stream.tsx:240
 #: src/views/issue/activity/issue__activity-stream.tsx:164
 #: src/views/issue/activity/issue__activity.tsx:279
 #: src/views/issue/activity/issue-activity__actions.ts:419
@@ -415,7 +415,7 @@ msgid "Drafts"
 msgstr "Drafts"
 
 #: src/views/article/arcticle-actions.ts:278
-#: src/views/article/article__activity-stream.tsx:161
+#: src/views/article/article__activity-stream.tsx:160
 #: src/views/issue/activity/issue__activity-stream.tsx:97
 #: src/views/issue/activity/issue__activity.tsx:268
 #: src/views/issue/activity/issue-activity__comment-actions.ts:394
@@ -796,7 +796,7 @@ msgstr "removed a reaction"
 msgid "reopened the pull request"
 msgstr "reopened the pull request"
 
-#: src/views/article/article__activity-stream.tsx:190
+#: src/views/article/article__activity-stream.tsx:189
 #: src/views/issue/activity/issue__activity-stream.tsx:111
 msgid "Reply"
 msgstr "Reply"
@@ -867,8 +867,8 @@ msgid "Share"
 msgstr "Share"
 
 #: src/views/article/arcticle-actions.ts:631
-#: src/views/article/article__activity-stream.tsx:224
-#: src/views/article/article__activity-stream.tsx:231
+#: src/views/article/article__activity-stream.tsx:223
+#: src/views/article/article__activity-stream.tsx:230
 #: src/views/issue/activity/issue__activity-stream.tsx:147
 #: src/views/issue/activity/issue__activity-stream.tsx:154
 #: src/views/issue/issue-base-actions-creater.ts:627
