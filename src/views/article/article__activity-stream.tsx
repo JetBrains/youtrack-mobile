@@ -149,9 +149,8 @@ const ArticleActivityStream = (props: Props) => {
           message: 'Show article\'s comment actions',
           analyticsId: ANALYTICS_ARTICLE_PAGE_STREAM,
         });
-        const articleURL: string | undefined = (
-          activityId &&
-          `${getApi().config.backendUrl}/articles/${article.idReadable}#focus=Comments-${activityId}`
+        const getArticleURL: () => string = () => (
+          activityId ? `${getApi().config.backendUrl}/articles/${article.idReadable}#focus=Comments-${activityId}` : ''
         );
         return {
           menuTitle: '',
@@ -214,7 +213,7 @@ const ArticleActivityStream = (props: Props) => {
               actionKey: guid(),
               actionTitle: i18n('Copy link'),
               execute: () => {
-                Clipboard.setString(articleURL as string);
+                Clipboard.setString(getArticleURL());
                 usage.trackEvent(ANALYTICS_ARTICLE_PAGE_STREAM, 'Copy comment URL');
                 notify(i18n('Copied'));
               },
@@ -226,7 +225,7 @@ const ArticleActivityStream = (props: Props) => {
                 Share.share({
                   // url: articleURL as string,
                   // title: articleURL as string,
-                  message: articleURL as string,
+                  message: getArticleURL(),
                 }, {
                   dialogTitle: i18n('Share link'),
                 });
