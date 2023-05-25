@@ -16,31 +16,31 @@ import {
 import InputScrollView from 'react-native-input-scroll-view';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import {useDispatch} from 'react-redux';
-import AttachFileDialog from '../attach-file/attach-file-dialog';
-import AttachmentAddPanel from '../attachments-row/attachments-add-panel';
-import AttachmentsRow from '../attachments-row/attachments-row';
-import Header from '../header/header';
+import AttachFileDialog from 'components/attach-file/attach-file-dialog';
+import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
+import AttachmentsRow from 'components/attachments-row/attachments-row';
+import Header from 'components/header/header';
 import IconHourGlass from '@jetbrains/icons/hourglass.svg';
 import IconAttachment from '@jetbrains/icons/attachment.svg';
-import log from '../log/log';
-import Mentions from '../mentions/mentions';
-import ModalPanelBottom from '../modal-panel-bottom/modal-panel-bottom';
-import Router from '../router/router';
-import usage from '../usage/usage';
-import VisibilityControl from '../visibility/visibility-control';
-import {ANALYTICS_ISSUE_STREAM_SECTION} from '../analytics/analytics-ids';
+import log from 'components/log/log';
+import Mentions from 'components/mentions/mentions';
+import ModalPanelBottom from 'components/modal-panel-bottom/modal-panel-bottom';
+import Router from 'components/router/router';
+import usage from 'components/usage/usage';
+import VisibilityControl from 'components/visibility/visibility-control';
+import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
 import {
   composeSuggestionText,
   getSuggestWord,
-} from '../mentions/mension-helper';
-import {getAttachmentActions} from '../attachments-row/attachment-actions';
-import {hasType} from '../api/api__resource-types';
+} from 'components/mentions/mension-helper';
+import {getAttachmentActions} from 'components/attachments-row/attachment-actions';
+import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {IconArrowUp, IconCheck, IconClose, IconAdd} from '../icon/icon';
-import {ThemeContext} from '../theme/theme-context';
+import {ThemeContext} from 'components/theme/theme-context';
 import styles, {MIN_INPUT_SIZE} from './comment-edit.styles';
 import type {Attachment, IssueComment} from 'types/CustomFields';
-import type {AttachmentActions} from '../attachments-row/attachment-actions';
+import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
