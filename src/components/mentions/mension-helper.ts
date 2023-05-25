@@ -3,8 +3,8 @@ import type {User} from 'types/User';
 const getSuggestWord = (
   text: string,
   caret: number,
-): null | RegExp$matchResult | string => {
-  const match = /[\S@]+$/.exec(text.slice(0, caret));
+): string | null => {
+  const match: RegExpExecArray | null = /[\S@]+$/.exec(text.slice(0, caret));
   return match && match[0];
 };
 
@@ -12,7 +12,7 @@ const composeSuggestionText = (
   user: User,
   text: string = '',
   caret: number,
-): void | string => {
+): undefined | string => {
   const word: string | null | undefined = getSuggestWord(text, caret);
 
   if (word) {
