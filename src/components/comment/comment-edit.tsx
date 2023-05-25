@@ -252,12 +252,11 @@ const IssueCommentEdit = (props: Props) => {
 
     if (newText) {
       const updatedText: string = `${newText} `;
-      const updatedComment: EditingComment = {
+      setEditingComment({
         ...editingComment,
         text: updatedText,
-      };
+      });
       changeState({
-        editingComment: updatedComment,
         mentionsVisible: false,
         isVisibilityControlVisible: true,
       });
