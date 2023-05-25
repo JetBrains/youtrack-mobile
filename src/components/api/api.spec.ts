@@ -10,7 +10,6 @@ import {AuthParams, RequestHeaders} from 'types/Auth';
 import {IssueComment} from 'types/CustomFields';
 import Router from 'components/router/router';
 import {HTTP_STATUS} from 'components/error/error-http-codes';
-import {resolveErrorMessage} from 'components/error/error-resolver';
 import {CustomError} from 'types/Error';
 
 
@@ -20,7 +19,9 @@ describe('API', () => {
     token_type: 'token type',
     access_token: 'fake token',
   } as AuthParams;
-  let authMock: Auth;
+  let authMock: Auth & {
+    refreshToken: jest.Mock
+  };
 
   const createApiInstance = (auth: Auth = authMock) => new Api(auth);
 
@@ -82,36 +83,71 @@ describe('API', () => {
     expect(callSpy).toHaveBeenCalledTimes(2);
   });
 
+  it('should set `isRefreshingToken` to false when a request is successful', async () => {
+    const instance: Api = createApiInstance();
+    instance.isRefreshingToken = true;
+    fetchMock.mock(`${serverUrl}?$top=-1`, {});
 
-  describe('Redirect to Login screen', () => {
+    await instance.makeAuthorizedRequest(serverUrl);
+
+    expect(instance.isRefreshingToken).toEqual(false);
+  });
+
+
+  describe('Response Error and Re-login', () => {
     let error: CustomError;
+    let instance: Api;
     beforeEach(() => {
-      Router.LogIn = jest.fn();
+      Router.EnterServer = jest.fn();
+      instance = createApiInstance();
+
       error = new Error('') as CustomError;
       error.status = HTTP_STATUS.UNAUTHORIZED;
       error.error_description = 'token is invalid';
-      fetchMock.mock(`${serverUrl}?$top=-1`, () => error);
-      (authMock.refreshToken as jest.Mock).mockRejectedValueOnce(error);
+      error.json = jest.fn();
+    });
+
+    it('should not return a response', async () => {
+      prepareUnsuccesfulRequest();
+      await performRequest();
+
+      expect(error.json).not.toHaveBeenCalled();
     });
 
     it('should redirect to login screen if refreshing token failed', async () => {
-      await createApiInstance().makeAuthorizedRequest(serverUrl);
+      prepareUnsuccesfulRequest();
+      await performRequest();
 
-      expect(Router.LogIn).toHaveBeenCalledWith({
-        config: authMock.config,
-        errorMessage: await resolveErrorMessage(error),
-      });
+      expect(instance.isRefreshingToken).toEqual(true);
+      expect(Router.EnterServer).toHaveBeenCalledWith({serverUrl: authMock.config.backendUrl});
 
     });
 
     it('should not redirect to login screen several times', async () => {
-      const apiInstance: Api = createApiInstance();
+      prepareUnsuccesfulRequest();
 
-      await apiInstance.makeAuthorizedRequest(serverUrl);
-      expect(Router.LogIn).toHaveBeenCalled();
-      await apiInstance.makeAuthorizedRequest(serverUrl);
-      expect(Router.LogIn).toHaveBeenCalledTimes(1);
+      expect(instance.isRefreshingToken).toEqual(false);
+
+      await performRequest();
+      expect(Router.EnterServer).toHaveBeenCalled();
+      expect(instance.isRefreshingToken).toEqual(true);
+
+      await performRequest();
+      expect(instance.isRefreshingToken).toEqual(true);
+
+      expect(Router.EnterServer).toHaveBeenCalledTimes(1);
     });
+
+
+    function prepareUnsuccesfulRequest() {
+      fetchMock.mock(`${serverUrl}?$top=-1`, error);
+      authMock.refreshToken.mockRejectedValueOnce(error);
+    }
+    async function performRequest() {
+      try {
+        await instance.makeAuthorizedRequest(serverUrl);
+      } catch (e) {}
+    }
   });
 
 

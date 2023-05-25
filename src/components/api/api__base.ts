@@ -6,7 +6,6 @@ import Router from 'components/router/router';
 import {fetch2, RequestController, requestController} from './api__request-controller';
 import {handleRelativeUrl} from 'components/config/config';
 import {HTTP_STATUS} from 'components/error/error-http-codes';
-import {resolveErrorMessage} from 'components/error/error-resolver';
 
 import Auth from 'components/auth/oauth2';
 import type {AppConfig} from 'types/AppConfig';
@@ -155,35 +154,32 @@ export default class BaseAPI {
       );
     };
 
-    const response: any = await sendRequest();
+    let response: any = await sendRequest();
 
     if (this.isError(response)) {
-      if (response.status === HTTP_STATUS.UNAUTHORIZED || response.status === HTTP_STATUS.FORBIDDEN || this.isTokenOutdated()) {
-        log.debug('Token has expired');
-        try {
-          await this.auth.refreshToken();
-          await sendRequest();
-          log.debug('Repeat a request', url);
-          return;
-        } catch (e) {
-          if (!this.isRefreshingToken) {
-            this.isRefreshingToken = true;
-            const errorMessage: string = await resolveErrorMessage(e);
-            return Router.LogIn({
-              config: this.config,
-              errorMessage,
-            });
-          }
-          return;
-        }
-      } else {
+      const isNotAuthorized: boolean = response.status === HTTP_STATUS.UNAUTHORIZED || this.isTokenOutdated();
+      if (!isNotAuthorized) {
         log.warn('Request failed', response);
         throw response;
+      } else {
+        log.debug('Unauthorised. Refreshing token...');
+        try {
+          await this.auth.refreshToken();
+          log.debug('Repeat a request', url);
+          response = await sendRequest();
+        } catch (e) {
+          if (!this.isRefreshingToken) {
+            log.debug('Unauthorised. Token refresh failed. Logging in...', e);
+            this.isRefreshingToken = true;
+            Router.EnterServer({serverUrl: this.config.backendUrl});
+          }
+          throw e;
+        }
       }
     } else {
       this.isRefreshingToken = false;
     }
 
-    return options.parseJson === false ? response : await response.json();
+    return options.parseJson === false ? response : await response?.json?.();
   }
 }

@@ -142,6 +142,7 @@
     "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/react-native": "^11.5.2",
     "@tsconfig/react-native": "^2.0.3",
+    "@types/fetch-mock": "^7.3.5",
     "@types/jest": "^29.4.0",
     "@types/lodash.debounce": "^4.0.7",
     "@types/lodash.once": "^4.1.7",

@@ -25,7 +25,6 @@ import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {logo, IconBack} from 'components/icon/icon';
 import {openDebugView, onLogIn} from 'actions/app-actions';
-import {resolveErrorMessage} from 'components/error/error-resolver';
 import {ThemeContext} from 'components/theme/theme-context';
 import styles from './log-in.styles';
 import type {AppConfig} from 'types/AppConfig';
@@ -116,32 +115,20 @@ export class LogIn extends Component<Props, State> {
     this.props.onChangeServerUrl(this.props.config.backendUrl);
   }
 
-  async logInViaHub(): Promise<void> | Promise<any> {
+  async logInViaHub() {
     const {config, onLogIn} = this.props;
     const msg: string = 'Login via browser PKCE';
 
     try {
-      this.setState({
-        loggingIn: true,
-      });
-      const authParams: OAuthParams2 = await OAuth2.obtainTokenWithOAuthCode(
-        config,
-      );
+      this.setState({loggingIn: true});
+      const authParams: OAuthParams2 = await OAuth2.obtainTokenWithOAuthCode(config);
       usage.trackEvent(CATEGORY_NAME, msg, 'Success');
       onLogIn(authParams);
     } catch (err) {
+      this.setState({loggingIn: false});
       usage.trackEvent(CATEGORY_NAME, msg, 'Error');
       log.warn(msg, err);
-
-      if (err.code === 'authentication_failed') {
-        this.changeYouTrackUrl();
-      } else {
-        const errorMessage = await resolveErrorMessage(err);
-        this.setState({
-          loggingIn: false,
-          errorMessage: errorMessage,
-        });
-      }
+      this.changeYouTrackUrl();
     }
   }
 
