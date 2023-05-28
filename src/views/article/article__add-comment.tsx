@@ -25,9 +25,9 @@ const ArticleAddComment = (props: Props) => {
   useEffect(() => {
     loadDraftComment();
   }, [loadDraftComment]);
-  const canAttach: boolean = props.issuePermissions.articleCanAddAttachment(
-    props.article,
-  );
+
+  const canAttach: boolean = props.issuePermissions.articleCanAddAttachment(props.article);
+
   return (
     <IssueCommentEdit
       isArticle={true}
@@ -36,7 +36,7 @@ const ArticleAddComment = (props: Props) => {
         getApi().articles.getVisibilityOptions(props.article.id)
       }
       onSubmitComment={props.onSubmitComment}
-      editingComment={props.comment}
+      editingComment={{...props.comment, article: {id: props.article.id}}}
       getCommentSuggestions={(query: string) => dispatch(getMentions(query))}
       canAttach={canAttach}
       canRemoveAttach={() => canAttach}

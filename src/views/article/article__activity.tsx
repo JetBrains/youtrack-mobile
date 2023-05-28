@@ -9,6 +9,7 @@ import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import TipActivityActionAccessTouch from 'components/tip/tips/activity-touch-actions';
 import {convertCommentsToActivityPage, createActivityModel} from 'components/activity/activity-helper';
+import {setArticleCommentDraft} from 'views/article/article-reducers';
 import {setDraftCommentData} from 'actions/app-actions';
 
 import type {Activity} from 'types/Activity';
@@ -70,6 +71,12 @@ const ArticleActivities = (props: Props) => {
     },
     [isNaturalSortOrder],
   );
+
+  useEffect(() => {
+    return () => {
+      dispatch(setArticleCommentDraft(null));
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(setDraftCommentData(

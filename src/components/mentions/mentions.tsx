@@ -6,11 +6,14 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import Avatar from '../avatar/avatar';
-import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+
+import Avatar from 'components/avatar/avatar';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+
 import styles from './mentions.styles';
+
 import type {User} from 'types/User';
-import type {ViewStyleProp} from 'types/Internal';
+
 type Props = {
   isLoading: boolean;
   mentions:
@@ -20,9 +23,11 @@ type Props = {
     | null
     | undefined;
   onApply: (user: User) => any;
-  style?: ViewStyleProp;
+  style?: Record<string, any>;
 };
-export default function Mentions(props: Props): React.ReactNode {
+
+
+export default function Mentions(props: Props): JSX.Element {
   const AVATAR_SIZE: number = 24;
   const {mentions, isLoading, onApply, style} = props;
   return (

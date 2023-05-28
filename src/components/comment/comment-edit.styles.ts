@@ -84,6 +84,9 @@ export default EStyleSheet.create({
     ...mainText,
     color: '$text',
   },
+  commentInputPlaceholder: {
+    color: '$icon',
+  },
   mainText: mainText,
   commentSendButton: {
     width: MIN_INPUT_SIZE,
@@ -92,6 +95,10 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '$link',
+  },
+  commentSendButtonIcon: {
+    color: '$textButton',
+    backgroundColor: '$background',
   },
   commentSendButtonDisabled: {
     backgroundColor: '$textSecondary',

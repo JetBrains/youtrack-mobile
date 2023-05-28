@@ -172,10 +172,10 @@ export const createActivityCommentActions = (
       getState: StateGetter,
       getApi: ApiGetter,
     ): Promise<null | IssueComment> => {
-      const {issue} = getState()[stateFieldName];
-      if (draftComment && issue) {
+      const issueId: string | undefined = draftComment?.issue?.id || getState()[stateFieldName]?.issue?.id;
+      if (draftComment && issueId) {
         const [error, draft] = await until(
-          getApi().issue.updateDraftComment(issue.id, draftComment),
+          getApi().issue.updateDraftComment(issueId, draftComment),
         );
 
         if (error) {
@@ -201,12 +201,12 @@ export const createActivityCommentActions = (
         getState: StateGetter,
         getApi: ApiGetter,
       ) => {
-        const issue: IssueFull = getState()[stateFieldName].issue;
+        const issueId: string | undefined = draftComment.issue || getState()[stateFieldName]?.issue?.id;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Add comment', 'Success');
 
-        if (draftComment && issue) {
+        if (draftComment && issueId) {
           const [error] = await until(
-            getApi().issue.submitDraftComment(issue.id, draftComment),
+            getApi().issue.submitDraftComment(issueId, draftComment),
           );
 
           if (error) {

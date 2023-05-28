@@ -129,9 +129,8 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
         const api: Api = getApi();
-        const issueId: string = getState().issueState.issue.id;
-        const isDraftComment: boolean =
-          comment.$type === ResourceTypes.DRAFT_ISSUE_COMMENT;
+        const issueId: string = comment?.issue?.id || getState().issueState.issue.id;
+        const isDraftComment: boolean = comment.$type === ResourceTypes.DRAFT_ISSUE_COMMENT;
         const [error, attachments] = await until(
           files.map((attach: Attachment) =>
             api.issue.attachFileToComment(
