@@ -36,7 +36,7 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
       onCommentChange={onCommentChange}
       getVisibilityOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
       onSubmitComment={props.onSubmitComment}
-      editingComment={props.comment}
+      editingComment={{...props.comment, issue: {id: issue.id}}}
       getCommentSuggestions={(query: string) =>
         dispatch(
           createActivityCommentActions(stateFieldName).loadCommentSuggestions(
@@ -54,6 +54,4 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(
-  IssueActivityStreamCommentEdit,
-) as React$AbstractComponent<Props, unknown>;
+export default React.memo<Props>(IssueActivityStreamCommentEdit);

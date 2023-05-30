@@ -23,7 +23,7 @@ interface Props {
 
 const ArticleActivityStreamCommentEdit = (props: Props) => {
   const dispatch: (...args: any[]) => any = useDispatch();
-  const {article, issuePermissions, onCommentChange = () => {}} = props;
+  const {article, issuePermissions, onCommentChange = (comment: IssueComment) => comment} = props;
   return (
     <IssueCommentEdit
       isArticle={true}
@@ -32,7 +32,7 @@ const ArticleActivityStreamCommentEdit = (props: Props) => {
       onCommentChange={onCommentChange}
       getVisibilityOptions={() => getApi().articles.getVisibilityOptions(article.id)}
       onSubmitComment={props.onSubmitComment}
-      editingComment={props.comment}
+      editingComment={{...props.comment, article: {is: article.id}}}
       getCommentSuggestions={(query: string) => dispatch(getMentions(query))}
       canAttach={issuePermissions.articleCanAddAttachment(article)}
       canRemoveAttach={(attachment: Attachment) => issuePermissions.articleCanDeleteAttachment(article)}

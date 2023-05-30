@@ -201,7 +201,7 @@ export const createActivityCommentActions = (
         getState: StateGetter,
         getApi: ApiGetter,
       ) => {
-        const issueId: string | undefined = draftComment.issue || getState()[stateFieldName]?.issue?.id;
+        const issueId: string | undefined = draftComment?.issue?.id || getState()[stateFieldName]?.issue?.id;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Add comment', 'Success');
 
         if (draftComment && issueId) {

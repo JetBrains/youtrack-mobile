@@ -514,6 +514,7 @@ const submitArticleCommentDraft = (
 
 const updateArticleComment = (
   comment: IssueComment,
+  isAttachmentChange: boolean,
 ): ((
   dispatch: (arg0: any) => any,
   getState: () => AppState,
@@ -530,6 +531,9 @@ const updateArticleComment = (
     }
     const [error] = await until(api.articles.updateComment(articleId, comment));
 
+    if (isAttachmentChange) {
+      notify(i18n('Comment updated'));
+    }
     if (error) {
       notifyError(error);
     } else {

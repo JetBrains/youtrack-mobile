@@ -359,14 +359,14 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
           stateFieldName={stateFieldName}
           issueContext={this.issueContext}
           comment={editingComment}
-          onCommentChange={(
+          onCommentChange={async (
             comment: IssueComment,
             isAttachmentChange: boolean,
-          ) =>
+          ) => (
             isAttachmentChange
-              ? submitEditedComment(comment, isAttachmentChange)
-              : Promise.resolve()
-          }
+              ? await submitEditedComment(comment, isAttachmentChange)
+              : Promise.resolve(comment)
+          )}
           onSubmitComment={async (comment: IssueComment) => {
             await submitEditedComment(comment, false);
             this.loadDraftComment();
@@ -405,9 +405,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
           stateFieldName={stateFieldName}
           comment={editingComment}
           onAddSpentTime={canAddWork ? this.renderAddSpentTimePage : null}
-          onCommentChange={(comment: IssueComment) =>
-            updateDraftComment(comment)
-          }
+          onCommentChange={async (comment: IssueComment) => await updateDraftComment(comment)}
           onSubmitComment={this.onSubmitComment}
         />
 

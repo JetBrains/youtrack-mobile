@@ -168,8 +168,8 @@ const ArticleActivityStream = (props: Props) => {
                   );
                 }
                 usage.trackEvent(ANALYTICS_ARTICLE_PAGE_STREAM, 'Edit comment');
-                const onCommentChange: (comment: IssueComment) => void = (comment: IssueComment) => {
-                  dispatch(articleActions.updateArticleComment(comment));
+                const onSubmitComment = (comment: IssueComment, isAttachmentChange?: boolean) => {
+                  dispatch(articleActions.updateArticleComment(comment, isAttachmentChange));
                 };
                 Router.PageModal({
                   children: (
@@ -177,8 +177,12 @@ const ArticleActivityStream = (props: Props) => {
                       article={article}
                       issuePermissions={issuePermissions}
                       comment={{...comment, attachments}}
-                      onCommentChange={onCommentChange}
-                      onSubmitComment={onCommentChange}
+                      onCommentChange={async (comment: IssueComment, isAttachmentChange: boolean) => (
+                        isAttachmentChange
+                          ? await onSubmitComment(comment, isAttachmentChange)
+                          : Promise.resolve(comment)
+                      )}
+                      onSubmitComment={onSubmitComment}
                     />
                   ),
                 });

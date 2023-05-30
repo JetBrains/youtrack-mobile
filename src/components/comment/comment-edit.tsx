@@ -98,8 +98,9 @@ type State = {
   mentionsQuery: string;
   mentionsVisible: boolean;
   height: number;
-  timer: ReturnType<typeof setTimeout> | null;
 };
+
+
 const EMPTY_COMMENT: EditingComment = {
   text: '',
   updated: -1,
@@ -128,7 +129,6 @@ const IssueCommentEdit = (props: Props) => {
     mentionsQuery: '',
     mentionsVisible: false,
     height: UNIT * 4,
-    timer: null,
   });
 
   const changeState = (statePart: Partial<State>): void => {
@@ -160,15 +160,18 @@ const IssueCommentEdit = (props: Props) => {
       toggleSaving(true);
       const comment: IssueComment = await props.onCommentChange(draft as IssueComment, isAttachmentChange);
       toggleSaving(false);
-      return comment;
+      return comment || draft;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [props.onCommentChange]
   );
   const onSubmitComment = useCallback(
-    async (draft: IssueComment): Promise<void> => {
+    async (): Promise<void> => {
+      toggleVisibilityControl(false);
       toggleSaving(true);
-      await props.onSubmitComment(draft);
+      const comment: IssueComment = await onCommentChange(getCurrentComment(state.editingComment));
+      await props.onSubmitComment(comment as IssueComment);
+      setEditingComment(EMPTY_COMMENT);
       toggleSaving(false);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -178,7 +181,7 @@ const IssueCommentEdit = (props: Props) => {
   useEffect(() => {
     return () => {
       if (editingCommentRef.current.id || editingCommentRef.current.text || editingCommentRef.current.visibility) {
-        onCommentChange(editingCommentRef.current);
+        onCommentChange(getCurrentComment(editingCommentRef.current));
       }
       setEditingComment(EMPTY_COMMENT);
     };
@@ -209,13 +212,6 @@ const IssueCommentEdit = (props: Props) => {
 
   const toggleVisibilityControl = (isVisibilityControlVisible: boolean): void => {
     changeState({isVisibilityControlVisible});
-  };
-
-  const submitComment = async (updatedComment: EditingComment): Promise<void> => {
-    toggleVisibilityControl(false);
-    const draft: IssueComment = await onCommentChange(updatedComment);
-    await onSubmitComment(draft);
-    setEditingComment(EMPTY_COMMENT);
   };
 
   const onMentionsShow = async (
@@ -296,10 +292,7 @@ const IssueCommentEdit = (props: Props) => {
         onHide={() => toggleSelectVisibility(false)}
         visibility={state.editingComment.visibility}
         onSubmit={(visibility: Visibility) => {
-          const comment: Partial<IssueComment> = getCurrentComment({
-            visibility,
-          });
-          setEditingComment(comment);
+          setEditingComment(getCurrentComment({...state.editingComment, visibility}));
         }}
         uiTheme={theme.uiTheme}
         getOptions={props.getVisibilityOptions}
@@ -309,17 +302,12 @@ const IssueCommentEdit = (props: Props) => {
   };
 
   const toggleAttachFileDialog = (isAttachFileDialogVisible: boolean): void => {
-    changeState({
-      isAttachFileDialogVisible,
-    });
+    changeState({isAttachFileDialogVisible});
   };
 
-  const renderSendButton = (): React.ReactNode => {
-    const {isSaving, timer} = state;
-    const isDisabled: boolean =
-      isSaving ||
-      !!timer ||
-      (!state.editingComment.text && !state.editingComment.attachments);
+  const renderSubmitButton = (): React.ReactNode => {
+    const {isSaving} = state;
+    const isDisabled: boolean = !state.editingComment.text && !state.editingComment.attachments || isSaving;
     return (
       <TouchableOpacity
         style={[
@@ -327,8 +315,8 @@ const IssueCommentEdit = (props: Props) => {
           isDisabled ? styles.commentSendButtonDisabled : null,
         ]}
         disabled={isDisabled}
-        onPress={() => {
-          submitComment(getCurrentComment(state.editingComment));
+        onPress={async () => {
+          await onSubmitComment();
         }}
       >
         {!isSaving && <IconArrowUp size={22} color={styles.commentSendButtonIcon.color}/>}
@@ -350,7 +338,7 @@ const IssueCommentEdit = (props: Props) => {
             let draftComment: EditingComment = state.editingComment;
 
             if (!draftComment.id) {
-              draftComment = await onCommentChange(state.editingComment, false);
+              draftComment = await onCommentChange(state.editingComment);
             }
 
             const addedAttachments: Attachment[] = await dispatch(props.onAttach(files, draftComment));
@@ -529,7 +517,7 @@ const IssueCommentEdit = (props: Props) => {
                 toggleVisibilityControl(false);
               },
             )}
-            {Boolean(hasText || hasAttachments()) && renderSendButton()}
+            {Boolean(hasText || hasAttachments()) && renderSubmitButton()}
           </View>
         </View>
 
@@ -545,7 +533,7 @@ const IssueCommentEdit = (props: Props) => {
                   styles.actionsContainerButton,
                   styles.floatContextButton,
                 ]}
-                disabled={isSaving || mentionsVisible || !!state.timer}
+                disabled={isSaving || mentionsVisible}
                 onPress={() => {
                   changeState({
                     isAttachActionsVisible: false,
@@ -634,7 +622,7 @@ const IssueCommentEdit = (props: Props) => {
             }
             onRightButtonClick={async () => {
               if (isSubmitEnabled) {
-                await submitComment(state.editingComment);
+                await onSubmitComment();
                 closeModal();
               }
             }}
@@ -674,8 +662,7 @@ const IssueCommentEdit = (props: Props) => {
                     isDisabled={
                       state.isSaving ||
                       state.isAttachFileDialogVisible ||
-                      state.mentionsLoading ||
-                      !!state.timer
+                      state.mentionsLoading
                     }
                     showAddAttachDialog={() => toggleAttachFileDialog(true)}
                   />
