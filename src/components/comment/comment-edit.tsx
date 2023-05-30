@@ -407,13 +407,9 @@ const IssueCommentEdit = (props: Props) => {
           const attachments: Attachment[] = (
             state.editingComment.attachments || []
           ).filter((it: Attachment) => it.id !== attachment.id);
-          const isDeleted: boolean = !state.editingComment.text && !attachments.length;
-          const updatedComment: EditingComment = getCurrentComment({
-            attachments,
-            deleted: isDeleted,
-          });
-          setEditingComment(isDeleted ? undefined : updatedComment);
-          onCommentChange(updatedComment, true);
+          const updatedComment: EditingComment = getCurrentComment({attachments});
+          setEditingComment(updatedComment);
+          await onCommentChange(updatedComment, true);
 
           if (props.isEditMode) {
             closeModal();
