@@ -242,6 +242,7 @@ msgstr "Commentaire modifié"
 msgid "Comment deleted"
 msgstr "Commentaire supprimé"
 
+#: src/views/article/arcticle-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Comment updated"
 msgstr "Commentaire mis à jour"

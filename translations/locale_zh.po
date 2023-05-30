@@ -238,6 +238,7 @@ msgstr "已更改评论"
 msgid "Comment deleted"
 msgstr "已删除评论"
 
+#: src/views/article/arcticle-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Comment updated"
 msgstr "已更新评论"

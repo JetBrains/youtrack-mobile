@@ -69,12 +69,12 @@ msgstr "Activity Settings"
 msgid "Add project to favorites"
 msgstr "Add project to favorites"
 
-#: src/views/article/article__activity-stream.tsx:197
+#: src/views/article/article__activity-stream.tsx:201
 #: src/views/issue/activity/issue__activity-stream.tsx:119
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:677
+#: src/components/comment/comment-edit.tsx:586
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -138,7 +138,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:646
+#: src/components/comment/comment-edit.tsx:555
 #: src/views/issue/issue-base-actions-creater.ts:667
 msgid "Attach file"
 msgstr "Attach file"
@@ -182,7 +182,7 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/components/confirmation/confirmation.ts:14
 #: src/components/tags/tags.tsx:57
 #: src/views/article/arcticle-actions.ts:320
-#: src/views/article/arcticle-actions.ts:668
+#: src/views/article/arcticle-actions.ts:679
 #: src/views/create-issue/create-issue-actions.ts:510
 #: src/views/inbox-threads/inbox-threads__thread.tsx:198
 #: src/views/inbox-threads/inbox-threads.tsx:278
@@ -195,7 +195,7 @@ msgid "Cancel"
 msgstr "Cancel"
 
 #: src/components/attach-file/attach-file-dialog.tsx:83
-#: src/components/attachments-row/attachment-actions.ts:330
+#: src/components/attachments-row/attachment-actions.ts:329
 msgid "Choose from library…"
 msgstr "Choose from library…"
 
@@ -236,6 +236,7 @@ msgstr "Comment changed"
 msgid "Comment deleted"
 msgstr "Comment deleted"
 
+#: src/views/article/arcticle-actions.ts:535
 #: src/views/issue/activity/issue-activity__comment-actions.ts:261
 msgid "Comment updated"
 msgstr "Comment updated"
@@ -280,8 +281,8 @@ msgstr "Content revised"
 
 #: src/components/user/user-card.tsx:120
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx:158
-#: src/views/article/article__activity-stream.tsx:209
-#: src/views/article/article__activity-stream.tsx:218
+#: src/views/article/article__activity-stream.tsx:213
+#: src/views/article/article__activity-stream.tsx:222
 #: src/views/issue/activity/issue__activity-stream.tsx:134
 #: src/views/issue/activity/issue-activity__comment-actions.ts:380
 #: src/views/issue/issue-base-actions-creater.ts:640
@@ -297,8 +298,8 @@ msgstr "Copy description"
 msgid "Copy field text"
 msgstr "Copy field text"
 
-#: src/views/article/arcticle-actions.ts:641
-#: src/views/article/article__activity-stream.tsx:214
+#: src/views/article/arcticle-actions.ts:652
+#: src/views/article/article__activity-stream.tsx:218
 #: src/views/issue/activity/issue__activity-stream.tsx:139
 #: src/views/issue/activity/issue-activity__comment-actions.ts:384
 #: src/views/issue/issue-base-actions-creater.ts:636
@@ -310,7 +311,7 @@ msgstr "Copy link"
 msgid "Copy link to article"
 msgstr "Copy link to article"
 
-#: src/views/article/article__activity-stream.tsx:205
+#: src/views/article/article__activity-stream.tsx:209
 #: src/views/issue/activity/issue__activity-stream.tsx:130
 #: src/views/issue/activity/issue-activity__comment-actions.ts:376
 #: src/views/issue/issue-base-actions-creater.ts:730
@@ -350,9 +351,9 @@ msgid "Decline"
 msgstr "Decline"
 
 #: src/views/article/arcticle-actions.ts:304
-#: src/views/article/arcticle-actions.ts:655
+#: src/views/article/arcticle-actions.ts:666
 #: src/views/article/arcticle-helper.ts:3
-#: src/views/article/article__activity-stream.tsx:240
+#: src/views/article/article__activity-stream.tsx:244
 #: src/views/issue/activity/issue__activity-stream.tsx:164
 #: src/views/issue/activity/issue__activity.tsx:279
 #: src/views/issue/activity/issue-activity__actions.ts:419
@@ -423,7 +424,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:695
+#: src/components/comment/comment-edit.tsx:603
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -796,7 +797,7 @@ msgstr "removed a reaction"
 msgid "reopened the pull request"
 msgstr "reopened the pull request"
 
-#: src/views/article/article__activity-stream.tsx:189
+#: src/views/article/article__activity-stream.tsx:193
 #: src/views/issue/activity/issue__activity-stream.tsx:111
 msgid "Reply"
 msgstr "Reply"
@@ -866,9 +867,9 @@ msgstr "Settings"
 msgid "Share"
 msgstr "Share"
 
-#: src/views/article/arcticle-actions.ts:631
-#: src/views/article/article__activity-stream.tsx:223
-#: src/views/article/article__activity-stream.tsx:230
+#: src/views/article/arcticle-actions.ts:642
+#: src/views/article/article__activity-stream.tsx:227
+#: src/views/article/article__activity-stream.tsx:234
 #: src/views/issue/activity/issue__activity-stream.tsx:147
 #: src/views/issue/activity/issue__activity-stream.tsx:154
 #: src/views/issue/issue-base-actions-creater.ts:627
@@ -884,7 +885,7 @@ msgid "Share logs"
 msgstr "Share logs"
 
 #: src/views/article/arcticle-actions.ts:217
-#: src/views/article/arcticle-actions.ts:618
+#: src/views/article/arcticle-actions.ts:629
 #: src/views/issue/issue-base-actions-creater.ts:612
 msgid "Share…"
 msgstr "Share…"
@@ -964,7 +965,7 @@ msgstr[0] "Tag"
 msgstr[1] "Tags"
 
 #: src/components/attach-file/attach-file-dialog.tsx:90
-#: src/components/attachments-row/attachment-actions.ts:343
+#: src/components/attachments-row/attachment-actions.ts:342
 msgid "Take a picture…"
 msgstr "Take a picture…"
 
@@ -1161,7 +1162,7 @@ msgstr "When integrating TeamCity and YouTrack, the users are matched by their e
 msgid "Woah, you can't touch this!"
 msgstr "Woah, you can't touch this!"
 
-#: src/components/comment/comment-edit.tsx:499
+#: src/components/comment/comment-edit.tsx:422
 #: src/views/issue/activity/activity__add-spent-time.tsx:426
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"

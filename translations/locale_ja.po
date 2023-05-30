@@ -238,6 +238,7 @@ msgstr "コメントが変更されました"
 msgid "Comment deleted"
 msgstr "コメントが削除されました"
 
+#: src/views/article/arcticle-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Comment updated"
 msgstr "コメントが更新されました"

@@ -250,6 +250,7 @@ msgstr "Комментарий изменен"
 msgid "Comment deleted"
 msgstr "Комментарий удален"
 
+#: src/views/article/arcticle-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Comment updated"
 msgstr "Комментарий обновлен"

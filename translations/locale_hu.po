@@ -242,6 +242,7 @@ msgstr "Megjegyzés módosítva"
 msgid "Comment deleted"
 msgstr "Megjegyzés törölve"
 
+#: src/views/article/arcticle-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Comment updated"
 msgstr "Hozzászólás frissítve"

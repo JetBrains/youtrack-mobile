@@ -238,6 +238,7 @@ msgstr "코멘트 변경됨"
 msgid "Comment deleted"
 msgstr "코멘트 삭제됨"
 
+#: src/views/article/arcticle-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Comment updated"
 msgstr "코멘트 업데이트됨"
