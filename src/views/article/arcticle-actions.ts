@@ -476,6 +476,18 @@ const updateArticleCommentDraft = (
   };
 };
 
+const resetArticleCommentDraft = (): ((
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+) => Promise<void>) => {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+  ): Promise<void> => {
+    dispatch(setArticleCommentDraft(null));
+  };
+};
+
 const submitArticleCommentDraft = (
   commentDraft: IssueComment,
 ): ((
@@ -507,7 +519,7 @@ const submitArticleCommentDraft = (
         message: 'Comment added',
         analyticsId: ANALYTICS_ARTICLE_PAGE,
       });
-      dispatch(setArticleCommentDraft(null));
+      dispatch(resetArticleCommentDraft());
     }
   };
 };
@@ -933,4 +945,5 @@ export {
   deleteAttachment,
   onCheckboxUpdate,
   onReactionSelect,
+  resetArticleCommentDraft,
 };

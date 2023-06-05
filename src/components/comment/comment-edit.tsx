@@ -62,12 +62,12 @@ type CommentEntity = {
   article?: { id: string };
 };
 
-type EditingComment = Partial<IssueComment & CommentReply>;
+type EditingComment = IssueComment & CommentReply & CommentEntity;
 
-interface Props {
+export interface Props {
   canAttach: boolean;
   canRemoveAttach: (attachment: Attachment) => boolean;
-  editingComment: IssueComment & CommentReply & CommentEntity;
+  editingComment: EditingComment;
   focus?: boolean;
   getCommentSuggestions: (query: string) => Promise<UserMentions>;
   getVisibilityOptions: () => Promise<VisibilityGroups>;
@@ -78,7 +78,7 @@ interface Props {
     attachment: Attachment,
     comment: IssueComment,
   ) => Attachment[];
-  onCommentChange: (comment: IssueComment, isAttachmentChange: boolean) => any;
+  onCommentChange: (comment: IssueComment, isAttachmentChange?: boolean) => any;
   onSubmitComment: (comment: IssueComment) => any;
   visibilityLabel?: string;
   header?: React.ReactElement<React.ComponentProps<any>, any>;
@@ -105,9 +105,9 @@ const EMPTY_COMMENT: EditingComment = {
   text: '',
   updated: -1,
   visibility: null,
-};
+} as EditingComment;
 
-const IssueCommentEdit = (props: Props) => {
+const CommentEdit = (props: Props) => {
   const dispatch = useDispatch();
   const theme: Theme = useContext(ThemeContext);
   const attachmentActions: AttachmentActions = getAttachmentActions('issueCommentInput');
@@ -145,7 +145,7 @@ const IssueCommentEdit = (props: Props) => {
   };
 
   const getCurrentComment = useCallback(
-    (data: EditingComment = {}): EditingComment => ({
+    (data: EditingComment = {} as EditingComment): EditingComment => ({
       ...props.editingComment,
       attachments: state.editingComment.attachments,
       visibility: state.editingComment.visibility,
@@ -310,6 +310,9 @@ const IssueCommentEdit = (props: Props) => {
     const isDisabled: boolean = !state.editingComment.text && !state.editingComment.attachments || isSaving;
     return (
       <TouchableOpacity
+        testID="test:id/commentSubmitButton"
+        accessibilityLabel="commentSubmitButton"
+        accessible={true}
         style={[
           styles.commentSendButton,
           isDisabled ? styles.commentSendButtonDisabled : null,
@@ -338,7 +341,7 @@ const IssueCommentEdit = (props: Props) => {
             let draftComment: EditingComment = state.editingComment;
 
             if (!draftComment.id) {
-              draftComment = await onCommentChange(state.editingComment);
+              draftComment = await onCommentChange(state.editingComment) as EditingComment;
             }
 
             const addedAttachments: Attachment[] = await dispatch(props.onAttach(files, draftComment));
@@ -415,6 +418,9 @@ const IssueCommentEdit = (props: Props) => {
   ): React.ReactNode => {
     return (
       <TextInput
+        testID="test:id/commentEditInput"
+        accessibilityLabel="commentEditInput"
+        accessible={true}
         autoCorrect={true}
         multiline={true}
         autoFocus={autoFocus || props.isEditMode}
@@ -679,6 +685,9 @@ const IssueCommentEdit = (props: Props) => {
 
   return (
     <View
+      testID="test:id/commentEdit"
+      accessibilityLabel="commentEdit"
+      accessible={true}
       style={props.isEditMode ? styles.commentEditContainer : styles.container}
     >
       {renderUserMentions()}
@@ -689,4 +698,4 @@ const IssueCommentEdit = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(IssueCommentEdit);
+export default React.memo<Props>(CommentEdit);

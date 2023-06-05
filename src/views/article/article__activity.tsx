@@ -9,7 +9,6 @@ import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import TipActivityActionAccessTouch from 'components/tip/tips/activity-touch-actions';
 import {convertCommentsToActivityPage, createActivityModel} from 'components/activity/activity-helper';
-import {setArticleCommentDraft} from 'views/article/article-reducers';
 import {setDraftCommentData} from 'actions/app-actions';
 
 import type {Activity} from 'types/Activity';
@@ -74,7 +73,7 @@ const ArticleActivities = (props: Props) => {
 
   useEffect(() => {
     return () => {
-      dispatch(setArticleCommentDraft(null));
+      dispatch(articleActions.resetArticleCommentDraft());
     };
   }, [dispatch]);
 
@@ -133,14 +132,8 @@ const ArticleActivities = (props: Props) => {
           <ArticleAddComment
             article={article}
             comment={articleCommentDraft}
-            onCommentChange={(
-              comment: IssueComment,
-            ): ((...args: any[]) => any) =>
-              dispatch(articleActions.updateArticleCommentDraft(comment))
-            }
-            onSubmitComment={async (
-              comment: IssueComment,
-            ): Promise<void> => {
+            onCommentChange={(comment: IssueComment) => dispatch(articleActions.updateArticleCommentDraft(comment))}
+            onSubmitComment={async (comment: IssueComment) => {
               updateActivities(comment);
               await dispatch(articleActions.submitArticleCommentDraft(comment));
               refreshActivities(false);

@@ -21,7 +21,7 @@ chai.use(chaiAsPromised);
 chai.use(sinonChai);
 should();
 
-require('react-native-reanimated/lib/commonjs/reanimated2/jestUtils').setUpTests();
+jest.mock('react-native-reanimated', () => require('react-native-reanimated/mock'));
 
 mockReactNativeNotification();
 
