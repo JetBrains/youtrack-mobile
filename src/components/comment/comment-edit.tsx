@@ -181,9 +181,10 @@ const CommentEdit = (props: Props) => {
   useEffect(() => {
     return () => {
       if (editingCommentRef.current.id || editingCommentRef.current.text || editingCommentRef.current.visibility) {
-        onCommentChange(getCurrentComment(editingCommentRef.current));
+        onCommentChange(getCurrentComment(editingCommentRef.current)).then(() => setEditingComment(EMPTY_COMMENT));
+      } else {
+        setEditingComment(EMPTY_COMMENT);
       }
-      setEditingComment(EMPTY_COMMENT);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

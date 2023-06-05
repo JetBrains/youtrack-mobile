@@ -151,12 +151,11 @@ export const createActivityCommentActions = (
       getApi: ApiGetter,
     ) => {
       const issueState: SingleIssueState = getState()[stateFieldName];
-      const {issue} = issueState;
-
+      const issueId: string = issueState.issueId || issueState?.issue?.id;
       let draftComment: IssueComment | null = null;
-      if (issue && issue.id) {
+      if (issueId) {
         try {
-          draftComment = await getApi().issue.getDraftComment(issue.id);
+          draftComment = await getApi().issue.getDraftComment(issueId);
         } catch (error) {
           log.warn('Failed to receive issue comment draft', error);
         }
@@ -172,7 +171,8 @@ export const createActivityCommentActions = (
       getState: StateGetter,
       getApi: ApiGetter,
     ): Promise<null | IssueComment> => {
-      const issueId: string | undefined = draftComment?.issue?.id || getState()[stateFieldName]?.issue?.id;
+      const issueState: SingleIssueState = getState()[stateFieldName];
+      const issueId: string | undefined = draftComment?.issue?.id || issueState?.issueId || issueState?.issue?.id;
       if (draftComment && issueId) {
         const [error, draft] = await until(
           getApi().issue.updateDraftComment(issueId, draftComment),

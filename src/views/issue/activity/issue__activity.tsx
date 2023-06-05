@@ -132,6 +132,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     }
   };
   loadDraftComment = async () => {
+    await this.props.setEditingComment(null);
     const draft: IssueComment | null = await this.props.getDraftComment();
     this.props.setEditingComment(draft);
   };
