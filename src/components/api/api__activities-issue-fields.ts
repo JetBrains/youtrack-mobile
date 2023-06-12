@@ -141,7 +141,7 @@ export const issueActivitiesFields: string = toField([
 ])
   .toString()
   .concat(
-    `;@addedRemovedCommon:${toField([
+    `${encodeURIComponent(';@')}addedRemovedCommon:${toField([
       ISSUE_ACTIVITIES_EVENT_BASE,
       IssueFields.issueComment,
       'usesMarkdown',
