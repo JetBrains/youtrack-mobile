@@ -240,7 +240,7 @@ describe('<CreateIssue/>', () => {
     it('should update a draft before create a new issue', async () => {
       await store.dispatch(actions.createIssue());
       expect(apiMock.issue.updateIssueDraft).toHaveBeenCalledWith(
-        issueDraftBase,
+        {...issueDraftBase, fields: undefined},
       );
       expect(store.getActions()[1]).toEqual({
         payload: {

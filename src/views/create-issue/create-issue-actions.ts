@@ -308,7 +308,7 @@ export function createIssue(
     dispatch(actions.startIssueCreation());
 
     try {
-      await dispatch(updateIssueDraft());
+      await dispatch(updateIssueDraft(true));
       const created = await api.issue.createIssue(getState().creation.issue);
       log.info('Issue has been created');
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Success');
