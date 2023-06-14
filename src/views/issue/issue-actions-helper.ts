@@ -14,7 +14,7 @@ export const createDispatchActions = (
   actions: IssueBaseActions,
   commandDialogTypes: typeof commandDialogActionMap,
   attachmentActions: AttachmentActions,
-  attachmentTypes: typeof attachmentActionMap,
+  attachmentTypes: Record<keyof typeof attachmentActionMap, string>,
 ) => ({
   setIssueId: (
     issueId: string,

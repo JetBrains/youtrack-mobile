@@ -15,12 +15,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-// @ts-ignore
+
+import IconFile from '@jetbrains/icons/file.svg';
 import Video from 'react-native-video';
 
 import attachFile, {attachFileMethod} from './attach-file';
 import AttachmentErrorBoundary from 'components/attachments-row/attachment-error-boundary';
 import calculateAspectRatio from 'components/aspect-ratio/aspect-ratio';
+import FileThumb from 'components/attachments-row/attachment-thumbnail';
 import Header from 'components/header/header';
 import IconAttachment from '@jetbrains/icons/attachment.svg';
 import ModalPortal from 'components/modal-view/modal-portal';
@@ -28,7 +30,6 @@ import ModalView from 'components/modal-view/modal-view';
 import usage from 'components/usage/usage';
 import VisibilityControl from 'components/visibility/visibility-control';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
-import {getApi} from 'components/api/api__instance';
 import {hasMimeType} from 'components/mime-type/mime-type';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
@@ -60,66 +61,65 @@ type Props = {
   source?: keyof typeof attachFileMethod;
 };
 
-const AttachFileDialog = (
-  props: Props,
-): React.ReactElement<
-  React.ComponentProps<typeof ModalView>,
-  typeof ModalView
-> => {
-  const mounted: {
-    current: boolean;
-  } = useRef(false);
+const AttachFileDialog = (props: Props): JSX.Element => {
   usage.trackScreenView('Attach file modal');
+  const mounted: React.MutableRefObject<boolean> = useRef(false);
   const theme: Theme = useContext(ThemeContext);
-  const [
-    attaches,
-    updateAttaches,
-  ] = useState<Array<NormalizedAttachment> | null>(null);
-  const [isAttaching, updateAttaching] = useState(false);
+  const [attaches, updateAttaches] = useState<Array<NormalizedAttachment> | null>(null);
+  const [isAttaching, updateAttaching] = useState<boolean>(false);
+
   const createActions = useCallback((): ActionSheetAction[] => {
+  const doExecute = (method: keyof typeof attachFileMethod) => showSystemDialog(method);
     return [
       {
+        id: attachFileMethod.document,
+        title: i18n('Document…'),
+        icon: IconFile,
+        iconSize: 22,
+        execute: () => {
+          logEvent({
+            message: 'Attach document from storage',
+            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
+          });
+          doExecute(attachFileMethod.document);
+        },
+      },
+      {
         id: attachFileMethod.openPicker,
-        title: i18n('Choose from library…'),
+        title: i18n('Photo library…'),
         icon: IconAttachment,
         iconSize: 22,
-        execute: () => {},
+        execute: () => {
+          logEvent({
+            message: 'Attach file from storage',
+            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
+          });
+          doExecute(attachFileMethod.openPicker);
+        },
       },
       {
         id: attachFileMethod.openCamera,
         title: i18n('Take a picture…'),
         icon: IconCamera,
         iconSize: 18,
-        execute: () => {},
-      },
-    ].map((action: ActionSheetAction) => {
-      if (action.id === attachFileMethod.openPicker) {
-        action.execute = () => {
-          logEvent({
-            message: 'Attach file from storage',
-            analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
-          });
-          showSystemDialog(attachFileMethod.openPicker);
-        };
-      } else {
-        action.execute = () => {
+        execute: () => {
           logEvent({
             message: 'Attach file via camera',
             analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
           });
-          showSystemDialog(attachFileMethod.openCamera);
-        };
-      }
-
-      return action;
-    });
+          doExecute(attachFileMethod.openCamera);
+        },
+      },
+    ];
   }, []);
+
   useEffect(() => {
     mounted.current = true;
     return () => {
       mounted.current = false;
     };
   }, []);
+
   useEffect(() => {
     if (props.source) {
       const action: ActionSheetAction | null | undefined = createActions().find(
@@ -134,10 +134,7 @@ const AttachFileDialog = (
 
   const showSystemDialog = async (method: keyof typeof attachFileMethod) => {
     try {
-      const attachedFiles: NormalizedAttachment[] | null = await attachFile(
-        method,
-      );
-
+      const attachedFiles: NormalizedAttachment[] | null = await attachFile(method);
       if (attachedFiles) {
         updateAttaches(attachedFiles);
       }
@@ -146,19 +143,16 @@ const AttachFileDialog = (
     }
   };
 
-  const renderMedia: (file: NormalizedAttachment) => any = (
-    file: NormalizedAttachment,
-  ): React.ReactElement<React.ComponentProps<typeof Video>, typeof Video> => {
+  const renderMedia = (file: NormalizedAttachment): React.ReactNode => {
     const dimensions: ScaledSize = Dimensions.get('window');
     return (
       <Video
         style={{
-          minHeight: Math.min(file.dimensions.height, dimensions.height / 1.5),
-          minWidth: Math.min(file.dimensions.width, dimensions.width),
+          minHeight: Math.min(file?.dimensions?.height || 300, dimensions.height / 1.5),
+          minWidth: Math.min(file?.dimensions?.width || 300, dimensions.width),
         }}
         controls={true}
         fullscreen={false}
-        headers={getApi().auth.getAuthorizationHeaders()}
         paused={false}
         rate={0.0}
         resizeMode="contain"
@@ -169,13 +163,8 @@ const AttachFileDialog = (
     );
   };
 
-  const renderImage: (
-    file: NormalizedAttachment,
-  ) => React.ReactElement<React.ComponentProps<any>, any> = (
-    file: NormalizedAttachment,
-  ): React.ReactElement<React.ComponentProps<typeof Image>, typeof Image> => {
-    const dimensions: ImageDimensions | null | undefined =
-      file && calculateAspectRatio(file.dimensions);
+  const renderImage = (file: NormalizedAttachment): React.ReactNode => {
+    const dimensions: ImageDimensions | null | undefined = file && calculateAspectRatio(file.dimensions);
     return (
       <Image
         style={styles.imagePreview}
@@ -189,22 +178,23 @@ const AttachFileDialog = (
     );
   };
 
-  const renderPreview = (
-    files: NormalizedAttachment[],
-  ): Array<React.ReactElement<React.ComponentProps<any>, any>> => {
+  const renderPreview = (files: NormalizedAttachment[]): React.ReactNode => {
     return files.map((file: NormalizedAttachment, index: number) => {
-      const isMediaMimeType: boolean =
-        hasMimeType.audio(file) || hasMimeType.video(file);
+      const isMediaMimeType: boolean = hasMimeType.audio(file) || hasMimeType.video(file);
 
       if (file?.url) {
         return (
           <AttachmentErrorBoundary
             key={`${file.name}-${index}`}
-            attachName={file.name}
+            attachName={file.name || 'file'}
           >
             <>
               {isMediaMimeType && renderMedia(file)}
-              {!isMediaMimeType && hasMimeType.image(file) && renderImage(file)}
+              {!isMediaMimeType && (
+                hasMimeType.image(file)
+                  ? renderImage(file)
+                  : <FileThumb style={styles.thumbnail} attach={file}/>
+              )}
             </>
           </AttachmentErrorBoundary>
         );
@@ -233,7 +223,9 @@ const AttachFileDialog = (
           if (attaches) {
             updateAttaching(true);
             props.actions.onAttach(attaches, () => {
-              mounted.current === true && updateAttaching(false);
+              if (mounted.current) {
+                updateAttaching(false);
+              }
             });
           }
         }}

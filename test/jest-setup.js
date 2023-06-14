@@ -66,3 +66,7 @@ global.AbortController = jest.fn().mockReturnValue({
 });
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+
+jest.mock('react-native-document-picker', () => ({
+  default: jest.fn(),
+}));

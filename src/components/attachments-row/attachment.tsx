@@ -6,25 +6,32 @@ import {
   Text,
   Alert,
 } from 'react-native';
+
 import debounce from 'lodash.debounce';
 import {SvgUri} from 'react-native-svg';
-import ImageWithProgress from '../image/image-with-progress';
-import ModalPortal from '../modal-view/modal-portal';
-import PreviewFile from 'views/preview-file/preview-file';
-import Router from '../router/router';
-import {attachmentCategories} from './attachment-helper';
-import {hasMimeType} from '../mime-type/mime-type';
-import {HIT_SLOP} from '../common-styles/button';
-import {IconRemoveFilled} from '../icon/icon';
-import {isAndroidPlatform} from 'util/util';
-import {isSplitView} from '../responsive/responsive-helper';
 import {View as AnimatedView} from 'react-native-animatable';
+
+import FileThumb from 'components/attachments-row/attachment-thumbnail';
+import ImageWithProgress from 'components/image/image-with-progress';
+import ModalPortal from 'components/modal-view/modal-portal';
+import PreviewFile from 'views/preview-file/preview-file';
+import Router from 'components/router/router';
+import {hasMimeType} from 'components/mime-type/mime-type';
+import {HIT_SLOP} from 'components/common-styles/button';
+import {IconRemoveFilled} from 'components/icon/icon';
+import {isAndroidPlatform} from 'util/util';
+import {isSplitView} from 'components/responsive/responsive-helper';
+
 import styles from './attachments-row.styles';
+
 import type {Attachment} from 'types/CustomFields';
 import type {FileCategoryKey} from './attachment-helper';
 import type {UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
+
+
 type StyleMap = Record<FileCategoryKey, ViewStyleProp>;
+
 type Props = {
   imageHeaders: Record<string, any> | null | undefined;
   onOpenAttachment: (type: string, name: string) => any;
@@ -43,6 +50,8 @@ type State = {
 };
 const ANIMATION_DURATION: number = 700;
 const isAndroid: boolean = isAndroidPlatform();
+
+
 export default class Attach extends PureComponent<Props, State> {
   static defaultProps: Partial<Props> = {
     imageHeaders: null,
@@ -59,7 +68,7 @@ export default class Attach extends PureComponent<Props, State> {
     video: styles.attachmentMedia,
     audio: styles.attachmentMedia,
   };
-  _isUnmounted: boolean;
+  _isUnmounted: boolean = false;
   handleLoadError: any = debounce(err => {
     this.props.onImageLoadingError(err);
   }, 60 * 1000);
@@ -140,40 +149,6 @@ export default class Attach extends PureComponent<Props, State> {
     );
   }
 
-  renderThumb(
-    fileTypeStyle: ViewStyleProp & Record<string, any> = {},
-    testId: string = 'attachmentFile',
-  ): React.ReactNode {
-    const {attach} = this.props;
-    return (
-      <View
-        testID={testId}
-        style={[styles.attachmentThumbContainer, fileTypeStyle]}
-      >
-        <View style={styles.attachmentTypeContainer}>
-          <View
-            style={[
-              styles.attachmentType,
-              {
-                backgroundColor: fileTypeStyle?.color,
-              },
-            ]}
-          >
-            <Text numberOfLines={1} style={styles.attachmentText}>
-              {attach.name.split('.').pop() || attach.name}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.attachmentName}>
-          <Text numberOfLines={2} style={styles.attachmentFileText}>
-            {attach.name}
-          </Text>
-        </View>
-      </View>
-    );
-  }
-
   renderImage(): React.ReactNode {
     const {attachingImage, imageHeaders, attach} = this.props;
     const isAttachingImage = attachingImage === attach;
@@ -190,7 +165,7 @@ export default class Attach extends PureComponent<Props, State> {
     return (
       <AnimatedView
         testID="attachmentImage"
-        animation={isAttachingImage ? 'zoomIn' : null}
+        animation={isAttachingImage ? 'zoomIn' : ''}
         useNativeDriver={true}
         duration={ANIMATION_DURATION}
         easing="ease-out-quart"
@@ -215,25 +190,6 @@ export default class Attach extends PureComponent<Props, State> {
         )}
       </AnimatedView>
     );
-  }
-
-  renderFile(): React.ReactNode {
-    const {attach} = this.props;
-    const fileExt: string | null | undefined = attach.name.split('.').pop();
-    let thumbStyle: ViewStyleProp = this.thumbStyleMap.default;
-
-    for (const key in attachmentCategories) {
-      const isCategory: boolean = attachmentCategories[key as any]
-        .split(' ')
-        .some((it: string) => it === fileExt);
-
-      if (isCategory) {
-        thumbStyle = this.thumbStyleMap[key as any];
-        break;
-      }
-    }
-
-    return this.renderThumb(thumbStyle);
   }
 
   remove: () => void = () => {
@@ -302,14 +258,14 @@ export default class Attach extends PureComponent<Props, State> {
 
   renderAttach(): React.ReactNode {
     if (this.isMedia()) {
-      return this.renderThumb(styles.attachmentMedia, 'attachmentMedia');
+      return <FileThumb attach={this.props.attach} testID="attachmentMedia"/>;
     } else if (this.isSVG()) {
       return this.renderSVG();
     } else if (this.isImage()) {
       return this.renderImage();
     }
 
-    return this.renderFile();
+    return <FileThumb attach={this.props.attach}/>;
   }
 
   render(): React.ReactNode {

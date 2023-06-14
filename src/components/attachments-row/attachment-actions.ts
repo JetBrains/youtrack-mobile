@@ -47,7 +47,7 @@ export type AttachmentActions = {
   loadIssueAttachments: (...args: any[]) => any;
 };
 export const getAttachmentActions = (prefix: string): AttachmentActions => {
-  const types: typeof attachmentActionMap = createAttachmentTypes(prefix);
+  const types: Record<keyof typeof attachmentActionMap, string> = createAttachmentTypes(prefix);
   const actions: Record<string, any> = {
     toggleAttachFileDialog: function (
       isAttachFileDialogVisible: boolean = false,

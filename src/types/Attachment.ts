@@ -1,4 +1,5 @@
 import type {Visibility} from './Visibility';
+
 export type Attachment = {
   filename?: string;
   path: string;
@@ -6,11 +7,12 @@ export type Attachment = {
   width: number;
   height: number;
 };
+
 export type NormalizedAttachment = {
   url: string;
-  name: string;
-  mimeType: string;
-  dimensions: {
+  name: string | null;
+  mimeType: string | null;
+  dimensions?: {
     width: number;
     height: number;
   };

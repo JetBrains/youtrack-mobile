@@ -136,7 +136,7 @@ export type IssueBaseActions = {
   OPEN_ISSUE_SELECT: (action: {payload: any}) => IssueState;
   CLOSE_ISSUE_SELECT: (action: {payload: any}) => IssueState;
 };
-export const createAttachmentReducer = (types: typeof attachmentActionMap) => ({
+export const createAttachmentReducer = (types: Record<keyof typeof attachmentActionMap, string>) => ({
   [types.ATTACH_START_ADDING](
     state: IssueState,
     action: {

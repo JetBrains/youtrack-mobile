@@ -1,6 +1,8 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {headerTitle, mainText} from 'components/common-styles/typography';
-import {UNIT} from 'components/variables';
+
+import {headerTitle, mainText, UNIT} from 'components/common-styles';
+
+
 export default EStyleSheet.create({
   container: {
     height: '100%',
@@ -43,4 +45,8 @@ export default EStyleSheet.create({
   disabled: {
     color: '$disabled',
   },
-}) as any;
+  thumbnail: {
+    width: '100%',
+    marginBottom: UNIT * 2,
+  },
+});
