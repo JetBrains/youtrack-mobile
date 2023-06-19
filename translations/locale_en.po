@@ -74,7 +74,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:593
+#: src/components/comment/comment-edit.tsx:590
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -126,11 +126,11 @@ msgstr "Are you sure you want to delete this work item?"
 msgid "Article added to favorites"
 msgstr "Article added to favorites"
 
-#: src/views/article-create/article-create.tsx:390
+#: src/views/article-create/article-create.tsx:396
 msgid "Article content"
 msgstr "Article content"
 
-#: src/views/article-create/arcticle-create-actions.ts:99
+#: src/views/article-create/arcticle-create-actions.ts:103
 msgid "Article published"
 msgstr "Article published"
 
@@ -138,12 +138,12 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:562
+#: src/components/comment/comment-edit.tsx:559
 #: src/views/issue/issue-base-actions-creater.ts:667
 msgid "Attach file"
 msgstr "Attach file"
 
-#: src/components/attach-file/attach-file-dialog.tsx:242
+#: src/components/attach-file/attach-file-dialog.tsx:234
 #: src/components/attachments-row/attachments-add-panel.tsx:40
 msgid "Attach files"
 msgstr "Attach files"
@@ -154,7 +154,7 @@ msgid_plural "Attachments"
 msgstr[0] "Attachment"
 msgstr[1] "Attachments"
 
-#: src/components/attachments-row/attachment-actions.ts:29
+#: src/components/attachments-row/attachment-actions.ts:39
 msgid "Attachment deleted"
 msgstr "Attachment deleted"
 
@@ -181,8 +181,8 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/components/account/accounts.tsx:51
 #: src/components/confirmation/confirmation.ts:14
 #: src/components/tags/tags.tsx:57
-#: src/views/article/arcticle-actions.ts:320
-#: src/views/article/arcticle-actions.ts:691
+#: src/views/article/arcticle-actions.ts:321
+#: src/views/article/arcticle-actions.ts:692
 #: src/views/create-issue/create-issue-actions.ts:510
 #: src/views/inbox-threads/inbox-threads__thread.tsx:198
 #: src/views/inbox-threads/inbox-threads.tsx:278
@@ -194,8 +194,7 @@ msgstr "By logging in, you agree to the Privacy Policy."
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/components/attach-file/attach-file-dialog.tsx:83
-#: src/components/attachments-row/attachment-actions.ts:329
+#: src/components/attachments-row/attachment-actions.ts:399
 msgid "Choose from library…"
 msgstr "Choose from library…"
 
@@ -236,7 +235,7 @@ msgstr "Comment changed"
 msgid "Comment deleted"
 msgstr "Comment deleted"
 
-#: src/views/article/arcticle-actions.ts:547
+#: src/views/article/arcticle-actions.ts:548
 #: src/views/issue/activity/issue-activity__comment-actions.ts:261
 msgid "Comment updated"
 msgstr "Comment updated"
@@ -298,7 +297,7 @@ msgstr "Copy description"
 msgid "Copy field text"
 msgstr "Copy field text"
 
-#: src/views/article/arcticle-actions.ts:664
+#: src/views/article/arcticle-actions.ts:665
 #: src/views/article/article__activity-stream.tsx:218
 #: src/views/issue/activity/issue__activity-stream.tsx:139
 #: src/views/issue/activity/issue-activity__comment-actions.ts:384
@@ -350,8 +349,8 @@ msgstr "Date"
 msgid "Decline"
 msgstr "Decline"
 
-#: src/views/article/arcticle-actions.ts:304
-#: src/views/article/arcticle-actions.ts:678
+#: src/views/article/arcticle-actions.ts:305
+#: src/views/article/arcticle-actions.ts:679
 #: src/views/article/arcticle-helper.ts:3
 #: src/views/article/article__activity-stream.tsx:244
 #: src/views/issue/activity/issue__activity-stream.tsx:164
@@ -366,7 +365,7 @@ msgstr "Delete"
 msgid "Delete comment permanently?"
 msgstr "Delete comment permanently?"
 
-#: src/views/article-create/article-create.tsx:306
+#: src/views/article-create/article-create.tsx:312
 msgid "Delete draft"
 msgstr "Delete draft"
 
@@ -395,7 +394,7 @@ msgstr "Discard and close"
 msgid "Discard draft and close?"
 msgstr "Discard draft and close?"
 
-#: src/views/article-create/article-create.tsx:307
+#: src/views/article-create/article-create.tsx:313
 msgid "Discard unpublished changes"
 msgstr "Discard unpublished changes"
 
@@ -406,6 +405,10 @@ msgstr "Do you really want to log out?"
 #: src/components/account/accounts.tsx:47
 msgid "Do you really want to remove this account?"
 msgstr "Do you really want to remove this account?"
+
+#: src/components/attach-file/attach-file-dialog.tsx:76
+msgid "Document…"
+msgstr "Document…"
 
 #: src/views/settings/settings-helper.ts:40
 msgid "Don't send logs"
@@ -424,7 +427,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:610
+#: src/components/comment/comment-edit.tsx:607
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -469,7 +472,7 @@ msgstr "Filter boards by name"
 msgid "Filter items"
 msgstr "Filter items"
 
-#: src/views/article-create/article-create.tsx:146
+#: src/views/article-create/article-create.tsx:149
 #: src/views/knowledge-base/knowledge-base.tsx:584
 msgid "Filter projects"
 msgstr "Filter projects"
@@ -743,6 +746,10 @@ msgstr "Other groups and teams"
 msgid "Password"
 msgstr "Password"
 
+#: src/components/attach-file/attach-file-dialog.tsx:89
+msgid "Photo library…"
+msgstr "Photo library…"
+
 #: src/views/settings/settings-helper.ts:25
 msgid "Problem"
 msgstr "Problem"
@@ -867,7 +874,7 @@ msgstr "Settings"
 msgid "Share"
 msgstr "Share"
 
-#: src/views/article/arcticle-actions.ts:654
+#: src/views/article/arcticle-actions.ts:655
 #: src/views/article/article__activity-stream.tsx:227
 #: src/views/article/article__activity-stream.tsx:234
 #: src/views/issue/activity/issue__activity-stream.tsx:147
@@ -885,7 +892,7 @@ msgid "Share logs"
 msgstr "Share logs"
 
 #: src/views/article/arcticle-actions.ts:217
-#: src/views/article/arcticle-actions.ts:641
+#: src/views/article/arcticle-actions.ts:642
 #: src/views/issue/issue-base-actions-creater.ts:612
 msgid "Share…"
 msgstr "Share…"
@@ -964,8 +971,8 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/components/attach-file/attach-file-dialog.tsx:90
-#: src/components/attachments-row/attachment-actions.ts:342
+#: src/components/attach-file/attach-file-dialog.tsx:102
+#: src/components/attachments-row/attachment-actions.ts:412
 msgid "Take a picture…"
 msgstr "Take a picture…"
 
@@ -1049,7 +1056,7 @@ msgstr "Thread muted"
 msgid "Thread unmuted"
 msgstr "Thread unmuted"
 
-#: src/views/article-create/article-create.tsx:389
+#: src/views/article-create/article-create.tsx:395
 msgid "Title"
 msgstr "Title"
 
@@ -1162,7 +1169,7 @@ msgstr "When integrating TeamCity and YouTrack, the users are matched by their e
 msgid "Woah, you can't touch this!"
 msgstr "Woah, you can't touch this!"
 
-#: src/components/comment/comment-edit.tsx:429
+#: src/components/comment/comment-edit.tsx:426
 #: src/views/issue/activity/activity__add-spent-time.tsx:426
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"

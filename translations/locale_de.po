@@ -200,7 +200,6 @@ msgstr "Durch die Anmeldung stimmen Sie den Datenschutzrichtlinien zu."
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachment-actions.ts
 msgid "Choose from library…"
 msgstr "Aus der Bibliothek wählen…"
@@ -412,6 +411,10 @@ msgstr "Möchten Sie sich wirklich abmelden?"
 #: src/components/account/accounts.tsx
 msgid "Do you really want to remove this account?"
 msgstr "Möchten Sie dieses Konto wirklich entfernen?"
+
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Document…"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -748,6 +751,10 @@ msgstr "Andere Gruppen und Teams"
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "Kennwort"
+
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Photo library…"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"

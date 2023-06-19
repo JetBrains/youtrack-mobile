@@ -196,7 +196,6 @@ msgstr "로그인하면 개인정보 보호정책에 동의하는 것입니다."
 msgid "Cancel"
 msgstr "취소"
 
-#: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachment-actions.ts
 msgid "Choose from library…"
 msgstr "라이브러리에서 선택…"
@@ -408,6 +407,10 @@ msgstr "로그아웃하시겠어요?"
 #: src/components/account/accounts.tsx
 msgid "Do you really want to remove this account?"
 msgstr "이 계정을 삭제하시겠어요?"
+
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Document…"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -743,6 +746,10 @@ msgstr "기타 그룹 및 팀"
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "비밀번호"
+
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Photo library…"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"

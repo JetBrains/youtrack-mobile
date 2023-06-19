@@ -200,7 +200,6 @@ msgstr "Ao fazer o login, você concorda com a Política de Privacidade."
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachment-actions.ts
 msgid "Choose from library…"
 msgstr "Selecionar da biblioteca…"
@@ -412,6 +411,10 @@ msgstr "Você quer mesmo encerrar a sessão?"
 #: src/components/account/accounts.tsx
 msgid "Do you really want to remove this account?"
 msgstr "Você realmente deseja excluir esta conta?"
+
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Document…"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -748,6 +751,10 @@ msgstr "Outros grupos e equipes"
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "Senha"
+
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Photo library…"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"

@@ -208,7 +208,6 @@ msgstr "Входя в систему, вы соглашаетесь с Поли�
 msgid "Cancel"
 msgstr "Отмена"
 
-#: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachment-actions.ts
 msgid "Choose from library…"
 msgstr "Выбрать из библиотеки…"
@@ -420,6 +419,10 @@ msgstr "Вы действительно хотите выйти?"
 #: src/components/account/accounts.tsx
 msgid "Do you really want to remove this account?"
 msgstr "Вы действительно хотите удалить этот аккаунт?"
+
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Document…"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -758,6 +761,10 @@ msgstr "Другие группы и команды"
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "Пароль"
+
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Photo library…"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"

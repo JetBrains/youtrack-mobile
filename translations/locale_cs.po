@@ -208,7 +208,6 @@ msgstr ""
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachment-actions.ts
 msgid "Choose from library…"
 msgstr ""
@@ -419,6 +418,10 @@ msgstr ""
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to remove this account?"
+msgstr ""
+
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Document…"
 msgstr ""
 
 #: src/views/settings/settings-helper.ts
@@ -758,6 +761,10 @@ msgstr ""
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "Heslo"
+
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Photo library…"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"

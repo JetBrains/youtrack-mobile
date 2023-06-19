@@ -196,7 +196,6 @@ msgstr "登录，即表示您同意《隐私政策》。"
 msgid "Cancel"
 msgstr "取消"
 
-#: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachment-actions.ts
 msgid "Choose from library…"
 msgstr "从库中选择…"
@@ -408,6 +407,10 @@ msgstr "确实要退出登录吗?"
 #: src/components/account/accounts.tsx
 msgid "Do you really want to remove this account?"
 msgstr "确实要移除此帐户吗?"
+
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Document…"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -743,6 +746,10 @@ msgstr "其他群组和团队"
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "密码"
+
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Photo library…"
+msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"
