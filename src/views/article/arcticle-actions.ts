@@ -288,6 +288,7 @@ const showArticleActions = (
           );
           setProcessing(false);
           Router.ArticleCreate({
+            originalArticleIdReadable: article.idReadable,
             originalArticleId: article.id,
             articleDraft: Array.isArray(articleDrafts)
               ? articleDrafts[0]

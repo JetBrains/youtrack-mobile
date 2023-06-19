@@ -67,7 +67,7 @@ export const createBtoa = (str: string): any => {
 export const until = (
   promises: any,
   combine: boolean = false,
-): Promise<[CustomError | null | undefined, any]> => {
+): Promise<unknown[] | [CustomError, unknown[]]> => {
   if (!promises) {
     return Promise.reject(['No promises are provided']);
   }

@@ -1,6 +1,7 @@
 import qs from 'qs';
 
 import ApiHelper from './api__helper';
+import issueFields from 'components/api/api__issue-fields';
 import log from 'components/log/log';
 import Router from 'components/router/router';
 import {fetch2, RequestController, requestController} from './api__request-controller';
@@ -10,6 +11,9 @@ import {HTTP_STATUS} from 'components/error/error-http-codes';
 import Auth from 'components/auth/oauth2';
 import type {AppConfig} from 'types/AppConfig';
 import type {RequestHeaders} from 'types/Auth';
+import {Attachment} from 'types/CustomFields';
+import {NormalizedAttachment} from 'types/Attachment';
+import {Visibility} from 'types/Visibility';
 
 const MAX_QUERY_LENGTH = 2048;
 
@@ -182,4 +186,75 @@ export default class BaseAPI {
 
     return options.parseJson === false ? response : await response?.json?.();
   }
+
+  async updateAttachmentVisibility(
+    subResourcePath: string,
+    attachment: Attachment,
+    visibility: Visibility | null,
+  ): Promise<Attachment> {
+    const queryString: string = qs.stringify({fields: issueFields.VISIBILITY.toString()});
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/${subResourcePath}/attachments/${attachment.id}?${queryString}`,
+      'POST',
+      {
+        visibility,
+      },
+    );
+  }
+
+  async updateCommentAttachmentVisibility(
+    subResourcePath: string,
+    attachment: Attachment,
+    visibility: Visibility | null,
+  ): Promise<Attachment> {
+    const queryString: string = qs.stringify({fields: issueFields.VISIBILITY.toString()});
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/${subResourcePath}/attachments/${attachment.id}?${queryString}`,
+      'POST',
+      {
+        // name: attachment.name,
+        visibility,
+      },
+    );
+  }
+
+  async attachFileToComment(
+    subResourcePath: string,
+    file: NormalizedAttachment,
+    commentId: string | undefined,
+  ): Promise<Attachment[]> {
+    const commentResourcePath: string = commentId ? `comments/${commentId}` : 'draftComment';
+    const url = `${subResourcePath}/${commentResourcePath}/attachments?fields=id,name,url,thumbnailURL,mimeType,imageDimensions(height,width)`;
+    const response = await fetch(url, {
+      method: 'POST',
+      body: createFormData(file),
+      headers: this.auth.getAuthorizationHeaders(),
+    });
+    const addedAttachments: Attachment[] = await response.json();
+    return ApiHelper.convertAttachmentRelativeToAbsURLs(
+      addedAttachments,
+      this.config.backendUrl,
+    );
+  }
+
+  async attachFile(subResourcePath: string, file: NormalizedAttachment): Promise<Attachment[]> {
+    const url = `${subResourcePath}/attachments?fields=id,name`;
+    const response = await fetch(url, {
+      method: 'POST',
+      body: createFormData(file),
+      headers: this.auth.getAuthorizationHeaders(),
+    });
+    return await response.json();
+  }
+}
+
+
+function createFormData(file: NormalizedAttachment): FormData {
+  const formData = new FormData();
+  formData.append('file', {
+    uri: file.url,
+    name: file.name,
+    type: file.mimeType,
+  });
+  return formData;
 }

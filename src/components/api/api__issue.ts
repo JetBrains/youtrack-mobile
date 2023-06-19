@@ -25,6 +25,7 @@ import type {
 import type {AnyIssue, IssueCreate, IssueFull} from 'types/Issue';
 import type {Visibility} from 'types/Visibility';
 import type {WorkItem} from 'types/Work';
+import {NormalizedAttachment} from 'types/Attachment';
 
 export default class IssueAPI extends ApiBase {
   draftsURL: string = `${this.youTrackApiUrl}${
@@ -364,56 +365,22 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async attachFile(
-    issueId: string,
-    fileUri: string,
-    fileName: string,
-    mimeType: string,
-  ): Promise<XMLHttpRequest> {
-    const url = `${this.youTrackIssueUrl}/${issueId}/attachments?fields=id,name`;
-    const headers = this.auth.getAuthorizationHeaders();
-    const formData = new FormData();
-    formData.append('photo', {
-      uri: fileUri,
-      name: fileName,
-      type: mimeType,
-    });
-    const response = await fetch(url, {
-      method: 'POST',
-      body: formData,
-      headers: headers,
-    });
-    return await response.json();
+  async attachFile(issueId: string, file: NormalizedAttachment): Promise<Attachment[]> {
+    return super.attachFile(
+      `${this.youTrackIssueUrl}/${issueId}`,
+      file,
+    );
   }
 
   async attachFileToComment(
     issueId: string,
-    fileUri: string,
-    fileName: string,
-    commentId: string,
-    mimeType: string,
-    visibility: Visibility | null | undefined = null,
-  ): Promise<Array<Attachment>> {
-    const resourcePath: string = commentId
-      ? `comments/${commentId}`
-      : 'draftComment';
-    const url = `${this.youTrackIssueUrl}/${issueId}/${resourcePath}/attachments?fields=id,name,url,thumbnailURL,mimeType,imageDimensions(height,width)`;
-    const formData = new FormData();
-    formData.append('photo', {
-      uri: fileUri,
-      name: fileName,
-      type: mimeType,
-      visibility,
-    });
-    const response = await fetch(url, {
-      method: 'POST',
-      body: formData,
-      headers: this.auth.getAuthorizationHeaders(),
-    });
-    const addedAttachments: Attachment[] = await response.json();
-    return ApiHelper.convertAttachmentRelativeToAbsURLs(
-      addedAttachments,
-      this.config.backendUrl,
+    file: NormalizedAttachment,
+    commentId: string | undefined,
+  ): Promise<Attachment[]> {
+    return super.attachFileToComment(
+      `${this.youTrackIssueUrl}/${issueId}`,
+      file,
+      commentId
     );
   }
 
@@ -433,22 +400,28 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async updateIssueAttachmentVisibility(
+  async updateAttachmentVisibility(
     issueId: string,
-    attachmentId: string,
-    visibility: Visibility | null | undefined,
+    attachment: Attachment,
+    visibility: Visibility,
   ): Promise<Attachment> {
-    const queryString = qs.stringify({
-      fields:
-        'id,thumbnailURL,url,visibility($type,permittedGroups($type,id),permittedUsers($type,id))',
-    });
-    const body = {
-      visibility,
-    };
-    return await this.makeAuthorizedRequest(
-      `${this.youTrackIssueUrl}/${issueId}/attachments/${attachmentId}?${queryString}`,
-      'POST',
-      body,
+    return await super.updateAttachmentVisibility(
+      `issues/${issueId}`,
+      attachment,
+      visibility
+    );
+  }
+
+  async updateCommentAttachmentVisibility(
+    issueId: string,
+    attachment: Attachment,
+    visibility: Visibility,
+    isCommentDraft: boolean,
+  ): Promise<Attachment> {
+    return await super.updateAttachmentVisibility(
+      `issues/${issueId}${isCommentDraft ? '/draftComment' : ''}`,
+      attachment,
+      visibility
     );
   }
 

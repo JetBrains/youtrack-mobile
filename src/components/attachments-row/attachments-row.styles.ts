@@ -33,6 +33,7 @@ export default EStyleSheet.create({
     left: UNIT,
   },
   attachmentType: {
+    maxWidth: UNIT * 10,
     borderRadius: 3,
     paddingVertical: 1,
     paddingHorizontal: UNIT / 2,

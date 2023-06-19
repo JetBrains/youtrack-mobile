@@ -401,8 +401,8 @@ export function uploadIssueAttach(
   files: NormalizedAttachment[],
 ): (dispatch: (arg0: any) => any, getState: () => any) => Promise<void> {
   return async (dispatch: (arg0: any) => any, getState: () => AppState) => {
-    const draftId: string = getState().creation.issue.id;
-    await dispatch(attachmentActions.uploadFile(files, draftId));
+    const draft: IssueCreate = getState().creation.issue;
+    await dispatch(attachmentActions.doUploadFile(false, files, draft));
   };
 }
 

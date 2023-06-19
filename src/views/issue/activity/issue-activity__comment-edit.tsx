@@ -6,6 +6,9 @@ import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {getApi} from 'components/api/api__instance';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {IssueContextData, IssueFull} from 'types/Issue';
+import {NormalizedAttachment} from 'types/Attachment';
+
+
 type Props = {
   comment: IssueComment;
   issueContext: IssueContextData;
@@ -21,9 +24,13 @@ type Props = {
 
 const IssueActivityStreamCommentEdit = (props: Props) => {
   const issue: IssueFull = props.issueContext.issue;
-  const issuePermissions: IssuePermissions =
-    props.issueContext.issuePermissions;
+  const issuePermissions: IssuePermissions = props.issueContext.issuePermissions;
   const dispatch: (...args: any[]) => any = props.issueContext.dispatcher;
+
+  const doUploadFileToComment = (files: NormalizedAttachment[], comment: IssueComment) => {
+    return attachmentActions.doUploadFileToComment(false, files, issue, comment);
+  };
+
   const {
     onCommentChange = () => {},
     onAddSpentTime = null,
@@ -32,7 +39,7 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
   return (
     <IssueCommentEdit
       focus={true}
-      onAttach={attachmentActions.uploadFileToIssueComment}
+      onAttach={doUploadFileToComment}
       onCommentChange={onCommentChange}
       getVisibilityOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
       onSubmitComment={props.onSubmitComment}

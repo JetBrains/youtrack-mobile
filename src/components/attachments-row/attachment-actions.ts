@@ -1,24 +1,34 @@
-import attachFile from '../attach-file/attach-file';
-import log from '../log/log';
-import usage from '../usage/usage';
+import attachFile from 'components/attach-file/attach-file';
+import log from 'components/log/log';
+import usage from 'components/usage/usage';
 import {
+  ANALYTICS_ARTICLE_PAGE,
+  ANALYTICS_ARTICLE_PAGE_STREAM,
   ANALYTICS_ISSUE_PAGE,
   ANALYTICS_ISSUE_STREAM_SECTION,
-} from '../analytics/analytics-ids';
+} from 'components/analytics/analytics-ids';
 import {attachmentActionMap, createAttachmentTypes} from './attachment-helper';
 import {i18n} from 'components/i18n/i18n';
-import {IconAttachment, IconCamera} from '../icon/icon';
-import {logEvent} from '../log/log-helper';
-import {notify, notifyError} from '../notification/notification';
-import {ResourceTypes} from '../api/api__resource-types';
+import {IconAttachment, IconCamera} from 'components/icon/icon';
+import {logEvent} from 'components/log/log-helper';
+import {notify, notifyError} from 'components/notification/notification';
+import {hasType, ResourceTypes} from 'components/api/api__resource-types';
 import {until} from 'util/util';
-import type Api from '../api/api';
+
+import ArticlesAPI from 'components/api/api__articles';
+import IssueAPI from 'components/api/api__issue';
+import type Api from 'components/api/api';
 import type {ActionSheetAction} from 'types/Action';
-import type {AppState} from '../../reducers';
+import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {NormalizedAttachment} from 'types/Attachment';
+import {CustomError} from 'types/Error';
+import {IssueCreate, IssueFull} from 'types/Issue';
+import {Visibility} from 'types/Visibility';
+
 type ApiGetter = () => Api;
+
 type StateGetter = () => AppState;
 const attachFileMethod: Record<string, any> = {
   openCamera: 'openCamera',
@@ -34,9 +44,18 @@ export type AttachmentActions = {
   cancelImageAttaching: (...args: any[]) => any;
   doRemoveAttach: (...args: any[]) => any;
   stopImageAttaching: (...args: any[]) => any;
-  uploadFile: (...args: any[]) => any;
-  uploadFileToComment: (...args: any[]) => any;
-  uploadFileToIssueComment: (...args: any[]) => any;
+  doUploadFile: (
+    isArticle: boolean,
+    files: NormalizedAttachment[],
+    entity: IssueFull | Article | IssueCreate,
+    comment?: IssueComment,
+  ) => Promise<Attachment[]>;
+  doUploadFileToComment: (
+    isArticle: boolean,
+    files: NormalizedAttachment[],
+    entity: IssueFull | Article | IssueCreate,
+    comment: IssueComment,
+  ) => Promise<Attachment[]>;
   uploadFileToArticleComment: (...args: any[]) => any;
   removeAttachment: (...args: any[]) => any;
   removeArticleAttachment: (...args: any[]) => any;
@@ -46,6 +65,8 @@ export type AttachmentActions = {
   createAttachActions: (...args: any[]) => any;
   loadIssueAttachments: (...args: any[]) => any;
 };
+
+
 export const getAttachmentActions = (prefix: string): AttachmentActions => {
   const types: Record<keyof typeof attachmentActionMap, string> = createAttachmentTypes(prefix);
   const actions: Record<string, any> = {
@@ -80,9 +101,10 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
         type: types.ATTACH_STOP_ADDING,
       };
     },
-    uploadFile: function (
+    doUploadFile: function (
+      isArticle: boolean = false,
       files: NormalizedAttachment[],
-      issueId?: string,
+      entity: IssueFull | Article | IssueCreate,
     ) {
       return async (
         dispatch: (arg0: any) => any,
@@ -90,68 +112,107 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
         getApi: ApiGetter,
       ) => {
         const api: Api = getApi();
-        const entityId: string = issueId || getState().issueState.issue.id;
-        const [error, addedAttachments] = await until(
-          files.map((attach: Attachment) =>
-            api.issue.attachFile(
-              entityId,
-              attach.url,
-              attach.name,
-              attach.mimeType,
-            ),
-          ),
+        const attachApi: ArticlesAPI | IssueAPI = isArticle ? api.articles : api.issue;
+        const [error, addedAttachments]: [CustomError | null, Attachment[]] = await until(
+          files.map((file: NormalizedAttachment) => attachApi.attachFile(entity.id, file)),
           true,
-        );
+        ) as [CustomError | null, Attachment[]];
 
         if (error) {
           notifyError(error);
           return [];
         } else {
-          log.info(`File attached to issue ${entityId}`);
-          usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Attach image', 'Success');
+          log.info(`File attached to the ${isArticle ? 'Article' : 'Issue'} ${entity.id}`);
+          usage.trackEvent(
+            isArticle ? ANALYTICS_ARTICLE_PAGE : ANALYTICS_ISSUE_PAGE,
+            'Attach image',
+            'Success'
+          );
           dispatch(actions.stopImageAttaching());
           dispatch(actions.toggleAttachFileDialog(false));
-          return addedAttachments;
+          const visibility: Visibility | undefined = files[0].visibility;
+          if (visibility) {
+            const [err, attachmentsWithVisibility]: [CustomError | null, Attachment[]] = await until(
+              addedAttachments.map(
+                (attach: Attachment) => (attachApi.updateAttachmentVisibility(
+                  entity.id,
+                  attach,
+                  visibility,
+                  hasType.articleDraft(entity)
+                ))
+              ),
+              true,
+            ) as [CustomError | null, Attachment[]];
+            return err ? addedAttachments : attachmentsWithVisibility;
+          } else {
+            return addedAttachments;
+          }
         }
       };
-    },
-    uploadFileToIssueComment: function (
+    }    ,
+    doUploadFileToComment: function (
+      isArticle: boolean = false,
       files: NormalizedAttachment[],
-      comment: Partial<IssueComment>,
+      entity: IssueFull | Article | IssueCreate,
+      comment: IssueComment,
     ) {
       return async (
         dispatch: (arg0: any) => any,
         getState: StateGetter,
         getApi: ApiGetter,
-      ): Promise<Array<Attachment>> => {
-        logEvent({
-          message: 'Attaching file to a comment',
-          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
-        });
+      ) => {
         const api: Api = getApi();
-        const issueId: string = comment?.issue?.id || getState().issueState.issue.id;
-        const isDraftComment: boolean = comment.$type === ResourceTypes.DRAFT_ISSUE_COMMENT;
-        const [error, attachments] = await until(
-          files.map((attach: Attachment) =>
-            api.issue.attachFileToComment(
-              issueId,
-              attach.url,
-              attach.name,
-              isDraftComment ? undefined : comment.id,
-              attach.mimeType,
-              comment.visibility,
-            ),
-          ),
+        const attachApi: ArticlesAPI | IssueAPI = isArticle ? api.articles : api.issue;
+        const isCommentDraft: boolean = hasType.commentDraft(comment);
+        const [error, addedAttachments]: [CustomError | null, Attachment[]] = await until(
+          files.map((file: NormalizedAttachment) => attachApi.attachFileToComment(
+            entity.id,
+            file,
+            isCommentDraft ? undefined : comment.id
+          )),
           true,
-        );
+        ) as [CustomError | null, Attachment[]];
 
         if (error) {
           notifyError(error);
           return [];
         } else {
+          log.info(`File attached to the ${isArticle ? 'Article' : 'Issue'} Comment ${entity.id}`);
+          usage.trackEvent(
+            isArticle ? ANALYTICS_ARTICLE_PAGE_STREAM : ANALYTICS_ISSUE_STREAM_SECTION,
+            'Attach image',
+            'Success'
+          );
           dispatch(actions.stopImageAttaching());
           dispatch(actions.toggleAttachFileDialog(false));
-          return attachments;
+          const visibility: Visibility | undefined = (
+            files[0].visibility || (hasType.visibilityLimited(comment.visibility) ? comment.visibility : null)
+          );
+          if (visibility) {
+            const [err, attachmentsWithVisibility]: [CustomError | null, Attachment[]] = await until(
+              addedAttachments.map(
+                (attach: Attachment) => {
+                  return attachApi.updateCommentAttachmentVisibility(
+                    entity.id, attach, visibility, isCommentDraft
+                  );
+                }
+              ),
+            ) as [CustomError | null, Attachment[]];
+            if (!err) {
+              const visibilityMap: Record<string, Visibility> = attachmentsWithVisibility.reduce(
+                (akk, attach: Attachment) => ({
+                  ...akk,
+                  [attach.id]: attach.visibility,
+                }), {});
+              return addedAttachments.map((attach: Attachment) => {
+                return Object.assign(
+                  attach,
+                  visibilityMap[attach.id] ? {visibility: visibilityMap[attach.id]} : {}
+                );
+              });
+            }
+          }
+          return addedAttachments;
         }
       };
     },
@@ -163,27 +224,25 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
         dispatch: (arg0: any) => any,
         getState: StateGetter,
         getApi: ApiGetter,
-      ): Promise<Array<Attachment>> => {
+      ): Promise<Attachment[]> => {
         logEvent({
           message: 'Attaching file to a comment',
-          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
+          analyticsId: ANALYTICS_ARTICLE_PAGE_STREAM,
         });
         const api: Api = getApi();
-        const articleId: string = getState().article.article.id;
-        const isDraftComment: boolean =
-          comment.$type === ResourceTypes.DRAFT_ARTICLE_COMMENT;
-        const [error, attachments] = await until(
-          files.map((attach: Attachment) =>
+        const entityId: string = getState().article.article.id;
+        const isDraftComment: boolean = comment.$type === ResourceTypes.DRAFT_ARTICLE_COMMENT;
+        const commentId: string | undefined = isDraftComment ? undefined : comment.id;
+        const [error, addedAttachments]: [CustomError | null, Attachment[]] = await until(
+          files.map((file: NormalizedAttachment) =>
             api.articles.attachFileToComment(
-              articleId,
-              attach.url,
-              attach.name,
-              isDraftComment ? undefined : comment.id,
-              attach.mimeType,
+              entityId,
+              file,
+              commentId,
             ),
           ),
           true,
-        );
+        ) as [CustomError | null, Attachment[]];
 
         if (error) {
           notifyError(error);
@@ -191,7 +250,18 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
         } else {
           dispatch(actions.stopImageAttaching());
           dispatch(actions.toggleAttachFileDialog(false));
-          return attachments;
+          const visibility: Visibility | undefined = files[0].visibility;
+          if (visibility) {
+            const [err, attachmentsWithVisibility]: [CustomError | null, Attachment[]] = await until(
+              addedAttachments.map(
+                (attach: Attachment) => api.articles.updateAttachmentVisibility(entityId, attach, visibility)
+              ),
+              true,
+            ) as [CustomError | null, Attachment[]];
+            return err ? addedAttachments : attachmentsWithVisibility;
+          } else {
+            return addedAttachments;
+          }
         }
       };
     },

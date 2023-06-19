@@ -74,10 +74,7 @@ export interface Props {
   isArticle?: boolean;
   isEditMode?: boolean;
   onAddSpentTime?: (() => any) | null;
-  onAttach: (
-    attachment: Attachment,
-    comment: IssueComment,
-  ) => Attachment[];
+  onAttach: (files: NormalizedAttachment[], comment: IssueComment) => Promise<Attachment[]>;
   onCommentChange: (comment: IssueComment, isAttachmentChange?: boolean) => any;
   onSubmitComment: (comment: IssueComment) => any;
   visibilityLabel?: string;
@@ -332,7 +329,7 @@ const CommentEdit = (props: Props) => {
   const renderAttachFileDialog = () => {
     return (
       <AttachFileDialog
-        hideVisibility={true}
+        hideVisibility={false}
         getVisibilityOptions={props.getVisibilityOptions}
         actions={{
           onAttach: async (

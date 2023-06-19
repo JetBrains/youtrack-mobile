@@ -16,7 +16,8 @@ import {activityArticleCategory} from '../activity/activity__category';
 import type {Activity} from 'types/Activity';
 import type {Article, ArticleDraft} from 'types/Article';
 import type {Attachment, IssueComment} from 'types/CustomFields';
-import {VisibilityGroups} from 'types/Visibility';
+import {Visibility, VisibilityGroups} from 'types/Visibility';
+import {NormalizedAttachment} from 'types/Attachment';
 
 
 export default class ArticlesAPI extends ApiBase {
@@ -219,16 +220,16 @@ export default class ArticlesAPI extends ApiBase {
         $visibilitySkip: 0,
       },
     );
-    const requestURL: string =
-      url || `${this.youTrackApiUrl}/articles/${articleId}/visibilityOptions`;
+    const requestURL: string = url || `${this.youTrackApiUrl}/articles/${articleId}/visibilityOptions`;
     return await this.makeAuthorizedRequest(
       `${requestURL}?${queryString}`,
       'GET',
     );
   };
+
   getDraftVisibilityOptions: (articleId: string) => Promise<VisibilityGroups> = async (
     articleId: string,
-  ): Promise<Article> =>
+  ): Promise<VisibilityGroups> =>
     this.getVisibilityOptions(
       articleId,
       `${this.currentUserAPIUrl}/articleDrafts/${articleId}/visibilityOptions`,
@@ -341,26 +342,15 @@ export default class ArticlesAPI extends ApiBase {
     return this.convertAttachmentsURL(attachments);
   }
 
-  async attachFile(
+  attachFile = async (
     articleId: string,
-    fileUri: string,
-    fileName: string,
-  ): Promise<XMLHttpRequest> {
-    const url = `${this.currentUserAPIUrl}/articleDrafts/${articleId}/attachments?fields=id,name`;
-    const headers = this.auth.getAuthorizationHeaders();
-    const formData = new FormData();
-    formData.append('photo', {
-      uri: fileUri,
-      name: fileName,
-      type: 'image/binary',
-    });
-    const response = await fetch(url, {
-      method: 'POST',
-      body: formData,
-      headers: headers,
-    });
-    return await response.json();
-  }
+    file: NormalizedAttachment,
+  ): Promise<Attachment[]> => {
+    return super.attachFile(
+      `${this.currentUserAPIUrl}/articleDrafts/${articleId}`,
+      file,
+    );
+  };
 
   removeAttachment(articleId: string, attachmentId: string): Promise<any> {
     return this.removeArticleEntity('attachments', articleId, attachmentId);
@@ -383,30 +373,40 @@ export default class ArticlesAPI extends ApiBase {
 
   async attachFileToComment(
     articleId: string,
-    fileUri: string,
-    fileName: string,
+    file: NormalizedAttachment,
     commentId?: string,
-    mimeType: string,
-  ): Promise<Array<Attachment>> {
-    const resourcePath: string = commentId
-      ? `comments/${commentId}`
-      : 'draftComment';
-    const url = `${this.youTrackApiUrl}/articles/${articleId}/${resourcePath}/attachments?fields=id,name,url,thumbnailURL,mimeType,imageDimensions(height,width)`;
-    const formData = new FormData();
-    formData.append('photo', {
-      uri: fileUri,
-      name: fileName,
-      type: mimeType,
-    });
-    const response = await fetch(url, {
-      method: 'POST',
-      body: formData,
-      headers: this.auth.getAuthorizationHeaders(),
-    });
-    const addedAttachments: Attachment[] = await response.json();
-    return ApiHelper.convertAttachmentRelativeToAbsURLs(
-      addedAttachments,
-      this.config.backendUrl,
+  ): Promise<Attachment[]> {
+    return super.attachFileToComment(
+      `${this.youTrackApiUrl}/articles/${articleId}`,
+      file,
+      commentId,
+    );
+  }
+
+  async updateAttachmentVisibility(
+    articleId: string,
+    attachment: Attachment,
+    visibility: Visibility,
+    isArticleDraft?: boolean,
+  ): Promise<Attachment> {
+    const resourcePath: string = isArticleDraft ? `${this.isActualAPI ? '' : 'admin/'}users/me/articleDrafts` : `articles`;
+    return await super.updateAttachmentVisibility(
+      `${resourcePath}/${articleId}`,
+      attachment,
+      visibility
+    );
+  }
+
+  async updateCommentAttachmentVisibility(
+    articleId: string,
+    attachment: Attachment,
+    visibility: Visibility,
+    isCommentDraft: boolean,
+  ): Promise<Attachment> {
+    return await super.updateAttachmentVisibility(
+      `articles/${articleId}${isCommentDraft ? '/draftComment' : ''}`,
+      attachment,
+      visibility
     );
   }
 

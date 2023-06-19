@@ -11,6 +11,7 @@ import {visibilityArticleDefaultText} from 'components/visibility/visibility-str
 
 import type {Article} from 'types/Article';
 import type {Attachment, IssueComment} from 'types/CustomFields';
+import {NormalizedAttachment} from 'types/Attachment';
 
 interface Props {
   article: Article;
@@ -24,11 +25,15 @@ interface Props {
 const ArticleActivityStreamCommentEdit = (props: Props) => {
   const dispatch: (...args: any[]) => any = useDispatch();
   const {article, issuePermissions, onCommentChange = (comment: IssueComment) => comment} = props;
+  const doUploadFileToComment = (files: NormalizedAttachment[], comment: IssueComment) => {
+    return attachmentActions.doUploadFileToComment(true, files, props.article, comment);
+  };
+
   return (
     <IssueCommentEdit
       isArticle={true}
       isEditMode={true}
-      onAttach={attachmentActions.uploadFileToArticleComment}
+      onAttach={doUploadFileToComment}
       onCommentChange={onCommentChange}
       getVisibilityOptions={() => getApi().articles.getVisibilityOptions(article.id)}
       onSubmitComment={props.onSubmitComment}

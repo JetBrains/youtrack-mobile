@@ -10,6 +10,9 @@ import type {IssueBaseActions} from './issue-base-reducer';
 import {commandDialogActionMap} from 'components/command-dialog/command-dialog-action-types';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import {attachmentActionMap} from 'components/attachments-row/attachment-helper';
+import {NormalizedAttachment} from 'types/Attachment';
+
+
 export const createDispatchActions = (
   actions: IssueBaseActions,
   commandDialogTypes: typeof commandDialogActionMap,
@@ -258,7 +261,7 @@ export const createDispatchActions = (
   removeAttachment: (attach, issueId) => {
     return attachmentActions.removeAttachment(attach, issueId);
   },
-  uploadFile: (files, issueId) => {
-    return attachmentActions.uploadFile(files, issueId);
+  uploadFile: (files: NormalizedAttachment[], issue: IssueFull) => {
+    return attachmentActions.doUploadFile(false, files, issue);
   },
 });

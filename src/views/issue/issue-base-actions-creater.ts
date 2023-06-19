@@ -888,7 +888,7 @@ export const createActions = (
     ): (dispatch: (arg0: any) => any, getState: StateGetter) => Promise<void> {
       return async (dispatch: (arg0: any) => any, getState: StateGetter) => {
         await dispatch(
-          dispatchActions.uploadFile(files, getState()[stateFieldName].issueId),
+          dispatchActions.uploadFile(files, getState()[stateFieldName].issue),
         );
       };
     },

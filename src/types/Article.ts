@@ -19,7 +19,7 @@ export type Article = {
   ordinal: number;
   parentId: string | null;
   parentArticle: Article;
-  project: ArticleProject;
+  project: ArticleProject | null;
   reporter: User;
   summary: string;
   updated: number;

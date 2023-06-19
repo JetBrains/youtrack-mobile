@@ -6,12 +6,15 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+
 import {useDebouncedCallback} from 'use-debounce';
 import {useDispatch, useSelector} from 'react-redux';
+import {View as AnimatedView} from 'react-native-animatable';
+
 import * as articleCreateActions from './arcticle-create-actions';
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
-import AttachmentsRow from 'components/attachments-row/attachments-row';
 import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
+import AttachmentsRow from 'components/attachments-row/attachments-row';
 import Badge from 'components/badge/badge';
 import Header from 'components/header/header';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
@@ -28,28 +31,30 @@ import {IconAngleDown, IconCheck, IconClose} from 'components/icon/icon';
 import {PanelWithSeparator} from 'components/panel/panel-with-separator';
 import {SkeletonCreateArticle} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
-import {View as AnimatedView} from 'react-native-animatable';
+
 import styles from './article-create.styles';
-import type {AppState} from '../../reducers';
+
+import type {AppState} from 'reducers';
 import type {Article, ArticleDraft, ArticleProject} from 'types/Article';
 import type {ArticleCreateState} from './article-create-reducers';
-import type {Attachment, IssueProject} from 'types/CustomFields';
+import type {Attachment} from 'types/CustomFields';
 import type {CustomError} from 'types/Error';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Theme, UIThemeColors} from 'types/Theme';
 import type {Visibility} from 'types/Visibility';
-type Props = {
-  articleDraft?:
-    | (Article & {
-        project: ArticleProject | null;
-      })
-    | null;
+
+interface Props {
+  articleDraft?: (Article & {
+    project: ArticleProject | null;
+  }) | null;
   isNew?: boolean;
+  originalArticleIdReadable?: string;
   originalArticleId?: string;
   breadCrumbs?: React.ReactElement<React.ComponentProps<any>, any> | null;
   isSplitView: boolean;
   onHide: () => any;
-};
+}
+
 
 const ArticleCreate = (props: Props) => {
   const articleDraftDataInitial = Object.freeze({
@@ -65,9 +70,9 @@ const ArticleCreate = (props: Props) => {
   const dispatch = useDispatch();
   const theme: Theme = useContext(ThemeContext);
   const isConnected: boolean = useSelector(
-    (state: AppState) => state.app.networkState.isConnected,
+    (state: AppState) => !!state.app.networkState?.isConnected,
   );
-  const articleDraft: ArticleDraft = useSelector(
+  const articleDraft: ArticleDraft | null = useSelector(
     (state: AppState) => state.articleCreate.articleDraft,
   );
   const error: CustomError | null = useSelector(
@@ -79,7 +84,7 @@ const ArticleCreate = (props: Props) => {
   const issuePermissions: IssuePermissions = useSelector(
     (state: AppState) => state.app.issuePermissions,
   );
-  const attachingImage: Attachment = useSelector(
+  const attachingImage: Attachment | null = useSelector(
     (state: AppState) => state.articleCreate.attachingImage,
   );
   const isAttachFileDialogVisible: boolean = useSelector(
@@ -117,9 +122,7 @@ const ArticleCreate = (props: Props) => {
     let draft: Partial<ArticleDraft> = articleDraft;
 
     if (props.originalArticleId && !draft.id) {
-      const createdArticleDraft: ArticleDraft = await createArticleDraft(
-        props.originalArticleId,
-      );
+      const createdArticleDraft: ArticleDraft = await createArticleDraft(props.originalArticleId);
       draft = {...createdArticleDraft, ...articleDraft};
     }
 
@@ -135,22 +138,22 @@ const ArticleCreate = (props: Props) => {
 
   const renderProjectSelect = () => {
     if (isProjectSelectVisible) {
-      const selectedItems = [];
+      const selectedItems: ArticleProject[] = [];
 
       const hideSelect = () => updateProjectSelectVisibility(false);
 
       const selectProps = {
         multi: false,
-        selectedItems: selectedItems,
+        selectedItems,
         emptyValue: null,
         placeholder: i18n('Filter projects'),
         dataSource: () =>
           Promise.resolve(
-            getStorageState().projects.filter((it: ArticleProject) =>
-              issuePermissions.articleCanCreateArticle(it.ringId),
+            getStorageState().projects.filter(
+              (it: ArticleProject) => issuePermissions.articleCanCreateArticle(it.ringId),
             ),
           ),
-        onSelect: (project: IssueProject) => {
+        onSelect: (project: ArticleProject) => {
           updateDraft({
             project: project,
             parentArticle: null,
@@ -215,7 +218,7 @@ const ArticleCreate = (props: Props) => {
         }
         onRightButtonClick={async () => {
           if (!isSubmitDisabled) {
-            const createdArticle: Article | null | undefined = await dispatch(
+            const createdArticle: Article | undefined = await dispatch(
               articleCreateActions.publishArticleDraft(draft),
             );
 
@@ -249,19 +252,22 @@ const ArticleCreate = (props: Props) => {
     dispatch(articleCreateActions.loadAttachments());
   };
 
-  const renderAttachFileDialog = (): React.ReactElement<
-    React.ComponentProps<typeof AttachFileDialog>,
-    typeof AttachFileDialog
-  > | null => {
+  const renderAttachFileDialog = (): React.ReactNode => {
     if (!articleDraft) {
       return null;
     }
 
     return (
       <AttachFileDialog
-        hideVisibility={true}
-        getVisibilityOptions={() =>
-          getApi().articles.getVisibilityOptions(articleDraft.id)
+        hideVisibility={false}
+        getVisibilityOptions={() => {
+          const articlesAPI = getApi().articles;
+          return (props.originalArticleIdReadable
+            ? articlesAPI.getVisibilityOptions
+            : articlesAPI.getDraftVisibilityOptions)(
+            (props.originalArticleIdReadable || articleDraft.id) as string
+          );
+        }
         }
         actions={{
           onAttach: async (
@@ -425,6 +431,4 @@ const ArticleCreate = (props: Props) => {
   );
 };
 
-export default React.memo<ArticleCreateState>(
-  ArticleCreate,
-) as React$AbstractComponent<ArticleCreateState, unknown>;
+export default React.memo<ArticleCreateState>(ArticleCreate);
