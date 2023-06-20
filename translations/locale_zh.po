@@ -180,6 +180,10 @@ msgstr "Bugsnag 隐私政策"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "登录，即表示您同意《隐私政策》。"
 
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Camera"
+msgstr ""
+
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
 #: src/components/tags/tags.tsx
@@ -195,10 +199,6 @@ msgstr "登录，即表示您同意《隐私政策》。"
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Cancel"
 msgstr "取消"
-
-#: src/components/attachments-row/attachment-actions.ts
-msgid "Choose from library…"
-msgstr "从库中选择…"
 
 #: src/components/debug-view/debug-view.tsx
 #: src/components/popup/popup.tsx
@@ -409,7 +409,7 @@ msgid "Do you really want to remove this account?"
 msgstr "确实要移除此帐户吗?"
 
 #: src/components/attach-file/attach-file-dialog.tsx
-msgid "Document…"
+msgid "Document"
 msgstr ""
 
 #: src/views/settings/settings-helper.ts
@@ -748,7 +748,7 @@ msgid "Password"
 msgstr "密码"
 
 #: src/components/attach-file/attach-file-dialog.tsx
-msgid "Photo library…"
+msgid "Photo and video library"
 msgstr ""
 
 #: src/views/settings/settings-helper.ts
@@ -970,11 +970,6 @@ msgstr "与操作系统同步"
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "标签"
-
-#: src/components/attach-file/attach-file-dialog.tsx
-#: src/components/attachments-row/attachment-actions.ts
-msgid "Take a picture…"
-msgstr "拍照…"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Thank you for your feedback!"

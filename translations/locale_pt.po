@@ -184,6 +184,10 @@ msgstr "Política de Privacidade da Bugsnag"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "Ao fazer o login, você concorda com a Política de Privacidade."
 
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Camera"
+msgstr ""
+
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
 #: src/components/tags/tags.tsx
@@ -199,10 +203,6 @@ msgstr "Ao fazer o login, você concorda com a Política de Privacidade."
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Cancel"
 msgstr "Cancelar"
-
-#: src/components/attachments-row/attachment-actions.ts
-msgid "Choose from library…"
-msgstr "Selecionar da biblioteca…"
 
 #: src/components/debug-view/debug-view.tsx
 #: src/components/popup/popup.tsx
@@ -413,7 +413,7 @@ msgid "Do you really want to remove this account?"
 msgstr "Você realmente deseja excluir esta conta?"
 
 #: src/components/attach-file/attach-file-dialog.tsx
-msgid "Document…"
+msgid "Document"
 msgstr ""
 
 #: src/views/settings/settings-helper.ts
@@ -753,7 +753,7 @@ msgid "Password"
 msgstr "Senha"
 
 #: src/components/attach-file/attach-file-dialog.tsx
-msgid "Photo library…"
+msgid "Photo and video library"
 msgstr ""
 
 #: src/views/settings/settings-helper.ts
@@ -976,11 +976,6 @@ msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Etiqueta"
 msgstr[1] "Etiquetas"
-
-#: src/components/attach-file/attach-file-dialog.tsx
-#: src/components/attachments-row/attachment-actions.ts
-msgid "Take a picture…"
-msgstr "Tirar uma foto…"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Thank you for your feedback!"

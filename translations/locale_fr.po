@@ -184,6 +184,10 @@ msgstr "Charte de confidentialité de Bugsnag"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "En vous connectant, vous acceptez la Charte de confidentialité."
 
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Camera"
+msgstr ""
+
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
 #: src/components/tags/tags.tsx
@@ -199,10 +203,6 @@ msgstr "En vous connectant, vous acceptez la Charte de confidentialité."
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Cancel"
 msgstr "Annuler"
-
-#: src/components/attachments-row/attachment-actions.ts
-msgid "Choose from library…"
-msgstr "Choisir à partir de la bibliothèque…"
 
 #: src/components/debug-view/debug-view.tsx
 #: src/components/popup/popup.tsx
@@ -413,7 +413,7 @@ msgid "Do you really want to remove this account?"
 msgstr "Souhaitez-vous vraiment supprimer ce compte ?"
 
 #: src/components/attach-file/attach-file-dialog.tsx
-msgid "Document…"
+msgid "Document"
 msgstr ""
 
 #: src/views/settings/settings-helper.ts
@@ -753,7 +753,7 @@ msgid "Password"
 msgstr "Mot de passe"
 
 #: src/components/attach-file/attach-file-dialog.tsx
-msgid "Photo library…"
+msgid "Photo and video library"
 msgstr ""
 
 #: src/views/settings/settings-helper.ts
@@ -976,11 +976,6 @@ msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Balise"
 msgstr[1] "Balises"
-
-#: src/components/attach-file/attach-file-dialog.tsx
-#: src/components/attachments-row/attachment-actions.ts
-msgid "Take a picture…"
-msgstr "Prendre une photo…"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Thank you for your feedback!"

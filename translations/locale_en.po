@@ -154,7 +154,7 @@ msgid_plural "Attachments"
 msgstr[0] "Attachment"
 msgstr[1] "Attachments"
 
-#: src/components/attachments-row/attachment-actions.ts:39
+#: src/components/attachments-row/attachment-actions.ts:37
 msgid "Attachment deleted"
 msgstr "Attachment deleted"
 
@@ -178,6 +178,10 @@ msgstr "Bugsnag Privacy Policy"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "By logging in, you agree to the Privacy Policy."
 
+#: src/components/attach-file/attach-file-dialog.tsx:102
+msgid "Camera"
+msgstr "Camera"
+
 #: src/components/account/accounts.tsx:51
 #: src/components/confirmation/confirmation.ts:14
 #: src/components/tags/tags.tsx:57
@@ -193,10 +197,6 @@ msgstr "By logging in, you agree to the Privacy Policy."
 #: src/views/settings/settings__feedback-form.tsx:87
 msgid "Cancel"
 msgstr "Cancel"
-
-#: src/components/attachments-row/attachment-actions.ts:399
-msgid "Choose from library…"
-msgstr "Choose from library…"
 
 #: src/components/debug-view/debug-view.tsx:40
 #: src/components/popup/popup.tsx:31
@@ -407,8 +407,8 @@ msgid "Do you really want to remove this account?"
 msgstr "Do you really want to remove this account?"
 
 #: src/components/attach-file/attach-file-dialog.tsx:76
-msgid "Document…"
-msgstr "Document…"
+msgid "Document"
+msgstr "Document"
 
 #: src/views/settings/settings-helper.ts:40
 msgid "Don't send logs"
@@ -747,8 +747,8 @@ msgid "Password"
 msgstr "Password"
 
 #: src/components/attach-file/attach-file-dialog.tsx:89
-msgid "Photo library…"
-msgstr "Photo library…"
+msgid "Photo and video library"
+msgstr "Photo and video library"
 
 #: src/views/settings/settings-helper.ts:25
 msgid "Problem"
@@ -970,11 +970,6 @@ msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
-
-#: src/components/attach-file/attach-file-dialog.tsx:102
-#: src/components/attachments-row/attachment-actions.ts:412
-msgid "Take a picture…"
-msgstr "Take a picture…"
 
 #: src/views/settings/settings__feedback-form.tsx:111
 msgid "Thank you for your feedback!"

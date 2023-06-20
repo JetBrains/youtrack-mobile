@@ -192,6 +192,10 @@ msgstr ""
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr ""
 
+#: src/components/attach-file/attach-file-dialog.tsx
+msgid "Camera"
+msgstr ""
+
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
 #: src/components/tags/tags.tsx
@@ -207,10 +211,6 @@ msgstr ""
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Cancel"
 msgstr "Скасувати"
-
-#: src/components/attachments-row/attachment-actions.ts
-msgid "Choose from library…"
-msgstr ""
 
 #: src/components/debug-view/debug-view.tsx
 #: src/components/popup/popup.tsx
@@ -421,7 +421,7 @@ msgid "Do you really want to remove this account?"
 msgstr ""
 
 #: src/components/attach-file/attach-file-dialog.tsx
-msgid "Document…"
+msgid "Document"
 msgstr ""
 
 #: src/views/settings/settings-helper.ts
@@ -763,7 +763,7 @@ msgid "Password"
 msgstr "Пароль"
 
 #: src/components/attach-file/attach-file-dialog.tsx
-msgid "Photo library…"
+msgid "Photo and video library"
 msgstr ""
 
 #: src/views/settings/settings-helper.ts
@@ -988,11 +988,6 @@ msgstr[0] "Мітка"
 msgstr[1] "Мітки"
 msgstr[2] "Мітки"
 msgstr[3] "Мітки"
-
-#: src/components/attach-file/attach-file-dialog.tsx
-#: src/components/attachments-row/attachment-actions.ts
-msgid "Take a picture…"
-msgstr ""
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Thank you for your feedback!"
