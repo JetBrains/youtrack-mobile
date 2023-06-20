@@ -31,6 +31,7 @@ export default EStyleSheet.create({
     margin: UNIT,
   },
   buttonIcon: {
+    minWidth: 20,
     marginRight: UNIT * 2,
     color: '$iconAccent',
   },

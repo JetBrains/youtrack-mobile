@@ -9,7 +9,6 @@ import {
 } from 'components/analytics/analytics-ids';
 import {attachmentActionMap, createAttachmentTypes} from './attachment-helper';
 import {i18n} from 'components/i18n/i18n';
-import {IconAttachment, IconCamera} from 'components/icon/icon';
 import {logEvent} from 'components/log/log-helper';
 import {notify, notifyError} from 'components/notification/notification';
 import {hasType, ResourceTypes} from 'components/api/api__resource-types';
@@ -18,7 +17,6 @@ import {until} from 'util/util';
 import ArticlesAPI from 'components/api/api__articles';
 import IssueAPI from 'components/api/api__issue';
 import type Api from 'components/api/api';
-import type {ActionSheetAction} from 'types/Action';
 import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
 import type {Attachment, IssueComment} from 'types/CustomFields';
@@ -62,7 +60,6 @@ export type AttachmentActions = {
   removeAttachmentFromIssueComment: (...args: any[]) => any;
   removeAttachmentFromArticleComment: (...args: any[]) => any;
   showAttachImageDialog: (...args: any[]) => any;
-  createAttachActions: (...args: any[]) => any;
   loadIssueAttachments: (...args: any[]) => any;
 };
 
@@ -390,38 +387,6 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           notifyError(err);
         }
       };
-    },
-    createAttachActions: function (
-      dispatch: (arg0: (...args: any[]) => any) => any,
-    ): ActionSheetAction[] {
-      return [
-        {
-          title: i18n('Choose from library…'),
-          icon: IconAttachment,
-          execute: () => {
-            logEvent({
-              message: 'Attach file from storage',
-              analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
-            });
-            dispatch(
-              actions.showAttachImageDialog(attachFileMethod.openPicker),
-            );
-          },
-        },
-        {
-          title: i18n('Take a picture…'),
-          icon: IconCamera,
-          execute: () => {
-            logEvent({
-              message: 'Attach file via camera',
-              analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
-            });
-            dispatch(
-              actions.showAttachImageDialog(attachFileMethod.openCamera),
-            );
-          },
-        },
-      ];
     },
     loadIssueAttachments: function (issueId: string) {
       return async (

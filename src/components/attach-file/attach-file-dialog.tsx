@@ -24,7 +24,7 @@ import AttachmentErrorBoundary from 'components/attachments-row/attachment-error
 import calculateAspectRatio from 'components/aspect-ratio/aspect-ratio';
 import FileThumb from 'components/attachments-row/attachment-thumbnail';
 import Header from 'components/header/header';
-import IconAttachment from '@jetbrains/icons/attachment.svg';
+import IconMedia from 'components/icon/assets/media.svg';
 import ModalPortal from 'components/modal-view/modal-portal';
 import ModalView from 'components/modal-view/modal-view';
 import usage from 'components/usage/usage';
@@ -73,7 +73,7 @@ const AttachFileDialog = (props: Props): JSX.Element => {
     return [
       {
         id: attachFileMethod.document,
-        title: i18n('Document…'),
+        title: i18n('Document'),
         icon: IconFile,
         iconSize: 22,
         execute: () => {
@@ -86,8 +86,8 @@ const AttachFileDialog = (props: Props): JSX.Element => {
       },
       {
         id: attachFileMethod.openPicker,
-        title: i18n('Photo library…'),
-        icon: IconAttachment,
+        title: i18n('Photo and video library'),
+        icon: IconMedia,
         iconSize: 22,
         execute: () => {
           logEvent({
@@ -99,7 +99,7 @@ const AttachFileDialog = (props: Props): JSX.Element => {
       },
       {
         id: attachFileMethod.openCamera,
-        title: i18n('Take a picture…'),
+        title: i18n('Camera'),
         icon: IconCamera,
         iconSize: 18,
         execute: () => {
