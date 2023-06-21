@@ -186,7 +186,7 @@ msgstr "Al iniciar sesión, acepta la Política de privacidad."
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
-msgstr ""
+msgstr "Cámara"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
@@ -414,7 +414,7 @@ msgstr "¿Seguro que desea eliminar esta cuenta?"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Document"
-msgstr ""
+msgstr "Documento"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -754,7 +754,7 @@ msgstr "Contraseña"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
-msgstr ""
+msgstr "Biblioteca de fotos y videos"
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"

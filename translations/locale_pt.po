@@ -186,7 +186,7 @@ msgstr "Ao fazer o login, você concorda com a Política de Privacidade."
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
-msgstr ""
+msgstr "Câmera"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
@@ -414,7 +414,7 @@ msgstr "Você realmente deseja excluir esta conta?"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Document"
-msgstr ""
+msgstr "Documento"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -754,7 +754,7 @@ msgstr "Senha"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
-msgstr ""
+msgstr "Biblioteca de fotos e vídeos"
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"

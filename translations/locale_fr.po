@@ -186,7 +186,7 @@ msgstr "En vous connectant, vous acceptez la Charte de confidentialité."
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
-msgstr ""
+msgstr "Caméra"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
@@ -414,7 +414,7 @@ msgstr "Souhaitez-vous vraiment supprimer ce compte ?"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Document"
-msgstr ""
+msgstr "Document"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -754,7 +754,7 @@ msgstr "Mot de passe"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
-msgstr ""
+msgstr "Photothèque et vidéothèque"
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"

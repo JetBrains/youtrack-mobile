@@ -186,7 +186,7 @@ msgstr "Durch die Anmeldung stimmen Sie den Datenschutzrichtlinien zu."
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
-msgstr ""
+msgstr "Kamera"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
@@ -414,7 +414,7 @@ msgstr "Möchten Sie dieses Konto wirklich entfernen?"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Document"
-msgstr ""
+msgstr "Dokument"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -754,7 +754,7 @@ msgstr "Kennwort"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
-msgstr ""
+msgstr "Foto- und Videobibliothek"
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"

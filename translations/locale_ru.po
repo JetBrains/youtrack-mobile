@@ -194,7 +194,7 @@ msgstr "Входя в систему, вы соглашаетесь с Поли�
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
-msgstr ""
+msgstr "Камера"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
@@ -422,7 +422,7 @@ msgstr "Вы действительно хотите удалить этот а�
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Document"
-msgstr ""
+msgstr "Документ"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -764,7 +764,7 @@ msgstr "Пароль"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
-msgstr ""
+msgstr "Библиотека Фото/видео"
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"

@@ -182,7 +182,7 @@ msgstr "登录，即表示您同意《隐私政策》。"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
-msgstr ""
+msgstr "相机"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
@@ -410,7 +410,7 @@ msgstr "确实要移除此帐户吗?"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Document"
-msgstr ""
+msgstr "文档"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -749,7 +749,7 @@ msgstr "密码"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
-msgstr ""
+msgstr "照片和视频库"
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"
