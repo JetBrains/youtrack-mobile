@@ -2,10 +2,10 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {deepmerge} from 'deepmerge-ts';
 
-import * as storage from '../src/components/storage/storage';
-import Auth from '../src/components/auth/oauth2';
+import * as storage from 'components/storage/storage';
+import Auth from 'components/auth/oauth2';
 import {createProjectCustomFieldMock} from './mocks__custom-fields';
-import {ResourceTypes} from '../src/components/api/api__resource-types';
+import {ResourceTypes} from 'components/api/api__resource-types';
 
 async function setStorage(state = {}) {
   return await storage.__setStorageState(state);

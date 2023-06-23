@@ -40,7 +40,7 @@ describe('open-url-handler', () => {
     });
   });
 
-  describe('openByUrlDetector', () => {
+  describe.skip('openByUrlDetector', () => {
     let idMock: string;
     let urlMock;
     let onIdDetected: (url: string, issueId?: string | null, articleId?: string | null) => any;

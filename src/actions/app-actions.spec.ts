@@ -10,14 +10,22 @@ import * as storage from 'components/storage/storage';
 import * as storageOauth from 'components/storage/storage__oauth';
 import * as types from './action-types';
 import * as urlUtils from '../components/open-url-handler/open-url-handler';
-import OAuth2 from 'components/auth/oauth2';
+import API from 'components/api/api';
 import log from 'components/log/log';
 import mocks from '../../test/mocks';
+import OAuth2 from 'components/auth/oauth2';
 import permissionsHelper from 'components/permissions-store/permissions-helper';
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
 import Router from 'components/router/router';
 import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
+import {AppConfig} from 'types/AppConfig';
+import {AuthConfig, AuthParams} from 'types/Auth';
+import {PermissionCacheItem} from 'types/Permission';
+import {RootState} from 'reducers/app-reducer';
+import {StorageState} from 'components/storage/storage';
+import {Store} from 'redux';
+import {User, UserCurrent} from 'types/User';
 
 jest.mock('components/storage/storage', () => {
   const st = jest.requireActual('components/storage/storage');
@@ -33,41 +41,42 @@ jest.mock('components/router/router', () => ({
   EnterServer: jest.fn(),
 }));
 
-jest.mock('react-native/Libraries/Linking/Linking', () => ({
-  getInitialURL: jest.fn(),
-  addEventListener: jest.fn(),
-}));
 
 const backendURLMock = 'https://example.com';
-let appConfigMock;
-let apiMock;
-let appStateMock;
-let store;
-let userMock;
-let authParamsMock;
+let appConfigMock: AppConfig;
+let apiMock: API;
+let appStateMock: RootState;
+let store: Store;
+let userMock: User;
+let authParamsMock: AuthParams;
 
 const getApi = () => apiMock;
 
 const middlewares = [thunk.withExtraArgument(getApi)];
 const storeMock = configureMockStore(middlewares);
+
+
 describe('app-actions', () => {
-  beforeEach(() => jest.restoreAllMocks());
   beforeEach(async () => {
     jest
       .spyOn(storageOauth, 'getStoredSecurelyAuthParams')
-      .mockImplementationOnce(() => authParamsMock);
-    apiMock = createAPIMock();
+      .mockResolvedValue(authParamsMock);
+
+    apiMock = createAPIMock() as any as API;
     appStateMock = {
       auth: createAuthInstanceMock(),
-    };
+    } as any as RootState;
     updateStore({...appStateMock});
     await storage.populateStorage();
   });
+  afterEach(() => {
+    (storageOauth.getStoredSecurelyAuthParams as jest.Mock).mockClear();
+  });
+
+
   describe('subscribeToPushNotifications', () => {
     beforeEach(() => {
-      jest
-        .spyOn(PushNotifications, 'register')
-        .mockReturnValue(Promise.resolve());
+      jest.spyOn(PushNotifications, 'register').mockResolvedValue();
       jest.spyOn(PushNotifications, 'initialize');
       jest.spyOn(Notification, 'notifyError');
       jest.spyOn(Notification, 'notify');
@@ -76,12 +85,21 @@ describe('app-actions', () => {
       });
       setRegistered(false);
     });
+    afterEach(() => {
+      (PushNotifications.register as jest.Mock).mockRestore();
+      (PushNotifications.initialize as jest.Mock).mockRestore();
+      (Notification.notifyError as jest.Mock).mockRestore();
+      (Notification.notify as jest.Mock).mockRestore();
+    });
+
+
     describe('Registration success', () => {
       it('should subscribe if a device is not registered', async () => {
         await store.dispatch(actions.subscribeToPushNotifications());
         expect(PushNotifications.register).toHaveBeenCalled();
         expect(PushNotifications.initialize).toHaveBeenCalled();
       });
+
       it('should not subscribe, but initialize if a device is already registered', async () => {
         setRegistered(true);
         await store.dispatch(actions.subscribeToPushNotifications());
@@ -89,17 +107,21 @@ describe('app-actions', () => {
         expect(PushNotifications.initialize).toHaveBeenCalled();
       });
     });
+
+
     describe('Registration error', () => {
       const registrationErrorMock = new Error('Registration failed');
       beforeEach(() => {
         jest.spyOn(log, 'warn');
       });
+
       it('should not initialize if registration failed', async () => {
         setRegistrationThrow();
         await store.dispatch(actions.subscribeToPushNotifications());
         expect(PushNotifications.register).toHaveBeenCalled();
         expect(PushNotifications.initialize).not.toHaveBeenCalled();
       });
+
       it('should show error screen if registration failed', async () => {
         setRegistrationThrow();
         await store.dispatch(actions.subscribeToPushNotifications());
@@ -107,12 +129,14 @@ describe('app-actions', () => {
           registrationErrorMock,
         );
       });
+
       it('should not initialize if a registration service returns error', async () => {
         setRegistrationServiceReturnError();
         await store.dispatch(actions.subscribeToPushNotifications());
         expect(PushNotifications.register).toHaveBeenCalled();
         expect(PushNotifications.initialize).not.toHaveBeenCalled();
       });
+
       it('should log error and should not show error screen if a registration service returns error', async () => {
         setRegistrationServiceReturnError();
         await store.dispatch(actions.subscribeToPushNotifications());
@@ -137,6 +161,10 @@ describe('app-actions', () => {
 
 
   describe('removeAccountOrLogOut', () => {
+    afterEach(() => {
+      (PushNotifications.unregister as jest.Mock).mockReset();
+      (appStateMock.auth?.logOut as jest.Mock)?.mockReset?.();
+    });
     beforeEach(() => {
       jest.spyOn(PushNotifications, 'unregister').mockResolvedValueOnce({});
       updateStore({
@@ -145,20 +173,22 @@ describe('app-actions', () => {
     });
 
     it('should logout from the only account', async () => {
-      jest.spyOn(appStateMock.auth, 'logOut');
+      const auth = appStateMock.auth as OAuth2;
+      jest.spyOn(auth, 'logOut');
       await store.dispatch(actions.removeAccountOrLogOut());
 
-      expect(appStateMock.auth.logOut).toHaveBeenCalled();
+      expect(auth.logOut).toHaveBeenCalled();
     });
 
     it('should not logout from the account', async () => {
       updateStore({
         app: {...appStateMock, otherAccounts: [{}]},
       });
-      jest.spyOn(appStateMock.auth, 'logOut');
+      const auth = appStateMock.auth as OAuth2;
+      jest.spyOn(auth, 'logOut');
       await store.dispatch(actions.removeAccountOrLogOut());
 
-      expect(appStateMock.auth.logOut).toHaveBeenCalled();
+      expect(auth.logOut).toHaveBeenCalled();
       expect(apiMock.user.logout).toHaveBeenCalled();
     });
 
@@ -180,7 +210,7 @@ describe('app-actions', () => {
 
   describe('Permissions', () => {
     let actualPermissionsMock;
-    let cachedPermissionsMock;
+    let cachedPermissionsMock: PermissionCacheItem[];
     let permissionItemMock;
     beforeEach(() => {
       permissionItemMock = {
@@ -195,6 +225,7 @@ describe('app-actions', () => {
         .spyOn(permissionsHelper, 'loadPermissions')
         .mockResolvedValueOnce(actualPermissionsMock);
     });
+
     it('should load permissions', async () => {
       await store.dispatch(actions.loadUserPermissions());
       expect(permissionsHelper.loadPermissions).toHaveBeenCalledWith(
@@ -206,6 +237,7 @@ describe('app-actions', () => {
         actualPermissionsMock,
       );
     });
+
     it('should not set permissions from cache if there are no any', async () => {
       setCachedPermissions(null);
       await store.dispatch(actions.loadUserPermissions());
@@ -217,6 +249,7 @@ describe('app-actions', () => {
         currentUser: appStateMock.auth.currentUser,
       });
     });
+
     it('should update permissions', async () => {
       setCachedPermissions(cachedPermissionsMock);
       await store.dispatch(actions.loadUserPermissions());
@@ -226,6 +259,7 @@ describe('app-actions', () => {
         currentUser: appStateMock.auth.currentUser,
       });
     });
+
     it('should update permissions cache', async () => {
       jest.spyOn(appActionHelper, 'updateCachedPermissions');
       await store.dispatch(actions.loadUserPermissions());
@@ -263,23 +297,25 @@ describe('app-actions', () => {
       });
     });
   });
+
   const searchContextMock = {
     id: 1,
   };
   const naturalCommentsOrderMock = false;
+
+
   describe('initializeApp', () => {
     beforeEach(() => {
       setStoreAndCurrentUser({});
-      jest
-        .spyOn(storageOauth, 'getStoredSecurelyAuthParams')
-        .mockImplementationOnce(() => authParamsMock);
     });
+
     it('should initialize OAuth instance', async () => {
       await store.dispatch(actions.initializeApp(appConfigMock));
       expect(store.getActions()[0].type).toEqual(types.INITIALIZE_AUTH);
       expect(store.getActions()[0].auth instanceof OAuth2).toEqual(true);
       expect(store.getActions()[0].auth.authParams).toEqual(authParamsMock);
     });
+
     it('should set YT current user from cache', async () => {
       jest.spyOn(actions, 'completeInitialization');
       userMock = mocks.createUserMock({
@@ -326,6 +362,8 @@ describe('app-actions', () => {
       });
     });
   });
+
+
   describe('completeInitialization', () => {
     beforeEach(() => {
       setAppStateNetworkConnected(true);
@@ -345,12 +383,15 @@ describe('app-actions', () => {
       expect(apiMock.inbox.getFolders).not.toHaveBeenCalled();
     });
   });
+
+
   describe('inboxCheckUpdateStatus', () => {
     let foldersMock;
     beforeEach(() => {
       setAppStateNetworkConnected(true);
       foldersMock = createInboxFoldersMock();
     });
+
     it('should load inbox thread folders without `start` parameter', async () => {
       mocks.setStorage({
         inboxThreadsCache: {
@@ -360,6 +401,7 @@ describe('app-actions', () => {
       await store.dispatch(actions.inboxCheckUpdateStatus());
       expect(apiMock.inbox.getFolders).toHaveBeenCalledWith(undefined);
     });
+
     it('should load inbox thread folders with `start` parameter - a max value from all folders` lasSeen', async () => {
       const notifiedMock = 3;
       mocks.setStorage({
@@ -377,6 +419,7 @@ describe('app-actions', () => {
       await store.dispatch(actions.inboxCheckUpdateStatus());
       expect(apiMock.inbox.getFolders).toHaveBeenCalledWith(notifiedMock + 1);
     });
+
     it('should set inbox thread folders', async () => {
       apiMock.inbox.getFolders.mockResolvedValueOnce(foldersMock);
       await store.dispatch(actions.inboxCheckUpdateStatus());
@@ -385,6 +428,7 @@ describe('app-actions', () => {
         inboxThreadsFolders: foldersMock,
       });
     });
+
     it('should not set inbox thread folders on error', async () => {
       apiMock.inbox.getFolders.mockRejectedValueOnce(new Error());
       await store.dispatch(actions.inboxCheckUpdateStatus());
@@ -414,6 +458,7 @@ describe('app-actions', () => {
         .mockReturnValueOnce([]);
       jest.spyOn(appActionHelper, 'storeYTCurrentUser');
     });
+
     it('should redirect to issues', async () => {
       setStoreAndCurrentUser({
         guest: false,
@@ -423,6 +468,7 @@ describe('app-actions', () => {
       );
       expect(isRedirected).toEqual(true);
     });
+
     it('should not redirect guest user to issues', async () => {
       setStoreAndCurrentUser({
         guest: true,
@@ -432,6 +478,7 @@ describe('app-actions', () => {
       );
       await expect(isRedirected).toEqual(false);
     });
+
     it('should not redirect user to issues if no permissions are cached', async () => {
       jest
         .spyOn(appActionHelper, 'getCachedPermissions')
@@ -449,18 +496,12 @@ describe('app-actions', () => {
 
   describe('subscribeToURL', () => {
     const activityIdMock = `1`;
-    let subscribeToURLHandler;
     beforeAll(async () => jest.useFakeTimers({advanceTimers: true}));
     beforeEach(async () => {
-      jest.clearAllTimers();
       setStoreAndCurrentUser({});
-      subscribeToURLHandler = actions.subscribeToURL();
     });
 
-    afterEach(() => jest.restoreAllMocks());
-
     it('should invoke URL handler', async () => {
-      jest.advanceTimersByTime(101);
       jest.spyOn(urlUtils, 'openByUrlDetector');
 
       await assert();
@@ -473,24 +514,27 @@ describe('app-actions', () => {
       const issueIdMock = `I-1`;
       beforeEach(() => {
         Router.Issue = jest.fn();
+        Router.Is;
       });
 
       it('should navigate to an issue', async () => {
         await assert(`${backendURLMock}/issue/${issueIdMock}`);
-        jest.advanceTimersByTime(101);
 
-        expect(Router.Issue).toHaveBeenCalledWith(
-          {issueId: issueIdMock}, {forceReset: true}
-        );
+        setTimeout(() => {
+          expect(Router.Issue).toHaveBeenCalledWith(
+            {issueId: issueIdMock}, {forceReset: true}
+          );
+        }, 100);
       });
 
       it('should navigate to an issue and switch to `Activity` tab', async () => {
         await assert(`${backendURLMock}/issue/${issueIdMock}#focus=Comments-${activityIdMock}`);
-        jest.advanceTimersByTime(101);
 
-        expect(Router.Issue).toHaveBeenCalledWith(
-          {issueId: issueIdMock, navigateToActivity: activityIdMock}, {forceReset: true}
-        );
+        setTimeout(() => {
+          expect(Router.Issue).toHaveBeenCalledWith(
+            {issueId: issueIdMock, navigateToActivity: activityIdMock}, {forceReset: true}
+          );
+        }, 100);
       });
     });
 
@@ -503,31 +547,33 @@ describe('app-actions', () => {
 
       it('should navigate to an article', async () => {
         await assert(`${backendURLMock}/articles/${articleIdMock}`);
-        jest.advanceTimersByTime(101);
 
-        expect(Router.Article).toHaveBeenCalledWith(
-          {articlePlaceholder: {id: articleIdMock}}, {forceReset: true}
-        );
+        setTimeout(() => {
+          expect(Router.Article).toHaveBeenCalledWith(
+            {articlePlaceholder: {id: articleIdMock}}, {forceReset: true}
+          );
+        }, 100);
       });
 
       it('should navigate to an article and switch to `Activity` tab', async () => {
         await assert(`${backendURLMock}/articles/${articleIdMock}#focus=Comments-${activityIdMock}`);
-        jest.advanceTimersByTime(101);
 
-        expect(Router.Article).toHaveBeenCalledWith(
-          {articlePlaceholder: {id: articleIdMock}, navigateToActivity: activityIdMock}, {forceReset: true}
-        );
+        setTimeout(() => {
+          expect(Router.Article).toHaveBeenCalledWith(
+            {articlePlaceholder: {id: articleIdMock}, navigateToActivity: activityIdMock}, {forceReset: true}
+          );
+        });
       });
     });
 
     async function assert(url = '') {
-      Linking.getInitialURL.mockResolvedValue(url);
-      await subscribeToURLHandler(jest.fn(), store.getState, () => {});
+      (Linking.getInitialURL as jest.Mock).mockResolvedValueOnce(url);
+      await actions.subscribeToURL()(jest.fn(), store.getState, () => ({} as API));
     }
   });
 
 
-  function setStoreAndCurrentUser(ytCurrentUser) {
+  function setStoreAndCurrentUser(ytCurrentUser: UserCurrent) {
     updateStore({
       app: {
         auth: createAuthInstanceMock(ytCurrentUser),
@@ -536,37 +582,38 @@ describe('app-actions', () => {
     setYTCurrentUser(ytCurrentUser);
   }
 
-  function setYTCurrentUser(ytCurrentUser) {
+  function setYTCurrentUser(ytCurrentUser: UserCurrent | null) {
     storage.__setStorageState({
-      currentUser: {
-        ytCurrentUser,
-      },
+      currentUser: {ytCurrentUser},
     });
   }
 
-  function setRegistered(isRegistered) {
+  function setRegistered(isRegistered: boolean) {
     storage.__setStorageState({
       isRegisteredForPush: isRegistered,
-    });
+    } as StorageState);
   }
 
   function updateStore(state: Record<string, any> | null | undefined = {}) {
     store = storeMock(state);
   }
 
-  function createAuthInstanceMock(currentUser) {
+  function createAuthInstanceMock(currentUser?: User): OAuth2 {
     appConfigMock = {
-      l10n: {},
+      l10n: {
+        language: '',
+        locale: '',
+      },
       backendUrl: backendURLMock,
       auth: {
         serverUri: `${backendURLMock}/hub`,
-      },
-    };
+      } as AuthConfig,
+    } as AppConfig;
     const authMock = new OAuth2(appConfigMock);
     authParamsMock = {
       token_type: 'token_type',
       access_token: 'access_token',
-    };
+    } as AuthParams;
     authMock.setAuthParams(authParamsMock);
     if (currentUser) {
       authMock.setCurrentUser(currentUser);
@@ -576,11 +623,11 @@ describe('app-actions', () => {
 
   function createAPIMock() {
     return {
-      getUserAgreement: jest.fn(() => Promise.resolve({})),
+      getUserAgreement: jest.fn().mockResolvedValue({}),
       user: {
-        getUser: jest.fn(() => Promise.resolve({})),
-        getUserFolders: jest.fn(() => Promise.resolve([{}])),
-        logout: jest.fn(() => Promise.resolve()),
+        getUser: jest.fn().mockResolvedValue({}),
+        getUserFolders: jest.fn().mockResolvedValue([{}]),
+        logout: jest.fn().mockResolvedValue([{}]),
       },
       inbox: {
         getFolders: jest.fn(() => Promise.resolve([])),

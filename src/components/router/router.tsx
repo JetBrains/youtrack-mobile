@@ -50,7 +50,10 @@ const SlideModal = {
  * Route singleton
  */
 
+type RouterMethodName = keyof typeof routeMap;
+
 class Router {
+  [index: RouterMethodName | string]: unknown;
   _navigator: NavigationNavigator | null = null;
   _currentRoute: NavigationJumpToActionPayload | null = null;
   rootRoutes: NavigationJumpToActionPayload[] = [];

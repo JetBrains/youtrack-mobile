@@ -1,15 +1,18 @@
 import React from 'react';
 import {Provider} from 'react-redux';
-import {render, cleanup, fireEvent} from '@testing-library/react-native';
-import * as appActions from '../../actions/app-actions';
-import Menu, {menuPollInboxStatusDelay} from './menu';
-import mocks from '../../../test/mocks';
-import Router from '../router/router';
-import {DEFAULT_THEME} from '../theme/theme';
-import {rootRoutesList, routeMap} from '../../app-routes';
-jest.mock('../feature/feature');
-let apiMock;
 
+import {render, cleanup, fireEvent} from '@testing-library/react-native';
+
+import * as appActions from 'actions/app-actions';
+import Menu, {menuPollInboxStatusDelay} from './menu';
+import mocks from 'test/mocks';
+import Router from 'components/router/router';
+import {DEFAULT_THEME} from 'components/theme/theme';
+import {rootRoutesList, routeMap} from 'app-routes';
+
+jest.mock('../feature/feature');
+
+let apiMock;
 const getApi = () => apiMock;
 
 const createStoreMock = mocks.createMockStore(getApi);

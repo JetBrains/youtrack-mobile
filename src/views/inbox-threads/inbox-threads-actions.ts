@@ -105,7 +105,7 @@ const updateThreadsStateAndCache = (
         (map: ThreadsStateData, folderId: ThreadsStateFilterId) => {
           let data = {};
 
-          if (threadsData[folderId]) {
+          if (threadsData?.[folderId]) {
             const threads: InboxThread[] = threadsData[folderId].threads.reduce(
               (list: InboxThread[], it: InboxThread) =>
                 list.concat(

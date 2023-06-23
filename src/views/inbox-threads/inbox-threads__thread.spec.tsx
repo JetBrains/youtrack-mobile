@@ -16,7 +16,7 @@ import {Store} from 'redux';
 
 jest.mock('components/swipeable/swipeable-row');
 jest.mock('@expo/react-native-action-sheet', () => ({
-  ...jest.requireActual('@expo/react-native-action-sheet'),
+  ...jest.requireActual('@expo/react-native-action-sheet'),//https://github.com/jestjs/jest/issues/6914
 }));
 
 
@@ -34,14 +34,13 @@ describe('Inbox Thread', () => {
     };
     apiMock = {
       inbox: {
-        muteToggle: jest.fn(),
-        markMessages: jest.fn(),
+        muteToggle: jest.fn().mockResolvedValueOnce(threadMock),
+        markMessages: jest.fn().mockResolvedValueOnce([null]),
       },
     };
     threadMock = mocks.createThreadMock();
     createStore();
   });
-
 
   describe('Render', () => {
     it('should render Thread entity', () => {
@@ -99,6 +98,8 @@ describe('Inbox Thread', () => {
           'Cancel',
         ]);
       });
+
+
       describe('Mute/Unmute', () => {
         it('should mute a thread', () => {
           getActionSheetCallbacksArray(threadMock)(0);
@@ -255,11 +256,13 @@ describe('Inbox Thread', () => {
 
 
   describe('Read/Unread', () => {
-    let threadMock: InboxThread;
-
     beforeEach(() => {
       threadMock = mocks.createThreadMock();
       jest.spyOn(actions, 'readMessageToggle');
+
+    });
+    afterEach(() => {
+      (actions.readMessageToggle as jest.Mock).mockRestore();
     });
 
     it('should mark a thread as read', () => {

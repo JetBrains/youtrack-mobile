@@ -2283,7 +2283,7 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^29.4.0":
+"@types/jest@^29.5.2":
   version "29.5.2"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.5.2.tgz#86b4afc86e3a8f3005b297ed8a72494f89e6395b"
   integrity sha512-mSoZVJF5YzGVCk+FsDxzDuH7s+SCkzrgKZzf0Z0T2WudhBUPoF6ktoTPC4R0ZoCPCV5xUvuU6ias5NvxcBcMMg==
@@ -5972,7 +5972,7 @@ jest-changed-files@^29.5.0:
     execa "^5.0.0"
     p-limit "^3.1.0"
 
-jest-circus@^29.4.2, jest-circus@^29.5.0:
+jest-circus@^29.5.0:
   version "29.5.0"
   resolved "https://registry.yarnpkg.com/jest-circus/-/jest-circus-29.5.0.tgz#b5926989449e75bff0d59944bae083c9d7fb7317"
   integrity sha512-gq/ongqeQKAplVxqJmbeUOJJKkW3dDNPY8PjhJ5G0lBRvu0e3EWGxGy5cI4LAGA7gV2UHCtWBI4EMXK8c9nQKA==
@@ -6461,7 +6461,7 @@ jest-worker@^29.5.0:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jest@^29.4.2:
+jest@^29.5.0:
   version "29.5.0"
   resolved "https://registry.yarnpkg.com/jest/-/jest-29.5.0.tgz#f75157622f5ce7ad53028f2f8888ab53e1f1f24e"
   integrity sha512-juMg3he2uru1QoXX078zTa7pO85QyB9xajZc6bU+d9yEGwrKX6+vGmJQ3UdVZsvTEUARIdObzH68QItim6OSSQ==

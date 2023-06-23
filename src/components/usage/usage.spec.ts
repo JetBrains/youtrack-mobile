@@ -19,10 +19,7 @@ jest.mock('react-native-google-analytics', () => ({
 describe('Google Analytics', () => {
   beforeEach(() => {
     ga.reset();
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
+    ga.default.init(false);
   });
 
   it('should create GA instance', async () => {

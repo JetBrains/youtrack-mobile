@@ -2,7 +2,7 @@ import React from 'react';
 import {Linking} from 'react-native';
 
 import {Provider} from 'react-redux';
-import {render, fireEvent} from '@testing-library/react-native';
+import {render, fireEvent, screen} from '@testing-library/react-native';
 import {Store} from 'redux';
 
 import mocks from 'test/mocks';
@@ -10,17 +10,21 @@ import mocks from 'test/mocks';
 import * as appActions from 'actions/app-actions';
 import * as useUserCard from 'components/hooks/use-user-card-async';
 import UserCard from './user-card';
+import {setApi} from 'components/api/api__instance';
 
-import {User} from 'types/User';
-import {__setStorageState} from 'components/storage/storage';
+import Api from 'components/api/api';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
+import OAuth2 from 'components/auth/oauth2';
 import Router from 'components/router/router';
+import {__setStorageState} from 'components/storage/storage';
 import {AnyIssue} from 'types/Issue';
+import {User} from 'types/User';
 
 jest.mock('react-native/Libraries/Linking/Linking', () => ({
   openURL: jest.fn().mockResolvedValue(null),
 }));
 
+let apiMock;
 let issuePermissionsMock: IssuePermissions;
 let storeMock: Store;
 let userMock: User;
@@ -55,13 +59,22 @@ describe('<UserCard/>', () => {
         backendUrl: 'https://example.com',
       },
     });
+
+    const authMock = mocks.createAuthMock(mocks.createConfigMock()) as OAuth2;
+    apiMock = new Api(authMock);
+    setApi({
+      ...apiMock,
+      user: {
+        getUserCard: jest.fn(),
+      },
+    });
   });
 
   describe('No read user permission', () => {
     it('should not render user card', () => {
-      const {queryByTestId} = doRender();
+      doRender();
 
-      expect(queryByTestId('test:id/userCard')).toBeNull();
+      expect(screen.queryByTestId('test:id/userCard')).toBeNull();
     });
   });
 
@@ -72,37 +85,37 @@ describe('<UserCard/>', () => {
     });
 
     it('should render user card', () => {
-      const {getByTestId} = doRender();
+      doRender();
 
-      expect(getByTestId('test:id/userCard')).toBeTruthy();
+      expect(screen.getByTestId('test:id/userCard')).toBeTruthy();
     });
 
     it('should render user`s login', () => {
-      const {getByTestId} = doRender();
+      doRender();
 
-      expect(getByTestId('test:id/userCardName')).toBeTruthy();
+      expect(screen.getByTestId('test:id/userCardName')).toBeTruthy();
     });
 
     it('should render user`s related group icon', () => {
-      const {getByTestId} = doRender({
+      doRender({
         ...userMock,
         issueRelatedGroup: {
           icon: 'https://',
         },
       });
 
-      expect(getByTestId('test:id/userCardRelatedGroup')).toBeTruthy();
+      expect(screen.getByTestId('test:id/userCardRelatedGroup')).toBeTruthy();
     });
 
     it('should not render user`s email', () => {
-      const {queryByTestId} = doRender();
+      doRender();
 
-      expect(queryByTestId('test:id/userCardEmail')).toBeNull();
+      expect(screen.queryByTestId('test:id/userCardEmail')).toBeNull();
     });
 
     it('should navigate to the user profile', () => {
-      const {getByTestId} = doRender();
-      const userName = getByTestId('test:id/userCardName');
+      doRender();
+      const userName = screen.getByTestId('test:id/userCardName');
 
       expect(userName).toBeTruthy();
       fireEvent.press(userName);
@@ -112,15 +125,15 @@ describe('<UserCard/>', () => {
 
     it('should not render mention button', () => {
       jest.spyOn(useUserCard, 'useUserCardAsync').mockResolvedValue(null);
-      const {queryByTestId} = doRender();
+      doRender();
 
-      expect(queryByTestId('test:id/userCardMentionButton')).toBeNull();
+      expect(screen.queryByTestId('test:id/userCardMentionButton')).toBeNull();
     });
 
     it('should not render reported issues button', () => {
-      const {queryByTestId} = doRender({} as User);
+      doRender({} as User);
 
-      expect(queryByTestId('test:id/userCardReportedIssuesButton')).toBeNull();
+      expect(screen.queryByTestId('test:id/userCardReportedIssuesButton')).toBeNull();
     });
   });
 
@@ -134,34 +147,34 @@ describe('<UserCard/>', () => {
 
     it('should render user`s email', () => {
       const emailMock = 'me@me.me';
-      const {getByTestId, findAllByText} = doRender({...userMock, email: emailMock});
+      doRender({...userMock, email: emailMock});
 
-      expect(getByTestId('test:id/userCardEmail')).toBeTruthy();
-      expect(findAllByText(emailMock)).toBeTruthy();
+      expect(screen.getByTestId('test:id/userCardEmail')).toBeTruthy();
+      expect(screen.findAllByText(emailMock)).toBeTruthy();
     });
 
     it('should invoke mention button callback', () => {
       jest.spyOn(useUserCard, 'useUserCardAsync').mockResolvedValue({});
       jest.spyOn(issuePermissionsMock, 'canCommentOn').mockReturnValueOnce(true);
       jest.spyOn(appActions, 'addMentionToDraftComment');
-      const {getByTestId} = doRender();
+      doRender();
 
-      fireEvent.press(getByTestId('test:id/userCardMentionButton'));
+      fireEvent.press(screen.getByTestId('test:id/userCardMentionButton'));
 
       expect(appActions.addMentionToDraftComment).toHaveBeenCalledWith(userMock.login);
     });
 
     it('should invoke reported issues button', () => {
-      const {getByTestId} = doRender();
+      doRender();
 
-      fireEvent.press(getByTestId('test:id/userCardReportedIssuesButton'));
+      fireEvent.press(screen.getByTestId('test:id/userCardReportedIssuesButton'));
 
       expect(Router.Issues).toHaveBeenCalledWith({searchQuery: `created by: ${userMock.login}`});
     });
   });
 
   function doRender(user: User = userMock) {
-    return render(
+    render(
       <Provider store={storeMock}>
         <UserCard user={user}/>
       </Provider>
