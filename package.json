@@ -40,7 +40,7 @@
     "ios-archive-no-sign": "export RCT_NO_LAUNCH_PACKAGER=true && yarn run ios-archive -- CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED='NO'",
     "ios-set-version": "node script/set-ios-version",
     "lint": "eslint . --quiet --ext .js,.jsx,.ts,.tsx",
-    "postinstall": "script/postinstall.sh && yarn patch-package",
+    "postinstall": "yarn patch-package",
     "prepare": "husky install",
     "prepare-config": "node script/prepare-config",
     "start": "react-native start",
