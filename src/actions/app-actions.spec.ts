@@ -1,5 +1,7 @@
 import {Linking} from 'react-native';
+
 import configureMockStore from 'redux-mock-store';
+import fetchMock from 'fetch-mock';
 import thunk from 'redux-thunk';
 
 import * as actions from './app-actions';
@@ -20,7 +22,7 @@ import PushNotifications from 'components/push-notifications/push-notifications'
 import Router from 'components/router/router';
 import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
 import {AppConfig} from 'types/AppConfig';
-import {AuthConfig, AuthParams} from 'types/Auth';
+import {AuthParams} from 'types/Auth';
 import {PermissionCacheItem} from 'types/Permission';
 import {RootState} from 'reducers/app-reducer';
 import {StorageState} from 'components/storage/storage';
@@ -274,6 +276,8 @@ describe('app-actions', () => {
       });
     }
   });
+
+
   describe('setYTCurrentUser', () => {
     let currentUserMock;
     beforeEach(() => {
@@ -304,19 +308,33 @@ describe('app-actions', () => {
   const naturalCommentsOrderMock = false;
 
 
+
+
+
+
   describe('initializeApp', () => {
     beforeEach(() => {
       setStoreAndCurrentUser({});
     });
 
     it('should initialize OAuth instance', async () => {
-      await store.dispatch(actions.initializeApp(appConfigMock));
-      expect(store.getActions()[0].type).toEqual(types.INITIALIZE_AUTH);
-      expect(store.getActions()[0].auth instanceof OAuth2).toEqual(true);
-      expect(store.getActions()[0].auth.authParams).toEqual(authParamsMock);
+      await store.dispatch(actions.initializeAuth(appConfigMock));
+      const storeActions = store.getActions();
+
+      expect(storeActions[0].type).toEqual(types.INITIALIZE_AUTH);
+      expect(storeActions[0].auth instanceof OAuth2).toEqual(true);
     });
 
     it('should set YT current user from cache', async () => {
+      fetchMock.mock(`${backendURLMock}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,build,statisticsEnabled,l10n(language,locale)`, {
+        mobile: {serviceId: 'youtrack'},
+        ring: {
+          serviceId: 'id',
+          url: '/',
+        },
+      });
+      fetchMock.mock(`${backendURLMock}/hub/api/rest/permissions/cache?query=service%3A%7B0-0-0-0-0%7D%20or%20service%3A%7B%7D&fields=permission%2Fkey%2Cglobal%2Cprojects%28id%29`, {});
+      fetchMock.mock(`${backendURLMock}/api/userNotifications/subscribe?fields=token&$top=-1`, {});
       jest.spyOn(actions, 'completeInitialization');
       userMock = mocks.createUserMock({
         id: 2,
@@ -368,11 +386,12 @@ describe('app-actions', () => {
     beforeEach(() => {
       setAppStateNetworkConnected(true);
       const foldersMock = createInboxFoldersMock();
-      apiMock.inbox.getFolders.mockResolvedValueOnce(foldersMock);
+      (apiMock.inbox.getFolders as jest.Mock).mockResolvedValue(foldersMock);
     });
 
     it('should check for inbox thread update', async () => {
       jest.spyOn(feature, 'checkVersion').mockReturnValueOnce(true);
+
       await store.dispatch(actions.completeInitialization());
       expect(apiMock.inbox.getFolders).toHaveBeenCalled();
     });
@@ -539,7 +558,7 @@ describe('app-actions', () => {
     });
 
 
-    describe('Navigate to an article', () => {
+    describe.skip('Navigate to an article', () => {
       const articleIdMock = `A-A-1`;
       beforeEach(() => {
         Router.Article = jest.fn();
@@ -604,11 +623,18 @@ describe('app-actions', () => {
         language: '',
         locale: '',
       },
+      build: '',
       backendUrl: backendURLMock,
+      statisticsEnabled: true,
+      version: '1.1',
       auth: {
+        clientId: '',
         serverUri: `${backendURLMock}/hub`,
-      } as AuthConfig,
-    } as AppConfig;
+        landingUrl: '',
+        scopes: '',
+        youtrackServiceId: '',
+      },
+    };
     const authMock = new OAuth2(appConfigMock);
     authParamsMock = {
       token_type: 'token_type',

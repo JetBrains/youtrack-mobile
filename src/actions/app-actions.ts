@@ -678,11 +678,15 @@ function loadWorkTimeSettings(): Action {
     getState: () => AppState,
     getApi: () => Api,
   ) => {
-    const workTimeSettings: WorkTimeSettings = await getApi().getWorkTimeSettings();
-    await dispatch({
-      type: types.RECEIVE_WORK_TIME_SETTINGS,
-      workTimeSettings,
-    });
+    try {
+      const workTimeSettings: WorkTimeSettings = await getApi().getWorkTimeSettings();
+      await dispatch({
+        type: types.RECEIVE_WORK_TIME_SETTINGS,
+        workTimeSettings,
+      });
+    } catch (error) {
+      notifyError(error);
+    }
   };
 }
 

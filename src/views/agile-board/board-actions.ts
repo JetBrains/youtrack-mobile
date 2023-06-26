@@ -110,16 +110,14 @@ export function getAgileUserProfile(): (
 }
 export function loadAgileWithStatus(
   agileId: string,
-): (dispatch: (arg0: any) => any) => Promise<void> {
+): (dispatch: (arg0: any) => any, getState: () => AppState, getApi: ApiGetter) => Promise<void> {
   return async (
     dispatch: (arg0: any) => any,
     getState: () => AppState,
     getApi: ApiGetter,
   ) => {
-    const isOffline: boolean =
-      getState().app?.networkState?.isConnected === false;
-    const cachedDefaultAgileBoard: Board | null | undefined = getStorageState()
-      .agileDefaultBoard;
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    const cachedDefaultAgileBoard: Board | null | undefined = getStorageState().agileDefaultBoard;
 
     if (cachedDefaultAgileBoard) {
       dispatch(receiveAgile(cachedDefaultAgileBoard));
@@ -156,15 +154,13 @@ export function loadBoard(
     const agileUserProfile: AgileUserProfile = await dispatch(
       getAgileUserProfile(),
     );
-    const cachedAgileLastSprint: Sprint | null | undefined = getStorageState()
-      .agileLastSprint;
+    const cachedAgileLastSprint: Sprint | null | undefined = getStorageState().agileLastSprint;
     let sprint: Sprint | null | undefined;
 
     if (!refresh && board.currentSprint) {
       sprint = board.currentSprint;
     } else {
-      sprint =
-        getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints) ||
+      sprint = getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints) ||
         (cachedAgileLastSprint?.agile?.id === board.id
           ? cachedAgileLastSprint
           : null);
@@ -349,6 +345,7 @@ export function loadSprint(
       const error: CustomError = (new Error(message) as any) as CustomError;
       error.error_description = 'Check that the sprint exists';
       dispatch(setError(error));
+      dispatch(receiveSprint(null));
       trackError('Load sprint');
       log.info(message, e);
       dispatch(setGlobalInProgress(false));
@@ -420,17 +417,15 @@ export function loadAgileProfile(): (
 export function loadDefaultAgileBoard(
   query: string,
   refresh: boolean,
-): (dispatch: (arg0: any) => any) => Promise<void> {
+): (dispatch: (arg0: any) => any, getState: () => AppState, getApi: ApiGetter) => Promise<void> {
   return async (
     dispatch: (arg0: any) => any,
     getState: () => AppState,
     getApi: ApiGetter,
   ) => {
     dispatch(setError(null));
-    const isOffline: boolean =
-      getState().app?.networkState?.isConnected === false;
-    const cachedAgileLastSprint: Sprint | null | undefined = getStorageState()
-      .agileLastSprint;
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    const cachedAgileLastSprint: Sprint | null | undefined = getStorageState().agileLastSprint;
     dispatch(receiveSprint(cachedAgileLastSprint));
 
     if (isOffline && cachedAgileLastSprint) {
@@ -872,7 +867,7 @@ export function subscribeServersideUpdates(): (
 ) => Promise<void> {
   return async (
     dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
+    getState: () => AppState,
     getApi: ApiGetter,
   ) => {
     const {sprint} = getState().agile;

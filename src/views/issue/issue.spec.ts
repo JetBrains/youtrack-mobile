@@ -1,25 +1,31 @@
 import configureMockStore from 'redux-mock-store';
-import sinon from 'sinon';
 import thunk from 'redux-thunk';
+
 import * as activityHelper from './activity/issue-activity__helper';
-import createIssueActions from './issue-actions';
 import * as types from './issue-action-types';
-import Mocks from '../../../test/mocks';
+import createIssueActions from './issue-actions';
+import Mocks from 'test/mocks';
 import {actions} from './issue-reducers';
 import {createActivityCommentActions} from './activity/issue-activity__comment-actions';
-let apiMock;
+import {Store} from 'redux';
+import API from 'components/api/api';
+import {setApi} from 'components/api/api__instance';
+
+let apiMock: API;
 
 const getApi = () => apiMock;
 
 const ISSUE_ID = 'test-id';
 const issueActions = createIssueActions();
 const mockStore = configureMockStore([thunk.withExtraArgument(getApi)]);
+
+
 describe('Issue view actions', () => {
-  let store;
-  let issueMock;
-  let commentMock;
+  let store: Store;
+  let issueMock: {};
+  let commentMock: {};
   beforeEach(() => {
-    jest.restoreAllMocks();
+    jest.resetAllMocks();
     issueMock = {
       id: ISSUE_ID,
     };
@@ -29,8 +35,8 @@ describe('Issue view actions', () => {
     };
     apiMock = {
       issue: {
-        getIssue: sinon.stub().returns(issueMock),
-        getIssueComments: sinon.stub().returns([commentMock]),
+        getIssue: jest.fn().mockResolvedValue(issueMock),
+        getIssueComments: jest.fn().mockResolvedValue([commentMock]),
         submitDraftComment: jest.fn(),
         getActivitiesPage: jest.fn(),
       },
@@ -44,10 +50,14 @@ describe('Issue view actions', () => {
         activityPage: [],
       },
     });
+    setApi(apiMock);
   });
+
   it('should load issue', async () => {
     await store.dispatch(issueActions.loadIssue());
-    apiMock.issue.getIssue.should.have.been.calledWith(ISSUE_ID);
+
+    expect(apiMock.issue.getIssue).toHaveBeenCalledWith(ISSUE_ID);
+
     const dispatched = store.getActions();
     expect(dispatched[0]).toEqual({
       type: actions.SET_ISSUE_ID.type,
@@ -62,6 +72,7 @@ describe('Issue view actions', () => {
       },
     });
   });
+
   it('should add comment', async () => {
     Mocks.setStorage();
     jest
@@ -110,6 +121,8 @@ describe('Issue view actions', () => {
       activitiesEnabled: true,
     });
   });
+
+
   describe('Refresh issue', () => {
     const issueCommentsSelectedTypeMock = 'IssueComments';
     const issueActivityEnabledTypesMock = [
@@ -121,20 +134,20 @@ describe('Issue view actions', () => {
     let actionsIsActivitiesAPIEnabled;
     let getIssueActivitiesEnabledTypes;
     beforeEach(() => {
-      actionsIsActivitiesAPIEnabled = sinon
-        .stub(activityHelper, 'isIssueActivitiesAPIEnabled')
-        .returns(true);
-      getIssueActivitiesEnabledTypes = sinon
-        .stub(activityHelper, 'getIssueActivitiesEnabledTypes')
-        .returns(issueActivityEnabledTypesMock);
+      actionsIsActivitiesAPIEnabled = jest
+        .spyOn(activityHelper, 'isIssueActivitiesAPIEnabled')
+        .mockResolvedValueOnce(true);
+      getIssueActivitiesEnabledTypes = jest
+        .spyOn(activityHelper, 'getIssueActivitiesEnabledTypes')
+        .mockResolvedValueOnce(issueActivityEnabledTypesMock);
     });
     afterEach(() => {
-      actionsIsActivitiesAPIEnabled.restore();
-      getIssueActivitiesEnabledTypes.restore();
+      actionsIsActivitiesAPIEnabled.mockRestore();
+      getIssueActivitiesEnabledTypes.mockRestore();
     });
     it('should refresh issue details', async () => {
       await store.dispatch(issueActions.refreshIssue());
-      apiMock.issue.getIssue.should.have.been.calledWith(ISSUE_ID);
+      expect(apiMock.issue.getIssue).toHaveBeenCalledWith(ISSUE_ID);
       const dispatched = store.getActions();
       expect(dispatched[0]).toEqual({
         type: actions.START_ISSUE_REFRESHING.type,

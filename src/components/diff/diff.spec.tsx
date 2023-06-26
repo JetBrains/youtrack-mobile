@@ -2,6 +2,8 @@ import React from 'react';
 import {render, cleanup, fireEvent} from '@testing-library/react-native';
 import Diff from './diff';
 import {buildStyles, DEFAULT_THEME} from '../theme/theme';
+
+
 describe('<Diff/>', () => {
   let text1;
   let text2;
@@ -12,6 +14,8 @@ describe('<Diff/>', () => {
     text2 = 'xABC';
   });
   afterEach(cleanup);
+
+
   describe('Render', () => {
     it('should render component', () => {
       const {getByTestId} = doRender(text1, text2);

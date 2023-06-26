@@ -10,13 +10,13 @@ export type Swimlane = Record<string, any> & {
 };
 export type AgileUserProfile = {
   defaultAgile: Partial<Board>;
-  visitedSprints: Array<{
+  visitedSprints: {
     id: string;
     name: string;
     agile: {
       id: string;
     };
-  }>;
+  }[];
 };
 export type AgileColumnFieldValue = {
   id: string;

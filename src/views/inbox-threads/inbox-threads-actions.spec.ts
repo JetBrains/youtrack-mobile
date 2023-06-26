@@ -1,8 +1,10 @@
+import configureMockStore from 'redux-mock-store';
+import mocks from 'test/mocks';
+import thunk from 'redux-thunk';
+
 import * as actions from './inbox-threads-actions';
 import * as storage from 'components/storage/storage';
-import configureMockStore from 'redux-mock-store';
-import mocks from '../../../test/mocks';
-import thunk from 'redux-thunk';
+
 import {folderIdAllKey, folderIdMap} from './inbox-threads-helper';
 import {
   inboxThreadsNamespace,
@@ -11,12 +13,15 @@ import {
 import {
   INBOX_THREADS_FOLDER_SEEN,
   SET_PROGRESS,
-} from '../../actions/action-types';
+} from 'actions/action-types';
+import {Store} from 'redux';
+
+
 describe('Inbox Threads', () => {
-  let apiMock;
-  let responseMock;
-  let store;
-  let threadMock;
+  let apiMock: {};
+  let responseMock: {};
+  let store: Store;
+  let threadMock: {};
 
   const getApi = () => apiMock;
 
@@ -33,8 +38,8 @@ describe('Inbox Threads', () => {
     apiMock = {
       inbox: {
         getThreads: jest.fn().mockResolvedValue(responseMock),
-        updateFolders: jest.fn(),
-        saveAllAsSeen: jest.fn(),
+        updateFolders: jest.fn().mockResolvedValue({}),
+        saveAllAsSeen: jest.fn().mockResolvedValue({}),
       },
       articles: {
         addCommentReaction: jest.fn().mockResolvedValue({}),
@@ -49,6 +54,8 @@ describe('Inbox Threads', () => {
 
     storage.__setStorageState({});
   });
+
+
   describe('loadInboxThreads', () => {
     it('should load inbox threads for the first time', async () => {
       await store.dispatch(
@@ -147,6 +154,8 @@ describe('Inbox Threads', () => {
         },
       });
     });
+
+
     describe('Mark and save a folder as seen', () => {
       let folderId;
       let lastKnownNotified;
@@ -179,6 +188,8 @@ describe('Inbox Threads', () => {
           );
         });
       });
+
+
       describe('markFolderSeen', () => {
         it('should update folder`s lastSeen in the state', async () => {
           await store.dispatch(
@@ -269,6 +280,8 @@ describe('Inbox Threads', () => {
         });
       }
     });
+
+
     describe('onReactionSelect', () => {
       let onAfterSelectCallback;
       let issueMock;
@@ -367,6 +380,8 @@ describe('Inbox Threads', () => {
         );
       });
     });
+
+
     describe('Cache', () => {
       it('should set folder data from the cache', async () => {
         createStore(false);
@@ -435,6 +450,8 @@ describe('Inbox Threads', () => {
       });
     });
   });
+
+
   describe('updateThreadsStateAndCache', () => {
     let threadMocks;
     let updatedThread;
