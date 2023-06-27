@@ -754,7 +754,7 @@ msgstr "Contraseña"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
-msgstr "Biblioteca de fotos y videos"
+msgstr "Biblioteca de fotos y vídeos"
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"

@@ -410,7 +410,7 @@ msgstr "本当にこのアカウントを除去しますか？"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Document"
-msgstr "書類"
+msgstr "ドキュメント"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"

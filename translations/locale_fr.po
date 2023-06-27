@@ -186,7 +186,7 @@ msgstr "En vous connectant, vous acceptez la Charte de confidentialité."
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
-msgstr "Caméra"
+msgstr "Appareil photo"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
