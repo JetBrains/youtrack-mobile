@@ -8,12 +8,14 @@ import {until} from 'util/util';
 import API from '../api/api';
 import styles from './tags.styles';
 import type {Tag} from 'types/CustomFields';
-type Props = {
+
+interface Props {
   existed: Tag[];
   onAdd: (tags: Tag[]) => any;
   onHide: () => void;
   projectId: string;
-};
+  starId: string;
+}
 
 const TagAddSelect = (props: Props) => {
   const {onAdd, onHide, projectId, existed = []} = props;
@@ -25,12 +27,12 @@ const TagAddSelect = (props: Props) => {
       const [error, relevantTags] = await until(
         api.issueFolder.getProjectRelevantTags(projectId),
       );
-      return error ? [] : relevantTags;
+      return error ? [] : relevantTags.filter((it: Tag) => it.id !== props.starId);
     },
     selectedItems: existed,
     getTitle: (tag: Tag) => getEntityPresentation(tag),
     onCancel: onHide,
-    onSelect: async (tags: Tag[] | null | undefined) => {
+    onSelect: async (tags: Tag[] | null) => {
       await onAdd(tags || []);
       onHide();
     },
@@ -48,7 +50,4 @@ const TagAddSelect = (props: Props) => {
   return <Select {...selectProps} />;
 };
 
-export default React.memo<Props>(TagAddSelect) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(TagAddSelect);

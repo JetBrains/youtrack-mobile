@@ -42,6 +42,8 @@ import type {IssueState} from './issue-base-reducer';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {UserAppearanceProfile} from 'types/User';
 import type {Visibility} from 'types/Visibility';
+import {CustomError} from 'types/Error';
+
 type ApiGetter = () => Api;
 type StateGetter = () => IssueState;
 
@@ -534,12 +536,12 @@ export const createActions = (
     },
     onOpenTagsSelect: function (): (
       dispatch: (arg0: any) => any,
-      getState: StateGetter,
+      getState: () => AppState,
       getApi: ApiGetter,
     ) => void {
       return (
         dispatch: (arg0: any) => any,
-        getState: StateGetter,
+        getState: () => AppState,
         getApi: ApiGetter,
       ) => {
         const api: Api = getApi();
@@ -551,15 +553,12 @@ export const createActions = (
             placeholder: i18n('Filter tags'),
             dataSource: async () => {
               const issueProjectId: string = issue.project.id;
-              const [error, relevantProjectTags] = await until(
+              const [error, relevantProjectTags]: [CustomError | null, Tag[]] = await until(
                 api.issueFolder.getProjectRelevantTags(issueProjectId),
               );
-
-              if (error) {
-                return [];
-              }
-
-              return relevantProjectTags;
+              return error ? [] : relevantProjectTags.filter((it: Tag) => {
+                return it.id !== getState()?.app?.user?.profiles?.general?.star?.id;
+              });
             },
             selectedItems: issue?.tags || [],
             getTitle: item => getEntityPresentation(item),

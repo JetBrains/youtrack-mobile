@@ -742,10 +742,8 @@ const mapDispatchToProps = dispatch => {
     createAttachActions: () => attachmentActions.createAttachActions(dispatch),
     dispatcher: dispatch,
     setIssueId: issueId => dispatch(dispatchActions.setIssueId(issueId)),
-    setIssueSummaryCopy: summary =>
-      dispatch(dispatchActions.setIssueSummaryCopy(summary)),
-    setIssueDescriptionCopy: description =>
-      dispatch(dispatchActions.setIssueDescriptionCopy(description)),
+    setIssueSummaryCopy: summary => dispatch(dispatchActions.setIssueSummaryCopy(summary)),
+    setIssueDescriptionCopy: description => dispatch(dispatchActions.setIssueDescriptionCopy(description)),
     stopEditingIssue: () => dispatch(dispatchActions.stopEditingIssue()),
     closeCommandDialog: () => dispatch(dispatchActions.closeCommandDialog()),
   };
@@ -754,7 +752,6 @@ const mapDispatchToProps = dispatch => {
 export function connectIssue(Component: any): any {
   return connect(mapStateToProps, mapDispatchToProps)(Component);
 }
-export default connectIssue(Issue) as React$AbstractComponent<
-  IssueProps,
-  unknown
->;
+
+
+export default connectIssue(Issue);
