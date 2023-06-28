@@ -1,5 +1,8 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
+
+import log from 'components/log/log';
 import {getStorageState, storageStateAuthParamsKey} from './storage';
+
 import type {AuthParams} from 'types/Auth';
 
 const getAuthParamsKey = (): string =>
@@ -18,8 +21,13 @@ const storeSecurelyAuthParams = async (
 
 const getStoredSecurelyAuthParams = async (authParamsKey: string | null): Promise<AuthParams | null> => {
   if (authParamsKey) {
-    const authParams: | string | null = await EncryptedStorage.getItem(authParamsKey);
-    return typeof authParams === 'string' ? JSON.parse(authParams) : null;
+    try {
+      const authParams: | string | null = await EncryptedStorage.getItem(authParamsKey);
+      return typeof authParams === 'string' ? JSON.parse(authParams) : null;
+    } catch (e) {
+      log.warn('getStoredSecurelyAuthParams(getItem) failed', e.code);
+      return null;
+    }
   }
 
   return null;
