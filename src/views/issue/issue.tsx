@@ -14,6 +14,7 @@ import IssueActivity from './activity/issue__activity';
 import IssueDetails from './issue__details';
 import IssueDetailsModal from './modal/issue.modal__details';
 import IssueTabbed from 'components/issue-tabbed/issue-tabbed';
+import IssueVotes from 'components/issue-actions/issue-votes';
 import LinkedIssuesAddLink from 'components/linked-issues/linked-issues-add-link';
 import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
@@ -337,10 +338,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     }
   }
 
-  renderBackIcon: () => null | React.ReactElement<
-    React.ComponentProps<any>,
-    any
-  > = () => {
+  renderBackIcon: () => React.ReactNode = () => {
     return isSplitView() ? null : (
       <IconBack color={this.uiTheme.colors.$link} />
     );
@@ -350,12 +348,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return issue && issuePermissions && issuePermissions.canStar();
   };
 
-  renderActionsIcon(
-    uiTheme: UITheme,
-  ): React.ReactElement<
-    React.ComponentProps<typeof Skeleton | typeof Text>,
-    typeof Skeleton | typeof Text
-  > {
+  renderActionsIcon(uiTheme: UITheme): React.ReactNode {
     if (!this.isIssueLoaded()) {
       return <Skeleton width={24} />;
     }
@@ -371,6 +364,20 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         )}
         <Text> </Text>
       </Text>
+    );
+  }
+
+  renderIssueVotes(): React.ReactNode {
+    const {issue, issuePermissions, toggleVote} = this.props;
+    return (
+      <View style={styles.issueVote}>
+        <IssueVotes
+          canVote={issuePermissions.canVote(issue)}
+          votes={issue?.votes}
+          voted={issue?.voters?.hasVote}
+          onVoteToggle={toggleVote}
+        />
+      </View>
     );
   }
 
@@ -391,15 +398,12 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return <Skeleton width={24} />;
   };
 
-  renderHeaderIssueTitle(): React.ReactElement<
-    React.ComponentProps<any>,
-    any
-  > | null {
+  renderHeaderIssueTitle(): React.ReactNode {
     const {issue, issuePlaceholder, issueLoadingError} = this.props;
 
     const _issue: AnyIssue = issue || issuePlaceholder;
 
-    const readableID: string | null | undefined = getReadableID(_issue);
+    const readableID: string | undefined = getReadableID(_issue);
 
     if (readableID) {
       return (
@@ -467,8 +471,6 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       stopEditingIssue,
       issuePermissions,
     } = this.props;
-    const issueIdReadable = this.renderHeaderIssueTitle();
-
     if (!editMode) {
       const isIssueLoaded: boolean = this.isIssueLoaded();
       return (
@@ -477,7 +479,11 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
           rightButton={
             isIssueLoaded ? this.renderActionsIcon(this.uiTheme) : null
           }
-          extraButton={isIssueLoaded ? this.renderStar() : null}
+          extra={(
+            isIssueLoaded
+              ? <View style={styles.headerExtraContainer}>{this.renderIssueVotes()}{this.renderStar()}</View>
+              : null
+          )}
           onRightButtonClick={() => {
             if (isIssueLoaded) {
               showIssueActions(
@@ -495,7 +501,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
           }}
           onBack={this.handleOnBack}
         >
-          {issueIdReadable}
+          {this.renderHeaderIssueTitle()}
         </Header>
       );
     } else {

@@ -13,7 +13,6 @@ import CustomFieldsPanel from 'components/custom-fields-panel/custom-fields-pane
 import HTML from 'components/wiki/markdown/markdown-html';
 import IssueCustomFieldText from 'components/custom-field/issue-custom-field-text';
 import IssueMarkdown from './issue__markdown';
-import IssueVotes from 'components/issue-actions/issue-votes';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import LinkedIssues from 'components/linked-issues/linked-issues';
 import LinkedIssuesTitle from 'components/linked-issues/linked-issues-title';
@@ -83,7 +82,6 @@ export type IssueDetailsProps = {
   setIssueDescriptionCopy: (description: string) => any;
   analyticCategory: string;
   renderRefreshControl: () => any;
-  onVoteToggle: (voted: boolean) => any;
   onSwitchToActivity: () => any;
   onRemoveAttachment: () => any;
   onVisibilityChange: (visibility: Visibility) => any;
@@ -141,7 +139,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     return false;
   }
 
-  renderLinksBlock: () => void | Node = () => {
+  renderLinksBlock: () => React.ReactNode = () => {
     const {issuePermissions, getIssueLinksTitle} = this.props;
     const issue: AnyIssue = this.getIssue();
     return (
@@ -206,20 +204,6 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
             )
           }
           uiTheme={this.uiTheme}
-        />
-      </View>
-    );
-  }
-
-  renderIssueVotes(): React.ReactNode {
-    const {issue, issuePermissions, onVoteToggle} = this.props;
-    return (
-      <View style={styles.issueVote}>
-        <IssueVotes
-          canVote={issuePermissions.canVote(issue)}
-          votes={issue?.votes}
-          voted={issue?.voters?.hasVote}
-          onVoteToggle={onVoteToggle}
         />
       </View>
     );
@@ -414,7 +398,6 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
       <View style={styles.issueView}>
         <View style={styles.issueTopActions}>
           {this.renderIssueVisibility()}
-          {this.renderIssueVotes()}
         </View>
         {this.renderAdditionalInfo()}
 

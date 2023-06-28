@@ -45,7 +45,6 @@ export const baseHeaderStyles = {
     alignItems: 'flex-start',
     flexShrink: 1,
     padding: 0,
-    paddingLeft: UNIT * 2,
   },
 };
 

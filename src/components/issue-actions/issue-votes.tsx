@@ -1,13 +1,10 @@
 import * as React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
-import EStyleSheet from 'react-native-extended-stylesheet';
-
-import {HIT_SLOP, secondaryText, UNIT} from 'components/common-styles';
+import {HIT_SLOP} from 'components/common-styles';
 import {IconThumbUp} from 'components/icon/icon';
-import {ThemeContext} from 'components/theme/theme-context';
 
-import {Theme} from 'types/Theme';
+import styles from './issue-votes.styles';
 
 interface Props {
   voted: boolean;
@@ -18,11 +15,15 @@ interface Props {
 
 
 export default function (props: Props) {
-  const theme: Theme = React.useContext(ThemeContext);
   const {voted, votes, canVote, onVoteToggle} = props;
 
   const toggle = () => onVoteToggle(!voted);
 
+  const color: string = (
+    voted
+      ? styles.link.color
+      : canVote ? styles.iconEnabled.color : styles.iconDisabled.color
+  );
   return (
     <TouchableOpacity
       hitSlop={HIT_SLOP}
@@ -30,28 +31,12 @@ export default function (props: Props) {
       style={styles.button}
       onPress={toggle}
     >
-      <Text style={styles.counter}>{votes || 0}</Text>
+      <Text style={[styles.counter, {color}]}>{votes || 0}</Text>
       <IconThumbUp
         isActive={voted}
-        size={20}
-        color={
-          canVote ? theme.uiTheme.colors.$iconAccent : theme.uiTheme.colors.$disabled
-        }
+        size={19}
+        color={color}
       />
     </TouchableOpacity>
   );
 }
-
-const styles = EStyleSheet.create({
-  button: {
-    marginLeft: UNIT * 0.75,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-  },
-  counter: {
-    marginRight: UNIT,
-    ...secondaryText,
-    color: '$icon',
-  },
-});

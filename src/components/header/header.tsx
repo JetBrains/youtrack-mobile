@@ -9,15 +9,10 @@ import type {Theme} from 'types/Theme';
 export type HeaderProps = {
   onBack?: () => any;
   onRightButtonClick?: (...args: any[]) => any;
-  leftButton?:
-    | (React.ReactElement<React.ComponentProps<any>, any> | null | undefined)
-    | null;
-  rightButton?:
-    | (React.ReactElement<React.ComponentProps<any>, any> | null | undefined)
-    | null;
-  extraButton?:
-    | (React.ReactElement<React.ComponentProps<any>, any> | null | undefined)
-    | null;
+  leftButton?: React.ReactNode;
+  rightButton?: React.ReactNode;
+  extraButton?: React.ReactNode;
+  extra?: React.ReactNode;
   children?: any;
   style?: ViewStyleProp;
   title?: string;
@@ -54,6 +49,7 @@ export default class Header extends PureComponent<HeaderProps, Readonly<{}>> {
       leftButton,
       children,
       extraButton,
+      extra,
       rightButton,
       style,
       title,
@@ -107,6 +103,11 @@ export default class Header extends PureComponent<HeaderProps, Readonly<{}>> {
                 >
                   {extraButton}
                 </TouchableOpacity>
+              )}
+              {!!extra && (
+                <>
+                  {extra}
+                </>
               )}
 
               {!!rightButton && (
