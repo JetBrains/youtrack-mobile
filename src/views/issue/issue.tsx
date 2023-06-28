@@ -1,13 +1,13 @@
 import React from 'react';
 import {FlatList, RefreshControl, Text, View} from 'react-native';
+
 import {bindActionCreatorsExt} from 'util/redux-ext';
 import {connect} from 'react-redux';
+
 import createIssueActions, {dispatchActions} from './issue-actions';
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
 import ColorField from 'components/color-field/color-field';
-import CommandDialog, {
-  CommandDialogModal,
-} from 'components/command-dialog/command-dialog';
+import CommandDialog, {CommandDialogModal} from 'components/command-dialog/command-dialog';
 import ErrorMessage from 'components/error-message/error-message';
 import Header from 'components/header/header';
 import IssueActivity from './activity/issue__activity';
@@ -22,6 +22,7 @@ import usage from 'components/usage/usage';
 import {addListenerGoOnline} from 'components/network/network-events';
 import {attachmentActions} from './issue__attachment-actions-and-types';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from './issue-base-actions-creater';
+import {DEFAULT_THEME} from 'components/theme/theme';
 import {getApi} from 'components/api/api__instance';
 import {getReadableID} from 'components/issue-formatter/issue-formatter';
 import {
@@ -37,12 +38,14 @@ import {IssueContext} from './issue-context';
 import {Select, SelectModal} from 'components/select/select';
 import {Skeleton} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
+
 import styles from './issue.styles';
+
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
 import type {AnyIssue, IssueFull, TabRoute} from 'types/Issue';
 import type {Attachment, IssueLink, Tag} from 'types/CustomFields';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
-import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
+import type {EventSubscription} from 'react-native';
 import type {IssueTabbedState} from 'components/issue-tabbed/issue-tabbed';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {RequestHeaders} from 'types/Auth';
@@ -51,7 +54,10 @@ import type {ScrollData} from 'types/Markdown';
 import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from 'types/Theme';
 import type {User} from 'types/User';
+
 const isIOS: boolean = isIOSPlatform();
+
+
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
   issuePlaceholder: Record<string, any>;
@@ -64,11 +70,13 @@ type AdditionalProps = {
   onCommandApply: () => any;
   commentId?: string;
 };
+
 export type IssueProps = IssueState &
   typeof dispatchActions &
   AttachmentActions &
   AdditionalProps;
-//@ts-expect-error
+
+
 export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   static contextTypes: {
     actionSheet: (...args: any[]) => any;
@@ -81,7 +89,8 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   renderRefreshControl: (
     ...args: any[]
   ) => any = this._renderRefreshControl.bind(this);
-  goOnlineSubscription: EventSubscription;
+  goOnlineSubscription: EventSubscription | undefined;
+  uiTheme: UITheme = DEFAULT_THEME;
 
   constructor(props: IssueProps) {
         super(props);
@@ -114,7 +123,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   componentWillUnmount() {
     super.componentWillUnmount();
-    this.goOnlineSubscription?.remove();
+    this.goOnlineSubscription?.remove?.();
   }
 
   async UNSAFE_componentWillReceiveProps(nextProps: IssueProps): Promise<void> {
@@ -365,13 +374,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   }
 
-  renderStar: () => React.ReactElement<
-    React.ComponentProps<typeof Star | typeof Skeleton>,
-    typeof Star | typeof Skeleton
-  > = (): React.ReactElement<
-    React.ComponentProps<typeof Star | typeof Skeleton>,
-    typeof Star | typeof Skeleton
-  > => {
+  renderStar = (): React.ReactNode => {
     const {issue, toggleStar} = this.props;
 
     if (issue && this.isIssueLoaded()) {
@@ -527,7 +530,6 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   _renderRefreshControl(
     onRefresh?: (...args: any[]) => any,
-    uiTheme: UITheme,
   ) {
     return (
       <RefreshControl
@@ -535,7 +537,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         accessibilityLabel="refresh-control"
         accessible={true}
         refreshing={this.props.isRefreshing}
-        tintColor={uiTheme.colors.$link}
+        tintColor={this.uiTheme.colors.$link}
         onRefresh={() => {
           if (onRefresh) {
             onRefresh();
@@ -622,7 +624,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   ) => void = async (
     files: NormalizedAttachment[],
     onAttachingFinish: () => any,
-  ): any => {
+  ) => {
     const {uploadIssueAttach, loadAttachments} = this.props;
     await uploadIssueAttach(files);
     onAttachingFinish();

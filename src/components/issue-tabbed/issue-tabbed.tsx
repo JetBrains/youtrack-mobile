@@ -20,7 +20,7 @@ export type IssueTabbedState = {
 };
 
 
-export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
+export default class IssueTabbed<P = {}, S = IssueTabbedState> extends PureComponent<P, S> {
   initialWindowDimensions: any = Dimensions.get('window');
   tabRoutes: TabRoute[] = [
     this.getMainTabText(),
@@ -29,7 +29,8 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
     key: name,
     title: name,
   }));
-  unsubscribeOnDimensionsChange: EventSubscription;
+  unsubscribeOnDimensionsChange: EventSubscription | undefined;
+  // @ts-ignore
   state: IssueTabbedState = {
     index: 0,
     routes: this.tabRoutes,
@@ -46,7 +47,7 @@ export default class IssueTabbed extends PureComponent<void, IssueTabbedState> {
   }
 
   componentWillUnmount(): void {
-    this.unsubscribeOnDimensionsChange.remove();
+    this.unsubscribeOnDimensionsChange?.remove?.();
   }
 
   getMainTabText(): string {
