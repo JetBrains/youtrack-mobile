@@ -57,7 +57,7 @@ msgstr "1w 1d 1h 1m"
 msgid "Accept"
 msgstr "Accept"
 
-#: src/components/issue-tabbed/issue-tabbed.tsx:57
+#: src/components/issue-tabbed/issue-tabbed.tsx:58
 msgid "Activity"
 msgstr "Activity"
 
@@ -79,7 +79,7 @@ msgid "Add spent time"
 msgstr "Add spent time"
 
 #: src/components/tags/tag-add-panel.tsx:39
-#: src/views/issue/issue-base-actions-creater.ts:657
+#: src/views/issue/issue-base-actions-creater.ts:656
 msgid "Add tag"
 msgstr "Add tag"
 
@@ -102,7 +102,7 @@ msgid "Appearance"
 msgstr "Appearance"
 
 #: src/views/create-issue/create-issue-actions.ts:503
-#: src/views/issue/issue-base-actions-creater.ts:688
+#: src/views/issue/issue-base-actions-creater.ts:687
 msgid "Apply command…"
 msgstr "Apply command…"
 
@@ -139,7 +139,7 @@ msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
 #: src/components/comment/comment-edit.tsx:559
-#: src/views/issue/issue-base-actions-creater.ts:667
+#: src/views/issue/issue-base-actions-creater.ts:666
 msgid "Attach file"
 msgstr "Attach file"
 
@@ -191,8 +191,8 @@ msgstr "Camera"
 #: src/views/inbox-threads/inbox-threads__thread.tsx:198
 #: src/views/inbox-threads/inbox-threads.tsx:278
 #: src/views/issue/activity/issue-activity__comment-actions.ts:413
-#: src/views/issue/issue-base-actions-creater.ts:697
-#: src/views/issue/issue-base-actions-creater.ts:738
+#: src/views/issue/issue-base-actions-creater.ts:696
+#: src/views/issue/issue-base-actions-creater.ts:737
 #: src/views/knowledge-base/knowledge-base-actions.ts:497
 #: src/views/settings/settings__feedback-form.tsx:87
 msgid "Cancel"
@@ -284,16 +284,16 @@ msgstr "Content revised"
 #: src/views/article/article__activity-stream.tsx:222
 #: src/views/issue/activity/issue__activity-stream.tsx:134
 #: src/views/issue/activity/issue-activity__comment-actions.ts:380
-#: src/views/issue/issue-base-actions-creater.ts:640
-#: src/views/issue/issue-base-actions-creater.ts:734
+#: src/views/issue/issue-base-actions-creater.ts:639
+#: src/views/issue/issue-base-actions-creater.ts:733
 msgid "Copied"
 msgstr "Copied"
 
-#: src/views/issue/issue__details.tsx:379
+#: src/views/issue/issue__details.tsx:363
 msgid "Copy description"
 msgstr "Copy description"
 
-#: src/views/issue/issue__details.tsx:265
+#: src/views/issue/issue__details.tsx:249
 msgid "Copy field text"
 msgstr "Copy field text"
 
@@ -301,7 +301,7 @@ msgstr "Copy field text"
 #: src/views/article/article__activity-stream.tsx:218
 #: src/views/issue/activity/issue__activity-stream.tsx:139
 #: src/views/issue/activity/issue-activity__comment-actions.ts:384
-#: src/views/issue/issue-base-actions-creater.ts:636
+#: src/views/issue/issue-base-actions-creater.ts:635
 msgid "Copy link"
 msgstr "Copy link"
 
@@ -313,7 +313,7 @@ msgstr "Copy link to article"
 #: src/views/article/article__activity-stream.tsx:209
 #: src/views/issue/activity/issue__activity-stream.tsx:130
 #: src/views/issue/activity/issue-activity__comment-actions.ts:376
-#: src/views/issue/issue-base-actions-creater.ts:730
+#: src/views/issue/issue-base-actions-creater.ts:729
 msgid "Copy text"
 msgstr "Copy text"
 
@@ -333,7 +333,7 @@ msgstr "created"
 msgid "Created by"
 msgstr "Created by"
 
-#: src/views/create-issue/create-issue.tsx:289
+#: src/views/create-issue/create-issue.tsx:290
 msgid "Current issue"
 msgstr "Current issue"
 
@@ -381,7 +381,7 @@ msgstr "Description"
 msgid "Description changed"
 msgstr "Description changed"
 
-#: src/components/issue-tabbed/issue-tabbed.tsx:53
+#: src/components/issue-tabbed/issue-tabbed.tsx:54
 #: src/views/inbox/inbox.tsx:262
 msgid "Details"
 msgstr "Details"
@@ -423,7 +423,7 @@ msgstr "Drafts"
 #: src/views/issue/activity/issue__activity-stream.tsx:97
 #: src/views/issue/activity/issue__activity.tsx:269
 #: src/views/issue/activity/issue-activity__comment-actions.ts:394
-#: src/views/issue/issue-base-actions-creater.ts:647
+#: src/views/issue/issue-base-actions-creater.ts:646
 msgid "Edit"
 msgstr "Edit"
 
@@ -489,8 +489,8 @@ msgstr "Filter saved searches"
 msgid "Filter sprints by name"
 msgstr "Filter sprints by name"
 
-#: src/components/tags/tag-add-select.tsx:22
-#: src/views/issue/issue-base-actions-creater.ts:551
+#: src/components/tags/tag-add-select.tsx:24
+#: src/views/issue/issue-base-actions-creater.ts:553
 msgid "Filter tags"
 msgstr "Filter tags"
 
@@ -534,7 +534,7 @@ msgstr "in revision"
 msgid "Invalid query"
 msgstr "Invalid query"
 
-#: src/views/issue/issue-base-actions-creater.ts:865
+#: src/views/issue/issue-base-actions-creater.ts:864
 msgid "Issue deleted"
 msgstr "Issue deleted"
 
@@ -550,7 +550,7 @@ msgstr "Issue link added"
 msgid "Issue link removed"
 msgstr "Issue link removed"
 
-#: src/views/issue/issue-base-actions-creater.ts:281
+#: src/views/issue/issue-base-actions-creater.ts:283
 msgid "Issue updated"
 msgstr "Issue updated"
 
@@ -584,8 +584,8 @@ msgid "Light theme"
 msgstr "Light theme"
 
 #: src/components/linked-issues/linked-issues-add-link.tsx:250
-#: src/views/create-issue/create-issue.tsx:379
-#: src/views/issue/issue-base-actions-creater.ts:678
+#: src/views/create-issue/create-issue.tsx:380
+#: src/views/issue/issue-base-actions-creater.ts:677
 msgid "Link issue"
 msgstr "Link issue"
 
@@ -668,7 +668,7 @@ msgstr "Mute thread"
 msgid "New Article"
 msgstr "New Article"
 
-#: src/views/create-issue/create-issue.tsx:435
+#: src/views/create-issue/create-issue.tsx:437
 msgid "New Issue"
 msgstr "New Issue"
 
@@ -879,7 +879,7 @@ msgstr "Share"
 #: src/views/article/article__activity-stream.tsx:234
 #: src/views/issue/activity/issue__activity-stream.tsx:147
 #: src/views/issue/activity/issue__activity-stream.tsx:154
-#: src/views/issue/issue-base-actions-creater.ts:627
+#: src/views/issue/issue-base-actions-creater.ts:626
 msgid "Share link"
 msgstr "Share link"
 
@@ -893,7 +893,7 @@ msgstr "Share logs"
 
 #: src/views/article/arcticle-actions.ts:217
 #: src/views/article/arcticle-actions.ts:642
-#: src/views/issue/issue-base-actions-creater.ts:612
+#: src/views/issue/issue-base-actions-creater.ts:611
 msgid "Share…"
 msgstr "Share…"
 
@@ -1104,7 +1104,7 @@ msgstr "Untitled"
 msgid "updated"
 msgstr "updated"
 
-#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx:48
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx:49
 msgid "Updated by"
 msgstr "Updated by"
 
@@ -1132,7 +1132,7 @@ msgstr "VCS changes"
 msgid "View comment"
 msgstr "View comment"
 
-#: src/views/issue/issue__details.tsx:512
+#: src/views/issue/issue__details.tsx:495
 msgid "View comments and other activity"
 msgstr "View comments and other activity"
 
