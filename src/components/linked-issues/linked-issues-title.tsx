@@ -31,7 +31,7 @@ const LinkedIssuesTitle = (props: Props): React.ReactNode => {
       </View>
       <IconAngleRight
         size={18}
-        color={styles.linkedIssuesTitleTextDetails.color}
+        color={styles.linkedIssuesTitleIcon.color}
       />
     </TouchableOpacity>
   ) : null;

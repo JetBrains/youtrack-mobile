@@ -128,4 +128,7 @@ export default EStyleSheet.create({
     color: '$text',
     fontSize: markdownText.fontSize,
   },
+  linkedIssuesTitleIcon: {
+    color: '$icon',
+  },
 });
