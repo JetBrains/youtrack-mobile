@@ -13,6 +13,7 @@ const centered = {
   alignItems: 'center',
   justifyContent: 'center',
 };
+
 export default EStyleSheet.create({
   secondaryText: secondaryText,
   container: {
@@ -48,6 +49,8 @@ export default EStyleSheet.create({
   },
   issueTopPanelText: {...secondaryText, color: '$textSecondary'},
   tags: {
+    marginRight: -UNIT * 2,
+    paddingRight: UNIT * 2,
     marginTop: UNIT * 1.5,
     paddingTop: UNIT / 2,
     paddingBottom: UNIT * 1.5,

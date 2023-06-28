@@ -1,6 +1,8 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {mainText} from 'components/common-styles/typography';
-import {UNIT} from 'components/variables';
+
+import {mainText, UNIT} from 'components/common-styles';
+
+
 export default EStyleSheet.create({
   tags: {
     overflow: 'hidden',
