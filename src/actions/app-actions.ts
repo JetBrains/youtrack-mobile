@@ -1191,18 +1191,15 @@ const inboxCheckUpdateStatus = (): Action => {
         | InboxThread
         | null
         | undefined = getFirstCachedThread();
-      const [error, folders]: [
-        CustomError | null | undefined,
-        Array<InboxFolder>,
-      ] = await until(
+      const [error, folders]: [CustomError | null, InboxFolder[]] = await until(
         getApi().inbox.getFolders(
           typeof firstCachedThread?.notified === 'number'
             ? firstCachedThread?.notified + 1
             : undefined,
         ),
-      );
+      ) as [CustomError | null, InboxFolder[]];
 
-      if (!error) {
+      if (!error && Array.isArray(folders)) {
         const sorted: InboxFolder[] = folders.reduce(
           (flds: InboxFolder[], folder: InboxFolder) => {
             if (folder.id === folderIdMap[2]) {
