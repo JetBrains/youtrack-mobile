@@ -31,17 +31,17 @@ export default EStyleSheet.create({
     }),
   },
   createUpdateInfoPanel: {
-    marginTop: UNIT,
+    marginTop: UNIT * 1.5,
     marginBottom: UNIT * 1.5,
   },
   createUpdateInfoPanelButton: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
   },
   createUpdateInfoText: {
-    paddingTop: UNIT * 0.75,
     ...secondaryText,
     color: '$textSecondary',
+    alignItems: 'baseline',
   },
   visibility: {
     flexShrink: 1,
