@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: UNIT / 3,
     paddingHorizontal: UNIT / 2,
-    borderRadius: UNIT,
+    borderRadius: UNIT / 1.2,
   },
   wrapperOneChar: {
     width: COLOR_FIELD_SIZE,
