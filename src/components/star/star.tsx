@@ -21,7 +21,7 @@ export default class Star extends PureComponent<Props, void> {
   };
 
   render(): React.ReactNode {
-    const {hasStar, canStar, style, size = 22, disabled = false} = this.props;
+    const {hasStar, canStar, style, size = 19, disabled = false} = this.props;
 
     if (!canStar) {
       return null;

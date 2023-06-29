@@ -223,6 +223,24 @@ export const IconClone = (props?: Props) => (
     }}
   />
 );
+export const IconStar = (props?: Props) => (
+  <IconFont
+    {...{
+      isFontAwesome: true,
+      name: 'star',
+      ...props,
+    }}
+  />
+);
+export const IconStarOutline = (props?: Props) => (
+  <IconFont
+    {...{
+      isFontAwesome: true,
+      name: 'star-o',
+      ...props,
+    }}
+  />
+);
 // JetBrains RingUI custom icons
 export const IconAdd = (props?: Props) => (
   <IconYTM
@@ -362,10 +380,10 @@ export const IconSearch = (props?: Props) => (
 export const IconSettings = (props?: Props) => (
   <IconYTM {...{...defaultProps(), name: 'settings-20px', ...props}} />
 );
-export const IconStar = (props?: Props) => (
+export const IconStar_ = (props?: Props) => (
   <IconYTM {...{...defaultProps(), name: 'star-filled', ...props}} />
 );
-export const IconStarOutline = (props?: Props) => (
+export const IconStarOutline_ = (props?: Props) => (
   <IconYTM {...{...defaultProps(), name: 'star-empty', ...props}} />
 );
 export const IconWork = (props?: Props) => (
