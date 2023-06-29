@@ -73,9 +73,9 @@ export default class ColorField extends PureComponent<Props, Readonly<{}>> {
 const styles = StyleSheet.create({
   wrapper: {
     justifyContent: 'center',
-    paddingVertical: UNIT / 4,
+    paddingVertical: UNIT / 3,
     paddingHorizontal: UNIT / 2,
-    borderRadius: UNIT / 2,
+    borderRadius: UNIT,
   },
   wrapperOneChar: {
     width: COLOR_FIELD_SIZE,
