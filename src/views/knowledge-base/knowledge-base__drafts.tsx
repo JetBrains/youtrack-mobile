@@ -14,20 +14,20 @@ import Header from 'components/header/header';
 import IconTrash from '@jetbrains/icons/trash.svg';
 import Router from 'components/router/router';
 import Select from 'components/select/select';
-import {
-  confirmDeleteAllDrafts,
-  confirmDeleteArticleDraft,
-} from '../article/arcticle-helper';
+import {confirmDeleteAllDrafts, confirmDeleteArticleDraft} from 'components/confirmation/article-confirmations';
 import {deleteArticle} from '../article/arcticle-actions';
 import {i18n} from 'components/i18n/i18n';
 import {IconBack, IconKnowledgeBase} from 'components/icon/icon';
 import {loadArticlesDrafts} from './knowledge-base-actions';
-import {routeMap} from '../../app-routes';
+import {routeMap} from 'app-routes';
 import {SkeletonList} from 'components/skeleton/skeleton';
 import {until} from 'util/util';
 import {View as AnimatedView} from 'react-native-animatable';
+
 import styles from './knowledge-base.styles';
+
 import type {Article, ArticleDraft} from 'types/Article';
+
 type Props = {
   backIcon?: any;
   onBack?: () => any;

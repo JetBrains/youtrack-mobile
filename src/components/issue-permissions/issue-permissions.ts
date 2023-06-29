@@ -28,6 +28,8 @@ export const CAN_UPDATE_NOT_OWN_COMMENT =
 export const CAN_DELETE_COMMENT = 'JetBrains.YouTrack.DELETE_COMMENT';
 export const CAN_DELETE_NOT_OWN_COMMENT =
   'JetBrains.YouTrack.DELETE_NOT_OWN_COMMENT';
+export const CAN_DELETE_ISSUE =
+  'JetBrains.YouTrack.DELETE_ISSUE';
 export const CAN_LINK_ISSUE = 'JetBrains.YouTrack.LINK_ISSUE';
 export const CAN_UPDATE_WATCH = 'JetBrains.YouTrack.UPDATE_WATCH_FOLDER';
 export const CREATE_ARTICLE = 'JetBrains.YouTrack.CREATE_ARTICLE';
@@ -166,6 +168,7 @@ export default class IssuePermissions {
   };
   canCommentOn: (issue: AnyIssue) => boolean = (issue: AnyIssue): boolean =>
     this.hasPermissionFor(issue, CAN_CREATE_COMMENT);
+  canDeleteIssue: (issue: AnyIssue) => boolean = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_DELETE_ISSUE);
   canUpdateComment: (
     entity: AnyIssue | Article,
     comment: IssueComment,

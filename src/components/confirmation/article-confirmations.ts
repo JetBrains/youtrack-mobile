@@ -1,6 +1,6 @@
-import {confirmation} from 'components/confirmation/confirmation';
+import {confirmation, deleteButtonText} from 'components/confirmation/confirmation';
 import {i18n} from 'components/i18n/i18n';
-const deleteButtonText: string = i18n('Delete');
+
 export const confirmDeleteArticle = (message?: string): any =>
   confirmation(
     i18n('Are you sure you want to delete this article?'),

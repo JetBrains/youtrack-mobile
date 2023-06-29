@@ -7,7 +7,7 @@ import ArticlesAPI from 'components/api/api__articles';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
 import {cacheUserLastVisitedArticle, setGlobalInProgress} from 'actions/app-actions';
-import {confirmDeleteArticle} from './arcticle-helper';
+import {confirmDeleteArticle} from 'components/confirmation/article-confirmations';
 import {findActivityInGroupedActivities} from 'components/activity/activity-helper';
 import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
@@ -42,6 +42,7 @@ import type {CustomError} from 'types/Error';
 import type {Reaction} from 'types/Reaction';
 import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
 import type {User} from 'types/User';
+
 type ApiGetter = () => Api;
 
 const clearArticle = (): ((

@@ -493,6 +493,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
                   canEdit: issuePermissions.canUpdateGeneralInfo(issue),
                   canApplyCommand: issuePermissions.canRunCommand(issue),
                   canTag: issuePermissions.canTag(issue),
+                  canDeleteIssue: issuePermissions.canDeleteIssue(issue),
                 },
                 this.switchToDetailsTab,
                 issuePermissions.canLink(issue) ? this.onAddIssueLink : null,

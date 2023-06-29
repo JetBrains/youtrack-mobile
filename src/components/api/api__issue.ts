@@ -55,6 +55,17 @@ export default class IssueAPI extends ApiBase {
     return issue;
   }
 
+  async deleteIssue(id: string): Promise<void> {
+    return this.makeAuthorizedRequest(
+      `${this.youTrackIssueUrl}/${id}`,
+      'DELETE',
+      null,
+      {
+        parseJson: false,
+      }
+    );
+  }
+
   async getIssueLinks(id: string): Promise<Array<IssueLink>> {
     const queryString = qs.stringify(
       {

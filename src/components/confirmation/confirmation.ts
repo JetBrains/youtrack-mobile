@@ -1,5 +1,10 @@
 import {Alert} from 'react-native';
+
 import {i18n} from 'components/i18n/i18n';
+
+export const deleteButtonText: string = i18n('Delete');
+
+
 export const confirmation = async (
   title: string,
   actionButtonTitle: string,
