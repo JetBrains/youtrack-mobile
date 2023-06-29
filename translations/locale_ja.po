@@ -109,15 +109,15 @@ msgstr "外観"
 msgid "Apply command…"
 msgstr "コマンドを適用…"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete all article drafts?"
 msgstr "記事の下書きをすべて削除してもよろしいですか？"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this article?"
 msgstr "この記事を削除してもよろしいですか？"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this draft?"
 msgstr "この下書きを削除してもよろしいですか？"
 
@@ -351,15 +351,16 @@ msgstr "日付"
 msgid "Decline"
 msgstr "拒否"
 
+#: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/arcticle-helper.ts
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
+#: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
 msgstr "削除"
 
@@ -370,6 +371,10 @@ msgstr "コメントを永久に削除しますか？"
 #: src/views/article-create/article-create.tsx
 msgid "Delete draft"
 msgstr "下書きを削除"
+
+#: src/components/confirmation/issue-confirmations.ts
+msgid "Delete issue {{issueId}}?"
+msgstr ""
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"
@@ -1039,7 +1044,7 @@ msgstr "VCS ユーザー名が YouTrack の複数のユーザーと一致して�
 msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
 msgstr "TeamCity から変更者に関する情報を取得中にエラーが発生しました。最も可能性の高い理由は、代わりに統合を実行する TeamCity ユーザーに必要な権限がないことです。"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "This action deletes all drafts, including unpublished sub-articles"
 msgstr "この操作は未公開のサブ記事を含むすべての下書きを削除します"
 

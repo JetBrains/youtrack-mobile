@@ -112,15 +112,15 @@ msgstr "Apariencia"
 msgid "Apply command…"
 msgstr "Aplicar comando…"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete all article drafts?"
 msgstr "¿Seguro que desea eliminar todos los borradores de artículos?"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this article?"
 msgstr "¿Seguro que desea eliminar este artículo?"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this draft?"
 msgstr "¿Seguro que desea eliminar este borrador?"
 
@@ -355,15 +355,16 @@ msgstr "Fecha"
 msgid "Decline"
 msgstr "Rechazar"
 
+#: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/arcticle-helper.ts
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
+#: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -374,6 +375,10 @@ msgstr "¿Eliminar comentario permanentemente?"
 #: src/views/article-create/article-create.tsx
 msgid "Delete draft"
 msgstr "Eliminar borrador"
+
+#: src/components/confirmation/issue-confirmations.ts
+msgid "Delete issue {{issueId}}?"
+msgstr ""
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"
@@ -1045,7 +1050,7 @@ msgstr "El nombre de usuario VCS coincide con más de un usuario de YouTrack. Pa
 msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
 msgstr "Se ha producido un error al recuperar de TeamCity la información sobre el autor del cambio. Lo más probable es que el usuario de TeamCity con el que la integración funciona no tenga los permisos necesarios."
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "This action deletes all drafts, including unpublished sub-articles"
 msgstr "Esta acción elimina todos los borradores, incluidos los subartículos sin publicar"
 

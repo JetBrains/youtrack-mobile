@@ -109,15 +109,15 @@ msgstr "外观"
 msgid "Apply command…"
 msgstr "应用命令…"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete all article drafts?"
 msgstr "确定要删除所有文章草稿吗?"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this article?"
 msgstr "确定要删除此文章吗?"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this draft?"
 msgstr "是否确实要删除此草稿?"
 
@@ -351,15 +351,16 @@ msgstr "日期"
 msgid "Decline"
 msgstr "数据库大小<br>(不带 blobs)"
 
+#: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/arcticle-helper.ts
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
+#: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
 msgstr "删除"
 
@@ -370,6 +371,10 @@ msgstr "永久删除评论?"
 #: src/views/article-create/article-create.tsx
 msgid "Delete draft"
 msgstr "删除草稿"
+
+#: src/components/confirmation/issue-confirmations.ts
+msgid "Delete issue {{issueId}}?"
+msgstr ""
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"
@@ -1039,7 +1044,7 @@ msgstr "VCS 用户名与 YouTrack 中的多个用户匹配。要链接未来的�
 msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
 msgstr "从 TeamCity 检索有关更改作者的信息时出错。最可能的原因是代表集成运行的 TeamCity 用户没有所需的权限。"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "This action deletes all drafts, including unpublished sub-articles"
 msgstr "此操作将删除所有草稿，包括未发布的子文章"
 

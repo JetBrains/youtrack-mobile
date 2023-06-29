@@ -118,15 +118,15 @@ msgstr "Тема интерфейса"
 msgid "Apply command…"
 msgstr "Применить команду…"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete all article drafts?"
 msgstr "Вы действительно хотите удалить все черновики?"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this article?"
 msgstr "Вы действительно хотите удалить эту статью?"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this draft?"
 msgstr "Вы действительно хотите удалить черновик?"
 
@@ -363,15 +363,16 @@ msgstr "Дата"
 msgid "Decline"
 msgstr "Отклонить"
 
+#: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/arcticle-helper.ts
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
+#: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
 msgstr "Удалить"
 
@@ -382,6 +383,10 @@ msgstr "Удалить комментарий навсегда?"
 #: src/views/article-create/article-create.tsx
 msgid "Delete draft"
 msgstr "Удалить черновик"
+
+#: src/components/confirmation/issue-confirmations.ts
+msgid "Delete issue {{issueId}}?"
+msgstr ""
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"
@@ -1057,7 +1062,7 @@ msgstr "Имя пользователя в VCS соответствует нес
 msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
 msgstr "Не удалось получить информацию об авторе изменения из TeamCity. Скорее всего, у пользователя TeamCity, от имени которого выполняется интеграция, недостаточно разрешений."
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "This action deletes all drafts, including unpublished sub-articles"
 msgstr "Будут удалены все черновики, включая неопубликованные вложенные статьи"
 

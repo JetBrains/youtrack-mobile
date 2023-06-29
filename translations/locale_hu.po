@@ -112,15 +112,15 @@ msgstr "Megjelenés"
 msgid "Apply command…"
 msgstr "Parancs alkalmazása…"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete all article drafts?"
 msgstr "Biztos. hogy törli az összes cikkvázlatot?"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this article?"
 msgstr "Biztos, hogy törli ezt a cikket?"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this draft?"
 msgstr "Biztosan törli ezt a piszkozatot?"
 
@@ -355,15 +355,16 @@ msgstr "Dátum"
 msgid "Decline"
 msgstr "Elutasítás"
 
+#: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/arcticle-helper.ts
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
+#: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
 msgstr "Törlés"
 
@@ -374,6 +375,10 @@ msgstr "Véglegesen törli a hozzászólást?"
 #: src/views/article-create/article-create.tsx
 msgid "Delete draft"
 msgstr "Piszkozat törlése"
+
+#: src/components/confirmation/issue-confirmations.ts
+msgid "Delete issue {{issueId}}?"
+msgstr "Törli a(z) {{issueId}} hibajegyet?"
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"
@@ -1045,7 +1050,7 @@ msgstr "A VCS Felhasználónév egynél több felhasználóval is megegyezik a Y
 msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
 msgstr "Hiba történt a változás TeamCity-beli szerzőjével kapcsolatos információ letöltése során. A legvalószínűbb ok az, hogy a TeamCity felhasználó, amely az integráció nevében fut, nem rendelkezik a szükséges engedélyekkel."
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "This action deletes all drafts, including unpublished sub-articles"
 msgstr "Ez a művelet törli az összes piszkozatot, beleértve a kiadatlan részcikkeket is"
 

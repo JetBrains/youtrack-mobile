@@ -112,15 +112,15 @@ msgstr "Darstellung"
 msgid "Apply command…"
 msgstr "Befehl anwenden…"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete all article drafts?"
 msgstr "Möchten Sie wirklich alle Artikelentwürfe löschen?"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this article?"
 msgstr "Möchten Sie diesen Artikel wirklich löschen?"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this draft?"
 msgstr "Sind Sie sicher, dass Sie diesen Entwurf löschen möchten?"
 
@@ -355,15 +355,16 @@ msgstr "Datum"
 msgid "Decline"
 msgstr "Ablehnen"
 
+#: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/arcticle-helper.ts
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
+#: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
 msgstr "Löschen"
 
@@ -374,6 +375,10 @@ msgstr "Kommentar endgültig löschen?"
 #: src/views/article-create/article-create.tsx
 msgid "Delete draft"
 msgstr "Entwurf löschen"
+
+#: src/components/confirmation/issue-confirmations.ts
+msgid "Delete issue {{issueId}}?"
+msgstr ""
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"
@@ -1045,7 +1050,7 @@ msgstr "Der VCS-Benutzername passt zu mehreren Benutzern in YouTrack. Um zukünf
 msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
 msgstr "Der wahrscheinlichste Grund dafür ist, dass der TeamCity-Benutzer, in dessen Namen die Integration ausgeführt wird, nicht über die erforderlichen Berechtigungen verfügt."
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "This action deletes all drafts, including unpublished sub-articles"
 msgstr "Diese Aktion löscht alle Entwürfe, einschließlich unveröffentlichter Unterartikel"
 

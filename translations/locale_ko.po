@@ -109,15 +109,15 @@ msgstr "모양"
 msgid "Apply command…"
 msgstr "명령어 적용…"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete all article drafts?"
 msgstr "모든 자료 초안을 삭제하시겠습니까?"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this article?"
 msgstr "이 자료를 삭제하시겠습니까?"
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this draft?"
 msgstr "이 초안을 삭제하시겠습니까?"
 
@@ -351,15 +351,16 @@ msgstr "날짜"
 msgid "Decline"
 msgstr "취소"
 
+#: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/arcticle-helper.ts
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
+#: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
 msgstr "삭제"
 
@@ -370,6 +371,10 @@ msgstr "주석을 영구히 삭제할까요?"
 #: src/views/article-create/article-create.tsx
 msgid "Delete draft"
 msgstr "초안 삭제"
+
+#: src/components/confirmation/issue-confirmations.ts
+msgid "Delete issue {{issueId}}?"
+msgstr ""
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"
@@ -1039,7 +1044,7 @@ msgstr "VCS 사용자 이름이 YouTrack에서 두 명 이상의 사용자와 �
 msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
 msgstr "TeamCity에서 변경 내용의 작성자에 대한 정보를 검색하는 동안 오류가 발생했습니다. TeamCity 사용자를 대신해 작동하는 통합에 필요한 권한이 없어서 발생했을 가능성이 가장 높습니다."
 
-#: src/views/article/arcticle-helper.ts
+#: src/components/confirmation/article-confirmations.ts
 msgid "This action deletes all drafts, including unpublished sub-articles"
 msgstr "이 액션은 게시되지 않은 하위 자료를 포함해 모든 초안을 삭제합니다."
 
