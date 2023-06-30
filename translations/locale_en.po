@@ -14,7 +14,7 @@ msgstr " ({{amount}} unresolved)"
 msgid " or "
 msgstr " or "
 
-#: src/views/agile-board/board-actions.ts:697
+#: src/views/agile-board/board-actions.ts:692
 msgid "(archived)"
 msgstr "(archived)"
 
@@ -74,7 +74,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:590
+#: src/components/comment/comment-edit.tsx:592
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -138,7 +138,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:559
+#: src/components/comment/comment-edit.tsx:561
 #: src/views/issue/issue-base-actions-creater.ts:691
 msgid "Attach file"
 msgstr "Attach file"
@@ -260,7 +260,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:936
+#: src/actions/app-actions.ts:940
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -432,7 +432,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:607
+#: src/components/comment/comment-edit.tsx:609
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -449,7 +449,7 @@ msgid "Enter command"
 msgstr "Enter command"
 
 #: src/components/query-assist/query-assist.tsx:182
-#: src/components/query-assist/query-preview.tsx:60
+#: src/components/query-assist/query-preview.tsx:62
 msgid "Enter search request"
 msgstr "Enter search request"
 
@@ -469,7 +469,7 @@ msgstr "Favorites"
 msgid "Feature request"
 msgstr "Feature request"
 
-#: src/views/agile-board/board-actions.ts:725
+#: src/views/agile-board/board-actions.ts:720
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
@@ -490,7 +490,7 @@ msgstr "Filter projects, saved searches, and tags"
 msgid "Filter saved searches"
 msgstr "Filter saved searches"
 
-#: src/views/agile-board/board-actions.ts:690
+#: src/views/agile-board/board-actions.ts:685
 msgid "Filter sprints by name"
 msgstr "Filter sprints by name"
 
@@ -706,7 +706,7 @@ msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
 #: src/components/error/error-message-data.ts:34
-#: src/views/issues/issues.tsx:566
+#: src/views/issues/issues.tsx:576
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -843,7 +843,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:632
+#: src/views/issues/issues.tsx:642
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -1169,7 +1169,7 @@ msgstr "When integrating TeamCity and YouTrack, the users are matched by their e
 msgid "Woah, you can't touch this!"
 msgstr "Woah, you can't touch this!"
 
-#: src/components/comment/comment-edit.tsx:426
+#: src/components/comment/comment-edit.tsx:427
 #: src/views/issue/activity/activity__add-spent-time.tsx:426
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
