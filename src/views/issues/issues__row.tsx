@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
+
 import ColorField from 'components/color-field/color-field';
 import Tags from 'components/tags/tags';
 import {
@@ -10,16 +11,20 @@ import {
 import {ytDate} from 'components/date/date';
 import Avatar from 'components/avatar/avatar';
 import {ThemeContext} from 'components/theme/theme-context';
+
 import styles from './issues.styles';
+
 import type {AnyIssue} from 'types/Issue';
 import type {BundleValue} from 'types/CustomFields';
 import type {ViewStyleProp} from 'types/Internal';
+
 type Props = {
   issue: AnyIssue;
   onClick: (...args: any[]) => any;
   onTagPress?: (query: string) => any;
   style?: ViewStyleProp;
 };
+
 export default class IssueRow extends Component<Props, void> {
   shouldComponentUpdate(nextProps: Props): boolean {
     return ['tags', 'links', 'fields', 'resolved', 'summary'].some(

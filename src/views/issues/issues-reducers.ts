@@ -18,8 +18,8 @@ export type IssuesState = {
   isIssuesContextOpen: boolean;
   issuesCount: number | null;
   issues: IssueOnList[];
-  selectProps: Record<string, any>;
-  searchContext: Partial<Folder>;
+  selectProps: Record<string, any> | null;
+  searchContext: Folder;
   isSearchContextPinned: boolean;
 };
 export const initialState: IssuesState = {
@@ -35,7 +35,7 @@ export const initialState: IssuesState = {
   issuesCount: null,
   issues: [],
   selectProps: null,
-  searchContext: EVERYTHING_CONTEXT,
+  searchContext: EVERYTHING_CONTEXT as Folder,
   isSearchContextPinned: false,
 };
 export default createReducer(initialState, {
