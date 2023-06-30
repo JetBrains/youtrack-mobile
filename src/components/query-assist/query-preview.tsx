@@ -1,4 +1,4 @@
-import {Text, View} from 'react-native';
+import {Text, TouchableWithoutFeedback, View} from 'react-native';
 import React, {Component} from 'react';
 import {i18n} from 'components/i18n/i18n';
 import {IconSearch} from '../icon/icon';
@@ -40,11 +40,13 @@ export default class QueryPreview extends Component<Props, void> {
     return (
       <View style={[styles.placeHolder, style]}>
         <View style={styles.inputWrapper}>
-          <IconSearch
-            style={styles.searchIcon}
-            size={20}
-            color={styles.clearIcon.color}
-          />
+          <TouchableWithoutFeedback onPress={this.focus}>
+            <IconSearch
+              style={styles.searchIcon}
+              size={20}
+              color={styles.clearIcon.color}
+            />
+          </TouchableWithoutFeedback>
 
           <Text
             numberOfLines={1}
