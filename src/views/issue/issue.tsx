@@ -471,6 +471,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       stopEditingIssue,
       issuePermissions,
     } = this.props;
+    const issueTitle: React.ReactNode = this.renderHeaderIssueTitle();
     if (!editMode) {
       const isIssueLoaded: boolean = this.isIssueLoaded();
       return (
@@ -502,7 +503,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
           }}
           onBack={this.handleOnBack}
         >
-          {this.renderHeaderIssueTitle()}
+          {issueTitle}
         </Header>
       );
     } else {
@@ -529,7 +530,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
             canSave ? saveIssueSummaryAndDescriptionChange : () => {}
           }
         >
-          {issueIdReadable}
+          {issueTitle}
         </Header>
       );
     }
