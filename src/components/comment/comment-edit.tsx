@@ -202,7 +202,8 @@ const CommentEdit = (props: Props) => {
         changeState({commentCaret: comment.text?.length});
       }
     },
-    [props.editingComment, setEditingComment, state.editingComment]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [props.editingComment, setEditingComment]
   );
 
   const focus = (): void => {
