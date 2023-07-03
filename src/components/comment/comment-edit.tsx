@@ -200,6 +200,9 @@ const CommentEdit = (props: Props) => {
         const comment: EditingComment = {...state.editingComment, ...props.editingComment};
         setEditingComment(comment);
         changeState({commentCaret: comment.text?.length});
+        if (props.editingComment.reply) {
+          focus();
+        }
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -273,7 +276,7 @@ const CommentEdit = (props: Props) => {
           mentions={state.mentions}
           onApply={(user: User) => {
             applySuggestion(user);
-            setTimeout(focus, 150);
+            focus();
           }}
         />
       );
