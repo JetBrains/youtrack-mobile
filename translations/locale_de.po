@@ -378,7 +378,7 @@ msgstr "Entwurf löschen"
 
 #: src/components/confirmation/issue-confirmations.ts
 msgid "Delete issue {{issueId}}?"
-msgstr ""
+msgstr "Ticket {{issueId}} löschen?"
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"

@@ -74,7 +74,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:592
+#: src/components/comment/comment-edit.tsx:596
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -138,7 +138,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:561
+#: src/components/comment/comment-edit.tsx:565
 #: src/views/issue/issue-base-actions-creater.ts:691
 msgid "Attach file"
 msgstr "Attach file"
@@ -432,7 +432,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:609
+#: src/components/comment/comment-edit.tsx:613
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -1169,7 +1169,7 @@ msgstr "When integrating TeamCity and YouTrack, the users are matched by their e
 msgid "Woah, you can't touch this!"
 msgstr "Woah, you can't touch this!"
 
-#: src/components/comment/comment-edit.tsx:427
+#: src/components/comment/comment-edit.tsx:431
 #: src/views/issue/activity/activity__add-spent-time.tsx:426
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"

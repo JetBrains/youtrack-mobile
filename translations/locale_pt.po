@@ -378,7 +378,7 @@ msgstr "Excluir rascunho"
 
 #: src/components/confirmation/issue-confirmations.ts
 msgid "Delete issue {{issueId}}?"
-msgstr ""
+msgstr "Excluir issue {{issueId}}?"
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"

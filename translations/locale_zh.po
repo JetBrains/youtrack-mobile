@@ -374,7 +374,7 @@ msgstr "删除草稿"
 
 #: src/components/confirmation/issue-confirmations.ts
 msgid "Delete issue {{issueId}}?"
-msgstr ""
+msgstr "删除问题 {{issueId}}?"
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"

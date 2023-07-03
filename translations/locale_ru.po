@@ -386,7 +386,7 @@ msgstr "Удалить черновик"
 
 #: src/components/confirmation/issue-confirmations.ts
 msgid "Delete issue {{issueId}}?"
-msgstr ""
+msgstr "Удалить задачу {{issueId}}?"
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"

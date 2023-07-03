@@ -374,7 +374,7 @@ msgstr "下書きを削除"
 
 #: src/components/confirmation/issue-confirmations.ts
 msgid "Delete issue {{issueId}}?"
-msgstr ""
+msgstr "課題 {{issueId}} を削除しますか？"
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"

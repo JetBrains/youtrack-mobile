@@ -374,7 +374,7 @@ msgstr "초안 삭제"
 
 #: src/components/confirmation/issue-confirmations.ts
 msgid "Delete issue {{issueId}}?"
-msgstr ""
+msgstr "{{issueId}} 이슈를 삭제하시겠어요?"
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"

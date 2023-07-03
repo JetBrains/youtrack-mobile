@@ -378,7 +378,7 @@ msgstr "Supprimer le brouillon"
 
 #: src/components/confirmation/issue-confirmations.ts
 msgid "Delete issue {{issueId}}?"
-msgstr ""
+msgstr "Supprimer le ticket {{issueId}} ?"
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"
