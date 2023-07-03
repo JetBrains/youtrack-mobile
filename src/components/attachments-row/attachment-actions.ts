@@ -340,14 +340,16 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
         getApi: ApiGetter,
       ) => {
         const api: Api = getApi();
-        const issueId: string = getState().issueState.issue.id;
-        await dispatch(
-          actions.removeAttachmentFromComment(
-            () =>
-              api.issue.removeFileFromComment(issueId, attach.id, commentId),
-            attach.id,
-          ),
-        );
+        const issueId: string = getState().issueState?.issue?.id;
+        if (issueId && attach.id && commentId) {
+          await dispatch(
+            actions.removeAttachmentFromComment(
+              () =>
+                api.issue.removeFileFromComment(issueId, attach.id, commentId),
+              attach.id,
+            ),
+          );
+        }
       };
     },
     removeAttachmentFromArticleComment: function (
