@@ -366,7 +366,7 @@ export const createActions = (
             description,
           ),
         );
-        const [error, updated] = await until(
+        const [error] = await until(
           api.issue.updateDescriptionCheckbox(
             issue.id,
             checked,
@@ -379,7 +379,7 @@ export const createActions = (
           dispatch(
             dispatchActions.setIssueSummaryAndDescription(
               issue.summary,
-              updated.description,
+              issue.description,
             ),
           );
           notifyError(error);
