@@ -46,7 +46,7 @@ export function renderSelector(params: {
           ]}
           numberOfLines={1}
         >
-          {`${params.label} `}
+          {params.label}
         </Text>
         {((params.showLoader && !params.isDisabled) || !params.showLoader) && (
           <IconAngleDown
