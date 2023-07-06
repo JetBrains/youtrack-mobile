@@ -14,7 +14,7 @@ msgstr " ({{amount}} unresolved)"
 msgid " or "
 msgstr " or "
 
-#: src/views/agile-board/board-actions.ts:692
+#: src/views/agile-board/board-actions.ts:693
 msgid "(archived)"
 msgstr "(archived)"
 
@@ -211,11 +211,11 @@ msgstr "closed the pull request"
 msgid "Collapse all"
 msgstr "Collapse all"
 
-#: src/views/agile-board/agile-board.tsx:360
+#: src/views/agile-board/agile-board.tsx:368
 msgid "Column collapsed"
 msgstr "Column collapsed"
 
-#: src/views/agile-board/agile-board.tsx:360
+#: src/views/agile-board/agile-board.tsx:368
 msgid "Column expanded"
 msgstr "Column expanded"
 
@@ -469,7 +469,7 @@ msgstr "Favorites"
 msgid "Feature request"
 msgstr "Feature request"
 
-#: src/views/agile-board/board-actions.ts:720
+#: src/views/agile-board/board-actions.ts:721
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
@@ -490,7 +490,7 @@ msgstr "Filter projects, saved searches, and tags"
 msgid "Filter saved searches"
 msgstr "Filter saved searches"
 
-#: src/views/agile-board/board-actions.ts:685
+#: src/views/agile-board/board-actions.ts:686
 msgid "Filter sprints by name"
 msgstr "Filter sprints by name"
 
@@ -988,7 +988,7 @@ msgstr "The application failed to restart automatically. Please try to restart i
 msgid "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
 msgstr "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
 
-#: src/views/agile-board/agile-board.tsx:425
+#: src/views/agile-board/agile-board.tsx:437
 msgid "The board {{boardName}} has configuration errors"
 msgstr "The board {{boardName}} has configuration errors"
 
