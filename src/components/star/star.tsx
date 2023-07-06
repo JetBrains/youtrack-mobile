@@ -1,8 +1,11 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import {TouchableOpacity} from 'react-native';
-import {HIT_SLOP} from '../common-styles/button';
-import {IconStar, IconStarOutline} from '../icon/icon';
+
+import {HIT_SLOP} from 'components/common-styles/button';
+import {IconStar, IconStarOutline} from 'components/icon/icon';
+
 import styles from './star.styles';
+
 type Props = {
   disabled?: boolean;
   canStar: boolean;
@@ -11,35 +14,32 @@ type Props = {
   style?: any;
   size?: number;
 };
-export default class Star extends PureComponent<Props, void> {
-  toggle: () => void = () => {
-    const {hasStar, onStarToggle} = this.props;
 
+
+const Star = (props: Props): React.JSX.Element | null => {
+  const {hasStar, canStar, style, size = 19, disabled = false, onStarToggle} = props;
+
+  const toggle = () => {
     if (onStarToggle) {
       onStarToggle(!hasStar);
     }
   };
 
-  render(): React.ReactNode {
-    const {hasStar, canStar, style, size = 19, disabled = false} = this.props;
+  return !canStar ? null : (
+    <TouchableOpacity
+      disabled={disabled}
+      hitSlop={HIT_SLOP}
+      style={style}
+      onPress={toggle}
+    >
+      {hasStar ? (
+        <IconStar size={size} color={styles.link.color}/>
+      ) : (
+        <IconStarOutline size={size} color={styles.inactive.color}/>
+      )}
+    </TouchableOpacity>
+  );
+};
 
-    if (!canStar) {
-      return null;
-    }
 
-    return (
-      <TouchableOpacity
-        disabled={disabled}
-        hitSlop={HIT_SLOP}
-        style={style}
-        onPress={this.toggle}
-      >
-        {hasStar ? (
-          <IconStar size={size} color={styles.link.color} />
-        ) : (
-          <IconStarOutline size={size} color={styles.inactive.color} />
-        )}
-      </TouchableOpacity>
-    );
-  }
-}
+export default React.memo(Star);

@@ -23,7 +23,7 @@ import {i18n} from 'components/i18n/i18n';
 import {isIOSPlatform, until} from 'util/util';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {notify, notifyError} from 'components/notification/notification';
-import {routeMap} from '../../app-routes';
+import {routeMap} from 'app-routes';
 import {setGlobalInProgress} from 'actions/app-actions';
 import {sortAlphabetically} from 'components/search/sorting';
 
@@ -43,11 +43,12 @@ import type {CustomError} from 'types/Error';
 import type {IssueFull, IssueOnList} from 'types/Issue';
 
 type ApiGetter = () => Api;
+type StateGetter = () => AppState;
 
 export const PAGE_SIZE = 15;
 const RECONNECT_TIMEOUT = 60000;
 let serverSideEventsInstance: ServersideEvents;
-let serverSideEventsInstanceErrorTimer = null;
+let serverSideEventsInstanceErrorTimer: null | typeof setTimeout = null;
 export const DEFAULT_ERROR_AGILE_WITH_INVALID_STATUS = {
   status: {
     valid: false,
@@ -98,7 +99,7 @@ function getLastVisitedSprint(
 
 export function getAgileUserProfile(): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => StateGetter,
 ) => Promise<Partial<AgileUserProfile>> {
   return async (
     dispatch: (arg0: any) => any,
@@ -235,7 +236,7 @@ export function loadAgile(
   agileId: string,
 ): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => StateGetter,
   getApi: ApiGetter,
 ) => Promise<Partial<Board>> {
   return async (
@@ -268,7 +269,7 @@ export function suggestAgileQuery(
   caret: number,
 ): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => StateGetter,
   getApi: ApiGetter,
 ) => Promise<void> {
   return async (
@@ -393,7 +394,7 @@ export function loadSprintIssues(
 }
 export function loadAgileProfile(): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => StateGetter,
   getApi: ApiGetter,
 ) => Promise<void> {
   return async (
@@ -512,7 +513,7 @@ export function fetchMoreSwimlanes(
   query?: string,
 ): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => StateGetter,
   getApi: ApiGetter,
 ) => Promise<void> {
   return async (
@@ -563,7 +564,7 @@ export function rowCollapseToggle(
   row: AgileBoardRow,
 ): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => StateGetter,
   getApi: ApiGetter,
 ) => Promise<void> {
   return async (
@@ -618,7 +619,7 @@ export function columnCollapseToggle(
   column: BoardColumn,
 ): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => StateGetter,
   getApi: ApiGetter,
 ) => Promise<void> {
   return async (
@@ -662,7 +663,7 @@ export function closeSelect(): {
 }
 export function openSprintSelect(): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => StateGetter,
   getApi: ApiGetter,
 ) => void {
   return (
@@ -701,7 +702,7 @@ export function openSprintSelect(): (
 }
 export function openBoardSelect(): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => StateGetter,
   getApi: ApiGetter,
 ) => void {
   return (
@@ -716,7 +717,7 @@ export function openBoardSelect(): (
     dispatch({
       type: types.OPEN_AGILE_SELECT,
       selectProps: {
-        sectioned: true,
+        agileSelector: true,
         placeholder: i18n('Filter boards by name'),
         dataSource: async () => {
           const [error, agileBoardsList] = await until(api.agile.getAgileBoardsList());
@@ -834,7 +835,7 @@ export function createCardForCell(
   cellId: string,
 ): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => StateGetter,
   getApi: ApiGetter,
 ) => Promise<Partial<IssueOnList> | null> {
   return async (
@@ -863,12 +864,12 @@ export function createCardForCell(
 }
 export function subscribeServersideUpdates(): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => StateGetter,
   getApi: ApiGetter,
 ) => Promise<void> {
   return async (
     dispatch: (arg0: any) => any,
-    getState: () => AppState,
+    getState: StateGetter,
     getApi: ApiGetter,
   ) => {
     const {sprint} = getState().agile;
@@ -937,7 +938,7 @@ export function onCardDrop(data: {
   movedId: string;
 }): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => StateGetter,
   getApi: ApiGetter,
 ) => Promise<void> {
   return async (

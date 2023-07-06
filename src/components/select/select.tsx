@@ -403,7 +403,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
 
         {!this.state.loaded && (
           <View style={[styles.row, styles.loadingRow]}>
-            <ActivityIndicator/>
+            <ActivityIndicator color={styles.link.color}/>
             <Text style={styles.loadingMessage}>{i18n('Loading values…')}</Text>
           </View>
         )}

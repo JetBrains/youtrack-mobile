@@ -44,6 +44,13 @@ export default EStyleSheet.create({
     ...separator,
   },
   loadingRow: {
+    position: 'absolute',
+    zIndex: 2,
+    top: 0,
+    bottom: 0,
+    left: -UNIT * 4,
+    right: 0,
+    height: '100%',
     justifyContent: 'center',
   },
   headerText: {

@@ -1,16 +1,17 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import EStyleSheet from 'react-native-extended-stylesheet';
+
+import AgileSelectItemStar from 'views/agile-board/agile-board__agile-select-item';
 import {IconAngleDown} from 'components/icon/icon';
-import {UNIT} from 'components/variables';
-import {HEADER_FONT_SIZE, mainText} from 'components/common-styles';
-import {elevation1} from 'components/common-styles';
-import type {
-  TextStyleProp,
-  ViewStyleProp,
-} from 'react-native/Libraries/StyleSheet/StyleSheet';
+
+import styles from './agile-board__renderer.styles';
+
 import type {UITheme} from 'types/Theme';
-export function renderSelector(params: {
+import {ViewStyleProp, TextStyleProp} from 'types/Internal';
+import {BoardOnList} from 'types/Agile';
+
+
+const renderSelector = (params: {
   key: string;
   label: string;
   onPress: () => any;
@@ -20,67 +21,54 @@ export function renderSelector(params: {
   isDisabled?: boolean;
   showLoader?: boolean;
   uiTheme: UITheme;
-}): React.ReactNode {
-  return (
-    <View
-      style={[
-        styles.selector,
-        params.style,
-        params.showBottomBorder ? styles.selectorBorder : null,
-      ]}
+}): React.ReactNode => (
+  <View
+    style={[
+      styles.selector,
+      params.style,
+      params.showBottomBorder ? styles.selectorBorder : null,
+    ]}
+  >
+    <TouchableOpacity
+      testID="search-context"
+      accessibilityLabel="search-context"
+      accessible={true}
+      key={params.key}
+      style={styles.selectorButton}
+      disabled={params.isDisabled}
+      onPress={params.onPress}
     >
-      <TouchableOpacity
-        testID="search-context"
-        accessibilityLabel="search-context"
-        accessible={true}
-        key={params.key}
-        style={styles.selectorButton}
-        disabled={params.isDisabled}
-        onPress={params.onPress}
+      <Text
+        style={[
+          styles.selectorButtonText,
+          params.textStyle,
+          params.isDisabled ? styles.selectorButtonTextDisabled : null,
+        ]}
+        numberOfLines={1}
       >
-        <Text
-          style={[
-            styles.selectorButtonText,
-            params.textStyle,
-            params.isDisabled ? styles.selectorButtonTextDisabled : null,
-          ]}
-          numberOfLines={1}
-        >
-          {params.label}
-        </Text>
-        {((params.showLoader && !params.isDisabled) || !params.showLoader) && (
-          <IconAngleDown
-            size={17}
-            style={styles.selectorIcon}
-            color={
-              params.isDisabled
-                ? params.uiTheme.colors.$icon
-                : params.uiTheme.colors.$text
-            }
-          />
-        )}
-      </TouchableOpacity>
-    </View>
-  );
-}
-const styles = EStyleSheet.create({
-  selector: {
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-  },
-  selectorBorder: {...elevation1},
-  selectorButton: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    padding: UNIT,
-    paddingLeft: 0,
-    marginBottom: UNIT,
-  },
-  selectorButtonText: {...mainText, fontWeight: '500', color: '$text'},
-  selectorButtonTextDisabled: {
-    color: '$icon',
-  },
-  selectorIcon: {
-    lineHeight: HEADER_FONT_SIZE,
-  },
-});
+        {params.label}
+      </Text>
+      {((params.showLoader && !params.isDisabled) || !params.showLoader) && (
+        <IconAngleDown
+          size={17}
+          style={styles.selectorIcon}
+          color={
+            params.isDisabled
+              ? params.uiTheme.colors.$icon
+              : params.uiTheme.colors.$text
+          }
+        />
+      )}
+    </TouchableOpacity>
+  </View>
+);
+
+const renderAgileSelectItem = (board: BoardOnList) => {
+  return <AgileSelectItemStar board={board}/>;
+};
+
+
+export {
+  renderSelector,
+  renderAgileSelectItem,
+};

@@ -1,7 +1,7 @@
 import ApiHelper from './api__helper';
 import IssueFields from './api__issue-fields';
 const toField = ApiHelper.toField;
-const SPRINT: any = toField(['id', 'name', 'start', 'finish']);
+const SPRINT: any = toField(['id', 'name', 'start', 'finish','favorite']);
 const AGILE_SHORT_WITH_SPRINTS = toField([
   'id',
   'name',

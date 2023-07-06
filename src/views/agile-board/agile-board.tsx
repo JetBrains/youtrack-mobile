@@ -14,6 +14,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 
 import * as boardActions from './board-actions';
 import AgileBoardSprint from './agile-board__sprint';
+import AgileSectionedSelect from 'views/agile-board/agile-board__agile-selector';
 import Api from 'components/api/api';
 import Auth from 'components/auth/oauth2';
 import BoardHeader from './board-header';
@@ -23,7 +24,6 @@ import ErrorMessage from 'components/error-message/error-message';
 import IssueModal from '../issue/modal/issue.modal';
 import log from 'components/log/log';
 import ModalPortal from 'components/modal-view/modal-portal';
-import SelectSectioned from 'components/select/select-sectioned';
 import QueryAssistPanel from 'components/query-assist/query-assist-panel';
 import QueryPreview from 'components/query-assist/query-preview';
 import Router from 'components/router/router';
@@ -397,7 +397,7 @@ class AgileBoard extends Component<Props, State> {
     const SelectComponent: any = (
       this.state.isSplitView
         ? SelectModal
-        : selectProps.sectioned ? SelectSectioned : Select
+        : selectProps.agileSelector ? AgileSectionedSelect : Select
     );
     return (
       <SelectComponent

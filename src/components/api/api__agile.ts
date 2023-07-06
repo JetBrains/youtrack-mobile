@@ -19,7 +19,7 @@ export default class AgileAPI extends ApiBase {
   async getAgile(agileId: string): Promise<Board> {
     const queryString = qs.stringify({
       fields:
-        'id,name,status(errors,valid),sprintsSettings(disableSprints),hideOrphansSwimlane',
+        'id,name,favorite,status(errors,valid),sprintsSettings(disableSprints),hideOrphansSwimlane',
     });
     return await this.makeAuthorizedRequest(
       `${this.youTrackUrl}/api/agiles/${agileId}?${queryString}`,
@@ -168,6 +168,20 @@ export default class AgileAPI extends ApiBase {
     });
     return await this.makeAuthorizedRequest(
       `${this.youTrackUrl}/api/agileUserProfile?${queryString}`,
+    );
+  }
+
+  async updateAgileBoard(agileId: string, body: Partial<Board> | null, fields: string): Promise<Partial<Board>> {
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/agiles/${agileId}?${qs.stringify({fields})}`,
+      'POST',
+      body,
+    );
+  }
+
+  async toggleAgileBoardStar(agile: BoardOnList):  Promise<Partial<Board>> {
+    return await this.updateAgileBoard(
+      agile.id, {favorite: !agile.favorite}, agileFields.boardOnList.toString()
     );
   }
 

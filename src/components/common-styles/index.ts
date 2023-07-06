@@ -20,3 +20,7 @@ export {
   elevationTop,
   boxShadow,
 } from './shadow';
+
+export {
+  layout,
+} from './layout';

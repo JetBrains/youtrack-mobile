@@ -5,6 +5,8 @@ import Avatar from 'components/avatar/avatar';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {IconCheck} from 'components/icon/icon';
 
+import {View as AnimatedView} from 'react-native-animatable';
+
 import styles from './select.styles';
 
 import type {ViewStyleProp} from 'types/Internal';
@@ -60,36 +62,43 @@ export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
     }
 
     return (
-      <TouchableOpacity
-        testID="test:id/selectListItem"
-        accessibilityLabel="selectListItem"
-        accessible={false}
-        key={item.id}
-        style={[styles.row, style]}
-        onPress={this.onSelect}
-        onLongPress={onLongPress}
-        disabled={disabled}
+      <AnimatedView
+        useNativeDriver
+        duration={500}
+        animation="fadeIn"
       >
-        <View style={styles.selectItemValue}
-          testID="test:id/selectListItemText"
-          accessible={true}
+        <TouchableOpacity
+          testID="test:id/selectListItem"
+          accessibilityLabel="selectListItem"
+          accessible={false}
+          key={item.id}
+          style={[styles.row, style]}
+          onPress={this.onSelect}
+          onLongPress={onLongPress}
+          disabled={disabled}
         >
-          {item.avatarUrl && (
-            <Avatar
-              userName={this.getDefaultTitle(item)}
-              size={32}
-              style={styles.itemIcon}
-              source={{
-                uri: item.avatarUrl,
-              }}
-            />
-          )}
+          <View
+            style={styles.selectItemValue}
+            testID="test:id/selectListItemText"
+            accessible={true}
+          >
+            {item.avatarUrl && (
+              <Avatar
+                userName={this.getDefaultTitle(item)}
+                size={32}
+                style={styles.itemIcon}
+                source={{
+                  uri: item.avatarUrl,
+                }}
+              />
+            )}
 
-          {this.renderTitle(item)}
-        </View>
+            {this.renderTitle(item)}
+          </View>
 
-        {isSelected && <IconCheck size={20} color={styles.link.color} />}
-      </TouchableOpacity>
+          {isSelected && <IconCheck size={20} color={styles.link.color}/>}
+        </TouchableOpacity>
+      </AnimatedView>
     );
   }
 }

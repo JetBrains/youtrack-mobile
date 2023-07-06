@@ -68,11 +68,25 @@ class SelectSectioned<P extends ISectionedProps, S extends ISectionedState> exte
     );
   }
 
-  getFilteredItems(items: SLItem[], selected?: IItem[]) {
+  getFilteredItems(items: SLItem[], selected?: SLItem[]) {
     const {selectedItems} = this.state;
+    let _selectedItems: SLItem[] = selected || selectedItems;
+
+    if (_selectedItems?.length) {
+      const itemsMap = items.reduce((akk, it: SLItem) => {
+        return {
+          ...akk,
+          ...it.data.reduce((a,i) => ({...a, [i.id]: i}), {}),
+        };
+      }, {});
+
+      _selectedItems = _selectedItems.reduce((akk: SLItem[], it: SLItem) => {
+        return [...akk, itemsMap[it.id] ? {...it, ...itemsMap[it.id]} : it];
+      }, []);
+    }
     return [
-      {title: '', data: selected || selectedItems},
-    ...this.removeDuplicateItems(items, selected || selectedItems),
+      {title: '', data: _selectedItems},
+    ...this.removeDuplicateItems(items, _selectedItems),
     ];
   }
 
