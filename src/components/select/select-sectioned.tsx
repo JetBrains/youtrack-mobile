@@ -42,7 +42,7 @@ class SelectSectioned<P extends ISectionedProps, S extends ISectionedState> exte
 
   renderSectionHeader = ({section}: { section: SLItem }): React.ReactNode => {
     return section.title ? (
-      <View style={styles.sectionHeader}>
+      <View style={[styles.sectionHeader, !section.title.trim() && styles.sectionHeaderEmpty]}>
         <Text style={styles.sectionHeaderText}>{section.title}</Text>
       </View>
     ) : null;

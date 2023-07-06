@@ -103,6 +103,10 @@ export default EStyleSheet.create({
     paddingLeft: UNIT * 2,
     backgroundColor: '$boxBackground',
   },
+  sectionHeaderEmpty: {
+    height: 7,
+    padding: 0,
+  },
   searchText: {...mainText, fontWeight: '500', color: '$text'},
   sectionHeaderText: {
     textTransform: 'uppercase',

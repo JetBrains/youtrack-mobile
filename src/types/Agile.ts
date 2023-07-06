@@ -95,6 +95,7 @@ export type Board = {
 export type BoardOnList = {
   id: string;
   name: string;
+  favorite: boolean;
   sprints: {
     id: string;
     name: string;

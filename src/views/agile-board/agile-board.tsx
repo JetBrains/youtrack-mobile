@@ -6,9 +6,12 @@ import {
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
+
+import DeviceInfo from 'react-native-device-info';
 import isEqual from 'react-fast-compare';
 import {connect} from 'react-redux';
 import {View as AnimatedView} from 'react-native-animatable';
+
 import * as boardActions from './board-actions';
 import AgileBoardSprint from './agile-board__sprint';
 import Api from 'components/api/api';
@@ -20,6 +23,7 @@ import ErrorMessage from 'components/error-message/error-message';
 import IssueModal from '../issue/modal/issue.modal';
 import log from 'components/log/log';
 import ModalPortal from 'components/modal-view/modal-portal';
+import SelectSectioned from 'components/select/select-sectioned';
 import QueryAssistPanel from 'components/query-assist/query-assist-panel';
 import QueryPreview from 'components/query-assist/query-preview';
 import Router from 'components/router/router';
@@ -35,17 +39,19 @@ import {IconException, IconMagnifyZoom} from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {notify} from 'components/notification/notification';
 import {renderSelector} from './agile-board__renderer';
-import {routeMap} from '../../app-routes';
+import {routeMap} from 'app-routes';
 import {Select, SelectModal} from 'components/select/select';
 import {SkeletonAgile} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 import {HIT_SLOP} from 'components/common-styles';
 import {UNIT} from 'components/variables';
+
 import styles from './agile-board.styles';
+
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
 import type {AgilePageState} from './board-reducers';
 import type {AnyIssue, IssueOnList} from 'types/Issue';
-import type {AppState} from '../../reducers';
+import type {AppState} from 'reducers';
 import type {CustomError} from 'types/Error';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {
@@ -56,8 +62,9 @@ import type {
   Sprint,
 } from 'types/Agile';
 import type {Theme, UITheme} from 'types/Theme';
-import DeviceInfo from 'react-native-device-info';
+
 const CATEGORY_NAME = 'Agile board';
+
 type Props = AgilePageState & {
   auth: Auth;
   api: Api;
@@ -80,6 +87,7 @@ type Props = AgilePageState & {
   storeLastQuery: (query: string) => any;
   updateIssue: (issueId: string, sprint?: SprintFull) => any;
 };
+
 type State = {
   zoomedIn: boolean;
   stickElement: {
@@ -386,9 +394,13 @@ class AgileBoard extends Component<Props, State> {
 
   _renderSelect() {
     const {selectProps} = this.props;
-    const Component: any = this.state.isSplitView ? SelectModal : Select;
+    const SelectComponent: any = (
+      this.state.isSplitView
+        ? SelectModal
+        : selectProps.sectioned ? SelectSectioned : Select
+    );
     return (
-      <Component
+      <SelectComponent
         getTitle={item => item.name}
         onCancel={this.props.onCloseSelect}
         {...selectProps}

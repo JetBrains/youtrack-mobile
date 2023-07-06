@@ -716,32 +716,33 @@ export function openBoardSelect(): (
     dispatch({
       type: types.OPEN_AGILE_SELECT,
       selectProps: {
-        show: true,
+        sectioned: true,
         placeholder: i18n('Filter boards by name'),
         dataSource: async () => {
-          const agileBoardsList: BoardOnList[] = await api.agile.getAgileBoardsList();
-          const boards = agileBoardsList.sort(sortAlphabetically).reduce(
+          const [error, agileBoardsList] = await until(api.agile.getAgileBoardsList());
+          if (error) {
+            return [];
+          }
+          const groupedBoards: {
+            favorites: { data: BoardOnList[], title: string },
+            regular: { data: BoardOnList[], title: string }
+          } = agileBoardsList.sort(sortAlphabetically).reduce(
             (
-              list: {
-                favorites: Board[];
-                regular: Board[];
+              akk: {
+                favorites: { data: BoardOnList[], title: string };
+                regular: { data: BoardOnList[], title: string };
               },
-              board: Board,
+              board: BoardOnList,
             ) => {
-              if (board.favorite) {
-                list.favorites.push(board);
-              } else {
-                list.regular.push(board);
-              }
-
-              return list;
+              board.favorite ? akk.favorites.data.push(board) : akk.regular.data.push(board);
+              return akk;
             },
             {
-              favorites: [],
-              regular: [],
+              favorites: {data: [], title: ' '},
+              regular: {data: [], title: ' '},
             },
           );
-          return [].concat(boards.favorites).concat(boards.regular);
+          return [groupedBoards.favorites, groupedBoards.regular];
         },
         selectedItems: sprint ? [sprint.agile] : agile ? [agile] : [],
         onSelect: async (selectedBoard: BoardOnList, query: string = '') => {

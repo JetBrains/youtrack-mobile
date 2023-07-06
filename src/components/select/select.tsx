@@ -29,7 +29,7 @@ export interface ISelectProps {
   onCancel: () => any;
   getTitle: (item: IItem) => string;
   header?: () => any;
-  titleRenderer?: (item: IItem) => any;
+  titleRenderer?: (item: IItem) => React.ReactNode;
   getValue?: (item: IItem) => string;
   selectedItems: IItem[];
   placeholder?: string;
