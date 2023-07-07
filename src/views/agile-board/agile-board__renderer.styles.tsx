@@ -12,12 +12,18 @@ export default EStyleSheet.create({
   selectorBorder: {...elevation1},
   selectorButton: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
     padding: UNIT,
     paddingLeft: 0,
     marginBottom: UNIT,
   },
-  selectorButtonText: {...mainText, fontWeight: '500', color: '$text'},
+  selectorButtonText: {
+    ...mainText,
+    lineHeight: null,
+    fontWeight: '500',
+    color: '$text',
+  },
   selectorButtonTextDisabled: {
     color: '$icon',
   },
