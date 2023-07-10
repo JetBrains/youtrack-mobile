@@ -53,7 +53,7 @@ msgstr "@Mention in a comment"
 msgid "1w 1d 1h 1m"
 msgstr "1w 1d 1h 1m"
 
-#: src/components/user-agreement/user-agreement.tsx:46
+#: src/components/user-agreement/user-agreement.tsx:47
 msgid "Accept"
 msgstr "Accept"
 
@@ -260,7 +260,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:940
+#: src/actions/app-actions.ts:943
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -345,7 +345,7 @@ msgstr "Dark theme"
 msgid "Date"
 msgstr "Date"
 
-#: src/components/user-agreement/user-agreement.tsx:49
+#: src/components/user-agreement/user-agreement.tsx:50
 msgid "Decline"
 msgstr "Decline"
 
