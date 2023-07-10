@@ -699,11 +699,14 @@ export function acceptUserAgreement(): Action {
     log.info('User agreement accepted');
     usage.trackEvent('EUA is accepted');
     const api: Api = getApi();
-    await api.acceptUserAgreement();
-    dispatch({
-      type: types.HIDE_USER_AGREEMENT,
-    });
-    dispatch(completeInitialization());
+    try {
+      await api.acceptUserAgreement();
+      dispatch(completeInitialization());
+    } catch (e) {
+      dispatch(removeAccountOrLogOut());
+    } finally {
+      dispatch({type: types.HIDE_USER_AGREEMENT});
+    }
   };
 }
 export function declineUserAgreement(): Action {

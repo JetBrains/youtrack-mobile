@@ -1,19 +1,25 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
+
 import {connect} from 'react-redux';
-import ModalView from '../modal-view/modal-view';
+
+import MarkdownView from 'components/wiki/markdown-view';
+import ModalView from 'components/modal-view/modal-view';
 import {acceptUserAgreement, declineUserAgreement} from 'actions/app-actions';
+import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
-import {UNIT} from 'components/variables';
+
 import styles from './user-agreement.styles';
+
 import type {EndUserAgreement} from 'types/AppConfig';
-import MarkdownView from '../wiki/markdown-view';
+
 type Props = {
   show: boolean;
   agreement: EndUserAgreement;
-  onAccept: (...args: any[]) => any;
-  onDecline: (...args: any[]) => any;
+  onAccept: () => any;
+  onDecline: () => any;
 };
+
 export class UserAgreementView extends Component<Props, void> {
   render(): React.ReactNode {
     const {show, agreement, onAccept, onDecline} = this.props;
@@ -34,12 +40,7 @@ export class UserAgreementView extends Component<Props, void> {
           </ScrollView>
           <View style={styles.buttons}>
             <TouchableOpacity
-              hitSlop={{
-                top: UNIT,
-                left: UNIT,
-                bottom: UNIT,
-                right: UNIT,
-              }}
+              hitSlop={HIT_SLOP}
               style={styles.button}
               onPress={onAccept}
             >
