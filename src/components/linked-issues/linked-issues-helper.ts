@@ -10,14 +10,20 @@ export type LinksListData = {
 const INWARD_ISSUE_ID_POSTFIX: string = 't';
 const OUTWARD_ISSUE_ID_POSTFIX: string = 's';
 
+const getLinkTypePresentation = (linkType: IssueLinkType, sourceToTarget: boolean): string => {
+  return (
+    sourceToTarget
+      ? linkType.localizedSourceToTarget || linkType.sourceToTarget
+      : linkType.localizedTargetToSource || linkType.targetToSource
+  );
+};
+
+
 const getLinkTitle = (link: IssueLink): string => {
-  const linkType = link.linkType;
-
-  if (link.direction === 'OUTWARD' || link.direction === 'BOTH') {
-    return linkType.localizedSourceToTarget || linkType.sourceToTarget;
-  }
-
-  return linkType.localizedTargetToSource || linkType.targetToSource;
+  return getLinkTypePresentation(
+    link.linkType,
+    link.direction === 'OUTWARD' || link.direction === 'BOTH'
+  );
 };
 
 const getLinkedIssuesMap = (links: IssueLink[]): LinksMap => {
@@ -62,8 +68,7 @@ function getIssueLinkIdSuffix(directed: boolean, outward: boolean) {
 }
 
 function createIssueLink(linkType: IssueLinkType, outward: boolean) {
-  const isSourceToTargetLink = (opposite: boolean): boolean =>
-    opposite && linkType.directed ? !outward : outward;
+  const isSourceToTargetLink = (opposite: boolean): boolean => opposite && linkType.directed ? !outward : outward;
 
   return {
     type: linkType,
@@ -71,8 +76,8 @@ function createIssueLink(linkType: IssueLinkType, outward: boolean) {
     id: linkType.id + getIssueLinkIdSuffix(linkType.directed, outward),
     getPresentation: (opposite: boolean = false) =>
       isSourceToTargetLink(opposite)
-        ? linkType.localizedSourceToTarget || linkType.sourceToTarget
-        : linkType.localizedTargetToSource || linkType.targetToSource,
+        ? getLinkTypePresentation(linkType, true)
+        : getLinkTypePresentation(linkType, false),
     getName: (opposite: boolean = false) =>
       isSourceToTargetLink(opposite)
         ? linkType.sourceToTarget

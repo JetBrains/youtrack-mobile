@@ -67,10 +67,7 @@ const LinkedIssuesAddLink = (props: Props): JSX.Element => {
   const [isQASelectVisible, updateQASelectVisible] = useState(false);
   const [suggestions, updateSuggestions] = useState<TransformedSuggestion[]>([]);
   const loadLinkTypes = useCallback(async (): Promise<Array<IssueLinkType>> => {
-    const linkTypes: IssueLinkType[] = await issueCommonLinksActions(
-      {} as any,
-    ).loadIssueLinkTypes();
-    return linkTypes.filter((it: IssueLinkType) => !it.readOnly);
+    return await issueCommonLinksActions({}).loadIssueLinkTypes();
   }, []);
   const doLinkIssue = useCallback(
     async (issue: IssueOnList) => {
