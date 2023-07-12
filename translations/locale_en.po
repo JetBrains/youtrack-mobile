@@ -65,7 +65,7 @@ msgstr "Activity"
 msgid "Activity Settings"
 msgstr "Activity Settings"
 
-#: src/views/knowledge-base/knowledge-base.tsx:82
+#: src/views/knowledge-base/knowledge-base.tsx:88
 msgid "Add project to favorites"
 msgstr "Add project to favorites"
 
@@ -207,7 +207,7 @@ msgstr "Close"
 msgid "closed the pull request"
 msgstr "closed the pull request"
 
-#: src/views/knowledge-base/knowledge-base.tsx:535
+#: src/views/knowledge-base/knowledge-base.tsx:541
 msgid "Collapse all"
 msgstr "Collapse all"
 
@@ -260,7 +260,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:943
+#: src/actions/app-actions.ts:938
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -270,7 +270,7 @@ msgstr "Connecting to YouTrack..."
 msgid "Contact support"
 msgstr "Contact support"
 
-#: src/views/article/article.tsx:143
+#: src/views/article/article.tsx:145
 msgid "Content"
 msgstr "Content"
 
@@ -419,7 +419,7 @@ msgstr "Document"
 msgid "Don't send logs"
 msgstr "Don't send logs"
 
-#: src/views/knowledge-base/knowledge-base.tsx:563
+#: src/views/knowledge-base/knowledge-base.tsx:569
 msgid "Drafts"
 msgstr "Drafts"
 
@@ -461,7 +461,7 @@ msgstr "Enter the web address for a YouTrack installation where you have a regis
 msgid "Enter time value"
 msgstr "Enter time value"
 
-#: src/views/knowledge-base/knowledge-base.tsx:601
+#: src/views/knowledge-base/knowledge-base.tsx:607
 msgid "Favorites"
 msgstr "Favorites"
 
@@ -478,7 +478,7 @@ msgid "Filter items"
 msgstr "Filter items"
 
 #: src/views/article-create/article-create.tsx:149
-#: src/views/knowledge-base/knowledge-base.tsx:584
+#: src/views/knowledge-base/knowledge-base.tsx:590
 msgid "Filter projects"
 msgstr "Filter projects"
 
@@ -503,7 +503,7 @@ msgstr "Filter tags"
 msgid "Filter users, groups, and teams"
 msgstr "Filter users, groups, and teams"
 
-#: src/views/knowledge-base/knowledge-base.tsx:662
+#: src/views/knowledge-base/knowledge-base.tsx:668
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
@@ -519,7 +519,7 @@ msgstr "Groups and teams"
 msgid "Help us fix problems faster"
 msgstr "Help us fix problems faster"
 
-#: src/views/knowledge-base/knowledge-base.tsx:651
+#: src/views/knowledge-base/knowledge-base.tsx:657
 msgid "Here you'll see a list of articles from your favorite projects"
 msgstr "Here you'll see a list of articles from your favorite projects"
 
@@ -531,7 +531,7 @@ msgstr "If this isn't what you expected, you might try one of these solutions:"
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
 msgstr "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
 
-#: src/views/article/article.tsx:265
+#: src/views/article/article.tsx:267
 msgid "in revision"
 msgstr "in revision"
 
@@ -575,7 +575,7 @@ msgstr "JetBrains Privacy Policy"
 msgid "just now"
 msgstr "just now"
 
-#: src/views/knowledge-base/knowledge-base.tsx:708
+#: src/views/knowledge-base/knowledge-base.tsx:714
 msgid "Knowledge Base"
 msgstr "Knowledge Base"
 
@@ -588,7 +588,7 @@ msgstr "License error"
 msgid "Light theme"
 msgstr "Light theme"
 
-#: src/components/linked-issues/linked-issues-add-link.tsx:250
+#: src/components/linked-issues/linked-issues-add-link.tsx:247
 #: src/views/create-issue/create-issue.tsx:380
 #: src/views/issue/issue-base-actions-creater.ts:702
 msgid "Link issue"
@@ -624,7 +624,7 @@ msgid "Logs"
 msgstr "Logs"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts:493
-#: src/views/knowledge-base/knowledge-base.tsx:483
+#: src/views/knowledge-base/knowledge-base.tsx:489
 msgid "Manage Favorite Projects"
 msgstr "Manage Favorite Projects"
 
@@ -685,15 +685,15 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.tsx:421
+#: src/components/activity-stream/activity__stream.tsx:422
 msgid "No activity yet"
 msgstr "No activity yet"
 
-#: src/views/knowledge-base/knowledge-base.tsx:261
+#: src/views/knowledge-base/knowledge-base.tsx:267
 msgid "No articles"
 msgstr "No articles"
 
-#: src/views/knowledge-base/knowledge-base.tsx:85
+#: src/views/knowledge-base/knowledge-base.tsx:91
 msgid "No articles found"
 msgstr "No articles found"
 
@@ -701,7 +701,7 @@ msgstr "No articles found"
 msgid "No drafts yet"
 msgstr "No drafts yet"
 
-#: src/views/knowledge-base/knowledge-base.tsx:81
+#: src/views/knowledge-base/knowledge-base.tsx:87
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
@@ -763,7 +763,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/knowledge-base/knowledge-base.tsx:606
+#: src/views/knowledge-base/knowledge-base.tsx:612
 msgid "Projects"
 msgstr "Projects"
 
@@ -838,7 +838,7 @@ msgstr "Search for a different value"
 msgid "Search for the project"
 msgstr "Search for the project"
 
-#: src/views/knowledge-base/knowledge-base.tsx:754
+#: src/views/knowledge-base/knowledge-base.tsx:763
 msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
@@ -1020,7 +1020,7 @@ msgstr "The commit author has specified an email address that is associated with
 msgid "The commit author is not an assignee in the project."
 msgstr "The commit author is not an assignee in the project."
 
-#: src/actions/app-actions.ts:483
+#: src/actions/app-actions.ts:487
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
@@ -1068,7 +1068,7 @@ msgstr "Title changed"
 msgid "To view an item in context, select an issue, article, or update from the list"
 msgstr "To view an item in context, select an issue, article, or update from the list"
 
-#: src/views/knowledge-base/knowledge-base.tsx:588
+#: src/views/knowledge-base/knowledge-base.tsx:594
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
 msgstr "To view articles in the knowledge base for a specific project, mark it as a favorite"
 
