@@ -31,6 +31,7 @@ import {loadConfig} from 'components/config/config';
 import {loadTranslation} from 'components/i18n/i18n-translation';
 import {logEvent} from 'components/log/log-helper';
 import {normalizeAuthParams} from 'components/auth/oauth2-helper';
+import {navigateToRouteById} from 'components/router/router-helper';
 import {notify, notifyError} from 'components/notification/notification';
 import {openByUrlDetector} from 'components/open-url-handler/open-url-handler';
 import {SET_DRAFT_COMMENT_DATA, SET_PROGRESS} from './action-types';
@@ -60,6 +61,7 @@ import {UserGeneralProfileLocale} from 'types/User';
 import {AnyIssue} from 'types/Issue';
 
 type Action = (dispatch: (arg0: any) => any, getState: () => AppState, getApi: () => Api) => Promise<any>;
+
 
 export function setNetworkState(networkState: NetInfoState): Action {
   return async (
@@ -415,6 +417,7 @@ export function switchAccount(
   account: StorageState,
   dropCurrentAccount: boolean = false,
   issueId?: string,
+  articleId?: string,
 ): Action {
   return async (
     dispatch: (arg0: any) => any,
@@ -426,7 +429,7 @@ export function switchAccount(
 
     try {
       redirectToHome(account.config?.backendUrl);
-      await dispatch(changeAccount(account, dropCurrentAccount, issueId));
+      await dispatch(changeAccount(account, dropCurrentAccount, issueId, articleId));
     } catch (e) {}
   };
 }
@@ -469,7 +472,8 @@ export function updateOtherAccounts(
 export function changeAccount(
   account: StorageState,
   removeCurrentAccount: boolean,
-  issueId: string | null | undefined,
+  issueId?: string,
+  articleId?: string
 ): Action {
   return async (
     dispatch: (arg0: any) => any,
@@ -509,7 +513,7 @@ export function changeAccount(
       await dispatch(checkUserAgreement());
 
       if (!state.app.showUserAgreement) {
-        dispatch(completeInitialization(issueId));
+        dispatch(completeInitialization(issueId, articleId));
       }
 
       log.info('Account changed, URL:', account?.config?.backendUrl);
@@ -594,8 +598,9 @@ export function loadUserPermissions(): Action {
   };
 }
 export function completeInitialization(
-  issueId: string | null = null,
-  navigateToActivity: boolean = false,
+  issueId?: string,
+  articleId?: string,
+  navigateToActivity?: string,
   skipNavigateToRoute: boolean = false,
 ): Action {
   return async (
@@ -604,13 +609,10 @@ export function completeInitialization(
     getApi: () => Api,
   ) => {
     log.debug('Completing initialization');
-    const cachedCurrentUser: UserCurrent | null | undefined = storage.getStorageState()
-      ?.currentUser?.ytCurrentUser;
-    const cachedLocale: UserGeneralProfileLocale | null | undefined =
-      cachedCurrentUser?.profiles?.general?.locale;
+    const cachedCurrentUser: UserCurrent | undefined = storage.getStorageState()?.currentUser?.ytCurrentUser;
+    const cachedLocale: UserGeneralProfileLocale | undefined = cachedCurrentUser?.profiles?.general?.locale;
     const currentUser: UserCurrent = await dispatch(loadYTCurrentUser());
-    const userProfileLocale: UserGeneralProfileLocale | null | undefined =
-      currentUser?.profiles?.general?.locale;
+    const userProfileLocale: UserGeneralProfileLocale | undefined = currentUser?.profiles?.general?.locale;
     const isLanguageChanged: boolean = !cachedLocale?.language || (
       !!cachedLocale?.language &&
       !!userProfileLocale?.language &&
@@ -620,7 +622,7 @@ export function completeInitialization(
     if (isLanguageChanged && userProfileLocale?.language) {
       loadTranslation(userProfileLocale?.locale, userProfileLocale?.language);
 
-      if (!issueId) {
+      if (!issueId && !articleId) {
         redirectToHome(storage.getStorageState()?.config?.backendUrl);
       }
     }
@@ -629,11 +631,12 @@ export function completeInitialization(
     await dispatch(cacheProjects());
     log.debug('Initialization completed');
 
-    if (!skipNavigateToRoute || (isLanguageChanged && !issueId)) {
+    if (!skipNavigateToRoute || (isLanguageChanged && !issueId && !articleId)) {
       Router.navigateToDefaultRoute(
-        issueId
+        issueId || articleId
           ? {
               issueId,
+              articleId,
               navigateToActivity,
             }
           : null,
@@ -870,8 +873,9 @@ export function subscribeToURL(): Action {
 
 export function redirectToRoute(
   config: AppConfig,
-  issueId: string | null,
-  navigateToActivity: boolean,
+  issueId?: string,
+  articleId?: string,
+  navigateToActivity?: string,
 ): Action {
   return async (
     dispatch: (arg0: any) => any,
@@ -897,20 +901,11 @@ export function redirectToRoute(
         const isGuest: boolean = await setUser();
 
         if (cachedPermissions && !isGuest) {
-          if (isSplitView() || !issueId) {
+          const splitView: boolean = isSplitView();
+          if ((!splitView && (issueId || articleId)) || (splitView || !(issueId && articleId))) {
             isRedirected = true;
-            Router.Issues({
-              issueId,
-              navigateToActivity,
-            });
-          } else if (issueId) {
-            isRedirected = true;
-            Router.Issue({
-              issueId,
-              navigateToActivity,
-              forceReset: true,
-            });
           }
+          navigateToRouteById(issueId, articleId, navigateToActivity);
         }
       }
     } catch (e) {}
@@ -955,8 +950,9 @@ async function refreshConfig(backendUrl: string): Promise<AppConfig> {
 
 export function initializeApp(
   config: AppConfig,
-  issueId: string | null,
-  navigateToActivity: boolean,
+  issueId?: string,
+  articleId?: string,
+  navigateToActivity?: string,
 ): Action {
   return async (
     dispatch: (arg0: any) => any,
@@ -973,7 +969,7 @@ export function initializeApp(
     }
 
     const isRedirectedToTargetRoute: boolean = await dispatch(
-      redirectToRoute(config, issueId, navigateToActivity),
+      redirectToRoute(config, issueId, articleId, navigateToActivity),
     );
     let configCurrent = config;
     const currentAppVersion: string | null | undefined = storage.getStorageState()
@@ -1022,6 +1018,7 @@ export function initializeApp(
       await dispatch(
         completeInitialization(
           issueId,
+          articleId,
           navigateToActivity,
           isRedirectedToTargetRoute,
         ),
@@ -1053,9 +1050,7 @@ export function connectToNewYoutrack(newURL: string): Action {
     });
   };
 }
-export function setAccount(
-  notificationRouteData: NotificationRouteData | Record<string, any> = {},
-): Action {
+export function setAccount(notificationRouteData: NotificationRouteData = {}): Action {
   return async (
     dispatch: (arg0: any) => any,
     getState: () => AppState,
@@ -1063,8 +1058,7 @@ export function setAccount(
   ) => {
     const state: StorageState = await storage.populateStorage();
     await dispatch(populateAccounts());
-    const notificationBackendUrl: string | null | undefined =
-      notificationRouteData?.backendUrl;
+    const notificationBackendUrl: string | undefined = notificationRouteData?.backendUrl;
 
     if (
       notificationBackendUrl &&
@@ -1092,7 +1086,8 @@ export function setAccount(
       dispatch(
         initializeApp(
           targetConfig,
-          notificationRouteData?.issueId || null,
+          notificationRouteData?.issueId,
+          notificationRouteData?.articleId,
           notificationRouteData.navigateToActivity,
         ),
       );
@@ -1131,8 +1126,8 @@ export function subscribeToPushNotifications(): Action {
 
     PushNotificationsProcessor.init();
 
-    const onSwitchAccount = async (account: StorageState, issueId: string) =>
-      await dispatch(switchAccount(account, false, issueId));
+    const onSwitchAccount = async (account: StorageState, issueId?: string, articleId?: string) =>
+      await dispatch(switchAccount(account, false, issueId, articleId));
 
     if (isRegisteredForPush()) {
       log.info(

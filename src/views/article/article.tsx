@@ -58,40 +58,42 @@ type Props = ArticleState & {
   updateArticlesList: () => (...args: any[]) => any;
   lastVisitedArticle: Article | null | undefined;
   commentId?: string;
+  navigateToActivity?: string;
 } & typeof articleActions;
+
 type State = IssueTabbedState & {
   modalChildren: any;
-}; //@ts-expect-error
+};
+
 
 class Article extends IssueTabbed<Props, State> {
   static contextTypes = {
     actionSheet: Function,
   };
-  props: Props;
-  uiTheme: UITheme;
-  unsubscribe: (...args: any[]) => any;
-  articleDetailsList: Record<string, any>;
-  goOnlineSubscription: EventSubscription;
+
+  uiTheme!: UITheme;
+  unsubscribe: ((...args: any[]) => any) | undefined;
+  articleDetailsList: FlatList | undefined;
+  goOnlineSubscription: EventSubscription | undefined;
+
   componentWillUnmount = () => {
-    this.unsubscribe && this.unsubscribe();
+    this?.unsubscribe?.();
 
     if (!this.props.storePrevArticle) {
       this.props.clearArticle();
     }
 
-    this.goOnlineSubscription.remove();
+    this.goOnlineSubscription?.remove?.();
   };
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.articlePlaceholder !== this.props.articlePlaceholder) {
-      this.loadArticle(
-        this.props.articlePlaceholder.id ||
-          this.props.articlePlaceholder.idReadable,
-      );
+    const {articlePlaceholder, commentId, navigateToActivity} = this.props;
+    if (prevProps.articlePlaceholder !== articlePlaceholder) {
+      this.loadArticle(articlePlaceholder.id || articlePlaceholder.idReadable);
     }
 
-    if (prevProps.navigateToActivity !== this.props.navigateToActivity) {
-      if (this.props.navigateToActivity || this.props.commentId) {
+    if (prevProps.navigateToActivity !== navigateToActivity) {
+      if (navigateToActivity || commentId) {
         this.switchToActivityTab();
       } else {
         this.switchToDetailsTab();
@@ -150,7 +152,7 @@ class Article extends IssueTabbed<Props, State> {
   }
 
 
-  loadArticle = (articleId: string, reset: boolean) =>
+  loadArticle = (articleId: string, reset?: boolean) =>
     this.props.loadArticle(articleId, reset);
   getArticle = (): Article => {
     const {articlePlaceholder, lastVisitedArticle} = this.props;
@@ -353,9 +355,11 @@ class Article extends IssueTabbed<Props, State> {
       <FlatList
         testID="articleDetails"
         data={[0]}
-        ref={(instance: Record<string, any> | null | undefined) =>
-          instance && (this.articleDetailsList = instance)
-        }
+        ref={(instance: FlatList) => {
+          if (instance) {
+            this.articleDetailsList = instance;
+          }
+        }}
         removeClippedSubviews={false}
         refreshControl={this.renderRefreshControl(this.refresh)}
         keyExtractor={() => 'article-details'}
@@ -504,7 +508,7 @@ const mapStateToProps = (
 ): ArticleState => {
   return {
     ...state.article,
-    articlePlaceholder: ownProps.articlePlaceholder,
+    ...ownProps,
     issuePermissions: state.app.issuePermissions,
     lastVisitedArticle: state.app?.user?.profiles?.articles?.lastVisitedArticle,
     articlesList: createArticleList(

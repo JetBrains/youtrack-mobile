@@ -8,8 +8,10 @@ import {
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
+
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+
 import * as knowledgeBaseActions from './knowledge-base-actions';
 import Article from 'views/article/article';
 import ArticleCreate from 'views/article-create/article-create';
@@ -25,7 +27,6 @@ import Star from 'components/star/star';
 import usage from 'components/usage/usage';
 import {addListenerGoOnline} from 'components/network/network-events';
 import {ANALYTICS_ARTICLES_PAGE} from 'components/analytics/analytics-ids';
-import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import {HIT_SLOP} from 'components/common-styles';
 import {getGroupedByFieldNameAlphabetically} from 'components/search/sorting';
 import {getStorageState} from 'components/storage/storage';
@@ -42,13 +43,15 @@ import {
   IconNoProjectFound,
   IconNothingFound,
 } from 'components/icon/icon-pictogram';
-import {routeMap} from '../../app-routes';
+import {routeMap} from 'app-routes';
 import {SkeletonIssues} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables';
+
 import styles from './knowledge-base.styles';
+
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
-import type {AppState} from '../../reducers';
+import type {AppState} from 'reducers';
 import type {
   Article as ArticleSingle,
   ArticlesList,
@@ -58,10 +61,12 @@ import type {
   ArticleNodeList,
   ArticleDraft,
 } from 'types/Article';
+import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {ISelectProps} from 'components/select/select';
 import type {Theme, UITheme} from 'types/Theme';
+
 type Props = KnowledgeBaseActions &
   KnowledgeBaseState & {
     issuePermissions: IssuePermissions;
@@ -69,6 +74,7 @@ type Props = KnowledgeBaseActions &
     preventReload?: boolean;
     lastVisitedArticle?: ArticleSingle;
   };
+
 type State = {
   focusedArticle: ArticleSingle | null | undefined;
   isHeaderPinned: boolean;
@@ -90,10 +96,10 @@ export class KnowledgeBase extends Component<Props, State> {
     actionSheet: Function,
   };
   listRef: any;
-  uiTheme: UITheme;
+  uiTheme!: UITheme;
   unsubscribe: (...args: any[]) => any = () => null;
-  unsubscribeOnDimensionsChange: EventSubscription;
-  goOnlineSubscription: EventSubscription;
+  unsubscribeOnDimensionsChange: EventSubscription | undefined;
+  goOnlineSubscription: EventSubscription | undefined;
 
   constructor(props: Props) {
     super(props);
@@ -111,9 +117,9 @@ export class KnowledgeBase extends Component<Props, State> {
   }
 
   componentWillUnmount() {
-    this.unsubscribeOnDimensionsChange.remove();
+    this.unsubscribeOnDimensionsChange?.remove?.();
     this.unsubscribe();
-    this.goOnlineSubscription.remove();
+    this.goOnlineSubscription?.remove?.();
   }
 
   async componentDidMount() {
@@ -747,7 +753,10 @@ export class KnowledgeBase extends Component<Props, State> {
 
     return focusedArticle ? (
       <View style={styles.content}>
-        <Article articlePlaceholder={focusedArticle} />
+        <Article
+          articlePlaceholder={focusedArticle}
+          navigateToActivity={this.props.navigateToActivity}
+        />
       </View>
     ) : (
       <NothingSelectedIconWithText

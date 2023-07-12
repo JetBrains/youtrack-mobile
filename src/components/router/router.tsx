@@ -10,10 +10,10 @@ import {
   NavigationRoute,
 } from 'react-navigation';
 import log from 'components/log/log';
-import {flushStoragePart} from '../storage/storage';
-import {isSplitView} from '../responsive/responsive-helper';
+import {flushStoragePart} from 'components/storage/storage';
+import {isSplitView} from 'components/responsive/responsive-helper';
 import {guid} from 'util/util';
-import {routeMap} from '../../app-routes';
+import {routeMap} from 'app-routes';
 import type {
   NavigationNavigator,
   NavigationResetActionPayload,
@@ -53,7 +53,7 @@ const SlideModal = {
 type RouterMethodName = keyof typeof routeMap;
 
 class Router {
-  [index: RouterMethodName | string]: unknown;
+  [index: RouterMethodName | string]: any;
   _navigator: NavigationNavigator | null = null;
   _currentRoute: NavigationJumpToActionPayload | null = null;
   rootRoutes: NavigationJumpToActionPayload[] = [];
@@ -185,13 +185,11 @@ class Router {
     }
   }
 
-  navigateToDefaultRoute(props: Record<string, any> & { issueId: string; } | null = null) {
-    const defaultRoute: string = this.rootRoutes[0];
-
-    if (props?.issueId) {
-      this.navigate(routeMap.Issue, props, {
-        forceReset: true,
-      });
+  navigateToDefaultRoute(props?: Record<string, any> & { issueId?: string; articleId?: string }) {
+    const defaultRoute: NavigationJumpToActionPayload = this.rootRoutes[0];
+    const route = props?.issueId ? routeMap.Issue : props?.articleId ? routeMap.ArticleSingle : null;
+    if (route) {
+      this.navigate(route, props, {forceReset: true});
     } else {
       this.navigate(defaultRoute, props);
     }

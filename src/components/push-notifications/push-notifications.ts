@@ -1,8 +1,9 @@
-import log from '../log/log';
+import log from 'components/log/log';
 import PNHelper from './push-notifications-helper';
 import PushNotificationsProcessor from './push-notifications-processor';
 import {isAndroidPlatform} from 'util/util';
-import type {StorageState} from '../storage/storage';
+
+import type {StorageState} from 'components/storage/storage';
 import type {Token} from 'types/Notification';
 
 async function getDeviceToken(): Promise<Token> {
@@ -75,7 +76,7 @@ async function unregister(): Promise<void> {
 }
 
 async function initialize(
-  onSwitchAccount: (account: StorageState, issueId: string) => any,
+  onSwitchAccount: (account: StorageState, issueId?: string, articleId?: string) => any,
 ): Promise<void> {
   const deviceToken: Token = await getDeviceToken();
 

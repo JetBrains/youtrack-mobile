@@ -1,25 +1,23 @@
 import {
   Notification,
   Notifications,
-  Registered,
   RegistrationError,
 } from 'react-native-notifications';
 import helper, {PushNotifications} from './push-notifications-helper';
-import log from '../log/log';
-import Router from '../router/router';
-import {isSplitView} from '../responsive/responsive-helper';
+import log from 'components/log/log';
+import {navigateToRouteById} from 'components/router/router-helper';
 import {targetAccountToSwitchTo} from 'actions/app-actions-helper';
-import type EmitterSubscription from 'react-native/Libraries/vendor/emitter/_EmitterSubscription';
+
 import type {NotificationCompletion, TokenHandler} from 'types/Notification';
-import type {StorageState} from '../storage/storage';
+import type {StorageState} from 'components/storage/storage';
+import {EmitterSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
+
+
 export default class PushNotificationsProcessor extends PushNotifications {
-  static registerNotificationOpenListener:
-    | EmitterSubscription
-    | null
-    | undefined = null;
+  static registerNotificationOpenListener: EmitterSubscription | null = null;
 
   static subscribeOnNotificationOpen(
-    onSwitchAccount: (account: StorageState, issueId: string) => any,
+    onSwitchAccount: (account: StorageState, issueId?: string, articleId?: string) => any,
   ) {
     log.info(
       'Push notifications(subscribeOnNotificationOpen:Android): subscribe to open event',
@@ -32,18 +30,17 @@ export default class PushNotificationsProcessor extends PushNotifications {
     }
 
     this.registerNotificationOpenListener = Notifications.events().registerNotificationOpened(
-      async (notification: typeof Notification, completion: () => void) => {
+      async (notification: Notification, completion: () => void) => {
         log.info(`On notification open:: ${JSON.stringify(notification)}`);
-        const issueId: string | null | undefined = helper.getIssueId(
-          notification,
-        );
+        const issueId: string | undefined = helper.getIssueId(notification);
+        const articleId: string | undefined = helper.getArticleId(notification);
         log.info(`On notification open:: issue ID ${issueId}`);
 
-        if (!issueId) {
+        if (!issueId && !articleId) {
           return;
         }
 
-        const targetBackendUrl = notification?.payload?.backendUrl;
+        const targetBackendUrl: string = helper.getBackendURL(notification);
         log.info(
           `On notification open:: notification?.payload?.backendUrl ${JSON.stringify(
             targetBackendUrl,
@@ -57,21 +54,11 @@ export default class PushNotificationsProcessor extends PushNotifications {
         );
 
         if (targetAccount) {
-          await onSwitchAccount(targetAccount, issueId);
+          await onSwitchAccount(targetAccount, issueId, articleId);
           log.info(`On notification open:: switched to target account`);
-        } else if (issueId) {
+        } else if (issueId || articleId) {
           log.info(`On notification open:: redirecting to ${issueId}`);
-
-          if (isSplitView()) {
-            Router.Issues({
-              issueId,
-            });
-          } else {
-            Router.Issue({
-              issueId,
-              navigateToActivity: helper.getActivityId(notification),
-            });
-          }
+          navigateToRouteById(issueId, articleId, helper.getActivityId(notification));
         }
 
         completion();
@@ -97,17 +84,17 @@ export default class PushNotificationsProcessor extends PushNotifications {
       })
       .catch(err => log.info(`Initial notification::failed ${err}`));
     Notifications.events().registerRemoteNotificationsRegistered(
-      (event: typeof Registered) => {
+      (event: { deviceToken: string }) => {
         this.setDeviceToken(event.deviceToken);
         resolveToken(event.deviceToken);
       },
     );
     Notifications.events().registerRemoteNotificationsRegistrationFailed(
-      (error: typeof RegistrationError) => rejectToken(error),
+      (error: RegistrationError) => rejectToken(error),
     );
     Notifications.events().registerNotificationReceivedForeground(
       (
-        notification: typeof Notification,
+        notification: Notification,
         completion: (response: NotificationCompletion) => void,
       ) => {
         log.info(
@@ -124,7 +111,7 @@ export default class PushNotificationsProcessor extends PushNotifications {
     );
     Notifications.events().registerNotificationReceivedBackground(
       (
-        notification: typeof Notification,
+        notification: Notification,
         completion: (response: NotificationCompletion) => void,
       ) => {
         log.info(

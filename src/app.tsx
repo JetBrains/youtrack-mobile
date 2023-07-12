@@ -3,7 +3,7 @@ import {UIManager} from 'react-native';
 
 import Toast from 'react-native-easy-toast';
 import {ActionSheetProvider, connectActionSheet} from '@expo/react-native-action-sheet';
-import {Notifications} from 'react-native-notifications';
+import {Notifications, Notification} from 'react-native-notifications';
 import {Provider} from 'react-redux';
 
 import AgileBoard from 'views/agile-board/agile-board';
@@ -55,25 +55,13 @@ class YouTrackMobile extends Component<void, void> {
   }
 
   static async getNotificationData(): Promise<NotificationRouteData> {
-    const notification: Promise<
-      typeof Notification | (PushNotificationIOS | null | undefined)
-    > = await Notifications.getInitialNotification();
-    log.info(
-      `Initial notification(on start app):: ${JSON.stringify(notification)}`,
-    );
-    return {
-      issueId: notificationsHelper.getIssueId(notification),
-      backendUrl: notificationsHelper.getBackendUrl(notification),
-      navigateToActivity: notificationsHelper.getActivityId(notification),
-    };
+    const notification: Notification | undefined = await Notifications.getInitialNotification();
+    log.info(`Initial notification(on start app):: ${JSON.stringify(notification)}`);
+    return notificationsHelper.getNotificationRouteData(notification);
   }
 
-  static async init(
-    getNotificationRouteData: () => Promise<
-      NotificationRouteData | null | undefined
-    >,
-  ) {
-    let notificationRouteData: NotificationRouteData | null | undefined;
+  static async init(getNotificationRouteData: () => Promise<NotificationRouteData | null>) {
+    let notificationRouteData: NotificationRouteData | null;
 
     if (getNotificationRouteData) {
       notificationRouteData = await getNotificationRouteData();
