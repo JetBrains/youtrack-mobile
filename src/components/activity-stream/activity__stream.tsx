@@ -232,6 +232,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
           <StreamUserInfo activityGroup={activityGroup}/>
         )}
         <StreamComment
+          onCheckboxUpdate={props.onCheckboxUpdate}
           activity={activity}
           attachments={attachments}
           commentActions={props.commentActions}
