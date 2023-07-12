@@ -34,6 +34,7 @@ export const rowStyles = {
   activityAuthor: {
     color: '$textSecondary',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     marginTop: UNIT / 2,
     marginBottom: UNIT / 4,
   },
