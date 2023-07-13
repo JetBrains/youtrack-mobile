@@ -65,13 +65,13 @@ interface Props {
   youtrackWiki: YouTrackWiki;
   work: {
     onWorkUpdate?: (workItem?: WorkItem) => void;
-    createContextActions: (workItem: WorkItem) => ContextMenuConfigItem[];
+    createContextActions: (workItem: WorkItem | ActivityItem) => ContextMenuConfigItem[];
   };
   onCheckboxUpdate: (checked: boolean, position: number, comment: IssueComment) => void;
   renderHeader?: () => any;
   refreshControl: () => any;
   highlight?: {
-    activityId: string;
+    activityId?: string;
     commentId?: string;
   };
 }
@@ -137,7 +137,8 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
 
   useLayoutEffect(() => {
     setTimeout(() => {
-      const layout: LayoutRectangle | undefined = layoutMap.current[highlight!.commentId || highlight!.activityId];
+      const id: string | undefined = highlight?.commentId || highlight?.activityId;
+      const layout: LayoutRectangle | undefined = id ? layoutMap.current[id] : undefined;
       if (layout) {
         scrollToActivity(layout);
       }

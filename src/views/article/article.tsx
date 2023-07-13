@@ -87,12 +87,12 @@ class Article extends IssueTabbed<Props, State> {
   };
 
   componentDidUpdate(prevProps: Props) {
-    const {articlePlaceholder, commentId, navigateToActivity} = this.props;
+    const {article, articlePlaceholder, commentId, navigateToActivity} = this.props;
     if (prevProps.articlePlaceholder !== articlePlaceholder) {
       this.loadArticle(articlePlaceholder.id || articlePlaceholder.idReadable);
     }
 
-    if (prevProps.navigateToActivity !== navigateToActivity) {
+    if (prevProps.navigateToActivity !== navigateToActivity || !article?.summary && (commentId || navigateToActivity)) {
       if (navigateToActivity || commentId) {
         this.switchToActivityTab();
       } else {
@@ -114,9 +114,8 @@ class Article extends IssueTabbed<Props, State> {
       this.props.setPreviousArticle();
     }
 
-    const currentArticle: Article = this.getArticle();
-    const canLoadArticle: boolean =
-      currentArticle && (currentArticle.id || currentArticle.idReadable);
+    const currentArticle: ArticleEntity = this.getArticle();
+    const canLoadArticle: boolean = !!currentArticle && !!(currentArticle.id || currentArticle.idReadable);
 
     if (canLoadArticle) {
       this.switchToDetailsTab();
@@ -134,9 +133,9 @@ class Article extends IssueTabbed<Props, State> {
       );
     }
 
-    if (canLoadArticle && this.props.navigateToActivity) {
+    if (canLoadArticle && (this.props.navigateToActivity || this.props.commentId)) {
       this.switchToActivityTab();
-    } else if (!canLoadArticle && !this.props.navigateToActivity) {
+    } else if (!canLoadArticle && !this.props.navigateToActivity && !this.props.commentId) {
       return Router.KnowledgeBase();
     }
   }
@@ -145,21 +144,20 @@ class Article extends IssueTabbed<Props, State> {
     return i18n('Content');
   }
 
-  getRouteBadge(
-    route: TabRoute,
-  ): React.ReactElement<React.ComponentProps<typeof View>, typeof View> | null {
+  // @ts-ignore
+  getRouteBadge(route: TabRoute): React.ReactNode {
     return super.getRouteBadge(route.title === this.tabRoutes[1].title, this.props?.article?.comments?.length);
   }
 
 
   loadArticle = (articleId: string, reset?: boolean) =>
     this.props.loadArticle(articleId, reset);
-  getArticle = (): Article => {
+  getArticle = (): ArticleEntity => {
     const {articlePlaceholder, lastVisitedArticle} = this.props;
     return articlePlaceholder || lastVisitedArticle;
   };
   refresh = () => {
-    const article: Article | null | undefined = this.getArticle();
+    const article: ArticleEntity | null | undefined = this.getArticle();
     const articleId: string | null | undefined = article?.id;
 
     if (articleId) {
@@ -207,7 +205,7 @@ class Article extends IssueTabbed<Props, State> {
       />
     );
   };
-  toggleModalChildren = (modalChildren: any = null) => {
+  toggleModalChildren = (modalChildren?: React.ReactNode) => {
     this.setState({
       modalChildren,
     });
@@ -245,7 +243,7 @@ class Article extends IssueTabbed<Props, State> {
         {!!articleData && (
           <>
             <View style={styles.articleDetailsHeader}>
-              {issuePermissions.canUpdateArticle(article) && (
+              {issuePermissions.canUpdateArticle(article as ArticleEntity) && (
                 <VisibilityControl
                   style={breadCrumbsElement ? null : styles.visibility}
                   visibility={visibility}
@@ -402,7 +400,7 @@ class Article extends IssueTabbed<Props, State> {
   };
   canDeleteArticle = (): boolean => {
     const {article, issuePermissions} = this.props;
-    return issuePermissions.articleCanDeleteArticle(article.project.ringId);
+    return issuePermissions.articleCanDeleteArticle(article?.project?.ringId);
   };
   renderHeader = () => {
     const {
@@ -451,7 +449,7 @@ class Article extends IssueTabbed<Props, State> {
               excludeProject: true,
             }),
           issuePermissions.canStar(),
-          articleData.hasStar,
+          !!articleData.hasStar,
           this.state.isSplitView,
         ),
     };
@@ -512,7 +510,7 @@ const mapStateToProps = (
     issuePermissions: state.app.issuePermissions,
     lastVisitedArticle: state.app?.user?.profiles?.articles?.lastVisitedArticle,
     articlesList: createArticleList(
-      state.articles.articles || getStorageState().articles || [],
+      (state.articles.articles || getStorageState().articles || []) as ArticleEntity[],
     ),
   };
 };

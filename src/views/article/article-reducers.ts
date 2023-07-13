@@ -2,21 +2,22 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import {issuePermissionsNull} from 'components/issue-permissions/issue-permissions-helper';
 import {ON_NAVIGATE_BACK} from 'actions/action-types';
-import {routeMap} from '../../app-routes';
+import {routeMap} from 'app-routes';
 import type {Activity} from 'types/Activity';
 import type {Article, ArticlesList} from 'types/Article';
 import type {CustomError} from 'types/Error';
 import type {IssueComment} from 'types/CustomFields';
 export type ArticleState = {
   activityPage: Activity[] | null;
-  article: Article;
+  article: Article | null;
   articleCommentDraft: IssueComment | null;
   articlesList: ArticlesList;
-  error: CustomError;
+  error: CustomError | null;
   isLoading: boolean;
   isProcessing: boolean;
   issuePermissions: IssuePermissions;
   prevArticleState: ArticleState | null | undefined;
+  lastVisitedArticle?: Partial<Article>;
 };
 export const articleInitialState: ArticleState = {
   activityPage: null,
@@ -37,7 +38,7 @@ const {reducer, actions} = createSlice({
       state.isProcessing = action.payload;
     },
 
-    setError(state: ArticleState, action: PayloadAction<boolean>) {
+    setError(state: ArticleState, action: PayloadAction<CustomError>) {
       state.error = action.payload;
     },
 
@@ -58,7 +59,7 @@ const {reducer, actions} = createSlice({
 
     setArticleCommentDraft(
       state: ArticleState,
-      action: PayloadAction<Article>,
+      action: PayloadAction<IssueComment>,
     ) {
       state.articleCommentDraft = action.payload;
     },

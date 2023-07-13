@@ -51,7 +51,7 @@ interface Props {
   renderHeader?: () => any;
   refreshControl: () => any;
   highlight?: {
-    activityId: string;
+    activityId?: string;
     commentId?: string;
   };
 }

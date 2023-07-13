@@ -31,7 +31,7 @@ import type {UITheme} from 'types/Theme';
 
 type Props = {
   article: Article;
-  error: CustomError;
+  error: CustomError | null;
   isLoading: boolean;
   onRemoveAttach?: (attachment: Attachment) => any;
   onCreateArticle?: () => any;
@@ -41,29 +41,21 @@ type Props = {
   isSplitView: boolean;
 };
 
+type ModalStackData = {
+  id: string;
+  children: any;
+  onHide: () => any;
+};
+
+
 const ArticleDetails = (props: Props) => {
-  const [modalStack, updateModalStack] = useState([]);
+  const [modalStack, updateModalStack] = useState<ModalStackData[]>([]);
 
   function navigateToSubArticlePage(article: Article) {
     const update = () => {
-      updateModalStack(
-        (
-          prev: Array<{
-            id: string;
-            children: any;
-            onHide: () => any;
-          }>,
-        ) => {
+      updateModalStack((prev: ModalStackData[]) => {
           const onHide = () =>
-            updateModalStack(
-              (
-                prev: Array<{
-                  id: string;
-                  children: any;
-                  onHide: () => any;
-                }>,
-              ) => prev.filter(it => it.id !== article.id),
-            );
+            updateModalStack((prev: ModalStackData[]) => prev.filter(it => it.id !== article.id));
 
           prev.push({
             id: article.id,

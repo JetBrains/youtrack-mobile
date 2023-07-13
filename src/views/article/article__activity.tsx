@@ -27,7 +27,7 @@ interface Props {
   uiTheme: UITheme;
   onCheckboxUpdate?: (articleContent: string) => (...args: any[]) => any;
   highlight?: {
-    activityId: string;
+    activityId?: string;
     commentId?: string;
   };
 }

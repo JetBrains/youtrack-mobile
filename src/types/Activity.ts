@@ -5,7 +5,7 @@ import type {PullRequest, VCSActivity} from './Vcs';
 import type {Reaction} from './Reaction';
 import type {ContextMenuConfig} from 'types/MenuConfig';
 
-type ActivityWork = {
+export type ActivityWork = {
   id: string;
   name: string;
   text: string;

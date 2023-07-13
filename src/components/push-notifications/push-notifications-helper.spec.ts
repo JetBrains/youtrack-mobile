@@ -318,6 +318,7 @@ describe('push-notifications-helper', () => {
         } as any),
       ).toEqual(eventIdMock);
     });
+
     it('should return `undefined` if it is a summary category', () => {
       expect(
         helper.getActivityId({

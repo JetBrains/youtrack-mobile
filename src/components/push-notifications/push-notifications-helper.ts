@@ -82,10 +82,16 @@ function showInfoMessage(
 }
 
 function getIssueId(notification: Notification | null = null): string {
-  return getNotificationDataByField(notification, 'ytIssueId');
+  return (
+    getNotificationDataByField(notification, 'issueId') ||
+    getNotificationDataByField(notification, 'ytIssueId')
+  );
 }
 function getArticleId(notification: Notification | null = null): string {
-  return getNotificationDataByField(notification, 'ytArticleId');
+  return (
+    getNotificationDataByField(notification, 'articleId') ||
+    getNotificationDataByField(notification, 'ytArticleId')
+  );
 }
 function getBackendURL(notification: Notification | null = null): string {
   return getNotificationDataByField(notification, 'backendUrl');
@@ -93,9 +99,9 @@ function getBackendURL(notification: Notification | null = null): string {
 
 function getNotificationDataByField(notification: Record<string, any> | null, fieldName: string) {
   return notification ? (
+    notification?.payload?.[fieldName] ||
     notification?.[fieldName] ||
     notification?.data?.[fieldName] ||
-    notification?.payload?.[fieldName] ||
     notification?.getData?.()?.[fieldName] ||
     ''
   ) : '';
@@ -114,6 +120,9 @@ function getActivityId(notification: Notification | null = null): string | undef
       categoryName.SUMMARY,
       categoryName.ISSUE_CREATED,
       categoryName.ISSUE_CREATED.split('_').pop(),
+      categoryName.ARTICLE_CREATED,
+      categoryName.ARTICLE_CONTENT,
+      categoryName.ARTICLE_SUMMARY,
     ].join(',').toLowerCase().split(',').includes(it.toLowerCase());
   });
 
