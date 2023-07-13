@@ -26,7 +26,7 @@ msgstr "(Clear value)"
 msgid "[Removed field]"
 msgstr "[Removed field]"
 
-#: src/views/article/article__details.tsx:177
+#: src/views/article/article__details.tsx:169
 msgid "{{amount}} article"
 msgid_plural "{{amount}} articles"
 msgstr[0] "{{amount}} article"
@@ -270,7 +270,7 @@ msgstr "Connecting to YouTrack..."
 msgid "Contact support"
 msgstr "Contact support"
 
-#: src/views/article/article.tsx:145
+#: src/views/article/article.tsx:144
 msgid "Content"
 msgstr "Content"
 
@@ -531,7 +531,7 @@ msgstr "If this isn't what you expected, you might try one of these solutions:"
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
 msgstr "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
 
-#: src/views/article/article.tsx:267
+#: src/views/article/article.tsx:265
 msgid "in revision"
 msgstr "in revision"
 
@@ -685,7 +685,7 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.tsx:422
+#: src/components/activity-stream/activity__stream.tsx:423
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -946,7 +946,7 @@ msgstr "Spent time:"
 msgid "Start a new article"
 msgstr "Start a new article"
 
-#: src/views/article/article__details.tsx:159
+#: src/views/article/article__details.tsx:151
 msgid "Sub-articles"
 msgstr "Sub-articles"
 
