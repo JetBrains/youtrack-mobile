@@ -150,7 +150,7 @@
     "@types/lodash.throttle": "^4.1.7",
     "@types/node-gettext": "^3.0.3",
     "@types/qs": "^6.9.7",
-    "@types/react": "^18.0.26",
+    "@types/react": "^18.2.15",
     "@types/react-native": "^0.71.8",
     "@types/react-native-video": "^5.0.14",
     "@types/react-redux": "^7.1.24",

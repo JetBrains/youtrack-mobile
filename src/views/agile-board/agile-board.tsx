@@ -14,7 +14,7 @@ import {View as AnimatedView} from 'react-native-animatable';
 
 import * as boardActions from './board-actions';
 import AgileBoardSprint from './agile-board__sprint';
-import AgileSectionedSelect from 'views/agile-board/agile-board__agile-selector';
+import AgileSectionedSelect, {AgileSectionedSelectModal} from 'views/agile-board/agile-board__agile-selector';
 import Api from 'components/api/api';
 import Auth from 'components/auth/oauth2';
 import BoardHeader from './board-header';
@@ -396,12 +396,12 @@ class AgileBoard extends Component<Props, State> {
     const {selectProps} = this.props;
     const SelectComponent: any = (
       this.state.isSplitView
-        ? SelectModal
+        ? selectProps.agileSelector ? AgileSectionedSelectModal : SelectModal
         : selectProps.agileSelector ? AgileSectionedSelect : Select
     );
     return (
       <SelectComponent
-        getTitle={item => item.name}
+        getTitle={(item: BoardOnList | Sprint) => item.name}
         onCancel={this.props.onCloseSelect}
         {...selectProps}
         onSelect={(selected: BoardOnList | Sprint) => {

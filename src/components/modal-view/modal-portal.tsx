@@ -7,18 +7,20 @@ import modalStyles from './modal.view.styles';
 
 import type {ViewStyleProp} from 'types/Internal';
 
-type Props = {
+interface Props {
   children: any;
   fullscreen?: boolean;
   hasOverlay?: boolean;
   onHide: () => any;
   style?: ViewStyleProp;
-};
+  testID?: string;
+}
 
 
 const ModalPortal = (props: Props): JSX.Element => {
   const {hasOverlay = true, onHide = () => {}} = props;
   return (
+    // @ts-ignore
     <Portal testID={props.testID}>
       {!!props.children && (
         <View style={modalStyles.container}>

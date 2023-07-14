@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, FlatList, Text, TextInput, TouchableOpacity, View,} from 'react-native';
 import ColorField from 'components/color-field/color-field';
 import ModalPortal from 'components/modal-view/modal-portal';
 import ModalView from 'components/modal-view/modal-view';
@@ -20,7 +13,9 @@ import styles, {SELECT_ITEM_HEIGHT, SELECT_ITEM_SEPARATOR_HEIGHT} from './select
 
 import {CustomError} from 'types/Error';
 
-export type IItem = Record<string, any>;
+export type IItem = {
+  [key: string]: any;
+};
 
 export interface ISelectProps {
   dataSource: (query: string) => Promise<IItem[]>;
@@ -193,7 +188,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     });
   }
 
-  _renderTitle(item: IItem) {
+  _renderTitle(item: IItem): React.JSX.Element {
     const label: React.ReactElement<React.ComponentProps<any>, any> = (
       <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>
     );
