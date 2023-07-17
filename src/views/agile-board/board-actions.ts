@@ -719,15 +719,19 @@ export function openBoardSelect(): (
       selectProps: {
         agileSelector: true,
         placeholder: i18n('Filter boards by name'),
-        dataSource: async () => {
-          const [error, agileBoardsList] = await until(api.agile.getAgileBoardsList());
+        dataSource: async (q: string = '') => {
+          const [error, agileBoardsList] = await until(
+            api.agile.getAgileBoardsList()
+          ) as [CustomError | null, BoardOnList[]];
           if (error) {
             return [];
           }
           const groupedBoards: {
             favorites: { data: BoardOnList[], title: string },
             regular: { data: BoardOnList[], title: string }
-          } = agileBoardsList.sort(sortAlphabetically).reduce(
+          } = agileBoardsList.filter(
+            (it: BoardOnList) => it.name.toLowerCase().indexOf(q.toLowerCase()) !== -1
+          ).sort(sortAlphabetically).reduce(
             (
               akk: {
                 favorites: { data: BoardOnList[], title: string };
