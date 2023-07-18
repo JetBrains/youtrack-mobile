@@ -7,11 +7,9 @@ export default EStyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingVertical: UNIT,
-    paddingHorizontal: UNIT * 2,
   },
   content: {
     padding: UNIT,
-    paddingBottom: UNIT * 2,
+    marginBottom: UNIT * 2,
   },
 });

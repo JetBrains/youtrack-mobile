@@ -1,22 +1,29 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {Platform, StyleSheet} from 'react-native';
+
 import {COLOR_FIELD_SIZE} from 'components/color-field/color-field';
-import {elevation1, MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from 'components/common-styles';
 import {
+  elevation1,
   headerTitle,
+  MAIN_FONT_SIZE,
   mainText,
+  SECONDARY_FONT_SIZE,
   secondaryText,
+  UNIT,
 } from 'components/common-styles';
 import {headerTitlePresentation} from 'components/header/header.styles';
 import {issueCard} from 'components/common-styles/issue';
 import {separator} from 'components/common-styles/list';
 import {splitViewStyles} from 'components/common-styles/split-view';
-import {UNIT} from 'components/variables';
+
 const rowLine = {
   flexDirection: 'row',
   alignItems: 'center',
 };
+
 const searchContextHeight = UNIT * 7;
+
+
 export default EStyleSheet.create({
   listContainer: {
     flex: 1,
@@ -136,6 +143,10 @@ export default EStyleSheet.create({
     marginRight: -1,
   },
   toolbarText: {...secondaryText, color: '$textSecondary'},
+  toolbarIcon: {
+    paddingLeft: UNIT / 2,
+    color: '$icon',
+  },
   toolbarSortByText: {
     textAlign: 'right',
   },
@@ -200,4 +211,36 @@ export default EStyleSheet.create({
     paddingLeft: UNIT,
   },
   loadingIndicator: StyleSheet.absoluteFillObject,
+  settings: {
+    marginTop: UNIT,
+  },
+  settingsItem: {
+    paddingHorizontal: UNIT * 2,
+    paddingVertical: UNIT,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  settingsTitle: {
+    paddingHorizontal: UNIT * 2,
+    marginBottom: UNIT * 2,
+    ...secondaryText,
+    fontSize: SECONDARY_FONT_SIZE - 2,
+    textTransform: 'uppercase',
+    color: '$textSecondary',
+    letterSpacing: 1,
+  },
+  settingsText: {
+    ...mainText,
+    color: '$text',
+  },
+  settingsIcon: {
+    color: '$iconAccent',
+  },
+  settingsSeparator: {
+    borderColor: '$separator',
+    ...separator,
+    marginLeft: -UNIT * 2,
+    marginVertical: UNIT * 2,
+  },
 });

@@ -9,7 +9,7 @@ const doAssist = async (params: {
   context: Folder | null | undefined;
   query: string;
   sortProperties?: IssueFieldSortProperty[];
-}): Promise<SearchSuggestions | null | undefined> => {
+}): Promise<SearchSuggestions> => {
   const api: API = getApi();
   const {context, query = '', sortProperties} = params;
   const [error, searchSuggestions] = await until(

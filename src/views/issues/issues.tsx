@@ -13,6 +13,7 @@ import {connect} from 'react-redux';
 
 import * as issueActions from './issues-actions';
 import CreateIssue from 'views/create-issue/create-issue';
+import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import ErrorMessage from 'components/error-message/error-message';
 import IconBookmark from 'components/icon/assets/bookmark.svg';
 import Issue from 'views/issue/issue';
@@ -35,7 +36,7 @@ import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {getIssueFromCache} from './issues-actions';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
-import {IconAdd, IconAngleDown} from 'components/icon/icon';
+import {IconAdd, IconAngleDown, IconSettings} from 'components/icon/icon';
 import {
   ICON_PICTOGRAM_DEFAULT_SIZE,
   IconNothingFound,
@@ -82,6 +83,7 @@ type State = {
   focusedIssue: AnyIssue | null | undefined;
   isSplitView: boolean;
   isCreateModalVisible: boolean;
+  settingsVisible: boolean;
 };
 
 
@@ -100,6 +102,7 @@ export class Issues extends Component<Props, State> {
       focusedIssue: null,
       isSplitView: false,
       isCreateModalVisible: false,
+      settingsVisible: false,
     };
     usage.trackScreenView('Issue list');
   }
@@ -485,7 +488,6 @@ export class Issues extends Component<Props, State> {
       query,
       issuesCount,
       openSavedSearchesSelect,
-      searchContext,
       networkState,
     } = this.props;
     return (
@@ -517,18 +519,22 @@ export class Issues extends Component<Props, State> {
           </TouchableOpacity>
         </View>
 
-        {this.hasIssues() && (
-          <View style={styles.toolbar}>
-            <IssuesCount issuesCount={issuesCount} />
-            <IssuesSortBy
-              context={searchContext}
-              onApply={(q: string) => {
-                this.onQueryUpdate(q);
-              }}
-              query={query}
+        <View style={styles.toolbar}>
+          {this.hasIssues() && <IssuesCount issuesCount={issuesCount}/>}
+          <TouchableOpacity
+            style={styles.rowLine}
+            onPress={() => {
+              this.setState({settingsVisible: true});
+            }}
+          >
+            <Text style={styles.toolbarText}>{i18n('Settings')}</Text>
+            <IconSettings
+              style={styles.toolbarIcon}
+              size={14}
+              color={styles.toolbarIcon.color}
             />
-          </View>
-        )}
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
@@ -667,6 +673,10 @@ export class Issues extends Component<Props, State> {
 
   render(): React.ReactNode {
     const {isSplitView} = this.state;
+    const {
+      query,
+      searchContext,
+    } = this.props;
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
@@ -682,6 +692,29 @@ export class Issues extends Component<Props, State> {
               {isSplitView && this.renderSplitView()}
               {!isSplitView && this.renderIssues()}
               {this.renderModalPortal()}
+              <BottomSheetModal
+                style={{
+                  paddingHorizontal: 0,
+                }}
+                withHandle={true}
+                height={Dimensions.get('window').height - 100}
+                snapPoint={310}
+                isVisible={this.state.settingsVisible}
+                onClose={() => this.setState({settingsVisible: false})}
+              >
+                <View style={styles.settings}>
+                  <Text style={styles.settingsTitle}>{i18n('List Settings')}</Text>
+                  {this.hasIssues() && <IssuesSortBy
+                    onOpen={() => this.setState({settingsVisible: false})}
+                    context={searchContext}
+                    onApply={(q: string) => this.onQueryUpdate(q)}
+                    query={query}
+                  />}
+                  <View style={styles.settingsSeparator}/>
+
+                </View>
+
+              </BottomSheetModal>
             </View>
           );
         }}
