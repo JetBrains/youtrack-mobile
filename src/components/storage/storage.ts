@@ -5,7 +5,7 @@ import log from 'components/log/log';
 import {getAuthParamsKey} from './storage__oauth';
 import {i18n} from 'components/i18n/i18n';
 import {notify} from 'components/notification/notification';
-import {routeMap} from '../../app-routes';
+import {routeMap} from 'app-routes';
 
 import type {Activity, ActivityType} from 'types/Activity';
 import type {AnyIssue} from 'types/Issue';
@@ -94,6 +94,7 @@ export type StorageState = TipsState & FeatureState & {
   themeMode: string | null;
   vcsChanges: boolean | null;
   forceHandsetMode: boolean | null;
+  issuesViewMode: number | null;
 };
 
 const storageKeys: StorageStateKeys & (typeof tipsKeys) & (typeof featuresKeys) = {
@@ -129,6 +130,7 @@ const storageKeys: StorageStateKeys & (typeof tipsKeys) & (typeof featuresKeys) 
   permissions: 'YT_USER_PERMISSIONS',
   themeMode: THEME_MODE_KEY,
   vcsChanges: 'YT_VCS_CHANGES',
+  issuesViewMode: 'YT_ISSUES_MODE',
 };
 let storageState: StorageState | null = null;
 
@@ -178,6 +180,7 @@ export const initialState: Readonly<StorageState> = {
   themeMode: null,
   vcsChanges: null,
   forceHandsetMode: null,
+  issuesViewMode: null,
 };
 
 function cleanAndLogState(message, state?: StorageState) {
@@ -260,6 +263,7 @@ export async function clearCachesAndDrafts(): Promise<StorageState> {
     storageKeys.permissions,
     storageKeys.agileDefaultBoard,
     storageKeys.projects,
+    storageKeys.issuesViewMode,
     ...Object.values(tipsKeys),
     ...Object.values(featuresKeys),
   ] as string[]);

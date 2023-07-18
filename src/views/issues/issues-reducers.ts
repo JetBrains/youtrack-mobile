@@ -1,11 +1,15 @@
+import * as types from './issues-action-types';
 import {createReducer} from 'redux-create-reducer';
 import {EVERYTHING_CONTEXT} from 'components/search/search-context';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
+import {issuesViewMode} from 'views/issues/index';
 import {LOG_OUT, SET_PROGRESS} from 'actions/action-types';
-import * as types from './issues-action-types';
+
 import type {Folder} from 'types/User';
 import type {IssueOnList, TransformedSuggestion} from 'types/Issue';
+
+
 export type IssuesState = {
   query: string;
   skip: number;
@@ -21,7 +25,9 @@ export type IssuesState = {
   selectProps: Record<string, any> | null;
   searchContext: Folder;
   isSearchContextPinned: boolean;
+  viewMode: number;
 };
+
 export const initialState: IssuesState = {
   query: '',
   queryAssistSuggestions: [],
@@ -37,9 +43,12 @@ export const initialState: IssuesState = {
   selectProps: null,
   searchContext: EVERYTHING_CONTEXT as Folder,
   isSearchContextPinned: false,
+  viewMode: issuesViewMode.M,
 };
+
+
 export default createReducer(initialState, {
-  [LOG_OUT]: (state: IssuesState): IssuesState => {
+  [LOG_OUT]: (): IssuesState => {
     return initialState;
   },
   [ISSUE_CREATED]: (
@@ -61,7 +70,6 @@ export default createReducer(initialState, {
   },
   [types.CLEAR_SUGGESTIONS]: (
     state: IssuesState,
-    action: Record<string, any>,
   ) => {
     return {...state, queryAssistSuggestions: []};
   },
@@ -154,7 +162,7 @@ export default createReducer(initialState, {
     function updateIssue(issue: IssueOnList): IssueOnList {
       return Object.keys(issue).reduce((updated: IssueOnList, key: string) => {
         return {...updated, [key]: sourceIssue[key]};
-      }, {});
+      }, {} as IssueOnList);
     }
 
     const issues: IssueOnList[] = state.issues.map((issue: IssueOnList) =>
@@ -191,4 +199,10 @@ export default createReducer(initialState, {
   ): IssuesState {
     return {...state, searchContext: action.searchContext};
   },
-}) as any;
+  [types.SET_ISSUES_VIEW_MODE](
+    state: IssuesState,
+    action: Record<string, any>,
+  ): IssuesState {
+    return {...state, viewMode: action.viewMode};
+  },
+} as Record<string, any>);

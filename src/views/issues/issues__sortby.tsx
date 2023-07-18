@@ -41,18 +41,18 @@ const IssuesSortByTitle = ({sortProperties, onPress}: {
         testID="test:id/issuesSortBy"
         accessibilityLabel="issuesSortBy"
         accessible={true}
-        style={styles.settingsItem}
+        style={styles.settingsRow}
         onPress={onPress}
       >
         <Text
           numberOfLines={2}
-          style={styles.settingsText}
+          style={styles.settingsItemText}
         >
           {i18n('Sorted by')} {createSortButtonTitle(sortProperties)}
         </Text>
         <IconAngleRight
           size={19}
-          color={styles.settingsIcon.color}
+          color={styles.settingsItemIcon.color}
         />
       </TouchableOpacity>
     </>

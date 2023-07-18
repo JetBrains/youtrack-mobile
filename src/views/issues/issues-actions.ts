@@ -24,6 +24,7 @@ import type Api from 'components/api/api';
 import type {AppState} from 'reducers';
 import type {Folder} from 'types/User';
 import type {AnyIssue, IssueFull} from 'types/Issue';
+import {issuesViewMode, IssuesViewMode} from 'views/issues/index';
 
 type ApiGetter = () => Api;
 
@@ -520,6 +521,11 @@ export function initializeIssuesList(
   searchQuery?: string,
 ): (dispatch: (arg0: any) => any) => Promise<void> {
   return async (dispatch: (arg0: any) => any) => {
+    const viewMode: number = getStorageState().issuesViewMode ?? issuesViewMode.M;
+    dispatch({
+      type: types.SET_ISSUES_VIEW_MODE,
+      viewMode,
+    });
     dispatch(setIssuesQuery(searchQuery || getStorageState().query || ''));
 
     if (searchQuery) {
@@ -656,5 +662,21 @@ export function loadIssuesCount(
     } catch (e) {
       log.log('Failed to load issues count');
     }
+  };
+}
+
+export function onViewModeChange(viewMode: IssuesViewMode): (
+  dispatch: (arg0: any) => any,
+  getState: () => any,
+  getApi: ApiGetter,
+) => Promise<void> {
+  return async (
+    dispatch: (arg0: any) => any,
+  ) => {
+    dispatch({
+      type: types.SET_ISSUES_VIEW_MODE,
+      viewMode: viewMode.mode,
+    });
+    flushStoragePart({issuesViewMode: viewMode.mode});
   };
 }

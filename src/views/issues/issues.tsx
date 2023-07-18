@@ -36,7 +36,7 @@ import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {getIssueFromCache} from './issues-actions';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
-import {IconAdd, IconAngleDown, IconSettings} from 'components/icon/icon';
+import {IconAdd, IconAngleDown, IconCheck, IconSettings} from 'components/icon/icon';
 import {
   ICON_PICTOGRAM_DEFAULT_SIZE,
   IconNothingFound,
@@ -44,6 +44,7 @@ import {
 import {initialState} from './issues-reducers';
 import {isReactElement} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
+import {IssuesViewMode, issuesViewModes} from 'views/issues/index';
 import {logEvent} from 'components/log/log-helper';
 import {notify} from 'components/notification/notification';
 import {requestController} from 'components/api/api__request-controller';
@@ -676,6 +677,8 @@ export class Issues extends Component<Props, State> {
     const {
       query,
       searchContext,
+      onViewModeChange,
+      viewMode,
     } = this.props;
     return (
       <ThemeContext.Consumer>
@@ -702,17 +705,42 @@ export class Issues extends Component<Props, State> {
                 isVisible={this.state.settingsVisible}
                 onClose={() => this.setState({settingsVisible: false})}
               >
-                <View style={styles.settings}>
-                  <Text style={styles.settingsTitle}>{i18n('List Settings')}</Text>
-                  {this.hasIssues() && <IssuesSortBy
-                    onOpen={() => this.setState({settingsVisible: false})}
-                    context={searchContext}
-                    onApply={(q: string) => this.onQueryUpdate(q)}
-                    query={query}
-                  />}
+                <>
+                  <View style={styles.settingsItem}>
+                    <Text style={styles.settingsItemTitle}>{i18n('List Settings')}</Text>
+                    <IssuesSortBy
+                      onOpen={() => this.setState({settingsVisible: false})}
+                      context={searchContext}
+                      onApply={(q: string) => this.onQueryUpdate(q)}
+                      query={query}
+                    />
+                  </View>
                   <View style={styles.settingsSeparator}/>
-
-                </View>
+                  <View style={styles.settingsItem}>
+                    <Text style={styles.settingsItemTitle}>{i18n('View Mode')}</Text>
+                    {issuesViewModes.map((it: IssuesViewMode) => {
+                      return (
+                        <TouchableOpacity
+                          style={styles.settingsRow}
+                          onPress={() => {
+                            onViewModeChange(it);
+                          }}
+                        >
+                          <Text>
+                            <Text
+                              style={[styles.settingsItemText, styles.settingsItemTextMonospace]}>{`${it.label} `}</Text>
+                            <Text style={styles.settingsItemText}>{i18n('Size')}</Text>
+                          </Text>
+                          {viewMode === it.mode && <IconCheck
+                            size={20}
+                            color={styles.link.color}
+                          />}
+                        </TouchableOpacity>
+                      );
+                    })
+                    }
+                  </View>
+                </>
 
               </BottomSheetModal>
             </View>
