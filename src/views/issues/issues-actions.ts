@@ -28,7 +28,7 @@ import {issuesViewMode, IssuesViewMode} from 'views/issues/index';
 
 type ApiGetter = () => Api;
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE: number = 14;
 
 function trackEvent(msg: string, additionalParam: string | null | undefined) {
   usage.trackEvent(ANALYTICS_ISSUES_PAGE, msg, additionalParam);
@@ -320,8 +320,7 @@ export function closeSelect(): (dispatch: (arg0: any) => any) => void {
 export function cacheIssues(issues: AnyIssue[]): () => void {
   return () => {
     let updatedCache: AnyIssue[] = issues;
-    const cachedIssues: AnyIssue[] | null | undefined = getStorageState()
-      .issuesCache;
+    const cachedIssues: AnyIssue[] | null | undefined = getStorageState().issuesCache;
 
     if (cachedIssues) {
       const issueActivityMap: Record<string, AnyIssue> = cachedIssues.reduce(
@@ -359,16 +358,14 @@ export function setIssuesError(
     });
   };
 }
-export function loadIssues(
-  query: string,
-): (
+export function loadIssues(query: string): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => AppState,
   getApi: ApiGetter,
 ) => Promise<void> {
   return async (
     dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
+    getState: () => AppState,
     getApi: ApiGetter,
   ) => {
     try {
@@ -382,7 +379,7 @@ export function loadIssues(
       }
 
       const [error, listIssues] = await until(
-        api.issues.getIssues(query, PAGE_SIZE),
+        api.issues.getIssues(query, PAGE_SIZE, 0, getState().issueList.viewMode),
       );
       dispatch(stopIssuesLoading());
 
@@ -547,12 +544,12 @@ export function initializeIssuesList(
 }
 export function loadMoreIssues(): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => AppState,
   getApi: ApiGetter,
 ) => Promise<void> {
   return async (
     dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
+    getState: () => AppState,
     getApi: ApiGetter,
   ) => {
     try {
@@ -595,6 +592,7 @@ export function loadMoreIssues(): (
           searchQuery,
           PAGE_SIZE,
           newSkip,
+          getState().issueList.viewMode
         )) as any;
         log.info(`Loaded ${PAGE_SIZE} more issues.`);
         moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues);
@@ -667,16 +665,22 @@ export function loadIssuesCount(
 
 export function onViewModeChange(viewMode: IssuesViewMode): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => AppState,
   getApi: ApiGetter,
 ) => Promise<void> {
   return async (
     dispatch: (arg0: any) => any,
+    getState: () => AppState,
   ) => {
-    dispatch({
-      type: types.SET_ISSUES_VIEW_MODE,
-      viewMode: viewMode.mode,
-    });
-    flushStoragePart({issuesViewMode: viewMode.mode});
+    if (viewMode.mode !== getState().issueList.viewMode) {
+      dispatch({
+        type: types.SET_ISSUES_VIEW_MODE,
+        viewMode: viewMode.mode,
+      });
+      await flushStoragePart({issuesCache: null});
+      dispatch(receiveIssues([]));
+      flushStoragePart({issuesViewMode: viewMode.mode});
+      dispatch(refreshIssues());
+    }
   };
 }

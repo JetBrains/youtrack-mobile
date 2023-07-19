@@ -16,7 +16,6 @@ export const issueCard = {
   issueSummary: {
     ...mainText,
     flex: 1,
-    marginTop: UNIT,
     ...Platform.select({
       ios: {
         fontWeight: '500',

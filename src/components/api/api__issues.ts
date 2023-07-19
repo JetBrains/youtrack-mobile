@@ -1,11 +1,15 @@
-import qs from 'qs';
 import ApiBase from './api__base';
 import ApiHelper from './api__helper';
 import issueFields from './api__issue-fields';
-import {checkVersion, FEATURE_VERSION} from '../feature/feature';
-import {routeMap} from '../../app-routes';
+import qs from 'qs';
+import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
+import {issuesViewMode} from 'views/issues';
+import {routeMap} from 'app-routes';
+
 import type {IssueOnList} from 'types/Issue';
 import type {Folder} from 'types/User';
+
+
 export default class IssuesAPI extends ApiBase {
   async _getIssues(
     query: string = '',
@@ -30,13 +34,19 @@ export default class IssuesAPI extends ApiBase {
   async getIssues(
     query: string = '',
     $top: number,
-    $skip?: number,
-  ): Promise<Array<IssueOnList>> {
+    $skip: number = 0,
+    viewMode: number,
+  ): Promise<IssueOnList[]> {
+    const fields = (
+      viewMode === issuesViewMode.M
+        ? issueFields.issuesOnList
+        : viewMode === issuesViewMode.L ? issueFields.issuesOnListL : issueFields.issuesOnListS
+    );
     const issues: IssueOnList[] = await this._getIssues(
       encodeURIComponent(query),
       $top,
       $skip,
-      issueFields.issuesOnList.toString(),
+      fields.toString(),
     );
     return ApiHelper.patchAllRelativeAvatarUrls(issues, this.config.backendUrl);
   }

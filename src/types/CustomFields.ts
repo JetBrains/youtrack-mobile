@@ -104,7 +104,7 @@ export type CustomFieldValue =
   | Partial<FieldValue>
   | number
   | string
-  | Array<any>;
+  | any[];
 export type CustomFieldBase = {
   $type: string;
   id: string;

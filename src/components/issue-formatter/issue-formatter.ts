@@ -1,4 +1,4 @@
-import type {AnyIssue} from 'types/Issue';
+import type {AnyIssue, IssueFull, IssueOnList} from 'types/Issue';
 import type {CustomField} from 'types/CustomFields';
 import type {Article} from 'types/Article';
 
@@ -33,8 +33,8 @@ function getAssigneeField(issue: AnyIssue): CustomField | null | undefined {
   });
 }
 
-function getReadableID(entity: AnyIssue | Article): string {
-  return (!!entity && (entity.idReadable || entity.id)) || '';
+function getReadableID(entity: IssueOnList | IssueFull | Article): string {
+  return (!!entity && entity?.idReadable) || '';
 }
 
 function getEntityPresentation(entity?: Record<string, any>): string {

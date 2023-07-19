@@ -178,7 +178,7 @@ describe('Issue list actions', () => {
     actions.receiveIssues(issues).should.deep.equal({
       type: types.RECEIVE_ISSUES,
       issues,
-      pageSize: 10,
+      pageSize: 14,
     });
   });
   describe('loadIssuesCount', () => {

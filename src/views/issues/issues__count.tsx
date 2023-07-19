@@ -31,7 +31,7 @@ const IssuesCount = ({issuesCount}: { issuesCount: number | null }) => {
         )}
       </Text>
     </AnimatedView>
-  ) : <Skeleton width={40} height={12} speed={3000} shimmerWidth={150}/>;
+  ) : <Skeleton width={40} height={14} speed={2000} shimmerWidth={100}/>;
 };
 
 

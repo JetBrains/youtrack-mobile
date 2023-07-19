@@ -14,24 +14,25 @@ import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './issues.styles';
 
-import type {AnyIssue} from 'types/Issue';
+import type {IssueOnList} from 'types/Issue';
 import type {BundleValue} from 'types/CustomFields';
 import type {ViewStyleProp} from 'types/Internal';
+import {issuesViewMode} from 'views/issues/index';
 
-type Props = {
-  issue: AnyIssue;
+interface Props {
+  issue: IssueOnList;
   onClick: (...args: any[]) => any;
   onTagPress?: (query: string) => any;
   style?: ViewStyleProp;
-};
+  viewMode: number;
+}
 
 export default class IssueRow extends Component<Props, void> {
   shouldComponentUpdate(nextProps: Props): boolean {
     return ['tags', 'links', 'fields', 'resolved', 'summary'].some(
       (issueFieldName: string) => {
-        return (
-          nextProps.issue[issueFieldName] !== this.props.issue[issueFieldName]
-        );
+        // @ts-ignore
+        return nextProps.issue[issueFieldName] !== this.props.issue[issueFieldName];
       },
     );
   }
@@ -42,12 +43,12 @@ export default class IssueRow extends Component<Props, void> {
     if (
       !priorityField ||
       !priorityField.value ||
-      priorityField.value.length === 0
+      Array.isArray(priorityField.value) && priorityField.value?.length === 0
     ) {
       return null;
     }
 
-    const values: BundleValue[] = [].concat(priorityField.value);
+    const values: BundleValue[] = [].concat(priorityField.value as any);
     const LAST = values.length - 1;
     return (
       <ColorField
@@ -59,7 +60,7 @@ export default class IssueRow extends Component<Props, void> {
   }
 
   render(): React.ReactNode {
-    const {issue, onTagPress, style} = this.props;
+    const {issue, onTagPress, style, viewMode} = this.props;
     return (
       <ThemeContext.Consumer>
         {() => {
@@ -71,8 +72,14 @@ export default class IssueRow extends Component<Props, void> {
               accessibilityLabel="issue-row"
               accessible={false}
             >
-              <View>
-                <View testID="test:id/issueRowDetails" style={styles.rowLine}>
+              <View style={[
+                styles.issueRow,
+                viewMode === issuesViewMode.S && styles.rowLine,
+              ]}>
+                <View
+                  testID="test:id/issueRowDetails"
+                  style={styles.rowLine}
+                >
                   {this.renderPriority()}
                   <Text
                     style={[
@@ -111,15 +118,28 @@ export default class IssueRow extends Component<Props, void> {
                   style={[
                     styles.summary,
                     issue.resolved ? styles.resolved : null,
+                    viewMode === 0 && styles.summaryCompact,
                   ]}
-                  numberOfLines={2}
+                  numberOfLines={viewMode + 1 || 2}
                   testID="test:id/issueRowSummary"
                   accessible={true}
                 >
                   {issue.summary}
                 </Text>
 
-                {onTagPress && issue.tags?.length > 0 && (
+                {!!issue.description && (
+                  <View style={styles.description}>
+                    <Text
+                      style={styles.secondaryText}
+                      numberOfLines={3}
+                      testID="test:id/issueRowDescription"
+                      accessible={true}
+                    >
+                      {issue.description.replace(/\n+/g, '\n')}
+                    </Text>
+                  </View>
+                )}
+                {onTagPress && (issue?.tags || []).length > 0 && (
                   <Tags
                     tags={issue.tags}
                     onTagPress={onTagPress}

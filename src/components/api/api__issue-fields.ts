@@ -221,6 +221,14 @@ const ISSUE_XSHORT_FIELDS: any = toField([
     project: ISSUE_PROJECT_FIELDS,
   },
 ]);
+const ISSUE_SSHORT_FIELDS: any = toField([
+  'id',
+  'summary',
+  'resolved',
+  {
+    fields: ISSUE_FIELD_SHORT_FIELDS,
+  },
+]);
 const ISSUE_SHORT_FIELDS: any = toField([
   ISSUE_XSHORT_FIELDS,
   {
@@ -232,6 +240,10 @@ const ISSUE_SHORT_FIELDS: any = toField([
   {
     tags: ISSUE_TAGS_FIELDS,
   },
+]);
+const ISSUE_LSHORT_FIELDS: any = toField([
+  ISSUE_SHORT_FIELDS,
+  'description',
 ]);
 const ISSUE_LINKED_ISSUE_FIELDS: any = toField([
   'id',
@@ -392,7 +404,9 @@ const MENTIONS_FIELDS: any = toField([
 export default {
   attachments: ISSUE_ATTACHMENTS_FIELDS,
   attachmentsBase: ISSUE_ATTACHMENTS_BASE_FIELDS,
+  issuesOnListS: ISSUE_SSHORT_FIELDS,
   issuesOnList: ISSUE_SHORT_FIELDS,
+  issuesOnListL: ISSUE_LSHORT_FIELDS,
   singleIssueLinks: ISSUE_LINKS_FIELDS,
   issueLinkBase: ISSUE_LINKS_FIELDS_BASE,
   issueLinkTypes: ISSUE_LINK_TYPES_FIELDS,

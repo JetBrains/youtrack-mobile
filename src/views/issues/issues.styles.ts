@@ -49,11 +49,6 @@ export default EStyleSheet.create({
   },
   row: {
     flexDirection: 'column',
-    justifyContent: 'flex-start',
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 2,
-    paddingTop: 13,
-    paddingBottom: UNIT * 1.5,
   },
   priorityPlaceholder: {
     width: COLOR_FIELD_SIZE,
@@ -67,13 +62,27 @@ export default EStyleSheet.create({
       },
     }),
   },
-  rowLine: rowLine,
+  rowLine,
+  issueRow: {
+    paddingHorizontal: UNIT * 2,
+    paddingVertical: UNIT * 1.5,
+  },
   separator: {...separator, borderBottomWidth: 0.75, borderColor: '$separator'},
   secondaryText: {...secondaryText, color: '$textSecondary'},
   mainText: {...mainText, color: '$text'},
   headLeft: {...issueCard.issueId, color: '$textSecondary'},
   headRight: {...rowLine, flexGrow: 1, justifyContent: 'flex-end'},
-  summary: {...issueCard.issueSummary, color: '$text'},
+  summary: {
+    ...issueCard.issueSummary,
+    marginTop: UNIT,
+    color: '$text',
+  },
+  summaryCompact: {
+    marginTop: 0,
+  },
+  description: {
+    marginTop: UNIT / 2,
+  },
   subtext: {
     paddingTop: 6,
     fontSize: SECONDARY_FONT_SIZE,
@@ -147,6 +156,9 @@ export default EStyleSheet.create({
   toolbarIcon: {
     paddingLeft: UNIT / 2,
     color: '$icon',
+  },
+  toolbarItemDisabled: {
+    opacity: 0.4,
   },
   toolbarSortByText: {
     textAlign: 'right',

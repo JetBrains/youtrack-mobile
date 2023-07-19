@@ -44,12 +44,12 @@ import {
 import {initialState} from './issues-reducers';
 import {isReactElement} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
-import {IssuesViewMode, issuesViewModes} from 'views/issues/index';
+import {issuesViewMode, IssuesViewMode, issuesViewModes} from 'views/issues/index';
 import {logEvent} from 'components/log/log-helper';
 import {notify} from 'components/notification/notification';
 import {requestController} from 'components/api/api__request-controller';
 import {routeMap} from 'app-routes';
-import {SkeletonIssues} from 'components/skeleton/skeleton';
+import {SkeletonIssues, SkeletonIssuesS} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables';
 
@@ -76,6 +76,7 @@ type Props = IssuesState &
     issueId?: string;
     searchQuery?: string;
     networkState: NetInfoState,
+    isInProgress: boolean,
   };
 
 type State = {
@@ -271,13 +272,13 @@ export class Issues extends Component<Props, State> {
     return (
       <View
         style={[
-          styles.row,
-          focusedIssue?.id === item.id || focusedIssue?.id === item.idReadable
+          focusedIssue?.id === item.id || item.idReadable && focusedIssue?.id === item.idReadable
             ? styles.splitViewMainFocused
             : null,
         ]}
       >
         <IssueRow
+          viewMode={this.props.viewMode}
           issue={item}
           onClick={issue => {
             if (this.state.isSplitView) {
@@ -302,7 +303,8 @@ export class Issues extends Component<Props, State> {
   _renderRefreshControl() {
     return (
       <RefreshControl
-        refreshing={false}   onRefresh={this.props.refreshIssues}
+        refreshing={false}
+        onRefresh={this.props.refreshIssues}
         tintColor={this.theme.uiTheme.colors.$link}
         testID="refresh-control"
         accessibilityLabel="refresh-control"
@@ -484,7 +486,11 @@ export class Issues extends Component<Props, State> {
     );
   };
   hasIssues: () => boolean = (): boolean => this.props.issues?.length > 0;
-  renderSearchQuery: ()=> React.ReactNode = () => {
+
+  toggleSettingsVisibility(settingsVisible: boolean) {
+    this.setState({settingsVisible});
+  }
+  renderSearchQuery: () => React.ReactNode = () => {
     const {
       query,
       issuesCount,
@@ -521,17 +527,21 @@ export class Issues extends Component<Props, State> {
         </View>
 
         <View style={styles.toolbar}>
-          {this.hasIssues() && <IssuesCount issuesCount={issuesCount}/>}
+          {this.hasIssues() ? <IssuesCount issuesCount={issuesCount}/> : <View/>}
           <TouchableOpacity
-            style={styles.rowLine}
+            style={[
+              styles.rowLine,
+              this.props.isInProgress && styles.toolbarItemDisabled,
+            ]}
+            disabled={this.props.isInProgress}
             onPress={() => {
-              this.setState({settingsVisible: true});
+              this.toggleSettingsVisibility(true);
             }}
           >
             <Text style={styles.toolbarText}>{i18n('Settings')}</Text>
             <IconSettings
               style={styles.toolbarIcon}
-              size={14}
+              size={13}
               color={styles.toolbarIcon.color}
             />
           </TouchableOpacity>
@@ -539,14 +549,14 @@ export class Issues extends Component<Props, State> {
       </View>
     );
   };
+
+  renderSkeleton(){
+    return this.props.viewMode === issuesViewMode.S ? <SkeletonIssuesS/> : <SkeletonIssues/>;
+  }
+
   renderIssuesFooter = () => {
     const {isLoadingMore} = this.props;
-
-    if (isLoadingMore) {
-      return <SkeletonIssues />;
-    }
-
-    return this.renderError();
+    return isLoadingMore ? this.renderSkeleton() : this.renderError();
   };
 
   renderIssueList(): React.ReactNode {
@@ -559,8 +569,7 @@ export class Issues extends Component<Props, State> {
         <View style={styles.list}>
           {contextButton}
           {searchQuery}
-
-          <SkeletonIssues />
+          {this.renderSkeleton()}
         </View>
       );
     }
@@ -703,13 +712,13 @@ export class Issues extends Component<Props, State> {
                 height={Dimensions.get('window').height - 100}
                 snapPoint={310}
                 isVisible={this.state.settingsVisible}
-                onClose={() => this.setState({settingsVisible: false})}
+                onClose={() => this.toggleSettingsVisibility(false)}
               >
                 <>
                   <View style={styles.settingsItem}>
                     <Text style={styles.settingsItemTitle}>{i18n('List Settings')}</Text>
                     <IssuesSortBy
-                      onOpen={() => this.setState({settingsVisible: false})}
+                      onOpen={() => this.toggleSettingsVisibility(false)}
                       context={searchContext}
                       onApply={(q: string) => this.onQueryUpdate(q)}
                       query={query}
@@ -721,9 +730,11 @@ export class Issues extends Component<Props, State> {
                     {issuesViewModes.map((it: IssuesViewMode) => {
                       return (
                         <TouchableOpacity
+                          disabled={it.mode === viewMode}
                           style={styles.settingsRow}
                           onPress={() => {
                             onViewModeChange(it);
+                            this.toggleSettingsVisibility(false);
                           }}
                         >
                           <Text>
