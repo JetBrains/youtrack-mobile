@@ -44,7 +44,13 @@ import {
 import {initialState} from './issues-reducers';
 import {isReactElement} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
-import {issuesViewMode, IssuesViewMode, issuesViewModes} from 'views/issues/index';
+import {
+  issuesViewSetting,
+  issuesSettingsIssueSizes,
+  IssueSetting,
+  issuesSettingsSearch,
+  issuesSearchSetting,
+} from 'views/issues/index';
 import {logEvent} from 'components/log/log-helper';
 import {notify} from 'components/notification/notification';
 import {requestController} from 'components/api/api__request-controller';
@@ -278,7 +284,7 @@ export class Issues extends Component<Props, State> {
         ]}
       >
         <IssueRow
-          viewMode={this.props.viewMode}
+          settings={this.props.settings}
           issue={item}
           onClick={issue => {
             if (this.state.isSplitView) {
@@ -551,7 +557,7 @@ export class Issues extends Component<Props, State> {
   };
 
   renderSkeleton(){
-    return this.props.viewMode === issuesViewMode.S ? <SkeletonIssuesS/> : <SkeletonIssues/>;
+    return this.props.settings.view.mode === issuesViewSetting.S ? <SkeletonIssuesS/> : <SkeletonIssues/>;
   }
 
   renderIssuesFooter = () => {
@@ -681,14 +687,89 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  render(): React.ReactNode {
-    const {isSplitView} = this.state;
+  renderSettings(): React.JSX.Element {
     const {
       query,
       searchContext,
       onViewModeChange,
-      viewMode,
+      settings,
     } = this.props;
+    return (
+      <BottomSheetModal
+        style={styles.settingsModal}
+        withHandle={true}
+        height={Dimensions.get('window').height - 100}
+        snapPoint={450}
+        isVisible={this.state.settingsVisible}
+        onClose={() => this.toggleSettingsVisibility(false)}
+      >
+        <>
+          <View style={styles.settingsItem}>
+            <Text style={styles.settingsItemTitle}>{i18n('Search Settings')}</Text>
+            {issuesSettingsSearch.map((it: IssueSetting) => {
+              return (
+                <TouchableOpacity
+                  disabled={it.mode === issuesSearchSetting.filter}
+                  style={styles.settingsRow}
+                  onPress={() => {
+                    this.toggleSettingsVisibility(false);
+                  }}
+                >
+                  <Text style={[
+                    styles.settingsItemText,
+                    it.mode === issuesSearchSetting.filter && styles.toolbarItemDisabled,
+                  ]}>{it.label}</Text>
+                  {it.mode === settings.search.mode && <IconCheck
+                    size={20}
+                    color={styles.link.color}
+                  />}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+          <View style={styles.settingsSeparator}/>
+          <View style={styles.settingsItem}>
+            <Text style={styles.settingsItemTitle}>{i18n('List Settings')}</Text>
+            <IssuesSortBy
+              onOpen={() => this.toggleSettingsVisibility(false)}
+              context={searchContext}
+              onApply={(q: string) => this.onQueryUpdate(q)}
+              query={query}
+            />
+          </View>
+          <View style={styles.settingsItem}>
+            <Text style={styles.settingsItemTitle}>{i18n('Issue size')}</Text>
+            {issuesSettingsIssueSizes.map((it: IssueSetting) => {
+              const isActive: boolean = it.mode === settings.view.mode;
+              return (
+                <TouchableOpacity
+                  disabled={isActive}
+                  style={styles.settingsRow}
+                  onPress={() => {
+                    onViewModeChange(it.mode);
+                    this.toggleSettingsVisibility(false);
+                  }}
+                >
+                  <Text
+                    style={styles.settingsItemText}>
+                    {`${it.label} `}
+                  </Text>
+                  {isActive && <IconCheck
+                    size={20}
+                    color={styles.link.color}
+                  />}
+                </TouchableOpacity>
+              );
+            })
+            }
+          </View>
+        </>
+      </BottomSheetModal>
+    );
+  }
+
+  render(): React.ReactNode {
+    const {isSplitView} = this.state;
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
@@ -704,56 +785,7 @@ export class Issues extends Component<Props, State> {
               {isSplitView && this.renderSplitView()}
               {!isSplitView && this.renderIssues()}
               {this.renderModalPortal()}
-              <BottomSheetModal
-                style={{
-                  paddingHorizontal: 0,
-                }}
-                withHandle={true}
-                height={Dimensions.get('window').height - 100}
-                snapPoint={310}
-                isVisible={this.state.settingsVisible}
-                onClose={() => this.toggleSettingsVisibility(false)}
-              >
-                <>
-                  <View style={styles.settingsItem}>
-                    <Text style={styles.settingsItemTitle}>{i18n('List Settings')}</Text>
-                    <IssuesSortBy
-                      onOpen={() => this.toggleSettingsVisibility(false)}
-                      context={searchContext}
-                      onApply={(q: string) => this.onQueryUpdate(q)}
-                      query={query}
-                    />
-                  </View>
-                  <View style={styles.settingsSeparator}/>
-                  <View style={styles.settingsItem}>
-                    <Text style={styles.settingsItemTitle}>{i18n('View Mode')}</Text>
-                    {issuesViewModes.map((it: IssuesViewMode) => {
-                      return (
-                        <TouchableOpacity
-                          disabled={it.mode === viewMode}
-                          style={styles.settingsRow}
-                          onPress={() => {
-                            onViewModeChange(it);
-                            this.toggleSettingsVisibility(false);
-                          }}
-                        >
-                          <Text>
-                            <Text
-                              style={[styles.settingsItemText, styles.settingsItemTextMonospace]}>{`${it.label} `}</Text>
-                            <Text style={styles.settingsItemText}>{i18n('Size')}</Text>
-                          </Text>
-                          {viewMode === it.mode && <IconCheck
-                            size={20}
-                            color={styles.link.color}
-                          />}
-                        </TouchableOpacity>
-                      );
-                    })
-                    }
-                  </View>
-                </>
-
-              </BottomSheetModal>
+              {this.renderSettings()}
             </View>
           );
         }}

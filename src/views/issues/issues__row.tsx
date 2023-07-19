@@ -17,14 +17,14 @@ import styles from './issues.styles';
 import type {IssueOnList} from 'types/Issue';
 import type {BundleValue} from 'types/CustomFields';
 import type {ViewStyleProp} from 'types/Internal';
-import {issuesViewMode} from 'views/issues/index';
+import {IssuesSettings, issuesViewSetting} from 'views/issues/index';
 
 interface Props {
   issue: IssueOnList;
   onClick: (...args: any[]) => any;
   onTagPress?: (query: string) => any;
   style?: ViewStyleProp;
-  viewMode: number;
+  settings: IssuesSettings;
 }
 
 export default class IssueRow extends Component<Props, void> {
@@ -60,7 +60,7 @@ export default class IssueRow extends Component<Props, void> {
   }
 
   render(): React.ReactNode {
-    const {issue, onTagPress, style, viewMode} = this.props;
+    const {issue, onTagPress, style, settings} = this.props;
     return (
       <ThemeContext.Consumer>
         {() => {
@@ -74,7 +74,7 @@ export default class IssueRow extends Component<Props, void> {
             >
               <View style={[
                 styles.issueRow,
-                viewMode === issuesViewMode.S && styles.rowLine,
+                settings.view.mode === issuesViewSetting.S && styles.rowLine,
               ]}>
                 <View
                   testID="test:id/issueRowDetails"
@@ -118,9 +118,9 @@ export default class IssueRow extends Component<Props, void> {
                   style={[
                     styles.summary,
                     issue.resolved ? styles.resolved : null,
-                    viewMode === 0 && styles.summaryCompact,
+                    settings.view.mode === 0 && styles.summaryCompact,
                   ]}
-                  numberOfLines={viewMode + 1 || 2}
+                  numberOfLines={settings.view.mode + 1 || 2}
                   testID="test:id/issueRowSummary"
                   accessible={true}
                 >

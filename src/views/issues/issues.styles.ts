@@ -7,7 +7,6 @@ import {
   headerTitle,
   MAIN_FONT_SIZE,
   mainText,
-  monospace,
   SECONDARY_FONT_SIZE,
   secondaryText,
   UNIT,
@@ -224,20 +223,24 @@ export default EStyleSheet.create({
     paddingLeft: UNIT,
   },
   loadingIndicator: StyleSheet.absoluteFillObject,
+  settingsModal: {
+    paddingTop: UNIT / 4,
+    paddingHorizontal: 0,
+  },
   settingsItem: {
     marginTop: UNIT * 2,
-    marginBottom: UNIT * 2,
   },
   settingsRow: {
     paddingHorizontal: UNIT * 2,
-    paddingVertical: UNIT,
+    paddingVertical: UNIT * 1.1,
+    marginBottom: UNIT,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   settingsItemTitle: {
     paddingHorizontal: UNIT * 2,
-    marginBottom: UNIT * 2,
+    marginBottom: UNIT * 1.5,
     ...secondaryText,
     fontSize: SECONDARY_FONT_SIZE - 2,
     textTransform: 'uppercase',
@@ -247,10 +250,6 @@ export default EStyleSheet.create({
   settingsItemText: {
     ...mainText,
     color: '$text',
-  },
-  settingsItemTextMonospace: {
-    ...monospace,
-    fontSize: MAIN_FONT_SIZE - 1,
   },
   settingsItemIcon: {
     color: '$iconAccent',

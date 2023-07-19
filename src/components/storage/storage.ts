@@ -20,6 +20,7 @@ import type {OAuthParams2} from 'types/Auth';
 import type {PermissionCacheItem} from 'types/Permission';
 import type {ThreadsStateFilterId} from 'types/Inbox';
 import type {UserCurrent} from 'types/User';
+import {IssuesSettings} from 'views/issues';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 export const MAX_STORED_QUERIES = 5;
@@ -94,7 +95,7 @@ export type StorageState = TipsState & FeatureState & {
   themeMode: string | null;
   vcsChanges: boolean | null;
   forceHandsetMode: boolean | null;
-  issuesViewMode: number | null;
+  issuesSettings: IssuesSettings | null;
 };
 
 const storageKeys: StorageStateKeys & (typeof tipsKeys) & (typeof featuresKeys) = {
@@ -130,7 +131,7 @@ const storageKeys: StorageStateKeys & (typeof tipsKeys) & (typeof featuresKeys) 
   permissions: 'YT_USER_PERMISSIONS',
   themeMode: THEME_MODE_KEY,
   vcsChanges: 'YT_VCS_CHANGES',
-  issuesViewMode: 'YT_ISSUES_MODE',
+  issuesSettings: 'YT_ISSUES_SETTINGS',
 };
 let storageState: StorageState | null = null;
 
@@ -180,7 +181,7 @@ export const initialState: Readonly<StorageState> = {
   themeMode: null,
   vcsChanges: null,
   forceHandsetMode: null,
-  issuesViewMode: null,
+  issuesSettings: null,
 };
 
 function cleanAndLogState(message, state?: StorageState) {
@@ -263,7 +264,7 @@ export async function clearCachesAndDrafts(): Promise<StorageState> {
     storageKeys.permissions,
     storageKeys.agileDefaultBoard,
     storageKeys.projects,
-    storageKeys.issuesViewMode,
+    storageKeys.issuesSettings,
     ...Object.values(tipsKeys),
     ...Object.values(featuresKeys),
   ] as string[]);

@@ -16,6 +16,7 @@ import {
   getCachedUserQueries,
 } from 'components/query-assist/query-assist-helper';
 import {i18n} from 'components/i18n/i18n';
+import {IssuesSettings, issuesSettingsDefault} from 'views/issues/index';
 import {notifyError} from 'components/notification/notification';
 import {setGlobalInProgress} from 'actions/app-actions';
 import {until} from 'util/util';
@@ -24,7 +25,6 @@ import type Api from 'components/api/api';
 import type {AppState} from 'reducers';
 import type {Folder} from 'types/User';
 import type {AnyIssue, IssueFull} from 'types/Issue';
-import {issuesViewMode, IssuesViewMode} from 'views/issues/index';
 
 type ApiGetter = () => Api;
 
@@ -379,7 +379,7 @@ export function loadIssues(query: string): (
       }
 
       const [error, listIssues] = await until(
-        api.issues.getIssues(query, PAGE_SIZE, 0, getState().issueList.viewMode),
+        api.issues.getIssues(query, PAGE_SIZE, 0, getState().issueList.settings.view.mode),
       );
       dispatch(stopIssuesLoading());
 
@@ -388,9 +388,7 @@ export function loadIssues(query: string): (
           dispatch(setIssuesError(error));
         }
       } else {
-        const issues: AnyIssue[] = ApiHelper.fillIssuesFieldHash(
-          listIssues,
-        );
+        const issues: AnyIssue[] = ApiHelper.fillIssuesFieldHash(listIssues);
         log.info(`${issues?.length} issues loaded`);
         dispatch(receiveIssues(issues));
         dispatch(cacheIssues(issues));
@@ -518,10 +516,10 @@ export function initializeIssuesList(
   searchQuery?: string,
 ): (dispatch: (arg0: any) => any) => Promise<void> {
   return async (dispatch: (arg0: any) => any) => {
-    const viewMode: number = getStorageState().issuesViewMode ?? issuesViewMode.M;
+    const settings: IssuesSettings = getStorageState().issuesSettings ?? issuesSettingsDefault;
     dispatch({
-      type: types.SET_ISSUES_VIEW_MODE,
-      viewMode,
+      type: types.SET_ISSUES_SETTINGS,
+      settings,
     });
     dispatch(setIssuesQuery(searchQuery || getStorageState().query || ''));
 
@@ -592,7 +590,7 @@ export function loadMoreIssues(): (
           searchQuery,
           PAGE_SIZE,
           newSkip,
-          getState().issueList.viewMode
+          getState().issueList.settings.view.mode
         )) as any;
         log.info(`Loaded ${PAGE_SIZE} more issues.`);
         moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues);
@@ -663,7 +661,7 @@ export function loadIssuesCount(
   };
 }
 
-export function onViewModeChange(viewMode: IssuesViewMode): (
+export function onViewModeChange(mode: number): (
   dispatch: (arg0: any) => any,
   getState: () => AppState,
   getApi: ApiGetter,
@@ -672,14 +670,19 @@ export function onViewModeChange(viewMode: IssuesViewMode): (
     dispatch: (arg0: any) => any,
     getState: () => AppState,
   ) => {
-    if (viewMode.mode !== getState().issueList.viewMode) {
+    const settings: IssuesSettings = getState().issueList.settings;
+    if (mode !== settings.view.mode) {
+      const issuesSettings: IssuesSettings = {
+        ...settings,
+        view: {...settings.view, mode},
+      };
       dispatch({
-        type: types.SET_ISSUES_VIEW_MODE,
-        viewMode: viewMode.mode,
+        type: types.SET_ISSUES_SETTINGS,
+        settings: issuesSettings,
       });
       await flushStoragePart({issuesCache: null});
       dispatch(receiveIssues([]));
-      flushStoragePart({issuesViewMode: viewMode.mode});
+      flushStoragePart({issuesSettings});
       dispatch(refreshIssues());
     }
   };

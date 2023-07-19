@@ -3,7 +3,7 @@ import {createReducer} from 'redux-create-reducer';
 import {EVERYTHING_CONTEXT} from 'components/search/search-context';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
-import {issuesViewMode} from 'views/issues/index';
+import {IssuesSettings, issuesSettingsDefault} from 'views/issues/index';
 import {LOG_OUT, SET_PROGRESS} from 'actions/action-types';
 
 import type {Folder} from 'types/User';
@@ -25,7 +25,7 @@ export type IssuesState = {
   selectProps: Record<string, any> | null;
   searchContext: Folder;
   isSearchContextPinned: boolean;
-  viewMode: number;
+  settings: IssuesSettings;
 };
 
 export const initialState: IssuesState = {
@@ -43,7 +43,7 @@ export const initialState: IssuesState = {
   selectProps: null,
   searchContext: EVERYTHING_CONTEXT as Folder,
   isSearchContextPinned: false,
-  viewMode: issuesViewMode.M,
+  settings: issuesSettingsDefault,
 };
 
 
@@ -199,10 +199,10 @@ export default createReducer(initialState, {
   ): IssuesState {
     return {...state, searchContext: action.searchContext};
   },
-  [types.SET_ISSUES_VIEW_MODE](
+  [types.SET_ISSUES_SETTINGS](
     state: IssuesState,
     action: Record<string, any>,
   ): IssuesState {
-    return {...state, viewMode: action.viewMode};
+    return {...state, settings: action.settings};
   },
 } as Record<string, any>);
