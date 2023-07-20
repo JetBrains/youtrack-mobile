@@ -15,7 +15,6 @@ import * as issueActions from './issues-actions';
 import CreateIssue from 'views/create-issue/create-issue';
 import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import ErrorMessage from 'components/error-message/error-message';
-import IconBookmark from 'components/icon/assets/bookmark.svg';
 import Issue from 'views/issue/issue';
 import IssueRow from './issues__row';
 import IssuesCount from './issues__count';
@@ -257,7 +256,7 @@ export class Issues extends Component<Props, State> {
         disabled={isDisabled}
       >
         <IconAdd
-          size={20}
+          size={22}
           color={
             isDisabled
               ? this.getThemeColors().$disabled
@@ -500,8 +499,6 @@ export class Issues extends Component<Props, State> {
     const {
       query,
       issuesCount,
-      openSavedSearchesSelect,
-      networkState,
     } = this.props;
     return (
       <View style={styles.listHeader}>
@@ -511,25 +508,6 @@ export class Issues extends Component<Props, State> {
             query={query}
             onFocus={this.onSearchQueryPanelFocus}
           />
-          <TouchableOpacity
-            style={styles.userSearchQueryButton}
-            testID="test:id/user-search-query-button"
-            accessibilityLabel="user-search-query-button"
-            accessible={true}
-            onPress={openSavedSearchesSelect}
-            disabled={!networkState?.isConnected}
-          >
-            <IconBookmark
-              style={styles.bookmarkIcon}
-              width={20}
-              height={20}
-              color={
-                networkState?.isConnected
-                  ? this.getThemeColors().$link
-                  : this.getThemeColors().$disabled
-              }
-            />
-          </TouchableOpacity>
         </View>
 
         <View style={styles.toolbar}>
@@ -814,7 +792,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     ...bindActionCreators(issueActions, dispatch),
     onQueryUpdate: (query: string) => dispatch(issueActions.onQueryUpdate(query)),
     onOpenContextSelect: () => dispatch(issueActions.openContextSelect()),
-    openSavedSearchesSelect: () => dispatch(issueActions.openSavedSearchesSelect()),
     updateSearchContextPinned: isSearchScrolledUp => dispatch(
       issueActions.updateSearchContextPinned(isSearchScrolledUp)
     ),

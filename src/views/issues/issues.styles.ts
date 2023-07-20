@@ -141,7 +141,8 @@ export default EStyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    padding: UNIT * 2,
+    padding: UNIT * 1.5,
+    paddingLeft: UNIT * 2,
   },
   toolbarAction: {
     flexDirection: 'row',

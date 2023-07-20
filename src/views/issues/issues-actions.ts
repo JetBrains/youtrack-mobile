@@ -5,16 +5,12 @@ import log from 'components/log/log';
 import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {EVERYTHING_CONTEXT} from 'components/search/search-context';
-import {filterArrayByType} from 'components/api/api__resource-types';
 import {
   flushStoragePart,
   getStorageState,
   MAX_STORED_QUERIES,
 } from 'components/storage/storage';
-import {
-  getAssistSuggestions,
-  getCachedUserQueries,
-} from 'components/query-assist/query-assist-helper';
+import {getAssistSuggestions} from 'components/query-assist/query-assist-helper';
 import {i18n} from 'components/i18n/i18n';
 import {IssuesSettings, issuesSettingsDefault} from 'views/issues/index';
 import {notifyError} from 'components/notification/notification';
@@ -201,58 +197,6 @@ export function onQueryUpdate(
     dispatch(setIssuesQuery(query));
     dispatch(clearAssistSuggestions());
     dispatch(refreshIssues());
-  };
-}
-export function openSavedSearchesSelect(): (
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => void {
-  return (
-    dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
-    getApi: ApiGetter,
-  ) => {
-    trackEvent('Issue saved searches select');
-    const savedSearchesSelectProps = {
-      isOwnSearches: true,
-      show: true,
-      placeholder: i18n('Filter saved searches'),
-      cacheResults: true,
-      dataSource: async () => {
-        let folders: Array<Record<string, any>> = getCachedUserQueries();
-
-        try {
-          const issueFolders: Folder[] = await getApi().getIssueFolders(true);
-          folders = [
-            {
-              title: null,
-              data: filterArrayByType(issueFolders as any, 'savedSearch'),
-            },
-            {
-              title: i18n('Recent searches'),
-              data: folders,
-            },
-          ];
-        } catch (e) {
-          log.warn('Failed to load user saved searches');
-        }
-
-        return folders;
-      },
-      selectedItems: [],
-      onCancel: () => dispatch(closeSelect()),
-      onSelect: async (savedQuery: Folder) => {
-        try {
-          dispatch(closeSelect());
-          dispatch(onQueryUpdate(savedQuery.query || ''));
-          dispatch(refreshIssues());
-        } catch (error) {
-          log.warn('Failed to change a context', error);
-        }
-      },
-    };
-    dispatch(openSelect(savedSearchesSelectProps));
   };
 }
 export function openContextSelect(): (
