@@ -112,16 +112,22 @@ export default EStyleSheet.create({
   searchContextPinned: {...elevation1},
   searchContextButton: {
     ...rowLine,
+    alignSelf: 'flex-start',
+    minWidth: 130,
     marginTop: UNIT,
     marginRight: UNIT * 10,
     marginLeft: UNIT * 2,
-    paddingTop: UNIT,
-    paddingBottom: UNIT,
+    paddingVertical: UNIT,
+    backgroundColor: '$background',
   },
   contextButtonText: {
     ...headerTitle,
     color: '$text',
-    backgroundColor: '$background',
+    letterSpacing: 0.25,
+  },
+  contextButtonIcon: {
+    marginTop: 1,
+    marginLeft: 1,
   },
   searchPanel: {
     flexGrow: 1,

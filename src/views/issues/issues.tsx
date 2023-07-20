@@ -357,16 +357,17 @@ export class Issues extends Component<Props, State> {
       >
         <View style={styles.searchContextButton}>
           <Text numberOfLines={1} style={styles.contextButtonText}>
-            {`${searchContext?.name || ''} `}
+            {`${searchContext?.name || ''}`}
           </Text>
           {searchContext && (
             <IconAngleDown
+              style={styles.contextButtonIcon}
               color={
                 isDisabled
                   ? this.getThemeColors().$disabled
                   : this.getThemeColors().$text
               }
-              size={17}
+              size={19}
             />
           )}
         </View>
