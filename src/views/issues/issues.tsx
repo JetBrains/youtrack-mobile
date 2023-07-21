@@ -510,7 +510,7 @@ export class Issues extends Component<Props, State> {
               this.toggleSettingsVisibility(true);
             }}
           >
-            <Text style={styles.toolbarText}>{i18n('Settings')}</Text>
+            <Text style={styles.toolbarText}>{i18n('List settings')}</Text>
             <IconSettings
               style={styles.toolbarIcon}
               size={13}
@@ -671,7 +671,7 @@ export class Issues extends Component<Props, State> {
       >
         <>
           <View style={styles.settingsItem}>
-            <Text style={styles.settingsItemTitle}>{i18n('Search Settings')}</Text>
+            <Text style={styles.settingsItemTitle}>{i18n('Search Input Mode')}</Text>
             {issuesSettingsSearch.map((it: IssueSetting) => {
               return (
                 <TouchableOpacity
@@ -695,7 +695,7 @@ export class Issues extends Component<Props, State> {
           </View>
           <View style={styles.settingsSeparator}/>
           <View style={styles.settingsItem}>
-            <Text style={styles.settingsItemTitle}>{i18n('List Settings')}</Text>
+            <Text style={styles.settingsItemTitle}>{i18n('Sort Order')}</Text>
             <IssuesSortBy
               onOpen={() => this.toggleSettingsVisibility(false)}
               context={searchContext}
@@ -703,8 +703,9 @@ export class Issues extends Component<Props, State> {
               query={query}
             />
           </View>
+          <View style={styles.settingsSeparator}/>
           <View style={styles.settingsItem}>
-            <Text style={styles.settingsItemTitle}>{i18n('Issue size')}</Text>
+            <Text style={styles.settingsItemTitle}>{i18n('Preview Size')}</Text>
             {issuesSettingsIssueSizes.map((it: IssueSetting) => {
               const isActive: boolean = it.mode === settings.view.mode;
               return (
