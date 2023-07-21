@@ -718,6 +718,8 @@ export function openBoardSelect(): (
       type: types.OPEN_AGILE_SELECT,
       selectProps: {
         agileSelector: true,
+        hasStar: (board: BoardOnList) => board.favorite,
+        onStar: (board: BoardOnList) => api.agile.toggleAgileBoardStar(board),
         placeholder: i18n('Filter boards by name'),
         dataSource: async (q: string = '') => {
           const [error, agileBoardsList] = await until(

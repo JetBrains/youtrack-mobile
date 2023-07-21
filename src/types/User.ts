@@ -83,14 +83,14 @@ export type UserGeneralProfile = {
 };
 export type Folder = {
   $type: string;
-  id: string | null | undefined;
-  ringId: string | null | undefined;
-  shortName: string | null | undefined;
-  name: string | null | undefined;
-  query: string | null | undefined;
-  pinned: string | null | undefined;
-  issuesUrl: string | null | undefined;
-  fqFolderId?: string | null | undefined;
-  isUpdatable: string | null | undefined;
+  id: string;
+  ringId: string;
+  shortName: string;
+  name: string;
+  query: string;
+  pinned: boolean;
+  issuesUrl: string;
+  fqFolderId?: string;
+  isUpdatable: boolean;
   template: boolean;
 };

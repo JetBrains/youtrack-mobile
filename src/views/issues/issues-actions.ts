@@ -21,12 +21,15 @@ import type Api from 'components/api/api';
 import type {AppState} from 'reducers';
 import type {Folder} from 'types/User';
 import type {AnyIssue, IssueFull} from 'types/Issue';
+import {CustomError} from 'types/Error';
+import {ISelectProps} from 'components/select/select';
+import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
 
 type ApiGetter = () => Api;
 
 const PAGE_SIZE: number = 14;
 
-function trackEvent(msg: string, additionalParam: string | null | undefined) {
+function trackEvent(msg: string, additionalParam?: string) {
   usage.trackEvent(ANALYTICS_ISSUES_PAGE, msg, additionalParam);
 }
 
@@ -185,7 +188,7 @@ function getSearchContext() {
 }
 
 export function getSearchQuery(query: string = ''): string {
-  const userSearchContext: Folder | null | undefined = getSearchContext();
+  const userSearchContext: Folder = getSearchContext();
   const searchContextQuery: string = userSearchContext?.query || '';
   return userSearchContext?.query ? `${searchContextQuery} ${query}` : query;
 }
@@ -212,19 +215,22 @@ export function openContextSelect(): (
     trackEvent('Issue list context select');
     const api: Api = getApi();
     const currentSearchContext = getSearchContext();
-    const searchContextSelectProps = {
-      show: true,
+    const searchContextSelectProps: Partial<ISSWithItemActionsProps> = {
       placeholder: i18n('Filter projects, saved searches, and tags'),
-      dataSource: async () => {
-        let folders: Folder[] = [];
-
-        try {
-          folders = await api.user.getUserFolders();
-        } catch (e) {
+      dataSource: async (q: string = '') => {
+        const [error, folders] = await until(
+          api.user.getUserFolders()
+        ) as [CustomError | null, Folder[]];
+        if (error) {
           log.warn('Failed to load user folders for the context');
+          return [];
         }
-
-        return [EVERYTHING_CONTEXT].concat(folders);
+        return [
+          {title: ' ', data: [EVERYTHING_CONTEXT]},
+          {
+            title: ' ', data: folders.filter((f: Folder) => f.name.indexOf(q) !== -1),
+          },
+        ];
       },
       selectedItems: [currentSearchContext],
       onCancel: () => dispatch(closeSelect()),
@@ -240,17 +246,17 @@ export function openContextSelect(): (
           log.warn('Failed to change a context', error);
         }
       },
+      hasStar: (folder: Folder) => folder.pinned,
+      onStar: (folder: Folder) => api.issueFolder.issueFolders(folder.id, {pinned: !folder.pinned}),
     };
     dispatch(openSelect(searchContextSelectProps));
   };
 }
-export function openSelect(
-  selectsProps: Record<string, any>,
-): (dispatch: (arg0: any) => any) => void {
+export function openSelect(selectProps: Partial<ISelectProps>): (dispatch: (arg0: any) => any) => void {
   return (dispatch: (arg0: any) => any) => {
     dispatch({
       type: types.OPEN_SEARCH_CONTEXT_SELECT,
-      selectProps: selectsProps,
+      selectProps,
     });
   };
 }

@@ -68,7 +68,7 @@ export type StorageState = TipsState & FeatureState & {
   creationTimestamp: number | null;
   config: AppConfig | null;
   query: string | null;
-  searchContext: Folder | null;
+  searchContext: Folder;
   lastQueries: string[] | null;
   issuesCache: AnyIssue[] | null;
   inboxCache: Notification[] | null;

@@ -68,6 +68,11 @@ export default EStyleSheet.create({
     fontSize: MAIN_FONT_SIZE,
     color: '$text',
   },
+  itemStar: {
+    marginRight: UNIT * 1.5,
+    padding: UNIT / 2,
+    paddingRight: UNIT,
+  },
   loadingMessage: {
     paddingLeft: UNIT * 2,
     color: '$textSecondary',

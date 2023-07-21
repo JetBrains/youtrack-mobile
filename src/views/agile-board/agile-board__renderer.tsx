@@ -1,14 +1,12 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
-import AgileSelectItemStar from 'views/agile-board/agile-board__agile-select-item';
 import {IconAngleDown} from 'components/icon/icon';
 
 import styles from './agile-board__renderer.styles';
 
 import type {UITheme} from 'types/Theme';
 import {ViewStyleProp, TextStyleProp} from 'types/Internal';
-import {BoardOnList} from 'types/Agile';
 
 
 const renderSelector = (params: {
@@ -63,12 +61,7 @@ const renderSelector = (params: {
   </View>
 );
 
-const renderAgileSelectItem = (board: BoardOnList) => {
-  return <AgileSelectItemStar board={board}/>;
-};
-
 
 export {
   renderSelector,
-  renderAgileSelectItem,
 };

@@ -17,6 +17,10 @@ export type IItem = {
   [key: string]: any;
 };
 
+interface TitleRenderer<T> {
+  (item: T): React.ReactNode;
+}
+
 export interface ISelectProps {
   dataSource: (query: string) => Promise<IItem[]>;
   onSelect: (item: any) => any;
@@ -24,11 +28,11 @@ export interface ISelectProps {
   onCancel: () => any;
   getTitle: (item: IItem) => string;
   header?: () => any;
-  titleRenderer?: (item: IItem) => React.ReactNode;
+  titleRenderer?: TitleRenderer<any>;
   getValue?: (item: IItem) => string;
   selectedItems: IItem[];
   placeholder?: string;
-  multi: boolean;
+  multi?: boolean;
   autoFocus?: boolean;
   emptyValue?: string | null | undefined;
   style?: any;
@@ -188,7 +192,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     });
   }
 
-  _renderTitle(item: IItem): React.JSX.Element {
+  _renderTitle(item: IItem): React.ReactNode {
     const label: React.ReactElement<React.ComponentProps<any>, any> = (
       <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>
     );

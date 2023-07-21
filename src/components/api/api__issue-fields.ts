@@ -287,14 +287,13 @@ const ISSUE_LINKS_FIELDS: any = toField([
   },
 ]);
 const ISSUE_FOLDER_FIELDS: any = toField([
+  '$type',
   'id',
+  'issuesUrl',
   'name',
-  'localizedName',
+  'pinned',
   'query',
-  'isUpdatable',
-  {
-    owner: ['id', 'ringId'],
-  },
+  'shortName',
 ]);
 const SUGGESTION_FIELDS = toField([
   'id',

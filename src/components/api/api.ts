@@ -18,8 +18,8 @@ import UserGroupAPI from './api__user-group';
 import type Auth from '../auth/oauth2';
 import type {EndUserAgreement} from 'types/AppConfig';
 import type {IssueProject} from 'types/CustomFields';
-import type {SavedQuery, CommandSuggestionResponse} from 'types/Issue';
-import type {Folder, User} from 'types/User';
+import type {CommandSuggestionResponse} from 'types/Issue';
+import type {User} from 'types/User';
 
 
 class API extends BaseAPI {
@@ -90,20 +90,20 @@ class API extends BaseAPI {
     );
   }
 
-  async getCustomFieldUserValues(bundleId: string): Promise<Array<User>> {
+  async getCustomFieldUserValues(bundleId: string): Promise<User[]> {
     const queryString = qs.stringify({
       banned: false,
       sort: true,
       fields: issueFields.user.toString(),
     });
-    const values = await this.makeAuthorizedRequest(
+    const values: User[] = await this.makeAuthorizedRequest(
       `${this.youtTrackFieldBundleUrl}/user/${bundleId}/aggregatedUsers?${queryString}`,
     );
     return ApiHelper.convertRelativeUrls(
       values,
       'avatarUrl',
       this.config.backendUrl,
-    );
+    ) as User[];
   }
 
   async getCustomFieldValues(
@@ -168,40 +168,6 @@ class API extends BaseAPI {
           id,
         })),
       },
-    );
-  }
-
-  async getSavedQueries(): Promise<Array<SavedQuery>> {
-    const queryString = qs.stringify({
-      fields: issueFields.issueFolder.toString(),
-    });
-    return await this.makeAuthorizedRequest(
-      `${this.youTrackUrl}/api/savedQueries?${queryString}`,
-    );
-  }
-
-  async getIssueFolders(
-    pinnedOnly: boolean | null | undefined = null,
-  ): Promise<Folder[]> {
-    const fields = ApiHelper.toField([
-      'id',
-      '$type',
-      'name',
-      'query',
-      'pinned',
-      {
-        owner: ['id', 'ringId'],
-      },
-      {
-        color: ['id'],
-      },
-    ]);
-    const queryString = qs.stringify({
-      fields: fields.toString(),
-      pinned: pinnedOnly,
-    });
-    return await this.makeAuthorizedRequest(
-      `${this.youTrackUrl}/api/issueFolders?${queryString}`,
     );
   }
 

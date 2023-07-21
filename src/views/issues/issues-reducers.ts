@@ -8,6 +8,7 @@ import {LOG_OUT, SET_PROGRESS} from 'actions/action-types';
 
 import type {Folder} from 'types/User';
 import type {IssueOnList, TransformedSuggestion} from 'types/Issue';
+import {ISelectProps} from 'components/select/select';
 
 
 export type IssuesState = {
@@ -22,7 +23,7 @@ export type IssuesState = {
   isIssuesContextOpen: boolean;
   issuesCount: number | null;
   issues: IssueOnList[];
-  selectProps: Record<string, any> | null;
+  selectProps: ISelectProps | null;
   searchContext: Folder;
   isSearchContextPinned: boolean;
   settings: IssuesSettings;

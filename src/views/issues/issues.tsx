@@ -25,8 +25,6 @@ import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-w
 import QueryAssistPanel from 'components/query-assist/query-assist-panel';
 import QueryPreview from 'components/query-assist/query-preview';
 import Router from 'components/router/router';
-import Select, {SelectModal} from 'components/select/select';
-import SelectSectioned from 'components/select/select-sectioned';
 import usage from 'components/usage/usage';
 import {addListenerGoOnline} from 'components/network/network-events';
 import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
@@ -55,6 +53,10 @@ import {notify} from 'components/notification/notification';
 import {requestController} from 'components/api/api__request-controller';
 import {routeMap} from 'app-routes';
 import {SkeletonIssues, SkeletonIssuesS} from 'components/skeleton/skeleton';
+import {
+  SectionedSelectWithItemActions,
+  SectionedSelectWithItemActionsModal,
+} from 'components/select/select-sectioned-with-item-and-star';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables';
 
@@ -377,33 +379,18 @@ export class Issues extends Component<Props, State> {
 
   renderContextSelect(): any {
     const {selectProps} = this.props;
-    const {onSelect, ...restSelectProps} = selectProps;
-    const sp: any = {
-      ...restSelectProps,
-      onSelect: async (selectedContext: Folder) => {
-        this.updateFocusedIssue(null);
-        onSelect(selectedContext);
-      },
-    };
-
-    if (selectProps.isOwnSearches) {
-      return (
-        <SelectSectioned
-          getTitle={item =>
-            item.name + (item.shortName ? ` (${item.shortName})` : '')
-          }
-          {...sp}
-        />
-      );
-    }
-
-    const SelectComponent = isSplitView() ? SelectModal : Select;
+    const {onSelect, ...restProps} = selectProps;
+    const SelectComponent = (
+      isSplitView() ? SectionedSelectWithItemActionsModal : SectionedSelectWithItemActions
+    );
     return (
       <SelectComponent
-        getTitle={item =>
-          item.name + (item.shortName ? ` (${item.shortName})` : '')
-        }
-        {...sp}
+        {...restProps}
+        getTitle={item => item.name + (item.shortName ? ` (${item.shortName})` : '')}
+        onSelect={async (selectedContext: Folder) => {
+          this.updateFocusedIssue(null);
+          onSelect?.(selectedContext);
+        }}
       />
     );
   }
