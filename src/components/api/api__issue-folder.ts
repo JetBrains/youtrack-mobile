@@ -10,9 +10,9 @@ const queryString = UserAPI.createFieldsQuery(issueFields.issueFolder);
 
 export default class IssueFolderAPI extends ApiBase {
 
-  async getIssueFolders(): Promise<Tag> {
+  async getIssueFolders(pinned: boolean = false): Promise<Tag> {
     return await this.makeAuthorizedRequest(
-      `${this.youTrackApiUrl}/issueFolders?${queryString}`,
+      `${this.youTrackApiUrl}/issueFolders?${queryString}&pinned=${pinned}`,
     );
   }
   async issueFolders(id: string, body: Record<string, any>): Promise<Tag> {

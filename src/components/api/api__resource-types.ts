@@ -28,6 +28,7 @@ export const ResourceTypes = {
   PROJECT_BASED_COLOR_CODING: 'ProjectBasedColorCoding',
   SPACE_MAPPING: 'SpaceChangesProcessor',
   SPACE_SERVER: 'SpaceServer',
+  TAG: 'jetbrains.charisma.persistent.issueFolders.Tag',
   TEAMCITY_CHANGES_PROCESSOR: 'TeamcityChangesProcessor',
   UPSOURCE_PROCESSOR: 'UpsourceChangesProcessor',
   USER: 'jetbrains.charisma.persistence.user.User',
@@ -60,7 +61,7 @@ export const hasType = function (type: string) {
       : false;
   };
 };
-hasType.agile = hasType(ResourceTypes.ISSUE_FOLDER_TAG);
+hasType.agile = hasType(ResourceTypes.AGILE);
 hasType.article = hasType(ResourceTypes.ARTICLE);
 hasType.articleComment = hasType(ResourceTypes.ARTICLE_COMMENT);
 hasType.articleDraft = hasType(ResourceTypes.ARTICLE_DRAFT);
@@ -73,7 +74,7 @@ hasType.customFieldText = hasType(ResourceTypes.CUSTOM_FIELD_TEXT);
 hasType.issue = hasType(ResourceTypes.ISSUE);
 hasType.project = hasType(ResourceTypes.PROJECT);
 hasType.savedSearch = hasType(ResourceTypes.ISSUE_FOLDER_SAVED_QUERY);
-hasType.tag = hasType(ResourceTypes.ISSUE_FOLDER_TAG);
+hasType.tag = hasType(ResourceTypes.ISSUE_FOLDER_TAG) || hasType(ResourceTypes.TAG);
 hasType.user = hasType(ResourceTypes.USER);
 hasType.userGroup = hasType(ResourceTypes.USER_GROUP);
 hasType.visibilityLimited = hasType(ResourceTypes.VISIBILITY_LIMITED);

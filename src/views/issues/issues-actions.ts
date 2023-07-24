@@ -11,10 +11,12 @@ import {
   MAX_STORED_QUERIES,
 } from 'components/storage/storage';
 import {getAssistSuggestions} from 'components/query-assist/query-assist-helper';
+import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {IssuesSettings, issuesSettingsDefault} from 'views/issues/index';
 import {notifyError} from 'components/notification/notification';
 import {setGlobalInProgress} from 'actions/app-actions';
+import {sortAlphabetically} from 'components/search/sorting';
 import {until} from 'util/util';
 
 import type Api from 'components/api/api';
@@ -26,6 +28,11 @@ import {ISelectProps} from 'components/select/select';
 import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
 
 type ApiGetter = () => Api;
+type GroupedFolders = {
+  projects: Folder[];
+  searches: Folder[];
+  tags: Folder[];
+};
 
 const PAGE_SIZE: number = 14;
 
@@ -217,18 +224,37 @@ export function openContextSelect(): (
     const currentSearchContext = getSearchContext();
     const searchContextSelectProps: Partial<ISSWithItemActionsProps> = {
       placeholder: i18n('Filter projects, saved searches, and tags'),
-      dataSource: async (q: string = '') => {
-        const [error, folders] = await until(
-          api.user.getUserFolders()
-        ) as [CustomError | null, Folder[]];
+      dataSource: async (query: string = '') => {
+        const [error, allFolders] = await until(
+          [api.issueFolder.getIssueFolders(true), query ? api.issueFolder.getIssueFolders() : null]
+        ) as [CustomError | null, [Folder[], (Folder[] | null)]];
         if (error) {
           log.warn('Failed to load user folders for the context');
           return [];
         }
+
+        const pinnedFolders: Folder[] = allFolders[0];
+        const unpinnedFolders: Folder[] = allFolders[1] || [];
+        const pinnedGrouped: GroupedFolders = getGroupedFolders(pinnedFolders);
+        const unpinnedGrouped: GroupedFolders = query.length ? getGroupedFolders(unpinnedFolders) : {
+          projects: [],
+          tags: [],
+          searches: [],
+        };
+
         return [
-          {title: ' ', data: [EVERYTHING_CONTEXT]},
           {
-            title: ' ', data: folders.filter((f: Folder) => f.name.indexOf(q) !== -1),
+            title: i18n('Projects'),
+            data: sortFolders(
+              [EVERYTHING_CONTEXT as Folder, ...pinnedGrouped.projects, ...unpinnedGrouped.projects], query),
+          },
+          {
+            title: i18n('Tags'),
+            data: sortFolders([...pinnedGrouped.tags, ...unpinnedGrouped.tags], query),
+          },
+          {
+            title: i18n('Saved Searches'),
+            data: sortFolders([...pinnedGrouped.searches, ...unpinnedGrouped.searches], query),
           },
         ];
       },
@@ -636,4 +662,41 @@ export function onViewModeChange(mode: number): (
       dispatch(refreshIssues());
     }
   };
+}
+
+
+function getGroupedFolders(folders: Folder[]) {
+  return folders.reduce(
+    (
+      akk: GroupedFolders,
+      it: Folder,
+    ) => {
+      if (hasType.project(it)) {
+        akk.projects.push(it);
+      } else if (hasType.savedSearch(it)) {
+        akk.searches.push(it);
+      } else {
+        akk.tags.push(it);
+      }
+      return akk;
+    },
+    {
+      projects: [],
+      searches: [],
+      tags: [],
+    },
+  );
+}
+
+function sortFolders(flds: Folder[], q?: string): Folder[] {
+  const map: Record<string, boolean> = {};
+  return (q ? flds.filter(
+    (it: Folder) => {
+      if (map[it.id]) {
+        return false;
+      }
+      map[it.id] = true;
+      return it.name.toLowerCase().indexOf(q.toLowerCase()) !== -1;
+    }
+  ) : flds).sort(sortAlphabetically);
 }

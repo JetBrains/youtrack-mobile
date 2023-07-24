@@ -38,7 +38,7 @@ export class SectionedSelectWithItemActions<P extends ISSWithItemActionsProps, S
             if (error) {
               notifyError(error);
             } else {
-              this._onSearch();
+              this._onSearch(this.state.query);
             }
           }}/>}
         <Text style={styles.itemTitle}>
