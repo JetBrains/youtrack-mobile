@@ -24,7 +24,7 @@ interface Props {
   onClick: (...args: any[]) => any;
   onTagPress?: (query: string) => any;
   style?: ViewStyleProp;
-  settings: IssuesSettings;
+  settings?: IssuesSettings;
 }
 
 export default class IssueRow extends Component<Props, void> {
@@ -61,6 +61,7 @@ export default class IssueRow extends Component<Props, void> {
 
   render(): React.ReactNode {
     const {issue, onTagPress, style, settings} = this.props;
+    const mode: number = settings?.view.mode || 0;
     return (
       <ThemeContext.Consumer>
         {() => {
@@ -74,7 +75,7 @@ export default class IssueRow extends Component<Props, void> {
             >
               <View style={[
                 styles.issueRow,
-                settings.view.mode === issuesViewSetting.S && styles.rowLine,
+                mode === issuesViewSetting.S && styles.rowLine,
               ]}>
                 <View
                   testID="test:id/issueRowDetails"
@@ -118,9 +119,9 @@ export default class IssueRow extends Component<Props, void> {
                   style={[
                     styles.summary,
                     issue.resolved ? styles.resolved : null,
-                    settings.view.mode === 0 && styles.summaryCompact,
+                    mode === 0 && styles.summaryCompact,
                   ]}
-                  numberOfLines={settings.view.mode + 1 || 2}
+                  numberOfLines={mode + 1}
                   testID="test:id/issueRowSummary"
                   accessible={true}
                 >
