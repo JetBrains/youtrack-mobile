@@ -41,20 +41,13 @@ export default EStyleSheet.create({
   linkedList: {
     paddingHorizontal: UNIT * 2,
   },
-  linkedIssueItem: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingVertical: UNIT * 1.5,
-  },
-  linkedIssue: {
-    flexGrow: 1,
-    flexBasis: UNIT * 4,
-  },
   linkedIssueRemoveAction: {
     padding: UNIT / 1.5,
-    height: UNIT * 4,
+    minHeight: UNIT * 4,
     marginLeft: UNIT,
     color: '$iconAccent',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   separator: {
     ...separatorBorder,

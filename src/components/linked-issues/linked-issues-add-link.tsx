@@ -212,7 +212,6 @@ const LinkedIssuesAddLink = (props: Props): JSX.Element => {
     return (
       <AnimatedView useNativeDriver duration={500} animation="fadeIn">
         <IssueRow
-          style={[styles.linkedIssueItem, styles.linkedIssue]}
           issue={issue}
           onClick={doLinkIssue}
         />
