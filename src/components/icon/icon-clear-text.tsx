@@ -3,6 +3,7 @@ import React from 'react';
 import {IconClose} from './icon';
 import {UNIT} from 'components/variables';
 import {HIT_SLOP} from '../common-styles/button';
+
 export function iconClearText(onPress: (arg0: any) => any, color: string) {
   return (
     <TouchableOpacity hitSlop={HIT_SLOP} onPress={onPress} style={styles.icon}>

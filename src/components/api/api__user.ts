@@ -42,10 +42,15 @@ export default class UserAPI extends ApiBase {
             'naturalCommentsOrder',
             'useAbsoluteDates',
             'firstDayOfWeek',
+            'liteUiFilters',
           ],
           articles: {
             lastVisitedArticle: ['id,idReadable,summary,project(id,ringId)'],
           },
+          helpdesk: [
+            'isAgent',
+            'isReporter',
+          ],
         },
       },
     ]);

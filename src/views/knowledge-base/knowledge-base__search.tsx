@@ -1,13 +1,16 @@
 import React, {useState} from 'react';
 import {TextInput, View} from 'react-native';
+
 import {i18n} from 'components/i18n/i18n';
-import {IconSearch} from 'components/icon/icon';
 import {iconClearText} from 'components/icon/icon-clear-text';
+import {IconSearch} from 'components/icon/icon';
+
 import styles from './knowledge-base.styles';
-type Props = {
+
+interface Props {
   onSearch: (query: string) => void;
   query: string | null;
-};
+}
 
 const KnowledgeBaseSearchPanel = (props: Props) => {
   const [searchQuery, updateQuery] = useState(props.query || '');
@@ -22,7 +25,7 @@ const KnowledgeBaseSearchPanel = (props: Props) => {
         testID="test:id/knowledge-base-search-panel"
         accessibilityLabel="query-assist-input"
         accessible={true}
-        style={styles.searchInput}
+        style={styles.searchInputWithMinHeight}
         placeholderTextColor={styles.clearIcon.color}
         placeholder={i18n('Search articles')}
         clearButtonMode="never"
@@ -47,6 +50,4 @@ const KnowledgeBaseSearchPanel = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(
-  KnowledgeBaseSearchPanel,
-) as React$AbstractComponent<Props, unknown>;
+export default React.memo<Props>(KnowledgeBaseSearchPanel);

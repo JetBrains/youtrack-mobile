@@ -40,6 +40,7 @@ export type UserProfiles = {
   notifications?: Record<string, any>;
   teamcity?: Record<string, any>;
   timetracking?: Record<string, any>;
+  helpdesk?: UserHelpdeskProfile;
 };
 export type UserAppearanceProfile = {
   $type: string;
@@ -52,6 +53,7 @@ export type UserAppearanceProfile = {
   showSimilarIssues?: boolean;
   uiTheme?: string;
   useAbsoluteDates?: boolean;
+  liteUiFilters?: string[];
 };
 export type UserArticlesProfile = {
   $type?: string;
@@ -81,6 +83,12 @@ export type UserGeneralProfile = {
   };
   locale: UserGeneralProfileLocale;
 };
+
+export interface UserHelpdeskProfile {
+  isAgent: boolean;
+  isReporter: boolean;
+}
+
 export type Folder = {
   $type: string;
   id: string;

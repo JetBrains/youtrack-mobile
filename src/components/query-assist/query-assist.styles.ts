@@ -1,11 +1,10 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {clearIcon, inputWrapper, searchInput} from '../common-styles/search';
-import {elevation1} from 'components/common-styles';
-import {UNIT} from 'components/variables';
+
+import {clearIcon, inputWrapper, searchInput, searchInputWithMinHeight} from 'components/common-styles/search';
+import {elevation1, mainText, UNIT} from 'components/common-styles';
+
+
 export default EStyleSheet.create({
-  placeHolder: {
-    height: UNIT * 6,
-  },
   modal: {
     height: '100%',
     justifyContent: 'flex-start',
@@ -18,17 +17,20 @@ export default EStyleSheet.create({
     position: 'relative',
     zIndex: 1,
   },
-  inputWrapper: inputWrapper,
+  inputContainer: {
+    ...inputWrapper,
+    ...mainText,
+    flex: 1,
+  },
+  inputWrapper,
   inputWrapperActive: {
     ...elevation1,
     borderRadius: 0,
     borderBottomColor: 'transparent',
     backgroundColor: '$background',
   },
-  searchInput: searchInput,
-  searchInputHasText: {
-    color: '$text',
-  },
+  searchInput,
+  searchInputWithMinHeight,
   searchInputPlaceholder: {
     justifyContent: 'center',
     color: '$icon',
@@ -46,10 +48,5 @@ export default EStyleSheet.create({
   },
   link: {
     color: '$link',
-  },
-  searchPanel: {
-    flexGrow: 1,
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 1.5,
   },
 });

@@ -5,6 +5,7 @@ import {
   FlatList,
   RefreshControl,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 
 import React, {Component} from 'react';
@@ -18,6 +19,7 @@ import ErrorMessage from 'components/error-message/error-message';
 import Issue from 'views/issue/issue';
 import IssueRow from './issues__row';
 import IssuesCount from './issues__count';
+import IssuesFilters from 'views/issues/issues__filters';
 import IssuesSortBy from './issues__sortby';
 import log from 'components/log/log';
 import ModalPortal from 'components/modal-view/modal-portal';
@@ -33,7 +35,7 @@ import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {getIssueFromCache} from './issues-actions';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
-import {IconAdd, IconAngleDown, IconCheck, IconSettings} from 'components/icon/icon';
+import {IconAdd, IconAngleDown, IconAngleRight, IconCheck, IconSettings} from 'components/icon/icon';
 import {
   ICON_PICTOGRAM_DEFAULT_SIZE,
   IconNothingFound,
@@ -68,7 +70,7 @@ import type {AnyIssue, IssueOnList} from 'types/Issue';
 import type {AppState} from 'reducers';
 import type {ErrorMessageProps} from 'components/error-message/error-message';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
-import type {Folder} from 'types/User';
+import type {Folder, User} from 'types/User';
 import type {IssuesState} from './issues-reducers';
 import type {Theme, UIThemeColors} from 'types/Theme';
 import {NetInfoState} from '@react-native-community/netinfo';
@@ -77,14 +79,15 @@ type IssuesActions = typeof issueActions;
 
 type Props = IssuesState &
   IssuesActions & {
-    auth: Auth;
-    api: Api;
-    onOpenContextSelect: () => any;
-    issueId?: string;
-    searchQuery?: string;
-    networkState: NetInfoState,
-    isInProgress: boolean,
-  };
+  auth: Auth;
+  api: Api;
+  onOpenContextSelect: () => any;
+  issueId?: string;
+  searchQuery?: string;
+  networkState: NetInfoState,
+  isInProgress: boolean,
+  user: User,
+};
 
 type State = {
   isEditQuery: boolean;
@@ -97,7 +100,6 @@ type State = {
 
 
 export class Issues extends Component<Props, State> {
-  searchPanelNode: QueryAssistPanel | undefined;
   unsubscribeOnDispatch: ((...args: any[]) => any) | undefined;
   unsubscribeOnDimensionsChange: EventSubscription | undefined;
   theme: Theme = {uiTheme: DEFAULT_THEME, mode: DEFAULT_THEME.mode, setMode: () => {}};
@@ -233,7 +235,7 @@ export class Issues extends Component<Props, State> {
       </ModalPortal>
     ) : null;
   };
-  renderCreateIssueButton: (isDisabled: boolean)=> React.ReactNode = (
+  renderCreateIssueButton: (isDisabled: boolean) => React.ReactNode = (
     isDisabled: boolean,
   ) => {
     return (
@@ -269,7 +271,7 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  _renderRow = ({item}: {item: IssueOnList}) => {
+  _renderRow = ({item}: { item: IssueOnList }) => {
     const {focusedIssue} = this.state;
 
     if (isReactElement(item)) {
@@ -325,7 +327,7 @@ export class Issues extends Component<Props, State> {
       return null;
     }
 
-    return <View style={styles.separator} />;
+    return <View style={styles.separator}/>;
   };
   onEndReached: () => void = () => {
     this.props.loadMoreIssues();
@@ -335,7 +337,7 @@ export class Issues extends Component<Props, State> {
     return this.theme.uiTheme.colors;
   }
 
-  renderContextButton: ()=> React.ReactNode = () => {
+  renderContextButton: () => React.ReactNode = () => {
     const {
       onOpenContextSelect,
       isRefreshing,
@@ -395,13 +397,6 @@ export class Issues extends Component<Props, State> {
     );
   }
 
-  searchPanelRef: (instance: QueryAssistPanel | undefined) => void = (
-    instance: QueryAssistPanel | undefined,
-  ) => {
-    if (instance) {
-      this.searchPanelNode = instance;
-    }
-  };
   onScroll: (nativeEvent: any) => void = (nativeEvent: Record<string, any>) => {
     const newY = nativeEvent.contentOffset.y;
     const isPinned: boolean = newY >= UNIT;
@@ -448,15 +443,13 @@ export class Issues extends Component<Props, State> {
     this.props.setIssuesCount(null);
     this.props.onQueryUpdate(query);
   };
-  renderSearchPanel: ()=> React.ReactNode = () => {
+
+  renderSearchQueryAssist: () => React.ReactNode = () => {
     const {query, suggestIssuesQuery, queryAssistSuggestions} = this.props;
-
     const _query = this.state.clearSearchQuery ? '' : query;
-
     return (
       <QueryAssistPanel
         key="QueryAssistPanel"
-        ref={this.searchPanelRef}
         queryAssistSuggestions={queryAssistSuggestions}
         query={_query}
         suggestIssuesQuery={suggestIssuesQuery}
@@ -478,51 +471,107 @@ export class Issues extends Component<Props, State> {
       />
     );
   };
+
+  renderFilterQueryActions() {
+    return !this.props.query ? null : (
+      <ScrollView
+        horizontal={true}
+        contentContainerStyle={styles.searchPanelFilters}
+      >
+        {[
+          i18n('Update query'),
+          i18n('Save as new'),
+          i18n('Discard changes'),
+        ].map((actionName: string) => (
+          <TouchableOpacity
+            style={[styles.filtersButton, styles.filtersButtonAction]}
+          >
+            <Text style={styles.filtersButtonText}>
+              {actionName}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    );
+  }
+
+  isFilterSearchMode() {
+    return this.props.settings.search.mode === issuesSearchSetting.filter;
+  }
+
+  renderSearchPanel() {
+    const isFilterMode: boolean = this.isFilterSearchMode();
+    return (
+      <>
+        <View style={styles.searchPanel}>
+          {this.state.isEditQuery ? this.renderSearchQueryAssist() : this.renderSearchQueryPreview()}
+        </View>
+        {isFilterMode && (
+          <ScrollView
+            horizontal={true}
+            contentContainerStyle={styles.searchPanelFilters}
+          >
+            <IssuesFilters
+              query={this.props.query}
+              user={this.props.user}
+              disabled={false}
+              onApply={() => {
+
+              }}
+            />
+          </ScrollView>
+        )}
+      </>
+
+    );
+  }
+
   hasIssues: () => boolean = (): boolean => this.props.issues?.length > 0;
 
   toggleSettingsVisibility(settingsVisible: boolean) {
     this.setState({settingsVisible});
   }
-  renderSearchQuery: () => React.ReactNode = () => {
-    const {
-      query,
-      issuesCount,
-    } = this.props;
-    return (
-      <View style={styles.listHeader}>
-        <View style={styles.listHeaderTop}>
-          <QueryPreview
-            style={styles.searchPanel}
-            query={query}
-            onFocus={this.onSearchQueryPanelFocus}
-          />
-        </View>
 
-        <View style={styles.toolbar}>
-          {this.hasIssues() ? <IssuesCount issuesCount={issuesCount}/> : <View/>}
-          <TouchableOpacity
-            style={[
-              styles.rowLine,
-              this.props.isInProgress && styles.toolbarItemDisabled,
-            ]}
-            disabled={this.props.isInProgress}
-            onPress={() => {
-              this.toggleSettingsVisibility(true);
-            }}
-          >
-            <Text style={styles.toolbarText}>{i18n('List settings')}</Text>
-            <IconSettings
-              style={styles.toolbarIcon}
-              size={13}
-              color={styles.toolbarIcon.color}
-            />
-          </TouchableOpacity>
-        </View>
+  renderToolbar() {
+    return (
+      <View style={styles.toolbar}>
+        {this.hasIssues() ? <IssuesCount issuesCount={this.props.issuesCount}/> : <View/>}
+        <TouchableOpacity
+          style={[
+            styles.rowLine,
+            this.props.isInProgress && styles.toolbarItemDisabled,
+          ]}
+          disabled={this.props.isInProgress}
+          onPress={() => {
+            this.toggleSettingsVisibility(true);
+          }}
+        >
+          <Text style={styles.toolbarText}>{i18n('List settings')}</Text>
+          <IconSettings
+            style={styles.toolbarIcon}
+            size={13}
+            color={styles.toolbarIcon.color}
+          />
+        </TouchableOpacity>
       </View>
+    );
+  }
+
+  renderSearchQueryPreview: () => React.ReactNode = () => {
+    const isFilterSearchMode: boolean = this.isFilterSearchMode();
+    return (
+      <QueryPreview
+        editable={isFilterSearchMode}
+        placeholder={isFilterSearchMode ? i18n('Find issues that contain key words') : undefined}
+        style={styles.searchQueryPreview}
+        query={this.props.query}
+        onSubmit={isFilterSearchMode ? this.props.onQueryUpdate : undefined}
+        onFocus={!isFilterSearchMode ? this.onSearchQueryPanelFocus : undefined}
+      />
     );
   };
 
-  renderSkeleton(){
+  renderSkeleton() {
     return this.props.settings.view.mode === issuesViewSetting.S ? <SkeletonIssuesS/> : <SkeletonIssues/>;
   }
 
@@ -534,22 +583,25 @@ export class Issues extends Component<Props, State> {
   renderIssueList(): React.ReactNode {
     const {issues, isRefreshing} = this.props;
     const contextButton = this.renderContextButton();
-    const searchQuery = this.renderSearchQuery();
+    const searchPanel: React.ReactNode = <>
+      {this.renderSearchPanel()}
+      {this.renderToolbar()}
+    </>;
 
     if (isRefreshing && (!issues || issues.length === 0)) {
       return (
         <View style={styles.list}>
           {contextButton}
-          {searchQuery}
+          {searchPanel}
           {this.renderSkeleton()}
         </View>
       );
     }
 
-    const listData = [
+    const listData: React.ReactNode[] = [
       contextButton,
-      searchQuery,
-    ].concat(issues || []);
+      searchPanel,
+    ].concat((issues || []) as any);
     return (
       <FlatList
         style={styles.list}
@@ -558,15 +610,14 @@ export class Issues extends Component<Props, State> {
         removeClippedSubviews={false}
         data={listData}
         keyExtractor={this.getKey}
-        renderItem={this._renderRow}
+        renderItem={this._renderRow as any}
         ItemSeparatorComponent={this._renderSeparator}
         ListEmptyComponent={() => {
           return <Text>{i18n('No issues found')}</Text>;
         }}
-        ListFooterComponent={this.renderIssuesFooter}
+        ListFooterComponent={this.renderIssuesFooter as any}
         refreshControl={this._renderRefreshControl()}
         onScroll={params => this.onScroll(params.nativeEvent)}
-        tintColor={this.theme.uiTheme.colors.$link}
         onEndReached={this.onEndReached}
         onEndReachedThreshold={0.1}
       />
@@ -584,10 +635,10 @@ export class Issues extends Component<Props, State> {
       {},
       loadingError
         ? {
-            error: loadingError,
-          }
+          error: loadingError,
+        }
         : !this.hasIssues()
-        ? {
+          ? {
             errorMessageData: {
               ...ERROR_MESSAGE_DATA.NO_ISSUES_FOUND,
               icon: () => (
@@ -598,7 +649,7 @@ export class Issues extends Component<Props, State> {
               ),
             },
           }
-        : null,
+          : null,
     ) as ErrorMessageProps;
 
     if (Object.keys(props).length > 0) {
@@ -608,20 +659,17 @@ export class Issues extends Component<Props, State> {
     return null;
   }
 
-  renderIssues: ()=> React.ReactNode = () => {
+  renderIssues: () => React.ReactNode = () => {
     const {isIssuesContextOpen, isRefreshing} = this.props;
     return (
       <View style={styles.listContainer} testID="test:id/issueListPhone">
         {isIssuesContextOpen && this.renderContextSelect()}
-        {this.state.isEditQuery && this.renderSearchPanel()}
-
         {this.renderIssueList()}
-
         {this.renderCreateIssueButton(isRefreshing)}
       </View>
     );
   };
-  renderFocusedIssue: ()=> React.ReactNode = () => {
+  renderFocusedIssue: () => React.ReactNode = () => {
     const {focusedIssue} = this.state;
 
     if (!focusedIssue || !this.hasIssues()) {
@@ -644,7 +692,7 @@ export class Issues extends Component<Props, State> {
       </View>
     );
   };
-  renderSplitView: ()=> React.ReactNode = () => {
+  renderSplitView: () => React.ReactNode = () => {
     return (
       <>
         <View style={styles.splitViewSide}>{this.renderIssues()}</View>
@@ -657,9 +705,11 @@ export class Issues extends Component<Props, State> {
     const {
       query,
       searchContext,
-      onViewModeChange,
+      onSettingsChange,
       settings,
+      user,
     } = this.props;
+    const isQueryMode: boolean = settings.search.mode === issuesSearchSetting.query;
     return (
       <BottomSheetModal
         style={styles.settingsModal}
@@ -675,16 +725,12 @@ export class Issues extends Component<Props, State> {
             {issuesSettingsSearch.map((it: IssueSetting) => {
               return (
                 <TouchableOpacity
-                  disabled={it.mode === issuesSearchSetting.filter}
                   style={styles.settingsRow}
                   onPress={() => {
-                    this.toggleSettingsVisibility(false);
+                    onSettingsChange({...settings, search: it});
                   }}
                 >
-                  <Text style={[
-                    styles.settingsItemText,
-                    it.mode === issuesSearchSetting.filter && styles.toolbarItemDisabled,
-                  ]}>{it.label}</Text>
+                  <Text style={styles.settingsItemText}>{it.label}</Text>
                   {it.mode === settings.search.mode && <IconCheck
                     size={20}
                     color={styles.link.color}
@@ -695,13 +741,34 @@ export class Issues extends Component<Props, State> {
           </View>
           <View style={styles.settingsSeparator}/>
           <View style={styles.settingsItem}>
-            <Text style={styles.settingsItemTitle}>{i18n('Sort Order')}</Text>
-            <IssuesSortBy
+            <Text style={styles.settingsItemTitle}>
+              {isQueryMode && i18n('Sort Order')}
+              {!isQueryMode && i18n('Filter Settings')}
+            </Text>
+            {isQueryMode && <IssuesSortBy
               onOpen={() => this.toggleSettingsVisibility(false)}
               context={searchContext}
               onApply={(q: string) => this.onQueryUpdate(q)}
               query={query}
-            />
+            />}
+            {!isQueryMode && <TouchableOpacity
+              style={styles.settingsRow}
+              onPress={() => {
+
+                //TODO
+              }}
+            >
+              <Text
+                numberOfLines={1}
+                style={styles.settingsItemText}
+              >
+                {user.profiles?.appearance?.liteUiFilters?.join(', ')}
+              </Text>
+              <IconAngleRight
+                size={19}
+                color={styles.settingsItemIcon.color}
+              />
+            </TouchableOpacity>}
           </View>
           <View style={styles.settingsSeparator}/>
           <View style={styles.settingsItem}>
@@ -713,7 +780,7 @@ export class Issues extends Component<Props, State> {
                   disabled={isActive}
                   style={styles.settingsRow}
                   onPress={() => {
-                    onViewModeChange(it.mode);
+                    onSettingsChange({...settings, view: it});
                     this.toggleSettingsVisibility(false);
                   }}
                 >
@@ -773,6 +840,7 @@ const mapStateToProps = (
     ...ownProps,
     ...state.app,
     searchContext: state.issueList.searchContext,
+    user: state.app.user,
   };
 };
 

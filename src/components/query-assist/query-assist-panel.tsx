@@ -1,11 +1,13 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import {View} from 'react-native';
+
 import QueryAssist, {QueryAssistModal} from './query-assist';
-import {isSplitView} from '../responsive/responsive-helper';
-import styles from './query-assist.styles';
-import type {TransformedSuggestion} from '../../types/Issue';
+import {isSplitView} from 'components/responsive/responsive-helper';
+
+import type {TransformedSuggestion} from 'types/Issue';
 import type {ViewStyleProp} from 'types/Internal';
-type SearchPanelProps = {
+
+interface SearchPanelProps {
   queryAssistSuggestions: TransformedSuggestion[];
   query: string;
   suggestIssuesQuery: (query: string, caret: number) => any;
@@ -14,22 +16,10 @@ type SearchPanelProps = {
   issuesCount?: number | null | undefined;
   style?: ViewStyleProp;
   clearButtonMode?: 'never' | 'while-editing' | 'unless-editing' | 'always';
-};
-export default class QueryAssistPanel extends PureComponent<
-  SearchPanelProps,
-  void
-> {
-  static defaultProps: {
-    onClose: () => null;
-  } = {
-    onClose: () => null,
-  };
-  node: Record<string, any>;
+}
 
-  setNativeProps(...args: Array<Record<string, any>>): any {
-    return this.node && this.node.setNativeProps(...args);
-  }
 
+export default class QueryAssistPanel extends React.PureComponent<SearchPanelProps, void> {
   loadSuggests: (query: string, caret: number) => any = (
     query: string,
     caret: number,
@@ -40,14 +30,11 @@ export default class QueryAssistPanel extends PureComponent<
     return this.props.onQueryUpdate(query);
   };
 
-  render(): React.ReactNode {
+  render() {
     const {queryAssistSuggestions, query, style, clearButtonMode} = this.props;
     const Component: any = isSplitView() ? QueryAssistModal : QueryAssist;
     return (
-      <View
-        style={[styles.searchPanel, style]}
-        ref={node => (this.node = node)}
-      >
+      <View style={style}>
         <Component
           suggestions={queryAssistSuggestions}
           currentQuery={query}

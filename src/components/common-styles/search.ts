@@ -9,12 +9,15 @@ export const inputWrapper = {
   backgroundColor: '$boxBackground',
 };
 export const searchInput = {
-  flex: 1,
-  paddingLeft: UNIT / 1.5,
-  paddingVertical: UNIT * 1.6,
+  flexGrow: 1,
+  padding: 0,
   marginHorizontal: UNIT,
   ...mainText,
   color: '$text',
+};
+export const searchInputWithMinHeight = {
+  ...searchInput,
+  height: UNIT * 5.5,
 };
 export const clearIcon = {
   marginLeft: UNIT,

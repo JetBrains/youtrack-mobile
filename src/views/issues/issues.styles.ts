@@ -15,6 +15,7 @@ import {headerTitlePresentation} from 'components/header/header.styles';
 import {issueCard} from 'components/common-styles/issue';
 import {separator} from 'components/common-styles/list';
 import {splitViewStyles} from 'components/common-styles/split-view';
+import {searchInputWithMinHeight} from 'components/common-styles/search';
 
 const rowLine = {
   flexDirection: 'row',
@@ -95,13 +96,6 @@ export default EStyleSheet.create({
   tags: {
     marginTop: UNIT,
   },
-  listHeader: {
-    minHeight: 108,
-  },
-  listHeaderTop: {
-    flexDirection: 'row',
-    marginTop: UNIT,
-  },
   userSearchQueryButton: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -135,9 +129,19 @@ export default EStyleSheet.create({
     marginLeft: 1,
   },
   searchPanel: {
+    paddingHorizontal: UNIT * 2,
+  },
+  searchPanelFilters: {
+    ...rowLine,
     flexGrow: 1,
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT * 1.5,
+    alignItems: 'center',
+    minHeight: UNIT * 5,
+    marginTop: UNIT,
+    paddingHorizontal: UNIT * 2,
+  },
+  searchQueryPreview: {
+    ...searchInputWithMinHeight,
+    marginHorizontal: 0,
   },
   createIssueButton: {
     position: 'absolute',
@@ -154,6 +158,7 @@ export default EStyleSheet.create({
     justifyContent: 'space-between',
     padding: UNIT * 1.5,
     paddingLeft: UNIT * 2,
+    marginBottom: UNIT,
   },
   toolbarAction: {
     flexDirection: 'row',
@@ -243,12 +248,12 @@ export default EStyleSheet.create({
     marginTop: UNIT * 2,
   },
   settingsRow: {
-    paddingHorizontal: UNIT * 2,
-    paddingVertical: UNIT * 1.1,
-    marginBottom: UNIT,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: UNIT,
+    paddingHorizontal: UNIT * 2,
+    paddingVertical: UNIT * 1.1,
   },
   settingsItemTitle: {
     paddingHorizontal: UNIT * 2,
@@ -261,7 +266,9 @@ export default EStyleSheet.create({
   },
   settingsItemText: {
     ...mainText,
+    paddingRight: UNIT * 2,
     color: '$text',
+    textTransform: 'capitalize',
   },
   settingsItemIcon: {
     color: '$iconAccent',
@@ -270,5 +277,30 @@ export default EStyleSheet.create({
     borderColor: '$separator',
     ...separator,
     marginLeft: -UNIT * 2,
+  },
+  filters: rowLine,
+  filtersButton: {
+    ...rowLine,
+    minWidth: UNIT * 8,
+    height: UNIT * 4,
+    paddingHorizontal: UNIT * 2,
+    marginRight: UNIT,
+    borderRadius: UNIT,
+    backgroundColor: '$boxBackground',
+
+  },
+  filtersButtonAction: {
+    borderColor: '$linkLight',
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+  },
+  filtersButtonText: {
+    ...secondaryText,
+    marginRight: UNIT / 2,
+    color: '$text',
+    textTransform: 'capitalize',
+  },
+  filtersIcon: {
+    color: '$icon',
   },
 });

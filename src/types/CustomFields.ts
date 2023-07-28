@@ -193,3 +193,23 @@ export interface DraftCommentData {
   getCommentDraft: () => Promise<IssueComment | null>,
   setDraft: Function;
 }
+
+export interface Filter {
+  $type: string,
+  id: string,
+  name: string,
+  sortable?: string,
+  customField?: {
+    $type: string,
+    id: string,
+    name: string,
+    aliases: string,
+    localizedName: string,
+    fieldType: {
+      valueType: string,
+      presentation: string,
+      isBundleType: string,
+      isMultiValue: string,
+    },
+  },
+}

@@ -2,6 +2,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
 import {headerTitle, MAIN_FONT_SIZE} from 'components/common-styles';
 import {separatorBorder} from 'components/common-styles/list';
+import {searchInputWithMinHeight} from 'components/common-styles/search';
 export default EStyleSheet.create({
   agile: {
     flex: 1,
@@ -75,6 +76,7 @@ export default EStyleSheet.create({
   },
   agileSelectorText: {...headerTitle, color: '$text'},
   searchQueryPreview: {
+    ...searchInputWithMinHeight,
     marginHorizontal: UNIT * 2,
   },
 });

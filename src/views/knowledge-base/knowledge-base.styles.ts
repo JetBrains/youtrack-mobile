@@ -3,7 +3,7 @@ import {articleItemWithChildrenStyles} from 'components/articles/article-item-wi
 import {
   clearIcon,
   inputWrapper,
-  searchInput,
+  searchInput, searchInputWithMinHeight,
 } from 'components/common-styles/search';
 import {elevation1, HEADER_FONT_SIZE, MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from 'components/common-styles';
 import {
@@ -15,11 +15,15 @@ import {Platform} from 'react-native';
 import {SELECT_ITEM_HEIGHT} from 'components/select/select.styles';
 import {splitViewStyles} from 'components/common-styles/split-view';
 import {UNIT} from 'components/variables';
-const wrapper = {
+
+const spaceAround = {
   marginHorizontal: UNIT * 2,
-  marginVertical: UNIT,
+  marginBottom: UNIT,
 };
+
 export const noProjectsIconSize = 240;
+
+
 export default EStyleSheet.create({
   ...articleItemWithChildrenStyles,
   container: {
@@ -136,18 +140,23 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  searchPanelContainer: {...wrapper, ...inputWrapper, marginBottom: 0},
-  searchInput: searchInput,
+  searchPanelContainer: {
+    ...spaceAround,
+    ...inputWrapper,
+    marginBottom: 0,
+  },
+  searchInput,
+  searchInputWithMinHeight,
   clearIcon: clearIcon,
   link: {
     color: '$link',
   },
   actionBar: {
-    ...wrapper,
+    ...spaceAround,
     flexDirection: 'row',
     height: UNIT * 4,
+    marginTop: UNIT,
     paddingLeft: UNIT / 4,
-    paddingRight: UNIT * 0.75,
     alignItems: 'center',
     justifyContent: 'space-between',
   },

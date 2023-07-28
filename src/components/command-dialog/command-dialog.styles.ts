@@ -1,8 +1,9 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from 'components/variables';
-import {mainText} from 'components/common-styles/typography';
-import {elevation1} from 'components/common-styles';
-import {inputWrapper, searchInput} from '../common-styles/search';
+
+import {elevation1, UNIT, mainText} from 'components/common-styles';
+import {inputWrapper, searchInputWithMinHeight} from 'components/common-styles/search';
+
+
 export default EStyleSheet.create({
   container: {
     height: '100%',
@@ -18,7 +19,10 @@ export default EStyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
-  searchInput: {...searchInput},
+  searchInput: {
+    ...searchInputWithMinHeight,
+    minHeight: UNIT * 5,
+  },
   suggestion: {
     flexGrow: 1,
     flexDirection: 'row',

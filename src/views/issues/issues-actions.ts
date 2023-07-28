@@ -637,7 +637,7 @@ export function loadIssuesCount(
   };
 }
 
-export function onViewModeChange(mode: number): (
+export function onSettingsChange(settings: IssuesSettings): (
   dispatch: (arg0: any) => any,
   getState: () => AppState,
   getApi: ApiGetter,
@@ -646,20 +646,19 @@ export function onViewModeChange(mode: number): (
     dispatch: (arg0: any) => any,
     getState: () => AppState,
   ) => {
-    const settings: IssuesSettings = getState().issueList.settings;
-    if (mode !== settings.view.mode) {
-      const issuesSettings: IssuesSettings = {
-        ...settings,
-        view: {...settings.view, mode},
-      };
+    const prevSettings: IssuesSettings = getState().issueList.settings;
+    if (
+      prevSettings.view.mode !== settings.view.mode ||
+      prevSettings.search.mode !== settings.search.mode
+    ) {
       dispatch({
         type: types.SET_ISSUES_SETTINGS,
-        settings: issuesSettings,
+        settings: settings,
       });
       await flushStoragePart({issuesCache: null});
       dispatch(receiveIssues([]));
-      flushStoragePart({issuesSettings});
       dispatch(refreshIssues());
+      flushStoragePart({issuesSettings: settings});
     }
   };
 }

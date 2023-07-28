@@ -600,11 +600,13 @@ class AgileBoard extends Component<Props, State> {
   };
   renderSearchPanelPreview = () => {
     return (
-      <QueryPreview
-        style={styles.searchQueryPreview}
-        query={this.query}
-        onFocus={this.onShowAssist}
-      />
+      <View>
+        <QueryPreview
+          style={styles.searchQueryPreview}
+          query={this.query}
+          onFocus={this.onShowAssist}
+        />
+      </View>
     );
   };
 

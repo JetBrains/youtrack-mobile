@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {elevation1, mainText, secondaryText} from 'components/common-styles';
-import {inputWrapper, searchInput} from 'components/common-styles/search';
+import {inputWrapper, searchInputWithMinHeight} from 'components/common-styles/search';
 import {MAIN_FONT_SIZE} from 'components/common-styles/typography';
 import {separator} from 'components/common-styles/list';
 import {UNIT} from 'components/variables';
@@ -9,6 +9,7 @@ import {UNIT} from 'components/variables';
 const minButtonWidth = UNIT * 5;
 export const SELECT_ITEM_HEIGHT = UNIT * 7;
 export const SELECT_ITEM_SEPARATOR_HEIGHT = 1;
+
 
 export default EStyleSheet.create({
   inputWrapper: {
@@ -24,11 +25,8 @@ export default EStyleSheet.create({
     color: '$link',
   },
   searchInput: {
-    flex: 1,
-    paddingVertical: UNIT * 1.5,
+    ...searchInputWithMinHeight,
     margin: UNIT,
-    fontSize: MAIN_FONT_SIZE,
-    color: '$text',
   },
   row: {
     position: 'relative',
@@ -106,7 +104,7 @@ export default EStyleSheet.create({
     alignItems: 'center',
   },
   modalPortalSelectContent: {
-    paddingBottom: SELECT_ITEM_HEIGHT + searchInput.paddingVertical,
+    paddingBottom: SELECT_ITEM_HEIGHT,
   },
 
   sectionHeader: {
