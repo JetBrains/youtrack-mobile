@@ -8,6 +8,7 @@ import {
   getEntityPresentation,
   getReadableID,
 } from 'components/issue-formatter/issue-formatter';
+import {IssuesSettings, issuesViewSettingMode} from 'views/issues/index';
 import {ytDate} from 'components/date/date';
 import Avatar from 'components/avatar/avatar';
 import {ThemeContext} from 'components/theme/theme-context';
@@ -17,7 +18,6 @@ import styles from './issues.styles';
 import type {IssueOnList} from 'types/Issue';
 import type {BundleValue} from 'types/CustomFields';
 import type {ViewStyleProp} from 'types/Internal';
-import {IssuesSettings, issuesViewSetting} from 'views/issues/index';
 
 interface Props {
   issue: IssueOnList;
@@ -75,7 +75,7 @@ export default class IssueRow extends Component<Props, void> {
             >
               <View style={[
                 styles.issueRow,
-                mode === issuesViewSetting.S && styles.rowLine,
+                mode === issuesViewSettingMode.S && styles.rowLine,
               ]}>
                 <View
                   testID="test:id/issueRowDetails"

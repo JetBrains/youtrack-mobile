@@ -7,21 +7,28 @@ import {
   SectionList,
   ActivityIndicator,
 } from 'react-native';
+
 import EStyleSheet from 'react-native-extended-stylesheet';
+
+import Select from 'components/select/select';
+import {mainText, secondaryText, UNIT} from 'components/common-styles';
 import {uuid} from 'util/util';
-import Select from '../select/select';
-import {UNIT} from 'components/variables';
-import {mainText, secondaryText} from 'components/common-styles/typography';
-import type {TransformedSuggestion, SavedQuery} from 'types/Issue';
+
+import type {TransformedSuggestion} from 'types/Issue';
+import {Folder} from 'types/User';
+import {SectionListData} from 'react-native/Libraries/Lists/SectionList';
+
 type Props = {
   style?: any;
-  suggestions: Array<TransformedSuggestion | SavedQuery>;
+  suggestions: SectionListData<Folder, Folder | TransformedSuggestion>[];
   onApplySuggestion: (suggestion: TransformedSuggestion) => any;
-  onApplySavedQuery: (savedQuery?: SavedQuery) => any;
+  onApplySavedQuery: (savedQuery?: TransformedSuggestion) => any;
 };
+
+
 export default class QueryAssistSuggestionsList extends Component<Props, void> {
-  onApplySuggestion: (suggestion: TransformedSuggestion | SavedQuery) => any = (
-    suggestion: TransformedSuggestion | SavedQuery,
+  onApplySuggestion: (suggestion: TransformedSuggestion) => any = (
+    suggestion: TransformedSuggestion,
   ) => {
     const isSuggestion = suggestion.caret;
     const {onApplySuggestion, onApplySavedQuery} = this.props;
@@ -29,9 +36,7 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
       ? onApplySuggestion(suggestion)
       : onApplySavedQuery(suggestion);
   };
-  renderRow: (arg0: TransformedSuggestion | SavedQuery)=> React.ReactNode = ({
-    item,
-  }: TransformedSuggestion | SavedQuery) => {
+  renderRow: (arg0: TransformedSuggestion)=> React.ReactNode = ({item}: TransformedSuggestion) => {
     const isSuggestion = item.caret;
     return (
       <TouchableOpacity
@@ -49,7 +54,8 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
       </TouchableOpacity>
     );
   };
-  renderSectionHeader: (arg0: any) => void | Node = ({
+
+  renderSectionHeader = ({
     section,
   }: Record<string, any>) => {
     if (section.title) {
@@ -75,10 +81,10 @@ export default class QueryAssistSuggestionsList extends Component<Props, void> {
           scrollEventThrottle={10}
           sections={suggestions}
           keyExtractor={uuid}
-          renderItem={this.renderRow}
-          renderSectionHeader={this.renderSectionHeader}
+          renderItem={this.renderRow as any}
+          renderSectionHeader={this.renderSectionHeader as any}
           ListEmptyComponent={<ActivityIndicator color={styles.link.color} />}
-          ItemSeparatorComponent={Select.renderSeparator}
+          ItemSeparatorComponent={Select.renderSeparator as any}
           getItemLayout={Select.getItemLayout}
         />
       </View>

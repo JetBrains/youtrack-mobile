@@ -4,7 +4,7 @@ import IssuesSortByList from './issues__sortby_list';
 import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
 import {IconAngleRight} from 'components/icon/icon';
-import {doAssist, getSortPropertyName} from './issues__sortby-helper';
+import {doAssist, getSortPropertyName} from './issues-helper';
 import {i18n} from 'components/i18n/i18n';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import styles from './issues.styles';

@@ -2,7 +2,7 @@ import ApiBase from './api__base';
 
 import {toField} from 'util/to-field';
 
-import {Filter} from 'types/CustomFields';
+import {FilterField} from 'types/CustomFields';
 
 const sortByFields = toField([
   'id',
@@ -33,23 +33,6 @@ const filterFields = toField([
   '$type',
   'id',
   'name',
-  /*{
-   customField: [
-   '$type',
-   'id',
-   'name',
-   'aliases',
-   'localizedName',
-   {
-   fieldType: [
-   'valueType',
-   'presentation',
-   'isBundleType',
-   'isMultiValue',
-   ],
-   },
-   ],
-   },*/
 ]);
 
 const filtersDefaultParams = {
@@ -72,7 +55,7 @@ export default class CustomFieldsAPI extends ApiBase {
     );
   }
 
-  async getSortableFilters(contextId?: string | null): Promise<Filter[]> {
+  async getSortableFilters(contextId?: string | null): Promise<FilterField[]> {
     return this.filterFields(
       sortByFields,
       {
@@ -84,7 +67,7 @@ export default class CustomFieldsAPI extends ApiBase {
     });
   }
 
-  async getFilters(): Promise<Filter[]> {
+  async getFilters(): Promise<FilterField[]> {
     return this.filterFields(filterFields, filtersDefaultParams);
   }
 }

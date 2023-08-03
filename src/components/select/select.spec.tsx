@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 
-import {cleanup, screen, waitFor} from '@testing-library/react-native';
+import {screen, waitFor} from '@testing-library/react-native';
 
 import {ISelectProps, SelectModal} from './select';
 import {renderTestSelectComponent} from 'components/select/select-spec-helper';
@@ -11,24 +11,28 @@ jest.mock('react-native-portalize', () => ({
   Portal: 'View',
 }));
 
+jest.mock('lodash.debounce');
+
 
 describe('Select', () => {
   let dataSourceMock: jest.Mock;
+  let renderParams: {dataSource: jest.Mock};
 
   beforeEach(() => {
     dataSourceMock = jest.fn();
+    renderParams = {
+      dataSource: dataSourceMock.mockResolvedValue([{name: 'foo', key: '1'}, {name: 'bar', key: '2'}]),
+    };
   });
-  afterEach(cleanup);
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 
 
   describe('<Select/>', () => {
-    beforeEach(() => {
-      doRender({
-        dataSource: dataSourceMock.mockResolvedValueOnce([{name: 'foo', key: '1'}, {name: 'bar', key: '2'}]),
-      });
-    });
-
     it('should render Select', async () => {
+      doRender(renderParams);
+
       await expect(screen.getByTestId('test:id/select')).toBeTruthy();
       await expect(screen.getByTestId('test:id/selectInput')).toBeTruthy();
       await expect(screen.getByTestId('test:id/selectList')).toBeTruthy();
@@ -47,7 +51,11 @@ describe('Select', () => {
     });
 
     it('should render list items', async () => {
-      await waitFor(() => expect(screen.getAllByTestId('test:id/selectListItem')).toHaveLength(2));
+      doRender(renderParams);
+
+      await waitFor(
+        () => expect(screen.getAllByTestId('test:id/selectListItem')).toHaveLength(2)
+      );
     });
   });
 
@@ -57,7 +65,7 @@ describe('Select', () => {
       dataSourceMock = jest.fn();
       doRender({
         Component: SelectModal,
-        dataSource: dataSourceMock.mockResolvedValueOnce([{name: 'foo', key: '1'}, {name: 'bar', key: '2'}]),
+        dataSource: renderParams.dataSource,
       });
     });
 

@@ -3,7 +3,7 @@ import ApiHelper from './api__helper';
 import issueFields from './api__issue-fields';
 import qs from 'qs';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
-import {issuesViewSetting} from 'views/issues';
+import {issuesViewSettingMode} from 'views/issues';
 import {routeMap} from 'app-routes';
 
 import type {IssueOnList} from 'types/Issue';
@@ -38,9 +38,9 @@ export default class IssuesAPI extends ApiBase {
     viewMode: number,
   ): Promise<IssueOnList[]> {
     const fields = (
-      viewMode === issuesViewSetting.M
+      viewMode === issuesViewSettingMode.M
         ? issueFields.issuesOnList
-        : viewMode === issuesViewSetting.L ? issueFields.issuesOnListL : issueFields.issuesOnListS
+        : viewMode === issuesViewSettingMode.L ? issueFields.issuesOnListL : issueFields.issuesOnListS
     );
     const issues: IssueOnList[] = await this._getIssues(
       encodeURIComponent(query),

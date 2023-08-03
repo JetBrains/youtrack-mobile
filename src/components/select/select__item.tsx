@@ -10,9 +10,10 @@ import {View as AnimatedView} from 'react-native-animatable';
 import styles from './select.styles';
 
 import type {ViewStyleProp} from 'types/Internal';
+import {IItem} from 'components/select/select';
 
 export type Props = {
-  item: Record<string, any>;
+  item: IItem;
   isSelected: boolean;
   onPress: (item: Record<string, any>) => any;
   onLongPress?: (arg0: any) => any;

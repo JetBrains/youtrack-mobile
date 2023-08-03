@@ -155,6 +155,7 @@
     "@types/react-native-video": "^5.0.14",
     "@types/react-redux": "^7.1.24",
     "@types/react-test-renderer": "^18.0.0",
+    "@types/redux-mock-store": "^1.0.3",
     "@types/url-parse": "^1.4.8",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
     "@typescript-eslint/parser": "^5.46.1",

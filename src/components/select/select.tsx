@@ -1,5 +1,8 @@
 import * as React from 'react';
 import {ActivityIndicator, FlatList, Text, TextInput, TouchableOpacity, View,} from 'react-native';
+
+import debounce from 'lodash.debounce';
+
 import ColorField from 'components/color-field/color-field';
 import ModalPortal from 'components/modal-view/modal-portal';
 import ModalView from 'components/modal-view/modal-view';
@@ -141,6 +144,13 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     }
   }
 
+  async doLoadItems(query: string): Promise<IItem[]> {
+    this.setState({loaded: false});
+    const items: IItem[] = await this.props.dataSource(query);
+    this.setState({loaded: true, items});
+    return items;
+  }
+
   async _loadItems(query: string) {
     try {
       this.setState({
@@ -151,7 +161,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
             : await this.props.dataSource(query)
         ),
       });
-      this._onSearch(query);
+      this.onSearch(query);
       this.setState({loaded: true});
     } catch (err) {
       notifyError(err as CustomError);
@@ -185,12 +195,15 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     return label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
   }
 
-  _onSearch(query: string = '') {
+  async onSearch(query: string = '') {
+    await this.doLoadItems(query);
     const filteredItems: IItem[] = (this.state.items || []).filter((it: IItem) => this.filterItemByLabel(it, query));
     this.setState({
       filteredItems: this.getSortedItems(filteredItems),
     });
   }
+
+  _onSearch = debounce(this.onSearch, 300);
 
   _renderTitle(item: IItem): React.ReactNode {
     const label: React.ReactElement<React.ComponentProps<any>, any> = (
@@ -228,7 +241,6 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
       this.onSelect(item);
       return [item];
     }
-
     let selectedItems = this._isSelected(item)
       ? this.state.selectedItems.filter(it => it.id !== item.id)
       : this.state.selectedItems.concat(item);
@@ -379,7 +391,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
               returnKeyType={multi ? 'done' : 'search'}
               autoCorrect={false}
               underlineColorAndroid="transparent"
-              onSubmitEditing={() => multi ? this._onSave() : this._onSearch(this.state.query)}
+              onSubmitEditing={async () => multi ? this._onSave() : await this.onSearch(this.state.query)}
               value={this.state.query}
               onChangeText={this.onChangeText}
               autoCapitalize="none"

@@ -194,7 +194,7 @@ export interface DraftCommentData {
   setDraft: Function;
 }
 
-export interface Filter {
+export interface FilterField {
   $type: string,
   id: string,
   name: string,
@@ -212,4 +212,11 @@ export interface Filter {
       isMultiValue: string,
     },
   },
+}
+
+export interface FilterFieldValue {
+  $type: string,
+  id: string,
+  presentation: string,
+  query: string,
 }

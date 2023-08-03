@@ -1,81 +1,94 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
-import {Filter} from 'types/CustomFields';
+import {FiltersSetting} from 'views/issues/index';
 import {getApi} from 'components/api/api__instance';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+import {getFiltersSettingsData, getFilterSettingKey, FilterFieldMap} from 'views/issues/issues-helper';
+import {i18n} from 'components/i18n/i18n';
+import {IconAngleDown} from 'components/icon/icon';
 import {until} from 'util/util';
 
 import styles from './issues.styles';
 
 import {CustomError} from 'types/Error';
-import {IconAngleDown} from 'components/icon/icon';
+import {FilterField, FilterFieldValue} from 'types/CustomFields';
 import {User} from 'types/User';
+
+const projectKey = 'project';
+
 
 const IssuesFilters = ({
   disabled,
-  onApply,
-  query,
+  filtersSettings = {},
+  onPress,
   user,
 }: {
   disabled: boolean;
-  onApply: (query: string) => void;
-  query: string;
+  filtersSettings: FiltersSetting,
+  onPress: (filterField: FilterField[]) => void;
   user: User;
 }): React.JSX.Element => {
   const defaultConfig: string[] = (
     user.profiles?.helpdesk?.isReporter
-      ? ['project', 'state', 'assignee', 'type']
-      : ['state', 'assignee', 'project']
+      ? [projectKey, 'state', 'assignee', 'type']
+      : ['state', 'assignee', projectKey]
   );
-  const config: string[] = user.profiles?.appearance?.liteUiFilters || defaultConfig;
-
-  const [filtersData, setFiltersData] = React.useState<{
-    allFilters: Filter[];
-    visibleFilters: Filter[];
-  }>({
-    allFilters: [],
-    visibleFilters: [],
-  });
+  const filtersConfig: string[] = user.profiles?.appearance?.liteUiFilters || defaultConfig;
+  const [filtersMap, setFiltersMap] = React.useState<FilterFieldMap | null>(null);
 
   const loadFilters = React.useCallback(async () => {
-    const apiCustomFields = getApi().customFields;
-    const [error, fs] = await until(
-      apiCustomFields.getFilters()
-    ) as [CustomError | null, Filter[]];
-    return error ? [] : fs;
+    const [error, filters] = await until(getApi().customFields.getFilters()) as [CustomError | null, FilterField[]];
+    return error ? [] : filters;
   }, []);
 
   React.useEffect(() => {
-    loadFilters().then((allFilters: Filter[]) => {
-      const filtersMap: { [key: string]: Filter } = allFilters.reduce((akk, it) => (
-        {...akk, [it.name.toLowerCase()]: it}),
-        {}
+    loadFilters().then((filterFields: FilterField[]) => {
+      setFiltersMap(
+        filterFields.reduce(
+          (akk: FilterFieldMap, it: FilterField) => {
+            const key: string = getFilterSettingKey(it);
+            return {
+              ...akk,
+              [key]: [...(akk[key] || []), it],
+            };
+          },
+          {}
+        )
       );
-      const visibleFilters = config.reduce(
-        (akk: Filter[], filterName: string) => [...akk, filtersMap[filterName]],
-        []
-      );
-      setFiltersData({
-        allFilters,
-        visibleFilters,
-      });
     });
-  }, [config, loadFilters]);
+  }, [filtersConfig, loadFilters]);
 
 
+  const visibleFilters: FilterField[][] = (
+    filtersMap
+      ? filtersConfig.map((filterId: string) => filtersMap[filterId])
+      : []
+  );
   return (
     <View style={styles.filters}>
-      {filtersData.visibleFilters.map((it: Filter) => {
+      {visibleFilters.map((it: FilterField[]) => {
+        const filterData = getFiltersSettingsData(filtersSettings, it);
+        const presentation: string = (
+          filterData.selectedValues.length
+            ? filterData.selectedValues.map((i: FilterFieldValue) => getEntityPresentation(i)).join(', ')
+            : filterData.key === projectKey ? i18n('All projects') : it[0].name
+        );
         return (
           <TouchableOpacity
-            style={styles.filtersButton}
+            key={it[0].id}
+            style={[
+              styles.filtersButton,
+              filterData.selectedValues.length && styles.filtersButtonHighlighted,
+            ]}
             disabled={disabled}
-            onPress={() => {
-              onApply?.(query);
-            }}
+            onPress={() => onPress(it)}
           >
-            <Text style={styles.filtersButtonText}>
-              {it.name}
+            <Text
+              numberOfLines={1}
+              style={styles.filtersButtonText}
+            >
+              {presentation}
             </Text>
             <IconAngleDown color={styles.filtersIcon.color} size={12}/>
           </TouchableOpacity>

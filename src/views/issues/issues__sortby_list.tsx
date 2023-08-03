@@ -15,7 +15,7 @@ import {
   doAssist,
   getSortPropertyName,
   isRelevanceSortProperty,
-} from './issues__sortby-helper';
+} from './issues-helper';
 import {
   EllipsisVertical,
   IconAdd,

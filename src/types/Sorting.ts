@@ -7,7 +7,7 @@ export type PredefinedFilterField = {
   sortablePresentation: string;
 };
 export type IssueFieldSortProperty = {
-  $type: 'IssueFieldSortProperty';
+  $type: 'IssueFieldSortProperty' | 'RelevanceSortProperty';
   asc: boolean;
   id: string;
   localizedName?: string;

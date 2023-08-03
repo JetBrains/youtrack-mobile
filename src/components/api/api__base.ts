@@ -95,9 +95,7 @@ export default class BaseAPI {
     return qs.stringify(
       Object.assign({
         ...restParams,
-        ...{
-          fields: ApiHelper.toField(fields).toString(),
-        },
+        fields: ApiHelper.toField(fields).toString(),
       }),
       opts,
     );

@@ -13,7 +13,7 @@ import type {
   IssueFieldSortProperty,
   PredefinedFilterField,
 } from 'types/Sorting';
-import {Filter} from 'types/CustomFields';
+import {FilterField} from 'types/CustomFields';
 type Props = {
   context: Folder;
   onApply: (sortProperties: IssueFieldSortProperty[]) => any;
@@ -46,8 +46,8 @@ const IssuesSortByAddAttribute = (props: Props) => {
   const loadSortProperties = async (): Promise<
     Array<IssueFieldSortProperty>
   > => {
-    const filterFields: Filter[] = await api.customFields.getSortableFilters(props?.context?.id);
-    return filterFields.filter((it: Filter) => it.sortable).map((filterField: any) => ({
+    const filterFields: FilterField[] = await api.customFields.getSortableFilters(props?.context?.id);
+    return filterFields.filter((it: FilterField) => it.sortable).map((filterField: any) => ({
       $type: 'IssueFieldSortProperty',
       asc: filterField.defaultSortAsc,
       id: filterField.id,

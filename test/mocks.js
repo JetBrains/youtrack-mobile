@@ -1,4 +1,4 @@
-import configureMockStore from 'redux-mock-store';
+import configureMockStore, {MockStore} from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {deepmerge} from 'deepmerge-ts';
 
@@ -61,7 +61,7 @@ function createArticleMock(...args) {
   );
 }
 
-function createMockStore(middlewareArgument) {
+function createMockStore(middlewareArgument): MockStore {
   const middleware = [thunk.withExtraArgument(middlewareArgument)];
   return configureMockStore(middleware);
 }

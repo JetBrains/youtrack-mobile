@@ -21,7 +21,12 @@ interface Props {
 
 const QueryPreview = (props: Props) => {
   const ref: React.MutableRefObject<TextInput | null> = React.useRef<TextInput | null>(null);
-  const [value, setValue] = React.useState<string>(props.query || '');
+  const {query = '', style, placeholder = i18n('Enter search request'), editable = true} = props;
+  const [value, setValue] = React.useState<string>(query);
+
+  React.useEffect(() => {
+    setValue(query);
+  }, [query]);
 
   const focus = () => {
     if (props?.onFocus) {
@@ -31,7 +36,6 @@ const QueryPreview = (props: Props) => {
     }
   };
 
-  const {query, style, placeholder = i18n('Enter search request'), editable = true} = props;
   return (
     <View style={style}>
       <View style={styles.inputContainer}>

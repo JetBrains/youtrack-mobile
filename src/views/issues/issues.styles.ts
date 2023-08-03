@@ -282,12 +282,15 @@ export default EStyleSheet.create({
   filtersButton: {
     ...rowLine,
     minWidth: UNIT * 8,
+    maxWidth: UNIT * 24,
     height: UNIT * 4,
     paddingHorizontal: UNIT * 2,
     marginRight: UNIT,
     borderRadius: UNIT,
     backgroundColor: '$boxBackground',
-
+  },
+  filtersButtonHighlighted: {
+    backgroundColor: '$blueBackground',
   },
   filtersButtonAction: {
     borderColor: '$linkLight',
@@ -298,7 +301,6 @@ export default EStyleSheet.create({
     ...secondaryText,
     marginRight: UNIT / 2,
     color: '$text',
-    textTransform: 'capitalize',
   },
   filtersIcon: {
     color: '$icon',

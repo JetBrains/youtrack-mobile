@@ -2,7 +2,6 @@ import * as React from 'react';
 import {SectionList, Text, View} from 'react-native';
 
 import Animated, {FadeIn} from 'react-native-reanimated';
-import debounce from 'lodash.debounce';
 
 import ModalPortal from 'components/modal-view/modal-portal';
 import Select, {ISelectProps, ISelectState, IItem} from './select';
@@ -95,7 +94,7 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
     ];
   }
 
-  _onSearch = async (query: string = '') => {
+  onSearch = async (query: string = '') => {
     let filteredItems: Section[];
     let items: SLItem[] = this.state.items;
     this.setState({loaded: false});
@@ -127,13 +126,6 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
     });
   };
 
-  _onSearchDebounced = debounce(this._onSearch, 300);
-
-  onChangeText = (text: string) => {
-    this.setState({query: text});
-    this._onSearchDebounced(text);
-  };
-
   renderHeader() {
     return null;
   }
@@ -160,7 +152,7 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"
           scrollEventThrottle={10}
-          sections={this.state.filteredItems}
+          sections={this.state.filteredItems as any}
           keyExtractor={this.getItemKey}
           renderItem={this.renderItem as any}
           renderSectionHeader={this.renderSectionHeader as any}

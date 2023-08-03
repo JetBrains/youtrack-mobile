@@ -1,5 +1,6 @@
 import {isActivityCategory} from './activity__category';
 import type {Activity} from 'types/Activity';
+import {arrayToMap, mapToArray, removeDuplicatesFromArray} from 'util/util';
 type MergedActivity = Activity;
 type activityMapItem = Record<string, Activity>;
 export function mergeActivities(activities: Activity[]): MergedActivity[] {
@@ -109,14 +110,7 @@ export function merge(A: any[], B: any[]): any[] {
     return A || B;
   }
 
-  return removeDuplicates(A.concat(B));
-}
-
-function removeDuplicates(A: any[]): any[] {
-  const idsMap: Record<string, boolean> = {};
-  return A.filter(it => {
-    return idsMap[it.id] ? false : (idsMap[it.id] = true);
-  });
+  return removeDuplicatesFromArray(A.concat(B));
 }
 
 // O(size(A) + 2*size(B))
@@ -131,17 +125,4 @@ export function disjoint(A: any, B: any): any {
   });
   const newB = mapToArray(inB);
   return [newA, newB];
-}
-
-function arrayToMap(items: any[]): Record<string, any> {
-  return items.reduce(function (map, item) {
-    map[item.id] = item;
-    return map;
-  }, {});
-}
-
-function mapToArray(map: Record<string, any>): any[] {
-  return Object.keys(map).map(function (id) {
-    return map[id];
-  });
 }

@@ -14,12 +14,13 @@ import {IconBack, IconClose} from 'components/icon/icon';
 
 import styles from './query-assist.styles';
 
-import type {TransformedSuggestion, SavedQuery} from 'types/Issue';
+import type {Folder} from 'types/User';
+import type {TransformedSuggestion} from 'types/Issue';
 
 const SHOW_LIST_ANIMATION_DURATION = 500;
 
 interface Props {
-  suggestions: Array<TransformedSuggestion | SavedQuery>;
+  suggestions: Array<TransformedSuggestion | Folder>;
   currentQuery: string;
   onApplyQuery: (query: string) => any;
   onChange: (query: string, caret: number) => any;
@@ -137,8 +138,8 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
     this.focusInput();
     this.props.onChange(newQuery, leftPartAndNewQuery.length);
   };
-  onApplySavedQuery: (savedQuery: SavedQuery) => void = (
-    savedQuery: SavedQuery,
+  onApplySavedQuery: (savedQuery: Folder) => void = (
+    savedQuery: Folder,
   ) => {
     this.setState({
       inputValue: savedQuery.query,
@@ -261,7 +262,7 @@ export class QueryAssistModal extends QueryAssist<Props, State & { visible: bool
     this.onHide();
   }
 
-  onApplySavedQuery(savedQuery: SavedQuery) {
+  onApplySavedQuery(savedQuery: Folder) {
     super.onApplyQuery(savedQuery.query);
     this.onHide();
   }

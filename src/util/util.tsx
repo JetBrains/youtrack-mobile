@@ -67,22 +67,21 @@ export const createBtoa = (str: string): any => {
 export const until = (
   promises: any,
   combine: boolean = false,
+  anyPromiseSuccess: boolean = false,
 ): Promise<unknown[] | [CustomError, unknown[]]> => {
   if (!promises) {
     return Promise.reject(['No promises are provided']);
   }
 
   if (Array.isArray(promises)) {
-    return Promise.all(promises)
-      .then(data => {
-        if (combine) {
-          return [
-            null,
-            data.reduce((list: any[], it: any) => list.concat(it)),
-          ];
+    const resolveMethod = anyPromiseSuccess ? Promise.allSettled : Promise.all;
+    return resolveMethod(promises)
+      .then((data: any[]) => {
+        const fulfilled: { status: 'fulfilled' | 'rejected', value: any[] }[] = anyPromiseSuccess ? data.filter((it) => it.status === 'fulfilled') : data;
+        if (!fulfilled.length) {
+          throw 'No fulfilled promises';
         }
-
-        return [null, data];
+        return [null, combine ? fulfilled.reduce((list: any[], it: any) => list.concat(it.value), []) : fulfilled.map(it => it.value)];
       })
       .catch((err: CustomError) => {
         return [err, promises.map<typeof undefined>(() => undefined)];
@@ -129,3 +128,26 @@ export const createNullProjectCustomField = (
 };
 export const isURLPattern: (str: string) => boolean = (str: string): boolean =>
   /^(http(s?)):\/\/|(www.)/i.test(str);
+
+export const removeDuplicatesFromArray = (A: any[]): any[] => {
+  const idsMap: Record<string, boolean> = {};
+  return A.filter(it => {
+    return idsMap[it.id] ? false : (idsMap[it.id] = true);
+  });
+};
+
+export const arrayToMap = (
+  items: any[],
+  keyName: string | null,
+  lowerCaseKey: boolean = false,
+): Record<string, any> => {
+  const key: string = keyName != null ? keyName : 'id';
+  return items.reduce(
+    (map, item) => ({...map, [lowerCaseKey ? item[key].toLowerCase() : item[key]]: item}),
+    {}
+  );
+};
+
+export const mapToArray = (map: Record<string, any>): any[] => Object.keys(map).map(function (id) {
+  return map[id];
+});

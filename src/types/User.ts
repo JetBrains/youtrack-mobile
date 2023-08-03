@@ -101,4 +101,8 @@ export type Folder = {
   fqFolderId?: string;
   isUpdatable: boolean;
   template: boolean;
+  owner?: {
+    id: string;
+    ringId: string;
+  };
 };

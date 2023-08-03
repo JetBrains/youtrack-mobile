@@ -1,8 +1,19 @@
 import {i18n} from 'components/i18n/i18n';
+import {FilterField, FilterFieldValue} from 'types/CustomFields';
+
+export interface FilterSetting {
+  filterField: FilterField[];
+  selectedValues: FilterFieldValue[];
+}
+
+export interface FiltersSetting {
+  [name: string]: FilterSetting | undefined;
+}
 
 export interface IssueSetting {
-  mode: number,
-  label: string,
+  mode: number;
+  label: string;
+  filters?: FiltersSetting;
 }
 
 export interface IssuesSettings {
@@ -10,13 +21,13 @@ export interface IssuesSettings {
   search: IssueSetting;
 }
 
-enum issuesViewSetting {
+enum issuesViewSettingMode {
   S = 0,
   M = 1,
   L = 2,
 }
 
-enum issuesSearchSetting {
+enum issuesSearchSettingMode {
   query = 0,
   filter = 1,
 }
@@ -24,39 +35,43 @@ enum issuesSearchSetting {
 const issuesSettingsIssueSizes: IssueSetting[] = [
   {
     label: i18n('Small'),
-    mode: issuesViewSetting.S,
+    mode: issuesViewSettingMode.S,
   },
   {
     label: i18n('Medium'),
-    mode: issuesViewSetting.M,
+    mode: issuesViewSettingMode.M,
   },
   {
     label: i18n('Large'),
-    mode: issuesViewSetting.L,
+    mode: issuesViewSettingMode.L,
   },
 ];
 
 const issuesSettingsSearch: IssueSetting[] = [
   {
     label: i18n('Filters'),
-    mode: issuesSearchSetting.filter,
+    mode: issuesSearchSettingMode.filter,
+    filters: {},
   },
   {
     label: i18n('Query'),
-    mode: issuesSearchSetting.query,
+    mode: issuesSearchSettingMode.query,
   },
 ];
 
 const issuesSettingsDefault: IssuesSettings = {
   view: issuesSettingsIssueSizes[1],
-  search: issuesSettingsSearch[0],
+  search: {
+    ...issuesSettingsSearch[0],
+    filters: {},
+  },
 };
 
 
 export {
-  issuesSearchSetting,
+  issuesSearchSettingMode,
   issuesSettingsDefault,
   issuesSettingsIssueSizes,
   issuesSettingsSearch,
-  issuesViewSetting,
+  issuesViewSettingMode,
 };

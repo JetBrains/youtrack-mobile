@@ -32,6 +32,7 @@ describe('<SelectSectioned/>', () => {
 
   beforeEach(() => {
     dataSourceMock = jest.fn().mockResolvedValue(dataItemsMock);
+    (debouce as jest.Mock).mockImplementationOnce((fn: (...args: any[]) => any) => fn);
   });
   afterEach(cleanup);
 
@@ -45,7 +46,6 @@ describe('<SelectSectioned/>', () => {
   });
 
   it('should filter list items', async () => {
-    debouce.mockImplementationOnce((fn: (...args: any[]) => any) => fn);
     const queryMock = 'f';
     doRender({
       dataSource: (q) => dataSourceMock(q),

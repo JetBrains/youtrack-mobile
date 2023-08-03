@@ -4,6 +4,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import log from 'components/log/log';
 import {getAuthParamsKey} from './storage__oauth';
 import {i18n} from 'components/i18n/i18n';
+import {IssuesSettings, issuesSettingsDefault} from 'views/issues';
 import {notify} from 'components/notification/notification';
 import {routeMap} from 'app-routes';
 
@@ -20,7 +21,6 @@ import type {OAuthParams2} from 'types/Auth';
 import type {PermissionCacheItem} from 'types/Permission';
 import type {ThreadsStateFilterId} from 'types/Inbox';
 import type {UserCurrent} from 'types/User';
-import {IssuesSettings} from 'views/issues';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 export const MAX_STORED_QUERIES = 5;
@@ -95,7 +95,7 @@ export type StorageState = TipsState & FeatureState & {
   themeMode: string | null;
   vcsChanges: boolean | null;
   forceHandsetMode: boolean | null;
-  issuesSettings: IssuesSettings | null;
+  issuesSettings: IssuesSettings;
 };
 
 const storageKeys: StorageStateKeys & (typeof tipsKeys) & (typeof featuresKeys) = {
@@ -181,7 +181,7 @@ export const initialState: Readonly<StorageState> = {
   themeMode: null,
   vcsChanges: null,
   forceHandsetMode: null,
-  issuesSettings: null,
+  issuesSettings: issuesSettingsDefault,
 };
 
 function cleanAndLogState(message, state?: StorageState) {

@@ -4,30 +4,31 @@ import ApiHelper from 'components/api/api__helper';
 import log from 'components/log/log';
 import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
+import {createQueryFromFiltersSetting, getFiltersSettingsData} from 'views/issues/issues-helper';
 import {EVERYTHING_CONTEXT} from 'components/search/search-context';
-import {
-  flushStoragePart,
-  getStorageState,
-  MAX_STORED_QUERIES,
-} from 'components/storage/storage';
+import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from 'components/storage/storage';
 import {getAssistSuggestions} from 'components/query-assist/query-assist-helper';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {IssuesSettings, issuesSettingsDefault} from 'views/issues/index';
+import {issuesSearchSettingMode, IssuesSettings, issuesSettingsDefault} from 'views/issues/index';
 import {notifyError} from 'components/notification/notification';
+import {removeDuplicatesFromArray, until} from 'util/util';
 import {setGlobalInProgress} from 'actions/app-actions';
 import {sortAlphabetically} from 'components/search/sorting';
-import {until} from 'util/util';
 
 import type Api from 'components/api/api';
+import type {AnyIssue, IssueFull} from 'types/Issue';
 import type {AppState} from 'reducers';
 import type {Folder} from 'types/User';
-import type {AnyIssue, IssueFull} from 'types/Issue';
 import {CustomError} from 'types/Error';
+import {FilterField, FilterFieldValue} from 'types/CustomFields';
 import {ISelectProps} from 'components/select/select';
 import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
+import {IssuesState} from 'views/issues/issues-reducers';
 
 type ApiGetter = () => Api;
+
 type GroupedFolders = {
   projects: Folder[];
   searches: Folder[];
@@ -194,11 +195,12 @@ function getSearchContext() {
   return getStorageState().searchContext || EVERYTHING_CONTEXT;
 }
 
-export function getSearchQuery(query: string = ''): string {
+export function combineWithContextQuery(query: string = ''): string {
   const userSearchContext: Folder = getSearchContext();
   const searchContextQuery: string = userSearchContext?.query || '';
   return userSearchContext?.query ? `${searchContextQuery} ${query}` : query;
 }
+
 export function onQueryUpdate(
   query: string,
 ): (dispatch: (arg0: any) => any) => void {
@@ -211,42 +213,72 @@ export function onQueryUpdate(
 }
 export function openContextSelect(): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => AppState,
   getApi: ApiGetter,
 ) => void {
   return (
     dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
+    getState: () => AppState,
     getApi: ApiGetter,
   ) => {
     trackEvent('Issue list context select');
     const api: Api = getApi();
     const currentSearchContext = getSearchContext();
-    const searchContextSelectProps: Partial<ISSWithItemActionsProps> = {
+    const searchContextSelectProps: Partial<ISSWithItemActionsProps> & { isSectioned: boolean } = {
+      isSectioned: true,
       placeholder: i18n('Filter projects, saved searches, and tags'),
+      getTitle: (item: Folder) => item.name + (item.shortName ? ` (${item.shortName})` : ''),
       dataSource: async (query: string = '') => {
+        const isFilterSearchMode: boolean = getState().issueList.settings.search.mode === issuesSearchSettingMode.filter;
+        const promises: (null | Promise<Folder[]>)[] | (Promise<Folder> | null)[] =
+          isFilterSearchMode
+            ? [
+              null,
+              api.savedQueries.getSavedQueries(),
+            ]
+            : [
+              api.issueFolder.getIssueFolders(true),
+              query ? api.issueFolder.getIssueFolders() : null,
+            ]
+        ;
         const [error, allFolders] = await until(
-          [api.issueFolder.getIssueFolders(true), query ? api.issueFolder.getIssueFolders() : null]
+          promises,
+          false,
+          true,
         ) as [CustomError | null, [Folder[], (Folder[] | null)]];
         if (error) {
           log.warn('Failed to load user folders for the context');
           return [];
         }
+        let pinnedFolders: Folder[] = [];
+        let unpinnedFolders: Folder[] = [];
+        if (isFilterSearchMode) {
+          allFolders[1]?.forEach((it: Folder) => {
+            if (it.pinned) {
+              pinnedFolders.push(it);
+            } else {
+              unpinnedFolders.push(it);
+            }
+          });
+        } else {
+          pinnedFolders = allFolders[0];
+          unpinnedFolders = allFolders[1] || [];
+        }
 
-        const pinnedFolders: Folder[] = allFolders[0];
-        const unpinnedFolders: Folder[] = allFolders[1] || [];
         const pinnedGrouped: GroupedFolders = getGroupedFolders(pinnedFolders);
-        const unpinnedGrouped: GroupedFolders = query.length ? getGroupedFolders(unpinnedFolders) : {
+        const unpinnedGrouped: GroupedFolders = query.length || isFilterSearchMode ? getGroupedFolders(unpinnedFolders) : {
           projects: [],
           tags: [],
           searches: [],
         };
 
+        const searchQueries: Folder[] = [...pinnedGrouped.searches, ...unpinnedGrouped.searches];
         return [
           {
             title: i18n('Projects'),
             data: sortFolders(
-              [EVERYTHING_CONTEXT as Folder, ...pinnedGrouped.projects, ...unpinnedGrouped.projects], query),
+              [EVERYTHING_CONTEXT as Folder, ...pinnedGrouped.projects, ...unpinnedGrouped.projects], query
+            ),
           },
           {
             title: i18n('Tags'),
@@ -254,7 +286,7 @@ export function openContextSelect(): (
           },
           {
             title: i18n('Saved Searches'),
-            data: sortFolders([...pinnedGrouped.searches, ...unpinnedGrouped.searches], query),
+            data: isFilterSearchMode ? searchQueries : sortFolders(searchQueries, query),
           },
         ];
       },
@@ -278,6 +310,95 @@ export function openContextSelect(): (
     dispatch(openSelect(searchContextSelectProps));
   };
 }
+
+export function composeSearchQuery(): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => string {
+  return (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
+    const issueListState: IssuesState = getState().issueList;
+    const searchSettings = issueListState.settings.search;
+    const filtersQuery: string = (
+      searchSettings.mode === issuesSearchSettingMode.filter
+        ? createQueryFromFiltersSetting(searchSettings?.filters)
+        : ''
+    );
+    const searchQuery: string = combineWithContextQuery([
+      filtersQuery,
+      issueListState.query,
+    ].join(' '));
+    return searchQuery.trim();
+  };
+}
+
+
+export function openFilterFieldSelect(filterFields: FilterField[]): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => void {
+  return (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
+    trackEvent('Issues filter field select');
+    const settings: IssuesSettings = getState().issueList.settings;
+    const filtersSettingsData = getFiltersSettingsData(settings.search?.filters, filterFields);
+    const selectProps: Partial<ISelectProps> = {
+      multi: true,
+      getTitle: (it: FilterFieldValue) => getEntityPresentation(it),
+      dataSource: async (prefix: string = '') => {
+        const [error, combinedValues] = await until(
+          filterFields.map(
+            (it: FilterField) => getApi().filterFields.filterFieldValues(it.id, prefix, dispatch(composeSearchQuery()))
+          ),
+          true,
+          true
+        ) as [CustomError | null, FilterFieldValue[]];
+        if (error) {
+          log.warn('Failed to load user folders for the context');
+        }
+        return error ? [] : removeDuplicatesFromArray(filtersSettingsData.selectedValues.concat(combinedValues));
+      },
+      selectedItems: filtersSettingsData.selectedValues,
+      onCancel: () => dispatch(closeSelect()),
+      onSelect: async (selectedFilterValues: FilterFieldValue[]) => {
+        try {
+          dispatch(closeSelect());
+          const issuesSettings = {
+            ...settings,
+            search: {
+              ...settings.search,
+              filters: {
+                ...settings.search.filters,
+                [filtersSettingsData.key]: {
+                  filterField: filterFields,
+                  selectedValues: selectedFilterValues,
+                },
+              },
+            },
+          };
+          await dispatch({
+            type: types.SET_ISSUES_SETTINGS,
+            settings: issuesSettings,
+          });
+          await flushStoragePart({issuesSettings});
+          dispatch(refreshIssues());
+        } catch (error) {
+          log.warn('Failed to change a context', error);
+        }
+      },
+    };
+    dispatch(openSelect(selectProps));
+  };
+}
+
 export function openSelect(selectProps: Partial<ISelectProps>): (dispatch: (arg0: any) => any) => void {
   return (dispatch: (arg0: any) => any) => {
     dispatch({
@@ -393,9 +514,7 @@ export function isIssueMatchesQuery(
   ) => {
     const [error, listIssues] = await until(
       getApi().issues.getIssuesXShort(
-        encodeURIComponent(
-          `${getSearchQuery(getState().issueList.query)} #${issueIdReadable}`,
-        ),
+        encodeURIComponent(`${composeSearchQuery()} #${issueIdReadable}`),
         1,
       ),
     );
@@ -453,13 +572,13 @@ export function updateIssue(
 }
 export function refreshIssues(): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => AppState,
 ) => Promise<void> {
   return async (
     dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
+    getState: () => AppState,
   ): Promise<void> => {
-    const searchQuery: string = getSearchQuery(getState().issueList.query);
+    const searchQuery: string = dispatch(composeSearchQuery());
     dispatch(setIssuesCount(null));
     dispatch(loadIssues(searchQuery));
     dispatch(refreshIssuesCount());
@@ -473,9 +592,7 @@ export function refreshIssuesCount(): (
     dispatch: (arg0: any) => any,
     getState: () => Record<string, any>,
   ): Promise<void> => {
-    const userQuery: string = getState().issueList.query;
-    const searchQuery: string = getSearchQuery(userQuery);
-    dispatch(loadIssuesCount(searchQuery, getSearchContext()));
+    dispatch(loadIssuesCount(getSearchContext()));
   };
 }
 export function setSearchContext(
@@ -543,7 +660,6 @@ export function loadMoreIssues(): (
         isListEndReached,
         skip,
         issues,
-        query,
       } = getState().issueList;
 
       if (
@@ -561,7 +677,7 @@ export function loadMoreIssues(): (
       dispatch(startMoreIssuesLoading(newSkip));
 
       try {
-        const searchQuery = getSearchQuery(query);
+        const searchQuery = dispatch(composeSearchQuery());
         let moreIssues: AnyIssue[] = (await api.issues.getIssues(
           searchQuery,
           PAGE_SIZE,
@@ -593,10 +709,7 @@ export function loadMoreIssues(): (
     }
   };
 }
-export function loadIssuesCount(
-  query: string | null | undefined,
-  folder: Folder | null | undefined,
-): (
+export function loadIssuesCount(folder?: Folder | null): (
   dispatch: (arg0: any) => any,
   getState: () => any,
   getApi: ApiGetter,
@@ -609,8 +722,9 @@ export function loadIssuesCount(
     try {
       const api: Api = getApi();
       const abortController: AbortController = new AbortController();
+      const _query = dispatch(composeSearchQuery());
       const issuesCount: number = await api.issues.getIssuesCount(
-        query,
+        _query,
         folder,
         false,
         abortController,
@@ -625,7 +739,7 @@ export function loadIssuesCount(
             clearTimeout(timer);
             timer = null;
           };
-        }).then(() => dispatch(loadIssuesCount(query, folder)));
+        }).then(() => dispatch(loadIssuesCount(folder)));
       }
 
       if (issuesCount >= 0) {
@@ -647,14 +761,18 @@ export function onSettingsChange(settings: IssuesSettings): (
     getState: () => AppState,
   ) => {
     const prevSettings: IssuesSettings = getState().issueList.settings;
+    const isSearchModeChanged: boolean = prevSettings.search.mode !== settings.search.mode;
     if (
       prevSettings.view.mode !== settings.view.mode ||
-      prevSettings.search.mode !== settings.search.mode
+      isSearchModeChanged
     ) {
       dispatch({
         type: types.SET_ISSUES_SETTINGS,
-        settings: settings,
+        settings,
       });
+      if (isSearchModeChanged) {
+        dispatch(setIssuesQuery(''));
+      }
       await flushStoragePart({issuesCache: null});
       dispatch(receiveIssues([]));
       dispatch(refreshIssues());

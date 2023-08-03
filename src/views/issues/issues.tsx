@@ -44,17 +44,18 @@ import {initialState} from './issues-reducers';
 import {isReactElement} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {
-  issuesViewSetting,
-  issuesSettingsIssueSizes,
   IssueSetting,
+  issuesSearchSettingMode,
+  issuesSettingsIssueSizes,
   issuesSettingsSearch,
-  issuesSearchSetting,
+  issuesViewSettingMode,
 } from 'views/issues/index';
 import {logEvent} from 'components/log/log-helper';
 import {notify} from 'components/notification/notification';
 import {requestController} from 'components/api/api__request-controller';
 import {routeMap} from 'app-routes';
 import {SkeletonIssues, SkeletonIssuesS} from 'components/skeleton/skeleton';
+import {Select, SelectModal} from 'components/select/select';
 import {
   SectionedSelectWithItemActions,
   SectionedSelectWithItemActionsModal,
@@ -74,6 +75,7 @@ import type {Folder, User} from 'types/User';
 import type {IssuesState} from './issues-reducers';
 import type {Theme, UIThemeColors} from 'types/Theme';
 import {NetInfoState} from '@react-native-community/netinfo';
+import {FilterField} from 'types/CustomFields';
 
 type IssuesActions = typeof issueActions;
 
@@ -87,6 +89,7 @@ type Props = IssuesState &
   networkState: NetInfoState,
   isInProgress: boolean,
   user: User,
+  onFilterPress: (filterField: FilterField[]) => any,
 };
 
 type State = {
@@ -345,8 +348,7 @@ export class Issues extends Component<Props, State> {
       isSearchContextPinned,
       networkState,
     } = this.props;
-    const isDisabled: boolean =
-      isRefreshing || !searchContext || !networkState?.isConnected;
+    const isDisabled: boolean = isRefreshing || !searchContext || !networkState?.isConnected;
     return (
       <TouchableOpacity
         key="issueListContext"
@@ -381,18 +383,20 @@ export class Issues extends Component<Props, State> {
 
   renderContextSelect(): any {
     const {selectProps} = this.props;
-    const {onSelect, ...restProps} = selectProps;
+    const {onSelect, isSectioned, ...restProps} = selectProps;
     const SelectComponent = (
-      isSplitView() ? SectionedSelectWithItemActionsModal : SectionedSelectWithItemActions
+      isSplitView()
+        ? isSectioned ? SectionedSelectWithItemActionsModal : SelectModal
+        : isSectioned ? SectionedSelectWithItemActions : Select
     );
     return (
       <SelectComponent
-        {...restProps}
         getTitle={item => item.name + (item.shortName ? ` (${item.shortName})` : '')}
         onSelect={async (selectedContext: Folder) => {
           this.updateFocusedIssue(null);
           onSelect?.(selectedContext);
         }}
+        {...restProps}
       />
     );
   }
@@ -472,34 +476,13 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  renderFilterQueryActions() {
-    return !this.props.query ? null : (
-      <ScrollView
-        horizontal={true}
-        contentContainerStyle={styles.searchPanelFilters}
-      >
-        {[
-          i18n('Update query'),
-          i18n('Save as new'),
-          i18n('Discard changes'),
-        ].map((actionName: string) => (
-          <TouchableOpacity
-            style={[styles.filtersButton, styles.filtersButtonAction]}
-          >
-            <Text style={styles.filtersButtonText}>
-              {actionName}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    );
-  }
-
   isFilterSearchMode() {
-    return this.props.settings.search.mode === issuesSearchSetting.filter;
+    return this.props.settings.search.mode === issuesSearchSettingMode.filter;
   }
 
   renderSearchPanel() {
+    const {settings} = this.props;
+    const {onFilterPress} = this.props;
     const isFilterMode: boolean = this.isFilterSearchMode();
     return (
       <>
@@ -512,11 +495,12 @@ export class Issues extends Component<Props, State> {
             contentContainerStyle={styles.searchPanelFilters}
           >
             <IssuesFilters
+              filtersSettings={settings.search.filters}
               query={this.props.query}
               user={this.props.user}
               disabled={false}
-              onApply={() => {
-
+              onPress={(filterFields: FilterField[]) => {
+                onFilterPress(filterFields);
               }}
             />
           </ScrollView>
@@ -557,11 +541,10 @@ export class Issues extends Component<Props, State> {
     );
   }
 
-  renderSearchQueryPreview: () => React.ReactNode = () => {
+  renderSearchQueryPreview() {
     const isFilterSearchMode: boolean = this.isFilterSearchMode();
     return (
       <QueryPreview
-        editable={isFilterSearchMode}
         placeholder={isFilterSearchMode ? i18n('Find issues that contain key words') : undefined}
         style={styles.searchQueryPreview}
         query={this.props.query}
@@ -569,10 +552,10 @@ export class Issues extends Component<Props, State> {
         onFocus={!isFilterSearchMode ? this.onSearchQueryPanelFocus : undefined}
       />
     );
-  };
+  }
 
   renderSkeleton() {
-    return this.props.settings.view.mode === issuesViewSetting.S ? <SkeletonIssuesS/> : <SkeletonIssues/>;
+    return this.props.settings.view.mode === issuesViewSettingMode.S ? <SkeletonIssuesS/> : <SkeletonIssues/>;
   }
 
   renderIssuesFooter = () => {
@@ -709,7 +692,7 @@ export class Issues extends Component<Props, State> {
       settings,
       user,
     } = this.props;
-    const isQueryMode: boolean = settings.search.mode === issuesSearchSetting.query;
+    const isQueryMode: boolean = settings.search.mode === issuesSearchSettingMode.query;
     return (
       <BottomSheetModal
         style={styles.settingsModal}
@@ -722,9 +705,10 @@ export class Issues extends Component<Props, State> {
         <>
           <View style={styles.settingsItem}>
             <Text style={styles.settingsItemTitle}>{i18n('Search Input Mode')}</Text>
-            {issuesSettingsSearch.map((it: IssueSetting) => {
+            {issuesSettingsSearch.map((it: IssueSetting, index: number) => {
               return (
                 <TouchableOpacity
+                  key={`issueSetting${index}`}
                   style={styles.settingsRow}
                   onPress={() => {
                     onSettingsChange({...settings, search: it});
@@ -773,10 +757,11 @@ export class Issues extends Component<Props, State> {
           <View style={styles.settingsSeparator}/>
           <View style={styles.settingsItem}>
             <Text style={styles.settingsItemTitle}>{i18n('Preview Size')}</Text>
-            {issuesSettingsIssueSizes.map((it: IssueSetting) => {
+            {issuesSettingsIssueSizes.map((it: IssueSetting, index: number) => {
               const isActive: boolean = it.mode === settings.view.mode;
               return (
                 <TouchableOpacity
+                  key={`sizeSetting${index}`}
                   disabled={isActive}
                   style={styles.settingsRow}
                   onPress={() => {
@@ -849,6 +834,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     ...bindActionCreators(issueActions, dispatch),
     onQueryUpdate: (query: string) => dispatch(issueActions.onQueryUpdate(query)),
     onOpenContextSelect: () => dispatch(issueActions.openContextSelect()),
+    onFilterPress: (filterFields: FilterField[]) => dispatch(issueActions.openFilterFieldSelect(filterFields)),
     updateSearchContextPinned: isSearchScrolledUp => dispatch(
       issueActions.updateSearchContextPinned(isSearchScrolledUp)
     ),
