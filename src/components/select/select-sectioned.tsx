@@ -66,10 +66,8 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
           data: it.data.filter((it: IItem) => !(it.id in selectedMap)),
         },
       ],
-        [] as Section[]
-    ).filter(
-      (it: SLItem) => it.data.length > 0
-    );
+        []
+    ).filter((it: SLItem) => it.data.length > 0);
   }
 
   getFilteredItems(items: SLItem[], selected?: SLItem[]): Section[] {
@@ -94,17 +92,13 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
     ];
   }
 
-  onSearch = async (query: string = '') => {
-    let filteredItems: Section[];
-    let items: SLItem[] = this.state.items;
-    this.setState({loaded: false});
-
-    if (this.props.cacheResults && items.length > 0) {
-      const doFilter = (data: SLItem[]): SLItem[] => (data || []).filter(
-        (it: SLItem) => this.filterItemByLabel(it, query)
-      );
-      filteredItems = this.getFilteredItems(items).reduce((akk: Section[], it: IItem) => {
-        const data: IItem[] = doFilter(it.data);
+  async onSearch(query: string) {
+    const filterByLabel = (data: SLItem[]): SLItem[] => (data || []).filter(
+      (it: SLItem) => this.filterItemByLabel(it, query)
+    );
+    const doSearch = (): Section[] => (
+      this.getFilteredItems(this.state.items).reduce((akk: Section[], it: IItem) => {
+        const data: IItem[] = filterByLabel(it.data);
         if (data.length > 0) {
           akk.push({
             title: it.title,
@@ -112,19 +106,12 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
           });
         }
         return akk;
-      }, []);
+      }, [])
+    );
 
-    } else {
-      items = await this.props.dataSource(query);
-      filteredItems = this.getFilteredItems(items);
-    }
-
-    this.setState({
-      filteredItems,
-      items,
-      loaded: true,
-    });
-  };
+    await this.doLoadItems(query);
+    this.setState({filteredItems: doSearch()});
+  }
 
   renderHeader() {
     return null;

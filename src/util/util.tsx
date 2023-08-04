@@ -7,6 +7,10 @@ import appPackage from '../../package.json';
 import {getStorageState} from 'components/storage/storage';
 import type {CustomError} from 'types/Error';
 import type {StorageState} from 'components/storage/storage';
+
+type RequestPromise = { status: 'fulfilled' | 'rejected', value: any[] };
+
+
 export const AppVersion: any = appPackage.version.split('-')[0];
 export const isTablet: boolean = DeviceInfo.isTablet();
 export const isReactElement = (element: any): boolean => {
@@ -64,6 +68,7 @@ export const createBtoa = (str: string): any => {
 
   return base64.fromByteArray(byteArray);
 };
+
 export const until = (
   promises: any,
   combine: boolean = false,
@@ -77,11 +82,18 @@ export const until = (
     const resolveMethod = anyPromiseSuccess ? Promise.allSettled : Promise.all;
     return resolveMethod(promises)
       .then((data: any[]) => {
-        const fulfilled: { status: 'fulfilled' | 'rejected', value: any[] }[] = anyPromiseSuccess ? data.filter((it) => it.status === 'fulfilled') : data;
+        const fulfilled: RequestPromise[] = anyPromiseSuccess ? data.filter((it) => it.status === 'fulfilled') : data;
         if (!fulfilled.length) {
           throw 'No fulfilled promises';
         }
-        return [null, combine ? fulfilled.reduce((list: any[], it: any) => list.concat(it.value), []) : fulfilled];
+        return [
+          null,
+          (
+            combine
+              ? fulfilled.reduce((list: any[], it: any) => list.concat(anyPromiseSuccess ? it.value : it), [])
+              : anyPromiseSuccess ? fulfilled.map((it: RequestPromise) => it.value) : fulfilled
+          ),
+        ];
       })
       .catch((err: CustomError) => {
         return [err, promises.map<typeof undefined>(() => undefined)];

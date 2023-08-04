@@ -18,6 +18,7 @@ export function renderTestSelectComponent(props: Partial<ISelectProps & { Compon
       <ThemeContext.Provider value={{uiTheme: DEFAULT_THEME}}>
         <Component
           getTitle={(it: IItem) => it.name}
+          dataSource={jest.fn()}
           {...props}
           getWrapperComponent={() => View}
         />

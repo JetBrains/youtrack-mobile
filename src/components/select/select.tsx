@@ -10,11 +10,9 @@ import SelectItem from './select__item';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {IconCheck, IconClose} from 'components/icon/icon';
-import {notifyError} from 'components/notification/notification';
 
 import styles, {SELECT_ITEM_HEIGHT, SELECT_ITEM_SEPARATOR_HEIGHT} from './select.styles';
 
-import {CustomError} from 'types/Error';
 
 export type IItem = {
   [key: string]: any;
@@ -42,7 +40,6 @@ export interface ISelectProps {
   noFilter?: boolean;
   getWrapperComponent?: () => any;
   getWrapperProps?: () => any;
-  cacheResults?: boolean;
 }
 
 export interface ISelectState {
@@ -102,7 +99,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
       filteredItems: [] as IItem[],
       selectedItems: props.selectedItems || ([] as IItem[]),
       loaded: false,
-    };
+    } as S;
   }
 
   getSortedItems = (items: IItem[] = []): IItem[] => {
@@ -128,7 +125,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
   };
 
   componentDidMount() {
-    this._loadItems(this.state.query);
+    this.onSearch(this.state.query);
   }
 
   componentDidUpdate(prevProps: ISelectProps) {
@@ -140,32 +137,15 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
         selectedItems: this.props.selectedItems || [],
       });
 
-      this._loadItems(this.state.query);
+      this.onSearch(this.state.query);
     }
   }
 
-  async doLoadItems(query: string): Promise<IItem[]> {
+  async doLoadItems(query: string = ''): Promise<IItem[]> {
     this.setState({loaded: false});
     const items: IItem[] = await this.props.dataSource(query);
     this.setState({loaded: true, items});
     return items;
-  }
-
-  async _loadItems(query: string) {
-    try {
-      this.setState({
-        loaded: false,
-        items: (
-          this.props.cacheResults && (this.state?.items || []).length > 0
-            ? this.state.items
-            : await this.props.dataSource(query)
-        ),
-      });
-      this.onSearch(query);
-      this.setState({loaded: true});
-    } catch (err) {
-      notifyError(err as CustomError);
-    }
   }
 
   renderEmptyValueItem(): React.ReactElement | null {
@@ -195,9 +175,13 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     return label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
   }
 
-  async onSearch(query: string = '') {
+  getFilteredItems(items: IItem[] = [], query: string = ''): IItem[] {
+    return items.filter((it: IItem) => this.filterItemByLabel(it, query));
+  }
+
+  async onSearch(query: string) {
     await this.doLoadItems(query);
-    const filteredItems: IItem[] = (this.state.items || []).filter((it: IItem) => this.filterItemByLabel(it, query));
+    const filteredItems: IItem[] = this.getFilteredItems(this.state.items || [], query);
     this.setState({
       filteredItems: this.getSortedItems(filteredItems),
     });
