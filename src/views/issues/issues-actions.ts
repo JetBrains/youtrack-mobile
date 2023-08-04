@@ -11,7 +11,12 @@ import {getAssistSuggestions} from 'components/query-assist/query-assist-helper'
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {issuesSearchSettingMode, IssuesSettings, issuesSettingsDefault} from 'views/issues/index';
+import {
+  issuesSearchSettingMode,
+  IssuesSettings,
+  issuesSettingsDefault,
+  issuesViewSettingMode,
+} from 'views/issues/index';
 import {notifyError} from 'components/notification/notification';
 import {removeDuplicatesFromArray, until} from 'util/util';
 import {setGlobalInProgress} from 'actions/app-actions';
@@ -52,6 +57,21 @@ export function setIssuesQuery(
     query,
   };
 }
+
+export function getPageSize(): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => number {
+  return (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
+    return getState().issueList.settings.view.mode === issuesViewSettingMode.S ? PAGE_SIZE * 3 : PAGE_SIZE;
+  };
+}
+
 export function readStoredIssuesQuery(): (
   dispatch: (arg0: any) => any,
 ) => Promise<void> {
@@ -150,6 +170,7 @@ export function stopMoreIssuesLoading(): {
 }
 export function receiveIssues(
   issues: AnyIssue[],
+  pageSize: number = PAGE_SIZE,
 ): {
   issues: AnyIssue[];
   pageSize: number;
@@ -158,7 +179,7 @@ export function receiveIssues(
   return {
     type: types.RECEIVE_ISSUES,
     issues,
-    pageSize: PAGE_SIZE,
+    pageSize,
   };
 }
 export function resetIssuesCount(): {
@@ -476,7 +497,7 @@ export function loadIssues(query: string): (
       }
 
       const [error, listIssues] = await until(
-        api.issues.getIssues(query, PAGE_SIZE, 0, getState().issueList.settings.view.mode),
+        api.issues.getIssues(query, dispatch(getPageSize()), 0, getState().issueList.settings.view.mode),
       );
       dispatch(stopIssuesLoading());
 
@@ -487,10 +508,10 @@ export function loadIssues(query: string): (
       } else {
         const issues: AnyIssue[] = ApiHelper.fillIssuesFieldHash(listIssues);
         log.info(`${issues?.length} issues loaded`);
-        dispatch(receiveIssues(issues));
+        dispatch(receiveIssues(issues, dispatch(getPageSize())));
         dispatch(cacheIssues(issues));
 
-        if (issues?.length < PAGE_SIZE) {
+        if (issues?.length < dispatch(getPageSize())) {
           log.info('End reached during initial load');
           dispatch(listEndReached());
         }
@@ -565,7 +586,7 @@ export function updateIssue(
         issueToUpdate,
         currentIssues,
       );
-      dispatch(receiveIssues(updatedIssues));
+      dispatch(receiveIssues(updatedIssues, dispatch(getPageSize())));
       dispatch(cacheIssues(updatedIssues));
     }
   };
@@ -627,7 +648,7 @@ export function initializeIssuesList(
 
     if (cachedIssues?.length) {
       log.debug(`Loaded ${cachedIssues.length} cached issues`);
-      dispatch(receiveIssues(cachedIssues));
+      dispatch(receiveIssues(cachedIssues, dispatch(getPageSize())));
     }
 
     dispatch(refreshIssues());
@@ -672,7 +693,8 @@ export function loadMoreIssues(): (
         return;
       }
 
-      const newSkip = skip + PAGE_SIZE;
+      const pageSize: number = dispatch(getPageSize());
+      const newSkip = skip + pageSize;
       log.info(`Loading more issues. newSkip = ${newSkip}`);
       dispatch(startMoreIssuesLoading(newSkip));
 
@@ -680,20 +702,20 @@ export function loadMoreIssues(): (
         const searchQuery = dispatch(composeSearchQuery());
         let moreIssues: AnyIssue[] = (await api.issues.getIssues(
           searchQuery,
-          PAGE_SIZE,
+          pageSize,
           newSkip,
           getState().issueList.settings.view.mode
         )) as any;
-        log.info(`Loaded ${PAGE_SIZE} more issues.`);
+        log.info(`Loaded ${pageSize} more issues.`);
         moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues);
         const updatedIssues = ApiHelper.removeDuplicatesByPropName(
           issues.concat(moreIssues),
           'id',
         );
-        dispatch(receiveIssues(updatedIssues));
+        dispatch(receiveIssues(updatedIssues, dispatch(getPageSize())));
         dispatch(cacheIssues(updatedIssues));
 
-        if (moreIssues?.length < PAGE_SIZE) {
+        if (moreIssues?.length < pageSize) {
           log.info(
             `End of issues reached: all ${updatedIssues?.length} issues are loaded`,
           );
@@ -774,7 +796,7 @@ export function onSettingsChange(settings: IssuesSettings): (
         dispatch(setIssuesQuery(''));
       }
       await flushStoragePart({issuesCache: null});
-      dispatch(receiveIssues([]));
+      dispatch(receiveIssues([], dispatch(getPageSize())));
       dispatch(refreshIssues());
       flushStoragePart({issuesSettings: settings});
     }
