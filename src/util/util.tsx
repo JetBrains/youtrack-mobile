@@ -68,7 +68,7 @@ export const until = (
   promises: any,
   combine: boolean = false,
   anyPromiseSuccess: boolean = false,
-): Promise<unknown[] | [CustomError, unknown[]]> => {
+): Promise<any[] | [CustomError, any[]]> => {
   if (!promises) {
     return Promise.reject(['No promises are provided']);
   }
@@ -81,7 +81,7 @@ export const until = (
         if (!fulfilled.length) {
           throw 'No fulfilled promises';
         }
-        return [null, combine ? fulfilled.reduce((list: any[], it: any) => list.concat(it.value), []) : fulfilled.map(it => it.value)];
+        return [null, combine ? fulfilled.reduce((list: any[], it: any) => list.concat(it.value), []) : fulfilled];
       })
       .catch((err: CustomError) => {
         return [err, promises.map<typeof undefined>(() => undefined)];
