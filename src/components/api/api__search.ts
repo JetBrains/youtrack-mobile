@@ -8,6 +8,9 @@ import type {
   ServersideSuggestionLegacy,
   TransformedSuggestion,
 } from 'types/Issue';
+import {QueryAssistAst} from 'components/query-assist/query-parser_types';
+
+
 export default class SearchAPI extends ApiBase {
   constructor(auth: Auth) {
     super(auth);
@@ -69,6 +72,28 @@ export default class SearchAPI extends ApiBase {
       },
     );
     return ApiHelper.convertQueryAssistSuggestions(response.suggestions);
+  }
+
+  async getQueryAssistSuggestionsData(
+    query: string,
+    folders: Folder[] | null = [],
+    type: string = 'Issue',
+  ): Promise<{
+    ast: QueryAssistAst,
+    caret: number,
+    query: string,
+  }> {
+    const params = 'fields=title,caret,query,ast(expression(%40exp))%3B%40exp%3A%24type,operator,left(%40exp),right(%40exp),terms(text,start,stop,minus,value%2Fname,fields(field(name),minus),%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20value(name),field(name,start,stop,filterFields(%24type,id,customField(id,name))),values(%24type,start,stop,minus,value(name,minus),left(name),right(name),expression(%40exp)))';
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/search/assist?${params}`,
+      'POST',
+      {
+        caret: 0,
+        folders,
+        query,
+        type,
+      },
+    );
   }
 
   async getQueryAssistSuggestionsLegacy(

@@ -1,9 +1,9 @@
 import {i18n} from 'components/i18n/i18n';
-import {FilterField, FilterFieldValue} from 'types/CustomFields';
+import {FilterField} from 'types/CustomFields';
 
 export interface FilterSetting {
   filterField: FilterField[];
-  selectedValues: FilterFieldValue[];
+  selectedValues: string[];
 }
 
 export interface FiltersSetting {
@@ -49,13 +49,13 @@ const issuesSettingsIssueSizes: IssueSetting[] = [
 
 const issuesSettingsSearch: IssueSetting[] = [
   {
+    label: i18n('Query'),
+    mode: issuesSearchSettingMode.query,
+  },
+  {
     label: i18n('Filters'),
     mode: issuesSearchSettingMode.filter,
     filters: {},
-  },
-  {
-    label: i18n('Query'),
-    mode: issuesSearchSettingMode.query,
   },
 ];
 
@@ -67,6 +67,17 @@ const issuesSettingsDefault: IssuesSettings = {
   },
 };
 
+enum defaultIssuesFilterFieldConfig {
+  project = 'project',
+  state = 'state',
+  assignee = 'assignee',
+}
+
+const defaultHelpdeskFilterFieldConfig = {
+  ...defaultIssuesFilterFieldConfig,
+  type: 'type',
+};
+
 
 export {
   issuesSearchSettingMode,
@@ -74,4 +85,6 @@ export {
   issuesSettingsIssueSizes,
   issuesSettingsSearch,
   issuesViewSettingMode,
+  defaultIssuesFilterFieldConfig,
+  defaultHelpdeskFilterFieldConfig,
 };

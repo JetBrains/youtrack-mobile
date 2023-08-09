@@ -200,7 +200,7 @@ export default createReducer(initialState, {
   ): IssuesState {
     return {...state, searchContext: action.searchContext};
   },
-  [types.SET_ISSUES_SETTINGS](
+  [types.SET_LIST_SETTINGS](
     state: IssuesState,
     action: Record<string, any>,
   ): IssuesState {

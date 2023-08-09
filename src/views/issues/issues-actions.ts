@@ -2,21 +2,31 @@ import * as issueUpdater from 'components/issue-actions/issue-updater';
 import * as types from './issues-action-types';
 import ApiHelper from 'components/api/api__helper';
 import log from 'components/log/log';
+import QueryParser from 'components/query-assist/query-parser';
 import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
-import {createQueryFromFiltersSetting, getFiltersSettingsData} from 'views/issues/issues-helper';
+import {
+  createQueryFromFiltersSetting,
+  getFilterFieldKey,
+  youtrackFields,
+} from 'views/issues/issues-helper';
+import {
+  defaultHelpdeskFilterFieldConfig,
+  defaultIssuesFilterFieldConfig,
+  FilterSetting,
+  FiltersSetting,
+  IssueSetting,
+  issuesSearchSettingMode,
+  IssuesSettings,
+  issuesSettingsDefault,
+  issuesViewSettingMode,
+} from 'views/issues/index';
 import {EVERYTHING_CONTEXT} from 'components/search/search-context';
 import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from 'components/storage/storage';
 import {getAssistSuggestions} from 'components/query-assist/query-assist-helper';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {
-  issuesSearchSettingMode,
-  IssuesSettings,
-  issuesSettingsDefault,
-  issuesViewSettingMode,
-} from 'views/issues/index';
 import {notifyError} from 'components/notification/notification';
 import {removeDuplicatesFromArray, until} from 'util/util';
 import {setGlobalInProgress} from 'actions/app-actions';
@@ -25,12 +35,12 @@ import {sortAlphabetically} from 'components/search/sorting';
 import type Api from 'components/api/api';
 import type {AnyIssue, IssueFull} from 'types/Issue';
 import type {AppState} from 'reducers';
-import type {Folder} from 'types/User';
+import type {Folder, User} from 'types/User';
 import {CustomError} from 'types/Error';
 import {FilterField, FilterFieldValue} from 'types/CustomFields';
 import {ISelectProps} from 'components/select/select';
 import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
-import {IssuesState} from 'views/issues/issues-reducers';
+import {QueryAssistAst} from 'components/query-assist/query-parser_types';
 
 type ApiGetter = () => Api;
 
@@ -336,29 +346,28 @@ export function composeSearchQuery(): (
   dispatch: (arg0: any) => any,
   getState: () => AppState,
   getApi: ApiGetter,
-) => string {
-  return (
+) => Promise<string> {
+  return async (
     dispatch: (arg0: any) => any,
     getState: () => AppState,
     getApi: ApiGetter,
   ) => {
-    const issueListState: IssuesState = getState().issueList;
-    const searchSettings = issueListState.settings.search;
-    const filtersQuery: string = (
-      searchSettings.mode === issuesSearchSettingMode.filter
-        ? createQueryFromFiltersSetting(searchSettings?.filters)
-        : ''
-    );
-    const searchQuery: string = combineWithContextQuery([
-      filtersQuery,
-      issueListState.query,
-    ].join(' '));
-    return searchQuery.trim();
+    const settings: IssuesSettings = dispatch(getIssuesSettings());
+    const issuesQuery: string = getState().issueList.query;
+    const searchSettings: IssueSetting = settings.search;
+    let query: string;
+    if (searchSettings.mode === issuesSearchSettingMode.filter) {
+      const visibleFilters: FilterSetting[] = getVisibleFilters(getState().app.user as User, settings);
+      query = `${createQueryFromFiltersSetting(visibleFilters)} ${QueryParser.convertToNonStructural(issuesQuery)}`;
+    } else {
+      query = combineWithContextQuery(issuesQuery);
+    }
+    return query.trim();
   };
 }
 
 
-export function openFilterFieldSelect(filterFields: FilterField[]): (
+export function openFilterFieldSelect(filterSetting: FilterSetting): (
   dispatch: (arg0: any) => any,
   getState: () => AppState,
   getApi: ApiGetter,
@@ -369,15 +378,16 @@ export function openFilterFieldSelect(filterFields: FilterField[]): (
     getApi: ApiGetter,
   ) => {
     trackEvent('Issues filter field select');
-    const settings: IssuesSettings = getState().issueList.settings;
-    const filtersSettingsData = getFiltersSettingsData(settings.search?.filters, filterFields);
+    const settings: IssuesSettings = dispatch(getIssuesSettings());
+    const selectedItems: { name: string; id: string }[] = filterSetting.selectedValues.map(i => ({id: i, name: i}));
     const selectProps: Partial<ISelectProps> = {
       multi: true,
       getTitle: (it: FilterFieldValue) => getEntityPresentation(it),
       dataSource: async (prefix: string = '') => {
-        const [error, combinedValues] = await until(
-          filterFields.map(
-            (it: FilterField) => getApi().filterFields.filterFieldValues(it.id, prefix, dispatch(composeSearchQuery()))
+        const query = dispatch(composeSearchQuery());
+        const [error, filterFieldValues] = await until(
+          filterSetting.filterField.map(
+            (it: FilterField) => getApi().filterFields.filterFieldValues(it.id, prefix, query)
           ),
           true,
           true
@@ -385,31 +395,30 @@ export function openFilterFieldSelect(filterFields: FilterField[]): (
         if (error) {
           log.warn('Failed to load user folders for the context');
         }
-        return error ? [] : removeDuplicatesFromArray(filtersSettingsData.selectedValues.concat(combinedValues));
+        const _values = removeDuplicatesFromArray(
+          filterFieldValues.map(i => ({id: i.id, name: i.presentation})).concat(selectedItems)
+        );
+        return error ? [] : _values;
       },
-      selectedItems: filtersSettingsData.selectedValues,
+      selectedItems,
       onCancel: () => dispatch(closeSelect()),
-      onSelect: async (selectedFilterValues: FilterFieldValue[]) => {
+      onSelect: async (selected: { id: string; name: string }[]) => {
         try {
           dispatch(closeSelect());
-          const issuesSettings = {
+          const issuesSettings: IssuesSettings = {
             ...settings,
             search: {
               ...settings.search,
               filters: {
                 ...settings.search.filters,
-                [filtersSettingsData.key]: {
-                  filterField: filterFields,
-                  selectedValues: selectedFilterValues,
+                [getFilterFieldKey(filterSetting.filterField[0])]: {
+                  filterField: filterSetting.filterField,
+                  selectedValues: selected.map(i => i.id),
                 },
               },
             },
           };
-          await dispatch({
-            type: types.SET_ISSUES_SETTINGS,
-            settings: issuesSettings,
-          });
-          await flushStoragePart({issuesSettings});
+          await dispatch(cachedIssuesSettings(issuesSettings));
           dispatch(refreshIssues());
         } catch (error) {
           log.warn('Failed to change a context', error);
@@ -535,7 +544,7 @@ export function isIssueMatchesQuery(
   ) => {
     const [error, listIssues] = await until(
       getApi().issues.getIssuesXShort(
-        encodeURIComponent(`${composeSearchQuery()} #${issueIdReadable}`),
+        encodeURIComponent(`${await dispatch(composeSearchQuery())} #${issueIdReadable}`),
         1,
       ),
     );
@@ -599,7 +608,7 @@ export function refreshIssues(): (
     dispatch: (arg0: any) => any,
     getState: () => AppState,
   ): Promise<void> => {
-    const searchQuery: string = dispatch(composeSearchQuery());
+    const searchQuery: string = await dispatch(composeSearchQuery());
     dispatch(setIssuesCount(null));
     dispatch(loadIssues(searchQuery));
     dispatch(refreshIssuesCount());
@@ -616,9 +625,9 @@ export function refreshIssuesCount(): (
     dispatch(loadIssuesCount(getSearchContext()));
   };
 }
-export function setSearchContext(
-  searchContext: Folder = EVERYTHING_CONTEXT,
-): (dispatch: (arg0: any) => any) => Promise<void> {
+export function setSearchContext(searchContext: Folder = EVERYTHING_CONTEXT as Folder): (
+  dispatch: (arg0: any) => any,
+) => Promise<void> {
   return async (dispatch: (arg0: any) => any) => {
     dispatch({
       type: types.SET_SEARCH_CONTEXT,
@@ -626,15 +635,113 @@ export function setSearchContext(
     });
   };
 }
+
+export function cachedIssuesSettings(settings?: IssuesSettings): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => IssuesSettings {
+  return (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ): IssuesSettings => {
+    if (settings) {
+      dispatch({
+        type: types.SET_LIST_SETTINGS,
+        settings,
+      });
+      flushStoragePart({issuesSettings: settings});
+    }
+    return settings || getStorageState().issuesSettings || issuesSettingsDefault;
+  };
+}
+
+export function getIssuesSettings(): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  ) => IssuesSettings {
+  return (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    ): IssuesSettings => {
+
+    return getState().issueList.settings;
+  };
+}
+
+export function setFilters(): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => Promise<void> {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
+    const searchContext: Folder = getSearchContext();
+    let settings: IssuesSettings = dispatch(cachedIssuesSettings());
+    if (settings.search.mode === issuesSearchSettingMode.filter && searchContext.id) {
+      if (Object.keys(settings.search.filters!).length === 0) {
+        const [error, filterFields] = await until(getApi().customFields.getFilters());
+        if (error) {
+          log.warn('Cannot load filter fields');
+        }
+
+        const qData = await dispatch(getQueryAssistSuggestionsData(searchContext.query));
+        settings = {
+          ...settings,
+          search: {
+            ...settings.search,
+            filters: (filterFields || []).reduce((akk: FiltersSetting, it: FilterField) => {
+              const key: string = getFilterFieldKey(it);
+              return {
+                ...akk,
+                [key]: {
+                  filterField: [...(akk[key]?.filterField || []), it],
+                  selectedValues: akk[key]?.selectedValues || [],
+                },
+              };
+            }, {}),
+          },
+        };
+
+        const parser: QueryParser = new QueryParser(searchContext.query, qData.ast);
+        const filtersSetting = settings.search.filters;
+        for (const key in filtersSetting) {
+          settings.search.filters[key].selectedValues = parser.getValue?.(youtrackFields[key]) || [];
+        }
+      }
+      dispatch(cachedIssuesSettings(settings));
+    }
+  };
+}
+
+export function getVisibleFilters(user: User, settings: IssuesSettings): FilterSetting[] {
+  const filtersConfig: string[] = (
+    user?.profiles?.helpdesk?.isReporter
+      ? Object.values(defaultIssuesFilterFieldConfig)
+      : Object.values(defaultHelpdeskFilterFieldConfig)
+  );
+  const visibleFilterNames: string[] = user?.profiles?.appearance?.liteUiFilters || filtersConfig;
+  return visibleFilterNames.map(
+    (filterId: string) => settings.search.filters?.[filterId]
+  ).filter(Boolean) as FilterSetting[];
+}
+
 export function initializeIssuesList(
   searchQuery?: string,
-): (dispatch: (arg0: any) => any) => Promise<void> {
-  return async (dispatch: (arg0: any) => any) => {
-    const settings: IssuesSettings = getStorageState().issuesSettings ?? issuesSettingsDefault;
-    dispatch({
-      type: types.SET_ISSUES_SETTINGS,
-      settings,
-    });
+): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+  ) => Promise<void> {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+    ) => {
     dispatch(setIssuesQuery(searchQuery || getStorageState().query || ''));
 
     if (searchQuery) {
@@ -644,8 +751,9 @@ export function initializeIssuesList(
     }
 
     await dispatch(setSearchContext(getSearchContext()));
-    const cachedIssues: AnyIssue[] | null = getStorageState().issuesCache;
+    await dispatch(setFilters());
 
+    const cachedIssues: AnyIssue[] | null = getStorageState().issuesCache;
     if (cachedIssues?.length) {
       log.debug(`Loaded ${cachedIssues.length} cached issues`);
       dispatch(receiveIssues(cachedIssues, dispatch(getPageSize())));
@@ -699,7 +807,7 @@ export function loadMoreIssues(): (
       dispatch(startMoreIssuesLoading(newSkip));
 
       try {
-        const searchQuery = dispatch(composeSearchQuery());
+        const searchQuery = await dispatch(composeSearchQuery());
         let moreIssues: AnyIssue[] = (await api.issues.getIssues(
           searchQuery,
           pageSize,
@@ -733,21 +841,22 @@ export function loadMoreIssues(): (
 }
 export function loadIssuesCount(folder?: Folder | null): (
   dispatch: (arg0: any) => any,
-  getState: () => any,
+  getState: () => AppState,
   getApi: ApiGetter,
 ) => Promise<void> {
   return async (
     dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
+    getState: () => AppState,
     getApi: ApiGetter,
   ) => {
     try {
       const api: Api = getApi();
       const abortController: AbortController = new AbortController();
-      const _query = dispatch(composeSearchQuery());
+      const _query = await dispatch(composeSearchQuery());
+      const _folder = getState().issueList.settings.search.mode === issuesSearchSettingMode.filter ? undefined : folder;
       const issuesCount: number = await api.issues.getIssuesCount(
         _query,
-        folder,
+        _folder,
         false,
         abortController,
       );
@@ -782,27 +891,41 @@ export function onSettingsChange(settings: IssuesSettings): (
     dispatch: (arg0: any) => any,
     getState: () => AppState,
   ) => {
-    const prevSettings: IssuesSettings = getState().issueList.settings;
-    const isSearchModeChanged: boolean = prevSettings.search.mode !== settings.search.mode;
-    if (
-      prevSettings.view.mode !== settings.view.mode ||
-      isSearchModeChanged
-    ) {
-      dispatch({
-        type: types.SET_ISSUES_SETTINGS,
-        settings,
-      });
-      if (isSearchModeChanged) {
+    const prevSettings: IssuesSettings = dispatch(getIssuesSettings());
+    if (prevSettings !== settings) {
+      const isFilterMode: boolean = settings.search.mode === issuesSearchSettingMode.filter;
+      if (prevSettings.search.mode !== settings.search.mode && isFilterMode) {
         dispatch(setIssuesQuery(''));
       }
+      await dispatch(cachedIssuesSettings(settings));
       await flushStoragePart({issuesCache: null});
+      if (isFilterMode) {
+        await dispatch(setFilters());
+      }
       dispatch(receiveIssues([], dispatch(getPageSize())));
       dispatch(refreshIssues());
-      flushStoragePart({issuesSettings: settings});
     }
   };
 }
 
+export function getQueryAssistSuggestionsData(query: string): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => Promise<{
+  ast: QueryAssistAst,
+  caret: number,
+  query: string,
+}> {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
+    const [error, data] = await until(getApi().search.getQueryAssistSuggestionsData(query));
+    return error ? {} : data;
+  };
+}
 
 function getGroupedFolders(folders: Folder[]) {
   return folders.reduce(

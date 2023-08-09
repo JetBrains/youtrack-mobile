@@ -44,8 +44,10 @@ import {initialState} from './issues-reducers';
 import {isReactElement} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {
+  FilterSetting,
   IssueSetting,
   issuesSearchSettingMode,
+  IssuesSettings,
   issuesSettingsIssueSizes,
   issuesSettingsSearch,
   issuesViewSettingMode,
@@ -89,7 +91,7 @@ type Props = IssuesState &
   networkState: NetInfoState,
   isInProgress: boolean,
   user: User,
-  onFilterPress: (filterField: FilterField[]) => any,
+  onFilterPress: (filterField: FilterSetting) => any,
 };
 
 type State = {
@@ -481,32 +483,27 @@ export class Issues extends Component<Props, State> {
   }
 
   renderSearchPanel() {
-    const {settings} = this.props;
+    const {settings, user, getVisibleFilters} = this.props;
     const {onFilterPress} = this.props;
     const isFilterMode: boolean = this.isFilterSearchMode();
+    const filters: FilterSetting[] = isFilterMode ? getVisibleFilters(user, settings) : [];
     return (
       <>
         <View style={styles.searchPanel}>
           {this.state.isEditQuery ? this.renderSearchQueryAssist() : this.renderSearchQueryPreview()}
         </View>
-        {isFilterMode && (
+        {isFilterMode && filters.length > 0 && (
           <ScrollView
             horizontal={true}
             contentContainerStyle={styles.searchPanelFilters}
           >
             <IssuesFilters
-              filtersSettings={settings.search.filters}
-              query={this.props.query}
-              user={this.props.user}
-              disabled={false}
-              onPress={(filterFields: FilterField[]) => {
-                onFilterPress(filterFields);
-              }}
+              filters={filters}
+              onPress={(filterSetting: FilterSetting) => onFilterPress(filterSetting)}
             />
           </ScrollView>
         )}
       </>
-
     );
   }
 
@@ -834,12 +831,13 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     ...bindActionCreators(issueActions, dispatch),
     onQueryUpdate: (query: string) => dispatch(issueActions.onQueryUpdate(query)),
     onOpenContextSelect: () => dispatch(issueActions.openContextSelect()),
-    onFilterPress: (filterFields: FilterField[]) => dispatch(issueActions.openFilterFieldSelect(filterFields)),
+    onFilterPress: (filterFields: FilterField[], values: string[]) => dispatch(issueActions.openFilterFieldSelect(filterFields, values)),
     updateSearchContextPinned: isSearchScrolledUp => dispatch(
       issueActions.updateSearchContextPinned(isSearchScrolledUp)
     ),
     setIssuesCount: (count: number | null) => dispatch(issueActions.setIssuesCount(count)),
     updateIssue: (issueId: string) => dispatch(issueActions.updateIssue(issueId)),
+    getVisibleFilters: (user: User, settings: IssuesSettings) => issueActions.getVisibleFilters(user, settings),
   };
 };
 

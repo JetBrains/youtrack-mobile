@@ -50,10 +50,6 @@ export interface ISelectState {
   loaded: boolean;
 }
 
-interface SelectItemsSortData {
-  selected: IItem[];
-  other: IItem[];
-}
 
 export class Select<P extends ISelectProps, S extends ISelectState> extends React.PureComponent<P, S> {
   static defaultProps: {
@@ -106,22 +102,14 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     const selectedItemsKey: string[] = this.state.selectedItems.map(
       (it: IItem) => this.getItemKey(it),
     );
-    const sortData: SelectItemsSortData = items.reduce(
-      (data: SelectItemsSortData, item: IItem) => {
-        if (selectedItemsKey.includes(this.getItemKey(item))) {
-          data.selected.push(item);
-        } else {
-          data.other.push(item);
-        }
-
-        return data;
-      },
-      {
-        selected: [] as IItem[],
-        other: [] as IItem[],
-      },
+    const nonSelected: IItem[] = items.reduce(
+      (data: IItem[], item: IItem) => [
+        ...data,
+        ...(selectedItemsKey.includes(this.getItemKey(item)) ? [] : [item]),
+      ],
+      [] as IItem[]
     );
-    return [...sortData.selected, ...sortData.other];
+    return [...this.state.selectedItems, ...nonSelected];
   };
 
   componentDidMount() {

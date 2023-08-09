@@ -1,7 +1,10 @@
 import React from 'react';
 
 import {cleanup, fireEvent, render, screen} from '@testing-library/react-native';
+import {Provider} from 'react-redux';
+import {Store} from 'redux';
 
+import mocks from 'test/mocks';
 import Tags from './tags';
 import {Tag} from 'types/CustomFields';
 
@@ -15,6 +18,7 @@ describe('<Tags/>', () => {
   let tagQueryMock;
   let onTagPressMock: jest.Mock;
   let tagMock: Tag;
+  let storeMock: Store;
 
   afterEach(cleanup);
   beforeEach(() => {
@@ -29,6 +33,7 @@ describe('<Tags/>', () => {
       },
       query: tagQueryMock,
     } as Tag;
+    storeMock = mocks.createMockStore([])({});
   });
 
 
@@ -111,6 +116,10 @@ describe('<Tags/>', () => {
     onTagRemove?: jest.Mock,
     onTagPress?: jest.Mock
   }) {
-    return render(<Tags tags={tags} onTagPress={onTagPress} onTagRemove={onTagRemove}/>);
+    return render(
+      <Provider store={storeMock}>
+        <Tags tags={tags} onTagPress={onTagPress} onTagRemove={onTagRemove}/>
+      </Provider>
+    );
   }
 });

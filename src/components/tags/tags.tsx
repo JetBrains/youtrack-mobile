@@ -2,6 +2,7 @@ import React from 'react';
 import {View, TouchableOpacity} from 'react-native';
 
 import {useActionSheet} from '@expo/react-native-action-sheet';
+import {useSelector} from 'react-redux';
 
 import ColorField from 'components/color-field/color-field';
 import {guid} from 'util/util';
@@ -12,6 +13,8 @@ import styles from './tags.styles';
 import type {Tag} from 'types/CustomFields';
 import type {ViewStyleProp} from 'types/Internal';
 import {ActionSheetAction} from 'types/Action';
+import {AppState} from 'reducers';
+import {issuesSearchSettingMode} from 'views/issues';
 
 interface Props {
   tags: Tag[];
@@ -26,6 +29,10 @@ const NO_COLOR_CODING_ID = '0';
 
 const Tags = (props: Props): JSX.Element | null => {
   const {showActionSheetWithOptions} = useActionSheet();
+
+  const isFilterMode: boolean = useSelector((state: AppState) => {
+    return state.issueList?.settings?.search?.mode === issuesSearchSettingMode.filter;
+  });
 
   const getContextActions = (tag: Tag): ActionSheetAction[] => {
     const actions: ActionSheetAction[] = [
@@ -71,6 +78,7 @@ const Tags = (props: Props): JSX.Element | null => {
               style={[styles.tag, multiline ? styles.tagMultiline : null]}
               testID="test:id/tagsListTag"
               accessible={false}
+              disabled={isFilterMode}
               onPress={() => {
                 showActionSheetWithOptions(
                   {

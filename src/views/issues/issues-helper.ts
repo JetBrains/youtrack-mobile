@@ -5,8 +5,21 @@ import {until} from 'util/util';
 import type API from 'components/api/api';
 import type {Folder} from 'types/User';
 import type {IssueFieldSortProperty, SearchSuggestions} from 'types/Sorting';
-import {FilterSetting, FiltersSetting} from 'views/issues/index';
-import {FilterField, FilterFieldValue} from 'types/CustomFields';
+import {FilterSetting} from 'views/issues/index';
+import {FilterField} from 'types/CustomFields';
+import QueryParser from 'components/query-assist/query-parser';
+
+export const youtrackFields: { [key: string]: string } = {
+  id: 'issue id',
+  summary: 'summary',
+  priority: 'priority',
+  state: 'state',
+  project: 'project',
+  requester: 'reporter',
+  assignee: 'assignee',
+  updated: 'updated',
+  created: 'created',
+};
 
 const doAssist = async (params: {
   context: Folder | null | undefined;
@@ -40,37 +53,22 @@ const isRelevanceSortProperty = (sortProperty: IssueFieldSortProperty): boolean 
   return sortProperty.$type === 'RelevanceSortProperty';
 };
 
-const createQueryFromFiltersSetting = (filters: FiltersSetting = {}): string => {
-  return Object.keys(filters).reduce((akk: string, name: string) => {
-    const query: string[] = (filters[name]?.selectedValues || []).map(i => i.query);
-    return `${akk} ${query.join(' ')}`;
+const createQueryFromFiltersSetting = (filters: FilterSetting[] = []): string => {
+  return filters.reduce((akk: string, it: FilterSetting) => {
+    const query: string = (it.selectedValues || []).map(QueryParser.wrap).join(',');
+    return query ? `${akk} ${it.filterField[0].name}:${query}` : akk;
   }, '').trim();
 };
 
-const getFilterSettingKey = (filterField: FilterField) => {
+const getFilterFieldKey = (filterField: FilterField) => {
   return filterField.name.toLowerCase();
 };
-
-const getFiltersSettingsData = (filtersSetting: FiltersSetting, filterFields: FilterField[]) => {
-  const key: string = getFilterSettingKey(filterFields[0]);
-  const filter: FilterSetting | { selectedValues: FilterFieldValue[] } = (
-    filtersSetting?.[key] ||
-    {selectedValues: []}
-  );
-  return {
-    key,
-    ...filter,
-  };
-};
-
-export type FilterFieldMap = { [key: string]: FilterField[] };
 
 
 export {
   createQueryFromFiltersSetting,
   doAssist,
-  getFiltersSettingsData,
-  getFilterSettingKey,
+  getFilterFieldKey,
   getSortPropertyName,
   isRelevanceSortProperty,
 };
