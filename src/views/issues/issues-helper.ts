@@ -5,7 +5,7 @@ import {until} from 'util/util';
 import type API from 'components/api/api';
 import type {Folder} from 'types/User';
 import type {IssueFieldSortProperty, SearchSuggestions} from 'types/Sorting';
-import {FilterSetting} from 'views/issues/index';
+import {defaultIssuesFilterFieldConfig, FilterSetting} from 'views/issues/index';
 import {FilterField} from 'types/CustomFields';
 import QueryParser from 'components/query-assist/query-parser';
 
@@ -54,10 +54,20 @@ const isRelevanceSortProperty = (sortProperty: IssueFieldSortProperty): boolean 
 };
 
 const createQueryFromFiltersSetting = (filters: FilterSetting[] = []): string => {
-  return filters.reduce((akk: string, it: FilterSetting) => {
+  const groupedQuery = filters.reduce((akk: {[key: string]: string}, it: FilterSetting) => {
     const query: string = (it.selectedValues || []).map(QueryParser.wrap).join(',');
-    return query ? `${akk} ${it.filterField[0].name}:${query}` : akk;
-  }, '').trim();
+    if (query) {
+      akk[getFilterFieldKey(it.filterField[0])] = query;
+    }
+    return akk;
+  }, {});
+
+  const {project, ...other} = groupedQuery;
+  const q: string[] = project ? [`${defaultIssuesFilterFieldConfig.project}:${project}`] : [];
+  for(const v in other) {
+    q.push(`${v}:${other[v]}`);
+  }
+  return q.join(' ').trim();
 };
 
 const getFilterFieldKey = (filterField: FilterField) => {

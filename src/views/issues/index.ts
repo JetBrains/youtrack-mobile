@@ -3,6 +3,7 @@ import {FilterField} from 'types/CustomFields';
 
 export interface FilterSetting {
   filterField: FilterField[];
+  key: string;
   selectedValues: string[];
 }
 
@@ -62,7 +63,7 @@ const issuesSettingsSearch: IssueSetting[] = [
 const issuesSettingsDefault: IssuesSettings = {
   view: issuesSettingsIssueSizes[1],
   search: {
-    ...issuesSettingsSearch[0],
+    ...issuesSettingsSearch[1],
     filters: {},
   },
 };

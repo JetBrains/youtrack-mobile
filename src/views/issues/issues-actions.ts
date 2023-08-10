@@ -511,7 +511,7 @@ export function loadIssues(query: string): (
       dispatch(stopIssuesLoading());
 
       if (error) {
-        if (isOffline && !getStorageState().issuesCache) {
+        if (isOffline && !getStorageState().issuesCache || !isOffline) {
           dispatch(setIssuesError(error));
         }
       } else {
@@ -699,6 +699,7 @@ export function setFilters(): (
               return {
                 ...akk,
                 [key]: {
+                  key,
                   filterField: [...(akk[key]?.filterField || []), it],
                   selectedValues: akk[key]?.selectedValues || [],
                 },
