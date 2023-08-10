@@ -34,7 +34,7 @@ yarn install
 
 ### iOS
 
-1. Install [XCode](https://developer.apple.com/xcode/download/).
+1. Install [Xcode](https://developer.apple.com/xcode/download/).
    It's also recommended to install Xcode command line tools `xcode-select --install`.
 2. From Xcode settings download an iOS simulator.
 
