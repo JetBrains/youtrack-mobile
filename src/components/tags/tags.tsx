@@ -35,19 +35,19 @@ const Tags = (props: Props): JSX.Element | null => {
   });
 
   const getContextActions = (tag: Tag): ActionSheetAction[] => {
-    const actions: ActionSheetAction[] = [
-      {
+    const actions: ActionSheetAction[] = [];
+    if (!isFilterMode) {
+      actions.push({
         title: i18n('Show all issues tagged with "{{tagName}}"...', {
           tagName: tag.name,
         }),
         execute: () => props.onTagPress(tag.query),
-      },
-    ];
-
+      });
+    }
     if (props.onTagRemove) {
       actions.push({
         title: i18n('Remove tag'),
-        execute: () => props.onTagRemove && props.onTagRemove(tag.id),
+        execute: () => props?.onTagRemove?.(tag.id),
       });
     }
 
@@ -78,7 +78,6 @@ const Tags = (props: Props): JSX.Element | null => {
               style={[styles.tag, multiline ? styles.tagMultiline : null]}
               testID="test:id/tagsListTag"
               accessible={false}
-              disabled={isFilterMode}
               onPress={() => {
                 showActionSheetWithOptions(
                   {

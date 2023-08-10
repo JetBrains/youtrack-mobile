@@ -1,5 +1,5 @@
 export type ActionSheetAction = {
-  execute: () => any;
+  execute?: () => any;
   id?: string;
   icon?: any;
   iconSize?: number;
