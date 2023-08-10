@@ -14,13 +14,12 @@ import {connect} from 'react-redux';
 
 import * as issueActions from './issues-actions';
 import CreateIssue from 'views/create-issue/create-issue';
-import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import ErrorMessage from 'components/error-message/error-message';
 import Issue from 'views/issue/issue';
 import IssueRow from './issues__row';
 import IssuesCount from './issues__count';
 import IssuesFilters from 'views/issues/issues__filters';
-import IssuesSortBy from './issues__sortby';
+import IssuesListSettings from './issues__settings';
 import log from 'components/log/log';
 import ModalPortal from 'components/modal-view/modal-portal';
 import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
@@ -35,7 +34,7 @@ import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {getIssueFromCache} from './issues-actions';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
-import {IconAdd, IconAngleDown, IconAngleRight, IconCheck, IconSettings} from 'components/icon/icon';
+import {IconAdd, IconAngleDown, IconSettings} from 'components/icon/icon';
 import {
   ICON_PICTOGRAM_DEFAULT_SIZE,
   IconNothingFound,
@@ -45,11 +44,7 @@ import {isReactElement} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {
   FilterSetting,
-  IssueSetting,
   issuesSearchSettingMode,
-  IssuesSettings,
-  issuesSettingsIssueSizes,
-  issuesSettingsSearch,
   issuesViewSettingMode,
 } from 'views/issues/index';
 import {logEvent} from 'components/log/log-helper';
@@ -440,7 +435,7 @@ export class Issues extends Component<Props, State> {
     this.setEditQueryMode(true);
     this.clearSearchQuery(clearSearchQuery);
   };
-  onQueryUpdate: (query: string) => void = (query: string) => {
+  onQueryUpdate = (query: string) => {
     logEvent({
       message: 'Apply search',
       analyticsId: ANALYTICS_ISSUES_PAGE,
@@ -509,9 +504,9 @@ export class Issues extends Component<Props, State> {
 
   hasIssues: () => boolean = (): boolean => this.props.issues?.length > 0;
 
-  toggleSettingsVisibility(settingsVisible: boolean) {
+  toggleSettingsVisibility = (settingsVisible: boolean) => {
     this.setState({settingsVisible});
-  }
+  };
 
   renderToolbar() {
     return (
@@ -681,107 +676,13 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  renderSettings(): React.JSX.Element {
-    const {
-      query,
-      searchContext,
-      onSettingsChange,
-      settings,
-      user,
-    } = this.props;
-    const isQueryMode: boolean = settings.search.mode === issuesSearchSettingMode.query;
-    return (
-      <BottomSheetModal
-        style={styles.settingsModal}
-        withHandle={true}
-        height={Dimensions.get('window').height - 100}
-        snapPoint={450}
-        isVisible={this.state.settingsVisible}
-        onClose={() => this.toggleSettingsVisibility(false)}
-      >
-        <>
-          <View style={styles.settingsItem}>
-            <Text style={styles.settingsItemTitle}>{i18n('Search Input Mode')}</Text>
-            {issuesSettingsSearch.map((it: IssueSetting, index: number) => {
-              return (
-                <TouchableOpacity
-                  key={`issueSetting${index}`}
-                  style={styles.settingsRow}
-                  onPress={() => {
-                    onSettingsChange({...settings, search: it});
-                  }}
-                >
-                  <Text style={styles.settingsItemText}>{it.label}</Text>
-                  {it.mode === settings.search.mode && <IconCheck
-                    size={20}
-                    color={styles.link.color}
-                  />}
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-          <View style={styles.settingsSeparator}/>
-          <View style={styles.settingsItem}>
-            <Text style={styles.settingsItemTitle}>
-              {isQueryMode && i18n('Sort Order')}
-              {!isQueryMode && i18n('Filter Settings')}
-            </Text>
-            {isQueryMode && <IssuesSortBy
-              onOpen={() => this.toggleSettingsVisibility(false)}
-              context={searchContext}
-              onApply={(q: string) => this.onQueryUpdate(q)}
-              query={query}
-            />}
-            {!isQueryMode && <TouchableOpacity
-              style={styles.settingsRow}
-              onPress={() => {
-
-                //TODO
-              }}
-            >
-              <Text
-                numberOfLines={1}
-                style={styles.settingsItemText}
-              >
-                {user.profiles?.appearance?.liteUiFilters?.join(', ')}
-              </Text>
-              <IconAngleRight
-                size={19}
-                color={styles.settingsItemIcon.color}
-              />
-            </TouchableOpacity>}
-          </View>
-          <View style={styles.settingsSeparator}/>
-          <View style={styles.settingsItem}>
-            <Text style={styles.settingsItemTitle}>{i18n('Preview Size')}</Text>
-            {issuesSettingsIssueSizes.map((it: IssueSetting, index: number) => {
-              const isActive: boolean = it.mode === settings.view.mode;
-              return (
-                <TouchableOpacity
-                  key={`sizeSetting${index}`}
-                  disabled={isActive}
-                  style={styles.settingsRow}
-                  onPress={() => {
-                    onSettingsChange({...settings, view: it});
-                    this.toggleSettingsVisibility(false);
-                  }}
-                >
-                  <Text
-                    style={styles.settingsItemText}>
-                    {`${it.label} `}
-                  </Text>
-                  {isActive && <IconCheck
-                    size={20}
-                    color={styles.link.color}
-                  />}
-                </TouchableOpacity>
-              );
-            })
-            }
-          </View>
-        </>
-      </BottomSheetModal>
-    );
+  renderSettings(): React.JSX.Element | null {
+    return this.state.settingsVisible ? (
+      <IssuesListSettings
+        onQueryUpdate={this.onQueryUpdate}
+        toggleVisibility={this.toggleSettingsVisibility}
+      />
+    ) : null;
   }
 
   render(): React.ReactNode {
