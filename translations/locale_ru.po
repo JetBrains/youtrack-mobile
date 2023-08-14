@@ -108,6 +108,10 @@ msgstr "добавил(а) реакцию"
 msgid "All"
 msgstr "Все"
 
+#: src/views/issues/issues__filters-filter.tsx
+msgid "All projects"
+msgstr ""
+
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
 msgid "Appearance"
@@ -500,9 +504,9 @@ msgstr "Фильтровать проекты"
 msgid "Filter projects, saved searches, and tags"
 msgstr "Фильтровать проекты, теги и сохраненные поиски"
 
-#: src/views/issues/issues-actions.ts
-msgid "Filter saved searches"
-msgstr "Фильтровать сохраненные поиски"
+#: src/views/issues/issues__settings.tsx
+msgid "Filter Settings"
+msgstr ""
 
 #: src/views/agile-board/board-actions.ts
 msgid "Filter sprints by name"
@@ -517,9 +521,17 @@ msgstr "Фильтровать теги"
 msgid "Filter users, groups, and teams"
 msgstr "Фильтровать пользователей, группы и команды"
 
+#: src/views/issues/index.ts
+msgid "Filters"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Find favorite projects"
 msgstr "Найти проекты"
+
+#: src/views/issues/issues.tsx
+msgid "Find issues that contain key words"
+msgstr ""
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Get help"
@@ -593,6 +605,10 @@ msgstr "только что"
 msgid "Knowledge Base"
 msgstr "База знаний"
 
+#: src/views/issues/index.ts
+msgid "Large"
+msgstr ""
+
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-message-data.ts
 msgid "License error"
@@ -616,6 +632,10 @@ msgstr "Ссылка на комментарий скопирована"
 #: src/components/linked-issues/linked-issues.tsx
 msgid "Linked issues"
 msgstr "Связанные задачи"
+
+#: src/views/issues/issues.tsx
+msgid "List settings"
+msgstr ""
 
 #: src/components/select/select.tsx
 msgid "Loading values…"
@@ -667,6 +687,10 @@ msgstr[0] "{{issuesCount}} совпадающая задача"
 msgstr[1] "{{issuesCount}} совпадающие задачи"
 msgstr[2] "{{issuesCount}} совпадающих задач"
 msgstr[3] "{{issuesCount}} совпадающих задач"
+
+#: src/views/issues/index.ts
+msgid "Medium"
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
@@ -771,6 +795,10 @@ msgstr "Пароль"
 msgid "Photo and video library"
 msgstr "Библиотека Фото/видео"
 
+#: src/views/issues/issues__settings.tsx
+msgid "Preview Size"
+msgstr ""
+
 #: src/views/settings/settings-helper.ts
 msgid "Problem"
 msgstr "Сообщить о проблеме"
@@ -779,6 +807,7 @@ msgstr "Сообщить о проблеме"
 msgid "Project"
 msgstr "Проект"
 
+#: src/views/issues/issues-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Projects"
 msgstr "Проекты"
@@ -791,8 +820,11 @@ msgstr "Проекты свернуты"
 msgid "Projects expanded"
 msgstr "Проекты развернуты"
 
+#: src/views/issues/index.ts
+msgid "Query"
+msgstr ""
+
 #: src/components/query-assist/query-assist-helper.ts
-#: src/views/issues/issues-actions.ts
 msgid "Recent searches"
 msgstr "Недавние поиски"
 
@@ -842,6 +874,10 @@ msgstr "Восстановить"
 msgid "Retry"
 msgstr "Попробовать еще раз"
 
+#: src/views/issues/issues-actions.ts
+msgid "Saved Searches"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base__search.tsx
 msgid "Search articles"
 msgstr "Поиск статей"
@@ -853,6 +889,10 @@ msgstr "Поищите другое значение"
 #: src/components/custom-fields-panel/custom-fields-panel.tsx
 msgid "Search for the project"
 msgstr "Искать проект"
+
+#: src/views/issues/issues__settings.tsx
+msgid "Search Input Mode"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Select an article from the list"
@@ -931,6 +971,10 @@ msgstr "Показать все задачи с тегом «{{tagName}}»..."
 msgid "Show more"
 msgstr "Показать больше"
 
+#: src/views/issues/index.ts
+msgid "Small"
+msgstr ""
+
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-messages.ts
 msgid "Something went wrong"
@@ -939,6 +983,10 @@ msgstr "Что-то пошло не так"
 #: src/views/issues/issues__sortby_list.tsx
 msgid "Sort Attributes"
 msgstr "Атрибуты сортировки"
+
+#: src/views/issues/issues__settings.tsx
+msgid "Sort Order"
+msgstr ""
 
 #: src/views/issue/activity/issue__activity-settings.tsx
 msgid "Sort: oldest first"
@@ -993,6 +1041,10 @@ msgstr[0] "Тег"
 msgstr[1] "Теги"
 msgstr[2] "Теги"
 msgstr[3] "Теги"
+
+#: src/views/issues/issues-actions.ts
+msgid "Tags"
+msgstr ""
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Thank you for your feedback!"
