@@ -3,7 +3,7 @@ import {TextInput, TouchableWithoutFeedback, View} from 'react-native';
 
 import {i18n} from 'components/i18n/i18n';
 import {IconSearch} from 'components/icon/icon';
-import {iconClearText} from 'components/icon/icon-clear-text';
+import {IconClearText} from 'components/icon/icon-clear-text';
 
 import styles from './query-assist.styles';
 
@@ -37,41 +37,43 @@ const QueryPreview = (props: Props) => {
   };
 
   return (
-    <View style={style}>
-      <View style={styles.inputContainer}>
-        <TouchableWithoutFeedback onPress={focus}>
-          <IconSearch
-            style={styles.searchIcon}
-            size={20}
-            color={styles.clearIcon.color}
-          />
-        </TouchableWithoutFeedback>
+    <View style={[styles.inputContainer, style]}>
+      <TouchableWithoutFeedback onPress={focus}>
+        <IconSearch
+          style={styles.searchIcon}
+          size={20}
+          color={styles.clearIcon.color}
+        />
+      </TouchableWithoutFeedback>
 
-        <TextInput
-          editable={editable}
-          ref={ref}
-          numberOfLines={1}
-          onFocus={focus}
-          accessible={true}
-          testID="test:id/query-assist-input"
-          placeholder={placeholder}
-          placeholderTextColor={styles.searchInputPlaceholder.color}
-          style={styles.searchInput}
-          value={value}
-          onChangeText={(q: string) => {
-            setValue(q);
-          }}
-          onSubmitEditing={() => {
-            props?.onSubmit?.(value);
+      <TextInput
+        editable={editable}
+        ref={ref}
+        numberOfLines={1}
+        onFocus={focus}
+        accessible={true}
+        testID="test:id/query-assist-input"
+        placeholder={placeholder}
+        placeholderTextColor={styles.searchInputPlaceholder.color}
+        style={styles.searchInput}
+        value={value}
+        onChangeText={(q: string) => {
+          setValue(q);
+        }}
+        onSubmitEditing={() => {
+          props?.onSubmit?.(value);
+        }}
+      />
+
+      {!!query && (
+        <IconClearText
+          onPress={() => {
+            setValue('');
+            props?.onFocus?.(true);
+            props?.onSubmit?.('');
           }}
         />
-
-        {!!query && iconClearText(() => {
-          setValue('');
-          props?.onFocus?.(true);
-          props?.onSubmit?.('');
-        }, styles.clearIcon.color)}
-      </View>
+      )}
     </View>
   );
 };

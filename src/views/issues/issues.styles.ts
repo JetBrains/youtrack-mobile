@@ -15,7 +15,6 @@ import {headerTitlePresentation} from 'components/header/header.styles';
 import {issueCard} from 'components/common-styles/issue';
 import {separator} from 'components/common-styles/list';
 import {splitViewStyles} from 'components/common-styles/split-view';
-import {searchInputWithMinHeight} from 'components/common-styles/search';
 
 const rowLine = {
   flexDirection: 'row',
@@ -140,7 +139,6 @@ export default EStyleSheet.create({
     paddingHorizontal: UNIT * 2,
   },
   searchQueryPreview: {
-    ...searchInputWithMinHeight,
     marginHorizontal: 0,
   },
   createIssueButton: {

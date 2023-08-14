@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {TextInput, View} from 'react-native';
 
 import {i18n} from 'components/i18n/i18n';
-import {iconClearText} from 'components/icon/icon-clear-text';
+import {IconClearText} from 'components/icon/icon-clear-text';
 import {IconSearch} from 'components/icon/icon';
 
 import styles from './knowledge-base.styles';
@@ -41,11 +41,14 @@ const KnowledgeBaseSearchPanel = (props: Props) => {
         value={searchQuery}
       />
 
-      {!!searchQuery &&
-        iconClearText(() => {
-          updateQuery('');
-          props.onSearch('');
-        }, styles.clearIcon.color)}
+      {!!searchQuery && (
+        <IconClearText
+          onPress={() => {
+            updateQuery('');
+            props.onSearch('');
+          }}
+        />
+      )}
     </View>
   );
 };

@@ -152,18 +152,6 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
     this.props.onClose(this.state.inputValue);
   };
 
-  renderClearIcon(): React.ReactNode {
-    return (
-      <TouchableOpacity
-        onPress={this.resetState}
-        hitSlop={HIT_SLOP}
-        style={styles.clearIcon}
-      >
-        <IconClose size={13} color={styles.clearIcon.color} />
-      </TouchableOpacity>
-    );
-  }
-
   renderCloseButton() {
     return <IconBack color={styles.link.color} />;
   }
@@ -210,7 +198,15 @@ export class QueryAssist<P extends Props, S extends State> extends React.PureCom
           value={inputValue}
         />
 
-        {!!inputValue && this.renderClearIcon()}
+        {!!inputValue && (
+          <TouchableOpacity
+            onPress={this.resetState}
+            hitSlop={HIT_SLOP}
+            style={styles.clearIcon}
+          >
+            <IconClose size={18} color={styles.clearIcon.color} />
+          </TouchableOpacity>
+        )}
       </View>
     );
   }

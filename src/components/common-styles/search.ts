@@ -9,7 +9,7 @@ export const inputWrapper = {
   backgroundColor: '$boxBackground',
 };
 export const searchInput = {
-  flexGrow: 1,
+  flex: 1,
   padding: 0,
   marginHorizontal: UNIT,
   ...mainText,

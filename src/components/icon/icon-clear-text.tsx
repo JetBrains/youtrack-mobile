@@ -1,21 +1,20 @@
-import {TouchableOpacity, StyleSheet} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import React from 'react';
-import {IconClose} from './icon';
-import {UNIT} from 'components/variables';
-import {HIT_SLOP} from '../common-styles/button';
 
-export function iconClearText(onPress: (arg0: any) => any, color: string) {
+import {HIT_SLOP} from 'components/common-styles/button';
+import {IconClose} from './icon';
+
+import styles from './icon-clear-text.styles';
+
+
+export function IconClearText({onPress}: { onPress: () => any }) {
   return (
-    <TouchableOpacity hitSlop={HIT_SLOP} onPress={onPress} style={styles.icon}>
-      <IconClose size={18} color={color} />
+    <TouchableOpacity
+      style={styles.icon}
+      hitSlop={HIT_SLOP}
+      onPress={onPress}
+    >
+      <IconClose size={18} color={styles.icon.color} />
     </TouchableOpacity>
   );
 }
-const styles = StyleSheet.create({
-  icon: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: UNIT,
-    marginRight: UNIT,
-  },
-});
