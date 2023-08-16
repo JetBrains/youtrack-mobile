@@ -5,7 +5,6 @@ import {
   FlatList,
   RefreshControl,
   TouchableOpacity,
-  ScrollView,
 } from 'react-native';
 
 import React, {Component} from 'react';
@@ -72,7 +71,6 @@ import type {Folder, User} from 'types/User';
 import type {IssuesState} from './issues-reducers';
 import type {Theme, UIThemeColors} from 'types/Theme';
 import {NetInfoState} from '@react-native-community/netinfo';
-import {FilterField} from 'types/CustomFields';
 
 type IssuesActions = typeof issueActions;
 
@@ -478,26 +476,12 @@ export class Issues extends Component<Props, State> {
   }
 
   renderSearchPanel() {
-    const {settings, user, getVisibleFilters} = this.props;
-    const {onFilterPress} = this.props;
-    const isFilterMode: boolean = this.isFilterSearchMode();
-    const filters: FilterSetting[] = isFilterMode ? getVisibleFilters(user, settings) : [];
     return (
       <>
         <View style={styles.searchPanel}>
           {this.state.isEditQuery ? this.renderSearchQueryAssist() : this.renderSearchQueryPreview()}
         </View>
-        {isFilterMode && filters.length > 0 && (
-          <ScrollView
-            horizontal={true}
-            contentContainerStyle={styles.searchPanelFilters}
-          >
-            <IssuesFilters
-              filters={filters}
-              onPress={(filterSetting: FilterSetting) => onFilterPress(filterSetting)}
-            />
-          </ScrollView>
-        )}
+        {this.isFilterSearchMode() && <IssuesFilters/>}
       </>
     );
   }
@@ -534,11 +518,13 @@ export class Issues extends Component<Props, State> {
   }
 
   renderSearchQueryPreview() {
+    const {isRefreshing} = this.props;
     const isFilterSearchMode: boolean = this.isFilterSearchMode();
     return (
       <QueryPreview
-        placeholder={isFilterSearchMode ? i18n('Find issues that contain key words') : undefined}
         style={styles.searchQueryPreview}
+        editable={!isRefreshing}
+        placeholder={isFilterSearchMode ? i18n('Find issues that contain key words') : undefined}
         query={this.props.query}
         onSubmit={isFilterSearchMode ? this.props.onQueryUpdate : undefined}
         onFocus={!isFilterSearchMode ? this.onSearchQueryPanelFocus : undefined}
@@ -732,13 +718,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     ...bindActionCreators(issueActions, dispatch),
     onQueryUpdate: (query: string) => dispatch(issueActions.onQueryUpdate(query)),
     onOpenContextSelect: () => dispatch(issueActions.openContextSelect()),
-    onFilterPress: (filterFields: FilterField[], values: string[]) => dispatch(issueActions.openFilterFieldSelect(filterFields, values)),
     updateSearchContextPinned: isSearchScrolledUp => dispatch(
       issueActions.updateSearchContextPinned(isSearchScrolledUp)
     ),
     setIssuesCount: (count: number | null) => dispatch(issueActions.setIssuesCount(count)),
     updateIssue: (issueId: string) => dispatch(issueActions.updateIssue(issueId)),
-    getVisibleFilters: (user: User, settings: IssuesSettings) => issueActions.getVisibleFilters(user, settings),
   };
 };
 

@@ -7,6 +7,14 @@ import type {Folder, User, UserAppearanceProfile} from 'types/User';
 import type {IssueComment} from 'types/CustomFields';
 import type {Reaction} from 'types/Reaction';
 
+const appearanceProfileFields = [
+  'naturalCommentsOrder',
+  'useAbsoluteDates',
+  'firstDayOfWeek',
+  'liteUiFilters',
+];
+
+
 export default class UserAPI extends ApiBase {
   apiUrl: string;
   SEARCH_CONTEXT_FIELDS: string[] = ['id', 'name', 'shortName', 'query'];
@@ -38,12 +46,7 @@ export default class UserAPI extends ApiBase {
             dateFieldFormat: ['dateNoYearPattern', 'datePattern', 'pattern'],
             locale: ['language', 'locale'],
           },
-          appearance: [
-            'naturalCommentsOrder',
-            'useAbsoluteDates',
-            'firstDayOfWeek',
-            'liteUiFilters',
-          ],
+          appearance: appearanceProfileFields,
           articles: {
             lastVisitedArticle: ['id,idReadable,summary,project(id,ringId)'],
           },
@@ -75,7 +78,7 @@ export default class UserAPI extends ApiBase {
     userId: string = 'me',
     appearanceProfile: UserAppearanceProfile,
   ): Promise<UserAppearanceProfile> {
-    const queryString = ApiBase.createFieldsQuery(['naturalCommentsOrder']);
+    const queryString = ApiBase.createFieldsQuery(appearanceProfileFields);
     return await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/users/${userId}/profiles/appearance?${queryString}`,
       'POST',

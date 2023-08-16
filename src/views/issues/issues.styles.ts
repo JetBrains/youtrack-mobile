@@ -269,7 +269,7 @@ export default EStyleSheet.create({
     textTransform: 'capitalize',
   },
   settingsItemIcon: {
-    color: '$iconAccent',
+    color: '$icon',
   },
   settingsSeparator: {
     borderColor: '$separator',
