@@ -504,6 +504,7 @@ msgstr "סינון פרויקטים"
 msgid "Filter projects, saved searches, and tags"
 msgstr ""
 
+#: src/views/issues/issues__filters-settings__list.tsx
 #: src/views/issues/issues__settings.tsx
 msgid "Filter Settings"
 msgstr ""

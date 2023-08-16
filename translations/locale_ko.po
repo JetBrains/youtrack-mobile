@@ -492,6 +492,7 @@ msgstr "프로젝트 필터링"
 msgid "Filter projects, saved searches, and tags"
 msgstr "프로젝트, 저장된 검색 및 태그 필터링"
 
+#: src/views/issues/issues__filters-settings__list.tsx
 #: src/views/issues/issues__settings.tsx
 msgid "Filter Settings"
 msgstr ""

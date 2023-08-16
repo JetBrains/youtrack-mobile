@@ -486,11 +486,12 @@ msgstr "Filter items"
 msgid "Filter projects"
 msgstr "Filter projects"
 
-#: src/views/issues/issues-actions.ts:260
+#: src/views/issues/issues-actions.ts:259
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
-#: src/views/issues/issues__settings.tsx:78
+#: src/views/issues/issues__filters-settings__list.tsx:116
+#: src/views/issues/issues__settings.tsx:83
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
@@ -515,7 +516,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:540
+#: src/views/issues/issues.tsx:527
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -619,7 +620,7 @@ msgstr "Link to comment copied"
 msgid "Linked issues"
 msgstr "Linked issues"
 
-#: src/views/issues/issues.tsx:525
+#: src/views/issues/issues.tsx:509
 msgid "List settings"
 msgstr "List settings"
 
@@ -730,7 +731,7 @@ msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
 #: src/components/error/error-message-data.ts:34
-#: src/views/issues/issues.tsx:591
+#: src/views/issues/issues.tsx:577
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -779,7 +780,7 @@ msgstr "Password"
 msgid "Photo and video library"
 msgstr "Photo and video library"
 
-#: src/views/issues/issues__settings.tsx:107
+#: src/views/issues/issues__settings.tsx:113
 msgid "Preview Size"
 msgstr "Preview Size"
 
@@ -791,7 +792,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/issues/issues-actions.ts:309
+#: src/views/issues/issues-actions.ts:308
 #: src/views/knowledge-base/knowledge-base.tsx:609
 msgid "Projects"
 msgstr "Projects"
@@ -858,7 +859,7 @@ msgstr "Restore"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/views/issues/issues-actions.ts:319
+#: src/views/issues/issues-actions.ts:318
 msgid "Saved Searches"
 msgstr "Saved Searches"
 
@@ -874,7 +875,7 @@ msgstr "Search for a different value"
 msgid "Search for the project"
 msgstr "Search for the project"
 
-#: src/views/issues/issues__settings.tsx:55
+#: src/views/issues/issues__settings.tsx:59
 msgid "Search Input Mode"
 msgstr "Search Input Mode"
 
@@ -883,7 +884,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:653
+#: src/views/issues/issues.tsx:639
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -968,7 +969,7 @@ msgstr "Something went wrong"
 msgid "Sort Attributes"
 msgstr "Sort Attributes"
 
-#: src/views/issues/issues__settings.tsx:77
+#: src/views/issues/issues__settings.tsx:82
 msgid "Sort Order"
 msgstr "Sort Order"
 
@@ -1024,7 +1025,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/views/issues/issues-actions.ts:315
+#: src/views/issues/issues-actions.ts:314
 msgid "Tags"
 msgstr "Tags"
 

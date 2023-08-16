@@ -492,6 +492,7 @@ msgstr "筛选项目"
 msgid "Filter projects, saved searches, and tags"
 msgstr "筛选项目、保存的搜索和标签"
 
+#: src/views/issues/issues__filters-settings__list.tsx
 #: src/views/issues/issues__settings.tsx
 msgid "Filter Settings"
 msgstr ""

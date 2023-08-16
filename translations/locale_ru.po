@@ -504,6 +504,7 @@ msgstr "Фильтровать проекты"
 msgid "Filter projects, saved searches, and tags"
 msgstr "Фильтровать проекты, теги и сохраненные поиски"
 
+#: src/views/issues/issues__filters-settings__list.tsx
 #: src/views/issues/issues__settings.tsx
 msgid "Filter Settings"
 msgstr ""

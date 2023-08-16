@@ -492,6 +492,7 @@ msgstr "プロジェクトをフィルタリング"
 msgid "Filter projects, saved searches, and tags"
 msgstr "プロジェクト、保存した検索条件、タグで絞り込む"
 
+#: src/views/issues/issues__filters-settings__list.tsx
 #: src/views/issues/issues__settings.tsx
 msgid "Filter Settings"
 msgstr ""

@@ -496,6 +496,7 @@ msgstr "Filtra i progetti"
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filtra progetti, ricerche salvate e tag"
 
+#: src/views/issues/issues__filters-settings__list.tsx
 #: src/views/issues/issues__settings.tsx
 msgid "Filter Settings"
 msgstr "Impostazioni dei filtri"
