@@ -554,10 +554,6 @@ msgstr "A beépített hibajelentések mellett a YouTrack Mobile a Bugsnag harmad
 msgid "in revision"
 msgstr "felülvizsgálat alatt"
 
-#: src/components/error/error-message-data.ts
-msgid "Invalid query"
-msgstr ""
-
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
 msgstr "Hibajegy törölve"
@@ -624,10 +620,6 @@ msgstr "Megjegyzésre mutató hivatkozás másolva"
 #: src/components/linked-issues/linked-issues-title.tsx
 #: src/components/linked-issues/linked-issues.tsx
 msgid "Linked issues"
-msgstr ""
-
-#: src/views/issues/issues.tsx
-msgid "List settings"
 msgstr ""
 
 #: src/components/select/select.tsx
@@ -1214,6 +1206,10 @@ msgstr "A cikkolvasók számára látható"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to issue readers"
+msgstr ""
+
+#: src/components/error/error-message-data.ts
+msgid "We didn't find any messages that match your search query"
 msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts

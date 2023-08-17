@@ -550,10 +550,6 @@ msgstr "組み込みのエラー報告機能に加えて、YouTrack Mobile で�
 msgid "in revision"
 msgstr "リビジョン内"
 
-#: src/components/error/error-message-data.ts
-msgid "Invalid query"
-msgstr "クエリが無効です"
-
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
 msgstr "課題が削除されました"
@@ -621,10 +617,6 @@ msgstr "コメントのリンクをコピーしました"
 #: src/components/linked-issues/linked-issues.tsx
 msgid "Linked issues"
 msgstr "リンクされた課題"
-
-#: src/views/issues/issues.tsx
-msgid "List settings"
-msgstr ""
 
 #: src/components/select/select.tsx
 msgid "Loading values…"
@@ -1209,6 +1201,10 @@ msgstr "記事の読者に表示する"
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to issue readers"
 msgstr "課題の読者に表示する"
+
+#: src/components/error/error-message-data.ts
+msgid "We didn't find any messages that match your search query"
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."

@@ -554,10 +554,6 @@ msgstr "En plus de nos rapports d'erreurs intégrés, YouTrack Mobile utilise Bu
 msgid "in revision"
 msgstr "en révision"
 
-#: src/components/error/error-message-data.ts
-msgid "Invalid query"
-msgstr "Requête non valide"
-
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
 msgstr "Ticket supprimé"
@@ -625,10 +621,6 @@ msgstr "Lien vers le commentaire copié"
 #: src/components/linked-issues/linked-issues.tsx
 msgid "Linked issues"
 msgstr "Tickets associés"
-
-#: src/views/issues/issues.tsx
-msgid "List settings"
-msgstr ""
 
 #: src/components/select/select.tsx
 msgid "Loading values…"
@@ -1215,6 +1207,10 @@ msgstr "Visible par les lecteurs de l'article"
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to issue readers"
 msgstr "Visible pour les lecteurs et lectrices du ticket"
+
+#: src/components/error/error-message-data.ts
+msgid "We didn't find any messages that match your search query"
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."

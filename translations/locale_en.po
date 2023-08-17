@@ -491,7 +491,7 @@ msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
 #: src/views/issues/issues__filters-settings__list.tsx:116
-#: src/views/issues/issues__settings.tsx:83
+#: src/views/issues/issues__settings.tsx:84
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
@@ -508,7 +508,7 @@ msgstr "Filter tags"
 msgid "Filter users, groups, and teams"
 msgstr "Filter users, groups, and teams"
 
-#: src/views/issues/index.ts:57
+#: src/views/issues/index.ts:61
 msgid "Filters"
 msgstr "Filters"
 
@@ -516,7 +516,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:527
+#: src/views/issues/issues.tsx:532
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -547,10 +547,6 @@ msgstr "In addition to our built-in error reporting, YouTrack Mobile uses Bugsna
 #: src/views/article/article.tsx:265
 msgid "in revision"
 msgstr "in revision"
-
-#: src/components/error/error-message-data.ts:43
-msgid "Invalid query"
-msgstr "Invalid query"
 
 #: src/views/issue/issue-base-actions-creater.ts:905
 msgid "Issue deleted"
@@ -592,7 +588,7 @@ msgstr "just now"
 msgid "Knowledge Base"
 msgstr "Knowledge Base"
 
-#: src/views/issues/index.ts:46
+#: src/views/issues/index.ts:50
 msgid "Large"
 msgstr "Large"
 
@@ -619,10 +615,6 @@ msgstr "Link to comment copied"
 #: src/components/linked-issues/linked-issues.tsx:211
 msgid "Linked issues"
 msgstr "Linked issues"
-
-#: src/views/issues/issues.tsx:509
-msgid "List settings"
-msgstr "List settings"
 
 #: src/components/select/select.tsx:390
 msgid "Loading values…"
@@ -673,7 +665,7 @@ msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] "Matches {{issuesCount}} issue"
 msgstr[1] "Matches {{issuesCount}} issues"
 
-#: src/views/issues/index.ts:42
+#: src/views/issues/index.ts:46
 msgid "Medium"
 msgstr "Medium"
 
@@ -731,7 +723,7 @@ msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
 #: src/components/error/error-message-data.ts:34
-#: src/views/issues/issues.tsx:577
+#: src/views/issues/issues.tsx:582
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -780,7 +772,7 @@ msgstr "Password"
 msgid "Photo and video library"
 msgstr "Photo and video library"
 
-#: src/views/issues/issues__settings.tsx:113
+#: src/views/issues/issues__settings.tsx:114
 msgid "Preview Size"
 msgstr "Preview Size"
 
@@ -805,7 +797,7 @@ msgstr "Projects collapsed"
 msgid "Projects expanded"
 msgstr "Projects expanded"
 
-#: src/views/issues/index.ts:53
+#: src/views/issues/index.ts:57
 msgid "Query"
 msgstr "Query"
 
@@ -875,7 +867,7 @@ msgstr "Search for a different value"
 msgid "Search for the project"
 msgstr "Search for the project"
 
-#: src/views/issues/issues__settings.tsx:59
+#: src/views/issues/issues__settings.tsx:60
 msgid "Search Input Mode"
 msgstr "Search Input Mode"
 
@@ -884,7 +876,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:639
+#: src/views/issues/issues.tsx:647
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -956,7 +948,7 @@ msgstr "Show all issues tagged with \"{{tagName}}\"..."
 msgid "Show more"
 msgstr "Show more"
 
-#: src/views/issues/index.ts:38
+#: src/views/issues/index.ts:42
 msgid "Small"
 msgstr "Small"
 
@@ -969,7 +961,7 @@ msgstr "Something went wrong"
 msgid "Sort Attributes"
 msgstr "Sort Attributes"
 
-#: src/views/issues/issues__settings.tsx:82
+#: src/views/issues/issues__settings.tsx:83
 msgid "Sort Order"
 msgstr "Sort Order"
 
@@ -1133,7 +1125,7 @@ msgstr "Total votes"
 msgid "Touch and hold an item to view a list of available actions"
 msgstr "Touch and hold an item to view a list of available actions"
 
-#: src/components/error-message/error-message.tsx:87
+#: src/components/error-message/error-message.tsx:95
 msgid "Try Again"
 msgstr "Try Again"
 
@@ -1209,6 +1201,10 @@ msgstr "Visible to article readers"
 #: src/components/visibility/visibility-strings.ts:2
 msgid "Visible to issue readers"
 msgstr "Visible to issue readers"
+
+#: src/components/error/error-message-data.ts:43
+msgid "We didn't find any messages that match your search query"
+msgstr "We didn't find any messages that match your search query"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:16
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."

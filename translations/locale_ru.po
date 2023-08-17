@@ -562,10 +562,6 @@ msgstr "Помимо собственной системы сбора инфор
 msgid "in revision"
 msgstr "в работе"
 
-#: src/components/error/error-message-data.ts
-msgid "Invalid query"
-msgstr "Некорректный запрос"
-
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
 msgstr "Задача удалена"
@@ -633,10 +629,6 @@ msgstr "Ссылка на комментарий скопирована"
 #: src/components/linked-issues/linked-issues.tsx
 msgid "Linked issues"
 msgstr "Связанные задачи"
-
-#: src/views/issues/issues.tsx
-msgid "List settings"
-msgstr ""
 
 #: src/components/select/select.tsx
 msgid "Loading values…"
@@ -1227,6 +1219,10 @@ msgstr "Отображается для всех читателей статьи
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to issue readers"
 msgstr "Отображается для всех читателей задачи"
+
+#: src/components/error/error-message-data.ts
+msgid "We didn't find any messages that match your search query"
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."

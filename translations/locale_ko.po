@@ -550,10 +550,6 @@ msgstr "기본 제공 오류 보고 외에도 YouTrack Mobile은 문제를 진�
 msgid "in revision"
 msgstr "수정 버전의"
 
-#: src/components/error/error-message-data.ts
-msgid "Invalid query"
-msgstr "잘못된 쿼리"
-
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
 msgstr "이슈가 삭제되었습니다"
@@ -621,10 +617,6 @@ msgstr "코멘트 링크 복사됨"
 #: src/components/linked-issues/linked-issues.tsx
 msgid "Linked issues"
 msgstr "연결된 이슈"
-
-#: src/views/issues/issues.tsx
-msgid "List settings"
-msgstr ""
 
 #: src/components/select/select.tsx
 msgid "Loading values…"
@@ -1209,6 +1201,10 @@ msgstr "자료 리더에게 표시됨"
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to issue readers"
 msgstr "이슈 리더에게 표시됨"
+
+#: src/components/error/error-message-data.ts
+msgid "We didn't find any messages that match your search query"
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."

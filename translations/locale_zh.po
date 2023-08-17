@@ -550,10 +550,6 @@ msgstr "除了我们内置的错误报告之外，YouTrack Mobile 还会使用�
 msgid "in revision"
 msgstr "修订版"
 
-#: src/components/error/error-message-data.ts
-msgid "Invalid query"
-msgstr "无效查询"
-
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
 msgstr "已删除问题"
@@ -621,10 +617,6 @@ msgstr "已复制评论的链接"
 #: src/components/linked-issues/linked-issues.tsx
 msgid "Linked issues"
 msgstr "链接的问题"
-
-#: src/views/issues/issues.tsx
-msgid "List settings"
-msgstr ""
 
 #: src/components/select/select.tsx
 msgid "Loading values…"
@@ -1209,6 +1201,10 @@ msgstr "对文章读者可见"
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to issue readers"
 msgstr "问题读者可见"
+
+#: src/components/error/error-message-data.ts
+msgid "We didn't find any messages that match your search query"
+msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."
