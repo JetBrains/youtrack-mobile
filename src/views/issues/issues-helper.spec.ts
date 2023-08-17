@@ -24,21 +24,11 @@ describe('Issues helper', () => {
       );
     });
 
-    it('should sort filters', async () => {
+    it('should create a query from filters', async () => {
       const filters = createSettingMock();
 
       expect(helper.createQueryFromFiltersSetting(filters)).toEqual(
         `${nameMock.toLowerCase()}:${fieldValue},${fieldValue}`
-      );
-    });
-
-    it('should wrap terms with white space', async () => {
-      const filterValueWithWhiteSpace = 'No State';
-      const filters = createSettingMock(nameMock, [filterValueWithWhiteSpace]);
-      const value = `{${filterValueWithWhiteSpace}}`;
-
-      expect(helper.createQueryFromFiltersSetting(filters)).toEqual(
-        `${nameMock.toLowerCase()}:${value}`
       );
     });
 
@@ -60,6 +50,24 @@ describe('Issues helper', () => {
     });
   });
 
+
+  describe('convertToNonStructural', () => {
+    it('should not wrap text with brackets', async () => {
+      expect(helper.convertToNonStructural('')).toEqual('');
+    });
+
+    it('should not wrap text with white spaces only with brackets', async () => {
+      expect(helper.convertToNonStructural('  ')).toEqual('  ');
+    });
+
+    it('should wrap text with brackets', async () => {
+      expect(helper.convertToNonStructural('text')).toEqual('{text}');
+    });
+
+    it('should replace several white spaces with the one and wrap text with brackets', async () => {
+      expect(helper.convertToNonStructural('bold   text   style')).toEqual('{bold text style}');
+    });
+  });
 
   function createSettingMock(name: string = nameMock, values?: string[]): FilterSetting[] {
     const key = name.toLowerCase();

@@ -1,25 +1,14 @@
 import {getApi} from 'components/api/api__instance';
 import {getCustomFieldName} from 'components/custom-field/custom-field-helper';
 import {until} from 'util/util';
+import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
 import type API from 'components/api/api';
 import type {Folder} from 'types/User';
 import type {IssueFieldSortProperty, SearchSuggestions} from 'types/Sorting';
 import {defaultIssuesFilterFieldConfig, FilterSetting} from 'views/issues/index';
 import {FilterField} from 'types/CustomFields';
-import QueryParser from 'components/query-assist/query-parser';
 
-export const youtrackFields: { [key: string]: string } = {
-  id: 'issue id',
-  summary: 'summary',
-  priority: 'priority',
-  state: 'state',
-  project: 'project',
-  requester: 'reporter',
-  assignee: 'assignee',
-  updated: 'updated',
-  created: 'created',
-};
 
 const doAssist = async (params: {
   context: Folder | null | undefined;
@@ -53,9 +42,11 @@ const isRelevanceSortProperty = (sortProperty: IssueFieldSortProperty): boolean 
   return sortProperty.$type === 'RelevanceSortProperty';
 };
 
+const convertToNonStructural = (text: string): string => text.trim() ? `{${text.replace(whiteSpacesRegex, ' ')}}` : text;
+
 const createQueryFromFiltersSetting = (filters: FilterSetting[] = []): string => {
   const groupedQuery = filters.reduce((akk: {[key: string]: string}, it: FilterSetting) => {
-    const query: string = (it.selectedValues || []).map(QueryParser.wrap).join(',');
+    const query: string = (it.selectedValues || []).join(',');
     if (query) {
       akk[getFilterFieldKey(it.filterField[0])] = query;
     }
@@ -70,13 +61,12 @@ const createQueryFromFiltersSetting = (filters: FilterSetting[] = []): string =>
   return q.join(' ').trim();
 };
 
-const getFilterFieldKey = (filterField: FilterField) => {
-  return filterField.name.toLowerCase();
-};
+const getFilterFieldKey = (filterField: FilterField) => filterField.name.toLowerCase();
 
 
 export {
   createQueryFromFiltersSetting,
+  convertToNonStructural,
   doAssist,
   getFilterFieldKey,
   getSortPropertyName,

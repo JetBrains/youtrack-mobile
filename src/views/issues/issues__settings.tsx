@@ -14,10 +14,11 @@ import IssuesSortBy from './issues__sortby';
 import {i18n} from 'components/i18n/i18n';
 import {IconCheck} from 'components/icon/icon';
 import {
-  IssueSetting,
+  IssuesSetting,
   issuesSearchSettingMode,
   issuesSettingsIssueSizes,
   issuesSettingsSearch,
+  IssuesSettingSearch,
 } from 'views/issues/index';
 import {onSettingsChange, refreshIssues} from 'views/issues/issues-actions';
 import {receiveUserAppearanceProfile} from 'actions/app-actions';
@@ -57,7 +58,7 @@ const IssuesListSettings = ({
         <>
           <View style={styles.settingsItem}>
             <Text style={styles.settingsItemTitle}>{i18n('Search Input Mode')}</Text>
-            {issuesSettingsSearch.map((it: IssueSetting, index: number) => {
+            {issuesSettingsSearch.map((it: IssuesSetting | IssuesSettingSearch, index: number) => {
               return (
                 <TouchableOpacity
                   disabled={it.mode === settings.search.mode}
@@ -111,7 +112,7 @@ const IssuesListSettings = ({
           <View style={styles.settingsSeparator}/>
           <View style={styles.settingsItem}>
             <Text style={styles.settingsItemTitle}>{i18n('Preview Size')}</Text>
-            {issuesSettingsIssueSizes.map((it: IssueSetting, index: number) => {
+            {issuesSettingsIssueSizes.map((it: IssuesSetting, index: number) => {
               const isActive: boolean = it.mode === settings.view.mode;
               return (
                 <TouchableOpacity

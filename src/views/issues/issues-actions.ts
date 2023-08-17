@@ -2,19 +2,18 @@ import * as issueUpdater from 'components/issue-actions/issue-updater';
 import * as types from './issues-action-types';
 import ApiHelper from 'components/api/api__helper';
 import log from 'components/log/log';
-import QueryParser from 'components/query-assist/query-parser';
 import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {
+  convertToNonStructural,
   createQueryFromFiltersSetting,
   getFilterFieldKey,
-  youtrackFields,
 } from 'views/issues/issues-helper';
 import {
   defaultIssuesFilterFieldConfig,
   FilterSetting,
   FiltersSetting,
-  IssueSetting,
+  IssuesSetting,
   issuesSearchSettingMode,
   IssuesSettings,
   issuesSettingsDefault,
@@ -30,16 +29,16 @@ import {notifyError} from 'components/notification/notification';
 import {removeDuplicatesFromArray, until} from 'util/util';
 import {setGlobalInProgress} from 'actions/app-actions';
 import {sortAlphabetically} from 'components/search/sorting';
+import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
 import type Api from 'components/api/api';
 import type {AnyIssue, IssueFull} from 'types/Issue';
 import type {AppState} from 'reducers';
-import type {Folder, User} from 'types/User';
+import type {Folder} from 'types/User';
 import {CustomError} from 'types/Error';
 import {FilterField, FilterFieldValue} from 'types/CustomFields';
 import {ISelectProps} from 'components/select/select';
 import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
-import {QueryAssistAst} from 'components/query-assist/query-parser_types';
 
 type ApiGetter = () => Api;
 
@@ -225,10 +224,11 @@ function getSearchContext() {
   return getStorageState().searchContext || EVERYTHING_CONTEXT;
 }
 
-export function combineWithContextQuery(query: string = ''): string {
+export function combineWithContextQuery(query: string = '', toNonStructural: boolean): string {
   const userSearchContext: Folder = getSearchContext();
   const searchContextQuery: string = userSearchContext?.query || '';
-  return userSearchContext?.query ? `${searchContextQuery} ${query}` : query;
+  const q: string = toNonStructural ? convertToNonStructural(query) : query;
+  return userSearchContext?.query ? `${searchContextQuery} ${q}` : q;
 }
 
 export function onQueryUpdate(
@@ -327,7 +327,6 @@ export function openContextSelect(): (
           dispatch(closeSelect());
           await dispatch(setSearchContext(searchContext));
           await flushStoragePart({searchContext});
-          await dispatch(setFilters());
           dispatch(refreshIssues());
         } catch (error) {
           log.warn('Failed to change a context', error);
@@ -352,20 +351,14 @@ export function composeSearchQuery(): (
   ) => {
     const settings: IssuesSettings = dispatch(getIssuesSettings());
     const issuesQuery: string = getState().issueList.query;
-    const searchSettings: IssueSetting = settings.search;
-    let query: string = '';
+    const searchSettings: IssuesSetting = settings.search;
     const isFilterMode: boolean = searchSettings.mode === issuesSearchSettingMode.filter;
+    let query: string = combineWithContextQuery(issuesQuery, isFilterMode).trim();
     if (isFilterMode) {
-      const visibleFilters: FilterSetting[] = getVisibleFilters(getState().app.user as User, settings);
-      query = `${createQueryFromFiltersSetting(visibleFilters)} ${QueryParser.convertToNonStructural(issuesQuery)}`;
-      if (!query.trim()) {
-        query = combineWithContextQuery(issuesQuery);
-      }
+      const filtersSettings: FilterSetting[] = Object.values(settings.search.filters);
+      query = `${query} ${createQueryFromFiltersSetting(filtersSettings)}`;
     }
-    if (!isFilterMode || !query.trim() && isFilterMode) {
-      query = combineWithContextQuery(issuesQuery);
-    }
-    return query.trim();
+    return query.trim().replace(whiteSpacesRegex, ' ');
   };
 }
 
@@ -408,13 +401,15 @@ export function openFilterFieldSelect(filterSetting: FilterSetting): (
       onSelect: async (selected: { id: string; name: string }[]) => {
         try {
           dispatch(closeSelect());
+          const key: string = getFilterFieldKey(filterSetting.filterField[0]);
           const issuesSettings: IssuesSettings = {
             ...settings,
             search: {
               ...settings.search,
               filters: {
                 ...settings.search.filters,
-                [getFilterFieldKey(filterSetting.filterField[0])]: {
+                [key]: {
+                  key,
                   filterField: filterSetting.filterField,
                   selectedValues: selected.map(i => i.id),
                 },
@@ -673,7 +668,7 @@ export function getIssuesSettings(): (
   };
 }
 
-export function initFilters(): (
+export function setFilters(): (
   dispatch: (arg0: any) => any,
   getState: () => AppState,
   getApi: ApiGetter,
@@ -688,18 +683,23 @@ export function initFilters(): (
     if (error) {
       log.warn('Cannot load filter fields');
     } else {
+      const visibleFiltersNames: string[] = (
+        getState().app.user?.profiles?.appearance?.liteUiFilters ||
+        Object.values(defaultIssuesFilterFieldConfig)
+      );
       settings = {
         ...settings,
         search: {
           ...settings.search,
-          filters: filterFields.reduce((akk: FiltersSetting, it: FilterField) => {
-            const key: string = getFilterFieldKey(it);
+          filters: visibleFiltersNames.reduce((akk: FiltersSetting, it: string) => {
+            const key: string = it.toLowerCase();
+            const filterSettings: FilterSetting | undefined = settings.search.filters?.[key];
             return {
               ...akk,
               [key]: {
                 key,
-                filterField: [...(akk[key]?.filterField || []), it],
-                selectedValues: akk[key]?.selectedValues || [],
+                filterField: filterFields.filter((i: FilterField) => i.name.toLowerCase() === key),
+                selectedValues: filterSettings?.selectedValues || [],
               },
             };
           }, {}),
@@ -708,41 +708,6 @@ export function initFilters(): (
       dispatch(cachedIssuesSettings(settings));
     }
   };
-}
-export function setFilters(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    if (getState().issueList.settings.search.mode === issuesSearchSettingMode.filter) {
-      const searchContext: Folder = getSearchContext();
-      const settings: IssuesSettings = dispatch(cachedIssuesSettings());
-      const filtersSetting = settings.search.filters;
-      let parser: QueryParser | null = null;
-      if (searchContext.id) {
-        const qData = await dispatch(getQueryAssistSuggestionsData(searchContext.query));
-        parser = new QueryParser(searchContext.query, qData.ast);
-      }
-
-      for (const key in filtersSetting) {
-        const youtrackField = youtrackFields[key];
-        settings.search.filters![key]!.selectedValues = parser ? parser.getValue?.(youtrackField) : [];
-      }
-      dispatch(cachedIssuesSettings(settings));
-    }
-  };
-}
-
-export function getVisibleFilters(user: User, settings: IssuesSettings): FilterSetting[] {
-  const visibleFilterNames: string[] = user?.profiles?.appearance?.liteUiFilters || [] || Object.values(defaultIssuesFilterFieldConfig);
-  return visibleFilterNames.map(
-    (filterId: string) => settings.search.filters?.[filterId]
-  ).filter(Boolean) as FilterSetting[];
 }
 
 export function initializeIssuesList(
@@ -766,7 +731,6 @@ export function initializeIssuesList(
     }
 
     await dispatch(setSearchContext(getSearchContext()));
-    await dispatch(initFilters());
     await dispatch(setFilters());
 
     const cachedIssues: AnyIssue[] | null = getStorageState().issuesCache;
@@ -915,24 +879,6 @@ export function onSettingsChange(settings: IssuesSettings): (
     }
     dispatch(receiveIssues([], dispatch(getPageSize())));
     dispatch(refreshIssues());
-  };
-}
-export function getQueryAssistSuggestionsData(query: string): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<{
-  ast: QueryAssistAst,
-  caret: number,
-  query: string,
-}> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    const [error, data] = await until(getApi().search.getQueryAssistSuggestionsData(query));
-    return error ? {} : data;
   };
 }
 

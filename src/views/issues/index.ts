@@ -1,6 +1,7 @@
 import {i18n} from 'components/i18n/i18n';
 import {FilterField} from 'types/CustomFields';
 
+
 export interface FilterSetting {
   filterField: FilterField[];
   key: string;
@@ -8,18 +9,21 @@ export interface FilterSetting {
 }
 
 export interface FiltersSetting {
-  [name: string]: FilterSetting | undefined;
+  [name: string]: FilterSetting;
 }
 
-export interface IssueSetting {
+export interface IssuesSetting {
   mode: number;
   label: string;
-  filters?: FiltersSetting;
+}
+
+export interface IssuesSettingSearch extends IssuesSetting {
+  filters: FiltersSetting;
 }
 
 export interface IssuesSettings {
-  view: IssueSetting;
-  search: IssueSetting;
+  view: IssuesSetting;
+  search: IssuesSettingSearch;
 }
 
 enum issuesViewSettingMode {
@@ -33,7 +37,7 @@ enum issuesSearchSettingMode {
   filter = 1,
 }
 
-const issuesSettingsIssueSizes: IssueSetting[] = [
+const issuesSettingsIssueSizes: IssuesSetting[] = [
   {
     label: i18n('Small'),
     mode: issuesViewSettingMode.S,
@@ -48,7 +52,7 @@ const issuesSettingsIssueSizes: IssueSetting[] = [
   },
 ];
 
-const issuesSettingsSearch: IssueSetting[] = [
+const issuesSettingsSearch: (IssuesSetting | IssuesSettingSearch)[] = [
   {
     label: i18n('Query'),
     mode: issuesSearchSettingMode.query,
@@ -72,20 +76,15 @@ enum defaultIssuesFilterFieldConfig {
   project = 'project',
   state = 'state',
   assignee = 'assignee',
+  type = 'type',
 }
-
-const defaultHelpdeskFilterFieldConfig = {
-  ...defaultIssuesFilterFieldConfig,
-  type: 'type',
-};
 
 
 export {
+  defaultIssuesFilterFieldConfig,
   issuesSearchSettingMode,
   issuesSettingsDefault,
   issuesSettingsIssueSizes,
   issuesSettingsSearch,
   issuesViewSettingMode,
-  defaultIssuesFilterFieldConfig,
-  defaultHelpdeskFilterFieldConfig,
 };
