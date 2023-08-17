@@ -241,6 +241,14 @@ export const IconStarOutline = (props?: Props) => (
     }}
   />
 );
+export const IconSettings = (props?: Props) => (
+  <IconFont
+    {...{
+      name: 'cog-outline',
+      ...props,
+    }}
+  />
+);
 // JetBrains RingUI custom icons
 export const IconAdd = (props?: Props) => (
   <IconYTM
@@ -292,14 +300,7 @@ export const IconCaretDownUp = (
     }}
   />
 );
-export const IconAttachment = (props?: Props) => (
-  <IconYTM
-    {...{
-      name: 'attachment',
-      ...props,
-    }}
-  />
-);
+
 export const IconBack = (props?: Props) => {
   if (isAndroid) {
     return (
@@ -377,7 +378,7 @@ export const IconTask = (props?: Props) => (
 export const IconSearch = (props?: Props) => (
   <IconYTM {...{...defaultProps(), name: 'search', ...props}} />
 );
-export const IconSettings = (props?: Props) => (
+export const IconSettingsTab = (props?: Props) => (
   <IconYTM {...{...defaultProps(), name: 'settings-20px', ...props}} />
 );
 export const IconStar_ = (props?: Props) => (

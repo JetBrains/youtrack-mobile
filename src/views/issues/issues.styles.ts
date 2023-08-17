@@ -34,6 +34,22 @@ export default EStyleSheet.create({
     minHeight: '100%',
     paddingBottom: UNIT * 4,
   },
+  listActions: {
+    ...rowLine,
+    justifyContent: 'space-between',
+    position: 'absolute',
+    top: UNIT,
+    right: UNIT / 2,
+    height: UNIT * 5,
+    width: UNIT * 10,
+  },
+  listActionsItem: {
+    height: UNIT * 4.5,
+    width: UNIT * 4.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
   tryAgainButton: {
     alignSelf: 'center',
     paddingTop: UNIT * 2,
@@ -105,6 +121,7 @@ export default EStyleSheet.create({
   },
   searchContext: {
     height: searchContextHeight,
+    maxWidth: '90%',
     backgroundColor: '$background',
   },
   searchContextPinned: {...elevation1},
@@ -140,14 +157,6 @@ export default EStyleSheet.create({
   },
   searchQueryPreview: {
     marginHorizontal: 0,
-  },
-  createIssueButton: {
-    position: 'absolute',
-    top: UNIT,
-    right: UNIT / 4,
-    height: UNIT * 5,
-    width: UNIT * 5,
-    padding: UNIT,
   },
   toolbar: {
     flexDirection: 'row',

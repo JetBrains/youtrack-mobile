@@ -31,7 +31,6 @@ import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {getIssueFromCache} from './issues-actions';
-import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconAdd, IconAngleDown, IconSettings} from 'components/icon/icon';
 import {
@@ -233,16 +232,36 @@ export class Issues extends Component<Props, State> {
       </ModalPortal>
     ) : null;
   };
-  renderCreateIssueButton: (isDisabled: boolean) => React.ReactNode = (
-    isDisabled: boolean,
-  ) => {
+
+  renderSettingsButton() {
     return (
       <TouchableOpacity
-        hitSlop={HIT_SLOP}
+        style={[
+          styles.listActionsItem,
+          styles.rowLine,
+        ]}
+        disabled={this.props.isInProgress}
+        onPress={() => {
+          this.toggleSettingsVisibility(true);
+        }}
+      >
+        <IconSettings
+          size={20}
+          color={this.props.isInProgress
+            ? this.getThemeColors().$disabled
+            : this.getThemeColors().$link}
+        />
+      </TouchableOpacity>
+    );
+  }
+
+  renderCreateIssueButton: () => React.ReactNode = () => {
+    return (
+      <TouchableOpacity
         testID="test:id/create-issue-button"
         accessibilityLabel="create-issue-button"
         accessible={true}
-        style={styles.createIssueButton}
+        style={styles.listActionsItem}
         onPress={() => {
           if (this.state.isSplitView) {
             this.setState({
@@ -255,12 +274,12 @@ export class Issues extends Component<Props, State> {
             });
           }
         }}
-        disabled={isDisabled}
+        disabled={this.props.isInProgress}
       >
         <IconAdd
           size={22}
           color={
-            isDisabled
+            this.props.isInProgress
               ? this.getThemeColors().$disabled
               : this.getThemeColors().$link
           }
@@ -357,7 +376,10 @@ export class Issues extends Component<Props, State> {
         onPress={onOpenContextSelect}
       >
         <View style={styles.searchContextButton}>
-          <Text numberOfLines={1} style={styles.contextButtonText}>
+          <Text
+            numberOfLines={1}
+            style={styles.contextButtonText}
+          >
             {`${searchContext?.name || ''}`}
           </Text>
           {searchContext && (
@@ -496,23 +518,6 @@ export class Issues extends Component<Props, State> {
     return (
       <View style={styles.toolbar}>
         {this.hasIssues() ? <IssuesCount issuesCount={this.props.issuesCount}/> : <View/>}
-        <TouchableOpacity
-          style={[
-            styles.rowLine,
-            this.props.isInProgress && styles.toolbarItemDisabled,
-          ]}
-          disabled={this.props.isInProgress}
-          onPress={() => {
-            this.toggleSettingsVisibility(true);
-          }}
-        >
-          <Text style={styles.toolbarText}>{i18n('List settings')}</Text>
-          <IconSettings
-            style={styles.toolbarIcon}
-            size={13}
-            color={styles.toolbarIcon.color}
-          />
-        </TouchableOpacity>
       </View>
     );
   }
@@ -621,12 +626,15 @@ export class Issues extends Component<Props, State> {
   }
 
   renderIssues: () => React.ReactNode = () => {
-    const {isIssuesContextOpen, isRefreshing} = this.props;
+    const {isIssuesContextOpen} = this.props;
     return (
       <View style={styles.listContainer} testID="test:id/issueListPhone">
         {isIssuesContextOpen && this.renderContextSelect()}
         {this.renderIssueList()}
-        {this.renderCreateIssueButton(isRefreshing)}
+        <View style={styles.listActions}>
+          {this.renderCreateIssueButton()}
+          {this.renderSettingsButton()}
+        </View>
       </View>
     );
   };

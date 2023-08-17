@@ -10,7 +10,7 @@ import {getStorageState} from 'components/storage/storage';
 import {
   IconBell,
   IconBoard,
-  IconSettings,
+  IconSettingsTab,
   IconTask,
   IconKnowledgeBase,
   IconCircle,
@@ -311,7 +311,7 @@ export default function () {
 
         <MenuItem
           testID="test:id/menuSettings"
-          icon={<IconSettings size={21} color={color(routeMap.Settings)} />}
+          icon={<IconSettingsTab size={21} color={color(routeMap.Settings)} />}
           onPress={openSettings}
         />
       </View>
