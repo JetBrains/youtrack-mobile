@@ -34,7 +34,7 @@ export default EStyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginLeft: UNIT * 2,
-    paddingRight: UNIT * 1.5,
+    paddingRight: UNIT * 2,
     height: SELECT_ITEM_HEIGHT,
   },
   rowSeparator: {
@@ -63,6 +63,8 @@ export default EStyleSheet.create({
     marginRight: UNIT * 2,
   },
   itemIconSelected: {
+    height: '90%',
+    justifyContent: 'center',
     marginLeft: UNIT,
     paddingLeft: UNIT,
     backgroundColor: '$background',
