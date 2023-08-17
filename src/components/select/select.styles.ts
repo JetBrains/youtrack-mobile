@@ -62,6 +62,11 @@ export default EStyleSheet.create({
   itemIcon: {
     marginRight: UNIT * 2,
   },
+  itemIconSelected: {
+    marginLeft: UNIT,
+    paddingLeft: UNIT,
+    backgroundColor: '$background',
+  },
   itemTitle: {
     fontSize: MAIN_FONT_SIZE,
     color: '$text',
