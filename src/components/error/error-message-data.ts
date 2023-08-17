@@ -40,7 +40,7 @@ export const ERROR_MESSAGE_DATA: Record<string, ErrorMessageData> = {
     icon: IconAccountAlert,
   },
   invalid_query: {
-    title: i18n('Invalid query'),
+    title: i18n(`We didn't find any messages that match your search query`),
   },
   'Not Found': notFoundMessageData,
   USER_BANNED: {

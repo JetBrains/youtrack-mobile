@@ -12,14 +12,14 @@ export const styles = EStyleSheet.create({
     marginTop: UNIT * 1.5,
     ...title,
     color: '$text',
+    textAlign: 'center',
   },
   errorDescription: {
     padding: UNIT * 4,
     paddingTop: UNIT * 2,
     ...secondaryText,
-    color: '$icon',
+    color: '$text',
     lineHeight: HEADER_FONT_SIZE,
-    textAlign: 'center',
   },
   tryAgainButton: {
     alignSelf: 'center',

@@ -1,13 +1,16 @@
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import {ERROR_MESSAGE_DATA} from '../error/error-message-data';
-import {extractErrorMessage, resolveError} from '../error/error-resolver';
+
+import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
+import {extractErrorMessage, resolveError} from 'components/error/error-resolver';
 import {i18n} from 'components/i18n/i18n';
-import {IconSearch} from '../icon/icon';
+import {ICON_PICTOGRAM_DEFAULT_SIZE, IconNothingFound} from 'components/icon/icon-pictogram';
+
 import {styles} from './error-message.style';
+
 import type {CustomError, ErrorMessageData} from 'types/Error';
 import type {ViewStyleProp} from 'types/Internal';
+
 export type ErrorMessageProps = {
   error?: CustomError;
   errorMessageData?: ErrorMessageData | null;
@@ -15,9 +18,12 @@ export type ErrorMessageProps = {
   style?: ViewStyleProp;
   testID?: string;
 };
-type State = {
+
+interface State {
   errorMessageData: ErrorMessageData | null;
-};
+}
+
+
 export default class ErrorMessage extends PureComponent<
   ErrorMessageProps,
   State
@@ -60,11 +66,13 @@ export default class ErrorMessage extends PureComponent<
       return null;
     }
 
-    const Icon = errorMessageData.icon ? errorMessageData.icon : IconSearch;
-    const iconSize = errorMessageData.iconSize || 80;
+    const Icon = errorMessageData?.icon;
     return (
       <View testID={testID || 'error'} style={[styles.errorContainer, style]}>
-        <Icon size={iconSize} color={EStyleSheet.value('$navigation')} />
+        {Icon && <Icon size={ errorMessageData?.iconSize || 80} color={styles.errorContainer.color}/>}
+        {!Icon && <IconNothingFound
+          size={ICON_PICTOGRAM_DEFAULT_SIZE / 1.5}
+        />}
 
         <Text
           testID="test:id/error-message"
