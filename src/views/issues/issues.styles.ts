@@ -129,7 +129,7 @@ export default EStyleSheet.create({
     alignSelf: 'flex-start',
     minWidth: 130,
     marginTop: UNIT,
-    marginRight: UNIT * 13,
+    marginRight: UNIT * 14,
     marginLeft: UNIT * 2,
     paddingVertical: UNIT,
     backgroundColor: '$background',
