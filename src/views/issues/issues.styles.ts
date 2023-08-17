@@ -121,7 +121,6 @@ export default EStyleSheet.create({
   },
   searchContext: {
     height: searchContextHeight,
-    maxWidth: '90%',
     backgroundColor: '$background',
   },
   searchContextPinned: {...elevation1},
@@ -130,7 +129,7 @@ export default EStyleSheet.create({
     alignSelf: 'flex-start',
     minWidth: 130,
     marginTop: UNIT,
-    marginRight: UNIT * 10,
+    marginRight: UNIT * 13,
     marginLeft: UNIT * 2,
     paddingVertical: UNIT,
     backgroundColor: '$background',
