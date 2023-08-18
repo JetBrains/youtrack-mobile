@@ -45,7 +45,7 @@ export default class IssuesAPI extends ApiBase {
         folderId,
         topRoot,
         skipRoot,
-        query,
+        query: encodeURIComponent(query),
         fields: 'tree(id)',
         flatten: true,
       },
