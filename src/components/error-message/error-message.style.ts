@@ -9,15 +9,15 @@ export const styles = EStyleSheet.create({
     justifyContent: 'center',
   },
   errorTitle: {
-    marginTop: UNIT * 1.5,
     ...title,
+    marginTop: UNIT * 2,
     color: '$text',
     textAlign: 'center',
   },
   errorDescription: {
+    ...secondaryText,
     padding: UNIT * 4,
     paddingTop: UNIT * 2,
-    ...secondaryText,
     color: '$text',
     lineHeight: HEADER_FONT_SIZE,
   },

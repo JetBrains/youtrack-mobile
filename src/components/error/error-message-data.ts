@@ -3,27 +3,22 @@ import {HTTP_STATUS} from './error-http-codes';
 import {i18n} from 'components/i18n/i18n';
 import {IconAccountAlert} from '../icon/icon';
 import type {ErrorMessageData} from 'types/Error';
+
 const unauthorizedErrorMessageData: ErrorMessageData = {
-  // eslint-disable-next-line
-  title: i18n("Woah, you can't touch this!"),
-  description: i18n(
-    'Your account has insufficient permission to perform this operation.',
-  ),
+  title: i18n(`Woah, you can't touch this!`),
+  description: i18n('Your account has insufficient permission to perform this operation.'),
 };
 const noIssueFoundDescriptionMessages: string[] = [
-  i18n(
-    // eslint-disable-next-line
-    "If this isn't what you expected, you might try one of these solutions:",
-  ),
+  i18n(`If this isn't what you expected, you might try one of these solutions:`),
   i18n('Search for a different value'),
   i18n('Use fewer search parameters'),
+  i18n('Clear the current search context'),
+  i18n('Wrap attribute values that contain spaces in braces {like this}.'),
 ];
 const notFoundMessageData: ErrorMessageData = {
-  // eslint-disable-next-line
-  title: i18n("Nope, can't find it!"),
+  title: i18n(`Nope, can't find it!`),
   description: i18n(
-    // eslint-disable-next-line
-    "It could mean that the issue doesn't exist or you don't have permission to view it",
+    `It could mean that the issue doesn't exist or you don't have permission to view it`,
   ),
 };
 export const ERROR_MESSAGE_DATA: Record<string, ErrorMessageData> = {
@@ -31,8 +26,8 @@ export const ERROR_MESSAGE_DATA: Record<string, ErrorMessageData> = {
     title: i18n('Something went wrong'),
   },
   NO_ISSUES_FOUND: {
-    title: i18n('No issues found'),
-    description: noIssueFoundDescriptionMessages.join('\n'),
+    title: i18n(`We didn't find any issues in the current search context that match your query`),
+    description: noIssueFoundDescriptionMessages.join('\n  - '),
   },
   LICENSE_ERROR_RESPONSE: i18n('License error'),
   'License error': {
@@ -40,7 +35,7 @@ export const ERROR_MESSAGE_DATA: Record<string, ErrorMessageData> = {
     icon: IconAccountAlert,
   },
   invalid_query: {
-    title: i18n(`We didn't find any messages that match your search query`),
+    title: i18n(`The search query contains unknown values`),
   },
   'Not Found': notFoundMessageData,
   USER_BANNED: {

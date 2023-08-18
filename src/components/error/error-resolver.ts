@@ -14,7 +14,6 @@ export const extractErrorMessage = function (
 
   let fields = [
     err.error_description,
-    err.error_children && err.error_children.map(it => it.error),
   ];
 
   if (!isDescriptionOnly) {
@@ -28,7 +27,10 @@ export const extractErrorMessage = function (
     ]);
   }
 
-  const errorText = fields.filter(Boolean).join('. ');
+  let errorText = fields.filter(Boolean).join('. ');
+  if (err.error_children) {
+    errorText = [errorText, ...err.error_children.map(it => it.error)].join('\n  - ');
+  }
   return errorText || DEFAULT_ERROR_MESSAGE;
 };
 export async function resolveError(
