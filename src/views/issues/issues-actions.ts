@@ -352,7 +352,7 @@ export function openFilterFieldSelect(filterSetting: FilterSetting): (
       multi: true,
       getTitle: (it: FilterFieldValue) => getEntityPresentation(it),
       dataSource: async (prefix: string = '') => {
-        const query = dispatch(composeSearchQuery());
+        const query = await dispatch(composeSearchQuery());
         const [error, filterFieldValues] = await until(
           filterSetting.filterField.map(
             (it: FilterField) => getApi().filterFields.filterFieldValues(it.id, prefix, query)
