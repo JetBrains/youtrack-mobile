@@ -11,6 +11,7 @@ import type {Folder} from 'types/User';
 import type {IssueOnList} from 'types/Issue';
 import {IssueFull} from 'types/Issue';
 
+export type SortedIssues = { tree: { id: string }[] | undefined };
 
 export default class IssuesAPI extends ApiBase {
   async _getIssues(
@@ -38,7 +39,7 @@ export default class IssuesAPI extends ApiBase {
     query: string = '',
     topRoot: number,
     skipRoot: number = 0,
-  ): Promise<{ tree: { id: string }[]}> {
+  ): Promise<SortedIssues> {
     const q: string = qs.stringify(
       {
         folderId,

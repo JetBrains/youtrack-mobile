@@ -38,6 +38,7 @@ import {CustomError} from 'types/Error';
 import {FilterField, FilterFieldValue} from 'types/CustomFields';
 import {ISelectProps} from 'components/select/select';
 import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
+import {SortedIssues} from 'components/api/api__issues';
 
 type ApiGetter = () => Api;
 
@@ -46,6 +47,8 @@ type GroupedFolders = {
   searches: Folder[];
   tags: Folder[];
 };
+
+type SortedIssuesData = [error: CustomError | null, sortedIssues: SortedIssues];
 
 const PAGE_SIZE: number = 14;
 
@@ -464,14 +467,14 @@ export function doLoadIssues(query: string, pageSize: number, skip = 0): (
     const api: Api = getApi();
     let listIssues: IssueOnList[] = [];
 
-    const [error, sortedIssues] = await until(
+    const [error, sortedIssues]: SortedIssuesData = await until(
       api.issues.sortedIssues(getSearchContext().id, query, pageSize, skip)
-    );
+    ) as SortedIssuesData;
     if (error) {
       handleError(error);
     }
 
-    if (sortedIssues.tree.length > 0) {
+    if (Array.isArray(sortedIssues?.tree) && sortedIssues.tree.length > 0) {
       const [err, _issues] = await until(
         api.issues.issuesGetter(sortedIssues.tree, getState().issueList.settings.view.mode),
       );
@@ -857,7 +860,9 @@ export function onSettingsChange(settings: IssuesSettings): (
     dispatch: (arg0: any) => any,
     getState: () => AppState,
   ) => {
-    dispatch(setIssuesQuery(''));
+    if (settings.search.mode !== getState().issueList.settings.search.mode) {
+      dispatch(setIssuesQuery(''));
+    }
     await dispatch(cachedIssuesSettings(settings));
     await flushStoragePart({issuesCache: null});
     if (settings.search.mode === issuesSearchSettingMode.filter) {
