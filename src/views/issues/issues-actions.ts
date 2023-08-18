@@ -503,8 +503,9 @@ export function loadIssues(query: string): (
         dispatch(startIssuesLoading());
       }
 
+      const pageSize: number = dispatch(getPageSize());
       const [error, listIssues] = await until(
-        api.issues.getIssues(query, dispatch(getPageSize()), 0, getState().issueList.settings.view.mode),
+        api.issues.getIssues(query, pageSize, 0, getState().issueList.settings.view.mode),
       );
       dispatch(stopIssuesLoading());
 
@@ -515,10 +516,11 @@ export function loadIssues(query: string): (
       } else {
         const issues: AnyIssue[] = ApiHelper.fillIssuesFieldHash(listIssues);
         log.info(`${issues?.length} issues loaded`);
-        dispatch(receiveIssues(issues, dispatch(getPageSize())));
+        dispatch(receiveIssues(issues, pageSize));
         dispatch(cacheIssues(issues));
 
-        if (issues?.length < dispatch(getPageSize())) {
+        if (issues.length < pageSize) {
+          dispatch(setIssuesCount(issues.length));
           log.info('End reached during initial load');
           dispatch(listEndReached());
         }
