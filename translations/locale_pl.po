@@ -216,6 +216,10 @@ msgstr ""
 msgid "Cancel"
 msgstr "Anuluj"
 
+#: src/components/error/error-message-data.ts
+msgid "Clear the current search context"
+msgstr ""
+
 #: src/components/debug-view/debug-view.tsx
 #: src/components/popup/popup.tsx
 msgid "Close"
@@ -738,7 +742,6 @@ msgstr ""
 msgid "No favorites projects found"
 msgstr ""
 
-#: src/components/error/error-message-data.ts
 #: src/views/issues/issues.tsx
 msgid "No issues found"
 msgstr "Nie znaleziono zgłoszeń"
@@ -1083,6 +1086,10 @@ msgstr ""
 msgid "The commit author is not an assignee in the project."
 msgstr ""
 
+#: src/components/error/error-message-data.ts
+msgid "The search query contains unknown values"
+msgstr ""
+
 #: src/actions/app-actions.ts
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr ""
@@ -1221,7 +1228,7 @@ msgid "Visible to issue readers"
 msgstr "Widoczny dla czytelników zgłoszeń"
 
 #: src/components/error/error-message-data.ts
-msgid "We didn't find any messages that match your search query"
+msgid "We didn't find any issues in the current search context that match your query"
 msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
@@ -1234,6 +1241,10 @@ msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
+msgstr ""
+
+#: src/components/error/error-message-data.ts
+msgid "Wrap attribute values that contain spaces in braces {like this}."
 msgstr ""
 
 #: src/components/comment/comment-edit.tsx

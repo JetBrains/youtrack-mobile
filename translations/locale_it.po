@@ -208,6 +208,10 @@ msgstr ""
 msgid "Cancel"
 msgstr "Annulla"
 
+#: src/components/error/error-message-data.ts
+msgid "Clear the current search context"
+msgstr "Cancella il contesto di ricerca attuale"
+
 #: src/components/debug-view/debug-view.tsx
 #: src/components/popup/popup.tsx
 msgid "Close"
@@ -728,7 +732,6 @@ msgstr "Ancora nessuna bozza"
 msgid "No favorites projects found"
 msgstr "Nessun progetto preferito trovato"
 
-#: src/components/error/error-message-data.ts
 #: src/views/issues/issues.tsx
 msgid "No issues found"
 msgstr "Nessun ticket trovato"
@@ -1071,6 +1074,10 @@ msgstr "L'autore del commit ha specificato un indirizzo email associato a un acc
 msgid "The commit author is not an assignee in the project."
 msgstr "L'autore del commit non è un assegnatario nel progetto."
 
+#: src/components/error/error-message-data.ts
+msgid "The search query contains unknown values"
+msgstr "La query di ricerca contiene valori sconosciuti"
+
 #: src/actions/app-actions.ts
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "L'account selezionato non è più autorizzato a utilizzare YouTrack Mobile. Effettua nuovamente l'accesso."
@@ -1209,8 +1216,8 @@ msgid "Visible to issue readers"
 msgstr "Visibile ai lettori dei ticket"
 
 #: src/components/error/error-message-data.ts
-msgid "We didn't find any messages that match your search query"
-msgstr ""
+msgid "We didn't find any issues in the current search context that match your query"
+msgstr "Non sono stati riscontrati ticket nel contesto di ricerca attuale che corrispondono alla query"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."
@@ -1223,6 +1230,10 @@ msgstr "Quando si integrano TeamCity e YouTrack, gli utenti vengono abbinati ai 
 #: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
 msgstr "Ehi, non puoi toccarlo!"
+
+#: src/components/error/error-message-data.ts
+msgid "Wrap attribute values that contain spaces in braces {like this}."
+msgstr ""
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx

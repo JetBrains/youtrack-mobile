@@ -204,6 +204,10 @@ msgstr "카메라"
 msgid "Cancel"
 msgstr "취소"
 
+#: src/components/error/error-message-data.ts
+msgid "Clear the current search context"
+msgstr ""
+
 #: src/components/debug-view/debug-view.tsx
 #: src/components/popup/popup.tsx
 msgid "Close"
@@ -723,7 +727,6 @@ msgstr "아직 초안이 없음"
 msgid "No favorites projects found"
 msgstr "즐겨찾기 프로젝트를 찾을 수 없음"
 
-#: src/components/error/error-message-data.ts
 #: src/views/issues/issues.tsx
 msgid "No issues found"
 msgstr "이슈를 찾을 수 없습니다"
@@ -1065,6 +1068,10 @@ msgstr "커밋 작성자가 다른 사용자 계정과 연관된 이메일 주�
 msgid "The commit author is not an assignee in the project."
 msgstr "커밋 작성자가 프로젝트 담당자가 아닙니다."
 
+#: src/components/error/error-message-data.ts
+msgid "The search query contains unknown values"
+msgstr ""
+
 #: src/actions/app-actions.ts
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "선택한 계정은 더 이상 YouTrack Mobile을 사용할 수 없습니다. 다시 로그인하십시오."
@@ -1203,7 +1210,7 @@ msgid "Visible to issue readers"
 msgstr "이슈 리더에게 표시됨"
 
 #: src/components/error/error-message-data.ts
-msgid "We didn't find any messages that match your search query"
+msgid "We didn't find any issues in the current search context that match your query"
 msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
@@ -1217,6 +1224,10 @@ msgstr "TeamCity와 YouTrack을 통합할 때 사용자는 이메일 주소와 �
 #: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
 msgstr "이런, 여기에 접근하실 수 없습니다."
+
+#: src/components/error/error-message-data.ts
+msgid "Wrap attribute values that contain spaces in braces {like this}."
+msgstr ""
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx

@@ -208,6 +208,10 @@ msgstr ""
 msgid "Cancel"
 msgstr "Mégsem"
 
+#: src/components/error/error-message-data.ts
+msgid "Clear the current search context"
+msgstr "Az aktuális keresési kontextus törlése"
+
 #: src/components/debug-view/debug-view.tsx
 #: src/components/popup/popup.tsx
 msgid "Close"
@@ -728,7 +732,6 @@ msgstr ""
 msgid "No favorites projects found"
 msgstr ""
 
-#: src/components/error/error-message-data.ts
 #: src/views/issues/issues.tsx
 msgid "No issues found"
 msgstr "Nincs találat"
@@ -1071,6 +1074,10 @@ msgstr "A közzététel végrehajtó olyan e-mail címet adott meg, amely egy m�
 msgid "The commit author is not an assignee in the project."
 msgstr "A közzététel végrehajtó nem a projekt egyik felelőse."
 
+#: src/components/error/error-message-data.ts
+msgid "The search query contains unknown values"
+msgstr "A keresési igény ismeretlen értékeket tartalmaz"
+
 #: src/actions/app-actions.ts
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "A kiválasztott fiók már nem jogosult a YouTrack Mobile használatára. Kérjük, jelentkezzen be újra."
@@ -1209,8 +1216,8 @@ msgid "Visible to issue readers"
 msgstr ""
 
 #: src/components/error/error-message-data.ts
-msgid "We didn't find any messages that match your search query"
-msgstr ""
+msgid "We didn't find any issues in the current search context that match your query"
+msgstr "Nem találtunk olyan hibajegyeket a jelenlegi keresési környezetben, amelyek megfelelnek a lekérdezésnek"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."
@@ -1223,6 +1230,10 @@ msgstr "TeamCity és YouTrack integrálásakor a felhasználók az email címük
 #: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
 msgstr "Hú, ezt nem érintheti meg!"
+
+#: src/components/error/error-message-data.ts
+msgid "Wrap attribute values that contain spaces in braces {like this}."
+msgstr ""
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx

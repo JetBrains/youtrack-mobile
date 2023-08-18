@@ -202,6 +202,10 @@ msgstr "Camera"
 msgid "Cancel"
 msgstr "Cancel"
 
+#: src/components/error/error-message-data.ts:15
+msgid "Clear the current search context"
+msgstr "Clear the current search context"
+
 #: src/components/debug-view/debug-view.tsx:40
 #: src/components/popup/popup.tsx:31
 msgid "Close"
@@ -486,7 +490,7 @@ msgstr "Filter items"
 msgid "Filter projects"
 msgstr "Filter projects"
 
-#: src/views/issues/issues-actions.ts:259
+#: src/views/issues/issues-actions.ts:254
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
@@ -536,7 +540,7 @@ msgstr "Help us fix problems faster"
 msgid "Here you'll see a list of articles from your favorite projects"
 msgstr "Here you'll see a list of articles from your favorite projects"
 
-#: src/components/error/error-message-data.ts:14
+#: src/components/error/error-message-data.ts:12
 msgid "If this isn't what you expected, you might try one of these solutions:"
 msgstr "If this isn't what you expected, you might try one of these solutions:"
 
@@ -572,7 +576,7 @@ msgstr "Issue updated"
 msgid "Issues can be sorted by up to 4 attributes"
 msgstr "Issues can be sorted by up to 4 attributes"
 
-#: src/components/error/error-message-data.ts:24
+#: src/components/error/error-message-data.ts:20
 msgid "It could mean that the issue doesn't exist or you don't have permission to view it"
 msgstr "It could mean that the issue doesn't exist or you don't have permission to view it"
 
@@ -592,8 +596,8 @@ msgstr "Knowledge Base"
 msgid "Large"
 msgstr "Large"
 
-#: src/components/error/error-message-data.ts:37
-#: src/components/error/error-message-data.ts:39
+#: src/components/error/error-message-data.ts:32
+#: src/components/error/error-message-data.ts:34
 msgid "License error"
 msgstr "License error"
 
@@ -722,7 +726,6 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/components/error/error-message-data.ts:34
 #: src/views/issues/issues.tsx:582
 msgid "No issues found"
 msgstr "No issues found"
@@ -743,7 +746,7 @@ msgstr "No type"
 msgid "No user information provided by Upsource."
 msgstr "No user information provided by Upsource."
 
-#: src/components/error/error-message-data.ts:23
+#: src/components/error/error-message-data.ts:19
 msgid "Nope, can't find it!"
 msgstr "Nope, can't find it!"
 
@@ -784,7 +787,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/issues/issues-actions.ts:308
+#: src/views/issues/issues-actions.ts:276
 #: src/views/knowledge-base/knowledge-base.tsx:609
 msgid "Projects"
 msgstr "Projects"
@@ -851,7 +854,7 @@ msgstr "Restore"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/views/issues/issues-actions.ts:318
+#: src/views/issues/issues-actions.ts:285
 msgid "Saved Searches"
 msgstr "Saved Searches"
 
@@ -859,7 +862,7 @@ msgstr "Saved Searches"
 msgid "Search articles"
 msgstr "Search articles"
 
-#: src/components/error/error-message-data.ts:18
+#: src/components/error/error-message-data.ts:13
 msgid "Search for a different value"
 msgstr "Search for a different value"
 
@@ -952,7 +955,7 @@ msgstr "Show more"
 msgid "Small"
 msgstr "Small"
 
-#: src/components/error/error-message-data.ts:31
+#: src/components/error/error-message-data.ts:26
 #: src/components/error/error-messages.ts:7
 msgid "Something went wrong"
 msgstr "Something went wrong"
@@ -1017,7 +1020,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/views/issues/issues-actions.ts:314
+#: src/views/issues/issues-actions.ts:281
 msgid "Tags"
 msgstr "Tags"
 
@@ -1065,11 +1068,15 @@ msgstr "The commit author has specified an email address that is associated with
 msgid "The commit author is not an assignee in the project."
 msgstr "The commit author is not an assignee in the project."
 
+#: src/components/error/error-message-data.ts:38
+msgid "The search query contains unknown values"
+msgstr "The search query contains unknown values"
+
 #: src/actions/app-actions.ts:487
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
-#: src/components/error/error-message-data.ts:61
+#: src/components/error/error-message-data.ts:56
 msgid "The server is overloaded or down for maintenance"
 msgstr "The server is overloaded or down for maintenance"
 
@@ -1158,11 +1165,11 @@ msgstr "updated"
 msgid "Updated by"
 msgstr "Updated by"
 
-#: src/components/error/error-message-data.ts:19
+#: src/components/error/error-message-data.ts:14
 msgid "Use fewer search parameters"
 msgstr "Use fewer search parameters"
 
-#: src/components/error/error-message-data.ts:47
+#: src/components/error/error-message-data.ts:42
 msgid "User account is banned"
 msgstr "User account is banned"
 
@@ -1202,9 +1209,9 @@ msgstr "Visible to article readers"
 msgid "Visible to issue readers"
 msgstr "Visible to issue readers"
 
-#: src/components/error/error-message-data.ts:43
-msgid "We didn't find any messages that match your search query"
-msgstr "We didn't find any messages that match your search query"
+#: src/components/error/error-message-data.ts:29
+msgid "We didn't find any issues in the current search context that match your query"
+msgstr "We didn't find any issues in the current search context that match your query"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts:16
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."
@@ -1217,6 +1224,10 @@ msgstr "When integrating TeamCity and YouTrack, the users are matched by their e
 #: src/components/error/error-message-data.ts:8
 msgid "Woah, you can't touch this!"
 msgstr "Woah, you can't touch this!"
+
+#: src/components/error/error-message-data.ts:16
+msgid "Wrap attribute values that contain spaces in braces {like this}."
+msgstr "Wrap attribute values that contain spaces in braces {like this}."
 
 #: src/components/comment/comment-edit.tsx:431
 #: src/views/issue/activity/activity__add-spent-time.tsx:426
@@ -1251,7 +1262,7 @@ msgstr "Your account has insufficient permission to perform this operation."
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 msgstr "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 
-#: src/components/error/error-message-data.ts:50
+#: src/components/error/error-message-data.ts:45
 msgid ""
 "Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n"
 "\n"

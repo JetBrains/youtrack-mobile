@@ -208,6 +208,10 @@ msgstr "Kamera"
 msgid "Cancel"
 msgstr "Abbrechen"
 
+#: src/components/error/error-message-data.ts
+msgid "Clear the current search context"
+msgstr ""
+
 #: src/components/debug-view/debug-view.tsx
 #: src/components/popup/popup.tsx
 msgid "Close"
@@ -728,7 +732,6 @@ msgstr "Noch keine Entwürfe"
 msgid "No favorites projects found"
 msgstr "Keine Projektfavoriten gefunden"
 
-#: src/components/error/error-message-data.ts
 #: src/views/issues/issues.tsx
 msgid "No issues found"
 msgstr "Keine Tickets gefunden"
@@ -1071,6 +1074,10 @@ msgstr "Der Commit-Autor hat eine E-Mail-Adresse angegeben, die einem anderen Be
 msgid "The commit author is not an assignee in the project."
 msgstr "Der Commit-Autor ist kein Bearbeiter im Projekt."
 
+#: src/components/error/error-message-data.ts
+msgid "The search query contains unknown values"
+msgstr ""
+
 #: src/actions/app-actions.ts
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "Der ausgewählte Account ist nicht länger zur Verwendung von YouTrack Mobile autorisiert. Bitte melden Sie sich neu an."
@@ -1209,7 +1216,7 @@ msgid "Visible to issue readers"
 msgstr "Sichtbar für Ticket-Leser"
 
 #: src/components/error/error-message-data.ts
-msgid "We didn't find any messages that match your search query"
+msgid "We didn't find any issues in the current search context that match your query"
 msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
@@ -1223,6 +1230,10 @@ msgstr "Bei der Integration zwischen TeamCity und YouTrack werden die Benutzer a
 #: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
 msgstr "Stopp!"
+
+#: src/components/error/error-message-data.ts
+msgid "Wrap attribute values that contain spaces in braces {like this}."
+msgstr ""
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
