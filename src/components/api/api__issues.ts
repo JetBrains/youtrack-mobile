@@ -1,13 +1,15 @@
+import qs from 'qs';
+
 import ApiBase from './api__base';
 import ApiHelper from './api__helper';
 import issueFields from './api__issue-fields';
-import qs from 'qs';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 import {issuesViewSettingMode} from 'views/issues';
 import {routeMap} from 'app-routes';
 
-import type {IssueOnList} from 'types/Issue';
 import type {Folder} from 'types/User';
+import type {IssueOnList} from 'types/Issue';
+import {IssueFull} from 'types/Issue';
 
 
 export default class IssuesAPI extends ApiBase {
@@ -31,22 +33,43 @@ export default class IssuesAPI extends ApiBase {
     return this.makeAuthorizedRequest(`${this.youTrackIssueUrl}?${q}`);
   }
 
-  async getIssues(
+  async sortedIssues(
+    folderId: string,
     query: string = '',
-    $top: number,
-    $skip: number = 0,
-    viewMode: number,
-  ): Promise<IssueOnList[]> {
+    topRoot: number,
+    skipRoot: number = 0,
+  ): Promise<{ tree: { id: string }[]}> {
+    const q: string = qs.stringify(
+      {
+        folderId,
+        topRoot,
+        skipRoot,
+        query,
+        fields: 'tree(id)',
+        flatten: true,
+      },
+      {
+        encode: false,
+      },
+    );
+
+    return this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/sortedIssues?${q}`
+    );
+  }
+
+  async issuesGetter(issueIds: { id: string; }[], viewMode: number): Promise<IssueFull[]> {
     const fields = (
       viewMode === issuesViewSettingMode.M
         ? issueFields.issuesOnList
         : viewMode === issuesViewSettingMode.L ? issueFields.issuesOnListL : issueFields.issuesOnListS
     );
-    const issues: IssueOnList[] = await this._getIssues(
-      encodeURIComponent(query),
-      $top,
-      $skip,
-      fields.toString(),
+    const issues = await this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/issuesGetter?${qs.stringify({
+        fields: fields.toString(),
+      })}`,
+      'POST',
+      issueIds,
     );
     return ApiHelper.patchAllRelativeAvatarUrls(issues, this.config.backendUrl);
   }

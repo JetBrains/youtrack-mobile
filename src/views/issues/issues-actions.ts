@@ -25,14 +25,13 @@ import {getAssistSuggestions} from 'components/query-assist/query-assist-helper'
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {notifyError} from 'components/notification/notification';
 import {removeDuplicatesFromArray, until} from 'util/util';
 import {setGlobalInProgress} from 'actions/app-actions';
 import {sortAlphabetically} from 'components/search/sorting';
 import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
 import type Api from 'components/api/api';
-import type {AnyIssue, IssueFull} from 'types/Issue';
+import type {AnyIssue, IssueFull, IssueOnList} from 'types/Issue';
 import type {AppState} from 'reducers';
 import type {Folder} from 'types/User';
 import {CustomError} from 'types/Error';
@@ -224,13 +223,6 @@ function getSearchContext() {
   return getStorageState().searchContext || EVERYTHING_CONTEXT;
 }
 
-export function combineWithContextQuery(query: string = '', toNonStructural: boolean): string {
-  const userSearchContext: Folder = getSearchContext();
-  const searchContextQuery: string = userSearchContext?.query || '';
-  const q: string = toNonStructural ? convertToNonStructural(query) : query;
-  return userSearchContext?.query ? `${searchContextQuery} ${q}` : q;
-}
-
 export function onQueryUpdate(
   query: string,
 ): (dispatch: (arg0: any) => any) => void {
@@ -325,7 +317,7 @@ export function composeSearchQuery(): (
     const issuesQuery: string = getState().issueList.query;
     const searchSettings: IssuesSetting = settings.search;
     const isFilterMode: boolean = searchSettings.mode === issuesSearchSettingMode.filter;
-    let query: string = combineWithContextQuery(issuesQuery, isFilterMode).trim();
+    let query: string = (isFilterMode ? convertToNonStructural(issuesQuery) : issuesQuery).trim();
     if (isFilterMode) {
       const filtersSettings: FilterSetting[] = Object.values(settings.search.filters);
       query = `${query} ${createQueryFromFiltersSetting(filtersSettings)}`;
@@ -333,7 +325,6 @@ export function composeSearchQuery(): (
     return query.trim().replace(whiteSpacesRegex, ' ');
   };
 }
-
 
 export function openFilterFieldSelect(filterSetting: FilterSetting): (
   dispatch: (arg0: any) => any,
@@ -455,6 +446,45 @@ export function setIssuesError(
     });
   };
 }
+
+export function doLoadIssues(query: string, pageSize: number, skip = 0): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => Promise<IssueOnList[]> {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
+    const handleError = (e: CustomError) => {
+      throw e;
+    };
+
+    const api: Api = getApi();
+    let listIssues: IssueOnList[] = [];
+
+    const [error, sortedIssues] = await until(
+      api.issues.sortedIssues(getSearchContext().id, query, pageSize, skip)
+    );
+    if (error) {
+      handleError(error);
+    }
+
+    if (sortedIssues.tree.length > 0) {
+      const [err, _issues] = await until(
+        api.issues.issuesGetter(sortedIssues.tree, getState().issueList.settings.view.mode),
+      );
+      if (err) {
+        handleError(err);
+      }
+      listIssues = ApiHelper.fillIssuesFieldHash(_issues) as IssueOnList[];
+    }
+
+    return listIssues;
+  };
+}
+
 export function loadIssues(query: string): (
   dispatch: (arg0: any) => any,
   getState: () => AppState,
@@ -466,42 +496,33 @@ export function loadIssues(query: string): (
     getApi: ApiGetter,
   ) => {
     try {
-      const api: Api = getApi();
-      const isOffline: boolean =
-        getState().app?.networkState?.isConnected === false;
-      log.info('Loading issues...');
-
+      const isOffline: boolean = getState().app?.networkState?.isConnected === false;
       if (!isOffline) {
         dispatch(startIssuesLoading());
+        log.info('Loading issues...');
       }
 
       const pageSize: number = dispatch(getPageSize());
-      const [error, listIssues] = await until(
-        api.issues.getIssues(query, pageSize, 0, getState().issueList.settings.view.mode),
-      );
-      dispatch(stopIssuesLoading());
+      const issues: AnyIssue[] = await dispatch(doLoadIssues(query, pageSize));
+      log.info(`${issues?.length} issues loaded`);
 
-      if (error) {
-        if (isOffline && !getStorageState().issuesCache || !isOffline) {
-          dispatch(setIssuesError(error));
-        }
-      } else {
-        const issues: AnyIssue[] = ApiHelper.fillIssuesFieldHash(listIssues);
-        log.info(`${issues?.length} issues loaded`);
-        dispatch(receiveIssues(issues, pageSize));
-        dispatch(cacheIssues(issues));
+      dispatch(receiveIssues(issues, pageSize));
+      dispatch(cacheIssues(issues));
 
-        if (issues.length < pageSize) {
-          dispatch(setIssuesCount(issues.length));
-          log.info('End reached during initial load');
-          dispatch(listEndReached());
-        }
+      if (issues.length < pageSize) {
+        dispatch(setIssuesCount(issues.length));
+        log.info('End reached during initial load');
+        dispatch(listEndReached());
       }
     } catch (e) {
       log.log('Failed to load issues');
+      dispatch(setIssuesError(e));
+    } finally {
+      dispatch(stopIssuesLoading());
     }
   };
 }
+
 export function isIssueMatchesQuery(
   issueIdReadable: string,
 ): (
@@ -727,14 +748,11 @@ export function loadMoreIssues(): (
     getApi: ApiGetter,
   ) => {
     try {
-      const isOffline: boolean =
-        getState().app?.networkState?.isConnected === false;
-
+      const isOffline: boolean = getState().app?.networkState?.isConnected === false;
       if (isOffline) {
         return;
       }
 
-      const api: Api = getApi();
       const {
         isInitialized,
         isLoadingMore,
@@ -756,35 +774,29 @@ export function loadMoreIssues(): (
       }
 
       const pageSize: number = dispatch(getPageSize());
-      const newSkip = skip + pageSize;
+      const newSkip: number = skip + pageSize;
       log.info(`Loading more issues. newSkip = ${newSkip}`);
       dispatch(startMoreIssuesLoading(newSkip));
 
       try {
         const searchQuery = await dispatch(composeSearchQuery());
-        let moreIssues: AnyIssue[] = (await api.issues.getIssues(
-          searchQuery,
-          pageSize,
-          newSkip,
-          getState().issueList.settings.view.mode
-        )) as any;
+        let moreIssues: IssueOnList[] = await dispatch(doLoadIssues(searchQuery, pageSize, newSkip));
         log.info(`Loaded ${pageSize} more issues.`);
-        moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues);
-        const updatedIssues = ApiHelper.removeDuplicatesByPropName(
+        moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues) as IssueOnList[];
+        const updatedIssues: IssueOnList[] = ApiHelper.removeDuplicatesByPropName(
           issues.concat(moreIssues),
           'id',
-        );
-        dispatch(receiveIssues(updatedIssues, dispatch(getPageSize())));
+        ) as IssueOnList[];
+        dispatch(receiveIssues(updatedIssues, pageSize));
         dispatch(cacheIssues(updatedIssues));
 
-        if (moreIssues?.length < pageSize) {
-          log.info(
-            `End of issues reached: all ${updatedIssues?.length} issues are loaded`,
-          );
+        if (moreIssues.length < pageSize) {
+          log.info(`End of issues reached: all ${updatedIssues?.length} issues are loaded`);
           dispatch(listEndReached());
         }
-      } catch (err) {
-        notifyError(err);
+      } catch (e) {
+        log.log('Failed to load more issues');
+        dispatch(setIssuesError(e));
       } finally {
         dispatch(stopMoreIssuesLoading());
       }
