@@ -42,7 +42,7 @@ export default class IssuesAPI extends ApiBase {
   ): Promise<SortedIssues> {
     const q: string = qs.stringify(
       {
-        folderId,
+        folderId: folderId !== null ? folderId : undefined,
         topRoot,
         skipRoot,
         query: encodeURIComponent(query),
