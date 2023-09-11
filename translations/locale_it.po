@@ -170,7 +170,7 @@ msgstr "Allegato eliminato"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Attachment name"
-msgstr ""
+msgstr "Nome allegato"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Author"
@@ -190,7 +190,7 @@ msgstr "Effettuando l'accesso, accetti la politica sulla privacy."
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
-msgstr ""
+msgstr "Fotocamera"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
@@ -268,11 +268,11 @@ msgstr "ha fatto il committ delle modifiche"
 
 #: src/components/account/accounts.tsx
 msgid "Confirm logout"
-msgstr ""
+msgstr "Conferma la disconnessione"
 
 #: src/components/account/accounts.tsx
 msgid "Confirmation required"
-msgstr ""
+msgstr "Conferma richiesta"
 
 #: src/actions/app-actions.ts
 msgid "Connecting to YouTrack..."
@@ -290,7 +290,7 @@ msgstr "Contenuto"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Content revised"
-msgstr ""
+msgstr "Contenuto revisionato"
 
 #: src/components/user/user-card.tsx
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx
@@ -305,11 +305,11 @@ msgstr "Copiato"
 
 #: src/views/issue/issue__details.tsx
 msgid "Copy description"
-msgstr ""
+msgstr "Copia descrizione"
 
 #: src/views/issue/issue__details.tsx
 msgid "Copy field text"
-msgstr ""
+msgstr "Copia il testo del campo"
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity-stream.tsx
@@ -419,15 +419,15 @@ msgstr "Ignora le modifiche non pubblicate"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to log out?"
-msgstr ""
+msgstr "Vuoi davvero disconnetterti?"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to remove this account?"
-msgstr ""
+msgstr "Vuoi davvero rimuovere questo account?"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Document"
-msgstr ""
+msgstr "Documento"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
@@ -477,7 +477,7 @@ msgstr "Inserisci il valore temporale"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
-msgstr ""
+msgstr "Preferiti"
 
 #: src/views/settings/settings-helper.ts
 msgid "Feature request"
@@ -600,7 +600,7 @@ msgstr "Knowledge base"
 
 #: src/views/issues/index.ts
 msgid "Large"
-msgstr ""
+msgstr "Grande"
 
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-message-data.ts
@@ -667,7 +667,7 @@ msgstr "Contrassegna come non letto"
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Marked as read"
-msgstr ""
+msgstr "Contrassegnato come letto"
 
 #: src/views/issues/issues__count.tsx
 msgid "Matches {{issuesCount}} issue"
@@ -677,7 +677,7 @@ msgstr[1] "Corrisponde a {{issuesCount}} ticket"
 
 #: src/views/issues/index.ts
 msgid "Medium"
-msgstr ""
+msgstr "Medio"
 
 #: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
@@ -706,7 +706,7 @@ msgstr "Nuovo ticket"
 
 #: src/views/inbox-threads/inbox-threads__update-button.tsx
 msgid "New messages"
-msgstr ""
+msgstr "Nuovi messaggi"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Next"
@@ -758,7 +758,7 @@ msgstr "No, non riesco a trovarlo!"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Notification settings…"
-msgstr ""
+msgstr "Impostazioni delle notifiche…"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 #: src/views/inbox/inbox.tsx
@@ -779,11 +779,11 @@ msgstr "Password"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
-msgstr ""
+msgstr "Libreria foto e video"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
-msgstr ""
+msgstr "Dimensione anteprima"
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"
@@ -959,7 +959,7 @@ msgstr "Visualizza di più"
 
 #: src/views/issues/index.ts
 msgid "Small"
-msgstr ""
+msgstr "Piccolo"
 
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-messages.ts
@@ -972,7 +972,7 @@ msgstr "Attributi di ordinamento"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Sort Order"
-msgstr ""
+msgstr "Ordinamento"
 
 #: src/views/issue/activity/issue__activity-settings.tsx
 msgid "Sort: oldest first"
@@ -1108,11 +1108,11 @@ msgstr "Questa azione elimina tutte le bozze, inclusi gli articoli secondari non
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Thread muted"
-msgstr ""
+msgstr "Audio del thread disattivato"
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Thread unmuted"
-msgstr ""
+msgstr "Audio del thread attivato"
 
 #: src/views/article-create/article-create.tsx
 msgid "Title"
@@ -1120,11 +1120,11 @@ msgstr "Titolo"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Title changed"
-msgstr ""
+msgstr "Titolo modificato"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "To view an item in context, select an issue, article, or update from the list"
-msgstr ""
+msgstr "Per visualizzare un elemento nel contesto, seleziona un ticket, un articolo o un aggiornamento dall'elenco"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
@@ -1136,7 +1136,7 @@ msgstr "Numero totale di voti"
 
 #: src/components/tip/tips/activity-touch-actions.tsx
 msgid "Touch and hold an item to view a list of available actions"
-msgstr ""
+msgstr "Tocca e tieni premuto un elemento per visualizzare un elenco di azioni disponibili"
 
 #: src/components/error-message/error-message.tsx
 msgid "Try Again"
@@ -1201,7 +1201,7 @@ msgstr "Visualizza commenti e altre attività"
 
 #: src/components/user/user-card.tsx
 msgid "View reported issues"
-msgstr ""
+msgstr "Visualizza i ticket creati"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
@@ -1233,7 +1233,7 @@ msgstr "Ehi, non puoi toccarlo!"
 
 #: src/components/error/error-message-data.ts
 msgid "Wrap attribute values that contain spaces in braces {like this}."
-msgstr ""
+msgstr "Disponi i valori degli attributi che contengono spazi tra parentesi graffe {come questo}."
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
@@ -1262,7 +1262,7 @@ msgstr "Il tuo account non dispone di autorizzazioni sufficienti per eseguire qu
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
-msgstr ""
+msgstr "Lo spazio di archiviazione disponibile del dispositivo mobile si sta esaurendo. Alcune funzionalità dell'app potrebbero non essere disponibili."
 
 #: src/components/error/error-message-data.ts
 msgid "Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n\n"

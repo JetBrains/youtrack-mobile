@@ -162,7 +162,7 @@ msgstr ""
 #: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachments-add-panel.tsx
 msgid "Attach files"
-msgstr ""
+msgstr "Přiložit soubory"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Attachment"

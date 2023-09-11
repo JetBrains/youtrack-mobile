@@ -101,7 +101,7 @@ msgstr "全部"
 
 #: src/views/issues/issues__filters-filter.tsx
 msgid "All projects"
-msgstr ""
+msgstr "所有项目"
 
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
@@ -206,7 +206,7 @@ msgstr "取消"
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
-msgstr ""
+msgstr "清除当前搜索上下文"
 
 #: src/components/debug-view/debug-view.tsx
 #: src/components/popup/popup.tsx
@@ -499,7 +499,7 @@ msgstr "筛选项目、保存的搜索和标签"
 #: src/views/issues/issues__filters-settings__list.tsx
 #: src/views/issues/issues__settings.tsx
 msgid "Filter Settings"
-msgstr ""
+msgstr "筛选器设置"
 
 #: src/views/agile-board/board-actions.ts
 msgid "Filter sprints by name"
@@ -516,7 +516,7 @@ msgstr "筛选用户、群组和团队"
 
 #: src/views/issues/index.ts
 msgid "Filters"
-msgstr ""
+msgstr "筛选器"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Find favorite projects"
@@ -524,7 +524,7 @@ msgstr "查找收藏的项目"
 
 #: src/views/issues/issues.tsx
 msgid "Find issues that contain key words"
-msgstr ""
+msgstr "查找包含关键词的问题"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Get help"
@@ -596,7 +596,7 @@ msgstr "知识库"
 
 #: src/views/issues/index.ts
 msgid "Large"
-msgstr ""
+msgstr "大"
 
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-message-data.ts
@@ -672,7 +672,7 @@ msgstr[0] "匹配 {{issuesCount}} 个问题"
 
 #: src/views/issues/index.ts
 msgid "Medium"
-msgstr ""
+msgstr "中"
 
 #: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
@@ -778,7 +778,7 @@ msgstr "照片和视频库"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
-msgstr ""
+msgstr "预览大小"
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"
@@ -803,7 +803,7 @@ msgstr "已展开项目"
 
 #: src/views/issues/index.ts
 msgid "Query"
-msgstr ""
+msgstr "查询"
 
 #: src/components/query-assist/query-assist-helper.ts
 msgid "Recent searches"
@@ -857,7 +857,7 @@ msgstr "重试"
 
 #: src/views/issues/issues-actions.ts
 msgid "Saved Searches"
-msgstr ""
+msgstr "已保存的搜索"
 
 #: src/views/knowledge-base/knowledge-base__search.tsx
 msgid "Search articles"
@@ -873,7 +873,7 @@ msgstr "搜索项目"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Search Input Mode"
-msgstr ""
+msgstr "搜索输入模式"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Select an article from the list"
@@ -954,7 +954,7 @@ msgstr "显示更多"
 
 #: src/views/issues/index.ts
 msgid "Small"
-msgstr ""
+msgstr "小"
 
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-messages.ts
@@ -967,7 +967,7 @@ msgstr "排序属性"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Sort Order"
-msgstr ""
+msgstr "排序顺序"
 
 #: src/views/issue/activity/issue__activity-settings.tsx
 msgid "Sort: oldest first"
@@ -1022,7 +1022,7 @@ msgstr[0] "标签"
 
 #: src/views/issues/issues-actions.ts
 msgid "Tags"
-msgstr ""
+msgstr "标签"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Thank you for your feedback!"
@@ -1070,7 +1070,7 @@ msgstr "提交作者不是项目的被指派者。"
 
 #: src/components/error/error-message-data.ts
 msgid "The search query contains unknown values"
-msgstr ""
+msgstr "该搜索查询包含未知值"
 
 #: src/actions/app-actions.ts
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
@@ -1211,7 +1211,7 @@ msgstr "问题读者可见"
 
 #: src/components/error/error-message-data.ts
 msgid "We didn't find any issues in the current search context that match your query"
-msgstr ""
+msgstr "我们在当前搜索上下文中找不到与您的查询匹配的任何问题"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."
@@ -1227,7 +1227,7 @@ msgstr "注意，不要碰这个!"
 
 #: src/components/error/error-message-data.ts
 msgid "Wrap attribute values that contain spaces in braces {like this}."
-msgstr ""
+msgstr "将包含空格的特性值包装在大括号中，{像这样一样}。"
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx

@@ -1201,7 +1201,7 @@ msgstr ""
 
 #: src/components/user/user-card.tsx
 msgid "View reported issues"
-msgstr ""
+msgstr "Jelentett problémák megtekintése"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"

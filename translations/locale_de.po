@@ -104,7 +104,7 @@ msgstr "Alle"
 
 #: src/views/issues/issues__filters-filter.tsx
 msgid "All projects"
-msgstr ""
+msgstr "Alle Projekte"
 
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
@@ -210,7 +210,7 @@ msgstr "Abbrechen"
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
-msgstr ""
+msgstr "Aktuellen Suchkontext entfernen"
 
 #: src/components/debug-view/debug-view.tsx
 #: src/components/popup/popup.tsx
@@ -503,7 +503,7 @@ msgstr "Projekte, gespeicherte Suchen und Tags filtern"
 #: src/views/issues/issues__filters-settings__list.tsx
 #: src/views/issues/issues__settings.tsx
 msgid "Filter Settings"
-msgstr ""
+msgstr "Filtereinstellungen"
 
 #: src/views/agile-board/board-actions.ts
 msgid "Filter sprints by name"
@@ -520,7 +520,7 @@ msgstr "Filtern Sie Benutzer, Gruppen und Teams"
 
 #: src/views/issues/index.ts
 msgid "Filters"
-msgstr ""
+msgstr "Filter"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Find favorite projects"
@@ -528,7 +528,7 @@ msgstr "Projektfavoriten finden"
 
 #: src/views/issues/issues.tsx
 msgid "Find issues that contain key words"
-msgstr ""
+msgstr "Tickets finden, die Schlüsselwörter enthalten"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Get help"
@@ -600,7 +600,7 @@ msgstr "Wissensdatenbank"
 
 #: src/views/issues/index.ts
 msgid "Large"
-msgstr ""
+msgstr "Groß"
 
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-message-data.ts
@@ -677,7 +677,7 @@ msgstr[1] "Trifft auf {{issuesCount}} Tickets zu"
 
 #: src/views/issues/index.ts
 msgid "Medium"
-msgstr ""
+msgstr "Mittel"
 
 #: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
@@ -783,7 +783,7 @@ msgstr "Foto- und Videobibliothek"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
-msgstr ""
+msgstr "Vorschaugröße"
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"
@@ -808,7 +808,7 @@ msgstr "Projekte erweitert"
 
 #: src/views/issues/index.ts
 msgid "Query"
-msgstr ""
+msgstr "Abfrage"
 
 #: src/components/query-assist/query-assist-helper.ts
 msgid "Recent searches"
@@ -862,7 +862,7 @@ msgstr "Wiederholen"
 
 #: src/views/issues/issues-actions.ts
 msgid "Saved Searches"
-msgstr ""
+msgstr "Gespeicherte Suchen"
 
 #: src/views/knowledge-base/knowledge-base__search.tsx
 msgid "Search articles"
@@ -878,7 +878,7 @@ msgstr "Nach Projekt suchen"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Search Input Mode"
-msgstr ""
+msgstr "Sucheingabe-Modus"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Select an article from the list"
@@ -959,7 +959,7 @@ msgstr "Weitere anzeigen"
 
 #: src/views/issues/index.ts
 msgid "Small"
-msgstr ""
+msgstr "Klein"
 
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-messages.ts
@@ -972,7 +972,7 @@ msgstr "Attribute sortieren"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Sort Order"
-msgstr ""
+msgstr "Sortierung"
 
 #: src/views/issue/activity/issue__activity-settings.tsx
 msgid "Sort: oldest first"
@@ -1028,7 +1028,7 @@ msgstr[1] "Tags"
 
 #: src/views/issues/issues-actions.ts
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Thank you for your feedback!"
@@ -1076,7 +1076,7 @@ msgstr "Der Commit-Autor ist kein Bearbeiter im Projekt."
 
 #: src/components/error/error-message-data.ts
 msgid "The search query contains unknown values"
-msgstr ""
+msgstr "Die Suchanfrage enthält unbekannte Werte"
 
 #: src/actions/app-actions.ts
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
@@ -1217,7 +1217,7 @@ msgstr "Sichtbar für Ticket-Leser"
 
 #: src/components/error/error-message-data.ts
 msgid "We didn't find any issues in the current search context that match your query"
-msgstr ""
+msgstr "Im aktuellen Suchkontext haben wir keine Tickets für Ihre Suchanfrage gefunden"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."
@@ -1233,7 +1233,7 @@ msgstr "Stopp!"
 
 #: src/components/error/error-message-data.ts
 msgid "Wrap attribute values that contain spaces in braces {like this}."
-msgstr ""
+msgstr "Attributwerte, die Leerzeichen enthalten, in {geschweifte Klammern} setzen."
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx

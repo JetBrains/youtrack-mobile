@@ -101,7 +101,7 @@ msgstr "전체"
 
 #: src/views/issues/issues__filters-filter.tsx
 msgid "All projects"
-msgstr ""
+msgstr "모든 프로젝트"
 
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
@@ -206,7 +206,7 @@ msgstr "취소"
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
-msgstr ""
+msgstr "현재 검색 컨텍스트 지우기"
 
 #: src/components/debug-view/debug-view.tsx
 #: src/components/popup/popup.tsx
@@ -499,7 +499,7 @@ msgstr "프로젝트, 저장된 검색 및 태그 필터링"
 #: src/views/issues/issues__filters-settings__list.tsx
 #: src/views/issues/issues__settings.tsx
 msgid "Filter Settings"
-msgstr ""
+msgstr "필터 설정"
 
 #: src/views/agile-board/board-actions.ts
 msgid "Filter sprints by name"
@@ -516,7 +516,7 @@ msgstr "사용자, 그룹 및 팀 필터링"
 
 #: src/views/issues/index.ts
 msgid "Filters"
-msgstr ""
+msgstr "필터"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Find favorite projects"
@@ -524,7 +524,7 @@ msgstr "즐겨찾는 프로젝트 찾기"
 
 #: src/views/issues/issues.tsx
 msgid "Find issues that contain key words"
-msgstr ""
+msgstr "키워드를 포함하는 이슈 찾기"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Get help"
@@ -596,7 +596,7 @@ msgstr "지식 베이스"
 
 #: src/views/issues/index.ts
 msgid "Large"
-msgstr ""
+msgstr "크게"
 
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-message-data.ts
@@ -672,7 +672,7 @@ msgstr[0] " {{issuesCount}} 건이 존재합니다."
 
 #: src/views/issues/index.ts
 msgid "Medium"
-msgstr ""
+msgstr "보통"
 
 #: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
@@ -778,7 +778,7 @@ msgstr "사진 및 비디오 라이브러리"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
-msgstr ""
+msgstr "미리보기 크기"
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"
@@ -803,7 +803,7 @@ msgstr "확장된 프로젝트"
 
 #: src/views/issues/index.ts
 msgid "Query"
-msgstr ""
+msgstr "쿼리"
 
 #: src/components/query-assist/query-assist-helper.ts
 msgid "Recent searches"
@@ -857,7 +857,7 @@ msgstr "다시 시도"
 
 #: src/views/issues/issues-actions.ts
 msgid "Saved Searches"
-msgstr ""
+msgstr "저장된 검색"
 
 #: src/views/knowledge-base/knowledge-base__search.tsx
 msgid "Search articles"
@@ -873,7 +873,7 @@ msgstr "프로젝트 검색"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Search Input Mode"
-msgstr ""
+msgstr "검색 입력 모드"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Select an article from the list"
@@ -954,7 +954,7 @@ msgstr "더보기"
 
 #: src/views/issues/index.ts
 msgid "Small"
-msgstr ""
+msgstr "작게"
 
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-messages.ts
@@ -967,7 +967,7 @@ msgstr "정렬 속성"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Sort Order"
-msgstr ""
+msgstr "정렬 순서"
 
 #: src/views/issue/activity/issue__activity-settings.tsx
 msgid "Sort: oldest first"
@@ -1022,7 +1022,7 @@ msgstr[0] "태그"
 
 #: src/views/issues/issues-actions.ts
 msgid "Tags"
-msgstr ""
+msgstr "태그"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Thank you for your feedback!"
@@ -1070,7 +1070,7 @@ msgstr "커밋 작성자가 프로젝트 담당자가 아닙니다."
 
 #: src/components/error/error-message-data.ts
 msgid "The search query contains unknown values"
-msgstr ""
+msgstr "검색 쿼리에 알 수 없는 값이 있습니다."
 
 #: src/actions/app-actions.ts
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
@@ -1211,7 +1211,7 @@ msgstr "이슈 리더에게 표시됨"
 
 #: src/components/error/error-message-data.ts
 msgid "We didn't find any issues in the current search context that match your query"
-msgstr ""
+msgstr "사용자 쿼리와 일치하는 현재 검색 컨텍스트에서 이슈를 찾을 수 없습니다"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."
@@ -1227,7 +1227,7 @@ msgstr "이런, 여기에 접근하실 수 없습니다."
 
 #: src/components/error/error-message-data.ts
 msgid "Wrap attribute values that contain spaces in braces {like this}."
-msgstr ""
+msgstr "공백이 있는 속성 값을 {이와 같이} 중괄호로 래핑합니다."
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
