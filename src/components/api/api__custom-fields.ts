@@ -33,6 +33,7 @@ const filterFields = toField([
   '$type',
   'id',
   'name',
+  'customField(id,name)',
 ]);
 
 const filtersDefaultParams = {

@@ -10,7 +10,7 @@ describe('Issues helper', () => {
 
   describe('getFilterSettingKey', () => {
     it('should return  lower-cased key', async () => {
-      expect(helper.getFilterFieldKey({name: 'Test'} as FilterField)).toEqual('test');
+      expect(helper.getFilterFieldKey({id: 'Test'} as FilterField)).toEqual('test');
     });
   });
 
@@ -75,7 +75,7 @@ describe('Issues helper', () => {
       key,
       filterField: Array(2).fill({
         $type: 'CustomFilterField',
-        id: '1-1',
+        id: key,
         name: key,
       }),
       selectedValues: values || Array(2).fill(fieldValue),

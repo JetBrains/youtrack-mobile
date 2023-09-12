@@ -696,7 +696,7 @@ export function setFilters(): (
               ...akk,
               [key]: {
                 key,
-                filterField: filterFields.filter((i: FilterField) => i.name.toLowerCase() === key),
+                filterField: filterFields.filter((i: FilterField) => getFilterFieldKey(i) === key),
                 selectedValues: filterSettings?.selectedValues || [],
               },
             };

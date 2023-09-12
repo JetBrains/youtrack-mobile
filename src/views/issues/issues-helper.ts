@@ -61,7 +61,10 @@ const createQueryFromFiltersSetting = (filters: FilterSetting[] = []): string =>
   return q.join(' ').trim();
 };
 
-const getFilterFieldKey = (filterField: FilterField) => filterField.name.toLowerCase();
+const getFilterFieldKey = (filterField: FilterField) => {
+  const key: string = filterField?.customField?.name || filterField.id;
+  return key.toLowerCase();
+};
 
 
 export {
