@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
+import {useSelector} from 'react-redux';
+
 import IssuesFiltersSettingList from 'views/issues/issues__filters-settings__list';
 import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
@@ -12,7 +14,9 @@ import {until} from 'util/util';
 
 import styles from './issues.styles';
 
+import {AppState} from 'reducers';
 import {FilterField} from 'types/CustomFields';
+import {FilterSetting} from 'views/issues/index';
 import {User} from 'types/User';
 
 
@@ -28,12 +32,17 @@ const IssuesFiltersSetting = ({
   const cachedFilterFields = React.useRef<FilterField[] | null>(null);
   const [sorted, setSorted] = React.useState<string[]>([]);
   const [modalChildren, updateModalChildren] = useState<React.JSX.Element | null>(null);
+  const issuesSettings = useSelector((state: AppState) => state.issueList.settings);
 
   useEffect(() => {
     if (user.profiles?.appearance?.liteUiFilters?.length) {
-      setSorted(user.profiles?.appearance?.liteUiFilters);
+      const list = user.profiles?.appearance?.liteUiFilters.map((it: string) => {
+        const filter: FilterSetting = issuesSettings.search.filters[it?.toLowerCase()];
+        return filter?.filterField?.[0]?.name || it;
+      });
+      setSorted(list);
     }
-  }, [sorted, user.profiles?.appearance?.liteUiFilters]);
+  }, [issuesSettings, user.profiles?.appearance?.liteUiFilters]);
 
   const onBack = () => {
     if (isSplitView()) {
@@ -66,7 +75,7 @@ const IssuesFiltersSetting = ({
   const renderAddItemComponent = () => {
     const isSplitViewMode: boolean = isSplitView();
     const Container: typeof Select | typeof SelectModal = isSplitViewMode ? SelectModal : Select;
-    const toSorted = (it: {id: string, name: string}) => it.name;
+    const toSorted = (it: { id: string, name: string }) => it.name;
     const toSelectItem = (it: string) => ({id: it, name: it});
     const component = (
       <Container
@@ -115,7 +124,7 @@ const IssuesFiltersSetting = ({
         onApply={(filters) => onApply(filters)}
         onBack={onBack}
         onAdd={renderAddItemComponent}
-        />
+      />
     );
   };
 
