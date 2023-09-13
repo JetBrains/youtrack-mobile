@@ -110,7 +110,7 @@ msgstr "הכל"
 
 #: src/views/issues/issues__filters-filter.tsx
 msgid "All projects"
-msgstr ""
+msgstr "כל הפרויקטים"
 
 #: src/views/settings/settings__appearance.tsx
 #: src/views/settings/settings.tsx
@@ -818,7 +818,7 @@ msgstr ""
 
 #: src/views/issues/index.ts
 msgid "Query"
-msgstr ""
+msgstr "שאילתה"
 
 #: src/components/query-assist/query-assist-helper.ts
 msgid "Recent searches"
