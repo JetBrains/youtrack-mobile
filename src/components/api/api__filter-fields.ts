@@ -13,7 +13,7 @@ export default class FilterFields extends ApiBase {
       'name',
     ];
     return await this.makeAuthorizedRequest(
-      `${url}?$%24top=100&fields=${fields.join(',')}&query=${encodeURIComponent(query)}&prefix=${encodeURIComponent(prefix)}&type=Issue`,
+      `${url}?%24top=100&fields=${fields.join(',')}&query=${encodeURIComponent(query)}&prefix=${encodeURIComponent(prefix)}&type=Issue`,
       'GET'
     );
   }
