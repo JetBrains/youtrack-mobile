@@ -88,7 +88,7 @@ export default EStyleSheet.create({
   headLeft: {
     ...issueCard.issueId,
     color: '$textSecondary',
-    marginRight: UNIT,
+    marginRight: UNIT / 4,
     marginTop: UNIT / 4,
   },
   headRight: {...rowLine, flexGrow: 1, justifyContent: 'flex-end'},
