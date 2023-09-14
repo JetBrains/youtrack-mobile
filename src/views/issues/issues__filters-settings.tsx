@@ -30,13 +30,13 @@ const IssuesFiltersSetting = ({
   const issuesSettings = useSelector((state: AppState) => state.issueList.settings);
 
   useEffect(() => {
-    if (user.profiles?.appearance?.liteUiFilters?.length) {
+    if (user.profiles?.appearance?.liteUiFilters?.length && issuesSettings.search?.filters) {
       const list: FilterSetting[] | undefined = user.profiles?.appearance?.liteUiFilters.reduce(
         (akk: FilterSetting[], it: string) => {
           return [...akk, issuesSettings.search.filters[it?.toLowerCase()]];
         },
         []
-      );
+      ).filter(Boolean);
       setSorted(list);
     }
   }, [issuesSettings, user.profiles?.appearance?.liteUiFilters]);
