@@ -44,9 +44,18 @@ const isRelevanceSortProperty = (sortProperty: IssueFieldSortProperty): boolean 
 
 const convertToNonStructural = (text: string): string => text.trim() ? `{${text.replace(whiteSpacesRegex, ' ')}}` : text;
 
+const wrapToBraces = (text: string): string => {
+  const str: string = text.trim();
+  if (str && whiteSpacesRegex.test(str)) {
+    return convertToNonStructural(str);
+  }
+  return str;
+};
+
 const createQueryFromFiltersSetting = (filters: FilterSetting[] = []): string => {
   const groupedQuery = filters.reduce((akk: {[key: string]: string}, it: FilterSetting) => {
-    const query: string = (it.selectedValues || []).join(',');
+    const query: string = (it.selectedValues || []).map(wrapToBraces).join(',');
+
     if (query) {
       akk[getFilterFieldName(it.filterField[0])] = query;
     }
@@ -74,4 +83,5 @@ export {
   getFilterFieldName,
   getSortPropertyName,
   isRelevanceSortProperty,
+  wrapToBraces,
 };

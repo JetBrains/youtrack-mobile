@@ -69,6 +69,21 @@ describe('Issues helper', () => {
     });
   });
 
+
+  describe('wrapToBraces', () => {
+    it('should wrap text with white spaces', async () => {
+      expect(helper.wrapToBraces('a b')).toEqual('{a b}');
+    });
+
+    it('should wrap and strim text with white spaces', async () => {
+      expect(helper.wrapToBraces(' a b ')).toEqual('{a b}');
+    });
+
+    it('should not wrap text without white spaces', async () => {
+      expect(helper.wrapToBraces('ab')).toEqual('ab');
+    });
+  });
+
   function createSettingMock(name: string = nameMock, values?: string[]): FilterSetting[] {
     const key = name.toLowerCase();
     return [{
