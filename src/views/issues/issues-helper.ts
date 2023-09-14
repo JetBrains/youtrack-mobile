@@ -48,7 +48,7 @@ const createQueryFromFiltersSetting = (filters: FilterSetting[] = []): string =>
   const groupedQuery = filters.reduce((akk: {[key: string]: string}, it: FilterSetting) => {
     const query: string = (it.selectedValues || []).join(',');
     if (query) {
-      akk[getFilterFieldKey(it.filterField[0])] = query;
+      akk[getFilterFieldName(it.filterField[0])] = query;
     }
     return akk;
   }, {});
@@ -61,8 +61,8 @@ const createQueryFromFiltersSetting = (filters: FilterSetting[] = []): string =>
   return q.join(' ').trim();
 };
 
-const getFilterFieldKey = (filterField: FilterField) => {
-  const key: string = filterField?.customField?.name || filterField.id;
+const getFilterFieldName = (filterField: FilterField) => {
+  const key: string = filterField?.customField?.name || filterField.name;
   return key.toLowerCase();
 };
 
@@ -71,7 +71,7 @@ export {
   createQueryFromFiltersSetting,
   convertToNonStructural,
   doAssist,
-  getFilterFieldKey,
+  getFilterFieldName,
   getSortPropertyName,
   isRelevanceSortProperty,
 };

@@ -4,7 +4,7 @@ import {FilterField} from 'types/CustomFields';
 
 export interface FilterSetting {
   filterField: FilterField[];
-  key: string;
+  id: string;
   selectedValues: string[];
 }
 

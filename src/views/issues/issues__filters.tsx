@@ -10,6 +10,7 @@ import styles from './issues.styles';
 
 import {AppState} from 'reducers';
 import {FilterSetting, IssuesSettings} from 'views/issues/index';
+import {guid} from 'util/util';
 
 
 const IssuesFilters = (): React.JSX.Element | null => {
@@ -27,16 +28,16 @@ const IssuesFilters = (): React.JSX.Element | null => {
         {
           Object.keys(settings.search.filters).map((it: string) => {
             const fs: FilterSetting = settings.search.filters[it];
-            return (
+            return fs.filterField[0] ? (
               <IssuesFilterField
-                key={fs.filterField[0].id}
+                key={guid()}
                 filterSetting={fs}
                 disabled={disabled}
                 onPress={(filterSetting: FilterSetting) => {
                   dispatch(openFilterFieldSelect(filterSetting));
                 }}
               />
-            );
+            ) : null;
           })
         }
       </View>

@@ -20,7 +20,7 @@ import {
   issuesSettingsSearch,
   IssuesSettingSearch,
 } from 'views/issues/index';
-import {onSettingsChange, refreshIssues} from 'views/issues/issues-actions';
+import {onSettingsChange, setFilters} from 'views/issues/issues-actions';
 import {receiveUserAppearanceProfile} from 'actions/app-actions';
 
 import styles from './issues.styles';
@@ -100,7 +100,7 @@ const IssuesListSettings = ({
                       liteUiFilters: visibleFilters,
                     })
                   );
-                  dispatch(refreshIssues());
+                  await dispatch(setFilters());
                 }}
                 onOpen={() => toggleVisibility(false)}
                 user={user}

@@ -10,7 +10,7 @@ describe('Issues helper', () => {
 
   describe('getFilterSettingKey', () => {
     it('should return  lower-cased key', async () => {
-      expect(helper.getFilterFieldKey({id: 'Test'} as FilterField)).toEqual('test');
+      expect(helper.getFilterFieldName({name: 'Test'} as FilterField)).toEqual('test');
     });
   });
 
@@ -34,7 +34,7 @@ describe('Issues helper', () => {
 
     it('should contain the `key` field', async () => {
       const filterSettings = createSettingMock();
-      expect(filterSettings[0].key).toEqual(
+      expect(filterSettings[0].id).toEqual(
         nameMock.toLowerCase()
       );
     });
@@ -72,7 +72,7 @@ describe('Issues helper', () => {
   function createSettingMock(name: string = nameMock, values?: string[]): FilterSetting[] {
     const key = name.toLowerCase();
     return [{
-      key,
+      id: key,
       filterField: Array(2).fill({
         $type: 'CustomFilterField',
         id: key,

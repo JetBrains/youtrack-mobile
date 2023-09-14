@@ -7,7 +7,7 @@ import styles from './issues.styles';
 
 import {defaultIssuesFilterFieldConfig, FilterSetting} from 'views/issues/index';
 import {i18n} from 'components/i18n/i18n';
-import {getFilterFieldKey} from 'views/issues/issues-helper';
+import {getFilterFieldName} from 'views/issues/issues-helper';
 
 
 const IssuesFilterField = ({
@@ -24,7 +24,7 @@ const IssuesFilterField = ({
   const values = filterSetting.selectedValues;
   const presentation = values.length
       ? values.join(', ')
-      : getFilterFieldKey(filterFields[0]) === defaultIssuesFilterFieldConfig.project ? i18n('All projects') : filterFields[0].name;
+      : getFilterFieldName(filterFields[0]) === defaultIssuesFilterFieldConfig.project ? i18n('All projects') : filterFields[0].name;
 
   return (
     <TouchableOpacity

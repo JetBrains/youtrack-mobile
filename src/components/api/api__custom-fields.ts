@@ -33,7 +33,7 @@ const filterFields = toField([
   '$type',
   'id',
   'name',
-  'customField(id,name)',
+  'customField(id,name,localizedName)',
 ]);
 
 const filtersDefaultParams = {

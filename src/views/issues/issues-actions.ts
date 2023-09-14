@@ -7,7 +7,7 @@ import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {
   convertToNonStructural,
   createQueryFromFiltersSetting,
-  getFilterFieldKey,
+  getFilterFieldName,
 } from 'views/issues/issues-helper';
 import {
   defaultIssuesFilterFieldConfig,
@@ -367,7 +367,7 @@ export function openFilterFieldSelect(filterSetting: FilterSetting): (
       onSelect: async (selected: { id: string; name: string }[]) => {
         try {
           dispatch(closeSelect());
-          const key: string = getFilterFieldKey(filterSetting.filterField[0]);
+          const key: string = getFilterFieldName(filterSetting.filterField[0]);
           const issuesSettings: IssuesSettings = {
             ...settings,
             search: {
@@ -690,13 +690,16 @@ export function setFilters(): (
         search: {
           ...settings.search,
           filters: visibleFiltersNames.reduce((akk: FiltersSetting, it: string) => {
-            const key: string = it.toLowerCase();
-            const filterSettings: FilterSetting | undefined = settings.search.filters?.[key];
+            const id: string = it.toLowerCase();
+            const filterSettings: FilterSetting | undefined = settings.search.filters?.[id];
+            const filterField: FilterField[] = filterFields.filter((i: FilterField) => {
+              return getFilterFieldName(i) === id || id === i.id;
+            });
             return {
               ...akk,
-              [key]: {
-                key,
-                filterField: filterFields.filter((i: FilterField) => getFilterFieldKey(i) === key),
+              [id]: {
+                id,
+                filterField,
                 selectedValues: filterSettings?.selectedValues || [],
               },
             };
