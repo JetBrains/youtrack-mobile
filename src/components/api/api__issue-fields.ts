@@ -229,7 +229,7 @@ const ISSUE_SSHORT_FIELDS: any = toField([
     fields: ISSUE_FIELD_SHORT_FIELDS,
   },
 ]);
-const ISSUE_SHORT_FIELDS: any = toField([
+const ISSUE_MEDIUM_FIELDS: any = toField([
   ISSUE_XSHORT_FIELDS,
   {
     reporter: ISSUE_USER_FIELDS,
@@ -241,9 +241,9 @@ const ISSUE_SHORT_FIELDS: any = toField([
     tags: ISSUE_TAGS_FIELDS,
   },
 ]);
-const ISSUE_LSHORT_FIELDS: any = toField([
-  ISSUE_SHORT_FIELDS,
-  'description',
+const ISSUE_LARGE_FIELDS: any = toField([
+  ISSUE_MEDIUM_FIELDS,
+  'trimmedDescription',
 ]);
 const ISSUE_LINKED_ISSUE_FIELDS: any = toField([
   'id',
@@ -404,8 +404,8 @@ export default {
   attachments: ISSUE_ATTACHMENTS_FIELDS,
   attachmentsBase: ISSUE_ATTACHMENTS_BASE_FIELDS,
   issuesOnListS: ISSUE_SSHORT_FIELDS,
-  issuesOnList: ISSUE_SHORT_FIELDS,
-  issuesOnListL: ISSUE_LSHORT_FIELDS,
+  issuesOnList: ISSUE_MEDIUM_FIELDS,
+  issuesOnListL: ISSUE_LARGE_FIELDS,
   singleIssueLinks: ISSUE_LINKS_FIELDS,
   issueLinkBase: ISSUE_LINKS_FIELDS_BASE,
   issueLinkTypes: ISSUE_LINK_TYPES_FIELDS,

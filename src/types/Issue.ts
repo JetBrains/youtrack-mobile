@@ -25,6 +25,7 @@ export type IssueOnList = Partial<Omit<IssueFull, 'fields'>> & {
     value: Record<string, any>;
   };
   fields: CustomFieldShort[];
+  trimmedDescription: string;
 };
 export type IssueFull = {
   $type: string;

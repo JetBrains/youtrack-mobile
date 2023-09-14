@@ -65,6 +65,7 @@ export default class IssueRow extends Component<Props, void> {
     return (
       <ThemeContext.Consumer>
         {() => {
+          const description: string = issue.trimmedDescription || issue.description;
           return (
             <TouchableOpacity
               style={style}
@@ -128,7 +129,7 @@ export default class IssueRow extends Component<Props, void> {
                   {issue.summary}
                 </Text>
 
-                {!!issue.description && (
+                {!!description && (
                   <View style={styles.description}>
                     <Text
                       style={styles.secondaryText}
@@ -136,7 +137,7 @@ export default class IssueRow extends Component<Props, void> {
                       testID="test:id/issueRowDescription"
                       accessible={true}
                     >
-                      {issue.description.replace(/\n+/g, '\n')}
+                      {description.replace(/\n+/g, '\n')}
                     </Text>
                   </View>
                 )}
