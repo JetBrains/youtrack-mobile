@@ -27,6 +27,7 @@ interface ISSWithItemActionsState extends ISectionedState {
 
 export class SectionedSelectWithItemActions<P extends ISSWithItemActionsProps, S extends ISSWithItemActionsState> extends SelectSectioned<P, S> {
   _renderTitle(item: IItem): React.ReactNode {
+    const name: string = `${item.name}${item.shortName ? ` (${item.shortName})` : ''}`;
     return (
       <>
         {!!item.id && <Star
@@ -42,7 +43,7 @@ export class SectionedSelectWithItemActions<P extends ISSWithItemActionsProps, S
             }
           }}/>}
         <Text style={styles.itemTitle}>
-          {item.name}
+          {name}
         </Text>
       </>
     );

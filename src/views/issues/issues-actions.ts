@@ -252,7 +252,6 @@ export function openContextSelect(): (
     const searchContextSelectProps: Partial<ISSWithItemActionsProps> & { isSectioned: boolean } = {
       isSectioned: true,
       placeholder: i18n('Filter projects, saved searches, and tags'),
-      getTitle: (item: Folder) => item.name + (item.shortName ? ` (${item.shortName})` : ''),
       dataSource: async (query: string = '') => {
         const [error, allFolders] = await until(
           [api.issueFolder.getIssueFolders(true), query ? api.issueFolder.getIssueFolders() : null]
@@ -907,7 +906,8 @@ function sortFolders(flds: Folder[], q?: string): Folder[] {
         return false;
       }
       map[it.id] = true;
-      return it.name.toLowerCase().indexOf(q.toLowerCase()) !== -1;
+      const pattern: string = q.toLowerCase();
+      return [it.name.toLowerCase(), it?.shortName?.toLowerCase?.() || ''].includes(pattern);
     }
   ) : flds).sort(sortAlphabetically);
 }
