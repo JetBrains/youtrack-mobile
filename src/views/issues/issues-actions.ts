@@ -253,17 +253,12 @@ export function openContextSelect(): (
       isSectioned: true,
       placeholder: i18n('Filter projects, saved searches, and tags'),
       dataSource: async (query: string = '') => {
-        let userFolders = this?.cache;
-        if (!userFolders) {
-          const [error, folders] = await until(
-            api.user.getUserFolders()
-          ) as [CustomError | null, Folder[]];
-          if (error) {
-            log.warn('Failed to load user folders for the context');
-            return [];
-          }
-          userFolders = folders;
-          this.cache = folders;
+        const [error, userFolders] = await until(
+          api.user.getUserFolders()
+        ) as [CustomError | null, Folder[]];
+        if (error) {
+          log.warn('Failed to load user folders for the context');
+          return [];
         }
         const pinnedFolders: Folder[] = userFolders.filter((it: Folder) => it.pinned);
         const unpinnedFolders: Folder[] = userFolders.filter((it: Folder) => !it.pinned);
