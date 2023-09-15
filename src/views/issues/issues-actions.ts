@@ -253,36 +253,45 @@ export function openContextSelect(): (
       isSectioned: true,
       placeholder: i18n('Filter projects, saved searches, and tags'),
       dataSource: async (query: string = '') => {
-        const [error, allFolders] = await until(
-          [api.issueFolder.getIssueFolders(true), query ? api.issueFolder.getIssueFolders() : null]
-        ) as [CustomError | null, [Folder[], (Folder[] | null)]];
-        if (error) {
-          log.warn('Failed to load user folders for the context');
-          return [];
+        let userFolders = this?.cache;
+        if (!userFolders) {
+          const [error, folders] = await until(
+            api.user.getUserFolders()
+          ) as [CustomError | null, Folder[]];
+          if (error) {
+            log.warn('Failed to load user folders for the context');
+            return [];
+          }
+          userFolders = folders;
+          this.cache = folders;
         }
-
-        const pinnedFolders: Folder[] = allFolders[0];
-        const unpinnedFolders: Folder[] = allFolders[1] || [];
+        const pinnedFolders: Folder[] = userFolders.filter((it: Folder) => it.pinned);
+        const unpinnedFolders: Folder[] = userFolders.filter((it: Folder) => !it.pinned);
         const pinnedGrouped: GroupedFolders = getGroupedFolders(pinnedFolders);
-        const unpinnedGrouped: GroupedFolders = query.length ? getGroupedFolders(unpinnedFolders) : {
-          projects: [],
-          tags: [],
-          searches: [],
-        };
+        const unpinnedGrouped: GroupedFolders = getGroupedFolders(unpinnedFolders);
 
         return [
           {
             title: i18n('Projects'),
-            data: sortFolders(
-              [EVERYTHING_CONTEXT as Folder, ...pinnedGrouped.projects, ...unpinnedGrouped.projects], query),
+            data: [
+              EVERYTHING_CONTEXT as Folder,
+              ...sortFolders(pinnedGrouped.projects, query),
+              ...sortFolders(unpinnedGrouped.projects, query),
+            ],
           },
           {
             title: i18n('Tags'),
-            data: sortFolders([...pinnedGrouped.tags, ...unpinnedGrouped.tags], query),
+            data: [
+              ...sortFolders(pinnedGrouped.tags, query),
+              ...sortFolders(unpinnedGrouped.tags, query),
+            ], query,
           },
           {
             title: i18n('Saved Searches'),
-            data: sortFolders([...pinnedGrouped.searches, ...unpinnedGrouped.searches], query),
+            data: [
+              ...sortFolders(pinnedGrouped.searches, query),
+              ...sortFolders(unpinnedGrouped.searches, query),
+            ],
           },
         ];
       },
@@ -907,7 +916,7 @@ function sortFolders(flds: Folder[], q?: string): Folder[] {
       }
       map[it.id] = true;
       const pattern: string = q.toLowerCase();
-      return [it.name.toLowerCase(), it?.shortName?.toLowerCase?.() || ''].includes(pattern);
+      return [it.name.toLowerCase(), it?.shortName?.toLowerCase?.() || ''].some(s => s.indexOf(pattern) !== -1);
     }
   ) : flds).sort(sortAlphabetically);
 }
