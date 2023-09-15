@@ -787,7 +787,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/issues/issues-actions.ts:276
+#: src/views/issues/issues-actions.ts:270
 #: src/views/knowledge-base/knowledge-base.tsx:609
 msgid "Projects"
 msgstr "Projects"
@@ -1020,7 +1020,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/views/issues/issues-actions.ts:281
+#: src/views/issues/issues-actions.ts:278
 msgid "Tags"
 msgstr "Tags"
 
