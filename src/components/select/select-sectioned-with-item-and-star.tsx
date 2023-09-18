@@ -4,7 +4,7 @@ import {Text} from 'react-native';
 import ModalPortal from 'components/modal-view/modal-portal';
 import SelectSectioned, {
   ISectionedProps,
-  ISectionedState,
+  ISectionedState, SelectSectionedModal,
 } from 'components/select/select-sectioned';
 import Star from 'components/star/star';
 import {notifyError} from 'components/notification/notification';
@@ -50,7 +50,7 @@ export class SectionedSelectWithItemActions<P extends ISSWithItemActionsProps, S
   }
 }
 
-export class SectionedSelectWithItemActionsModal<P extends ISSWithItemActionsProps, S extends ISSWithItemActionsState> extends SectionedSelectWithItemActions<P, S> {
+export class SectionedSelectWithItemActionsModal<P extends ISSWithItemActionsProps, S extends ISSWithItemActionsState> extends SelectSectionedModal<P, S> implements SectionedSelectWithItemActions<P, S> {
   render: () => React.ReactNode = (): React.ReactNode => {
     return (
       <ModalPortal

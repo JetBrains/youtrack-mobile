@@ -41,6 +41,7 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
       loaded: false,
       query: '',
       selectedItems: props.selectedItems || [],
+      visible: true,
     };
   }
 
