@@ -1,13 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
 import {IconAngleDown} from 'components/icon/icon';
+import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './issues.styles';
 
 import {defaultIssuesFilterFieldConfig, FilterSetting} from 'views/issues/index';
 import {i18n} from 'components/i18n/i18n';
 import {getFilterFieldName} from 'views/issues/issues-helper';
+import {Theme} from 'types/Theme';
 
 
 const IssuesFilterField = ({
@@ -19,6 +21,8 @@ const IssuesFilterField = ({
   disabled?: boolean;
   onPress: (filterSetting: FilterSetting) => void;
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const theme: Theme = useContext(ThemeContext);
 
   const filterFields = filterSetting.filterField;
   const values = filterSetting.selectedValues;

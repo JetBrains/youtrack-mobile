@@ -15,7 +15,7 @@ import * as issueActions from './issues-actions';
 import CreateIssue from 'views/create-issue/create-issue';
 import ErrorMessage from 'components/error-message/error-message';
 import Issue from 'views/issue/issue';
-import IssueRow from './issues__row';
+import IssueRow, {IssueRowCompact} from './issues__row';
 import IssuesCount from './issues__count';
 import IssuesFilters from 'views/issues/issues__filters';
 import IssuesListSettings from './issues__settings';
@@ -31,6 +31,7 @@ import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {getIssueFromCache} from './issues-actions';
+import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {IconAdd, IconAngleDown, IconSettings} from 'components/icon/icon';
 import {
@@ -289,12 +290,14 @@ export class Issues extends Component<Props, State> {
   };
 
   _renderRow = ({item}: { item: IssueOnList }) => {
-    const {focusedIssue} = this.state;
+    const {settings} = this.props;
+    const {focusedIssue, isSplitView} = this.state;
 
     if (isReactElement(item)) {
       return item;
     }
 
+    const IssueRowComponent = settings.view.mode === issuesViewSettingMode.S ? IssueRowCompact : IssueRow;
     return (
       <View
         style={[
@@ -303,11 +306,12 @@ export class Issues extends Component<Props, State> {
             : null,
         ]}
       >
-        <IssueRow
-          settings={this.props.settings}
+        <IssueRowComponent
+          hideId={hasType.project(this.props.searchContext)}
+          settings={settings}
           issue={item}
           onClick={issue => {
-            if (this.state.isSplitView) {
+            if (isSplitView) {
               this.updateFocusedIssue(issue);
             } else {
               this.goToIssue(issue);
@@ -322,6 +326,7 @@ export class Issues extends Component<Props, State> {
       </View>
     );
   };
+
   getKey: (item: any) => string = (item: Record<string, any>) => {
     return `${isReactElement(item) ? item.key : item.id}`;
   };

@@ -223,10 +223,16 @@ const ISSUE_XSHORT_FIELDS: any = toField([
 ]);
 const ISSUE_SSHORT_FIELDS: any = toField([
   'id',
+  'idReadable',
   'summary',
   'resolved',
   {
     fields: ISSUE_FIELD_SHORT_FIELDS,
+  },
+  {
+    reporter: [
+      'avatarUrl',
+    ],
   },
 ]);
 const ISSUE_MEDIUM_FIELDS: any = toField([

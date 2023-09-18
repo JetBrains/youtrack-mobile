@@ -12,7 +12,7 @@ import {
   UNIT,
 } from 'components/common-styles';
 import {headerTitlePresentation} from 'components/header/header.styles';
-import {issueCard} from 'components/common-styles/issue';
+import {issueCard, issueIdResolved} from 'components/common-styles/issue';
 import {separator} from 'components/common-styles/list';
 import {splitViewStyles} from 'components/common-styles/split-view';
 
@@ -25,6 +25,7 @@ const searchContextHeight = UNIT * 7;
 
 
 export default EStyleSheet.create({
+  issueIdResolved,
   listContainer: {
     flex: 1,
     backgroundColor: '$background',
@@ -77,6 +78,10 @@ export default EStyleSheet.create({
       },
     }),
   },
+  priorityWrapperCompact: {
+    width: 4,
+    paddingHorizontal: 0,
+  },
   rowLine,
   issueRow: {
     paddingHorizontal: UNIT * 2,
@@ -85,13 +90,24 @@ export default EStyleSheet.create({
   separator: {...separator, borderBottomWidth: 0.75, borderColor: '$separator'},
   secondaryText: {...secondaryText, color: '$textSecondary'},
   mainText: {...mainText, color: '$text'},
-  headLeft: {
+  readableId: {
     ...issueCard.issueId,
     color: '$textSecondary',
     marginTop: UNIT / 4,
     marginRight: UNIT,
   },
-  headRight: {...rowLine, flexGrow: 1, justifyContent: 'flex-end'},
+  readableIdCompact: {
+    marginLeft: UNIT / 2,
+    fontSize: SECONDARY_FONT_SIZE - 1,
+  },
+  reporter: {
+    ...rowLine,
+    flexGrow: 1,
+    justifyContent: 'flex-end',
+  },
+  reporterCompact: {
+    flexGrow: 0,
+  },
   summary: {
     ...issueCard.issueSummary,
     marginTop: UNIT,
@@ -99,7 +115,6 @@ export default EStyleSheet.create({
   },
   summaryCompact: {
     marginTop: 0,
-    // marginLeft: UNIT,
   },
   description: {
     marginTop: UNIT / 2,
