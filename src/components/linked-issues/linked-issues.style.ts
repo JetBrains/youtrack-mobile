@@ -38,6 +38,9 @@ export default EStyleSheet.create({
     marginTop: UNIT * 2,
     marginBottom: headerMinHeight,
   },
+  linkedIssue: {
+    flexGrow: 1,
+  },
   linkedList: {
     paddingHorizontal: UNIT * 2,
   },

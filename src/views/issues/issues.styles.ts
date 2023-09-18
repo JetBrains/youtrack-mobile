@@ -88,8 +88,8 @@ export default EStyleSheet.create({
   headLeft: {
     ...issueCard.issueId,
     color: '$textSecondary',
-    marginRight: UNIT / 4,
     marginTop: UNIT / 4,
+    marginRight: UNIT,
   },
   headRight: {...rowLine, flexGrow: 1, justifyContent: 'flex-end'},
   summary: {
@@ -99,6 +99,7 @@ export default EStyleSheet.create({
   },
   summaryCompact: {
     marginTop: 0,
+    // marginLeft: UNIT,
   },
   description: {
     marginTop: UNIT / 2,

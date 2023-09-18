@@ -66,6 +66,7 @@ export default class IssueRow extends Component<Props, void> {
       <ThemeContext.Consumer>
         {() => {
           const description: string = issue.trimmedDescription || issue.description;
+          const readableID: string = getReadableID(issue);
           return (
             <TouchableOpacity
               style={style}
@@ -83,18 +84,18 @@ export default class IssueRow extends Component<Props, void> {
                   style={styles.rowLine}
                 >
                   {this.renderPriority()}
-                  <Text
+                  {!!readableID && <Text
                     style={[
                       styles.headLeft,
                       issue.resolved
                         ? {
-                            textDecorationLine: 'line-through',
-                          }
+                          textDecorationLine: 'line-through',
+                        }
                         : null,
                     ]}
                   >
-                    {getReadableID(issue)}
-                  </Text>
+                    {readableID}
+                  </Text>}
 
                   {Boolean(issue.updated || issue.reporter) && (
                     <View style={styles.headRight}>
