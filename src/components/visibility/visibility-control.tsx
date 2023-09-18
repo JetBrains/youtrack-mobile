@@ -2,13 +2,14 @@ import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 import IssueVisibility from './issue-visibility';
-import SelectSectioned, {SLItem} from 'components/select/select-sectioned';
+import SelectSectioned, {SelectSectionedModal, SLItem} from 'components/select/select-sectioned';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconAngleDown, IconClose, IconLock} from 'components/icon/icon';
+import {isSplitView} from 'components/responsive/responsive-helper';
 import {sortAlphabetically} from '../search/sorting';
 import {visibilityDefaultText} from './visibility-strings';
 
@@ -173,8 +174,9 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   getItemTitle: (item: any) => any = (item: Record<string, any>) => getEntityPresentation(item);
 
   renderSelect(): React.ReactNode {
+    const Component = isSplitView() ? SelectSectionedModal : SelectSectioned;
     return (
-      <SelectSectioned
+      <Component
         testID="test:id/visibility-control-button"
         accessibilityLabel="visibility-control-button"
         accessible={true}
