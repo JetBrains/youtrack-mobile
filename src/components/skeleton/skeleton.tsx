@@ -4,6 +4,7 @@ import {agileCard} from '../agile-card/agile-card.styles';
 import {getAgileCardHeight} from '../agile-card/agile-card';
 import {UNIT} from 'components/variables';
 type SkeletonProps = {
+  flex?: number;
   width?: number | string;
   height?: number;
   borderRadius?: number;
@@ -291,16 +292,24 @@ export const SkeletonIssuesS = (props: SkeletonProps): JSX.Element => {
               key={`skeletonIssues-${index}`}
               flexDirection="row"
               marginBottom={UNIT * 2.3}
+              width="100%"
             >
               {SkeletonSecondaryLine({
-                width: 24,
+                width: 4,
                 marginRight: UNIT,
                 borderRadius: 10,
                 height: SKELETON_HEIGHT,
               })}
               {SkeletonSecondaryLine({
-                width: '92%',
-                borderRadius: 10,
+                flex: 1,
+                borderRadius: 0,
+                height: SKELETON_HEIGHT,
+              })}
+              {SkeletonSecondaryLine({
+                width: SKELETON_HEIGHT,
+                marginLeft: UNIT,
+                marginRight: -UNIT / 2,
+                borderRadius: SKELETON_HEIGHT,
                 height: SKELETON_HEIGHT,
               })}
             </SkeletonPlaceholder.Item>;
