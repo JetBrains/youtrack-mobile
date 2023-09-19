@@ -96,7 +96,7 @@ msgstr "added a reaction"
 msgid "All"
 msgstr "All"
 
-#: src/views/issues/issues__filters-filter.tsx:27
+#: src/views/issues/issues__filters-filter.tsx:31
 msgid "All projects"
 msgstr "All projects"
 
@@ -508,7 +508,7 @@ msgstr "Filter sprints by name"
 msgid "Filter tags"
 msgstr "Filter tags"
 
-#: src/components/visibility/visibility-control.tsx:183
+#: src/components/visibility/visibility-control.tsx:185
 msgid "Filter users, groups, and teams"
 msgstr "Filter users, groups, and teams"
 
@@ -520,7 +520,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:532
+#: src/views/issues/issues.tsx:537
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -528,7 +528,7 @@ msgstr "Find issues that contain key words"
 msgid "Get help"
 msgstr "Get help"
 
-#: src/components/visibility/visibility-control.tsx:110
+#: src/components/visibility/visibility-control.tsx:111
 msgid "Groups and teams"
 msgstr "Groups and teams"
 
@@ -726,7 +726,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:582
+#: src/views/issues/issues.tsx:587
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -763,7 +763,7 @@ msgstr "Notifications"
 msgid "Other"
 msgstr "Other"
 
-#: src/components/visibility/visibility-control.tsx:110
+#: src/components/visibility/visibility-control.tsx:111
 msgid "Other groups and teams"
 msgstr "Other groups and teams"
 
@@ -808,7 +808,7 @@ msgstr "Query"
 msgid "Recent searches"
 msgstr "Recent searches"
 
-#: src/components/visibility/visibility-control.tsx:106
+#: src/components/visibility/visibility-control.tsx:107
 msgid "Recommended groups and teams"
 msgstr "Recommended groups and teams"
 
@@ -879,7 +879,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:647
+#: src/views/issues/issues.tsx:652
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -1177,7 +1177,7 @@ msgstr "User account is banned"
 msgid "Username or email"
 msgstr "Username or email"
 
-#: src/components/visibility/visibility-control.tsx:114
+#: src/components/visibility/visibility-control.tsx:115
 msgid "Users"
 msgstr "Users"
 

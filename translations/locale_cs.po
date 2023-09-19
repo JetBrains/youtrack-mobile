@@ -102,7 +102,7 @@ msgstr "Přidat k oblíbeným"
 #: src/views/inbox-threads/inbox-threads__reactions.tsx
 #: src/views/inbox/inbox.tsx
 msgid "added a reaction"
-msgstr ""
+msgstr "přidána reakce"
 
 #: src/views/inbox-threads/inbox-threads-helper.ts
 msgid "All"
@@ -178,7 +178,7 @@ msgstr ""
 
 #: src/components/activity/activity__history-title.ts
 msgid "Attachment name"
-msgstr ""
+msgstr "Název přílohy"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Author"
@@ -227,11 +227,11 @@ msgstr "Zavřít"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "closed the pull request"
-msgstr ""
+msgstr "zavření žádosti o přijetí změn"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Collapse all"
-msgstr ""
+msgstr "Sbalit vše"
 
 #: src/views/agile-board/agile-board.tsx
 msgid "Column collapsed"
@@ -272,7 +272,7 @@ msgstr "Komentáře"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "committed changes"
-msgstr ""
+msgstr "potvrzené změny"
 
 #: src/components/account/accounts.tsx
 msgid "Confirm logout"
@@ -325,7 +325,7 @@ msgstr ""
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy link"
-msgstr ""
+msgstr "Kopírovat odkaz"
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
@@ -386,7 +386,7 @@ msgstr "Smazat"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Delete comment permanently?"
-msgstr ""
+msgstr "Smazat komentář navždy?"
 
 #: src/views/article-create/article-create.tsx
 msgid "Delete draft"
@@ -398,7 +398,7 @@ msgstr "Odstranit případ {{issueId}}?"
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"
-msgstr ""
+msgstr "Navždy smazat"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Description"
@@ -576,11 +576,11 @@ msgstr "Historie případu"
 
 #: src/components/issue-actions/issue-links-actions.ts
 msgid "Issue link added"
-msgstr ""
+msgstr "Byl přidán odkaz na případ"
 
 #: src/components/issue-actions/issue-links-actions.ts
 msgid "Issue link removed"
-msgstr ""
+msgstr "Odkaz na případ je odebrán"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue updated"
@@ -671,7 +671,7 @@ msgstr "Označit jako přečtené"
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Mark as unread"
-msgstr ""
+msgstr "Označit jako nepřečtené"
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Marked as read"
@@ -692,7 +692,7 @@ msgstr ""
 #: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
 msgid "mentioned you"
-msgstr ""
+msgstr "vás zmínil/a"
 
 #: src/views/inbox-threads/inbox-threads-helper.ts
 msgid "Mentions & Reactions"
@@ -781,7 +781,7 @@ msgstr ""
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Other groups and teams"
-msgstr ""
+msgstr "Další skupiny a týmy"
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
@@ -797,7 +797,7 @@ msgstr ""
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"
-msgstr ""
+msgstr "Problém"
 
 #: src/components/custom-fields-panel/custom-fields-panel.tsx
 msgid "Project"
@@ -826,7 +826,7 @@ msgstr ""
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Recommended groups and teams"
-msgstr ""
+msgstr "Doporučené skupiny a týmy"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
@@ -847,7 +847,7 @@ msgstr "Odebrat štítek"
 #: src/views/inbox-threads/inbox-threads__reactions.tsx
 #: src/views/inbox/inbox.tsx
 msgid "removed a reaction"
-msgstr ""
+msgstr "odstranil reakci"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "reopened the pull request"
@@ -956,7 +956,7 @@ msgstr ""
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Show all"
-msgstr ""
+msgstr "Zobrazit vše"
 
 #: src/components/tags/tags.tsx
 msgid "Show all issues tagged with \"{{tagName}}\"..."
@@ -974,11 +974,11 @@ msgstr ""
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-messages.ts
 msgid "Something went wrong"
-msgstr ""
+msgstr "Něco se pokazilo"
 
 #: src/views/issues/issues__sortby_list.tsx
 msgid "Sort Attributes"
-msgstr ""
+msgstr "Řazení atributů"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Sort Order"
@@ -1072,7 +1072,7 @@ msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The commit author does not belong to the committers group."
-msgstr ""
+msgstr "Autor revize nepatří do skupiny přispěvatelů."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The commit author has not specified an email address."
@@ -1104,11 +1104,11 @@ msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The VCS user name does not match any user in YouTrack. To link future commits, add the VCS user name to the Hub account for this user."
-msgstr ""
+msgstr "Uživatelské jméno VCS neodpovídá žádnému uživateli v YouTracku. Chcete-li propojit budoucí potvrzení, přidejte uživatelské jméno VCS k účtu Hub pro tohoto uživatele."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The VCS user name matches more than one user in YouTrack. To link future commits, remove the duplicate VCS user names from one or more Hub accounts or merge the duplicates into a single user account."
-msgstr ""
+msgstr "Uživatelské jméno VCS se shoduje s více než jedním uživatelem v YouTracku. Chcete-li propojit budoucí potvrzení, odeberte duplicitní uživatelská jména VCS z jednoho nebo více účtů Hubu nebo sloučit duplikáty do jednoho uživatelského účtu."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
@@ -1144,7 +1144,7 @@ msgstr ""
 
 #: src/components/activity-stream/activity__stream-history.tsx
 msgid "Total votes"
-msgstr ""
+msgstr "Celkem hlasů"
 
 #: src/components/tip/tips/activity-touch-actions.tsx
 msgid "Touch and hold an item to view a list of available actions"
@@ -1164,7 +1164,7 @@ msgstr "Nezařazené karty"
 
 #: src/views/inbox-threads/inbox-threads__thread.tsx
 msgid "Unmute thread"
-msgstr ""
+msgstr "Zrušit ztlumení vlákna"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Unread only"
@@ -1193,7 +1193,7 @@ msgstr ""
 
 #: src/views/log-in/log-in.tsx
 msgid "Username or email"
-msgstr ""
+msgstr "Uživatelské jméno nebo e-mail"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Users"
@@ -1213,7 +1213,7 @@ msgstr ""
 
 #: src/components/user/user-card.tsx
 msgid "View reported issues"
-msgstr ""
+msgstr "Zobrazení nahlášených problémů"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
@@ -1241,7 +1241,7 @@ msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
-msgstr ""
+msgstr "Woah, nešahej na to!"
 
 #: src/components/error/error-message-data.ts
 msgid "Wrap attribute values that contain spaces in braces {like this}."
@@ -1258,7 +1258,7 @@ msgstr "Ano"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"
-msgstr ""
+msgstr "Nemáte žádná nepřečtená oznámení"
 
 #: src/views/inbox/inbox.tsx
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
