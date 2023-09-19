@@ -495,7 +495,7 @@ msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
 #: src/views/issues/issues__filters-settings__list.tsx:172
-#: src/views/issues/issues__settings.tsx:84
+#: src/views/issues/issues__settings.tsx:90
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
@@ -520,7 +520,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:537
+#: src/views/issues/issues.tsx:549
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -726,7 +726,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:587
+#: src/views/issues/issues.tsx:599
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -775,7 +775,7 @@ msgstr "Password"
 msgid "Photo and video library"
 msgstr "Photo and video library"
 
-#: src/views/issues/issues__settings.tsx:114
+#: src/views/issues/issues__settings.tsx:117
 msgid "Preview Size"
 msgstr "Preview Size"
 
@@ -870,7 +870,7 @@ msgstr "Search for a different value"
 msgid "Search for the project"
 msgstr "Search for the project"
 
-#: src/views/issues/issues__settings.tsx:60
+#: src/views/issues/issues__settings.tsx:66
 msgid "Search Input Mode"
 msgstr "Search Input Mode"
 
@@ -879,7 +879,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:652
+#: src/views/issues/issues.tsx:664
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -964,7 +964,7 @@ msgstr "Something went wrong"
 msgid "Sort Attributes"
 msgstr "Sort Attributes"
 
-#: src/views/issues/issues__settings.tsx:83
+#: src/views/issues/issues__settings.tsx:89
 msgid "Sort Order"
 msgstr "Sort Order"
 

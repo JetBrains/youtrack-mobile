@@ -58,7 +58,7 @@ msgstr[3] ""
 
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
-msgstr ""
+msgstr "@Zmínka v komentáři"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
@@ -369,7 +369,7 @@ msgstr "Datum"
 
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
-msgstr ""
+msgstr "Zamítnout"
 
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
@@ -502,7 +502,7 @@ msgstr "Filtrovat položky"
 #: src/views/article-create/article-create.tsx
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Filter projects"
-msgstr ""
+msgstr "Filtrovat projekty"
 
 #: src/views/issues/issues-actions.ts
 msgid "Filter projects, saved searches, and tags"
@@ -1068,7 +1068,7 @@ msgstr "Změna byla ručně připojena k tomuto případu."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The change was processed during the initial data fetching, thus no command has been applied."
-msgstr ""
+msgstr "Změna byla zpracována při počátečním načítání dat, takže nebyl použit žádný příkaz."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The commit author does not belong to the committers group."
@@ -1112,7 +1112,7 @@ msgstr "Uživatelské jméno VCS se shoduje s více než jedním uživatelem v Y
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
-msgstr ""
+msgstr "Při načítání informací o autorovi změny z TeamCity došlo k chybě. Nejpravděpodobnějším důvodem je, že uživatel TeamCity, jehož jménem probíhá integrace, nemá požadovaná oprávnění."
 
 #: src/components/confirmation/article-confirmations.ts
 msgid "This action deletes all drafts, including unpublished sub-articles"
@@ -1217,7 +1217,7 @@ msgstr "Zobrazení nahlášených problémů"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
-msgstr ""
+msgstr "Viditelnost"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"
@@ -1237,7 +1237,7 @@ msgstr "Když chcete integraovat TeamCity a YouTrack, uživatelé jsou spojován
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. There are two or more different YouTrack users that have the same email address as the commit's author has in TeamCity."
-msgstr ""
+msgstr "Při integraci TeamCity a YouTrack jsou uživatelé přiřazeni svými e-mailovými adresami. Existují dva nebo více různých uživatelů YouTracku, kteří mají stejnou e-mailovou adresu, jakou má autor revize v TeamCity."
 
 #: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
