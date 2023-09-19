@@ -327,4 +327,10 @@ export default EStyleSheet.create({
   filtersIcon: {
     color: '$icon',
   },
+  filtersButtonReset: {
+    padding: UNIT / 2,
+    paddingRight: UNIT,
+    marginLeft: UNIT,
+    marginRight: -UNIT,
+  },
 });

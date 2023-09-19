@@ -298,6 +298,18 @@ export class Issues extends Component<Props, State> {
     }
 
     const IssueRowComponent = settings.view.mode === issuesViewSettingMode.S ? IssueRowCompact : IssueRow;
+    const contextIsProject: any = hasType.project(this.props.searchContext);
+    const filterFieldProject: FilterSetting | undefined = settings.search.filters?.project;
+    const selectedProjects: string[] | undefined = filterFieldProject?.selectedValues;
+    const hideId: boolean = (
+      contextIsProject && selectedProjects?.length === 0 ||
+      !contextIsProject && selectedProjects?.length === 1 ||
+      (
+        contextIsProject &&
+        selectedProjects?.length === 1 &&
+        this.props.searchContext.id === filterFieldProject.filterField?.[0]?.customField?.id
+      )
+    );
     return (
       <View
         style={[
@@ -307,7 +319,7 @@ export class Issues extends Component<Props, State> {
         ]}
       >
         <IssueRowComponent
-          hideId={hasType.project(this.props.searchContext)}
+          hideId={hideId}
           settings={settings}
           issue={item}
           onClick={issue => {

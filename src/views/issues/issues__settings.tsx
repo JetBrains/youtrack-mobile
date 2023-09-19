@@ -113,11 +113,11 @@ const IssuesListSettings = ({
           <View style={styles.settingsItem}>
             <Text style={styles.settingsItemTitle}>{i18n('Preview Size')}</Text>
             {issuesSettingsIssueSizes.map((it: IssuesSetting, index: number) => {
-              const isActive: boolean = it.mode === settings.view.mode;
+              const previewModeIsNotChanged: boolean = it.mode === settings.view.mode;
               return (
                 <TouchableOpacity
                   key={`sizeSetting${index}`}
-                  disabled={isActive}
+                  disabled={previewModeIsNotChanged}
                   style={styles.settingsRow}
                   onPress={() => {
                     dispatch(onSettingsChange({...settings, view: it}));
@@ -128,7 +128,7 @@ const IssuesListSettings = ({
                     style={styles.settingsItemText}>
                     {`${it.label} `}
                   </Text>
-                  {isActive && <IconCheck
+                  {previewModeIsNotChanged && <IconCheck
                     size={20}
                     color={styles.link.color}
                   />}

@@ -342,7 +342,7 @@ export function openFilterFieldSelect(filterSetting: FilterSetting): (
     getState: () => AppState,
     getApi: ApiGetter,
   ) => {
-    trackEvent('Issues filter field select');
+    trackEvent('Issues settings: changed filter');
     const settings: IssuesSettings = dispatch(getIssuesSettings());
     const selectedItems: { name: string; id: string }[] = filterSetting.selectedValues.map(i => ({id: i, name: i}));
     const selectProps: Partial<ISelectProps> = {
@@ -396,6 +396,38 @@ export function openFilterFieldSelect(filterSetting: FilterSetting): (
   };
 }
 
+export function resetFilterFields(): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => void {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
+    trackEvent('Issues settings: reset all filters');
+    const settings: IssuesSettings = dispatch(getIssuesSettings());
+    const issuesSettings: IssuesSettings = {
+      ...settings,
+      search: {
+        ...settings.search,
+        filters: Object.keys(settings.search.filters).reduce((akk, key) => {
+          return {
+            ...akk,
+            [key]: {
+              key,
+              filterField: settings.search.filters[key].filterField,
+              selectedValues: [],
+            },
+          };
+        }, {}),
+      },
+    };
+    await dispatch(cachedIssuesSettings(issuesSettings));
+    dispatch(refreshIssues());
+  };
+}
 export function openSelect(selectProps: Partial<ISelectProps>): (dispatch: (arg0: any) => any) => void {
   return (dispatch: (arg0: any) => any) => {
     dispatch({
@@ -866,8 +898,13 @@ export function onSettingsChange(settings: IssuesSettings): (
     dispatch: (arg0: any) => any,
     getState: () => AppState,
   ) => {
-    if (settings.search.mode !== getState().issueList.settings.search.mode) {
+    const currentSettings: IssuesSettings = getState().issueList.settings;
+    if (settings.search.mode !== currentSettings.search.mode) {
+      trackEvent(`Issues settings: switch mode to ${settings.search.mode}`);
       dispatch(setIssuesQuery(''));
+    }
+    if (settings.view.mode !== currentSettings.view.mode) {
+      trackEvent(`Issues settings: change preview size to ${settings.view.mode}`);
     }
     await dispatch(cachedIssuesSettings(settings));
     await flushStoragePart({issuesCache: null});
