@@ -23,6 +23,7 @@ export function loadTranslation(
       pl: require('../../../translations/locale_pl.json'),
       it: require('../../../translations/locale_it.json'),
       uk: require('../../../translations/locale_uk.json'),
+      tr: require('../../../translations/locale_tr.json'),
     };
     const lang: string = language.toLowerCase();
     const translations: Record<string, any> | null | undefined =
