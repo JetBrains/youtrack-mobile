@@ -312,7 +312,7 @@ export default EStyleSheet.create({
     backgroundColor: '$boxBackground',
   },
   filtersButtonHighlighted: {
-    backgroundColor: '$blueBackground',
+    backgroundColor: '$linkLight',
   },
   filtersButtonAction: {
     borderColor: '$linkLight',
