@@ -1,4 +1,4 @@
-import {Linking} from 'react-native';
+import {Linking, PermissionsAndroid, Platform} from 'react-native';
 
 import DeviceInfo from 'react-native-device-info';
 import UrlParse from 'url-parse';
@@ -25,7 +25,7 @@ import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {isIOSPlatform, until} from 'util/util';
+import {isAndroidPlatform, isIOSPlatform, until} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {loadConfig} from 'components/config/config';
 import {loadTranslation} from 'components/i18n/i18n-translation';
@@ -1137,15 +1137,31 @@ export function subscribeToPushNotifications(): Action {
       return;
     }
 
-    try {
-      await PushNotifications.register();
-      PushNotifications.initialize(onSwitchAccount);
-      setRegisteredForPush(true);
-      log.info('Successfully registered for push notifications');
-    } catch (err) {
-      notifyError(err as CustomError);
+    if (isAndroidPlatform() && Platform.Version >= 33) {
+      try {
+        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          await doSubscribe(onSwitchAccount);
+          log.info('Push notifications permission granted');
+        } else {
+          log.warn('Push notifications permission is not allowed');
+        }
+      } catch (err) {
+        log.warn(err);
+      }
+    } else {
+      await doSubscribe(onSwitchAccount);
     }
   };
+}
+async function doSubscribe(onSwitchAccount: (account: StorageState, issueId?: string, articleId?: string) => any) {
+  try {
+    await PushNotifications.register();
+    PushNotifications.initialize(onSwitchAccount);
+    setRegisteredForPush(true);
+  } catch (err) {
+    notifyError(err as CustomError);
+  }
 }
 
 function isRegisteredForPush(): boolean {
