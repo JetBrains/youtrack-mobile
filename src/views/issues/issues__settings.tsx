@@ -11,6 +11,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import IssuesFiltersSetting from 'views/issues/issues__filters-settings';
 import IssuesSortBy from './issues__sortby';
+import usage from 'components/usage/usage';
+import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {i18n} from 'components/i18n/i18n';
 import {IconCheck} from 'components/icon/icon';
 import {
@@ -37,6 +39,10 @@ const IssuesListSettings = ({
   toggleVisibility: (isVisible: boolean) => void;
 }): React.JSX.Element => {
   const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    usage.trackEvent(ANALYTICS_ISSUES_PAGE, 'Issues settings: open');
+  }, []);
 
   const query = useSelector((state: AppState) => state.issueList.query);
   const searchContext = useSelector((state: AppState) => state.issueList.searchContext);
@@ -92,7 +98,6 @@ const IssuesListSettings = ({
               />
             ) : (
               <IssuesFiltersSetting
-                filters={user?.profiles?.appearance?.liteUiFilters || []}
                 onApply={async (visibleFilters: string[]) => {
                   await dispatch(
                     receiveUserAppearanceProfile({
@@ -104,9 +109,7 @@ const IssuesListSettings = ({
                 }}
                 onOpen={() => toggleVisibility(false)}
                 user={user}
-              >
-
-              </IssuesFiltersSetting>
+              />
             )}
           </View>
           <View style={styles.settingsSeparator}/>
