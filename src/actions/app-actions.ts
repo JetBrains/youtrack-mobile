@@ -817,15 +817,13 @@ export function cacheProjects(): (
     getState: () => AppState,
     getApi: () => Api,
   ) => {
-    const userFolders: Folder[] = await getApi().user.getUserFolders('', [
-      '$type,id,shortName,name,pinned',
-    ]);
-    const projects: Folder[] = userFolders.filter((it: Folder) =>
-      hasType.project(it),
-    );
-    await storage.flushStoragePart({
-      projects: projects,
-    });
+    const [error, userFolders]: [CustomError | null, Folder[]] = await until(
+      getApi().user.getUserFolders('', ['$type,id,shortName,name,pinned'])
+    ) as [CustomError | null, Folder[]];
+    const projects: Folder[] = (error ? [] : userFolders).filter((it: Folder) => hasType.project(it));
+    if (projects.length > 0) {
+      await storage.flushStoragePart({projects});
+    }
     return projects;
   };
 }
