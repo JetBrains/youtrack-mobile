@@ -268,7 +268,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:938
+#: src/actions/app-actions.ts:936
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -947,7 +947,7 @@ msgid "Show all issues tagged with \"{{tagName}}\"..."
 msgstr "Show all issues tagged with \"{{tagName}}\"..."
 
 #: src/components/activity-stream/activity__stream-vcs.tsx:206
-#: src/views/inbox-threads/inbox-threads__subscription.tsx:107
+#: src/views/inbox-threads/inbox-threads__subscription.tsx:110
 msgid "Show more"
 msgstr "Show more"
 

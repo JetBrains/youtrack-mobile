@@ -14,19 +14,19 @@ msgstr ""
 
 #: src/components/linked-issues/linked-issues.tsx
 msgid " ({{amount}} unresolved)"
-msgstr ""
+msgstr " (nevyřešeno: {{amount}})"
 
 #: src/components/comment/comment.tsx
 msgid " or "
-msgstr ""
+msgstr " nebo "
 
 #: src/views/agile-board/board-actions.ts
 msgid "(archived)"
-msgstr ""
+msgstr "(archivováno)"
 
 #: src/components/custom-fields-panel/custom-fields-panel__date-picker.tsx
 msgid "(Clear value)"
-msgstr ""
+msgstr "(Vymazat hodnotu)"
 
 #: src/components/activity/activity__history-title.ts
 msgid "[Removed field]"
@@ -35,26 +35,26 @@ msgstr "[Odstraněné políčko]"
 #: src/views/article/article__details.tsx
 msgid "{{amount}} article"
 msgid_plural "{{amount}} articles"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{{amount}} článek"
+msgstr[1] "{{amount}} články"
+msgstr[2] "{{amount}} článků"
+msgstr[3] "{{amount}} článků"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "{{amount}} file"
 msgid_plural "{{amount}} files"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{{amount}} soubor"
+msgstr[1] "{{amount}} souborů"
+msgstr[2] "{{amount}} souborů"
+msgstr[3] "{{amount}} souborů"
 
 #: src/components/linked-issues/linked-issues.tsx
 msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{{amount}} případ"
+msgstr[1] "{{amount}} případy"
+msgstr[2] "{{amount}} případů"
+msgstr[3] "{{amount}} případu"
 
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
@@ -63,7 +63,7 @@ msgstr "@Zmínka v komentáři"
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "1w 1d 1h 1m"
-msgstr ""
+msgstr "1T 1d 1h 1m"
 
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Accept"
@@ -71,15 +71,15 @@ msgstr "Přijmout"
 
 #: src/components/issue-tabbed/issue-tabbed.tsx
 msgid "Activity"
-msgstr ""
+msgstr "Aktivita"
 
 #: src/views/issue/activity/issue__activity.tsx
 msgid "Activity Settings"
-msgstr ""
+msgstr "Nastavení aktivity"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Add project to favorites"
-msgstr ""
+msgstr "Přidat projekt k oblíbeným"
 
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -120,44 +120,44 @@ msgstr "Vzhled"
 #: src/views/create-issue/create-issue-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Apply command…"
-msgstr ""
+msgstr "Použít, příkaz…"
 
 #: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete all article drafts?"
-msgstr ""
+msgstr "Opravdu chcete odstranit všechny koncepty článků?"
 
 #: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this article?"
-msgstr ""
+msgstr "Opravdu chcete odstranit tento článek?"
 
 #: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this draft?"
-msgstr ""
+msgstr "Opravdu chcete tento koncept odstranit?"
 
 #: src/views/issue/activity/issue-activity__actions.ts
 msgid "Are you sure you want to delete this work item?"
-msgstr ""
+msgstr "Opravdu chcete smazat tento výkaz práce?"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Article added to favorites"
-msgstr ""
+msgstr "Článek přidán do oblíbených"
 
 #: src/views/article-create/article-create.tsx
 msgid "Article content"
-msgstr ""
+msgstr "Obsah článku"
 
 #: src/views/article-create/arcticle-create-actions.ts
 msgid "Article published"
-msgstr ""
+msgstr "Článek publikován"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Article removed from favorites"
-msgstr ""
+msgstr "Článek odebrán z oblíbených"
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Attach file"
-msgstr ""
+msgstr "Přiložit soubor"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 #: src/components/attachments-row/attachments-add-panel.tsx
@@ -167,14 +167,14 @@ msgstr "Přiložit soubory"
 #: src/components/activity/activity__history-title.ts
 msgid "Attachment"
 msgid_plural "Attachments"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Příloha"
+msgstr[1] "Přílohy"
+msgstr[2] "Přílohy"
+msgstr[3] "Přílohy"
 
 #: src/components/attachments-row/attachment-actions.ts
 msgid "Attachment deleted"
-msgstr ""
+msgstr "Příloha odstraněna"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Attachment name"
@@ -186,19 +186,19 @@ msgstr "Autor"
 
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
-msgstr ""
+msgstr "Prohlížeč"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Bugsnag Privacy Policy"
-msgstr ""
+msgstr "Zásady ochrany osobních údajů Bugsnag"
 
 #: src/views/log-in/log-in.tsx
 msgid "By logging in, you agree to the Privacy Policy."
-msgstr ""
+msgstr "Přihlášením souhlasíte se Zásadami ochrany osobních údajů."
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
-msgstr ""
+msgstr "Fotoaparát"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
@@ -235,15 +235,15 @@ msgstr "Sbalit vše"
 
 #: src/views/agile-board/agile-board.tsx
 msgid "Column collapsed"
-msgstr ""
+msgstr "Sloupec sbalen"
 
 #: src/views/agile-board/agile-board.tsx
 msgid "Column expanded"
-msgstr ""
+msgstr "Sloupec rozbalen"
 
 #: src/components/command-dialog/command-dialog-helper.ts
 msgid "Command applied"
-msgstr ""
+msgstr "Příkaz aplikován"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "Command was successfully applied."
@@ -251,16 +251,16 @@ msgstr "Příkaz byl použit."
 
 #: src/components/activity/activity__history-title.ts
 msgid "Comment changed"
-msgstr ""
+msgstr "Komentář upraven"
 
 #: src/components/comment/comment.tsx
 msgid "Comment deleted"
-msgstr ""
+msgstr "Komentář smazán"
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Comment updated"
-msgstr ""
+msgstr "Komentář aktualizován"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.tsx
 msgid "commented"
@@ -276,29 +276,29 @@ msgstr "potvrzené změny"
 
 #: src/components/account/accounts.tsx
 msgid "Confirm logout"
-msgstr ""
+msgstr "Potvrdit odhlášení"
 
 #: src/components/account/accounts.tsx
 msgid "Confirmation required"
-msgstr ""
+msgstr "Vyžadováno potvrzení"
 
 #: src/actions/app-actions.ts
 msgid "Connecting to YouTrack..."
-msgstr ""
+msgstr "Připojení k YouTrack..."
 
 #: src/components/error-boundary/error-boundary.tsx
 #: src/components/error-message/error-message-inline.tsx
 #: src/views/enter-server/enter-server.tsx
 msgid "Contact support"
-msgstr ""
+msgstr "Kontaktujte podporu"
 
 #: src/views/article/article.tsx
 msgid "Content"
-msgstr ""
+msgstr "Obsah"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Content revised"
-msgstr ""
+msgstr "Revidovaný obsah"
 
 #: src/components/user/user-card.tsx
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx
@@ -313,11 +313,11 @@ msgstr "Zkopírováno"
 
 #: src/views/issue/issue__details.tsx
 msgid "Copy description"
-msgstr ""
+msgstr "Zkopírovat popis"
 
 #: src/views/issue/issue__details.tsx
 msgid "Copy field text"
-msgstr ""
+msgstr "Kopírovat text pole"
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity-stream.tsx
@@ -330,14 +330,14 @@ msgstr "Kopírovat odkaz"
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
 msgid "Copy link to article"
-msgstr ""
+msgstr "Kopírovat odkaz na článek"
 
 #: src/views/article/article__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy text"
-msgstr ""
+msgstr "Kopírovat text"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "Could not apply specified command."
@@ -345,7 +345,7 @@ msgstr "Zadaný příkaz nelze použít."
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Crash report sent"
-msgstr ""
+msgstr "Odeslaná zpráva o selhání"
 
 #: src/views/inbox-threads/inbox-threads__item-issue-created.tsx
 msgid "created"
@@ -361,7 +361,7 @@ msgstr "Aktuální případ"
 
 #: src/views/settings/settings__appearance.tsx
 msgid "Dark theme"
-msgstr ""
+msgstr "Tmavý motiv"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Date"
@@ -415,11 +415,11 @@ msgstr "Podrobnosti"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Discard and close"
-msgstr ""
+msgstr "Zahodit a zavřít"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Discard draft and close?"
-msgstr ""
+msgstr "Zahodit návrh a zavřít?"
 
 #: src/views/article-create/article-create.tsx
 msgid "Discard unpublished changes"
@@ -427,19 +427,19 @@ msgstr "Zahodit nepublikované změny"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to log out?"
-msgstr ""
+msgstr "Opravdu se chcete odhlásit?"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to remove this account?"
-msgstr ""
+msgstr "Opravdu chcete tento účet odebrat?"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Document"
-msgstr ""
+msgstr "Dokument"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
-msgstr ""
+msgstr "Neodesílat protokoly"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Drafts"
@@ -464,11 +464,11 @@ msgstr "E-mail"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
-msgstr ""
+msgstr "E-mailová adresa pro další komunikaci"
 
 #: src/components/command-dialog/command-dialog.tsx
 msgid "Enter command"
-msgstr ""
+msgstr "Zadejte příkaz"
 
 #: src/components/query-assist/query-assist.tsx
 #: src/components/query-assist/query-preview.tsx
@@ -477,23 +477,23 @@ msgstr "Zadat vyhledávací dotaz"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
-msgstr ""
+msgstr "Zadejte webovou adresu instalace YouTrack, kde máte registrovaný účet"
 
 #: src/components/custom-fields-panel/custom-fields-panel.tsx
 msgid "Enter time value"
-msgstr ""
+msgstr "Zadejte časovou hodnotu"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
-msgstr ""
+msgstr "Oblíbené"
 
 #: src/views/settings/settings-helper.ts
 msgid "Feature request"
-msgstr ""
+msgstr "Žádost o funkci"
 
 #: src/views/agile-board/board-actions.ts
 msgid "Filter boards by name"
-msgstr ""
+msgstr "Filtrovat tabule podle názvu"
 
 #: src/components/select/select.tsx
 msgid "Filter items"
@@ -506,7 +506,7 @@ msgstr "Filtrovat projekty"
 
 #: src/views/issues/issues-actions.ts
 msgid "Filter projects, saved searches, and tags"
-msgstr ""
+msgstr "Filtrovat projekty, uložená hledání a štítky"
 
 #: src/views/issues/issues__filters-settings__list.tsx
 #: src/views/issues/issues__settings.tsx
@@ -515,12 +515,12 @@ msgstr "Nastavení filtrů"
 
 #: src/views/agile-board/board-actions.ts
 msgid "Filter sprints by name"
-msgstr ""
+msgstr "Filtrovat sprinty dle názvu"
 
 #: src/components/tags/tag-add-select.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Filter tags"
-msgstr ""
+msgstr "Filtrovat štítky"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
@@ -532,7 +532,7 @@ msgstr "Filtry"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Find favorite projects"
-msgstr ""
+msgstr "Najít oblíbené projekty"
 
 #: src/views/issues/issues.tsx
 msgid "Find issues that contain key words"
@@ -540,7 +540,7 @@ msgstr "Hledat případy podle klíčových slov"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Get help"
-msgstr ""
+msgstr "Získat nápovědu"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Groups and teams"
@@ -548,11 +548,11 @@ msgstr "Skupiny a týmy"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
-msgstr ""
+msgstr "Pomozte nám rychleji vyřešit problémy"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Here you'll see a list of articles from your favorite projects"
-msgstr ""
+msgstr "Zde uvidíte seznam článků z vašich oblíbených projektů"
 
 #: src/components/error/error-message-data.ts
 msgid "If this isn't what you expected, you might try one of these solutions:"
@@ -560,7 +560,7 @@ msgstr "Pokud to není požadovaný výsledek, můžete zkusit jedno z těchto �
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
-msgstr ""
+msgstr "Kromě našeho vestavěného hlášení chyb používá YouTrack Mobile Bugsnag, službu třetí strany, která nám pomáhá diagnostikovat problémy a sledovat stabilitu aplikací. Údaje z reportů sdílíme s Bugsnag pouze v případě, že souhlasíte s tím, že nám to umožníte."
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -568,7 +568,7 @@ msgstr "probíhá revize"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
-msgstr ""
+msgstr "Případ smazán"
 
 #: src/components/activity/activity-helper.ts
 msgid "Issue history"
@@ -588,15 +588,15 @@ msgstr "Případ aktualizován"
 
 #: src/views/issues/issues__sortby_list.tsx
 msgid "Issues can be sorted by up to 4 attributes"
-msgstr ""
+msgstr "Případy lze třídit až podle 4 atributů"
 
 #: src/components/error/error-message-data.ts
 msgid "It could mean that the issue doesn't exist or you don't have permission to view it"
-msgstr ""
+msgstr "Mohlo by to znamenat, že případ neexistuje nebo nemáte oprávnění k jeho zobrazení"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "JetBrains Privacy Policy"
-msgstr ""
+msgstr "Zásady ochrany osobních údajů společnosti JetBrains"
 
 #: src/components/date/date.ts
 msgid "just now"
@@ -613,11 +613,11 @@ msgstr ""
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-message-data.ts
 msgid "License error"
-msgstr ""
+msgstr "Chyba licence"
 
 #: src/views/settings/settings__appearance.tsx
 msgid "Light theme"
-msgstr ""
+msgstr "Světlý motiv"
 
 #: src/components/linked-issues/linked-issues-add-link.tsx
 #: src/views/create-issue/create-issue.tsx
@@ -627,16 +627,16 @@ msgstr "Propojit případ"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Link to comment copied"
-msgstr ""
+msgstr "Odkaz na komentář zkopírován"
 
 #: src/components/linked-issues/linked-issues-title.tsx
 #: src/components/linked-issues/linked-issues.tsx
 msgid "Linked issues"
-msgstr ""
+msgstr "Odkazované případy"
 
 #: src/components/select/select.tsx
 msgid "Loading values…"
-msgstr ""
+msgstr "Načítání hodnot…"
 
 #: src/views/log-in/log-in.tsx
 msgid "Log in"
@@ -644,20 +644,20 @@ msgstr "Přihlásit se"
 
 #: src/views/log-in/log-in.tsx
 msgid "Log in to YouTrack"
-msgstr ""
+msgstr "Přihlásit se do YouTrack"
 
 #: src/views/log-in/log-in.tsx
 msgid "Log in with Browser"
-msgstr ""
+msgstr "Přihlásit se pomocí prohlížeče"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Logs"
-msgstr ""
+msgstr "Protokoly"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Manage Favorite Projects"
-msgstr ""
+msgstr "Správa oblíbených projektů"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Mark all as read"
@@ -675,15 +675,15 @@ msgstr "Označit jako nepřečtené"
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Marked as read"
-msgstr ""
+msgstr "Označeno jako přečtené"
 
 #: src/views/issues/issues__count.tsx
 msgid "Matches {{issuesCount}} issue"
 msgid_plural "Matches {{issuesCount}} issues"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Odpovídá {{issuesCount}} případu"
+msgstr[1] "Odpovídá {{issuesCount}} případům"
+msgstr[2] "Odpovídá {{issuesCount}} úkolům"
+msgstr[3] "Odpovídá {{issuesCount}} úkolům"
 
 #: src/views/issues/index.ts
 msgid "Medium"
@@ -716,31 +716,31 @@ msgstr "Nový případ"
 
 #: src/views/inbox-threads/inbox-threads__update-button.tsx
 msgid "New messages"
-msgstr ""
+msgstr "Nové zprávy"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Next"
-msgstr ""
+msgstr "Násl"
 
 #: src/components/activity-stream/activity__stream.tsx
 msgid "No activity yet"
-msgstr ""
+msgstr "Zatím žádná aktivita"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "No articles"
-msgstr ""
+msgstr "Žádné články"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "No articles found"
-msgstr ""
+msgstr "Nebyly nalezeny žádné články"
 
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "No drafts yet"
-msgstr ""
+msgstr "Zatím žádné návrhy"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "No favorites projects found"
-msgstr ""
+msgstr "Nebyly nalezeny žádné oblíbené projekty"
 
 #: src/views/issues/issues.tsx
 msgid "No issues found"
@@ -748,7 +748,7 @@ msgstr "Nebyly nalezeny žádné problémy"
 
 #: src/components/select/select.tsx
 msgid "No items"
-msgstr ""
+msgstr "Žádné položky"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "No notifications"
@@ -768,7 +768,7 @@ msgstr "Ne, nemůžu to najít!"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Notification settings…"
-msgstr ""
+msgstr "Nastavení oznámení…"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 #: src/views/inbox/inbox.tsx
@@ -777,7 +777,7 @@ msgstr "Oznámení"
 
 #: src/views/settings/settings-helper.ts
 msgid "Other"
-msgstr ""
+msgstr "Jiné"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Other groups and teams"
@@ -789,11 +789,11 @@ msgstr "Heslo"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
-msgstr ""
+msgstr "Knihovna fotografií a videí"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
-msgstr ""
+msgstr "Velikost náhledu"
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"
@@ -822,7 +822,7 @@ msgstr "Dotaz"
 
 #: src/components/query-assist/query-assist-helper.ts
 msgid "Recent searches"
-msgstr ""
+msgstr "Nedávná hledání"
 
 #: src/components/visibility/visibility-control.tsx
 msgid "Recommended groups and teams"
@@ -834,11 +834,11 @@ msgstr "Odebrat"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Remove favorite"
-msgstr ""
+msgstr "Odebrat oblíbené"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove project from favorites?"
-msgstr ""
+msgstr "Odebrat projekt z oblíbených?"
 
 #: src/components/tags/tags.tsx
 msgid "Remove tag"
@@ -860,7 +860,7 @@ msgstr "Odpovědět"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
-msgstr ""
+msgstr "Restartovat"
 
 #: src/components/comment/comment.tsx
 msgid "Restore"
@@ -868,7 +868,7 @@ msgstr "Obnovit"
 
 #: src/views/home/home.tsx
 msgid "Retry"
-msgstr ""
+msgstr "Opakovat"
 
 #: src/views/issues/issues-actions.ts
 msgid "Saved Searches"
@@ -884,11 +884,11 @@ msgstr "Hledat jinou hodnotu"
 
 #: src/components/custom-fields-panel/custom-fields-panel.tsx
 msgid "Search for the project"
-msgstr ""
+msgstr "Vyhledat projekt"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Search Input Mode"
-msgstr ""
+msgstr "Režim zadávání vyhledávání"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Select an article from the list"
@@ -897,31 +897,31 @@ msgstr "Vyberte článek ze seznamu"
 #: src/views/inbox/inbox.tsx
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
-msgstr ""
+msgstr "Vyberte problém ze seznamu"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
-msgstr ""
+msgstr "Odeslat hlášeni o pádu"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send extended report to Bugsnag"
-msgstr ""
+msgstr "Odeslat rozšířený report do Bugsnag"
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
-msgstr ""
+msgstr "Odeslat zpětnou vazbu"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Send Feedback"
-msgstr ""
+msgstr "Odeslat zpětnou vazbu"
 
 #: src/views/settings/settings-helper.ts
 msgid "Send logs"
-msgstr ""
+msgstr "Odeslat protokoly"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sending crash report…"
-msgstr ""
+msgstr "Odeslání zprávy o selhání…"
 
 #: src/views/settings/settings.tsx
 msgid "Settings"
@@ -942,17 +942,17 @@ msgstr "Sdílet odkaz"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Share link to article"
-msgstr ""
+msgstr "Sdílet odkaz na článek"
 
 #: src/views/settings/settings.tsx
 msgid "Share logs"
-msgstr ""
+msgstr "Sdílet protokoly"
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Share…"
-msgstr ""
+msgstr "Sdílet…"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Show all"
@@ -960,7 +960,7 @@ msgstr "Zobrazit vše"
 
 #: src/components/tags/tags.tsx
 msgid "Show all issues tagged with \"{{tagName}}\"..."
-msgstr ""
+msgstr "Zobrazit všechny problémy označené \"{{tagName}}\"..."
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 #: src/views/inbox-threads/inbox-threads__subscription.tsx
@@ -982,7 +982,7 @@ msgstr "Řazení atributů"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Sort Order"
-msgstr ""
+msgstr "Řadit podle"
 
 #: src/views/issue/activity/issue__activity-settings.tsx
 msgid "Sort: oldest first"
@@ -1000,11 +1000,11 @@ msgstr "Aktualizace stráveného času"
 
 #: src/components/activity-stream/activity__stream-work.tsx
 msgid "Spent time:"
-msgstr ""
+msgstr "Strávený čas:"
 
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "Start a new article"
-msgstr ""
+msgstr "Začít nový článek"
 
 #: src/views/article/article__details.tsx
 msgid "Sub-articles"
@@ -1033,10 +1033,10 @@ msgstr "Podle OS"
 #: src/components/activity/activity__history-title.ts
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Tag"
+msgstr[1] "Štítky"
+msgstr[2] "Štítky"
+msgstr[3] "Štítky"
 
 #: src/views/issues/issues-actions.ts
 msgid "Tags"
@@ -1044,11 +1044,11 @@ msgstr "Štítky"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Thank you for your feedback!"
-msgstr ""
+msgstr "Děkujeme za Váš názor!"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "The application failed to restart automatically. Please try to restart it manually."
-msgstr ""
+msgstr "Aplikaci se nepodařilo automaticky restartovat. Zkuste ji restartovat ručně."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
@@ -1056,7 +1056,7 @@ msgstr ""
 
 #: src/views/agile-board/agile-board.tsx
 msgid "The board {{boardName}} has configuration errors"
-msgstr ""
+msgstr "Tabule {{boardName}} má chyby v konfiguraci"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The change has been detached from this issue. It is still displayed here because its comment mentions the issue."
@@ -1092,15 +1092,15 @@ msgstr "Vyhledávací dotaz obsahuje neznámé hodnoty"
 
 #: src/actions/app-actions.ts
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
-msgstr ""
+msgstr "Vybraný účet již není oprávněn používat YouTrack Mobile. Přihlaste se prosím znovu."
 
 #: src/components/error/error-message-data.ts
 msgid "The server is overloaded or down for maintenance"
-msgstr ""
+msgstr "Server je přetížen nebo vypnutý z důvodu údržby"
 
 #: src/views/agile-board/board-updaters.ts
 msgid "The settings for this agile board have been updated. Please reload the board."
-msgstr ""
+msgstr "Nastavení této agilní tabule byla aktualizována. Prosím, znovu načtěte tabuli."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The VCS user name does not match any user in YouTrack. To link future commits, add the VCS user name to the Hub account for this user."
@@ -1116,15 +1116,15 @@ msgstr "Při načítání informací o autorovi změny z TeamCity došlo k chyb�
 
 #: src/components/confirmation/article-confirmations.ts
 msgid "This action deletes all drafts, including unpublished sub-articles"
-msgstr ""
+msgstr "Tato akce odstraní všechny pracovní verze, včetně nepublikovaných dílčích článků"
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Thread muted"
-msgstr ""
+msgstr "Vlákno ztlumeno"
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Thread unmuted"
-msgstr ""
+msgstr "Vlákno bez ztlumení"
 
 #: src/views/article-create/article-create.tsx
 msgid "Title"
@@ -1132,15 +1132,15 @@ msgstr "Název"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Title changed"
-msgstr ""
+msgstr "Změna názvu"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "To view an item in context, select an issue, article, or update from the list"
-msgstr ""
+msgstr "Chcete-li zobrazit položku v kontextu, vyberte problém, článek nebo aktualizaci ze seznamu"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
-msgstr ""
+msgstr "Chcete-li zobrazit články znalostní báze pro určitý projekt, označte jej jako oblíbený"
 
 #: src/components/activity-stream/activity__stream-history.tsx
 msgid "Total votes"
@@ -1148,11 +1148,11 @@ msgstr "Celkem hlasů"
 
 #: src/components/tip/tips/activity-touch-actions.tsx
 msgid "Touch and hold an item to view a list of available actions"
-msgstr ""
+msgstr "Klepnutím a podržením položky zobrazíte seznam dostupných akcí"
 
 #: src/components/error-message/error-message.tsx
 msgid "Try Again"
-msgstr ""
+msgstr "Zkuste to znovu"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Type"
@@ -1189,7 +1189,7 @@ msgstr "Použít méně parametrů vyhledávání"
 
 #: src/components/error/error-message-data.ts
 msgid "User account is banned"
-msgstr ""
+msgstr "Uživatelský účet je zakázán"
 
 #: src/views/log-in/log-in.tsx
 msgid "Username or email"
@@ -1209,7 +1209,7 @@ msgstr "Zobrazit komentář"
 
 #: src/views/issue/issue__details.tsx
 msgid "View comments and other activity"
-msgstr ""
+msgstr "Zobrazení komentářů a dalších aktivit"
 
 #: src/components/user/user-card.tsx
 msgid "View reported issues"
@@ -1245,7 +1245,7 @@ msgstr "Woah, nešahej na to!"
 
 #: src/components/error/error-message-data.ts
 msgid "Wrap attribute values that contain spaces in braces {like this}."
-msgstr ""
+msgstr "Zalamování hodnot atributů, které obsahují mezery ve složených závorkách {například takto}."
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
@@ -1262,76 +1262,77 @@ msgstr "Nemáte žádná nepřečtená oznámení"
 
 #: src/views/inbox/inbox.tsx
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
-msgstr ""
+msgstr "Zatím jste neobdrželi žádná oznámení. Pokud chcete nakonfigurovat předvolby oznámení pro svůj účet, přejděte do svého profilu YouTrack ve webové aplikaci."
 
 #: src/views/log-in/log-in.tsx
 msgid "You need a YouTrack account to use the app.\n"
-msgstr ""
+msgstr "K používání aplikace potřebujete účet YouTrack.\n"
 
 #: src/components/error/error-message-data.ts
 msgid "Your account has insufficient permission to perform this operation."
-msgstr ""
+msgstr "Váš účet nemá k provedení této operace dostatečná oprávnění."
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
-msgstr ""
+msgstr "Mobilnímu zařízení dochází volné místo v úložišti. Některé funkce aplikace nemusí být dostupné."
 
 #: src/components/error/error-message-data.ts
 msgid "Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n\n"
 "To log in on this screen, enter your username and a one-time application password."
-msgstr ""
+msgstr "Váš účet YouTrack vyžaduje poskytnutí dvoufaktorového ověření pro přihlášení. Tato možnost je k dispozici pouze v případě, že se přihlásíte pomocí mobilního prohlížeče. Mobilní prohlížeč vám také umožní přihlásit se pomocí účtu třetí strany (je-li k dispozici).\n\n"
+"Chcete-li se přihlásit na této obrazovce, zadejte své uživatelské jméno a jednorázové heslo aplikace."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not find a user that matches the user account in Bitbucket."
-msgstr ""
+msgstr "YouTrack nenašel uživatele, který odpovídá uživatelskému účtu v Bitbucketu."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not find a user that matches the user account in GitHub."
-msgstr ""
+msgstr "YouTrack nenašel uživatele, který odpovídá uživatelskému účtu na GitHubu."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not find a user that matches the user account in GitLab."
-msgstr ""
+msgstr "YouTrack nenašel uživatele, který odpovídá uživatelskému účtu v GitLabu."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive an email address for the commit author from Bitbucket."
-msgstr ""
+msgstr "YouTrack neobdržel e-mailovou adresu autora revize od Bitbucketu."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive an email address for the commit author from GitHub."
-msgstr ""
+msgstr "YouTrack neobdržel e-mailovou adresu autora commitu, z GitHubu."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive an email address for the commit author from GitLab."
-msgstr ""
+msgstr "YouTrack neobdržel e-mailovou adresu autora commitu, od GitLabu."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive user data for this commit author from Bitbucket."
-msgstr ""
+msgstr "YouTrack neobdržel uživatelská data pro tohoto autora commitu od Bitbucketu."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive user data for this commit author from GitHub."
-msgstr ""
+msgstr "YouTrack neobdržel uživatelská data pro autora tohoto commitu z GitHubu."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive user data for this commit author from GitLab."
-msgstr ""
+msgstr "YouTrack neobdržel uživatelská data pro autora tohoto commitu z GitLabu."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack found multiple users with email addresses that match the registered email in Bitbucket."
-msgstr ""
+msgstr "YouTrack našel více uživatelů s e-mailovými adresami, které odpovídají registrovanému e-mailu v Bitbucketu."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack found multiple users with email addresses that match the registered email in GitHub."
-msgstr ""
+msgstr "YouTrack našel více uživatelů s e-mailovými adresami, které odpovídají registrovaným e-mailům na GitHubu."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack found multiple users with email addresses that match the registered email in GitLab."
-msgstr ""
+msgstr "YouTrack našel více uživatelů s e-mailovými adresami, které odpovídají registrovanému e-mailu v GitLabu."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack was unable to match the VCS user name to a Hub account for an unknown reason. Check your server logs for details."
-msgstr ""
+msgstr "YouTrack nemohl z neznámého důvodu přiřadit uživatelské jméno VCS k účtu Hub. Podrobnosti najdete v protokolech serveru."
 
