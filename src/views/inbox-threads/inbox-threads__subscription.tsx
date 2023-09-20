@@ -6,14 +6,14 @@ import ThreadCommentItem from './inbox-threads__item-comment';
 import ThreadEntityCreatedItem from './inbox-threads__item-issue-created';
 import ThreadHistoryItem from './inbox-threads__item-history';
 import ThreadWorkItem from './inbox-threads__item-work';
-import {createMessagesMap, sortEvents} from './inbox-threads-helper';
+import {bubbleProjectActivity, mergeActivities} from 'components/activity/activity__merge-activities';
+import {createMessagesMap} from './inbox-threads-helper';
 import {getStorageState} from 'components/storage/storage';
 import {groupActivities} from 'components/activity/activity__group-activities';
 import {i18n} from 'components/i18n/i18n';
 import {isActivityCategory} from 'components/activity/activity__category';
-import {mergeActivities} from 'components/activity/activity__merge-activities';
 import {sortByTimestamp} from 'components/search/sorting';
-import {splitActivities} from 'components/activity/activity__split-activities';
+import {splitByHead} from 'components/activity/activity__split-activities';
 
 import styles from './inbox-threads.styles';
 
@@ -43,7 +43,7 @@ export default function InboxThreadItemSubscription({
 }: Props): JSX.Element | null {
   const isMergedNotifications: React.MutableRefObject<boolean> = React.useRef(!!getStorageState().mergedNotifications);
   const [shownMessagesAmount, updateShownMessagesAmount] = useState(3);
-  const activityToMessageMap = createMessagesMap(thread.messages);
+  const activityToMessageMap: Record<string, Activity> | null = createMessagesMap(thread.messages);
   const activities: Activity[] = thread.messages.reduce(
     (list, it) => list.concat(it.activities),
     [],
@@ -52,7 +52,7 @@ export default function InboxThreadItemSubscription({
     onAddActivityToGroup: (group, activity: Activity) => {
       group.messages = group.messages ? group.messages : [];
 
-      if (activityToMessageMap[activity?.id]) {
+      if (activityToMessageMap?.[activity?.id]) {
         group.messages.push(activityToMessageMap[activity.id]);
       }
     },
@@ -67,9 +67,12 @@ export default function InboxThreadItemSubscription({
 
   const splittedMessageGroups = messageGroups
     .map(group => {
-      group.events = sortEvents(group.events);
-      const mergedActivities = mergeActivities(group.events).sort(sortByTimestamp);
-      return splitActivities(mergedActivities, group.activityToMessageMap);
+      const subgroups = splitByHead(group.events, group.activityToMessageMap);
+      subgroups.forEach(subgroup => {
+        subgroup.mergedActivities = mergeActivities(subgroup.activities).sort(sortByTimestamp);
+        subgroup.mergedActivities = bubbleProjectActivity(subgroup.mergedActivities);
+      });
+      return subgroups;
     })
     .filter(splittedGroup => splittedGroup.length > 0)
     .reduce((acc, it) => acc.concat(it), []);

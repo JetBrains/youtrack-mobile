@@ -52,10 +52,10 @@ describe('InboxThreadItemSubscription', () => {
             },
             messages: [{}],
           }));
-        jest.spyOn(module, 'splitActivities');
+        jest.spyOn(module, 'splitByHead');
       });
       it('should show button', () => {
-        module.splitActivities.mockImplementationOnce(
+        module.splitByHead.mockImplementationOnce(
           () => splittedActivitiesMock,
         );
         const {getByTestId} = renderAndGetMatcher();
@@ -64,7 +64,7 @@ describe('InboxThreadItemSubscription', () => {
         ).toBeTruthy();
       });
       it('should not show button', () => {
-        module.splitActivities.mockImplementationOnce(() =>
+        module.splitByHead.mockImplementationOnce(() =>
           splittedActivitiesMock.slice(0, 2),
         );
         const {queryByTestId} = renderAndGetMatcher();

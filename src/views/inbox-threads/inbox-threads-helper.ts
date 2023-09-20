@@ -51,7 +51,7 @@ function getTypes(
 
 function createMessagesMap(
   messages: InboxThreadMessage[] = [],
-): Record<string, Activity> | null | undefined {
+): Record<string, Activity> | null {
   if (!messages?.length) {
     return null;
   }

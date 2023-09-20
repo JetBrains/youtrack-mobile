@@ -3,7 +3,7 @@ import {getTypes} from 'views/inbox-threads/inbox-threads-helper';
 import {Activity} from 'types/Activity';
 
 interface MergedItem {
-  mergedActivities: Activity[];
+  activities: Activity[];
   messages: Activity[];
   issue?: Activity;
   head?: Activity;
@@ -12,71 +12,56 @@ interface MergedItem {
   work?: Activity;
 }
 
-
-export function splitActivities(activities: Activity[], activityToMessageMap: Record<string, Activity>) {
-  let mergedItem: MergedItem = {
-    mergedActivities: [],
+export function splitByHead(activities: Activity[], activityToMessageMap: Record<string, Activity>) {
+  const subgroups: MergedItem[] = [];
+  let subgroup: MergedItem = {
+    activities: [],
     messages: [],
   };
-  const splittedActivities: MergedItem[] = [];
   let hasTerminated = false;
-  activities.forEach((activity: Activity, index: number) => {
+  activities.forEach((activity, index) => {
     const isType = getTypes(activity);
     const activityId = activity.id;
-
-    if (
-      isType.issueCreated ||
-      isType.articleCreated ||
-      isType.comment ||
-      isType.work
-    ) {
+    if (isType.issueCreated || isType.articleCreated || isType.comment || isType.work) {
       if (hasTerminated) {
-        splittedActivities.push(mergedItem);
-        mergedItem = {
-          mergedActivities: [],
-          messages: [],
-        };
+        subgroups.push(subgroup);
+        subgroup = {activities: [], messages: []};
       }
-
       switch (true) {
         case isType.issueCreated: {
-          mergedItem.issue = activity;
-          mergedItem.head = activity;
+          subgroup.issue = activity;
+          subgroup.head = activity;
           break;
         }
-
         case isType.articleCreated: {
-          mergedItem.article = activity;
-          mergedItem.head = activity;
+          subgroup.article = activity;
+          subgroup.head = activity;
           break;
         }
-
         case isType.comment: {
-          mergedItem.comment = activity;
-          mergedItem.head = activity;
+          subgroup.comment = activity;
+          subgroup.head = activity;
           break;
         }
-
         case isType.work: {
-          mergedItem.work = activity;
-          mergedItem.head = activity;
+          subgroup.work = activity;
+          subgroup.head = activity;
         }
       }
-
-      mergedItem.messages.push(activityToMessageMap[activityId]);
+      subgroup.messages.push(activityToMessageMap[activityId]);
       hasTerminated = true;
     } else {
-      mergedItem.mergedActivities.push(activity);
-      mergedItem.messages.push(activityToMessageMap[activityId]);
+      subgroup.activities.push(activity);
+      subgroup.messages.push(activityToMessageMap[activityId]);
     }
 
     if (index === activities.length - 1) {
-      if (!mergedItem.head) {
-        mergedItem.head = mergedItem.mergedActivities[0];
+      if (!subgroup.head) {
+        subgroup.head = subgroup.activities[0];
       }
-
-      splittedActivities.push(mergedItem);
+      subgroups.push(subgroup);
     }
   });
-  return splittedActivities;
+
+  return subgroups;
 }

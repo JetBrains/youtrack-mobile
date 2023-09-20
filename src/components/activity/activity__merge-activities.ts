@@ -1,8 +1,13 @@
-import {isActivityCategory} from './activity__category';
-import type {Activity} from 'types/Activity';
 import {arrayToMap, mapToArray, removeDuplicatesFromArray} from 'util/util';
+import {getTypes} from 'views/inbox-threads/inbox-threads-helper';
+import {isActivityCategory} from './activity__category';
+
+import type {Activity} from 'types/Activity';
+
 type MergedActivity = Activity;
 type activityMapItem = Record<string, Activity>;
+
+
 export function mergeActivities(activities: Activity[]): MergedActivity[] {
   if (!activities) {
     return [];
@@ -125,4 +130,22 @@ export function disjoint(A: any, B: any): any {
   });
   const newB = mapToArray(inB);
   return [newA, newB];
+}
+
+export function bubbleProjectActivity(activities: Activity[]) {
+  let projectActivity;
+  let i;
+  for (i = 0; i < activities.length; i++) {
+    if (getTypes(activities[i]).project) {
+      projectActivity = activities[i];
+      break;
+    }
+  }
+
+  if (!projectActivity) {
+    return activities;
+  }
+
+  const sortedEvents = [activities[i]];
+  return sortedEvents.concat(activities.slice(0, i)).concat(activities.slice(i + 1, activities.length));
 }
