@@ -75,7 +75,7 @@ const IssuesFiltersSetting = ({
         filters={sorted}
         onApply={(filters: FilterSetting[]) => {
           setSorted(filters);
-          onApply(filters.map((it: FilterSetting) => it.id));
+          onApply(filters.map((it: FilterSetting) => (it?.name?.toLowerCase?.() || it.id)));
         }}
         onBack={onBack}
       />
