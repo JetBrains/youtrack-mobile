@@ -6,4 +6,5 @@ export default {
   knowledgeBase: '2020.2',
   searchAssist: '2020.1',
   issuesGetter: '2020.1',
+  issuesSettings: '2023.3.1',
 };

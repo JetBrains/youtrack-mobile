@@ -946,6 +946,45 @@ async function refreshConfig(backendUrl: string): Promise<AppConfig> {
   return updatedConfig;
 }
 
+export function migrateToIssuesFilterSearch(): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: () => Api,
+) => void {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: () => Api,
+  ) => {
+    const storageState: StorageState = storage.getStorageState();
+    let shouldMigrate;
+    try {
+      const curAppVer = (storageState.currentAppVersion || '')?.split('.');
+      const nextAppVer = packageJson.version.split('.');
+      const curr = curAppVer.map(it => parseInt(it, 10));
+      const next = nextAppVer.map(it => parseInt(it, 10));
+      const isNextVerToMigrate: boolean = next[0] === 2023 && next[1] === 3 && next[2] === 1;
+      shouldMigrate = (
+        !storageState.currentAppVersion ||
+        curr[0] < next[0] && isNextVerToMigrate ||
+        curr[0] === next[0] && isNextVerToMigrate && curr[1] < 3
+      );
+    } catch (e) {
+      shouldMigrate = false;
+    }
+    if (shouldMigrate) {
+      const doUpdate = (it: StorageState): StorageState => ({...it, query: ''}) as StorageState;
+      await storage.flushStorage(doUpdate(storageState));
+      const otherAccounts: StorageState[] = await storage.getOtherAccounts();
+      if (otherAccounts.length > 0) {
+        const updatedOtherAccounts: StorageState[] = otherAccounts.map(doUpdate);
+        await storage.storeAccounts(updatedOtherAccounts);
+        dispatch(receiveOtherAccounts(updatedOtherAccounts));
+      }
+    }
+  };
+}
+
 export function initializeApp(
   config: AppConfig,
   issueId?: string,
@@ -957,31 +996,27 @@ export function initializeApp(
     getState: () => AppState,
     getApi: () => Api,
   ): Promise<void> => {
-    const cachedCurrentUser: UserCurrent | null | undefined = storage.getStorageState()
-      ?.currentUser?.ytCurrentUser;
-    const userProfileLocale: UserGeneralProfileLocale | null | undefined =
-      cachedCurrentUser?.profiles?.general?.locale;
+    const cachedCurrentUser: UserCurrent | null | undefined = storage.getStorageState()?.currentUser?.ytCurrentUser;
+    const userProfileLocale: UserGeneralProfileLocale | null | undefined = cachedCurrentUser?.profiles?.general?.locale;
+
+    const currentAppVersion: string | null | undefined = storage.getStorageState().currentAppVersion;
+    const versionHasChanged: boolean = currentAppVersion != null && packageJson.version !== currentAppVersion;
+    storage.flushStoragePart({currentAppVersion: packageJson.version});
 
     if (userProfileLocale?.language) {
       loadTranslation(userProfileLocale.locale, userProfileLocale.language);
     }
 
+    await dispatch(migrateToIssuesFilterSearch());
+
     const isRedirectedToTargetRoute: boolean = await dispatch(
       redirectToRoute(config, issueId, articleId, navigateToActivity),
     );
-    let configCurrent = config;
-    const currentAppVersion: string | null | undefined = storage.getStorageState()
-      .currentAppVersion;
-    const versionHasChanged: boolean =
-      currentAppVersion != null && packageJson.version !== currentAppVersion;
 
+    let configCurrent = config;
     try {
       if (versionHasChanged) {
-        log.info(
-          `App upgraded from ${currentAppVersion || 'NOTHING'} to "${
-            packageJson.version
-          }"; reloading config`,
-        );
+        log.info(`App upgraded to "${packageJson.version}"; reloading config`);
         configCurrent = await refreshConfig(config.backendUrl);
       }
 

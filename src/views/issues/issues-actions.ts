@@ -26,14 +26,14 @@ import {getEntityPresentation} from 'components/issue-formatter/issue-formatter'
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {removeDuplicatesFromArray, until} from 'util/util';
-import {setGlobalInProgress} from 'actions/app-actions';
+import {receiveUserAppearanceProfile, setGlobalInProgress, setYTCurrentUser} from 'actions/app-actions';
 import {sortAlphabetically} from 'components/search/sorting';
 import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
 import type Api from 'components/api/api';
 import type {AnyIssue, IssueFull, IssueOnList} from 'types/Issue';
 import type {AppState} from 'reducers';
-import type {Folder} from 'types/User';
+import type {Folder, User} from 'types/User';
 import {CustomError} from 'types/Error';
 import {FilterField, FilterFieldValue} from 'types/CustomFields';
 import {ISelectProps} from 'components/select/select';
@@ -716,10 +716,35 @@ export function setFilters(): (
     if (error) {
       log.warn('Cannot load filter fields');
     } else {
+      const currentUser: User | null = getState().app.user;
+      const liteUiFilters: string[] | undefined = currentUser?.profiles?.appearance?.liteUiFilters;
       const visibleFiltersNames: string[] = (
-        getState().app.user?.profiles?.appearance?.liteUiFilters ||
-        Object.values(defaultIssuesFilterFieldConfig)
+        Array.isArray(liteUiFilters) && liteUiFilters.length > 0
+          ? liteUiFilters
+          : Object.values(defaultIssuesFilterFieldConfig)
       );
+
+      if (liteUiFilters?.length === 0) {
+        const ytCurrentUser = getStorageState().currentUser?.ytCurrentUser;
+        const user = {
+          ...ytCurrentUser,
+          profiles: {
+            ...ytCurrentUser.profiles,
+            appearance: {
+              ...ytCurrentUser.profiles?.appearance,
+              liteUiFilters: visibleFiltersNames,
+            },
+          },
+        };
+        dispatch(
+          receiveUserAppearanceProfile({
+            ...user?.profiles?.appearance,
+            liteUiFilters: visibleFiltersNames,
+          })
+        );
+        await dispatch(setYTCurrentUser(user));
+      }
+
       settings = {
         ...settings,
         search: {
