@@ -243,7 +243,6 @@ export const createActions = (
         const issue: IssueFull = (getState()[stateFieldName] as IssueState).issue;
         const searchQuery: string = encodeURIComponent(
           [
-            `(project:${issue.project.shortName})`,
             query.length > 0 ? `(${query})` : '',
             `(${linkTypeName.split(' ').join(' ')}: -${getReadableID(issue)})`,
           ]
