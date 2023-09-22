@@ -20,6 +20,7 @@ export default EStyleSheet.create({
   inputContainer: {
     ...inputWrapper,
     ...searchInputWithMinHeight,
+    flex: 0,
   },
   inputWrapper,
   inputWrapperActive: {
