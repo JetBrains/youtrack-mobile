@@ -122,7 +122,8 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
 
   renderSummary() {
     const {issue, settings} = this.props;
-    const mode: number = settings?.view.mode || 0;
+    const hasSettingMode: boolean = typeof settings?.view.mode === 'number';
+    const mode: number = hasSettingMode ? settings?.view.mode : 2;
     return issue.summary ? (
       <Text
         style={[
