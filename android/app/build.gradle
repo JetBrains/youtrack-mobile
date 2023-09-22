@@ -194,6 +194,3 @@ apply from: file("../../node_modules/@react-native-community/cli-platform-androi
 apply plugin: 'com.google.gms.google-services'
 
 apply from: "../../node_modules/@bugsnag/react-native/bugsnag-react-native.gradle"
-bugsnag {
-  uploadReactNativeMappings = true
-}
