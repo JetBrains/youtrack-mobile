@@ -50,9 +50,13 @@ export default EStyleSheet.create({
     marginLeft: -UNIT * 2,
   },
   linkedIssueRemoveAction: {
+    position: 'absolute',
+    right: -UNIT,
+    zIndex: 1,
     alignSelf: 'center',
     marginLeft: UNIT,
-    padding: UNIT / 2,
+    padding: UNIT,
+    paddingRight: UNIT,
     color: '$iconAccent',
   },
   separator: {
@@ -73,7 +77,7 @@ export default EStyleSheet.create({
     textTransform: 'uppercase',
   },
   addLinkButton: {
-    padding: UNIT * 1.5,
+    padding: UNIT,
   },
   linkTypeSelect: linkTypeSelect,
   issuesToLinkContainer: {
