@@ -34,9 +34,9 @@ const StreamWork = (props: Props) => {
         )}
 
         <View style={styles.activityChange}>
-          {Boolean(work.date) && (
+          {Boolean(work.created) && (
             <Text style={styles.secondaryTextColor}>
-              {ytDate(work.date, true)}
+              {ytDate(work.created, true)}
             </Text>
           )}
 
