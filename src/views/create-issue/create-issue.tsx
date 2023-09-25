@@ -114,7 +114,7 @@ class CreateIssue extends PureComponent<Props, State> {
     return this.getUITheme().colors;
   }
 
-  UNSAFE_componentWillMount() {
+  componentDidMount() {
     this.props.initializeWithDraftOrProject(this.props.predefinedDraftId);
   }
 
