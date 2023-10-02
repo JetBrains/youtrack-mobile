@@ -19,6 +19,7 @@ import CustomFieldsPanel from 'components/custom-fields-panel/custom-fields-pane
 import Header from 'components/header/header';
 import IconLink from '@jetbrains/icons/link.svg';
 import IssueCustomFieldText from 'components/custom-field/issue-custom-field-text';
+import IssueDrafts from 'views/create-issue/create-issue-drafts';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import LinkedIssues from 'components/linked-issues/linked-issues';
 import LinkedIssuesAddLink from 'components/linked-issues/linked-issues-add-link';
@@ -39,7 +40,7 @@ import {
 } from 'components/custom-field/custom-field-helper';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import {HIT_SLOP} from 'components/common-styles';
-import {i18n} from 'components/i18n/i18n';
+import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {
   IconCheck,
   IconClose,
@@ -66,12 +67,14 @@ import styles from './create-issue.styles';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Theme, UITheme, UIThemeColors} from 'types/Theme';
 import {AppState} from 'reducers';
+import {IssueCreate} from 'types/Issue';
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
   predefinedDraftId: string | null | undefined;
-  onAddTags: (tags: Tag[]) => () => Promise<void>;
-  onHide?: () => void;
+  drafts: IssueCreate[];
+  updateDraft: (ignoreFields: boolean, tags?: Tag[]) => () => Promise<void>;
+  onHide: () => void;
   isMatchesQuery?: () => boolean;
   isConnected: boolean;
   starId: string;
@@ -132,10 +135,7 @@ class CreateIssue extends PureComponent<Props, State> {
     cancelAddAttach(attachingImage as Attachment);
     hideAddAttachDialog();
   };
-  renderAttachFileDialog = (): React.ReactElement<
-    React.ComponentProps<typeof AttachFileDialog>,
-    typeof AttachFileDialog
-  > | null => {
+  renderAttachFileDialog = (): React.ReactNode => {
     const {issue} = this.props;
 
     if (!issue || !issue.id) {
@@ -218,17 +218,18 @@ class CreateIssue extends PureComponent<Props, State> {
     );
   }
 
-  renderActionsIcon() {
-    if (this.isProcessing() || !this.hasProject() || !this.props.isConnected) {
-      return null;
-    }
+  isActionDisabled(): boolean {
+    return this.isProcessing() || !this.hasProject() || !this.props.isConnected;
+  }
 
+  renderActionsIcon() {
     return (
       <TouchableOpacity
+        style={styles.moreActionsButton}
         hitSlop={HIT_SLOP}
         onPress={() => {
           !this.isProcessing() &&
-          this.props.showContextActions(this.context.actionSheet());
+          this.props.showContextActions((this.context as any).actionSheet());
         }}
       >
         <Text style={styles.iconMore}>
@@ -239,7 +240,6 @@ class CreateIssue extends PureComponent<Props, State> {
               <IconDrag size={18} color={this.getUIThemeColors().$link}/>
             </Text>
           )}
-          <Text> </Text>
         </Text>
       </TouchableOpacity>
     );
@@ -392,6 +392,24 @@ class CreateIssue extends PureComponent<Props, State> {
     );
   };
 
+  renderDraftsButton() {
+    const {drafts} = this.props;
+    return drafts.length > 0 ? (
+      <TouchableOpacity
+        style={styles.draftsButton}
+        hitSlop={HIT_SLOP}
+        onPress={async () => {
+          await this.props.updateDraft(false);
+          Router.PageModal({children: <IssueDrafts onHide={this.props.onHide}/>});
+        }}
+      >
+        <Text style={styles.draftsButtonText}>
+          {`${drafts.length} ${i18nPlural(drafts.length, 'Draft', 'Drafts')}`}
+        </Text>
+      </TouchableOpacity>
+    ) : null;
+  }
+
   render() {
     const {
       setIssueSummary,
@@ -423,7 +441,8 @@ class CreateIssue extends PureComponent<Props, State> {
             <ActivityIndicator color={uiThemeColors.$link}/>
           ) : (
             <IconCheck
-              size={20}
+              style={styles.applyButton}
+              size={19}
               color={
                 canCreateIssue && isConnected
                   ? uiThemeColors.$link
@@ -439,7 +458,12 @@ class CreateIssue extends PureComponent<Props, State> {
                 leftButton={<IconClose size={21} color={uiThemeColors.$link}/>}
                 onBack={this.onHide}
                 rightButton={rightButton}
-                extraButton={this.renderActionsIcon()}
+                extraButton={!this.isActionDisabled() ? (
+                  <View style={styles.row}>
+                    {this.renderDraftsButton()}
+                    {this.renderActionsIcon()}
+                  </View>
+                ) : null}
                 onRightButtonClick={() =>
                   canCreateIssue &&
                   isConnected &&
@@ -555,9 +579,9 @@ class CreateIssue extends PureComponent<Props, State> {
                         <TagAddSelect
                           starId={starId}
                           existed={issue?.tags}
-                          projectId={issue.project?.id}
+                          projectId={issue.project.id as string}
                           onAdd={(tags: Tag[]) =>
-                            this.props.onAddTags(tags)
+                            this.props.updateDraft(true, tags)
                           }
                           onHide={() =>
                             this.setState({
@@ -605,7 +629,7 @@ class CreateIssue extends PureComponent<Props, State> {
 const mapStateToProps = (state: AppState, ownProps: { predefinedDraftId?: string }) => {
   return {
     ...state.creation,
-    predefinedDraftId: ownProps.predefinedDraftId,
+    ...ownProps,
     issuePermissions: state.app.issuePermissions,
     isConnected: !!state.app.networkState?.isConnected,
     starId: state.app.user?.profiles?.general?.star?.id,
@@ -615,12 +639,15 @@ const mapStateToProps = (state: AppState, ownProps: { predefinedDraftId?: string
 const mapDispatchToProps = dispatch => {
   return {
     ...bindActionCreators(createIssueActions, dispatch),
-    onAddTags: (tags: Tag[]) =>
-      dispatch(
-        createIssueActions.updateIssueDraft(true, {
-          tags,
-        }),
-      ),
+    deleteAllDrafts: () => {
+      dispatch(createIssueActions.deleteAllDrafts());
+    },
+    deleteDraft: (id: string) => {
+      dispatch(createIssueActions.deleteDraft(id));
+    },
+    updateDraft: (ignoreFields: boolean, tags?: Tag[]) => {
+      dispatch(createIssueActions.updateIssueDraft(ignoreFields, tags ? {tags} : undefined));
+    },
   };
 };
 

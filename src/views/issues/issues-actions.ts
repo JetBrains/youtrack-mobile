@@ -783,6 +783,7 @@ export function initializeIssuesList(
     getState: () => AppState,
     getApi: ApiGetter,
     ) => {
+    dispatch(startIssuesLoading());
     dispatch(setIssuesQuery(searchQuery || getStorageState().query || ''));
 
     if (searchQuery) {

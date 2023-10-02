@@ -122,8 +122,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
 
   renderSummary() {
     const {issue, settings} = this.props;
-    const hasSettingMode: boolean = typeof settings?.view.mode === 'number';
-    const mode: number = hasSettingMode ? settings?.view.mode : 2;
+    const mode: number = typeof settings?.view.mode === 'number' ? settings?.view.mode : 2;
     return issue.summary ? (
       <Text
         style={[
@@ -155,7 +154,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
     return (
       <View style={styles.issueRow}>
         <View
-          testID="test:id/issueRowDetails"
+          testID="test:id/issueRowDraftDetails"
           style={styles.rowLine}
         >
           {this.renderPriority()}
@@ -239,6 +238,37 @@ export class IssueRowCompact<P extends Props, S = {}> extends IssueRow<P, S> {
           {this.renderId()}
           {this.renderReporter()}
         </>
+      </View>
+    );
+  }
+}
+
+export class IssueRowDraft<P extends Props, S = {}> extends IssueRow<P, S> {
+
+  renderProjectName() {
+    return (
+      <Text style={styles.draftTextId}>
+        {`${this.props.issue?.project?.shortName} `}
+      </Text>
+    );
+  }
+
+  renderSummary() {
+    return this.props.issue.summary ? (
+      <Text style={styles.draftText}>
+        {this.props.issue.summary}
+      </Text>
+    ) : null;
+  }
+
+
+  renderContent(): React.JSX.Element {
+    return (
+      <View style={styles.draft}>
+        <Text numberOfLines={3}>
+          {this.renderProjectName()}
+          {this.renderSummary()}
+        </Text>
       </View>
     );
   }

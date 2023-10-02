@@ -18,7 +18,7 @@ import {issuesSearchSettingMode} from 'views/issues';
 
 interface Props {
   tags: Tag[];
-  onTagPress: (query: string) => void;
+  onTagPress?: (query: string) => void;
   onTagRemove?: (id: string) => void;
   style?: ViewStyleProp;
   multiline?: boolean;
@@ -36,12 +36,12 @@ const Tags = (props: Props): JSX.Element | null => {
 
   const getContextActions = (tag: Tag): ActionSheetAction[] => {
     const actions: ActionSheetAction[] = [];
-    if (!isFilterMode) {
+    if (!isFilterMode && props?.onTagPress) {
       actions.push({
         title: i18n('Show all issues tagged with "{{tagName}}"...', {
           tagName: tag.name,
         }),
-        execute: () => props.onTagPress(tag.query),
+        execute: () => props?.onTagPress?.(tag.query),
       });
     }
     if (props.onTagRemove) {

@@ -1,20 +1,21 @@
 import * as React from 'react';
-import {Animated} from 'react-native';
+import {Animated, View} from 'react-native';
 
+import AnimatedInterpolation = Animated.AnimatedInterpolation;
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-// import Swipeable from './sw';
 import {RectButton} from 'react-native-gesture-handler';
 
-
 import styles from './swipeable.styles';
+
+type Interpolation = Animated.AnimatedInterpolation<number | string>;
 
 interface Props {
   enabled?: boolean;
   children: React.ReactNode;
-  leftActionText: string;
-  rightActionText: string;
-  onSwipeLeft: () => void;
-  onSwipeRight: () => void;
+  leftActionText?: string;
+  rightActionText?: string;
+  onSwipeLeft?: () => void;
+  onSwipeRight?: () => void;
 }
 
 
@@ -22,9 +23,9 @@ export default function SwipeableRow(props: Props) {
   const swipeableRow = React.useRef<Swipeable | null>(null);
 
   const close = () => swipeableRow?.current?.close?.();
-  const getTextPresentation = (text: string) => text.split(' ').join('\n');
+  const getTextPresentation = (text: string = '') => text.split(' ').join('\n');
 
-  const renderActions = (dragX: Animated.AnimatedInterpolation<number | string>, isLeftAction: boolean) => {
+  const renderActions = (dragX: Interpolation, isLeftAction: boolean) => {
     const trans = dragX.interpolate({
       inputRange: [-10, 5, 250, 251],
       outputRange: [-1, 1, 30, 1],
@@ -37,11 +38,22 @@ export default function SwipeableRow(props: Props) {
             {transform: [{ translateX: trans }]},
           ]}
         >
-          {getTextPresentation(isLeftAction  ? props.leftActionText : props.rightActionText)}
+          {getTextPresentation(isLeftAction  ? props?.leftActionText : props?.rightActionText)}
         </Animated.Text>
       </RectButton>
     );
   };
+
+  const renderLeftAction = (
+    props?.onSwipeLeft
+      ? (progress: AnimatedInterpolation<number>, dragX: Interpolation) => renderActions(dragX, true)
+      : undefined
+  );
+  const renderRightAction = (
+    props?.onSwipeRight
+      ? (progress: AnimatedInterpolation<number>, dragX: Interpolation) => renderActions(dragX, false)
+      : undefined
+  );
 
   return (
     <Swipeable
@@ -52,8 +64,8 @@ export default function SwipeableRow(props: Props) {
       overshootRight={false}
       enableTrackpadTwoFingerGesture
       friction={2}
-      leftThreshold={20}
-      rightThreshold={20}
+      leftThreshold={100}
+      rightThreshold={100}
       overshootFriction={8}
       animationOptions={{
         delay: 0,
@@ -62,15 +74,17 @@ export default function SwipeableRow(props: Props) {
       onSwipeableOpen={(direction: 'left' | 'right', swipeable: Swipeable) => {
         swipeable.close();
         if (direction === 'left') {
-          props.onSwipeLeft();
+          props?.onSwipeLeft?.();
         } else {
-          props.onSwipeRight();
+          props?.onSwipeRight?.();
         }
       }}
-      renderLeftActions={(progress, dragX) => renderActions(dragX, true)}
-      renderRightActions={(progress, dragX) => renderActions(dragX, false)}
+      renderLeftActions={renderLeftAction}
+      renderRightActions={renderRightAction}
     >
-      {props.children}
+      <View style={styles.content}>
+        {props.children}
+      </View>
     </Swipeable>
   );
 }

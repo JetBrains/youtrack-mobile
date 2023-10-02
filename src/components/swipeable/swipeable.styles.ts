@@ -1,29 +1,28 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from 'components/variables';
 
 export default EStyleSheet.create({
   container: {
     backgroundColor: '$background',
   },
+  content: {
+    flex: 1,
+    backgroundColor: '$background',
+  },
   leftAction: {
     position: 'relative',
     zIndex: 2,
-    flex: 1,
-    maxWidth: '40%',
-    paddingTop: UNIT * 4,
+    flexGrow: 1,
     alignItems: 'flex-start',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     backgroundColor: '$blueBackground',
   },
   leftActionText: {
     color: '$blueColor',
   },
   rightAction: {
-    flex: 1,
-    maxWidth: '40%',
-    paddingTop: UNIT * 4,
+    flexGrow: 1,
     alignItems: 'flex-end',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     backgroundColor: '$greenBackground',
   },
   rightActionText: {

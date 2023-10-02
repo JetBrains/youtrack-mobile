@@ -333,4 +333,19 @@ export default EStyleSheet.create({
     marginLeft: UNIT,
     marginRight: -UNIT,
   },
+  draft: {
+    ...this.issueRow,
+    padding: UNIT * 2,
+  },
+  draftText: {
+    ...mainText,
+    color: '$text',
+  },
+  draftTextId: {
+    ...mainText,
+    color: '$textSecondary',
+    paddingRight: UNIT * 2,
+    marginRight: UNIT * 2,
+    textTransform: 'uppercase',
+  },
 });

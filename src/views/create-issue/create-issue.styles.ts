@@ -1,8 +1,11 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from 'components/variables';
-import {headerTitle, MAIN_FONT_SIZE, mainText} from 'components/common-styles';
+
+import {headerTitle, layout, MAIN_FONT_SIZE, mainText, SECONDARY_FONT_SIZE, UNIT} from 'components/common-styles';
 import {separator} from 'components/common-styles/list';
+
+
 export default EStyleSheet.create({
+  ...layout,
   container: {
     flex: 1,
     backgroundColor: '$background',
@@ -83,5 +86,29 @@ export default EStyleSheet.create({
   addLinkButtonText: {...mainText, marginLeft: UNIT * 1.8, color: '$link'},
   addLinkButtonTextDisabled: {
     color: '$textSecondary',
+  },
+  link: {
+    color: '$link',
+  },
+  applyButton: {
+    padding: UNIT / 4,
+    paddingRight: 0,
+  },
+  moreActionsButton: {
+    paddingTop: UNIT / 4,
+  },
+  draftsButton: {
+    paddingTop: UNIT / 4,
+    marginRight: UNIT * 2.5,
+  },
+  draftsDeleteAllButton: {
+    padding: UNIT,
+  },
+  draftsButtonText: {
+    fontSize: SECONDARY_FONT_SIZE,
+    color: '$link',
+  },
+  draftsItem: {
+    backgroundColor: '$background',
   },
 });

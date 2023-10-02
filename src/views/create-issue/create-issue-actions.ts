@@ -42,6 +42,7 @@ import type {StorageState} from 'components/storage/storage';
 import type {Visibility} from 'types/Visibility';
 import {CustomError} from 'types/Error';
 import {Folder} from 'types/User';
+import {until} from 'util/util';
 
 type ApiGetter = () => Api;
 
@@ -263,7 +264,7 @@ export function updateIssueDraft(
 }
 
 export function initializeWithDraftOrProject(
-  preDefinedDraftId: string | null | undefined,
+  preDefinedDraftId?: string,
 ): (dispatch: (arg0: any) => any) => Promise<void> {
   return async (dispatch: (arg0: any) => any) => {
     if (preDefinedDraftId) {
@@ -284,9 +285,69 @@ export function initializeWithDraftOrProject(
           links: await dispatch(loadIssueLinksTitle()),
         }),
       );
+      dispatch(initAndSetIssueDrafts());
     } else {
       log.info('Draft not found, initializing new draft');
       await dispatch(loadStoredProject());
+    }
+  };
+}
+
+export function initAndSetIssueDrafts(): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+  ) => Promise<void> {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
+    const [error, drafts] = await until(
+      getApi().issue.getUserIssueDrafts()
+    );
+    if (!error && drafts) {
+      dispatch(actions.setUserDrafts({
+        drafts: drafts.filter((it: AnyIssue) => it.id !== getState().creation.issue.id),
+      }));
+    }
+  };
+}
+
+export function deleteAllDrafts(): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+  ) => Promise<void> {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
+    const [error] = await until(
+      getApi().issue.deleteAllIssueDraftsExcept(getState().creation.issue.id)
+    );
+    if (!error) {
+      dispatch(initAndSetIssueDrafts());
+    }
+  };
+}
+
+export function deleteDraft(draftId: string): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+  ) => Promise<void> {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
+    const [error] = await until(
+      getApi().issue.deleteDraft(draftId)
+    );
+    if (!error) {
+      await dispatch(initAndSetIssueDrafts());
     }
   };
 }

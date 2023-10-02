@@ -16,6 +16,7 @@ import type {CommandSuggestionResponse, IssueCreate, IssueFull} from 'types/Issu
 import {AnyCustomField} from 'components/custom-field/custom-field-helper';
 
 export type CreateIssueState = {
+  drafts: IssueCreate[];
   processing: boolean;
   attachingImage: Attachment | null;
   predefinedDraftId: string | null;
@@ -33,6 +34,7 @@ const notSelectedProject: Partial<IssueProject> = {
 };
 
 const initialState: CreateIssueState = {
+  drafts: [],
   processing: false,
   attachingImage: null,
   predefinedDraftId: null,
@@ -85,6 +87,16 @@ const slice: Slice = createSlice({
     },
     resetIssueDraftId: (state: CreateIssueState) => {
       state.issue = {...state.issue, id: ''};
+    },
+    setUserDrafts: (
+      state: CreateIssueState,
+      action: {
+        payload: {
+          drafts: IssueCreate[];
+        };
+      },
+    ) => {
+      state.drafts = action.payload.drafts;
     },
     setIssueProject: (
       state: CreateIssueState,

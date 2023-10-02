@@ -270,7 +270,7 @@ export class Issues extends Component<Props, State> {
             });
           } else {
             Router.CreateIssue({
-              onHide: () => Router.pop(true),
+              onHide: () => Router.navigateToDefaultRoute(),
               isMatchesQuery: this.isMatchesQuery,
             });
           }

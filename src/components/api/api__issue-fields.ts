@@ -215,6 +215,11 @@ const ISSUE_BASE_FIELDS = toField([
   'created',
   'updated',
 ]);
+const ISSUE_DRAFT_FIELDS = toField([
+  'id',
+  'summary',
+  'project(shortName)',
+]);
 const ISSUE_XSHORT_FIELDS: any = toField([
   ISSUE_BASE_FIELDS,
   {
@@ -492,6 +497,7 @@ export default {
   userAgreement: USER_AGREEMENT_FIELDS,
   userConsent: USER_CONSENT_FIELDS,
   getVisibility: GET_VISIBILITY_FIELDS,
+  ISSUE_DRAFT_FIELDS,
   ISSUE_USER_FIELDS,
   ISSUE_COMMENTS_FIELDS,
   ISSUE_COMMENTS_REMOVED_FIELDS: ISSUE_COMMENTS_REMOVED,

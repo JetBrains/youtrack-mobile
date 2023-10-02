@@ -182,11 +182,15 @@ export default class IssueAPI extends ApiBase {
     return issue;
   }
 
-  /**
-   * Creates (if issue has no id) or updates issue draft
-   * @param issue
-   * @returns {Promise}
-   */
+  async getUserIssueDrafts(): Promise<AnyIssue> {
+    const queryString = qs.stringify({
+      fields: issueFields.ISSUE_DRAFT_FIELDS.toString(),
+    });
+    return await this.makeAuthorizedRequest(
+      `${this.draftsURL}/?${queryString}`,
+    );
+  }
+
   async updateIssueDraft(issue: IssueCreate): Promise<IssueFull> {
     const queryString = qs.stringify({
       fields: issueFields.singleIssue.toString(),
@@ -201,6 +205,24 @@ export default class IssueAPI extends ApiBase {
       this.config.backendUrl,
     );
     return updatedIssue;
+  }
+
+  async deleteAllIssueDraftsExcept(id: string): Promise<IssueFull> {
+    return await this.makeAuthorizedRequest(
+      this.draftsURL,
+      'PUT',
+      [{id}],
+      {parseJson: false}
+    );
+  }
+
+  async deleteDraft(id: string): Promise<IssueFull> {
+    return await this.makeAuthorizedRequest(
+      `${this.draftsURL}/${id}`,
+      'DELETE',
+      null,
+      {parseJson: false}
+    );
   }
 
   async updateIssueDraftFieldValue(
