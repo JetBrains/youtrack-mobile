@@ -375,6 +375,7 @@ msgstr "Zamítnout"
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity-stream.tsx
+#: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
@@ -383,6 +384,14 @@ msgstr "Zamítnout"
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
 msgstr "Smazat"
+
+#: src/views/create-issue/create-issue-drafts.tsx
+msgid "Delete all"
+msgstr "Smazat vše"
+
+#: src/views/create-issue/create-issue-drafts.tsx
+msgid "Delete all drafts?"
+msgstr "Smazat všechny koncepty?"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Delete comment permanently?"
@@ -441,6 +450,15 @@ msgstr "Dokument"
 msgid "Don't send logs"
 msgstr "Neodesílat protokoly"
 
+#: src/views/create-issue/create-issue.tsx
+msgid "Draft"
+msgid_plural "Drafts"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Drafts"
 msgstr "Koncepty"

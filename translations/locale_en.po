@@ -105,7 +105,7 @@ msgstr "All projects"
 msgid "Appearance"
 msgstr "Appearance"
 
-#: src/views/create-issue/create-issue-actions.ts:503
+#: src/views/create-issue/create-issue-actions.ts:564
 #: src/views/issue/issue-base-actions-creater.ts:711
 msgid "Apply command…"
 msgstr "Apply command…"
@@ -191,7 +191,7 @@ msgstr "Camera"
 #: src/components/tags/tags.tsx:55
 #: src/views/article/arcticle-actions.ts:322
 #: src/views/article/arcticle-actions.ts:693
-#: src/views/create-issue/create-issue-actions.ts:510
+#: src/views/create-issue/create-issue-actions.ts:571
 #: src/views/inbox-threads/inbox-threads__thread.tsx:198
 #: src/views/inbox-threads/inbox-threads.tsx:278
 #: src/views/issue/activity/issue-activity__comment-actions.ts:413
@@ -361,6 +361,7 @@ msgstr "Decline"
 #: src/views/article/arcticle-actions.ts:306
 #: src/views/article/arcticle-actions.ts:680
 #: src/views/article/article__activity-stream.tsx:244
+#: src/views/create-issue/create-issue-drafts.tsx:34
 #: src/views/issue/activity/issue__activity-stream.tsx:164
 #: src/views/issue/activity/issue__activity.tsx:280
 #: src/views/issue/activity/issue-activity__actions.ts:419
@@ -369,6 +370,14 @@ msgstr "Decline"
 #: src/views/issue/issue-base-actions-creater.ts:720
 msgid "Delete"
 msgstr "Delete"
+
+#: src/views/create-issue/create-issue-drafts.tsx:62
+msgid "Delete all"
+msgstr "Delete all"
+
+#: src/views/create-issue/create-issue-drafts.tsx:67
+msgid "Delete all drafts?"
+msgstr "Delete all drafts?"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts:332
 msgid "Delete comment permanently?"
@@ -427,6 +436,13 @@ msgstr "Document"
 msgid "Don't send logs"
 msgstr "Don't send logs"
 
+#: src/views/create-issue/create-issue.tsx:407
+msgid "Draft"
+msgid_plural "Drafts"
+msgstr[0] "Draft"
+msgstr[1] "Drafts"
+
+#: src/views/create-issue/create-issue-drafts.tsx:56
 #: src/views/knowledge-base/knowledge-base.tsx:568
 msgid "Drafts"
 msgstr "Drafts"
@@ -694,7 +710,7 @@ msgstr "Mute thread"
 msgid "New Article"
 msgstr "New Article"
 
-#: src/views/create-issue/create-issue.tsx:437
+#: src/views/create-issue/create-issue.tsx:456
 msgid "New Issue"
 msgstr "New Issue"
 

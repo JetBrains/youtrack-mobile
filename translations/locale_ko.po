@@ -363,6 +363,7 @@ msgstr "취소"
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity-stream.tsx
+#: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
@@ -371,6 +372,14 @@ msgstr "취소"
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
 msgstr "삭제"
+
+#: src/views/create-issue/create-issue-drafts.tsx
+msgid "Delete all"
+msgstr ""
+
+#: src/views/create-issue/create-issue-drafts.tsx
+msgid "Delete all drafts?"
+msgstr ""
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Delete comment permanently?"
@@ -429,6 +438,12 @@ msgstr "문서"
 msgid "Don't send logs"
 msgstr "로그를 보내지 않음"
 
+#: src/views/create-issue/create-issue.tsx
+msgid "Draft"
+msgid_plural "Drafts"
+msgstr[0] ""
+
+#: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Drafts"
 msgstr "이슈 초안"

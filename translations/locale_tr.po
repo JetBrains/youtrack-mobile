@@ -367,6 +367,7 @@ msgstr "Reddet"
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity-stream.tsx
+#: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__actions.ts
@@ -375,6 +376,14 @@ msgstr "Reddet"
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Delete"
 msgstr "Sil"
+
+#: src/views/create-issue/create-issue-drafts.tsx
+msgid "Delete all"
+msgstr ""
+
+#: src/views/create-issue/create-issue-drafts.tsx
+msgid "Delete all drafts?"
+msgstr ""
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Delete comment permanently?"
@@ -433,6 +442,13 @@ msgstr "Belge"
 msgid "Don't send logs"
 msgstr ""
 
+#: src/views/create-issue/create-issue.tsx
+msgid "Draft"
+msgid_plural "Drafts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Drafts"
 msgstr "Taslaklar"
