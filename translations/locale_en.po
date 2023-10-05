@@ -79,7 +79,7 @@ msgid "Add spent time"
 msgstr "Add spent time"
 
 #: src/components/tags/tag-add-panel.tsx:39
-#: src/views/issue/issue-base-actions-creater.ts:680
+#: src/views/issue/issue-base-actions-creater.ts:670
 msgid "Add tag"
 msgstr "Add tag"
 
@@ -106,7 +106,7 @@ msgid "Appearance"
 msgstr "Appearance"
 
 #: src/views/create-issue/create-issue-actions.ts:564
-#: src/views/issue/issue-base-actions-creater.ts:711
+#: src/views/issue/issue-base-actions-creater.ts:701
 msgid "Apply command…"
 msgstr "Apply command…"
 
@@ -143,7 +143,7 @@ msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
 #: src/components/comment/comment-edit.tsx:565
-#: src/views/issue/issue-base-actions-creater.ts:690
+#: src/views/issue/issue-base-actions-creater.ts:680
 msgid "Attach file"
 msgstr "Attach file"
 
@@ -195,8 +195,8 @@ msgstr "Camera"
 #: src/views/inbox-threads/inbox-threads__thread.tsx:198
 #: src/views/inbox-threads/inbox-threads.tsx:278
 #: src/views/issue/activity/issue-activity__comment-actions.ts:413
-#: src/views/issue/issue-base-actions-creater.ts:736
-#: src/views/issue/issue-base-actions-creater.ts:777
+#: src/views/issue/issue-base-actions-creater.ts:726
+#: src/views/issue/issue-base-actions-creater.ts:767
 #: src/views/knowledge-base/knowledge-base-actions.ts:497
 #: src/views/settings/settings__feedback-form.tsx:87
 msgid "Cancel"
@@ -268,7 +268,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:936
+#: src/actions/app-actions.ts:934
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -292,8 +292,8 @@ msgstr "Content revised"
 #: src/views/article/article__activity-stream.tsx:222
 #: src/views/issue/activity/issue__activity-stream.tsx:134
 #: src/views/issue/activity/issue-activity__comment-actions.ts:380
-#: src/views/issue/issue-base-actions-creater.ts:663
-#: src/views/issue/issue-base-actions-creater.ts:773
+#: src/views/issue/issue-base-actions-creater.ts:653
+#: src/views/issue/issue-base-actions-creater.ts:763
 msgid "Copied"
 msgstr "Copied"
 
@@ -309,7 +309,7 @@ msgstr "Copy field text"
 #: src/views/article/article__activity-stream.tsx:218
 #: src/views/issue/activity/issue__activity-stream.tsx:139
 #: src/views/issue/activity/issue-activity__comment-actions.ts:384
-#: src/views/issue/issue-base-actions-creater.ts:659
+#: src/views/issue/issue-base-actions-creater.ts:649
 msgid "Copy link"
 msgstr "Copy link"
 
@@ -321,7 +321,7 @@ msgstr "Copy link to article"
 #: src/views/article/article__activity-stream.tsx:209
 #: src/views/issue/activity/issue__activity-stream.tsx:130
 #: src/views/issue/activity/issue-activity__comment-actions.ts:376
-#: src/views/issue/issue-base-actions-creater.ts:769
+#: src/views/issue/issue-base-actions-creater.ts:759
 msgid "Copy text"
 msgstr "Copy text"
 
@@ -361,21 +361,21 @@ msgstr "Decline"
 #: src/views/article/arcticle-actions.ts:306
 #: src/views/article/arcticle-actions.ts:680
 #: src/views/article/article__activity-stream.tsx:244
-#: src/views/create-issue/create-issue-drafts.tsx:34
+#: src/views/create-issue/create-issue-drafts.tsx:39
 #: src/views/issue/activity/issue__activity-stream.tsx:164
 #: src/views/issue/activity/issue__activity.tsx:280
 #: src/views/issue/activity/issue-activity__actions.ts:419
 #: src/views/issue/activity/issue-activity__comment-actions.ts:332
 #: src/views/issue/activity/issue-activity__comment-actions.ts:404
-#: src/views/issue/issue-base-actions-creater.ts:720
+#: src/views/issue/issue-base-actions-creater.ts:710
 msgid "Delete"
 msgstr "Delete"
 
-#: src/views/create-issue/create-issue-drafts.tsx:62
+#: src/views/create-issue/create-issue-drafts.tsx:73
 msgid "Delete all"
 msgstr "Delete all"
 
-#: src/views/create-issue/create-issue-drafts.tsx:67
+#: src/views/create-issue/create-issue-drafts.tsx:78
 msgid "Delete all drafts?"
 msgstr "Delete all drafts?"
 
@@ -442,7 +442,7 @@ msgid_plural "Drafts"
 msgstr[0] "Draft"
 msgstr[1] "Drafts"
 
-#: src/views/create-issue/create-issue-drafts.tsx:56
+#: src/views/create-issue/create-issue-drafts.tsx:67
 #: src/views/knowledge-base/knowledge-base.tsx:568
 msgid "Drafts"
 msgstr "Drafts"
@@ -452,7 +452,7 @@ msgstr "Drafts"
 #: src/views/issue/activity/issue__activity-stream.tsx:97
 #: src/views/issue/activity/issue__activity.tsx:269
 #: src/views/issue/activity/issue-activity__comment-actions.ts:394
-#: src/views/issue/issue-base-actions-creater.ts:670
+#: src/views/issue/issue-base-actions-creater.ts:660
 msgid "Edit"
 msgstr "Edit"
 
@@ -520,7 +520,7 @@ msgid "Filter sprints by name"
 msgstr "Filter sprints by name"
 
 #: src/components/tags/tag-add-select.tsx:24
-#: src/views/issue/issue-base-actions-creater.ts:558
+#: src/views/issue/issue-base-actions-creater.ts:548
 msgid "Filter tags"
 msgstr "Filter tags"
 
@@ -536,7 +536,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:549
+#: src/views/issues/issues.tsx:551
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -568,7 +568,7 @@ msgstr "In addition to our built-in error reporting, YouTrack Mobile uses Bugsna
 msgid "in revision"
 msgstr "in revision"
 
-#: src/views/issue/issue-base-actions-creater.ts:904
+#: src/views/issue/issue-base-actions-creater.ts:894
 msgid "Issue deleted"
 msgstr "Issue deleted"
 
@@ -584,7 +584,7 @@ msgstr "Issue link added"
 msgid "Issue link removed"
 msgstr "Issue link removed"
 
-#: src/views/issue/issue-base-actions-creater.ts:288
+#: src/views/issue/issue-base-actions-creater.ts:278
 msgid "Issue updated"
 msgstr "Issue updated"
 
@@ -623,7 +623,7 @@ msgstr "Light theme"
 
 #: src/components/linked-issues/linked-issues-add-link.tsx:246
 #: src/views/create-issue/create-issue.tsx:380
-#: src/views/issue/issue-base-actions-creater.ts:701
+#: src/views/issue/issue-base-actions-creater.ts:691
 msgid "Link issue"
 msgstr "Link issue"
 
@@ -742,7 +742,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:599
+#: src/views/issues/issues.tsx:601
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -895,7 +895,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:664
+#: src/views/issues/issues.tsx:666
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -936,7 +936,7 @@ msgstr "Share"
 #: src/views/article/article__activity-stream.tsx:234
 #: src/views/issue/activity/issue__activity-stream.tsx:147
 #: src/views/issue/activity/issue__activity-stream.tsx:154
-#: src/views/issue/issue-base-actions-creater.ts:650
+#: src/views/issue/issue-base-actions-creater.ts:640
 msgid "Share link"
 msgstr "Share link"
 
@@ -950,7 +950,7 @@ msgstr "Share logs"
 
 #: src/views/article/arcticle-actions.ts:218
 #: src/views/article/arcticle-actions.ts:643
-#: src/views/issue/issue-base-actions-creater.ts:635
+#: src/views/issue/issue-base-actions-creater.ts:625
 msgid "Share…"
 msgstr "Share…"
 
