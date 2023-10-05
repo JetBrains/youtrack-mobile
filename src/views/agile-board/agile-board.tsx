@@ -479,11 +479,7 @@ class AgileBoard extends Component<Props, State> {
           networkState?.isConnected === false
             ? null
             : async (...args): Promise<void> => {
-                const draft: Partial<IssueOnList> = await createCardForCell.apply(
-                  null,
-                  [...args, this.state.isSplitView],
-                );
-
+                const draft: Partial<IssueOnList> | null = await createCardForCell(...args);
                 if (this.state.isSplitView) {
                   this.toggleModalChildren(
                     <CreateIssue
