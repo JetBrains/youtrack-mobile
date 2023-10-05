@@ -7,6 +7,7 @@ import log from 'components/log/log';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
+import {confirmDeleteIssue} from 'components/confirmation/issue-confirmations';
 import {
   getEntityPresentation,
   getReadableID,
@@ -17,12 +18,12 @@ import {initialState, IssueState} from './issue-base-reducer';
 import {i18n} from 'components/i18n/i18n';
 import {isIOSPlatform, until} from 'util/util';
 import {logEvent} from 'components/log/log-helper';
+import {makeIssueWebUrl} from 'views/issue/activity/issue-activity__helper';
 import {notify, notifyError} from 'components/notification/notification';
 import {receiveUserAppearanceProfile} from 'actions/app-actions';
 import {resolveError} from 'components/error/error-resolver';
 import {showActions} from 'components/action-sheet/action-sheet';
 
-import type ActionSheet from '@expo/react-native-action-sheet';
 import type Api from 'components/api/api';
 import type {AppState} from 'reducers';
 import type {
@@ -46,20 +47,9 @@ import type {UserAppearanceProfile} from 'types/User';
 import type {Visibility} from 'types/Visibility';
 import {CustomError} from 'types/Error';
 
-import {confirmDeleteIssue} from 'components/confirmation/issue-confirmations';
-
 type ApiGetter = () => Api;
 type StateGetter = () => AppState;
 
-
-function createIssueWebUrl(
-  api: Api,
-  issue: IssueFull,
-  commentId: string | null | undefined,
-) {
-  const commentHash = commentId ? `#comment=${commentId}` : '';
-  return `${api.config.backendUrl}/issue/${issue.idReadable}${commentHash}`;
-}
 
 export const DEFAULT_ISSUE_STATE_FIELD_NAME: keyof AppState = 'issueState';
 
@@ -634,7 +624,7 @@ export const createActions = (
           {
             title: i18n('Share…'),
             execute: () => {
-              const url: string = createIssueWebUrl(api, issue);
+              const url: string = makeIssueWebUrl(api, issue);
 
               if (isIOSPlatform()) {
                 Share.share({
@@ -659,7 +649,7 @@ export const createActions = (
             title: i18n('Copy link'),
             execute: () => {
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy URL');
-              Clipboard.setString(createIssueWebUrl(api, issue));
+              Clipboard.setString(makeIssueWebUrl(api, issue));
               notify(i18n('Copied'));
             },
           },

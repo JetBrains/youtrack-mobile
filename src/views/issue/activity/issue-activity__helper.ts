@@ -67,8 +67,14 @@ export async function toggleIssueActivityEnabledType(
 export function makeIssueWebUrl(
   api: Api,
   issue: IssueFull,
-  id: string | undefined,
+  id?: string,
 ): string {
   const commentHash: string = id ? `#focus=Comments-${id}` : '';
-  return `${api.config.backendUrl}/issue/${issue.idReadable}${commentHash}`;
+  const issueId: string = issue.idReadable || issue.id;
+  const url: string = `${api.config.backendUrl}/issue`;
+  return (
+    issueId && commentHash
+      ? `${url}/${issueId}${commentHash}`
+      : `${url}s`
+  );
 }
