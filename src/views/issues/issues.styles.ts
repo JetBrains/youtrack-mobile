@@ -42,7 +42,7 @@ export default EStyleSheet.create({
     top: UNIT,
     right: UNIT / 2,
     height: UNIT * 5,
-    width: UNIT * 10,
+    maxWidth: UNIT * 10,
   },
   listActionsItem: {
     height: UNIT * 4.5,

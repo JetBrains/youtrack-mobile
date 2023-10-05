@@ -306,6 +306,9 @@ export default class IssuePermissions {
   canReadUserBasic(user: User) {
     return this.isCurrentUser(user) || this.permissionsStore.has('jetbrains.jetpass.user-read-basic');
   }
+  canCreateProject() {
+    return this.permissionsStore.has(CREATE_ISSUE);
+  }
 
   /*
    Articles
