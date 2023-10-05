@@ -67,9 +67,9 @@ export default class PushNotificationsProcessor extends PushNotifications {
   }
 
   static init() {
-    let resolveToken: TokenHandler = () => {};
+    let resolveToken: TokenHandler = (token) => {};
 
-    let rejectToken: TokenHandler = () => {};
+    let rejectToken: TokenHandler = (reason) => {};
 
     this.deviceTokenPromise = new Promise<string>(
       (resolve: TokenHandler, reject: TokenHandler) => {

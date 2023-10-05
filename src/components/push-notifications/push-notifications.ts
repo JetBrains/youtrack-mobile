@@ -86,6 +86,7 @@ async function initialize(
     );
 
     try {
+      PushNotificationsProcessor.init();
       await register();
     } catch (e) {
       const message: string =
