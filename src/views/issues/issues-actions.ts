@@ -25,7 +25,7 @@ import {getAssistSuggestions} from 'components/query-assist/query-assist-helper'
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {removeDuplicatesFromArray, until} from 'util/util';
+import {guid, removeDuplicatesFromArray, until} from 'util/util';
 import {receiveUserAppearanceProfile, setGlobalInProgress, setYTCurrentUser} from 'actions/app-actions';
 import {sortAlphabetically} from 'components/search/sorting';
 import {whiteSpacesRegex} from 'components/wiki/util/patterns';
@@ -361,7 +361,7 @@ export function openFilterFieldSelect(filterSetting: FilterSetting): (
           log.warn('Failed to load user folders for the context');
         }
         const _values = removeDuplicatesFromArray(
-          filterFieldValues.map(i => ({id: i.id, name: i.presentation})).concat(selectedItems)
+          filterFieldValues.map(i => ({id: i?.id || guid(), name: i.presentation})).concat(selectedItems)
         );
         return error ? [] : _values;
       },
