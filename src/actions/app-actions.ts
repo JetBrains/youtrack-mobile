@@ -821,9 +821,7 @@ export function cacheProjects(): (
       getApi().user.getUserFolders('', ['$type,id,shortName,name,pinned'])
     ) as [CustomError | null, Folder[]];
     const projects: Folder[] = (error ? [] : userFolders).filter((it: Folder) => hasType.project(it));
-    if (projects.length > 0) {
-      await storage.flushStoragePart({projects});
-    }
+    await storage.flushStoragePart({projects});
     return projects;
   };
 }
