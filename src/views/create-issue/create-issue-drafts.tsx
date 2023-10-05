@@ -1,6 +1,7 @@
 import React from 'react';
-import {FlatList, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 
+import Animated, {Layout, useSharedValue, withSpring} from 'react-native-reanimated';
 import {useDispatch, useSelector} from 'react-redux';
 
 import Header from 'components/header/header';
@@ -19,7 +20,9 @@ import {AppState} from 'reducers';
 import {IssueCreate} from 'types/Issue';
 import {useTheme} from 'react-navigation';
 import {ThemeContext} from 'components/theme/theme-context';
+import {SELECT_ITEM_HEIGHT} from 'components/select/select.styles';
 
+const AnimatedView = Animated.createAnimatedComponent(View);
 
 const IssueDrafts = ({onHide}: { onHide: () => void }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -27,25 +30,33 @@ const IssueDrafts = ({onHide}: { onHide: () => void }) => {
 
   const dispatch = useDispatch();
   const drafts: IssueCreate[] = useSelector((state: AppState) => state.creation.drafts);
+  const [current, setCurrent] = React.useState<string | null>(null);
+  const height = useSharedValue(SELECT_ITEM_HEIGHT);
 
   const listItem = ({item} : {item: IssueCreate}) => {
     return (
       <SwipeableRow
         rightActionText={i18n('Delete')}
         onSwipeRight={async () => {
+          setCurrent(item.id);
+          height.value = withSpring(0);
           await dispatch(deleteDraft(item.id));
           if (drafts.length === 1) {
             Router.pop();
           }
         }}
       >
-        <IssueRowDraft
-          key={item.id}
-          issue={item as any}
-          onClick={() => {
-            Router.CreateIssue({predefinedDraftId: item.id, onHide});
-          }}
-        />
+        <AnimatedView
+          style={current === item.id ? {height} : null}
+        >
+          <IssueRowDraft
+            key={item.id}
+            issue={item as any}
+            onClick={() => {
+              Router.CreateIssue({predefinedDraftId: item.id, onHide});
+            }}
+          />
+        </AnimatedView>
       </SwipeableRow>
     );
   };
@@ -72,7 +83,8 @@ const IssueDrafts = ({onHide}: { onHide: () => void }) => {
           });
         }}
       />
-      <FlatList
+      <Animated.FlatList
+        itemLayoutAnimation={Layout.mass(1)}
         bounces={false}
         data={drafts}
         renderItem={listItem}
