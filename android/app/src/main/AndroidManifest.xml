@@ -57,6 +57,10 @@
                     android:scheme="https" />
                 <data
                     android:host="youtrack.jetbrains.com"
+                    android:pathPattern="/tickets.*"
+                    android:scheme="https" />
+                <data
+                    android:host="youtrack.jetbrains.com"
                     android:pathPattern="/issue/.*"
                     android:scheme="https" />
                 <data
@@ -78,6 +82,14 @@
                 <data
                     android:host="*.myjetbrains.com"
                     android:pathPattern="/youtrack/issues.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.myjetbrains.com"
+                    android:pathPattern="/tickets.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.myjetbrains.com"
+                    android:pathPattern="/youtrack/tickets.*"
                     android:scheme="https" />
                 <data
                     android:host="*.myjetbrains.com"
@@ -110,6 +122,14 @@
                 <data
                     android:host="*.youtrack.cloud"
                     android:pathPattern="/youtrack/issues.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.youtrack.cloud"
+                    android:pathPattern="/tickets.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.youtrack.cloud"
+                    android:pathPattern="/youtrack/tickets.*"
                     android:scheme="https" />
                 <data
                     android:host="*.youtrack.cloud"
@@ -165,6 +185,22 @@
                 <data
                     android:host="*"
                     android:pathPattern="/youtrack/issue/.*"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/tickets.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/youtrack/tickets.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/tickets.*"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/youtrack/tickets.*"
                     android:scheme="http" />
                 <data
                     android:host="*"
