@@ -12,7 +12,7 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 import styles from './issues.styles';
 
 import {AppState} from 'reducers';
-import {FilterSetting} from 'views/issues/index';
+import {defaultIssuesFilterFieldConfig, FilterSetting} from 'views/issues/index';
 import {User} from 'types/User';
 
 
@@ -30,8 +30,14 @@ const IssuesFiltersSetting = ({
   const issuesSettings = useSelector((state: AppState) => state.issueList.settings);
 
   useEffect(() => {
-    if (user.profiles?.appearance?.liteUiFilters?.length && issuesSettings.search?.filters) {
-      const list: FilterSetting[] | undefined = user.profiles?.appearance?.liteUiFilters.reduce(
+    const userProfileFiltersNames: string[] = (user.profiles?.appearance?.liteUiFilters || []).filter(Boolean);
+    const filterFields = (
+      userProfileFiltersNames.length > 0
+        ? userProfileFiltersNames
+        : Object.values(defaultIssuesFilterFieldConfig)
+    );
+    if (issuesSettings.search?.filters) {
+      const list: FilterSetting[] | undefined = filterFields.reduce(
         (akk: FilterSetting[], it: string) => {
           return [...akk, issuesSettings.search.filters[it?.toLowerCase()]];
         },

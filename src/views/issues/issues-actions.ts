@@ -717,14 +717,14 @@ export function setFilters(): (
       log.warn('Cannot load filter fields');
     } else {
       const currentUser: User | null = getState().app.user;
-      const liteUiFilters: string[] | undefined = currentUser?.profiles?.appearance?.liteUiFilters;
+      const userProfileFiltersNames: string[] = (currentUser?.profiles?.appearance?.liteUiFilters || []).filter(Boolean);
       const visibleFiltersNames: string[] = (
-        Array.isArray(liteUiFilters) && liteUiFilters.length > 0
-          ? liteUiFilters
+        userProfileFiltersNames.length > 0
+          ? userProfileFiltersNames
           : Object.values(defaultIssuesFilterFieldConfig)
       );
 
-      if (liteUiFilters?.length === 0) {
+      if (userProfileFiltersNames.length === 0) {
         const ytCurrentUser = getStorageState().currentUser?.ytCurrentUser;
         const user = {
           ...ytCurrentUser,
