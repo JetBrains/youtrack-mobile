@@ -478,20 +478,22 @@ class AgileBoard extends Component<Props, State> {
         onTapCreateIssue={
           networkState?.isConnected === false
             ? null
-            : async (...args): Promise<void> => {
-                const draft: Partial<IssueOnList> | null = await createCardForCell(...args);
-                if (this.state.isSplitView) {
-                  this.toggleModalChildren(
-                    <CreateIssue
-                      isSplitView={this.state.isSplitView}
-                      onHide={this.clearModalChildren}
-                      predefinedDraftId={draft.id}
-                    />,
-                  );
-                } else {
-                  Router.CreateIssue({
-                    predefinedDraftId: draft.id,
-                  });
+            : async (cellColumnId: string, cellId: string): Promise<void> => {
+                const draft: Partial<IssueOnList> | null = await createCardForCell(cellColumnId, cellId);
+                if (draft?.id) {
+                  if (this.state.isSplitView) {
+                    this.toggleModalChildren(
+                      <CreateIssue
+                        isSplitView={this.state.isSplitView}
+                        onHide={this.clearModalChildren}
+                        predefinedDraftId={draft.id}
+                      />,
+                    );
+                  } else {
+                    Router.CreateIssue({
+                      predefinedDraftId: draft.id,
+                    });
+                  }
                 }
               }
         }
@@ -717,8 +719,9 @@ const mapDispatchToProps = dispatch => {
     onOpenSprintSelect: () => dispatch(boardActions.openSprintSelect()),
     onOpenBoardSelect: () => dispatch(boardActions.openBoardSelect()),
     onCloseSelect: () => dispatch(boardActions.closeSelect()),
-    createCardForCell: (...args) =>
-      dispatch(boardActions.createCardForCell(...args)),
+    createCardForCell: (cellColumnId: string, cellId: string) => {
+      dispatch(boardActions.createCardForCell(cellColumnId, cellId));
+    },
     onCardDrop: (...args) => dispatch(boardActions.onCardDrop(...args)),
     refreshAgile: (agileId: string, sprintId: string, query: string = '') =>
       dispatch(boardActions.refreshAgile(agileId, sprintId, query)),
