@@ -68,13 +68,19 @@ const IssuesListSettings = ({
               return (
                 <TouchableOpacity
                   disabled={it.mode === settings.search.mode}
+                  testID="test:id/issuesSettingsSearchButton"
+                  accessibilityLabel="issuesSettingsSearchButton"
                   key={`issueSetting${index}`}
                   style={styles.settingsRow}
                   onPress={() => {
                     dispatch(onSettingsChange({...settings, search: it}));
                   }}
                 >
-                  <Text style={styles.settingsItemText}>{it.label}</Text>
+                  <Text
+                    style={styles.settingsItemText}
+                    testID="test:id/issuesSettingsSearchButtonText"
+                    accessibilityLabel="issuesSettingsSearchButtonText"
+                  >{it.label}</Text>
                   {it.mode === settings.search.mode && <IconCheck
                     size={20}
                     color={styles.link.color}

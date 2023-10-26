@@ -244,6 +244,8 @@ export class Issues extends Component<Props, State> {
           styles.rowLine,
         ]}
         disabled={this.props.isInProgress}
+        testID="test:id/issuesSettingsButton"
+        accessibilityLabel="issuesSettingsButton"
         onPress={() => {
           this.toggleSettingsVisibility(true);
         }}
