@@ -719,9 +719,9 @@ const mapDispatchToProps = dispatch => {
     onOpenSprintSelect: () => dispatch(boardActions.openSprintSelect()),
     onOpenBoardSelect: () => dispatch(boardActions.openBoardSelect()),
     onCloseSelect: () => dispatch(boardActions.closeSelect()),
-    createCardForCell: (cellColumnId: string, cellId: string) => {
-      dispatch(boardActions.createCardForCell(cellColumnId, cellId));
-    },
+    createCardForCell: (cellColumnId: string, cellId: string) => dispatch(
+      boardActions.createCardForCell(cellColumnId, cellId)
+    ),
     onCardDrop: (...args) => dispatch(boardActions.onCardDrop(...args)),
     refreshAgile: (agileId: string, sprintId: string, query: string = '') =>
       dispatch(boardActions.refreshAgile(agileId, sprintId, query)),
