@@ -274,6 +274,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     return (
       // @ts-ignore
       <FlatList
+        contentContainerStyle={styles.container}
         testID="test:id/selectList"
         accessibilityLabel="selectList"
         accessible={false}
@@ -287,6 +288,21 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
         ItemSeparatorComponent={Select.renderSeparator}
         getItemLayout={Select.getItemLayout}
         extraData={this.state.selectedItems}
+        ListFooterComponent={() => {
+          return (
+            <View style={styles.footer}>
+              {!this.state.loaded && (
+                <>
+                  <ActivityIndicator color={styles.link.color}/>
+                  <Text style={styles.loadingMessage}>{i18n('Loading values…')}</Text>
+                </>
+              )}
+              {this.state.loaded && this.state?.items?.length === 0 && (
+                <Text style={styles.loadingMessage}>{i18n('No items')}</Text>
+              )}
+            </View>
+          );
+        }}
       />
     );
   }
@@ -381,18 +397,6 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
                 <IconCheck size={20} color={styles.link.color}/>
               </TouchableOpacity>
             )}
-          </View>
-        )}
-
-        {!this.state.loaded && (
-          <View style={[styles.row, styles.loadingRow]}>
-            <ActivityIndicator color={styles.link.color}/>
-            <Text style={styles.loadingMessage}>{i18n('Loading values…')}</Text>
-          </View>
-        )}
-        {this.state.loaded && this.state?.items?.length === 0 && (
-          <View style={[styles.row, styles.loadingRow]}>
-            <Text style={styles.loadingMessage}>{i18n('No items')}</Text>
           </View>
         )}
 
