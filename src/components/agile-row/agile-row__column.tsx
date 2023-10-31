@@ -10,7 +10,7 @@ import type {IssueFull} from 'types/Issue';
 import type {UITheme} from 'types/Theme';
 type ColumnProps = {
   cell: BoardCell;
-  onTapCreateIssue?: (...args: any[]) => any;
+  onTapCreateIssue?: (cellColumnId: string, cellId: string) => any;
   lastColumn: boolean;
   renderIssueCard: (issue: IssueFull) => any;
   uiTheme: UITheme;
@@ -34,10 +34,9 @@ export default function AgileRowColumn(props: ColumnProps): React.ReactNode {
 
       <TouchableOpacity
         disabled={!props.onTapCreateIssue}
-        onPress={() =>
-          props.onTapCreateIssue &&
-          props.onTapCreateIssue(cell.column.id, cell.id)
-        }
+        onPress={() => {
+          props?.onTapCreateIssue?.(cell.column.id, cell.id);
+        }}
         style={[
           styles.addCardButton,
           isSplitView() && zoomedIn && columnsLength > 3

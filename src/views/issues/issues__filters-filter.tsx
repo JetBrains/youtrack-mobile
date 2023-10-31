@@ -33,6 +33,8 @@ const IssuesFilterField = ({
   return (
     <TouchableOpacity
       key={filterFields[0].id}
+      testID="test:id/issuesFilterField"
+      accessibilityLabel="issuesFilterField"
       style={[
         styles.filtersButton,
         values.length > 0 && styles.filtersButtonHighlighted,
@@ -43,6 +45,8 @@ const IssuesFilterField = ({
       <Text
         numberOfLines={1}
         style={styles.filtersButtonText}
+        testID="test:id/issuesFilterFieldText"
+        accessibilityLabel="issuesFilterFieldText"
       >
         {presentation}
       </Text>

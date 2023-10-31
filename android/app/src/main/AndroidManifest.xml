@@ -32,6 +32,11 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/notification_icon_color" />
 
+        <activity xmlns:tools="http://schemas.android.com/tools"
+            android:name="net.openid.appauth.AuthorizationManagementActivity"
+            android:launchMode="singleInstance"
+            tools:replace="android:launchMode" />
+
         <activity
             android:name="com.jetbrains.youtrack.mobile.app.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
