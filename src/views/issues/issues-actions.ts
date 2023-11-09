@@ -720,7 +720,7 @@ export function setFilters(): (
     const [error, filterFields] = await until(getApi().customFields.getFilters());
     if (error) {
       log.warn('Cannot load filter fields');
-    } else {
+    } else if (Array.isArray(filterFields) && filterFields.filter(Boolean).length > 0) {
       const currentUser: User | null = getState().app.user;
       const userProfileFiltersNames: string[] = (currentUser?.profiles?.appearance?.liteUiFilters || []).filter(Boolean);
       const visibleFiltersNames: string[] = (
@@ -772,9 +772,27 @@ export function setFilters(): (
         },
       };
       dispatch(cachedIssuesSettings(settings));
+    } else {
+      dispatch(switchToQuerySearchSetting());
     }
   };
 }
+
+export function switchToQuerySearchSetting(preventReload?: boolean): (
+  dispatch: (arg0: any) => any,
+  getState: () => AppState,
+  getApi: ApiGetter,
+) => Promise<void> {
+  return async (
+    dispatch: (arg0: any) => any,
+    getState: () => AppState,
+    getApi: ApiGetter,
+  ) => {
+    const settings: IssuesSettings = getState().issueList.settings;
+    await dispatch(onSettingsChange({...settings, search: issuesSettingsSearch[0]}, preventReload));
+  };
+}
+
 
 export function initializeIssuesList(searchQuery?: string): (
   dispatch: (arg0: any) => any,
@@ -790,8 +808,7 @@ export function initializeIssuesList(searchQuery?: string): (
     const searchContext: Folder = searchQuery?.trim?.() ? getEverythingSearchContext() : getSearchContext();
 
     if (searchQuery) {
-      const settings: IssuesSettings = getState().issueList.settings;
-      await dispatch(onSettingsChange({...settings, search: issuesSettingsSearch[0]}, true));
+      await dispatch(switchToQuerySearchSetting(true));
       await flushStoragePart({searchContext});
       await dispatch(storeIssuesQuery(searchQuery));
     }

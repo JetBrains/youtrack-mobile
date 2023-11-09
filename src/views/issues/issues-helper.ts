@@ -73,7 +73,7 @@ const createQueryFromFiltersSetting = (filters: FilterSetting[] = []): string =>
 };
 
 const getFilterFieldName = (filterField: FilterField) => {
-  const key: string = filterField?.customField?.name || filterField.name;
+  const key: string = filterField?.customField?.name || filterField?.name || '';
   return key.toLowerCase();
 };
 
