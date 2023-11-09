@@ -8,7 +8,7 @@ import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 import type API from 'components/api/api';
 import type {Folder} from 'types/User';
 import type {IssueFieldSortProperty, SearchSuggestions} from 'types/Sorting';
-import {defaultIssuesFilterFieldConfig, FilterSetting} from 'views/issues/index';
+import {FilterSetting} from 'views/issues/index';
 import {FilterField} from 'types/CustomFields';
 
 
@@ -65,7 +65,7 @@ const createQueryFromFiltersSetting = (filters: FilterSetting[] = []): string =>
   }, {});
 
   const {project, ...other} = groupedQuery;
-  const q: string[] = project ? [`${defaultIssuesFilterFieldConfig.project}:${project}`] : [];
+  const q: string[] = project ? [`project:${project}`] : [];
   for(const v in other) {
     q.push(`${v}:${other[v]}`);
   }

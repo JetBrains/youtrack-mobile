@@ -1,7 +1,7 @@
 import * as helper from './issues-helper';
 
 import {FilterField} from 'types/CustomFields';
-import {defaultIssuesFilterFieldConfig, FilterSetting} from 'views/issues/index';
+import {FilterSetting} from 'views/issues/index';
 
 
 describe('Issues helper', () => {
@@ -39,13 +39,13 @@ describe('Issues helper', () => {
       );
     });
 
-    it('should `project` on the first place', async () => {
-      const s1 = createSettingMock(nameMock, [fieldValue, fieldValue]);
+    it('should put `project` on the first place', async () => {
+      const s1 = createSettingMock(nameMock, [fieldValue, 'Close']);
       const projectIds = ['TEST', 'SB'];
-      const s2 = createSettingMock(defaultIssuesFilterFieldConfig.project, projectIds);
+      const s2 = createSettingMock('project', projectIds);
 
       expect(helper.createQueryFromFiltersSetting(s1.concat(s2))).toEqual(
-        `project:${projectIds.join(',')} ${nameMock.toLowerCase()}:${fieldValue},${fieldValue}`
+        `project:${projectIds.join(',')} ${nameMock.toLowerCase()}:${fieldValue},Close`
       );
     });
   });

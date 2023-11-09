@@ -21,6 +21,7 @@ import {
   issuesSettingsIssueSizes,
   issuesSettingsSearch,
   IssuesSettingSearch,
+  IssuesSettings,
 } from 'views/issues/index';
 import {onSettingsChange, setFilters} from 'views/issues/issues-actions';
 import {receiveUserAppearanceProfile} from 'actions/app-actions';
@@ -50,6 +51,9 @@ const IssuesListSettings = ({
   const user: User = useSelector((state: AppState) => state.app.user) as User;
 
   const isQueryMode: boolean = settings.search.mode === issuesSearchSettingMode.query;
+  const doChangeSettings = (issuesSettings: IssuesSettings) => {
+    dispatch(onSettingsChange(issuesSettings));
+  };
 
   return (
     <>
@@ -73,7 +77,7 @@ const IssuesListSettings = ({
                   key={`issueSetting${index}`}
                   style={styles.settingsRow}
                   onPress={() => {
-                    dispatch(onSettingsChange({...settings, search: it}));
+                    doChangeSettings({...settings, search: it});
                   }}
                 >
                   <Text
@@ -111,7 +115,11 @@ const IssuesListSettings = ({
                       liteUiFilters: visibleFilters,
                     })
                   );
-                  await dispatch(setFilters());
+                  if (visibleFilters.length === 0) {
+                    doChangeSettings({...settings, search: issuesSettingsSearch[0]});
+                  } else {
+                    await dispatch(setFilters());
+                  }
                 }}
                 onOpen={() => toggleVisibility(false)}
                 user={user}
@@ -129,7 +137,7 @@ const IssuesListSettings = ({
                   disabled={previewModeIsNotChanged}
                   style={styles.settingsRow}
                   onPress={() => {
-                    dispatch(onSettingsChange({...settings, view: it}));
+                    doChangeSettings({...settings, view: it});
                     toggleVisibility(false);
                   }}
                 >
