@@ -820,7 +820,7 @@ export function cacheProjects(): (
     const [error, userFolders]: [CustomError | null, Folder[]] = await until(
       getApi().user.getUserFolders('', ['$type,id,shortName,name,pinned'])
     ) as [CustomError | null, Folder[]];
-    const projects: Folder[] = (error ? [] : userFolders).filter((it: Folder) => hasType.project(it));
+    const projects: Folder[] = error ? [] : userFolders.filter(it => hasType.project(it));
     await storage.flushStoragePart({projects});
     return projects;
   };
