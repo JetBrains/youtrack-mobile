@@ -14,7 +14,7 @@ msgstr " ({{amount}} unresolved)"
 msgid " or "
 msgstr " or "
 
-#: src/views/agile-board/board-actions.ts:693
+#: src/views/agile-board/board-actions.ts:698
 msgid "(archived)"
 msgstr "(archived)"
 
@@ -31,6 +31,12 @@ msgid "{{amount}} article"
 msgid_plural "{{amount}} articles"
 msgstr[0] "{{amount}} article"
 msgstr[1] "{{amount}} articles"
+
+#: src/views/create-issue/create-issue.tsx:407
+msgid "{{amount}} draft"
+msgid_plural "{{amount}} drafts"
+msgstr[0] "{{amount}} draft"
+msgstr[1] "{{amount}} drafts"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx:135
 msgid "{{amount}} file"
@@ -268,7 +274,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:934
+#: src/actions/app-actions.ts:935
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -436,12 +442,6 @@ msgstr "Document"
 msgid "Don't send logs"
 msgstr "Don't send logs"
 
-#: src/views/create-issue/create-issue.tsx:407
-msgid "Draft"
-msgid_plural "Drafts"
-msgstr[0] "Draft"
-msgstr[1] "Drafts"
-
 #: src/views/create-issue/create-issue-drafts.tsx:67
 #: src/views/knowledge-base/knowledge-base.tsx:568
 msgid "Drafts"
@@ -493,7 +493,7 @@ msgstr "Favorites"
 msgid "Feature request"
 msgstr "Feature request"
 
-#: src/views/agile-board/board-actions.ts:723
+#: src/views/agile-board/board-actions.ts:728
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
@@ -506,16 +506,16 @@ msgstr "Filter items"
 msgid "Filter projects"
 msgstr "Filter projects"
 
-#: src/views/issues/issues-actions.ts:254
+#: src/views/issues/issues-actions.ts:259
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
 #: src/views/issues/issues__filters-settings__list.tsx:172
-#: src/views/issues/issues__settings.tsx:96
+#: src/views/issues/issues__settings.tsx:100
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
-#: src/views/agile-board/board-actions.ts:686
+#: src/views/agile-board/board-actions.ts:691
 msgid "Filter sprints by name"
 msgstr "Filter sprints by name"
 
@@ -536,7 +536,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:553
+#: src/views/issues/issues.tsx:562
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -710,7 +710,7 @@ msgstr "Mute thread"
 msgid "New Article"
 msgstr "New Article"
 
-#: src/views/create-issue/create-issue.tsx:456
+#: src/views/create-issue/create-issue.tsx:458
 msgid "New Issue"
 msgstr "New Issue"
 
@@ -742,7 +742,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:603
+#: src/views/issues/issues.tsx:612
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -791,7 +791,7 @@ msgstr "Password"
 msgid "Photo and video library"
 msgstr "Photo and video library"
 
-#: src/views/issues/issues__settings.tsx:123
+#: src/views/issues/issues__settings.tsx:131
 msgid "Preview Size"
 msgstr "Preview Size"
 
@@ -803,7 +803,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/issues/issues-actions.ts:270
+#: src/views/issues/issues-actions.ts:275
 #: src/views/knowledge-base/knowledge-base.tsx:609
 msgid "Projects"
 msgstr "Projects"
@@ -870,7 +870,7 @@ msgstr "Restore"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/views/issues/issues-actions.ts:285
+#: src/views/issues/issues-actions.ts:290
 msgid "Saved Searches"
 msgstr "Saved Searches"
 
@@ -886,7 +886,7 @@ msgstr "Search for a different value"
 msgid "Search for the project"
 msgstr "Search for the project"
 
-#: src/views/issues/issues__settings.tsx:66
+#: src/views/issues/issues__settings.tsx:70
 msgid "Search Input Mode"
 msgstr "Search Input Mode"
 
@@ -895,7 +895,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:668
+#: src/views/issues/issues.tsx:677
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -980,7 +980,7 @@ msgstr "Something went wrong"
 msgid "Sort Attributes"
 msgstr "Sort Attributes"
 
-#: src/views/issues/issues__settings.tsx:95
+#: src/views/issues/issues__settings.tsx:99
 msgid "Sort Order"
 msgstr "Sort Order"
 
@@ -1036,7 +1036,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/views/issues/issues-actions.ts:278
+#: src/views/issues/issues-actions.ts:283
 msgid "Tags"
 msgstr "Tags"
 

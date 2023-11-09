@@ -38,6 +38,12 @@ msgid_plural "{{amount}} articles"
 msgstr[0] "{{amount}} Artikel"
 msgstr[1] "{{amount}} Artikel"
 
+#: src/views/create-issue/create-issue.tsx
+msgid "{{amount}} draft"
+msgid_plural "{{amount}} drafts"
+msgstr[0] ""
+msgstr[1] ""
+
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "{{amount}} file"
 msgid_plural "{{amount}} files"
@@ -379,11 +385,11 @@ msgstr "Löschen"
 
 #: src/views/create-issue/create-issue-drafts.tsx
 msgid "Delete all"
-msgstr ""
+msgstr "Alle löschen"
 
 #: src/views/create-issue/create-issue-drafts.tsx
 msgid "Delete all drafts?"
-msgstr ""
+msgstr "Alle Entwürfe löschen?"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Delete comment permanently?"
@@ -441,12 +447,6 @@ msgstr "Dokument"
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
 msgstr "Keine Protokolle senden"
-
-#: src/views/create-issue/create-issue.tsx
-msgid "Draft"
-msgid_plural "Drafts"
-msgstr[0] ""
-msgstr[1] ""
 
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/knowledge-base/knowledge-base.tsx
