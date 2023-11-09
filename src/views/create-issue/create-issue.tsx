@@ -404,7 +404,9 @@ class CreateIssue extends PureComponent<Props, State> {
         }}
       >
         <Text style={styles.draftsButtonText}>
-          {`${drafts.length} ${i18nPlural(drafts.length, 'Draft', 'Drafts')}`}
+          {`${i18nPlural(
+            drafts.length, '{{amount}} draft', '{{amount}} drafts', {amount: drafts.length}
+          )}`}
         </Text>
       </TouchableOpacity>
     ) : null;
