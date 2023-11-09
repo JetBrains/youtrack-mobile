@@ -15,7 +15,7 @@ const noIssueFoundDescriptionMessages: string[] = [
   i18n('Clear the current search context'),
   i18n('Wrap attribute values that contain spaces in braces {like this}.'),
 ];
-const notFoundMessageData: ErrorMessageData = {
+export const notFoundMessageData: ErrorMessageData = {
   title: i18n(`Nope, can't find it!`),
   description: i18n(
     `It could mean that the issue doesn't exist or you don't have permission to view it`,

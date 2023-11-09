@@ -22,6 +22,7 @@ import {
 import {i18n} from 'components/i18n/i18n';
 import {isIOSPlatform, until} from 'util/util';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
+import {notFoundMessageData} from 'components/error/error-message-data';
 import {notify, notifyError} from 'components/notification/notification';
 import {routeMap} from 'app-routes';
 import {setGlobalInProgress} from 'actions/app-actions';
@@ -156,10 +157,10 @@ export function loadBoard(
       getAgileUserProfile(),
     );
     const cachedAgileLastSprint: Sprint | null | undefined = getStorageState().agileLastSprint;
-    let sprint: Sprint | null | undefined;
+    let sprint: Sprint | null;
 
     if (!refresh && board.currentSprint) {
-      sprint = board.currentSprint;
+      sprint = board.currentSprint as Sprint;
     } else {
       sprint = getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints) ||
         (cachedAgileLastSprint?.agile?.id === board.id
@@ -174,9 +175,13 @@ export function loadBoard(
         'Last visited sprint is undefined. Use the last one of the current board.',
       );
     }
-
-    log.info(`Loading: Board ${board?.name}, Sprint = ${sprint?.name}`);
-    dispatch(loadSprint(board.id, sprint.id, query));
+    if (sprint?.id) {
+      log.info(`Loading: Board ${board?.name}, Sprint = ${sprint?.name}`);
+      dispatch(loadSprint(board.id, sprint.id, query));
+    } else {
+      dispatch(receiveSprint(null));
+      dispatch(setError(new Error(notFoundMessageData.title) as CustomError));
+    }
   };
 }
 
