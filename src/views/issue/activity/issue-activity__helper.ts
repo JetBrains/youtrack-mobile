@@ -70,11 +70,7 @@ export function makeIssueWebUrl(
   id?: string,
 ): string {
   const commentHash: string = id ? `#focus=Comments-${id}` : '';
-  const issueId: string = issue.idReadable || issue.id;
+  const issueId: string = issue?.idReadable || issue?.id || '';
   const url: string = `${api.config.backendUrl}/issue`;
-  return (
-    issueId && commentHash
-      ? `${url}/${issueId}${commentHash}`
-      : `${url}s`
-  );
+  return `${url}/${issueId}${commentHash}`;
 }
