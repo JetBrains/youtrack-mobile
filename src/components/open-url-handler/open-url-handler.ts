@@ -102,4 +102,5 @@ export {
   extractArticleId,
   extractIssueId,
   openByUrlDetector,
+  extractIssuesQuery,
 };

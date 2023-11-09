@@ -17,7 +17,7 @@ function updateCachedPermissions(
   });
 }
 
-function getCachedPermissions(): PermissionCacheItem[] | null | undefined {
+function getCachedPermissions(): PermissionCacheItem[] | null {
   return getStorageState().permissions;
 }
 

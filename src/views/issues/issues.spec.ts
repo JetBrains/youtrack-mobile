@@ -71,7 +71,7 @@ describe('Issues', () => {
         query: issueContextQueryMock,
       });
 
-      await store.dispatch(actions.readStoredIssuesQuery());
+      await store.dispatch(actions.setStoredIssuesQuery());
 
       expect(store.getActions()[0]).toEqual({
         type: types.SET_ISSUES_QUERY,

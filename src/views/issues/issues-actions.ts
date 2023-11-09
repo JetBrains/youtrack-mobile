@@ -18,6 +18,7 @@ import {
   IssuesSettings,
   issuesSettingsDefault,
   issuesViewSettingMode,
+  issuesSettingsSearch,
 } from 'views/issues/index';
 import {EVERYTHING_CONTEXT} from 'components/search/search-context';
 import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from 'components/storage/storage';
@@ -82,7 +83,7 @@ export function getPageSize(): (
   };
 }
 
-export function readStoredIssuesQuery(): (
+export function setStoredIssuesQuery(): (
   dispatch: (arg0: any) => any,
 ) => Promise<void> {
   return async (dispatch: (arg0: any) => any) => {
@@ -222,8 +223,12 @@ export function updateSearchContextPinned(
   };
 }
 
+function getEverythingSearchContext(): Folder {
+  return EVERYTHING_CONTEXT as Folder;
+}
+
 function getSearchContext() {
-  return getStorageState().searchContext || EVERYTHING_CONTEXT;
+  return getStorageState().searchContext || getEverythingSearchContext();
 }
 
 export function onQueryUpdate(
@@ -771,9 +776,7 @@ export function setFilters(): (
   };
 }
 
-export function initializeIssuesList(
-  searchQuery?: string,
-): (
+export function initializeIssuesList(searchQuery?: string): (
   dispatch: (arg0: any) => any,
   getState: () => AppState,
   getApi: ApiGetter,
@@ -784,18 +787,19 @@ export function initializeIssuesList(
     getApi: ApiGetter,
     ) => {
     dispatch(startIssuesLoading());
-    dispatch(setIssuesQuery(searchQuery || getStorageState().query || ''));
+    const searchContext: Folder = searchQuery?.trim?.() ? getEverythingSearchContext() : getSearchContext();
 
     if (searchQuery) {
-      dispatch(storeIssuesQuery(searchQuery));
-    } else {
-      dispatch(readStoredIssuesQuery());
+      const settings: IssuesSettings = getState().issueList.settings;
+      await dispatch(onSettingsChange({...settings, search: issuesSettingsSearch[0]}, true));
+      await flushStoragePart({searchContext});
+      await dispatch(storeIssuesQuery(searchQuery));
     }
-
-    await dispatch(setSearchContext(getSearchContext()));
+    await dispatch(setStoredIssuesQuery());
+    await dispatch(setSearchContext(searchContext));
     await dispatch(setFilters());
 
-    const cachedIssues: AnyIssue[] | null = getStorageState().issuesCache;
+    const cachedIssues: AnyIssue[] | null = searchQuery ? [] : getStorageState().issuesCache;
     if (cachedIssues?.length) {
       log.debug(`Loaded ${cachedIssues.length} cached issues`);
       dispatch(receiveIssues(cachedIssues, dispatch(getPageSize())));
@@ -915,7 +919,7 @@ export function loadIssuesCount(folder?: Folder | null): (
   };
 }
 
-export function onSettingsChange(settings: IssuesSettings): (
+export function onSettingsChange(settings: IssuesSettings, preventReload?: boolean): (
   dispatch: (arg0: any) => any,
   getState: () => AppState,
   getApi: ApiGetter,
@@ -928,6 +932,7 @@ export function onSettingsChange(settings: IssuesSettings): (
     if (settings.search.mode !== currentSettings.search.mode) {
       trackEvent(`Issues settings: switch mode to ${settings.search.mode}`);
       dispatch(setIssuesQuery(''));
+      await flushStoragePart({query: null});
     }
     if (settings.view.mode !== currentSettings.view.mode) {
       trackEvent(`Issues settings: change preview size to ${settings.view.mode}`);
@@ -938,7 +943,9 @@ export function onSettingsChange(settings: IssuesSettings): (
       await dispatch(setFilters());
     }
     dispatch(receiveIssues([], dispatch(getPageSize())));
-    dispatch(refreshIssues());
+    if (!preventReload) {
+      dispatch(refreshIssues());
+    }
   };
 }
 

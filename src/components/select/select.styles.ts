@@ -12,6 +12,9 @@ export const SELECT_ITEM_SEPARATOR_HEIGHT = 1;
 
 
 export default EStyleSheet.create({
+  container: {
+    flexGrow: 1,
+  },
   inputWrapper: {
     ...inputWrapper,
     ...elevation1,
@@ -41,14 +44,9 @@ export default EStyleSheet.create({
     borderColor: '$separator',
     ...separator,
   },
-  loadingRow: {
-    position: 'absolute',
-    zIndex: 2,
-    top: 0,
-    bottom: 0,
-    left: -UNIT * 4,
-    right: 0,
-    height: '100%',
+  footer: {
+    height: '90%',
+    alignItems: 'center',
     justifyContent: 'center',
   },
   headerText: {
