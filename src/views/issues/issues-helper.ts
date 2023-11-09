@@ -1,3 +1,5 @@
+import {Animated, Easing} from 'react-native';
+
 import {getApi} from 'components/api/api__instance';
 import {getCustomFieldName} from 'components/custom-field/custom-field-helper';
 import {until} from 'util/util';
@@ -75,9 +77,32 @@ const getFilterFieldName = (filterField: FilterField) => {
   return key.toLowerCase();
 };
 
+const createAnimatedRotateStyle = (): {transform: {rotate: Animated.AnimatedInterpolation<string>}[]} => {
+  const rotateAnimation = new Animated.Value(0);
+  Animated.timing(rotateAnimation, {
+    toValue: 1,
+    duration: 1500,
+    easing: Easing.linear,
+    useNativeDriver: true,
+  }).start(() => rotateAnimation.setValue(0));
+  const interpolateRotating = rotateAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
+  return {
+    transform: [
+      {
+        rotate: interpolateRotating,
+      },
+    ],
+  };
+};
+
 
 export {
   createQueryFromFiltersSetting,
+  createAnimatedRotateStyle,
   convertToNonStructural,
   doAssist,
   getFilterFieldName,

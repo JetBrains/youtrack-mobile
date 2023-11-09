@@ -33,7 +33,7 @@ import {logEvent} from 'components/log/log-helper';
 import {normalizeAuthParams} from 'components/auth/oauth2-helper';
 import {navigateToRouteById} from 'components/router/router-helper';
 import {notify, notifyError} from 'components/notification/notification';
-import {openByUrlDetector} from 'components/open-url-handler/open-url-handler';
+import {extractIssuesQuery, openByUrlDetector} from 'components/open-url-handler/open-url-handler';
 import {SET_DRAFT_COMMENT_DATA, SET_PROGRESS} from './action-types';
 import {setApi} from 'components/api/api__instance';
 
@@ -601,6 +601,7 @@ export function completeInitialization(
   issueId?: string,
   articleId?: string,
   navigateToActivity?: string,
+  searchQuery?: string,
   skipNavigateToRoute: boolean = false,
 ): Action {
   return async (
@@ -633,13 +634,12 @@ export function completeInitialization(
 
     if (!skipNavigateToRoute || (isLanguageChanged && !issueId && !articleId)) {
       Router.navigateToDefaultRoute(
-        issueId || articleId
-          ? {
-              issueId,
-              articleId,
-              navigateToActivity,
-            }
-          : null,
+        issueId || articleId || searchQuery ? {
+          issueId,
+          articleId,
+          navigateToActivity,
+          searchQuery,
+        } : undefined,
       );
     }
 
@@ -885,10 +885,7 @@ export function redirectToRoute(
         const auth: OAuth2 = await createAuthInstance(config);
         dispatch(setAuthInstance(auth));
         setApi(new Api(auth));
-        const cachedPermissions:
-          | Array<PermissionCacheItem>
-          | null
-          | undefined = getCachedPermissions();
+        const cachedPermissions: Array<PermissionCacheItem> | null = getCachedPermissions();
 
         if (cachedPermissions) {
           await dispatch(setUserPermissions(cachedPermissions));
@@ -898,7 +895,11 @@ export function redirectToRoute(
 
         if (cachedPermissions && !isGuest) {
           const splitView: boolean = isSplitView();
-          if ((!splitView && (issueId || articleId)) || (splitView || !(issueId && articleId))) {
+          if (
+            (!splitView && (issueId || articleId)) ||
+            splitView ||
+            !(issueId && articleId)
+          ) {
             isRedirected = true;
           }
           navigateToRouteById(issueId, articleId, navigateToActivity);
@@ -1007,7 +1008,9 @@ export function initializeApp(
 
     await dispatch(migrateToIssuesFilterSearch());
 
-    const isRedirectedToTargetRoute: boolean = await dispatch(
+    const url: string | null = await Linking.getInitialURL();
+    const searchQuery: string | null = extractIssuesQuery(url);
+    const isRedirectedToTargetRoute: boolean = url ? false : await dispatch(
       redirectToRoute(config, issueId, articleId, navigateToActivity),
     );
 
@@ -1051,6 +1054,7 @@ export function initializeApp(
           issueId,
           articleId,
           navigateToActivity,
+          searchQuery ?? undefined,
           isRedirectedToTargetRoute,
         ),
       );

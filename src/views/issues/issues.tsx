@@ -5,6 +5,7 @@ import {
   FlatList,
   RefreshControl,
   TouchableOpacity,
+  Animated,
 } from 'react-native';
 
 import React, {Component} from 'react';
@@ -29,6 +30,7 @@ import Router from 'components/router/router';
 import usage from 'components/usage/usage';
 import {addListenerGoOnline} from 'components/network/network-events';
 import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
+import {createAnimatedRotateStyle} from 'views/issues/issues-helper';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {getIssueFromCache} from './issues-actions';
@@ -237,6 +239,11 @@ export class Issues extends Component<Props, State> {
   };
 
   renderSettingsButton() {
+    const animatedStyle = (
+      !this.props.isInProgress && !this.isFilterSearchMode() && this.props.searchQuery
+        ? createAnimatedRotateStyle()
+        : null
+    );
     return (
       <TouchableOpacity
         style={[
@@ -250,12 +257,14 @@ export class Issues extends Component<Props, State> {
           this.toggleSettingsVisibility(true);
         }}
       >
-        <IconSettings
-          size={20}
-          color={this.props.isInProgress
-            ? this.getThemeColors().$disabled
-            : this.getThemeColors().$link}
-        />
+        <Animated.Text style={animatedStyle}>
+          <IconSettings
+            size={20}
+            color={this.props.isInProgress
+              ? this.getThemeColors().$disabled
+              : this.getThemeColors().$link}
+          />
+        </Animated.Text>
       </TouchableOpacity>
     );
   }

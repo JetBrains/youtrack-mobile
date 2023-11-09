@@ -185,7 +185,7 @@ class Router {
     }
   }
 
-  navigateToDefaultRoute(props?: Record<string, any> & { issueId?: string; articleId?: string }) {
+  navigateToDefaultRoute(props?: { issueId?: string; articleId?: string; navigateToActivity?: string; searchQuery?: string }) {
     const defaultRoute: NavigationJumpToActionPayload = this.rootRoutes[0];
     const route = props?.issueId ? routeMap.Issue : props?.articleId ? routeMap.ArticleSingle : null;
     if (route) {
