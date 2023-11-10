@@ -209,14 +209,12 @@ function Thread({
           onPress={() => {
             showActionSheetWithOptions(
               {
-                ...defaultActionsOptions,
+                ...defaultActionsOptions(uiTheme),
                 options: options.map(action => action.title),
                 title: `${threadData.entity?.idReadable} ${threadData.entity?.summary}`,
                 cancelButtonIndex: options.length - 1,
               },
-              (index: number) => {
-                options[index]?.execute?.();
-              },
+              (index?: number) => options[(index as number)]?.execute?.(),
             );
           }}
           style={styles.threadTitleAction}

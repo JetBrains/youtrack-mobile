@@ -16,7 +16,7 @@ import API from 'components/api/api';
 import log from 'components/log/log';
 import mocks from '../../test/mocks';
 import OAuth2 from 'components/auth/oauth2';
-import permissionsHelper from 'components/permissions-store/permissions-helper';
+import * as permissionsHelper from 'components/permissions-store/permissions-helper';
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
 import Router from 'components/router/router';

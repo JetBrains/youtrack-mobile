@@ -9,8 +9,8 @@ export const DEFAULT_THEME: UITheme = lightTheme;
 export const getSystemThemeMode = (): any => Appearance.getColorScheme();
 export const themes: UITheme[] = [lightTheme, darkTheme];
 export const getUITheme = (mode: string): UITheme => {
-  const theme: UITheme | null | undefined = themes.reduce(
-    (theme: UITheme | null | undefined, it: UITheme) =>
+  const theme: UITheme | null = themes.reduce(
+    (theme: UITheme | null, it: UITheme) =>
       it.mode.includes(mode) ? it : theme,
     null,
   );
@@ -20,10 +20,7 @@ export const buildStyles = (mode: string, uiTheme: UITheme) => {
   EStyleSheet.build({
     $theme: mode,
     $androidSummaryFontWeight: uiTheme.androidSummaryFontWeight,
-    $link: uiTheme.colors.$link,
     $resolved: uiTheme.colors.$icon,
-    $disabled: uiTheme.colors.$disabled,
-    $icon: uiTheme.colors.$icon,
     ...uiTheme.colors,
   });
 };
@@ -31,9 +28,8 @@ export const getThemeMode = async (): Promise<string> => {
   let mode: string;
 
   try {
-    const storedMode: string | null | undefined = JSON.parse(
-      await AsyncStorage.getItem(THEME_MODE_KEY),
-    );
+    const item: string | null = await AsyncStorage.getItem(THEME_MODE_KEY);
+    const storedMode: string | null = item ? JSON.parse(item) : null;
     mode = storedMode || getSystemThemeMode();
   } catch (e) {
     mode = DEFAULT_THEME.mode;

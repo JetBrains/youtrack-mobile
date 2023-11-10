@@ -1,44 +1,51 @@
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
-import {DEFAULT_THEME} from '../theme/theme';
-import styles from './action-sheet.styles';
+
+import {DEFAULT_THEME, getSystemThemeMode, getUITheme} from 'components/theme/theme';
+import {getStorageState} from 'components/storage/storage';
+
 import type {ActionSheetOptions} from '@expo/react-native-action-sheet';
+import {UITheme} from 'types/Theme';
+
 export type ActionSheetOption = {
   title: string;
   execute?: (...args: any[]) => any;
 };
-// @ts-expect-error: any-typed ActionSheetOptions
+
 export type ShowActionSheetWithOptions = (
   options: ActionSheetOptions,
   callback: (i: number) => void,
 ) => void;
-export const defaultActionsOptions = {
-  titleTextStyle: {
-    color: styles.icon?.color || DEFAULT_THEME.colors.$icon,
-  },
-  messageTextStyle: {
-    color: styles.icon?.color || DEFAULT_THEME.colors.$icon,
-  },
-  separatorStyle: {
-    backgroundColor:
-      styles.separator?.backgroundColor || DEFAULT_THEME.colors.$boxBackground,
-  },
-  containerStyle: {
-    backgroundColor:
-      styles.container?.backgroundColor || DEFAULT_THEME.colors.$background,
-  },
-  textStyle: {
-    color: styles.text?.color || DEFAULT_THEME.colors.$text,
-  },
-  showSeparators: true,
+
+export const defaultActionsOptions = (uiTheme: UITheme = DEFAULT_THEME) => {
+  const uiThemeColors = uiTheme.colors;
+  return ({
+    showSeparators: true,
+    titleTextStyle: {
+      color: uiThemeColors.$icon,
+    },
+    messageTextStyle: {
+      color: uiThemeColors.$icon,
+    },
+    separatorStyle: {
+      backgroundColor: uiThemeColors.$boxBackground,
+    },
+    containerStyle: {
+      backgroundColor: uiThemeColors.$background,
+    },
+    textStyle: {
+      color: uiThemeColors.$text,
+    },
+  });
 };
 
 async function doShowActions(
   options: ActionSheetOption[],
   showActionSheetWithOptions: ShowActionSheetWithOptions,
-  title?: string | null,
-  message?: string | null,
+  title?: string,
+  message?: string,
 ) {
   const cancelIndex: number = options.length - 1;
+  const uiTheme = await getUITheme(getSystemThemeMode() || getStorageState().themeMode);
   return new Promise((resolve: (...args: any[]) => any) => {
     showActionSheetWithOptions(
       {
@@ -46,7 +53,7 @@ async function doShowActions(
         message,
         options: options.map(action => action.title),
         cancelButtonIndex: cancelIndex,
-        ...defaultActionsOptions,
+        ...defaultActionsOptions(uiTheme),
       },
       actionIndex => {
         const action = options[actionIndex];
@@ -64,8 +71,8 @@ async function doShowActions(
 export function showActions(
   options: ActionSheetOption[],
   actionSheetInstance: typeof ActionSheetProvider,
-  title?: string | null,
-  message?: string | null,
+  title?: string,
+  message?: string,
 ): Promise<ActionSheetOption> {
   return doShowActions(
     options,
@@ -77,8 +84,8 @@ export function showActions(
 export function showActionSheet(
   options: ActionSheetOption[],
   showActionSheetWithOptions: ShowActionSheetWithOptions,
-  title?: string | null,
-  message?: string | null,
+  title: string,
+  message?: string,
 ): Promise<ActionSheetOption | null | undefined> {
   return doShowActions(options, showActionSheetWithOptions, title, message);
 }
