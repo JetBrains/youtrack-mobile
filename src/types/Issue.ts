@@ -19,14 +19,17 @@ export type IssueContextData = {
   issue: IssueFull;
   issuePermissions: IssuePermissions;
 };
-export type IssueOnList = Partial<Omit<IssueFull, 'fields'>> & {
+
+export type IssueOnList = (
+  Pick<IssueFull, '$type' | 'created' | 'fields' | 'id' | 'idReadable' | 'project' | 'reporter' | 'resolved' | 'summary' | 'tags' | 'updated'> & {
   fieldHash: {
     key: string;
     value: Record<string, any>;
   };
   fields: CustomFieldShort[];
   trimmedDescription: string;
-};
+});
+
 export type IssueFull = {
   $type: string;
   attachments: Attachment[];
