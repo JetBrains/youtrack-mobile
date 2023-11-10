@@ -1,20 +1,20 @@
-import PermissionsHelper from 'components/permissions-store/permissions-helper';
+import * as PermissionsHelper from 'components/permissions-store/permissions-helper';
 import {
   flushStoragePart,
   getOtherAccounts,
   getStorageState,
 } from 'components/storage/storage';
+
 import {removeTrailingSlash} from 'util/util';
+
 import type {PermissionCacheItem} from 'types/Permission';
 import type {StorageState} from 'components/storage/storage';
-import type {User} from '../types/User';
+import type {User} from 'types/User';
 
 function updateCachedPermissions(
   permissions: PermissionCacheItem[],
 ): void {
-  flushStoragePart({
-    permissions,
-  });
+  flushStoragePart({permissions});
 }
 
 function getCachedPermissions(): PermissionCacheItem[] | null {
@@ -25,7 +25,7 @@ function loadPermissions(
   token_type: string,
   access_token: string,
   permissionsCacheUrl: string,
-): Promise<Array<PermissionCacheItem>> {
+): Promise<PermissionCacheItem[]> {
   return PermissionsHelper.loadPermissions(
     token_type,
     access_token,
