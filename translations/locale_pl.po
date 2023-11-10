@@ -14,7 +14,7 @@ msgstr ""
 
 #: src/components/linked-issues/linked-issues.tsx
 msgid " ({{amount}} unresolved)"
-msgstr ""
+msgstr " ({{amount}} nierozwiązanych)"
 
 #: src/components/comment/comment.tsx
 msgid " or "
