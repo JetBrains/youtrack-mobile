@@ -274,7 +274,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:935
+#: src/actions/app-actions.ts:947
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -1088,7 +1088,7 @@ msgstr "The commit author is not an assignee in the project."
 msgid "The search query contains unknown values"
 msgstr "The search query contains unknown values"
 
-#: src/actions/app-actions.ts:487
+#: src/actions/app-actions.ts:488
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
@@ -1274,7 +1274,7 @@ msgstr ""
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Your account has insufficient permission to perform this operation."
 
-#: src/components/storage/storage.ts:367
+#: src/components/storage/storage.ts:364
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 msgstr "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 
