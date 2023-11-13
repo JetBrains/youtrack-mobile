@@ -20,7 +20,7 @@ import {
   folderIdMap,
 } from 'views/inbox-threads/inbox-threads-helper';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
-import {getCachedPermissions, storeYTCurrentUser} from './app-actions-helper';
+import {getCachedPermissions, storeYTCurrentUser, targetAccountToSwitchTo} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
 import {hasType} from 'components/api/api__resource-types';
@@ -428,7 +428,6 @@ export function switchAccount(
     cacheUserLastVisitedArticle(null);
 
     try {
-      redirectToHome(account.config?.backendUrl);
       await dispatch(changeAccount(account, dropCurrentAccount, issueId, articleId));
     } catch (e) {}
   };
@@ -473,7 +472,9 @@ export function changeAccount(
   account: StorageState,
   removeCurrentAccount: boolean,
   issueId?: string,
-  articleId?: string
+  articleId?: string,
+  navigateToActivity?: string,
+  searchQuery?: string,
 ): Action {
   return async (
     dispatch: (arg0: any) => any,
@@ -491,6 +492,7 @@ export function changeAccount(
       throw new Error(errorMessage);
     }
 
+    redirectToHome(account.config!.backendUrl);
     const auth: OAuth2 = new OAuth2(config);
     dispatch(beginAccountChange());
 
@@ -513,7 +515,7 @@ export function changeAccount(
       await dispatch(checkUserAgreement());
 
       if (!state.app.showUserAgreement) {
-        dispatch(completeInitialization(issueId, articleId));
+        dispatch(completeInitialization(issueId, articleId, navigateToActivity, searchQuery));
       }
 
       log.info('Account changed, URL:', account?.config?.backendUrl);
@@ -832,37 +834,47 @@ export function subscribeToURL(): Action {
     getState: () => AppState,
     getApi: () => Api,
   ) => {
-    const onIdDetected = (url: string, issueId?: string, articleId?: string) => {
-      if (!getIsAuthorized()) {
-        log.debug('User is not authorized, URL won\'t be opened');
-        return;
+    openByUrlDetector(
+      async (url: string, issueId?: string, articleId?: string) => {
+        if (isAuthorized()) {
+          usage.trackEvent('app', 'Open issue in app by URL');
+          navigateTo(url, issueId, articleId);
+        }
+      },
+      async (url: string, searchQuery: string) => {
+        if (isAuthorized()) {
+          usage.trackEvent('app', 'Open issues query in app by URL');
+          navigateTo(url, undefined, undefined, searchQuery);
+        }
       }
+    );
 
-      usage.trackEvent('app', 'Open issue in app by URL');
-      const navigateToActivity: string | undefined = url.split('#focus=Comments-')?.[1];
-      if (issueId) {
-        Router.Issue({issueId, navigateToActivity}, {forceReset: true});
-      } else if (articleId) {
-        Router.Article({articlePlaceholder: {id: articleId}, navigateToActivity}, {forceReset: true});
+    function isAuthorized(): boolean {
+      const isUserAuthorized = !!getState().app?.auth?.currentUser;
+      if (!isUserAuthorized) {
+        log.debug('User is not authorized, URL won\'t be opened');
+      }
+      return isUserAuthorized;
+    }
+
+    async function navigateTo(url: string, issueId?: string, articleId?: string, searchQuery?: string) {
+      const backendUrl = getApi().config.backendUrl;
+      if (url.indexOf(backendUrl) === -1) {
+        const serverURL = UrlParse(url).origin || '';
+        const account = await targetAccountToSwitchTo(serverURL);
+        if (account) {
+          await dispatch(changeAccount(account, false, issueId, articleId, undefined, searchQuery));
+        }
       } else {
-        Router.navigateToDefaultRoute();
+        const navigateToActivity: string | undefined = url.split('#focus=Comments-')?.[1];
+        if (issueId) {
+          Router.Issue({issueId, navigateToActivity}, {forceReset: true});
+        } else if (articleId) {
+          Router.Article({articlePlaceholder: {id: articleId}, navigateToActivity}, {forceReset: true});
+        } else {
+          Router.navigateToDefaultRoute({searchQuery});
+        }
       }
-    };
-
-    const onQueryDetected = (url: string, searchQuery: string) => {
-      if (!getIsAuthorized()) {
-        log.debug('User is not authorized, URL won\'t be opened');
-        return;
-      }
-
-      usage.trackEvent('app', 'Open issues query in app by URL');
-      Router.Issues({searchQuery});
-    };
-
-    openByUrlDetector(onIdDetected, onQueryDetected);
-
-    function getIsAuthorized(): boolean {
-      return !!getState().app?.auth?.currentUser;
     }
   };
 }
@@ -1100,12 +1112,7 @@ export function setAccount(notificationRouteData: NotificationRouteData = {}): A
       state?.config &&
       notificationBackendUrl !== state.config?.backendUrl
     ) {
-      const notificationIssueAccount:
-        | StorageState
-        | null
-        | undefined = await appActionsHelper.targetAccountToSwitchTo(
-        notificationBackendUrl,
-      );
+      const notificationIssueAccount = await appActionsHelper.targetAccountToSwitchTo(notificationBackendUrl);
 
       if (notificationIssueAccount) {
         await dispatch(updateOtherAccounts(notificationIssueAccount));

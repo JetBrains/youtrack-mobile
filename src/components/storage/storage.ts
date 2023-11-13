@@ -11,16 +11,13 @@ import {routeMap} from 'app-routes';
 import type {Activity, ActivityType} from 'types/Activity';
 import type {AnyIssue} from 'types/Issue';
 import type {AppConfig} from 'types/AppConfig';
-import type {Article, ArticlesList} from 'types/Article';
-import type {ArticleProject} from 'types/Article';
+import type {Article, ArticleProject, ArticlesList} from 'types/Article';
 import type {Board, Sprint} from 'types/Agile';
-import type {Folder} from 'types/User';
-import type {InboxThread, Notification} from 'types/Inbox';
+import type {Folder, UserCurrent} from 'types/User';
+import type {InboxThread, Notification, ThreadsStateFilterId} from 'types/Inbox';
 import type {IssueProject} from 'types/CustomFields';
 import type {OAuthParams2} from 'types/Auth';
 import type {PermissionCacheItem} from 'types/Permission';
-import type {ThreadsStateFilterId} from 'types/Inbox';
-import type {UserCurrent} from 'types/User';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 export const MAX_STORED_QUERIES = 5;
@@ -404,9 +401,7 @@ export async function secureAccounts(
 
 export async function getOtherAccounts(): Promise<Array<StorageState>> {
   const value: string | null = await AsyncStorage.getItem(OTHER_ACCOUNTS_KEY);
-  const otherAccounts: StorageState[] = value ? JSON.parse(value) : [];
-  await secureAccounts(otherAccounts);
-  return otherAccounts;
+  return value ? JSON.parse(value) : [];
 }
 
 export async function storeAccounts(accounts: StorageState[]) {

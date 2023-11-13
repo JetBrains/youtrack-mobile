@@ -1,4 +1,5 @@
 import * as PermissionsHelper from 'components/permissions-store/permissions-helper';
+import log from 'components/log/log';
 import {
   flushStoragePart,
   getOtherAccounts,
@@ -33,28 +34,22 @@ function loadPermissions(
   );
 }
 
-async function targetAccountToSwitchTo(
-  targetBackendUrl: string = '',
-): Promise<StorageState | null> {
-  if (!targetBackendUrl) {
+async function targetAccountToSwitchTo(targetBackendUrl: string = ''): Promise<StorageState | null> {
+  const url = targetBackendUrl.trim();
+  if (!url) {
     return null;
   }
 
   let targetAccount: StorageState | null = null;
-  const storageState: StorageState = getStorageState();
-
-  if (
-    targetBackendUrl &&
-    removeTrailingSlash(targetBackendUrl) !==
-      removeTrailingSlash(storageState.config?.backendUrl || '')
-  ) {
+  const targetURL = removeTrailingSlash(url);
+  if (targetURL !== removeTrailingSlash(getStorageState()?.config?.backendUrl || '')) {
     const otherAccounts: StorageState[] = await getOtherAccounts();
-    targetAccount =
-      otherAccounts.find(
-        (account: StorageState) =>
-          removeTrailingSlash(account.config?.backendUrl || '') ===
-          removeTrailingSlash(targetBackendUrl),
-      ) || null;
+    targetAccount = otherAccounts.find(
+      (account: StorageState) => removeTrailingSlash(account.config?.backendUrl || '') === targetURL
+    ) || null;
+  }
+  if (targetAccount) {
+    log.debug('The account to switch is found', url);
   }
 
   return targetAccount;
