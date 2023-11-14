@@ -45,7 +45,8 @@ async function targetAccountToSwitchTo(targetBackendUrl: string = ''): Promise<S
   if (targetURL !== removeTrailingSlash(getStorageState()?.config?.backendUrl || '')) {
     const otherAccounts: StorageState[] = await getOtherAccounts();
     targetAccount = otherAccounts.find(
-      (account: StorageState) => removeTrailingSlash(account.config?.backendUrl || '') === targetURL
+      (account: StorageState) =>
+        removeTrailingSlash(account.config?.backendUrl || '').indexOf(targetURL) !== -1
     ) || null;
   }
   if (targetAccount) {
