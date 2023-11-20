@@ -73,8 +73,8 @@ const IssuesListSettings = ({
                 <TouchableOpacity
                   disabled={it.mode === settings.search.mode}
                   testID="test:id/issuesSettingsSearchButton"
-                  accessibilityLabel="issuesSettingsSearchButton"
                   key={`issueSetting${index}`}
+                  accessible={false}
                   style={styles.settingsRow}
                   onPress={() => {
                     doChangeSettings({...settings, search: it});
