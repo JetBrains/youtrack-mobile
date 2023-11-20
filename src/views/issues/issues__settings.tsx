@@ -83,7 +83,7 @@ const IssuesListSettings = ({
                   <Text
                     style={styles.settingsItemText}
                     testID="test:id/issuesSettingsSearchButtonText"
-                    accessibilityLabel="issuesSettingsSearchButtonText"
+                    accessible={true}
                   >{it.label}</Text>
                   {it.mode === settings.search.mode && <IconCheck
                     size={20}
