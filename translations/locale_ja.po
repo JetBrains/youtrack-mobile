@@ -583,7 +583,7 @@ msgstr "課題リンクが追加されました"
 
 #: src/components/issue-actions/issue-links-actions.ts
 msgid "Issue link removed"
-msgstr "問題リンクが削除されました"
+msgstr "課題リンクが除去されました"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue updated"

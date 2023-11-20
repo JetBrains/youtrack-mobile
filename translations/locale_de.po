@@ -41,8 +41,8 @@ msgstr[1] "{{amount}} Artikel"
 #: src/views/create-issue/create-issue.tsx
 msgid "{{amount}} draft"
 msgid_plural "{{amount}} drafts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{{amount}} Entwurf"
+msgstr[1] "{{amount}} Entwürfe"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "{{amount}} file"
