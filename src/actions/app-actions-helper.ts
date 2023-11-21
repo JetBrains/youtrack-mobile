@@ -1,20 +1,21 @@
-import PermissionsHelper from 'components/permissions-store/permissions-helper';
+import * as PermissionsHelper from 'components/permissions-store/permissions-helper';
+import log from 'components/log/log';
 import {
   flushStoragePart,
   getOtherAccounts,
   getStorageState,
 } from 'components/storage/storage';
+
 import {removeTrailingSlash} from 'util/util';
+
 import type {PermissionCacheItem} from 'types/Permission';
 import type {StorageState} from 'components/storage/storage';
-import type {User} from '../types/User';
+import type {User} from 'types/User';
 
 function updateCachedPermissions(
   permissions: PermissionCacheItem[],
 ): void {
-  flushStoragePart({
-    permissions,
-  });
+  flushStoragePart({permissions});
 }
 
 function getCachedPermissions(): PermissionCacheItem[] | null {
@@ -25,7 +26,7 @@ function loadPermissions(
   token_type: string,
   access_token: string,
   permissionsCacheUrl: string,
-): Promise<Array<PermissionCacheItem>> {
+): Promise<PermissionCacheItem[]> {
   return PermissionsHelper.loadPermissions(
     token_type,
     access_token,
@@ -33,28 +34,23 @@ function loadPermissions(
   );
 }
 
-async function targetAccountToSwitchTo(
-  targetBackendUrl: string = '',
-): Promise<StorageState | null> {
-  if (!targetBackendUrl) {
+async function targetAccountToSwitchTo(targetBackendUrl: string = ''): Promise<StorageState | null> {
+  const url = targetBackendUrl.trim();
+  if (!url) {
     return null;
   }
 
   let targetAccount: StorageState | null = null;
-  const storageState: StorageState = getStorageState();
-
-  if (
-    targetBackendUrl &&
-    removeTrailingSlash(targetBackendUrl) !==
-      removeTrailingSlash(storageState.config?.backendUrl || '')
-  ) {
+  const targetURL = removeTrailingSlash(url);
+  if (targetURL !== removeTrailingSlash(getStorageState()?.config?.backendUrl || '')) {
     const otherAccounts: StorageState[] = await getOtherAccounts();
-    targetAccount =
-      otherAccounts.find(
-        (account: StorageState) =>
-          removeTrailingSlash(account.config?.backendUrl || '') ===
-          removeTrailingSlash(targetBackendUrl),
-      ) || null;
+    targetAccount = otherAccounts.find(
+      (account: StorageState) =>
+        removeTrailingSlash(account.config?.backendUrl || '').indexOf(targetURL) !== -1
+    ) || null;
+  }
+  if (targetAccount) {
+    log.debug('The account to switch is found', url);
   }
 
   return targetAccount;

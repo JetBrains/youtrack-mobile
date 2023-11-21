@@ -6,7 +6,7 @@ async function loadPermissions(
   token_type: string,
   access_token: string,
   permissionsCacheUrl: string,
-): Promise<Array<PermissionCacheItem>> {
+): Promise<PermissionCacheItem[]> {
   return fetch(permissionsCacheUrl, {
     headers: {
       Accept: ACCEPT_HEADER,
@@ -16,17 +16,17 @@ async function loadPermissions(
   })
     .then(res => res.json())
     .then((response: PermissionCacheItem[] | CustomError) => {
-      if (response.error) {
+      if ((response as CustomError).error) {
         throw response;
       }
 
-      return response;
+      return response as PermissionCacheItem[];
     })
     .catch(async err => {
       throw err;
     });
 }
 
-export default {
+export {
   loadPermissions,
 };

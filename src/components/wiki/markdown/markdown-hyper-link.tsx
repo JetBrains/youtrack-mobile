@@ -20,7 +20,11 @@ const MarkdownHyperLink = ({
       selectable={true}
       key={guid()}
       style={[...(Array.isArray(style) ? style : [style]), styles.link]}
-      onPress={() => Linking.openURL(uri)}
+      onPress={() => {
+        if (uri?.trim?.()) {
+          Linking.openURL(uri);
+        }
+      }}
     >
       {children || uri}
     </Text>

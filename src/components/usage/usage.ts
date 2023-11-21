@@ -28,7 +28,7 @@ const createInstance = async () => {
     googleAnalyiticsId,
     clientId,
     1,
-    userAgent || 'YouTrackMobile',
+    typeof userAgent === 'string' ? userAgent : 'YouTrackMobile',
   );
 };
 

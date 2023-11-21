@@ -280,12 +280,11 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
             ];
             showActionSheetWithOptions(
               {
-                ...defaultActionsOptions,
+                ...defaultActionsOptions(theme.uiTheme),
                 options: options.map(action => action.title),
                 cancelButtonIndex: options.length - 1,
               },
-              (index: number) =>
-                options[index]?.execute && options[index].execute(),
+              (index?: number) => options[index as number].execute?.(),
             );
           }}
           style={styles.threadTitleAction}

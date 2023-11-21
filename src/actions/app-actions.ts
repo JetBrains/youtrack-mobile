@@ -21,7 +21,7 @@ import {
   folderIdMap,
 } from 'views/inbox-threads/inbox-threads-helper';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
-import {storeYTCurrentUser} from './app-actions-helper';
+import {storeYTCurrentUser, targetAccountToSwitchTo} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
 import {hasType} from 'components/api/api__resource-types';
@@ -310,8 +310,8 @@ export function activateAccount(
 }
 export function changeAccount(
   account: StorageState,
-  removeCurrentAccount: boolean = false,
-  ): Action {
+  removeCurrentAccount: boolean,
+): Action {
   return async (
     dispatch: (arg0: any) => any,
     getState: () => AppState,
@@ -643,7 +643,7 @@ export function cacheProjects(): (
     const [error, userFolders]: [CustomError | null, Folder[]] = await until(
       getApi().user.getUserFolders('', ['$type,id,shortName,name,pinned'])
     ) as [CustomError | null, Folder[]];
-    const projects: Folder[] = (error ? [] : userFolders).filter((it: Folder) => hasType.project(it));
+    const projects: Folder[] = error ? [] : userFolders.filter(it => hasType.project(it));
     await storage.flushStoragePart({projects});
     return projects;
   };
@@ -655,37 +655,47 @@ export function subscribeToURL(): Action {
     getState: () => AppState,
     getApi: () => Api,
   ) => {
-    const onIdDetected = (url: string, issueId?: string, articleId?: string) => {
-      if (!getIsAuthorized()) {
-        log.debug('User is not authorized, URL won\'t be opened');
-        return;
+    openByUrlDetector(
+      async (url: string, issueId?: string, articleId?: string) => {
+        if (isAuthorized()) {
+          usage.trackEvent('app', 'Open issue in app by URL');
+          navigateTo(url, issueId, articleId);
+        }
+      },
+      async (url: string, searchQuery: string) => {
+        if (isAuthorized()) {
+          usage.trackEvent('app', 'Open issues query in app by URL');
+          navigateTo(url, undefined, undefined, searchQuery);
+        }
       }
+    );
 
-      usage.trackEvent('app', 'Open issue in app by URL');
-      const navigateToActivity: string | undefined = url.split('#focus=Comments-')?.[1];
-      if (issueId) {
-        Router.Issue({issueId, navigateToActivity});
-      } else if (articleId) {
-        Router.Article({articlePlaceholder: {id: articleId}, navigateToActivity});
+    function isAuthorized(): boolean {
+      const isUserAuthorized = !!getState().app?.auth?.currentUser;
+      if (!isUserAuthorized) {
+        log.debug('User is not authorized, URL won\'t be opened');
+      }
+      return isUserAuthorized;
+    }
+
+    async function navigateTo(url: string, issueId?: string, articleId?: string, searchQuery?: string) {
+      const backendUrl = getApi().config.backendUrl;
+      if (url.indexOf(backendUrl) === -1) {
+        const serverURL = UrlParse(url).origin || '';
+        const account = await targetAccountToSwitchTo(serverURL);
+        if (account) {
+          await dispatch(changeAccount(account, false, issueId, articleId, undefined, searchQuery));
+        }
       } else {
-        Router.navigateToDefaultRoute();
+        const navigateToActivity: string | undefined = url.split('#focus=Comments-')?.[1];
+        if (issueId) {
+          Router.Issue({issueId, navigateToActivity}, {forceReset: true});
+        } else if (articleId) {
+          Router.Article({articlePlaceholder: {id: articleId}, navigateToActivity}, {forceReset: true});
+        } else {
+          Router.navigateToDefaultRoute({searchQuery});
+        }
       }
-    };
-
-    const onQueryDetected = (url: string, searchQuery: string) => {
-      if (!getIsAuthorized()) {
-        log.debug('User is not authorized, URL won\'t be opened');
-        return;
-      }
-
-      usage.trackEvent('app', 'Open issues query in app by URL');
-      Router.Issues({searchQuery});
-    };
-
-    openByUrlDetector(onIdDetected, onQueryDetected);
-
-    function getIsAuthorized(): boolean {
-      return !!getState().app?.auth?.currentUser;
     }
   };
 }

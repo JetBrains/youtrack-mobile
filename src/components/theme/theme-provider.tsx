@@ -57,17 +57,17 @@ class ManageThemeProvider extends PureComponent<Props, State> {
     this._isMounted = true;
     this.subscription = Appearance.addChangeListener(
       (preferences: Appearance.AppearancePreferences) => {
-        this.setMode(preferences.colorScheme);
+        this.setMode(preferences.colorScheme || null);
       },
     );
   };
 
   componentWillUnmount() {
-    this.subscription.remove();
+    this.subscription?.remove?.();
     this._isMounted = false;
   }
 
-  buildStyles(mode: string | null | undefined): UITheme {
+  buildStyles(mode: string | null): UITheme {
     const _mode = mode || getSystemThemeMode();
 
     const uiTheme = getUITheme(_mode);
@@ -77,13 +77,6 @@ class ManageThemeProvider extends PureComponent<Props, State> {
 
   isCustomMode(mode: string | null | undefined): boolean {
     return themes.some((theme: UITheme) => theme.mode === mode);
-  }
-
-  shouldChangeMode(mode: string = ''): boolean {
-    const storedThemeName: string | null | undefined = getStorageState()
-      .themeMode;
-    const customMode: boolean = this.isCustomMode(mode);
-    return customMode || !storedThemeName || (!customMode && !!storedThemeName);
   }
 
   setAndroidNavBarStyle(uiTheme: UITheme) {
@@ -100,13 +93,13 @@ class ManageThemeProvider extends PureComponent<Props, State> {
     }
   }
 
-  setMode = async (mode: string | null | undefined, reset: boolean = false) => {
+  setMode = async (mode: string | null, reset: boolean = false) => {
     if (this._isMounted) {
       const cm = this.isCustomMode(mode);
-      const storedMode = getStorageState().themeMode;
+      const storedMode: string | null = getStorageState().themeMode;
       let newMode = null;
 
-      if (cm === true) {
+      if (cm) {
         newMode = mode;
       } else if (reset) {
         newMode = null;
@@ -114,9 +107,7 @@ class ManageThemeProvider extends PureComponent<Props, State> {
         newMode = storedMode;
       }
 
-      await flushStoragePart({
-        themeMode: newMode,
-      });
+      await flushStoragePart({themeMode: newMode});
       const uiTheme: UITheme = this.buildStyles(newMode);
       this.setState({
         mode,

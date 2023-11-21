@@ -40,8 +40,8 @@ function parseUrl(
   url: string,
   onIdDetected: (
     url: string,
-    issueId?: string | null,
-    articleId?: string | null,
+    issueId?: string,
+    articleId?: string,
   ) => void,
   onQueryDetected: (
     url: string,
@@ -58,7 +58,7 @@ function parseUrl(
           ? `Article ID detected in URL: ${articleId}`
           : ''),
     );
-    return onIdDetected(url, issueId, articleId);
+    return onIdDetected(url, issueId as string, articleId as string);
   }
 
   const query: string | null = extractIssuesQuery(url);
@@ -73,7 +73,7 @@ function parseUrl(
 }
 
 const openByUrlDetector = async (
-  onIdDetected: (url: string, issueId?: string | null, articleId?: string | null) => any,
+  onIdDetected: (url: string, issueId?: string, articleId?: string) => any,
   onQueryDetected: (url: string, query: string) => any,
 ) => {
   setTimeout(() => {

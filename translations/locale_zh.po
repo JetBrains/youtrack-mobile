@@ -37,6 +37,11 @@ msgid "{{amount}} article"
 msgid_plural "{{amount}} articles"
 msgstr[0] "{{amount}} 篇文章"
 
+#: src/views/create-issue/create-issue.tsx
+msgid "{{amount}} draft"
+msgid_plural "{{amount}} drafts"
+msgstr[0] ""
+
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "{{amount}} file"
 msgid_plural "{{amount}} files"
@@ -375,11 +380,11 @@ msgstr "删除"
 
 #: src/views/create-issue/create-issue-drafts.tsx
 msgid "Delete all"
-msgstr ""
+msgstr "全部删除"
 
 #: src/views/create-issue/create-issue-drafts.tsx
 msgid "Delete all drafts?"
-msgstr ""
+msgstr "是否删除所有草稿?"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Delete comment permanently?"
@@ -437,11 +442,6 @@ msgstr "文档"
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
 msgstr "不发送日志"
-
-#: src/views/create-issue/create-issue.tsx
-msgid "Draft"
-msgid_plural "Drafts"
-msgstr[0] ""
 
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/knowledge-base/knowledge-base.tsx

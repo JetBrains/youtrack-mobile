@@ -40,6 +40,14 @@ msgstr[1] "{{amount}} статьи"
 msgstr[2] "{{amount}} статей"
 msgstr[3] "{{amount}} статьи"
 
+#: src/views/create-issue/create-issue.tsx
+msgid "{{amount}} draft"
+msgid_plural "{{amount}} drafts"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "{{amount}} file"
 msgid_plural "{{amount}} files"
@@ -387,11 +395,11 @@ msgstr "Удалить"
 
 #: src/views/create-issue/create-issue-drafts.tsx
 msgid "Delete all"
-msgstr ""
+msgstr "Удалить все"
 
 #: src/views/create-issue/create-issue-drafts.tsx
 msgid "Delete all drafts?"
-msgstr ""
+msgstr "Удалить все черновики?"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Delete comment permanently?"
@@ -449,14 +457,6 @@ msgstr "Документ"
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
 msgstr "Не отправлять логи"
-
-#: src/views/create-issue/create-issue.tsx
-msgid "Draft"
-msgid_plural "Drafts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
 
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/knowledge-base/knowledge-base.tsx

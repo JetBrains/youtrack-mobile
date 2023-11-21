@@ -8123,10 +8123,10 @@ react-native-codegen@^0.71.5:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
-react-native-device-info@^10.4.0:
-  version "10.7.0"
-  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-10.7.0.tgz#f97f6f0da5d5a8775191566a667437c6ffc60417"
-  integrity sha512-8PiuGwKFB/56mjl5uVuCFoBLZJonerJRS/CTPAsT1rbyrc9vDGAj93FmzYW9GBroKUtQwF2gSP2scQzMHB/rVg==
+react-native-device-info@^10.11.0:
+  version "10.11.0"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-10.11.0.tgz#2c9f378f1c3c5eb9aafa803d015b84325991a9aa"
+  integrity sha512-qRzhuYOm5ZXQi5dhfJFjDq157oipxcEW/fo0QyMm5+TI6V6/+P/tju+Hif6z0rpLCf7MV7iDVRv2Kqha4D/yvQ==
 
 react-native-device-log@Trihydro/react-native-device-log:
   version "1.0.3"

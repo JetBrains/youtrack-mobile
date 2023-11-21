@@ -14,7 +14,7 @@ msgstr ""
 
 #: src/components/linked-issues/linked-issues.tsx
 msgid " ({{amount}} unresolved)"
-msgstr ""
+msgstr " ({{amount}} nierozwiązanych)"
 
 #: src/components/comment/comment.tsx
 msgid " or "
@@ -35,6 +35,14 @@ msgstr ""
 #: src/views/article/article__details.tsx
 msgid "{{amount}} article"
 msgid_plural "{{amount}} articles"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: src/views/create-issue/create-issue.tsx
+msgid "{{amount}} draft"
+msgid_plural "{{amount}} drafts"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -449,14 +457,6 @@ msgstr ""
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
 msgstr ""
-
-#: src/views/create-issue/create-issue.tsx
-msgid "Draft"
-msgid_plural "Drafts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
 
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/knowledge-base/knowledge-base.tsx
