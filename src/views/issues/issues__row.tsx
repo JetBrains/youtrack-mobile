@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
-import ColorField from 'components/color-field/color-field';
+import ColorField, {COLOR_FIELD_SIZE} from 'components/color-field/color-field';
+import IconHDTicket from 'components/icon/assets/hdticket.svg';
 import Tags from 'components/tags/tags';
 import {
   getPriotityField,
@@ -40,22 +41,47 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
 
   renderPriority(customStyle?: any, text?: string): React.ReactNode {
     const priorityField = getPriotityField(this.props.issue);
+    const isHelpDeskEnabled: boolean = this.props.issue.project?.plugins?.helpDeskSettings?.enabled;
 
     if (
       !priorityField ||
       !priorityField.value ||
       Array.isArray(priorityField.value) && priorityField.value?.length === 0
     ) {
-      return null;
+      return isHelpDeskEnabled ? (
+        <View style={styles.priorityWrapper}>
+          <View>
+            <IconHDTicket
+              color={styles.helpDeskIcon.color}
+              width={COLOR_FIELD_SIZE}
+              height={COLOR_FIELD_SIZE}
+            />
+          </View>
+        </View>
+      ) : null;
     }
 
     const values: BundleValue[] = [].concat(priorityField.value as any);
     const LAST = values.length - 1;
-    return <ColorField
-      style={[styles.priorityWrapper, customStyle]}
-      text={text || values[LAST].name}
-      color={values[LAST].color}
-    />;
+
+    return (
+      <>
+        <ColorField
+          style={[styles.priorityWrapper, customStyle]}
+          text={text || values[LAST].name}
+          color={values[LAST].color}
+        />
+        {isHelpDeskEnabled && (
+          <View style={styles.helpDeskIconWrapper}>
+            <IconHDTicket
+              color={styles.helpDeskIcon.color}
+              width={12}
+              height={12}
+            />
+          </View>
+        )}
+      </>
+    );
   }
 
   renderReporter() {

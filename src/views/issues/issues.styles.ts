@@ -71,6 +71,7 @@ export default EStyleSheet.create({
     height: COLOR_FIELD_SIZE,
   },
   priorityWrapper: {
+    position: 'relative',
     marginRight: UNIT,
     ...Platform.select({
       android: {
@@ -347,5 +348,18 @@ export default EStyleSheet.create({
     paddingRight: UNIT * 2,
     marginRight: UNIT * 2,
     textTransform: 'uppercase',
+  },
+  helpDeskIconWrapper: {
+    position: 'absolute',
+    backgroundColor: '$background',
+    borderColor: '$icon',
+    borderWidth: 0.5,
+    borderRadius: UNIT * 2,
+    zIndex: 1,
+    marginLeft: COLOR_FIELD_SIZE - UNIT,
+    bottom: -3,
+  },
+  helpDeskIcon: {
+    color: '#A0C1D7',
   },
 });

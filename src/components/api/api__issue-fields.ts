@@ -9,6 +9,9 @@ const ISSUE_PROJECT_FIELDS: any = toField([
   'template',
   {
     plugins: {
+      helpDeskSettings: [
+        'enabled',
+      ],
       timeTrackingSettings: toField([
         'enabled',
         {

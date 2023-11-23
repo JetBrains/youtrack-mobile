@@ -1,8 +1,7 @@
 import React, {PureComponent} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text} from 'react-native';
 
-import {SECONDARY_FONT_SIZE, secondaryText} from 'components/common-styles/typography';
-import {UNIT} from 'components/variables';
+import styles from './color-field.styles';
 
 interface Props {
   text: string;
@@ -40,11 +39,8 @@ export default class ColorField extends PureComponent<Props, Readonly<{}>> {
   }
 
   render(): React.ReactNode {
-    const {color, fullText, style, defaultColorCoding} = this.props;
-
-    if (color && color.id === NO_COLOR_CODING_ID && !fullText) {
-      return null;
-    }
+    const {style, defaultColorCoding, color} = this.props;
+    const hasNoColor: boolean = color?.id === NO_COLOR_CODING_ID;
 
     return (
       <View
@@ -54,11 +50,16 @@ export default class ColorField extends PureComponent<Props, Readonly<{}>> {
           !this.props.fullText ? styles.wrapperOneChar : null,
           style,
           defaultColorCoding,
+          hasNoColor && !defaultColorCoding && styles.defaultColorCoding,
         ]}
         testID="color-field-value-wrapper"
       >
         <Text
-          style={[{color: this._getForegroundColor()}, styles.text]}
+          style={[
+            {color: this._getForegroundColor()},
+            styles.text,
+            hasNoColor && !defaultColorCoding && {color: styles.defaultColorCoding.color},
+          ]}
           numberOfLines={1}
           testID="color-field-value"
           accessible={true}
@@ -69,22 +70,3 @@ export default class ColorField extends PureComponent<Props, Readonly<{}>> {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  wrapper: {
-    justifyContent: 'center',
-    paddingVertical: UNIT / 3,
-    paddingHorizontal: UNIT / 2,
-    borderRadius: UNIT / 1.2,
-  },
-  wrapperOneChar: {
-    width: COLOR_FIELD_SIZE,
-    height: COLOR_FIELD_SIZE,
-  },
-  text: {
-    ...secondaryText,
-    fontSize: SECONDARY_FONT_SIZE - 1,
-    lineHeight: SECONDARY_FONT_SIZE + 1,
-    textAlign: 'center',
-  },
-});
