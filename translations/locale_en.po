@@ -194,7 +194,7 @@ msgstr "Camera"
 
 #: src/components/account/accounts.tsx:51
 #: src/components/confirmation/confirmation.ts:19
-#: src/components/tags/tags.tsx:55
+#: src/components/tags/tags.tsx:52
 #: src/views/article/arcticle-actions.ts:322
 #: src/views/article/arcticle-actions.ts:693
 #: src/views/create-issue/create-issue-actions.ts:571
@@ -840,7 +840,7 @@ msgstr "Remove favorite"
 msgid "Remove project from favorites?"
 msgstr "Remove project from favorites?"
 
-#: src/components/tags/tags.tsx:49
+#: src/components/tags/tags.tsx:46
 msgid "Remove tag"
 msgstr "Remove tag"
 
@@ -958,7 +958,7 @@ msgstr "Share…"
 msgid "Show all"
 msgstr "Show all"
 
-#: src/components/tags/tags.tsx:41
+#: src/components/tags/tags.tsx:38
 msgid "Show all issues tagged with \"{{tagName}}\"..."
 msgstr "Show all issues tagged with \"{{tagName}}\"..."
 
