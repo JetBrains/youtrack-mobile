@@ -20,12 +20,6 @@ export default EStyleSheet.create({
   tagMultiline: {
     marginBottom: UNIT,
   },
-  tagNoColor: {
-    borderWidth: 0.5,
-    color: '$text',
-    borderColor: '$textSecondary',
-    backgroundColor: '$boxBackground',
-  },
   button: {
     flexDirection: 'row',
     paddingVertical: UNIT * 1.5,

@@ -3,10 +3,15 @@ import {View, Text} from 'react-native';
 
 import styles from './color-field.styles';
 
+export interface ColorCoding {
+  id: string;
+  background: string;
+  foreground: string;
+}
+
 interface Props {
-  text: string;
-  color?: Record<string, any>;
-  defaultColorCoding?: Record<string, any> | null | undefined;
+  text?: string;
+  color?: ColorCoding;
   fullText?: boolean;
   style?: any;
 }
@@ -16,21 +21,9 @@ const NO_COLOR_CODING_ID = '0';
 
 
 export default class ColorField extends PureComponent<Props, Readonly<{}>> {
-  _getBackgroundColor() {
-    const {defaultColorCoding, color} = this.props;
-    return defaultColorCoding
-      ? defaultColorCoding.backgroundColor
-      : color?.background;
-  }
-
-  _getForegroundColor() {
-    const {defaultColorCoding, color} = this.props;
-    return defaultColorCoding?.color || color?.foreground;
-  }
-
   getText(): null | string {
     if (!this.props.text) {
-      return null;
+      return '';
     }
 
     return this.props.fullText
@@ -39,29 +32,29 @@ export default class ColorField extends PureComponent<Props, Readonly<{}>> {
   }
 
   render(): React.ReactNode {
-    const {style, defaultColorCoding, color} = this.props;
+    const {style = null, color} = this.props;
     const hasNoColor: boolean = color?.id === NO_COLOR_CODING_ID;
 
     return (
       <View
+        testID="test:id/color-field-value-wrapper"
+        accessibilityLabel="color-field-value-wrapper"
+        accessible={true}
         style={[
-          {backgroundColor: this._getBackgroundColor()},
+          {backgroundColor: color?.background},
           styles.wrapper,
-          !this.props.fullText ? styles.wrapperOneChar : null,
+          !this.props.fullText && styles.wrapperOneChar,
           style,
-          defaultColorCoding,
-          hasNoColor && !defaultColorCoding && styles.defaultColorCoding,
+          hasNoColor ? styles.defaultColorCoding : null,
         ]}
-        testID="color-field-value-wrapper"
       >
         <Text
           style={[
-            {color: this._getForegroundColor()},
             styles.text,
-            hasNoColor && !defaultColorCoding && {color: styles.defaultColorCoding.color},
+            {color: hasNoColor ? styles.defaultColorCoding.color : color?.foreground},
           ]}
           numberOfLines={1}
-          testID="color-field-value"
+          testID="test:id/color-field-value"
           accessible={true}
         >
           {this.getText()}

@@ -22,8 +22,8 @@ export default EStyleSheet.create({
   },
   defaultColorCoding: {
     color: '$text',
-    borderColor: '$textSecondary',
+    borderColor: '$disabled',
     borderWidth: 0.5,
-    backgroundColor: '$background',
+    backgroundColor: '$boxBackground',
   },
 });
