@@ -10,13 +10,15 @@ import {isAndroidPlatform} from 'util/util';
 
 export {default as logo} from './youtrack-logo-512.png';
 
-type Props = {
+interface Props {
   name?: string;
   size?: number;
   color?: string;
   isFontAwesome?: boolean;
   style?: Record<string, string> | Record<string, string>[];
-};
+  testID?: string;
+}
+
 const isAndroid = isAndroidPlatform();
 
 const defaultProps = () => ({
@@ -26,7 +28,7 @@ const defaultProps = () => ({
   isFontAwesome: false,
 });
 
-export function IconFont(props: Props): JSX.Element | null {
+export function IconFont(props: Props): React.JSX.Element | null {
   if (!props.name) {
     return null;
   }

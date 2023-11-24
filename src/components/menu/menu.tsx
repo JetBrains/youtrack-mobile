@@ -1,8 +1,11 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Dimensions, View} from 'react-native';
+import {Dimensions, View, EventSubscription} from 'react-native';
+
 import * as Progress from 'react-native-progress';
 import {View as AnimatedView} from 'react-native-animatable';
 import {useDispatch, useSelector} from 'react-redux';
+
+import IconHDTicket from 'components/icon/assets/hdticket.svg';
 import Router from '../router/router';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 import {folderIdMap} from 'views/inbox-threads/inbox-threads-helper';
@@ -16,56 +19,70 @@ import {
   IconCircle,
 } from 'components/icon/icon';
 import {InboxFolder} from 'types/Inbox';
-import {inboxCheckUpdateStatus} from '../../actions/app-actions';
+import {inboxCheckUpdateStatus} from 'actions/app-actions';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {MenuItem} from './menu__item';
-import {routeMap} from '../../app-routes';
+import {routeMap} from 'app-routes';
+
 import styles from './menu.styles';
-import type {AppState} from '../../reducers';
+
+import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
-import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventSubscription';
+
 export const menuPollInboxStatusDelay: number = 60 * 1000;
-export default function () {
+
+type Routes = {
+  prevRouteName: string | null;
+  currentRouteName: string | null;
+};
+
+
+export default function Menu() {
   const dispatch = useDispatch();
-  const interval = useRef();
+
+  const interval = useRef<ReturnType<typeof setInterval>>();
+
   const isInboxEnabled: boolean = checkVersion(FEATURE_VERSION.inbox);
-  const isInboxThreadsEnabled: boolean = checkVersion(
-    FEATURE_VERSION.inboxThreads,
-  );
+
+  const isInboxThreadsEnabled: boolean = checkVersion(FEATURE_VERSION.inboxThreads);
+
   const isKBEnabled: boolean = checkVersion(FEATURE_VERSION.knowledgeBase);
+
+  const isHelpdeskEnabled: boolean = checkVersion(FEATURE_VERSION.helpDesk);
+
   const hasNewNotifications: boolean = useSelector((appState: AppState) => {
     if (!isInboxThreadsEnabled) {
       return false;
     }
-
-    const inboxFolders: InboxFolder[] =
-      appState.app.inboxThreadsFolders.filter(
-        it => it?.id === folderIdMap[1] || it?.id === folderIdMap[2],
-      ) || [];
+    const inboxFolders: InboxFolder[] = appState.app.inboxThreadsFolders.filter(
+      it => it?.id === folderIdMap[1] || it?.id === folderIdMap[2],
+    ) || [];
     return (
       inboxFolders.length > 0 &&
       inboxFolders.some(it => it?.lastNotified > it?.lastSeen)
     );
   });
-  const isChangingAccount: boolean = useSelector(
-    (appState: AppState) => appState.app.isChangingAccount,
-  );
-  const isInProgress: boolean = useSelector(
-    (appState: AppState) => appState.app.isInProgress,
-  );
+
+  const isChangingAccount: boolean = useSelector((appState: AppState) => appState.app.isChangingAccount);
+
+  const isInProgress: boolean = useSelector((appState: AppState) => !!appState.app.isInProgress);
+
   const setInboxHasUpdateStatus = useCallback(() => {
     dispatch(inboxCheckUpdateStatus());
   }, [dispatch]);
-  const [routes, updateRoutes] = useState({
+
+  const [routes, updateRoutes] = useState<Routes>({
     prevRouteName: null,
     currentRouteName: null,
   });
+
   const [splitView, updateSplitView] = useState(isSplitView());
+
   useEffect(() => {
     const unsubscribe = () => {
       if (interval.current) {
         clearInterval(interval.current);
-        interval.current = null;
+        interval.current = undefined;
       }
     };
 
@@ -82,10 +99,7 @@ export default function () {
   }, [isInboxThreadsEnabled, setInboxHasUpdateStatus, isChangingAccount]);
   useEffect(() => {
     const unsubscribeOnDispatch = Router.setOnDispatchCallback(
-      (
-        routeName: string | null | undefined,
-        prevRouteName: string | null | undefined,
-      ) => {
+      (routeName: string | null, prevRouteName: string | null) => {
         updateRoutes({
           currentRouteName: routeName,
           prevRouteName: prevRouteName,
@@ -188,6 +202,12 @@ export default function () {
     }
   };
 
+  const openTickets = () => {
+    if (canNavigateTo(routeMap.Tickets)) {
+      Router.Tickets();
+    }
+  };
+
   const openKnowledgeBase = () => {
     const isNotArticleView: boolean =
       routes.currentRouteName !== routeMap.ArticleSingle &&
@@ -248,7 +268,8 @@ export default function () {
           testID="test:id/menuIssues"
           icon={
             <IconTask
-              testID="menuIssuesIcon"
+              testID="test:id/menuIssuesIcon"
+              // @ts-ignore - for testing purposes
               isActive={isActiveRoute(routeMap.Issues)}
               size={23}
               color={color(routeMap.Issues)}
@@ -307,6 +328,13 @@ export default function () {
             />
           }
           onPress={openKnowledgeBase}
+        />
+
+        <MenuItem
+          disabled={!isHelpdeskEnabled}
+          testID="test:id/menuTickets"
+          icon={<IconHDTicket width={23} height={23} color={color(routeMap.Tickets)} />}
+          onPress={openTickets}
         />
 
         <MenuItem

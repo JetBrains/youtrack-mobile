@@ -7,32 +7,38 @@ import * as appActions from 'actions/app-actions';
 import Menu, {menuPollInboxStatusDelay} from './menu';
 import mocks from 'test/mocks';
 import Router from 'components/router/router';
-import {DEFAULT_THEME} from 'components/theme/theme';
 import {rootRoutesList, routeMap} from 'app-routes';
+
+import type API from 'components/api/api';
+import type OAuth2 from 'components/auth/oauth2';
+import {AppState} from 'reducers';
+import {MockStore} from 'redux-mock-store';
+import {RootState} from 'reducers/app-reducer';
+import {User} from 'types/User';
 
 jest.mock('../feature/feature');
 
-let apiMock;
+let apiMock: API;
 const getApi = () => apiMock;
 
 const createStoreMock = mocks.createMockStore(getApi);
 const rootTestID = 'menu';
 describe('<Menu/>', () => {
-  let storeMock;
-  let stateMock;
-  let ownPropsMock;
-  let router;
+  let storeMock: MockStore;
+  let stateMock: AppState;
+  let ownPropsMock: {};
+  let router: typeof Router;
   beforeEach(() => {
     jest.restoreAllMocks();
     stateMock = {
       app: {
-        auth: {},
+        auth: {} as OAuth2,
         inboxThreadsFolders: [],
         isChangingAccount: false,
         otherAccounts: [],
-        user: {},
-      },
-    };
+        user: {} as User,
+      } as unknown as RootState,
+    } as AppState;
     ownPropsMock = {};
     storeMock = createStoreMock(stateMock, ownPropsMock);
     router = Router;
@@ -85,10 +91,7 @@ describe('<Menu/>', () => {
       }).toThrow();
     });
     it('should render menu `Settings` item', async () => {
-      const {getByTestId} = doRender({
-        auth: {},
-        agileUserProfile: {},
-      });
+      const {getByTestId} = doRender();
       expect(getByTestId('test:id/menuSettings')).toBeTruthy();
     });
     it('should render menu container if `auth` is not provided', () => {
@@ -138,9 +141,11 @@ describe('<Menu/>', () => {
     it('should activate pressed root route', () => {
       const {getByTestId} = doRender();
       fireEvent.press(getByTestId('test:id/menuIssues'));
-      expect(getByTestId('menuIssuesIcon')).toHaveProp('isActive', true);
+      // @ts-ignore
+      expect(getByTestId('test:id/menuIssuesIcon')).toHaveProp('isActive', true);
       fireEvent.press(getByTestId('test:id/menuAgile'));
-      expect(getByTestId('menuIssuesIcon')).toHaveProp('isActive', false);
+      // @ts-ignore
+      expect(getByTestId('test:id/menuIssuesIcon')).toHaveProp('isActive', false);
     });
   });
   describe('Inbox status polling', () => {
@@ -208,18 +213,10 @@ describe('<Menu/>', () => {
     });
   }
 
-  function doRender(agileUserProfile = {}) {
+  function doRender() {
     return render(
       <Provider store={storeMock}>
-        <Menu
-          show={true}
-          onOpen={() => {}}
-          onClose={() => {}}
-          openFeaturesView={() => {}}
-          agileProfile={agileUserProfile}
-          issueQuery={''}
-          uiTheme={DEFAULT_THEME}
-        />
+        <Menu/>
       </Provider>,
     );
   }

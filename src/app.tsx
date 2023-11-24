@@ -172,6 +172,11 @@ class YouTrackMobile extends Component<void, void> {
       component: WikiPage,
       modal: true,
     });
+    Router.registerRoute({
+      name: routeMap.Tickets,
+      component: Issues,
+      type: 'reset',
+    });
     Router.finalizeRoutes(this.routeHomeName);
   }
 
