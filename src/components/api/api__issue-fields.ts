@@ -128,7 +128,7 @@ const ISSUE_FIELD_SHORT_FIELDS = toField([
   {
     projectCustomField: [
       {
-        field: ['id', 'name', 'localizedName'],
+        field: ['id', 'name', 'localizedName', 'avatarUrl'],
       },
     ],
   },
@@ -230,6 +230,15 @@ const ISSUE_XSHORT_FIELDS: any = toField([
   },
 ]);
 const ISSUE_SSHORT_FIELDS: any = toField([
+  {
+    project: {
+      plugins: {
+        helpDeskSettings: [
+          'enabled',
+        ],
+      },
+    },
+  },
   'id',
   'idReadable',
   'summary',

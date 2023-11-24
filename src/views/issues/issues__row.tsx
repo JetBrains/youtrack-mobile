@@ -5,20 +5,22 @@ import ColorField, {COLOR_FIELD_SIZE} from 'components/color-field/color-field';
 import IconHDTicket from 'components/icon/assets/hdticket.svg';
 import Tags from 'components/tags/tags';
 import {
-  getPriotityField,
+  getPriorityField,
   getEntityPresentation,
   getReadableID,
+  getAssigneeField,
 } from 'components/issue-formatter/issue-formatter';
 import {IssuesSettings} from 'views/issues/index';
 import {ytDate} from 'components/date/date';
 import Avatar from 'components/avatar/avatar';
 import {ThemeContext} from 'components/theme/theme-context';
 
-import styles from './issues.styles';
+import styles, {DUAL_AVATAR_SIZE} from './issues.styles';
 
+import type {BundleValue, CustomField} from 'types/CustomFields';
 import type {IssueOnList} from 'types/Issue';
-import type {BundleValue} from 'types/CustomFields';
 import type {ViewStyleProp} from 'types/Internal';
+import {FieldValue} from 'types/CustomFields';
 
 interface Props {
   hideId?: boolean;
@@ -33,15 +35,30 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
   shouldComponentUpdate(nextProps: P): boolean {
     return ['tags', 'links', 'fields', 'resolved', 'summary'].some(
       (issueFieldName: string) => {
-        // @ts-ignore
         return nextProps.issue[issueFieldName] !== this.props.issue[issueFieldName];
       },
     );
   }
 
+  isHelpDeskEnabled(): boolean {
+    return !!this.props.issue.project?.plugins?.helpDeskSettings?.enabled;
+  }
+
+  renderHelpDeskIcon(size: number, style?: ViewStyleProp): React.JSX.Element {
+    return (
+      <View style={style}>
+        <IconHDTicket
+          color={styles.helpDeskIcon.color}
+          width={size}
+          height={size}
+        />
+      </View>
+    );
+  }
+
   renderPriority(customStyle?: any, text?: string): React.ReactNode {
-    const priorityField = getPriotityField(this.props.issue);
-    const isHelpDeskEnabled: boolean = this.props.issue.project?.plugins?.helpDeskSettings?.enabled;
+    const priorityField = getPriorityField(this.props.issue);
+    const isHelpDeskEnabled: boolean = this.isHelpDeskEnabled();
 
     if (
       !priorityField ||
@@ -50,13 +67,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
     ) {
       return isHelpDeskEnabled ? (
         <View style={styles.priorityWrapper}>
-          <View>
-            <IconHDTicket
-              color={styles.helpDeskIcon.color}
-              width={COLOR_FIELD_SIZE}
-              height={COLOR_FIELD_SIZE}
-            />
-          </View>
+          {this.renderHelpDeskIcon(COLOR_FIELD_SIZE - 3)}
         </View>
       ) : null;
     }
@@ -71,15 +82,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
           text={text || values[LAST].name}
           color={values[LAST].color}
         />
-        {isHelpDeskEnabled && (
-          <View style={styles.helpDeskIconWrapper}>
-            <IconHDTicket
-              color={styles.helpDeskIcon.color}
-              width={12}
-              height={12}
-            />
-          </View>
-        )}
+        {isHelpDeskEnabled && this.renderHelpDeskIcon(13, styles.helpDeskIconWrapper)}
       </>
     );
   }
@@ -98,16 +101,31 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
 
   renderAvatar() {
     const {issue} = this.props;
+    const assigneeField: CustomField | null = this.isHelpDeskEnabled() ? getAssigneeField(issue) : null;
+    const assigneeFieldValue = assigneeField?.value as (FieldValue | null);
+
     return (
-      issue.reporter ? (
-        <Avatar
-          userName={getEntityPresentation(issue.reporter)}
-          size={20}
-          source={{
-            uri: issue.reporter?.avatarUrl,
-          }}
-        />
-      ) : null
+      <View style={styles.dualAvatarWrapper}>
+        {issue.reporter && (
+          <View style={assigneeFieldValue?.avatarUrl && styles.leftAvatarWrapper}>
+            <Avatar
+              userName={getEntityPresentation(issue.reporter)}
+              size={20}
+              source={{uri: issue.reporter?.avatarUrl}}
+            />
+          </View>
+        )}
+        {assigneeFieldValue?.avatarUrl && (
+          <View style={styles.rightAvatarWrapper}>
+            <Avatar
+              style={styles.rightAvatar}
+              userName={getEntityPresentation(assigneeFieldValue)}
+              size={DUAL_AVATAR_SIZE}
+              source={{uri: assigneeFieldValue?.avatarUrl}}
+            />
+          </View>
+        )}
+      </View>
     );
   }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import ApiHelper from '../api/api__helper';
 import AgileRowColumn from './agile-row__column';
-import {getPriotityField} from '../issue-formatter/issue-formatter';
+import {getPriorityField} from '../issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {IconAngleDownRight} from '../icon/icon';
 import {isAllColumnsCollapsed} from 'views/agile-board/agile-board__helper';
@@ -26,7 +26,7 @@ type Props = {
 };
 
 function renderCollapsedCard(issue: IssueOnList) {
-  const priorityField = getPriotityField(issue);
+  const priorityField = getPriorityField(issue);
   const color = priorityField?.value?.color;
   return (
     <View
