@@ -11,7 +11,7 @@ import type {IssueOnList, TransformedSuggestion} from 'types/Issue';
 import {ISelectProps} from 'components/select/select';
 
 
-export type IssuesState = {
+export interface IssuesState {
   query: string;
   skip: number;
   queryAssistSuggestions: TransformedSuggestion[];
@@ -23,11 +23,11 @@ export type IssuesState = {
   isIssuesContextOpen: boolean;
   issuesCount: number | null;
   issues: IssueOnList[];
-  selectProps: ISelectProps | null;
+  selectProps: (ISelectProps & {isSectioned?: boolean}) | null;
   searchContext: Folder;
   isSearchContextPinned: boolean;
   settings: IssuesSettings;
-};
+}
 
 export const initialState: IssuesState = {
   query: '',

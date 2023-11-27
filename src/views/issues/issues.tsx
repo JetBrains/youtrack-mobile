@@ -71,14 +71,13 @@ import type {AppState} from 'reducers';
 import type {ErrorMessageProps} from 'components/error-message/error-message';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {Folder, User} from 'types/User';
-import type {IssuesState} from './issues-reducers';
 import type {Theme, UIThemeColors} from 'types/Theme';
+import {IssuesState} from './issues-reducers';
 import {NetInfoState} from '@react-native-community/netinfo';
 
 type IssuesActions = typeof issueActions;
 
-type Props = IssuesState &
-  IssuesActions & {
+export type Props = IssuesState & IssuesActions & {
   auth: Auth;
   api: Api;
   onOpenContextSelect: () => any;
@@ -91,14 +90,14 @@ type Props = IssuesState &
   issuePermissions: IssuePermissions,
 };
 
-type State = {
+interface State {
   isEditQuery: boolean;
   clearSearchQuery: boolean;
-  focusedIssue: AnyIssue | null | undefined;
+  focusedIssue: AnyIssue | null;
   isSplitView: boolean;
   isCreateModalVisible: boolean;
   settingsVisible: boolean;
-};
+}
 
 
 export class Issues extends Component<Props, State> {
@@ -430,7 +429,7 @@ export class Issues extends Component<Props, State> {
 
   renderContextSelect(): any {
     const {selectProps} = this.props;
-    const {onSelect, isSectioned, ...restProps} = selectProps;
+    const {onSelect, isSectioned, ...restProps} = selectProps!;
     const SelectComponent = (
       isSplitView()
         ? isSectioned ? SectionedSelectWithItemActionsModal : SelectModal
@@ -469,10 +468,8 @@ export class Issues extends Component<Props, State> {
     });
   }
 
-  updateFocusedIssue(focusedIssue: AnyIssue | null | undefined) {
-    this.setState({
-      focusedIssue,
-    });
+  updateFocusedIssue(focusedIssue: AnyIssue | null) {
+    this.setState({focusedIssue});
   }
 
   onSearchQueryPanelFocus: (clearSearchQuery?: boolean) => void = (
@@ -721,7 +718,6 @@ export class Issues extends Component<Props, State> {
                 styles.listContainer,
                 isSplitView ? styles.splitViewContainer : null,
               ]}
-              testID="issue-list-page"
             >
               {isSplitView && this.renderSplitView()}
               {!isSplitView && this.renderIssues()}
@@ -765,4 +761,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Issues);
+export const doConnectComponent = (Component: any) => {
+  return connect(mapStateToProps, mapDispatchToProps)(Component);
+};
+
+export default doConnectComponent(Issues);

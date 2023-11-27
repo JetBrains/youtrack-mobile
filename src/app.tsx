@@ -27,6 +27,7 @@ import PreviewFile from 'views/preview-file/preview-file';
 import Router from 'components/router/router';
 import Settings from 'views/settings/settings';
 import store from './store';
+import Tickets from 'views/tickets/tickets';
 import WikiPage from 'views/wiki-page/wiki-page';
 import {BottomSheetProvider} from 'components/bottom-sheet';
 import {onNavigateBack, setAccount} from 'actions/app-actions';
@@ -174,7 +175,7 @@ class YouTrackMobile extends Component<void, void> {
     });
     Router.registerRoute({
       name: routeMap.Tickets,
-      component: Issues,
+      component: Tickets,
       type: 'reset',
     });
     Router.finalizeRoutes(this.routeHomeName);
