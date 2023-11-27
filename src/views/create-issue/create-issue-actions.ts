@@ -264,7 +264,7 @@ export function updateIssueDraft(
 }
 
 export function initializeWithDraftOrProject(
-  preDefinedDraftId?: string,
+  preDefinedDraftId: string | null,
 ): (dispatch: (arg0: any) => any) => Promise<void> {
   return async (dispatch: (arg0: any) => any) => {
     if (preDefinedDraftId) {

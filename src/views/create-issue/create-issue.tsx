@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {bindActionCreators} from 'redux';
+import {bindActionCreators, Dispatch} from 'redux';
 import {connect} from 'react-redux';
 
 import * as createIssueActions from './create-issue-actions';
@@ -71,7 +71,7 @@ import {IssueCreate} from 'types/Issue';
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
-  predefinedDraftId: string | null | undefined;
+  predefinedDraftId: string | null;
   drafts: IssueCreate[];
   updateDraft: (ignoreFields: boolean, tags?: Tag[]) => () => Promise<void>;
   onHide: () => void;
@@ -638,7 +638,7 @@ const mapStateToProps = (state: AppState, ownProps: { predefinedDraftId?: string
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     ...bindActionCreators(createIssueActions, dispatch),
     deleteAllDrafts: () => {
