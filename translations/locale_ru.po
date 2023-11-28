@@ -46,7 +46,7 @@ msgid_plural "{{amount}} drafts"
 msgstr[0] "{{amount}} черновик"
 msgstr[1] "{{amount}} черновика"
 msgstr[2] "{{amount}} черновиков"
-msgstr[3] "{{amount}} черновиков"
+msgstr[3] "{{amount}} черновика"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "{{amount}} file"
