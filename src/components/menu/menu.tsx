@@ -279,8 +279,15 @@ export default function Menu() {
         />
 
         <MenuItem
+          disabled={!isHelpdeskEnabled}
+          testID="test:id/menuTickets"
+          icon={<IconHDTicket width={23} height={23} color={color(routeMap.Tickets)} />}
+          onPress={openTickets}
+        />
+
+        <MenuItem
           testID="test:id/menuAgile"
-          icon={<IconBoard size={28} color={color(routeMap.AgileBoard)} />}
+          icon={<IconBoard size={27} color={color(routeMap.AgileBoard)} />}
           onPress={openAgileBoard}
         />
 
@@ -306,7 +313,7 @@ export default function Menu() {
                   </AnimatedView>
                 )}
               <IconBell
-                size={22}
+                size={21}
                 color={color(
                   isInboxThreadsEnabled
                     ? routeMap.InboxThreads
@@ -331,15 +338,8 @@ export default function Menu() {
         />
 
         <MenuItem
-          disabled={!isHelpdeskEnabled}
-          testID="test:id/menuTickets"
-          icon={<IconHDTicket width={23} height={23} color={color(routeMap.Tickets)} />}
-          onPress={openTickets}
-        />
-
-        <MenuItem
           testID="test:id/menuSettings"
-          icon={<IconSettingsTab size={21} color={color(routeMap.Settings)} />}
+          icon={<IconSettingsTab size={20} color={color(routeMap.Settings)} />}
           onPress={openSettings}
         />
       </View>

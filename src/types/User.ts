@@ -97,6 +97,7 @@ export type Folder = {
   name: string;
   query: string;
   pinned: boolean;
+  pinnedInHelpdesk: boolean;
   issuesUrl: string;
   fqFolderId?: string;
   isUpdatable: boolean;

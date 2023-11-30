@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import React, {Component} from 'react';
-import {bindActionCreators, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as issueActions from './issues-actions';
@@ -74,13 +74,14 @@ import type {Folder, User} from 'types/User';
 import type {Theme, UIThemeColors} from 'types/Theme';
 import {IssuesState} from './issues-reducers';
 import {NetInfoState} from '@react-native-community/netinfo';
+import {ReduxAction, ReduxThunkDispatch} from 'types/Redux';
 
 type IssuesActions = typeof issueActions;
 
-export type Props = IssuesState & IssuesActions & {
+export type IssuesProps = IssuesState & IssuesActions & {
   auth: Auth;
   api: Api;
-  onOpenContextSelect: () => any;
+  onOpenContextSelect: () => ReduxThunkDispatch;
   issueId?: string;
   searchQuery?: string;
   networkState: NetInfoState,
@@ -100,13 +101,13 @@ interface State {
 }
 
 
-export class Issues extends Component<Props, State> {
+export class Issues<P extends IssuesProps> extends Component<P, State> {
   unsubscribeOnDispatch: ((...args: any[]) => any) | undefined;
   unsubscribeOnDimensionsChange: EventSubscription | undefined;
   theme: Theme = {uiTheme: DEFAULT_THEME, mode: DEFAULT_THEME.mode, setMode: () => {}};
   goOnlineSubscription: EventSubscription | undefined;
 
-  constructor(props: Props) {
+  constructor(props: P) {
     super(props);
     this.state = {
       isEditQuery: false,
@@ -119,7 +120,7 @@ export class Issues extends Component<Props, State> {
     usage.trackScreenView('Issue list');
   }
 
-  onDimensionsChange: () => void = (): void => {
+  onDimensionsChange = (): void => {
     const isSplit: boolean = isSplitView();
     this.setState({
       isSplitView: isSplit,
@@ -186,7 +187,7 @@ export class Issues extends Component<Props, State> {
     this.goOnlineSubscription?.remove?.();
   }
 
-  shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+  shouldComponentUpdate(nextProps: IssuesProps, nextState: State): boolean {
     if (
       Object.keys(initialState).some(
         // @ts-ignore
@@ -268,7 +269,7 @@ export class Issues extends Component<Props, State> {
     );
   }
 
-  renderCreateIssueButton: () => React.ReactNode = () => {
+  renderCreateIssueButton = () => {
     return this.props?.issuePermissions?.canCreateProject?.() ? (
       <TouchableOpacity
         testID="test:id/create-issue-button"
@@ -351,7 +352,7 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  getKey: (item: any) => string = (item: Record<string, any>) => {
+  getKey = (item: Record<string, any>) => {
     return `${isReactElement(item) ? item.key : item.id}`;
   };
 
@@ -375,7 +376,7 @@ export class Issues extends Component<Props, State> {
 
     return <View style={styles.separator}/>;
   };
-  onEndReached: () => void = () => {
+  onEndReached = () => {
     this.props.loadMoreIssues();
   };
 
@@ -383,15 +384,15 @@ export class Issues extends Component<Props, State> {
     return this.theme.uiTheme.colors;
   }
 
-  renderContextButton: () => React.ReactNode = () => {
+  renderContextButton = () => {
     const {
-      onOpenContextSelect,
       isRefreshing,
       searchContext,
       isSearchContextPinned,
       networkState,
     } = this.props;
     const isDisabled: boolean = isRefreshing || !searchContext || !networkState?.isConnected;
+    const themeColors: UIThemeColors = this.getThemeColors();
     return (
       <TouchableOpacity
         key="issueListContext"
@@ -402,7 +403,7 @@ export class Issues extends Component<Props, State> {
           isSearchContextPinned ? styles.searchContextPinned : null,
         ]}
         disabled={isDisabled}
-        onPress={onOpenContextSelect}
+        onPress={this.props.onOpenContextSelect}
       >
         <View style={styles.searchContextButton}>
           <Text
@@ -416,8 +417,8 @@ export class Issues extends Component<Props, State> {
               style={styles.contextButtonIcon}
               color={
                 isDisabled
-                  ? this.getThemeColors().$disabled
-                  : this.getThemeColors().$text
+                  ? themeColors.$disabled
+                  : themeColors.$text
               }
               size={19}
             />
@@ -427,7 +428,7 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  renderContextSelect(): any {
+  renderContextSelect() {
     const {selectProps} = this.props;
     const {onSelect, isSectioned, ...restProps} = selectProps!;
     const SelectComponent = (
@@ -472,12 +473,16 @@ export class Issues extends Component<Props, State> {
     this.setState({focusedIssue});
   }
 
+  getAnalyticId() {
+    return ANALYTICS_ISSUES_PAGE;
+  }
+
   onSearchQueryPanelFocus: (clearSearchQuery?: boolean) => void = (
     clearSearchQuery: boolean = false,
   ) => {
     logEvent({
       message: 'Focus search panel',
-      analyticsId: ANALYTICS_ISSUES_PAGE,
+      analyticsId: this.getAnalyticId(),
     });
     this.setEditQueryMode(true);
     this.clearSearchQuery(clearSearchQuery);
@@ -485,7 +490,7 @@ export class Issues extends Component<Props, State> {
   onQueryUpdate = (query: string) => {
     logEvent({
       message: 'Apply search',
-      analyticsId: ANALYTICS_ISSUES_PAGE,
+      analyticsId: this.getAnalyticId(),
     });
     this.setEditQueryMode(false);
     this.props.setIssuesCount(null);
@@ -508,7 +513,7 @@ export class Issues extends Component<Props, State> {
           if (this.state.clearSearchQuery) {
             logEvent({
               message: 'Clear search',
-              analyticsId: ANALYTICS_ISSUES_PAGE,
+              analyticsId: this.getAnalyticId(),
             });
             this.onQueryUpdate(q);
           } else {
@@ -591,7 +596,7 @@ export class Issues extends Component<Props, State> {
       );
     }
 
-    const listData: React.ReactNode[] = [
+    const listData = [
       contextButton,
       searchPanel,
     ].concat((issues || []) as any);
@@ -688,7 +693,7 @@ export class Issues extends Component<Props, State> {
       </View>
     );
   };
-  renderSplitView: () => React.ReactNode = () => {
+  renderSplitView = () => {
     return (
       <>
         <View style={styles.splitViewSide}>{this.renderIssues()}</View>
@@ -697,7 +702,7 @@ export class Issues extends Component<Props, State> {
     );
   };
 
-  renderSettings(): React.JSX.Element | null {
+  renderSettings() {
     return this.state.settingsVisible ? (
       <IssuesListSettings
         onQueryUpdate={this.onQueryUpdate}
@@ -731,38 +736,42 @@ export class Issues extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (
-  state: AppState,
-  ownProps: {
-    issueId?: string;
-    searchQuery?: string;
+export const doConnectComponent = (
+  Component: any,
+  extraActions?: (dispatch: ReduxThunkDispatch) => ({ [fnName: string]: ReduxAction }),
+  extraProps?: { [fnName: string]: any },
+) => connect(
+  (
+    state: AppState,
+    ownProps: {
+      issueId?: string;
+      searchQuery?: string;
+    },
+  ) => {
+    return {
+      ...state.issueList,
+      ...ownProps,
+      ...state.app,
+      searchContext: state.issueList.searchContext,
+      user: state.app.user,
+      issuePermissions: state.app?.issuePermissions,
+      ...extraProps,
+    };
   },
-) => {
-  return {
-    ...state.issueList,
-    ...ownProps,
-    ...state.app,
-    searchContext: state.issueList.searchContext,
-    user: state.app.user,
-    issuePermissions: state.app?.issuePermissions,
-  };
-};
+  (dispatch: ReduxThunkDispatch) => {
+    return {
+      ...bindActionCreators(issueActions, dispatch),
+      onQueryUpdate: (query: string) => dispatch(issueActions.onQueryUpdate(query)),
+      onOpenContextSelect: () => dispatch(issueActions.openContextSelect()),
+      updateSearchContextPinned: (isSearchScrolledUp: boolean) => dispatch(
+        issueActions.updateSearchContextPinned(isSearchScrolledUp)
+      ),
+      setIssuesCount: (count: number | null) => dispatch(issueActions.setIssuesCount(count)),
+      updateIssue: (issueId: string) => dispatch(issueActions.updateIssue(issueId)),
+      ...extraActions?.(dispatch),
+    };
+  }
+)(Component);
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    ...bindActionCreators(issueActions, dispatch),
-    onQueryUpdate: (query: string) => dispatch(issueActions.onQueryUpdate(query)),
-    onOpenContextSelect: () => dispatch(issueActions.openContextSelect()),
-    updateSearchContextPinned: isSearchScrolledUp => dispatch(
-      issueActions.updateSearchContextPinned(isSearchScrolledUp)
-    ),
-    setIssuesCount: (count: number | null) => dispatch(issueActions.setIssuesCount(count)),
-    updateIssue: (issueId: string) => dispatch(issueActions.updateIssue(issueId)),
-  };
-};
-
-export const doConnectComponent = (Component: any) => {
-  return connect(mapStateToProps, mapDispatchToProps)(Component);
-};
 
 export default doConnectComponent(Issues);

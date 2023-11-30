@@ -27,6 +27,7 @@ export interface IssuesState {
   searchContext: Folder;
   isSearchContextPinned: boolean;
   settings: IssuesSettings;
+  helpDesk: boolean;
 }
 
 export const initialState: IssuesState = {
@@ -45,6 +46,7 @@ export const initialState: IssuesState = {
   searchContext: EVERYTHING_CONTEXT as Folder,
   isSearchContextPinned: false,
   settings: issuesSettingsDefault,
+  helpDesk: false,
 };
 
 
@@ -101,7 +103,6 @@ export default createReducer(initialState, {
   },
   [types.STOP_LOADING_MORE]: (
     state: IssuesState,
-    action: Record<string, any>,
   ) => {
     return {...state, isLoadingMore: false};
   },
@@ -130,9 +131,6 @@ export default createReducer(initialState, {
   },
   [types.LIST_END_REACHED]: (
     state: IssuesState,
-    action: {
-      error: Record<string, any>;
-    },
   ) => {
     return {...state, isListEndReached: true};
   },
@@ -162,7 +160,7 @@ export default createReducer(initialState, {
 
     function updateIssue(issue: IssueOnList): IssueOnList {
       return Object.keys(issue).reduce((updated: IssueOnList, key: string) => {
-        return {...updated, [key]: sourceIssue[key]};
+        return {...updated, [key]: sourceIssue[key as keyof IssueOnList]};
       }, {} as IssueOnList);
     }
 
@@ -205,5 +203,11 @@ export default createReducer(initialState, {
     action: Record<string, any>,
   ): IssuesState {
     return {...state, settings: action.settings};
+  },
+  [types.SET_HELPDESK](
+    state: IssuesState,
+    action: { helpDesk: boolean },
+  ): IssuesState {
+    return {...state, helpDesk: action.helpDesk};
   },
 } as Record<string, any>);

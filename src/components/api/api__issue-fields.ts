@@ -315,6 +315,7 @@ const ISSUE_FOLDER_FIELDS: any = toField([
   'issuesUrl',
   'name',
   'pinned',
+  'pinnedInHelpdesk',
   'query',
   'shortName',
 ]);
