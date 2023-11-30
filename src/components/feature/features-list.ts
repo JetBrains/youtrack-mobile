@@ -7,4 +7,5 @@ export default {
   searchAssist: '2020.1',
   issuesGetter: '2020.1',
   issuesSettings: '2023.3.1',
+  helpDesk: '2023.1',
 };

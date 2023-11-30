@@ -65,7 +65,8 @@ export type StorageState = TipsState & FeatureState & {
   creationTimestamp: number | null;
   config: AppConfig | null;
   query: string | null;
-  searchContext: Folder;
+  searchContext: Folder | null;
+  helpdeskContext: Folder | null;
   lastQueries: string[] | null;
   issuesCache: AnyIssue[] | null;
   inboxCache: Notification[] | null;
@@ -112,6 +113,7 @@ const storageKeys: StorageStateKeys & (typeof tipsKeys) & (typeof featuresKeys) 
   creationTimestamp: 'YT_CREATION_TIMESTAMP_STORAGE_KEY',
   query: 'YT_QUERY_STORAGE',
   searchContext: 'YT_SEARCH_CONTEXT_STORAGE',
+  helpdeskContext: 'YT_HELPDESK_CONTEXT_STORAGE',
   lastQueries: 'YT_LAST_QUERIES_STORAGE_KEY',
   issuesCache: 'yt_mobile_issues_cache',
   inboxCache: 'YT_INBOX_CACHE',
@@ -161,6 +163,7 @@ export const initialState: Readonly<StorageState> = {
   config: null,
   query: null,
   searchContext: null,
+  helpdeskContext: null,
   lastQueries: null,
   issuesCache: null,
   inboxCache: null,

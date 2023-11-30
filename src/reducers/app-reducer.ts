@@ -27,10 +27,10 @@ export type RootState = {
   workTimeSettings: WorkTimeSettings | {};
   user: User | null;
   issuePermissions: IssuePermissions;
-  networkState: NetInfoState | null;
+  networkState: Partial<NetInfoState> | null;
   inboxThreadsFolders: InboxFolder[];
   isInProgress?: boolean;
-  draftCommentData: DraftCommentData,
+  draftCommentData: DraftCommentData;
 };
 
 const initialState: RootState = {

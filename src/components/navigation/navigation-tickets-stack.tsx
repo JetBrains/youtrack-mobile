@@ -17,24 +17,17 @@ import PreviewFile from 'views/preview-file/preview-file';
 import {defaultScreenOptions, Navigators, subscribeToScreenListeners} from 'components/navigation';
 import {routeMap} from 'app-routes';
 
-export type IssueLinksStackParams = {
-  [routeMap.AttachmentPreview]: any;
-  [routeMap.Issue]: any;
-  [routeMap.LinkedIssues]: any;
-  [routeMap.LinkedIssuesAddLink]: any;
-  [routeMap.Page]: any;
-  [routeMap.PreviewFile]: any;
-};
+import {IssueLinksStackParams} from 'components/navigation/navigation-issues-stack';
 
-type IssuesStackParams = IssueLinksStackParams & {
+type TicketsStackParams = IssueLinksStackParams & {
   [routeMap.CreateIssue]: any;
   [routeMap.EnterServer]: any;
-  [routeMap.Issues]: any;
+  [routeMap.Tickets]: any;
   [routeMap.LogIn]: any;
 };
 
 
-const IssuesStack = createNativeStackNavigator<IssuesStackParams>();
+const IssuesStack = createNativeStackNavigator<TicketsStackParams>();
 
 const getCommonIssueStack = (StackName, postfix: string = '') => {
   return (
@@ -55,13 +48,13 @@ const getCommonIssueStack = (StackName, postfix: string = '') => {
   );
 };
 
-export default function IssuesStackNavigator({navigation}: NativeStackScreenProps<ParamListBase>) {
+export default function TicketsStackNavigator({navigation}: NativeStackScreenProps<ParamListBase>) {
   return (
     <IssuesStack.Navigator
       key={Navigators.IssuesRoot}
-      initialRouteName={routeMap.Issues}
+      initialRouteName={routeMap.Tickets}
       screenOptions={defaultScreenOptions}
-      screenListeners={() => subscribeToScreenListeners(Navigators.IssuesRoot)}
+      screenListeners={() => subscribeToScreenListeners(Navigators.TicketsRoot)}
     >
       <IssuesStack.Group>
         <IssuesStack.Screen
@@ -75,7 +68,7 @@ export default function IssuesStackNavigator({navigation}: NativeStackScreenProp
       </IssuesStack.Group>
 
       <IssuesStack.Screen
-        name={routeMap.Issues}
+        name={routeMap.Tickets}
         component={Issues}
       />
 

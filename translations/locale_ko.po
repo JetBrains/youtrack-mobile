@@ -40,7 +40,7 @@ msgstr[0] "{{amount}}개 자료"
 #: src/views/create-issue/create-issue.tsx
 msgid "{{amount}} draft"
 msgid_plural "{{amount}} drafts"
-msgstr[0] ""
+msgstr[0] "{{amount}}개 초안"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "{{amount}} file"

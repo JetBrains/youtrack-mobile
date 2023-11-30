@@ -5,8 +5,8 @@ import type {Article} from 'types/Article';
 function findIssueField(
   issue: AnyIssue,
   predicate: (field: CustomField) => boolean,
-): CustomField | null | undefined {
-  const fields: CustomField[] = issue.fields || [];
+): CustomField | null {
+  const fields: CustomField[] = issue.fields as CustomField[] || [];
 
   for (const field of fields) {
     if (predicate(field)) {
@@ -17,15 +17,14 @@ function findIssueField(
   return null;
 }
 
-function getPriotityField(issue: AnyIssue): CustomField | null | undefined {
+function getPriorityField(issue: AnyIssue): CustomField | null {
   return findIssueField(issue, field => {
-    const fieldName: string | null | undefined =
-      field?.projectCustomField?.field?.name;
+    const fieldName: string | null | undefined = field?.projectCustomField?.field?.name;
     return !!fieldName && fieldName.toLowerCase() === 'priority';
   });
 }
 
-function getAssigneeField(issue: AnyIssue): CustomField | null | undefined {
+function getAssigneeField(issue: AnyIssue): CustomField | null {
   const PRIORITY_FIELDS = ['Assignee', 'Assignees'];
   return findIssueField(issue, field => {
     const fieldName = field.projectCustomField.field.name;
@@ -73,7 +72,7 @@ function getVisibilityPresentation(entity: Record<string, any>): null | string {
 }
 
 export {
-  getPriotityField,
+  getPriorityField,
   getAssigneeField,
   getReadableID,
   getVisibilityPresentation,

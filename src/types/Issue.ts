@@ -28,6 +28,24 @@ export type IssueOnList = (
   };
   fields: CustomFieldShort[];
   trimmedDescription: string;
+  project: {
+    plugins: {
+      helpDeskSettings: {
+        enabled: boolean;
+      },
+      timeTrackingSettings: {
+        enabled: boolean;
+        timeSpent: {
+          id: string;
+          field: {
+            id: string;
+            name: string;
+            localizedName: string;
+          }
+        },
+      },
+    }
+  },
 });
 
 export type IssueFull = {

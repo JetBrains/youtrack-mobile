@@ -24,10 +24,7 @@ interface Props {
   multiline?: boolean;
 }
 
-const NO_COLOR_CODING_ID = '0';
-
-
-const Tags = (props: Props): JSX.Element | null => {
+const Tags = (props: Props): React.JSX.Element | null => {
   const {showActionSheetWithOptions} = useActionSheet();
 
   const isFilterMode: boolean = useSelector((state: AppState) => {
@@ -56,8 +53,6 @@ const Tags = (props: Props): JSX.Element | null => {
     });
     return actions;
   };
-
-  const isDefaultColorCoding = (tag: Tag) => tag?.color?.id === NO_COLOR_CODING_ID ? styles.tagNoColor : null;
 
   const {tags, multiline, style} = props;
 
@@ -95,9 +90,6 @@ const Tags = (props: Props): JSX.Element | null => {
                 testID="tagColor"
                 text={tag.name}
                 color={tag.color}
-                defaultColorCoding={
-                  isDefaultColorCoding(tag) ? styles.tagNoColor : null
-                }
                 fullText={true}
               />
             </TouchableOpacity>

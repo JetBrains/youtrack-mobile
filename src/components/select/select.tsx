@@ -24,7 +24,7 @@ interface TitleRenderer<T> {
 
 export interface ISelectProps {
   dataSource: (query: string) => Promise<IItem[]>;
-  onSelect: (item: any) => any;
+  onSelect: (item: any | any[]) => any;
   onChangeSelection: (selectedItems: IItem[], current: IItem) => any;
   onCancel: () => any;
   getTitle: (item: IItem) => string;

@@ -1,86 +1,83 @@
 import React from 'react';
 
-import {shallow} from 'enzyme';
+import {render, screen} from '@testing-library/react-native';
 
-import ColorField from '../color-field/color-field';
-const fieldBackgroundColorMock = '#000';
-const fieldForegroundColorMock = '#FFF';
-const fieldTextMock = 'Test custom field';
+import ColorField, {ColorCoding} from '../color-field/color-field';
+
+import styles from './color-field.styles';
+
+const colorBackgroundMock = '#000';
+const colorForegroundMock = '#FFF';
+const textMock = 'Test custom field';
+
 
 describe('<ColorField/>', () => {
-  let fieldMock;
-  beforeEach(() => {
-    fieldMock = {
-      name: fieldTextMock,
-      color: {
-        id: 4,
-        background: fieldBackgroundColorMock,
-        foreground: fieldForegroundColorMock,
-      },
-    };
-  });
-
-  it('should render a component', () => {
-    const wrapper = doShallow();
-    wrapper.should.be.defined;
-  });
-  it('should not throw an exception if `text` prop is not provided', () => {
-    expect(() => doShallow(null)).not.toThrow();
-  });
-
   describe('Render text', () => {
-    it('should render first letter of color field', () => {
-      const wrapper = doShallow();
-      wrapper
-        .find({
-          testID: 'color-field-value',
-        })
-        .children()
-        .should.have.text(fieldTextMock[0]);
+    it('should render if `text` prop is not provided', () => {
+      doRender({});
+
+      expect(screen.getByTestId('test:id/color-field-value')).toBeTruthy();
     });
+
+    it('should render first letter of color field', () => {
+      doRender({text: textMock});
+
+      expect(screen.findByText(textMock[0])).toBeTruthy();
+    });
+
     it('should render whole text of color field', () => {
-      const wrapper = shallow(
-        <ColorField
-          text={fieldMock.name}
-          fullText={true}
-          color={fieldMock.color}
-        />,
-      );
-      wrapper
-        .find({
-          testID: 'color-field-value',
-        })
-        .children()
-        .should.have.text(fieldMock.name);
+      doRender({text: textMock, fullText: true});
+
+      expect(screen.getByText(textMock)).toBeTruthy();
     });
   });
 
   describe('Colorize', () => {
-    it('should set background color', () => {
-      const container = doShallow().find({
-        testID: 'color-field-value-wrapper',
+    beforeEach(() => {
+      doRender({
+        text: textMock,
+        color: {
+          id: '1',
+          foreground: colorForegroundMock,
+          background: colorBackgroundMock,
+        },
       });
-      const values = Object.values(container.props().style);
-      const backgroundColorStyle = values[0];
-      backgroundColorStyle.backgroundColor.should.equal(fieldBackgroundColorMock);
+
     });
-    it('should set foreground color', () => {
-      const container = doShallow().find({
-        testID: 'color-field-value',
-      });
-      const values = Object.values(container.props().style);
-      const foregroundColorStyle = values[0];
-      foregroundColorStyle.color.should.equal(fieldForegroundColorMock);
+
+    it('should set a background color', () => {
+      // @ts-ignore
+      expect(screen.getByTestId('test:id/color-field-value-wrapper')).toHaveProp('style', [
+        {backgroundColor: colorBackgroundMock},
+        styles.wrapper,
+        styles.wrapperOneChar,
+        null,
+        null,
+      ]);
+    });
+
+    it('should set a foreground color', () => {
+      // @ts-ignore
+      expect(screen.getByText(textMock[0])).toHaveProp('style', [
+        styles.text,
+        {color: colorForegroundMock},
+      ]);
     });
   });
 
-  function doShallow(
-    name = fieldMock.name,
-    color = fieldMock.color,
-    fullText = null,
-  ) {
-    return shallow(
-      <ColorField text={name} color={color} fullText={fullText} />,
+  function doRender({
+    text,
+    color,
+    fullText,
+  }: {
+    text?: string;
+    color?: ColorCoding;
+    fullText?: boolean;
+  }) {
+    return render(
+      <ColorField text={text} color={color} fullText={fullText}/>
     );
   }
+
 });
+

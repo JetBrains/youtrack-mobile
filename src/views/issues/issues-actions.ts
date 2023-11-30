@@ -3,7 +3,7 @@ import * as types from './issues-action-types';
 import ApiHelper from 'components/api/api__helper';
 import log from 'components/log/log';
 import usage from 'components/usage/usage';
-import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
+import {ANALYTICS_ISSUES_PAGE, ANALYTICS_TICKETS_PAGE} from 'components/analytics/analytics-ids';
 import {
   convertToNonStructural,
   createQueryFromFiltersSetting,
@@ -24,44 +24,52 @@ import {EVERYTHING_CONTEXT} from 'components/search/search-context';
 import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from 'components/storage/storage';
 import {getAssistSuggestions} from 'components/query-assist/query-assist-helper';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
-import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {guid, removeDuplicatesFromArray, until} from 'util/util';
 import {receiveUserAppearanceProfile, setGlobalInProgress, setYTCurrentUser} from 'actions/app-actions';
-import {sortAlphabetically} from 'components/search/sorting';
 import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
 import type Api from 'components/api/api';
 import type {AnyIssue, IssueFull, IssueOnList} from 'types/Issue';
-import type {AppState} from 'reducers';
 import type {Folder, User} from 'types/User';
 import {CustomError} from 'types/Error';
 import {FilterField, FilterFieldValue} from 'types/CustomFields';
+import {getGroupedFolders, GroupedFolders, sortFolders} from 'components/folder/folder';
 import {ISelectProps} from 'components/select/select';
 import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
+import {ReduxAction, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 import {SortedIssues} from 'components/api/api__issues';
 
 type ApiGetter = () => Api;
 
-type GroupedFolders = {
-  projects: Folder[];
-  searches: Folder[];
-  tags: Folder[];
-};
+export interface ContextDataSource {
+  title: string;
+  data: Folder[];
+}
 
 type SortedIssuesData = [error: CustomError | null, sortedIssues: SortedIssues];
 
 const PAGE_SIZE: number = 14;
 
-function trackEvent(msg: string, additionalParam?: string) {
-  usage.trackEvent(ANALYTICS_ISSUES_PAGE, msg, additionalParam);
+export function trackEvent(msg: string, additionalParam?: string): ReduxAction {
+  return (
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+  ) => {
+    usage.trackEvent(
+      getState().issueList.helpDesk ? ANALYTICS_TICKETS_PAGE : ANALYTICS_ISSUES_PAGE,
+      msg,
+      additionalParam
+    );
+  };
 }
+
 
 export function setIssuesQuery(
   query: string,
 ): {
   query: string;
-  type: any;
+  type: string;
 } {
   return {
     type: types.SET_ISSUES_QUERY,
@@ -69,39 +77,26 @@ export function setIssuesQuery(
   };
 }
 
-export function getPageSize(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => number {
+export function getPageSize(): ReduxAction<number> {
   return (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
   ) => {
     return getState().issueList.settings.view.mode === issuesViewSettingMode.S ? PAGE_SIZE * 3 : PAGE_SIZE;
   };
 }
 
-export function setStoredIssuesQuery(): (
-  dispatch: (arg0: any) => any,
-) => Promise<void> {
+export function setStoredIssuesQuery(): ReduxAction {
   return async (dispatch: (arg0: any) => any) => {
     const query = getStorageState().query || '';
     dispatch(setIssuesQuery(query));
   };
 }
-export function suggestIssuesQuery(
-  query: string,
-  caret: number,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => Promise<void> {
+
+export function suggestIssuesQuery(query: string, caret: number): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
     getApi: ApiGetter,
   ) => {
     const suggestions = await getAssistSuggestions(getApi(), query, caret);
@@ -111,8 +106,9 @@ export function suggestIssuesQuery(
     });
   };
 }
+
 export function clearAssistSuggestions(): {
-  type: any;
+  type: string;
 } {
   return {
     type: types.CLEAR_SUGGESTIONS,
@@ -134,58 +130,62 @@ async function storeLastQuery(query: string) {
   });
 }
 
-export function storeIssuesQuery(query: string): () => void {
+export function storeIssuesQuery(query: string): ReduxAction {
   return () => {
-    flushStoragePart({
-      query,
-    });
+    flushStoragePart({query});
     storeLastQuery(query);
   };
 }
+
 export function listEndReached(): {
-  type: any;
+  type: string;
 } {
   return {
     type: types.LIST_END_REACHED,
   };
 }
+
 export function startIssuesLoading(): {
   isInProgress: boolean;
-  type: any;
+  type: string;
 } {
   return setGlobalInProgress(true);
 }
+
 export function stopIssuesLoading(): {
   isInProgress: boolean;
-  type: any;
+  type: string;
 } {
   return setGlobalInProgress(false);
 }
+
 export function startMoreIssuesLoading(
   newSkip: number,
 ): {
   newSkip: number;
-  type: any;
+  type: string;
 } {
   return {
     type: types.START_LOADING_MORE,
     newSkip,
   };
 }
+
 export function stopMoreIssuesLoading(): {
-  type: any;
+  type: string;
 } {
   return {
     type: types.STOP_LOADING_MORE,
   };
 }
+
 export function receiveIssues(
   issues: AnyIssue[],
   pageSize: number = PAGE_SIZE,
 ): {
   issues: AnyIssue[];
   pageSize: number;
-  type: any;
+  type: string;
 } {
   return {
     type: types.RECEIVE_ISSUES,
@@ -193,29 +193,30 @@ export function receiveIssues(
     pageSize,
   };
 }
+
 export function resetIssuesCount(): {
-  type: any;
+  type: string;
 } {
   return {
     type: types.RESET_ISSUES_COUNT,
   };
 }
+
 export function setIssuesCount(
   count: number | null,
 ): {
   count: number | null;
-  type: any;
+  type: string;
 } {
   return {
     type: types.SET_ISSUES_COUNT,
     count,
   };
 }
-export function updateSearchContextPinned(
-  isPinned: boolean,
-): {
+
+export function updateSearchContextPinned(isPinned: boolean): {
   isSearchContextPinned: boolean;
-  type: any;
+  type: string;
 } {
   return {
     type: types.IS_SEARCH_CONTEXT_PINNED,
@@ -231,33 +232,36 @@ function getSearchContext() {
   return getStorageState().searchContext || getEverythingSearchContext();
 }
 
-export function onQueryUpdate(
-  query: string,
-): (dispatch: (arg0: any) => any) => void {
-  return (dispatch: (arg0: any) => any) => {
+export function onQueryUpdate(query: string): ReduxAction {
+  return (dispatch: ReduxThunkDispatch) => {
     dispatch(storeIssuesQuery(query));
     dispatch(setIssuesQuery(query));
     dispatch(clearAssistSuggestions());
     dispatch(refreshIssues());
   };
 }
-export function openContextSelect(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => void {
+
+export function isHelpDesk(): ReduxAction<boolean> {
   return (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+  ) => getState().issueList.helpDesk;
+}
+
+
+export function openContextSelect(trackMsg = 'Issue list context select'): ReduxAction {
+  return (
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
     getApi: ApiGetter,
   ) => {
-    trackEvent('Issue list context select');
+    dispatch(trackEvent(trackMsg));
     const api: Api = getApi();
     const currentSearchContext = getSearchContext();
     const searchContextSelectProps: Partial<ISSWithItemActionsProps> & { isSectioned: boolean } = {
       isSectioned: true,
       placeholder: i18n('Filter projects, saved searches, and tags'),
-      dataSource: async (query: string = '') => {
+      dataSource: async (query: string = ''): Promise<ContextDataSource[]> => {
         const [error, userFolders] = await until(
           api.user.getUserFolders()
         ) as [CustomError | null, Folder[]];
@@ -265,8 +269,11 @@ export function openContextSelect(): (
           log.warn('Failed to load user folders for the context');
           return [];
         }
-        const pinnedFolders: Folder[] = userFolders.filter((it: Folder) => it.pinned);
-        const unpinnedFolders: Folder[] = userFolders.filter((it: Folder) => !it.pinned);
+
+        const isHelpdesk: boolean = await dispatch(isHelpDesk());
+        const filterHelpdeskFolders = (it: Folder) => isHelpdesk ? it.pinnedInHelpdesk : true;
+        const pinnedFolders: Folder[] = userFolders.filter((it: Folder) => it.pinned).filter(filterHelpdeskFolders);
+        const unpinnedFolders: Folder[] = userFolders.filter((it: Folder) => !it.pinned).filter(filterHelpdeskFolders);
         const pinnedGrouped: GroupedFolders = getGroupedFolders(pinnedFolders);
         const unpinnedGrouped: GroupedFolders = getGroupedFolders(unpinnedFolders);
 
@@ -284,7 +291,7 @@ export function openContextSelect(): (
             data: [
               ...sortFolders(pinnedGrouped.tags, query),
               ...sortFolders(unpinnedGrouped.tags, query),
-            ], query,
+            ],
           },
           {
             title: i18n('Saved Searches'),
@@ -314,15 +321,10 @@ export function openContextSelect(): (
   };
 }
 
-export function composeSearchQuery(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<string> {
+export function composeSearchQuery(): ReduxAction<Promise<string>> {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
   ) => {
     const settings: IssuesSettings = dispatch(getIssuesSettings());
     const issuesQuery: string = getState().issueList.query;
@@ -337,17 +339,13 @@ export function composeSearchQuery(): (
   };
 }
 
-export function openFilterFieldSelect(filterSetting: FilterSetting): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => void {
+export function openFilterFieldSelect(filterSetting: FilterSetting): ReduxAction {
   return (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
     getApi: ApiGetter,
   ) => {
-    trackEvent('Issues settings: changed filter');
+    dispatch(trackEvent('Issues settings: changed filter'));
     const settings: IssuesSettings = dispatch(getIssuesSettings());
     const selectedItems: { name: string; id: string }[] = filterSetting.selectedValues.map(i => ({id: i, name: i}));
     const selectProps: Partial<ISelectProps> = {
@@ -401,17 +399,11 @@ export function openFilterFieldSelect(filterSetting: FilterSetting): (
   };
 }
 
-export function resetFilterFields(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => void {
+export function resetFilterFields(): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
   ) => {
-    trackEvent('Issues settings: reset all filters');
+    dispatch(trackEvent('Issues settings: reset all filters'));
     const settings: IssuesSettings = dispatch(getIssuesSettings());
     const issuesSettings: IssuesSettings = {
       ...settings,
@@ -433,21 +425,24 @@ export function resetFilterFields(): (
     dispatch(refreshIssues());
   };
 }
-export function openSelect(selectProps: Partial<ISelectProps>): (dispatch: (arg0: any) => any) => void {
-  return (dispatch: (arg0: any) => any) => {
+
+export function openSelect(selectProps: Partial<ISelectProps>): ReduxAction {
+  return (dispatch: ReduxThunkDispatch) => {
     dispatch({
       type: types.OPEN_SEARCH_CONTEXT_SELECT,
       selectProps,
     });
   };
 }
-export function closeSelect(): (dispatch: (arg0: any) => any) => void {
-  return (dispatch: (arg0: any) => any) => {
+
+export function closeSelect(): ReduxAction {
+  return (dispatch: ReduxThunkDispatch) => {
     dispatch({
       type: types.CLOSE_SEARCH_CONTEXT_SELECT,
     });
   };
 }
+
 export function cacheIssues(issues: AnyIssue[]): () => void {
   return () => {
     let updatedCache: AnyIssue[] = issues;
@@ -478,10 +473,9 @@ export function cacheIssues(issues: AnyIssue[]): () => void {
     });
   };
 }
-export function setIssuesError(
-  error: Record<string, any>,
-): (dispatch: (arg0: any) => any) => Promise<void> {
-  return async (dispatch: (arg0: any) => any) => {
+
+export function setIssuesError(error: CustomError): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     dispatch(resetIssuesCount());
     dispatch({
       type: types.LOADING_ISSUES_ERROR,
@@ -490,14 +484,10 @@ export function setIssuesError(
   };
 }
 
-export function doLoadIssues(query: string, pageSize: number, skip = 0): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<IssueOnList[]> {
+export function doLoadIssues(query: string, pageSize: number, skip = 0): ReduxAction<Promise<IssueOnList[]>> {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
     getApi: ApiGetter,
   ) => {
     const handleError = (e: CustomError) => {
@@ -528,15 +518,10 @@ export function doLoadIssues(query: string, pageSize: number, skip = 0): (
   };
 }
 
-export function loadIssues(query: string): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void> {
+export function loadIssues(query: string): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
   ) => {
     try {
       const isOffline: boolean = getState().app?.networkState?.isConnected === false;
@@ -559,23 +544,17 @@ export function loadIssues(query: string): (
       }
     } catch (e) {
       log.log('Failed to load issues');
-      dispatch(setIssuesError(e));
+      dispatch(setIssuesError(e as CustomError));
     } finally {
       dispatch(stopIssuesLoading());
     }
   };
 }
 
-export function isIssueMatchesQuery(
-  issueIdReadable: string,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => Promise<boolean> {
+export function isIssueMatchesQuery(issueIdReadable: string): ReduxAction<Promise<boolean>> {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
     getApi: ApiGetter,
   ) => {
     const [error, listIssues] = await until(
@@ -587,44 +566,23 @@ export function isIssueMatchesQuery(
     return !error && listIssues.length > 0;
   };
 }
+
 export function getIssueFromCache(
   issueId: string,
-): AnyIssue | null | undefined {
+): AnyIssue | undefined {
   const cachedIssues: AnyIssue[] = getStorageState().issuesCache || [];
   return cachedIssues.find(
     (it: AnyIssue) => it.id === issueId || it?.idReadable === issueId,
   );
 }
-export function loadIssue(
-  issueId: string,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-) => Promise<AnyIssue | null> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => Promise<IssueFull | null>,
-  ) => {
-    let issue: AnyIssue | null | undefined = getIssueFromCache(issueId);
 
-    if (!issue) {
-      issue = await issueUpdater.loadIssue(issueId);
-    }
-
-    return issue;
-  };
-}
-export function updateIssue(
-  issueId: string,
-): (dispatch: (arg0: any) => any, getState: () => any) => Promise<void> {
+export function updateIssue(issueId: string): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
   ) => {
     const currentIssues: AnyIssue[] = getState().issueList.issues;
-    const issueToUpdate: IssueFull | null = await issueUpdater.loadIssue(
-      issueId,
-    );
+    const issueToUpdate: IssueFull | null = await issueUpdater.loadIssue(issueId);
 
     if (issueToUpdate) {
       const updatedIssues: AnyIssue[] = issueUpdater.updateIssueInIssues(
@@ -636,33 +594,29 @@ export function updateIssue(
     }
   };
 }
-export function refreshIssues(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-  ): Promise<void> => {
+
+export function refreshIssues(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch): Promise<void> => {
     const searchQuery: string = await dispatch(composeSearchQuery());
     dispatch(setIssuesCount(null));
     dispatch(loadIssues(searchQuery));
     dispatch(refreshIssuesCount());
   };
 }
+
 export function refreshIssuesCount(): (
-  dispatch: (arg0: any) => any,
+  dispatch: ReduxThunkDispatch,
   getState: () => any,
 ) => Promise<void> {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
+    dispatch: ReduxThunkDispatch,
   ): Promise<void> => {
     dispatch(loadIssuesCount(getSearchContext()));
   };
 }
+
 export function setSearchContext(searchContext: Folder = EVERYTHING_CONTEXT as Folder): (
-  dispatch: (arg0: any) => any,
+  dispatch: ReduxThunkDispatch,
 ) => Promise<void> {
   return async (dispatch: (arg0: any) => any) => {
     dispatch({
@@ -672,16 +626,8 @@ export function setSearchContext(searchContext: Folder = EVERYTHING_CONTEXT as F
   };
 }
 
-export function cachedIssuesSettings(settings?: IssuesSettings): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => IssuesSettings {
-  return (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ): IssuesSettings => {
+export function cachedIssuesSettings(settings?: IssuesSettings): ReduxAction<IssuesSettings> {
+  return (dispatch: ReduxThunkDispatch): IssuesSettings => {
     if (settings) {
       dispatch({
         type: types.SET_LIST_SETTINGS,
@@ -693,27 +639,23 @@ export function cachedIssuesSettings(settings?: IssuesSettings): (
   };
 }
 
-export function getIssuesSettings(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  ) => IssuesSettings {
+export function getIssuesSettings(): ReduxAction<IssuesSettings> {
   return (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    ): IssuesSettings => {
-
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+  ): IssuesSettings => {
     return getState().issueList.settings;
   };
 }
 
 export function setFilters(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
   getApi: ApiGetter,
 ) => Promise<void> {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
     getApi: ApiGetter,
   ) => {
     let settings: IssuesSettings = dispatch(cachedIssuesSettings());
@@ -722,7 +664,8 @@ export function setFilters(): (
       log.warn('Cannot load filter fields');
     } else if (Array.isArray(filterFields) && filterFields.filter(Boolean).length > 0) {
       const currentUser: User | null = getState().app.user;
-      const userProfileFiltersNames: string[] = (currentUser?.profiles?.appearance?.liteUiFilters || []).filter(Boolean);
+      const userProfileFiltersNames: string[] = (currentUser?.profiles?.appearance?.liteUiFilters || []).filter(
+        Boolean);
       const visibleFiltersNames: string[] = (
         userProfileFiltersNames.length > 0
           ? userProfileFiltersNames
@@ -778,15 +721,10 @@ export function setFilters(): (
   };
 }
 
-export function switchToQuerySearchSetting(preventReload?: boolean): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void> {
+export function switchToQuerySearchSetting(preventReload?: boolean): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
   ) => {
     const settings: IssuesSettings = getState().issueList.settings;
     await dispatch(onSettingsChange({...settings, search: issuesSettingsSearch[0]}, preventReload));
@@ -795,14 +733,12 @@ export function switchToQuerySearchSetting(preventReload?: boolean): (
 
 
 export function initializeIssuesList(searchQuery?: string): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
   getApi: ApiGetter,
   ) => Promise<void> {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
     ) => {
     dispatch(startIssuesLoading());
     const searchContext: Folder = searchQuery?.trim?.() ? getEverythingSearchContext() : getSearchContext();
@@ -825,15 +761,11 @@ export function initializeIssuesList(searchQuery?: string): (
     dispatch(refreshIssues());
   };
 }
-export function loadMoreIssues(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void> {
+
+export function loadMoreIssues(): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
   ) => {
     try {
       const isOffline: boolean = getState().app?.networkState?.isConnected === false;
@@ -884,7 +816,7 @@ export function loadMoreIssues(): (
         }
       } catch (e) {
         log.log('Failed to load more issues');
-        dispatch(setIssuesError(e));
+        dispatch(setIssuesError(e as CustomError));
       } finally {
         dispatch(stopMoreIssuesLoading());
       }
@@ -893,14 +825,11 @@ export function loadMoreIssues(): (
     }
   };
 }
-export function loadIssuesCount(folder?: Folder | null): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void> {
+
+export function loadIssuesCount(folder?: Folder | null): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
     getApi: ApiGetter,
   ) => {
     try {
@@ -917,12 +846,12 @@ export function loadIssuesCount(folder?: Folder | null): (
 
       if (issuesCount === -1 && !abortController.signal.aborted) {
         return new Promise((resolve, reject) => {
-          let timer: TimeoutID | null | undefined = setTimeout(resolve, 3000);
+          let timer: ReturnType<typeof setTimeout> | undefined = setTimeout(resolve, 3000);
 
           abortController.signal.onabort = () => {
             reject();
             clearTimeout(timer);
-            timer = null;
+            timer = undefined;
           };
         }).then(() => dispatch(loadIssuesCount(folder)));
       }
@@ -936,23 +865,19 @@ export function loadIssuesCount(folder?: Folder | null): (
   };
 }
 
-export function onSettingsChange(settings: IssuesSettings, preventReload?: boolean): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void> {
+export function onSettingsChange(settings: IssuesSettings, preventReload?: boolean): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
   ) => {
     const currentSettings: IssuesSettings = getState().issueList.settings;
     if (settings.search.mode !== currentSettings.search.mode) {
-      trackEvent(`Issues settings: switch mode to ${settings.search.mode}`);
+      dispatch(trackEvent(`Issues settings: switch mode to ${settings.search.mode}`));
       dispatch(setIssuesQuery(''));
       await flushStoragePart({query: null});
     }
     if (settings.view.mode !== currentSettings.view.mode) {
-      trackEvent(`Issues settings: change preview size to ${settings.view.mode}`);
+      dispatch(trackEvent(`Issues settings: change preview size to ${settings.view.mode}`));
     }
     await dispatch(cachedIssuesSettings(settings));
     await flushStoragePart({issuesCache: null});
@@ -964,41 +889,4 @@ export function onSettingsChange(settings: IssuesSettings, preventReload?: boole
       dispatch(refreshIssues());
     }
   };
-}
-
-function getGroupedFolders(folders: Folder[]) {
-  return folders.reduce(
-    (
-      akk: GroupedFolders,
-      it: Folder,
-    ) => {
-      if (hasType.project(it)) {
-        akk.projects.push(it);
-      } else if (hasType.savedSearch(it)) {
-        akk.searches.push(it);
-      } else {
-        akk.tags.push(it);
-      }
-      return akk;
-    },
-    {
-      projects: [],
-      searches: [],
-      tags: [],
-    },
-  );
-}
-
-function sortFolders(flds: Folder[], q?: string): Folder[] {
-  const map: Record<string, boolean> = {};
-  return (q ? flds.filter(
-    (it: Folder) => {
-      if (map[it.id]) {
-        return false;
-      }
-      map[it.id] = true;
-      const pattern: string = q.toLowerCase();
-      return [it.name.toLowerCase(), it?.shortName?.toLowerCase?.() || ''].some(s => s.indexOf(pattern) !== -1);
-    }
-  ) : flds).sort(sortAlphabetically);
 }

@@ -4,19 +4,22 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconVCS from '@jetbrains/icons/pr-merged.svg';
+import IconHelpDesk from 'components/icon/assets/hdticket.svg';
 
 import IconYTM from './youtrack-icon';
 import {isAndroidPlatform} from 'util/util';
 
 export {default as logo} from './youtrack-logo-512.png';
 
-type Props = {
+interface Props {
   name?: string;
   size?: number;
   color?: string;
   isFontAwesome?: boolean;
   style?: Record<string, string> | Record<string, string>[];
-};
+  testID?: string;
+}
+
 const isAndroid = isAndroidPlatform();
 
 const defaultProps = () => ({
@@ -26,7 +29,15 @@ const defaultProps = () => ({
   isFontAwesome: false,
 });
 
-export function IconFont(props: Props): JSX.Element | null {
+
+export function IconHelpdesk(props: Props) {
+  // @ts-ignore
+  const {size} = props;
+  return <IconHelpDesk {...props} width={size} height={size} />;
+}
+
+
+export function IconFont(props: Props) {
   if (!props.name) {
     return null;
   }

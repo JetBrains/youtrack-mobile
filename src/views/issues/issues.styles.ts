@@ -23,6 +23,8 @@ const rowLine = {
 
 const searchContextHeight = UNIT * 7;
 
+export const DUAL_AVATAR_SIZE = 20;
+
 
 export default EStyleSheet.create({
   issueIdResolved,
@@ -71,6 +73,7 @@ export default EStyleSheet.create({
     height: COLOR_FIELD_SIZE,
   },
   priorityWrapper: {
+    position: 'relative',
     marginRight: UNIT,
     ...Platform.select({
       android: {
@@ -347,5 +350,40 @@ export default EStyleSheet.create({
     paddingRight: UNIT * 2,
     marginRight: UNIT * 2,
     textTransform: 'uppercase',
+  },
+  helpDeskIconWrapper: {
+    position: 'absolute',
+    backgroundColor: '$background',
+    borderRadius: UNIT * 2,
+    zIndex: 1,
+    marginLeft: COLOR_FIELD_SIZE - UNIT,
+    bottom: -3,
+  },
+  helpDeskIcon: {
+    color: '#A0C1D7',
+  },
+  dualAvatarWrapper: {
+    position: 'relative',
+    width: DUAL_AVATAR_SIZE,
+    height: DUAL_AVATAR_SIZE,
+  },
+  leftAvatarWrapper: {
+    position: 'absolute',
+    bottom: 0,
+    width: DUAL_AVATAR_SIZE / 2,
+    height: DUAL_AVATAR_SIZE,
+    overflow: 'hidden',
+  },
+  rightAvatarWrapper: {
+    position: 'absolute',
+    zIndex: 1,
+    right: -1,
+    bottom: 0,
+    width: DUAL_AVATAR_SIZE / 2,
+    height: DUAL_AVATAR_SIZE,
+    overflow: 'hidden',
+  },
+  rightAvatar: {
+    left: -DUAL_AVATAR_SIZE / 2,
   },
 });

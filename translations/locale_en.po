@@ -194,7 +194,7 @@ msgstr "Camera"
 
 #: src/components/account/accounts.tsx:51
 #: src/components/confirmation/confirmation.ts:19
-#: src/components/tags/tags.tsx:55
+#: src/components/tags/tags.tsx:52
 #: src/views/article/arcticle-actions.ts:322
 #: src/views/article/arcticle-actions.ts:693
 #: src/views/create-issue/create-issue-actions.ts:571
@@ -536,7 +536,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:562
+#: src/views/issues/issues.tsx:559
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -742,7 +742,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:612
+#: src/views/issues/issues.tsx:609
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -840,7 +840,7 @@ msgstr "Remove favorite"
 msgid "Remove project from favorites?"
 msgstr "Remove project from favorites?"
 
-#: src/components/tags/tags.tsx:49
+#: src/components/tags/tags.tsx:46
 msgid "Remove tag"
 msgstr "Remove tag"
 
@@ -895,7 +895,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:677
+#: src/views/issues/issues.tsx:674
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -958,7 +958,7 @@ msgstr "Share…"
 msgid "Show all"
 msgstr "Show all"
 
-#: src/components/tags/tags.tsx:41
+#: src/components/tags/tags.tsx:38
 msgid "Show all issues tagged with \"{{tagName}}\"..."
 msgstr "Show all issues tagged with \"{{tagName}}\"..."
 

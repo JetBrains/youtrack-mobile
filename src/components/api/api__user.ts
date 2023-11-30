@@ -51,6 +51,7 @@ export default class UserAPI extends ApiBase {
             lastVisitedArticle: ['id,idReadable,summary,project(id,ringId)'],
           },
           helpdesk: [
+            'helpdeskFolder(id)',
             'isAgent',
             'isReporter',
           ],

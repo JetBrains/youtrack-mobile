@@ -9,6 +9,9 @@ const ISSUE_PROJECT_FIELDS: any = toField([
   'template',
   {
     plugins: {
+      helpDeskSettings: [
+        'enabled',
+      ],
       timeTrackingSettings: toField([
         'enabled',
         {
@@ -125,7 +128,7 @@ const ISSUE_FIELD_SHORT_FIELDS = toField([
   {
     projectCustomField: [
       {
-        field: ['id', 'name', 'localizedName'],
+        field: ['id', 'name', 'localizedName', 'avatarUrl'],
       },
     ],
   },
@@ -227,6 +230,15 @@ const ISSUE_XSHORT_FIELDS: any = toField([
   },
 ]);
 const ISSUE_SSHORT_FIELDS: any = toField([
+  {
+    project: {
+      plugins: {
+        helpDeskSettings: [
+          'enabled',
+        ],
+      },
+    },
+  },
   'id',
   'idReadable',
   'summary',
@@ -303,6 +315,7 @@ const ISSUE_FOLDER_FIELDS: any = toField([
   'issuesUrl',
   'name',
   'pinned',
+  'pinnedInHelpdesk',
   'query',
   'shortName',
 ]);

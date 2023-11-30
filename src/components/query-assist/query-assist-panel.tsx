@@ -7,7 +7,7 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 import type {TransformedSuggestion} from 'types/Issue';
 import type {ViewStyleProp} from 'types/Internal';
 
-interface SearchPanelProps {
+interface Props {
   queryAssistSuggestions: TransformedSuggestion[];
   query: string;
   suggestIssuesQuery: (query: string, caret: number) => any;
@@ -19,31 +19,24 @@ interface SearchPanelProps {
 }
 
 
-export default class QueryAssistPanel extends React.PureComponent<SearchPanelProps, void> {
-  loadSuggests: (query: string, caret: number) => any = (
-    query: string,
-    caret: number,
-  ) => {
-    return this.props.suggestIssuesQuery(query, caret);
-  };
-  applyQuery: (query: string) => any = (query: string) => {
-    return this.props.onQueryUpdate(query);
-  };
+const QueryAssistPanel = (props: Props): React.JSX.Element => {
+  const loadSuggests = (q: string, caret: number) => props.suggestIssuesQuery(q, caret);
+  const applyQuery = (q: string) => props.onQueryUpdate(q);
+  const Component = isSplitView() ? QueryAssistModal : QueryAssist;
 
-  render() {
-    const {queryAssistSuggestions, query, style, clearButtonMode} = this.props;
-    const Component: any = isSplitView() ? QueryAssistModal : QueryAssist;
-    return (
-      <View style={style}>
-        <Component
-          suggestions={queryAssistSuggestions}
-          currentQuery={query}
-          onChange={this.loadSuggests}
-          onApplyQuery={this.applyQuery}
-          onClose={this.props.onClose}
-          clearButtonMode={clearButtonMode}
-        />
-      </View>
-    );
-  }
-}
+  return (
+    <View style={props.style}>
+      <Component
+        suggestions={props.queryAssistSuggestions}
+        currentQuery={props.query}
+        onChange={loadSuggests}
+        onApplyQuery={applyQuery}
+        onClose={props.onClose}
+        clearButtonMode={props.clearButtonMode}
+      />
+    </View>
+  );
+};
+
+
+export default React.memo(QueryAssistPanel);

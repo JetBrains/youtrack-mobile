@@ -7,13 +7,13 @@ import AgileStackNavigator from 'components/navigation/navigation-agile-stack';
 import InboxStackNavigator from 'components/navigation/navigation-inbox-stack';
 import IssuesStackNavigator from './navigation-issues-stack';
 import KnowledgeBaseStackNavigator from 'components/navigation/navigation-kb-stack';
+import NavigationInboxIcon from 'components/navigation/navigation-inbox-icon';
 import SettingsStackNavigator from 'components/navigation/navigation-settings-stack';
+import TicketsStackNavigator from 'components/navigation/navigation-tickets-stack';
 import {BottomTabsScreen, defaultScreenOptions, Navigators} from './index';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 
 import styles from './navigation.styles';
-import NavigationInboxIcon from 'components/navigation/navigation-inbox-icon';
-
 
 interface NavigatorRoute {
   icon: React.FC<any>,
@@ -23,10 +23,11 @@ interface NavigatorRoute {
 
 const rootRouteTabsData: { [key in keyof Navigators]: NavigatorRoute } = {
   [Navigators.IssuesRoot]: {icon: icons.IconTask, size: 23, testID: 'test:id/menuIssues'},
-  [Navigators.AgileRoot]: {icon: icons.IconBoard, size: 28, testID: 'test:id/menuAgile'},
-  [Navigators.InboxRoot]: {icon: NavigationInboxIcon, size: 22, testID: 'test:id/menuNotifications'},
+  [Navigators.TicketsRoot]: {icon: icons.IconHelpdesk, size: 23, testID: 'test:id/menuTickets'},
+  [Navigators.AgileRoot]: {icon: icons.IconBoard, size: 27, testID: 'test:id/menuAgile'},
+  [Navigators.InboxRoot]: {icon: NavigationInboxIcon, size: 21, testID: 'test:id/menuNotifications'},
   [Navigators.KnowledgeBaseRoot]: {icon: icons.IconKnowledgeBase, size: 22, testID: 'test:id/menuKnowledgeBase'},
-  [Navigators.SettingsRoot]: {icon: icons.IconSettings, size: 21, testID: 'test:id/menuSettings'},
+  [Navigators.SettingsRoot]: {icon: icons.IconSettingsTab, size: 20, testID: 'test:id/menuSettings'},
 };
 
 const BottomTabs = createBottomTabNavigator<BottomTabsScreen>();
@@ -63,6 +64,12 @@ export default function NavigationBottomTabs() {
       <BottomTabs.Screen
         name={Navigators.IssuesRoot}
         component={IssuesStackNavigator}
+        options={screenOptions}
+      />
+
+      <BottomTabs.Screen
+        name={Navigators.TicketsRoot}
+        component={TicketsStackNavigator}
         options={screenOptions}
       />
 

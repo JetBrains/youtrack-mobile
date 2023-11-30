@@ -18,6 +18,7 @@ enum Navigators {
   KnowledgeBaseRoot = 'KnowledgeBaseRoot',
   LoginRoot = 'LoginRoot',
   SettingsRoot = 'SettingsRoot',
+  TicketsRoot = 'TicketsRoot',
 }
 
 export type NavigatorKey = keyof Navigators;

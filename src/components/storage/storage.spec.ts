@@ -73,6 +73,7 @@ describe('Storage', () => {
         'YT_CURRENT_USER_STORAGE_KEY',
         'YT_CREATION_TIMESTAMP_STORAGE_KEY',
         'YT_SEARCH_CONTEXT_STORAGE',
+        'YT_HELPDESK_CONTEXT_STORAGE',
         'YT_LAST_QUERIES_STORAGE_KEY',
         'yt_mobile_issues_cache',
         'YT_INBOX_CACHE',
