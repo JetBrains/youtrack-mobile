@@ -37,7 +37,7 @@ import {FilterField, FilterFieldValue} from 'types/CustomFields';
 import {getGroupedFolders, GroupedFolders, sortFolders} from 'components/folder/folder';
 import {ISelectProps} from 'components/select/select';
 import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
-import {ReduxAction, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
+import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 import {SortedIssues} from 'components/api/api__issues';
 
 type ApiGetter = () => Api;
@@ -97,7 +97,7 @@ export function suggestIssuesQuery(query: string, caret: number): ReduxAction {
   return async (
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
-    getApi: ApiGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const suggestions = await getAssistSuggestions(getApi(), query, caret);
     dispatch({
@@ -253,7 +253,7 @@ export function openContextSelect(trackMsg = 'Issue list context select'): Redux
   return (
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
-    getApi: ApiGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     dispatch(trackEvent(trackMsg));
     const api: Api = getApi();
@@ -343,7 +343,7 @@ export function openFilterFieldSelect(filterSetting: FilterSetting): ReduxAction
   return (
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
-    getApi: ApiGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     dispatch(trackEvent('Issues settings: changed filter'));
     const settings: IssuesSettings = dispatch(getIssuesSettings());
@@ -488,7 +488,7 @@ export function doLoadIssues(query: string, pageSize: number, skip = 0): ReduxAc
   return async (
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
-    getApi: ApiGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const handleError = (e: CustomError) => {
       throw e;
@@ -555,7 +555,7 @@ export function isIssueMatchesQuery(issueIdReadable: string): ReduxAction<Promis
   return async (
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
-    getApi: ApiGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const [error, listIssues] = await until(
       getApi().issues.getIssuesXShort(
@@ -651,12 +651,12 @@ export function getIssuesSettings(): ReduxAction<IssuesSettings> {
 export function setFilters(): (
   dispatch: ReduxThunkDispatch,
   getState: ReduxStateGetter,
-  getApi: ApiGetter,
+  getApi: ReduxAPIGetter,
 ) => Promise<void> {
   return async (
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
-    getApi: ApiGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     let settings: IssuesSettings = dispatch(cachedIssuesSettings());
     const [error, filterFields] = await until(getApi().customFields.getFilters());
@@ -735,7 +735,7 @@ export function switchToQuerySearchSetting(preventReload?: boolean): ReduxAction
 export function initializeIssuesList(searchQuery?: string): (
   dispatch: ReduxThunkDispatch,
   getState: ReduxStateGetter,
-  getApi: ApiGetter,
+  getApi: ReduxAPIGetter,
   ) => Promise<void> {
   return async (
     dispatch: ReduxThunkDispatch,
@@ -830,7 +830,7 @@ export function loadIssuesCount(folder?: Folder | null): ReduxAction {
   return async (
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
-    getApi: ApiGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     try {
       const api: Api = getApi();

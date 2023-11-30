@@ -4,6 +4,7 @@ import {isActivityCategory} from 'components/activity/activity__category';
 
 import type {Activity} from 'types/Activity';
 import type {InboxThread, InboxThreadMessage, InboxThreadTarget} from 'types/Inbox';
+import {ThreadsStateFilterId} from 'types/Inbox';
 
 function getTypes(
   activity: Activity,
@@ -93,8 +94,8 @@ const getThreadTabsTitles: () => string[] = () => [
   i18n('Subscriptions'),
 ];
 
-const folderIdAllKey: string = 'all';
-const folderIdMap: Record<number, string> = {
+const folderIdAllKey: ThreadsStateFilterId = 'all';
+const folderIdMap: {[key: number]: string} = {
   [0]: undefined,
   [1]: 'direct',
   [2]: 'subscription',

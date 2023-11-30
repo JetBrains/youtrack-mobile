@@ -1,4 +1,5 @@
 import type {AuthConfiguration} from 'react-native-app-auth';
+
 export type AuthParams = {
   access_token: string;
   accessTokenExpirationDate: string;
@@ -8,6 +9,7 @@ export type AuthParams = {
   scope: string;
   token_type: string;
 };
+
 export type AuthConfig = {
   serverUri: string;
   clientId: string;
@@ -17,6 +19,7 @@ export type AuthConfig = {
   landingUrl: string;
   youtrackServiceId: string;
 };
+
 export type OAuthParams = {
   accessToken: string;
   accessTokenExpirationDate: string;
@@ -29,12 +32,14 @@ export type OAuthParams = {
   tokenAdditionalParameters: Record<string, any>;
   tokenType: string;
 };
-//@ts-expect-error
+
 export type OAuthConfig = AuthConfiguration;
+
 export type OAuthParams2 = AuthParams &
   OAuthParams & {
-    inAppLogin?: boolean;
-  };
+  inAppLogin?: boolean;
+};
+
 export type RequestHeaders = {
   Authorization?: string;
   'User-Agent': string;
