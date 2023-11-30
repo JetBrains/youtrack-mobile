@@ -24,11 +24,11 @@ export const routeMap = {
 };
 export const rootRoutesList = [
   routeMap.Issues,
+  routeMap.Tickets,
   routeMap.AgileBoard,
   routeMap.Inbox,
   routeMap.InboxThreads,
   routeMap.Settings,
   routeMap.KnowledgeBase,
   routeMap.ArticleSingle,
-  routeMap.Tickets,
 ];
