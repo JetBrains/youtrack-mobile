@@ -14,6 +14,7 @@ import MentionsAPI from './api__mention';
 import ProjectsAPI from './api__projects';
 import SavedQueries from 'components/api/api__saved-queries';
 import SearchAPI from './api__search';
+import GlobalSettingsAPI from 'components/api/api__global-settings';
 import UserAPI from './api__user';
 import UserGroupAPI from './api__user-group';
 
@@ -31,6 +32,7 @@ class API extends BaseAPI {
   articles: ArticlesAPI;
   customFields: CustomFieldsAPI;
   filterFields: FilterFields;
+  globalSettings: GlobalSettingsAPI;
   inbox: InboxAPI;
   issue: IssueAPI;
   issueFolder: IssueFolderAPI;
@@ -48,6 +50,7 @@ class API extends BaseAPI {
     this.articles = new ArticlesAPI(auth);
     this.customFields = new CustomFieldsAPI(auth);
     this.filterFields = new FilterFields(auth);
+    this.globalSettings = new GlobalSettingsAPI(auth);
     this.inbox = new InboxAPI(auth);
     this.issue = new IssueAPI(auth);
     this.issueFolder = new IssueFolderAPI(auth);

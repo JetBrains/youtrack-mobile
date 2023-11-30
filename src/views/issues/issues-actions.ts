@@ -40,8 +40,6 @@ import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-i
 import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 import {SortedIssues} from 'components/api/api__issues';
 
-type ApiGetter = () => Api;
-
 export interface ContextDataSource {
   title: string;
   data: Folder[];

@@ -40,6 +40,8 @@ type Routes = {
 export default function Menu() {
   const dispatch = useDispatch();
 
+  const isHelpdeskEnabled = useSelector((state: AppState) => state.app.globalSettings.helpdeskEnabled);
+
   const interval = useRef<ReturnType<typeof setInterval>>();
 
   const isInboxEnabled: boolean = checkVersion(FEATURE_VERSION.inbox);
@@ -48,7 +50,7 @@ export default function Menu() {
 
   const isKBEnabled: boolean = checkVersion(FEATURE_VERSION.knowledgeBase);
 
-  const isHelpdeskEnabled: boolean = checkVersion(FEATURE_VERSION.helpDesk);
+  const isHelpdeskFeatureEnabled: boolean = checkVersion(FEATURE_VERSION.helpDesk);
 
   const hasNewNotifications: boolean = useSelector((appState: AppState) => {
     if (!isInboxThreadsEnabled) {
@@ -97,6 +99,7 @@ export default function Menu() {
 
     return unsubscribe;
   }, [isInboxThreadsEnabled, setInboxHasUpdateStatus, isChangingAccount]);
+
   useEffect(() => {
     const unsubscribeOnDispatch = Router.setOnDispatchCallback(
       (routeName: string | null, prevRouteName: string | null) => {
@@ -108,6 +111,7 @@ export default function Menu() {
     );
     return () => unsubscribeOnDispatch();
   }, []);
+
   useEffect(() => {
     const unsubscribeOnDimensionsChange: EventSubscription = Dimensions.addEventListener(
       'change',
@@ -279,7 +283,7 @@ export default function Menu() {
         />
 
         <MenuItem
-          disabled={!isHelpdeskEnabled}
+          disabled={!isHelpdeskFeatureEnabled || !isHelpdeskEnabled}
           testID="test:id/menuTickets"
           icon={<IconHDTicket width={23} height={23} color={color(routeMap.Tickets)} />}
           onPress={openTickets}

@@ -12,6 +12,7 @@ import type {StorageState} from 'components/storage/storage';
 import type {User, UserAppearanceProfile, UserArticlesProfile} from 'types/User';
 import type {WorkTimeSettings} from 'types/Work';
 import {DraftCommentData} from 'types/CustomFields';
+import {GlobalSettings} from 'types/GlobalSettings';
 import {InboxFolder} from 'types/Inbox';
 
 
@@ -31,6 +32,7 @@ export type RootState = {
   inboxThreadsFolders: InboxFolder[];
   isInProgress?: boolean;
   draftCommentData: DraftCommentData;
+  globalSettings: GlobalSettings;
 };
 
 const initialState: RootState = {
@@ -51,6 +53,7 @@ const initialState: RootState = {
   inboxThreadsFolders: [],
   isInProgress: false,
   draftCommentData: {} as DraftCommentData,
+  globalSettings: {} as GlobalSettings,
 };
 
 
@@ -317,6 +320,16 @@ export default createReducer(initialState, {
         getCommentDraft,
         setDraft,
       },
+    };
+  },
+
+  [types.SET_SETTINGS](
+    state: RootState,
+    action: { globalSettings: GlobalSettings },
+  ) {
+    return {
+      ...state,
+      globalSettings: action.globalSettings,
     };
   },
 });

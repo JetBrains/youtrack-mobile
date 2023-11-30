@@ -63,11 +63,7 @@ import {UserGeneralProfileLocale} from 'types/User';
 
 
 export function setNetworkState(networkState: NetInfoState): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch) => {
     dispatch({
       type: types.SET_NETWORK,
       networkState,
@@ -76,11 +72,7 @@ export function setNetworkState(networkState: NetInfoState): ReduxAction {
 }
 
 export function logOut(): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const auth = getState().app.auth;
     if (auth) {
       auth.logOut();
@@ -95,61 +87,40 @@ export function logOut(): ReduxAction {
   };
 }
 
-export function openDebugView(): {
-  type: string;
-} {
+export function openDebugView() {
   return {
     type: types.OPEN_DEBUG_VIEW,
   };
 }
 
-export function closeDebugView(): {
-  type: string;
-} {
+export function closeDebugView() {
   return {
     type: types.CLOSE_DEBUG_VIEW,
   };
 }
 
-export function setEnabledFeatures(
-  features: string[],
-): {
-  features: string[];
-  type: string;
-} {
+export function setEnabledFeatures(features: string[]) {
   return {
     type: types.SET_FEATURES,
     features,
   };
 }
 
-export function onNavigateBack(
-  closingView: Record<string, any>,
-): {
-  closingView: any;
-  type: string;
-} {
+export function onNavigateBack(closingView: Record<string, any>) {
   return {
     type: types.ON_NAVIGATE_BACK,
     closingView,
   };
 }
 
-export function receiveOtherAccounts(
-  otherAccounts: StorageState[],
-): {
-  otherAccounts: StorageState[];
-  type: string;
-} {
+export function receiveOtherAccounts(otherAccounts: StorageState[]) {
   return {
     type: types.RECEIVE_OTHER_ACCOUNTS,
     otherAccounts,
   };
 }
 
-export function receiveUserAppearanceProfile(
-  userAppearanceProfile?: UserAppearanceProfile,
-): ReduxAction {
+export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppearanceProfile): ReduxAction {
   return async (
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
@@ -175,15 +146,9 @@ export function receiveUserAppearanceProfile(
 }
 
 export const updateUserArticlesProfile = (
-  articlesProfile:
-    | UserArticlesProfile
-    | {
-    lastVisitedArticle: null;
-  },
+  articlesProfile: UserArticlesProfile | { lastVisitedArticle: null },
 ): ReduxAction => async (
   dispatch: ReduxThunkDispatch,
-  getState: ReduxStateGetter,
-  getApi: ReduxAPIGetter,
 ) => {
   dispatch({
     type: types.RECEIVE_USER_ARTICLES_PROFILE,
@@ -192,21 +157,16 @@ export const updateUserArticlesProfile = (
     },
   });
 };
-export const resetUserArticlesProfile = (): ReduxAction => async (
-  dispatch: ReduxThunkDispatch,
-  getState: ReduxStateGetter,
-  getApi: ReduxAPIGetter,
-) => {
+
+export const resetUserArticlesProfile = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
   dispatch(
     updateUserArticlesProfile({
       lastVisitedArticle: null,
     }),
   );
 };
-export const cacheUserLastVisitedArticle = (
-  article: Article | null,
-  activities?: Activity[],
-) => {
+
+export const cacheUserLastVisitedArticle = (article: Article | null, activities?: Activity[]) => {
   try {
     if (!article || !article.id) {
       storage.flushStoragePart({
@@ -239,11 +199,7 @@ export const cacheUserLastVisitedArticle = (
 };
 
 export function loadCurrentUserAndSetAPI(): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     if (getState().app?.networkState?.isConnected === true) {
       const auth: OAuth2 = (getState().app.auth as any) as OAuth2;
       const authParams = auth.getAuthParams();
@@ -289,11 +245,7 @@ async function storeConfig(config: AppConfig) {
 }
 
 function populateAccounts() {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch) => {
     const otherAccounts: StorageState[] = await storage.getOtherAccounts();
     dispatch(receiveOtherAccounts(otherAccounts));
   };
@@ -338,18 +290,9 @@ async function authorizeOnOneMoreServer(
   });
 }
 
-function applyAccount(
-  config: AppConfig,
-  auth: OAuth2,
-  authParams: AuthParams,
-): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
-    const otherAccounts: StorageState[] =
-      getState().app.otherAccounts || [];
+function applyAccount(config: AppConfig, auth: OAuth2, authParams: AuthParams): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
+    const otherAccounts: StorageState[] = getState().app.otherAccounts || [];
     const currentAccount: StorageState = storage.getStorageState();
     const newOtherAccounts: StorageState[] = [
       currentAccount,
@@ -375,11 +318,7 @@ function applyAccount(
 }
 
 export function addAccount(serverUrl: string = ''): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     log.info('Adding new account started');
 
     try {
@@ -428,11 +367,7 @@ export function switchAccount(
   issueId?: string,
   articleId?: string,
 ): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch) => {
     dispatch(resetUserArticlesProfile());
     cacheUserLastVisitedArticle(null);
 
@@ -444,17 +379,9 @@ export function switchAccount(
 
 export function updateOtherAccounts(
   account: StorageState,
-  removeCurrentAccount: boolean = false,
-): (
-  dispatch: ReduxThunkDispatch,
-  getState: ReduxStateGetter,
-  getApi: ReduxAPIGetter,
-) => Promise<Array<StorageState>> {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  removeCurrentAccount: boolean = false
+): ReduxAction<Promise<StorageState[]>> {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const state: AppState = getState();
     const currentAccount: StorageState = storage.getStorageState();
     log.info(
@@ -487,10 +414,7 @@ export function changeAccount(
   navigateToActivity?: string,
   searchQuery?: string,
 ): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const state: AppState = getState();
     const config: AppConfig = (account.config as any) as AppConfig;
     const authParams: AuthParams | null = await getStoredSecurelyAuthParams(account.authParamsKey);
@@ -524,6 +448,7 @@ export function changeAccount(
       await storeConfig(config);
       await dispatch(initializeAuth(config));
       await dispatch(checkUserAgreement());
+      await dispatch(applyGlobalSettings());
 
       if (!state.app.showUserAgreement) {
         dispatch(completeInitialization(issueId, articleId, navigateToActivity, searchQuery));
@@ -574,11 +499,7 @@ export function removeAccountOrLogOut(): ReduxAction {
 }
 
 function setUserPermissions(permissions: PermissionCacheItem[]): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     dispatch({
       type: types.SET_PERMISSIONS,
       permissionsStore: new PermissionsStore(permissions),
@@ -589,11 +510,7 @@ function setUserPermissions(permissions: PermissionCacheItem[]): ReduxAction {
 }
 
 export function loadUserPermissions(): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const auth: OAuth2 = (getState().app.auth as any) as OAuth2;
 
     try {
@@ -619,11 +536,7 @@ export function completeInitialization(
   searchQuery?: string,
   skipNavigateToRoute: boolean = false,
 ): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch) => {
     log.debug('Completing initialization');
     const cachedCurrentUser: UserCurrent | undefined = storage.getStorageState()?.currentUser?.ytCurrentUser;
     const cachedLocale: UserGeneralProfileLocale | undefined = cachedCurrentUser?.profiles?.general?.locale;
@@ -667,11 +580,7 @@ export function completeInitialization(
 }
 
 export function setYTCurrentUser(user: User): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ): Promise<void> => {
+  return async (dispatch: ReduxThunkDispatch) => {
     await dispatch({
       type: types.RECEIVE_USER,
       user,
@@ -731,11 +640,7 @@ export function acceptUserAgreement(): ReduxAction {
 }
 
 export function declineUserAgreement(): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch) => {
     log.info('User agreement declined');
     usage.trackEvent('EUA is declined');
     dispatch({
@@ -746,11 +651,7 @@ export function declineUserAgreement(): ReduxAction {
 }
 
 export function initializeAuth(config: AppConfig): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch) => {
     const auth: OAuth2 = await createAuthInstance(config);
     dispatch(setAuthInstance(auth));
     await dispatch(loadCurrentUserAndSetAPI());
@@ -827,16 +728,8 @@ export function onLogIn(authParams: AuthParams): ReduxAction {
   };
 }
 
-export function cacheProjects(): (
-  dispatch: ReduxThunkDispatch,
-  getState: ReduxStateGetter,
-  getApi: ReduxAPIGetter,
-) => Promise<Array<Folder>> {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+export function cacheProjects(): ReduxAction<Promise<Folder[]>> {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const [error, userFolders]: [CustomError | null, Folder[]] = await until(
       getApi().user.getUserFolders('', ['$type,id,shortName,name,pinned'])
     ) as [CustomError | null, Folder[]];
@@ -847,11 +740,7 @@ export function cacheProjects(): (
 }
 
 export function subscribeToURL(): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     openByUrlDetector(
       async (url: string, issueId?: string, articleId?: string) => {
         if (isAuthorized()) {
@@ -897,65 +786,6 @@ export function subscribeToURL(): ReduxAction {
   };
 }
 
-export function redirectToRoute(
-  config: AppConfig,
-  issueId?: string,
-  articleId?: string,
-  navigateToActivity?: string,
-): ReduxAction<Promise<boolean>> {
-  return async (
-    dispatch: ReduxThunkDispatch,
-  ): Promise<boolean> => {
-    let isRedirected: boolean = false;
-
-    try {
-      if (config) {
-        const auth: OAuth2 = await createAuthInstance(config);
-        dispatch(setAuthInstance(auth));
-        setApi(new Api(auth));
-        const cachedPermissions: Array<PermissionCacheItem> | null = getCachedPermissions();
-
-        if (cachedPermissions) {
-          await dispatch(setUserPermissions(cachedPermissions));
-        }
-
-        const isGuest: boolean = await setUser();
-
-        if (cachedPermissions && !isGuest) {
-          const splitView: boolean = isSplitView();
-          if (
-            (!splitView && (issueId || articleId)) ||
-            splitView ||
-            !(issueId && articleId)
-          ) {
-            isRedirected = true;
-          }
-          navigateToRouteById(issueId, articleId, navigateToActivity);
-        }
-      }
-    } catch (e) {}
-
-    if (!isRedirected) {
-      redirectToHome(config.backendUrl);
-    }
-
-    return isRedirected;
-
-    async function setUser(): Promise<boolean> {
-      const hubCurrentUser: UserCurrent | null | undefined = storage.getStorageState()
-        .currentUser;
-      const ytCurrentUser: User | null | undefined =
-        hubCurrentUser?.ytCurrentUser;
-
-      if (ytCurrentUser) {
-        await dispatch(setYTCurrentUser(ytCurrentUser));
-      }
-
-      return ytCurrentUser?.guest === true;
-    }
-  };
-}
-
 function redirectToHome(backendUrl: string = '') {
   Router.Home({
     backendUrl: backendUrl,
@@ -973,16 +803,8 @@ async function refreshConfig(backendUrl: string): Promise<AppConfig> {
   return updatedConfig;
 }
 
-export function migrateToIssuesFilterSearch(): (
-  dispatch: ReduxThunkDispatch,
-  getState: ReduxStateGetter,
-  getApi: ReduxAPIGetter,
-) => void {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+export function migrateToIssuesFilterSearch(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     const storageState: StorageState = storage.getStorageState();
     let shouldMigrate;
     try {
@@ -1012,37 +834,66 @@ export function migrateToIssuesFilterSearch(): (
   };
 }
 
+export function applyGlobalSettings(): ReduxAction {
+  return async (
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
+  ) => {
+    const [error, globalSettings] = await until(getApi().globalSettings.getSettings());
+    if (!error) {
+      dispatch({
+        type: types.SET_SETTINGS,
+        globalSettings,
+      });
+    }
+  };
+}
+
 export function initializeApp(
   config: AppConfig,
   issueId?: string,
   articleId?: string,
   navigateToActivity?: string,
 ): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ): Promise<void> => {
-    const cachedCurrentUser: UserCurrent | null | undefined = storage.getStorageState()?.currentUser?.ytCurrentUser;
-    const userProfileLocale: UserGeneralProfileLocale | null | undefined = cachedCurrentUser?.profiles?.general?.locale;
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
+    const cachedCurrentUser: User | undefined = storage.getStorageState()?.currentUser?.ytCurrentUser;
+    if (cachedCurrentUser) {
+      await dispatch(setYTCurrentUser(cachedCurrentUser));
+    }
+    const cachedPermissions: PermissionCacheItem[] | null = getCachedPermissions();
+    if (cachedPermissions) {
+      await dispatch(setUserPermissions(cachedPermissions));
+    }
 
-    const currentAppVersion: string | null | undefined = storage.getStorageState().currentAppVersion;
-    const versionHasChanged: boolean = currentAppVersion != null && packageJson.version !== currentAppVersion;
-    storage.flushStoragePart({currentAppVersion: packageJson.version});
-
+    const userProfileLocale: UserGeneralProfileLocale | undefined = cachedCurrentUser?.profiles?.general?.locale;
     if (userProfileLocale?.language) {
       loadTranslation(userProfileLocale.locale, userProfileLocale.language);
     }
 
     await dispatch(migrateToIssuesFilterSearch());
+    await createAPIInstance();
+    await dispatch(applyGlobalSettings());
 
-    const url: string | null = await Linking.getInitialURL();
-    const searchQuery: string | null = extractIssuesQuery(url);
-    const isRedirectedToTargetRoute: boolean = url ? false : await dispatch(
-      redirectToRoute(config, issueId, articleId, navigateToActivity),
+    const splitView: boolean = isSplitView();
+    const isRedirectedToTargetRoute: boolean = (
+      !!cachedPermissions &&
+      !cachedCurrentUser?.guest && (
+        (!splitView && !!(issueId || articleId)) ||
+        splitView ||
+        !(issueId && articleId)
+      )
     );
+    if (isRedirectedToTargetRoute) {
+      navigateToRouteById(issueId, articleId, navigateToActivity);
+    }
 
+    const url = await Linking.getInitialURL();
     let configCurrent = config;
+    const currentAppVersion: string | null = storage.getStorageState().currentAppVersion;
+    const versionHasChanged: boolean = currentAppVersion != null && packageJson.version !== currentAppVersion;
+    storage.flushStoragePart({currentAppVersion: packageJson.version});
+
     try {
       if (versionHasChanged) {
         log.info(`App upgraded to "${packageJson.version}"; reloading config`);
@@ -1082,7 +933,7 @@ export function initializeApp(
           issueId,
           articleId,
           navigateToActivity,
-          searchQuery ?? undefined,
+          extractIssuesQuery(url) ?? undefined,
           isRedirectedToTargetRoute,
         ),
       );
@@ -1093,6 +944,18 @@ export function initializeApp(
     if (!versionHasChanged) {
       refreshConfig(configCurrent.backendUrl);
     }
+
+    async function createAPIInstance() {
+      if (config) {
+        try {
+          const auth: OAuth2 = await createAuthInstance(config);
+          dispatch(setAuthInstance(auth));
+          setApi(new Api(auth));
+        } catch (e) {
+          redirectToHome(config.backendUrl);
+        }
+      }
+    }
   };
 }
 
@@ -1101,11 +964,7 @@ export async function doConnect(newURL: string): Promise<any> {
 }
 
 export function connectToNewYoutrack(newURL: string): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch) => {
     const config = await doConnect(newURL);
     await storeConfig(config);
     const auth: OAuth2 = await createAuthInstance(config);
@@ -1117,11 +976,7 @@ export function connectToNewYoutrack(newURL: string): ReduxAction {
 }
 
 export function setAccount(notificationRouteData: NotificationRouteData = {}): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch) => {
     const state: StorageState = await storage.populateStorage();
     await dispatch(populateAccounts());
     const notificationBackendUrl: string | undefined = notificationRouteData?.backendUrl;
@@ -1177,11 +1032,7 @@ export function setAccount(notificationRouteData: NotificationRouteData = {}): R
 }
 
 export function subscribeToPushNotifications(): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ): Promise<void> => {
+  return async (dispatch: ReduxThunkDispatch) => {
     if (await DeviceInfo.isEmulator()) {
       return;
     }
@@ -1320,11 +1171,7 @@ export function setDraftCommentData(
 }
 
 const addMentionToDraftComment = (userLogin: string): ReduxAction => {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ) => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     if (getState().app?.networkState?.isConnected !== true) {
       return;
     }
@@ -1347,24 +1194,8 @@ const addMentionToDraftComment = (userLogin: string): ReduxAction => {
   };
 };
 
-const getDraftCommentData = () => {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
-  ): Promise<DraftCommentData | null> => {
-    try {
-      return await getState().app.draftCommentData;
-    } catch (e) {
-      return null;
-    }
-  };
-};
-
-
 export {
   addMentionToDraftComment,
-  getDraftCommentData,
   inboxCheckUpdateStatus,
   setGlobalInProgress,
 };
