@@ -43,7 +43,7 @@ export const initialState: IssuesState = {
   issuesCount: null,
   issues: [],
   selectProps: null,
-  searchContext: EVERYTHING_SEARCH_CONTEXT as Folder,
+  searchContext: EVERYTHING_SEARCH_CONTEXT,
   isSearchContextPinned: false,
   settings: issuesSettingsDefault,
   helpDesk: false,

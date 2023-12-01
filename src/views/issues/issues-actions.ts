@@ -181,7 +181,7 @@ export function updateSearchContextPinned(isPinned: boolean) {
 
 export function getSearchContext(): ReduxAction<Folder> {
   return (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
-    return getState().issueList.searchContext || EVERYTHING_SEARCH_CONTEXT;
+    return getState().issueList.searchContext;
   };
 }
 
@@ -230,7 +230,7 @@ export function openContextSelect(trackMsg = 'Issue list context select'): Redux
           {
             title: i18n('Projects'),
             data: [
-              EVERYTHING_SEARCH_CONTEXT as Folder,
+              EVERYTHING_SEARCH_CONTEXT,
               ...sortFolders(pinnedGrouped.projects, query),
               ...sortFolders(unpinnedGrouped.projects, query),
             ],
@@ -256,7 +256,7 @@ export function openContextSelect(trackMsg = 'Issue list context select'): Redux
       onSelect: async (searchContext: Folder) => {
         try {
           dispatch(closeSelect());
-          await dispatch(setSearchContext(searchContext));
+          await dispatch(updateSearchContext(searchContext));
           dispatch(refreshIssues());
         } catch (error) {
           log.warn('Failed to change a context', error);
@@ -563,13 +563,22 @@ export function refreshIssuesCount(): (
   };
 }
 
-export function setSearchContext(searchContext: Folder = EVERYTHING_SEARCH_CONTEXT): ReduxAction {
+export function updateSearchContext(searchContext: Folder): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
     dispatch({
       type: types.SET_SEARCH_CONTEXT,
       searchContext,
     });
     flushStoragePart({searchContext});
+  };
+}
+
+export function initSearchContext(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
+    dispatch({
+      type: types.SET_SEARCH_CONTEXT,
+      searchContext: getStorageState().searchContext,
+    });
   };
 }
 
@@ -696,7 +705,7 @@ export function initializeIssuesList(searchQuery?: string): (
     }
 
     await dispatch(setStoredIssuesQuery());
-    await dispatch(setSearchContext(searchContext));
+    await dispatch(updateSearchContext(searchContext));
     await dispatch(setFilters());
 
     const cachedIssues: AnyIssue[] | null = searchQuery ? [] : getStorageState().issuesCache || [];
