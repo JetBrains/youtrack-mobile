@@ -73,7 +73,7 @@ export interface UserGeneralProfileLocale {
 export type UserGeneralProfile = {
   $type: string;
   id: string;
-  searchContext?: Folder | null | undefined;
+  searchContext?: Folder | null;
   timezone: {
     id: string;
   };
@@ -87,6 +87,7 @@ export type UserGeneralProfile = {
 export interface UserHelpdeskProfile {
   isAgent: boolean;
   isReporter: boolean;
+  helpdeskFolder: Folder
 }
 
 export type Folder = {

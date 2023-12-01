@@ -1,6 +1,6 @@
 import * as types from './issues-action-types';
 import {createReducer} from 'redux-create-reducer';
-import {EVERYTHING_CONTEXT} from 'components/search/search-context';
+import {EVERYTHING_SEARCH_CONTEXT} from 'components/search/search-context';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {IssuesSettings, issuesSettingsDefault} from 'views/issues/index';
@@ -43,7 +43,7 @@ export const initialState: IssuesState = {
   issuesCount: null,
   issues: [],
   selectProps: null,
-  searchContext: EVERYTHING_CONTEXT as Folder,
+  searchContext: EVERYTHING_SEARCH_CONTEXT as Folder,
   isSearchContextPinned: false,
   settings: issuesSettingsDefault,
   helpDesk: false,
