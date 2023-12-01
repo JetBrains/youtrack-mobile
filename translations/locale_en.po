@@ -98,7 +98,7 @@ msgstr "Add to favorites"
 msgid "added a reaction"
 msgstr "added a reaction"
 
-#: src/views/inbox-threads/inbox-threads-helper.ts:91
+#: src/views/inbox-threads/inbox-threads-helper.ts:92
 msgid "All"
 msgstr "All"
 
@@ -274,7 +274,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:947
+#: src/actions/app-actions.ts:793
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -506,7 +506,7 @@ msgstr "Filter items"
 msgid "Filter projects"
 msgstr "Filter projects"
 
-#: src/views/issues/issues-actions.ts:259
+#: src/views/issues/issues-actions.ts:261
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
@@ -536,7 +536,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:559
+#: src/views/issues/issues.tsx:564
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -694,7 +694,7 @@ msgstr "Medium"
 msgid "mentioned you"
 msgstr "mentioned you"
 
-#: src/views/inbox-threads/inbox-threads-helper.ts:92
+#: src/views/inbox-threads/inbox-threads-helper.ts:93
 msgid "Mentions & Reactions"
 msgstr "Mentions & Reactions"
 
@@ -742,7 +742,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:609
+#: src/views/issues/issues.tsx:614
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -803,7 +803,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/issues/issues-actions.ts:275
+#: src/views/issues/issues-actions.ts:280
 #: src/views/knowledge-base/knowledge-base.tsx:609
 msgid "Projects"
 msgstr "Projects"
@@ -870,7 +870,7 @@ msgstr "Restore"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/views/issues/issues-actions.ts:290
+#: src/views/issues/issues-actions.ts:295
 msgid "Saved Searches"
 msgstr "Saved Searches"
 
@@ -895,7 +895,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:674
+#: src/views/issues/issues.tsx:679
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -1014,7 +1014,7 @@ msgstr "Sub-articles"
 msgid "submitted a pull request"
 msgstr "submitted a pull request"
 
-#: src/views/inbox-threads/inbox-threads-helper.ts:93
+#: src/views/inbox-threads/inbox-threads-helper.ts:94
 msgid "Subscriptions"
 msgstr "Subscriptions"
 
@@ -1036,7 +1036,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/views/issues/issues-actions.ts:283
+#: src/views/issues/issues-actions.ts:288
 msgid "Tags"
 msgstr "Tags"
 
@@ -1088,7 +1088,7 @@ msgstr "The commit author is not an assignee in the project."
 msgid "The search query contains unknown values"
 msgstr "The search query contains unknown values"
 
-#: src/actions/app-actions.ts:488
+#: src/actions/app-actions.ts:423
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
@@ -1274,7 +1274,7 @@ msgstr ""
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Your account has insufficient permission to perform this operation."
 
-#: src/components/storage/storage.ts:364
+#: src/components/storage/storage.ts:367
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 msgstr "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 
