@@ -773,10 +773,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bugsnag/cli@^1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@bugsnag/cli/-/cli-1.2.2.tgz#ed74c0059b6091b29a1c6ca201551b5822fb7328"
-  integrity sha512-dggGl+Za/cIREcXc5ZqSvw1e19vZnX+kyLOdWBlGlLARm91sZPOfAR4NBTvZfGSGEvybQxU1gbX8vXnCXUKoeQ==
+"@bugsnag/cli@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/cli/-/cli-2.0.0.tgz#1839326bdc5512c0203546679dcb55a233616bcc"
+  integrity sha512-Zo6rqTYx5xE0T1QFwghTyZmIzxFncWgtp54C4ci1NmmtIKG1lH9vhr9lq8oOCKAu83bBmQY+zf1MfDfvpNOZQQ==
   dependencies:
     axios "^1.4.0"
     console.table "^0.10.0"
@@ -847,10 +847,10 @@
   resolved "https://registry.yarnpkg.com/@bugsnag/plugin-react/-/plugin-react-7.19.0.tgz#3f86c6ed2745cd60a4099d0e14ca46f2b9cf501f"
   integrity sha512-owC4QXYJWGllMoOPcH5P7sbDIDuFLMCbjGAU6FwH5mBMObSQo+1ViSKImlTJQUFXATM8ySISTBVt7w3C6FFHng==
 
-"@bugsnag/react-native@^7.18.2":
-  version "7.20.2"
-  resolved "https://registry.yarnpkg.com/@bugsnag/react-native/-/react-native-7.20.2.tgz#f2df1cf98bb0605ba011a21960a687f378247526"
-  integrity sha512-pvzFZA/7PzChLgrSsynZFl/lBOcY+X76sLbniJz7S3Lcrdc5+NY5fP+AVoZH9mqNaob6OSiALubUVLpPeirivg==
+"@bugsnag/react-native@^7.22.2":
+  version "7.22.2"
+  resolved "https://registry.yarnpkg.com/@bugsnag/react-native/-/react-native-7.22.2.tgz#aa24fe41dc9cc041b715768e88aa43a0d4f72ed3"
+  integrity sha512-r8kIwk7zI4ONCyjy4wV39m85blgA+U3TXXJf07VH89xDfOvELeO/BTF2wGaqgvICwvH8/kHw6LT+EHOqIMKExA==
   dependencies:
     "@bugsnag/core" "^7.19.0"
     "@bugsnag/delivery-react-native" "^7.19.0"
