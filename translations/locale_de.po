@@ -1130,6 +1130,11 @@ msgstr "Thread stummgeschaltet"
 msgid "Thread unmuted"
 msgstr "Thread-Stummschaltung aufgehoben"
 
+#: src/views/issues/issues-reducers.ts
+#: src/views/tickets/tickets.tsx
+msgid "Tickets"
+msgstr ""
+
 #: src/views/article-create/article-create.tsx
 msgid "Title"
 msgstr "Titel"

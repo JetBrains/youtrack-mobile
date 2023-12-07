@@ -1123,6 +1123,11 @@ msgstr "已忽略话题"
 msgid "Thread unmuted"
 msgstr "已取消忽略话题"
 
+#: src/views/issues/issues-reducers.ts
+#: src/views/tickets/tickets.tsx
+msgid "Tickets"
+msgstr "工单"
+
 #: src/views/article-create/article-create.tsx
 msgid "Title"
 msgstr "标题"

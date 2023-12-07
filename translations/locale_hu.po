@@ -1130,6 +1130,11 @@ msgstr "Szál elnémítva"
 msgid "Thread unmuted"
 msgstr "Szál némítása feloldva"
 
+#: src/views/issues/issues-reducers.ts
+#: src/views/tickets/tickets.tsx
+msgid "Tickets"
+msgstr "Jegyek"
+
 #: src/views/article-create/article-create.tsx
 msgid "Title"
 msgstr "Cím"

@@ -1130,6 +1130,11 @@ msgstr "Tópico silenciado"
 msgid "Thread unmuted"
 msgstr "Tópico não silenciado"
 
+#: src/views/issues/issues-reducers.ts
+#: src/views/tickets/tickets.tsx
+msgid "Tickets"
+msgstr "Tickets"
+
 #: src/views/article-create/article-create.tsx
 msgid "Title"
 msgstr "Título"

@@ -506,7 +506,7 @@ msgstr "Filter items"
 msgid "Filter projects"
 msgstr "Filter projects"
 
-#: src/views/issues/issues-actions.ts:261
+#: src/views/issues/issues-actions.ts:294
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
@@ -536,7 +536,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:564
+#: src/views/issues/issues.tsx:566
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -742,7 +742,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:614
+#: src/views/issues/issues.tsx:616
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -803,7 +803,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/issues/issues-actions.ts:280
+#: src/views/issues/issues-actions.ts:315
 #: src/views/knowledge-base/knowledge-base.tsx:609
 msgid "Projects"
 msgstr "Projects"
@@ -870,7 +870,7 @@ msgstr "Restore"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/views/issues/issues-actions.ts:295
+#: src/views/issues/issues-actions.ts:330
 msgid "Saved Searches"
 msgstr "Saved Searches"
 
@@ -895,7 +895,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:679
+#: src/views/issues/issues.tsx:681
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -1036,7 +1036,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/views/issues/issues-actions.ts:288
+#: src/views/issues/issues-actions.ts:323
 msgid "Tags"
 msgstr "Tags"
 
@@ -1123,6 +1123,11 @@ msgstr "Thread muted"
 #: src/views/inbox-threads/inbox-threads-actions.ts:399
 msgid "Thread unmuted"
 msgstr "Thread unmuted"
+
+#: src/views/issues/issues-reducers.ts:51
+#: src/views/tickets/tickets.tsx:29
+msgid "Tickets"
+msgstr "Tickets"
 
 #: src/views/article-create/article-create.tsx:395
 msgid "Title"
@@ -1274,7 +1279,7 @@ msgstr ""
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Your account has insufficient permission to perform this operation."
 
-#: src/components/storage/storage.ts:367
+#: src/components/storage/storage.ts:373
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 msgstr "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 
