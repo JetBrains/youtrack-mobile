@@ -739,7 +739,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
 }
 
 export function doConnectComponent(
-  ReactComponent: React.ComponentType<never>,
+  ReactComponent: React.ComponentType<any>,
   extraActions?: { [fnName: string]: ReduxAction<unknown> },
 )
 {

@@ -3,16 +3,16 @@ import {doConnectComponent, Issues} from 'views/issues/issues';
 
 import * as ticketsActions from './tickets-actions';
 import {ANALYTICS_TICKETS_PAGE} from 'components/analytics/analytics-ids';
+import {i18n} from 'components/i18n/i18n';
 
 import type {IssuesProps} from '../issues/issues';
 import {Folder} from 'types/User';
-import {i18n} from 'components/i18n/i18n';
 
 type TicketsProps = IssuesProps & typeof ticketsActions;
 
-export class Tickets<P extends TicketsProps> extends Issues<P> {
+export class Tickets extends Issues<TicketsProps> {
 
-  constructor(props: P) {
+  constructor(props: TicketsProps) {
     super(props);
     this.props.setHelpDeskMode();
     usage.trackScreenView('Tickets');
