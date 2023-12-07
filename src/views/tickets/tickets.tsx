@@ -5,7 +5,8 @@ import * as ticketsActions from './tickets-actions';
 import {ANALYTICS_TICKETS_PAGE} from 'components/analytics/analytics-ids';
 
 import type {IssuesProps} from '../issues/issues';
-import {ReduxThunkDispatch} from 'types/Redux';
+import {Folder} from 'types/User';
+import {i18n} from 'components/i18n/i18n';
 
 type TicketsProps = IssuesProps & typeof ticketsActions;
 
@@ -20,14 +21,16 @@ export class Tickets<P extends TicketsProps> extends Issues<P> {
   getAnalyticId() {
     return ANALYTICS_TICKETS_PAGE;
   }
+
+  getSearchContext(): Folder {
+    const {helpdeskSearchContext, user} = this.props;
+    const defaultHelpdeskFolder: Folder = user.profiles.helpdesk.helpdeskFolder;
+    const name = defaultHelpdeskFolder.id === helpdeskSearchContext.id
+      ? i18n('Tickets')
+      : helpdeskSearchContext.name;
+    return {...helpdeskSearchContext, name};
+  }
 }
 
 
-const mapDispatchToProps = (dispatch: ReduxThunkDispatch): {[fnName: string]: ReduxThunkDispatch} => {
-  return {
-    onOpenContextSelect: () => dispatch(ticketsActions.openContextSelect()),
-    setHelpDeskMode: () => dispatch(ticketsActions.setHelpDeskMode()),
-  };
-};
-
-export default doConnectComponent(Tickets, mapDispatchToProps, {helpDesk: true});
+export default doConnectComponent(Tickets, ticketsActions);

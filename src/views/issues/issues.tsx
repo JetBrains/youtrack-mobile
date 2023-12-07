@@ -33,7 +33,6 @@ import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {createAnimatedRotateStyle} from 'views/issues/issues-helper';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
-import {getIssueFromCache} from './issues-actions';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {IconAdd, IconAngleDown, IconSettings} from 'components/icon/icon';
@@ -117,6 +116,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
       isCreateModalVisible: false,
       settingsVisible: false,
     };
+    this.props.setIssuesMode();
     usage.trackScreenView('Issue list');
   }
 
@@ -168,11 +168,9 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     const issueId: string | null | undefined = this.props.issueId;
 
     if (issueId) {
-      const targetIssue: AnyIssue =
-        getIssueFromCache(issueId) ||
-        ({
-          id: issueId,
-        } as any);
+      const targetIssue: IssueOnList = this.props.getIssueFromCache(issueId) || ({
+        id: issueId,
+      }) as IssueOnList;
       this.updateFocusedIssue(targetIssue);
     }
 
@@ -384,13 +382,17 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     return this.theme.uiTheme.colors;
   }
 
+  getSearchContext(): Folder {
+    return this.props.searchContext;
+  }
+
   renderContextButton = () => {
     const {
       isRefreshing,
-      searchContext,
       isSearchContextPinned,
       networkState,
     } = this.props;
+    const searchContext = this.getSearchContext();
     const isDisabled: boolean = isRefreshing || !searchContext || !networkState?.isConnected;
     const themeColors: UIThemeColors = this.getThemeColors();
     return (
@@ -431,19 +433,19 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
   renderContextSelect() {
     const {selectProps} = this.props;
     const {onSelect, isSectioned, ...restProps} = selectProps!;
-    const SelectComponent = (
+    const SelectComponent: React.ElementType = (
       isSplitView()
         ? isSectioned ? SectionedSelectWithItemActionsModal : SelectModal
         : isSectioned ? SectionedSelectWithItemActions : Select
     );
     return (
       <SelectComponent
-        getTitle={item => item.name + (item.shortName ? ` (${item.shortName})` : '')}
         onSelect={async (selectedContext: Folder) => {
           this.updateFocusedIssue(null);
           onSelect?.(selectedContext);
         }}
         {...restProps}
+        getTitle={(item: Folder) => item.name + (item.shortName ? ` (${item.shortName})` : '')}
       />
     );
   }
@@ -736,42 +738,41 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
   }
 }
 
-export const doConnectComponent = (
-  Component: any,
-  extraActions?: (dispatch: ReduxThunkDispatch) => ({ [fnName: string]: ReduxAction }),
-  extraProps?: { [fnName: string]: any },
-) => connect(
-  (
-    state: AppState,
-    ownProps: {
-      issueId?: string;
-      searchQuery?: string;
+export function doConnectComponent(
+  ReactComponent: React.ComponentType<never>,
+  extraActions?: { [fnName: string]: ReduxAction<unknown> },
+)
+{
+  return connect(
+    (
+      state: AppState,
+      ownProps: {
+        issueId?: string;
+        searchQuery?: string;
+      },
+    ) => {
+      return {
+        ...state.issueList,
+        ...ownProps,
+        ...state.app,
+      };
     },
-  ) => {
-    return {
-      ...state.issueList,
-      ...ownProps,
-      ...state.app,
-      searchContext: state.issueList.searchContext,
-      user: state.app.user,
-      issuePermissions: state.app?.issuePermissions,
-      ...extraProps,
-    };
-  },
-  (dispatch: ReduxThunkDispatch) => {
-    return {
-      ...bindActionCreators(issueActions, dispatch),
-      onQueryUpdate: (query: string) => dispatch(issueActions.onQueryUpdate(query)),
-      onOpenContextSelect: () => dispatch(issueActions.openContextSelect()),
-      updateSearchContextPinned: (isSearchScrolledUp: boolean) => dispatch(
-        issueActions.updateSearchContextPinned(isSearchScrolledUp)
-      ),
-      setIssuesCount: (count: number | null) => dispatch(issueActions.setIssuesCount(count)),
-      updateIssue: (issueId: string) => dispatch(issueActions.updateIssue(issueId)),
-      ...extraActions?.(dispatch),
-    };
-  }
-)(Component);
+    (dispatch: ReduxThunkDispatch) => {
+      return {
+        ...bindActionCreators(issueActions, dispatch),
+        getIssueFromCache: (issueId: string) => dispatch(issueActions.getIssueFromCache(issueId)),
+        onQueryUpdate: (query: string) => dispatch(issueActions.onQueryUpdate(query)),
+        onOpenContextSelect: () => dispatch(issueActions.openContextSelect()),
+        updateSearchContextPinned: (isSearchScrolledUp: boolean) => dispatch(
+          issueActions.updateSearchContextPinned(isSearchScrolledUp)
+        ),
+        setIssuesCount: (count: number | null) => dispatch(issueActions.setIssuesCount(count)),
+        updateIssue: (issueId: string) => dispatch(issueActions.updateIssue(issueId)),
+        ...(extraActions ? bindActionCreators(extraActions, dispatch) : {}),
+      };
+    }
+  )(ReactComponent);
+}
 
 
 export default doConnectComponent(Issues);

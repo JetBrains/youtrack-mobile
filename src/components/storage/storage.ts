@@ -9,7 +9,7 @@ import {notify} from 'components/notification/notification';
 import {routeMap} from 'app-routes';
 
 import type {Activity, ActivityType} from 'types/Activity';
-import type {AnyIssue} from 'types/Issue';
+import type {IssueOnList} from 'types/Issue';
 import type {AppConfig} from 'types/AppConfig';
 import type {Article, ArticleProject, ArticlesList} from 'types/Article';
 import type {Board, Sprint} from 'types/Agile';
@@ -66,9 +66,10 @@ export type StorageState = TipsState & FeatureState & {
   config: AppConfig | null;
   query: string | null;
   searchContext: Folder | null;
-  helpdeskContext: Folder | null;
+  helpdeskSearchContext: Folder | null;
   lastQueries: string[] | null;
-  issuesCache: AnyIssue[] | null;
+  issuesCache: IssueOnList[] | null;
+  helpdeskCache: IssueOnList[] | null;
   inboxCache: Notification[] | null;
   inboxThreadsCache: InboxThreadsCache | null;
   isRegisteredForPush: boolean;
@@ -113,9 +114,10 @@ const storageKeys: StorageStateKeys & (typeof tipsKeys) & (typeof featuresKeys) 
   creationTimestamp: 'YT_CREATION_TIMESTAMP_STORAGE_KEY',
   query: 'YT_QUERY_STORAGE',
   searchContext: 'YT_SEARCH_CONTEXT_STORAGE',
-  helpdeskContext: 'YT_HELPDESK_CONTEXT_STORAGE',
+  helpdeskSearchContext: 'YT_HELPDESK_SEARCH_CONTEXT_STORAGE',
   lastQueries: 'YT_LAST_QUERIES_STORAGE_KEY',
   issuesCache: 'yt_mobile_issues_cache',
+  helpdeskCache: 'yt_mobile_helpdesk_cache',
   inboxCache: 'YT_INBOX_CACHE',
   inboxThreadsCache: 'YT_INBOX_THREADS_CACHE',
   isRegisteredForPush: 'YT_IS_REGISTERED_FOR_PUSH',
@@ -163,9 +165,10 @@ export const initialState: Readonly<StorageState> = {
   config: null,
   query: null,
   searchContext: null,
-  helpdeskContext: null,
+  helpdeskSearchContext: null,
   lastQueries: null,
   issuesCache: null,
+  helpdeskCache: null,
   inboxCache: null,
   inboxThreadsCache: null,
   isRegisteredForPush: false,
@@ -252,10 +255,12 @@ export async function clearCachesAndDrafts(): Promise<StorageState> {
     storageKeys.query,
     storageKeys.lastQueries,
     storageKeys.issuesCache,
+    storageKeys.helpdeskCache,
     storageKeys.inboxCache,
     storageKeys.inboxThreadsCache,
     storageKeys.isRegisteredForPush,
     storageKeys.deviceToken,
+    storageKeys.helpdeskSearchContext,
     storageKeys.agileZoomedIn,
     storageKeys.agileLastSprint,
     storageKeys.agileQuery,
@@ -265,6 +270,7 @@ export async function clearCachesAndDrafts(): Promise<StorageState> {
     storageKeys.agileDefaultBoard,
     storageKeys.projects,
     storageKeys.issuesSettings,
+    storageKeys.searchContext,
     ...Object.values(tipsKeys),
     ...Object.values(featuresKeys),
   ] as string[]);

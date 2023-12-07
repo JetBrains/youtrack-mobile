@@ -1,23 +1,20 @@
-import * as issuesActions from 'views/issues/issues-actions';
-import {SET_HELPDESK} from 'views/issues/issues-action-types';
+import {SET_HELPDESK_CONTEXT, SET_HELPDESK_MODE} from 'views/issues/issues-action-types';
+import {ReduxAction, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 
-import {ReduxAction, ReduxThunkDispatch} from 'types/Redux';
-
-
-const openContextSelect = (): ReduxAction => (dispatch: ReduxThunkDispatch) => {
-  dispatch(issuesActions.openContextSelect('Tickets list context select'));
-};
-
-const setHelpDeskMode = (): ReduxAction => (dispatch: ReduxThunkDispatch) => {
+const setHelpDeskMode = (): ReduxAction => (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter
+) => {
   dispatch({
-    type: SET_HELPDESK,
-    helpDesk: true,
+    type: SET_HELPDESK_MODE,
+    helpDeskMode: true,
+  });
+  dispatch({
+    type: SET_HELPDESK_CONTEXT,
+    helpdeskSearchContext: getState().app.user?.profiles?.helpdesk?.helpdeskFolder,
   });
 };
 
-
 export {
-  openContextSelect,
   setHelpDeskMode,
 };
-

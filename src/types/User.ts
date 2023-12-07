@@ -11,7 +11,7 @@ export type User = {
   id: string;
   issueRelatedGroup?: IssueRelatedGroup;
   login: string;
-  profiles?: UserProfiles;
+  profiles: UserProfiles;
   ringId?: string;
   endUserAgreementConsent?: {
     accepted: boolean;
@@ -40,7 +40,7 @@ export type UserProfiles = {
   notifications?: Record<string, any>;
   teamcity?: Record<string, any>;
   timetracking?: Record<string, any>;
-  helpdesk?: UserHelpdeskProfile;
+  helpdesk: UserHelpdeskProfile;
 };
 export type UserAppearanceProfile = {
   $type: string;

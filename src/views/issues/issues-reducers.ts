@@ -1,6 +1,7 @@
 import * as types from './issues-action-types';
 import {createReducer} from 'redux-create-reducer';
 import {EVERYTHING_SEARCH_CONTEXT} from 'components/search/search-context';
+import {i18n} from 'components/i18n/i18n';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {IssuesSettings, issuesSettingsDefault} from 'views/issues/index';
@@ -27,7 +28,8 @@ export interface IssuesState {
   searchContext: Folder;
   isSearchContextPinned: boolean;
   settings: IssuesSettings;
-  helpDesk: boolean;
+  helpdeskSearchContext: Folder;
+  helpDeskMode: boolean;
 }
 
 export const initialState: IssuesState = {
@@ -46,7 +48,8 @@ export const initialState: IssuesState = {
   searchContext: EVERYTHING_SEARCH_CONTEXT,
   isSearchContextPinned: false,
   settings: issuesSettingsDefault,
-  helpDesk: false,
+  helpdeskSearchContext: {...EVERYTHING_SEARCH_CONTEXT, name: i18n('Tickets')},
+  helpDeskMode: false,
 };
 
 
@@ -200,14 +203,20 @@ export default createReducer(initialState, {
   },
   [types.SET_LIST_SETTINGS](
     state: IssuesState,
-    action: Record<string, any>,
+    action: { settings: IssuesSettings },
   ): IssuesState {
     return {...state, settings: action.settings};
   },
-  [types.SET_HELPDESK](
+  [types.SET_HELPDESK_MODE](
     state: IssuesState,
-    action: { helpDesk: boolean },
+    action: { helpDeskMode: boolean },
   ): IssuesState {
-    return {...state, helpDesk: action.helpDesk};
+    return {...state, helpDeskMode: action.helpDeskMode};
   },
-} as Record<string, any>);
+  [types.SET_HELPDESK_CONTEXT](
+    state,
+    action: { helpdeskSearchContext: Folder },
+  ) {
+    return {...state, helpdeskSearchContext: action.helpdeskSearchContext};
+  },
+});
