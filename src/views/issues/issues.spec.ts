@@ -3,7 +3,6 @@ import * as Feature from 'components/feature/feature';
 import * as types from './issues-action-types';
 import * as storage from 'components/storage/storage';
 import Api from 'components/api/api';
-// @ts-ignore
 import mocks from 'test/mocks';
 import reducer, {IssuesState} from './issues-reducers';
 import Store from 'store';
@@ -13,8 +12,9 @@ import {issuesSettingsDefault, issuesSettingsIssueSizes, issuesSettingsSearch} f
 import {SET_PROGRESS} from 'actions/action-types';
 import {StorageState} from 'components/storage/storage';
 
-import {Folder, User} from 'types/User';
+import type Auth from 'components/auth/oauth2';
 import {AnyIssue, IssueOnList} from 'types/Issue';
+import {Folder, User} from 'types/User';
 
 jest.mock('components/api/api', () => {
   return jest.fn().mockImplementation(() => ({
@@ -46,7 +46,7 @@ describe('Issues', () => {
     queryMock = 'project MyProject';
     issueListQueryMock = 'test search';
 
-    apiMock = new Api(mocks.createAuthMock());
+    apiMock = new Api(mocks.createAuthMock() as Auth);
 
     createTestStore({
       helpDeskMode: false,
@@ -227,7 +227,7 @@ describe('Issues', () => {
       });
 
       it('should load issues count', async () => {
-        const folderMock = mocks.createFolder();
+        const folderMock: Folder = mocks.createFolder();
 
         await store.dispatch(issuesActions.loadIssuesCount(folderMock));
 

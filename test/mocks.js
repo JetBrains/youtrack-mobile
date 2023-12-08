@@ -85,7 +85,7 @@ function createUserMock(data = {}) {
       fullName: randomWord(),
       name: randomWord(),
       login: randomWord(),
-      avatarUrl: 'https://unsplash.it/32/32',
+      avatarUrl: randomWord(),
       guest: false,
       profiles: {
         general: {
@@ -103,6 +103,7 @@ function createUserMock(data = {}) {
       userPermissions: {
         has: () => true,
       },
+      banned: false,
     },
     data
   );
@@ -232,36 +233,6 @@ function createActivityCustomFieldMock(data = {}) {
   }, data);
 }
 
-function createActivityCommentMock(data = {}) {
-  return deepmerge({
-    $type: 'CommentActivityItem',
-    added: [{
-      text: 'Fixed',
-    }],
-    author: {
-      $type: 'User',
-      avatarUrl: 'https://example.com/avatar',
-      fullName: 'John Dow',
-      id: '0-1',
-      login: 'John.Dow',
-      name: 'John Dow',
-      ringId: '1234',
-    },
-    category: {
-      $type: 'ActivityCategory',
-      id: 'CommentsCategory',
-    },
-    removed: [],
-    timestamp: 1,
-    target: {
-      $type: 'IssueComment',
-      created: 1,
-      id: '0-1',
-      usesMarkdown: true,
-    },
-  }, data);
-}
-
 function createThreadMock(data = {}) {
   return deepmerge(
     {
@@ -302,8 +273,15 @@ function createFolder(data = {}) {
     $type: ResourceTypes.ISSUE_FOLDER_SAVED_QUERY,
     id: uuid(),
     ringId: uuid(),
+    shortName: randomWord(),
     name: randomWord(),
     query: randomWord(),
+    pinned: false,
+    pinnedInHelpdesk: true,
+    issuesUrl: '/issues/',
+    fqFolderId: randomWord(),
+    isUpdatable: true,
+    template: false,
   }, data);
 }
 
@@ -326,7 +304,6 @@ export default {
   createAuthParamsMock,
   createUserMock,
   createActivityCustomFieldMock,
-  createActivityCommentMock,
   createThreadMock,
   createFolder,
 
