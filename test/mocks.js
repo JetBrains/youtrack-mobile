@@ -1,4 +1,4 @@
-import configureMockStore, {MockStore} from 'redux-mock-store';
+import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {deepmerge} from 'deepmerge-ts';
 
@@ -61,7 +61,7 @@ function createArticleMock(...args) {
   );
 }
 
-function createMockStore(middlewareArgument): MockStore {
+function createMockStore(middlewareArgument) {
   const middleware = [thunk.withExtraArgument(middlewareArgument)];
   return configureMockStore(middleware);
 }
@@ -297,6 +297,16 @@ function reactReduxMockFn() {
   });
 }
 
+function createFolder(data = {}) {
+  return deepmerge({
+    $type: ResourceTypes.ISSUE_FOLDER_SAVED_QUERY,
+    id: uuid(),
+    ringId: uuid(),
+    name: randomWord(),
+    query: randomWord(),
+  }, data);
+}
+
 export default {
   setStorage,
 
@@ -318,6 +328,7 @@ export default {
   createActivityCustomFieldMock,
   createActivityCommentMock,
   createThreadMock,
+  createFolder,
 
   reactReduxMockFn,
 };

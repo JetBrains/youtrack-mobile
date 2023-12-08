@@ -18,6 +18,10 @@ export class Tickets extends Issues<TicketsProps> {
     usage.trackScreenView('Tickets');
   }
 
+  get searchQuery() {
+    return this.props.helpdeskQuery;
+  }
+
   getAnalyticId() {
     return ANALYTICS_TICKETS_PAGE;
   }

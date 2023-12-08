@@ -1,22 +1,35 @@
-import * as actions from './issues-actions';
+import * as issuesActions from './issues-actions';
 import * as Feature from 'components/feature/feature';
 import * as types from './issues-action-types';
-import API from 'components/api/api';
+import * as storage from 'components/storage/storage';
+import Api from 'components/api/api';
 // @ts-ignore
 import mocks from 'test/mocks';
 import reducer, {IssuesState} from './issues-reducers';
 import Store from 'store';
-import {flushStoragePart, getStorageState, __setStorageState, StorageState} from 'components/storage/storage';
+import {deepmerge} from 'deepmerge-ts';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
+import {issuesSettingsDefault, issuesSettingsIssueSizes, issuesSettingsSearch} from 'views/issues/index';
 import {SET_PROGRESS} from 'actions/action-types';
+import {StorageState} from 'components/storage/storage';
 
-import {Folder} from 'types/User';
-import {AnyIssue} from 'types/Issue';
+import {Folder, User} from 'types/User';
+import {AnyIssue, IssueOnList} from 'types/Issue';
 
-const currentUserIdMock = 'current-user';
-let apiMock: Partial<API & any>;
-let currentUserMock;
-let issueContextQueryMock: string;
+jest.mock('components/api/api', () => {
+  return jest.fn().mockImplementation(() => ({
+    search: {},
+    issues: {
+      getIssuesCount: jest.fn(),
+    },
+    customFields: {
+      getFilters: jest.fn().mockResolvedValue([]),
+    },
+  }));
+});
+
+let apiMock: Api;
+let queryMock: string;
 let issueListQueryMock: string;
 let store: typeof Store;
 
@@ -26,39 +39,31 @@ const createStoreMock = mocks.createMockStore(getApi);
 
 describe('Issues', () => {
   const TEST_QUERY = 'test-query';
-  afterEach(() => jest.restoreAllMocks());
+
   beforeEach(() => {
-    issueContextQueryMock = 'project MyProject';
+    jest.clearAllMocks();
+
+    queryMock = 'project MyProject';
     issueListQueryMock = 'test search';
-    currentUserMock = {
-      id: currentUserIdMock,
-    };
-    apiMock = {
-      search: {} as IssuesState,
-    };
-    store = createStoreMock({
-      app: {
-        user: currentUserMock,
-        auth: {
-          currentUser: currentUserMock,
-        },
-      },
-      searchContext: {
-        query: issueContextQueryMock,
-      },
-      issueList: {
-        query: issueListQueryMock,
-        settings: {search: {filters: {}}},
-      },
+
+    apiMock = new Api(mocks.createAuthMock());
+
+    createTestStore({
+      helpDeskMode: false,
     });
-    __setStorageState({});
+
+    storage.__setStorageState({});
   });
 
 
-  describe('Issue list actions', () => {
+  describe('Issues mode', () => {
+    it('should set Issues mode', async () => {
+      const isHelpdeskMode = await store.dispatch(issuesActions.isHelpDeskMode());
+      expect(isHelpdeskMode).toEqual(false);
+    });
 
     it('should set issues query', async () => {
-      await store.dispatch(actions.setIssuesQuery(TEST_QUERY));
+      await store.dispatch(issuesActions.issuesQueryAction(TEST_QUERY));
 
       expect(store.getActions()[0]).toEqual({
         type: types.SET_ISSUES_QUERY,
@@ -66,16 +71,41 @@ describe('Issues', () => {
       });
     });
 
-    it('should read stored query', async () => {
-      await flushStoragePart({
-        query: issueContextQueryMock,
-      });
+    it('should store query', async () => {
+      await store.dispatch(issuesActions.storeIssuesQuery(queryMock));
 
-      await store.dispatch(actions.setStoredIssuesQuery());
+      expect(storage.getStorageState().query).toEqual(queryMock);
+    });
+
+    it('should read stored query', async () => {
+      await storage.flushStoragePart({query: queryMock});
+      await store.dispatch(issuesActions.setStoredIssuesQuery());
 
       expect(store.getActions()[0]).toEqual({
         type: types.SET_ISSUES_QUERY,
-        query: issueContextQueryMock,
+        query: queryMock,
+      });
+    });
+
+    it('should clear query assist suggestions', async () => {
+      await store.dispatch(issuesActions.clearAssistSuggestions());
+
+      expect(store.getActions()[0].type).toEqual(types.CLEAR_SUGGESTIONS);
+    });
+
+    it('should receive issues', async () => {
+      const issues = [
+        {
+          id: 'test',
+        },
+      ] as AnyIssue[];
+
+      await store.dispatch(issuesActions.receiveIssues(issues));
+
+      expect(store.getActions()[0]).toEqual({
+        type: types.RECEIVE_ISSUES,
+        issues,
+        pageSize: 14,
       });
     });
 
@@ -110,7 +140,7 @@ describe('Issues', () => {
           id: 'searchContext',
         };
 
-        __setStorageState({
+        storage.__setStorageState({
           searchContext: searchContextMock,
         } as StorageState);
 
@@ -151,7 +181,7 @@ describe('Issues', () => {
 
       it('should load query assist suggestions with recent searches', async () => {
         const cachedRecentUserQueryMock = ['last-query'];
-        await flushStoragePart({
+        await storage.flushStoragePart({
           lastQueries: cachedRecentUserQueryMock,
         });
         await doSuggest();
@@ -178,47 +208,17 @@ describe('Issues', () => {
       });
 
       async function doSuggest(caretPosition: number = 4) {
-        await store.dispatch(actions.suggestIssuesQuery(TEST_QUERY, caretPosition));
+        await store.dispatch(issuesActions.suggestIssuesQuery(TEST_QUERY, caretPosition));
       }
-    });
-
-    it('should clear query assist suggestions', async () => {
-      await store.dispatch(actions.clearAssistSuggestions());
-
-      expect(store.getActions()[0].type).toEqual(types.CLEAR_SUGGESTIONS);
-    });
-
-    it('should store query', async () => {
-      await store.dispatch(actions.storeIssuesQuery('query-update'));
-
-      expect(getStorageState().query).toEqual('query-update');
-    });
-
-    it('should receive issues', async () => {
-      const issues = [
-        {
-          id: 'test',
-        },
-      ] as AnyIssue[];
-
-      await store.dispatch(actions.receiveIssues(issues));
-
-      expect(store.getActions()[0]).toEqual({
-        type: types.RECEIVE_ISSUES,
-        issues,
-        pageSize: 14,
-      });
     });
 
 
     describe('loadIssuesCount', () => {
       it('should set issues count', async () => {
         const countMock = 12;
-        apiMock.issues = {
-          getIssuesCount: jest.fn().mockResolvedValueOnce(countMock),
-        };
+        (apiMock.issues.getIssuesCount as jest.Mock).mockResolvedValueOnce(countMock);
 
-        await store.dispatch(actions.loadIssuesCount());
+        await store.dispatch(issuesActions.loadIssuesCount());
 
         expect(store.getActions()[0]).toEqual({
           type: types.SET_ISSUES_COUNT,
@@ -227,27 +227,143 @@ describe('Issues', () => {
       });
 
       it('should load issues count', async () => {
-        apiMock.issues = {
-          getIssuesCount: jest.fn(),
-        };
-        const folderMock = {
-          id: 'contextId',
-        } as Folder;
+        const folderMock = mocks.createFolder();
 
-        await store.dispatch(actions.loadIssuesCount(folderMock));
+        await store.dispatch(issuesActions.loadIssuesCount(folderMock));
 
         expect(apiMock.issues.getIssuesCount).toHaveBeenCalledWith(
           issueListQueryMock,
           folderMock,
           false,
-          expect.anything(),
+          expect.any(Object)
         );
+      });
+
+
+      describe('Search Modes', () => {
+        describe('Query', () => {
+          it('should compose search query', async () => {
+            createTestStore({
+              query: `${queryMock}  `,
+            });
+
+            const composedQuery = await store.dispatch(issuesActions.composeSearchQuery());
+            expect(composedQuery).toEqual(queryMock);
+          });
+
+        });
+
+        describe('Filter', () => {
+          it('should compose search query', async () => {
+            const folderNameMock = 'State';
+            const folder1: Folder = mocks.createFolder({name: folderNameMock});
+            const filterMock1 = {
+              id: folder1.name,
+              selectedValues: ['A1', 'A 2'],
+              filterField: [folder1],
+            };
+            const filterMock2 = {
+              id: 'project',
+              selectedValues: ['Project1', 'Project2'],
+              filterField: [mocks.createFolder({name: 'project'})],
+            };
+            createTestStore({
+              query: queryMock,
+              settings: {
+                search: {
+                  ...issuesSettingsSearch[1],
+                  filters: {
+                    [filterMock1.id]: filterMock1,
+                    [filterMock2.id]: filterMock2,
+                  },
+                },
+                view: issuesSettingsIssueSizes[1],
+              },
+            });
+
+            const composedQuery = await store.dispatch(issuesActions.composeSearchQuery());
+            const nonStructuralQuery = `{${queryMock}}`;
+            const projectQuery = `${filterMock2.id}:${filterMock2.selectedValues.join(',')}`;
+            const otherFolderQuery = `${folderNameMock.toLowerCase()}:${filterMock1.selectedValues[0]},{${filterMock1.selectedValues[1]}}`;
+            expect(composedQuery).toEqual([
+              nonStructuralQuery,
+              projectQuery,
+              otherFolderQuery,
+            ].join(' '));
+          });
+
+        });
       });
     });
   });
 
 
-  describe('Issue list reducers', () => {
+  describe('HelpDesk mode', () => {
+    let issueStateHelpdesk: Partial<IssuesState>;
+    beforeEach(() => {
+      issueStateHelpdesk = {
+        helpDeskMode: true,
+        helpdeskQuery: '',
+        helpdeskSearchContext: mocks.createFolder(),
+        settings: issuesSettingsDefault,
+      };
+      createTestStore(issueStateHelpdesk);
+    });
+
+    it('should set Helpdesk mode', async () => {
+      const isHelpdeskMode = await store.dispatch(issuesActions.isHelpDeskMode());
+
+      expect(isHelpdeskMode).toEqual(true);
+    });
+
+    it('should initialize list with Helpdesk cache', async () => {
+      const helpdeskCache: IssueOnList[] = [mocks.createIssueMock()];
+      await storage.flushStoragePart({helpdeskCache});
+
+      await store.dispatch(issuesActions.initializeIssuesList());
+
+      expect(store.getActions()[4]).toEqual({
+        type: types.RECEIVE_ISSUES,
+        issues: helpdeskCache,
+        pageSize: issuesActions.PAGE_SIZE,
+      });
+    });
+
+    it('should read stored Helpdesk query', async () => {
+      await storage.flushStoragePart({helpdeskQuery: queryMock});
+      await store.dispatch(issuesActions.setStoredIssuesQuery());
+
+      expect(store.getActions()[0]).toEqual({
+        type: types.SET_HELPDESK_QUERY,
+        helpdeskQuery: queryMock,
+      });
+    });
+
+    it('should store Helpdesk query', async () => {
+      await storage.flushStoragePart({helpdeskQuery: null});
+      await store.dispatch(issuesActions.storeIssuesQuery(queryMock));
+
+      expect(storage.getStorageState().helpdeskQuery).toEqual(queryMock);
+    });
+
+    it('should update Helpdesk query', async () => {
+      await store.dispatch(issuesActions.onQueryUpdate(queryMock));
+
+      expect(store.getActions()[0]).toEqual({
+        type: types.SET_HELPDESK_QUERY,
+        helpdeskQuery: queryMock,
+      });
+
+      expect(
+        store.getActions().find((it: Record<string, unknown>) => it.type === types.SET_ISSUES_QUERY)
+      ).toBeUndefined();
+    });
+
+
+  });
+
+
+  describe('Issues reducers', () => {
     it('should set issues query', async () => {
       const newState = reducer(
         {} as IssuesState,
@@ -434,4 +550,24 @@ describe('Issues', () => {
     });
   });
 
+
+
+  function createTestStore(data: Partial<IssuesState> = {}) {
+    const user: User = mocks.createUserMock();
+    store = createStoreMock({
+      app: {
+        user,
+        auth: {
+          currentUser: user,
+        },
+      },
+      issueList: deepmerge({
+        searchContext: {
+          query: queryMock,
+        },
+        query: issueListQueryMock,
+        settings: {search: {filters: {}}},
+      }, data),
+    });
+  }
 });

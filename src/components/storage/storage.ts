@@ -65,6 +65,7 @@ export type StorageState = TipsState & FeatureState & {
   creationTimestamp: number | null;
   config: AppConfig | null;
   query: string | null;
+  helpdeskQuery: string | null;
   searchContext: Folder | null;
   helpdeskSearchContext: Folder | null;
   lastQueries: string[] | null;
@@ -113,6 +114,7 @@ const storageKeys: StorageStateKeys & (typeof tipsKeys) & (typeof featuresKeys) 
   config: 'BACKEND_CONFIG_STORAGE_KEY',
   creationTimestamp: 'YT_CREATION_TIMESTAMP_STORAGE_KEY',
   query: 'YT_QUERY_STORAGE',
+  helpdeskQuery: 'YT__HELPDESK_QUERY_STORAGE',
   searchContext: 'YT_SEARCH_CONTEXT_STORAGE',
   helpdeskSearchContext: 'YT_HELPDESK_SEARCH_CONTEXT_STORAGE',
   lastQueries: 'YT_LAST_QUERIES_STORAGE_KEY',
@@ -164,6 +166,7 @@ export const initialState: Readonly<StorageState> = {
   creationTimestamp: null,
   config: null,
   query: null,
+  helpdeskQuery: null,
   searchContext: null,
   helpdeskSearchContext: null,
   lastQueries: null,
@@ -253,6 +256,7 @@ export async function clearCachesAndDrafts(): Promise<StorageState> {
     storageKeys.projectId,
     storageKeys.draftId,
     storageKeys.query,
+    storageKeys.helpdeskQuery,
     storageKeys.lastQueries,
     storageKeys.issuesCache,
     storageKeys.helpdeskCache,

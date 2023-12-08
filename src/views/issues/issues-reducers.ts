@@ -14,6 +14,7 @@ import {ISelectProps} from 'components/select/select';
 
 export interface IssuesState {
   query: string;
+  helpdeskQuery: string;
   skip: number;
   queryAssistSuggestions: TransformedSuggestion[];
   isLoadingMore: boolean;
@@ -34,6 +35,7 @@ export interface IssuesState {
 
 export const initialState: IssuesState = {
   query: '',
+  helpdeskQuery: '',
   queryAssistSuggestions: [],
   skip: 0,
   isLoadingMore: false,
@@ -70,6 +72,12 @@ export default createReducer(initialState, {
     action: Record<string, any>,
   ) => {
     return {...state, query: action.query};
+  },
+  [types.SET_HELPDESK_QUERY]: (
+    state: IssuesState,
+    action: { helpdeskQuery: string },
+  ) => {
+    return {...state, helpdeskQuery: action.helpdeskQuery};
   },
   [types.SUGGEST_QUERY]: (state: IssuesState, action: Record<string, any>) => {
     return {...state, queryAssistSuggestions: action.suggestions};

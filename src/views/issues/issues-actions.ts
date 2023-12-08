@@ -47,7 +47,7 @@ export interface ContextDataSource {
 
 type SortedIssuesData = [error: CustomError | null, sortedIssues: SortedIssues];
 
-const PAGE_SIZE: number = 14;
+export const PAGE_SIZE: number = 14;
 
 const getSearchContext = (): ReduxAction<Folder> => (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
   const appState = getState();
@@ -64,9 +64,14 @@ const trackEvent = (msg: string, analyticsId: string = ANALYTICS_ISSUES_PAGE) =>
   );
 };
 
-const setIssuesQuery = (query: string) => ({
+const issuesQueryAction = (query: string) => ({
   type: types.SET_ISSUES_QUERY,
   query,
+});
+
+const helpdeskQueryAction = (helpdeskQuery: string) => ({
+  type: types.SET_HELPDESK_QUERY,
+  helpdeskQuery,
 });
 
 const getPageSize = (): ReduxAction<number> => (
@@ -76,9 +81,17 @@ const getPageSize = (): ReduxAction<number> => (
   return getState().issueList.settings.view.mode === issuesViewSettingMode.S ? PAGE_SIZE * 3 : PAGE_SIZE;
 };
 
+const isHelpDeskMode = (): ReduxAction<boolean> => (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter
+) => getState().issueList.helpDeskMode;
+
 const setStoredIssuesQuery = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
-  const query = getStorageState().query || '';
-  dispatch(setIssuesQuery(query));
+  if (dispatch(isHelpDeskMode())) {
+    dispatch(helpdeskQueryAction(getStorageState().helpdeskQuery || ''));
+  } else {
+    dispatch(issuesQueryAction(getStorageState().query || ''));
+  }
 };
 
 const suggestIssuesQuery = (query: string, caret: number): ReduxAction => async (
@@ -97,7 +110,7 @@ const clearAssistSuggestions = () => ({
   type: types.CLEAR_SUGGESTIONS,
 });
 
-const storeIssuesQuery = (query: string): ReduxAction => () => {
+const storeIssuesQuery = (query: string): ReduxAction => (dispatch: ReduxThunkDispatch) => {
   if (!query) {
     return;
   }
@@ -108,7 +121,7 @@ const storeIssuesQuery = (query: string): ReduxAction => () => {
     MAX_STORED_QUERIES,
   );
   flushStoragePart({
-    query,
+    ...(dispatch(isHelpDeskMode()) ? {helpdeskQuery: query} : {query}),
     lastQueries: uniqueUpdatedQueries,
   });
 };
@@ -224,16 +237,18 @@ const composeSearchQuery = (): ReduxAction<Promise<string>> => async (
   getState: ReduxStateGetter,
 ) => {
   const settings: IssuesSettings = dispatch(getIssuesSettings());
-  const issuesQuery: string = getState().issueList.query;
+  const isHelpdeskMode = dispatch(isHelpDeskMode());
+  const issuesState = getState().issueList;
+  const searchQuery: string = isHelpdeskMode ? issuesState.helpdeskQuery : issuesState.query;
   const searchSettings: IssuesSetting = settings.search;
   const isFilterMode: boolean = searchSettings.mode === issuesSearchSettingMode.filter;
-  let query: string = (isFilterMode ? convertToNonStructural(issuesQuery) : issuesQuery).trim();
+  let query: string = (isFilterMode ? convertToNonStructural(searchQuery) : searchQuery).trim();
   if (isFilterMode) {
     const filtersSettings: FilterSetting[] = Object.values(settings.search.filters);
     query = `${query} ${createQueryFromFiltersSetting(filtersSettings)}`;
   }
-  if (dispatch(isHelpDeskMode())) {
-    const helpdeskSearchContext = getState().issueList.helpdeskSearchContext;
+  if (isHelpdeskMode) {
+    const helpdeskSearchContext = issuesState.helpdeskSearchContext;
     query = `${query} ${helpdeskSearchContext.query}`;
   }
   return query.trim().replace(whiteSpacesRegex, ' ');
@@ -248,14 +263,14 @@ const refreshIssues = (): ReduxAction => async (dispatch: ReduxThunkDispatch): P
 
 const onQueryUpdate = (query: string): ReduxAction => (dispatch: ReduxThunkDispatch) => {
   dispatch(storeIssuesQuery(query));
-  dispatch(setIssuesQuery(query));
+  if (dispatch(isHelpDeskMode())) {
+    dispatch(helpdeskQueryAction(query));
+  } else {
+    dispatch(issuesQueryAction(query));
+  }
   dispatch(clearAssistSuggestions());
   dispatch(refreshIssues());
 };
-
-export function isHelpDeskMode(): ReduxAction<boolean> {
-  return (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => getState().issueList.helpDeskMode;
-}
 
 const searchContextAction = (searchContext: Folder) => ({
   type: types.SET_SEARCH_CONTEXT,
@@ -680,7 +695,7 @@ const onSettingsChange = (settings: IssuesSettings, preventReload?: boolean): Re
   const eventContext = dispatch(isHelpDeskMode()) ? `Issues` : `Tickets`;
   if (settings.search.mode !== currentSettings.search.mode) {
     trackEvent(`${eventContext} settings: switch mode to ${settings.search.mode}`);
-    dispatch(setIssuesQuery(''));
+    dispatch(issuesQueryAction(''));
     await flushStoragePart({query: null});
   }
   if (settings.view.mode !== currentSettings.view.mode) {
@@ -804,11 +819,14 @@ export {
   getIssuesSettings,
   getPageSize,
   getSearchContext,
-  searchContextAction,
   getStoredSearchContext,
+  helpdeskQueryAction,
+  helpdeskSearchContextAction,
   initializeIssuesList,
   initSearchContext,
+  isHelpDeskMode,
   isIssueMatchesQuery,
+  issuesQueryAction,
   listEndReached,
   loadIssues,
   loadIssuesCount,
@@ -823,10 +841,11 @@ export {
   refreshIssuesCount,
   resetFilterFields,
   resetIssuesCount,
+  searchContextAction,
   setFilters,
   setIssuesCount,
   setIssuesError,
-  setIssuesQuery,
+  setIssuesMode,
   setStoredIssuesQuery,
   startIssuesLoading,
   startMoreIssuesLoading,
@@ -837,7 +856,5 @@ export {
   switchToQuerySearchSetting,
   trackEvent,
   updateIssue,
-  helpdeskSearchContextAction,
   updateSearchContextPinned,
-  setIssuesMode,
 };

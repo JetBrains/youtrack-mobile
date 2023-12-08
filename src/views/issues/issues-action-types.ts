@@ -1,4 +1,5 @@
 export const SET_ISSUES_QUERY = 'issues.SET_ISSUES_QUERY';
+export const SET_HELPDESK_QUERY = 'issues.SET_HELPDESK_QUERY';
 export const SUGGEST_QUERY = 'issues.SUGGEST_QUERY';
 export const CLEAR_SUGGESTIONS = 'issues.CLEAR_SUGGESTIONS';
 export const RECEIVE_ISSUES = 'issues.RECEIVE_ISSUES';

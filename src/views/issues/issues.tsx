@@ -120,6 +120,10 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     usage.trackScreenView('Issue list');
   }
 
+  get searchQuery() {
+    return this.props.query;
+  }
+
   onDimensionsChange = (): void => {
     const isSplit: boolean = isSplitView();
     this.setState({
@@ -500,8 +504,8 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
   };
 
   renderSearchQueryAssist: () => React.ReactNode = () => {
-    const {query, suggestIssuesQuery, queryAssistSuggestions} = this.props;
-    const _query = this.state.clearSearchQuery ? '' : query;
+    const {suggestIssuesQuery, queryAssistSuggestions} = this.props;
+    const _query = this.state.clearSearchQuery ? '' : this.searchQuery;
     return (
       <QueryAssistPanel
         key="QueryAssistPanel"
@@ -564,7 +568,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         style={styles.searchQueryPreview}
         editable={!isRefreshing}
         placeholder={isFilterSearchMode ? i18n('Find issues that contain key words') : undefined}
-        query={this.props.query}
+        query={this.searchQuery}
         onSubmit={isFilterSearchMode ? this.props.onQueryUpdate : undefined}
         onFocus={!isFilterSearchMode ? this.onSearchQueryPanelFocus : undefined}
       />
