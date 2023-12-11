@@ -13,6 +13,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as issueActions from './issues-actions';
+import * as actions from './issues-reducers';
 import CreateIssue from 'views/create-issue/create-issue';
 import ErrorMessage from 'components/error-message/error-message';
 import Issue from 'views/issue/issue';
@@ -768,9 +769,9 @@ export function doConnectComponent(
         onQueryUpdate: (query: string) => dispatch(issueActions.onQueryUpdate(query)),
         onOpenContextSelect: () => dispatch(issueActions.openContextSelect()),
         updateSearchContextPinned: (isSearchScrolledUp: boolean) => dispatch(
-          issueActions.updateSearchContextPinned(isSearchScrolledUp)
+           actions.IS_SEARCH_CONTEXT_PINNED(isSearchScrolledUp)
         ),
-        setIssuesCount: (count: number | null) => dispatch(issueActions.setIssuesCount(count)),
+        setIssuesCount: (count: number | null) => dispatch(actions.SET_ISSUES_COUNT(count)),
         updateIssue: (issueId: string) => dispatch(issueActions.updateIssue(issueId)),
         ...(extraActions ? bindActionCreators(extraActions, dispatch) : {}),
       };

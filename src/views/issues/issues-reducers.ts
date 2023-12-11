@@ -1,5 +1,5 @@
-import * as types from './issues-action-types';
-import {createReducer} from 'redux-create-reducer';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+
 import {EVERYTHING_SEARCH_CONTEXT} from 'components/search/search-context';
 import {i18n} from 'components/i18n/i18n';
 import {ISSUE_CREATED} from '../create-issue/create-issue-action-types';
@@ -9,7 +9,9 @@ import {LOG_OUT, SET_PROGRESS} from 'actions/action-types';
 
 import type {Folder} from 'types/User';
 import type {IssueOnList, TransformedSuggestion} from 'types/Issue';
+import {CustomError} from 'types/Error';
 import {ISelectProps} from 'components/select/select';
+import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
 
 
 export interface IssuesState {
@@ -19,13 +21,13 @@ export interface IssuesState {
   queryAssistSuggestions: TransformedSuggestion[];
   isLoadingMore: boolean;
   isListEndReached: boolean;
-  loadingError: Record<string, any> | null | undefined;
+  loadingError: CustomError | null;
   isInitialized: boolean;
   isRefreshing: boolean;
   isIssuesContextOpen: boolean;
   issuesCount: number | null;
   issues: IssueOnList[];
-  selectProps: (ISelectProps & {isSectioned?: boolean}) | null;
+  selectProps: Partial<ISelectProps> | ISelectProps | (ISSWithItemActionsProps & { isSectioned: boolean }) | null;
   searchContext: Folder;
   isSearchContextPinned: boolean;
   settings: IssuesSettings;
@@ -54,177 +56,147 @@ export const initialState: IssuesState = {
   helpDeskMode: false,
 };
 
+export const issuesNamespace = 'issues';
+const {reducer, actions} = createSlice({
+  name: issuesNamespace,
+  initialState,
 
-export default createReducer(initialState, {
-  [LOG_OUT]: (): IssuesState => {
-    return initialState;
-  },
-  [ISSUE_CREATED]: (
-    state: IssuesState,
-    action: {
-      issue: IssueOnList;
+  reducers: {
+    SET_ISSUES_QUERY(state: IssuesState, action: PayloadAction<string>) {
+      state.query = action.payload;
     },
-  ): IssuesState => {
-    return {...state, issues: [action.issue, ...state.issues]};
-  },
-  [types.SET_ISSUES_QUERY]: (
-    state: IssuesState,
-    action: Record<string, any>,
-  ) => {
-    return {...state, query: action.query};
-  },
-  [types.SET_HELPDESK_QUERY]: (
-    state: IssuesState,
-    action: { helpdeskQuery: string },
-  ) => {
-    return {...state, helpdeskQuery: action.helpdeskQuery};
-  },
-  [types.SUGGEST_QUERY]: (state: IssuesState, action: Record<string, any>) => {
-    return {...state, queryAssistSuggestions: action.suggestions};
-  },
-  [types.CLEAR_SUGGESTIONS]: (
-    state: IssuesState,
-  ) => {
-    return {...state, queryAssistSuggestions: []};
-  },
-  [SET_PROGRESS]: (
-    state: IssuesState,
-    action: {
-      isInProgress: boolean;
+    SET_HELPDESK_QUERY(state: IssuesState, action: PayloadAction<string>) {
+      state.helpdeskQuery = action.payload;
     },
-  ) => {
-    const isRefreshing: boolean = action.isInProgress;
-    return {
-      ...state,
-      isRefreshing,
-      ...(isRefreshing === true
-        ? {
+    SUGGEST_QUERY(state: IssuesState, action: PayloadAction<TransformedSuggestion[]>) {
+      state.queryAssistSuggestions = action.payload;
+    },
+    CLEAR_SUGGESTIONS(state: IssuesState) {
+      state.queryAssistSuggestions = [];
+    },
+    START_LOADING_MORE(state: IssuesState, action: PayloadAction<number>) {
+      state.isLoadingMore = true;
+      state.skip = action.payload;
+    },
+    STOP_LOADING_MORE(state: IssuesState) {
+      state.isLoadingMore = false;
+    },
+    RECEIVE_ISSUES(state: IssuesState, action: PayloadAction<IssueOnList[]>) {
+      state.issues = action.payload;
+      state.isInitialized = true;
+    },
+    LOADING_ISSUES_ERROR(state: IssuesState, action: PayloadAction<CustomError | null>) {
+      state.loadingError = action.payload;
+      state.isInitialized = true;
+      state.isListEndReached = true;
+      state.issues = [];
+    },
+    LIST_END_REACHED(state: IssuesState) {
+      state.isListEndReached = true;
+    },
+    SET_ISSUES_COUNT(state: IssuesState, action: PayloadAction<number | null>) {
+      state.issuesCount = action.payload;
+    },
+    RESET_ISSUES_COUNT(state: IssuesState) {
+      state.issuesCount = null;
+    },
+    OPEN_SEARCH_CONTEXT_SELECT(state: IssuesState, action: PayloadAction<Partial<ISelectProps> | ISelectProps | (ISSWithItemActionsProps & { isSectioned: boolean })>) {
+      state.selectProps = action.payload;
+      state.isIssuesContextOpen = true;
+    },
+    CLOSE_SEARCH_CONTEXT_SELECT(state: IssuesState) {
+      state.selectProps = null;
+      state.isIssuesContextOpen = false;
+    },
+    IS_SEARCH_CONTEXT_PINNED(state: IssuesState, action: PayloadAction<boolean>) {
+      state.isSearchContextPinned = action.payload;
+    },
+    SET_SEARCH_CONTEXT(state: IssuesState, action: PayloadAction<Folder>) {
+      state.searchContext = action.payload;
+    },
+    SET_LIST_SETTINGS(state: IssuesState, action: PayloadAction<IssuesSettings>) {
+      state.settings = action.payload;
+    },
+    SET_HELPDESK_MODE(state: IssuesState, action: PayloadAction<boolean>) {
+      state.helpDeskMode = action.payload;
+    },
+    SET_HELPDESK_CONTEXT(state: IssuesState, action: PayloadAction<Folder>) {
+      state.helpdeskSearchContext = action.payload;
+    },
+  },
+
+  extraReducers: {
+    [LOG_OUT]: (): IssuesState => {
+      return initialState;
+    },
+    [ISSUE_CREATED]: (
+      state: IssuesState,
+      action: {
+        issue: IssueOnList;
+      },
+    ): IssuesState => {
+      return {...state, issues: [action.issue, ...state.issues]};
+    },
+    [SET_PROGRESS]: (
+      state: IssuesState,
+      action: {
+        isInProgress: boolean;
+      },
+    ) => {
+      const isRefreshing: boolean = action.isInProgress;
+      return {
+        ...state,
+        isRefreshing,
+        ...(isRefreshing
+          ? {
             loadingError: null,
             isListEndReached: false,
             skip: 0,
           }
-        : {}),
-    };
-  },
-  [types.START_LOADING_MORE]: (
-    state: IssuesState,
-    action: Record<string, any>,
-  ) => {
-    return {...state, isLoadingMore: true, skip: action.newSkip};
-  },
-  [types.STOP_LOADING_MORE]: (
-    state: IssuesState,
-  ) => {
-    return {...state, isLoadingMore: false};
-  },
-  [types.RECEIVE_ISSUES]: (
-    state: IssuesState,
-    action: {
-      issues: IssueOnList[];
-      pageSize: number;
+          : {}),
+      };
     },
-  ) => {
-    return {...state, issues: action.issues, isInitialized: true};
-  },
-  [types.LOADING_ISSUES_ERROR]: (
-    state: IssuesState,
-    action: {
-      error: Record<string, any>;
+    [ISSUE_UPDATED]: (
+      state: IssuesState,
+      action: {
+        issue: IssueOnList;
+      },
+    ) => {
+      const sourceIssue: IssueOnList = action.issue;
+
+      function updateIssue(issue: IssueOnList): IssueOnList {
+        return Object.keys(issue).reduce((updated: IssueOnList, key: string) => {
+          return {...updated, [key]: sourceIssue[key as keyof IssueOnList]};
+        }, {} as IssueOnList);
+      }
+
+      const issues: IssueOnList[] = state.issues.map((issue: IssueOnList) =>
+        issue.id === sourceIssue?.id ? updateIssue(issue) : issue,
+      );
+      return {...state, issues};
     },
-  ) => {
-    return {
-      ...state,
-      isInitialized: true,
-      isListEndReached: true,
-      loadingError: action.error,
-      issues: [],
-    };
-  },
-  [types.LIST_END_REACHED]: (
-    state: IssuesState,
-  ) => {
-    return {...state, isListEndReached: true};
-  },
-  [types.SET_ISSUES_COUNT]: (
-    state: IssuesState,
-    action: {
-      count: number;
-    },
-  ) => {
-    return {...state, issuesCount: action.count};
-  },
-  [types.RESET_ISSUES_COUNT]: (
-    state: IssuesState,
-    action: {
-      count: number;
-    },
-  ) => {
-    return {...state, issuesCount: null};
-  },
-  [ISSUE_UPDATED]: (
-    state: IssuesState,
-    action: {
-      issue: IssueOnList;
-    },
-  ) => {
-    const sourceIssue: IssueOnList = action.issue;
-
-    function updateIssue(issue: IssueOnList): IssueOnList {
-      return Object.keys(issue).reduce((updated: IssueOnList, key: string) => {
-        return {...updated, [key]: sourceIssue[key as keyof IssueOnList]};
-      }, {} as IssueOnList);
-    }
-
-    const issues: IssueOnList[] = state.issues.map((issue: IssueOnList) =>
-      issue.id === sourceIssue?.id ? updateIssue(issue) : issue,
-    );
-    return {...state, issues};
-  },
-
-  [types.OPEN_SEARCH_CONTEXT_SELECT](
-    state: IssuesState,
-    action: Record<string, any>,
-  ): IssuesState {
-    return {
-      ...state,
-      selectProps: action.selectProps,
-      isIssuesContextOpen: true,
-    };
-  },
-
-  [types.CLOSE_SEARCH_CONTEXT_SELECT](state: IssuesState): IssuesState {
-    return {...state, selectProps: null, isIssuesContextOpen: false};
-  },
-
-  [types.IS_SEARCH_CONTEXT_PINNED](
-    state: IssuesState,
-    action: Record<string, any>,
-  ): IssuesState {
-    return {...state, isSearchContextPinned: action.isSearchContextPinned};
-  },
-
-  [types.SET_SEARCH_CONTEXT](
-    state: IssuesState,
-    action: Record<string, any>,
-  ): IssuesState {
-    return {...state, searchContext: action.searchContext};
-  },
-  [types.SET_LIST_SETTINGS](
-    state: IssuesState,
-    action: { settings: IssuesSettings },
-  ): IssuesState {
-    return {...state, settings: action.settings};
-  },
-  [types.SET_HELPDESK_MODE](
-    state: IssuesState,
-    action: { helpDeskMode: boolean },
-  ): IssuesState {
-    return {...state, helpDeskMode: action.helpDeskMode};
-  },
-  [types.SET_HELPDESK_CONTEXT](
-    state,
-    action: { helpdeskSearchContext: Folder },
-  ) {
-    return {...state, helpdeskSearchContext: action.helpdeskSearchContext};
   },
 });
+
+export const {
+  CLEAR_SUGGESTIONS,
+  CLOSE_SEARCH_CONTEXT_SELECT,
+  IS_SEARCH_CONTEXT_PINNED,
+  LIST_END_REACHED,
+  LOADING_ISSUES_ERROR,
+  OPEN_SEARCH_CONTEXT_SELECT,
+  RECEIVE_ISSUES,
+  RESET_ISSUES_COUNT,
+  SET_HELPDESK_CONTEXT,
+  SET_HELPDESK_MODE,
+  SET_HELPDESK_QUERY,
+  SET_ISSUES_COUNT,
+  SET_ISSUES_QUERY,
+  SET_LIST_SETTINGS,
+  SET_SEARCH_CONTEXT,
+  START_LOADING_MORE,
+  STOP_LOADING_MORE,
+  SUGGEST_QUERY,
+} = actions;
+
+export default reducer;

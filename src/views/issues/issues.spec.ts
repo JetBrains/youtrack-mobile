@@ -1,10 +1,23 @@
-import * as issuesActions from './issues-actions';
+import * as actions from './issues-reducers';
 import * as Feature from 'components/feature/feature';
-import * as types from './issues-action-types';
+import * as issuesActions from './issues-actions';
 import * as storage from 'components/storage/storage';
+import * as types from './issues-action-types';
 import Api from 'components/api/api';
 import mocks from 'test/mocks';
-import reducer, {IssuesState} from './issues-reducers';
+import reducer, {
+  IssuesState,
+  CLEAR_SUGGESTIONS,
+  LIST_END_REACHED,
+  LOADING_ISSUES_ERROR,
+  RECEIVE_ISSUES,
+  SET_HELPDESK_QUERY,
+  SET_ISSUES_COUNT,
+  SET_ISSUES_QUERY,
+  START_LOADING_MORE,
+  STOP_LOADING_MORE,
+  SUGGEST_QUERY,
+} from './issues-reducers';
 import Store from 'store';
 import {deepmerge} from 'deepmerge-ts';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
@@ -13,8 +26,8 @@ import {SET_PROGRESS} from 'actions/action-types';
 import {StorageState} from 'components/storage/storage';
 
 import type Auth from 'components/auth/oauth2';
-import {AnyIssue, IssueOnList} from 'types/Issue';
-import {Folder, User} from 'types/User';
+import {IssueOnList} from 'types/Issue';
+import {Folder} from 'types/User';
 
 jest.mock('components/api/api', () => {
   return jest.fn().mockImplementation(() => ({
@@ -63,11 +76,11 @@ describe('Issues', () => {
     });
 
     it('should set issues query', async () => {
-      await store.dispatch(issuesActions.issuesQueryAction(TEST_QUERY));
+      await store.dispatch(actions.SET_ISSUES_QUERY(TEST_QUERY));
 
       expect(store.getActions()[0]).toEqual({
-        type: types.SET_ISSUES_QUERY,
-        query: TEST_QUERY,
+        type: `${SET_ISSUES_QUERY}`,
+        payload: TEST_QUERY,
       });
     });
 
@@ -82,15 +95,15 @@ describe('Issues', () => {
       await store.dispatch(issuesActions.setStoredIssuesQuery());
 
       expect(store.getActions()[0]).toEqual({
-        type: types.SET_ISSUES_QUERY,
-        query: queryMock,
+        type: `${SET_ISSUES_QUERY}`,
+        payload: queryMock,
       });
     });
 
     it('should clear query assist suggestions', async () => {
-      await store.dispatch(issuesActions.clearAssistSuggestions());
+      await store.dispatch(actions.CLEAR_SUGGESTIONS());
 
-      expect(store.getActions()[0].type).toEqual(types.CLEAR_SUGGESTIONS);
+      expect(store.getActions()[0].type).toEqual(`${CLEAR_SUGGESTIONS}`);
     });
 
     it('should receive issues', async () => {
@@ -98,14 +111,13 @@ describe('Issues', () => {
         {
           id: 'test',
         },
-      ] as AnyIssue[];
+      ] as IssueOnList[];
 
-      await store.dispatch(issuesActions.receiveIssues(issues));
+      await store.dispatch(actions.RECEIVE_ISSUES(issues));
 
       expect(store.getActions()[0]).toEqual({
-        type: types.RECEIVE_ISSUES,
-        issues,
-        pageSize: 14,
+        type: `${RECEIVE_ISSUES}`,
+        payload: issues,
       });
     });
 
@@ -174,8 +186,8 @@ describe('Issues', () => {
         ];
 
         expect(store.getActions()[0]).toEqual({
-          type: types.SUGGEST_QUERY,
-          suggestions,
+          type: `${SUGGEST_QUERY}`,
+          payload: suggestions,
         });
       });
 
@@ -202,8 +214,8 @@ describe('Issues', () => {
           },
         ];
         expect(store.getActions()[0]).toEqual({
-          type: types.SUGGEST_QUERY,
-          suggestions,
+          type: `${SUGGEST_QUERY}`,
+          payload: suggestions,
         });
       });
 
@@ -221,8 +233,8 @@ describe('Issues', () => {
         await store.dispatch(issuesActions.loadIssuesCount());
 
         expect(store.getActions()[0]).toEqual({
-          type: types.SET_ISSUES_COUNT,
-          count: countMock,
+          type: `${SET_ISSUES_COUNT}`,
+          payload: countMock,
         });
       });
 
@@ -323,9 +335,8 @@ describe('Issues', () => {
       await store.dispatch(issuesActions.initializeIssuesList());
 
       expect(store.getActions()[4]).toEqual({
-        type: types.RECEIVE_ISSUES,
-        issues: helpdeskCache,
-        pageSize: issuesActions.PAGE_SIZE,
+        type: `${RECEIVE_ISSUES}`,
+        payload: helpdeskCache,
       });
     });
 
@@ -334,8 +345,8 @@ describe('Issues', () => {
       await store.dispatch(issuesActions.setStoredIssuesQuery());
 
       expect(store.getActions()[0]).toEqual({
-        type: types.SET_HELPDESK_QUERY,
-        helpdeskQuery: queryMock,
+        type: `${SET_HELPDESK_QUERY}`,
+        payload: queryMock,
       });
     });
 
@@ -350,8 +361,8 @@ describe('Issues', () => {
       await store.dispatch(issuesActions.onQueryUpdate(queryMock));
 
       expect(store.getActions()[0]).toEqual({
-        type: types.SET_HELPDESK_QUERY,
-        helpdeskQuery: queryMock,
+        type: `${SET_HELPDESK_QUERY}`,
+        payload: queryMock,
       });
 
       expect(
@@ -368,8 +379,8 @@ describe('Issues', () => {
       const newState = reducer(
         {} as IssuesState,
         {
-          type: types.SET_ISSUES_QUERY,
-          query: 'test',
+          type: `${SET_ISSUES_QUERY}`,
+          payload: 'test',
         },
       );
 
@@ -385,8 +396,8 @@ describe('Issues', () => {
       const newState = reducer(
         {} as IssuesState,
         {
-          type: types.SUGGEST_QUERY,
-          suggestions,
+          type: `${SUGGEST_QUERY}`,
+          payload: suggestions,
         },
       );
 
@@ -426,8 +437,8 @@ describe('Issues', () => {
       const newState = reducer(
         {} as IssuesState,
         {
-          type: types.START_LOADING_MORE,
-          newSkip: 10,
+          type: `${START_LOADING_MORE}`,
+          payload: 10,
         },
       );
 
@@ -441,7 +452,7 @@ describe('Issues', () => {
       const newState = reducer(
         {} as IssuesState,
         {
-          type: types.STOP_LOADING_MORE,
+          type: `${STOP_LOADING_MORE}`,
         },
       );
 
@@ -459,8 +470,8 @@ describe('Issues', () => {
       const newState = reducer(
         {} as IssuesState,
         {
-          type: types.RECEIVE_ISSUES,
-          issues,
+          type: `${RECEIVE_ISSUES}`,
+          payload: issues,
         },
       );
 
@@ -475,8 +486,8 @@ describe('Issues', () => {
       const newState = reducer(
         {} as IssuesState,
         {
-          type: types.LOADING_ISSUES_ERROR,
-          error,
+          type: `${LOADING_ISSUES_ERROR}`,
+          payload: error,
         },
       );
 
@@ -492,7 +503,7 @@ describe('Issues', () => {
       const newState = reducer(
         {} as IssuesState,
         {
-          type: types.LIST_END_REACHED,
+          type: `${LIST_END_REACHED}`,
         },
       );
 
@@ -505,8 +516,8 @@ describe('Issues', () => {
       const newState = reducer(
         {} as IssuesState,
         {
-          type: types.SET_ISSUES_COUNT,
-          count: 12,
+          type: `${SET_ISSUES_COUNT}`,
+          payload: 12,
         },
       );
 
@@ -553,7 +564,7 @@ describe('Issues', () => {
 
 
   function createTestStore(data: Partial<IssuesState> = {}) {
-    const user: User = mocks.createUserMock();
+    const user = mocks.createUserMock();
     store = createStoreMock({
       app: {
         user,

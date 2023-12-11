@@ -12,6 +12,7 @@ import type {User} from './User';
 import type {Visibility} from './Visibility';
 import {AnyCustomField} from 'components/custom-field/custom-field-helper';
 import {Article} from 'types/Article';
+import {ActivityItem} from 'types/Activity';
 
 export type IssueContextData = {
   dispatcher: () => any;
@@ -46,6 +47,7 @@ export type IssueOnList = (
       },
     }
   },
+  activityPage?: ActivityItem[]
 });
 
 export type IssueFull = {

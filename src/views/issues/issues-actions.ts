@@ -1,5 +1,5 @@
+import * as issuesActions from './issues-reducers';
 import * as issueUpdater from 'components/issue-actions/issue-updater';
-import * as types from './issues-action-types';
 import ApiHelper from 'components/api/api__helper';
 import log from 'components/log/log';
 import usage from 'components/usage/usage';
@@ -28,7 +28,6 @@ import {getGroupedFolders, GroupedFolders, sortFolders} from 'components/folder/
 import {i18n} from 'components/i18n/i18n';
 import {guid, removeDuplicatesFromArray, until} from 'util/util';
 import {receiveUserAppearanceProfile, setGlobalInProgress, setYTCurrentUser} from 'actions/app-actions';
-import {SET_HELPDESK_MODE} from './issues-action-types';
 import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
 import type {AnyIssue, IssueFull, IssueOnList} from 'types/Issue';
@@ -39,6 +38,7 @@ import {ISelectProps} from 'components/select/select';
 import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
 import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 import {SortedIssues} from 'components/api/api__issues';
+import {ActivityItem} from 'types/Activity';
 
 export interface ContextDataSource {
   title: string;
@@ -64,16 +64,6 @@ const trackEvent = (msg: string, analyticsId: string = ANALYTICS_ISSUES_PAGE) =>
   );
 };
 
-const issuesQueryAction = (query: string) => ({
-  type: types.SET_ISSUES_QUERY,
-  query,
-});
-
-const helpdeskQueryAction = (helpdeskQuery: string) => ({
-  type: types.SET_HELPDESK_QUERY,
-  helpdeskQuery,
-});
-
 const getPageSize = (): ReduxAction<number> => (
   dispatch: ReduxThunkDispatch,
   getState: ReduxStateGetter,
@@ -88,9 +78,9 @@ const isHelpDeskMode = (): ReduxAction<boolean> => (
 
 const setStoredIssuesQuery = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
   if (dispatch(isHelpDeskMode())) {
-    dispatch(helpdeskQueryAction(getStorageState().helpdeskQuery || ''));
+    dispatch(issuesActions.SET_HELPDESK_QUERY(getStorageState().helpdeskQuery || ''));
   } else {
-    dispatch(issuesQueryAction(getStorageState().query || ''));
+    dispatch(issuesActions.SET_ISSUES_QUERY(getStorageState().query || ''));
   }
 };
 
@@ -100,15 +90,8 @@ const suggestIssuesQuery = (query: string, caret: number): ReduxAction => async 
   getApi: ReduxAPIGetter,
 ) => {
   const suggestions = await getAssistSuggestions(getApi(), query, caret);
-  dispatch({
-    type: types.SUGGEST_QUERY,
-    suggestions,
-  });
+  dispatch(issuesActions.SUGGEST_QUERY(suggestions));
 };
-
-const clearAssistSuggestions = () => ({
-  type: types.CLEAR_SUGGESTIONS,
-});
 
 const storeIssuesQuery = (query: string): ReduxAction => (dispatch: ReduxThunkDispatch) => {
   if (!query) {
@@ -126,61 +109,25 @@ const storeIssuesQuery = (query: string): ReduxAction => (dispatch: ReduxThunkDi
   });
 };
 
-const listEndReached = () => ({
-  type: types.LIST_END_REACHED,
-});
-
 const startIssuesLoading = () => setGlobalInProgress(true);
 
 const stopIssuesLoading = () => setGlobalInProgress(false);
 
-const startMoreIssuesLoading = (newSkip: number) => ({
-  type: types.START_LOADING_MORE,
-  newSkip,
-});
-
-const stopMoreIssuesLoading = () => ({
-  type: types.STOP_LOADING_MORE,
-});
-
-const receiveIssues = (issues: AnyIssue[], pageSize: number = PAGE_SIZE) => ({
-  type: types.RECEIVE_ISSUES,
-  issues,
-  pageSize,
-});
-
-const resetIssuesCount = () => ({
-  type: types.RESET_ISSUES_COUNT,
-});
-
-const setIssuesCount = (count: number | null) => ({
-  type: types.SET_ISSUES_COUNT,
-  count,
-});
-
-const updateSearchContextPinned = (isPinned: boolean) => ({
-  type: types.IS_SEARCH_CONTEXT_PINNED,
-  isSearchContextPinned: isPinned,
-});
-
 const setIssuesError = (error: CustomError): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
-  dispatch(resetIssuesCount());
-  dispatch({
-    type: types.LOADING_ISSUES_ERROR,
-    error: error,
-  });
+  dispatch(issuesActions.RESET_ISSUES_COUNT());
+  dispatch(issuesActions.LOADING_ISSUES_ERROR(error));
 };
 
-const cacheIssues = (issues: AnyIssue[]): ReduxAction => (dispatch: ReduxThunkDispatch) => {
-  let updatedCache: AnyIssue[] = issues;
+const cacheIssues = (issues: IssueOnList[]): ReduxAction => (dispatch: ReduxThunkDispatch) => {
+  let updatedCache: IssueOnList[] = issues;
   const isHelpdeskMode = dispatch(isHelpDeskMode());
-  const cachedIssues: AnyIssue[] | null = isHelpdeskMode
+  const cachedIssues: IssueOnList[] | null = isHelpdeskMode
     ? getStorageState().helpdeskCache
     : getStorageState().issuesCache;
 
   if (cachedIssues) {
-    const issueActivityMap: Record<string, AnyIssue> = cachedIssues.reduce(
-      (map: Record<string, AnyIssue>, it: AnyIssue) => {
+    const issueActivityMap: Record<string, ActivityItem[]> = cachedIssues.reduce(
+      (map: Record<string, ActivityItem[]>, it: IssueOnList) => {
         if (it.activityPage) {
           map[it.id] = it.activityPage;
         }
@@ -189,7 +136,7 @@ const cacheIssues = (issues: AnyIssue[]): ReduxAction => (dispatch: ReduxThunkDi
       },
       {},
     );
-    updatedCache = issues.map((it: AnyIssue) => {
+    updatedCache = issues.map((it: IssueOnList) => {
       if (issueActivityMap[it.id]) {
         it.activityPage = issueActivityMap[it.id];
       }
@@ -213,16 +160,16 @@ const loadIssues = (query: string): ReduxAction => async (
       log.info(`Loading ${context}...`);
     }
     const pageSize: number = dispatch(getPageSize());
-    const issues: AnyIssue[] = await dispatch(doLoadIssues(query, pageSize));
+    const issues: IssueOnList[] = await dispatch(doLoadIssues(query, pageSize));
     log.info(`${issues?.length} issues loaded`);
 
-    dispatch(receiveIssues(issues, pageSize));
+    dispatch(issuesActions.RECEIVE_ISSUES(issues));
     dispatch(cacheIssues(issues));
 
     if (issues.length < pageSize) {
-      dispatch(setIssuesCount(issues.length));
+      dispatch(issuesActions.SET_ISSUES_COUNT(issues.length));
       log.info('End reached during initial load');
-      dispatch(listEndReached());
+      dispatch(issuesActions.LIST_END_REACHED());
     }
   } catch (e) {
     log.log(`Failed to load ${context}`);
@@ -256,7 +203,7 @@ const composeSearchQuery = (): ReduxAction<Promise<string>> => async (
 
 const refreshIssues = (): ReduxAction => async (dispatch: ReduxThunkDispatch): Promise<void> => {
   const searchQuery: string = await dispatch(composeSearchQuery());
-  dispatch(setIssuesCount(null));
+  dispatch(issuesActions.SET_ISSUES_COUNT(null));
   dispatch(loadIssues(searchQuery));
   dispatch(refreshIssuesCount());
 };
@@ -264,35 +211,12 @@ const refreshIssues = (): ReduxAction => async (dispatch: ReduxThunkDispatch): P
 const onQueryUpdate = (query: string): ReduxAction => (dispatch: ReduxThunkDispatch) => {
   dispatch(storeIssuesQuery(query));
   if (dispatch(isHelpDeskMode())) {
-    dispatch(helpdeskQueryAction(query));
+    dispatch(issuesActions.SET_HELPDESK_QUERY(query));
   } else {
-    dispatch(issuesQueryAction(query));
+    dispatch(issuesActions.SET_ISSUES_QUERY(query));
   }
-  dispatch(clearAssistSuggestions());
+  dispatch(issuesActions.CLEAR_SUGGESTIONS());
   dispatch(refreshIssues());
-};
-
-const searchContextAction = (searchContext: Folder) => ({
-  type: types.SET_SEARCH_CONTEXT,
-  searchContext,
-});
-
-const helpdeskSearchContextAction = (helpdeskSearchContext: Folder) => ({
-  type: types.SET_HELPDESK_CONTEXT,
-  helpdeskSearchContext,
-});
-
-const closeSelect = (): ReduxAction => (dispatch: ReduxThunkDispatch) => {
-  dispatch({
-    type: types.CLOSE_SEARCH_CONTEXT_SELECT,
-  });
-};
-
-const openSelect = (selectProps: Partial<ISelectProps>): ReduxAction => (dispatch: ReduxThunkDispatch) => {
-  dispatch({
-    type: types.OPEN_SEARCH_CONTEXT_SELECT,
-    selectProps,
-  });
 };
 
 const openContextSelect = (): ReduxAction => {
@@ -351,13 +275,13 @@ const openContextSelect = (): ReduxAction => {
         ];
       },
       selectedItems: [currentSearchContext],
-      onCancel: () => dispatch(closeSelect()),
+      onCancel: () => dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT()),
       onSelect: async (searchContext: Folder) => {
         try {
-          dispatch(closeSelect());
+          dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT());
           const isHelpdeskMode = dispatch(isHelpDeskMode());
           dispatch(
-            isHelpdeskMode ? helpdeskSearchContextAction(searchContext) : searchContextAction(searchContext)
+            isHelpdeskMode ? issuesActions.SET_HELPDESK_CONTEXT(searchContext) : issuesActions.SET_SEARCH_CONTEXT(searchContext)
           );
           flushStoragePart(isHelpdeskMode ? {searchContext} : {helpdeskSearchContext: searchContext});
           dispatch(refreshIssues());
@@ -368,7 +292,7 @@ const openContextSelect = (): ReduxAction => {
       hasStar: (folder: Folder) => folder.pinned,
       onStar: (folder: Folder) => api.issueFolder.issueFolders(folder.id, {pinned: !folder.pinned}),
     };
-    dispatch(openSelect(searchContextSelectProps));
+    dispatch(issuesActions.OPEN_SEARCH_CONTEXT_SELECT(searchContextSelectProps));
   };
 };
 
@@ -382,10 +306,7 @@ const getIssuesSettings = (): ReduxAction<IssuesSettings> => (
 
 const cachedIssuesSettings = (settings?: IssuesSettings): ReduxAction<IssuesSettings> => (dispatch: ReduxThunkDispatch): IssuesSettings => {
   if (settings) {
-    dispatch({
-      type: types.SET_LIST_SETTINGS,
-      settings,
-    });
+    dispatch(issuesActions.SET_LIST_SETTINGS(settings));
     flushStoragePart({issuesSettings: settings});
   }
   return settings || getStorageState().issuesSettings || issuesSettingsDefault;
@@ -420,10 +341,10 @@ const openFilterFieldSelect = (filterSetting: FilterSetting): ReduxAction => (
       return error ? [] : _values;
     },
     selectedItems,
-    onCancel: () => dispatch(closeSelect()),
+    onCancel: () => dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT()),
     onSelect: async (selected: { id: string; name: string }[]) => {
       try {
-        dispatch(closeSelect());
+        dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT());
         const key: string = getFilterFieldName(filterSetting.filterField[0]);
         const issuesSettings: IssuesSettings = {
           ...settings,
@@ -446,7 +367,7 @@ const openFilterFieldSelect = (filterSetting: FilterSetting): ReduxAction => (
       }
     },
   };
-  dispatch(openSelect(selectProps));
+  dispatch(issuesActions.OPEN_SEARCH_CONTEXT_SELECT(selectProps));
 };
 
 const resetFilterFields = (): ReduxAction => async (
@@ -541,7 +462,7 @@ const updateIssue = (issueId: string): ReduxAction => async (
       issueToUpdate,
       currentIssues,
     );
-    dispatch(receiveIssues(updatedIssues, dispatch(getPageSize())));
+    dispatch(issuesActions.RECEIVE_ISSUES(updatedIssues as IssueOnList[]));
     dispatch(cacheIssues(updatedIssues));
   }
 };
@@ -586,7 +507,7 @@ const loadIssuesCount = (folder?: Folder | null): ReduxAction => async (
     }
 
     if (issuesCount >= 0) {
-      dispatch(setIssuesCount(issuesCount));
+      dispatch(issuesActions.SET_ISSUES_COUNT(issuesCount));
     }
   } catch (e) {
     log.log(`Failed to load ${isHelpDeskMode() ? 'tickets' : 'issues'} count`);
@@ -601,10 +522,10 @@ const initSearchContext = (searchQuery: string = ''): ReduxAction => async (disp
   let searchContext: Folder;
   if (dispatch(isHelpDeskMode)) {
     searchContext = getStorageState().currentUser?.ytCurrentUser?.profiles?.helpdesk?.helpdeskFolder as Folder;
-    dispatch(helpdeskSearchContextAction(searchContext));
+    dispatch(issuesActions.SET_HELPDESK_CONTEXT(searchContext));
   } else {
     searchContext = searchQuery.trim() ? EVERYTHING_SEARCH_CONTEXT : getStoredSearchContext();
-    dispatch(searchContextAction(searchContext));
+    dispatch(issuesActions.SET_SEARCH_CONTEXT(searchContext));
   }
 };
 
@@ -695,7 +616,7 @@ const onSettingsChange = (settings: IssuesSettings, preventReload?: boolean): Re
   const eventContext = dispatch(isHelpDeskMode()) ? `Issues` : `Tickets`;
   if (settings.search.mode !== currentSettings.search.mode) {
     trackEvent(`${eventContext} settings: switch mode to ${settings.search.mode}`);
-    dispatch(issuesQueryAction(''));
+    dispatch(issuesActions.SET_ISSUES_QUERY(''));
     await flushStoragePart({query: null});
   }
   if (settings.view.mode !== currentSettings.view.mode) {
@@ -706,17 +627,14 @@ const onSettingsChange = (settings: IssuesSettings, preventReload?: boolean): Re
   if (settings.search.mode === issuesSearchSettingMode.filter) {
     await dispatch(setFilters());
   }
-  dispatch(receiveIssues([], dispatch(getPageSize())));
+  dispatch(issuesActions.RECEIVE_ISSUES([]));
   if (!preventReload) {
     dispatch(refreshIssues());
   }
 };
 
 const setIssuesMode = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
-  dispatch({
-    type: SET_HELPDESK_MODE,
-    helpDeskMode: false,
-  });
+  dispatch(issuesActions.SET_HELPDESK_MODE(false));
 };
 
 const initializeIssuesList = (searchQuery?: string): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
@@ -739,7 +657,7 @@ const initializeIssuesList = (searchQuery?: string): ReduxAction => async (dispa
   }
   if (cachedIssues.length > 0) {
     log.debug(`Loaded ${cachedIssues.length} cached ${isHelpDeskMode() ? 'tickets' : 'issues'}`);
-    dispatch(receiveIssues(cachedIssues, dispatch(getPageSize())));
+    dispatch(issuesActions.RECEIVE_ISSUES(cachedIssues));
   }
   dispatch(refreshIssues());
 };
@@ -778,7 +696,7 @@ const loadMoreIssues = (): ReduxAction => async (
     const pageSize: number = dispatch(getPageSize());
     const newSkip: number = skip + pageSize;
     log.info(`Loading more ${context}. newSkip = ${newSkip}`);
-    dispatch(startMoreIssuesLoading(newSkip));
+    dispatch(issuesActions.START_LOADING_MORE(newSkip));
 
     try {
       const searchQuery = await dispatch(composeSearchQuery());
@@ -789,18 +707,18 @@ const loadMoreIssues = (): ReduxAction => async (
         issues.concat(moreIssues),
         'id',
       ) as IssueOnList[];
-      dispatch(receiveIssues(updatedIssues, pageSize));
+      dispatch(issuesActions.RECEIVE_ISSUES(updatedIssues));
       dispatch(cacheIssues(updatedIssues));
 
       if (moreIssues.length < pageSize) {
         log.info(`End of ${context} reached: all ${updatedIssues?.length} are loaded`);
-        dispatch(listEndReached());
+        dispatch(issuesActions.LIST_END_REACHED());
       }
     } catch (e) {
       log.log(`Failed to load more ${context}`);
       dispatch(setIssuesError(e as CustomError));
     } finally {
-      dispatch(stopMoreIssuesLoading());
+      dispatch(issuesActions.STOP_LOADING_MORE());
     }
   } catch (e) {
     log.log(`Failed to load more ${context}`);
@@ -811,8 +729,6 @@ const loadMoreIssues = (): ReduxAction => async (
 export {
   cachedIssuesSettings,
   cacheIssues,
-  clearAssistSuggestions,
-  closeSelect,
   composeSearchQuery,
   doLoadIssues,
   getIssueFromCache,
@@ -820,14 +736,10 @@ export {
   getPageSize,
   getSearchContext,
   getStoredSearchContext,
-  helpdeskQueryAction,
-  helpdeskSearchContextAction,
   initializeIssuesList,
   initSearchContext,
   isHelpDeskMode,
   isIssueMatchesQuery,
-  issuesQueryAction,
-  listEndReached,
   loadIssues,
   loadIssuesCount,
   loadMoreIssues,
@@ -835,26 +747,18 @@ export {
   onSettingsChange,
   openContextSelect,
   openFilterFieldSelect,
-  openSelect,
-  receiveIssues,
   refreshIssues,
   refreshIssuesCount,
   resetFilterFields,
-  resetIssuesCount,
-  searchContextAction,
   setFilters,
-  setIssuesCount,
   setIssuesError,
   setIssuesMode,
   setStoredIssuesQuery,
   startIssuesLoading,
-  startMoreIssuesLoading,
   stopIssuesLoading,
-  stopMoreIssuesLoading,
   storeIssuesQuery,
   suggestIssuesQuery,
   switchToQuerySearchSetting,
   trackEvent,
   updateIssue,
-  updateSearchContextPinned,
 };
