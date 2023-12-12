@@ -54,8 +54,8 @@ msgstr[1] "{{amount}} issues"
 msgid "@Mention in a comment"
 msgstr "@Mention in a comment"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:386
-#: src/views/issue/activity/activity__add-spent-time.tsx:400
+#: src/views/issue/activity/activity__add-spent-time.tsx:387
+#: src/views/issue/activity/activity__add-spent-time.tsx:401
 msgid "1w 1d 1h 1m"
 msgstr "1w 1d 1h 1m"
 
@@ -85,7 +85,7 @@ msgid "Add spent time"
 msgstr "Add spent time"
 
 #: src/components/tags/tag-add-panel.tsx:39
-#: src/views/issue/issue-base-actions-creater.ts:670
+#: src/views/issue/issue-base-actions-creater.ts:579
 msgid "Add tag"
 msgstr "Add tag"
 
@@ -112,7 +112,7 @@ msgid "Appearance"
 msgstr "Appearance"
 
 #: src/views/create-issue/create-issue-actions.ts:564
-#: src/views/issue/issue-base-actions-creater.ts:701
+#: src/views/issue/issue-base-actions-creater.ts:610
 msgid "Apply command…"
 msgstr "Apply command…"
 
@@ -149,7 +149,7 @@ msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
 #: src/components/comment/comment-edit.tsx:565
-#: src/views/issue/issue-base-actions-creater.ts:680
+#: src/views/issue/issue-base-actions-creater.ts:589
 msgid "Attach file"
 msgstr "Attach file"
 
@@ -172,7 +172,7 @@ msgstr "Attachment deleted"
 msgid "Attachment name"
 msgstr "Attachment name"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:355
+#: src/views/issue/activity/activity__add-spent-time.tsx:356
 msgid "Author"
 msgstr "Author"
 
@@ -201,8 +201,8 @@ msgstr "Camera"
 #: src/views/inbox-threads/inbox-threads__thread.tsx:198
 #: src/views/inbox-threads/inbox-threads.tsx:278
 #: src/views/issue/activity/issue-activity__comment-actions.ts:413
-#: src/views/issue/issue-base-actions-creater.ts:726
-#: src/views/issue/issue-base-actions-creater.ts:767
+#: src/views/issue/issue-base-actions-creater.ts:636
+#: src/views/issue/issue-base-actions-creater.ts:667
 #: src/views/knowledge-base/knowledge-base-actions.ts:497
 #: src/views/settings/settings__feedback-form.tsx:87
 msgid "Cancel"
@@ -225,11 +225,11 @@ msgstr "closed the pull request"
 msgid "Collapse all"
 msgstr "Collapse all"
 
-#: src/views/agile-board/agile-board.tsx:371
+#: src/views/agile-board/agile-board.tsx:372
 msgid "Column collapsed"
 msgstr "Column collapsed"
 
-#: src/views/agile-board/agile-board.tsx:371
+#: src/views/agile-board/agile-board.tsx:372
 msgid "Column expanded"
 msgstr "Column expanded"
 
@@ -298,8 +298,8 @@ msgstr "Content revised"
 #: src/views/article/article__activity-stream.tsx:222
 #: src/views/issue/activity/issue__activity-stream.tsx:134
 #: src/views/issue/activity/issue-activity__comment-actions.ts:380
-#: src/views/issue/issue-base-actions-creater.ts:653
-#: src/views/issue/issue-base-actions-creater.ts:763
+#: src/views/issue/issue-base-actions-creater.ts:562
+#: src/views/issue/issue-base-actions-creater.ts:663
 msgid "Copied"
 msgstr "Copied"
 
@@ -315,7 +315,7 @@ msgstr "Copy field text"
 #: src/views/article/article__activity-stream.tsx:218
 #: src/views/issue/activity/issue__activity-stream.tsx:139
 #: src/views/issue/activity/issue-activity__comment-actions.ts:384
-#: src/views/issue/issue-base-actions-creater.ts:649
+#: src/views/issue/issue-base-actions-creater.ts:558
 msgid "Copy link"
 msgstr "Copy link"
 
@@ -327,7 +327,7 @@ msgstr "Copy link to article"
 #: src/views/article/article__activity-stream.tsx:209
 #: src/views/issue/activity/issue__activity-stream.tsx:130
 #: src/views/issue/activity/issue-activity__comment-actions.ts:376
-#: src/views/issue/issue-base-actions-creater.ts:759
+#: src/views/issue/issue-base-actions-creater.ts:659
 msgid "Copy text"
 msgstr "Copy text"
 
@@ -355,7 +355,7 @@ msgstr "Current issue"
 msgid "Dark theme"
 msgstr "Dark theme"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:365
+#: src/views/issue/activity/activity__add-spent-time.tsx:366
 msgid "Date"
 msgstr "Date"
 
@@ -373,7 +373,7 @@ msgstr "Decline"
 #: src/views/issue/activity/issue-activity__actions.ts:419
 #: src/views/issue/activity/issue-activity__comment-actions.ts:332
 #: src/views/issue/activity/issue-activity__comment-actions.ts:404
-#: src/views/issue/issue-base-actions-creater.ts:710
+#: src/views/issue/issue-base-actions-creater.ts:619
 msgid "Delete"
 msgstr "Delete"
 
@@ -414,11 +414,11 @@ msgstr "Description changed"
 msgid "Details"
 msgstr "Details"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:217
+#: src/views/issue/activity/activity__add-spent-time.tsx:218
 msgid "Discard and close"
 msgstr "Discard and close"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:217
+#: src/views/issue/activity/activity__add-spent-time.tsx:218
 msgid "Discard draft and close?"
 msgstr "Discard draft and close?"
 
@@ -452,7 +452,7 @@ msgstr "Drafts"
 #: src/views/issue/activity/issue__activity-stream.tsx:97
 #: src/views/issue/activity/issue__activity.tsx:269
 #: src/views/issue/activity/issue-activity__comment-actions.ts:394
-#: src/views/issue/issue-base-actions-creater.ts:660
+#: src/views/issue/issue-base-actions-creater.ts:569
 msgid "Edit"
 msgstr "Edit"
 
@@ -481,7 +481,7 @@ msgstr "Enter search request"
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr "Enter the web address for a YouTrack installation where you have a registered account"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:246
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:245
 msgid "Enter time value"
 msgstr "Enter time value"
 
@@ -506,12 +506,12 @@ msgstr "Filter items"
 msgid "Filter projects"
 msgstr "Filter projects"
 
-#: src/views/issues/issues-actions.ts:309
+#: src/views/issues/issues-actions.ts:231
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
 #: src/views/issues/issues__filters-settings__list.tsx:172
-#: src/views/issues/issues__settings.tsx:100
+#: src/views/issues/issues__settings.tsx:101
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
@@ -520,7 +520,7 @@ msgid "Filter sprints by name"
 msgstr "Filter sprints by name"
 
 #: src/components/tags/tag-add-select.tsx:24
-#: src/views/issue/issue-base-actions-creater.ts:548
+#: src/views/issue/issue-base-actions-creater.ts:465
 msgid "Filter tags"
 msgstr "Filter tags"
 
@@ -536,7 +536,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:570
+#: src/views/issues/issues.tsx:572
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -568,7 +568,7 @@ msgstr "In addition to our built-in error reporting, YouTrack Mobile uses Bugsna
 msgid "in revision"
 msgstr "in revision"
 
-#: src/views/issue/issue-base-actions-creater.ts:894
+#: src/views/issue/issue-base-actions-creater.ts:772
 msgid "Issue deleted"
 msgstr "Issue deleted"
 
@@ -584,7 +584,7 @@ msgstr "Issue link added"
 msgid "Issue link removed"
 msgstr "Issue link removed"
 
-#: src/views/issue/issue-base-actions-creater.ts:278
+#: src/views/issue/issue-base-actions-creater.ts:228
 msgid "Issue updated"
 msgstr "Issue updated"
 
@@ -623,7 +623,7 @@ msgstr "Light theme"
 
 #: src/components/linked-issues/linked-issues-add-link.tsx:246
 #: src/views/create-issue/create-issue.tsx:380
-#: src/views/issue/issue-base-actions-creater.ts:691
+#: src/views/issue/issue-base-actions-creater.ts:600
 msgid "Link issue"
 msgstr "Link issue"
 
@@ -742,7 +742,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:620
+#: src/views/issues/issues.tsx:622
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -754,7 +754,7 @@ msgstr "No items"
 msgid "No notifications"
 msgstr "No notifications"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:57
+#: src/views/issue/activity/activity__add-spent-time.tsx:58
 msgid "No type"
 msgstr "No type"
 
@@ -791,7 +791,7 @@ msgstr "Password"
 msgid "Photo and video library"
 msgstr "Photo and video library"
 
-#: src/views/issues/issues__settings.tsx:131
+#: src/views/issues/issues__settings.tsx:132
 msgid "Preview Size"
 msgstr "Preview Size"
 
@@ -799,11 +799,11 @@ msgstr "Preview Size"
 msgid "Problem"
 msgstr "Problem"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:121
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:120
 msgid "Project"
 msgstr "Project"
 
-#: src/views/issues/issues-actions.ts:330
+#: src/views/issues/issues-actions.ts:252
 #: src/views/knowledge-base/knowledge-base.tsx:609
 msgid "Projects"
 msgstr "Projects"
@@ -870,7 +870,7 @@ msgstr "Restore"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/views/issues/issues-actions.ts:345
+#: src/views/issues/issues-actions.ts:267
 msgid "Saved Searches"
 msgstr "Saved Searches"
 
@@ -882,11 +882,11 @@ msgstr "Search articles"
 msgid "Search for a different value"
 msgstr "Search for a different value"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:207
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:206
 msgid "Search for the project"
 msgstr "Search for the project"
 
-#: src/views/issues/issues__settings.tsx:70
+#: src/views/issues/issues__settings.tsx:71
 msgid "Search Input Mode"
 msgstr "Search Input Mode"
 
@@ -895,7 +895,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:685
+#: src/views/issues/issues.tsx:687
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -936,7 +936,7 @@ msgstr "Share"
 #: src/views/article/article__activity-stream.tsx:234
 #: src/views/issue/activity/issue__activity-stream.tsx:147
 #: src/views/issue/activity/issue__activity-stream.tsx:154
-#: src/views/issue/issue-base-actions-creater.ts:640
+#: src/views/issue/issue-base-actions-creater.ts:549
 msgid "Share link"
 msgstr "Share link"
 
@@ -950,7 +950,7 @@ msgstr "Share logs"
 
 #: src/views/article/arcticle-actions.ts:218
 #: src/views/article/arcticle-actions.ts:643
-#: src/views/issue/issue-base-actions-creater.ts:625
+#: src/views/issue/issue-base-actions-creater.ts:534
 msgid "Share…"
 msgstr "Share…"
 
@@ -980,7 +980,7 @@ msgstr "Something went wrong"
 msgid "Sort Attributes"
 msgstr "Sort Attributes"
 
-#: src/views/issues/issues__settings.tsx:99
+#: src/views/issues/issues__settings.tsx:100
 msgid "Sort Order"
 msgstr "Sort Order"
 
@@ -993,8 +993,8 @@ msgid "Sorted by"
 msgstr "Sorted by"
 
 #: src/components/activity/activity-helper.ts:48
-#: src/views/issue/activity/activity__add-spent-time.tsx:274
-#: src/views/issue/activity/activity__add-spent-time.tsx:381
+#: src/views/issue/activity/activity__add-spent-time.tsx:275
+#: src/views/issue/activity/activity__add-spent-time.tsx:382
 msgid "Spent time"
 msgstr "Spent time"
 
@@ -1036,7 +1036,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/views/issues/issues-actions.ts:338
+#: src/views/issues/issues-actions.ts:260
 msgid "Tags"
 msgstr "Tags"
 
@@ -1052,7 +1052,7 @@ msgstr "The application failed to restart automatically. Please try to restart i
 msgid "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
 msgstr "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
 
-#: src/views/agile-board/agile-board.tsx:440
+#: src/views/agile-board/agile-board.tsx:441
 msgid "The board {{boardName}} has configuration errors"
 msgstr "The board {{boardName}} has configuration errors"
 
@@ -1124,8 +1124,8 @@ msgstr "Thread muted"
 msgid "Thread unmuted"
 msgstr "Thread unmuted"
 
-#: src/views/issues/issues-reducers.ts:53
-#: src/views/tickets/tickets.tsx:33
+#: src/views/issues/issues-reducers.ts:55
+#: src/views/tickets/tickets.tsx:34
 msgid "Tickets"
 msgstr "Tickets"
 
@@ -1157,7 +1157,7 @@ msgstr "Touch and hold an item to view a list of available actions"
 msgid "Try Again"
 msgstr "Try Again"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:411
+#: src/views/issue/activity/activity__add-spent-time.tsx:412
 msgid "Type"
 msgstr "Type"
 
@@ -1251,7 +1251,7 @@ msgid "Wrap attribute values that contain spaces in braces {like this}."
 msgstr "Wrap attribute values that contain spaces in braces {like this}."
 
 #: src/components/comment/comment-edit.tsx:431
-#: src/views/issue/activity/activity__add-spent-time.tsx:426
+#: src/views/issue/activity/activity__add-spent-time.tsx:427
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
 
