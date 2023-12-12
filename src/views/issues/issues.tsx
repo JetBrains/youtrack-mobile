@@ -118,6 +118,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
       settingsVisible: false,
     };
     this.props.setIssuesMode();
+    this.props.setIssuesFromCache();
     usage.trackScreenView('Issue list');
   }
 

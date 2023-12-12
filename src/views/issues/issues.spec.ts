@@ -2,7 +2,6 @@ import * as actions from './issues-reducers';
 import * as Feature from 'components/feature/feature';
 import * as issuesActions from './issues-actions';
 import * as storage from 'components/storage/storage';
-import * as types from './issues-action-types';
 import Api from 'components/api/api';
 import mocks from 'test/mocks';
 import reducer, {
@@ -11,7 +10,6 @@ import reducer, {
   LIST_END_REACHED,
   LOADING_ISSUES_ERROR,
   RECEIVE_ISSUES,
-  SET_HELPDESK_QUERY,
   SET_ISSUES_COUNT,
   SET_ISSUES_QUERY,
   START_LOADING_MORE,
@@ -21,7 +19,7 @@ import reducer, {
 import Store from 'store';
 import {deepmerge} from 'deepmerge-ts';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
-import {issuesSettingsDefault, issuesSettingsIssueSizes, issuesSettingsSearch} from 'views/issues/index';
+import {issuesSettingsIssueSizes, issuesSettingsSearch} from 'views/issues/index';
 import {SET_PROGRESS} from 'actions/action-types';
 import {StorageState} from 'components/storage/storage';
 
@@ -310,70 +308,6 @@ describe('Issues', () => {
   });
 
 
-  describe('HelpDesk mode', () => {
-    let issueStateHelpdesk: Partial<IssuesState>;
-    beforeEach(() => {
-      issueStateHelpdesk = {
-        helpDeskMode: true,
-        helpdeskQuery: '',
-        helpdeskSearchContext: mocks.createFolder(),
-        settings: issuesSettingsDefault,
-      };
-      createTestStore(issueStateHelpdesk);
-    });
-
-    it('should set Helpdesk mode', async () => {
-      const isHelpdeskMode = await store.dispatch(issuesActions.isHelpDeskMode());
-
-      expect(isHelpdeskMode).toEqual(true);
-    });
-
-    it('should initialize list with Helpdesk cache', async () => {
-      const helpdeskCache: IssueOnList[] = [mocks.createIssueMock()];
-      await storage.flushStoragePart({helpdeskCache});
-
-      await store.dispatch(issuesActions.initializeIssuesList());
-
-      expect(store.getActions()[4]).toEqual({
-        type: `${RECEIVE_ISSUES}`,
-        payload: helpdeskCache,
-      });
-    });
-
-    it('should read stored Helpdesk query', async () => {
-      await storage.flushStoragePart({helpdeskQuery: queryMock});
-      await store.dispatch(issuesActions.setStoredIssuesQuery());
-
-      expect(store.getActions()[0]).toEqual({
-        type: `${SET_HELPDESK_QUERY}`,
-        payload: queryMock,
-      });
-    });
-
-    it('should store Helpdesk query', async () => {
-      await storage.flushStoragePart({helpdeskQuery: null});
-      await store.dispatch(issuesActions.storeIssuesQuery(queryMock));
-
-      expect(storage.getStorageState().helpdeskQuery).toEqual(queryMock);
-    });
-
-    it('should update Helpdesk query', async () => {
-      await store.dispatch(issuesActions.onQueryUpdate(queryMock));
-
-      expect(store.getActions()[0]).toEqual({
-        type: `${SET_HELPDESK_QUERY}`,
-        payload: queryMock,
-      });
-
-      expect(
-        store.getActions().find((it: Record<string, unknown>) => it.type === types.SET_ISSUES_QUERY)
-      ).toBeUndefined();
-    });
-
-
-  });
-
-
   describe('Issues reducers', () => {
     it('should set issues query', async () => {
       const newState = reducer(
@@ -560,7 +494,6 @@ describe('Issues', () => {
       ]);
     });
   });
-
 
 
   function createTestStore(data: Partial<IssuesState> = {}) {

@@ -638,6 +638,14 @@ const setIssuesMode = (): ReduxAction => async (dispatch: ReduxThunkDispatch) =>
   dispatch(issuesActions.SET_HELPDESK_MODE(false));
 };
 
+const setIssuesFromCache = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
+  const cachedIssues: IssueOnList[] = getStorageState().issuesCache || [];
+  if (cachedIssues.length > 0) {
+    log.debug(`Loaded ${cachedIssues.length} cached issues`);
+    dispatch(issuesActions.RECEIVE_ISSUES(cachedIssues));
+  }
+};
+
 const initializeIssuesList = (searchQuery?: string): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
   dispatch(startIssuesLoading());
 
@@ -649,17 +657,6 @@ const initializeIssuesList = (searchQuery?: string): ReduxAction => async (dispa
   await dispatch(initSearchContext(searchQuery));
   await dispatch(setStoredIssuesQuery());
   await dispatch(setFilters());
-
-  let cachedIssues: IssueOnList[] = [];
-  if (dispatch(isHelpDeskMode())) {
-    cachedIssues = getStorageState().helpdeskCache || [];
-  } else if (!searchQuery) {
-    cachedIssues = getStorageState().issuesCache || [];
-  }
-  if (cachedIssues.length > 0) {
-    log.debug(`Loaded ${cachedIssues.length} cached ${isHelpDeskMode() ? 'tickets' : 'issues'}`);
-    dispatch(issuesActions.RECEIVE_ISSUES(cachedIssues));
-  }
   dispatch(refreshIssues());
 };
 
@@ -753,6 +750,7 @@ export {
   resetFilterFields,
   setFilters,
   setIssuesError,
+  setIssuesFromCache,
   setIssuesMode,
   setStoredIssuesQuery,
   startIssuesLoading,

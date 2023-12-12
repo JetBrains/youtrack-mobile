@@ -15,6 +15,7 @@ export class Tickets extends Issues<TicketsProps> {
   constructor(props: TicketsProps) {
     super(props);
     this.props.setHelpDeskMode();
+    this.props.setTicketsFromCache();
     usage.trackScreenView('Tickets');
   }
 
