@@ -4,8 +4,10 @@ import {getPeriodPresentationFor} from '../time-tracking/time-tracking';
 import {getSimpleCustomFieldType} from '../custom-field/custom-field-helper';
 import {hasType} from '../api/api__resource-types';
 import {isActivityCategory} from './activity__category';
-import type {IssueProject} from 'types/CustomFields';
+
 import type {WorkTimeSettings} from 'types/Work';
+import {Project} from 'types/Project';
+
 export type TextValueChangeParams = {
   activity: Record<string, any>;
   issueFields: Array<Record<string, any>> | null | undefined;
@@ -134,7 +136,7 @@ function getEmptyFieldValue(activity, issueFields) {
 
 function getProjectPresentation(value: Record<string, any>): string {
   const LOST_PROJECT_NAME: string = '[Lost project]';
-  const project: IssueProject | null = hasType.project(value)
+  const project: Project | null = hasType.project(value)
     ? value
     : hasType.project(value?.project)
     ? value.project

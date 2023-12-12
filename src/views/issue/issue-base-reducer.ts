@@ -5,11 +5,13 @@ import type {
   CustomField,
   FieldValue,
   IssueLink,
-  IssueProject,
+
 } from 'types/CustomFields';
 import type {SliceCaseReducers} from '@reduxjs/toolkit';
 import type {User} from 'types/User';
 import type {Visibility} from 'types/Visibility';
+import {Project} from 'types/Project';
+
 export type IssueState = {
   attachingImage: Record<string, any> | null | undefined;
   commandIsApplying: boolean;
@@ -119,7 +121,7 @@ export type IssueBaseActions = {
   }) => IssueState;
   SET_PROJECT: (action: {
     payload: {
-      project: IssueProject;
+      project: Project;
     };
   }) => IssueState;
   SET_VOTED: (action: {
@@ -364,7 +366,7 @@ export const createIssueReduxSlice: (
         state: IssueState,
         action: {
           payload: {
-            project: IssueProject;
+            project: Project;
           };
         },
       ) => {

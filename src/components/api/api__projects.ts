@@ -1,6 +1,8 @@
 import ApiBase from './api__base';
+
 import type Auth from '../auth/oauth2';
-import type {IssueProject} from 'types/CustomFields';
+import {Project} from 'types/Project';
+
 export default class ProjectsAPI extends ApiBase {
   projectsURL: string = `${this.youTrackApiUrl}/admin/projects`;
   pinProjectURL: string = `${this.youTrackApiUrl}/users/me/pinnedProjects`;
@@ -9,7 +11,7 @@ export default class ProjectsAPI extends ApiBase {
     super(auth);
   }
 
-  async addFavorite(projectId: string): Promise<IssueProject> {
+  async addFavorite(projectId: string): Promise<Project> {
     return this.makeAuthorizedRequest(
       `${this.pinProjectURL}?fields=id,pinned`,
       'POST',
@@ -19,7 +21,7 @@ export default class ProjectsAPI extends ApiBase {
     );
   }
 
-  async removeFavorite(projectId: string): Promise<IssueProject> {
+  async removeFavorite(projectId: string): Promise<Project> {
     return this.makeAuthorizedRequest(
       `${this.pinProjectURL}/${projectId}`,
       'DELETE',
@@ -33,7 +35,7 @@ export default class ProjectsAPI extends ApiBase {
   async toggleFavorite(
     projectId: string,
     pinned: boolean,
-  ): Promise<IssueProject> {
+  ): Promise<Project> {
     if (pinned) {
       return this.removeFavorite(projectId);
     } else {
@@ -41,7 +43,7 @@ export default class ProjectsAPI extends ApiBase {
     }
   }
 
-  async getTimeTrackingSettings(projectId: string): Promise<IssueProject> {
+  async getTimeTrackingSettings(projectId: string): Promise<Project> {
     const fields: string = 'enabled,workItemTypes(id,name,ordinal,url)';
     return this.makeAuthorizedRequest(
       `${this.projectsURL}/${projectId}/timeTrackingSettings/?fields=${fields}`,

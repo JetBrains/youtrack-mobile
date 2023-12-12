@@ -31,7 +31,6 @@ import type {
   CustomField,
   CustomFieldText,
   FieldValue,
-  IssueProject,
   Tag,
 } from 'types/CustomFields';
 import type {
@@ -46,6 +45,7 @@ import type {NormalizedAttachment} from 'types/Attachment';
 import type {UserAppearanceProfile} from 'types/User';
 import type {Visibility} from 'types/Visibility';
 import {CustomError} from 'types/Error';
+import {Project} from 'types/Project';
 
 type ApiGetter = () => Api;
 type StateGetter = () => AppState;
@@ -448,7 +448,7 @@ export const createActions = (
       };
     },
     updateProject: function (
-      project: IssueProject,
+      project: Project,
     ): (
       dispatch: (arg0: any) => any,
       getState: StateGetter,

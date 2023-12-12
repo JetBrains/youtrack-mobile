@@ -1,4 +1,6 @@
-import type {CustomField, IssueProject} from './CustomFields';
+import type {CustomField} from './CustomFields';
+import {Project} from 'types/Project';
+
 export type PredefinedFilterField = {
   $type: 'PredefinedFilterField';
   defaultSortAsc: boolean;
@@ -22,7 +24,7 @@ export type CustomFilterField = {
   id: string;
   name: string;
   presentation: string;
-  projects: Array<Partial<IssueProject>>;
+  projects: Array<Partial<Project>>;
   sortable: boolean;
   sortablePresentation: string;
 };

@@ -1,9 +1,10 @@
-import type {Attachment, IssueComment, IssueProject} from './CustomFields';
+import type {Attachment, IssueComment} from './CustomFields';
 import type {IssueFull} from './Issue';
 import type {User} from './User';
 import type {PullRequest, VCSActivity} from './Vcs';
 import type {Reaction} from './Reaction';
 import type {ContextMenuConfig} from 'types/MenuConfig';
+import {Project} from 'types/Project';
 
 export type ActivityWork = {
   id: string;
@@ -29,7 +30,7 @@ export type ActivityWork = {
 };
 
 export type ActivityItem =
-  | IssueProject
+  | Project
   | IssueComment
   | Attachment
   | IssueFull

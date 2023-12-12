@@ -1,11 +1,10 @@
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import type {
-  IssueProject,
-  CustomFieldShort,
   Tag,
   Attachment,
   IssueComment,
   IssueLink,
+  CustomFieldBase,
 } from './CustomFields';
 import type {UserGroup} from './UserGroup';
 import type {User} from './User';
@@ -13,6 +12,7 @@ import type {Visibility} from './Visibility';
 import {AnyCustomField} from 'components/custom-field/custom-field-helper';
 import {Article} from 'types/Article';
 import {ActivityItem} from 'types/Activity';
+import {Project} from 'types/Project';
 
 export type IssueContextData = {
   dispatcher: () => any;
@@ -21,53 +21,36 @@ export type IssueContextData = {
   issuePermissions: IssuePermissions;
 };
 
-export type IssueOnList = (
-  Pick<IssueFull, '$type' | 'created' | 'fields' | 'id' | 'idReadable' | 'project' | 'reporter' | 'resolved' | 'summary' | 'tags' | 'updated'> & {
-  fieldHash: {
-    key: string;
-    value: Record<string, any>;
-  };
-  fields: CustomFieldShort[];
-  trimmedDescription: string;
-  project: {
-    plugins: {
-      helpDeskSettings: {
-        enabled: boolean;
-      },
-      timeTrackingSettings: {
-        enabled: boolean;
-        timeSpent: {
-          id: string;
-          field: {
-            id: string;
-            name: string;
-            localizedName: string;
-          }
-        },
-      },
-    }
-  },
-  activityPage?: ActivityItem[]
-});
-
-export type IssueFull = {
+interface BaseIssue {
   $type: string;
-  attachments: Attachment[];
-  comments?: IssueComment[];
   created: number;
-  description: string;
-  fieldHash?: any;
-  fields: AnyCustomField[];
-  _fields?: AnyCustomField[];
+  fields: CustomFieldBase[];
   id: string;
   idReadable: string;
   links: IssueLink[];
-  project: IssueProject;
+  project: Project;
   reporter: User;
   resolved: boolean;
   summary: string;
   tags: Tag[];
   updated: number;
+}
+
+export interface IssueOnList extends BaseIssue {
+  fieldHash: {
+    key: string;
+    value: Record<string, any>;
+  };
+  trimmedDescription: string;
+  activityPage?: ActivityItem[],
+}
+
+export interface IssueFull  extends BaseIssue {
+  attachments: Attachment[];
+  comments?: IssueComment[];
+  description: string;
+  fieldHash?: any;
+  _fields?: AnyCustomField[];
   updater: User;
   voters: {
     hasVote: boolean;
@@ -83,7 +66,8 @@ export type IssueFull = {
   mentionedArticles: Article[];
   mentionedIssues: AnyIssue[];
   mentionedUsers: User[];
-};
+}
+
 export type IssueCreate = Omit<
   IssueFull,
   | 'comments'
@@ -97,7 +81,7 @@ export type IssueCreate = Omit<
   | 'voters'
   | 'watchers'
   | 'wikifiedDescription'
-> & { project: Partial<IssueProject>; };
+> & { project: Partial<Project>; };
 export type AnyIssue = IssueOnList | IssueFull | IssueLink | IssueCreate;
 export type TransformedSuggestion = {
   prefix: string;

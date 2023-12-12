@@ -15,9 +15,9 @@ import type {Article, ArticleProject, ArticlesList} from 'types/Article';
 import type {Board, Sprint} from 'types/Agile';
 import type {Folder, UserCurrent} from 'types/User';
 import type {InboxThread, Notification, ThreadsStateFilterId} from 'types/Inbox';
-import type {IssueProject} from 'types/CustomFields';
 import type {OAuthParams2} from 'types/Auth';
 import type {PermissionCacheItem} from 'types/Permission';
+import {Project} from 'types/Project';
 
 const OTHER_ACCOUNTS_KEY = 'YT_OTHER_ACCOUNTS_STORAGE_KEY';
 export const MAX_STORED_QUERIES = 5;
@@ -59,7 +59,7 @@ export type StorageState = TipsState & FeatureState & {
   } | null;
   authParams: OAuthParams2 | null;
   projectId: string | null;
-  projects: (IssueProject | ArticleProject)[];
+  projects: (Project | ArticleProject)[];
   draftId: string | null;
   currentUser: UserCurrent | null;
   creationTimestamp: number | null;

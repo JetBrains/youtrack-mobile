@@ -9,10 +9,10 @@ import type {
   Attachment,
   CustomField,
   IssueComment,
-  IssueProject,
 } from 'types/CustomFields';
 import type {WorkItem} from 'types/Work';
-import {Entity} from 'types/Global';
+import {Entity} from 'types/Entity';
+import {Project} from 'types/Project';
 
 export const CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_ISSUE';
 export const READ_ISSUE = 'JetBrains.YouTrack.READ_ISSUE';
@@ -241,8 +241,8 @@ export default class IssuePermissions {
 
     return this.canRemoveAttachment(entity);
   };
-  canCreateIssueToProject: (project: IssueProject) => boolean = (
-    project: IssueProject,
+  canCreateIssueToProject: (project: Project) => boolean = (
+    project: Project,
   ): boolean => {
     return this.hasPermissionFor(
       {

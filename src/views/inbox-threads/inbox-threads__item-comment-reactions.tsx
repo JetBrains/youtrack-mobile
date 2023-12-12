@@ -14,7 +14,7 @@ import type {Activity} from 'types/Activity';
 import type {IssueComment} from 'types/CustomFields';
 import type {Reaction} from 'types/Reaction';
 import type {User} from 'types/User';
-import {Entity} from 'types/Global';
+import {Entity} from 'types/Entity';
 
 type Props = {
   activity: Activity;

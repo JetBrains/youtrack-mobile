@@ -20,9 +20,9 @@ import UserGroupAPI from './api__user-group';
 
 import type Auth from '../auth/oauth2';
 import type {EndUserAgreement} from 'types/AppConfig';
-import type {IssueProject} from 'types/CustomFields';
 import type {CommandSuggestionResponse} from 'types/Issue';
 import type {User} from 'types/User';
+import {Project} from 'types/Project';
 
 
 class API extends BaseAPI {
@@ -89,7 +89,7 @@ class API extends BaseAPI {
     );
   }
 
-  async getProjects(query: string): Promise<Array<IssueProject>> {
+  async getProjects(query: string): Promise<Array<Project>> {
     const queryString = qs.stringify({
       fields: issueFields.projectOnList.toString(),
       query: query,

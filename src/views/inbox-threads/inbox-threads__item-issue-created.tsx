@@ -15,7 +15,7 @@ import styles from './inbox-threads.styles';
 import type {CustomField} from 'types/CustomFields';
 import type {InboxThreadTarget} from 'types/Inbox';
 import type {UITheme} from 'types/Theme';
-import {Entity} from 'types/Global';
+import {Entity} from 'types/Entity';
 
 
 type Props = {

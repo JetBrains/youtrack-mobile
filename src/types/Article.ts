@@ -1,7 +1,9 @@
-import type {Attachment, IssueComment, IssueProject} from './CustomFields';
+import type {Attachment, IssueComment} from './CustomFields';
 import type {AnyIssue} from './Issue';
 import type {User} from './User';
 import type {Visibility} from './Visibility';
+import {Project} from 'types/Project';
+
 export type Article = {
   $type: string;
   attachments: Attachment[];
@@ -40,7 +42,7 @@ export type ArticlesListItem = {
   dataCollapsed?: ArticleNodeList | null;
 };
 export type ArticlesList = Array<ArticlesListItem>;
-export type ArticleProject = Partial<IssueProject> & {
+export type ArticleProject = Partial<Project> & {
   articles: {
     collapsed: boolean;
   };

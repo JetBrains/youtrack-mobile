@@ -19,13 +19,13 @@ import type {
   IssueComment,
   IssueLink,
   IssueLinkType,
-  IssueProject,
   Tag,
 } from 'types/CustomFields';
 import type {AnyIssue, IssueCreate, IssueFull} from 'types/Issue';
 import type {Visibility} from 'types/Visibility';
 import type {WorkItem} from 'types/Work';
 import {NormalizedAttachment} from 'types/Attachment';
+import {Project} from 'types/Project';
 
 export default class IssueAPI extends ApiBase {
   draftsURL: string = `${this.youTrackApiUrl}${
@@ -541,7 +541,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async updateProject(issue: AnyIssue, project: IssueProject): Promise<any> {
+  async updateProject(issue: AnyIssue, project: Project): Promise<any> {
     const body = {
       id: issue.id,
       project: project,

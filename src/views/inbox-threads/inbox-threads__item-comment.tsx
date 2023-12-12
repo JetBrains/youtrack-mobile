@@ -16,12 +16,12 @@ import {i18n} from 'components/i18n/i18n';
 import styles from './inbox-threads.styles';
 
 import type {Attachment} from 'types/Attachment';
-import {Entity} from 'types/Global';
 import type {
   InboxThreadGroup,
   InboxThreadTarget,
 } from 'types/Inbox';
 import type {UserCurrent} from 'types/User';
+import {Entity} from 'types/Entity';
 
 
 type Props = {

@@ -25,29 +25,28 @@ import {SkeletonIssueCustomFields} from 'components/skeleton/skeleton';
 
 import styles, {calendarTheme} from './custom-fields-panel.styles';
 
-import type {
-  IssueProject,
-  CustomField as IssueCustomField,
-} from 'types/CustomFields';
+import type {CustomField as IssueCustomField} from 'types/CustomFields';
 import type {UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
 import {IssueContextData} from 'types/Issue';
+import {Project} from 'types/Project';
+
 type Props = {
   autoFocusSelect?: boolean;
   style?: ViewStyleProp;
   issueId: string;
-  issueProject: IssueProject;
+  issueProject: Project;
   fields: IssueCustomField[];
   hasPermission: {
     canUpdateField?: (field: IssueCustomField) => boolean;
-    canCreateIssueToProject?: (project: IssueProject) => boolean;
+    canCreateIssueToProject?: (project: Project) => boolean;
     canEditProject: boolean;
   };
   onUpdate: (
     field: IssueCustomField,
     value: null | number | Record<string, any> | Array<Record<string, any>>,
   ) => Promise<Record<string, any>>;
-  onUpdateProject: (project: IssueProject) => Promise<Record<string, any>>;
+  onUpdateProject: (project: Project) => Promise<Record<string, any>>;
   uiTheme: UITheme;
   analyticsId?: string;
   testID?: string;
@@ -206,7 +205,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         multi: false,
         placeholder: i18n('Search for the project'),
         selectedItems: [this.props.issueProject],
-        onSelect: (project: IssueProject) => {
+        onSelect: (project: Project) => {
           this.trackEvent('Update project: updated');
           this.closeEditor();
           this.setState({

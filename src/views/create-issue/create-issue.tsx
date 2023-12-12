@@ -58,7 +58,6 @@ import type {
   CustomField,
   CustomFieldText,
   IssueLink,
-  IssueProject,
   Tag,
 } from 'types/CustomFields';
 
@@ -68,6 +67,7 @@ import type {NormalizedAttachment} from 'types/Attachment';
 import type {Theme, UITheme, UIThemeColors} from 'types/Theme';
 import {AppState} from 'reducers';
 import {IssueCreate} from 'types/Issue';
+import {Project} from 'types/Project';
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
@@ -155,9 +155,9 @@ class CreateIssue extends PureComponent<Props, State> {
     );
   };
   canUpdateField = (field: CustomField) => this.props.issuePermissions.canUpdateField(this.props.issue as IssueFull, field);
-  canCreateIssueToProject = (project: IssueProject) => this.props.issuePermissions.canCreateIssueToProject(project);
+  canCreateIssueToProject = (project: Project) => this.props.issuePermissions.canCreateIssueToProject(project);
   onFieldUpdate = async (field: CustomField, value: any) => await this.props.updateFieldValue(field, value);
-  onUpdateProject = async (project: IssueProject) => await this.props.updateProject(project);
+  onUpdateProject = async (project: Project) => await this.props.updateProject(project);
 
   renderCustomFieldPanel() {
     const {issue, isConnected} = this.props;
@@ -169,7 +169,7 @@ class CreateIssue extends PureComponent<Props, State> {
         accessibilityLabel="createIssueFields"
         accessible={false}
         issueId={issue.id}
-        issueProject={issue.project as IssueProject}
+        issueProject={issue.project as Project}
         fields={getIssueCustomFieldsNotText(issue.fields)}
         hasPermission={{
           canUpdateField: isConnected ? this.canUpdateField : undefined,

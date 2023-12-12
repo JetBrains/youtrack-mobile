@@ -50,13 +50,13 @@ import type {
   CustomFieldTextValue,
   FieldValue,
   IssueLink,
-  IssueProject,
 } from 'types/CustomFields';
 
 import type {ScrollData} from 'types/Markdown';
 import type {Theme, UITheme} from 'types/Theme';
 import type {Visibility} from 'types/Visibility';
 import type {YouTrackWiki} from 'types/Wiki';
+import {Project} from 'types/Project';
 
 export type IssueDetailsProps = {
   loadIssue: () => any;
@@ -68,7 +68,7 @@ export type IssueDetailsProps = {
     field: CustomField | CustomFieldText,
     value: FieldValue,
   ) => any;
-  updateProject: (project: IssueProject) => any;
+  updateProject: (project: Project) => any;
   issue: IssueFull;
   issuePlaceholder: IssueOnList;
   issueLoaded: boolean;
@@ -436,8 +436,8 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   };
   canUpdateField: (field: CustomField) => any = (field: CustomField) =>
     this.getIssuePermissions().canUpdateField(this.getIssue(), field);
-  canCreateIssueToProject: (project: IssueProject) => any = (
-    project: IssueProject,
+  canCreateIssueToProject: (project: Project) => any = (
+    project: Project,
   ) => this.getIssuePermissions().canCreateIssueToProject(project);
   onFieldUpdate: (
     field: CustomField | CustomFieldText,
@@ -446,8 +446,8 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     field: CustomField | CustomFieldText,
     value: any,
   ) => await this.props.updateIssueFieldValue(field, value);
-  onUpdateProject: (project: IssueProject) => Promise<any> = async (
-    project: IssueProject,
+  onUpdateProject: (project: Project) => Promise<any> = async (
+    project: Project,
   ) => await this.props.updateProject(project);
   renderCustomFieldPanel: ()=> React.ReactNode = () => {
     const _issue: AnyIssue = this.getIssue();
