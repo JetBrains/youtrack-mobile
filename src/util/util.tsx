@@ -8,8 +8,10 @@ import {getStorageState} from 'components/storage/storage';
 import type {CustomError} from 'types/Error';
 import type {StorageState} from 'components/storage/storage';
 
-type RequestPromise = { status: 'fulfilled' | 'rejected', value: any[] };
-
+interface RequestPromise<P extends any> {
+  status: 'fulfilled' | 'rejected',
+  value: P | P[]
+}
 
 export const AppVersion: any = appPackage.version.split('-')[0];
 export const isTablet: boolean = DeviceInfo.isTablet();
@@ -69,34 +71,34 @@ export const createBtoa = (str: string): any => {
   return base64.fromByteArray(byteArray);
 };
 
-export const until = (
+export const until = <P = any>(
   promises: any,
-  combine: boolean = false,
+  isCombined: boolean = false,
   anyPromiseSuccess: boolean = false,
-): Promise<any[] | [CustomError, any[]]> => {
+): Promise<[CustomError | null, P]> => {
   if (!promises) {
     return Promise.reject(['No promises are provided']);
   }
 
   if (Array.isArray(promises)) {
-    const resolveMethod = anyPromiseSuccess ? Promise.allSettled : Promise.all;
+    const resolveMethod: any = anyPromiseSuccess ? Promise.allSettled : Promise.all;
     return resolveMethod(promises)
-      .then((data: any[]) => {
-        const fulfilled: RequestPromise[] = anyPromiseSuccess ? data.filter((it) => it.status === 'fulfilled') : data;
+      .then((data: RequestPromise<P>[]) => {
+        const fulfilled = anyPromiseSuccess ? data.filter((it) => it.status === 'fulfilled') : data;
         if (!fulfilled.length) {
           throw 'No fulfilled promises';
         }
         return [
           null,
           (
-            combine
-              ? fulfilled.reduce((list: any[], it: any) => list.concat(anyPromiseSuccess ? it.value : it), [])
-              : anyPromiseSuccess ? fulfilled.map((it: RequestPromise) => it.value) : fulfilled
+            isCombined
+              ? fulfilled.flatMap((it: RequestPromise<P>) => anyPromiseSuccess ? it.value : it)
+              : anyPromiseSuccess ? fulfilled.map((it: RequestPromise<P>) => it.value) : fulfilled
           ),
         ];
       })
       .catch((err: CustomError) => {
-        return [err, promises.map<typeof undefined>(() => undefined)];
+        return [err, undefined];
       });
   }
 
