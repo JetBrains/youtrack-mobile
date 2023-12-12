@@ -67,11 +67,11 @@ export function getBaseUrl(url: string): any | string {
 }
 
 function handleRelativeUrl(
-  hubUrl: string | null = null,
+  hubUrl: string,
   ytUrl: string,
-): null | string {
+): string {
   ytUrl = getBaseUrl(ytUrl);
-  return hubUrl && hubUrl[0] && hubUrl[0] === '/' ? ytUrl + hubUrl : hubUrl;
+  return hubUrl?.[0] === '/' ? ytUrl + hubUrl : hubUrl;
 }
 
 function formatYouTrackURL(url: string): string {
