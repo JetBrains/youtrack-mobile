@@ -2,28 +2,28 @@ import ApiHelper from '../api/api__helper';
 import log from '../log/log';
 import {getApi} from '../api/api__instance';
 import {until} from 'util/util';
+
 import type Api from '../api/api';
-import type {AnyIssue, IssueFull} from 'types/Issue';
-export const loadIssue = async (issueId: string): Promise<IssueFull | null> => {
+import {IssueFull, IssueOnList} from 'types/Issue';
+
+export const loadIssue = async (issueId: string): Promise<IssueFull> => {
   const api: Api = getApi();
   log.info(`Updating issue ${issueId}`);
   const [error, issue] = await until(api.issue.getIssue(issueId));
 
-  if (error) {
+  if (error || !issue) {
     log.info(`Failed to load issue ${issueId}`);
-    return null;
+    return {} as IssueFull;
   } else {
-    return ApiHelper.fillIssuesFieldHash([issue])[0] as any;
+    return ApiHelper.fillIssuesFieldHash([issue])[0] as IssueFull;
   }
 };
-export const updateIssueInIssues = (
-  issueToUpdate: AnyIssue,
-  currentIssues: AnyIssue[],
-): AnyIssue[] => {
+
+export const updateIssueInIssues = (issueToUpdate: IssueOnList | IssueFull, currentIssues: IssueOnList[]): IssueOnList[] => {
   return (currentIssues || []).reduce(
-    (issues: AnyIssue[], issue: AnyIssue) => {
+    (issues: IssueOnList[], issue: IssueOnList) => {
       return issues.concat([
-        issue?.id === issueToUpdate?.id ? issueToUpdate : issue,
+        issue.id === issueToUpdate.id ? {...issue, ...issueToUpdate} : issue,
       ]);
     },
     [],

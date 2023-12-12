@@ -30,7 +30,7 @@ import {guid, removeDuplicatesFromArray, until} from 'util/util';
 import {receiveUserAppearanceProfile, setGlobalInProgress, setYTCurrentUser} from 'actions/app-actions';
 import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
-import type {AnyIssue, IssueFull, IssueOnList} from 'types/Issue';
+import type {IssueOnList} from 'types/Issue';
 import type {Folder, User} from 'types/User';
 import {CustomError} from 'types/Error';
 import {FilterField, FilterFieldValue} from 'types/CustomFields';
@@ -454,11 +454,11 @@ const updateIssue = (issueId: string): ReduxAction => async (
   dispatch: ReduxThunkDispatch,
   getState: ReduxStateGetter,
 ) => {
-  const currentIssues: AnyIssue[] = getState().issueList.issues;
-  const issueToUpdate: IssueFull | null = await issueUpdater.loadIssue(issueId);
+  const currentIssues = getState().issueList.issues;
+  const issueToUpdate = await issueUpdater.loadIssue(issueId);
 
   if (issueToUpdate) {
-    const updatedIssues: AnyIssue[] = issueUpdater.updateIssueInIssues(
+    const updatedIssues: IssueOnList[] = issueUpdater.updateIssueInIssues(
       issueToUpdate,
       currentIssues,
     );
