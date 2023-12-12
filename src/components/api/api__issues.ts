@@ -11,7 +11,9 @@ import type {Folder} from 'types/User';
 import type {IssueOnList} from 'types/Issue';
 import {IssueFull} from 'types/Issue';
 
-export type SortedIssues = { tree: { id: string }[] | undefined };
+export interface SortedIssues {
+  tree: Array<{ id: string }>;
+}
 
 export default class IssuesAPI extends ApiBase {
   async _getIssues(
@@ -95,16 +97,14 @@ export default class IssuesAPI extends ApiBase {
     abortController?: AbortController,
   ): Promise<number> {
     const isActualVersion: boolean = checkVersion(FEATURE_VERSION.issuesGetter);
-    type Count = 'count' | 'value';
-    const fieldName: Count = isActualVersion ? 'count' : 'value'; //API version specific
-
-    const response: Record<Count, number> = await (isActualVersion
-      ? this.issuesCount(query, folder, unresolvedOnly, abortController)
-      : this.issuesCountLegacy(query, abortController));
-    return response[fieldName];
+    return await (
+      isActualVersion
+        ? this.issuesCount(query, folder, unresolvedOnly, abortController)
+        : this.issuesCountLegacy(query, abortController)
+    );
   }
 
-  issuesCountLegacy(
+  async issuesCountLegacy(
     query: string | null,
     abortController?: AbortController,
   ): Promise<number> {
@@ -113,31 +113,32 @@ export default class IssuesAPI extends ApiBase {
       filter: query,
     });
     const url = `${this.youTrackUrl}/rest/issue/count?${queryString}`;
-    return this.makeAuthorizedRequest(url, null, null, {
+    const response = await this.makeAuthorizedRequest(url, null, null, {
       controller: {
         [routeMap.Issues]: abortController,
       },
     });
+    return response.value;
   }
 
   /*
    * @since 2019.1.51759
    */
-  issuesCount(
+  async issuesCount(
     query: string | null = null,
     folder: Folder | null | undefined,
     unresolvedOnly: boolean = false,
     abortController?: AbortController,
   ): Promise<number> {
-    return this.makeAuthorizedRequest(
+    const response = await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/issuesGetter/count?fields=count`,
       'POST',
       {
         folder: folder?.id
           ? {
-              $type: folder.$type,
-              id: folder.id,
-            }
+            $type: folder.$type,
+            id: folder.id,
+          }
           : null,
         query: query ? query.trim() : null,
         unresolvedOnly,
@@ -148,5 +149,6 @@ export default class IssuesAPI extends ApiBase {
         },
       },
     );
+    return response.count;
   }
 }

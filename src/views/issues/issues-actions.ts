@@ -45,8 +45,6 @@ export interface ContextDataSource {
   data: Folder[];
 }
 
-type SortedIssuesData = [error: CustomError | null, sortedIssues: SortedIssues];
-
 export const PAGE_SIZE: number = 14;
 
 const getSearchContext = (): ReduxAction<Folder> => (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
@@ -190,7 +188,7 @@ const composeSearchQuery = (): ReduxAction<Promise<string>> => async (
   const searchSettings: IssuesSetting = settings.search;
   const isFilterMode: boolean = searchSettings.mode === issuesSearchSettingMode.filter;
   let query: string = (isFilterMode ? convertToNonStructural(searchQuery) : searchQuery).trim();
-  if (isFilterMode) {
+  if (isFilterMode && settings.search.filters) {
     const filtersSettings: FilterSetting[] = Object.values(settings.search.filters);
     query = `${query} ${createQueryFromFiltersSetting(filtersSettings)}`;
   }
@@ -375,16 +373,17 @@ const resetFilterFields = (): ReduxAction => async (
 ) => {
   trackEvent(`${isHelpDeskMode() ? 'Tickets' : 'Issues'}: reset all filters`);
   const settings: IssuesSettings = dispatch(getIssuesSettings());
+  const filters = settings.search.filters || {};
   const issuesSettings: IssuesSettings = {
     ...settings,
     search: {
       ...settings.search,
-      filters: Object.keys(settings.search.filters).reduce((akk, key) => {
+      filters: Object.keys(filters).reduce((akk, key) => {
         return {
           ...akk,
           [key]: {
             key,
-            filterField: settings.search.filters[key].filterField,
+            filterField: filters[key].filterField,
             selectedValues: [],
           },
         };
@@ -411,9 +410,9 @@ const doLoadIssues = (query: string, pageSize: number, skip = 0): ReduxAction<Pr
   const contextFolder = isHelpdeskMode
     ? appState.app.user?.profiles?.helpdesk?.helpdeskFolder || EVERYTHING_SEARCH_CONTEXT
     : dispatch(getSearchContext());
-  const [error, sortedIssues]: SortedIssuesData = await until(
+  const [error, sortedIssues] = await until<SortedIssues>(
     api.issues.sortedIssues(contextFolder.id, query, pageSize, skip)
-  ) as SortedIssuesData;
+  );
   if (error) {
     handleError(error);
   }
@@ -486,7 +485,9 @@ const loadIssuesCount = (folder?: Folder | null): ReduxAction => async (
     const api = getApi();
     const abortController: AbortController = new AbortController();
     const _query = await dispatch(composeSearchQuery());
-    const _folder = getState().issueList.settings.search.mode === issuesSearchSettingMode.filter ? undefined : folder;
+    const _folder = getState().issueList.settings.search.mode === issuesSearchSettingMode.filter
+      ? undefined
+      : folder;
     const issuesCount: number = await api.issues.getIssuesCount(
       _query,
       _folder,
@@ -561,13 +562,13 @@ const setFilters = (): (
     );
 
     if (userProfileFiltersNames.length === 0) {
-      const ytCurrentUser = getStorageState().currentUser?.ytCurrentUser;
-      const user = {
+      const ytCurrentUser: User = getStorageState().currentUser?.ytCurrentUser as User;
+      const user: User = {
         ...ytCurrentUser,
         profiles: {
           ...ytCurrentUser.profiles,
           appearance: {
-            ...ytCurrentUser.profiles?.appearance,
+            ...ytCurrentUser?.profiles?.appearance,
             liteUiFilters: visibleFiltersNames,
           },
         },

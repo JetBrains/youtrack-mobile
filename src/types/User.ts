@@ -43,7 +43,7 @@ export type UserProfiles = {
   helpdesk: UserHelpdeskProfile;
 };
 export type UserAppearanceProfile = {
-  $type: string;
+  $type?: string;
   exceptionsExpanded?: boolean;
   expandChangesInActivityStream?: boolean;
   firstDayOfWeek?: number;

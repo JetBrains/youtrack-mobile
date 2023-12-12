@@ -29,6 +29,7 @@ import {receiveUserAppearanceProfile} from 'actions/app-actions';
 import styles from './issues.styles';
 
 import {AppState} from 'reducers';
+import {ReduxThunkDispatch} from 'types/Redux';
 import {User} from 'types/User';
 
 
@@ -39,7 +40,7 @@ const IssuesListSettings = ({
   onQueryUpdate: (q: string) => void;
   toggleVisibility: (isVisible: boolean) => void;
 }): React.JSX.Element => {
-  const dispatch = useDispatch();
+  const dispatch: ReduxThunkDispatch = useDispatch();
 
   React.useEffect(() => {
     usage.trackEvent(ANALYTICS_ISSUES_PAGE, 'Issues settings: open');

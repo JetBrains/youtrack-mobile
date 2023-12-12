@@ -18,7 +18,7 @@ export interface IssuesSetting {
 }
 
 export interface IssuesSettingSearch extends IssuesSetting {
-  filters: FiltersSetting;
+  filters?: FiltersSetting;
 }
 
 export interface IssuesSettings {

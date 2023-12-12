@@ -7,6 +7,7 @@ import log from 'components/log/log';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
+import {ActionSheetOption, showActions} from 'components/action-sheet/action-sheet';
 import {confirmDeleteIssue} from 'components/confirmation/issue-confirmations';
 import {
   getEntityPresentation,
@@ -22,7 +23,6 @@ import {makeIssueWebUrl} from 'views/issue/activity/issue-activity__helper';
 import {notify, notifyError} from 'components/notification/notification';
 import {receiveUserAppearanceProfile} from 'actions/app-actions';
 import {resolveError} from 'components/error/error-resolver';
-import {showActions} from 'components/action-sheet/action-sheet';
 
 import type Api from 'components/api/api';
 import type {AppState} from 'reducers';
@@ -44,11 +44,10 @@ import type {IssueLink} from 'types/CustomFields';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {UserAppearanceProfile} from 'types/User';
 import type {Visibility} from 'types/Visibility';
+import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 import {CustomError} from 'types/Error';
 import {Project} from 'types/Project';
-
-type ApiGetter = () => Api;
-type StateGetter = () => AppState;
+import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 
 
 export const DEFAULT_ISSUE_STATE_FIELD_NAME: keyof AppState = 'issueState';
@@ -58,15 +57,11 @@ export const createActions = (
   stateFieldName: keyof AppState = DEFAULT_ISSUE_STATE_FIELD_NAME,
 ): any => {
   const actions = {
-    loadIssueAttachments: function (): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    loadIssueAttachments: function (): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter,
       ) => {
         const issueId: string | undefined = (getState()[stateFieldName] as IssueState).issueId;
 
@@ -82,31 +77,18 @@ export const createActions = (
         }
       };
     },
-    loadIssueLinksTitle: function (): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<Array<IssueLink>> {
+    loadIssueLinksTitle: function (): ReduxAction<Promise<IssueLink[]>> {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
       ) => {
         const issue: IssueFull = (getState()[stateFieldName] as IssueState).issue;
         return await issueCommonLinksActions(issue).loadIssueLinksTitle();
       };
     },
-    getIssueLinksTitle: function (
-      links?: IssueLink[],
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    getIssueLinksTitle: function (links?: IssueLink[]): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
       ) => {
         dispatch(
           dispatchActions.receiveIssueLinks(
@@ -115,19 +97,13 @@ export const createActions = (
         );
       };
     },
-    loadIssue: function (
-      issuePlaceholder?: Partial<IssueFull>,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<IssueFull | void> {
+    loadIssue: function (issuePlaceholder?: IssueOnList): ReduxAction<Promise<IssueFull | undefined>> {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: AppState,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter,
       ) => {
-        const issueId = getState()[stateFieldName].issueId;
+        const issueId = (getState()[stateFieldName] as IssueState).issueId;
         const api: Api = getApi();
 
         const doUpdate = (issue: AnyIssue): void => {
@@ -153,10 +129,6 @@ export const createActions = (
         };
 
         try {
-          if (!issueId) {
-            throw new Error('Attempt to load issue with no ID');
-          }
-
           log.debug(`Loading issue "${issueId}"`);
           const issue = await api.issue.getIssue(issueId);
           log.info(`Issue "${issueId}" loaded`);
@@ -166,28 +138,25 @@ export const createActions = (
           return issue;
         } catch (err) {
           if (getState().app?.networkState?.isConnected === false) {
-            const cachedIssue: AnyIssue | null | undefined =
-              (getStorageState().issuesCache || []).find((issue: AnyIssue) => {
-                return issue.id === issueId || issue.idReadable === issueId;
-              }) || issuePlaceholder;
-            cachedIssue && doUpdate(cachedIssue);
+            const cachedIssue: IssueOnList | undefined =
+              (getStorageState().issuesCache || []).find(
+                (issue: IssueOnList) => issue.id === issueId || issue.idReadable === issueId
+              ) || issuePlaceholder;
+            if (cachedIssue) {
+              doUpdate(cachedIssue);
+            }
           } else {
-            log.warn('Failed to load issue', error);
-            const error = await resolveError(err);
+            log.warn('Failed to load issue', err);
+            const error = await resolveError(err as CustomError);
             dispatch(dispatchActions.setError(error));
           }
         }
       };
     },
-    loadLinkedIssues: function (): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<Array<IssueLink>> {
+    loadLinkedIssues: function (): ReduxAction<Promise<IssueLink[]>> {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
       ) => {
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Load linked issue');
         const issue: IssueFull = (getState()[stateFieldName] as IssueState).issue;
@@ -197,15 +166,10 @@ export const createActions = (
     onUnlinkIssue: function (
       linkedIssue: IssueOnList,
       linkTypeId: string,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<boolean> {
+    ): ReduxAction<Promise<boolean>> {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
       ) => {
         const issue: IssueFull = (getState()[stateFieldName] as IssueState).issue;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Remove linked issue');
@@ -219,15 +183,10 @@ export const createActions = (
       linkTypeName: string,
       query: string = '',
       page?: number,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<IssueOnList> {
+    ): ReduxAction<Promise<IssueOnList>> {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
       ) => {
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Search to link issues');
         const issue: IssueFull = (getState()[stateFieldName] as IssueState).issue;
@@ -248,15 +207,10 @@ export const createActions = (
     onLinkIssue: function (
       linkedIssueIdReadable: string,
       linkTypeName: string,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<boolean> {
+    ): ReduxAction<Promise<boolean>> {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
       ) => {
         const issue: IssueFull = (getState()[stateFieldName] as IssueState).issue;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Link issue');
@@ -266,12 +220,8 @@ export const createActions = (
         );
       };
     },
-    refreshIssue: function (): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
-      return async (dispatch: (arg0: any) => any, getState: StateGetter) => {
+    refreshIssue: function (): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
         dispatch(dispatchActions.startIssueRefreshing());
 
         try {
@@ -282,25 +232,22 @@ export const createActions = (
             `${successMessage} "${(getState()[stateFieldName] as IssueState).issueId}" loaded`,
           );
         } catch (error) {
-          notifyError(error);
+          notifyError(error as CustomError);
         } finally {
           dispatch(dispatchActions.stopIssueRefreshing());
         }
       };
     },
-    saveIssueSummaryAndDescriptionChange: function (): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    saveIssueSummaryAndDescriptionChange: function (): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter,
       ) => {
         const api: Api = getApi();
-        const {issue} = getState()[stateFieldName];
-        const {summaryCopy, descriptionCopy} = getState()[stateFieldName];
+        const issueState = getState()[stateFieldName] as IssueState;
+        const {issue} = issueState;
+        const {summaryCopy, descriptionCopy} = issueState;
         const textCustomFields: CustomFieldText[] = getIssueTextCustomFields(
           issue.fields,
         );
@@ -324,10 +271,10 @@ export const createActions = (
           await dispatch(actions.loadIssue());
           dispatch(dispatchActions.stopEditingIssue());
           dispatch(
-            dispatchActions.issueUpdated((getState()[stateFieldName] as IssueState).issue),
+            dispatchActions.issueUpdated((issueState as IssueState).issue),
           );
         } catch (err) {
-          notifyError(err);
+          notifyError(err as CustomError);
         } finally {
           dispatch(dispatchActions.stopSavingEditedIssue());
         }
@@ -337,18 +284,14 @@ export const createActions = (
       checked: boolean,
       position: number,
       description: string,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    ): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter,
       ) => {
         const api: Api = getApi();
-        const {issue} = getState()[stateFieldName];
+        const {issue} = getState()[stateFieldName] as IssueState;
         dispatch(
           dispatchActions.setIssueSummaryAndDescription(
             issue.summary,
@@ -383,15 +326,9 @@ export const createActions = (
     setCustomFieldValue: function (
       field: CustomField,
       value: FieldValue,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    ): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
       ) => {
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update field value');
         dispatch(dispatchActions.setIssueFieldValue(field, value));
@@ -400,26 +337,22 @@ export const createActions = (
     updateIssueFieldValue: function (
       field: CustomField,
       value: FieldValue,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    ): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter,
       ) => {
         const api: Api = getApi();
         const issue: IssueFull = (getState()[stateFieldName] as IssueState).issue;
         dispatch(actions.setCustomFieldValue(field, value));
 
-        const updateMethod = (...args: any[]) => {
+        const updateMethod = (issueId: string, fieldId: string, fieldValue: FieldValue) => {
           if (field.hasStateMachine) {
-            return api.issue.updateIssueFieldEvent(...args);
+            return api.issue.updateIssueFieldEvent(issueId, fieldId, fieldValue);
           }
 
-          return api.issue.updateIssueFieldValue(...args);
+          return api.issue.updateIssueFieldValue(issueId, fieldId, fieldValue);
         };
 
         try {
@@ -430,7 +363,7 @@ export const createActions = (
             dispatchActions.issueUpdated((getState()[stateFieldName] as IssueState).issue),
           );
         } catch (err) {
-          const error = await resolveError(err);
+          const error = await resolveError(err as CustomError);
 
           if (
             error.error_type === 'workflow' &&
@@ -449,19 +382,15 @@ export const createActions = (
     },
     updateProject: function (
       project: Project,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    ): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter,
       ) => {
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update project');
         const api: Api = getApi();
-        const {issue} = getState()[stateFieldName];
+        const {issue} = getState()[stateFieldName] as IssueState;
         dispatch(dispatchActions.setProject(project));
 
         try {
@@ -472,25 +401,21 @@ export const createActions = (
             dispatchActions.issueUpdated((getState()[stateFieldName] as IssueState).issue),
           );
         } catch (err) {
-          notifyError(err);
+          notifyError(err as CustomError);
           dispatch(actions.loadIssue());
         }
       };
     },
     toggleVote: function (
       voted: boolean,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    ): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter,
       ) => {
         const api: Api = getApi();
-        const {issue} = getState()[stateFieldName];
+        const {issue} = getState()[stateFieldName] as IssueState;
         dispatch(dispatchActions.setVoted(voted));
         usage.trackEvent(
           ANALYTICS_ISSUE_PAGE,
@@ -500,44 +425,36 @@ export const createActions = (
         try {
           await api.issue.updateIssueVoted(issue.id, voted);
         } catch (err) {
-          notifyError(err);
+          notifyError(err as CustomError);
           dispatch(dispatchActions.setVoted(!voted));
         }
       };
     },
     toggleStar: function (
       starred: boolean,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    ): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter,
       ) => {
         const api: Api = getApi();
-        const {issue} = getState()[stateFieldName];
+        const {issue} = getState()[stateFieldName] as IssueState;
         dispatch(dispatchActions.setStarred(starred));
 
         try {
           await api.issue.updateIssueStarred(issue.id, starred);
         } catch (err) {
-          notifyError(err);
+          notifyError(err as CustomError);
           dispatch(dispatchActions.setStarred(!starred));
         }
       };
     },
-    onOpenTagsSelect: function (): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => void {
+    onOpenTagsSelect: function (): ReduxAction {
       return (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter,
       ) => {
         const api: Api = getApi();
         const issue: IssueFull = (getState()[stateFieldName] as IssueState).issue;
@@ -548,7 +465,7 @@ export const createActions = (
             placeholder: i18n('Filter tags'),
             dataSource: async () => {
               const issueProjectId: string = issue.project.id;
-              const [error, relevantProjectTags]: [CustomError | null, Tag[]] = await until(
+              const [error, relevantProjectTags] = await until<Tag[]>(
                 api.issueFolder.getProjectRelevantTags(issueProjectId),
               );
               return error ? [] : relevantProjectTags.filter((it: Tag) => {
@@ -579,15 +496,11 @@ export const createActions = (
         );
       };
     },
-    deleteIssue: function (issueId: string): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    deleteIssue: function (issueId: string): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter,
       ) => {
         const [error] = await until(getApi().issue.deleteIssue(issueId));
         if (error) {
@@ -598,7 +511,7 @@ export const createActions = (
       };
     },
     showIssueActions: function (
-      actionSheet: ActionSheet,
+      actionSheet: typeof ActionSheetProvider,
       permissions: {
         canAttach: boolean;
         canEdit: boolean;
@@ -608,19 +521,15 @@ export const createActions = (
       },
       switchToDetailsTab: () => any,
       renderLinkIssues?: () => any,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    ): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter,
       ) => {
         const api: Api = getApi();
         const issue: IssueFull = (getState()[stateFieldName] as IssueState).issue;
-        const actionSheetActions = [
+        const actionSheetActions: ActionSheetOption[] = [
           {
             title: i18n('Share…'),
             execute: () => {
@@ -717,7 +626,8 @@ export const createActions = (
                 .then(() =>
                   dispatch(actions.deleteIssue(issue.id)),
                 )
-                .catch(() => {});
+                .catch(() => {
+                });
             },
           });
         }
@@ -734,26 +644,16 @@ export const createActions = (
             : issue.summary,
         );
 
-        if (selectedAction && selectedAction.execute) {
-          selectedAction.execute();
-        }
+        selectedAction?.execute?.();
       };
     },
     onShowCopyTextContextActions: function (
-      actionSheet: ActionSheet,
+      actionSheet: typeof ActionSheetProvider,
       text: string,
       title?: string,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
-      return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
-      ) => {
-        const selectedAction = await showActions(
+    ): ReduxAction {
+      return async () => {
+        const selectedAction: ActionSheetOption = await showActions(
           [
             {
               title: title || i18n('Copy text'),
@@ -770,14 +670,12 @@ export const createActions = (
           actionSheet,
         );
 
-        if (selectedAction && selectedAction.execute) {
-          selectedAction.execute();
-        }
+        selectedAction?.execute?.();
       };
     },
     openNestedIssueView: function (
       params: OpenNestedViewParams,
-    ): () => any | void {
+    ): ReduxAction {
       return () => {
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Navigate to linked issue');
 
@@ -798,12 +696,8 @@ export const createActions = (
         });
       };
     },
-    unloadIssueIfExist: function (): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
-      return async (dispatch: (arg0: any) => any, getState: StateGetter) => {
+    unloadIssueIfExist: function (): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
         const state = getState()[stateFieldName];
 
         if (state !== initialState) {
@@ -811,7 +705,7 @@ export const createActions = (
         }
       };
     },
-    openIssueListWithSearch: function (searchQuery: string): () => void {
+    openIssueListWithSearch: function (searchQuery: string): ReduxAction {
       return () => {
         Router.Issues({
           searchQuery,
@@ -820,15 +714,11 @@ export const createActions = (
     },
     onTagRemove: function (
       tagId: string,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    ): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter,
       ) => {
         const issue: IssueFull = (getState()[stateFieldName] as IssueState).issue;
         const api: Api = getApi();
@@ -842,46 +732,34 @@ export const createActions = (
           };
           dispatch(dispatchActions.receiveIssue(updatedIssue));
         } catch (err) {
-          notifyError(err);
+          notifyError(err as CustomError);
         }
       };
     },
     getCommandSuggestions: function (
       command: string,
       caret: number,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    ): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
       ) => {
         const issueId: string = (getState()[stateFieldName] as IssueState).issueId;
         await commandDialogHelper
           .loadIssueCommandSuggestions([issueId], command, caret)
           .then((suggestions: CommandSuggestionResponse) => {
             suggestions &&
-              dispatch(dispatchActions.receiveCommandSuggestions(suggestions));
+            dispatch(dispatchActions.receiveCommandSuggestions(suggestions));
           })
-          .catch(() => {
-            //
-          });
+          .catch(() => {});
       };
     },
     applyCommand: function (
       command: string,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    ): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
       ): Promise<void> => {
         const issueId: string = (getState()[stateFieldName] as IssueState).issueId;
         dispatch(dispatchActions.startApplyingCommand());
@@ -907,15 +785,15 @@ export const createActions = (
     },
     updateUserAppearanceProfile: function (
       userAppearanceProfile: UserAppearanceProfile,
-    ): (dispatch: (arg0: any) => any) => Promise<void> {
-      return async (dispatch: (arg0: any) => any) => {
+    ): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch) => {
         dispatch(receiveUserAppearanceProfile(userAppearanceProfile));
       };
     },
     uploadIssueAttach: function (
       files: NormalizedAttachment[],
-    ): (dispatch: (arg0: any) => any, getState: StateGetter) => Promise<void> {
-      return async (dispatch: (arg0: any) => any, getState: StateGetter) => {
+    ): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
         await dispatch(
           dispatchActions.uploadFile(files, (getState()[stateFieldName] as IssueState).issue),
         );
@@ -923,32 +801,29 @@ export const createActions = (
     },
     cancelAddAttach: function (
       attach: Attachment,
-    ): (dispatch: (arg0: any) => any) => Promise<void> {
-      return async (dispatch: (arg0: any) => any) => {
+    ): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch) => {
         await dispatch(dispatchActions.cancelImageAttaching(attach));
       };
     },
-    loadAttachments: function (): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-    ) => Promise<void> {
-      return async (dispatch: (arg0: any) => any, getState: StateGetter) => {
+    loadAttachments: function (): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch) => {
         dispatch(
-          actions.loadIssueAttachments((getState()[stateFieldName] as IssueState).issueId),
+          actions.loadIssueAttachments(),
         );
       };
     },
     toggleVisibleAddAttachDialog: function (
       isVisible: boolean,
-    ): (dispatch: (arg0: any) => any) => Promise<void> {
-      return async (dispatch: (arg0: any) => any) => {
+    ): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch) => {
         dispatch(dispatchActions.toggleAttachFileDialog(isVisible));
       };
     },
     removeAttachment: function (
       attach: Attachment,
-    ): (dispatch: (arg0: any) => any, getState: StateGetter) => Promise<void> {
-      return async (dispatch: (arg0: any) => any, getState: StateGetter) => {
+    ): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
         await dispatch(
           dispatchActions.removeAttachment(
             attach,
@@ -959,22 +834,18 @@ export const createActions = (
     },
     updateIssueVisibility: function (
       visibility: Visibility,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
+    ): ReduxAction {
       return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter,
       ) => {
-        const issueState: IssueFull = getState()[stateFieldName];
+        const issueState = getState()[stateFieldName] as IssueState;
         const prevVisibility: Visibility = issueState.issue.visibility;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update visibility');
 
         try {
-          const issueWithUpdatedVisibility: Visibility = await getApi().issue.updateVisibility(
+          const issueWithUpdatedVisibility: { id: string; visibility: Visibility } = await getApi().issue.updateVisibility(
             issueState.issueId,
             visibility,
           );
@@ -994,12 +865,12 @@ export const createActions = (
               ),
             ),
           );
-          notifyError(err);
+          notifyError(err as CustomError);
         }
       };
     },
-    onCloseTagsSelect: function (): (dispatch: (arg0: any) => any) => void {
-      return (dispatch: (arg0: any) => any) => {
+    onCloseTagsSelect: function (): ReduxAction {
+      return (dispatch: ReduxThunkDispatch) => {
         dispatch(
           dispatchActions.closeTagsSelect({
             selectProps: null,
