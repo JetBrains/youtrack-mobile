@@ -1,10 +1,9 @@
 import React from 'react';
 import {Platform} from 'react-native';
+
 import base64 from 'base64-js';
-import DeviceInfo from 'react-native-device-info';
-import qs from 'qs';
-import appPackage from '../../package.json';
 import {getStorageState} from 'components/storage/storage';
+
 import type {CustomError} from 'types/Error';
 import type {StorageState} from 'components/storage/storage';
 
@@ -13,26 +12,23 @@ interface RequestPromise<P extends any> {
   value: P | P[]
 }
 
-export const AppVersion: any = appPackage.version.split('-')[0];
-export const isTablet: boolean = DeviceInfo.isTablet();
 export const isReactElement = (element: any): boolean => {
   return React.isValidElement(element);
 };
+
 export const isIOSPlatform = (): boolean => {
   return Platform.OS === 'ios';
 };
+
 export const isAndroidPlatform = (): boolean => {
   return Platform.OS === 'android';
 };
+
 export const getHUBUrl = (): string => {
   const storageState: StorageState = getStorageState();
   return storageState?.config?.auth?.serverUri || '';
 };
-export const parseUrlQueryString = (url: string): Record<string, any> => {
-  const match = url.match(/\?(.*)/);
-  const query_string = match && match[1];
-  return qs.parse(query_string);
-};
+
 export const uuid = (): string => {
   let d = new Date().getTime();
   let d2 = 0;
@@ -52,23 +48,26 @@ export const uuid = (): string => {
     return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
   });
 };
+
 export const guid = (): string => {
   return (
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15)
   );
 };
+
 export const removeTrailingSlash = (str: string): string => {
   return str.replace(/\/$/, '');
 };
+
 export const createBtoa = (str: string): any => {
-  const byteArray = [];
+  const byteArray: number[] = [];
 
   for (let i = 0; i < str.length; i++) {
     byteArray.push(str.charCodeAt(i));
   }
 
-  return base64.fromByteArray(byteArray);
+  return base64.fromByteArray(new Uint8Array(byteArray));
 };
 
 export const until = <P = any>(
@@ -110,10 +109,12 @@ export const until = <P = any>(
       return [err];
     });
 };
+
 export const nullProjectCustomFieldMaxLength: number = 20;
+
 export const createNullProjectCustomField = (
   projectName: string = '',
-  label: string,
+  label: string = '',
   maxLength: number = nullProjectCustomFieldMaxLength,
 ): {
   projectCustomField: {
@@ -126,7 +127,7 @@ export const createNullProjectCustomField = (
   };
 } => {
   const visibleProjectName: string =
-    projectName.length > maxLength
+    projectName?.length > maxLength
       ? `${projectName.substring(0, maxLength - 3)}…`
       : projectName;
   return {
@@ -140,6 +141,7 @@ export const createNullProjectCustomField = (
     },
   };
 };
+
 export const isURLPattern: (str: string) => boolean = (str: string): boolean =>
   /^(http(s?)):\/\/|(www.)/i.test(str);
 
