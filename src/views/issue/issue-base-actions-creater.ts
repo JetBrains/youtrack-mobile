@@ -473,7 +473,7 @@ export const createActions = (
               });
             },
             selectedItems: issue?.tags || [],
-            getTitle: item => getEntityPresentation(item),
+            getTitle: (item: Tag) => getEntityPresentation(item),
             onCancel: () => dispatch(actions.onCloseTagsSelect()),
             onSelect: async (tags: Tag[]) => {
               const [error, issueWithTags] = await until(
