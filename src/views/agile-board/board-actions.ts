@@ -37,6 +37,7 @@ import type {
   BoardOnList,
   Sprint,
   SprintFull,
+  Swimlane,
 } from 'types/Agile';
 import type {AgilePageState} from './board-reducers';
 import type {AppState} from 'reducers';
@@ -48,8 +49,8 @@ type StateGetter = () => AppState;
 
 export const PAGE_SIZE = 15;
 const RECONNECT_TIMEOUT = 60000;
-let serverSideEventsInstance: ServersideEvents;
-let serverSideEventsInstanceErrorTimer: null | typeof setTimeout = null;
+let serverSideEventsInstance: ServersideEvents | null;
+let serverSideEventsInstanceErrorTimer: number | undefined;
 export const DEFAULT_ERROR_AGILE_WITH_INVALID_STATUS = {
   status: {
     valid: false,
@@ -57,7 +58,7 @@ export const DEFAULT_ERROR_AGILE_WITH_INVALID_STATUS = {
   },
 };
 
-function receiveSprint(sprint) {
+function receiveSprint(sprint: Sprint | null) {
   return {
     type: types.RECEIVE_SPRINT,
     sprint,
@@ -71,7 +72,7 @@ function setError(error: CustomError | null) {
   };
 }
 
-function track(msg: string, additionalParam: string | null | undefined) {
+function track(msg: string, additionalParam?: string) {
   usage.trackEvent(ANALYTICS_AGILE_PAGE, msg, additionalParam);
 }
 
@@ -416,7 +417,7 @@ export function loadAgileProfile(): (
         profile,
       });
     } catch (error) {
-      dispatch(setError(error));
+      dispatch(setError(error as CustomError));
     }
   };
 }
@@ -442,8 +443,7 @@ export function loadDefaultAgileBoard(
     const agileUserProfile: AgileUserProfile = await dispatch(
       getAgileUserProfile(),
     );
-    const board: Board | null | undefined = agileUserProfile?.defaultAgile;
-
+    const board: Partial<Board> | null = agileUserProfile?.defaultAgile;
     if (board) {
       log.info('Loading Default Agile board', board?.name || board?.id);
       await dispatch(loadBoard(board, query, refresh));
@@ -472,7 +472,7 @@ function stopSwimlanesLoading() {
   };
 }
 
-function receiveSwimlanes(swimlanes) {
+function receiveSwimlanes(swimlanes: Swimlane) {
   return {
     type: types.RECEIVE_SWIMLANES,
     PAGE_SIZE,
@@ -480,7 +480,7 @@ function receiveSwimlanes(swimlanes) {
   };
 }
 
-function setSSEInstance(sseInstance: ServersideEvents | null | undefined) {
+function setSSEInstance(sseInstance: ServersideEvents | null) {
   serverSideEventsInstance = sseInstance;
 }
 
@@ -488,7 +488,7 @@ export function destroySSE() {
   if (serverSideEventsInstance) {
     log.info('Force close SSE');
     clearTimeout(serverSideEventsInstanceErrorTimer);
-    serverSideEventsInstanceErrorTimer = null;
+    serverSideEventsInstanceErrorTimer = undefined;
     serverSideEventsInstance.close();
     setSSEInstance(null);
   }
@@ -556,7 +556,7 @@ export function fetchMoreSwimlanes(
   };
 }
 
-function updateRowCollapsedState(row, newCollapsed: boolean) {
+function updateRowCollapsedState(row: AgileBoardRow, newCollapsed: boolean) {
   animateLayout();
   return {
     type: types.ROW_COLLAPSE_TOGGLE,
@@ -611,7 +611,7 @@ export function rowCollapseToggle(
   };
 }
 
-function updateColumnCollapsedState(column, newCollapsed: boolean) {
+function updateColumnCollapsedState(column: BoardColumn, newCollapsed: boolean) {
   animateLayout();
   return {
     type: types.COLUMN_COLLAPSE_TOGGLE,
@@ -655,7 +655,7 @@ export function columnCollapseToggle(
       trackEvent('Toggle column collapsing');
     } catch (e) {
       dispatch(updateColumnCollapsedState(column, oldCollapsed));
-      notifyError(e);
+      notifyError(e as CustomError);
     }
   };
 }
@@ -690,11 +690,11 @@ export function openSprintSelect(): (
         show: true,
         placeholder: i18n('Filter sprints by name'),
         dataSource: async () => {
-          const sprints = await api.agile.getSprintList(sprint.agile.id);
+          const sprints: Sprint[] = await api.agile.getSprintList(sprint.agile.id);
           return getGroupedSprints(sprints);
         },
         selectedItems: [sprint],
-        getTitle: sprint =>
+        getTitle: (sprint: Sprint) =>
           `${sprint.name} ${sprint.archived ? i18n('(archived)') : ''}`,
         onSelect: (selectedSprint: Sprint, query: string) => {
           dispatch(closeSelect());
@@ -868,7 +868,7 @@ export function createCardForCell(
       trackEvent('Open create card for cell');
       return draft;
     } catch (err) {
-      notifyError(err);
+      notifyError(err as CustomError);
       return null;
     }
   };
@@ -1044,7 +1044,7 @@ export function updateIssue(
       type: ISSUE_UPDATED,
       issue,
 
-      onUpdate(board) {
+      onUpdate(board: Board) {
         !!sprint &&
           cacheSprint(
             Object.assign({}, sprint, {

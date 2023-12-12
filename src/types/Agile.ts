@@ -107,7 +107,7 @@ export type BoardOnList = {
   };
 };
 export type Sprint = {
-  $type: string;
+  $type?: string;
   id: string;
   name: string;
   goal: string | null | undefined;
