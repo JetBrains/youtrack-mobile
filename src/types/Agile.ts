@@ -93,6 +93,7 @@ export type Board = {
   colorCoding: FieldBasedColorCoding | ProjectBasedColorCoding;
 };
 export type BoardOnList = {
+  $type: string;
   id: string;
   name: string;
   favorite: boolean;
@@ -106,6 +107,7 @@ export type BoardOnList = {
   };
 };
 export type Sprint = {
+  $type: string;
   id: string;
   name: string;
   goal: string | null | undefined;

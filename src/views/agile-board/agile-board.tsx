@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Dimensions,
+  NativeScrollEvent,
 } from 'react-native';
 
 import DeviceInfo from 'react-native-device-info';
@@ -29,20 +30,24 @@ import Router from 'components/router/router';
 import usage from 'components/usage/usage';
 import {addListenerGoOnline} from 'components/network/network-events';
 import {ANALYTICS_AGILE_PAGE} from 'components/analytics/analytics-ids';
+import {DEFAULT_THEME} from 'components/theme/theme';
 import {DragContainer} from 'components/draggable';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
-import {i18n} from 'components/i18n/i18n';
 import {getScrollableWidth} from 'components/board-scroller/board-scroller__math';
 import {hasType} from 'components/api/api__resource-types';
+import {HIT_SLOP} from 'components/common-styles';
+import {i18n} from 'components/i18n/i18n';
 import {IconException, IconMagnifyZoom} from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {notify} from 'components/notification/notification';
+import {ReduxThunkDispatch} from 'types/Redux';
 import {renderSelector} from './agile-board__renderer';
+import {RootState} from 'reducers/app-reducer';
 import {routeMap} from 'app-routes';
+import {SectionedSelectWithItemActions, SectionedSelectWithItemActionsModal,} from 'components/select/select-sectioned-with-item-and-star';
 import {Select, SelectModal} from 'components/select/select';
 import {SkeletonAgile} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
-import {HIT_SLOP} from 'components/common-styles';
 import {UNIT} from 'components/variables';
 
 import styles from './agile-board.styles';
@@ -61,14 +66,10 @@ import type {
   Sprint,
 } from 'types/Agile';
 import type {Theme, UITheme} from 'types/Theme';
-import {
-  SectionedSelectWithItemActions,
-  SectionedSelectWithItemActionsModal,
-} from 'components/select/select-sectioned-with-item-and-star';
 
 const CATEGORY_NAME = 'Agile board';
 
-type Props = AgilePageState & {
+type Props = AgilePageState & RootState & typeof boardActions & {
   auth: Auth;
   api: Api;
   isLoadingMore: boolean;
@@ -80,8 +81,8 @@ type Props = AgilePageState & {
   onLoadMoreSwimlanes: (query?: string) => any;
   onRowCollapseToggle: (row: AgileBoardRow) => any;
   onColumnCollapseToggle: (column: BoardColumn) => any;
-  onOpenSprintSelect: (arg0: any) => any;
-  onOpenBoardSelect: (arg0: any) => any;
+  onOpenSprintSelect: () => void;
+  onOpenBoardSelect: () => void;
   onCloseSelect: (arg0: any) => any;
   createCardForCell: (columnId: string, cellId: string) => any;
   onCardDrop: (arg0: any) => any;
@@ -107,10 +108,10 @@ type State = {
 class AgileBoard extends Component<Props, State> {
   boardHeader: BoardHeader | null | undefined;
   query: string;
-  unsubscribeOnDispatch: (...args: any[]) => any;
-  uiTheme: UITheme;
-  unsubscribeOnDimensionsChange: EventSubscription;
-  goOnlineSubscription: EventSubscription;
+  unsubscribeOnDispatch: ((...args: any[]) => any) | undefined;
+  unsubscribeOnDimensionsChange: EventSubscription | undefined;
+  uiTheme: UITheme = DEFAULT_THEME;
+  goOnlineSubscription: EventSubscription | undefined;
 
   constructor(props: Props) {
     super(props);
@@ -166,9 +167,9 @@ class AgileBoard extends Component<Props, State> {
 
   componentWillUnmount() {
     boardActions.destroySSE();
-    this.unsubscribeOnDispatch();
-    this.unsubscribeOnDimensionsChange.remove();
-    this.goOnlineSubscription.remove();
+    this.unsubscribeOnDispatch?.();
+    this.unsubscribeOnDimensionsChange?.remove?.();
+    this.goOnlineSubscription?.remove?.();
   }
 
   onDimensionsChange: () => Promise<void> = async (): Promise<void> => {
@@ -181,7 +182,7 @@ class AgileBoard extends Component<Props, State> {
   loadBoard = (refresh: boolean = false) => {
     this.props.onLoadBoard(this.query, refresh);
   };
-  onVerticalScroll = event => {
+  onVerticalScroll = (event: { nativeEvent: NativeScrollEvent }) => {
     const {nativeEvent} = event;
     const newY = nativeEvent.contentOffset.y;
     const viewHeight = nativeEvent.layoutMeasurement.height;
@@ -199,14 +200,14 @@ class AgileBoard extends Component<Props, State> {
       },
     });
   };
-  onContentSizeChange = (width, height) => {
+  onContentSizeChange = (width: number, height: number) => {
     const windowHeight = Dimensions.get('window').height;
 
     if (height < windowHeight) {
       this.props.onLoadMoreSwimlanes(this.query);
     }
   };
-  syncHeaderPosition = event => {
+  syncHeaderPosition = (event: { nativeEvent: NativeScrollEvent }) => {
     const {nativeEvent} = event;
 
     if (this.boardHeader) {
@@ -260,11 +261,11 @@ class AgileBoard extends Component<Props, State> {
       });
     }
   };
-  _getScrollableWidth = (): number | null => {
+  _getScrollableWidth = (): number | undefined => {
     const {sprint} = this.props;
 
     if (!sprint || !sprint.board || !sprint.board.columns) {
-      return null;
+      return undefined;
     }
 
     return getScrollableWidth(
@@ -275,8 +276,8 @@ class AgileBoard extends Component<Props, State> {
 
   renderAgileSelector() {
     const {agile, onOpenBoardSelect, sprint, networkState} = this.props;
-    const agileName: string = agile?.name || sprint?.agile?.name;
-    const agileId: string = agile?.id || sprint?.agile?.id;
+    const agileName: string | undefined = agile?.name || sprint?.agile?.name;
+    const agileId: string | undefined = agile?.id || sprint?.agile?.id;
 
     if (agileName && agileId) {
       return renderSelector({
@@ -381,7 +382,7 @@ class AgileBoard extends Component<Props, State> {
           <BoardHeader
             ref={this.boardHeaderRef}
             style={{
-              minWidth: zoomedIn ? this._getScrollableWidth() : null,
+              minWidth: zoomedIn ? this._getScrollableWidth() : undefined,
             }}
             columns={this.props.sprint.board?.columns}
             onCollapseToggle={this.toggleColumn}
@@ -521,7 +522,7 @@ class AgileBoard extends Component<Props, State> {
     this.props.onCardDrop({
       columnId: dropZone.data.columnId,
       cellId: dropZone.data.cellId,
-      leadingId: dropZone.data.issueIds.filter(id => id !== movedId)[
+      leadingId: dropZone.data.issueIds.filter((id: string) => id !== movedId)[
         dropZone.placeholderIndex - 1
       ],
       movedId,
@@ -707,13 +708,13 @@ const mapStateToProps = (state: AppState) => {
   return {...state.agile, ...state.app};
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: ReduxThunkDispatch) => {
   return {
     onLoadBoard: (query: string, refresh: boolean) =>
       dispatch(boardActions.loadDefaultAgileBoard(query, refresh)),
     onLoadMoreSwimlanes: (query?: string) =>
       dispatch(boardActions.fetchMoreSwimlanes(query)),
-    onRowCollapseToggle: row => dispatch(boardActions.rowCollapseToggle(row)),
+    onRowCollapseToggle: (row: AgileBoardRow) => dispatch(boardActions.rowCollapseToggle(row)),
     onColumnCollapseToggle: (column: BoardColumn) =>
       dispatch(boardActions.columnCollapseToggle(column)),
     onOpenSprintSelect: () => dispatch(boardActions.openSprintSelect()),
