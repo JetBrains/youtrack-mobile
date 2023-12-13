@@ -14,7 +14,7 @@ msgstr " ({{amount}} unresolved)"
 msgid " or "
 msgstr " or "
 
-#: src/views/agile-board/board-actions.ts:698
+#: src/views/agile-board/board-actions.ts:652
 msgid "(archived)"
 msgstr "(archived)"
 
@@ -493,7 +493,7 @@ msgstr "Favorites"
 msgid "Feature request"
 msgstr "Feature request"
 
-#: src/views/agile-board/board-actions.ts:728
+#: src/views/agile-board/board-actions.ts:679
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
@@ -515,7 +515,7 @@ msgstr "Filter projects, saved searches, and tags"
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
-#: src/views/agile-board/board-actions.ts:691
+#: src/views/agile-board/board-actions.ts:645
 msgid "Filter sprints by name"
 msgstr "Filter sprints by name"
 
