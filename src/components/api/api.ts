@@ -231,7 +231,7 @@ class API extends BaseAPI {
       `${konnectorURL}/ring/pushNotifications/unsubscribe`,
       'POST',
       {
-        deviceToken: deviceToken,
+        appleDeviceId: deviceToken,
       },
     );
   }
