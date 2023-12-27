@@ -48,17 +48,17 @@ function parseUrl(
     searchQuery: string
   ) => void,
 ) {
-  const issueId: string | null = extractIssueId(url);
-  const articleId: string | null = extractArticleId(url);
+  const issueId = extractIssueId(url) ?? undefined;
+  const articleId = extractArticleId(url) ?? undefined;
 
-  if (issueId || articleId) {
+  if (typeof issueId === 'string' || typeof articleId === 'string') {
     log.info(
       issueId
         ? `Issue ID detected in URL: ${issueId}` : (articleId
           ? `Article ID detected in URL: ${articleId}`
           : ''),
     );
-    return onIdDetected(url, issueId as string, articleId as string);
+    return onIdDetected(url, issueId, articleId);
   }
 
   const query: string | null = extractIssuesQuery(url);
@@ -86,7 +86,7 @@ const openByUrlDetector = async (
   }, 100);
 
   const onURLOpen = (event: { url: string } | string) => {
-    const url: string = event?.url || event;
+    const url: string = typeof event === 'string' ? event : event?.url;
     if (url) {
       log.debug(`Linking URL event fired with URL "${url}"`);
       parseUrl(url, onIdDetected, onQueryDetected);

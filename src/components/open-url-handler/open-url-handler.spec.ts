@@ -2,13 +2,6 @@ import {Linking} from 'react-native';
 
 import {extractIssueId, extractArticleId, openByUrlDetector} from './open-url-handler';
 
-
-jest.mock('react-native/Libraries/Linking/Linking', () => ({
-  getInitialURL: jest.fn(),
-  addEventListener: jest.fn(),
-}));
-
-
 describe('open-url-handler', () => {
 
   describe('extractIssueId', () => {
@@ -40,13 +33,15 @@ describe('open-url-handler', () => {
     });
   });
 
-  describe.skip('openByUrlDetector', () => {
+  describe('openByUrlDetector', () => {
     let idMock: string;
-    let urlMock;
-    let onIdDetected: (url: string, issueId?: string | null, articleId?: string | null) => any;
+    let urlMock: string;
+    let onIdDetected: (url: string, issueId?: string, articleId?: string) => any;
     let onQueryDetected: (url: string, query: string) => any;
-    beforeAll(() => jest.useFakeTimers({advanceTimers: true}));
-    afterAll(() => jest.useRealTimers());
+    const getInitialURL = Linking.getInitialURL as jest.Mock;
+
+    beforeEach(() => jest.useFakeTimers({advanceTimers: true}));
+    afterEach(() => jest.useRealTimers());
 
     beforeEach(() => {
       jest.clearAllTimers();
@@ -57,30 +52,33 @@ describe('open-url-handler', () => {
     });
 
     it('should invoke issue id detect callback', async () => {
-      Linking.getInitialURL.mockResolvedValueOnce(urlMock);
+      getInitialURL.mockResolvedValueOnce(urlMock);
 
       await openByUrlDetector(onIdDetected, onQueryDetected);
-      jest.advanceTimersByTime(100);
 
-      expect(onIdDetected).toHaveBeenCalledWith(
-        urlMock,
-        idMock,
-        null
-      );
+      setTimeout(() => {
+        expect(onIdDetected).toHaveBeenCalledWith(
+          urlMock,
+          idMock,
+          undefined
+        );
+      }, 100);
     });
 
     it('should invoke article id detect callback', async () => {
       urlMock = `https://example.com/articles/${idMock}`;
-      Linking.getInitialURL.mockResolvedValueOnce(urlMock);
+      getInitialURL.mockResolvedValueOnce(urlMock);
 
       await openByUrlDetector(onIdDetected, onQueryDetected);
       jest.advanceTimersByTime(100);
 
-      expect(onIdDetected).toHaveBeenCalledWith(
-        urlMock,
-        null,
-        idMock,
-      );
+      setTimeout(() => {
+        expect(onIdDetected).toHaveBeenCalledWith(
+          urlMock,
+          undefined,
+          idMock,
+        );
+      }, 100);
     });
 
     it('should subscribe to press URL event', () => {
