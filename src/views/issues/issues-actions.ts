@@ -47,11 +47,26 @@ export interface ContextDataSource {
 
 export const PAGE_SIZE: number = 14;
 
+const getDefaultHelpdeskSearchContext = (): ReduxAction<Folder> => (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter
+) => getState().app.user?.profiles?.helpdesk?.helpdeskFolder!;
+
+const isDefaultHelpdeskSearchContext = (searchContextFolderId: string): ReduxAction<boolean> => (
+  dispatch: ReduxThunkDispatch,
+) => (dispatch(getDefaultHelpdeskSearchContext()).id === searchContextFolderId);
+
 const getSearchContext = (): ReduxAction<Folder> => (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
   const appState = getState();
-  return appState.issueList.helpDeskMode
-    ? appState.issueList.helpdeskSearchContext
-    : appState.issueList.searchContext;
+  if (appState.issueList.helpDeskMode) {
+    const helpdeskSearchContext = appState.issueList.helpdeskSearchContext;
+    const isDefaultTicketsContext = dispatch(isDefaultHelpdeskSearchContext(helpdeskSearchContext.id));
+    return {
+      ...helpdeskSearchContext,
+      name: isDefaultTicketsContext ? i18n('Tickets') : helpdeskSearchContext.name,
+    };
+  }
+  return appState.issueList.searchContext;
 };
 
 
@@ -91,20 +106,18 @@ const suggestIssuesQuery = (query: string, caret: number): ReduxAction => async 
   dispatch(issuesActions.SUGGEST_QUERY(suggestions));
 };
 
-const storeIssuesQuery = (query: string): ReduxAction => (dispatch: ReduxThunkDispatch) => {
-  if (!query) {
-    return;
+const storeIssuesQuery = (q: string): ReduxAction => (dispatch: ReduxThunkDispatch) => {
+  const query = q.trim();
+  const data: {
+    helpdeskQuery?: string;
+    query?: string;
+    lastQueries?: string[]
+  } = dispatch(isHelpDeskMode()) ? {helpdeskQuery: query} : {query};
+  if (q) {
+    const updatedQueries = [query, ...(getStorageState().lastQueries || [])];
+    data.lastQueries = Array.from(new Set(updatedQueries)).slice(0, MAX_STORED_QUERIES);
   }
-
-  const updatedQueries = [query, ...(getStorageState().lastQueries || [])];
-  const uniqueUpdatedQueries = Array.from(new Set(updatedQueries)).slice(
-    0,
-    MAX_STORED_QUERIES,
-  );
-  flushStoragePart({
-    ...(dispatch(isHelpDeskMode()) ? {helpdeskQuery: query} : {query}),
-    lastQueries: uniqueUpdatedQueries,
-  });
+  flushStoragePart(data);
 };
 
 const startIssuesLoading = () => setGlobalInProgress(true);
@@ -251,7 +264,7 @@ const openContextSelect = (): ReduxAction => {
           {
             title: i18n('Projects'),
             data: [
-              isHelpdeskMode ? getState().issueList.helpdeskSearchContext : EVERYTHING_SEARCH_CONTEXT,
+              currentSearchContext,
               ...sortFolders(pinnedGrouped.projects, query),
               ...sortFolders(unpinnedGrouped.projects, query),
             ],
@@ -272,16 +285,21 @@ const openContextSelect = (): ReduxAction => {
           },
         ];
       },
-      selectedItems: [currentSearchContext],
+      selectedItems: [{
+        ...currentSearchContext,
+        id: dispatch(isDefaultHelpdeskSearchContext(currentSearchContext.id)) ? null : currentSearchContext.id,
+      }],
       onCancel: () => dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT()),
       onSelect: async (searchContext: Folder) => {
         try {
           dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT());
           const isHelpdeskMode = dispatch(isHelpDeskMode());
           dispatch(
-            isHelpdeskMode ? issuesActions.SET_HELPDESK_CONTEXT(searchContext) : issuesActions.SET_SEARCH_CONTEXT(searchContext)
+            isHelpdeskMode
+              ? issuesActions.SET_HELPDESK_CONTEXT(searchContext)
+              : issuesActions.SET_SEARCH_CONTEXT(searchContext)
           );
-          flushStoragePart(isHelpdeskMode ? {searchContext} : {helpdeskSearchContext: searchContext});
+          await flushStoragePart(isHelpdeskMode ? {searchContext} : {helpdeskSearchContext: searchContext});
           dispatch(refreshIssues());
         } catch (error) {
           log.warn('Failed to change a context', error);
@@ -405,11 +423,8 @@ const doLoadIssues = (query: string, pageSize: number, skip = 0): ReduxAction<Pr
 
   const api = getApi();
   let listIssues: IssueOnList[] = [];
-  const isHelpdeskMode = dispatch(isHelpDeskMode());
   const appState = getState();
-  const contextFolder = isHelpdeskMode
-    ? appState.app.user?.profiles?.helpdesk?.helpdeskFolder || EVERYTHING_SEARCH_CONTEXT
-    : dispatch(getSearchContext());
+  const contextFolder = dispatch(getSearchContext());
   const [error, sortedIssues] = await until<SortedIssues>(
     api.issues.sortedIssues(contextFolder.id, query, pageSize, skip)
   );
@@ -515,18 +530,17 @@ const loadIssuesCount = (folder?: Folder | null): ReduxAction => async (
   }
 };
 
-const getStoredSearchContext = () => {
-  return getStorageState().searchContext || EVERYTHING_SEARCH_CONTEXT;
-};
-
 const initSearchContext = (searchQuery: string = ''): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
-  let searchContext: Folder;
-  if (dispatch(isHelpDeskMode)) {
-    searchContext = getStorageState().currentUser?.ytCurrentUser?.profiles?.helpdesk?.helpdeskFolder as Folder;
-    dispatch(issuesActions.SET_HELPDESK_CONTEXT(searchContext));
+  if (dispatch(isHelpDeskMode())) {
+    dispatch(issuesActions.SET_HELPDESK_CONTEXT(dispatch(getDefaultHelpdeskSearchContext())));
   } else {
-    searchContext = searchQuery.trim() ? EVERYTHING_SEARCH_CONTEXT : getStoredSearchContext();
-    dispatch(issuesActions.SET_SEARCH_CONTEXT(searchContext));
+    dispatch(
+      issuesActions.SET_SEARCH_CONTEXT(
+        searchQuery.trim()
+          ? EVERYTHING_SEARCH_CONTEXT
+          : getStorageState().searchContext || EVERYTHING_SEARCH_CONTEXT
+      )
+    );
   }
 };
 
@@ -733,7 +747,6 @@ export {
   getIssuesSettings,
   getPageSize,
   getSearchContext,
-  getStoredSearchContext,
   initializeIssuesList,
   initSearchContext,
   isHelpDeskMode,

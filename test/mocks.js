@@ -99,6 +99,9 @@ function createUserMock(data = {}) {
         timetracking: {
           isTimeTrackingAvailable: true,
         },
+        helpdesk: {
+          helpdeskFolder: createFolder(),
+        },
       },
       userPermissions: {
         has: () => true,

@@ -371,6 +371,9 @@ describe('app-actions', () => {
             timetracking: {
               isTimeTrackingAvailable: true,
             },
+            helpdesk: {
+              helpdeskFolder: expect.any(Object),
+            },
           },
         },
       });
