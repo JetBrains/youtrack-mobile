@@ -1130,6 +1130,7 @@ msgstr "İleti dizisi sessize alındı"
 msgid "Thread unmuted"
 msgstr ""
 
+#: src/views/issues/issues-actions.ts
 #: src/views/issues/issues-reducers.ts
 #: src/views/tickets/tickets.tsx
 msgid "Tickets"

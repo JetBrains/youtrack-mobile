@@ -1144,6 +1144,7 @@ msgstr "Vlákno ztlumeno"
 msgid "Thread unmuted"
 msgstr "Vlákno bez ztlumení"
 
+#: src/views/issues/issues-actions.ts
 #: src/views/issues/issues-reducers.ts
 #: src/views/tickets/tickets.tsx
 msgid "Tickets"

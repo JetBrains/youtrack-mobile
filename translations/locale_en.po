@@ -506,7 +506,7 @@ msgstr "Filter items"
 msgid "Filter projects"
 msgstr "Filter projects"
 
-#: src/views/issues/issues-actions.ts:231
+#: src/views/issues/issues-actions.ts:244
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
@@ -803,7 +803,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/issues/issues-actions.ts:252
+#: src/views/issues/issues-actions.ts:265
 #: src/views/knowledge-base/knowledge-base.tsx:609
 msgid "Projects"
 msgstr "Projects"
@@ -870,7 +870,7 @@ msgstr "Restore"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/views/issues/issues-actions.ts:267
+#: src/views/issues/issues-actions.ts:280
 msgid "Saved Searches"
 msgstr "Saved Searches"
 
@@ -1036,7 +1036,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/views/issues/issues-actions.ts:260
+#: src/views/issues/issues-actions.ts:273
 msgid "Tags"
 msgstr "Tags"
 
@@ -1124,6 +1124,7 @@ msgstr "Thread muted"
 msgid "Thread unmuted"
 msgstr "Thread unmuted"
 
+#: src/views/issues/issues-actions.ts:66
 #: src/views/issues/issues-reducers.ts:55
 #: src/views/tickets/tickets.tsx:34
 msgid "Tickets"
