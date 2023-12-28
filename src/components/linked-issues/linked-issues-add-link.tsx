@@ -6,6 +6,7 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
+
 import ErrorMessage from 'components/error-message/error-message';
 import Header from 'components/header/header';
 import issueCommonLinksActions from 'components/issue-actions/issue-links-actions';
@@ -31,9 +32,9 @@ import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './linked-issues.style';
 
+import type {AssistSuggest, IssueOnList} from 'types/Issue';
 import type {IssueLinkTypeExtended} from './linked-issues-helper';
 import type {IssueLinkType} from 'types/CustomFields';
-import type {IssueOnList, TransformedSuggestion} from 'types/Issue';
 import type {Theme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
 
@@ -65,7 +66,7 @@ const LinkedIssuesAddLink = (props: Props): JSX.Element => {
     _query: '',
   });
   const [isQASelectVisible, updateQASelectVisible] = useState(false);
-  const [suggestions, updateSuggestions] = useState<TransformedSuggestion[]>([]);
+  const [suggestions, updateSuggestions] = useState<AssistSuggest[]>([]);
   const loadLinkTypes = useCallback(async (): Promise<Array<IssueLinkType>> => {
     return await issueCommonLinksActions({}).loadIssueLinkTypes();
   }, []);
@@ -146,8 +147,8 @@ const LinkedIssuesAddLink = (props: Props): JSX.Element => {
   const loadSuggestions = async (
     q: string,
     caret: number,
-  ): Promise<Array<TransformedSuggestion>> => {
-    const _suggestions: TransformedSuggestion[] = await getAssistSuggestions(
+  ): Promise<AssistSuggest[]> => {
+    const _suggestions = await getAssistSuggestions(
       getApi(),
       q,
       caret,

@@ -41,6 +41,7 @@ import type {
 } from 'types/Agile';
 import type {CustomError} from 'types/Error';
 import type {IssueFull, IssueOnList} from 'types/Issue';
+import {AppState} from 'reducers';
 import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 
 export const PAGE_SIZE = 15;
@@ -268,7 +269,8 @@ export function suggestAgileQuery(
     getState: ReduxStateGetter,
     getApi: ReduxAPIGetter,
   ) => {
-    const suggestions = await getAssistSuggestions(getApi(), query, caret);
+    const projects = getState().agile.profile?.defaultAgile.projects || [];
+    const suggestions = await getAssistSuggestions(getApi(),query, caret, projects, 'Issue');
     dispatch({
       type: types.AGILE_SEARCH_SUGGESTS,
       suggestions,

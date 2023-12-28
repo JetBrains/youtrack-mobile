@@ -14,13 +14,13 @@ import {IconBack, IconClose} from 'components/icon/icon';
 
 import styles from './query-assist.styles';
 
+import type {AssistSuggest, TransformedSuggestion} from 'types/Issue';
 import type {Folder} from 'types/User';
-import type {TransformedSuggestion} from 'types/Issue';
 
 const SHOW_LIST_ANIMATION_DURATION = 500;
 
 interface Props {
-  suggestions: Array<TransformedSuggestion | Folder>;
+  suggestions: AssistSuggest[];
   currentQuery: string;
   onApplyQuery: (query: string) => any;
   onChange: (query: string, caret: number) => any;

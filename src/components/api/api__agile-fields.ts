@@ -11,6 +11,11 @@ const AGILE_SHORT_WITH_SPRINTS = toField([
   {
     currentSprint: SPRINT,
   },
+  {
+    projects: [
+      'id',
+    ],
+  },
 ]);
 const AGILE_PROFILE: any = toField([
   {

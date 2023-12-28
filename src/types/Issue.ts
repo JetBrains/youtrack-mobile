@@ -156,3 +156,14 @@ export type OpenNestedViewParams = {
   issue?: IssueFull;
   issueId?: string;
 };
+
+export interface UsedQuery {
+  id: string;
+  name: string;
+  query: string;
+}
+
+export interface AssistSuggest {
+  title: string | null;
+  data: Array<TransformedSuggestion | UsedQuery>;
+}

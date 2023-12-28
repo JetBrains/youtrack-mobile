@@ -7,8 +7,8 @@ import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {IssuesSettings, issuesSettingsDefault} from 'views/issues/index';
 import {LOG_OUT, SET_PROGRESS} from 'actions/action-types';
 
+import type {AssistSuggest, IssueOnList} from 'types/Issue';
 import type {Folder} from 'types/User';
-import type {IssueOnList, TransformedSuggestion} from 'types/Issue';
 import {CustomError} from 'types/Error';
 import {ISelectProps} from 'components/select/select';
 import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
@@ -18,7 +18,7 @@ export interface IssuesState {
   query: string;
   helpdeskQuery: string;
   skip: number;
-  queryAssistSuggestions: TransformedSuggestion[];
+  queryAssistSuggestions: AssistSuggest[];
   isLoadingMore: boolean;
   isListEndReached: boolean;
   loadingError: CustomError | null;
@@ -68,7 +68,7 @@ const {reducer, actions} = createSlice({
     SET_HELPDESK_QUERY(state: IssuesState, action: PayloadAction<string>) {
       state.helpdeskQuery = action.payload;
     },
-    SUGGEST_QUERY(state: IssuesState, action: PayloadAction<TransformedSuggestion[]>) {
+    SUGGEST_QUERY(state: IssuesState, action: PayloadAction<AssistSuggest[]>) {
       state.queryAssistSuggestions = action.payload;
     },
     CLEAR_SUGGESTIONS(state: IssuesState) {

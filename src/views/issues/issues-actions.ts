@@ -105,7 +105,14 @@ const suggestIssuesQuery = (query: string, caret: number): ReduxAction => async 
   getState: ReduxStateGetter,
   getApi: ReduxAPIGetter,
 ) => {
-  const suggestions = await getAssistSuggestions(getApi(), query, caret);
+  const searchContext = dispatch(getSearchContext());
+  const suggestions = await getAssistSuggestions(
+    getApi(),
+    query,
+    caret,
+    searchContext.id ? [searchContext] : [],
+    'Issue',
+  );
   dispatch(issuesActions.SUGGEST_QUERY(suggestions));
 };
 

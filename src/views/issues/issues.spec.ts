@@ -21,7 +21,6 @@ import {deepmerge} from 'deepmerge-ts';
 import {ISSUE_UPDATED} from '../issue/issue-action-types';
 import {issuesSettingsIssueSizes, issuesSettingsSearch} from 'views/issues/index';
 import {SET_PROGRESS} from 'actions/action-types';
-import {StorageState} from 'components/storage/storage';
 
 import type Auth from 'components/auth/oauth2';
 import {IssueOnList} from 'types/Issue';
@@ -59,9 +58,7 @@ describe('Issues', () => {
 
     apiMock = new Api(mocks.createAuthMock() as Auth);
 
-    createTestStore({
-      helpDeskMode: false,
-    });
+    createTestStore();
 
     storage.__setStorageState({});
   });
@@ -146,30 +143,46 @@ describe('Issues', () => {
 
       it('should use latest REST endpoint and with the search context', async () => {
         jest.spyOn(Feature, 'checkVersion').mockReturnValueOnce(true);
-        const searchContextMock = {
-          id: 'searchContext',
-        };
+        const searchContextMock = mocks.createFolder();
 
-        storage.__setStorageState({
-          searchContext: searchContextMock,
-        } as StorageState);
-
-        await doSuggest(5);
-
-        expect(
-          apiMock.search.getQueryAssistSuggestions,
-        ).toHaveBeenCalledWith(TEST_QUERY, 5, [searchContextMock]);
-      });
-
-      it('should use latest REST endpoint and without any search context', async () => {
-        jest.spyOn(Feature, 'checkVersion').mockReturnValueOnce(true);
+        createTestStore({searchContext: searchContextMock});
 
         await doSuggest(5);
 
         expect(apiMock.search.getQueryAssistSuggestions).toHaveBeenCalledWith(
           TEST_QUERY,
           5,
-          null,
+          [searchContextMock],
+          'Issue'
+        );
+      });
+
+      it('should send empty array as `folders` param if a context does not have id', async () => {
+        jest.spyOn(Feature, 'checkVersion').mockReturnValueOnce(true);
+        const searchContextMock = {id: null, name: 'Everything', query: ''} as unknown as Folder;
+
+        createTestStore({searchContext: searchContextMock});
+
+        await doSuggest(5);
+
+        expect(apiMock.search.getQueryAssistSuggestions).toHaveBeenCalledWith(
+          TEST_QUERY,
+          5,
+          [],
+          'Issue'
+        );
+      });
+
+      it('should use latest REST endpoint and without any search context', async () => {
+        jest.spyOn(Feature, 'checkVersion').mockReturnValueOnce(true);
+        createTestStore({searchContext: {} as unknown as Folder});
+        await doSuggest(5);
+
+        expect(apiMock.search.getQueryAssistSuggestions).toHaveBeenCalledWith(
+          TEST_QUERY,
+          5,
+          [],
+          'Issue'
         );
       });
 
@@ -506,6 +519,7 @@ describe('Issues', () => {
         },
       },
       issueList: deepmerge({
+        helpDeskMode: false,
         searchContext: {
           query: queryMock,
         },
