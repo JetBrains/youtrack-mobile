@@ -14,7 +14,7 @@ msgstr " ({{amount}} unresolved)"
 msgid " or "
 msgstr " or "
 
-#: src/views/agile-board/board-actions.ts:652
+#: src/views/agile-board/board-actions.ts:654
 msgid "(archived)"
 msgstr "(archived)"
 
@@ -493,7 +493,7 @@ msgstr "Favorites"
 msgid "Feature request"
 msgstr "Feature request"
 
-#: src/views/agile-board/board-actions.ts:679
+#: src/views/agile-board/board-actions.ts:681
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
@@ -506,7 +506,7 @@ msgstr "Filter items"
 msgid "Filter projects"
 msgstr "Filter projects"
 
-#: src/views/issues/issues-actions.ts:244
+#: src/views/issues/issues-actions.ts:254
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
@@ -515,7 +515,7 @@ msgstr "Filter projects, saved searches, and tags"
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
-#: src/views/agile-board/board-actions.ts:645
+#: src/views/agile-board/board-actions.ts:647
 msgid "Filter sprints by name"
 msgstr "Filter sprints by name"
 
@@ -621,7 +621,7 @@ msgstr "License error"
 msgid "Light theme"
 msgstr "Light theme"
 
-#: src/components/linked-issues/linked-issues-add-link.tsx:246
+#: src/components/linked-issues/linked-issues-add-link.tsx:247
 #: src/views/create-issue/create-issue.tsx:380
 #: src/views/issue/issue-base-actions-creater.ts:600
 msgid "Link issue"
@@ -803,7 +803,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/issues/issues-actions.ts:265
+#: src/views/issues/issues-actions.ts:275
 #: src/views/knowledge-base/knowledge-base.tsx:609
 msgid "Projects"
 msgstr "Projects"
@@ -820,7 +820,7 @@ msgstr "Projects expanded"
 msgid "Query"
 msgstr "Query"
 
-#: src/components/query-assist/query-assist-helper.ts:62
+#: src/components/query-assist/query-assist-helper.ts:48
 msgid "Recent searches"
 msgstr "Recent searches"
 
@@ -870,7 +870,7 @@ msgstr "Restore"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/views/issues/issues-actions.ts:280
+#: src/views/issues/issues-actions.ts:290
 msgid "Saved Searches"
 msgstr "Saved Searches"
 
@@ -1036,7 +1036,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/views/issues/issues-actions.ts:273
+#: src/views/issues/issues-actions.ts:283
 msgid "Tags"
 msgstr "Tags"
 
@@ -1124,7 +1124,7 @@ msgstr "Thread muted"
 msgid "Thread unmuted"
 msgstr "Thread unmuted"
 
-#: src/views/issues/issues-actions.ts:66
+#: src/views/issues/issues-actions.ts:69
 #: src/views/issues/issues-reducers.ts:55
 #: src/views/tickets/tickets.tsx:34
 msgid "Tickets"
