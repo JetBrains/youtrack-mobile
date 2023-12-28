@@ -47,14 +47,17 @@ export interface ContextDataSource {
 
 export const PAGE_SIZE: number = 14;
 
-const getDefaultHelpdeskSearchContext = (): ReduxAction<Folder> => (
+const getDefaultHelpdeskSearchContext = (): ReduxAction<Folder | null> => (
   dispatch: ReduxThunkDispatch,
   getState: ReduxStateGetter
-) => getState().app.user?.profiles?.helpdesk?.helpdeskFolder!;
+) => getState().app.user?.profiles?.helpdesk?.helpdeskFolder || null;
 
 const isDefaultHelpdeskSearchContext = (searchContextFolderId: string): ReduxAction<boolean> => (
   dispatch: ReduxThunkDispatch,
-) => (dispatch(getDefaultHelpdeskSearchContext()).id === searchContextFolderId);
+) => {
+  const helpdeskSearchContext = dispatch(getDefaultHelpdeskSearchContext());
+  return helpdeskSearchContext ? helpdeskSearchContext.id === searchContextFolderId : false;
+};
 
 const getSearchContext = (): ReduxAction<Folder> => (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
   const appState = getState();
@@ -532,7 +535,10 @@ const loadIssuesCount = (folder?: Folder | null): ReduxAction => async (
 
 const initSearchContext = (searchQuery: string = ''): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
   if (dispatch(isHelpDeskMode())) {
-    dispatch(issuesActions.SET_HELPDESK_CONTEXT(dispatch(getDefaultHelpdeskSearchContext())));
+    const helpdeskSearchContext = dispatch(getDefaultHelpdeskSearchContext());
+    if (helpdeskSearchContext) {
+      dispatch(issuesActions.SET_HELPDESK_CONTEXT(helpdeskSearchContext));
+    }
   } else {
     dispatch(
       issuesActions.SET_SEARCH_CONTEXT(
