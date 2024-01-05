@@ -1,51 +1,46 @@
 import React from 'react';
-import {shallow} from 'enzyme';
-import {ResourceTypes} from '../api/api__resource-types';
+
+import {cleanup, render, screen} from '@testing-library/react-native';
+
 import CommentVisibility from './comment__visibility';
-import {IconLock} from '../icon/icon';
-import type {Visibility} from 'types/Visibility';
+
+jest.mock('components/icon/icon', () => ({
+  IconLock: 'IconLock',
+}));
+
 describe('<CommentVisibility/>', () => {
-  let wrapper: Record<string, any>;
-  let visibilityMock: Visibility;
+  let visibilityPresentation: string;
+
+  afterEach(cleanup);
+
   beforeEach(() => {
-    visibilityMock = {
-      $type: ResourceTypes.VISIBILITY_UNLIMITED,
-      permittedUsers: [],
-      permittedGroups: [],
-    };
-    wrapper = doShallow(visibilityMock);
+    visibilityPresentation = 'Hidden';
   });
+
+
   describe('Render', () => {
     it('should render component', () => {
-      expect(findByTestId('commentVisibility')).toHaveLength(1);
-      expect(findByTestId('commentVisibilityIcon')).toHaveLength(1);
+      doRender(visibilityPresentation);
+
+      expect(screen.getByTestId('commentVisibility')).toBeTruthy();
+      expect(screen.getByTestId('commentVisibilityIcon')).toBeTruthy();
     });
+
     it('should not render component', () => {
-      wrapper = doShallow(null);
-      expect(findByTestId('commentVisibility')).toHaveLength(0);
-      expect(findByTestId('commentVisibilityIcon')).toHaveLength(0);
+      doRender(null);
+
+      expect(screen.queryByTestId('commentVisibility')).toBeNull();
     });
-    it('should colorize component', () => {
-      const color = 'red';
-      wrapper = doShallow(visibilityMock, color);
-      expect(
-        wrapper.contains(
-          <IconLock testID="commentVisibilityIcon" size={16} color={color} />,
-        ),
-      ).toEqual(true);
+
+    it('should set custom color to the icon', () => {
+      doRender(visibilityPresentation, 'red');
+
+      expect(screen.getByTestId('commentVisibilityIcon')).toHaveProp('color', 'red');
     });
   });
 
-  function findByTestId(testId) {
-    return (
-      wrapper &&
-      wrapper.find({
-        testID: testId,
-      })
-    );
-  }
 
-  function doShallow(visibility?: Visibility, color?: string) {
-    return shallow(<CommentVisibility visibility={visibility} color={color} />);
+  function doRender(presentation: string | null, color?: string) {
+    return render(<CommentVisibility presentation={presentation} color={color} />);
   }
 });

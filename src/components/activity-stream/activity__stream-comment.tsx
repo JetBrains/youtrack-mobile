@@ -79,9 +79,7 @@ const StreamComment = ({
         IssueVisibility.isSecured(comment.visibility) && (
           <CommentVisibility
             style={styles.activityVisibility}
-            visibility={IssueVisibility.getVisibilityPresentation(
-              comment.visibility,
-            )}
+            presentation={IssueVisibility.getVisibilityPresentation(comment.visibility)}
             color={theme.uiTheme.colors.$iconAccent}
           />
         )}
