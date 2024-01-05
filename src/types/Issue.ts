@@ -21,7 +21,7 @@ export type IssueContextData = {
   issuePermissions: IssuePermissions;
 };
 
-interface BaseIssue {
+export interface BaseIssue {
   $type: string;
   created: number;
   fields: CustomFieldBase[];
@@ -43,6 +43,7 @@ export interface IssueOnList extends BaseIssue {
   };
   trimmedDescription: string;
   activityPage?: ActivityItem[],
+  description?: string;
 }
 
 export interface IssueFull  extends BaseIssue {

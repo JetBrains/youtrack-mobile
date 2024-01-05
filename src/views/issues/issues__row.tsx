@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
-import ColorField, {COLOR_FIELD_SIZE} from 'components/color-field/color-field';
+import ColorField from 'components/color-field/color-field';
 import IconHDTicket from 'components/icon/assets/hdticket.svg';
 import Tags from 'components/tags/tags';
 import {
@@ -18,8 +18,8 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles, {DUAL_AVATAR_SIZE} from './issues.styles';
 
 import type {BundleValue, CustomField} from 'types/CustomFields';
-import type {IssueOnList} from 'types/Issue';
 import type {ViewStyleProp} from 'types/Internal';
+import {BaseIssue, IssueOnList} from 'types/Issue';
 import {FieldValue} from 'types/CustomFields';
 
 interface Props {
@@ -33,8 +33,9 @@ interface Props {
 
 export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
   shouldComponentUpdate(nextProps: P): boolean {
-    return ['tags', 'links', 'fields', 'resolved', 'summary'].some(
-      (issueFieldName: string) => {
+    const issueProperties = ['tags', 'links', 'fields', 'resolved', 'summary'] as (keyof BaseIssue)[];
+    return issueProperties.some(
+      (issueFieldName) => {
         return nextProps.issue[issueFieldName] !== this.props.issue[issueFieldName];
       },
     );
@@ -48,7 +49,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
     return (
       <View style={style}>
         <IconHDTicket
-          color={styles.helpDeskIcon.color}
+          color={styles.helpDeskIconWrapper.color}
           width={size}
           height={size}
         />
@@ -58,18 +59,13 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
 
   renderPriority(customStyle?: any, text?: string): React.ReactNode {
     const priorityField = getPriorityField(this.props.issue);
-    const isHelpDeskEnabled: boolean = this.isHelpDeskEnabled();
 
     if (
       !priorityField ||
       !priorityField.value ||
       Array.isArray(priorityField.value) && priorityField.value?.length === 0
     ) {
-      return isHelpDeskEnabled ? (
-        <View style={styles.priorityWrapper}>
-          {this.renderHelpDeskIcon(COLOR_FIELD_SIZE - 3)}
-        </View>
-      ) : null;
+      return null;
     }
 
     const values: BundleValue[] = [].concat(priorityField.value as any);
@@ -82,7 +78,6 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
           text={text || values[LAST].name}
           color={values[LAST].color}
         />
-        {isHelpDeskEnabled && this.renderHelpDeskIcon(13, styles.helpDeskIconWrapper)}
       </>
     );
   }
@@ -202,6 +197,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
           style={styles.rowLine}
         >
           {this.renderPriority()}
+          {this.isHelpDeskEnabled() && this.renderHelpDeskIcon(13, styles.helpDeskIconWrapper)}
           {this.renderId()}
           {this.renderReporter()}
         </View>
@@ -256,11 +252,10 @@ export class IssueRowCompact<P extends Props, S = {}> extends IssueRow<P, S> {
 
   renderId() {
     const {issue, hideId} = this.props;
-    const idReadable: string | undefined = issue.idReadable;
     return (
-      hideId
+      hideId || !issue.idReadable
         ? null
-        : idReadable ? super.renderId(styles.readableIdCompact, idReadable.split('-')[0]) : null
+        : super.renderId(styles.readableIdCompact, issue.idReadable.split('-')[0])
     );
   }
 
@@ -279,6 +274,7 @@ export class IssueRowCompact<P extends Props, S = {}> extends IssueRow<P, S> {
 
         {this.renderSummary()}
         <>
+          {this.isHelpDeskEnabled() && this.renderHelpDeskIcon(13, styles.helpDeskIconWrapperCompact)}
           {this.renderId()}
           {this.renderReporter()}
         </>

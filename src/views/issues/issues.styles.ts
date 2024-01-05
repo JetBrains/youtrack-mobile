@@ -353,14 +353,19 @@ export default EStyleSheet.create({
   },
   helpDeskIconWrapper: {
     position: 'absolute',
+    zIndex: 1,
+    bottom: -3,
+    marginLeft: COLOR_FIELD_SIZE - UNIT,
     backgroundColor: '$background',
     borderRadius: UNIT * 2,
-    zIndex: 1,
-    marginLeft: COLOR_FIELD_SIZE - UNIT,
-    bottom: -3,
+    color: '$iconAccent',
+  },
+  helpDeskIconWrapperCompact: {
+    marginTop: UNIT / 4,
+    marginRight: -UNIT / 4,
+    opacity: 0.7,
   },
   helpDeskIcon: {
-    color: '#A0C1D7',
   },
   dualAvatarWrapper: {
     position: 'relative',
