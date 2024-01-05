@@ -13,8 +13,10 @@ import {
 import ActivityUserAvatar from './activity__stream-avatar';
 import ApiHelper from 'components/api/api__helper';
 import CommentReactions from 'components/comment/comment-reactions';
+import CommentVisibility from 'components/comment/comment__visibility';
 import ContextActionsProvider from 'components/activity-stream/activity__stream-actions-provider';
 import Feature, {FEATURE_VERSION} from 'components/feature/feature';
+import IssueVisibility from 'components/visibility/issue-visibility';
 import ReactionAddIcon from 'components/reactions/new-reaction.svg';
 import StreamComment from './activity__stream-comment';
 import StreamHistoryChange from './activity__stream-history';
@@ -43,6 +45,7 @@ import type {User} from 'types/User';
 import type {WorkItem, WorkTimeSettings} from 'types/Work';
 import type {YouTrackWiki} from 'types/Wiki';
 import {Activity} from 'types/Activity';
+import {ViewStyleProp} from 'types/Internal';
 
 interface Props {
   activities: ActivityGroup[] | null;
@@ -145,12 +148,12 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     }, 100);
   }, [highlight, scrollToActivity]);
 
-  const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment | null => (
-    firstActivityChange(activityGroup.comment) as (IssueComment | null)
+  const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment => (
+    firstActivityChange(activityGroup.comment) as IssueComment
   );
 
   const renderCommentReactions = (activityGroup: ActivityGroup): React.ReactNode => {
-    const comment: IssueComment | null = getCommentFromActivityGroup(activityGroup);
+    const comment = getCommentFromActivityGroup(activityGroup);
     return comment && !comment.deleted ? (
       <CommentReactions
         style={styles.activityCommentReactions}
@@ -179,8 +182,8 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     if (!isAndroidOrDesktop) {
       return;
     }
-    const activity: Activity = activityGroup.comment || activityGroup.work;
-    const entity: ActivityItem | undefined = activity && firstActivityChange(activity);
+    const activity = activityGroup.comment || activityGroup.work;
+    const entity: ActivityItem | undefined = activity && firstActivityChange(activity as Activity);
     if (entity) {
       openBottomSheet({
         header: null,
@@ -212,23 +215,40 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     }
   };
 
+  const renderCommentVisibility = (_comment: IssueComment, style?: ViewStyleProp) => {
+    return _comment &&
+      !_comment?.deleted &&
+      IssueVisibility.isSecured(_comment?.visibility) ? (
+      <CommentVisibility
+        style={{...styles.activityVisibility, ...style}}
+        presentation={IssueVisibility.getVisibilityPresentation(
+          _comment.visibility,
+        )}
+      />
+    ) : null;
+  };
+
   const renderCommentActivity = (activityGroup: ActivityGroup) => {
-    const activity: Activity = activityGroup.comment as Activity;
+    const activity = activityGroup.comment as Activity;
+    const comment = getCommentFromActivityGroup(activityGroup);
+    let attachments: Attachment[] = props.attachments || comment?.attachments || [];
+    if (attachments.length) {
+      attachments = ApiHelper.convertAttachmentRelativeToAbsURLs(
+        attachments,
+        props.youtrackWiki.backendUrl,
+      );
+    }
 
-    const _attachments: Attachment[] =
-      props.attachments || (firstActivityChange(activity) as IssueComment)?.attachments || [];
-
-    const attachments: Attachment[] = ApiHelper.convertAttachmentRelativeToAbsURLs(
-      _attachments,
-      props.youtrackWiki.backendUrl,
-    );
     return (
       <>
         {activityGroup.merged ? (
-          <StreamTimestamp
-            timestamp={activityGroup.timestamp}
-            style={styles.activityCommentDate}
-          />
+          <>
+            <StreamTimestamp
+              timestamp={activityGroup.timestamp}
+              style={styles.activityCommentDate}
+            />
+            {renderCommentVisibility(comment, styles.activityVisibilityMerged)}
+          </>
         ) : (
           <StreamUserInfo activityGroup={activityGroup}/>
         )}
@@ -306,56 +326,59 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
 
     const Component = hasHighlightedActivity ? Animated.View : View;
     return (
-      <View
-        style={[
-          styles.activity,
-          activityGroup.merged && !activityGroup.comment
-            ? styles.activityMerged
-            : null,
-        ]}
-      >
-        <ActivityUserAvatar
-          activityGroup={activityGroup}
-          showAvatar={!!activityGroup.comment}
-        />
-
-        <Component
+      <View style={styles.activityWrapper}>
+        {!activityGroup.merged && _comment && renderCommentVisibility(_comment)}
+        <View
           style={[
-            styles.activityItem,
-            hasHighlightedActivity && {
-              backgroundColor: color.current,
-            },
+            styles.activity,
+            activityGroup.merged && !activityGroup.comment
+              ? styles.activityMerged
+              : null,
           ]}
         >
-          {renderedItem}
-          {activityGroupEvents.length > 0 && (
-            <View
-              style={
-                isRelatedChange
-                  ? styles.activityRelatedChanges
-                  : styles.activityHistoryChanges
-              }
-            >
-              {Boolean(!activityGroup.merged && !isRelatedChange) && (
-                <StreamUserInfo activityGroup={activityGroup}/>
-              )}
-              {activityGroup.merged && (
-                <StreamTimestamp
-                  isAbs={true}
-                  timestamp={activityGroup.timestamp}
-                />
-              )}
+          <ActivityUserAvatar
+            activityGroup={activityGroup}
+            showAvatar={!!activityGroup.comment}
+          />
 
-              {activityGroupEvents.map(event => (
-                <StreamHistoryChange
-                  key={event.id}
-                  activity={event}
-                  workTimeSettings={props.workTimeSettings}
-                />
-              ))}
-            </View>
-          )}
-        </Component>
+          <Component
+            style={[
+              styles.activityItem,
+              hasHighlightedActivity && {
+                backgroundColor: color.current,
+              },
+            ]}
+          >
+            {renderedItem}
+            {activityGroupEvents.length > 0 && (
+              <View
+                style={
+                  isRelatedChange
+                    ? styles.activityRelatedChanges
+                    : styles.activityHistoryChanges
+                }
+              >
+                {Boolean(!activityGroup.merged && !isRelatedChange) && (
+                  <StreamUserInfo activityGroup={activityGroup} />
+                )}
+                {activityGroup.merged && (
+                  <StreamTimestamp
+                    isAbs={true}
+                    timestamp={activityGroup.timestamp}
+                  />
+                )}
+
+                {activityGroupEvents.map(event => (
+                  <StreamHistoryChange
+                    key={event.id}
+                    activity={event}
+                    workTimeSettings={props.workTimeSettings}
+                  />
+                ))}
+              </View>
+            )}
+          </Component>
+        </View>
       </View>
     );
   };

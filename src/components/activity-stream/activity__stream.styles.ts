@@ -7,12 +7,14 @@ const secondaryTextColor = {
   color: '$textSecondary',
 };
 export const rowStyles = {
-  activity: {
-    flexDirection: 'row',
+  activityWrapper: {
     paddingTop: UNIT,
     paddingLeft: UNIT,
     paddingRight: UNIT,
     backgroundColor: '$background',
+  },
+  activity: {
+    flexDirection: 'row',
   },
   activityMerged: {
     marginBottom: 0,
@@ -137,6 +139,12 @@ export const rowStyles = {
   secondaryTextColor: secondaryTextColor,
   activityVisibility: {
     marginTop: UNIT,
+    marginLeft: UNIT * 6,
+    marginBottom: UNIT * 2,
+  },
+  activityVisibilityMerged: {
+    marginLeft: 0,
+    marginTop: UNIT * 2,
     marginBottom: UNIT,
   },
   activityWorkIcon: {

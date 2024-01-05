@@ -7,25 +7,25 @@ import styles from './comment__visibility.styles';
 
 import type { ViewStyleProp } from 'types/Internal';
 
-
-const CommentVisibility = (props: {
+const CommentVisibility = ({
+  presentation,
+  color = styles.commentIcon.color,
+  style,
+}: {
   presentation: string | null;
   color?: string;
   style?: ViewStyleProp;
 }) => {
-  return props.presentation ? (
-    <View
-      testID="commentVisibility"
-      style={[styles.commentVisibility, props.style]}
-    >
-      <IconLock testID="commentVisibilityIcon" size={16} color={props.color} />
-      <Text
-        style={[
-          styles.commentVisibilityText,
-          props.color && { color: props.color },
-        ]}
-      >
-        {props.presentation}
+  return presentation ? (
+    <View testID="commentVisibility" style={[styles.commentVisibility, style]}>
+      <IconLock
+        testID="commentVisibilityIcon"
+        size={16}
+        style={styles.commentIcon}
+        color={color}
+      />
+      <Text style={styles.commentVisibilityText}>
+        {presentation}
       </Text>
     </View>
   ) : null;

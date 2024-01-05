@@ -15,21 +15,20 @@ import {i18n} from 'components/i18n/i18n';
 
 import styles from './inbox-threads.styles';
 
-import type {Attachment} from 'types/Attachment';
-import type {
-  InboxThreadGroup,
-  InboxThreadTarget,
-} from 'types/Inbox';
-import type {UserCurrent} from 'types/User';
-import {Entity} from 'types/Entity';
+import {Activity} from 'types/Activity';
+import {InboxThreadGroup, InboxThreadTarget} from 'types/Inbox';
+import {IssueComment} from 'types/CustomFields';
+import {UserCurrent} from 'types/User';
 
 
-type Props = {
+interface Props {
   currentUser: UserCurrent;
   group: InboxThreadGroup;
+  onNavigate: (entity: InboxThreadTarget, navigateToActivity?: string) => any;
   target: InboxThreadTarget;
-  onNavigate: (entity: Entity, navigateToActivity?: string) => any;
-};
+}
+
+
 export default function ThreadCommentItem({
   group,
   currentUser,
@@ -37,8 +36,10 @@ export default function ThreadCommentItem({
   onNavigate,
 }: Props) {
   const [isReactionPanelVisible, updateReactionPanelVisible] = useState(false);
-  const attachments: Attachment[] =
-    firstActivityChange(group.comment)?.attachments || [];
+  if (!group.comment) {
+    return null;
+  }
+  const comment = firstActivityChange(group.comment as Activity) as IssueComment;
   return (
     <>
       <ThreadItem
@@ -60,8 +61,7 @@ export default function ThreadCommentItem({
           <>
             <StreamComment
               activity={group.comment}
-              attachments={attachments}
-              hideVisibility={true}
+              attachments={comment.attachments || []}
             />
             <ThreadCommentReactions
               activity={group.comment}
@@ -79,7 +79,7 @@ export default function ThreadCommentItem({
           hitSlop={HIT_SLOP}
           style={styles.threadButton}
           onPress={() => {
-            onNavigate(target, group.comment.id);
+            onNavigate(target, group.comment?.id);
           }}
         >
           <Text style={styles.threadButtonText}>{i18n('View comment')}</Text>

@@ -88,7 +88,7 @@ export interface ActivityGroup extends Activity {
   merged?: boolean;
   root?: boolean;
   vcs?: VCSActivity;
-  work?: ActivityWork;
+  work?: Activity;
   events?: Activity[];
 }
 
