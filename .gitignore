@@ -69,3 +69,6 @@ yarn-error.log
 
 # Translations
 *.pot
+
+# testing
+/coverage
