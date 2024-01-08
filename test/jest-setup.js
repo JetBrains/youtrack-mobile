@@ -72,7 +72,7 @@ jest.mock('react-native-document-picker', () => ({
   default: jest.fn(),
 }));
 
-jest.mock('react-native', () => {
+jest.doMock('react-native', () => {
   const RN = jest.requireActual('react-native');
   RN.NativeModules.Linking = {
     getInitialURL: jest.fn(),
