@@ -337,7 +337,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     }
 
     return (
-      <View>
+      <View testID="test:id/issue-summary">
         <Text
           style={[styles.summary, issue.resolved && styles.summaryResolved]}
           selectable={true}
