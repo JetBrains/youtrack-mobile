@@ -274,7 +274,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:793
+#: src/actions/app-actions.ts:796
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
