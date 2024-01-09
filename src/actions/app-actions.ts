@@ -765,7 +765,10 @@ export function subscribeToURL(): ReduxAction {
     }
 
     async function navigateTo(url: string, issueId?: string, articleId?: string, searchQuery?: string) {
-      const backendUrl = getApi().config.backendUrl;
+      const backendUrl = getApi().config?.backendUrl;
+      if (!backendUrl) {
+        return;
+      }
       if (url.indexOf(backendUrl) === -1) {
         const serverURL = UrlParse(url).origin || '';
         const account = await targetAccountToSwitchTo(serverURL);

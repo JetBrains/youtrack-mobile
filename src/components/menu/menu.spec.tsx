@@ -1,7 +1,7 @@
 import React from 'react';
 import {Provider} from 'react-redux';
 
-import {render, cleanup, fireEvent, screen} from '@testing-library/react-native';
+import {render, cleanup, fireEvent, screen, act} from '@testing-library/react-native';
 
 import * as appActions from 'actions/app-actions';
 import * as feature from 'components/feature/feature';
@@ -17,7 +17,7 @@ import {MockStore} from 'redux-mock-store';
 import {RootState} from 'reducers/app-reducer';
 import {User} from 'types/User';
 
-jest.mock('../feature/feature');
+jest.mock('components/feature/feature');
 
 let apiMock: API;
 const getApi = () => apiMock;
@@ -28,7 +28,6 @@ const rootTestID = 'menu';
 describe('<Menu/>', () => {
   let storeMock: MockStore;
   let stateMock: AppState;
-  let ownPropsMock: {};
   let router: typeof Router;
 
   beforeEach(() => {
@@ -43,12 +42,12 @@ describe('<Menu/>', () => {
         globalSettings: {},
       } as unknown as RootState,
     } as AppState;
-    ownPropsMock = {};
-    storeMock = createStoreMock(stateMock, ownPropsMock);
+    storeMock = createStoreMock(stateMock);
     router = Router;
   });
 
   beforeEach(() => {
+    jest.useFakeTimers();
     jest.spyOn(feature, 'checkVersion');
   });
 
@@ -117,7 +116,7 @@ describe('<Menu/>', () => {
 
     it('should render menu container if `auth` is not provided', () => {
       stateMock.app.auth = null;
-      storeMock = createStoreMock(stateMock, ownPropsMock);
+      storeMock = createStoreMock(stateMock);
 
       const {queryByTestId} = doRender();
 
@@ -126,7 +125,7 @@ describe('<Menu/>', () => {
 
     it('should render menu container if `user` is not provided', () => {
       stateMock.app.user = null;
-      storeMock = createStoreMock(stateMock, ownPropsMock);
+      storeMock = createStoreMock(stateMock);
 
       const {queryByTestId} = doRender();
 
@@ -143,7 +142,7 @@ describe('<Menu/>', () => {
 
     it('should not navigate if `Menu` disabled', () => {
       stateMock.app.isChangingAccount = true;
-      storeMock = createStoreMock(stateMock, ownPropsMock);
+      storeMock = createStoreMock(stateMock);
       const {getByTestId} = doRender();
 
       fireEvent.press(getByTestId('test:id/menuAgile'));
@@ -173,7 +172,9 @@ describe('<Menu/>', () => {
       const {getByTestId} = doRender();
 
       fireEvent.press(getByTestId('test:id/menuIssues'));
-      Router.Issue();
+      act(() => {
+        Router.Issue();
+      });
       fireEvent.press(getByTestId('test:id/menuIssues'));
 
       expect(Router.navigate).toHaveBeenCalledTimes(3);
@@ -184,24 +185,18 @@ describe('<Menu/>', () => {
 
       fireEvent.press(getByTestId('test:id/menuIssues'));
 
-      // @ts-ignore
       expect(getByTestId('test:id/menuIssuesIcon')).toHaveProp('isActive', true);
 
       fireEvent.press(getByTestId('test:id/menuAgile'));
 
-      // @ts-ignore
       expect(getByTestId('test:id/menuIssuesIcon')).toHaveProp('isActive', false);
     });
   });
 
 
   describe('Inbox status polling', () => {
-    beforeAll(() => {
-      jest.useFakeTimers({advanceTimers: true});
-    });
-    afterAll(() => {
-      jest.useRealTimers();
-    });
+    beforeEach(() => jest.useFakeTimers());
+    afterEach(() => jest.useRealTimers());
     beforeEach(() => {
       mockRouter();
       jest.spyOn(appActions, 'inboxCheckUpdateStatus');
@@ -227,7 +222,9 @@ describe('<Menu/>', () => {
           const {getByTestId} = doRender();
 
           fireEvent.press(getByTestId('test:id/menuIssues'));
-          jest.advanceTimersByTime(menuPollInboxStatusDelay);
+          act(() => {
+            jest.advanceTimersByTime(menuPollInboxStatusDelay);
+          });
 
           expect(appActions.inboxCheckUpdateStatus).toHaveBeenCalledTimes(2);
         });
@@ -236,7 +233,9 @@ describe('<Menu/>', () => {
           const {getByTestId} = doRender();
 
           fireEvent.press(getByTestId('test:id/menuNotifications'));
-          jest.advanceTimersByTime(menuPollInboxStatusDelay);
+          act(() => {
+            jest.advanceTimersByTime(menuPollInboxStatusDelay);
+          });
 
           expect(appActions.inboxCheckUpdateStatus).toHaveBeenCalled();
         });
@@ -251,7 +250,9 @@ describe('<Menu/>', () => {
         it('should not poll status if the feature is unavailable', () => {
           const {getByTestId} = doRender();
           fireEvent.press(getByTestId('test:id/menuIssues'));
-          jest.advanceTimersByTime(menuPollInboxStatusDelay);
+          act(() => {
+            jest.advanceTimersByTime(menuPollInboxStatusDelay);
+          });
 
           expect(appActions.inboxCheckUpdateStatus).not.toHaveBeenCalled();
         });
@@ -287,7 +288,7 @@ describe('<Menu/>', () => {
       function setUp(versionMatches: boolean, isEnabled: boolean) {
         (feature.checkVersion as jest.Mock).mockReturnValue(versionMatches);
         stateMock.app.globalSettings = {helpdeskEnabled: isEnabled, type: 'public'};
-        storeMock = createStoreMock(stateMock, ownPropsMock);
+        storeMock = createStoreMock(stateMock);
       }
     });
   });
