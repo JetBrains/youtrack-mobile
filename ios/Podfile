@@ -19,14 +19,22 @@ prepare_react_native_project!
 # ```
 flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
 
-linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
-end
+#linkage = ENV['USE_FRAMEWORKS']
+#if linkage != nil
+#  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+#  use_frameworks! :linkage => linkage.to_sym
+#end
+#use_frameworks! :linkage => :static
 
 target 'YouTrackMobile' do
   config = use_native_modules!
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'FirebaseCoreExtension', :modular_headers => true
+  pod 'FirebaseInstallations', :modular_headers => true
+  pod 'GoogleDataTransport', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+  pod 'nanopb', :modular_headers => true
+  $RNFirebaseAnalyticsWithoutAdIdSupport = true
 
   use_react_native!(
       :path => config[:reactNativePath],
