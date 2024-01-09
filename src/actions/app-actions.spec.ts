@@ -14,7 +14,7 @@ import * as types from './action-types';
 import * as urlUtils from '../components/open-url-handler/open-url-handler';
 import API from 'components/api/api';
 import log from 'components/log/log';
-import mocks from '../../test/mocks';
+import mocks from 'test/mocks';
 import OAuth2 from 'components/auth/oauth2';
 import * as permissionsHelper from 'components/permissions-store/permissions-helper';
 import PermissionsStore from 'components/permissions-store/permissions-store';
@@ -43,6 +43,13 @@ jest.mock('components/router/router', () => ({
   EnterServer: jest.fn(),
   Issues: jest.fn(),
 }));
+
+jest.mock('react-native/Libraries/Linking/Linking', () => ({
+  getInitialURL: jest.fn().mockResolvedValue(''),
+  addEventListener: jest.fn(),
+}));
+
+jest.mock('components/usage/usage');
 
 
 const backendURLMock = 'https://example.com';
