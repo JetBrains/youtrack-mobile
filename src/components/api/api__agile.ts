@@ -9,6 +9,7 @@ import type {
   AgileBoardRow,
   BoardOnList,
   Board,
+  Sprint,
 } from 'types/Agile';
 import type {IssueFull} from 'types/Issue';
 export default class AgileAPI extends ApiBase {
@@ -143,7 +144,7 @@ export default class AgileAPI extends ApiBase {
     );
   }
 
-  async getSprintList(boardId: string): Promise<Record<string, any>> {
+  async getSprintList(boardId: string): Promise<Sprint[]> {
     const queryString = qs.stringify({
       fields: agileFields.sprintShort.toString(),
     });

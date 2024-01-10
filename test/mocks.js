@@ -1,4 +1,4 @@
-import configureMockStore, {MockStore} from 'redux-mock-store';
+import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {deepmerge} from 'deepmerge-ts';
 
@@ -61,7 +61,7 @@ function createArticleMock(...args) {
   );
 }
 
-function createMockStore(middlewareArgument): MockStore {
+function createMockStore(middlewareArgument) {
   const middleware = [thunk.withExtraArgument(middlewareArgument)];
   return configureMockStore(middleware);
 }
@@ -85,7 +85,7 @@ function createUserMock(data = {}) {
       fullName: randomWord(),
       name: randomWord(),
       login: randomWord(),
-      avatarUrl: 'https://unsplash.it/32/32',
+      avatarUrl: randomWord(),
       guest: false,
       profiles: {
         general: {
@@ -99,10 +99,14 @@ function createUserMock(data = {}) {
         timetracking: {
           isTimeTrackingAvailable: true,
         },
+        helpdesk: {
+          helpdeskFolder: createFolder(),
+        },
       },
       userPermissions: {
         has: () => true,
       },
+      banned: false,
     },
     data
   );
@@ -232,36 +236,6 @@ function createActivityCustomFieldMock(data = {}) {
   }, data);
 }
 
-function createActivityCommentMock(data = {}) {
-  return deepmerge({
-    $type: 'CommentActivityItem',
-    added: [{
-      text: 'Fixed',
-    }],
-    author: {
-      $type: 'User',
-      avatarUrl: 'https://example.com/avatar',
-      fullName: 'John Dow',
-      id: '0-1',
-      login: 'John.Dow',
-      name: 'John Dow',
-      ringId: '1234',
-    },
-    category: {
-      $type: 'ActivityCategory',
-      id: 'CommentsCategory',
-    },
-    removed: [],
-    timestamp: 1,
-    target: {
-      $type: 'IssueComment',
-      created: 1,
-      id: '0-1',
-      usesMarkdown: true,
-    },
-  }, data);
-}
-
 function createThreadMock(data = {}) {
   return deepmerge(
     {
@@ -297,6 +271,23 @@ function reactReduxMockFn() {
   });
 }
 
+function createFolder(data = {}) {
+  return deepmerge({
+    $type: ResourceTypes.ISSUE_FOLDER_SAVED_QUERY,
+    id: uuid(),
+    ringId: uuid(),
+    shortName: randomWord(),
+    name: randomWord(),
+    query: randomWord(),
+    pinned: false,
+    pinnedInHelpdesk: true,
+    issuesUrl: '/issues/',
+    fqFolderId: randomWord(),
+    isUpdatable: true,
+    template: false,
+  }, data);
+}
+
 export default {
   setStorage,
 
@@ -316,8 +307,8 @@ export default {
   createAuthParamsMock,
   createUserMock,
   createActivityCustomFieldMock,
-  createActivityCommentMock,
   createThreadMock,
+  createFolder,
 
   reactReduxMockFn,
 };

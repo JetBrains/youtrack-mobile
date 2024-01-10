@@ -34,7 +34,7 @@ import type {AppState} from 'reducers';
 import type {TabRoute} from 'types/Issue';
 import type {Theme, UIThemeColors} from 'types/Theme';
 import {AppConfig} from 'types/AppConfig';
-import {Entity} from 'types/Global';
+import {Entity} from 'types/Entity';
 import {InboxThread} from 'types/Inbox';
 import {NavigationState} from 'react-navigation';
 

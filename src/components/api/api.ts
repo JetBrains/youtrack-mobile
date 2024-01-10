@@ -14,14 +14,15 @@ import MentionsAPI from './api__mention';
 import ProjectsAPI from './api__projects';
 import SavedQueries from 'components/api/api__saved-queries';
 import SearchAPI from './api__search';
+import GlobalSettingsAPI from 'components/api/api__global-settings';
 import UserAPI from './api__user';
 import UserGroupAPI from './api__user-group';
 
 import type Auth from '../auth/oauth2';
 import type {EndUserAgreement} from 'types/AppConfig';
-import type {IssueProject} from 'types/CustomFields';
 import type {CommandSuggestionResponse} from 'types/Issue';
 import type {User} from 'types/User';
+import {Project} from 'types/Project';
 
 
 class API extends BaseAPI {
@@ -31,6 +32,7 @@ class API extends BaseAPI {
   articles: ArticlesAPI;
   customFields: CustomFieldsAPI;
   filterFields: FilterFields;
+  globalSettings: GlobalSettingsAPI;
   inbox: InboxAPI;
   issue: IssueAPI;
   issueFolder: IssueFolderAPI;
@@ -48,6 +50,7 @@ class API extends BaseAPI {
     this.articles = new ArticlesAPI(auth);
     this.customFields = new CustomFieldsAPI(auth);
     this.filterFields = new FilterFields(auth);
+    this.globalSettings = new GlobalSettingsAPI(auth);
     this.inbox = new InboxAPI(auth);
     this.issue = new IssueAPI(auth);
     this.issueFolder = new IssueFolderAPI(auth);
@@ -86,7 +89,7 @@ class API extends BaseAPI {
     );
   }
 
-  async getProjects(query: string): Promise<Array<IssueProject>> {
+  async getProjects(query: string): Promise<Array<Project>> {
     const queryString = qs.stringify({
       fields: issueFields.projectOnList.toString(),
       query: query,
@@ -228,7 +231,7 @@ class API extends BaseAPI {
       `${konnectorURL}/ring/pushNotifications/unsubscribe`,
       'POST',
       {
-        deviceToken: deviceToken,
+        appleDeviceId: deviceToken,
       },
     );
   }

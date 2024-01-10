@@ -17,7 +17,7 @@ import type {IssueComment} from 'types/CustomFields';
 import type {Reaction} from 'types/Reaction';
 import type {User} from 'types/User';
 import {InboxThreadGroup} from 'types/Inbox';
-import {Entity} from 'types/Global';
+import {Entity} from 'types/Entity';
 
 type Props = {
   currentUser: User;

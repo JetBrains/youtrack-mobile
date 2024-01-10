@@ -10,10 +10,10 @@ import type {
   CustomField,
   FieldValue,
   IssueLink,
-  IssueProject,
 } from 'types/CustomFields';
 import type {CommandSuggestionResponse, IssueCreate, IssueFull} from 'types/Issue';
 import {AnyCustomField} from 'components/custom-field/custom-field-helper';
+import {Project} from 'types/Project';
 
 export type CreateIssueState = {
   drafts: IssueCreate[];
@@ -28,7 +28,7 @@ export type CreateIssueState = {
 };
 
 
-const notSelectedProject: Partial<IssueProject> = {
+const notSelectedProject: Partial<Project> = {
   id: '',
   name: 'Not selected',
 };
@@ -102,7 +102,7 @@ const slice: Slice = createSlice({
       state: CreateIssueState,
       action: {
         payload: {
-          project: IssueProject;
+          project: Project;
         };
       },
     ) => {

@@ -91,7 +91,7 @@ export default class Header extends PureComponent<HeaderProps, Readonly<{}>> {
                 </Text>
               )}
 
-              <View style={styles.headerCenter} testID="header-content">
+              <View style={styles.headerCenter} testID="test:id/header-content">
                 {children}
               </View>
 

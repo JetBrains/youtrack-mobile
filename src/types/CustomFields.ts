@@ -2,34 +2,9 @@ import type {IssueFull, IssueOnList} from './Issue';
 import type {Reaction} from './Reaction';
 import type {User} from './User';
 import type {Visibility} from './Visibility';
-import type {WorkItemType} from './Work';
+import {Entity} from 'types/Entity';
 import {Mentions} from 'components/wiki/markdown-view-rules';
-import {Entity} from 'types/Global';
 
-export type TimeTrackingFieldInfo = {
-  id: string;
-  field: {
-    id: string;
-    name: string;
-  };
-};
-export type IssueProject = {
-  $type?: string;
-  id: string;
-  name: string;
-  shortName: string;
-  archived: boolean;
-  ringId: string;
-  pinned: boolean;
-  plugins?: {
-    timeTrackingSettings: {
-      enabled: boolean;
-      timeSpent: TimeTrackingFieldInfo | null | undefined;
-      workItemTypes: WorkItemType[];
-    };
-  };
-  template: boolean;
-};
 export type ColorField = {
   id: string;
   background: string;
@@ -63,29 +38,40 @@ export type BundleValue = {
   };
   color: ColorField;
 };
-export type ProjectCustomField = {
+
+interface ProjectCustomFieldBaseField {
+  id: string;
+  name: string;
+  localizedName: string;
+}
+
+interface ProjectCustomFieldField  extends ProjectCustomFieldBaseField {
+  ordinal: number;
+  fieldType: {
+    valueType: string;
+    isMultiValue: boolean;
+  };
+}
+
+export interface ProjectCustomFieldBase {
   $type: string;
+  field: ProjectCustomFieldBaseField;
+}
+
+export interface ProjectCustomField extends Omit<ProjectCustomFieldBase, 'field'> {
   id: string;
   ordinal: number;
   canBeEmpty: boolean;
-  emptyFieldText: string | null | undefined;
+  emptyFieldText: string | null;
   isPublic: boolean;
   bundle: {
     id: string;
     isUpdateable: boolean;
   };
-  field: {
-    id: string;
-    name: string;
-    localizedName: string;
-    ordinal: number;
-    fieldType: {
-      valueType: string;
-      isMultiValue: boolean;
-    };
-  };
+  field: ProjectCustomFieldField;
   defaultValues: BundleValue[];
-};
+}
+
 export type FieldValue = {
   $type: string;
   id: string;

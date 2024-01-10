@@ -57,7 +57,8 @@ export default class SearchAPI extends ApiBase {
   async getQueryAssistSuggestions(
     query: string,
     caret: number,
-    folders: Folder[] | null = null,
+    folders: Folder[] | Partial<Folder> | null = null,
+    type?: string,
   ): Promise<Array<TransformedSuggestion>> {
     const response: {
       suggestions: ServersideSuggestion[];
@@ -68,6 +69,7 @@ export default class SearchAPI extends ApiBase {
         caret,
         folders,
         query,
+        type,
       },
     );
     return ApiHelper.convertQueryAssistSuggestions(response.suggestions);

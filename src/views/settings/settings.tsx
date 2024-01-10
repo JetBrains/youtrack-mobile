@@ -87,6 +87,7 @@ class Settings extends PureComponent<Props, State> {
 
   render() {
     const {
+      onAddAccount,
       onChangeAccount,
       onLogOut,
       openDebugView,
@@ -143,6 +144,7 @@ class Settings extends PureComponent<Props, State> {
 
               <View style={styles.settingsContent}>
                 <Accounts
+                  onAddAccount={onAddAccount}
                   onChangeAccount={onChangeAccount}
                   onClose={() => {}}
                   onLogOut={onLogOut}

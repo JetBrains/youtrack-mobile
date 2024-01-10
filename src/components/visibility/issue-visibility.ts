@@ -1,29 +1,23 @@
-import type {Visibility} from 'types/Visibility';
-import {ResourceTypes, addTypes} from '../api/api__resource-types';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {ResourceTypes} from '../api/api__resource-types';
+
 import type {UserGroup} from 'types/UserGroup';
 import type {User} from 'types/User';
-export default class IssueVisibility {
-  static visibility(
-    visibility: Visibility,
-    isLimited: boolean = false,
-  ): Visibility {
-    const _visibility: Visibility = Object.assign(
-      {
-        permittedUsers: [],
-        permittedGroups: [],
-      },
-      visibility,
-    );
+import type {Visibility} from 'types/Visibility';
 
-    const hasVisibility: boolean =
-      _visibility.permittedGroups.length > 0 ||
-      _visibility.permittedUsers.length > 0;
-    _visibility.$type =
-      isLimited === true || hasVisibility
-        ? ResourceTypes.VISIBILITY_LIMITED
-        : ResourceTypes.VISIBILITY_UNLIMITED;
-    return _visibility;
+
+export default class IssueVisibility {
+  static visibility(visibility: Visibility = null, isLimited: boolean = false): Visibility {
+    const isSecured: boolean =
+      isLimited ||
+      !!visibility?.permittedGroups?.length ||
+      !!visibility?.permittedUsers?.length;
+    return {
+      permittedUsers: [],
+      permittedGroups: [],
+      ...visibility,
+      $type: isSecured ? ResourceTypes.VISIBILITY_LIMITED : ResourceTypes.VISIBILITY_UNLIMITED,
+    };
   }
 
   static hasUsersOrGroups(visibility: Visibility): boolean {
@@ -31,15 +25,12 @@ export default class IssueVisibility {
       return false;
     }
 
-    const _visibility = this.visibility(visibility);
+    const v = this.visibility(visibility);
 
-    return !!(
-      (_visibility.permittedUsers && _visibility.permittedUsers.length) ||
-      (_visibility.permittedGroups && _visibility.permittedGroups.length)
-    );
+    return !!(v?.permittedUsers?.length || v?.permittedGroups?.length);
   }
 
-  static isSecured(visibility: Visibility | null): boolean {
+  static isSecured(visibility?: Visibility | null): boolean {
     if (!visibility) {
       return false;
     }
@@ -47,73 +38,22 @@ export default class IssueVisibility {
     return this.hasUsersOrGroups(visibility);
   }
 
-  static toggleOption(
-    visibility: Visibility,
-    option: Record<string, any>,
-  ): Record<string, any> {
-    const _visibility = this.visibility(visibility);
-
-    const visibilityTypes = [
-      {
-        type: addTypes(ResourceTypes.USER),
-        key: 'permittedUsers',
-      },
-      {
-        type: addTypes(ResourceTypes.USER_GROUP),
-        key: 'permittedGroups',
-      },
-    ];
-
-    for (const item of visibilityTypes) {
-      const hasVisibilityType = item.type.some(it => it === option.$type);
-
-      if (hasVisibilityType) {
-        if (hasOption(_visibility[item.key], option.id)) {
-          _visibility[item.key] = _visibility[item.key].filter(
-            user => user.id !== option.id,
-          );
-        } else {
-          _visibility[item.key].push(option);
-        }
-
-        break;
-      }
-    }
-
-    return this.visibility(_visibility, this.hasUsersOrGroups(_visibility));
-
-    function hasOption(
-      collection: Array<Record<string, any>>,
-      optionId: string,
-    ) {
-      return collection.some(user => user.id === optionId);
-    }
-  }
-
-  static getVisibilityAsArray(
-    visibility: Visibility = {},
-  ): Array<User | UserGroup> {
+  static getVisibilityAsArray(visibility: Visibility): Array<User | UserGroup> {
     return [
-      ...(visibility.permittedGroups || []),
-      ...(visibility.permittedUsers || []),
+      ...(visibility?.permittedGroups || []),
+      ...(visibility?.permittedUsers || []),
     ];
   }
 
-  static getVisibilityPresentation(visibility: Visibility = {}): string {
+  static getVisibilityPresentation(visibility: Visibility): string {
     return IssueVisibility.getVisibilityAsArray(visibility)
       .map(it => getEntityPresentation(it))
       .join(', ');
   }
 
-  static getVisibilityShortPresentation(visibility: Visibility = {}): string {
-    const visibilityItems: Array<
-      UserGroup | User
-    > = IssueVisibility.getVisibilityAsArray(visibility);
-    const firstItemPresentation: string = getEntityPresentation(
-      visibilityItems[0],
-    );
-    return `${firstItemPresentation}${
-      visibilityItems.length > 1 ? ` +${visibilityItems.length - 1}` : ''
-    }`;
+  static getVisibilityShortPresentation(visibility: Visibility): string {
+    const visibilityItems: Array<UserGroup | User> = IssueVisibility.getVisibilityAsArray(visibility);
+    const firstItemPresentation: string = getEntityPresentation(visibilityItems[0]);
+    return `${firstItemPresentation}${visibilityItems.length > 1 ? ` +${visibilityItems.length - 1}` : ''}`;
   }
 }

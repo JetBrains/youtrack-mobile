@@ -20,7 +20,7 @@ import type {InboxThread} from 'types/Inbox';
 import type {IssueComment} from 'types/CustomFields';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
-import {Entity} from 'types/Global';
+import {Entity} from 'types/Entity';
 
 type Props = {
   currentUser: User;

@@ -14,13 +14,11 @@ import Select from 'components/select/select';
 import {mainText, secondaryText, UNIT} from 'components/common-styles';
 import {uuid} from 'util/util';
 
-import type {TransformedSuggestion} from 'types/Issue';
-import {Folder} from 'types/User';
-import {SectionListData} from 'react-native/Libraries/Lists/SectionList';
+import type {AssistSuggest, TransformedSuggestion} from 'types/Issue';
 
 type Props = {
   style?: any;
-  suggestions: SectionListData<Folder, Folder | TransformedSuggestion>[];
+  suggestions: AssistSuggest[];
   onApplySuggestion: (suggestion: TransformedSuggestion) => any;
   onApplySavedQuery: (savedQuery?: TransformedSuggestion) => any;
 };

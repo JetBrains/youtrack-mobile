@@ -43,7 +43,7 @@ export default class IssueFolderAPI extends ApiBase {
     projectId: string,
     top: number = 100,
     skip: number = 0,
-  ): Promise<Tag> {
+  ): Promise<Tag[]> {
     const q: string = UserAPI.createFieldsQuery(issueFields.ISSUE_TAGS_FIELDS);
     return await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/admin/projects/${projectId}/relevantTags?$top=${top}&$skip=${skip}&${q}`,

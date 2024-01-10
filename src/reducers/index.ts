@@ -24,6 +24,7 @@ import type {State as IssueCommentActivityState} from 'views/issue/activity/issu
 import type {IssuesState} from 'views/issues/issues-reducers';
 import type {IssueState} from 'views/issue/issue-base-reducer';
 import type {InboxThreadState} from 'views/inbox-threads/inbox-threads-reducers';
+
 export type AppState = {
   agile: AgilePageState;
   app: RootState;
@@ -39,6 +40,7 @@ export type AppState = {
   issueModalState: IssueState;
   inboxThreads: InboxThreadState;
 };
+
 export default combineReducers({
   agile,
   app,
@@ -53,4 +55,4 @@ export default combineReducers({
   issueState,
   issueModalState,
   inboxThreads,
-}) as any;
+});

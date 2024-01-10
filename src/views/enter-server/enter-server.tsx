@@ -55,6 +55,7 @@ const CATEGORY_NAME: string = 'Choose server';
 
 
 const EnterServer = (props: Props) => {
+  console.log('>>>>>> EnterServer:currentAccount:RENDER', props.currentAccount);
   usage.trackScreenView(CATEGORY_NAME);
   log.info('Entering server URL view has been opened');
 
@@ -86,6 +87,7 @@ const EnterServer = (props: Props) => {
     for (const url of getPossibleUrls(trimmedUrl)) {
       log.log(`Trying: "${url}"`);
       try {
+        console.log('>>>>>> EnterServer:currentAccount:CONNECT', props.currentAccount);
         await dispatch(connectToNewYoutrack(url, props.currentAccount));
         log.log(`Successfully connected to ${url}`);
         break;

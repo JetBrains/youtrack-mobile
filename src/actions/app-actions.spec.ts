@@ -14,7 +14,7 @@ import * as types from './action-types';
 import * as urlUtils from '../components/open-url-handler/open-url-handler';
 import API from 'components/api/api';
 import log from 'components/log/log';
-import mocks from '../../test/mocks';
+import mocks from 'test/mocks';
 import OAuth2 from 'components/auth/oauth2';
 import * as permissionsHelper from 'components/permissions-store/permissions-helper';
 import PermissionsStore from 'components/permissions-store/permissions-store';
@@ -42,7 +42,16 @@ jest.mock('components/router/router', () => ({
   navigateToDefaultRoute: jest.fn(),
   Home: jest.fn(),
   EnterServer: jest.fn(),
+  Issues: jest.fn(),
 }));
+
+jest.mock('react-native/Libraries/Linking/Linking', () => ({
+  getInitialURL: jest.fn().mockResolvedValue(''),
+  addEventListener: jest.fn(),
+}));
+
+jest.mock('components/usage/usage');
+jest.mock('components/open-url-handler/open-url-handler');
 
 
 const backendURLMock = 'https://example.com';
@@ -65,13 +74,15 @@ describe('app-actions', () => {
     apiMock = createAPIMock();
     appStateMock = {
       auth: createAuthInstanceMock(),
-    } as any as RootState;
+    } as unknown as RootState;
     updateStore({...appStateMock});
 
     await storage.populateStorage();
   });
+
   afterEach(() => {
     (storageOauth.getStoredSecurelyAuthParams as jest.Mock).mockClear();
+    jest.clearAllMocks();
   });
 
 
@@ -305,13 +316,10 @@ describe('app-actions', () => {
     });
   });
 
-  const searchContextMock = {
-    id: 1,
-  };
-  const naturalCommentsOrderMock = false;
-
 
   describe('initializeApp', () => {
+    const searchContextMock = {id: 1};
+    const naturalCommentsOrderMock = false;
     beforeEach(() => {
       setStoreAndCurrentUser({});
     });
@@ -458,20 +466,6 @@ describe('app-actions', () => {
     });
   });
 
-  function createInboxFoldersMock() {
-    return [
-      {
-        id: 'direct',
-        lastNotified: 2,
-        lastSeen: 1,
-      },
-      {
-        id: 'subscription',
-        lastNotified: 1,
-        lastSeen: 1,
-      },
-    ];
-  }
 
 
   describe('subscribeToURL', () => {
@@ -496,7 +490,7 @@ describe('app-actions', () => {
   });
 
 
-  function setStoreAndCurrentUser(ytCurrentUser: UserCurrent) {
+  function setStoreAndCurrentUser(ytCurrentUser: User) {
     updateStore({
       app: {
         auth: createAuthInstanceMock(ytCurrentUser),
@@ -560,7 +554,10 @@ describe('app-actions', () => {
       inbox: {
         getFolders: jest.fn().mockResolvedValue([]),
       },
-    };
+      globalSettings: {
+        getSettings: jest.fn().mockResolvedValue([{}]),
+      },
+    } as unknown as API;
   }
 
   function setAppStateNetworkConnected(isConnected = true) {
@@ -580,3 +577,18 @@ describe('app-actions', () => {
       .mockResolvedValue(authParamsMock);
   }
 });
+
+function createInboxFoldersMock() {
+  return [
+    {
+      id: 'direct',
+      lastNotified: 2,
+      lastSeen: 1,
+    },
+    {
+      id: 'subscription',
+      lastNotified: 1,
+      lastSeen: 1,
+    },
+  ];
+}

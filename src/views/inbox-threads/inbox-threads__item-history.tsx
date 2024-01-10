@@ -10,7 +10,7 @@ import type {
   InboxThreadGroup,
   InboxThreadTarget,
 } from 'types/Inbox';
-import {Entity} from 'types/Global';
+import {Entity} from 'types/Entity';
 
 type Props = {
   group: InboxThreadGroup;

@@ -11,7 +11,7 @@ export type User = {
   id: string;
   issueRelatedGroup?: IssueRelatedGroup;
   login: string;
-  profiles?: UserProfiles;
+  profiles: UserProfiles;
   ringId?: string;
   endUserAgreementConsent?: {
     accepted: boolean;
@@ -40,10 +40,10 @@ export type UserProfiles = {
   notifications?: Record<string, any>;
   teamcity?: Record<string, any>;
   timetracking?: Record<string, any>;
-  helpdesk?: UserHelpdeskProfile;
+  helpdesk: UserHelpdeskProfile;
 };
 export type UserAppearanceProfile = {
-  $type: string;
+  $type?: string;
   exceptionsExpanded?: boolean;
   expandChangesInActivityStream?: boolean;
   firstDayOfWeek?: number;
@@ -73,7 +73,7 @@ export interface UserGeneralProfileLocale {
 export type UserGeneralProfile = {
   $type: string;
   id: string;
-  searchContext?: Folder | null | undefined;
+  searchContext?: Folder | null;
   timezone: {
     id: string;
   };
@@ -87,6 +87,7 @@ export type UserGeneralProfile = {
 export interface UserHelpdeskProfile {
   isAgent: boolean;
   isReporter: boolean;
+  helpdeskFolder: Folder
 }
 
 export type Folder = {

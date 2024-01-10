@@ -22,7 +22,7 @@ import type {InboxThread, InboxThreadGroup} from 'types/Inbox';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
-import {Entity} from 'types/Global';
+import {Entity} from 'types/Entity';
 
 
 type Props = {

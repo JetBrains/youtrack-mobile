@@ -22,7 +22,7 @@ import type {CustomError} from 'types/Error';
 import type {InboxThread, ThreadData} from 'types/Inbox';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
-import {Entity} from 'types/Global';
+import {Entity} from 'types/Entity';
 
 interface Props {
   folderId: string | undefined;

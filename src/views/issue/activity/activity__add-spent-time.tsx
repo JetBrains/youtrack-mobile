@@ -30,12 +30,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import styles from './activity__add-spent-time.styles';
 import type {AppState} from '../../../reducers';
 import type {IssueFull} from 'types/Issue';
-import type {IssueProject} from 'types/CustomFields';
 import type {ISelectProps} from 'components/select/select';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
 import type {WorkItem, TimeTracking, WorkItemType} from 'types/Work';
+import {Project} from 'types/Project';
+
 type Props = {
   issue: IssueFull;
   workItem?: WorkItem;
@@ -89,7 +90,7 @@ const AddSpentTimeForm = (props: Props) => {
   const getProjectRingId: () => string = (): string =>
     (
       props?.issue?.project ||
-      ((props.workItem?.issue?.project as any) as IssueProject)
+      ((props.workItem?.issue?.project as any) as Project)
     ).ringId;
 
   const getDraft = (draftItem: WorkItem): WorkItem => ({

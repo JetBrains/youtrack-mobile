@@ -4,11 +4,11 @@ import {View} from 'react-native';
 import QueryAssist, {QueryAssistModal} from './query-assist';
 import {isSplitView} from 'components/responsive/responsive-helper';
 
-import type {TransformedSuggestion} from 'types/Issue';
+import type {AssistSuggest} from 'types/Issue';
 import type {ViewStyleProp} from 'types/Internal';
 
 interface Props {
-  queryAssistSuggestions: TransformedSuggestion[];
+  queryAssistSuggestions: AssistSuggest[];
   query: string;
   suggestIssuesQuery: (query: string, caret: number) => any;
   onQueryUpdate: (query: string) => any;

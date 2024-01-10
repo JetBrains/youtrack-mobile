@@ -1,4 +1,4 @@
-import {createSlice, Slice} from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 import type {ArticlesList, ProjectArticlesData} from 'types/Article';
 import type {CustomError} from 'types/Error';
 export type KnowledgeBaseState = {
@@ -59,6 +59,6 @@ const {reducer, actions} = createSlice({
       state.articles = action.payload;
     },
   },
-}) as typeof Slice;
+});
 export const {setError, setList, setArticles, setExpandingProjectId} = actions;
 export default reducer;

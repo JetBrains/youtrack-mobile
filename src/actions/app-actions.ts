@@ -40,7 +40,7 @@ import type {Activity} from 'types/Activity';
 import type {AppConfig, EndUserAgreement} from 'types/AppConfig';
 import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
-import type {AuthParams} from 'types/Auth';
+import type {AuthParams, OAuthParams2} from 'types/Auth';
 import type {CustomError} from 'types/Error';
 import type {
   Folder,
@@ -55,31 +55,25 @@ import type {NotificationRouteData} from 'types/Notification';
 import type {PermissionCacheItem} from 'types/Permission';
 import type {StorageState} from 'components/storage/storage';
 import type {WorkTimeSettings} from 'types/Work';
-import {DraftCommentData, IssueComment} from 'types/CustomFields';
-import {UserGeneralProfileLocale} from 'types/User';
 import {AnyIssue} from 'types/Issue';
+import {DraftCommentData, IssueComment} from 'types/CustomFields';
+import {GlobalSettings} from 'types/GlobalSettings';
+import {ReduxAction, ReduxStateGetter, ReduxAPIGetter, ReduxThunkDispatch} from 'types/Redux';
+import {UserGeneralProfileLocale} from 'types/User';
+import {normalizeAuthParams} from "components/auth/oauth2-helper";
 
-type Action = (dispatch: (arg0: any) => any, getState: () => AppState, getApi: () => Api) => Promise<any>;
 
-
-export function setNetworkState(networkState: NetInfoState): Action {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ) => {
+export function setNetworkState(networkState: NetInfoState): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     dispatch({
       type: types.SET_NETWORK,
       networkState,
     });
   };
 }
-export function logOut(): Action {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ) => {
+
+export function logOut(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const auth = getState().app.auth;
     if (auth) {
       auth.logOut();
@@ -93,37 +87,31 @@ export function logOut(): Action {
     log.info('User is logged out');
   };
 }
-export function openDebugView(): {
-  type: string;
-} {
+
+export function openDebugView() {
   return {
     type: types.OPEN_DEBUG_VIEW,
   };
 }
-export function closeDebugView(): {
-  type: string;
-} {
+
+export function closeDebugView() {
   return {
     type: types.CLOSE_DEBUG_VIEW,
   };
 }
 
-export function receiveOtherAccounts(otherAccounts: StorageState[]): {
-  otherAccounts: StorageState[];
-  type: string;
-} {
+export function receiveOtherAccounts(otherAccounts: StorageState[]) {
   return {
     type: types.RECEIVE_OTHER_ACCOUNTS,
     otherAccounts,
   };
 }
-export function receiveUserAppearanceProfile(
-  userAppearanceProfile?: UserAppearanceProfile,
-): Action {
+
+export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppearanceProfile): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     if (userAppearanceProfile) {
       try {
@@ -143,16 +131,11 @@ export function receiveUserAppearanceProfile(
     }
   };
 }
+
 export const updateUserArticlesProfile = (
-  articlesProfile:
-    | UserArticlesProfile
-    | {
-        lastVisitedArticle: null;
-      },
-): Action => async (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: () => Api,
+  articlesProfile: UserArticlesProfile | { lastVisitedArticle: null },
+): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
 ) => {
   dispatch({
     type: types.RECEIVE_USER_ARTICLES_PROFILE,
@@ -161,17 +144,15 @@ export const updateUserArticlesProfile = (
     },
   });
 };
-export const resetUserArticlesProfile = (): Action => async (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: () => Api,
-) => {
+
+export const resetUserArticlesProfile = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
   dispatch(
     updateUserArticlesProfile({
       lastVisitedArticle: null,
     }),
   );
 };
+
 export const cacheUserLastVisitedArticle = (
   article: Article | null,
   activities?: Activity[],
@@ -206,13 +187,11 @@ export const cacheUserLastVisitedArticle = (
     });
   }
 };
-export function loadCurrentUserAndSetAPI(auth: OAuth2): Action {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ) => {
+
+export function loadCurrentUserAndSetAPI(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     if (getState().app?.networkState?.isConnected === true) {
+      const auth: OAuth2 = getState().app.auth as OAuth2;
       const authParams = auth.getAuthParams();
       await auth.loadCurrentUser(authParams);
       await storage.flushStoragePart({
@@ -250,12 +229,8 @@ async function storeConfig(config: AppConfig) {
   });
 }
 
-function populateAccounts() {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ) => {
+function populateAccounts(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     const otherAccounts: StorageState[] = await storage.getOtherAccounts();
     dispatch(receiveOtherAccounts(otherAccounts));
   };
@@ -276,15 +251,10 @@ function endAccountChange() {
 export function activateAccount(
   nextAccount: StorageState,
   removeCurrentAccount: boolean = false,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: () => Api,
-) => Promise<Array<StorageState>> {
+): ReduxAction<Promise<StorageState[]>> {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
   ) => {
     const state: AppState = getState();
     const currentAccount: StorageState = storage.getStorageState();
@@ -308,16 +278,14 @@ export function activateAccount(
     return otherAccounts;
   };
 }
+
 export function changeAccount(
   account: StorageState,
   removeCurrentAccount: boolean,
-): Action {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-  ) => {
+): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const state: AppState = getState();
-    const config: AppConfig | null = account.config as AppConfig;
+    const config = account.config as AppConfig;
     const authParams: AuthParams | null = await getStoredSecurelyAuthParams(account.authParamsKey);
 
     if (!authParams) {
@@ -339,10 +307,10 @@ export function changeAccount(
       }
 
       await dispatch(activateAccount(account, removeCurrentAccount));
-      const auth: OAuth2 = await dispatch(initializeAuth(config));
-      await dispatch(loadCurrentUserAndSetAPI(auth));
+      await dispatch(loadCurrentUserAndSetAPI());
       await storeConfig(config);
-      await dispatch(checkUserAgreement(auth));
+      await dispatch(checkUserAgreement());
+      await dispatch(applyGlobalSettings());
 
       if (!state.app.showUserAgreement) {
         dispatch(completeInitialization());
@@ -357,11 +325,12 @@ export function changeAccount(
     dispatch(endAccountChange());
   };
 }
-export function removeAccountOrLogOut(): Action {
+
+export function removeAccountOrLogOut(): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const otherAccounts: StorageState[] = getState().app.otherAccounts || [];
 
@@ -389,12 +358,8 @@ export function removeAccountOrLogOut(): Action {
   };
 }
 
-function setUserPermissions(permissions: PermissionCacheItem[]): Action {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ) => {
+function setUserPermissions(permissions: PermissionCacheItem[]): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     dispatch({
       type: types.SET_PERMISSIONS,
       permissionsStore: new PermissionsStore(permissions),
@@ -404,13 +369,9 @@ function setUserPermissions(permissions: PermissionCacheItem[]): Action {
   };
 }
 
-export function loadUserPermissions(): Action {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ) => {
-    const auth: OAuth2 = (getState().app.auth as any) as OAuth2;
+export function loadUserPermissions(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
+    const auth: OAuth2 = getState().app.auth as OAuth2;
 
     try {
       const permissions: PermissionCacheItem[] = await appActionsHelper.loadPermissions(
@@ -428,11 +389,9 @@ export function loadUserPermissions(): Action {
   };
 }
 
-export function setTranslation(): Action {
+export function setTranslation(): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
+    dispatch: ReduxThunkDispatch,
   ) => {
     log.debug('Setting translation');
     const cachedCurrentUser: UserCurrent | null | undefined = storage.getStorageState()?.currentUser?.ytCurrentUser;
@@ -451,12 +410,8 @@ export function setTranslation(): Action {
   };
 }
 
-export function completeInitialization(): Action {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ) => {
+export function completeInitialization(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     log.debug('Completing initialization');
     dispatch(setTranslation());
     await dispatch(loadUserPermissions());
@@ -470,12 +425,9 @@ export function completeInitialization(): Action {
     }
   };
 }
-export function setYTCurrentUser(user: User): Action {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ): Promise<void> => {
+
+export function setYTCurrentUser(user: User): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     await dispatch({
       type: types.RECEIVE_USER,
       user,
@@ -483,11 +435,12 @@ export function setYTCurrentUser(user: User): Action {
     await storeYTCurrentUser(user);
   };
 }
-export function loadYTCurrentUser(): Action {
+
+export function loadYTCurrentUser(): ReduxAction<Promise<UserCurrent>> {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const user: User = await getApi().user.getUser();
     await dispatch(setYTCurrentUser(user));
@@ -495,11 +448,11 @@ export function loadYTCurrentUser(): Action {
   };
 }
 
-function loadWorkTimeSettings(): Action {
+function loadWorkTimeSettings(): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     try {
       const workTimeSettings: WorkTimeSettings = await getApi().getWorkTimeSettings();
@@ -508,16 +461,16 @@ function loadWorkTimeSettings(): Action {
         workTimeSettings,
       });
     } catch (error) {
-      notifyError(error);
+      notifyError(error as CustomError);
     }
   };
 }
 
-export function acceptUserAgreement(): Action {
+export function acceptUserAgreement(): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     log.info('User agreement accepted');
     usage.trackEvent('EUA is accepted');
@@ -532,12 +485,9 @@ export function acceptUserAgreement(): Action {
     }
   };
 }
-export function declineUserAgreement(): Action {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ) => {
+
+export function declineUserAgreement(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     log.info('User agreement declined');
     usage.trackEvent('EUA is declined');
     dispatch({
@@ -546,12 +496,9 @@ export function declineUserAgreement(): Action {
     dispatch(removeAccountOrLogOut());
   };
 }
-export function initializeAuth(config: AppConfig): Action {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ) => {
+
+export function initializeAuth(config: AppConfig): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     const auth: OAuth2 = await createAuthInstance(config);
     dispatch(setAuthInstance(auth));
     await auth.setAuthParamsFromCache();
@@ -561,13 +508,14 @@ export function initializeAuth(config: AppConfig): Action {
 
 type Agreement = | EndUserAgreement | null | undefined;
 
-function checkUserAgreement(auth: OAuth2): Action {
+function checkUserAgreement(): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ): Promise<void> => {
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
+  ) => {
     const api: Api = getApi();
+    const auth: OAuth2 = getState().app.auth as OAuth2;
     const currentUser: UserCurrent | null = auth.currentUser;
     log.debug('Checking user agreement', currentUser);
 
@@ -597,14 +545,15 @@ function checkUserAgreement(auth: OAuth2): Action {
   };
 }
 
-export function onLogIn(authParams: AuthParams, config: AppConfig, currentAccount?: StorageState): Action {
+export function onLogIn(authParams: AuthParams, config: AppConfig, currentAccount?: StorageState): ReduxAction {
   return async (
-    dispatch: (...args: any[]) => any,
-    getState: () => AppState,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
   ) => {
     await storeConfig(config);
 
     const otherAccounts: StorageState[] = getState().app.otherAccounts || [];
+    debugger
     if (currentAccount) {
       const newOtherAccounts: StorageState[] = [...otherAccounts, currentAccount];
       await storage.storeAccounts(newOtherAccounts);
@@ -618,43 +567,33 @@ export function onLogIn(authParams: AuthParams, config: AppConfig, currentAccoun
     });
 
     const auth: OAuth2 = await createAuthInstance(config);
+    debugger
     await dispatch(setAuthInstance(auth));
     await auth.cacheAuthParams(authParams, timestamp.toString());
     auth.setAuthParams(authParams);
 
-    await dispatch(loadCurrentUserAndSetAPI(auth));
-    await dispatch(checkUserAgreement(auth));
+    await dispatch(loadCurrentUserAndSetAPI());
+    await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
       dispatch(completeInitialization());
     }
   };
 }
-export function cacheProjects(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: () => Api,
-) => Promise<Array<Folder>> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ) => {
-    const [error, userFolders]: [CustomError | null, Folder[]] = await until(
+
+export function cacheProjects(): ReduxAction<Promise<Folder[]>> {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    const [error, userFolders] = await until<Folder[]>(
       getApi().user.getUserFolders('', ['$type,id,shortName,name,pinned'])
-    ) as [CustomError | null, Folder[]];
+    );
     const projects: Folder[] = error ? [] : userFolders.filter(it => hasType.project(it));
     await storage.flushStoragePart({projects});
     return projects;
   };
 }
 
-export function subscribeToURL(): Action {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ) => {
+export function subscribeToURL(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     openByUrlDetector(
       async (url: string, issueId?: string, articleId?: string) => {
         if (isAuthorized()) {
@@ -679,7 +618,10 @@ export function subscribeToURL(): Action {
     }
 
     async function navigateTo(url: string, issueId?: string, articleId?: string, searchQuery?: string) {
-      const backendUrl = getApi().config.backendUrl;
+      const backendUrl = getApi().config?.backendUrl;
+      if (!backendUrl) {
+        return;
+      }
       if (url.indexOf(backendUrl) === -1) {
         const serverURL = UrlParse(url).origin || '';
         const account = await targetAccountToSwitchTo(serverURL);
@@ -748,27 +690,44 @@ async function refreshConfig(backendUrl: string): Promise<AppConfig> {
   return updatedConfig;
 }
 
-export function initializeApp(config: AppConfig): Action {
+export function applyGlobalSettings(): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ): Promise<void> => {
-    const account: StorageState = storage.getStorageState();
-    const cachedCurrentUser: UserCurrent | null | undefined = account?.currentUser?.ytCurrentUser;
-    const userProfileLocale: UserGeneralProfileLocale | null | undefined = cachedCurrentUser?.profiles?.general?.locale;
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
+  ) => {
+    const [error, globalSettings] = await until<GlobalSettings>(getApi().globalSettings.getSettings());
+    if (!error) {
+      dispatch({
+        type: types.SET_SETTINGS,
+        globalSettings,
+      });
+    }
+  };
+}
 
+export function initializeApp(
+  config: AppConfig,
+): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
+    const account: StorageState = storage.getStorageState();
+    const cachedCurrentUser: User | undefined = account?.currentUser?.ytCurrentUser;
+    if (cachedCurrentUser) {
+      await dispatch(setYTCurrentUser(cachedCurrentUser));
+    }
+
+    const userProfileLocale: UserGeneralProfileLocale | undefined = cachedCurrentUser?.profiles?.general?.locale;
     if (userProfileLocale?.language) {
       loadTranslation(userProfileLocale.locale, userProfileLocale.language);
     }
 
-    const hubCurrentUser: UserCurrent | null | undefined = storage.getStorageState().currentUser;
+    const hubCurrentUser: UserCurrent | null | undefined = account.currentUser;
     const ytCurrentUser: User | null | undefined = hubCurrentUser?.ytCurrentUser;
     if (ytCurrentUser) {
       await dispatch(setYTCurrentUser(ytCurrentUser));
     }
 
-    const cachedPermissions: | Array<PermissionCacheItem> | null = storage.getStorageState().permissions;
+    const cachedPermissions: PermissionCacheItem[] | null = account.permissions;
     if (cachedPermissions) {
       await dispatch(setUserPermissions(cachedPermissions));
     }
@@ -778,6 +737,9 @@ export function initializeApp(config: AppConfig): Action {
     const versionHasChanged: boolean = currentAppVersion != null && packageJson.version !== currentAppVersion;
 
     await dispatch(migrateToIssuesFilterSearch());
+    await createAPIInstance();
+    await dispatch(applyGlobalSettings());
+
     storage.flushStoragePart({currentAppVersion: packageJson.version});
 
     try {
@@ -796,7 +758,7 @@ export function initializeApp(config: AppConfig): Action {
       return;
     }
 
-    await dispatch(checkUserAgreement(getState().app.auth as OAuth2));
+    await dispatch(checkUserAgreement());
     if (!getState().app.showUserAgreement) {
       await dispatch(completeInitialization());
     }
@@ -806,29 +768,40 @@ export function initializeApp(config: AppConfig): Action {
     if (!versionHasChanged) {
       refreshConfig(configCurrent.backendUrl);
     }
+
+    async function createAPIInstance() {
+      if (config) {
+        try {
+          const auth: OAuth2 = await createAuthInstance(config);
+          dispatch(setAuthInstance(auth));
+          setApi(new Api(auth));
+        } catch (e) {
+          Router.EnterServer({serverUrl: config.backendUrl});
+        }
+      }
+    }
   };
 }
+
 export async function doConnect(newURL: string): Promise<any> {
   return await loadConfig(newURL);
 }
 
-const connectToNewYoutrack = (newURL: string, currentAccount?: StorageState): Action => async (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: () => Api,
-) => {
-  const config: AppConfig = await doConnect(newURL);
-  Router.LogIn({config, currentAccount});
-};
+export function connectToNewYoutrack(newURL: string, currentAccount?: StorageState): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
+    const config = await doConnect(newURL);
+    await storeConfig(config);
+    const auth: OAuth2 = await createAuthInstance(config);
+    dispatch(setAuthInstance(auth));
+    Router.LogIn({
+      config,
+      currentAccount,
+    });
+  };
+}
 
-export function setAccount(
-  notificationRouteData: NotificationRouteData | Record<string, any> = {},
-): Action {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ) => {
+export function setAccount(notificationRouteData: NotificationRouteData = {}): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     const state: StorageState = await storage.populateStorage();
     await dispatch(populateAccounts());
     const notificationBackendUrl: string | null | undefined = notificationRouteData?.backendUrl;
@@ -877,12 +850,9 @@ export function setAccount(
     }
   };
 }
-export function subscribeToPushNotifications(): Action {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ): Promise<void> => {
+
+export function subscribeToPushNotifications(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     if (await DeviceInfo.isEmulator()) {
       return;
     }
@@ -918,6 +888,7 @@ export function subscribeToPushNotifications(): Action {
     }
   };
 }
+
 async function doSubscribe(onSwitchAccount: (account: StorageState, issueId?: string, articleId?: string) => any) {
   try {
     await PushNotifications.register();
@@ -959,14 +930,14 @@ function receiveInboxUpdateStatus(
 
 const getFirstCachedThread = (): InboxThread | null => {
   const inboxThreadsCache: storage.InboxThreadsCache | null = storage.getStorageState()?.inboxThreadsCache;
-  return inboxThreadsCache?.[folderIdAllKey]?.[0];
+  return inboxThreadsCache?.[folderIdAllKey]?.[0] || null;
 };
 
-const inboxCheckUpdateStatus = (): Action => {
+const inboxCheckUpdateStatus = (): ReduxAction => {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     if (getState().app?.networkState?.isConnected === true) {
       const firstCachedThread:
@@ -1007,7 +978,11 @@ const setGlobalInProgress = (isInProgress: boolean) => ({
   isInProgress,
 });
 
-export function setDraftCommentData(setDraft: Function, getCommentDraft: () => () => Promise<IssueComment | null>, entity: AnyIssue | Article) {
+export function setDraftCommentData(
+  setDraft: Function,
+  getCommentDraft: () => () => Promise<IssueComment | null>,
+  entity: AnyIssue | Article
+) {
   return {
     entity,
     getCommentDraft,
@@ -1016,12 +991,8 @@ export function setDraftCommentData(setDraft: Function, getCommentDraft: () => (
   };
 }
 
-const addMentionToDraftComment = (userLogin: string): Action => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ) => {
+const addMentionToDraftComment = (userLogin: string): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     if (getState().app?.networkState?.isConnected !== true) {
       return;
     }
@@ -1044,25 +1015,8 @@ const addMentionToDraftComment = (userLogin: string): Action => {
   };
 };
 
-const getDraftCommentData = () => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: () => Api,
-  ): Promise<DraftCommentData | null> => {
-    try {
-      return await getState().app.draftCommentData;
-    } catch (e) {
-      return null;
-    }
-  };
-};
-
-
 export {
   addMentionToDraftComment,
-  connectToNewYoutrack,
-  getDraftCommentData,
   inboxCheckUpdateStatus,
   setGlobalInProgress,
 };

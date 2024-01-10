@@ -89,12 +89,12 @@ export default class BaseAPI {
 
   static createFieldsQuery(
     fields: Record<string, any> | Array<Record<string, any> | string>,
-    restParams?: Record<string, any> | undefined,
-    opts?: Record<string, any> | undefined,
+    restParams?: Record<string, any> | null,
+    opts?: Record<string, any>,
   ): string {
     return qs.stringify(
       Object.assign({
-        ...restParams,
+        ...(typeof restParams === 'object' ? restParams : {}),
         fields: ApiHelper.toField(fields).toString(),
       }),
       opts,

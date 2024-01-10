@@ -1,9 +1,9 @@
+import * as issuesActions from './issues-reducers';
 import * as issueUpdater from 'components/issue-actions/issue-updater';
-import * as types from './issues-action-types';
 import ApiHelper from 'components/api/api__helper';
 import log from 'components/log/log';
 import usage from 'components/usage/usage';
-import {ANALYTICS_ISSUES_PAGE, ANALYTICS_TICKETS_PAGE} from 'components/analytics/analytics-ids';
+import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {
   convertToNonStructural,
   createQueryFromFiltersSetting,
@@ -20,258 +20,251 @@ import {
   issuesViewSettingMode,
   issuesSettingsSearch,
 } from 'views/issues/index';
-import {EVERYTHING_CONTEXT} from 'components/search/search-context';
+import {EVERYTHING_SEARCH_CONTEXT} from 'components/search/search-context';
 import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from 'components/storage/storage';
 import {getAssistSuggestions} from 'components/query-assist/query-assist-helper';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+import {getGroupedFolders, GroupedFolders, sortFolders} from 'components/folder/folder';
 import {i18n} from 'components/i18n/i18n';
 import {guid, removeDuplicatesFromArray, until} from 'util/util';
 import {receiveUserAppearanceProfile, setGlobalInProgress, setYTCurrentUser} from 'actions/app-actions';
 import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
-import type Api from 'components/api/api';
-import type {AnyIssue, IssueFull, IssueOnList} from 'types/Issue';
+import type {IssueOnList} from 'types/Issue';
 import type {Folder, User} from 'types/User';
 import {CustomError} from 'types/Error';
 import {FilterField, FilterFieldValue} from 'types/CustomFields';
-import {getGroupedFolders, GroupedFolders, sortFolders} from 'components/folder/folder';
 import {ISelectProps} from 'components/select/select';
 import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
-import {ReduxAction, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
+import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 import {SortedIssues} from 'components/api/api__issues';
-
-type ApiGetter = () => Api;
+import {ActivityItem} from 'types/Activity';
 
 export interface ContextDataSource {
   title: string;
   data: Folder[];
 }
 
-type SortedIssuesData = [error: CustomError | null, sortedIssues: SortedIssues];
+export const PAGE_SIZE: number = 14;
 
-const PAGE_SIZE: number = 14;
+const getDefaultHelpdeskSearchContext = (): ReduxAction<Folder | null> => (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter
+) => getState().app.user?.profiles?.helpdesk?.helpdeskFolder || null;
 
-export function trackEvent(msg: string, additionalParam?: string): ReduxAction {
-  return (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-  ) => {
-    usage.trackEvent(
-      getState().issueList.helpDesk ? ANALYTICS_TICKETS_PAGE : ANALYTICS_ISSUES_PAGE,
-      msg,
-      additionalParam
-    );
-  };
-}
+const isDefaultHelpdeskSearchContext = (searchContextFolderId: string): ReduxAction<boolean> => (
+  dispatch: ReduxThunkDispatch,
+) => {
+  const helpdeskSearchContext = dispatch(getDefaultHelpdeskSearchContext());
+  return helpdeskSearchContext ? helpdeskSearchContext.id === searchContextFolderId : false;
+};
+
+const getSearchContext = (): ReduxAction<Folder> => (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
+  const appState = getState();
+  if (appState.issueList.helpDeskMode) {
+    const helpdeskSearchContext = appState.issueList.helpdeskSearchContext;
+    const isDefaultTicketsContext = dispatch(isDefaultHelpdeskSearchContext(helpdeskSearchContext.id));
+    return {
+      ...helpdeskSearchContext,
+      name: isDefaultTicketsContext ? i18n('Tickets') : helpdeskSearchContext.name,
+    };
+  }
+  return appState.issueList.searchContext;
+};
 
 
-export function setIssuesQuery(
-  query: string,
-): {
-  query: string;
-  type: string;
-} {
-  return {
-    type: types.SET_ISSUES_QUERY,
+const trackEvent = (msg: string, analyticsId: string = ANALYTICS_ISSUES_PAGE) => {
+  usage.trackEvent(
+    analyticsId,
+    msg,
+  );
+};
+
+const getPageSize = (): ReduxAction<number> => (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+) => {
+  return getState().issueList.settings.view.mode === issuesViewSettingMode.S ? PAGE_SIZE * 3 : PAGE_SIZE;
+};
+
+const isHelpDeskMode = (): ReduxAction<boolean> => (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter
+) => getState().issueList.helpDeskMode;
+
+const setStoredIssuesQuery = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
+  if (dispatch(isHelpDeskMode())) {
+    dispatch(issuesActions.SET_HELPDESK_QUERY(getStorageState().helpdeskQuery || ''));
+  } else {
+    dispatch(issuesActions.SET_ISSUES_QUERY(getStorageState().query || ''));
+  }
+};
+
+const suggestIssuesQuery = (query: string, caret: number): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+  getApi: ReduxAPIGetter,
+) => {
+  const searchContext = dispatch(getSearchContext());
+  const suggestions = await getAssistSuggestions(
+    getApi(),
     query,
-  };
-}
+    caret,
+    searchContext.id ? [searchContext] : [],
+    'Issue',
+  );
+  dispatch(issuesActions.SUGGEST_QUERY(suggestions));
+};
 
-export function getPageSize(): ReduxAction<number> {
-  return (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-  ) => {
-    return getState().issueList.settings.view.mode === issuesViewSettingMode.S ? PAGE_SIZE * 3 : PAGE_SIZE;
-  };
-}
+const storeIssuesQuery = (q: string): ReduxAction => (dispatch: ReduxThunkDispatch) => {
+  const query = q.trim();
+  const data: {
+    helpdeskQuery?: string;
+    query?: string;
+    lastQueries?: string[]
+  } = dispatch(isHelpDeskMode()) ? {helpdeskQuery: query} : {query};
+  if (q) {
+    const updatedQueries = [query, ...(getStorageState().lastQueries || [])];
+    data.lastQueries = Array.from(new Set(updatedQueries)).slice(0, MAX_STORED_QUERIES);
+  }
+  flushStoragePart(data);
+};
 
-export function setStoredIssuesQuery(): ReduxAction {
-  return async (dispatch: (arg0: any) => any) => {
-    const query = getStorageState().query || '';
-    dispatch(setIssuesQuery(query));
-  };
-}
+const startIssuesLoading = () => setGlobalInProgress(true);
 
-export function suggestIssuesQuery(query: string, caret: number): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ApiGetter,
-  ) => {
-    const suggestions = await getAssistSuggestions(getApi(), query, caret);
-    dispatch({
-      type: types.SUGGEST_QUERY,
-      suggestions,
+const stopIssuesLoading = () => setGlobalInProgress(false);
+
+const setIssuesError = (error: CustomError): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
+  dispatch(issuesActions.RESET_ISSUES_COUNT());
+  dispatch(issuesActions.LOADING_ISSUES_ERROR(error));
+};
+
+const cacheIssues = (issues: IssueOnList[]): ReduxAction => (dispatch: ReduxThunkDispatch) => {
+  let updatedCache: IssueOnList[] = issues;
+  const isHelpdeskMode = dispatch(isHelpDeskMode());
+  const cachedIssues: IssueOnList[] | null = isHelpdeskMode
+    ? getStorageState().helpdeskCache
+    : getStorageState().issuesCache;
+
+  if (cachedIssues) {
+    const issueActivityMap: Record<string, ActivityItem[]> = cachedIssues.reduce(
+      (map: Record<string, ActivityItem[]>, it: IssueOnList) => {
+        if (it.activityPage) {
+          map[it.id] = it.activityPage;
+        }
+
+        return map;
+      },
+      {},
+    );
+    updatedCache = issues.map((it: IssueOnList) => {
+      if (issueActivityMap[it.id]) {
+        it.activityPage = issueActivityMap[it.id];
+      }
+
+      return it;
     });
-  };
-}
-
-export function clearAssistSuggestions(): {
-  type: string;
-} {
-  return {
-    type: types.CLEAR_SUGGESTIONS,
-  };
-}
-
-async function storeLastQuery(query: string) {
-  if (!query) {
-    return;
   }
 
-  const updatedQueries = [query, ...(getStorageState().lastQueries || [])];
-  const uniqueUpdatedQueries = Array.from(new Set(updatedQueries)).slice(
-    0,
-    MAX_STORED_QUERIES,
-  );
-  flushStoragePart({
-    lastQueries: uniqueUpdatedQueries,
-  });
-}
+  flushStoragePart(isHelpdeskMode ? {helpdeskCache: updatedCache} : {issuesCache: updatedCache});
+};
 
-export function storeIssuesQuery(query: string): ReduxAction {
-  return () => {
-    flushStoragePart({query});
-    storeLastQuery(query);
-  };
-}
+const loadIssues = (query: string): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+) => {
+  const context = isHelpDeskMode() ? 'tickets' : 'issues';
+  try {
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    if (!isOffline) {
+      dispatch(startIssuesLoading());
+      log.info(`Loading ${context}...`);
+    }
+    const pageSize: number = dispatch(getPageSize());
+    const issues: IssueOnList[] = await dispatch(doLoadIssues(query, pageSize));
+    log.info(`${issues?.length} issues loaded`);
 
-export function listEndReached(): {
-  type: string;
-} {
-  return {
-    type: types.LIST_END_REACHED,
-  };
-}
+    dispatch(issuesActions.RECEIVE_ISSUES(issues));
+    dispatch(cacheIssues(issues));
 
-export function startIssuesLoading(): {
-  isInProgress: boolean;
-  type: string;
-} {
-  return setGlobalInProgress(true);
-}
+    if (issues.length < pageSize) {
+      dispatch(issuesActions.SET_ISSUES_COUNT(issues.length));
+      log.info('End reached during initial load');
+      dispatch(issuesActions.LIST_END_REACHED());
+    }
+  } catch (e) {
+    log.log(`Failed to load ${context}`);
+    dispatch(setIssuesError(e as CustomError));
+  } finally {
+    dispatch(stopIssuesLoading());
+  }
+};
 
-export function stopIssuesLoading(): {
-  isInProgress: boolean;
-  type: string;
-} {
-  return setGlobalInProgress(false);
-}
+const composeSearchQuery = (): ReduxAction<Promise<string>> => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+) => {
+  const settings: IssuesSettings = dispatch(getIssuesSettings());
+  const isHelpdeskMode = dispatch(isHelpDeskMode());
+  const issuesState = getState().issueList;
+  const searchQuery: string = isHelpdeskMode ? issuesState.helpdeskQuery : issuesState.query;
+  const searchSettings: IssuesSetting = settings.search;
+  const isFilterMode: boolean = searchSettings.mode === issuesSearchSettingMode.filter;
+  let query: string = (isFilterMode ? convertToNonStructural(searchQuery) : searchQuery).trim();
+  if (isFilterMode && settings.search.filters) {
+    const filtersSettings: FilterSetting[] = Object.values(settings.search.filters);
+    query = `${query} ${createQueryFromFiltersSetting(filtersSettings)}`;
+  }
+  if (isHelpdeskMode) {
+    const helpdeskSearchContext = issuesState.helpdeskSearchContext;
+    query = `${query} ${helpdeskSearchContext.query}`;
+  }
+  return query.trim().replace(whiteSpacesRegex, ' ');
+};
 
-export function startMoreIssuesLoading(
-  newSkip: number,
-): {
-  newSkip: number;
-  type: string;
-} {
-  return {
-    type: types.START_LOADING_MORE,
-    newSkip,
-  };
-}
+const refreshIssues = (): ReduxAction => async (dispatch: ReduxThunkDispatch): Promise<void> => {
+  const searchQuery: string = await dispatch(composeSearchQuery());
+  dispatch(issuesActions.SET_ISSUES_COUNT(null));
+  dispatch(loadIssues(searchQuery));
+  dispatch(refreshIssuesCount());
+};
 
-export function stopMoreIssuesLoading(): {
-  type: string;
-} {
-  return {
-    type: types.STOP_LOADING_MORE,
-  };
-}
+const onQueryUpdate = (query: string): ReduxAction => (dispatch: ReduxThunkDispatch) => {
+  dispatch(storeIssuesQuery(query));
+  if (dispatch(isHelpDeskMode())) {
+    dispatch(issuesActions.SET_HELPDESK_QUERY(query));
+  } else {
+    dispatch(issuesActions.SET_ISSUES_QUERY(query));
+  }
+  dispatch(issuesActions.CLEAR_SUGGESTIONS());
+  dispatch(refreshIssues());
+};
 
-export function receiveIssues(
-  issues: AnyIssue[],
-  pageSize: number = PAGE_SIZE,
-): {
-  issues: AnyIssue[];
-  pageSize: number;
-  type: string;
-} {
-  return {
-    type: types.RECEIVE_ISSUES,
-    issues,
-    pageSize,
-  };
-}
-
-export function resetIssuesCount(): {
-  type: string;
-} {
-  return {
-    type: types.RESET_ISSUES_COUNT,
-  };
-}
-
-export function setIssuesCount(
-  count: number | null,
-): {
-  count: number | null;
-  type: string;
-} {
-  return {
-    type: types.SET_ISSUES_COUNT,
-    count,
-  };
-}
-
-export function updateSearchContextPinned(isPinned: boolean): {
-  isSearchContextPinned: boolean;
-  type: string;
-} {
-  return {
-    type: types.IS_SEARCH_CONTEXT_PINNED,
-    isSearchContextPinned: isPinned,
-  };
-}
-
-function getEverythingSearchContext(): Folder {
-  return EVERYTHING_CONTEXT as Folder;
-}
-
-function getSearchContext() {
-  return getStorageState().searchContext || getEverythingSearchContext();
-}
-
-export function onQueryUpdate(query: string): ReduxAction {
-  return (dispatch: ReduxThunkDispatch) => {
-    dispatch(storeIssuesQuery(query));
-    dispatch(setIssuesQuery(query));
-    dispatch(clearAssistSuggestions());
-    dispatch(refreshIssues());
-  };
-}
-
-export function isHelpDesk(): ReduxAction<boolean> {
+const openContextSelect = (): ReduxAction => {
   return (
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
-  ) => getState().issueList.helpDesk;
-}
-
-
-export function openContextSelect(trackMsg = 'Issue list context select'): ReduxAction {
-  return (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ApiGetter,
+    getApi: ReduxAPIGetter,
   ) => {
-    dispatch(trackEvent(trackMsg));
-    const api: Api = getApi();
-    const currentSearchContext = getSearchContext();
+    trackEvent(`${isHelpDeskMode() ? 'Tickets' : 'Issue list'} context select`);
+    const api = getApi();
+    const currentSearchContext = dispatch(getSearchContext());
     const searchContextSelectProps: Partial<ISSWithItemActionsProps> & { isSectioned: boolean } = {
       isSectioned: true,
       placeholder: i18n('Filter projects, saved searches, and tags'),
       dataSource: async (query: string = ''): Promise<ContextDataSource[]> => {
+        const isHelpdeskMode = dispatch(isHelpDeskMode());
         const [error, userFolders] = await until(
-          api.user.getUserFolders()
+          isHelpdeskMode
+            ? api.savedQueries.getSavedQueries()
+            : api.user.getUserFolders()
         ) as [CustomError | null, Folder[]];
         if (error) {
           log.warn('Failed to load user folders for the context');
           return [];
         }
 
-        const isHelpdesk: boolean = await dispatch(isHelpDesk());
-        const filterHelpdeskFolders = (it: Folder) => isHelpdesk ? it.pinnedInHelpdesk : true;
+        const filterHelpdeskFolders = (it: Folder) => isHelpdeskMode ? it.pinnedInHelpdesk : true;
         const pinnedFolders: Folder[] = userFolders.filter((it: Folder) => it.pinned).filter(filterHelpdeskFolders);
         const unpinnedFolders: Folder[] = userFolders.filter((it: Folder) => !it.pinned).filter(filterHelpdeskFolders);
         const pinnedGrouped: GroupedFolders = getGroupedFolders(pinnedFolders);
@@ -281,7 +274,7 @@ export function openContextSelect(trackMsg = 'Issue list context select'): Redux
           {
             title: i18n('Projects'),
             data: [
-              EVERYTHING_CONTEXT as Folder,
+              currentSearchContext,
               ...sortFolders(pinnedGrouped.projects, query),
               ...sortFolders(unpinnedGrouped.projects, query),
             ],
@@ -302,13 +295,21 @@ export function openContextSelect(trackMsg = 'Issue list context select'): Redux
           },
         ];
       },
-      selectedItems: [currentSearchContext],
-      onCancel: () => dispatch(closeSelect()),
+      selectedItems: [{
+        ...currentSearchContext,
+        id: dispatch(isDefaultHelpdeskSearchContext(currentSearchContext.id)) ? null : currentSearchContext.id,
+      }],
+      onCancel: () => dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT()),
       onSelect: async (searchContext: Folder) => {
         try {
-          dispatch(closeSelect());
-          await dispatch(setSearchContext(searchContext));
-          await flushStoragePart({searchContext});
+          dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT());
+          const isHelpdeskMode = dispatch(isHelpDeskMode());
+          dispatch(
+            isHelpdeskMode
+              ? issuesActions.SET_HELPDESK_CONTEXT(searchContext)
+              : issuesActions.SET_SEARCH_CONTEXT(searchContext)
+          );
+          await flushStoragePart(isHelpdeskMode ? {searchContext} : {helpdeskSearchContext: searchContext});
           dispatch(refreshIssues());
         } catch (error) {
           log.warn('Failed to change a context', error);
@@ -317,576 +318,472 @@ export function openContextSelect(trackMsg = 'Issue list context select'): Redux
       hasStar: (folder: Folder) => folder.pinned,
       onStar: (folder: Folder) => api.issueFolder.issueFolders(folder.id, {pinned: !folder.pinned}),
     };
-    dispatch(openSelect(searchContextSelectProps));
+    dispatch(issuesActions.OPEN_SEARCH_CONTEXT_SELECT(searchContextSelectProps));
   };
-}
+};
 
-export function composeSearchQuery(): ReduxAction<Promise<string>> {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-  ) => {
-    const settings: IssuesSettings = dispatch(getIssuesSettings());
-    const issuesQuery: string = getState().issueList.query;
-    const searchSettings: IssuesSetting = settings.search;
-    const isFilterMode: boolean = searchSettings.mode === issuesSearchSettingMode.filter;
-    let query: string = (isFilterMode ? convertToNonStructural(issuesQuery) : issuesQuery).trim();
-    if (isFilterMode) {
-      const filtersSettings: FilterSetting[] = Object.values(settings.search.filters);
-      query = `${query} ${createQueryFromFiltersSetting(filtersSettings)}`;
-    }
-    return query.trim().replace(whiteSpacesRegex, ' ');
-  };
-}
+const getIssuesSettings = (): ReduxAction<IssuesSettings> => (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter
+): IssuesSettings => {
+  return getState().issueList.settings;
+};
 
-export function openFilterFieldSelect(filterSetting: FilterSetting): ReduxAction {
-  return (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ApiGetter,
-  ) => {
-    dispatch(trackEvent('Issues settings: changed filter'));
-    const settings: IssuesSettings = dispatch(getIssuesSettings());
-    const selectedItems: { name: string; id: string }[] = filterSetting.selectedValues.map(i => ({id: i, name: i}));
-    const selectProps: Partial<ISelectProps> = {
-      multi: true,
-      getTitle: (it: FilterFieldValue) => getEntityPresentation(it),
-      dataSource: async (prefix: string = '') => {
-        const query = await dispatch(composeSearchQuery());
-        const [error, filterFieldValues] = await until(
-          filterSetting.filterField.map(
-            (it: FilterField) => getApi().filterFields.filterFieldValues(it.id, prefix, query)
-          ),
-          true,
-          true
-        ) as [CustomError | null, FilterFieldValue[]];
-        if (error) {
-          log.warn('Failed to load user folders for the context');
-        }
-        const _values = removeDuplicatesFromArray(
-          filterFieldValues.map(i => ({id: i?.id || guid(), name: i.presentation})).concat(selectedItems)
-        );
-        return error ? [] : _values;
-      },
-      selectedItems,
-      onCancel: () => dispatch(closeSelect()),
-      onSelect: async (selected: { id: string; name: string }[]) => {
-        try {
-          dispatch(closeSelect());
-          const key: string = getFilterFieldName(filterSetting.filterField[0]);
-          const issuesSettings: IssuesSettings = {
-            ...settings,
-            search: {
-              ...settings.search,
-              filters: {
-                ...settings.search.filters,
-                [key]: {
-                  key,
-                  filterField: filterSetting.filterField,
-                  selectedValues: selected.map(i => i.id),
-                },
+
+const cachedIssuesSettings = (settings?: IssuesSettings): ReduxAction<IssuesSettings> => (dispatch: ReduxThunkDispatch): IssuesSettings => {
+  if (settings) {
+    dispatch(issuesActions.SET_LIST_SETTINGS(settings));
+    flushStoragePart({issuesSettings: settings});
+  }
+  return settings || getStorageState().issuesSettings || issuesSettingsDefault;
+};
+
+const openFilterFieldSelect = (filterSetting: FilterSetting): ReduxAction => (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+  getApi: ReduxAPIGetter,
+) => {
+  trackEvent(`${isHelpDeskMode() ? 'Tickets' : 'Issues'} settings: changed filter`);
+  const settings: IssuesSettings = dispatch(getIssuesSettings());
+  const selectedItems: { name: string; id: string }[] = filterSetting.selectedValues.map(i => ({id: i, name: i}));
+  const selectProps: Partial<ISelectProps> = {
+    multi: true,
+    getTitle: (it: FilterFieldValue) => getEntityPresentation(it),
+    dataSource: async (prefix: string = '') => {
+      const query = await dispatch(composeSearchQuery());
+      const [error, filterFieldValues] = await until(
+        filterSetting.filterField.map(
+          (it: FilterField) => getApi().filterFields.filterFieldValues(it.id, prefix, query)
+        ),
+        true,
+        true
+      ) as [CustomError | null, FilterFieldValue[]];
+      if (error) {
+        log.warn('Failed to load user folders for the context');
+      }
+      const _values = removeDuplicatesFromArray(
+        filterFieldValues.map(i => ({id: i?.id || guid(), name: i.presentation})).concat(selectedItems)
+      );
+      return error ? [] : _values;
+    },
+    selectedItems,
+    onCancel: () => dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT()),
+    onSelect: async (selected: { id: string; name: string }[]) => {
+      try {
+        dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT());
+        const key: string = getFilterFieldName(filterSetting.filterField[0]);
+        const issuesSettings: IssuesSettings = {
+          ...settings,
+          search: {
+            ...settings.search,
+            filters: {
+              ...settings.search.filters,
+              [key]: {
+                key,
+                filterField: filterSetting.filterField,
+                selectedValues: selected.map(i => i.id),
               },
             },
-          };
-          await dispatch(cachedIssuesSettings(issuesSettings));
-          dispatch(refreshIssues());
-        } catch (error) {
-          log.warn('Failed to change a context', error);
-        }
-      },
-    };
-    dispatch(openSelect(selectProps));
+          },
+        };
+        await dispatch(cachedIssuesSettings(issuesSettings));
+        dispatch(refreshIssues());
+      } catch (error) {
+        log.warn('Failed to change a context', error);
+      }
+    },
   };
-}
+  dispatch(issuesActions.OPEN_SEARCH_CONTEXT_SELECT(selectProps));
+};
 
-export function resetFilterFields(): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-  ) => {
-    dispatch(trackEvent('Issues settings: reset all filters'));
-    const settings: IssuesSettings = dispatch(getIssuesSettings());
-    const issuesSettings: IssuesSettings = {
+const resetFilterFields = (): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
+) => {
+  trackEvent(`${isHelpDeskMode() ? 'Tickets' : 'Issues'}: reset all filters`);
+  const settings: IssuesSettings = dispatch(getIssuesSettings());
+  const filters = settings.search.filters || {};
+  const issuesSettings: IssuesSettings = {
+    ...settings,
+    search: {
+      ...settings.search,
+      filters: Object.keys(filters).reduce((akk, key) => {
+        return {
+          ...akk,
+          [key]: {
+            key,
+            filterField: filters[key].filterField,
+            selectedValues: [],
+          },
+        };
+      }, {}),
+    },
+  };
+  await dispatch(cachedIssuesSettings(issuesSettings));
+  dispatch(refreshIssues());
+};
+
+const doLoadIssues = (query: string, pageSize: number, skip = 0): ReduxAction<Promise<IssueOnList[]>> => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+  getApi: ReduxAPIGetter,
+) => {
+  const handleError = (e: CustomError) => {
+    throw e;
+  };
+
+  const api = getApi();
+  let listIssues: IssueOnList[] = [];
+  const appState = getState();
+  const contextFolder = dispatch(getSearchContext());
+  const [error, sortedIssues] = await until<SortedIssues>(
+    api.issues.sortedIssues(contextFolder.id, query, pageSize, skip)
+  );
+  if (error) {
+    handleError(error);
+  }
+
+  if (Array.isArray(sortedIssues?.tree) && sortedIssues.tree.length > 0) {
+    const [err, _issues] = await until(
+      api.issues.issuesGetter(sortedIssues.tree, appState.issueList.settings.view.mode),
+    );
+    if (err) {
+      handleError(err);
+    }
+    listIssues = ApiHelper.fillIssuesFieldHash(_issues) as IssueOnList[];
+  }
+
+  return listIssues;
+};
+
+const isIssueMatchesQuery = (issueIdReadable: string): ReduxAction<Promise<boolean>> => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+  getApi: ReduxAPIGetter,
+) => {
+  const [error, listIssues] = await until(
+    getApi().issues.getIssuesXShort(
+      encodeURIComponent(`${await dispatch(composeSearchQuery())} #${issueIdReadable}`),
+      1,
+    ),
+  );
+  return !error && listIssues.length > 0;
+};
+
+const getIssueFromCache = (issueId: string): IssueOnList | null => {
+  const cachedIssues: IssueOnList[] = getStorageState().issuesCache || [];
+  return cachedIssues.find((it: IssueOnList) => it.id === issueId || it.idReadable === issueId) || null;
+};
+
+const updateIssue = (issueId: string): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+) => {
+  const currentIssues = getState().issueList.issues;
+  const issueToUpdate = await issueUpdater.loadIssue(issueId);
+
+  if (issueToUpdate) {
+    const updatedIssues: IssueOnList[] = issueUpdater.updateIssueInIssues(
+      issueToUpdate,
+      currentIssues,
+    );
+    dispatch(issuesActions.RECEIVE_ISSUES(updatedIssues as IssueOnList[]));
+    dispatch(cacheIssues(updatedIssues));
+  }
+};
+
+const refreshIssuesCount = (): (
+  dispatch: ReduxThunkDispatch,
+  getState: () => any,
+) => Promise<void> => async (
+  dispatch: ReduxThunkDispatch,
+): Promise<void> => {
+  dispatch(loadIssuesCount(dispatch(getSearchContext())));
+};
+
+
+const loadIssuesCount = (folder?: Folder | null): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+  getApi: ReduxAPIGetter,
+) => {
+  try {
+    const api = getApi();
+    const abortController: AbortController = new AbortController();
+    const _query = await dispatch(composeSearchQuery());
+    const _folder = getState().issueList.settings.search.mode === issuesSearchSettingMode.filter
+      ? undefined
+      : folder;
+    const issuesCount: number = await api.issues.getIssuesCount(
+      _query,
+      _folder,
+      false,
+      abortController,
+    );
+
+    if (issuesCount === -1 && !abortController.signal.aborted) {
+      return new Promise((resolve, reject) => {
+        let timer: ReturnType<typeof setTimeout> | undefined = setTimeout(resolve, 3000);
+
+        abortController.signal.onabort = () => {
+          reject();
+          clearTimeout(timer);
+          timer = undefined;
+        };
+      }).then(() => dispatch(loadIssuesCount(folder)));
+    }
+
+    if (issuesCount >= 0) {
+      dispatch(issuesActions.SET_ISSUES_COUNT(issuesCount));
+    }
+  } catch (e) {
+    log.log(`Failed to load ${isHelpDeskMode() ? 'tickets' : 'issues'} count`);
+  }
+};
+
+const initSearchContext = (searchQuery: string = ''): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
+  if (dispatch(isHelpDeskMode())) {
+    const helpdeskSearchContext = dispatch(getDefaultHelpdeskSearchContext());
+    if (helpdeskSearchContext) {
+      dispatch(issuesActions.SET_HELPDESK_CONTEXT(helpdeskSearchContext));
+    }
+  } else {
+    dispatch(
+      issuesActions.SET_SEARCH_CONTEXT(
+        searchQuery.trim()
+          ? EVERYTHING_SEARCH_CONTEXT
+          : getStorageState().searchContext || EVERYTHING_SEARCH_CONTEXT
+      )
+    );
+  }
+};
+
+const switchToQuerySearchSetting = (preventReload?: boolean): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+) => {
+  const settings: IssuesSettings = getState().issueList.settings;
+  await dispatch(onSettingsChange({...settings, search: issuesSettingsSearch[0]}, preventReload));
+};
+
+const setFilters = (): (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+  getApi: ReduxAPIGetter,
+) => Promise<void> => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+  getApi: ReduxAPIGetter,
+) => {
+  let settings: IssuesSettings = dispatch(cachedIssuesSettings());
+  const [error, filterFields] = await until(getApi().customFields.getFilters());
+  if (error) {
+    log.warn('Cannot load filter fields');
+  } else if (Array.isArray(filterFields) && filterFields.filter(Boolean).length > 0) {
+    const currentUser: User | null = getState().app.user;
+    const userProfileFiltersNames: string[] = (currentUser?.profiles?.appearance?.liteUiFilters || []).filter(
+      Boolean);
+    const visibleFiltersNames: string[] = (
+      userProfileFiltersNames.length > 0
+        ? userProfileFiltersNames
+        : Object.values(defaultIssuesFilterFieldConfig)
+    );
+
+    if (userProfileFiltersNames.length === 0) {
+      const ytCurrentUser: User = getStorageState().currentUser?.ytCurrentUser as User;
+      const user: User = {
+        ...ytCurrentUser,
+        profiles: {
+          ...ytCurrentUser.profiles,
+          appearance: {
+            ...ytCurrentUser?.profiles?.appearance,
+            liteUiFilters: visibleFiltersNames,
+          },
+        },
+      };
+      dispatch(
+        receiveUserAppearanceProfile({
+          ...user?.profiles?.appearance,
+          liteUiFilters: visibleFiltersNames,
+        })
+      );
+      await dispatch(setYTCurrentUser(user));
+    }
+
+    settings = {
       ...settings,
       search: {
         ...settings.search,
-        filters: Object.keys(settings.search.filters).reduce((akk, key) => {
+        filters: visibleFiltersNames.reduce((akk: FiltersSetting, it: string) => {
+          const id: string = it.toLowerCase();
+          const filterSettings: FilterSetting | undefined = settings.search.filters?.[id];
+          const filterField: FilterField[] = filterFields.filter((i: FilterField) => {
+            return getFilterFieldName(i) === id || id === i.id;
+          });
           return {
             ...akk,
-            [key]: {
-              key,
-              filterField: settings.search.filters[key].filterField,
-              selectedValues: [],
+            [id]: {
+              id,
+              filterField,
+              selectedValues: filterSettings?.selectedValues || [],
             },
           };
         }, {}),
       },
     };
-    await dispatch(cachedIssuesSettings(issuesSettings));
+    dispatch(cachedIssuesSettings(settings));
+  } else {
+    dispatch(switchToQuerySearchSetting());
+  }
+};
+
+const onSettingsChange = (settings: IssuesSettings, preventReload?: boolean): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+) => {
+  const currentSettings: IssuesSettings = getState().issueList.settings;
+  const eventContext = dispatch(isHelpDeskMode()) ? `Issues` : `Tickets`;
+  if (settings.search.mode !== currentSettings.search.mode) {
+    trackEvent(`${eventContext} settings: switch mode to ${settings.search.mode}`);
+    dispatch(issuesActions.SET_ISSUES_QUERY(''));
+    await flushStoragePart({query: null});
+  }
+  if (settings.view.mode !== currentSettings.view.mode) {
+    trackEvent(`${eventContext} settings: change preview size to ${settings.view.mode}`);
+  }
+  await dispatch(cachedIssuesSettings(settings));
+  await flushStoragePart({issuesCache: null});
+  if (settings.search.mode === issuesSearchSettingMode.filter) {
+    await dispatch(setFilters());
+  }
+  dispatch(issuesActions.RECEIVE_ISSUES([]));
+  if (!preventReload) {
     dispatch(refreshIssues());
-  };
-}
+  }
+};
 
-export function openSelect(selectProps: Partial<ISelectProps>): ReduxAction {
-  return (dispatch: ReduxThunkDispatch) => {
-    dispatch({
-      type: types.OPEN_SEARCH_CONTEXT_SELECT,
-      selectProps,
-    });
-  };
-}
+const setIssuesMode = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
+  dispatch(issuesActions.SET_HELPDESK_MODE(false));
+};
 
-export function closeSelect(): ReduxAction {
-  return (dispatch: ReduxThunkDispatch) => {
-    dispatch({
-      type: types.CLOSE_SEARCH_CONTEXT_SELECT,
-    });
-  };
-}
+const setIssuesFromCache = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
+  const cachedIssues: IssueOnList[] = getStorageState().issuesCache || [];
+  if (cachedIssues.length > 0) {
+    log.debug(`Loaded ${cachedIssues.length} cached issues`);
+    dispatch(issuesActions.RECEIVE_ISSUES(cachedIssues));
+  }
+};
 
-export function cacheIssues(issues: AnyIssue[]): () => void {
-  return () => {
-    let updatedCache: AnyIssue[] = issues;
-    const cachedIssues: AnyIssue[] | null | undefined = getStorageState().issuesCache;
+const initializeIssuesList = (searchQuery?: string): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
+  dispatch(startIssuesLoading());
 
-    if (cachedIssues) {
-      const issueActivityMap: Record<string, AnyIssue> = cachedIssues.reduce(
-        (map: Record<string, AnyIssue>, it: AnyIssue) => {
-          if (it.activityPage) {
-            map[it.id] = it.activityPage;
-          }
+  if (searchQuery) {
+    await dispatch(switchToQuerySearchSetting(true));
+    await dispatch(storeIssuesQuery(searchQuery));
+  }
 
-          return map;
-        },
-        {},
-      );
-      updatedCache = issues.map((it: AnyIssue) => {
-        if (issueActivityMap[it.id]) {
-          it.activityPage = issueActivityMap[it.id];
-        }
+  await dispatch(initSearchContext(searchQuery));
+  await dispatch(setStoredIssuesQuery());
+  await dispatch(setFilters());
+  dispatch(refreshIssues());
+};
 
-        return it;
-      });
+const loadMoreIssues = (): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+) => {
+  const context = isHelpDeskMode() ? 'tickets' : 'issues';
+  try {
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    if (isOffline) {
+      return;
     }
 
-    flushStoragePart({
-      issuesCache: updatedCache,
-    });
-  };
-}
+    const {
+      isInitialized,
+      isLoadingMore,
+      isRefreshing,
+      loadingError,
+      isListEndReached,
+      skip,
+      issues,
+    } = getState().issueList;
 
-export function setIssuesError(error: CustomError): ReduxAction {
-  return async (dispatch: ReduxThunkDispatch) => {
-    dispatch(resetIssuesCount());
-    dispatch({
-      type: types.LOADING_ISSUES_ERROR,
-      error: error,
-    });
-  };
-}
-
-export function doLoadIssues(query: string, pageSize: number, skip = 0): ReduxAction<Promise<IssueOnList[]>> {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ApiGetter,
-  ) => {
-    const handleError = (e: CustomError) => {
-      throw e;
-    };
-
-    const api: Api = getApi();
-    let listIssues: IssueOnList[] = [];
-
-    const [error, sortedIssues]: SortedIssuesData = await until(
-      api.issues.sortedIssues(getSearchContext().id, query, pageSize, skip)
-    ) as SortedIssuesData;
-    if (error) {
-      handleError(error);
+    if (
+      !isInitialized ||
+      isLoadingMore ||
+      isRefreshing ||
+      loadingError ||
+      isListEndReached
+    ) {
+      return;
     }
 
-    if (Array.isArray(sortedIssues?.tree) && sortedIssues.tree.length > 0) {
-      const [err, _issues] = await until(
-        api.issues.issuesGetter(sortedIssues.tree, getState().issueList.settings.view.mode),
-      );
-      if (err) {
-        handleError(err);
-      }
-      listIssues = ApiHelper.fillIssuesFieldHash(_issues) as IssueOnList[];
-    }
+    const pageSize: number = dispatch(getPageSize());
+    const newSkip: number = skip + pageSize;
+    log.info(`Loading more ${context}. newSkip = ${newSkip}`);
+    dispatch(issuesActions.START_LOADING_MORE(newSkip));
 
-    return listIssues;
-  };
-}
-
-export function loadIssues(query: string): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-  ) => {
     try {
-      const isOffline: boolean = getState().app?.networkState?.isConnected === false;
-      if (!isOffline) {
-        dispatch(startIssuesLoading());
-        log.info('Loading issues...');
-      }
+      const searchQuery = await dispatch(composeSearchQuery());
+      let moreIssues: IssueOnList[] = await dispatch(doLoadIssues(searchQuery, pageSize, newSkip));
+      log.info(`Loaded ${pageSize} more ${context}.`);
+      moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues) as IssueOnList[];
+      const updatedIssues: IssueOnList[] = ApiHelper.removeDuplicatesByPropName(
+        issues.concat(moreIssues),
+        'id',
+      ) as IssueOnList[];
+      dispatch(issuesActions.RECEIVE_ISSUES(updatedIssues));
+      dispatch(cacheIssues(updatedIssues));
 
-      const pageSize: number = dispatch(getPageSize());
-      const issues: AnyIssue[] = await dispatch(doLoadIssues(query, pageSize));
-      log.info(`${issues?.length} issues loaded`);
-
-      dispatch(receiveIssues(issues, pageSize));
-      dispatch(cacheIssues(issues));
-
-      if (issues.length < pageSize) {
-        dispatch(setIssuesCount(issues.length));
-        log.info('End reached during initial load');
-        dispatch(listEndReached());
+      if (moreIssues.length < pageSize) {
+        log.info(`End of ${context} reached: all ${updatedIssues?.length} are loaded`);
+        dispatch(issuesActions.LIST_END_REACHED());
       }
     } catch (e) {
-      log.log('Failed to load issues');
+      log.log(`Failed to load more ${context}`);
       dispatch(setIssuesError(e as CustomError));
     } finally {
-      dispatch(stopIssuesLoading());
+      dispatch(issuesActions.STOP_LOADING_MORE());
     }
-  };
-}
-
-export function isIssueMatchesQuery(issueIdReadable: string): ReduxAction<Promise<boolean>> {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ApiGetter,
-  ) => {
-    const [error, listIssues] = await until(
-      getApi().issues.getIssuesXShort(
-        encodeURIComponent(`${await dispatch(composeSearchQuery())} #${issueIdReadable}`),
-        1,
-      ),
-    );
-    return !error && listIssues.length > 0;
-  };
-}
-
-export function getIssueFromCache(
-  issueId: string,
-): AnyIssue | undefined {
-  const cachedIssues: AnyIssue[] = getStorageState().issuesCache || [];
-  return cachedIssues.find(
-    (it: AnyIssue) => it.id === issueId || it?.idReadable === issueId,
-  );
-}
-
-export function updateIssue(issueId: string): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-  ) => {
-    const currentIssues: AnyIssue[] = getState().issueList.issues;
-    const issueToUpdate: IssueFull | null = await issueUpdater.loadIssue(issueId);
-
-    if (issueToUpdate) {
-      const updatedIssues: AnyIssue[] = issueUpdater.updateIssueInIssues(
-        issueToUpdate,
-        currentIssues,
-      );
-      dispatch(receiveIssues(updatedIssues, dispatch(getPageSize())));
-      dispatch(cacheIssues(updatedIssues));
-    }
-  };
-}
-
-export function refreshIssues(): ReduxAction {
-  return async (dispatch: ReduxThunkDispatch): Promise<void> => {
-    const searchQuery: string = await dispatch(composeSearchQuery());
-    dispatch(setIssuesCount(null));
-    dispatch(loadIssues(searchQuery));
-    dispatch(refreshIssuesCount());
-  };
-}
-
-export function refreshIssuesCount(): (
-  dispatch: ReduxThunkDispatch,
-  getState: () => any,
-) => Promise<void> {
-  return async (
-    dispatch: ReduxThunkDispatch,
-  ): Promise<void> => {
-    dispatch(loadIssuesCount(getSearchContext()));
-  };
-}
-
-export function setSearchContext(searchContext: Folder = EVERYTHING_CONTEXT as Folder): (
-  dispatch: ReduxThunkDispatch,
-) => Promise<void> {
-  return async (dispatch: (arg0: any) => any) => {
-    dispatch({
-      type: types.SET_SEARCH_CONTEXT,
-      searchContext,
-    });
-  };
-}
-
-export function cachedIssuesSettings(settings?: IssuesSettings): ReduxAction<IssuesSettings> {
-  return (dispatch: ReduxThunkDispatch): IssuesSettings => {
-    if (settings) {
-      dispatch({
-        type: types.SET_LIST_SETTINGS,
-        settings,
-      });
-      flushStoragePart({issuesSettings: settings});
-    }
-    return settings || getStorageState().issuesSettings || issuesSettingsDefault;
-  };
-}
-
-export function getIssuesSettings(): ReduxAction<IssuesSettings> {
-  return (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-  ): IssuesSettings => {
-    return getState().issueList.settings;
-  };
-}
-
-export function setFilters(): (
-  dispatch: ReduxThunkDispatch,
-  getState: ReduxStateGetter,
-  getApi: ApiGetter,
-) => Promise<void> {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ApiGetter,
-  ) => {
-    let settings: IssuesSettings = dispatch(cachedIssuesSettings());
-    const [error, filterFields] = await until(getApi().customFields.getFilters());
-    if (error) {
-      log.warn('Cannot load filter fields');
-    } else if (Array.isArray(filterFields) && filterFields.filter(Boolean).length > 0) {
-      const currentUser: User | null = getState().app.user;
-      const userProfileFiltersNames: string[] = (currentUser?.profiles?.appearance?.liteUiFilters || []).filter(
-        Boolean);
-      const visibleFiltersNames: string[] = (
-        userProfileFiltersNames.length > 0
-          ? userProfileFiltersNames
-          : Object.values(defaultIssuesFilterFieldConfig)
-      );
-
-      if (userProfileFiltersNames.length === 0) {
-        const ytCurrentUser = getStorageState().currentUser?.ytCurrentUser;
-        const user = {
-          ...ytCurrentUser,
-          profiles: {
-            ...ytCurrentUser.profiles,
-            appearance: {
-              ...ytCurrentUser.profiles?.appearance,
-              liteUiFilters: visibleFiltersNames,
-            },
-          },
-        };
-        dispatch(
-          receiveUserAppearanceProfile({
-            ...user?.profiles?.appearance,
-            liteUiFilters: visibleFiltersNames,
-          })
-        );
-        await dispatch(setYTCurrentUser(user));
-      }
-
-      settings = {
-        ...settings,
-        search: {
-          ...settings.search,
-          filters: visibleFiltersNames.reduce((akk: FiltersSetting, it: string) => {
-            const id: string = it.toLowerCase();
-            const filterSettings: FilterSetting | undefined = settings.search.filters?.[id];
-            const filterField: FilterField[] = filterFields.filter((i: FilterField) => {
-              return getFilterFieldName(i) === id || id === i.id;
-            });
-            return {
-              ...akk,
-              [id]: {
-                id,
-                filterField,
-                selectedValues: filterSettings?.selectedValues || [],
-              },
-            };
-          }, {}),
-        },
-      };
-      dispatch(cachedIssuesSettings(settings));
-    } else {
-      dispatch(switchToQuerySearchSetting());
-    }
-  };
-}
-
-export function switchToQuerySearchSetting(preventReload?: boolean): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-  ) => {
-    const settings: IssuesSettings = getState().issueList.settings;
-    await dispatch(onSettingsChange({...settings, search: issuesSettingsSearch[0]}, preventReload));
-  };
-}
+  } catch (e) {
+    log.log(`Failed to load more ${context}`);
+  }
+};
 
 
-export function initializeIssuesList(searchQuery?: string): (
-  dispatch: ReduxThunkDispatch,
-  getState: ReduxStateGetter,
-  getApi: ApiGetter,
-  ) => Promise<void> {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    ) => {
-    dispatch(startIssuesLoading());
-    const searchContext: Folder = searchQuery?.trim?.() ? getEverythingSearchContext() : getSearchContext();
-
-    if (searchQuery) {
-      await dispatch(switchToQuerySearchSetting(true));
-      await flushStoragePart({searchContext});
-      await dispatch(storeIssuesQuery(searchQuery));
-    }
-    await dispatch(setStoredIssuesQuery());
-    await dispatch(setSearchContext(searchContext));
-    await dispatch(setFilters());
-
-    const cachedIssues: AnyIssue[] | null = searchQuery ? [] : getStorageState().issuesCache;
-    if (cachedIssues?.length) {
-      log.debug(`Loaded ${cachedIssues.length} cached issues`);
-      dispatch(receiveIssues(cachedIssues, dispatch(getPageSize())));
-    }
-
-    dispatch(refreshIssues());
-  };
-}
-
-export function loadMoreIssues(): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-  ) => {
-    try {
-      const isOffline: boolean = getState().app?.networkState?.isConnected === false;
-      if (isOffline) {
-        return;
-      }
-
-      const {
-        isInitialized,
-        isLoadingMore,
-        isRefreshing,
-        loadingError,
-        isListEndReached,
-        skip,
-        issues,
-      } = getState().issueList;
-
-      if (
-        !isInitialized ||
-        isLoadingMore ||
-        isRefreshing ||
-        loadingError ||
-        isListEndReached
-      ) {
-        return;
-      }
-
-      const pageSize: number = dispatch(getPageSize());
-      const newSkip: number = skip + pageSize;
-      log.info(`Loading more issues. newSkip = ${newSkip}`);
-      dispatch(startMoreIssuesLoading(newSkip));
-
-      try {
-        const searchQuery = await dispatch(composeSearchQuery());
-        let moreIssues: IssueOnList[] = await dispatch(doLoadIssues(searchQuery, pageSize, newSkip));
-        log.info(`Loaded ${pageSize} more issues.`);
-        moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues) as IssueOnList[];
-        const updatedIssues: IssueOnList[] = ApiHelper.removeDuplicatesByPropName(
-          issues.concat(moreIssues),
-          'id',
-        ) as IssueOnList[];
-        dispatch(receiveIssues(updatedIssues, pageSize));
-        dispatch(cacheIssues(updatedIssues));
-
-        if (moreIssues.length < pageSize) {
-          log.info(`End of issues reached: all ${updatedIssues?.length} issues are loaded`);
-          dispatch(listEndReached());
-        }
-      } catch (e) {
-        log.log('Failed to load more issues');
-        dispatch(setIssuesError(e as CustomError));
-      } finally {
-        dispatch(stopMoreIssuesLoading());
-      }
-    } catch (e) {
-      log.log('Failed to load more issues');
-    }
-  };
-}
-
-export function loadIssuesCount(folder?: Folder | null): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-    getApi: ApiGetter,
-  ) => {
-    try {
-      const api: Api = getApi();
-      const abortController: AbortController = new AbortController();
-      const _query = await dispatch(composeSearchQuery());
-      const _folder = getState().issueList.settings.search.mode === issuesSearchSettingMode.filter ? undefined : folder;
-      const issuesCount: number = await api.issues.getIssuesCount(
-        _query,
-        _folder,
-        false,
-        abortController,
-      );
-
-      if (issuesCount === -1 && !abortController.signal.aborted) {
-        return new Promise((resolve, reject) => {
-          let timer: ReturnType<typeof setTimeout> | undefined = setTimeout(resolve, 3000);
-
-          abortController.signal.onabort = () => {
-            reject();
-            clearTimeout(timer);
-            timer = undefined;
-          };
-        }).then(() => dispatch(loadIssuesCount(folder)));
-      }
-
-      if (issuesCount >= 0) {
-        dispatch(setIssuesCount(issuesCount));
-      }
-    } catch (e) {
-      log.log('Failed to load issues count');
-    }
-  };
-}
-
-export function onSettingsChange(settings: IssuesSettings, preventReload?: boolean): ReduxAction {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-  ) => {
-    const currentSettings: IssuesSettings = getState().issueList.settings;
-    if (settings.search.mode !== currentSettings.search.mode) {
-      dispatch(trackEvent(`Issues settings: switch mode to ${settings.search.mode}`));
-      dispatch(setIssuesQuery(''));
-      await flushStoragePart({query: null});
-    }
-    if (settings.view.mode !== currentSettings.view.mode) {
-      dispatch(trackEvent(`Issues settings: change preview size to ${settings.view.mode}`));
-    }
-    await dispatch(cachedIssuesSettings(settings));
-    await flushStoragePart({issuesCache: null});
-    if (settings.search.mode === issuesSearchSettingMode.filter) {
-      await dispatch(setFilters());
-    }
-    dispatch(receiveIssues([], dispatch(getPageSize())));
-    if (!preventReload) {
-      dispatch(refreshIssues());
-    }
-  };
-}
+export {
+  cachedIssuesSettings,
+  cacheIssues,
+  composeSearchQuery,
+  doLoadIssues,
+  getIssueFromCache,
+  getIssuesSettings,
+  getPageSize,
+  getSearchContext,
+  initializeIssuesList,
+  initSearchContext,
+  isHelpDeskMode,
+  isIssueMatchesQuery,
+  loadIssues,
+  loadIssuesCount,
+  loadMoreIssues,
+  onQueryUpdate,
+  onSettingsChange,
+  openContextSelect,
+  openFilterFieldSelect,
+  refreshIssues,
+  refreshIssuesCount,
+  resetFilterFields,
+  setFilters,
+  setIssuesError,
+  setIssuesFromCache,
+  setIssuesMode,
+  setStoredIssuesQuery,
+  startIssuesLoading,
+  stopIssuesLoading,
+  storeIssuesQuery,
+  suggestIssuesQuery,
+  switchToQuerySearchSetting,
+  trackEvent,
+  updateIssue,
+};

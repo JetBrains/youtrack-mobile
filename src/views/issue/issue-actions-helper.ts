@@ -1,4 +1,4 @@
-import type {CustomField, FieldValue, IssueProject} from 'types/CustomFields';
+import type {CustomField, FieldValue} from 'types/CustomFields';
 import type {
   CommandSuggestionResponse,
   IssueFull,
@@ -11,6 +11,7 @@ import {commandDialogActionMap} from 'components/command-dialog/command-dialog-a
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import {attachmentActionMap} from 'components/attachments-row/attachment-helper';
 import {NormalizedAttachment} from 'types/Attachment';
+import {Project} from 'types/Project';
 
 
 export const createDispatchActions = (
@@ -63,9 +64,9 @@ export const createDispatchActions = (
     });
   },
   setProject: (
-    project: IssueProject,
+    project: Project,
   ): {
-    project: IssueProject;
+    project: Project;
     type: any;
   } => {
     return actions.SET_PROJECT({

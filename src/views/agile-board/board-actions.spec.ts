@@ -15,11 +15,6 @@ import {AgileUserProfile, Board, Sprint} from 'types/Agile';
 import {setApi} from 'components/api/api__instance';
 import {AppConfig} from 'types/AppConfig';
 
-
-jest.mock('react-native/Libraries/Linking/Linking', () => ({
-  getInitialURL: jest.fn(),
-  addEventListener: jest.fn(),
-}));
 jest.mock('components/api/api__serverside-events');
 
 let apiMock: API;

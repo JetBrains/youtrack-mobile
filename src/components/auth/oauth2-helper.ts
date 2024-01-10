@@ -10,7 +10,7 @@ import type {AuthParams, OAuthConfig, OAuthParams2} from 'types/Auth';
 const ACCEPT_HEADER: string = 'application/json, text/plain, */*';
 const URL_ENCODED_TYPE: string = 'application/x-www-form-urlencoded';
 
-const normalizeAuthParams = (authParams: OAuthParams2): Promise<AuthParams> => {
+const normalizeAuthParams = (authParams: OAuthParams2): AuthParams => {
   return {
     access_token: authParams.accessToken || authParams.access_token,
     accessTokenExpirationDate: authParams.accessTokenExpirationDate,

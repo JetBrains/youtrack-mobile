@@ -30,7 +30,7 @@ msgstr ""
 
 #: src/components/activity/activity__history-title.ts
 msgid "[Removed field]"
-msgstr ""
+msgstr "[Kaldırılan alan]"
 
 #: src/views/article/article__details.tsx
 msgid "{{amount}} article"
@@ -1129,6 +1129,12 @@ msgstr "İleti dizisi sessize alındı"
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Thread unmuted"
 msgstr ""
+
+#: src/views/issues/issues-actions.ts
+#: src/views/issues/issues-reducers.ts
+#: src/views/tickets/tickets.tsx
+msgid "Tickets"
+msgstr "Biletler"
 
 #: src/views/article-create/article-create.tsx
 msgid "Title"

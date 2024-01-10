@@ -1,4 +1,6 @@
 import type {IssueFull, IssueOnList} from './Issue';
+import {Folder} from 'types/User';
+
 export type Cell = {
   id: string;
   column: AgileColumn;
@@ -91,8 +93,10 @@ export type Board = {
   hideOrphansSwimlane: boolean;
   currentSprint: Partial<Sprint>;
   colorCoding: FieldBasedColorCoding | ProjectBasedColorCoding;
+  projects?: Folder[] | Partial<Folder>;
 };
 export type BoardOnList = {
+  $type: string;
   id: string;
   name: string;
   favorite: boolean;
@@ -106,6 +110,7 @@ export type BoardOnList = {
   };
 };
 export type Sprint = {
+  $type?: string;
   id: string;
   name: string;
   goal: string | null | undefined;

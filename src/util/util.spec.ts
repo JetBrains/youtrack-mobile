@@ -2,10 +2,11 @@ import {
   createNullProjectCustomField,
   nullProjectCustomFieldMaxLength,
 } from './util';
+
 describe('createNullProjectCustomField', () => {
   describe('NULL safety', () => {
     it('should not throw if `projectName` param is not defined', () => {
-      expect(() => createNullProjectCustomField()).not.toThrow();
+      expect(() => createNullProjectCustomField(null as any, null as any, null as any)).not.toThrow();
     });
     it('should not throw if `maxLength` param is not defined', () => {
       expect(() =>
@@ -18,9 +19,11 @@ describe('createNullProjectCustomField', () => {
       ).not.toThrow();
     });
   });
+
+
   describe('Field', () => {
     const projectLabelMock = 'label';
-    let projectNameMock;
+    let projectNameMock: string;
     beforeEach(() => {
       projectNameMock =
         'YouTrack Mobile lets you track your team’s projects and tasks, and collaborate on the go.';
@@ -30,7 +33,7 @@ describe('createNullProjectCustomField', () => {
       expect(createNullProjectCustomField(projectNameMock)).toEqual({
         projectCustomField: {
           field: {
-            name: undefined,
+            name: '',
           },
         },
         value: {
@@ -42,7 +45,7 @@ describe('createNullProjectCustomField', () => {
       expect(createNullProjectCustomField(projectNameMock)).toEqual({
         projectCustomField: {
           field: {
-            name: undefined,
+            name: '',
           },
         },
         value: {
@@ -50,6 +53,7 @@ describe('createNullProjectCustomField', () => {
         },
       });
     });
+
     it('should return project custom field with a project name not longer than provided length', () => {
       expect(
         createNullProjectCustomField(projectNameMock, projectLabelMock, 10),
@@ -64,6 +68,7 @@ describe('createNullProjectCustomField', () => {
         },
       });
     });
+
     it('should return project custom field with a project name', () => {
       const projectCustomFieldNameMock = 'project custom field label';
       expect(

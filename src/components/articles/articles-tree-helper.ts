@@ -10,8 +10,9 @@ import type {
   ArticlesListItem,
   ProjectArticlesData,
 } from 'types/Article';
-import type {IssueProject} from 'types/CustomFields';
 import type {Visibility} from 'types/Visibility';
+import {Project} from 'types/Project';
+
 export const createArticlesListItem = (
   project: ArticleProject | null,
   data: ArticleNodeList,
@@ -142,12 +143,12 @@ export const createBreadCrumbs = (
   article: Article,
   articlesList: ArticlesList,
   excludeProject: boolean = false,
-): Array<Article | IssueProject> => {
+): Array<Article | Project> => {
   if (!article?.project?.id) {
     return [];
   }
 
-  const breadCrumbs: Array<Article | IssueProject> = [];
+  const breadCrumbs: Array<Article | Project> = [];
   const projectNode:
     | ArticlesListItem
     | null

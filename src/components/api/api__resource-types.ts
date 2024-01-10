@@ -51,9 +51,11 @@ type HasMethodName =
   | 'savedSearch'
   | 'tag'
   | 'agile';
-type Entity = Partial<{
+
+interface Entity {
   $type: string;
-}>;
+}
+
 export const hasType = function (type: string) {
   return function (it: Entity): boolean {
     return it

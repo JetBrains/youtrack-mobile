@@ -19,7 +19,7 @@ import type {
   Board,
   AgileUserProfile,
 } from 'types/Agile';
-import type {IssueOnList, IssueFull, ServersideSuggestion} from 'types/Issue';
+import type {IssueOnList, IssueFull, TransformedSuggestion} from 'types/Issue';
 import type {CustomError} from 'types/Error';
 type BoardState = Board;
 export type AgilePageState = {
@@ -32,12 +32,8 @@ export type AgilePageState = {
   sprint?: SprintFull;
   selectProps: Record<string, any>;
   agile: Board;
-  error?:
-    | (CustomError & {
-        noAgiles: boolean;
-      })
-    | null;
-  queryAssistSuggestions: ServersideSuggestion[];
+  error?: (CustomError & { noAgiles: boolean; }) | null;
+  queryAssistSuggestions: TransformedSuggestion[];
   noMoreSwimlanes?: boolean;
 };
 const initialPageState: AgilePageState = {

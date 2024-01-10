@@ -2,7 +2,8 @@ import type {Activity} from './Activity';
 import type {AnyIssue, IssueOnList} from './Issue';
 import type {Article} from './Article';
 import type {User} from './User';
-import {Entity} from 'types/Global';
+import {Entity} from 'types/Entity';
+
 type ChangeCategory =
   | 'COMMENT'
   | 'CUSTOM_FIELD'

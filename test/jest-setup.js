@@ -12,8 +12,6 @@ import {__setStorageState} from 'components/storage/storage';
 import {buildStyles, DEFAULT_THEME} from 'components/theme/theme';
 import {mockReactNativeNotification} from './jest-mock__react-native-notifications';
 
-import * as ReactNative from 'react-native';
-
 
 Enzyme.configure({adapter: new Adapter()});
 
@@ -72,24 +70,4 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
 jest.mock('react-native-document-picker', () => ({
   default: jest.fn(),
-}));
-
-jest.doMock('react-native', () => {
-  return Object.setPrototypeOf(
-    ReactNative,
-    {
-      NativeModules: {
-        ...ReactNative.NativeModules,
-        Linking: {
-          getInitialURL: jest.fn().mockResolvedValue(''),
-          addEventListener: jest.fn(),
-        },
-      },
-    },
-  );
-});
-
-jest.mock('react-native/Libraries/Linking/Linking', () => ({
-  getInitialURL: jest.fn().mockResolvedValue(''),
-  addEventListener: jest.fn(),
 }));

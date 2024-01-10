@@ -37,19 +37,17 @@ import type {
   BoardOnList,
   Sprint,
   SprintFull,
+  Swimlane,
 } from 'types/Agile';
-import type {AgilePageState} from './board-reducers';
-import type {AppState} from 'reducers';
 import type {CustomError} from 'types/Error';
 import type {IssueFull, IssueOnList} from 'types/Issue';
-
-type ApiGetter = () => Api;
-type StateGetter = () => AppState;
+import {AppState} from 'reducers';
+import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 
 export const PAGE_SIZE = 15;
 const RECONNECT_TIMEOUT = 60000;
-let serverSideEventsInstance: ServersideEvents;
-let serverSideEventsInstanceErrorTimer: null | typeof setTimeout = null;
+let serverSideEventsInstance: ServersideEvents | null;
+let serverSideEventsInstanceErrorTimer: number | undefined;
 export const DEFAULT_ERROR_AGILE_WITH_INVALID_STATUS = {
   status: {
     valid: false,
@@ -57,7 +55,7 @@ export const DEFAULT_ERROR_AGILE_WITH_INVALID_STATUS = {
   },
 };
 
-function receiveSprint(sprint) {
+function receiveSprint(sprint: Sprint | null) {
   return {
     type: types.RECEIVE_SPRINT,
     sprint,
@@ -71,7 +69,7 @@ function setError(error: CustomError | null) {
   };
 }
 
-function track(msg: string, additionalParam: string | null | undefined) {
+function track(msg: string, additionalParam?: string) {
   usage.trackEvent(ANALYTICS_AGILE_PAGE, msg, additionalParam);
 }
 
@@ -98,13 +96,10 @@ function getLastVisitedSprint(
   );
 }
 
-export function getAgileUserProfile(): (
-  dispatch: (arg0: any) => any,
-  getState: () => StateGetter,
-) => Promise<Partial<AgileUserProfile>> {
+export function getAgileUserProfile(): ReduxAction<Promise<Partial<AgileUserProfile>>> {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
   ) => {
     const state = getState();
     return state?.agile?.profile || {};
@@ -112,11 +107,11 @@ export function getAgileUserProfile(): (
 }
 export function loadAgileWithStatus(
   agileId: string,
-): (dispatch: (arg0: any) => any, getState: () => AppState, getApi: ApiGetter) => Promise<void> {
+): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const isOffline: boolean = getState().app?.networkState?.isConnected === false;
     const cachedDefaultAgileBoard: Board | null | undefined = getStorageState().agileDefaultBoard;
@@ -148,8 +143,8 @@ export function loadBoard(
   board: Board,
   query: string,
   refresh: boolean = false,
-): (dispatch: (arg0: any) => any) => Promise<void> {
-  return async (dispatch: (arg0: any) => any) => {
+): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     destroySSE();
     dispatch(updateAgileUserProfileLastVisitedAgile(board.id));
     dispatch(loadAgileWithStatus(board.id));
@@ -185,11 +180,11 @@ export function loadBoard(
   };
 }
 
-function updateAgileUserProfile(requestBody: Record<string, any>) {
+function updateAgileUserProfile(requestBody: Record<string, any>): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const [error, profile] = await until(
       getApi().agile.updateAgileUserProfile(requestBody),
@@ -204,8 +199,8 @@ function updateAgileUserProfile(requestBody: Record<string, any>) {
   };
 }
 
-function updateAgileUserProfileLastVisitedSprint(sprintId: string) {
-  return async (dispatch: (arg0: any) => any) => {
+function updateAgileUserProfileLastVisitedSprint(sprintId: string): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     dispatch(
       updateAgileUserProfile({
         visitedSprints: [
@@ -218,8 +213,8 @@ function updateAgileUserProfileLastVisitedSprint(sprintId: string) {
   };
 }
 
-function updateAgileUserProfileLastVisitedAgile(agileId: string) {
-  return async (dispatch: (arg0: any) => any) => {
+function updateAgileUserProfileLastVisitedAgile(agileId: string): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     dispatch(
       updateAgileUserProfile({
         defaultAgile: {
@@ -239,15 +234,11 @@ function receiveAgile(agile: Board) {
 
 export function loadAgile(
   agileId: string,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => StateGetter,
-  getApi: ApiGetter,
-) => Promise<Partial<Board>> {
+): ReduxAction<Promise<Partial<Board>>> {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const api: Api = getApi();
 
@@ -272,17 +263,14 @@ export async function cacheSprint(sprint: Sprint): Promise<void> {
 export function suggestAgileQuery(
   query: string,
   caret: number,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => StateGetter,
-  getApi: ApiGetter,
-) => Promise<void> {
+): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
-    const suggestions = await getAssistSuggestions(getApi(), query, caret);
+    const projects = getState().agile.profile?.defaultAgile.projects || [];
+    const suggestions = await getAssistSuggestions(getApi(),query, caret, projects, 'Issue');
     dispatch({
       type: types.AGILE_SEARCH_SUGGESTS,
       suggestions,
@@ -293,15 +281,11 @@ export function loadSprint(
   agileId: string,
   sprintId: string,
   query: string,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => AgilePageState,
-  getApi: ApiGetter,
-) => Promise<void> {
+): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AgilePageState,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const api: Api = getApi();
     dispatch(setError(null));
@@ -316,12 +300,12 @@ export function loadSprint(
         0,
         query,
       );
-      const state: AgilePageState = getState();
+      const state: AppState = getState();
 
       async function loadSEETicket(): Promise<string | null> {
         const [error, eventSourceTicket] = await until(
           api.agile.loadSprintSSETicket(
-            sprint.agile?.id || getState().agile.id,
+            sprint.agile?.id || state.agile.id,
             sprint.id,
             encodeURIComponent(getStorageState().agileQuery || ''),
           ),
@@ -360,15 +344,11 @@ export function loadSprint(
 }
 export function loadSprintIssues(
   sprint: SprintFull,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => AgilePageState,
-  getApi: ApiGetter,
-) => Promise<void> {
+): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AgilePageState,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const api: Api = getApi();
     dispatch(setGlobalInProgress(true));
@@ -397,15 +377,11 @@ export function loadSprintIssues(
     }
   };
 }
-export function loadAgileProfile(): (
-  dispatch: (arg0: any) => any,
-  getState: () => StateGetter,
-  getApi: ApiGetter,
-) => Promise<void> {
+export function loadAgileProfile(): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     let profile;
 
@@ -416,18 +392,18 @@ export function loadAgileProfile(): (
         profile,
       });
     } catch (error) {
-      dispatch(setError(error));
+      dispatch(setError(error as CustomError));
     }
   };
 }
 export function loadDefaultAgileBoard(
   query: string,
   refresh: boolean,
-): (dispatch: (arg0: any) => any, getState: () => AppState, getApi: ApiGetter) => Promise<void> {
+): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     dispatch(setError(null));
     const isOffline: boolean = getState().app?.networkState?.isConnected === false;
@@ -442,8 +418,7 @@ export function loadDefaultAgileBoard(
     const agileUserProfile: AgileUserProfile = await dispatch(
       getAgileUserProfile(),
     );
-    const board: Board | null | undefined = agileUserProfile?.defaultAgile;
-
+    const board: Partial<Board> | null = agileUserProfile?.defaultAgile;
     if (board) {
       log.info('Loading Default Agile board', board?.name || board?.id);
       await dispatch(loadBoard(board, query, refresh));
@@ -472,7 +447,7 @@ function stopSwimlanesLoading() {
   };
 }
 
-function receiveSwimlanes(swimlanes) {
+function receiveSwimlanes(swimlanes: Swimlane) {
   return {
     type: types.RECEIVE_SWIMLANES,
     PAGE_SIZE,
@@ -480,7 +455,7 @@ function receiveSwimlanes(swimlanes) {
   };
 }
 
-function setSSEInstance(sseInstance: ServersideEvents | null | undefined) {
+function setSSEInstance(sseInstance: ServersideEvents | null) {
   serverSideEventsInstance = sseInstance;
 }
 
@@ -488,7 +463,7 @@ export function destroySSE() {
   if (serverSideEventsInstance) {
     log.info('Force close SSE');
     clearTimeout(serverSideEventsInstanceErrorTimer);
-    serverSideEventsInstanceErrorTimer = null;
+    serverSideEventsInstanceErrorTimer = undefined;
     serverSideEventsInstance.close();
     setSSEInstance(null);
   }
@@ -516,15 +491,11 @@ function moveIssue(
 
 export function fetchMoreSwimlanes(
   query?: string,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => StateGetter,
-  getApi: ApiGetter,
-) => Promise<void> {
+): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const isOffline: boolean =
       getState().app?.networkState?.isConnected === false;
@@ -556,7 +527,7 @@ export function fetchMoreSwimlanes(
   };
 }
 
-function updateRowCollapsedState(row, newCollapsed: boolean) {
+function updateRowCollapsedState(row: AgileBoardRow, newCollapsed: boolean) {
   animateLayout();
   return {
     type: types.ROW_COLLAPSE_TOGGLE,
@@ -567,15 +538,11 @@ function updateRowCollapsedState(row, newCollapsed: boolean) {
 
 export function rowCollapseToggle(
   row: AgileBoardRow,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => StateGetter,
-  getApi: ApiGetter,
-) => Promise<void> {
+): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const {sprint} = getState().agile;
     const api: Api = getApi();
@@ -611,7 +578,7 @@ export function rowCollapseToggle(
   };
 }
 
-function updateColumnCollapsedState(column, newCollapsed: boolean) {
+function updateColumnCollapsedState(column: BoardColumn, newCollapsed: boolean) {
   animateLayout();
   return {
     type: types.COLUMN_COLLAPSE_TOGGLE,
@@ -622,15 +589,11 @@ function updateColumnCollapsedState(column, newCollapsed: boolean) {
 
 export function columnCollapseToggle(
   column: BoardColumn,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => StateGetter,
-  getApi: ApiGetter,
-) => Promise<void> {
+): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const {sprint} = getState().agile;
     const api = getApi();
@@ -655,7 +618,7 @@ export function columnCollapseToggle(
       trackEvent('Toggle column collapsing');
     } catch (e) {
       dispatch(updateColumnCollapsedState(column, oldCollapsed));
-      notifyError(e);
+      notifyError(e as CustomError);
     }
   };
 }
@@ -666,54 +629,44 @@ export function closeSelect(): {
     type: types.CLOSE_AGILE_SELECT,
   };
 }
-export function openSprintSelect(): (
-  dispatch: (arg0: any) => any,
-  getState: () => StateGetter,
-  getApi: ApiGetter,
-) => void {
+export function openSprintSelect(): ReduxAction {
   return (
-    dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const {sprint} = getState().agile;
     const api: Api = getApi();
 
-    if (!sprint) {
-      return;
+    if (sprint) {
+      trackEvent('Open sprint select');
+      dispatch({
+        type: types.OPEN_AGILE_SELECT,
+        selectProps: {
+          show: true,
+          placeholder: i18n('Filter sprints by name'),
+          dataSource: async () => {
+            const sprints: Sprint[] = await api.agile.getSprintList(sprint.agile.id);
+            return getGroupedSprints(sprints);
+          },
+          selectedItems: [sprint],
+          getTitle: (sprint: Sprint) =>
+            `${sprint.name} ${sprint.archived ? i18n('(archived)') : ''}`,
+          onSelect: (selectedSprint: Sprint, query: string) => {
+            dispatch(closeSelect());
+            dispatch(loadSprint(sprint.agile.id, selectedSprint.id, query));
+            trackEvent('Change sprint');
+          },
+        },
+      });
     }
-
-    trackEvent('Open sprint select');
-    dispatch({
-      type: types.OPEN_AGILE_SELECT,
-      selectProps: {
-        show: true,
-        placeholder: i18n('Filter sprints by name'),
-        dataSource: async () => {
-          const sprints = await api.agile.getSprintList(sprint.agile.id);
-          return getGroupedSprints(sprints);
-        },
-        selectedItems: [sprint],
-        getTitle: sprint =>
-          `${sprint.name} ${sprint.archived ? i18n('(archived)') : ''}`,
-        onSelect: (selectedSprint: Sprint, query: string) => {
-          dispatch(closeSelect());
-          dispatch(loadSprint(sprint.agile.id, selectedSprint.id, query));
-          trackEvent('Change sprint');
-        },
-      },
-    });
   };
 }
-export function openBoardSelect(): (
-  dispatch: (arg0: any) => any,
-  getState: () => StateGetter,
-  getApi: ApiGetter,
-) => void {
+export function openBoardSelect(): ReduxAction {
   return (
-    dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const api: Api = getApi();
     const {sprint, agile} = getState().agile;
@@ -844,15 +797,11 @@ export function storeCreatingIssueDraft(
 export function createCardForCell(
   columnId: string,
   cellId: string,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => StateGetter,
-  getApi: ApiGetter,
-) => Promise<Partial<IssueOnList> | null> {
+): ReduxAction<Promise<Partial<IssueOnList> | null>> {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const {sprint} = getState().agile;
     const api: Api = getApi();
@@ -868,25 +817,21 @@ export function createCardForCell(
       trackEvent('Open create card for cell');
       return draft;
     } catch (err) {
-      notifyError(err);
+      notifyError(err as CustomError);
       return null;
     }
   };
 }
-export function subscribeServersideUpdates(): (
-  dispatch: (arg0: any) => any,
-  getState: () => StateGetter,
-  getApi: ApiGetter,
-) => Promise<void> {
+export function subscribeServersideUpdates(): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: StateGetter,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const {sprint} = getState().agile;
 
     const updateCache = (): void => {
-      cacheSprint(getState().agile.sprint);
+      cacheSprint(sprint);
     };
 
     serverSideEventsInstance = new ServersideEvents(getApi().config.backendUrl);
@@ -947,20 +892,16 @@ export function onCardDrop(data: {
   cellId: string;
   leadingId: string | null | undefined;
   movedId: string;
-}): (
-  dispatch: (arg0: any) => any,
-  getState: () => StateGetter,
-  getApi: ApiGetter,
-) => Promise<void> {
+}): ReduxAction {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => Record<string, any>,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
     const {sprint} = getState().agile;
     const api: Api = getApi();
     const issueOnBoard = findIssueOnBoard(
-      getState().agile.sprint.board,
+      sprint.board,
       data.movedId,
     );
 
@@ -1009,8 +950,8 @@ export function refreshAgile(
   agileId: string,
   sprintId: string,
   query: string,
-): (dispatch: (arg0: any) => any) => Promise<void> {
-  return async (dispatch: (arg0: any) => any) => {
+): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     log.info('Refresh agile with popup');
     flushStoragePart({
       agileQuery: query,
@@ -1037,14 +978,14 @@ export function storeLastQuery(query: string): () => Promise<void> {
 export function updateIssue(
   issueId: string,
   sprint?: SprintFull,
-): (dispatch: (arg0: any) => any) => Promise<void> {
-  return async (dispatch: (arg0: any) => any) => {
+): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     const issue: IssueFull | null = await issueUpdater.loadIssue(issueId);
     dispatch({
       type: ISSUE_UPDATED,
       issue,
 
-      onUpdate(board) {
+      onUpdate(board: Board) {
         !!sprint &&
           cacheSprint(
             Object.assign({}, sprint, {

@@ -12,7 +12,7 @@ import type {Activity} from 'types/Activity';
 import type {InboxThreadGroup} from 'types/Inbox';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
-import {Entity} from 'types/Global';
+import {Entity} from 'types/Entity';
 
 type Props = {
   author: User;

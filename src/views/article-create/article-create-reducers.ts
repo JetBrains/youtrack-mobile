@@ -1,12 +1,16 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+
 import {attachmentTypes} from './article-create__attachment-actions-and-types';
 import {guid} from 'util/util';
+
 import type {Article, ArticleDraft} from 'types/Article';
 import type {Attachment} from 'types/CustomFields';
 import type {CustomError} from 'types/Error';
+import {ElementType} from 'react';
+
 export type ArticleCreateState = {
   articleDraft: ArticleDraft | null;
-  breadCrumbs: React.ReactElement<React.ComponentProps<any>, any> | null;
+  breadCrumbs: ElementType | null;
   error: CustomError | null;
   isProcessing: boolean;
   isAttachFileDialogVisible: boolean;
@@ -14,6 +18,7 @@ export type ArticleCreateState = {
   isNew?: boolean;
   originalArticleId?: string;
 };
+
 export const articleCreateInitialState: ArticleCreateState = {
   articleDraft: null,
   breadCrumbs: null,
@@ -22,16 +27,16 @@ export const articleCreateInitialState: ArticleCreateState = {
   isAttachFileDialogVisible: false,
   attachingImage: null,
 };
+
 const attachmentReducers = {
   [attachmentTypes.ATTACH_START_ADDING](
     state: ArticleCreateState,
     action: {
-      attachingImage: Record<string, any>;
+      attachingImage: Attachment;
     },
   ) {
     const {attachingImage} = action;
-    const attachments: Attachment[] =
-      state?.articleDraft?.attachments || [];
+    const attachments: Attachment[] = state?.articleDraft?.attachments || [];
     state.articleDraft = {
       ...state.articleDraft,
       attachments: [...attachments, attachingImage],
@@ -110,7 +115,7 @@ const {reducer, actions} = createSlice({
       state.isProcessing = action.payload;
     },
 
-    setError(state: ArticleCreateState, action: PayloadAction<boolean>) {
+    setError(state: ArticleCreateState, action: PayloadAction<CustomError>) {
       state.error = action.payload;
     },
 
@@ -119,6 +124,6 @@ const {reducer, actions} = createSlice({
     },
   },
   extraReducers: attachmentReducers,
-}) as any;
+});
 export const {setError, setProcessing, setArticleDraft} = actions;
 export default reducer;
