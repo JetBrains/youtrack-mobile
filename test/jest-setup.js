@@ -71,12 +71,3 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 jest.mock('react-native-document-picker', () => ({
   default: jest.fn(),
 }));
-
-jest.mock('react-native', () => {
-  const RN = jest.requireActual('react-native');
-  RN.NativeModules.Linking = {
-    getInitialURL: jest.fn(),
-    addEventListener: jest.fn(),
-  };
-  return RN;
-});

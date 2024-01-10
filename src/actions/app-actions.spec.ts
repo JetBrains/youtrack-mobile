@@ -50,6 +50,7 @@ jest.mock('react-native/Libraries/Linking/Linking', () => ({
 }));
 
 jest.mock('components/usage/usage');
+jest.mock('components/open-url-handler/open-url-handler');
 
 
 const backendURLMock = 'https://example.com';
