@@ -6,6 +6,8 @@ import {COLOR_FIELD_SIZE} from 'components/color-field/color-field';
 
 export default EStyleSheet.create({
   wrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: UNIT / 4,
     paddingHorizontal: 5,

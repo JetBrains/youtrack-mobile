@@ -391,4 +391,23 @@ export default EStyleSheet.create({
   rightAvatar: {
     left: -DUAL_AVATAR_SIZE / 2,
   },
+  slaFields: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: UNIT / 2,
+  },
+  slaFieldsItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: UNIT,
+  },
+  slaFieldPaused: {
+    backgroundColor: '$greyColor',
+    color: '$text',
+  },
+  slaFieldPausedIcon: {
+    marginRight: UNIT / 4,
+    color: '$textSecondary',
+  },
 });

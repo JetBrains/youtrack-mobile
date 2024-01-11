@@ -111,6 +111,7 @@ const ISSUE_FIELD_SHORT_FIELDS = toField([
   'name',
   'localizedName',
   '$type',
+  'pausedTime',
   {
     value: [
       'id',

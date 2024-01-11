@@ -1,50 +1,52 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, View, Text, Linking} from 'react-native';
-import ApiHelper from '../api/api__helper';
-import Avatar from '../avatar/avatar';
-import ColorField from '../color-field/color-field';
+
+import ApiHelper from 'components/api/api__helper';
+import Avatar from 'components/avatar/avatar';
+import ColorField from 'components/color-field/color-field';
 import IconUrl from '@jetbrains/icons/new-window.svg';
 import {absDate} from 'components/date/date';
-import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {getHUBUrl, isURLPattern} from 'util/util';
-import {HIT_SLOP} from '../common-styles/button';
+import {HIT_SLOP} from 'components/common-styles/button';
+
 import styles from './custom-field.styles';
-import type {
+
+import {
   CustomField as CustomFieldType,
   FieldValue,
 } from 'types/CustomFields';
-import type {User} from 'types/User';
-type Props = {
+import {User} from 'types/User';
+import {CustomFieldValue} from 'types/CustomFields';
+
+interface Props {
   field: CustomFieldType;
-  onPress: (arg0: any) => any;
+  onPress: () => unknown;
   disabled: boolean;
   active: boolean;
-};
+}
+
 const maxValueStringWidth: number = 30;
+
 export default class CustomField extends Component<Props, void> {
   _getFieldType(field: CustomFieldType) {
-    if (!field?.projectCustomField?.field?.fieldType) {
-      return null;
-    }
-
-    return field.projectCustomField.field.fieldType.valueType;
+    return field?.projectCustomField?.field?.fieldType?.valueType || null;
   }
 
   _getValue(
-    value: FieldValue | null | undefined,
-    fieldType: string | null | undefined,
-  ): string | null | undefined {
+    value: CustomFieldValue | null,
+    fieldType: string | null
+  ): string | null {
     const field: CustomFieldType = this.props.field;
-    const emptyValue: string | null | undefined =
+    const emptyValue: string | null =
       field?.projectCustomField?.emptyFieldText || '';
 
     if (value != null) {
       if (fieldType === 'date') {
-        return absDate((value as any) as number, true);
+        return absDate(value as any as number, true);
       }
-
       if (fieldType === 'date and time') {
-        return absDate((value as any) as Date);
+        return absDate(value);
       }
 
       if (
@@ -52,7 +54,7 @@ export default class CustomField extends Component<Props, void> {
         fieldType === 'string' ||
         fieldType === 'float'
       ) {
-        return `${value as any}`;
+        return `${value}`;
       }
 
       return getEntityPresentation(value);
@@ -74,46 +76,32 @@ export default class CustomField extends Component<Props, void> {
       : label;
   }
 
-  _renderColorMaker(
-    value:
-      | (FieldValue | null | undefined)
-      | (Array<FieldValue> | null | undefined),
-  ) {
-    const firstColorCodedValue =
-      value && [].concat(value).find(fieldValue => fieldValue.color);
-
-    if (firstColorCodedValue) {
-      return (
-        <ColorField
-          style={styles.colorMarker}
-          text={firstColorCodedValue.localizedName || firstColorCodedValue.name}
-          color={firstColorCodedValue.color}
-        />
-      );
-    }
+  _renderColorMaker(value: CustomFieldValue | null) {
+    const firstColorCodedValue: FieldValue | null = value
+      ? [].concat(value).find((fieldValue: FieldValue) => fieldValue.color) || null
+      : null;
+    return firstColorCodedValue ? (
+      <ColorField
+        style={styles.colorMarker}
+        text={firstColorCodedValue.localizedName || firstColorCodedValue.name}
+        color={firstColorCodedValue.color}
+      />
+    ) : null;
   }
-
-  _renderValue(
-    value: Record<string, any> | Array<Record<string, any>>,
-    fieldType: string | null | undefined,
-  ) {
-    const {active, disabled} = this.props;
+  _renderValue(value: CustomFieldValue, fieldType: string | null) {
+    const { active, disabled } = this.props;
     const textStyle = [
       styles.valueText,
       active && styles.valueTextActive,
       disabled && styles.valueTextDisabled,
     ];
 
-    const render = (val: Record<string, any> | null) => {
+    const render = (val: CustomFieldValue | null) => {
       const valuePresentation: string = this._getValue(val, fieldType) || '';
       return (
         <View style={styles.value} key="value" accessible={false}>
-          {val && fieldType === 'user' ? this.renderAvatar(val) : null}
-          <Text
-            testID="test:id/value"
-            accessible={true}
-            style={textStyle}
-          >
+          {val && fieldType === 'user' ? this.renderAvatar(val as User) : null}
+          <Text testID="test:id/value" accessible={true} style={textStyle}>
             {valuePresentation?.length > maxValueStringWidth
               ? `${valuePresentation.substring(0, maxValueStringWidth)}…`
               : valuePresentation}
@@ -123,7 +111,12 @@ export default class CustomField extends Component<Props, void> {
               hitSlop={HIT_SLOP}
               onPress={() => Linking.openURL(valuePresentation.trim())}
             >
-              <IconUrl size={22} fill={styles.url.color} style={styles.url} />
+              <IconUrl
+                width={14}
+                height={14}
+                fill={styles.url.color}
+                style={styles.url}
+              />
             </TouchableOpacity>
           )}
         </View>
@@ -138,7 +131,7 @@ export default class CustomField extends Component<Props, void> {
       return value.map((val, ind) => {
         return [
           render(val),
-          <Text style={textStyle} key={val}>
+          <Text style={textStyle} key={`cf-${ind}`}>
             {ind === value.length - 1 ? ' ' : ', '}
           </Text>,
         ];
@@ -149,11 +142,11 @@ export default class CustomField extends Component<Props, void> {
   }
 
   renderAvatar(fieldValue: User): React.ReactNode {
-    const user: User = ApiHelper.convertRelativeUrls(
+    const user = ApiHelper.convertRelativeUrls(
       [fieldValue],
       'avatarUrl',
-      getHUBUrl(),
-    )[0];
+      getHUBUrl()
+    )[0] as User;
     return (
       <Avatar
         testID="test:id/customFieldAvatar"
@@ -164,14 +157,14 @@ export default class CustomField extends Component<Props, void> {
         userName={getEntityPresentation(user)}
         size={20}
         source={{
-          uri: (user.avatarUrl as any) as string,
+          uri: user.avatarUrl,
         }}
       />
     );
   }
 
   render(): React.ReactNode {
-    const {field, active} = this.props;
+    const { field, active } = this.props;
     return (
       <TouchableOpacity
         style={[styles.wrapper, active ? styles.wrapperActive : null]}
@@ -180,18 +173,14 @@ export default class CustomField extends Component<Props, void> {
         accessible={false}
       >
         <View style={styles.keyWrapper} accessible={false}>
-          <Text
-            style={styles.keyText}
-            testID="test:id/name"
-            accessible={true}
-          >
+          <Text style={styles.keyText} testID="test:id/name" accessible={true}>
             {this.getLabel()}
           </Text>
         </View>
 
         <View style={styles.valuesWrapper} accessible={false}>
-          {this._renderColorMaker((field.value as any) as FieldValue)}
-          {this._renderValue(field.value, this._getFieldType(field))}
+          {this._renderColorMaker(field.value as FieldValue)}
+          {this._renderValue(field.value as FieldValue, this._getFieldType(field))}
         </View>
       </TouchableOpacity>
     );

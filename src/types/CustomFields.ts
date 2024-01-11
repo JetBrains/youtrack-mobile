@@ -87,15 +87,17 @@ export type FieldValue = {
   text: string;
 };
 export type CustomFieldValue =
-  | FieldValue
-  | Partial<FieldValue>
   | number
   | string
-  | any[];
+  | FieldValue
+  | Partial<FieldValue>
+  | Partial<FieldValue>[]
+
 export type CustomFieldBase = {
   $type: string;
   id: string;
   name: string;
+  pausedTime?: number;
   projectCustomField: ProjectCustomField;
 };
 export type CustomField = {

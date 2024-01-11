@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
+import IconPaused from '@jetbrains/icons/paused.svg';
 import ColorField from 'components/color-field/color-field';
 import IconHDTicket from 'components/icon/assets/hdticket.svg';
 import Tags from 'components/tags/tags';
@@ -8,8 +9,9 @@ import {
   getPriorityField,
   getEntityPresentation,
   getReadableID,
-  getAssigneeField,
+  getAssigneeField, getSLAFields,
 } from 'components/issue-formatter/issue-formatter';
+import {i18n} from 'components/i18n/i18n';
 import {IssuesSettings} from 'views/issues/index';
 import {ytDate} from 'components/date/date';
 import Avatar from 'components/avatar/avatar';
@@ -17,7 +19,7 @@ import {ThemeContext} from 'components/theme/theme-context';
 
 import styles, {DUAL_AVATAR_SIZE} from './issues.styles';
 
-import type {BundleValue, CustomField} from 'types/CustomFields';
+import type {BundleValue, CustomFieldBase} from 'types/CustomFields';
 import type {ViewStyleProp} from 'types/Internal';
 import {BaseIssue, IssueOnList} from 'types/Issue';
 import {FieldValue} from 'types/CustomFields';
@@ -53,6 +55,31 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
           width={size}
           height={size}
         />
+      </View>
+    );
+  }
+
+  renderSLA() {
+    const slaFields = getSLAFields(this.props.issue);
+    return (
+      <View style={styles.slaFields}>
+        {slaFields.map((f) => {
+          if (f.pausedTime) {
+            return <ColorField
+              style={styles.slaFieldPaused}
+              color={{foreground: styles.slaFieldPaused.color, id: '', background: ''}}
+              text={i18n('Paused')}
+              fullText={true}>
+              <IconPaused
+                style={styles.slaFieldPausedIcon}
+                fill={styles.slaFieldPausedIcon.color}
+                width={13}
+                height={13}
+              />
+            </ColorField>;
+          }
+          return null;
+        })}
       </View>
     );
   }
@@ -101,7 +128,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
 
   renderAvatar() {
     const {issue} = this.props;
-    const assigneeField: CustomField | null = this.isHelpDeskEnabled() ? getAssigneeField(issue) : null;
+    const assigneeField: CustomFieldBase | null = this.isHelpDeskEnabled() ? getAssigneeField(issue) : null;
     const assigneeFieldValue = assigneeField?.value as (FieldValue | null);
 
     return (
@@ -209,6 +236,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
 
         {this.renderSummary()}
         {this.renderDescription()}
+        {this.renderSLA()}
         {this.renderTags()}
       </View>
     );

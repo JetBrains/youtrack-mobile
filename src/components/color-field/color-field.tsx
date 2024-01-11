@@ -14,6 +14,7 @@ interface Props {
   color?: ColorCoding;
   fullText?: boolean;
   style?: any;
+  children?: any;
 }
 
 export const COLOR_FIELD_SIZE = 20;
@@ -48,6 +49,7 @@ export default class ColorField extends PureComponent<Props, Readonly<{}>> {
           hasNoColor ? styles.defaultColorCoding : null,
         ]}
       >
+        {this.props.children}
         <Text
           style={[
             styles.text,
