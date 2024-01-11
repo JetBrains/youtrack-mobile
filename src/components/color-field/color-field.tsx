@@ -33,7 +33,7 @@ export default class ColorField extends PureComponent<Props, Readonly<{}>> {
 
   render(): React.ReactNode {
     const {style = null, color} = this.props;
-    const hasNoColor: boolean = color?.id === NO_COLOR_CODING_ID;
+    const hasNoColor: boolean = !color || color?.id === NO_COLOR_CODING_ID;
 
     return (
       <View

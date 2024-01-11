@@ -60,25 +60,30 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
   renderPriority(customStyle?: any, text?: string): React.ReactNode {
     const priorityField = getPriorityField(this.props.issue);
 
-    if (
-      !priorityField ||
-      !priorityField.value ||
-      Array.isArray(priorityField.value) && priorityField.value?.length === 0
-    ) {
-      return null;
+    const hasHoPriority =
+      !priorityField?.value ||
+      (Array.isArray(priorityField?.value) && priorityField.value?.length === 0);
+
+    if (hasHoPriority) {
+      return this.isHelpDeskEnabled() ? (
+        <ColorField
+          style={[
+            styles.priorityWrapper,
+            styles.priorityPlaceholder,
+            customStyle,
+          ]}
+        />
+      ) : null;
     }
 
     const values: BundleValue[] = [].concat(priorityField.value as any);
     const LAST = values.length - 1;
-
     return (
-      <>
-        <ColorField
-          style={[styles.priorityWrapper, customStyle]}
-          text={text || values[LAST].name}
-          color={values[LAST].color}
-        />
-      </>
+      <ColorField
+        style={[styles.priorityWrapper, customStyle]}
+        text={text || values[LAST].name}
+        color={values[LAST].color}
+      />
     );
   }
 

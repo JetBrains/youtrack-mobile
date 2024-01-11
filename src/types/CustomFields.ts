@@ -87,6 +87,7 @@ export type FieldValue = {
   text: string;
 };
 export type CustomFieldValue =
+  | FieldValue
   | Partial<FieldValue>
   | number
   | string
@@ -102,7 +103,7 @@ export type CustomField = {
   id: string;
   name: string;
   hasStateMachine?: boolean;
-  value: CustomFieldValue;
+  value: CustomFieldValue | CustomFieldValue[];
   localizedName?: string;
   projectCustomField: ProjectCustomField;
 };
