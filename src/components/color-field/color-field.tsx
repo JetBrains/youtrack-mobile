@@ -53,6 +53,7 @@ export default class ColorField extends PureComponent<Props, Readonly<{}>> {
         <Text
           style={[
             styles.text,
+            style?.fontSize ? {fontSize: style.fontSize} : null,
             {color: hasNoColor ? styles.defaultColorCoding.color : color?.foreground},
           ]}
           numberOfLines={1}

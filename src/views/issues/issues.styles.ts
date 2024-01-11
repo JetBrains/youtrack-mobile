@@ -360,13 +360,6 @@ export default EStyleSheet.create({
     borderRadius: UNIT * 2,
     color: '$iconAccent',
   },
-  helpDeskIconWrapperCompact: {
-    marginTop: UNIT / 4,
-    marginRight: -UNIT / 4,
-    opacity: 0.7,
-  },
-  helpDeskIcon: {
-  },
   dualAvatarWrapper: {
     position: 'relative',
     width: DUAL_AVATAR_SIZE,
@@ -396,18 +389,37 @@ export default EStyleSheet.create({
     flexWrap: 'wrap',
     marginTop: UNIT / 2,
   },
+  slaFieldsCompact: {
+    marginTop: 0,
+  },
   slaFieldsItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: UNIT,
   },
+  slaField: {
+    color: '$textButton',
+    backgroundColor: '$greenColor',
+  },
+  slaFieldOverdue: {
+    backgroundColor: '$redColor',
+  },
   slaFieldPaused: {
     backgroundColor: '$greyColor',
     color: '$text',
   },
   slaFieldPausedIcon: {
-    marginRight: UNIT / 4,
     color: '$textSecondary',
+  },
+  slaFieldTag: {
+    marginTop: -UNIT / 2,
+    marginRight: UNIT / 1.5,
+    fontSize: SECONDARY_FONT_SIZE - 3,
+  },
+  slaFieldPausedCompact: {
+    marginTop: -UNIT / 2,
+    marginRight: UNIT / 2,
+    marginLeft: -UNIT / 2,
   },
 });

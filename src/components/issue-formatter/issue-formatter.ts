@@ -1,10 +1,10 @@
-import type {AnyIssue, IssueFull, IssueOnList} from 'types/Issue';
-import type {Article} from 'types/Article';
-import type {CustomFieldBase} from 'types/CustomFields';
+import type { AnyIssue, IssueFull, IssueOnList } from 'types/Issue';
+import type { Article } from 'types/Article';
+import type { CustomFieldBase } from 'types/CustomFields';
 
 function findIssueField(
   issue: AnyIssue,
-  predicate: (field: CustomFieldBase) => boolean,
+  predicate: (field: CustomFieldBase) => boolean
 ): CustomFieldBase | null {
   const fields = issue.fields || [];
 
@@ -24,14 +24,10 @@ function getPriorityField(issue: AnyIssue): CustomFieldBase | null {
   });
 }
 
-function getPausedTime(issue: IssueOnList): CustomFieldBase[] {
-  return (issue.fields || []).filter(it => it.pausedTime);
-}
-
 function getSLAFields(issue: IssueOnList): CustomFieldBase[] {
-  return [
-    ...getPausedTime(issue),
-  ];
+  return (issue.fields || []).filter(
+    (it) => it.$type === 'SlaIssueCustomField'
+  );
 }
 
 function getAssigneeField(issue: AnyIssue): CustomFieldBase | null {

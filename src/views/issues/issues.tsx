@@ -336,6 +336,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         ]}
       >
         <IssueRowComponent
+          helpdeskMode={this.props.helpDeskMode && !!item.project?.plugins?.helpDeskSettings?.enabled}
           hideId={hideId}
           settings={settings}
           issue={item}
@@ -557,7 +558,10 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
   renderToolbar() {
     return (
       <View style={styles.toolbar}>
-        {this.hasIssues() ? <IssuesCount issuesCount={this.props.issuesCount}/> : <View/>}
+        {this.hasIssues() ? <IssuesCount
+            issuesCount={this.props.issuesCount}
+            isHelpdesk={this.props.helpDeskMode}
+          /> : <View />}
       </View>
     );
   }

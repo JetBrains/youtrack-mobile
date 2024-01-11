@@ -9,7 +9,7 @@ import {i18nPlural} from 'components/i18n/i18n';
 import {Skeleton} from 'components/skeleton/skeleton';
 
 
-const IssuesCount = ({issuesCount}: { issuesCount: number | null }) => {
+const IssuesCount = ({issuesCount, isHelpdesk}: { issuesCount: number | null, isHelpdesk: boolean }) => {
   return typeof issuesCount === 'number' ? (
     <AnimatedView
       testID="test:id/issuesCount"
@@ -21,7 +21,14 @@ const IssuesCount = ({issuesCount}: { issuesCount: number | null }) => {
       style={styles.toolbarAction}
     >
       <Text numberOfLines={2} style={styles.toolbarText}>
-        {i18nPlural(
+        {isHelpdesk ? i18nPlural(
+          issuesCount,
+          'Matches {{issuesCount}} ticket',
+          'Matches {{issuesCount}} tickets',
+          {
+            issuesCount,
+          },
+        ) : i18nPlural(
           issuesCount,
           'Matches {{issuesCount}} issue',
           'Matches {{issuesCount}} issues',

@@ -90,6 +90,7 @@ export type CustomFieldValue =
   | number
   | string
   | FieldValue
+  | FieldValue[]
   | Partial<FieldValue>
   | Partial<FieldValue>[]
 
@@ -98,6 +99,7 @@ export type CustomFieldBase = {
   id: string;
   name: string;
   pausedTime?: number;
+  value: CustomFieldValue;
   projectCustomField: ProjectCustomField;
 };
 export type CustomField = {
