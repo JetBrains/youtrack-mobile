@@ -56,6 +56,24 @@ msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} incidencia"
 msgstr[1] "{{amount}} incidencias"
 
+#: src/views/issues/issues__row.tsx
+msgid "{{daysLeft}}h"
+msgid_plural "{{daysLeft}}h"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/views/issues/issues__row.tsx
+msgid "{{hoursLeft}}h"
+msgid_plural "{{hoursLeft}}h"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/views/issues/issues__row.tsx
+msgid "{{minutesAbsolute}}m"
+msgid_plural "{{minutesAbsolute}}m"
+msgstr[0] ""
+msgstr[1] ""
+
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
 msgstr "@Mención en un comentario"
@@ -691,6 +709,12 @@ msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] "Coincide con {{issuesCount}} incidencia"
 msgstr[1] "Coincide con {{issuesCount}} incidencias"
 
+#: src/views/issues/issues__count.tsx
+msgid "Matches {{issuesCount}} ticket"
+msgid_plural "Matches {{issuesCount}} tickets"
+msgstr[0] ""
+msgstr[1] ""
+
 #: src/views/issues/index.ts
 msgid "Medium"
 msgstr "Medium"
@@ -792,6 +816,10 @@ msgstr "Otros grupos y equipos"
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "Contraseña"
+
+#: src/views/issues/issues__row.tsx
+msgid "Paused"
+msgstr "En pausa"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"

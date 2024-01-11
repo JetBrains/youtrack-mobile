@@ -64,6 +64,30 @@ msgstr[1] "{{amount}} zgłoszenia"
 msgstr[2] "{{amount}} zgłoszeń"
 msgstr[3] "{{amount}} zgłoszenia"
 
+#: src/views/issues/issues__row.tsx
+msgid "{{daysLeft}}h"
+msgid_plural "{{daysLeft}}h"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: src/views/issues/issues__row.tsx
+msgid "{{hoursLeft}}h"
+msgid_plural "{{hoursLeft}}h"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: src/views/issues/issues__row.tsx
+msgid "{{minutesAbsolute}}m"
+msgid_plural "{{minutesAbsolute}}m"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
 msgstr ""
@@ -703,6 +727,14 @@ msgstr[1] "Pasuje do {{issuesCount}} zgłoszeń"
 msgstr[2] "Pasuje do {{issuesCount}} zgłoszeń"
 msgstr[3] "Pasuje do {{issuesCount}} zgłoszenia"
 
+#: src/views/issues/issues__count.tsx
+msgid "Matches {{issuesCount}} ticket"
+msgid_plural "Matches {{issuesCount}} tickets"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
 #: src/views/issues/index.ts
 msgid "Medium"
 msgstr ""
@@ -804,6 +836,10 @@ msgstr "Inne grupy i zespoły"
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "Hasło"
+
+#: src/views/issues/issues__row.tsx
+msgid "Paused"
+msgstr "Wstrzymano"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"

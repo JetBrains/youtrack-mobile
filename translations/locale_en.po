@@ -50,6 +50,24 @@ msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} issue"
 msgstr[1] "{{amount}} issues"
 
+#: src/views/issues/issues__row.tsx:333
+msgid "{{daysLeft}}h"
+msgid_plural "{{daysLeft}}h"
+msgstr[0] "{{daysLeft}}h"
+msgstr[1] "{{daysLeft}}h"
+
+#: src/views/issues/issues__row.tsx:325
+msgid "{{hoursLeft}}h"
+msgid_plural "{{hoursLeft}}h"
+msgstr[0] "{{hoursLeft}}h"
+msgstr[1] "{{hoursLeft}}h"
+
+#: src/views/issues/issues__row.tsx:316
+msgid "{{minutesAbsolute}}m"
+msgid_plural "{{minutesAbsolute}}m"
+msgstr[0] "{{minutesAbsolute}}m"
+msgstr[1] "{{minutesAbsolute}}m"
+
 #: src/components/user/user-card.tsx:162
 msgid "@Mention in a comment"
 msgstr "@Mention in a comment"
@@ -536,7 +554,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:572
+#: src/views/issues/issues.tsx:576
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -600,7 +618,7 @@ msgstr "It could mean that the issue doesn't exist or you don't have permission 
 msgid "JetBrains Privacy Policy"
 msgstr "JetBrains Privacy Policy"
 
-#: src/components/date/date.ts:109
+#: src/components/date/date.ts:108
 msgid "just now"
 msgstr "just now"
 
@@ -679,11 +697,17 @@ msgstr "Mark as unread"
 msgid "Marked as read"
 msgstr "Marked as read"
 
-#: src/views/issues/issues__count.tsx:24
+#: src/views/issues/issues__count.tsx:31
 msgid "Matches {{issuesCount}} issue"
 msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] "Matches {{issuesCount}} issue"
 msgstr[1] "Matches {{issuesCount}} issues"
+
+#: src/views/issues/issues__count.tsx:24
+msgid "Matches {{issuesCount}} ticket"
+msgid_plural "Matches {{issuesCount}} tickets"
+msgstr[0] "Matches {{issuesCount}} ticket"
+msgstr[1] "Matches {{issuesCount}} tickets"
 
 #: src/views/issues/index.ts:46
 msgid "Medium"
@@ -742,7 +766,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:622
+#: src/views/issues/issues.tsx:626
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -786,6 +810,10 @@ msgstr "Other groups and teams"
 #: src/views/log-in/log-in.tsx:223
 msgid "Password"
 msgstr "Password"
+
+#: src/views/issues/issues__row.tsx:102
+msgid "Paused"
+msgstr "Paused"
 
 #: src/components/attach-file/attach-file-dialog.tsx:89
 msgid "Photo and video library"
@@ -895,7 +923,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:687
+#: src/views/issues/issues.tsx:691
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 

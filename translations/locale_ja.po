@@ -52,6 +52,21 @@ msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} 件の課題"
 
+#: src/views/issues/issues__row.tsx
+msgid "{{daysLeft}}h"
+msgid_plural "{{daysLeft}}h"
+msgstr[0] ""
+
+#: src/views/issues/issues__row.tsx
+msgid "{{hoursLeft}}h"
+msgid_plural "{{hoursLeft}}h"
+msgstr[0] ""
+
+#: src/views/issues/issues__row.tsx
+msgid "{{minutesAbsolute}}m"
+msgid_plural "{{minutesAbsolute}}m"
+msgstr[0] ""
+
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
 msgstr "コメントでの@メンション"
@@ -685,6 +700,11 @@ msgid "Matches {{issuesCount}} issue"
 msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] "{{issuesCount}} 件の課題に一致"
 
+#: src/views/issues/issues__count.tsx
+msgid "Matches {{issuesCount}} ticket"
+msgid_plural "Matches {{issuesCount}} tickets"
+msgstr[0] ""
+
 #: src/views/issues/index.ts
 msgid "Medium"
 msgstr "中"
@@ -786,6 +806,10 @@ msgstr "その他のグループとチーム"
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "パスワード"
+
+#: src/views/issues/issues__row.tsx
+msgid "Paused"
+msgstr "一時停止しました"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
