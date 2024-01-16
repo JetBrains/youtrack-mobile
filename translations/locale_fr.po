@@ -1162,7 +1162,7 @@ msgstr "Son du thread activé"
 #: src/views/issues/issues-reducers.ts
 #: src/views/tickets/tickets.tsx
 msgid "Tickets"
-msgstr "Tickets"
+msgstr "Tickets de support"
 
 #: src/views/article-create/article-create.tsx
 msgid "Title"
