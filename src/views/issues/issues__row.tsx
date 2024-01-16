@@ -332,8 +332,8 @@ export class IssueRowCompact<P extends Props, S = {}> extends IssueRow<P, S> {
     const daysLeft = Math.floor(hoursLeft / 24);
     return i18nPlural(
       daysLeft,
-      '{{daysLeft}}h',
-      '{{daysLeft}}h',
+      '{{daysLeft}}d',
+      '{{daysLeft}}d',
       {daysLeft},
     );
   }
