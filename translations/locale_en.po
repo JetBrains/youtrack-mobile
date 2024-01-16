@@ -51,10 +51,10 @@ msgstr[0] "{{amount}} issue"
 msgstr[1] "{{amount}} issues"
 
 #: src/views/issues/issues__row.tsx:333
-msgid "{{daysLeft}}h"
-msgid_plural "{{daysLeft}}h"
-msgstr[0] "{{daysLeft}}h"
-msgstr[1] "{{daysLeft}}h"
+msgid "{{daysLeft}}d"
+msgid_plural "{{daysLeft}}d"
+msgstr[0] "{{daysLeft}}d"
+msgstr[1] "{{daysLeft}}d"
 
 #: src/views/issues/issues__row.tsx:325
 msgid "{{hoursLeft}}h"

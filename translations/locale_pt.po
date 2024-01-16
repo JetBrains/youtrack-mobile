@@ -57,8 +57,8 @@ msgstr[0] "{{amount}} issue"
 msgstr[1] "{{amount}} issues"
 
 #: src/views/issues/issues__row.tsx
-msgid "{{daysLeft}}h"
-msgid_plural "{{daysLeft}}h"
+msgid "{{daysLeft}}d"
+msgid_plural "{{daysLeft}}d"
 msgstr[0] ""
 msgstr[1] ""
 
