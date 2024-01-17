@@ -59,20 +59,20 @@ msgstr[1] "{{amount}} Tickets"
 #: src/views/issues/issues__row.tsx
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{{daysLeft}}T"
+msgstr[1] "{{daysLeft}}T"
 
 #: src/views/issues/issues__row.tsx
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{{hoursLeft}}St."
+msgstr[1] "{{hoursLeft}}St."
 
 #: src/views/issues/issues__row.tsx
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{{minutesAbsolute}}Min"
+msgstr[1] "{{minutesAbsolute}}Min"
 
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
@@ -712,8 +712,8 @@ msgstr[1] "Trifft auf {{issuesCount}} Tickets zu"
 #: src/views/issues/issues__count.tsx
 msgid "Matches {{issuesCount}} ticket"
 msgid_plural "Matches {{issuesCount}} tickets"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Trifft auf {{issuesCount}} Supportfall zu"
+msgstr[1] "Trifft auf {{issuesCount}} Supportfälle zu"
 
 #: src/views/issues/index.ts
 msgid "Medium"
@@ -1162,7 +1162,7 @@ msgstr "Thread-Stummschaltung aufgehoben"
 #: src/views/issues/issues-reducers.ts
 #: src/views/tickets/tickets.tsx
 msgid "Tickets"
-msgstr ""
+msgstr "Supportfälle"
 
 #: src/views/article-create/article-create.tsx
 msgid "Title"

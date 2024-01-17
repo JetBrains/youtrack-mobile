@@ -59,20 +59,20 @@ msgstr[1] "{{amount}} incidencias"
 #: src/views/issues/issues__row.tsx
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{{daysLeft}}d."
+msgstr[1] "{{daysLeft}}d."
 
 #: src/views/issues/issues__row.tsx
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{{hoursLeft}}h"
+msgstr[1] "{{hoursLeft}}h"
 
 #: src/views/issues/issues__row.tsx
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{{minutesAbsolute}}min"
+msgstr[1] "{{minutesAbsolute}}min"
 
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
@@ -712,8 +712,8 @@ msgstr[1] "Coincide con {{issuesCount}} incidencias"
 #: src/views/issues/issues__count.tsx
 msgid "Matches {{issuesCount}} ticket"
 msgid_plural "Matches {{issuesCount}} tickets"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Coincide con {{issuesCount}} ticket"
+msgstr[1] "Coincide con {{issuesCount}} tickets"
 
 #: src/views/issues/index.ts
 msgid "Medium"
@@ -1162,7 +1162,7 @@ msgstr "Hilo no silenciado"
 #: src/views/issues/issues-reducers.ts
 #: src/views/tickets/tickets.tsx
 msgid "Tickets"
-msgstr ""
+msgstr "Tickets"
 
 #: src/views/article-create/article-create.tsx
 msgid "Title"

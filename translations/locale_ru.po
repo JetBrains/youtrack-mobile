@@ -67,26 +67,26 @@ msgstr[3] "{{amount}} задачи"
 #: src/views/issues/issues__row.tsx
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{{daysLeft}}д"
+msgstr[1] "{{daysLeft}}д"
+msgstr[2] "{{daysLeft}}д"
+msgstr[3] "{{daysLeft}}д"
 
 #: src/views/issues/issues__row.tsx
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{{hoursLeft}}ч"
+msgstr[1] "{{hoursLeft}}ч"
+msgstr[2] "{{hoursLeft}}ч"
+msgstr[3] "{{hoursLeft}}ч"
 
 #: src/views/issues/issues__row.tsx
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{{minutesAbsolute}}мин"
+msgstr[1] "{{minutesAbsolute}}мин"
+msgstr[2] "{{minutesAbsolute}}мин"
+msgstr[3] "{{minutesAbsolute}}мин"
 
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
@@ -730,10 +730,10 @@ msgstr[3] "{{issuesCount}} совпадающих задач"
 #: src/views/issues/issues__count.tsx
 msgid "Matches {{issuesCount}} ticket"
 msgid_plural "Matches {{issuesCount}} tickets"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{{issuesCount}} совпадающий запрос"
+msgstr[1] "{{issuesCount}} совпадающих запроса"
+msgstr[2] "{{issuesCount}} совпадающих запросов"
+msgstr[3] "{{issuesCount}} совпадающих запросов"
 
 #: src/views/issues/index.ts
 msgid "Medium"
@@ -1184,7 +1184,7 @@ msgstr "Тема не игнорируется"
 #: src/views/issues/issues-reducers.ts
 #: src/views/tickets/tickets.tsx
 msgid "Tickets"
-msgstr ""
+msgstr "Запросы"
 
 #: src/views/article-create/article-create.tsx
 msgid "Title"

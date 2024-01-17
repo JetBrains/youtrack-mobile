@@ -55,17 +55,17 @@ msgstr[0] "{{amount}} 个问题"
 #: src/views/issues/issues__row.tsx
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
-msgstr[0] ""
+msgstr[0] "{{daysLeft}} 天"
 
 #: src/views/issues/issues__row.tsx
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
-msgstr[0] ""
+msgstr[0] "{{hoursLeft}} 小时"
 
 #: src/views/issues/issues__row.tsx
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
-msgstr[0] ""
+msgstr[0] "{{minutesAbsolute}} 分钟"
 
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
@@ -703,7 +703,7 @@ msgstr[0] "匹配 {{issuesCount}} 个问题"
 #: src/views/issues/issues__count.tsx
 msgid "Matches {{issuesCount}} ticket"
 msgid_plural "Matches {{issuesCount}} tickets"
-msgstr[0] ""
+msgstr[0] "匹配 {{issuesCount}} 个工单"
 
 #: src/views/issues/index.ts
 msgid "Medium"
