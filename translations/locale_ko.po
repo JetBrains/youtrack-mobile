@@ -55,17 +55,17 @@ msgstr[0] "이슈 {{amount}}개"
 #: src/views/issues/issues__row.tsx
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
-msgstr[0] ""
+msgstr[0] "{{daysLeft}}일"
 
 #: src/views/issues/issues__row.tsx
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
-msgstr[0] ""
+msgstr[0] "{{hoursLeft}}시간"
 
 #: src/views/issues/issues__row.tsx
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
-msgstr[0] ""
+msgstr[0] "{{minutesAbsolute}}분"
 
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
@@ -703,7 +703,7 @@ msgstr[0] " {{issuesCount}} 건이 존재합니다."
 #: src/views/issues/issues__count.tsx
 msgid "Matches {{issuesCount}} ticket"
 msgid_plural "Matches {{issuesCount}} tickets"
-msgstr[0] ""
+msgstr[0] "{{issuesCount}}개 티켓과 일치"
 
 #: src/views/issues/index.ts
 msgid "Medium"
