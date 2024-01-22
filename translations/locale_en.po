@@ -50,19 +50,19 @@ msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} issue"
 msgstr[1] "{{amount}} issues"
 
-#: src/views/issues/issues__row.tsx:333
+#: src/views/issues/issues__row.tsx:330
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
 msgstr[0] "{{daysLeft}}d"
 msgstr[1] "{{daysLeft}}d"
 
-#: src/views/issues/issues__row.tsx:325
+#: src/views/issues/issues__row.tsx:322
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
 msgstr[0] "{{hoursLeft}}h"
 msgstr[1] "{{hoursLeft}}h"
 
-#: src/views/issues/issues__row.tsx:316
+#: src/views/issues/issues__row.tsx:313
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
 msgstr[0] "{{minutesAbsolute}}m"
@@ -746,7 +746,7 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.tsx:446
+#: src/components/activity-stream/activity__stream.tsx:465
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -811,7 +811,7 @@ msgstr "Other groups and teams"
 msgid "Password"
 msgstr "Password"
 
-#: src/views/issues/issues__row.tsx:102
+#: src/views/issues/issues__row.tsx:98
 msgid "Paused"
 msgstr "Paused"
 
