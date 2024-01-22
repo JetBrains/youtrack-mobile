@@ -358,6 +358,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
                 )}
                 {activityGroup.merged && (
                   <StreamTimestamp
+                    style={styles.activityTimestampMerged}
                     isAbs={true}
                     timestamp={activityGroup.timestamp}
                   />
@@ -409,26 +410,36 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     return (
       <View
         key={`${index}-${activityGroup.id}`}
-        onLayout={event => {
+        onLayout={(event) => {
           if (activities?.length) {
-            layoutMap.current[getActivityGroupId(activityGroup)] = event.nativeEvent.layout;
+            layoutMap.current[getActivityGroupId(activityGroup)] =
+              event.nativeEvent.layout;
             if (_comment?.id) {
               layoutMap.current[_comment.id] = event.nativeEvent.layout;
             }
             getActivityGroupEvents(activityGroup).forEach(
-              (it: Activity) => layoutMap.current[it.id] = event.nativeEvent.layout,
+              (it: Activity) =>
+                (layoutMap.current[it.id] = event.nativeEvent.layout)
             );
           }
         }}
       >
-        {index > 0 && !activityGroup.merged && !isCommentSecured && <View style={styles.activitySeparator}/>}
+        {index > 0 && !activityGroup.merged && !isCommentSecured && (
+          <View style={styles.activitySeparator} />
+        )}
         <View
           style={[
             styles.activityWrapper,
             activityGroup.merged && styles.activityWrapperMerged,
-            prevActivity?.merged && nextActivity?.merged && !isCommentSecured && styles.activityWrapperMergedReduced,
+            prevActivity?.merged &&
+              nextActivity?.merged &&
+              !isCommentSecured &&
+              !nextActivity &&
+              styles.activityWrapperMergedReduced,
             isCommentSecured && styles.activityWrapperSecured,
-            isCommentSecured && prevActivity?.merged && styles.activityWrapperMerged,
+            isCommentSecured &&
+              prevActivity?.merged &&
+              styles.activityWrapperMerged,
           ]}
         >
           {addActionsWrapper(activityGroup)}

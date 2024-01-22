@@ -71,6 +71,9 @@ export const rowStyles = {
     color: '$textSecondary',
     lineHeight: MAIN_FONT_SIZE,
   },
+  activityTimestampMerged: {
+    color: '$text',
+  },
   activityLabel: {
     fontSize: SECONDARY_FONT_SIZE,
     color: '$textSecondary',
