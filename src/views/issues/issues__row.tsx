@@ -45,18 +45,6 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
     );
   }
 
-  renderHelpDeskIcon(size: number, style?: ViewStyleProp): React.JSX.Element {
-    return (
-      <View style={style}>
-        <IconHDTicket
-          color={styles.helpDeskIconWrapper.color}
-          width={size}
-          height={size}
-        />
-      </View>
-    );
-  }
-
   renderSLAPausedTag(text: string) {
     return (
       <ColorField
@@ -91,7 +79,15 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
   }
 
   renderSLADateTag(f: CustomFieldBase) {
-    return <ColorField color={this.createSLADateTagColor(f)} text={ytDate(f.value as number)} fullText={true} />;
+    return (
+      <View style={styles.slaFieldsItem}>
+        <ColorField
+          color={this.createSLADateTagColor(f)}
+          text={ytDate(f.value as number)}
+          fullText={true}
+        />
+      </View>
+    );
   }
 
   renderSLA() {
@@ -108,20 +104,11 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
   renderPriority(customStyle?: any, text?: string): React.ReactNode {
     const priorityField = getPriorityField(this.props.issue);
 
-    const hasHoPriority =
+    if (
       !priorityField?.value ||
-      (Array.isArray(priorityField?.value) && priorityField.value?.length === 0);
-
-    if (hasHoPriority) {
-      return this.props.helpdeskMode ? (
-        <ColorField
-          style={[
-            styles.priorityWrapper,
-            styles.priorityPlaceholder,
-            customStyle,
-          ]}
-        />
-      ) : null;
+      (Array.isArray(priorityField?.value) && priorityField.value?.length === 0)
+    ) {
+      return null;
     }
 
     const values: BundleValue[] = [].concat(priorityField.value as any);
@@ -243,14 +230,24 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
   }
 
   renderContent() {
+    const priorityEl = this.renderPriority();
+    const helpdeskParams = {
+      iconSize: priorityEl ? 13 : 19,
+      style: priorityEl ? styles.helpDeskIconWrapper : styles.helpDeskIcon,
+    };
     return (
       <View style={styles.issueRow}>
-        <View
-          testID="test:id/issueRowDraftDetails"
-          style={styles.rowLine}
-        >
-          {this.renderPriority()}
-          {this.props.helpdeskMode && this.renderHelpDeskIcon(13, styles.helpDeskIconWrapper)}
+        <View testID="test:id/issueRowDraftDetails" style={styles.rowLine}>
+          {priorityEl}
+          {this.props.helpdeskMode && (
+            <View style={helpdeskParams.style}>
+              <IconHDTicket
+                color={helpdeskParams.style.color}
+                width={helpdeskParams.iconSize}
+                height={helpdeskParams.iconSize}
+              />
+            </View>
+          )}
           {this.renderId()}
           {this.renderReporter()}
         </View>
@@ -350,19 +347,19 @@ export class IssueRowCompact<P extends Props, S = {}> extends IssueRow<P, S> {
     );
   }
 
-  renderSLAPausedTag(): React.JSX.Element {
+  renderSLAPausedTag() {
     return <View style={styles.slaFieldPausedCompact}>{super.renderSLAPausedTag('')}</View>;
   }
 
-  renderContent(): React.JSX.Element {
+  renderContent() {
     return (
       <View style={[styles.issueRow, styles.rowLine]}>
         <View testID="test:id/issueRowDetails" style={styles.rowLine}>
           {this.renderPriority()}
-          {this.props.helpdeskMode && this.renderSLA()}
         </View>
 
         {this.renderSummary()}
+        {this.props.helpdeskMode && this.renderSLA()}
         {this.renderId()}
         {this.renderReporter()}
       </View>
@@ -389,7 +386,7 @@ export class IssueRowDraft<P extends Props, S = {}> extends IssueRow<P, S> {
   }
 
 
-  renderContent(): React.JSX.Element {
+  renderContent() {
     return (
       <View style={styles.draft}>
         <Text numberOfLines={3}>

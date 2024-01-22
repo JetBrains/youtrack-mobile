@@ -361,6 +361,10 @@ export default EStyleSheet.create({
     borderRadius: UNIT * 2,
     color: '$iconAccent',
   },
+  helpDeskIcon: {
+    marginRight: UNIT,
+    color: '$iconAccent',
+  },
   dualAvatarWrapper: {
     position: 'relative',
     width: DUAL_AVATAR_SIZE,
@@ -387,17 +391,13 @@ export default EStyleSheet.create({
   },
   slaFields: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     marginTop: UNIT / 2,
   },
   slaFieldsCompact: {
     marginTop: 0,
   },
   slaFieldsItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: UNIT,
+    marginRight: UNIT / 2,
   },
   slaField: {
     color: '$textButton',
