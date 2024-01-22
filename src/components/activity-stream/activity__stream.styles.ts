@@ -82,6 +82,7 @@ export const rowStyles = {
   activityRelatedChanges: {
     flex: 1,
     padding: UNIT * 1.5,
+    paddingTop: UNIT,
     marginVertical: UNIT,
     backgroundColor: '$boxBackground',
     borderRadius: UNIT,
