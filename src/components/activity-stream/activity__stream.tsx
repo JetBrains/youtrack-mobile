@@ -326,15 +326,10 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
 
     const Component = hasHighlightedActivity ? Animated.View : View;
     return (
-      <View style={styles.activityWrapper}>
+      <>
         {!activityGroup.merged && _comment && renderCommentVisibility(_comment)}
         <View
-          style={[
-            styles.activity,
-            activityGroup.merged && !activityGroup.comment
-              ? styles.activityMerged
-              : null,
-          ]}
+          style={styles.activity}
         >
           <ActivityUserAvatar
             activityGroup={activityGroup}
@@ -379,7 +374,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
             )}
           </Component>
         </View>
-      </View>
+      </>
     );
   };
 
@@ -408,6 +403,9 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
       return null;
     }
     const _comment: | IssueComment | null = getCommentFromActivityGroup(activityGroup);
+    const prevActivity = activities?.[index - 1];
+    const nextActivity = activities?.[index + 1];
+    const isCommentSecured = !!_comment && IssueVisibility.isSecured(_comment?.visibility);
     return (
       <View
         key={`${index}-${activityGroup.id}`}
@@ -423,9 +421,19 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
           }
         }}
       >
-        {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
-        {addActionsWrapper(activityGroup)}
-        {!!props.onSelectReaction && renderCommentReactions(activityGroup)}
+        {index > 0 && !activityGroup.merged && !isCommentSecured && <View style={styles.activitySeparator}/>}
+        <View
+          style={[
+            styles.activityWrapper,
+            activityGroup.merged && styles.activityWrapperMerged,
+            prevActivity?.merged && nextActivity?.merged && !isCommentSecured && styles.activityWrapperMergedReduced,
+            isCommentSecured && styles.activityWrapperSecured,
+            isCommentSecured && prevActivity?.merged && styles.activityWrapperMerged,
+          ]}
+        >
+          {addActionsWrapper(activityGroup)}
+          {!!props.onSelectReaction && renderCommentReactions(activityGroup)}
+        </View>
       </View>
     );
   };

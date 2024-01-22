@@ -8,23 +8,29 @@ const secondaryTextColor = {
 };
 export const rowStyles = {
   activityWrapper: {
+    paddingVertical: UNIT * 3,
+    paddingHorizontal: UNIT,
+  },
+  activityWrapperSecured: {
+    paddingTop: UNIT * 2,
+    marginHorizontal: -UNIT,
+    paddingHorizontal: UNIT * 2,
+    backgroundColor: '$greyBackground',
+    borderTopWidth: 1,
+    borderTopColor: '$background',
+  },
+  activityWrapperMerged: {
     paddingTop: UNIT,
-    paddingLeft: UNIT,
-    paddingRight: UNIT,
-    backgroundColor: '$background',
+  },
+  activityWrapperMergedReduced: {
+    paddingVertical: 0,
   },
   activity: {
     flexDirection: 'row',
   },
-  activityMerged: {
-    marginBottom: 0,
-    paddingTop: UNIT * 3,
-  },
   activitySeparator: {
     ...separator,
     borderColor: '$separator',
-    marginTop: UNIT * 3,
-    marginBottom: UNIT * 2,
     marginLeft: UNIT * 7,
     marginRight: -UNIT,
   },
@@ -75,10 +81,8 @@ export const rowStyles = {
   },
   activityRelatedChanges: {
     flex: 1,
-    padding: UNIT * 2,
-    paddingTop: UNIT,
-    marginTop: UNIT * 1.5,
-    marginBottom: UNIT,
+    padding: UNIT * 1.5,
+    marginVertical: UNIT,
     backgroundColor: '$boxBackground',
     borderRadius: UNIT,
     lineHeight: SECONDARY_FONT_SIZE,
@@ -126,7 +130,7 @@ export const rowStyles = {
   },
   activityCommentReactions: {
     alignItems: 'center',
-    paddingLeft: UNIT * 7,
+    paddingLeft: UNIT * 6,
     marginRight: UNIT,
   },
   activityCommentAttachments: {
