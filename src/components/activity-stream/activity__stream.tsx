@@ -437,7 +437,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
               !nextActivity &&
               styles.activityWrapperMergedReduced,
             isCommentSecured && styles.activityWrapperSecured,
-            activityGroup.merged && prevActivity && styles.activityWrapperNoTop,
+            activityGroup.merged && prevActivity?.merged && styles.activityWrapperNoTop,
             isCommentSecured && nextActivity?.merged && styles.activityWrapperNoBottom,
           ]}
         >
