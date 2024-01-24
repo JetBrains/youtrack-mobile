@@ -3,6 +3,7 @@ import {Linking, Text, TouchableOpacity, View} from 'react-native';
 import BottomSheetModal from '../modal-panel-bottom/bottom-sheet-modal';
 import Details from '../details/details';
 import MarkdownView from '../wiki/markdown-view';
+import StreamTimestamp from 'components/activity-stream/activity__stream-timestamp';
 import StreamUserInfo from './activity__stream-user-info';
 import {firstActivityChange} from './activity__stream-helper';
 import {
@@ -15,14 +16,16 @@ import {
 import {HIT_SLOP} from '../common-styles/button';
 import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {IconCaretDownUp} from '../icon/icon';
-import {ytDate} from 'components/date/date';
+
 import styles from './activity__stream.styles';
+
 import type {Activity} from 'types/Activity';
 import type {PullRequest, VCSActivity, VcsProcessor} from 'types/Vcs';
 import type {TextStyleProp} from 'types/Internal';
-type Props = {
+
+interface Props {
   activityGroup: Activity;
-};
+}
 
 const StreamVCS = (props: Props) => {
   function renderMarkdown(
@@ -56,11 +59,8 @@ const StreamVCS = (props: Props) => {
   }
 
   const [sourcesVisible, updateSourcesVisible] = useState(false);
-  const pullRequest: PullRequest | null | undefined =
-    props.activityGroup.vcs?.pullRequest;
-  const firstChange: Record<string, any> | null = firstActivityChange(
-    props.activityGroup.vcs,
-  );
+  const pullRequest: PullRequest | null | undefined = props.activityGroup.vcs?.pullRequest;
+  const firstChange: Record<string, any> | null = firstActivityChange(props.activityGroup.vcs);
   const vcs: VCSActivity | null = pullRequest || firstChange;
 
   if (!vcs) {
@@ -122,10 +122,7 @@ const StreamVCS = (props: Props) => {
     );
   };
 
-  const renderSourcesDialog = (): React.ReactElement<
-    React.ComponentProps<typeof BottomSheetModal>,
-    typeof BottomSheetModal
-  > => {
+  const renderSourcesDialog = () => {
     return (
       <BottomSheetModal
         isVisible={sourcesVisible}
@@ -162,7 +159,10 @@ const StreamVCS = (props: Props) => {
           {!!date && (
             <Text style={[styles.vcsInfoDate, styles.secondaryTextColor]}>
               {title ? `${title} ` : ''}
-              {ytDate(date)}
+              <StreamTimestamp
+                style={props.activityGroup.merged && styles.activityTimestampMerged}
+                timestamp={date}
+              />
             </Text>
           )}
 
@@ -217,7 +217,4 @@ const StreamVCS = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(StreamVCS) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(StreamVCS);

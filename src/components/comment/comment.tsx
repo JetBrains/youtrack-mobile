@@ -4,12 +4,12 @@ import {View, Text, TouchableWithoutFeedback} from 'react-native';
 import Avatar from '../avatar/avatar';
 import HTML from 'components/wiki/markdown/markdown-html';
 import MarkdownView from 'components/wiki/markdown-view';
+import StreamTimestamp from 'components/activity-stream/activity__stream-timestamp';
 import YoutrackWiki from 'components/wiki/youtrack-wiki';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {isPureHTMLBlock, prepareHTML} from 'components/wiki/markdown-helper';
 import {markdownText} from 'components/common-styles';
-import {ytDate} from 'components/date/date';
 
 import styles from './comment.styles';
 
@@ -162,7 +162,7 @@ function Comment(props: Props) {
             }}
           >
             {' '}
-            {ytDate(comment.created)}
+            <StreamTimestamp timestamp={comment.created}/>
           </Text>
         </Text>
         <View style={styles.commentText}>{renderComment()}</View>

@@ -243,11 +243,11 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
       <>
         {activityGroup.merged ? (
           <>
+            {renderCommentVisibility(comment, styles.activityVisibilityMerged)}
             <StreamTimestamp
               timestamp={activityGroup.timestamp}
-              style={styles.activityCommentDate}
+              style={activityGroup.merged && styles.activityTimestampMerged}
             />
-            {renderCommentVisibility(comment, styles.activityVisibilityMerged)}
           </>
         ) : (
           <StreamUserInfo activityGroup={activityGroup}/>
@@ -437,9 +437,8 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
               !nextActivity &&
               styles.activityWrapperMergedReduced,
             isCommentSecured && styles.activityWrapperSecured,
-            isCommentSecured &&
-              prevActivity?.merged &&
-              styles.activityWrapperMerged,
+            activityGroup.merged && prevActivity && styles.activityWrapperNoTop,
+            isCommentSecured && nextActivity?.merged && styles.activityWrapperNoBottom,
           ]}
         >
           {addActionsWrapper(activityGroup)}
