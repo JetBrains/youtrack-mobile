@@ -689,7 +689,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async createWorkItem(issueId: string, draft: WorkItem): Promise<any> {
+  async createWorkItem(issueId: string, draft: WorkItem): Promise<WorkItem> {
     return this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/timeTracking/workItems/${
         draft.$type ? (draft.id as any) : ''
