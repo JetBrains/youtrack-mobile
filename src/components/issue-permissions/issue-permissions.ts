@@ -1,6 +1,5 @@
 import {isHelpdeskProject} from 'components/helpdesk';
 
-import type {AnyIssue} from 'types/Issue';
 import type {Article, ArticleProject} from 'types/Article';
 import type {Attachment, CustomField, IssueComment} from 'types/CustomFields';
 import type {PermissionsStore} from '../permissions-store/permissions-store';
@@ -83,7 +82,7 @@ export default class IssuePermissions {
     return user.ringId === this.currentUser.id;
   };
 
-  canUpdateGeneralInfo = (issue: AnyIssue | null): boolean => {
+  canUpdateGeneralInfo = (issue: Entity | null): boolean => {
     if (!issue) {
       return false;
     }
@@ -95,7 +94,7 @@ export default class IssuePermissions {
     return this.isCurrentUser(issue?.reporter) && this.hasPermissionFor(issue, CREATE_ISSUE);
   };
 
-  _canUpdatePublicField = (issue: AnyIssue | null | undefined): boolean => {
+  _canUpdatePublicField = (issue: Entity): boolean => {
     if (this.isCurrentUser(issue?.reporter) && this.hasPermissionFor(issue, CREATE_ISSUE)) {
       return true;
     }
@@ -103,9 +102,9 @@ export default class IssuePermissions {
     return this.hasPermissionFor(issue, UPDATE_ISSUE);
   };
 
-  _canUpdatePrivateField = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, PRIVATE_UPDATE_ISSUE);
+  _canUpdatePrivateField = (issue: Entity): boolean => this.hasPermissionFor(issue, PRIVATE_UPDATE_ISSUE);
 
-  _isBlockedByTimeTracking = (issue: AnyIssue, field: CustomField): boolean => {
+  _isBlockedByTimeTracking = (issue: Entity, field: CustomField): boolean => {
     if (!issue.project || !issue.project.plugins) {
       return false;
     }
@@ -120,7 +119,7 @@ export default class IssuePermissions {
     return isSpentTime; // Spent Time field is always disabled to edit – calculating automatically
   };
 
-  canUpdateField = (issue: AnyIssue, field: CustomField): boolean => {
+  canUpdateField = (issue: Entity, field: CustomField): boolean => {
     if (!issue) {
       return false;
     }
@@ -168,9 +167,9 @@ export default class IssuePermissions {
     return true;
   };
 
-  canCommentOn = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_CREATE_COMMENT);
+  canCommentOn = (issue: Entity): boolean => this.hasPermissionFor(issue, CAN_CREATE_COMMENT);
 
-  canDeleteIssue = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_DELETE_ISSUE);
+  canDeleteIssue = (issue: Entity): boolean => this.hasPermissionFor(issue, CAN_DELETE_ISSUE);
 
   canUpdateComment = (
     entity: Entity,
@@ -206,12 +205,12 @@ export default class IssuePermissions {
     return this.canDeleteNotOwnComment(entity);
   };
 
-  canRestoreComment = (issue: AnyIssue, comment: IssueComment): boolean =>
+  canRestoreComment = (issue: Entity, comment: IssueComment): boolean =>
     this.canDeleteComment(issue, comment) || this.canUpdateComment(issue, comment);
 
-  canDeleteCommentPermanently = (issue: AnyIssue): boolean => this.canDeleteNotOwnComment(issue);
+  canDeleteCommentPermanently = (issue: Entity): boolean => this.canDeleteNotOwnComment(issue);
 
-  canAddAttachmentTo = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_ADD_ATTACHMENT);
+  canAddAttachmentTo = (issue: Entity): boolean => this.hasPermissionFor(issue, CAN_ADD_ATTACHMENT);
 
   canRemoveAttachment = (entity: Entity): boolean => this.hasPermissionFor(entity, CAN_REMOVE_ATTACHMENT);
 
@@ -231,20 +230,20 @@ export default class IssuePermissions {
       CAN_CREATE_COMMENT
     );
 
-  canVote = (issue: AnyIssue): boolean =>
+  canVote = (issue: Entity): boolean =>
     !!issue && !!this.currentUser && !this.isCurrentUser(issue?.reporter) && !this.currentUser.guest;
 
-  canTag = (issue: AnyIssue): boolean =>
+  canTag = (issue: Entity): boolean =>
     this.hasPermissionFor(issue, PRIVATE_UPDATE_ISSUE) || this.hasPermissionFor(issue, CAN_UPDATE_WATCH);
 
   canStar = (): boolean => !this.currentUser?.guest;
 
-  canRunCommand = (issue: AnyIssue): boolean => {
-    const has = (...args) => this.permissionsStore.has(...args);
+  canRunCommand = (issue: Entity): boolean => {
+    const has = this.permissionsStore.has;
 
-    return this.isCurrentUser(issue.reporter) || hasAnyPermission();
+    return this.isCurrentUser(issue.reporter) || hasSomePermissionToUpdate();
 
-    function hasAnyPermission(): boolean {
+    function hasSomePermissionToUpdate(): boolean {
       const projectRingId = IssuePermissions.getIssueProjectRingId(issue);
       return (
         !!projectRingId &&
@@ -256,7 +255,7 @@ export default class IssuePermissions {
       );
     }
   };
-  canUpdateWork = (entity: AnyIssue, workItem?: WorkItem): boolean => {
+  canUpdateWork = (entity: Entity, workItem?: WorkItem): boolean => {
     if (workItem && workItem.author && this.isCurrentUser(workItem.author)) {
       return this.hasPermissionFor(entity, WORK_ITEM_UPDATE);
     }
@@ -264,14 +263,14 @@ export default class IssuePermissions {
     return this.hasPermissionFor(entity, WORK_ITEM_UPDATE_NOT_OWN);
   };
 
-  canCreateWorkNotOwn = (entity: AnyIssue): boolean => this.hasPermissionFor(entity, WORK_ITEM_CREATE_NOT_OWN);
+  canCreateWorkNotOwn = (entity: Entity): boolean => this.hasPermissionFor(entity, WORK_ITEM_CREATE_NOT_OWN);
 
-  canCreateWork = (entity: AnyIssue): boolean =>
+  canCreateWork = (entity: Entity): boolean =>
     this.hasPermissionFor(entity, WORK_ITEM_CREATE) || this.canCreateWorkNotOwn(entity);
 
-  canDeleteWork = (entity: AnyIssue, workItem: WorkItem) => this.canUpdateWork(entity, workItem);
+  canDeleteWork = (entity: Entity, workItem: WorkItem) => this.canUpdateWork(entity, workItem);
 
-  canLink = (entity: AnyIssue) => {
+  canLink = (entity: Entity) => {
     return this.hasPermissionFor(entity, CAN_LINK_ISSUE);
   };
 
