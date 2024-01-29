@@ -1,27 +1,24 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React from 'react';
 import {
   ActivityIndicator,
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
   Dimensions,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+
+import IconAttachment from '@jetbrains/icons/attachment.svg';
+import IconHourGlass from '@jetbrains/icons/hourglass.svg';
 import InputScrollView from 'react-native-input-scroll-view';
-import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import {useDispatch} from 'react-redux';
+
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
 import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
 import AttachmentsRow from 'components/attachments-row/attachments-row';
 import Header from 'components/header/header';
-import IconHourGlass from '@jetbrains/icons/hourglass.svg';
-import IconAttachment from '@jetbrains/icons/attachment.svg';
+import IssueVisibility from 'components/visibility/issue-visibility';
+import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import log from 'components/log/log';
 import Mentions from 'components/mentions/mentions';
 import ModalPanelBottom from 'components/modal-panel-bottom/modal-panel-bottom';
@@ -36,23 +33,19 @@ import {
 import {getAttachmentActions} from 'components/attachments-row/attachment-actions';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {IconArrowUp, IconCheck, IconClose, IconAdd} from '../icon/icon';
+import {IconAdd, IconArrowUp, IconCheck, IconClose} from 'components/icon/icon';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables';
 
-import styles, {MIN_INPUT_SIZE} from './comment-edit.styles';
+import styles, { MIN_INPUT_SIZE} from './comment-edit.styles';
 
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Theme} from 'types/Theme';
-import type {User} from 'types/User';
+import type {User, UserMentions} from 'types/User';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
-import IssueVisibility from 'components/visibility/issue-visibility';
-
-type UserMentions = {
-  users: User[];
-};
+import {ReduxThunkDispatch} from 'types/Redux';
 
 type CommentReply = {
   reply?: boolean;
@@ -67,6 +60,8 @@ type EditingComment = IssueComment & CommentReply & CommentEntity;
 
 export interface Props {
   canAttach: boolean;
+  canCommentPublicly?: boolean;
+  canUpdateCommentVisibility?: boolean;
   canRemoveAttach: (attachment: Attachment) => boolean;
   editingComment: EditingComment;
   focus?: boolean;
@@ -76,13 +71,14 @@ export interface Props {
   isEditMode?: boolean;
   onAddSpentTime?: (() => any) | null;
   onAttach: (files: NormalizedAttachment[], comment: IssueComment) => Promise<Attachment[]>;
-  onCommentChange: (comment: IssueComment, isAttachmentChange?: boolean) => any;
+  onCommentChange: (comment: IssueComment, isAttachmentChange?: boolean) => Promise<IssueComment | null>;
   onSubmitComment: (comment: IssueComment) => any;
   visibilityLabel?: string;
-  header?: React.ReactElement<React.ComponentProps<any>, any>;
+  visibility?: Visibility;
+  header?: React.ReactNode;
 }
 
-type State = {
+interface State {
   attachFileSource: string | null;
   commentCaret: number;
   editingComment: EditingComment;
@@ -96,24 +92,24 @@ type State = {
   mentionsQuery: string;
   mentionsVisible: boolean;
   height: number;
-};
+  visibility?: Visibility;
+}
 
 
 const EMPTY_COMMENT: EditingComment = {
   text: '',
   updated: -1,
-  visibility: null,
 } as EditingComment;
 
 const CommentEdit = (props: Props) => {
-  const dispatch = useDispatch();
-  const theme: Theme = useContext(ThemeContext);
+  const dispatch: ReduxThunkDispatch = useDispatch();
+  const theme: Theme = React.useContext(ThemeContext);
   const attachmentActions: AttachmentActions = getAttachmentActions('issueCommentInput');
 
-  const editCommentInput = useRef<TextInput | null>(null);
-  const editingCommentRef = useRef<EditingComment>(EMPTY_COMMENT);
+  const editCommentInput = React.useRef<TextInput | null>(null);
+  const editingCommentRef = React.useRef<EditingComment>(EMPTY_COMMENT);
 
-  const [state, updateState] = useState<State>({
+  const [state, updateState] = React.useState<State>({
     attachFileSource: null,
     commentCaret: 0,
     editingComment: EMPTY_COMMENT,
@@ -133,17 +129,21 @@ const CommentEdit = (props: Props) => {
     updateState((prevState: State) => ({...prevState, ...statePart}));
   };
 
-  const setEditingComment = useCallback((editingComment: EditingComment) => {
+  const setEditingComment = React.useCallback((editingComment: EditingComment) => {
     changeState({editingComment});
     editingCommentRef.current = editingComment;
   }, []);
+
+  const setEmptyComment = () => {
+    setEditingComment(EMPTY_COMMENT);
+  };
 
   const toggleSaving = (isSaving: boolean): void => {
     changeState({isSaving});
   };
 
-  const getCurrentComment = useCallback(
-    (data: EditingComment = {} as EditingComment): EditingComment => ({
+  const getCurrentComment = React.useCallback(
+    (data: EditingComment | Partial<EditingComment> = {}): EditingComment => ({
       ...props.editingComment,
       attachments: state.editingComment.attachments,
       visibility: state.editingComment.visibility,
@@ -153,30 +153,30 @@ const CommentEdit = (props: Props) => {
     [props.editingComment, state.editingComment.attachments, state.editingComment.visibility],
   );
 
-  const onCommentChange = useCallback(
+  const onCommentChange = React.useCallback(
     async (draft: EditingComment, isAttachmentChange: boolean = false): Promise<IssueComment> => {
       toggleSaving(true);
-      const comment: IssueComment = await props.onCommentChange(draft as IssueComment, isAttachmentChange);
+      const comment = await props.onCommentChange(draft, isAttachmentChange);
       toggleSaving(false);
       return comment || draft;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [props.onCommentChange]
   );
-  const onSubmitComment = useCallback(
+  const onSubmitComment = React.useCallback(
     async (): Promise<void> => {
       toggleVisibilityControl(false);
       toggleSaving(true);
       const comment: IssueComment = await onCommentChange(getCurrentComment(state.editingComment));
       await props.onSubmitComment(comment as IssueComment);
-      setEditingComment(EMPTY_COMMENT);
+      setEmptyComment();
       toggleSaving(false);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [props.onSubmitComment, toggleSaving]
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     return () => {
       if (editingCommentRef.current.id || editingCommentRef.current.text || editingCommentRef.current.visibility) {
         onCommentChange(getCurrentComment(editingCommentRef.current)).then(() => setEditingComment(EMPTY_COMMENT));
@@ -187,15 +187,12 @@ const CommentEdit = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(
+  React.useEffect(
     () => {
       if (
         props.editingComment?.reply === true ||
-        state.editingComment.id === undefined && props.editingComment?.id ||
-        (
-          state.editingComment.id &&
-          state.editingComment?.updated < props.editingComment?.updated
-        )
+        (state.editingComment.id === undefined && props.editingComment?.id) ||
+        (state.editingComment.id && state.editingComment?.updated < props.editingComment?.updated)
       ) {
         const comment: EditingComment = {...state.editingComment, ...props.editingComment};
         setEditingComment(comment);
@@ -207,6 +204,14 @@ const CommentEdit = (props: Props) => {
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [props.editingComment, setEditingComment]
+  );
+
+  React.useEffect(
+    () => {
+      setEditingComment({...state.editingComment, ...props.editingComment, visibility: props.visibility});
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [props.visibility]
   );
 
   const focus = (): void => {
@@ -221,14 +226,14 @@ const CommentEdit = (props: Props) => {
     text: string,
     caret: number,
   ): Promise<void> => {
-    const word: string | null = (getSuggestWord(text, caret));
+    const word = (getSuggestWord(text, caret));
     if (!word) {
       changeState({
         mentionsVisible: false,
         mentionsQuery: '',
       });
     } else if (word[0] === '@') {
-      const mentionsQuery: string = word.slice(1);
+      const mentionsQuery = word.slice(1);
       changeState({
         mentionsVisible: true,
         mentionsQuery,
@@ -243,14 +248,14 @@ const CommentEdit = (props: Props) => {
   };
 
   const applySuggestion = (user: User) => {
-    const newText: string | undefined = composeSuggestionText(
+    const newText = composeSuggestionText(
       user,
       state.editingComment.text,
       state.commentCaret,
     );
 
     if (newText) {
-      const updatedText: string = `${newText} `;
+      const updatedText = `${newText} `;
       setEditingComment({
         ...state.editingComment,
         text: updatedText,
@@ -283,14 +288,13 @@ const CommentEdit = (props: Props) => {
     }
   };
 
-  const renderVisibility = (): React.ReactNode => {
+  const renderVisibility = () => {
     const toggleSelectVisibility = (isVisibilitySelectVisible: boolean) =>
-      changeState({
-        isVisibilitySelectVisible,
-      });
+      changeState({isVisibilitySelectVisible});
 
     return (
       <VisibilityControl
+        disabled={!props.canUpdateCommentVisibility}
         onShow={() => toggleSelectVisibility(true)}
         onHide={() => toggleSelectVisibility(false)}
         visibility={state.editingComment.visibility}
@@ -308,7 +312,7 @@ const CommentEdit = (props: Props) => {
     changeState({isAttachFileDialogVisible});
   };
 
-  const renderSubmitButton = (): React.ReactNode => {
+  const renderSubmitButton = () => {
     const {isSaving} = state;
     const isDisabled: boolean = !state.editingComment.text && !state.editingComment.attachments || isSaving;
     return (
@@ -347,7 +351,7 @@ const CommentEdit = (props: Props) => {
               draftComment = await onCommentChange(state.editingComment) as EditingComment;
             }
 
-            const addedAttachments: Attachment[] = await dispatch(props.onAttach(files, draftComment));
+            const addedAttachments = await dispatch(props.onAttach(files, draftComment));
             onAttachingFinish();
             toggleAttachFileDialog(false);
             const updatedComment: EditingComment = getCurrentComment({
@@ -369,7 +373,7 @@ const CommentEdit = (props: Props) => {
     );
   };
 
-  const renderAttachments = (): React.ReactNode => {
+  const renderAttachments = () => {
     return (
       <AttachmentsRow
         attachments={state.editingComment.attachments}
@@ -387,15 +391,13 @@ const CommentEdit = (props: Props) => {
           !state.isSaving && props.canRemoveAttach(attachment)
         }
         onRemoveImage={async (attachment: Attachment) => {
-          const resource: (...args: any[]) => any = props.isArticle
+          const resource = props.isArticle
             ? attachmentActions.removeAttachmentFromArticleComment
             : attachmentActions.removeAttachmentFromIssueComment;
           await dispatch(
             resource(
               attachment,
-              hasType.commentDraft(state.editingComment)
-                ? undefined
-                : state.editingComment.id,
+              hasType.commentDraft(state.editingComment) ? undefined : state.editingComment.id,
             ),
           );
           const attachments: Attachment[] = (
@@ -418,7 +420,7 @@ const CommentEdit = (props: Props) => {
     autoFocus: boolean,
     onFocus: (...args: any[]) => any,
     onBlur: (...args: any[]) => any,
-  ): React.ReactNode => {
+  ) => {
     return (
       <TextInput
         testID="test:id/commentEditInput"
@@ -439,7 +441,7 @@ const CommentEdit = (props: Props) => {
           changeState({commentCaret: event.nativeEvent.selection.start});
         }}
         onChangeText={(text: string) => {
-          const updatedDraftComment: Partial<IssueComment> = getCurrentComment({text});
+          const updatedDraftComment = getCurrentComment({text});
           setEditingComment(updatedDraftComment);
           onMentionsShow(text, state.commentCaret);
         }}
@@ -464,7 +466,7 @@ const CommentEdit = (props: Props) => {
 
   const hasAttachments = (): boolean => !!state.editingComment?.attachments?.length;
 
-  const renderAddNewComment = (): React.ReactNode => {
+  const renderAddNewComment = () => {
     const {
       isSaving,
       mentionsVisible,
@@ -472,18 +474,16 @@ const CommentEdit = (props: Props) => {
       isVisibilitySelectVisible,
       editingComment,
     } = state;
-    const hasText: boolean = !!editingComment.text;
-    const showVisibilityControl: boolean = !mentionsVisible && (
+
+    const showVisibilityControl = !mentionsVisible && (
       IssueVisibility.isSecured(editingComment.visibility) ||
       !!editingComment.text ||
+      editingComment.visibility ||
       !!editingComment?.attachments?.length ||
       (isVisibilitySelectVisible || isVisibilityControlVisible)
     );
 
-    const hideAttachActionsPanel = () =>
-      changeState({
-        isAttachActionsVisible: false,
-      });
+    const hideAttachActionsPanel = () => changeState({isAttachActionsVisible: false});
 
     return (
       <>
@@ -516,7 +516,10 @@ const CommentEdit = (props: Props) => {
             </View>
           )}
 
-          <View style={styles.commentInputContainer}>
+          <View style={[
+            styles.commentInputContainer,
+            !props.canCommentPublicly && styles.commentInputContainerHighlighted,
+          ]}>
             {renderCommentInput(
               props.focus || !!editingComment.reply,
               () => toggleVisibilityControl(true),
@@ -527,7 +530,7 @@ const CommentEdit = (props: Props) => {
                 toggleVisibilityControl(false);
               },
             )}
-            {Boolean(hasText || hasAttachments()) && renderSubmitButton()}
+            {Boolean(!!editingComment.text || hasAttachments()) && renderSubmitButton()}
           </View>
         </View>
 
@@ -603,7 +606,7 @@ const CommentEdit = (props: Props) => {
     );
   };
 
-  const renderEditComment = (): React.ReactNode => {
+  const renderEditComment = () => {
     const isSubmitEnabled: boolean = !!state.editingComment.text || hasAttachments();
     return (
       <View style={styles.commentEditContainer}>

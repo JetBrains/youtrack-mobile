@@ -88,6 +88,12 @@ export interface UserHelpdeskProfile {
   isAgent: boolean;
   isReporter: boolean;
   helpdeskFolder: Folder
+  agentInProjects: {
+    id: string;
+  }[];
+  reporterInProjects: {
+    id: string;
+  }[];
 }
 
 export type Folder = {
@@ -108,3 +114,7 @@ export type Folder = {
     ringId: string;
   };
 };
+
+export interface UserMentions {
+  users: User[];
+}

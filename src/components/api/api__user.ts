@@ -56,6 +56,12 @@ export default class UserAPI extends ApiBase {
             },
             'isAgent',
             'isReporter',
+            {
+              agentInProjects: ['id'],
+            },
+            {
+              reporterInProjects: ['id'],
+            },
           ],
         },
       },

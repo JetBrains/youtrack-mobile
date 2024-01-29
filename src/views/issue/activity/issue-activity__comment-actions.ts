@@ -1,14 +1,12 @@
 import {Clipboard} from 'react-native';
+
 import * as activityHelper from './issue-activity__helper';
 import * as types from '../issue-action-types';
 import log from 'components/log/log';
 import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
 import {confirmation} from 'components/confirmation/confirmation';
-import {
-  convertCommentsToActivityPage,
-  findActivityInGroupedActivities,
-} from 'components/activity/activity-helper';
+import {convertCommentsToActivityPage, findActivityInGroupedActivities} from 'components/activity/activity-helper';
 import {
   createIssueActivityActions,
   receiveActivityAPIAvailability,
@@ -18,9 +16,10 @@ import {DEFAULT_ISSUE_STATE_FIELD_NAME} from '../issue-base-actions-creater';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {notify, notifyError} from 'components/notification/notification';
-import {showActions} from 'components/action-sheet/action-sheet';
+import {ActionSheetOption, showActions} from 'components/action-sheet/action-sheet';
 import {until} from 'util/util';
 import {updateActivityCommentReactions} from 'components/activity-stream/activity__stream-helper';
+
 import type Api from 'components/api/api';
 import type IssueAPI from 'components/api/api__issue';
 import type {Activity, ActivityPositionData} from 'types/Activity';
@@ -28,20 +27,16 @@ import type {CustomError} from 'types/Error';
 import type {IssueComment} from 'types/CustomFields';
 import type {IssueFull} from 'types/Issue';
 import type {Reaction} from 'types/Reaction';
-import type {State as IssueActivityState} from './issue-activity__reducers';
-import type {State as IssueCommentActivityState} from './issue-activity__comment-reducers';
 import type {State as SingleIssueState} from '../issue-reducers';
 import type {UserGroup} from 'types/UserGroup';
-import type {User} from 'types/User';
-type ApiGetter = () => Api;
-type StateGetter = () => {
-  issueActivity: IssueActivityState;
-  issueCommentActivity: IssueCommentActivityState;
-  issueState: SingleIssueState;
-};
-export function updateComment(
-  comment: IssueComment,
-): {
+import type {User, UserMentions} from 'types/User';
+import {ActionSheetProvider} from '@expo/react-native-action-sheet';
+import {ActivityGroup} from 'types/Activity';
+import {AppState} from 'reducers';
+import {IssueState} from 'views/issue/issue-base-reducer';
+import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
+
+export function updateComment(comment: IssueComment): {
   comment: IssueComment;
   type: string;
 } {
@@ -50,9 +45,10 @@ export function updateComment(
     comment,
   };
 }
+
 export function deleteCommentFromList(
   comment: IssueComment,
-  activityId?: string,
+  activityId?: string
 ): {
   activityId: void | string;
   comment: IssueComment;
@@ -64,6 +60,7 @@ export function deleteCommentFromList(
     activityId,
   };
 }
+
 export function startLoadingCommentSuggestions(): {
   type: any;
 } {
@@ -71,6 +68,7 @@ export function startLoadingCommentSuggestions(): {
     type: types.START_LOADING_COMMENT_SUGGESTIONS,
   };
 }
+
 export function stopLoadingCommentSuggestions(): {
   type: any;
 } {
@@ -78,9 +76,8 @@ export function stopLoadingCommentSuggestions(): {
     type: types.STOP_LOADING_COMMENT_SUGGESTIONS,
   };
 }
-export function receiveCommentSuggestions(
-  suggestions: Record<string, any>,
-): {
+
+export function receiveCommentSuggestions(suggestions: Record<string, any>): {
   suggestions: any;
   type: any;
 } {
@@ -89,21 +86,53 @@ export function receiveCommentSuggestions(
     suggestions,
   };
 }
-export const createActivityCommentActions = (
-  stateFieldName: string = DEFAULT_ISSUE_STATE_FIELD_NAME,
-): any => {
-  const actions = {
-    loadIssueCommentsAsActivityPage: function loadIssueCommentsAsActivityPage(): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
-      return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
-      ) => {
-        const issueId = getState()[stateFieldName].issueId;
+
+export interface CommentActions {
+  deleteCommentPermanently: (comment: IssueComment, activityId?: string) => ReduxAction;
+  getCommentVisibilityOptions: () => ReduxAction;
+  loadActivity: (doNotReset?: boolean) => ReduxAction;
+  deleteComment: (comment: IssueComment) => ReduxAction<Promise<unknown>>;
+  onCheckboxUpdate: (checked: boolean, position: number, comment: IssueComment) => ReduxAction;
+  showIssueCommentActions: (
+    actionSheet: typeof ActionSheetProvider,
+    comment: IssueComment,
+    updateComment: ((comment: IssueComment) => void) | null | undefined,
+    canDeleteComment: boolean
+  ) => ReduxAction;
+  loadIssueCommentsAsActivityPage: () => ReduxAction;
+  submitEditedComment: (comment: IssueComment, isAttachmentChange?: boolean) => ReduxAction;
+  copyCommentUrl: (id: string) => ReduxAction;
+  toggleCommentDeleted: (
+    comment: IssueComment,
+    deleted: boolean
+  ) => (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => Promise<void>;
+  setEditingComment: (comment: IssueComment | {text: string; reply: boolean} | null) => ReduxAction;
+  loadCommentSuggestions: (query: string) => ReduxAction<Promise<UserMentions>>;
+  onReactionSelect: (
+    issueId: string,
+    comment: IssueComment,
+    reaction: Reaction,
+    activities: ActivityGroup[],
+    onReactionUpdate: (activities: Activity[], error?: CustomError) => void
+  ) => ReduxAction;
+  updateDraftComment: (
+    draftComment: IssueComment,
+    doNotFlush?: boolean
+  ) => (
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter
+  ) => Promise<IssueComment | null>;
+  getDraftComment: () => ReduxAction<Promise<IssueComment | null>>;
+  restoreComment: (comment: IssueComment) => ReduxAction;
+  submitDraftComment: (draftComment: IssueComment) => ReduxAction;
+}
+
+export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STATE_FIELD_NAME) => {
+  const actions: CommentActions = {
+    loadIssueCommentsAsActivityPage: function (): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+        const issueId = (getState()[stateFieldName as keyof AppState] as IssueState).issueId;
         const api: Api = getApi();
 
         try {
@@ -111,103 +140,67 @@ export const createActivityCommentActions = (
           log.info(`Loaded ${comments.length} comments for ${issueId} issue`);
           dispatch(receiveActivityAPIAvailability(false));
           const activityPage = convertCommentsToActivityPage(comments);
-          dispatch(
-            createIssueActivityActions(
-              stateFieldName,
-            ).receiveActivityEnabledTypes(),
-          );
+          dispatch(createIssueActivityActions(stateFieldName).receiveActivityEnabledTypes());
           dispatch(receiveActivityPage(activityPage));
         } catch (error) {
           dispatch({
             type: types.RECEIVE_COMMENTS_ERROR,
             error: error,
           });
-          notifyError(error);
+          notifyError(error as CustomError);
         }
       };
     },
-    loadActivity: function loadActivity(
-      doNotReset: boolean = false,
-    ): (dispatch: (arg0: any) => any) => Promise<void> {
-      return async (dispatch: (arg0: any) => any) => {
+    loadActivity: function (doNotReset: boolean = false): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch) => {
         if (activityHelper.isIssueActivitiesAPIEnabled()) {
-          dispatch(
-            createIssueActivityActions(stateFieldName).loadActivitiesPage(
-              doNotReset,
-            ),
-          );
+          dispatch(createIssueActivityActions(stateFieldName).loadActivitiesPage(doNotReset));
         } else {
           dispatch(actions.loadIssueCommentsAsActivityPage());
         }
       };
     },
-    getDraftComment: (): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<IssueComment | null> => async (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => {
-      const issueState: SingleIssueState = getState()[stateFieldName];
-      const issueId: string = issueState.issueId || issueState?.issue?.id;
-      let draftComment: IssueComment | null = null;
-      if (issueId) {
-        try {
-          draftComment = await getApi().issue.getDraftComment(issueId);
-        } catch (error) {
-          log.warn('Failed to receive issue comment draft', error);
+    getDraftComment: (): ReduxAction<Promise<IssueComment | null>> =>
+      async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+        const issueState: SingleIssueState = getState()[stateFieldName as keyof AppState] as IssueState;
+        const issueId: string = issueState.issueId || issueState?.issue?.id;
+        let draftComment: IssueComment | null = null;
+        if (issueId) {
+          try {
+            draftComment = await getApi().issue.getDraftComment(issueId);
+          } catch (error) {
+            log.warn('Failed to receive issue comment draft', error);
+          }
         }
-      }
-      return draftComment;
-    },
-    updateDraftComment: (draftComment: IssueComment, doNotFlush: boolean = false): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<null | IssueComment> => async (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ): Promise<null | IssueComment> => {
-      const issueState: SingleIssueState = getState()[stateFieldName];
-      const issueId: string | undefined = draftComment?.issue?.id || issueState?.issueId || issueState?.issue?.id;
-      if (draftComment && issueId) {
-        const [error, draft] = await until(
-          getApi().issue.updateDraftComment(issueId, draftComment),
-        );
+        return draftComment;
+      },
+    updateDraftComment:
+      (draftComment: IssueComment, doNotFlush: boolean = false): ReduxAction<Promise<null | IssueComment>> =>
+      async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+        const issueState: SingleIssueState = getState()[stateFieldName as keyof AppState] as IssueState;
+        const issueId = draftComment?.issue?.id || issueState?.issueId || issueState?.issue?.id;
+        if (draftComment && issueId) {
+          const [error, draft] = await until<IssueComment>(getApi().issue.updateDraftComment(issueId, draftComment));
 
-        if (error) {
-          log.warn('Failed to update a comment draft', error);
-        } else if (!doNotFlush) {
-          dispatch(actions.setEditingComment(draft));
+          if (error) {
+            log.warn('Failed to update a comment draft', error);
+          } else if (!doNotFlush) {
+            dispatch(actions.setEditingComment(draft));
+          }
+
+          return error ? null : draft;
+        } else {
+          return null;
         }
-
-        return error ? null : draft;
-      } else {
-        return null;
-      }
-    },
-    submitDraftComment: function submitDraftComment(
-      draftComment: IssueComment,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
-      return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
-      ) => {
-        const issueId: string | undefined = draftComment?.issue?.id || getState()[stateFieldName]?.issue?.id;
+      },
+    submitDraftComment: function (draftComment: IssueComment): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+        const issueId: string | undefined =
+          draftComment?.issue?.id || (getState()[stateFieldName as keyof AppState] as IssueState)?.issue?.id;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Add comment', 'Success');
 
         if (draftComment && issueId) {
-          const [error] = await until(
-            getApi().issue.submitDraftComment(issueId, draftComment),
-          );
+          const [error] = await until(getApi().issue.submitDraftComment(issueId, draftComment));
 
           if (error) {
             notifyError(error);
@@ -218,43 +211,21 @@ export const createActivityCommentActions = (
         }
       };
     },
-    setEditingComment: function setEditingComment(comment: (IssueComment | {text: string, reply: boolean }) | null): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
-      return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
-      ) => {
+    setEditingComment: function (comment: (IssueComment | {text: string; reply: boolean}) | null): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch) => {
         dispatch({
           type: types.SET_EDITING_COMMENT,
           comment,
         });
       };
     },
-    submitEditedComment: function submitEditedComment(
-      comment: IssueComment,
-      isAttachmentChange: boolean = false,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
-      return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
-      ) => {
-        const issue: IssueFull = getState()[stateFieldName].issue;
+    submitEditedComment: function (comment: IssueComment, isAttachmentChange: boolean = false): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+        const issue: IssueFull = (getState()[stateFieldName as keyof AppState] as IssueState).issue;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update comment');
 
         try {
-          const updatedComment = await getApi().issue.submitComment(
-            issue.id,
-            comment,
-          );
+          const updatedComment = await getApi().issue.submitComment(issue.id, comment);
           log.info(`Comment ${updatedComment.id} updated. Refreshing...`);
 
           if (isAttachmentChange) {
@@ -267,111 +238,69 @@ export const createActivityCommentActions = (
 
           await dispatch(actions.loadActivity(true));
         } catch (error) {
-          notifyError(error);
+          notifyError(error as CustomError);
         }
       };
     },
-    toggleCommentDeleted: function toggleCommentDeleted(
-      comment: IssueComment,
-      deleted: boolean,
-    ) {
-      return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
-      ) => {
-        const issueId = getState()[stateFieldName].issueId;
+    toggleCommentDeleted: function (comment: IssueComment, deleted: boolean) {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+        const issueId = (getState()[stateFieldName as keyof AppState] as IssueState).issueId;
 
         try {
-          const _comment: IssueComment = await getApi().issue.updateCommentDeleted(
-            issueId,
-            comment.id,
-            deleted,
-          );
+          const _comment: IssueComment = await getApi().issue.updateCommentDeleted(issueId, comment.id, deleted);
           dispatch(updateComment({...comment, ..._comment}));
-          log.info(
-            `Comment ${
-              comment.id
-            } deleted state updated: ${deleted.toString()}`,
-          );
+          log.info(`Comment ${comment.id} deleted state updated: ${deleted.toString()}`);
         } catch (error) {
           dispatch(updateComment({...comment}));
-          notifyError(error);
+          notifyError(error as CustomError);
         }
       };
     },
-    deleteComment: function deleteComment(
-      comment: IssueComment,
-    ): (dispatch: (arg0: any) => any) => Promise<unknown> {
-      return async (dispatch: (arg0: any) => any) => {
+    deleteComment: function (comment: IssueComment): ReduxAction<Promise<unknown>> {
+      return async (dispatch: ReduxThunkDispatch) => {
         return dispatch(actions.toggleCommentDeleted(comment, true));
       };
     },
-    restoreComment: function restoreComment(
-      comment: IssueComment,
-    ): (dispatch: (arg0: any) => any) => Promise<any> {
-      return async (dispatch: (arg0: any) => any) => {
+    restoreComment: function (comment: IssueComment): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch) => {
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Restore comment');
         return dispatch(actions.toggleCommentDeleted(comment, false));
       };
     },
-    deleteCommentPermanently: function deleteCommentPermanently(
-      comment: IssueComment,
-      activityId?: string,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
-      return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
-      ) => {
-        const issueId = getState()[stateFieldName].issueId;
+    deleteCommentPermanently: function (comment: IssueComment, activityId?: string): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+        const issueId = (getState()[stateFieldName as keyof AppState] as IssueState).issueId;
         confirmation(i18n('Delete comment permanently?'), i18n('Delete'))
           .then(async () => {
             try {
-              await getApi().issue.deleteCommentPermanently(
-                issueId,
-                comment.id,
-              );
+              await getApi().issue.deleteCommentPermanently(issueId, comment.id);
               log.info(`Comment ${comment.id} deleted forever`);
               dispatch(deleteCommentFromList(comment, activityId));
               dispatch(actions.loadActivity());
             } catch (error) {
               dispatch(actions.loadActivity());
-              notifyError(error);
+              notifyError(error as CustomError);
             }
           })
           .catch(() => {});
       };
     },
-    copyCommentUrl: function copyCommentUrl(id: string): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => void {
-      return (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
-      ) => {
+    copyCommentUrl: function (id: string): ReduxAction {
+      return (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         const api: Api = getApi();
-        const {issue} = getState()[stateFieldName];
+        const {issue} = getState()[stateFieldName as keyof AppState] as IssueState;
         Clipboard.setString(activityHelper.makeIssueWebUrl(api, issue, id));
         notify(i18n('Link to comment copied'));
       };
-
     },
-    showIssueCommentActions: function showIssueCommentActions(
-      actionSheet: Record<string, any>,
+    showIssueCommentActions: function (
+      actionSheet: typeof ActionSheetProvider,
       comment: IssueComment,
       updateComment: ((comment: IssueComment) => void) | null | undefined,
-      canDeleteComment: boolean,
-    ): (dispatch: (arg0: any) => any) => Promise<void> {
-      return async (dispatch: (arg0: any) => any) => {
-        const contextActions = [
+      canDeleteComment: boolean
+    ): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch) => {
+        const contextActions: ActionSheetOption[] = [
           {
             title: i18n('Copy text'),
             execute: () => {
@@ -383,7 +312,7 @@ export const createActivityCommentActions = (
           {
             title: i18n('Copy link'),
             execute: () => {
-              dispatch(actions.copyCommentUrl(comment));
+              dispatch(actions.copyCommentUrl(comment.id));
               usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment URL');
             },
           },
@@ -415,10 +344,8 @@ export const createActivityCommentActions = (
         const selectedAction = await showActions(
           contextActions,
           actionSheet,
-          comment?.author ? getEntityPresentation(comment.author) : null,
-          comment.text.length > 155
-            ? `${comment.text.substr(0, 153)}…`
-            : comment.text,
+          comment?.author ? getEntityPresentation(comment.author) : '',
+          comment.text.length > 155 ? `${comment.text.substring(0, 153)}…` : comment.text
         );
 
         if (selectedAction && selectedAction.execute) {
@@ -426,20 +353,10 @@ export const createActivityCommentActions = (
         }
       };
     },
-    loadCommentSuggestions: function loadCommentSuggestions(
-      query: string,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
-      return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
-      ): Promise<Array<User>> => {
+    loadCommentSuggestions: function (query: string): ReduxAction<Promise<UserMentions>> {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         const api: Api = getApi();
-        const issue: IssueFull = getState()[stateFieldName].issue;
+        const issue: IssueFull = (getState()[stateFieldName as keyof AppState] as IssueState).issue;
         dispatch(startLoadingCommentSuggestions());
 
         try {
@@ -453,66 +370,44 @@ export const createActivityCommentActions = (
           dispatch(receiveCommentSuggestions(suggestions));
           return suggestions;
         } catch (error) {
-          notifyError(error);
-          return [];
+          notifyError(error as CustomError);
+          return {users: []};
         } finally {
           dispatch(stopLoadingCommentSuggestions());
         }
       };
     },
-    getCommentVisibilityOptions: function getCommentVisibilityOptions(): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<Array<User | UserGroup>> {
+    getCommentVisibilityOptions: function (): ReduxAction {
       return (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter
       ): Promise<Array<User | UserGroup>> => {
         const api: Api = getApi();
-        const issueId: string = getState()[stateFieldName].issue.id;
-        usage.trackEvent(
-          ANALYTICS_ISSUE_PAGE,
-          'Open comment visibility select',
-        );
+        const issueId: string = (getState()[stateFieldName as keyof AppState] as IssueState).issue.id;
+        usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Open comment visibility select');
         return api.issue.getVisibilityOptions(issueId);
       };
     },
-    onReactionSelect: function onReactionSelect(
+    onReactionSelect: function (
       issueId: string,
       comment: IssueComment,
       reaction: Reaction,
-      activities: Activity[],
-      onReactionUpdate: (
-        activities: Activity[],
-        error?: CustomError,
-      ) => void,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
-      return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
-      ) => {
+      activities: ActivityGroup[],
+      onReactionUpdate: (activities: Activity[], error?: CustomError) => void
+    ): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         const issueApi: IssueAPI = getApi().issue;
-          const currentUser: User = getState().app.user;
+        const currentUser: User = getState().app.user!;
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Reaction select');
         const reactionName: string = reaction.reaction;
         const existReaction: Reaction = (comment.reactions || []).filter(
-          it => it.reaction === reactionName && it.author.id === currentUser.id,
+          it => it.reaction === reactionName && it.author.id === currentUser.id
         )[0];
         const [error, commentReaction] = await until(
           existReaction
-            ? issueApi.removeCommentReaction(
-                issueId,
-                comment.id,
-                existReaction.id,
-              )
-            : issueApi.addCommentReaction(issueId, comment.id, reactionName),
+            ? issueApi.removeCommentReaction(issueId, comment.id, existReaction.id)
+            : issueApi.addCommentReaction(issueId, comment.id, reactionName)
         );
 
         if (error) {
@@ -521,10 +416,10 @@ export const createActivityCommentActions = (
           return;
         }
 
-        const targetActivityData:
-          | ActivityPositionData
-          | null
-          | undefined = findActivityInGroupedActivities(activities, comment.id);
+        const targetActivityData: ActivityPositionData | null | undefined = findActivityInGroupedActivities(
+          activities,
+          comment.id
+        );
 
         if (targetActivityData) {
           const _comment = updateActivityCommentReactions({
@@ -533,36 +428,20 @@ export const createActivityCommentActions = (
             reaction: existReaction ? reaction : commentReaction,
           });
 
-          const newActivities: Activity[] = activities.slice(0);
-          const targetActivity: Activity | null | undefined =
-            newActivities[targetActivityData.index];
-
-          if (targetActivity && Array.isArray(targetActivity?.comment?.added)) {
+          const newActivities: ActivityGroup[] = activities.slice(0);
+          const targetActivity: ActivityGroup | undefined = newActivities[targetActivityData.index];
+          if (targetActivity?.comment?.added) {
             targetActivity.comment.added = [_comment];
             onReactionUpdate(newActivities);
           }
         }
       };
     },
-    onCheckboxUpdate: function onCheckboxUpdate(
-      checked: boolean,
-      position: number,
-      comment: IssueComment,
-    ): (
-      dispatch: (arg0: any) => any,
-      getState: StateGetter,
-      getApi: ApiGetter,
-    ) => Promise<void> {
-      return async (
-        dispatch: (arg0: any) => any,
-        getState: StateGetter,
-        getApi: ApiGetter,
-      ) => {
+    onCheckboxUpdate: function (checked: boolean, position: number, comment: IssueComment): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         const api: Api = getApi();
-        const {issue} = getState()[stateFieldName];
-        const [error, response] = await until(
-          api.issue.updateCommentCheckbox(issue.id, checked, position, comment),
-        );
+        const {issue} = getState()[stateFieldName as keyof AppState] as IssueState;
+        const [error, response] = await until(api.issue.updateCommentCheckbox(issue.id, checked, position, comment));
 
         if (!error && response) {
           dispatch(updateComment({...comment, text: response.text}));

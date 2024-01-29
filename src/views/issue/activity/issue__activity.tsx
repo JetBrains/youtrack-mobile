@@ -4,6 +4,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import {bindActionCreators, Dispatch} from 'redux';
 import {connect} from 'react-redux';
 
+import * as activityActions from './issue-activity__actions';
 import AddSpentTimeForm from './activity__add-spent-time';
 import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import ErrorMessage from 'components/error-message/error-message';
@@ -25,14 +26,10 @@ import {
   convertCommentsToActivityPage,
   createActivityModel,
 } from 'components/activity/activity-helper';
-import {createActivityCommentActions} from './issue-activity__comment-actions';
-import {
-  createIssueActivityActions,
-  receiveActivityPage,
-} from './issue-activity__actions';
+import {CommentActions, createActivityCommentActions} from './issue-activity__comment-actions';
 import {getApi} from 'components/api/api__instance';
 import {guid} from 'util/util';
-import {HIT_SLOP} from 'components/common-styles';
+import {HIT_SLOP, UNIT} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconAngleDown, IconClose} from 'components/icon/icon';
 import {isIssueActivitiesAPIEnabled} from './issue-activity__helper';
@@ -42,7 +39,6 @@ import {logEvent} from 'components/log/log-helper';
 import {setDraftCommentData} from 'actions/app-actions';
 import {SkeletonIssueActivities} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
-import {UNIT} from 'components/variables';
 
 import styles from './issue-activity.styles';
 
@@ -56,25 +52,29 @@ import type {Theme, UITheme} from 'types/Theme';
 import type {User, UserAppearanceProfile} from 'types/User';
 import type {WorkItem} from 'types/Work';
 import type {YouTrackWiki} from 'types/Wiki';
+import {AppState} from 'reducers';
 import {ContextMenuConfigItem} from 'types/MenuConfig';
+import {IssueActivityActions} from './issue-activity__actions';
 
-type IssueActivityProps = Partial<
-  IssueActivityState &
-    IssueCommentActivityState &
-    typeof attachmentActions & {
-      canAttach: boolean;
-      onAttach: () => any;
-      stateFieldName: string;
-      highlight?: {
-        activityId: string;
-        commentId?: string;
-      };
-    }
->;
-type State = {
+type IssueActivityProps = IssueActivityState &
+  IssueActivityActions &
+  IssueCommentActivityState &
+  CommentActions &
+  typeof attachmentActions & {
+    canAttach: boolean;
+    onAttach: () => any;
+    stateFieldName: string;
+    highlight?: {
+      activityId: string;
+      commentId?: string;
+    };
+  };
+
+interface State {
   modalChildren: any;
   settingsVisible: boolean;
-};
+}
+
 export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   static contextTypes: any = {
     actionSheet: Function,
@@ -84,8 +84,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     Authorization: string;
     'User-Agent': string;
   } = getApi().auth.getAuthorizationHeaders();
-  issuePermissions: Partial<IssuePermissions>;
-  props: IssueActivityProps;
+  issuePermissions: IssuePermissions;
   issueContext: IssueContextData;
   goOnlineSubscription: EventSubscription;
   theme: Theme;
@@ -101,7 +100,8 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    await this.props.setDefaultProjectTeam(this.props.issue.project);
     this.load(this.getCurrentIssueId());
   }
 
@@ -109,7 +109,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     return this.props.issuePlaceholder?.id || this.props.issue?.id;
   }
 
-  componentDidUpdate(prevProps: IssueActivityProps): void {
+  componentDidUpdate(prevProps: IssueActivityProps) {
     if (
       (!prevProps.issuePlaceholder && this.props.issuePlaceholder) ||
       (prevProps.issuePlaceholder &&
@@ -144,7 +144,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     }
   };
 
-  renderActivitySettings(disabled: boolean, uiTheme: UITheme): React.ReactNode {
+  renderActivitySettings(disabled: boolean, uiTheme: UITheme) {
     const {
       issueActivityTypes,
       issueActivityEnabledTypes,
@@ -196,11 +196,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     );
   }
 
-  getUserAppearanceProfile():
-    | UserAppearanceProfile
-    | {
-        naturalCommentsOrder: boolean;
-      } {
+  getUserAppearanceProfile(): UserAppearanceProfile | { naturalCommentsOrder: boolean; } {
     const DEFAULT_USER_APPEARANCE_PROFILE = {
       naturalCommentsOrder: true,
     };
@@ -323,9 +319,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     );
   }
 
-  canAddComment: () => boolean = () => this.issuePermissions.canCommentOn(this.props.issue);
+  canAddComment = () => this.issuePermissions.canCommentOn(this.props.issue);
 
-  onSubmitComment: (comment: IssueComment) => any = async (comment: IssueComment) => {
+  onSubmitComment = async (comment: IssueComment) => {
     const {
       submitDraftComment,
       activityPage,
@@ -347,7 +343,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     await submitDraftComment(comment);
   };
 
-  renderEditCommentInput(): React.ReactNode {
+  renderEditCommentInput() {
     const {
       editingComment,
       submitEditedComment,
@@ -389,14 +385,14 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     );
   }
 
-  renderAddCommentInput(): React.ReactNode {
+  renderAddCommentInput() {
     const {
       editingComment,
       issue,
       updateDraftComment,
       stateFieldName,
     } = this.props;
-    const canAddWork: boolean = (
+    const canAddWork = (
       issue?.project?.plugins?.timeTrackingSettings?.enabled &&
       this.issuePermissions.canCreateWork(issue)
     );
@@ -415,9 +411,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     );
   }
 
-  renderAddSpentTimePage: (workItem?: WorkItem) => any = (
-    workItem?: WorkItem,
-  ) => {
+  renderAddSpentTimePage = (workItem?: WorkItem) => {
     const {issue} = this.props;
     const isSplitViewMode: boolean = isSplitView();
 
@@ -452,7 +446,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     }
   };
 
-  renderCommentVisibilitySelect(): React.ReactNode {
+  renderCommentVisibilitySelect() {
     const {selectProps, onCloseSelect} = this.props;
     return (
       <Select
@@ -476,13 +470,13 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     );
   }
 
-  renderRefreshControl: () => any = () => {
-    return this.props.renderRefreshControl(() =>
-      this.loadIssueActivities(false, this.getCurrentIssueId()),
-    );
+  renderRefreshControl = () => {
+    return this.props.renderRefreshControl(() => {
+      this.loadIssueActivities(false, this.getCurrentIssueId());
+    });
   };
 
-  render(): React.ReactNode {
+  render() {
     const {isVisibilitySelectShown, editingComment} = this.props;
     return (
       <IssueContext.Consumer>
@@ -528,14 +522,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   }
 }
 
-const mapStateToProps = (
-  state: {
-    app: Record<string, any>;
-    issueActivity: IssueActivityState;
-    issueCommentActivity: IssueCommentActivityState;
-  },
-  ownProps,
-): IssueActivityState & IssueCommentActivityState => {
+const mapStateToProps = (state: AppState, ownProps) => {
   return {
     ...state.issueCommentActivity,
     ...state.issueActivity,
@@ -554,13 +541,14 @@ const mapDispatchToProps = (dispatch: Dispatch, ownProps: IssueActivityProps) =>
   ));
   return {
     ...bindActionCreatorsExt(
-      createIssueActivityActions(ownProps.stateFieldName),
+      activityActions.createIssueActivityActions(ownProps.stateFieldName),
       dispatch,
     ),
     ...bindActionCreators(attachmentActions, dispatch),
     ...bindActionCreatorsExt(commentActions, dispatch),
-    updateOptimisticallyActivityPage: (activityPage: Activity[]) => dispatch(receiveActivityPage(activityPage)),
+    updateOptimisticallyActivityPage: (activityPage: Activity[]) => dispatch(activityActions.receiveActivityPage(activityPage)),
     onGetCommentVisibilityOptions: () => dispatch(commentActions.getCommentVisibilityOptions()),
+    getProjectTeam: (projectId: string) => dispatch(commentActions.getProjectTeam(projectId)),
   };
 };
 

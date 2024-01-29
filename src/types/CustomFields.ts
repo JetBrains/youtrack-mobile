@@ -140,6 +140,7 @@ export type Attachment = {
 export type IssueComment = {
   $type: string;
   id: string;
+  canUpdateVisibility: boolean;
   created: number;
   updated: number;
   textPreview: string;
@@ -147,7 +148,7 @@ export type IssueComment = {
   text: string;
   usesMarkdown: boolean;
   author: User;
-  visibility: Visibility | null;
+  visibility?: Visibility | null;
   reactionOrder: string;
   reactions: Reaction[];
   issue?: Partial<IssueFull>;

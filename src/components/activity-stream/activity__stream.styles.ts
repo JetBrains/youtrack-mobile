@@ -14,7 +14,7 @@ export const rowStyles = {
   },
   activityWrapperSecured: {
     paddingTop: UNIT * 2,
-    backgroundColor: '$greyBackground',
+    backgroundColor: '$yellowBackground',
   },
   activityWrapperNoTop: {
     paddingTop: 0,

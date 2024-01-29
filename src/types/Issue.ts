@@ -9,9 +9,9 @@ import type {
 import type {UserGroup} from './UserGroup';
 import type {User} from './User';
 import type {Visibility} from './Visibility';
+import {Activity} from 'types/Activity';
 import {AnyCustomField} from 'components/custom-field/custom-field-helper';
 import {Article} from 'types/Article';
-import {ActivityItem} from 'types/Activity';
 import {Project} from 'types/Project';
 
 export type IssueContextData = {
@@ -42,7 +42,7 @@ export interface IssueOnList extends BaseIssue {
     value: Record<string, any>;
   };
   trimmedDescription: string;
-  activityPage?: ActivityItem[],
+  activityPage?: Activity[],
   description?: string;
 }
 

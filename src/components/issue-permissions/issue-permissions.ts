@@ -1,18 +1,14 @@
-/**
- * https://confluence.jetbrains.com/display/TSYS/Issue+access+rights
- */
+import {isHelpdeskProject} from 'components/helpdesk';
+
 import type {AnyIssue} from 'types/Issue';
-import type {Article} from 'types/Article';
+import type {Article, ArticleProject} from 'types/Article';
+import type {Attachment, CustomField, IssueComment} from 'types/CustomFields';
 import type {PermissionsStore} from '../permissions-store/permissions-store';
-import type {User} from 'types/User';
-import type {
-  Attachment,
-  CustomField,
-  IssueComment,
-} from 'types/CustomFields';
+import type {User, UserHelpdeskProfile} from 'types/User';
 import type {WorkItem} from 'types/Work';
 import {Entity} from 'types/Entity';
 import {Project} from 'types/Project';
+import {UserCurrent} from 'types/User';
 
 export const CREATE_ISSUE = 'JetBrains.YouTrack.CREATE_ISSUE';
 export const READ_ISSUE = 'JetBrains.YouTrack.READ_ISSUE';
@@ -48,9 +44,10 @@ export const WORK_ITEM_CREATE_NOT_OWN =
 export const WORK_ITEM_UPDATE = 'JetBrains.YouTrack.UPDATE_WORK_ITEM';
 export const WORK_ITEM_UPDATE_NOT_OWN =
   'JetBrains.YouTrack.UPDATE_NOT_OWN_WORK_ITEM';
+
 export default class IssuePermissions {
   permissionsStore: PermissionsStore;
-  currentUser: User;
+  currentUser: UserCurrent;
 
   constructor(permissionsStore: PermissionsStore, currentUser: User) {
     this.permissionsStore = permissionsStore;
@@ -166,6 +163,39 @@ export default class IssuePermissions {
 
     return this._canUpdatePrivateField(issue);
   };
+
+  getUserProfileHelpdeskSettings = (): UserHelpdeskProfile | null => {
+    return this.currentUser?.ytCurrentUser?.profiles?.helpdesk || null;
+  };
+
+  isInProject = (project: Project | ArticleProject, projects: Array<{id: string}>): boolean => {
+    return projects.some((p: {id: string}) => p.id === project.id);
+  };
+
+  isAgentInProject = (project: Project | ArticleProject): boolean => {
+    const settings = this.getUserProfileHelpdeskSettings();
+    return settings ? this.isInProject(project, settings.agentInProjects) : false;
+  };
+
+  isReporterInProject = (project: Project | ArticleProject): boolean => {
+    const settings = this.getUserProfileHelpdeskSettings();
+    return settings ? this.isInProject(project, settings.reporterInProjects) : false;
+  };
+
+  canCommentPublicly = (entity: Entity): boolean => {
+    if (entity.project && isHelpdeskProject(entity)) {
+      return this.isReporterInProject(entity.project) || this.isAgentInProject(entity.project);
+    }
+    return true;
+  };
+
+  canUpdateCommentVisibility = (entity: Entity): boolean => {
+    if (entity.project && isHelpdeskProject(entity)) {
+      return this.isAgentInProject(entity.project);
+    }
+    return true;
+  };
+
   canCommentOn: (issue: AnyIssue) => boolean = (issue: AnyIssue): boolean =>
     this.hasPermissionFor(issue, CAN_CREATE_COMMENT);
   canDeleteIssue: (issue: AnyIssue) => boolean = (issue: AnyIssue): boolean => this.hasPermissionFor(issue, CAN_DELETE_ISSUE);
