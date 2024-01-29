@@ -1,3 +1,5 @@
+import * as helpdeskHelper from 'components/helpdesk';
+
 import IssuePermissions, {
   CAN_UPDATE_COMMENT,
   CAN_UPDATE_NOT_OWN_COMMENT,
@@ -18,8 +20,8 @@ import {CustomField, IssueComment} from 'types/CustomFields';
 import {Entity} from 'types/Entity';
 import {IssueOnList} from 'types/Issue';
 import {PermissionCacheItem} from 'types/Permission';
-import {ProjectTimeTrackingTimeSpent} from 'types/Project';
-import {User} from 'types/User';
+import {Project, ProjectTimeTrackingTimeSpent} from 'types/Project';
+import {User, UserHelpdeskProfile} from 'types/User';
 
 describe('IssuePermissions', function () {
   const USER_ID = 'some-user-id';
@@ -41,7 +43,6 @@ describe('IssuePermissions', function () {
         key: 'permissionName',
       },
     };
-    permissionsStore = new PermissionsStore([permissionItemMock]);
     issueMock = {
       reporter: {
         ringId: USER_ID,
@@ -71,7 +72,10 @@ describe('IssuePermissions', function () {
     currentUserMock = {
       id: USER_ID,
       guest: false,
+      profiles: {},
     } as User;
+
+    permissionsStore = new PermissionsStore([permissionItemMock]);
     issuePermissions = createInstance(permissionsStore, currentUserMock);
   });
 
@@ -425,6 +429,160 @@ describe('IssuePermissions', function () {
       expect(issuePermissions.articleCanDeleteAttachment(issueMock)).toEqual(false);
     });
   });
+
+
+  describe('HelpDesk', () => {
+    it('should returns NULL if there is no helpdesk user profile', async () => {
+      expect(issuePermissions.getUserProfileHelpdeskSettings()).toEqual(null);
+    });
+
+    it('should returns helpdesk user profile', async () => {
+      setUserHelpdeskProfile({isAgent: true});
+
+      expect(issuePermissions.getUserProfileHelpdeskSettings()).toEqual({isAgent: true});
+    });
+
+    describe('isInProject', () => {
+      it('should returns TRUE if the project is in the list', () => {
+        expect(issuePermissions.isInProject({id: '1'} as Project, [{id: '2'}, {id: '1'}])).toEqual(true);
+      });
+
+      it('should returns FALSE if the project is mot in the list', () => {
+        expect(issuePermissions.isInProject({id: '11'} as Project, [{id: '2'}, {id: '1'}])).toEqual(false);
+      });
+    });
+
+    describe('isAgentInProject', () => {
+      it('should returns TRUE if the reporter in the list of  is in the list of `UserHelpdeskProfile.agentInProjects`', () => {
+        setUserHelpdeskProfile({agentInProjects: [{id: '2'}, {id: '1'}]});
+
+        expect(issuePermissions.isAgentInProject({id: '1'} as Project)).toEqual(true);
+      });
+
+      it('should returns FALSE if the reporter in not the list of  is in the list of `UserHelpdeskProfile.agentInProjects`', () => {
+        setUserHelpdeskProfile({agentInProjects: [{id: '2'}]});
+
+        expect(issuePermissions.isAgentInProject({id: '1'} as Project)).toEqual(false);
+      });
+
+      it('should returns FALSE if the list of `UserHelpdeskProfile.agentInProjects` is empty', () => {
+        setUserHelpdeskProfile({agentInProjects: []});
+
+        expect(issuePermissions.isAgentInProject({id: '1'} as Project)).toEqual(false);
+      });
+
+      it('should returns FALSE if the list of `UserHelpdeskProfile` is not defined', () => {
+        setUserHelpdeskProfile(null as any);
+
+        expect(issuePermissions.isAgentInProject({id: '1'} as Project)).toEqual(false);
+      });
+    });
+
+    describe('isReporterInProject', () => {
+      it('should returns TRUE if the reporter in the list of  is in the list of `UserHelpdeskProfile.agentInProjects`', () => {
+        setUserHelpdeskProfile({reporterInProjects: [{id: '2'}, {id: '1'}]});
+
+        expect(issuePermissions.isReporterInProject({id: '1'} as Project)).toEqual(true);
+      });
+
+      it('should returns FALSE if the reporter in not the list of  is in the list of `UserHelpdeskProfile.agentInProjects`', () => {
+        setUserHelpdeskProfile({reporterInProjects: [{id: '2'}]});
+
+        expect(issuePermissions.isReporterInProject({id: '1'} as Project)).toEqual(false);
+      });
+
+      it('should returns FALSE if the list of `UserHelpdeskProfile.agentInProjects` is empty', () => {
+        setUserHelpdeskProfile({reporterInProjects: []});
+
+        expect(issuePermissions.isReporterInProject({id: '1'} as Project)).toEqual(false);
+      });
+
+      it('should returns FALSE if the list of `UserHelpdeskProfile` is not defined', () => {
+        setUserHelpdeskProfile(null as any);
+
+        expect(issuePermissions.isReporterInProject({id: '1'} as Project)).toEqual(false);
+      });
+    });
+
+    const entity = {project: {id: '1'}} as Entity;
+
+    describe('canCommentPublicly', () => {
+      it('should returns TRUE if it is no a helpdesk project', () => {
+        setIsHelpdeskProject(false);
+
+        expect(issuePermissions.canCommentPublicly(entity)).toEqual(true);
+      });
+
+      it('should returns TRUE if there is no project in the entity', () => {
+        setIsHelpdeskProject(false);
+
+        expect(issuePermissions.canCommentPublicly({} as Entity)).toEqual(true);
+      });
+
+      it('should returns TRUE if the user is in the reporters list of projects', () => {
+        setIsHelpdeskProject(true);
+        jest.spyOn(issuePermissions, 'isReporterInProject').mockReturnValueOnce(true);
+
+        expect(issuePermissions.canCommentPublicly(entity)).toEqual(true);
+      });
+
+      it('should returns TRUE if the user is in the agents list of projects', () => {
+        setIsHelpdeskProject(true);
+        jest.spyOn(issuePermissions, 'isAgentInProject').mockReturnValueOnce(true);
+
+        expect(issuePermissions.canCommentPublicly(entity)).toEqual(true);
+      });
+
+      it('should returns FALSE if the user neither in agents nor in the reporters list of projects', () => {
+        setIsHelpdeskProject(true);
+        jest.spyOn(issuePermissions, 'isAgentInProject').mockReturnValueOnce(false);
+        jest.spyOn(issuePermissions, 'isReporterInProject').mockReturnValueOnce(false);
+
+        expect(issuePermissions.canCommentPublicly(entity)).toEqual(false);
+      });
+    });
+
+    describe('canUpdateCommentVisibility', () => {
+      it('should returns TRUE if it is not a helpdesk project', () => {
+        setIsHelpdeskProject(false);
+
+        expect(issuePermissions.canUpdateCommentVisibility(entity)).toEqual(true);
+      });
+
+      it('should returns TRUE if there is no project in the entity', () => {
+        setIsHelpdeskProject(false);
+        expect(issuePermissions.canUpdateCommentVisibility({} as Entity)).toEqual(true);
+      });
+
+      it('should returns TRUE if the user is in the agents list of projects', () => {
+        setIsHelpdeskProject(true);
+        jest.spyOn(issuePermissions, 'isAgentInProject').mockReturnValueOnce(true);
+
+        expect(issuePermissions.canUpdateCommentVisibility(entity)).toEqual(true);
+      });
+
+      it('should returns FALSE if the user is not in the agents list of projects', () => {
+        setIsHelpdeskProject(true);
+        jest.spyOn(issuePermissions, 'isAgentInProject').mockReturnValueOnce(false);
+
+        expect(issuePermissions.canUpdateCommentVisibility(entity)).toEqual(false);
+      });
+    });
+  });
+
+
+  function setIsHelpdeskProject(isHelpdesk: boolean) {
+    jest.spyOn(helpdeskHelper, 'isHelpdeskProject').mockReturnValue(isHelpdesk);
+  }
+
+  function setUserHelpdeskProfile(helpdesk: Partial<UserHelpdeskProfile>) {
+    issuePermissions = createInstance(permissionsStore, {
+      ...currentUserMock,
+      ytCurrentUser: {
+        profiles: {helpdesk},
+      },
+    } as User);
+  }
 
   function permissionStoreHasReturnsTrueForPermission(permission: string) {
     jest.spyOn(permissionsStore, 'has').mockImplementation(
