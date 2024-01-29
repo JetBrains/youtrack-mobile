@@ -46,11 +46,8 @@ function getEstimation(
   fields: CustomFieldShort[] = []
 ) {
   const field: CustomFieldShort | undefined = fields.find(f => f.projectCustomField?.field?.id === estimationField.id);
-
-  if (typeof field?.value === 'object' && 'presentation' in field.value) {
-    return field.value.presentation;
-  }
-  return '';
+  // @ts-ignore
+  return field?.value?.presentation || '';
 }
 
 export default class AgileCard extends PureComponent<Props, void> {
