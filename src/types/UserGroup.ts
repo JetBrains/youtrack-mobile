@@ -5,5 +5,9 @@ export type UserGroup = {
   id: string;
   name: string;
   ringId: string;
+  team?: {
+    id: string;
+    name: string;
+  };
   usersCount: number;
 };

@@ -3,11 +3,12 @@ import {Text} from 'react-native';
 import {absDate, ytDate} from 'components/date/date';
 import styles from './activity__stream.styles';
 import type {ViewStyleProp} from 'types/Internal';
-type Props = {
+
+interface Props {
   isAbs?: boolean;
   timestamp?: number;
   style?: ViewStyleProp;
-};
+}
 
 const StreamTimestamp = (props: Props) => {
   if (typeof props.timestamp !== 'number') {
@@ -21,7 +22,4 @@ const StreamTimestamp = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(StreamTimestamp) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(StreamTimestamp);

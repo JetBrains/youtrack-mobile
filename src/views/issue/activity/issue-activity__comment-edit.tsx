@@ -9,18 +9,15 @@ import type {IssueContextData, IssueFull} from 'types/Issue';
 import {NormalizedAttachment} from 'types/Attachment';
 
 
-type Props = {
+interface Props {
   comment: IssueComment;
   issueContext: IssueContextData;
   onAddSpentTime?: () => void;
-  onCommentChange?: (
-    comment: IssueComment,
-    isAttachmentChange: boolean,
-  ) => Promise<void> | void;
+  onCommentChange: (comment: IssueComment, isAttachmentChange?: boolean) => Promise<IssueComment | null>;
   onSubmitComment: (comment: IssueComment) => Promise<void>;
   header?: React.ReactElement<React.ComponentProps<any>, any>;
   stateFieldName: string;
-};
+}
 
 const IssueActivityStreamCommentEdit = (props: Props) => {
   const issue: IssueFull = props.issueContext.issue;

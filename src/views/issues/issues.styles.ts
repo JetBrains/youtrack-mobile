@@ -326,6 +326,7 @@ export default EStyleSheet.create({
     ...secondaryText,
     marginRight: UNIT / 2,
     color: '$text',
+    textTransform: 'capitalize',
   },
   filtersIcon: {
     color: '$icon',
@@ -360,12 +361,9 @@ export default EStyleSheet.create({
     borderRadius: UNIT * 2,
     color: '$iconAccent',
   },
-  helpDeskIconWrapperCompact: {
-    marginTop: UNIT / 4,
-    marginRight: -UNIT / 4,
-    opacity: 0.7,
-  },
   helpDeskIcon: {
+    marginRight: UNIT,
+    color: '$iconAccent',
   },
   dualAvatarWrapper: {
     position: 'relative',
@@ -390,5 +388,39 @@ export default EStyleSheet.create({
   },
   rightAvatar: {
     left: -DUAL_AVATAR_SIZE / 2,
+  },
+  slaFields: {
+    flexDirection: 'row',
+    marginTop: UNIT / 2,
+  },
+  slaFieldsCompact: {
+    marginTop: 0,
+  },
+  slaFieldsItem: {
+    marginRight: UNIT / 2,
+  },
+  slaField: {
+    color: '$textButton',
+    backgroundColor: '$greenColor',
+  },
+  slaFieldOverdue: {
+    backgroundColor: '$redColor',
+  },
+  slaFieldPaused: {
+    backgroundColor: '$greyColor',
+    color: '$text',
+  },
+  slaFieldPausedIcon: {
+    color: '$textSecondary',
+  },
+  slaFieldTag: {
+    marginTop: -UNIT / 2,
+    marginRight: UNIT / 1.5,
+    fontSize: SECONDARY_FONT_SIZE - 3,
+  },
+  slaFieldPausedCompact: {
+    marginTop: -UNIT / 2,
+    marginRight: UNIT / 2,
+    marginLeft: -UNIT / 2,
   },
 });

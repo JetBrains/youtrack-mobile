@@ -13,7 +13,7 @@ jest.mock('react-native/Libraries/Linking/Linking', () => ({
   addEventListener: jest.fn(),
 }));
 
-describe.skip('open-url-handler', () => {
+describe('open-url-handler', () => {
   describe('extractIssueId', () => {
     it('should return NULL if URI is not provided', () => {
       expect(extractIssueId()).toEqual(null);

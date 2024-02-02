@@ -1,6 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from 'components/variables';
-import {secondaryText} from 'components/common-styles/typography';
+
+import {secondaryText, UNIT} from 'components/common-styles';
+
 export default EStyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -12,5 +13,8 @@ export default EStyleSheet.create({
   buttonIcon: {
     marginRight: UNIT,
   },
-  buttonText: {...secondaryText, color: '$textSecondary'},
-}) as any;
+  buttonText: {...secondaryText, color: '$yellowColor'},
+  link: {
+    color: 'link',
+  },
+});

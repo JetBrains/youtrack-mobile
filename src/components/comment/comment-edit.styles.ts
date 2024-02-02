@@ -75,12 +75,15 @@ export default EStyleSheet.create({
     borderRadius: INPUT_BORDER_RADIUS,
     borderWidth: 1,
     borderColor: '$disabled',
+    backgroundColor: '$background',
+  },
+  commentInputContainerHighlighted: {
+    backgroundColor: '$yellowBackground',
   },
   commentInput: {
     flex: 1,
     maxHeight: 106,
     padding: 0,
-    backgroundColor: '$background',
     ...mainText,
     color: '$text',
   },

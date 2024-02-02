@@ -1,12 +1,12 @@
-import type {AnyIssue} from 'types/Issue';
-import type {CustomField} from 'types/CustomFields';
-import type {Article} from 'types/Article';
+import type { AnyIssue, IssueFull, IssueOnList } from 'types/Issue';
+import type { Article } from 'types/Article';
+import type { CustomFieldBase } from 'types/CustomFields';
 
 function findIssueField(
   issue: AnyIssue,
-  predicate: (field: CustomField) => boolean,
-): CustomField | null {
-  const fields: CustomField[] = issue.fields as CustomField[] || [];
+  predicate: (field: CustomFieldBase) => boolean
+): CustomFieldBase | null {
+  const fields = issue.fields || [];
 
   for (const field of fields) {
     if (predicate(field)) {
@@ -17,14 +17,20 @@ function findIssueField(
   return null;
 }
 
-function getPriorityField(issue: AnyIssue): CustomField | null {
+function getPriorityField(issue: AnyIssue): CustomFieldBase | null {
   return findIssueField(issue, field => {
     const fieldName: string | null | undefined = field?.projectCustomField?.field?.name;
     return !!fieldName && fieldName.toLowerCase() === 'priority';
   });
 }
 
-function getAssigneeField(issue: AnyIssue): CustomField | null {
+function getSLAFields(issue: IssueOnList): CustomFieldBase[] {
+  return (issue.fields || []).filter(
+    (it) => it.$type === 'SlaIssueCustomField'
+  );
+}
+
+function getAssigneeField(issue: AnyIssue): CustomFieldBase | null {
   const PRIORITY_FIELDS = ['Assignee', 'Assignees'];
   return findIssueField(issue, field => {
     const fieldName = field.projectCustomField.field.name;
@@ -32,7 +38,7 @@ function getAssigneeField(issue: AnyIssue): CustomField | null {
   });
 }
 
-function getReadableID(entity: AnyIssue | Article): string {
+function getReadableID(entity: IssueOnList | IssueFull | Article): string {
   return (!!entity && entity?.idReadable) || '';
 }
 
@@ -77,4 +83,5 @@ export {
   getReadableID,
   getVisibilityPresentation,
   getEntityPresentation,
+  getSLAFields,
 };

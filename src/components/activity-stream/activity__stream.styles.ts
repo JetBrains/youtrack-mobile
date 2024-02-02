@@ -8,23 +8,26 @@ const secondaryTextColor = {
 };
 export const rowStyles = {
   activityWrapper: {
-    paddingTop: UNIT,
-    paddingLeft: UNIT,
-    paddingRight: UNIT,
-    backgroundColor: '$background',
+    paddingTop: UNIT * 3,
+    paddingBottom: UNIT * 2.5,
+    paddingHorizontal: UNIT,
+  },
+  activityWrapperSecured: {
+    paddingTop: UNIT * 2,
+    backgroundColor: '$yellowBackground',
+  },
+  activityWrapperNoTop: {
+    paddingTop: 0,
+  },
+  activityWrapperNoBottom: {
+    paddingBottom: 0,
   },
   activity: {
     flexDirection: 'row',
   },
-  activityMerged: {
-    marginBottom: 0,
-    paddingTop: UNIT * 3,
-  },
   activitySeparator: {
     ...separator,
     borderColor: '$separator',
-    marginTop: UNIT * 3,
-    marginBottom: UNIT * 2,
     marginLeft: UNIT * 7,
     marginRight: -UNIT,
   },
@@ -65,6 +68,9 @@ export const rowStyles = {
     color: '$textSecondary',
     lineHeight: MAIN_FONT_SIZE,
   },
+  activityTimestampMerged: {
+    color: '$text', fontWeight: '500',
+  },
   activityLabel: {
     fontSize: SECONDARY_FONT_SIZE,
     color: '$textSecondary',
@@ -75,10 +81,9 @@ export const rowStyles = {
   },
   activityRelatedChanges: {
     flex: 1,
-    padding: UNIT * 2,
+    padding: UNIT * 1.5,
     paddingTop: UNIT,
-    marginTop: UNIT * 1.5,
-    marginBottom: UNIT,
+    marginVertical: UNIT,
     backgroundColor: '$boxBackground',
     borderRadius: UNIT,
     lineHeight: SECONDARY_FONT_SIZE,
@@ -121,12 +126,9 @@ export const rowStyles = {
   activityCommentActionsOther: {
     color: '$iconAccent',
   },
-  activityCommentDate: {
-    marginTop: UNIT * 2,
-  },
   activityCommentReactions: {
     alignItems: 'center',
-    paddingLeft: UNIT * 7,
+    paddingLeft: UNIT * 6,
     marginRight: UNIT,
   },
   activityCommentAttachments: {
@@ -145,7 +147,6 @@ export const rowStyles = {
   activityVisibilityMerged: {
     marginLeft: 0,
     marginTop: UNIT * 2,
-    marginBottom: UNIT,
   },
   activityWorkIcon: {
     position: 'relative',

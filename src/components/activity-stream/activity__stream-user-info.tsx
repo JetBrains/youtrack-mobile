@@ -14,7 +14,7 @@ import type {Activity} from 'types/Activity';
 import {User} from 'types/User';
 
 
-const StreamUserInfo = ({activityGroup}: { activityGroup: Activity }): JSX.Element => {
+const StreamUserInfo = ({activityGroup}: { activityGroup: Activity }): React.JSX.Element => {
   const issuePermissions: IssuePermissions = usePermissions();
 
   const getUser = (): User => activityGroup.author;

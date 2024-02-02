@@ -40,7 +40,7 @@ import type {Activity} from 'types/Activity';
 import type {AppConfig, EndUserAgreement} from 'types/AppConfig';
 import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
-import type {AuthParams, OAuthParams2} from 'types/Auth';
+import type {AuthParams} from 'types/Auth';
 import type {CustomError} from 'types/Error';
 import type {
   Folder,
@@ -60,8 +60,6 @@ import {DraftCommentData, IssueComment} from 'types/CustomFields';
 import {GlobalSettings} from 'types/GlobalSettings';
 import {ReduxAction, ReduxStateGetter, ReduxAPIGetter, ReduxThunkDispatch} from 'types/Redux';
 import {UserGeneralProfileLocale} from 'types/User';
-import {normalizeAuthParams} from "components/auth/oauth2-helper";
-
 
 export function setNetworkState(networkState: NetInfoState): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
@@ -363,8 +361,10 @@ function setUserPermissions(permissions: PermissionCacheItem[]): ReduxAction {
     dispatch({
       type: types.SET_PERMISSIONS,
       permissionsStore: new PermissionsStore(permissions),
-      currentUser:
-        getState().app?.auth?.currentUser || storage.getStorageState().currentUser,
+      currentUser: {
+        ...getState().app?.auth?.currentUser,
+        ...storage.getStorageState().currentUser,
+      },
     });
   };
 }
@@ -553,7 +553,6 @@ export function onLogIn(authParams: AuthParams, config: AppConfig, currentAccoun
     await storeConfig(config);
 
     const otherAccounts: StorageState[] = getState().app.otherAccounts || [];
-    debugger
     if (currentAccount) {
       const newOtherAccounts: StorageState[] = [...otherAccounts, currentAccount];
       await storage.storeAccounts(newOtherAccounts);
@@ -567,7 +566,6 @@ export function onLogIn(authParams: AuthParams, config: AppConfig, currentAccoun
     });
 
     const auth: OAuth2 = await createAuthInstance(config);
-    debugger
     await dispatch(setAuthInstance(auth));
     await auth.cacheAuthParams(authParams, timestamp.toString());
     auth.setAuthParams(authParams);
@@ -980,7 +978,7 @@ const setGlobalInProgress = (isInProgress: boolean) => ({
 
 export function setDraftCommentData(
   setDraft: Function,
-  getCommentDraft: () => () => Promise<IssueComment | null>,
+  getCommentDraft: () => ReduxAction<Promise<IssueComment | null>>,
   entity: AnyIssue | Article
 ) {
   return {

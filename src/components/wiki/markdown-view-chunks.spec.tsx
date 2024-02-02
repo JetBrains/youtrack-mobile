@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {render, cleanup} from '@testing-library/react-native';
+import {render, cleanup, screen} from '@testing-library/react-native';
 
 import Api from 'components/api/api';
 import MarkdownViewChunks from './markdown-view-chunks';
@@ -12,7 +12,7 @@ import {setApi} from '../api/api__instance';
 import OAuth2 from 'components/auth/oauth2';
 
 let apiMock;
-describe('<Menu/>', () => {
+describe('<MarkdownViewChunks/>', () => {
   beforeEach(() => {
     jest.restoreAllMocks();
     apiMock = new Api(mocks.createAuthMock(mocks.createConfigMock()) as OAuth2);
@@ -23,8 +23,8 @@ describe('<Menu/>', () => {
   afterEach(cleanup);
   describe('Render', () => {
     it('should render component', () => {
-      const {queryByTestId} = doRender();
-      expect(queryByTestId('markdownViewChunks')).toBeDefined();
+      doRender();
+      expect(screen.queryByTestId('markdownViewChunks')).toBeDefined();
     });
   });
 

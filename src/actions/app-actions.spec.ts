@@ -1,6 +1,6 @@
 import {Linking} from 'react-native';
 
-import configureMockStore from 'redux-mock-store';
+import configureMockStore, {MockStore} from 'redux-mock-store';
 import fetchMock from 'fetch-mock';
 import thunk from 'redux-thunk';
 
@@ -8,6 +8,7 @@ import * as actions from './app-actions';
 import * as appActionHelper from './app-actions-helper';
 import * as feature from 'components/feature/feature';
 import * as Notification from 'components/notification/notification';
+import * as permissionsHelper from 'components/permissions-store/permissions-helper';
 import * as storage from 'components/storage/storage';
 import * as storageOauth from 'components/storage/storage__oauth';
 import * as types from './action-types';
@@ -16,19 +17,18 @@ import API from 'components/api/api';
 import log from 'components/log/log';
 import mocks from 'test/mocks';
 import OAuth2 from 'components/auth/oauth2';
-import * as permissionsHelper from 'components/permissions-store/permissions-helper';
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
-import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
 import Router from 'components/router/router';
+import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
 
-import {PermissionCacheItem} from 'types/Permission';
 import {AppConfig} from 'types/AppConfig';
 import {AuthParams} from 'types/Auth';
+import {InboxFolder} from 'types/Inbox';
+import {PermissionCacheItem} from 'types/Permission';
 import {RootState} from 'reducers/app-reducer';
 import {StorageState} from 'components/storage/storage';
-import {Store} from 'redux';
-import {User} from 'types/User';
+import {User, UserCurrent} from 'types/User';
 
 jest.mock('components/storage/storage', () => {
   const st = jest.requireActual('components/storage/storage');
@@ -57,8 +57,8 @@ jest.mock('components/open-url-handler/open-url-handler');
 const backendURLMock = 'https://example.com';
 let appConfigMock: AppConfig | Partial<AppConfig>;
 let apiMock: API;
-let appStateMock: Partial<RootState>;
-let store: Store;
+let appStateMock: RootState;
+let store: MockStore;
 let userMock: User;
 let authParamsMock: AuthParams;
 
@@ -67,13 +67,12 @@ const getApi = () => apiMock;
 const middlewares = [thunk.withExtraArgument(getApi)];
 const storeMock = configureMockStore(middlewares);
 
-
 describe('app-actions', () => {
   beforeEach(async () => {
     mockGetAuthParamsFromCache();
     apiMock = createAPIMock();
     appStateMock = {
-      auth: createAuthInstanceMock(),
+      auth: createAuthInstanceMock({} as User),
     } as unknown as RootState;
     updateStore({...appStateMock});
 
@@ -225,18 +224,18 @@ describe('app-actions', () => {
 
 
   describe('Permissions', () => {
-    let actualPermissionsMock;
+    let actualPermissionsMock: PermissionCacheItem[];
     let cachedPermissionsMock: PermissionCacheItem[];
-    let permissionItemMock;
+    let permissionItemMock: PermissionCacheItem;
     beforeEach(() => {
       permissionItemMock = {
         permission: {
           key: 'permissionName',
         },
-      };
+      } as PermissionCacheItem;
       cachedPermissionsMock = [permissionItemMock];
       actualPermissionsMock = [permissionItemMock, permissionItemMock];
-      setStoreAndCurrentUser();
+      setStoreAndCurrentUser({} as User);
       jest
         .spyOn(permissionsHelper, 'loadPermissions')
         .mockResolvedValueOnce(actualPermissionsMock);
@@ -247,7 +246,7 @@ describe('app-actions', () => {
       expect(permissionsHelper.loadPermissions).toHaveBeenCalledWith(
         authParamsMock.token_type,
         authParamsMock.access_token,
-        appStateMock.auth.PERMISSIONS_CACHE_URL,
+        appStateMock.auth!.PERMISSIONS_CACHE_URL,
       );
       expect(storage.getStorageState().permissions).toEqual(
         actualPermissionsMock,
@@ -262,7 +261,7 @@ describe('app-actions', () => {
       expect(storeAction[0]).toEqual({
         type: types.SET_PERMISSIONS,
         permissionsStore: new PermissionsStore(actualPermissionsMock),
-        currentUser: appStateMock.auth.currentUser,
+        currentUser: appStateMock.auth!.currentUser,
       });
     });
 
@@ -272,7 +271,7 @@ describe('app-actions', () => {
       expect(store.getActions()[0]).toEqual({
         type: types.SET_PERMISSIONS,
         permissionsStore: new PermissionsStore(actualPermissionsMock),
-        currentUser: appStateMock.auth.currentUser,
+        currentUser: appStateMock.auth!.currentUser,
       });
     });
 
@@ -321,7 +320,7 @@ describe('app-actions', () => {
     const searchContextMock = {id: 1};
     const naturalCommentsOrderMock = false;
     beforeEach(() => {
-      setStoreAndCurrentUser({});
+      setStoreAndCurrentUser({} as User);
     });
 
     it('should initialize OAuth instance', async () => {
@@ -370,7 +369,8 @@ describe('app-actions', () => {
           },
         },
       });
-      setStorageData({currentUser: {ytCurrentUser: ytCurrentUserMock}});
+      const currentUser = {ytCurrentUser: ytCurrentUserMock} as unknown as UserCurrent;
+      setStorageData({currentUser: currentUser} as StorageState);
       await store.dispatch(actions.initializeApp(appConfigMock));
 
       expect(store.getActions()[0]).toEqual({
@@ -416,7 +416,7 @@ describe('app-actions', () => {
 
 
   describe('inboxCheckUpdateStatus', () => {
-    let foldersMock;
+    let foldersMock: InboxFolder;
     beforeEach(() => {
       setAppStateNetworkConnected(true);
       foldersMock = createInboxFoldersMock();
@@ -471,7 +471,7 @@ describe('app-actions', () => {
   describe('subscribeToURL', () => {
     beforeAll(async () => jest.useFakeTimers({advanceTimers: true}));
     beforeEach(async () => {
-      setStoreAndCurrentUser({});
+      setStoreAndCurrentUser({} as User);
     });
 
     it('should invoke URL handler', async () => {
@@ -496,7 +496,8 @@ describe('app-actions', () => {
         auth: createAuthInstanceMock(ytCurrentUser),
       },
     });
-    setStorageData({currentUser: {ytCurrentUser}});
+    const currentUser = {currentUser: {ytCurrentUser}} as unknown as StorageState;
+    setStorageData(currentUser);
   }
 
   function setStorageData(data: Partial<StorageState>) {
@@ -590,5 +591,5 @@ function createInboxFoldersMock() {
       lastNotified: 1,
       lastSeen: 1,
     },
-  ];
+  ] as InboxFolder[];
 }

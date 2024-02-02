@@ -9,15 +9,24 @@ import type {Visibility} from 'types/Visibility';
 export default class IssueVisibility {
   static visibility(visibility: Visibility = null, isLimited: boolean = false): Visibility {
     const isSecured: boolean =
-      isLimited ||
-      !!visibility?.permittedGroups?.length ||
-      !!visibility?.permittedUsers?.length;
+      isLimited || !!visibility?.permittedGroups?.length || !!visibility?.permittedUsers?.length;
     return {
       permittedUsers: [],
       permittedGroups: [],
       ...visibility,
       $type: isSecured ? ResourceTypes.VISIBILITY_LIMITED : ResourceTypes.VISIBILITY_UNLIMITED,
     };
+  }
+
+  static createLimitedVisibility(
+    permittedGroups: (UserGroup | Partial<UserGroup>)[] = [],
+    permittedUsers: (User | Partial<User>)[] = []
+  ): Visibility {
+    return {
+      permittedUsers,
+      permittedGroups,
+      $type: ResourceTypes.VISIBILITY_LIMITED,
+    } as Visibility;
   }
 
   static hasUsersOrGroups(visibility: Visibility): boolean {
@@ -39,10 +48,7 @@ export default class IssueVisibility {
   }
 
   static getVisibilityAsArray(visibility: Visibility): Array<User | UserGroup> {
-    return [
-      ...(visibility?.permittedGroups || []),
-      ...(visibility?.permittedUsers || []),
-    ];
+    return [...(visibility?.permittedGroups || []), ...(visibility?.permittedUsers || [])];
   }
 
   static getVisibilityPresentation(visibility: Visibility): string {

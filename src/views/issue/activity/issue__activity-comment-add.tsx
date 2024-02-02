@@ -1,6 +1,6 @@
-import React, {useContext} from 'react';
+import React from 'react';
 
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import IssueCommentEdit from 'components/comment/comment-edit';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
@@ -10,23 +10,30 @@ import {getApi} from 'components/api/api__instance';
 import {IssueContext} from 'views/issue/issue-context';
 
 import type {IssueComment} from 'types/CustomFields';
-import type {IssueContextData, IssueFull} from 'types/Issue';
+import type {IssueContextData} from 'types/Issue';
+import {AppState} from 'reducers';
 import {NormalizedAttachment} from 'types/Attachment';
+import {ReduxThunkDispatch} from 'types/Redux';
+import IssueVisibility from 'components/visibility/issue-visibility';
 
 interface Props {
   comment: IssueComment;
   onAddSpentTime: null | (() => void);
-  onCommentChange: (draftComment: IssueComment) => Promise<void>;
+  onCommentChange: (draftComment: IssueComment, isAttachmentChange?: boolean) => Promise<IssueComment | null>;
   onSubmitComment: (draftComment: IssueComment) => Promise<void>;
-  stateFieldName: string;
+  stateFieldName: keyof AppState;
 }
 
 const IssueActivityStreamCommentAdd = (props: Props) => {
-  const dispatch = useDispatch();
-  const issueContext: IssueContextData = useContext(IssueContext);
-  const issue: IssueFull = issueContext.issue;
+  const dispatch: ReduxThunkDispatch = useDispatch();
+  const team = useSelector((state: AppState) => state.issueActivity.defaultProjectTeam);
+
+  const issueContext: IssueContextData = React.useContext(IssueContext);
+  const issue = issueContext.issue;
   const issuePermissions: IssuePermissions = issueContext.issuePermissions;
-  const canAttach: boolean = issuePermissions.canAddAttachmentTo(issue);
+  const canAttach = issuePermissions.canAddAttachmentTo(issue);
+  const canCommentPublicly = issuePermissions.canCommentPublicly(issue);
+  const canUpdateCommentVisibility = issuePermissions.canUpdateCommentVisibility(issue);
 
   const doUploadFileToComment = (files: NormalizedAttachment[], comment: IssueComment) => {
     return attachmentActions.doUploadFileToComment(false, files, issue, comment);
@@ -38,17 +45,16 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
       getVisibilityOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
       onSubmitComment={props.onSubmitComment}
       editingComment={{...props.comment, issue: {id: issue.id}}}
-      getCommentSuggestions={(query: string) =>
-        dispatch(
-          createActivityCommentActions(
-            props.stateFieldName,
-          ).loadCommentSuggestions(query),
-        )
+      getCommentSuggestions={async (query: string) =>
+        dispatch(createActivityCommentActions(props.stateFieldName).loadCommentSuggestions(query))
       }
       canAttach={canAttach}
+      canCommentPublicly={canCommentPublicly}
+      canUpdateCommentVisibility={canUpdateCommentVisibility}
       canRemoveAttach={() => canAttach}
       onAddSpentTime={props.onAddSpentTime}
       onAttach={doUploadFileToComment}
+      visibility={team ? IssueVisibility.createLimitedVisibility([team]) : undefined}
     />
   );
 };

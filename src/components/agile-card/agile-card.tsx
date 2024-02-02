@@ -1,26 +1,24 @@
 import React, {PureComponent} from 'react';
 import {View, Text} from 'react-native';
-import ApiHelper from '../api/api__helper';
-import Avatar from '../avatar/avatar';
-import Tags from '../tags/tags';
-import {
-  getAgileCardColorCoding,
-  hasColorCoding,
-} from '../../views/agile-board/agile-board__helper';
-import {getAssigneeField} from '../issue-formatter/issue-formatter';
-import {getStorageState} from '../storage/storage';
+
+import ApiHelper from 'components/api/api__helper';
+import Avatar from 'components/avatar/avatar';
+import Tags from 'components/tags/tags';
+import {getAgileCardColorCoding, hasColorCoding} from 'views/agile-board/agile-board__helper';
+import {getAssigneeField} from 'components/issue-formatter/issue-formatter';
+import {getStorageState} from 'components/storage/storage';
 import {UNIT} from 'components/variables';
+
 import styles from './agile-card.styles';
+
+import type {CustomFieldShort} from 'types/CustomFields';
+import type {FieldStyle} from 'types/Agile';
 import type {IssueOnList} from 'types/Issue';
-import type {
-  CustomFieldShort,
-  CustomField,
-  CustomFieldValue,
-} from 'types/CustomFields';
-import type {FieldStyle} from '../../types/Agile';
-import type {ViewStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
-type Props = {
+import type {ViewStyleProp} from 'types/Internal';
+import {FieldValue} from 'types/CustomFields';
+
+interface Props {
   cardWidth?: number | null | undefined;
   dragging?: boolean;
   // from <DragContainer/>
@@ -36,25 +34,27 @@ type Props = {
   uiTheme: UITheme;
   zoomedIn?: boolean;
   colorCoding?: FieldStyle;
-};
+}
+
 export const cardBottomMargin: number = UNIT * 1.5;
-export const getAgileCardHeight = (): number =>
-  (getStorageState().agileZoomedIn ?? true ? 110 : 50) + cardBottomMargin;
+export const getAgileCardHeight = (): number => (getStorageState().agileZoomedIn ?? true ? 110 : 50) + cardBottomMargin;
 
 function getEstimation(
   estimationField: {
     id: string;
   },
-  fields: CustomFieldShort[] = [],
+  fields: CustomFieldShort[] = []
 ) {
-  const field = fields.filter(
-    field => field.projectCustomField.field.id === estimationField.id,
-  )[0];
-  return field?.value?.presentation || '';
+  const field: CustomFieldShort | undefined = fields.find(f => f.projectCustomField?.field?.id === estimationField.id);
+
+  if (typeof field?.value === 'object' && 'presentation' in field.value) {
+    return field.value.presentation;
+  }
+  return '';
 }
 
 export default class AgileCard extends PureComponent<Props, void> {
-  renderEstimation(): void | Node {
+  renderEstimation() {
     const {issue, estimationField, zoomedIn} = this.props;
 
     if (!!estimationField && zoomedIn) {
@@ -66,17 +66,11 @@ export default class AgileCard extends PureComponent<Props, void> {
     }
   }
 
-  renderAssignees(): Array<
-    React.ReactElement<React.ComponentProps<Avatar>, Avatar>
-  > {
+  renderAssignees() {
     const {issue} = this.props;
-    const assigneeField: CustomField | null | undefined = getAssigneeField(
-      issue,
-    );
-    const assignees: CustomFieldValue[] = []
-      .concat(assigneeField ? assigneeField.value : null)
-      .filter(Boolean);
-    return assignees.map((assignee: CustomFieldValue) => {
+    const assigneeField = getAssigneeField(issue);
+    const assignees: FieldValue[] = [].concat((assigneeField ? assigneeField.value : null) as any).filter(Boolean);
+    return assignees.map((assignee: FieldValue) => {
       return (
         <Avatar
           style={styles.assignee}
@@ -86,33 +80,20 @@ export default class AgileCard extends PureComponent<Props, void> {
           source={{
             uri: assignee.avatarUrl,
           }}
-          testID="card-avatar"
         />
       );
     });
   }
 
-  render(): React.ReactNode {
-    const {
-      issue,
-      style,
-      ghost,
-      dragging,
-      zoomedIn,
-      dropZoneWidth,
-      cardWidth,
-    } = this.props;
-    const colorCoding: FieldStyle | null | undefined = getAgileCardColorCoding(
-      issue,
-      this.props.colorCoding,
-    );
-    const zoomedInTextStyle: ViewStyleProp | null | undefined = zoomedIn
-      ? null
-      : styles.zoomedInText;
+  render() {
+    const {issue, style, ghost, dragging, zoomedIn, dropZoneWidth, cardWidth} = this.props;
+    const colorCoding: FieldStyle | null | undefined = getAgileCardColorCoding(issue, this.props.colorCoding);
+    const zoomedInTextStyle: ViewStyleProp | null | undefined = zoomedIn ? null : styles.zoomedInText;
     const agileCardHeight: number = getAgileCardHeight();
     const hasWidth: boolean = typeof dropZoneWidth === 'number';
     return (
       <View
+        testID="test:id/agileCard"
         style={[
           ghost && styles.ghost,
           {
@@ -147,20 +128,11 @@ export default class AgileCard extends PureComponent<Props, void> {
             ]}
           />
 
-          <View
-            style={[
-              styles.cardContainer,
-              zoomedIn ? null : styles.cardContainerNotZoomed,
-            ]}
-          >
+          <View style={[styles.cardContainer, zoomedIn ? null : styles.cardContainerNotZoomed]}>
             <View style={styles.issueHeader}>
               <View style={styles.issueHeaderLeft}>
                 <Text
-                  style={[
-                    styles.issueId,
-                    issue.resolved ? styles.issueIdResolved : null,
-                    zoomedInTextStyle,
-                  ]}
+                  style={[styles.issueId, issue.resolved ? styles.issueIdResolved : null, zoomedInTextStyle]}
                   testID="card-simple-issue-id"
                 >
                   {ApiHelper.getIssueId(issue)}
@@ -176,21 +148,13 @@ export default class AgileCard extends PureComponent<Props, void> {
             </View>
 
             <View style={styles.issueContent}>
-              <Text
-                style={styles.issueSummary}
-                numberOfLines={zoomedIn ? 2 : 1}
-              >
-                <Text
-                  testID="card-summary"
-                  style={[styles.summary, zoomedInTextStyle]}
-                >
+              <Text style={styles.issueSummary} numberOfLines={zoomedIn ? 2 : 1}>
+                <Text testID="test:id/agileCardSummary" style={[styles.summary, zoomedInTextStyle]}>
                   {issue?.summary}
                 </Text>
               </Text>
 
-              {Boolean(zoomedIn && issue.tags) && (
-                <Tags tags={issue.tags} style={styles.tags} multiline={true} />
-              )}
+              {Boolean(zoomedIn && issue.tags) && <Tags tags={issue.tags} style={styles.tags} multiline={true} />}
             </View>
           </View>
         </View>

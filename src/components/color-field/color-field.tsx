@@ -14,6 +14,7 @@ interface Props {
   color?: ColorCoding;
   fullText?: boolean;
   style?: any;
+  children?: any;
 }
 
 export const COLOR_FIELD_SIZE = 20;
@@ -33,7 +34,7 @@ export default class ColorField extends PureComponent<Props, Readonly<{}>> {
 
   render(): React.ReactNode {
     const {style = null, color} = this.props;
-    const hasNoColor: boolean = color?.id === NO_COLOR_CODING_ID;
+    const hasNoColor: boolean = !color || color?.id === NO_COLOR_CODING_ID;
 
     return (
       <View
@@ -48,9 +49,11 @@ export default class ColorField extends PureComponent<Props, Readonly<{}>> {
           hasNoColor ? styles.defaultColorCoding : null,
         ]}
       >
+        {this.props.children}
         <Text
           style={[
             styles.text,
+            style?.fontSize ? {fontSize: style.fontSize} : null,
             {color: hasNoColor ? styles.defaultColorCoding.color : color?.foreground},
           ]}
           numberOfLines={1}

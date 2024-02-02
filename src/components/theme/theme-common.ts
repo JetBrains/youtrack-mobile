@@ -5,7 +5,7 @@ export const themeColorsPalette: UIThemeColorsPaletteColors = {
   $redBackground: 'rgba(219, 88, 96, 0.15)',
   $redColor: '#db5860',
   $yellowBackground: 'rgba(237, 162, 0, 0.15)',
-  $yellowColor: '#eda200',
+  $yellowColor: '#B25C00',
   $greenBackground: 'rgba(89, 168, 105, 0.15)',
   $greenColor: '#59a869',
   $blueBackground: 'rgba(0, 142, 255, 0.15)',

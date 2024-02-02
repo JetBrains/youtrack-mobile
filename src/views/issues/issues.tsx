@@ -39,6 +39,7 @@ import usage from 'components/usage/usage';
 import {addListenerGoOnline} from 'components/network/network-events';
 import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {createAnimatedRotateStyle} from 'views/issues/issues-helper';
+import {DEFAULT_THEME} from 'components/theme/theme';
 import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
@@ -82,14 +83,14 @@ import {INavigationRoute, Navigators} from 'components/navigation';
 import {IssuesState} from './issues-reducers';
 import {NetInfoState} from '@react-native-community/netinfo';
 import {ReduxAction, ReduxThunkDispatch} from 'types/Redux';
-import {DEFAULT_THEME} from 'components/theme/theme';
+import {isHelpdeskProject} from 'components/helpdesk';
 
+type ReduxExtraActions = {[fnName: string]: ReduxAction<unknown>};
 type IssuesActions = typeof issueActions;
 
-export type IssuesProps = IssuesState & IssuesActions & {
+export type IssuesProps = IssuesState & IssuesActions & ReduxExtraActions & {
   auth: Auth;
   api: Api;
-  onOpenContextSelect: () => ReduxThunkDispatch;
   issueId?: string;
   searchQuery?: string;
   networkState: NetInfoState,
@@ -98,6 +99,13 @@ export type IssuesProps = IssuesState & IssuesActions & {
   user: User,
   onFilterPress: (filterField: FilterSetting) => any,
   issuePermissions: IssuePermissions,
+
+  getIssueFromCache: (issueId: string) => ReduxThunkDispatch;
+  onQueryUpdate: (query: string) => ReduxThunkDispatch
+  onOpenContextSelect: () => ReduxThunkDispatch
+  updateSearchContextPinned: ReduxThunkDispatch;
+  setIssuesCount: (count: number | null) => ReduxThunkDispatch;
+  updateIssue: (issueId: string) => ReduxThunkDispatch;
 };
 
 interface State {
@@ -341,6 +349,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         ]}
       >
         <IssueRowComponent
+          helpdeskMode={this.props.helpDeskMode && isHelpdeskProject(item)}
           hideId={hideId}
           settings={settings}
           issue={item}
@@ -562,7 +571,10 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
   renderToolbar() {
     return (
       <View style={styles.toolbar}>
-        {this.hasIssues() ? <IssuesCount issuesCount={this.props.issuesCount}/> : <View/>}
+        {this.hasIssues() ? <IssuesCount
+            issuesCount={this.props.issuesCount}
+            isHelpdesk={this.props.helpDeskMode}
+          /> : <View />}
       </View>
     );
   }
@@ -749,18 +761,14 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
   }
 }
 
-export function doConnectComponent(
-  ReactComponent: React.ComponentType<any>,
-  extraActions?: { [fnName: string]: ReduxAction<unknown> },
-)
-{
+export function doConnectComponent(ReactComponent: React.ComponentType<any>, extraActions?: ReduxExtraActions) {
   return connect(
     (
       state: AppState,
       ownProps: {
         issueId?: string;
         searchQuery?: string;
-      },
+      }
     ) => {
       return {
         ...state.issueList,
@@ -779,7 +787,7 @@ export function doConnectComponent(
         ),
         setIssuesCount: (count: number | null) => dispatch(actions.SET_ISSUES_COUNT(count)),
         updateIssue: (issueId: string) => dispatch(issueActions.updateIssue(issueId)),
-        ...(extraActions ? bindActionCreators(extraActions, dispatch) : {}),
+        ...(extraActions ? bindActionCreators<ReduxExtraActions, ReduxExtraActions>(extraActions, dispatch) : {}),
       };
     }
   )(ReactComponent);

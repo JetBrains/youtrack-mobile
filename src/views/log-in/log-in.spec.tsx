@@ -3,6 +3,7 @@ import {NativeModules} from 'react-native';
 import {LogIn_} from './log-in';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
+
 describe.skip('LogIn', () => {
   let defaultProps;
   beforeEach(() => {

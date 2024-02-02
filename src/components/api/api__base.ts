@@ -88,7 +88,7 @@ export default class BaseAPI {
   }
 
   static createFieldsQuery(
-    fields: Record<string, any> | Array<Record<string, any> | string>,
+    fields: Record<string, any> | Array<Record<string, any> | string> | string,
     restParams?: Record<string, any> | null,
     opts?: Record<string, any>,
   ): string {
