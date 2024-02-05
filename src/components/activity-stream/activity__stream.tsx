@@ -215,7 +215,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     }
   };
 
-  const isSecured = (c?: IssueComment) => c && IssueVisibility.isSecured(c?.visibility);
+  const isSecured = (c?: IssueComment): boolean => !!c && IssueVisibility.isSecured(c?.visibility);
 
   const renderCommentActivity = (activityGroup: ActivityGroup) => {
     const activity = activityGroup.comment!;
