@@ -45,7 +45,6 @@ import type {User} from 'types/User';
 import type {WorkItem, WorkTimeSettings} from 'types/Work';
 import type {YouTrackWiki} from 'types/Wiki';
 import {Activity} from 'types/Activity';
-import {ViewStyleProp} from 'types/Internal';
 
 interface Props {
   activities: ActivityGroup[] | null;
@@ -88,7 +87,7 @@ export interface ActivityStreamPropsReaction {
 
 export type ActivityStreamProps = Props & ActivityStreamPropsReaction;
 
-export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStreamProps) => {
+export const ActivityStream = (props: ActivityStreamProps) => {
   const window = useWindowDimensions();
   const {
     renderHeader = () => null,
@@ -166,9 +165,10 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
         >
           <TouchableOpacity
             hitSlop={HIT_SLOP}
+            style={styles.activityCommentActionsAddReaction}
             onPress={() => props?.onReactionPanelOpen?.(comment)}
           >
-            <ReactionAddIcon style={styles.activityCommentActionsAddReaction}/>
+            <ReactionAddIcon color={styles.activityCommentActionsAddReaction.color}/>
           </TouchableOpacity>
         </Feature>
       </CommentReactions>
@@ -217,18 +217,8 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
 
   const isSecured = (c?: IssueComment) => c && IssueVisibility.isSecured(c?.visibility);
 
-  const renderVisibility = (c: IssueComment, style?: ViewStyleProp) => {
-    return !c?.deleted && isSecured(c) ? (
-      <TouchableOpacity hitSlop={HIT_SLOP} onPress={() => {
-
-      }}>
-        <CommentVisibility style={{...styles.activityVisibility, ...style}} />
-      </TouchableOpacity>
-    ) : null;
-  };
-
   const renderCommentActivity = (activityGroup: ActivityGroup) => {
-    const activity = activityGroup.comment as Activity;
+    const activity = activityGroup.comment!;
     const comment = getCommentFromActivityGroup(activityGroup);
     let attachments: Attachment[] = props.attachments || comment?.attachments || [];
     if (attachments.length) {
@@ -249,7 +239,13 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
           ) : (
             <StreamUserInfo activityGroup={activityGroup} />
           )}
-          {renderVisibility(comment)}
+          {!comment?.deleted && isSecured(comment) && (
+            <TouchableOpacity hitSlop={HIT_SLOP} onPress={() => {
+
+            }}>
+              <CommentVisibility style={styles.activityVisibility} />
+            </TouchableOpacity>
+          )}
         </View>
 
         <StreamComment
@@ -325,11 +321,10 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     }
 
     const Component = hasHighlightedActivity ? Animated.View : View;
+    const secured = isSecured(_comment);
     return (
       <>
-        <View
-          style={styles.activity}
-        >
+        <View style={styles.activity}>
           <ActivityUserAvatar
             style={activityGroup.merged && styles.activityAvatarMerged}
             activityGroup={activityGroup}
@@ -339,7 +334,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
           <Component
             style={[
               styles.activityContent,
-              isSecured(_comment) && styles.activityContentSecured,
+              secured && styles.activityContentSecured,
               hasHighlightedActivity && {
                 backgroundColor: color.current,
               },
@@ -350,32 +345,29 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
               <View
                 style={
                   isRelatedChange
-                    ? [styles.activityRelatedChanges, activityGroup.merged && styles.activityRelatedChangesSecured]
+                    ? [styles.activityRelatedChanges, secured && styles.activityRelatedChangesSecured]
                     : styles.activityHistoryChanges
                 }
               >
-
-                {!activityGroup.merged && !isRelatedChange && (
-                  <StreamUserInfo activityGroup={activityGroup} />
-                )}
-
-                {activityGroup.merged && (
-                  <StreamTimestamp
-                    style={styles.activityTimestampMerged}
-                    isAbs={true}
-                    timestamp={activityGroup.timestamp}
-                  />
+                {!isRelatedChange && (
+                  <>
+                    {!activityGroup.merged && <StreamUserInfo activityGroup={activityGroup} />}
+                    {activityGroup.merged && (
+                      <StreamTimestamp
+                        style={styles.activityTimestampMerged}
+                        isAbs={true}
+                        timestamp={activityGroup.timestamp}
+                      />
+                    )}
+                  </>
                 )}
 
                 {activityGroupEvents.map(event => (
-                  <StreamHistoryChange
-                    key={event.id}
-                    activity={event}
-                    workTimeSettings={props.workTimeSettings}
-                  />
+                  <StreamHistoryChange key={event.id} activity={event} workTimeSettings={props.workTimeSettings} />
                 ))}
               </View>
             )}
+            {!!props.onSelectReaction && renderCommentReactions(activityGroup)}
           </Component>
         </View>
       </>
@@ -431,10 +423,10 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
         )}
         {activityGroup?.merged && <View style={styles.activityMergedLeaf} />}
 
-        {index > 0 && !activityGroup.merged && !isSecured(_comment) && <View style={styles.activitySeparator} />}
+        {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator} />}
+
         <View style={[styles.activityWrapper, activityGroup.merged && styles.activityWrapperMerged]}>
           {addActionsWrapper(activityGroup)}
-          {!!props.onSelectReaction && renderCommentReactions(activityGroup)}
         </View>
       </View>
     );

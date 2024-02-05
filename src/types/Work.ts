@@ -28,7 +28,7 @@ export type WorkItemTemplate = {
 };
 export type WorkItem = WorkItemTemplate & {
   $type?: string;
-  created: User;
+  created: number;
   creator?: User;
   id?: string;
   text: string | null;

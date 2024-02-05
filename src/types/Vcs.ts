@@ -41,6 +41,7 @@ export type VcsChange = {
   id: string;
   $type: keyof typeof ResourceTypes.VCS_ITEM;
 };
+
 export type PullRequest = {
   author: User;
   date: number;

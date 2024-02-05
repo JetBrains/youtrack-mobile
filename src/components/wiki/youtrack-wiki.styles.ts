@@ -14,7 +14,7 @@ export default EStyleSheet.create({
     paddingLeft: UNIT,
     borderWidth: 2,
     borderBottomWidth: 0,
-    borderColor: '$background',
+    borderColor: '$boxBackground',
     backgroundColor: '$background',
     borderTopLeftRadius: UNIT,
     borderTopRightRadius: UNIT,
@@ -29,7 +29,7 @@ export default EStyleSheet.create({
     padding: UNIT / 2,
   },
   codeToolbarIcon: {
-    color: '$blueDark',
+    color: '$iconAction',
   },
   codeToolbarText: {
     color: '$text',
@@ -70,7 +70,8 @@ export default EStyleSheet.create({
   codeScrollContainer: {
     padding: UNIT,
     paddingRight: 0,
-    backgroundColor: '$blueLighter',
+    borderColor: '$boxBackground',
+    backgroundColor: '$boxBackground',
     borderBottomLeftRadius: UNIT,
     borderBottomRightRadius: UNIT,
     minHeight: UNIT * 7,

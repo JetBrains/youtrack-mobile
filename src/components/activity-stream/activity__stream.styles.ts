@@ -17,29 +17,29 @@ export const rowStyles = {
     top: 20,
     bottom: -20,
     width: 2,
-    opacity: 0.2,
-    backgroundColor: '$blueDark',
+    opacity: 0.25,
+    backgroundColor: '$iconAction',
   },
   activityMergedConnectorFirst: {
-    top: 52,
+    top: 50,
   },
   activityMergedLeaf: {
     left: 17,
-    top: 18,
+    top: 7,
     width: 14,
     height: 14,
     borderRadius: 14,
     borderWidth: 3,
     borderColor: '$background',
-    backgroundColor: '$blueDark',
+    backgroundColor: '$iconAction',
   },
   activityWrapper: {
     position: 'relative',
     paddingHorizontal: UNIT,
-    marginTop: UNIT,
+    marginVertical: UNIT * 1.5,
   },
   activityWrapperMerged: {
-    marginTop: -UNIT,
+    marginTop: -UNIT * 2,
   },
   activity: {
     flexDirection: 'row',
@@ -47,13 +47,11 @@ export const rowStyles = {
   activityContent: {
     flex: 1,
     padding: UNIT,
-    marginLeft: UNIT,
-    paddingTop: UNIT * 1.5,
-    backgroundColor: '$background',
+    marginLeft: UNIT / 2,
     borderRadius: UNIT,
   },
   activityContentSecured: {
-    backgroundColor: '$yellowLightBackground',
+    backgroundColor: '$privateBackground',
   },
   activityTitle: {
     flexDirection: 'row',
@@ -66,17 +64,19 @@ export const rowStyles = {
   },
   activitySeparator: {
     ...separator,
-    marginTop: UNIT * 2,
+    marginLeft: UNIT,
     borderColor: '$separator',
   },
   activityAvatar: {
     width: UNIT * 4,
     height: UNIT * 4,
+    marginTop: UNIT / 4,
     borderRadius: 6,
-    marginTop: UNIT,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '$blueLight',
+  },
+  activityAvatarIcon: {
+    backgroundColor: '$iconBackground',
   },
   activityAvatarMerged: {
     backgroundColor: 'transparent',
@@ -112,11 +112,11 @@ export const rowStyles = {
   },
   activityRelatedChanges: {
     flex: 1,
+    marginTop: UNIT,
     padding: UNIT * 1.5,
-    paddingTop: UNIT,
-    backgroundColor: '$blueLighter',
+    paddingTop: UNIT * 0.75,
+    backgroundColor: '$greyBackground',
     borderRadius: UNIT,
-    lineHeight: SECONDARY_FONT_SIZE,
   },
   activityRelatedChangesSecured: {
     backgroundColor: '$yellowBackground',
@@ -127,6 +127,9 @@ export const rowStyles = {
   },
   activityChange: {
     marginTop: UNIT / 2,
+  },
+  activityChangeMerged: {
+    marginTop: 0,
   },
   activityNoActivity: {
     marginTop: UNIT * 5,
@@ -154,21 +157,18 @@ export const rowStyles = {
   },
   activityCommentActionsAddReaction: {
     color: '$iconAccent',
-    marginRight: UNIT * 2,
   },
   activityCommentActionsOther: {
     color: '$iconAccent',
   },
   activityCommentReactions: {
     alignItems: 'center',
-    paddingLeft: UNIT * 6,
-    marginRight: UNIT,
   },
   activityCommentAttachments: {
-    marginVertical: UNIT,
+    marginTop: UNIT,
   },
   activityIcon: {
-    color: '$blueDark',
+    color: '$iconAction',
   },
   link: {...secondaryText, color: '$link'},
   secondaryTextColor: secondaryTextColor,
@@ -181,9 +181,6 @@ export const rowStyles = {
     color: '$textSecondary',
     fontWeight: 'bold',
   },
-  activityWorkComment: {
-    marginTop: UNIT,
-  },
   activityWorkEditIcon: {
     position: 'absolute',
     right: 0,
@@ -193,11 +190,7 @@ export const rowStyles = {
   },
   vcsInfo: {
     flexDirection: 'row',
-  },
-  vcsInfoDate: {
-    flexShrink: 1,
-    flexGrow: 1,
-    marginRight: UNIT * 2,
+    justifyContent: 'space-between',
   },
   showMoreMessage: {
     marginTop: UNIT,

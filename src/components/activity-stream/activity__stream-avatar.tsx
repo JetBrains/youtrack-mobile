@@ -20,7 +20,7 @@ interface Props {
 const ActivityUserAvatar = ({activityGroup, showAvatar, size = 32, style}: Props) => {
   const shouldRenderIcon: boolean = Boolean(!activityGroup.merged && !showAvatar);
   return (
-    <View style={[styles.activityAvatar, style]}>
+    <View style={[styles.activityAvatar, !showAvatar && styles.activityAvatarIcon, style]}>
       {Boolean(!activityGroup.merged && showAvatar) && (
         <Avatar
           userName={getEntityPresentation(activityGroup.author)}

@@ -9,12 +9,12 @@ export default EStyleSheet.create({
     alignItems: 'center',
   },
   commentVisibilityText: {
-    color: '$yellowColor',
+    color: '$private',
     marginLeft: UNIT / 1.5,
   },
   commentIcon: {
     marginLeft: -1,
     alignSelf: 'flex-start',
-    color: '$yellowColor',
+    color: '$private',
   },
 });

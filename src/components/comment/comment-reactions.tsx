@@ -18,7 +18,7 @@ import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
 
 interface ReactionsType {
-  children: JSX.Element | null;
+  children: React.JSX.Element | null;
   comment: IssueComment;
   currentUser: User | null;
   onReactionSelect?: (comment: IssueComment, reaction: Reaction) => any;

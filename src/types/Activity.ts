@@ -1,7 +1,7 @@
 import type {Attachment, IssueComment} from './CustomFields';
 import type {IssueFull} from './Issue';
 import type {User} from './User';
-import type {PullRequest, VCSActivity} from './Vcs';
+import type {PullRequest} from './Vcs';
 import type {Reaction} from './Reaction';
 import type {ContextMenuConfig} from 'types/MenuConfig';
 import {Project} from 'types/Project';
@@ -87,7 +87,7 @@ export interface ActivityGroup extends Activity {
   lastGroup?: boolean;
   merged?: boolean;
   root?: boolean;
-  vcs?: VCSActivity;
+  vcs?: Activity;
   work?: Activity;
   events?: Activity[];
 }

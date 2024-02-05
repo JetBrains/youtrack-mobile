@@ -78,7 +78,7 @@ export default EStyleSheet.create({
     backgroundColor: '$background',
   },
   commentInputContainerHighlighted: {
-    backgroundColor: '$yellowBackground',
+    backgroundColor: '$privateBackground',
   },
   commentInput: {
     flex: 1,

@@ -30,6 +30,8 @@ export default EStyleSheet.create({
   reactionsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    marginTop: UNIT / 2,
+    marginBottom: -UNIT,
   },
   reactionsReaction: {
     flexDirection: 'row',
@@ -37,10 +39,9 @@ export default EStyleSheet.create({
     justifyContent: 'center',
     minWidth: 26,
     height: 24,
-    marginBottom: UNIT,
+    marginTop: UNIT,
     marginRight: UNIT,
-    paddingVertical: UNIT / 2,
-    paddingHorizontal: UNIT / 2,
+    padding: UNIT / 2,
     borderRadius: UNIT / 2,
     backgroundColor: '$boxBackground',
     borderWidth: 1,

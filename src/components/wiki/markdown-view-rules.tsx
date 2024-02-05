@@ -55,8 +55,8 @@ function getMarkdownRules(
       style: Record<string, any>,
       inheritedStyles: Record<string, any> = {},
     ) => (
-      <View key={node.key} style={[inheritedStyles, style.blockquote]}>
-        {children}
+      <View key={node.key} style={style.blockquote}>
+        <Text style={[inheritedStyles, style.blockquoteText]}>{children}</Text>
       </View>
     ),
     image: (

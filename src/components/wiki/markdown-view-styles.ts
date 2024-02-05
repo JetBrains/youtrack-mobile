@@ -19,11 +19,11 @@ const code = {
   borderRadius: 4,
 };
 
-
 export const baseMarkdownStyles = {
   body: {
     color: DEFAULT_THEME.colors.$text,
     fontSize: MAIN_FONT_SIZE,
+    lineHeight: MAIN_FONT_SIZE * 1.3,
   },
   heading1: {
     flexDirection: 'row',
@@ -59,7 +59,7 @@ export const baseMarkdownStyles = {
   },
   heading6: {
     flexDirection: 'row',
-    fontSize: 11,
+    fontSize: MAIN_FONT_SIZE - 5,
     lineHeight: null,
     ...vSpace,
   },
@@ -84,6 +84,9 @@ export const baseMarkdownStyles = {
     backgroundColor: 'transparent',
     borderLeftColor: DEFAULT_THEME.colors.$iconAccent,
     borderLeftWidth: 2,
+  },
+  blockquoteText: {
+    fontSize: MAIN_FONT_SIZE,
   },
   bullet_list: {},
   ordered_list: {},
@@ -166,7 +169,7 @@ export const baseMarkdownStyles = {
   textgroup: {},
   paragraph: {
     marginTop: UNIT,
-    marginBottom: UNIT,
+    marginBottom: UNIT / 2,
     flexWrap: 'wrap',
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -184,10 +187,7 @@ export const baseMarkdownStyles = {
   span: {},
 };
 
-const markdownStyles = (
-  uiTheme: UITheme = DEFAULT_THEME,
-  textStyle: TextStyleProp = {},
-) => {
+const markdownStyles = (uiTheme: UITheme = DEFAULT_THEME, textStyle: TextStyleProp = {}) => {
   const uiThemeColors: UIThemeColors = uiTheme.colors;
   return {
     ...baseMarkdownStyles,
@@ -216,6 +216,7 @@ const markdownStyles = (
     },
     text: {
       ...baseMarkdownStyles.text,
+      ...textStyle,
       color: uiThemeColors.$text,
     },
     textgroup: {...baseMarkdownStyles.textgroup},
