@@ -23,7 +23,7 @@ export const rowStyles = {
     marginRight: UNIT,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '$boxBackground',
+    backgroundColor: '$iconBackground',
     borderWidth: UNIT / 2,
     borderColor: '$background',
     borderRadius: UNIT,

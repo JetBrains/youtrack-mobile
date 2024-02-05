@@ -19,7 +19,7 @@ const dark: UITheme = {
     $disabled: '#5d5d5d',
     $icon: 'rgb(153, 153, 153)',
     $iconAction: 'rgba(132, 150, 173, 1)',
-    $iconBackground: 'rgba(62, 77, 89, 0.5)',
+    $iconBackground: 'rgba(40, 48, 55, 1)',
     $iconAccent: '#577996',
     $mask: '#FFFFFF57',
     $navigation: '#696969',

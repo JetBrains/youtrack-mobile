@@ -16,7 +16,8 @@ import {Entity} from 'types/Entity';
 
 type Props = {
   author: User;
-  avatar: any;
+  avatar: React.ReactNode;
+  avatarStyle?: Record<string, string>;
   change?: any;
   group?: InboxThreadGroup;
   reason: string;
@@ -28,6 +29,7 @@ type Props = {
 export default function ThreadItem({
   author,
   avatar,
+  avatarStyle,
   change,
   group,
   reason,
@@ -45,6 +47,7 @@ export default function ThreadItem({
       <UserInfo
         additionalInfo={reason}
         avatar={avatar}
+        avatarStyle={avatarStyle}
         timestamp={timestamp}
         user={author}
       />
