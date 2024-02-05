@@ -38,7 +38,7 @@ msgid_plural "{{amount}} drafts"
 msgstr[0] "{{amount}} draft"
 msgstr[1] "{{amount}} drafts"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx:132
+#: src/components/activity-stream/activity__stream-vcs.tsx:101
 msgid "{{amount}} file"
 msgid_plural "{{amount}} files"
 msgstr[0] "{{amount}} file"
@@ -235,7 +235,7 @@ msgstr "Clear the current search context"
 msgid "Close"
 msgstr "Close"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx:94
+#: src/components/activity-stream/activity__stream-vcs.tsx:69
 msgid "closed the pull request"
 msgstr "closed the pull request"
 
@@ -272,7 +272,7 @@ msgstr "Comment deleted"
 msgid "Comment updated"
 msgstr "Comment updated"
 
-#: src/views/inbox-threads/inbox-threads__item-comment.tsx:74
+#: src/views/inbox-threads/inbox-threads__item-comment.tsx:75
 msgid "commented"
 msgstr "commented"
 
@@ -280,7 +280,7 @@ msgstr "commented"
 msgid "Comments"
 msgstr "Comments"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx:76
+#: src/components/activity-stream/activity__stream-vcs.tsx:53
 msgid "committed changes"
 msgstr "committed changes"
 
@@ -722,7 +722,7 @@ msgstr "mentioned you"
 msgid "Mentions & Reactions"
 msgstr "Mentions & Reactions"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx:89
+#: src/components/activity-stream/activity__stream-vcs.tsx:64
 msgid "merged the pull request"
 msgstr "merged the pull request"
 
@@ -746,7 +746,7 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.tsx:464
+#: src/components/activity-stream/activity__stream.tsx:448
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -877,7 +877,7 @@ msgstr "Remove tag"
 msgid "removed a reaction"
 msgstr "removed a reaction"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx:83
+#: src/components/activity-stream/activity__stream-vcs.tsx:59
 msgid "reopened the pull request"
 msgstr "reopened the pull request"
 
@@ -990,7 +990,7 @@ msgstr "Show all"
 msgid "Show all issues tagged with \"{{tagName}}\"..."
 msgstr "Show all issues tagged with \"{{tagName}}\"..."
 
-#: src/components/activity-stream/activity__stream-vcs.tsx:206
+#: src/components/activity-stream/activity__stream-vcs.tsx:165
 #: src/views/inbox-threads/inbox-threads__subscription.tsx:110
 msgid "Show more"
 msgstr "Show more"
@@ -1026,7 +1026,7 @@ msgstr "Sorted by"
 msgid "Spent time"
 msgstr "Spent time"
 
-#: src/components/activity-stream/activity__stream-work.tsx:44
+#: src/components/activity-stream/activity__stream-work.tsx:38
 msgid "Spent time:"
 msgstr "Spent time:"
 
@@ -1038,7 +1038,7 @@ msgstr "Start a new article"
 msgid "Sub-articles"
 msgstr "Sub-articles"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx:84
+#: src/components/activity-stream/activity__stream-vcs.tsx:59
 msgid "submitted a pull request"
 msgstr "submitted a pull request"
 
@@ -1207,7 +1207,7 @@ msgid "Untitled"
 msgstr "Untitled"
 
 #: src/views/inbox-threads/inbox-threads__item-history.tsx:29
-#: src/views/inbox-threads/inbox-threads__item-work.tsx:43
+#: src/views/inbox-threads/inbox-threads__item-work.tsx:42
 msgid "updated"
 msgstr "updated"
 
@@ -1235,7 +1235,7 @@ msgstr "Users"
 msgid "VCS changes"
 msgstr "VCS changes"
 
-#: src/views/inbox-threads/inbox-threads__item-comment.tsx:85
+#: src/views/inbox-threads/inbox-threads__item-comment.tsx:86
 msgid "View comment"
 msgstr "View comment"
 
