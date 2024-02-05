@@ -28,7 +28,6 @@ export default function ThreadWorkItem({group, target, onNavigate}: Props) {
         <IconWork
           size={22}
           color={styles.icon.color}
-          style={styles.activityWorkIcon}
         />
       }
       change={

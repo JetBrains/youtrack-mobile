@@ -4,7 +4,7 @@ import {UNIT} from 'components/variables';
 
 export default EStyleSheet.create({
   commentVisibility: {
-    flex: 1,
+    flexGrow: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },

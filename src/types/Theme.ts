@@ -27,11 +27,15 @@ export type UIThemeColorsPaletteColors = {
   $redBackground: string;
   $redColor: string;
   $yellowBackground: string;
+  $yellowLightBackground: string;
   $yellowColor: string;
   $greenBackground: string;
   $greenColor: string;
   $blueBackground: string;
   $blueColor: string;
+  $blueLight: string;
+  $blueLighter: string;
+  $blueDark: string;
 };
 export type UIThemeColors = UIThemeCommonColors & UIThemeColorsPaletteColors;
 export type UIThemeName = 'light' | 'dark';

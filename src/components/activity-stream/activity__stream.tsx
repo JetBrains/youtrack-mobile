@@ -152,7 +152,7 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     firstActivityChange(activityGroup.comment) as IssueComment
   );
 
-  const renderCommentReactions = (activityGroup: ActivityGroup): React.ReactNode => {
+  const renderCommentReactions = (activityGroup: ActivityGroup) => {
     const comment = getCommentFromActivityGroup(activityGroup);
     return comment && !comment.deleted ? (
       <CommentReactions
@@ -215,16 +215,15 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     }
   };
 
-  const renderCommentVisibility = (_comment: IssueComment, style?: ViewStyleProp) => {
-    return _comment &&
-      !_comment?.deleted &&
-      IssueVisibility.isSecured(_comment?.visibility) ? (
-      <CommentVisibility
-        style={{...styles.activityVisibility, ...style}}
-        presentation={IssueVisibility.getVisibilityPresentation(
-          _comment.visibility,
-        )}
-      />
+  const isSecured = (c?: IssueComment) => c && IssueVisibility.isSecured(c?.visibility);
+
+  const renderVisibility = (c: IssueComment, style?: ViewStyleProp) => {
+    return !c?.deleted && isSecured(c) ? (
+      <TouchableOpacity hitSlop={HIT_SLOP} onPress={() => {
+
+      }}>
+        <CommentVisibility style={{...styles.activityVisibility, ...style}} />
+      </TouchableOpacity>
     ) : null;
   };
 
@@ -241,17 +240,18 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
 
     return (
       <>
-        {activityGroup.merged ? (
-          <>
-            {renderCommentVisibility(comment, styles.activityVisibilityMerged)}
+        <View style={styles.activityTitle}>
+          {activityGroup.merged ? (
             <StreamTimestamp
               timestamp={activityGroup.timestamp}
               style={activityGroup.merged && styles.activityTimestampMerged}
             />
-          </>
-        ) : (
-          <StreamUserInfo activityGroup={activityGroup}/>
-        )}
+          ) : (
+            <StreamUserInfo activityGroup={activityGroup} />
+          )}
+          {renderVisibility(comment)}
+        </View>
+
         <StreamComment
           onCheckboxUpdate={props.onCheckboxUpdate}
           activity={activity}
@@ -327,18 +327,19 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     const Component = hasHighlightedActivity ? Animated.View : View;
     return (
       <>
-        {!activityGroup.merged && _comment && renderCommentVisibility(_comment)}
         <View
           style={styles.activity}
         >
           <ActivityUserAvatar
+            style={activityGroup.merged && styles.activityAvatarMerged}
             activityGroup={activityGroup}
             showAvatar={!!activityGroup.comment}
           />
 
           <Component
             style={[
-              styles.activityItem,
+              styles.activityContent,
+              isSecured(_comment) && styles.activityContentSecured,
               hasHighlightedActivity && {
                 backgroundColor: color.current,
               },
@@ -349,13 +350,15 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
               <View
                 style={
                   isRelatedChange
-                    ? styles.activityRelatedChanges
+                    ? [styles.activityRelatedChanges, activityGroup.merged && styles.activityRelatedChangesSecured]
                     : styles.activityHistoryChanges
                 }
               >
-                {Boolean(!activityGroup.merged && !isRelatedChange) && (
+
+                {!activityGroup.merged && !isRelatedChange && (
                   <StreamUserInfo activityGroup={activityGroup} />
                 )}
+
                 {activityGroup.merged && (
                   <StreamTimestamp
                     style={styles.activityTimestampMerged}
@@ -404,43 +407,32 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
       return null;
     }
     const _comment: | IssueComment | null = getCommentFromActivityGroup(activityGroup);
-    const prevActivity = activities?.[index - 1];
-    const nextActivity = activities?.[index + 1];
-    const isCommentSecured = !!_comment && IssueVisibility.isSecured(_comment?.visibility);
+    const nextActivity = props?.activities?.[index + 1];
+    const prevActivity = props?.activities?.[index - 1];
     return (
       <View
         key={`${index}-${activityGroup.id}`}
-        onLayout={(event) => {
+        onLayout={event => {
           if (activities?.length) {
-            layoutMap.current[getActivityGroupId(activityGroup)] =
-              event.nativeEvent.layout;
+            layoutMap.current[getActivityGroupId(activityGroup)] = event.nativeEvent.layout;
             if (_comment?.id) {
               layoutMap.current[_comment.id] = event.nativeEvent.layout;
             }
             getActivityGroupEvents(activityGroup).forEach(
-              (it: Activity) =>
-                (layoutMap.current[it.id] = event.nativeEvent.layout)
+              (it: Activity) => (layoutMap.current[it.id] = event.nativeEvent.layout)
             );
           }
         }}
       >
-        {index > 0 && !activityGroup.merged && !isCommentSecured && (
-          <View style={styles.activitySeparator} />
+        {(nextActivity?.merged || (prevActivity?.merged && activityGroup.merged && nextActivity?.merged)) && (
+          <View
+            style={[styles.activityMergedConnector, !activityGroup?.merged && styles.activityMergedConnectorFirst]}
+          />
         )}
-        <View
-          style={[
-            styles.activityWrapper,
-            activityGroup.merged && styles.activityWrapperMerged,
-            prevActivity?.merged &&
-              nextActivity?.merged &&
-              !isCommentSecured &&
-              !nextActivity &&
-              styles.activityWrapperMergedReduced,
-            isCommentSecured && styles.activityWrapperSecured,
-            activityGroup.merged && prevActivity?.merged && styles.activityWrapperNoTop,
-            isCommentSecured && nextActivity?.merged && styles.activityWrapperNoBottom,
-          ]}
-        >
+        {activityGroup?.merged && <View style={styles.activityMergedLeaf} />}
+
+        {index > 0 && !activityGroup.merged && !isSecured(_comment) && <View style={styles.activitySeparator} />}
+        <View style={[styles.activityWrapper, activityGroup.merged && styles.activityWrapperMerged]}>
           {addActionsWrapper(activityGroup)}
           {!!props.onSelectReaction && renderCommentReactions(activityGroup)}
         </View>

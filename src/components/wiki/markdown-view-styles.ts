@@ -1,7 +1,7 @@
 import {Platform} from 'react-native';
 
 import {DEFAULT_THEME} from 'components/theme/theme';
-import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from 'components/common-styles/typography';
+import {MAIN_FONT_SIZE} from 'components/common-styles/typography';
 import {UNIT} from 'components/variables';
 
 import type {UITheme, UIThemeColors} from 'types/Theme';
@@ -23,7 +23,7 @@ const code = {
 export const baseMarkdownStyles = {
   body: {
     color: DEFAULT_THEME.colors.$text,
-    fontSize: SECONDARY_FONT_SIZE,
+    fontSize: MAIN_FONT_SIZE,
   },
   heading1: {
     flexDirection: 'row',
