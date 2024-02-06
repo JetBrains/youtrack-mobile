@@ -16,12 +16,12 @@ import {useDispatch} from 'react-redux';
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
 import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
 import AttachmentsRow from 'components/attachments-row/attachments-row';
+import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import Header from 'components/header/header';
 import IssueVisibility from 'components/visibility/issue-visibility';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import log from 'components/log/log';
 import Mentions from 'components/mentions/mentions';
-import ModalPanelBottom from 'components/modal-panel-bottom/modal-panel-bottom';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
 import VisibilityControl from 'components/visibility/visibility-control';
@@ -47,14 +47,14 @@ import type {User, UserMentions} from 'types/User';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
 import {ReduxThunkDispatch} from 'types/Redux';
 
-type CommentReply = {
+interface CommentReply {
   reply?: boolean;
-};
+}
 
-type CommentEntity = {
+interface CommentEntity {
   issue?: { id: string };
   article?: { id: string };
-};
+}
 
 type EditingComment = IssueComment & CommentReply & CommentEntity;
 
@@ -542,7 +542,12 @@ const CommentEdit = (props: Props) => {
         )}
 
         {state.isAttachActionsVisible && (
-          <ModalPanelBottom onHide={hideAttachActionsPanel}>
+          <BottomSheetModal
+            isVisible={true}
+            onClose={hideAttachActionsPanel}
+            withHandle={false}
+            snapPoint={130}
+          >
             {props.canAttach && (
               <TouchableOpacity
                 style={[
@@ -603,7 +608,7 @@ const CommentEdit = (props: Props) => {
                 </Text>
               </TouchableOpacity>
             )}
-          </ModalPanelBottom>
+          </BottomSheetModal>
         )}
       </>
     );

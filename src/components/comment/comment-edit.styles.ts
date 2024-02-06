@@ -151,6 +151,8 @@ export default EStyleSheet.create({
     fontWeight: '500',
   },
   floatContextButton: {
+    alignSelf: 'flex-start',
+    minWidth: 160,
     margin: UNIT,
   },
   floatContextButtonText: {
