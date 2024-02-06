@@ -1,12 +1,11 @@
 import * as React from 'react';
 import {SectionList, Text, View} from 'react-native';
 
-import Animated, {FadeIn} from 'react-native-reanimated';
-
 import ModalPortal from 'components/modal-view/modal-portal';
 import Select, {ISelectProps, ISelectState, IItem} from './select';
 
 import styles from './select.styles';
+
 import {SectionListData} from 'react-native/Libraries/Lists/SectionList';
 
 
@@ -129,27 +128,23 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
   renderItems() {
     const {header = () => null} = this.props;
     return (
-      <Animated.View
-        layout={FadeIn.duration(500)}
-      >
-        <SectionList
-          contentContainerStyle={styles.list}
-          testID="test:id/selectListSectioned"
-          accessibilityLabel="selectListSectioned"
-          accessible={false}
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
-          scrollEventThrottle={10}
-          sections={this.state.filteredItems as any}
-          keyExtractor={this.getItemKey}
-          renderItem={this.renderItem as any}
-          renderSectionHeader={this.renderSectionHeader as any}
-          ListEmptyComponent={null}
-          ListHeaderComponent={header()}
-          ItemSeparatorComponent={Select.renderSeparator as any}
-          getItemLayout={Select.getItemLayout}
-        />
-      </Animated.View>
+      <SectionList
+        contentContainerStyle={styles.list}
+        testID="test:id/selectListSectioned"
+        accessibilityLabel="selectListSectioned"
+        accessible={false}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        scrollEventThrottle={10}
+        sections={this.state.filteredItems as any}
+        keyExtractor={this.getItemKey}
+        renderItem={this.renderItem as any}
+        renderSectionHeader={this.renderSectionHeader as any}
+        ListEmptyComponent={null}
+        ListHeaderComponent={header()}
+        ItemSeparatorComponent={Select.renderSeparator as any}
+        getItemLayout={Select.getItemLayout}
+      />
     );
   }
 }
