@@ -509,17 +509,20 @@ const CommentEdit = (props: Props) => {
                 }
               >
                 <IconAdd
-                  color={styles.actionsContainerButton.color}
+                  color={
+                    !props.canCommentPublicly
+                      ? styles.commentInputContainerHighlighted.color
+                      : styles.actionsContainerButton.color
+                  }
                   size={22}
                 />
               </TouchableOpacity>
             </View>
           )}
 
-          <View style={[
-            styles.commentInputContainer,
-            !props.canCommentPublicly && styles.commentInputContainerHighlighted,
-          ]}>
+          <View
+            style={[styles.commentInputContainer, !props.canCommentPublicly && styles.commentInputContainerHighlighted]}
+          >
             {renderCommentInput(
               props.focus || !!editingComment.reply,
               () => toggleVisibilityControl(true),
