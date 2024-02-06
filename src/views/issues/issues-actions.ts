@@ -59,17 +59,25 @@ const isDefaultHelpdeskSearchContext = (searchContextFolderId: string): ReduxAct
   return helpdeskSearchContext ? helpdeskSearchContext.id === searchContextFolderId : false;
 };
 
+const createDefaultHelpdeskSearchContext = (): ReduxAction<Folder> => (dispatch: ReduxThunkDispatch) => {
+    const context = dispatch(getDefaultHelpdeskSearchContext());
+    if (context) {
+      return {
+        ...context,
+        name: i18n('Tickets'),
+      };
+    } else {
+      return EVERYTHING_SEARCH_CONTEXT;
+    }
+  };
+
 const getSearchContext = (): ReduxAction<Folder> => (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
-  const appState = getState();
-  if (appState.issueList.helpDeskMode) {
-    const helpdeskSearchContext = appState.issueList.helpdeskSearchContext;
-    const isDefaultTicketsContext = dispatch(isDefaultHelpdeskSearchContext(helpdeskSearchContext.id));
-    return {
-      ...helpdeskSearchContext,
-      name: isDefaultTicketsContext ? i18n('Tickets') : helpdeskSearchContext.name,
-    };
+  const issueList = getState().issueList;
+  if (issueList.helpDeskMode) {
+    const hsc = issueList.helpdeskSearchContext;
+    return dispatch(isDefaultHelpdeskSearchContext(hsc.id)) ? dispatch(createDefaultHelpdeskSearchContext()) : hsc;
   }
-  return appState.issueList.searchContext;
+  return issueList.searchContext;
 };
 
 
@@ -206,8 +214,8 @@ const composeSearchQuery = (): ReduxAction<Promise<string>> => async (
 ) => {
   const settings: IssuesSettings = dispatch(getIssuesSettings());
   const isHelpdeskMode = dispatch(isHelpDeskMode());
-  const issuesState = getState().issueList;
-  const searchQuery: string = isHelpdeskMode ? issuesState.helpdeskQuery : issuesState.query;
+  const issueList = getState().issueList;
+  const searchQuery: string = isHelpdeskMode ? issueList.helpdeskQuery : issueList.query;
   const searchSettings: IssuesSetting = settings.search;
   const isFilterMode: boolean = searchSettings.mode === issuesSearchSettingMode.filter;
   let query: string = (isFilterMode ? convertToNonStructural(searchQuery) : searchQuery).trim();
@@ -216,8 +224,7 @@ const composeSearchQuery = (): ReduxAction<Promise<string>> => async (
     query = `${query} ${createQueryFromFiltersSetting(filtersSettings)}`;
   }
   if (isHelpdeskMode) {
-    const helpdeskSearchContext = issuesState.helpdeskSearchContext;
-    query = `${query} ${helpdeskSearchContext.query}`;
+    query = `${query} ${issueList.helpdeskSearchContext.query}`;
   }
   return query.trim().replace(whiteSpacesRegex, ' ');
 };
@@ -269,12 +276,20 @@ const openContextSelect = (): ReduxAction => {
         const unpinnedFolders: Folder[] = userFolders.filter((it: Folder) => !it.pinned).filter(filterHelpdeskFolders);
         const pinnedGrouped: GroupedFolders = getGroupedFolders(pinnedFolders);
         const unpinnedGrouped: GroupedFolders = getGroupedFolders(unpinnedFolders);
+        let defaultContext: Folder[];
+        if (!isHelpdeskMode) {
+          defaultContext = currentSearchContext.id ? [EVERYTHING_SEARCH_CONTEXT] : [];
+        } else {
+          defaultContext = dispatch(isDefaultHelpdeskSearchContext(currentSearchContext.id))
+            ? []
+            : [dispatch(createDefaultHelpdeskSearchContext())];
+        }
 
         return [
           {
             title: i18n('Projects'),
             data: [
-              currentSearchContext,
+              ...defaultContext,
               ...sortFolders(pinnedGrouped.projects, query),
               ...sortFolders(unpinnedGrouped.projects, query),
             ],
@@ -309,7 +324,7 @@ const openContextSelect = (): ReduxAction => {
               ? issuesActions.SET_HELPDESK_CONTEXT(searchContext)
               : issuesActions.SET_SEARCH_CONTEXT(searchContext)
           );
-          await flushStoragePart(isHelpdeskMode ? {searchContext} : {helpdeskSearchContext: searchContext});
+          await flushStoragePart(isHelpdeskMode ? {helpdeskSearchContext: searchContext} : {searchContext});
           dispatch(refreshIssues());
         } catch (error) {
           log.warn('Failed to change a context', error);
