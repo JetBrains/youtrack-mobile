@@ -98,7 +98,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:599
+#: src/components/comment/comment-edit.tsx:607
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -166,7 +166,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:568
+#: src/components/comment/comment-edit.tsx:576
 #: src/views/issue/issue-base-actions-creater.ts:589
 msgid "Attach file"
 msgstr "Attach file"
@@ -474,7 +474,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:616
+#: src/components/comment/comment-edit.tsx:624
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -524,7 +524,7 @@ msgstr "Filter items"
 msgid "Filter projects"
 msgstr "Filter projects"
 
-#: src/views/issues/issues-actions.ts:254
+#: src/views/issues/issues-actions.ts:261
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
@@ -831,7 +831,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/issues/issues-actions.ts:275
+#: src/views/issues/issues-actions.ts:290
 #: src/views/knowledge-base/knowledge-base.tsx:609
 msgid "Projects"
 msgstr "Projects"
@@ -898,7 +898,7 @@ msgstr "Restore"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/views/issues/issues-actions.ts:290
+#: src/views/issues/issues-actions.ts:305
 msgid "Saved Searches"
 msgstr "Saved Searches"
 
@@ -1064,7 +1064,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/views/issues/issues-actions.ts:283
+#: src/views/issues/issues-actions.ts:298
 msgid "Tags"
 msgstr "Tags"
 
@@ -1152,7 +1152,7 @@ msgstr "Thread muted"
 msgid "Thread unmuted"
 msgstr "Thread unmuted"
 
-#: src/views/issues/issues-actions.ts:69
+#: src/views/issues/issues-actions.ts:67
 #: src/views/issues/issues-reducers.ts:55
 #: src/views/tickets/tickets.tsx:34
 msgid "Tickets"
