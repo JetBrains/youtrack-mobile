@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {secondaryText, UNIT} from 'components/common-styles';
+import {MAIN_FONT_SIZE, secondaryText, UNIT} from 'components/common-styles';
 
 
 export const rowStyles = {
@@ -10,16 +10,17 @@ export const rowStyles = {
   userName: {
     flexGrow: 1,
     flexShrink: 0,
-    fontSize: 18,
+    color: '$text',
+    fontSize: MAIN_FONT_SIZE + 1,
+    lineHeight: MAIN_FONT_SIZE + 1,
     fontWeight: '500',
     letterSpacing: -0.22,
-    color: '$text',
   },
   userAvatar: {
-    minWidth: UNIT * 5,
-    minHeight: UNIT * 5,
+    width: UNIT * 5,
+    height: UNIT * 5,
     marginLeft: -UNIT / 2,
-    marginTop: -UNIT / 4,
+    marginTop: -UNIT,
     marginRight: UNIT,
     alignItems: 'center',
     justifyContent: 'center',

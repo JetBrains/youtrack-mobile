@@ -17,6 +17,9 @@ export default EStyleSheet.create({
   icon: {
     color: '$iconAction',
   },
+  iconAddReaction: {
+    color: '$iconAccent',
+  },
   avatarComment: {
     backgroundColor: '$background',
   },
@@ -42,7 +45,7 @@ export default EStyleSheet.create({
   },
   thread: {
     marginTop: UNIT * 1.5,
-    marginLeft: UNIT * 2,
+    marginLeft: UNIT * 1.5,
   },
   threadContainer: {
     backgroundColor: '$background',
