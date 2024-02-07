@@ -27,7 +27,7 @@ interface Props {
   onHide?: () => any;
   onShow?: () => any;
   onSubmit?: ((visibility: Visibility) => any) | null | undefined;
-  style: ViewStyleProp | null;
+  style?: ViewStyleProp | null;
   uiTheme?: UITheme;
   visibility: Visibility | null;
   visibilityDefaultLabel?: string;
@@ -210,8 +210,14 @@ export default class VisibilityControl extends PureComponent<Props, State> {
         style={[styles.container, this.props.style]}
       >
         {!onSubmit && isSecured && (
-          <TouchableOpacity style={styles.resetButton} onPress={this.resetVisibility} hitSlop={HIT_SLOP}>
-            <IconClose size={16} color={styles.icon.color} />
+          <TouchableOpacity
+            testID="test:id/visibilityResetButton"
+            accessibilityLabel="visibilityResetButton"
+            style={styles.resetButton}
+            onPress={this.resetVisibility}
+            hitSlop={HIT_SLOP}
+          >
+            <IconClose size={16} color={styles.secured.color} />
           </TouchableOpacity>
         )}
 
@@ -228,7 +234,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
 
   render() {
     return (
-      <View testID="visibilityControl">
+      <View testID="test:id/visibilityControl" accessibilityLabel="visibilityControl">
         {this.renderVisibilityButton()}
         {this.state.isSelectVisible && this.renderSelect()}
       </View>

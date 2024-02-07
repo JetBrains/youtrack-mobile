@@ -1,99 +1,111 @@
 import React from 'react';
-import {shallow} from 'enzyme';
-import {ResourceTypes} from '../api/api__resource-types';
+
+import {act, cleanup, fireEvent, render, screen} from '@testing-library/react-native';
+
+import {ResourceTypes} from 'components/api/api__resource-types';
 import VisibilityControl from './visibility-control';
-import {VisibilityGroups} from 'types/Visibility';
+
+import {UserGroup} from 'types/UserGroup';
+import {Visibility, VisibilityGroups} from 'types/Visibility';
+
+jest.mock('components/select/select-sectioned', () => 'SelectSectioned');
+
 describe('<VisibilityControl/>', () => {
-  let wrapper;
-  let instance;
-  let visibilityMock;
-  let counter;
+  let visibilityMock: Visibility;
+  let visibilityRestrictedMock: Visibility;
+  let counter: number;
+  let onApplyMock: jest.Mock;
+  let onSubmitMock: jest.Mock;
+  const getOptionsFn = () => Promise.resolve({} as VisibilityGroups);
+
+  afterEach(cleanup);
   beforeEach(() => {
     counter = 0;
     visibilityMock = {
       $type: ResourceTypes.VISIBILITY_UNLIMITED,
     };
-    render();
+    visibilityRestrictedMock = {
+      $type: ResourceTypes.VISIBILITY_LIMITED,
+      permittedGroups: [{} as UserGroup],
+    };
+    onApplyMock = jest.fn();
+    onSubmitMock = jest.fn();
   });
-  describe('Render', () => {
-    it('should initialize state', () => {
-      expect(findByTestId('visibilityControl')).toHaveLength(1);
-      expect(findByTestId('test:id/visibilityControlButton')).toHaveLength(1);
-    });
+
+  it('should render component', () => {
+    doRender();
+
+    expect(screen.findByTestId('test:id/visibilityControl')).toBeTruthy();
+    expect(screen.findByTestId('test:id/visibilityControlButton')).toBeTruthy();
   });
-  describe('Init', () => {
-    it('should initialize state', () => {
-      expect(instance.state.visibility).toEqual(visibilityMock);
-      expect(instance.state.isSelectVisible).toEqual(false);
-    });
+
+  it('should not render <Select/>', () => {
+    doRender();
+
+    expect(screen.queryByTestId('test:id/visibility-control-button')).toBeNull();
   });
+
   describe('Visibility', () => {
-    let restrictedVisibilityMock;
-    let onApplyMock;
-    let onSubmitMock;
-    beforeEach(() => {
-      restrictedVisibilityMock = {
-        $type: ResourceTypes.VISIBILITY_LIMITED,
-        permittedGroups: [{}],
-      };
-      onApplyMock = jest.fn();
-      onSubmitMock = jest.fn();
-    });
     it('should reset visibility', () => {
-      render(onApplyMock, onSubmitMock);
-      instance.resetVisibility();
-      expect(instance.state.visibility).toEqual(null);
+      doRender({visibility: visibilityRestrictedMock, onApply: onApplyMock, onSubmit: undefined});
+
+      fireEvent.press(screen.getByTestId('test:id/visibilityResetButton'));
+
+      expect(onApplyMock).toHaveBeenCalledWith(null);
     });
+
     it('should submit visibility', () => {
-      render(onApplyMock, onSubmitMock);
-      instance.updateVisibility(restrictedVisibilityMock);
-      expect(onSubmitMock).toHaveBeenCalledWith(restrictedVisibilityMock);
-      expect(onApplyMock).not.toHaveBeenCalledWith(restrictedVisibilityMock);
+      const v = instantiate({
+        visibility: visibilityRestrictedMock,
+        onApply: onApplyMock,
+        onSubmit: onSubmitMock,
+      });
+
+      act(() => {
+        v.updateVisibility(visibilityRestrictedMock);
+      });
+
+      expect(onSubmitMock).toHaveBeenCalledWith(visibilityRestrictedMock);
+      expect(onApplyMock).not.toHaveBeenCalledWith(visibilityRestrictedMock);
     });
+
     it('should apply visibility', () => {
-      render(onApplyMock, null);
-      instance.updateVisibility(restrictedVisibilityMock);
-      expect(onSubmitMock).not.toHaveBeenCalledWith(restrictedVisibilityMock);
-      expect(onApplyMock).toHaveBeenCalledWith(restrictedVisibilityMock);
-    });
-    it('should update state with a new visibility', () => {
-      instance.updateVisibility(restrictedVisibilityMock);
-      expect(instance.state.visibility).toEqual(restrictedVisibilityMock);
-    });
-    it('should invoke `onShow` and `onHide` callback', () => {
-      render();
-      expect(counter).toEqual(0);
-      instance.setSelectVisible(true);
-      expect(counter).toEqual(1);
-      instance.setSelectVisible(false);
-      expect(counter).toEqual(0);
+      const v = instantiate({
+        visibility: visibilityRestrictedMock,
+        onApply: onApplyMock,
+        onSubmit: undefined,
+      });
+
+      act(() => {
+        v.updateVisibility(visibilityRestrictedMock);
+      });
+
+      expect(onSubmitMock).not.toHaveBeenCalledWith(visibilityRestrictedMock);
+      expect(onApplyMock).toHaveBeenCalledWith(visibilityRestrictedMock);
     });
   });
 
-  function findByTestId(testId) {
-    return (
-      wrapper &&
-      wrapper.find({
-        testID: testId,
-      })
-    );
-  }
-
-  function doShallow(visibility, onApply = () => {}, onSubmit = () => {}) {
-    return shallow(
+  function doRender(params?: {visibility?: Visibility | null; onApply?: jest.Mock; onSubmit?: jest.Mock}) {
+    render(
       <VisibilityControl
         onShow={() => counter++}
         onHide={() => counter--}
-        visibility={visibility}
-        onApply={onApply}
-        onSubmit={onSubmit}
-        getOptions={() => Promise.resolve({} as VisibilityGroups)}
-      />,
+        visibility={params?.visibility || visibilityMock}
+        onApply={params?.onApply}
+        onSubmit={params?.onSubmit}
+        getOptions={getOptionsFn}
+      />
     );
   }
 
-  function render(onApply, onSubmit) {
-    wrapper = doShallow(visibilityMock, onApply, onSubmit);
-    instance = wrapper.instance();
+  function instantiate(params: {visibility: Visibility | null; onApply: jest.Mock; onSubmit?: jest.Mock}) {
+    return new VisibilityControl({
+      onShow: () => counter++,
+      onHide: () => counter--,
+      visibility: params.visibility,
+      onApply: params.onApply,
+      onSubmit: params.onSubmit,
+      getOptions: getOptionsFn,
+    });
   }
 });
