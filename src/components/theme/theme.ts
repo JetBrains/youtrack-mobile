@@ -4,18 +4,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import darkTheme from './theme-dark';
 import lightTheme from './theme-light';
 import {THEME_MODE_KEY} from '../storage/storage';
-import type {UITheme} from 'types/Theme';
+import type {Theme, UITheme} from 'types/Theme';
+
 export const DEFAULT_THEME: UITheme = lightTheme;
+
+export const defaultTheme: Theme = {uiTheme: DEFAULT_THEME, mode: DEFAULT_THEME.mode, setMode: () => {}};
+
 export const getSystemThemeMode = (): any => Appearance.getColorScheme();
+
 export const themes: UITheme[] = [lightTheme, darkTheme];
+
 export const getUITheme = (mode: string): UITheme => {
   const theme: UITheme | null = themes.reduce(
-    (theme: UITheme | null, it: UITheme) =>
-      it.mode.includes(mode) ? it : theme,
-    null,
+    (theme: UITheme | null, it: UITheme) => (it.mode.includes(mode) ? it : theme),
+    null
   );
   return theme || DEFAULT_THEME;
 };
+
 export const buildStyles = (mode: string, uiTheme: UITheme) => {
   EStyleSheet.build({
     $theme: mode,
@@ -24,6 +30,7 @@ export const buildStyles = (mode: string, uiTheme: UITheme) => {
     ...uiTheme.colors,
   });
 };
+
 export const getThemeMode = async (): Promise<string> => {
   let mode: string;
 
