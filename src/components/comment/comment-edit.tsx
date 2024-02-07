@@ -509,11 +509,7 @@ const CommentEdit = (props: Props) => {
                 }
               >
                 <IconAdd
-                  color={
-                    !props.canCommentPublicly
-                      ? styles.commentInputContainerHighlighted.color
-                      : styles.actionsContainerButton.color
-                  }
+                  color={styles.actionsContainerButton.color}
                   size={22}
                 />
               </TouchableOpacity>
