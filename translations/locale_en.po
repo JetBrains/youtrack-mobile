@@ -85,7 +85,7 @@ msgstr "Accept"
 msgid "Activity"
 msgstr "Activity"
 
-#: src/views/issue/activity/issue__activity.tsx:166
+#: src/views/issue/activity/issue__activity.tsx:169
 msgid "Activity Settings"
 msgstr "Activity Settings"
 
@@ -98,7 +98,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:607
+#: src/components/comment/comment-edit.tsx:603
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -166,7 +166,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:576
+#: src/components/comment/comment-edit.tsx:572
 #: src/views/issue/issue-base-actions-creater.ts:589
 msgid "Attach file"
 msgstr "Attach file"
@@ -387,7 +387,7 @@ msgstr "Decline"
 #: src/views/article/article__activity-stream.tsx:244
 #: src/views/create-issue/create-issue-drafts.tsx:39
 #: src/views/issue/activity/issue__activity-stream.tsx:164
-#: src/views/issue/activity/issue__activity.tsx:276
+#: src/views/issue/activity/issue__activity.tsx:274
 #: src/views/issue/activity/issue-activity__actions.ts:279
 #: src/views/issue/activity/issue-activity__comment-actions.ts:273
 #: src/views/issue/activity/issue-activity__comment-actions.ts:333
@@ -468,13 +468,13 @@ msgstr "Drafts"
 #: src/views/article/arcticle-actions.ts:279
 #: src/views/article/article__activity-stream.tsx:160
 #: src/views/issue/activity/issue__activity-stream.tsx:97
-#: src/views/issue/activity/issue__activity.tsx:265
+#: src/views/issue/activity/issue__activity.tsx:263
 #: src/views/issue/activity/issue-activity__comment-actions.ts:323
 #: src/views/issue/issue-base-actions-creater.ts:569
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:624
+#: src/components/comment/comment-edit.tsx:620
 msgid "Edit comment"
 msgstr "Edit comment"
 
