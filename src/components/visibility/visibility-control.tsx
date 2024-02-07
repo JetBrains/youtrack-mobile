@@ -211,16 +211,16 @@ export default class VisibilityControl extends PureComponent<Props, State> {
       >
         {!onSubmit && isSecured && (
           <TouchableOpacity style={styles.resetButton} onPress={this.resetVisibility} hitSlop={HIT_SLOP}>
-            <IconClose size={16} color={styles.link.color} />
+            <IconClose size={16} color={styles.icon.color} />
           </TouchableOpacity>
         )}
 
         <TouchableOpacity style={styles.container} onPress={this.openSelect} hitSlop={HIT_SLOP} disabled={disabled}>
           {(isSecured || visibility?.inherited) && (
-            <IconLock style={styles.buttonIcon} size={16} color={styles.buttonText.color} />
+            <IconLock style={styles.buttonIcon} size={16} color={styles.secured.color} />
           )}
-          <Text style={styles.buttonText}>{label}</Text>
-          {!disabled && <IconAngleDown size={20} color={styles.buttonText.color} />}
+          <Text style={[styles.buttonText, isSecured && styles.secured]}>{label}</Text>
+          {!disabled && <IconAngleDown size={20} color={isSecured ? styles.secured.color : styles.buttonText.color} />}
         </TouchableOpacity>
       </View>
     );

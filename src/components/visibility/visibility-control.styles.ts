@@ -15,6 +15,9 @@ export default EStyleSheet.create({
   },
   buttonText: {...secondaryText, color: '$textSecondary'},
   link: {
-    color: 'link',
+    color: '$link',
+  },
+  secured: {
+    color: '$private',
   },
 });
