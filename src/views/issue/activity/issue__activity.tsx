@@ -16,7 +16,7 @@ import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
-import Select from 'components/select/select';
+import Select, {ISelectProps} from 'components/select/select';
 import TipActivityActionAccessTouch from 'components/tip/tips/activity-touch-actions';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
 import {attachmentActions} from '../issue__attachment-actions-and-types';
@@ -27,6 +27,7 @@ import {
   createActivityModel,
 } from 'components/activity/activity-helper';
 import {CommentActions, createActivityCommentActions} from './issue-activity__comment-actions';
+import {defaultTheme} from 'components/theme/theme';
 import {getApi} from 'components/api/api__instance';
 import {guid} from 'util/util';
 import {HIT_SLOP, UNIT} from 'components/common-styles';
@@ -42,8 +43,8 @@ import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './issue-activity.styles';
 
-import type {Activity} from 'types/Activity';
-import type {AnyIssue, IssueContextData} from 'types/Issue';
+import type {Activity, ActivityItem} from 'types/Activity';
+import type {IssueContextData} from 'types/Issue';
 import type {EventSubscription} from 'react-native';
 import type {IssueComment} from 'types/CustomFields';
 import type {State as IssueActivityState} from './issue-activity__reducers';
@@ -55,6 +56,8 @@ import type {YouTrackWiki} from 'types/Wiki';
 import {AppState} from 'reducers';
 import {ContextMenuConfigItem} from 'types/MenuConfig';
 import {IssueActivityActions} from './issue-activity__actions';
+import {CustomError} from 'types/Error';
+import {RequestHeaders} from 'types/Auth';
 
 type IssueActivityProps = IssueActivityState &
   IssueActivityActions &
@@ -68,6 +71,9 @@ type IssueActivityProps = IssueActivityState &
       activityId: string;
       commentId?: string;
     };
+    issuePermissions: IssuePermissions;
+    updateOptimisticallyActivityPage: (activityPage: Activity[]) => void;
+    selectProps: ISelectProps;
   };
 
 interface State {
@@ -80,14 +86,11 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     actionSheet: Function,
   };
   backendUrl: string = getApi().config.backendUrl;
-  imageHeaders: {
-    Authorization: string;
-    'User-Agent': string;
-  } = getApi().auth.getAuthorizationHeaders();
+  imageHeaders: RequestHeaders = getApi().auth.getAuthorizationHeaders();
   issuePermissions: IssuePermissions;
   issueContext: IssueContextData;
   goOnlineSubscription: EventSubscription;
-  theme: Theme;
+  theme: Theme = defaultTheme;
   state: State = {
     modalChildren: null,
     settingsVisible: false,
@@ -221,19 +224,13 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     const youtrackWiki: YouTrackWiki = {
       backendUrl: this.backendUrl,
       imageHeaders: this.imageHeaders,
-      onIssueIdTap: issueId =>
-        openNestedIssueView({
-          issueId,
-        }),
+      onIssueIdTap: (issueId: string) => openNestedIssueView({issueId}),
     };
 
-    const onWorkUpdate = async (
-      workItem?: WorkItem,
-    ): ((...args: any[]) => any) => {
+    const onWorkUpdate = async (workItem?: WorkItem) => {
       if (workItem) {
         await doUpdateWorkItem(workItem);
       }
-
       this.loadIssueActivities(true);
     };
 
@@ -246,10 +243,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
       <IssueActivityStream
         activities={createActivityModel(
           activityPage,
-          this.getUserAppearanceProfile().naturalCommentsOrder,
+          !!this.getUserAppearanceProfile().naturalCommentsOrder,
         )}
         attachments={issue?.attachments}
-        actionSheet={this.context.actionSheet}
+        actionSheet={this.context!.actionSheet}
         issueFields={issue?.fields}
         issueId={issue?.id}
         uiTheme={this.theme.uiTheme}
@@ -259,9 +256,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
         currentUser={user}
         work={{
           onWorkUpdate,
-          createContextActions: (workItem: WorkItem): ContextMenuConfigItem[] => {
+          createContextActions: (workItem: WorkItem | ActivityItem): ContextMenuConfigItem[] => {
+            const work = workItem as WorkItem;
             return [
-              ...(issPermissions.canUpdateWork(issue as AnyIssue, workItem) ? [{
+              ...(issPermissions.canUpdateWork(issue, work) ? [{
                 actionTitle: i18n('Edit'),
                 actionKey: guid(),
                 execute: () => {
@@ -269,10 +267,10 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
                     message: 'SpentTime: actions:update',
                     analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
                   });
-                  this.renderAddSpentTimePage(workItem);
+                  this.renderAddSpentTimePage(work);
                 },
               }] : []),
-              ...(issPermissions.canDeleteWork(issue as AnyIssue, workItem) ? [{
+              ...(issPermissions.canDeleteWork(issue, work) ? [{
                 actionTitle: i18n('Delete'),
                 actionKey: guid(),
                 execute: async () => {
@@ -280,7 +278,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
                     message: 'SpentTime: actions:delete',
                     analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
                   });
-                  const isDeleted = await deleteWorkItem(workItem);
+                  const isDeleted = await deleteWorkItem(work);
                   if (isDeleted) {
                     onWorkUpdate();
                   }
@@ -298,7 +296,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
           const hasError: boolean = this.hasLoadingError();
 
           if (hasError) {
-            return <ErrorMessage error={this.props.activitiesLoadingError} />;
+            return <ErrorMessage error={this.props.activitiesLoadingError as CustomError} />;
           } else {
             const activitiesApiEnabled: boolean = isIssueActivitiesAPIEnabled();
             const activityLoaded: boolean = this.isActivityLoaded();
@@ -370,13 +368,14 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
           }}
           header={
             <TouchableOpacity
+              hitSlop={HIT_SLOP}
               style={styles.editCommentCloseButton}
               onPress={async () => {
                 await setEditingComment(null);
                 this.loadDraftComment();
               }}
             >
-              <IconClose size={21} color={styles.link.color} />
+              <IconClose size={16} color={styles.icon.color} />
             </TouchableOpacity>
           }
         />
@@ -450,9 +449,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     const {selectProps, onCloseSelect} = this.props;
     return (
       <Select
+        {...selectProps}
         getTitle={item => item.name}
         onCancel={onCloseSelect}
-        {...selectProps}
       />
     );
   }
@@ -540,15 +539,12 @@ const mapDispatchToProps = (dispatch: Dispatch, ownProps: IssueActivityProps) =>
     ownProps?.issue
   ));
   return {
-    ...bindActionCreatorsExt(
-      activityActions.createIssueActivityActions(ownProps.stateFieldName),
-      dispatch,
-    ),
+    ...bindActionCreatorsExt(activityActions.createIssueActivityActions(ownProps.stateFieldName), dispatch),
     ...bindActionCreators(attachmentActions, dispatch),
     ...bindActionCreatorsExt(commentActions, dispatch),
-    updateOptimisticallyActivityPage: (activityPage: Activity[]) => dispatch(activityActions.receiveActivityPage(activityPage)),
-    onGetCommentVisibilityOptions: () => dispatch(commentActions.getCommentVisibilityOptions()),
-    getProjectTeam: (projectId: string) => dispatch(commentActions.getProjectTeam(projectId)),
+    updateOptimisticallyActivityPage: (activityPage: Activity[]) => {
+      dispatch(activityActions.receiveActivityPage(activityPage));
+    },
   };
 };
 
