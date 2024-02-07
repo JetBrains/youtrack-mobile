@@ -95,10 +95,11 @@ export default EStyleSheet.create({
   commentSendButton: {
     width: MIN_INPUT_SIZE,
     height: MIN_INPUT_SIZE,
-    borderRadius: INPUT_BORDER_RADIUS - 1,
+    alignSelf: 'flex-end',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '$link',
+    borderRadius: INPUT_BORDER_RADIUS - 1,
   },
   commentSendButtonIcon: {
     color: '$textButton',

@@ -45,45 +45,42 @@ import type {NormalizedAttachment} from 'types/Attachment';
 import type {Theme} from 'types/Theme';
 import type {User, UserMentions} from 'types/User';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
+import {IssueFull} from 'types/Issue';
 import {ReduxThunkDispatch} from 'types/Redux';
 
-interface CommentReply {
+interface EditingComment extends IssueComment {
+  article?: { id: string };
+  issue?: Partial<IssueFull>;
   reply?: boolean;
 }
 
-interface CommentEntity {
-  issue?: { id: string };
-  article?: { id: string };
-}
-
-type EditingComment = IssueComment & CommentReply & CommentEntity;
-
 export interface Props {
   canAttach: boolean;
-  canCommentPublicly?: boolean;
-  canUpdateCommentVisibility?: boolean;
+  canCommentPublicly: boolean;
   canRemoveAttach: (attachment: Attachment) => boolean;
+  canUpdateCommentVisibility?: boolean;
   editingComment: EditingComment;
   focus?: boolean;
   getCommentSuggestions: (query: string) => Promise<UserMentions>;
   getVisibilityOptions: () => Promise<VisibilityGroups>;
+  header?: React.ReactNode;
   isArticle?: boolean;
   isEditMode?: boolean;
   onAddSpentTime?: (() => any) | null;
   onAttach: (files: NormalizedAttachment[], comment: IssueComment) => Promise<Attachment[]>;
   onCommentChange: (comment: IssueComment, isAttachmentChange?: boolean) => Promise<IssueComment | null>;
   onSubmitComment: (comment: IssueComment) => any;
-  visibilityLabel?: string;
   visibility?: Visibility;
-  header?: React.ReactNode;
+  visibilityLabel?: string;
 }
 
 interface State {
   attachFileSource: string | null;
   commentCaret: number;
   editingComment: EditingComment;
-  isAttachFileDialogVisible: boolean;
+  height: number;
   isAttachActionsVisible: boolean;
+  isAttachFileDialogVisible: boolean;
   isSaving: boolean;
   isVisibilityControlVisible: boolean;
   isVisibilitySelectVisible: boolean;
@@ -91,7 +88,6 @@ interface State {
   mentionsLoading: boolean;
   mentionsQuery: string;
   mentionsVisible: boolean;
-  height: number;
   visibility?: Visibility;
 }
 
@@ -113,16 +109,16 @@ const CommentEdit = (props: Props) => {
     attachFileSource: null,
     commentCaret: 0,
     editingComment: EMPTY_COMMENT,
-    isAttachFileDialogVisible: false,
+    height: UNIT * 4,
     isAttachActionsVisible: false,
+    isAttachFileDialogVisible: false,
     isSaving: false,
-    isVisibilitySelectVisible: false,
     isVisibilityControlVisible: false,
+    isVisibilitySelectVisible: false,
     mentions: null,
     mentionsLoading: false,
     mentionsQuery: '',
     mentionsVisible: false,
-    height: UNIT * 4,
   });
 
   const changeState = (statePart: Partial<State>): void => {
@@ -208,7 +204,11 @@ const CommentEdit = (props: Props) => {
 
   React.useEffect(
     () => {
-      setEditingComment({...state.editingComment, ...props.editingComment, visibility: props.visibility});
+      setEditingComment({
+        ...state.editingComment,
+        ...props.editingComment,
+        visibility: props.visibility || props.editingComment.visibility,
+      });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [props.visibility]
