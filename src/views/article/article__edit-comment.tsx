@@ -40,6 +40,7 @@ const ArticleActivityStreamCommentEdit = (props: Props) => {
       editingComment={{...props.comment, article: {is: article.id}}}
       getCommentSuggestions={(query: string) => dispatch(getMentions(query))}
       canAttach={issuePermissions.articleCanAddAttachment(article)}
+      canCommentPublicly={issuePermissions.canCommentPublicly(article)}
       canRemoveAttach={(attachment: Attachment) => issuePermissions.articleCanDeleteAttachment(article)}
       visibilityLabel={visibilityArticleDefaultText()}
     />

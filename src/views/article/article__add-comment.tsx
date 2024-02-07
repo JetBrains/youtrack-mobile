@@ -45,6 +45,7 @@ const ArticleAddComment = (props: Props) => {
       getCommentSuggestions={(query: string) => dispatch(articleActions.getMentions(query))}
       canAttach={canAttach}
       canRemoveAttach={() => canAttach}
+      canCommentPublicly={props.issuePermissions.canCommentPublicly(props.article)}
       onAttach={attachmentActions.uploadFileToArticleComment}
       visibilityLabel={visibilityArticleDefaultText()}
     />

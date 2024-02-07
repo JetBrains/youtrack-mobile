@@ -29,7 +29,7 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
   };
 
   const {
-    onCommentChange = () => {},
+    onCommentChange = () => Promise.resolve(null),
     onAddSpentTime = null,
     stateFieldName,
   } = props;
@@ -49,6 +49,7 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
         )
       }
       canAttach={issuePermissions.canAddAttachmentTo(issue)}
+      canCommentPublicly={issuePermissions.canCommentPublicly(issue)}
       canRemoveAttach={(attachment: Attachment) =>
         issuePermissions.canDeleteCommentAttachment(attachment, issue)
       }
