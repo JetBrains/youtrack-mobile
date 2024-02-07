@@ -50,6 +50,7 @@ const IssueActivityStreamCommentEdit = (props: Props) => {
       }
       canAttach={issuePermissions.canAddAttachmentTo(issue)}
       canCommentPublicly={issuePermissions.canCommentPublicly(issue)}
+      canUpdateCommentVisibility={issuePermissions.canUpdateCommentVisibility(issue)}
       canRemoveAttach={(attachment: Attachment) =>
         issuePermissions.canDeleteCommentAttachment(attachment, issue)
       }

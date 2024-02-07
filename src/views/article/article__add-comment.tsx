@@ -16,7 +16,7 @@ interface Props {
   article: Article;
   issuePermissions: IssuePermissions;
   comment: IssueComment | null;
-  onCommentChange: (draftComment: IssueComment) => Promise<void>;
+  onCommentChange: (draftComment: IssueComment, isAttachmentChange?: boolean) => Promise<IssueComment | null>;
   onSubmitComment: (draftComment: IssueComment) => Promise<void>;
 }
 
@@ -41,11 +41,12 @@ const ArticleAddComment = (props: Props) => {
       onCommentChange={props.onCommentChange}
       getVisibilityOptions={() => getApi().articles.getVisibilityOptions(props.article.id)}
       onSubmitComment={props.onSubmitComment}
-      editingComment={{...props.comment, article: {id: props?.article?.id}}}
+      editingComment={{...props.comment, article: {id: props.article.id}}}
       getCommentSuggestions={(query: string) => dispatch(articleActions.getMentions(query))}
       canAttach={canAttach}
       canRemoveAttach={() => canAttach}
       canCommentPublicly={props.issuePermissions.canCommentPublicly(props.article)}
+      canUpdateCommentVisibility={props.issuePermissions.canUpdateCommentVisibility(props.article)}
       onAttach={attachmentActions.uploadFileToArticleComment}
       visibilityLabel={visibilityArticleDefaultText()}
     />
