@@ -60,7 +60,6 @@ export const rowStyles = {
   },
   activityVisibility: {
     justifyContent: 'flex-end',
-    marginLeft: UNIT * 3,
   },
   activitySeparator: {
     ...separator,
