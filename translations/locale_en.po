@@ -697,13 +697,13 @@ msgstr "Mark as unread"
 msgid "Marked as read"
 msgstr "Marked as read"
 
-#: src/views/issues/issues__count.tsx:31
+#: src/views/issues/issues__count.tsx:30
 msgid "Matches {{issuesCount}} issue"
 msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] "Matches {{issuesCount}} issue"
 msgstr[1] "Matches {{issuesCount}} issues"
 
-#: src/views/issues/issues__count.tsx:24
+#: src/views/issues/issues__count.tsx:23
 msgid "Matches {{issuesCount}} ticket"
 msgid_plural "Matches {{issuesCount}} tickets"
 msgstr[0] "Matches {{issuesCount}} ticket"
@@ -1182,7 +1182,7 @@ msgstr "Total votes"
 msgid "Touch and hold an item to view a list of available actions"
 msgstr "Touch and hold an item to view a list of available actions"
 
-#: src/components/error-message/error-message.tsx:95
+#: src/components/error-message/error-message.tsx:94
 msgid "Try Again"
 msgstr "Try Again"
 
@@ -1239,7 +1239,7 @@ msgstr "VCS changes"
 msgid "View comment"
 msgstr "View comment"
 
-#: src/views/issue/issue__details.tsx:495
+#: src/views/issue/issue__details.tsx:494
 msgid "View comments and other activity"
 msgstr "View comments and other activity"
 
