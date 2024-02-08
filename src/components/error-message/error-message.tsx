@@ -76,7 +76,6 @@ export default class ErrorMessage extends PureComponent<
 
         <Text
           testID="test:id/error-message"
-          accessibilityLabel="error-message"
           accessible={true}
           style={styles.errorTitle}
         >

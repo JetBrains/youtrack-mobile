@@ -39,7 +39,6 @@ export default class ColorField extends PureComponent<Props, Readonly<{}>> {
     return (
       <View
         testID="test:id/color-field-value-wrapper"
-        accessibilityLabel="color-field-value-wrapper"
         accessible={true}
         style={[
           {backgroundColor: color?.background},
