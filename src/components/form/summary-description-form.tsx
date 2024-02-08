@@ -67,7 +67,6 @@ export default class SummaryDescriptionForm extends Component<Props, Readonly<{}
                 editable={editable}
                 autoFocus
                 testID="test:id/issue-summary"
-                accessibilityLabel="issue-summary"
                 accessible={true}
                 placeholder={summaryPlaceholder}
                 placeholderTextColor={styles.placeholder.color}

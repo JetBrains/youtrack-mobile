@@ -341,7 +341,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         <Text
           style={[styles.summary, issue.resolved && styles.summaryResolved]}
           selectable={true}
-          testID="issue-summary"
+          testID="test:id/issue-summary-text"
         >
           {issue.summary}
         </Text>
@@ -364,7 +364,6 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
           }}
           delayLongPress={250}
           testID="test:id/issue-description"
-          accessibilityLabel="issue-description"
           accessible={true}
         >
           <View style={styles.description}>{this.renderMarkdown()}</View>
