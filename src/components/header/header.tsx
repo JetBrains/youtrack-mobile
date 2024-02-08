@@ -60,7 +60,7 @@ export default class Header extends PureComponent<HeaderProps, Readonly<{}>> {
         {(theme: Theme) => {
           return (
             <View
-              testID="header"
+              testID="test:id/header"
               style={[
                 styles.header,
                 showShadow ? styles.headerShadow : null,
