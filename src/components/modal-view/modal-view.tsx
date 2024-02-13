@@ -1,78 +1,57 @@
-import React, {PureComponent} from 'react';
-import {Modal, View} from 'react-native';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import {ThemeContext} from '../theme/theme-context';
-import type {ModalOrientation, ModalAnimationType} from 'types/ModalView';
+import React from 'react';
+import {Modal, TouchableOpacity, View} from 'react-native';
+
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
+import styles from './modal.view.styles';
+
+import type {ModalAnimationType, ModalOrientation} from 'types/ModalView';
 import type {ViewStyleProp} from 'types/Internal';
-import {Orientation, AnimationType} from 'types/ModalView';
-import type {Theme} from 'types/Theme';
-type DefaultProps = {
-  onRequestClose: () => any;
-  supportedOrientations: ModalOrientation[];
-  animationType: ModalAnimationType;
-};
-type Props = {
-  visible?: boolean;
-  transparent?: boolean;
+import {AnimationType, Orientation} from 'types/ModalView';
+
+interface Props {
   animationType?: ModalAnimationType;
+  children: React.ReactNode;
+  onRequestClose?: () => void;
+  style?: ViewStyleProp | null;
   supportedOrientations?: ModalOrientation[];
-  onRequestClose?: () => any;
-  style?: ViewStyleProp | null | undefined;
-  children: any;
   testID?: string;
-};
+  transparent?: boolean;
+  visible?: boolean;
+}
 
-export default class ModalView extends PureComponent<Props, Readonly<{}>> {
-  static defaultProps: DefaultProps = {
-    onRequestClose: () => {},
-    supportedOrientations: [Orientation.PORTRAIT, Orientation.LANDSCAPE],
-    animationType: AnimationType.NONE,
-  };
-
-  render(): JSX.Element {
-    const {
-      visible,
-      transparent,
-      animationType,
-      supportedOrientations,
-      onRequestClose,
-      children,
-      style = {},
-      testID = 'modalView',
-    } = this.props;
-    const baseStyle: ViewStyleProp = {
-      flex: 1,
-    };
-    return (
-      <ThemeContext.Consumer>
-        {(theme: Theme) => {
-          return (
-            <Modal
-              testID={testID}
-              visible={visible}
-              transparent={transparent}
-              animationType={animationType}
-              supportedOrientations={supportedOrientations}
-              onRequestClose={onRequestClose}
-            >
-              <SafeAreaProvider>
-                <SafeAreaView
-                  style={[
-                    baseStyle,
-                    transparent === true
-                      ? null
-                      : {
-                          backgroundColor: theme.uiTheme.colors.$background,
-                        },
-                  ]}
-                >
-                  <View style={[baseStyle, style]}>{children}</View>
-                </SafeAreaView>
-              </SafeAreaProvider>
-            </Modal>
-          );
-        }}
-      </ThemeContext.Consumer>
-    );
-  }
+export default function ModalView(props: Props) {
+  const {
+    animationType = AnimationType.SLIDE,
+    supportedOrientations = [Orientation.PORTRAIT, Orientation.LANDSCAPE],
+    onRequestClose = () => {},
+    transparent,
+  } = props;
+  const {top, bottom} = useSafeAreaInsets();
+  return (
+    <View>
+      <Modal
+        animationType={animationType}
+        onRequestClose={onRequestClose}
+        supportedOrientations={supportedOrientations}
+        testID={props.testID}
+        transparent={transparent}
+        visible={props.visible}
+      >
+        <TouchableOpacity activeOpacity={1} style={styles.modalMask} onPress={onRequestClose} />
+        <View style={[styles.container, transparent && styles.containerPopup]}>
+          <View
+            style={[
+              styles.modalContent,
+              transparent && styles.modalPopup,
+              !transparent && {paddingTop: top, paddingBottom: bottom * 2},
+              props.style,
+            ]}
+          >
+            {props.children}
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
 }

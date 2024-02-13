@@ -104,7 +104,7 @@ const FeaturesDebugSettings = (props: Props): React.ReactNode => {
   };
 
   return (
-    <ModalView animationType="slide">
+    <ModalView>
       <View style={styles.container}>
         <Header
           showShadow={true}

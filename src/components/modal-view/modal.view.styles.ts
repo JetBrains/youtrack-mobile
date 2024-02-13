@@ -1,43 +1,46 @@
 import {StyleSheet} from 'react-native';
+
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {boxShadow} from 'components/common-styles';
-const borderRadius = 22;
+
+import {boxShadow, UNIT} from 'components/common-styles';
+
 export default EStyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'inherited',
+  },
+  containerPopup: {
+    backgroundColor: 'transparent',
   },
   modalMask: {
     ...StyleSheet.absoluteFillObject,
-    width: '100%',
-    height: '100%',
     backgroundColor: '$dimBackground',
+  },
+  fullscreen: {
+    backgroundColor: '#1F2326',
   },
   modal: {
-    width: 704,
-    maxHeight: '85%',
-    backgroundColor: '$background',
-    borderRadius,
+    alignItems: 'center',
+    justifyContent: 'center',
     ...boxShadow,
-  },
-  modalFullscreen: {
-    ...StyleSheet.absoluteFillObject,
-    marginVertical: 0,
-    width: '100%',
-    height: '100%',
-    maxHeight: '100%',
-    zIndex: 1,
-    borderRadius: 0,
-    backgroundColor: '$dimBackground',
   },
   modalContent: {
     overflow: 'hidden',
     width: '100%',
     height: '100%',
-    borderRadius,
+    minWidth: '50%',
+    minHeight: '50%',
+    backgroundColor: '$background',
+    borderRadius: UNIT * 2,
   },
-  modalContentFullscreen: {
-    borderRadius: 0,
+  modalPopup: {
+    width: null,
+    height: null,
+    minWidth: 50,
+    minHeight: 50,
+    margin: UNIT * 2,
+    padding: UNIT * 2,
   },
 });

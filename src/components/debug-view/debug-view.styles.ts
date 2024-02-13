@@ -2,7 +2,8 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
 export default EStyleSheet.create({
   container: {
-    flex: 1,
+    minWidth: '100%',
+    height: '100%',
     backgroundColor: '$background',
   },
   buttons: {

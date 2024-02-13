@@ -427,7 +427,7 @@ export default class CustomFieldsPanel extends Component<Props, State> {
   };
 
   _renderSelect() {
-    const Component: Select | SelectModal = isSplitView()
+    const Component = isSplitView()
       ? SelectModal
       : Select;
     return (
@@ -498,39 +498,37 @@ export default class CustomFieldsPanel extends Component<Props, State> {
         </ModalPortal>
       );
     } else {
-      return <ModalView animationType="slide">{render()}</ModalView>;
+      return <ModalView>{render()}</ModalView>;
     }
   }
 
-  renderSimpleValueInput(): any {
+  renderSimpleValueInput() {
     const {editingField} = this.state;
     const title: string = editingField?.projectCustomField?.field?.name || '';
 
-    const render = (): React.ReactNode => {
-      return (
-        <SimpleValueEditor
-          modal={this.props.modal}
-          editingField={this.state.editingField}
-          onApply={(value: any) => {
-            this.state.simpleValue.onApply(value);
-            this.closeEditor();
-          }}
-          onHide={this.closeEditor}
-          placeholder={this.state.simpleValue.placeholder}
-          title={title}
-          value={this.state.simpleValue.value}
-        />
-      );
-    };
+    const editor = (
+      <SimpleValueEditor
+        modal={this.props.modal}
+        editingField={this.state.editingField}
+        onApply={(value: any) => {
+          this.state.simpleValue.onApply(value);
+          this.closeEditor();
+        }}
+        onHide={this.closeEditor}
+        placeholder={this.state.simpleValue.placeholder}
+        title={title}
+        value={this.state.simpleValue.value}
+      />
+    );
 
     if (isSplitView()) {
       return (
         <ModalPortal hasOverlay={!this.props.modal} onHide={this.closeEditor}>
-          {render()}
+          {editor}
         </ModalPortal>
       );
     } else {
-      return <ModalView animationType="slide">{render()}</ModalView>;
+      return <ModalView>{editor}</ModalView>;
     }
   }
 

@@ -20,7 +20,6 @@ import {hasMimeType} from 'components/mime-type/mime-type';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {IconRemoveFilled} from 'components/icon/icon';
 import {isAndroidPlatform} from 'util/util';
-import {isSplitView} from 'components/responsive/responsive-helper';
 
 import styles from './attachments-row.styles';
 
@@ -33,7 +32,7 @@ import type {ViewStyleProp} from 'types/Internal';
 type StyleMap = Record<FileCategoryKey, ViewStyleProp>;
 
 type Props = {
-  imageHeaders: Record<string, any> | null | undefined;
+  imageHeaders?: Record<string, any>;
   onOpenAttachment: (type: string, name: string) => any;
   onImageLoadingError: (error: Record<string, any>) => any;
   canRemoveImage?: boolean;
@@ -51,10 +50,8 @@ type State = {
 const ANIMATION_DURATION: number = 700;
 const isAndroid: boolean = isAndroidPlatform();
 
-
 export default class Attach extends PureComponent<Props, State> {
   static defaultProps: Partial<Props> = {
-    imageHeaders: null,
     canRemoveImage: false,
     onOpenAttachment: () => {},
     onImageLoadingError: () => {},
@@ -101,31 +98,17 @@ export default class Attach extends PureComponent<Props, State> {
     this.doPreview();
   }
 
-  doPreview: () => void = (): void => {
+  doPreview = (): void => {
     const {attach, attachments, onRemoveImage, imageHeaders} = this.props;
-
-    if (isSplitView()) {
-      this.toggleModalChildren(
-        <PreviewFile
-          current={attach}
-          imageAttachments={this.isMedia() ? undefined : [attach]}
-          imageHeaders={imageHeaders}
-          onRemoveImage={
-            onRemoveImage ? () => onRemoveImage(attach) : undefined
-          }
-          onHide={() => this.toggleModalChildren()}
-        />,
-      );
-    } else {
-      Router.PreviewFile({
-        current: attach,
-        imageAttachments: this.isMedia()
-          ? undefined
-          : attachments.filter((it: Attachment) => hasMimeType.previewable(it)),
-        imageHeaders,
-        onRemoveImage: onRemoveImage ? () => onRemoveImage(attach) : undefined,
-      });
-    }
+    this.toggleModalChildren(
+      <PreviewFile
+        current={attach}
+        imageAttachments={this.isMedia() ? [] : attachments.filter(it => hasMimeType.previewable(it))}
+        imageHeaders={imageHeaders}
+        onRemoveImage={onRemoveImage ? () => onRemoveImage(attach) : undefined}
+        onHide={() => this.toggleModalChildren()}
+      />
+    );
   };
 
   openAttachmentUrl(name: string, url: string): void | Promise<null> {
@@ -304,14 +287,7 @@ export default class Attach extends PureComponent<Props, State> {
             />
           </TouchableOpacity>
         )}
-        {isSplitView() && (
-          <ModalPortal
-            fullscreen={true}
-            onHide={() => this.toggleModalChildren()}
-          >
-            {modalChildren}
-          </ModalPortal>
-        )}
+        <ModalPortal fullscreen onHide={() => this.toggleModalChildren()}>{modalChildren}</ModalPortal>
       </View>
     );
   }

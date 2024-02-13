@@ -351,7 +351,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
       <WrapperComponent
         testID="test:id/select"
         {...wrapperProps}
-        style={style}
+        style={[styles.select, style]}
       >
         {this.renderHeader()}
         {!noFilter && (

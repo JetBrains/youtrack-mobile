@@ -1,15 +1,12 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {
-  View,
-  ActivityIndicator,
-  Text,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import React from 'react';
+import {View, ActivityIndicator, Text, TouchableOpacity, Linking} from 'react-native';
+
+// @ts-ignore
 import Gallery from 'react-native-image-gallery';
 import Video from 'react-native-video';
 import {SvgFromUri} from 'react-native-svg';
 import {View as AnimatedView} from 'react-native-animatable';
+
 import Header from 'components/header/header';
 import ImageWithProgress from 'components/image/image-with-progress';
 import Router from 'components/router/router';
@@ -20,24 +17,27 @@ import {IconClose} from 'components/icon/icon';
 import {IconNoProjectFound} from 'components/icon/icon-pictogram';
 import {isAndroidPlatform} from 'util/util';
 import {logEvent} from 'components/log/log-helper';
+
 import styles from './preview-file.styles';
+
 import type {Attachment} from 'types/CustomFields';
-type FileSource = {
+
+interface FileSource {
   id: string;
   uri: string;
-  headers: Record<string, any>;
+  headers?: Record<string, any>;
   mimeType: string;
-};
-type Props = {
+}
+
+interface Props {
   imageAttachments: Attachment[];
   current: Attachment;
-  imageHeaders: Record<string, any> | null | undefined;
+  imageHeaders?: Record<string, any>;
   onRemoveImage?: (index: number) => any;
   onHide?: () => any;
-};
-const isAndroid: boolean = isAndroidPlatform();
-const ERROR_MESSAGE: string = 'Cannot load a preview';
-type VideoError = {
+}
+
+interface VideoError {
   error: {
     code: number;
     domain: string;
@@ -45,14 +45,17 @@ type VideoError = {
     localizedFailureReason: string;
     localizedRecoverySuggestion: string;
   };
-};
+}
 
-const ImagePreview = (props: Props): React.ReactNode => {
-  const [index, updateCurrentIndex] = useState(0);
-  const [error, updateError] = useState(null);
-  const [isLoading, updateIsLoading] = useState(false);
+const isAndroid: boolean = isAndroidPlatform();
+const ERROR_MESSAGE: string = 'Cannot load a preview';
 
-  const closeView = (): void => {
+const ImagePreview = (props: Props) => {
+  const [index, updateCurrentIndex] = React.useState(0);
+  const [error, updateError] = React.useState<string | null>(null);
+  const [isLoading, updateIsLoading] = React.useState(false);
+
+  const closeView = () => {
     if (props.onHide) {
       props.onHide();
     } else {
@@ -60,14 +63,12 @@ const ImagePreview = (props: Props): React.ReactNode => {
     }
   };
 
-  const getCurrentIndex: (attachment: Attachment) => number = useCallback(
+  const getCurrentIndex: (attachment: Attachment) => number = React.useCallback(
     (attachment: Attachment): number =>
-      props.imageAttachments.findIndex(
-        (it: Attachment) => it.id === attachment.id,
-      ) || 0,
-    [props.imageAttachments],
+      props.imageAttachments.findIndex((it: Attachment) => it.id === attachment.id) || 0,
+    [props.imageAttachments]
   );
-  useEffect(() => {
+  React.useEffect(() => {
     updateError(null);
     updateIsLoading(false);
 
@@ -76,23 +77,16 @@ const ImagePreview = (props: Props): React.ReactNode => {
     }
   }, [getCurrentIndex, props]);
 
-  const renderLoader = (): React.ReactElement<
-    React.ComponentProps<typeof ActivityIndicator>,
-    typeof ActivityIndicator
-  > => <ActivityIndicator color={styles.loader.color} style={styles.loader} />;
+  const renderLoader = () => <ActivityIndicator color={styles.loader.color} style={styles.loader} />;
 
-  const renderImage: (imageProps: any)=> React.ReactNode = (imageProps: {
-    source: Attachment;
-  }): React.ReactNode => {
+  const renderImage = (imageProps: {source: Attachment}) => {
     usage.trackEvent(ANALYTICS_PREVIEW_PAGE, 'Open image');
 
     if (error) {
       return renderError();
     }
 
-    const attach: Attachment =
-      imageProps.source &&
-      props.imageAttachments[getCurrentIndex(imageProps.source)];
+    const attach: Attachment = imageProps.source && props.imageAttachments[getCurrentIndex(imageProps.source)];
     return hasMimeType.svg(attach) ? (
       <SvgFromUri width="100%" height="100%" uri={attach.url} />
     ) : (
@@ -113,7 +107,7 @@ const ImagePreview = (props: Props): React.ReactNode => {
   };
 
   const createSource = (
-    attach: Attachment,
+    attach: Attachment
   ): {
     source: FileSource;
   } => ({
@@ -125,10 +119,7 @@ const ImagePreview = (props: Props): React.ReactNode => {
     },
   });
 
-  const renderVideo = (): React.ReactElement<
-    React.ComponentProps<typeof Video>,
-    typeof Video
-  > => {
+  const renderVideo = (): React.ReactNode => {
     usage.trackEvent(ANALYTICS_PREVIEW_PAGE, 'Open video');
     return (
       <Video
@@ -141,9 +132,7 @@ const ImagePreview = (props: Props): React.ReactNode => {
         onError={(onError: VideoError) => {
           updateIsLoading(false);
           const message: string =
-            onError?.error?.localizedFailureReason ||
-            onError?.error?.localizedDescription ||
-            ERROR_MESSAGE;
+            onError?.error?.localizedFailureReason || onError?.error?.localizedDescription || ERROR_MESSAGE;
           updateError(message);
           logEvent({
             message,
@@ -163,7 +152,7 @@ const ImagePreview = (props: Props): React.ReactNode => {
 
   const isImageAttach = (): boolean => !!props.imageAttachments?.length;
 
-  const renderError = (): React.ReactNode => (
+  const renderError = () => (
     <View style={[styles.container, styles.error]}>
       <IconNoProjectFound />
       <Text style={styles.errorTitle}>{error || ERROR_MESSAGE}</Text>
@@ -171,10 +160,7 @@ const ImagePreview = (props: Props): React.ReactNode => {
     </View>
   );
 
-  const renderImageGallery = (): null | React.ReactElement<
-    React.ComponentProps<typeof Gallery>,
-    typeof Gallery
-  > => {
+  const renderImageGallery = (): React.ReactNode => {
     return (
       <Gallery
         images={props.imageAttachments.map(createSource)}
@@ -186,14 +172,9 @@ const ImagePreview = (props: Props): React.ReactNode => {
     );
   };
 
-  const renderOpenButton = (): React.ReactElement<
-    React.ComponentProps<typeof TouchableOpacity>,
-    typeof TouchableOpacity
-  > => {
+  const renderOpenButton = () => {
     usage.trackEvent(ANALYTICS_PREVIEW_PAGE, 'Preview file externally');
-    const attach: Attachment = isImageAttach()
-      ? props.imageAttachments[index]
-      : props.current;
+    const attach: Attachment = isImageAttach() ? props.imageAttachments[index] : props.current;
     return (
       <TouchableOpacity onPress={() => Linking.openURL(attach.url)}>
         <Text style={styles.link} numberOfLines={2}>
@@ -204,38 +185,26 @@ const ImagePreview = (props: Props): React.ReactNode => {
   };
 
   return (
-    <AnimatedView
-      animation="fadeIn"
-      duration={200}
-      useNativeDriver={true}
-      style={styles.container}
-    >
+    <AnimatedView animation="fadeIn" duration={200} useNativeDriver={true} style={styles.container}>
       <Header
-        leftButton={
-          <IconClose
-            size={21}
-            color={styles.link.color}
-            style={styles.closeIcon}
-          />
-        }
+        leftButton={<IconClose size={21} color={styles.link.color} style={styles.closeIcon} />}
         onBack={closeView}
         style={styles.header}
       >
         {!error && <View>{renderOpenButton()}</View>}
       </Header>
 
-      {isImageAttach() && renderImageGallery()}
+      <View style={styles.container}>
+        {isImageAttach() && renderImageGallery()}
 
-      {!isImageAttach() && renderVideo()}
+        {!isImageAttach() && renderVideo()}
 
-      {isLoading && renderLoader()}
+        {isLoading && renderLoader()}
 
-      {!!error && renderError()}
+        {!!error && renderError()}
+      </View>
     </AnimatedView>
   );
 };
 
-export default React.memo<Props>(ImagePreview) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(ImagePreview);

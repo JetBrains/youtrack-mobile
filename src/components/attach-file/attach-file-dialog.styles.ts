@@ -5,12 +5,10 @@ import {headerTitle, mainText, UNIT} from 'components/common-styles';
 
 export default EStyleSheet.create({
   container: {
-    height: '100%',
     backgroundColor: '$background',
   },
   content: {
     flex: 1,
-    paddingBottom: UNIT * 6,
   },
   images: {
     flexGrow: 1,

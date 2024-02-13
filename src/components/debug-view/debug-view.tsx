@@ -1,11 +1,14 @@
 import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
+
 import {connect} from 'react-redux';
-import {i18n} from 'components/i18n/i18n';
 import {LogView} from 'react-native-device-log';
+
+import ModalPortal from 'components/modal-view/modal-portal';
 import {closeDebugView} from 'actions/app-actions';
-import {copyRawLogs} from '../log/log';
-import ModalView from '../modal-view/modal-view';
+import {copyRawLogs} from 'components/log/log';
+import {i18n} from 'components/i18n/i18n';
+
 import styles from './debug-view.styles';
 type Props = {
   show: boolean;
@@ -26,7 +29,7 @@ export class DebugView extends PureComponent<Props, void> {
     }
 
     return (
-      <ModalView animationType="slide" onRequestClose={onHide}>
+      <ModalPortal onHide={onHide}>
         <View style={styles.container}>
           <LogView
             inverted={true}
@@ -44,7 +47,7 @@ export class DebugView extends PureComponent<Props, void> {
             </TouchableOpacity>
           </View>
         </View>
-      </ModalView>
+      </ModalPortal>
     );
   }
 }

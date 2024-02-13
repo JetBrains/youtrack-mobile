@@ -9,7 +9,7 @@ const dark: UITheme = {
   colors: {
     $background: '#1c1c1e',
     $boxBackground: 'rgb(35, 39, 43)',
-    $dimBackground: 'rgba(0,0,0,0.7)',
+    $dimBackground: 'rgba(50, 50, 50, 0.8)',
     $error: 'rgb(219, 88, 96)',
     $text: 'rgb(187, 187, 187)',
     $textSecondary: 'rgb(115, 117, 119)',
