@@ -12,6 +12,9 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  background: {
+    backgroundColor: '$background',
+  },
   input: {
     ...rowFormStyles.input,
     marginTop: UNIT * 3,

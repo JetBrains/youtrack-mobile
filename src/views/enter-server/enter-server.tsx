@@ -176,6 +176,7 @@ export class EnterServer extends Component<Props, State> {
               testID="test:id/enterServer"
               keyboardShouldPersistTaps="handled"
               keyboardDismissMode="on-drag"
+              style={styles.background}
               contentContainerStyle={styles.scrollContainer}
             >
               <View style={styles.container}>
