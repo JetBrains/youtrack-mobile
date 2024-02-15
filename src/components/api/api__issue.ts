@@ -22,7 +22,7 @@ import type {
   Tag,
 } from 'types/CustomFields';
 import type {AnyIssue, IssueCreate, IssueFull} from 'types/Issue';
-import type {Visibility} from 'types/Visibility';
+import type {Visibility, VisibilityGroups} from 'types/Visibility';
 import type {WorkItem} from 'types/Work';
 import {NormalizedAttachment} from 'types/Attachment';
 import {Project} from 'types/Project';
@@ -139,6 +139,10 @@ export default class IssueAPI extends ApiBase {
       visibility,
     });
   }
+
+  setCommentVisibility = async (visibility: VisibilityGroups | null, issueId: string, commentId: string) => {
+    return await super.updateVisibility(`${this.youTrackIssueUrl}/${issueId}/comments/${commentId}`, visibility);
+  };
 
   async getIssueComments(issueId: string): Promise<Array<IssueComment>> {
     const queryString = qs.stringify({

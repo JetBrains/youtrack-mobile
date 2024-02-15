@@ -10,10 +10,11 @@ import {
   View,
 } from 'react-native';
 
+import ActivityStreamCommentVisibilityModal from 'components/activity-stream/activity__stream-comment-visibility-modal';
 import ActivityUserAvatar from './activity__stream-avatar';
 import ApiHelper from 'components/api/api__helper';
 import CommentReactions from 'components/comment/comment-reactions';
-import CommentVisibility from 'components/comment/comment__visibility';
+import CommentVisibility from 'components/comment/comment__visibility-presentation';
 import ContextActionsProvider from 'components/activity-stream/activity__stream-actions-provider';
 import Feature, {FEATURE_VERSION} from 'components/feature/feature';
 import IssueVisibility from 'components/visibility/issue-visibility';
@@ -63,15 +64,16 @@ interface Props {
     ) => void,
   ) => any;
   uiTheme: UITheme;
-  workTimeSettings: WorkTimeSettings | null | undefined;
+  workTimeSettings?: WorkTimeSettings | null;
   youtrackWiki: YouTrackWiki;
-  work: {
+  work?: {
     onWorkUpdate?: (workItem?: WorkItem) => void;
     createContextActions: (workItem: WorkItem | ActivityItem) => ContextMenuConfigItem[];
   };
   onCheckboxUpdate: (checked: boolean, position: number, comment: IssueComment) => void;
   renderHeader?: () => any;
   refreshControl: () => any;
+  onUpdate: () => void;
   highlight?: {
     activityId?: string;
     commentId?: string;
@@ -147,9 +149,10 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     }, 100);
   }, [highlight, scrollToActivity]);
 
-  const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment => (
-    firstActivityChange(activityGroup.comment) as IssueComment
-  );
+  const [selectedComment, setSelectedComment] = React.useState<IssueComment | null>(null);
+
+  const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment =>
+    firstActivityChange(activityGroup.comment) as IssueComment;
 
   const renderCommentReactions = (activityGroup: ActivityGroup) => {
     const comment = getCommentFromActivityGroup(activityGroup);
@@ -240,10 +243,8 @@ export const ActivityStream = (props: ActivityStreamProps) => {
             <StreamUserInfo activityGroup={activityGroup} />
           )}
           {!comment?.deleted && isSecured(comment) && (
-            <TouchableOpacity hitSlop={HIT_SLOP} onPress={() => {
-
-            }}>
-              <CommentVisibility style={styles.activityVisibility} />
+            <TouchableOpacity hitSlop={HIT_SLOP} onPress={() => setSelectedComment(comment)}>
+              <CommentVisibility />
             </TouchableOpacity>
           )}
         </View>
@@ -290,11 +291,11 @@ export const ActivityStream = (props: ActivityStreamProps) => {
               activityGroup,
               {
                 menuTitle: '',
-                menuItems: props.work.createContextActions(firstActivityChange(activityGroup.work)),
+                menuItems: props?.work?.createContextActions?.(firstActivityChange(activityGroup.work)) || [],
               }
             )}
             activityGroup={activityGroup}
-            onUpdate={props.work.onWorkUpdate}
+            onUpdate={props?.work?.onWorkUpdate}
           />
         );
         break;
@@ -380,7 +381,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
 
     if (activityGroup.comment) {
       menuConfig = props.commentActions?.contextMenuConfig?.(entity as IssueComment, activityGroup?.comment?.id);
-    } else if (activityGroup.work) {
+    } else if (activityGroup.work && props?.work) {
       menuConfig = {
         menuTitle: '',
         menuItems: props.work.createContextActions(entity),
@@ -446,6 +447,16 @@ export const ActivityStream = (props: ActivityStreamProps) => {
       {(activities || []).map(renderActivityGroup)}
       {activities?.length === 0 && (
         <Text style={styles.activityNoActivity}>{i18n('No activity yet')}</Text>
+      )}
+      {!!selectedComment && (
+        <ActivityStreamCommentVisibilityModal
+          comment={selectedComment}
+          onUpdate={() => {
+            setSelectedComment(null);
+            props.onUpdate();
+          }}
+          onDismiss={() => setSelectedComment(null)}
+        />
       )}
     </ScrollView>
   );

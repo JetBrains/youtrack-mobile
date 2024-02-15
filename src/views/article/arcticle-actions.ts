@@ -1,11 +1,14 @@
+import {Alert, Clipboard, Share} from 'react-native';
+
+import ActionSheet from '@expo/react-native-action-sheet';
+
+import ArticlesAPI from 'components/api/api__articles';
+import Router from 'components/router/router';
+import usage from 'components/usage/usage';
 import {
   ANALYTICS_ARTICLE_PAGE,
   ANALYTICS_ARTICLE_PAGE_STREAM,
 } from 'components/analytics/analytics-ids';
-import {Alert, Clipboard, Share} from 'react-native';
-import ArticlesAPI from 'components/api/api__articles';
-import Router from 'components/router/router';
-import usage from 'components/usage/usage';
 import {cacheUserLastVisitedArticle, setGlobalInProgress} from 'actions/app-actions';
 import {confirmDeleteArticle} from 'components/confirmation/article-confirmations';
 import {findActivityInGroupedActivities} from 'components/activity/activity-helper';
@@ -30,7 +33,7 @@ import {
   showActionSheet,
 } from 'components/action-sheet/action-sheet';
 import {updateActivityCommentReactions} from 'components/activity-stream/activity__stream-helper';
-import type ActionSheet from '@expo/react-native-action-sheet';
+
 import type Api from 'components/api/api';
 import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
 import type {Activity, ActivityPositionData} from 'types/Activity';
@@ -189,7 +192,7 @@ const loadActivitiesPage = (
 };
 
 const showArticleActions = (
-  actionSheet: ActionSheet,
+  actionSheet: typeof ActionSheet,
   canUpdate: boolean,
   canDelete: boolean,
   renderBreadCrumbs: (...args: any[]) => any,
@@ -528,7 +531,7 @@ const submitArticleCommentDraft = (
 
 const updateArticleComment = (
   comment: IssueComment,
-  isAttachmentChange: boolean,
+  isAttachmentChange?: boolean,
 ): ((
   dispatch: (arg0: any) => any,
   getState: () => AppState,

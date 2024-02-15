@@ -7,16 +7,26 @@ import {i18n} from 'components/i18n/i18n';
 
 import styles from './popup.styles';
 
-export default function Popup({childrenRenderer, onHide}: {childrenRenderer: () => any; onHide: () => any}) {
+export default function Popup({
+  childrenRenderer,
+  onHide,
+  noButton,
+}: {
+  childrenRenderer: () => any;
+  onHide: () => void;
+  noButton?: boolean;
+}) {
   return (
     <ModalView testID="popup" transparent animationType="fade" style={styles.modal} onRequestClose={onHide}>
       <View testID="popupContentChildren">{childrenRenderer()}</View>
 
-      <View style={styles.buttons}>
-        <TouchableOpacity hitSlop={HIT_SLOP} onPress={onHide} style={styles.button}>
-          <Text style={styles.buttonText}>{i18n('Close')}</Text>
-        </TouchableOpacity>
-      </View>
+      {!noButton && (
+        <View style={styles.buttons}>
+          <TouchableOpacity hitSlop={HIT_SLOP} onPress={onHide} style={styles.button}>
+            <Text style={styles.buttonText}>{i18n('Close')}</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </ModalView>
   );
 }

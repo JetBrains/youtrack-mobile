@@ -3,11 +3,10 @@ import {ResourceTypes} from '../api/api__resource-types';
 
 import type {UserGroup} from 'types/UserGroup';
 import type {User} from 'types/User';
-import type {Visibility} from 'types/Visibility';
-
+import type {Visibility, VisibilityItem} from 'types/Visibility';
 
 export default class IssueVisibility {
-  static visibility(visibility: Visibility = null, isLimited: boolean = false): Visibility {
+  static visibility(visibility: Visibility | null = null, isLimited: boolean = false): Visibility {
     const isSecured: boolean =
       isLimited || !!visibility?.permittedGroups?.length || !!visibility?.permittedUsers?.length;
     return {
@@ -47,18 +46,18 @@ export default class IssueVisibility {
     return this.hasUsersOrGroups(visibility);
   }
 
-  static getVisibilityAsArray(visibility: Visibility): Array<User | UserGroup> {
+  static getVisibilityAsArray(visibility: Visibility | null): VisibilityItem[] {
     return [...(visibility?.permittedGroups || []), ...(visibility?.permittedUsers || [])];
   }
 
-  static getVisibilityPresentation(visibility: Visibility): string {
+  static getVisibilityPresentation(visibility: Visibility | null): string {
     return IssueVisibility.getVisibilityAsArray(visibility)
       .map(it => getEntityPresentation(it))
       .join(', ');
   }
 
-  static getVisibilityShortPresentation(visibility: Visibility): string {
-    const visibilityItems: Array<UserGroup | User> = IssueVisibility.getVisibilityAsArray(visibility);
+  static getVisibilityShortPresentation(visibility: Visibility | null): string {
+    const visibilityItems = IssueVisibility.getVisibilityAsArray(visibility);
     const firstItemPresentation: string = getEntityPresentation(visibilityItems[0]);
     return `${firstItemPresentation}${visibilityItems.length > 1 ? ` +${visibilityItems.length - 1}` : ''}`;
   }

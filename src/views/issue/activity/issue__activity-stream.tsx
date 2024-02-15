@@ -4,6 +4,7 @@ import {Clipboard, Share} from 'react-native';
 import {useSelector} from 'react-redux';
 
 import ApiHelper from 'components/api/api__helper';
+import CommentVisibilityControl from 'components/visibility/comment-visibility-control';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import ReactionsPanel from './issue__activity-reactions-dialog';
 import usage from 'components/usage/usage';
@@ -28,6 +29,7 @@ import type {ContextMenuConfig, ContextMenuConfigItem} from 'types/MenuConfig';
 import type {CustomError} from 'types/Error';
 import type {IssueContextData, IssueFull} from 'types/Issue';
 import type {Reaction} from 'types/Reaction';
+import {Entity} from 'types/Entity';
 
 type Props = ActivityStreamProps & {
   issueId: string;
@@ -45,9 +47,7 @@ interface IReactionState {
 }
 
 const IssueActivityStream: React.FC<Props> = (props: Props) => {
-  const configBackendUrl: string = useSelector(
-    (appState: AppState) => appState.app.auth?.config?.backendUrl || '',
-  );
+  const configBackendUrl: string = useSelector((appState: AppState) => appState.app.auth?.config?.backendUrl || '');
   const issueContext: IssueContextData = useContext(IssueContext);
   const commentActions = createActivityCommentActions();
 
@@ -57,6 +57,8 @@ const IssueActivityStream: React.FC<Props> = (props: Props) => {
   });
 
   const [activities, setActivities] = useState<Activity[] | null>(null);
+
+  const [selectedComment, setSelectedComment] = useState<IssueComment | null>(null);
 
   useEffect(() => {
     setActivities(props.activities);
@@ -123,6 +125,14 @@ const IssueActivityStream: React.FC<Props> = (props: Props) => {
                 isReactionsPanelVisible: true,
                 currentComment: comment,
               });
+            },
+          },
+          issuePermissions.canUpdateComment(issue, comment) && {
+            actionKey: guid(),
+            actionTitle: i18n('Update visibility'),
+            execute: () => {
+              usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Change visibility');
+              setSelectedComment(comment);
             },
           },
           {
@@ -221,6 +231,18 @@ const IssueActivityStream: React.FC<Props> = (props: Props) => {
             selectReaction(reactionState.currentComment as IssueComment, reaction);
           }}
           onHide={hideReactionsPanel}
+        />
+      )}
+      {!!selectedComment && (
+        <CommentVisibilityControl
+          forceChange
+          commentId={selectedComment.id}
+          entity={selectedComment.issue as Entity}
+          onUpdate={() => {
+            setSelectedComment(null);
+            props.onUpdate();
+          }}
+          visibility={selectedComment.visibility!}
         />
       )}
     </>

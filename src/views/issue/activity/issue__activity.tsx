@@ -292,6 +292,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
           comment: IssueComment,
         ) => onCheckboxUpdate(checked, position, comment)}
         refreshControl={this.renderRefreshControl}
+        onUpdate={() => this.refresh(true)}
         renderHeader={() => {
           const hasError: boolean = this.hasLoadingError();
 
@@ -469,10 +470,12 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     );
   }
 
+  refresh = (reset: boolean = false) => {
+    this.loadIssueActivities(reset, this.getCurrentIssueId());
+  };
+
   renderRefreshControl = () => {
-    return this.props.renderRefreshControl(() => {
-      this.loadIssueActivities(false, this.getCurrentIssueId());
-    });
+    return this.props.renderRefreshControl(this.refresh);
   };
 
   render() {

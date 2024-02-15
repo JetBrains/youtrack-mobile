@@ -17,13 +17,12 @@ import type {Article} from 'types/Article';
 import type {IssueComment} from 'types/CustomFields';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
+import {ReduxThunkDispatch} from 'types/Redux';
 
 interface Props {
   article: Article;
   issuePermissions: IssuePermissions;
-  renderRefreshControl: (
-    onRefresh: (...args: any[]) => any,
-  ) => React.ReactElement<React.ComponentProps<any>, any>;
+  renderRefreshControl: (onRefresh: () => void) => React.ReactNode;
   uiTheme: UITheme;
   onCheckboxUpdate?: (articleContent: string) => (...args: any[]) => any;
   highlight?: {
@@ -35,33 +34,33 @@ interface Props {
 
 const ArticleActivities = (props: Props) => {
   const {article, uiTheme, renderRefreshControl, issuePermissions} = props;
-  const dispatch: (...args: any[]) => any = useDispatch();
+  const dispatch: ReduxThunkDispatch = useDispatch();
 
-  const activityPage: Activity[] | null = useSelector((state: AppState) => state.article.activityPage);
-  const articleCommentDraft: IssueComment | null = useSelector(
+  const activityPage = useSelector((state: AppState) => state.article.activityPage);
+  const articleCommentDraft = useSelector(
     (state: AppState) => state.article.articleCommentDraft,
   );
-  const currentUser: User | null = useSelector((state: AppState) => state.app.user);
-  const user: User | null = useSelector((state: AppState) => state.app.user);
+  const currentUser = useSelector((state: AppState) => state.app.user);
+  const user = useSelector((state: AppState) => state.app.user);
 
   const [activities, updateActivityModel] = useState<Activity[] | null>(null);
 
-  const refreshActivities: (...args: any[]) => any = useCallback(
+  const refreshActivities = useCallback(
     (reset?: boolean) => dispatch(articleActions.loadActivitiesPage(reset)),
-    [dispatch],
+    [dispatch]
   );
 
-  const loadActivities: (...args: any[]) => any = useCallback(
+  const loadActivities = useCallback(
     (reset: boolean) => {
       if (article?.idReadable) {
         dispatch(articleActions.loadCachedActivitiesPage());
         refreshActivities(reset);
       }
     },
-    [article?.idReadable, dispatch, refreshActivities],
+    [article?.idReadable, dispatch, refreshActivities]
   );
 
-  const isNaturalSortOrder: boolean = !!user?.profiles?.appearance?.naturalCommentsOrder;
+  const isNaturalSortOrder = !!user?.profiles?.appearance?.naturalCommentsOrder;
   const doCreateActivityModel = useCallback(
     (activitiesPage: Activity[]): void => {
       updateActivityModel(
@@ -95,7 +94,7 @@ const ArticleActivities = (props: Props) => {
     }
   }, [activityPage, doCreateActivityModel, user?.profiles?.appearance]);
 
-  const updateActivities = (comment: IssueComment): void => {
+  const updateActivities = (comment: IssueComment) => {
     const commentActivity: (Activity & { tmp?: boolean })[] = [{
       ...convertCommentsToActivityPage([comment])[0],
       tmp: true,
@@ -104,8 +103,8 @@ const ArticleActivities = (props: Props) => {
     }];
     doCreateActivityModel(
       isNaturalSortOrder
-        ? activityPage.concat(commentActivity)
-        : commentActivity.concat(activityPage),
+        ? activityPage!.concat(commentActivity)
+        : commentActivity.concat(activityPage!),
     );
   };
 
@@ -125,6 +124,7 @@ const ArticleActivities = (props: Props) => {
         ) => dispatch(articleActions.updateArticleComment(comment))}
         refreshControl={() => renderRefreshControl(() => loadActivities(false))}
         highlight={props.highlight}
+        onUpdate={refreshActivities}
       />
 
       {canCommentOn && (

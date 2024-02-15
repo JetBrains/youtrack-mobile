@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import * as articleActions from 'views/article/arcticle-actions';
 import ApiHelper from 'components/api/api__helper';
 import ArticleActivityStreamCommentEdit from 'views/article/article__edit-comment';
+import CommentVisibilityControl from 'components/visibility/comment-visibility-control';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import ReactionsPanel from '../issue/activity/issue__activity-reactions-dialog';
 import Router from 'components/router/router';
@@ -36,6 +37,7 @@ import type {User} from 'types/User';
 import type {WorkTimeSettings} from 'types/Work';
 import type {YouTrackWiki} from 'types/Wiki';
 import {Article} from 'types/Article';
+import {ReduxThunkDispatch} from 'types/Redux';
 
 interface Props {
   article: Article;
@@ -54,6 +56,7 @@ interface Props {
     activityId?: string;
     commentId?: string;
   };
+  onUpdate: () => void;
 }
 
 interface IReactionState {
@@ -80,7 +83,7 @@ const getYoutrackWikiProps = (): YouTrackWiki => {
 };
 
 const ArticleActivityStream = (props: Props) => {
-  const dispatch = useDispatch();
+  const dispatch: ReduxThunkDispatch = useDispatch();
   const {
     article,
     activities,
@@ -96,6 +99,7 @@ const ArticleActivityStream = (props: Props) => {
   );
 
   const [_activities, setActivities] = useState<Activity[] | null>(activities);
+  const [selectedComment, setSelectedComment] = useState<IssueComment | null>(null);
 
   useEffect(() => {
     setActivities(props.activities);
@@ -204,6 +208,14 @@ const ArticleActivityStream = (props: Props) => {
                 openReactionsPanel(comment);
               },
             },
+            issuePermissions.articleCanCommentOn(article) && {
+              actionKey: guid(),
+              actionTitle: i18n('Update visibility'),
+              execute: () => {
+                usage.trackEvent(ANALYTICS_ARTICLE_PAGE_STREAM, 'Change visibility');
+                setSelectedComment(comment);
+              },
+            },
             {
               actionKey: guid(),
               actionTitle: i18n('Copy text'),
@@ -269,7 +281,7 @@ const ArticleActivityStream = (props: Props) => {
         youtrackWiki={getYoutrackWikiProps()}
         onSelectReaction={selectReaction}
         onReactionPanelOpen={openReactionsPanel}
-        currentUser={user}
+        currentUser={user!}
         commentActions={createCommentActions()}
         onCheckboxUpdate={(
           checked: boolean,
@@ -291,6 +303,7 @@ const ArticleActivityStream = (props: Props) => {
         refreshControl={props.refreshControl}
         renderHeader={props.renderHeader}
         highlight={props.highlight}
+        onUpdate={props.onUpdate}
       />
       {reactionState.isReactionsPanelVisible && (
         <ReactionsPanel
@@ -298,6 +311,18 @@ const ArticleActivityStream = (props: Props) => {
             selectReaction(reactionState.currentComment as IssueComment, reaction);
           }}
           onHide={hideReactionsPanel}
+        />
+      )}
+      {!!selectedComment && (
+        <CommentVisibilityControl
+          forceChange
+          commentId={selectedComment.id}
+          entity={article}
+          onUpdate={() => {
+            setSelectedComment(null);
+            props.onUpdate();
+          }}
+          visibility={selectedComment.visibility!}
         />
       )}
     </>

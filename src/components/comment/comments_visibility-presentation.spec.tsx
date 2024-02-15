@@ -2,7 +2,7 @@ import React from 'react';
 
 import {cleanup, render, screen} from '@testing-library/react-native';
 
-import CommentVisibility from './comment__visibility';
+import CommentVisibility from './comment__visibility-presentation';
 
 jest.mock('components/icon/icon', () => ({
   IconLock: 'IconLock',
@@ -32,16 +32,10 @@ describe('<CommentVisibility/>', () => {
 
       expect(screen.queryByTestId('test:id/commentVisibilityLabel')).toBeNull();
     });
-
-    it('should set custom color to the icon', () => {
-      doRender(visibilityPresentation, 'red');
-
-      expect(screen.getByTestId('test:id/commentVisibilityIcon')).toHaveProp('color', 'red');
-    });
   });
 
 
-  function doRender(presentation?: string, color?: string) {
-    return render(<CommentVisibility presentation={presentation} color={color} />);
+  function doRender(presentation?: string) {
+    return render(<CommentVisibility presentation={presentation} />);
   }
 });

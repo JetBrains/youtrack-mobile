@@ -58,9 +58,6 @@ export const rowStyles = {
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
-  activityVisibility: {
-    justifyContent: 'flex-end',
-  },
   activitySeparator: {
     ...separator,
     marginLeft: UNIT,

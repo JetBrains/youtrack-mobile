@@ -40,7 +40,6 @@ export default EStyleSheet.create({
     height: null,
     minWidth: 50,
     minHeight: 50,
-    margin: UNIT * 2,
-    padding: UNIT * 2,
+    maxWidth: '80%',
   },
 });

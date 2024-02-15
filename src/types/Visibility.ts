@@ -3,17 +3,17 @@ import type {UserGroup} from './UserGroup';
 
 export type VisibilityItem = User | UserGroup;
 
-export type Visibility = {
+export interface Visibility {
   $type?: string;
-  permittedUsers?: User[];
   implicitPermittedUsers?: User[];
-  permittedGroups?: UserGroup[];
   inherited?: Visibility | null;
-} | null;
+  permittedGroups?: UserGroup[];
+  permittedUsers?: User[];
+}
 
-export interface VisibilityGroups {
+export interface VisibilityGroups extends Visibility {
   groupsWithoutRecommended?: UserGroup[];
   recommendedGroups?: UserGroup[];
-  visibilityGroups: UserGroup[];
-  visibilityUsers: User[];
+  visibilityGroups?: UserGroup[];
+  visibilityUsers?: User[];
 }

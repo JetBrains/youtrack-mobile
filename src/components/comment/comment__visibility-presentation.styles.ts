@@ -1,5 +1,4 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-
 import {UNIT} from 'components/variables';
 
 export default EStyleSheet.create({
@@ -10,11 +9,12 @@ export default EStyleSheet.create({
   },
   commentVisibilityText: {
     color: '$private',
-    marginLeft: UNIT / 1.5,
   },
   commentIcon: {
-    marginLeft: -1,
-    alignSelf: 'flex-start',
+    paddingLeft: UNIT / 4,
     color: '$private',
+  },
+  commentIconFirst: {
+    paddingRight: UNIT / 4,
   },
 });
