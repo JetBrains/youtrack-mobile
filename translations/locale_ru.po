@@ -564,6 +564,7 @@ msgstr "Фильтровать спринты по имени"
 msgid "Filter tags"
 msgstr "Фильтровать теги"
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "Фильтровать пользователей, группы и команды"
@@ -584,7 +585,7 @@ msgstr "Искать задачи, содержащие ключевые сло�
 msgid "Get help"
 msgstr "Помощь"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "Группы и команды"
 
@@ -607,6 +608,10 @@ msgstr "Помимо собственной системы сбора инфор
 #: src/views/article/article.tsx
 msgid "in revision"
 msgstr "в работе"
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
+msgstr "Унаследованные ограничения"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -829,7 +834,7 @@ msgstr "Уведомления"
 msgid "Other"
 msgstr "Другое"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "Другие группы и команды"
 
@@ -878,7 +883,7 @@ msgstr "Запрос"
 msgid "Recent searches"
 msgstr "Недавние поиски"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "Рекомендуемые группы и команды"
 
@@ -911,6 +916,10 @@ msgstr "заново открыл(а) пул-реквест"
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "Ответить"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr "Сбросить видимость"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -952,6 +961,10 @@ msgstr "Выберите статью из списка"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "Выбрать задачу из списка"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
+msgstr "Выбрать пользователей, группы и команды"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
@@ -1234,6 +1247,11 @@ msgstr "Только непрочитанные"
 msgid "Untitled"
 msgstr "Без названия"
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr ""
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1255,7 +1273,7 @@ msgstr "Аккаунт заблокирован"
 msgid "Username or email"
 msgstr "Имя пользователя или адрес электронной почты"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "Пользователи"
 
@@ -1278,6 +1296,10 @@ msgstr "Просмотреть созданные задачи"
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "Видимость"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
+msgstr ""
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"

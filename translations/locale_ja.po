@@ -540,6 +540,7 @@ msgstr "名前でスプリントを絞り込む"
 msgid "Filter tags"
 msgstr "タグで絞り込む"
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "ユーザー、グループ、チームを絞り込む"
@@ -560,7 +561,7 @@ msgstr "キーワードを含む課題の検索"
 msgid "Get help"
 msgstr "ヘルプを表示"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "グループとチーム"
 
@@ -583,6 +584,10 @@ msgstr "組み込みのエラー報告機能に加えて、YouTrack Mobile で�
 #: src/views/article/article.tsx
 msgid "in revision"
 msgstr "リビジョン内"
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
+msgstr "継承した制限"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -799,7 +804,7 @@ msgstr "通知"
 msgid "Other"
 msgstr "その他"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "その他のグループとチーム"
 
@@ -848,7 +853,7 @@ msgstr "クエリ"
 msgid "Recent searches"
 msgstr "最近の検索条件"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "推奨するグループとチーム"
 
@@ -881,6 +886,10 @@ msgstr "さんがプルリクエストを再開しました"
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "返信"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr "可視性をリセット"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -922,6 +931,10 @@ msgstr "リストから記事を選択"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "リストから課題を選択"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
+msgstr "ユーザー、グループ、チームの選択"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
@@ -1201,6 +1214,11 @@ msgstr "未読のみ"
 msgid "Untitled"
 msgstr "無題"
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr ""
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1222,7 +1240,7 @@ msgstr "ユーザーアカウントは禁止されています"
 msgid "Username or email"
 msgstr "ユーザー名またはメールアドレス"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "ユーザー"
 
@@ -1245,6 +1263,10 @@ msgstr "報告された課題を表示"
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "表示対象"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
+msgstr ""
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"

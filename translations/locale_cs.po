@@ -564,6 +564,7 @@ msgstr "Filtrovat sprinty dle názvu"
 msgid "Filter tags"
 msgstr "Filtrovat štítky"
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "Filtrujte uživatele, skupiny a týmy"
@@ -584,7 +585,7 @@ msgstr "Hledat případy podle klíčových slov"
 msgid "Get help"
 msgstr "Získat nápovědu"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "Skupiny a týmy"
 
@@ -607,6 +608,10 @@ msgstr "Kromě našeho vestavěného hlášení chyb používá YouTrack Mobile 
 #: src/views/article/article.tsx
 msgid "in revision"
 msgstr "probíhá revize"
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
+msgstr "Zděděná omezení"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -829,7 +834,7 @@ msgstr "Oznámení"
 msgid "Other"
 msgstr "Jiné"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "Další skupiny a týmy"
 
@@ -878,7 +883,7 @@ msgstr "Dotaz"
 msgid "Recent searches"
 msgstr "Nedávná hledání"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "Doporučené skupiny a týmy"
 
@@ -911,6 +916,10 @@ msgstr ""
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "Odpovědět"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -952,6 +961,10 @@ msgstr "Vyberte článek ze seznamu"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "Vyberte problém ze seznamu"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
+msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
@@ -1234,6 +1247,11 @@ msgstr "Pouze nepřečtené"
 msgid "Untitled"
 msgstr "Bez názvu"
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr ""
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1255,7 +1273,7 @@ msgstr "Uživatelský účet je zakázán"
 msgid "Username or email"
 msgstr "Uživatelské jméno nebo e-mail"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "Uživatelé"
 
@@ -1278,6 +1296,10 @@ msgstr "Zobrazení nahlášených problémů"
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "Viditelnost"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
+msgstr ""
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"

@@ -564,6 +564,7 @@ msgstr ""
 msgid "Filter tags"
 msgstr ""
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "Фільтр користувачів, груп і команд"
@@ -584,7 +585,7 @@ msgstr "Шукати завдання за ключовими словами"
 msgid "Get help"
 msgstr ""
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "Групи та команди"
 
@@ -607,6 +608,10 @@ msgstr ""
 #: src/views/article/article.tsx
 msgid "in revision"
 msgstr "на редагуванні"
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
+msgstr "Успадковані обмеження"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -829,7 +834,7 @@ msgstr "Сповіщення"
 msgid "Other"
 msgstr "Інше"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "Інші групи та команди"
 
@@ -878,7 +883,7 @@ msgstr "Запит"
 msgid "Recent searches"
 msgstr ""
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "Рекомендовані групи й команди"
 
@@ -911,6 +916,10 @@ msgstr ""
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "Відповісти"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr "Скинути видимість"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -951,6 +960,10 @@ msgstr "Виберіть статтю зі списку"
 #: src/views/inbox/inbox.tsx
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
+msgstr ""
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
 msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
@@ -1234,6 +1247,11 @@ msgstr "Лише непрочитані"
 msgid "Untitled"
 msgstr "Без назви"
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr ""
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1255,7 +1273,7 @@ msgstr ""
 msgid "Username or email"
 msgstr "Імʼя користувача або адреса ел. пошти"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "Користувачі"
 
@@ -1278,6 +1296,10 @@ msgstr ""
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "Видимість"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
+msgstr ""
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"

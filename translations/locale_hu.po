@@ -548,6 +548,7 @@ msgstr ""
 msgid "Filter tags"
 msgstr ""
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "Felhasználók, csoportok és csapatok szűrése"
@@ -568,7 +569,7 @@ msgstr ""
 msgid "Get help"
 msgstr "Segítség kérése"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "Csoportok és csapatok"
 
@@ -591,6 +592,10 @@ msgstr "A beépített hibajelentések mellett a YouTrack Mobile a Bugsnag harmad
 #: src/views/article/article.tsx
 msgid "in revision"
 msgstr "felülvizsgálat alatt"
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
+msgstr ""
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -809,7 +814,7 @@ msgstr "Értesítések"
 msgid "Other"
 msgstr "Egyéb"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "További csoportok és csapatok"
 
@@ -858,7 +863,7 @@ msgstr "Lekérdezés"
 msgid "Recent searches"
 msgstr ""
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "Ajánlott csoportok és csapatok"
 
@@ -891,6 +896,10 @@ msgstr "újra megnyitotta az áthúzási kérelmet"
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "Válasz"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr "Láthatóság visszaállítása"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -931,6 +940,10 @@ msgstr "Válasszon ki egy cikket a listából"
 #: src/views/inbox/inbox.tsx
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
+msgstr ""
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
 msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
@@ -1212,6 +1225,11 @@ msgstr "Csak olvasatlan"
 msgid "Untitled"
 msgstr "Névtelen"
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr ""
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1233,7 +1251,7 @@ msgstr ""
 msgid "Username or email"
 msgstr "Felhasználónév vagy e-mail cím"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "Felhasználók"
 
@@ -1256,6 +1274,10 @@ msgstr "Jelentett problémák megtekintése"
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "Láthatóság"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
+msgstr ""
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"

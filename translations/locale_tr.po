@@ -548,6 +548,7 @@ msgstr ""
 msgid "Filter tags"
 msgstr ""
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "Kullanıcıları, grupları ve ekipleri filtrele"
@@ -568,7 +569,7 @@ msgstr "Anahtar kelimeler içeren sorunları bulun"
 msgid "Get help"
 msgstr "Yardım alın"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "Gruplar ve takımlar"
 
@@ -590,6 +591,10 @@ msgstr ""
 
 #: src/views/article/article.tsx
 msgid "in revision"
+msgstr ""
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
 msgstr ""
 
 #: src/views/issue/issue-base-actions-creater.ts
@@ -809,7 +814,7 @@ msgstr "Bildirimler"
 msgid "Other"
 msgstr "Diğer"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "Diğer gruplar ve takımlar"
 
@@ -858,7 +863,7 @@ msgstr "Sorgu"
 msgid "Recent searches"
 msgstr "Son aramalar"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "Önerilen gruplar ve takımlar"
 
@@ -891,6 +896,10 @@ msgstr ""
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "Yanıtla"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -931,6 +940,10 @@ msgstr ""
 #: src/views/inbox/inbox.tsx
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
+msgstr ""
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
 msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
@@ -1212,6 +1225,11 @@ msgstr "Yalnızca okunmamış"
 msgid "Untitled"
 msgstr ""
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr ""
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1233,7 +1251,7 @@ msgstr ""
 msgid "Username or email"
 msgstr ""
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "Kullanıcılar"
 
@@ -1256,6 +1274,10 @@ msgstr "Bildirilen konuları görüntüle"
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "Görünürlük"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
+msgstr ""
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"

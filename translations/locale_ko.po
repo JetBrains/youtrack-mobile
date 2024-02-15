@@ -540,6 +540,7 @@ msgstr "이름으로 스프린트 필터링"
 msgid "Filter tags"
 msgstr "태그 필터링"
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "사용자, 그룹 및 팀 필터링"
@@ -560,7 +561,7 @@ msgstr "키워드를 포함하는 이슈 찾기"
 msgid "Get help"
 msgstr "도움 받기"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "그룹 및 팀"
 
@@ -583,6 +584,10 @@ msgstr "기본 제공 오류 보고 외에도 YouTrack Mobile은 문제를 진�
 #: src/views/article/article.tsx
 msgid "in revision"
 msgstr "수정 버전의"
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
+msgstr "상속된 제한"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -799,7 +804,7 @@ msgstr "알림"
 msgid "Other"
 msgstr "기타"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "기타 그룹 및 팀"
 
@@ -848,7 +853,7 @@ msgstr "쿼리"
 msgid "Recent searches"
 msgstr "최근 검색"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "권장 그룹 및 팀"
 
@@ -881,6 +886,10 @@ msgstr "풀 리퀘스트를 다시 열었음"
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "답글"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr "가시성 재설정"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -922,6 +931,10 @@ msgstr "목록에서 기사 선택"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "목록에서 이슈 선택"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
+msgstr "사용자, 그룹 및 팀 선택"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
@@ -1201,6 +1214,11 @@ msgstr "읽지 않은 항목만"
 msgid "Untitled"
 msgstr "제목 없음"
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr ""
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1222,7 +1240,7 @@ msgstr "사용자 계정이 금지됨"
 msgid "Username or email"
 msgstr "사용자 이름 또는 이메일"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "사용자"
 
@@ -1245,6 +1263,10 @@ msgstr "보고된 이슈 보기"
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "가시성"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
+msgstr ""
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"

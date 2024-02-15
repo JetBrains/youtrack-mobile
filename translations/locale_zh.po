@@ -540,6 +540,7 @@ msgstr "按名称筛选冲刺"
 msgid "Filter tags"
 msgstr "筛选标签"
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "筛选用户、群组和团队"
@@ -560,7 +561,7 @@ msgstr "查找包含关键词的问题"
 msgid "Get help"
 msgstr "获取帮助"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "群组和团队"
 
@@ -583,6 +584,10 @@ msgstr "除了我们内置的错误报告之外，YouTrack Mobile 还会使用�
 #: src/views/article/article.tsx
 msgid "in revision"
 msgstr "修订版"
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
+msgstr ""
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -799,7 +804,7 @@ msgstr "通知"
 msgid "Other"
 msgstr "其他"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "其他群组和团队"
 
@@ -848,7 +853,7 @@ msgstr "查询"
 msgid "Recent searches"
 msgstr "最近的搜索"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "推荐的群组和团队"
 
@@ -881,6 +886,10 @@ msgstr "已重新打开 Pull Request"
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "回复"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr "重置可见性"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -922,6 +931,10 @@ msgstr "从列表中选择文章"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "从列表中选择问题"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
+msgstr "选择用户、群组和团队"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
@@ -1201,6 +1214,11 @@ msgstr "仅未读"
 msgid "Untitled"
 msgstr "未命名"
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr ""
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1222,7 +1240,7 @@ msgstr "用户帐户被禁言"
 msgid "Username or email"
 msgstr "用户名或电子邮件"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "用户"
 
@@ -1245,6 +1263,10 @@ msgstr "查看报告的问题"
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "可见性"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
+msgstr ""
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"

@@ -548,6 +548,7 @@ msgstr "Filtrar sprints por nombre"
 msgid "Filter tags"
 msgstr "Filtrar etiquetas"
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "Filtrar usuarios, grupos y equipos"
@@ -568,7 +569,7 @@ msgstr "Buscar incidencias que contengan palabras clave"
 msgid "Get help"
 msgstr "Obtener ayuda"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "Grupos y equipos"
 
@@ -591,6 +592,10 @@ msgstr "Además de nuestro informe de errores integrado, YouTrack Mobile utiliza
 #: src/views/article/article.tsx
 msgid "in revision"
 msgstr "en revisión"
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
+msgstr "Restricciones heredadas"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -809,7 +814,7 @@ msgstr "Notificaciones"
 msgid "Other"
 msgstr "Otro"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "Otros grupos y equipos"
 
@@ -858,7 +863,7 @@ msgstr "Consulta"
 msgid "Recent searches"
 msgstr "Búsquedas recientes"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "Grupos y equipos recomendados"
 
@@ -891,6 +896,10 @@ msgstr "ha reabierto la solicitud de incorporación de cambios"
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "Responder"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr "Restablecer visibilidad"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -932,6 +941,10 @@ msgstr "Seleccione un artículo de la lista"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "Seleccione una incidencia de la lista"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
+msgstr "Seleccionar usuarios, grupos y equipos"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
@@ -1212,6 +1225,11 @@ msgstr "Solo no leídos"
 msgid "Untitled"
 msgstr "Sin título"
 
+#: src/views/article/article__activity-stream.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr ""
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1233,7 +1251,7 @@ msgstr "La cuenta de usuario se ha bloqueado"
 msgid "Username or email"
 msgstr "Nombre de usuario o correo electrónico"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "Usuarios"
 
@@ -1256,6 +1274,10 @@ msgstr "Ver las incidencias notificadas"
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "Visibilidad"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
+msgstr ""
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"
