@@ -272,11 +272,19 @@ export const rowStyles = {
   },
   contextMenuAuxiliaryPreview: {
     flexDirection: 'row',
-    maxWidth: 300,
+  },
+  contextMenuAuxiliaryPreviewNarrow: {
+    maxWidth: 330,
   },
   contextMenuAuxiliaryPreviewText: {
     fontSize: MAIN_FONT_SIZE - 1,
+    lineHeight: MAIN_FONT_SIZE + 2,
     color: '$text',
+  },
+  activityCommentVisibility: {
+    minHeight: 50,
+    padding: UNIT,
+    paddingHorizontal: UNIT * 2,
   },
 };
 export default EStyleSheet.create(rowStyles);

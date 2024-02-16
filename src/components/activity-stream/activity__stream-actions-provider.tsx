@@ -12,7 +12,7 @@ const ContextActionsProvider = ({
 }: {
   children: React.ReactNode;
   menuConfig: ContextMenuConfig;
-  auxiliaryPreview?: () => React.ReactElement;
+  auxiliaryPreview: (() => React.ReactElement | null) | null;
 }) => {
   return (
     <ContextMenu

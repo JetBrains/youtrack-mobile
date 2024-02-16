@@ -47,6 +47,7 @@ import type {User} from 'types/User';
 import type {WorkItem, WorkTimeSettings} from 'types/Work';
 import type {YouTrackWiki} from 'types/Wiki';
 import {Activity} from 'types/Activity';
+import {ViewStyleProp} from 'types/Internal';
 
 interface Props {
   activities: ActivityGroup[] | null;
@@ -224,6 +225,27 @@ export const ActivityStream = (props: ActivityStreamProps) => {
 
   const isSecured = (c?: IssueComment): boolean => !!c && IssueVisibility.isSecured(c?.visibility);
 
+  const renderCommentVisibilityPresentation = (
+    comment: IssueComment | null,
+    style?: ViewStyleProp
+  ): React.ReactElement | null => {
+    if (comment && IssueVisibility.isSecured(comment.visibility)) {
+      const presentation = getVisibilityPresentation(
+        comment.visibility!,
+        comment.issue ? visibilityDefaultText() : visibilityArticleDefaultText(),
+        true
+      );
+      return (
+        <View style={[styles.contextMenuAuxiliaryPreview, style]}>
+          <Text style={styles.contextMenuAuxiliaryPreviewText}>
+            {i18n('Visible to {{presentation}}', {presentation})}
+          </Text>
+        </View>
+      );
+    }
+    return null;
+  };
+
   const renderCommentActivity = (activityGroup: ActivityGroup) => {
     const activity = activityGroup.comment!;
     const comment = getCommentFromActivityGroup(activityGroup);
@@ -234,6 +256,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
         props.youtrackWiki.backendUrl,
       );
     }
+
     const icon = !comment?.deleted && isSecured(comment) ? (
       <IconLock
         testID="test:id/commentVisibilityIcon"
@@ -241,6 +264,27 @@ export const ActivityStream = (props: ActivityStreamProps) => {
         style={styles.privateIcon}
         color={styles.privateIcon.color}
       />
+    ) : null;
+
+    const iconComponent = icon ? (
+      isAndroidPlatform() ? (
+        <TouchableOpacity
+          hitSlop={HIT_SLOP}
+          onPress={() => {
+            openBottomSheet({
+              withHandle: false,
+              header: null,
+              children: (
+                <View style={styles.activityCommentVisibility}>{renderCommentVisibilityPresentation(comment)}</View>
+              ),
+            });
+          }}
+        >
+          {icon}
+        </TouchableOpacity>
+      ) : (
+        icon
+      )
     ) : null;
 
     return (
@@ -252,10 +296,10 @@ export const ActivityStream = (props: ActivityStreamProps) => {
                 timestamp={activityGroup.timestamp}
                 style={activityGroup.merged && styles.activityTimestampMerged}
               />
-              {icon}
+              {iconComponent}
             </>
           ) : (
-            <StreamUserInfo activityGroup={activityGroup}>{icon}</StreamUserInfo>
+            <StreamUserInfo activityGroup={activityGroup}>{iconComponent}</StreamUserInfo>
           )}
         </View>
 
@@ -399,25 +443,17 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     }
     const children = doRenderActivity(activityGroup);
     const comment = activityGroup.comment ? entity as IssueComment : null;
-    let auxiliaryPreview;
-    if (comment && IssueVisibility.isSecured(comment.visibility)) {
-      const presentation = getVisibilityPresentation(
-        comment.visibility!,
-        comment.issue ? visibilityDefaultText() : visibilityArticleDefaultText(),
-        true
-      );
-    auxiliaryPreview = () => (
-      <View style={styles.contextMenuAuxiliaryPreview}>
-        <Text style={styles.contextMenuAuxiliaryPreviewText}>
-          {i18n('Visible to {{presentation}}', {presentation})}
-        </Text>
-      </View>
-    );
-    }
-    return (
-      menuConfig
-        ? <ContextActionsProvider auxiliaryPreview={auxiliaryPreview} menuConfig={menuConfig}>{children}</ContextActionsProvider>
-        : <>{children}</>
+    return menuConfig ? (
+      <ContextActionsProvider
+        auxiliaryPreview={
+          comment ? () => renderCommentVisibilityPresentation(comment, styles.contextMenuAuxiliaryPreviewNarrow) : null
+        }
+        menuConfig={menuConfig}
+      >
+        {children}
+      </ContextActionsProvider>
+    ) : (
+      <>{children}</>
     );
   };
 
