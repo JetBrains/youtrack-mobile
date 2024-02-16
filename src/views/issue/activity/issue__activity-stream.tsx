@@ -143,12 +143,15 @@ const IssueActivityStream: React.FC<Props> = (props: Props) => {
               usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Copy comment text');
               notify(i18n('Copied'));
             },
+            startBlock: true,
           },
           {
             actionKey: guid(),
             actionTitle: i18n('Copy link'),
             execute: () => {
-              dispatch(commentActions.copyCommentUrl(activityId));
+              if (activityId) {
+                dispatch(commentActions.copyCommentUrl(activityId));
+              }
               usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Copy comment URL');
             },
           },
@@ -177,6 +180,7 @@ const IssueActivityStream: React.FC<Props> = (props: Props) => {
               usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'Delete comment');
               dispatch(commentActions.deleteComment(comment));
             },
+            startBlock: true,
           }),
         ].filter(Boolean) as ContextMenuConfigItem[],
       };

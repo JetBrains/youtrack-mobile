@@ -188,29 +188,34 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     const entity: ActivityItem | undefined = activity && firstActivityChange(activity as Activity);
     if (entity) {
       openBottomSheet({
+        withHandle: false,
         header: null,
         children: (
           <>
-            {menuConfig.menuItems.map(
-              (it: ContextMenuConfigItem) => (
-                <TouchableOpacity
-                  key={guid()}
-                  style={styles.contextMenu}
-                  onPress={() => {
-                    closeBottomSheet();
-                    it?.execute?.();
-                  }}
-                >
-                  <Text
-                    style={[
-                      styles.contextMenuItem,
-                      it.menuAttributes?.includes('destructive') && styles.contextMenuItemDestructive,
-                    ]}>
-                    {it.actionTitle}
-                  </Text>
-                </TouchableOpacity>
-              )
-            )}
+            {menuConfig.menuItems.map((it: ContextMenuConfigItem) => {
+              return (
+                <>
+                  {it.startBlock && <View style={styles.contextMenuStartBlock} />}
+                  <TouchableOpacity
+                    key={guid()}
+                    style={[styles.contextMenu]}
+                    onPress={() => {
+                      closeBottomSheet();
+                      it.execute();
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.contextMenuItem,
+                        it.menuAttributes?.includes('destructive') && styles.contextMenuItemDestructive,
+                      ]}
+                    >
+                      {it.actionTitle}
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              );
+            })}
           </>
         ),
       });

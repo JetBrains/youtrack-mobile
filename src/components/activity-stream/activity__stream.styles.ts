@@ -1,7 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {MAIN_FONT_SIZE, mainText, SECONDARY_FONT_SIZE, secondaryText, UNIT} from 'components/common-styles';
-import {separator} from '../common-styles/list';
+import {separator, separatorTopBorder} from '../common-styles/list';
 
 const secondaryTextColor = {
   color: '$textSecondary',
@@ -239,12 +239,17 @@ export const rowStyles = {
     flexDirection: 'row',
     padding: UNIT / 2,
     alignItems: 'center',
-    alignSelf: 'flex-start',
+  },
+  contextMenuStartBlock: {
+    height: separatorTopBorder.borderTopWidth,
+    marginVertical: UNIT,
+    backgroundColor: '$separator',
   },
   contextMenuItem: {
     padding: UNIT,
     minWidth: 160,
     paddingRight: 0,
+    fontSize: MAIN_FONT_SIZE,
     color: '$text',
   },
   contextMenuItemDestructive: {

@@ -4,11 +4,11 @@ import {ImageItemConfig} from 'react-native-ios-context-menu/src/types/ImageItem
 
 import type {MenuConfig, MenuActionConfig, IconConfig} from 'react-native-ios-context-menu';
 
-
 export interface ContextMenuConfigItem extends MenuActionConfig {
   execute: () => any;
-  icon?: IconConfig | (ImageItemConfig & { svg?: string })
-  svg?: () => React.FC<React.SVGAttributes<SVGElement>>
+  icon?: IconConfig | (ImageItemConfig & {svg?: string});
+  svg?: () => React.FC<React.SVGAttributes<SVGElement>>;
+  startBlock?: boolean;
 }
 
 export interface ContextMenuConfig extends MenuConfig {
