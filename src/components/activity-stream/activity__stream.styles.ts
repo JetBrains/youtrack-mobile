@@ -77,12 +77,23 @@ export const rowStyles = {
   activityAvatarMerged: {
     backgroundColor: 'transparent',
   },
-  activityAuthor: {
+  activityAuthorInfo: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  activityAuthorInfoContent: {
+    flexGrow: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    maxWidth: '98%',
+  },
+  activityAuthorInfoContentUser: {
     color: '$textSecondary',
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  activityAuthorName: {
+  activityAuthorInfoContentUserName: {
     marginRight: UNIT,
     color: '$text',
     fontSize: MAIN_FONT_SIZE + 1,
@@ -166,7 +177,14 @@ export const rowStyles = {
   activityIcon: {
     color: '$iconAction',
   },
-  link: {...secondaryText, color: '$link'},
+  privateIcon: {
+    color: '$private',
+    marginRight: -UNIT / 4,
+  },
+  link: {
+    ...secondaryText,
+    color: '$link',
+  },
   secondaryTextColor: secondaryTextColor,
   activityStarTag: {
     flexDirection: 'row',
@@ -246,6 +264,14 @@ export const rowStyles = {
     paddingTop: UNIT,
     paddingBottom: UNIT * 1.5,
     ...secondaryText,
+  },
+  contextMenuAuxiliaryPreview: {
+    flexDirection: 'row',
+    maxWidth: 300,
+  },
+  contextMenuAuxiliaryPreviewText: {
+    fontSize: MAIN_FONT_SIZE - 1,
+    color: '$text',
   },
 };
 export default EStyleSheet.create(rowStyles);

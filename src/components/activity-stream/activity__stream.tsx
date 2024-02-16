@@ -10,11 +10,9 @@ import {
   View,
 } from 'react-native';
 
-import ActivityStreamCommentVisibilityModal from 'components/activity-stream/activity__stream-comment-visibility-modal';
 import ActivityUserAvatar from './activity__stream-avatar';
 import ApiHelper from 'components/api/api__helper';
 import CommentReactions from 'components/comment/comment-reactions';
-import CommentVisibility from 'components/comment/comment__visibility-presentation';
 import ContextActionsProvider from 'components/activity-stream/activity__stream-actions-provider';
 import Feature, {FEATURE_VERSION} from 'components/feature/feature';
 import IssueVisibility from 'components/visibility/issue-visibility';
@@ -26,13 +24,16 @@ import StreamUserInfo from './activity__stream-user-info';
 import StreamVCS from './activity__stream-vcs';
 import StreamWork from './activity__stream-work';
 import {firstActivityChange} from './activity__stream-helper';
+import {getVisibilityPresentation} from 'components/visibility/visibility-helper';
 import {guid, isAndroidPlatform} from 'util/util';
 import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
+import {IconLock} from 'components/icon/icon';
 import {isDesktop} from 'components/responsive/responsive-helper';
 import {menuHeight} from 'components/common-styles/header';
 import {useBottomSheetContext} from 'components/bottom-sheet';
+import {visibilityArticleDefaultText, visibilityDefaultText} from 'components/visibility/visibility-strings';
 
 import styles from './activity__stream.styles';
 
@@ -149,8 +150,6 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     }, 100);
   }, [highlight, scrollToActivity]);
 
-  const [selectedComment, setSelectedComment] = React.useState<IssueComment | null>(null);
-
   const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment =>
     firstActivityChange(activityGroup.comment) as IssueComment;
 
@@ -230,22 +229,28 @@ export const ActivityStream = (props: ActivityStreamProps) => {
         props.youtrackWiki.backendUrl,
       );
     }
+    const icon = !comment?.deleted && isSecured(comment) ? (
+      <IconLock
+        testID="test:id/commentVisibilityIcon"
+        size={16}
+        style={styles.privateIcon}
+        color={styles.privateIcon.color}
+      />
+    ) : null;
 
     return (
       <>
         <View style={styles.activityTitle}>
           {activityGroup.merged ? (
-            <StreamTimestamp
-              timestamp={activityGroup.timestamp}
-              style={activityGroup.merged && styles.activityTimestampMerged}
-            />
+            <>
+              <StreamTimestamp
+                timestamp={activityGroup.timestamp}
+                style={activityGroup.merged && styles.activityTimestampMerged}
+              />
+              {icon}
+            </>
           ) : (
-            <StreamUserInfo activityGroup={activityGroup} />
-          )}
-          {!comment?.deleted && isSecured(comment) && (
-            <TouchableOpacity hitSlop={HIT_SLOP} onPress={() => setSelectedComment(comment)}>
-              <CommentVisibility />
-            </TouchableOpacity>
+            <StreamUserInfo activityGroup={activityGroup}>{icon}</StreamUserInfo>
           )}
         </View>
 
@@ -388,9 +393,25 @@ export const ActivityStream = (props: ActivityStreamProps) => {
       };
     }
     const children = doRenderActivity(activityGroup);
+    const comment = activityGroup.comment ? entity as IssueComment : null;
+    let auxiliaryPreview;
+    if (comment && IssueVisibility.isSecured(comment.visibility)) {
+      const presentation = getVisibilityPresentation(
+        comment.visibility!,
+        comment.issue ? visibilityDefaultText() : visibilityArticleDefaultText(),
+        true
+      );
+    auxiliaryPreview = () => (
+      <View style={styles.contextMenuAuxiliaryPreview}>
+        <Text style={styles.contextMenuAuxiliaryPreviewText}>
+          {i18n('Visible to {{presentation}}', {presentation})}
+        </Text>
+      </View>
+    );
+    }
     return (
       menuConfig
-        ? <ContextActionsProvider menuConfig={menuConfig}>{children}</ContextActionsProvider>
+        ? <ContextActionsProvider auxiliaryPreview={auxiliaryPreview} menuConfig={menuConfig}>{children}</ContextActionsProvider>
         : <>{children}</>
     );
   };
@@ -447,16 +468,6 @@ export const ActivityStream = (props: ActivityStreamProps) => {
       {(activities || []).map(renderActivityGroup)}
       {activities?.length === 0 && (
         <Text style={styles.activityNoActivity}>{i18n('No activity yet')}</Text>
-      )}
-      {!!selectedComment && (
-        <ActivityStreamCommentVisibilityModal
-          comment={selectedComment}
-          onUpdate={() => {
-            setSelectedComment(null);
-            props.onUpdate();
-          }}
-          onDismiss={() => setSelectedComment(null)}
-        />
       )}
     </ScrollView>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import StreamTimestamp from './activity__stream-timestamp';
@@ -14,7 +14,7 @@ import type {Activity} from 'types/Activity';
 import {User} from 'types/User';
 
 
-const StreamUserInfo = ({activityGroup}: { activityGroup: Activity }): React.JSX.Element => {
+const StreamUserInfo = ({activityGroup, children}: { activityGroup: Activity; children?: React.ReactNode }): React.JSX.Element => {
   const issuePermissions: IssuePermissions = usePermissions();
 
   const getUser = (): User => activityGroup.author;
@@ -26,21 +26,26 @@ const StreamUserInfo = ({activityGroup}: { activityGroup: Activity }): React.JSX
   const {openBottomSheet} = useBottomSheetContext();
 
   return (
-    <TouchableOpacity
-      disabled={!canReadCard}
-      style={styles.activityAuthor}
-      onPress={() => {
-        openBottomSheet({
-          withHandle: false,
-          children: <UserCard user={getUser()}/>,
-        });
-      }}
-    >
-      <Text style={styles.activityAuthorName}>
-        {getEntityPresentation(getUser())}
-      </Text>
-      {!!activityGroup.timestamp && <StreamTimestamp timestamp={activityGroup.timestamp}/>}
-    </TouchableOpacity>
+    <View style={styles.activityAuthorInfo}>
+      <View style={styles.activityAuthorInfoContent}>
+        <TouchableOpacity
+          disabled={!canReadCard}
+          style={styles.activityAuthorInfoContentUser}
+          onPress={() => {
+            openBottomSheet({
+              withHandle: false,
+              children: <UserCard user={getUser()}/>,
+            });
+          }}
+        >
+          <Text style={styles.activityAuthorInfoContentUserName}>
+            {getEntityPresentation(getUser())}
+          </Text>
+        </TouchableOpacity>
+        {!!activityGroup.timestamp && <StreamTimestamp timestamp={activityGroup.timestamp}/>}
+      </View>
+      {children}
+    </View>
   );
 };
 
