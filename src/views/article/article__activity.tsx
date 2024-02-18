@@ -71,12 +71,6 @@ const ArticleActivities = (props: Props) => {
   );
 
   useEffect(() => {
-    return () => {
-      dispatch(articleActions.resetArticleCommentDraft());
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(setDraftCommentData(
       articleActions.updateArticleCommentDraft,
       () => async () => await articleCommentDraft,
