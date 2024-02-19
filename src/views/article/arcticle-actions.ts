@@ -45,6 +45,7 @@ import type {CustomError} from 'types/Error';
 import type {Reaction} from 'types/Reaction';
 import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
 import type {User} from 'types/User';
+import {ReduxAction, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 
 type ApiGetter = () => Api;
 
@@ -531,12 +532,9 @@ const submitArticleCommentDraft = (
 
 const updateArticleComment = (
   comment: IssueComment,
-  isAttachmentChange?: boolean,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-) => Promise<void>) => {
-  return async (dispatch: (arg0: any) => any, getState: () => AppState) => {
+  isAttachmentChange?: boolean
+): ReduxAction<Promise<IssueComment | null>> => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const api: Api = getApi();
     const articleId: string | undefined = comment?.article?.id || getState()?.article?.article?.id;
     logEvent({
@@ -544,21 +542,23 @@ const updateArticleComment = (
       analyticsId: ANALYTICS_ARTICLE_PAGE,
     });
     if (!articleId) {
-      return;
+      return null;
     }
-    const [error] = await until(api.articles.updateComment(articleId, comment));
+    const [error, c] = await until<IssueComment>(api.articles.updateComment(articleId, comment));
 
     if (isAttachmentChange) {
       notify(i18n('Comment updated'));
     }
     if (error) {
       notifyError(error);
+      return null;
     } else {
       logEvent({
         message: 'Comment updated',
         analyticsId: ANALYTICS_ARTICLE_PAGE,
       });
       dispatch(loadActivitiesPage());
+      return c;
     }
   };
 };

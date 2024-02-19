@@ -31,7 +31,6 @@ const ArticleActivityStreamCommentEdit = (props: Props) => {
   return (
     <IssueCommentEdit
       isArticle={true}
-      isEditMode={true}
       onAttach={doUploadFileToComment}
       onCommentChange={onCommentChange}
       getVisibilityOptions={() => getApi().articles.getVisibilityOptions(article.id)}
