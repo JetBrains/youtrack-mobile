@@ -92,7 +92,7 @@ msgstr "アクティビティの設定"
 msgid "Add project to favorites"
 msgstr "プロジェクトをお気に入りに追加"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
 msgstr "リアクションを追加"
@@ -310,8 +310,8 @@ msgstr "内容が変更されました"
 
 #: src/components/user/user-card.tsx
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -328,7 +328,7 @@ msgid "Copy field text"
 msgstr "フィールドテキストのコピー"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -340,7 +340,7 @@ msgstr "リンクのコピー"
 msgid "Copy link to article"
 msgstr "記事のリンクをコピー"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -382,7 +382,7 @@ msgstr "拒否"
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
@@ -464,7 +464,7 @@ msgid "Drafts"
 msgstr "件の下書き"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -882,7 +882,7 @@ msgstr "がリアクションを削除しました"
 msgid "reopened the pull request"
 msgstr "さんがプルリクエストを再開しました"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "返信"
@@ -969,8 +969,8 @@ msgid "Share"
 msgstr "共有"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -1214,10 +1214,10 @@ msgstr "未読のみ"
 msgid "Untitled"
 msgstr "無題"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Update visibility"
-msgstr ""
+msgstr "表示対象を更新"
 
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
@@ -1264,9 +1264,10 @@ msgstr "報告された課題を表示"
 msgid "Visibility"
 msgstr "表示対象"
 
+#: src/components/activity-stream/activity__stream.tsx
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Visible to {{presentation}}"
-msgstr ""
+msgstr "表示対象：{{presentation}}"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"

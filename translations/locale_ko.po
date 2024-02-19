@@ -92,7 +92,7 @@ msgstr "활동 설정"
 msgid "Add project to favorites"
 msgstr "즐겨 찾기에 프로젝트 추가"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
 msgstr "감정 이모티콘 추가"
@@ -310,8 +310,8 @@ msgstr "내용 수정됨"
 
 #: src/components/user/user-card.tsx
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -328,7 +328,7 @@ msgid "Copy field text"
 msgstr "필드 텍스트 복사"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -340,7 +340,7 @@ msgstr "링크 복사"
 msgid "Copy link to article"
 msgstr "자료 링크 복사"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -382,7 +382,7 @@ msgstr "취소"
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
@@ -464,7 +464,7 @@ msgid "Drafts"
 msgstr "이슈 초안"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -882,7 +882,7 @@ msgstr "감정 이모티콘을 제거했음"
 msgid "reopened the pull request"
 msgstr "풀 리퀘스트를 다시 열었음"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "답글"
@@ -969,8 +969,8 @@ msgid "Share"
 msgstr "공유"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -1214,10 +1214,10 @@ msgstr "읽지 않은 항목만"
 msgid "Untitled"
 msgstr "제목 없음"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Update visibility"
-msgstr ""
+msgstr "가시성 업데이트"
 
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
@@ -1264,9 +1264,10 @@ msgstr "보고된 이슈 보기"
 msgid "Visibility"
 msgstr "가시성"
 
+#: src/components/activity-stream/activity__stream.tsx
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Visible to {{presentation}}"
-msgstr ""
+msgstr "{{presentation}}에게 표시"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"

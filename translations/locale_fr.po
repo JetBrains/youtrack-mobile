@@ -99,7 +99,7 @@ msgstr "Paramètres d'activité"
 msgid "Add project to favorites"
 msgstr "Ajouter le projet aux favoris"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
 msgstr "Ajouter une réaction"
@@ -318,8 +318,8 @@ msgstr "Contenu révisé"
 
 #: src/components/user/user-card.tsx
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -336,7 +336,7 @@ msgid "Copy field text"
 msgstr "Copier le texte de champ"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -348,7 +348,7 @@ msgstr "Copier le lien"
 msgid "Copy link to article"
 msgstr "Copier le lien vers l'article"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -390,7 +390,7 @@ msgstr "Refuser"
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
@@ -472,7 +472,7 @@ msgid "Drafts"
 msgstr "Brouillons"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -892,7 +892,7 @@ msgstr "a supprimé une réaction"
 msgid "reopened the pull request"
 msgstr "a rouvert la requête d'extraction"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "Répondre"
@@ -979,8 +979,8 @@ msgid "Share"
 msgstr "Partager"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -1225,10 +1225,10 @@ msgstr "Non lues uniquement"
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Update visibility"
-msgstr ""
+msgstr "Mettre à jour la visibilité"
 
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
@@ -1275,9 +1275,10 @@ msgstr "Afficher les tickets signalés"
 msgid "Visibility"
 msgstr "Visibilité"
 
+#: src/components/activity-stream/activity__stream.tsx
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Visible to {{presentation}}"
-msgstr ""
+msgstr "Visible pour {{presentation}}"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"
