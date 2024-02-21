@@ -1,37 +1,39 @@
-import React, {Component} from 'react';
+import React, {useContext} from 'react';
 import {View, ActivityIndicator} from 'react-native';
 
 import {ScrollView} from 'react-native-gesture-handler';
 import {View as AnimatedView} from 'react-native-animatable';
+import {useSelector} from 'react-redux';
 
 import Api from 'components/api/api';
 import CustomField from 'components/custom-field/custom-field';
 import DatePickerField from './custom-fields-panel__date-picker';
-import Header from 'components/header/header';
 import ModalPortal from 'components/modal-view/modal-portal';
 import ModalView from 'components/modal-view/modal-view';
 import SimpleValueEditor from './custom-fields-panel__simple-value';
 import usage from 'components/usage/usage';
 import {createNullProjectCustomField} from 'util/util';
-import {getApi} from '../api/api__instance';
 import {formatTime} from 'components/date/date';
+import {getApi} from 'components/api/api__instance';
 import {i18n} from 'components/i18n/i18n';
-import {IconCheck, IconClose} from 'components/icon/icon';
+import {IItem, ISelectState, Select, SelectModal} from 'components/select/select';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {IssueContext} from 'views/issue/issue-context';
 import {PanelWithSeparator} from 'components/panel/panel-with-separator';
-import {Select, SelectModal} from 'components/select/select';
 import {SkeletonIssueCustomFields} from 'components/skeleton/skeleton';
+import {ThemeContext} from 'components/theme/theme-context';
 
 import styles, {calendarTheme} from './custom-fields-panel.styles';
 
-import type {CustomField as IssueCustomField} from 'types/CustomFields';
+import type {CustomField as IssueCustomField, CustomFieldValue} from 'types/CustomFields';
 import type {UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
+import {AppState} from 'reducers';
 import {IssueContextData} from 'types/Issue';
 import {Project} from 'types/Project';
+import {Theme} from 'types/Theme';
 
-type Props = {
+interface Props {
   autoFocusSelect?: boolean;
   style?: ViewStyleProp;
   issueId: string;
@@ -44,332 +46,254 @@ type Props = {
   };
   onUpdate: (
     field: IssueCustomField,
-    value: null | number | Record<string, any> | Array<Record<string, any>>,
-  ) => Promise<Record<string, any>>;
-  onUpdateProject: (project: Project) => Promise<Record<string, any>>;
+    value: CustomFieldValue | null,
+  ) => Promise<unknown>;
+  onUpdateProject: (project: Project) => Promise<unknown>;
   uiTheme: UITheme;
   analyticsId?: string;
   testID?: string;
   accessible?: boolean;
   accessibilityLabel?: string;
   modal?: boolean;
-};
-type State = {
-  editingField: IssueCustomField | null | undefined;
-  savingField: IssueCustomField | null | undefined;
-  isEditingProject: boolean;
-  isSavingProject: boolean;
-  height: number;
-  topCoord: number;
-  select: {
-    show: boolean;
-    dataSource: (query: string) => Promise<Array<Record<string, any>>>;
-    onSelect: (item: any) => any;
-    onChangeSelection?: (selectedItems: Array<Record<string, any>>) => any;
-    multi: boolean;
-    emptyValue?: string | null | undefined;
-    selectedItems: Array<Record<string, any>>;
-    placeholder?: string;
-    getValue?: (item: Record<string, any>) => string;
-    getTitle?: (item: Record<string, any>) => string;
-  };
-  datePicker: {
-    show: boolean;
-    title: string;
-    withTime: boolean;
-    time: string | null;
-    value: Date;
-    emptyValueName?: string | null | undefined;
-    onSelect: (date: Date, time: string) => any;
-    placeholder: string;
-  };
-  simpleValue: {
-    show: boolean;
-    value: string;
-    placeholder: string;
-    onApply: (arg0: any) => any;
-  };
-};
-const initialEditorsState = {
-  select: {
-    show: false,
-    dataSource: () => Promise.resolve([]),
-    onChangeSelection: items => {},
-    onSelect: () => {},
-    multi: false,
-    selectedItems: [],
-  },
-  datePicker: {
-    show: false,
-    title: '',
-    time: null,
-    withTime: false,
-    value: new Date(),
-    onSelect: () => {},
-    placeholder: '',
-  },
-  simpleValue: {
-    show: false,
-    value: '',
-    placeholder: '',
-    onApply: () => {},
-  },
-};
+  horizontal?: boolean;
+}
+
+interface SelectState extends ISelectState {
+  show?: boolean;
+  dataSource: (query: string) => Promise<Array<IItem>>;
+  emptyValue?: string | null | undefined;
+  getTitle?: (item: IItem) => string;
+  getValue?: (item: IItem) => string;
+  multi: boolean;
+  onChangeSelection?: (selectedItems: Array<IItem>) => any;
+  onSelect: (item: any) => any;
+  placeholder?: string;
+  selectedItems: Array<IItem>;
+}
+
+interface SimpleValueState {
+  show?: boolean;
+  onApply: (v: string) => void;
+  placeholder: string;
+  value: string;
+}
+
+interface DatePickerState {
+  show?: boolean;
+  emptyValueName: string | null;
+  onSelect: (date: Date, time: string) => any;
+  placeholder: string;
+  time: string | null;
+  title: string;
+  value: Date;
+  withTime: boolean;
+}
+
 const DATE_AND_TIME_FIELD_VALUE_TYPE = 'date and time';
 
 const getProjectLabel = () => i18n('Project');
 
-export default class CustomFieldsPanel extends Component<Props, State> {
-  api: Api = getApi();
-  currentScrollX: number = 0;
-  isComponentMounted: boolean | null | undefined;
-  isConnected: boolean | null | undefined;
+const placeholders = {
+  integer: '-12 or 34',
+  string: 'Type value',
+  text: 'Type text value',
+  float: 'Type float value',
+  default: '1w 1d 1h 1m',
+};
+const valueFormatters = {
+  integer: (v: string) => parseInt(v, 10),
+  float: (v: string) => parseFloat(v),
+  string: (v: string) => v,
+  text: (v: string) => ({text: v}),
+  default: (v: string) => ({presentation: v}),
+};
 
-  constructor(props: Props) {
-    super(props);
-    this.closeEditor = this.closeEditor.bind(this);
-    this.state = {
-      topCoord: 0,
-      height: 0,
-      editingField: null,
-      savingField: null,
-      isEditingProject: false,
-      isSavingProject: false,
-      ...initialEditorsState,
+const dataPickerDefault: DatePickerState = {
+  show: false,
+  emptyValueName: null,
+  onSelect: () => {},
+  placeholder: '',
+  time: null,
+  title: '',
+  value: new Date(),
+  withTime: false,
+};
+
+export default function CustomFieldsPanel(props: Props) {
+  const theme: Theme = useContext(ThemeContext);
+
+  const api: Api = getApi();
+  let currentScrollX: number = 0;
+  const isComponentMounted = React.useRef<boolean>(false);
+  const isConnected = useSelector((state: AppState) => state.app.networkState?.isConnected);
+  const [selectState, setSelectState] = React.useState<SelectState | null>(null);
+  const [simpleValueState, setSimpleValue] = React.useState<SimpleValueState | null>(null);
+  const [datePickerState, setDatePickerState] = React.useState<DatePickerState>(dataPickerDefault);
+  const [isEditingProject, setEditingProject] = React.useState<boolean>(false);
+  const [isSavingProject, setSavingProject] = React.useState<boolean>(false);
+  const [editingField, setEditingField] = React.useState<IssueCustomField | null>(null);
+  const [savingField, setSavingField] = React.useState<IssueCustomField | null>(null);
+
+  React.useEffect(() => {
+    isComponentMounted.current = true;
+    return () => {
+      isComponentMounted.current = false;
     };
-  }
+  }, []);
 
-  componentDidMount(): void {
-    this.isComponentMounted = true;
-  }
+  React.useEffect(() => {
+    isComponentMounted.current = true;
+    return () => {
+      isComponentMounted.current = false;
+    };
+  }, []);
 
-  componentWillUnmount(): void {
-    this.isComponentMounted = null;
-  }
-
-  shouldComponentUpdate(nextProps: Props, prevState: State): boolean {
-    return (
-      this.props.uiTheme !== nextProps.uiTheme ||
-      this.props.fields !== nextProps.fields ||
-      this.state !== prevState
-    );
-  }
-
-  trackEvent: (message: string) => void = (message: string) => {
-    if (this.props.analyticsId) {
-      usage.trackEvent(this.props.analyticsId, message);
+  const trackEvent: (message: string) => void = (message: string) => {
+    if (props.analyticsId) {
+      usage.trackEvent(props.analyticsId, message);
     }
   };
 
-  saveUpdatedField(
-    field: IssueCustomField,
-    value: null | number | Record<string, any> | Array<Record<string, any>>,
-  ): Promise<boolean> {
-    const updateSavingState = value =>
-      this.isComponentMounted &&
-      this.setState({
-        savingField: value,
-      });
+  const saveUpdatedField = (field: IssueCustomField, value: CustomFieldValue | null) => {
+    const updateSavingState = (savingField: IssueCustomField | null) => {
+      if (isComponentMounted) {
+        setSavingField(savingField);
+      }
+    };
 
-    this.closeEditor();
+    closeEditor();
     updateSavingState(field);
-    return this.props
+    return props
       .onUpdate(field, value)
       .then(res => {
         updateSavingState(null);
         return res;
       })
       .catch(() => updateSavingState(null));
-  }
+  };
 
-  onSelectProject: () => void | Promise<any> = () => {
-    this.trackEvent('Update project: start');
+  const onSelectProject = () => {
+    trackEvent('Update project: start');
 
-    if (this.state.isEditingProject) {
-      return this.closeEditor();
+    if (isEditingProject) {
+      return closeEditor();
     }
 
-    const {hasPermission} = this.props;
-    this.closeEditor();
-    this.setState({
-      isEditingProject: true,
-      select: {
-        show: true,
-        getValue: project => project.name + project.shortName,
-        dataSource: async query => {
-          const projects = await this.api.getProjects(query);
-          return projects
-            .filter(project => !project.archived && !project.template)
-            .filter(project => hasPermission?.canCreateIssueToProject?.(project));
-        },
-        multi: false,
-        placeholder: i18n('Search for the project'),
-        selectedItems: [this.props.issueProject],
-        onSelect: (project: Project) => {
-          this.trackEvent('Update project: updated');
-          this.closeEditor();
-          this.setState({
-            isSavingProject: true,
-          });
-          return this.props.onUpdateProject(project).then(() =>
-            this.setState({
-              isSavingProject: false,
-            }),
-          );
-        },
+    const {hasPermission} = props;
+    closeEditor();
+    setEditingProject(true);
+    setSelectState({
+      show: true,
+      getValue: (project: Project) => `${project.name} (${project.shortName})`,
+      dataSource: async query => {
+        const projects = await api.getProjects(query);
+        return projects
+          .filter(project => !project.archived && !project.template)
+          .filter(project => hasPermission?.canCreateIssueToProject?.(project));
+      },
+      multi: false,
+      placeholder: i18n('Search for the project'),
+      selectedItems: [props.issueProject],
+      onSelect: (project: Project) => {
+        trackEvent('Update project: updated');
+        closeEditor();
+        setSavingProject(true);
+        return props.onUpdateProject(project).then(() => setSavingProject(false));
       },
     });
   };
 
-  closeEditor(): Promise<any> {
-    return new Promise(resolve => {
-      this.setState(
-        {
-          editingField: null,
-          isEditingProject: false,
-          ...initialEditorsState,
-        },
-        resolve,
-      );
-    });
-  }
+  const closeEditor = () => {
+    setEditingField(null);
+    setEditingProject(false);
+    setSelectState(null);
+    setSimpleValue(null);
+    setDatePickerState(dataPickerDefault);
+  };
 
-  editDateField(field: IssueCustomField): void {
-    this.trackEvent('Edit date field');
-    const withTime =
-      field.projectCustomField.field.fieldType.valueType ===
-      DATE_AND_TIME_FIELD_VALUE_TYPE;
-    return this.setState({
-      datePicker: {
-        show: true,
-        placeholder: i18n('Enter time value'),
-        withTime,
-        time: field.value ? formatTime(new Date(field.value)) : null,
-        title: field.projectCustomField.field.name,
-        value: field.value ? new Date(field.value) : new Date(),
-        emptyValueName: field.projectCustomField.canBeEmpty
-          ? field.projectCustomField.emptyFieldText
-          : null,
-        onSelect: (date: Date, time?: string) => {
-          if (!date) {
-            return this.saveUpdatedField(field, null);
-          }
+  const editDateField = (field: IssueCustomField) => {
+    trackEvent('Edit date field');
+    const projectCustomField = field.projectCustomField;
+    const withTime = projectCustomField.field.fieldType.valueType === DATE_AND_TIME_FIELD_VALUE_TYPE;
+    const date = field.value ? new Date(field.value as number) : null;
+    return setDatePickerState({
+      show: true,
+      placeholder: i18n('Enter time value'),
+      withTime,
+      time: date ? formatTime(date) : null,
+      title: projectCustomField.field.name,
+      value: field.value ? date! : new Date(),
+      emptyValueName: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
+      onSelect: (d: Date, time?: string) => {
+        if (!d) {
+          return saveUpdatedField(field, null);
+        }
 
-          if (withTime && time) {
-            try {
-              const match = time.match(/(\d\d):(\d\d)/);
+        if (withTime && time) {
+          try {
+            const match = time.match(/(\d\d):(\d\d)/);
 
-              if (match) {
-                const [, hours = 3, minutes = 0] = match;
-                date.setHours(hours, minutes);
-              }
-            } catch (e) {
-              throw new Error(`Invalid date: ${e}`);
+            if (match) {
+              const [, hours = 3, minutes = 0] = match;
+              d.setHours(parseInt(`${hours}`, 10), parseInt(`${minutes}`, 10));
             }
+          } catch (e) {
+            throw new Error(`Invalid date: ${e}`);
           }
+        }
 
-          this.saveUpdatedField(field, date.getTime());
-        },
+        saveUpdatedField(field, d.getTime());
       },
     });
-  }
+  };
 
-  editSimpleValueField(field: IssueCustomField, type: string): void {
-    this.trackEvent('Edit simple value field');
-    const placeholders = {
-      integer: '-12 or 34',
-      string: 'Type value',
-      text: 'Type text value',
-      float: 'Type float value',
-      default: '1w 1d 1h 1m',
-    };
-    const valueFormatters = {
-      integer: value => parseInt(value),
-      float: value => parseFloat(value),
-      string: value => value,
-      text: value => ({
-        text: value,
-      }),
-      default: value => ({
-        presentation: value,
-      }),
-    };
-    const placeholder = placeholders[type] || placeholders.default;
+  const editSimpleValueField = (field: IssueCustomField, type: keyof typeof placeholders) => {
+    trackEvent('Edit simple value field');
+    const placeholder: string = placeholders[type] || placeholders.default;
     const valueFormatter = valueFormatters[type] || valueFormatters.default;
     const value: string =
-      field.value != null
-        ? field.value?.presentation ||
-          field.value.text ||
-          `${(field.value as any) as string}`
-        : '';
-    return this.setState({
-      simpleValue: {
-        show: true,
-        placeholder,
-        value,
-        onApply: value => this.saveUpdatedField(field, valueFormatter(value)),
-      },
+      field.value != null ? field.value?.presentation || field.value.text || `${field.value}` : '';
+    return setSimpleValue({
+      show: true,
+      placeholder,
+      value,
+      onApply: (v: string) => saveUpdatedField(field, valueFormatter(v)),
     });
-  }
+  };
 
-  editCustomField(field: IssueCustomField) {
+  const editCustomField = (field: IssueCustomField) => {
     const projectCustomField = field.projectCustomField;
-    const projectCustomFieldName: string | null | undefined =
-      projectCustomField?.field?.name;
-    this.trackEvent(
-      `Edit custom field: ${
-        projectCustomFieldName ? projectCustomFieldName.toLowerCase() : ''
-      }`,
-    );
-    const isMultiValue = projectCustomField.field.fieldType.isMultiValue;
-    let selectedItems: string[];
+    const projectCustomFieldName: string | null | undefined = projectCustomField?.field?.name;
+    trackEvent(`Edit custom field: ${projectCustomFieldName ? projectCustomFieldName.toLowerCase() : ''}`);
 
-    if (isMultiValue) {
-      selectedItems = (field.value as any) as Array<string>;
-    } else {
-      selectedItems = field.value ? [(field.value as any) as string] : [];
-    }
+    setSelectState({
+      show: true,
+      multi: projectCustomField.field.fieldType.isMultiValue,
+      selectedItems: new Array<CustomFieldValue>().concat(field.value),
+      emptyValue: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
+      dataSource: () => {
+        if (field.hasStateMachine) {
+          return api
+            .getStateMachineEvents(props.issueId, field.id)
+            .then((items: {id: string; presentation: string}[]) =>
+              items.flatMap(it => ({
+                name: `${it.id} (${it.presentation})`,
+              }))
+            );
+        }
 
-    this.setState({
-      select: {
-        show: true,
-        multi: isMultiValue,
-        selectedItems: selectedItems,
-        emptyValue: projectCustomField.canBeEmpty
-          ? projectCustomField.emptyFieldText
-          : null,
-        dataSource: () => {
-          if (field.hasStateMachine) {
-            return this.api
-              .getStateMachineEvents(this.props.issueId, field.id)
-              .then(items =>
-                items.map(it =>
-                  Object.assign(it, {
-                    name: `${it.id} (${it.presentation})`,
-                  }),
-                ),
-              );
-          }
-
-          return this.api.getCustomFieldValues(
-            projectCustomField?.bundle?.id,
-            projectCustomField.field.fieldType.valueType,
-          );
-        },
-        onChangeSelection: selectedItems =>
-          this.setState({
-            select: {...this.state.select, selectedItems},
-          }),
-        onSelect: value => this.saveUpdatedField(field, value),
+        return api.getCustomFieldValues(projectCustomField?.bundle?.id, projectCustomField.field.fieldType.valueType);
       },
+      onChangeSelection: selectedItems => {
+        setSelectState((prevState: SelectState | null) => ({...prevState, ...selectState, selectedItems}));
+      },
+      onSelect: value => saveUpdatedField(field, value),
     });
-  }
+  };
 
-  onEditField: (field: IssueCustomField) => Promise<any> | null | undefined = (
-    field: IssueCustomField,
-  ) => {
-    if (field === this.state.editingField) {
-      return this.closeEditor();
+  const onEditField = (field: IssueCustomField) => {
+    if (field === editingField) {
+      return closeEditor();
     }
 
     const {fieldType} = field.projectCustomField?.field;
@@ -378,43 +302,31 @@ export default class CustomFieldsPanel extends Component<Props, State> {
       return null;
     }
 
-    this.setState({
-      editingField: field,
-      isEditingProject: false,
-      ...initialEditorsState,
-    });
-
-    if (
-      fieldType.valueType === 'date' ||
-      fieldType.valueType === DATE_AND_TIME_FIELD_VALUE_TYPE
-    ) {
-      return this.editDateField(field);
+    setEditingField(field);
+    setEditingProject(false);
+    if (fieldType.valueType === 'date' || fieldType.valueType === DATE_AND_TIME_FIELD_VALUE_TYPE) {
+      return editDateField(field);
     }
 
-    if (
-      ['period', 'integer', 'string', 'text', 'float'].indexOf(
-        fieldType.valueType,
-      ) !== -1
-    ) {
-      return this.editSimpleValueField(field, fieldType.valueType);
+    if (['period', 'integer', 'string', 'text', 'float'].indexOf(fieldType.valueType) !== -1) {
+      return editSimpleValueField(field, fieldType.valueType as keyof typeof placeholders);
     }
 
-    return this.editCustomField(field);
+    return editCustomField(field);
   };
-  storeScrollPosition: (event: any) => void = (event: Record<string, any>) => {
+
+  const storeScrollPosition = (event: Record<string, any>) => {
     const {nativeEvent} = event;
-    this.currentScrollX = nativeEvent.contentOffset.x;
+    currentScrollX = nativeEvent.contentOffset.x;
   };
-  restoreScrollPosition = (
-    scrollNode: ScrollView | null | undefined,
-    ensure: boolean = true,
-  ) => {
-    if (!scrollNode || !this.currentScrollX) {
+
+  const restoreScrollPosition = (scrollNode?: ScrollView | null, ensure: boolean = true) => {
+    if (!scrollNode || !currentScrollX) {
       return;
     }
 
     scrollNode.scrollTo({
-      x: this.currentScrollX,
+      x: currentScrollX,
       y: 0,
       animated: false,
     });
@@ -422,178 +334,122 @@ export default class CustomFieldsPanel extends Component<Props, State> {
     // Android doesn't get first scrollTo call https://youtrack.jetbrains.com/issue/YTM-402
     // iOS doesn't scroll immediately since 0.48 https://github.com/facebook/react-native/issues/15808
     if (ensure) {
-      setTimeout(() => this.restoreScrollPosition(scrollNode, false));
+      setTimeout(() => restoreScrollPosition(scrollNode, false));
     }
   };
 
-  _renderSelect() {
-    const Component = isSplitView()
-      ? SelectModal
-      : Select;
-    return (
-      <Component
-        {...this.state.select}
-        autoFocus={this.props.autoFocusSelect}
-        onCancel={() => this.closeEditor()}
-      />
-    );
-  }
+  const renderSelect = () => {
+    const Component = isSplitView() ? SelectModal : Select;
+    return <Component {...selectState} autoFocus={props.autoFocusSelect} onCancel={() => closeEditor()} />;
+  };
 
-  renderHeader(title: string, uiTheme: UITheme): React.ReactNode {
-    const {simpleValue, editingField} = this.state;
-    const isSimpleValueEditorShown: boolean =
-      simpleValue.show && !!editingField;
-    return (
-      <Header
-        style={styles.customFieldEditorHeader}
-        leftButton={<IconClose size={21} color={uiTheme.colors.$link} />}
-        onBack={() => this.closeEditor()}
-        rightButton={
-          isSimpleValueEditorShown ? (
-            <IconCheck size={21} color={uiTheme.colors.$link} />
-          ) : null
-        }
-        onRightButtonClick={() => {
-          if (isSimpleValueEditorShown) {
-            simpleValue.onApply(simpleValue.value);
-          }
-        }}
-        title={title}
-      />
-    );
-  }
+  const renderDatePicker = () => {
+    const {modal} = props;
 
-  renderDatePicker(uiTheme: UITheme) {
-    const {datePicker} = this.state;
-    const {modal} = this.props;
-
-    const render = (): React.ReactNode => {
-      const hideEditor = (): void => {
-        this.closeEditor();
-      };
-
+    const render = () => {
       return (
         <DatePickerField
           modal={modal}
-          emptyValueName={datePicker.emptyValueName}
-          onApply={(date, time) => {
-            datePicker.onSelect(date, time);
-            hideEditor();
+          emptyValueName={datePickerState.emptyValueName}
+          onApply={(date: Date, time: string) => {
+            datePickerState.onSelect(date, time);
+            closeEditor();
           }}
-          onHide={hideEditor}
-          placeholder={datePicker.placeholder}
-          theme={calendarTheme(uiTheme)}
-          title={datePicker.title}
-          time={datePicker.time}
-          value={datePicker.value}
-          withTime={datePicker.withTime}
+          onHide={closeEditor}
+          placeholder={datePickerState.placeholder}
+          theme={calendarTheme(theme.uiTheme)}
+          title={datePickerState.title}
+          time={datePickerState.time}
+          value={datePickerState.value}
+          withTime={datePickerState.withTime}
         />
       );
     };
 
     if (isSplitView()) {
       return (
-        <ModalPortal hasOverlay={!this.props.modal} onHide={this.closeEditor}>
+        <ModalPortal hasOverlay={!props.modal} onHide={closeEditor}>
           {render()}
         </ModalPortal>
       );
     } else {
       return <ModalView>{render()}</ModalView>;
     }
-  }
+  };
 
-  renderSimpleValueInput() {
-    const {editingField} = this.state;
+  const renderSimpleValueInput = () => {
     const title: string = editingField?.projectCustomField?.field?.name || '';
 
-    const editor = (
+    const editor = simpleValueState ? (
       <SimpleValueEditor
-        modal={this.props.modal}
-        editingField={this.state.editingField}
+        modal={props.modal}
+        editingField={editingField}
         onApply={(value: any) => {
-          this.state.simpleValue.onApply(value);
-          this.closeEditor();
+          simpleValueState.onApply(value);
+          closeEditor();
         }}
-        onHide={this.closeEditor}
-        placeholder={this.state.simpleValue.placeholder}
+        onHide={closeEditor}
+        placeholder={simpleValueState.placeholder}
         title={title}
-        value={this.state.simpleValue.value}
+        value={simpleValueState.value}
       />
-    );
+    ) : null;
 
     if (isSplitView()) {
       return (
-        <ModalPortal hasOverlay={!this.props.modal} onHide={this.closeEditor}>
+        <ModalPortal hasOverlay={!props.modal} onHide={closeEditor}>
           {editor}
         </ModalPortal>
       );
     } else {
       return <ModalView>{editor}</ModalView>;
     }
-  }
+  };
 
-  renderFields(): React.ReactNode {
-    const {
-      hasPermission,
-      fields,
-      issueProject = {
-        name: '',
-      },
-    } = this.props;
-    const {
-      savingField,
-      editingField,
-      isEditingProject,
-      isSavingProject,
-    } = this.state;
+  const renderFields = () => {
+    const {issueProject = {name: ''}, horizontal} = props;
+    const Container = horizontal ? View : PanelWithSeparator;
+    const ContainerScroll = horizontal ? View : ScrollView;
     return (
       <>
-        {!fields && <SkeletonIssueCustomFields />}
+        {!props.fields && <SkeletonIssueCustomFields />}
 
-        {!!fields && (
-          <PanelWithSeparator>
-            <ScrollView
-              ref={this.restoreScrollPosition}
-              onScroll={this.storeScrollPosition}
+        {!!props.fields && (
+          <Container>
+            <ContainerScroll
+              ref={restoreScrollPosition}
+              onScroll={storeScrollPosition}
               contentOffset={{
-                x: this.currentScrollX,
+                x: currentScrollX,
                 y: 0,
               }}
               scrollEventThrottle={100}
               horizontal={true}
-              style={styles.customFieldsPanel}
+              style={horizontal && styles.customFieldsPanel}
               keyboardShouldPersistTaps="always"
             >
               <View key="Project">
                 <CustomField
-                  disabled={
-                    !hasPermission.canEditProject || this.isConnected === false
-                  }
-                  onPress={this.onSelectProject}
+                  horizontal={horizontal}
+                  disabled={!props.hasPermission.canEditProject || isConnected === false}
+                  onPress={onSelectProject}
                   active={isEditingProject}
-                  field={createNullProjectCustomField(
-                    issueProject.name,
-                    getProjectLabel(),
-                  )}
+                  field={createNullProjectCustomField(issueProject.name, getProjectLabel())}
                 />
-                {isSavingProject && (
-                  <ActivityIndicator style={styles.savingFieldIndicator} />
-                )}
+                {isSavingProject && <ActivityIndicator style={styles.savingFieldIndicator} />}
               </View>
 
-              {fields.map((field: IssueCustomField, index: number) => {
+              {props.fields.map((field: IssueCustomField, index: number) => {
                 const isDisabled: boolean =
-                  !(
-                    hasPermission.canUpdateField &&
-                    hasPermission.canUpdateField(field)
-                  ) ||
+                  !(props.hasPermission.canUpdateField && props.hasPermission.canUpdateField(field)) ||
                   !field?.projectCustomField?.field?.fieldType ||
-                  this.isConnected === false;
+                  isConnected === false;
                 return (
-                  <View key={field.id || `${field.name}-${index}`}>
+                  <React.Fragment key={field.id || `${field.name}-${index}`}>
                     <CustomField
+                      horizontal={horizontal}
                       field={field}
-                      onPress={() => this.onEditField(field)}
+                      onPress={() => onEditField(field)}
                       active={editingField === field}
                       disabled={isDisabled}
                     />
@@ -601,51 +457,36 @@ export default class CustomFieldsPanel extends Component<Props, State> {
                     {savingField && savingField.id === field.id && (
                       <ActivityIndicator style={styles.savingFieldIndicator} />
                     )}
-                  </View>
+                  </React.Fragment>
                 );
               })}
-            </ScrollView>
-          </PanelWithSeparator>
+            </ContainerScroll>
+          </Container>
         )}
       </>
     );
-  }
+  };
 
-  render(): React.ReactNode {
-    const {uiTheme, style, testID, accessible, accessibilityLabel} = this.props;
-    const {select, datePicker, simpleValue, editingField} = this.state;
-    return (
-      <IssueContext.Consumer>
-        {(issueDate: IssueContextData) => {
-          if (issueDate) {
-            this.isConnected = issueDate.isConnected;
-          }
+  return (
+    <IssueContext.Consumer>
+      {(issueDate: IssueContextData) => {
+        return (
+          <View
+            accessible={props.accessible}
+            accessibilityLabel={props.accessibilityLabel}
+            testID={props.testID}
+            style={[styles.container, props.style]}
+          >
+            {renderFields()}
 
-          return (
-            <View
-              accessible={accessible}
-              accessibilityLabel={accessibilityLabel}
-              testID={testID}
-              style={[styles.container, style]}
-            >
-              {this.renderFields()}
-
-              <AnimatedView
-                style={styles.editorViewContainer}
-                animation="fadeIn"
-                duration={500}
-                useNativeDriver
-              >
-                {select.show && this._renderSelect()}
-                {datePicker.show && this.renderDatePicker(uiTheme)}
-                {simpleValue.show &&
-                  !!editingField &&
-                  this.renderSimpleValueInput()}
-              </AnimatedView>
-            </View>
-          );
-        }}
-      </IssueContext.Consumer>
-    );
-  }
+            <AnimatedView style={styles.editorViewContainer} animation="fadeIn" duration={500} useNativeDriver>
+              {selectState && renderSelect()}
+              {datePickerState.show && renderDatePicker()}
+              {simpleValueState && !!editingField && renderSimpleValueInput()}
+            </AnimatedView>
+          </View>
+        );
+      }}
+    </IssueContext.Consumer>
+  );
 }
