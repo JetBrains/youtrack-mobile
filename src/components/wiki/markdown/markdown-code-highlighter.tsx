@@ -159,8 +159,9 @@ function MarkdownCodeHighlighter(props: {node: MarkdownNode; uiTheme: UITheme}) 
             }}
           >
             <IconCopy
-              width={15}
-              height={15}
+              style={styles.codeToolbarIcon}
+              width={20}
+              height={20}
               fill={styles.codeToolbarIcon.color}
               color={styles.codeToolbarIcon.color}
             />

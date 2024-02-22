@@ -12,8 +12,14 @@ export const SELECT_ITEM_SEPARATOR_HEIGHT = 1;
 
 
 export default EStyleSheet.create({
+  select: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '$background',
+  },
   container: {
-    flexGrow: 1,
+    minWidth: '50%',
+    minHeight: '50%',
   },
   inputWrapper: {
     ...inputWrapper,
@@ -109,7 +115,7 @@ export default EStyleSheet.create({
     alignItems: 'center',
   },
   modalPortalSelectContent: {
-    paddingBottom: SELECT_ITEM_HEIGHT,
+    paddingBottom: SELECT_ITEM_HEIGHT * 1.5,
   },
 
   sectionHeader: {

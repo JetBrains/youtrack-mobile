@@ -12,22 +12,17 @@ import {getEntityPresentation} from 'components/issue-formatter/issue-formatter'
 
 import styles from './mentions.styles';
 
-import type {User} from 'types/User';
+import type {User, UserMentions} from 'types/User';
 
-type Props = {
+interface Props {
   isLoading: boolean;
-  mentions:
-    | {
-        users: User[];
-      }
-    | null
-    | undefined;
+  mentions: UserMentions | null;
   onApply: (user: User) => any;
   style?: Record<string, any>;
-};
+}
 
 
-export default function Mentions(props: Props): JSX.Element {
+export default function Mentions(props: Props) {
   const AVATAR_SIZE: number = 24;
   const {mentions, isLoading, onApply, style} = props;
   return (

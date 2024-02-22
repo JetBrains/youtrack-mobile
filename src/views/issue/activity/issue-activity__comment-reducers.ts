@@ -5,7 +5,7 @@ export type State = {
   commentsLoadingError: Error | null | undefined;
   commentSuggestions: Record<string, any> | null | undefined;
   commentText: string;
-  editingComment: IssueComment | null | undefined;
+  editingComment: IssueComment | null;
   isVisibilitySelectShown: boolean;
   suggestionsAreLoading: boolean;
   tmpIssueComments: IssueComment[] | null | undefined;

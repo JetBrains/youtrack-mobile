@@ -11,6 +11,8 @@ jest.mock('react-native-svg', () => ({
   SvgUri: 'SvgUri',
 }));
 
+jest.mock('components/modal-view/modal-portal');
+
 const attachmentMockName = 'attachName';
 const attachmentMockUrl = 'http://example.com?attach';
 
@@ -74,7 +76,6 @@ describe('<Attachment/>', () => {
 
   describe('showImageAttachment', () => {
     it('should show image attachment', async () => {
-      Router.PreviewFile = jest.fn();
 
       renderImage();
       fireEvent.press(screen.getByTestId('attachment'));

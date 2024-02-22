@@ -6,7 +6,7 @@ import {UNIT} from 'components/variables';
 
 const minButtonWidth: number = UNIT * 5;
 
-export const headerMinHeight = UNIT * 8;
+export const headerMinHeight = UNIT * 6;
 
 export const headerTitlePresentation = {
   ...headerTitle,

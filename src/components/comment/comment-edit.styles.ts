@@ -75,12 +75,16 @@ export default EStyleSheet.create({
     borderRadius: INPUT_BORDER_RADIUS,
     borderWidth: 1,
     borderColor: '$disabled',
+    backgroundColor: '$background',
+  },
+  commentInputContainerHighlighted: {
+    backgroundColor: '$privateBackground',
+    color: '$private',
   },
   commentInput: {
     flex: 1,
     maxHeight: 106,
     padding: 0,
-    backgroundColor: '$background',
     ...mainText,
     color: '$text',
   },
@@ -91,10 +95,11 @@ export default EStyleSheet.create({
   commentSendButton: {
     width: MIN_INPUT_SIZE,
     height: MIN_INPUT_SIZE,
-    borderRadius: INPUT_BORDER_RADIUS - 1,
+    alignSelf: 'flex-end',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '$link',
+    borderRadius: INPUT_BORDER_RADIUS - 1,
   },
   commentSendButtonIcon: {
     color: '$textButton',
@@ -147,6 +152,8 @@ export default EStyleSheet.create({
     fontWeight: '500',
   },
   floatContextButton: {
+    alignSelf: 'flex-start',
+    minWidth: 160,
     margin: UNIT,
   },
   floatContextButtonText: {

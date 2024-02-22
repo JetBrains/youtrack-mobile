@@ -16,10 +16,14 @@ type UIThemeCommonColors = {
   $linkLight: string;
   $disabled: string;
   $icon: string;
+  $iconAction: string;
+  $iconBackground: string;
   $iconAccent: string;
   $mask: string;
   $navigation: string;
   $separator: string;
+  $private: string;
+  $privateBackground: string;
 };
 export type UIThemeColorsPaletteColors = {
   $greyBackground: string;

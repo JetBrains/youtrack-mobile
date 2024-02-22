@@ -1,7 +1,8 @@
 import ApiBase from './api__base';
+import {USER_GROUP_FIELDS} from 'components/api/api__issue-fields';
 
 import type Auth from '../auth/oauth2';
-import {Project} from 'types/Project';
+import {Project, ProjectTeam, ProjectWithTeam} from 'types/Project';
 
 export default class ProjectsAPI extends ApiBase {
   projectsURL: string = `${this.youTrackApiUrl}/admin/projects`;
@@ -49,5 +50,13 @@ export default class ProjectsAPI extends ApiBase {
       `${this.projectsURL}/${projectId}/timeTrackingSettings/?fields=${fields}`,
       'GET',
     );
+  }
+
+  async getTeam(projectId: string): Promise<ProjectTeam> {
+    const project: ProjectWithTeam = await this.makeAuthorizedRequest(
+      `${this.projectsURL}/${projectId}/?fields=${USER_GROUP_FIELDS.toString()}`,
+      'GET',
+    );
+    return project.team;
   }
 }

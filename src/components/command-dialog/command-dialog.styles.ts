@@ -7,6 +7,7 @@ import {inputWrapper, searchInputWithMinHeight} from 'components/common-styles/s
 export default EStyleSheet.create({
   container: {
     height: '100%',
+    backgroundColor: '$background',
   },
   inputWrapper: {
     ...inputWrapper,

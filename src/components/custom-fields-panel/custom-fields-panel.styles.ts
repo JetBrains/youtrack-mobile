@@ -21,6 +21,7 @@ export default EStyleSheet.create({
   editorViewContainer: {
     flex: 1,
     flexShrink: 1,
+    backgroundColor: '$background',
   },
   customFieldDateEditorValue: {
     marginBottom: UNIT * 2,

@@ -56,6 +56,7 @@ export default EStyleSheet.create({
     color: '$text',
   },
   colorMarker: {
+    width: UNIT * 2.4,
     marginRight: UNIT,
   },
   url: {

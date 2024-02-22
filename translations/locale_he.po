@@ -64,6 +64,30 @@ msgstr[1] "{{amount}} בעיות"
 msgstr[2] "{{amount}} בעיות"
 msgstr[3] "{{amount}} בעיות"
 
+#: src/views/issues/issues__row.tsx
+msgid "{{daysLeft}}d"
+msgid_plural "{{daysLeft}}d"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: src/views/issues/issues__row.tsx
+msgid "{{hoursLeft}}h"
+msgid_plural "{{hoursLeft}}h"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: src/views/issues/issues__row.tsx
+msgid "{{minutesAbsolute}}m"
+msgid_plural "{{minutesAbsolute}}m"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
 msgstr ""
@@ -89,7 +113,7 @@ msgstr ""
 msgid "Add project to favorites"
 msgstr ""
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
 msgstr "הוספת תגובה"
@@ -310,8 +334,8 @@ msgstr "התוכן שונה"
 
 #: src/components/user/user-card.tsx
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -328,7 +352,7 @@ msgid "Copy field text"
 msgstr ""
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -340,7 +364,7 @@ msgstr "להעתיק קישור"
 msgid "Copy link to article"
 msgstr ""
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -382,7 +406,7 @@ msgstr "דחייה"
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
@@ -464,7 +488,7 @@ msgid "Drafts"
 msgstr "טיוטות"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -540,6 +564,7 @@ msgstr ""
 msgid "Filter tags"
 msgstr ""
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "סינון משתמשים, קבוצות וצוותים"
@@ -560,7 +585,7 @@ msgstr ""
 msgid "Get help"
 msgstr ""
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "קבוצות וצוותים"
 
@@ -582,6 +607,10 @@ msgstr ""
 
 #: src/views/article/article.tsx
 msgid "in revision"
+msgstr ""
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
 msgstr ""
 
 #: src/views/issue/issue-base-actions-creater.ts
@@ -703,6 +732,14 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
+#: src/views/issues/issues__count.tsx
+msgid "Matches {{issuesCount}} ticket"
+msgid_plural "Matches {{issuesCount}} tickets"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
 #: src/views/issues/index.ts
 msgid "Medium"
 msgstr ""
@@ -797,13 +834,17 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "קבוצות וצוותים אחרים"
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "סיסמה"
+
+#: src/views/issues/issues__row.tsx
+msgid "Paused"
+msgstr "הושהה"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
@@ -842,7 +883,7 @@ msgstr "שאילתה"
 msgid "Recent searches"
 msgstr ""
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "קבוצות וצוותים מומלצים"
 
@@ -871,10 +912,14 @@ msgstr ""
 msgid "reopened the pull request"
 msgstr ""
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "הגב"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -917,6 +962,10 @@ msgstr ""
 msgid "Select an issue from the list"
 msgstr ""
 
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
+msgstr ""
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
 msgstr ""
@@ -950,8 +999,8 @@ msgid "Share"
 msgstr "שתף"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -1198,6 +1247,11 @@ msgstr ""
 msgid "Untitled"
 msgstr ""
 
+#: src/views/article/article__activity.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr ""
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1219,7 +1273,7 @@ msgstr ""
 msgid "Username or email"
 msgstr ""
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "משתמשים"
 
@@ -1241,6 +1295,11 @@ msgstr ""
 
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
+msgstr ""
+
+#: src/components/activity-stream/activity__stream.tsx
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
 msgstr ""
 
 #: src/components/visibility/visibility-strings.ts

@@ -57,6 +57,7 @@ export default function ThreadCommentItem({
             }}
           />
         }
+        avatarStyle={styles.avatarComment}
         change={
           <>
             <StreamComment

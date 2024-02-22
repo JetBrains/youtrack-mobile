@@ -157,5 +157,6 @@ export const issueActivitiesFields: string = toField([
       IssueFields.attachmentsBase,
       IssueFields.ISSUE_COMMENTS_REMOVED_FIELDS,
       IssueFields.MENTIONS_FIELDS,
-    ]).toString()}`,
+      {article: ['id']},
+    ]).toString()}`
   );
