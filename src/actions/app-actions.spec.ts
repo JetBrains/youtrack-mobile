@@ -17,7 +17,6 @@ import API from 'components/api/api';
 import log from 'components/log/log';
 import mocks from 'test/mocks';
 import OAuth2 from 'components/auth/oauth2';
-import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
 import Router from 'components/router/router';
 import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
@@ -27,7 +26,7 @@ import {AuthParams} from 'types/Auth';
 import {InboxFolder} from 'types/Inbox';
 import {PermissionCacheItem} from 'types/Permission';
 import {RootState} from 'reducers/app-reducer';
-import {StorageState} from 'components/storage/storage';
+import {getStorageState, StorageState} from 'components/storage/storage';
 import {User, UserCurrent} from 'types/User';
 
 jest.mock('components/storage/storage', () => {
@@ -223,16 +222,9 @@ describe('app-actions', () => {
 
   describe('Permissions', () => {
     let actualPermissionsMock: PermissionCacheItem[];
-    let cachedPermissionsMock: PermissionCacheItem[];
-    let permissionItemMock: PermissionCacheItem;
+
     beforeEach(() => {
-      permissionItemMock = {
-        permission: {
-          key: 'permissionName',
-        },
-      } as PermissionCacheItem;
-      cachedPermissionsMock = [permissionItemMock];
-      actualPermissionsMock = [permissionItemMock, permissionItemMock];
+      actualPermissionsMock = [mocks.createPermissionItem() as PermissionCacheItem, mocks.createPermissionItem() as PermissionCacheItem];
       setStoreAndCurrentUser({} as User);
       jest
         .spyOn(permissionsHelper, 'loadPermissions')
@@ -252,39 +244,29 @@ describe('app-actions', () => {
     });
 
     it('should not set permissions from cache if there are no any', async () => {
-      setCachedPermissions(null);
-      await store.dispatch(actions.loadUserPermissions());
-      const storeAction = store.getActions();
-      expect(storeAction).toHaveLength(1);
-      expect(storeAction[0]).toEqual({
-        type: types.SET_PERMISSIONS,
-        permissionsStore: new PermissionsStore(actualPermissionsMock),
-        currentUser: appStateMock.auth!.currentUser,
-      });
-    });
-
-    it('should update permissions', async () => {
-      setCachedPermissions(cachedPermissionsMock);
-      await store.dispatch(actions.loadUserPermissions());
-      expect(store.getActions()[0]).toEqual({
-        type: types.SET_PERMISSIONS,
-        permissionsStore: new PermissionsStore(actualPermissionsMock),
-        currentUser: appStateMock.auth!.currentUser,
-      });
-    });
-
-    it('should update permissions cache', async () => {
       jest.spyOn(appActionHelper, 'updateCachedPermissions');
-      await store.dispatch(actions.loadUserPermissions());
-      expect(appActionHelper.updateCachedPermissions).toHaveBeenCalledWith(
-        actualPermissionsMock,
-      );
+      setCachedPermissions(null);
+
+      await store.dispatch(actions.initializeApp(appConfigMock));
+      expect(store.getActions().filter(a => a.type === types.SET_PERMISSIONS)).toHaveLength(1);
+    });
+
+    it('should update cached permissions', async () => {
+      jest.spyOn(appActionHelper, 'updateCachedPermissions');
+      const cachedPermissions = mocks.createPermissionItem();
+      setCachedPermissions([cachedPermissions]);
+
+      expect(getStorageState().permissions).toEqual([cachedPermissions]);
+
+      await store.dispatch(actions.initializeApp(appConfigMock));
+
+      expect(store.getActions().filter(a => a.type === types.SET_PERMISSIONS)).toHaveLength(2);
+      expect(appActionHelper.updateCachedPermissions).toHaveBeenCalledWith(actualPermissionsMock);
+      expect(getStorageState().permissions).toEqual(actualPermissionsMock);
     });
 
     function setCachedPermissions(permissions) {
-      storage.__setStorageState({
-        permissions: permissions,
-      });
+      storage.__setStorageState({permissions});
     }
   });
 
