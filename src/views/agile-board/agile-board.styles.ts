@@ -63,7 +63,7 @@ export default EStyleSheet.create({
   agileSelector: {
     width: '100%',
     minHeight: UNIT * 7,
-    paddingTop: UNIT * 1.5,
+    paddingTop: UNIT,
     paddingLeft: UNIT * 2,
     marginRight: UNIT * 7,
     backgroundColor: '$background',
