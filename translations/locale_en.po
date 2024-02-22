@@ -499,7 +499,7 @@ msgstr "Enter search request"
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr "Enter the web address for a YouTrack installation where you have a registered account"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:245
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:221
 msgid "Enter time value"
 msgstr "Enter time value"
 
@@ -832,7 +832,7 @@ msgstr "Preview Size"
 msgid "Problem"
 msgstr "Problem"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:120
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:94
 msgid "Project"
 msgstr "Project"
 
@@ -919,7 +919,7 @@ msgstr "Search articles"
 msgid "Search for a different value"
 msgstr "Search for a different value"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:206
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:195
 msgid "Search for the project"
 msgstr "Search for the project"
 
