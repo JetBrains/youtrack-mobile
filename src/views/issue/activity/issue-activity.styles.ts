@@ -60,11 +60,14 @@ export default EStyleSheet.create({
   editCommentCloseButton: {
     position: 'absolute',
     zIndex: 1,
-    left: UNIT / 1.5,
+    top: UNIT * 1.5,
+    right: UNIT * 2,
     alignItems: 'center',
     justifyContent: 'center',
-    width: UNIT * 4,
-    height: UNIT * 4,
+    width: UNIT * 3,
+    height: UNIT * 3,
+    borderRadius: UNIT * 4,
+    backgroundColor: '$boxBackground',
   },
   link: {
     color: '$link',
@@ -74,5 +77,8 @@ export default EStyleSheet.create({
   },
   error: {
     color: '$error',
+  },
+  icon: {
+    color: '$icon',
   },
 });

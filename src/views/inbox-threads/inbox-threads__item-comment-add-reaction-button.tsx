@@ -5,13 +5,15 @@ import {HIT_SLOP} from 'components/common-styles';
 import styles from './inbox-threads.styles';
 import {useSelector} from 'react-redux';
 import type {AppState} from '../../reducers';
-type Props = {
+
+interface Props {
   onPress: () => any;
   style?: any;
-};
+}
+
 export default function ThreadAddReactionButton({onPress, style}: Props) {
   const isOnline: boolean = useSelector(
-    (state: AppState) => state.app.networkState?.isConnected,
+    (state: AppState) => !!state.app.networkState?.isConnected,
   );
   return (
     <TouchableOpacity
@@ -21,7 +23,7 @@ export default function ThreadAddReactionButton({onPress, style}: Props) {
       onPress={onPress}
     >
       <ReactionAddIcon
-        color={!isOnline ? styles.disabled.color : styles.icon.color}
+        color={!isOnline ? styles.disabled.color : styles.iconAddReaction.color}
       />
     </TouchableOpacity>
   );

@@ -75,7 +75,7 @@ function isAbsoluteDates(): boolean {
 function formatDate(
   date: Date | number,
   pattern: string = USER_DATE_FORMAT_DEFAULT_PATTERN,
-  locale,
+  locale: Locale,
 ) {
   return format(date, pattern, {
     locale,
@@ -83,7 +83,7 @@ function formatDate(
 }
 
 function formatTime(date: Date | number): string {
-  return format(date, getPattern().split(getDatePattern()).pop().trim());
+  return format(date, (getPattern().split(getDatePattern()).pop() || '').trim());
 }
 
 function getLocale() {
@@ -96,15 +96,14 @@ function absDate(date?: Date | number, noTime?: boolean): string {
     : formatDate(date, noTime ? getDatePattern() : getPattern(), getLocale());
 }
 
-function ytDate(date?: Date | number, noTime?: boolean): string {
+function ytDate(date: number, noTime?: boolean): string {
   if (date == null) {
     return '';
   }
+  return isAbsoluteDates() ? absDate(date, noTime) : ytDateRelative(date);
+}
 
-  if (isAbsoluteDates()) {
-    return absDate(date, noTime);
-  }
-
+function ytDateRelative(date: number): string {
   return Date.now() - date <= 60 * 1000
     ? i18n('just now')
     : formatDistanceToNow(date, {
@@ -119,4 +118,5 @@ export {
   absDate,
   formatTime,
   ytDate,
+  ytDateRelative,
 };

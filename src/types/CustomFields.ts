@@ -87,14 +87,19 @@ export type FieldValue = {
   text: string;
 };
 export type CustomFieldValue =
-  | Partial<FieldValue>
   | number
   | string
-  | any[];
+  | FieldValue
+  | FieldValue[]
+  | Partial<FieldValue>
+  | Partial<FieldValue>[]
+
 export type CustomFieldBase = {
   $type: string;
   id: string;
   name: string;
+  pausedTime?: number;
+  value: CustomFieldValue;
   projectCustomField: ProjectCustomField;
 };
 export type CustomField = {
@@ -102,7 +107,7 @@ export type CustomField = {
   id: string;
   name: string;
   hasStateMachine?: boolean;
-  value: CustomFieldValue;
+  value: CustomFieldValue | CustomFieldValue[];
   localizedName?: string;
   projectCustomField: ProjectCustomField;
 };
@@ -135,6 +140,7 @@ export type Attachment = {
 export type IssueComment = {
   $type: string;
   id: string;
+  canUpdateVisibility: boolean;
   created: number;
   updated: number;
   textPreview: string;
@@ -142,10 +148,11 @@ export type IssueComment = {
   text: string;
   usesMarkdown: boolean;
   author: User;
-  visibility: Visibility | null;
+  visibility?: Visibility | null;
   reactionOrder: string;
   reactions: Reaction[];
   issue?: Partial<IssueFull>;
+  article?: { id: string; };
   attachments?: Attachment[];
   mentions?: Mentions;
 };

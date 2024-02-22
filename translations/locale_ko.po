@@ -52,6 +52,21 @@ msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
 msgstr[0] "이슈 {{amount}}개"
 
+#: src/views/issues/issues__row.tsx
+msgid "{{daysLeft}}d"
+msgid_plural "{{daysLeft}}d"
+msgstr[0] "{{daysLeft}}일"
+
+#: src/views/issues/issues__row.tsx
+msgid "{{hoursLeft}}h"
+msgid_plural "{{hoursLeft}}h"
+msgstr[0] "{{hoursLeft}}시간"
+
+#: src/views/issues/issues__row.tsx
+msgid "{{minutesAbsolute}}m"
+msgid_plural "{{minutesAbsolute}}m"
+msgstr[0] "{{minutesAbsolute}}분"
+
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
 msgstr "코멘트 내의 @멘션"
@@ -77,7 +92,7 @@ msgstr "활동 설정"
 msgid "Add project to favorites"
 msgstr "즐겨 찾기에 프로젝트 추가"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
 msgstr "감정 이모티콘 추가"
@@ -295,8 +310,8 @@ msgstr "내용 수정됨"
 
 #: src/components/user/user-card.tsx
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -313,7 +328,7 @@ msgid "Copy field text"
 msgstr "필드 텍스트 복사"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -325,7 +340,7 @@ msgstr "링크 복사"
 msgid "Copy link to article"
 msgstr "자료 링크 복사"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -367,7 +382,7 @@ msgstr "취소"
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
@@ -449,7 +464,7 @@ msgid "Drafts"
 msgstr "이슈 초안"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -525,6 +540,7 @@ msgstr "이름으로 스프린트 필터링"
 msgid "Filter tags"
 msgstr "태그 필터링"
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "사용자, 그룹 및 팀 필터링"
@@ -545,7 +561,7 @@ msgstr "키워드를 포함하는 이슈 찾기"
 msgid "Get help"
 msgstr "도움 받기"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "그룹 및 팀"
 
@@ -568,6 +584,10 @@ msgstr "기본 제공 오류 보고 외에도 YouTrack Mobile은 문제를 진�
 #: src/views/article/article.tsx
 msgid "in revision"
 msgstr "수정 버전의"
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
+msgstr "상속된 제한"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -685,6 +705,11 @@ msgid "Matches {{issuesCount}} issue"
 msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] " {{issuesCount}} 건이 존재합니다."
 
+#: src/views/issues/issues__count.tsx
+msgid "Matches {{issuesCount}} ticket"
+msgid_plural "Matches {{issuesCount}} tickets"
+msgstr[0] "{{issuesCount}}개 티켓과 일치"
+
 #: src/views/issues/index.ts
 msgid "Medium"
 msgstr "보통"
@@ -779,13 +804,17 @@ msgstr "알림"
 msgid "Other"
 msgstr "기타"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "기타 그룹 및 팀"
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "비밀번호"
+
+#: src/views/issues/issues__row.tsx
+msgid "Paused"
+msgstr "일시 중지됨"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
@@ -824,7 +853,7 @@ msgstr "쿼리"
 msgid "Recent searches"
 msgstr "최근 검색"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "권장 그룹 및 팀"
 
@@ -853,10 +882,14 @@ msgstr "감정 이모티콘을 제거했음"
 msgid "reopened the pull request"
 msgstr "풀 리퀘스트를 다시 열었음"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "답글"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr "가시성 재설정"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -899,6 +932,10 @@ msgstr "목록에서 기사 선택"
 msgid "Select an issue from the list"
 msgstr "목록에서 이슈 선택"
 
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
+msgstr "사용자, 그룹 및 팀 선택"
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
 msgstr "충돌 보고서 보내기"
@@ -932,8 +969,8 @@ msgid "Share"
 msgstr "공유"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -1127,7 +1164,7 @@ msgstr "스레드 끄기 해제됨"
 #: src/views/issues/issues-reducers.ts
 #: src/views/tickets/tickets.tsx
 msgid "Tickets"
-msgstr "티켓목록"
+msgstr "티켓"
 
 #: src/views/article-create/article-create.tsx
 msgid "Title"
@@ -1177,6 +1214,11 @@ msgstr "읽지 않은 항목만"
 msgid "Untitled"
 msgstr "제목 없음"
 
+#: src/views/article/article__activity.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr "가시성 업데이트"
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1198,7 +1240,7 @@ msgstr "사용자 계정이 금지됨"
 msgid "Username or email"
 msgstr "사용자 이름 또는 이메일"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "사용자"
 
@@ -1221,6 +1263,11 @@ msgstr "보고된 이슈 보기"
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "가시성"
+
+#: src/components/activity-stream/activity__stream.tsx
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
+msgstr "{{presentation}}에게 표시"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"

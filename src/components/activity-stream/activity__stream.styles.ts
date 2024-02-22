@@ -1,69 +1,113 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {MAIN_FONT_SIZE, mainText, SECONDARY_FONT_SIZE, secondaryText, UNIT} from 'components/common-styles';
-import {separator} from '../common-styles/list';
+import {separator, separatorTopBorder} from '../common-styles/list';
 
 const secondaryTextColor = {
   color: '$textSecondary',
 };
 export const rowStyles = {
+  activityStream: {
+    paddingVertical: UNIT * 2,
+  },
+  activityMergedConnector: {
+    position: 'absolute',
+    zIndex: -1,
+    left: 23,
+    top: 20,
+    bottom: -20,
+    width: 2,
+    opacity: 0.25,
+    backgroundColor: '$iconAction',
+  },
+  activityMergedConnectorFirst: {
+    top: 50,
+  },
+  activityMergedLeaf: {
+    left: 17,
+    top: 7,
+    width: 14,
+    height: 14,
+    borderRadius: 14,
+    borderWidth: 3,
+    borderColor: '$background',
+    backgroundColor: '$iconAction',
+  },
   activityWrapper: {
-    paddingTop: UNIT,
-    paddingLeft: UNIT,
-    paddingRight: UNIT,
-    backgroundColor: '$background',
+    position: 'relative',
+    paddingHorizontal: UNIT,
+    marginVertical: UNIT * 1.5,
+  },
+  activityWrapperMerged: {
+    marginTop: -UNIT * 2,
   },
   activity: {
     flexDirection: 'row',
   },
-  activityMerged: {
-    marginBottom: 0,
-    paddingTop: UNIT * 3,
+  activityContent: {
+    flex: 1,
+    padding: UNIT,
+    marginLeft: UNIT / 2,
+    borderRadius: UNIT,
+  },
+  activityContentSecured: {
+    backgroundColor: '$privateBackground',
+  },
+  activityTitle: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   activitySeparator: {
     ...separator,
+    marginLeft: UNIT,
     borderColor: '$separator',
-    marginTop: UNIT * 3,
-    marginBottom: UNIT * 2,
-    marginLeft: UNIT * 7,
-    marginRight: -UNIT,
   },
   activityAvatar: {
     width: UNIT * 4,
     height: UNIT * 4,
+    marginTop: UNIT / 4,
+    borderRadius: 6,
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  activityAuthor: {
+  activityAvatarIcon: {
+    backgroundColor: '$iconBackground',
+  },
+  activityAvatarMerged: {
+    backgroundColor: 'transparent',
+  },
+  activityAuthorInfo: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  activityAuthorInfoContent: {
+    flexGrow: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    maxWidth: '98%',
+  },
+  activityAuthorInfoContentUser: {
     color: '$textSecondary',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: UNIT / 2,
-    marginBottom: UNIT / 4,
   },
-  activityStream: {
-    paddingTop: UNIT * 2,
-    paddingBottom: UNIT * 3,
-    paddingHorizontal: UNIT,
-  },
-  activityItem: {
-    flex: 1,
-    marginLeft: UNIT * 2,
-  },
-  activityAuthorName: {
-    flexGrow: 1,
-    flexShrink: 0,
-    marginRight: UNIT / 2,
-    ...secondaryTextColor,
-    fontSize: MAIN_FONT_SIZE + 2,
+  activityAuthorInfoContentUserName: {
+    marginRight: UNIT,
+    color: '$text',
+    fontSize: MAIN_FONT_SIZE + 1,
     lineHeight: MAIN_FONT_SIZE + 1,
     fontWeight: '500',
     letterSpacing: -0.22,
-    color: '$text',
   },
   activityTimestamp: {
     ...secondaryText,
     color: '$textSecondary',
     lineHeight: MAIN_FONT_SIZE,
+  },
+  activityTimestampMerged: {
+    fontWeight: '500',
   },
   activityLabel: {
     fontSize: SECONDARY_FONT_SIZE,
@@ -75,13 +119,14 @@ export const rowStyles = {
   },
   activityRelatedChanges: {
     flex: 1,
-    padding: UNIT * 2,
-    paddingTop: UNIT,
-    marginTop: UNIT * 1.5,
-    marginBottom: UNIT,
-    backgroundColor: '$boxBackground',
+    marginTop: UNIT,
+    padding: UNIT * 1.5,
+    paddingTop: UNIT * 0.75,
+    backgroundColor: '$greyBackground',
     borderRadius: UNIT,
-    lineHeight: SECONDARY_FONT_SIZE,
+  },
+  activityRelatedChangesSecured: {
+    backgroundColor: '$yellowBackground',
   },
   activityHistoryChanges: {
     flex: 1,
@@ -89,6 +134,9 @@ export const rowStyles = {
   },
   activityChange: {
     marginTop: UNIT / 2,
+  },
+  activityChangeMerged: {
+    marginTop: 0,
   },
   activityNoActivity: {
     marginTop: UNIT * 5,
@@ -116,41 +164,28 @@ export const rowStyles = {
   },
   activityCommentActionsAddReaction: {
     color: '$iconAccent',
-    marginRight: UNIT * 2,
   },
   activityCommentActionsOther: {
     color: '$iconAccent',
   },
-  activityCommentDate: {
-    marginTop: UNIT * 2,
-  },
   activityCommentReactions: {
     alignItems: 'center',
-    paddingLeft: UNIT * 7,
-    marginRight: UNIT,
   },
   activityCommentAttachments: {
-    marginVertical: UNIT,
+    marginTop: UNIT,
   },
   activityIcon: {
-    color: '$iconAccent',
+    color: '$iconAction',
   },
-  link: {...secondaryText, color: '$link'},
+  privateIcon: {
+    color: '$private',
+    marginRight: -UNIT / 4,
+  },
+  link: {
+    ...secondaryText,
+    color: '$link',
+  },
   secondaryTextColor: secondaryTextColor,
-  activityVisibility: {
-    marginTop: UNIT,
-    marginLeft: UNIT * 6,
-    marginBottom: UNIT * 2,
-  },
-  activityVisibilityMerged: {
-    marginLeft: 0,
-    marginTop: UNIT * 2,
-    marginBottom: UNIT,
-  },
-  activityWorkIcon: {
-    position: 'relative',
-    top: -2,
-  },
   activityStarTag: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -159,9 +194,6 @@ export const rowStyles = {
     marginLeft: UNIT / 2,
     color: '$textSecondary',
     fontWeight: 'bold',
-  },
-  activityWorkComment: {
-    marginTop: UNIT,
   },
   activityWorkEditIcon: {
     position: 'absolute',
@@ -172,11 +204,7 @@ export const rowStyles = {
   },
   vcsInfo: {
     flexDirection: 'row',
-  },
-  vcsInfoDate: {
-    flexShrink: 1,
-    flexGrow: 1,
-    marginRight: UNIT * 2,
+    justifyContent: 'space-between',
   },
   showMoreMessage: {
     marginTop: UNIT,
@@ -211,12 +239,17 @@ export const rowStyles = {
     flexDirection: 'row',
     padding: UNIT / 2,
     alignItems: 'center',
-    alignSelf: 'flex-start',
+  },
+  contextMenuStartBlock: {
+    height: separatorTopBorder.borderTopWidth,
+    marginVertical: UNIT,
+    backgroundColor: '$separator',
   },
   contextMenuItem: {
     padding: UNIT,
     minWidth: 160,
     paddingRight: 0,
+    fontSize: MAIN_FONT_SIZE,
     color: '$text',
   },
   contextMenuItemDestructive: {
@@ -236,6 +269,22 @@ export const rowStyles = {
     paddingTop: UNIT,
     paddingBottom: UNIT * 1.5,
     ...secondaryText,
+  },
+  contextMenuAuxiliaryPreview: {
+    flexDirection: 'row',
+  },
+  contextMenuAuxiliaryPreviewNarrow: {
+    maxWidth: 330,
+  },
+  contextMenuAuxiliaryPreviewText: {
+    fontSize: MAIN_FONT_SIZE - 1,
+    lineHeight: MAIN_FONT_SIZE + 2,
+    color: '$text',
+  },
+  activityCommentVisibility: {
+    minHeight: 50,
+    padding: UNIT,
+    paddingHorizontal: UNIT * 2,
   },
 };
 export default EStyleSheet.create(rowStyles);

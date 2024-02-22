@@ -22,7 +22,7 @@ export interface ProjectPlugins {
 
 }
 
-export type Project = {
+export interface Project {
   $type?: string;
   id: string;
   name: string;
@@ -32,4 +32,13 @@ export type Project = {
   pinned: boolean;
   plugins?: ProjectPlugins;
   template: boolean;
-};
+}
+
+export interface ProjectTeam {
+  id: string;
+  name: string;
+}
+
+export interface ProjectWithTeam extends Project {
+  team: ProjectTeam;
+}

@@ -2,15 +2,15 @@ import React, {PureComponent} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 import IssueVisibility from './issue-visibility';
-import SelectSectioned, {SelectSectionedModal, SLItem} from 'components/select/select-sectioned';
+import SelectSectioned, {SelectSectionedModal} from 'components/select/select-sectioned';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
+import {getGroupedData, getVisibilityPresentation} from 'components/visibility/visibility-helper';
 import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconAngleDown, IconClose, IconLock} from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';
-import {sortAlphabetically} from '../search/sorting';
 import {visibilityDefaultText} from './visibility-strings';
 
 import styles from './visibility-control.styles';
@@ -19,17 +19,19 @@ import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
 import type {Visibility, VisibilityGroups, VisibilityItem} from 'types/Visibility';
+import {UserGroup} from 'types/UserGroup';
 
 interface Props {
   getOptions: (q: string | undefined) => Promise<VisibilityGroups>;
-  onApply: (visibility: Visibility) => any;
+  onApply: (visibility: Visibility | null) => any;
   onHide?: () => any;
   onShow?: () => any;
-  onSubmit?: ((visibility: Visibility) => any) | null | undefined;
-  style: ViewStyleProp | null;
-  uiTheme: UITheme;
+  onSubmit?: ((visibility: Visibility | null) => void) | null;
+  style?: ViewStyleProp | null;
+  uiTheme?: UITheme;
   visibility: Visibility | null;
   visibilityDefaultLabel?: string;
+  disabled?: boolean;
 }
 
 type State = {
@@ -37,11 +39,10 @@ type State = {
   visibility: Visibility | null;
 };
 
-
 export default class VisibilityControl extends PureComponent<Props, State> {
   static defaultProps: Partial<Props> = {
     visibility: null,
-    onApply: (visibility: Visibility) => null,
+    onApply: () => null,
     getOptions: () => Promise.resolve({} as VisibilityGroups),
     style: null,
     uiTheme: DEFAULT_THEME,
@@ -63,12 +64,8 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     }
   }
 
-  updateVisibility: (visibility: Visibility | null) => void = (
-    visibility: Visibility | null,
-  ) => {
-    this.setState({
-      visibility,
-    });
+  updateVisibility = (visibility: Visibility | null) => {
+    this.setState({visibility});
 
     if (this.props.onSubmit) {
       this.props.onSubmit(visibility);
@@ -77,6 +74,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
 
     this.props.onApply(visibility);
   };
+
   getVisibilityOptions = async (q: string | undefined): Promise<VisibilityGroups> => {
     try {
       return await this.props.getOptions(q);
@@ -85,72 +83,33 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     }
   };
 
-  getGroupedData = async (q: string) => {
-    const vg: VisibilityGroups = await this.getVisibilityOptions(q);
-    const sort = (data: VisibilityItem[] = []): VisibilityItem[] => (
-      data
-        .filter((group: VisibilityItem & { allUsersGroup?: boolean }) => !group.allUsersGroup)
-        .sort(sortAlphabetically)
-    );
-    const recommendedGroups: VisibilityItem[] = sort(vg.recommendedGroups);
-    const groupsWithoutRecommended: VisibilityItem[] = (
-      vg.groupsWithoutRecommended != null
-        ? vg.groupsWithoutRecommended
-        : vg.visibilityGroups
-    );
-    const grouped: {
-      groups: { data: VisibilityItem[]; title: string };
-      users: { data: VisibilityItem[]; title: string };
-      recommended: { data: VisibilityItem[]; title: string }
-    } = {
-      recommended: {
-        title: i18n('Recommended groups and teams'),
-        data: recommendedGroups,
-      },
-      groups: {
-        title: recommendedGroups.length > 0 ? i18n('Other groups and teams') : i18n('Groups and teams'),
-        data: sort(groupsWithoutRecommended),
-      },
-      users: {
-        title: i18n('Users'),
-        data: sort(vg.visibilityUsers),
-      },
-    };
-
-    return Object.keys(grouped).reduce(
-      (akk: SLItem[], key: string) => [
-        ...akk,
-        ...(grouped[key as keyof typeof grouped].data.length > 0 ? [grouped[key as keyof typeof grouped]] : [])],
-      [] as SLItem[]
-    );
-  };
-
-  setSelectVisible: (isVisible: boolean) => void = (isVisible: boolean) => {
-    const noop: () => void = (): void => {};
+  setSelectVisible = (isSelectVisible: boolean) => {
+    const noop = () => {};
 
     const {onShow = noop, onHide = noop} = this.props;
 
-    if (isVisible) {
+    if (isSelectVisible) {
       onShow();
     } else {
       onHide();
     }
 
-    this.setState({
-      isSelectVisible: isVisible,
-    });
+    this.setState({isSelectVisible});
   };
-  openSelect: () => void = () => {
+
+  openSelect = () => {
     this.setSelectVisible(true);
   };
-  closeSelect: () => void = () => {
+
+  closeSelect = () => {
     this.setSelectVisible(false);
   };
-  onSelect = (selectedItems: VisibilityItem[] | null) => {
-    const selected: VisibilityItem[] = selectedItems || [];
+
+  onSelect = (selectedItems: (User | UserGroup)[] | null) => {
+    const selected: (User | UserGroup)[] = selectedItems || [];
     const visibility: Visibility = IssueVisibility.visibility({
-      permittedGroups: selected.filter((it: VisibilityItem) => hasType.userGroup(it)),
-      permittedUsers: selected.filter((it: VisibilityItem) => hasType.user(it)),
+      permittedGroups: selected.filter((it: User | UserGroup) => hasType.userGroup(it)) as UserGroup[],
+      permittedUsers: selected.filter((it: User | UserGroup) => hasType.user(it)) as User[],
     });
     this.updateVisibility({
       ...this.props.visibility,
@@ -158,23 +117,21 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     });
     this.closeSelect();
   };
-  resetVisibility: () => void = () => {
+
+  resetVisibility = () => {
     this.updateVisibility(null);
   };
+
   getVisibilitySelectedItems: () => VisibilityItem[] = () => {
     const {visibility} = this.state;
     const v: VisibilityItem[] = [];
-    return (
-      visibility
-        ? v.concat(visibility?.permittedGroups || []).concat(visibility?.permittedUsers || [])
-        : v
-    );
+    return visibility ? v.concat(visibility?.permittedGroups || []).concat(visibility?.permittedUsers || []) : v;
   };
 
   getItemTitle: (item: any) => any = (item: Record<string, any>) => getEntityPresentation(item);
 
   renderSelect(): React.ReactNode {
-    const Component = isSplitView() ? SelectSectionedModal : SelectSectioned;
+    const Component = (isSplitView() ? SelectSectionedModal : SelectSectioned) as React.ElementType;
     return (
       <Component
         testID="test:id/visibility-control-button"
@@ -185,35 +142,20 @@ export default class VisibilityControl extends PureComponent<Props, State> {
         placeholder={i18n('Filter users, groups, and teams')}
         selectedItems={this.getVisibilitySelectedItems()}
         getTitle={this.getItemTitle}
-        dataSource={this.getGroupedData}
+        dataSource={async (q: string) => getGroupedData(await this.getVisibilityOptions(q))}
         onSelect={this.onSelect}
         onCancel={this.closeSelect}
       />
     );
   }
 
-  getVisibilityPresentation(visibility: Visibility): string {
-    const author: User | undefined = visibility?.implicitPermittedUsers && visibility.implicitPermittedUsers[0];
-    return [
-      getEntityPresentation(author),
-      IssueVisibility.getVisibilityShortPresentation(visibility),
-    ]
-      .filter(Boolean)
-      .join(', ');
-  }
-
   renderVisibilityButton(): React.ReactNode {
-    const {
-      onSubmit,
-      visibilityDefaultLabel = visibilityDefaultText(),
-    } = this.props;
+    const {onSubmit, visibilityDefaultLabel = visibilityDefaultText(), disabled} = this.props;
     const {visibility} = this.state;
+
     const isSecured: boolean = IssueVisibility.isSecured(visibility);
-    const label: string = visibility?.inherited
-      ? 'Inherited restrictions'
-      : isSecured
-        ? this.getVisibilityPresentation(visibility)
-        : visibilityDefaultLabel;
+    const label: string = getVisibilityPresentation(visibility, visibilityDefaultLabel);
+
     return (
       <View
         testID="test:id/visibilityControlButton"
@@ -223,36 +165,30 @@ export default class VisibilityControl extends PureComponent<Props, State> {
       >
         {!onSubmit && isSecured && (
           <TouchableOpacity
+            testID="test:id/visibilityResetButton"
+            accessibilityLabel="visibilityResetButton"
             style={styles.resetButton}
             onPress={this.resetVisibility}
             hitSlop={HIT_SLOP}
           >
-            <IconClose size={16} color={this.props.uiTheme.colors.$link}/>
+            <IconClose size={16} color={styles.secured.color} />
           </TouchableOpacity>
         )}
 
-        <TouchableOpacity
-          style={styles.container}
-          onPress={this.openSelect}
-          hitSlop={HIT_SLOP}
-        >
+        <TouchableOpacity style={styles.container} onPress={this.openSelect} hitSlop={HIT_SLOP} disabled={disabled}>
           {(isSecured || visibility?.inherited) && (
-            <IconLock
-              style={styles.buttonIcon}
-              size={16}
-              color={this.props.uiTheme.colors.$iconAccent}
-            />
+            <IconLock style={styles.buttonIcon} size={16} color={styles.secured.color} />
           )}
-          <Text style={styles.buttonText}>{label}</Text>
-          <IconAngleDown size={20} color={styles.buttonText.color}/>
+          <Text style={[styles.buttonText, isSecured && styles.secured]}>{label}</Text>
+          {!disabled && <IconAngleDown size={20} color={isSecured ? styles.secured.color : styles.buttonText.color} />}
         </TouchableOpacity>
       </View>
     );
   }
 
-  render(): React.ReactNode {
+  render() {
     return (
-      <View testID="visibilityControl">
+      <View testID="test:id/visibilityControl" accessibilityLabel="visibilityControl">
         {this.renderVisibilityButton()}
         {this.state.isSelectVisible && this.renderSelect()}
       </View>

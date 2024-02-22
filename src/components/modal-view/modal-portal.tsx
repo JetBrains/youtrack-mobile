@@ -1,71 +1,52 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
-import {Portal} from 'react-native-portalize';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-import modalStyles from './modal.view.styles';
+import {Portal} from 'react-native-portalize';
+import {View as AnimatedView} from 'react-native-animatable';
+
+import styles from './modal.view.styles';
 
 import type {ViewStyleProp} from 'types/Internal';
 
 interface Props {
-  children: any;
+  children: React.ReactNode;
   fullscreen?: boolean;
+  popup?: boolean;
   hasOverlay?: boolean;
   onHide: () => any;
   style?: ViewStyleProp;
   testID?: string;
 }
 
-
-const ModalPortal = (props: Props): JSX.Element => {
+const ModalPortal = (props: Props) => {
   const {hasOverlay = true, onHide = () => {}} = props;
-  return (
+  const {top, bottom} = useSafeAreaInsets();
+  return props.children ? (
     // @ts-ignore
     <Portal testID={props.testID}>
-      {!!props.children && (
-        <View style={modalStyles.container}>
-          {hasOverlay && (
-            <TouchableOpacity
-              activeOpacity={1}
-              style={modalStyles.modalMask}
-              onPress={onHide}
-            />
-          )}
-          <View
-            style={[
-              modalStyles.modal,
-              props.fullscreen && modalStyles.modalFullscreen,
-            ]}
-          >
-            <View
-              style={[
-                modalStyles.modalContent,
-                props.fullscreen && modalStyles.modalContentFullscreen,
-                props.style,
-              ]}
-            >
-              {props.children}
-            </View>
+      <AnimatedView
+        useNativeDriver
+        animation="fadeIn"
+        duration={400}
+        style={[styles.container, {paddingTop: top, paddingBottom: bottom}, props.style]}
+      >
+        {hasOverlay && (
+          <TouchableOpacity
+            activeOpacity={1}
+            style={[styles.modalMask, props.fullscreen && styles.fullscreen]}
+            onPress={onHide}
+          />
+        )}
+        <View style={styles.modal}>
+          <View style={[styles.modalContent, props.popup && styles.modalPopup, props.fullscreen && styles.fullscreen]}>
+            {props.children}
           </View>
         </View>
-      )}
+      </AnimatedView>
     </Portal>
-  );
+  ) : null;
 };
 
-export const ModalPortalPart = ({
-  children,
-  isVisible,
-  style,
-}: {
-  children: any;
-  isVisible: boolean;
-  style?: ViewStyleProp;
-}): React.ReactNode => {
-  return (
-    <Portal>
-      {!!children && isVisible && <View style={style}>{children}</View>}
-    </Portal>
-  );
-};
-export default ModalPortal;
+export default React.memo(ModalPortal);

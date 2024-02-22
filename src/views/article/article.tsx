@@ -113,6 +113,7 @@ class Article extends IssueTabbed<Props, State> {
     if (this.props.storePrevArticle) {
       this.props.setPreviousArticle();
     }
+    this.props.resetArticleCommentDraft();
 
     const currentArticle: ArticleEntity = this.getArticle();
     const canLoadArticle: boolean = !!currentArticle && !!(currentArticle.id || currentArticle.idReadable);

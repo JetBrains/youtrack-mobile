@@ -1,14 +1,22 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {headerMinHeight} from 'components/header/header.styles';
+
 import {StyleSheet} from 'react-native';
+
+import {headerMinHeight} from 'components/header/header.styles';
 import {title} from 'components/common-styles/issue';
 import {UNIT} from 'components/variables';
+
 export default EStyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#000000',
+    height: '100%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: UNIT,
   },
   header: {
+    marginTop: UNIT,
+    marginBottom: -UNIT,
     backgroundColor: 'transparent',
   },
   preview: {

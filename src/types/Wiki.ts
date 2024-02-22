@@ -5,7 +5,7 @@ export type YouTrackWiki = {
   attachments?: Attachment[];
   backendUrl: string;
   imageHeaders: RequestHeaders | null | undefined;
-  onIssueIdTap?: () => void;
+  onIssueIdTap?: (issueId: string) => void
   title?: string;
   description?: string;
   style?: ViewStyleProp;

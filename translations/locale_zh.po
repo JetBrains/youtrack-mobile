@@ -52,6 +52,21 @@ msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} 个问题"
 
+#: src/views/issues/issues__row.tsx
+msgid "{{daysLeft}}d"
+msgid_plural "{{daysLeft}}d"
+msgstr[0] "{{daysLeft}} 天"
+
+#: src/views/issues/issues__row.tsx
+msgid "{{hoursLeft}}h"
+msgid_plural "{{hoursLeft}}h"
+msgstr[0] "{{hoursLeft}} 小时"
+
+#: src/views/issues/issues__row.tsx
+msgid "{{minutesAbsolute}}m"
+msgid_plural "{{minutesAbsolute}}m"
+msgstr[0] "{{minutesAbsolute}} 分钟"
+
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
 msgstr "在评论中@提及"
@@ -77,7 +92,7 @@ msgstr "活动设置"
 msgid "Add project to favorites"
 msgstr "将项目添加到收藏夹"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
 msgstr "添加回应"
@@ -295,8 +310,8 @@ msgstr "已修改内容"
 
 #: src/components/user/user-card.tsx
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -313,7 +328,7 @@ msgid "Copy field text"
 msgstr "复制字段文本"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -325,7 +340,7 @@ msgstr "复制链接"
 msgid "Copy link to article"
 msgstr "复制文章的链接"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -367,7 +382,7 @@ msgstr "数据库大小<br>(不带 blobs)"
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
@@ -449,7 +464,7 @@ msgid "Drafts"
 msgstr "草稿箱"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -525,6 +540,7 @@ msgstr "按名称筛选冲刺"
 msgid "Filter tags"
 msgstr "筛选标签"
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "筛选用户、群组和团队"
@@ -545,7 +561,7 @@ msgstr "查找包含关键词的问题"
 msgid "Get help"
 msgstr "获取帮助"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "群组和团队"
 
@@ -568,6 +584,10 @@ msgstr "除了我们内置的错误报告之外，YouTrack Mobile 还会使用�
 #: src/views/article/article.tsx
 msgid "in revision"
 msgstr "修订版"
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
+msgstr ""
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -685,6 +705,11 @@ msgid "Matches {{issuesCount}} issue"
 msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] "匹配 {{issuesCount}} 个问题"
 
+#: src/views/issues/issues__count.tsx
+msgid "Matches {{issuesCount}} ticket"
+msgid_plural "Matches {{issuesCount}} tickets"
+msgstr[0] "匹配 {{issuesCount}} 个工单"
+
 #: src/views/issues/index.ts
 msgid "Medium"
 msgstr "中"
@@ -779,13 +804,17 @@ msgstr "通知"
 msgid "Other"
 msgstr "其他"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "其他群组和团队"
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "密码"
+
+#: src/views/issues/issues__row.tsx
+msgid "Paused"
+msgstr "已暂停"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
@@ -824,7 +853,7 @@ msgstr "查询"
 msgid "Recent searches"
 msgstr "最近的搜索"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "推荐的群组和团队"
 
@@ -853,10 +882,14 @@ msgstr "已移除回应"
 msgid "reopened the pull request"
 msgstr "已重新打开 Pull Request"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "回复"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr "重置可见性"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -899,6 +932,10 @@ msgstr "从列表中选择文章"
 msgid "Select an issue from the list"
 msgstr "从列表中选择问题"
 
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
+msgstr "选择用户、群组和团队"
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
 msgstr "发送崩溃报告"
@@ -932,8 +969,8 @@ msgid "Share"
 msgstr "共享"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -1177,6 +1214,11 @@ msgstr "仅未读"
 msgid "Untitled"
 msgstr "未命名"
 
+#: src/views/article/article__activity.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr "更新可见性"
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1198,7 +1240,7 @@ msgstr "用户帐户被禁言"
 msgid "Username or email"
 msgstr "用户名或电子邮件"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "用户"
 
@@ -1221,6 +1263,11 @@ msgstr "查看报告的问题"
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "可见性"
+
+#: src/components/activity-stream/activity__stream.tsx
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
+msgstr "对 {{presentation}} 可见"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"

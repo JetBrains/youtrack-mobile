@@ -8,7 +8,10 @@ import type {IssueComment} from 'types/CustomFields';
 import type {IssueFull, OpenNestedViewParams} from 'types/Issue';
 import type {User, UserAppearanceProfile} from 'types/User';
 import type {WorkTimeSettings} from 'types/Work';
+import {ProjectTeam} from 'types/Project';
+
 type ActivityPage = Array<Activity> | null;
+
 export type State = {
   activitiesEnabled: boolean;
   activitiesLoadingError: Error | null | undefined;
@@ -23,13 +26,15 @@ export type State = {
   issueLoadingError: Error | null | undefined;
   issuePlaceholder: Partial<IssueFull>;
   openNestedIssueView: (params: OpenNestedViewParams) => any;
-  renderRefreshControl: (arg0: () => void) => any;
+  renderRefreshControl: (onRefreshCallback: () => void) => any;
   updateUserAppearanceProfile: (
     appearanceProfile: UserAppearanceProfile,
   ) => any;
   user: User;
   workTimeSettings: WorkTimeSettings | null | undefined;
+  defaultProjectTeam: ProjectTeam | undefined;
 };
+
 export const initialState: State = {
   activitiesEnabled: false,
   activitiesLoadingError: null,
@@ -48,6 +53,7 @@ export const initialState: State = {
   updateUserAppearanceProfile: () => {},
   user: null,
   workTimeSettings: null,
+  defaultProjectTeam: undefined,
 };
 const attachmentReducers = {
   [attachmentTypes.ATTACH_START_ADDING](
@@ -171,7 +177,13 @@ export default createReducer(initialState, {
     );
     return {...state, activityPage: newActivityPage};
   },
-}) as any;
+  [types.SET_HELPDESK_DEFAULT_PROJECT_TEAM]: (
+    state: State,
+    action: {team?: ProjectTeam},
+  ): State => {
+    return {...state, defaultProjectTeam: action.team};
+  },
+});
 
 function removeCommentFromActivityPage(
   activityPage: ActivityPage,

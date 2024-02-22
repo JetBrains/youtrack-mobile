@@ -503,8 +503,10 @@ function setUserPermissions(permissions: PermissionCacheItem[]): ReduxAction {
     dispatch({
       type: types.SET_PERMISSIONS,
       permissionsStore: new PermissionsStore(permissions),
-      currentUser:
-        getState().app?.auth?.currentUser || storage.getStorageState().currentUser,
+      currentUser: {
+        ...getState().app?.auth?.currentUser,
+        ...storage.getStorageState().currentUser,
+      },
     });
   };
 }
@@ -1162,7 +1164,7 @@ const setGlobalInProgress = (isInProgress: boolean) => ({
 
 export function setDraftCommentData(
   setDraft: Function,
-  getCommentDraft: () => () => Promise<IssueComment | null>,
+  getCommentDraft: () => ReduxAction<Promise<IssueComment | null>>,
   entity: AnyIssue | Article
 ) {
   return {

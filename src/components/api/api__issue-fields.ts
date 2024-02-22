@@ -111,6 +111,7 @@ const ISSUE_FIELD_SHORT_FIELDS = toField([
   'name',
   'localizedName',
   '$type',
+  'pausedTime',
   {
     value: [
       'id',
@@ -158,12 +159,13 @@ const ISSUE_ATTACHMENTS_FIELDS: any = toField([
     author: ['ringId'],
   },
 ]);
-const USER_GROUP_FIELDS = toField([
+export const USER_GROUP_FIELDS = toField([
   '$type',
   'id',
   'name',
   'localizedName',
   'allUsersGroup',
+  'team(id,name)',
 ]);
 const VISIBILITY_FIELDS: any = toField([
   {
@@ -205,6 +207,7 @@ const ISSUE_COMMENTS_FIELDS: any = toField([
   'updated',
   'deleted',
   'hasEmail',
+  'canUpdateVisibility',
   {
     attachments: ISSUE_ATTACHMENTS_FIELDS,
   },

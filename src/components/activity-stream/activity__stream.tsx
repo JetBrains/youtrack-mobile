@@ -13,7 +13,6 @@ import {
 import ActivityUserAvatar from './activity__stream-avatar';
 import ApiHelper from 'components/api/api__helper';
 import CommentReactions from 'components/comment/comment-reactions';
-import CommentVisibility from 'components/comment/comment__visibility';
 import ContextActionsProvider from 'components/activity-stream/activity__stream-actions-provider';
 import Feature, {FEATURE_VERSION} from 'components/feature/feature';
 import IssueVisibility from 'components/visibility/issue-visibility';
@@ -25,13 +24,16 @@ import StreamUserInfo from './activity__stream-user-info';
 import StreamVCS from './activity__stream-vcs';
 import StreamWork from './activity__stream-work';
 import {firstActivityChange} from './activity__stream-helper';
+import {getVisibilityPresentation} from 'components/visibility/visibility-helper';
 import {guid, isAndroidPlatform} from 'util/util';
 import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
+import {IconLock} from 'components/icon/icon';
 import {isDesktop} from 'components/responsive/responsive-helper';
 import {menuHeight} from 'components/common-styles/header';
 import {useBottomSheetContext} from 'components/bottom-sheet';
+import {visibilityArticleDefaultText, visibilityDefaultText} from 'components/visibility/visibility-strings';
 
 import styles from './activity__stream.styles';
 
@@ -64,15 +66,16 @@ interface Props {
     ) => void,
   ) => any;
   uiTheme: UITheme;
-  workTimeSettings: WorkTimeSettings | null | undefined;
+  workTimeSettings?: WorkTimeSettings | null;
   youtrackWiki: YouTrackWiki;
-  work: {
+  work?: {
     onWorkUpdate?: (workItem?: WorkItem) => void;
     createContextActions: (workItem: WorkItem | ActivityItem) => ContextMenuConfigItem[];
   };
   onCheckboxUpdate: (checked: boolean, position: number, comment: IssueComment) => void;
   renderHeader?: () => any;
   refreshControl: () => any;
+  onUpdate: () => void;
   highlight?: {
     activityId?: string;
     commentId?: string;
@@ -88,7 +91,7 @@ export interface ActivityStreamPropsReaction {
 
 export type ActivityStreamProps = Props & ActivityStreamPropsReaction;
 
-export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStreamProps) => {
+export const ActivityStream = (props: ActivityStreamProps) => {
   const window = useWindowDimensions();
   const {
     renderHeader = () => null,
@@ -148,11 +151,10 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     }, 100);
   }, [highlight, scrollToActivity]);
 
-  const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment => (
-    firstActivityChange(activityGroup.comment) as IssueComment
-  );
+  const getCommentFromActivityGroup = (activityGroup: ActivityGroup): IssueComment =>
+    firstActivityChange(activityGroup.comment) as IssueComment;
 
-  const renderCommentReactions = (activityGroup: ActivityGroup): React.ReactNode => {
+  const renderCommentReactions = (activityGroup: ActivityGroup) => {
     const comment = getCommentFromActivityGroup(activityGroup);
     return comment && !comment.deleted ? (
       <CommentReactions
@@ -166,9 +168,10 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
         >
           <TouchableOpacity
             hitSlop={HIT_SLOP}
+            style={styles.activityCommentActionsAddReaction}
             onPress={() => props?.onReactionPanelOpen?.(comment)}
           >
-            <ReactionAddIcon style={styles.activityCommentActionsAddReaction}/>
+            <ReactionAddIcon color={styles.activityCommentActionsAddReaction.color}/>
           </TouchableOpacity>
         </Feature>
       </CommentReactions>
@@ -186,50 +189,65 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     const entity: ActivityItem | undefined = activity && firstActivityChange(activity as Activity);
     if (entity) {
       openBottomSheet({
+        withHandle: false,
         header: null,
         children: (
           <>
-            {menuConfig.menuItems.map(
-              (it: ContextMenuConfigItem) => (
-                <TouchableOpacity
-                  key={guid()}
-                  style={styles.contextMenu}
-                  onPress={() => {
-                    closeBottomSheet();
-                    it?.execute?.();
-                  }}
-                >
-                  <Text
-                    style={[
-                      styles.contextMenuItem,
-                      it.menuAttributes?.includes('destructive') && styles.contextMenuItemDestructive,
-                    ]}>
-                    {it.actionTitle}
-                  </Text>
-                </TouchableOpacity>
-              )
-            )}
+            {menuConfig.menuItems.map((it: ContextMenuConfigItem) => {
+              return (
+                <>
+                  {it.startBlock && <View style={styles.contextMenuStartBlock} />}
+                  <TouchableOpacity
+                    key={guid()}
+                    style={[styles.contextMenu]}
+                    onPress={() => {
+                      closeBottomSheet();
+                      it.execute();
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.contextMenuItem,
+                        it.menuAttributes?.includes('destructive') && styles.contextMenuItemDestructive,
+                      ]}
+                    >
+                      {it.actionTitle}
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              );
+            })}
           </>
         ),
       });
     }
   };
 
-  const renderCommentVisibility = (_comment: IssueComment, style?: ViewStyleProp) => {
-    return _comment &&
-      !_comment?.deleted &&
-      IssueVisibility.isSecured(_comment?.visibility) ? (
-      <CommentVisibility
-        style={{...styles.activityVisibility, ...style}}
-        presentation={IssueVisibility.getVisibilityPresentation(
-          _comment.visibility,
-        )}
-      />
-    ) : null;
+  const isSecured = (c?: IssueComment): boolean => !!c && IssueVisibility.isSecured(c?.visibility);
+
+  const renderCommentVisibilityPresentation = (
+    comment: IssueComment | null,
+    style?: ViewStyleProp
+  ): React.ReactElement | null => {
+    if (comment && IssueVisibility.isSecured(comment.visibility)) {
+      const presentation = getVisibilityPresentation(
+        comment.visibility!,
+        comment.issue ? visibilityDefaultText() : visibilityArticleDefaultText(),
+        true
+      );
+      return (
+        <View style={[styles.contextMenuAuxiliaryPreview, style]}>
+          <Text style={styles.contextMenuAuxiliaryPreviewText}>
+            {i18n('Visible to {{presentation}}', {presentation})}
+          </Text>
+        </View>
+      );
+    }
+    return null;
   };
 
   const renderCommentActivity = (activityGroup: ActivityGroup) => {
-    const activity = activityGroup.comment as Activity;
+    const activity = activityGroup.comment!;
     const comment = getCommentFromActivityGroup(activityGroup);
     let attachments: Attachment[] = props.attachments || comment?.attachments || [];
     if (attachments.length) {
@@ -239,19 +257,52 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
       );
     }
 
+    const icon = !comment?.deleted && isSecured(comment) ? (
+      <IconLock
+        testID="test:id/commentVisibilityIcon"
+        size={16}
+        style={styles.privateIcon}
+        color={styles.privateIcon.color}
+      />
+    ) : null;
+
+    const iconComponent = icon ? (
+      isAndroidPlatform() ? (
+        <TouchableOpacity
+          hitSlop={HIT_SLOP}
+          onPress={() => {
+            openBottomSheet({
+              withHandle: false,
+              header: null,
+              children: (
+                <View style={styles.activityCommentVisibility}>{renderCommentVisibilityPresentation(comment)}</View>
+              ),
+            });
+          }}
+        >
+          {icon}
+        </TouchableOpacity>
+      ) : (
+        icon
+      )
+    ) : null;
+
     return (
       <>
-        {activityGroup.merged ? (
-          <>
-            <StreamTimestamp
-              timestamp={activityGroup.timestamp}
-              style={styles.activityCommentDate}
-            />
-            {renderCommentVisibility(comment, styles.activityVisibilityMerged)}
-          </>
-        ) : (
-          <StreamUserInfo activityGroup={activityGroup}/>
-        )}
+        <View style={styles.activityTitle}>
+          {activityGroup.merged ? (
+            <>
+              <StreamTimestamp
+                timestamp={activityGroup.timestamp}
+                style={activityGroup.merged && styles.activityTimestampMerged}
+              />
+              {iconComponent}
+            </>
+          ) : (
+            <StreamUserInfo activityGroup={activityGroup}>{iconComponent}</StreamUserInfo>
+          )}
+        </View>
+
         <StreamComment
           onCheckboxUpdate={props.onCheckboxUpdate}
           activity={activity}
@@ -294,11 +345,11 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
               activityGroup,
               {
                 menuTitle: '',
-                menuItems: props.work.createContextActions(firstActivityChange(activityGroup.work)),
+                menuItems: props?.work?.createContextActions?.(firstActivityChange(activityGroup.work)) || [],
               }
             )}
             activityGroup={activityGroup}
-            onUpdate={props.work.onWorkUpdate}
+            onUpdate={props?.work?.onWorkUpdate}
           />
         );
         break;
@@ -325,25 +376,20 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
     }
 
     const Component = hasHighlightedActivity ? Animated.View : View;
+    const secured = isSecured(_comment);
     return (
-      <View style={styles.activityWrapper}>
-        {!activityGroup.merged && _comment && renderCommentVisibility(_comment)}
-        <View
-          style={[
-            styles.activity,
-            activityGroup.merged && !activityGroup.comment
-              ? styles.activityMerged
-              : null,
-          ]}
-        >
+      <>
+        <View style={styles.activity}>
           <ActivityUserAvatar
+            style={activityGroup.merged && styles.activityAvatarMerged}
             activityGroup={activityGroup}
             showAvatar={!!activityGroup.comment}
           />
 
           <Component
             style={[
-              styles.activityItem,
+              styles.activityContent,
+              secured && styles.activityContentSecured,
               hasHighlightedActivity && {
                 backgroundColor: color.current,
               },
@@ -354,32 +400,32 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
               <View
                 style={
                   isRelatedChange
-                    ? styles.activityRelatedChanges
+                    ? [styles.activityRelatedChanges, secured && styles.activityRelatedChangesSecured]
                     : styles.activityHistoryChanges
                 }
               >
-                {Boolean(!activityGroup.merged && !isRelatedChange) && (
-                  <StreamUserInfo activityGroup={activityGroup} />
-                )}
-                {activityGroup.merged && (
-                  <StreamTimestamp
-                    isAbs={true}
-                    timestamp={activityGroup.timestamp}
-                  />
+                {!isRelatedChange && (
+                  <>
+                    {!activityGroup.merged && <StreamUserInfo activityGroup={activityGroup} />}
+                    {activityGroup.merged && (
+                      <StreamTimestamp
+                        style={styles.activityTimestampMerged}
+                        isAbs={true}
+                        timestamp={activityGroup.timestamp}
+                      />
+                    )}
+                  </>
                 )}
 
                 {activityGroupEvents.map(event => (
-                  <StreamHistoryChange
-                    key={event.id}
-                    activity={event}
-                    workTimeSettings={props.workTimeSettings}
-                  />
+                  <StreamHistoryChange key={event.id} activity={event} workTimeSettings={props.workTimeSettings} />
                 ))}
               </View>
             )}
+            {!!props.onSelectReaction && renderCommentReactions(activityGroup)}
           </Component>
         </View>
-      </View>
+      </>
     );
   };
 
@@ -389,17 +435,25 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
 
     if (activityGroup.comment) {
       menuConfig = props.commentActions?.contextMenuConfig?.(entity as IssueComment, activityGroup?.comment?.id);
-    } else if (activityGroup.work) {
+    } else if (activityGroup.work && props?.work) {
       menuConfig = {
         menuTitle: '',
         menuItems: props.work.createContextActions(entity),
       };
     }
     const children = doRenderActivity(activityGroup);
-    return (
-      menuConfig
-        ? <ContextActionsProvider menuConfig={menuConfig}>{children}</ContextActionsProvider>
-        : <>{children}</>
+    const comment = activityGroup.comment ? entity as IssueComment : null;
+    return menuConfig ? (
+      <ContextActionsProvider
+        auxiliaryPreview={
+          comment ? () => renderCommentVisibilityPresentation(comment, styles.contextMenuAuxiliaryPreviewNarrow) : null
+        }
+        menuConfig={menuConfig}
+      >
+        {children}
+      </ContextActionsProvider>
+    ) : (
+      <>{children}</>
     );
   };
 
@@ -408,6 +462,8 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
       return null;
     }
     const _comment: | IssueComment | null = getCommentFromActivityGroup(activityGroup);
+    const nextActivity = props?.activities?.[index + 1];
+    const prevActivity = props?.activities?.[index - 1];
     return (
       <View
         key={`${index}-${activityGroup.id}`}
@@ -418,14 +474,23 @@ export const ActivityStream: React.FC<ActivityStreamProps> = (props: ActivityStr
               layoutMap.current[_comment.id] = event.nativeEvent.layout;
             }
             getActivityGroupEvents(activityGroup).forEach(
-              (it: Activity) => layoutMap.current[it.id] = event.nativeEvent.layout,
+              (it: Activity) => (layoutMap.current[it.id] = event.nativeEvent.layout)
             );
           }
         }}
       >
-        {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator}/>}
-        {addActionsWrapper(activityGroup)}
-        {!!props.onSelectReaction && renderCommentReactions(activityGroup)}
+        {(nextActivity?.merged || (prevActivity?.merged && activityGroup.merged && nextActivity?.merged)) && (
+          <View
+            style={[styles.activityMergedConnector, !activityGroup?.merged && styles.activityMergedConnectorFirst]}
+          />
+        )}
+        {activityGroup?.merged && <View style={styles.activityMergedLeaf} />}
+
+        {index > 0 && !activityGroup.merged && <View style={styles.activitySeparator} />}
+
+        <View style={[styles.activityWrapper, activityGroup.merged && styles.activityWrapperMerged]}>
+          {addActionsWrapper(activityGroup)}
+        </View>
       </View>
     );
   };

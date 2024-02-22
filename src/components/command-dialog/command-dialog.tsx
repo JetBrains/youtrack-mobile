@@ -263,9 +263,10 @@ export default class CommandDialog extends Component<Props, State> {
   }
 
   render(): React.ReactNode {
-    return <ModalView animationType="slide">{this.renderContent()}</ModalView>;
+    return <ModalView>{this.renderContent()}</ModalView>;
   }
 }
+
 export class CommandDialogModal extends CommandDialog {
   render(): React.ReactNode {
     return (

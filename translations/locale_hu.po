@@ -56,6 +56,24 @@ msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} hibajegy"
 msgstr[1] "{{amount}} hibajegy"
 
+#: src/views/issues/issues__row.tsx
+msgid "{{daysLeft}}d"
+msgid_plural "{{daysLeft}}d"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/views/issues/issues__row.tsx
+msgid "{{hoursLeft}}h"
+msgid_plural "{{hoursLeft}}h"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/views/issues/issues__row.tsx
+msgid "{{minutesAbsolute}}m"
+msgid_plural "{{minutesAbsolute}}m"
+msgstr[0] ""
+msgstr[1] ""
+
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
 msgstr "@Említés egy hozzászólásban"
@@ -81,7 +99,7 @@ msgstr "Tevékenység beállításai"
 msgid "Add project to favorites"
 msgstr "Projekt hozzáadása a kedvencekhez"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
 msgstr "Reakció hozzáadása"
@@ -300,8 +318,8 @@ msgstr "Módosított tartalom"
 
 #: src/components/user/user-card.tsx
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -318,7 +336,7 @@ msgid "Copy field text"
 msgstr ""
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -330,7 +348,7 @@ msgstr "Link másolása"
 msgid "Copy link to article"
 msgstr "Cikkre mutató hivatkozás másolása"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -372,7 +390,7 @@ msgstr "Elutasítás"
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
@@ -454,7 +472,7 @@ msgid "Drafts"
 msgstr "Piszkozatok"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -530,6 +548,7 @@ msgstr ""
 msgid "Filter tags"
 msgstr ""
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "Felhasználók, csoportok és csapatok szűrése"
@@ -550,7 +569,7 @@ msgstr ""
 msgid "Get help"
 msgstr "Segítség kérése"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "Csoportok és csapatok"
 
@@ -573,6 +592,10 @@ msgstr "A beépített hibajelentések mellett a YouTrack Mobile a Bugsnag harmad
 #: src/views/article/article.tsx
 msgid "in revision"
 msgstr "felülvizsgálat alatt"
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
+msgstr ""
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -691,6 +714,12 @@ msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] "{{issuesCount}} hibajeggyel egyezik"
 msgstr[1] "{{issuesCount}} hibajeggyel egyezik"
 
+#: src/views/issues/issues__count.tsx
+msgid "Matches {{issuesCount}} ticket"
+msgid_plural "Matches {{issuesCount}} tickets"
+msgstr[0] ""
+msgstr[1] ""
+
 #: src/views/issues/index.ts
 msgid "Medium"
 msgstr ""
@@ -785,13 +814,17 @@ msgstr "Értesítések"
 msgid "Other"
 msgstr "Egyéb"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "További csoportok és csapatok"
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "Jelszó"
+
+#: src/views/issues/issues__row.tsx
+msgid "Paused"
+msgstr "Szüneteltetve"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
@@ -830,7 +863,7 @@ msgstr "Lekérdezés"
 msgid "Recent searches"
 msgstr ""
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "Ajánlott csoportok és csapatok"
 
@@ -859,10 +892,14 @@ msgstr "eltávolított egy választ"
 msgid "reopened the pull request"
 msgstr "újra megnyitotta az áthúzási kérelmet"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "Válasz"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr "Láthatóság visszaállítása"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -905,6 +942,10 @@ msgstr "Válasszon ki egy cikket a listából"
 msgid "Select an issue from the list"
 msgstr ""
 
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
+msgstr ""
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
 msgstr ""
@@ -938,8 +979,8 @@ msgid "Share"
 msgstr "Megosztás"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -1184,6 +1225,11 @@ msgstr "Csak olvasatlan"
 msgid "Untitled"
 msgstr "Névtelen"
 
+#: src/views/article/article__activity.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr ""
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1205,7 +1251,7 @@ msgstr ""
 msgid "Username or email"
 msgstr "Felhasználónév vagy e-mail cím"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "Felhasználók"
 
@@ -1228,6 +1274,11 @@ msgstr "Jelentett problémák megtekintése"
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "Láthatóság"
+
+#: src/components/activity-stream/activity__stream.tsx
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
+msgstr ""
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"

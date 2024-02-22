@@ -1,26 +1,29 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
+import Avatar from 'components/avatar/avatar';
 import ColorField from 'components/color-field/color-field';
 import IconHDTicket from 'components/icon/assets/hdticket.svg';
+import IconPaused from '@jetbrains/icons/paused.svg';
 import Tags from 'components/tags/tags';
 import {
   getPriorityField,
   getEntityPresentation,
   getReadableID,
   getAssigneeField,
+  getSLAFields,
 } from 'components/issue-formatter/issue-formatter';
+import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {IssuesSettings} from 'views/issues/index';
-import {ytDate} from 'components/date/date';
-import Avatar from 'components/avatar/avatar';
 import {ThemeContext} from 'components/theme/theme-context';
+import {ytDate} from 'components/date/date';
 
 import styles, {DUAL_AVATAR_SIZE} from './issues.styles';
 
-import type {BundleValue, CustomField} from 'types/CustomFields';
-import type {ViewStyleProp} from 'types/Internal';
 import {BaseIssue, IssueOnList} from 'types/Issue';
+import {BundleValue, CustomFieldBase} from 'types/CustomFields';
 import {FieldValue} from 'types/CustomFields';
+import {ViewStyleProp} from 'types/Internal';
 
 interface Props {
   hideId?: boolean;
@@ -29,6 +32,7 @@ interface Props {
   onTagPress?: (query: string) => any;
   style?: ViewStyleProp;
   settings?: IssuesSettings;
+  helpdeskMode: boolean;
 }
 
 export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
@@ -41,18 +45,58 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
     );
   }
 
-  isHelpDeskEnabled(): boolean {
-    return !!this.props.issue.project?.plugins?.helpDeskSettings?.enabled;
+  renderSLAPausedTag(text: string) {
+    return (
+      <ColorField
+        style={styles.slaFieldPaused}
+        color={{
+          id: '',
+          foreground: styles.slaFieldPaused.color,
+          background: '',
+        }}
+        text={text}
+        fullText={true}
+      >
+        <IconPaused
+          style={styles.slaFieldPausedIcon}
+          fill={styles.slaFieldPausedIcon.color}
+          width={13}
+          height={13}
+        />
+      </ColorField>
+    );
   }
 
-  renderHelpDeskIcon(size: number, style?: ViewStyleProp): React.JSX.Element {
+  createSLADateTagColor(f: CustomFieldBase) {
+    return {
+      id: '',
+      foreground: styles.slaField.color,
+      background:
+        new Date().getTime() > f.value
+          ? styles.slaFieldOverdue.backgroundColor
+          : styles.slaField.backgroundColor,
+    };
+  }
+
+  renderSLADateTag(f: CustomFieldBase) {
     return (
-      <View style={style}>
-        <IconHDTicket
-          color={styles.helpDeskIconWrapper.color}
-          width={size}
-          height={size}
+      <View style={styles.slaFieldsItem}>
+        <ColorField
+          color={this.createSLADateTagColor(f)}
+          text={ytDate(f.value as number)}
+          fullText={true}
         />
+      </View>
+    );
+  }
+
+  renderSLA() {
+    const slaFields = getSLAFields(this.props.issue);
+    return (
+      <View style={styles.slaFields}>
+        {slaFields.map((f: CustomFieldBase) =>
+          f.pausedTime ? this.renderSLAPausedTag(i18n('Paused')) : this.renderSLADateTag(f)
+        )}
       </View>
     );
   }
@@ -61,24 +105,20 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
     const priorityField = getPriorityField(this.props.issue);
 
     if (
-      !priorityField ||
-      !priorityField.value ||
-      Array.isArray(priorityField.value) && priorityField.value?.length === 0
+      !priorityField?.value ||
+      (Array.isArray(priorityField?.value) && priorityField.value?.length === 0)
     ) {
       return null;
     }
 
     const values: BundleValue[] = [].concat(priorityField.value as any);
     const LAST = values.length - 1;
-
     return (
-      <>
-        <ColorField
-          style={[styles.priorityWrapper, customStyle]}
-          text={text || values[LAST].name}
-          color={values[LAST].color}
-        />
-      </>
+      <ColorField
+        style={[styles.priorityWrapper, customStyle]}
+        text={text || values[LAST].name}
+        color={values[LAST].color}
+      />
     );
   }
 
@@ -96,7 +136,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
 
   renderAvatar() {
     const {issue} = this.props;
-    const assigneeField: CustomField | null = this.isHelpDeskEnabled() ? getAssigneeField(issue) : null;
+    const assigneeField: CustomFieldBase | null = this.props.helpdeskMode ? getAssigneeField(issue) : null;
     const assigneeFieldValue = assigneeField?.value as (FieldValue | null);
 
     return (
@@ -190,20 +230,31 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
   }
 
   renderContent() {
+    const priorityEl = this.renderPriority();
+    const helpdeskParams = {
+      iconSize: priorityEl ? 13 : 19,
+      style: priorityEl ? styles.helpDeskIconWrapper : styles.helpDeskIcon,
+    };
     return (
       <View style={styles.issueRow}>
-        <View
-          testID="test:id/issueRowDraftDetails"
-          style={styles.rowLine}
-        >
-          {this.renderPriority()}
-          {this.isHelpDeskEnabled() && this.renderHelpDeskIcon(13, styles.helpDeskIconWrapper)}
+        <View testID="test:id/issueRowDraftDetails" style={styles.rowLine}>
+          {priorityEl}
+          {this.props.helpdeskMode && (
+            <View style={helpdeskParams.style}>
+              <IconHDTicket
+                color={helpdeskParams.style.color}
+                width={helpdeskParams.iconSize}
+                height={helpdeskParams.iconSize}
+              />
+            </View>
+          )}
           {this.renderId()}
           {this.renderReporter()}
         </View>
 
         {this.renderSummary()}
         {this.renderDescription()}
+        {this.renderSLA()}
         {this.renderTags()}
       </View>
     );
@@ -237,47 +288,80 @@ export class IssueRowCompact<P extends Props, S = {}> extends IssueRow<P, S> {
   }
 
   renderReporter() {
-    const {issue} = this.props;
-    return (
-      issue.reporter ? (
-        <View style={[
-          styles.reporter,
-          styles.reporterCompact,
-        ]}>
-          {this.renderAvatar()}
-        </View>
-      ) : null
-    );
+    const { issue } = this.props;
+    return issue.reporter ? (
+      <View style={[styles.reporter, styles.reporterCompact]}>
+        {this.renderAvatar()}
+      </View>
+    ) : null;
   }
 
   renderId() {
-    const {issue, hideId} = this.props;
-    return (
-      hideId || !issue.idReadable
-        ? null
-        : super.renderId(styles.readableIdCompact, issue.idReadable.split('-')[0])
+    const { issue, hideId } = this.props;
+    return hideId || !issue.idReadable
+      ? null
+      : super.renderId(
+          styles.readableIdCompact,
+          issue.idReadable.split('-')[0]
+        );
+  }
+
+  formatDistanceToBreach(date: number): string {
+    const minutesLeft = Math.floor((date - Date.now()) / 1000 / 60);
+    const minutesAbsolute = Math.abs(minutesLeft);
+    if (minutesAbsolute < 90) {
+      return i18nPlural(
+        minutesAbsolute,
+        '{{minutesAbsolute}}m',
+        '{{minutesAbsolute}}m',
+        {minutesAbsolute},
+      );
+    }
+    const hoursLeft = Math.floor(minutesAbsolute / 60);
+    if (hoursLeft < 24) {
+      return i18nPlural(
+        hoursLeft,
+        '{{hoursLeft}}h',
+        '{{hoursLeft}}h',
+        {hoursLeft},
+      );
+    }
+    const daysLeft = Math.floor(hoursLeft / 24);
+    return i18nPlural(
+      daysLeft,
+      '{{daysLeft}}d',
+      '{{daysLeft}}d',
+      {daysLeft},
     );
   }
 
-  renderContent(): React.JSX.Element {
+  renderSLADateTag(f: CustomFieldBase) {
+    const prefix = new Date().getTime() > f.value ? '-' : '';
     return (
-      <View style={[
-        styles.issueRow,
-        styles.rowLine,
-      ]}>
-        <View
-          testID="test:id/issueRowDetails"
-          style={styles.rowLine}
-        >
+      <ColorField
+        style={styles.slaFieldTag}
+        color={this.createSLADateTagColor(f)}
+        text={`${prefix}${this.formatDistanceToBreach(f.value as number)}`}
+        fullText={true}
+      />
+    );
+  }
+
+  renderSLAPausedTag() {
+    return <View style={styles.slaFieldPausedCompact}>{super.renderSLAPausedTag('')}</View>;
+  }
+
+  renderContent() {
+    return (
+      <View style={[styles.issueRow, styles.rowLine]}>
+        <View testID="test:id/issueRowDetails" style={styles.rowLine}>
           {this.renderPriority()}
         </View>
 
         {this.renderSummary()}
-        <>
-          {this.isHelpDeskEnabled() && this.renderHelpDeskIcon(13, styles.helpDeskIconWrapperCompact)}
-          {this.renderId()}
-          {this.renderReporter()}
-        </>
+        {this.props.helpdeskMode && this.renderSLA()}
+        {this.renderId()}
+        {this.renderReporter()}
       </View>
     );
   }
@@ -302,7 +386,7 @@ export class IssueRowDraft<P extends Props, S = {}> extends IssueRow<P, S> {
   }
 
 
-  renderContent(): React.JSX.Element {
+  renderContent() {
     return (
       <View style={styles.draft}>
         <Text numberOfLines={3}>

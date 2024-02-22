@@ -46,7 +46,6 @@ describe('<ColorField/>', () => {
     });
 
     it('should set a background color', () => {
-      // @ts-ignore
       expect(screen.getByTestId('test:id/color-field-value-wrapper')).toHaveProp('style', [
         {backgroundColor: colorBackgroundMock},
         styles.wrapper,
@@ -57,9 +56,27 @@ describe('<ColorField/>', () => {
     });
 
     it('should set a foreground color', () => {
-      // @ts-ignore
       expect(screen.getByText(textMock[0])).toHaveProp('style', [
         styles.text,
+        null,
+        {color: colorForegroundMock},
+      ]);
+    });
+
+    it('should fontSize from the style parameter', () => {
+      doRender({
+        text: textMock,
+        color: {
+          id: '1',
+          foreground: colorForegroundMock,
+          background: colorBackgroundMock,
+        },
+        style: {fontSize: 22},
+      });
+
+      expect(screen.getByText(textMock[0])).toHaveProp('style', [
+        styles.text,
+        {'fontSize': 22},
         {color: colorForegroundMock},
       ]);
     });
@@ -69,14 +86,14 @@ describe('<ColorField/>', () => {
     text,
     color,
     fullText,
+    style,
   }: {
     text?: string;
     color?: ColorCoding;
     fullText?: boolean;
+    style?: Record<string, string | number>
   }) {
-    return render(
-      <ColorField text={text} color={color} fullText={fullText}/>
-    );
+    return render(<ColorField text={text} color={color} fullText={fullText} style={style}/>);
   }
 
 });

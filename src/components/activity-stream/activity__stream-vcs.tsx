@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import {Linking, Text, TouchableOpacity, View} from 'react-native';
+
 import BottomSheetModal from '../modal-panel-bottom/bottom-sheet-modal';
-import Details from '../details/details';
-import MarkdownView from '../wiki/markdown-view';
+import Details from 'components/details/details';
+import MarkdownView from 'components/wiki/markdown-view';
+import StreamTimestamp from 'components/activity-stream/activity__stream-timestamp';
 import StreamUserInfo from './activity__stream-user-info';
 import {firstActivityChange} from './activity__stream-helper';
 import {
@@ -14,39 +16,19 @@ import {
 } from './activity__stream-vcs-helper';
 import {HIT_SLOP} from '../common-styles/button';
 import {i18n, i18nPlural} from 'components/i18n/i18n';
-import {IconCaretDownUp} from '../icon/icon';
-import {ytDate} from 'components/date/date';
+import {IconCaretDownUp} from 'components/icon/icon';
+
 import styles from './activity__stream.styles';
-import type {Activity} from 'types/Activity';
+
+import type {ActivityGroup, ActivityItem} from 'types/Activity';
 import type {PullRequest, VCSActivity, VcsProcessor} from 'types/Vcs';
 import type {TextStyleProp} from 'types/Internal';
-type Props = {
-  activityGroup: Activity;
-};
 
-const StreamVCS = (props: Props) => {
-  function renderMarkdown(
-    markdown: string | null | undefined,
-    hasStyle: boolean = false,
-  ) {
-    return markdown ? (
-      <View style={hasStyle && styles.activityWorkComment}>
-        <MarkdownView>{markdown}</MarkdownView>
-      </View>
-    ) : null;
-  }
-
-  function renderMessage(
-    message: string,
-    index: number,
-    arr: string[],
-    isError: boolean = false,
-  ) {
+const StreamVCS = (props: {activityGroup: ActivityGroup;}) => {
+  function renderMessage(message: string, index: number, arr: string[], isError: boolean = false) {
     return (
       <View key={`message_${index}`}>
-        <Text style={[styles.vcsMessage, isError && styles.vcsError]}>
-          {message}
-        </Text>
+        <Text style={[styles.vcsMessage, isError && styles.vcsError]}>{message}</Text>
       </View>
     );
   }
@@ -56,12 +38,9 @@ const StreamVCS = (props: Props) => {
   }
 
   const [sourcesVisible, updateSourcesVisible] = useState(false);
-  const pullRequest: PullRequest | null | undefined =
-    props.activityGroup.vcs?.pullRequest;
-  const firstChange: Record<string, any> | null = firstActivityChange(
-    props.activityGroup.vcs,
-  );
-  const vcs: VCSActivity | null = pullRequest || firstChange;
+  const pullRequest: PullRequest | undefined = props.activityGroup.vcs?.pullRequest;
+  const firstChange: ActivityItem | null = firstActivityChange(props.activityGroup.vcs);
+  const vcs: VCSActivity | null = (pullRequest || firstChange) as VCSActivity | null;
 
   if (!vcs) {
     return null;
@@ -71,17 +50,13 @@ const StreamVCS = (props: Props) => {
   const errorMessages: string[] = getErrorMessages(vcs).filter(Boolean);
   const date: number = vcs.fetched || vcs.date;
   const processors: VcsProcessor[] = getProcessorsUrls(vcs);
-  let title: string = props.activityGroup.merged
-    ? ''
-    : i18n('committed changes');
+  let title: string = props.activityGroup.merged ? '' : i18n('committed changes');
 
   if (pullRequest) {
     switch (firstChange?.state?.id) {
       case pullRequestState.OPEN: {
         const reopened = firstChange.reopened;
-        title = reopened
-          ? i18n('reopened the pull request')
-          : i18n('submitted a pull request');
+        title = reopened ? i18n('reopened the pull request') : i18n('submitted a pull request');
         break;
       }
 
@@ -96,53 +71,43 @@ const StreamVCS = (props: Props) => {
     }
   }
 
-  const renderProcessorURL: (
-    processor: VcsProcessor | PullRequest,
-    singleUrl?: boolean,
-    textStyle?: TextStyleProp,
-  ) => React.ReactElement<
-    React.ComponentProps<typeof TouchableOpacity>,
-    typeof TouchableOpacity
-  > = (
+  const renderProcessorURL = (
     processor: VcsProcessor | PullRequest,
     singleProcessor: boolean = false,
-    textStyle?: TextStyleProp,
+    textStyle?: TextStyleProp
   ) => {
     return (
-      <Text key={processor.id || processor?.label || processor?.idExternal}>
-        <TouchableOpacity
-          hitSlop={HIT_SLOP}
-          onPress={() => Linking.openURL(processor.url)}
-        >
-          <Text style={[styles.link, textStyle]}>
-            {singleProcessor ? getVcsPresentation(vcs) : processor.label || ''}
-          </Text>
-        </TouchableOpacity>
-      </Text>
+      <TouchableOpacity
+        key={processor.id || processor?.label || processor?.idExternal}
+        hitSlop={HIT_SLOP}
+        onPress={() => Linking.openURL(processor.url)}
+      >
+        <Text style={[styles.link, textStyle]}>
+          {singleProcessor ? getVcsPresentation(vcs) : processor.label || ''}
+        </Text>
+      </TouchableOpacity>
     );
   };
 
-  const renderSourcesDialog = (): React.ReactElement<
-    React.ComponentProps<typeof BottomSheetModal>,
-    typeof BottomSheetModal
-  > => {
+  const renderSourcesDialog = () => {
     return (
       <BottomSheetModal
         isVisible={sourcesVisible}
-        header={!!vcs.files && vcs.files !== -1 && (
-          <View style={styles.vcsBottomSheetHeader}>
-            <Text style={styles.activityLabel}>
-              {i18nPlural(vcs.files, '{{amount}} file', '{{amount}} files', {
-                amount: vcs.files,
-              })}
-            </Text>
-          </View>
-        )}
+        header={
+          !!vcs.files &&
+          vcs.files !== -1 && (
+            <View style={styles.vcsBottomSheetHeader}>
+              <Text style={styles.activityLabel}>
+                {i18nPlural(vcs.files, '{{amount}} file', '{{amount}} files', {
+                  amount: vcs.files,
+                })}
+              </Text>
+            </View>
+          )
+        }
         onClose={() => updateSourcesVisible(false)}
       >
-        {processors.map((processor: VcsProcessor) =>
-          renderProcessorURL(processor, false, styles.vcsSourceButton),
-        )}
+        {processors.map((processor: VcsProcessor) => renderProcessorURL(processor, false, styles.vcsSourceButton))}
       </BottomSheetModal>
     );
   };
@@ -157,24 +122,20 @@ const StreamVCS = (props: Props) => {
         />
       )}
 
-      <View style={styles.activityChange}>
+      <View style={[styles.activityChange, props.activityGroup.merged && styles.activityChangeMerged]}>
         <View style={styles.vcsInfo}>
           {!!date && (
-            <Text style={[styles.vcsInfoDate, styles.secondaryTextColor]}>
+            <Text style={styles.secondaryTextColor}>
               {title ? `${title} ` : ''}
-              {ytDate(date)}
+              <StreamTimestamp style={props.activityGroup.merged && styles.activityTimestampMerged} timestamp={date} />
             </Text>
           )}
 
           {Boolean(vcs.version && processors) && (
-            <View>
-              {processors.length === 1 &&
-                renderProcessorURL(processors[0], true)}
+            <>
+              {processors.length === 1 && renderProcessorURL(processors[0], true)}
               {processors.length > 1 && (
-                <TouchableOpacity
-                  hitSlop={HIT_SLOP}
-                  onPress={() => updateSourcesVisible(true)}
-                >
+                <TouchableOpacity hitSlop={HIT_SLOP} onPress={() => updateSourcesVisible(true)}>
                   <Text style={styles.link}>
                     <IconCaretDownUp
                       size={12}
@@ -186,22 +147,20 @@ const StreamVCS = (props: Props) => {
                   </Text>
                 </TouchableOpacity>
               )}
-            </View>
+            </>
           )}
 
           {!!vcs.url && <View>{renderProcessorURL(vcs, true)}</View>}
         </View>
 
-        {renderMarkdown(vcs.title, !!vcs.id)}
-        {renderMarkdown(vcs.text, !!vcs.id)}
+        <MarkdownView>{vcs.title}</MarkdownView>
+        <MarkdownView>{vcs.text}</MarkdownView>
 
         {(infoMessages.length > 0 || errorMessages.length > 0) && (
           <Details
             style={{
               ...styles.showMoreMessage,
-              ...(errorMessages.length
-                ? styles.vcsError
-                : styles.secondaryTextColor),
+              ...(errorMessages.length ? styles.vcsError : styles.secondaryTextColor),
             }}
             toggler={i18n('Show more')}
             renderer={() => (
@@ -217,7 +176,4 @@ const StreamVCS = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(StreamVCS) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo(StreamVCS);

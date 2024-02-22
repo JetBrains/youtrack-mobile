@@ -56,6 +56,24 @@ msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} incidencia"
 msgstr[1] "{{amount}} incidencias"
 
+#: src/views/issues/issues__row.tsx
+msgid "{{daysLeft}}d"
+msgid_plural "{{daysLeft}}d"
+msgstr[0] "{{daysLeft}}d."
+msgstr[1] "{{daysLeft}}d."
+
+#: src/views/issues/issues__row.tsx
+msgid "{{hoursLeft}}h"
+msgid_plural "{{hoursLeft}}h"
+msgstr[0] "{{hoursLeft}}h"
+msgstr[1] "{{hoursLeft}}h"
+
+#: src/views/issues/issues__row.tsx
+msgid "{{minutesAbsolute}}m"
+msgid_plural "{{minutesAbsolute}}m"
+msgstr[0] "{{minutesAbsolute}}min"
+msgstr[1] "{{minutesAbsolute}}min"
+
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
 msgstr "@Mención en un comentario"
@@ -81,7 +99,7 @@ msgstr "Configuración de actividad"
 msgid "Add project to favorites"
 msgstr "Añadir proyecto a favoritos"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
 msgstr "Añadir reacción"
@@ -300,8 +318,8 @@ msgstr "Contenido revisado"
 
 #: src/components/user/user-card.tsx
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -318,7 +336,7 @@ msgid "Copy field text"
 msgstr "Copiar texto de campo"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -330,7 +348,7 @@ msgstr "Copiar enlace"
 msgid "Copy link to article"
 msgstr "Copiar enlace al artículo"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -372,7 +390,7 @@ msgstr "Rechazar"
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
@@ -454,7 +472,7 @@ msgid "Drafts"
 msgstr "Borradores"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -530,6 +548,7 @@ msgstr "Filtrar sprints por nombre"
 msgid "Filter tags"
 msgstr "Filtrar etiquetas"
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "Filtrar usuarios, grupos y equipos"
@@ -550,7 +569,7 @@ msgstr "Buscar incidencias que contengan palabras clave"
 msgid "Get help"
 msgstr "Obtener ayuda"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "Grupos y equipos"
 
@@ -573,6 +592,10 @@ msgstr "Además de nuestro informe de errores integrado, YouTrack Mobile utiliza
 #: src/views/article/article.tsx
 msgid "in revision"
 msgstr "en revisión"
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
+msgstr "Restricciones heredadas"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -691,6 +714,12 @@ msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] "Coincide con {{issuesCount}} incidencia"
 msgstr[1] "Coincide con {{issuesCount}} incidencias"
 
+#: src/views/issues/issues__count.tsx
+msgid "Matches {{issuesCount}} ticket"
+msgid_plural "Matches {{issuesCount}} tickets"
+msgstr[0] "Coincide con {{issuesCount}} ticket"
+msgstr[1] "Coincide con {{issuesCount}} tickets"
+
 #: src/views/issues/index.ts
 msgid "Medium"
 msgstr "Medium"
@@ -785,13 +814,17 @@ msgstr "Notificaciones"
 msgid "Other"
 msgstr "Otro"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "Otros grupos y equipos"
 
 #: src/views/log-in/log-in.tsx
 msgid "Password"
 msgstr "Contraseña"
+
+#: src/views/issues/issues__row.tsx
+msgid "Paused"
+msgstr "En pausa"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
@@ -830,7 +863,7 @@ msgstr "Consulta"
 msgid "Recent searches"
 msgstr "Búsquedas recientes"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "Grupos y equipos recomendados"
 
@@ -859,10 +892,14 @@ msgstr "ha quitado una reacción"
 msgid "reopened the pull request"
 msgstr "ha reabierto la solicitud de incorporación de cambios"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "Responder"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr "Restablecer visibilidad"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -905,6 +942,10 @@ msgstr "Seleccione un artículo de la lista"
 msgid "Select an issue from the list"
 msgstr "Seleccione una incidencia de la lista"
 
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
+msgstr "Seleccionar usuarios, grupos y equipos"
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
 msgstr "Enviar informe de errores"
@@ -938,8 +979,8 @@ msgid "Share"
 msgstr "Compartir"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -1134,7 +1175,7 @@ msgstr "Hilo no silenciado"
 #: src/views/issues/issues-reducers.ts
 #: src/views/tickets/tickets.tsx
 msgid "Tickets"
-msgstr ""
+msgstr "Tickets"
 
 #: src/views/article-create/article-create.tsx
 msgid "Title"
@@ -1184,6 +1225,11 @@ msgstr "Solo no leídos"
 msgid "Untitled"
 msgstr "Sin título"
 
+#: src/views/article/article__activity.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr "Actualizar visibilidad"
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1205,7 +1251,7 @@ msgstr "La cuenta de usuario se ha bloqueado"
 msgid "Username or email"
 msgstr "Nombre de usuario o correo electrónico"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "Usuarios"
 
@@ -1228,6 +1274,11 @@ msgstr "Ver las incidencias notificadas"
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "Visibilidad"
+
+#: src/components/activity-stream/activity__stream.tsx
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
+msgstr "Visible para {{presentation}}"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"
