@@ -16,6 +16,8 @@ export default EStyleSheet.create({
   },
   tabLabelText: {
     ...mainText,
+    paddingTop: UNIT,
+    paddingBottom: UNIT,
     paddingRight: UNIT,
     fontWeight: '500',
     textTransform: 'none',
