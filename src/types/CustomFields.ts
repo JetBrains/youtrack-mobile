@@ -152,6 +152,7 @@ export type IssueComment = {
   reactionOrder: string;
   reactions: Reaction[];
   issue?: Partial<IssueFull>;
+  article?: { id: string; };
   attachments?: Attachment[];
   mentions?: Mentions;
 };

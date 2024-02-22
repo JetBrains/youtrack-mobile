@@ -61,7 +61,7 @@ type Props = {
   source?: keyof typeof attachFileMethod;
 };
 
-const AttachFileDialog = (props: Props): JSX.Element => {
+const AttachFileDialog = (props: Props) => {
   usage.trackScreenView('Attach file modal');
   const mounted: React.MutableRefObject<boolean> = useRef(false);
   const theme: Theme = useContext(ThemeContext);
@@ -294,9 +294,7 @@ const AttachFileDialog = (props: Props): JSX.Element => {
     );
   } else {
     return (
-      <ModalView animationType="slide" style={styles.container}>
-        {children}
-      </ModalView>
+      <ModalView style={styles.container}>{children}</ModalView>
     );
   }
 };

@@ -75,6 +75,7 @@ export default EStyleSheet.create({
   priorityWrapper: {
     position: 'relative',
     marginRight: UNIT,
+    width: 20,
     ...Platform.select({
       android: {
         marginTop: UNIT / 4,

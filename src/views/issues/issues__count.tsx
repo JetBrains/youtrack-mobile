@@ -13,7 +13,6 @@ const IssuesCount = ({issuesCount, isHelpdesk}: { issuesCount: number | null, is
   return typeof issuesCount === 'number' ? (
     <AnimatedView
       testID="test:id/issuesCount"
-      accessibilityLabel="issuesCount"
       accessible={true}
       useNativeDriver
       duration={500}

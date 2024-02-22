@@ -178,7 +178,7 @@ describe('app-actions', () => {
     });
     let auth: OAuth2;
     beforeEach(() => {
-      jest.spyOn(PushNotifications, 'unregister').mockResolvedValueOnce({});
+      jest.spyOn(PushNotifications, 'unregister').mockResolvedValueOnce(Promise.resolve());
       updateStore({
         app: {...appStateMock, otherAccounts: []},
       });

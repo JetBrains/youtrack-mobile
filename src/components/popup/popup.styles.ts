@@ -1,50 +1,14 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
+
 import {UNIT} from 'components/variables';
-import {HEADER_FONT_SIZE} from 'components/common-styles';
-const extendedReportModalText = {
-  letterSpacing: 0.08,
-  fontSize: 16,
-  lineHeight: HEADER_FONT_SIZE + 6,
-};
-const alignCenter = {
-  justifyContent: 'center',
-  alignItems: 'center',
-};
+import {MAIN_FONT_SIZE} from 'components/common-styles';
+
 export default EStyleSheet.create({
-  link: {
-    marginTop: UNIT,
-    marginBottom: UNIT,
-    color: '$link',
-  },
-  modal: {...alignCenter},
-  container: {
-    flex: 1,
-    backgroundColor: '$mask',
-    ...alignCenter,
-  },
-  content: {
-    margin: UNIT * 5,
-    padding: UNIT * 3,
-    paddingBottom: UNIT,
-    backgroundColor: '$background',
-    shadowOpacity: 0.6,
-    borderRadius: 6,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.6)',
-    shadowRadius: UNIT * 2,
-  },
-  title: {
-    ...extendedReportModalText,
-    fontWeight: '500',
-    marginBottom: UNIT / 2,
+  modal: {
+
   },
   buttons: {
-    position: 'relative',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    alignSelf: 'flex-end',
     marginTop: UNIT,
     marginBottom: UNIT,
     marginRight: -UNIT,
@@ -57,7 +21,7 @@ export default EStyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: MAIN_FONT_SIZE,
     color: '$link',
   },
 });

@@ -99,7 +99,7 @@ msgstr "Paramètres d'activité"
 msgid "Add project to favorites"
 msgstr "Ajouter le projet aux favoris"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Add reaction"
 msgstr "Ajouter une réaction"
@@ -318,8 +318,8 @@ msgstr "Contenu révisé"
 
 #: src/components/user/user-card.tsx
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -336,7 +336,7 @@ msgid "Copy field text"
 msgstr "Copier le texte de champ"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -348,7 +348,7 @@ msgstr "Copier le lien"
 msgid "Copy link to article"
 msgstr "Copier le lien vers l'article"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
@@ -390,7 +390,7 @@ msgstr "Refuser"
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
@@ -472,7 +472,7 @@ msgid "Drafts"
 msgstr "Brouillons"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity.tsx
 #: src/views/issue/activity/issue-activity__comment-actions.ts
@@ -548,6 +548,7 @@ msgstr "Filtrer les sprints par nom"
 msgid "Filter tags"
 msgstr "Filtrer les balises"
 
+#: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
 msgid "Filter users, groups, and teams"
 msgstr "Filtrer les utilisateurs, les groupes et les équipes"
@@ -568,7 +569,7 @@ msgstr "Rechercher des tickets contenant les mots clés"
 msgid "Get help"
 msgstr "Obtenir de l'aide"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
 msgstr "Groupes et équipes"
 
@@ -591,6 +592,10 @@ msgstr "En plus de nos rapports d'erreurs intégrés, YouTrack Mobile utilise Bu
 #: src/views/article/article.tsx
 msgid "in revision"
 msgstr "en révision"
+
+#: src/components/visibility/visibility-helper.ts
+msgid "Inherited restrictions"
+msgstr "Restrictions héritées"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -809,7 +814,7 @@ msgstr "Notifications"
 msgid "Other"
 msgstr "Autre"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Other groups and teams"
 msgstr "Autres groupes et équipes"
 
@@ -858,7 +863,7 @@ msgstr "Requête"
 msgid "Recent searches"
 msgstr "Recherches récentes"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
 msgstr "Groupes et équipes recommandés"
 
@@ -887,10 +892,14 @@ msgstr "a supprimé une réaction"
 msgid "reopened the pull request"
 msgstr "a rouvert la requête d'extraction"
 
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Reply"
 msgstr "Répondre"
+
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Reset visibility"
+msgstr "Réinitialiser la visibilité"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -933,6 +942,10 @@ msgstr "Sélectionnez un article dans la liste"
 msgid "Select an issue from the list"
 msgstr "Sélectionnez un ticket dans la liste"
 
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Select users, groups, and teams"
+msgstr "Sélectionner des utilisateurs, des groupes et des équipes"
+
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
 msgstr "Envoyer un rapport d'incident"
@@ -966,8 +979,8 @@ msgid "Share"
 msgstr "Partager"
 
 #: src/views/article/arcticle-actions.ts
-#: src/views/article/article__activity-stream.tsx
-#: src/views/article/article__activity-stream.tsx
+#: src/views/article/article__activity.tsx
+#: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -1212,6 +1225,11 @@ msgstr "Non lues uniquement"
 msgid "Untitled"
 msgstr "Sans titre"
 
+#: src/views/article/article__activity.tsx
+#: src/views/issue/activity/issue__activity-stream.tsx
+msgid "Update visibility"
+msgstr "Mettre à jour la visibilité"
+
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
 msgid "updated"
@@ -1233,7 +1251,7 @@ msgstr "Le compte utilisateur est exclu"
 msgid "Username or email"
 msgstr "Nom d'utilisateur ou adresse e-mail"
 
-#: src/components/visibility/visibility-control.tsx
+#: src/components/visibility/visibility-helper.ts
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -1256,6 +1274,11 @@ msgstr "Afficher les tickets signalés"
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
 msgstr "Visibilité"
+
+#: src/components/activity-stream/activity__stream.tsx
+#: src/components/visibility/comment-visibility-control.tsx
+msgid "Visible to {{presentation}}"
+msgstr "Visible pour {{presentation}}"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"

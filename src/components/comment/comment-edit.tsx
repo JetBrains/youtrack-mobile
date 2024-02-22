@@ -16,12 +16,12 @@ import {useDispatch} from 'react-redux';
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
 import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
 import AttachmentsRow from 'components/attachments-row/attachments-row';
+import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import Header from 'components/header/header';
 import IssueVisibility from 'components/visibility/issue-visibility';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import log from 'components/log/log';
 import Mentions from 'components/mentions/mentions';
-import ModalPanelBottom from 'components/modal-panel-bottom/modal-panel-bottom';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
 import VisibilityControl from 'components/visibility/visibility-control';
@@ -37,7 +37,7 @@ import {IconAdd, IconArrowUp, IconCheck, IconClose} from 'components/icon/icon';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables';
 
-import styles, {MIN_INPUT_SIZE} from './comment-edit.styles';
+import styles, { MIN_INPUT_SIZE} from './comment-edit.styles';
 
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
@@ -45,45 +45,42 @@ import type {NormalizedAttachment} from 'types/Attachment';
 import type {Theme} from 'types/Theme';
 import type {User, UserMentions} from 'types/User';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
+import {IssueFull} from 'types/Issue';
 import {ReduxThunkDispatch} from 'types/Redux';
 
-type CommentReply = {
-  reply?: boolean;
-};
-
-type CommentEntity = {
-  issue?: { id: string };
+interface EditingComment extends IssueComment {
   article?: { id: string };
-};
-
-type EditingComment = IssueComment & CommentReply & CommentEntity;
+  issue?: Partial<IssueFull>;
+  reply?: boolean;
+}
 
 export interface Props {
   canAttach: boolean;
-  canCommentPublicly?: boolean;
-  canUpdateCommentVisibility?: boolean;
+  canCommentPublicly: boolean;
   canRemoveAttach: (attachment: Attachment) => boolean;
+  canUpdateCommentVisibility?: boolean;
   editingComment: EditingComment;
   focus?: boolean;
   getCommentSuggestions: (query: string) => Promise<UserMentions>;
   getVisibilityOptions: () => Promise<VisibilityGroups>;
+  header?: React.ReactNode;
   isArticle?: boolean;
   isEditMode?: boolean;
   onAddSpentTime?: (() => any) | null;
   onAttach: (files: NormalizedAttachment[], comment: IssueComment) => Promise<Attachment[]>;
   onCommentChange: (comment: IssueComment, isAttachmentChange?: boolean) => Promise<IssueComment | null>;
   onSubmitComment: (comment: IssueComment) => any;
-  visibilityLabel?: string;
   visibility?: Visibility;
-  header?: React.ReactNode;
+  visibilityLabel?: string;
 }
 
 interface State {
   attachFileSource: string | null;
   commentCaret: number;
   editingComment: EditingComment;
-  isAttachFileDialogVisible: boolean;
+  height: number;
   isAttachActionsVisible: boolean;
+  isAttachFileDialogVisible: boolean;
   isSaving: boolean;
   isVisibilityControlVisible: boolean;
   isVisibilitySelectVisible: boolean;
@@ -91,7 +88,6 @@ interface State {
   mentionsLoading: boolean;
   mentionsQuery: string;
   mentionsVisible: boolean;
-  height: number;
   visibility?: Visibility;
 }
 
@@ -113,16 +109,16 @@ const CommentEdit = (props: Props) => {
     attachFileSource: null,
     commentCaret: 0,
     editingComment: EMPTY_COMMENT,
-    isAttachFileDialogVisible: false,
+    height: UNIT * 4,
     isAttachActionsVisible: false,
+    isAttachFileDialogVisible: false,
     isSaving: false,
-    isVisibilitySelectVisible: false,
     isVisibilityControlVisible: false,
+    isVisibilitySelectVisible: false,
     mentions: null,
     mentionsLoading: false,
     mentionsQuery: '',
     mentionsVisible: false,
-    height: UNIT * 4,
   });
 
   const changeState = (statePart: Partial<State>): void => {
@@ -208,7 +204,11 @@ const CommentEdit = (props: Props) => {
 
   React.useEffect(
     () => {
-      setEditingComment({...state.editingComment, ...props.editingComment, visibility: props.visibility});
+      setEditingComment({
+        ...state.editingComment,
+        ...props.editingComment,
+        visibility: props.visibility || props.editingComment.visibility,
+      });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [props.visibility]
@@ -516,10 +516,9 @@ const CommentEdit = (props: Props) => {
             </View>
           )}
 
-          <View style={[
-            styles.commentInputContainer,
-            !props.canCommentPublicly && styles.commentInputContainerHighlighted,
-          ]}>
+          <View
+            style={[styles.commentInputContainer, !props.canCommentPublicly && styles.commentInputContainerHighlighted]}
+          >
             {renderCommentInput(
               props.focus || !!editingComment.reply,
               () => toggleVisibilityControl(true),
@@ -539,7 +538,12 @@ const CommentEdit = (props: Props) => {
         )}
 
         {state.isAttachActionsVisible && (
-          <ModalPanelBottom onHide={hideAttachActionsPanel}>
+          <BottomSheetModal
+            isVisible={true}
+            onClose={hideAttachActionsPanel}
+            withHandle={false}
+            snapPoint={130}
+          >
             {props.canAttach && (
               <TouchableOpacity
                 style={[
@@ -600,7 +604,7 @@ const CommentEdit = (props: Props) => {
                 </Text>
               </TouchableOpacity>
             )}
-          </ModalPanelBottom>
+          </BottomSheetModal>
         )}
       </>
     );

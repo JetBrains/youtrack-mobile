@@ -13,7 +13,7 @@ import type {AppConfig} from 'types/AppConfig';
 import type {RequestHeaders} from 'types/Auth';
 import {Attachment} from 'types/CustomFields';
 import {NormalizedAttachment} from 'types/Attachment';
-import {Visibility} from 'types/Visibility';
+import {Visibility, VisibilityGroups} from 'types/Visibility';
 
 const MAX_QUERY_LENGTH = 2048;
 
@@ -183,6 +183,11 @@ export default class BaseAPI {
     }
 
     return options.parseJson === false ? response : await response?.json?.();
+  }
+
+  async updateVisibility(url: string, visibility: VisibilityGroups | null): Promise<VisibilityGroups> {
+    const queryString = BaseAPI.createFieldsQuery({visibility: issueFields.getVisibility.toString()});
+    return await this.makeAuthorizedRequest(`${url}?${queryString}`, 'POST', {visibility});
   }
 
   async updateAttachmentVisibility(

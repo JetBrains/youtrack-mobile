@@ -15,7 +15,13 @@ export default EStyleSheet.create({
     backgroundColor: '$background',
   },
   icon: {
+    color: '$iconAction',
+  },
+  iconAddReaction: {
     color: '$iconAccent',
+  },
+  avatarComment: {
+    backgroundColor: '$background',
   },
   link: {
     color: '$link',
@@ -39,7 +45,7 @@ export default EStyleSheet.create({
   },
   thread: {
     marginTop: UNIT * 1.5,
-    marginLeft: UNIT * 2,
+    marginLeft: UNIT * 1.5,
   },
   threadContainer: {
     backgroundColor: '$background',
@@ -58,12 +64,14 @@ export default EStyleSheet.create({
   },
   threadConnector: {
     position: 'absolute',
+    zIndex: -1,
     top: UNIT / 2,
     left: 15,
     width: 2,
     height: '98.5%',
     paddingBottom: UNIT * 2,
-    backgroundColor: '$separator',
+    opacity: 0.25,
+    backgroundColor: '$iconAction',
   },
   threadTitleContainer: {
     alignItems: 'baseline',

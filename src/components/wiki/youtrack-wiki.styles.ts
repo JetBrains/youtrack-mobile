@@ -1,14 +1,9 @@
 import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from 'components/variables';
-import {
-  MAIN_FONT_SIZE,
-  mainText,
-  monospace,
-  SECONDARY_FONT_SIZE,
-} from 'components/common-styles/typography';
 
-const showMoreLink = {
+import {MAIN_FONT_SIZE, mainText, monospace, SECONDARY_FONT_SIZE, UNIT} from 'components/common-styles';
+
+const link = {
   color: '$link',
 };
 export default EStyleSheet.create({
@@ -20,6 +15,7 @@ export default EStyleSheet.create({
     borderWidth: 2,
     borderBottomWidth: 0,
     borderColor: '$boxBackground',
+    backgroundColor: '$background',
     borderTopLeftRadius: UNIT,
     borderTopRightRadius: UNIT,
   },
@@ -29,11 +25,11 @@ export default EStyleSheet.create({
     justifyContent: 'space-between',
   },
   codeToolbarButton: {
-    marginLeft: UNIT,
-    padding: UNIT,
+    marginHorizontal: UNIT,
+    padding: UNIT / 2,
   },
   codeToolbarIcon: {
-    color: '$iconAccent',
+    color: '$iconAction',
   },
   codeToolbarText: {
     color: '$text',
@@ -59,27 +55,22 @@ export default EStyleSheet.create({
   deleted: {
     textDecorationLine: 'line-through',
   },
-  unspaced: {
-    margin: 0,
-  },
-  link: {
-    color: '$link',
-  },
+  link,
   text: {
-    color: '$link',
+    color: '$text',
   },
   showMoreLink: {
-    ...showMoreLink,
+    ...link,
     lineHeight: SECONDARY_FONT_SIZE * 2,
-
   },
-  exceptionLink: showMoreLink,
+  exceptionLink: link,
   codeContainer: {
     marginVertical: UNIT,
   },
   codeScrollContainer: {
     padding: UNIT,
     paddingRight: 0,
+    borderColor: '$boxBackground',
     backgroundColor: '$boxBackground',
     borderBottomLeftRadius: UNIT,
     borderBottomRightRadius: UNIT,
@@ -115,9 +106,7 @@ export default EStyleSheet.create({
     left: -28,
     backgroundColor: '$background',
   },
-  checkboxIcon: {
-    color: '$link',
-  },
+  checkboxIcon: link,
   checkboxIconBlank: {
     color: '$icon',
   },
@@ -135,7 +124,7 @@ export default EStyleSheet.create({
 });
 export const htmlViewStyles = EStyleSheet.create({
   a: {
-    color: '$link',
+    ...link,
     textDecorationLine: 'underline',
   },
 });

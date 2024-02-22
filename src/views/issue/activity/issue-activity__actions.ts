@@ -69,7 +69,7 @@ export interface IssueActivityActions {
   deleteWorkItemDraft: (issueId?: string) => ReduxAction;
   updateWorkItemDraft: (draft: WorkItem, issueId?: string) => ReduxAction<Promise<WorkItem | null>>;
   getWorkItemAuthors: (projectRingId?: string) => ReduxAction<Promise<Partial<User>[]>>;
-  deleteWorkItem: (workItem: WorkItem) => ReduxAction;
+  deleteWorkItem: (workItem: WorkItem) => ReduxAction<Promise<boolean>>;
 }
 
 export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_FIELD_NAME) => {
@@ -272,7 +272,7 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
         return projectTimeTrackingSettings.workItemTypes.sort(sortByOrdinal);
       };
     },
-    deleteWorkItem: function (workItem: WorkItem): ReduxAction {
+    deleteWorkItem: function (workItem: WorkItem): ReduxAction<Promise<boolean>> {
       return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         const api: Api = getApi();
         const issueId: string = workItem?.issue?.id || (getState()[stateFieldName] as IssueState).issueId;

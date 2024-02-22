@@ -36,6 +36,7 @@ const BottomTabs = createBottomTabNavigator<BottomTabsScreen>();
 export default function NavigationBottomTabs() {
   const isInboxEnabled: boolean = checkVersion(FEATURE_VERSION.inbox);
   const isKBEnabled: boolean = checkVersion(FEATURE_VERSION.knowledgeBase);
+  const isHDEnabled: boolean = checkVersion(FEATURE_VERSION.helpDesk);
 
   const screenOptions = {
     ...defaultScreenOptions,
@@ -67,11 +68,13 @@ export default function NavigationBottomTabs() {
         options={screenOptions}
       />
 
-      <BottomTabs.Screen
-        name={Navigators.TicketsRoot}
-        component={TicketsStackNavigator}
-        options={screenOptions}
-      />
+      {isHDEnabled && (
+        <BottomTabs.Screen
+          name={Navigators.TicketsRoot}
+          component={TicketsStackNavigator}
+          options={screenOptions}
+        />
+      )}
 
       <BottomTabs.Screen
         name={Navigators.AgileRoot}

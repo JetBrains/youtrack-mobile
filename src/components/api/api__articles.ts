@@ -383,6 +383,9 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
+  setCommentVisibility = async (visibility: VisibilityGroups | null, articleId: string, commentId: string) =>
+    await super.updateVisibility(`${this.youTrackApiUrl}/articles/${articleId}/comments/${commentId}`, visibility);
+
   async updateAttachmentVisibility(
     articleId: string,
     attachment: Attachment,

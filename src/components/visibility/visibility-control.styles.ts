@@ -13,8 +13,11 @@ export default EStyleSheet.create({
   buttonIcon: {
     marginRight: UNIT,
   },
-  buttonText: {...secondaryText, color: '$yellowColor'},
+  buttonText: {...secondaryText, color: '$textSecondary'},
   link: {
-    color: 'link',
+    color: '$link',
+  },
+  secured: {
+    color: '$private',
   },
 });

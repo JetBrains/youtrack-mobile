@@ -5,6 +5,8 @@ import styles from './bottom-sheet.style';
 type Props = {
   children: any;
   height?: number;
+  adjustToHeight?: boolean;
+  modalTopOffset?: number;
   header?: React.ReactNode;
   isVisible: boolean;
   onClose: () => void;
@@ -14,7 +16,7 @@ type Props = {
 };
 
 const SheetModal = (props: Props): React.JSX.Element => {
-  const {snapPoint = 16, withHandle = false} = props;
+  const {snapPoint = 16, withHandle = false, adjustToHeight = typeof props?.height !== 'number'} = props;
   const ref: React.MutableRefObject<Modalize | null> = useRef<Modalize | null>(null);
 
   useEffect(() => {
@@ -32,9 +34,10 @@ const SheetModal = (props: Props): React.JSX.Element => {
   return (
     <Portal style={styles.container}>
       <Modalize
-        adjustToContentHeight={typeof props?.height !== 'number'}
+        adjustToContentHeight={adjustToHeight}
         modalHeight={props?.height}
         modalStyle={styles.modal}
+        modalTopOffset={props.modalTopOffset}
         childrenStyle={[styles.content, props.style]}
         ref={ref}
         withHandle={withHandle}

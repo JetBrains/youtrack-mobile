@@ -31,6 +31,7 @@ export default function Navigation() {
       [routeMap.Issue]: 'issue/:id',
       [routeMap.Issues]: 'issues',
       [routeMap.Issue]: 'issue/:id',
+      [routeMap.Tickets]: 'tickets',
       [routeMap.Ticket]: 'tickets/:id',
       NotFound: '*',
     },

@@ -27,7 +27,7 @@ export interface IssuesState {
   isIssuesContextOpen: boolean;
   issuesCount: number | null;
   issues: IssueOnList[];
-  selectProps: Partial<ISelectProps> | ISelectProps | (ISSWithItemActionsProps & { isSectioned: boolean }) | null;
+  selectProps: (Partial<ISelectProps> | ISelectProps | ISSWithItemActionsProps & { isSectioned?: boolean }) | null;
   searchContext: Folder;
   isSearchContextPinned: boolean;
   settings: IssuesSettings;

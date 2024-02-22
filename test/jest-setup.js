@@ -71,3 +71,10 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 jest.mock('react-native-document-picker', () => ({
   default: jest.fn(),
 }));
+
+jest.mock('react-native-safe-area-context', () => ({
+  useSafeAreaInsets: () => ({
+    top: 0,
+    bottom: 0,
+  }),
+}));

@@ -27,7 +27,7 @@ type TicketsStackParams = IssueLinksStackParams & {
 };
 
 
-const IssuesStack = createNativeStackNavigator<TicketsStackParams>();
+const TicketsStack = createNativeStackNavigator<TicketsStackParams>();
 
 const getCommonIssueStack = (StackName, postfix: string = '') => {
   return (
@@ -50,52 +50,52 @@ const getCommonIssueStack = (StackName, postfix: string = '') => {
 
 export default function TicketsStackNavigator({navigation}: NativeStackScreenProps<ParamListBase>) {
   return (
-    <IssuesStack.Navigator
+    <TicketsStack.Navigator
       key={Navigators.IssuesRoot}
       initialRouteName={routeMap.Tickets}
       screenOptions={defaultScreenOptions}
       screenListeners={() => subscribeToScreenListeners(Navigators.TicketsRoot)}
     >
-      <IssuesStack.Group>
-        <IssuesStack.Screen
+      <TicketsStack.Group>
+        <TicketsStack.Screen
           name={routeMap.EnterServer}
           component={EnterServer}
         />
-        <IssuesStack.Screen
+        <TicketsStack.Screen
           name={routeMap.LogIn}
           component={LogIn}
         />
-      </IssuesStack.Group>
+      </TicketsStack.Group>
 
-      <IssuesStack.Screen
+      <TicketsStack.Screen
         name={routeMap.Tickets}
         component={Issues}
       />
 
-      {getCommonIssueStack(IssuesStack)}
+      {getCommonIssueStack(TicketsStack)}
 
-      <IssuesStack.Group
+      <TicketsStack.Group
         screenOptions={{presentation: 'modal'}}
       >
-        <IssuesStack.Screen
+        <TicketsStack.Screen
           name={routeMap.CreateIssue}
           component={CreateIssue}
         />
-        <IssuesStack.Screen
+        <TicketsStack.Screen
           name={routeMap.AttachmentPreview}
           component={AttachmentPreview}
         />
-        <IssuesStack.Screen
+        <TicketsStack.Screen
           name={routeMap.PreviewFile}
           component={PreviewFile}
         />
-        <IssuesStack.Screen
+        <TicketsStack.Screen
           name={routeMap.Page}
           component={Page}
         />
 
-        {getCommonIssueStack(IssuesStack, 'Modal')}
-      </IssuesStack.Group>
-    </IssuesStack.Navigator>
+        {getCommonIssueStack(TicketsStack, 'Modal')}
+      </TicketsStack.Group>
+    </TicketsStack.Navigator>
   );
 }

@@ -1,11 +1,7 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {
-  View,
-  ActivityIndicator,
-  Text,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import React from 'react';
+import {View, ActivityIndicator, Text, TouchableOpacity, Linking} from 'react-native';
+
+// @ts-ignore
 import Gallery from 'react-native-image-gallery';
 import Video from 'react-native-video';
 import {SvgFromUri} from 'react-native-svg';
@@ -31,14 +27,14 @@ import {mixinNavigationProps} from 'components/navigation';
 interface FileSource {
   id: string;
   uri: string;
-  headers: Record<string, any>;
+  headers?: Record<string, any>;
   mimeType: string;
 }
 
 interface Props {
   imageAttachments: Attachment[];
   current: Attachment;
-  imageHeaders: Record<string, any> | null | undefined;
+  imageHeaders?: Record<string, any>;
   onRemoveImage?: (index: number) => any;
   onHide?: () => any;
 }
@@ -56,14 +52,13 @@ interface VideoError {
 const isAndroid: boolean = isAndroidPlatform();
 const ERROR_MESSAGE: string = 'Cannot load a preview';
 
-const ImagePreview = (props: Props): JSX.Element => {
+const ImagePreview = (props: Props) => {
   const navigation: NavigationProp<ParamListBase> = useNavigation();
 
-  const [index, updateCurrentIndex] = useState(0);
-  const [error, updateError] = useState(null);
-  const [isLoading, updateIsLoading] = useState(false);
-
-  const closeView = (): void => {
+  const [index, updateCurrentIndex] = React.useState(0);
+  const [error, updateError] = React.useState<string | null>(null);
+  const [isLoading, updateIsLoading] = React.useState(false);
+  const closeView = () => {
     if (props.onHide) {
       props.onHide();
     } else {
@@ -71,15 +66,13 @@ const ImagePreview = (props: Props): JSX.Element => {
     }
   };
 
-  const getCurrentIndex: (attachment: Attachment) => number = useCallback(
+  const getCurrentIndex: (attachment: Attachment) => number = React.useCallback(
     (attachment: Attachment): number =>
-      props.imageAttachments.findIndex(
-        (it: Attachment) => it.id === attachment.id,
-      ) || 0,
-    [props.imageAttachments],
+      props.imageAttachments.findIndex((it: Attachment) => it.id === attachment.id) || 0,
+    [props.imageAttachments]
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     updateError(null);
     updateIsLoading(false);
 
@@ -88,9 +81,9 @@ const ImagePreview = (props: Props): JSX.Element => {
     }
   }, [getCurrentIndex, props]);
 
-  const renderLoader = (): React.ReactNode => <ActivityIndicator color={styles.loader.color} style={styles.loader}/>;
+  const renderLoader = () => <ActivityIndicator color={styles.loader.color} style={styles.loader} />;
 
-  const renderImage = (imageProps: { source: Attachment; }): React.ReactNode => {
+  const renderImage = (imageProps: {source: Attachment}) => {
     usage.trackEvent(ANALYTICS_PREVIEW_PAGE, 'Open image');
 
     if (error) {
@@ -118,7 +111,7 @@ const ImagePreview = (props: Props): JSX.Element => {
   };
 
   const createSource = (
-    attach: Attachment,
+    attach: Attachment
   ): {
     source: FileSource;
   } => ({
@@ -130,10 +123,7 @@ const ImagePreview = (props: Props): JSX.Element => {
     },
   });
 
-  const renderVideo = (): React.ReactElement<
-    React.ComponentProps<typeof Video>,
-    typeof Video
-  > => {
+  const renderVideo = (): React.ReactNode => {
     usage.trackEvent(ANALYTICS_PREVIEW_PAGE, 'Open video');
     return (
       <Video
@@ -146,9 +136,7 @@ const ImagePreview = (props: Props): JSX.Element => {
         onError={(onError: VideoError) => {
           updateIsLoading(false);
           const message: string =
-            onError?.error?.localizedFailureReason ||
-            onError?.error?.localizedDescription ||
-            ERROR_MESSAGE;
+            onError?.error?.localizedFailureReason || onError?.error?.localizedDescription || ERROR_MESSAGE;
           updateError(message);
           logEvent({
             message,
@@ -168,7 +156,7 @@ const ImagePreview = (props: Props): JSX.Element => {
 
   const isImageAttach = (): boolean => !!props.imageAttachments?.length;
 
-  const renderError = (): React.ReactNode => (
+  const renderError = () => (
     <View style={[styles.container, styles.error]}>
       <IconNoProjectFound/>
       <Text style={styles.errorTitle}>{error || ERROR_MESSAGE}</Text>
@@ -176,10 +164,7 @@ const ImagePreview = (props: Props): JSX.Element => {
     </View>
   );
 
-  const renderImageGallery = (): null | React.ReactElement<
-    React.ComponentProps<typeof Gallery>,
-    typeof Gallery
-  > => {
+  const renderImageGallery = (): React.ReactNode => {
     return (
       <Gallery
         images={props.imageAttachments.map(createSource)}
@@ -191,7 +176,7 @@ const ImagePreview = (props: Props): JSX.Element => {
     );
   };
 
-  const renderOpenButton = (): React.ReactNode => {
+  const renderOpenButton = () => {
     usage.trackEvent(ANALYTICS_PREVIEW_PAGE, 'Preview file externally');
     const attach: Attachment = isImageAttach() ? props.imageAttachments[index] : props.current;
     return (
@@ -204,33 +189,24 @@ const ImagePreview = (props: Props): JSX.Element => {
   };
 
   return (
-    <AnimatedView
-      animation="fadeIn"
-      duration={200}
-      useNativeDriver={true}
-      style={styles.container}
-    >
+    <AnimatedView animation="fadeIn" duration={200} useNativeDriver={true} style={styles.container}>
       <Header
-        leftButton={
-          <IconClose
-            size={21}
-            color={styles.link.color}
-            style={styles.closeIcon}
-          />
-        }
+        leftButton={<IconClose size={21} color={styles.link.color} style={styles.closeIcon} />}
         onBack={closeView}
         style={styles.header}
       >
         {!error && <View>{renderOpenButton()}</View>}
       </Header>
 
-      {isImageAttach() && renderImageGallery()}
+      <View style={styles.container}>
+        {isImageAttach() && renderImageGallery()}
 
-      {!isImageAttach() && renderVideo()}
+        {!isImageAttach() && renderVideo()}
 
-      {isLoading && renderLoader()}
+        {isLoading && renderLoader()}
 
-      {!!error && renderError()}
+        {!!error && renderError()}
+      </View>
     </AnimatedView>
   );
 };

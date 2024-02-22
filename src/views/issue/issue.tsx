@@ -344,7 +344,11 @@ export class Issue extends IssueTabbed<IssueProps, IIssueTabbedState> {
     }
 
     return (
-      <Text style={styles.iconMore}>
+      <Text style={styles.iconMore}
+        testID="test:id/header-menu-button"
+        accessibilityLabel="header-menu-button"
+        accessible={true}
+      >
         {isIOS ? (
           <IconMoreOptions size={18} color={uiTheme.colors.$link}/>
         ) : (

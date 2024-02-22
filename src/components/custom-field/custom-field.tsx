@@ -164,7 +164,7 @@ export default class CustomField extends Component<Props, void> {
   }
 
   render(): React.ReactNode {
-    const {field, active} = this.props;
+    const { field, active } = this.props;
     return (
       <TouchableOpacity
         style={[styles.wrapper, active ? styles.wrapperActive : null]}
