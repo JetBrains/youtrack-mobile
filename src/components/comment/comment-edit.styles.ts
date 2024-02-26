@@ -139,8 +139,7 @@ export default EStyleSheet.create({
   actionsContainerButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: UNIT / 2,
-    paddingHorizontal: UNIT / 2,
+    padding: UNIT / 2,
     color: '$iconAccent',
   },
   actionsContainerButtonDisabled: {

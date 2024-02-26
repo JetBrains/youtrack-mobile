@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 
 import IconAttachment from '@jetbrains/icons/attachment.svg';
-import IconHourGlass from '@jetbrains/icons/hourglass.svg';
 import InputScrollView from 'react-native-input-scroll-view';
 import {useDispatch} from 'react-redux';
 
@@ -18,6 +17,8 @@ import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel
 import AttachmentsRow from 'components/attachments-row/attachments-row';
 import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import Header from 'components/header/header';
+import IconPlus from 'components/icon/assets/plus.svg';
+import IconTime from 'components/icon/assets/time.svg';
 import IssueVisibility from 'components/visibility/issue-visibility';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import log from 'components/log/log';
@@ -33,7 +34,7 @@ import {
 import {getAttachmentActions} from 'components/attachments-row/attachment-actions';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {IconAdd, IconArrowUp, IconCheck, IconClose} from 'components/icon/icon';
+import {IconArrowUp, IconCheck, IconClose} from 'components/icon/icon';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables';
 
@@ -508,9 +509,10 @@ const CommentEdit = (props: Props) => {
                   })
                 }
               >
-                <IconAdd
+                <IconPlus
                   color={styles.actionsContainerButton.color}
-                  size={22}
+                  width={23}
+                  height={23}
                 />
               </TouchableOpacity>
             </View>
@@ -589,10 +591,10 @@ const CommentEdit = (props: Props) => {
                   }
                 }}
               >
-                <IconHourGlass
-                  fill={styles.actionsContainerButton.color}
-                  width={20}
-                  height={20}
+                <IconTime
+                  color={styles.actionsContainerButton.color}
+                  width={22}
+                  height={22}
                 />
                 <Text
                   style={[
