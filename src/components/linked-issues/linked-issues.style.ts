@@ -51,13 +51,17 @@ export default EStyleSheet.create({
   },
   linkedIssueRemoveAction: {
     position: 'absolute',
-    right: -UNIT,
+    right: -UNIT * 2,
     zIndex: 1,
     alignSelf: 'center',
     marginLeft: UNIT,
     padding: UNIT,
-    paddingRight: UNIT,
-    color: '$iconAccent',
+    paddingHorizontal: UNIT / 2,
+  },
+  linkedIssueRemoveActionProgress: {
+    position: 'absolute',
+    right: UNIT * 1.5,
+    zIndex: 1,
   },
   separator: {
     ...separatorBorder,
@@ -77,7 +81,7 @@ export default EStyleSheet.create({
     textTransform: 'uppercase',
   },
   addLinkButton: {
-    padding: UNIT,
+    marginRight: UNIT / 2,
   },
   linkTypeSelect: linkTypeSelect,
   issuesToLinkContainer: {
@@ -110,17 +114,20 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: UNIT,
+    marginTop: UNIT / 2,
     marginRight: -UNIT * 2,
-    marginBottom: UNIT / 2,
-    paddingTop: UNIT,
-    paddingRight: UNIT * 2.5,
-    paddingVertical: UNIT * 2,
-    borderBottomWidth: 0.75,
-    borderColor: '$separator',
+    paddingRight: UNIT,
+    paddingVertical: UNIT,
   },
   linkedIssuesTitle: {
     flex: 0.95,
+  },
+  linkedIssuesTitleSeparator: {
+    height: 0.75,
+    marginRight: -UNIT * 2,
+    marginTop: UNIT,
+    marginBottom: UNIT,
+    backgroundColor: '$separator',
   },
   linkedIssuesTitleText: {
     fontSize: SECONDARY_FONT_SIZE,
