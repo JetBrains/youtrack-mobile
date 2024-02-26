@@ -3,19 +3,30 @@ import React from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconMore from 'components/icon/assets/more.svg';
 import IconVCS from '@jetbrains/icons/pr-merged.svg';
 
 import IconYTM from './youtrack-icon';
 import {isAndroidPlatform} from 'util/util';
+import {ViewStyleProp} from 'types/Internal';
 
 export {default as logo} from './youtrack-logo-512.png';
+
+import styles from './icon.styles';
+
+interface SVGIconProps {
+  size?: number;
+  color?: string;
+  style?: ViewStyleProp | ViewStyleProp[];
+  testID?: string;
+}
 
 interface Props {
   name?: string;
   size?: number;
   color?: string;
   isFontAwesome?: boolean;
-  style?: Record<string, string> | Record<string, string>[];
+  style?: ViewStyleProp | ViewStyleProp[];
   testID?: string;
 }
 
@@ -365,9 +376,17 @@ export const IconHourGlass = (props?: Props) => (
 export const IconKnowledgeBase = (props?: Props) => (
   <IconYTM {...{...defaultProps(), name: 'knowledge-base', ...props}} />
 );
-export const IconMoreOptions = (props?: Props) => (
-  <IconYTM {...{...defaultProps(), name: 'more-options', ...props}} />
-);
+export const IconMoreOptions = (props?: SVGIconProps) => {
+  const color = props?.color || defaultProps().color;
+  const size = props?.size || 18;
+  return (
+    <IconMore
+      style={[].concat(props?.style || []).concat(isAndroid ? styles.iconMoreOptionsAndroid : [])}
+      width={size}
+      height={size}
+      color={color}/>
+  );
+};
 export const IconPencil = (props?: Props) => (
   <IconYTM {...{...defaultProps(), name: 'pencil', ...props}} />
 );

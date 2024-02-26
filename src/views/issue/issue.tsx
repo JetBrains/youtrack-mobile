@@ -4,7 +4,6 @@ import {FlatList, RefreshControl, Text, TouchableOpacity, View} from 'react-nati
 import {bindActionCreatorsExt} from 'util/redux-ext';
 import {connect} from 'react-redux';
 
-import IconMore from 'components/icon/assets/more.svg';
 import createIssueActions, {dispatchActions} from './issue-actions';
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
 import ColorField from 'components/color-field/color-field';
@@ -30,7 +29,7 @@ import {getReadableID} from 'components/issue-formatter/issue-formatter';
 import {
   IconBack,
   IconCheck,
-  IconClose,
+  IconClose, IconMoreOptions,
 } from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {IssueContext} from './issue-context';
@@ -370,7 +369,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
           }
         }}
       >
-        <IconMore width={18} height={18} color={styles.link.color} />
+        <IconMoreOptions size={18} color={styles.link.color} />
       </TouchableOpacity>
     );
   }
