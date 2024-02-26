@@ -4,6 +4,7 @@ import {FlatList, RefreshControl, Text, View} from 'react-native';
 import {bindActionCreatorsExt} from 'util/redux-ext';
 import {connect} from 'react-redux';
 
+import IconMore from 'components/icon/assets/more.svg';
 import createIssueActions, {dispatchActions} from './issue-actions';
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
 import ColorField from 'components/color-field/color-field';
@@ -30,10 +31,7 @@ import {
   IconBack,
   IconCheck,
   IconClose,
-  IconDrag,
-  IconMoreOptions,
 } from 'components/icon/icon';
-import {isIOSPlatform} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {IssueContext} from './issue-context';
 import {Select, SelectModal} from 'components/select/select';
@@ -55,9 +53,6 @@ import type {ScrollData} from 'types/Markdown';
 import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from 'types/Theme';
 import type {User} from 'types/User';
-
-const isIOS: boolean = isIOSPlatform();
-
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
@@ -155,9 +150,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     }
   }
 
-  getRouteBadge(
-    route: TabRoute,
-  ): React.ReactElement<React.ComponentProps<typeof View>, typeof View> | null {
+  getRouteBadge(route: TabRoute) {
     return super.getRouteBadge(route.title === this.tabRoutes[1].title, this.props?.commentsCounter);
   }
 
@@ -348,26 +341,19 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return issue && issuePermissions && issuePermissions.canStar();
   };
 
-  renderActionsIcon(uiTheme: UITheme): React.ReactNode {
+  renderActionsIcon(): React.ReactNode {
     if (!this.isIssueLoaded()) {
       return <Skeleton width={24} />;
     }
 
     return (
-      <Text style={styles.iconMore}
+      <View style={styles.iconMore}
         testID="test:id/header-menu-button"
         accessibilityLabel="header-menu-button"
         accessible={true}
       >
-        {isIOS ? (
-          <IconMoreOptions size={18} color={uiTheme.colors.$link} />
-        ) : (
-          <Text>
-            <IconDrag size={18} color={uiTheme.colors.$link} />
-          </Text>
-        )}
-        <Text> </Text>
-      </Text>
+        <IconMore width={18} height={18} color={styles.link.color} />
+      </View>
     );
   }
 
@@ -482,7 +468,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         <Header
           leftButton={this.renderBackIcon()}
           rightButton={
-            isIssueLoaded ? this.renderActionsIcon(this.uiTheme) : null
+            isIssueLoaded ? this.renderActionsIcon() : null
           }
           extra={(
             isIssueLoaded

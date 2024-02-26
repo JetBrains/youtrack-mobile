@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 
+import IconVote from 'components/icon/assets/vote.svg';
 import {HIT_SLOP} from 'components/common-styles';
-import {IconThumbUp} from 'components/icon/icon';
 
 import styles from './issue-votes.styles';
 
@@ -31,10 +31,11 @@ export default function (props: Props) {
       style={styles.button}
       onPress={toggle}
     >
-      <Text style={[styles.counter, {color}]}>{votes || 0}</Text>
-      <IconThumbUp
+      <View style={styles.counter}><Text style={[styles.counterText, {color}]}>{votes || 0}</Text></View>
+      <IconVote
         isActive={voted}
-        size={19}
+        width={19}
+        height={19}
         color={color}
       />
     </TouchableOpacity>

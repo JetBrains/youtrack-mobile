@@ -31,8 +31,7 @@ export default EStyleSheet.create({
   headerText: {...headerTitle, color: '$text'},
   headerTextResolved: {...issueIdResolved, color: '$textSecondary'},
   issueStar: {
-    marginLeft: UNIT * 2,
-    marginRight: UNIT * 1.5,
+    marginLeft: UNIT,
   },
   savingIndicator: {
     paddingTop: 4,
@@ -113,8 +112,7 @@ export default EStyleSheet.create({
     paddingVertical: UNIT / 4,
   },
   iconMore: {
-    position: 'absolute',
-    top: -9,
+    padding: UNIT / 2,
   },
   link: {
     color: '$link',

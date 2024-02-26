@@ -1,7 +1,7 @@
 import {Platform} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
-import {elevation1, MAIN_FONT_SIZE} from 'components/common-styles';
+import {elevation1, MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from 'components/common-styles';
 import {mainText, secondaryText} from 'components/common-styles/typography';
 export default EStyleSheet.create({
   tabsBar: {...elevation1, backgroundColor: '$background'},
@@ -54,12 +54,13 @@ export default EStyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: UNIT / 1.75,
     paddingVertical: UNIT / 4,
-    borderRadius: UNIT / 2,
+    borderRadius: UNIT,
     backgroundColor: '$greyBackground',
   },
   tabBadgeText: {
-    paddingLeft: UNIT / 2,
+    paddingLeft: UNIT / 4,
     color: '$icon',
+    fontSize: SECONDARY_FONT_SIZE,
     ...Platform.select({
       android: {
         lineHeight: MAIN_FONT_SIZE + 1,
@@ -67,6 +68,6 @@ export default EStyleSheet.create({
     }),
   },
   tabBadgeIcon: {
-    color: '$iconAccent',
+    color: '$iconAction',
   },
 });

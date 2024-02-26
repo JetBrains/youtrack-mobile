@@ -318,7 +318,7 @@ export const IconBack = (props?: Props) => {
 
   return (
     <IconYTM
-      {...{...defaultProps(), name: 'chevron-left', size: 30, ...props}}
+      {...{...defaultProps(), name: 'chevron-left', size: 32, ...props}}
     />
   );
 };
