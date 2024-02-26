@@ -40,11 +40,15 @@ export default EStyleSheet.create({
     color: '$disabled',
   },
   icon: {
-    color: '$navigation',
+    color: '$iconAction',
   },
   circleIcon: {
     position: 'absolute',
-    top: -10,
-    left: 18,
+    top: 0,
+    left: 13,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '$background',
+    backgroundColor: '$background',
   },
 });
