@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import * as actions from './inbox-threads-actions';
 import Article from 'views/article/article';
 import Header from 'components/header/header';
+import IconMoreOptions from 'components/icon/assets/more.svg';
 import InboxThreadsList from './inbox-threads__list';
 import InboxThreadsProgressPlaceholder from './inbox-threads__progress-placeholder';
 import InboxThreadsTabBar from './inbox-threads__tab-bar';
@@ -22,7 +23,6 @@ import {folderIdMap, getThreadTabsTitles, mergeThreads} from './inbox-threads-he
 import {getStorageState} from 'components/storage/storage';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {IconMoreOptions} from 'components/icon/icon';
 import {isSplitView as hasSplitView} from 'components/responsive/responsive-helper';
 import {markAllAsRead} from './inbox-threads-actions';
 import {ThemeContext} from 'components/theme/theme-context';
@@ -290,7 +290,8 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
           style={styles.threadTitleAction}
         >
           <IconMoreOptions
-            size={18}
+            width={18}
+            height={18}
             color={isOnline ? styles.link.color : styles.disabled.color}
           />
         </TouchableOpacity>
