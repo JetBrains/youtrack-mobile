@@ -135,6 +135,7 @@ export default EStyleSheet.create({
     color: '$textSecondary',
   },
   list: {
+    minWidth: '50%',
     paddingBottom: UNIT * 4,
   },
 });
