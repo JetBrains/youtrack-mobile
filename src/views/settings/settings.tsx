@@ -32,7 +32,7 @@ interface Props {
   onChangeAccount: (account: StorageState) => any;
   openDebugView: () => any;
   otherAccounts: StorageState[];
-  isChangingAccount: boolean | null | undefined;
+  isChangingAccount: boolean;
   features: Array<Record<string, any>>;
   setFeatures: (...args: any[]) => any;
 }

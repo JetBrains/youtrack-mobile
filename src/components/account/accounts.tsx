@@ -26,7 +26,7 @@ import {i18n} from 'components/i18n/i18n';
 
 type Props = {
   otherAccounts: StorageState[];
-  isChangingAccount: boolean | null | undefined;
+  isChangingAccount: boolean;
   onClose: () => any;
   onLogOut: () => any;
   onAddAccount: () => any;
@@ -75,8 +75,8 @@ export default class Accounts extends PureComponent<Props, void> {
     this.props.onChangeAccount(account);
   };
 
-  renderAccount(account: StorageState): React.ReactNode {
-    const config: AppConfig = account.config;
+  renderAccount(account: StorageState) {
+    const config: AppConfig = account.config as AppConfig;
     const user = account.currentUser;
 
     if (!user) {
@@ -110,15 +110,15 @@ export default class Accounts extends PureComponent<Props, void> {
     );
   }
 
-  renderAccounts(): React.ReactElement<React.ComponentProps<any>, any> {
+  renderAccounts() {
     const {
       openDebugView,
       otherAccounts,
       isChangingAccount,
       uiTheme,
     } = this.props;
-    const storageState: StorageState = getStorageState();
-    const accounts: StorageState[] = []
+    const storageState = getStorageState();
+    const accounts: StorageState[] = ([] as StorageState[])
       .concat(storageState)
       .concat(otherAccounts || [])
       .filter(account => !!account.config) // Do not render if account is not ready
@@ -140,7 +140,7 @@ export default class Accounts extends PureComponent<Props, void> {
     );
   }
 
-  render(): React.ReactNode {
+  render() {
     const {onAddAccount, isChangingAccount, uiTheme} = this.props;
     return (
       <View style={styles.accountContainer} testID="accounts">
