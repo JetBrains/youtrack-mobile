@@ -57,6 +57,7 @@ export default EStyleSheet.create({
     marginLeft: UNIT,
     padding: UNIT,
     paddingHorizontal: UNIT / 2,
+    color: '$iconAccent',
   },
   linkedIssueRemoveActionProgress: {
     position: 'absolute',

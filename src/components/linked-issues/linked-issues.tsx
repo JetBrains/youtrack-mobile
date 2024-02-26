@@ -125,7 +125,10 @@ const LinkedIssues = (props: Props) => {
               <ActivityIndicator style={styles.linkedIssueRemoveActionProgress} color={styles.link.color} />
             )}
             {!isCurrentButtonPressed && (
-              <IconClearText size={24} color={isButtonPressed ? styles.disabled.color : styles.link.color} />
+              <IconClearText
+                size={24}
+                color={isButtonPressed ? styles.disabled.color : styles.linkedIssueRemoveAction.color}
+              />
             )}
           </TouchableOpacity>
         )}
