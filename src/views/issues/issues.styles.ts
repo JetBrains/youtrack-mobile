@@ -47,8 +47,9 @@ export default EStyleSheet.create({
     maxWidth: UNIT * 10,
   },
   listActionsItem: {
-    height: UNIT * 4.5,
-    width: UNIT * 4.5,
+    height: UNIT * 4,
+    width: UNIT * 4,
+    marginRight: UNIT / 1.5,
     alignItems: 'center',
     justifyContent: 'center',
   },

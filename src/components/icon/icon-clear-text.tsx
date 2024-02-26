@@ -1,8 +1,8 @@
 import {TouchableOpacity} from 'react-native';
 import React from 'react';
 
+import IconPlus from 'components/icon/assets/plus.svg';
 import {HIT_SLOP} from 'components/common-styles/button';
-import {IconClose} from './icon';
 
 import styles from './icon-clear-text.styles';
 
@@ -14,7 +14,7 @@ export function IconClearText({onPress}: { onPress: () => any }) {
       hitSlop={HIT_SLOP}
       onPress={onPress}
     >
-      <IconClose size={18} color={styles.icon.color} />
+      <IconPlus width={18} height={18} color={styles.icon.color} />
     </TouchableOpacity>
   );
 }

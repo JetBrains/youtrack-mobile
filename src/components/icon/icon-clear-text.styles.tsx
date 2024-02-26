@@ -9,5 +9,11 @@ export default EStyleSheet.create({
     ...clearIcon,
     marginLeft: UNIT,
     marginRight: UNIT,
+    borderRadius: UNIT,
+    transform: [
+      {
+        rotate: '-45deg',
+      },
+    ],
   },
 });
