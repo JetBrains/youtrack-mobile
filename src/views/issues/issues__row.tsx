@@ -3,7 +3,7 @@ import {View, Text, TouchableOpacity} from 'react-native';
 
 import Avatar from 'components/avatar/avatar';
 import ColorField from 'components/color-field/color-field';
-import IconHDTicket from 'components/icon/assets/hdticket.svg';
+import IconHDTicket from 'components/icon/assets/menu_helpdesk.svg';
 import IconPaused from '@jetbrains/icons/paused.svg';
 import Tags from 'components/tags/tags';
 import {
