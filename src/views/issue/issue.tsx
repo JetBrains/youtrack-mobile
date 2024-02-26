@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, RefreshControl, Text, View} from 'react-native';
+import {FlatList, RefreshControl, Text, TouchableOpacity, View} from 'react-native';
 
 import {bindActionCreatorsExt} from 'util/redux-ext';
 import {connect} from 'react-redux';
@@ -41,7 +41,7 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './issue.styles';
 
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
-import type {AnyIssue, IssueFull, TabRoute} from 'types/Issue';
+import type {IssueFull, TabRoute} from 'types/Issue';
 import type {Attachment, IssueLink, Tag} from 'types/CustomFields';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import type {EventSubscription} from 'react-native';
@@ -154,7 +154,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return super.getRouteBadge(route.title === this.tabRoutes[1].title, this.props?.commentsCounter);
   }
 
-  async loadIssue(issuePlaceholder: Partial<IssueFull> | null | undefined) {
+  async loadIssue(issuePlaceholder?: Partial<IssueFull> | null) {
     await this.props.loadIssue(issuePlaceholder);
   }
 
@@ -341,19 +341,37 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return issue && issuePermissions && issuePermissions.canStar();
   };
 
-  renderActionsIcon(): React.ReactNode {
+  renderActions(): React.ReactNode {
     if (!this.isIssueLoaded()) {
       return <Skeleton width={24} />;
     }
 
+    const {issue, showIssueActions, issuePermissions} = this.props;
     return (
-      <View style={styles.iconMore}
+      <TouchableOpacity
+        style={styles.issueActions}
         testID="test:id/header-menu-button"
         accessibilityLabel="header-menu-button"
         accessible={true}
+        onPress={() => {
+          if (this.isIssueLoaded()) {
+            showIssueActions(
+              this.context.actionSheet(),
+              {
+                canAttach: issuePermissions.canAddAttachmentTo(issue),
+                canEdit: issuePermissions.canUpdateGeneralInfo(issue),
+                canApplyCommand: issuePermissions.canRunCommand(issue),
+                canTag: issuePermissions.canTag(issue),
+                canDeleteIssue: issuePermissions.canDeleteIssue(issue),
+              },
+              this.switchToDetailsTab,
+              issuePermissions.canLink(issue) ? this.onAddIssueLink : null,
+            );
+          }
+        }}
       >
         <IconMore width={18} height={18} color={styles.link.color} />
-      </View>
+      </TouchableOpacity>
     );
   }
 
@@ -391,7 +409,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   renderHeaderIssueTitle(): React.ReactNode {
     const {issue, issuePlaceholder, issueLoadingError} = this.props;
 
-    const _issue: AnyIssue = issue || issuePlaceholder;
+    const _issue: IssueFull = issue || issuePlaceholder;
 
     const readableID: string | undefined = getReadableID(_issue);
 
@@ -415,7 +433,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       : (!issueLoadingError && <Skeleton width={120} />) || null;
   }
 
-  toggleModalChildren(modalChildren?: any): void {
+  toggleModalChildren(modalChildren?: React.ReactNode): void {
     this.setState({
       modalChildren,
     });
@@ -452,14 +470,11 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   _renderHeader() {
     const {
-      issue,
       editMode,
       summaryCopy,
       isSavingEditedIssue,
       saveIssueSummaryAndDescriptionChange,
-      showIssueActions,
       stopEditingIssue,
-      issuePermissions,
     } = this.props;
     const issueTitle: React.ReactNode = this.renderHeaderIssueTitle();
     if (!editMode) {
@@ -467,30 +482,15 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       return (
         <Header
           leftButton={this.renderBackIcon()}
-          rightButton={
-            isIssueLoaded ? this.renderActionsIcon() : null
+          extra={
+            isIssueLoaded ? (
+              <View style={styles.headerExtraContainer}>
+                {this.renderIssueVotes()}
+                {this.renderStar()}
+                {this.renderActions()}
+              </View>
+            ) : null
           }
-          extra={(
-            isIssueLoaded
-              ? <View style={styles.headerExtraContainer}>{this.renderIssueVotes()}{this.renderStar()}</View>
-              : null
-          )}
-          onRightButtonClick={() => {
-            if (isIssueLoaded) {
-              showIssueActions(
-                this.context.actionSheet(),
-                {
-                  canAttach: issuePermissions.canAddAttachmentTo(issue),
-                  canEdit: issuePermissions.canUpdateGeneralInfo(issue),
-                  canApplyCommand: issuePermissions.canRunCommand(issue),
-                  canTag: issuePermissions.canTag(issue),
-                  canDeleteIssue: issuePermissions.canDeleteIssue(issue),
-                },
-                this.switchToDetailsTab,
-                issuePermissions.canLink(issue) ? this.onAddIssueLink : null,
-              );
-            }
-          }}
           onBack={this.handleOnBack}
         >
           {issueTitle}
