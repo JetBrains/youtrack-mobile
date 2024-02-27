@@ -7,11 +7,14 @@ import {
   Text,
   ActivityIndicator,
 } from 'react-native';
+
+import {View as AnimatedView} from 'react-native-animatable';
 import {useDispatch} from 'react-redux';
+
 import ArticleWithChildren from 'components/articles/article-item-with-children';
 import ErrorMessage from 'components/error-message/error-message';
 import Header from 'components/header/header';
-import IconTrash from '@jetbrains/icons/trash.svg';
+import IconTrash from 'components/icon/assets/trash.svg';
 import Router from 'components/router/router';
 import Select from 'components/select/select';
 import {confirmDeleteAllDrafts, confirmDeleteArticleDraft} from 'components/confirmation/article-confirmations';
@@ -22,31 +25,29 @@ import {loadArticlesDrafts} from './knowledge-base-actions';
 import {routeMap} from 'app-routes';
 import {SkeletonList} from 'components/skeleton/skeleton';
 import {until} from 'util/util';
-import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './knowledge-base.styles';
 
 import type {Article, ArticleDraft} from 'types/Article';
+import {ReduxThunkDispatch} from 'types/Redux';
 
-type Props = {
+interface Props {
   backIcon?: any;
   onBack?: () => any;
   onArticleCreate: (
     articleDraft: ArticleDraft | null | undefined,
     isNew: boolean,
   ) => any;
-};
+}
 
 const KnowledgeBaseDrafts = (props: Props) => {
-  const dispatch = useDispatch();
-  const [drafts, updateDrafts] = useState(null);
+  const dispatch:ReduxThunkDispatch = useDispatch();
+  const [drafts, updateDrafts] = useState<ArticleDraft[] | null>(null);
   const [isLoading, updateLoading] = useState(false);
   const [isDeleting, updateDeleting] = useState(false);
   const loadDrafts = useCallback(async () => {
     updateLoading(true);
-    const articleDrafts: ArticleDraft[] = await dispatch(
-      loadArticlesDrafts(),
-    );
+    const articleDrafts: ArticleDraft[] = await dispatch(loadArticlesDrafts());
     updateLoading(false);
     updateDrafts(articleDrafts as any);
   }, [dispatch]);
@@ -81,7 +82,7 @@ const KnowledgeBaseDrafts = (props: Props) => {
     );
   }, [loadDrafts]);
 
-  const renderArticle = ({item}) => {
+  const renderArticle = ({item}: {item: ArticleDraft}) => {
     return (
       <ArticleWithChildren
         style={[styles.itemDraft, isDeleting ? styles.itemDraftDisabled : null]}
@@ -127,7 +128,7 @@ const KnowledgeBaseDrafts = (props: Props) => {
                 style={styles.iconTrash}
                 onPress={deleteAllDrafts}
               >
-                <IconTrash fill={styles.link.color} width={19} height={19} />
+                <IconTrash color={styles.link.color} width={19} height={19} />
               </TouchableOpacity>
             )
           ) : null
@@ -181,9 +182,7 @@ const KnowledgeBaseDrafts = (props: Props) => {
               onRefresh={loadDrafts}
             />
           }
-          keyExtractor={(item: ArticleDraft, index: number) =>
-            item?.id || `${index}`
-          }
+          keyExtractor={(item: ArticleDraft, index: number) => item?.id || `${index}`}
           getItemLayout={Select.getItemLayout}
           renderItem={renderArticle}
           ItemSeparatorComponent={Select.renderSeparator}
@@ -193,7 +192,4 @@ const KnowledgeBaseDrafts = (props: Props) => {
   );
 };
 
-export default React.memo<any>(KnowledgeBaseDrafts) as React$AbstractComponent<
-  any,
-  unknown
->;
+export default React.memo<any>(KnowledgeBaseDrafts);
