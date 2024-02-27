@@ -121,7 +121,7 @@ const IssuesSortByList = (props: Props) => {
                 );
               }}
             >
-              <IconClose size={20} color={styles.sortIcon.color} />
+              <IconClose color={styles.sortIcon.color} />
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -141,7 +141,6 @@ const IssuesSortByList = (props: Props) => {
         showShadow={true}
         leftButton={
           <IconClose
-            size={21}
             color={styles.link.color}
             style={styles.sortIconBack}
           />
@@ -149,7 +148,7 @@ const IssuesSortByList = (props: Props) => {
         onBack={onBack}
         rightButton={
           <IconCheck
-            size={20}
+            size={24}
             color={styles.link.color}
             style={styles.sortByListAddIcon}
           />
@@ -189,7 +188,7 @@ const IssuesSortByList = (props: Props) => {
             }}
           >
             <IconAdd
-              size={21}
+              size={24}
               style={styles.sortByListAddIcon}
               color={styles.link.color}
             />

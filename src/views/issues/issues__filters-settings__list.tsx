@@ -79,7 +79,7 @@ const IssuesFiltersSettingList = ({
                 sorted.filter((it: FilterSetting) => it.id !== item.id)
               )}
             >
-              <IconClose size={20} color={styles.sortIcon.color} />
+              <IconClose color={styles.sortIcon.color} />
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -139,7 +139,6 @@ const IssuesFiltersSettingList = ({
         showShadow={true}
         leftButton={
           <IconClose
-            size={21}
             color={styles.link.color}
             style={styles.sortIconBack}
           />
@@ -147,7 +146,6 @@ const IssuesFiltersSettingList = ({
         onBack={onBack}
         rightButton={
           <IconCheck
-            size={20}
             color={styles.link.color}
             style={styles.sortByListAddIcon}
           />
@@ -162,7 +160,7 @@ const IssuesFiltersSettingList = ({
             onPress={renderAddItemComponent}
           >
             <IconAdd
-              size={21}
+              size={24}
               style={styles.sortByListAddIcon}
               color={styles.link.color}
             />

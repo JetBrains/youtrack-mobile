@@ -34,7 +34,7 @@ import {
   IconAngleRight,
   IconBack,
   IconClose,
-  IconContextActions,
+  IconMoreOptions,
 } from 'components/icon/icon';
 import {i18n} from 'components/i18n/i18n';
 import {isSplitView} from 'components/responsive/responsive-helper';
@@ -315,7 +315,7 @@ export class KnowledgeBase extends Component<Props, State> {
           }
         >
           {this.state.isSplitView ? (
-            <IconClose size={21} color={styles.link.color} />
+            <IconClose color={styles.link.color} />
           ) : (
             <IconBack color={styles.link.color} />
           )}
@@ -551,7 +551,7 @@ export class KnowledgeBase extends Component<Props, State> {
             if (this.state.isSplitView) {
               this.toggleModal(
                 <KnowledgeBaseDrafts
-                  backIcon={<IconClose size={21} color={styles.link.color} />}
+                  backIcon={<IconClose color={styles.link.color} />}
                   onBack={() => this.toggleModal()}
                   onArticleCreate={this.onArticleCreate}
                 />,
@@ -721,7 +721,7 @@ export class KnowledgeBase extends Component<Props, State> {
                 );
               }}
             >
-              <IconContextActions color={styles.link.color} />
+              <IconMoreOptions color={styles.link.color} />
             </TouchableOpacity>
           ),
         })}

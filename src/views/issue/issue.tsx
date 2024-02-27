@@ -457,7 +457,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       this.toggleModalChildren(
         render(
           this.toggleModalChildren,
-          <IconClose size={21} color={styles.link.color} />,
+          <IconClose color={styles.link.color} />,
         ),
       );
     } else {
@@ -504,14 +504,12 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
           style={styles.header}
           leftButton={
             <IconClose
-              size={21}
               color={isSavingEditedIssue ? textSecondaryColor : linkColor}
             />
           }
           onBack={stopEditingIssue}
           rightButton={
             <IconCheck
-              size={20}
               color={canSave ? linkColor : textSecondaryColor}
             />
           }

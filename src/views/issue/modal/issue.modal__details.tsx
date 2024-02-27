@@ -58,7 +58,6 @@ export default class IssueModalDetails extends IssueDetails<
           closeIcon={
             this.props.stacked ? null : (
               <IconClose
-                size={21}
                 color={styles.link.color}
                 style={stylesModal.backIcon}
               />

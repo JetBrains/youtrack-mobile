@@ -149,7 +149,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
           <Text style={styles.itemTitle}>{emptyValue}</Text>
 
           {this.state.selectedItems.length === 0 && (
-            <IconCheck size={20} color={styles.link.color}/>
+            <IconCheck size={22} color={styles.link.color}/>
           )}
         </TouchableOpacity>
         {Select.renderSeparator()}
@@ -363,7 +363,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
               onPress={this.onCancel}
             >
               <IconClose
-                size={21}
+                size={26}
                 style={styles.cancelButton}
                 color={styles.cancelButton.color}
               />
@@ -394,7 +394,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
                 style={styles.applyButton}
                 onPress={() => this._onSave()}
               >
-                <IconCheck size={20} color={styles.link.color}/>
+                <IconCheck size={22} color={styles.link.color}/>
               </TouchableOpacity>
             )}
           </View>

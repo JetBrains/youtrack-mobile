@@ -1,7 +1,8 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {UNIT} from 'components/common-styles';
 import {clearIcon} from 'components/common-styles/search';
+import {rotate45} from './icon.styles';
+import {UNIT} from 'components/common-styles';
 
 
 export default EStyleSheet.create({
@@ -10,10 +11,6 @@ export default EStyleSheet.create({
     marginLeft: UNIT,
     marginRight: UNIT,
     borderRadius: UNIT,
-    transform: [
-      {
-        rotate: '-45deg',
-      },
-    ],
+    ...rotate45,
   },
 });

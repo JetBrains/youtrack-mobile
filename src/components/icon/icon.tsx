@@ -8,9 +8,11 @@ import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Comment from 'components/icon/assets/comment.svg';
 import History from 'components/icon/assets/history.svg';
+import Checkmark from 'components/icon/assets/checkmark.svg';
 import ChevronSmallDown from 'components/icon/assets/shevron_small_down.svg';
 import ChevronSmallUp from 'components/icon/assets/shevron_small_up.svg';
 import IconMore from 'components/icon/assets/more.svg';
+import Plus from 'components/icon/assets/plus.svg';
 import Time from 'components/icon/assets/time.svg';
 import Vcs from 'components/icon/assets/vcs.svg';
 import IconYTM from './youtrack-icon';
@@ -22,7 +24,7 @@ import {TextStyleProp} from 'types/Internal';
 // @ts-ignore
 export {default as logo} from './youtrack-logo-512.png';
 
-import styles from './icon.styles';
+import styles, {rotate45} from './icon.styles';
 
 type IconStyle = TextStyleProp | TextStyleProp[];
 
@@ -76,11 +78,10 @@ export const IconAccountAlert = (props?: Props) => (
   />
 );
 
-const mergeStyles = (style: any = []): any => {
-  return [].concat(style);
+const mergeStyles = (style: any = [], extraStyle: any = []): any[] => {
+  return [].concat(style).concat(extraStyle);
 };
 
-/* Material icons */
 export const IconLock = (props?: Props) => {
   const color = props?.color || svgProps().color;
   const size = props?.size || 16;
@@ -130,15 +131,6 @@ export const IconFileText = (props?: Props) => (
   />
 );
 
-export const EllipsisVertical = (props?: Props) => (
-  <IconFont
-    {...{
-      isFontAwesome: true,
-      name: 'ellipsis-v',
-      ...props,
-    }}
-  />
-);
 export const IconAngleRight = (props?: Props) => (
   <IconFont
     {...{
@@ -190,15 +182,11 @@ export const IconClone = (props?: Props) => (
     }}
   />
 );
-// JetBrains RingUI custom icons
-export const IconAdd = (props?: Props) => (
-  <IconYTM
-    {...{
-      name: 'add',
-      ...props,
-    }}
-  />
-);
+export const IconAdd = (props?: Props, style) => {
+  const color = props?.color || svgProps().color;
+  const size = props?.size || 26;
+  return <Plus style={mergeStyles(props?.style, style)} width={size} height={size} color={color} />;
+};
 export const IconAngleDown = (props?: Props) => {
   const color = props?.color || svgProps().color;
   const size = props?.size || 18;
@@ -237,15 +225,12 @@ export const IconBack = (props?: Props) => {
 
   return <IconYTM {...{...defaultProps(), name: 'chevron-left', size: 32, ...props}} />;
 };
-export const IconContextActions = (props?: Props) => {
-  if (isAndroid) {
-    return <IconYTM {...{...defaultProps(), name: 'drag', size: 18, ...props}} />;
-  }
-
-  return <IconYTM {...{...defaultProps(), name: 'more-options', size: 18, ...props}} />;
+export const IconCheck = (props?: Props) => {
+  const color = props?.color || svgProps().color;
+  const size = props?.size || 24;
+  return <Checkmark style={mergeStyles(props?.style)} width={size} height={size} color={color} />;
 };
-export const IconCheck = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'checkmark', ...props}} />;
-export const IconClose = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'close', ...props}} />;
+export const IconClose = (props?: Props) => IconAdd(props, rotate45);
 export const IconComment = (props?: Props) => {
   const color = props?.color || defaultProps().color;
   const size = props?.size || 24;
@@ -278,6 +263,11 @@ export const IconMoreOptions = (props?: SVGIconProps) => {
     />
   );
 };
+export const EllipsisVertical = (props?: Props) => {
+  const style = mergeStyles(props?.style).concat(styles.iconMoreOptionsAndroid);
+  return IconMoreOptions({...props, style});
+};
+
 export const IconPencil = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'pencil', ...props}} />;
 export const IconRemoveFilled = (props?: Props) => (
   <IconYTM {...{...defaultProps(), name: 'remove-filled', ...props}} />

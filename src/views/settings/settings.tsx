@@ -101,7 +101,7 @@ class Settings extends PureComponent<Props, State> {
               title: i18n('Appearance'),
               onPress: () => {
                 const backIcon: any = isSplitView() ? (
-                  <IconClose size={21} color={theme.uiTheme.colors.$link} />
+                  <IconClose color={theme.uiTheme.colors.$link} />
                 ) : (
                   <IconBack color={theme.uiTheme.colors.$link} />
                 );
