@@ -288,11 +288,6 @@ function createFolder(data = {}) {
   }, data);
 }
 
-function createPermissionItem() {
-  return {
-    permission: {key: randomWord()}};
-}
-
 export default {
   setStorage,
 
@@ -314,7 +309,6 @@ export default {
   createActivityCustomFieldMock,
   createThreadMock,
   createFolder,
-  createPermissionItem,
 
   reactReduxMockFn,
 };
