@@ -2,8 +2,8 @@ import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 import animation from 'components/animation/animation';
-import {HIT_SLOP, SECONDARY_FONT_SIZE} from 'components/common-styles';
-import {IconCaretDownUp} from 'components/icon/icon';
+import {HIT_SLOP} from 'components/common-styles';
+import {IconChevronDownUp} from 'components/icon/icon';
 
 import styles from './details.styles';
 
@@ -16,7 +16,7 @@ type Props = {
   toggler?: string | null | undefined;
 };
 
-const Details = (props: Props): JSX.Element => {
+const Details = (props: Props) => {
   const {toggler = 'Details', title, style, renderer} = props;
   const [expanded, updateExpanded] = React.useState(false);
   return (
@@ -34,13 +34,13 @@ const Details = (props: Props): JSX.Element => {
           }}
           hitSlop={HIT_SLOP}
         >
-          <Text style={[styles.toggle, style]}>
-            <IconCaretDownUp
-              size={SECONDARY_FONT_SIZE - 4}
+          <Text style={[styles.buttonText, style]}>
+            <IconChevronDownUp
+              size={styles.buttonText.fontSize - 2}
               isDown={!expanded}
-              color={props?.style?.color || styles.toggle.color}
+              color={props?.style?.color || styles.buttonText.color}
             />
-            <Text style={styles.toggleText}> {toggler}</Text>
+            {toggler}
           </Text>
         </TouchableOpacity>
       </View>

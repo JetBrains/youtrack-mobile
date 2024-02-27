@@ -223,8 +223,7 @@ export const rowStyles = {
     color: '$link',
   },
   vcsSourceButtonIcon: {
-    paddingRight: UNIT / 2,
-    marginRight: UNIT * 2,
+    marginRight: -UNIT / 2,
   },
   vcsSourceSubTitle: {
     fontSize: SECONDARY_FONT_SIZE - 2,

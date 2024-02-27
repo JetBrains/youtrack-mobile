@@ -11,7 +11,7 @@ export default EStyleSheet.create({
     marginRight: UNIT * 2,
   },
   buttonIcon: {
-    marginRight: UNIT,
+    marginRight: UNIT / 1.5,
   },
   buttonText: {...secondaryText, color: '$textSecondary'},
   link: {
