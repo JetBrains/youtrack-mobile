@@ -42,7 +42,6 @@ class IssueModal extends Issue<Props> {
     ) : (
       <IconClose
         style={styles.issueModalCloseIcon}
-        size={21}
         color={this.uiTheme.colors.$link}
       />
     );

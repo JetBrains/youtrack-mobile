@@ -50,7 +50,7 @@ export default EStyleSheet.create({
   tipStreamActions: {
     zIndex: 1,
     position: 'absolute',
-    height: 60,
+    maxHeight: 120,
     left: UNIT,
     right: UNIT,
     bottom: UNIT,

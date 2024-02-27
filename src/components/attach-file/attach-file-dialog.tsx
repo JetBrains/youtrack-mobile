@@ -207,14 +207,13 @@ const AttachFileDialog = (props: Props) => {
   const render: (onHide: () => any) => any = (onHide: () => any) => (
     <>
       <Header
-        leftButton={<IconClose size={21} color={styles.link.color} />}
+        leftButton={<IconClose color={styles.link.color} />}
         onBack={onHide}
         rightButton={
           isAttaching ? (
             <ActivityIndicator color={styles.link.color} />
           ) : (
             <IconCheck
-              size={20}
               color={attaches ? styles.link.color : styles.disabled.color}
             />
           )

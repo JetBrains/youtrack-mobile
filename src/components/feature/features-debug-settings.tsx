@@ -110,7 +110,6 @@ const FeaturesDebugSettings = (props: Props): React.ReactNode => {
           showShadow={true}
           leftButton={
             <IconClose
-              size={21}
               color={styles.closeButton.color}
               style={styles.closeButton}
             />

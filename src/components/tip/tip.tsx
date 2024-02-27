@@ -17,7 +17,7 @@ const Tip = ({text, icon, onClose, style = {}}: {text: string, icon: any, onClos
       <TouchableOpacity
         style={styles.tipCloseButton}
         onPress={onClose}>
-        <IconClose size={18} color={styles.tipIcon.color}/>
+        <IconClose size={20} color={styles.tipIcon.color}/>
       </TouchableOpacity>
     </View>
   );
