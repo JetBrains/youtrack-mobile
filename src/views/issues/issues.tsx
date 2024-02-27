@@ -16,8 +16,6 @@ import * as issueActions from './issues-actions';
 import * as actions from './issues-reducers';
 import CreateIssue from 'views/create-issue/create-issue';
 import ErrorMessage from 'components/error-message/error-message';
-import IconSettings from 'components/icon/assets/settings.svg';
-import IconPlus from 'components/icon/assets/plus.svg';
 import Issue from 'views/issue/issue';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import IssueRow, {IssueRowCompact} from './issues__row';
@@ -38,7 +36,7 @@ import {DEFAULT_THEME} from 'components/theme/theme';
 import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {IconAngleDown} from 'components/icon/icon';
+import {IconAdd, IconAngleDown, IconMoreOptions} from 'components/icon/icon';
 import {
   ICON_PICTOGRAM_DEFAULT_SIZE,
   IconNothingFound,
@@ -269,10 +267,8 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         }}
       >
         <Animated.View style={animatedStyle}>
-          <IconSettings
+          <IconMoreOptions
             style={styles.iconSettings}
-            width={20}
-            height={20}
             color={this.props.isInProgress
               ? this.getThemeColors().$disabled
               : this.getThemeColors().$link}
@@ -303,9 +299,8 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         }}
         disabled={this.props.isInProgress}
       >
-        <IconPlus
-          width={22}
-          height={22}
+        <IconAdd
+          size={25}
           color={
             this.props.isInProgress
               ? this.getThemeColors().$disabled
@@ -686,8 +681,8 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         {isIssuesContextOpen && this.renderContextSelect()}
         {this.renderIssueList()}
         <View style={styles.listActions}>
-          {this.renderCreateIssueButton()}
           {this.renderSettingsButton()}
+          {this.renderCreateIssueButton()}
         </View>
       </View>
     );
