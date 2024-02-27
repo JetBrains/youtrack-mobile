@@ -92,7 +92,7 @@ export default class WikiPage extends PureComponent<Props, State> {
             <View style={styles.container} testID="wikiPage">
               <Header
                 showShadow={true}
-                leftButton={<IconClose size={21} color={styles.link.color} />}
+                leftButton={<IconClose color={styles.link.color} />}
                 onBack={this.onBack}
                 rightButton={<IconShare size={21} color={styles.icon.color} />}
                 onRightButtonClick={() => {
