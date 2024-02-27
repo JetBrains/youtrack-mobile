@@ -66,7 +66,7 @@ const StreamVCS = (props: {activityGroup: ActivityGroup;}) => {
       }
 
       case pullRequestState.DECLINED: {
-        title = i18n('closed the pull request');
+        title = i18n('declined the pull request');
       }
     }
   }
