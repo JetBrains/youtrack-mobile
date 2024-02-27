@@ -1,11 +1,11 @@
 import React from 'react';
 
 import IconPrOpen from '@jetbrains/icons/pr-open.svg';
-import IconVcs from '@jetbrains/icons/commit.svg';
+import IconVcs from 'components/icon/assets/commit.svg';
 
-import IconPrDeclined from 'components/icon/assets/pull-request-declined.svg';
+import IconPrDeclined from '@jetbrains/icons/pr-close.svg';
 import IconPrMerged from 'components/icon/assets/pull-request-merged.svg';
-import {IconHistory, IconWork} from 'components/icon/icon';
+import {IconHistory, IconHourGlass} from 'components/icon/icon';
 import {pullRequestState} from './activity__stream-vcs-helper';
 
 import styles from './activity__stream.styles';
@@ -20,7 +20,7 @@ const ActivityIcon = ({activityGroup}: {activityGroup: ActivityGroup}): React.JS
 
   switch (true) {
     case activityGroup.vcs != null:
-      const iconProps = {fill: iconColor, width: defaultSize, height: defaultSize};
+      const iconProps = {fill: iconColor, color: iconColor, width: defaultSize, height: defaultSize};
 
       if (activityGroup.vcs?.pullRequest) {
         switch (activityGroup.vcs.added[0].state.id) {
@@ -38,14 +38,14 @@ const ActivityIcon = ({activityGroup}: {activityGroup: ActivityGroup}): React.JS
           }
         }
       } else {
-        icon = <IconVcs {...iconProps} />;
+        icon = <IconVcs {...iconProps} width={22} height={22} />;
       }
       break;
     case activityGroup.work != null:
-      icon = <IconWork size={17} color={iconColor} />;
+      icon = <IconHourGlass size={20} color={iconColor} />;
       break;
     default:
-      icon = <IconHistory size={defaultSize} color={iconColor} />;
+      icon = <IconHistory size={20} color={iconColor} />;
   }
 
   return icon as React.ReactElement;

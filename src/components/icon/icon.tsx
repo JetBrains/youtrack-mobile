@@ -6,10 +6,13 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 // @ts-ignore
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import Comment from 'components/icon/assets/comment.svg';
+import History from 'components/icon/assets/history.svg';
 import ChevronSmallDown from 'components/icon/assets/shevron_small_down.svg';
 import ChevronSmallUp from 'components/icon/assets/shevron_small_up.svg';
 import IconMore from 'components/icon/assets/more.svg';
-import IconVCS from '@jetbrains/icons/pr-merged.svg';
+import Time from 'components/icon/assets/time.svg';
+import Vcs from 'components/icon/assets/vcs.svg';
 import IconYTM from './youtrack-icon';
 import Lock from 'components/icon/assets/lock.svg';
 import {isAndroidPlatform} from 'util/util';
@@ -243,11 +246,23 @@ export const IconContextActions = (props?: Props) => {
 };
 export const IconCheck = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'checkmark', ...props}} />;
 export const IconClose = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'close', ...props}} />;
-export const IconComment = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'comment', ...props}} />;
+export const IconComment = (props?: Props) => {
+  const color = props?.color || defaultProps().color;
+  const size = props?.size || 24;
+  return <Comment style={mergeStyles(props?.style)} width={size} height={size} color={color} />;
+};
 export const IconDrag = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'drag', ...props}} />;
 export const IconException = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'exception', ...props}} />;
-export const IconHistory = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'history', ...props}} />;
-export const IconHourGlass = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'hourglass', ...props}} />;
+export const IconHistory = (props?: Props) => {
+  const color = props?.color || svgProps().color;
+  const size = props?.size || 24;
+  return <History style={mergeStyles(props?.style)} width={size} height={size} color={color} />;
+};
+export const IconHourGlass = (props?: Props) => {
+  const color = props?.color || svgProps().color;
+  const size = props?.size || 24;
+  return <Time style={mergeStyles(props?.style)} width={size} height={size} color={color} />;
+};
 export const IconKnowledgeBase = (props?: Props) => (
   <IconYTM {...{...defaultProps(), name: 'knowledge-base', ...props}} />
 );
@@ -269,8 +284,7 @@ export const IconRemoveFilled = (props?: Props) => (
 );
 export const IconWork = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'hourglass-20px', ...props}} />;
 export const IconVcs = (props?: Props) => {
-  const size = props?.size || 22;
-  return (
-    <IconVCS style={{transform: [{scaleY: -1}]}} fill={props?.color || svgProps().color} width={size} height={size} />
-  );
+  const color = props?.color || svgProps().color;
+  const size = props?.size || 24;
+  return <Vcs style={mergeStyles(props?.style)} width={size} height={size} color={color} />;
 };
