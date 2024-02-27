@@ -88,7 +88,7 @@ export default EStyleSheet.create({
   },
   threadSubTitle: {
     maxWidth: '76%',
-    marginTop: -UNIT,
+    marginTop: -UNIT / 2,
     marginLeft: UNIT * 5.5,
   },
   threadTitleActions: {
@@ -145,7 +145,7 @@ export default EStyleSheet.create({
     paddingTop: 0,
   },
   threadReactions: {
-    marginBottom: UNIT / 2,
+    marginBottom: UNIT,
   },
   threadReactionsList: {
     marginRight: UNIT,

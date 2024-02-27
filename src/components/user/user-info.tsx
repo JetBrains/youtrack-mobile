@@ -39,7 +39,7 @@ export default function UserInfo(props: Props): React.JSX.Element {
       {!!avatar && <View style={[styles.userAvatar, avatarStyle]}>{avatar}</View>}
 
       {!!userName && (
-        <View>
+        <View style={styles.userInfo}>
           <Text testID="UserInfoName" style={styles.userName}>
             {userName}
           </Text>

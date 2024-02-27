@@ -6,6 +6,7 @@ import {MAIN_FONT_SIZE, secondaryText, UNIT} from 'components/common-styles';
 export const rowStyles = {
   user: {
     flexDirection: 'row',
+    marginLeft: -UNIT / 2,
   },
   userName: {
     flexGrow: 1,
@@ -19,8 +20,6 @@ export const rowStyles = {
   userAvatar: {
     width: UNIT * 5,
     height: UNIT * 5,
-    marginLeft: -UNIT / 2,
-    marginTop: -UNIT,
     marginRight: UNIT,
     alignItems: 'center',
     justifyContent: 'center',
@@ -28,6 +27,9 @@ export const rowStyles = {
     borderWidth: UNIT / 2,
     borderColor: '$background',
     borderRadius: UNIT,
+  },
+  userInfo: {
+    marginTop: UNIT,
   },
   timestampContainer: {
     flexGrow: 1,

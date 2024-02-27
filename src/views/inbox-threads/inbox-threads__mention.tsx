@@ -72,6 +72,7 @@ export default function InboxThreadMention({
             }}
           />
         }
+        avatarStyle={styles.avatarComment}
         change={
           <>
             <TouchableOpacity
