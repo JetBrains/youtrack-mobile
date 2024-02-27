@@ -256,21 +256,21 @@ describe('app-actions', () => {
       await store.dispatch(actions.loadUserPermissions());
       const storeAction = store.getActions();
       expect(storeAction).toHaveLength(1);
-      expect(storeAction[0]).toEqual({
+      expect(JSON.stringify(storeAction[0])).toEqual(JSON.stringify({
         type: types.SET_PERMISSIONS,
         permissionsStore: new PermissionsStore(actualPermissionsMock),
         currentUser: appStateMock.auth!.currentUser,
-      });
+      }));
     });
 
     it('should update permissions', async () => {
       setCachedPermissions(cachedPermissionsMock);
       await store.dispatch(actions.loadUserPermissions());
-      expect(store.getActions()[0]).toEqual({
+      expect(JSON.stringify(store.getActions()[0])).toEqual(JSON.stringify({
         type: types.SET_PERMISSIONS,
         permissionsStore: new PermissionsStore(actualPermissionsMock),
         currentUser: appStateMock.auth!.currentUser,
-      });
+      }));
     });
 
     it('should update permissions cache', async () => {
