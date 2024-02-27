@@ -11,7 +11,7 @@ import SyntaxHighlighter from 'react-native-syntax-highlighter';
 import {decodeHTML} from 'entities';
 import {idea, darcula} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-import IconCopy from '@jetbrains/icons/copy.svg';
+import IconCopy from '@jetbrains/icons/copy-12px.svg';
 import IconFullscreen from '@jetbrains/icons/fullscreen.svg';
 import Router from '../../router/router';
 import {i18n} from 'components/i18n/i18n';
@@ -160,8 +160,8 @@ function MarkdownCodeHighlighter(props: {node: MarkdownNode; uiTheme: UITheme}) 
           >
             <IconCopy
               style={styles.codeToolbarIcon}
-              width={20}
-              height={20}
+              width={18}
+              height={18}
               fill={styles.codeToolbarIcon.color}
               color={styles.codeToolbarIcon.color}
             />
