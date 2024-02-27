@@ -83,7 +83,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     };
   }
 
-  static renderSeparator(): React.ReactNode {
+  static renderSeparator() {
     return <View style={styles.rowSeparator}/>;
   }
 
