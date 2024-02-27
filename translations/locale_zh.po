@@ -233,10 +233,6 @@ msgstr "清除当前搜索上下文"
 msgid "Close"
 msgstr "关闭"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx
-msgid "closed the pull request"
-msgstr "已经关闭的 Pull Request"
-
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Collapse all"
 msgstr "全部收起"
@@ -378,6 +374,10 @@ msgstr "日期"
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
 msgstr "数据库大小<br>(不带 blobs)"
+
+#: src/components/activity-stream/activity__stream-vcs.tsx
+msgid "declined the pull request"
+msgstr ""
 
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts

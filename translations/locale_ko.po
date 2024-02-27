@@ -233,10 +233,6 @@ msgstr "현재 검색 컨텍스트 지우기"
 msgid "Close"
 msgstr "닫기"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx
-msgid "closed the pull request"
-msgstr "풀 리퀘스트가 닫혔음"
-
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Collapse all"
 msgstr "모두 접기"
@@ -378,6 +374,10 @@ msgstr "날짜"
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
 msgstr "취소"
+
+#: src/components/activity-stream/activity__stream-vcs.tsx
+msgid "declined the pull request"
+msgstr ""
 
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts

@@ -6,7 +6,7 @@ msgstr ""
 "X-Crowdin-SourceKey: msgstr\n"
 "Language: en\n"
 
-#: src/components/linked-issues/linked-issues.tsx:159
+#: src/components/linked-issues/linked-issues.tsx:149
 msgid " ({{amount}} unresolved)"
 msgstr " ({{amount}} unresolved)"
 
@@ -32,7 +32,7 @@ msgid_plural "{{amount}} articles"
 msgstr[0] "{{amount}} article"
 msgstr[1] "{{amount}} articles"
 
-#: src/views/create-issue/create-issue.tsx:407
+#: src/views/create-issue/create-issue.tsx:399
 msgid "{{amount}} draft"
 msgid_plural "{{amount}} drafts"
 msgstr[0] "{{amount}} draft"
@@ -44,7 +44,7 @@ msgid_plural "{{amount}} files"
 msgstr[0] "{{amount}} file"
 msgstr[1] "{{amount}} files"
 
-#: src/components/linked-issues/linked-issues.tsx:155
+#: src/components/linked-issues/linked-issues.tsx:145
 msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} issue"
@@ -98,7 +98,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:603
+#: src/components/comment/comment-edit.tsx:605
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -125,7 +125,7 @@ msgid "All projects"
 msgstr "All projects"
 
 #: src/views/settings/settings__appearance.tsx:63
-#: src/views/settings/settings.tsx:106
+#: src/views/settings/settings.tsx:101
 msgid "Appearance"
 msgstr "Appearance"
 
@@ -154,7 +154,7 @@ msgstr "Are you sure you want to delete this work item?"
 msgid "Article added to favorites"
 msgstr "Article added to favorites"
 
-#: src/views/article-create/article-create.tsx:396
+#: src/views/article-create/article-create.tsx:394
 msgid "Article content"
 msgstr "Article content"
 
@@ -166,12 +166,12 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:572
+#: src/components/comment/comment-edit.tsx:574
 #: src/views/issue/issue-base-actions-creater.ts:589
 msgid "Attach file"
 msgstr "Attach file"
 
-#: src/components/attach-file/attach-file-dialog.tsx:234
+#: src/components/attach-file/attach-file-dialog.tsx:233
 #: src/components/attachments-row/attachments-add-panel.tsx:40
 msgid "Attach files"
 msgstr "Attach files"
@@ -210,7 +210,7 @@ msgstr "By logging in, you agree to the Privacy Policy."
 msgid "Camera"
 msgstr "Camera"
 
-#: src/components/account/accounts.tsx:51
+#: src/components/account/accounts.tsx:52
 #: src/components/confirmation/confirmation.ts:19
 #: src/components/tags/tags.tsx:52
 #: src/views/article/arcticle-actions.ts:326
@@ -221,7 +221,7 @@ msgstr "Camera"
 #: src/views/issue/activity/issue-activity__comment-actions.ts:342
 #: src/views/issue/issue-base-actions-creater.ts:636
 #: src/views/issue/issue-base-actions-creater.ts:667
-#: src/views/knowledge-base/knowledge-base-actions.ts:497
+#: src/views/knowledge-base/knowledge-base-actions.ts:495
 #: src/views/settings/settings__feedback-form.tsx:87
 msgid "Cancel"
 msgstr "Cancel"
@@ -235,19 +235,15 @@ msgstr "Clear the current search context"
 msgid "Close"
 msgstr "Close"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx:69
-msgid "closed the pull request"
-msgstr "closed the pull request"
-
 #: src/views/knowledge-base/knowledge-base.tsx:540
 msgid "Collapse all"
 msgstr "Collapse all"
 
-#: src/views/agile-board/agile-board.tsx:372
+#: src/views/agile-board/agile-board.tsx:366
 msgid "Column collapsed"
 msgstr "Column collapsed"
 
-#: src/views/agile-board/agile-board.tsx:372
+#: src/views/agile-board/agile-board.tsx:366
 msgid "Column expanded"
 msgstr "Column expanded"
 
@@ -284,11 +280,11 @@ msgstr "Comments"
 msgid "committed changes"
 msgstr "committed changes"
 
-#: src/components/account/accounts.tsx:45
+#: src/components/account/accounts.tsx:46
 msgid "Confirm logout"
 msgstr "Confirm logout"
 
-#: src/components/account/accounts.tsx:45
+#: src/components/account/accounts.tsx:46
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
@@ -365,7 +361,7 @@ msgstr "created"
 msgid "Created by"
 msgstr "Created by"
 
-#: src/views/create-issue/create-issue.tsx:290
+#: src/views/create-issue/create-issue.tsx:282
 msgid "Current issue"
 msgstr "Current issue"
 
@@ -380,6 +376,10 @@ msgstr "Date"
 #: src/components/user-agreement/user-agreement.tsx:50
 msgid "Decline"
 msgstr "Decline"
+
+#: src/components/activity-stream/activity__stream-vcs.tsx:69
+msgid "declined the pull request"
+msgstr "declined the pull request"
 
 #: src/components/confirmation/confirmation.ts:5
 #: src/views/article/arcticle-actions.ts:310
@@ -407,7 +407,7 @@ msgstr "Delete all drafts?"
 msgid "Delete comment permanently?"
 msgstr "Delete comment permanently?"
 
-#: src/views/article-create/article-create.tsx:312
+#: src/views/article-create/article-create.tsx:310
 msgid "Delete draft"
 msgstr "Delete draft"
 
@@ -419,7 +419,7 @@ msgstr "Delete issue {{issueId}}?"
 msgid "Delete permanently"
 msgstr "Delete permanently"
 
-#: src/views/settings/settings__feedback-form.tsx:249
+#: src/views/settings/settings__feedback-form.tsx:248
 msgid "Description"
 msgstr "Description"
 
@@ -440,15 +440,15 @@ msgstr "Discard and close"
 msgid "Discard draft and close?"
 msgstr "Discard draft and close?"
 
-#: src/views/article-create/article-create.tsx:313
+#: src/views/article-create/article-create.tsx:311
 msgid "Discard unpublished changes"
 msgstr "Discard unpublished changes"
 
-#: src/components/account/accounts.tsx:48
+#: src/components/account/accounts.tsx:49
 msgid "Do you really want to log out?"
 msgstr "Do you really want to log out?"
 
-#: src/components/account/accounts.tsx:47
+#: src/components/account/accounts.tsx:48
 msgid "Do you really want to remove this account?"
 msgstr "Do you really want to remove this account?"
 
@@ -474,7 +474,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:620
+#: src/components/comment/comment-edit.tsx:622
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -482,7 +482,7 @@ msgstr "Edit comment"
 msgid "Email"
 msgstr "Email"
 
-#: src/views/settings/settings__feedback-form.tsx:221
+#: src/views/settings/settings__feedback-form.tsx:220
 msgid "Email address for follow-up"
 msgstr "Email address for follow-up"
 
@@ -528,7 +528,7 @@ msgstr "Filter projects"
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
-#: src/views/issues/issues__filters-settings__list.tsx:172
+#: src/views/issues/issues__filters-settings__list.tsx:170
 #: src/views/issues/issues__settings.tsx:101
 msgid "Filter Settings"
 msgstr "Filter Settings"
@@ -555,7 +555,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:584
+#: src/views/issues/issues.tsx:581
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -611,7 +611,7 @@ msgstr "Issue link removed"
 msgid "Issue updated"
 msgstr "Issue updated"
 
-#: src/views/issues/issues__sortby_list.tsx:205
+#: src/views/issues/issues__sortby_list.tsx:204
 msgid "Issues can be sorted by up to 4 attributes"
 msgstr "Issues can be sorted by up to 4 attributes"
 
@@ -645,7 +645,7 @@ msgid "Light theme"
 msgstr "Light theme"
 
 #: src/components/linked-issues/linked-issues-add-link.tsx:247
-#: src/views/create-issue/create-issue.tsx:380
+#: src/views/create-issue/create-issue.tsx:372
 #: src/views/issue/issue-base-actions-creater.ts:600
 msgid "Link issue"
 msgstr "Link issue"
@@ -654,8 +654,8 @@ msgstr "Link issue"
 msgid "Link to comment copied"
 msgstr "Link to comment copied"
 
-#: src/components/linked-issues/linked-issues-title.tsx:22
-#: src/components/linked-issues/linked-issues.tsx:211
+#: src/components/linked-issues/linked-issues-title.tsx:26
+#: src/components/linked-issues/linked-issues.tsx:197
 msgid "Linked issues"
 msgstr "Linked issues"
 
@@ -675,11 +675,11 @@ msgstr "Log in to YouTrack"
 msgid "Log in with Browser"
 msgstr "Log in with Browser"
 
-#: src/views/settings/settings__feedback-form.tsx:207
+#: src/views/settings/settings__feedback-form.tsx:206
 msgid "Logs"
 msgstr "Logs"
 
-#: src/views/knowledge-base/knowledge-base-actions.ts:493
+#: src/views/knowledge-base/knowledge-base-actions.ts:491
 #: src/views/knowledge-base/knowledge-base.tsx:488
 msgid "Manage Favorite Projects"
 msgstr "Manage Favorite Projects"
@@ -719,7 +719,7 @@ msgid "Medium"
 msgstr "Medium"
 
 #: src/components/activity-stream/activity__stream-history.tsx:196
-#: src/views/inbox-threads/inbox-threads__mention.tsx:101
+#: src/views/inbox-threads/inbox-threads__mention.tsx:102
 msgid "mentioned you"
 msgstr "mentioned you"
 
@@ -735,11 +735,11 @@ msgstr "merged the pull request"
 msgid "Mute thread"
 msgstr "Mute thread"
 
-#: src/views/knowledge-base/knowledge-base-actions.ts:506
+#: src/views/knowledge-base/knowledge-base-actions.ts:504
 msgid "New Article"
 msgstr "New Article"
 
-#: src/views/create-issue/create-issue.tsx:458
+#: src/views/create-issue/create-issue.tsx:449
 msgid "New Issue"
 msgstr "New Issue"
 
@@ -763,7 +763,7 @@ msgstr "No articles"
 msgid "No articles found"
 msgstr "No articles found"
 
-#: src/views/knowledge-base/knowledge-base__drafts.tsx:149
+#: src/views/knowledge-base/knowledge-base__drafts.tsx:150
 msgid "No drafts yet"
 msgstr "No drafts yet"
 
@@ -771,7 +771,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:634
+#: src/views/issues/issues.tsx:631
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -841,11 +841,11 @@ msgstr "Project"
 msgid "Projects"
 msgstr "Projects"
 
-#: src/views/knowledge-base/knowledge-base-actions.ts:548
+#: src/views/knowledge-base/knowledge-base-actions.ts:546
 msgid "Projects collapsed"
 msgstr "Projects collapsed"
 
-#: src/views/knowledge-base/knowledge-base-actions.ts:548
+#: src/views/knowledge-base/knowledge-base-actions.ts:546
 msgid "Projects expanded"
 msgstr "Projects expanded"
 
@@ -861,7 +861,7 @@ msgstr "Recent searches"
 msgid "Recommended groups and teams"
 msgstr "Recommended groups and teams"
 
-#: src/views/knowledge-base/knowledge-base-actions.ts:385
+#: src/views/knowledge-base/knowledge-base-actions.ts:383
 msgid "Remove"
 msgstr "Remove"
 
@@ -869,7 +869,7 @@ msgstr "Remove"
 msgid "Remove favorite"
 msgstr "Remove favorite"
 
-#: src/views/knowledge-base/knowledge-base-actions.ts:385
+#: src/views/knowledge-base/knowledge-base-actions.ts:383
 msgid "Remove project from favorites?"
 msgstr "Remove project from favorites?"
 
@@ -932,7 +932,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:699
+#: src/views/issues/issues.tsx:696
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -948,7 +948,7 @@ msgstr "Send crash report"
 msgid "Send extended report to Bugsnag"
 msgstr "Send extended report to Bugsnag"
 
-#: src/views/settings/settings.tsx:135
+#: src/views/settings/settings.tsx:125
 msgid "Send feedback"
 msgstr "Send feedback"
 
@@ -964,7 +964,7 @@ msgstr "Send logs"
 msgid "Sending crash report…"
 msgstr "Sending crash report…"
 
-#: src/views/settings/settings.tsx:144
+#: src/views/settings/settings.tsx:134
 msgid "Settings"
 msgstr "Settings"
 
@@ -985,7 +985,7 @@ msgstr "Share link"
 msgid "Share link to article"
 msgstr "Share link to article"
 
-#: src/views/settings/settings.tsx:131
+#: src/views/settings/settings.tsx:121
 msgid "Share logs"
 msgstr "Share logs"
 
@@ -1017,7 +1017,7 @@ msgstr "Small"
 msgid "Something went wrong"
 msgstr "Something went wrong"
 
-#: src/views/issues/issues__sortby_list.tsx:199
+#: src/views/issues/issues__sortby_list.tsx:198
 msgid "Sort Attributes"
 msgstr "Sort Attributes"
 
@@ -1025,7 +1025,7 @@ msgstr "Sort Attributes"
 msgid "Sort Order"
 msgstr "Sort Order"
 
-#: src/views/issue/activity/issue__activity-settings.tsx:43
+#: src/views/issue/activity/issue__activity-settings.tsx:50
 msgid "Sort: oldest first"
 msgstr "Sort: oldest first"
 
@@ -1043,7 +1043,7 @@ msgstr "Spent time"
 msgid "Spent time:"
 msgstr "Spent time:"
 
-#: src/views/knowledge-base/knowledge-base__drafts.tsx:164
+#: src/views/knowledge-base/knowledge-base__drafts.tsx:165
 msgid "Start a new article"
 msgstr "Start a new article"
 
@@ -1059,7 +1059,7 @@ msgstr "submitted a pull request"
 msgid "Subscriptions"
 msgstr "Subscriptions"
 
-#: src/views/settings/settings__feedback-form.tsx:234
+#: src/views/settings/settings__feedback-form.tsx:233
 msgid "Summary"
 msgstr "Summary"
 
@@ -1093,7 +1093,7 @@ msgstr "The application failed to restart automatically. Please try to restart i
 msgid "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
 msgstr "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
 
-#: src/views/agile-board/agile-board.tsx:441
+#: src/views/agile-board/agile-board.tsx:435
 msgid "The board {{boardName}} has configuration errors"
 msgstr "The board {{boardName}} has configuration errors"
 
@@ -1171,7 +1171,7 @@ msgstr "Thread unmuted"
 msgid "Tickets"
 msgstr "Tickets"
 
-#: src/views/article-create/article-create.tsx:395
+#: src/views/article-create/article-create.tsx:393
 msgid "Title"
 msgstr "Title"
 
@@ -1302,12 +1302,12 @@ msgstr "Woah, you can't touch this!"
 msgid "Wrap attribute values that contain spaces in braces {like this}."
 msgstr "Wrap attribute values that contain spaces in braces {like this}."
 
-#: src/components/comment/comment-edit.tsx:433
+#: src/components/comment/comment-edit.tsx:434
 #: src/views/issue/activity/activity__add-spent-time.tsx:427
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
 
-#: src/components/account/accounts.tsx:55
+#: src/components/account/accounts.tsx:56
 msgid "Yes"
 msgstr "Yes"
 

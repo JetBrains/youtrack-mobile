@@ -257,10 +257,6 @@ msgstr "Очистьте поточний контекст пошуку"
 msgid "Close"
 msgstr "Закрити"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx
-msgid "closed the pull request"
-msgstr ""
-
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Collapse all"
 msgstr ""
@@ -402,6 +398,10 @@ msgstr "Дата"
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
 msgstr "Відхилити"
+
+#: src/components/activity-stream/activity__stream-vcs.tsx
+msgid "declined the pull request"
+msgstr ""
 
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts

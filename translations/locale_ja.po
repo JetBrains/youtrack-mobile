@@ -233,10 +233,6 @@ msgstr "現在の検索範囲をクリア"
 msgid "Close"
 msgstr "閉じる"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx
-msgid "closed the pull request"
-msgstr "がプルリクエストをクローズしました"
-
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Collapse all"
 msgstr "すべて折りたたむ"
@@ -378,6 +374,10 @@ msgstr "日付"
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
 msgstr "拒否"
+
+#: src/components/activity-stream/activity__stream-vcs.tsx
+msgid "declined the pull request"
+msgstr "さんがプルリクエストを却下しました"
 
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
