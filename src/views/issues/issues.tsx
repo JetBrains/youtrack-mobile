@@ -271,8 +271,8 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         <Animated.View style={animatedStyle}>
           <IconSettings
             style={styles.iconSettings}
-            width={19}
-            height={19}
+            width={20}
+            height={20}
             color={this.props.isInProgress
               ? this.getThemeColors().$disabled
               : this.getThemeColors().$link}
@@ -304,8 +304,8 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         disabled={this.props.isInProgress}
       >
         <IconPlus
-          width={20}
-          height={20}
+          width={22}
+          height={22}
           color={
             this.props.isInProgress
               ? this.getThemeColors().$disabled
