@@ -67,7 +67,7 @@ const IssuesFiltersSettingList = ({
           onLongPress={move}
         >
           <View style={styles.rowLine}>
-            <EllipsisVertical size={22} color={styles.sortIcon.color} />
+            <EllipsisVertical color={styles.sortIcon.color} />
             <Text style={styles.sortByListItemText}>
               {presentation}
             </Text>

@@ -2,6 +2,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
 import {HEADER_FONT_SIZE, MAIN_FONT_SIZE, secondaryText} from 'components/common-styles/typography';
 import {title} from '../common-styles/issue';
+
 export const styles = EStyleSheet.create({
   errorContainer: {
     padding: UNIT * 2,
@@ -10,13 +11,12 @@ export const styles = EStyleSheet.create({
   },
   errorTitle: {
     ...title,
-    marginTop: UNIT * 2,
     color: '$text',
     textAlign: 'center',
   },
   errorDescription: {
     ...secondaryText,
-    padding: UNIT * 4,
+    padding: UNIT * 2,
     paddingTop: UNIT * 2,
     color: '$text',
     lineHeight: HEADER_FONT_SIZE,

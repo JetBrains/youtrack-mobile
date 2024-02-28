@@ -237,7 +237,8 @@ export default EStyleSheet.create({
     ...rowLine,
     justifyContent: 'space-between',
     paddingVertical: UNIT * 1.5,
-    paddingHorizontal: UNIT,
+    paddingLeft: 11,
+    paddingRight: 5,
   },
   sortByListItemActive: {
     backgroundColor: '$boxBackground',
@@ -250,7 +251,8 @@ export default EStyleSheet.create({
   sortByListItemText: {
     color: '$text',
     ...mainText,
-    paddingLeft: UNIT * 2,
+    textTransform: 'capitalize',
+    paddingLeft: UNIT,
   },
   sortIcon: {
     color: '$iconAccent',

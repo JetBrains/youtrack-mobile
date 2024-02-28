@@ -177,9 +177,16 @@ export default EStyleSheet.create({
     justifyContent: 'center',
   },
   noDraftsButton: {
-    marginTop: UNIT * 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: UNIT * 2,
   },
-  noDraftsButtonText: {...mainText, color: '$link'},
+  noDraftsButtonText: {
+    ...mainText,
+    marginLeft: UNIT / 2,
+    color: '$link',
+  },
   noProjects: {
     flexGrow: 1,
     alignItems: 'center',

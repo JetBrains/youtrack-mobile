@@ -20,7 +20,8 @@ import Select from 'components/select/select';
 import {confirmDeleteAllDrafts, confirmDeleteArticleDraft} from 'components/confirmation/article-confirmations';
 import {deleteArticle} from '../article/arcticle-actions';
 import {i18n} from 'components/i18n/i18n';
-import {IconBack, IconKnowledgeBase} from 'components/icon/icon';
+import {IconAdd, IconBack} from 'components/icon/icon';
+import {IconNoProjectFound} from 'components/icon/icon-pictogram';
 import {loadArticlesDrafts} from './knowledge-base-actions';
 import {routeMap} from 'app-routes';
 import {SkeletonList} from 'components/skeleton/skeleton';
@@ -148,12 +149,7 @@ const KnowledgeBaseDrafts = (props: Props) => {
             <ErrorMessage
               errorMessageData={{
                 title: i18n('No drafts yet'),
-                icon: () => (
-                  <IconKnowledgeBase
-                    color={styles.actionBarButtonText.color}
-                    size={81}
-                  />
-                ),
+                icon: () => <IconNoProjectFound style={styles.noProjectsIcon} />,
               }}
             />
 
@@ -161,6 +157,7 @@ const KnowledgeBaseDrafts = (props: Props) => {
               style={styles.noDraftsButton}
               onPress={() => props.onArticleCreate(null, true)}
             >
+              <IconAdd size={18} color={styles.noDraftsButtonText.color}/>
               <Text style={styles.noDraftsButtonText}>
                 {i18n('Start a new article')}
               </Text>

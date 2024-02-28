@@ -6,17 +6,21 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 // @ts-ignore
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Comment from 'components/icon/assets/comment.svg';
-import History from 'components/icon/assets/history.svg';
+import ArrowLeft from '@jetbrains/icons/arrow-20px-left.svg';
+import Article from '@jetbrains/icons/article-20px.svg';
 import Checkmark from 'components/icon/assets/checkmark.svg';
+import ChevronLeft from 'components/icon/assets/shevron_left.svg';
 import ChevronSmallDown from 'components/icon/assets/shevron_small_down.svg';
 import ChevronSmallUp from 'components/icon/assets/shevron_small_up.svg';
-import IconMore from 'components/icon/assets/more.svg';
+import Comment from 'components/icon/assets/comment.svg';
+import Drag from '@jetbrains/icons/drag-20px.svg';
+import History from 'components/icon/assets/history.svg';
+import Lock from 'components/icon/assets/lock.svg';
+import More from 'components/icon/assets/more.svg';
 import Plus from 'components/icon/assets/plus.svg';
 import Time from 'components/icon/assets/time.svg';
 import Vcs from 'components/icon/assets/vcs.svg';
 import IconYTM from './youtrack-icon';
-import Lock from 'components/icon/assets/lock.svg';
 import {isAndroidPlatform} from 'util/util';
 
 import {TextStyleProp} from 'types/Internal';
@@ -27,13 +31,6 @@ export {default as logo} from './youtrack-logo-512.png';
 import styles, {rotate45} from './icon.styles';
 
 type IconStyle = TextStyleProp | TextStyleProp[];
-
-interface SVGIconProps {
-  size?: number;
-  color?: string;
-  style?: IconStyle;
-  testID?: string;
-}
 
 interface Props {
   name?: string;
@@ -67,9 +64,7 @@ export function IconFont(props: Props): React.JSX.Element | null {
   return <Icon {...{...defaultProps(), ...props}} />;
 }
 
-/* Main menu icons */
-
-export const IconAccountAlert = (props?: Props) => (
+export const IconAccountAlert = (props: Props) => (
   <IconFont
     {...{
       name: 'account-alert',
@@ -78,16 +73,11 @@ export const IconAccountAlert = (props?: Props) => (
   />
 );
 
-const mergeStyles = (style: any = [], extraStyle: any = []): any[] => {
-  return [].concat(style).concat(extraStyle);
+const mergeStyles = (style: IconStyle = [], extraStyle: IconStyle = []): IconStyle[] => {
+  return new Array<IconStyle>().concat(style).concat(extraStyle);
 };
 
-export const IconLock = (props?: Props) => {
-  const color = props?.color || svgProps().color;
-  const size = props?.size || 16;
-  return <Lock style={mergeStyles(props?.style)} width={size} height={size} color={color} />;
-};
-export const IconArrowUp = (props?: Props) => (
+export const IconArrowUp = (props: Props) => (
   <IconFont
     {...{
       name: 'arrow-up',
@@ -95,7 +85,8 @@ export const IconArrowUp = (props?: Props) => (
     }}
   />
 );
-export const IconShare = (props?: Props) => (
+
+export const IconShare = (props: Props) => (
   <IconFont
     {...{
       name: 'export-variant',
@@ -103,7 +94,8 @@ export const IconShare = (props?: Props) => (
     }}
   />
 );
-export const IconCircle = (props?: Props) => (
+
+export const IconCircle = (props: Props) => (
   <IconFont
     {...{
       name: 'circle',
@@ -111,7 +103,8 @@ export const IconCircle = (props?: Props) => (
     }}
   />
 );
-export const IconCircleOutline = (props?: Props) => (
+
+export const IconCircleOutline = (props: Props) => (
   <IconFont
     {...{
       name: 'checkbox-blank-circle-outline',
@@ -120,8 +113,7 @@ export const IconCircleOutline = (props?: Props) => (
   />
 );
 
-/* FontAwesome icons */
-export const IconFileText = (props?: Props) => (
+export const IconFileText = (props: Props) => (
   <IconFont
     {...{
       isFontAwesome: true,
@@ -131,7 +123,7 @@ export const IconFileText = (props?: Props) => (
   />
 );
 
-export const IconAngleRight = (props?: Props) => (
+export const IconAngleRight = (props: Props) => (
   <IconFont
     {...{
       isFontAwesome: true,
@@ -140,7 +132,8 @@ export const IconAngleRight = (props?: Props) => (
     }}
   />
 );
-export const IconCamera = (props?: Props) => (
+
+export const IconCamera = (props: Props) => (
   <IconFont
     {...{
       isFontAwesome: true,
@@ -149,7 +142,8 @@ export const IconCamera = (props?: Props) => (
     }}
   />
 );
-export const IconCheckboxBlank = (props?: Props) => (
+
+export const IconCheckboxBlank = (props: Props) => (
   <IconFont
     {...{
       name: 'checkbox-blank-outline',
@@ -157,7 +151,8 @@ export const IconCheckboxBlank = (props?: Props) => (
     }}
   />
 );
-export const IconCheckboxChecked = (props?: Props) => (
+
+export const IconCheckboxChecked = (props: Props) => (
   <IconFont
     {...{
       name: 'checkbox-marked',
@@ -165,7 +160,8 @@ export const IconCheckboxChecked = (props?: Props) => (
     }}
   />
 );
-export const IconFileCheck = (props?: Props) => (
+
+export const IconFileCheck = (props: Props) => (
   <IconFont
     {...{
       name: 'file-check-outline',
@@ -173,7 +169,8 @@ export const IconFileCheck = (props?: Props) => (
     }}
   />
 );
-export const IconClone = (props?: Props) => (
+
+export const IconClone = (props: Props) => (
   <IconFont
     {...{
       isFontAwesome: true,
@@ -182,23 +179,8 @@ export const IconClone = (props?: Props) => (
     }}
   />
 );
-export const IconAdd = (props?: Props, style) => {
-  const color = props?.color || svgProps().color;
-  const size = props?.size || 26;
-  return <Plus style={mergeStyles(props?.style, style)} width={size} height={size} color={color} />;
-};
-export const IconAngleDown = (props?: Props) => {
-  const color = props?.color || svgProps().color;
-  const size = props?.size || 18;
-  return <ChevronSmallDown style={mergeStyles(props?.style)} width={size} height={size} color={color} />;
-};
 
-export const IconAngleUp = (props?: Props) => {
-  const color = props?.color || defaultProps().color;
-  const size = props?.size || 18;
-  return <ChevronSmallUp style={mergeStyles(props?.style)} width={size} height={size} color={color} />;
-};
-export const IconAngleDownRight = (props?: Props & {isDown?: boolean}) => (
+export const IconAngleDownRight = (props: Props & {isDown?: boolean}) => (
   <IconYTM
     {...{
       ...defaultProps(),
@@ -207,74 +189,61 @@ export const IconAngleDownRight = (props?: Props & {isDown?: boolean}) => (
     }}
   />
 );
-export const IconChevronDownUp = (props?: Props & {isDown?: boolean}) => {
+
+export const IconPencil = (props: Props) => <IconYTM {...{...defaultProps(), name: 'pencil', ...props}} />;
+
+export const IconRemoveFilled = (props: Props) => <IconYTM {...{...defaultProps(), name: 'remove-filled', ...props}} />;
+
+export const IconWork = (props: Props) => <IconYTM {...{...defaultProps(), name: 'hourglass-20px', ...props}} />;
+
+export const IconException = (props: Props) => <IconYTM {...{...defaultProps(), name: 'exception', ...props}} />;
+
+/*
+  SVG icons
+ */
+
+const createSVGProps = (
+  props: Props,
+  defaultSize: number,
+  style?: IconStyle
+): {
+  [key: string]: string | number | IconStyle[];
+} => {
+  const color = props?.color || svgProps().color;
+  const size = props?.size || defaultSize;
+  return {color, width: size, height: size, style: mergeStyles(props?.style, style)};
+};
+
+export const IconLock = (props: Props) => <Lock {...createSVGProps(props, 16)} />;
+
+export const IconAdd = (props: Props, style: IconStyle) => <Plus {...createSVGProps(props, 26, style)} />;
+
+export const IconAngleDown = (props: Props) => <ChevronSmallDown {...createSVGProps(props, 18)} />;
+
+export const IconAngleUp = (props: Props) => <ChevronSmallUp {...createSVGProps(props, 18)} />;
+
+export const IconChevronDownUp = (props: Props & {isDown?: boolean}) => {
   return props?.isDown ? IconAngleDown(props) : IconAngleUp(props);
 };
-export const IconBack = (props?: Props) => {
-  if (isAndroid) {
-    return (
-      <IconFont
-        {...{
-          name: 'arrow-left',
-          size: 24,
-          ...props,
-        }}
-      />
-    );
-  }
 
-  return <IconYTM {...{...defaultProps(), name: 'chevron-left', size: 32, ...props}} />;
-};
-export const IconCheck = (props?: Props) => {
-  const color = props?.color || svgProps().color;
-  const size = props?.size || 24;
-  return <Checkmark style={mergeStyles(props?.style)} width={size} height={size} color={color} />;
-};
-export const IconClose = (props?: Props) => IconAdd(props, rotate45);
-export const IconComment = (props?: Props) => {
-  const color = props?.color || defaultProps().color;
-  const size = props?.size || 24;
-  return <Comment style={mergeStyles(props?.style)} width={size} height={size} color={color} />;
-};
-export const IconDrag = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'drag', ...props}} />;
-export const IconException = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'exception', ...props}} />;
-export const IconHistory = (props?: Props) => {
-  const color = props?.color || svgProps().color;
-  const size = props?.size || 24;
-  return <History style={mergeStyles(props?.style)} width={size} height={size} color={color} />;
-};
-export const IconHourGlass = (props?: Props) => {
-  const color = props?.color || svgProps().color;
-  const size = props?.size || 24;
-  return <Time style={mergeStyles(props?.style)} width={size} height={size} color={color} />;
-};
-export const IconKnowledgeBase = (props?: Props) => (
-  <IconYTM {...{...defaultProps(), name: 'knowledge-base', ...props}} />
-);
-export const IconMoreOptions = (props?: SVGIconProps) => {
-  const color = props?.color || defaultProps().color;
-  const size = props?.size || 18;
-  return (
-    <IconMore
-      style={mergeStyles(props?.style).concat(isAndroid ? styles.iconMoreOptionsAndroid : [])}
-      width={size}
-      height={size}
-      color={color}
-    />
-  );
-};
-export const EllipsisVertical = (props?: Props) => {
-  const style = mergeStyles(props?.style).concat(styles.iconMoreOptionsAndroid);
-  return IconMoreOptions({...props, style});
-};
+export const IconBack = (props: Props) =>
+  isAndroid ? <ArrowLeft {...createSVGProps(props, 22)} /> : <ChevronLeft {...createSVGProps(props, 24)} />;
 
-export const IconPencil = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'pencil', ...props}} />;
-export const IconRemoveFilled = (props?: Props) => (
-  <IconYTM {...{...defaultProps(), name: 'remove-filled', ...props}} />
-);
-export const IconWork = (props?: Props) => <IconYTM {...{...defaultProps(), name: 'hourglass-20px', ...props}} />;
-export const IconVcs = (props?: Props) => {
-  const color = props?.color || svgProps().color;
-  const size = props?.size || 24;
-  return <Vcs style={mergeStyles(props?.style)} width={size} height={size} color={color} />;
-};
+export const IconCheck = (props: Props) => <Checkmark {...createSVGProps(props, 24)} />;
+
+export const IconClose = (props: Props) => IconAdd(props, rotate45);
+
+export const IconComment = (props: Props) => <Comment {...createSVGProps(props, 24)} />;
+
+export const IconHistory = (props: Props) => <History {...createSVGProps(props, 24)} />;
+
+export const IconHourGlass = (props: Props) => <Time {...createSVGProps(props, 24)} />;
+
+export const IconKnowledgeBase = (props: Props) => <Article {...createSVGProps(props, 24)} />;
+
+export const IconMoreOptions = (props: Props) =>
+  <More {...createSVGProps(props, 18, isAndroid ? styles.iconMoreOptionsAndroid : [])} />;
+
+export const EllipsisVertical = (props: Props) => <Drag {...createSVGProps(props, 18)} />;
+
+export const IconVcs = (props: Props) => <Vcs {...createSVGProps(props, 24)} />;
