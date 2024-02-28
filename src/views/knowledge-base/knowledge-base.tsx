@@ -595,6 +595,7 @@ export class KnowledgeBase extends Component<Props, State> {
           rightButton: (
             <TouchableOpacity
               hitSlop={HIT_SLOP}
+              style={{padding: 7, marginRight: -7}}
               onPress={() => {
                 showContextActions(
                   this.context.actionSheet(),

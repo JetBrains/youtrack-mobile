@@ -437,7 +437,9 @@ class Article extends IssueTabbed<Props, State> {
       },
       rightButton:
         isArticleLoaded && !isProcessing ? (
-          <IconMoreOptions color={linkColor} />
+          <View style={{padding: 7, marginRight: 2}}>
+            <IconMoreOptions color={linkColor} />
+          </View>
         ) : null,
       onRightButtonClick: () =>
         showArticleActions(

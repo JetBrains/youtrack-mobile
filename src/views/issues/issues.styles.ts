@@ -51,7 +51,8 @@ export default EStyleSheet.create({
     height: UNIT * 4,
     width: UNIT * 4,
     marginLeft: UNIT * 2,
-    alignItems: 'center',
+    paddingRight: 2.5,
+    alignItems: 'flex-end',
     justifyContent: 'center',
   },
 
