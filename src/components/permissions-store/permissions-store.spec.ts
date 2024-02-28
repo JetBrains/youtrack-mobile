@@ -1,4 +1,5 @@
 import PermissionsStore from './permissions-store';
+import {PermissionCacheItem} from 'types/Permission';
 
 const PER_PROJECT_PERMISSION = 'per-project-permission';
 const GLOBAL_PERMISSION = 'global-permission';
@@ -13,7 +14,7 @@ describe('PermissionsStore', () => {
   });
 
   it('should map project ids', () => {
-    expect(permissionsStore.permissionsMap.get(PER_PROJECT_PERMISSION).projectIds[0]).toEqual(PERMITTED_PROJECT_ID)
+    expect(permissionsStore.permissionsMap.get(PER_PROJECT_PERMISSION).projectIds[0]).toEqual(PERMITTED_PROJECT_ID);
   });
 
   it('should return false if user has no such permission at all', () => {
@@ -64,22 +65,27 @@ function createPermissions() {
       permission: {
         key: GLOBAL_PERMISSION,
       },
+      projectIds: [],
+      projects: [],
     },
     {
       global: true,
       permission: {
         key: GLOBAL_PERMISSION_TWO,
       },
+      projectIds: [],
+      projects: [],
     },
     {
       permission: {
         key: PER_PROJECT_PERMISSION,
       },
+      projectIds: [],
       projects: [
         {
           id: PERMITTED_PROJECT_ID,
         },
       ],
     },
-  ];
+  ] as PermissionCacheItem[];
 }

@@ -1,5 +1,5 @@
-import type {CustomError} from 'types/Error';
 import type {PermissionCacheItem} from 'types/Permission';
+
 const ACCEPT_HEADER = 'application/json, text/plain, */*';
 
 async function loadPermissions(
@@ -15,14 +15,13 @@ async function loadPermissions(
     },
   })
     .then(res => res.json())
-    .then((response: PermissionCacheItem[] | CustomError) => {
-      if ((response as CustomError).error) {
+    .then(response => {
+      if ('error' in response) {
         throw response;
       }
-
-      return response as PermissionCacheItem[];
+      return response;
     })
-    .catch(async err => {
+    .catch(err => {
       throw err;
     });
 }
