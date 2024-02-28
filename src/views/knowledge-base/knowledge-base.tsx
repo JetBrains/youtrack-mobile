@@ -65,6 +65,7 @@ import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {ISelectProps} from 'components/select/select';
 import type {Theme, UITheme} from 'types/Theme';
+import {ReduxThunkDispatch} from 'types/Redux';
 
 type Props = KnowledgeBaseActions &
   KnowledgeBaseState & {
@@ -74,13 +75,14 @@ type Props = KnowledgeBaseActions &
     lastVisitedArticle?: ArticleSingle;
   };
 
-type State = {
+interface State {
   focusedArticle: ArticleSingle | null | undefined;
   isHeaderPinned: boolean;
   isSelectVisible: boolean;
   isSplitView: boolean;
   modalChildren: any;
-};
+}
+
 const ERROR_MESSAGE_DATA: Record<string, any> = {
   noFavoriteProjects: {
     title: i18n('No favorites projects found'),
@@ -90,13 +92,14 @@ const ERROR_MESSAGE_DATA: Record<string, any> = {
     title: i18n('No articles found'),
   },
 };
+
 export class KnowledgeBase extends Component<Props, State> {
   static contextTypes: any = {
     actionSheet: Function,
   };
   listRef: any;
   uiTheme!: UITheme;
-  unsubscribe: (...args: any[]) => any = () => null;
+  unsubscribe: Function | undefined;
   unsubscribeOnDimensionsChange: EventSubscription | undefined;
   goOnlineSubscription: EventSubscription | undefined;
 
@@ -117,28 +120,23 @@ export class KnowledgeBase extends Component<Props, State> {
 
   componentWillUnmount() {
     this.unsubscribeOnDimensionsChange?.remove?.();
-    this.unsubscribe();
+    this.unsubscribe?.();
     this.goOnlineSubscription?.remove?.();
   }
 
   async componentDidMount() {
-    this.unsubscribeOnDimensionsChange = Dimensions.addEventListener(
-      'change',
-      this.setSplitView,
-    );
-    this.unsubscribe = Router.setOnDispatchCallback(
-      (routeName: string, prevRouteName: string) => {
-        if (
-          !this.props.preventReload &&
-          routeName === routeMap.KnowledgeBase &&
-          (prevRouteName === routeMap.Article ||
-            prevRouteName === routeMap.ArticleCreate ||
-            prevRouteName === routeMap.Page)
-        ) {
-          this.loadArticlesList(false);
-        }
-      },
-    );
+    this.unsubscribeOnDimensionsChange = Dimensions.addEventListener('change', this.setSplitView);
+    this.unsubscribe = Router.setOnDispatchCallback((routeName: string, prevRouteName: string) => {
+      if (
+        !this.props.preventReload &&
+        routeName === routeMap.KnowledgeBase &&
+        (prevRouteName === routeMap.Article ||
+          prevRouteName === routeMap.ArticleCreate ||
+          prevRouteName === routeMap.Page)
+      ) {
+        this.loadArticlesList(false);
+      }
+    });
     this.props.clearUserLastVisitedArticle();
     this.props.loadCachedArticleList();
 
@@ -155,23 +153,19 @@ export class KnowledgeBase extends Component<Props, State> {
     });
   }
 
-  setSplitView: () => void = (): void => {
+  setSplitView = (): void => {
     this.setState({
       isSplitView: isSplitView(),
     });
   };
-  loadArticlesList: (reset?: boolean) => Promise<any> = async (
-    reset?: boolean,
-  ) => this.props.loadArticleList(reset);
-  scrollToProject: (project: ArticleProject) => void = (
-    project: ArticleProject,
-  ) => {
+
+  loadArticlesList = async (reset?: boolean) => this.props.loadArticleList(reset);
+
+  scrollToProject = (project: ArticleProject) => {
     const {articlesList} = this.props;
 
     if (project && articlesList) {
-      const index: number = articlesList.findIndex(
-        (listItem: ArticlesListItem) => listItem.title?.id === project.id,
-      );
+      const index: number = articlesList.findIndex((listItem: ArticlesListItem) => listItem.title?.id === project.id);
 
       if (index > 0) {
         setTimeout(
@@ -182,105 +176,75 @@ export class KnowledgeBase extends Component<Props, State> {
               itemIndex: 0,
               sectionIndex: index,
             }),
-          0,
+          0
         );
       }
     }
   };
-  updateFocusedArticle: (
-    focusedArticle: ArticleSingle | null | undefined,
-  ) => void = (focusedArticle: ArticleSingle | null | undefined): void => {
-    this.setState({
-      focusedArticle,
-    });
+
+  updateFocusedArticle = (focusedArticle?: ArticleSingle | null) => {
+    this.setState({focusedArticle});
   };
-  renderProject: (arg0: {
-    section: ArticlesListItem;
-  }) => null | React.ReactElement<React.ComponentProps<any>, any> = ({
-    section,
-  }: {
-    section: ArticlesListItem;
-  }) => {
+
+  renderProject = ({section}: {section: ArticlesListItem}) => {
     const project: ArticleProject | null | undefined = section.title;
-
-    if (project) {
-      const {expandingProjectId} = this.props;
-      const isProjectExpanding: boolean = expandingProjectId === project.id;
-      const isCollapsed: boolean = project?.articles?.collapsed;
-      const Icon = isCollapsed ? IconAngleRight : IconAngleDown;
-      const hasHoArticles: boolean =
-        section.title?.articles?.collapsed === false &&
-        section.data?.length === 0;
-      const hasSearchQuery: boolean = !!this.getSearchQuery();
-      return (
-        <>
-          <View style={styles.item}>
-            <TouchableOpacity
-              testID="test:id/project-title-item"
-              accessibilityLabel="project-title-item"
-              accessible={true}
-              disabled={hasSearchQuery}
-              style={styles.itemProject}
-              onPress={() => this.props.toggleProjectVisibility(section)}
-            >
-              <View
-                style={[
-                  styles.itemProjectIcon,
-                  isCollapsed && styles.itemProjectIconCollapsed,
-                ]}
-              >
-                <Icon size={24} color={styles.itemProjectIcon.color} />
-              </View>
-              <Text numberOfLines={2} style={styles.projectTitleText}>
-                {project.name}
-              </Text>
-            </TouchableOpacity>
-            {!hasSearchQuery && !!project?.id && (
-              <Star
-                style={styles.itemStar}
-                disabled={isProjectExpanding}
-                size={19}
-                hasStar={project.pinned}
-                canStar={true}
-                onStarToggle={async () => {
-                  const hasPinnedProjects: boolean = await this.props.toggleProjectFavorite(
-                    section,
-                  );
-
-                  if (!hasPinnedProjects) {
-                    this.updateFocusedArticle(null);
-                  }
-                }}
-              />
-            )}
-          </View>
-          {this.renderSeparator()}
-          {(hasHoArticles || isProjectExpanding) && (
-            <View>
-              <View style={[styles.itemArticle, styles.itemNoArticle]}>
-                {isProjectExpanding && (
-                  <ActivityIndicator color={styles.link.color} />
-                )}
-                {hasHoArticles && (
-                  <Text style={styles.itemNoArticleText}>
-                    {i18n('No articles')}
-                  </Text>
-                )}
-              </View>
-              {this.renderSeparator()}
-            </View>
-          )}
-        </>
-      );
+    if (!project) {
+      return null;
     }
+    const {expandingProjectId} = this.props;
+    const isProjectExpanding: boolean = expandingProjectId === project.id;
+    const isCollapsed: boolean = project?.articles?.collapsed;
+    const Icon = isCollapsed ? IconAngleRight : IconAngleDown;
+    const hasHoArticles: boolean = section.title?.articles?.collapsed === false && section.data?.length === 0;
+    const hasSearchQuery: boolean = !!this.getSearchQuery();
+    return (
+      <>
+        <View style={styles.item}>
+          <TouchableOpacity
+            testID="test:id/project-title-item"
+            accessibilityLabel="project-title-item"
+            accessible={true}
+            disabled={hasSearchQuery}
+            style={styles.itemProject}
+            onPress={() => this.props.toggleProjectVisibility(section)}
+          >
+            <View style={[styles.itemProjectIcon, isCollapsed && styles.itemProjectIconCollapsed]}>
+              <Icon size={24} color={styles.itemProjectIcon.color} />
+            </View>
+            <Text numberOfLines={2} style={styles.projectTitleText}>
+              {project.name}
+            </Text>
+          </TouchableOpacity>
+          {!hasSearchQuery && !!project?.id && (
+            <Star
+              style={styles.itemStar}
+              disabled={isProjectExpanding}
+              size={19}
+              hasStar={!!project.pinned}
+              canStar={true}
+              onStarToggle={async () => {
+                const hasPinnedProjects: boolean = await this.props.toggleProjectFavorite(section);
+                if (!hasPinnedProjects) {
+                  this.updateFocusedArticle(null);
+                }
+              }}
+            />
+          )}
+        </View>
+        {this.renderSeparator()}
+        {(hasHoArticles || isProjectExpanding) && (
+          <View>
+            <View style={[styles.itemArticle, styles.itemNoArticle]}>
+              {isProjectExpanding && <ActivityIndicator color={styles.link.color} />}
+              {hasHoArticles && <Text style={styles.itemNoArticleText}>{i18n('No articles')}</Text>}
+            </View>
+            {this.renderSeparator()}
+          </View>
+        )}
+      </>
+    );
   };
-  renderArticle: (arg0: {
-    item: ArticleNode;
-  }) => null | React.ReactElement<React.ComponentProps<any>, any> = ({
-    item,
-  }: {
-    item: ArticleNode;
-  }) => (
+  renderArticle = ({item}: {item: ArticleNode}) => (
     <ArticleWithChildren
       style={styles.itemArticle}
       article={item.data}
@@ -296,29 +260,16 @@ export class KnowledgeBase extends Component<Props, State> {
           });
         }
       }}
-      onShowSubArticles={(article: ArticleSingle) =>
-        this.renderSubArticlesPage(article)
-      }
+      onShowSubArticles={(article: ArticleSingle) => this.renderSubArticlesPage(article)}
     />
   );
-  renderSubArticlesPage: (article: ArticleSingle) => Promise<void> = async (
-    article: ArticleSingle,
-  ) => {
-    const childrenData: ArticleNodeList = await this.props.getArticleChildren(
-      article.id,
-    );
+
+  renderSubArticlesPage = async (article: ArticleSingle) => {
+    const childrenData: ArticleNodeList = await this.props.getArticleChildren(article.id);
     const title = this.renderHeader({
       leftButton: (
-        <TouchableOpacity
-          onPress={() =>
-            this.state.isSplitView ? this.toggleModal(null) : Router.pop()
-          }
-        >
-          {this.state.isSplitView ? (
-            <IconClose color={styles.link.color} />
-          ) : (
-            <IconBack color={styles.link.color} />
-          )}
+        <TouchableOpacity onPress={() => (this.state.isSplitView ? this.toggleModal(null) : Router.pop())}>
+          {this.state.isSplitView ? <IconClose color={styles.link.color} /> : <IconBack color={styles.link.color} />}
         </TouchableOpacity>
       ),
       title: article.summary,
@@ -345,7 +296,7 @@ export class KnowledgeBase extends Component<Props, State> {
           data: childrenData,
         },
       ],
-      true,
+      true
     );
 
     if (this.state.isSplitView) {
@@ -361,37 +312,24 @@ export class KnowledgeBase extends Component<Props, State> {
       });
     }
   };
-  renderHeader: (arg0: {
-    leftButton?: React.ReactElement<React.ComponentProps<any>, any>;
-    title: string;
-    customTitleComponent?: React.ReactElement<React.ComponentProps<any>, any>;
-    rightButton?: React.ReactElement<React.ComponentProps<any>, any>;
-  })=> React.ReactNode = ({
-    leftButton,
+
+  renderHeader = ({
     title,
     customTitleComponent,
+    leftButton,
     rightButton,
   }: {
-    leftButton?: React.ReactElement<React.ComponentProps<any>, any>;
     title: string;
-    customTitleComponent?: React.ReactElement<React.ComponentProps<any>, any>;
-    rightButton?: React.ReactElement<React.ComponentProps<any>, any>;
+    customTitleComponent?: React.ReactNode;
+    leftButton?: React.ReactNode;
+    rightButton?: React.ReactNode;
   }) => {
     return (
       <View
         key="articlesHeader"
-        style={[
-          styles.header,
-          this.state.isHeaderPinned || customTitleComponent
-            ? styles.headerShadow
-            : null,
-        ]}
+        style={[styles.header, this.state.isHeaderPinned || customTitleComponent ? styles.headerShadow : null]}
       >
-        {leftButton && (
-          <View style={[styles.headerButton, styles.headerLeftButton]}>
-            {leftButton}
-          </View>
-        )}
+        {leftButton && <View style={[styles.headerButton, styles.headerLeftButton]}>{leftButton}</View>}
         <View style={styles.headerTitle}>
           {customTitleComponent ? (
             customTitleComponent
@@ -401,30 +339,21 @@ export class KnowledgeBase extends Component<Props, State> {
             </Text>
           )}
         </View>
-        {rightButton && (
-          <View style={[styles.headerButton, styles.headerRightButton]}>
-            {rightButton}
-          </View>
-        )}
+        {rightButton && <View style={[styles.headerButton, styles.headerRightButton]}>{rightButton}</View>}
       </View>
     );
   };
 
-  renderSeparator(): React.ReactNode {
-    return (
-      <View style={styles.separator}>{SelectSectioned.renderSeparator()}</View>
-    );
+  renderSeparator() {
+    return <View style={styles.separator}>{SelectSectioned.renderSeparator()}</View>;
   }
 
-  onScroll: (arg0: any) => void = ({nativeEvent}: Record<string, any>) => {
+  onScroll = ({nativeEvent}: Record<string, any>) => {
     this.setState({
       isHeaderPinned: nativeEvent.contentOffset.y >= UNIT,
     });
   };
-  renderRefreshControl: () => React.ReactElement<
-    React.ComponentProps<typeof RefreshControl>,
-    typeof RefreshControl
-  > = () => {
+  renderRefreshControl = () => {
     return (
       <RefreshControl
         testID="refresh-control"
@@ -436,20 +365,16 @@ export class KnowledgeBase extends Component<Props, State> {
       />
     );
   };
-  getListItemKey = (item: ArticleNode, index: number) =>
-    item?.data?.id || `${index}`;
+
+  getListItemKey = (item: ArticleNode, index: number) => item?.data?.id || `${index}`;
+
   setListRef = (listRef: any) => {
     if (listRef) {
       this.listRef = listRef;
     }
   };
-  renderArticlesList: (
-    articlesList: ArticlesList | Partial<ArticlesList>,
-    hideSearchPanel?: boolean,
-  ) => React.ReactNode = (
-    articlesList: ArticlesList,
-    hideSearchPanel: boolean = false,
-  ) => {
+
+  renderArticlesList = (articlesList: ArticlesList, hideSearchPanel: boolean = false) => {
     const {isLoading} = this.props;
     return (
       <SectionList
@@ -474,8 +399,7 @@ export class KnowledgeBase extends Component<Props, State> {
           )
         }
         ListFooterComponent={() =>
-          !isLoading &&
-          !hideSearchPanel && (
+          !isLoading && !hideSearchPanel ? (
             <View style={styles.listFooter}>
               <TouchableOpacity
                 testID="test:id/manage-favorite-projects"
@@ -484,31 +408,28 @@ export class KnowledgeBase extends Component<Props, State> {
                 hitSlop={HIT_SLOP}
                 onPress={this.openProjectSelect}
               >
-                <Text style={styles.manageFavoriteProjectsLink}>
-                  {i18n('Manage Favorite Projects')}
-                </Text>
+                <Text style={styles.manageFavoriteProjectsLink}>{i18n('Manage Favorite Projects')}</Text>
               </TouchableOpacity>
             </View>
-          )
+          ) : null
         }
         ListEmptyComponent={() =>
-          !isLoading && (
+          !isLoading ? (
             <ErrorMessage
               errorMessageData={{
                 ...ERROR_MESSAGE_DATA.noArticlesFound,
-                icon: () => (
-                  <IconNothingFound style={styles.noArticlesErrorIcon} />
-                ),
+                icon: () => <IconNothingFound style={styles.noArticlesErrorIcon} />,
               }}
             />
-          )
+          ) : null
         }
       />
     );
   };
-  getSearchQuery: () => string | null = (): string | null =>
-    knowledgeBaseActions.getArticlesQuery();
-  renderSearchPanel: ()=> React.ReactNode = () => (
+
+  getSearchQuery = (): string | null => knowledgeBaseActions.getArticlesQuery();
+
+  renderSearchPanel = () => (
     <KnowledgeBaseSearchPanel
       query={this.getSearchQuery()}
       onSearch={(query: string) => {
@@ -516,7 +437,8 @@ export class KnowledgeBase extends Component<Props, State> {
       }}
     />
   );
-  renderActionsBar: ()=> React.ReactNode = () => {
+
+  renderActionsBar = () => {
     const {isLoading, articlesList} = this.props;
     const list: ArticlesList = articlesList || [];
     const hasSearchQuery: boolean = !!this.getSearchQuery();
@@ -535,11 +457,7 @@ export class KnowledgeBase extends Component<Props, State> {
           hitSlop={HIT_SLOP}
           onPress={() => this.props.toggleAllProjects()}
         >
-          {!hasSearchQuery && (
-            <Text style={styles.actionBarButtonText}>
-              {i18n('Collapse all')}
-            </Text>
-          )}
+          {!hasSearchQuery && <Text style={styles.actionBarButtonText}>{i18n('Collapse all')}</Text>}
         </TouchableOpacity>
         <TouchableOpacity
           testID="test:id/drafts"
@@ -554,13 +472,11 @@ export class KnowledgeBase extends Component<Props, State> {
                   backIcon={<IconClose color={styles.link.color} />}
                   onBack={() => this.toggleModal()}
                   onArticleCreate={this.onArticleCreate}
-                />,
+                />
               );
             } else {
               Router.Page({
-                children: (
-                  <KnowledgeBaseDrafts onArticleCreate={this.onArticleCreate} />
-                ),
+                children: <KnowledgeBaseDrafts onArticleCreate={this.onArticleCreate} />,
               });
             }
           }}
@@ -571,39 +487,33 @@ export class KnowledgeBase extends Component<Props, State> {
       </View>
     );
   };
-  closeProjectSelect: () => void = () =>
-    this.setState({
-      isSelectVisible: false,
-    });
-  openProjectSelect: () => void = () =>
-    this.setState({
-      isSelectVisible: true,
-    });
-  renderProjectSelect: ()=> React.ReactNode = () => {
+
+  closeProjectSelect = () => this.setState({isSelectVisible: false});
+
+  openProjectSelect = () => this.setState({isSelectVisible: true});
+
+  renderProjectSelect = () => {
     const {updateProjectsFavorites} = this.props;
     const projects: ArticleProject[] = getStorageState().projects as ArticleProject[];
-    const prevPinnedProjects: ArticleProject[] = projects.filter(
-      (it: ArticleProject) => it.pinned,
-    );
+    const prevPinnedProjects: ArticleProject[] = projects.filter((it: ArticleProject) => it.pinned);
     const selectProps: ISelectProps = {
       placeholder: i18n('Filter projects'),
       multi: true,
       header: () => (
         <Text style={styles.manageFavoriteProjectsNote}>
-          {i18n(
-            'To view articles in the knowledge base for a specific project, mark it as a favorite',
-          )}
+          {i18n('To view articles in the knowledge base for a specific project, mark it as a favorite')}
         </Text>
       ),
       dataSource: (q: string = '') => {
-        const filteredProjects = q ? projects.filter((it: ArticleProject) => {
-          const value = q.toLowerCase();
-          return it.name?.toLowerCase().indexOf(value) !== -1 || it.shortName?.toLowerCase().indexOf(value) !== -1;
-        }) : projects;
+        const filteredProjects = q
+          ? projects.filter((it: ArticleProject) => {
+              const value = q.toLowerCase();
+              return it.name?.toLowerCase().indexOf(value) !== -1 || it.shortName?.toLowerCase().indexOf(value) !== -1;
+            })
+          : projects;
+        //TODO: remove it if `Favorite` string is not needed
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const favorites = {//TODO: remove it if `Favorite` string is not needed
-          title: i18n('Favorites'),
-        };
+        const favorites = {title: i18n('Favorites')};
         return Promise.resolve([
           {
             title: i18n('Projects'),
@@ -615,25 +525,15 @@ export class KnowledgeBase extends Component<Props, State> {
       getTitle: (it: ArticleProject) => it.name,
       onCancel: this.closeProjectSelect,
       onChangeSelection: () => null,
-      onSelect: async (
-        selectedProjects: ArticleProject[] | null | undefined,
-      ) => {
+      onSelect: async (selectedProjects: ArticleProject[] | null | undefined) => {
         const pinnedProjects: ArticleProject[] = (selectedProjects || [])
-          .map((it: ArticleProject) =>
-            it.pinned ? null : {...it, pinned: true},
-          )
+          .map((it: ArticleProject) => (it.pinned ? null : {...it, pinned: true}))
           .filter(Boolean);
         const unpinnedProjects: ArticleProject[] = prevPinnedProjects
-          .filter(
-            (it: ArticleProject) => !(selectedProjects || []).includes(it),
-          )
+          .filter((it: ArticleProject) => !(selectedProjects || []).includes(it))
           .map((it: ArticleProject) => ({...it, pinned: false}));
         this.closeProjectSelect();
-        await updateProjectsFavorites(
-          pinnedProjects,
-          unpinnedProjects,
-          selectedProjects?.length === 0,
-        );
+        await updateProjectsFavorites(pinnedProjects, unpinnedProjects, selectedProjects?.length === 0);
 
         if ((selectedProjects || []).length === 0) {
           this.props.setNoFavoriteProjects();
@@ -646,24 +546,16 @@ export class KnowledgeBase extends Component<Props, State> {
     };
     return <SelectSectioned {...selectProps} />;
   };
-  renderNoFavouriteProjects: ()=> React.ReactNode = () => {
+
+  renderNoFavouriteProjects = () => {
     return (
       <View style={styles.noProjects}>
         <IconNoProjectFound style={styles.noProjectsIcon} />
         <Text style={styles.noProjectsMessage}>
-          {i18n(
-            // eslint-disable-next-line quotes
-            "Here you'll see a list of articles from your favorite projects",
-          )}
+          {i18n(`Here you'll see a list of articles from your favorite projects`)}
         </Text>
-        <TouchableOpacity
-          style={styles.noProjectsButton}
-          hitSlop={HIT_SLOP}
-          onPress={this.openProjectSelect}
-        >
-          <Text style={styles.noProjectsButtonText}>
-            {i18n('Find favorite projects')}
-          </Text>
+        <TouchableOpacity style={styles.noProjectsButton} hitSlop={HIT_SLOP} onPress={this.openProjectSelect}>
+          <Text style={styles.noProjectsButtonText}>{i18n('Find favorite projects')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -675,10 +567,7 @@ export class KnowledgeBase extends Component<Props, State> {
     });
   }
 
-  onArticleCreate(
-    articleDraft?: ArticleDraft | null | undefined,
-    isNew: boolean = true,
-  ) {
+  onArticleCreate(articleDraft?: ArticleDraft | null, isNew: boolean = true) {
     if (this.state.isSplitView) {
       this.toggleModal(
         <ArticleCreate
@@ -686,7 +575,7 @@ export class KnowledgeBase extends Component<Props, State> {
           isSplitView={this.state.isSplitView}
           onHide={this.toggleModal}
           articleDraft={articleDraft}
-        />,
+        />
       );
     } else {
       Router.ArticleCreate({
@@ -697,14 +586,8 @@ export class KnowledgeBase extends Component<Props, State> {
     }
   }
 
-  renderArticleList: ()=> React.ReactNode = (): React.ReactNode => {
-    const {
-      isLoading,
-      articlesList,
-      error,
-      showContextActions,
-      issuePermissions,
-    } = this.props;
+  renderArticleList = () => {
+    const {isLoading, articlesList, error, showContextActions, issuePermissions} = this.props;
     return (
       <>
         {this.renderHeader({
@@ -717,7 +600,7 @@ export class KnowledgeBase extends Component<Props, State> {
                   this.context.actionSheet(),
                   issuePermissions.articleCanCreateArticle(),
                   this.openProjectSelect,
-                  this.onArticleCreate,
+                  this.onArticleCreate
                 );
               }}
             >
@@ -726,13 +609,9 @@ export class KnowledgeBase extends Component<Props, State> {
           ),
         })}
         <View style={styles.content}>
-          {error && !error.noFavoriteProjects && (
-            <ErrorMessage testID="articleError" error={error} />
-          )}
+          {error && !error.noFavoriteProjects && <ErrorMessage testID="articleError" error={error} />}
 
-          {error &&
-            error.noFavoriteProjects &&
-            this.renderNoFavouriteProjects()}
+          {error && error.noFavoriteProjects && this.renderNoFavouriteProjects()}
 
           {!error && !articlesList && isLoading && <SkeletonIssues />}
 
@@ -741,7 +620,8 @@ export class KnowledgeBase extends Component<Props, State> {
       </>
     );
   };
-  renderFocusedArticle: ()=> React.ReactNode = (): React.ReactNode => {
+
+  renderFocusedArticle = (): React.ReactNode => {
     const {focusedArticle} = this.state;
 
     if (!this.props?.articlesList || this.props.articlesList.length === 0) {
@@ -750,18 +630,14 @@ export class KnowledgeBase extends Component<Props, State> {
 
     return focusedArticle ? (
       <View style={styles.content}>
-        <Article
-          articlePlaceholder={focusedArticle}
-          navigateToActivity={this.props.navigateToActivity}
-        />
+        <Article articlePlaceholder={focusedArticle} navigateToActivity={this.props.navigateToActivity} />
       </View>
     ) : (
-      <NothingSelectedIconWithText
-        text={i18n('Select an article from the list')}
-      />
+      <NothingSelectedIconWithText text={i18n('Select an article from the list')} />
     );
   };
-  renderSplitView: ()=> React.ReactNode = (): React.ReactNode => {
+
+  renderSplitView = () => {
     return (
       <View style={styles.splitViewContainer}>
         <View style={styles.splitViewSide}>{this.renderArticleList()}</View>
@@ -770,30 +646,20 @@ export class KnowledgeBase extends Component<Props, State> {
     );
   };
 
-  render(): React.ReactNode {
+  render() {
     const {isSplitView} = this.state;
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
           this.uiTheme = theme.uiTheme;
           return (
-            <View
-              style={[
-                styles.container,
-                isSplitView ? styles.splitViewContainer : null,
-              ]}
-              testID="articles"
-            >
+            <View style={[styles.container, isSplitView ? styles.splitViewContainer : null]} testID="articles">
               {isSplitView && this.renderSplitView()}
               {!isSplitView && this.renderArticleList()}
 
               {this.state.isSelectVisible && this.renderProjectSelect()}
 
-              {isSplitView && (
-                <ModalPortal onHide={() => this.toggleModal()}>
-                  {this.state.modalChildren}
-                </ModalPortal>
-              )}
+              {isSplitView && <ModalPortal onHide={() => this.toggleModal()}>{this.state.modalChildren}</ModalPortal>}
             </View>
           );
         }}
@@ -810,7 +676,7 @@ const mapStateToProps = (state: AppState) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: ReduxThunkDispatch) => {
   return {...bindActionCreators(knowledgeBaseActions, dispatch)};
 };
 
