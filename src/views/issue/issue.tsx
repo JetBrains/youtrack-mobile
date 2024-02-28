@@ -369,7 +369,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
           }
         }}
       >
-        <IconMoreOptions size={18} color={styles.link.color} />
+        <IconMoreOptions color={styles.link.color} />
       </TouchableOpacity>
     );
   }
