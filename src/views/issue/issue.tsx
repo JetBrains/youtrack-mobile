@@ -377,14 +377,14 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   renderIssueVotes(): React.ReactNode {
     const {issue, issuePermissions, toggleVote} = this.props;
     return (
-      <View style={styles.issueVote}>
-        <IssueVotes
-          canVote={issuePermissions.canVote(issue)}
-          votes={issue?.votes}
-          voted={issue?.voters?.hasVote}
-          onVoteToggle={toggleVote}
-        />
-      </View>
+      <IssueVotes
+        size={21}
+        canVote={issuePermissions.canVote(issue)}
+        votes={issue?.votes}
+        voted={issue?.voters?.hasVote}
+        onVoteToggle={toggleVote}
+        style={styles.issueVote}
+      />
     );
   }
 
@@ -394,6 +394,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     if (issue && this.isIssueLoaded()) {
       return (
         <Star
+          size={21}
           style={styles.issueStar}
           canStar={this.canStar()}
           hasStar={issue.watchers?.hasStar}

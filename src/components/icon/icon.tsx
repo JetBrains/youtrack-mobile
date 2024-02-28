@@ -7,7 +7,6 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import ArrowLeft from '@jetbrains/icons/arrow-20px-left.svg';
-import Article from '@jetbrains/icons/article-20px.svg';
 import Checkmark from 'components/icon/assets/checkmark.svg';
 import ChevronLeft from 'components/icon/assets/shevron_left.svg';
 import ChevronSmallDown from 'components/icon/assets/shevron_small_down.svg';
@@ -20,6 +19,7 @@ import More from 'components/icon/assets/more.svg';
 import Plus from 'components/icon/assets/plus.svg';
 import Time from 'components/icon/assets/time.svg';
 import Vcs from 'components/icon/assets/vcs.svg';
+import Vote from 'components/icon/assets/vote.svg';
 import IconYTM from './youtrack-icon';
 import {isAndroidPlatform} from 'util/util';
 
@@ -227,7 +227,7 @@ export const IconChevronDownUp = (props: Props & {isDown?: boolean}) => {
 };
 
 export const IconBack = (props: Props) =>
-  isAndroid ? <ArrowLeft {...createSVGProps(props, 22)} /> : <ChevronLeft {...createSVGProps(props, 24)} />;
+  isAndroid ? <ArrowLeft {...createSVGProps(props, 23)} /> : <ChevronLeft {...createSVGProps(props, 25)} />;
 
 export const IconCheck = (props: Props) => <Checkmark {...createSVGProps(props, 24)} />;
 
@@ -239,11 +239,11 @@ export const IconHistory = (props: Props) => <History {...createSVGProps(props, 
 
 export const IconHourGlass = (props: Props) => <Time {...createSVGProps(props, 24)} />;
 
-export const IconKnowledgeBase = (props: Props) => <Article {...createSVGProps(props, 24)} />;
-
 export const IconMoreOptions = (props: Props) =>
-  <More {...createSVGProps(props, 18, isAndroid ? styles.iconMoreOptionsAndroid : [])} />;
+  <More {...createSVGProps(props, 19, isAndroid ? styles.iconMoreOptionsAndroid : [])} />;
 
 export const EllipsisVertical = (props: Props) => <Drag {...createSVGProps(props, 18)} />;
 
 export const IconVcs = (props: Props) => <Vcs {...createSVGProps(props, 24)} />;
+
+export const IconVote = (props: Props) => <Vote {...createSVGProps(props, 19)} />;
