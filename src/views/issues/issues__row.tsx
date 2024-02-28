@@ -23,7 +23,7 @@ import styles, {DUAL_AVATAR_SIZE} from './issues.styles';
 import {BaseIssue, IssueOnList} from 'types/Issue';
 import {BundleValue, CustomFieldBase} from 'types/CustomFields';
 import {FieldValue} from 'types/CustomFields';
-import {ViewStyleProp} from 'types/Internal';
+import {TextStyleProp, ViewStyleProp} from 'types/Internal';
 
 interface Props {
   hideId?: boolean;
@@ -101,7 +101,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
     );
   }
 
-  renderPriority(customStyle?: any, text?: string): React.ReactNode {
+  renderPriority(customStyle?: TextStyleProp, text?: string): React.ReactNode {
     const priorityField = getPriorityField(this.props.issue);
 
     if (
@@ -115,7 +115,8 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
     const LAST = values.length - 1;
     return (
       <ColorField
-        style={[styles.priorityWrapper, customStyle]}
+        monospace
+        style={{...styles.priorityWrapper, ...customStyle}}
         text={text || values[LAST].name}
         color={values[LAST].color}
       />

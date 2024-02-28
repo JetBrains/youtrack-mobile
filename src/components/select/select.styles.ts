@@ -1,5 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
+import {COLOR_FIELD_SIZE} from 'components/color-field/color-field';
 import {elevation1, mainText, secondaryText} from 'components/common-styles';
 import {inputWrapper, searchInputWithMinHeight} from 'components/common-styles/search';
 import {MAIN_FONT_SIZE} from 'components/common-styles/typography';
@@ -97,7 +98,7 @@ export default EStyleSheet.create({
     justifyContent: 'space-between',
   },
   colorField: {
-    width: UNIT * 2.5,
+    minWidth: COLOR_FIELD_SIZE,
     marginRight: UNIT * 1.5,
   },
   applyButton: {

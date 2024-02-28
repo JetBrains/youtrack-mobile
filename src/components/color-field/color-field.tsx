@@ -1,67 +1,65 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import {View, Text} from 'react-native';
 
 import styles from './color-field.styles';
 
+import {TextStyleProp} from 'types/Internal';
+
 export interface ColorCoding {
   id: string;
-  background: string;
   foreground: string;
+  background: string;
 }
 
 interface Props {
-  text?: string;
+  children?: React.ReactNode;
   color?: ColorCoding;
   fullText?: boolean;
-  style?: any;
-  children?: any;
+  monospace?: boolean;
+  style?: TextStyleProp;
+  text?: string;
 }
 
-export const COLOR_FIELD_SIZE = 20;
+export const COLOR_FIELD_SIZE = 21;
 const NO_COLOR_CODING_ID = '0';
 
-
-export default class ColorField extends PureComponent<Props, Readonly<{}>> {
-  getText(): null | string {
-    if (!this.props.text) {
+export default function ColorField(props: Props) {
+  const getText = (): string => {
+    if (!props.text?.trim?.()) {
       return '';
     }
+    return props.fullText ? props.text : Array.from(props.text)[0];
+  };
 
-    return this.props.fullText
-      ? this.props.text
-      : Array.from(this.props.text)[0];
-  }
+  const {style = null, color} = props;
+  const hasNoColor: boolean = !color || color?.id === NO_COLOR_CODING_ID;
 
-  render(): React.ReactNode {
-    const {style = null, color} = this.props;
-    const hasNoColor: boolean = !color || color?.id === NO_COLOR_CODING_ID;
-
-    return (
-      <View
-        testID="test:id/color-field-value-wrapper"
-        accessible={true}
+  return (
+    <View
+      testID="test:id/color-field-value-wrapper"
+      accessible={true}
+      style={[
+        {backgroundColor: color?.background},
+        styles.wrapper,
+        !props.fullText && styles.wrapperOneChar,
+        style,
+        hasNoColor ? styles.defaultColorCoding : null,
+      ]}
+    >
+      {props.children}
+      <Text
         style={[
-          {backgroundColor: color?.background},
-          styles.wrapper,
-          !this.props.fullText && styles.wrapperOneChar,
-          style,
-          hasNoColor ? styles.defaultColorCoding : null,
+          styles.text,
+          style?.fontSize ? {fontSize: style.fontSize} : null,
+          props.monospace ? styles.textMonospace : null,
+          {color: hasNoColor ? styles.defaultColorCoding.color : color?.foreground},
         ]}
+        numberOfLines={1}
+        testID="test:id/color-field-value"
+        accessible={true}
       >
-        {this.props.children}
-        <Text
-          style={[
-            styles.text,
-            style?.fontSize ? {fontSize: style.fontSize} : null,
-            {color: hasNoColor ? styles.defaultColorCoding.color : color?.foreground},
-          ]}
-          numberOfLines={1}
-          testID="test:id/color-field-value"
-          accessible={true}
-        >
-          {this.getText()}
-        </Text>
-      </View>
-    );
-  }
+        {getText()}
+      </Text>
+    </View>
+  );
 }

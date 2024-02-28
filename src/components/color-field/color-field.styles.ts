@@ -1,8 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {SECONDARY_FONT_SIZE, secondaryText, UNIT} from 'components/common-styles';
 import {COLOR_FIELD_SIZE} from 'components/color-field/color-field';
-
+import {monospace, SECONDARY_FONT_SIZE, secondaryText, UNIT} from 'components/common-styles';
 
 export default EStyleSheet.create({
   wrapper: {
@@ -21,6 +20,9 @@ export default EStyleSheet.create({
     ...secondaryText,
     fontSize: SECONDARY_FONT_SIZE - 1,
     textAlign: 'center',
+  },
+  textMonospace: {
+    ...monospace,
   },
   defaultColorCoding: {
     color: '$text',

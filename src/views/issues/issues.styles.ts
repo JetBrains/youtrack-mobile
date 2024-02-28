@@ -7,6 +7,7 @@ import {
   headerTitle,
   MAIN_FONT_SIZE,
   mainText,
+  monospace,
   SECONDARY_FONT_SIZE,
   secondaryText,
   UNIT,
@@ -76,7 +77,8 @@ export default EStyleSheet.create({
   priorityWrapper: {
     position: 'relative',
     marginRight: UNIT,
-    width: 22,
+    ...monospace,
+    minWidth: COLOR_FIELD_SIZE,
     ...Platform.select({
       android: {
         marginTop: UNIT / 4,
