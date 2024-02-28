@@ -50,19 +50,19 @@ msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} issue"
 msgstr[1] "{{amount}} issues"
 
-#: src/views/issues/issues__row.tsx:330
+#: src/views/issues/issues__row.tsx:331
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
 msgstr[0] "{{daysLeft}}d"
 msgstr[1] "{{daysLeft}}d"
 
-#: src/views/issues/issues__row.tsx:322
+#: src/views/issues/issues__row.tsx:323
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
 msgstr[0] "{{hoursLeft}}h"
 msgstr[1] "{{hoursLeft}}h"
 
-#: src/views/issues/issues__row.tsx:313
+#: src/views/issues/issues__row.tsx:314
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
 msgstr[0] "{{minutesAbsolute}}m"
@@ -89,7 +89,7 @@ msgstr "Activity"
 msgid "Activity Settings"
 msgstr "Activity Settings"
 
-#: src/views/knowledge-base/knowledge-base.tsx:87
+#: src/views/knowledge-base/knowledge-base.tsx:89
 msgid "Add project to favorites"
 msgstr "Add project to favorites"
 
@@ -235,7 +235,7 @@ msgstr "Clear the current search context"
 msgid "Close"
 msgstr "Close"
 
-#: src/views/knowledge-base/knowledge-base.tsx:540
+#: src/views/knowledge-base/knowledge-base.tsx:460
 msgid "Collapse all"
 msgstr "Collapse all"
 
@@ -461,7 +461,7 @@ msgid "Don't send logs"
 msgstr "Don't send logs"
 
 #: src/views/create-issue/create-issue-drafts.tsx:67
-#: src/views/knowledge-base/knowledge-base.tsx:568
+#: src/views/knowledge-base/knowledge-base.tsx:484
 msgid "Drafts"
 msgstr "Drafts"
 
@@ -503,7 +503,7 @@ msgstr "Enter the web address for a YouTrack installation where you have a regis
 msgid "Enter time value"
 msgstr "Enter time value"
 
-#: src/views/knowledge-base/knowledge-base.tsx:605
+#: src/views/knowledge-base/knowledge-base.tsx:516
 msgid "Favorites"
 msgstr "Favorites"
 
@@ -520,7 +520,7 @@ msgid "Filter items"
 msgstr "Filter items"
 
 #: src/views/article-create/article-create.tsx:149
-#: src/views/knowledge-base/knowledge-base.tsx:589
+#: src/views/knowledge-base/knowledge-base.tsx:500
 msgid "Filter projects"
 msgstr "Filter projects"
 
@@ -551,7 +551,7 @@ msgstr "Filter users, groups, and teams"
 msgid "Filters"
 msgstr "Filters"
 
-#: src/views/knowledge-base/knowledge-base.tsx:665
+#: src/views/knowledge-base/knowledge-base.tsx:558
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
@@ -571,7 +571,7 @@ msgstr "Groups and teams"
 msgid "Help us fix problems faster"
 msgstr "Help us fix problems faster"
 
-#: src/views/knowledge-base/knowledge-base.tsx:654
+#: src/views/knowledge-base/knowledge-base.tsx:555
 msgid "Here you'll see a list of articles from your favorite projects"
 msgstr "Here you'll see a list of articles from your favorite projects"
 
@@ -627,7 +627,7 @@ msgstr "JetBrains Privacy Policy"
 msgid "just now"
 msgstr "just now"
 
-#: src/views/knowledge-base/knowledge-base.tsx:711
+#: src/views/knowledge-base/knowledge-base.tsx:594
 msgid "Knowledge Base"
 msgstr "Knowledge Base"
 
@@ -680,7 +680,7 @@ msgid "Logs"
 msgstr "Logs"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts:491
-#: src/views/knowledge-base/knowledge-base.tsx:488
+#: src/views/knowledge-base/knowledge-base.tsx:411
 msgid "Manage Favorite Projects"
 msgstr "Manage Favorite Projects"
 
@@ -755,19 +755,19 @@ msgstr "Next"
 msgid "No activity yet"
 msgstr "No activity yet"
 
-#: src/views/knowledge-base/knowledge-base.tsx:266
+#: src/views/knowledge-base/knowledge-base.tsx:239
 msgid "No articles"
 msgstr "No articles"
 
-#: src/views/knowledge-base/knowledge-base.tsx:90
+#: src/views/knowledge-base/knowledge-base.tsx:92
 msgid "No articles found"
 msgstr "No articles found"
 
-#: src/views/knowledge-base/knowledge-base__drafts.tsx:150
+#: src/views/knowledge-base/knowledge-base__drafts.tsx:151
 msgid "No drafts yet"
 msgstr "No drafts yet"
 
-#: src/views/knowledge-base/knowledge-base.tsx:86
+#: src/views/knowledge-base/knowledge-base.tsx:88
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
@@ -837,7 +837,7 @@ msgid "Project"
 msgstr "Project"
 
 #: src/views/issues/issues-actions.ts:290
-#: src/views/knowledge-base/knowledge-base.tsx:609
+#: src/views/knowledge-base/knowledge-base.tsx:519
 msgid "Projects"
 msgstr "Projects"
 
@@ -927,7 +927,7 @@ msgstr "Search for the project"
 msgid "Search Input Mode"
 msgstr "Search Input Mode"
 
-#: src/views/knowledge-base/knowledge-base.tsx:760
+#: src/views/knowledge-base/knowledge-base.tsx:637
 msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
@@ -1043,7 +1043,7 @@ msgstr "Spent time"
 msgid "Spent time:"
 msgstr "Spent time:"
 
-#: src/views/knowledge-base/knowledge-base__drafts.tsx:165
+#: src/views/knowledge-base/knowledge-base__drafts.tsx:162
 msgid "Start a new article"
 msgstr "Start a new article"
 
@@ -1183,7 +1183,7 @@ msgstr "Title changed"
 msgid "To view an item in context, select an issue, article, or update from the list"
 msgstr "To view an item in context, select an issue, article, or update from the list"
 
-#: src/views/knowledge-base/knowledge-base.tsx:593
+#: src/views/knowledge-base/knowledge-base.tsx:504
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
 msgstr "To view articles in the knowledge base for a specific project, mark it as a favorite"
 
