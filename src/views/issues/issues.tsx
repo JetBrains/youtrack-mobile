@@ -681,8 +681,8 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         {isIssuesContextOpen && this.renderContextSelect()}
         {this.renderIssueList()}
         <View style={styles.listActions}>
-          {this.renderSettingsButton()}
           {this.renderCreateIssueButton()}
+          {this.renderSettingsButton()}
         </View>
       </View>
     );
