@@ -17,7 +17,6 @@ import AttachmentsRow from 'components/attachments-row/attachments-row';
 import CommandDialog from 'components/command-dialog/command-dialog';
 import CustomFieldsPanel from 'components/custom-fields-panel/custom-fields-panel';
 import Header from 'components/header/header';
-import IconLink from '@jetbrains/icons/link.svg';
 import IssueCustomFieldText from 'components/custom-field/issue-custom-field-text';
 import IssueDrafts from 'views/create-issue/create-issue-drafts';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
@@ -44,10 +43,9 @@ import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {
   IconCheck,
   IconClose,
-  IconDrag,
   IconMoreOptions,
+  IconLink,
 } from 'components/icon/icon';
-import {isIOSPlatform} from 'util/util';
 import {ThemeContext} from 'components/theme/theme-context';
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
 import type {AnyIssue, IssueFull} from 'types/Issue';
@@ -233,13 +231,7 @@ class CreateIssue extends PureComponent<Props, State> {
         }}
       >
         <Text style={styles.iconMore}>
-          {isIOSPlatform() ? (
-            <IconMoreOptions size={18} color={this.getUIThemeColors().$link}/>
-          ) : (
-            <Text>
-              <IconDrag size={18} color={this.getUIThemeColors().$link}/>
-            </Text>
-          )}
+          <IconMoreOptions color={this.getUIThemeColors().$link}/>
         </Text>
       </TouchableOpacity>
     );
@@ -337,10 +329,8 @@ class CreateIssue extends PureComponent<Props, State> {
       getIssueLinksTitle,
       processing,
     } = this.props;
-    const iconLink: any = (
+    const iconLink = (
       <IconLink
-        width={24}
-        height={24}
         fill={
           processing
             ? styles.addLinkButtonTextDisabled.color
@@ -441,7 +431,6 @@ class CreateIssue extends PureComponent<Props, State> {
           ) : (
             <IconCheck
               style={styles.applyButton}
-              size={19}
               color={
                 canCreateIssue && isConnected
                   ? uiThemeColors.$link
@@ -454,7 +443,7 @@ class CreateIssue extends PureComponent<Props, State> {
               <Header
                 title={i18n('New Issue')}
                 showShadow={true}
-                leftButton={<IconClose size={21} color={uiThemeColors.$link}/>}
+                leftButton={<IconClose color={uiThemeColors.$link}/>}
                 onBack={this.onHide}
                 rightButton={rightButton}
                 extraButton={!this.isActionDisabled() ? (

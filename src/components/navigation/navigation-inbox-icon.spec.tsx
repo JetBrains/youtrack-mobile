@@ -8,6 +8,7 @@ import mocks from 'test/mocks';
 import NavigationInboxIcon, {menuPollInboxStatusDelay} from './navigation-inbox-icon';
 
 jest.mock('../feature/feature');
+jest.mock('./navigation-icon');
 
 
 const createStoreMock = mocks.createMockStore({});

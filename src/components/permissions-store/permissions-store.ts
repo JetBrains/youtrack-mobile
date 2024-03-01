@@ -13,15 +13,11 @@ class PermissionsStore {
       );
       return permission;
     });
-    this.permissionsMap = new Map(
-      permissionsWithProjects.map(it => [it.permission.key, it]),
-    );
+    this.permissionsMap = new Map(permissionsWithProjects.map(it => [it.permission.key, it]));
   }
 
-  has(permissionId: string, projectId?: string): boolean {
-    const permission: PermissionCacheItem = this.permissionsMap.get(
-      permissionId,
-    );
+  has = (permissionId: string, projectId?: string): boolean => {
+    const permission: PermissionCacheItem = this.permissionsMap.get(permissionId);
 
     if (!permission) {
       return false;
@@ -36,19 +32,15 @@ class PermissionsStore {
     }
 
     return permission.projectIds.length > 0;
-  }
+  };
 
-  hasEvery(permissionIds: string[], projectId: string): boolean {
-    return (permissionIds || []).every(permissionId =>
-      this.has(permissionId, projectId),
-    );
-  }
+  hasEvery = (permissionIds: string[], projectId?: string): boolean => (permissionIds || []).every(permissionId =>
+    this.has(permissionId, projectId),
+  );
 
-  hasSome(permissionIds: string[], projectId: string): boolean {
-    return (permissionIds || []).some(permissionId =>
-      this.has(permissionId, projectId),
-    );
-  }
+  hasSome = (permissionIds: string[], projectId?: string): boolean => (permissionIds || []).some(permissionId =>
+    this.has(permissionId, projectId),
+  );
 }
 
 export type {PermissionsStore};

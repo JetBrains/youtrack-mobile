@@ -58,12 +58,11 @@ export default EStyleSheet.create({
     marginRight: UNIT,
   },
   headerRightButton: {
+    marginTop: 2,
     marginLeft: UNIT,
-    ...Platform.select({
-      android: {
-        marginRight: -UNIT / 2,
-      },
-    }),
+    marginRight: -7,
+    paddingLeft: UNIT / 2,
+    paddingRight: UNIT,
   },
   separator: {
     marginLeft: UNIT * 3,
@@ -178,9 +177,16 @@ export default EStyleSheet.create({
     justifyContent: 'center',
   },
   noDraftsButton: {
-    marginTop: UNIT * 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: UNIT * 2,
   },
-  noDraftsButtonText: {...mainText, color: '$link'},
+  noDraftsButtonText: {
+    ...mainText,
+    marginLeft: UNIT / 2,
+    color: '$link',
+  },
   noProjects: {
     flexGrow: 1,
     alignItems: 'center',

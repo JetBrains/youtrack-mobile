@@ -56,7 +56,7 @@
     "@bugsnag/react-native": "^7.22.2",
     "@expo/react-native-action-sheet": "4.0.1",
     "@gpsgate/react-native-eventsource": "ExpandoPakistan/react-native-eventsource.git",
-    "@jetbrains/icons": "^3.20.0",
+    "@jetbrains/icons": "^4.0.1",
     "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-native-community/netinfo": "9.3.7",
     "@react-native-masked-view/masked-view": "^0.2.9",

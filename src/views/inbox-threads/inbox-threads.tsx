@@ -237,7 +237,7 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
     <Header
       showShadow={isHeaderShadowVisible}
       title={i18n('Notifications')}
-      rightButton={
+      extraButton={
         <TouchableOpacity
           disabled={!isOnline}
           testID="test:id/inboxSettings"
@@ -289,10 +289,7 @@ const InboxThreads: ()=> React.ReactNode = (): JSX.Element => {
           }}
           style={styles.threadTitleAction}
         >
-          <IconMoreOptions
-            size={18}
-            color={isOnline ? styles.link.color : styles.disabled.color}
-          />
+          <IconMoreOptions color={isOnline ? styles.link.color : styles.disabled.color}/>
         </TouchableOpacity>
       }
     />

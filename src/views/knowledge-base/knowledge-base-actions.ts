@@ -39,6 +39,8 @@ import type {
 } from 'types/Article';
 import type {CustomError} from 'types/Error';
 import type {Folder} from 'types/User';
+import {ArticleDraft} from 'types/Article';
+import {ReduxAction} from 'types/Redux';
 
 type ApiGetter = () => Api;
 
@@ -254,17 +256,13 @@ const filterArticles = (
   }
 };
 
-const loadArticlesDrafts = (): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<any> | Promise<Array<any>>) => async (
+const loadArticlesDrafts = (): ReduxAction<Promise<ArticleDraft[]>> => async (
   dispatch: (arg0: any) => any,
   getState: () => AppState,
   getApi: ApiGetter,
 ) => {
   const api: Api = getApi();
-  const [error, articlesDrafts] = await until(api.articles.getArticleDrafts());
+  const [error, articlesDrafts] = await until<ArticleDraft[]>(api.articles.getArticleDrafts());
 
   if (error) {
     notifyError(error);

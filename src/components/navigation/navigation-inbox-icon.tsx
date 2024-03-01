@@ -1,29 +1,32 @@
 import React from 'react';
 import {View} from 'react-native';
 
-import {View as AnimatedView} from 'react-native-animatable';
 import {useDispatch, useSelector} from 'react-redux';
+import {View as AnimatedView} from 'react-native-animatable';
 
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 import {folderIdMap} from 'views/inbox-threads/inbox-threads-helper';
-import {IconBell, IconCircle} from 'components/icon/icon';
+import {IconCircle} from 'components/icon/icon';
 import {inboxCheckUpdateStatus} from 'actions/app-actions';
+import {menuIconNotifications} from 'components/icon/icon';
 
 import {InboxFolder} from 'types/Inbox';
 
 import styles from './navigation.styles';
 
 import type {AppState} from 'reducers';
+import {ReduxThunkDispatch} from 'types/Redux';
+import NavigationIcon from 'components/navigation/navigation-icon';
 
 export const menuPollInboxStatusDelay: number = 60 * 1000;
 
 
 export default function NavigationInboxIcon({color, size} : { color: string; size: number }) {
-  const dispatch = useDispatch();
+  const dispatch: ReduxThunkDispatch = useDispatch();
 
   const isInboxThreadsEnabled: boolean = checkVersion(FEATURE_VERSION.inboxThreads);
 
-  const interval = React.useRef<React.MutableRefObject<typeof setInterval | null>>();
+  const interval = React.useRef<number | null>(null);
 
   const isChangingAccount: boolean = useSelector((appState: AppState) => appState.app.isChangingAccount);
   const hasNewNotifications: boolean = useSelector((appState: AppState) => {
@@ -57,7 +60,7 @@ export default function NavigationInboxIcon({color, size} : { color: string; siz
       interval.current = setInterval(
         setInboxHasUpdateStatus,
         menuPollInboxStatusDelay,
-      );
+      ) as unknown as number;
       setInboxHasUpdateStatus();
     }
 
@@ -77,13 +80,10 @@ export default function NavigationInboxIcon({color, size} : { color: string; siz
           animation="fadeIn"
           style={styles.circleIcon}
         >
-          <IconCircle size={10} color={styles.link.color}/>
+          <IconCircle size={8} color={styles.link.color}/>
         </AnimatedView>
       )}
-      <IconBell
-        size={size}
-        color={color}
-      />
+      <NavigationIcon xml={menuIconNotifications} size={size} color={color} />
     </View>
   );
 }

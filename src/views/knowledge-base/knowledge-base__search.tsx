@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {TextInput, View} from 'react-native';
 
+import IconSearch from 'components/icon/assets/search.svg';
 import {i18n} from 'components/i18n/i18n';
 import {IconClearText} from 'components/icon/icon-clear-text';
-import {IconSearch} from 'components/icon/icon';
 
 import styles from './knowledge-base.styles';
 
@@ -18,7 +18,7 @@ const KnowledgeBaseSearchPanel = (props: Props) => {
   return (
     <View style={styles.searchPanelContainer}>
       {Boolean(!focus && !searchQuery) && (
-        <IconSearch size={20} color={styles.icon.color} />
+        <IconSearch width={18} height={18} color={styles.icon.color} />
       )}
 
       <TextInput

@@ -11,11 +11,12 @@ import Swiper from 'react-native-swiper';
 
 import Avatar from 'components/avatar/avatar';
 import Router from 'components/router/router';
+import IconAdd from 'components/icon/assets/plus.svg';
+import IconLogout from 'components/icon/assets/logout.svg';
 import {formatYouTrackURL} from 'components/config/config';
 import {getStorageState} from 'components/storage/storage';
 import {HIT_SLOP} from 'components/common-styles/button';
 import {i18n} from 'components/i18n/i18n';
-import {IconLogout, IconAdd} from 'components/icon/icon';
 
 import avatarStyles from 'components/avatar/default-avatar.styles';
 import styles, {SWIPER_HEIGHT} from './accounts.styles';
@@ -27,7 +28,7 @@ import type {ViewStyleProp} from 'types/Internal';
 
 type Props = {
   otherAccounts: StorageState[];
-  isChangingAccount: boolean | null | undefined;
+  isChangingAccount: boolean;
   onClose: () => any;
   onLogOut: () => any;
   onChangeAccount: (account: StorageState) => any;
@@ -75,8 +76,8 @@ export default class Accounts extends PureComponent<Props, void> {
     this.props.onChangeAccount(account);
   };
 
-  renderAccount(account: StorageState): React.ReactNode {
-    const config: AppConfig = account.config;
+  renderAccount(account: StorageState) {
+    const config: AppConfig = account.config as AppConfig;
     const user = account.currentUser;
 
     if (!user || !config) {
@@ -110,15 +111,15 @@ export default class Accounts extends PureComponent<Props, void> {
     );
   }
 
-  renderAccounts(): React.ReactElement<React.ComponentProps<any>, any> {
+  renderAccounts() {
     const {
       openDebugView,
       otherAccounts,
       isChangingAccount,
       uiTheme,
     } = this.props;
-    const storageState: StorageState = getStorageState();
-    const accounts: StorageState[] = []
+    const storageState = getStorageState();
+    const accounts: StorageState[] = ([] as StorageState[])
       .concat(storageState)
       .concat(otherAccounts || [])
       .filter(account => !!account.config) // Do not render if account is not ready
@@ -140,7 +141,7 @@ export default class Accounts extends PureComponent<Props, void> {
     );
   }
 
-  render(): React.ReactNode {
+  render() {
     const {isChangingAccount, uiTheme} = this.props;
     return (
       <View
@@ -158,7 +159,7 @@ export default class Accounts extends PureComponent<Props, void> {
             Router.EnterServer({currentAccount: getStorageState()});
           }}
         >
-          <IconAdd size={24} color={uiTheme.colors.$link} />
+          <IconAdd width={24} height={24} color={uiTheme.colors.$link} />
         </TouchableOpacity>
 
         {this.renderAccounts()}
@@ -172,7 +173,7 @@ export default class Accounts extends PureComponent<Props, void> {
           disabled={isChangingAccount}
           onPress={this._logOut}
         >
-          <IconLogout size={22} color={uiTheme.colors.$link} />
+          <IconLogout width={22} height={22} color={uiTheme.colors.$link} />
         </TouchableOpacity>
       </View>
     );

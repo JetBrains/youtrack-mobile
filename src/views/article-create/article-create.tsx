@@ -186,10 +186,7 @@ const ArticleCreate = (props: Props) => {
         style={styles.header}
         title={props.isNew ? 'New Article' : 'Draft'}
         leftButton={
-          <IconClose
-            size={21}
-            color={isProcessing ? uiThemeColors.$disabled : linkColor}
-          />
+          <IconClose color={isProcessing ? uiThemeColors.$disabled : linkColor} />
         }
         onBack={() => {
           if (draft.id) {
@@ -208,10 +205,7 @@ const ArticleCreate = (props: Props) => {
               <ActivityIndicator color={theme.uiTheme.colors.$link} />
             )
           ) : (
-            <IconCheck
-              size={20}
-              color={isSubmitDisabled ? uiThemeColors.$disabled : linkColor}
-            />
+            <IconCheck color={isSubmitDisabled ? uiThemeColors.$disabled : linkColor} />
           )
         }
         onRightButtonClick={async () => {

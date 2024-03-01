@@ -14,7 +14,7 @@ type Props = {
   backIcon?: any;
 };
 
-const SettingsAppearance = (props: Props): JSX.Element => {
+const SettingsAppearance = (props: Props) => {
   const renderThemeCheckbox = (
     currentTheme: Theme,
     uiTheme: Record<string, any>,

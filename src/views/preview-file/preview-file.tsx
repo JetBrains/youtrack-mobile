@@ -191,7 +191,7 @@ const ImagePreview = (props: Props) => {
   return (
     <AnimatedView animation="fadeIn" duration={200} useNativeDriver={true} style={styles.container}>
       <Header
-        leftButton={<IconClose size={21} color={styles.link.color} style={styles.closeIcon} />}
+        leftButton={<IconClose color={styles.link.color} style={styles.closeIcon} />}
         onBack={closeView}
         style={styles.header}
       >

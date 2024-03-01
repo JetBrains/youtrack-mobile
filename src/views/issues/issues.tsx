@@ -43,7 +43,7 @@ import {DEFAULT_THEME} from 'components/theme/theme';
 import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {IconAdd, IconAngleDown, IconSettings} from 'components/icon/icon';
+import {IconAdd, IconAngleDown, IconMoreOptions} from 'components/icon/icon';
 import {
   ICON_PICTOGRAM_DEFAULT_SIZE,
   IconNothingFound,
@@ -263,10 +263,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     );
     return (
       <TouchableOpacity
-        style={[
-          styles.listActionsItem,
-          styles.rowLine,
-        ]}
+        style={styles.listActionsItem}
         disabled={this.props.isInProgress}
         testID="test:id/issuesSettingsButton"
         accessibilityLabel="issuesSettingsButton"
@@ -274,14 +271,14 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
           this.toggleSettingsVisibility(true);
         }}
       >
-        <Animated.Text style={animatedStyle}>
-          <IconSettings
-            size={20}
+        <Animated.View style={animatedStyle}>
+          <IconMoreOptions
+            style={styles.iconSettings}
             color={this.props.isInProgress
               ? this.getThemeColors().$disabled
               : this.getThemeColors().$link}
           />
-        </Animated.Text>
+        </Animated.View>
       </TouchableOpacity>
     );
   }
@@ -308,7 +305,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         disabled={this.props.isInProgress}
       >
         <IconAdd
-          size={22}
+          size={25}
           color={
             this.props.isInProgress
               ? this.getThemeColors().$disabled

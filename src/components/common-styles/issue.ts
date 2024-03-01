@@ -2,8 +2,7 @@ import {UNIT} from 'components/variables';
 import {HEADER_FONT_SIZE, MAIN_FONT_SIZE, mainText, secondaryText} from './typography';
 import {Platform} from 'react-native';
 export const title = {
-  fontSize: MAIN_FONT_SIZE + 2,
-  fontWeight: '500',
+  fontSize: MAIN_FONT_SIZE,
   lineHeight: HEADER_FONT_SIZE + 1,
   letterSpacing: -0.22,
 };

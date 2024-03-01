@@ -1,12 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import {Text, Dimensions, View, EventSubscription} from 'react-native';
 
-import {TabView, TabBar} from 'react-native-tab-view';
-
+import IconComment from 'components/icon/assets/comment.svg';
 import {i18n} from 'components/i18n/i18n';
-import {isSplitView} from 'components/responsive/responsive-helper';
 
-import {IconComment} from 'components/icon/icon';
+import {isSplitView} from '../responsive/responsive-helper';
+import {TabView, TabBar} from 'react-native-tab-view';
 
 import styles from './issue-tabbed.style';
 
@@ -32,7 +31,8 @@ export default class IssueTabbed<P = {}, S = IIssueTabbedState> extends React.Pu
     title: name,
   }));
   unsubscribeOnDimensionsChange: EventSubscription | undefined;
-  state: IIssueTabbedState = {
+  // @ts-ignore
+  state: IssueTabbedState = {
     index: 0,
     routes: this.tabRoutes,
     isTransitionInProgress: false,
@@ -77,7 +77,7 @@ export default class IssueTabbed<P = {}, S = IIssueTabbedState> extends React.Pu
     });
   };
 
-  getRouteBadge(isVisible: boolean, children: string | React.ReactNode): React.ReactNode {
+  getRouteBadge(isVisible: boolean, children?: string | React.ReactNode) {
     if (!isVisible) {
       return null;
     }
@@ -85,7 +85,8 @@ export default class IssueTabbed<P = {}, S = IIssueTabbedState> extends React.Pu
     return children ? (
       <View style={styles.tabBadge}>
         <IconComment
-          size={17}
+          width={17}
+          height={17}
           color={styles.tabBadgeIcon.color}
           style={styles.tabBadgeIcon}
         />

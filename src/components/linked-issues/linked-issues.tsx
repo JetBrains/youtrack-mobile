@@ -6,14 +6,20 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+
 import {View as AnimatedView} from 'react-native-animatable';
-import Header from '../header/header';
+
+import Header from 'components/header/header';
+import IconPlus from 'components/icon/assets/plus.svg';
 import IssueRow from 'views/issues/issues__row';
 import {createLinksList} from './linked-issues-helper';
 import {i18n, i18nPlural} from 'components/i18n/i18n';
-import {IconAdd, IconBack, IconClose} from '../icon/icon';
-import {ThemeContext} from '../theme/theme-context';
+import {IconBack} from 'components/icon/icon';
+import {IconClearText} from 'components/icon/icon-clear-text';
+import {ThemeContext} from 'components/theme/theme-context';
+
 import styles from './linked-issues.style';
+
 import type {IssueLink} from 'types/CustomFields';
 import type {IssueOnList} from 'types/Issue';
 import type {LinksListData} from './linked-issues-helper';
@@ -23,7 +29,7 @@ import {mixinNavigationProps, INavigationParams} from 'components/navigation';
 import {routeMap} from 'app-routes';
 import {goBack} from 'components/navigation/navigator';
 
-type Props = {
+interface Props {
   canLink?: (issue: IssueOnList) => boolean;
   issuesGetter: (linkTypeName: string, query: string) => any;
   linksGetter: () => any;
@@ -34,9 +40,9 @@ type Props = {
   subTitle?: any;
   closeIcon?: any;
   onIssueLinkPress?: (issue: IssueOnList) => any;
-};
+}
 
-const LinkedIssues = (props: Props & INavigationParams): JSX.Element => {
+const LinkedIssues = (props: Props & INavigationParams) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const theme: Theme = useContext(ThemeContext);
 
@@ -83,12 +89,7 @@ const LinkedIssues = (props: Props & INavigationParams): JSX.Element => {
     const isButtonPressed: boolean = pressedButtonId !== null;
     const isCurrentButtonPressed: boolean = isButtonPressed && pressedButtonId === linkedIssue.id + linkTypeId;
     return (
-      <AnimatedView
-        useNativeDriver
-        duration={500}
-        animation="fadeIn"
-        style={styles.linkedIssueItem}
-      >
+      <AnimatedView useNativeDriver duration={500} animation="fadeIn" style={styles.linkedIssueItem}>
         <IssueRow
           style={styles.linkedIssue}
           issue={linkedIssue}
@@ -111,17 +112,11 @@ const LinkedIssues = (props: Props & INavigationParams): JSX.Element => {
             disabled={isButtonPressed}
             onPress={async () => {
               updatePressedButtonId(linkedIssue.id + linkTypeId);
-              const isRemoved: boolean = await props.onUnlink(
-                linkedIssue,
-                linkTypeId,
-              );
+              const isRemoved: boolean = await props.onUnlink(linkedIssue, linkTypeId);
               updatePressedButtonId(null);
 
               if (isRemoved) {
-                const updatedLinksList: LinksListData[] = doUpdateSections(
-                  linkedIssue,
-                  linkTypeId,
-                );
+                const updatedLinksList: LinksListData[] = doUpdateSections(linkedIssue, linkTypeId);
                 props.onUpdate();
 
                 if (updatedLinksList.length === 0) {
@@ -132,16 +127,12 @@ const LinkedIssues = (props: Props & INavigationParams): JSX.Element => {
             style={styles.linkedIssueRemoveAction}
           >
             {isCurrentButtonPressed && (
-              <ActivityIndicator color={styles.link.color}/>
+              <ActivityIndicator style={styles.linkedIssueRemoveActionProgress} color={styles.link.color} />
             )}
             {!isCurrentButtonPressed && (
-              <IconClose
-                size={20}
-                color={
-                  isButtonPressed
-                    ? styles.disabled.color
-                    : styles.linkedIssueRemoveAction.color
-                }
+              <IconClearText
+                size={24}
+                color={isButtonPressed ? styles.disabled.color : styles.linkedIssueRemoveAction.color}
               />
             )}
           </TouchableOpacity>
@@ -190,11 +181,7 @@ const LinkedIssues = (props: Props & INavigationParams): JSX.Element => {
         leftButton={props.closeIcon || <IconBack color={styles.link.color}/>}
         rightButton={
           props.canLink ? (
-            <IconAdd
-              style={styles.addLinkButton}
-              color={styles.link.color}
-              size={20}
-            />
+            <IconPlus style={styles.addLinkButton} color={styles.link.color} width={22} height={22} />
           ) : null
         }
         onRightButtonClick={onAddIssueLink}
@@ -212,17 +199,13 @@ const LinkedIssues = (props: Props & INavigationParams): JSX.Element => {
         sections={sections}
         scrollEventThrottle={10}
         keyExtractor={(issue: IssueOnList) => issue.id}
-        renderItem={(info: { item: any; section: LinksListData & any }) =>
-          renderLinkedIssue(info.item, info.section.linkTypeId)
-        }
+        renderItem={(info) => renderLinkedIssue(info.item, info.section.linkTypeId)}
         renderSectionHeader={renderSectionTitle}
         ItemSeparatorComponent={() => <View style={styles.separator}/>}
         stickySectionHeadersEnabled={true}
       />
 
-      {isLoading && (
-        <ActivityIndicator style={styles.loader} color={styles.link.color}/>
-      )}
+      {isLoading && <ActivityIndicator style={styles.loader} color={styles.link.color} />}
     </View>
   );
 };

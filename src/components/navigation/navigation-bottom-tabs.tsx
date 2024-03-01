@@ -2,7 +2,8 @@ import * as React from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import * as icons from 'components/icon/icon';
+import {menuIconHelpdesk, menuIconIssues, menuIconAgile, menuIconKB, menuIconSettings} from 'components/icon/icon';
+
 import AgileStackNavigator from 'components/navigation/navigation-agile-stack';
 import InboxStackNavigator from 'components/navigation/navigation-inbox-stack';
 import IssuesStackNavigator from './navigation-issues-stack';
@@ -14,20 +15,21 @@ import {BottomTabsScreen, defaultScreenOptions, Navigators} from './index';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 
 import styles from './navigation.styles';
+import NavigationIcon from 'components/navigation/navigation-icon';
 
 interface NavigatorRoute {
-  icon: React.FC<any>,
+  icon: string | any,
   size: number;
   testID: string
 }
 
 const rootRouteTabsData: { [key in keyof Navigators]: NavigatorRoute } = {
-  [Navigators.IssuesRoot]: {icon: icons.IconTask, size: 23, testID: 'test:id/menuIssues'},
-  [Navigators.TicketsRoot]: {icon: icons.IconHelpdesk, size: 23, testID: 'test:id/menuTickets'},
-  [Navigators.AgileRoot]: {icon: icons.IconBoard, size: 27, testID: 'test:id/menuAgile'},
-  [Navigators.InboxRoot]: {icon: NavigationInboxIcon, size: 21, testID: 'test:id/menuNotifications'},
-  [Navigators.KnowledgeBaseRoot]: {icon: icons.IconKnowledgeBase, size: 22, testID: 'test:id/menuKnowledgeBase'},
-  [Navigators.SettingsRoot]: {icon: icons.IconSettingsTab, size: 20, testID: 'test:id/menuSettings'},
+  [Navigators.IssuesRoot]: {icon: menuIconIssues, size: 24, testID: 'test:id/menuIssues'},
+  [Navigators.TicketsRoot]: {icon: menuIconHelpdesk, size: 23, testID: 'test:id/menuTickets'},
+  [Navigators.AgileRoot]: {icon: menuIconAgile, size: 23, testID: 'test:id/menuAgile'},
+  [Navigators.InboxRoot]: {icon: NavigationInboxIcon, size: 23, testID: 'test:id/menuNotifications'},
+  [Navigators.KnowledgeBaseRoot]: {icon: menuIconKB, size: 25, testID: 'test:id/menuKnowledgeBase'},
+  [Navigators.SettingsRoot]: {icon: menuIconSettings, size: 23, testID: 'test:id/menuSettings'},
 };
 
 const BottomTabs = createBottomTabNavigator<BottomTabsScreen>();
@@ -52,12 +54,13 @@ export default function NavigationBottomTabs() {
           tabBarStyle: styles.tabBar,
           tabBarItemStyle: styles.tabBarItem,
           tabBarShowLabel: false,
-          tabBarIcon: ({color}: { color: string }) => (
-            <navRoute.icon
-              size={navRoute.size}
-              color={color}
-            />
-          ),
+          tabBarIcon: ({color}: {color: string}) => {
+            const Icon = navRoute.icon;
+            if (typeof Icon !== 'string') {
+              return <Icon size={navRoute.size} color={color} />;
+            }
+            return <NavigationIcon xml={Icon} size={navRoute.size} color={color} />;
+          },
           tabBarTestID: navRoute.testID,
         };
       }}

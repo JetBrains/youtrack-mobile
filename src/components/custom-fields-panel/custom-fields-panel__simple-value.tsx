@@ -27,13 +27,13 @@ const SimpleValueEditor = (props: Props) => {
           props.modal ? (
             <IconBack color={styles.link.color} />
           ) : (
-            <IconClose size={21} color={styles.link.color} />
+            <IconClose color={styles.link.color} />
           )
         }
         onBack={props.onHide}
         rightButton={
           value.trim() ? (
-            <IconCheck size={21} color={styles.link.color} />
+            <IconCheck color={styles.link.color} />
           ) : null
         }
         onRightButtonClick={() => {

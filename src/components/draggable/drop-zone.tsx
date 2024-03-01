@@ -37,9 +37,9 @@ export type ZoneInfo = {
   reportMeasurements: (arg0: any) => any;
 };
 type Props = {
-  onMoveOver: (arg0: any) => any;
-  onLeave: (arg0: any) => any;
-  onDrop: (data: Record<string, any> | null | undefined) => any;
+  onMoveOver?: (arg0: any) => any;
+  onLeave?: (arg0: any) => any;
+  onDrop?: (data: Record<string, any> | null | undefined) => any;
   data: ZoneInfoData;
   dragging?: boolean;
   disabled?: boolean;
@@ -225,7 +225,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
   }
 }
 
-export default (props: Props): React.ReactNode => (
+export default (props: Props) => (
   <DragContext.Consumer>
     {dragContext => {
       if (!dragContext) {
