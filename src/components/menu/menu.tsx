@@ -35,11 +35,12 @@ type Routes = {
   currentRouteName: string | null;
 };
 
-
 export default function Menu() {
   const dispatch: ReduxThunkDispatch = useDispatch();
 
   const isHelpdeskEnabled = useSelector((state: AppState) => state.app.globalSettings.helpdeskEnabled);
+
+  const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles?.helpdesk?.isReporter);
 
   const interval = useRef<ReturnType<typeof setInterval>>();
 
@@ -52,16 +53,12 @@ export default function Menu() {
   const isHelpdeskFeatureEnabled: boolean = checkVersion(FEATURE_VERSION.helpDesk);
 
   const hasNewNotifications: boolean = useSelector((appState: AppState) => {
-    if (!isInboxThreadsEnabled) {
+    if (!isInboxThreadsEnabled || isReporter) {
       return false;
     }
-    const inboxFolders: InboxFolder[] = appState.app.inboxThreadsFolders.filter(
-      it => it?.id === folderIdMap[1] || it?.id === folderIdMap[2],
-    ) || [];
-    return (
-      inboxFolders.length > 0 &&
-      inboxFolders.some(it => it?.lastNotified > it?.lastSeen)
-    );
+    const inboxFolders: InboxFolder[] =
+      appState.app.inboxThreadsFolders.filter(it => it?.id === folderIdMap[1] || it?.id === folderIdMap[2]) || [];
+    return inboxFolders.length > 0 && inboxFolders.some(it => it?.lastNotified > it?.lastSeen);
   });
 
   const isChangingAccount: boolean = useSelector((appState: AppState) => appState.app.isChangingAccount);
@@ -89,10 +86,7 @@ export default function Menu() {
 
     if (isInboxThreadsEnabled && !isChangingAccount) {
       unsubscribe();
-      interval.current = setInterval(
-        setInboxHasUpdateStatus,
-        menuPollInboxStatusDelay,
-      );
+      interval.current = setInterval(setInboxHasUpdateStatus, menuPollInboxStatusDelay);
       setInboxHasUpdateStatus();
     }
 
@@ -112,9 +106,8 @@ export default function Menu() {
   }, []);
 
   useEffect(() => {
-    const unsubscribeOnDimensionsChange: EventSubscription = Dimensions.addEventListener(
-      'change',
-      () => updateSplitView(isSplitView()),
+    const unsubscribeOnDimensionsChange: EventSubscription = Dimensions.addEventListener('change', () =>
+      updateSplitView(isSplitView())
     );
     return () => unsubscribeOnDimensionsChange.remove();
   }, [setInboxHasUpdateStatus]);
@@ -127,8 +120,7 @@ export default function Menu() {
     if (routes.currentRouteName === routeMap.Article) {
       return (
         routes.prevRouteName === routeName ||
-        (routes.prevRouteName === routeMap.Page &&
-          routeMap.KnowledgeBase === routeName)
+        (routes.prevRouteName === routeMap.Page && routeMap.KnowledgeBase === routeName)
       );
     }
 
@@ -152,8 +144,7 @@ export default function Menu() {
     if (routes.currentRouteName === routeMap.PageModal) {
       return (
         routeMap.KnowledgeBase === routeName &&
-        (routes.prevRouteName === routeMap.Article ||
-          routes.prevRouteName === routeMap.Page)
+        (routes.prevRouteName === routeMap.Article || routes.prevRouteName === routeMap.Page)
       );
     }
 
@@ -190,9 +181,7 @@ export default function Menu() {
   };
 
   const openInbox = () => {
-    const routeName: string = isInboxThreadsEnabled
-      ? routeMap.InboxThreads
-      : routeMap.Inbox;
+    const routeName: string = isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox;
 
     if (canNavigateTo(routeName) && Router[routeName]) {
       Router[routeName]();
@@ -213,13 +202,11 @@ export default function Menu() {
 
   const openKnowledgeBase = () => {
     const isNotArticleView: boolean =
-      routes.currentRouteName !== routeMap.ArticleSingle &&
-      routes.currentRouteName !== routeMap.Article;
+      routes.currentRouteName !== routeMap.ArticleSingle && routes.currentRouteName !== routeMap.Article;
 
     if (canNavigateTo(routeMap.KnowledgeBase)) {
       const articleLastVisited = getStorageState().articleLastVisited;
-      const article: Article | null | undefined =
-        articleLastVisited && articleLastVisited.article;
+      const article: Article | null = articleLastVisited?.article || null;
 
       if (article && isNotArticleView && !splitView) {
         Router.ArticleSingle({
@@ -238,20 +225,11 @@ export default function Menu() {
   };
 
   const color = (routeName: string) => {
-    return isChangingAccount
-      ? styles.disabled.color
-      : isActiveRoute(routeName)
-      ? styles.link.color
-      : styles.icon.color;
+    return isChangingAccount ? styles.disabled.color : isActiveRoute(routeName) ? styles.link.color : styles.icon.color;
   };
 
   return (
-    <AnimatedView
-      useNativeDriver
-      duration={300}
-      animation="fadeIn"
-      testID="menu"
-    >
+    <AnimatedView useNativeDriver duration={300} animation="fadeIn" testID="menu">
       <View style={styles.menuProgressContainer}>
         <Progress.Bar
           animated={true}
@@ -267,19 +245,22 @@ export default function Menu() {
         />
       </View>
       <View style={styles.menu}>
-        <MenuItem
-          testID="test:id/menuIssues"
-          icon={
-            <IconIssues
-              // @ts-ignore - for testing purposes
-              isActive={isActiveRoute(routeMap.Issues)}
-              width={24}
-              height={24}
-              color={color(routeMap.Issues)}
-            />
-          }
-          onPress={openIssueList}
-        />
+        {!isReporter && (
+          <MenuItem
+            testID="test:id/menuIssues"
+            icon={
+              <IconIssues
+                testID="test:id/menuIssuesIcon"
+                // @ts-ignore - for testing purposes
+                isActive={isActiveRoute(routeMap.Issues)}
+                width={24}
+                height={24}
+                color={color(routeMap.Issues)}
+              />
+            }
+            onPress={openIssueList}
+          />
+        )}
 
         <MenuItem
           disabled={!isHelpdeskFeatureEnabled || !isHelpdeskEnabled}
@@ -288,57 +269,43 @@ export default function Menu() {
           onPress={openTickets}
         />
 
-        <MenuItem
-          testID="test:id/menuAgile"
-          icon={<IconAgile width={23} height={23} color={color(routeMap.AgileBoard)} />}
-          onPress={openAgileBoard}
-        />
+        {!isReporter && (
+          <MenuItem
+            testID="test:id/menuAgile"
+            icon={<IconAgile width={23} height={23} color={color(routeMap.AgileBoard)} />}
+            onPress={openAgileBoard}
+          />
+        )}
 
-        <MenuItem
-          disabled={!isInboxEnabled && !isInboxThreadsEnabled}
-          testID="test:id/menuNotifications"
-          icon={
-            <View>
-              <IconNotifications
-                width={23}
-                height={23}
-                color={color(
-                  isInboxThreadsEnabled
-                    ? routeMap.InboxThreads
-                    : routeMap.Inbox,
-                )}
-              />
-              {isInboxThreadsEnabled &&
-                hasNewNotifications &&
-                !isActiveRoute(
-                  isInboxThreadsEnabled
-                    ? routeMap.InboxThreads
-                    : routeMap.Inbox,
-                ) && (
-                  <AnimatedView
-                    useNativeDriver
-                    duration={1000}
-                    animation="fadeIn"
-                    style={styles.circleIcon}
-                  >
-                    <IconCircle size={8} color={styles.link.color} />
-                  </AnimatedView>
-                )}
-            </View>
-          }
-          onPress={openInbox}
-        />
+        {!isReporter && (
+          <MenuItem
+            disabled={!isInboxEnabled && !isInboxThreadsEnabled}
+            testID="test:id/menuNotifications"
+            icon={
+              <View>
+                <IconNotifications
+                  width={23}
+                  height={23}
+                  color={color(isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox)}
+                />
+                {isInboxThreadsEnabled &&
+                  !isReporter &&
+                  hasNewNotifications &&
+                  !isActiveRoute(isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox) && (
+                    <AnimatedView useNativeDriver duration={1000} animation="fadeIn" style={styles.circleIcon}>
+                      <IconCircle size={8} color={styles.link.color} />
+                    </AnimatedView>
+                  )}
+              </View>
+            }
+            onPress={openInbox}
+          />
+        )}
 
         <MenuItem
           disabled={!isKBEnabled}
           testID="test:id/menuKnowledgeBase"
-          icon={
-            <IconKnowledgeBase
-              width={25}
-              height={25}
-              color={color(routeMap.KnowledgeBase)}
-            />
-          }
+          icon={<IconKnowledgeBase width={25} height={25} color={color(routeMap.KnowledgeBase)} />}
           onPress={openKnowledgeBase}
         />
 
