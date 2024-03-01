@@ -224,7 +224,7 @@ const composeSearchQuery = (): ReduxAction<Promise<string>> => async (
     query = `${query} ${createQueryFromFiltersSetting(filtersSettings)}`;
   }
   if (isHelpdeskMode) {
-    query = `${query} ${issueList.helpdeskSearchContext.query}`;
+    query = `${query} ${issueList.helpdeskSearchContext?.query || ''}`;
   }
   return query.trim().replace(whiteSpacesRegex, ' ');
 };

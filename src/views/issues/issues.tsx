@@ -160,14 +160,14 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         options: Record<string, any>,
       ) => {
         if (
-          prevRouteName === routeMap.Issues &&
-          routeName !== routeMap.Issues
+          (prevRouteName === routeMap.Issues || prevRouteName === routeMap.Tickets) &&
+          (routeName !== routeMap.Issues || prevRouteName !== routeMap.Tickets)
         ) {
           requestController.cancelIssuesRequests();
         }
 
         if (
-          routeName === routeMap.Issues &&
+          (routeName === routeMap.Issues || routeName === routeMap.Tickets) &&
           prevRouteName === routeMap.Issue &&
           options?.issueId
         ) {
@@ -398,6 +398,10 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     return this.props.searchContext;
   }
 
+  isReporter(): boolean {
+    return this.props.user.profiles.helpdesk.isReporter;
+  }
+
   renderContextButton = () => {
     const {
       isRefreshing,
@@ -549,7 +553,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         <View style={styles.searchPanel}>
           {this.state.isEditQuery ? this.renderSearchQueryAssist() : this.renderSearchQueryPreview()}
         </View>
-        {this.isFilterSearchMode() && <IssuesFilters/>}
+        {!this.isReporter() && this.isFilterSearchMode() && <IssuesFilters/>}
       </>
     );
   }
@@ -595,9 +599,9 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     return isLoadingMore ? this.renderSkeleton() : this.renderError();
   };
 
-  renderIssueList(): React.ReactNode {
+  renderIssueList() {
     const {issues, isRefreshing} = this.props;
-    const contextButton = this.renderContextButton();
+    const contextButton = this.isReporter() ? <View style={styles.searchContext}/> : this.renderContextButton();
     const searchPanel: React.ReactNode = <>
       {this.renderSearchPanel()}
       {this.renderToolbar()}
@@ -616,7 +620,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     const listData = [
       contextButton,
       searchPanel,
-    ].concat((issues || []) as any);
+    ].filter(Boolean).concat((issues || []) as any);
     return (
       <FlatList
         style={styles.list}

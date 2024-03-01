@@ -50,6 +50,7 @@ const IssuesListSettings = ({
   const searchContext = useSelector((state: AppState) => state.issueList.searchContext);
   const settings = useSelector((state: AppState) => state.issueList.settings);
   const user: User = useSelector((state: AppState) => state.app.user) as User;
+  const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles.helpdesk.isReporter);
 
   const isQueryMode: boolean = settings.search.mode === issuesSearchSettingMode.query;
   const doChangeSettings = (issuesSettings: IssuesSettings) => {
@@ -61,73 +62,78 @@ const IssuesListSettings = ({
       <BottomSheetModal
         style={styles.settingsModal}
         withHandle={true}
-        height={Dimensions.get('window').height - 100}
+        height={isReporter ? 220 : Dimensions.get('window').height - 100}
         snapPoint={450}
         isVisible={true}
         onClose={() => toggleVisibility(false)}
       >
         <>
-          <View style={styles.settingsItem}>
-            <Text style={styles.settingsItemTitle}>{i18n('Search Input Mode')}</Text>
-            {issuesSettingsSearch.map((it: IssuesSetting | IssuesSettingSearch, index: number) => {
-              return (
-                <TouchableOpacity
-                  disabled={it.mode === settings.search.mode}
-                  testID="test:id/issuesSettingsSearchButton"
-                  key={`issueSetting${index}`}
-                  accessible={false}
-                  style={styles.settingsRow}
-                  onPress={() => {
-                    doChangeSettings({...settings, search: it});
-                  }}
-                >
-                  <Text
-                    style={styles.settingsItemText}
-                    testID="test:id/issuesSettingsSearchButtonText"
-                    accessible={true}
-                  >{it.label}</Text>
-                  {it.mode === settings.search.mode && <IconCheck
-                    size={20}
-                    color={styles.link.color}
-                  />}
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-          <View style={styles.settingsSeparator}/>
-          <View style={styles.settingsItem}>
-            <Text style={styles.settingsItemTitle}>
-              {isQueryMode && i18n('Sort Order')}
-              {!isQueryMode && i18n('Filter Settings')}
-            </Text>
-            {isQueryMode ? (
-              <IssuesSortBy
-                onOpen={() => toggleVisibility(false)}
-                context={searchContext}
-                onApply={(q: string) => onQueryUpdate(q)}
-                query={query}
-              />
-            ) : (
-              <IssuesFiltersSetting
-                onApply={async (visibleFilters: string[]) => {
-                  await dispatch(
-                    receiveUserAppearanceProfile({
-                      ...user?.profiles?.appearance,
-                      liteUiFilters: visibleFilters,
-                    })
-                  );
-                  if (visibleFilters.length === 0) {
-                    doChangeSettings({...settings, search: issuesSettingsSearch[0]});
-                  } else {
-                    await dispatch(setFilters());
-                  }
-                }}
-                onOpen={() => toggleVisibility(false)}
-                user={user}
-              />
-            )}
-          </View>
-          <View style={styles.settingsSeparator}/>
+          {!isReporter && (
+            <View style={styles.settingsItem}>
+              <Text style={styles.settingsItemTitle}>{i18n('Search Input Mode')}</Text>
+              {issuesSettingsSearch.map((it: IssuesSetting | IssuesSettingSearch, index: number) => {
+                return (
+                  <TouchableOpacity
+                    disabled={it.mode === settings.search.mode}
+                    testID="test:id/issuesSettingsSearchButton"
+                    key={`issueSetting${index}`}
+                    accessible={false}
+                    style={styles.settingsRow}
+                    onPress={() => {
+                      doChangeSettings({...settings, search: it});
+                    }}
+                  >
+                    <Text
+                      style={styles.settingsItemText}
+                      testID="test:id/issuesSettingsSearchButtonText"
+                      accessible={true}
+                    >
+                      {it.label}
+                    </Text>
+                    {it.mode === settings.search.mode && <IconCheck size={20} color={styles.link.color} />}
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          )}
+          {!isReporter &&
+            <>
+              <View style={styles.settingsSeparator} />
+              <View style={styles.settingsItem}>
+                <Text style={styles.settingsItemTitle}>
+                  {isQueryMode && i18n('Sort Order')}
+                  {!isQueryMode && i18n('Filter Settings')}
+                </Text>
+                {isQueryMode ? (
+                  <IssuesSortBy
+                    onOpen={() => toggleVisibility(false)}
+                    context={searchContext}
+                    onApply={(q: string) => onQueryUpdate(q)}
+                    query={query}
+                  />
+                ) : (
+                  <IssuesFiltersSetting
+                    onApply={async (visibleFilters: string[]) => {
+                      await dispatch(
+                        receiveUserAppearanceProfile({
+                          ...user?.profiles?.appearance,
+                          liteUiFilters: visibleFilters,
+                        })
+                      );
+                      if (visibleFilters.length === 0) {
+                        doChangeSettings({...settings, search: issuesSettingsSearch[0]});
+                      } else {
+                        await dispatch(setFilters());
+                      }
+                    }}
+                    onOpen={() => toggleVisibility(false)}
+                    user={user}
+                  />
+                )}
+              </View>
+              <View style={styles.settingsSeparator} />
+            </>
+          }
           <View style={styles.settingsItem}>
             <Text style={styles.settingsItemTitle}>{i18n('Preview Size')}</Text>
             {issuesSettingsIssueSizes.map((it: IssuesSetting, index: number) => {
@@ -142,18 +148,11 @@ const IssuesListSettings = ({
                     toggleVisibility(false);
                   }}
                 >
-                  <Text
-                    style={styles.settingsItemText}>
-                    {`${it.label} `}
-                  </Text>
-                  {previewModeIsNotChanged && <IconCheck
-                    size={20}
-                    color={styles.link.color}
-                  />}
+                  <Text style={styles.settingsItemText}>{`${it.label} `}</Text>
+                  {previewModeIsNotChanged && <IconCheck size={20} color={styles.link.color} />}
                 </TouchableOpacity>
               );
-            })
-            }
+            })}
           </View>
         </>
       </BottomSheetModal>
