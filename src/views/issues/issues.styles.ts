@@ -50,7 +50,7 @@ export default EStyleSheet.create({
   listActionsItem: {
     height: UNIT * 4,
     width: UNIT * 4,
-    marginLeft: UNIT * 2,
+    marginLeft: UNIT,
     paddingRight: 2.5,
     alignItems: 'flex-end',
     justifyContent: 'center',

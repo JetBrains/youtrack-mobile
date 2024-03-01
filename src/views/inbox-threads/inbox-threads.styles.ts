@@ -117,6 +117,7 @@ export default EStyleSheet.create({
   },
   threadItemActionWithSettings: {
     top: UNIT * 5,
+    marginRight: UNIT / 2,
   },
   threadMuteToggle: {
     padding: UNIT / 2,

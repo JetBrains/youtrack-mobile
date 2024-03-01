@@ -90,6 +90,9 @@ export default EStyleSheet.create({
   link: {
     color: '$link',
   },
+  icon: {
+    color: '$iconAction',
+  },
   applyButton: {
     padding: UNIT / 4,
     paddingRight: 0,

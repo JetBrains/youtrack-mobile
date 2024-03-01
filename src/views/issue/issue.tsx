@@ -378,7 +378,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     const {issue, issuePermissions, toggleVote} = this.props;
     return (
       <IssueVotes
-        size={21}
+        size={23}
         canVote={issuePermissions.canVote(issue)}
         votes={issue?.votes}
         voted={issue?.voters?.hasVote}
@@ -394,7 +394,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     if (issue && this.isIssueLoaded()) {
       return (
         <Star
-          size={21}
+          size={23}
           style={styles.issueStar}
           canStar={this.canStar()}
           hasStar={issue.watchers?.hasStar}

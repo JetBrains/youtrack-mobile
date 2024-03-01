@@ -1,6 +1,6 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {secondaryText, UNIT} from 'components/common-styles';
+import {MAIN_FONT_SIZE, mainText, UNIT} from 'components/common-styles';
 
 export default EStyleSheet.create({
   button: {
@@ -9,12 +9,13 @@ export default EStyleSheet.create({
     justifyContent: 'flex-end',
   },
   counter: {
-    marginBottom: -1,
+    marginBottom: -2,
     marginRight: UNIT / 4,
   },
   counterText: {
-    ...secondaryText,
+    ...mainText,
     fontWeight: '500',
+    fontSize: MAIN_FONT_SIZE,
     color: '$icon',
   },
   iconDisabled: {

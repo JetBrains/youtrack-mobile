@@ -7,6 +7,7 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import ArrowLeft from '@jetbrains/icons/arrow-20px-left.svg';
+import Attachment from '@jetbrains/icons/attachment-20px.svg';
 import Checkmark from 'components/icon/assets/checkmark.svg';
 import ChevronLeft from 'components/icon/assets/shevron_left.svg';
 import ChevronSmallDown from 'components/icon/assets/shevron_small_down.svg';
@@ -14,9 +15,11 @@ import ChevronSmallUp from 'components/icon/assets/shevron_small_up.svg';
 import Comment from 'components/icon/assets/comment.svg';
 import Drag from '@jetbrains/icons/drag-20px.svg';
 import History from 'components/icon/assets/history.svg';
+import Link from '@jetbrains/icons/link-20px.svg';
 import Lock from 'components/icon/assets/lock.svg';
 import More from 'components/icon/assets/more.svg';
 import Plus from 'components/icon/assets/plus.svg';
+import Tag from '@jetbrains/icons/tag-20px.svg';
 import Time from 'components/icon/assets/time.svg';
 import Vcs from 'components/icon/assets/vcs.svg';
 import Vote from 'components/icon/assets/vote.svg';
@@ -216,7 +219,7 @@ const createSVGProps = (
 
 export const IconLock = (props: Props) => <Lock {...createSVGProps(props, 16)} />;
 
-export const IconAdd = (props: Props, style: IconStyle) => <Plus {...createSVGProps(props, 26, style)} />;
+export const IconAdd = (props: Props, style: IconStyle) => <Plus {...createSVGProps(props, 27, style)} />;
 
 export const IconAngleDown = (props: Props) => <ChevronSmallDown {...createSVGProps(props, 18)} />;
 
@@ -227,9 +230,9 @@ export const IconChevronDownUp = (props: Props & {isDown?: boolean}) => {
 };
 
 export const IconBack = (props: Props) =>
-  isAndroid ? <ArrowLeft {...createSVGProps(props, 23)} /> : <ChevronLeft {...createSVGProps(props, 25)} />;
+  isAndroid ? <ArrowLeft {...createSVGProps(props, 25)} /> : <ChevronLeft {...createSVGProps(props, 25)} />;
 
-export const IconCheck = (props: Props) => <Checkmark {...createSVGProps(props, 24)} />;
+export const IconCheck = (props: Props) => <Checkmark {...createSVGProps(props, 25)} />;
 
 export const IconClose = (props: Props) => IconAdd(props, rotate45);
 
@@ -240,10 +243,16 @@ export const IconHistory = (props: Props) => <History {...createSVGProps(props, 
 export const IconHourGlass = (props: Props) => <Time {...createSVGProps(props, 24)} />;
 
 export const IconMoreOptions = (props: Props) =>
-  <More {...createSVGProps(props, 19, isAndroid ? styles.iconMoreOptionsAndroid : [])} />;
+  <More {...createSVGProps(props, isAndroid ? 20 : 19, isAndroid ? styles.iconMoreOptionsAndroid : [])} />;
 
 export const EllipsisVertical = (props: Props) => <Drag {...createSVGProps(props, 18)} />;
 
 export const IconVcs = (props: Props) => <Vcs {...createSVGProps(props, 24)} />;
 
 export const IconVote = (props: Props) => <Vote {...createSVGProps(props, 19)} />;
+
+export const IconLink = (props: Props) => <Link {...createSVGProps(props, 20)} />;
+
+export const IconTag = (props: Props) => <Tag {...createSVGProps(props, 20)} />;
+
+export const IconAttachment = (props: Props) => <Attachment {...createSVGProps(props, 21)} />;

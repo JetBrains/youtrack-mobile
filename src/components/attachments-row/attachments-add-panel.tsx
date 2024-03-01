@@ -1,17 +1,22 @@
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
-import IconAttachment from '@jetbrains/icons/attachment.svg';
-import {i18n} from 'components/i18n/i18n';
+
 import {View} from 'react-native-animatable';
+
+import {IconAttachment} from 'components/icon/icon';
+import {i18n} from 'components/i18n/i18n';
+
 import styles from './attachment-add-panel.styles';
+
 import type {ViewStyleProp} from 'types/Internal';
-type Props = {
+
+interface Props {
   isDisabled?: boolean;
   showAddAttachDialog: () => any;
   style?: ViewStyleProp;
-};
+}
 
-const AttachmentAddPanel = (props: Props): JSX.Element => {
+const AttachmentAddPanel = (props: Props) => {
   return (
     <View style={[styles.attachButtonsContainer, props.style]}>
       <TouchableOpacity
@@ -23,9 +28,7 @@ const AttachmentAddPanel = (props: Props): JSX.Element => {
         onPress={props.showAddAttachDialog}
       >
         <IconAttachment
-          width={23}
-          height={23}
-          fill={
+          color={
             props.isDisabled
               ? styles.attachButtonTextDisabled.color
               : styles.attachButtonText.color

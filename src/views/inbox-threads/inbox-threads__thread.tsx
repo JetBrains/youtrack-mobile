@@ -29,6 +29,7 @@ import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
 import InboxThreadReadToggleButton from 'views/inbox-threads/inbox-threads__read-toggle-button';
 import SwipeableRow from 'components/swipeable/swipeable-row';
+import {ReduxThunkDispatch} from 'types/Redux';
 
 type Props = {
   currentUser: User;
@@ -53,7 +54,7 @@ function Thread({
   const {showActionSheetWithOptions} = useActionSheet();
   const isOnline: boolean = useSelector((state: AppState) => !!state.app.networkState?.isConnected);
 
-  const dispatch = useDispatch();
+  const dispatch: ReduxThunkDispatch = useDispatch();
   const [_thread, updateThread]: [
     InboxThread,
     (...args: any[]) => any,

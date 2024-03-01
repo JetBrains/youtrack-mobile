@@ -8,7 +8,6 @@ export const rotate45 = {
 };
 export default EStyleSheet.create({
   iconMoreOptionsAndroid: {
-    marginRight: -UNIT,
     paddingHorizontal: UNIT / 2,
     transform: [{rotate: '-90deg'}],
   },

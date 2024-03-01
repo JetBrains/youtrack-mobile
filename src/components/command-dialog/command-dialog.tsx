@@ -1,3 +1,4 @@
+import React, {Component} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -6,40 +7,48 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import React, {Component} from 'react';
+
 import debounce from 'lodash.debounce';
-import ApiHelper from '../api/api__helper';
+
+import ApiHelper from 'components/api/api__helper';
 import KeyboardSpacerIOS from '../platform/keyboard-spacer.ios';
-import ModalPortal from '../modal-view/modal-portal';
-import ModalView from '../modal-view/modal-view';
-import SelectItem from '../select/select__item';
-import {i18n} from 'components/i18n/i18n';
+import ModalPortal from 'components/modal-view/modal-portal';
+import ModalView from 'components/modal-view/modal-view';
+import SelectItem from 'components/select/select__item';
 import {guid} from 'util/util';
-import {IconBack, IconCheck} from '../icon/icon';
+import {i18n} from 'components/i18n/i18n';
+import {IconBack, IconCheck} from 'components/icon/icon';
+
 import styles from './command-dialog.styles';
+
 import type {
   CommandSuggestionResponse,
   CommandSuggestion,
   SuggestedCommand,
 } from 'types/Issue';
+
 import type {UITheme} from 'types/Theme';
-type Props = {
+
+interface Props {
   suggestions: CommandSuggestionResponse | null | undefined;
   initialCommand: string;
   onApply: (command: string) => any;
   onChange: (command: string, caret: number) => any;
   isApplying: boolean;
-  onCancel: (...args: any[]) => any;
+  onCancel: () => unknown;
   uiTheme: UITheme;
-};
-type State = {
+}
+
+interface State {
   displayCancelSearch: boolean;
   input: string;
   caret: number;
-};
-type DefaultProps = {
+}
+
+interface DefaultProps {
   onChange: (...args: any[]) => any;
-};
+}
+
 export default class CommandDialog extends Component<Props, State> {
   static defaultProps: DefaultProps = {
     onChange: () => {},
@@ -56,7 +65,7 @@ export default class CommandDialog extends Component<Props, State> {
     command: null,
     caret: 0,
   };
-  onSearch: any = debounce((command: string, caret: number) => {
+  onSearch = debounce((command: string, caret: number) => {
     if (
       this.lastUsedParams.command === command &&
       this.lastUsedParams.caret === caret
@@ -88,9 +97,7 @@ export default class CommandDialog extends Component<Props, State> {
     this.onSearch(initialCommand, initialCommand.length);
   }
 
-  onApplySuggestion: (suggestion: CommandSuggestion) => void = (
-    suggestion: CommandSuggestion,
-  ) => {
+  onApplySuggestion = (suggestion: CommandSuggestion) => {
     const suggestionText = `${suggestion.prefix || ''}${suggestion.option}${
       suggestion.suffix || ''
     }`;
@@ -104,7 +111,7 @@ export default class CommandDialog extends Component<Props, State> {
     });
     this.onSearch(newQuery, suggestion.caret);
   };
-  onApply: () => void = () => {
+  onApply = () => {
     this.props.onApply(this.state.input);
   };
 
@@ -215,7 +222,7 @@ export default class CommandDialog extends Component<Props, State> {
     );
   }
 
-  renderContent(): React.ReactNode {
+  renderContent() {
     const {isApplying, uiTheme} = this.props;
     const canApply = this.canApplyCommand();
     return (
@@ -227,7 +234,7 @@ export default class CommandDialog extends Component<Props, State> {
             accessible={true}
             onPress={this.props.onCancel}
           >
-            <IconBack size={28} />
+            <IconBack />
           </TouchableOpacity>
 
           {this._renderInput()}
@@ -244,7 +251,6 @@ export default class CommandDialog extends Component<Props, State> {
               <ActivityIndicator color={uiTheme.colors.$link} />
             ) : (
               <IconCheck
-                size={20}
                 color={
                   canApply ? uiTheme.colors.$link : uiTheme.colors.$disabled
                 }
@@ -262,13 +268,13 @@ export default class CommandDialog extends Component<Props, State> {
     );
   }
 
-  render(): React.ReactNode {
+  render() {
     return <ModalView>{this.renderContent()}</ModalView>;
   }
 }
 
 export class CommandDialogModal extends CommandDialog {
-  render(): React.ReactNode {
+  render() {
     return (
       <ModalPortal onHide={this.props.onCancel}>
         {this.renderContent()}

@@ -128,7 +128,7 @@ export interface InboxThreadGroup {
 }
 export type ThreadData = {
   entity: Entity;
-  component: JSX.Element;
+  component: unknown;
   entityAtBottom?: boolean;
 };
 export interface InboxFolder {
