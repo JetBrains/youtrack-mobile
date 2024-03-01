@@ -178,8 +178,8 @@ export default EStyleSheet.create({
   },
   tabTitleIconUnread: {
     position: 'absolute',
-    top: UNIT - 1,
-    right: -UNIT / 2,
+    top: UNIT / 4,
+    right: -UNIT / 4,
   },
   threadUpdateButtonContainer: {
     zIndex: 1,
