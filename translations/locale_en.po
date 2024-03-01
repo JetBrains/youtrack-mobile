@@ -32,7 +32,7 @@ msgid_plural "{{amount}} articles"
 msgstr[0] "{{amount}} article"
 msgstr[1] "{{amount}} articles"
 
-#: src/views/create-issue/create-issue.tsx:399
+#: src/views/create-issue/create-issue.tsx:397
 msgid "{{amount}} draft"
 msgid_plural "{{amount}} drafts"
 msgstr[0] "{{amount}} draft"
@@ -102,7 +102,7 @@ msgstr "Add reaction"
 msgid "Add spent time"
 msgstr "Add spent time"
 
-#: src/components/tags/tag-add-panel.tsx:39
+#: src/components/tags/tag-add-panel.tsx:40
 #: src/views/issue/issue-base-actions-creater.ts:579
 msgid "Add tag"
 msgstr "Add tag"
@@ -172,7 +172,7 @@ msgid "Attach file"
 msgstr "Attach file"
 
 #: src/components/attach-file/attach-file-dialog.tsx:233
-#: src/components/attachments-row/attachments-add-panel.tsx:40
+#: src/components/attachments-row/attachments-add-panel.tsx:43
 msgid "Attach files"
 msgstr "Attach files"
 
@@ -216,7 +216,7 @@ msgstr "Camera"
 #: src/views/article/arcticle-actions.ts:326
 #: src/views/article/arcticle-actions.ts:696
 #: src/views/create-issue/create-issue-actions.ts:571
-#: src/views/inbox-threads/inbox-threads__thread.tsx:198
+#: src/views/inbox-threads/inbox-threads__thread.tsx:199
 #: src/views/inbox-threads/inbox-threads.tsx:278
 #: src/views/issue/activity/issue-activity__comment-actions.ts:342
 #: src/views/issue/issue-base-actions-creater.ts:636
@@ -486,7 +486,7 @@ msgstr "Email"
 msgid "Email address for follow-up"
 msgstr "Email address for follow-up"
 
-#: src/components/command-dialog/command-dialog.tsx:129
+#: src/components/command-dialog/command-dialog.tsx:136
 msgid "Enter command"
 msgstr "Enter command"
 
@@ -529,7 +529,7 @@ msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
 #: src/views/issues/issues__filters-settings__list.tsx:170
-#: src/views/issues/issues__settings.tsx:101
+#: src/views/issues/issues__settings.tsx:105
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
@@ -555,7 +555,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:581
+#: src/views/issues/issues.tsx:585
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -645,7 +645,7 @@ msgid "Light theme"
 msgstr "Light theme"
 
 #: src/components/linked-issues/linked-issues-add-link.tsx:247
-#: src/views/create-issue/create-issue.tsx:372
+#: src/views/create-issue/create-issue.tsx:370
 #: src/views/issue/issue-base-actions-creater.ts:600
 msgid "Link issue"
 msgstr "Link issue"
@@ -688,13 +688,13 @@ msgstr "Manage Favorite Projects"
 msgid "Mark all as read"
 msgstr "Mark all as read"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx:164
-#: src/views/inbox-threads/inbox-threads__thread.tsx:193
+#: src/views/inbox-threads/inbox-threads__thread.tsx:165
+#: src/views/inbox-threads/inbox-threads__thread.tsx:194
 msgid "Mark as read"
 msgstr "Mark as read"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx:161
-#: src/views/inbox-threads/inbox-threads__thread.tsx:193
+#: src/views/inbox-threads/inbox-threads__thread.tsx:162
+#: src/views/inbox-threads/inbox-threads__thread.tsx:194
 msgid "Mark as unread"
 msgstr "Mark as unread"
 
@@ -731,7 +731,7 @@ msgstr "Mentions & Reactions"
 msgid "merged the pull request"
 msgstr "merged the pull request"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx:181
+#: src/views/inbox-threads/inbox-threads__thread.tsx:182
 msgid "Mute thread"
 msgstr "Mute thread"
 
@@ -739,7 +739,7 @@ msgstr "Mute thread"
 msgid "New Article"
 msgstr "New Article"
 
-#: src/views/create-issue/create-issue.tsx:449
+#: src/views/create-issue/create-issue.tsx:447
 msgid "New Issue"
 msgstr "New Issue"
 
@@ -771,7 +771,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:631
+#: src/views/issues/issues.tsx:635
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -824,7 +824,7 @@ msgstr "Paused"
 msgid "Photo and video library"
 msgstr "Photo and video library"
 
-#: src/views/issues/issues__settings.tsx:132
+#: src/views/issues/issues__settings.tsx:138
 msgid "Preview Size"
 msgstr "Preview Size"
 
@@ -923,7 +923,7 @@ msgstr "Search for a different value"
 msgid "Search for the project"
 msgstr "Search for the project"
 
-#: src/views/issues/issues__settings.tsx:71
+#: src/views/issues/issues__settings.tsx:73
 msgid "Search Input Mode"
 msgstr "Search Input Mode"
 
@@ -932,7 +932,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:696
+#: src/views/issues/issues.tsx:700
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -1021,7 +1021,7 @@ msgstr "Something went wrong"
 msgid "Sort Attributes"
 msgstr "Sort Attributes"
 
-#: src/views/issues/issues__settings.tsx:100
+#: src/views/issues/issues__settings.tsx:104
 msgid "Sort Order"
 msgstr "Sort Order"
 
@@ -1207,7 +1207,7 @@ msgstr "Type"
 msgid "Uncategorized Cards"
 msgstr "Uncategorized Cards"
 
-#: src/views/inbox-threads/inbox-threads__thread.tsx:181
+#: src/views/inbox-threads/inbox-threads__thread.tsx:182
 msgid "Unmute thread"
 msgstr "Unmute thread"
 
