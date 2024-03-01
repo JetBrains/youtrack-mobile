@@ -44,10 +44,8 @@ import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {
   IconCheck,
   IconClose,
-  IconDrag,
   IconMoreOptions,
 } from 'components/icon/icon';
-import {isIOSPlatform} from 'util/util';
 import {ThemeContext} from 'components/theme/theme-context';
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
 import type {AnyIssue, IssueFull} from 'types/Issue';
@@ -233,13 +231,7 @@ class CreateIssue extends PureComponent<Props, State> {
         }}
       >
         <Text style={styles.iconMore}>
-          {isIOSPlatform() ? (
-            <IconMoreOptions size={18} color={this.getUIThemeColors().$link}/>
-          ) : (
-            <Text>
-              <IconDrag size={18} color={this.getUIThemeColors().$link}/>
-            </Text>
-          )}
+          <IconMoreOptions color={this.getUIThemeColors().$link}/>
         </Text>
       </TouchableOpacity>
     );
@@ -444,7 +436,6 @@ class CreateIssue extends PureComponent<Props, State> {
           ) : (
             <IconCheck
               style={styles.applyButton}
-              size={19}
               color={
                 canCreateIssue && isConnected
                   ? uiThemeColors.$link
@@ -457,7 +448,7 @@ class CreateIssue extends PureComponent<Props, State> {
               <Header
                 title={i18n('New Issue')}
                 showShadow={true}
-                leftButton={<IconClose size={21} color={uiThemeColors.$link}/>}
+                leftButton={<IconClose color={uiThemeColors.$link}/>}
                 onBack={this.onHide}
                 rightButton={rightButton}
                 extraButton={!this.isActionDisabled() ? (

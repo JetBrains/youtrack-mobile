@@ -7,6 +7,7 @@ import {
   headerTitle,
   MAIN_FONT_SIZE,
   mainText,
+  monospace,
   SECONDARY_FONT_SIZE,
   secondaryText,
   UNIT,
@@ -42,14 +43,16 @@ export default EStyleSheet.create({
     justifyContent: 'space-between',
     position: 'absolute',
     top: UNIT,
-    right: UNIT / 2,
+    right: 15,
     height: UNIT * 5,
-    maxWidth: UNIT * 10,
+    maxWidth: UNIT * 12,
   },
   listActionsItem: {
-    height: UNIT * 4.5,
-    width: UNIT * 4.5,
-    alignItems: 'center',
+    height: UNIT * 4,
+    width: UNIT * 4,
+    marginLeft: UNIT * 2,
+    paddingRight: 2.5,
+    alignItems: 'flex-end',
     justifyContent: 'center',
   },
 
@@ -75,7 +78,8 @@ export default EStyleSheet.create({
   priorityWrapper: {
     position: 'relative',
     marginRight: UNIT,
-    width: 20,
+    ...monospace,
+    minWidth: COLOR_FIELD_SIZE,
     ...Platform.select({
       android: {
         marginTop: UNIT / 4,
@@ -235,9 +239,9 @@ export default EStyleSheet.create({
   sortByListItem: {
     ...rowLine,
     justifyContent: 'space-between',
-    paddingVertical: UNIT * 2,
-    paddingLeft: UNIT * 2,
-    paddingRight: UNIT,
+    paddingVertical: UNIT * 1.5,
+    paddingLeft: 11,
+    paddingRight: 5,
   },
   sortByListItemActive: {
     backgroundColor: '$boxBackground',
@@ -250,7 +254,8 @@ export default EStyleSheet.create({
   sortByListItemText: {
     color: '$text',
     ...mainText,
-    paddingLeft: UNIT * 2,
+    textTransform: 'capitalize',
+    paddingLeft: UNIT,
   },
   sortIcon: {
     color: '$iconAccent',

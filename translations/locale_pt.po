@@ -241,10 +241,6 @@ msgstr "Limpar o contexto de pesquisa atual"
 msgid "Close"
 msgstr "Fechar"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx
-msgid "closed the pull request"
-msgstr "fechou a solicitação de pull"
-
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Collapse all"
 msgstr "Recolher tudo"
@@ -386,6 +382,10 @@ msgstr "Data"
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
 msgstr "Recusar"
+
+#: src/components/activity-stream/activity__stream-vcs.tsx
+msgid "declined the pull request"
+msgstr ""
 
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts

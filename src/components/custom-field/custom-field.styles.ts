@@ -1,5 +1,8 @@
 import {Platform} from 'react-native';
+
 import EStyleSheet from 'react-native-extended-stylesheet';
+
+import {COLOR_FIELD_SIZE} from 'components/color-field/color-field';
 import {
   MAIN_FONT_SIZE,
   mainText,
@@ -56,7 +59,7 @@ export default EStyleSheet.create({
     color: '$text',
   },
   colorMarker: {
-    width: UNIT * 2.4,
+    minWidth: COLOR_FIELD_SIZE,
     marginRight: UNIT,
   },
   url: {

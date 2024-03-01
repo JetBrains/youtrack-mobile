@@ -1,8 +1,8 @@
 import React, {PureComponent} from 'react';
 import {Text, Dimensions, View, EventSubscription} from 'react-native';
 
+import IconComment from 'components/icon/assets/comment.svg';
 import {i18n} from 'components/i18n/i18n';
-import {IconComment} from 'components/icon/icon';
 import {isSplitView} from '../responsive/responsive-helper';
 import {TabView, TabBar} from 'react-native-tab-view';
 
@@ -76,7 +76,7 @@ export default class IssueTabbed<P = {}, S = IssueTabbedState> extends PureCompo
     });
   };
 
-  getRouteBadge(isVisible: boolean, children: string | React.ReactNode): any {
+  getRouteBadge(isVisible: boolean, children?: string | React.ReactNode) {
     if (!isVisible) {
       return null;
     }
@@ -84,7 +84,8 @@ export default class IssueTabbed<P = {}, S = IssueTabbedState> extends PureCompo
     return children ? (
       <View style={styles.tabBadge}>
         <IconComment
-          size={17}
+          width={16}
+          height={16}
           color={styles.tabBadgeIcon.color}
           style={styles.tabBadgeIcon}
         />

@@ -152,7 +152,6 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
           title={i18n('Send Feedback')}
           leftButton={
             <IconClose
-              size={21}
               color={
                 isFeedbackFormSending
                   ? uiThemeColors.$disabled

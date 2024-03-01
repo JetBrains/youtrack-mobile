@@ -447,7 +447,6 @@ export default function CustomFieldsPanel(props: Props) {
                 return (
                   <React.Fragment key={field.id || `${field.name}-${index}`}>
                     <CustomField
-                      horizontal={horizontal}
                       field={field}
                       onPress={() => onEditField(field)}
                       active={editingField === field}

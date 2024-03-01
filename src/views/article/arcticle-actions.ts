@@ -395,7 +395,7 @@ export const createArticleDraft = async (
 };
 
 const deleteArticle = (
-  article: Article,
+  article: Article | ArticleDraft,
   onAfterDelete?: () => any,
 ): ((
   dispatch: (arg0: any) => any,
@@ -408,16 +408,16 @@ const deleteArticle = (
     getApi: ApiGetter,
   ) => {
     const api: Api = getApi();
-    const isDraft: boolean = hasType.articleDraft(article);
     logEvent({
       message: 'Delete article',
       analyticsId: ANALYTICS_ARTICLE_PAGE,
     });
     dispatch(setProcessing(true));
+    const articleId = article.id || '';
     const [error] = await until(
-      isDraft
-        ? api.articles.deleteDraft(article.id)
-        : api.articles.deleteArticle(article.id),
+      hasType.articleDraft({$type: article.$type || ''})
+        ? api.articles.deleteDraft(articleId)
+        : api.articles.deleteArticle(articleId),
     );
     dispatch(setProcessing(false));
 

@@ -9,7 +9,10 @@ export default EStyleSheet.create({
     justifyContent: 'flex-end',
   },
   counter: {
-    marginRight: UNIT / 2,
+    marginBottom: -1,
+    marginRight: UNIT / 4,
+  },
+  counterText: {
     ...secondaryText,
     fontWeight: '500',
     color: '$icon',

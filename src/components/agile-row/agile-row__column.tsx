@@ -1,25 +1,30 @@
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
-import {AGILE_TABLET_CARD_WIDTH} from '../agile-common/agile-common';
+
+import IconPlus from 'components/icon/assets/plus.svg';
+import {AGILE_TABLET_CARD_WIDTH} from 'components/agile-common/agile-common';
 import {DropZone} from '../draggable';
-import {IconAdd} from '../icon/icon';
-import {isSplitView} from '../responsive/responsive-helper';
+import {isSplitView} from 'components/responsive/responsive-helper';
+
 import styles from './agile-row.styles';
+
 import type {BoardCell} from 'types/Agile';
-import type {IssueFull} from 'types/Issue';
+import type {IssueOnList} from 'types/Issue';
 import type {UITheme} from 'types/Theme';
-type ColumnProps = {
+
+interface ColumnProps {
   cell: BoardCell;
   onTapCreateIssue?: (cellColumnId: string, cellId: string) => any;
   lastColumn: boolean;
-  renderIssueCard: (issue: IssueFull) => any;
+  renderIssueCard: (issue: IssueOnList) => any;
   uiTheme: UITheme;
   zoomedIn?: boolean;
   columnsLength: number;
-};
+}
+
 export default function AgileRowColumn(props: ColumnProps): React.ReactNode {
   const {cell, uiTheme, zoomedIn, columnsLength} = props;
-  const issues: IssueFull[] = cell.issues || [];
+  const issues = cell.issues || [];
   return (
     <DropZone
       style={[styles.column, props.lastColumn && styles.columnWithoutBorder]}
@@ -39,20 +44,13 @@ export default function AgileRowColumn(props: ColumnProps): React.ReactNode {
         }}
         style={[
           styles.addCardButton,
-          isSplitView() && zoomedIn && columnsLength > 3
-            ? {
-                width: AGILE_TABLET_CARD_WIDTH,
-              }
-            : null,
+          isSplitView() && zoomedIn && columnsLength > 3 ? {width: AGILE_TABLET_CARD_WIDTH} : null,
         ]}
       >
-        <IconAdd
-          color={
-            props.onTapCreateIssue
-              ? uiTheme.colors.$link
-              : uiTheme.colors.$disabled
-          }
-          size={18}
+        <IconPlus
+          color={props.onTapCreateIssue ? uiTheme.colors.$link : uiTheme.colors.$disabled}
+          width={18}
+          height={18}
         />
       </TouchableOpacity>
     </DropZone>

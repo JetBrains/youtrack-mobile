@@ -241,10 +241,6 @@ msgstr "Effacer le contexte de recherche actuel"
 msgid "Close"
 msgstr "Fermer"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx
-msgid "closed the pull request"
-msgstr "a fermé la requête d'extraction"
-
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Collapse all"
 msgstr "Réduire tout"
@@ -386,6 +382,10 @@ msgstr "Date"
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
 msgstr "Refuser"
+
+#: src/components/activity-stream/activity__stream-vcs.tsx
+msgid "declined the pull request"
+msgstr "a refusé la requête d'extraction"
 
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
