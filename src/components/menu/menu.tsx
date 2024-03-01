@@ -5,19 +5,17 @@ import * as Progress from 'react-native-progress';
 import {View as AnimatedView} from 'react-native-animatable';
 import {useDispatch, useSelector} from 'react-redux';
 
-import IconHDTicket from 'components/icon/assets/hdticket.svg';
-import Router from '../router/router';
+import IconHelpdesk from 'components/icon/assets/menu_helpdesk.svg';
+import IconIssues from 'components/icon/assets/menu_issue.svg';
+import IconAgile from 'components/icon/assets/menu_agile.svg';
+import IconNotifications from 'components/icon/assets/menu_notification.svg';
+import IconKnowledgeBase from 'components/icon/assets/menu_kb.svg';
+import IconSettings from 'components/icon/assets/settings.svg';
+import Router from 'components/router/router';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 import {folderIdMap} from 'views/inbox-threads/inbox-threads-helper';
 import {getStorageState} from 'components/storage/storage';
-import {
-  IconBell,
-  IconBoard,
-  IconSettingsTab,
-  IconTask,
-  IconKnowledgeBase,
-  IconCircle,
-} from 'components/icon/icon';
+import {IconCircle} from 'components/icon/icon';
 import {InboxFolder} from 'types/Inbox';
 import {inboxCheckUpdateStatus} from 'actions/app-actions';
 import {isSplitView} from 'components/responsive/responsive-helper';
@@ -271,11 +269,12 @@ export default function Menu() {
         <MenuItem
           testID="test:id/menuIssues"
           icon={
-            <IconTask
+            <IconIssues
               testID="test:id/menuIssuesIcon"
               // @ts-ignore - for testing purposes
               isActive={isActiveRoute(routeMap.Issues)}
-              size={23}
+              width={24}
+              height={24}
               color={color(routeMap.Issues)}
             />
           }
@@ -285,13 +284,13 @@ export default function Menu() {
         <MenuItem
           disabled={!isHelpdeskFeatureEnabled || !isHelpdeskEnabled}
           testID="test:id/menuTickets"
-          icon={<IconHDTicket width={23} height={23} color={color(routeMap.Tickets)} />}
+          icon={<IconHelpdesk width={24} height={24} color={color(routeMap.Tickets)} />}
           onPress={openTickets}
         />
 
         <MenuItem
           testID="test:id/menuAgile"
-          icon={<IconBoard size={27} color={color(routeMap.AgileBoard)} />}
+          icon={<IconAgile width={23} height={23} color={color(routeMap.AgileBoard)} />}
           onPress={openAgileBoard}
         />
 
@@ -300,6 +299,15 @@ export default function Menu() {
           testID="test:id/menuNotifications"
           icon={
             <View>
+              <IconNotifications
+                width={23}
+                height={23}
+                color={color(
+                  isInboxThreadsEnabled
+                    ? routeMap.InboxThreads
+                    : routeMap.Inbox,
+                )}
+              />
               {isInboxThreadsEnabled &&
                 hasNewNotifications &&
                 !isActiveRoute(
@@ -313,17 +321,9 @@ export default function Menu() {
                     animation="fadeIn"
                     style={styles.circleIcon}
                   >
-                    <IconCircle size={10} color={styles.link.color} />
+                    <IconCircle size={8} color={styles.link.color} />
                   </AnimatedView>
                 )}
-              <IconBell
-                size={21}
-                color={color(
-                  isInboxThreadsEnabled
-                    ? routeMap.InboxThreads
-                    : routeMap.Inbox,
-                )}
-              />
             </View>
           }
           onPress={openInbox}
@@ -334,7 +334,8 @@ export default function Menu() {
           testID="test:id/menuKnowledgeBase"
           icon={
             <IconKnowledgeBase
-              size={22}
+              width={25}
+              height={25}
               color={color(routeMap.KnowledgeBase)}
             />
           }
@@ -343,7 +344,7 @@ export default function Menu() {
 
         <MenuItem
           testID="test:id/menuSettings"
-          icon={<IconSettingsTab size={20} color={color(routeMap.Settings)} />}
+          icon={<IconSettings width={23} height={23} color={color(routeMap.Settings)} />}
           onPress={openSettings}
         />
       </View>

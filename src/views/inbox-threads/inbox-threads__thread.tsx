@@ -219,9 +219,7 @@ function Thread({
           }}
           style={styles.threadTitleAction}
         >
-          <IconMoreOptions
-            size={18}
-            color={isOnline ? styles.icon.color : styles.disabled.color}
+          <IconMoreOptions color={isOnline ? styles.icon.color : styles.disabled.color}
           />
         </TouchableOpacity>
       </View>

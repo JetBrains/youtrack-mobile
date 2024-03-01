@@ -257,10 +257,6 @@ msgstr "Очистите текущую область поиска"
 msgid "Close"
 msgstr "Закрыть"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx
-msgid "closed the pull request"
-msgstr "закрыл(а) пул-реквест"
-
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Collapse all"
 msgstr "Свернуть все"
@@ -402,6 +398,10 @@ msgstr "Дата"
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
 msgstr "Отклонить"
+
+#: src/components/activity-stream/activity__stream-vcs.tsx
+msgid "declined the pull request"
+msgstr "отклонил(а) пул-реквест"
 
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts

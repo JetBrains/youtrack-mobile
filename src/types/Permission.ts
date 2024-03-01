@@ -1,14 +1,12 @@
-type Permission = {
-  key: string;
-};
-
 export type CacheItemProject = {
   id: string;
 };
 
 export type PermissionCacheItem = {
-  projects: CacheItemProject[];
+  global: boolean;
+  permission: {
+    key: string;
+  };
   projectIds: string[];
-  global: Boolean;
-  permission: Permission;
+  projects: CacheItemProject[];
 };

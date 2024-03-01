@@ -21,7 +21,7 @@ export function AttachmentPreview(props: Props): React.ReactNode {
   return (
     <View style={styles.container}>
       <Header
-        leftButton={<IconClose size={21} color={styles.link.color} />}
+        leftButton={<IconClose color={styles.link.color} />}
         rightButton={<Text style={styles.link}>{i18n('Browser')}</Text>}
         onRightButtonClick={() => {
           Linking.openURL(url);

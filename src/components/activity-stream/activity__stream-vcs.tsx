@@ -16,7 +16,7 @@ import {
 } from './activity__stream-vcs-helper';
 import {HIT_SLOP} from '../common-styles/button';
 import {i18n, i18nPlural} from 'components/i18n/i18n';
-import {IconCaretDownUp} from 'components/icon/icon';
+import {IconChevronDownUp} from 'components/icon/icon';
 
 import styles from './activity__stream.styles';
 
@@ -66,7 +66,7 @@ const StreamVCS = (props: {activityGroup: ActivityGroup;}) => {
       }
 
       case pullRequestState.DECLINED: {
-        title = i18n('closed the pull request');
+        title = i18n('declined the pull request');
       }
     }
   }
@@ -137,7 +137,7 @@ const StreamVCS = (props: {activityGroup: ActivityGroup;}) => {
               {processors.length > 1 && (
                 <TouchableOpacity hitSlop={HIT_SLOP} onPress={() => updateSourcesVisible(true)}>
                   <Text style={styles.link}>
-                    <IconCaretDownUp
+                    <IconChevronDownUp
                       size={12}
                       isDown={!sourcesVisible}
                       style={styles.vcsSourceButtonIcon}

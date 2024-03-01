@@ -35,8 +35,6 @@ export default EStyleSheet.create({
     color: '$icon',
   },
   searchIcon: {
-    marginTop: UNIT / 2,
-    marginLeft: UNIT / 2,
     color: '$icon',
   },
   clearIcon: {

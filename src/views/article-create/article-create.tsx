@@ -189,7 +189,6 @@ const ArticleCreate = (props: Props) => {
         title={props.isNew ? 'New Article' : 'Draft'}
         leftButton={
           <IconClose
-            size={21}
             color={isProcessing ? uiThemeColors.$disabled : linkColor}
           />
         }
@@ -211,7 +210,6 @@ const ArticleCreate = (props: Props) => {
             )
           ) : (
             <IconCheck
-              size={20}
               color={isSubmitDisabled ? uiThemeColors.$disabled : linkColor}
             />
           )

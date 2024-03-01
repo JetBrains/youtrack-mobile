@@ -241,10 +241,6 @@ msgstr "Aktuellen Suchkontext entfernen"
 msgid "Close"
 msgstr "Schließen"
 
-#: src/components/activity-stream/activity__stream-vcs.tsx
-msgid "closed the pull request"
-msgstr "hat den Pull-Request geschlossen"
-
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Collapse all"
 msgstr "Alle reduzieren"
@@ -386,6 +382,10 @@ msgstr "Datum"
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
 msgstr "Ablehnen"
+
+#: src/components/activity-stream/activity__stream-vcs.tsx
+msgid "declined the pull request"
+msgstr "hat den Pull-Request abgelehnt"
 
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts

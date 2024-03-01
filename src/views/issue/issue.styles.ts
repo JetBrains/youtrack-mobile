@@ -31,8 +31,7 @@ export default EStyleSheet.create({
   headerText: {...headerTitle, color: '$text'},
   headerTextResolved: {...issueIdResolved, color: '$textSecondary'},
   issueStar: {
-    marginLeft: UNIT * 2,
-    marginRight: UNIT * 1.5,
+    marginLeft: UNIT,
   },
   savingIndicator: {
     paddingTop: 4,
@@ -92,7 +91,7 @@ export default EStyleSheet.create({
   issueVote: {
     flexShrink: 0,
     minWidth: UNIT * 8,
-    marginRight: UNIT,
+    marginRight: UNIT * 1.5,
   },
   switchToActivityButton: {
     marginTop: UNIT * 4,
@@ -112,9 +111,9 @@ export default EStyleSheet.create({
     paddingHorizontal: UNIT / 2,
     paddingVertical: UNIT / 4,
   },
-  iconMore: {
-    position: 'absolute',
-    top: -9,
+  issueActions: {
+    padding: UNIT / 2,
+    marginLeft: UNIT * 2,
   },
   link: {
     color: '$link',

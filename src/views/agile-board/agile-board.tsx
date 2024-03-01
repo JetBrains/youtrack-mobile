@@ -21,6 +21,8 @@ import BoardHeader from './board-header';
 import BoardScroller from 'components/board-scroller/board-scroller';
 import CreateIssue from '../create-issue/create-issue';
 import ErrorMessage from 'components/error-message/error-message';
+import IconSearchMinus from 'components/icon/assets/search_munus.svg';
+import IconSearchPlus from 'components/icon/assets/search_plus.svg';
 import IssueModal from '../issue/modal/issue.modal';
 import log from 'components/log/log';
 import ModalPortal from 'components/modal-view/modal-portal';
@@ -37,7 +39,7 @@ import {getScrollableWidth} from 'components/board-scroller/board-scroller__math
 import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
-import {IconException, IconMagnifyZoom} from 'components/icon/icon';
+import {IconException} from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {notify} from 'components/notification/notification';
 import {ReduxThunkDispatch} from 'types/Redux';
@@ -335,13 +337,9 @@ class AgileBoard extends Component<Props, State> {
     const {zoomedIn, stickElement} = this.state;
 
     if (!stickElement.boardHeader && !isLoading && !isLoadingAgile && sprint) {
+      const Icon = zoomedIn ? IconSearchMinus : IconSearchPlus;
       return (
-        <AnimatedView
-          useNativeDriver
-          duration={3000}
-          animation="tada"
-          style={styles.zoomButton}
-        >
+        <AnimatedView useNativeDriver duration={3000} animation="tada" style={styles.zoomButton}>
           <TouchableOpacity
             testID="magnifier-button"
             accessibilityLabel="magnifier-button"
@@ -349,11 +347,7 @@ class AgileBoard extends Component<Props, State> {
             hitSlop={HIT_SLOP}
             onPress={this.toggleZoom}
           >
-            <IconMagnifyZoom
-              zoomedIn={zoomedIn}
-              size={24}
-              color={styles.link.color}
-            />
+            <Icon width={20} height={20} color={styles.link.color} />
           </TouchableOpacity>
         </AnimatedView>
       );

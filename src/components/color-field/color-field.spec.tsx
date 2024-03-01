@@ -59,6 +59,7 @@ describe('<ColorField/>', () => {
       expect(screen.getByText(textMock[0])).toHaveProp('style', [
         styles.text,
         null,
+        null,
         {color: colorForegroundMock},
       ]);
     });
@@ -77,6 +78,26 @@ describe('<ColorField/>', () => {
       expect(screen.getByText(textMock[0])).toHaveProp('style', [
         styles.text,
         {'fontSize': 22},
+        null,
+        {color: colorForegroundMock},
+      ]);
+    });
+
+    it('should have monospace style', () => {
+      doRender({
+        text: textMock,
+        color: {
+          id: '1',
+          foreground: colorForegroundMock,
+          background: colorBackgroundMock,
+        },
+        monospace: true,
+      });
+
+      expect(screen.getByText(textMock[0])).toHaveProp('style', [
+        styles.text,
+        null,
+        {'fontFamily': expect.any(String)},
         {color: colorForegroundMock},
       ]);
     });
@@ -87,13 +108,15 @@ describe('<ColorField/>', () => {
     color,
     fullText,
     style,
+    monospace,
   }: {
     text?: string;
     color?: ColorCoding;
     fullText?: boolean;
     style?: Record<string, string | number>
+    monospace?: boolean,
   }) {
-    return render(<ColorField text={text} color={color} fullText={fullText} style={style}/>);
+    return render(<ColorField monospace={monospace} text={text} color={color} fullText={fullText} style={style}/>);
   }
 
 });

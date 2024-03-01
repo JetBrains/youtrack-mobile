@@ -1,8 +1,8 @@
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
 
+import IconStar from 'components/icon/assets/star.svg';
 import {HIT_SLOP} from 'components/common-styles/button';
-import {IconStar, IconStarOutline} from 'components/icon/icon';
 
 import styles from './star.styles';
 
@@ -10,7 +10,7 @@ type Props = {
   disabled?: boolean;
   canStar: boolean;
   hasStar: boolean;
-  onStarToggle: (starred: boolean) => any;
+  onStarToggle?: (starred: boolean) => any;
   style?: any;
   size?: number;
 };
@@ -32,11 +32,7 @@ const Star = (props: Props): React.JSX.Element | null => {
       style={style}
       onPress={toggle}
     >
-      {hasStar ? (
-        <IconStar size={size} color={styles.link.color}/>
-      ) : (
-        <IconStarOutline size={size} color={styles.inactive.color}/>
-      )}
+      <IconStar width={size} height={size} color={hasStar ? styles.link.color : styles.inactive.color}/>
     </TouchableOpacity>
   );
 };

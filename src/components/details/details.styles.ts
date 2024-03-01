@@ -1,5 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
+
 import {SECONDARY_FONT_SIZE} from 'components/common-styles';
+
 export default EStyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -12,7 +14,7 @@ export default EStyleSheet.create({
     fontSize: SECONDARY_FONT_SIZE,
     color: '$textSecondary',
   },
-  toggle: {
+  buttonText: {
     fontSize: SECONDARY_FONT_SIZE,
     color: '$link',
   },

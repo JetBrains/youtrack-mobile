@@ -98,7 +98,7 @@ export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
           </View>
 
           {isSelected && <View style={styles.itemIconSelected}>
-            <IconCheck size={20} color={styles.link.color}/>
+            <IconCheck size={22} color={styles.link.color}/>
           </View>}
         </TouchableOpacity>
       </AnimatedView>
