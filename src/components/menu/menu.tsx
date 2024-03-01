@@ -26,6 +26,7 @@ import styles from './menu.styles';
 
 import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
+import {ReduxThunkDispatch} from 'types/Redux';
 
 export const menuPollInboxStatusDelay: number = 60 * 1000;
 
@@ -36,7 +37,7 @@ type Routes = {
 
 
 export default function Menu() {
-  const dispatch = useDispatch();
+  const dispatch: ReduxThunkDispatch = useDispatch();
 
   const isHelpdeskEnabled = useSelector((state: AppState) => state.app.globalSettings.helpdeskEnabled);
 
@@ -270,7 +271,6 @@ export default function Menu() {
           testID="test:id/menuIssues"
           icon={
             <IconIssues
-              testID="test:id/menuIssuesIcon"
               // @ts-ignore - for testing purposes
               isActive={isActiveRoute(routeMap.Issues)}
               width={24}
