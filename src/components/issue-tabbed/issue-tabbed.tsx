@@ -84,8 +84,8 @@ export default class IssueTabbed<P = {}, S = IssueTabbedState> extends PureCompo
     return children ? (
       <View style={styles.tabBadge}>
         <IconComment
-          width={16}
-          height={16}
+          width={17}
+          height={17}
           color={styles.tabBadgeIcon.color}
           style={styles.tabBadgeIcon}
         />
