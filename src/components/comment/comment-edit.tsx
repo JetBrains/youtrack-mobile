@@ -10,7 +10,7 @@ import {
 
 import IconAttachment from '@jetbrains/icons/attachment.svg';
 import InputScrollView from 'react-native-input-scroll-view';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
 import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
@@ -46,6 +46,7 @@ import type {NormalizedAttachment} from 'types/Attachment';
 import type {Theme} from 'types/Theme';
 import type {User, UserMentions} from 'types/User';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
+import {AppState} from 'reducers';
 import {IssueFull} from 'types/Issue';
 import {ReduxThunkDispatch} from 'types/Redux';
 
@@ -71,7 +72,6 @@ export interface Props {
   onAttach: (files: NormalizedAttachment[], comment: IssueComment) => Promise<Attachment[]>;
   onCommentChange: (comment: IssueComment, isAttachmentChange?: boolean) => Promise<IssueComment | null>;
   onSubmitComment: (comment: IssueComment) => any;
-  visibility?: Visibility;
   visibilityLabel?: string;
 }
 
@@ -102,6 +102,7 @@ const CommentEdit = (props: Props) => {
   const dispatch: ReduxThunkDispatch = useDispatch();
   const theme: Theme = React.useContext(ThemeContext);
   const attachmentActions: AttachmentActions = getAttachmentActions('issueCommentInput');
+  const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles.helpdesk.isReporter);
 
   const editCommentInput = React.useRef<TextInput | null>(null);
   const editingCommentRef = React.useRef<EditingComment>(EMPTY_COMMENT);
@@ -109,7 +110,7 @@ const CommentEdit = (props: Props) => {
   const [state, updateState] = React.useState<State>({
     attachFileSource: null,
     commentCaret: 0,
-    editingComment: EMPTY_COMMENT,
+    editingComment: {...EMPTY_COMMENT, ...props.editingComment},
     height: UNIT * 4,
     isAttachActionsVisible: false,
     isAttachFileDialogVisible: false,
@@ -143,7 +144,7 @@ const CommentEdit = (props: Props) => {
     (data: EditingComment | Partial<EditingComment> = {}): EditingComment => ({
       ...props.editingComment,
       attachments: state.editingComment.attachments,
-      visibility: state.editingComment.visibility,
+      visibility: state.editingComment.visibility || props.editingComment.visibility,
       usesMarkdown: true,
       ...data,
     }),
@@ -201,18 +202,6 @@ const CommentEdit = (props: Props) => {
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [props.editingComment, setEditingComment]
-  );
-
-  React.useEffect(
-    () => {
-      setEditingComment({
-        ...state.editingComment,
-        ...props.editingComment,
-        visibility: props.visibility || props.editingComment.visibility,
-      });
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [props.visibility]
   );
 
   const focus = (): void => {
@@ -292,7 +281,6 @@ const CommentEdit = (props: Props) => {
   const renderVisibility = () => {
     const toggleSelectVisibility = (isVisibilitySelectVisible: boolean) =>
       changeState({isVisibilitySelectVisible});
-
     return (
       <VisibilityControl
         disabled={!props.canUpdateCommentVisibility}
@@ -489,14 +477,13 @@ const CommentEdit = (props: Props) => {
     return (
       <>
         {!!editingComment.id && props.header}
-        <View
-          style={[
-            styles.commentHeaderContainer,
-            showVisibilityControl ? styles.commentHeaderContainerCreate : null,
-          ]}
-        >
-          {showVisibilityControl && renderVisibility()}
-        </View>
+        {!isReporter &&
+          <View
+            style={[styles.commentHeaderContainer, showVisibilityControl ? styles.commentHeaderContainerCreate : null]}
+          >
+            {showVisibilityControl && renderVisibility()}
+          </View>
+        }
 
         <View style={styles.commentContainer}>
           {(!!props.onAddSpentTime || props.canAttach) && (
@@ -653,7 +640,7 @@ const CommentEdit = (props: Props) => {
           multilineInputStyle={styles.mainText}
         >
           <View style={styles.commentEditContent}>
-            {!state.mentionsVisible && (
+            {!isReporter && !state.mentionsVisible && (
               <View style={styles.commentEditVisibility}>
                 {renderVisibility()}
               </View>
