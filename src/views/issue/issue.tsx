@@ -52,6 +52,7 @@ import type {ScrollData} from 'types/Markdown';
 import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from 'types/Theme';
 import type {User} from 'types/User';
+import {isHelpdeskProject} from 'components/helpdesk';
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
@@ -353,7 +354,9 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     const {issue, issuePermissions} = this.props;
     return {
       canAttach: issuePermissions.canAddAttachmentTo(issue),
-      canEdit: !this.isReporter() && !this.isAgent() && issuePermissions.canUpdateGeneralInfo(issue),
+      canEdit:
+        issuePermissions.canUpdateGeneralInfo(issue) &&
+        !(isHelpdeskProject(issue.project) || issuePermissions.isAgentInProject(issue.project)),
       canApplyCommand: !this.isReporter() && issuePermissions.canRunCommand(issue),
       canTag: issuePermissions.canTag(issue),
       canDeleteIssue: issuePermissions.canDeleteIssue(issue),
