@@ -180,11 +180,12 @@ export default class IssuePermissions {
       return false;
     }
 
+    const helpdeskProject = isHelpdeskProject(entity);
     if (this.isCurrentUser(comment?.author)) {
-      return this.hasPermissionFor(entity, canUpdateCommentPermissionName);
+      return this.hasPermissionFor(entity, canUpdateCommentPermissionName) && !helpdeskProject;
     }
 
-    return this.hasPermissionFor(entity, CAN_UPDATE_NOT_OWN_COMMENT);
+    return this.hasPermissionFor(entity, CAN_UPDATE_NOT_OWN_COMMENT) && !helpdeskProject;
   };
 
   canDeleteNotOwnComment = (issue: Entity): boolean => this.hasPermissionFor(issue, CAN_DELETE_NOT_OWN_COMMENT);
