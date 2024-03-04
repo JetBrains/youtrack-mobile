@@ -352,7 +352,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   createIssueActionsPermissionsMap() {
     const {issue, issuePermissions} = this.props;
     return {
-      canAttach: !this.isReporter() && issuePermissions.canAddAttachmentTo(issue),
+      canAttach: issuePermissions.canAddAttachmentTo(issue),
       canEdit: !this.isReporter() && !this.isAgent() && issuePermissions.canUpdateGeneralInfo(issue),
       canApplyCommand: !this.isReporter() && issuePermissions.canRunCommand(issue),
       canTag: issuePermissions.canTag(issue),

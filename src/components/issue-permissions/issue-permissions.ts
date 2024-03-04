@@ -210,7 +210,8 @@ export default class IssuePermissions {
 
   canDeleteCommentPermanently = (issue: Entity): boolean => this.canDeleteNotOwnComment(issue);
 
-  canAddAttachmentTo = (issue: Entity): boolean => this.hasPermissionFor(issue, CAN_ADD_ATTACHMENT);
+  canAddAttachmentTo = (entity: Entity, allowedInHelpdesk: boolean = false): boolean =>
+    this.hasPermissionFor(entity, CAN_ADD_ATTACHMENT) && (!isHelpdeskProject(entity) || allowedInHelpdesk);
 
   canRemoveAttachment = (entity: Entity): boolean => this.hasPermissionFor(entity, CAN_REMOVE_ATTACHMENT);
 
