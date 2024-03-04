@@ -98,7 +98,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:605
+#: src/components/comment/comment-edit.tsx:592
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -166,7 +166,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:574
+#: src/components/comment/comment-edit.tsx:561
 #: src/views/issue/issue-base-actions-creater.ts:589
 msgid "Attach file"
 msgstr "Attach file"
@@ -474,7 +474,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:622
+#: src/components/comment/comment-edit.tsx:609
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -499,7 +499,7 @@ msgstr "Enter search request"
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr "Enter the web address for a YouTrack installation where you have a registered account"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:221
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:222
 msgid "Enter time value"
 msgstr "Enter time value"
 
@@ -919,7 +919,7 @@ msgstr "Search articles"
 msgid "Search for a different value"
 msgstr "Search for a different value"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:195
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:196
 msgid "Search for the project"
 msgstr "Search for the project"
 
@@ -1302,7 +1302,7 @@ msgstr "Woah, you can't touch this!"
 msgid "Wrap attribute values that contain spaces in braces {like this}."
 msgstr "Wrap attribute values that contain spaces in braces {like this}."
 
-#: src/components/comment/comment-edit.tsx:434
+#: src/components/comment/comment-edit.tsx:422
 #: src/views/issue/activity/activity__add-spent-time.tsx:427
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
