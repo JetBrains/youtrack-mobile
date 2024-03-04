@@ -159,10 +159,6 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return !!this.props.user?.profiles?.helpdesk?.isReporter;
   }
 
-  isAgent(): boolean {
-    return !!this.props.user?.profiles?.helpdesk?.isAgent;
-  }
-
   async loadIssue(issuePlaceholder?: Partial<IssueFull> | null) {
     await this.props.loadIssue(issuePlaceholder);
   }
@@ -391,9 +387,16 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   }
 
-  renderIssueVotes(): React.ReactNode {
+  isHelpdeskTicket() {
+    return !!this.props.issue && isHelpdeskProject(this.props.issue);
+  }
+
+  renderIssueVotes() {
     const {issue, issuePermissions, toggleVote} = this.props;
-    return (
+    if (this.isHelpdeskTicket()) {
+      return null;
+    }
+    return this.isHelpdeskTicket() ? null : (
       <IssueVotes
         size={23}
         canVote={issuePermissions.canVote(issue)}
@@ -405,9 +408,11 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   }
 
-  renderStar = (): React.ReactNode => {
+  renderStar = () => {
     const {issue, toggleStar} = this.props;
-
+    if (this.isHelpdeskTicket()) {
+      return null;
+    }
     if (issue && this.isIssueLoaded()) {
       return (
         <Star
