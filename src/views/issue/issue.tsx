@@ -52,6 +52,7 @@ import type {ScrollData} from 'types/Markdown';
 import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from 'types/Theme';
 import type {User} from 'types/User';
+import {isHelpdeskProject} from 'components/helpdesk';
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
@@ -64,6 +65,7 @@ type AdditionalProps = {
   isTagsSelectVisible: boolean;
   onCommandApply: () => any;
   commentId?: string;
+  user: User;
 };
 
 export type IssueProps = IssueState &
@@ -151,6 +153,14 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
 
   getRouteBadge(route: TabRoute) {
     return super.getRouteBadge(route.title === this.tabRoutes[1].title, this.props?.commentsCounter);
+  }
+
+  isReporter(): boolean {
+    return !!this.props.user?.profiles?.helpdesk?.isReporter;
+  }
+
+  isAgent(): boolean {
+    return !!this.props.user?.profiles?.helpdesk?.isAgent;
   }
 
   async loadIssue(issuePlaceholder?: Partial<IssueFull> | null) {
@@ -340,7 +350,20 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return issue && issuePermissions && issuePermissions.canStar();
   };
 
-  renderActions(): React.ReactNode {
+  createIssueActionsPermissionsMap() {
+    const {issue, issuePermissions} = this.props;
+    return {
+      canAttach: issuePermissions.canAddAttachmentTo(issue),
+      canEdit:
+        issuePermissions.canUpdateGeneralInfo(issue) &&
+        !(isHelpdeskProject(issue.project) || issuePermissions.isAgentInProject(issue.project)),
+      canApplyCommand: !this.isReporter() && issuePermissions.canRunCommand(issue),
+      canTag: issuePermissions.canTag(issue),
+      canDeleteIssue: issuePermissions.canDeleteIssue(issue),
+    };
+  }
+
+  renderActions() {
     if (!this.isIssueLoaded()) {
       return <Skeleton width={24} />;
     }
@@ -356,13 +379,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
           if (this.isIssueLoaded()) {
             showIssueActions(
               this.context.actionSheet(),
-              {
-                canAttach: issuePermissions.canAddAttachmentTo(issue),
-                canEdit: issuePermissions.canUpdateGeneralInfo(issue),
-                canApplyCommand: issuePermissions.canRunCommand(issue),
-                canTag: issuePermissions.canTag(issue),
-                canDeleteIssue: issuePermissions.canDeleteIssue(issue),
-              },
+              this.createIssueActionsPermissionsMap(),
               this.switchToDetailsTab,
               issuePermissions.canLink(issue) ? this.onAddIssueLink : null,
             );
