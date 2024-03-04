@@ -341,7 +341,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         ]}
       >
         <IssueRowComponent
-          helpdeskMode={this.props.helpDeskMode && isHelpdeskProject(item)}
+          helpdeskMode={this.props.helpDeskMode || isHelpdeskProject(item)}
           hideId={hideId}
           settings={settings}
           issue={item}
