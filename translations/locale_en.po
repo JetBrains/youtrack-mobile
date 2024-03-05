@@ -93,8 +93,8 @@ msgstr "Activity Settings"
 msgid "Add project to favorites"
 msgstr "Add project to favorites"
 
-#: src/views/article/article__activity.tsx:194
-#: src/views/issue/activity/issue__activity-stream.tsx:121
+#: src/views/article/article__activity.tsx:195
+#: src/views/issue/activity/issue__activity-stream.tsx:122
 msgid "Add reaction"
 msgstr "Add reaction"
 
@@ -308,26 +308,26 @@ msgstr "Content revised"
 
 #: src/components/user/user-card.tsx:120
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx:158
-#: src/views/article/article__activity.tsx:214
-#: src/views/article/article__activity.tsx:223
-#: src/views/issue/activity/issue__activity-stream.tsx:144
+#: src/views/article/article__activity.tsx:215
+#: src/views/article/article__activity.tsx:224
+#: src/views/issue/activity/issue__activity-stream.tsx:145
 #: src/views/issue/activity/issue-activity__comment-actions.ts:309
 #: src/views/issue/issue-base-actions-creater.ts:562
 #: src/views/issue/issue-base-actions-creater.ts:663
 msgid "Copied"
 msgstr "Copied"
 
-#: src/views/issue/issue__details.tsx:363
+#: src/views/issue/issue__details.tsx:369
 msgid "Copy description"
 msgstr "Copy description"
 
-#: src/views/issue/issue__details.tsx:249
+#: src/views/issue/issue__details.tsx:255
 msgid "Copy field text"
 msgstr "Copy field text"
 
 #: src/views/article/arcticle-actions.ts:669
-#: src/views/article/article__activity.tsx:219
-#: src/views/issue/activity/issue__activity-stream.tsx:150
+#: src/views/article/article__activity.tsx:220
+#: src/views/issue/activity/issue__activity-stream.tsx:151
 #: src/views/issue/activity/issue-activity__comment-actions.ts:313
 #: src/views/issue/issue-base-actions-creater.ts:558
 msgid "Copy link"
@@ -338,8 +338,8 @@ msgstr "Copy link"
 msgid "Copy link to article"
 msgstr "Copy link to article"
 
-#: src/views/article/article__activity.tsx:210
-#: src/views/issue/activity/issue__activity-stream.tsx:140
+#: src/views/article/article__activity.tsx:211
+#: src/views/issue/activity/issue__activity-stream.tsx:141
 #: src/views/issue/activity/issue-activity__comment-actions.ts:305
 #: src/views/issue/issue-base-actions-creater.ts:659
 msgid "Copy text"
@@ -357,7 +357,7 @@ msgstr "Crash report sent"
 msgid "created"
 msgstr "created"
 
-#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx:45
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx:53
 msgid "Created by"
 msgstr "Created by"
 
@@ -384,9 +384,9 @@ msgstr "declined the pull request"
 #: src/components/confirmation/confirmation.ts:5
 #: src/views/article/arcticle-actions.ts:310
 #: src/views/article/arcticle-actions.ts:683
-#: src/views/article/article__activity.tsx:248
+#: src/views/article/article__activity.tsx:249
 #: src/views/create-issue/create-issue-drafts.tsx:39
-#: src/views/issue/activity/issue__activity-stream.tsx:177
+#: src/views/issue/activity/issue__activity-stream.tsx:178
 #: src/views/issue/activity/issue__activity.tsx:274
 #: src/views/issue/activity/issue-activity__actions.ts:279
 #: src/views/issue/activity/issue-activity__comment-actions.ts:273
@@ -466,8 +466,8 @@ msgid "Drafts"
 msgstr "Drafts"
 
 #: src/views/article/arcticle-actions.ts:283
-#: src/views/article/article__activity.tsx:177
-#: src/views/issue/activity/issue__activity-stream.tsx:99
+#: src/views/article/article__activity.tsx:178
+#: src/views/issue/activity/issue__activity-stream.tsx:100
 #: src/views/issue/activity/issue__activity.tsx:263
 #: src/views/issue/activity/issue-activity__comment-actions.ts:323
 #: src/views/issue/issue-base-actions-creater.ts:569
@@ -751,7 +751,7 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.tsx:511
+#: src/components/activity-stream/activity__stream.tsx:514
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -886,8 +886,8 @@ msgstr "removed a reaction"
 msgid "reopened the pull request"
 msgstr "reopened the pull request"
 
-#: src/views/article/article__activity.tsx:186
-#: src/views/issue/activity/issue__activity-stream.tsx:113
+#: src/views/article/article__activity.tsx:187
+#: src/views/issue/activity/issue__activity-stream.tsx:114
 msgid "Reply"
 msgstr "Reply"
 
@@ -973,10 +973,10 @@ msgid "Share"
 msgstr "Share"
 
 #: src/views/article/arcticle-actions.ts:659
-#: src/views/article/article__activity.tsx:228
-#: src/views/article/article__activity.tsx:237
-#: src/views/issue/activity/issue__activity-stream.tsx:160
-#: src/views/issue/activity/issue__activity-stream.tsx:167
+#: src/views/article/article__activity.tsx:229
+#: src/views/article/article__activity.tsx:238
+#: src/views/issue/activity/issue__activity-stream.tsx:161
+#: src/views/issue/activity/issue__activity-stream.tsx:168
 #: src/views/issue/issue-base-actions-creater.ts:549
 msgid "Share link"
 msgstr "Share link"
@@ -1219,8 +1219,8 @@ msgstr "Unread only"
 msgid "Untitled"
 msgstr "Untitled"
 
-#: src/views/article/article__activity.tsx:202
-#: src/views/issue/activity/issue__activity-stream.tsx:132
+#: src/views/article/article__activity.tsx:203
+#: src/views/issue/activity/issue__activity-stream.tsx:133
 msgid "Update visibility"
 msgstr "Update visibility"
 
@@ -1229,7 +1229,7 @@ msgstr "Update visibility"
 msgid "updated"
 msgstr "updated"
 
-#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx:49
+#: src/components/issue-tabbed/issue-tabbed__created-updated.tsx:56
 msgid "Updated by"
 msgstr "Updated by"
 
@@ -1257,7 +1257,7 @@ msgstr "VCS changes"
 msgid "View comment"
 msgstr "View comment"
 
-#: src/views/issue/issue__details.tsx:494
+#: src/views/issue/issue__details.tsx:498
 msgid "View comments and other activity"
 msgstr "View comments and other activity"
 
@@ -1269,7 +1269,7 @@ msgstr "View reported issues"
 msgid "Visibility"
 msgstr "Visibility"
 
-#: src/components/activity-stream/activity__stream.tsx:241
+#: src/components/activity-stream/activity__stream.tsx:242
 #: src/components/visibility/comment-visibility-control.tsx:110
 msgid "Visible to {{presentation}}"
 msgstr "Visible to {{presentation}}"
