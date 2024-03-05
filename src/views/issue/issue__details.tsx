@@ -109,6 +109,8 @@ export interface IssueDetailsProps {
   ) => any;
   modal?: boolean;
   scrollData: ScrollData;
+  isAgent: boolean;
+  isReporter: boolean;
 }
 
 export default class IssueDetails extends Component<IssueDetailsProps, void> {
@@ -213,11 +215,11 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   }
 
   renderAdditionalInfo() {
-    const issue: IssueFull = this.getIssue() as IssueFull;
+    const issue = this.getIssue();
     return issue ? <CreateUpdateInfo
       analyticId={ANALYTICS_ISSUE_PAGE}
       reporter={issue.reporter}
-      updater={issue.updater}
+      updater={this.props.isReporter ? null : issue.updater}
       created={issue.created}
       updated={issue.updated}
     /> : (
@@ -226,11 +228,12 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   }
 
   renderIssueVisibility() {
-    const {onVisibilityChange} = this.props;
-    const issue: IssueFull = this.getIssue() as IssueFull;
+    const {onVisibilityChange, isAgent} = this.props;
+    const issue = this.getIssue();
     return issue ? (
       <View style={styles.visibility}>
         <VisibilityControl
+          disabled={isAgent}
           visibility={issue.visibility}
           onSubmit={onVisibilityChange}
           uiTheme={this.uiTheme}
@@ -395,12 +398,10 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   }
 
   renderIssueView() {
-    const {issue, editMode, onAttach} = this.props;
+    const {issue, editMode, onAttach, isReporter} = this.props;
     return (
       <View style={styles.issueView}>
-        <View style={styles.issueTopActions}>
-          {this.renderIssueVisibility()}
-        </View>
+        {!isReporter && <View style={styles.issueTopActions}>{this.renderIssueVisibility()}</View>}
         {this.renderAdditionalInfo()}
 
         {editMode && this.renderIssueEditContent()}
