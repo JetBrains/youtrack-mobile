@@ -549,9 +549,9 @@ describe('IssuePermissions', function () {
         expect(issuePermissions.canUpdateCommentVisibility(entity)).toEqual(true);
       });
 
-      it('should returns TRUE if there is no project in the entity', () => {
+      it('should returns FALSE if there is no project in the entity', () => {
         setIsHelpdeskProject(false);
-        expect(issuePermissions.canUpdateCommentVisibility({} as Entity)).toEqual(true);
+        expect(issuePermissions.canUpdateCommentVisibility(null)).toEqual(false);
       });
 
       it('should returns TRUE if the user is in the agents list of projects', () => {

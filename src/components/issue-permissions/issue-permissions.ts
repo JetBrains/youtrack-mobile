@@ -160,7 +160,10 @@ export default class IssuePermissions {
     return true;
   };
 
-  canUpdateCommentVisibility = (entity: Entity): boolean => {
+  canUpdateCommentVisibility = (entity: Entity | null): boolean => {
+    if (!entity?.project) {
+      return false;
+    }
     if (entity.project && isHelpdeskProject(entity)) {
       return this.isAgentInProject(entity.project);
     }
