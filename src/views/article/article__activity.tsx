@@ -65,6 +65,7 @@ const ArticleActivities = (props: Props) => {
   const currentUser = useSelector((state: AppState) => state.app.user);
   const user = useSelector((state: AppState) => state.app.user);
   const workTimeSettings = useSelector((store: AppState) => store.app.workTimeSettings);
+  const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles.helpdesk.isReporter);
 
   const canCommentOn = issuePermissions.articleCanCommentOn(article);
   const isNaturalSortOrder = !!user?.profiles?.appearance?.naturalCommentsOrder;
@@ -197,7 +198,7 @@ const ArticleActivities = (props: Props) => {
                 openReactionsPanel(comment);
               },
             },
-            canCommentOn && {
+            issuePermissions.canUpdateCommentVisibility(article) && {
               actionKey: guid(),
               actionTitle: i18n('Update visibility'),
               execute: () => {
@@ -290,6 +291,7 @@ const ArticleActivities = (props: Props) => {
         refreshControl={() => renderRefreshControl(() => loadActivities(false))}
         highlight={props.highlight}
         onUpdate={refreshActivities}
+        isReporter={isReporter}
       />
       {reactionState.isReactionsPanelVisible && (
         <ReactionsPanel

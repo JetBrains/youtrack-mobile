@@ -50,6 +50,7 @@ const IssueActivityStream: React.FC<Props> = (props: Props) => {
   const configBackendUrl: string = useSelector((appState: AppState) => appState.app.auth?.config?.backendUrl || '');
   const issueContext: IssueContextData = useContext(IssueContext);
   const commentActions = createActivityCommentActions();
+  const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles.helpdesk.isReporter);
 
   const [reactionState, setReactionState] = useState<IReactionState>({
     currentComment: null,
@@ -127,7 +128,7 @@ const IssueActivityStream: React.FC<Props> = (props: Props) => {
               });
             },
           },
-          issuePermissions.canUpdateComment(issue, comment) && {
+          issuePermissions.canUpdateCommentVisibility(issue) && {
             actionKey: guid(),
             actionTitle: i18n('Update visibility'),
             execute: () => {
@@ -210,6 +211,7 @@ const IssueActivityStream: React.FC<Props> = (props: Props) => {
     <>
       <IssueStream
         {...props}
+        isReporter={isReporter}
         commentActions={createCommentActions()}
         activities={activities}
         onReactionPanelOpen={(comment: IssueComment) => {
@@ -257,6 +259,6 @@ const isActivitiesEqual = (prev: Props, next: Props): boolean => (
   !!prev && !!next && prev.activities === next.activities
 );
 
-export const IssueStream: React.FC<Props> = React.memo<Props>(ActivityStream, isActivitiesEqual);
+export const IssueStream = React.memo<Props>(ActivityStream, isActivitiesEqual);
 
 export default React.memo<Props>(IssueActivityStream, isActivitiesEqual);

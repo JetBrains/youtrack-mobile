@@ -13,40 +13,47 @@ import styles from './issue-tabbed.style';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
 
-interface Props {
+const CreateUpdateInfo = ({
+  analyticId,
+  reporter,
+  updater,
+  created,
+  updated,
+  style,
+}: {
   analyticId: string;
   reporter: User;
-  updater: User;
+  updater: User | null;
   created: number;
   updated: number;
   style?: ViewStyleProp;
-}
-
-const CreateUpdateInfo = (props: Props): JSX.Element => {
+}) => {
   const [expanded, updateExpanded] = React.useState(false);
 
   const createLine = (user: User, label: string, date: number) => {
-    return <Text style={styles.createUpdateInfoText} selectable={true}>
-      {`${label} ${getEntityPresentation(user)} `}
-      <Text style={styles.createUpdateInfoText}>{props.created ? ytDate(date) : ''}</Text>
-    </Text>;
+    return (
+      <Text style={styles.createUpdateInfoText} selectable={true}>
+        {`${label} ${getEntityPresentation(user)} `}
+        <Text style={styles.createUpdateInfoText}>{created ? ytDate(date) : ''}</Text>
+      </Text>
+    );
   };
 
   return (
-    <View style={[styles.createUpdateInfoPanel, props.style]}>
+    <View style={[styles.createUpdateInfoPanel, style]}>
       <TouchableOpacity
+        disabled={!updater}
         hitSlop={HIT_SLOP}
         style={styles.createUpdateInfoPanelButton}
         onPress={() => {
-          usage.trackEvent(props.analyticId, 'toggleCreatedUpdated');
+          usage.trackEvent(analyticId, 'toggleCreatedUpdated');
           updateExpanded(!expanded);
         }}
       >
-        {props.reporter && createLine(props.reporter, i18n('Created by'), props.created)}
-        <IconChevronDownUp isDown={!expanded} size={20} color={styles.createUpdateInfoText.color}/>
-
+        {reporter && createLine(reporter, i18n('Created by'), created)}
+        {updater && <IconChevronDownUp isDown={!expanded} size={20} color={styles.createUpdateInfoText.color} />}
       </TouchableOpacity>
-      <View>{props.updater && expanded && createLine(props.updater, i18n('Updated by'), props.updated)}</View>
+      {updater && <View>{updater && expanded && createLine(updater, i18n('Updated by'), updated)}</View>}
     </View>
   );
 };

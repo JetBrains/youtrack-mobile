@@ -159,6 +159,10 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return !!this.props.user?.profiles?.helpdesk?.isReporter;
   }
 
+  isAgent(): boolean {
+    return !!this.props.user?.profiles?.helpdesk?.isAgent;
+  }
+
   async loadIssue(issuePlaceholder?: Partial<IssueFull> | null) {
     await this.props.loadIssue(issuePlaceholder);
   }
@@ -202,6 +206,8 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     const Component: any = isSplitView ? IssueDetailsModal : IssueDetails;
     return (
       <Component
+        isAgent={this.isAgent()}
+        isReporter={this.isReporter()}
         loadIssue={loadIssue}
         openNestedIssueView={openNestedIssueView}
         attachingImage={attachingImage}
