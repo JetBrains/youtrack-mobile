@@ -58,9 +58,12 @@ import type {Visibility} from 'types/Visibility';
 import type {YouTrackWiki} from 'types/Wiki';
 import {Project} from 'types/Project';
 
-export type IssueDetailsProps = {
+export interface IssueDetailsProps {
   loadIssue: () => any;
-  openNestedIssueView: (arg0: {issue?: IssueFull; issueId?: string}) => any;
+  openNestedIssueView: (arg0: {
+    issue?: IssueFull;
+    issueId?: string
+  }) => any;
   attachingImage: Record<string, any> | null | undefined;
   refreshIssue: () => any;
   issuePermissions: IssuePermissions;
@@ -84,7 +87,7 @@ export type IssueDetailsProps = {
   renderRefreshControl: () => any;
   onSwitchToActivity: () => any;
   onRemoveAttachment: () => any;
-  onVisibilityChange: (visibility: Visibility) => any;
+  onVisibilityChange: (visibility: Visibility | null) => any;
   onAttach: (isVisible: boolean) => any;
   onCheckboxUpdate: (
     checked: boolean,
@@ -106,11 +109,12 @@ export type IssueDetailsProps = {
   ) => any;
   modal?: boolean;
   scrollData: ScrollData;
-};
+}
+
 export default class IssueDetails extends Component<IssueDetailsProps, void> {
   imageHeaders: any = getApi().auth.getAuthorizationHeaders();
   backendUrl: any = getApi().config.backendUrl;
-  uiTheme: UITheme;
+  uiTheme: UITheme | undefined;
 
   constructor(props: IssueDetailsProps) {
     super(props);
@@ -139,9 +143,9 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     return false;
   }
 
-  renderLinksBlock: () => React.ReactNode = () => {
+  renderLinksBlock = () => {
     const {issuePermissions, getIssueLinksTitle} = this.props;
-    const issue: AnyIssue = this.getIssue();
+    const issue = this.getIssue();
     return (
       <LinkedIssuesTitle
         issueLinks={issue.links}
@@ -158,8 +162,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
                 }}
                 canLink={
                   issuePermissions.canLink(issue)
-                    ? (linkedIssue: AnyIssue) =>
-                        issuePermissions.canLink(linkedIssue)
+                    ? (linkedIssue) => issuePermissions.canLink(linkedIssue)
                     : undefined
                 }
                 subTitle={`${issue.idReadable} ${issue.summary}`}
@@ -177,7 +180,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   };
 
-  renderAttachments(attachments: Attachment[] | null): React.ReactNode {
+  renderAttachments(attachments: Attachment[] | null) {
     if (!attachments || !attachments.length) {
       return null;
     }
@@ -209,7 +212,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  renderAdditionalInfo(): React.ReactNode {
+  renderAdditionalInfo() {
     const issue: IssueFull = this.getIssue() as IssueFull;
     return issue ? <CreateUpdateInfo
       analyticId={ANALYTICS_ISSUE_PAGE}
@@ -222,7 +225,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  renderIssueVisibility(): React.ReactNode {
+  renderIssueVisibility() {
     const {onVisibilityChange} = this.props;
     const issue: IssueFull = this.getIssue() as IssueFull;
     return issue ? (
@@ -236,7 +239,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
       </View>
     ) : <SkeletonIssueInfoLine/>;
   }
-  renderIssueTextFields(): React.ReactNode {
+  renderIssueTextFields() {
     const {editMode, onLongPress, setCustomFieldValue} = this.props;
     const issue: AnyIssue = this.getIssue();
     return getIssueTextCustomFields(issue.fields).map(
@@ -328,9 +331,9 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  renderIssueContent(): React.ReactNode {
+  renderIssueContent() {
     const {openIssueListWithSearch, onTagRemove, onLongPress} = this.props;
-    const issue: AnyIssue = this.getIssue();
+    const issue = this.getIssue();
 
     if (!issue) {
       return <SkeletonIssueContent />;
@@ -374,7 +377,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  renderIssueEditContent(): React.ReactNode {
+  renderIssueEditContent() {
     const {isSavingEditedIssue, summaryCopy, descriptionCopy} = this.props;
     return (
       <>
@@ -391,7 +394,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  renderIssueView(): React.ReactNode {
+  renderIssueView() {
     const {issue, editMode, onAttach} = this.props;
     return (
       <View style={styles.issueView}>
@@ -417,11 +420,11 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  getIssue(): AnyIssue {
+  getIssue() {
     return this.props.issue || this.props.issuePlaceholder;
   }
 
-  getIssuePermissions: () => IssuePermissions = (): IssuePermissions => {
+  getIssuePermissions = (): IssuePermissions => {
     const noop = () => false;
 
     return (
@@ -448,8 +451,8 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   onUpdateProject: (project: Project) => Promise<any> = async (
     project: Project,
   ) => await this.props.updateProject(project);
-  renderCustomFieldPanel: ()=> React.ReactNode = () => {
-    const _issue: AnyIssue = this.getIssue();
+  renderCustomFieldPanel = () => {
+    const _issue = this.getIssue();
 
     return (
       <CustomFieldsPanel
@@ -467,13 +470,13 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         }}
         onUpdate={this.onFieldUpdate}
         onUpdateProject={this.onUpdateProject}
-        uiTheme={this.uiTheme}
+        uiTheme={this.uiTheme!}
         modal={this.props.modal}
       />
     );
   };
 
-  renderContent(): React.ReactNode {
+  renderContent() {
     const {renderRefreshControl, onSwitchToActivity} = this.props;
     return (
       <ScrollView
@@ -498,7 +501,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     );
   }
 
-  render(): React.ReactNode {
+  render() {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {

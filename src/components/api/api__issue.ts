@@ -557,7 +557,12 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  getVisibilityOptions = async (issueId: string, prefix: string = '', skip: number = 0, top: number = 20): Promise<any> => {
+  getVisibilityOptions = async (
+    issueId: string,
+    prefix: string = '',
+    skip: number = 0,
+    top: number = 20
+  ): Promise<VisibilityGroups> => {
     const queryString = qs.stringify({
       $top: 50,
       fields: issueFields.getVisibility.toString(),
