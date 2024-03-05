@@ -37,9 +37,7 @@ export const articleFields: any = toField([
   {
     parentArticle: ['id', 'idReadable', 'summary'],
   },
-  {
-    project: ['id', 'name', 'ringId'],
-  },
+  issueFields.PROJECT_WITH_HELPDESK_FIELDS,
   {
     reporter: issueFields.user,
   },

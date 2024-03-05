@@ -1,4 +1,11 @@
 import {toField} from 'util/to-field';
+
+const PROJECT_SHORT_WITH_HELPDESK_FIELDS: any = toField([
+  {
+    project: ['id', 'name', 'ringId', {plugins: {helpDeskSettings: ['enabled']}}],
+  },
+]);
+
 const ISSUE_PROJECT_FIELDS: any = toField([
   '$type',
   'id',
@@ -9,9 +16,7 @@ const ISSUE_PROJECT_FIELDS: any = toField([
   'template',
   {
     plugins: {
-      helpDeskSettings: [
-        'enabled',
-      ],
+      helpDeskSettings: ['enabled'],
       timeTrackingSettings: toField([
         'enabled',
         {
@@ -233,15 +238,7 @@ const ISSUE_XSHORT_FIELDS: any = toField([
   },
 ]);
 const ISSUE_SSHORT_FIELDS: any = toField([
-  {
-    project: {
-      plugins: {
-        helpDeskSettings: [
-          'enabled',
-        ],
-      },
-    },
-  },
+  PROJECT_SHORT_WITH_HELPDESK_FIELDS,
   'id',
   'idReadable',
   'summary',
@@ -525,4 +522,5 @@ export default {
   workItems: ISSUE_WORK_ITEMS_FIELDS,
   MENTIONS_FIELDS,
   ISSUE_BASE_FIELDS,
+  PROJECT_WITH_HELPDESK_FIELDS: PROJECT_SHORT_WITH_HELPDESK_FIELDS,
 };

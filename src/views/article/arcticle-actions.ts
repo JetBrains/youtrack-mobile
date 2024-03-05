@@ -110,7 +110,7 @@ const loadArticle = (
       dispatch(setArticle(null));
     }
 
-    const [error, article] = await until(api.articles.getArticle(articleId));
+    const [error, article] = await until<Article>(api.articles.getArticle(articleId));
     dispatch(setGlobalInProgress(false));
 
     if (error) {

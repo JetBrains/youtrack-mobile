@@ -80,6 +80,7 @@ interface Props {
     activityId?: string;
     commentId?: string;
   };
+  isReporter: boolean;
 }
 
 const isAndroidOrDesktop: boolean = isAndroidPlatform() || isDesktop();
@@ -429,7 +430,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     );
   };
 
-  const addActionsWrapper = (activityGroup: ActivityGroup): React.ReactNode => {
+  const addActionsWrapper = (activityGroup: ActivityGroup) => {
     const entity: ActivityItem = firstActivityChange((activityGroup.comment || activityGroup.work) as Activity);
     let menuConfig: ContextMenuConfig | null = null;
 
@@ -446,7 +447,9 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     return menuConfig ? (
       <ContextActionsProvider
         auxiliaryPreview={
-          comment ? () => renderCommentVisibilityPresentation(comment, styles.contextMenuAuxiliaryPreviewNarrow) : null
+          !props.isReporter && comment
+            ? () => renderCommentVisibilityPresentation(comment, styles.contextMenuAuxiliaryPreviewNarrow)
+            : null
         }
         menuConfig={menuConfig}
       >
