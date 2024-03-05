@@ -258,7 +258,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
       );
     }
 
-    const icon = !comment?.deleted && isSecured(comment) ? (
+    const icon = !props.isReporter && !comment?.deleted && isSecured(comment) ? (
       <IconLock
         testID="test:id/commentVisibilityIcon"
         size={16}
@@ -390,7 +390,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
           <Component
             style={[
               styles.activityContent,
-              secured && styles.activityContentSecured,
+              !props.isReporter && secured && styles.activityContentSecured,
               hasHighlightedActivity && {
                 backgroundColor: color.current,
               },
