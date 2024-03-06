@@ -87,7 +87,7 @@ describe('Issues', () => {
 
     it('should read stored query', async () => {
       await storage.flushStoragePart({query: queryMock});
-      await store.dispatch(issuesActions.setStoredIssuesQuery());
+      await store.dispatch(issuesActions.initSearchQuery());
 
       expect(store.getActions()[0]).toEqual({
         type: `${SET_ISSUES_QUERY}`,

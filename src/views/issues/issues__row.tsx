@@ -14,6 +14,7 @@ import {
   getSLAFields,
 } from 'components/issue-formatter/issue-formatter';
 import {i18n, i18nPlural} from 'components/i18n/i18n';
+import {isHelpdeskProject} from 'components/helpdesk';
 import {IssuesSettings} from 'views/issues/index';
 import {ThemeContext} from 'components/theme/theme-context';
 import {ytDate} from 'components/date/date';
@@ -91,6 +92,9 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
   }
 
   renderSLA() {
+    if (!this.props.helpdeskMode) {
+      return null;
+    }
     const slaFields = getSLAFields(this.props.issue);
     return (
       <View style={styles.slaFields}>
@@ -101,7 +105,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
     );
   }
 
-  renderPriority(customStyle?: TextStyleProp, text?: string): React.ReactNode {
+  renderPriority(customStyle?: TextStyleProp, text?: string) {
     const priorityField = getPriorityField(this.props.issue);
 
     if (
@@ -240,7 +244,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
       <View style={styles.issueRow}>
         <View testID="test:id/issueRowDraftDetails" style={styles.rowLine}>
           {priorityEl}
-          {this.props.helpdeskMode && (
+          {isHelpdeskProject(this.props.issue) && (
             <View style={helpdeskParams.style}>
               <IconHDTicket
                 color={helpdeskParams.style.color}
@@ -261,7 +265,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
     );
   }
 
-  render(): React.ReactNode {
+  render() {
     const {issue, style} = this.props;
     return (
       <ThemeContext.Consumer>
@@ -284,7 +288,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
 }
 
 export class IssueRowCompact<P extends Props, S = {}> extends IssueRow<P, S> {
-  renderPriority(): React.ReactNode {
+  renderPriority() {
     return super.renderPriority(styles.priorityWrapperCompact, ' ');
   }
 
