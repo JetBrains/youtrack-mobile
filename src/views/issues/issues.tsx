@@ -75,7 +75,6 @@ import type {Theme, UIThemeColors} from 'types/Theme';
 import {IssuesState} from './issues-reducers';
 import {NetInfoState} from '@react-native-community/netinfo';
 import {ReduxAction, ReduxThunkDispatch} from 'types/Redux';
-import {isHelpdeskProject} from 'components/helpdesk';
 
 type ReduxExtraActions = {[fnName: string]: ReduxAction<unknown>};
 type IssuesActions = typeof issueActions;
@@ -341,7 +340,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         ]}
       >
         <IssueRowComponent
-          helpdeskMode={this.props.helpDeskMode || isHelpdeskProject(item)}
+          helpdeskMode={this.props.helpDeskMode}
           hideId={hideId}
           settings={settings}
           issue={item}
@@ -409,38 +408,26 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
       networkState,
     } = this.props;
     const searchContext = this.getSearchContext();
-    const isDisabled: boolean = isRefreshing || !searchContext || !networkState?.isConnected;
+    const isDisabled: boolean = isRefreshing || !networkState?.isConnected;
     const themeColors: UIThemeColors = this.getThemeColors();
     return (
       <TouchableOpacity
         key="issueListContext"
         accessible={true}
         testID="test:id/issue-list-context"
-        style={[
-          styles.searchContext,
-          isSearchContextPinned ? styles.searchContextPinned : null,
-        ]}
+        style={[styles.searchContext, isSearchContextPinned ? styles.searchContextPinned : null]}
         disabled={isDisabled}
         onPress={this.props.onOpenContextSelect}
       >
-        <View style={styles.searchContextButton}>
-          <Text
-            numberOfLines={1}
-            style={styles.contextButtonText}
-          >
-            {`${searchContext?.name || ''}`}
+        <View style={[styles.searchContextButton, {width: Dimensions.get('window').width - 125}]}>
+          <Text numberOfLines={1} style={styles.contextButtonText}>
+            {searchContext.name}
           </Text>
-          {searchContext && (
-            <IconAngleDown
-              style={styles.contextButtonIcon}
-              color={
-                isDisabled
-                  ? themeColors.$disabled
-                  : themeColors.$text
-              }
-              size={19}
-            />
-          )}
+          <IconAngleDown
+            style={styles.contextButtonIcon}
+            color={isDisabled ? themeColors.$disabled : themeColors.$text}
+            size={19}
+          />
         </View>
       </TouchableOpacity>
     );
@@ -544,7 +531,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
   };
 
   isFilterSearchMode() {
-    return this.props.settings.search.mode === issuesSearchSettingMode.filter;
+    return this.props.settings.search.mode === issuesSearchSettingMode.filter || this.props.helpDeskMode;
   }
 
   renderSearchPanel() {
@@ -553,7 +540,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         <View style={styles.searchPanel}>
           {this.state.isEditQuery ? this.renderSearchQueryAssist() : this.renderSearchQueryPreview()}
         </View>
-        {!this.isReporter() && this.isFilterSearchMode() && <IssuesFilters/>}
+        {this.isFilterSearchMode() && <IssuesFilters/>}
       </>
     );
   }

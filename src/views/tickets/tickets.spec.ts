@@ -62,7 +62,7 @@ describe('Tickets', () => {
 
   it('should read stored Helpdesk query', async () => {
     await storage.flushStoragePart({helpdeskQuery: queryMock});
-    await store.dispatch(issuesActions.setStoredIssuesQuery());
+    await store.dispatch(issuesActions.initSearchQuery());
 
     expect(store.getActions()[0]).toEqual({
       type: `${SET_HELPDESK_QUERY}`,

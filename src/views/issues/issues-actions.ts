@@ -100,7 +100,7 @@ const isHelpDeskMode = (): ReduxAction<boolean> => (
   getState: ReduxStateGetter
 ) => getState().issueList.helpDeskMode;
 
-const setStoredIssuesQuery = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
+const initSearchQuery = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
   if (dispatch(isHelpDeskMode())) {
     dispatch(issuesActions.SET_HELPDESK_QUERY(getStorageState().helpdeskQuery || ''));
   } else {
@@ -557,9 +557,10 @@ const loadIssuesCount = (folder?: Folder | null): ReduxAction => async (
 
 const initSearchContext = (searchQuery: string = ''): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
   if (dispatch(isHelpDeskMode())) {
-    const helpdeskSearchContext = dispatch(getDefaultHelpdeskSearchContext());
-    if (helpdeskSearchContext) {
-      dispatch(issuesActions.SET_HELPDESK_CONTEXT(helpdeskSearchContext));
+    const hdSearchContext =
+      getStorageState().helpdeskSearchContext || dispatch(getDefaultHelpdeskSearchContext());
+    if (hdSearchContext) {
+      dispatch(issuesActions.SET_HELPDESK_CONTEXT(hdSearchContext));
     }
   } else {
     dispatch(
@@ -697,7 +698,7 @@ const initializeIssuesList = (searchQuery?: string): ReduxAction => async (dispa
   }
 
   await dispatch(initSearchContext(searchQuery));
-  await dispatch(setStoredIssuesQuery());
+  await dispatch(initSearchQuery());
   await dispatch(setFilters());
   dispatch(refreshIssues());
 };
@@ -793,7 +794,7 @@ export {
   setIssuesError,
   setIssuesFromCache,
   setIssuesMode,
-  setStoredIssuesQuery,
+  initSearchQuery,
   startIssuesLoading,
   stopIssuesLoading,
   storeIssuesQuery,

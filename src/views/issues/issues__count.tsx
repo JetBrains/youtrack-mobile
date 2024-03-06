@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {Text, View} from 'react-native';
 
 import {View as AnimatedView} from 'react-native-animatable';
 
@@ -37,7 +37,7 @@ const IssuesCount = ({issuesCount, isHelpdesk}: { issuesCount: number | null, is
         )}
       </Text>
     </AnimatedView>
-  ) : <Skeleton width={40} height={17} speed={2000} shimmerWidth={100}/>;
+  ) : <View style={styles.toolbarAction}><Skeleton width={40} height={17} speed={2000} shimmerWidth={100}/></View>;
 };
 
 

@@ -87,7 +87,7 @@ export default EStyleSheet.create({
     }),
   },
   priorityWrapperCompact: {
-    width: 4,
+    minWidth: 4,
     paddingHorizontal: 0,
   },
   rowLine,
@@ -153,12 +153,12 @@ export default EStyleSheet.create({
     alignSelf: 'flex-start',
     minWidth: 130,
     marginTop: UNIT,
-    marginRight: UNIT * 14,
     marginLeft: UNIT * 2,
     paddingVertical: UNIT,
     backgroundColor: '$background',
   },
   contextButtonText: {
+    flex: 1,
     ...headerTitle,
     color: '$text',
     letterSpacing: 0.25,
@@ -194,6 +194,7 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: UNIT * 2,
+    height: 17,
   },
   toolbarActionSortBy: {
     marginRight: -1,
