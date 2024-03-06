@@ -184,9 +184,9 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     if (this.issueId) {
       const targetIssue: AnyIssue =
         getIssueFromCache(this.issueId) ||
-        ({
+        {
           id: this.issueId,
-        } as any);
+        };
       this.updateFocusedIssue(targetIssue);
     }
 
@@ -346,7 +346,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         ]}
       >
         <IssueRowComponent
-          helpdeskMode={this.props.helpDeskMode && isHelpdeskProject(item)}
+          helpdeskMode={this.props.helpDeskMode || isHelpdeskProject(item)}
           hideId={hideId}
           settings={settings}
           issue={item}
@@ -401,6 +401,10 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
 
   getSearchContext(): Folder {
     return this.props.searchContext;
+  }
+
+  isReporter(): boolean {
+    return this.props.user.profiles.helpdesk.isReporter;
   }
 
   renderContextButton = () => {
@@ -554,7 +558,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         <View style={styles.searchPanel}>
           {this.state.isEditQuery ? this.renderSearchQueryAssist() : this.renderSearchQueryPreview()}
         </View>
-        {this.isFilterSearchMode() && <IssuesFilters/>}
+        {!this.isReporter() && this.isFilterSearchMode() && <IssuesFilters/>}
       </>
     );
   }
@@ -600,9 +604,9 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     return isLoadingMore ? this.renderSkeleton() : this.renderError();
   };
 
-  renderIssueList(): React.ReactNode {
+  renderIssueList() {
     const {issues, isRefreshing} = this.props;
-    const contextButton = this.renderContextButton();
+    const contextButton = this.isReporter() ? <View style={styles.searchContext}/> : this.renderContextButton();
     const searchPanel: React.ReactNode = <>
       {this.renderSearchPanel()}
       {this.renderToolbar()}
@@ -621,7 +625,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     const listData = [
       contextButton,
       searchPanel,
-    ].concat((issues || []) as any);
+    ].filter(Boolean).concat((issues || []) as any);
     return (
       <FlatList
         style={styles.list}

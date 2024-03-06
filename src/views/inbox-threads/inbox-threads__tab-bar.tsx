@@ -47,9 +47,10 @@ const InboxThreadsTabBar = ({
       </Text>
       {!focused && index > 0 && tabHasUpdates() && (
         <IconCircle
-          size={9}
+          size={7}
           color={styles.link.color}
-          style={styles.tabTitleIconUnread}
+          style={styles.
+            tabTitleIconUnread}
         />
       )}
     </View>

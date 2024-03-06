@@ -714,7 +714,8 @@ export function initializeApp(
       await dispatch(setYTCurrentUser(cachedCurrentUser));
     }
 
-    const userProfileLocale: UserGeneralProfileLocale | undefined = cachedCurrentUser?.profiles?.general?.locale;
+    const profiles = cachedCurrentUser?.profiles;
+    const userProfileLocale: UserGeneralProfileLocale | undefined = profiles?.general?.locale;
     if (userProfileLocale?.language) {
       loadTranslation(userProfileLocale.locale, userProfileLocale.language);
     }

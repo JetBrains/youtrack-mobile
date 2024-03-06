@@ -126,6 +126,7 @@ export default function CustomFieldsPanel(props: Props) {
   let currentScrollX: number = 0;
   const isComponentMounted = React.useRef<boolean>(false);
   const isConnected = useSelector((state: AppState) => state.app.networkState?.isConnected);
+  const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles.helpdesk.isReporter);
   const [selectState, setSelectState] = React.useState<SelectState | null>(null);
   const [simpleValueState, setSimpleValue] = React.useState<SimpleValueState | null>(null);
   const [datePickerState, setDatePickerState] = React.useState<DatePickerState>(dataPickerDefault);
@@ -406,6 +407,8 @@ export default function CustomFieldsPanel(props: Props) {
     }
   };
 
+  const isFieldDisabled = () => isConnected === false || isReporter;
+
   const renderFields = () => {
     const {issueProject = {name: ''}, horizontal} = props;
     const Container = horizontal ? View : PanelWithSeparator;
@@ -431,7 +434,7 @@ export default function CustomFieldsPanel(props: Props) {
               <View key="Project">
                 <CustomField
                   horizontal={horizontal}
-                  disabled={!props.hasPermission.canEditProject || isConnected === false}
+                  disabled={!props.hasPermission.canEditProject || isFieldDisabled()}
                   onPress={onSelectProject}
                   active={isEditingProject}
                   field={createNullProjectCustomField(issueProject.name, getProjectLabel())}
@@ -441,9 +444,9 @@ export default function CustomFieldsPanel(props: Props) {
 
               {props.fields.map((field: IssueCustomField, index: number) => {
                 const isDisabled: boolean =
+                  isFieldDisabled() ||
                   !(props.hasPermission.canUpdateField && props.hasPermission.canUpdateField(field)) ||
-                  !field?.projectCustomField?.field?.fieldType ||
-                  isConnected === false;
+                  !field?.projectCustomField?.field?.fieldType;
                 return (
                   <React.Fragment key={field.id || `${field.name}-${index}`}>
                     <CustomField

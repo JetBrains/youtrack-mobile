@@ -59,9 +59,12 @@ import {routeMap} from 'app-routes';
 import {NavigationScreenProp, NavigationState} from 'react-navigation';
 import {Project} from 'types/Project';
 
-export type IssueDetailsProps = {
+export interface IssueDetailsProps {
   loadIssue: () => any;
-  openNestedIssueView: (arg0: { issue?: IssueFull; issueId?: string }) => any;
+  openNestedIssueView: (arg0: {
+    issue?: IssueFull;
+    issueId?: string
+  }) => any;
   attachingImage: Record<string, any> | null | undefined;
   refreshIssue: () => any;
   issuePermissions: IssuePermissions;
@@ -85,7 +88,7 @@ export type IssueDetailsProps = {
   renderRefreshControl: () => any;
   onSwitchToActivity: () => any;
   onRemoveAttachment: () => any;
-  onVisibilityChange: (visibility: Visibility) => any;
+  onVisibilityChange: (visibility: Visibility | null) => any;
   onAttach: (isVisible: boolean) => any;
   onCheckboxUpdate: (
     checked: boolean,
@@ -107,6 +110,11 @@ export type IssueDetailsProps = {
   ) => any;
   modal?: boolean;
   scrollData: ScrollData;
+  isAgent: boolean;
+  isReporter: boolean;
+}
+
+export default class IssueDetails extends Component<IssueDetailsProps, void> {
   navigation: NavigationScreenProp<NavigationState>,
 };
 
@@ -114,7 +122,7 @@ export type IssueDetailsProps = {
 class IssueDetails extends React.Component<IssueDetailsProps, void> {
   imageHeaders: any = getApi().auth.getAuthorizationHeaders();
   backendUrl: any = getApi().config.backendUrl;
-  uiTheme: UITheme;
+  uiTheme: UITheme | undefined;
 
   constructor(props: IssueDetailsProps) {
     super(props);
@@ -146,7 +154,7 @@ class IssueDetails extends React.Component<IssueDetailsProps, void> {
 
   renderLinksBlock: () => React.ReactNode = () => {
     const {issuePermissions, getIssueLinksTitle, navigation} = this.props;
-    const issue: AnyIssue = this.getIssue();
+    const issue = this.getIssue();
     const props = {
       issuesGetter: this.props.issuesGetter,
       linksGetter: this.props.linksGetter,
@@ -165,7 +173,7 @@ class IssueDetails extends React.Component<IssueDetailsProps, void> {
     );
   };
 
-  renderAttachments(attachments: Attachment[] | null): React.ReactNode {
+  renderAttachments(attachments: Attachment[] | null) {
     if (!attachments || !attachments.length) {
       return null;
     }
@@ -197,12 +205,12 @@ class IssueDetails extends React.Component<IssueDetailsProps, void> {
     );
   }
 
-  renderAdditionalInfo(): React.ReactNode {
-    const issue: IssueFull = this.getIssue() as IssueFull;
+  renderAdditionalInfo() {
+    const issue = this.getIssue();
     return issue ? <CreateUpdateInfo
       analyticId={ANALYTICS_ISSUE_PAGE}
       reporter={issue.reporter}
-      updater={issue.updater}
+      updater={this.props.isReporter ? null : issue.updater}
       created={issue.created}
       updated={issue.updated}
     /> : (
@@ -210,12 +218,13 @@ class IssueDetails extends React.Component<IssueDetailsProps, void> {
     );
   }
 
-  renderIssueVisibility(): React.ReactNode {
-    const {onVisibilityChange} = this.props;
-    const issue: IssueFull = this.getIssue() as IssueFull;
+  renderIssueVisibility() {
+    const {onVisibilityChange, isAgent} = this.props;
+    const issue = this.getIssue();
     return issue ? (
       <View style={styles.visibility}>
         <VisibilityControl
+          disabled={isAgent}
           visibility={issue.visibility}
           onSubmit={onVisibilityChange}
           uiTheme={this.uiTheme}
@@ -224,7 +233,7 @@ class IssueDetails extends React.Component<IssueDetailsProps, void> {
       </View>
     ) : <SkeletonIssueInfoLine/>;
   }
-  renderIssueTextFields(): React.ReactNode {
+  renderIssueTextFields() {
     const {editMode, onLongPress, setCustomFieldValue} = this.props;
     const issue: AnyIssue = this.getIssue();
     return getIssueTextCustomFields(issue.fields).map(
@@ -315,9 +324,9 @@ class IssueDetails extends React.Component<IssueDetailsProps, void> {
     );
   }
 
-  renderIssueContent(): React.ReactNode {
+  renderIssueContent() {
     const {openIssueListWithSearch, onTagRemove, onLongPress} = this.props;
-    const issue: AnyIssue = this.getIssue();
+    const issue = this.getIssue();
 
     if (!issue) {
       return <SkeletonIssueContent/>;
@@ -361,7 +370,7 @@ class IssueDetails extends React.Component<IssueDetailsProps, void> {
     );
   }
 
-  renderIssueEditContent(): React.ReactNode {
+  renderIssueEditContent() {
     const {isSavingEditedIssue, summaryCopy, descriptionCopy} = this.props;
     return (
       <>
@@ -378,13 +387,11 @@ class IssueDetails extends React.Component<IssueDetailsProps, void> {
     );
   }
 
-  renderIssueView(): React.ReactNode {
-    const {issue, editMode, onAttach} = this.props;
+  renderIssueView() {
+    const {issue, editMode, onAttach, isReporter} = this.props;
     return (
       <View style={styles.issueView}>
-        <View style={styles.issueTopActions}>
-          {this.renderIssueVisibility()}
-        </View>
+        {!isReporter && <View style={styles.issueTopActions}>{this.renderIssueVisibility()}</View>}
         {this.renderAdditionalInfo()}
 
         {editMode && this.renderIssueEditContent()}
@@ -404,11 +411,11 @@ class IssueDetails extends React.Component<IssueDetailsProps, void> {
     );
   }
 
-  getIssue(): AnyIssue {
-    return this.props.issue || this.issuePlaceholder;
+  getIssue() {
+    return this.props.issue || this.props.issuePlaceholder;
   }
 
-  getIssuePermissions: () => IssuePermissions = (): IssuePermissions => {
+  getIssuePermissions = (): IssuePermissions => {
     const noop = () => false;
 
     return (
@@ -435,8 +442,8 @@ class IssueDetails extends React.Component<IssueDetailsProps, void> {
   onUpdateProject: (project: Project) => Promise<any> = async (
     project: Project,
   ) => await this.props.updateProject(project);
-  renderCustomFieldPanel: () => React.ReactNode = () => {
-    const _issue: AnyIssue = this.getIssue();
+  renderCustomFieldPanel = () => {
+    const _issue = this.getIssue();
 
     return (
       <CustomFieldsPanel
@@ -454,13 +461,13 @@ class IssueDetails extends React.Component<IssueDetailsProps, void> {
         }}
         onUpdate={this.onFieldUpdate}
         onUpdateProject={this.onUpdateProject}
-        uiTheme={this.uiTheme}
+        uiTheme={this.uiTheme!}
         modal={this.props.modal}
       />
     );
   };
 
-  renderContent(): React.ReactNode {
+  renderContent() {
     const {renderRefreshControl, onSwitchToActivity} = this.props;
     return (
       <ScrollView
@@ -485,7 +492,7 @@ class IssueDetails extends React.Component<IssueDetailsProps, void> {
     );
   }
 
-  render(): React.ReactNode {
+  render() {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {

@@ -331,7 +331,7 @@ class CreateIssue extends PureComponent<Props, State> {
     } = this.props;
     const iconLink = (
       <IconLink
-        fill={
+        color={
           processing
             ? styles.addLinkButtonTextDisabled.color
             : styles.addLinkButtonText.color

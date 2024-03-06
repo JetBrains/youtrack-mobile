@@ -52,6 +52,7 @@ import type {ScrollData} from 'types/Markdown';
 import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from 'types/Theme';
 import type {User} from 'types/User';
+import {isHelpdeskProject} from 'components/helpdesk';
 import {INavigationParams, spreadNavigationProps} from 'components/navigation';
 
 type AdditionalProps = {
@@ -65,6 +66,7 @@ type AdditionalProps = {
   isTagsSelectVisible: boolean;
   onCommandApply: () => any;
   commentId?: string;
+  user: User;
 };
 
 export type IssueProps = IssueState &
@@ -147,6 +149,14 @@ export class Issue extends IssueTabbed<IssueProps, IIssueTabbedState> {
     return super.getRouteBadge(route.title === this.tabRoutes[1].title, this.props?.commentsCounter);
   }
 
+  isReporter(): boolean {
+    return !!this.props.user?.profiles?.helpdesk?.isReporter;
+  }
+
+  isAgent(): boolean {
+    return !!this.props.user?.profiles?.helpdesk?.isAgent;
+  }
+
   async loadIssue(issuePlaceholder?: Partial<IssueFull> | null) {
     await this.props.loadIssue(issuePlaceholder);
   }
@@ -191,6 +201,8 @@ export class Issue extends IssueTabbed<IssueProps, IIssueTabbedState> {
     const Component: any = isSplitView ? IssueDetailsModal : IssueDetails;
     return (
       <Component
+        isAgent={this.isAgent()}
+        isReporter={this.isReporter()}
         loadIssue={loadIssue}
         openNestedIssueView={openNestedIssueView}
         attachingImage={attachingImage}
@@ -332,7 +344,20 @@ export class Issue extends IssueTabbed<IssueProps, IIssueTabbedState> {
     return issue && issuePermissions && issuePermissions.canStar();
   };
 
-  renderActions(): React.ReactNode {
+  createIssueActionsPermissionsMap() {
+    const {issue, issuePermissions} = this.props;
+    return {
+      canAttach: issuePermissions.canAddAttachmentTo(issue),
+      canEdit:
+        issuePermissions.canUpdateGeneralInfo(issue) &&
+        !(isHelpdeskProject(issue.project) || issuePermissions.isAgentInProject(issue.project)),
+      canApplyCommand: !this.isReporter() && issuePermissions.canRunCommand(issue),
+      canTag: issuePermissions.canTag(issue),
+      canDeleteIssue: issuePermissions.canDeleteIssue(issue),
+    };
+  }
+
+  renderActions() {
     if (!this.isIssueLoaded()) {
       return <Skeleton width={24}/>;
     }
@@ -348,13 +373,7 @@ export class Issue extends IssueTabbed<IssueProps, IIssueTabbedState> {
           if (this.isIssueLoaded()) {
             showIssueActions(
               this.context.actionSheet(),
-              {
-                canAttach: issuePermissions.canAddAttachmentTo(issue),
-                canEdit: issuePermissions.canUpdateGeneralInfo(issue),
-                canApplyCommand: issuePermissions.canRunCommand(issue),
-                canTag: issuePermissions.canTag(issue),
-                canDeleteIssue: issuePermissions.canDeleteIssue(issue),
-              },
+              this.createIssueActionsPermissionsMap(),
               this.switchToDetailsTab,
               issuePermissions.canLink(issue) ? this.onAddIssueLink : null,
             );
@@ -366,9 +385,13 @@ export class Issue extends IssueTabbed<IssueProps, IIssueTabbedState> {
     );
   }
 
-  renderIssueVotes(): React.ReactNode {
+  isHelpdeskTicket() {
+    return !!this.props.issue && isHelpdeskProject(this.props.issue);
+  }
+
+  renderIssueVotes() {
     const {issue, issuePermissions, toggleVote} = this.props;
-    return (
+    return this.isHelpdeskTicket() ? null : (
       <IssueVotes
         size={23}
         canVote={issuePermissions.canVote(issue)}
@@ -380,9 +403,11 @@ export class Issue extends IssueTabbed<IssueProps, IIssueTabbedState> {
     );
   }
 
-  renderStar = (): React.ReactNode => {
+  renderStar = () => {
     const {issue, toggleStar} = this.props;
-
+    if (this.isHelpdeskTicket()) {
+      return null;
+    }
     if (issue && this.isIssueLoaded()) {
       return (
         <Star
