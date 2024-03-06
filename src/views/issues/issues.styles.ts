@@ -158,7 +158,6 @@ export default EStyleSheet.create({
     backgroundColor: '$background',
   },
   contextButtonText: {
-    flex: 1,
     ...headerTitle,
     color: '$text',
     letterSpacing: 0.25,

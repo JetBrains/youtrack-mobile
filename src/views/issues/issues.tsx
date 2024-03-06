@@ -421,7 +421,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
       >
         <View style={[styles.searchContextButton, {width: Dimensions.get('window').width - 125}]}>
           <Text numberOfLines={1} style={styles.contextButtonText}>
-            {searchContext.name}
+            {searchContext.name.replace(' ', '\xa0')}
           </Text>
           <IconAngleDown
             style={styles.contextButtonIcon}
