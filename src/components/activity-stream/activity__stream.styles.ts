@@ -278,7 +278,7 @@ export const rowStyles = {
   contextMenuAuxiliaryPreviewText: {
     fontSize: MAIN_FONT_SIZE - 1,
     lineHeight: MAIN_FONT_SIZE + 2,
-    color: '$text',
+    color: '$private',
   },
   activityCommentVisibility: {
     minHeight: 50,

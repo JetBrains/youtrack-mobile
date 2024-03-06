@@ -871,7 +871,8 @@ export function initializeApp(
       await dispatch(setUserPermissions(cachedPermissions));
     }
 
-    const userProfileLocale: UserGeneralProfileLocale | undefined = cachedCurrentUser?.profiles?.general?.locale;
+    const profiles = cachedCurrentUser?.profiles;
+    const userProfileLocale: UserGeneralProfileLocale | undefined = profiles?.general?.locale;
     if (userProfileLocale?.language) {
       loadTranslation(userProfileLocale.locale, userProfileLocale.language);
     }
@@ -890,7 +891,7 @@ export function initializeApp(
       )
     );
     if (isRedirectedToTargetRoute) {
-      navigateToRouteById(issueId, articleId, navigateToActivity);
+      navigateToRouteById(issueId, articleId, navigateToActivity, profiles?.helpdesk.isReporter);
     }
 
     const url = await Linking.getInitialURL();

@@ -17,7 +17,6 @@ import AttachmentsRow from 'components/attachments-row/attachments-row';
 import CommandDialog from 'components/command-dialog/command-dialog';
 import CustomFieldsPanel from 'components/custom-fields-panel/custom-fields-panel';
 import Header from 'components/header/header';
-import IconLink from '@jetbrains/icons/link.svg';
 import IssueCustomFieldText from 'components/custom-field/issue-custom-field-text';
 import IssueDrafts from 'views/create-issue/create-issue-drafts';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
@@ -45,6 +44,7 @@ import {
   IconCheck,
   IconClose,
   IconMoreOptions,
+  IconLink,
 } from 'components/icon/icon';
 import {ThemeContext} from 'components/theme/theme-context';
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
@@ -329,11 +329,9 @@ class CreateIssue extends PureComponent<Props, State> {
       getIssueLinksTitle,
       processing,
     } = this.props;
-    const iconLink: any = (
+    const iconLink = (
       <IconLink
-        width={24}
-        height={24}
-        fill={
+        color={
           processing
             ? styles.addLinkButtonTextDisabled.color
             : styles.addLinkButtonText.color

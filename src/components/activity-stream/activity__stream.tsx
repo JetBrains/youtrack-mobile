@@ -80,6 +80,7 @@ interface Props {
     activityId?: string;
     commentId?: string;
   };
+  isReporter: boolean;
 }
 
 const isAndroidOrDesktop: boolean = isAndroidPlatform() || isDesktop();
@@ -257,7 +258,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
       );
     }
 
-    const icon = !comment?.deleted && isSecured(comment) ? (
+    const icon = !props.isReporter && !comment?.deleted && isSecured(comment) ? (
       <IconLock
         testID="test:id/commentVisibilityIcon"
         size={16}
@@ -389,7 +390,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
           <Component
             style={[
               styles.activityContent,
-              secured && styles.activityContentSecured,
+              !props.isReporter && secured && styles.activityContentSecured,
               hasHighlightedActivity && {
                 backgroundColor: color.current,
               },
@@ -429,7 +430,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     );
   };
 
-  const addActionsWrapper = (activityGroup: ActivityGroup): React.ReactNode => {
+  const addActionsWrapper = (activityGroup: ActivityGroup) => {
     const entity: ActivityItem = firstActivityChange((activityGroup.comment || activityGroup.work) as Activity);
     let menuConfig: ContextMenuConfig | null = null;
 
@@ -446,7 +447,9 @@ export const ActivityStream = (props: ActivityStreamProps) => {
     return menuConfig ? (
       <ContextActionsProvider
         auxiliaryPreview={
-          comment ? () => renderCommentVisibilityPresentation(comment, styles.contextMenuAuxiliaryPreviewNarrow) : null
+          !props.isReporter && comment
+            ? () => renderCommentVisibilityPresentation(comment, styles.contextMenuAuxiliaryPreviewNarrow)
+            : null
         }
         menuConfig={menuConfig}
       >

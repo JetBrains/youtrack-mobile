@@ -22,7 +22,7 @@ import type {Visibility, VisibilityGroups, VisibilityItem} from 'types/Visibilit
 import {UserGroup} from 'types/UserGroup';
 
 interface Props {
-  getOptions: (q: string | undefined) => Promise<VisibilityGroups>;
+  getOptions: (q: string) => Promise<VisibilityGroups>;
   onApply: (visibility: Visibility | null) => any;
   onHide?: () => any;
   onShow?: () => any;
@@ -75,7 +75,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
     this.props.onApply(visibility);
   };
 
-  getVisibilityOptions = async (q: string | undefined): Promise<VisibilityGroups> => {
+  getVisibilityOptions = async (q: string): Promise<VisibilityGroups> => {
     try {
       return await this.props.getOptions(q);
     } catch (e) {

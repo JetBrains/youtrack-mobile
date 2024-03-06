@@ -52,6 +52,7 @@ import type {ScrollData} from 'types/Markdown';
 import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from 'types/Theme';
 import type {User} from 'types/User';
+import {isHelpdeskProject} from 'components/helpdesk';
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
@@ -64,6 +65,7 @@ type AdditionalProps = {
   isTagsSelectVisible: boolean;
   onCommandApply: () => any;
   commentId?: string;
+  user: User;
 };
 
 export type IssueProps = IssueState &
@@ -153,6 +155,14 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return super.getRouteBadge(route.title === this.tabRoutes[1].title, this.props?.commentsCounter);
   }
 
+  isReporter(): boolean {
+    return !!this.props.user?.profiles?.helpdesk?.isReporter;
+  }
+
+  isAgent(): boolean {
+    return !!this.props.user?.profiles?.helpdesk?.isAgent;
+  }
+
   async loadIssue(issuePlaceholder?: Partial<IssueFull> | null) {
     await this.props.loadIssue(issuePlaceholder);
   }
@@ -196,6 +206,8 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     const Component: any = isSplitView ? IssueDetailsModal : IssueDetails;
     return (
       <Component
+        isAgent={this.isAgent()}
+        isReporter={this.isReporter()}
         loadIssue={loadIssue}
         openNestedIssueView={openNestedIssueView}
         attachingImage={attachingImage}
@@ -340,7 +352,20 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return issue && issuePermissions && issuePermissions.canStar();
   };
 
-  renderActions(): React.ReactNode {
+  createIssueActionsPermissionsMap() {
+    const {issue, issuePermissions} = this.props;
+    return {
+      canAttach: issuePermissions.canAddAttachmentTo(issue),
+      canEdit:
+        issuePermissions.canUpdateGeneralInfo(issue) &&
+        !(isHelpdeskProject(issue.project) || issuePermissions.isAgentInProject(issue.project)),
+      canApplyCommand: !this.isReporter() && issuePermissions.canRunCommand(issue),
+      canTag: issuePermissions.canTag(issue),
+      canDeleteIssue: issuePermissions.canDeleteIssue(issue),
+    };
+  }
+
+  renderActions() {
     if (!this.isIssueLoaded()) {
       return <Skeleton width={24} />;
     }
@@ -356,13 +381,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
           if (this.isIssueLoaded()) {
             showIssueActions(
               this.context.actionSheet(),
-              {
-                canAttach: issuePermissions.canAddAttachmentTo(issue),
-                canEdit: issuePermissions.canUpdateGeneralInfo(issue),
-                canApplyCommand: issuePermissions.canRunCommand(issue),
-                canTag: issuePermissions.canTag(issue),
-                canDeleteIssue: issuePermissions.canDeleteIssue(issue),
-              },
+              this.createIssueActionsPermissionsMap(),
               this.switchToDetailsTab,
               issuePermissions.canLink(issue) ? this.onAddIssueLink : null,
             );
@@ -374,26 +393,36 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   }
 
-  renderIssueVotes(): React.ReactNode {
+  isHelpdeskTicket() {
+    return !!this.props.issue && isHelpdeskProject(this.props.issue);
+  }
+
+  renderIssueVotes() {
     const {issue, issuePermissions, toggleVote} = this.props;
-    return (
-      <View style={styles.issueVote}>
-        <IssueVotes
-          canVote={issuePermissions.canVote(issue)}
-          votes={issue?.votes}
-          voted={issue?.voters?.hasVote}
-          onVoteToggle={toggleVote}
-        />
-      </View>
+    if (this.isHelpdeskTicket()) {
+      return null;
+    }
+    return this.isHelpdeskTicket() ? null : (
+      <IssueVotes
+        size={23}
+        canVote={issuePermissions.canVote(issue)}
+        votes={issue?.votes}
+        voted={issue?.voters?.hasVote}
+        onVoteToggle={toggleVote}
+        style={styles.issueVote}
+      />
     );
   }
 
-  renderStar = (): React.ReactNode => {
+  renderStar = () => {
     const {issue, toggleStar} = this.props;
-
+    if (this.isHelpdeskTicket()) {
+      return null;
+    }
     if (issue && this.isIssueLoaded()) {
       return (
         <Star
+          size={23}
           style={styles.issueStar}
           canStar={this.canStar()}
           hasStar={issue.watchers?.hasStar}
