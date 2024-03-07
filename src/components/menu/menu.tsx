@@ -38,7 +38,10 @@ type Routes = {
 export default function Menu() {
   const dispatch: ReduxThunkDispatch = useDispatch();
 
-  const isHelpdeskEnabled = useSelector((state: AppState) => state.app.globalSettings.helpdeskEnabled);
+  const isHelpdeskEnabled = useSelector(
+    (state: AppState) =>
+      state.app.globalSettings.helpdeskEnabled || !!state.app.user?.profiles?.helpdesk?.helpdeskFolder
+  );
 
   const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles?.helpdesk?.isReporter);
 
