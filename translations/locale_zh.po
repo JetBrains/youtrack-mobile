@@ -52,17 +52,17 @@ msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} 个问题"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
 msgstr[0] "{{daysLeft}} 天"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
 msgstr[0] "{{hoursLeft}} 小时"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
 msgstr[0] "{{minutesAbsolute}} 分钟"
@@ -812,7 +812,7 @@ msgstr "其他群组和团队"
 msgid "Password"
 msgstr "密码"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/custom-field/custom-field-sla.tsx
 msgid "Paused"
 msgstr "已暂停"
 

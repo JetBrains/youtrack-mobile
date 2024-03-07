@@ -50,19 +50,19 @@ msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} issue"
 msgstr[1] "{{amount}} issues"
 
-#: src/views/issues/issues__row.tsx:335
+#: src/components/date/date.ts:140
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
 msgstr[0] "{{daysLeft}}d"
 msgstr[1] "{{daysLeft}}d"
 
-#: src/views/issues/issues__row.tsx:327
+#: src/components/date/date.ts:132
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
 msgstr[0] "{{hoursLeft}}h"
 msgstr[1] "{{hoursLeft}}h"
 
-#: src/views/issues/issues__row.tsx:318
+#: src/components/date/date.ts:123
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
 msgstr[0] "{{minutesAbsolute}}m"
@@ -212,7 +212,7 @@ msgstr "Camera"
 
 #: src/components/account/accounts.tsx:52
 #: src/components/confirmation/confirmation.ts:19
-#: src/components/tags/tags.tsx:52
+#: src/components/tags/tags.tsx:53
 #: src/views/article/arcticle-actions.ts:326
 #: src/views/article/arcticle-actions.ts:696
 #: src/views/create-issue/create-issue-actions.ts:571
@@ -555,7 +555,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:572
+#: src/views/issues/issues.tsx:573
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -623,7 +623,7 @@ msgstr "It could mean that the issue doesn't exist or you don't have permission 
 msgid "JetBrains Privacy Policy"
 msgstr "JetBrains Privacy Policy"
 
-#: src/components/date/date.ts:108
+#: src/components/date/date.ts:112
 msgid "just now"
 msgstr "just now"
 
@@ -771,7 +771,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:622
+#: src/views/issues/issues.tsx:623
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -816,7 +816,7 @@ msgstr "Other groups and teams"
 msgid "Password"
 msgstr "Password"
 
-#: src/views/issues/issues__row.tsx:102
+#: src/components/custom-field/custom-field-sla.tsx:44
 msgid "Paused"
 msgstr "Paused"
 
@@ -832,7 +832,7 @@ msgstr "Preview Size"
 msgid "Problem"
 msgstr "Problem"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:94
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:93
 msgid "Project"
 msgstr "Project"
 
@@ -932,7 +932,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:687
+#: src/views/issues/issues.tsx:688
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
