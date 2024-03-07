@@ -6,6 +6,7 @@ import {getStorageState} from 'components/storage/storage';
 
 import type {CustomError} from 'types/Error';
 import type {StorageState} from 'components/storage/storage';
+import {CustomField} from 'types/CustomFields';
 
 interface RequestPromise<P extends any> {
   status: 'fulfilled' | 'rejected',
@@ -115,21 +116,10 @@ export const nullProjectCustomFieldMaxLength: number = 20;
 export const createNullProjectCustomField = (
   projectName: string = '',
   label: string = '',
-  maxLength: number = nullProjectCustomFieldMaxLength,
-): {
-  projectCustomField: {
-    field: {
-      name: string;
-    };
-  };
-  value: {
-    name: string;
-  };
-} => {
+  maxLength: number = nullProjectCustomFieldMaxLength
+): CustomField => {
   const visibleProjectName: string =
-    projectName?.length > maxLength
-      ? `${projectName.substring(0, maxLength - 3)}…`
-      : projectName;
+    projectName?.length > maxLength ? `${projectName.substring(0, maxLength - 3)}…` : projectName;
   return {
     projectCustomField: {
       field: {
@@ -139,7 +129,7 @@ export const createNullProjectCustomField = (
     value: {
       name: visibleProjectName,
     },
-  };
+  } as CustomField;
 };
 
 export const isURLPattern: (str: string) => boolean = (str: string): boolean =>
