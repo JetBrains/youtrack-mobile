@@ -48,9 +48,11 @@ const Tags = (props: Props): React.JSX.Element | null => {
       });
     }
 
-    actions.push({
-      title: i18n('Cancel'),
-    });
+    if (actions.length > 0) {
+      actions.push({
+        title: i18n('Cancel'),
+      });
+    }
     return actions;
   };
 
@@ -74,15 +76,18 @@ const Tags = (props: Props): React.JSX.Element | null => {
               testID="test:id/tagsListTag"
               accessible={false}
               onPress={() => {
-                showActionSheetWithOptions(
-                  {
-                    options: getContextActions(tag).map((it: ActionSheetAction) => it.title),
-                    cancelButtonIndex: getContextActions(tag).length - 1,
-                  },
-                  (index: number | undefined): void | Promise<void> => {
-                    getContextActions(tag)[index as number]?.execute?.();
-                  },
-                );
+                const contextActions = getContextActions(tag);
+                if (contextActions.length > 0) {
+                  showActionSheetWithOptions(
+                    {
+                      options: contextActions.map((it: ActionSheetAction) => it.title),
+                      cancelButtonIndex: contextActions.length - 1,
+                    },
+                    (index: number | undefined): void | Promise<void> => {
+                      contextActions[index as number]?.execute?.();
+                    },
+                  );
+                }
               }}
               key={guid()}
             >
