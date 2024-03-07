@@ -340,6 +340,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         ]}
       >
         <IssueRowComponent
+          absDate={!!this.props.user?.profiles?.appearance?.useAbsoluteDates}
           helpdeskMode={this.props.helpDeskMode}
           hideId={hideId}
           settings={settings}

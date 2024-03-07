@@ -1,14 +1,14 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {COLOR_FIELD_SIZE} from 'components/color-field/color-field';
-import {monospace, SECONDARY_FONT_SIZE, secondaryText, UNIT} from 'components/common-styles';
+import {monospace, SECONDARY_FONT_SIZE, secondaryText} from 'components/common-styles';
 
 export default EStyleSheet.create({
   wrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: UNIT / 4,
+    paddingBottom: 1,
     paddingHorizontal: 5,
     borderRadius: 6,
   },

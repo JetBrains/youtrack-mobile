@@ -1,11 +1,10 @@
-import type { AnyIssue, IssueFull, IssueOnList } from 'types/Issue';
-import type { Article } from 'types/Article';
-import type { CustomFieldBase } from 'types/CustomFields';
+import {isSLAField} from 'components/custom-field/custom-field-helper';
 
-function findIssueField(
-  issue: AnyIssue,
-  predicate: (field: CustomFieldBase) => boolean
-): CustomFieldBase | null {
+import type {AnyIssue, IssueFull, IssueOnList} from 'types/Issue';
+import type {Article} from 'types/Article';
+import type {CustomField, CustomFieldBase} from 'types/CustomFields';
+
+function findIssueField(issue: AnyIssue, predicate: (field: CustomFieldBase | CustomField) => boolean) {
   const fields = issue.fields || [];
 
   for (const field of fields) {
@@ -17,20 +16,18 @@ function findIssueField(
   return null;
 }
 
-function getPriorityField(issue: AnyIssue): CustomFieldBase | null {
+function getPriorityField(issue: AnyIssue) {
   return findIssueField(issue, field => {
     const fieldName: string | null | undefined = field?.projectCustomField?.field?.name;
     return !!fieldName && fieldName.toLowerCase() === 'priority';
   });
 }
 
-function getSLAFields(issue: IssueOnList): CustomFieldBase[] {
-  return (issue.fields || []).filter(
-    (it) => it.$type === 'SlaIssueCustomField'
-  );
+function getSLAFields(issue: IssueOnList) {
+  return (issue.fields || []).filter(isSLAField);
 }
 
-function getAssigneeField(issue: AnyIssue): CustomFieldBase | null {
+function getAssigneeField(issue: AnyIssue) {
   const PRIORITY_FIELDS = ['Assignee', 'Assignees'];
   return findIssueField(issue, field => {
     const fieldName = field.projectCustomField.field.name;
@@ -38,11 +35,11 @@ function getAssigneeField(issue: AnyIssue): CustomFieldBase | null {
   });
 }
 
-function getReadableID(entity: IssueOnList | IssueFull | Article): string {
+function getReadableID(entity: IssueOnList | IssueFull | Article) {
   return (!!entity && entity?.idReadable) || '';
 }
 
-function getEntityPresentation(entity?: Record<string, any>): string {
+function getEntityPresentation(entity?: Record<string, any>) {
   let userName: string = '';
 
   if (entity) {
@@ -52,19 +49,14 @@ function getEntityPresentation(entity?: Record<string, any>): string {
 
     if (!userName) {
       userName =
-        entity.fullName ||
-        entity.localizedName ||
-        entity.name ||
-        entity.login ||
-        entity.presentation ||
-        entity.text;
+        entity.fullName || entity.localizedName || entity.name || entity.login || entity.presentation || entity.text;
     }
   }
 
   return userName || '';
 }
 
-function getVisibilityPresentation(entity: Record<string, any>): null | string {
+const getVisibilityPresentation = (entity: Record<string, any>) => {
   if (!entity) {
     return null;
   }
@@ -75,7 +67,7 @@ function getVisibilityPresentation(entity: Record<string, any>): null | string {
     .concat(visibility.permittedUsers || [])
     .map(it => getEntityPresentation(it))
     .join(', ');
-}
+};
 
 export {
   getPriorityField,

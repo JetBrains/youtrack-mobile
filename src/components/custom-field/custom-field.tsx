@@ -4,16 +4,19 @@ import {TouchableOpacity, View, Text, Linking} from 'react-native';
 import ApiHelper from 'components/api/api__helper';
 import Avatar from 'components/avatar/avatar';
 import ColorField from 'components/color-field/color-field';
+import CustomFieldSLA from 'components/custom-field/custom-field-sla';
 import IconUrl from '@jetbrains/icons/new-window.svg';
 import {absDate} from 'components/date/date';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {getHUBUrl, isURLPattern} from 'util/util';
 import {HIT_SLOP} from 'components/common-styles/button';
+import {isSLAField} from 'components/custom-field/custom-field-helper';
 
 import styles from './custom-field.styles';
 
 import {
   CustomField as CustomFieldType,
+  CustomFieldBase,
   FieldValue,
 } from 'types/CustomFields';
 import {User} from 'types/User';
@@ -24,6 +27,7 @@ interface Props {
   onPress: () => unknown;
   disabled: boolean;
   active: boolean;
+  absDate: boolean;
 }
 
 const maxValueStringWidth: number = 30;
@@ -43,10 +47,10 @@ export default class CustomField extends Component<Props, void> {
 
     if (value != null) {
       if (fieldType === 'date') {
-        return absDate(value as any as number, true);
+        return absDate(value as unknown as number, true);
       }
       if (fieldType === 'date and time') {
-        return absDate(value);
+        return absDate(value as unknown as number);
       }
 
       if (
@@ -76,9 +80,9 @@ export default class CustomField extends Component<Props, void> {
       : label;
   }
 
-  _renderColorMaker(value: CustomFieldValue | null) {
-    const firstColorCodedValue: FieldValue | null = value
-      ? [].concat(value).find((fieldValue: FieldValue) => fieldValue.color) || null
+  _renderColorMaker(value: CustomFieldValue | CustomFieldValue[] | null) {
+    const firstColorCodedValue: FieldValue = value
+      ? new Array().concat(value).find((fieldValue: FieldValue) => fieldValue.color) || null
       : null;
     return firstColorCodedValue ? (
       <ColorField
@@ -88,7 +92,12 @@ export default class CustomField extends Component<Props, void> {
       />
     ) : null;
   }
-  _renderValue(value: CustomFieldValue, fieldType: string | null) {
+
+  renderSLAValue(field: CustomFieldBase) {
+    return <CustomFieldSLA field={field} absDate={this.props.absDate} />;
+  }
+
+  _renderValue(value: CustomFieldValue | CustomFieldValue[], fieldType: string | null) {
     const { active, disabled } = this.props;
     const textStyle = [
       styles.valueText,
@@ -163,13 +172,14 @@ export default class CustomField extends Component<Props, void> {
     );
   }
 
-  render(): React.ReactNode {
+  render() {
     const { field, active } = this.props;
+    const slaField = isSLAField(field);
     return (
       <TouchableOpacity
         style={[styles.wrapper, active ? styles.wrapperActive : null]}
         onPress={this.props.onPress}
-        disabled={this.props.disabled}
+        disabled={this.props.disabled || slaField}
         accessible={false}
       >
         <View style={styles.keyWrapper} accessible={false}>
@@ -179,8 +189,9 @@ export default class CustomField extends Component<Props, void> {
         </View>
 
         <View style={styles.valuesWrapper} accessible={false}>
-          {this._renderColorMaker(field.value as FieldValue)}
-          {this._renderValue(field.value as FieldValue, this._getFieldType(field))}
+          {this._renderColorMaker(field.value)}
+          {slaField && this.renderSLAValue(field)}
+          {!slaField && this._renderValue(field.value, this._getFieldType(field))}
         </View>
       </TouchableOpacity>
     );

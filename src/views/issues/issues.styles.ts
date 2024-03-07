@@ -402,31 +402,4 @@ export default EStyleSheet.create({
   slaFieldsCompact: {
     marginTop: 0,
   },
-  slaFieldsItem: {
-    marginRight: UNIT / 2,
-  },
-  slaField: {
-    color: '$textButton',
-    backgroundColor: '$greenColor',
-  },
-  slaFieldOverdue: {
-    backgroundColor: '$redColor',
-  },
-  slaFieldPaused: {
-    backgroundColor: '$greyColor',
-    color: '$text',
-  },
-  slaFieldPausedIcon: {
-    color: '$textSecondary',
-  },
-  slaFieldTag: {
-    marginTop: -UNIT / 2,
-    marginRight: UNIT / 1.5,
-    fontSize: SECONDARY_FONT_SIZE - 3,
-  },
-  slaFieldPausedCompact: {
-    marginTop: -UNIT / 2,
-    marginRight: UNIT / 2,
-    marginLeft: -UNIT / 2,
-  },
 });

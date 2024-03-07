@@ -3,8 +3,8 @@ import {View, Text, TouchableOpacity} from 'react-native';
 
 import Avatar from 'components/avatar/avatar';
 import ColorField from 'components/color-field/color-field';
+import CustomFieldSLA from 'components/custom-field/custom-field-sla';
 import IconHDTicket from 'components/icon/assets/menu_helpdesk.svg';
-import IconPaused from '@jetbrains/icons/paused.svg';
 import Tags from 'components/tags/tags';
 import {
   getPriorityField,
@@ -13,7 +13,6 @@ import {
   getAssigneeField,
   getSLAFields,
 } from 'components/issue-formatter/issue-formatter';
-import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {isHelpdeskProject} from 'components/helpdesk';
 import {IssuesSettings} from 'views/issues/index';
 import {ThemeContext} from 'components/theme/theme-context';
@@ -29,11 +28,12 @@ import {TextStyleProp, ViewStyleProp} from 'types/Internal';
 interface Props {
   hideId?: boolean;
   issue: IssueOnList;
-  onClick: (...args: any[]) => any;
-  onTagPress?: (query: string) => any;
+  onClick: (issue: IssueOnList) => void;
+  onTagPress?: (query: string) => void;
   style?: ViewStyleProp;
   settings?: IssuesSettings;
   helpdeskMode: boolean;
+  absDate: boolean;
 }
 
 export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
@@ -46,61 +46,14 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
     );
   }
 
-  renderSLAPausedTag(text: string) {
-    return (
-      <ColorField
-        style={styles.slaFieldPaused}
-        color={{
-          id: '',
-          foreground: styles.slaFieldPaused.color,
-          background: '',
-        }}
-        text={text}
-        fullText={true}
-      >
-        <IconPaused
-          style={styles.slaFieldPausedIcon}
-          fill={styles.slaFieldPausedIcon.color}
-          width={13}
-          height={13}
-        />
-      </ColorField>
-    );
-  }
-
-  createSLADateTagColor(f: CustomFieldBase) {
-    return {
-      id: '',
-      foreground: styles.slaField.color,
-      background:
-        new Date().getTime() > f.value
-          ? styles.slaFieldOverdue.backgroundColor
-          : styles.slaField.backgroundColor,
-    };
-  }
-
-  renderSLADateTag(f: CustomFieldBase) {
-    return (
-      <View style={styles.slaFieldsItem}>
-        <ColorField
-          color={this.createSLADateTagColor(f)}
-          text={ytDate(f.value as number)}
-          fullText={true}
-        />
-      </View>
-    );
-  }
-
-  renderSLA() {
+  renderSLA(absDate: boolean, style?: ViewStyleProp) {
     if (!this.props.helpdeskMode) {
       return null;
     }
     const slaFields = getSLAFields(this.props.issue);
     return (
-      <View style={styles.slaFields}>
-        {slaFields.map((f: CustomFieldBase) =>
-          f.pausedTime ? this.renderSLAPausedTag(i18n('Paused')) : this.renderSLADateTag(f)
-        )}
+      <View style={[styles.slaFields, style]}>
+        {slaFields.map((f: CustomFieldBase) => <CustomFieldSLA field={f} absDate={absDate} />)}
       </View>
     );
   }
@@ -115,7 +68,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
       return null;
     }
 
-    const values: BundleValue[] = [].concat(priorityField.value as any);
+    const values: BundleValue[] = new Array().concat(priorityField.value);
     const LAST = values.length - 1;
     return (
       <ColorField
@@ -174,7 +127,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
     return issue.updated ? <Text style={styles.secondaryText}>{`${ytDate(issue.updated)}  `}</Text> : null;
   }
 
-  renderId(customStyle?: any, id?: string) {
+  renderId(customStyle?: ViewStyleProp, id?: string) {
     const {issue} = this.props;
     const readableId: string = id || getReadableID(issue);
     return readableId ? <Text
@@ -259,7 +212,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
 
         {this.renderSummary()}
         {this.renderDescription()}
-        {this.renderSLA()}
+        {this.renderSLA(this.props.absDate)}
         {this.renderTags()}
       </View>
     );
@@ -311,51 +264,6 @@ export class IssueRowCompact<P extends Props, S = {}> extends IssueRow<P, S> {
         );
   }
 
-  formatDistanceToBreach(date: number): string {
-    const minutesLeft = Math.floor((date - Date.now()) / 1000 / 60);
-    const minutesAbsolute = Math.abs(minutesLeft);
-    if (minutesAbsolute < 90) {
-      return i18nPlural(
-        minutesAbsolute,
-        '{{minutesAbsolute}}m',
-        '{{minutesAbsolute}}m',
-        {minutesAbsolute},
-      );
-    }
-    const hoursLeft = Math.floor(minutesAbsolute / 60);
-    if (hoursLeft < 24) {
-      return i18nPlural(
-        hoursLeft,
-        '{{hoursLeft}}h',
-        '{{hoursLeft}}h',
-        {hoursLeft},
-      );
-    }
-    const daysLeft = Math.floor(hoursLeft / 24);
-    return i18nPlural(
-      daysLeft,
-      '{{daysLeft}}d',
-      '{{daysLeft}}d',
-      {daysLeft},
-    );
-  }
-
-  renderSLADateTag(f: CustomFieldBase) {
-    const prefix = new Date().getTime() > f.value ? '-' : '';
-    return (
-      <ColorField
-        style={styles.slaFieldTag}
-        color={this.createSLADateTagColor(f)}
-        text={`${prefix}${this.formatDistanceToBreach(f.value as number)}`}
-        fullText={true}
-      />
-    );
-  }
-
-  renderSLAPausedTag() {
-    return <View style={styles.slaFieldPausedCompact}>{super.renderSLAPausedTag('')}</View>;
-  }
-
   renderContent() {
     return (
       <View style={[styles.issueRow, styles.rowLine]}>
@@ -364,7 +272,7 @@ export class IssueRowCompact<P extends Props, S = {}> extends IssueRow<P, S> {
         </View>
 
         {this.renderSummary()}
-        {this.props.helpdeskMode && this.renderSLA()}
+        {this.props.helpdeskMode && this.renderSLA(false, styles.slaFieldsCompact)}
         {this.renderId()}
         {this.renderReporter()}
       </View>

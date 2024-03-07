@@ -76,6 +76,7 @@ export type FieldValue = {
   $type: string;
   id: string;
   ringId: string;
+  localizedName: string;
   name: string;
   fullName: string;
   avatarUrl: string;
@@ -94,23 +95,20 @@ export type CustomFieldValue =
   | Partial<FieldValue>
   | Partial<FieldValue>[]
 
-export type CustomFieldBase = {
+export interface CustomFieldBase {
   $type: string;
   id: string;
   name: string;
   pausedTime?: number;
-  value: CustomFieldValue;
   projectCustomField: ProjectCustomField;
-};
-export type CustomField = {
-  $type: string;
-  id: string;
-  name: string;
-  hasStateMachine?: boolean;
   value: CustomFieldValue | CustomFieldValue[];
+}
+
+export interface CustomField extends CustomFieldBase {
   localizedName?: string;
-  projectCustomField: ProjectCustomField;
-};
+  hasStateMachine?: boolean;
+}
+
 export type CustomFieldTextValue = {
   id: string | null | undefined;
   text: string;
