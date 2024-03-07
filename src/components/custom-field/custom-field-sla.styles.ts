@@ -19,4 +19,12 @@ export default EStyleSheet.create({
   slaPausedIcon: {
     color: '$textSecondary',
   },
+  preview: {
+    padding: UNIT,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  previewLabel: {
+    marginRight: UNIT,
+  },
 });
