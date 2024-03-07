@@ -56,19 +56,19 @@ msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} hibajegy"
 msgstr[1] "{{amount}} hibajegy"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
 msgstr[0] ""
@@ -822,7 +822,7 @@ msgstr "További csoportok és csapatok"
 msgid "Password"
 msgstr "Jelszó"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/custom-field/custom-field-sla.tsx
 msgid "Paused"
 msgstr "Szüneteltetve"
 

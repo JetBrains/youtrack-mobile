@@ -56,19 +56,19 @@ msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} Ticket"
 msgstr[1] "{{amount}} Tickets"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
 msgstr[0] "{{daysLeft}}T"
 msgstr[1] "{{daysLeft}}T"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
 msgstr[0] "{{hoursLeft}}St."
 msgstr[1] "{{hoursLeft}}St."
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
 msgstr[0] "{{minutesAbsolute}}Min"
@@ -822,7 +822,7 @@ msgstr "Andere Gruppen und Teams"
 msgid "Password"
 msgstr "Kennwort"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/custom-field/custom-field-sla.tsx
 msgid "Paused"
 msgstr "Angehalten"
 

@@ -52,17 +52,17 @@ msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} 件の課題"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
 msgstr[0] "{{daysLeft}}日"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
 msgstr[0] "{{hoursLeft}}時間"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
 msgstr[0] "{{minutesAbsolute}}分"
@@ -812,7 +812,7 @@ msgstr "その他のグループとチーム"
 msgid "Password"
 msgstr "パスワード"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/custom-field/custom-field-sla.tsx
 msgid "Paused"
 msgstr "一時停止しました"
 

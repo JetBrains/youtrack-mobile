@@ -64,7 +64,7 @@ msgstr[1] "{{amount}} задачи"
 msgstr[2] "{{amount}} задач"
 msgstr[3] "{{amount}} задачи"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
 msgstr[0] "{{daysLeft}}д"
@@ -72,7 +72,7 @@ msgstr[1] "{{daysLeft}}д"
 msgstr[2] "{{daysLeft}}д"
 msgstr[3] "{{daysLeft}}д"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
 msgstr[0] "{{hoursLeft}}ч"
@@ -80,7 +80,7 @@ msgstr[1] "{{hoursLeft}}ч"
 msgstr[2] "{{hoursLeft}}ч"
 msgstr[3] "{{hoursLeft}}ч"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/date/date.ts
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
 msgstr[0] "{{minutesAbsolute}}мин"
@@ -842,7 +842,7 @@ msgstr "Другие группы и команды"
 msgid "Password"
 msgstr "Пароль"
 
-#: src/views/issues/issues__row.tsx
+#: src/components/custom-field/custom-field-sla.tsx
 msgid "Paused"
 msgstr "Приостановлено"
 
