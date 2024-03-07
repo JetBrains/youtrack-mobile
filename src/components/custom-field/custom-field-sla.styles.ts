@@ -3,6 +3,7 @@ import {UNIT} from 'components/variables';
 
 export default EStyleSheet.create({
   slaField: {
+    minWidth: UNIT * 4.5,
     marginRight: UNIT / 2,
   },
   slaDefaultStyle: {
