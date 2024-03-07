@@ -1,6 +1,5 @@
 import {format, formatDistanceToNow} from 'date-fns';
-import {i18n} from 'components/i18n/i18n';
-import {getStorageState} from '../storage/storage';
+
 import deLocale from 'date-fns/locale/de';
 import ruLocale from 'date-fns/locale/ru';
 import esLocale from 'date-fns/locale/es';
@@ -15,8 +14,13 @@ import ptLocale from 'date-fns/locale/pt';
 import plLocale from 'date-fns/locale/pl';
 import itLocale from 'date-fns/locale/it';
 import ukLocale from 'date-fns/locale/uk';
+
+import {i18n, i18nPlural} from 'components/i18n/i18n';
+import {getStorageState} from 'components/storage/storage';
+
 import type {Locale} from 'date-fns';
 import type {User, UserProfileDateFieldFormat} from 'types/User';
+
 const dateLocaleMap: Record<string, Locale> = {
   de: deLocale,
   ru: ruLocale,
@@ -112,11 +116,41 @@ function ytDateRelative(date: number): string {
       });
 }
 
+function formatSLADistanceToBreach(date: number): string {
+  const minutesLeft = Math.floor((date - Date.now()) / 1000 / 60);
+  const minutesAbsolute = Math.abs(minutesLeft);
+  if (minutesAbsolute < 90) {
+    return i18nPlural(
+      minutesAbsolute,
+      '{{minutesAbsolute}}m',
+      '{{minutesAbsolute}}m',
+      {minutesAbsolute},
+    );
+  }
+  const hoursLeft = Math.floor(minutesAbsolute / 60);
+  if (hoursLeft < 24) {
+    return i18nPlural(
+      hoursLeft,
+      '{{hoursLeft}}h',
+      '{{hoursLeft}}h',
+      {hoursLeft},
+    );
+  }
+  const daysLeft = Math.floor(hoursLeft / 24);
+  return i18nPlural(
+    daysLeft,
+    '{{daysLeft}}d',
+    '{{daysLeft}}d',
+    {daysLeft},
+  );
+}
+
 export {
   USER_DATE_FORMAT_DEFAULT_DATE_PATTERN,
   USER_DATE_FORMAT_DEFAULT_PATTERN,
   absDate,
   formatTime,
+  formatSLADistanceToBreach,
   ytDate,
   ytDateRelative,
 };

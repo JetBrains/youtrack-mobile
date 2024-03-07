@@ -9,21 +9,15 @@ import type {
 export type AnyCustomField = Partial<CustomField & CustomFieldText>;
 
 const isProjectCustomField = (customField: ProjectCustomField): boolean => {
-  return customField?.$type
-    ? customField.$type.indexOf('ProjectCustomField') !== -1
-    : false;
+  return customField?.$type ? customField.$type.indexOf('ProjectCustomField') !== -1 : false;
 };
 
-const getSimpleCustomFieldType = (
-  customField: ProjectCustomField | null | undefined,
-): string | null | undefined => {
+const getSimpleCustomFieldType = (customField: ProjectCustomField | null | undefined): string | null | undefined => {
   if (!customField) {
     return null;
   }
 
-  const fieldType = isProjectCustomField(customField)
-    ? customField.field.fieldType
-    : customField.fieldType;
+  const fieldType = isProjectCustomField(customField) ? customField.field.fieldType : customField.fieldType;
   return fieldType ? fieldType.valueType : null;
 };
 
@@ -32,15 +26,11 @@ const isTextCustomField = (customField: ProjectCustomField): boolean => {
     return false;
   }
 
-  const valueType: string | null | undefined = getSimpleCustomFieldType(
-    customField,
-  );
+  const valueType: string | null | undefined = getSimpleCustomFieldType(customField);
   return valueType ? valueType === 'text' : false;
 };
 
-const isRequiredCustomField = (
-  customField: CustomFieldBase | CustomFieldText | CustomField,
-): boolean => {
+const isRequiredCustomField = (customField: CustomFieldBase | CustomFieldText | CustomField): boolean => {
   if (!customField || !customField?.projectCustomField) {
     return false;
   }
@@ -48,38 +38,26 @@ const isRequiredCustomField = (
   return !customField.projectCustomField.canBeEmpty;
 };
 
-const getIssueTextCustomFields = (
-  issueCustomFields: AnyCustomField[] = [],
-): CustomFieldText[] =>
-  issueCustomFields.filter((field: AnyCustomField) =>
-    isTextCustomField(field.projectCustomField),
-  );
+const getIssueTextCustomFields = (issueCustomFields: CustomFieldBase[] = []) =>
+  issueCustomFields.filter((field: CustomFieldBase) => isTextCustomField(field.projectCustomField));
 
-const getIssueCustomFieldsNotText = (
-  issueCustomFields: AnyCustomField[] = [],
-): CustomField[] =>
-  issueCustomFields.filter(
-    (field: AnyCustomField) => !isTextCustomField(field.projectCustomField),
-  );
+const getIssueCustomFieldsNotText = (issueCustomFields: CustomFieldBase[] = []): CustomField[] =>
+  issueCustomFields.filter(field => !isTextCustomField(field.projectCustomField));
 
 const updateCustomFieldValue = (
-  fields: AnyCustomField[] = [],
-  cf: AnyCustomField,
-  value: CustomFieldValue,
-): AnyCustomField[] => {
-  const index: number = fields.findIndex((f: AnyCustomField) => f.id === cf.id);
-  return index >= 0
-    ? [
-        ...fields.slice(0, index),
-        {...fields[index], value},
-        ...fields.slice(index + 1),
-      ]
-    : fields;
+  fields: CustomFieldBase[] = [],
+  cf: CustomFieldBase,
+  value: CustomFieldValue
+): CustomFieldBase[] => {
+  const index: number = fields.findIndex(f => f.id === cf.id);
+  return index >= 0 ? [...fields.slice(0, index), {...fields[index], value}, ...fields.slice(index + 1)] : fields;
 };
 
-const getCustomFieldName = (customField: Partial<AnyCustomField>): string => {
+const getCustomFieldName = (customField: CustomField): string => {
   return customField?.localizedName || customField?.name || '';
 };
+
+const isSLAField = (cf: CustomField): boolean => cf.$type === 'SlaIssueCustomField';
 
 export {
   getCustomFieldName,
@@ -88,5 +66,6 @@ export {
   getSimpleCustomFieldType,
   isTextCustomField,
   isRequiredCustomField,
+  isSLAField,
   updateCustomFieldValue,
 };

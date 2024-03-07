@@ -55,7 +55,6 @@ interface Props {
   accessible?: boolean;
   accessibilityLabel?: string;
   modal?: boolean;
-  horizontal?: boolean;
 }
 
 interface SelectState extends ISelectState {
@@ -126,7 +125,8 @@ export default function CustomFieldsPanel(props: Props) {
   let currentScrollX: number = 0;
   const isComponentMounted = React.useRef<boolean>(false);
   const isConnected = useSelector((state: AppState) => state.app.networkState?.isConnected);
-  const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles.helpdesk.isReporter);
+  const user = useSelector((state: AppState) => state.app.user);
+  const isReporter = user?.profiles.helpdesk.isReporter;
   const [selectState, setSelectState] = React.useState<SelectState | null>(null);
   const [simpleValueState, setSimpleValue] = React.useState<SimpleValueState | null>(null);
   const [datePickerState, setDatePickerState] = React.useState<DatePickerState>(dataPickerDefault);
@@ -410,16 +410,14 @@ export default function CustomFieldsPanel(props: Props) {
   const isFieldDisabled = () => isConnected === false || isReporter;
 
   const renderFields = () => {
-    const {issueProject = {name: ''}, horizontal} = props;
-    const Container = horizontal ? View : PanelWithSeparator;
-    const ContainerScroll = horizontal ? View : ScrollView;
+    const {issueProject = {name: ''}} = props;
     return (
       <>
         {!props.fields && <SkeletonIssueCustomFields />}
 
         {!!props.fields && (
-          <Container>
-            <ContainerScroll
+          <PanelWithSeparator>
+            <ScrollView
               ref={restoreScrollPosition}
               onScroll={storeScrollPosition}
               contentOffset={{
@@ -428,12 +426,10 @@ export default function CustomFieldsPanel(props: Props) {
               }}
               scrollEventThrottle={100}
               horizontal={true}
-              style={horizontal && styles.customFieldsPanel}
               keyboardShouldPersistTaps="always"
             >
               <View key="Project">
                 <CustomField
-                  horizontal={horizontal}
                   disabled={!props.hasPermission.canEditProject || isFieldDisabled()}
                   onPress={onSelectProject}
                   active={isEditingProject}
@@ -450,6 +446,7 @@ export default function CustomFieldsPanel(props: Props) {
                 return (
                   <React.Fragment key={field.id || `${field.name}-${index}`}>
                     <CustomField
+                      absDate={!!user?.profiles.appearance?.useAbsoluteDates}
                       field={field}
                       onPress={() => onEditField(field)}
                       active={editingField === field}
@@ -462,8 +459,8 @@ export default function CustomFieldsPanel(props: Props) {
                   </React.Fragment>
                 );
               })}
-            </ContainerScroll>
-          </Container>
+            </ScrollView>
+          </PanelWithSeparator>
         )}
       </>
     );
