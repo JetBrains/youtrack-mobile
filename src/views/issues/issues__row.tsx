@@ -182,6 +182,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
       <Tags
         tags={issue.tags || []}
         onTagPress={onTagPress}
+        style={styles.tags}
       />
     ) : null;
   }
@@ -211,10 +212,8 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
 
         {this.renderSummary()}
         {this.renderDescription()}
-        <View style={styles.tags}>
-          {this.renderSLA(this.props.absDate)}
-          {this.renderTags()}
-        </View>
+        {this.renderSLA(this.props.absDate)}
+        {this.renderTags()}
       </View>
     );
   }
