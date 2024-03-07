@@ -407,7 +407,7 @@ export default function CustomFieldsPanel(props: Props) {
     }
   };
 
-  const isFieldDisabled = () => isConnected === false || isReporter;
+  const isFieldDisabled = () => isConnected === false || !!isReporter;
 
   const renderFields = () => {
     const {issueProject = {name: ''}} = props;

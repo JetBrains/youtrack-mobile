@@ -27,7 +27,7 @@ interface Props {
   onPress: () => unknown;
   disabled: boolean;
   active: boolean;
-  absDate: boolean;
+  absDate?: boolean;
 }
 
 const maxValueStringWidth: number = 30;

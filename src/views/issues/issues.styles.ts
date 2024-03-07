@@ -133,7 +133,6 @@ export default EStyleSheet.create({
     color: '$textSecondary',
   },
   tags: {
-    ...rowLine,
     marginTop: UNIT,
   },
   userSearchQueryButton: {
@@ -398,8 +397,7 @@ export default EStyleSheet.create({
   },
   slaFields: {
     flexDirection: 'row',
-    marginRight: UNIT / 2,
-    marginBottom: UNIT / 4,
+    marginTop: UNIT / 2,
   },
   slaFieldsCompact: {
     marginTop: 0,
