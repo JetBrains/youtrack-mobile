@@ -68,40 +68,42 @@ function hashCode(value: string) {
   return hash;
 }
 
-export default class DefaultAvatar extends React.PureComponent<Props, void> {
-  render(): React.ReactNode {
-    const {text, size, style} = this.props;
+export default function DefaultAvatar(props: Props) {
+  const {text, size, style} = props;
+  const colors = React.useMemo(() => {
+    return COLOR_PARIS[Math.abs(hashCode((text || '').toLowerCase()) % COLOR_PARIS.length)];
+  }, [text]);
 
-    if (!text) {
-      return null;
-    }
-
-    const shortText = extractLetters(text);
-    const colors = COLOR_PARIS[Math.abs(hashCode(text.toLowerCase()) % COLOR_PARIS.length)];
-    const textStyle = [
-      styles.text,
-      {
-        fontSize: size / 2,
-        lineHeight: size / 2,
-      },
-    ];
-    return (
-      <LinearGradient
-        colors={colors}
-        style={[
-          styles.common,
-          style,
-          {
-            width: size,
-            height: size,
-            borderRadius: size,
-          },
-        ]}
-      >
-        <View>
-          <Text style={textStyle}>{shortText}</Text>
-        </View>
-      </LinearGradient>
-    );
+  if (!text) {
+    return null;
   }
+
+  return (
+    <LinearGradient
+      colors={colors}
+      style={[
+        styles.common,
+        style,
+        {
+          width: size,
+          height: size,
+          borderRadius: size,
+        },
+      ]}
+    >
+      <View>
+        <Text
+          style={[
+            styles.text,
+            {
+              fontSize: size / 2,
+              lineHeight: size / 2,
+            },
+          ]}
+        >
+          {extractLetters(text)}
+        </Text>
+      </View>
+    </LinearGradient>
+  );
 }

@@ -7,13 +7,15 @@ import DefaultAvatar from './default-avatar';
 
 import styles from './default-avatar.styles';
 
+import {ViewStyleProp} from 'types/Internal';
+
 interface Props {
   userName?: string;
   size: number;
   source: {
     uri: string;
   };
-  style?: Record<string, any>;
+  style?: ViewStyleProp;
 }
 
 interface State {
@@ -21,6 +23,7 @@ interface State {
   renderSVG: boolean;
 }
 
+const errors = ['error decoding image data', 'unknown image format'];
 
 const Avatar = (props: Props) => {
   const {source, userName = 'A', size, style} = props;
@@ -33,7 +36,6 @@ const Avatar = (props: Props) => {
   React.useEffect(() => {
     setState((st: State) => ({...st, renderDefault: !source.uri}));
   }, [source.uri]);
-
 
   return (
     <View
@@ -53,32 +55,24 @@ const Avatar = (props: Props) => {
           width={size}
           height={size}
           uri={source.uri}
-          onError={() => setState({
-            renderSVG: false,
-            renderDefault: true,
-          })}
+          onError={() =>
+            setState({
+              renderSVG: false,
+              renderDefault: true,
+            })
+          }
         />
       )}
-      {state.renderDefault && (
-        <DefaultAvatar
-          size={size}
-          text={userName}
-          style={[styles.common, style]}
-        />
-      )}
+      {state.renderDefault && <DefaultAvatar size={size} text={userName} style={[styles.common, style]} />}
       {!state.renderSVG && !state.renderDefault && (
         <Image
           source={source}
-          style={[
-            styles.common,
-            {width: size, height: size, borderRadius: size},
-          ]}
-          onError={(e: NativeSyntheticEvent<ImageErrorEventData>) => {
-            const error: unknown | undefined = e?.nativeEvent?.error;
+          style={[styles.common, {width: size, height: size, borderRadius: size}]}
+          onError={(event: NativeSyntheticEvent<ImageErrorEventData>) => {
+            const error = event?.nativeEvent?.error;
             if (error) {
-              const isDecodeError: boolean = typeof error === 'string' && error.indexOf(
-                'Error decoding image data'
-              ) !== -1;
+              const isDecodeError: boolean =
+                typeof error === 'string' && errors.some(s => error.toLowerCase().indexOf(s) !== -1);
               setState({
                 renderSVG: isDecodeError,
                 renderDefault: !isDecodeError,
@@ -90,6 +84,5 @@ const Avatar = (props: Props) => {
     </View>
   );
 };
-
 
 export default React.memo(Avatar);
