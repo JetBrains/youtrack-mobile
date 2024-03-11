@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {
   ScrollView,
   Text,
@@ -110,14 +110,10 @@ export interface IssueDetailsProps {
   ) => any;
   modal?: boolean;
   scrollData: ScrollData;
+  navigation: NavigationScreenProp<NavigationState>;
   isAgent: boolean;
   isReporter: boolean;
 }
-
-export default class IssueDetails extends Component<IssueDetailsProps, void> {
-  navigation: NavigationScreenProp<NavigationState>,
-};
-
 
 class IssueDetails extends React.Component<IssueDetailsProps, void> {
   imageHeaders: any = getApi().auth.getAuthorizationHeaders();
