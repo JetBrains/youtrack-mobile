@@ -87,7 +87,7 @@ export default EStyleSheet.create({
     }),
   },
   priorityWrapperCompact: {
-    width: 4,
+    minWidth: 4,
     paddingHorizontal: 0,
   },
   rowLine,
@@ -153,7 +153,6 @@ export default EStyleSheet.create({
     alignSelf: 'flex-start',
     minWidth: 130,
     marginTop: UNIT,
-    marginRight: UNIT * 14,
     marginLeft: UNIT * 2,
     paddingVertical: UNIT,
     backgroundColor: '$background',
@@ -194,6 +193,7 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: UNIT * 2,
+    height: 17,
   },
   toolbarActionSortBy: {
     marginRight: -1,
@@ -401,32 +401,5 @@ export default EStyleSheet.create({
   },
   slaFieldsCompact: {
     marginTop: 0,
-  },
-  slaFieldsItem: {
-    marginRight: UNIT / 2,
-  },
-  slaField: {
-    color: '$textButton',
-    backgroundColor: '$greenColor',
-  },
-  slaFieldOverdue: {
-    backgroundColor: '$redColor',
-  },
-  slaFieldPaused: {
-    backgroundColor: '$greyColor',
-    color: '$text',
-  },
-  slaFieldPausedIcon: {
-    color: '$textSecondary',
-  },
-  slaFieldTag: {
-    marginTop: -UNIT / 2,
-    marginRight: UNIT / 1.5,
-    fontSize: SECONDARY_FONT_SIZE - 3,
-  },
-  slaFieldPausedCompact: {
-    marginTop: -UNIT / 2,
-    marginRight: UNIT / 2,
-    marginLeft: -UNIT / 2,
   },
 });

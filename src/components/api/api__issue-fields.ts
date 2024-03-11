@@ -106,6 +106,7 @@ const ISSUE_FIELD_FIELDS = toField([
   'name',
   'localizedName',
   'hasStateMachine',
+  'pausedTime',
   ISSUE_FIELD_VALUE,
   {
     projectCustomField: PROJECT_CUSTOM_FIELD_FIELDS,
