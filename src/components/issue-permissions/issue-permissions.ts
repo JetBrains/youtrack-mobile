@@ -325,4 +325,16 @@ export default class IssuePermissions {
   articleCanAddAttachment = (article: Article): boolean => this.hasPermissionFor(article, CREATE_ARTICLE_COMMENT);
 
   articleCanDeleteAttachment = (article: Article): boolean => this.articleCanUpdate(article);
+
+  helpdesk = {
+    isHelpdeskTicket: (entity: Entity) => isHelpdeskProject(entity),
+    isReporter: (entity: Entity | null = null): boolean => {
+      const helpDeskProject = !entity || isHelpdeskProject(entity);
+      return (
+        helpDeskProject &&
+        (!!this.getUserProfileHelpdeskSettings()?.isReporter ||
+          (!!entity?.project && this.isReporterInProject(entity.project)))
+      );
+    },
+  };
 }
