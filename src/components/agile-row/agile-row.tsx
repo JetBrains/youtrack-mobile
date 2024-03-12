@@ -11,6 +11,7 @@ import type {AgileBoardRow, BoardCell, BoardColumn} from 'types/Agile';
 import type {IssueOnList} from 'types/Issue';
 import type {ViewStyleProp} from 'types/Internal';
 import type {UITheme} from 'types/Theme';
+
 type RenderIssueCard = (issue: IssueOnList) => any;
 type Props = {
   style?: ViewStyleProp;
@@ -68,7 +69,7 @@ function renderCollapsedColumn(
   }
 }
 
-export default function BoardRow(props: Props): React.ReactNode {
+export default function BoardRow(props: Props) {
   const {
     row,
     style,
@@ -160,7 +161,6 @@ export default function BoardRow(props: Props): React.ReactNode {
                 onTapCreateIssue={onTapCreateIssue}
                 lastColumn={lastColumn}
                 renderIssueCard={renderIssueCard}
-                uiTheme={uiTheme}
                 zoomedIn={zoomedIn}
                 columnsLength={columns.length}
               />
