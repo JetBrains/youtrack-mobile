@@ -82,6 +82,10 @@ export default class IssuePermissions {
     return user.ringId === this.currentUser.id;
   };
 
+  canCreateIssue = (entity: Entity | null): boolean => {
+    return entity ? this.hasPermissionFor(entity, CREATE_ISSUE) : false;
+  };
+
   canUpdateGeneralInfo = (issue: Entity | null): boolean => {
     if (!issue) {
       return false;

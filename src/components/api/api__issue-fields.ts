@@ -1,8 +1,14 @@
 import {toField} from 'util/to-field';
 
+const PROJECT_BASE_AND_HELPDESK_SETTINGS_FIELDS = [
+  'id',
+  'name',
+  'ringId',
+  {plugins: {helpDeskSettings: ['enabled']}},
+];
 const PROJECT_SHORT_WITH_HELPDESK_FIELDS: any = toField([
   {
-    project: ['id', 'name', 'ringId', {plugins: {helpDeskSettings: ['enabled']}}],
+    project: PROJECT_BASE_AND_HELPDESK_SETTINGS_FIELDS,
   },
 ]);
 
@@ -524,4 +530,5 @@ export default {
   MENTIONS_FIELDS,
   ISSUE_BASE_FIELDS,
   PROJECT_WITH_HELPDESK_FIELDS: PROJECT_SHORT_WITH_HELPDESK_FIELDS,
+  PROJECT_BASE_AND_HELPDESK_SETTINGS_FIELDS,
 };

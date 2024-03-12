@@ -36,6 +36,7 @@ import type {
   BoardColumn,
   BoardOnList,
   Sprint,
+  SprintBase,
   SprintFull,
   Swimlane,
 } from 'types/Agile';
@@ -96,13 +97,9 @@ function getLastVisitedSprint(
   );
 }
 
-export function getAgileUserProfile(): ReduxAction<Promise<Partial<AgileUserProfile>>> {
-  return async (
-    dispatch: ReduxThunkDispatch,
-    getState: ReduxStateGetter,
-  ) => {
-    const state = getState();
-    return state?.agile?.profile || {};
+export function getAgileUserProfile(): ReduxAction<Promise<AgileUserProfile | {}>> {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
+    return getState()?.agile?.profile || {};
   };
 }
 export function loadAgileWithStatus(
@@ -111,10 +108,9 @@ export function loadAgileWithStatus(
   return async (
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
   ) => {
     const isOffline: boolean = getState().app?.networkState?.isConnected === false;
-    const cachedDefaultAgileBoard: Board | null | undefined = getStorageState().agileDefaultBoard;
+    const cachedDefaultAgileBoard = getStorageState().agileDefaultBoard;
 
     if (cachedDefaultAgileBoard) {
       dispatch(receiveAgile(cachedDefaultAgileBoard));
@@ -124,15 +120,13 @@ export function loadAgileWithStatus(
       dispatch({
         type: types.START_LOADING_AGILE,
       });
-      const agileWithStatus: Board = await dispatch(loadAgile(agileId));
+      const agileWithStatus = await dispatch(loadAgile(agileId));
       dispatch({
         type: types.STOP_LOADING_AGILE,
       });
-      flushStoragePart({
-        agileDefaultBoard: agileWithStatus,
-      });
+      flushStoragePart({agileDefaultBoard: agileWithStatus});
 
-      if (!agileWithStatus.status.valid) {
+      if (!agileWithStatus.status!.valid) {
         dispatch(receiveSprint(null));
         dispatch(setGlobalInProgress(false));
       }
@@ -148,14 +142,12 @@ export function loadBoard(
     destroySSE();
     dispatch(updateAgileUserProfileLastVisitedAgile(board.id));
     dispatch(loadAgileWithStatus(board.id));
-    const agileUserProfile: AgileUserProfile = await dispatch(
-      getAgileUserProfile(),
-    );
-    const cachedAgileLastSprint: Sprint | null | undefined = getStorageState().agileLastSprint;
-    let sprint: Sprint | null;
+    const agileUserProfile = await dispatch(getAgileUserProfile());
+    const cachedAgileLastSprint = getStorageState().agileLastSprint;
+    let sprint: SprintBase | null;
 
     if (!refresh && board.currentSprint) {
-      sprint = board.currentSprint as Sprint;
+      sprint = board.currentSprint;
     } else {
       sprint = getLastVisitedSprint(board.id, agileUserProfile?.visitedSprints) ||
         (cachedAgileLastSprint?.agile?.id === board.id
@@ -383,10 +375,9 @@ export function loadAgileProfile(): ReduxAction {
     getState: ReduxStateGetter,
     getApi: ReduxAPIGetter,
   ) => {
-    let profile;
 
     try {
-      profile = await getApi().agile.getAgileUserProfile();
+    const profile = await getApi().agile.getAgileUserProfile();
       dispatch({
         type: types.RECEIVE_AGILE_PROFILE,
         profile,
@@ -403,7 +394,6 @@ export function loadDefaultAgileBoard(
   return async (
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
-    getApi: ReduxAPIGetter,
   ) => {
     dispatch(setError(null));
     const isOffline: boolean = getState().app?.networkState?.isConnected === false;
@@ -415,10 +405,8 @@ export function loadDefaultAgileBoard(
     }
 
     await dispatch(loadAgileProfile());
-    const agileUserProfile: AgileUserProfile = await dispatch(
-      getAgileUserProfile(),
-    );
-    const board: Partial<Board> | null = agileUserProfile?.defaultAgile;
+    const agileUserProfile = await dispatch(getAgileUserProfile());
+    const board = agileUserProfile?.defaultAgile;
     if (board) {
       log.info('Loading Default Agile board', board?.name || board?.id);
       await dispatch(loadBoard(board, query, refresh));

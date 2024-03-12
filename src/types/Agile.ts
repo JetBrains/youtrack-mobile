@@ -1,5 +1,5 @@
 import type {IssueFull, IssueOnList} from './Issue';
-import {Folder} from 'types/User';
+import {ProjectBase} from 'types/Project';
 
 export type Cell = {
   id: string;
@@ -11,7 +11,16 @@ export type Swimlane = Record<string, any> & {
   cells: Cell[];
 };
 export type AgileUserProfile = {
-  defaultAgile: Partial<Board>;
+  defaultAgile: {
+    id: string;
+    name: string;
+    currentSprint: SprintBase;
+    sprints: SprintBase[];
+    projects: Array<{
+      id: string;
+      ringId: string;
+    }>
+  };
   visitedSprints: {
     id: string;
     name: string;
@@ -91,9 +100,13 @@ export type Board = {
     disableSprints: boolean;
   };
   hideOrphansSwimlane: boolean;
-  currentSprint: Partial<Sprint>;
+  currentSprint: SprintBase;
   colorCoding: FieldBasedColorCoding | ProjectBasedColorCoding;
-  projects?: Folder[] | Partial<Folder>;
+  projects: Array<ProjectBase>;
+  swimlaneSettings: {
+    $type: string;
+    enabled: boolean;
+  };
 };
 export type BoardOnList = {
   $type: string;
@@ -109,28 +122,37 @@ export type BoardOnList = {
     fullName: string;
   };
 };
-export type Sprint = {
-  $type?: string;
+
+export interface Agile {
+  $type: string;
   id: string;
   name: string;
-  goal: string | null | undefined;
+  hideOrphansSwimlane: boolean;
+  isUpdatable: boolean;
+  orphansAtTheTop: boolean;
+  estimationField: {
+    id: string;
+  };
+  colorCoding: FieldBasedColorCoding | ProjectBasedColorCoding;
+}
+
+export interface SprintBase {
+  id: string;
+  name: string;
+  start: number | null;
+  finish: number | null;
+}
+
+export interface Sprint extends SprintBase {
   archived: boolean;
-  start: number | null | undefined;
-  finish: number | null | undefined;
-  agile?: Board;
+  agile?: Agile;
   board?: Board;
-};
-export type SprintFull = Sprint & {
+  goal: string | null;
+}
+
+export interface SprintFull extends Sprint {
   id: string;
   board: Board;
+  agile: Agile;
   eventSourceTicket: string;
-  agile: {
-    id: string;
-    name: string;
-    orphansAtTheTop: boolean;
-    isUpdatable: boolean;
-    estimationField: {
-      id: string;
-    };
-  };
-};
+}

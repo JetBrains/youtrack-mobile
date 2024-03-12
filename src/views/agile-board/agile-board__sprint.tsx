@@ -11,8 +11,8 @@ import type {UITheme} from 'types/Theme';
 type Props = {
   sprint: SprintFull;
   zoomedIn: boolean;
-  canRunCommand: (issue: AnyIssue) => boolean;
-  onTapIssue: (issue: AnyIssue) => void;
+  canRunCommand: (issue: IssueOnList) => boolean;
+  onTapIssue: (issue: IssueOnList) => void;
   onTapCreateIssue?: (columnId: string, cellId: string) => void;
   onCollapseToggle: (row: AgileBoardRow) => void;
   uiTheme: UITheme;
@@ -115,8 +115,7 @@ export default class AgileBoardSprint extends Component<Props, void> {
 
     const isOrphansAtTheTop: boolean = !!sprint.agile?.orphansAtTheTop;
     const hideOrphansSwimlane: boolean = sprint.agile?.hideOrphansSwimlane;
-    const orphan: AgileBoardRow =
-      !hideOrphansSwimlane && this.renderOrphan(board);
+    const orphan = hideOrphansSwimlane ? null : this.renderOrphan(board);
     return (
       <>
         {isOrphansAtTheTop && orphan}

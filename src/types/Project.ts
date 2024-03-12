@@ -19,7 +19,15 @@ export interface ProjectPlugins {
     timeSpent?: ProjectTimeTrackingTimeSpent;
     workItemTypes?: WorkItemType[];
   };
+}
 
+export interface ProjectBase {
+  id: string;
+  name: string;
+  ringId: string;
+  plugins: {
+    helpDeskSettings: ProjectHelpDeskSettings;
+  };
 }
 
 export interface Project {

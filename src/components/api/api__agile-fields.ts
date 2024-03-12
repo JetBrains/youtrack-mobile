@@ -1,5 +1,5 @@
 import ApiHelper from './api__helper';
-import IssueFields from './api__issue-fields';
+import issueFields from './api__issue-fields';
 const toField = ApiHelper.toField;
 const SPRINT: any = toField(['id', 'name', 'start', 'finish','favorite']);
 const AGILE_SHORT_WITH_SPRINTS = toField([
@@ -135,7 +135,7 @@ const SPRINT_LIVE_UPDATE: any = toField([
     swimlane: BOARD_ROW,
   },
   {
-    issue: IssueFields.issuesOnList,
+    issue: issueFields.issuesOnList,
   },
   {
     removedIssue: 'id',
@@ -168,7 +168,7 @@ const SPRINT_ISSUES_FIELDS: any = toField([
   'id',
   'resolved',
   {
-    tags: IssueFields.ISSUE_TAGS_FIELDS,
+    tags: issueFields.ISSUE_TAGS_FIELDS,
   },
   {
     project: 'id,name',
@@ -203,6 +203,27 @@ const SPRINT_ISSUES_FIELDS: any = toField([
     ],
   },
 ]);
+
+const AGILE: any = toField([
+  'id',
+  'name',
+  'favorite',
+  'hideOrphansSwimlane',
+  {
+    status: ['errors', 'valid'],
+  },
+  {
+    swimlaneSettings: ['$type', 'enabled'],
+  },
+  {
+    sprintsSettings: ['disableSprints'],
+  },
+  {
+    projects: issueFields.PROJECT_BASE_AND_HELPDESK_SETTINGS_FIELDS,
+  },
+]);
+
+
 export default {
   agileUserProfile: AGILE_PROFILE,
   sprint: SPRINT_WITH_BOARD,
@@ -211,4 +232,5 @@ export default {
   row: BOARD_ROW,
   boardOnList: BOARD_ON_LIST,
   liveUpdate: SPRINT_LIVE_UPDATE,
+  AGILE,
 };
