@@ -165,8 +165,12 @@ const CommentEdit = (props: Props) => {
     async (): Promise<void> => {
       toggleVisibilityControl(false);
       toggleSaving(true);
-      const comment: IssueComment = await onCommentChange(getCurrentComment(state.editingComment));
-      await props.onSubmitComment(comment as IssueComment);
+      const draft = getCurrentComment(state.editingComment);
+      const comment = await onCommentChange({
+        ...draft,
+        visibility: draft.canUpdateVisibility ? draft.visibility : null,
+      });
+      await props.onSubmitComment(comment);
       setEmptyComment();
       toggleSaving(false);
     },
