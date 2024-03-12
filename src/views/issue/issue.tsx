@@ -358,7 +358,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       canAttach: issuePermissions.canAddAttachmentTo(issue),
       canEdit:
         issuePermissions.canUpdateGeneralInfo(issue) &&
-        !(isHelpdeskProject(issue.project) || issuePermissions.isAgentInProject(issue.project)),
+        (!isHelpdeskProject(issue) || issuePermissions.isAgentInProject(issue.project)),
       canApplyCommand: !this.isReporter() && issuePermissions.canRunCommand(issue),
       canTag: issuePermissions.canTag(issue),
       canDeleteIssue: issuePermissions.canDeleteIssue(issue),
