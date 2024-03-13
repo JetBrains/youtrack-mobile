@@ -327,7 +327,8 @@ export default class IssuePermissions {
   articleCanDeleteAttachment = (article: Article): boolean => this.articleCanUpdate(article);
 
   helpdesk = {
-    isHelpdeskTicket: (entity: Entity) => isHelpdeskProject(entity),
+    isHelpdeskProject,
+    isAgent: () => !!this.getUserProfileHelpdeskSettings()?.isAgent,
     isReporter: (entity: Entity | null = null): boolean => {
       const helpDeskProject = !entity || isHelpdeskProject(entity);
       return (
