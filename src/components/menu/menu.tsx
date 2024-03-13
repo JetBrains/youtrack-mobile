@@ -275,7 +275,7 @@ export default function Menu() {
         {!isReporter && (
           <MenuItem
             testID="test:id/menuAgile"
-            icon={<IconAgile width={23} height={23} color={color(routeMap.AgileBoard)} />}
+            icon={<IconAgile width={22} height={22} color={color(routeMap.AgileBoard)} />}
             onPress={openAgileBoard}
           />
         )}
