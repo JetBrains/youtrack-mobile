@@ -1,7 +1,7 @@
 import React from 'react';
 import {Modal, TouchableOpacity, View} from 'react-native';
 
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 
 import styles from './modal.view.styles';
 
@@ -27,7 +27,7 @@ export default function ModalView(props: Props) {
     onRequestClose = () => {},
     transparent,
   } = props;
-  const {top, bottom} = useSafeAreaInsets();
+  const baseStyle: ViewStyleProp = {flex: 1};
   return (
     <View>
       <Modal
@@ -39,18 +39,30 @@ export default function ModalView(props: Props) {
         visible={props.visible}
       >
         <TouchableOpacity activeOpacity={1} style={styles.modalMask} onPress={onRequestClose} />
-        <View style={[styles.container, transparent && styles.containerPopup]}>
-          <View
+        <SafeAreaProvider>
+          <SafeAreaView
             style={[
-              styles.modalContent,
-              transparent && styles.modalPopup,
-              !transparent && {paddingTop: top, paddingBottom: bottom * 2},
-              props.style,
+              baseStyle,
+              transparent === true
+                ? null
+                : {
+                  backgroundColor: styles.modalContent.backgroundColor,
+                },
             ]}
           >
-            {props.children}
-          </View>
-        </View>
+            <View style={[styles.container, transparent && styles.containerPopup]}>
+              <View
+                style={[
+                  styles.modalContent,
+                  transparent && styles.modalPopup,
+                  props.style,
+                ]}
+              >
+                {props.children}
+              </View>
+            </View>
+          </SafeAreaView>
+        </SafeAreaProvider>
       </Modal>
     </View>
   );
