@@ -549,6 +549,7 @@ export function completeInitialization(
       !!userProfileLocale?.language &&
       cachedLocale?.language !== userProfileLocale?.language
     );
+    const isReporter = currentUser.profiles?.helpdesk?.isReporter;
 
     if (isLanguageChanged && userProfileLocale?.language) {
       loadTranslation(userProfileLocale?.locale, userProfileLocale?.language);
@@ -563,14 +564,18 @@ export function completeInitialization(
     log.debug('Initialization completed');
 
     if (!skipNavigateToRoute || (isLanguageChanged && !issueId && !articleId)) {
-      Router.navigateToDefaultRoute(
-        issueId || articleId || searchQuery ? {
-          issueId,
-          articleId,
-          navigateToActivity,
-          searchQuery,
-        } : undefined,
-      );
+      if (isReporter) {
+        Router.Tickets();
+      } else {
+        Router.navigateToDefaultRoute(
+          issueId || articleId || searchQuery ? {
+            issueId,
+            articleId,
+            navigateToActivity,
+            searchQuery,
+          } : undefined,
+        );
+      }
     }
 
     dispatch(loadWorkTimeSettings());
