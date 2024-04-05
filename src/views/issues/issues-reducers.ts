@@ -12,6 +12,7 @@ import type {Folder} from 'types/User';
 import {CustomError} from 'types/Error';
 import {ISelectProps} from 'components/select/select';
 import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
+import {ProjectHelpdesk} from 'types/Project';
 
 
 export interface IssuesState {
@@ -33,6 +34,7 @@ export interface IssuesState {
   settings: IssuesSettings;
   helpdeskSearchContext: Folder;
   helpDeskMode: boolean;
+  helpDeskProjects: ProjectHelpdesk[];
 }
 
 export const initialState: IssuesState = {
@@ -54,6 +56,7 @@ export const initialState: IssuesState = {
   settings: issuesSettingsDefault,
   helpdeskSearchContext: {...EVERYTHING_SEARCH_CONTEXT, name: i18n('Tickets')},
   helpDeskMode: false,
+  helpDeskProjects: [],
 };
 
 export const issuesNamespace = 'issues';
@@ -123,6 +126,9 @@ const {reducer, actions} = createSlice({
     SET_HELPDESK_CONTEXT(state: IssuesState, action: PayloadAction<Folder>) {
       state.helpdeskSearchContext = action.payload;
     },
+    SET_HELPDESK_PROJECTS(state: IssuesState, action: PayloadAction<ProjectHelpdesk[]>) {
+      state.helpDeskProjects = action.payload;
+    },
   },
 
   extraReducers: {
@@ -190,6 +196,7 @@ export const {
   SET_HELPDESK_CONTEXT,
   SET_HELPDESK_MODE,
   SET_HELPDESK_QUERY,
+  SET_HELPDESK_PROJECTS,
   SET_ISSUES_COUNT,
   SET_ISSUES_QUERY,
   SET_LIST_SETTINGS,

@@ -25,7 +25,7 @@ interface TitleRenderer<T> {
 export interface ISelectProps {
   dataSource: (query: string) => Promise<IItem[]>;
   onSelect: (item: any | any[]) => any;
-  onChangeSelection: (selectedItems: IItem[], current: IItem) => any;
+  onChangeSelection?: (selectedItems: IItem[], current: IItem) => any;
   onCancel: () => any;
   getTitle: (item: IItem) => string;
   header?: () => any;
@@ -57,10 +57,8 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     getTitle: (item: any) => any;
     header: () => null;
     noFilter: boolean;
-    onChangeSelection: (items: any[]) => null;
   } = {
     autoFocus: false,
-    onChangeSelection: () => null,
     noFilter: false,
     getTitle: (item: IItem) => getEntityPresentation(item),
     header: () => null,
@@ -224,7 +222,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     }
 
     this.setState({selectedItems});
-    this.props.onChangeSelection(selectedItems, item);
+    this.props?.onChangeSelection?.(selectedItems, item);
     return selectedItems;
   }
 

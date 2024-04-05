@@ -1,5 +1,5 @@
 import type {IssueFull, IssueOnList} from './Issue';
-import {ProjectBase} from 'types/Project';
+import {ProjectWithPlugins} from 'types/Project';
 
 export type Cell = {
   id: string;
@@ -102,7 +102,7 @@ export type Board = {
   hideOrphansSwimlane: boolean;
   currentSprint: SprintBase;
   colorCoding: FieldBasedColorCoding | ProjectBasedColorCoding;
-  projects: Array<ProjectBase>;
+  projects: Array<ProjectWithPlugins>;
   swimlaneSettings: {
     $type: string;
     enabled: boolean;

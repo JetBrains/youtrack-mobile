@@ -12,7 +12,7 @@ const isProjectCustomField = (customField: ProjectCustomField): boolean => {
   return customField?.$type ? customField.$type.indexOf('ProjectCustomField') !== -1 : false;
 };
 
-const getSimpleCustomFieldType = (customField: ProjectCustomField | null | undefined): string | null | undefined => {
+const getSimpleCustomFieldType = (customField?: ProjectCustomField | null): string | null => {
   if (!customField) {
     return null;
   }
@@ -53,14 +53,14 @@ const updateCustomFieldValue = (
   return index >= 0 ? [...fields.slice(0, index), {...fields[index], value}, ...fields.slice(index + 1)] : fields;
 };
 
-const getCustomFieldName = (customField: CustomField): string => {
+const getLocalizedName = (customField: {localizedName?: string | null; name?: string}): string => {
   return customField?.localizedName || customField?.name || '';
 };
 
 const isSLAField = (cf: CustomField): boolean => cf.$type === 'SlaIssueCustomField';
 
 export {
-  getCustomFieldName,
+  getLocalizedName,
   getIssueTextCustomFields,
   getIssueCustomFieldsNotText,
   getSimpleCustomFieldType,

@@ -1,7 +1,7 @@
 import {Animated, Easing} from 'react-native';
 
 import {getApi} from 'components/api/api__instance';
-import {getCustomFieldName} from 'components/custom-field/custom-field-helper';
+import {getLocalizedName} from 'components/custom-field/custom-field-helper';
 import {until} from 'util/util';
 import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
@@ -33,7 +33,7 @@ const getSortPropertyName = (sortProperty: IssueFieldSortProperty): string => {
   const name = sortProperty
     ? sortProperty?.sortField?.sortablePresentation ||
       sortProperty.localizedName ||
-      getCustomFieldName(sortProperty.sortField as any)
+      getLocalizedName(sortProperty.sortField)
     : sortProperty;
   return name && sortProperty?.sortField?.$type === 'PredefinedFilterField'
     ? name.charAt(0).toUpperCase() + name.slice(1)

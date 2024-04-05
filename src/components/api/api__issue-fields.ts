@@ -32,6 +32,28 @@ const ISSUE_PROJECT_FIELDS: any = toField([
     },
   },
 ]);
+
+const HELPDESK_PROJECT_FIELDS = toField([
+  'id',
+  'name',
+  'shortName',
+  'archived',
+  'ringId',
+  {
+    plugins: {
+      helpDeskSettings: [
+        'enabled',
+        {
+          defaultForm: [
+            'title',
+            'uuid',
+          ],
+        },
+      ],
+    },
+  },
+]);
+
 const ISSUE_USER_BASE_FIELDS = toField(['id', 'fullName']);
 const ISSUE_USER_FIELDS: any = toField([
   ISSUE_USER_BASE_FIELDS,
@@ -40,6 +62,7 @@ const ISSUE_USER_FIELDS: any = toField([
   'avatarUrl',
   'name',
   'localizedName',
+  'userType(id)',
 ]);
 const BUNDLE_VALUE: any = toField([
   '$type',
@@ -480,7 +503,7 @@ export default {
     },
     MENTIONS_FIELDS,
     VISIBILITY_FIELDS,
-  ]) as any,
+  ]),
   projectOnList: ISSUE_PROJECT_FIELDS,
   project: toField([
     'id',
@@ -498,7 +521,7 @@ export default {
     {
       fields: PROJECT_CUSTOM_FIELD_FIELDS,
     },
-  ]) as any,
+  ]),
   bundle: toField([
     'id',
     'isUpdateable',
@@ -508,7 +531,7 @@ export default {
     {
       aggregatedUsers: ISSUE_USER_FIELDS,
     },
-  ]) as any,
+  ]),
   bundleValues: BUNDLE_VALUE,
   user: ISSUE_USER_FIELDS,
   issueComment: ISSUE_COMMENTS_FIELDS,
@@ -531,4 +554,5 @@ export default {
   ISSUE_BASE_FIELDS,
   PROJECT_WITH_HELPDESK_FIELDS: PROJECT_SHORT_WITH_HELPDESK_FIELDS,
   PROJECT_BASE_AND_HELPDESK_SETTINGS_FIELDS,
+  HELPDESK_PROJECT_FIELDS,
 };

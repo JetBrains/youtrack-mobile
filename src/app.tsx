@@ -13,6 +13,7 @@ import ArticleCreate from 'views/article-create/article-create';
 import AttachmentPreview from 'views/attachment-preview/attachment-preview';
 import CreateIssue from 'views/create-issue/create-issue';
 import EnterServer from 'views/enter-server/enter-server';
+import HelpDeskFeedback from 'views/helpdesk-feedback/helpdesk-feedback';
 import Home from 'views/home/home';
 import Inbox from 'views/inbox/inbox';
 import InboxThreads from 'views/inbox-threads/inbox-threads';
@@ -176,6 +177,11 @@ class YouTrackMobile extends Component<void, void> {
     Router.registerRoute({
       name: routeMap.Tickets,
       component: Tickets,
+      type: 'reset',
+    });
+    Router.registerRoute({
+      name: routeMap.HelpDeskFeedback,
+      component: HelpDeskFeedback,
       type: 'reset',
     });
     Router.finalizeRoutes(this.routeHomeName);

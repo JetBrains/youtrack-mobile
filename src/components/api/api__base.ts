@@ -68,6 +68,7 @@ export default class BaseAPI {
   youTrackIssueUrl: string;
   youTrackApiUrl: string;
   isRefreshingToken: boolean;
+  youTrackProjectUrl: string;
 
   constructor(auth: Auth) {
     this.auth = auth;
@@ -85,6 +86,7 @@ export default class BaseAPI {
     this.youTrackApiUrl = `${this.youTrackUrl}/api`;
     this.youTrackIssueUrl = `${this.youTrackApiUrl}/issues`;
     this.isRefreshingToken = false;
+    this.youTrackProjectUrl = `${this.youTrackUrl}/api/admin/projects`;
   }
 
   static createFieldsQuery(
@@ -114,6 +116,34 @@ export default class BaseAPI {
       response.status < HTTP_STATUS.SUCCESS ||
       response.status >= HTTP_STATUS.REDIRECT
     );
+  }
+
+  async doRequest(request: Function) {
+    let response = await request();
+
+    if (this.isError(response)) {
+      const isNotAuthorized: boolean = response.status === HTTP_STATUS.UNAUTHORIZED || this.isTokenOutdated();
+      if (!isNotAuthorized) {
+        log.warn('Request failed. Unauthorised', response);
+        throw response;
+      } else {
+        log.debug('Unauthorised. Refreshing token...');
+        try {
+          await this.auth.refreshToken();
+          log.debug('Repeating a request');
+          response = await request();
+        } catch (e) {
+          if (!this.isRefreshingToken) {
+            log.debug('Unauthorised. Token refresh failed. Logging in...', e);
+            this.isRefreshingToken = true;
+          }
+          throw e;
+        }
+      }
+    } else {
+      this.isRefreshingToken = false;
+    }
+    return response;
   }
 
   async makeAuthorizedRequest(
@@ -182,6 +212,39 @@ export default class BaseAPI {
       this.isRefreshingToken = false;
     }
 
+    return options.parseJson === false ? response : await response?.json?.();
+  }
+
+  async submitFormRequest(
+    name: string,
+    url: string,
+    body: Record<string, any> | null,
+    options: RequestOptions = {
+      parseJson: true,
+    },
+  ) {
+    log.debug(`'Submitting a form' to ${url} with body ${JSON.stringify(body)}`);
+    const request = async (): Promise<Response> => {
+      const requestHeaders: RequestHeaders = this.auth.getAuthorizationHeaders();
+
+      if (!requestHeaders.Authorization) {
+        log.warn(`Missing auth header in the  POST request: ${url}`);
+      }
+      const formData = new FormData();
+      formData.append(name, JSON.stringify(body));
+
+      return await fetch2(
+        url,
+        {
+          method: 'POST',
+          headers: requestHeaders,
+          body: formData,
+        },
+        options.controller,
+      );
+    };
+
+    const response = await this.doRequest(request);
     return options.parseJson === false ? response : await response?.json?.();
   }
 

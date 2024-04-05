@@ -21,6 +21,7 @@ export const routeMap = {
   Issue2: 'Issue2',
   WikiPage: 'WikiPage',
   Tickets: 'Tickets',
+  HelpDeskFeedback: 'HelpDeskFeedback',
 };
 export const rootRoutesList = [
   routeMap.Issues,
@@ -31,4 +32,5 @@ export const rootRoutesList = [
   routeMap.Settings,
   routeMap.KnowledgeBase,
   routeMap.ArticleSingle,
+  routeMap.HelpDeskFeedback,
 ];

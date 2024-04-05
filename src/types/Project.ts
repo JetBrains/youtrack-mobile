@@ -1,3 +1,4 @@
+import {EntityBase} from 'types/Entity';
 import {WorkItemType} from 'types/Work';
 
 export interface ProjectTimeTrackingTimeSpent {
@@ -8,42 +9,52 @@ export interface ProjectTimeTrackingTimeSpent {
   };
 }
 
-export interface ProjectHelpDeskSettings {
+export interface ProjectEntity extends EntityBase {
+  name: string;
+  ringId: string;
+}
+
+export interface ProjectHelpDeskSettingsBase extends EntityBase {
   enabled: boolean;
 }
 
-export interface ProjectPlugins {
-  helpDeskSettings?: ProjectHelpDeskSettings,
-  timeTrackingSettings?: {
-    enabled: boolean;
-    timeSpent?: ProjectTimeTrackingTimeSpent;
-    workItemTypes?: WorkItemType[];
+export interface ProjectHelpDeskSettings extends ProjectHelpDeskSettingsBase {
+  defaultForm: {
+    title: string;
+    uuid: string;
   };
 }
 
-export interface ProjectBase {
-  id: string;
-  name: string;
-  ringId: string;
+export interface ProjectWithPlugins extends ProjectEntity {
+  plugins: {
+    helpDeskSettings: ProjectHelpDeskSettingsBase;
+  };
+}
+
+export interface Project extends ProjectEntity {
+  shortName: string;
+  archived: boolean;
+  pinned: boolean;
+  plugins?: {
+    helpDeskSettings?: ProjectHelpDeskSettingsBase;
+    timeTrackingSettings?: {
+      enabled: boolean;
+      timeSpent?: ProjectTimeTrackingTimeSpent;
+      workItemTypes?: WorkItemType[];
+    };
+  };
+  template: boolean;
+}
+
+export interface ProjectHelpdesk extends ProjectEntity {
+  archived: boolean;
+  shortName: string;
   plugins: {
     helpDeskSettings: ProjectHelpDeskSettings;
   };
 }
 
-export interface Project {
-  $type?: string;
-  id: string;
-  name: string;
-  shortName: string;
-  archived: boolean;
-  ringId: string;
-  pinned: boolean;
-  plugins?: ProjectPlugins;
-  template: boolean;
-}
-
-export interface ProjectTeam {
-  id: string;
+export interface ProjectTeam extends EntityBase {
   name: string;
 }
 

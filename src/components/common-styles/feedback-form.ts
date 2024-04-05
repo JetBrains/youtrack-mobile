@@ -1,5 +1,5 @@
 import {elevation1} from './shadow';
-import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from './typography';
+import {MAIN_FONT_SIZE, mainText, SECONDARY_FONT_SIZE} from './typography';
 import {rowFormStyles} from './form';
 import {UNIT} from 'components/variables';
 const feedbackFormStyles = {
@@ -34,7 +34,7 @@ const feedbackFormStyles = {
     color: '$textSecondary',
   },
   feedbackFormTextMain: {
-    marginBottom: -UNIT,
+    marginBottom: -UNIT * 2,
   },
   feedbackFormTextError: {
     color: '$error',
@@ -60,6 +60,7 @@ const feedbackFormStyles = {
   feedbackFormInputDescription: {
     ...rowFormStyles.input,
     minHeight: UNIT * 12,
+    maxHeight: UNIT * 12,
     flexGrow: 1,
     marginTop: UNIT * 2,
     color: '$text',
@@ -69,5 +70,15 @@ const feedbackFormStyles = {
     height: UNIT * 14,
   },
   elevation1: elevation1,
+  icon: {
+    color: '$icon',
+  },
+  link: {
+    color: '$link',
+  },
+  text: {
+    ...mainText,
+    color: '$text',
+  },
 };
 export default feedbackFormStyles;

@@ -3,6 +3,10 @@ import {UNIT} from 'components/variables';
 import {MAIN_FONT_SIZE, SECONDARY_FONT_SIZE} from './typography';
 export const containerPadding = UNIT * 4;
 export const rowFormStyles = {
+  flexContainer: {
+    flex: 1,
+    backgroundColor: '$background',
+  },
   scrollContainer: {
     flexGrow: 1,
     backgroundColor: '$background',
@@ -11,9 +15,14 @@ export const rowFormStyles = {
     flexGrow: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
-    paddingLeft: containerPadding,
-    paddingRight: containerPadding,
+    paddingHorizontal: containerPadding,
     backgroundColor: '$background',
+  },
+  block: {
+    marginTop: UNIT,
+  },
+  label: {
+    marginBottom: UNIT,
   },
   input: {
     width: '100%',

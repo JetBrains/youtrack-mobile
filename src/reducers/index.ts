@@ -1,10 +1,12 @@
 import {combineReducers} from 'redux';
+
 import agile from 'views/agile-board/board-reducers';
 import app from './app-reducer';
 import article from 'views/article/article-reducers';
 import articleCreate from 'views/article-create/article-create-reducers';
 import articles from 'views/knowledge-base/knowledge-base-reducers';
 import creation from 'views/create-issue/create-issue-reducers';
+import helpDeskFeedbackForm from 'views/helpdesk-feedback/helpdesk-feedback-reducers';
 import inbox from 'views/inbox/inbox-reducers';
 import issueActivity from 'views/issue/activity/issue-activity__reducers';
 import issueCommentActivity from 'views/issue/activity/issue-activity__comment-reducers';
@@ -12,6 +14,7 @@ import issueList from 'views/issues/issues-reducers';
 import issueModalState from 'views/issue/modal/issue.modal-reducers';
 import issueState from 'views/issue/issue-reducers';
 import inboxThreads from 'views/inbox-threads/inbox-threads-reducers';
+
 import type {AgilePageState} from 'views/agile-board/board-reducers';
 import type {RootState} from './app-reducer';
 import type {ArticleState} from 'views/article/article-reducers';
@@ -24,6 +27,7 @@ import type {State as IssueCommentActivityState} from 'views/issue/activity/issu
 import type {IssuesState} from 'views/issues/issues-reducers';
 import type {IssueState} from 'views/issue/issue-base-reducer';
 import type {InboxThreadState} from 'views/inbox-threads/inbox-threads-reducers';
+import {HelpDeskFeedbackFormState} from 'views/helpdesk-feedback/helpdesk-feedback-reducers';
 
 export type AppState = {
   agile: AgilePageState;
@@ -32,6 +36,7 @@ export type AppState = {
   articleCreate: ArticleCreateState;
   articles: KnowledgeBaseState;
   creation: CreateIssueState;
+  helpDeskFeedbackForm: HelpDeskFeedbackFormState;
   inbox: InboxState;
   issueActivity: ActivityState;
   issueCommentActivity: IssueCommentActivityState;
@@ -48,6 +53,7 @@ export default combineReducers({
   articleCreate,
   articles,
   creation,
+  helpDeskFeedbackForm,
   inbox,
   issueActivity,
   issueCommentActivity,

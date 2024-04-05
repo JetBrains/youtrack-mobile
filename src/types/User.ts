@@ -1,24 +1,27 @@
 import type {Article} from './Article';
-export type User = {
-  $type: string;
+import {EntityBase} from 'types/Entity';
+
+export interface User extends EntityBase {
   avatarUrl: string;
-  email?: string;
-  featureFlags?: FeatureFlags[];
-  fullName?: string;
-  name?: string;
-  guest?: boolean;
+  email: string;
+  fullName: string;
+  name: string;
+  guest: boolean;
   banned: boolean;
-  id: string;
   issueRelatedGroup?: IssueRelatedGroup;
   login: string;
   profiles: UserProfiles;
-  ringId?: string;
+  ringId: string;
   endUserAgreementConsent?: {
     accepted: boolean;
     majorVersion: string;
     minorVersion: string;
   };
-};
+  userType: {
+    id: string;
+  };
+}
+
 export type UserCurrent = User & {
   ytCurrentUser?: User;
 };
@@ -96,9 +99,7 @@ export interface UserHelpdeskProfile {
   }[];
 }
 
-export type Folder = {
-  $type: string;
-  id: string;
+export interface Folder extends EntityBase {
   ringId: string;
   shortName: string;
   name: string;
@@ -113,7 +114,7 @@ export type Folder = {
     id: string;
     ringId: string;
   };
-};
+}
 
 export interface UserMentions {
   users: User[];
