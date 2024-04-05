@@ -37,6 +37,7 @@ export default class UserAPI extends ApiBase {
       'login',
       'guest',
       'fullName',
+      'userType(id)',
       {
         profiles: {
           general: {
@@ -117,7 +118,7 @@ export default class UserAPI extends ApiBase {
     );
   }
 
-  async getHubProjectUsers(query?: string): Promise<Array<Partial<User>>> {
+  async getHubProjectUsers(query: string = '', fields: string | string[] = 'id,name'): Promise<Array<{ringId: string; name: string}>> {
     const searchQuery: string = query ? `query=${query}` : '';
     const response: {
       skip: number;
@@ -126,10 +127,7 @@ export default class UserAPI extends ApiBase {
     } = await this.makeAuthorizedRequest(
       `${
         this.config.auth.serverUri
-      }/api/rest/users?${searchQuery}&${ApiBase.createFieldsQuery([
-        'id',
-        'name',
-      ])}`,
+      }/api/rest/users?${searchQuery}&${ApiBase.createFieldsQuery(fields)}`,
       'GET',
     );
     return response.users.map((hubUser: User) => ({

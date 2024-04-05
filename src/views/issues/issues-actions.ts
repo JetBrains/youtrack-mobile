@@ -2,8 +2,9 @@ import * as issuesActions from './issues-reducers';
 import * as issueUpdater from 'components/issue-actions/issue-updater';
 import ApiHelper from 'components/api/api__helper';
 import log from 'components/log/log';
+import Router from 'components/router/router';
 import usage from 'components/usage/usage';
-import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
+import {ANALYTICS_ISSUES_PAGE, ANALYTICS_TICKETS_PAGE} from 'components/analytics/analytics-ids';
 import {
   convertToNonStructural,
   createQueryFromFiltersSetting,
@@ -30,15 +31,16 @@ import {guid, removeDuplicatesFromArray, until} from 'util/util';
 import {receiveUserAppearanceProfile, setGlobalInProgress, setYTCurrentUser} from 'actions/app-actions';
 import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
-import type {IssueOnList} from 'types/Issue';
 import type {Folder, User} from 'types/User';
+import type {IssueOnList} from 'types/Issue';
+import {ActivityItem} from 'types/Activity';
 import {CustomError} from 'types/Error';
 import {FilterField, FilterFieldValue} from 'types/CustomFields';
 import {ISelectProps} from 'components/select/select';
 import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
+import {ProjectHelpdesk} from 'types/Project';
 import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 import {SortedIssues} from 'components/api/api__issues';
-import {ActivityItem} from 'types/Activity';
 
 export interface ContextDataSource {
   title: string;
@@ -334,6 +336,35 @@ const openContextSelect = (): ReduxAction => {
       onStar: (folder: Folder) => api.issueFolder.issueFolders(folder.id, {pinned: !folder.pinned}),
     };
     dispatch(issuesActions.OPEN_SEARCH_CONTEXT_SELECT(searchContextSelectProps));
+  };
+};
+
+const onOpenHelpDeskProjectsSelect = (): ReduxAction => {
+  return (
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
+  ) => {
+    trackEvent('Tickets: select create project', ANALYTICS_TICKETS_PAGE);
+    const onCancel = () => dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT());
+    const selectProps: ISelectProps = {
+      placeholder: i18n('Filter projects'),
+      getValue: (project: ProjectHelpdesk) => `${project.name} (${project.shortName})`,
+      dataSource: async (q: string = ''): Promise<ProjectHelpdesk[]> => {
+        const projectHelpdesks = getState().issueList.helpDeskProjects;
+        if (q.length) {
+          return projectHelpdesks.filter(p => p.name.indexOf(q) !== -1 || p.shortName.indexOf(q) !== -1);
+        }
+        return projectHelpdesks;
+      },
+      selectedItems: [],
+      onCancel,
+      onSelect: async (project: ProjectHelpdesk) => {
+        onCancel();
+        Router.HelpDeskFeedback({project});
+      },
+    };
+    dispatch(issuesActions.OPEN_SEARCH_CONTEXT_SELECT(selectProps));
   };
 };
 
@@ -787,6 +818,7 @@ export {
   onSettingsChange,
   openContextSelect,
   openFilterFieldSelect,
+  onOpenHelpDeskProjectsSelect,
   refreshIssues,
   refreshIssuesCount,
   resetFilterFields,

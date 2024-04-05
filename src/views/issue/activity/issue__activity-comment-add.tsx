@@ -8,7 +8,6 @@ import IssueVisibility from 'components/visibility/issue-visibility';
 import {attachmentActions} from './issue-activity__attachment-actions-and-types';
 import {createActivityCommentActions} from './issue-activity__comment-actions';
 import {getApi} from 'components/api/api__instance';
-import {isHelpdeskProject} from 'components/helpdesk';
 import {IssueContext} from 'views/issue/issue-context';
 
 import type {IssueComment} from 'types/CustomFields';
@@ -16,6 +15,7 @@ import type {IssueContextData} from 'types/Issue';
 import {AppState} from 'reducers';
 import {NormalizedAttachment} from 'types/Attachment';
 import {ReduxThunkDispatch} from 'types/Redux';
+import {Visibility} from 'types/Visibility';
 
 interface Props {
   comment: IssueComment;
@@ -32,13 +32,21 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
   const issueContext: IssueContextData = React.useContext(IssueContext);
   const issue = issueContext.issue;
   const issuePermissions: IssuePermissions = issueContext.issuePermissions;
+
   const canAttach = issuePermissions.canAddAttachmentTo(issue);
   const canCommentPublicly = issuePermissions.canCommentPublicly(issue);
   const canUpdateCommentVisibility = issuePermissions.canUpdateCommentVisibility(issue);
+  const isAgent = issuePermissions.helpdesk.isAgent();
+  const isHelpdeskProject = issuePermissions.helpdesk.isHelpdeskProject(issue);
 
   const doUploadFileToComment = (files: NormalizedAttachment[], comment: IssueComment) => {
     return attachmentActions.doUploadFileToComment(false, files, issue, comment);
   };
+
+  let visibility: Visibility | null = null;
+  if (isHelpdeskProject && !isAgent && team) {
+    visibility = IssueVisibility.createLimitedVisibility([team]);
+  }
 
   return (
     <IssueCommentEdit
@@ -48,8 +56,8 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
       editingComment={{
         ...props.comment,
         issue: {id: issue.id},
-        visibility: team ? IssueVisibility.createLimitedVisibility([team]) : issue.visibility,
-        canUpdateVisibility: props.comment?.canUpdateVisibility || !isHelpdeskProject(issue),
+        visibility,
+        canUpdateVisibility: props.comment?.canUpdateVisibility || !isHelpdeskProject,
       }}
       getCommentSuggestions={async (query: string) =>
         dispatch(createActivityCommentActions(props.stateFieldName).loadCommentSuggestions(query))

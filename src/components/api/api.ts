@@ -5,6 +5,7 @@ import ArticlesAPI from './api__articles';
 import BaseAPI from './api__base';
 import CustomFieldsAPI from './api__custom-fields';
 import FilterFields from 'components/api/api__filter-fields';
+import HelpDeskAPI from 'components/api/api__helpdesk';
 import InboxAPI from './api__inbox';
 import IssueAPI from './api__issue';
 import issueFields from './api__issue-fields';
@@ -26,11 +27,11 @@ import {Project} from 'types/Project';
 
 
 class API extends BaseAPI {
-  youTrackProjectUrl: string;
   youtTrackFieldBundleUrl: string;
   agile: AgileAPI;
   articles: ArticlesAPI;
   customFields: CustomFieldsAPI;
+  helpDesk: HelpDeskAPI;
   filterFields: FilterFields;
   globalSettings: GlobalSettingsAPI;
   inbox: InboxAPI;
@@ -50,6 +51,7 @@ class API extends BaseAPI {
     this.articles = new ArticlesAPI(auth);
     this.customFields = new CustomFieldsAPI(auth);
     this.filterFields = new FilterFields(auth);
+    this.helpDesk = new HelpDeskAPI(auth);
     this.globalSettings = new GlobalSettingsAPI(auth);
     this.inbox = new InboxAPI(auth);
     this.issue = new IssueAPI(auth);
@@ -61,7 +63,6 @@ class API extends BaseAPI {
     this.search = new SearchAPI(auth);
     this.user = new UserAPI(auth);
     this.userGroup = new UserGroupAPI(auth);
-    this.youTrackProjectUrl = `${this.youTrackUrl}/api/admin/projects`;
     this.youtTrackFieldBundleUrl = `${this.youTrackUrl}/api/admin/customFieldSettings/bundles`;
   }
 
@@ -89,11 +90,11 @@ class API extends BaseAPI {
     );
   }
 
-  async getProjects(query: string): Promise<Array<Project>> {
-    const queryString = qs.stringify({
-      fields: issueFields.projectOnList.toString(),
-      query: query,
-    });
+  async getProjects<T = Project>(
+    query: string = '',
+    fields: string = issueFields.projectOnList.toString(),
+    ): Promise<Array<T>> {
+    const queryString = qs.stringify({fields, query});
     return await this.makeAuthorizedRequest(
       `${this.youTrackProjectUrl}?${queryString}`,
     );

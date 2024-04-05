@@ -3,6 +3,7 @@ export const ResourceTypes = {
   ARTICLE: 'Article',
   ARTICLE_COMMENT: 'ArticleComment',
   ARTICLE_DRAFT: 'ArticleDraft',
+  ATTRIBUTE_BASED_SWIMLANE_SETTINGS: 'AttributeBasedSwimlaneSettings',
   BITBUCKET: 'BitBucketServer',
   BITBUCKET_MAPPING: 'BitBucketChangesProcessor',
   COMMENT_REACTIONS_FEED_ITEM: 'CommentReactionsFeedItem',

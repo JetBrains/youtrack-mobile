@@ -14,7 +14,7 @@ msgstr " ({{amount}} unresolved)"
 msgid " or "
 msgstr " or "
 
-#: src/views/agile-board/board-actions.ts:654
+#: src/views/agile-board/board-actions.ts:642
 msgid "(archived)"
 msgstr "(archived)"
 
@@ -98,7 +98,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:592
+#: src/components/comment/comment-edit.tsx:596
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -166,7 +166,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:561
+#: src/components/comment/comment-edit.tsx:565
 #: src/views/issue/issue-base-actions-creater.ts:589
 msgid "Attach file"
 msgstr "Attach file"
@@ -239,11 +239,11 @@ msgstr "Close"
 msgid "Collapse all"
 msgstr "Collapse all"
 
-#: src/views/agile-board/agile-board.tsx:366
+#: src/views/agile-board/agile-board.tsx:367
 msgid "Column collapsed"
 msgstr "Column collapsed"
 
-#: src/views/agile-board/agile-board.tsx:366
+#: src/views/agile-board/agile-board.tsx:367
 msgid "Column expanded"
 msgstr "Column expanded"
 
@@ -474,7 +474,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:609
+#: src/components/comment/comment-edit.tsx:613
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -511,7 +511,7 @@ msgstr "Favorites"
 msgid "Feature request"
 msgstr "Feature request"
 
-#: src/views/agile-board/board-actions.ts:681
+#: src/views/agile-board/board-actions.ts:669
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
@@ -533,7 +533,7 @@ msgstr "Filter projects, saved searches, and tags"
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
-#: src/views/agile-board/board-actions.ts:647
+#: src/views/agile-board/board-actions.ts:635
 msgid "Filter sprints by name"
 msgstr "Filter sprints by name"
 
@@ -1093,7 +1093,7 @@ msgstr "The application failed to restart automatically. Please try to restart i
 msgid "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
 msgstr "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
 
-#: src/views/agile-board/agile-board.tsx:435
+#: src/views/agile-board/agile-board.tsx:436
 msgid "The board {{boardName}} has configuration errors"
 msgstr "The board {{boardName}} has configuration errors"
 
@@ -1203,7 +1203,7 @@ msgstr "Try Again"
 msgid "Type"
 msgstr "Type"
 
-#: src/components/agile-row/agile-row.tsx:117
+#: src/components/agile-row/agile-row.tsx:118
 msgid "Uncategorized Cards"
 msgstr "Uncategorized Cards"
 
@@ -1302,7 +1302,7 @@ msgstr "Woah, you can't touch this!"
 msgid "Wrap attribute values that contain spaces in braces {like this}."
 msgstr "Wrap attribute values that contain spaces in braces {like this}."
 
-#: src/components/comment/comment-edit.tsx:422
+#: src/components/comment/comment-edit.tsx:426
 #: src/views/issue/activity/activity__add-spent-time.tsx:427
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"

@@ -83,6 +83,7 @@ import {INavigationRoute, Navigators} from 'components/navigation';
 import {IssuesState} from './issues-reducers';
 import {NetInfoState} from '@react-native-community/netinfo';
 import {ReduxAction, ReduxThunkDispatch} from 'types/Redux';
+import {navigate} from 'components/navigation/navigator';
 
 type ReduxExtraActions = {[fnName: string]: ReduxAction<unknown>};
 type IssuesActions = typeof issueActions;
@@ -291,14 +292,16 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         style={styles.listActionsItem}
         onPress={() => {
           if (this.state.isSplitView) {
-            this.setState({
-              isCreateModalVisible: true,
-            });
+            this.setState({isCreateModalVisible: true});
           } else {
-            Router.CreateIssue({
-              onHide: () => Router.navigateToDefaultRoute(),
-              isMatchesQuery: this.isMatchesQuery,
-            });
+            if (this.props.helpDeskMode) {
+              this.props.onOpenHelpDeskProjectsSelect(navigate);
+            } else {
+              Router.CreateIssue({
+                onHide: () => Router.navigateToDefaultRoute(),
+                isMatchesQuery: this.isMatchesQuery,
+              });
+            }
           }
         }}
         disabled={this.props.isInProgress}
@@ -771,6 +774,7 @@ export function doConnectComponent(ReactComponent: React.ComponentType<any>, ext
         getIssueFromCache: (issueId: string) => dispatch(issueActions.getIssueFromCache(issueId)),
         onQueryUpdate: (query: string) => dispatch(issueActions.onQueryUpdate(query)),
         onOpenContextSelect: () => dispatch(issueActions.openContextSelect()),
+        onOpenHelpDeskProjectsSelect: () => dispatch(issueActions.onOpenHelpDeskProjectsSelect()),
         updateSearchContextPinned: (isSearchScrolledUp: boolean) => dispatch(
            actions.IS_SEARCH_CONTEXT_PINNED(isSearchScrolledUp)
         ),

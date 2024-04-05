@@ -111,7 +111,7 @@ export interface IssueDetailsProps {
   modal?: boolean;
   scrollData: ScrollData;
   navigation: NavigationScreenProp<NavigationState>;
-  isAgent: boolean;
+  canEditVisibility: boolean;
   isReporter: boolean;
 }
 
@@ -215,12 +215,12 @@ class IssueDetails extends React.Component<IssueDetailsProps, void> {
   }
 
   renderIssueVisibility() {
-    const {onVisibilityChange, isAgent} = this.props;
+    const {onVisibilityChange, canEditVisibility } = this.props;
     const issue = this.getIssue();
     return issue ? (
       <View style={styles.visibility}>
         <VisibilityControl
-          disabled={isAgent}
+          disabled={!canEditVisibility}
           visibility={issue.visibility}
           onSubmit={onVisibilityChange}
           uiTheme={this.uiTheme}

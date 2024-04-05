@@ -1,11 +1,11 @@
 import {isHelpdeskProject} from 'components/helpdesk';
 
-import type {Article, ArticleProject} from 'types/Article';
+import type {Article} from 'types/Article';
 import type {Attachment, CustomField, IssueComment} from 'types/CustomFields';
 import type {PermissionsStore} from '../permissions-store/permissions-store';
 import type {User, UserHelpdeskProfile} from 'types/User';
 import type {WorkItem} from 'types/Work';
-import {Entity} from 'types/Entity';
+import {Entity, EntityBase} from 'types/Entity';
 import {Project} from 'types/Project';
 import {UserCurrent} from 'types/User';
 
@@ -41,8 +41,8 @@ export const WORK_ITEM_CREATE = 'JetBrains.YouTrack.CREATE_WORK_ITEM';
 export const WORK_ITEM_CREATE_NOT_OWN =
   'JetBrains.YouTrack.CREATE_NOT_OWN_WORK_ITEM';
 export const WORK_ITEM_UPDATE = 'JetBrains.YouTrack.UPDATE_WORK_ITEM';
-export const WORK_ITEM_UPDATE_NOT_OWN =
-  'JetBrains.YouTrack.UPDATE_NOT_OWN_WORK_ITEM';
+export const WORK_ITEM_UPDATE_NOT_OWN = 'JetBrains.YouTrack.UPDATE_NOT_OWN_WORK_ITEM';
+export const UPDATE_PROJECT = 'jetbrains.jetpass.project-update';
 
 export default class IssuePermissions {
   permissionsStore: PermissionsStore;
@@ -80,6 +80,10 @@ export default class IssuePermissions {
     }
 
     return user.ringId === this.currentUser.id;
+  };
+
+  canCreateIssue = (entity: Entity | null): boolean => {
+    return entity ? this.hasPermissionFor(entity, CREATE_ISSUE) : false;
   };
 
   canUpdateGeneralInfo = (issue: Entity | null): boolean => {
@@ -139,16 +143,16 @@ export default class IssuePermissions {
     return this.currentUser?.ytCurrentUser?.profiles?.helpdesk || null;
   };
 
-  isInProject = (project: Project | ArticleProject, projects: Array<{id: string}>): boolean => {
+  isInProject = (project: EntityBase, projects: Array<EntityBase>): boolean => {
     return projects.some((p: {id: string}) => p.id === project.id);
   };
 
-  isAgentInProject = (project: Project | ArticleProject): boolean => {
+  isAgentInProject = (project: EntityBase): boolean => {
     const settings = this.getUserProfileHelpdeskSettings();
     return settings ? this.isInProject(project, settings.agentInProjects) : false;
   };
 
-  isReporterInProject = (project: Project | ArticleProject): boolean => {
+  isReporterInProject = (project: EntityBase): boolean => {
     const settings = this.getUserProfileHelpdeskSettings();
     return settings ? this.isInProject(project, settings.reporterInProjects) : false;
   };
@@ -289,6 +293,10 @@ export default class IssuePermissions {
     return this.permissionsStore.has(CREATE_ISSUE);
   }
 
+  canUpdateProject(projectId: string) {
+    return !!projectId && this.permissionsStore.has(UPDATE_PROJECT, projectId);
+  }
+
   /*
    Articles
    */
@@ -321,4 +329,17 @@ export default class IssuePermissions {
   articleCanAddAttachment = (article: Article): boolean => this.hasPermissionFor(article, CREATE_ARTICLE_COMMENT);
 
   articleCanDeleteAttachment = (article: Article): boolean => this.articleCanUpdate(article);
+
+  helpdesk = {
+    isHelpdeskProject,
+    isAgent: () => !!this.getUserProfileHelpdeskSettings()?.isAgent,
+    isReporter: (entity: Entity | null = null): boolean => {
+      const helpDeskProject = !entity || isHelpdeskProject(entity);
+      return (
+        helpDeskProject &&
+        (!!this.getUserProfileHelpdeskSettings()?.isReporter ||
+          (!!entity?.project && this.isReporterInProject(entity.project)))
+      );
+    },
+  };
 }

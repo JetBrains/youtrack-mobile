@@ -36,7 +36,7 @@ import {ANALYTICS_AGILE_PAGE} from 'components/analytics/analytics-ids';
 import {DragContainer} from 'components/draggable';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {getScrollableWidth} from 'components/board-scroller/board-scroller__math';
-import {hasType} from 'components/api/api__resource-types';
+import {hasType, ResourceTypes} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconException} from 'components/icon/icon';
@@ -68,6 +68,7 @@ import type {
   Sprint,
 } from 'types/Agile';
 import type {Theme, UITheme} from 'types/Theme';
+import {Entity} from 'types/Entity';
 import {NavigationEventSubscription} from 'react-navigation';
 
 type Props = INavigationParams & AgilePageState & RootState & typeof boardActions & {
@@ -448,6 +449,21 @@ class AgileBoard extends Component<Props, State> {
   canRunCommand = (issue: AnyIssue): boolean => {
     return this.props.issuePermissions.canRunCommand(issue);
   };
+
+  canCreateCard = (): boolean => {
+    const {agile} = this.props;
+    const issuePermissions = this.props.issuePermissions;
+    if (agile?.projects && agile?.swimlaneSettings) {
+      const isAttributeBased = agile.swimlaneSettings.$type === ResourceTypes.ATTRIBUTE_BASED_SWIMLANE_SETTINGS;
+      return agile.projects.filter(p => !p.plugins.helpDeskSettings.enabled).some(project => {
+        const entity = {project} as Entity;
+        const canLink = isAttributeBased ? issuePermissions.canLink(entity) : true;
+        return issuePermissions.canCreateIssue(entity) && canLink;
+      });
+    }
+    return false;
+  };
+
   renderSprint = () => {
     const {
       sprint,
@@ -472,9 +488,8 @@ class AgileBoard extends Component<Props, State> {
         canRunCommand={this.canRunCommand}
         onTapIssue={this._onTapIssue}
         onTapCreateIssue={
-          networkState?.isConnected === false
-            ? null
-            : async (cellColumnId: string, cellId: string): Promise<void> => {
+          this.canCreateCard() && networkState?.isConnected === true
+            ? async (cellColumnId: string, cellId: string) => {
                 const draft: Partial<IssueOnList> | null = await createCardForCell(cellColumnId, cellId);
                 if (draft?.id) {
                   if (this.state.isSplitView) {
@@ -483,7 +498,7 @@ class AgileBoard extends Component<Props, State> {
                         isSplitView={this.state.isSplitView}
                         onHide={this.clearModalChildren}
                         predefinedDraftId={draft.id}
-                      />,
+                      />
                     );
                   } else {
                     Router.CreateIssue({
@@ -492,6 +507,7 @@ class AgileBoard extends Component<Props, State> {
                   }
                 }
               }
+            : null
         }
         onCollapseToggle={onRowCollapseToggle}
         uiTheme={this.uiTheme}

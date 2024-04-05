@@ -124,4 +124,7 @@ export default EStyleSheet.create({
     width: UNIT * 2.5,
     resizeMode: 'contain',
   },
+  link: {
+    color: '$link',
+  },
 });

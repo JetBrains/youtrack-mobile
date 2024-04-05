@@ -42,11 +42,13 @@ export type ArticlesListItem = {
   dataCollapsed?: ArticleNodeList | null;
 };
 export type ArticlesList = Array<ArticlesListItem>;
-export type ArticleProject = Partial<Project> & {
+
+export interface ArticleProject extends Project {
   articles: {
     collapsed: boolean;
   };
-};
+}
+
 export type ProjectArticlesData = {
   project: ArticleProject;
   articles: Article[];

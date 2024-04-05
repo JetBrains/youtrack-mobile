@@ -31,7 +31,7 @@ enum SecondaryRoutes {
   SettingsFeedbackForm = 'SettingsFeedbackForm',
   Ticket = 'Ticket',
   WikiPage = 'WikiPage',
-  Tickets  = 'Tickets',
+  HelpDeskFeedback = 'HelpDeskFeedback',
 }
 
 export const defaultRootRoute: NavigationRootNames = RootRoutesList.Issues;

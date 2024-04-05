@@ -25,7 +25,7 @@ type BoardState = Board;
 export type AgilePageState = {
   isLoading: boolean;
   isLoadingAgile: boolean;
-  profile: AgileUserProfile | null | undefined;
+  profile: AgileUserProfile | null;
   isSprintSelectOpen: boolean;
   creatingIssueDraftId: string | null | undefined;
   creatingIssueDraftCellId: string | null | undefined;

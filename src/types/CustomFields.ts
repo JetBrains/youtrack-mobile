@@ -105,7 +105,7 @@ export interface CustomFieldBase {
 }
 
 export interface CustomField extends CustomFieldBase {
-  localizedName?: string;
+  localizedName?: string | null;
   hasStateMachine?: boolean;
 }
 

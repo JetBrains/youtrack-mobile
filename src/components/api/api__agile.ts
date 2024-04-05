@@ -19,8 +19,7 @@ export default class AgileAPI extends ApiBase {
 
   async getAgile(agileId: string): Promise<Board> {
     const queryString = qs.stringify({
-      fields:
-        'id,name,favorite,status(errors,valid),sprintsSettings(disableSprints),hideOrphansSwimlane',
+      fields: agileFields.AGILE.toString(),
     });
     return await this.makeAuthorizedRequest(
       `${this.youTrackUrl}/api/agiles/${agileId}?${queryString}`,

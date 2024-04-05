@@ -201,8 +201,8 @@ export class Issue extends IssueTabbed<IssueProps, IIssueTabbedState> {
     const Component: any = isSplitView ? IssueDetailsModal : IssueDetails;
     return (
       <Component
-        isAgent={this.isAgent()}
-        isReporter={this.isReporter()}
+        isReporter={issuePermissions.helpdesk.isReporter(issue)}
+        canEditVisibility={!this.isAgent() && this.canEdit()}
         loadIssue={loadIssue}
         openNestedIssueView={openNestedIssueView}
         attachingImage={attachingImage}
@@ -334,23 +334,30 @@ export class Issue extends IssueTabbed<IssueProps, IIssueTabbedState> {
     Router.pop();
   }
 
-  renderBackIcon: () => React.ReactNode = () => {
+  renderBackIcon = () => {
     return isSplitView() ? null : (
       <IconBack color={this.uiTheme.colors.$link}/>
     );
   };
-  canStar: () => boolean = (): boolean => {
+
+  canStar = (): boolean => {
     const {issue, issuePermissions} = this.props;
-    return issue && issuePermissions && issuePermissions.canStar();
+    return !!issue && issuePermissions?.canStar?.();
+  };
+
+  canEdit = (): boolean => {
+    const {issue, issuePermissions} = this.props;
+    return (
+      issuePermissions.canUpdateGeneralInfo(issue) &&
+      (!isHelpdeskProject(issue) || issuePermissions.isAgentInProject(issue.project))
+    );
   };
 
   createIssueActionsPermissionsMap() {
     const {issue, issuePermissions} = this.props;
     return {
       canAttach: issuePermissions.canAddAttachmentTo(issue),
-      canEdit:
-        issuePermissions.canUpdateGeneralInfo(issue) &&
-        !(isHelpdeskProject(issue.project) || issuePermissions.isAgentInProject(issue.project)),
+      canEdit: this.canEdit(),
       canApplyCommand: !this.isReporter() && issuePermissions.canRunCommand(issue),
       canTag: issuePermissions.canTag(issue),
       canDeleteIssue: issuePermissions.canDeleteIssue(issue),
