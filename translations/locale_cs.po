@@ -441,6 +441,7 @@ msgstr "Odstranit případ {{issueId}}?"
 msgid "Delete permanently"
 msgstr "Navždy smazat"
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Description"
 msgstr "Popis"
@@ -504,6 +505,10 @@ msgstr "Upravit komentář"
 msgid "Email"
 msgstr "E-mail"
 
+#: src/views/helpdesk-feedback/index.ts
+msgid "Email address"
+msgstr "Emailová adresa"
+
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
 msgstr "E-mailová adresa pro další komunikaci"
@@ -542,6 +547,7 @@ msgid "Filter items"
 msgstr "Filtrovat položky"
 
 #: src/views/article-create/article-create.tsx
+#: src/views/issues/issues-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Filter projects"
 msgstr "Filtrovat projekty"
@@ -1085,6 +1091,7 @@ msgstr ""
 msgid "Subscriptions"
 msgstr "Odběry"
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Summary"
 msgstr "Souhrn"

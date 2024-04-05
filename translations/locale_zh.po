@@ -417,6 +417,7 @@ msgstr "删除问题 {{issueId}}?"
 msgid "Delete permanently"
 msgstr "永久删除"
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Description"
 msgstr "描述"
@@ -480,6 +481,10 @@ msgstr "编辑评论"
 msgid "Email"
 msgstr "电子邮件"
 
+#: src/views/helpdesk-feedback/index.ts
+msgid "Email address"
+msgstr "电子邮件地址"
+
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
 msgstr "用于跟进的电子邮件地址"
@@ -518,6 +523,7 @@ msgid "Filter items"
 msgstr "筛选条目"
 
 #: src/views/article-create/article-create.tsx
+#: src/views/issues/issues-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Filter projects"
 msgstr "筛选项目"
@@ -1055,6 +1061,7 @@ msgstr "提交 Pull Request"
 msgid "Subscriptions"
 msgstr "订阅"
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Summary"
 msgstr "摘要"

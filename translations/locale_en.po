@@ -288,7 +288,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:798
+#: src/actions/app-actions.ts:803
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -419,6 +419,7 @@ msgstr "Delete issue {{issueId}}?"
 msgid "Delete permanently"
 msgstr "Delete permanently"
 
+#: src/views/helpdesk-feedback/index.ts:143
 #: src/views/settings/settings__feedback-form.tsx:248
 msgid "Description"
 msgstr "Description"
@@ -482,6 +483,10 @@ msgstr "Edit comment"
 msgid "Email"
 msgstr "Email"
 
+#: src/views/helpdesk-feedback/index.ts:105
+msgid "Email address"
+msgstr "Email address"
+
 #: src/views/settings/settings__feedback-form.tsx:220
 msgid "Email address for follow-up"
 msgstr "Email address for follow-up"
@@ -515,16 +520,17 @@ msgstr "Feature request"
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
-#: src/components/select/select.tsx:342
+#: src/components/select/select.tsx:340
 msgid "Filter items"
 msgstr "Filter items"
 
 #: src/views/article-create/article-create.tsx:149
+#: src/views/issues/issues-actions.ts:351
 #: src/views/knowledge-base/knowledge-base.tsx:500
 msgid "Filter projects"
 msgstr "Filter projects"
 
-#: src/views/issues/issues-actions.ts:261
+#: src/views/issues/issues-actions.ts:263
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
@@ -555,7 +561,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:573
+#: src/views/issues/issues.tsx:575
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -659,7 +665,7 @@ msgstr "Link to comment copied"
 msgid "Linked issues"
 msgstr "Linked issues"
 
-#: src/components/select/select.tsx:297
+#: src/components/select/select.tsx:295
 msgid "Loading values…"
 msgstr "Loading values…"
 
@@ -771,11 +777,11 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:623
+#: src/views/issues/issues.tsx:625
 msgid "No issues found"
 msgstr "No issues found"
 
-#: src/components/select/select.tsx:301
+#: src/components/select/select.tsx:299
 msgid "No items"
 msgstr "No items"
 
@@ -836,7 +842,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/issues/issues-actions.ts:290
+#: src/views/issues/issues-actions.ts:292
 #: src/views/knowledge-base/knowledge-base.tsx:519
 msgid "Projects"
 msgstr "Projects"
@@ -907,7 +913,7 @@ msgstr "Restore"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/views/issues/issues-actions.ts:305
+#: src/views/issues/issues-actions.ts:307
 msgid "Saved Searches"
 msgstr "Saved Searches"
 
@@ -932,7 +938,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:688
+#: src/views/issues/issues.tsx:690
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -1059,6 +1065,7 @@ msgstr "submitted a pull request"
 msgid "Subscriptions"
 msgstr "Subscriptions"
 
+#: src/views/helpdesk-feedback/index.ts:149
 #: src/views/settings/settings__feedback-form.tsx:233
 msgid "Summary"
 msgstr "Summary"
@@ -1077,7 +1084,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/views/issues/issues-actions.ts:298
+#: src/views/issues/issues-actions.ts:300
 msgid "Tags"
 msgstr "Tags"
 
@@ -1165,9 +1172,9 @@ msgstr "Thread muted"
 msgid "Thread unmuted"
 msgstr "Thread unmuted"
 
-#: src/views/issues/issues-actions.ts:67
-#: src/views/issues/issues-reducers.ts:55
-#: src/views/tickets/tickets.tsx:34
+#: src/views/issues/issues-actions.ts:69
+#: src/views/issues/issues-reducers.ts:57
+#: src/views/tickets/tickets.tsx:33
 msgid "Tickets"
 msgstr "Tickets"
 

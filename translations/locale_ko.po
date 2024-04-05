@@ -417,6 +417,7 @@ msgstr "{{issueId}} 이슈를 삭제하시겠어요?"
 msgid "Delete permanently"
 msgstr "영구 삭제"
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Description"
 msgstr "설명"
@@ -480,6 +481,10 @@ msgstr "코멘트 편집"
 msgid "Email"
 msgstr "이메일"
 
+#: src/views/helpdesk-feedback/index.ts
+msgid "Email address"
+msgstr "이메일 주소"
+
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
 msgstr "후속 조치를 위한 이메일 주소"
@@ -518,6 +523,7 @@ msgid "Filter items"
 msgstr "필터 항목"
 
 #: src/views/article-create/article-create.tsx
+#: src/views/issues/issues-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Filter projects"
 msgstr "프로젝트 필터링"
@@ -1055,6 +1061,7 @@ msgstr "풀 리퀘스트를 제출함"
 msgid "Subscriptions"
 msgstr "구독"
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Summary"
 msgstr "요약"

@@ -441,6 +441,7 @@ msgstr "Usunąć zgłoszenie {{issueId}}?"
 msgid "Delete permanently"
 msgstr ""
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Description"
 msgstr "Opis"
@@ -504,6 +505,10 @@ msgstr "Edytuj komentarz"
 msgid "Email"
 msgstr "E-mail"
 
+#: src/views/helpdesk-feedback/index.ts
+msgid "Email address"
+msgstr "Adres email"
+
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
 msgstr ""
@@ -542,6 +547,7 @@ msgid "Filter items"
 msgstr ""
 
 #: src/views/article-create/article-create.tsx
+#: src/views/issues/issues-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Filter projects"
 msgstr ""
@@ -1085,6 +1091,7 @@ msgstr ""
 msgid "Subscriptions"
 msgstr ""
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Summary"
 msgstr "Podsumowanie"

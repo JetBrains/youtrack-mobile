@@ -425,6 +425,7 @@ msgstr "Eliminar incidencia {{issueId}}?"
 msgid "Delete permanently"
 msgstr "Eliminar permanentemente"
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Description"
 msgstr "Descripción"
@@ -488,6 +489,10 @@ msgstr "Editar comentario"
 msgid "Email"
 msgstr "Correo electrónico"
 
+#: src/views/helpdesk-feedback/index.ts
+msgid "Email address"
+msgstr "Dirección de correo electrónico"
+
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
 msgstr "Correo electrónico para seguimiento"
@@ -526,6 +531,7 @@ msgid "Filter items"
 msgstr "Filtrar elementos"
 
 #: src/views/article-create/article-create.tsx
+#: src/views/issues/issues-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Filter projects"
 msgstr "Filtrar proyectos"
@@ -1065,6 +1071,7 @@ msgstr "ha enviado una solicitud de incorporación de cambios"
 msgid "Subscriptions"
 msgstr "Suscripciones"
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Summary"
 msgstr "Resumen"

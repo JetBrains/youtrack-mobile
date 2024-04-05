@@ -425,6 +425,7 @@ msgstr "Sorun {{issueId}} silinsin mi?"
 msgid "Delete permanently"
 msgstr ""
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Description"
 msgstr "Açıklama"
@@ -488,6 +489,10 @@ msgstr ""
 msgid "Email"
 msgstr "E-Posta"
 
+#: src/views/helpdesk-feedback/index.ts
+msgid "Email address"
+msgstr "E-posta adresi"
+
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
 msgstr ""
@@ -526,6 +531,7 @@ msgid "Filter items"
 msgstr ""
 
 #: src/views/article-create/article-create.tsx
+#: src/views/issues/issues-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Filter projects"
 msgstr "Projeleri filtrele"
@@ -1065,6 +1071,7 @@ msgstr ""
 msgid "Subscriptions"
 msgstr "Abonelikler"
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Summary"
 msgstr "Özet"

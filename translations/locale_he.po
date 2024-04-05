@@ -441,6 +441,7 @@ msgstr ""
 msgid "Delete permanently"
 msgstr ""
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Description"
 msgstr "תיאור"
@@ -504,6 +505,10 @@ msgstr ""
 msgid "Email"
 msgstr "אימייל"
 
+#: src/views/helpdesk-feedback/index.ts
+msgid "Email address"
+msgstr ""
+
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
 msgstr ""
@@ -542,6 +547,7 @@ msgid "Filter items"
 msgstr "סינון פריטים"
 
 #: src/views/article-create/article-create.tsx
+#: src/views/issues/issues-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Filter projects"
 msgstr "סינון פרויקטים"
@@ -1085,6 +1091,7 @@ msgstr ""
 msgid "Subscriptions"
 msgstr ""
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Summary"
 msgstr "תקציר"
