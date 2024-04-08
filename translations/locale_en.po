@@ -18,7 +18,7 @@ msgstr " or "
 msgid "(archived)"
 msgstr "(archived)"
 
-#: src/components/custom-fields-panel/custom-fields-panel__date-picker.tsx:53
+#: src/components/custom-fields-panel/custom-fields-panel__date-picker.tsx:56
 msgid "(Clear value)"
 msgstr "(Clear value)"
 
@@ -72,8 +72,8 @@ msgstr[1] "{{minutesAbsolute}}m"
 msgid "@Mention in a comment"
 msgstr "@Mention in a comment"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:387
-#: src/views/issue/activity/activity__add-spent-time.tsx:401
+#: src/views/issue/activity/activity__add-spent-time.tsx:381
+#: src/views/issue/activity/activity__add-spent-time.tsx:395
 msgid "1w 1d 1h 1m"
 msgstr "1w 1d 1h 1m"
 
@@ -190,7 +190,7 @@ msgstr "Attachment deleted"
 msgid "Attachment name"
 msgstr "Attachment name"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:356
+#: src/views/issue/activity/activity__add-spent-time.tsx:350
 msgid "Author"
 msgstr "Author"
 
@@ -369,7 +369,7 @@ msgstr "Current issue"
 msgid "Dark theme"
 msgstr "Dark theme"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:366
+#: src/views/issue/activity/activity__add-spent-time.tsx:360
 msgid "Date"
 msgstr "Date"
 
@@ -504,7 +504,7 @@ msgstr "Enter search request"
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr "Enter the web address for a YouTrack installation where you have a registered account"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:222
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:218
 msgid "Enter time value"
 msgstr "Enter time value"
 
@@ -838,7 +838,7 @@ msgstr "Preview Size"
 msgid "Problem"
 msgstr "Problem"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:93
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:91
 msgid "Project"
 msgstr "Project"
 
@@ -925,7 +925,7 @@ msgstr "Search articles"
 msgid "Search for a different value"
 msgstr "Search for a different value"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:196
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:192
 msgid "Search for the project"
 msgstr "Search for the project"
 
@@ -1040,8 +1040,8 @@ msgid "Sorted by"
 msgstr "Sorted by"
 
 #: src/components/activity/activity-helper.ts:48
-#: src/views/issue/activity/activity__add-spent-time.tsx:275
-#: src/views/issue/activity/activity__add-spent-time.tsx:382
+#: src/views/issue/activity/activity__add-spent-time.tsx:272
+#: src/views/issue/activity/activity__add-spent-time.tsx:376
 msgid "Spent time"
 msgstr "Spent time"
 
@@ -1206,7 +1206,7 @@ msgstr "Touch and hold an item to view a list of available actions"
 msgid "Try Again"
 msgstr "Try Again"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:412
+#: src/views/issue/activity/activity__add-spent-time.tsx:406
 msgid "Type"
 msgstr "Type"
 
@@ -1310,7 +1310,7 @@ msgid "Wrap attribute values that contain spaces in braces {like this}."
 msgstr "Wrap attribute values that contain spaces in braces {like this}."
 
 #: src/components/comment/comment-edit.tsx:426
-#: src/views/issue/activity/activity__add-spent-time.tsx:427
+#: src/views/issue/activity/activity__add-spent-time.tsx:421
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
 
