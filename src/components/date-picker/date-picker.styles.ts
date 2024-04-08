@@ -1,14 +1,18 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {UNIT} from 'components/variables';
-import type {UITheme, UIThemeColors} from 'types/Theme';
+
 import {MAIN_FONT_SIZE} from 'components/common-styles/typography';
+import {UNIT} from 'components/variables';
+
+import type {UITheme, UIThemeColors} from 'types/Theme';
+import {Theme as CalendarTheme} from 'react-native-calendars/src/types';
+
 export default EStyleSheet.create({
   container: {
     flex: 1,
     minHeight: UNIT * 42,
   },
 });
-export const calendarTheme = (uiTheme: UITheme) => {
+export const calendarTheme = (uiTheme: UITheme): CalendarTheme => {
   const uiThemeColors: UIThemeColors = uiTheme.colors;
   return {
     arrowColor: uiThemeColors.$link,

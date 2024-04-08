@@ -1,30 +1,34 @@
 import React, {useEffect, useState} from 'react';
 import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+
 import DatePicker from 'components/date-picker/date-picker';
 import Header from 'components/header/header';
 import {i18n} from 'components/i18n/i18n';
 import {IconClose, IconBack} from 'components/icon/icon';
+
 import styles from './custom-fields-panel.styles';
-type Props = {
+
+interface Props {
   modal?: boolean;
   emptyValueName?: string | null | undefined;
-  onApply: (arg0: date, arg1: time) => any;
+  onApply: (date: Date, time: string) => any;
   onHide: () => void;
   placeholder: string;
   theme: any;
   title: string;
   time?: string | null | undefined;
-  value: string | null;
+  date: Date;
   withTime: boolean;
-};
+}
 
 const DatePickerField = (props: Props) => {
-  const [value, updateValue] = useState('');
+  const [value, updateValue] = useState(props.date);
   const [time, updateTime] = useState('');
+
   useEffect(() => {
     updateTime(props.time);
-    updateValue(props.value); // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    updateValue(props.date);
+  }, [props.date, props.time]);
 
   const onApply = (date: Date = value) => props.onApply(date, time);
 
@@ -77,7 +81,7 @@ const DatePickerField = (props: Props) => {
 
         <DatePicker
           style={styles.customFieldDateEditorCalendar}
-          current={value}
+          date={value}
           onDateSelect={(timestamp: number) => {
             onApply(new Date(timestamp));
           }}
@@ -87,7 +91,4 @@ const DatePickerField = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(DatePickerField) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo(DatePickerField);

@@ -84,7 +84,7 @@ interface DatePickerState {
   placeholder: string;
   time: string | null;
   title: string;
-  value: Date;
+  date: Date;
   withTime: boolean;
 }
 
@@ -114,7 +114,7 @@ const dataPickerDefault: DatePickerState = {
   placeholder: '',
   time: null,
   title: '',
-  value: new Date(),
+  date: new Date(),
   withTime: false,
 };
 
@@ -223,7 +223,7 @@ export default function CustomFieldsPanel(props: Props) {
       withTime,
       time: date ? formatTime(date) : null,
       title: projectCustomField.field.name,
-      value: field.value ? date! : new Date(),
+      date: field.value ? date! : new Date(),
       emptyValueName: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
       onSelect: (d: Date, time?: string) => {
         if (!d) {
@@ -361,7 +361,7 @@ export default function CustomFieldsPanel(props: Props) {
           theme={calendarTheme(theme.uiTheme)}
           title={datePickerState.title}
           time={datePickerState.time}
-          value={datePickerState.value}
+          date={datePickerState.date}
           withTime={datePickerState.withTime}
         />
       );
