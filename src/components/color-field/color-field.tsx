@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 
 import styles from './color-field.styles';
 
-import {TextStyleProp} from 'types/Internal';
+import {TextStyleProp, ViewStyleProp} from 'types/Internal';
 
 export interface ColorCoding {
   id: string;
@@ -16,7 +16,7 @@ interface Props {
   color?: ColorCoding;
   fullText?: boolean;
   monospace?: boolean;
-  style?: TextStyleProp;
+  style?: TextStyleProp & ViewStyleProp;
   text?: string;
 }
 

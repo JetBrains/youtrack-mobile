@@ -61,7 +61,7 @@ export default class CustomField extends Component<Props, void> {
         return `${value}`;
       }
 
-      return getEntityPresentation(value);
+      return getEntityPresentation(value as FieldValue);
     }
 
     return emptyValue;
@@ -94,7 +94,7 @@ export default class CustomField extends Component<Props, void> {
   }
 
   renderSLAValue(field: CustomFieldBase) {
-    return <CustomFieldSLA field={field} absDate={this.props.absDate} />;
+    return <CustomFieldSLA field={field} absDate={!!this.props.absDate} />;
   }
 
   _renderValue(value: CustomFieldValue | CustomFieldValue[], fieldType: string | null) {

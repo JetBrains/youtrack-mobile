@@ -53,7 +53,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
     const slaFields = getSLAFields(this.props.issue);
     return (
       <View style={[styles.slaFields, style]}>
-        {slaFields.map((f: CustomFieldBase) => <CustomFieldSLA field={f} absDate={absDate} />)}
+        {slaFields.map((f: CustomFieldBase) => <CustomFieldSLA key={f.id} field={f} absDate={absDate} />)}
       </View>
     );
   }

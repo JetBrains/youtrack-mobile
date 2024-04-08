@@ -35,7 +35,7 @@ const CustomFieldSLA = ({field, absDate, style}: {field: CustomFieldBase; absDat
   const renderSLAPausedTag = () => {
     return (
       <ColorField
-        style={styles.slaPaused}
+        style={{...styles.slaField, ...styles.slaPaused}}
         color={{
           id: '',
           foreground: styles.slaPaused.color,
