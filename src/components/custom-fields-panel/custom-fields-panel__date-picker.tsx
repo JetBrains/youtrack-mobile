@@ -10,23 +10,22 @@ import styles from './custom-fields-panel.styles';
 
 interface Props {
   modal?: boolean;
-  emptyValueName?: string | null | undefined;
-  onApply: (date: Date, time: string) => any;
+  emptyValueName?: string | null;
+  onApply: (date: Date | null, time: string | null) => any;
   onHide: () => void;
   placeholder: string;
-  theme: any;
   title: string;
-  time?: string | null | undefined;
+  time: string | null;
   date: Date;
   withTime: boolean;
 }
 
 const DatePickerField = (props: Props) => {
-  const [value, updateValue] = useState(props.date);
-  const [time, updateTime] = useState('');
+  const [value, updateValue] = useState<Date>(props.date);
+  const [time, updateTime] = useState<string>('');
 
   useEffect(() => {
-    updateTime(props.time);
+    updateTime(props.time || '');
     updateValue(props.date);
   }, [props.date, props.time]);
 
@@ -51,7 +50,7 @@ const DatePickerField = (props: Props) => {
           {!!props.emptyValueName && (
             <TouchableOpacity
               style={styles.buttonClearDate}
-              onPress={() => props.onApply(null)}
+              onPress={() => props.onApply(null, null)}
             >
               <Text style={styles.buttonClearDateText}>
                 {props.emptyValueName} {i18n('(Clear value)')}

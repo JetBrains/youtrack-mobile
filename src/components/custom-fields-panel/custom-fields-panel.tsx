@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {View, ActivityIndicator} from 'react-native';
 
 import {ScrollView} from 'react-native-gesture-handler';
@@ -21,9 +21,8 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 import {IssueContext} from 'views/issue/issue-context';
 import {PanelWithSeparator} from 'components/panel/panel-with-separator';
 import {SkeletonIssueCustomFields} from 'components/skeleton/skeleton';
-import {ThemeContext} from 'components/theme/theme-context';
 
-import styles, {calendarTheme} from './custom-fields-panel.styles';
+import styles from './custom-fields-panel.styles';
 
 import type {CustomField as IssueCustomField, CustomFieldValue} from 'types/CustomFields';
 import type {UITheme} from 'types/Theme';
@@ -31,7 +30,7 @@ import type {ViewStyleProp} from 'types/Internal';
 import {AppState} from 'reducers';
 import {IssueContextData} from 'types/Issue';
 import {Project} from 'types/Project';
-import {Theme} from 'types/Theme';
+import {FieldValue} from 'types/CustomFields';
 
 interface Props {
   autoFocusSelect?: boolean;
@@ -67,7 +66,6 @@ interface SelectState extends ISelectState {
   onChangeSelection?: (selectedItems: Array<IItem>) => any;
   onSelect: (item: any) => any;
   placeholder?: string;
-  selectedItems: Array<IItem>;
 }
 
 interface SimpleValueState {
@@ -80,7 +78,7 @@ interface SimpleValueState {
 interface DatePickerState {
   show?: boolean;
   emptyValueName: string | null;
-  onSelect: (date: Date, time: string) => any;
+  onSelect: (date: Date | null, time: string | null) => void;
   placeholder: string;
   time: string | null;
   title: string;
@@ -119,8 +117,6 @@ const dataPickerDefault: DatePickerState = {
 };
 
 export default function CustomFieldsPanel(props: Props) {
-  const theme: Theme = useContext(ThemeContext);
-
   const api: Api = getApi();
   let currentScrollX: number = 0;
   const isComponentMounted = React.useRef<boolean>(false);
@@ -225,7 +221,7 @@ export default function CustomFieldsPanel(props: Props) {
       title: projectCustomField.field.name,
       date: field.value ? date! : new Date(),
       emptyValueName: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
-      onSelect: (d: Date, time?: string) => {
+      onSelect: (d: Date | null, time: string | null) => {
         if (!d) {
           return saveUpdatedField(field, null);
         }
@@ -253,7 +249,9 @@ export default function CustomFieldsPanel(props: Props) {
     const placeholder: string = placeholders[type] || placeholders.default;
     const valueFormatter = valueFormatters[type] || valueFormatters.default;
     const value: string =
-      field.value != null ? field.value?.presentation || field.value.text || `${field.value}` : '';
+      field.value != null
+        ? (field.value as FieldValue)?.presentation || (field.value as FieldValue).text || `${field.value}`
+        : '';
     return setSimpleValue({
       show: true,
       placeholder,
@@ -352,13 +350,12 @@ export default function CustomFieldsPanel(props: Props) {
         <DatePickerField
           modal={modal}
           emptyValueName={datePickerState.emptyValueName}
-          onApply={(date: Date, time: string) => {
+          onApply={(date: Date | null, time: string | null) => {
             datePickerState.onSelect(date, time);
             closeEditor();
           }}
           onHide={closeEditor}
           placeholder={datePickerState.placeholder}
-          theme={calendarTheme(theme.uiTheme)}
           title={datePickerState.title}
           time={datePickerState.time}
           date={datePickerState.date}
