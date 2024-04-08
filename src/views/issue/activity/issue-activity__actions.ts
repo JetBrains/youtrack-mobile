@@ -18,7 +18,7 @@ import type Api from 'components/api/api';
 import type {Activity, ActivityType} from 'types/Activity';
 import type {AnyIssue} from 'types/Issue';
 import type {CustomError} from 'types/Error';
-import type {TimeTracking} from 'types/Work';
+import type {TimeTracking, WorkItemType} from 'types/Work';
 import type {User} from 'types/User';
 import type {WorkItem} from 'types/Work';
 import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
@@ -65,7 +65,7 @@ export interface IssueActivityActions {
   loadActivitiesPage: (doNotReset?: boolean, issueId?: string) => ReduxAction;
   doUpdateWorkItem: (workItem: WorkItem) => ReduxAction;
   createWorkItem: (draft: WorkItem, issueId?: string) => ReduxAction<Promise<CustomError | WorkItem>>;
-  getWorkItemTypes: (projectId?: string) => ReduxAction<Promise<void | {}>>;
+  getWorkItemTypes: (projectId?: string) => ReduxAction<Promise<WorkItemType[] | {}>>;
   deleteWorkItemDraft: (issueId?: string) => ReduxAction;
   updateWorkItemDraft: (draft: WorkItem, issueId?: string) => ReduxAction<Promise<WorkItem | null>>;
   getWorkItemAuthors: (projectRingId?: string) => ReduxAction<Promise<Partial<User>[]>>;
@@ -254,7 +254,7 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
           .sort(sortAlphabetically);
       };
     },
-    getWorkItemTypes: function (projectId?: string): ReduxAction<Promise<void | {}>> {
+    getWorkItemTypes: function (projectId?: string): ReduxAction<Promise<WorkItemType[] | {}>> {
       return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         const api: Api = getApi();
         const targetProjectId: string = projectId || (getState()[stateFieldName] as IssueState).issue.project.id;
