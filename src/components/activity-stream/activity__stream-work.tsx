@@ -40,7 +40,7 @@ const StreamWork = (props: Props) => {
               {` ${getDurationPresentation(work.duration)}`}
             </Text>
             {!!work.type && `, ${work.type.name}`}
-            {!!work.created && `, ${absDate(work.created, true)}`}
+            {!!work.date && `, ${absDate(work.date, true)}`}
           </Text>
 
           {!!work.text && (
