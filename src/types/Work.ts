@@ -1,4 +1,5 @@
 import type {User} from './User';
+
 export type WorkTimeSettings =
   | {
       id: string;
@@ -7,17 +8,27 @@ export type WorkTimeSettings =
       workDays: number[];
     }
   | {};
-export type WorkItemType = {
+
+export interface WorkItemType {
   id: string | null;
   name: string;
-};
-export type WorkItemTemplate = {
+}
+
+export interface WorkItemTemplate {
   author: User;
   date: number;
   duration: {
+    $type: string;
     presentation: string;
   };
-  type: WorkItemType | null;
+  type: null;
+}
+
+export interface WorkItem extends Omit<WorkItemTemplate, 'type'> {
+  $type?: string;
+  created: number;
+  creator?: User;
+  id?: string;
   issue: {
     id: string;
     project: {
@@ -25,17 +36,13 @@ export type WorkItemTemplate = {
       ringId: string;
     };
   };
-};
-export type WorkItem = WorkItemTemplate & {
-  $type?: string;
-  created: number;
-  creator?: User;
-  id?: string;
   text: string | null;
+  type: WorkItemType | null;
   usesMarkdown: boolean;
-};
-export type TimeTracking = {
+}
+
+export interface TimeTracking {
   enabled: boolean;
   draftWorkItem: WorkItem | null;
   workItemTemplate: WorkItemTemplate;
-};
+}
