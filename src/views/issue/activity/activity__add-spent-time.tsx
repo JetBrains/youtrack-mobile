@@ -264,20 +264,14 @@ const AddSpentTimeForm = (props: Props) => {
     const submitIcon = isProgress ? (
       <ActivityIndicator color={styles.link.color} />
     ) : (
-      <IconCheck
-        size={20}
-        color={isSubmitDisabled ? styles.disabled.color : styles.link.color}
-      />
+      <IconCheck color={isSubmitDisabled ? styles.disabled.color : styles.link.color}/>
     );
     return (
       <Header
         style={styles.elevation1}
         title={i18n('Spent time')}
         leftButton={
-          <IconClose
-            size={21}
-            color={isProgress ? styles.disabled.color : styles.link.color}
-          />
+          <IconClose color={isProgress ? styles.disabled.color : styles.link.color}/>
         }
         onBack={() => !isProgress && onClose()}
         extraButton={
