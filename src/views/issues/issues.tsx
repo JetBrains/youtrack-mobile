@@ -165,6 +165,10 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
           requestController.cancelIssuesRequests();
         }
 
+        if (prevRouteName === routeMap.HelpDeskFeedback && routeName === routeMap.Tickets) {
+          this.refresh();
+        }
+
         if (
           (routeName === routeMap.Issues || routeName === routeMap.Tickets) &&
           prevRouteName === routeMap.Issue &&

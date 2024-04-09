@@ -182,7 +182,6 @@ class YouTrackMobile extends Component<void, void> {
     Router.registerRoute({
       name: routeMap.HelpDeskFeedback,
       component: HelpDeskFeedback,
-      type: 'reset',
     });
     Router.finalizeRoutes(this.routeHomeName);
   }

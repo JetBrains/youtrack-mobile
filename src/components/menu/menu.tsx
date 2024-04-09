@@ -120,6 +120,10 @@ export default function Menu() {
       return routes.prevRouteName === routeName;
     }
 
+    if (routes.currentRouteName === routeMap.HelpDeskFeedback) {
+      return routes.prevRouteName === routeName;
+    }
+
     if (routes.currentRouteName === routeMap.Article) {
       return (
         routes.prevRouteName === routeName ||
