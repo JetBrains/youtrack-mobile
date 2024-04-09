@@ -29,8 +29,9 @@ export default class HelpDeskFormAPI extends ApiBase {
               projectField: [
                 '$type',
                 'id',
+                'emptyFieldText',
                 {
-                  field: ['id', 'localizedName', 'name', 'fieldType(isMultiValue)'],
+                  field: ['id', 'localizedName', 'name', 'fieldType(isMultiValue,valueType)'],
                 },
                 {
                   defaultValues: ['id', 'localizedName', 'name'],

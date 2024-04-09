@@ -29,6 +29,7 @@ export interface CustomFieldFeedbackBlock extends FeedbackFormBlockBase {
   projectField: {
     $type: string;
     id: string;
+    emptyFieldText: string;
     field: {
       id: string;
       localizedName: string | null;

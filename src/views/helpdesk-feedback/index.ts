@@ -1,5 +1,5 @@
 import log from 'components/log/log';
-import {getLocalizedName} from 'components/custom-field/custom-field-helper';
+import {getLocalizedName, getSimpleCustomFieldType} from 'components/custom-field/custom-field-helper';
 import {i18n} from 'components/i18n/i18n';
 import {sortByOrdinal} from 'components/search/sorting';
 
@@ -7,6 +7,8 @@ import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import {FeedbackForm, FeedbackFormBlock, FeedbackFormProject} from 'types/FeedbackForm';
 import {User} from 'types/User';
 import {EntityBase} from 'types/Entity';
+
+import {DATE_AND_TIME_FIELD_VALUE_TYPE} from 'components/custom-fields-panel';
 
 export const FeedbackFormPredefinedBlock = {
   attachment: 'AttachmentsFeedbackBlock',
@@ -17,13 +19,15 @@ export const FeedbackFormPredefinedBlock = {
   text: 'TextFeedbackBlock',
 } as const;
 
-export const formBlockType = {
+export const formBlockType: {[key: string]: string} = {
   text: 'text',
   field: 'field',
   period: 'period',
   input: 'input',
   email: 'email',
-} as const;
+  date: 'date',
+  dateTime: 'dateTime',
+};
 
 interface FeedbackFormRecord {
   [key: string]: any;
@@ -69,7 +73,7 @@ export interface FeedbackBlock {
   value?: string | undefined;
   multiline: boolean;
   required: boolean;
-  type: keyof typeof formBlockType;
+  type: string;
 }
 
 const createDefaultBlock = (b: FeedbackFormBlock): FeedbackBlock => ({
@@ -123,18 +127,27 @@ export const createFormBlock = (
       if (b.projectField.defaultValues) {
         value = isMultiValue ? b.projectField.defaultValues : b.projectField.defaultValues[0];
       }
+      const ft = getSimpleCustomFieldType(b.projectField) || '';
+      let type;
+      if (ft === DATE_AND_TIME_FIELD_VALUE_TYPE) {
+        type = formBlockType.dateTime;
+      } else {
+        type = formBlockType[ft] || formBlockType.field;
+      }
       return {
         ...defaultBlock,
         label: getLocalizedName(b.projectField.field),
         name: 'fields',
-        type: formBlockType.field,
+        type,
         field: {
           $type: b.projectField.$type,
           id: b.projectField.id,
           value,
           isMultiValue,
         },
-        value: b.projectField.defaultValues ? b.projectField.defaultValues.map(getLocalizedName).join(', ') : undefined,
+        value: b.projectField.defaultValues
+          ? b.projectField.defaultValues.map(getLocalizedName).join(', ')
+          : b.projectField.emptyFieldText,
       };
     case FeedbackFormPredefinedBlock.description:
       return {

@@ -43,6 +43,9 @@ const {reducer, actions} = createSlice({
     setError(state: HelpDeskFeedbackFormState, action: PayloadAction<CustomError>) {
       state.error = action.payload;
     },
+    setProject(state: HelpDeskFeedbackFormState, action: PayloadAction<ProjectHelpdesk>) {
+      state.project = action.payload;
+    },
   },
 
   extraReducers: {
@@ -55,6 +58,6 @@ const {reducer, actions} = createSlice({
   },
 });
 
-export const {setError, setFormData, setSelectProps} = actions;
+export const {setError, setFormData, setSelectProps, setProject} = actions;
 
 export default reducer;

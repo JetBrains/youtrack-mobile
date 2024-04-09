@@ -9,7 +9,7 @@ import {
 import {getLocalizedName} from 'components/custom-field/custom-field-helper';
 import {notify, notifyError} from 'components/notification/notification';
 import {SET_PROGRESS} from 'actions/action-types';
-import {setError, setSelectProps, setFormData} from './helpdesk-feedback-reducers';
+import {setError, setSelectProps, setFormData, setProject} from './helpdesk-feedback-reducers';
 import {until} from 'util/util';
 
 import {CustomError} from 'types/Error';
@@ -19,6 +19,7 @@ import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 
 
 const loadFeedbackForm = (project: ProjectHelpdesk): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    dispatch(setProject(project));
     const state = getState();
     const [error, form] = await until<FeedbackForm>(
       getApi().helpDesk.getForm(project.plugins.helpDeskSettings.defaultForm.uuid)
@@ -30,6 +31,7 @@ const loadFeedbackForm = (project: ProjectHelpdesk): ReduxAction => {
     }
   };
 };
+
 const setSelect = (b: FeedbackBlock, onSelect: (s: FeedbackFormBlockCustomField) => void): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const form = getState().helpDeskFeedbackForm.form!;
@@ -59,6 +61,7 @@ const setSelect = (b: FeedbackBlock, onSelect: (s: FeedbackFormBlockCustomField)
     );
   };
 };
+
 const setInProgress = (isInProgress: boolean = false): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch) =>
     dispatch({
@@ -103,8 +106,16 @@ const submitForm = (formBlocks: FeedbackBlock[]): ReduxAction<Promise<CustomErro
   };
 };
 
+const onRefresh = (): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
+    const state = getState().helpDeskFeedbackForm;
+    dispatch(loadFeedbackForm(state.project!));
+  };
+};
+
 export {
   loadFeedbackForm,
   setSelect,
+  onRefresh,
   submitForm,
 };
