@@ -24,7 +24,7 @@ msgstr " または "
 msgid "(archived)"
 msgstr "(アーカイブ済み)"
 
-#: src/components/custom-fields-panel/custom-fields-panel__date-picker.tsx
+#: src/components/date-picker/date-time-picker.tsx
 msgid "(Clear value)"
 msgstr "(値をクリア)"
 
@@ -105,6 +105,10 @@ msgstr "経過時間を追加"
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Add tag"
 msgstr "タグの追加"
+
+#: src/components/date-picker/date-time-picker.tsx
+msgid "Add time"
+msgstr "時間の追加"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Add to favorites"
@@ -834,7 +838,7 @@ msgstr "プレビューサイズ"
 msgid "Problem"
 msgstr "問題"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx
+#: src/components/custom-fields-panel/index.ts
 msgid "Project"
 msgstr "プロジェクト"
 
@@ -965,6 +969,10 @@ msgstr "ログを送信する"
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sending crash report…"
 msgstr "クラッシュレポートを送信中…"
+
+#: src/components/date-picker/date-time-picker.tsx
+msgid "Set a date"
+msgstr "日付の設定"
 
 #: src/views/settings/settings.tsx
 msgid "Settings"

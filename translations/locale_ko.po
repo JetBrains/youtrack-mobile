@@ -24,7 +24,7 @@ msgstr " 또는 "
 msgid "(archived)"
 msgstr "(보관됨)"
 
-#: src/components/custom-fields-panel/custom-fields-panel__date-picker.tsx
+#: src/components/date-picker/date-time-picker.tsx
 msgid "(Clear value)"
 msgstr "(값 지우기)"
 
@@ -105,6 +105,10 @@ msgstr "소요시간 추가"
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Add tag"
 msgstr "태그 추가"
+
+#: src/components/date-picker/date-time-picker.tsx
+msgid "Add time"
+msgstr "시간 추가"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Add to favorites"
@@ -834,7 +838,7 @@ msgstr "미리보기 크기"
 msgid "Problem"
 msgstr "문제"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx
+#: src/components/custom-fields-panel/index.ts
 msgid "Project"
 msgstr "프로젝트"
 
@@ -965,6 +969,10 @@ msgstr "로그 보내기"
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sending crash report…"
 msgstr "충돌 보고서를 보내는 중…"
+
+#: src/components/date-picker/date-time-picker.tsx
+msgid "Set a date"
+msgstr "날짜 설정"
 
 #: src/views/settings/settings.tsx
 msgid "Settings"

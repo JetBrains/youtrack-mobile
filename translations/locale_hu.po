@@ -24,7 +24,7 @@ msgstr " vagy "
 msgid "(archived)"
 msgstr "(archivált)"
 
-#: src/components/custom-fields-panel/custom-fields-panel__date-picker.tsx
+#: src/components/date-picker/date-time-picker.tsx
 msgid "(Clear value)"
 msgstr "(Érték törlése)"
 
@@ -112,6 +112,10 @@ msgstr "A ráfordított idő hozzáadása"
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Add tag"
 msgstr "Címke hozzáadása"
+
+#: src/components/date-picker/date-time-picker.tsx
+msgid "Add time"
+msgstr ""
 
 #: src/views/article/arcticle-actions.ts
 msgid "Add to favorites"
@@ -844,7 +848,7 @@ msgstr ""
 msgid "Problem"
 msgstr "Probléma"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx
+#: src/components/custom-fields-panel/index.ts
 msgid "Project"
 msgstr "Projekt"
 
@@ -974,6 +978,10 @@ msgstr ""
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sending crash report…"
+msgstr ""
+
+#: src/components/date-picker/date-time-picker.tsx
+msgid "Set a date"
 msgstr ""
 
 #: src/views/settings/settings.tsx

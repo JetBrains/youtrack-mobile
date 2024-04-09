@@ -24,7 +24,7 @@ msgstr " ou "
 msgid "(archived)"
 msgstr "(archivé)"
 
-#: src/components/custom-fields-panel/custom-fields-panel__date-picker.tsx
+#: src/components/date-picker/date-time-picker.tsx
 msgid "(Clear value)"
 msgstr "(Effacer la valeur)"
 
@@ -112,6 +112,10 @@ msgstr "Ajouter le temps passé"
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Add tag"
 msgstr "Ajouter une balise"
+
+#: src/components/date-picker/date-time-picker.tsx
+msgid "Add time"
+msgstr "Ajouter l'heure"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Add to favorites"
@@ -844,7 +848,7 @@ msgstr "Taille de l'aperçu"
 msgid "Problem"
 msgstr "Problème"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx
+#: src/components/custom-fields-panel/index.ts
 msgid "Project"
 msgstr "Projet"
 
@@ -975,6 +979,10 @@ msgstr "Envoyer les journaux"
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sending crash report…"
 msgstr "Envoi du rapport d'incident…"
+
+#: src/components/date-picker/date-time-picker.tsx
+msgid "Set a date"
+msgstr "Définir une date"
 
 #: src/views/settings/settings.tsx
 msgid "Settings"

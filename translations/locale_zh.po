@@ -24,7 +24,7 @@ msgstr " 或 "
 msgid "(archived)"
 msgstr "(已归档)"
 
-#: src/components/custom-fields-panel/custom-fields-panel__date-picker.tsx
+#: src/components/date-picker/date-time-picker.tsx
 msgid "(Clear value)"
 msgstr "(清除值)"
 
@@ -105,6 +105,10 @@ msgstr "添加花费的时间"
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Add tag"
 msgstr "添加标记"
+
+#: src/components/date-picker/date-time-picker.tsx
+msgid "Add time"
+msgstr "添加时间"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Add to favorites"
@@ -834,7 +838,7 @@ msgstr "预览大小"
 msgid "Problem"
 msgstr "问题"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx
+#: src/components/custom-fields-panel/index.ts
 msgid "Project"
 msgstr "项目"
 
@@ -965,6 +969,10 @@ msgstr "发送日志"
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sending crash report…"
 msgstr "正在发送崩溃报告…"
+
+#: src/components/date-picker/date-time-picker.tsx
+msgid "Set a date"
+msgstr "设置日期"
 
 #: src/views/settings/settings.tsx
 msgid "Settings"

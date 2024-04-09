@@ -18,7 +18,7 @@ msgstr " or "
 msgid "(archived)"
 msgstr "(archived)"
 
-#: src/components/custom-fields-panel/custom-fields-panel__date-picker.tsx:56
+#: src/components/date-picker/date-time-picker.tsx:74
 msgid "(Clear value)"
 msgstr "(Clear value)"
 
@@ -50,19 +50,19 @@ msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} issue"
 msgstr[1] "{{amount}} issues"
 
-#: src/components/date/date.ts:140
+#: src/components/date/date.ts:149
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
 msgstr[0] "{{daysLeft}}d"
 msgstr[1] "{{daysLeft}}d"
 
-#: src/components/date/date.ts:132
+#: src/components/date/date.ts:141
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
 msgstr[0] "{{hoursLeft}}h"
 msgstr[1] "{{hoursLeft}}h"
 
-#: src/components/date/date.ts:123
+#: src/components/date/date.ts:132
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
 msgstr[0] "{{minutesAbsolute}}m"
@@ -72,8 +72,8 @@ msgstr[1] "{{minutesAbsolute}}m"
 msgid "@Mention in a comment"
 msgstr "@Mention in a comment"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:381
-#: src/views/issue/activity/activity__add-spent-time.tsx:395
+#: src/views/issue/activity/activity__add-spent-time.tsx:383
+#: src/views/issue/activity/activity__add-spent-time.tsx:397
 msgid "1w 1d 1h 1m"
 msgstr "1w 1d 1h 1m"
 
@@ -106,6 +106,10 @@ msgstr "Add spent time"
 #: src/views/issue/issue-base-actions-creater.ts:579
 msgid "Add tag"
 msgstr "Add tag"
+
+#: src/components/date-picker/date-time-picker.tsx:84
+msgid "Add time"
+msgstr "Add time"
 
 #: src/views/article/arcticle-actions.ts:263
 msgid "Add to favorites"
@@ -190,7 +194,7 @@ msgstr "Attachment deleted"
 msgid "Attachment name"
 msgstr "Attachment name"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:350
+#: src/views/issue/activity/activity__add-spent-time.tsx:352
 msgid "Author"
 msgstr "Author"
 
@@ -369,7 +373,7 @@ msgstr "Current issue"
 msgid "Dark theme"
 msgstr "Dark theme"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:360
+#: src/views/issue/activity/activity__add-spent-time.tsx:362
 msgid "Date"
 msgstr "Date"
 
@@ -419,7 +423,7 @@ msgstr "Delete issue {{issueId}}?"
 msgid "Delete permanently"
 msgstr "Delete permanently"
 
-#: src/views/helpdesk-feedback/index.ts:143
+#: src/views/helpdesk-feedback/index.ts:156
 #: src/views/settings/settings__feedback-form.tsx:248
 msgid "Description"
 msgstr "Description"
@@ -433,11 +437,11 @@ msgstr "Description changed"
 msgid "Details"
 msgstr "Details"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:218
+#: src/views/issue/activity/activity__add-spent-time.tsx:220
 msgid "Discard and close"
 msgstr "Discard and close"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:218
+#: src/views/issue/activity/activity__add-spent-time.tsx:220
 msgid "Discard draft and close?"
 msgstr "Discard draft and close?"
 
@@ -483,7 +487,7 @@ msgstr "Edit comment"
 msgid "Email"
 msgstr "Email"
 
-#: src/views/helpdesk-feedback/index.ts:105
+#: src/views/helpdesk-feedback/index.ts:109
 msgid "Email address"
 msgstr "Email address"
 
@@ -504,7 +508,7 @@ msgstr "Enter search request"
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr "Enter the web address for a YouTrack installation where you have a registered account"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:218
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:197
 msgid "Enter time value"
 msgstr "Enter time value"
 
@@ -561,7 +565,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:575
+#: src/views/issues/issues.tsx:579
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -629,7 +633,7 @@ msgstr "It could mean that the issue doesn't exist or you don't have permission 
 msgid "JetBrains Privacy Policy"
 msgstr "JetBrains Privacy Policy"
 
-#: src/components/date/date.ts:112
+#: src/components/date/date.ts:121
 msgid "just now"
 msgstr "just now"
 
@@ -777,7 +781,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:625
+#: src/views/issues/issues.tsx:629
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -789,7 +793,7 @@ msgstr "No items"
 msgid "No notifications"
 msgstr "No notifications"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:58
+#: src/views/issue/activity/activity__add-spent-time.tsx:62
 msgid "No type"
 msgstr "No type"
 
@@ -838,7 +842,7 @@ msgstr "Preview Size"
 msgid "Problem"
 msgstr "Problem"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:91
+#: src/components/custom-fields-panel/index.ts:13
 msgid "Project"
 msgstr "Project"
 
@@ -925,7 +929,7 @@ msgstr "Search articles"
 msgid "Search for a different value"
 msgstr "Search for a different value"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:192
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:171
 msgid "Search for the project"
 msgstr "Search for the project"
 
@@ -938,7 +942,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:690
+#: src/views/issues/issues.tsx:694
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -969,6 +973,10 @@ msgstr "Send logs"
 #: src/components/error-boundary/error-boundary.tsx:198
 msgid "Sending crash report…"
 msgstr "Sending crash report…"
+
+#: src/components/date-picker/date-time-picker.tsx:67
+msgid "Set a date"
+msgstr "Set a date"
 
 #: src/views/settings/settings.tsx:134
 msgid "Settings"
@@ -1040,8 +1048,8 @@ msgid "Sorted by"
 msgstr "Sorted by"
 
 #: src/components/activity/activity-helper.ts:48
-#: src/views/issue/activity/activity__add-spent-time.tsx:272
-#: src/views/issue/activity/activity__add-spent-time.tsx:376
+#: src/views/issue/activity/activity__add-spent-time.tsx:274
+#: src/views/issue/activity/activity__add-spent-time.tsx:378
 msgid "Spent time"
 msgstr "Spent time"
 
@@ -1065,7 +1073,7 @@ msgstr "submitted a pull request"
 msgid "Subscriptions"
 msgstr "Subscriptions"
 
-#: src/views/helpdesk-feedback/index.ts:149
+#: src/views/helpdesk-feedback/index.ts:162
 #: src/views/settings/settings__feedback-form.tsx:233
 msgid "Summary"
 msgstr "Summary"
@@ -1206,7 +1214,7 @@ msgstr "Touch and hold an item to view a list of available actions"
 msgid "Try Again"
 msgstr "Try Again"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:406
+#: src/views/issue/activity/activity__add-spent-time.tsx:408
 msgid "Type"
 msgstr "Type"
 
@@ -1310,7 +1318,7 @@ msgid "Wrap attribute values that contain spaces in braces {like this}."
 msgstr "Wrap attribute values that contain spaces in braces {like this}."
 
 #: src/components/comment/comment-edit.tsx:426
-#: src/views/issue/activity/activity__add-spent-time.tsx:421
+#: src/views/issue/activity/activity__add-spent-time.tsx:423
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
 
