@@ -12,7 +12,7 @@ import type {DateData} from 'react-native-calendars';
 import type {Theme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
 
-const DatePicker = (props: {date: Date; onDateSelect: (timestamp: number) => any; style?: ViewStyleProp}) => {
+const DatePicker = (props: {date?: Date; onDateSelect: (timestamp: number) => any; style?: ViewStyleProp}) => {
   const theme: Theme = useContext(ThemeContext);
   const firstDay: number = useSelector((state: AppState) => {
     const firstDayOfWeek = state?.app?.user?.profiles?.appearance?.firstDayOfWeek;

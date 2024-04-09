@@ -5,13 +5,48 @@ import {UNIT} from 'components/variables';
 
 import type {UITheme, UIThemeColors} from 'types/Theme';
 import {Theme as CalendarTheme} from 'react-native-calendars/src/types';
+import {rowFormStyles} from 'components/common-styles/form';
+
+const simpleValueInput = {...rowFormStyles.input, color: '$text'};
 
 export default EStyleSheet.create({
   container: {
     flex: 1,
     minHeight: UNIT * 42,
   },
+  link: {
+    color: '$link',
+  },
+  placeholderText: {
+    color: '$icon',
+  },
+  icon: {
+    color: '$icon',
+  },
+  customFieldDateEditor: {
+    flex: 1,
+    padding: UNIT * 2,
+  },
+  customFieldDateEditorValue: {
+    marginBottom: UNIT * 2,
+  },
+  customFieldDateEditorCalendar: {
+    marginTop: UNIT * 2,
+  },
+  buttonClearDate: {
+    ...simpleValueInput,
+    padding: UNIT * 2,
+    backgroundColor: 'transparent',
+    borderColor: '$separator',
+    borderWidth: 1,
+  },
+  buttonClearDateText: {
+    color: '$link',
+    textAlign: 'center',
+  },
+  simpleValueInput,
 });
+
 export const calendarTheme = (uiTheme: UITheme): CalendarTheme => {
   const uiThemeColors: UIThemeColors = uiTheme.colors;
   return {

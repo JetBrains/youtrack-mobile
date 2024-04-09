@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import debounce from 'lodash.debounce';
 import InputScrollView from 'react-native-input-scroll-view';
+import {useDispatch, useSelector} from 'react-redux';
+
 import DatePicker from 'components/date-picker/date-picker';
 import Header from 'components/header/header';
 import ModalPortal from 'components/modal-view/modal-portal';
@@ -26,16 +28,18 @@ import {IconAngleRight, IconCheck, IconClose} from 'components/icon/icon';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {logEvent} from 'components/log/log-helper';
 import {ThemeContext} from 'components/theme/theme-context';
-import {useDispatch, useSelector} from 'react-redux';
+
 import styles from './activity__add-spent-time.styles';
-import type {AppState} from '../../../reducers';
+
+import type {AppState} from 'reducers';
 import type {IssueFull} from 'types/Issue';
 import type {ISelectProps} from 'components/select/select';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
-import type {WorkItem, TimeTracking, WorkItemType} from 'types/Work';
+import type {WorkItem, WorkItemType} from 'types/Work';
 import {Project} from 'types/Project';
+import {ReduxThunkDispatch} from 'types/Redux';
 
 type Props = {
   issue: IssueFull;
@@ -46,9 +50,9 @@ type Props = {
 };
 
 const AddSpentTimeForm = (props: Props) => {
-  const currentUser: User = useSelector((state: AppState) => state.app.user);
-  const draftDefault: Partial<WorkItem> = Object.freeze({
-    date: new Date().getTime(),
+  const currentUser = useSelector((state: AppState) => state.app.user);
+  const draftDefault = {
+    date: new Date(Date.now()),
     author: currentUser,
     duration: {
       presentation: '1d',
@@ -65,15 +69,15 @@ const AddSpentTimeForm = (props: Props) => {
         id: props.issue.project.id,
       },
     },
-  } as any);
+  };
   const theme: Theme = useContext(ThemeContext);
-  const dispatch = useDispatch();
+  const dispatch: ReduxThunkDispatch = useDispatch();
   const [isProgress, updateProgress] = useState(false);
   const [isSelectVisible, updateSelectVisibility] = useState(false);
-  const [draft, updateDraftWorkItem] = useState(props.workItem || draftDefault);
-  const [selectProps, updateSelectProps] = useState(null);
+  const [draft, updateDraftWorkItem] = useState<WorkItem>(props.workItem || draftDefault);
+  const [selectProps, updateSelectProps] = useState<Partial<ISelectProps> | null>(null);
   const [error, updateError] = useState(false);
-  const [modalChildren, updateModalChildren] = useState(null);
+  const [modalChildren, updateModalChildren] = useState<React.ReactNode>(null);
   const issueActivityActions = createIssueActivityActions();
 
   const doHide: () => void = (): void => {
@@ -127,9 +131,7 @@ const AddSpentTimeForm = (props: Props) => {
 
     async function loadTimeTracking() {
       updateProgress(true);
-      const timeTracking: TimeTracking = await dispatch(
-        issueActivityActions.getTimeTracking(getIssueId()),
-      );
+      const timeTracking = await dispatch(issueActivityActions.getTimeTracking(getIssueId()));
       updateDraftWorkItem({
         ...draftDefault,
         ...timeTracking?.workItemTemplate,
@@ -140,22 +142,22 @@ const AddSpentTimeForm = (props: Props) => {
           timeTracking?.workItemTemplate?.type ||
           draftDefault.type,
         usesMarkdown: true,
-      });
+      } as WorkItem);
       updateProgress(false);
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.workItem, dispatch]);
 
   const update = (data: Partial<WorkItem>) => {
     updateError(false);
-    const updatedDraft: WorkItem = {...draft, ...data};
+    const updatedDraft = {...draft, ...data};
     updateDraftWorkItem(updatedDraft);
 
     if (!props.workItem) {
-      delayedUpdate(updatedDraft);
+      delayedUpdate(updatedDraft as WorkItem);
     }
   };
 
-  const renderSelect = (selectProps: ISelectProps) => {
+  const renderSelect = (p: ISelectProps) => {
     const defaultSelectProps: ISelectProps = {
       multi: false,
       dataSource: () => Promise.resolve([]),
@@ -171,10 +173,10 @@ const AddSpentTimeForm = (props: Props) => {
         updateSelectVisibility(false);
       },
     };
-    return <Select {...Object.assign({}, defaultSelectProps, selectProps)} />;
+    return <Select {...Object.assign({}, defaultSelectProps, p)} />;
   };
 
-  const getUserSelectProps = (): Partial<ISelectProps> => {
+  const getUserSelectProps = () => {
     return {
       dataSource: async () =>
         await dispatch(
@@ -193,11 +195,11 @@ const AddSpentTimeForm = (props: Props) => {
     };
   };
 
-  const getWorkTypeSelectProps = (): Partial<ISelectProps> => {
+  const getWorkTypeSelectProps = () => {
     return {
       dataSource: async () => {
-        const types: WorkItemType[] = await dispatch(
-          issueActivityActions.getWorkItemTypes(draft.issue.project.id),
+        const types = await dispatch(
+          issueActivityActions.getWorkItemTypes(draft.issue!.project.id),
         );
         return [draftDefault.type].concat(types);
       },
@@ -235,7 +237,7 @@ const AddSpentTimeForm = (props: Props) => {
     });
     updateProgress(true);
     const updatedDraft: WorkItem = getDraft(draft);
-    const item: WorkItem | null | undefined = await dispatch(
+    const item = await dispatch(
       issueActivityActions.createWorkItem(
         {
           ...updatedDraft,
@@ -303,9 +305,9 @@ const AddSpentTimeForm = (props: Props) => {
 
   const renderDatePicker: () => void = (): void => {
     const isSplitModeView: boolean = isSplitView();
-    const datePicker: any = (
+    const datePicker = (
       <DatePicker
-        current={draft.date}
+        date={draft.date ? new Date(draft.date) : new Date(Date.now())}
         onDateSelect={(timestamp: number) => {
           update({
             date: timestamp,
@@ -419,7 +421,7 @@ const AddSpentTimeForm = (props: Props) => {
             textAlignVertical="top"
             style={[styles.feedbackFormInputDescription]}
             placeholder={i18n('Write a comment, @mention people')}
-            value={draft?.text}
+            value={draft?.text || undefined}
             onChangeText={(comment: string) =>
               updateDraftWorkItem({...draft, text: comment})
             }
@@ -428,7 +430,7 @@ const AddSpentTimeForm = (props: Props) => {
           <View style={styles.feedbackFormBottomIndent} />
         </View>
       </InputScrollView>
-      {isSelectVisible && !!selectProps && renderSelect(selectProps)}
+      {isSelectVisible && !!selectProps && renderSelect(selectProps as ISelectProps)}
 
       {modalChildren && (
         <ModalPortal onHide={() => updateModalChildren(null)}>
@@ -439,7 +441,4 @@ const AddSpentTimeForm = (props: Props) => {
   );
 };
 
-export default memo<Props>(AddSpentTimeForm) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default memo<Props>(AddSpentTimeForm);

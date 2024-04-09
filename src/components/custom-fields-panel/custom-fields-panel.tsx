@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, ActivityIndicator} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 
 import {ScrollView} from 'react-native-gesture-handler';
 import {View as AnimatedView} from 'react-native-animatable';
@@ -7,18 +7,22 @@ import {useSelector} from 'react-redux';
 
 import Api from 'components/api/api';
 import CustomField from 'components/custom-field/custom-field';
-import DatePickerField from './custom-fields-panel__date-picker';
+import DateTimePicker from '../date-picker/date-time-picker';
 import ModalPortal from 'components/modal-view/modal-portal';
 import ModalView from 'components/modal-view/modal-view';
 import SimpleValueEditor from './custom-fields-panel__simple-value';
 import usage from 'components/usage/usage';
 import {createNullProjectCustomField} from 'util/util';
-import {formatTime} from 'components/date/date';
+import {
+  customFieldPlaceholders,
+  customFieldValueFormatters,
+  DATE_AND_TIME_FIELD_VALUE_TYPE,
+  getProjectLabel,
+} from 'components/custom-fields-panel/index';
 import {getApi} from 'components/api/api__instance';
 import {i18n} from 'components/i18n/i18n';
 import {IItem, ISelectState, Select, SelectModal} from 'components/select/select';
 import {isSplitView} from 'components/responsive/responsive-helper';
-import {IssueContext} from 'views/issue/issue-context';
 import {PanelWithSeparator} from 'components/panel/panel-with-separator';
 import {SkeletonIssueCustomFields} from 'components/skeleton/skeleton';
 
@@ -28,9 +32,8 @@ import type {CustomField as IssueCustomField, CustomFieldValue} from 'types/Cust
 import type {UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
 import {AppState} from 'reducers';
-import {IssueContextData} from 'types/Issue';
-import {Project} from 'types/Project';
 import {FieldValue} from 'types/CustomFields';
+import {Project} from 'types/Project';
 
 interface Props {
   autoFocusSelect?: boolean;
@@ -43,10 +46,7 @@ interface Props {
     canCreateIssueToProject?: (project: Project) => boolean;
     canEditProject: boolean;
   };
-  onUpdate: (
-    field: IssueCustomField,
-    value: CustomFieldValue | null,
-  ) => Promise<unknown>;
+  onUpdate: (field: IssueCustomField, value: CustomFieldValue | null) => Promise<unknown>;
   onUpdateProject: (project: Project) => Promise<unknown>;
   uiTheme: UITheme;
   analyticsId?: string;
@@ -78,41 +78,20 @@ interface SimpleValueState {
 interface DatePickerState {
   show?: boolean;
   emptyValueName: string | null;
-  onSelect: (date: Date | null, time: string | null) => void;
+  onSelect: (date: Date | null) => void;
   placeholder: string;
-  time: string | null;
   title: string;
-  date: Date;
+  date: Date | null;
   withTime: boolean;
 }
-
-const DATE_AND_TIME_FIELD_VALUE_TYPE = 'date and time';
-
-const getProjectLabel = () => i18n('Project');
-
-const placeholders = {
-  integer: '-12 or 34',
-  string: 'Type value',
-  text: 'Type text value',
-  float: 'Type float value',
-  default: '1w 1d 1h 1m',
-};
-const valueFormatters = {
-  integer: (v: string) => parseInt(v, 10),
-  float: (v: string) => parseFloat(v),
-  string: (v: string) => v,
-  text: (v: string) => ({text: v}),
-  default: (v: string) => ({presentation: v}),
-};
 
 const dataPickerDefault: DatePickerState = {
   show: false,
   emptyValueName: null,
   onSelect: () => {},
   placeholder: '',
-  time: null,
   title: '',
-  date: new Date(),
+  date: null,
   withTime: false,
 };
 
@@ -217,37 +196,22 @@ export default function CustomFieldsPanel(props: Props) {
       show: true,
       placeholder: i18n('Enter time value'),
       withTime,
-      time: date ? formatTime(date) : null,
       title: projectCustomField.field.name,
-      date: field.value ? date! : new Date(),
+      date,
       emptyValueName: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
-      onSelect: (d: Date | null, time: string | null) => {
+      onSelect: (d: Date | null) => {
         if (!d) {
           return saveUpdatedField(field, null);
         }
-
-        if (withTime && time) {
-          try {
-            const match = time.match(/(\d\d):(\d\d)/);
-
-            if (match) {
-              const [, hours = 3, minutes = 0] = match;
-              d.setHours(parseInt(`${hours}`, 10), parseInt(`${minutes}`, 10));
-            }
-          } catch (e) {
-            throw new Error(`Invalid date: ${e}`);
-          }
-        }
-
         saveUpdatedField(field, d.getTime());
       },
     });
   };
 
-  const editSimpleValueField = (field: IssueCustomField, type: keyof typeof placeholders) => {
+  const editSimpleValueField = (field: IssueCustomField, type: keyof typeof customFieldPlaceholders) => {
     trackEvent('Edit simple value field');
-    const placeholder: string = placeholders[type] || placeholders.default;
-    const valueFormatter = valueFormatters[type] || valueFormatters.default;
+    const placeholder: string = customFieldPlaceholders[type] || customFieldPlaceholders.default;
+    const valueFormatter = customFieldValueFormatters[type] || customFieldValueFormatters.default;
     const value: string =
       field.value != null
         ? (field.value as FieldValue)?.presentation || (field.value as FieldValue).text || `${field.value}`
@@ -308,7 +272,7 @@ export default function CustomFieldsPanel(props: Props) {
     }
 
     if (['period', 'integer', 'string', 'text', 'float'].indexOf(fieldType.valueType) !== -1) {
-      return editSimpleValueField(field, fieldType.valueType as keyof typeof placeholders);
+      return editSimpleValueField(field, fieldType.valueType as keyof typeof customFieldPlaceholders);
     }
 
     return editCustomField(field);
@@ -347,18 +311,17 @@ export default function CustomFieldsPanel(props: Props) {
 
     const render = () => {
       return (
-        <DatePickerField
+        <DateTimePicker
           modal={modal}
           emptyValueName={datePickerState.emptyValueName}
-          onApply={(date: Date | null, time: string | null) => {
-            datePickerState.onSelect(date, time);
+          onApply={(date: Date | null) => {
+            datePickerState.onSelect(date);
             closeEditor();
           }}
           onHide={closeEditor}
           placeholder={datePickerState.placeholder}
           title={datePickerState.title}
-          time={datePickerState.time}
-          date={datePickerState.date}
+          current={datePickerState.date}
           withTime={datePickerState.withTime}
         />
       );
@@ -464,25 +427,19 @@ export default function CustomFieldsPanel(props: Props) {
   };
 
   return (
-    <IssueContext.Consumer>
-      {(issueDate: IssueContextData) => {
-        return (
-          <View
-            accessible={props.accessible}
-            accessibilityLabel={props.accessibilityLabel}
-            testID={props.testID}
-            style={[styles.container, props.style]}
-          >
-            {renderFields()}
+    <View
+      accessible={props.accessible}
+      accessibilityLabel={props.accessibilityLabel}
+      testID={props.testID}
+      style={[styles.container, props.style]}
+    >
+      {renderFields()}
 
-            <AnimatedView style={styles.editorViewContainer} animation="fadeIn" duration={500} useNativeDriver>
-              {selectState && renderSelect()}
-              {datePickerState.show && renderDatePicker()}
-              {simpleValueState && !!editingField && renderSimpleValueInput()}
-            </AnimatedView>
-          </View>
-        );
-      }}
-    </IssueContext.Consumer>
+      <AnimatedView style={styles.editorViewContainer} animation="fadeIn" duration={500} useNativeDriver>
+        {selectState && renderSelect()}
+        {datePickerState.show && renderDatePicker()}
+        {simpleValueState && !!editingField && renderSimpleValueInput()}
+      </AnimatedView>
+    </View>
   );
 }

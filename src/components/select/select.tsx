@@ -147,7 +147,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
           <Text style={styles.itemTitle}>{emptyValue}</Text>
 
           {this.state.selectedItems.length === 0 && (
-            <IconCheck size={22} color={styles.link.color}/>
+            <IconCheck color={styles.link.color}/>
           )}
         </TouchableOpacity>
         {Select.renderSeparator()}
@@ -249,7 +249,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     };
   }
 
-  renderItem = ({item}: IItem): React.ReactNode => {
+  renderItem = ({item}: IItem) => {
     return (
       <SelectItem
         item={item}
@@ -361,7 +361,6 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
               onPress={this.onCancel}
             >
               <IconClose
-                size={26}
                 style={styles.cancelButton}
                 color={styles.cancelButton.color}
               />
@@ -392,7 +391,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
                 style={styles.applyButton}
                 onPress={() => this._onSave()}
               >
-                <IconCheck size={22} color={styles.link.color}/>
+                <IconCheck color={styles.link.color}/>
               </TouchableOpacity>
             )}
           </View>

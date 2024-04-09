@@ -1,4 +1,4 @@
-import {format, formatDistanceToNow} from 'date-fns';
+import {format, formatDistanceToNow, startOfDay} from 'date-fns';
 
 import deLocale from 'date-fns/locale/de';
 import ruLocale from 'date-fns/locale/ru';
@@ -37,6 +37,7 @@ const dateLocaleMap: Record<string, Locale> = {
   it: itLocale,
   uk: ukLocale,
 };
+const DEFAULT_TIME_PATTERN: string = 'HH:mm';
 const USER_DATE_FORMAT_DEFAULT_PATTERN: string = 'd MMM yyyy HH:mm';
 const USER_DATE_FORMAT_DEFAULT_DATE_PATTERN: string = 'd MMM yyyy';
 
@@ -88,6 +89,14 @@ function formatDate(
 
 function formatTime(date: Date | number): string {
   return format(date, (getPattern().split(getDatePattern()).pop() || '').trim());
+}
+
+function toStartOfDayTimeString(date: Date | number): string {
+  return format(startOfDay(date), DEFAULT_TIME_PATTERN);
+}
+
+function toTimeString(date: Date | number): string {
+  return format(date, DEFAULT_TIME_PATTERN);
 }
 
 function getLocale() {
@@ -151,6 +160,8 @@ export {
   absDate,
   formatTime,
   formatSLADistanceToBreach,
+  toStartOfDayTimeString,
+  toTimeString,
   ytDate,
   ytDateRelative,
 };

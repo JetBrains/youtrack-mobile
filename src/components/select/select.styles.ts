@@ -30,8 +30,6 @@ export default EStyleSheet.create({
     borderBottomRightRadius: 0,
   },
   cancelButton: {
-    minWidth: minButtonWidth,
-    paddingLeft: UNIT,
     color: '$link',
   },
   searchInput: {
@@ -44,7 +42,7 @@ export default EStyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginLeft: UNIT * 2,
-    paddingRight: UNIT * 2,
+    paddingRight: UNIT,
     height: SELECT_ITEM_HEIGHT,
   },
   rowSeparator: {
@@ -104,7 +102,6 @@ export default EStyleSheet.create({
   applyButton: {
     minWidth: minButtonWidth,
     padding: UNIT,
-    paddingHorizontal: UNIT * 2,
   },
   link: {
     color: '$link',

@@ -1,19 +1,12 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {elevation1} from 'components/common-styles';
-import {headerTitlePresentation} from '../header/header.styles';
-import {rowFormStyles} from '../common-styles/form';
+
+import {headerTitlePresentation} from 'components/header/header.styles';
+import {rowFormStyles} from 'components/common-styles/form';
 import {UNIT} from 'components/variables';
-import type {UITheme, UIThemeColors} from 'types/Theme';
+
 const simpleValueInput = {...rowFormStyles.input, color: '$text'};
+
 export default EStyleSheet.create({
-  customFieldDateEditor: {
-    flex: 1,
-    padding: UNIT * 2,
-  },
-  customFieldEditorHeader: {
-    paddingHorizontal: UNIT * 2,
-    ...elevation1,
-  },
   customFieldSimpleEditor: {
     flex: 1,
     padding: UNIT * 2,
@@ -23,24 +16,7 @@ export default EStyleSheet.create({
     flexShrink: 1,
     backgroundColor: '$background',
   },
-  customFieldDateEditorValue: {
-    marginBottom: UNIT * 2,
-  },
-  customFieldDateEditorCalendar: {
-    marginTop: UNIT * 2,
-  },
-  buttonClearDate: {
-    ...simpleValueInput,
-    padding: UNIT * 2,
-    backgroundColor: 'transparent',
-    borderColor: '$separator',
-    borderWidth: 1,
-  },
-  buttonClearDateText: {
-    color: '$link',
-    textAlign: 'center',
-  },
-  simpleValueInput: simpleValueInput,
+  simpleValueInput,
   savingFieldIndicator: {
     backgroundColor: '$linkLight',
     position: 'absolute',
@@ -57,19 +33,3 @@ export default EStyleSheet.create({
     color: '$icon',
   },
 });
-export const calendarTheme = (uiTheme: UITheme) => {
-  const uiThemeColors: UIThemeColors = uiTheme.colors;
-  return {
-    calendarBackground: uiThemeColors.$background,
-    textSectionTitleColor: uiThemeColors.$icon,
-    selectedDayBackgroundColor: uiThemeColors.$link,
-    selectedDayTextColor: uiThemeColors.$background,
-    todayTextColor: uiThemeColors.$link,
-    dayTextColor: uiThemeColors.$text,
-    textDisabledColor: uiThemeColors.$disabled,
-    dotColor: uiThemeColors.$text,
-    selectedDotColor: uiThemeColors.$text,
-    arrowColor: uiThemeColors.$link,
-    monthTextColor: uiThemeColors.$text,
-  };
-};
