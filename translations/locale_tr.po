@@ -493,6 +493,7 @@ msgstr ""
 msgid "Email"
 msgstr "E-Posta"
 
+#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts
 #: src/views/helpdesk-feedback/index.ts
 msgid "Email address"
 msgstr "E-posta adresi"

@@ -509,6 +509,7 @@ msgstr "Редактировать комментарий"
 msgid "Email"
 msgstr "Адрес эл. почты"
 
+#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts
 #: src/views/helpdesk-feedback/index.ts
 msgid "Email address"
 msgstr "Адрес электронной почты"

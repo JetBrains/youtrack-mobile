@@ -485,6 +485,7 @@ msgstr "코멘트 편집"
 msgid "Email"
 msgstr "이메일"
 
+#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts
 #: src/views/helpdesk-feedback/index.ts
 msgid "Email address"
 msgstr "이메일 주소"

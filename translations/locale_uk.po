@@ -509,6 +509,7 @@ msgstr "Редагувати коментар"
 msgid "Email"
 msgstr "Електронна пошта"
 
+#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts
 #: src/views/helpdesk-feedback/index.ts
 msgid "Email address"
 msgstr "Адреса електронної пошти"

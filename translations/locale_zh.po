@@ -485,6 +485,7 @@ msgstr "编辑评论"
 msgid "Email"
 msgstr "电子邮件"
 
+#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts
 #: src/views/helpdesk-feedback/index.ts
 msgid "Email address"
 msgstr "电子邮件地址"

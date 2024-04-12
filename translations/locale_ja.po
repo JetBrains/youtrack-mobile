@@ -485,6 +485,7 @@ msgstr "コメントを編集"
 msgid "Email"
 msgstr "メールアドレス"
 
+#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts
 #: src/views/helpdesk-feedback/index.ts
 msgid "Email address"
 msgstr "メールアドレス"

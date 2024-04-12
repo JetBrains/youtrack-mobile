@@ -493,6 +493,7 @@ msgstr "Modifica commento"
 msgid "Email"
 msgstr "Email"
 
+#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts
 #: src/views/helpdesk-feedback/index.ts
 msgid "Email address"
 msgstr "Indirizzo e-mail"
