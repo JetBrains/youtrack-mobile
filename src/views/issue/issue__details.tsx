@@ -47,7 +47,7 @@ import type {
   Attachment,
   CustomField,
   CustomFieldText,
-  CustomFieldTextValue,
+  TextFieldValue,
   FieldValue,
   IssueLink,
 } from 'types/CustomFields';
@@ -105,7 +105,7 @@ export interface IssueDetailsProps {
   ) => Promise<boolean>;
   setCustomFieldValue: (
     field: CustomFieldText,
-    value: CustomFieldTextValue,
+    value: TextFieldValue,
   ) => any;
   modal?: boolean;
   scrollData: ScrollData;

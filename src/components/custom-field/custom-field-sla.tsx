@@ -10,10 +10,10 @@ import {i18n} from 'components/i18n/i18n';
 
 import styles from './custom-field-sla.styles';
 
-import {CustomFieldBase} from 'types/CustomFields';
+import {CustomFieldSLA} from 'types/CustomFields';
 import {ViewStyleProp} from 'types/Internal';
 
-const CustomFieldSLA = ({field, absDate, style}: {field: CustomFieldBase; absDate: boolean; style?: ViewStyleProp}) => {
+const CustomFieldSla = ({field, absDate, style}: {field: CustomFieldSLA; absDate: boolean; style?: ViewStyleProp}) => {
   const [modalVisible, setModalVisible] = React.useState<boolean>(false);
 
   const createColorCode = () => {
@@ -67,4 +67,4 @@ const CustomFieldSLA = ({field, absDate, style}: {field: CustomFieldBase; absDat
   );
 };
 
-export default React.memo(CustomFieldSLA);
+export default React.memo(CustomFieldSla);

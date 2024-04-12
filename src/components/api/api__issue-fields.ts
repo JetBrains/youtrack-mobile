@@ -70,7 +70,6 @@ const BUNDLE_VALUE: any = toField([
   'name',
   'localizedName',
   'description',
-  'ordinal',
   'ringId', // for user bundle elements
   'login', // for user bundle elements
   'released',
@@ -107,7 +106,6 @@ const ISSUE_FIELD_VALUE = toField([
 const PROJECT_CUSTOM_FIELD_FIELDS = toField([
   '$type',
   'id',
-  'ordinal',
   'canBeEmpty',
   'emptyFieldText',
   'isPublic',
@@ -119,7 +117,6 @@ const PROJECT_CUSTOM_FIELD_FIELDS = toField([
       'id',
       'name',
       'localizedName',
-      'ordinal',
       {
         fieldType: ['valueType', 'isMultiValue'],
       },

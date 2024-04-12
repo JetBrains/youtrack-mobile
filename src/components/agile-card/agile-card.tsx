@@ -11,12 +11,11 @@ import {UNIT} from 'components/variables';
 
 import styles from './agile-card.styles';
 
-import type {CustomFieldShort} from 'types/CustomFields';
 import type {FieldStyle} from 'types/Agile';
 import type {IssueOnList} from 'types/Issue';
 import type {UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
-import {FieldValue} from 'types/CustomFields';
+import {CustomFieldBase, FieldValue} from 'types/CustomFields';
 
 interface Props {
   cardWidth?: number | null | undefined;
@@ -43,9 +42,9 @@ function getEstimation(
   estimationField: {
     id: string;
   },
-  fields: CustomFieldShort[] = []
+  fields: CustomFieldBase[] = []
 ) {
-  const field: CustomFieldShort | undefined = fields.find(f => f.projectCustomField?.field?.id === estimationField.id);
+  const field: CustomFieldBase | undefined = fields.find(f => f.projectCustomField?.field?.id === estimationField.id);
   // @ts-ignore
   return field?.value?.presentation || '';
 }

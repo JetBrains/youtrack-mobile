@@ -20,7 +20,6 @@ const sortByFields = toField([
       'id',
       'name',
       'localizedName',
-      'ordinal',
       {
         fieldType: ['id', 'isBundleType', 'valueType'],
       },

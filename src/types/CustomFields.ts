@@ -2,7 +2,7 @@ import type {IssueFull, IssueOnList} from './Issue';
 import type {Reaction} from './Reaction';
 import type {User} from './User';
 import type {Visibility} from './Visibility';
-import {Entity} from 'types/Entity';
+import {Entity, EntityBase} from 'types/Entity';
 import {Mentions} from 'components/wiki/markdown-view-rules';
 
 export type ColorField = {
@@ -39,28 +39,21 @@ export type BundleValue = {
   color: ColorField;
 };
 
-interface ProjectCustomFieldBaseField {
+interface ICustomFieldValue {
+  $type: string;
   id: string;
   name: string;
   localizedName: string;
 }
 
-interface ProjectCustomFieldField  extends ProjectCustomFieldBaseField {
-  ordinal: number;
+export interface ICustomField extends ICustomFieldValue {
   fieldType: {
-    valueType: string;
     isMultiValue: boolean;
+    valueType: string;
   };
 }
 
-export interface ProjectCustomFieldBase {
-  $type: string;
-  field: ProjectCustomFieldBaseField;
-}
-
-export interface ProjectCustomField extends Omit<ProjectCustomFieldBase, 'field'> {
-  id: string;
-  ordinal: number;
+export interface ProjectCustomField extends EntityBase {
   canBeEmpty: boolean;
   emptyFieldText: string | null;
   isPublic: boolean;
@@ -68,40 +61,59 @@ export interface ProjectCustomField extends Omit<ProjectCustomFieldBase, 'field'
     id: string;
     isUpdateable: boolean;
   };
-  field: ProjectCustomFieldField;
+  field: ICustomField;
   defaultValues: BundleValue[];
 }
 
-export type FieldValue = {
-  $type: string;
-  id: string;
-  ringId: string;
-  localizedName: string;
+export interface UserFieldValue extends EntityBase {
+  avatarUrl: string;
+  fullName: string;
+  login: string;
   name: string;
+  ringId: string;
+}
+
+export interface PeriodFieldValue extends EntityBase {
+  minutes: number;
+  presentation: string;
+}
+
+export interface StateFieldValue extends ICustomFieldValue {
+  isResolved: boolean;
+}
+
+export type FloatIntNumberFieldValue = number;
+
+
+export interface TextFieldValue {
+  id: string;
+  text: string;
+}
+
+export interface FieldValue extends ICustomFieldValue {
+  ringId: string;
   fullName: string;
   avatarUrl: string;
   login: string;
-  minutes: number;
-  presentation: string;
-  isResolved: boolean;
   color: ColorField;
   text: string;
-};
-export type CustomFieldValue =
-  | number
-  | string
-  | FieldValue
-  | FieldValue[]
-  | Partial<FieldValue>
-  | Partial<FieldValue>[]
+}
 
-export interface CustomFieldBase {
-  $type: string;
-  id: string;
+export type CustomFieldValue =
+  | FloatIntNumberFieldValue
+  | TextFieldValue
+  | UserFieldValue
+  | PeriodFieldValue
+  | StateFieldValue;
+
+export interface CustomFieldBase extends EntityBase {
   name: string;
-  pausedTime?: number;
   projectCustomField: ProjectCustomField;
   value: CustomFieldValue | CustomFieldValue[];
+}
+
+export interface CustomFieldSLA extends CustomFieldBase {
+  pausedTime?: number;
 }
 
 export interface CustomField extends CustomFieldBase {
@@ -109,17 +121,14 @@ export interface CustomField extends CustomFieldBase {
   hasStateMachine?: boolean;
 }
 
-export type CustomFieldTextValue = {
-  id: string | null | undefined;
-  text: string;
-};
-export type CustomFieldText = CustomFieldBase & {
-  value: {
-    id: string | null | undefined;
-    text: string;
-  };
-};
-export type CustomFieldShort = Partial<CustomField>;
+export interface CustomFieldText extends Omit<CustomFieldBase, 'value'> {
+  value: TextFieldValue;
+}
+
+export interface CustomFieldPeriod extends Omit<CustomFieldBase, 'value'> {
+  value: PeriodFieldValue;
+}
+
 export type ImageDimensions = {
   width: number;
   height: number;

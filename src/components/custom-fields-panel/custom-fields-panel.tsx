@@ -20,6 +20,7 @@ import {
   getProjectLabel,
 } from 'components/custom-fields-panel/index';
 import {getApi} from 'components/api/api__instance';
+import {getCustomFieldSelectProps} from 'components/custom-field';
 import {i18n} from 'components/i18n/i18n';
 import {IItem, ISelectState, Select, SelectModal} from 'components/select/select';
 import {isSplitView} from 'components/responsive/responsive-helper';
@@ -32,7 +33,6 @@ import type {CustomField as IssueCustomField, CustomFieldValue} from 'types/Cust
 import type {UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
 import {AppState} from 'reducers';
-import {FieldValue} from 'types/CustomFields';
 import {Project} from 'types/Project';
 
 interface Props {
@@ -212,15 +212,25 @@ export default function CustomFieldsPanel(props: Props) {
     trackEvent('Edit simple value field');
     const placeholder: string = customFieldPlaceholders[type] || customFieldPlaceholders.default;
     const valueFormatter = customFieldValueFormatters[type] || customFieldValueFormatters.default;
-    const value: string =
-      field.value != null
-        ? (field.value as FieldValue)?.presentation || (field.value as FieldValue).text || `${field.value}`
-        : '';
+    const fieldValue = field.value as CustomFieldValue;
+    let value: string = '';
+    if (typeof fieldValue === 'object') {
+      if ('presentation' in fieldValue) {
+        value = fieldValue.presentation;
+      }
+      if ('text' in fieldValue) {
+        value = fieldValue.text;
+      }
+    }
+    if (!value) {
+      value = `${field.value}`;
+    }
+
     return setSimpleValue({
       show: true,
       placeholder,
       value,
-      onApply: (v: string) => saveUpdatedField(field, valueFormatter(v)),
+      onApply: (v: string) => saveUpdatedField(field, valueFormatter(v) as CustomFieldValue),
     });
   };
 
@@ -229,29 +239,16 @@ export default function CustomFieldsPanel(props: Props) {
     const projectCustomFieldName: string | null | undefined = projectCustomField?.field?.name;
     trackEvent(`Edit custom field: ${projectCustomFieldName ? projectCustomFieldName.toLowerCase() : ''}`);
 
-    setSelectState({
-      show: true,
-      multi: projectCustomField.field.fieldType.isMultiValue,
-      selectedItems: new Array<CustomFieldValue>().concat(field.value),
-      emptyValue: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
-      dataSource: () => {
-        if (field.hasStateMachine) {
-          return api
-            .getStateMachineEvents(props.issueId, field.id)
-            .then((items: {id: string; presentation: string}[]) =>
-              items.flatMap(it => ({
-                name: `${it.id} (${it.presentation})`,
-              }))
-            );
-        }
-
-        return api.getCustomFieldValues(projectCustomField?.bundle?.id, projectCustomField.field.fieldType.valueType);
-      },
+    const p = getCustomFieldSelectProps({
+      field,
+      issueId: props.issueId,
       onChangeSelection: selectedItems => {
         setSelectState((prevState: SelectState | null) => ({...prevState, ...selectState, selectedItems}));
       },
       onSelect: value => saveUpdatedField(field, value),
     });
+
+    setSelectState(p);
   };
 
   const onEditField = (field: IssueCustomField) => {
