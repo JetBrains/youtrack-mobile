@@ -118,19 +118,25 @@ export default class UserAPI extends ApiBase {
     );
   }
 
-  async getHubProjectUsers(query: string = '', fields: string | string[] = 'id,name'): Promise<Array<{ringId: string; name: string}>> {
+  async getHubUsers(query: string, fields: string | string[]): Promise<Array<Record<string, any>>> {
     const searchQuery: string = query ? `query=${query}` : '';
     const response: {
       skip: number;
       total: number;
-      users: User[];
+      users: Array<Record<string, any>>;
     } = await this.makeAuthorizedRequest(
-      `${
-        this.config.auth.serverUri
-      }/api/rest/users?${searchQuery}&${ApiBase.createFieldsQuery(fields)}`,
-      'GET',
+      `${this.config.auth.serverUri}/api/rest/users?${searchQuery}&${ApiBase.createFieldsQuery(fields)}`,
+      'GET'
     );
-    return response.users.map((hubUser: User) => ({
+    return response.users;
+  }
+
+  async getHubProjectUsers(
+    query: string = '',
+    fields: string | string[] = 'id,name'
+  ): Promise<Array<{ringId: string; name: string}>> {
+    const users = await this.getHubUsers(query, fields);
+    return users.map(hubUser => ({
       ringId: hubUser.id,
       name: hubUser.name,
     }));

@@ -19,7 +19,12 @@ import Header from 'components/header/header';
 import ModalView from 'components/modal-view/modal-view';
 import Router from 'components/router/router';
 import Select from 'components/select/select';
-import {FeedbackBlock, FeedbackFormBlockCustomField, formBlockType} from 'views/helpdesk-feedback';
+import {
+  FeedbackBlock,
+  FeedbackFormBlockCustomField,
+  FeedbackFormReporter,
+  formBlockType,
+} from 'views/helpdesk-feedback';
 import {getLocalizedName} from 'components/custom-field/custom-field-helper';
 import {HIT_SLOP} from 'components/common-styles';
 import {IconBack, IconCheck, IconClose} from 'components/icon/icon';
@@ -66,18 +71,18 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
     } catch (e) {}
   };
 
-  const updateBlock = (b: FeedbackBlock, value: FeedbackFormBlockCustomField) => {
-    setFormBlocks(fb => {
-      return fb.map(i => {
-        return b.id === i.id
+  const updateBlock = (b: FeedbackBlock, value: FeedbackFormBlockCustomField | FeedbackFormReporter[]) => {
+    setFormBlocks(fb =>
+      fb.map(it =>
+        b.id === it.id
           ? {
-              ...i,
-              field: {...i.field!, value},
+              ...it,
+              field: {...it.field!, value},
               value: new Array().concat(value).map(getLocalizedName).join(', '),
             }
-          : i;
-      });
-    });
+          : it
+      )
+    );
   };
 
   const isDateTimeType = (b: FeedbackBlock) => {
@@ -122,11 +127,29 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
           }
         >
           {formBlocks.map(b => {
-            const isEmail = b.type === formBlockType.email;
             const label = `${b.label}${b.required ? '*' : ''}`;
             return (
               <View style={styles.block} key={b.id}>
-                {(isEmail || b.type === formBlockType.input) && (
+                {b.type === formBlockType.email && (
+                  <FormTextInput
+                    value={b.value}
+                    onChange={text => {
+                      setFormBlocks(fb => {
+                        return fb.map(it => (b.id === it.id ? {...b, value: text} : it));
+                      });
+                    }}
+                    onFocus={() => {
+                      dispatch(
+                        actions.setUserSelect((users: FeedbackFormReporter[]) => {
+                          updateBlock(b, users);
+                        })
+                      );
+                    }}
+                    multiline={b.multiline}
+                    label={label}
+                  />
+                )}
+                {b.type === formBlockType.input && (
                   <FormTextInput
                     value={b.value}
                     onChange={text => {

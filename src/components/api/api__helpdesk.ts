@@ -21,7 +21,6 @@ export default class HelpDeskFormAPI extends ApiBase {
             'id',
             'description',
             'ordinal',
-            'parent(id)',
             'required',
             'periodFieldPattern',
             'text',
@@ -30,6 +29,7 @@ export default class HelpDeskFormAPI extends ApiBase {
                 '$type',
                 'id',
                 'emptyFieldText',
+                'bundle(id)',
                 {
                   field: ['id', 'localizedName', 'name', 'fieldType(isMultiValue,valueType)'],
                 },
@@ -41,7 +41,6 @@ export default class HelpDeskFormAPI extends ApiBase {
           ],
         },
         'confirmationText',
-        'disabled',
         'errors',
         'id',
         'isDefault',

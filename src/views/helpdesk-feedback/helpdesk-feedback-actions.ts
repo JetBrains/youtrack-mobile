@@ -5,6 +5,7 @@ import {
   FeedbackFormData,
   FeedbackFormBlockFieldValue,
   projectCustomFieldTypeToFieldType,
+  FeedbackFormReporter,
 } from 'views/helpdesk-feedback/index';
 import {getLocalizedName} from 'components/custom-field/custom-field-helper';
 import {notify, notifyError} from 'components/notification/notification';
@@ -16,6 +17,7 @@ import {CustomError} from 'types/Error';
 import {FeedbackForm} from 'types/FeedbackForm';
 import {ProjectHelpdesk} from 'types/Project';
 import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
+import {User} from 'types/User';
 
 const loadFeedbackForm = (project: ProjectHelpdesk): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
@@ -27,8 +29,15 @@ const loadFeedbackForm = (project: ProjectHelpdesk): ReduxAction => {
     if (error) {
       dispatch(setError(error));
     } else {
-      dispatch(setFormData({form, formBlocks: createFormBlocks(form, state.app.issuePermissions)}));
+      const currentUser = getState().app.user as User;
+      dispatch(setFormData({form, formBlocks: createFormBlocks(form, state.app.issuePermissions, currentUser)}));
     }
+  };
+};
+
+const resetSelectProps = (): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch) => {
+    dispatch(setSelectProps(null));
   };
 };
 
@@ -41,7 +50,6 @@ const setSelect = (b: FeedbackBlock, onSelect: (s: FeedbackFormBlockCustomField)
     if (error) {
       notifyError(error);
     }
-    const onCancel = () => dispatch(setSelectProps(null));
     const field = b.field!;
     const multi = field.isMultiValue;
     dispatch(
@@ -54,11 +62,42 @@ const setSelect = (b: FeedbackBlock, onSelect: (s: FeedbackFormBlockCustomField)
             selectedItems: (multi ? field.value : [field.value]) as FeedbackFormBlockFieldValue[],
             onSelect: (selected: FeedbackFormBlockCustomField) => {
               onSelect(selected);
-              onCancel();
+              dispatch(resetSelectProps());
             },
-            onCancel,
+            onCancel: () => dispatch(resetSelectProps()),
           })
     );
+  };
+};
+
+const setUserSelect = (onSelect: (users: FeedbackFormReporter[]) => void): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    const q = encodeURIComponent('not is:banned and type:Reporter');
+
+    const [error, users] = await until<FeedbackFormReporter[]>(
+      getApi().user.getHubUsers(q, 'id,name,login,guest,profile(avatar(url),email(email)),userType(id)')
+    );
+
+    if (!error) {
+      let selection: FeedbackFormReporter[] = [];
+      dispatch(
+        error
+          ? null
+          : setSelectProps({
+              getTitle: getLocalizedName,
+              dataSource: () => Promise.resolve(users.filter(u => !u.guest)),
+              selectedItems: selection,
+              onChangeSelection: (selected, current) => {
+                selection = selection.concat(selected).concat(current);
+              },
+              onSelect: (selected: FeedbackFormReporter[]) => {
+                onSelect(selected);
+                dispatch(resetSelectProps());
+              },
+              onCancel: () => dispatch(resetSelectProps()),
+            })
+      );
+    }
   };
 };
 
@@ -115,7 +154,8 @@ const onRefresh = (): ReduxAction => {
 
 export {
   loadFeedbackForm,
-  setSelect,
   onRefresh,
+  setSelect,
+  setUserSelect,
   submitForm,
 };

@@ -1,4 +1,5 @@
 import {EntityBase} from 'types/Entity';
+import {ICustomField} from 'types/CustomFields';
 import {ProjectEntity} from 'types/Project';
 import {User} from 'types/User';
 
@@ -65,7 +66,23 @@ export type FeedbackFormBlock =
   | TextFeedbackBlock;
 
 export interface FeedbackFormProject extends ProjectEntity {
+  id: string;
   restricted: boolean;
+}
+
+interface FeedbackFormField {
+  $type: string;
+  id: string;
+  emptyFieldText: string;
+  field: ICustomField,
+  bundle: {
+    id: string;
+  };
+  defaultValues: {
+    id: string;
+    localizedName: string
+    name: string;
+  },
 }
 
 export interface FeedbackForm extends EntityBase {
@@ -80,8 +97,9 @@ export interface FeedbackForm extends EntityBase {
   name: string;
   parent: {
     project: FeedbackFormProject;
-  } | null;
+  };
   title: string;
   useCaptcha: boolean;
   uuid: string;
+  projectField: FeedbackFormField | null,
 }

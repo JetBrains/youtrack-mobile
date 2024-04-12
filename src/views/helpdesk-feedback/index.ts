@@ -53,6 +53,7 @@ export type FeedbackFormBlockCustomField = FeedbackFormBlockFieldValue | Feedbac
 export type FeedbackFormFieldValue =
   | FeedbackFormBlockCustomField
   | FeedbackFormBlockFieldPresentation
+  | FeedbackFormReporter[]
   | number
   | string;
 
@@ -73,7 +74,25 @@ export interface FeedbackBlock {
   value?: string | undefined;
   multiline: boolean;
   required: boolean;
-  type: string;
+  type: string | null;
+}
+
+export interface FeedbackFormReporter {
+  id: string;
+  name: string;
+  login: string;
+  guest: boolean;
+  userType: {
+    id: string;
+  };
+  profile: {
+    avatar: {
+      url: string;
+    };
+    email: {
+      email: string;
+    };
+  };
 }
 
 const createDefaultBlock = (b: FeedbackFormBlock): FeedbackBlock => ({
@@ -90,27 +109,26 @@ const createDefaultBlock = (b: FeedbackFormBlock): FeedbackBlock => ({
 
 export const createFormBlock = (
   b: FeedbackFormBlock,
-  author: User,
+  currentUser: User,
   issuePermissions: IssuePermissions,
-  parentProject?: FeedbackFormProject
+  project: FeedbackFormProject
 ): FeedbackBlock | null => {
   const defaultBlock = createDefaultBlock(b);
   const blockType = b.$type;
   switch (blockType) {
     case FeedbackFormPredefinedBlock.email:
-      const isAgent =
-        author.userType.id === 'AGENT' && !!parentProject && issuePermissions.isAgentInProject(parentProject);
+      const isAdmin = issuePermissions.isAgentInProject(project);
+      const isAgent = currentUser.userType.id === 'AGENT' && isAdmin;
+      const isRestrictedProject = project.restricted;
       let label: string;
       if (isAgent) {
-        const isAdmin = !!parentProject && issuePermissions.canUpdateProject(parentProject.ringId);
-        const isRestrictedProject = parentProject.restricted;
         label = (isAdmin && isRestrictedProject) || !isRestrictedProject ? 'Reporter or email address' : 'Reporter';
       } else {
         label = i18n('Email address');
       }
       return {
         ...defaultBlock,
-        type: formBlockType.email,
+        type: currentUser.userType.id !== 'REPORTER' ? formBlockType.email : null,
         label,
         name: 'email',
       };
@@ -168,10 +186,14 @@ export const createFormBlock = (
   }
 };
 
-export const createFormBlocks = (ff: FeedbackForm, issuePermissions: IssuePermissions): FeedbackBlock[] => {
+export const createFormBlocks = (
+  ff: FeedbackForm,
+  issuePermissions: IssuePermissions,
+  currentUser: User
+): FeedbackBlock[] => {
   return (ff.blocks || [])
     .sort(sortByOrdinal)
-    .map(b => createFormBlock(b, ff.author, issuePermissions, ff.parent?.project))
+    .map(b => createFormBlock(b, currentUser, issuePermissions, ff.parent.project))
     .filter((b): b is FeedbackBlock => b != null);
 };
 
