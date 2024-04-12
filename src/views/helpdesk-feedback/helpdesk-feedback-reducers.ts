@@ -1,10 +1,11 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+
 import {SET_PROGRESS} from 'actions/action-types';
-import {ISelectProps} from 'components/select/select';
 
 import {CustomError} from 'types/Error';
 import {FeedbackBlock, FeedbackFormBlockFieldValue} from 'views/helpdesk-feedback/index';
 import {FeedbackForm} from 'types/FeedbackForm';
+import {ISelectWithCustomInput} from 'components/select/select-with-custom-input';
 import {ProjectHelpdesk} from 'types/Project';
 
 export interface HelpDeskFeedbackFormState {
@@ -14,7 +15,7 @@ export interface HelpDeskFeedbackFormState {
   fieldValues: Array<FeedbackFormBlockFieldValue> | null;
   inProgress: boolean;
   project: ProjectHelpdesk | null;
-  selectProps: ISelectProps | null;
+  selectProps: ISelectWithCustomInput | null;
 }
 
 export const initialState: HelpDeskFeedbackFormState = {
@@ -31,12 +32,15 @@ const {reducer, actions} = createSlice({
   name: 'helpdeskFeedbackForm',
   initialState: initialState,
   reducers: {
-    setFormData(state: HelpDeskFeedbackFormState, action: PayloadAction<{form: FeedbackForm, formBlocks: FeedbackBlock[]}>) {
+    setFormData(
+      state: HelpDeskFeedbackFormState,
+      action: PayloadAction<{form: FeedbackForm; formBlocks: FeedbackBlock[]}>
+    ) {
       state.form = action.payload.form;
       state.formBlocks = action.payload.formBlocks;
     },
 
-    setSelectProps(state: HelpDeskFeedbackFormState, action: PayloadAction<ISelectProps | null>) {
+    setSelectProps(state: HelpDeskFeedbackFormState, action: PayloadAction<ISelectWithCustomInput | null>) {
       state.selectProps = action.payload;
     },
 

@@ -1,3 +1,4 @@
+import HelpDeskFeedbackReporterOption from 'views/helpdesk-feedback/helpdesk-feedback-reporter-option';
 import {
   createFormBlocks,
   FeedbackBlock,
@@ -8,6 +9,7 @@ import {
   FeedbackFormReporter,
 } from 'views/helpdesk-feedback/index';
 import {getLocalizedName} from 'components/custom-field/custom-field-helper';
+import {i18n} from 'components/i18n/i18n';
 import {notify, notifyError} from 'components/notification/notification';
 import {SET_PROGRESS} from 'actions/action-types';
 import {setError, setSelectProps, setFormData, setProject} from './helpdesk-feedback-reducers';
@@ -36,9 +38,7 @@ const loadFeedbackForm = (project: ProjectHelpdesk): ReduxAction => {
 };
 
 const resetSelectProps = (): ReduxAction => {
-  return async (dispatch: ReduxThunkDispatch) => {
-    dispatch(setSelectProps(null));
-  };
+  return async (dispatch: ReduxThunkDispatch) => dispatch(setSelectProps(null));
 };
 
 const setSelect = (b: FeedbackBlock, onSelect: (s: FeedbackFormBlockCustomField) => void): ReduxAction => {
@@ -70,34 +70,38 @@ const setSelect = (b: FeedbackBlock, onSelect: (s: FeedbackFormBlockCustomField)
   };
 };
 
-const setUserSelect = (onSelect: (users: FeedbackFormReporter[]) => void): ReduxAction => {
+const setUserSelect = (
+  onSelect: ({reporter, email}: {reporter?: FeedbackFormReporter; email?: string}) => void
+): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
-    const q = encodeURIComponent('not is:banned and type:Reporter');
-
-    const [error, users] = await until<FeedbackFormReporter[]>(
-      getApi().user.getHubUsers(q, 'id,name,login,guest,profile(avatar(url),email(email)),userType(id)')
-    );
-
-    if (!error) {
-      let selection: FeedbackFormReporter[] = [];
-      dispatch(
-        error
-          ? null
-          : setSelectProps({
-              getTitle: getLocalizedName,
-              dataSource: () => Promise.resolve(users.filter(u => !u.guest)),
-              selectedItems: selection,
-              onChangeSelection: (selected, current) => {
-                selection = selection.concat(selected).concat(current);
-              },
-              onSelect: (selected: FeedbackFormReporter[]) => {
-                onSelect(selected);
-                dispatch(resetSelectProps());
-              },
-              onCancel: () => dispatch(resetSelectProps()),
-            })
+    const dataSource = async (query: string = '') => {
+      const _q = query.trim();
+      const q = encodeURIComponent(`not is:banned and type:Reporter${_q ? ` and ${_q}` : ''}`);
+      const [error, users] = await until<FeedbackFormReporter[]>(
+        getApi().user.getHubUsers(q, 'id,name,login,guest,profile(avatar(url),email(email)),userType(id)')
       );
-    }
+      return error ? [] : users.filter(u => !u.guest);
+    };
+
+    dispatch(
+      setSelectProps({
+        getTitle: getLocalizedName,
+        titleRenderer: (user: FeedbackFormReporter) => HelpDeskFeedbackReporterOption({user}),
+        dataSource,
+        selectedItems: [],
+        customInput: '',
+        customInputPlaceholder: i18n('Email address'),
+        onSelect: (v: FeedbackFormReporter | string) => {
+          if (typeof v === 'string') {
+            onSelect({email: v});
+          } else {
+            onSelect({reporter: v});
+          }
+          dispatch(resetSelectProps());
+        },
+        onCancel: () => dispatch(resetSelectProps()),
+      })
+    );
   };
 };
 
@@ -152,10 +156,4 @@ const onRefresh = (): ReduxAction => {
   };
 };
 
-export {
-  loadFeedbackForm,
-  onRefresh,
-  setSelect,
-  setUserSelect,
-  submitForm,
-};
+export {loadFeedbackForm, onRefresh, setSelect, setUserSelect, submitForm};

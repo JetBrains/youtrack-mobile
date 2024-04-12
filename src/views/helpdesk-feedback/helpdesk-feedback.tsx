@@ -18,7 +18,7 @@ import FormTextInput from 'components/form/form-text-input';
 import Header from 'components/header/header';
 import ModalView from 'components/modal-view/modal-view';
 import Router from 'components/router/router';
-import Select from 'components/select/select';
+import SelectWithCustomInput from 'components/select/select-with-custom-input';
 import {
   FeedbackBlock,
   FeedbackFormBlockCustomField,
@@ -71,18 +71,12 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
     } catch (e) {}
   };
 
-  const updateBlock = (b: FeedbackBlock, value: FeedbackFormBlockCustomField | FeedbackFormReporter[]) => {
-    setFormBlocks(fb =>
-      fb.map(it =>
-        b.id === it.id
-          ? {
-              ...it,
-              field: {...it.field!, value},
-              value: new Array().concat(value).map(getLocalizedName).join(', '),
-            }
-          : it
-      )
-    );
+  const onBlockChange = (b: FeedbackBlock, data: (i: FeedbackBlock) => Partial<FeedbackBlock>) => {
+    setFormBlocks(fb => fb.map(i => (b.id === i.id ? {...i, ...data(i)} : i)));
+  };
+
+  const onTextValueChange = (b: FeedbackBlock, text?: string) => {
+    onBlockChange(b, (i: FeedbackBlock) => ({value: text}));
   };
 
   const isDateTimeType = (b: FeedbackBlock) => {
@@ -133,16 +127,14 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                 {b.type === formBlockType.email && (
                   <FormTextInput
                     value={b.value}
-                    onChange={text => {
-                      setFormBlocks(fb => {
-                        return fb.map(it => (b.id === it.id ? {...b, value: text} : it));
-                      });
-                    }}
+                    onChange={text => onTextValueChange(b, text)}
                     onFocus={() => {
                       dispatch(
-                        actions.setUserSelect((users: FeedbackFormReporter[]) => {
-                          updateBlock(b, users);
-                        })
+                        actions.setUserSelect(
+                          ({reporter, email}: {reporter?: FeedbackFormReporter; email?: string}) => {
+                            onBlockChange(b, (i: FeedbackBlock) => ({reporter, email, value: email || reporter?.name || ''}));
+                          }
+                        )
                       );
                     }}
                     multiline={b.multiline}
@@ -152,13 +144,10 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                 {b.type === formBlockType.input && (
                   <FormTextInput
                     value={b.value}
-                    onChange={text => {
-                      setFormBlocks(fb => {
-                        return fb.map(it => (b.id === it.id ? {...b, value: text} : it));
-                      });
-                    }}
+                    onChange={text => onTextValueChange(b, text)}
                     multiline={b.multiline}
                     label={label}
+                    onClear={() => onTextValueChange(b, undefined)}
                   />
                 )}
                 {b.type === formBlockType.text && (
@@ -173,7 +162,15 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                     onPress={() => {
                       const isDateType = isDateTimeType(b);
                       if (!isDateType) {
-                        dispatch(actions.setSelect(b, (value: FeedbackFormBlockCustomField) => updateBlock(b, value)));
+                        dispatch(
+                          actions.setSelect(b, (value: FeedbackFormBlockCustomField) => {
+                            const data = (i: FeedbackBlock) => ({
+                              field: {...i.field!, value},
+                              value: new Array().concat(value).map(getLocalizedName).join(', '),
+                            });
+                            onBlockChange(b, data);
+                          })
+                        );
                       } else {
                         setDateTimeBlock(b);
                       }
@@ -198,9 +195,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
               if (dateTimeBlock.field) {
                 const timestamp = date ? date.valueOf() : undefined;
                 dateTimeBlock.field.value = timestamp;
-                dateTimeBlock.value = timestamp
-                  ? absDate(timestamp, dateTimeBlock.type === formBlockType.date)
-                  : '';
+                dateTimeBlock.value = timestamp ? absDate(timestamp, dateTimeBlock.type === formBlockType.date) : '';
               }
               setDateTimeBlock(null);
             }}
@@ -208,7 +203,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
         </ModalView>
       )}
 
-      {!!selectProps && <Select {...selectProps} />}
+      {!!selectProps && <SelectWithCustomInput {...selectProps} />}
     </View>
   );
 };

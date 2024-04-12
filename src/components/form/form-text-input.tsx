@@ -1,6 +1,7 @@
 import React from 'react';
-import {TextInput} from 'react-native';
+import {TextInput, View} from 'react-native';
 
+import {IconClearText} from 'components/icon/icon-clear-text';
 import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './form.style';
@@ -11,6 +12,7 @@ const FormTextInput = ({
   multiline,
   onChange,
   onFocus,
+  onClear,
   label,
   testID,
   value,
@@ -18,27 +20,35 @@ const FormTextInput = ({
   multiline?: boolean;
   onChange: (text: string) => void;
   onFocus?: () => void;
+  onClear?: () => void;
   label?: string;
   testID?: string;
   value?: string;
 }) => {
   const theme: Theme = React.useContext(ThemeContext);
   return (
-    <TextInput
-      autoCapitalize="none"
-      autoCorrect={false}
-      keyboardAppearance={theme.uiTheme.name}
-      placeholderTextColor={styles.icon.color}
-      selectTextOnFocus
-      textAlignVertical={multiline ? 'top' : undefined}
-      testID={testID}
-      style={[styles.feedbackFormInput, multiline && styles.feedbackFormInputDescription]}
-      multiline={multiline}
-      placeholder={label}
-      value={value}
-      onChangeText={onChange}
-      onFocus={onFocus}
-    />
+    <View style={styles.formInputWrapper}>
+      <TextInput
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardAppearance={theme.uiTheme.name}
+        placeholderTextColor={styles.icon.color}
+        selectTextOnFocus
+        textAlignVertical={multiline ? 'top' : undefined}
+        testID={testID}
+        style={[
+          styles.feedbackFormInput,
+          multiline && styles.feedbackFormInputDescription,
+          value && styles.formInputClearSpace,
+        ]}
+        multiline={multiline}
+        placeholder={label}
+        value={value}
+        onChangeText={onChange}
+        onFocus={onFocus}
+      />
+      {onClear && value && <IconClearText onPress={onClear} style={styles.formInputClearIcon} />}
+    </View>
   );
 };
 

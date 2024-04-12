@@ -134,7 +134,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     return items;
   }
 
-  renderEmptyValueItem(): React.ReactElement | null {
+  renderEmptyValueItem() {
     const {emptyValue} = this.props;
 
     if (!emptyValue) {
@@ -268,6 +268,10 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
 
   getItemKey = (item: IItem): string => item.key || item.ringId || item.id;
 
+  renderListHeader() {
+    return this.renderEmptyValueItem();
+  }
+
   renderItems() {
     return (
       // @ts-ignore
@@ -278,7 +282,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
         accessible={false}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
-        ListHeaderComponent={this.renderEmptyValueItem()}
+        ListHeaderComponent={this.renderListHeader()}
         scrollEventThrottle={50}
         data={this.state.filteredItems}
         keyExtractor={this.getItemKey}

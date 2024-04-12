@@ -36,6 +36,15 @@ export default EStyleSheet.create({
     ...searchInputWithMinHeight,
     margin: UNIT,
   },
+  customInput: {
+    ...searchInputWithMinHeight,
+    paddingLeft: UNIT,
+    marginVertical: UNIT * 2,
+    marginLeft: UNIT * 2,
+    minHeight: UNIT * 6,
+    backgroundColor: '$boxBackground',
+    borderRadius: UNIT,
+  },
   row: {
     position: 'relative',
     flexDirection: 'row',

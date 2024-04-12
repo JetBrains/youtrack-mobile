@@ -19,4 +19,16 @@ export default EStyleSheet.create({
   separator: {
     height: UNIT * 3.5,
   },
+  selectUserOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  selectUserOptionInfo: {
+    flexGrow: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginLeft: UNIT * 1.5,
+  },
 });
