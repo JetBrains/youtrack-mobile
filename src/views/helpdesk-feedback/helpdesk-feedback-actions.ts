@@ -71,6 +71,7 @@ const setSelect = (b: FeedbackBlock, onSelect: (s: FeedbackFormBlockCustomField)
 };
 
 const setUserSelect = (
+  value: string = '',
   onSelect: ({reporter, email}: {reporter?: FeedbackFormReporter; email?: string}) => void
 ): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
@@ -89,7 +90,7 @@ const setUserSelect = (
         titleRenderer: (user: FeedbackFormReporter) => HelpDeskFeedbackReporterOption({user}),
         dataSource,
         selectedItems: [],
-        customInput: '',
+        customInput: value,
         customInputPlaceholder: i18n('Email address'),
         onSelect: (v: FeedbackFormReporter | string) => {
           if (typeof v === 'string') {

@@ -122,20 +122,26 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
         >
           {formBlocks.map(b => {
             const label = `${b.label}${b.required ? '*' : ''}`;
+            const onFocus = () => {
+              dispatch(
+                actions.setUserSelect(
+                  b.value,
+                  ({reporter, email}: {reporter?: FeedbackFormReporter; email?: string}) => {
+                    onBlockChange(b, (i: FeedbackBlock) => ({reporter, email, value: email || reporter?.name || ''}));
+                  }
+                )
+              );
+            };
             return (
               <View style={styles.block} key={b.id}>
                 {b.type === formBlockType.email && (
                   <FormTextInput
                     value={b.value}
                     onChange={text => onTextValueChange(b, text)}
-                    onFocus={() => {
-                      dispatch(
-                        actions.setUserSelect(
-                          ({reporter, email}: {reporter?: FeedbackFormReporter; email?: string}) => {
-                            onBlockChange(b, (i: FeedbackBlock) => ({reporter, email, value: email || reporter?.name || ''}));
-                          }
-                        )
-                      );
+                    onFocus={onFocus}
+                    onClear={() => {
+                      onTextValueChange(b, undefined);
+                      onFocus();
                     }}
                     multiline={b.multiline}
                     label={label}
