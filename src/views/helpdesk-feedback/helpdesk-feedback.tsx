@@ -156,6 +156,23 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                     onClear={() => onTextValueChange(b, undefined)}
                   />
                 )}
+                {(b.type === formBlockType.integer || b.type === formBlockType.float) && (
+                  <FormTextInput
+                    value={`${b.value}`}
+                    placeholder={label || ''}
+                    onChange={text => {
+                      const value = text.replace(/,/, '.');
+                      const data = (i: FeedbackBlock) => ({
+                        field: {...i.field!, value: b.type === formBlockType.float ? parseFloat(value) : parseInt(value, 10)},
+                        value,
+                      });
+                      onBlockChange(b, data);
+                    }}
+                    multiline={b.multiline}
+                    onClear={() => onTextValueChange(b, '')}
+                    inputMode={b.type === formBlockType.integer ? 'numeric' : 'decimal'}
+                  />
+                )}
                 {b.type === formBlockType.text && (
                   <View style={styles.block}>
                     <Text style={[styles.block, styles.text]}>{b.label}</Text>

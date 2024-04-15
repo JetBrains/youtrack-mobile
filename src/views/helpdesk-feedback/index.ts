@@ -23,6 +23,8 @@ export const formBlockType: {[key: string]: string} = {
   text: 'text',
   field: 'field',
   period: 'period',
+  integer: 'integer',
+  float: 'float',
   input: 'input',
   email: 'email',
   date: 'date',
@@ -75,6 +77,7 @@ export interface FeedbackBlock {
   multiline: boolean;
   required: boolean;
   type: string | null;
+  reporter?: FeedbackFormReporter;
 }
 
 export interface FeedbackFormReporter {
@@ -115,12 +118,12 @@ export const createFormBlock = (
 ): FeedbackBlock | null => {
   const defaultBlock = createDefaultBlock(b);
   const blockType = b.$type;
+  let label: string = '';
   switch (blockType) {
     case FeedbackFormPredefinedBlock.email:
       const isAdmin = issuePermissions.isAgentInProject(project);
       const isAgent = currentUser.userType.id === 'AGENT' && isAdmin;
       const isRestrictedProject = project.restricted;
-      let label: string;
       if (isAgent) {
         label = (isAdmin && isRestrictedProject) || !isRestrictedProject ? 'Reporter or email address' : 'Reporter';
       } else {
@@ -146,15 +149,24 @@ export const createFormBlock = (
         value = isMultiValue ? b.projectField.defaultValues : b.projectField.defaultValues[0];
       }
       const ft = getSimpleCustomFieldType(b.projectField) || '';
-      let type;
-      if (ft === DATE_AND_TIME_FIELD_VALUE_TYPE) {
+      let type = formBlockType[ft];
+      let presentation = b.projectField.defaultValues
+        ? b.projectField.defaultValues.map(getLocalizedName).join(', ')
+        : b.projectField.emptyFieldText;
+      if (ft === formBlockType.float || ft === formBlockType.integer) {
+        label = `${b.projectField.field.name}${
+          b.projectField.emptyFieldText ? ` (${b.projectField.emptyFieldText})` : ''
+        }`;
+        presentation = '';
+      } else if (ft === DATE_AND_TIME_FIELD_VALUE_TYPE) {
         type = formBlockType.dateTime;
-      } else {
-        type = formBlockType[ft] || formBlockType.field;
+      }
+      if (!type) {
+        type = formBlockType.field;
       }
       return {
         ...defaultBlock,
-        label: getLocalizedName(b.projectField.field),
+        label: label || getLocalizedName(b.projectField.field),
         name: 'fields',
         type,
         field: {
@@ -163,9 +175,7 @@ export const createFormBlock = (
           value,
           isMultiValue,
         },
-        value: b.projectField.defaultValues
-          ? b.projectField.defaultValues.map(getLocalizedName).join(', ')
-          : b.projectField.emptyFieldText,
+        value: presentation,
       };
     case FeedbackFormPredefinedBlock.description:
       return {

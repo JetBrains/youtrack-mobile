@@ -127,6 +127,8 @@ const submitForm = (formBlocks: FeedbackBlock[]): ReduxAction<Promise<CustomErro
               ...b.field,
               $type: projectCustomFieldTypeToFieldType(b.field.$type, b.field.isMultiValue),
             });
+          } else if (b.reporter) {
+            akk.reporter = {ringId: b.reporter.id};
           } else if (b.name !== null) {
             akk[b.name] = b.value;
           }

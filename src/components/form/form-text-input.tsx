@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextInput, View} from 'react-native';
+import {InputModeOptions, TextInput, View} from 'react-native';
 
 import {IconClearText} from 'components/icon/icon-clear-text';
 import {ThemeContext} from 'components/theme/theme-context';
@@ -14,16 +14,20 @@ const FormTextInput = ({
   onFocus,
   onClear,
   label,
+  placeholder,
   testID,
   value,
+  inputMode = 'none',
 }: {
   multiline?: boolean;
   onChange: (text: string) => void;
   onFocus?: () => void;
   onClear?: () => void;
   label?: string;
+  placeholder?: string;
   testID?: string;
   value?: string;
+  inputMode?: InputModeOptions;
 }) => {
   const theme: Theme = React.useContext(ThemeContext);
   return (
@@ -42,10 +46,11 @@ const FormTextInput = ({
           value && styles.formInputClearSpace,
         ]}
         multiline={multiline}
-        placeholder={label}
+        placeholder={placeholder || label}
         value={value}
         onChangeText={onChange}
         onFocus={onFocus}
+        inputMode={inputMode}
       />
       {onClear && value && <IconClearText onPress={onClear} style={styles.formInputClearIcon} />}
     </View>
