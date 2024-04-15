@@ -78,6 +78,7 @@ msgstr[1] "{{minutesAbsolute}}min"
 msgid "@Mention in a comment"
 msgstr "@Mención en un comentario"
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "1w 1d 1h 1m"
@@ -982,8 +983,13 @@ msgid "Sending crash report…"
 msgstr "Enviando informe de errores…"
 
 #: src/components/date-picker/date-time-picker.tsx
+#: src/views/helpdesk-feedback/index.ts
 msgid "Set a date"
 msgstr "Establecer una fecha"
+
+#: src/views/helpdesk-feedback/index.ts
+msgid "Set date and time"
+msgstr "Establecer fecha y hora"
 
 #: src/views/settings/settings.tsx
 msgid "Settings"

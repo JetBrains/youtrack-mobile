@@ -71,6 +71,7 @@ msgstr[0] "{{minutesAbsolute}}분"
 msgid "@Mention in a comment"
 msgstr "코멘트 내의 @멘션"
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "1w 1d 1h 1m"
@@ -972,8 +973,13 @@ msgid "Sending crash report…"
 msgstr "충돌 보고서를 보내는 중…"
 
 #: src/components/date-picker/date-time-picker.tsx
+#: src/views/helpdesk-feedback/index.ts
 msgid "Set a date"
 msgstr "날짜 설정"
+
+#: src/views/helpdesk-feedback/index.ts
+msgid "Set date and time"
+msgstr "날짜 및 시간 설정"
 
 #: src/views/settings/settings.tsx
 msgid "Settings"

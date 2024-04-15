@@ -71,6 +71,7 @@ msgstr[0] "{{minutesAbsolute}}分"
 msgid "@Mention in a comment"
 msgstr "コメントでの@メンション"
 
+#: src/views/helpdesk-feedback/index.ts
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "1w 1d 1h 1m"
@@ -972,8 +973,13 @@ msgid "Sending crash report…"
 msgstr "クラッシュレポートを送信中…"
 
 #: src/components/date-picker/date-time-picker.tsx
+#: src/views/helpdesk-feedback/index.ts
 msgid "Set a date"
 msgstr "日付の設定"
+
+#: src/views/helpdesk-feedback/index.ts
+msgid "Set date and time"
+msgstr "日時の設定"
 
 #: src/views/settings/settings.tsx
 msgid "Settings"

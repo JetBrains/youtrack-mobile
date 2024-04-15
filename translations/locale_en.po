@@ -72,6 +72,7 @@ msgstr[1] "{{minutesAbsolute}}m"
 msgid "@Mention in a comment"
 msgstr "@Mention in a comment"
 
+#: src/views/helpdesk-feedback/index.ts:162
 #: src/views/issue/activity/activity__add-spent-time.tsx:383
 #: src/views/issue/activity/activity__add-spent-time.tsx:397
 msgid "1w 1d 1h 1m"
@@ -423,7 +424,7 @@ msgstr "Delete issue {{issueId}}?"
 msgid "Delete permanently"
 msgstr "Delete permanently"
 
-#: src/views/helpdesk-feedback/index.ts:174
+#: src/views/helpdesk-feedback/index.ts:194
 #: src/views/settings/settings__feedback-form.tsx:248
 msgid "Description"
 msgstr "Description"
@@ -487,8 +488,8 @@ msgstr "Edit comment"
 msgid "Email"
 msgstr "Email"
 
-#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts:93
-#: src/views/helpdesk-feedback/index.ts:127
+#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts:94
+#: src/views/helpdesk-feedback/index.ts:131
 msgid "Email address"
 msgstr "Email address"
 
@@ -509,7 +510,7 @@ msgstr "Enter search request"
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr "Enter the web address for a YouTrack installation where you have a registered account"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:197
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:198
 msgid "Enter time value"
 msgstr "Enter time value"
 
@@ -930,7 +931,7 @@ msgstr "Search articles"
 msgid "Search for a different value"
 msgstr "Search for a different value"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:171
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:172
 msgid "Search for the project"
 msgstr "Search for the project"
 
@@ -976,8 +977,13 @@ msgid "Sending crash report…"
 msgstr "Sending crash report…"
 
 #: src/components/date-picker/date-time-picker.tsx:67
+#: src/views/helpdesk-feedback/index.ts:169
 msgid "Set a date"
 msgstr "Set a date"
+
+#: src/views/helpdesk-feedback/index.ts:166
+msgid "Set date and time"
+msgstr "Set date and time"
 
 #: src/views/settings/settings.tsx:134
 msgid "Settings"
@@ -1074,7 +1080,7 @@ msgstr "submitted a pull request"
 msgid "Subscriptions"
 msgstr "Subscriptions"
 
-#: src/views/helpdesk-feedback/index.ts:180
+#: src/views/helpdesk-feedback/index.ts:200
 #: src/views/settings/settings__feedback-form.tsx:233
 msgid "Summary"
 msgstr "Summary"
