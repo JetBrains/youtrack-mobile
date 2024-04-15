@@ -26,6 +26,7 @@ export const formBlockType: {[key: string]: string} = {
   integer: 'integer',
   float: 'float',
   input: 'input',
+  string: 'string',
   email: 'email',
   date: 'date',
   dateTime: 'dateTime',
@@ -152,7 +153,7 @@ export const createFormBlock = (
       let type = formBlockType[ft];
       let presentation = '';
       switch (true) {
-        case (ft === formBlockType.float || ft === formBlockType.integer):
+        case (ft === formBlockType.float || ft === formBlockType.integer || ft === formBlockType.string):
           label = `${b.projectField.field.name}${
             b.projectField.emptyFieldText ? ` (${b.projectField.emptyFieldText})` : ''
           }`;

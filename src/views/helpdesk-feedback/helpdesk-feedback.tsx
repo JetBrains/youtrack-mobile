@@ -178,12 +178,13 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                     <Text style={[styles.block, styles.text]}>{b.label}</Text>
                   </View>
                 )}
-                {b.type === formBlockType.period && (
+                {(b.type === formBlockType.period || b.type === formBlockType.string) && (
                   <FormTextInput
                     value={b.value}
                     onChange={presentation => {
+                      const value = b.type === formBlockType.string ? presentation : {presentation};
                       const data = (i: FeedbackBlock) => ({
-                        field: {...i.field!, value: {presentation}},
+                        field: {...i.field!, value},
                         value: presentation,
                       });
                       onBlockChange(b, data);
