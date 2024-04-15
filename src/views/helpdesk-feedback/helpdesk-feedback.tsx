@@ -158,8 +158,8 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                 )}
                 {(b.type === formBlockType.integer || b.type === formBlockType.float) && (
                   <FormTextInput
-                    value={`${b.value}`}
-                    placeholder={label || ''}
+                    value={b.value}
+                    placeholder={label}
                     onChange={text => {
                       const value = text.replace(/,/, '.');
                       const data = (i: FeedbackBlock) => ({
@@ -177,6 +177,21 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                   <View style={styles.block}>
                     <Text style={[styles.block, styles.text]}>{b.label}</Text>
                   </View>
+                )}
+                {b.type === formBlockType.period && (
+                  <FormTextInput
+                    value={b.value}
+                    onChange={presentation => {
+                      const data = (i: FeedbackBlock) => ({
+                        field: {...i.field!, value: {presentation}},
+                        value: presentation,
+                      });
+                      onBlockChange(b, data);
+                    }}
+                    multiline={b.multiline}
+                    placeholder={label}
+                    onClear={() => onTextValueChange(b, '')}
+                  />
                 )}
                 {isSelectType(b) && (
                   <FormSelect

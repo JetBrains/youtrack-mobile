@@ -150,19 +150,28 @@ export const createFormBlock = (
       }
       const ft = getSimpleCustomFieldType(b.projectField) || '';
       let type = formBlockType[ft];
-      let presentation = b.projectField.defaultValues
-        ? b.projectField.defaultValues.map(getLocalizedName).join(', ')
-        : b.projectField.emptyFieldText;
-      if (ft === formBlockType.float || ft === formBlockType.integer) {
-        label = `${b.projectField.field.name}${
-          b.projectField.emptyFieldText ? ` (${b.projectField.emptyFieldText})` : ''
-        }`;
-        presentation = '';
-      } else if (ft === DATE_AND_TIME_FIELD_VALUE_TYPE) {
-        type = formBlockType.dateTime;
-      }
-      if (!type) {
-        type = formBlockType.field;
+      let presentation = '';
+      switch (true) {
+        case (ft === formBlockType.float || ft === formBlockType.integer):
+          label = `${b.projectField.field.name}${
+            b.projectField.emptyFieldText ? ` (${b.projectField.emptyFieldText})` : ''
+          }`;
+          break;
+        case ft === formBlockType.period:
+          label = `${b.projectField.field.name} (${i18n('1w 1d 1h 1m')})`;
+          break;
+        case (ft === DATE_AND_TIME_FIELD_VALUE_TYPE):
+          type = formBlockType.dateTime;
+          presentation = i18n('Set date and time');
+          break;
+        case (ft === formBlockType.date):
+          presentation = i18n('Set a date');
+          break;
+        default:
+          type = formBlockType.field;
+          presentation = b.projectField.defaultValues
+            ? b.projectField.defaultValues.map(getLocalizedName).join(', ')
+            : b.projectField.emptyFieldText;
       }
       return {
         ...defaultBlock,
