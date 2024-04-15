@@ -34,6 +34,7 @@ import type {UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
 import {AppState} from 'reducers';
 import {Project} from 'types/Project';
+import {PeriodFieldValue, TextFieldValue} from 'types/CustomFields';
 
 interface Props {
   autoFocusSelect?: boolean;
@@ -212,19 +213,10 @@ export default function CustomFieldsPanel(props: Props) {
     trackEvent('Edit simple value field');
     const placeholder: string = customFieldPlaceholders[type] || customFieldPlaceholders.default;
     const valueFormatter = customFieldValueFormatters[type] || customFieldValueFormatters.default;
-    const fieldValue = field.value as CustomFieldValue;
-    let value: string = '';
-    if (typeof fieldValue === 'object') {
-      if ('presentation' in fieldValue) {
-        value = fieldValue.presentation;
-      }
-      if ('text' in fieldValue) {
-        value = fieldValue.text;
-      }
-    }
-    if (!value) {
-      value = `${field.value}`;
-    }
+    const value: string =
+      field.value != null
+        ? (field.value as PeriodFieldValue)?.presentation || (field.value as TextFieldValue)?.text || `${field.value}`
+        : '';
 
     return setSimpleValue({
       show: true,
