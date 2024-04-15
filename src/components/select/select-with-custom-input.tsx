@@ -17,7 +17,7 @@ export default class SelectWithCustomInput extends Select<
 > {
   constructor(props: ISelectWithCustomInput) {
     super(props);
-    this.state = {...this.state, customInput: props.customInput || ''};
+    this.state = {...this.state, customInput: props.customInput};
   }
 
   renderInputValueItem() {
