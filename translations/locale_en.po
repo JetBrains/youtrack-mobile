@@ -32,7 +32,7 @@ msgid_plural "{{amount}} articles"
 msgstr[0] "{{amount}} article"
 msgstr[1] "{{amount}} articles"
 
-#: src/views/create-issue/create-issue.tsx:397
+#: src/views/create-issue/create-issue.tsx:398
 msgid "{{amount}} draft"
 msgid_plural "{{amount}} drafts"
 msgstr[0] "{{amount}} draft"
@@ -159,7 +159,7 @@ msgstr "Are you sure you want to delete this work item?"
 msgid "Article added to favorites"
 msgstr "Article added to favorites"
 
-#: src/views/article-create/article-create.tsx:394
+#: src/views/article-create/article-create.tsx:395
 msgid "Article content"
 msgstr "Article content"
 
@@ -176,7 +176,7 @@ msgstr "Article removed from favorites"
 msgid "Attach file"
 msgstr "Attach file"
 
-#: src/components/attach-file/attach-file-dialog.tsx:233
+#: src/components/attach-file/attach-file-dialog.tsx:153
 #: src/components/attachments-row/attachments-add-panel.tsx:43
 msgid "Attach files"
 msgstr "Attach files"
@@ -211,7 +211,7 @@ msgstr "Bugsnag Privacy Policy"
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "By logging in, you agree to the Privacy Policy."
 
-#: src/components/attach-file/attach-file-dialog.tsx:102
+#: src/components/attach-file/attach-file-dialog.tsx:83
 msgid "Camera"
 msgstr "Camera"
 
@@ -366,7 +366,7 @@ msgstr "created"
 msgid "Created by"
 msgstr "Created by"
 
-#: src/views/create-issue/create-issue.tsx:282
+#: src/views/create-issue/create-issue.tsx:283
 msgid "Current issue"
 msgstr "Current issue"
 
@@ -412,7 +412,7 @@ msgstr "Delete all drafts?"
 msgid "Delete comment permanently?"
 msgstr "Delete comment permanently?"
 
-#: src/views/article-create/article-create.tsx:310
+#: src/views/article-create/article-create.tsx:311
 msgid "Delete draft"
 msgstr "Delete draft"
 
@@ -446,7 +446,7 @@ msgstr "Discard and close"
 msgid "Discard draft and close?"
 msgstr "Discard draft and close?"
 
-#: src/views/article-create/article-create.tsx:311
+#: src/views/article-create/article-create.tsx:312
 msgid "Discard unpublished changes"
 msgstr "Discard unpublished changes"
 
@@ -458,7 +458,7 @@ msgstr "Do you really want to log out?"
 msgid "Do you really want to remove this account?"
 msgstr "Do you really want to remove this account?"
 
-#: src/components/attach-file/attach-file-dialog.tsx:76
+#: src/components/attach-file/attach-file-dialog.tsx:57
 msgid "Document"
 msgstr "Document"
 
@@ -488,7 +488,7 @@ msgstr "Edit comment"
 msgid "Email"
 msgstr "Email"
 
-#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts:94
+#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts:95
 #: src/views/helpdesk-feedback/index.ts:131
 msgid "Email address"
 msgstr "Email address"
@@ -657,7 +657,7 @@ msgid "Light theme"
 msgstr "Light theme"
 
 #: src/components/linked-issues/linked-issues-add-link.tsx:247
-#: src/views/create-issue/create-issue.tsx:370
+#: src/views/create-issue/create-issue.tsx:371
 #: src/views/issue/issue-base-actions-creater.ts:600
 msgid "Link issue"
 msgstr "Link issue"
@@ -751,7 +751,7 @@ msgstr "Mute thread"
 msgid "New Article"
 msgstr "New Article"
 
-#: src/views/create-issue/create-issue.tsx:447
+#: src/views/create-issue/create-issue.tsx:448
 msgid "New Issue"
 msgstr "New Issue"
 
@@ -832,7 +832,7 @@ msgstr "Password"
 msgid "Paused"
 msgstr "Paused"
 
-#: src/components/attach-file/attach-file-dialog.tsx:89
+#: src/components/attach-file/attach-file-dialog.tsx:70
 msgid "Photo and video library"
 msgstr "Photo and video library"
 
@@ -1193,7 +1193,7 @@ msgstr "Thread unmuted"
 msgid "Tickets"
 msgstr "Tickets"
 
-#: src/views/article-create/article-create.tsx:393
+#: src/views/article-create/article-create.tsx:394
 msgid "Title"
 msgstr "Title"
 
