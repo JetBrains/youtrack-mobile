@@ -1,12 +1,14 @@
+import * as qs from 'qs';
+
 import ApiBase from './api__base';
 import ApiHelper from './api__helper';
-
-import {FeedbackForm} from 'types/FeedbackForm';
 import issuesFields from './api__issue-fields';
-import {ProjectHelpdesk} from 'types/Project';
 import issueFields from 'components/api/api__issue-fields';
-import * as qs from 'qs';
-import {FeedbackFormBlockFieldValue} from 'views/helpdesk-feedback';
+
+import type {FeedbackFormBlockFieldValue} from 'views/helpdesk-feedback';
+import type {FeedbackForm} from 'types/FeedbackForm';
+import type {NormalizedAttachment} from 'types/Attachment';
+import type {ProjectHelpdesk} from 'types/Project';
 
 const toField = ApiHelper.toField;
 
@@ -59,18 +61,22 @@ export default class HelpDeskFormAPI extends ApiBase {
     return response.form;
   }
 
-  async submitForm(formId: string, body: Record<string, any>) {
+  async submitForm(
+    formId: string,
+    body: Record<string, any>,
+    files: NormalizedAttachment[] | null,
+  ): Promise<{
+    id: string;
+  }> {
     return await this.submitFormRequest(
       'feedbackForm',
       `${this.youTrackUrl}/api/feedbackForms/${formId}/submit?fields=id`,
-      body
+      body,
+      files
     );
   }
 
-  async getFieldValues(
-    formId: string,
-    blockId: string
-  ): Promise<Array<FeedbackFormBlockFieldValue>> {
+  async getFieldValues(formId: string, blockId: string): Promise<Array<FeedbackFormBlockFieldValue>> {
     return await this.makeAuthorizedRequest(
       `${this.youTrackUrl}/api/feedbackForms/${formId}/form/blocks/${blockId}/projectField/bundle/values?sort=true&fields=id,name,localizedName`,
       'GET'

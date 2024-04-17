@@ -21,6 +21,7 @@ import Router from 'components/router/router';
 import Star from 'components/star/star';
 import usage from 'components/usage/usage';
 import {addListenerGoOnline} from 'components/network/network-events';
+import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
 import {attachmentActions} from './issue__attachment-actions-and-types';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from './issue-base-actions-creater';
 import {DEFAULT_THEME} from 'components/theme/theme';
@@ -617,6 +618,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     typeof AttachFileDialog
   > => (
     <AttachFileDialog
+      analyticsId={ANALYTICS_ISSUE_PAGE}
       hideVisibility={false}
       getVisibilityOptions={() =>
         getApi().issue.getVisibilityOptions(this.props.issueId)

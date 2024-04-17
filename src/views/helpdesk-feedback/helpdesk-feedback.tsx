@@ -12,13 +12,18 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 
 import * as actions from './helpdesk-feedback-actions';
+import AttachFileDialog from 'components/attach-file/attach-file-dialog';
+import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel';
 import DateTimePicker from 'components/date-picker/date-time-picker';
+import FilesPreviewPanel from 'components/attach-file/files-preview-panel';
 import FormSelect from 'components/form/form-select-button';
 import FormTextInput from 'components/form/form-text-input';
 import Header from 'components/header/header';
 import ModalView from 'components/modal-view/modal-view';
 import Router from 'components/router/router';
 import SelectWithCustomInput from 'components/select/select-with-custom-input';
+import {absDate} from 'components/date/date';
+import {ANALYTICS_HD_FEEDBACK_PAGE} from 'components/analytics/analytics-ids';
 import {
   FeedbackBlock,
   FeedbackFormBlockCustomField,
@@ -29,16 +34,17 @@ import {getLocalizedName} from 'components/custom-field/custom-field-helper';
 import {HIT_SLOP} from 'components/common-styles';
 import {IconBack, IconCheck, IconClose} from 'components/icon/icon';
 import {isIOSPlatform} from 'util/util';
+import {isSplitView} from 'components/responsive/responsive-helper';
+import {onToggleAttachDialogVisibility} from './helpdesk-feedback-actions';
 import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './helpdesk-feedback.styles';
 
-import {AppState} from 'reducers';
-import {ProjectHelpdesk} from 'types/Project';
-import {ReduxThunkDispatch} from 'types/Redux';
-import {Theme, UIThemeColors} from 'types/Theme';
-import {isSplitView} from 'components/responsive/responsive-helper';
-import {absDate} from 'components/date/date';
+import type {AppState} from 'reducers';
+import type {NormalizedAttachment} from 'types/Attachment';
+import type {ProjectHelpdesk} from 'types/Project';
+import type {ReduxThunkDispatch} from 'types/Redux';
+import type {Theme, UIThemeColors} from 'types/Theme';
 
 const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
   const theme: Theme = React.useContext(ThemeContext);
@@ -50,9 +56,11 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
   const blocks = useSelector((state: AppState) => state.helpDeskFeedbackForm.formBlocks);
   const selectProps = useSelector((state: AppState) => state.helpDeskFeedbackForm.selectProps);
   const inProgress = useSelector((state: AppState) => state.app.isInProgress);
+  const isAttachDialogVisible = useSelector((state: AppState) => state.helpDeskFeedbackForm.isAttachDialogVisible);
 
   const [formBlocks, setFormBlocks] = React.useState<FeedbackBlock[]>([]);
   const [dateTimeBlock, setDateTimeBlock] = React.useState<FeedbackBlock | null>(null);
+  const [files, setFiles] = React.useState<Array<NormalizedAttachment>>([]);
 
   React.useEffect(() => {
     setFormBlocks(blocks || []);
@@ -66,7 +74,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
 
   const onSubmit = async () => {
     try {
-      await dispatch(actions.submitForm(formBlocks));
+      await dispatch(actions.submitForm(formBlocks, files));
       onBack();
     } catch (e) {}
   };
@@ -163,7 +171,10 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                     onChange={text => {
                       const value = text.replace(/,/, '.');
                       const data = (i: FeedbackBlock) => ({
-                        field: {...i.field!, value: b.type === formBlockType.float ? parseFloat(value) : parseInt(value, 10)},
+                        field: {
+                          ...i.field!,
+                          value: b.type === formBlockType.float ? parseFloat(value) : parseInt(value, 10),
+                        },
                         value,
                       });
                       onBlockChange(b, data);
@@ -216,6 +227,19 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                     }}
                   />
                 )}
+                {b.type === formBlockType.attachment && (
+                  <View style={styles.block}>
+                    <AttachmentAddPanel
+                      isDisabled={false}
+                      showAddAttachDialog={() => {
+                        dispatch(onToggleAttachDialogVisibility(true));
+                      }}
+                    />
+                    <FilesPreviewPanel files={files} onRemove={(f) => {
+                      setFiles(files.filter(it => it.url !== f.url));
+                    }} />
+                  </View>
+                )}
               </View>
             );
           })}
@@ -243,6 +267,22 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
       )}
 
       {!!selectProps && <SelectWithCustomInput {...selectProps} />}
+
+      {isAttachDialogVisible && (
+        <AttachFileDialog
+          analyticsId={ANALYTICS_HD_FEEDBACK_PAGE}
+          hideVisibility={true}
+          actions={{
+            onAttach: async (fls: NormalizedAttachment[], onAttachingFinish: (f: NormalizedAttachment[]) => void) => {
+              const fils = new Array<NormalizedAttachment>().concat(files).concat(fls);
+              setFiles(fils);
+              onAttachingFinish(fls);
+              dispatch(onToggleAttachDialogVisibility(false));
+            },
+            onCancel: () => dispatch(onToggleAttachDialogVisibility(false)),
+          }}
+        />
+      )}
     </View>
   );
 };

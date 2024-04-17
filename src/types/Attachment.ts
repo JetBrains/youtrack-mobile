@@ -10,11 +10,12 @@ export type Attachment = {
 
 export type NormalizedAttachment = {
   url: string;
-  name: string | null;
+  name: string;
   mimeType: string | null;
   dimensions?: {
     width: number;
     height: number;
   };
-  visibility?: Visibility;
+  visibility?: Visibility | null;
+  size: number;
 };

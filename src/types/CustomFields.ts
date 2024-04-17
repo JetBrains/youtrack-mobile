@@ -139,7 +139,7 @@ export type Attachment = {
   name: string;
   url: string;
   mimeType: string;
-  imageDimensions: ImageDimensions | undefined;
+  imageDimensions?: ImageDimensions;
   thumbnailURL: string;
   visibility?: Visibility | null;
   author?: User;

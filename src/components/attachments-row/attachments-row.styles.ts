@@ -2,6 +2,10 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import {SECONDARY_FONT_SIZE, UNIT} from 'components/common-styles';
 
+export const thumbSize = {
+  width: UNIT * 12,
+  height: UNIT * 8,
+};
 
 export default EStyleSheet.create({
   attachesScroll: {
@@ -14,8 +18,7 @@ export default EStyleSheet.create({
     borderWidth: 1,
     borderColor: '$separator',
     borderRadius: UNIT / 2,
-    width: UNIT * 12,
-    height: UNIT * 8,
+    ...thumbSize,
     overflow: 'hidden',
   },
   attachmentFile: {
@@ -74,6 +77,11 @@ export default EStyleSheet.create({
     borderColor: 'transparent',
   },
   attachmentDoc: {
+    color: '$blueColor',
+    backgroundColor: '$blueBackground',
+    borderColor: 'transparent',
+  },
+  attachmentPdf: {
     color: '$redColor',
     backgroundColor: '$redBackground',
     borderColor: 'transparent',

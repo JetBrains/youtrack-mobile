@@ -27,6 +27,7 @@ const getThumbStyleMap = ():Record<FileCategoryKey, FileTypeStyle> => ({
   sheet: styles.attachmentSheet,
   sketch: styles.attachmentSketch,
   text: styles.attachmentDoc,
+  pdf: styles.attachmentPdf,
   video: styles.attachmentMedia,
 });
 

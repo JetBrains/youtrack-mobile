@@ -219,25 +219,24 @@ export default class BaseAPI {
     name: string,
     url: string,
     body: Record<string, any> | null,
+    files: NormalizedAttachment[] | null,
     options: RequestOptions = {
       parseJson: true,
     },
   ) {
     log.debug(`'Submitting a form' to ${url} with body ${JSON.stringify(body)}`);
     const request = async (): Promise<Response> => {
-      const requestHeaders: RequestHeaders = this.auth.getAuthorizationHeaders();
-
-      if (!requestHeaders.Authorization) {
-        log.warn(`Missing auth header in the  POST request: ${url}`);
-      }
       const formData = new FormData();
       formData.append(name, JSON.stringify(body));
+      if (files?.length) {
+        files.forEach(f => formData.append('file', createFileData(f)));
+      }
 
       return await fetch2(
         url,
         {
           method: 'POST',
-          headers: requestHeaders,
+          headers: this.auth.getAuthorizationHeaders(),
           body: formData,
         },
         options.controller,
@@ -293,7 +292,7 @@ export default class BaseAPI {
     const url = `${subResourcePath}/${commentResourcePath}/attachments?fields=id,name,url,thumbnailURL,mimeType,imageDimensions(height,width)`;
     const response = await fetch(url, {
       method: 'POST',
-      body: createFormData(file),
+      body: createFileFormData(file),
       headers: this.auth.getAuthorizationHeaders(),
     });
     const addedAttachments: Attachment[] = await response.json();
@@ -307,20 +306,23 @@ export default class BaseAPI {
     const url = `${subResourcePath}/attachments?fields=id,name`;
     const response = await fetch(url, {
       method: 'POST',
-      body: createFormData(file),
+      body: createFileFormData(file),
       headers: this.auth.getAuthorizationHeaders(),
     });
     return await response.json();
   }
 }
 
-
-function createFormData(file: NormalizedAttachment): FormData {
-  const formData = new FormData();
-  formData.append('file', {
+function createFileData(file: NormalizedAttachment) {
+  return {
     uri: file.url,
     name: file.name,
     type: file.mimeType,
-  });
+  };
+}
+
+function createFileFormData(file: NormalizedAttachment): FormData {
+  const formData = new FormData();
+  formData.append('file', createFileData(file));
   return formData;
 }

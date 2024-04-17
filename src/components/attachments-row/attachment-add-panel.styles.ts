@@ -10,7 +10,7 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     paddingVertical: UNIT * 1.5,
   },
-  attachButtonText: {...mainText, marginLeft: UNIT * 2, color: '$link'},
+  attachButtonText: {...mainText, marginLeft: UNIT * 1.5, color: '$link'},
   attachButtonTextDisabled: {
     color: '$textSecondary',
   },

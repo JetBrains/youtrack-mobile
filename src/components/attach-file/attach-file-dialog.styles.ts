@@ -12,7 +12,8 @@ export default EStyleSheet.create({
   },
   images: {
     flexGrow: 1,
-    paddingHorizontal: UNIT * 2,
+    marginTop: UNIT * 2,
+    paddingHorizontal: UNIT * 1.5,
   },
   filePreview: {
     width: '100%',
@@ -45,7 +46,6 @@ export default EStyleSheet.create({
     color: '$disabled',
   },
   thumbnail: {
-    width: '100%',
     marginBottom: UNIT * 2,
   },
 });

@@ -25,6 +25,7 @@ import styles from './attachments-row.styles';
 
 import type {Attachment} from 'types/CustomFields';
 import type {FileCategoryKey} from './attachment-helper';
+import type {RequestHeaders} from 'types/Auth';
 import type {UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
 
@@ -32,7 +33,7 @@ import type {ViewStyleProp} from 'types/Internal';
 type StyleMap = Record<FileCategoryKey, ViewStyleProp>;
 
 type Props = {
-  imageHeaders?: Record<string, any>;
+  imageHeaders?: RequestHeaders;
   onOpenAttachment: (type: string, name: string) => any;
   onImageLoadingError: (error: Record<string, any>) => any;
   canRemoveImage?: boolean;
@@ -62,6 +63,7 @@ export default class Attach extends PureComponent<Props, State> {
     sheet: styles.attachmentSheet,
     sketch: styles.attachmentSketch,
     text: styles.attachmentDoc,
+    pdf: styles.attachmentPdf,
     video: styles.attachmentMedia,
     audio: styles.attachmentMedia,
   };
@@ -88,7 +90,7 @@ export default class Attach extends PureComponent<Props, State> {
     });
   }
 
-  showImageAttachment(attach: Attachment): any | void | Promise<null> {
+  showImageAttachment(attach: Attachment) {
     this.props.onOpenAttachment('image', attach.id);
 
     if (isAndroid && hasMimeType.svg(attach)) {
@@ -98,20 +100,20 @@ export default class Attach extends PureComponent<Props, State> {
     this.doPreview();
   }
 
-  doPreview = (): void => {
+  doPreview = () => {
     const {attach, attachments, onRemoveImage, imageHeaders} = this.props;
     this.toggleModalChildren(
       <PreviewFile
-        current={attach}
-        imageAttachments={this.isMedia() ? [] : attachments.filter(it => hasMimeType.previewable(it))}
+        file={attach}
+        files={attachments}
         imageHeaders={imageHeaders}
-        onRemoveImage={onRemoveImage ? () => onRemoveImage(attach) : undefined}
+        onRemove={onRemoveImage ? () => onRemoveImage(attach) : undefined}
         onHide={() => this.toggleModalChildren()}
       />
     );
   };
 
-  openAttachmentUrl(name: string, url: string): void | Promise<null> {
+  openAttachmentUrl(name: string, url: string) {
     this.props.onOpenAttachment('file', name);
     Router.AttachmentPreview({
       url,
@@ -120,7 +122,7 @@ export default class Attach extends PureComponent<Props, State> {
     });
   }
 
-  renderSVG(): React.ReactNode {
+  renderSVG() {
     return (
       <View testID="attachmentSvg" style={styles.attachmentThumbContainer}>
         <SvgUri
@@ -132,7 +134,7 @@ export default class Attach extends PureComponent<Props, State> {
     );
   }
 
-  renderImage(): React.ReactNode {
+  renderImage() {
     const {attachingImage, imageHeaders, attach} = this.props;
     const isAttachingImage = attachingImage === attach;
     const source = {
@@ -175,7 +177,7 @@ export default class Attach extends PureComponent<Props, State> {
     );
   }
 
-  remove: () => void = () => {
+  remove = () => {
     Alert.alert(
       'Delete attachment?',
       'This action deletes the attachment permanently and cannot be undone.',
@@ -204,7 +206,7 @@ export default class Attach extends PureComponent<Props, State> {
       },
     );
   };
-  onAttachPress: () => void = () => {
+  onAttachPress = () => {
     const {attach} = this.props;
 
     if (this.isMedia()) {
@@ -239,7 +241,7 @@ export default class Attach extends PureComponent<Props, State> {
     return !!this.props.canRemoveImage;
   }
 
-  renderAttach(): React.ReactNode {
+  renderAttach() {
     if (this.isMedia()) {
       return <FileThumb attach={this.props.attach} testID="attachmentMedia"/>;
     } else if (this.isSVG()) {
@@ -251,7 +253,7 @@ export default class Attach extends PureComponent<Props, State> {
     return <FileThumb attach={this.props.attach}/>;
   }
 
-  render(): React.ReactNode {
+  render() {
     const {attach, uiTheme} = this.props;
     const {modalChildren} = this.state;
     return (

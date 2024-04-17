@@ -142,6 +142,7 @@ class CreateIssue extends PureComponent<Props, State> {
 
     return (
       <AttachFileDialog
+        analyticsId={ANALYTICS_ISSUE_CREATE_PAGE}
         getVisibilityOptions={() =>
           getApi().issue.getVisibilityOptions(issue.id)
         }

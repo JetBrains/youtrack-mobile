@@ -257,6 +257,7 @@ const ArticleCreate = (props: Props) => {
 
     return (
       <AttachFileDialog
+        analyticsId={ANALYTICS_ARTICLE_CREATE_PAGE}
         hideVisibility={false}
         getVisibilityOptions={() => {
           const articlesAPI = getApi().articles;

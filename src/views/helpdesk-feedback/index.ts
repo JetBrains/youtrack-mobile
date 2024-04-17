@@ -200,6 +200,11 @@ export const createFormBlock = (
         label: i18n('Summary'),
         name: 'summary',
       };
+    case FeedbackFormPredefinedBlock.attachment:
+      return {
+        ...defaultBlock,
+        type: formBlockType.attachment,
+      };
     default:
       log.warn(`Unsupported feedback form block [${blockType}]`);
       return null;

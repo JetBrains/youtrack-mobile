@@ -8,19 +8,17 @@ import {UNIT} from 'components/variables';
 
 export default EStyleSheet.create({
   container: {
-    height: '100%',
+    minWidth: '100%',
+    minHeight: '97%',
     width: '100%',
-    alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: UNIT,
   },
   header: {
     marginTop: UNIT,
-    marginBottom: -UNIT,
+    marginBottom: -headerMinHeight,
     backgroundColor: 'transparent',
   },
   preview: {
-    flex: 1,
     position: 'relative',
     flexGrow: 1,
     alignSelf: 'center',
@@ -28,6 +26,7 @@ export default EStyleSheet.create({
     height: null,
     maxWidth: '100%',
     maxHeight: '100%',
+    marginTop: UNIT * 6,
   },
   loader: {...StyleSheet.absoluteFillObject, color: '$link'},
   removeButton: {
@@ -42,10 +41,14 @@ export default EStyleSheet.create({
   link: {
     color: '$link',
   },
-  fullScreen: {
-    // ...StyleSheet.absoluteFillObject,
+  videoContainer: {
+    ...StyleSheet.absoluteFillObject,
+    paddingTop: headerMinHeight,
+  },
+  video: {
     width: '100%',
     height: '100%',
+    maxHeight: '100%',
   },
   error: {
     alignItems: 'center',
@@ -55,6 +58,6 @@ export default EStyleSheet.create({
   errorTitle: {
     marginBottom: UNIT * 1.5,
     ...title,
-    color: '$text',
+    color: '$background',
   },
-}) as any;
+});

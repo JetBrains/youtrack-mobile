@@ -12,14 +12,15 @@ import {getLocalizedName} from 'components/custom-field/custom-field-helper';
 import {i18n} from 'components/i18n/i18n';
 import {notify, notifyError} from 'components/notification/notification';
 import {SET_PROGRESS} from 'actions/action-types';
-import {setError, setSelectProps, setFormData, setProject} from './helpdesk-feedback-reducers';
+import {setError, setSelectProps, setFormData, setProject, setAttachDialogVisibile} from './helpdesk-feedback-reducers';
 import {until} from 'util/util';
 
-import {CustomError} from 'types/Error';
-import {FeedbackForm} from 'types/FeedbackForm';
-import {ProjectHelpdesk} from 'types/Project';
-import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
-import {User} from 'types/User';
+import type {CustomError} from 'types/Error';
+import type {FeedbackForm} from 'types/FeedbackForm';
+import type {ProjectHelpdesk} from 'types/Project';
+import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
+import type {User} from 'types/User';
+import type {NormalizedAttachment} from 'types/Attachment';
 
 const loadFeedbackForm = (project: ProjectHelpdesk): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
@@ -114,7 +115,10 @@ const setInProgress = (isInProgress: boolean = false): ReduxAction => {
     });
 };
 
-const submitForm = (formBlocks: FeedbackBlock[]): ReduxAction<Promise<CustomError | void>> => {
+const submitForm = (
+  formBlocks: FeedbackBlock[],
+  files: NormalizedAttachment[] | null,
+): ReduxAction<Promise<CustomError | void>> => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const state = getState().helpDeskFeedbackForm;
     const form = state.form!;
@@ -139,7 +143,7 @@ const submitForm = (formBlocks: FeedbackBlock[]): ReduxAction<Promise<CustomErro
     dispatch(setInProgress(true));
     const [error] = await until<{
       id: string;
-    }>(getApi().helpDesk.submitForm(form.uuid, formData));
+    }>(getApi().helpDesk.submitForm(form.uuid, formData, files));
     dispatch(setInProgress(false));
     if (error) {
       notifyError(error);
@@ -159,4 +163,10 @@ const onRefresh = (): ReduxAction => {
   };
 };
 
-export {loadFeedbackForm, onRefresh, setSelect, setUserSelect, submitForm};
+const onToggleAttachDialogVisibility = (isVisible: boolean): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch) => {
+    dispatch(setAttachDialogVisibile(isVisible));
+  };
+};
+
+export {loadFeedbackForm, onRefresh, onToggleAttachDialogVisibility, setSelect, setUserSelect, submitForm};

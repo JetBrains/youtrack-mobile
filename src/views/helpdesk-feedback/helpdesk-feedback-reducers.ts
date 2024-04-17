@@ -14,6 +14,7 @@ export interface HelpDeskFeedbackFormState {
   formBlocks: FeedbackBlock[] | null;
   fieldValues: Array<FeedbackFormBlockFieldValue> | null;
   inProgress: boolean;
+  isAttachDialogVisible: boolean;
   project: ProjectHelpdesk | null;
   selectProps: ISelectWithCustomInput | null;
 }
@@ -24,6 +25,7 @@ export const initialState: HelpDeskFeedbackFormState = {
   formBlocks: null,
   fieldValues: null,
   inProgress: false,
+  isAttachDialogVisible: false,
   project: null,
   selectProps: null,
 };
@@ -47,8 +49,13 @@ const {reducer, actions} = createSlice({
     setError(state: HelpDeskFeedbackFormState, action: PayloadAction<CustomError>) {
       state.error = action.payload;
     },
+
     setProject(state: HelpDeskFeedbackFormState, action: PayloadAction<ProjectHelpdesk>) {
       state.project = action.payload;
+    },
+
+    setAttachDialogVisibile(state: HelpDeskFeedbackFormState, action: PayloadAction<boolean>) {
+      state.isAttachDialogVisible = action.payload;
     },
   },
 
@@ -62,6 +69,6 @@ const {reducer, actions} = createSlice({
   },
 });
 
-export const {setError, setFormData, setSelectProps, setProject} = actions;
+export const {setError, setFormData, setSelectProps, setProject, setAttachDialogVisibile} = actions;
 
 export default reducer;
