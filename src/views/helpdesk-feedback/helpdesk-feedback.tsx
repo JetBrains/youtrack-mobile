@@ -87,11 +87,18 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
     onBlockChange(b, (i: FeedbackBlock) => ({value: text}));
   };
 
-  const isDateTimeType = (b: FeedbackBlock) => {
-    return b.type === formBlockType.date || b.type === formBlockType.dateTime;
-  };
+  const isEmailBlock = (b: FeedbackBlock) => b.type === formBlockType.email;
 
-  const isSelectType = (b: FeedbackBlock) => b.type === formBlockType.field || isDateTimeType(b);
+  const onUserSelectOpen = (b: FeedbackBlock) => {
+    dispatch(
+      actions.setUserSelect(
+        b.value,
+        ({reporter, email}: {reporter?: FeedbackFormReporter; email?: string}) => {
+          onBlockChange(b, (i: FeedbackBlock) => ({reporter, email, value: email || reporter?.name || ''}));
+        }
+      )
+    );
+  };
 
   const iconColor = inProgress ? uiThemeColors.$disabled : uiThemeColors.$link;
   return (
@@ -130,40 +137,34 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
         >
           {formBlocks.map(b => {
             const label = `${b.label}${b.required ? '*' : ''}`;
-            const onFocus = () => {
-              dispatch(
-                actions.setUserSelect(
-                  b.value,
-                  ({reporter, email}: {reporter?: FeedbackFormReporter; email?: string}) => {
-                    onBlockChange(b, (i: FeedbackBlock) => ({reporter, email, value: email || reporter?.name || ''}));
-                  }
-                )
-              );
-            };
             return (
               <View style={styles.block} key={b.id}>
-                {b.type === formBlockType.email && (
+                {b.type === formBlockType.text && (
+                  <View style={styles.block}>
+                    <Text style={[styles.block, styles.text]}>{b.label}</Text>
+                  </View>
+                )}
+
+                {(isEmailBlock(b) || b.type === formBlockType.input) && (
                   <FormTextInput
                     value={b.value}
                     onChange={text => onTextValueChange(b, text)}
-                    onFocus={onFocus}
+                    onFocus={() => {
+                      if (isEmailBlock(b)) {
+                        onUserSelectOpen(b);
+                      }
+                    }}
                     onClear={() => {
-                      onTextValueChange(b, undefined);
-                      onFocus();
+                      onTextValueChange(b, '');
+                      if (isEmailBlock(b)) {
+                        onUserSelectOpen(b);
+                      }
                     }}
                     multiline={b.multiline}
                     label={label}
                   />
                 )}
-                {b.type === formBlockType.input && (
-                  <FormTextInput
-                    value={b.value}
-                    onChange={text => onTextValueChange(b, text)}
-                    multiline={b.multiline}
-                    label={label}
-                    onClear={() => onTextValueChange(b, undefined)}
-                  />
-                )}
+
                 {(b.type === formBlockType.integer || b.type === formBlockType.float) && (
                   <FormTextInput
                     value={b.value}
@@ -184,11 +185,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                     inputMode={b.type === formBlockType.integer ? 'numeric' : 'decimal'}
                   />
                 )}
-                {b.type === formBlockType.text && (
-                  <View style={styles.block}>
-                    <Text style={[styles.block, styles.text]}>{b.label}</Text>
-                  </View>
-                )}
+
                 {(b.type === formBlockType.period || b.type === formBlockType.string) && (
                   <FormTextInput
                     value={b.value}
@@ -205,39 +202,42 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                     onClear={() => onTextValueChange(b, '')}
                   />
                 )}
-                {isSelectType(b) && (
+
+                {b.type === formBlockType.field && (
                   <FormSelect
                     value={b.value}
                     label={label}
                     onPress={() => {
-                      const isDateType = isDateTimeType(b);
-                      if (!isDateType) {
-                        dispatch(
-                          actions.setSelect(b, (value: FeedbackFormBlockCustomField) => {
-                            const data = (i: FeedbackBlock) => ({
-                              field: {...i.field!, value},
-                              value: new Array().concat(value).map(getLocalizedName).join(', '),
-                            });
-                            onBlockChange(b, data);
-                          })
-                        );
-                      } else {
-                        setDateTimeBlock(b);
-                      }
+                      dispatch(
+                        actions.setSelect(b, (value: FeedbackFormBlockCustomField) => {
+                          const data = (i: FeedbackBlock) => ({
+                            field: {...i.field!, value},
+                            value: new Array().concat(value).map(getLocalizedName).join(', '),
+                          });
+                          onBlockChange(b, data);
+                        })
+                      );
                     }}
                   />
                 )}
+
+                {(b.type === formBlockType.date || b.type === formBlockType.dateTime) && (
+                  <FormSelect value={b.value} label={label} onPress={() => setDateTimeBlock(b)} />
+                )}
+
                 {b.type === formBlockType.attachment && (
                   <View style={styles.block}>
                     <AttachmentAddPanel
-                      isDisabled={false}
                       showAddAttachDialog={() => {
                         dispatch(onToggleAttachDialogVisibility(true));
                       }}
                     />
-                    <FilesPreviewPanel files={files} onRemove={(f) => {
-                      setFiles(files.filter(it => it.url !== f.url));
-                    }} />
+                    <FilesPreviewPanel
+                      files={files}
+                      onRemove={f => {
+                        setFiles(files.filter(it => it.url !== f.url));
+                      }}
+                    />
                   </View>
                 )}
               </View>
