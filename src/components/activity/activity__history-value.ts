@@ -1,7 +1,7 @@
 import {absDate} from 'components/date/date';
 import {getEntityPresentation} from '../issue-formatter/issue-formatter';
 import {getPeriodPresentationFor} from '../time-tracking/time-tracking';
-import {getSimpleCustomFieldType} from '../custom-field/custom-field-helper';
+import {getCustomFieldType} from '../custom-field/custom-field-helper';
 import {hasType} from '../api/api__resource-types';
 import {isActivityCategory} from './activity__category';
 
@@ -52,7 +52,7 @@ export function getTextValueChange(params: TextValueChangeParams): string {
     eventField.customField &&
     isActivityCategory.customField(params.activity)
   ) {
-    const simpleCustomFieldType = getSimpleCustomFieldType(
+    const simpleCustomFieldType = getCustomFieldType(
       eventField.customField,
     );
     setSimpleCustomFieldPresentationByType(

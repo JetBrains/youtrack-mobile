@@ -1,24 +1,29 @@
-import type {
+import {
   CustomField,
   CustomFieldBase,
   CustomFieldText,
   CustomFieldValue,
+  ICustomField,
   ProjectCustomField,
 } from 'types/CustomFields';
 
 export type AnyCustomField = Partial<CustomField & CustomFieldText>;
 
-const isProjectCustomField = (customField: ProjectCustomField): boolean => {
-  return customField?.$type ? customField.$type.indexOf('ProjectCustomField') !== -1 : false;
+export const getCustomFieldType = (customField: ICustomField): string | null => {
+  if (customField.fieldType) {
+    return customField.fieldType?.valueType || null;
+  }
+  return null;
 };
 
-const getSimpleCustomFieldType = (customField?: ProjectCustomField | null): string | null => {
-  if (!customField) {
+const getFieldType = (f: ProjectCustomField | ICustomField | null): string | null => {
+  if (!f) {
     return null;
   }
-
-  const fieldType = isProjectCustomField(customField) ? customField.field.fieldType : customField.fieldType;
-  return fieldType ? fieldType.valueType : null;
+  if ('field' in f) {
+    return getCustomFieldType(f.field);
+  }
+  return 'fieldType' in f ? getCustomFieldType(f) : null;
 };
 
 const isTextCustomField = (customField: ProjectCustomField): boolean => {
@@ -26,7 +31,7 @@ const isTextCustomField = (customField: ProjectCustomField): boolean => {
     return false;
   }
 
-  const valueType: string | null | undefined = getSimpleCustomFieldType(customField);
+  const valueType: string | null = getFieldType(customField);
   return valueType ? valueType === 'text' : false;
 };
 
@@ -59,13 +64,34 @@ const getLocalizedName = (customField: {localizedName?: string | null; name?: st
 
 const isSLAField = (cf: CustomField): boolean => cf.$type === 'SlaIssueCustomField';
 
+const projectCustomFieldTypeToFieldType = ($type: string, isMultiValue: boolean): string => {
+  const prefix = isMultiValue ? 'Multi' : 'Single';
+  const map: {
+    [k: string]: string | undefined;
+  } = {
+    BuildProjectCustomField: `${prefix}BuildIssueCustomField`,
+    StateProjectCustomField: 'StateMachineIssueCustomField',
+    VersionProjectCustomField: `${prefix}VersionIssueCustomField`,
+    EnumProjectCustomField: `${prefix}EnumIssueCustomField`,
+    UserProjectCustomField: `${prefix}UserIssueCustomField`,
+    GroupProjectCustomField: `${prefix}GroupIssueCustomField`,
+    OwnedProjectCustomField: `${prefix}OwnedIssueCustomField`,
+    PeriodProjectCustomField: 'PeriodIssueCustomField',
+    SimpleProjectCustomField: 'SimpleIssueCustomField',
+    SlaIssueCustomField: 'SlaIssueCustomField',
+    TextProjectCustomField: 'TextIssueCustomField',
+  };
+  return map[$type] || $type;
+};
+
 export {
   getLocalizedName,
   getIssueTextCustomFields,
   getIssueCustomFieldsNotText,
-  getSimpleCustomFieldType,
+  getFieldType,
   isTextCustomField,
   isRequiredCustomField,
   isSLAField,
+  projectCustomFieldTypeToFieldType,
   updateCustomFieldValue,
 };

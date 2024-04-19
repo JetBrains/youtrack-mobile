@@ -25,11 +25,17 @@ import SelectWithCustomInput from 'components/select/select-with-custom-input';
 import {absDate} from 'components/date/date';
 import {ANALYTICS_HD_FEEDBACK_PAGE} from 'components/analytics/analytics-ids';
 import {
+  blockValueToNumber,
   FeedbackBlock,
   FeedbackFormBlockCustomField,
   FeedbackFormReporter,
   formBlockType,
+  isDateOrTimeBlock,
+  isEmailBlock,
+  isNumberFieldBlock,
+  isTextFieldBlock,
 } from 'views/helpdesk-feedback';
+import {emailRegexp} from 'components/form/validate';
 import {getLocalizedName} from 'components/custom-field/custom-field-helper';
 import {HIT_SLOP} from 'components/common-styles';
 import {IconBack, IconCheck, IconClose} from 'components/icon/icon';
@@ -87,16 +93,11 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
     onBlockChange(b, (i: FeedbackBlock) => ({value: text}));
   };
 
-  const isEmailBlock = (b: FeedbackBlock) => b.type === formBlockType.email;
-
   const onUserSelectOpen = (b: FeedbackBlock) => {
     dispatch(
-      actions.setUserSelect(
-        b.value,
-        ({reporter, email}: {reporter?: FeedbackFormReporter; email?: string}) => {
-          onBlockChange(b, (i: FeedbackBlock) => ({reporter, email, value: email || reporter?.name || ''}));
-        }
-      )
+      actions.setUserSelect(b.value, ({reporter, email}: {reporter?: FeedbackFormReporter; email?: string}) => {
+        onBlockChange(b, (i: FeedbackBlock) => ({reporter, email, value: email || reporter?.name || ''}));
+      })
     );
   };
 
@@ -162,10 +163,12 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                     }}
                     multiline={b.multiline}
                     label={label}
+                    required={b.required}
+                    validator={isEmailBlock(b) ? emailRegexp : null}
                   />
                 )}
 
-                {(b.type === formBlockType.integer || b.type === formBlockType.float) && (
+                {isNumberFieldBlock(b) && (
                   <FormTextInput
                     value={b.value}
                     placeholder={label}
@@ -174,7 +177,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                       const data = (i: FeedbackBlock) => ({
                         field: {
                           ...i.field!,
-                          value: b.type === formBlockType.float ? parseFloat(value) : parseInt(value, 10),
+                          value: blockValueToNumber(b, value),
                         },
                         value,
                       });
@@ -183,10 +186,15 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                     multiline={b.multiline}
                     onClear={() => onTextValueChange(b, '')}
                     inputMode={b.type === formBlockType.integer ? 'numeric' : 'decimal'}
+                    required={b.required}
+                    validator={(v: string) => {
+                      const num = blockValueToNumber(b, v);
+                      return !Number.isNaN(num);
+                    }}
                   />
                 )}
 
-                {(b.type === formBlockType.period || b.type === formBlockType.string) && (
+                {isTextFieldBlock(b) && (
                   <FormTextInput
                     value={b.value}
                     onChange={presentation => {
@@ -200,6 +208,8 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                     multiline={b.multiline}
                     placeholder={label}
                     onClear={() => onTextValueChange(b, '')}
+                    required={b.required}
+                    validator={b.field?.periodPattern}
                   />
                 )}
 
@@ -221,7 +231,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                   />
                 )}
 
-                {(b.type === formBlockType.date || b.type === formBlockType.dateTime) && (
+                {isDateOrTimeBlock(b) && (
                   <FormSelect value={b.value} label={label} onPress={() => setDateTimeBlock(b)} />
                 )}
 

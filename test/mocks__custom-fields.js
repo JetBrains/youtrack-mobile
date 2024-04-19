@@ -1,22 +1,21 @@
 import guid from 'react-native-device-log/guid';
 
-function createFieldTypeMock(fields) {
+export function createFieldTypeMock(fields) {
   const defaultFields = {
-    'valueType': 'integer',
-    'isMultiValue': false,
-    '$type': 'FieldType',
+    $type: 'FieldType',
+    isMultiValue: false,
+    valueType: 'integer',
   };
   return {...defaultFields, ...fields};
 }
 
-function createCustomFieldMock(fields) {
+export function createCustomFieldMock(fields) {
   const defaultFields = {
-    'name': 'FieldName',
-    'ordinal': 8,
-    'localizedName': null,
-    'id': guid(),
-    '$type': 'CustomField',
-    'fieldType': createFieldTypeMock(),
+    $type: 'CustomField',
+    fieldType: createFieldTypeMock(),
+    id: guid(),
+    localizedName: null,
+    name: 'FieldName',
   };
 
   return {...defaultFields, ...fields};
@@ -24,12 +23,11 @@ function createCustomFieldMock(fields) {
 
 export function createProjectCustomFieldMock(fields) {
   const defaultFields = {
-    id: guid(),
-    ordinal: 1,
-    emptyFieldText: 'EMPTY FIELD TEXT',
-    canBeEmpty: true,
     $type: 'SimpleProjectCustomField',
+    canBeEmpty: true,
+    emptyFieldText: 'EMPTY FIELD TEXT',
     field: createCustomFieldMock(),
+    id: guid(),
   };
 
   return {...defaultFields, ...fields};

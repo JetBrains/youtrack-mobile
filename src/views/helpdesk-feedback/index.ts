@@ -1,5 +1,5 @@
 import log from 'components/log/log';
-import {getLocalizedName, getSimpleCustomFieldType} from 'components/custom-field/custom-field-helper';
+import {getFieldType, getLocalizedName} from 'components/custom-field/custom-field-helper';
 import {i18n} from 'components/i18n/i18n';
 import {sortByOrdinal} from 'components/search/sorting';
 
@@ -20,16 +20,16 @@ export const FeedbackFormPredefinedBlock = {
 } as const;
 
 export const formBlockType: {[key: string]: string} = {
-  text: 'text',
-  field: 'field',
-  period: 'period',
-  integer: 'integer',
-  float: 'float',
-  input: 'input',
-  string: 'string',
-  email: 'email',
   date: 'date',
   dateTime: 'dateTime',
+  email: 'email',
+  field: 'field',
+  float: 'float',
+  input: 'input',
+  integer: 'integer',
+  period: 'period',
+  string: 'string',
+  text: 'text',
 };
 
 interface FeedbackFormRecord {
@@ -63,8 +63,9 @@ export type FeedbackFormFieldValue =
 export interface FeedbackFormField {
   $type: string;
   id: string;
-  value?: FeedbackFormFieldValue;
   isMultiValue: boolean;
+  periodPattern?: RegExp;
+  value?: FeedbackFormFieldValue;
 }
 
 export interface FeedbackBlock {
@@ -145,11 +146,12 @@ export const createFormBlock = (
       };
     case FeedbackFormPredefinedBlock.customField:
       let value;
+      let periodPattern;
       const isMultiValue = b.projectField.field.fieldType.isMultiValue;
       if (b.projectField.defaultValues) {
         value = isMultiValue ? b.projectField.defaultValues : b.projectField.defaultValues[0];
       }
-      const ft = getSimpleCustomFieldType(b.projectField) || '';
+      const ft = getFieldType(b.projectField.field) || '';
       let type = formBlockType[ft];
       let presentation = '';
       switch (true) {
@@ -159,6 +161,7 @@ export const createFormBlock = (
           }`;
           break;
         case ft === formBlockType.period:
+          periodPattern = new RegExp(`^${b.periodFieldPattern}$`, 'i');
           label = `${b.projectField.field.name} (${i18n('1w 1d 1h 1m')})`;
           break;
         case (ft === DATE_AND_TIME_FIELD_VALUE_TYPE):
@@ -180,10 +183,11 @@ export const createFormBlock = (
         name: 'fields',
         type,
         field: {
-          $type: b.projectField.$type,
+          $type: b.projectField.$type!,
           id: b.projectField.id,
           value,
           isMultiValue,
+          periodPattern,
         },
         value: presentation,
       };
@@ -222,22 +226,13 @@ export const createFormBlocks = (
     .filter((b): b is FeedbackBlock => b != null);
 };
 
-export const projectCustomFieldTypeToFieldType = ($type: string, isMultiValue: boolean): string => {
-  const prefix = isMultiValue ? 'Multi' : 'Single';
-  const map: {
-    [k: string]: string | undefined;
-  } = {
-    BuildProjectCustomField: `${prefix}BuildIssueCustomField`,
-    StateProjectCustomField: 'StateMachineIssueCustomField',
-    VersionProjectCustomField: `${prefix}VersionIssueCustomField`,
-    EnumProjectCustomField: `${prefix}EnumIssueCustomField`,
-    UserProjectCustomField: `${prefix}UserIssueCustomField`,
-    GroupProjectCustomField: `${prefix}GroupIssueCustomField`,
-    OwnedProjectCustomField: `${prefix}OwnedIssueCustomField`,
-    PeriodProjectCustomField: 'PeriodIssueCustomField',
-    SimpleProjectCustomField: 'SimpleIssueCustomField',
-    SlaIssueCustomField: 'SlaIssueCustomField',
-    TextProjectCustomField: 'TextIssueCustomField',
-  };
-  return map[$type] || $type;
-};
+export const isDateOrTimeBlock = (b: FeedbackBlock) => b.type === formBlockType.date || b.type === formBlockType.dateTime;
+
+export const isEmailBlock = (b: FeedbackBlock) => b.type === formBlockType.email;
+
+export const isTextFieldBlock = (b: FeedbackBlock) => b.type === formBlockType.period || b.type === formBlockType.string;
+
+export const isNumberFieldBlock = (b: FeedbackBlock) => b.type === formBlockType.integer || b.type === formBlockType.float;
+
+export const blockValueToNumber = (b: FeedbackBlock, value: string) =>
+  b.type === formBlockType.float ? parseFloat(value) : parseInt(value, 10);

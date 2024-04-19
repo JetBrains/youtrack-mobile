@@ -1,5 +1,5 @@
 import {EntityBase} from 'types/Entity';
-import {ICustomField} from 'types/CustomFields';
+import {ICustomField, ICustomFieldValue} from 'types/CustomFields';
 import {ProjectEntity} from 'types/Project';
 import {User} from 'types/User';
 
@@ -24,28 +24,19 @@ export interface DescriptionFeedbackBlock extends FeedbackFormBlockBase {
   multiline: true;
 }
 
+export interface CustomFieldFeedbackBlockProjectField extends EntityBase {
+  defaultValues?: Array<ICustomFieldValue>;
+  emptyFieldText: string;
+  bundle: {
+    id: string;
+  }
+  field: ICustomField;
+}
+
 export interface CustomFieldFeedbackBlock extends FeedbackFormBlockBase {
   $type: 'CustomFieldFeedbackBlock';
   periodFieldPattern: string;
-  projectField: {
-    $type: string;
-    id: string;
-    emptyFieldText: string;
-    field: {
-      id: string;
-      localizedName: string | null;
-      name: string;
-      fieldType: {
-        isMultiValue: boolean;
-      }
-    };
-    defaultValues?: Array<{
-      $type: string;
-      id: string;
-      localizedName: string | null;
-      name: string;
-    }>
-  };
+  projectField: CustomFieldFeedbackBlockProjectField;
 }
 
 export interface AttachmentFeedbackBlock extends FeedbackFormBlockBase {

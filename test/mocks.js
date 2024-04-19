@@ -4,7 +4,7 @@ import {deepmerge} from 'deepmerge-ts';
 
 import * as storage from 'components/storage/storage';
 import Auth from 'components/auth/oauth2';
-import {createProjectCustomFieldMock} from './mocks__custom-fields';
+import {createProjectCustomFieldMock, createFieldTypeMock, createCustomFieldMock} from './mocks__custom-fields';
 import {ResourceTypes} from 'components/api/api__resource-types';
 
 async function setStorage(state = {}) {
@@ -289,26 +289,26 @@ function createFolder(data = {}) {
 }
 
 export default {
+  randomSentence,
+
+  reactReduxMockFn,
   setStorage,
+  createMockStore,
+  createConfigMock,
+  createAuthMock,
+  createAuthParamsMock,
+  navigatorMock,
 
   createIssueMock,
   createArticleMock,
   createIssueFieldMock: createIssuePriorityFieldMock,
-  createProjectCustomFieldMock,
-  createMockStore,
-
-  navigatorMock,
   createCommentMock,
-
-  randomSentence,
-
-  createConfigMock,
-  createAuthMock,
-  createAuthParamsMock,
   createUserMock,
-  createActivityCustomFieldMock,
   createThreadMock,
   createFolder,
 
-  reactReduxMockFn,
+  createProjectCustomFieldMock,
+  createFieldTypeMock,
+  createCustomFieldMock,
+  createActivityCustomFieldMock,
 };

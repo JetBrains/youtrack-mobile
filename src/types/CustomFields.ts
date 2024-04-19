@@ -21,10 +21,7 @@ export type Tag = {
     ringId: string;
   };
 };
-export type BundleValue = {
-  $type: string;
-  id: string;
-  name: string;
+export interface BundleValue extends ICustomFieldValue {
   description: string;
   ordinal: number;
   ringId: string;
@@ -37,13 +34,13 @@ export type BundleValue = {
     login: string;
   };
   color: ColorField;
-};
+}
 
-interface ICustomFieldValue {
+export interface ICustomFieldValue {
   $type: string;
   id: string;
   name: string;
-  localizedName: string;
+  localizedName: string | null;
 }
 
 export interface ICustomField extends ICustomFieldValue {
