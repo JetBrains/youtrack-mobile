@@ -57,7 +57,7 @@ const feedbackFormStyles = {
     color: '$text',
     backgroundColor: '$boxBackground',
   },
-  feedbackFormInputDescription: {
+  feedbackFormInputMultiline: {
     ...rowFormStyles.input,
     minHeight: UNIT * 12,
     maxHeight: UNIT * 12,

@@ -1,39 +1,46 @@
 import React from 'react';
-import {InputModeOptions, NativeSyntheticEvent, TextInput, TextInputFocusEventData, View} from 'react-native';
+import {InputModeOptions, NativeSyntheticEvent, Text, TextInput, TextInputFocusEventData, View} from 'react-native';
 
 import {IconClearText} from 'components/icon/icon-clear-text';
 import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './form.style';
 
-import {Theme} from 'types/Theme';
+import type {TextStyleProp, ViewStyleProp} from 'types/Internal';
+import type {Theme} from 'types/Theme';
 
 const FormTextInput = ({
+  editable = true,
+  inputMode,
   multiline,
-  onChange,
-  onFocus,
   onBlur,
+  onChange,
   onClear,
+  onFocus,
   label,
   placeholder,
-  testID,
-  value,
-  inputMode = 'none',
-  validator,
   required,
+  inputStyle,
+  testID,
+  validator,
+  value,
+  wrapperStyle,
 }: {
+  editable?: boolean;
+  inputMode?: InputModeOptions;
   multiline?: boolean;
-  onChange: (text: string) => void;
-  onFocus?: () => void;
   onBlur?: (e: NativeSyntheticEvent<TextInputFocusEventData>, validationError: boolean) => void;
+  onChange: (text: string) => void;
   onClear?: () => void;
+  onFocus?: () => void;
   label?: string;
   placeholder?: string;
-  testID?: string;
-  value?: string;
-  inputMode?: InputModeOptions;
-  validator?: RegExp | ((v: string) => boolean) | null;
   required?: boolean;
+  inputStyle?: TextStyleProp[];
+  testID?: string;
+  validator?: RegExp | ((v: string) => boolean) | null;
+  value?: string;
+  wrapperStyle?: ViewStyleProp;
 }) => {
   const theme: Theme = React.useContext(ThemeContext);
   const [hasError, setInvalid] = React.useState<boolean>(false);
@@ -43,8 +50,9 @@ const FormTextInput = ({
   }, []);
 
   return (
-    <View style={styles.formInputWrapper}>
+    <View style={wrapperStyle || styles.formBlock} pointerEvents="none">
       <TextInput
+        editable={editable}
         autoCapitalize="none"
         autoCorrect={false}
         keyboardAppearance={theme.uiTheme.name}
@@ -53,15 +61,17 @@ const FormTextInput = ({
         textAlignVertical={multiline ? 'top' : undefined}
         testID={testID}
         style={[
-          styles.feedbackFormInput,
-          multiline && styles.feedbackFormInputDescription,
-          value && styles.formInputClearSpace,
-          hasError && styles.feedbackInputError,
+          styles.formInput,
+          label && styles.formInputWithLabel,
+          inputStyle,
+          multiline ? styles.feedbackFormInputMultiline : null,
+          value ? styles.formInputClearSpace : null,
+          hasError ? styles.feedbackInputError : null,
         ]}
         multiline={multiline}
-        placeholder={placeholder || label}
+        placeholder={placeholder}
         value={value}
-        onChangeText={(t) => {
+        onChangeText={t => {
           onChange?.(t);
           setInvalid(false);
         }}
@@ -85,6 +95,7 @@ const FormTextInput = ({
         }}
         inputMode={inputMode}
       />
+      {!!label && <Text style={styles.formInputLabel}>{label}</Text>}
       {onClear && value && (
         <IconClearText
           onPress={() => {

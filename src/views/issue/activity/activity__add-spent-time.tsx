@@ -419,7 +419,7 @@ const AddSpentTimeForm = (props: Props) => {
             {...commonInputProps}
             multiline
             textAlignVertical="top"
-            style={[styles.feedbackFormInputDescription]}
+            style={[styles.feedbackFormInputMultiline]}
             placeholder={i18n('Write a comment, @mention people')}
             value={draft?.text || undefined}
             onChangeText={(comment: string) =>

@@ -1,36 +1,71 @@
 import React from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {
+  InputModeOptions,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
+  View,
+} from 'react-native';
 
+import {TouchableOpacity} from 'react-native-gesture-handler';
+
+import FormTextInput from 'components/form/form-text-input';
 import {IconAngleRight} from 'components/icon/icon';
 
 import styles from './form.style';
 
-import {ViewStyleProp} from 'types/Internal';
+import type {ViewStyleProp} from 'types/Internal';
 
 const FormSelectButton = ({
+  inputMode,
   label,
+  multiline,
+  onBlur,
+  onChange = () => {},
+  onClear,
+  onFocus,
   onPress,
+  required,
   style,
   testID,
+  validator,
   value,
 }: {
+  inputMode?: InputModeOptions;
   label?: string;
-  onPress: () => unknown;
+  multiline?: boolean;
+  onBlur?: (e: NativeSyntheticEvent<TextInputFocusEventData>, validationError: boolean) => void;
+  onChange?: (text: string) => void;
+  onClear?: () => void;
+  onFocus?: () => void;
+  onPress: () => void;
+  required?: boolean;
   style?: ViewStyleProp;
   testID?: string;
+  validator?: RegExp | ((v: string) => boolean) | null;
   value?: string;
 }) => {
   return (
-    <TouchableOpacity
-      style={[styles.feedbackFormInput, styles.feedbackFormType, style]}
-      onPress={onPress}
-    >
-      {!!label && <Text style={styles.feedbackFormTextSup}>{label}</Text>}
-      <Text testID={testID} style={[styles.feedbackFormText, label && styles.feedbackFormTextMain]}>
-        {value}
-      </Text>
-      <IconAngleRight size={20} color={styles.icon.color} />
-    </TouchableOpacity>
+    <View style={[styles.formBlock, styles.formSelect, style]}>
+      <TouchableOpacity onPress={onPress} style={styles.formSelectButton} testID={testID}>
+        <FormTextInput
+          editable={false}
+          inputMode={inputMode}
+          inputStyle={[label ? styles.formSelectText : null]}
+          multiline={multiline}
+          onBlur={onBlur}
+          onChange={onChange}
+          onClear={onClear}
+          onFocus={onFocus}
+          label={label}
+          placeholder={label}
+          required={required}
+          validator={validator}
+          value={value}
+          wrapperStyle={styles.formSelect}
+        />
+      </TouchableOpacity>
+      <IconAngleRight size={20} color={styles.formSelectIcon.color} style={styles.formSelectIcon} />
+    </View>
   );
 };
 

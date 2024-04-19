@@ -162,7 +162,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                       }
                     }}
                     multiline={b.multiline}
-                    label={label}
+                    placeholder={label}
                     required={b.required}
                     validator={isEmailBlock(b) ? emailRegexp : null}
                   />
