@@ -50,7 +50,7 @@ const FormTextInput = ({
   }, []);
 
   return (
-    <View style={wrapperStyle || styles.formBlock} pointerEvents="none">
+    <View style={wrapperStyle || styles.formBlock}>
       <TextInput
         editable={editable}
         autoCapitalize="none"
