@@ -244,7 +244,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
               textAlignVertical="top"
               testID="settingsFeedbackDescription"
               {...commonInputProps}
-              style={[styles.feedbackFormInputMultiline]}
+              style={[styles.feedbackFormInput, styles.feedbackFormInputMultiline]}
               placeholder={i18n('Description')}
               onChangeText={(value: string) =>
                 update({
