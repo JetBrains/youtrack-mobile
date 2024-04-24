@@ -44,6 +44,12 @@ export default EStyleSheet.create({
     minHeight: UNIT * 6,
     backgroundColor: '$boxBackground',
     borderRadius: UNIT,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  error: {
+    color: '$error',
+    borderColor: '$error',
   },
   row: {
     position: 'relative',
