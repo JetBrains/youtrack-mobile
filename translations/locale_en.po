@@ -488,7 +488,7 @@ msgstr "Edit comment"
 msgid "Email"
 msgstr "Email"
 
-#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts:94
+#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts:95
 #: src/views/helpdesk-feedback/index.ts:132
 msgid "Email address"
 msgstr "Email address"
@@ -938,6 +938,10 @@ msgstr "Search for the project"
 #: src/views/issues/issues__settings.tsx:73
 msgid "Search Input Mode"
 msgstr "Search Input Mode"
+
+#: src/views/helpdesk-feedback/helpdesk-feedback.tsx:205
+msgid "Select a reporter or enter a new email address"
+msgstr "Select a reporter or enter a new email address"
 
 #: src/views/knowledge-base/knowledge-base.tsx:637
 msgid "Select an article from the list"

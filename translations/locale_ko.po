@@ -935,6 +935,10 @@ msgstr "프로젝트 검색"
 msgid "Search Input Mode"
 msgstr "검색 입력 모드"
 
+#: src/views/helpdesk-feedback/helpdesk-feedback.tsx
+msgid "Select a reporter or enter a new email address"
+msgstr "보고자를 선택하거나 새 이메일 주소를 입력합니다"
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Select an article from the list"
 msgstr "목록에서 기사 선택"

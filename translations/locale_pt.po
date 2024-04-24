@@ -945,6 +945,10 @@ msgstr "Buscar o projeto"
 msgid "Search Input Mode"
 msgstr "Modo de entrada da busca"
 
+#: src/views/helpdesk-feedback/helpdesk-feedback.tsx
+msgid "Select a reporter or enter a new email address"
+msgstr "Selecione um relator ou digite um novo e-mail"
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Select an article from the list"
 msgstr "Selecione um artigo da lista"
