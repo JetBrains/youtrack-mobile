@@ -167,7 +167,8 @@ export default function Menu() {
       routes.currentRouteName === routeMap.Issue ||
       routes.currentRouteName === routeMap.Page ||
       routes.currentRouteName === routeMap.Article ||
-      routes.currentRouteName === routeMap.ArticleSingle
+      routes.currentRouteName === routeMap.ArticleSingle ||
+      routes.currentRouteName === routeMap.HelpDeskFeedback
     ) {
       return true;
     }
