@@ -37,7 +37,7 @@ interface FeedbackFormRecord {
 }
 
 export interface FeedbackFormData extends FeedbackFormRecord {
-  fields: Array<EntityBase>;
+  fields: Array<EntityBase | {captchaToken: string}>;
 }
 
 export interface FeedbackFormBlockFieldValue {

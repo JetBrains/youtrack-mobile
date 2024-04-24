@@ -2,7 +2,6 @@ import * as qs from 'qs';
 
 import ApiBase from './api__base';
 import ApiHelper from './api__helper';
-import issuesFields from './api__issue-fields';
 import issueFields from 'components/api/api__issue-fields';
 
 import type {FeedbackFormBlockFieldValue} from 'views/helpdesk-feedback';
@@ -16,7 +15,6 @@ export default class HelpDeskFormAPI extends ApiBase {
   async getForm(formId: string): Promise<FeedbackForm> {
     const queryString = toField({
       form: [
-        {author: issuesFields.ISSUE_USER_FIELDS},
         {
           blocks: [
             '$type',
@@ -50,6 +48,8 @@ export default class HelpDeskFormAPI extends ApiBase {
         {parent: {project: ['id', 'ringId', 'restricted']}},
         'title',
         'useCaptcha',
+        'captchaPublicKey',
+        'uiTheme',
         'uuid',
       ],
     }).toString();

@@ -19,6 +19,7 @@ import FilesPreviewPanel from 'components/attach-file/files-preview-panel';
 import FormSelect from 'components/form/form-select-button';
 import FormTextInput from 'components/form/form-text-input';
 import Header from 'components/header/header';
+import HelpDeskReCaptcha from 'views/helpdesk-feedback/helpdesk-feedback-recaptcha';
 import ModalView from 'components/modal-view/modal-view';
 import Router from 'components/router/router';
 import SelectWithCustomInput from 'components/select/select-with-custom-input';
@@ -38,6 +39,7 @@ import {
 import {emailRegexp} from 'components/form/validate';
 import {getLocalizedName} from 'components/custom-field/custom-field-helper';
 import {HIT_SLOP} from 'components/common-styles';
+import {i18n} from 'components/i18n/i18n';
 import {IconBack, IconCheck, IconClose} from 'components/icon/icon';
 import {isIOSPlatform} from 'util/util';
 import {isSplitView} from 'components/responsive/responsive-helper';
@@ -63,10 +65,13 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
   const selectProps = useSelector((state: AppState) => state.helpDeskFeedbackForm.selectProps);
   const inProgress = useSelector((state: AppState) => state.app.isInProgress);
   const isAttachDialogVisible = useSelector((state: AppState) => state.helpDeskFeedbackForm.isAttachDialogVisible);
+  const language = useSelector((state: AppState) => state.app.user?.profiles.general.locale.language);
+  const captchaURL = useSelector((state: AppState) => state.app.auth?.config.backendUrl!);
 
   const [formBlocks, setFormBlocks] = React.useState<FeedbackBlock[]>([]);
   const [dateTimeBlock, setDateTimeBlock] = React.useState<FeedbackBlock | null>(null);
   const [files, setFiles] = React.useState<Array<NormalizedAttachment>>([]);
+  const [captchaToken, setCaptchaToken] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     setFormBlocks(blocks || []);
@@ -74,13 +79,14 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
 
   React.useEffect(() => {
     dispatch(actions.loadFeedbackForm(project));
+    setCaptchaToken(null);
   }, [dispatch, project]);
 
   const onBack = () => Router.pop();
 
   const onSubmit = async () => {
     try {
-      await dispatch(actions.submitForm(formBlocks, files));
+      await dispatch(actions.submitForm(formBlocks, files, captchaToken));
       onBack();
     } catch (e) {}
   };
@@ -101,7 +107,8 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
     );
   };
 
-  const iconColor = inProgress ? uiThemeColors.$disabled : uiThemeColors.$link;
+  const disabled = inProgress || (form?.useCaptcha && !captchaToken);
+  const iconColor = disabled ? uiThemeColors.$disabled : uiThemeColors.$link;
   return (
     <View
       testID="test:id/helpDeskFeedback"
@@ -112,10 +119,10 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
       <Header
         showShadow
         title={form?.title || ''}
-        leftButton={isSplitView() ? <IconClose color={iconColor} /> : <IconBack color={iconColor} />}
+        leftButton={isSplitView() ? <IconClose color={iconColor} /> : <IconBack color={uiThemeColors.$link} />}
         onBack={() => !inProgress && onBack()}
         extraButton={
-          <TouchableOpacity hitSlop={HIT_SLOP} disabled={inProgress} onPress={onSubmit}>
+          <TouchableOpacity hitSlop={HIT_SLOP} disabled={disabled} onPress={onSubmit}>
             {inProgress ? <ActivityIndicator color={uiThemeColors.$link} /> : <IconCheck color={iconColor} />}
           </TouchableOpacity>
         }
@@ -138,33 +145,23 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
         >
           {formBlocks.map(b => {
             const label = `${b.label}${b.required ? '*' : ''}`;
+            const emailBlock = isEmailBlock(b);
             return (
-              <View style={styles.block} key={b.id}>
+              <View key={b.id}>
                 {b.type === formBlockType.text && (
                   <View style={styles.block}>
                     <Text style={[styles.block, styles.text]}>{b.label}</Text>
                   </View>
                 )}
 
-                {(isEmailBlock(b) || b.type === formBlockType.input) && (
+                {b.type === formBlockType.input && (
                   <FormTextInput
                     value={b.value}
                     onChange={text => onTextValueChange(b, text)}
-                    onFocus={() => {
-                      if (isEmailBlock(b)) {
-                        onUserSelectOpen(b);
-                      }
-                    }}
-                    onClear={() => {
-                      onTextValueChange(b, '');
-                      if (isEmailBlock(b)) {
-                        onUserSelectOpen(b);
-                      }
-                    }}
+                    onClear={() => onTextValueChange(b, '')}
                     multiline={b.multiline}
                     placeholder={label}
                     required={b.required}
-                    validator={isEmailBlock(b) ? emailRegexp : null}
                   />
                 )}
 
@@ -213,21 +210,27 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                   />
                 )}
 
-                {b.type === formBlockType.field && (
+                {(emailBlock || b.type === formBlockType.field) && (
                   <FormSelect
                     value={b.value}
                     label={label}
+                    placeholder={emailBlock ? i18n('Select a reporter or enter a new email address') : ''}
                     onPress={() => {
-                      dispatch(
-                        actions.setSelect(b, (value: FeedbackFormBlockCustomField) => {
-                          const data = (i: FeedbackBlock) => ({
-                            field: {...i.field!, value},
-                            value: new Array().concat(value).map(getLocalizedName).join(', '),
-                          });
-                          onBlockChange(b, data);
-                        })
-                      );
+                      if (emailBlock) {
+                        onUserSelectOpen(b);
+                      } else {
+                        dispatch(
+                          actions.setSelect(b, (value: FeedbackFormBlockCustomField) => {
+                            const data = (i: FeedbackBlock) => ({
+                              field: {...i.field!, value},
+                              value: new Array().concat(value).map(getLocalizedName).join(', '),
+                            });
+                            onBlockChange(b, data);
+                          })
+                        );
+                      }
                     }}
+                    validator={emailBlock ? emailRegexp : null}
                   />
                 )}
 
@@ -236,7 +239,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                 )}
 
                 {b.type === formBlockType.attachment && (
-                  <View style={styles.block}>
+                  <View style={styles.formBlock}>
                     <AttachmentAddPanel
                       showAddAttachDialog={() => {
                         dispatch(onToggleAttachDialogVisibility(true));
@@ -253,6 +256,19 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
               </View>
             );
           })}
+
+          {form?.useCaptcha && form?.captchaPublicKey && (
+            <HelpDeskReCaptcha
+              style={[styles.formBlock, styles.box]}
+              lang={language}
+              captchaPublicKey={form.captchaPublicKey}
+              captchaURL={captchaURL}
+              onSubmit={(token: string) => {
+                setCaptchaToken(token);
+              }}
+            />
+          )}
+
           <View style={styles.separator} />
         </ScrollView>
       </KeyboardAvoidingView>

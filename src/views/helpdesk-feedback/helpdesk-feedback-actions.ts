@@ -117,6 +117,7 @@ const setInProgress = (isInProgress: boolean = false): ReduxAction => {
 const submitForm = (
   formBlocks: FeedbackBlock[],
   files: NormalizedAttachment[] | null,
+  captchaToken: string | null,
 ): ReduxAction<Promise<CustomError | void>> => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const state = getState().helpDeskFeedbackForm;
@@ -139,6 +140,9 @@ const submitForm = (
         },
         {fields: []}
       );
+    if (captchaToken) {
+      formData.captchaToken = captchaToken;
+    }
     dispatch(setInProgress(true));
     const [error] = await until<{
       id: string;

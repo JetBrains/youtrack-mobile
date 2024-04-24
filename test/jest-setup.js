@@ -72,9 +72,12 @@ jest.mock('react-native-document-picker', () => ({
   default: jest.fn(),
 }));
 
+jest.mock('react-native-document-picker', () => ({
+  default: jest.fn(),
+}));
+
+jest.mock('react-native-webview', () => 'View');
+
 jest.mock('react-native-safe-area-context', () => ({
-  useSafeAreaInsets: () => ({
-    top: 0,
-    bottom: 0,
-  }),
+  useSafeAreaInsets: () => jest.fn().mockReturnValue({top: 0, right: 0, bottom: 0, left: 0}),
 }));

@@ -77,7 +77,6 @@ interface FeedbackFormField {
 }
 
 export interface FeedbackForm extends EntityBase {
-  author: User;
   blocks: Array<FeedbackFormBlock> | null;
   captchaPublicKey: string | null;
   confirmationText: string | null;
@@ -90,6 +89,7 @@ export interface FeedbackForm extends EntityBase {
     project: FeedbackFormProject;
   };
   title: string;
+  uiTheme: string;
   useCaptcha: boolean;
   uuid: string;
   projectField: FeedbackFormField | null,

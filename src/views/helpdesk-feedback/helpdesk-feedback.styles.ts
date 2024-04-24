@@ -1,13 +1,14 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {rowFormStyles} from 'components/common-styles/form';
-import feedbackForm from 'components/common-styles/feedback-form';
+import {formRowStyles} from 'components/form/form.style';
 import {headerMinHeight} from 'components/header/header.styles';
+import {rowFormStyles} from 'components/common-styles/form';
 import {UNIT} from 'components/variables';
+import {mainText} from 'components/common-styles';
 
 export default EStyleSheet.create({
   ...rowFormStyles,
-  ...feedbackForm,
+  ...formRowStyles,
   formContainer: {
     justifyContent: 'flex-end',
     paddingHorizontal: UNIT * 2,
@@ -30,5 +31,13 @@ export default EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginLeft: UNIT * 1.5,
+  },
+  captcha: {
+    ...mainText,
+    marginLeft: UNIT / 2,
+    color: '$text',
+  },
+  captchaCheckbox: {
+    color: '$text',
   },
 });
