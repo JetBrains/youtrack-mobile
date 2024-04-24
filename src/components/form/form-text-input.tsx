@@ -9,23 +9,7 @@ import styles from './form.style';
 import type {TextStyleProp, ViewStyleProp} from 'types/Internal';
 import type {Theme} from 'types/Theme';
 
-const FormTextInput = ({
-  editable = true,
-  inputMode,
-  multiline,
-  onBlur,
-  onChange,
-  onClear,
-  onFocus,
-  label,
-  placeholder,
-  required,
-  inputStyle,
-  testID,
-  validator,
-  value,
-  wrapperStyle,
-}: {
+interface Props extends React.PropsWithChildren {
   editable?: boolean;
   inputMode?: InputModeOptions;
   multiline?: boolean;
@@ -40,8 +24,27 @@ const FormTextInput = ({
   testID?: string;
   validator?: RegExp | ((v: string) => boolean) | null;
   value?: string;
-  wrapperStyle?: ViewStyleProp;
-}) => {
+  style?: ViewStyleProp;
+}
+
+const FormTextInput = ({
+  editable = true,
+  children,
+  inputMode,
+  multiline,
+  onBlur,
+  onChange,
+  onClear,
+  onFocus,
+  label,
+  placeholder,
+  required,
+  inputStyle,
+  testID,
+  validator,
+  value,
+  style,
+}: Props) => {
   const theme: Theme = React.useContext(ThemeContext);
   const [hasError, setInvalid] = React.useState<boolean>(false);
 
@@ -50,7 +53,7 @@ const FormTextInput = ({
   }, []);
 
   return (
-    <View style={wrapperStyle || styles.formBlock}>
+    <View style={[styles.formBlock, styles.formBlockText]}>
       <TextInput
         editable={editable}
         autoCapitalize="none"
@@ -67,6 +70,7 @@ const FormTextInput = ({
           multiline ? styles.feedbackFormInputMultiline : null,
           value ? styles.formInputClearSpace : null,
           hasError ? styles.feedbackInputError : null,
+          style,
         ]}
         multiline={multiline}
         placeholder={placeholder}
@@ -83,8 +87,7 @@ const FormTextInput = ({
             isInvalid = validator instanceof RegExp ? !validator.test(v) : false;
             if (validator instanceof RegExp) {
               isInvalid = !validator.test(v);
-            }
-            if (typeof validator === 'function') {
+            } else if (typeof validator === 'function') {
               isInvalid = !validator(v);
             }
           } else if (required) {
@@ -105,6 +108,7 @@ const FormTextInput = ({
           style={styles.formInputClearIcon}
         />
       )}
+      {children}
     </View>
   );
 };

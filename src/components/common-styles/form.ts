@@ -74,5 +74,16 @@ export const rowFormStyles = {
   link: {
     color: '$link',
   },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  box: {
+    padding: UNIT * 1.5,
+    borderRadius: UNIT,
+    borderColor: '$disabled',
+    borderWidth: 1,
+  },
 };
 export const formStyles = EStyleSheet.create(rowFormStyles);

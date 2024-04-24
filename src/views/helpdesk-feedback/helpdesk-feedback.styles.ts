@@ -35,9 +35,12 @@ export default EStyleSheet.create({
   captcha: {
     ...mainText,
     marginLeft: UNIT / 2,
-    color: '$text',
+    color: '$link',
   },
   captchaCheckbox: {
-    color: '$text',
+    color: '$link',
+  },
+  attachments: {
+    marginBottom: UNIT,
   },
 });

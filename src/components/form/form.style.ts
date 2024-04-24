@@ -4,7 +4,7 @@ import feedbackFormStyles from 'components/common-styles/feedback-form';
 import {mainText, SECONDARY_FONT_SIZE, UNIT} from 'components/common-styles';
 import {rowFormStyles} from 'components/common-styles/form';
 
-export default EStyleSheet.create({
+export const formRowStyles = {
   ...feedbackFormStyles,
   formInputWrapper: {
     flexDirection: 'row',
@@ -14,11 +14,22 @@ export default EStyleSheet.create({
     paddingRight: UNIT * 5,
   },
   formInputClearIcon: {
-    marginTop: UNIT * 3.7,
-    marginLeft: -UNIT * 3,
+    marginLeft: -UNIT * 5,
+    width: UNIT * 4,
+    height: UNIT * 4,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   formBlock: {
     marginTop: UNIT * 2,
+  },
+  formBlockError: {
+    borderColor: '$error',
+    color: '$error',
+  },
+  formBlockText: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   formInput: {
     ...rowFormStyles.input,
@@ -41,12 +52,15 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  formSelectButton: {
-    position: 'relative',
-  },
   formSelectIcon: {
-    top: 1,
-    right: UNIT * 2,
+    position: 'absolute',
+    right: 2,
+    paddingHorizontal: UNIT,
+    paddingVertical: UNIT * 1.5,
+    backgroundColor: '$boxBackground',
     color: '$icon',
+    borderRadius: UNIT,
   },
-});
+};
+
+export default EStyleSheet.create(formRowStyles);

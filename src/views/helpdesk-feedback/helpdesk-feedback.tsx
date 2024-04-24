@@ -36,7 +36,6 @@ import {
   isNumberFieldBlock,
   isTextFieldBlock,
 } from 'views/helpdesk-feedback';
-import {emailRegexp} from 'components/form/validate';
 import {getLocalizedName} from 'components/custom-field/custom-field-helper';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
@@ -97,14 +96,6 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
 
   const onTextValueChange = (b: FeedbackBlock, text?: string) => {
     onBlockChange(b, (i: FeedbackBlock) => ({value: text}));
-  };
-
-  const onUserSelectOpen = (b: FeedbackBlock) => {
-    dispatch(
-      actions.setUserSelect(b.value, ({reporter, email}: {reporter?: FeedbackFormReporter; email?: string}) => {
-        onBlockChange(b, (i: FeedbackBlock) => ({reporter, email, value: email || reporter?.name || ''}));
-      })
-    );
   };
 
   const disabled = inProgress || (form?.useCaptcha && !captchaToken);
@@ -184,10 +175,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                     onClear={() => onTextValueChange(b, '')}
                     inputMode={b.type === formBlockType.integer ? 'numeric' : 'decimal'}
                     required={b.required}
-                    validator={(v: string) => {
-                      const num = blockValueToNumber(b, v);
-                      return !Number.isNaN(num);
-                    }}
+                    validator={(v: string) => !Number.isNaN(blockValueToNumber(b, v))}
                   />
                 )}
 
@@ -216,21 +204,27 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                     label={label}
                     placeholder={emailBlock ? i18n('Select a reporter or enter a new email address') : ''}
                     onPress={() => {
-                      if (emailBlock) {
-                        onUserSelectOpen(b);
-                      } else {
-                        dispatch(
-                          actions.setSelect(b, (value: FeedbackFormBlockCustomField) => {
-                            const data = (i: FeedbackBlock) => ({
-                              field: {...i.field!, value},
-                              value: new Array().concat(value).map(getLocalizedName).join(', '),
-                            });
-                            onBlockChange(b, data);
-                          })
-                        );
-                      }
+                      dispatch(
+                        emailBlock
+                          ? actions.setUserSelect(
+                              b.value,
+                              ({reporter, email}: {reporter?: FeedbackFormReporter; email?: string}) => {
+                                onBlockChange(b, (i: FeedbackBlock) => ({
+                                  reporter,
+                                  email,
+                                  value: email || reporter?.name || '',
+                                }));
+                              }
+                            )
+                          : actions.setSelect(b, (value: FeedbackFormBlockCustomField) => {
+                              const data = (i: FeedbackBlock) => ({
+                                field: {...i.field!, value},
+                                value: new Array().concat(value).map(getLocalizedName).join(', '),
+                              });
+                              onBlockChange(b, data);
+                            })
+                      );
                     }}
-                    validator={emailBlock ? emailRegexp : null}
                   />
                 )}
 
@@ -239,7 +233,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                 )}
 
                 {b.type === formBlockType.attachment && (
-                  <View style={styles.formBlock}>
+                  <View style={[styles.formBlock, files ? styles.attachments : null]}>
                     <AttachmentAddPanel
                       showAddAttachDialog={() => {
                         dispatch(onToggleAttachDialogVisibility(true));

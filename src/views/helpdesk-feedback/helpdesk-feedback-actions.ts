@@ -7,6 +7,7 @@ import {
   FeedbackFormBlockFieldValue,
   FeedbackFormReporter,
 } from 'views/helpdesk-feedback/index';
+import {emailRegexp} from 'components/form/validate';
 import {getLocalizedName, projectCustomFieldTypeToFieldType} from 'components/custom-field/custom-field-helper';
 import {i18n} from 'components/i18n/i18n';
 import {notify, notifyError} from 'components/notification/notification';
@@ -92,6 +93,7 @@ const setUserSelect = (
         selectedItems: [],
         customInput: value,
         customInputPlaceholder: i18n('Email address'),
+        customInputValidator: emailRegexp,
         onSelect: (v: FeedbackFormReporter | string) => {
           if (typeof v === 'string') {
             onSelect({email: v});

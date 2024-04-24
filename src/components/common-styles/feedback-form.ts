@@ -62,7 +62,6 @@ const feedbackFormStyles = {
     minHeight: UNIT * 12,
     maxHeight: UNIT * 12,
     flexGrow: 1,
-    marginTop: UNIT * 2,
     color: '$text',
     backgroundColor: '$boxBackground',
   },

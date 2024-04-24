@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  InputModeOptions,
-  NativeSyntheticEvent,
-  TextInputFocusEventData,
-  View,
-} from 'react-native';
+import {InputModeOptions, NativeSyntheticEvent, TextInputFocusEventData, View} from 'react-native';
 
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -24,6 +19,7 @@ const FormSelectButton = ({
   onClear,
   onFocus,
   onPress,
+  placeholder,
   required,
   style,
   testID,
@@ -38,6 +34,7 @@ const FormSelectButton = ({
   onClear?: () => void;
   onFocus?: () => void;
   onPress: () => void;
+  placeholder?: string;
   required?: boolean;
   style?: ViewStyleProp;
   testID?: string;
@@ -45,26 +42,31 @@ const FormSelectButton = ({
   value?: string;
 }) => {
   return (
-    <View style={[styles.formBlock, styles.formSelect, style]}>
-      <TouchableOpacity onPress={onPress} style={styles.formSelectButton} testID={testID}>
-        <FormTextInput
-          editable={false}
-          inputMode={inputMode}
-          inputStyle={[label ? styles.formSelectText : null]}
-          multiline={multiline}
-          onBlur={onBlur}
-          onChange={onChange}
-          onClear={onClear}
-          onFocus={onFocus}
-          label={label}
-          placeholder={label}
-          required={required}
-          validator={validator}
-          value={value}
-          wrapperStyle={styles.formSelect}
-        />
+    <View style={[styles.formSelect]}>
+      <TouchableOpacity onPress={onPress} testID={testID}>
+        <View pointerEvents="box-only">
+          <FormTextInput
+            style={style}
+            editable={false}
+            inputMode={inputMode}
+            inputStyle={[label ? styles.formSelectText : null]}
+            multiline={multiline}
+            onBlur={onBlur}
+            onChange={onChange}
+            onClear={onClear}
+            onFocus={onFocus}
+            label={label}
+            placeholder={placeholder}
+            required={required}
+            validator={validator}
+            value={value}
+          >
+            <View style={styles.formSelectIcon}>
+              <IconAngleRight size={20} color={styles.formSelectIcon.color} />
+            </View>
+          </FormTextInput>
+        </View>
       </TouchableOpacity>
-      <IconAngleRight size={20} color={styles.formSelectIcon.color} style={styles.formSelectIcon} />
     </View>
   );
 };
