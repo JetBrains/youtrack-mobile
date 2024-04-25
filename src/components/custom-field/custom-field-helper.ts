@@ -43,8 +43,8 @@ const isRequiredCustomField = (customField: CustomFieldBase | CustomFieldText | 
   return !customField.projectCustomField.canBeEmpty;
 };
 
-const getIssueTextCustomFields = (issueCustomFields: CustomFieldBase[] = []) =>
-  issueCustomFields.filter((field: CustomFieldBase) => isTextCustomField(field.projectCustomField));
+const getIssueTextCustomFields = (issueCustomFields: CustomFieldBase[] = []): CustomFieldText[] =>
+  issueCustomFields.filter((field) => isTextCustomField(field.projectCustomField)) as CustomFieldText[];
 
 const getIssueCustomFieldsNotText = (issueCustomFields: CustomFieldBase[] = []): CustomField[] =>
   issueCustomFields.filter(field => !isTextCustomField(field.projectCustomField));

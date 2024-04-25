@@ -33,16 +33,12 @@ import {
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {isPureHTMLBlock, prepareHTML} from 'components/wiki/markdown-helper';
-import {
-  SkeletonIssueContent,
-  SkeletonIssueInfoLine,
-} from 'components/skeleton/skeleton';
+import {SkeletonIssueContent, SkeletonIssueInfoLine} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './issue.styles';
 
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
-import type {AnyIssue, IssueFull, IssueOnList} from 'types/Issue';
 import type {
   Attachment,
   CustomField,
@@ -51,27 +47,25 @@ import type {
   FieldValue,
   IssueLink,
 } from 'types/CustomFields';
-
+import type {IssueFull, IssueOnList} from 'types/Issue';
+import type {NormalizedAttachment} from 'types/Attachment';
+import type {Project} from 'types/Project';
 import type {ScrollData} from 'types/Markdown';
 import type {Theme, UITheme} from 'types/Theme';
 import type {Visibility} from 'types/Visibility';
 import type {YouTrackWiki} from 'types/Wiki';
-import {Project} from 'types/Project';
 
 export interface IssueDetailsProps {
   loadIssue: () => any;
-  openNestedIssueView: (arg0: {
-    issue?: IssueFull;
-    issueId?: string
-  }) => any;
-  attachingImage: Record<string, any> | null | undefined;
-  refreshIssue: () => any;
+  openNestedIssueView: (p: {issue?: IssueFull; issueId?: string;}) => void;
+  attachingImage: NormalizedAttachment;
+  refreshIssue: () => void;
   issuePermissions: IssuePermissions;
   updateIssueFieldValue: (
     field: CustomField | CustomFieldText,
     value: FieldValue,
-  ) => any;
-  updateProject: (project: Project) => any;
+  ) => void;
+  updateProject: (project: Project) => void;
   issue: IssueFull;
   issuePlaceholder: IssueOnList;
   issueLoaded: boolean;
@@ -79,26 +73,26 @@ export interface IssueDetailsProps {
   isSavingEditedIssue: boolean;
   summaryCopy: string;
   descriptionCopy: string;
-  openIssueListWithSearch: (query: string) => any;
-  onTagRemove: (tagId: string) => any;
-  setIssueSummaryCopy: (summary: string) => any;
-  setIssueDescriptionCopy: (description: string) => any;
+  openIssueListWithSearch: (query: string) => void;
+  onTagRemove: (tagId: string) => void;
+  setIssueSummaryCopy: (summary: string) => void;
+  setIssueDescriptionCopy: (description: string) => void;
   analyticCategory: string;
-  renderRefreshControl: () => any;
-  onSwitchToActivity: () => any;
-  onRemoveAttachment: () => any;
-  onVisibilityChange: (visibility: Visibility | null) => any;
-  onAttach: (isVisible: boolean) => any;
+  renderRefreshControl: () => React.ReactElement;
+  onSwitchToActivity: () => void;
+  onRemoveAttachment: () => void;
+  onVisibilityChange: (visibility: Visibility | null) => void;
+  onAttach: (isVisible: boolean) => void;
   onCheckboxUpdate: (
     checked: boolean,
     position: number,
     description: string,
   ) => void;
   onLongPress: (text: string, title?: string) => void;
-  getIssueLinksTitle: (linkedIssues?: IssueLink[]) => any;
-  issuesGetter: (linkTypeName: string, q: string) => any;
-  linksGetter: () => any;
-  onUnlink: (linkedIssue: IssueOnList, linkTypeId: string) => any;
+  getIssueLinksTitle: (linkedIssues?: IssueLink[]) => void;
+  issuesGetter: (linkTypeName: string, q: string) => void;
+  linksGetter: () => void;
+  onUnlink: (linkedIssue: IssueOnList, linkTypeId: string) => void;
   onLinkIssue: (
     linkedIssueIdReadable: string,
     linkTypeName: string,
@@ -106,7 +100,7 @@ export interface IssueDetailsProps {
   setCustomFieldValue: (
     field: CustomFieldText,
     value: TextFieldValue,
-  ) => any;
+  ) => void;
   modal?: boolean;
   scrollData: ScrollData;
   canEditVisibility: boolean;
@@ -244,10 +238,9 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   }
   renderIssueTextFields() {
     const {editMode, onLongPress, setCustomFieldValue} = this.props;
-    const issue: AnyIssue = this.getIssue();
-    return getIssueTextCustomFields(issue.fields).map(
-      (textField, index: number) => {
-        const f = textField as CustomFieldText;
+    const i = this.getIssue();
+    return getIssueTextCustomFields(i.fields).map(
+      (f, index: number) => {
         return (
           <TouchableWithoutFeedback
             key={`issueCustomFieldText${index}`}
@@ -268,8 +261,8 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
                     text,
                   });
                 }}
-                textField={textField}
-                usesMarkdown={issue.usesMarkdown}
+                textField={f}
+                usesMarkdown={i.usesMarkdown}
               />
             </View>
           </TouchableWithoutFeedback>
@@ -306,10 +299,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         backendUrl: this.backendUrl,
         attachments: issue.attachments,
         imageHeaders: this.imageHeaders,
-        onIssueIdTap: (issueId: string) =>
-          openNestedIssueView({
-            issueId,
-          }),
+        onIssueIdTap: (issueId: string) => openNestedIssueView({issueId}),
         title: getReadableID(issue),
         description: issue.wikifiedDescription,
       },
@@ -428,7 +418,6 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
 
   getIssuePermissions = (): IssuePermissions => {
     const noop = () => false;
-
     return (
       this.props.issuePermissions || {
         canCreateIssueToProject: noop,
@@ -438,21 +427,16 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
       }
     );
   };
-  canUpdateField: (field: CustomField) => any = (field: CustomField) =>
-    this.getIssuePermissions().canUpdateField(this.getIssue(), field);
-  canCreateIssueToProject: (project: Project) => any = (
-    project: Project,
-  ) => this.getIssuePermissions().canCreateIssueToProject(project);
-  onFieldUpdate: (
-    field: CustomField | CustomFieldText,
-    value: any,
-  ) => Promise<any> = async (
-    field: CustomField | CustomFieldText,
-    value: any,
-  ) => await this.props.updateIssueFieldValue(field, value);
-  onUpdateProject: (project: Project) => Promise<any> = async (
-    project: Project,
-  ) => await this.props.updateProject(project);
+
+  canUpdateField = (field: CustomField) => this.getIssuePermissions().canUpdateField(this.getIssue(), field);
+
+  canCreateIssueToProject = (project: Project) => this.getIssuePermissions().canCreateIssueToProject(project);
+
+  onFieldUpdate = async (field: CustomField | CustomFieldText, value: FieldValue) =>
+    await this.props.updateIssueFieldValue(field, value);
+
+  onUpdateProject = async (project: Project) => await this.props.updateProject(project);
+
   renderCustomFieldPanel = () => {
     const _issue = this.getIssue();
 
