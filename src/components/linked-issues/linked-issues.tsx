@@ -38,7 +38,7 @@ interface Props {
   style?: ViewStyleProp;
   subTitle?: any;
   onHide: () => void;
-  onAddLink?: (arg0: (onHide: () => any) => any) => any;
+  onAddLink?: (params: any | any[]) => any;
   closeIcon?: any;
   onIssueLinkPress?: (issue: IssueOnList) => any;
 }
@@ -46,8 +46,8 @@ interface Props {
 const LinkedIssues = (props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const theme: Theme = useContext(ThemeContext);
-  const [sections, updateSections] = useState([]);
-  const [pressedButtonId, updatePressedButtonId] = useState(null);
+  const [sections, updateSections] = useState<LinksListData[]>([]);
+  const [pressedButtonId, updatePressedButtonId] = useState<string | null>(null);
   const [isLoading, updateLoading] = useState(false);
   const getLinkedIssues = useCallback(async (): Promise<Array<IssueLink>> => {
     const linkedIssues: IssueLink[] = await props.linksGetter();
@@ -169,7 +169,7 @@ const LinkedIssues = (props: Props) => {
 
   const onAddIssueLink = () => {
     if (props.onAddLink) {
-      return props.onAddLink((onHide: () => any) => renderAddIssueLink(onHide));
+      return props.onAddLink((onHide: () => void) => renderAddIssueLink(onHide));
     } else {
       //TODO: use `props.onAddLink`
       Router.Page({

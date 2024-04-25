@@ -32,8 +32,8 @@ interface Props {
   onTagPress?: (query: string) => void;
   style?: ViewStyleProp;
   settings?: IssuesSettings;
-  helpdeskMode: boolean;
-  absDate: boolean;
+  helpdeskMode?: boolean;
+  absDate?: boolean;
 }
 
 export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
@@ -212,7 +212,7 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
 
         {this.renderSummary()}
         {this.renderDescription()}
-        {this.renderSLA(this.props.absDate)}
+        {this.renderSLA(!!this.props.absDate)}
         {this.renderTags()}
       </View>
     );

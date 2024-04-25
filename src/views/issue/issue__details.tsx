@@ -169,7 +169,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
                 }
                 subTitle={`${issue.idReadable} ${issue.summary}`}
                 onHide={() => Router.pop()}
-                onAddLink={(renderChildren: (arg0: () => any) => any) =>
+                onAddLink={(renderChildren: () => React.ReactNode) =>
                   Router.Page({
                     children: renderChildren(),
                   })
@@ -246,13 +246,14 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     const {editMode, onLongPress, setCustomFieldValue} = this.props;
     const issue: AnyIssue = this.getIssue();
     return getIssueTextCustomFields(issue.fields).map(
-      (textField: CustomFieldText, index: number) => {
+      (textField, index: number) => {
+        const f = textField as CustomFieldText;
         return (
           <TouchableWithoutFeedback
             key={`issueCustomFieldText${index}`}
             onLongPress={() => {
-              textField?.value?.text &&
-                onLongPress(textField.value.text, i18n('Copy field text'));
+              f?.value?.text &&
+                onLongPress(f.value.text, i18n('Copy field text'));
             }}
             delayLongPress={250}
           >
@@ -260,8 +261,8 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
               <IssueCustomFieldText
                 editMode={editMode}
                 onUpdateFieldValue={async (text: string): Promise<void> => {
-                  setCustomFieldValue(textField, {
-                    ...(textField.value || {
+                  setCustomFieldValue(f, {
+                    ...(f.value || {
                       id: undefined,
                     }),
                     text,
