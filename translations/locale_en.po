@@ -322,11 +322,11 @@ msgstr "Content revised"
 msgid "Copied"
 msgstr "Copied"
 
-#: src/views/issue/issue__details.tsx:369
+#: src/views/issue/issue__details.tsx:360
 msgid "Copy description"
 msgstr "Copy description"
 
-#: src/views/issue/issue__details.tsx:255
+#: src/views/issue/issue__details.tsx:249
 msgid "Copy field text"
 msgstr "Copy field text"
 
@@ -1283,7 +1283,7 @@ msgstr "VCS changes"
 msgid "View comment"
 msgstr "View comment"
 
-#: src/views/issue/issue__details.tsx:498
+#: src/views/issue/issue__details.tsx:483
 msgid "View comments and other activity"
 msgstr "View comments and other activity"
 

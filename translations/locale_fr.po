@@ -947,7 +947,7 @@ msgstr "Mode d'entrée de la recherche"
 
 #: src/views/helpdesk-feedback/helpdesk-feedback.tsx
 msgid "Select a reporter or enter a new email address"
-msgstr ""
+msgstr "Sélectionner un rapporteur ou saisir une nouvelle adresse e-mail"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Select an article from the list"
