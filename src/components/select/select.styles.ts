@@ -152,4 +152,9 @@ export default EStyleSheet.create({
     minWidth: '50%',
     paddingBottom: UNIT * 4,
   },
+  description: {
+    ...secondaryText,
+    color: '$textSecondary',
+  },
+
 });

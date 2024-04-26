@@ -20,6 +20,7 @@ const ISSUE_PROJECT_FIELDS: any = toField([
   'shortName',
   'ringId',
   'template',
+  'restricted',
   {
     plugins: {
       helpDeskSettings: ['enabled'],
@@ -63,6 +64,10 @@ const ISSUE_USER_FIELDS: any = toField([
   'name',
   'localizedName',
   'userType(id)',
+]);
+const ISSUE_USER_CC_FIELDS: any = toField([
+  ISSUE_USER_FIELDS,
+  'email',
 ]);
 const BUNDLE_VALUE: any = toField([
   '$type',
@@ -552,4 +557,5 @@ export default {
   PROJECT_WITH_HELPDESK_FIELDS: PROJECT_SHORT_WITH_HELPDESK_FIELDS,
   PROJECT_BASE_AND_HELPDESK_SETTINGS_FIELDS,
   HELPDESK_PROJECT_FIELDS,
+  ISSUE_USER_CC_FIELDS,
 };

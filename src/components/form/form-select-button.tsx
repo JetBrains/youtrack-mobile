@@ -8,7 +8,7 @@ import {IconAngleRight} from 'components/icon/icon';
 
 import styles from './form.style';
 
-import type {ViewStyleProp} from 'types/Internal';
+import type {TextStyleProp, ViewStyleProp} from 'types/Internal';
 
 const FormSelectButton = ({
   inputMode,
@@ -22,9 +22,11 @@ const FormSelectButton = ({
   placeholder,
   required,
   style,
+  textStyle,
   testID,
   validator,
   value,
+  disabled,
 }: {
   inputMode?: InputModeOptions;
   label?: string;
@@ -37,16 +39,18 @@ const FormSelectButton = ({
   placeholder?: string;
   required?: boolean;
   style?: ViewStyleProp;
+  textStyle?: TextStyleProp,
   testID?: string;
   validator?: RegExp | ((v: string) => boolean) | null;
   value?: string;
+  disabled?: boolean;
 }) => {
   return (
-    <View style={[styles.formSelect]}>
-      <TouchableOpacity onPress={onPress} testID={testID}>
+    <View style={[styles.formSelect, style]}>
+      <TouchableOpacity disabled={disabled} onPress={onPress} testID={testID}>
         <View pointerEvents="box-only">
           <FormTextInput
-            style={style}
+            style={textStyle}
             editable={false}
             inputMode={inputMode}
             inputStyle={[label ? styles.formSelectText : null]}

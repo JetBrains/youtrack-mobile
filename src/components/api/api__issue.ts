@@ -26,6 +26,7 @@ import type {Visibility, VisibilityGroups} from 'types/Visibility';
 import type {WorkItem} from 'types/Work';
 import {NormalizedAttachment} from 'types/Attachment';
 import {Project} from 'types/Project';
+import {UserCC} from 'types/User';
 
 export default class IssueAPI extends ApiBase {
   draftsURL: string = `${this.youTrackApiUrl}${
@@ -786,6 +787,35 @@ export default class IssueAPI extends ApiBase {
         ],
         text: comment.text,
       },
+    );
+  }
+
+  async getUsersCC(issueId: string): Promise<Array<UserCC>> {
+    const q = qs.stringify({fields: issueFields.ISSUE_USER_CC_FIELDS.toString()});
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/issues/${issueId}/helpdesk/ticketCCUsers?${q}`,
+      'GET',
+    );
+  }
+
+  async setUsersCC(issueId: string, ticketCCUsers: UserCC[]): Promise<Array<UserCC>> {
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/issues/${issueId}/helpdesk`,
+      'POST',
+      {ticketCCUsers},
+    );
+  }
+
+  async getUsersCCSuggest(query: string): Promise<Array<UserCC>> {
+    const q = qs.stringify({
+      fields: issueFields.ISSUE_USER_CC_FIELDS.toString(),
+      query: query.length ? query : undefined,
+      banned: false,
+      permission: 'JetBrains.YouTrack.READ_ISSUE',
+    });
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/users?${q}`,
+      'GET',
     );
   }
 }

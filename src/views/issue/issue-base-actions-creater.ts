@@ -1,5 +1,7 @@
 import {Clipboard, Share} from 'react-native';
 
+import {ActionSheetProvider} from '@expo/react-native-action-sheet';
+
 import * as commandDialogHelper from 'components/command-dialog/command-dialog-helper';
 import ApiHelper from 'components/api/api__helper';
 import issueCommonLinksActions from 'components/issue-actions/issue-links-actions';
@@ -9,10 +11,7 @@ import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
 import {ActionSheetOption, showActions} from 'components/action-sheet/action-sheet';
 import {confirmDeleteIssue} from 'components/confirmation/issue-confirmations';
-import {
-  getEntityPresentation,
-  getReadableID,
-} from 'components/issue-formatter/issue-formatter';
+import {getEntityPresentation, getReadableID} from 'components/issue-formatter/issue-formatter';
 import {getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {initialState, IssueState} from './issue-base-reducer';
@@ -26,29 +25,14 @@ import {resolveError} from 'components/error/error-resolver';
 
 import type Api from 'components/api/api';
 import type {AppState} from 'reducers';
-import type {
-  Attachment,
-  CustomField,
-  CustomFieldText,
-  FieldValue,
-  Tag,
-} from 'types/CustomFields';
-import type {
-  AnyIssue,
-  CommandSuggestionResponse,
-  IssueFull,
-  IssueOnList,
-  OpenNestedViewParams,
-} from 'types/Issue';
-import type {IssueLink} from 'types/CustomFields';
+import type {Attachment, CustomField, CustomFieldText, FieldValue, IssueLink, Tag} from 'types/CustomFields';
+import type {AnyIssue, CommandSuggestionResponse, IssueFull, IssueOnList, OpenNestedViewParams} from 'types/Issue';
 import type {NormalizedAttachment} from 'types/Attachment';
-import type {UserAppearanceProfile} from 'types/User';
+import type {UserAppearanceProfile, UserCC} from 'types/User';
 import type {Visibility} from 'types/Visibility';
-import {ActionSheetProvider} from '@expo/react-native-action-sheet';
-import {CustomError} from 'types/Error';
-import {Project} from 'types/Project';
-import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
-
+import type {CustomError} from 'types/Error';
+import type {Project} from 'types/Project';
+import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 
 export const DEFAULT_ISSUE_STATE_FIELD_NAME: keyof AppState = 'issueState';
 
@@ -877,6 +861,27 @@ export const createActions = (
             isTagsSelectVisible: false,
           }),
         );
+      };
+    },
+    loadUsersCC: function (issueId: string): ReduxAction {
+      return async (
+        dispatch: ReduxThunkDispatch,
+        getState: ReduxStateGetter,
+        getApi: ReduxAPIGetter,
+      ) => {
+        usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Load CC users');
+        const [error, usersCC] = await until<UserCC[]>(getApi().issue.getUsersCC(issueId));
+        if (error) {
+          notifyError(error);
+        }
+        if (usersCC) {
+          dispatch(dispatchActions.setUserCC(usersCC));
+        }
+      };
+    },
+    setUsersCC: function (users: UserCC[]): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch) => {
+        dispatch(dispatchActions.setUserCC(users));
       };
     },
   };

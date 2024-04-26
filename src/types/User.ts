@@ -1,24 +1,51 @@
 import type {Article} from './Article';
 import {EntityBase} from 'types/Entity';
 
-export interface User extends EntityBase {
+export interface UserBase extends EntityBase {
+  login: string;
+  ringId: string;
   avatarUrl: string;
-  email: string;
-  fullName: string;
   name: string;
+  localizedName: string;
+  userType: {
+    id: string;
+  };
+  fullName: string;
+}
+
+export interface UserCC extends Omit<UserBase, 'id'> {
+  email: string;
+  id?: string;
+}
+
+export interface UserHubCC extends EntityBase {
+  guest: boolean;
+  name: string;
+  login: string;
+  userType: {
+    id: string;
+  },
+  profile: {
+    avatar: {
+      url: string;
+    },
+    email: {
+      email: string
+    }
+  }
+}
+
+
+export interface User extends UserBase {
+  email: string;
   guest: boolean;
   banned: boolean;
   issueRelatedGroup?: IssueRelatedGroup;
-  login: string;
   profiles: UserProfiles;
-  ringId: string;
   endUserAgreementConsent?: {
     accepted: boolean;
     majorVersion: string;
     minorVersion: string;
-  };
-  userType: {
-    id: string;
   };
 }
 

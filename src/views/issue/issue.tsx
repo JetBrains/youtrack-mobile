@@ -22,7 +22,6 @@ import Star from 'components/star/star';
 import usage from 'components/usage/usage';
 import {addListenerGoOnline} from 'components/network/network-events';
 import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
-import {attachmentActions} from './issue__attachment-actions-and-types';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from './issue-base-actions-creater';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import {getApi} from 'components/api/api__instance';
@@ -32,6 +31,7 @@ import {
   IconCheck,
   IconClose, IconMoreOptions,
 } from 'components/icon/icon';
+import {isHelpdeskProject} from 'components/helpdesk';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {IssueContext} from './issue-context';
 import {Select, SelectModal} from 'components/select/select';
@@ -47,13 +47,13 @@ import type {AttachmentActions} from 'components/attachments-row/attachment-acti
 import type {EventSubscription} from 'react-native';
 import type {IssueTabbedState} from 'components/issue-tabbed/issue-tabbed';
 import type {NormalizedAttachment} from 'types/Attachment';
+import type {ReduxThunkDispatch} from 'types/Redux';
 import type {RequestHeaders} from 'types/Auth';
 import type {RootState} from 'reducers/app-reducer';
 import type {ScrollData} from 'types/Markdown';
 import type {State as IssueState} from './issue-reducers';
 import type {Theme, UITheme} from 'types/Theme';
-import type {User} from 'types/User';
-import {isHelpdeskProject} from 'components/helpdesk';
+import type {User, UserCC} from 'types/User';
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
@@ -67,6 +67,7 @@ type AdditionalProps = {
   onCommandApply: () => any;
   commentId?: string;
   user: User;
+  userCC: Array<UserCC>;
 };
 
 export type IssueProps = IssueState &
@@ -76,9 +77,7 @@ export type IssueProps = IssueState &
 
 
 export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
-  static contextTypes: {
-    actionSheet: (...args: any[]) => any;
-  } = {
+  static contextTypes = {
     actionSheet: Function,
   };
   CATEGORY_NAME: string = 'Issue';
@@ -91,9 +90,9 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   uiTheme: UITheme = DEFAULT_THEME;
 
   constructor(props: IssueProps) {
-        super(props);
-        this.onAddIssueLink = this.onAddIssueLink.bind(this);
-        this.toggleModalChildren = this.toggleModalChildren.bind(this);
+    super(props);
+    this.onAddIssueLink = this.onAddIssueLink.bind(this);
+    this.toggleModalChildren = this.toggleModalChildren.bind(this);
   }
 
   async init() {
@@ -157,15 +156,18 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   }
 
   isReporter(): boolean {
-    return !!this.props.user?.profiles?.helpdesk?.isReporter;
+    return this.props.issuePermissions.helpdesk.isReporter(this.props.issue);
   }
 
   isAgent(): boolean {
-    return !!this.props.user?.profiles?.helpdesk?.isAgent;
+    return this.props.issuePermissions.helpdesk.isAgent(this.props.issue);
   }
 
   async loadIssue(issuePlaceholder?: Partial<IssueFull> | null) {
     await this.props.loadIssue(issuePlaceholder);
+    if (isHelpdeskProject(this.props.issue)) {
+      this.props.loadUsersCC(this.props.issueId || this.props?.issuePlaceholder?.id || this.props.issue?.id);
+    }
   }
 
   createIssueDetails: (
@@ -203,11 +205,13 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       onShowCopyTextContextActions,
       getIssueLinksTitle,
       setCustomFieldValue,
+
     } = this.props;
     const Component: any = isSplitView ? IssueDetailsModal : IssueDetails;
     return (
       <Component
-        isReporter={issuePermissions.helpdesk.isReporter(issue)}
+        isReporter={this.isReporter()}
+        isAgent={this.isAgent()}
         canEditVisibility={!this.isAgent() && this.canEdit()}
         loadIssue={loadIssue}
         openNestedIssueView={openNestedIssueView}
@@ -358,7 +362,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     const {issue, issuePermissions} = this.props;
     return (
       issuePermissions.canUpdateGeneralInfo(issue) &&
-      (!isHelpdeskProject(issue) || issuePermissions.isAgentInProject(issue.project))
+      (!this.isHelpdeskTicket() || issuePermissions.helpdesk.isAgent(issue))
     );
   };
 
@@ -765,20 +769,21 @@ const mapStateToProps = (
     ...state.issueState,
     issuePlaceholder: ownProps.issuePlaceholder,
     issueId: ownProps.issueId,
-    user: state.app.user,
+    user: state.app.user!,
     isConnected,
-    navigateToActivity: isConnected === true || isConnected === undefined ? ownProps.navigateToActivity : undefined,
+    navigateToActivity: isConnected ? ownProps.navigateToActivity : undefined,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+export const issueActions = createIssueActions();
+
+const mapDispatchToProps = (dispatch: ReduxThunkDispatch) => {
   return {
-    ...bindActionCreatorsExt(createIssueActions(), dispatch),
-    createAttachActions: () => attachmentActions.createAttachActions(dispatch),
+    ...bindActionCreatorsExt(issueActions, dispatch),
     dispatcher: dispatch,
-    setIssueId: issueId => dispatch(dispatchActions.setIssueId(issueId)),
-    setIssueSummaryCopy: summary => dispatch(dispatchActions.setIssueSummaryCopy(summary)),
-    setIssueDescriptionCopy: description => dispatch(dispatchActions.setIssueDescriptionCopy(description)),
+    setIssueId: (issueId: string) => dispatch(dispatchActions.setIssueId(issueId)),
+    setIssueSummaryCopy: (summary: string) => dispatch(dispatchActions.setIssueSummaryCopy(summary)),
+    setIssueDescriptionCopy: (description: string) => dispatch(dispatchActions.setIssueDescriptionCopy(description)),
     stopEditingIssue: () => dispatch(dispatchActions.stopEditingIssue()),
     closeCommandDialog: () => dispatch(dispatchActions.closeCommandDialog()),
   };

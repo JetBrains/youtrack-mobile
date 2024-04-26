@@ -332,7 +332,14 @@ export default class IssuePermissions {
 
   helpdesk = {
     isHelpdeskProject,
-    isAgent: () => !!this.getUserProfileHelpdeskSettings()?.isAgent,
+    isAgent: (entity: Entity | null = null) => {
+      const helpDeskProject = !entity || isHelpdeskProject(entity);
+      return (
+        helpDeskProject &&
+        (!!this.getUserProfileHelpdeskSettings()?.isAgent ||
+          (!!entity?.project && this.isAgentInProject(entity.project)))
+      );
+    },
     isReporter: (entity: Entity | null = null): boolean => {
       const helpDeskProject = !entity || isHelpdeskProject(entity);
       return (

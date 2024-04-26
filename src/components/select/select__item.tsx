@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity, Text} from 'react-native';
 
 import Avatar from 'components/avatar/avatar';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
@@ -94,7 +94,10 @@ export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
               />
             )}
 
-            {this.renderTitle(item)}
+            <View>
+              {this.renderTitle(item)}
+              {!!item.description && <View><Text style={styles.description}>{item.description}</Text></View>}
+            </View>
           </View>
 
           {isSelected && <View style={styles.itemIconSelected}>

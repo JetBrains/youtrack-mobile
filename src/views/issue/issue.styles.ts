@@ -121,4 +121,19 @@ export default EStyleSheet.create({
   issueModalCloseIcon: {
     paddingHorizontal: UNIT,
   },
+  usersCCSelect: {
+    marginLeft: UNIT * 2,
+    marginBottom: UNIT,
+    paddingBottom: UNIT * 2,
+    paddingRight: UNIT * 2,
+    ...separatorBorder,
+    borderColor: '$separator',
+  },
+  usersCCSelectHeader: {
+    margin: UNIT,
+  },
+  usersCCSelectHeaderText: {
+    ...secondaryText,
+    color: '$textSecondary',
+  },
 });

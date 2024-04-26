@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {attachmentActionMap} from 'components/attachments-row/attachment-helper';
 import type {CommandSuggestionResponse, IssueFull} from 'types/Issue';
 import type {
@@ -7,10 +7,10 @@ import type {
   IssueLink,
 
 } from 'types/CustomFields';
+import type {Project} from 'types/Project';
 import type {SliceCaseReducers} from '@reduxjs/toolkit';
-import type {User} from 'types/User';
+import type {User, UserCC} from 'types/User';
 import type {Visibility} from 'types/Visibility';
-import {Project} from 'types/Project';
 
 export type IssueState = {
   attachingImage: Record<string, any> | null | undefined;
@@ -36,7 +36,10 @@ export type IssueState = {
   unloadedIssueState: IssueState | null | undefined;
   updateUserAppearanceProfile: (...args: any[]) => any;
   user: User | null;
+  isConnected: boolean;
+  usersCC: Array<UserCC> | null;
 };
+
 export const initialState: IssueState = {
   attachingImage: null,
   commandIsApplying: false,
@@ -61,6 +64,8 @@ export const initialState: IssueState = {
   unloadedIssueState: null,
   updateUserAppearanceProfile: null,
   user: null,
+  isConnected: false,
+  usersCC: null,
 };
 export type IssueBaseActions = {
   SET_ISSUE_ID: (action: {
@@ -137,7 +142,9 @@ export type IssueBaseActions = {
   UNLOAD_ACTIVE_ISSUE_VIEW: () => IssueState;
   OPEN_ISSUE_SELECT: (action: {payload: any}) => IssueState;
   CLOSE_ISSUE_SELECT: (action: {payload: any}) => IssueState;
+  SET_USERS_CC: (action: PayloadAction<Array<UserCC>>) => IssueState;
 };
+
 export const createAttachmentReducer = (types: Record<keyof typeof attachmentActionMap, string>) => ({
   [types.ATTACH_START_ADDING](
     state: IssueState,
@@ -222,7 +229,7 @@ export const createIssueReduxSlice: (
   extraReducers: Record<string, any>,
 ) => {
   actions: IssueBaseActions;
-  reducer: SliceCaseReducers;
+  reducer: SliceCaseReducers<IssueState>;
 } = (namespace: string = '', extraReducers: Record<string, any> = {}) =>
   createSlice({
     name: `${namespace}/issue`,
@@ -432,6 +439,9 @@ export const createIssueReduxSlice: (
       ) => {
         state.selectProps = action.payload.selectProps;
         state.isTagsSelectVisible = false;
+      },
+      SET_USERS_CC: (state: IssueState, action: PayloadAction<Array<User>>) => {
+        state.usersCC = action.payload;
       },
     },
   });

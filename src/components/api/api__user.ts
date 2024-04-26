@@ -118,14 +118,18 @@ export default class UserAPI extends ApiBase {
     );
   }
 
-  async getHubUsers(query: string, fields: string | string[]): Promise<Array<Record<string, any>>> {
+  async getHubUsers(
+    query: string,
+    fields: string | string[],
+    restParams?: Record<string, any> | null
+  ): Promise<Array<Record<string, any>>> {
     const searchQuery: string = query ? `query=${query}` : '';
     const response: {
       skip: number;
       total: number;
       users: Array<Record<string, any>>;
     } = await this.makeAuthorizedRequest(
-      `${this.config.auth.serverUri}/api/rest/users?${searchQuery}&${ApiBase.createFieldsQuery(fields)}`,
+      `${this.config.auth.serverUri}/api/rest/users?${searchQuery}&${ApiBase.createFieldsQuery(fields, restParams)}`,
       'GET'
     );
     return response.users;

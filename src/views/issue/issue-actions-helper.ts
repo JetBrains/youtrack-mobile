@@ -1,17 +1,15 @@
-import type {CustomField, FieldValue} from 'types/CustomFields';
-import type {
-  CommandSuggestionResponse,
-  IssueFull,
-  IssueOnList,
-} from 'types/Issue';
-import type {Visibility} from 'types/Visibility';
-import type {CustomError} from 'types/Error';
-import type {IssueBaseActions} from './issue-base-reducer';
-import {commandDialogActionMap} from 'components/command-dialog/command-dialog-action-types';
-import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import {attachmentActionMap} from 'components/attachments-row/attachment-helper';
-import {NormalizedAttachment} from 'types/Attachment';
-import {Project} from 'types/Project';
+import {commandDialogActionMap} from 'components/command-dialog/command-dialog-action-types';
+
+import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
+import type {CommandSuggestionResponse, IssueFull, IssueOnList} from 'types/Issue';
+import type {CustomError} from 'types/Error';
+import type {CustomField, FieldValue} from 'types/CustomFields';
+import type {IssueBaseActions} from './issue-base-reducer';
+import type {Attachment, NormalizedAttachment} from 'types/Attachment';
+import type {Project} from 'types/Project';
+import type {UserCC} from 'types/User';
+import type {Visibility} from 'types/Visibility';
 
 
 export const createDispatchActions = (
@@ -264,5 +262,8 @@ export const createDispatchActions = (
   },
   uploadFile: (files: NormalizedAttachment[], issue: IssueFull) => {
     return attachmentActions.doUploadFile(false, files, issue);
+  },
+  setUserCC: (users: UserCC[]) => {
+    return actions.SET_USERS_CC(users);
   },
 });

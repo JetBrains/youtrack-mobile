@@ -44,6 +44,7 @@ export interface Project extends ProjectEntity {
     };
   };
   template: boolean;
+  restricted: boolean;
 }
 
 export interface ProjectHelpdesk extends ProjectEntity {

@@ -13,6 +13,7 @@ import CustomFieldsPanel from 'components/custom-fields-panel/custom-fields-pane
 import HTML from 'components/wiki/markdown/markdown-html';
 import IssueCustomFieldText from 'components/custom-field/issue-custom-field-text';
 import IssueMarkdown from './issue__markdown';
+import IssueUsersCC from 'views/issue/issue-user-cc';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import LinkedIssues from 'components/linked-issues/linked-issues';
 import LinkedIssuesTitle from 'components/linked-issues/linked-issues-title';
@@ -32,6 +33,7 @@ import {
 } from 'components/custom-field/custom-field-helper';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
+import {isHelpdeskProject} from 'components/helpdesk';
 import {isPureHTMLBlock, prepareHTML} from 'components/wiki/markdown-helper';
 import {SkeletonIssueContent, SkeletonIssueInfoLine} from 'components/skeleton/skeleton';
 import {ThemeContext} from 'components/theme/theme-context';
@@ -54,6 +56,7 @@ import type {ScrollData} from 'types/Markdown';
 import type {Theme, UITheme} from 'types/Theme';
 import type {Visibility} from 'types/Visibility';
 import type {YouTrackWiki} from 'types/Wiki';
+import type {UserCC} from 'types/User';
 
 export interface IssueDetailsProps {
   loadIssue: () => any;
@@ -105,6 +108,8 @@ export interface IssueDetailsProps {
   scrollData: ScrollData;
   canEditVisibility: boolean;
   isReporter: boolean;
+  isAgent: boolean;
+  usersCC: Array<UserCC> | null;
 }
 
 export default class IssueDetails extends Component<IssueDetailsProps, void> {
@@ -133,6 +138,10 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     }
 
     if (nextProps.isSavingEditedIssue !== this.props.isSavingEditedIssue) {
+      return true;
+    }
+
+    if (nextProps.usersCC !== this.props.usersCC) {
       return true;
     }
 
@@ -438,21 +447,19 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
   onUpdateProject = async (project: Project) => await this.props.updateProject(project);
 
   renderCustomFieldPanel = () => {
-    const _issue = this.getIssue();
+    const i = this.getIssue();
 
     return (
       <CustomFieldsPanel
         analyticsId={ANALYTICS_ISSUE_PAGE}
         autoFocusSelect
-        issueId={_issue?.id}
-        issueProject={_issue?.project}
-        fields={getIssueCustomFieldsNotText(_issue?.fields || [])}
+        issueId={i?.id}
+        issueProject={i?.project}
+        fields={getIssueCustomFieldsNotText(i?.fields || [])}
         hasPermission={{
           canUpdateField: this.canUpdateField,
           canCreateIssueToProject: this.canCreateIssueToProject,
-          canEditProject: this.getIssuePermissions().canUpdateGeneralInfo(
-            _issue,
-          ),
+          canEditProject: this.getIssuePermissions().canUpdateGeneralInfo(i),
         }}
         onUpdate={this.onFieldUpdate}
         onUpdateProject={this.onUpdateProject}
@@ -472,16 +479,13 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         scrollEventThrottle={16}
       >
         {this.renderCustomFieldPanel()}
+        {isHelpdeskProject(this.props.issue) && (
+          <IssueUsersCC style={styles.usersCCSelect} disabled={!this.props.isAgent} />
+        )}
         {this.renderIssueView()}
 
-        <TouchableOpacity
-          style={styles.switchToActivityButton}
-          hitSlop={HIT_SLOP}
-          onPress={onSwitchToActivity}
-        >
-          <Text style={styles.switchToActivityButtonText}>
-            {i18n('View comments and other activity')}
-          </Text>
+        <TouchableOpacity style={styles.switchToActivityButton} hitSlop={HIT_SLOP} onPress={onSwitchToActivity}>
+          <Text style={styles.switchToActivityButtonText}>{i18n('View comments and other activity')}</Text>
         </TouchableOpacity>
       </ScrollView>
     );

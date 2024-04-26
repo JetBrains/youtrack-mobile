@@ -36,7 +36,7 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
   const canAttach = issuePermissions.canAddAttachmentTo(issue);
   const canCommentPublicly = issuePermissions.canCommentPublicly(issue);
   const canUpdateCommentVisibility = issuePermissions.canUpdateCommentVisibility(issue);
-  const isAgent = issuePermissions.helpdesk.isAgent();
+  const isAgent = issuePermissions.helpdesk.isAgent(issue);
   const isHelpdeskProject = issuePermissions.helpdesk.isHelpdeskProject(issue);
 
   const doUploadFileToComment = (files: NormalizedAttachment[], comment: IssueComment) => {
