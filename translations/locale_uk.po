@@ -253,6 +253,10 @@ msgstr ""
 msgid "Cancel"
 msgstr "Скасувати"
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "CCs"
+msgstr ""
+
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
 msgstr "Очистьте поточний контекст пошуку"
@@ -548,6 +552,10 @@ msgstr ""
 msgid "Filter boards by name"
 msgstr ""
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "Filter existing accounts by name or username"
+msgstr ""
+
 #: src/components/select/select.tsx
 msgid "Filter items"
 msgstr "Фільтрувати елементи"
@@ -801,6 +809,10 @@ msgstr ""
 msgid "No articles found"
 msgstr ""
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "No CCs"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "No drafts yet"
 msgstr ""
@@ -856,6 +868,10 @@ msgstr "Пароль"
 
 #: src/components/custom-field/custom-field-sla.tsx
 msgid "Paused"
+msgstr ""
+
+#: src/views/issue/issue-user-cc.tsx
+msgid "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
 msgstr ""
 
 #: src/components/attach-file/attach-file-dialog.tsx

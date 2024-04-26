@@ -237,6 +237,10 @@ msgstr "Fotocamera"
 msgid "Cancel"
 msgstr "Annulla"
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "CCs"
+msgstr ""
+
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
 msgstr "Cancella il contesto di ricerca attuale"
@@ -532,6 +536,10 @@ msgstr "Richiesta funzionalità"
 msgid "Filter boards by name"
 msgstr "Filtra bacheche per nome"
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "Filter existing accounts by name or username"
+msgstr ""
+
 #: src/components/select/select.tsx
 msgid "Filter items"
 msgstr "Filtra elementi"
@@ -781,6 +789,10 @@ msgstr "Nessun articolo"
 msgid "No articles found"
 msgstr "Nessun articolo trovato"
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "No CCs"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "No drafts yet"
 msgstr "Ancora nessuna bozza"
@@ -837,6 +849,10 @@ msgstr "Password"
 #: src/components/custom-field/custom-field-sla.tsx
 msgid "Paused"
 msgstr "In pausa"
+
+#: src/views/issue/issue-user-cc.tsx
+msgid "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
+msgstr ""
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"

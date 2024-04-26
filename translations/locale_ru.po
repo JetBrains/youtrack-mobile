@@ -253,6 +253,10 @@ msgstr "Камера"
 msgid "Cancel"
 msgstr "Отмена"
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "CCs"
+msgstr "Копии"
+
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
 msgstr "Очистите текущую область поиска"
@@ -548,6 +552,10 @@ msgstr "Запросить функциональность"
 msgid "Filter boards by name"
 msgstr "Фильтровать доски по имени"
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "Filter existing accounts by name or username"
+msgstr "Отфильтровать существующие аккаунты по имени человека или по имени пользователя"
+
 #: src/components/select/select.tsx
 msgid "Filter items"
 msgstr "Фильтровать элементы"
@@ -801,6 +809,10 @@ msgstr "Статей нет"
 msgid "No articles found"
 msgstr "Статьи не найдены"
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "No CCs"
+msgstr "Нет копий"
+
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "No drafts yet"
 msgstr "Черновиков пока нет"
@@ -857,6 +869,10 @@ msgstr "Пароль"
 #: src/components/custom-field/custom-field-sla.tsx
 msgid "Paused"
 msgstr "Приостановлено"
+
+#: src/views/issue/issue-user-cc.tsx
+msgid "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
+msgstr "Люди, добавленные в копию, получают те же уведомления, что и автор запроса"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"

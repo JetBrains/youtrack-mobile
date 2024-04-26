@@ -237,6 +237,10 @@ msgstr "Câmera"
 msgid "Cancel"
 msgstr "Cancelar"
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "CCs"
+msgstr "CCs"
+
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
 msgstr "Limpar o contexto de pesquisa atual"
@@ -532,6 +536,10 @@ msgstr "Solicação de recurso"
 msgid "Filter boards by name"
 msgstr "Filtrar boards pelo nome"
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "Filter existing accounts by name or username"
+msgstr "Filtrar contas existentes por nome ou nome de usuário"
+
 #: src/components/select/select.tsx
 msgid "Filter items"
 msgstr "Filtrar itens"
@@ -781,6 +789,10 @@ msgstr "Não há artigos"
 msgid "No articles found"
 msgstr "Nenhum artigo encontrado"
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "No CCs"
+msgstr "Sem CCs"
+
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "No drafts yet"
 msgstr "Ainda não há rascunhos"
@@ -837,6 +849,10 @@ msgstr "Senha"
 #: src/components/custom-field/custom-field-sla.tsx
 msgid "Paused"
 msgstr "Pausado"
+
+#: src/views/issue/issue-user-cc.tsx
+msgid "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
+msgstr "As pessoas adicionadas como CC recebem as mesmas notificações enviadas à pessoa que relatou este ticket"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"

@@ -253,6 +253,10 @@ msgstr "Fotoaparát"
 msgid "Cancel"
 msgstr "Zrušit"
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "CCs"
+msgstr ""
+
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
 msgstr "Zrušit omezení kontextu hledání"
@@ -548,6 +552,10 @@ msgstr "Žádost o funkci"
 msgid "Filter boards by name"
 msgstr "Filtrovat tabule podle názvu"
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "Filter existing accounts by name or username"
+msgstr ""
+
 #: src/components/select/select.tsx
 msgid "Filter items"
 msgstr "Filtrovat položky"
@@ -801,6 +809,10 @@ msgstr "Žádné články"
 msgid "No articles found"
 msgstr "Nebyly nalezeny žádné články"
 
+#: src/views/issue/issue-user-cc.tsx
+msgid "No CCs"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "No drafts yet"
 msgstr "Zatím žádné návrhy"
@@ -857,6 +869,10 @@ msgstr "Heslo"
 #: src/components/custom-field/custom-field-sla.tsx
 msgid "Paused"
 msgstr "Pozastaveno"
+
+#: src/views/issue/issue-user-cc.tsx
+msgid "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
+msgstr ""
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
