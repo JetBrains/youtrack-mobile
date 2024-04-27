@@ -231,7 +231,7 @@ msgstr "取消"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
-msgstr ""
+msgstr "抄送"
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
@@ -530,7 +530,7 @@ msgstr "按名称筛选面板"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "Filter existing accounts by name or username"
-msgstr ""
+msgstr "按名称或用户名筛选现有帐户"
 
 #: src/components/select/select.tsx
 msgid "Filter items"
@@ -781,7 +781,7 @@ msgstr "未找到文章"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "No CCs"
-msgstr ""
+msgstr "无抄送"
 
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "No drafts yet"
@@ -842,7 +842,7 @@ msgstr "已暂停"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
-msgstr ""
+msgstr "添加为抄送人的人员会收到通知，该通知与发送给报告此工单的人员的通知相同"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
