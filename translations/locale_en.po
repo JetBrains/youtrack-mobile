@@ -231,7 +231,7 @@ msgstr "Camera"
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/views/issue/issue-user-cc.tsx:80
+#: src/views/issue/issue-user-cc.tsx:81
 msgid "CCs"
 msgstr "CCs"
 
@@ -530,7 +530,7 @@ msgstr "Feature request"
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
-#: src/views/issue/issue-user-cc.tsx:85
+#: src/views/issue/issue-user-cc.tsx:86
 msgid "Filter existing accounts by name or username"
 msgstr "Filter existing accounts by name or username"
 
@@ -844,7 +844,7 @@ msgstr "Password"
 msgid "Paused"
 msgstr "Paused"
 
-#: src/views/issue/issue-user-cc.tsx:89
+#: src/views/issue/issue-user-cc.tsx:90
 msgid "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
 msgstr "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
 
