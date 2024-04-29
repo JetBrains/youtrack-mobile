@@ -77,6 +77,7 @@ const IssueUsersCC = ({disabled, style}: {disabled: boolean; style?: ViewStylePr
         disabled={disabled}
         value={presentation}
         placeholder={usersCC.length ? '' : i18n('No CCs')}
+        placeholderTextColor={styles.link.color}
         label={i18n('CCs')}
         onPress={() => {
           setSelectProps({

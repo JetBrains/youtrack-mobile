@@ -20,6 +20,7 @@ const FormSelectButton = ({
   onFocus,
   onPress,
   placeholder,
+  placeholderTextColor,
   required,
   style,
   textStyle,
@@ -37,6 +38,7 @@ const FormSelectButton = ({
   onFocus?: () => void;
   onPress: () => void;
   placeholder?: string;
+  placeholderTextColor?: string;
   required?: boolean;
   style?: ViewStyleProp;
   textStyle?: TextStyleProp,
@@ -61,6 +63,7 @@ const FormSelectButton = ({
             onFocus={onFocus}
             label={label}
             placeholder={placeholder}
+            placeholderTextColor={placeholderTextColor}
             required={required}
             validator={validator}
             value={value}

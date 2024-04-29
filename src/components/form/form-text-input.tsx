@@ -19,6 +19,7 @@ interface Props extends React.PropsWithChildren {
   onFocus?: () => void;
   label?: string;
   placeholder?: string;
+  placeholderTextColor?: string;
   required?: boolean;
   inputStyle?: TextStyleProp[];
   testID?: string;
@@ -38,6 +39,7 @@ const FormTextInput = ({
   onFocus,
   label,
   placeholder,
+  placeholderTextColor,
   required,
   inputStyle,
   testID,
@@ -59,7 +61,7 @@ const FormTextInput = ({
         autoCapitalize="none"
         autoCorrect={false}
         keyboardAppearance={theme.uiTheme.name}
-        placeholderTextColor={hasError ? styles.feedbackInputError.borderColor : styles.icon.color}
+        placeholderTextColor={hasError ? styles.feedbackInputError.borderColor : placeholderTextColor || styles.icon.color}
         selectTextOnFocus
         textAlignVertical={multiline ? 'top' : undefined}
         testID={testID}
