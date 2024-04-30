@@ -238,6 +238,10 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: src/views/issue/issue-user-cc.tsx
+msgid "CC me"
+msgstr "Kopien an mich"
+
+#: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "Kopien"
 
@@ -925,6 +929,11 @@ msgstr "hat den Pull-Request erneut geöffnet"
 msgid "Reply"
 msgstr "Antworten"
 
+#: src/views/issue/issue-user-cc.tsx
+#: src/views/issue/issue-user-cc.tsx
+msgid "Reporter"
+msgstr ""
+
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
 msgstr "Sichtbarkeit zurücksetzen"
@@ -1358,6 +1367,10 @@ msgstr "Einen Kommentar schreiben und @Personen erwähnen"
 #: src/components/account/accounts.tsx
 msgid "Yes"
 msgstr "Ja"
+
+#: src/views/issue/issue-user-cc.tsx
+msgid "You can only CC a maximum of 5 reporters per ticket"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

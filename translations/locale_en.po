@@ -231,7 +231,11 @@ msgstr "Camera"
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/views/issue/issue-user-cc.tsx:81
+#: src/views/issue/issue-user-cc.tsx:143
+msgid "CC me"
+msgstr "CC me"
+
+#: src/views/issue/issue-user-cc.tsx:111
 msgid "CCs"
 msgstr "CCs"
 
@@ -530,11 +534,11 @@ msgstr "Feature request"
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
-#: src/views/issue/issue-user-cc.tsx:86
+#: src/views/issue/issue-user-cc.tsx:127
 msgid "Filter existing accounts by name or username"
 msgstr "Filter existing accounts by name or username"
 
-#: src/components/select/select.tsx:344
+#: src/components/select/select.tsx:349
 msgid "Filter items"
 msgstr "Filter items"
 
@@ -679,7 +683,7 @@ msgstr "Link to comment copied"
 msgid "Linked issues"
 msgstr "Linked issues"
 
-#: src/components/select/select.tsx:299
+#: src/components/select/select.tsx:304
 msgid "Loading values…"
 msgstr "Loading values…"
 
@@ -783,7 +787,7 @@ msgstr "No articles"
 msgid "No articles found"
 msgstr "No articles found"
 
-#: src/views/issue/issue-user-cc.tsx:79
+#: src/views/issue/issue-user-cc.tsx:109
 msgid "No CCs"
 msgstr "No CCs"
 
@@ -799,7 +803,7 @@ msgstr "No favorites projects found"
 msgid "No issues found"
 msgstr "No issues found"
 
-#: src/components/select/select.tsx:303
+#: src/components/select/select.tsx:308
 msgid "No items"
 msgstr "No items"
 
@@ -844,7 +848,7 @@ msgstr "Password"
 msgid "Paused"
 msgstr "Paused"
 
-#: src/views/issue/issue-user-cc.tsx:90
+#: src/views/issue/issue-user-cc.tsx:93
 msgid "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
 msgstr "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
 
@@ -918,6 +922,11 @@ msgstr "reopened the pull request"
 #: src/views/issue/activity/issue__activity-stream.tsx:114
 msgid "Reply"
 msgstr "Reply"
+
+#: src/views/issue/issue-user-cc.tsx:120
+#: src/views/issue/issue-user-cc.tsx:144
+msgid "Reporter"
+msgstr "Reporter"
 
 #: src/components/visibility/comment-visibility-control.tsx:115
 msgid "Reset visibility"
@@ -1352,6 +1361,10 @@ msgstr "Write a comment, @mention people"
 #: src/components/account/accounts.tsx:56
 msgid "Yes"
 msgstr "Yes"
+
+#: src/views/issue/issue-user-cc.tsx:98
+msgid "You can only CC a maximum of 5 reporters per ticket"
+msgstr "You can only CC a maximum of 5 reporters per ticket"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx:147
 msgid "You don’t have any unread notifications"

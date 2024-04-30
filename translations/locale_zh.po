@@ -230,6 +230,10 @@ msgid "Cancel"
 msgstr "取消"
 
 #: src/views/issue/issue-user-cc.tsx
+msgid "CC me"
+msgstr "抄送我"
+
+#: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "抄送"
 
@@ -915,6 +919,11 @@ msgstr "已重新打开 Pull Request"
 msgid "Reply"
 msgstr "回复"
 
+#: src/views/issue/issue-user-cc.tsx
+#: src/views/issue/issue-user-cc.tsx
+msgid "Reporter"
+msgstr ""
+
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
 msgstr "重置可见性"
@@ -1347,6 +1356,10 @@ msgstr "写评论，提及人(@)"
 #: src/components/account/accounts.tsx
 msgid "Yes"
 msgstr "是"
+
+#: src/views/issue/issue-user-cc.tsx
+msgid "You can only CC a maximum of 5 reporters per ticket"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

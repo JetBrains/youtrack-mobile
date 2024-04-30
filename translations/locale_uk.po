@@ -254,6 +254,10 @@ msgid "Cancel"
 msgstr "Скасувати"
 
 #: src/views/issue/issue-user-cc.tsx
+msgid "CC me"
+msgstr ""
+
+#: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr ""
 
@@ -945,6 +949,11 @@ msgstr ""
 msgid "Reply"
 msgstr "Відповісти"
 
+#: src/views/issue/issue-user-cc.tsx
+#: src/views/issue/issue-user-cc.tsx
+msgid "Reporter"
+msgstr "Автор звіту"
+
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
 msgstr "Скинути видимість"
@@ -1379,6 +1388,10 @@ msgstr "Напишіть коментар, @згадайте когось"
 
 #: src/components/account/accounts.tsx
 msgid "Yes"
+msgstr ""
+
+#: src/views/issue/issue-user-cc.tsx
+msgid "You can only CC a maximum of 5 reporters per ticket"
 msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__list.tsx

@@ -254,6 +254,10 @@ msgid "Cancel"
 msgstr "Отмена"
 
 #: src/views/issue/issue-user-cc.tsx
+msgid "CC me"
+msgstr "Добавить меня в копию"
+
+#: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "Копии"
 
@@ -945,6 +949,11 @@ msgstr "заново открыл(а) пул-реквест"
 msgid "Reply"
 msgstr "Ответить"
 
+#: src/views/issue/issue-user-cc.tsx
+#: src/views/issue/issue-user-cc.tsx
+msgid "Reporter"
+msgstr ""
+
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
 msgstr "Сбросить видимость"
@@ -1380,6 +1389,10 @@ msgstr "Введите текст комментария, @упоминайте 
 #: src/components/account/accounts.tsx
 msgid "Yes"
 msgstr "Да"
+
+#: src/views/issue/issue-user-cc.tsx
+msgid "You can only CC a maximum of 5 reporters per ticket"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

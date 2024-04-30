@@ -230,6 +230,10 @@ msgid "Cancel"
 msgstr "取り消す"
 
 #: src/views/issue/issue-user-cc.tsx
+msgid "CC me"
+msgstr "自分を CC に追加"
+
+#: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "CC"
 
@@ -915,6 +919,11 @@ msgstr "さんがプルリクエストを再開しました"
 msgid "Reply"
 msgstr "返信"
 
+#: src/views/issue/issue-user-cc.tsx
+#: src/views/issue/issue-user-cc.tsx
+msgid "Reporter"
+msgstr ""
+
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
 msgstr "可視性をリセット"
@@ -1347,6 +1356,10 @@ msgstr "コメントを書くか、他のユーザーについて@メンショ�
 #: src/components/account/accounts.tsx
 msgid "Yes"
 msgstr "はい"
+
+#: src/views/issue/issue-user-cc.tsx
+msgid "You can only CC a maximum of 5 reporters per ticket"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

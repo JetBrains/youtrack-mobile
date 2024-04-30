@@ -230,6 +230,10 @@ msgid "Cancel"
 msgstr "취소"
 
 #: src/views/issue/issue-user-cc.tsx
+msgid "CC me"
+msgstr "나를 참조에 추가"
+
+#: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "참조"
 
@@ -915,6 +919,11 @@ msgstr "풀 리퀘스트를 다시 열었음"
 msgid "Reply"
 msgstr "답글"
 
+#: src/views/issue/issue-user-cc.tsx
+#: src/views/issue/issue-user-cc.tsx
+msgid "Reporter"
+msgstr ""
+
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
 msgstr "가시성 재설정"
@@ -1347,6 +1356,10 @@ msgstr "코멘트를 작성하거나, 다른 사람을 @멘션하세요"
 #: src/components/account/accounts.tsx
 msgid "Yes"
 msgstr "예"
+
+#: src/views/issue/issue-user-cc.tsx
+msgid "You can only CC a maximum of 5 reporters per ticket"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

@@ -238,6 +238,10 @@ msgid "Cancel"
 msgstr "İptal"
 
 #: src/views/issue/issue-user-cc.tsx
+msgid "CC me"
+msgstr ""
+
+#: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr ""
 
@@ -925,6 +929,11 @@ msgstr ""
 msgid "Reply"
 msgstr "Yanıtla"
 
+#: src/views/issue/issue-user-cc.tsx
+#: src/views/issue/issue-user-cc.tsx
+msgid "Reporter"
+msgstr "Raporlayıcı"
+
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
 msgstr ""
@@ -1358,6 +1367,10 @@ msgstr ""
 #: src/components/account/accounts.tsx
 msgid "Yes"
 msgstr "Evet"
+
+#: src/views/issue/issue-user-cc.tsx
+msgid "You can only CC a maximum of 5 reporters per ticket"
+msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

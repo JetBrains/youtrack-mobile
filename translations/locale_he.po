@@ -254,6 +254,10 @@ msgid "Cancel"
 msgstr "ביטול"
 
 #: src/views/issue/issue-user-cc.tsx
+msgid "CC me"
+msgstr ""
+
+#: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr ""
 
@@ -945,6 +949,11 @@ msgstr ""
 msgid "Reply"
 msgstr "הגב"
 
+#: src/views/issue/issue-user-cc.tsx
+#: src/views/issue/issue-user-cc.tsx
+msgid "Reporter"
+msgstr ""
+
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
 msgstr ""
@@ -1379,6 +1388,10 @@ msgstr ""
 
 #: src/components/account/accounts.tsx
 msgid "Yes"
+msgstr ""
+
+#: src/views/issue/issue-user-cc.tsx
+msgid "You can only CC a maximum of 5 reporters per ticket"
 msgstr ""
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
