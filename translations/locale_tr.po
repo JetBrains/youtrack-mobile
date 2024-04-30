@@ -53,26 +53,26 @@ msgstr[1] ""
 #: src/components/linked-issues/linked-issues.tsx
 msgid "{{amount}} issue"
 msgid_plural "{{amount}} issues"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{{amount}} sorun"
+msgstr[1] "{{amount}} sorun"
 
 #: src/components/date/date.ts
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{{daysLeft}} g"
+msgstr[1] "{{daysLeft}} g"
 
 #: src/components/date/date.ts
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{{hoursLeft}} sa"
+msgstr[1] "{{hoursLeft}} sa"
 
 #: src/components/date/date.ts
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{{minutesAbsolute}} dk"
+msgstr[1] "{{minutesAbsolute}} dk"
 
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
@@ -107,7 +107,7 @@ msgstr "Tepki ekle"
 
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
-msgstr ""
+msgstr "Harcanan süreyi ekle"
 
 #: src/components/tags/tag-add-panel.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -315,7 +315,7 @@ msgstr ""
 #: src/components/error-message/error-message-inline.tsx
 #: src/views/enter-server/enter-server.tsx
 msgid "Contact support"
-msgstr ""
+msgstr "Destek ekibiyle iletişime geçin"
 
 #: src/views/article/article.tsx
 msgid "Content"
@@ -398,7 +398,7 @@ msgstr "Reddet"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "declined the pull request"
-msgstr ""
+msgstr "çekme talebi reddedildi"
 
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
@@ -424,7 +424,7 @@ msgstr "Tüm taslaklar silinsin mi?"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Delete comment permanently?"
-msgstr ""
+msgstr "Yorum kalıcı olarak silinsin mi?"
 
 #: src/views/article-create/article-create.tsx
 msgid "Delete draft"
@@ -436,7 +436,7 @@ msgstr "Sorun {{issueId}} silinsin mi?"
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"
-msgstr ""
+msgstr "Kalıcı olarak sil"
 
 #: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
@@ -496,7 +496,7 @@ msgstr "Düzenle"
 
 #: src/components/comment/comment-edit.tsx
 msgid "Edit comment"
-msgstr ""
+msgstr "Yorumu düzenle"
 
 #: src/components/user/user-card.tsx
 msgid "Email"
@@ -518,7 +518,7 @@ msgstr "Komut girin"
 #: src/components/query-assist/query-assist.tsx
 #: src/components/query-assist/query-preview.tsx
 msgid "Enter search request"
-msgstr ""
+msgstr "Arama isteği girin"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
@@ -619,7 +619,7 @@ msgstr ""
 
 #: src/components/visibility/visibility-helper.ts
 msgid "Inherited restrictions"
-msgstr ""
+msgstr "Devralınan kısıtlamalar"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
@@ -936,7 +936,7 @@ msgstr "Raporlayıcı"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
-msgstr ""
+msgstr "Görünürlüğü sıfırla"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
@@ -985,7 +985,7 @@ msgstr ""
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"
-msgstr ""
+msgstr "Kullanıcıları, grupları ve ekipleri seçin"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
@@ -1279,7 +1279,7 @@ msgstr ""
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Update visibility"
-msgstr ""
+msgstr "Görünürlüğü güncelle"
 
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
@@ -1329,7 +1329,7 @@ msgstr "Görünürlük"
 #: src/components/activity-stream/activity__stream.tsx
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Visible to {{presentation}}"
-msgstr ""
+msgstr "Şurası için görünür: {{presentation}}"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"
@@ -1353,7 +1353,7 @@ msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Woah, you can't touch this!"
-msgstr ""
+msgstr "Hop, buna dokunamazsın!"
 
 #: src/components/error/error-message-data.ts
 msgid "Wrap attribute values that contain spaces in braces {like this}."
