@@ -2,7 +2,7 @@ import objectWalk from 'object-walk';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 import {handleRelativeUrl} from '../config/config';
 import {toField} from 'util/to-field';
-import type {Attachment, CustomField} from 'types/CustomFields';
+import type {CustomField} from 'types/CustomFields';
 import type {
   AnyIssue,
   ServersideSuggestion,
@@ -72,10 +72,10 @@ const API = {
   },
 
   convertAttachmentRelativeToAbsURLs(
-    attachments: Attachment[],
+    attachments: Array<Record<string, any>>,
     backendUrl: string,
-  ): Attachment[] {
-    let convertedItems: Attachment[] = attachments;
+  ): Array<Record<string, any>> {
+    let convertedItems = attachments;
     ['url', 'thumbnailURL', 'avatarUrl'].forEach((fieldName: string) => {
       convertedItems = this.convertRelativeUrls(
         convertedItems,

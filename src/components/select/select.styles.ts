@@ -76,6 +76,11 @@ export default EStyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    overflow: 'hidden',
+  },
+  item: {
+    flex: 1,
+    alignItems: 'flex-start',
   },
   itemIcon: {
     marginRight: UNIT * 2,
@@ -155,6 +160,7 @@ export default EStyleSheet.create({
   description: {
     ...secondaryText,
     color: '$textSecondary',
+    marginTop: UNIT / 4,
   },
 
 });

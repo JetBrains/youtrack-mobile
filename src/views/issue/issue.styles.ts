@@ -3,6 +3,7 @@ import {issueIdResolved} from 'components/common-styles/issue';
 import {
   headerTitle,
   mainText,
+  SECONDARY_FONT_SIZE,
   secondaryText,
 } from 'components/common-styles';
 import {separatorBorder} from 'components/common-styles/list';
@@ -118,6 +119,15 @@ export default EStyleSheet.create({
   link: {
     color: '$link',
   },
+  reporter: {
+    color: '$text',
+  },
+  reporterTag: {
+    alignSelf: 'flex-end',
+    color: '$textSecondary',
+    marginBottom: -UNIT / 2,
+    fontSize: SECONDARY_FONT_SIZE - 3,
+  },
   issueModalCloseIcon: {
     paddingHorizontal: UNIT,
   },
@@ -129,11 +139,15 @@ export default EStyleSheet.create({
     ...separatorBorder,
     borderColor: '$separator',
   },
-  usersCCSelectHeader: {
-    margin: UNIT,
+  selectHeader: {
+    margin: UNIT * 1.5,
   },
-  usersCCSelectHeaderText: {
+  selectHeaderText: {
+    paddingBottom: UNIT,
     ...secondaryText,
     color: '$textSecondary',
+  },
+  selectHeaderTextWarn: {
+    fontWeight: 600,
   },
 });

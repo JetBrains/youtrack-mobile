@@ -23,14 +23,17 @@ export default EStyleSheet.create({
   selectUserOption: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
   },
   selectUserOptionInfo: {
-    flexGrow: 1,
     flexDirection: 'row',
+    flex: 2,
     alignItems: 'center',
     justifyContent: 'space-between',
     marginLeft: UNIT * 1.5,
+  },
+  selectUserDescription: {
+    flex: 1,
+    alignItems: 'flex-end',
   },
   captcha: {
     ...mainText,

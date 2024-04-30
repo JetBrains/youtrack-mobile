@@ -6,7 +6,7 @@ export interface UserBase extends EntityBase {
   ringId: string;
   avatarUrl: string;
   name: string;
-  localizedName: string;
+  localizedName: string | null;
   userType: {
     id: string;
   };
@@ -16,6 +16,7 @@ export interface UserBase extends EntityBase {
 export interface UserCC extends Omit<UserBase, 'id'> {
   email: string;
   id?: string;
+  isReporter: boolean;
 }
 
 export interface UserHubCC extends EntityBase {

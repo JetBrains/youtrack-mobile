@@ -813,9 +813,13 @@ export default class IssueAPI extends ApiBase {
       banned: false,
       permission: 'JetBrains.YouTrack.READ_ISSUE',
     });
-    return await this.makeAuthorizedRequest(
+    const users: UserCC[] = await this.makeAuthorizedRequest(
       `${this.youTrackUrl}/api/users?${q}`,
       'GET',
     );
+    return ApiHelper.convertAttachmentRelativeToAbsURLs(
+      users,
+      this.config.backendUrl,
+    ) as UserCC[];
   }
 }

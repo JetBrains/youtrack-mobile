@@ -22,9 +22,9 @@ const HelpDeskFeedbackReporterOption = ({user}: {user: FeedbackFormReporter}) =>
             </View>
           )}
         </View>
-        <View>
-          <Text style={styles.hintText}>{user.login}</Text>
-        </View>
+      </View>
+      <View style={styles.selectUserDescription}>
+        <Text style={styles.hintText}>{user.login}</Text>
       </View>
     </View>
   );

@@ -94,7 +94,7 @@ export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
               />
             )}
 
-            <View>
+            <View style={styles.item}>
               {this.renderTitle(item)}
               {!!item.description && <View><Text style={styles.description}>{item.description}</Text></View>}
             </View>

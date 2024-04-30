@@ -40,6 +40,7 @@ export interface ISelectProps {
   noFilter?: boolean;
   getWrapperComponent?: () => any;
   getWrapperProps?: () => any;
+  isSelectionDisabled?: (selected: any[], current: any) => boolean;
 }
 
 export interface ISelectState {
@@ -207,6 +208,10 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
   }
 
   _onTouchItem(item: IItem): IItem[] {
+    const selectionDisabled = this.props?.isSelectionDisabled?.(this.state.selectedItems, item) || false;
+    if (selectionDisabled) {
+      return this.state.selectedItems;
+    }
     if (!this.props.multi) {
       this.onSelect(item);
       return [item];
