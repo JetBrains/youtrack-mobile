@@ -79,8 +79,9 @@ export default EStyleSheet.create({
     overflow: 'hidden',
   },
   item: {
+    flexDirection: 'row',
+    alignItems: 'center',
     flex: 1,
-    alignItems: 'flex-start',
   },
   itemIcon: {
     marginRight: UNIT * 2,
@@ -97,9 +98,8 @@ export default EStyleSheet.create({
     color: '$text',
   },
   itemStar: {
-    marginRight: UNIT * 1.5,
+    marginRight: UNIT,
     padding: UNIT / 2,
-    paddingRight: UNIT,
   },
   loadingMessage: {
     paddingLeft: UNIT * 2,

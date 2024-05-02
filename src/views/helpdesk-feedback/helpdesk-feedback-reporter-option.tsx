@@ -14,14 +14,12 @@ const HelpDeskFeedbackReporterOption = ({user}: {user: FeedbackFormReporter}) =>
     <View style={styles.selectUserOption}>
       {!!avatarUrl && <Avatar size={32} source={{uri: avatarUrl}} userName={user.name} />}
       <View style={styles.selectUserOptionInfo}>
-        <View>
-          <Text style={styles.text}>{getEntityPresentation(user)}</Text>
-          {!!user.profile?.email?.email && (
-            <View>
-              <Text style={styles.hintText}>{user.profile.email.email}</Text>
-            </View>
-          )}
-        </View>
+        <Text style={styles.text}>{getEntityPresentation(user)}</Text>
+        {!!user.profile?.email?.email && (
+          <View>
+            <Text style={styles.hintText}>{user.profile.email.email}</Text>
+          </View>
+        )}
       </View>
       <View style={styles.selectUserDescription}>
         <Text style={styles.hintText}>{user.login}</Text>
