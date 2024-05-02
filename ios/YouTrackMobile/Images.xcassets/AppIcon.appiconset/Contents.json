@@ -1,111 +1,114 @@
 {
   "images" : [
     {
-      "filename" : "iPhone_Notifications_20_2x.png",
-      "idiom" : "iphone",
+      "filename" : "40.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "iPhone_Notifications_20_3x.png",
-      "idiom" : "iphone",
+      "filename" : "60.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "3x",
       "size" : "20x20"
     },
     {
-      "filename" : "iPhone_Settings_29_2x.png",
-      "idiom" : "iphone",
+      "filename" : "58.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "iPhone_Settings_29_3x.png",
-      "idiom" : "iphone",
+      "filename" : "87.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
-      "filename" : "iPhone_Spotlight_40_2x.png",
-      "idiom" : "iphone",
+      "filename" : "76.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "2x",
+      "size" : "38x38"
+    },
+    {
+      "filename" : "114.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "38x38"
+    },
+    {
+      "filename" : "80.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "iPhone_Spotlight_40_3x.png",
-      "idiom" : "iphone",
+      "filename" : "120.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
-      "filename" : "iPhone_App_60_2x.png",
-      "idiom" : "iphone",
+      "filename" : "120 1.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "iPhone_App_60_3x.png",
-      "idiom" : "iphone",
+      "filename" : "180.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "iPad_Notifications_20_1x.png",
-      "idiom" : "ipad",
-      "scale" : "1x",
-      "size" : "20x20"
-    },
-    {
-      "filename" : "iPad_Notifications_20_2x.png",
-      "idiom" : "ipad",
+      "filename" : "128.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
-      "size" : "20x20"
+      "size" : "64x64"
     },
     {
-      "filename" : "iPad_Settings_29_1x.png",
-      "idiom" : "ipad",
-      "scale" : "1x",
-      "size" : "29x29"
+      "filename" : "192.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "scale" : "3x",
+      "size" : "64x64"
     },
     {
-      "filename" : "iPad_Settings_29_2x.png",
-      "idiom" : "ipad",
+      "filename" : "136.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
-      "size" : "29x29"
+      "size" : "68x68"
     },
     {
-      "filename" : "iPad_Spotlight_40_1x.png",
-      "idiom" : "ipad",
-      "scale" : "1x",
-      "size" : "40x40"
-    },
-    {
-      "filename" : "iPad_Spotlight_40_2x.png",
-      "idiom" : "ipad",
-      "scale" : "2x",
-      "size" : "40x40"
-    },
-    {
-      "filename" : "iPad_App_76_1x.png",
-      "idiom" : "ipad",
-      "scale" : "1x",
-      "size" : "76x76"
-    },
-    {
-      "filename" : "iPad_App_76_2x.png",
-      "idiom" : "ipad",
+      "filename" : "152.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
       "size" : "76x76"
     },
     {
-      "filename" : "iPad_Pro_App_83.5_2x.png",
-      "idiom" : "ipad",
+      "filename" : "167.png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "scale" : "2x",
       "size" : "83.5x83.5"
     },
     {
-      "filename" : "App_store_1024_1x.png",
-      "idiom" : "ios-marketing",
-      "scale" : "1x",
+      "filename" : "1024 .png",
+      "idiom" : "universal",
+      "platform" : "ios",
       "size" : "1024x1024"
     }
   ],
