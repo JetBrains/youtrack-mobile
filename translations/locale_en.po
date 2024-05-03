@@ -940,7 +940,7 @@ msgstr "Restart"
 msgid "Restore"
 msgstr "Restore"
 
-#: src/views/home/home.tsx:48
+#: src/views/home/home.tsx:51
 msgid "Retry"
 msgstr "Retry"
 
