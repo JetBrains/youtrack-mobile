@@ -29,7 +29,7 @@ import {isAndroidPlatform} from 'util/util';
 import {TextStyleProp} from 'types/Internal';
 
 // @ts-ignore
-export {default as logo} from './youtrack-logo-512.png';
+export {default as logo} from './assets/logo.png';
 
 import styles, {rotate45} from './icon.styles';
 
