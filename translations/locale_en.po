@@ -90,6 +90,10 @@ msgstr "Activity"
 msgid "Activity Settings"
 msgstr "Activity Settings"
 
+#: src/views/issues/issues__filters-settings.tsx:78
+msgid "Add filter"
+msgstr "Add filter"
+
 #: src/views/knowledge-base/knowledge-base.tsx:89
 msgid "Add project to favorites"
 msgstr "Add project to favorites"
@@ -301,7 +305,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:803
+#: src/actions/app-actions.ts:824
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -543,17 +547,17 @@ msgid "Filter items"
 msgstr "Filter items"
 
 #: src/views/article-create/article-create.tsx:149
-#: src/views/issues/issues-actions.ts:351
+#: src/views/issues/issues-actions.ts:354
 #: src/views/knowledge-base/knowledge-base.tsx:500
 msgid "Filter projects"
 msgstr "Filter projects"
 
-#: src/views/issues/issues-actions.ts:263
+#: src/views/issues/issues-actions.ts:266
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
 #: src/views/issues/issues__filters-settings__list.tsx:170
-#: src/views/issues/issues__settings.tsx:105
+#: src/views/issues/issues__settings.tsx:108
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
@@ -579,7 +583,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:579
+#: src/views/issues/issues.tsx:580
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -799,7 +803,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:629
+#: src/views/issues/issues.tsx:630
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -856,7 +860,7 @@ msgstr "People added as CCs receive the same notifications that are sent to the 
 msgid "Photo and video library"
 msgstr "Photo and video library"
 
-#: src/views/issues/issues__settings.tsx:138
+#: src/views/issues/issues__settings.tsx:147
 msgid "Preview Size"
 msgstr "Preview Size"
 
@@ -868,7 +872,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/issues/issues-actions.ts:292
+#: src/views/issues/issues-actions.ts:295
 #: src/views/knowledge-base/knowledge-base.tsx:519
 msgid "Projects"
 msgstr "Projects"
@@ -944,7 +948,7 @@ msgstr "Restore"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/views/issues/issues-actions.ts:307
+#: src/views/issues/issues-actions.ts:310
 msgid "Saved Searches"
 msgstr "Saved Searches"
 
@@ -960,7 +964,7 @@ msgstr "Search for a different value"
 msgid "Search for the project"
 msgstr "Search for the project"
 
-#: src/views/issues/issues__settings.tsx:73
+#: src/views/issues/issues__settings.tsx:76
 msgid "Search Input Mode"
 msgstr "Search Input Mode"
 
@@ -973,7 +977,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:694
+#: src/views/issues/issues.tsx:695
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -1071,7 +1075,7 @@ msgstr "Something went wrong"
 msgid "Sort Attributes"
 msgstr "Sort Attributes"
 
-#: src/views/issues/issues__settings.tsx:104
+#: src/views/issues/issues__settings.tsx:107
 msgid "Sort Order"
 msgstr "Sort Order"
 
@@ -1128,7 +1132,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/views/issues/issues-actions.ts:300
+#: src/views/issues/issues-actions.ts:303
 msgid "Tags"
 msgstr "Tags"
 
@@ -1180,7 +1184,7 @@ msgstr "The commit author is not an assignee in the project."
 msgid "The search query contains unknown values"
 msgstr "The search query contains unknown values"
 
-#: src/actions/app-actions.ts:423
+#: src/actions/app-actions.ts:444
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
@@ -1216,9 +1220,9 @@ msgstr "Thread muted"
 msgid "Thread unmuted"
 msgstr "Thread unmuted"
 
-#: src/views/issues/issues-actions.ts:69
+#: src/views/issues/issues-actions.ts:72
 #: src/views/issues/issues-reducers.ts:57
-#: src/views/tickets/tickets.tsx:33
+#: src/views/tickets/tickets.tsx:30
 msgid "Tickets"
 msgstr "Tickets"
 
@@ -1386,7 +1390,7 @@ msgstr ""
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Your account has insufficient permission to perform this operation."
 
-#: src/components/storage/storage.ts:377
+#: src/components/storage/storage.ts:381
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 msgstr "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 

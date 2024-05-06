@@ -110,6 +110,10 @@ msgstr "Aktivita"
 msgid "Activity Settings"
 msgstr "Nastavení aktivity"
 
+#: src/views/issues/issues__filters-settings.tsx
+msgid "Add filter"
+msgstr "Přidat filtr"
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Add project to favorites"
 msgstr "Přidat projekt k oblíbeným"

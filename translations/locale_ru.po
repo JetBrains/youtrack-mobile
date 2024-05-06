@@ -110,6 +110,10 @@ msgstr "События"
 msgid "Activity Settings"
 msgstr "Настройка ленты"
 
+#: src/views/issues/issues__filters-settings.tsx
+msgid "Add filter"
+msgstr "Добавить фильтр"
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Add project to favorites"
 msgstr "Добавить проект в избранное"

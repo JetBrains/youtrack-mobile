@@ -89,6 +89,10 @@ msgstr "アクティビティ"
 msgid "Activity Settings"
 msgstr "アクティビティの設定"
 
+#: src/views/issues/issues__filters-settings.tsx
+msgid "Add filter"
+msgstr "フィルターの追加"
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Add project to favorites"
 msgstr "プロジェクトをお気に入りに追加"

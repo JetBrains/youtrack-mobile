@@ -89,6 +89,10 @@ msgstr "活动"
 msgid "Activity Settings"
 msgstr "活动设置"
 
+#: src/views/issues/issues__filters-settings.tsx
+msgid "Add filter"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Add project to favorites"
 msgstr "将项目添加到收藏夹"

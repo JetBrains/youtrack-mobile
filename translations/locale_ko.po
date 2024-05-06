@@ -89,6 +89,10 @@ msgstr "활동"
 msgid "Activity Settings"
 msgstr "활동 설정"
 
+#: src/views/issues/issues__filters-settings.tsx
+msgid "Add filter"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Add project to favorites"
 msgstr "즐겨 찾기에 프로젝트 추가"

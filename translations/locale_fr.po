@@ -96,6 +96,10 @@ msgstr "Activité"
 msgid "Activity Settings"
 msgstr "Paramètres d'activité"
 
+#: src/views/issues/issues__filters-settings.tsx
+msgid "Add filter"
+msgstr "Ajouter un filtre"
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Add project to favorites"
 msgstr "Ajouter le projet aux favoris"
