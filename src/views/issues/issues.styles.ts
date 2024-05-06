@@ -71,15 +71,11 @@ export default EStyleSheet.create({
   row: {
     flexDirection: 'column',
   },
-  priorityPlaceholder: {
-    width: COLOR_FIELD_SIZE,
-    height: COLOR_FIELD_SIZE,
-  },
   priorityWrapper: {
     position: 'relative',
     marginRight: UNIT,
-    ...monospace,
     minWidth: COLOR_FIELD_SIZE,
+    minHeight: COLOR_FIELD_SIZE,
     ...Platform.select({
       android: {
         marginTop: UNIT / 4,
@@ -300,6 +296,9 @@ export default EStyleSheet.create({
     paddingRight: UNIT * 2,
     color: '$text',
     textTransform: 'capitalize',
+  },
+  settingsItemTextEmpty: {
+    color: '$icon',
   },
   settingsItemIcon: {
     color: '$icon',

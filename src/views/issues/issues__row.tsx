@@ -72,7 +72,6 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
     const LAST = values.length - 1;
     return (
       <ColorField
-        monospace
         style={{...styles.priorityWrapper, ...customStyle}}
         text={text || values[LAST].name}
         color={values[LAST].color}
