@@ -146,7 +146,8 @@ export default EStyleSheet.create({
   searchContextButton: {
     ...rowLine,
     alignSelf: 'flex-start',
-    minWidth: 130,
+    minWidth: '35%',
+    maxWidth: '68%',
     marginTop: UNIT,
     marginLeft: UNIT * 2,
     paddingVertical: UNIT,

@@ -408,7 +408,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     return this.props.user.profiles.helpdesk.isReporter;
   }
 
-  renderContextButton = () => {
+  renderContextButton() {
     const {
       isRefreshing,
       isSearchContextPinned,
@@ -418,15 +418,16 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     const isDisabled: boolean = isRefreshing || !networkState?.isConnected;
     const themeColors: UIThemeColors = this.getThemeColors();
     return (
-      <TouchableOpacity
+      <View
         key="issueListContext"
         accessible={true}
         testID="test:id/issue-list-context"
         style={[styles.searchContext, isSearchContextPinned ? styles.searchContextPinned : null]}
-        disabled={isDisabled}
-        onPress={this.props.onOpenContextSelect}
       >
-        <View style={[styles.searchContextButton, {width: Dimensions.get('window').width - 125}]}>
+        <TouchableOpacity
+          disabled={isDisabled}
+          onPress={this.props.onOpenContextSelect}
+          style={styles.searchContextButton}>
           <Text numberOfLines={1} style={styles.contextButtonText}>
             {searchContext.name.replace(' ', '\xa0')}
           </Text>
@@ -435,10 +436,10 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
             color={isDisabled ? themeColors.$disabled : themeColors.$text}
             size={19}
           />
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
     );
-  };
+  }
 
   renderContextSelect() {
     const {selectProps} = this.props;
@@ -595,7 +596,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
 
   renderIssueList() {
     const {issues, isRefreshing} = this.props;
-    const contextButton = this.isReporter() ? <View style={styles.searchContext}/> : this.renderContextButton();
+    const contextButton = this.renderContextButton();
     const searchPanel: React.ReactNode = <>
       {this.renderSearchPanel()}
       {this.renderToolbar()}
