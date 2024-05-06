@@ -3,7 +3,7 @@ import issueFields from './api__issue-fields';
 import {ResourceTypes} from './api__resource-types';
 
 import type Auth from '../auth/oauth2';
-import type {Folder, User, UserAppearanceProfile} from 'types/User';
+import type {Folder, User, UserAppearanceProfile, UserHelpdeskProfile} from 'types/User';
 import type {IssueComment} from 'types/CustomFields';
 import type {Reaction} from 'types/Reaction';
 
@@ -13,11 +13,38 @@ const appearanceProfileFields = [
   'firstDayOfWeek',
   'liteUiFilters',
 ];
+const SEARCH_CONTEXT_FIELDS: string[] = ['id', 'name', 'shortName', 'query'];
+const userProfiles = {
+  general: {
+    star: ['id'],
+    searchContext: SEARCH_CONTEXT_FIELDS,
+    timezone: ['id'],
+    dateFieldFormat: ['dateNoYearPattern', 'datePattern', 'pattern'],
+    locale: ['language', 'locale'],
+  },
+  appearance: appearanceProfileFields,
+  articles: {
+    lastVisitedArticle: ['id,idReadable,summary,project(id,ringId)'],
+  },
+  helpdesk: [
+    {
+      helpdeskFolder: SEARCH_CONTEXT_FIELDS,
+    },
+    'isAgent',
+    'isReporter',
+    {
+      agentInProjects: ['id'],
+    },
+    {
+      reporterInProjects: ['id'],
+    },
+    'ticketFilters',
+  ],
+};
 
 
 export default class UserAPI extends ApiBase {
   apiUrl: string;
-  SEARCH_CONTEXT_FIELDS: string[] = ['id', 'name', 'shortName', 'query'];
 
   constructor(auth: Auth) {
     super(auth);
@@ -39,32 +66,7 @@ export default class UserAPI extends ApiBase {
       'fullName',
       'userType(id)',
       {
-        profiles: {
-          general: {
-            star: ['id'],
-            searchContext: this.SEARCH_CONTEXT_FIELDS,
-            timezone: ['id'],
-            dateFieldFormat: ['dateNoYearPattern', 'datePattern', 'pattern'],
-            locale: ['language', 'locale'],
-          },
-          appearance: appearanceProfileFields,
-          articles: {
-            lastVisitedArticle: ['id,idReadable,summary,project(id,ringId)'],
-          },
-          helpdesk: [
-            {
-              helpdeskFolder: this.SEARCH_CONTEXT_FIELDS,
-            },
-            'isAgent',
-            'isReporter',
-            {
-              agentInProjects: ['id'],
-            },
-            {
-              reporterInProjects: ['id'],
-            },
-          ],
-        },
+        profiles: userProfiles,
       },
     ]);
     const user: User = await this.makeAuthorizedRequest(`${this.apiUrl}/${userId}?${queryString}`);
@@ -97,6 +99,18 @@ export default class UserAPI extends ApiBase {
         : Object.assign({}, appearanceProfile, {
             $type: ResourceTypes.USER_APPEARANCE_PROFILE,
           }),
+    );
+  }
+
+  async updateUserHelpdeskProfiles(
+    userId: string = 'me',
+    helpdeskProfiles: UserHelpdeskProfile,
+  ): Promise<UserHelpdeskProfile> {
+    const queryString = ApiBase.createFieldsQuery(userProfiles.helpdesk);
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackApiUrl}/users/${userId}/profiles/helpdesk?${queryString}`,
+      'POST',
+      {...helpdeskProfiles, $type: ResourceTypes.USER_HELPDESK_PROFILE}
     );
   }
 

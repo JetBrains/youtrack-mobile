@@ -11,7 +11,6 @@ import {
   getFilterFieldName,
 } from 'views/issues/issues-helper';
 import {
-  defaultIssuesFilterFieldConfig,
   FilterSetting,
   FiltersSetting,
   IssuesSetting,
@@ -28,10 +27,14 @@ import {getEntityPresentation} from 'components/issue-formatter/issue-formatter'
 import {getGroupedFolders, GroupedFolders, sortFolders} from 'components/folder/folder';
 import {i18n} from 'components/i18n/i18n';
 import {guid, removeDuplicatesFromArray, until} from 'util/util';
-import {receiveUserAppearanceProfile, setGlobalInProgress, setYTCurrentUser} from 'actions/app-actions';
+import {
+  receiveUserAppearanceProfile, receiveUserHelpdeskProfile,
+  setGlobalInProgress,
+  setYTCurrentUser,
+} from 'actions/app-actions';
 import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
-import type {Folder, User} from 'types/User';
+import type {Folder, User, UserProfiles} from 'types/User';
 import type {IssueOnList} from 'types/Issue';
 import {ActivityItem} from 'types/Activity';
 import {CustomError} from 'types/Error';
@@ -376,13 +379,18 @@ const getIssuesSettings = (): ReduxAction<IssuesSettings> => (
 };
 
 
-const cachedIssuesSettings = (settings?: IssuesSettings): ReduxAction<IssuesSettings> => (dispatch: ReduxThunkDispatch): IssuesSettings => {
-  if (settings) {
-    dispatch(issuesActions.SET_LIST_SETTINGS(settings));
-    flushStoragePart({issuesSettings: settings});
-  }
-  return settings || getStorageState().issuesSettings || issuesSettingsDefault;
-};
+const cachedIssuesSettings = (settings?: IssuesSettings): ReduxAction<IssuesSettings> =>
+  (dispatch: ReduxThunkDispatch): IssuesSettings => {
+    const helpdeskMode = dispatch(isHelpDeskMode());
+    if (settings) {
+      dispatch(issuesActions.SET_LIST_SETTINGS(settings));
+      flushStoragePart(helpdeskMode ? {helpdeskSettings: settings} : {issuesSettings: settings});
+    }
+    const storageState = getStorageState();
+    return (
+      settings || (helpdeskMode ? storageState.helpdeskSettings : storageState.issuesSettings) || issuesSettingsDefault
+    );
+  };
 
 const openFilterFieldSelect = (filterSetting: FilterSetting): ReduxAction => (
   dispatch: ReduxThunkDispatch,
@@ -627,33 +635,29 @@ const setFilters = (): (
     log.warn('Cannot load filter fields');
   } else if (Array.isArray(filterFields) && filterFields.filter(Boolean).length > 0) {
     const currentUser: User | null = getState().app.user;
-    const userProfileFiltersNames: string[] = (currentUser?.profiles?.appearance?.liteUiFilters || []).filter(
-      Boolean);
-    const visibleFiltersNames: string[] = (
-      userProfileFiltersNames.length > 0
-        ? userProfileFiltersNames
-        : Object.values(defaultIssuesFilterFieldConfig)
-    );
+    const helpdeskMode = dispatch(isHelpDeskMode());
+    const userProfileFiltersNames: string[] = (helpdeskMode
+      ? currentUser?.profiles?.helpdesk?.ticketFilters || []
+      : currentUser?.profiles?.appearance?.liteUiFilters || []).filter(Boolean);
 
+    const visibleFiltersNames: string[] = userProfileFiltersNames.length > 0 ? userProfileFiltersNames : [];
     if (userProfileFiltersNames.length === 0) {
       const ytCurrentUser: User = getStorageState().currentUser?.ytCurrentUser as User;
-      const user: User = {
-        ...ytCurrentUser,
-        profiles: {
-          ...ytCurrentUser.profiles,
-          appearance: {
-            ...ytCurrentUser?.profiles?.appearance,
-            liteUiFilters: visibleFiltersNames,
-          },
-        },
+      const profiles: UserProfiles = {
+        ...ytCurrentUser.profiles,
+        ...Object.assign(
+          {},
+          helpdeskMode
+            ? {helpdesk: {...ytCurrentUser.profiles.helpdesk, ticketFilters: visibleFiltersNames}}
+            : {appearance: {...ytCurrentUser?.profiles?.appearance, liteUiFilters: visibleFiltersNames}}
+        ),
       };
       dispatch(
-        receiveUserAppearanceProfile({
-          ...user?.profiles?.appearance,
-          liteUiFilters: visibleFiltersNames,
-        })
+        helpdeskMode
+          ? receiveUserHelpdeskProfile(profiles?.helpdesk)
+          : receiveUserAppearanceProfile(profiles?.appearance)
       );
-      await dispatch(setYTCurrentUser(user));
+      await dispatch(setYTCurrentUser({...ytCurrentUser, profiles}));
     }
 
     settings = {

@@ -73,6 +73,7 @@ const issuesSettingsDefault: IssuesSettings = {
 };
 
 enum defaultIssuesFilterFieldConfig {
+  project = 'project',
   state = 'state',
   assignee = 'assignee',
   type = 'type',

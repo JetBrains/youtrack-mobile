@@ -125,6 +125,7 @@ export interface UserHelpdeskProfile {
   reporterInProjects: {
     id: string;
   }[];
+  ticketFilters: string[],
 }
 
 export interface Folder extends EntityBase {

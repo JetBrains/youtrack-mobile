@@ -7,7 +7,6 @@ import {
   headerTitle,
   MAIN_FONT_SIZE,
   mainText,
-  monospace,
   SECONDARY_FONT_SIZE,
   secondaryText,
   UNIT,

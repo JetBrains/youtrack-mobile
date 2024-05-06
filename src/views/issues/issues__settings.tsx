@@ -24,21 +24,23 @@ import {
   IssuesSettings,
 } from 'views/issues/index';
 import {onSettingsChange, setFilters} from 'views/issues/issues-actions';
-import {receiveUserAppearanceProfile} from 'actions/app-actions';
+import {receiveUserAppearanceProfile, receiveUserHelpdeskProfile} from 'actions/app-actions';
 
 import styles from './issues.styles';
 
-import {AppState} from 'reducers';
-import {ReduxThunkDispatch} from 'types/Redux';
-import {User} from 'types/User';
+import type {AppState} from 'reducers';
+import type {ReduxThunkDispatch} from 'types/Redux';
+import type {User} from 'types/User';
 
 
 const IssuesListSettings = ({
   onQueryUpdate,
   toggleVisibility,
+  onChange,
 }: {
   onQueryUpdate: (q: string) => void;
   toggleVisibility: (isVisible: boolean) => void;
+  onChange: () => void,
 }): React.JSX.Element => {
   const dispatch: ReduxThunkDispatch = useDispatch();
 
@@ -51,6 +53,7 @@ const IssuesListSettings = ({
   const settings = useSelector((state: AppState) => state.issueList.settings);
   const user: User = useSelector((state: AppState) => state.app.user) as User;
   const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles.helpdesk.isReporter);
+  const isHelpdeskMode = useSelector((state: AppState) => state.issueList.helpDeskMode);
 
   const isQueryMode: boolean = settings.search.mode === issuesSearchSettingMode.query;
   const doChangeSettings = (issuesSettings: IssuesSettings) => {
@@ -115,7 +118,12 @@ const IssuesListSettings = ({
                   <IssuesFiltersSetting
                     onApply={async (visibleFilters: string[]) => {
                       await dispatch(
-                        receiveUserAppearanceProfile({
+                        isHelpdeskMode
+                          ? receiveUserHelpdeskProfile({
+                            ...user?.profiles?.helpdesk,
+                            ticketFilters: visibleFilters,
+                          })
+                          : receiveUserAppearanceProfile({
                           ...user?.profiles?.appearance,
                           liteUiFilters: visibleFilters,
                         })
@@ -125,6 +133,7 @@ const IssuesListSettings = ({
                       } else {
                         await dispatch(setFilters());
                       }
+                      onChange();
                     }}
                     onOpen={() => toggleVisibility(false)}
                     user={user}

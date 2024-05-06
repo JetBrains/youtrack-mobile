@@ -4,37 +4,42 @@ import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
 import IssuesFilterField from 'views/issues/issues__filters-filter';
-import {guid} from 'util/util';
 import {IconClose} from 'components/icon/icon';
 import {openFilterFieldSelect, resetFilterFields} from 'views/issues/issues-actions';
 
 import styles from './issues.styles';
 
-import {AppState} from 'reducers';
-import {FilterSetting, IssuesSettings} from 'views/issues/index';
+import type {AppState} from 'reducers';
+import type {FilterSetting, FiltersSetting, IssuesSettings} from 'views/issues/index';
+import type {ReduxThunkDispatch} from 'types/Redux';
 
 
 const IssuesFilters = (): React.JSX.Element | null => {
-  const dispatch = useDispatch();
+  const dispatch: ReduxThunkDispatch = useDispatch();
 
   const disabled: boolean = useSelector((state: AppState) => state.issueList.isRefreshing);
   const settings: IssuesSettings = useSelector((state: AppState) => state.issueList.settings);
 
-  const isResetEnabled: boolean = Object.keys(settings.search.filters).some(
-    (key: string) => settings.search.filters[key].selectedValues.length > 0
+  const getSearchFilters = (): FiltersSetting => settings.search.filters || {};
+
+  const getSearchFiltersKeys = (): string[] => Object.keys(getSearchFilters());
+
+  const isResetEnabled: boolean = getSearchFiltersKeys().some(
+    (key: string) => getSearchFilters()[key].selectedValues.length > 0
   );
-  return (
+
+  return getSearchFiltersKeys().length ? (
     <ScrollView
       horizontal={true}
       contentContainerStyle={styles.searchPanelFilters}
     >
       <View style={styles.filters}>
         {
-          Object.keys(settings.search.filters).map((it: string) => {
-            const fs: FilterSetting = settings.search.filters[it];
+          getSearchFiltersKeys().map((it: string, i: number) => {
+            const fs: FilterSetting = getSearchFilters()[it];
             return fs.filterField[0] ? (
               <IssuesFilterField
-                key={guid()}
+                key={`searchFilters-${i}`}
                 filterSetting={fs}
                 disabled={disabled}
                 onPress={(filterSetting: FilterSetting) => {
@@ -54,7 +59,7 @@ const IssuesFilters = (): React.JSX.Element | null => {
         </TouchableOpacity>}
       </View>
     </ScrollView>
-  );
+  ) : null;
 };
 
 

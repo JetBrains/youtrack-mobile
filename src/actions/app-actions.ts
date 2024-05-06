@@ -49,6 +49,7 @@ import type {
   UserAppearanceProfile,
   UserArticlesProfile,
   UserCurrent,
+  UserHelpdeskProfile,
 } from 'types/User';
 import type {InboxFolder, InboxThread} from 'types/Inbox';
 import type {NetInfoState} from '@react-native-community/netinfo';
@@ -139,7 +140,27 @@ export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppeara
           },
         });
       } catch (error) {
-        log.info('Can\'t update user appearance profile.');
+        log.info('Cannot update user appearance profile.');
+      }
+    }
+  };
+}
+
+export function receiveUserHelpdeskProfile(helpdeskProfiles?: UserHelpdeskProfile): ReduxAction {
+  return async (
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
+  ) => {
+    if (helpdeskProfiles) {
+      try {
+        const helpdesk = await getApi().user.updateUserHelpdeskProfiles('me', helpdeskProfiles);
+        dispatch({
+          type: types.RECEIVE_USER_HELPDESK_PROFILES,
+          helpdesk,
+        });
+      } catch (error) {
+        log.info('Cannot update user helpdesk profile.');
       }
     }
   };

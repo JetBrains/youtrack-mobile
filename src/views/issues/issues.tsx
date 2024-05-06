@@ -722,6 +722,9 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
       <IssuesListSettings
         onQueryUpdate={this.onQueryUpdate}
         toggleVisibility={this.toggleSettingsVisibility}
+        onChange={() => {
+          this.refresh();
+        }}
       />
     ) : null;
   }

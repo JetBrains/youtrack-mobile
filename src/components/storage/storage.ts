@@ -96,6 +96,7 @@ export type StorageState = TipsState & FeatureState & {
   vcsChanges: boolean | null;
   forceHandsetMode: boolean | null;
   issuesSettings: IssuesSettings;
+  helpdeskSettings: IssuesSettings;
 };
 
 const storageKeys: StorageStateKeys & (typeof tipsKeys) & (typeof featuresKeys) = {
@@ -135,6 +136,7 @@ const storageKeys: StorageStateKeys & (typeof tipsKeys) & (typeof featuresKeys) 
   themeMode: THEME_MODE_KEY,
   vcsChanges: 'YT_VCS_CHANGES',
   issuesSettings: 'YT_ISSUES_SETTINGS',
+  helpdeskSettings: 'YT_HELPDESK_SETTINGS',
 };
 let storageState: StorageState | null = null;
 
@@ -188,6 +190,7 @@ export const initialState: Readonly<StorageState> = {
   vcsChanges: null,
   forceHandsetMode: null,
   issuesSettings: issuesSettingsDefault,
+  helpdeskSettings: issuesSettingsDefault,
 };
 
 function cleanAndLogState(message, state?: StorageState) {
@@ -274,6 +277,7 @@ export async function clearCachesAndDrafts(): Promise<StorageState> {
     storageKeys.agileDefaultBoard,
     storageKeys.projects,
     storageKeys.issuesSettings,
+    storageKeys.helpdeskSettings,
     storageKeys.searchContext,
     ...Object.values(tipsKeys),
     ...Object.values(featuresKeys),

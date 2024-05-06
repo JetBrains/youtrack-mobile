@@ -93,6 +93,7 @@ describe('Storage', () => {
         'YT_THEME_MODE',
         'YT_VCS_CHANGES',
         'YT_ISSUES_SETTINGS',
+        'YT_HELPDESK_SETTINGS',
       ]);
     });
     it('should update field state on partial flush', async () => {

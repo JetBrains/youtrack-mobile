@@ -9,7 +9,7 @@ import type {EndUserAgreement} from 'types/AppConfig';
 import type {NetInfoState} from '@react-native-community/netinfo';
 import type {PermissionsStore} from 'components/permissions-store/permissions-store';
 import type {StorageState} from 'components/storage/storage';
-import type {User, UserAppearanceProfile, UserArticlesProfile} from 'types/User';
+import type {User, UserAppearanceProfile, UserArticlesProfile, UserHelpdeskProfile} from 'types/User';
 import type {WorkTimeSettings} from 'types/Work';
 import {DraftCommentData} from 'types/CustomFields';
 import {GlobalSettings} from 'types/GlobalSettings';
@@ -198,6 +198,30 @@ export default createReducer(initialState, {
       ...{
         profiles: updatedProfiles,
       },
+    };
+    return {
+      ...state,
+      ...{
+        user: updatedUser,
+      },
+    };
+  },
+  [types.RECEIVE_USER_HELPDESK_PROFILES](
+    state: RootState,
+    action: { helpdesk: UserHelpdeskProfile;},
+  ) {
+    const {user} = state;
+
+    const _user = user || {
+      profiles: {},
+    };
+
+    const updatedProfiles = Object.assign({}, _user.profiles || {}, {
+      helpdesk: action.helpdesk,
+    });
+    const updatedUser = {
+      ...state.user,
+      profiles: updatedProfiles,
     };
     return {
       ...state,
