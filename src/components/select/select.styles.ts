@@ -100,6 +100,7 @@ export default EStyleSheet.create({
   itemStar: {
     marginRight: UNIT,
     padding: UNIT / 2,
+    paddingLeft: 0,
   },
   loadingMessage: {
     paddingLeft: UNIT * 2,

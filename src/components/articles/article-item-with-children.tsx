@@ -75,7 +75,7 @@ const ArticleItemWithChildren = (props: Props) => {
                 <IconAngleRight
                   style={styles.itemButtonIcon}
                   size={22}
-                  color={styles.icon.color}
+                  color={styles.itemButtonText.color}
                 />
               </>
             )}

@@ -434,7 +434,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     if (issue && this.isIssueLoaded()) {
       return (
         <Star
-          size={23}
+          size={22}
           style={styles.issueStar}
           canStar={this.canStar()}
           hasStar={issue.watchers?.hasStar}

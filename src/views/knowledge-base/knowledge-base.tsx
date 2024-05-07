@@ -220,7 +220,7 @@ export class KnowledgeBase extends Component<Props, State> {
               style={styles.itemStar}
               disabled={isProjectExpanding}
               size={19}
-              hasStar={!!project.pinned}
+              hasStar={project.pinned}
               canStar={true}
               onStarToggle={async () => {
                 const hasPinnedProjects: boolean = await this.props.toggleProjectFavorite(section);

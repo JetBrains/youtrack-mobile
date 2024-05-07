@@ -1,7 +1,7 @@
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
 
-import IconStar from 'components/icon/assets/star.svg';
+import IconStar from '@jetbrains/icons/star-empty-20px.svg';
 import {HIT_SLOP} from 'components/common-styles/button';
 
 import styles from './star.styles';
