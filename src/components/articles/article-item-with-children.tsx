@@ -86,6 +86,4 @@ const ArticleItemWithChildren = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(
-  ArticleItemWithChildren,
-) as React$AbstractComponent<Props, unknown>;
+export default React.memo<Props>(ArticleItemWithChildren);

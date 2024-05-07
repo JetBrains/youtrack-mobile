@@ -220,4 +220,7 @@ export default EStyleSheet.create({
     fontSize: SECONDARY_FONT_SIZE,
     color: '$link',
   },
+  error: {
+    color: '$error',
+  },
 });

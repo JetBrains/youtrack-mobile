@@ -18,11 +18,10 @@ export const articleItemWithChildrenStyles = {
     color: '$icon',
   },
   lockIcon: {
-    marginLeft: UNIT / 2,
     color: '$private',
   },
   iconTrash: {
-    color: '$iconAccent',
+    color: '$error',
     padding: UNIT,
   },
   itemButtonContainer: {

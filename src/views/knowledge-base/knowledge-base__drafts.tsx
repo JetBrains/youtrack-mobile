@@ -129,7 +129,7 @@ const KnowledgeBaseDrafts = (props: Props) => {
                 style={styles.iconTrash}
                 onPress={deleteAllDrafts}
               >
-                <IconTrash color={styles.link.color} width={19} height={19} />
+                <IconTrash color={styles.error.color} width={19} height={19} />
               </TouchableOpacity>
             )
           ) : null
