@@ -69,12 +69,11 @@ export default EStyleSheet.create({
   },
   subArticleItemText: {...mainText, color: '$text'},
   subArticlesCreate: {
-    marginHorizontal: UNIT,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   subArticlesCreateIcon: {
-    position: 'absolute',
-    top: -UNIT * 2.1,
-    padding: UNIT,
+    marginLeft: UNIT,
     color: '$iconAccent',
   },
   commentContainer: {

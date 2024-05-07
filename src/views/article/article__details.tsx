@@ -28,6 +28,7 @@ import type {Article} from 'types/Article';
 import type {Attachment} from 'types/CustomFields';
 import type {CustomError} from 'types/Error';
 import type {UITheme} from 'types/Theme';
+import {HIT_SLOP} from 'components/common-styles';
 
 type Props = {
   article: Article;
@@ -147,20 +148,19 @@ const ArticleDetails = (props: Props) => {
           onPress={() => navigateToSubArticlePage(props.article)}
           style={styles.subArticles}
         >
-          <View style={styles.breadCrumbsItem}>
+          <View style={styles.subArticlesCreate}>
             <Text style={styles.subArticlesTitle}>{i18n('Sub-articles')}</Text>
             {!!onCreateArticle && (
-              <View style={styles.subArticlesCreate}>
-                <TouchableOpacity
-                  onPress={onCreateArticle}
-                  style={styles.subArticlesCreateIcon}
-                >
-                  <IconAdd
-                    size={18}
-                    color={styles.subArticlesCreateIcon.color}
-                  />
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                hitSlop={HIT_SLOP}
+                onPress={onCreateArticle}
+                style={styles.subArticlesCreateIcon}
+              >
+                <IconAdd
+                  size={22}
+                  color={styles.subArticlesCreateIcon.color}
+                />
+              </TouchableOpacity>
             )}
           </View>
           {hasSubArticles && (
