@@ -10,11 +10,11 @@ import {
 import Swiper from 'react-native-swiper';
 
 import Avatar from 'components/avatar/avatar';
-import IconAdd from 'components/icon/assets/plus.svg';
 import IconLogout from 'components/icon/assets/logout.svg';
 import {formatYouTrackURL} from 'components/config/config';
 import {getStorageState} from 'components/storage/storage';
 import {HIT_SLOP} from 'components/common-styles/button';
+import {IconAdd} from 'components/icon/icon';
 
 import avatarStyles from 'components/avatar/default-avatar.styles';
 import styles, {SWIPER_HEIGHT} from './accounts.styles';
@@ -154,7 +154,7 @@ export default class Accounts extends PureComponent<Props, void> {
           disabled={isChangingAccount}
           onPress={onAddAccount}
         >
-          <IconAdd width={24} height={24} color={uiTheme.colors.$link} />
+          <IconAdd size={26} color={uiTheme.colors.$link} />
         </TouchableOpacity>
 
         {this.renderAccounts()}

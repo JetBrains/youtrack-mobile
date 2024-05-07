@@ -1,7 +1,7 @@
 import {TouchableOpacity} from 'react-native';
 import React from 'react';
 
-import IconPlus from 'components/icon/assets/plus.svg';
+import {IconAdd} from 'components/icon/icon';
 import {HIT_SLOP} from 'components/common-styles/button';
 
 import styles from './icon-clear-text.styles';
@@ -30,7 +30,7 @@ export function IconClearText({
         }
       }}
     >
-      <IconPlus width={size} height={size} color={color} />
+      <IconAdd size={size} color={color} />
     </TouchableOpacity>
   );
 }

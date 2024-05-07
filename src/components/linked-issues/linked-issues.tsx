@@ -10,7 +10,7 @@ import {
 import {View as AnimatedView} from 'react-native-animatable';
 
 import Header from 'components/header/header';
-import IconPlus from 'components/icon/assets/plus.svg';
+import {IconAdd} from 'components/icon/icon';
 import IssueRow from 'views/issues/issues__row';
 import LinkedIssuesAddLink from './linked-issues-add-link';
 import Router from 'components/router/router';
@@ -184,9 +184,7 @@ const LinkedIssues = (props: Props) => {
         showShadow={true}
         leftButton={props.closeIcon || <IconBack color={styles.link.color} />}
         rightButton={
-          props.canLink ? (
-            <IconPlus style={styles.addLinkButton} color={styles.link.color} width={22} height={22} />
-          ) : null
+          props.canLink ? <IconAdd style={styles.addLinkButton} color={styles.link.color}/> : null
         }
         onRightButtonClick={onAddIssueLink}
         onBack={props.onHide}

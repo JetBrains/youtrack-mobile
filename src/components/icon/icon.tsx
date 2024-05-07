@@ -19,7 +19,7 @@ import History from 'components/icon/assets/history.svg';
 import Link from '@jetbrains/icons/link-20px.svg';
 import Lock from 'components/icon/assets/lock.svg';
 import More from 'components/icon/assets/more.svg';
-import Plus from 'components/icon/assets/plus.svg';
+import Plus from '@jetbrains/icons/add-20px.svg';
 import Tag from '@jetbrains/icons/tag-20px.svg';
 import Time from 'components/icon/assets/time.svg';
 import Vcs from 'components/icon/assets/vcs.svg';
@@ -213,7 +213,7 @@ const createSVGProps = (
 
 export const IconLock = (props: Props) => <Lock {...createSVGProps(props, 16)} />;
 
-export const IconAdd = (props: Props, style: IconStyle) => <Plus {...createSVGProps(props, 27, style)} />;
+export const IconAdd = (props: Props, style: IconStyle) => <Plus {...createSVGProps(props, 22, style)} />;
 
 export const IconAngleDown = (props: Props) => <ChevronSmallDown {...createSVGProps(props, 18)} />;
 

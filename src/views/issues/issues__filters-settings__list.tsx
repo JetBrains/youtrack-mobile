@@ -160,7 +160,6 @@ const IssuesFiltersSettingList = ({
             onPress={renderAddItemComponent}
           >
             <IconAdd
-              size={24}
               style={styles.sortByListAddIcon}
               color={styles.link.color}
             />

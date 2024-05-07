@@ -14,11 +14,10 @@ export const formRowStyles = {
     paddingRight: UNIT * 5,
   },
   formInputClearIcon: {
-    marginLeft: -UNIT * 5,
-    width: UNIT * 4,
-    height: UNIT * 4,
-    alignItems: 'center',
-    justifyContent: 'center',
+    position: 'absolute',
+    top: UNIT,
+    right: 0,
+    zIndex: 1,
   },
   formBlock: {
     marginTop: UNIT * 2,

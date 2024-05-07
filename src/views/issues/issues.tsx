@@ -305,7 +305,6 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         disabled={this.props.isInProgress}
       >
         <IconAdd
-          size={25}
           color={
             this.props.isInProgress
               ? this.getThemeColors().$disabled

@@ -157,7 +157,7 @@ const ArticleDetails = (props: Props) => {
                 style={styles.subArticlesCreateIcon}
               >
                 <IconAdd
-                  size={22}
+                  size={20}
                   color={styles.subArticlesCreateIcon.color}
                 />
               </TouchableOpacity>
@@ -177,7 +177,7 @@ const ArticleDetails = (props: Props) => {
               </Text>
               <IconAngleRight
                 size={18}
-                color={uiTheme.colors.$text}
+                color={styles.subArticlesNavigateIcon.color}
                 style={styles.subArticlesNavigateIcon}
               />
             </View>

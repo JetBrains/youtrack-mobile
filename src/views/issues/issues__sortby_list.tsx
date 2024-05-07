@@ -191,7 +191,6 @@ const IssuesSortByList = (props: Props) => {
             }}
           >
             <IconAdd
-              size={24}
               style={styles.sortByListAddIcon}
               color={styles.link.color}
             />

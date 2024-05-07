@@ -17,7 +17,7 @@ import AttachmentAddPanel from 'components/attachments-row/attachments-add-panel
 import AttachmentsRow from 'components/attachments-row/attachments-row';
 import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import Header from 'components/header/header';
-import IconPlus from 'components/icon/assets/plus.svg';
+import {IconAdd} from 'components/icon/icon';
 import IconTime from 'components/icon/assets/time.svg';
 import IssueVisibility from 'components/visibility/issue-visibility';
 import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
@@ -500,11 +500,7 @@ const CommentEdit = (props: Props) => {
                   })
                 }
               >
-                <IconPlus
-                  color={styles.actionsContainerButton.color}
-                  width={23}
-                  height={23}
-                />
+                <IconAdd color={styles.actionsContainerButton.color}/>
               </TouchableOpacity>
             </View>
           )}

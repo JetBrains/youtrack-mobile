@@ -1,16 +1,16 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {clearIcon} from 'components/common-styles/search';
 import {rotate45} from './icon.styles';
 import {UNIT} from 'components/common-styles';
 
 
 export default EStyleSheet.create({
   icon: {
-    ...clearIcon,
+    color: '$icon',
+    padding: UNIT / 2,
     marginLeft: UNIT,
     marginRight: UNIT,
-    borderRadius: UNIT,
+    borderRadius: UNIT * 2,
     ...rotate45,
   },
 });
