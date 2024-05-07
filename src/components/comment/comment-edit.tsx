@@ -322,7 +322,7 @@ const CommentEdit = (props: Props) => {
           await onSubmitComment();
         }}
       >
-        {!isSaving && <IconArrowUp size={22} color={styles.commentSendButtonIcon.color}/>}
+        {!isSaving && <IconArrowUp color={styles.commentSendButtonIcon.color}/>}
         {isSaving && <ActivityIndicator color={styles.commentSendButtonIcon.backgroundColor}/>}
       </TouchableOpacity>
     );

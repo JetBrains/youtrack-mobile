@@ -7,6 +7,7 @@ import IconFA from 'react-native-vector-icons/FontAwesome';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import ArrowLeft from '@jetbrains/icons/arrow-20px-left.svg';
+import ArrowUp from '@jetbrains/icons/arrow-20px-up.svg';
 import Attachment from '@jetbrains/icons/attachment-20px.svg';
 import Checkmark from 'components/icon/assets/checkmark.svg';
 import ChevronLeft from 'components/icon/assets/shevron_left.svg';
@@ -80,14 +81,7 @@ const mergeStyles = (style: IconStyle = [], extraStyle: IconStyle = []): IconSty
   return new Array<IconStyle>().concat(style).concat(extraStyle);
 };
 
-export const IconArrowUp = (props: Props) => (
-  <IconFont
-    {...{
-      name: 'arrow-up',
-      ...props,
-    }}
-  />
-);
+export const IconArrowUp = (props: Props) => <ArrowUp {...createSVGProps(props, 22)}/>;
 
 export const IconShare = (props: Props) => (
   <IconFont
