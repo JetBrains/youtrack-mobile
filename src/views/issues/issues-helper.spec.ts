@@ -1,7 +1,7 @@
 import * as helper from './issues-helper';
 
-import {FilterField} from 'types/CustomFields';
-import {FilterSetting} from 'views/issues/index';
+import type {FilterSetting} from 'views/issues/index';
+import type {FilterField} from 'types/Sorting';
 
 
 describe('Issues helper', () => {

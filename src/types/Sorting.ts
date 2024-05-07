@@ -1,20 +1,43 @@
-import type {CustomField} from './CustomFields';
-import {Project} from 'types/Project';
+import type {CustomField, ICustomField} from './CustomFields';
+import type {Project} from 'types/Project';
 
-export type PredefinedFilterField = {
+export interface PredefinedFilterField {
   $type: 'PredefinedFilterField';
   defaultSortAsc: boolean;
   id: string;
   name: string;
   sortablePresentation: string;
-};
+  presentation: string;
+  sortable: true;
+}
+
+export interface FilterField {
+  $type: string;
+  id: string;
+  name: string;
+  presentation: string;
+  sortablePresentation: string;
+  sortable: boolean;
+  defaultSortAsc: boolean;
+  customField: ICustomField;
+  projects: Array<{
+    id: string;
+    name: string;
+  }>;
+}
+
+export interface FilterFieldValue {
+  $type: string;
+  id: string;
+  presentation: string;
+  query: string;
+}
+
 export type IssueFieldSortProperty = {
   $type: 'IssueFieldSortProperty' | 'RelevanceSortProperty';
   asc: boolean;
   id: string;
-  localizedName?: string;
-  readOnly?: boolean;
-  sortField: PredefinedFilterField;
+  sortField: PredefinedFilterField | FilterField;
 };
 export type CustomFilterField = {
   $type: 'CustomFilterField';

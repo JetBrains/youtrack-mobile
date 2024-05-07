@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {View as AnimatedView} from 'react-native-animatable';
+
 import DraggableFlatList from 'react-native-draggable-dynamic-flatlist';
+import {View as AnimatedView} from 'react-native-animatable';
+
 import Header from 'components/header/header';
 import IconAscending from 'components/icon/assets/ascending.svg';
 import IconDescending from 'components/icon/assets/descending.svg';
@@ -24,24 +26,25 @@ import {
 } from 'components/icon/icon';
 import {i18n} from 'components/i18n/i18n';
 import {isSplitView} from 'components/responsive/responsive-helper';
+
 import styles from './issues.styles';
+
 import type {Folder} from 'types/User';
 import type {IssueFieldSortProperty, SearchSuggestions} from 'types/Sorting';
-type Props = {
+
+interface Props {
   context: Folder;
-  onApply: (
-    sortProperties: IssueFieldSortProperty[],
-    query: string,
-  ) => any;
+  onApply: (sortProperties: IssueFieldSortProperty[], query: string) => void;
   query: string;
   selectedSortProperties: IssueFieldSortProperty[];
   onBack?: () => any;
-};
+}
+
 const MAX_SORT_ATTRIBUTES_AMOUNT: number = 4;
 
 const IssuesSortByList = (props: Props) => {
-  const [selectedSortProperties, updateSelectedSortProperties] = useState([]);
-  const [modalChildren, updateModalChildren] = useState(null);
+  const [selectedSortProperties, updateSelectedSortProperties] = useState<IssueFieldSortProperty[]>([]);
+  const [modalChildren, updateModalChildren] = useState<React.ReactNode | null>(null);
   useEffect(() => {
     updateSelectedSortProperties(props.selectedSortProperties);
   }, [props.selectedSortProperties]);

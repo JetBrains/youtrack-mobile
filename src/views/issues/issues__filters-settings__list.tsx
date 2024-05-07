@@ -12,13 +12,13 @@ import Select, {SelectModal} from 'components/select/select';
 import {EllipsisVertical, IconAdd, IconCheck, IconClose} from 'components/icon/icon';
 import {getApi} from 'components/api/api__instance';
 import {i18n} from 'components/i18n/i18n';
+import {isSplitView} from 'components/responsive/responsive-helper';
 import {until} from 'util/util';
 
 import styles from './issues.styles';
 
-import {FilterSetting} from 'views/issues/index';
-import {FilterField} from 'types/CustomFields';
-import {isSplitView} from 'components/responsive/responsive-helper';
+import type {FilterSetting} from 'views/issues/index';
+import type {FilterField} from 'types/Sorting';
 
 
 const IssuesFiltersSettingList = ({

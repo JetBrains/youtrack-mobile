@@ -34,16 +34,16 @@ import {
 } from 'actions/app-actions';
 import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
+import type {ActivityItem} from 'types/Activity';
+import type {CustomError} from 'types/Error';
+import type {FilterField, FilterFieldValue} from 'types/Sorting';
 import type {Folder, User, UserProfiles} from 'types/User';
+import type {ISelectProps} from 'components/select/select';
 import type {IssueOnList} from 'types/Issue';
-import {ActivityItem} from 'types/Activity';
-import {CustomError} from 'types/Error';
-import {FilterField, FilterFieldValue} from 'types/CustomFields';
-import {ISelectProps} from 'components/select/select';
-import {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
-import {ProjectHelpdesk} from 'types/Project';
-import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
-import {SortedIssues} from 'components/api/api__issues';
+import type {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
+import type {ProjectHelpdesk} from 'types/Project';
+import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
+import type {SortedIssues} from 'components/api/api__issues';
 
 export interface ContextDataSource {
   title: string;

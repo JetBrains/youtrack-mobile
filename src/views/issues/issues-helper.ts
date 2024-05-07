@@ -6,10 +6,9 @@ import {until} from 'util/util';
 import {whiteSpacesRegex} from 'components/wiki/util/patterns';
 
 import type API from 'components/api/api';
+import type {FilterField, IssueFieldSortProperty, SearchSuggestions} from 'types/Sorting';
+import type {FilterSetting} from 'views/issues/index';
 import type {Folder} from 'types/User';
-import type {IssueFieldSortProperty, SearchSuggestions} from 'types/Sorting';
-import {FilterSetting} from 'views/issues/index';
-import {FilterField} from 'types/CustomFields';
 
 
 const doAssist = async (params: {
@@ -30,12 +29,16 @@ const doAssist = async (params: {
 };
 
 const getSortPropertyName = (sortProperty: IssueFieldSortProperty): string => {
-  const name = sortProperty
-    ? sortProperty?.sortField?.sortablePresentation ||
-      sortProperty.localizedName ||
-      getLocalizedName(sortProperty.sortField)
-    : sortProperty;
-  return name && sortProperty?.sortField?.$type === 'PredefinedFilterField'
+  const sortField = sortProperty.sortField;
+  let name = '';
+  if (sortField) {
+    if ('sortablePresentation' in sortField) {
+      name = sortField.sortablePresentation;
+    } else {
+      name = getLocalizedName(sortField);
+    }
+  }
+  return name && sortField?.$type === 'PredefinedFilterField'
     ? name.charAt(0).toUpperCase() + name.slice(1)
     : name;
 };

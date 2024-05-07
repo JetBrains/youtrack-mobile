@@ -1,6 +1,6 @@
 import ApiBase from './api__base';
 
-import {FilterField, FilterFieldValue} from 'types/CustomFields';
+import type {FilterField, FilterFieldValue} from 'types/Sorting';
 
 
 export default class FilterFields extends ApiBase {

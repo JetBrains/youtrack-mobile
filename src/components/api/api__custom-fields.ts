@@ -2,18 +2,16 @@ import ApiBase from './api__base';
 
 import {toField} from 'util/to-field';
 
-import {FilterField} from 'types/CustomFields';
+import type {FilterField} from 'types/Sorting';
 
 const sortByFields = toField([
   'id',
   '$type',
   'presentation',
   'name',
-  'aggregateable',
   'defaultSortAsc',
   'sortable',
   'sortablePresentation',
-  'instant',
   {
     customField: [
       '$type',
@@ -21,7 +19,7 @@ const sortByFields = toField([
       'name',
       'localizedName',
       {
-        fieldType: ['id', 'isBundleType', 'valueType'],
+        fieldType: ['id', 'valueType'],
       },
     ],
     projects: ['id', 'name'],
