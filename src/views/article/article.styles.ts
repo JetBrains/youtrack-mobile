@@ -61,6 +61,7 @@ export default EStyleSheet.create({
   subArticlesNavigateIcon: {
     position: 'relative',
     top: -UNIT,
+    color: '$icon',
   },
   subArticlesHeader: {...elevation1},
   articlesHeaderText: {...headerTitle, color: '$text'},
