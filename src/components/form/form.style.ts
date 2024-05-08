@@ -39,6 +39,7 @@ export const formRowStyles = {
     paddingVertical: UNIT * 2.5,
     paddingBottom: UNIT,
     marginTop: UNIT / 4,
+    lineHeight: null,
   },
   formInputLabel: {
     position: 'absolute',
