@@ -147,6 +147,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
 
                 {b.type === formBlockType.input && (
                   <FormTextInput
+                    style={styles.formBlock}
                     value={b.value}
                     onChange={text => onTextValueChange(b, text)}
                     onClear={() => onTextValueChange(b, '')}
@@ -158,6 +159,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
 
                 {isNumberFieldBlock(b) && (
                   <FormTextInput
+                    style={styles.formBlock}
                     value={b.value}
                     placeholder={label}
                     onChange={text => {
@@ -181,6 +183,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
 
                 {isTextFieldBlock(b) && (
                   <FormTextInput
+                    style={styles.formBlock}
                     value={b.value}
                     onChange={presentation => {
                       const value = b.type === formBlockType.string ? presentation : {presentation};
@@ -200,6 +203,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
 
                 {(emailBlock || b.type === formBlockType.field) && (
                   <FormSelect
+                    style={styles.formBlock}
                     value={b.value}
                     label={label}
                     placeholder={emailBlock ? i18n('Select a reporter or enter a new email address') : ''}
@@ -229,7 +233,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                 )}
 
                 {isDateOrTimeBlock(b) && (
-                  <FormSelect value={b.value} label={label} onPress={() => setDateTimeBlock(b)} />
+                  <FormSelect style={styles.formBlock} value={b.value} label={label} onPress={() => setDateTimeBlock(b)} />
                 )}
 
                 {b.type === formBlockType.attachment && (

@@ -480,7 +480,11 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
       >
         {this.renderCustomFieldPanel()}
         {isHelpdeskProject(this.props.issue) && (
-          <IssueUsersCC style={styles.usersCCSelect} disabled={!this.props.isAgent} />
+          <IssueUsersCC
+            style={styles.usersCCSelect}
+            textStyle={styles.usersCCSelectInner}
+            disabled={!this.props.isAgent}
+          />
         )}
         {this.renderIssueView()}
 

@@ -21,9 +21,17 @@ import type {CustomError} from 'types/Error';
 import type {ISelectProps} from 'components/select/select';
 import type {ReduxThunkDispatch} from 'types/Redux';
 import type {UserCC, UserHubCC} from 'types/User';
-import type {ViewStyleProp} from 'types/Internal';
+import type {TextStyleProp, ViewStyleProp} from 'types/Internal';
 
-const IssueUsersCC = ({disabled, style}: {disabled: boolean; style?: ViewStyleProp}) => {
+const IssueUsersCC = ({
+  disabled,
+  style,
+  textStyle,
+}: {
+  disabled: boolean;
+  style?: ViewStyleProp;
+  textStyle?: TextStyleProp;
+}) => {
   const dispatch: ReduxThunkDispatch = useDispatch();
   const issue = useSelector((state: AppState) => state.issueState.issue);
   const usersCC = useSelector((state: AppState) => state.issueState.usersCC || []);
@@ -77,7 +85,7 @@ const IssueUsersCC = ({disabled, style}: {disabled: boolean; style?: ViewStylePr
     const [error] = await until(
       getApi().issue.setUsersCC(
         issue.id,
-        users.map(i => ({...i, id: undefined})),
+        users.map(i => ({...i, id: undefined}))
       )
     );
     if (error) {
@@ -101,14 +109,15 @@ const IssueUsersCC = ({disabled, style}: {disabled: boolean; style?: ViewStylePr
   );
 
   return (
-    <View style={style}>
+    <>
       <FormSelect
-        textStyle={disabled ? null : styles.link}
+        style={style}
+        textStyle={disabled ? null : {...styles.link, ...textStyle}}
         disabled={disabled}
         value={presentation}
         placeholder={usersCC.length ? '' : i18n('No CCs')}
         placeholderTextColor={styles.link.color}
-        label={i18n('CCs')}
+        label={`${usersCC.length > 0 ? `${usersCC.length} ` : ''}${i18n('CCs')}`}
         onPress={() => {
           setSelectProps({
             multi: true,
@@ -117,9 +126,8 @@ const IssueUsersCC = ({disabled, style}: {disabled: boolean; style?: ViewStylePr
               <Text style={styles.reporter}>
                 {`${getEntityPresentation(it)} `}
                 {it.isReporter ? (
-                  <ColorField style={styles.reporterTag} text={i18n('Reporter')} fullText={true}>
+                  <ColorField style={styles.reporterTag} text={` ${i18n('Reporter')}`} fullText={true}>
                     <IconEarth width={12} height={12} color={styles.reporterTag.color} />
-                    <Text> </Text>
                   </ColorField>
                 ) : null}
               </Text>
@@ -169,7 +177,7 @@ const IssueUsersCC = ({disabled, style}: {disabled: boolean; style?: ViewStylePr
         }}
       />
       {!!selectProps && <SelectSectioned {...selectProps} />}
-    </View>
+    </>
   );
 };
 

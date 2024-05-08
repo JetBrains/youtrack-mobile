@@ -68,7 +68,7 @@ const FormSelectButton = ({
             validator={validator}
             value={value}
           >
-            <View style={styles.formSelectIcon}>
+            <View style={[styles.formSelectIcon, textStyle && {backgroundColor: textStyle?.backgroundColor}]}>
               <IconAngleRight size={20} color={styles.formSelectIcon.color} />
             </View>
           </FormTextInput>

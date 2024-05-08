@@ -6,7 +6,7 @@ import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './form.style';
 
-import type {TextStyleProp, ViewStyleProp} from 'types/Internal';
+import type {TextStyleProp} from 'types/Internal';
 import type {Theme} from 'types/Theme';
 
 interface Props extends React.PropsWithChildren {
@@ -25,7 +25,7 @@ interface Props extends React.PropsWithChildren {
   testID?: string;
   validator?: RegExp | ((v: string) => boolean) | null;
   value?: string;
-  style?: ViewStyleProp;
+  style?: TextStyleProp;
 }
 
 const FormTextInput = ({
@@ -55,13 +55,15 @@ const FormTextInput = ({
   }, []);
 
   return (
-    <View style={[styles.formBlock, styles.formBlockText]}>
+    <View style={styles.formBlockText}>
       <TextInput
         editable={editable}
         autoCapitalize="none"
         autoCorrect={false}
         keyboardAppearance={theme.uiTheme.name}
-        placeholderTextColor={hasError ? styles.feedbackInputError.borderColor : placeholderTextColor || styles.icon.color}
+        placeholderTextColor={
+          hasError ? styles.feedbackInputError.borderColor : placeholderTextColor || styles.icon.color
+        }
         selectTextOnFocus
         textAlignVertical={multiline ? 'top' : undefined}
         testID={testID}

@@ -133,11 +133,13 @@ export default EStyleSheet.create({
   },
   usersCCSelect: {
     marginLeft: UNIT * 2,
-    marginBottom: UNIT,
-    paddingBottom: UNIT * 2,
-    paddingRight: UNIT * 2,
+    paddingBottom: UNIT / 4,
     ...separatorBorder,
     borderColor: '$separator',
+    backgroundColor: 'transparent',
+  },
+  usersCCSelectInner: {
+    borderRadius: null,
   },
   selectHeader: {
     margin: UNIT * 1.5,
