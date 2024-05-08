@@ -15,7 +15,7 @@ export const formRowStyles = {
   },
   formInputClearIcon: {
     position: 'absolute',
-    top: UNIT,
+    top: UNIT * 3.2,
     right: 0,
     zIndex: 1,
   },
