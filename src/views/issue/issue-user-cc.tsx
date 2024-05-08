@@ -127,7 +127,7 @@ const IssueUsersCC = ({disabled, style}: {disabled: boolean; style?: ViewStylePr
             placeholder: i18n('Filter existing accounts by name or username'),
             header: createHeader,
             dataSource: async (q: string) => {
-              const groups = (await loadReporters(q))
+              return (await loadReporters(q))
                 .map((u: UserCC) => ({...u, description: u.email}))
                 .reduce(
                   (acc: Array<{title: string; data: UserCC[]}>, u) => {
@@ -144,8 +144,8 @@ const IssueUsersCC = ({disabled, style}: {disabled: boolean; style?: ViewStylePr
                     {title: i18n('Reporter'), data: []},
                     {title: ' ', data: []},
                   ]
-                );
-              return groups[0].data.length === 0 ? groups.slice(1, 2) : groups;
+                )
+                .filter(it => it.data.length > 0);
             },
             selectedItems: usersCC,
             isSelectionDisabled: (selected: UserCC[], current: UserCC) => {
