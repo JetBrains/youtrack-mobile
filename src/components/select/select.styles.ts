@@ -96,6 +96,7 @@ export default EStyleSheet.create({
     backgroundColor: '$background',
   },
   itemTitle: {
+    flex: 1,
     fontSize: MAIN_FONT_SIZE,
     color: '$text',
   },
