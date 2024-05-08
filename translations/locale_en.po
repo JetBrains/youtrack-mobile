@@ -103,7 +103,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:596
+#: src/components/comment/comment-edit.tsx:592
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -175,7 +175,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:565
+#: src/components/comment/comment-edit.tsx:561
 #: src/views/issue/issue-base-actions-creater.ts:573
 msgid "Attach file"
 msgstr "Attach file"
@@ -235,11 +235,11 @@ msgstr "Camera"
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/views/issue/issue-user-cc.tsx:143
+#: src/views/issue/issue-user-cc.tsx:151
 msgid "CC me"
 msgstr "CC me"
 
-#: src/views/issue/issue-user-cc.tsx:111
+#: src/views/issue/issue-user-cc.tsx:120
 msgid "CCs"
 msgstr "CCs"
 
@@ -492,7 +492,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:613
+#: src/components/comment/comment-edit.tsx:609
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -538,7 +538,7 @@ msgstr "Feature request"
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
-#: src/views/issue/issue-user-cc.tsx:127
+#: src/views/issue/issue-user-cc.tsx:135
 msgid "Filter existing accounts by name or username"
 msgstr "Filter existing accounts by name or username"
 
@@ -556,7 +556,7 @@ msgstr "Filter projects"
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
-#: src/views/issues/issues__filters-settings__list.tsx:170
+#: src/views/issues/issues__filters-settings__list.tsx:169
 #: src/views/issues/issues__settings.tsx:108
 msgid "Filter Settings"
 msgstr "Filter Settings"
@@ -583,7 +583,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:580
+#: src/views/issues/issues.tsx:579
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -639,7 +639,7 @@ msgstr "Issue link removed"
 msgid "Issue updated"
 msgstr "Issue updated"
 
-#: src/views/issues/issues__sortby_list.tsx:204
+#: src/views/issues/issues__sortby_list.tsx:206
 msgid "Issues can be sorted by up to 4 attributes"
 msgstr "Issues can be sorted by up to 4 attributes"
 
@@ -683,7 +683,7 @@ msgid "Link to comment copied"
 msgstr "Link to comment copied"
 
 #: src/components/linked-issues/linked-issues-title.tsx:26
-#: src/components/linked-issues/linked-issues.tsx:197
+#: src/components/linked-issues/linked-issues.tsx:195
 msgid "Linked issues"
 msgstr "Linked issues"
 
@@ -791,7 +791,7 @@ msgstr "No articles"
 msgid "No articles found"
 msgstr "No articles found"
 
-#: src/views/issue/issue-user-cc.tsx:109
+#: src/views/issue/issue-user-cc.tsx:118
 msgid "No CCs"
 msgstr "No CCs"
 
@@ -803,7 +803,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:630
+#: src/views/issues/issues.tsx:629
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -852,7 +852,7 @@ msgstr "Password"
 msgid "Paused"
 msgstr "Paused"
 
-#: src/views/issue/issue-user-cc.tsx:93
+#: src/views/issue/issue-user-cc.tsx:101
 msgid "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
 msgstr "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
 
@@ -927,8 +927,8 @@ msgstr "reopened the pull request"
 msgid "Reply"
 msgstr "Reply"
 
-#: src/views/issue/issue-user-cc.tsx:120
-#: src/views/issue/issue-user-cc.tsx:144
+#: src/views/issue/issue-user-cc.tsx:129
+#: src/views/issue/issue-user-cc.tsx:152
 msgid "Reporter"
 msgstr "Reporter"
 
@@ -968,7 +968,7 @@ msgstr "Search for the project"
 msgid "Search Input Mode"
 msgstr "Search Input Mode"
 
-#: src/views/helpdesk-feedback/helpdesk-feedback.tsx:205
+#: src/views/helpdesk-feedback/helpdesk-feedback.tsx:209
 msgid "Select a reporter or enter a new email address"
 msgstr "Select a reporter or enter a new email address"
 
@@ -977,7 +977,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:695
+#: src/views/issues/issues.tsx:694
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -1071,7 +1071,7 @@ msgstr "Small"
 msgid "Something went wrong"
 msgstr "Something went wrong"
 
-#: src/views/issues/issues__sortby_list.tsx:198
+#: src/views/issues/issues__sortby_list.tsx:200
 msgid "Sort Attributes"
 msgstr "Sort Attributes"
 
@@ -1083,7 +1083,7 @@ msgstr "Sort Order"
 msgid "Sort: oldest first"
 msgstr "Sort: oldest first"
 
-#: src/views/issues/issues__sortby.tsx:51
+#: src/views/issues/issues__sortby.tsx:53
 msgid "Sorted by"
 msgstr "Sorted by"
 
@@ -1101,7 +1101,7 @@ msgstr "Spent time:"
 msgid "Start a new article"
 msgstr "Start a new article"
 
-#: src/views/article/article__details.tsx:151
+#: src/views/article/article__details.tsx:152
 msgid "Sub-articles"
 msgstr "Sub-articles"
 
@@ -1312,7 +1312,7 @@ msgstr "VCS changes"
 msgid "View comment"
 msgstr "View comment"
 
-#: src/views/issue/issue__details.tsx:488
+#: src/views/issue/issue__details.tsx:492
 msgid "View comments and other activity"
 msgstr "View comments and other activity"
 
@@ -1366,7 +1366,7 @@ msgstr "Write a comment, @mention people"
 msgid "Yes"
 msgstr "Yes"
 
-#: src/views/issue/issue-user-cc.tsx:98
+#: src/views/issue/issue-user-cc.tsx:106
 msgid "You can only CC a maximum of 5 reporters per ticket"
 msgstr "You can only CC a maximum of 5 reporters per ticket"
 
