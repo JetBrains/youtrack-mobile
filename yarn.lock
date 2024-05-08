@@ -1207,10 +1207,10 @@
     "@types/yargs" "^17.0.8"
     chalk "^4.0.0"
 
-"@jetbrains/icons@^4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@jetbrains/icons/-/icons-4.0.1.tgz#70e90af3835a10a03512614839fed620cab278da"
-  integrity sha512-NVKNHJgdQZoIF5mnqBfg7djxGzhPtofYmtNN+HdhKeQoFlp6Wtf9DwdAb5IJgOj93h3T4gYwJtt51MgYsef7Rw==
+"@jetbrains/icons@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@jetbrains/icons/-/icons-4.2.0.tgz#649c191681e899386bc93c676575750f01d35ca7"
+  integrity sha512-AyLJ2hrdfVdJOb/fWXLR18Gm7U1HZeN/VwqM1afMoRa0hJJD3ArIzQSokL8lSMA8/hqItx9bbLQtCYFLMzdFAg==
 
 "@jridgewell/gen-mapping@^0.3.0", "@jridgewell/gen-mapping@^0.3.2":
   version "0.3.3"
