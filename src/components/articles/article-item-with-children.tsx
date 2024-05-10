@@ -1,19 +1,22 @@
 import React, {useState} from 'react';
 import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
-import IconTrash from '@jetbrains/icons/trash.svg';
+
 import {hasType} from '../api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
-import {IconAngleRight, IconLock} from '../icon/icon';
+import {IconAngleRight, IconLock, IconTrash} from 'components/icon/icon';
+
 import styles from './article-item-with-children.styles';
+
 import type {Article} from 'types/Article';
 import type {ViewStyleProp} from 'types/Internal';
-type Props = {
+
+interface Props {
   article: Article;
   onArticlePress: (article: Article) => void;
   onShowSubArticles?: (article: Article) => any;
   onDelete?: (article: Article) => any;
   style?: ViewStyleProp;
-};
+}
 
 const ArticleItemWithChildren = (props: Props) => {
   const [isLoadingSubArticles, updateIsLoadingSubArticles] = useState(false);
@@ -48,7 +51,7 @@ const ArticleItemWithChildren = (props: Props) => {
           style={styles.iconTrash}
           onPress={() => onDelete(article)}
         >
-          <IconTrash fill={styles.iconTrash.color} width={19} height={19} />
+          <IconTrash color={styles.iconTrash.color} />
         </TouchableOpacity>
       )}
 

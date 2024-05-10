@@ -23,6 +23,7 @@ import More from 'components/icon/assets/more.svg';
 import Plus from '@jetbrains/icons/add-20px.svg';
 import Tag from '@jetbrains/icons/tag-20px.svg';
 import Time from 'components/icon/assets/time.svg';
+import Trash from '@jetbrains/icons/trash-20px.svg';
 import Vcs from 'components/icon/assets/vcs.svg';
 import Vote from '@jetbrains/icons/vote-empty.svg';
 import IconYTM from './youtrack-icon';
@@ -253,3 +254,5 @@ export const IconTag = (props: Props) => <Tag {...createSVGProps(props, 20)} />;
 export const IconAttachment = (props: Props) => <Attachment {...createSVGProps(props, 21)} />;
 
 export const IconAddReaction = (props: Props, style: IconStyle) => <AddReaction {...createSVGProps(props, 18, style)} />;
+
+export const IconTrash = (props: Props, style: IconStyle) => <Trash {...createSVGProps(props, 19, style)} />;

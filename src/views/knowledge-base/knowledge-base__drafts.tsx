@@ -14,13 +14,12 @@ import {useDispatch} from 'react-redux';
 import ArticleWithChildren from 'components/articles/article-item-with-children';
 import ErrorMessage from 'components/error-message/error-message';
 import Header from 'components/header/header';
-import IconTrash from 'components/icon/assets/trash.svg';
 import Router from 'components/router/router';
 import Select from 'components/select/select';
 import {confirmDeleteAllDrafts, confirmDeleteArticleDraft} from 'components/confirmation/article-confirmations';
 import {deleteArticle} from '../article/arcticle-actions';
 import {i18n} from 'components/i18n/i18n';
-import {IconAdd, IconBack} from 'components/icon/icon';
+import {IconAdd, IconBack, IconTrash} from 'components/icon/icon';
 import {IconNoProjectFound} from 'components/icon/icon-pictogram';
 import {loadArticlesDrafts} from './knowledge-base-actions';
 import {routeMap} from 'app-routes';
@@ -129,7 +128,7 @@ const KnowledgeBaseDrafts = (props: Props) => {
                 style={styles.iconTrash}
                 onPress={deleteAllDrafts}
               >
-                <IconTrash color={styles.error.color} width={19} height={19} />
+                <IconTrash color={styles.error.color} size={21} />
               </TouchableOpacity>
             )
           ) : null
