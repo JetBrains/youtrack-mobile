@@ -16,7 +16,6 @@ import CommentReactions from 'components/comment/comment-reactions';
 import ContextActionsProvider from 'components/activity-stream/activity__stream-actions-provider';
 import Feature, {FEATURE_VERSION} from 'components/feature/feature';
 import IssueVisibility from 'components/visibility/issue-visibility';
-import ReactionAddIcon from 'components/reactions/new-reaction.svg';
 import StreamComment from './activity__stream-comment';
 import StreamHistoryChange from './activity__stream-history';
 import StreamTimestamp from './activity__stream-timestamp';
@@ -29,7 +28,7 @@ import {guid, isAndroidPlatform} from 'util/util';
 import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
-import {IconLock} from 'components/icon/icon';
+import {IconAddReaction, IconLock} from 'components/icon/icon';
 import {isDesktop} from 'components/responsive/responsive-helper';
 import {menuHeight} from 'components/common-styles/header';
 import {useBottomSheetContext} from 'components/bottom-sheet';
@@ -172,7 +171,7 @@ export const ActivityStream = (props: ActivityStreamProps) => {
             style={styles.activityCommentActionsAddReaction}
             onPress={() => props?.onReactionPanelOpen?.(comment)}
           >
-            <ReactionAddIcon color={styles.activityCommentActionsAddReaction.color}/>
+            <IconAddReaction color={styles.activityCommentActionsAddReaction.color}/>
           </TouchableOpacity>
         </Feature>
       </CommentReactions>

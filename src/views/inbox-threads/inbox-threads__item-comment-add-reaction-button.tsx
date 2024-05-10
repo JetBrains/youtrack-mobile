@@ -1,10 +1,14 @@
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
-import ReactionAddIcon from 'components/reactions/new-reaction.svg';
-import {HIT_SLOP} from 'components/common-styles';
-import styles from './inbox-threads.styles';
+
 import {useSelector} from 'react-redux';
-import type {AppState} from '../../reducers';
+
+import {HIT_SLOP} from 'components/common-styles';
+import {IconAddReaction} from 'components/icon/icon';
+
+import styles from './inbox-threads.styles';
+
+import type {AppState} from 'reducers';
 
 interface Props {
   onPress: () => any;
@@ -22,7 +26,7 @@ export default function ThreadAddReactionButton({onPress, style}: Props) {
       disabled={!isOnline}
       onPress={onPress}
     >
-      <ReactionAddIcon
+      <IconAddReaction
         color={!isOnline ? styles.disabled.color : styles.iconAddReaction.color}
       />
     </TouchableOpacity>

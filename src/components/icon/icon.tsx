@@ -9,6 +9,7 @@ import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons';
 import ArrowLeft from '@jetbrains/icons/arrow-20px-left.svg';
 import ArrowUp from '@jetbrains/icons/arrow-20px-up.svg';
 import Attachment from '@jetbrains/icons/attachment-20px.svg';
+import AddReaction from '@jetbrains/icons/emoji-round-plus.svg';
 import Checkmark from 'components/icon/assets/checkmark.svg';
 import ChevronLeft from 'components/icon/assets/shevron_left.svg';
 import ChevronSmallDown from 'components/icon/assets/shevron_small_down.svg';
@@ -250,3 +251,5 @@ export const IconLink = (props: Props) => <Link {...createSVGProps(props, 20)} /
 export const IconTag = (props: Props) => <Tag {...createSVGProps(props, 20)} />;
 
 export const IconAttachment = (props: Props) => <Attachment {...createSVGProps(props, 21)} />;
+
+export const IconAddReaction = (props: Props, style: IconStyle) => <AddReaction {...createSVGProps(props, 18, style)} />;
