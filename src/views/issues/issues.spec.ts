@@ -306,8 +306,8 @@ describe('Issues', () => {
 
             const composedQuery = await store.dispatch(issuesActions.composeSearchQuery());
             const nonStructuralQuery = `{${queryMock}}`;
-            const projectQuery = `${filterMock2.id}:${filterMock2.selectedValues.join(',')}`;
-            const otherFolderQuery = `${folderNameMock.toLowerCase()}:${filterMock1.selectedValues[0]},{${filterMock1.selectedValues[1]}}`;
+            const projectQuery = `${filterMock2.id}: ${filterMock2.selectedValues.join(',')}`;
+            const otherFolderQuery = `${folderNameMock.toLowerCase()}: ${filterMock1.selectedValues[0]},{${filterMock1.selectedValues[1]}}`;
             expect(composedQuery).toEqual([
               nonStructuralQuery,
               projectQuery,

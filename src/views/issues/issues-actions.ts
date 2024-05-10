@@ -213,23 +213,24 @@ const loadIssues = (query: string): ReduxAction => async (
   }
 };
 
-const composeSearchQuery = (): ReduxAction<Promise<string>> => async (
-  dispatch: ReduxThunkDispatch,
-  getState: ReduxStateGetter,
-) => {
+const getFiltersQuery = (): ReduxAction<string> => (dispatch: ReduxThunkDispatch) => {
   const settings: IssuesSettings = dispatch(getIssuesSettings());
+  const filtersSettings: FilterSetting[] = Object.values(settings.search.filters!);
+  return `${createQueryFromFiltersSetting(filtersSettings)}`.trim().replace(whiteSpacesRegex, ' ');
+};
+
+const getQuery = (): ReduxAction<string> => (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
   const isHelpdeskMode = dispatch(isHelpDeskMode());
   const issueList = getState().issueList;
-  const searchQuery: string = isHelpdeskMode ? issueList.helpdeskQuery : issueList.query;
+  return isHelpdeskMode ? issueList.helpdeskQuery : issueList.query;
+};
+
+const composeSearchQuery = (): ReduxAction<Promise<string>> => async (dispatch: ReduxThunkDispatch) => {
+  const settings: IssuesSettings = dispatch(getIssuesSettings());
   const searchSettings: IssuesSetting = settings.search;
-  const isFilterMode: boolean = searchSettings.mode === issuesSearchSettingMode.filter;
-  let query: string = (isFilterMode ? convertToNonStructural(searchQuery) : searchQuery).trim();
-  if (isFilterMode && settings.search.filters) {
-    const filtersSettings: FilterSetting[] = Object.values(settings.search.filters);
-    query = `${query} ${createQueryFromFiltersSetting(filtersSettings)}`;
-  }
-  if (isHelpdeskMode) {
-    query = `${query} ${issueList.helpdeskSearchContext?.query || ''}`;
+  let query: string = dispatch(getQuery());
+  if (searchSettings.mode === issuesSearchSettingMode.filter) {
+    query = `${convertToNonStructural(query)} ${dispatch(getFiltersQuery())}`;
   }
   return query.trim().replace(whiteSpacesRegex, ' ');
 };
@@ -564,12 +565,9 @@ const loadIssuesCount = (folder?: Folder | null): ReduxAction => async (
     const api = getApi();
     const abortController: AbortController = new AbortController();
     const _query = await dispatch(composeSearchQuery());
-    const _folder = getState().issueList.settings.search.mode === issuesSearchSettingMode.filter
-      ? undefined
-      : folder;
     const issuesCount: number = await api.issues.getIssuesCount(
       _query,
-      _folder,
+      folder,
       false,
       abortController,
     );

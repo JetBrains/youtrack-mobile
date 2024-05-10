@@ -20,7 +20,7 @@ describe('Issues helper', () => {
       const filters = createSettingMock();
 
       expect(helper.createQueryFromFiltersSetting(filters)).toEqual(
-        `${nameMock.toLowerCase()}:${fieldValue},${fieldValue}`
+        `${nameMock.toLowerCase()}: ${fieldValue},${fieldValue}`
       );
     });
 
@@ -28,7 +28,7 @@ describe('Issues helper', () => {
       const filters = createSettingMock();
 
       expect(helper.createQueryFromFiltersSetting(filters)).toEqual(
-        `${nameMock.toLowerCase()}:${fieldValue},${fieldValue}`
+        `${nameMock.toLowerCase()}: ${fieldValue},${fieldValue}`
       );
     });
 
@@ -45,7 +45,7 @@ describe('Issues helper', () => {
       const s2 = createSettingMock('project', projectIds);
 
       expect(helper.createQueryFromFiltersSetting(s1.concat(s2))).toEqual(
-        `project:${projectIds.join(',')} ${nameMock.toLowerCase()}:${fieldValue},Close`
+        `project: ${projectIds.join(',')} ${nameMock.toLowerCase()}: ${fieldValue},Close`
       );
     });
   });
