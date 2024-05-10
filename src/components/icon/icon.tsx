@@ -24,7 +24,7 @@ import Plus from '@jetbrains/icons/add-20px.svg';
 import Tag from '@jetbrains/icons/tag-20px.svg';
 import Time from 'components/icon/assets/time.svg';
 import Trash from '@jetbrains/icons/trash-20px.svg';
-import Vcs from 'components/icon/assets/vcs.svg';
+import Vcs from '@jetbrains/icons/commit-20px.svg';
 import Vote from '@jetbrains/icons/vote-empty.svg';
 import IconYTM from './youtrack-icon';
 import {isAndroidPlatform} from 'util/util';
@@ -34,7 +34,7 @@ import {TextStyleProp} from 'types/Internal';
 // @ts-ignore
 export {default as logo} from './assets/logo.png';
 
-import styles, {rotate45} from './icon.styles';
+import styles, {rotate45, rotate90} from './icon.styles';
 
 type IconStyle = TextStyleProp | TextStyleProp[];
 
@@ -243,7 +243,7 @@ export const IconMoreOptions = (props: Props) =>
 
 export const EllipsisVertical = (props: Props) => <Drag {...createSVGProps(props, 18)} />;
 
-export const IconVcs = (props: Props) => <Vcs {...createSVGProps(props, 24)} />;
+export const IconVcs = (props: Props) => <Vcs {...createSVGProps(props, 22, rotate90)} />;
 
 export const IconVote = (props: Props) => <Vote {...createSVGProps(props, 19)} />;
 

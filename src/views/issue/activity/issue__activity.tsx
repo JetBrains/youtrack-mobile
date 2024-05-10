@@ -168,7 +168,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
           <Text style={styles.settingsButtonText}>
             {i18n('Activity Settings')}
           </Text>
-          <IconAngleDown size={19} color={uiTheme.colors.$icon} />
+          <IconAngleDown size={19} color={styles.settingsButtonText.color} />
         </TouchableOpacity>
         <BottomSheetModal
           height={310}

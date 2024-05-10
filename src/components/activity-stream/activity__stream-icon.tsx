@@ -1,11 +1,10 @@
 import React from 'react';
 
 import IconPrOpen from '@jetbrains/icons/pr-open.svg';
-import IconVcs from 'components/icon/assets/commit.svg';
 
 import IconPrDeclined from '@jetbrains/icons/pr-close.svg';
-import IconPrMerged from 'components/icon/assets/pull-request-merged.svg';
-import {IconHistory, IconHourGlass} from 'components/icon/icon';
+import IconPrMerged from '@jetbrains/icons/pr-merged-20px.svg';
+import {IconHistory, IconHourGlass, IconVcs} from 'components/icon/icon';
 import {pullRequestState} from './activity__stream-vcs-helper';
 
 import styles from './activity__stream.styles';
@@ -38,7 +37,7 @@ const ActivityIcon = ({activityGroup}: {activityGroup: ActivityGroup}): React.JS
           }
         }
       } else {
-        icon = <IconVcs {...iconProps} width={22} height={22} />;
+        icon = <IconVcs {...iconProps} />;
       }
       break;
     case activityGroup.work != null:
