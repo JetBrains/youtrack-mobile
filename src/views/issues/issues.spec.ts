@@ -309,9 +309,9 @@ describe('Issues', () => {
             const projectQuery = `${filterMock2.id}: ${filterMock2.selectedValues.join(',')}`;
             const otherFolderQuery = `${folderNameMock.toLowerCase()}: ${filterMock1.selectedValues[0]},{${filterMock1.selectedValues[1]}}`;
             expect(composedQuery).toEqual([
-              nonStructuralQuery,
               projectQuery,
               otherFolderQuery,
+              nonStructuralQuery,
             ].join(' '));
           });
 

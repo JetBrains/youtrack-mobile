@@ -216,7 +216,7 @@ const loadIssues = (query: string): ReduxAction => async (
 const getFiltersQuery = (): ReduxAction<string> => (dispatch: ReduxThunkDispatch) => {
   const settings: IssuesSettings = dispatch(getIssuesSettings());
   const filtersSettings: FilterSetting[] = Object.values(settings.search.filters!);
-  return `${createQueryFromFiltersSetting(filtersSettings)}`.trim().replace(whiteSpacesRegex, ' ');
+  return `${createQueryFromFiltersSetting(filtersSettings)}`;
 };
 
 const getQuery = (): ReduxAction<string> => (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
@@ -230,7 +230,7 @@ const composeSearchQuery = (): ReduxAction<Promise<string>> => async (dispatch: 
   const searchSettings: IssuesSetting = settings.search;
   let query: string = dispatch(getQuery());
   if (searchSettings.mode === issuesSearchSettingMode.filter) {
-    query = `${convertToNonStructural(query)} ${dispatch(getFiltersQuery())}`;
+    query = `${dispatch(getFiltersQuery())} ${convertToNonStructural(query)}`;
   }
   return query.trim().replace(whiteSpacesRegex, ' ');
 };
@@ -405,10 +405,11 @@ const openFilterFieldSelect = (filterSetting: FilterSetting): ReduxAction => (
     multi: true,
     getTitle: (it: FilterFieldValue) => getEntityPresentation(it),
     dataSource: async (prefix: string = '') => {
-      const query = await dispatch(composeSearchQuery());
+      const q = await dispatch(composeSearchQuery());
+      const contextQuery = await dispatch(getSearchContext()).query;
       const [error, filterFieldValues] = await until(
         filterSetting.filterField.map(
-          (it: FilterField) => getApi().filterFields.filterFieldValues(it.id, prefix, query)
+          (it: FilterField) => getApi().filterFields.filterFieldValues(it.id, prefix, `${contextQuery} ${q}`)
         ),
         true,
         true
@@ -805,6 +806,7 @@ export {
   cacheIssues,
   composeSearchQuery,
   doLoadIssues,
+  getFiltersQuery,
   getIssueFromCache,
   getIssuesSettings,
   getPageSize,
