@@ -60,6 +60,7 @@ export default EStyleSheet.create({
   },
   colorMarker: {
     minWidth: COLOR_FIELD_SIZE,
+    minHeight: COLOR_FIELD_SIZE - 1,
     marginRight: UNIT,
   },
   url: {
