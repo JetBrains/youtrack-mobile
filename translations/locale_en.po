@@ -547,12 +547,12 @@ msgid "Filter items"
 msgstr "Filter items"
 
 #: src/views/article-create/article-create.tsx:149
-#: src/views/issues/issues-actions.ts:354
+#: src/views/issues/issues-actions.ts:355
 #: src/views/knowledge-base/knowledge-base.tsx:500
 msgid "Filter projects"
 msgstr "Filter projects"
 
-#: src/views/issues/issues-actions.ts:266
+#: src/views/issues/issues-actions.ts:267
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
@@ -779,7 +779,7 @@ msgstr "New messages"
 msgid "Next"
 msgstr "Next"
 
-#: src/components/activity-stream/activity__stream.tsx:514
+#: src/components/activity-stream/activity__stream.tsx:513
 msgid "No activity yet"
 msgstr "No activity yet"
 
@@ -795,7 +795,7 @@ msgstr "No articles found"
 msgid "No CCs"
 msgstr "No CCs"
 
-#: src/views/knowledge-base/knowledge-base__drafts.tsx:151
+#: src/views/knowledge-base/knowledge-base__drafts.tsx:150
 msgid "No drafts yet"
 msgstr "No drafts yet"
 
@@ -872,7 +872,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/issues/issues-actions.ts:295
+#: src/views/issues/issues-actions.ts:296
 #: src/views/knowledge-base/knowledge-base.tsx:519
 msgid "Projects"
 msgstr "Projects"
@@ -948,7 +948,7 @@ msgstr "Restore"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/views/issues/issues-actions.ts:310
+#: src/views/issues/issues-actions.ts:311
 msgid "Saved Searches"
 msgstr "Saved Searches"
 
@@ -1097,7 +1097,7 @@ msgstr "Spent time"
 msgid "Spent time:"
 msgstr "Spent time:"
 
-#: src/views/knowledge-base/knowledge-base__drafts.tsx:162
+#: src/views/knowledge-base/knowledge-base__drafts.tsx:161
 msgid "Start a new article"
 msgstr "Start a new article"
 
@@ -1132,7 +1132,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/views/issues/issues-actions.ts:303
+#: src/views/issues/issues-actions.ts:304
 msgid "Tags"
 msgstr "Tags"
 
@@ -1270,7 +1270,7 @@ msgstr "Unmute thread"
 msgid "Unread only"
 msgstr "Unread only"
 
-#: src/components/articles/article-item-with-children.tsx:33
+#: src/components/articles/article-item-with-children.tsx:36
 msgid "Untitled"
 msgstr "Untitled"
 
@@ -1324,7 +1324,7 @@ msgstr "View reported issues"
 msgid "Visibility"
 msgstr "Visibility"
 
-#: src/components/activity-stream/activity__stream.tsx:242
+#: src/components/activity-stream/activity__stream.tsx:241
 #: src/components/visibility/comment-visibility-control.tsx:110
 msgid "Visible to {{presentation}}"
 msgstr "Visible to {{presentation}}"
