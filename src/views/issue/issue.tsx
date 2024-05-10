@@ -416,7 +416,6 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     }
     return this.isHelpdeskTicket() ? null : (
       <IssueVotes
-        size={22}
         canVote={issuePermissions.canVote(issue)}
         votes={issue?.votes}
         voted={issue?.voters?.hasVote}

@@ -24,7 +24,7 @@ import Plus from '@jetbrains/icons/add-20px.svg';
 import Tag from '@jetbrains/icons/tag-20px.svg';
 import Time from 'components/icon/assets/time.svg';
 import Vcs from 'components/icon/assets/vcs.svg';
-import Vote from 'components/icon/assets/vote.svg';
+import Vote from '@jetbrains/icons/vote-empty.svg';
 import IconYTM from './youtrack-icon';
 import {isAndroidPlatform} from 'util/util';
 
@@ -209,7 +209,7 @@ const createSVGProps = (
 } => {
   const color = props?.color || svgProps().color;
   const size = props?.size || defaultSize;
-  return {color, width: size, height: size, style: mergeStyles(props?.style, style)};
+  return {color, fill: color, width: size, height: size, style: mergeStyles(props?.style, style)};
 };
 
 export const IconLock = (props: Props) => <Lock {...createSVGProps(props, 16)} />;
