@@ -25,7 +25,7 @@ const dark: UITheme = {
     $navigation: '#696969',
     $separator: 'rgba(210, 254, 254, 0.15)',
     $private: 'rgba(178, 92, 0, 1)',
-    $privateBackground: 'rgba(37, 29, 16, 1)',
+    $privateBackground: 'rgb(51,40,22)',
     ...themeColorsPalette,
   },
 };
