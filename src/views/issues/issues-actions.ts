@@ -18,7 +18,7 @@ import {
   IssuesSettings,
   issuesSettingsDefault,
   issuesViewSettingMode,
-  issuesSettingsSearch,
+  issuesSettingsSearch, defaultIssuesFilterFieldConfig,
 } from 'views/issues/index';
 import {EVERYTHING_SEARCH_CONTEXT} from 'components/search/search-context';
 import {flushStoragePart, getStorageState, MAX_STORED_QUERIES} from 'components/storage/storage';
@@ -403,7 +403,7 @@ const openFilterFieldSelect = (filterSetting: FilterSetting): ReduxAction => (
   const selectedItems: { name: string; id: string }[] = filterSetting.selectedValues.map(i => ({id: i, name: i}));
   const selectProps: Partial<ISelectProps> = {
     multi: true,
-    getTitle: (it: FilterFieldValue) => getEntityPresentation(it),
+    getTitle: getEntityPresentation,
     dataSource: async (prefix: string = '') => {
       const q = await dispatch(composeSearchQuery());
       const contextQuery = await dispatch(getSearchContext()).query;
@@ -629,7 +629,9 @@ const setFilters = (): (
   getApi: ReduxAPIGetter,
 ) => {
   let settings: IssuesSettings = dispatch(cachedIssuesSettings());
-  const [error, filterFields] = await until(getApi().customFields.getFilters());
+  const contextId = dispatch(getSearchContext()).id;
+
+  const [error, filterFields] = await until(getApi().customFields.getFilters(contextId));
   if (error) {
     log.warn('Cannot load filter fields');
   } else if (Array.isArray(filterFields) && filterFields.filter(Boolean).length > 0) {
@@ -639,7 +641,7 @@ const setFilters = (): (
       ? currentUser?.profiles?.helpdesk?.ticketFilters || []
       : currentUser?.profiles?.appearance?.liteUiFilters || []).filter(Boolean);
 
-    const visibleFiltersNames: string[] = userProfileFiltersNames.length > 0 ? userProfileFiltersNames : [];
+    const visibleFiltersNames: string[] = userProfileFiltersNames.length > 0 ? userProfileFiltersNames : Object.values(defaultIssuesFilterFieldConfig);
     if (userProfileFiltersNames.length === 0) {
       const ytCurrentUser: User = getStorageState().currentUser?.ytCurrentUser as User;
       const profiles: UserProfiles = {
