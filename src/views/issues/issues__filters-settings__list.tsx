@@ -10,6 +10,7 @@ import Header from 'components/header/header';
 import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
 import Select, {SelectModal} from 'components/select/select';
+import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {EllipsisVertical, IconAdd, IconCheck, IconClose} from 'components/icon/icon';
 import {getApi} from 'components/api/api__instance';
 import {getLocalizedName} from 'components/custom-field/custom-field-helper';
@@ -24,6 +25,7 @@ import type {FilterField} from 'types/Sorting';
 import type {FilterSetting} from 'views/issues/index';
 import type {ICustomField} from 'types/CustomFields';
 import type {ReduxThunkDispatch} from 'types/Redux';
+import usage from 'components/usage/usage';
 
 
 const IssuesFiltersSettingList = ({
@@ -42,6 +44,7 @@ const IssuesFiltersSettingList = ({
   const [modalChildren, updateModalChildren] = useState<React.ReactNode>(null);
 
   React.useEffect(() => {
+    usage.trackEvent(ANALYTICS_ISSUES_PAGE, 'Display filter settings');
     if (filters) {
       setSorted(filters);
     }
@@ -179,6 +182,7 @@ const IssuesFiltersSettingList = ({
           />
         }
         onRightButtonClick={() => {
+          usage.trackEvent(ANALYTICS_ISSUES_PAGE, 'Update filter settings');
           onApply(sorted);
           onBack();
         }}

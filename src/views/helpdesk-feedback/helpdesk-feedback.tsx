@@ -52,6 +52,7 @@ import type {NormalizedAttachment} from 'types/Attachment';
 import type {ProjectHelpdesk} from 'types/Project';
 import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme, UIThemeColors} from 'types/Theme';
+import usage from 'components/usage/usage';
 
 const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
   const theme: Theme = React.useContext(ThemeContext);
@@ -77,6 +78,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
   }, [blocks]);
 
   React.useEffect(() => {
+    usage.trackScreenView(ANALYTICS_HD_FEEDBACK_PAGE);
     dispatch(actions.loadFeedbackForm(project));
     setCaptchaToken(null);
   }, [dispatch, project]);
@@ -84,6 +86,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
   const onBack = () => Router.pop();
 
   const onSubmit = async () => {
+    usage.trackEvent(ANALYTICS_HD_FEEDBACK_PAGE, 'Submit form');
     try {
       await dispatch(actions.submitForm(formBlocks, files, captchaToken));
       onBack();

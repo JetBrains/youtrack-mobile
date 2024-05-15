@@ -13,6 +13,8 @@ import styles from './issues.styles';
 
 import type {Folder} from 'types/User';
 import type {IssueFieldSortProperty, SearchSuggestions} from 'types/Sorting';
+import usage from 'components/usage/usage';
+import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 
 const MAX_NUMBER_SORTING_PROPERTIES: number = 4;
 
@@ -80,6 +82,7 @@ const IssuesSortBy = ({context, onApply, query, onOpen}: {
   );
 
   useEffect(() => {
+    usage.trackEvent(ANALYTICS_ISSUES_PAGE, 'Display SortBy settings');
     loadSortingProperties(context, query);
   }, [loadSortingProperties, context, query]);
 
@@ -99,6 +102,7 @@ const IssuesSortBy = ({context, onApply, query, onOpen}: {
           sortProperties: IssueFieldSortProperty[],
           q: string,
         ) => {
+          usage.trackEvent(ANALYTICS_ISSUES_PAGE, 'Change SortBy settings');
           updateSelectedSortProperties(sortProperties);
           onApply(q);
 

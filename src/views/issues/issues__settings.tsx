@@ -83,6 +83,7 @@ const IssuesListSettings = ({
                     accessible={false}
                     style={styles.settingsRow}
                     onPress={() => {
+                      usage.trackEvent(ANALYTICS_ISSUES_PAGE, `Issues settings: set search mode to "${it.mode}"`);
                       doChangeSettings({...settings, search: it});
                     }}
                   >
