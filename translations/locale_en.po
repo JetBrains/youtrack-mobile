@@ -32,7 +32,7 @@ msgid_plural "{{amount}} articles"
 msgstr[0] "{{amount}} article"
 msgstr[1] "{{amount}} articles"
 
-#: src/views/create-issue/create-issue.tsx:398
+#: src/views/create-issue/create-issue.tsx:399
 msgid "{{amount}} draft"
 msgid_plural "{{amount}} drafts"
 msgstr[0] "{{amount}} draft"
@@ -90,7 +90,7 @@ msgstr "Activity"
 msgid "Activity Settings"
 msgstr "Activity Settings"
 
-#: src/views/issues/issues__filters-settings.tsx:78
+#: src/views/issues/issues__filters-settings.tsx:71
 msgid "Add filter"
 msgstr "Add filter"
 
@@ -378,7 +378,7 @@ msgstr "created"
 msgid "Created by"
 msgstr "Created by"
 
-#: src/views/create-issue/create-issue.tsx:283
+#: src/views/create-issue/create-issue.tsx:284
 msgid "Current issue"
 msgstr "Current issue"
 
@@ -547,17 +547,17 @@ msgid "Filter items"
 msgstr "Filter items"
 
 #: src/views/article-create/article-create.tsx:149
-#: src/views/issues/issues-actions.ts:355
+#: src/views/issues/issues-actions.ts:356
 #: src/views/knowledge-base/knowledge-base.tsx:500
 msgid "Filter projects"
 msgstr "Filter projects"
 
-#: src/views/issues/issues-actions.ts:267
+#: src/views/issues/issues-actions.ts:268
 msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
-#: src/views/issues/issues__filters-settings__list.tsx:169
-#: src/views/issues/issues__settings.tsx:108
+#: src/views/issues/issues__filters-settings__list.tsx:201
+#: src/views/issues/issues__settings.tsx:109
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
@@ -575,7 +575,7 @@ msgstr "Filter tags"
 msgid "Filter users, groups, and teams"
 msgstr "Filter users, groups, and teams"
 
-#: src/views/issues/index.ts:61
+#: src/views/issues/index.ts:62
 msgid "Filters"
 msgstr "Filters"
 
@@ -583,7 +583,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:579
+#: src/views/issues/issues.tsx:556
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -659,7 +659,7 @@ msgstr "just now"
 msgid "Knowledge Base"
 msgstr "Knowledge Base"
 
-#: src/views/issues/index.ts:50
+#: src/views/issues/index.ts:51
 msgid "Large"
 msgstr "Large"
 
@@ -673,7 +673,7 @@ msgid "Light theme"
 msgstr "Light theme"
 
 #: src/components/linked-issues/linked-issues-add-link.tsx:247
-#: src/views/create-issue/create-issue.tsx:371
+#: src/views/create-issue/create-issue.tsx:372
 #: src/views/issue/issue-base-actions-creater.ts:584
 msgid "Link issue"
 msgstr "Link issue"
@@ -742,7 +742,7 @@ msgid_plural "Matches {{issuesCount}} tickets"
 msgstr[0] "Matches {{issuesCount}} ticket"
 msgstr[1] "Matches {{issuesCount}} tickets"
 
-#: src/views/issues/index.ts:46
+#: src/views/issues/index.ts:47
 msgid "Medium"
 msgstr "Medium"
 
@@ -767,7 +767,7 @@ msgstr "Mute thread"
 msgid "New Article"
 msgstr "New Article"
 
-#: src/views/create-issue/create-issue.tsx:448
+#: src/views/create-issue/create-issue.tsx:450
 msgid "New Issue"
 msgstr "New Issue"
 
@@ -803,7 +803,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:629
+#: src/views/issues/issues.tsx:606
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -860,7 +860,7 @@ msgstr "People added as CCs receive the same notifications that are sent to the 
 msgid "Photo and video library"
 msgstr "Photo and video library"
 
-#: src/views/issues/issues__settings.tsx:147
+#: src/views/issues/issues__settings.tsx:148
 msgid "Preview Size"
 msgstr "Preview Size"
 
@@ -872,7 +872,7 @@ msgstr "Problem"
 msgid "Project"
 msgstr "Project"
 
-#: src/views/issues/issues-actions.ts:296
+#: src/views/issues/issues-actions.ts:297
 #: src/views/knowledge-base/knowledge-base.tsx:519
 msgid "Projects"
 msgstr "Projects"
@@ -885,7 +885,7 @@ msgstr "Projects collapsed"
 msgid "Projects expanded"
 msgstr "Projects expanded"
 
-#: src/views/issues/index.ts:57
+#: src/views/issues/index.ts:58
 msgid "Query"
 msgstr "Query"
 
@@ -948,7 +948,7 @@ msgstr "Restore"
 msgid "Retry"
 msgstr "Retry"
 
-#: src/views/issues/issues-actions.ts:311
+#: src/views/issues/issues-actions.ts:312
 msgid "Saved Searches"
 msgstr "Saved Searches"
 
@@ -968,7 +968,7 @@ msgstr "Search for the project"
 msgid "Search Input Mode"
 msgstr "Search Input Mode"
 
-#: src/views/helpdesk-feedback/helpdesk-feedback.tsx:209
+#: src/views/helpdesk-feedback/helpdesk-feedback.tsx:212
 msgid "Select a reporter or enter a new email address"
 msgstr "Select a reporter or enter a new email address"
 
@@ -977,7 +977,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:694
+#: src/views/issues/issues.tsx:671
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 
@@ -1062,7 +1062,7 @@ msgstr "Show all issues tagged with \"{{tagName}}\"..."
 msgid "Show more"
 msgstr "Show more"
 
-#: src/views/issues/index.ts:42
+#: src/views/issues/index.ts:43
 msgid "Small"
 msgstr "Small"
 
@@ -1075,7 +1075,7 @@ msgstr "Something went wrong"
 msgid "Sort Attributes"
 msgstr "Sort Attributes"
 
-#: src/views/issues/issues__settings.tsx:107
+#: src/views/issues/issues__settings.tsx:108
 msgid "Sort Order"
 msgstr "Sort Order"
 
@@ -1083,7 +1083,7 @@ msgstr "Sort Order"
 msgid "Sort: oldest first"
 msgstr "Sort: oldest first"
 
-#: src/views/issues/issues__sortby.tsx:53
+#: src/views/issues/issues__sortby.tsx:55
 msgid "Sorted by"
 msgstr "Sorted by"
 
@@ -1132,7 +1132,7 @@ msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: src/views/issues/issues-actions.ts:304
+#: src/views/issues/issues-actions.ts:305
 msgid "Tags"
 msgstr "Tags"
 
@@ -1220,7 +1220,7 @@ msgstr "Thread muted"
 msgid "Thread unmuted"
 msgstr "Thread unmuted"
 
-#: src/views/issues/issues-actions.ts:72
+#: src/views/issues/issues-actions.ts:73
 #: src/views/issues/issues-reducers.ts:57
 #: src/views/tickets/tickets.tsx:30
 msgid "Tickets"

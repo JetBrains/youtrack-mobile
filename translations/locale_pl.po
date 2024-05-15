@@ -125,7 +125,7 @@ msgstr "Dodaj reakcję"
 
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
-msgstr ""
+msgstr "Dodaj spędzony czas"
 
 #: src/components/tags/tag-add-panel.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -219,7 +219,7 @@ msgstr ""
 
 #: src/components/activity/activity__history-title.ts
 msgid "Attachment name"
-msgstr ""
+msgstr "Nazwa załącznika"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Author"
@@ -267,7 +267,7 @@ msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
-msgstr ""
+msgstr "Wyczyść bieżący kontekst wyszukiwania"
 
 #: src/components/debug-view/debug-view.tsx
 #: src/components/popup/popup.tsx
@@ -292,7 +292,7 @@ msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "Command was successfully applied."
-msgstr ""
+msgstr "Polecenie zostało zastosowane."
 
 #: src/components/activity/activity__history-title.ts
 msgid "Comment changed"
@@ -370,7 +370,7 @@ msgstr ""
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy link"
-msgstr ""
+msgstr "Skopiuj link"
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
@@ -386,7 +386,7 @@ msgstr ""
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "Could not apply specified command."
-msgstr ""
+msgstr "Nie można zastosować określonego polecenia."
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Crash report sent"
@@ -414,7 +414,7 @@ msgstr "Data"
 
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Decline"
-msgstr ""
+msgstr "Odrzuć"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "declined the pull request"
@@ -444,7 +444,7 @@ msgstr "Czy usunąć wszystkie wersje robocze?"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Delete comment permanently?"
-msgstr ""
+msgstr "Trwale usunąć komentarz?"
 
 #: src/views/article-create/article-create.tsx
 msgid "Delete draft"
@@ -456,7 +456,7 @@ msgstr "Usunąć zgłoszenie {{issueId}}?"
 
 #: src/components/comment/comment.tsx
 msgid "Delete permanently"
-msgstr ""
+msgstr "Usuń trwale"
 
 #: src/views/helpdesk-feedback/index.ts
 #: src/views/settings/settings__feedback-form.tsx
@@ -465,7 +465,7 @@ msgstr "Opis"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Description changed"
-msgstr ""
+msgstr "Zmieniono opis"
 
 #: src/components/issue-tabbed/issue-tabbed.tsx
 #: src/views/inbox/inbox.tsx
@@ -572,7 +572,7 @@ msgstr ""
 #: src/views/issues/issues-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Filter projects"
-msgstr ""
+msgstr "Filtruj projekty"
 
 #: src/views/issues/issues-actions.ts
 msgid "Filter projects, saved searches, and tags"
@@ -627,7 +627,7 @@ msgstr ""
 
 #: src/components/error/error-message-data.ts
 msgid "If this isn't what you expected, you might try one of these solutions:"
-msgstr ""
+msgstr "Jeśli nie jest to zgodne z oczekiwaniami, możesz wypróbować jedno z następujących rozwiązań:"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
@@ -651,11 +651,11 @@ msgstr "Historia zgłoszeń"
 
 #: src/components/issue-actions/issue-links-actions.ts
 msgid "Issue link added"
-msgstr ""
+msgstr "Dodano link do zgłoszenia"
 
 #: src/components/issue-actions/issue-links-actions.ts
 msgid "Issue link removed"
-msgstr ""
+msgstr "Usunięto link do zgłoszenia"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue updated"
@@ -1252,7 +1252,7 @@ msgstr ""
 #: src/views/issues/issues-reducers.ts
 #: src/views/tickets/tickets.tsx
 msgid "Tickets"
-msgstr "Bilety"
+msgstr "Zgłoszenia"
 
 #: src/views/article-create/article-create.tsx
 msgid "Title"
