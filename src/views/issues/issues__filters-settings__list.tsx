@@ -20,7 +20,7 @@ import {until} from 'util/util';
 
 import styles from './issues.styles';
 
-import type {FilterField, PredefinedFilterFieldBase} from 'types/Sorting';
+import type {FilterField} from 'types/Sorting';
 import type {FilterSetting} from 'views/issues/index';
 import type {ICustomField} from 'types/CustomFields';
 import type {ReduxThunkDispatch} from 'types/Redux';
@@ -37,7 +37,7 @@ const IssuesFiltersSettingList = ({
 }) => {
   const dispatch: ReduxThunkDispatch = useDispatch();
   const contextId = dispatch(getSearchContext()).id;
-  const cachedFilterFields = React.useRef<Array<FilterField | PredefinedFilterFieldBase> | null>(null);
+  const cachedFilterFields = React.useRef<Array<FilterField> | null>(null);
   const [sorted, setSorted] = React.useState<FilterSetting[]>([]);
   const [modalChildren, updateModalChildren] = useState<React.ReactNode>(null);
 
@@ -48,7 +48,7 @@ const IssuesFiltersSettingList = ({
   }, [filters]);
 
 
-  const getPredefinedFilterPresentation = (ff: PredefinedFilterFieldBase | FilterField) => {
+  const getPredefinedFilterPresentation = (ff: FilterField) => {
     if ('customFiled' in ff) {
       return getLocalizedName(ff.customFiled as ICustomField);
     }
@@ -60,7 +60,7 @@ const IssuesFiltersSettingList = ({
     return filterField ? getLocalizedName(filterField) : fs.id;
   };
 
-  const getFilterPresentation = (ff: FilterSetting | FilterField | PredefinedFilterFieldBase) => {
+  const getFilterPresentation = (ff: FilterSetting | FilterField) => {
     let name: string;
     if ('filterField' in ff) {
       name = getFilterSettingPresentation(ff);
@@ -70,7 +70,7 @@ const IssuesFiltersSettingList = ({
     return `${name[0].toUpperCase()}${name.slice(1)}`;
   };
 
-  const toSelectItem = (i: FilterSetting | FilterField | PredefinedFilterFieldBase) => ({
+  const toSelectItem = (i: FilterSetting | FilterField) => ({
     ...i,
     name: getFilterPresentation(i),
   });
@@ -139,7 +139,7 @@ const IssuesFiltersSettingList = ({
           if (cachedFilterFields.current) {
             _filters = cachedFilterFields.current;
           } else {
-            const [error, filteredFilters] = await until<Array<FilterField | PredefinedFilterFieldBase>>(
+            const [error, filteredFilters] = await until<Array<FilterField>>(
               getApi().customFields.getFilters(contextId, q)
             );
             cachedFilterFields.current = filteredFilters;
