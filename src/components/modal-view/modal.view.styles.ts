@@ -33,6 +33,7 @@ export default EStyleSheet.create({
     minWidth: '50%',
     minHeight: '50%',
     backgroundColor: '$background',
+    borderRadius: UNIT * 2,
   },
   modalPopup: {
     width: null,

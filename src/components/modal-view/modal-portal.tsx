@@ -17,6 +17,7 @@ interface Props {
   hasOverlay?: boolean;
   onHide: () => any;
   style?: ViewStyleProp;
+  contentStyle?: ViewStyleProp;
   testID?: string;
 }
 
@@ -40,7 +41,14 @@ const ModalPortal = (props: Props) => {
           />
         )}
         <View style={styles.modal}>
-          <View style={[styles.modalContent, props.popup && styles.modalPopup, props.fullscreen && styles.fullscreen]}>
+          <View
+            style={[
+              styles.modalContent,
+              props.contentStyle,
+              props.popup && styles.modalPopup,
+              props.fullscreen && styles.fullscreen,
+            ]}
+          >
             {props.children}
           </View>
         </View>

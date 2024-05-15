@@ -43,6 +43,7 @@ import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {
   IconCheck,
   IconClose,
+  IconBack,
   IconMoreOptions,
   IconLink,
 } from 'components/icon/icon';
@@ -72,7 +73,7 @@ type AdditionalProps = {
   predefinedDraftId: string | null;
   drafts: IssueCreate[];
   updateDraft: (ignoreFields: boolean, tags?: Tag[]) => () => Promise<void>;
-  onHide: () => void;
+  onHide?: () => void;
   isMatchesQuery?: () => boolean;
   isConnected: boolean;
   starId: string;
@@ -320,7 +321,7 @@ class CreateIssue extends PureComponent<Props, State> {
     if (this.props.onHide) {
       this.props.onHide();
     } else {
-      Router.pop(true);
+      Router.pop();
     }
   };
   renderLinkedIssuesAddLink = () => {
@@ -416,7 +417,7 @@ class CreateIssue extends PureComponent<Props, State> {
       isAttachFileDialogVisible,
       showCommandDialog,
       issuePermissions,
-      onHide = () => Router.pop(true),
+      onHide,
       isMatchesQuery,
       isConnected,
       starId,
@@ -424,6 +425,7 @@ class CreateIssue extends PureComponent<Props, State> {
     const isAttaching = attachingImage !== null;
     const isProcessing = processing || isAttaching;
     const canCreateIssue = issue.summary && issue?.project?.id && !isProcessing;
+    const Icon = onHide ? IconClose : IconBack;
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
@@ -447,7 +449,7 @@ class CreateIssue extends PureComponent<Props, State> {
               <Header
                 title={i18n('New Issue')}
                 showShadow={true}
-                leftButton={<IconClose color={uiThemeColors.$link}/>}
+                leftButton={<Icon color={uiThemeColors.$link}/>}
                 onBack={this.onHide}
                 rightButton={rightButton}
                 extraButton={!this.isActionDisabled() ? (

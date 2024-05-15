@@ -14,7 +14,6 @@ import {connect} from 'react-redux';
 
 import * as issueActions from './issues-actions';
 import * as actions from './issues-reducers';
-import CreateIssue from 'views/create-issue/create-issue';
 import ErrorMessage from 'components/error-message/error-message';
 import Issue from 'views/issue/issue';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
@@ -23,7 +22,6 @@ import IssuesCount from './issues__count';
 import IssuesFilters from 'views/issues/issues__filters';
 import IssuesListSettings from './issues__settings';
 import log from 'components/log/log';
-import ModalPortal from 'components/modal-view/modal-portal';
 import NothingSelectedIconWithText from 'components/icon/nothing-selected-icon-with-text';
 import QueryAssistPanel from 'components/query-assist/query-assist-panel';
 import QueryPreview from 'components/query-assist/query-preview';
@@ -72,9 +70,9 @@ import type {ErrorMessageProps} from 'components/error-message/error-message';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {Folder, User} from 'types/User';
 import type {Theme, UIThemeColors} from 'types/Theme';
-import {IssuesState} from './issues-reducers';
-import {NetInfoState} from '@react-native-community/netinfo';
-import {ReduxAction, ReduxThunkDispatch} from 'types/Redux';
+import type {IssuesState} from './issues-reducers';
+import type {NetInfoState} from '@react-native-community/netinfo';
+import type {ReduxAction, ReduxThunkDispatch} from 'types/Redux';
 
 type ReduxExtraActions = {[fnName: string]: ReduxAction<unknown>};
 type IssuesActions = typeof issueActions;
@@ -103,7 +101,6 @@ interface State {
   clearSearchQuery: boolean;
   focusedIssue: AnyIssue | null;
   isSplitView: boolean;
-  isCreateModalVisible: boolean;
   settingsVisible: boolean;
 }
 
@@ -121,7 +118,6 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
       clearSearchQuery: false,
       focusedIssue: null,
       isSplitView: false,
-      isCreateModalVisible: false,
       settingsVisible: false,
     };
     this.props.setIssuesMode();
@@ -234,25 +230,6 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     return await this.props.isIssueMatchesQuery(issueIdReadable);
   };
 
-  renderModalPortal = () => {
-    const onHide = () =>
-      this.setState({
-        isCreateModalVisible: false,
-      });
-
-    return this.state.isSplitView ? (
-      <ModalPortal onHide={onHide}>
-        {this.state.isCreateModalVisible && (
-          <CreateIssue
-            isSplitView={true}
-            onHide={onHide}
-            isMatchesQuery={this.isMatchesQuery}
-          />
-        )}
-      </ModalPortal>
-    ) : null;
-  };
-
   renderSettingsButton() {
     const animatedStyle = (
       !this.props.isInProgress && !this.isFilterSearchMode() && this.props.searchQuery
@@ -281,25 +258,25 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     );
   }
 
+  canCreateIssue() {
+    if (this.props.helpDeskMode) {
+      return this.props.helpDeskProjects.length > 0;
+    }
+    return this.props?.issuePermissions?.canCreateProject?.();
+  }
+
   renderCreateIssueButton = () => {
-    return this.props?.issuePermissions?.canCreateProject?.() ? (
+    return this.canCreateIssue() ? (
       <TouchableOpacity
         testID="test:id/create-issue-button"
         accessibilityLabel="create-issue-button"
         accessible={true}
         style={styles.listActionsItem}
         onPress={() => {
-          if (this.state.isSplitView) {
-            this.setState({isCreateModalVisible: true});
+          if (this.props.helpDeskMode) {
+            this.props.onOpenHelpDeskProjectsSelect();
           } else {
-            if (this.props.helpDeskMode) {
-              this.props.onOpenHelpDeskProjectsSelect();
-            } else {
-              Router.CreateIssue({
-                onHide: () => Router.navigateToDefaultRoute(),
-                isMatchesQuery: this.isMatchesQuery,
-              });
-            }
+            Router.CreateIssue({isMatchesQuery: this.isMatchesQuery});
           }
         }}
         disabled={this.props.isInProgress}
@@ -744,7 +721,6 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
             >
               {isSplitView && this.renderSplitView()}
               {!isSplitView && this.renderIssues()}
-              {this.renderModalPortal()}
               {this.renderSettings()}
             </View>
           );

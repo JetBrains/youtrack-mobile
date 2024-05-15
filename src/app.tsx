@@ -128,7 +128,6 @@ class YouTrackMobile extends Component<void, void> {
     Router.registerRoute({
       name: routeMap.CreateIssue,
       component: CreateIssue,
-      modal: true,
     });
     Router.registerRoute({
       name: routeMap.PreviewFile,

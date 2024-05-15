@@ -26,6 +26,7 @@ import {getAssistSuggestions} from 'components/query-assist/query-assist-helper'
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {getGroupedFolders, GroupedFolders, sortFolders} from 'components/folder/folder';
 import {i18n} from 'components/i18n/i18n';
+import {isSplitView} from 'components/responsive/responsive-helper';
 import {guid, removeDuplicatesFromArray, until} from 'util/util';
 import {
   receiveUserAppearanceProfile, receiveUserHelpdeskProfile,
@@ -365,7 +366,7 @@ const onOpenHelpDeskProjectsSelect = (): ReduxAction => {
       onCancel,
       onSelect: async (project: ProjectHelpdesk) => {
         onCancel();
-        Router.HelpDeskFeedback({project});
+        Router.HelpDeskFeedback({project, isTablet: isSplitView()});
       },
     };
     dispatch(issuesActions.OPEN_SEARCH_CONTEXT_SELECT(selectProps));

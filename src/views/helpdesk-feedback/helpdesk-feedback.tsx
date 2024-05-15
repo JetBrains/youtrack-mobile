@@ -54,7 +54,7 @@ import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme, UIThemeColors} from 'types/Theme';
 import usage from 'components/usage/usage';
 
-const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
+const HelpDeskFeedback = ({project, isTablet}: {project: ProjectHelpdesk, isTablet: boolean}) => {
   const theme: Theme = React.useContext(ThemeContext);
   const uiThemeColors: UIThemeColors = theme.uiTheme.colors;
 
@@ -113,7 +113,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
       <Header
         showShadow
         title={form?.title || ''}
-        leftButton={isSplitView() ? <IconClose color={iconColor} /> : <IconBack color={uiThemeColors.$link} />}
+        leftButton={isSplitView() && !isTablet ? <IconClose color={iconColor} /> : <IconBack color={uiThemeColors.$link} />}
         onBack={() => !inProgress && onBack()}
         extraButton={
           <TouchableOpacity hitSlop={HIT_SLOP} disabled={disabled} onPress={onSubmit}>
