@@ -1,5 +1,6 @@
 import {i18n} from 'components/i18n/i18n';
-import {FilterField} from 'types/CustomFields';
+
+import type {FilterField} from 'types/Sorting';
 
 
 export interface FilterSetting {

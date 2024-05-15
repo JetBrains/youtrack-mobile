@@ -3,6 +3,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 
 // @ts-ignore
 import DraggableFlatList from 'react-native-draggable-dynamic-flatlist';
+import {useDispatch} from 'react-redux';
 import {View as AnimatedView} from 'react-native-animatable';
 
 import Header from 'components/header/header';
@@ -11,14 +12,18 @@ import Router from 'components/router/router';
 import Select, {SelectModal} from 'components/select/select';
 import {EllipsisVertical, IconAdd, IconCheck, IconClose} from 'components/icon/icon';
 import {getApi} from 'components/api/api__instance';
+import {getLocalizedName} from 'components/custom-field/custom-field-helper';
+import {getSearchContext} from 'views/issues/issues-actions';
 import {i18n} from 'components/i18n/i18n';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {until} from 'util/util';
 
 import styles from './issues.styles';
 
+import type {FilterField, PredefinedFilterFieldBase} from 'types/Sorting';
 import type {FilterSetting} from 'views/issues/index';
-import type {FilterField} from 'types/Sorting';
+import type {ICustomField} from 'types/CustomFields';
+import type {ReduxThunkDispatch} from 'types/Redux';
 
 
 const IssuesFiltersSettingList = ({
@@ -30,15 +35,45 @@ const IssuesFiltersSettingList = ({
   onApply: (filters: FilterSetting[]) => void;
   onBack: () => void;
 }) => {
-  const cachedFilterFields = React.useRef<FilterField[] | null>(null);
+  const dispatch: ReduxThunkDispatch = useDispatch();
+  const contextId = dispatch(getSearchContext()).id;
+  const cachedFilterFields = React.useRef<Array<FilterField | PredefinedFilterFieldBase> | null>(null);
   const [sorted, setSorted] = React.useState<FilterSetting[]>([]);
-  const [modalChildren, updateModalChildren] = useState(null);
+  const [modalChildren, updateModalChildren] = useState<React.ReactNode>(null);
 
   React.useEffect(() => {
     if (filters) {
       setSorted(filters);
     }
   }, [filters]);
+
+
+  const getPredefinedFilterPresentation = (ff: PredefinedFilterFieldBase | FilterField) => {
+    if ('customFiled' in ff) {
+      return getLocalizedName(ff.customFiled as ICustomField);
+    }
+    return ff.name || ff.id;
+  };
+
+  const getFilterSettingPresentation = (fs: FilterSetting) => {
+    const filterField = fs.filterField[0];
+    return filterField ? getLocalizedName(filterField) : fs.id;
+  };
+
+  const getFilterPresentation = (ff: FilterSetting | FilterField | PredefinedFilterFieldBase) => {
+    let name: string;
+    if ('filterField' in ff) {
+      name = getFilterSettingPresentation(ff);
+    } else {
+      name = getPredefinedFilterPresentation(ff);
+    }
+    return `${name[0].toUpperCase()}${name.slice(1)}`;
+  };
+
+  const toSelectItem = (i: FilterSetting | FilterField | PredefinedFilterFieldBase) => ({
+    ...i,
+    name: getFilterPresentation(i),
+  });
 
   const renderItem = ({
     item,
@@ -49,8 +84,6 @@ const IssuesFiltersSettingList = ({
     move: () => any;
     isActive: boolean;
   }): React.JSX.Element => {
-    const filterField: FilterField = item.filterField?.[0];
-    const presentation: string = filterField ? filterField.customField?.localizedName || filterField.name : item.name;
     return (
       <AnimatedView
         animation="fadeIn"
@@ -69,7 +102,7 @@ const IssuesFiltersSettingList = ({
           <View style={styles.rowLine}>
             <EllipsisVertical color={styles.sortIcon.color} />
             <Text style={styles.sortByListItemText}>
-              {presentation}
+              {getFilterPresentation(item)}
             </Text>
           </View>
           <View style={styles.rowLine}>
@@ -90,11 +123,10 @@ const IssuesFiltersSettingList = ({
   const renderAddItemComponent = () => {
     const isSplitViewMode: boolean = isSplitView();
     const Container: typeof Select | typeof SelectModal = isSplitViewMode ? SelectModal : Select;
-    const toItem = (it: any) => ({...it, name: it.name || it.filterField?.[0]?.name});
-    const component = (
+    const ListComponent = (
       <Container
         multi={true}
-        selectedItems={sorted.map(toItem)}
+        selectedItems={sorted.map(toSelectItem)}
         onCancel={() => {
           if (isSplitViewMode) {
             updateModalChildren(null);
@@ -107,15 +139,13 @@ const IssuesFiltersSettingList = ({
           if (cachedFilterFields.current) {
             _filters = cachedFilterFields.current;
           } else {
-            const [error, response] = await until(getApi().customFields.getFilters());
-            cachedFilterFields.current = response;
-            _filters = error ? [] : response;
+            const [error, filteredFilters] = await until<Array<FilterField | PredefinedFilterFieldBase>>(
+              getApi().customFields.getFilters(contextId, q)
+            );
+            cachedFilterFields.current = filteredFilters;
+            _filters = error ? [] : filteredFilters;
           }
-          const filteredFilters = q ? _filters.filter((it: FilterField) => {
-            return it.name.toLowerCase().indexOf(q.toLowerCase()) !== -1;
-          }) : _filters;
-
-          return filteredFilters.map(toItem);
+          return _filters.map(toSelectItem);
         }}
         onSelect={(selected: FilterSetting[]) => {
           setSorted(selected);
@@ -125,11 +155,9 @@ const IssuesFiltersSettingList = ({
     );
 
     if (isSplitViewMode) {
-      updateModalChildren(component);
+      updateModalChildren(ListComponent);
     } else {
-      Router.PageModal({
-        children: component,
-      });
+      Router.PageModal({children: ListComponent});
     }
   };
 

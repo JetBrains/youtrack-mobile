@@ -13,7 +13,7 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 import styles from './issues.styles';
 
 import type {AppState} from 'reducers';
-import type {FilterSetting} from 'views/issues/index';
+import {defaultIssuesFilterFieldConfig, FilterSetting} from 'views/issues/index';
 import type {User} from 'types/User';
 
 
@@ -26,15 +26,14 @@ const IssuesFiltersSetting = ({
   onOpen: () => void;
   user: User;
 }) => {
-  const [sorted, setSorted] = React.useState<FilterSetting[]>([]);
+  const [filters, setFilters] = React.useState<FilterSetting[]>([]);
   const [modalChildren, updateModalChildren] = useState<React.JSX.Element | null>(null);
   const issuesSettings = useSelector((state: AppState) => state.issueList.settings);
   const isHelpdeskMode = useSelector((state: AppState) => state.issueList.helpDeskMode);
 
   const getFilters = React.useCallback((): string[] => {
     const profiles = user.profiles;
-    const filters = (isHelpdeskMode ? profiles.helpdesk.ticketFilters : profiles.appearance?.liteUiFilters) || [];
-    return filters.filter(Boolean);
+    return ((isHelpdeskMode ? profiles.helpdesk.ticketFilters : profiles.appearance?.liteUiFilters) || []).filter(Boolean);
   }, [isHelpdeskMode, user.profiles]);
 
   useEffect(() => {
@@ -42,7 +41,7 @@ const IssuesFiltersSetting = ({
     const filterFields = (
       userProfileFiltersNames.length > 0
         ? userProfileFiltersNames
-        : []
+        : Object.values(defaultIssuesFilterFieldConfig)
     );
     if (issuesSettings.search?.filters) {
       const list: FilterSetting[] | undefined = filterFields.reduce(
@@ -51,7 +50,7 @@ const IssuesFiltersSetting = ({
         },
         []
       ).filter(Boolean);
-      setSorted(list);
+      setFilters(list);
     }
   }, [getFilters, issuesSettings]);
 
@@ -65,23 +64,13 @@ const IssuesFiltersSetting = ({
 
   const Title = ({onPress}: { onPress: () => void; }) => {
     return (
-      <TouchableOpacity
-        style={styles.settingsRow}
-        onPress={onPress}
-      >
-        <Text
-          numberOfLines={1}
-          style={[styles.settingsItemText, !sorted.length && styles.settingsItemTextEmpty]}
-        >
-          {sorted.length
-            ? sorted.map((it: FilterSetting) => it?.filterField?.[0]?.name || it).join(', ')
-            : i18n('Add filter')
-          }
+      <TouchableOpacity style={styles.settingsRow} onPress={onPress}>
+        <Text numberOfLines={1} style={[styles.settingsItemText, !filters.length && styles.settingsItemTextEmpty]}>
+          {filters.length
+            ? filters.map((it: FilterSetting) => it?.filterField?.[0]?.name || it.id).join(', ')
+            : i18n('Add filter')}
         </Text>
-        <IconAngleRight
-          size={19}
-          color={styles.settingsItemIcon.color}
-        />
+        <IconAngleRight size={19} color={styles.settingsItemIcon.color} />
       </TouchableOpacity>
     );
   };
@@ -89,10 +78,10 @@ const IssuesFiltersSetting = ({
   const renderSortableList = () => {
     return (
       <IssuesFiltersSettingList
-        filters={sorted}
-        onApply={(filters: FilterSetting[]) => {
-          setSorted(filters);
-          onApply(filters.map((it: FilterSetting) => (it?.name?.toLowerCase?.() || it.id)));
+        filters={filters}
+        onApply={(fs: FilterSetting[]) => {
+          setFilters(fs);
+          onApply(fs.map((it: FilterSetting) => it.id.toLowerCase()));
         }}
         onBack={onBack}
       />
