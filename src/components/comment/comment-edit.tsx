@@ -168,7 +168,7 @@ const CommentEdit = (props: Props) => {
       const draft = getCurrentComment(state.editingComment);
       const comment = await onCommentChange({
         ...draft,
-        visibility: draft.canUpdateVisibility ? draft.visibility : null,
+        visibility: draft.canUpdateVisibility ? draft.visibility : undefined,
       });
       await props.onSubmitComment(comment);
       setEmptyComment();
