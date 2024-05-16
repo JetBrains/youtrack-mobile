@@ -119,7 +119,7 @@ const {reducer, actions} = createSlice({
       state.error = action.payload;
     },
 
-    setArticleDraft(state: ArticleCreateState, action: PayloadAction<Article>) {
+    setArticleDraft(state: ArticleCreateState, action: PayloadAction<Article | null>) {
       state.articleDraft = action.payload;
     },
   },

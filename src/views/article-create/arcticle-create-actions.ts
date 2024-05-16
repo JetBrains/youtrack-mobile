@@ -7,59 +7,28 @@ import {i18n} from 'components/i18n/i18n';
 import {logEvent} from 'components/log/log-helper';
 import {notify, notifyError} from 'components/notification/notification';
 import {until} from 'util/util';
-import {
-  setArticleDraft,
-  setError,
-  setProcessing,
-} from './article-create-reducers';
+import {setArticleDraft, setError, setProcessing} from './article-create-reducers';
 
 import type Api from 'components/api/api';
-import type {AppState} from 'reducers';
 import type {Article, ArticleDraft} from 'types/Article';
 import type {Attachment} from 'types/CustomFields';
-import {CustomError} from 'types/Error';
-import {NormalizedAttachment} from 'types/Attachment';
+import type {NormalizedAttachment} from 'types/Attachment';
+import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 
-type ApiGetter = () => Api;
-
-const updateArticleDraft = (
-  articleDraft: Article,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    const api: Api = getApi();
-    const [error] = await until(api.articles.updateArticleDraft(articleDraft));
-
+const updateArticleDraft = (articleDraft: Article): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    const [error] = await until<ArticleDraft>(getApi().articles.updateArticleDraft(articleDraft));
     if (error) {
       notifyError(error);
     }
   };
 };
 
-const createArticleDraft = (
-  articleId?: string,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void> | Promise<any>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+const createArticleDraft = (articleId?: string): ReduxAction<Promise<ArticleDraft | void>> => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const api: Api = getApi();
     dispatch(setProcessing(true));
-    const [error, articleDraft] = await until(
-      api.articles.createArticleDraft(articleId),
-    );
+    const [error, articleDraft] = await until(api.articles.createArticleDraft(articleId));
     dispatch(setProcessing(false));
 
     if (error) {
@@ -75,24 +44,12 @@ const createArticleDraft = (
   };
 };
 
-const publishArticleDraft = (
-  articleDraft: Article,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<Article | void>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ): Promise<Article | void> => {
+const publishArticleDraft = (articleDraft: Article): ReduxAction<Promise<Article | void>> => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const api: Api = getApi();
     dispatch(setProcessing(true));
     await dispatch(updateArticleDraft(articleDraft));
-    const [error, article]: [CustomError | null, Article[]] = await until(
-      api.articles.publishArticleDraft(articleDraft.id),
-    );
+    const [error, article] = await until<Article>(api.articles.publishArticleDraft(articleDraft.id));
     dispatch(setProcessing(false));
 
     if (error) {
@@ -106,135 +63,84 @@ const publishArticleDraft = (
   };
 };
 
-const setDraft = (
-  articleDraft: Article | null,
-): ((dispatch: (arg0: any) => any) => Promise<void>) => {
-  return async (dispatch: (arg0: any) => any) => {
+const setDraft = (articleDraft: Article | null): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch) => {
     dispatch(setArticleDraft(articleDraft));
   };
 };
 
-const showAddAttachDialog = (): ((
-  dispatch: (arg0: any) => any,
-) => Promise<void>) => {
-  return async (dispatch: (arg0: any) => any) => {
+const showAddAttachDialog = (): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch) => {
     dispatch(attachmentActions.toggleAttachFileDialog(true));
   };
 };
 
-const cancelAddAttach = (
-  attach: Attachment,
-): ((dispatch: (arg0: any) => any) => Promise<void>) => {
-  return async (dispatch: (arg0: any) => any) => {
+const cancelAddAttach = (attach: Attachment): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch) => {
     await dispatch(attachmentActions.cancelImageAttaching(attach));
   };
 };
 
-const hideAddAttachDialog = (): ((
-  dispatch: (arg0: any) => any,
-) => Promise<void>) => {
-  return async (dispatch: (arg0: any) => any) => {
+const hideAddAttachDialog = (): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch) => {
     dispatch(attachmentActions.toggleAttachFileDialog(false));
   };
 };
 
-const uploadFile = (
-  files: NormalizedAttachment[],
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+const uploadFile = (files: NormalizedAttachment[]): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const articleDraft: ArticleDraft | null = getState().articleCreate.articleDraft;
-    dispatch(attachmentActions.doUploadFile(
-      true,
-      files,
-      articleDraft,
-    ));
+    dispatch(attachmentActions.doUploadFile(true, files, articleDraft));
     logEvent({
       message: `Image attached to article ${articleDraft?.id}`,
     });
-    usage.trackEvent(
-      ANALYTICS_ARTICLE_CREATE_PAGE,
-      'Attach image',
-      'Success',
-    );
+    usage.trackEvent(ANALYTICS_ARTICLE_CREATE_PAGE, 'Attach image', 'Success');
   };
 };
 
-const loadAttachments = (): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+const loadAttachments = (): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const api: Api = getApi();
-    const articleDraft: ArticleDraft =
-      getState().articleCreate.articleDraft || {};
-    const [error, draftAttachments] = await until(
-      api.articles.getAttachments(articleDraft.id),
-    );
-
-    if (error) {
-      notifyError(error);
-    } else {
-      dispatch(setDraft({...articleDraft, attachments: draftAttachments}));
+    const articleDraft = getState().articleCreate.articleDraft;
+    if (articleDraft?.id) {
+      const [error, draftAttachments] = await until(api.articles.getAttachments(articleDraft.id));
+      if (error) {
+        notifyError(error);
+      } else {
+        dispatch(setDraft({...articleDraft, attachments: draftAttachments} as Article));
+      }
     }
   };
 };
 
-const deleteDraftAttachment = (
-  attachmentId: string,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+const deleteDraftAttachment = (attachmentId: string): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const api: Api = getApi();
-    const articleDraft: ArticleDraft = getState().articleCreate.articleDraft;
-    const [error] = await until(
-      api.articles.deleteDraftAttachment(articleDraft.id, attachmentId),
-    );
-
-    if (error) {
-      notifyError(error);
-    } else {
-      logEvent({
-        message: 'Attachment deleted',
-        analyticsId: ANALYTICS_ARTICLE_CREATE_PAGE,
-      });
-      dispatch(
-        setDraft({
-          ...articleDraft,
-          attachments: articleDraft.attachments.filter(
-            (it: Attachment) => it.id !== attachmentId,
-          ),
-        }),
-      );
+    const articleDraft = getState().articleCreate.articleDraft;
+    if (articleDraft?.id) {
+      const [error] = await until(api.articles.deleteDraftAttachment(articleDraft.id, attachmentId));
+      if (error) {
+        notifyError(error);
+      } else {
+        logEvent({
+          message: 'Attachment deleted',
+          analyticsId: ANALYTICS_ARTICLE_CREATE_PAGE,
+        });
+        dispatch(
+          setDraft({
+            ...articleDraft,
+            attachments: (articleDraft.attachments || []).filter((it: Attachment) => it.id !== attachmentId),
+          } as Article)
+        );
+      }
     }
+
   };
 };
 
-const deleteDraft = (): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-) => Promise<void>) => {
-  return async (dispatch: (arg0: any) => any, getState: () => AppState) => {
-    const articleDraft: ArticleDraft = getState().articleCreate.articleDraft;
+const deleteDraft = (): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
+    const articleDraft = getState().articleCreate.articleDraft;
     return confirmDeleteArticleDraft().then(async () => {
       dispatch(setProcessing(true));
       await dispatch(deleteArticle(articleDraft));
