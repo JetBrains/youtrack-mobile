@@ -108,8 +108,8 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   onSelect = (selectedItems: (User | UserGroup)[] | null) => {
     const selected: (User | UserGroup)[] = selectedItems || [];
     const visibility: Visibility = IssueVisibility.visibility({
-      permittedGroups: selected.filter((it: User | UserGroup) => hasType.userGroup(it)) as UserGroup[],
-      permittedUsers: selected.filter((it: User | UserGroup) => hasType.user(it)) as User[],
+      permittedGroups: selected.filter((it) => hasType.userGroup(it as UserGroup)) as UserGroup[],
+      permittedUsers: selected.filter((it) => hasType.user(it)) as User[],
     });
     this.updateVisibility({
       ...this.props.visibility,

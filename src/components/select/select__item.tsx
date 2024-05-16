@@ -83,13 +83,13 @@ export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
             testID="test:id/selectListItemText"
             accessible={true}
           >
-            {item.avatarUrl && (
+            {(item.avatarUrl || item.icon) && (
               <Avatar
                 userName={this.getDefaultTitle(item)}
                 size={32}
                 style={styles.itemIcon}
                 source={{
-                  uri: item.avatarUrl,
+                  uri: item.avatarUrl || item.icon,
                 }}
               />
             )}

@@ -202,6 +202,7 @@ export const USER_GROUP_FIELDS = toField([
   'name',
   'localizedName',
   'allUsersGroup',
+  'icon',
   'team(id,name)',
 ]);
 const VISIBILITY_FIELDS: any = toField([

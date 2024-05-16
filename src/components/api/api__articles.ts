@@ -213,18 +213,23 @@ export default class ArticlesAPI extends ApiBase {
   }
 
   getVisibilityOptions = async (articleId: string, url?: string): Promise<VisibilityGroups> => {
-    const queryString = ApiBase.createFieldsQuery(
-      issueFields.getVisibility.toString(),
-      {
-        $visibilityTop: 50,
-        $visibilitySkip: 0,
-      },
-    );
+    const queryString = ApiBase.createFieldsQuery(issueFields.getVisibility.toString(), {
+      $visibilityTop: 50,
+      $visibilitySkip: 0,
+    });
     const requestURL: string = url || `${this.youTrackApiUrl}/articles/${articleId}/visibilityOptions`;
-    return await this.makeAuthorizedRequest(
-      `${requestURL}?${queryString}`,
-      'GET',
+    const visibilityOptions = await this.makeAuthorizedRequest(`${requestURL}?${queryString}`, 'GET');
+    visibilityOptions.visibilityUsers = ApiHelper.convertRelativeUrls(
+      visibilityOptions.visibilityUsers || [],
+      'avatarUrl',
+      this.config.backendUrl
     );
+    visibilityOptions.visibilityGroups = ApiHelper.convertRelativeUrls(
+      visibilityOptions.visibilityGroups || [],
+      'icon',
+      this.config.backendUrl
+    );
+    return visibilityOptions;
   };
 
   getDraftVisibilityOptions: (articleId: string) => Promise<VisibilityGroups> = async (
