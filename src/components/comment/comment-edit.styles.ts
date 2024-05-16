@@ -204,4 +204,7 @@ export default EStyleSheet.create({
     borderWidth: 0.5,
     borderBottomWidth: 0,
   },
+  private: {
+    color: '$private',
+  },
 });

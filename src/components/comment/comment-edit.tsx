@@ -287,6 +287,7 @@ const CommentEdit = (props: Props) => {
       changeState({isVisibilitySelectVisible});
     return (
       <VisibilityControl
+        color={styles.private.color}
         disabled={!props.canUpdateCommentVisibility}
         onShow={() => toggleSelectVisibility(true)}
         onHide={() => toggleSelectVisibility(false)}

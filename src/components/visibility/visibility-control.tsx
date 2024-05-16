@@ -32,6 +32,7 @@ interface Props {
   visibility: Visibility | null;
   visibilityDefaultLabel?: string;
   disabled?: boolean;
+  color?: string;
 }
 
 type State = {
@@ -150,7 +151,12 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   }
 
   renderVisibilityButton(): React.ReactNode {
-    const {onSubmit, visibilityDefaultLabel = visibilityDefaultText(), disabled} = this.props;
+    const {
+      onSubmit,
+      visibilityDefaultLabel = visibilityDefaultText(),
+      disabled,
+      color = styles.buttonText.color,
+    } = this.props;
     const {visibility} = this.state;
 
     const isSecured: boolean = IssueVisibility.isSecured(visibility);
@@ -171,16 +177,16 @@ export default class VisibilityControl extends PureComponent<Props, State> {
             onPress={this.resetVisibility}
             hitSlop={HIT_SLOP}
           >
-            <IconClose size={16} color={styles.secured.color} />
+            <IconClose size={20} color={color} />
           </TouchableOpacity>
         )}
 
         <TouchableOpacity style={styles.container} onPress={this.openSelect} hitSlop={HIT_SLOP} disabled={disabled}>
           {(isSecured || visibility?.inherited) && (
-            <IconLock style={styles.buttonIcon} size={16} color={styles.secured.color} />
+            <IconLock style={styles.buttonIcon} size={18} color={color} />
           )}
-          <Text style={[styles.buttonText, isSecured && styles.secured]}>{label}</Text>
-          {!disabled && <IconAngleDown size={20} color={isSecured ? styles.secured.color : styles.buttonText.color} />}
+          <Text style={[styles.buttonText, isSecured && {color}]}>{label}</Text>
+          {!disabled && <IconAngleDown size={20} color={isSecured ? color : styles.buttonText.color} />}
         </TouchableOpacity>
       </View>
     );

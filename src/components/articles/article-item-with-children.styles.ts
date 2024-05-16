@@ -19,7 +19,7 @@ export const articleItemWithChildrenStyles = {
   },
   lockIcon: {
     marginLeft: UNIT / 2,
-    color: '$private',
+    color: '$icon',
   },
   iconTrash: {
     color: '$error',
