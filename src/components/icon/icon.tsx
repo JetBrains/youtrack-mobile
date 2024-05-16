@@ -26,6 +26,7 @@ import Time from 'components/icon/assets/time.svg';
 import Trash from '@jetbrains/icons/trash-20px.svg';
 import Vcs from '@jetbrains/icons/commit-20px.svg';
 import Vote from '@jetbrains/icons/vote-empty.svg';
+import Entry from '@jetbrains/icons/entry.svg';
 import IconYTM from './youtrack-icon';
 import {isAndroidPlatform} from 'util/util';
 
@@ -256,3 +257,5 @@ export const IconAttachment = (props: Props) => <Attachment {...createSVGProps(p
 export const IconAddReaction = (props: Props, style: IconStyle) => <AddReaction {...createSVGProps(props, 18, style)} />;
 
 export const IconTrash = (props: Props, style: IconStyle) => <Trash {...createSVGProps(props, 19, style)} />;
+
+export const IconLogout = (props: Props, style: IconStyle) => <Entry {...createSVGProps(props, 24, style)} />;

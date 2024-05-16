@@ -10,11 +10,10 @@ import {
 import Swiper from 'react-native-swiper';
 
 import Avatar from 'components/avatar/avatar';
-import IconLogout from 'components/icon/assets/logout.svg';
 import {formatYouTrackURL} from 'components/config/config';
 import {getStorageState} from 'components/storage/storage';
 import {HIT_SLOP} from 'components/common-styles/button';
-import {IconAdd} from 'components/icon/icon';
+import {IconAdd, IconLogout} from 'components/icon/icon';
 
 import avatarStyles from 'components/avatar/default-avatar.styles';
 import styles, {SWIPER_HEIGHT} from './accounts.styles';
@@ -168,7 +167,7 @@ export default class Accounts extends PureComponent<Props, void> {
           disabled={isChangingAccount}
           onPress={this._logOut}
         >
-          <IconLogout width={22} height={22} color={uiTheme.colors.$link} />
+          <IconLogout color={uiTheme.colors.$link} />
         </TouchableOpacity>
       </View>
     );
