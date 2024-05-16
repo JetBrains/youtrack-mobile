@@ -11,6 +11,7 @@ import {visibilityArticleDefaultText} from 'components/visibility/visibility-str
 
 import type {Article} from 'types/Article';
 import type {IssueComment} from 'types/CustomFields';
+import type {ReduxThunkDispatch} from 'types/Redux';
 
 interface Props {
   article: Article;
@@ -22,7 +23,7 @@ interface Props {
 
 
 const ArticleAddComment = (props: Props) => {
-  const dispatch = useDispatch();
+  const dispatch: ReduxThunkDispatch = useDispatch();
   const loadDraftComment = useCallback(
     async () => {
       await dispatch(articleActions.getArticleCommentDraft());

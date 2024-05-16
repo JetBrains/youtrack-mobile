@@ -1,8 +1,7 @@
 import {Alert, Clipboard, Share} from 'react-native';
 
-import ActionSheet from '@expo/react-native-action-sheet';
+import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 
-import ArticlesAPI from 'components/api/api__articles';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
 import {
@@ -12,7 +11,6 @@ import {
 import {cacheUserLastVisitedArticle, setGlobalInProgress} from 'actions/app-actions';
 import {confirmDeleteArticle} from 'components/confirmation/article-confirmations';
 import {findActivityInGroupedActivities} from 'components/activity/activity-helper';
-import {getApi} from 'components/api/api__instance';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {getStorageState} from 'components/storage/storage';
 import {hasType} from 'components/api/api__resource-types';
@@ -37,27 +35,19 @@ import {updateActivityCommentReactions} from 'components/activity-stream/activit
 import type Api from 'components/api/api';
 import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
 import type {Activity, ActivityPositionData} from 'types/Activity';
-import type {AppState} from 'reducers';
 import type {Article, ArticleDraft} from 'types/Article';
 import type {ArticleState} from './article-reducers';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {CustomError} from 'types/Error';
 import type {Reaction} from 'types/Reaction';
+import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
-import type {User} from 'types/User';
-import {ReduxAction, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 
-type ApiGetter = () => Api;
-
-const clearArticle = (): ((
-  dispatch: (arg0: any) => any,
-) => Promise<any>) => async (dispatch: (arg0: any) => any) =>
+const clearArticle = (): ReduxAction => async (dispatch: ReduxThunkDispatch) =>
   dispatch(setArticle(null));
 
-const loadArticleFromCache = (
-  article: Article,
-): ((dispatch: (arg0: any) => any) => Promise<void>) => {
-  return async (dispatch: (arg0: any) => any) => {
+const loadArticleFromCache = (article: Article): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch) => {
     const cachedArticleLastVisited: {
       article?: Article;
       activities?: Activity[];
@@ -80,37 +70,20 @@ const loadArticleFromCache = (
   };
 };
 
-const loadArticle = (
-  articleId: string,
-  reset: boolean = true,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    const isOffline: boolean =
-      getState().app?.networkState?.isConnected === false;
-
-    if (isOffline) {
-      return;
-    }
-
-    const api: Api = getApi();
+const loadArticle = (articleId: string, reset: boolean = true): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     logEvent({
       message: 'Loading article',
     });
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    if (isOffline) {
+      return;
+    }
     dispatch(setGlobalInProgress(true));
-
     if (reset) {
       dispatch(setArticle(null));
     }
-
-    const [error, article] = await until<Article>(api.articles.getArticle(articleId));
+    const [error, article] = await until<Article>(getApi().articles.getArticle(articleId));
     dispatch(setGlobalInProgress(false));
 
     if (error) {
@@ -129,10 +102,8 @@ const loadArticle = (
   };
 };
 
-const loadCachedActivitiesPage = (): ((
-  dispatch: (arg0: any) => any,
-) => Promise<void>) => {
-  return async (dispatch: (arg0: any) => any) => {
+const loadCachedActivitiesPage = (): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch) => {
     const cachedArticleLastVisited: {
       article?: Article;
       activities?: Activity[];
@@ -144,27 +115,14 @@ const loadCachedActivitiesPage = (): ((
   };
 };
 
-const loadActivitiesPage = (
-  reset: boolean = true,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    const isOffline: boolean =
-      getState().app?.networkState?.isConnected === false;
-
-    if (isOffline) {
+const loadActivitiesPage = (reset: boolean = true): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    const article = getState().article.article;
+    if (isOffline || !article) {
       return;
     }
 
-    const api: Api = getApi();
-    const article: Article = getState().article.article;
     dispatch(setGlobalInProgress(true));
 
     if (reset) {
@@ -172,7 +130,7 @@ const loadActivitiesPage = (
     }
 
     const [error, activityPage] = await until(
-      api.articles.getActivitiesPage(article.id),
+      getApi().articles.getActivitiesPage(article.id),
     );
     dispatch(setGlobalInProgress(false));
 
@@ -193,31 +151,30 @@ const loadActivitiesPage = (
 };
 
 const showArticleActions = (
-  actionSheet: typeof ActionSheet,
+  actionSheet: typeof ActionSheetProvider,
   canUpdate: boolean,
   canDelete: boolean,
   renderBreadCrumbs: (...args: any[]) => any,
   canStar: boolean,
   hasStar: boolean,
   isTablet: boolean,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => {
+): ReduxAction => {
   return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
+    dispatch: ReduxThunkDispatch,
+    getState: ReduxStateGetter,
+    getApi: ReduxAPIGetter,
   ) => {
-    const api: Api = getApi();
-    const {article} = getState().article;
-    const url: string = `${api.config.backendUrl}/articles/${article.idReadable}`;
     logEvent({
       message: 'Show article actions',
       analyticsId: ANALYTICS_ARTICLE_PAGE,
     });
-    const actions = [
+    const api: Api = getApi();
+    const article = getState().article.article;
+    if (!article) {
+      return;
+    }
+    const url: string = `${api.config.backendUrl}/articles/${article.idReadable}`;
+    const actions: ActionSheetOption[] = [
       {
         title: i18n('Share…'),
         execute: () => {
@@ -287,7 +244,7 @@ const showArticleActions = (
             analyticsId: ANALYTICS_ARTICLE_PAGE,
           });
           setProcessing(true);
-          const articleDrafts: Article | null = await getUnpublishedArticleDraft(
+          const articleDrafts = await getUnpublishedArticleDraft(
             api,
             article,
           );
@@ -333,10 +290,7 @@ const showArticleActions = (
   };
 };
 
-const getUnpublishedArticleDraft = async (
-  api: Api,
-  article: Article,
-): Promise<ArticleDraft | null> => {
+const getUnpublishedArticleDraft = async (api: Api, article: Article): Promise<ArticleDraft | null> => {
   let articleDraft: ArticleDraft;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, articleDrafts] = await until(
@@ -394,20 +348,8 @@ export const createArticleDraft = async (
   return articleDraft;
 };
 
-const deleteArticle = (
-  article: Article | ArticleDraft,
-  onAfterDelete?: () => any,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    const api: Api = getApi();
+const deleteArticle = (article: Article | ArticleDraft, onAfterDelete?: () => void): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     logEvent({
       message: 'Delete article',
       analyticsId: ANALYTICS_ARTICLE_PAGE,
@@ -416,8 +358,8 @@ const deleteArticle = (
     const articleId = article.id || '';
     const [error] = await until(
       hasType.articleDraft({$type: article.$type || ''})
-        ? api.articles.deleteDraft(articleId)
-        : api.articles.deleteArticle(articleId),
+        ? getApi().articles.deleteDraft(articleId)
+        : getApi().articles.deleteArticle(articleId),
     );
     dispatch(setProcessing(false));
 
@@ -429,25 +371,21 @@ const deleteArticle = (
   };
 };
 
-const setPreviousArticle = (): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-) => Promise<void>) => {
-  return async (dispatch: (arg0: any) => any, getState: () => AppState) => {
+const setPreviousArticle = (): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const articleState: ArticleState = getState().article;
     dispatch(setPrevArticle(articleState));
   };
 };
 
-const getArticleCommentDraft = (): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-) => Promise<void>) => {
-  return async (dispatch: (arg0: any) => any, getState: () => AppState) => {
-    const api: Api = getApi();
-    const article: Article = getState().article.article;
+const getArticleCommentDraft = (): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    const article = getState().article.article;
+    if (!article) {
+      return;
+    }
     const [error, draftComment] = await until(
-      api.articles.getCommentDraft(article.id),
+      getApi().articles.getCommentDraft(article.id),
     );
 
     if (!error && draftComment) {
@@ -456,20 +394,14 @@ const getArticleCommentDraft = (): ((
   };
 };
 
-const updateArticleCommentDraft = (
-  comment: IssueComment,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-) => Promise<null>) => {
-  return async (dispatch: (arg0: any) => any, getState: () => AppState) => {
-    const api: Api = getApi();
+const updateArticleCommentDraft = (comment: IssueComment): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const articleId: string | undefined = comment?.article?.id || getState()?.article?.article?.id;
     if (!articleId) {
       return null;
     }
     const [error, updatedCommentDraft] = await until(
-      api.articles.updateCommentDraft(articleId, comment),
+      getApi().articles.updateCommentDraft(articleId, comment),
     );
 
     if (error) {
@@ -482,29 +414,14 @@ const updateArticleCommentDraft = (
   };
 };
 
-const resetArticleCommentDraft = (): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-) => Promise<void>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-  ): Promise<void> => {
+const resetArticleCommentDraft = (): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch) => {
     dispatch(setArticleCommentDraft(null));
   };
 };
 
-const submitArticleCommentDraft = (
-  commentDraft: IssueComment,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-) => Promise<void>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-  ): Promise<void> => {
-    const api: Api = getApi();
+const submitArticleCommentDraft = (commentDraft: IssueComment): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const articleId: string | undefined = commentDraft?.article?.id || getState()?.article?.article?.id;
     logEvent({
       message: 'Submit article draft',
@@ -515,7 +432,7 @@ const submitArticleCommentDraft = (
     }
     await dispatch(updateArticleCommentDraft(commentDraft));
     const [error] = await until(
-      api.articles.submitCommentDraft(articleId, commentDraft.id),
+      getApi().articles.submitCommentDraft(articleId, commentDraft.id),
     );
 
     if (error) {
@@ -534,8 +451,7 @@ const updateArticleComment = (
   comment: IssueComment,
   isAttachmentChange?: boolean
 ): ReduxAction<Promise<IssueComment | null>> => {
-  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
-    const api: Api = getApi();
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const articleId: string | undefined = comment?.article?.id || getState()?.article?.article?.id;
     logEvent({
       message: 'Update article comment',
@@ -544,7 +460,7 @@ const updateArticleComment = (
     if (!articleId) {
       return null;
     }
-    const [error, c] = await until<IssueComment>(api.articles.updateComment(articleId, comment));
+    const [error, c] = await until<IssueComment>(getApi().articles.updateComment(articleId, comment));
 
     if (isAttachmentChange) {
       notify(i18n('Comment updated'));
@@ -563,19 +479,16 @@ const updateArticleComment = (
   };
 };
 
-const deleteArticleComment = (
-  commentId: string,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-) => Promise<void>) => {
-  return async (dispatch: (arg0: any) => any, getState: () => AppState) => {
-    const api: Api = getApi();
-    const article: Article = getState().article.article;
+const deleteArticleComment = (commentId: string): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     logEvent({
       message: 'Delete article comment',
       analyticsId: ANALYTICS_ARTICLE_PAGE,
     });
+    const article = getState().article.article;
+    if (!article) {
+      return;
+    }
 
     try {
       await new Promise(
@@ -585,7 +498,7 @@ const deleteArticleComment = (
         ) => {
           Alert.alert(
             'Are you sure you want to delete this comment?',
-            null,
+            '',
             [
               {
                 text: 'Cancel',
@@ -604,7 +517,7 @@ const deleteArticleComment = (
         },
       );
       const [error] = await until(
-        api.articles.deleteComment(article.id, commentId),
+        getApi().articles.deleteComment(article.id, commentId),
       );
 
       if (error) {
@@ -623,23 +536,17 @@ const showArticleCommentActions = (
   comment: IssueComment,
   activityId: string,
   canDeleteComment: boolean,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    const api: Api = getApi();
-    const {article} = getState().article;
+): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    const article = getState().article.article;
+    if (!article) {
+      return;
+    }
     logEvent({
       message: 'Show article\'s comment actions',
       analyticsId: ANALYTICS_ARTICLE_PAGE,
     });
-    const url: string = `${api.config.backendUrl}/articles/${article.idReadable}#comment${activityId}`;
+    const url: string = `${getApi().config.backendUrl}/articles/${article.idReadable}#comment${activityId}`;
     const commentText = comment.text;
     const options: ActionSheetOption[] = [
       {
@@ -698,7 +605,7 @@ const showArticleCommentActions = (
     const selectedAction = await showActionSheet(
       options,
       showActionSheetWithOptions,
-      comment?.author ? getEntityPresentation(comment.author) : null,
+      comment?.author ? getEntityPresentation(comment.author) : '',
       commentText.length > 155 ? `${commentText.substr(0, 153)}…` : commentText,
     );
 
@@ -712,26 +619,18 @@ const showArticleCommentActions = (
   };
 };
 
-const getMentions = (
-  query: string,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<null> | Promise<any>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    const api: Api = getApi();
-    const article: Article = getState().article.article;
+const getMentions = (query: string): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     logEvent({
       message: 'Get article mentions',
       analyticsId: ANALYTICS_ARTICLE_PAGE,
     });
+    const article = getState().article.article;
+    if (!article) {
+      return;
+    }
     const [error, mentions] = await until(
-      api.mentions.getMentions(query, {
+      getApi().mentions.getMentions(query, {
         containers: [
           {
             $type: article.$type,
@@ -750,26 +649,20 @@ const getMentions = (
   };
 };
 
-const toggleFavorite = (): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    const api: Api = getApi();
-    const {article} = getState().article;
+const toggleFavorite = (): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    const article = getState().article.article;
     logEvent({
       message: 'Toggle article star',
       analyticsId: ANALYTICS_ARTICLE_PAGE,
     });
+    if (!article) {
+      return;
+    }
     const prev: boolean = article.hasStar;
     dispatch(setArticle({...article, hasStar: !prev}));
     const [error] = await until(
-      api.articles.updateArticle(article.id, {
+      getApi().articles.updateArticle(article.id, {
         hasStar: !prev,
       }),
     );
@@ -783,24 +676,18 @@ const toggleFavorite = (): ((
 
 const deleteAttachment = (
   attachmentId: string,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    const api: Api = getApi();
-    const {article} = getState().article;
+): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     logEvent({
       message: 'Delete article attachment',
       analyticsId: ANALYTICS_ARTICLE_PAGE,
     });
+    const article = getState().article.article;
+    if (!article) {
+      return;
+    }
     const [error] = await until(
-      api.articles.deleteAttachment(article.id, attachmentId),
+      getApi().articles.deleteAttachment(article.id, attachmentId),
     );
 
     if (error) {
@@ -822,58 +709,47 @@ const deleteAttachment = (
   };
 };
 
-const createSubArticleDraft = (): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<ArticleDraft | null>) => {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    const api: Api = getApi();
-    const {article} = getState().article;
+const createSubArticleDraft = (): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     logEvent({
       message: 'Create sub-article',
       analyticsId: ANALYTICS_ARTICLE_PAGE,
     });
-    return await createArticleDraft(api, article, true);
+    const article = getState().article.article!;
+    return await createArticleDraft(getApi(), article, true);
   };
 };
 
-const onCheckboxUpdate = (
-  articleContent: string,
-): ((...args: any[]) => any) => async (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => {
-  const api: Api = getApi();
-  const {article} = getState().article;
-  const updatedArticle: Article = {...article, content: articleContent};
-  dispatch(setArticle({...article, content: articleContent}));
-  logEvent({
-    message: 'Checkbox updated',
-    analyticsId: ANALYTICS_ARTICLE_PAGE,
-  });
-  const [error] = await until(
-    api.articles.updateArticle(
-      article.id,
-      {
-        content: articleContent,
-      },
-      'content',
-    ),
-  );
+const onCheckboxUpdate =
+  (articleContent: string): ReduxAction =>
+  async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    logEvent({
+      message: 'Checkbox updated',
+      analyticsId: ANALYTICS_ARTICLE_PAGE,
+    });
+    const article = getState().article.article;
+    if (!article) {
+      return;
+    }
+    const updatedArticle: Article = {...article, content: articleContent};
+    dispatch(setArticle({...article, content: articleContent}));
+    const [error] = await until(
+      getApi().articles.updateArticle(
+        article.id,
+        {
+          content: articleContent,
+        },
+        'content'
+      )
+    );
 
-  if (error) {
-    notifyError(error);
-    await dispatch(setArticle(article));
-  } else {
-    cacheUserLastVisitedArticle(updatedArticle);
-  }
-};
+    if (error) {
+      notifyError(error);
+      await dispatch(setArticle(article));
+    } else {
+      cacheUserLastVisitedArticle(updatedArticle);
+    }
+  };
 
 function onReactionSelect(
   articleId: string,
@@ -881,24 +757,19 @@ function onReactionSelect(
   reaction: Reaction,
   activities: Activity[] | null,
   onReactionUpdate: (activities: Activity[], error?: CustomError) => void,
-): (dispatch: (arg0: any) => any, getState: () => AppState, getApi: ApiGetter) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    const api: ArticlesAPI = getApi().articles;
-    const currentUser: User = getState().app.user;
+): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    const currentUser = getState().app.user!;
     usage.trackEvent(ANALYTICS_ARTICLE_PAGE_STREAM, 'Reaction select');
     const reactionName: string = reaction.reaction;
     const existReaction: Reaction = (comment.reactions || []).filter(
       (it: Reaction) =>
-        it.reaction === reactionName && it.author.id === currentUser.id,
+        it.reaction === reactionName && it.author.id === currentUser!.id,
     )[0];
     const [error, commentReaction] = await until(
       existReaction
-        ? api.removeCommentReaction(articleId, comment.id, existReaction.id)
-        : api.addCommentReaction(articleId, comment.id, reactionName),
+        ? getApi().articles.removeCommentReaction(articleId, comment.id, existReaction.id)
+        : getApi().articles.addCommentReaction(articleId, comment.id, reactionName),
     );
 
     if (error) {
