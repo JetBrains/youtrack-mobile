@@ -1,5 +1,4 @@
 import {arrayToTree} from 'performant-array-to-tree';
-import type ActionSheet from '@expo/react-native-action-sheet';
 import * as helper from './knowledge-base-helper';
 import * as treeHelper from 'components/articles/articles-tree-helper';
 import animation from 'components/animation/animation';
@@ -28,7 +27,7 @@ import {until} from 'util/util';
 
 import type Api from 'components/api/api';
 import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
-import type {AppState} from 'reducers';
+import type {ActionSheetProvider} from '@expo/react-native-action-sheet';
 import type {
   Article,
   ArticleNodeList,
@@ -37,20 +36,15 @@ import type {
   ArticlesListItem,
   ProjectArticlesData,
 } from 'types/Article';
+import type {ArticleDraft} from 'types/Article';
 import type {CustomError} from 'types/Error';
 import type {Folder} from 'types/User';
-import {ArticleDraft} from 'types/Article';
-import {ReduxAction} from 'types/Redux';
-
-type ApiGetter = () => Api;
-
+import type {ReduxAction, ReduxThunkDispatch, ReduxStateGetter, ReduxAPIGetter} from 'types/Redux';
 
 export const getCachedArticleList = (): ArticlesList =>
   getStorageState().articlesList || [];
 
-const loadCachedArticleList = (): ((
-  dispatch: (arg0: any) => any,
-) => Promise<void>) => async (dispatch: (arg0: any) => any) => {
+const loadCachedArticleList = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
   const cachedArticlesList: ArticlesList = getCachedArticleList();
 
   if (cachedArticlesList?.length > 0) {
@@ -72,10 +66,7 @@ const createArticleList = (
 export const getPinnedNonTemplateProjects = async (
   api: Api,
 ): Promise<Array<Folder>> => {
-  const [error, pinnedFolders]: [
-    CustomError | null | undefined,
-    Folder,
-  ] = await until(api.issueFolder.getPinnedIssueFolder());
+  const [error, pinnedFolders] = await until<Folder[]>(api.issueFolder.getPinnedIssueFolder());
 
   if (error) {
     notifyError(error);
@@ -87,17 +78,15 @@ export const getPinnedNonTemplateProjects = async (
   }
 };
 
-const clearUserLastVisitedArticle = (): ((
-  dispatch: (arg0: any) => any,
-) => Promise<void>) => async (dispatch: (arg0: any) => any) => {
+const clearUserLastVisitedArticle = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
   dispatch(resetUserArticlesProfile());
   cacheUserLastVisitedArticle(null);
 };
 
 const loadArticleList = (
   reset: boolean = true,
-): ((dispatch: (arg0: any) => any) => Promise<void>) => async (
-  dispatch: (arg0: any) => any,
+): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
 ) => {
   const query: string | null = getArticlesQuery();
 
@@ -109,9 +98,9 @@ const loadArticleList = (
 };
 
 const getArticleList = (reset: boolean = true) => async (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+  getApi: ReduxAPIGetter,
 ) => {
   const isOffline: boolean =
     getState().app?.networkState?.isConnected === false;
@@ -181,16 +170,10 @@ const getArticleList = (reset: boolean = true) => async (
   }
 };
 
-const getArticleChildren: (
-  articleId: string,
-) => (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<ArticleNodeList> = (articleId: string) => async (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
+const getArticleChildren = (articleId: string): ReduxAction<Promise<ArticleNodeList>> => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+  getApi: ReduxAPIGetter,
 ) => {
   logEvent({
     message: 'Loading article children',
@@ -216,14 +199,10 @@ const getArticleChildren: (
 
 const filterArticles = (
   query: string | null,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => async (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
+): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+  getApi: ReduxAPIGetter,
 ) => {
   logEvent({
     message: 'Filter articles',
@@ -257,12 +236,11 @@ const filterArticles = (
 };
 
 const loadArticlesDrafts = (): ReduxAction<Promise<ArticleDraft[]>> => async (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+  getApi: ReduxAPIGetter,
 ) => {
-  const api: Api = getApi();
-  const [error, articlesDrafts] = await until<ArticleDraft[]>(api.articles.getArticleDrafts());
+  const [error, articlesDrafts] = await until<ArticleDraft[]>(getApi().articles.getArticleDrafts());
 
   if (error) {
     notifyError(error);
@@ -274,14 +252,10 @@ const loadArticlesDrafts = (): ReduxAction<Promise<ArticleDraft[]>> => async (
 
 const toggleProjectVisibility = (
   item: ArticlesListItem,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => async (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
+): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+  getApi: ReduxAPIGetter,
 ) => {
   const api: Api = getApi();
   const {articles, articlesList} = getState().articles;
@@ -367,14 +341,10 @@ const toggleProjectVisibility = (
 
 const toggleProjectFavorite = (
   item: ArticlesListItem,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => async (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
+): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+  getApi: ReduxAPIGetter,
 ) => {
   logEvent({
     message: 'Toggle project article favorite',
@@ -433,16 +403,11 @@ const updateProjectsFavorites = (
   pinnedProjects: ArticleProject[],
   unpinnedProjects: ArticleProject[],
   hasNoFavorites: boolean,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void>) => async (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
+): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
+  getApi: ReduxAPIGetter,
 ) => {
-  const api: Api = getApi();
   logEvent({
     message: 'Manage favorite projects',
     analyticsId: ANALYTICS_ARTICLES_PAGE,
@@ -451,10 +416,10 @@ const updateProjectsFavorites = (
   dispatch(setGlobalInProgress(true));
   const [error] = await until(
     pinnedProjects
-      .map((it: ArticleProject) => api.projects.addFavorite(it.id))
+      .map((it: ArticleProject) => getApi().projects.addFavorite(it.id))
       .concat(
         unpinnedProjects.map((it: ArticleProject) =>
-          api.projects.removeFavorite(it.id),
+          getApi().projects.removeFavorite(it.id),
         ),
       ),
   );
@@ -469,9 +434,7 @@ const updateProjectsFavorites = (
   dispatch(cacheProjects());
 };
 
-const setNoFavoriteProjects = (): ((
-  dispatch: (arg0: any) => any,
-) => Promise<void>) => async (dispatch: (arg0: any) => any) => {
+const setNoFavoriteProjects = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
   dispatch(setGlobalInProgress(false));
   dispatch(
     setError({
@@ -481,11 +444,11 @@ const setNoFavoriteProjects = (): ((
 };
 
 const showContextActions = (
-  actionSheet: ActionSheet,
+  actionSheet: typeof ActionSheetProvider,
   canCreateArticle: boolean,
-  onShowMoreProjects: (...args: any[]) => any,
-  onCreateArticle: () => any,
-): (() => Promise<void>) => async () => {
+  onShowMoreProjects: (...args: any[]) => void,
+  onCreateArticle: () => void,
+): ReduxAction => async () => {
   const actions: ActionSheetOption[] = [
     {
       title: i18n('Manage Favorite Projects'),
@@ -498,7 +461,7 @@ const showContextActions = (
 
   if (
     canCreateArticle &&
-    getStorageState().projects.some((it: ArticleProject) => it.pinned)
+    getStorageState().projects.some(it => it.pinned)
   ) {
     actions.unshift({
       title: i18n('New Article'),
@@ -518,12 +481,9 @@ const showContextActions = (
 
 const toggleAllProjects = (
   collapse: boolean = true,
-): ((
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-) => Promise<void>) => async (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
+): ReduxAction => async (
+  dispatch: ReduxThunkDispatch,
+  getState: ReduxStateGetter,
 ) => {
   const {articles, articlesList} = getState().articles;
   logEvent({
@@ -595,7 +555,7 @@ async function setArticlesListCache(articlesList: ArticlesList | null) {
 }
 
 function storeArticlesList(articlesList: ArticlesList | null) {
-  return async (dispatch: (arg0: any) => any) => {
+  return async (dispatch: ReduxThunkDispatch) => {
     dispatch(setList(articlesList));
     setArticlesListCache(articlesList);
   };
@@ -604,7 +564,7 @@ function storeArticlesList(articlesList: ArticlesList | null) {
 function storeProjectData(
   projectArticlesData: ProjectArticlesData[] | null,
 ) {
-  return async (dispatch: (arg0: any) => any) => {
+  return async (dispatch: ReduxThunkDispatch) => {
     dispatch(setArticles(projectArticlesData));
     await setArticlesCache(projectArticlesData);
   };
@@ -615,23 +575,16 @@ function getProjectDataPromises(
   projects: ArticleProject[],
 ): Array<Promise<ProjectArticlesData>> {
   return projects.map(async (project: ArticleProject) => {
-    if (project.articles.collapsed === true) {
+    if (project.articles.collapsed) {
       return {
-        ...{
-          project,
-        },
+        ...{project},
         articles: [],
       };
     }
 
-    const [error, articles]: [
-      CustomError | null | undefined,
-      ProjectArticlesData,
-    ] = await until(api.articles.getArticles(getArticlesQuery(), project.id));
+    const [error, articles] = await until<Article[]>(api.articles.getArticles(getArticlesQuery(), project.id));
     return {
-      ...{
-        project,
-      },
+      ...{project},
       articles: error ? [] : articles,
     };
   });

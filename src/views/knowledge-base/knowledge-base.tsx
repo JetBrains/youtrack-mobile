@@ -64,8 +64,8 @@ import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/Even
 import type {KnowledgeBaseActions} from './knowledge-base-actions';
 import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {ISelectProps} from 'components/select/select';
+import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme, UITheme} from 'types/Theme';
-import {ReduxThunkDispatch} from 'types/Redux';
 
 type Props = KnowledgeBaseActions &
   KnowledgeBaseState & {
@@ -493,9 +493,11 @@ export class KnowledgeBase extends Component<Props, State> {
   openProjectSelect = () => this.setState({isSelectVisible: true});
 
   renderProjectSelect = () => {
-    const {updateProjectsFavorites} = this.props;
-    const projects: ArticleProject[] = getStorageState().projects as ArticleProject[];
-    const prevPinnedProjects: ArticleProject[] = projects.filter((it: ArticleProject) => it.pinned);
+    const {updateProjectsFavorites, issuePermissions} = this.props;
+    const projects = getStorageState().projects.filter((p) => {
+      return issuePermissions.articleCanCreateArticle(p.ringId);
+    }) as ArticleProject[];
+    const prevPinnedProjects: ArticleProject[] = projects.filter(it => it.pinned);
     const selectProps: ISelectProps = {
       placeholder: i18n('Filter projects'),
       multi: true,
@@ -506,7 +508,7 @@ export class KnowledgeBase extends Component<Props, State> {
       ),
       dataSource: (q: string = '') => {
         const filteredProjects = q
-          ? projects.filter((it: ArticleProject) => {
+          ? projects.filter(it => {
               const value = q.toLowerCase();
               return it.name?.toLowerCase().indexOf(value) !== -1 || it.shortName?.toLowerCase().indexOf(value) !== -1;
             })
@@ -526,12 +528,12 @@ export class KnowledgeBase extends Component<Props, State> {
       onCancel: this.closeProjectSelect,
       onChangeSelection: () => null,
       onSelect: async (selectedProjects: ArticleProject[] | null | undefined) => {
-        const pinnedProjects: ArticleProject[] = (selectedProjects || [])
-          .map((it: ArticleProject) => (it.pinned ? null : {...it, pinned: true}))
+        const pinnedProjects = (selectedProjects || [])
+          .map(it => (it.pinned ? null : {...it, pinned: true}))
           .filter(Boolean);
         const unpinnedProjects: ArticleProject[] = prevPinnedProjects
-          .filter((it: ArticleProject) => !(selectedProjects || []).includes(it))
-          .map((it: ArticleProject) => ({...it, pinned: false}));
+          .filter(it => !(selectedProjects || []).includes(it))
+          .map(it => ({...it, pinned: false}));
         this.closeProjectSelect();
         await updateProjectsFavorites(pinnedProjects, unpinnedProjects, selectedProjects?.length === 0);
 
@@ -567,7 +569,7 @@ export class KnowledgeBase extends Component<Props, State> {
     });
   }
 
-  onArticleCreate(articleDraft?: ArticleDraft | null, isNew: boolean = true) {
+  onArticleCreate(articleDraft: ArticleDraft | null, isNew: boolean = true) {
     if (this.state.isSplitView) {
       this.toggleModal(
         <ArticleCreate

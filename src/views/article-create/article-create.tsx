@@ -45,7 +45,7 @@ import type {Theme, UIThemeColors} from 'types/Theme';
 import type {Visibility} from 'types/Visibility';
 
 interface Props {
-  articleDraft?: (Article & {
+  articleDraft: (Article & {
     project: ArticleProject | null;
   }) | null;
   isNew?: boolean;
