@@ -15,7 +15,7 @@ import type {Attachment} from 'types/CustomFields';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 
-const updateArticleDraft = (articleDraft: Article): ReduxAction => {
+const updateArticleDraft = (articleDraft: ArticleDraft): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const [error] = await until<ArticleDraft>(getApi().articles.updateArticleDraft(articleDraft));
     if (error) {
@@ -44,12 +44,12 @@ const createArticleDraft = (articleId?: string): ReduxAction<Promise<ArticleDraf
   };
 };
 
-const publishArticleDraft = (articleDraft: Article): ReduxAction<Promise<Article | void>> => {
+const publishArticleDraft = (articleDraft: ArticleDraft): ReduxAction<Promise<Article | void>> => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const api: Api = getApi();
     dispatch(setProcessing(true));
     await dispatch(updateArticleDraft(articleDraft));
-    const [error, article] = await until<Article>(api.articles.publishArticleDraft(articleDraft.id));
+    const [error, article] = await until<Article>(api.articles.publishArticleDraft(articleDraft.id!));
     dispatch(setProcessing(false));
 
     if (error) {
@@ -138,9 +138,9 @@ const deleteDraftAttachment = (attachmentId: string): ReduxAction => {
   };
 };
 
-const deleteDraft = (): ReduxAction => {
+const deleteDraft = (): ReduxAction<Promise<void>> => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
-    const articleDraft = getState().articleCreate.articleDraft;
+    const articleDraft: ArticleDraft = getState().articleCreate.articleDraft!;
     return confirmDeleteArticleDraft().then(async () => {
       dispatch(setProcessing(true));
       await dispatch(deleteArticle(articleDraft));

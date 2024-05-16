@@ -40,6 +40,7 @@ import type {ArticleCreateState} from './article-create-reducers';
 import type {Attachment} from 'types/CustomFields';
 import type {CustomError} from 'types/Error';
 import type {NormalizedAttachment} from 'types/Attachment';
+import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme, UIThemeColors} from 'types/Theme';
 import type {Visibility} from 'types/Visibility';
 
@@ -67,7 +68,7 @@ const ArticleCreate = (props: Props) => {
     visibility: null,
     attachments: [],
   });
-  const dispatch = useDispatch();
+  const dispatch: ReduxThunkDispatch = useDispatch();
   const theme: Theme = useContext(ThemeContext);
   const isConnected: boolean = useSelector(
     (state: AppState) => !!state.app.networkState?.isConnected,
@@ -116,14 +117,12 @@ const ArticleCreate = (props: Props) => {
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, createArticleDraft]);
 
-  const doUpdate = async (
-    articleDraft: ArticleDraft,
-  ): ((...args: any[]) => any) => {
-    let draft: Partial<ArticleDraft> = articleDraft;
+  const doUpdate = async (d: ArticleDraft) => {
+    let draft: Partial<ArticleDraft> = d;
 
     if (props.originalArticleId && !draft.id) {
-      const createdArticleDraft: ArticleDraft = await createArticleDraft(props.originalArticleId);
-      draft = {...createdArticleDraft, ...articleDraft};
+      const createdArticleDraft = await createArticleDraft(props.originalArticleId);
+      draft = {...createdArticleDraft, ...d};
     }
 
     return dispatch(articleCreateActions.updateArticleDraft(draft));
@@ -150,7 +149,7 @@ const ArticleCreate = (props: Props) => {
         dataSource: () =>
           Promise.resolve(
             getStorageState().projects.filter(
-              (it: ArticleProject) => issuePermissions.articleCanCreateArticle(it.ringId),
+              it => issuePermissions.articleCanCreateArticle(it.ringId),
             ),
           ),
         onSelect: (project: ArticleProject) => {
@@ -216,7 +215,7 @@ const ArticleCreate = (props: Props) => {
         }
         onRightButtonClick={async () => {
           if (!isSubmitDisabled) {
-            const createdArticle: Article | undefined = await dispatch(
+            const createdArticle = await dispatch(
               articleCreateActions.publishArticleDraft(draft),
             );
 
@@ -296,9 +295,7 @@ const ArticleCreate = (props: Props) => {
           style={styles.discardButton}
           disabled={isProcessing || !isConnected}
           onPress={async () => {
-            dispatch(articleCreateActions.deleteDraft()).then(
-              closeCreateArticleScreen,
-            );
+            dispatch(articleCreateActions.deleteDraft()).then(closeCreateArticleScreen);
           }}
         >
           <Text

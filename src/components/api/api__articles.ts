@@ -167,7 +167,7 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
-  async updateArticleDraft(articleDraft: Article): Promise<Article> {
+  async updateArticleDraft(articleDraft: ArticleDraft): Promise<ArticleDraft> {
     return this.makeAuthorizedRequest(
       `${this.currentUserAPIUrl}/articleDrafts/${articleDraft.id}?${this.articleFieldsQuery}`,
       'POST',

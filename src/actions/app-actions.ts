@@ -759,7 +759,7 @@ export function onLogIn(authParams: AuthParams): ReduxAction {
 export function cacheProjects(): ReduxAction<Promise<Folder[]>> {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const [error, userFolders]: [CustomError | null, Folder[]] = await until(
-      getApi().user.getUserFolders('', ['$type,id,shortName,name,pinned'])
+      getApi().user.getUserFolders('', ['$type,id,ringId,shortName,name,pinned'])
     ) as [CustomError | null, Folder[]];
     const projects: Folder[] = error ? [] : userFolders.filter(it => hasType.project(it));
     await storage.flushStoragePart({projects});
