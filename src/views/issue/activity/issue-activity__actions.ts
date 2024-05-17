@@ -62,7 +62,7 @@ export interface IssueActivityActions {
     type: any;
   };
   setDefaultProjectTeam: (project: Project) => ReduxAction;
-  loadActivitiesPage: (doNotReset?: boolean, issueId?: string) => ReduxAction;
+  loadActivitiesPage: (doNotReset?: boolean, issueId?: string, commentsOnly?: boolean) => ReduxAction;
   doUpdateWorkItem: (workItem: WorkItem) => ReduxAction;
   createWorkItem: (draft: WorkItem, issueId?: string) => ReduxAction<Promise<CustomError | WorkItem>>;
   getWorkItemTypes: (projectId?: string) => ReduxAction<Promise<WorkItemType[] | {}>>;
@@ -85,7 +85,7 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
         issueActivityEnabledTypes: activityHelper.getIssueActivitiesEnabledTypes(),
       };
     },
-    loadActivitiesPage: function (doNotReset: boolean = false, issueId?: string): ReduxAction {
+    loadActivitiesPage: function (doNotReset: boolean = false, issueId?: string, commentsOnly?: boolean): ReduxAction {
       return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         const targetIssueId: string = issueId || (getState()[stateFieldName] as IssueState).issueId;
         const isOffline: boolean = getState().app?.networkState?.isConnected === false;
@@ -101,7 +101,9 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
 
         const api: Api = getApi();
         dispatch(createIssueActivityActions(stateFieldName).receiveActivityEnabledTypes());
-        const activityCategories = getActivityCategories(activityHelper.getIssueActivitiesEnabledTypes());
+        const activityCategories = getActivityCategories(
+          activityHelper.getIssueActivitiesEnabledTypes(commentsOnly)
+        );
 
         if (!doNotReset) {
           dispatch(receiveActivityPage(null));

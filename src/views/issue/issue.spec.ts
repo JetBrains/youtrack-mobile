@@ -7,6 +7,7 @@ import API from 'components/api/api';
 import createIssueActions from './issue-actions';
 import Mocks from 'test/mocks';
 import {actions} from './issue-reducers';
+import {issueCommentsCategoryId} from 'components/activity/activity__category';
 import {setApi} from 'components/api/api__instance';
 
 import {ActivityType} from 'types/Activity';
@@ -81,7 +82,7 @@ describe('Issue view actions', () => {
   it('should add comment', async () => {
     const issueActivityTypes = [
       {
-        id: 'IssueComments',
+        id: issueCommentsCategoryId,
         name: 'Comments',
       },
       {

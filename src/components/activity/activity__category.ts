@@ -118,8 +118,10 @@ export interface IActivityCategory {
   };
 }
 
+export const issueCommentsCategoryId = 'IssueComments';
+
 export const ActivityCategory: IActivityCategory = [
-  ['COMMENT', 'IssueComments', [activityCategory.COMMENT], 'Comments'],
+  ['COMMENT', issueCommentsCategoryId, [activityCategory.COMMENT], 'Comments'],
   [
     'HISTORY',
     'IssueHistory',

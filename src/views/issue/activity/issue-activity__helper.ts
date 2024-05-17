@@ -1,5 +1,5 @@
 import Api from 'components/api/api';
-import {ActivityCategory} from 'components/activity/activity__category';
+import {ActivityCategory, issueCommentsCategoryId} from 'components/activity/activity__category';
 import {checkVersion} from 'components/feature/feature';
 import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {getActivityAllTypes} from 'components/activity/activity-helper';
@@ -12,9 +12,8 @@ export function isIssueActivitiesAPIEnabled(): any {
   return checkVersion('2018.3');
 }
 
-export function getIssueActivitiesEnabledTypes(): ActivityType[] {
-  let enabledTypes: ActivityType[] =
-    getStorageState().issueActivitiesEnabledTypes || [];
+export function getIssueActivitiesEnabledTypes(commentsOnly: boolean = false): ActivityType[] {
+  let enabledTypes: ActivityType[] = getStorageState().issueActivitiesEnabledTypes || [];
   const activityAllTypes: ActivityType[] = getActivityAllTypes();
 
   if (!enabledTypes.length) {
@@ -22,19 +21,21 @@ export function getIssueActivitiesEnabledTypes(): ActivityType[] {
     saveIssueActivityEnabledTypes(enabledTypes);
   }
 
+  if (commentsOnly) {
+    return enabledTypes.filter((it: ActivityType) => it.id === issueCommentsCategoryId);
+  }
+
   if (
     !getStorageState().vcsChanges &&
-    !enabledTypes.find(
-      (it: ActivityType) => it.id === ActivityCategory.Source?.VCS_ITEM,
-    )
+    !enabledTypes.find((it: ActivityType) => it.id === ActivityCategory.Source?.VCS_ITEM)
   ) {
-    const vcs: ActivityType | null | undefined = activityAllTypes.find(
+    const vcs: ActivityType | undefined = activityAllTypes.find(
       (it: ActivityType) => it.id === ActivityCategory.Source?.VCS_ITEM,
     );
-    vcs && enabledTypes.push(vcs);
-    flushStoragePart({
-      vcsChanges: true,
-    });
+    if (vcs) {
+      enabledTypes.push(vcs);
+    }
+    flushStoragePart({vcsChanges: true});
   }
 
   return enabledTypes;
