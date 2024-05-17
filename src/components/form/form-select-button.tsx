@@ -69,9 +69,11 @@ const FormSelectButton = ({
             validator={validator}
             value={value}
           >
-            <View style={[styles.formSelectIcon, backGrStyle]}>
-              <IconAngleRight size={20} color={styles.formSelectIcon.color} />
-            </View>
+            {!disabled &&
+              <View style={[styles.formSelectIcon, backGrStyle]}>
+                <IconAngleRight size={20} color={styles.formSelectIcon.color} />
+              </View>
+            }
           </FormTextInput>
         </View>
       </TouchableOpacity>
