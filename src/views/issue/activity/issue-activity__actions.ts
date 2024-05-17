@@ -56,7 +56,7 @@ export function loadingActivityPage(isLoading: boolean) {
 
 export interface IssueActivityActions {
   getTimeTracking: (issueId?: string) => ReduxAction<Promise<TimeTracking | null>>;
-  receiveActivityEnabledTypes: () => {
+  receiveActivityEnabledTypes: (commentsOnly?: boolean) => {
     issueActivityEnabledTypes: ActivityType[];
     issueActivityTypes: ActivityType[];
     type: any;
@@ -74,15 +74,15 @@ export interface IssueActivityActions {
 
 export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_FIELD_NAME) => {
   const actions: IssueActivityActions = {
-    receiveActivityEnabledTypes: function (): {
+    receiveActivityEnabledTypes: function (commentsOnly?: boolean): {
       issueActivityEnabledTypes: ActivityType[];
       issueActivityTypes: ActivityType[];
       type: any;
     } {
       return {
         type: types.RECEIVE_ACTIVITY_CATEGORIES,
-        issueActivityTypes: getActivityAllTypes(),
-        issueActivityEnabledTypes: activityHelper.getIssueActivitiesEnabledTypes(),
+        issueActivityTypes: commentsOnly ? [] : getActivityAllTypes(),
+        issueActivityEnabledTypes: activityHelper.getIssueActivitiesEnabledTypes(commentsOnly),
       };
     },
     loadActivitiesPage: function (doNotReset: boolean = false, issueId?: string, commentsOnly?: boolean): ReduxAction {
@@ -100,7 +100,7 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
         }
 
         const api: Api = getApi();
-        dispatch(createIssueActivityActions(stateFieldName).receiveActivityEnabledTypes());
+        dispatch(createIssueActivityActions(stateFieldName).receiveActivityEnabledTypes(commentsOnly));
         const activityCategories = getActivityCategories(
           activityHelper.getIssueActivitiesEnabledTypes(commentsOnly)
         );
