@@ -261,6 +261,7 @@ msgstr "Отмена"
 msgid "CC me"
 msgstr "Добавить меня в копию"
 
+#: src/components/activity/activity__history-title.ts
 #: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "Копии"

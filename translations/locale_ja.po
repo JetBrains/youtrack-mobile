@@ -237,6 +237,7 @@ msgstr "取り消す"
 msgid "CC me"
 msgstr "自分を CC に追加"
 
+#: src/components/activity/activity__history-title.ts
 #: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "CC"

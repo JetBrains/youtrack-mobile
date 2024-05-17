@@ -261,6 +261,7 @@ msgstr "Скасувати"
 msgid "CC me"
 msgstr ""
 
+#: src/components/activity/activity__history-title.ts
 #: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr ""

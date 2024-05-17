@@ -237,6 +237,7 @@ msgstr "取消"
 msgid "CC me"
 msgstr "抄送我"
 
+#: src/components/activity/activity__history-title.ts
 #: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "抄送"

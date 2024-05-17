@@ -245,6 +245,7 @@ msgstr "Abbrechen"
 msgid "CC me"
 msgstr "Kopien an mich"
 
+#: src/components/activity/activity__history-title.ts
 #: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "Kopien"

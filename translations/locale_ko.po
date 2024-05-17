@@ -237,6 +237,7 @@ msgstr "취소"
 msgid "CC me"
 msgstr "나를 참조에 추가"
 
+#: src/components/activity/activity__history-title.ts
 #: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
 msgstr "참조"
