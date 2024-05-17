@@ -58,12 +58,14 @@ const feedbackFormStyles = {
     backgroundColor: '$boxBackground',
   },
   feedbackFormInputMultiline: {
-    ...rowFormStyles.input,
-    minHeight: UNIT * 12,
+    minHeight: UNIT * 6,
     maxHeight: UNIT * 12,
     flexGrow: 1,
     color: '$text',
     backgroundColor: '$boxBackground',
+  },
+  feedbackFormInputMultilineWithLabel: {
+    paddingTop: UNIT * 2.5,
   },
   feedbackFormBottomIndent: {
     height: UNIT * 14,

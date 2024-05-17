@@ -47,12 +47,13 @@ const FormSelectButton = ({
   value?: string;
   disabled?: boolean;
 }) => {
+  const backGrStyle = style?.backgroundColor ? {backgroundColor: style?.backgroundColor} : null;
   return (
     <View style={[styles.formSelect, style]}>
       <TouchableOpacity disabled={disabled} onPress={onPress} testID={testID}>
         <View pointerEvents="box-only">
           <FormTextInput
-            style={textStyle}
+            style={{...textStyle, ...backGrStyle}}
             editable={false}
             inputMode={inputMode}
             inputStyle={[label ? styles.formSelectText : null]}
@@ -68,7 +69,7 @@ const FormSelectButton = ({
             validator={validator}
             value={value}
           >
-            <View style={[styles.formSelectIcon, textStyle && {backgroundColor: textStyle?.backgroundColor}]}>
+            <View style={[styles.formSelectIcon, backGrStyle]}>
               <IconAngleRight size={20} color={styles.formSelectIcon.color} />
             </View>
           </FormTextInput>

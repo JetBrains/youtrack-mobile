@@ -108,10 +108,11 @@ const IssueUsersCC = ({
     </View>
   );
 
-  return (
+  return !disabled || presentation ? (
     <>
       <FormSelect
         style={style}
+        multiline={true}
         textStyle={disabled ? null : {...styles.link, ...textStyle}}
         disabled={disabled}
         value={presentation}
@@ -178,7 +179,7 @@ const IssueUsersCC = ({
       />
       {!!selectProps && <SelectSectioned {...selectProps} />}
     </>
-  );
+  ) : null;
 };
 
 export default React.memo(IssueUsersCC);

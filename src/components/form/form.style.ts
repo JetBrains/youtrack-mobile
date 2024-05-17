@@ -54,7 +54,7 @@ export const formRowStyles = {
   },
   formSelectIcon: {
     position: 'absolute',
-    right: 2,
+    right: UNIT / 2,
     paddingHorizontal: UNIT,
     paddingVertical: UNIT * 1.5,
     backgroundColor: '$boxBackground',

@@ -72,6 +72,7 @@ const FormTextInput = ({
           label && styles.formInputWithLabel,
           inputStyle,
           multiline ? styles.feedbackFormInputMultiline : null,
+          multiline && label ? styles.feedbackFormInputMultilineWithLabel : null,
           value ? styles.formInputClearSpace : null,
           hasError ? styles.feedbackInputError : null,
           style,
