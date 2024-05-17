@@ -57,6 +57,9 @@ export function getTitle(activity: Activity) {
     case eventField.id === 'visible to':
       label = i18n('Visibility');
       break;
+    case eventField.id === 'cc recipients':
+      label = i18n('CCs');
+      break;
 
     default:
       label = eventField.presentation;

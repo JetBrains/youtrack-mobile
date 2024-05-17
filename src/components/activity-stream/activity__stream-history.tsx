@@ -173,7 +173,7 @@ const StreamHistoryChange = ({
       case Boolean(isActivityCategory.attachment(activity)):
         return renderAttachmentChange(activity);
 
-      case Boolean(isActivityCategory.visibility(activity)):
+      case Boolean(isActivityCategory.visibility(activity) || isActivityCategory.ticketCC(activity)):
         return (
           <StreamHistoryTextChange
             activity={activity}

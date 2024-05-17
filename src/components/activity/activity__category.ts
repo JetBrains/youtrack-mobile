@@ -28,6 +28,7 @@ export const categoryName = {
   STAR: 'STAR',
   SUMMARY: 'SUMMARY',
   TAGS: 'TAGS',
+  TICKET_CC: 'TICKET_CC',
   TOTAL_VOTES: 'TOTAL_VOTES',
   VCS_ITEM: 'VCS_ITEM',
   VISIBILITY: 'VISIBILITY',
@@ -83,6 +84,7 @@ export const activityCategory: Record<string, any> = {
   [categoryName.VISIBILITY]: 'PermittedGroupCategory',
   [categoryName.VISIBILITY_ISSUE]: 'IssueVisibilityCategory',
   [categoryName.STAR]: 'StarCategory',
+  [categoryName.TICKET_CC]: 'TicketCCEventCategory',
 };
 export const activityArticleCategory = {
   ARTICLE_CREATED: 'ArticleCreatedCategory',
@@ -136,6 +138,7 @@ export const ActivityCategory: IActivityCategory = [
       activityCategory.TAGS,
       activityCategory.VISIBILITY,
       activityCategory.VISIBILITY_ISSUE,
+      activityCategory.TICKET_CC,
     ],
     'Issue history',
   ],
@@ -275,3 +278,4 @@ isActivityCategory.visibility = isActivityCategories([
 isActivityCategory.vote = isActivityCategory(activityCategory.VOTERS);
 isActivityCategory.voters = isActivityCategory(activityCategory.VOTERS);
 isActivityCategory.work = isActivityCategory(activityCategory.WORK_ITEM);
+isActivityCategory.ticketCC = isActivityCategory(activityCategory.TICKET_CC);
