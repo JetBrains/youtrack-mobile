@@ -1,4 +1,4 @@
-const availableReactionNames: string[] = [
+const availableReactionNames = [
   'yes',
   'thanks',
   'thumbs-up',
@@ -55,5 +55,5 @@ const availableReactionNames: string[] = [
   'seven',
   'eight',
   'nine',
-];
+] as const;
 export default availableReactionNames;
