@@ -50,7 +50,7 @@ const IssuesFilterField = ({
       >
         {presentation}
       </Text>
-      <IconAngleDown color={styles.filtersIcon.color} size={12}/>
+      <IconAngleDown style={styles.filtersIcon} color={styles.filtersIcon.color} size={18}/>
     </TouchableOpacity>
   );
 };

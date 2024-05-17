@@ -329,10 +329,10 @@ export default EStyleSheet.create({
   },
   filtersButtonText: {
     ...secondaryText,
-    marginRight: UNIT / 2,
     color: '$text',
   },
   filtersIcon: {
+    marginRight: -UNIT,
     color: '$icon',
   },
   filtersButtonReset: {
