@@ -438,10 +438,16 @@ export class KnowledgeBase extends Component<Props, State> {
     />
   );
 
+  getVisibleProjects() {
+    return getStorageState().projects;
+  }
+
   renderActionsBar = () => {
-    const {isLoading, articlesList} = this.props;
+    const {isLoading, articlesList, issuePermissions} = this.props;
     const list: ArticlesList = articlesList || [];
     const hasSearchQuery: boolean = !!this.getSearchQuery();
+
+    const canCreateArticle = this.getVisibleProjects().some(p => issuePermissions.articleCanCreateArticle(p.ringId));
     const isToggleButtonEnabled: boolean =
       !isLoading &&
       !hasSearchQuery &&
@@ -459,31 +465,31 @@ export class KnowledgeBase extends Component<Props, State> {
         >
           {!hasSearchQuery && <Text style={styles.actionBarButtonText}>{i18n('Collapse all')}</Text>}
         </TouchableOpacity>
-        <TouchableOpacity
-          testID="test:id/drafts"
-          accessible={true}
-          disabled={isLoading}
-          hitSlop={HIT_SLOP}
-          style={styles.actionBarButton}
-          onPress={() => {
-            if (this.state.isSplitView) {
-              this.toggleModal(
-                <KnowledgeBaseDrafts
-                  backIcon={<IconClose color={styles.link.color} />}
-                  onBack={() => this.toggleModal()}
-                  onArticleCreate={this.onArticleCreate}
-                />
-              );
-            } else {
-              Router.Page({
-                children: <KnowledgeBaseDrafts onArticleCreate={this.onArticleCreate} />,
-              });
-            }
-          }}
-        >
-          <Text style={styles.actionBarButtonText}>{i18n('Drafts')}</Text>
-          <IconAngleRight size={20} color={styles.actionBarButtonText.color} />
-        </TouchableOpacity>
+        {canCreateArticle &&
+          <TouchableOpacity
+            testID="test:id/drafts"
+            accessible={true}
+            disabled={isLoading}
+            hitSlop={HIT_SLOP}
+            style={styles.actionBarButton}
+            onPress={() => {
+              if (this.state.isSplitView) {
+                this.toggleModal(
+                  <KnowledgeBaseDrafts
+                    backIcon={<IconClose color={styles.link.color} />}
+                    onBack={() => this.toggleModal()}
+                    onArticleCreate={this.onArticleCreate}
+                  />
+                );
+              } else {
+                Router.Page({children: <KnowledgeBaseDrafts onArticleCreate={this.onArticleCreate} />});
+              }
+            }}
+          >
+            <Text style={styles.actionBarButtonText}>{i18n('Drafts')}</Text>
+            <IconAngleRight size={20} color={styles.actionBarButtonText.color} />
+          </TouchableOpacity>
+        }
       </View>
     );
   };
@@ -494,8 +500,8 @@ export class KnowledgeBase extends Component<Props, State> {
 
   renderProjectSelect = () => {
     const {updateProjectsFavorites, issuePermissions} = this.props;
-    const projects = getStorageState().projects.filter((p) => {
-      return issuePermissions.articleCanCreateArticle(p.ringId);
+    const projects = this.getVisibleProjects().filter((p) => {
+      return issuePermissions.articleCanReadArticle(p.ringId);
     }) as ArticleProject[];
     const prevPinnedProjects: ArticleProject[] = projects.filter(it => it.pinned);
     const selectProps: ISelectProps = {

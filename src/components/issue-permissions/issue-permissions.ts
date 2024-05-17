@@ -28,6 +28,7 @@ export const CAN_DELETE_ISSUE =
 export const CAN_LINK_ISSUE = 'JetBrains.YouTrack.LINK_ISSUE';
 export const CAN_UPDATE_WATCH = 'JetBrains.YouTrack.UPDATE_WATCH_FOLDER';
 export const CREATE_ARTICLE = 'JetBrains.YouTrack.CREATE_ARTICLE';
+export const READ_ARTICLE = 'JetBrains.YouTrack.READ_ARTICLE';
 export const UPDATE_ARTICLE = 'JetBrains.YouTrack.UPDATE_ARTICLE';
 export const DELETE_ARTICLE = 'JetBrains.YouTrack.DELETE_ARTICLE';
 export const READ_ARTICLE_COMMENT = 'JetBrains.YouTrack.READ_ARTICLE_COMMENT';
@@ -323,6 +324,8 @@ export default class IssuePermissions {
     this.canDeleteComment(article, comment, DELETE_ARTICLE_COMMENT);
 
   articleCanCreateArticle = (projectRingId?: string) => this.permissionsStore.has(CREATE_ARTICLE, projectRingId);
+
+  articleCanReadArticle = (projectRingId?: string) => this.permissionsStore.has(READ_ARTICLE, projectRingId);
 
   articleCanDeleteArticle = (projectRingId?: string) => this.permissionsStore.has(DELETE_ARTICLE, projectRingId);
 
