@@ -4,22 +4,27 @@ import {
   sendReport,
 } from 'components/error/error-reporter';
 import {i18n} from 'components/i18n/i18n';
-export type FeedbackType = {
+
+export interface FeedbackType {
   title: string;
   marker: string;
-};
-export type FeedbackLogs = {
+}
+
+export interface FeedbackLogs {
   title: string;
   value: boolean;
-};
-export type FeedbackData = {
-  summary: string | null | undefined;
-  email: string | null | undefined;
+}
+
+export interface FeedbackData {
+  summary: string;
+  email: string;
   type: FeedbackType;
   logs: FeedbackLogs;
-  description: string | null | undefined;
-};
+  description?: string;
+}
+
 const feedbackTypeMarker: string = '[InAppFeedback]';
+
 export const feedbackTypeOptions: FeedbackType[] = [
   {
     title: i18n('Problem'),
@@ -36,8 +41,7 @@ export const feedbackTypeOptions: FeedbackType[] = [
 ];
 export const feedbackLogsOptions: FeedbackLogs[] = [
   {
-    // eslint-disable-next-line
-    title: i18n("Don't send logs"),
+    title: i18n(`Don't send logs`),
     value: false,
   },
   {

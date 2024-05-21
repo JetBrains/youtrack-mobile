@@ -39,8 +39,7 @@ export default function Menu() {
   const dispatch: ReduxThunkDispatch = useDispatch();
 
   const isHelpdeskEnabled = useSelector(
-    (state: AppState) =>
-      state.app.globalSettings.helpdeskEnabled || !!state.app.user?.profiles?.helpdesk?.helpdeskFolder
+    (state: AppState) => !state.app.helpdeskMenuHidden && state.app.globalSettings.helpdeskEnabled
   );
 
   const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles?.helpdesk?.isReporter);

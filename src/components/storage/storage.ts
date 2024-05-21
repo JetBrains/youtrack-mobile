@@ -97,6 +97,7 @@ export type StorageState = TipsState & FeatureState & {
   forceHandsetMode: boolean | null;
   issuesSettings: IssuesSettings;
   helpdeskSettings: IssuesSettings;
+  helpdeskMenuHidden: boolean;
 };
 
 const storageKeys: StorageStateKeys & (typeof tipsKeys) & (typeof featuresKeys) = {
@@ -121,6 +122,7 @@ const storageKeys: StorageStateKeys & (typeof tipsKeys) & (typeof featuresKeys) 
   lastQueries: 'YT_LAST_QUERIES_STORAGE_KEY',
   issuesCache: 'yt_mobile_issues_cache',
   helpdeskCache: 'yt_mobile_helpdesk_cache',
+  helpdeskMenuHidden: 'YT_MOBILE_HD_MENU_HIDDEN',
   inboxCache: 'YT_INBOX_CACHE',
   inboxThreadsCache: 'YT_INBOX_THREADS_CACHE',
   isRegisteredForPush: 'YT_IS_REGISTERED_FOR_PUSH',
@@ -191,6 +193,7 @@ export const initialState: Readonly<StorageState> = {
   forceHandsetMode: null,
   issuesSettings: issuesSettingsDefault,
   helpdeskSettings: issuesSettingsDefault,
+  helpdeskMenuHidden: false,
 };
 
 function cleanAndLogState(message, state?: StorageState) {
@@ -278,6 +281,7 @@ export async function clearCachesAndDrafts(): Promise<StorageState> {
     storageKeys.projects,
     storageKeys.issuesSettings,
     storageKeys.helpdeskSettings,
+    storageKeys.helpdeskMenuHidden,
     storageKeys.searchContext,
     ...Object.values(tipsKeys),
     ...Object.values(featuresKeys),

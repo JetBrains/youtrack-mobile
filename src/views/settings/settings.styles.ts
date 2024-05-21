@@ -22,9 +22,9 @@ export default EStyleSheet.create({
   },
   settingsListItem: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: UNIT,
-  },
-  settingsListItemTitle: {
     padding: UNIT,
   },
   settingsListItemTitleText: {...optionText},
@@ -64,5 +64,12 @@ export default EStyleSheet.create({
   settingsAppearance: {
     padding: UNIT * 2,
   },
-  elevation1: elevation1,
-}) as any;
+  elevation1,
+  separator: {
+    borderBottomWidth: 1,
+    marginLeft: UNIT,
+    marginTop: UNIT * 1.5,
+    marginBottom: UNIT * 2.5,
+    borderColor: '$separator',
+  },
+});

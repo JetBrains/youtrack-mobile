@@ -12,8 +12,8 @@ function resetCounter() {
 }
 
 export default function clicksCounter(
-  actionToPerform: () => any,
-  message: string | null | undefined,
+  actionToPerform?: () => any,
+  message?: string,
   numberOfTaps: number = 6,
 ): void {
   if (timeoutId) {

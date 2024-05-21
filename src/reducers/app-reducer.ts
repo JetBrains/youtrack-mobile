@@ -5,15 +5,15 @@ import {createReducer} from 'redux-create-reducer';
 import {issuePermissionsNull} from 'components/issue-permissions/issue-permissions-helper';
 
 import type Auth from 'components/auth/oauth2';
+import type {DraftCommentData} from 'types/CustomFields';
 import type {EndUserAgreement} from 'types/AppConfig';
+import type {GlobalSettings} from 'types/GlobalSettings';
+import type {InboxFolder} from 'types/Inbox';
 import type {NetInfoState} from '@react-native-community/netinfo';
 import type {PermissionsStore} from 'components/permissions-store/permissions-store';
 import type {StorageState} from 'components/storage/storage';
 import type {User, UserAppearanceProfile, UserArticlesProfile, UserHelpdeskProfile} from 'types/User';
 import type {WorkTimeSettings} from 'types/Work';
-import {DraftCommentData} from 'types/CustomFields';
-import {GlobalSettings} from 'types/GlobalSettings';
-import {InboxFolder} from 'types/Inbox';
 
 
 export type RootState = {
@@ -33,6 +33,7 @@ export type RootState = {
   isInProgress?: boolean;
   draftCommentData: DraftCommentData;
   globalSettings: GlobalSettings;
+  helpdeskMenuHidden: boolean;
 };
 
 const initialState: RootState = {
@@ -54,6 +55,7 @@ const initialState: RootState = {
   isInProgress: false,
   draftCommentData: {} as DraftCommentData,
   globalSettings: {} as GlobalSettings,
+  helpdeskMenuHidden: false,
 };
 
 
@@ -354,6 +356,16 @@ export default createReducer(initialState, {
     return {
       ...state,
       globalSettings: action.globalSettings,
+    };
+  },
+
+  [types.SET_HELPDESK_MENU_HIDDEN](
+    state: RootState,
+    action: { hidden: boolean },
+  ) {
+    return {
+      ...state,
+      helpdeskMenuHidden: action.hidden,
     };
   },
 });

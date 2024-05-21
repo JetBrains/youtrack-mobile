@@ -94,6 +94,7 @@ describe('Storage', () => {
         'YT_VCS_CHANGES',
         'YT_ISSUES_SETTINGS',
         'YT_HELPDESK_SETTINGS',
+        'YT_MOBILE_HD_MENU_HIDDEN',
       ]);
     });
     it('should update field state on partial flush', async () => {

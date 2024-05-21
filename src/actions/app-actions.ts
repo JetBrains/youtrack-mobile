@@ -38,6 +38,7 @@ import {SET_DRAFT_COMMENT_DATA, SET_PROGRESS} from './action-types';
 import {setApi} from 'components/api/api__instance';
 
 import type {Activity} from 'types/Activity';
+import type {AnyIssue} from 'types/Issue';
 import type {AppConfig, EndUserAgreement} from 'types/AppConfig';
 import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
@@ -51,16 +52,15 @@ import type {
   UserCurrent,
   UserHelpdeskProfile,
 } from 'types/User';
+import type {DraftCommentData, IssueComment} from 'types/CustomFields';
 import type {InboxFolder, InboxThread} from 'types/Inbox';
 import type {NetInfoState} from '@react-native-community/netinfo';
 import type {NotificationRouteData} from 'types/Notification';
 import type {PermissionCacheItem} from 'types/Permission';
+import type {ReduxAction, ReduxStateGetter, ReduxAPIGetter, ReduxThunkDispatch} from 'types/Redux';
 import type {StorageState} from 'components/storage/storage';
+import type {UserGeneralProfileLocale} from 'types/User';
 import type {WorkTimeSettings} from 'types/Work';
-import {AnyIssue} from 'types/Issue';
-import {DraftCommentData, IssueComment} from 'types/CustomFields';
-import {ReduxAction, ReduxStateGetter, ReduxAPIGetter, ReduxThunkDispatch} from 'types/Redux';
-import {UserGeneralProfileLocale} from 'types/User';
 
 
 export function setNetworkState(networkState: NetInfoState): ReduxAction {
@@ -560,6 +560,10 @@ export function completeInitialization(
   skipNavigateToRoute: boolean = false,
 ): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
+    dispatch({
+      type: types.SET_HELPDESK_MENU_HIDDEN,
+      hidden: storage.getStorageState().helpdeskMenuHidden,
+    });
     log.debug('Completing initialization');
     const cachedCurrentUser: UserCurrent | undefined = storage.getStorageState()?.currentUser?.ytCurrentUser;
     const cachedLocale: UserGeneralProfileLocale | undefined = cachedCurrentUser?.profiles?.general?.locale;
@@ -1226,8 +1230,19 @@ const addMentionToDraftComment = (userLogin: string): ReduxAction => {
   };
 };
 
+const setHelpdeskMenuVisibility = (hidden: boolean): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch) => {
+    storage.flushStoragePart({helpdeskMenuHidden: hidden});
+    dispatch({
+      type: types.SET_HELPDESK_MENU_HIDDEN,
+      hidden,
+    });
+  };
+};
+
 export {
   addMentionToDraftComment,
   inboxCheckUpdateStatus,
   setGlobalInProgress,
+  setHelpdeskMenuVisibility,
 };

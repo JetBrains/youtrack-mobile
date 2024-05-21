@@ -44,6 +44,7 @@ export default class IssueActivitiesSettings extends PureComponent<Props, State>
     super(props);
     this.switchCommonProps = {
       width: 40,
+      height: 25,
       backgroundActive: props.uiTheme.colors.$link,
     };
     this.sortOrderOption = {

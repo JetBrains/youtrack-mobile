@@ -26,7 +26,7 @@ interface State {
   notificationsSwipe: boolean | null,
 }
 
-const FeaturesDebugSettings = (props: Props): React.ReactNode => {
+const FeaturesDebugSettings = (props: Props) => {
   const {onHide = () => Router.pop(true)} = props;
 
   const getState = (): State => ({
