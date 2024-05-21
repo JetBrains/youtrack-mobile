@@ -1229,6 +1229,7 @@ msgstr "Hilo no silenciado"
 
 #: src/views/issues/issues-actions.ts
 #: src/views/issues/issues-reducers.ts
+#: src/views/settings/settings.tsx
 #: src/views/tickets/tickets.tsx
 msgid "Tickets"
 msgstr "Tickets"

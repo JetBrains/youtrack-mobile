@@ -1218,6 +1218,7 @@ msgstr "스레드 끄기 해제됨"
 
 #: src/views/issues/issues-actions.ts
 #: src/views/issues/issues-reducers.ts
+#: src/views/settings/settings.tsx
 #: src/views/tickets/tickets.tsx
 msgid "Tickets"
 msgstr "티켓"

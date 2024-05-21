@@ -133,8 +133,8 @@ msgstr "All"
 msgid "All projects"
 msgstr "All projects"
 
-#: src/views/settings/settings__appearance.tsx:63
-#: src/views/settings/settings.tsx:101
+#: src/views/settings/settings__appearance.tsx:53
+#: src/views/settings/settings.tsx:71
 msgid "Appearance"
 msgstr "Appearance"
 
@@ -231,7 +231,7 @@ msgstr "Camera"
 #: src/views/issue/issue-base-actions-creater.ts:620
 #: src/views/issue/issue-base-actions-creater.ts:651
 #: src/views/knowledge-base/knowledge-base-actions.ts:458
-#: src/views/settings/settings__feedback-form.tsx:87
+#: src/views/settings/settings__feedback-form.tsx:81
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -306,7 +306,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:824
+#: src/actions/app-actions.ts:828
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -383,7 +383,7 @@ msgstr "Created by"
 msgid "Current issue"
 msgstr "Current issue"
 
-#: src/views/settings/settings__appearance.tsx:41
+#: src/views/settings/settings__appearance.tsx:33
 msgid "Dark theme"
 msgstr "Dark theme"
 
@@ -438,7 +438,7 @@ msgid "Delete permanently"
 msgstr "Delete permanently"
 
 #: src/views/helpdesk-feedback/index.ts:198
-#: src/views/settings/settings__feedback-form.tsx:248
+#: src/views/settings/settings__feedback-form.tsx:191
 msgid "Description"
 msgstr "Description"
 
@@ -475,7 +475,7 @@ msgstr "Do you really want to remove this account?"
 msgid "Document"
 msgstr "Document"
 
-#: src/views/settings/settings-helper.ts:40
+#: src/views/settings/settings-helper.ts:44
 msgid "Don't send logs"
 msgstr "Don't send logs"
 
@@ -506,7 +506,7 @@ msgstr "Email"
 msgid "Email address"
 msgstr "Email address"
 
-#: src/views/settings/settings__feedback-form.tsx:220
+#: src/views/settings/settings__feedback-form.tsx:169
 msgid "Email address for follow-up"
 msgstr "Email address for follow-up"
 
@@ -531,7 +531,7 @@ msgstr "Enter time value"
 msgid "Favorites"
 msgstr "Favorites"
 
-#: src/views/settings/settings-helper.ts:29
+#: src/views/settings/settings-helper.ts:34
 msgid "Feature request"
 msgstr "Feature request"
 
@@ -669,7 +669,7 @@ msgstr "Large"
 msgid "License error"
 msgstr "License error"
 
-#: src/views/settings/settings__appearance.tsx:40
+#: src/views/settings/settings__appearance.tsx:32
 msgid "Light theme"
 msgstr "Light theme"
 
@@ -704,7 +704,7 @@ msgstr "Log in to YouTrack"
 msgid "Log in with Browser"
 msgstr "Log in with Browser"
 
-#: src/views/settings/settings__feedback-form.tsx:206
+#: src/views/settings/settings__feedback-form.tsx:158
 msgid "Logs"
 msgstr "Logs"
 
@@ -837,7 +837,7 @@ msgstr "Notification settings…"
 msgid "Notifications"
 msgstr "Notifications"
 
-#: src/views/settings/settings-helper.ts:33
+#: src/views/settings/settings-helper.ts:38
 msgid "Other"
 msgstr "Other"
 
@@ -865,7 +865,7 @@ msgstr "Photo and video library"
 msgid "Preview Size"
 msgstr "Preview Size"
 
-#: src/views/settings/settings-helper.ts:25
+#: src/views/settings/settings-helper.ts:30
 msgid "Problem"
 msgstr "Problem"
 
@@ -994,15 +994,15 @@ msgstr "Send crash report"
 msgid "Send extended report to Bugsnag"
 msgstr "Send extended report to Bugsnag"
 
-#: src/views/settings/settings.tsx:125
+#: src/views/settings/settings.tsx:107
 msgid "Send feedback"
 msgstr "Send feedback"
 
-#: src/views/settings/settings__feedback-form.tsx:152
+#: src/views/settings/settings__feedback-form.tsx:130
 msgid "Send Feedback"
 msgstr "Send Feedback"
 
-#: src/views/settings/settings-helper.ts:44
+#: src/views/settings/settings-helper.ts:48
 msgid "Send logs"
 msgstr "Send logs"
 
@@ -1019,7 +1019,7 @@ msgstr "Set a date"
 msgid "Set date and time"
 msgstr "Set date and time"
 
-#: src/views/settings/settings.tsx:134
+#: src/views/settings/settings.tsx:45
 msgid "Settings"
 msgstr "Settings"
 
@@ -1040,7 +1040,7 @@ msgstr "Share link"
 msgid "Share link to article"
 msgstr "Share link to article"
 
-#: src/views/settings/settings.tsx:121
+#: src/views/settings/settings.tsx:98
 msgid "Share logs"
 msgstr "Share logs"
 
@@ -1080,7 +1080,7 @@ msgstr "Sort Attributes"
 msgid "Sort Order"
 msgstr "Sort Order"
 
-#: src/views/issue/activity/issue__activity-settings.tsx:50
+#: src/views/issue/activity/issue__activity-settings.tsx:51
 msgid "Sort: oldest first"
 msgstr "Sort: oldest first"
 
@@ -1115,7 +1115,7 @@ msgid "Subscriptions"
 msgstr "Subscriptions"
 
 #: src/views/helpdesk-feedback/index.ts:204
-#: src/views/settings/settings__feedback-form.tsx:233
+#: src/views/settings/settings__feedback-form.tsx:179
 msgid "Summary"
 msgstr "Summary"
 
@@ -1123,7 +1123,7 @@ msgstr "Summary"
 msgid "Summary changed"
 msgstr "Summary changed"
 
-#: src/views/settings/settings__appearance.tsx:42
+#: src/views/settings/settings__appearance.tsx:34
 msgid "Sync with OS"
 msgstr "Sync with OS"
 
@@ -1137,7 +1137,7 @@ msgstr[1] "Tags"
 msgid "Tags"
 msgstr "Tags"
 
-#: src/views/settings/settings__feedback-form.tsx:111
+#: src/views/settings/settings__feedback-form.tsx:101
 msgid "Thank you for your feedback!"
 msgstr "Thank you for your feedback!"
 
@@ -1223,6 +1223,7 @@ msgstr "Thread unmuted"
 
 #: src/views/issues/issues-actions.ts:73
 #: src/views/issues/issues-reducers.ts:57
+#: src/views/settings/settings.tsx:77
 #: src/views/tickets/tickets.tsx:30
 msgid "Tickets"
 msgstr "Tickets"
@@ -1391,7 +1392,7 @@ msgstr ""
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Your account has insufficient permission to perform this operation."
 
-#: src/components/storage/storage.ts:381
+#: src/components/storage/storage.ts:385
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 msgstr "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 
