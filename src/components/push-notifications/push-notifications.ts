@@ -24,9 +24,10 @@ async function getDeviceToken(): Promise<Token> {
 async function doSubscribe(
   youtrackToken: string,
   deviceToken: string,
+  userLogin: string,
 ): Promise<void> {
   try {
-    await PNHelper.subscribe(deviceToken, youtrackToken);
+    await PNHelper.subscribe(deviceToken, youtrackToken, userLogin);
 
     if (isAndroidPlatform()) {
       showSuccessMessage();
@@ -48,7 +49,7 @@ async function doSubscribe(
   }
 }
 
-async function register(): Promise<void> {
+async function register(userLogin: string): Promise<void> {
   const deviceToken: Token = await getDeviceToken();
   const errorMsg: string = 'Subscription to push notifications failed.';
 
@@ -56,7 +57,7 @@ async function register(): Promise<void> {
     const youtrackToken: Token = await PNHelper.loadYouTrackToken();
 
     if (youtrackToken) {
-      await doSubscribe(youtrackToken, deviceToken);
+      await doSubscribe(youtrackToken, deviceToken, userLogin);
     } else {
       log.warn(errorMsg);
       throw new Error([errorMsg, ':YT token'].join(''));
@@ -76,7 +77,8 @@ async function unregister(): Promise<void> {
 }
 
 async function initialize(
-  onSwitchAccount: (account: StorageState, issueId?: string, articleId?: string) => any,
+  onSwitchAccount: (account: StorageState, issueId?: string, articleId?: string) => void,
+  userLogin: string,
 ): Promise<void> {
   const deviceToken: Token = await getDeviceToken();
 
@@ -87,7 +89,7 @@ async function initialize(
 
     try {
       PushNotificationsProcessor.init();
-      await register();
+      await register(userLogin);
     } catch (e) {
       const message: string =
         'Re-subscription to push notifications after a device token has been changed failed.';

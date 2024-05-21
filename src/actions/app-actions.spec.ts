@@ -22,13 +22,15 @@ import PushNotifications from 'components/push-notifications/push-notifications'
 import Router from 'components/router/router';
 import {folderIdAllKey} from 'views/inbox-threads/inbox-threads-helper';
 
-import {AppConfig} from 'types/AppConfig';
-import {AuthParams} from 'types/Auth';
-import {InboxFolder} from 'types/Inbox';
-import {PermissionCacheItem} from 'types/Permission';
-import {RootState} from 'reducers/app-reducer';
-import {StorageState} from 'components/storage/storage';
-import {User, UserCurrent} from 'types/User';
+import type {AppConfig} from 'types/AppConfig';
+import type {AppState} from 'reducers';
+import type {AuthParams} from 'types/Auth';
+import type {InboxFolder} from 'types/Inbox';
+import type {PermissionCacheItem} from 'types/Permission';
+import type {ReduxThunkDispatch} from 'types/Redux';
+import type {RootState} from 'reducers/app-reducer';
+import type {StorageState} from 'components/storage/storage';
+import type {User, UserCurrent} from 'types/User';
 
 jest.mock('components/storage/storage', () => {
   const st = jest.requireActual('components/storage/storage');
@@ -61,6 +63,7 @@ let appStateMock: RootState;
 let store: MockStore;
 let userMock: User;
 let authParamsMock: AuthParams;
+let dispatch: ReduxThunkDispatch;
 
 const getApi = () => apiMock;
 
@@ -68,6 +71,7 @@ const middlewares = [thunk.withExtraArgument(getApi)];
 const storeMock = configureMockStore(middlewares);
 
 describe('app-actions', () => {
+  userMock = mocks.createUserMock() as unknown as User;
   beforeEach(async () => {
     jest
       .spyOn(storageOauth, 'getStoredSecurelyAuthParams')
@@ -76,8 +80,9 @@ describe('app-actions', () => {
     apiMock = createAPIMock();
     appStateMock = {
       auth: createAuthInstanceMock({} as User),
-    } as unknown as RootState;
-    updateStore({...appStateMock});
+      user: userMock,
+    } as RootState;
+    updateStore({app: appStateMock} as AppState);
     await storage.populateStorage();
   });
 
@@ -108,16 +113,16 @@ describe('app-actions', () => {
 
     describe('Registration success', () => {
       it('should subscribe if a device is not registered', async () => {
-        await store.dispatch(actions.subscribeToPushNotifications());
-        expect(PushNotifications.register).toHaveBeenCalled();
-        expect(PushNotifications.initialize).toHaveBeenCalled();
+        await dispatch(actions.subscribeToPushNotifications());
+        expect(PushNotifications.register).toHaveBeenCalledWith(userMock.login);
+        expect(PushNotifications.initialize).toHaveBeenCalledWith(expect.any(Function), userMock.login);
       });
 
       it('should not subscribe, but initialize if a device is already registered', async () => {
         setRegistered(true);
-        await store.dispatch(actions.subscribeToPushNotifications());
+        await dispatch(actions.subscribeToPushNotifications());
         expect(PushNotifications.register).not.toHaveBeenCalled();
-        expect(PushNotifications.initialize).toHaveBeenCalled();
+        expect(PushNotifications.initialize).toHaveBeenCalledWith(expect.any(Function), userMock.login);
       });
     });
 
@@ -130,14 +135,14 @@ describe('app-actions', () => {
 
       it('should not initialize if registration failed', async () => {
         setRegistrationThrow();
-        await store.dispatch(actions.subscribeToPushNotifications());
-        expect(PushNotifications.register).toHaveBeenCalled();
+        await dispatch(actions.subscribeToPushNotifications());
+        expect(PushNotifications.register).toHaveBeenCalledWith(userMock.login);
         expect(PushNotifications.initialize).not.toHaveBeenCalled();
       });
 
       it('should show error screen if registration failed', async () => {
         setRegistrationThrow();
-        await store.dispatch(actions.subscribeToPushNotifications());
+        await dispatch(actions.subscribeToPushNotifications());
         expect(Notification.notifyError).toHaveBeenCalledWith(
           registrationErrorMock,
         );
@@ -145,14 +150,14 @@ describe('app-actions', () => {
 
       it('should not initialize if a registration service returns error', async () => {
         setRegistrationServiceReturnError();
-        await store.dispatch(actions.subscribeToPushNotifications());
-        expect(PushNotifications.register).toHaveBeenCalled();
+        await dispatch(actions.subscribeToPushNotifications());
+        expect(PushNotifications.register).toHaveBeenCalledWith(userMock.login);
         expect(PushNotifications.initialize).not.toHaveBeenCalled();
       });
 
       it('should log error and should not show error screen if a registration service returns error', async () => {
         setRegistrationServiceReturnError();
-        await store.dispatch(actions.subscribeToPushNotifications());
+        await dispatch(actions.subscribeToPushNotifications());
         expect(Notification.notifyError).toHaveBeenCalledWith(
           registrationErrorMock,
         );
@@ -182,13 +187,13 @@ describe('app-actions', () => {
       jest.spyOn(PushNotifications, 'unregister').mockResolvedValueOnce(Promise.resolve());
       updateStore({
         app: {...appStateMock, otherAccounts: []},
-      });
+      } as unknown as AppState);
     });
 
     it('should logout from the only account', async () => {
       const auth = appStateMock.auth as OAuth2;
       jest.spyOn(auth, 'logOut');
-      await store.dispatch(actions.removeAccountOrLogOut());
+      await dispatch(actions.removeAccountOrLogOut());
 
       expect(auth.logOut).toHaveBeenCalled();
     });
@@ -196,10 +201,10 @@ describe('app-actions', () => {
     it('should not logout from the account', async () => {
       updateStore({
         app: {...appStateMock, otherAccounts: [{}]},
-      });
+      } as unknown as AppState);
       const auth = appStateMock.auth as OAuth2;
       jest.spyOn(auth, 'logOut');
-      await store.dispatch(actions.removeAccountOrLogOut());
+      await dispatch(actions.removeAccountOrLogOut());
 
       expect(auth.logOut).toHaveBeenCalled();
       expect(apiMock.user.logout).toHaveBeenCalled();
@@ -207,14 +212,14 @@ describe('app-actions', () => {
 
     it('should not unsubscribe from push notifications', async () => {
       setRegistered(false);
-      await store.dispatch(actions.removeAccountOrLogOut());
+      await dispatch(actions.removeAccountOrLogOut());
 
       expect(PushNotifications.unregister).not.toHaveBeenCalled();
     });
 
     it('should unsubscribe from push notifications', async () => {
       setRegistered(true);
-      await store.dispatch(actions.removeAccountOrLogOut());
+      await dispatch(actions.removeAccountOrLogOut());
 
       expect(PushNotifications.unregister).toHaveBeenCalled();
     });
@@ -240,7 +245,7 @@ describe('app-actions', () => {
     });
 
     it('should load permissions', async () => {
-      await store.dispatch(actions.loadUserPermissions());
+      await dispatch(actions.loadUserPermissions());
       expect(permissionsHelper.loadPermissions).toHaveBeenCalledWith(
         authParamsMock.token_type,
         authParamsMock.access_token,
@@ -253,7 +258,7 @@ describe('app-actions', () => {
 
     it('should not set permissions from cache if there are no any', async () => {
       setCachedPermissions(null);
-      await store.dispatch(actions.loadUserPermissions());
+      await dispatch(actions.loadUserPermissions());
       const storeAction = store.getActions();
       expect(storeAction).toHaveLength(1);
       expect(JSON.stringify(storeAction[0])).toEqual(JSON.stringify({
@@ -265,7 +270,7 @@ describe('app-actions', () => {
 
     it('should update permissions', async () => {
       setCachedPermissions(cachedPermissionsMock);
-      await store.dispatch(actions.loadUserPermissions());
+      await dispatch(actions.loadUserPermissions());
       expect(JSON.stringify(store.getActions()[0])).toEqual(JSON.stringify({
         type: types.SET_PERMISSIONS,
         permissionsStore: new PermissionsStore(actualPermissionsMock),
@@ -275,32 +280,30 @@ describe('app-actions', () => {
 
     it('should update permissions cache', async () => {
       jest.spyOn(appActionHelper, 'updateCachedPermissions');
-      await store.dispatch(actions.loadUserPermissions());
+      await dispatch(actions.loadUserPermissions());
       expect(appActionHelper.updateCachedPermissions).toHaveBeenCalledWith(
         actualPermissionsMock,
       );
     });
 
-    function setCachedPermissions(permissions) {
+    function setCachedPermissions(permissions: PermissionCacheItem[] | null) {
       storage.__setStorageState({
         permissions: permissions,
-      });
+      } as StorageState);
     }
   });
 
 
   describe('setYTCurrentUser', () => {
-    let currentUserMock;
+    let currentUserMock: UserCurrent;
     beforeEach(() => {
-      currentUserMock = {};
+      currentUserMock = {} as UserCurrent;
       storage.__setStorageState({
         currentUser: currentUserMock,
-      });
-
-      userMock = mocks.createUserMock();
+      } as StorageState);
     });
     it('should set user and cache it', async () => {
-      await store.dispatch(actions.setYTCurrentUser(userMock));
+      await dispatch(actions.setYTCurrentUser(userMock));
 
       expect(store.getActions()[0]).toEqual({
         type: types.RECEIVE_USER,
@@ -322,7 +325,7 @@ describe('app-actions', () => {
     });
 
     it('should initialize OAuth instance', async () => {
-      await store.dispatch(actions.initializeAuth(appConfigMock));
+      await dispatch(actions.initializeAuth(appConfigMock));
       const storeActions = store.getActions();
 
       expect(storeActions[0].type).toEqual(types.INITIALIZE_AUTH);
@@ -352,7 +355,7 @@ describe('app-actions', () => {
         },
       }) as unknown as UserCurrent;
       await setYTCurrentUser(userMock);
-      await store.dispatch(actions.initializeApp(appConfigMock));
+      await dispatch(actions.initializeApp(appConfigMock));
       const action = store.getActions()[0];
       expect(action.user.profiles.general.searchContext).toEqual(
         searchContextMock,
@@ -399,20 +402,20 @@ describe('app-actions', () => {
     it('should check for inbox thread update', async () => {
       jest.spyOn(feature, 'checkVersion').mockReturnValueOnce(true);
 
-      await store.dispatch(actions.completeInitialization());
+      await dispatch(actions.completeInitialization());
       expect(apiMock.inbox.getFolders).toHaveBeenCalled();
     });
 
     it('should not check for inbox thread update', async () => {
       jest.spyOn(feature, 'checkVersion').mockReturnValueOnce(false);
-      await store.dispatch(actions.completeInitialization());
+      await dispatch(actions.completeInitialization());
       expect(apiMock.inbox.getFolders).not.toHaveBeenCalled();
     });
   });
 
 
   describe('inboxCheckUpdateStatus', () => {
-    let foldersMock: InboxFolder;
+    let foldersMock: InboxFolder[];
     beforeEach(() => {
       setAppStateNetworkConnected(true);
       foldersMock = createInboxFoldersMock();
@@ -424,7 +427,7 @@ describe('app-actions', () => {
           [folderIdAllKey]: [],
         },
       });
-      await store.dispatch(actions.inboxCheckUpdateStatus());
+      await dispatch(actions.inboxCheckUpdateStatus());
       expect(apiMock.inbox.getFolders).toHaveBeenCalledWith(undefined);
     });
 
@@ -442,13 +445,13 @@ describe('app-actions', () => {
           ],
         },
       });
-      await store.dispatch(actions.inboxCheckUpdateStatus());
+      await dispatch(actions.inboxCheckUpdateStatus());
       expect(apiMock.inbox.getFolders).toHaveBeenCalledWith(notifiedMock + 1);
     });
 
     it('should set inbox thread folders', async () => {
-      apiMock.inbox.getFolders.mockResolvedValueOnce(foldersMock);
-      await store.dispatch(actions.inboxCheckUpdateStatus());
+      (apiMock.inbox.getFolders as jest.Mock).mockResolvedValueOnce(foldersMock);
+      await dispatch(actions.inboxCheckUpdateStatus());
       expect(store.getActions()[0]).toEqual({
         type: types.INBOX_THREADS_FOLDERS,
         inboxThreadsFolders: foldersMock,
@@ -456,8 +459,8 @@ describe('app-actions', () => {
     });
 
     it('should not set inbox thread folders on error', async () => {
-      apiMock.inbox.getFolders.mockRejectedValueOnce(new Error());
-      await store.dispatch(actions.inboxCheckUpdateStatus());
+      (apiMock.inbox.getFolders as jest.Mock).mockRejectedValueOnce(new Error());
+      await dispatch(actions.inboxCheckUpdateStatus());
       expect(store.getActions()).toHaveLength(0);
     });
   });
@@ -475,13 +478,13 @@ describe('app-actions', () => {
     it('should redirect to `Issues screen`', async () => {
       setStoreAndCurrentUser({guest: false} as UserCurrent);
 
-      await store.dispatch(actions.initializeApp(appConfigMock));
+      await dispatch(actions.initializeApp(appConfigMock));
 
       expect(Router.Issues).toHaveBeenCalled();
     });
 
     it('should not redirect `guest` user to `Issues screen`', async () => {
-      await store.dispatch(actions.initializeApp(appConfigMock));
+      await dispatch(actions.initializeApp(appConfigMock));
 
       expect(Router.Issues).not.toHaveBeenCalled();
     });
@@ -491,7 +494,7 @@ describe('app-actions', () => {
         .spyOn(appActionHelper, 'getCachedPermissions')
         .mockReturnValueOnce(null);
 
-      await store.dispatch(actions.initializeApp(appConfigMock));
+      await dispatch(actions.initializeApp(appConfigMock));
 
       expect(Router.Issues).not.toHaveBeenCalled();
     });
@@ -582,14 +585,14 @@ describe('app-actions', () => {
       app: {
         auth: createAuthInstanceMock(ytCurrentUser),
       },
-    });
+    } as AppState);
     setYTCurrentUser(ytCurrentUser);
   }
 
   function setYTCurrentUser(ytCurrentUser: User) {
     storage.__setStorageState({
       currentUser: {ytCurrentUser},
-    });
+    } as StorageState);
   }
 
   function setRegistered(isRegistered: boolean) {
@@ -598,8 +601,9 @@ describe('app-actions', () => {
     } as StorageState);
   }
 
-  function updateStore(state: Record<string, any> | null | undefined = {}) {
+  function updateStore(state: AppState) {
     store = storeMock(state);
+    dispatch = store.dispatch;
   }
 
   function createAuthInstanceMock(currentUser?: User): OAuth2 {
@@ -657,7 +661,7 @@ describe('app-actions', () => {
           isConnected,
         },
       },
-    });
+    } as AppState);
   }
 });
 

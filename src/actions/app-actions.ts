@@ -1068,21 +1068,23 @@ export function setAccount(notificationRouteData: NotificationRouteData = {}): R
 }
 
 export function subscribeToPushNotifications(): ReduxAction {
-  return async (dispatch: ReduxThunkDispatch) => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     if (await DeviceInfo.isEmulator()) {
       return;
     }
 
     PushNotificationsProcessor.init();
 
-    const onSwitchAccount = async (account: StorageState, issueId?: string, articleId?: string) =>
+    const onSwitchAccount = async (account: StorageState, issueId?: string, articleId?: string) => {
       await dispatch(switchAccount(account, false, issueId, articleId));
+    };
 
+    const userLogin = getState().app.user?.login as string;
     if (isRegisteredForPush()) {
       log.info(
         'Device was already registered for push notifications. Initializing.',
       );
-      PushNotifications.initialize(onSwitchAccount);
+      PushNotifications.initialize(onSwitchAccount, userLogin);
       return;
     }
 
@@ -1090,7 +1092,7 @@ export function subscribeToPushNotifications(): ReduxAction {
       try {
         const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          await doSubscribe(onSwitchAccount);
+          await doSubscribe(onSwitchAccount, userLogin);
           log.info('Push notifications permission granted');
         } else {
           log.warn('Push notifications permission is not allowed');
@@ -1099,15 +1101,18 @@ export function subscribeToPushNotifications(): ReduxAction {
         log.warn(err);
       }
     } else {
-      await doSubscribe(onSwitchAccount);
+      await doSubscribe(onSwitchAccount, userLogin);
     }
   };
 }
 
-async function doSubscribe(onSwitchAccount: (account: StorageState, issueId?: string, articleId?: string) => any) {
+async function doSubscribe(
+  onSwitchAccount: (account: StorageState, issueId?: string, articleId?: string) => void,
+  userLogin: string
+) {
   try {
-    await PushNotifications.register();
-    PushNotifications.initialize(onSwitchAccount);
+    await PushNotifications.register(userLogin);
+    PushNotifications.initialize(onSwitchAccount, userLogin);
     setRegisteredForPush(true);
   } catch (err) {
     notifyError(err as CustomError);

@@ -47,11 +47,12 @@ describe('push-notifications-helper', () => {
         apiMock.subscribeToFCMNotifications.mockResolvedValueOnce(
           successResponseMock,
         );
-        await expect(doSubscribe()).resolves.toEqual(successResponseMock);
+        await expect(doSubscribe('userLogin android')).resolves.toEqual(successResponseMock);
         expect(apiMock.subscribeToFCMNotifications).toHaveBeenCalledWith(
           helper.KONNECTOR_URL,
           youTrackTokenMock,
           mockEventsRegistry.deviceTokenMock,
+          'userLogin android',
         );
       });
       it('should subscribe IOS', async () => {
@@ -59,11 +60,12 @@ describe('push-notifications-helper', () => {
         apiMock.subscribeToIOSNotifications.mockResolvedValueOnce(
           successResponseMock,
         );
-        await expect(doSubscribe()).resolves.toEqual(successResponseMock);
+        await expect(doSubscribe('userLogin ios')).resolves.toEqual(successResponseMock);
         expect(apiMock.subscribeToIOSNotifications).toHaveBeenCalledWith(
           helper.KONNECTOR_URL,
           youTrackTokenMock,
           mockEventsRegistry.deviceTokenMock,
+          'userLogin ios'
         );
       });
     });
@@ -73,29 +75,32 @@ describe('push-notifications-helper', () => {
       it('should NOT subscribe Android', async () => {
         (util.isAndroidPlatform as jest.Mock).mockReturnValueOnce(true);
         apiMock.subscribeToFCMNotifications.mockRejectedValueOnce(errorMock);
-        await expect(doSubscribe()).rejects.toEqual(errorMock);
+        await expect(doSubscribe('userLogin android')).rejects.toEqual(errorMock);
         expect(apiMock.subscribeToFCMNotifications).toHaveBeenCalledWith(
           helper.KONNECTOR_URL,
           youTrackTokenMock,
           mockEventsRegistry.deviceTokenMock,
+          'userLogin android',
         );
       });
       it('should NOT subscribe IOS', async () => {
         (util.isAndroidPlatform as jest.Mock).mockReturnValueOnce(false);
         apiMock.subscribeToIOSNotifications.mockRejectedValueOnce(errorMock);
-        await expect(doSubscribe()).rejects.toEqual(errorMock);
+        await expect(doSubscribe('userLogin ios')).rejects.toEqual(errorMock);
         expect(apiMock.subscribeToIOSNotifications).toHaveBeenCalledWith(
           helper.KONNECTOR_URL,
           youTrackTokenMock,
           mockEventsRegistry.deviceTokenMock,
+          'userLogin ios',
         );
       });
     });
 
-    function doSubscribe() {
+    function doSubscribe(userLogin: string) {
       return helper.subscribe(
         mockEventsRegistry.deviceTokenMock,
         youTrackTokenMock,
+        userLogin,
       );
     }
   });

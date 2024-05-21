@@ -18,12 +18,13 @@ import SearchAPI from './api__search';
 import GlobalSettingsAPI from 'components/api/api__global-settings';
 import UserAPI from './api__user';
 import UserGroupAPI from './api__user-group';
+import {createBtoa} from 'util/util';
 
 import type Auth from '../auth/oauth2';
 import type {EndUserAgreement} from 'types/AppConfig';
 import type {CommandSuggestionResponse} from 'types/Issue';
+import type {Project} from 'types/Project';
 import type {User} from 'types/User';
-import {Project} from 'types/Project';
 
 
 class API extends BaseAPI {
@@ -187,15 +188,21 @@ class API extends BaseAPI {
     return res.token;
   }
 
+  generateAccountHash(deviceToken: string, userLogin: string) {
+    return createBtoa(`${this.youTrackUrl}${deviceToken}${userLogin}`);
+  }
+
   async subscribeToFCMNotifications(
     konnectorURL: string,
     youtrackToken: string,
     deviceToken: string,
+    userLogin: string,
   ): Promise<string> {
     const url = `${konnectorURL}/ring/fcmPushNotifications`;
     return await this.makeAuthorizedRequest(url, 'POST', {
       youtrackToken: youtrackToken,
       deviceToken: deviceToken,
+      accountHash: this.generateAccountHash(deviceToken, userLogin),
     });
   }
 
@@ -207,7 +214,7 @@ class API extends BaseAPI {
       `${konnectorURL}/ring/fcmPushNotifications/unsubscribe`,
       'POST',
       {
-        deviceToken: deviceToken,
+        deviceToken,
       },
     );
   }
@@ -216,11 +223,13 @@ class API extends BaseAPI {
     konnectorURL: string,
     youtrackToken: string,
     deviceToken: string,
+    userLogin: string,
   ): Promise<string> {
     const url = `${konnectorURL}/ring/pushNotifications`;
     return await this.makeAuthorizedRequest(url, 'POST', {
       token: youtrackToken,
       appleDeviceId: deviceToken,
+      accountHash: this.generateAccountHash(deviceToken, userLogin),
     });
   }
 

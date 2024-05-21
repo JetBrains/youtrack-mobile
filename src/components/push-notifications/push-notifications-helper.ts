@@ -132,13 +132,10 @@ function getActivityId(notification: Notification | null = null): string | undef
 async function subscribe(
   deviceToken: string,
   youtrackToken: string,
+  userLogin: string,
 ): Promise<any> {
-  const isAndroid = isAndroidPlatform();
   const api: Api = getApi();
-  const resource: (...args: any[]) => any = isAndroid
-    ? api.subscribeToFCMNotifications
-    : api.subscribeToIOSNotifications;
-
+  const resource = isAndroidPlatform() ? api.subscribeToFCMNotifications : api.subscribeToIOSNotifications;
   try {
     log.info(logMessages.startSubscribing);
     const response = await resource.call(
@@ -146,6 +143,7 @@ async function subscribe(
       KONNECTOR_URL,
       youtrackToken,
       deviceToken,
+      userLogin,
     );
     log.info(logMessages.successSubscribing);
     return response;
@@ -158,9 +156,7 @@ async function subscribe(
 
 async function unsubscribe(deviceToken: string): Promise<any> {
   const api: Api = getApi();
-  const resource: (...args: any[]) => any = isAndroidPlatform()
-    ? api.unsubscribeFromFCMNotifications
-    : api.unsubscribeFromIOSNotifications;
+  const resource = isAndroidPlatform() ? api.unsubscribeFromFCMNotifications : api.unsubscribeFromIOSNotifications;
 
   try {
     log.info(logMessages.unsubscribeStart);
