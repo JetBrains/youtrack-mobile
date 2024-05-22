@@ -333,7 +333,7 @@ describe('app-actions', () => {
     });
 
     it('should set YT current user from cache', async () => {
-      fetchMock.mock(`${backendURLMock}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,build,statisticsEnabled,l10n(language,locale)`, {
+      fetchMock.mock(`${backendURLMock}/api/config?fields=ring(url,serviceId),mobile(serviceSecret,serviceId),version,build,statisticsEnabled,l10n(language,locale,predefinedQueries)`, {
         mobile: {serviceId: 'youtrack'},
         ring: {
           serviceId: 'id',
