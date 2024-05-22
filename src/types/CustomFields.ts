@@ -141,9 +141,7 @@ export type Attachment = {
   visibility?: Visibility | null;
   author?: User;
 };
-export type IssueComment = {
-  $type: string;
-  id: string;
+export interface IssueComment extends EntityBase {
   canUpdateVisibility: boolean;
   created: number;
   updated: number;
@@ -159,7 +157,8 @@ export type IssueComment = {
   article?: { id: string; };
   attachments?: Attachment[];
   mentions?: Mentions;
-};
+}
+
 export type IssueLinkType = {
   id: string;
   name: string;

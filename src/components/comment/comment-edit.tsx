@@ -47,12 +47,9 @@ import type {Theme} from 'types/Theme';
 import type {User, UserMentions} from 'types/User';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
 import {AppState} from 'reducers';
-import {IssueFull} from 'types/Issue';
 import {ReduxThunkDispatch} from 'types/Redux';
 
 interface EditingComment extends IssueComment {
-  article?: { id: string };
-  issue?: Partial<IssueFull>;
   reply?: boolean;
 }
 
@@ -166,9 +163,10 @@ const CommentEdit = (props: Props) => {
       toggleVisibilityControl(false);
       toggleSaving(true);
       const draft = getCurrentComment(state.editingComment);
+      const visibility = draft.canUpdateVisibility === false ? undefined : draft.visibility;
       const comment = await onCommentChange({
         ...draft,
-        visibility: draft.canUpdateVisibility ? draft.visibility : undefined,
+        visibility,
       });
       await props.onSubmitComment(comment);
       setEmptyComment();
@@ -283,16 +281,16 @@ const CommentEdit = (props: Props) => {
   };
 
   const renderVisibility = () => {
-    const toggleSelectVisibility = (isVisibilitySelectVisible: boolean) =>
-      changeState({isVisibilitySelectVisible});
+    const toggleSelectVisibility = (isVisibilitySelectVisible: boolean) => changeState({isVisibilitySelectVisible});
+    const enabled = state.editingComment.canUpdateVisibility || props.canUpdateCommentVisibility;
     return (
       <VisibilityControl
         color={styles.private.color}
-        disabled={!props.canUpdateCommentVisibility}
+        disabled={!enabled}
         onShow={() => toggleSelectVisibility(true)}
         onHide={() => toggleSelectVisibility(false)}
         visibility={state.editingComment.visibility}
-        onSubmit={(visibility: Visibility) => {
+        onSubmit={(visibility: Visibility | null) => {
           setEditingComment(getCurrentComment({...state.editingComment, visibility}));
         }}
         uiTheme={theme.uiTheme}

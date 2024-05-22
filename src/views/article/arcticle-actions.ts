@@ -22,6 +22,7 @@ import {
   setActivityPage,
   setArticle,
   setArticleCommentDraft,
+  setDefaultTeam,
   setError,
   setPrevArticle,
   setProcessing,
@@ -39,9 +40,11 @@ import type {Article, ArticleDraft} from 'types/Article';
 import type {ArticleState} from './article-reducers';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {CustomError} from 'types/Error';
+import type {ProjectTeam} from 'types/Project';
 import type {Reaction} from 'types/Reaction';
 import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
+import type {UserMentions} from 'types/User';
 
 const clearArticle = (): ReduxAction => async (dispatch: ReduxThunkDispatch) =>
   dispatch(setArticle(null));
@@ -70,6 +73,30 @@ const loadArticleFromCache = (article: Article): ReduxAction => {
   };
 };
 
+const loadDefaultTeam = (article: Article): ReduxAction => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    logEvent({
+      message: 'Loading default article project team',
+    });
+    const isOffline: boolean = getState().app?.networkState?.isConnected === false;
+    if (isOffline || !article.project?.id) {
+      return;
+    }
+    const [error, team] = await until<ProjectTeam>(getApi().projects.getTeam(article.project.id));
+
+    if (error) {
+      dispatch(setError(error));
+      logEvent({
+        message: 'Failed to load default article project team',
+        isError: true,
+      });
+    } else {
+      dispatch(setDefaultTeam(team));
+    }
+  };
+};
+
+
 const loadArticle = (articleId: string, reset: boolean = true): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     logEvent({
@@ -97,6 +124,7 @@ const loadArticle = (articleId: string, reset: boolean = true): ReduxAction => {
         message: 'Article loaded',
       });
       dispatch(setArticle(article));
+      dispatch(loadDefaultTeam(article));
       cacheUserLastVisitedArticle(article);
     }
   };
@@ -619,7 +647,7 @@ const showArticleCommentActions = (
   };
 };
 
-const getMentions = (query: string): ReduxAction => {
+const getMentions = (query: string): ReduxAction<Promise<UserMentions>> => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     logEvent({
       message: 'Get article mentions',
@@ -822,4 +850,5 @@ export {
   onCheckboxUpdate,
   onReactionSelect,
   resetArticleCommentDraft,
+  loadDefaultTeam,
 };

@@ -327,7 +327,6 @@ const ArticleActivities = (props: Props) => {
                 refreshActivities(false);
                 return Promise.resolve();
               }}
-              issuePermissions={issuePermissions}
             />
           )}
           {editingComment && (
