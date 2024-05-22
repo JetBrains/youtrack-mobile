@@ -937,7 +937,7 @@ msgstr "Antworten"
 #: src/views/issue/issue-user-cc.tsx
 #: src/views/issue/issue-user-cc.tsx
 msgid "Reporter"
-msgstr ""
+msgstr "Melder"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
@@ -1376,7 +1376,7 @@ msgstr "Ja"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
-msgstr ""
+msgstr "Sie können an maximal 5 Meldende pro Supportfall Kopien senden"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

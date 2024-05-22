@@ -90,7 +90,7 @@ msgstr[3] ""
 
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
-msgstr ""
+msgstr "@Wzmianka w komentarzu"
 
 #: src/views/helpdesk-feedback/index.ts
 #: src/views/issue/activity/activity__add-spent-time.tsx
