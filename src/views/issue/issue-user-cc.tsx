@@ -46,8 +46,10 @@ const IssueUsersCC = ({
   }, [usersCC]);
 
   const loadReporters = async (query: string = ''): Promise<UserCC[]> => {
+    const permissionName = 'Create Issue';
+    const permission = getApi().config.l10n.predefinedQueries[permissionName] || permissionName;
     const q = `not is:banned ${
-      issue.project.restricted ? `and access(project:{${issue.project.name}},with:{Create Issue})` : ''
+      issue.project.restricted ? `and access(project:{${issue.project.name}},with:{${permission}})` : ''
     } and type:Reporter${query.length === 0 ? '' : ` and ${query}`}`;
     const hubUsers = getApi().user.getHubUsers(
       encodeURIComponent(q),

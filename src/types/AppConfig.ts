@@ -8,6 +8,9 @@ export type AppConfig = {
   l10n: {
     language: string;
     locale: string;
+    predefinedQueries: {
+      [id: string]: string;
+    }
   };
 };
 export type EndUserAgreement = {
