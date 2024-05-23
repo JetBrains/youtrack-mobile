@@ -533,6 +533,10 @@ msgstr "Geben Sie die Webadresse einer YouTrack-Installation ein, für die Sie e
 msgid "Enter time value"
 msgstr "Zeitwert eingeben"
 
+#: src/components/search/search-context.ts
+msgid "Everything"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
 msgstr "Favoriten"

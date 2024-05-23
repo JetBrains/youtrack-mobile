@@ -549,6 +549,10 @@ msgstr "Zadejte webovou adresu instalace YouTrack, kde máte registrovaný úče
 msgid "Enter time value"
 msgstr "Zadejte časovou hodnotu"
 
+#: src/components/search/search-context.ts
+msgid "Everything"
+msgstr "Vše"
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
 msgstr "Oblíbené"

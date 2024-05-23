@@ -525,6 +525,10 @@ msgstr "アカウントを登録している YouTrack インストール環境�
 msgid "Enter time value"
 msgstr "時間の値を入力してください"
 
+#: src/components/search/search-context.ts
+msgid "Everything"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
 msgstr "お気に入り"
@@ -927,7 +931,7 @@ msgstr "返信"
 #: src/views/issue/issue-user-cc.tsx
 #: src/views/issue/issue-user-cc.tsx
 msgid "Reporter"
-msgstr ""
+msgstr "報告者"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
@@ -1365,7 +1369,7 @@ msgstr "はい"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
-msgstr ""
+msgstr "1 つのチケットに CC できる報告者数は最大 5 人です"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

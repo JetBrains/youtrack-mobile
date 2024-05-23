@@ -527,6 +527,10 @@ msgstr "Enter the web address for a YouTrack installation where you have a regis
 msgid "Enter time value"
 msgstr "Enter time value"
 
+#: src/components/search/search-context.ts:6
+msgid "Everything"
+msgstr "Everything"
+
 #: src/views/knowledge-base/knowledge-base.tsx:524
 msgid "Favorites"
 msgstr "Favorites"

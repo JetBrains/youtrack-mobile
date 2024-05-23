@@ -533,6 +533,10 @@ msgstr ""
 msgid "Enter time value"
 msgstr ""
 
+#: src/components/search/search-context.ts
+msgid "Everything"
+msgstr "Her şey"
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
 msgstr "Favoriler"

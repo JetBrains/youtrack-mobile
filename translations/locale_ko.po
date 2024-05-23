@@ -91,7 +91,7 @@ msgstr "활동 설정"
 
 #: src/views/issues/issues__filters-settings.tsx
 msgid "Add filter"
-msgstr ""
+msgstr "필터 추가"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Add project to favorites"
@@ -395,7 +395,7 @@ msgstr "취소"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "declined the pull request"
-msgstr ""
+msgstr "풀 리퀘스트가 거부되었습니다"
 
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
@@ -524,6 +524,10 @@ msgstr "등록된 계정이 있는 YouTrack 설치 웹 주소를 입력하세요
 #: src/components/custom-fields-panel/custom-fields-panel.tsx
 msgid "Enter time value"
 msgstr "시간 값 입력"
+
+#: src/components/search/search-context.ts
+msgid "Everything"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
@@ -927,7 +931,7 @@ msgstr "답글"
 #: src/views/issue/issue-user-cc.tsx
 #: src/views/issue/issue-user-cc.tsx
 msgid "Reporter"
-msgstr ""
+msgstr "요청자"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
@@ -1365,7 +1369,7 @@ msgstr "예"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
-msgstr ""
+msgstr "티켓당 최대 5명의 요청자만 참조에 추가할 수 있습니다"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

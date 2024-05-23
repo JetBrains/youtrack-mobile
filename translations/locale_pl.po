@@ -215,7 +215,7 @@ msgstr[3] "Załącznika"
 
 #: src/components/attachments-row/attachment-actions.ts
 msgid "Attachment deleted"
-msgstr ""
+msgstr "Usunięto załącznik"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Attachment name"
@@ -548,6 +548,10 @@ msgstr ""
 #: src/components/custom-fields-panel/custom-fields-panel.tsx
 msgid "Enter time value"
 msgstr ""
+
+#: src/components/search/search-context.ts
+msgid "Everything"
+msgstr "Wszystko"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"

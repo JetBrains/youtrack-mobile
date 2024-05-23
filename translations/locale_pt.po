@@ -403,7 +403,7 @@ msgstr "Recusar"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "declined the pull request"
-msgstr ""
+msgstr "recusou a solicitação de pull"
 
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
@@ -532,6 +532,10 @@ msgstr "Digitar o endereço web de uma instalação do YouTrack onde você tem u
 #: src/components/custom-fields-panel/custom-fields-panel.tsx
 msgid "Enter time value"
 msgstr "Digite o tempo"
+
+#: src/components/search/search-context.ts
+msgid "Everything"
+msgstr ""
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
@@ -937,7 +941,7 @@ msgstr "Responder"
 #: src/views/issue/issue-user-cc.tsx
 #: src/views/issue/issue-user-cc.tsx
 msgid "Reporter"
-msgstr ""
+msgstr "Relator"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
@@ -1376,7 +1380,7 @@ msgstr "Sim"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
-msgstr ""
+msgstr "Você só pode copiar (CC) no máximo 5 relatores por ticket"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"

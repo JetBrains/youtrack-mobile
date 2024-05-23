@@ -549,6 +549,10 @@ msgstr "Введите адрес сервера YouTrack, на котором �
 msgid "Enter time value"
 msgstr "Введите время"
 
+#: src/components/search/search-context.ts
+msgid "Everything"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
 msgstr "Избранное"

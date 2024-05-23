@@ -533,6 +533,10 @@ msgstr "Adja meg annak a YouTrack-telepítésnek a webcímét, amelyben regisztr
 msgid "Enter time value"
 msgstr "Időérték megadása"
 
+#: src/components/search/search-context.ts
+msgid "Everything"
+msgstr "Minden"
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
 msgstr "Kedvencek"

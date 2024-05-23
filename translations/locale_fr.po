@@ -533,6 +533,10 @@ msgstr "Saisissez l'adresse web d'une installation YouTrack sur laquelle vous av
 msgid "Enter time value"
 msgstr "Saisir la valeur temporelle"
 
+#: src/components/search/search-context.ts
+msgid "Everything"
+msgstr ""
+
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
 msgstr "Favoris"
@@ -937,7 +941,7 @@ msgstr "Répondre"
 #: src/views/issue/issue-user-cc.tsx
 #: src/views/issue/issue-user-cc.tsx
 msgid "Reporter"
-msgstr ""
+msgstr "Rapporteur"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Reset visibility"
@@ -1376,7 +1380,7 @@ msgstr "Oui"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
-msgstr ""
+msgstr "Vous ne pouvez ajouter en CC qu'un maximum de 5 rapporteurs par ticket de support"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"
