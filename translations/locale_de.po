@@ -535,7 +535,7 @@ msgstr "Zeitwert eingeben"
 
 #: src/components/search/search-context.ts
 msgid "Everything"
-msgstr ""
+msgstr "Alles"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"

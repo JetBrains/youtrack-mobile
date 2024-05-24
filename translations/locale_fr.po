@@ -535,7 +535,7 @@ msgstr "Saisir la valeur temporelle"
 
 #: src/components/search/search-context.ts
 msgid "Everything"
-msgstr ""
+msgstr "Tout"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"

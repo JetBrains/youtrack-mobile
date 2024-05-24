@@ -527,7 +527,7 @@ msgstr "시간 값 입력"
 
 #: src/components/search/search-context.ts
 msgid "Everything"
-msgstr ""
+msgstr "전체"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"

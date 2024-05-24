@@ -535,7 +535,7 @@ msgstr "Digite o tempo"
 
 #: src/components/search/search-context.ts
 msgid "Everything"
-msgstr ""
+msgstr "Tudo"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
