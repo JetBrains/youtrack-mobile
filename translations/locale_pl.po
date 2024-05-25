@@ -134,7 +134,7 @@ msgstr "Dodaj tag"
 
 #: src/components/date-picker/date-time-picker.tsx
 msgid "Add time"
-msgstr ""
+msgstr "Dodaj godzinę"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Add to favorites"
@@ -259,12 +259,12 @@ msgstr "Anuluj"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "CC me"
-msgstr ""
+msgstr "Dodaj mnie do DW"
 
 #: src/components/activity/activity__history-title.ts
 #: src/views/issue/issue-user-cc.tsx
 msgid "CCs"
-msgstr ""
+msgstr "Kopie DW"
 
 #: src/components/error/error-message-data.ts
 msgid "Clear the current search context"
@@ -277,7 +277,7 @@ msgstr "Zamknij"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Collapse all"
-msgstr ""
+msgstr "Zwiń wszystko"
 
 #: src/views/agile-board/agile-board.tsx
 msgid "Column collapsed"
@@ -336,7 +336,7 @@ msgstr ""
 #: src/components/error-message/error-message-inline.tsx
 #: src/views/enter-server/enter-server.tsx
 msgid "Contact support"
-msgstr ""
+msgstr "Skontaktuj się z pomocą techniczną"
 
 #: src/views/article/article.tsx
 msgid "Content"
@@ -383,7 +383,7 @@ msgstr ""
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Copy text"
-msgstr ""
+msgstr "Skopiuj tekst"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "Could not apply specified command."
@@ -403,7 +403,7 @@ msgstr "Utworzone przez"
 
 #: src/views/create-issue/create-issue.tsx
 msgid "Current issue"
-msgstr ""
+msgstr "Bieżące zgłoszenie"
 
 #: src/views/settings/settings__appearance.tsx
 msgid "Dark theme"
@@ -534,7 +534,7 @@ msgstr ""
 
 #: src/components/command-dialog/command-dialog.tsx
 msgid "Enter command"
-msgstr ""
+msgstr "Wprowadź polecenie"
 
 #: src/components/query-assist/query-assist.tsx
 #: src/components/query-assist/query-preview.tsx
@@ -567,11 +567,11 @@ msgstr ""
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "Filter existing accounts by name or username"
-msgstr ""
+msgstr "Filtruj istniejące konta według nazwy lub nazwy użytkownika"
 
 #: src/components/select/select.tsx
 msgid "Filter items"
-msgstr ""
+msgstr "Filtruj pozycje"
 
 #: src/views/article-create/article-create.tsx
 #: src/views/issues/issues-actions.ts
@@ -586,7 +586,7 @@ msgstr ""
 #: src/views/issues/issues__filters-settings__list.tsx
 #: src/views/issues/issues__settings.tsx
 msgid "Filter Settings"
-msgstr ""
+msgstr "Ustawienia filtrów"
 
 #: src/views/agile-board/board-actions.ts
 msgid "Filter sprints by name"
@@ -664,7 +664,7 @@ msgstr "Usunięto link do zgłoszenia"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue updated"
-msgstr ""
+msgstr "Zaktualizowano zgłoszenie"
 
 #: src/views/issues/issues__sortby_list.tsx
 msgid "Issues can be sorted by up to 4 attributes"
@@ -824,7 +824,7 @@ msgstr ""
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "No CCs"
-msgstr ""
+msgstr "Brak kopii DW"
 
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "No drafts yet"
@@ -885,7 +885,7 @@ msgstr "Wstrzymano"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "People added as CCs receive the same notifications that are sent to the person who reported this ticket"
-msgstr ""
+msgstr "Osoby dodane jako odbiorcy kopii DW otrzymują te same powiadomienia, co osoba, która zgłosiła to zgłoszenie pomocy technicznej"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
@@ -922,7 +922,7 @@ msgstr "Zapytanie"
 
 #: src/components/query-assist/query-assist-helper.ts
 msgid "Recent searches"
-msgstr ""
+msgstr "Ostatnie wyszukiwania"
 
 #: src/components/visibility/visibility-helper.ts
 msgid "Recommended groups and teams"
@@ -1043,11 +1043,11 @@ msgstr ""
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts
 msgid "Set a date"
-msgstr ""
+msgstr "Ustaw datę"
 
 #: src/views/helpdesk-feedback/index.ts
 msgid "Set date and time"
-msgstr ""
+msgstr "Ustaw datę i godzinę"
 
 #: src/views/settings/settings.tsx
 msgid "Settings"
@@ -1389,7 +1389,7 @@ msgstr "Hej, nie możesz tego dotykać!"
 
 #: src/components/error/error-message-data.ts
 msgid "Wrap attribute values that contain spaces in braces {like this}."
-msgstr ""
+msgstr "Zawijaj wartości atrybutów zawierające spacje w nawiasach klamrowych {like this}."
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
