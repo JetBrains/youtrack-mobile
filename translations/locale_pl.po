@@ -18,7 +18,7 @@ msgstr " ({{amount}} nierozwiązanych)"
 
 #: src/components/comment/comment.tsx
 msgid " or "
-msgstr ""
+msgstr " lub "
 
 #: src/views/agile-board/board-actions.ts
 msgid "(archived)"
@@ -26,7 +26,7 @@ msgstr "(zarchiwizowano)"
 
 #: src/components/date-picker/date-time-picker.tsx
 msgid "(Clear value)"
-msgstr ""
+msgstr "(Wyczyść wartości)"
 
 #: src/components/activity/activity__history-title.ts
 msgid "[Removed field]"
@@ -35,26 +35,26 @@ msgstr "[Usunięte pole]"
 #: src/views/article/article__details.tsx
 msgid "{{amount}} article"
 msgid_plural "{{amount}} articles"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{{amount}} artykuł"
+msgstr[1] "{{amount}} artykuły"
+msgstr[2] "{{amount}} artykułów"
+msgstr[3] "{{amount}} artykułu"
 
 #: src/views/create-issue/create-issue.tsx
 msgid "{{amount}} draft"
 msgid_plural "{{amount}} drafts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{{amount}} wersja robocza"
+msgstr[1] "{{amount}} wersje robocze"
+msgstr[2] "{{amount}} wersji roboczych"
+msgstr[3] "{{amount}} wersji roboczej"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "{{amount}} file"
 msgid_plural "{{amount}} files"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{{amount}} plik"
+msgstr[1] "{{amount}} pliki"
+msgstr[2] "{{amount}} plików"
+msgstr[3] "{{amount}} pliku"
 
 #: src/components/linked-issues/linked-issues.tsx
 msgid "{{amount}} issue"
@@ -67,26 +67,26 @@ msgstr[3] "{{amount}} zgłoszenia"
 #: src/components/date/date.ts
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{{daysLeft}} d"
+msgstr[1] "{{daysLeft}} d"
+msgstr[2] "{{daysLeft}} d"
+msgstr[3] "{{daysLeft}} d"
 
 #: src/components/date/date.ts
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{{hoursLeft}} h"
+msgstr[1] "{{hoursLeft}} h"
+msgstr[2] "{{hoursLeft}} h"
+msgstr[3] "{{hoursLeft}} h"
 
 #: src/components/date/date.ts
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{{minutesAbsolute}} m"
+msgstr[1] "{{minutesAbsolute}} m"
+msgstr[2] "{{minutesAbsolute}} m"
+msgstr[3] "{{minutesAbsolute}} m"
 
 #: src/components/user/user-card.tsx
 msgid "@Mention in a comment"
@@ -96,7 +96,7 @@ msgstr "@Wzmianka w komentarzu"
 #: src/views/issue/activity/activity__add-spent-time.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "1w 1d 1h 1m"
-msgstr ""
+msgstr "1 t 1 d 1 h 1 m"
 
 #: src/components/user-agreement/user-agreement.tsx
 msgid "Accept"
@@ -104,11 +104,11 @@ msgstr "Zaakceptuj"
 
 #: src/components/issue-tabbed/issue-tabbed.tsx
 msgid "Activity"
-msgstr ""
+msgstr "Aktywność"
 
 #: src/views/issue/activity/issue__activity.tsx
 msgid "Activity Settings"
-msgstr ""
+msgstr "Ustawienia aktywności"
 
 #: src/views/issues/issues__filters-settings.tsx
 msgid "Add filter"
@@ -116,7 +116,7 @@ msgstr "Dodaj filtr"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Add project to favorites"
-msgstr ""
+msgstr "Dodaj projekt do ulubionych"
 
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -125,7 +125,7 @@ msgstr "Dodaj reakcję"
 
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
-msgstr "Dodaj spędzony czas"
+msgstr "Dodaj czas spędzony"
 
 #: src/components/tags/tag-add-panel.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -134,7 +134,7 @@ msgstr "Dodaj tag"
 
 #: src/components/date-picker/date-time-picker.tsx
 msgid "Add time"
-msgstr "Dodaj godzinę"
+msgstr "Dodaj czas"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Add to favorites"
@@ -161,15 +161,15 @@ msgstr "Wygląd"
 #: src/views/create-issue/create-issue-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Apply command…"
-msgstr ""
+msgstr "Zastosuj, polecenie…"
 
 #: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete all article drafts?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć wszystkie wersje robocze artykułu?"
 
 #: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this article?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć ten artykuł?"
 
 #: src/components/confirmation/article-confirmations.ts
 msgid "Are you sure you want to delete this draft?"
@@ -177,23 +177,23 @@ msgstr "Czy na pewno chcesz usunąć tę wersję roboczą?"
 
 #: src/views/issue/activity/issue-activity__actions.ts
 msgid "Are you sure you want to delete this work item?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć tę pozycję dziennika pracy?"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Article added to favorites"
-msgstr ""
+msgstr "Artykuł dodano do ulubionych"
 
 #: src/views/article-create/article-create.tsx
 msgid "Article content"
-msgstr ""
+msgstr "Treść artykułu"
 
 #: src/views/article-create/arcticle-create-actions.ts
 msgid "Article published"
-msgstr ""
+msgstr "Opublikowano artykuł"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Article removed from favorites"
-msgstr ""
+msgstr "Usunięto artykuł z ulubionych"
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -227,19 +227,19 @@ msgstr "Autor"
 
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
-msgstr ""
+msgstr "Przeglądarka"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Bugsnag Privacy Policy"
-msgstr ""
+msgstr "Polityka prywatności aplikacji Bugsnag"
 
 #: src/views/log-in/log-in.tsx
 msgid "By logging in, you agree to the Privacy Policy."
-msgstr ""
+msgstr "Logując się, wyrażasz zgodę na Politykę prywatności."
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Camera"
-msgstr ""
+msgstr "Kamera"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
@@ -281,15 +281,15 @@ msgstr "Zwiń wszystko"
 
 #: src/views/agile-board/agile-board.tsx
 msgid "Column collapsed"
-msgstr ""
+msgstr "Zwinięto kolumnę"
 
 #: src/views/agile-board/agile-board.tsx
 msgid "Column expanded"
-msgstr ""
+msgstr "Rozwinięto kolumnę"
 
 #: src/components/command-dialog/command-dialog-helper.ts
 msgid "Command applied"
-msgstr ""
+msgstr "Zastosowano polecenie"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "Command was successfully applied."
@@ -297,16 +297,16 @@ msgstr "Polecenie zostało zastosowane."
 
 #: src/components/activity/activity__history-title.ts
 msgid "Comment changed"
-msgstr ""
+msgstr "Zmieniono komentarz"
 
 #: src/components/comment/comment.tsx
 msgid "Comment deleted"
-msgstr ""
+msgstr "Usunięto komentarz"
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Comment updated"
-msgstr ""
+msgstr "Zaktualizowano komentarz"
 
 #: src/views/inbox-threads/inbox-threads__item-comment.tsx
 msgid "commented"
@@ -322,15 +322,15 @@ msgstr "zatwierdzone zmiany"
 
 #: src/components/account/accounts.tsx
 msgid "Confirm logout"
-msgstr ""
+msgstr "Potwierdź wylogowanie"
 
 #: src/components/account/accounts.tsx
 msgid "Confirmation required"
-msgstr ""
+msgstr "Wymagane potwierdzenie"
 
 #: src/actions/app-actions.ts
 msgid "Connecting to YouTrack..."
-msgstr ""
+msgstr "Łączenie z YouTrack..."
 
 #: src/components/error-boundary/error-boundary.tsx
 #: src/components/error-message/error-message-inline.tsx
@@ -344,7 +344,7 @@ msgstr "Zawartość"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Content revised"
-msgstr ""
+msgstr "Poprawiono treść"
 
 #: src/components/user/user-card.tsx
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx
@@ -359,11 +359,11 @@ msgstr "Skopiowano"
 
 #: src/views/issue/issue__details.tsx
 msgid "Copy description"
-msgstr ""
+msgstr "Skopiuj opis"
 
 #: src/views/issue/issue__details.tsx
 msgid "Copy field text"
-msgstr ""
+msgstr "Skopiuj tekst pola"
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/article__activity.tsx
@@ -376,7 +376,7 @@ msgstr "Skopiuj link"
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
 msgid "Copy link to article"
-msgstr ""
+msgstr "Skopiuj link do artykułu"
 
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
@@ -391,7 +391,7 @@ msgstr "Nie można zastosować określonego polecenia."
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Crash report sent"
-msgstr ""
+msgstr "Wysłano raport o awarii"
 
 #: src/views/inbox-threads/inbox-threads__item-issue-created.tsx
 msgid "created"
@@ -407,7 +407,7 @@ msgstr "Bieżące zgłoszenie"
 
 #: src/views/settings/settings__appearance.tsx
 msgid "Dark theme"
-msgstr ""
+msgstr "Motyw ciemny"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Date"
@@ -419,7 +419,7 @@ msgstr "Odrzuć"
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 msgid "declined the pull request"
-msgstr ""
+msgstr "odrzucono żądanie ściągnięcia"
 
 #: src/components/confirmation/confirmation.ts
 #: src/views/article/arcticle-actions.ts
@@ -475,11 +475,11 @@ msgstr "Szczegóły"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Discard and close"
-msgstr ""
+msgstr "Odrzuć i zamknij"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Discard draft and close?"
-msgstr ""
+msgstr "Odrzucić wersję roboczą i zamknąć?"
 
 #: src/views/article-create/article-create.tsx
 msgid "Discard unpublished changes"
@@ -487,19 +487,19 @@ msgstr "Odrzuć nieopublikowane zmiany"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to log out?"
-msgstr ""
+msgstr "Czy na pewno chcesz się wylogować?"
 
 #: src/components/account/accounts.tsx
 msgid "Do you really want to remove this account?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć to konto?"
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Document"
-msgstr ""
+msgstr "Dokument"
 
 #: src/views/settings/settings-helper.ts
 msgid "Don't send logs"
-msgstr ""
+msgstr "Nie wysyłaj dzienników"
 
 #: src/views/create-issue/create-issue-drafts.tsx
 #: src/views/knowledge-base/knowledge-base.tsx
@@ -530,7 +530,7 @@ msgstr "Adres email"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Email address for follow-up"
-msgstr ""
+msgstr "Adres e-mail do dalszych działań"
 
 #: src/components/command-dialog/command-dialog.tsx
 msgid "Enter command"
@@ -543,11 +543,11 @@ msgstr "Wprowadź żądanie wyszukiwania"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
-msgstr ""
+msgstr "Wprowadź adres internetowy instalacji YouTrack, w której masz zarejestrowane konto"
 
 #: src/components/custom-fields-panel/custom-fields-panel.tsx
 msgid "Enter time value"
-msgstr ""
+msgstr "Wprowadź wartość czasu"
 
 #: src/components/search/search-context.ts
 msgid "Everything"
@@ -559,11 +559,11 @@ msgstr "Ulubione"
 
 #: src/views/settings/settings-helper.ts
 msgid "Feature request"
-msgstr ""
+msgstr "Prośba o funkcję"
 
 #: src/views/agile-board/board-actions.ts
 msgid "Filter boards by name"
-msgstr ""
+msgstr "Filtruj tablice według nazwy"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "Filter existing accounts by name or username"
@@ -581,7 +581,7 @@ msgstr "Filtruj projekty"
 
 #: src/views/issues/issues-actions.ts
 msgid "Filter projects, saved searches, and tags"
-msgstr ""
+msgstr "Filtruj projekty, zapisane wyszukiwania i tagi"
 
 #: src/views/issues/issues__filters-settings__list.tsx
 #: src/views/issues/issues__settings.tsx
@@ -590,12 +590,12 @@ msgstr "Ustawienia filtrów"
 
 #: src/views/agile-board/board-actions.ts
 msgid "Filter sprints by name"
-msgstr ""
+msgstr "Filtruj sprinty według nazwy"
 
 #: src/components/tags/tag-add-select.tsx
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Filter tags"
-msgstr ""
+msgstr "Filtruj tagi"
 
 #: src/components/visibility/comment-visibility-control.tsx
 #: src/components/visibility/visibility-control.tsx
@@ -608,7 +608,7 @@ msgstr "Filtry"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Find favorite projects"
-msgstr ""
+msgstr "Znajdź ulubione projekty"
 
 #: src/views/issues/issues.tsx
 msgid "Find issues that contain key words"
@@ -616,7 +616,7 @@ msgstr "Znajdź zgłoszenia zawierające słowa kluczowe"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Get help"
-msgstr ""
+msgstr "Uzyskaj pomoc"
 
 #: src/components/visibility/visibility-helper.ts
 msgid "Groups and teams"
@@ -624,11 +624,11 @@ msgstr "Grupy i zespoły"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Help us fix problems faster"
-msgstr ""
+msgstr "Pomóż nam szybciej rozwiązywać problemy"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Here you'll see a list of articles from your favorite projects"
-msgstr ""
+msgstr "Tutaj zobaczysz listę artykułów z Twoich ulubionych projektów"
 
 #: src/components/error/error-message-data.ts
 msgid "If this isn't what you expected, you might try one of these solutions:"
@@ -636,7 +636,7 @@ msgstr "Jeśli nie jest to zgodne z oczekiwaniami, możesz wypróbować jedno z 
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "In addition to our built-in error reporting, YouTrack Mobile uses Bugsnag, a third-party service that helps us diagnose problems and monitor application stability. We only share report data with Bugsnag if you agree to allow us to do so."
-msgstr ""
+msgstr "Oprócz wbudowanego raportowania błędów, YouTrack Mobile korzysta z Bugsnag, usługi innej firmy, która pomaga nam diagnozować problemy i monitorować stabilność aplikacji. Udostępniamy dane raportu firmie Bugsnag tylko wtedy, gdy wyrazisz na to zgodę."
 
 #: src/views/article/article.tsx
 msgid "in revision"
@@ -648,7 +648,7 @@ msgstr "Odziedziczone ograniczenia"
 
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Issue deleted"
-msgstr ""
+msgstr "Usunięto zgłoszenie"
 
 #: src/components/activity/activity-helper.ts
 msgid "Issue history"
@@ -668,15 +668,15 @@ msgstr "Zaktualizowano zgłoszenie"
 
 #: src/views/issues/issues__sortby_list.tsx
 msgid "Issues can be sorted by up to 4 attributes"
-msgstr ""
+msgstr "Zgłoszenia można sortować według maksymalnie 4 atrybutów"
 
 #: src/components/error/error-message-data.ts
 msgid "It could mean that the issue doesn't exist or you don't have permission to view it"
-msgstr ""
+msgstr "Może to oznaczać, że zgłoszenie nie istnieje lub nie masz uprawnień do jego wyświetlenia"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "JetBrains Privacy Policy"
-msgstr ""
+msgstr "Zasady ochrony prywatności JetBrains"
 
 #: src/components/date/date.ts
 msgid "just now"
@@ -688,16 +688,16 @@ msgstr "Baza wiedzy"
 
 #: src/views/issues/index.ts
 msgid "Large"
-msgstr ""
+msgstr "Duże"
 
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-message-data.ts
 msgid "License error"
-msgstr ""
+msgstr "Błąd licencji"
 
 #: src/views/settings/settings__appearance.tsx
 msgid "Light theme"
-msgstr ""
+msgstr "Motyw jasny"
 
 #: src/components/linked-issues/linked-issues-add-link.tsx
 #: src/views/create-issue/create-issue.tsx
@@ -707,16 +707,16 @@ msgstr "Powiąż zgłoszenie"
 
 #: src/views/issue/activity/issue-activity__comment-actions.ts
 msgid "Link to comment copied"
-msgstr ""
+msgstr "Skopiowano link do komentarza"
 
 #: src/components/linked-issues/linked-issues-title.tsx
 #: src/components/linked-issues/linked-issues.tsx
 msgid "Linked issues"
-msgstr ""
+msgstr "Powiązane zgłoszenia"
 
 #: src/components/select/select.tsx
 msgid "Loading values…"
-msgstr ""
+msgstr "Ładowanie wartości…"
 
 #: src/views/log-in/log-in.tsx
 msgid "Log in"
@@ -724,20 +724,20 @@ msgstr "Zaloguj się"
 
 #: src/views/log-in/log-in.tsx
 msgid "Log in to YouTrack"
-msgstr ""
+msgstr "Zaloguj się do YouTrack"
 
 #: src/views/log-in/log-in.tsx
 msgid "Log in with Browser"
-msgstr ""
+msgstr "Zaloguj się za pomocą przeglądarki"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Logs"
-msgstr ""
+msgstr "Dzienniki"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Manage Favorite Projects"
-msgstr ""
+msgstr "Zarządzaj ulubionymi projektami"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Mark all as read"
@@ -755,7 +755,7 @@ msgstr "Oznacz jako nieprzeczytane"
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Marked as read"
-msgstr ""
+msgstr "Oznaczone jako przeczytane"
 
 #: src/views/issues/issues__count.tsx
 msgid "Matches {{issuesCount}} issue"
@@ -768,19 +768,19 @@ msgstr[3] "Pasuje do {{issuesCount}} zgłoszenia"
 #: src/views/issues/issues__count.tsx
 msgid "Matches {{issuesCount}} ticket"
 msgid_plural "Matches {{issuesCount}} tickets"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Pasuje do {{issuesCount}} zgłoszenia pomocy technicznej"
+msgstr[1] "Pasuje do {{issuesCount}} zgłoszeń pomocy technicznej"
+msgstr[2] "Pasuje do {{issuesCount}} zgłoszeń pomocy technicznej"
+msgstr[3] "Pasuje do {{issuesCount}} zgłoszenia pomocy technicznej"
 
 #: src/views/issues/index.ts
 msgid "Medium"
-msgstr ""
+msgstr "Średnie"
 
 #: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
 msgid "mentioned you"
-msgstr "wspomniał(-a) o tobie"
+msgstr "wspomniał o Tobie"
 
 #: src/views/inbox-threads/inbox-threads-helper.ts
 msgid "Mentions & Reactions"
@@ -804,7 +804,7 @@ msgstr "Nowe zgłoszenie"
 
 #: src/views/inbox-threads/inbox-threads__update-button.tsx
 msgid "New messages"
-msgstr ""
+msgstr "Nowe wiadomości"
 
 #: src/views/enter-server/enter-server.tsx
 msgid "Next"
@@ -812,15 +812,15 @@ msgstr "Dalej"
 
 #: src/components/activity-stream/activity__stream.tsx
 msgid "No activity yet"
-msgstr ""
+msgstr "Brak aktywności"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "No articles"
-msgstr ""
+msgstr "Brak artykułów"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "No articles found"
-msgstr ""
+msgstr "Nie znaleziono artykułów"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "No CCs"
@@ -828,11 +828,11 @@ msgstr "Brak kopii DW"
 
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "No drafts yet"
-msgstr ""
+msgstr "Nie ma jeszcze wersji roboczych"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "No favorites projects found"
-msgstr ""
+msgstr "Nie znaleziono ulubionych projektów"
 
 #: src/views/issues/issues.tsx
 msgid "No issues found"
@@ -840,7 +840,7 @@ msgstr "Nie znaleziono zgłoszeń"
 
 #: src/components/select/select.tsx
 msgid "No items"
-msgstr ""
+msgstr "Brak elementów"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "No notifications"
@@ -860,7 +860,7 @@ msgstr "Nope, nie mogę tego znaleźć!"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Notification settings…"
-msgstr ""
+msgstr "Ustawienia powiadomień…"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 #: src/views/inbox/inbox.tsx
@@ -889,11 +889,11 @@ msgstr "Osoby dodane jako odbiorcy kopii DW otrzymują te same powiadomienia, co
 
 #: src/components/attach-file/attach-file-dialog.tsx
 msgid "Photo and video library"
-msgstr ""
+msgstr "Biblioteka zdjęć i filmów"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Preview Size"
-msgstr ""
+msgstr "Rozmiar podglądu"
 
 #: src/views/settings/settings-helper.ts
 msgid "Problem"
@@ -910,11 +910,11 @@ msgstr "Projekty"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Projects collapsed"
-msgstr ""
+msgstr "Zwinięto projekty"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Projects expanded"
-msgstr ""
+msgstr "Rozwinięto projekty"
 
 #: src/views/issues/index.ts
 msgid "Query"
@@ -934,11 +934,11 @@ msgstr "Usuń"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Remove favorite"
-msgstr ""
+msgstr "Usuń ulubione"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove project from favorites?"
-msgstr ""
+msgstr "Usunąć projekt z ulubionych?"
 
 #: src/components/tags/tags.tsx
 msgid "Remove tag"
@@ -969,7 +969,7 @@ msgstr "Resetuj widoczność"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Restart"
-msgstr ""
+msgstr "Uruchom ponownie"
 
 #: src/components/comment/comment.tsx
 msgid "Restore"
@@ -977,7 +977,7 @@ msgstr "Przywróć"
 
 #: src/views/home/home.tsx
 msgid "Retry"
-msgstr ""
+msgstr "Ponów próbę"
 
 #: src/views/issues/issues-actions.ts
 msgid "Saved Searches"
@@ -993,15 +993,15 @@ msgstr "Wyszukaj inną wartość"
 
 #: src/components/custom-fields-panel/custom-fields-panel.tsx
 msgid "Search for the project"
-msgstr ""
+msgstr "Wyszukaj projekt"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Search Input Mode"
-msgstr ""
+msgstr "Tryb wprowadzania wyszukiwania"
 
 #: src/views/helpdesk-feedback/helpdesk-feedback.tsx
 msgid "Select a reporter or enter a new email address"
-msgstr ""
+msgstr "Wybierz zgłaszającego lub wprowadź nowy adres e-mail"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Select an article from the list"
@@ -1010,35 +1010,35 @@ msgstr "Wybierz artykuł z listy"
 #: src/views/inbox/inbox.tsx
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
-msgstr ""
+msgstr "Wybierz zgłoszenie z listy"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"
-msgstr ""
+msgstr "Wybierz użytkowników, grupy i zespoły"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send crash report"
-msgstr ""
+msgstr "Wyślij raport o awarii"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Send extended report to Bugsnag"
-msgstr ""
+msgstr "Wyślij rozszerzony raport do Bugsnag"
 
 #: src/views/settings/settings.tsx
 msgid "Send feedback"
-msgstr ""
+msgstr "Wyślij opinię"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Send Feedback"
-msgstr ""
+msgstr "Wyślij opinię"
 
 #: src/views/settings/settings-helper.ts
 msgid "Send logs"
-msgstr ""
+msgstr "Wyślij dzienniki"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "Sending crash report…"
-msgstr ""
+msgstr "Wysyłanie raportu o awarii…"
 
 #: src/components/date-picker/date-time-picker.tsx
 #: src/views/helpdesk-feedback/index.ts
@@ -1068,25 +1068,25 @@ msgstr "Udostępnij link"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Share link to article"
-msgstr ""
+msgstr "Udostępnij link do artykułu"
 
 #: src/views/settings/settings.tsx
 msgid "Share logs"
-msgstr ""
+msgstr "Udostępnij dzienniki"
 
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
 #: src/views/issue/issue-base-actions-creater.ts
 msgid "Share…"
-msgstr ""
+msgstr "Udostępnij…"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "Show all"
-msgstr "Pokaż wszystko"
+msgstr "Pokaż wszystkie"
 
 #: src/components/tags/tags.tsx
 msgid "Show all issues tagged with \"{{tagName}}\"..."
-msgstr ""
+msgstr "Pokaż wszystkie zgłoszenia oznaczone tagiem „{{tagName}}”..."
 
 #: src/components/activity-stream/activity__stream-vcs.tsx
 #: src/views/inbox-threads/inbox-threads__subscription.tsx
@@ -1095,7 +1095,7 @@ msgstr "Pokaż więcej"
 
 #: src/views/issues/index.ts
 msgid "Small"
-msgstr ""
+msgstr "Mały"
 
 #: src/components/error/error-message-data.ts
 #: src/components/error/error-messages.ts
@@ -1108,7 +1108,7 @@ msgstr "Sortuj atrybuty"
 
 #: src/views/issues/issues__settings.tsx
 msgid "Sort Order"
-msgstr ""
+msgstr "Kolejność sortowania"
 
 #: src/views/issue/activity/issue__activity-settings.tsx
 msgid "Sort: oldest first"
@@ -1130,7 +1130,7 @@ msgstr "Spędzony czas:"
 
 #: src/views/knowledge-base/knowledge-base__drafts.tsx
 msgid "Start a new article"
-msgstr ""
+msgstr "Rozpocznij nowy artykuł"
 
 #: src/views/article/article__details.tsx
 msgid "Sub-articles"
@@ -1160,10 +1160,10 @@ msgstr "Synchronizuj z systemem operacyjnym"
 #: src/components/activity/activity__history-title.ts
 msgid "Tag"
 msgid_plural "Tags"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Tag"
+msgstr[1] "Znacznik"
+msgstr[2] "Tagów"
+msgstr[3] "Tagu"
 
 #: src/views/issues/issues-actions.ts
 msgid "Tags"
@@ -1171,11 +1171,11 @@ msgstr "Tagi"
 
 #: src/views/settings/settings__feedback-form.tsx
 msgid "Thank you for your feedback!"
-msgstr ""
+msgstr "Dziękujemy za opinię!"
 
 #: src/components/error-boundary/error-boundary.tsx
 msgid "The application failed to restart automatically. Please try to restart it manually."
-msgstr ""
+msgstr "Automatyczne ponowne uruchomienie aplikacji nie powiodło się. Spróbuj ponownie uruchomić ją ręcznie."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
@@ -1183,7 +1183,7 @@ msgstr "Autor tego commita nie został zidentyfikowany, ponieważ nie podał adr
 
 #: src/views/agile-board/agile-board.tsx
 msgid "The board {{boardName}} has configuration errors"
-msgstr ""
+msgstr "Tablica {{boardName}} ma błędy konfiguracyjne"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The change has been detached from this issue. It is still displayed here because its comment mentions the issue."
@@ -1219,19 +1219,19 @@ msgstr "Zapytanie wyszukiwania zawiera nieznane wartości"
 
 #: src/actions/app-actions.ts
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
-msgstr ""
+msgstr "Wybrane konto nie jest już autoryzowane do korzystania z aplikacji YouTrack Mobile. Zaloguj się ponownie."
 
 #: src/components/error/error-message-data.ts
 msgid "The server is overloaded or down for maintenance"
-msgstr ""
+msgstr "Serwer jest przeciążony lub wyłączony z powodu konserwacji"
 
 #: src/views/agile-board/board-updaters.ts
 msgid "The settings for this agile board have been updated. Please reload the board."
-msgstr ""
+msgstr "Zaktualizowano ustawienia tej tablicy zwinnej. Załaduj ponownie tablicę."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The VCS user name does not match any user in YouTrack. To link future commits, add the VCS user name to the Hub account for this user."
-msgstr "Nazwa użytkownika VCS nie pasuje do żadnego użytkownika w YouTrack. Aby powiązać przyszłe commity, dodaj nazwę użytkownika VCS do konta Hub tego użytkownika."
+msgstr "Nazwa użytkownika VCS nie pasuje do żadnego użytkownika w YouTrack. Aby powiazać przyszłe commity, dodaj nazwę użytkownika VCS do konta Hub tego użytkownika."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The VCS user name matches more than one user in YouTrack. To link future commits, remove the duplicate VCS user names from one or more Hub accounts or merge the duplicates into a single user account."
@@ -1239,7 +1239,7 @@ msgstr "Nazwa użytkownika VCS pasuje do więcej niż jednego użytkownika w You
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "There was an error retrieving information about the change's author from TeamCity. The most probable reason is that TeamCity user that integration runs on behalf of does not have the required permissions."
-msgstr "Wystąpił błąd podczas pobierania informacji o autorze zmiany z TeamCity. Najbardziej prawdopodobnym powodem jest to, że użytkownik TeamCity, w którego imieniu uruchamiana jest integracja, nie ma wymaganych uprawnień."
+msgstr "Podczas pobierania informacji o autorze zmiany z TeamCity wystąpił błąd. Najprawdopodobniejszym powodem jest to, że użytkownik TeamCity, w którego imieniu uruchamiana jest integracja, nie ma wymaganych uprawnień."
 
 #: src/components/confirmation/article-confirmations.ts
 msgid "This action deletes all drafts, including unpublished sub-articles"
@@ -1247,11 +1247,11 @@ msgstr "Ta akcja usuwa wszystkie wersje robocze, w tym nieopublikowane artykuły
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Thread muted"
-msgstr ""
+msgstr "Wyciszono wątek"
 
 #: src/views/inbox-threads/inbox-threads-actions.ts
 msgid "Thread unmuted"
-msgstr ""
+msgstr "Wyłączono wyciszenie wątku"
 
 #: src/views/issues/issues-actions.ts
 #: src/views/issues/issues-reducers.ts
@@ -1266,27 +1266,27 @@ msgstr "Tytuł"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Title changed"
-msgstr ""
+msgstr "Zmieniono tytuł"
 
 #: src/views/inbox-threads/inbox-threads.tsx
 msgid "To view an item in context, select an issue, article, or update from the list"
-msgstr ""
+msgstr "Aby wyświetlić element w kontekście, wybierz z listy zgłoszenie, artykuł lub aktualizację"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
-msgstr ""
+msgstr "Aby wyświetlić w bazie wiedzy artykuły dotyczące określonego projektu, oznacz go jako ulubiony"
 
 #: src/components/activity-stream/activity__stream-history.tsx
 msgid "Total votes"
-msgstr "Liczba głosów"
+msgstr "Łączna liczba głosów"
 
 #: src/components/tip/tips/activity-touch-actions.tsx
 msgid "Touch and hold an item to view a list of available actions"
-msgstr ""
+msgstr "Dotknij i przytrzymaj element, aby wyświetlić listę dostępnych akcji"
 
 #: src/components/error-message/error-message.tsx
 msgid "Try Again"
-msgstr ""
+msgstr "Spróbuj ponownie"
 
 #: src/views/issue/activity/activity__add-spent-time.tsx
 msgid "Type"
@@ -1311,7 +1311,7 @@ msgstr "Bez tytułu"
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Update visibility"
-msgstr ""
+msgstr "Aktualizuj widoczność"
 
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
@@ -1328,7 +1328,7 @@ msgstr "Użyj mniejszej liczby parametrów wyszukiwania"
 
 #: src/components/error/error-message-data.ts
 msgid "User account is banned"
-msgstr ""
+msgstr "Konto użytkownika zostało zablokowane"
 
 #: src/views/log-in/log-in.tsx
 msgid "Username or email"
@@ -1348,11 +1348,11 @@ msgstr "Wyświetl komentarz"
 
 #: src/views/issue/issue__details.tsx
 msgid "View comments and other activity"
-msgstr ""
+msgstr "Wyświetl komentarze i inną aktywność"
 
 #: src/components/user/user-card.tsx
 msgid "View reported issues"
-msgstr "Wyświetl zgłoszone problemy"
+msgstr "Wyświetl zgłoszenia"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
@@ -1361,7 +1361,7 @@ msgstr "Widoczność"
 #: src/components/activity-stream/activity__stream.tsx
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Visible to {{presentation}}"
-msgstr ""
+msgstr "Widoczne dla {{presentation}}"
 
 #: src/components/visibility/visibility-strings.ts
 msgid "Visible to article readers"
@@ -1373,7 +1373,7 @@ msgstr "Widoczny dla czytelników zgłoszeń"
 
 #: src/components/error/error-message-data.ts
 msgid "We didn't find any issues in the current search context that match your query"
-msgstr "Nie znaleźliśmy w bieżącym kontekście wyszukiwania żadnych zgłoszeń, pasujących do Twojego zapytania"
+msgstr "W bieżącym kontekście wyszukiwania nie znaleźliśmy żadnych zgłoszeń, które pasowałyby do Twojego zapytania"
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "When integrating TeamCity and YouTrack, the users are matched by their email addresses. TeamCity has not provided any email address of the committer."
@@ -1389,7 +1389,7 @@ msgstr "Hej, nie możesz tego dotykać!"
 
 #: src/components/error/error-message-data.ts
 msgid "Wrap attribute values that contain spaces in braces {like this}."
-msgstr "Zawijaj wartości atrybutów zawierające spacje w nawiasach klamrowych {like this}."
+msgstr "Zawijaj wartości atrybutów, które zawierają spacje w nawiasach klamrowych {like this}."
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
@@ -1402,7 +1402,7 @@ msgstr "Tak"
 
 #: src/views/issue/issue-user-cc.tsx
 msgid "You can only CC a maximum of 5 reporters per ticket"
-msgstr ""
+msgstr "Możesz wysłać kopie DW do maksymalnie 5 reporterów na zgłoszenie pomocy technicznej"
 
 #: src/views/inbox-threads/inbox-threads__list.tsx
 msgid "You don’t have any unread notifications"
@@ -1410,72 +1410,73 @@ msgstr "Nie masz żadnych nieprzeczytanych powiadomień"
 
 #: src/views/inbox/inbox.tsx
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
-msgstr ""
+msgstr "Nie otrzymano jeszcze żadnych powiadomień. Aby skonfigurować preferencje powiadomień dla swojego konta, przejdź do profilu YouTrack w aplikacji internetowej."
 
 #: src/views/log-in/log-in.tsx
 msgid "You need a YouTrack account to use the app.\n"
-msgstr ""
+msgstr "Aby korzystać z aplikacji, musisz mieć konto YouTrack.\n"
 
 #: src/components/error/error-message-data.ts
 msgid "Your account has insufficient permission to perform this operation."
-msgstr ""
+msgstr "Twoje konto nie ma wystarczających uprawnień do wykonania tej operacji."
 
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
-msgstr ""
+msgstr "Na urządzeniu mobilnym zaczyna brakować dostępnego miejsca. Niektóre funkcje aplikacji mogą być niedostępne."
 
 #: src/components/error/error-message-data.ts
 msgid "Your YouTrack account requires that you provide a second factor of authentication to log in. This option is only available when you log in with a mobile browser. The mobile browser will also let you sign in using a third-party account (if available).\n\n"
 "To log in on this screen, enter your username and a one-time application password."
-msgstr ""
+msgstr "Twoje konto YouTrack wymaga podania drugiego składnika uwierzytelniania w celu zalogowania się. Ta opcja jest dostępna tylko po zalogowaniu się za pomocą przeglądarki mobilnej. Przeglądarka mobilna umożliwia również zalogowanie się przy użyciu konta zewnętrznego (jeśli jest dostępne).\n\n"
+"Aby zalogować się na tym ekranie, wprowadź swoją nazwę użytkownika i jednorazowe hasło aplikacji."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not find a user that matches the user account in Bitbucket."
-msgstr ""
+msgstr "YouTrack nie znalazł użytkownika pasującego do konta użytkownika w Bitbucket."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not find a user that matches the user account in GitHub."
-msgstr ""
+msgstr "YouTrack nie znalazł użytkownika, który pasuje do konta użytkownika w GitHub."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not find a user that matches the user account in GitLab."
-msgstr ""
+msgstr "YouTrack nie znalazł użytkownika pasującego do konta użytkownika w GitLab."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive an email address for the commit author from Bitbucket."
-msgstr "Usługa YouTrack nie otrzymała z Bitbucket adresu e-mail autora commitu."
+msgstr "YouTrack nie otrzymał adresu e-mail autora commitu z Bitbucket."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive an email address for the commit author from GitHub."
-msgstr ""
+msgstr "YouTrack nie otrzymał adresu e-mail autora commitu z GitHub."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive an email address for the commit author from GitLab."
-msgstr ""
+msgstr "YouTrack nie otrzymał adresu e-mail autora commitu z GitLab."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive user data for this commit author from Bitbucket."
-msgstr ""
+msgstr "YouTrack nie otrzymał danych użytkownika tego autora commitu z Bitbucket."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive user data for this commit author from GitHub."
-msgstr ""
+msgstr "YouTrack nie otrzymał danych użytkownika tego autora commitu z GitHub."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive user data for this commit author from GitLab."
-msgstr ""
+msgstr "YouTrack nie otrzymał danych użytkownika tego autora commitu z GitLab."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack found multiple users with email addresses that match the registered email in Bitbucket."
-msgstr ""
+msgstr "YouTrack znalazł wielu użytkowników z adresami e-mail pasującymi do adresu e-mail zarejestrowanego w Bitbucket."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack found multiple users with email addresses that match the registered email in GitHub."
-msgstr ""
+msgstr "YouTrack znalazł wielu użytkowników z adresami e-mail pasującymi do adresu e-mail zarejestrowanego w GitHub."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack found multiple users with email addresses that match the registered email in GitLab."
-msgstr ""
+msgstr "YouTrack znalazł wielu użytkowników z adresami e-mail pasującymi do adresu e-mail zarejestrowanego w GitLab."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
