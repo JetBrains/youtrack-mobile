@@ -1444,27 +1444,27 @@ msgstr "YouTrack nie znalazł użytkownika pasującego do konta użytkownika w G
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive an email address for the commit author from Bitbucket."
-msgstr "YouTrack nie otrzymał adresu e-mail autora commitu z Bitbucket."
+msgstr "YouTrack nie otrzymał adresu e-mail autora commita z Bitbucket."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive an email address for the commit author from GitHub."
-msgstr "YouTrack nie otrzymał adresu e-mail autora commitu z GitHub."
+msgstr "YouTrack nie otrzymał adresu e-mail autora commita z GitHub."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive an email address for the commit author from GitLab."
-msgstr "YouTrack nie otrzymał adresu e-mail autora commitu z GitLab."
+msgstr "YouTrack nie otrzymał adresu e-mail autora commita z GitLab."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive user data for this commit author from Bitbucket."
-msgstr "YouTrack nie otrzymał danych użytkownika tego autora commitu z Bitbucket."
+msgstr "YouTrack nie otrzymał danych użytkownika tego autora commita z Bitbucket."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive user data for this commit author from GitHub."
-msgstr "YouTrack nie otrzymał danych użytkownika tego autora commitu z GitHub."
+msgstr "YouTrack nie otrzymał danych użytkownika tego autora commita z GitHub."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive user data for this commit author from GitLab."
-msgstr "YouTrack nie otrzymał danych użytkownika tego autora commitu z GitLab."
+msgstr "YouTrack nie otrzymał danych użytkownika tego autora commita z GitLab."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack found multiple users with email addresses that match the registered email in Bitbucket."

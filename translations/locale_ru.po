@@ -551,7 +551,7 @@ msgstr "Введите время"
 
 #: src/components/search/search-context.ts
 msgid "Everything"
-msgstr ""
+msgstr "Все"
 
 #: src/views/knowledge-base/knowledge-base.tsx
 msgid "Favorites"
