@@ -1,19 +1,14 @@
-import {createSlice, Slice} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction, Slice} from '@reduxjs/toolkit';
 
 import {attachmentTypes} from './create-issue__attachment-actions-and-types';
 import {createCommandDialogReducers} from 'components/command-dialog/command-dialog-reducer';
 import {createIssueNamespace} from './create-issue-action-types';
 import {LOG_OUT} from 'actions/action-types';
 
-import type {
-  Attachment,
-  CustomField,
-  FieldValue,
-  IssueLink,
-} from 'types/CustomFields';
+import type {Attachment, CustomField, FieldValue, IssueLink} from 'types/CustomFields';
+import type {AnyCustomField} from 'components/custom-field/custom-field-helper';
 import type {CommandSuggestionResponse, IssueCreate, IssueFull} from 'types/Issue';
-import {AnyCustomField} from 'components/custom-field/custom-field-helper';
-import {Project} from 'types/Project';
+import type {Project} from 'types/Project';
 
 export type CreateIssueState = {
   drafts: IssueCreate[];
@@ -26,7 +21,6 @@ export type CreateIssueState = {
   commandSuggestions: CommandSuggestionResponse | null | undefined;
   showCommandDialog: boolean;
 };
-
 
 const notSelectedProject: Partial<Project> = {
   id: '',
@@ -52,7 +46,6 @@ const initialState: CreateIssueState = {
   showCommandDialog: false,
 };
 
-
 const slice: Slice = createSlice({
   name: createIssueNamespace,
   initialState,
@@ -65,24 +58,10 @@ const slice: Slice = createSlice({
     },
   },
   reducers: {
-    setIssuePredefinedDraftId: (
-      state: CreateIssueState,
-      action: {
-        payload: {
-          preDefinedDraftId: string;
-        };
-      },
-    ) => {
+    setIssuePredefinedDraftId: (state: CreateIssueState, action: PayloadAction<{preDefinedDraftId: string}>) => {
       state.predefinedDraftId = action.payload.preDefinedDraftId;
     },
-    setIssueDraft: (
-      state: CreateIssueState,
-      action: {
-        payload: {
-          issue: IssueFull;
-        };
-      },
-    ) => {
+    setIssueDraft: (state: CreateIssueState, action: PayloadAction<{issue: IssueFull}>) => {
       state.issue = {...state.issue, ...action.payload.issue};
     },
     resetIssueDraftId: (state: CreateIssueState) => {
@@ -90,31 +69,19 @@ const slice: Slice = createSlice({
     },
     setUserDrafts: (
       state: CreateIssueState,
-      action: {
-        payload: {
-          drafts: IssueCreate[];
-        };
-      },
+      action: PayloadAction<{drafts: IssueCreate[];}>
     ) => {
       state.drafts = action.payload.drafts;
     },
     setIssueProject: (
       state: CreateIssueState,
-      action: {
-        payload: {
-          project: Project;
-        };
-      },
+      action: PayloadAction<{project: Project;}>
     ) => {
       state.issue = {...state.issue, project: action.payload.project};
     },
     setDraftProjectId: (
       state: CreateIssueState,
-      action: {
-        payload: {
-          projectId: string;
-        };
-      },
+      action: PayloadAction<{projectId: string;}>
     ) => {
       state.issue = {
         ...state.issue,
@@ -126,22 +93,11 @@ const slice: Slice = createSlice({
     },
     setIssueSummary: (
       state: CreateIssueState,
-      action: {
-        payload: {
-          summary: string;
-        };
-      },
+      action: PayloadAction<{summary: string;}>
     ) => {
       state.issue = {...state.issue, summary: action.payload.summary};
     },
-    setIssueDescription: (
-      state: CreateIssueState,
-      action: {
-        payload: {
-          description: string;
-        };
-      },
-    ) => {
+    setIssueDescription: (state: CreateIssueState, action: PayloadAction<{description: string}>) => {
       state.issue = {...state.issue, description: action.payload.description};
     },
     startIssueCreation: (state: CreateIssueState) => {
@@ -153,29 +109,18 @@ const slice: Slice = createSlice({
     resetCreation: () => initialState,
     setIssueFieldValue: (
       state: CreateIssueState,
-      action: {
-        payload: {
-          field: CustomField;
-          value: FieldValue;
-        };
-      },
+      action: PayloadAction<{field: CustomField; value: FieldValue;}>
     ) => {
       state.issue = {
         ...state.issue,
         fields: [...state.issue.fields].map((it: AnyCustomField) =>
-          it === action.payload.field
-            ? {...it, value: action.payload.value}
-            : it,
+          it === action.payload.field ? {...it, value: action.payload.value} : it
         ),
       };
     },
     setIssueLinks: (
       state: CreateIssueState,
-      action: {
-        payload: {
-          links: IssueLink[];
-        };
-      },
+      action: PayloadAction<{links: IssueLink[];}>
     ) => {
       state.issue = {...state.issue, links: action.payload.links};
     },
@@ -190,7 +135,7 @@ function createAttachmentReducers() {
       state: CreateIssueState,
       action: {
         attachingImage: Attachment;
-      },
+      }
     ): CreateIssueState {
       const {attachingImage} = action;
       return {
@@ -207,16 +152,14 @@ function createAttachmentReducers() {
       state: CreateIssueState,
       action: {
         attachingImage: Record<string, any>;
-      },
+      }
     ): CreateIssueState {
       const {attachingImage} = action;
       return {
         ...state,
         issue: {
           ...state.issue,
-          attachments: state.issue.attachments.filter(
-            attachment => attachment !== attachingImage,
-          ),
+          attachments: state.issue.attachments.filter(attachment => attachment !== attachingImage),
         },
         attachingImage: null,
       };
@@ -226,22 +169,18 @@ function createAttachmentReducers() {
       state: CreateIssueState,
       action: {
         attachmentId: string;
-      },
+      }
     ): CreateIssueState {
       return {
         ...state,
         issue: {
           ...state.issue,
-          attachments: state.issue.attachments.filter(
-            attach => attach.id !== action.attachmentId,
-          ),
+          attachments: state.issue.attachments.filter(attach => attach.id !== action.attachmentId),
         },
       };
     },
 
-    [attachmentTypes.ATTACH_STOP_ADDING](
-      state: CreateIssueState,
-    ): CreateIssueState {
+    [attachmentTypes.ATTACH_STOP_ADDING](state: CreateIssueState): CreateIssueState {
       return {...state, attachingImage: null};
     },
 
@@ -249,7 +188,7 @@ function createAttachmentReducers() {
       state: CreateIssueState,
       action: {
         isAttachFileDialogVisible: boolean;
-      },
+      }
     ): CreateIssueState {
       return {
         ...state,
@@ -261,7 +200,7 @@ function createAttachmentReducers() {
       state: CreateIssueState,
       action: {
         attachments: Attachment[];
-      },
+      }
     ): CreateIssueState {
       return {
         ...state,

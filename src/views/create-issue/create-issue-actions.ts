@@ -9,63 +9,42 @@ import {actions} from './create-issue-reducers';
 import {ANALYTICS_ISSUE_CREATE_PAGE} from 'components/analytics/analytics-ids';
 import {attachmentActions} from './create-issue__attachment-actions-and-types';
 import {commandDialogTypes, ISSUE_CREATED} from './create-issue-action-types';
-import {
-  CUSTOM_ERROR_MESSAGE,
-  DEFAULT_ERROR_MESSAGE,
-} from 'components/error/error-messages';
+import {CUSTOM_ERROR_MESSAGE, DEFAULT_ERROR_MESSAGE} from 'components/error/error-messages';
 import {getStorageState, flushStoragePart} from 'components/storage/storage';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {notifyError} from 'components/notification/notification';
 import {resolveError} from 'components/error/error-resolver';
 import {showActions} from 'components/action-sheet/action-sheet';
+import {until} from 'util/util';
 
 import type Api from 'components/api/api';
 import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
-import type {AppState} from 'reducers';
-import type {
-  AnyIssue,
-  CommandSuggestionResponse,
-  IssueCreate,
-  IssueOnList,
-} from 'types/Issue';
-import type {CreateIssueState} from './create-issue-reducers';
-import type {
-  CustomField,
-  FieldValue,
-  Attachment,
-  CustomFieldText,
-  IssueLink,
-} from 'types/CustomFields';
+import type {AnyIssue, CommandSuggestionResponse, IssueCreate, IssueOnList} from 'types/Issue';
+import type {CustomError} from 'types/Error';
+import type {CustomField, FieldValue, Attachment, CustomFieldText, IssueLink} from 'types/CustomFields';
+import type {Folder} from 'types/User';
 import type {NormalizedAttachment} from 'types/Attachment';
+import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 import type {StorageState} from 'components/storage/storage';
 import type {Visibility} from 'types/Visibility';
-import {CustomError} from 'types/Error';
-import {Folder} from 'types/User';
-import {until} from 'util/util';
-
-type ApiGetter = () => Api;
 
 export const CATEGORY_NAME = 'Create issue view';
 
-export function setIssueSummary(summary: string): CreateIssueState {
-  return actions.setIssueSummary({
-    summary,
-  });
+export function setIssueSummary(summary: string) {
+  return actions.setIssueSummary({summary});
 }
 
-export function setIssueDescription(description: string): CreateIssueState {
-  return actions.setIssueDescription({
-    description,
-  });
+export function setIssueDescription(description: string) {
+  return actions.setIssueDescription({description});
 }
 
 export function propagateCreatedIssue(
   issue: IssueCreate,
-  preDefinedDraftId: string | null | undefined,
+  preDefinedDraftId?: string | null
 ): {
   issue: IssueCreate;
-  preDefinedDraftId: string | null | undefined;
+  preDefinedDraftId?: string | null;
   type: string;
 } {
   return {
@@ -93,24 +72,16 @@ async function storeIssueDraftId(draftId: string): Promise<StorageState> {
   });
 }
 
-export function storeDraftAndGoBack(): (
-  dispatch: (arg0: any) => any,
-) => Promise<void> {
-  return async (dispatch: (arg0: any) => any) => {
+export function storeDraftAndGoBack(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     await dispatch(updateIssueDraft());
     //Hack: reset state after timeout to let router close the view without freezes
     setTimeout(() => dispatch(actions.resetCreation()), 500);
   };
 }
 
-export function loadStoredProject(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    ) => {
+export function loadStoredProject(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     let projectId: string | null | undefined = getStorageState().projectId;
 
     if (!projectId) {
@@ -122,38 +93,20 @@ export function loadStoredProject(): (
 
     if (projectId) {
       log.info(`Stored project loaded, id=${projectId}`);
-      dispatch(
-        actions.setDraftProjectId({
-          projectId,
-        }),
-      );
+      dispatch(actions.setDraftProjectId({projectId}));
       await dispatch(updateIssueDraft());
     }
   };
 }
 
-export function loadIssueFromDraft(
-  draftId: string,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+export function loadIssueFromDraft(draftId: string): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const api: Api = getApi();
 
     try {
       const draftIssue = await api.issue.loadIssueDraft(draftId);
       log.info(`Issue draft loaded, "${draftIssue.id || ''}"`);
-      dispatch(
-        actions.setIssueDraft({
-          issue: draftIssue,
-        }),
-      );
+      dispatch(actions.setIssueDraft({issue: draftIssue}));
     } catch (err) {
       log.info('Cannot load issue draft, cleaning up');
       clearIssueDraftStorage();
@@ -163,18 +116,8 @@ export function loadIssueFromDraft(
   };
 }
 
-export function applyCommand(
-  command: string,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+export function applyCommand(command: string): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const draftId = getState().creation.issue.id;
     dispatch({
       type: commandDialogTypes.START_APPLYING_COMMAND,
@@ -193,19 +136,8 @@ export function applyCommand(
   };
 }
 
-export function updateIssueDraft(
-  ignoreFields: boolean = false,
-  draftData?: Record<string, any>,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Record<string, any>): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const api: Api = getApi();
     const {issue} = getState().creation;
 
@@ -230,27 +162,18 @@ export function updateIssueDraft(
       }
 
       log.info('Issue draft updated', draftIssue.id);
-      dispatch(
-        actions.setIssueDraft({
-          issue: updatedDraftIssue,
-        }),
-      );
+      dispatch(actions.setIssueDraft({issue: updatedDraftIssue}));
 
       if (!getState().creation.predefinedDraftId) {
         await storeIssueDraftId(updatedDraftIssue.id);
       }
     } catch (err) {
-      const error =
-        (await resolveError(err as CustomError)) || new Error(DEFAULT_ERROR_MESSAGE);
+      const error = (await resolveError(err as CustomError)) || new Error(DEFAULT_ERROR_MESSAGE);
       const {error_description} = error;
 
       if (
-        (error_description &&
-          error_description.indexOf(CUSTOM_ERROR_MESSAGE.NO_ENTITY_FOUND) !==
-          -1) ||
-        (error &&
-          (error.error === 'bad_request' ||
-            error.error === CUSTOM_ERROR_MESSAGE.BAD_REQUEST))
+        (error_description && error_description.indexOf(CUSTOM_ERROR_MESSAGE.NO_ENTITY_FOUND) !== -1) ||
+        (error && (error.error === 'bad_request' || error.error === CUSTOM_ERROR_MESSAGE.BAD_REQUEST))
       ) {
         flushStoragePart({
           projectId: null,
@@ -263,16 +186,10 @@ export function updateIssueDraft(
   };
 }
 
-export function initializeWithDraftOrProject(
-  preDefinedDraftId: string | null,
-): (dispatch: (arg0: any) => any) => Promise<void> {
-  return async (dispatch: (arg0: any) => any) => {
+export function initializeWithDraftOrProject(preDefinedDraftId: string | null): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     if (preDefinedDraftId) {
-      dispatch(
-        actions.setIssuePredefinedDraftId({
-          preDefinedDraftId,
-        }),
-      );
+      dispatch(actions.setIssuePredefinedDraftId({preDefinedDraftId}));
     }
 
     const draftId = preDefinedDraftId || getStorageState().draftId;
@@ -280,11 +197,7 @@ export function initializeWithDraftOrProject(
     if (draftId) {
       log.info(`Initializing with draft ${draftId}`);
       await dispatch(loadIssueFromDraft(draftId));
-      dispatch(
-        actions.setIssueLinks({
-          links: await dispatch(loadIssueLinksTitle()),
-        }),
-      );
+      dispatch(actions.setIssueLinks({links: await dispatch(loadIssueLinksTitle())}));
       dispatch(initAndSetIssueDrafts());
     } else {
       log.info('Draft not found, initializing new draft');
@@ -293,59 +206,31 @@ export function initializeWithDraftOrProject(
   };
 }
 
-export function initAndSetIssueDrafts(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-  ) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    const [error, drafts] = await until(
-      getApi().issue.getUserIssueDrafts()
-    );
+export function initAndSetIssueDrafts(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    const [error, drafts] = await until(getApi().issue.getUserIssueDrafts());
     if (!error && drafts) {
-      dispatch(actions.setUserDrafts({
-        drafts: drafts.filter((it: AnyIssue) => it.id !== getState().creation.issue.id),
-      }));
+      dispatch(
+        actions.setUserDrafts({
+          drafts: drafts.filter((it: AnyIssue) => it.id !== getState().creation.issue.id),
+        })
+      );
     }
   };
 }
 
-export function deleteAllDrafts(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-  ) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    const [error] = await until(
-      getApi().issue.deleteAllIssueDraftsExcept(getState().creation.issue.id)
-    );
+export function deleteAllDrafts(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    const [error] = await until(getApi().issue.deleteAllIssueDraftsExcept(getState().creation.issue.id));
     if (!error) {
       dispatch(initAndSetIssueDrafts());
     }
   };
 }
 
-export function deleteDraft(draftId: string): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-  ) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    const [error] = await until(
-      getApi().issue.deleteDraft(draftId)
-    );
+export function deleteDraft(draftId: string): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    const [error] = await until(getApi().issue.deleteDraft(draftId));
     if (!error) {
       await dispatch(initAndSetIssueDrafts());
     }
@@ -354,17 +239,9 @@ export function deleteDraft(draftId: string): (
 
 export function createIssue(
   onHide: () => any,
-  isMatchesQuery: (issueIdReadable: string) => boolean = () => true,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+  isMatchesQuery: (issueIdReadable: string) => boolean = () => true
+): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const api: Api = getApi();
     dispatch(actions.startIssueCreation());
 
@@ -376,15 +253,8 @@ export function createIssue(
       const isMatches: boolean = await isMatchesQuery(created.idReadable);
 
       if (isMatches) {
-        const filledIssue: AnyIssue = ApiHelper.fillIssuesFieldHash([
-          created,
-        ])[0];
-        dispatch(
-          propagateCreatedIssue(
-            filledIssue,
-            getState().creation.predefinedDraftId,
-          ),
-        );
+        const filledIssue: AnyIssue = ApiHelper.fillIssuesFieldHash([created])[0];
+        dispatch(propagateCreatedIssue(filledIssue, getState().creation.predefinedDraftId));
       }
 
       dispatch(actions.resetCreation());
@@ -399,45 +269,19 @@ export function createIssue(
   };
 }
 
-export function updateProject(
-  project: Record<string, any>,
-): (dispatch: (arg0: any) => any, getState: () => any) => Promise<void> {
-  return async (dispatch: (arg0: any) => any, getState: () => AppState) => {
-    dispatch(
-      actions.setIssueProject({
-        project,
-      }),
-    );
+export function updateProject(project: Record<string, any>): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
+    dispatch(actions.setIssueProject({project}));
     log.info('Project has been updated');
     usage.trackEvent(CATEGORY_NAME, 'Change project');
-    dispatch(
-      updateIssueDraft(false, {
-        fields: [],
-      }),
-    );
+    dispatch(updateIssueDraft(false, {fields: []}));
     storeProjectId(project.id);
   };
 }
 
-export function updateFieldValue(
-  field: CustomField | CustomFieldText,
-  value: Partial<FieldValue>,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
-    dispatch(
-      actions.setIssueFieldValue({
-        field,
-        value,
-      }),
-    );
+export function updateFieldValue(field: CustomField | CustomFieldText, value: Partial<FieldValue>): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    dispatch(actions.setIssueFieldValue({field, value}));
     usage.trackEvent(CATEGORY_NAME, 'Change field value');
     log.info('Value of draft field has been changed successfully', {
       field,
@@ -458,106 +302,62 @@ export function updateFieldValue(
   };
 }
 
-export function uploadIssueAttach(
-  files: NormalizedAttachment[],
-): (dispatch: (arg0: any) => any, getState: () => any) => Promise<void> {
-  return async (dispatch: (arg0: any) => any, getState: () => AppState) => {
+export function uploadIssueAttach(files: NormalizedAttachment[]): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const draft: IssueCreate = getState().creation.issue;
     await dispatch(attachmentActions.doUploadFile(false, files, draft));
   };
 }
 
-export function cancelAddAttach(
-  attach: Attachment,
-): (dispatch: (arg0: any) => any) => Promise<void> {
-  return async (dispatch: (arg0: any) => any) => {
+export function cancelAddAttach(attach: Attachment): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     await dispatch(attachmentActions.cancelImageAttaching(attach));
   };
 }
 
-export function loadAttachments(): (
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-) => Promise<void> {
-  return async (dispatch: (arg0: any) => any, getState: () => AppState) => {
+export function loadAttachments(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const draftId = getState().creation.issue.id;
     dispatch(attachmentActions.loadIssueAttachments(draftId));
   };
 }
 
-export function showAddAttachDialog(): (
-  dispatch: (arg0: any) => any,
-) => Promise<void> {
-  return async (dispatch: (arg0: any) => any) => {
+export function showAddAttachDialog(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     dispatch(attachmentActions.toggleAttachFileDialog(true));
   };
 }
 
-export function hideAddAttachDialog(): (
-  dispatch: (arg0: any) => any,
-) => Promise<void> {
-  return async (dispatch: (arg0: any) => any) => {
+export function hideAddAttachDialog(): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     dispatch(attachmentActions.toggleAttachFileDialog(false));
   };
 }
 
-export function removeAttachment(
-  attach: Attachment,
-): (dispatch: (arg0: any) => any, getState: () => any) => Promise<void> {
-  return async (dispatch: (arg0: any) => any, getState: () => AppState) => {
+export function removeAttachment(attach: Attachment): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const draftId = getState().creation.issue.id;
     dispatch(attachmentActions.removeAttachment(attach, draftId));
   };
 }
 
-export function updateVisibility(
-  visibility: Visibility,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => any,
-  getApi: ApiGetter,
-) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+export function updateVisibility(visibility: Visibility): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const draftIssue: IssueCreate = getState().creation.issue;
     const draftIssueCopy: IssueCreate = {...draftIssue};
 
     try {
-      const draftWithVisibility: Visibility = await getApi().issue.updateVisibility(
-        draftIssue.id,
-        visibility,
-      );
-      dispatch(
-        actions.setIssueDraft({
-          issue: draftWithVisibility,
-        }),
-      );
+      const draftWithVisibility: Visibility = await getApi().issue.updateVisibility(draftIssue.id, visibility);
+      dispatch(actions.setIssueDraft({issue: draftWithVisibility}));
     } catch (err) {
-      dispatch(
-        actions.setIssueDraft({
-          issue: draftIssueCopy,
-        }),
-      );
+      dispatch(actions.setIssueDraft({issue: draftIssueCopy}));
       notifyError(err as CustomError);
     }
   };
 }
 
-export function showContextActions(
-  actionSheet: typeof ActionSheetProvider,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+export function showContextActions(actionSheet: typeof ActionSheetProvider): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch) => {
     const selectedAction: ActionSheetOption = await showActions(
       [
         {
@@ -571,7 +371,7 @@ export function showContextActions(
           title: i18n('Cancel'),
         },
       ],
-      actionSheet,
+      actionSheet
     );
 
     if (selectedAction && selectedAction.execute) {
@@ -580,28 +380,17 @@ export function showContextActions(
   };
 }
 
-export function getCommandSuggestions(
-  command: string,
-  caret: number,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+export function getCommandSuggestions(command: string, caret: number): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const issueId = getState().creation.issue.id;
     await commandDialogHelper
       .loadIssueCommandSuggestions([issueId], command, caret)
       .then((suggestions: CommandSuggestionResponse | null) => {
         suggestions &&
-        dispatch({
-          type: commandDialogTypes.RECEIVE_COMMAND_SUGGESTIONS,
-          suggestions,
-        });
+          dispatch({
+            type: commandDialogTypes.RECEIVE_COMMAND_SUGGESTIONS,
+            suggestions,
+          });
       })
       .catch(() => {
         //
@@ -609,22 +398,10 @@ export function getCommandSuggestions(
   };
 }
 
-export function toggleCommandDialog(
-  isVisible: boolean = false,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+export function toggleCommandDialog(isVisible: boolean = false): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     dispatch({
-      type: isVisible
-        ? commandDialogTypes.OPEN_COMMAND_DIALOG
-        : commandDialogTypes.CLOSE_COMMAND_DIALOG,
+      type: isVisible ? commandDialogTypes.OPEN_COMMAND_DIALOG : commandDialogTypes.CLOSE_COMMAND_DIALOG,
     });
   };
 }
@@ -632,65 +409,27 @@ export function toggleCommandDialog(
 export function loadIssuesXShort(
   linkTypeName: string,
   query: string = '',
-  page?: number,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<IssueOnList> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+  page?: number
+): ReduxAction<Promise<IssueOnList>> {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const issue: IssueCreate = getState().creation.issue;
     const searchQuery: string = encodeURIComponent(
-      [
-        `(project:${issue.project.shortName})`,
-        query.length > 0 ? `(${query})` : '',
-      ]
-        .filter(Boolean)
-        .join(' and '),
+      [`(project:${issue.project.shortName})`, query.length > 0 ? `(${query})` : ''].filter(Boolean).join(' and ')
     );
-    return await issueCommonLinksActions(issue).loadIssuesXShort(
-      searchQuery,
-      page,
-    );
+    return await issueCommonLinksActions(issue).loadIssuesXShort(searchQuery, page);
   };
 }
 
-export function onLinkIssue(
-  linkedIssueIdReadable: string,
-  linkTypeName: string,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<boolean> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+export function onLinkIssue(linkedIssueIdReadable: string, linkTypeName: string): ReduxAction<Promise<boolean>> {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const issue: IssueCreate = getState().creation.issue;
     usage.trackEvent(ANALYTICS_ISSUE_CREATE_PAGE, 'Link issue');
-    return await issueCommonLinksActions(issue).onLinkIssue(
-      linkedIssueIdReadable,
-      linkTypeName,
-    );
+    return await issueCommonLinksActions(issue).onLinkIssue(linkedIssueIdReadable, linkTypeName);
   };
 }
 
-export function loadLinkedIssues(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<Array<IssueLink>> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+export function loadLinkedIssues(): ReduxAction<Promise<Array<IssueLink>>> {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const issue: IssueCreate = getState().creation.issue;
     return await issueCommonLinksActions(issue).loadLinkedIssues();
   };
@@ -698,58 +437,25 @@ export function loadLinkedIssues(): (
 
 export function onUnlinkIssue(
   linkedIssue: IssueOnList,
-  linkTypeId: string,
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<boolean> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+  linkTypeId: string
+): ReduxAction<Promise<boolean>> {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const issue: IssueCreate = getState().creation.issue;
     usage.trackEvent(ANALYTICS_ISSUE_CREATE_PAGE, 'Remove linked issue');
-    return issueCommonLinksActions(issue).onUnlinkIssue(
-      linkedIssue,
-      linkTypeId,
-    );
+    return issueCommonLinksActions(issue).onUnlinkIssue(linkedIssue, linkTypeId);
   };
 }
 
-export function loadIssueLinksTitle(): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<Array<IssueLink>> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+export function loadIssueLinksTitle(): ReduxAction<Promise<Array<IssueLink>>> {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const issue: IssueCreate = getState().creation.issue;
     return await issueCommonLinksActions(issue).loadIssueLinksTitle();
   };
 }
 
-export function getIssueLinksTitle(
-  links?: IssueLink[],
-): (
-  dispatch: (arg0: any) => any,
-  getState: () => AppState,
-  getApi: ApiGetter,
-) => Promise<void> {
-  return async (
-    dispatch: (arg0: any) => any,
-    getState: () => AppState,
-    getApi: ApiGetter,
-  ) => {
+export function getIssueLinksTitle(links?: IssueLink[]): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const issue: IssueCreate = getState().creation.issue;
-    dispatch(
-      actions.setIssueLinks({
-        links: await issueCommonLinksActions(issue).getIssueLinksTitle(links),
-      }),
-    );
+    dispatch(actions.setIssueLinks({links: await issueCommonLinksActions(issue).getIssueLinksTitle(links)}));
   };
 }
