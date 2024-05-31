@@ -55,6 +55,7 @@ interface Props {
   accessible?: boolean;
   accessibilityLabel?: string;
   modal?: boolean;
+  helpDeskProjectsOnly: boolean;
 }
 
 interface SelectState extends ISelectState {
@@ -156,7 +157,7 @@ export default function CustomFieldsPanel(props: Props) {
       return closeEditor();
     }
 
-    const {hasPermission} = props;
+    const {hasPermission, helpDeskProjectsOnly} = props;
     closeEditor();
     setEditingProject(true);
     setSelectState({
@@ -165,6 +166,9 @@ export default function CustomFieldsPanel(props: Props) {
       dataSource: async query => {
         const projects = await api.getProjects(query);
         return projects
+          .filter(project =>
+            helpDeskProjectsOnly ? project.plugins?.helpDeskSettings?.enabled : !project.plugins?.helpDeskSettings?.enabled
+          )
           .filter(project => !project.archived && !project.template)
           .filter(project => hasPermission?.canCreateIssueToProject?.(project));
       },

@@ -465,6 +465,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         onUpdateProject={this.onUpdateProject}
         uiTheme={this.uiTheme!}
         modal={this.props.modal}
+        helpDeskProjectsOnly={!!i.project.plugins?.helpDeskSettings?.enabled}
       />
     );
   };

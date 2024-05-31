@@ -178,6 +178,7 @@ class CreateIssue extends PureComponent<Props, State> {
         onUpdate={this.onFieldUpdate}
         onUpdateProject={this.onUpdateProject}
         uiTheme={this.getUITheme()}
+        helpDeskProjectsOnly={false}
       />
     );
   }
