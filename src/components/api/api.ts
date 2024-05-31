@@ -120,6 +120,7 @@ class API extends BaseAPI {
   async getCustomFieldValues(
     bundleId: string,
     fieldValueType: string,
+    query: string = '',
   ): Promise<Array<Record<string, any>>> {
     if (fieldValueType === 'group') {
       return this.userGroup.getAllUserGroups();
@@ -132,6 +133,7 @@ class API extends BaseAPI {
     const queryString = API.createFieldsQuery(issueFields.bundleValues, {
       $includeArchived: false,
       sort: true,
+      query,
     });
     return await this.makeAuthorizedRequest(
       `${this.youtTrackFieldBundleUrl}/${fieldValueType}/${bundleId}/values?${queryString}`,

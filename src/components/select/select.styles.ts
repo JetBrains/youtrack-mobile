@@ -120,8 +120,7 @@ export default EStyleSheet.create({
     justifyContent: 'space-between',
   },
   colorField: {
-    minWidth: COLOR_FIELD_SIZE,
-    marginRight: UNIT * 1.5,
+    marginRight: UNIT,
   },
   applyButton: {
     minWidth: minButtonWidth,

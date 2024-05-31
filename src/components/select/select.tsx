@@ -370,6 +370,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
               onPress={this.onCancel}
             >
               <IconClose
+                size={23}
                 style={styles.cancelButton}
                 color={styles.cancelButton.color}
               />
