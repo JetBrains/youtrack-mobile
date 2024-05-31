@@ -40,6 +40,7 @@ const HELPDESK_PROJECT_FIELDS = toField([
   'shortName',
   'archived',
   'ringId',
+  'restricted',
   {
     plugins: {
       helpDeskSettings: [

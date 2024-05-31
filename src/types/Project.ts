@@ -53,6 +53,7 @@ export interface ProjectHelpdesk extends ProjectEntity {
   plugins: {
     helpDeskSettings: ProjectHelpDeskSettings;
   };
+  restricted: boolean;
 }
 
 export interface ProjectTeam extends EntityBase {

@@ -73,12 +73,14 @@ const setSelect = (b: FeedbackBlock, onSelect: (s: FeedbackFormBlockCustomField)
 
 const setUserSelect = (
   value: string = '',
-  onSelect: ({reporter, email}: {reporter?: FeedbackFormReporter; email?: string}) => void
+  onSelect: ({reporter, email}: {reporter?: FeedbackFormReporter; email?: string}) => void,
+  project: ProjectHelpdesk,
 ): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const dataSource = async (query: string = '') => {
       const _q = query.trim();
-      const q = encodeURIComponent(`not is:banned and type:Reporter${_q ? ` and ${_q}` : ''}`);
+      const restriction = project.restricted ? `and access(project: {${project.name}}, with: {Create Issue})` : '';
+      const q = encodeURIComponent(`not is:banned and type:Reporter${_q ? ` and ${_q}` : ''} ${restriction}`);
       const [error, users] = await until<FeedbackFormReporter[]>(
         getApi().user.getHubUsers(q, 'id,name,login,guest,profile(avatar(url),email(email)),userType(id)')
       );
@@ -91,7 +93,7 @@ const setUserSelect = (
         titleRenderer: (user: FeedbackFormReporter) => HelpDeskFeedbackReporterOption({user}),
         dataSource,
         selectedItems: [],
-        customInput: value,
+        customInput: project.restricted ? undefined : value,
         customInputPlaceholder: i18n('Email address'),
         customInputValidator: emailRegexp,
         onSelect: (v: FeedbackFormReporter | string) => {

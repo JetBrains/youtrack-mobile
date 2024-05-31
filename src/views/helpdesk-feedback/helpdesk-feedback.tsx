@@ -220,7 +220,8 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                                   email,
                                   value: email || reporter?.name || '',
                                 }));
-                              }
+                              },
+                              project,
                             )
                           : actions.setSelect(b, (value: FeedbackFormBlockCustomField) => {
                               const data = (i: FeedbackBlock) => ({
