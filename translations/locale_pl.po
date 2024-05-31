@@ -125,7 +125,7 @@ msgstr "Dodaj reakcję"
 
 #: src/components/comment/comment-edit.tsx
 msgid "Add spent time"
-msgstr "Dodaj czas spędzony"
+msgstr "Dodaj spędzony czas"
 
 #: src/components/tags/tag-add-panel.tsx
 #: src/views/issue/issue-base-actions-creater.ts
@@ -134,7 +134,7 @@ msgstr "Dodaj tag"
 
 #: src/components/date-picker/date-time-picker.tsx
 msgid "Add time"
-msgstr "Dodaj czas"
+msgstr "Dodaj godzinę"
 
 #: src/views/article/arcticle-actions.ts
 msgid "Add to favorites"
@@ -780,7 +780,7 @@ msgstr "Średnie"
 #: src/components/activity-stream/activity__stream-history.tsx
 #: src/views/inbox-threads/inbox-threads__mention.tsx
 msgid "mentioned you"
-msgstr "wspomniał o Tobie"
+msgstr "wspomniał(-a) o tobie"
 
 #: src/views/inbox-threads/inbox-threads-helper.ts
 msgid "Mentions & Reactions"
@@ -1161,7 +1161,7 @@ msgstr "Synchronizuj z systemem operacyjnym"
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tag"
-msgstr[1] "Znacznik"
+msgstr[1] "Tagi"
 msgstr[2] "Tagów"
 msgstr[3] "Tagu"
 
@@ -1231,7 +1231,7 @@ msgstr "Zaktualizowano ustawienia tej tablicy zwinnej. Załaduj ponownie tablic�
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The VCS user name does not match any user in YouTrack. To link future commits, add the VCS user name to the Hub account for this user."
-msgstr "Nazwa użytkownika VCS nie pasuje do żadnego użytkownika w YouTrack. Aby powiazać przyszłe commity, dodaj nazwę użytkownika VCS do konta Hub tego użytkownika."
+msgstr "Nazwa użytkownika VCS nie pasuje do żadnego użytkownika w YouTrack. Aby powiązać przyszłe commity, dodaj nazwę użytkownika VCS do konta Hub tego użytkownika."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "The VCS user name matches more than one user in YouTrack. To link future commits, remove the duplicate VCS user names from one or more Hub accounts or merge the duplicates into a single user account."
@@ -1311,7 +1311,7 @@ msgstr "Bez tytułu"
 #: src/views/article/article__activity.tsx
 #: src/views/issue/activity/issue__activity-stream.tsx
 msgid "Update visibility"
-msgstr "Aktualizuj widoczność"
+msgstr "Zaktualizuj widoczność"
 
 #: src/views/inbox-threads/inbox-threads__item-history.tsx
 #: src/views/inbox-threads/inbox-threads__item-work.tsx
@@ -1352,7 +1352,7 @@ msgstr "Wyświetl komentarze i inną aktywność"
 
 #: src/components/user/user-card.tsx
 msgid "View reported issues"
-msgstr "Wyświetl zgłoszenia"
+msgstr "Wyświetl przesłane zgłoszenia"
 
 #: src/components/activity/activity__history-title.ts
 msgid "Visibility"
@@ -1389,7 +1389,7 @@ msgstr "Hej, nie możesz tego dotykać!"
 
 #: src/components/error/error-message-data.ts
 msgid "Wrap attribute values that contain spaces in braces {like this}."
-msgstr "Zawijaj wartości atrybutów, które zawierają spacje w nawiasach klamrowych {like this}."
+msgstr "Zawijaj wartości atrybutów zawierające spacje w nawiasach klamrowych {like this}."
 
 #: src/components/comment/comment-edit.tsx
 #: src/views/issue/activity/activity__add-spent-time.tsx
@@ -1444,7 +1444,7 @@ msgstr "YouTrack nie znalazł użytkownika pasującego do konta użytkownika w G
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive an email address for the commit author from Bitbucket."
-msgstr "YouTrack nie otrzymał adresu e-mail autora commita z Bitbucket."
+msgstr "Usługa YouTrack nie otrzymała z Bitbucket adresu e-mail autora commita."
 
 #: src/components/activity-stream/activity__stream-vcs-helper.ts
 msgid "YouTrack did not receive an email address for the commit author from GitHub."
