@@ -188,6 +188,7 @@ class CreateIssue extends PureComponent<Props, State> {
     return (
       <View style={styles.visibility}>
         <VisibilityControl
+          disabled={!issue.canUpdateVisibility}
           visibility={issue.visibility}
           onSubmit={updateVisibility}
           uiTheme={this.getUITheme()}

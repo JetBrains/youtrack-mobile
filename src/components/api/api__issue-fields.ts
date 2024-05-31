@@ -263,6 +263,7 @@ const ISSUE_DRAFT_FIELDS = toField([
   'id',
   'summary',
   'project(shortName)',
+  'canUpdateVisibility',
 ]);
 const ISSUE_XSHORT_FIELDS: any = toField([
   ISSUE_BASE_FIELDS,
@@ -480,6 +481,7 @@ export default {
     'usesMarkdown',
     'hasEmail',
     'comments(id)',
+    'canUpdateVisibility',
     {
       watchers: 'hasStar',
     },

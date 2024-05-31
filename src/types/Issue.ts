@@ -82,7 +82,7 @@ export type IssueCreate = Omit<
   | 'voters'
   | 'watchers'
   | 'wikifiedDescription'
-> & { project: Partial<Project>; };
+> & { project: Partial<Project>; canUpdateVisibility: boolean };
 export type AnyIssue = IssueOnList | IssueFull | IssueLink | IssueCreate;
 export type TransformedSuggestion = {
   prefix: string;

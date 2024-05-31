@@ -155,7 +155,7 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Reco
     } as unknown as IssueCreate;
 
     try {
-      const updatedDraftIssue: IssueCreate = await api.issue.updateIssueDraft(draftIssue);
+      const updatedDraftIssue = await api.issue.updateIssueDraft(draftIssue);
 
       if (ignoreFields) {
         delete updatedDraftIssue.fields;
