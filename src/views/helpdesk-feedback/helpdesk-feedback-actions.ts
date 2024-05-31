@@ -24,6 +24,7 @@ import type {NormalizedAttachment} from 'types/Attachment';
 
 const loadFeedbackForm = (project: ProjectHelpdesk): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    dispatch(setError(null));
     dispatch(setProject(project));
     const state = getState();
     const [error, form] = await until<FeedbackForm>(

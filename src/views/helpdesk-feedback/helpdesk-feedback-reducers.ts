@@ -46,7 +46,7 @@ const {reducer, actions} = createSlice({
       state.selectProps = action.payload;
     },
 
-    setError(state: HelpDeskFeedbackFormState, action: PayloadAction<CustomError>) {
+    setError(state: HelpDeskFeedbackFormState, action: PayloadAction<CustomError | null>) {
       state.error = action.payload;
     },
 
