@@ -42,7 +42,6 @@ import {HIT_SLOP} from 'components/common-styles';
 import {i18n, i18nPlural} from 'components/i18n/i18n';
 import {
   IconCheck,
-  IconClose,
   IconBack,
   IconMoreOptions,
   IconLink,
@@ -73,7 +72,7 @@ type AdditionalProps = {
   predefinedDraftId: string | null;
   drafts: IssueCreate[];
   updateDraft: (ignoreFields: boolean, tags?: Tag[]) => () => Promise<void>;
-  onHide?: () => void;
+  onHide: () => void;
   isMatchesQuery?: () => boolean;
   isConnected: boolean;
   starId: string;
@@ -386,14 +385,16 @@ class CreateIssue extends PureComponent<Props, State> {
   };
 
   renderDraftsButton() {
-    const {drafts} = this.props;
+    const {drafts, onHide} = this.props;
     return drafts.length > 0 ? (
       <TouchableOpacity
         style={styles.draftsButton}
         hitSlop={HIT_SLOP}
         onPress={async () => {
           await this.props.updateDraft(false);
-          Router.PageModal({children: <IssueDrafts onHide={this.props.onHide}/>});
+          Router.PageModal({children: <IssueDrafts onHide={() => {
+            onHide();
+          }}/>});
         }}
       >
         <Text style={styles.draftsButtonText}>
@@ -426,7 +427,6 @@ class CreateIssue extends PureComponent<Props, State> {
     const isAttaching = attachingImage !== null;
     const isProcessing = processing || isAttaching;
     const canCreateIssue = issue.summary && issue?.project?.id && !isProcessing;
-    const Icon = onHide ? IconClose : IconBack;
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
@@ -450,7 +450,7 @@ class CreateIssue extends PureComponent<Props, State> {
               <Header
                 title={i18n('New Issue')}
                 showShadow={true}
-                leftButton={<Icon color={uiThemeColors.$link}/>}
+                leftButton={<IconBack color={uiThemeColors.$link}/>}
                 onBack={this.onHide}
                 rightButton={rightButton}
                 extraButton={!this.isActionDisabled() ? (

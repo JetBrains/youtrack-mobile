@@ -238,7 +238,7 @@ export function deleteDraft(draftId: string): ReduxAction {
 }
 
 export function createIssue(
-  onHide: () => any,
+  onHide: () => unknown,
   isMatchesQuery: (issueIdReadable: string) => boolean = () => true
 ): ReduxAction {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {

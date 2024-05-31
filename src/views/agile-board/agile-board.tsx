@@ -19,7 +19,6 @@ import Api from 'components/api/api';
 import Auth from 'components/auth/oauth2';
 import BoardHeader from './board-header';
 import BoardScroller from 'components/board-scroller/board-scroller';
-import CreateIssue from '../create-issue/create-issue';
 import ErrorMessage from 'components/error-message/error-message';
 import IconSearchMinus from 'components/icon/assets/search_munus.svg';
 import IconSearchPlus from 'components/icon/assets/search_plus.svg';
@@ -491,19 +490,7 @@ class AgileBoard extends Component<Props, State> {
             ? async (cellColumnId: string, cellId: string) => {
                 const draft: Partial<IssueOnList> | null = await createCardForCell(cellColumnId, cellId);
                 if (draft?.id) {
-                  if (this.state.isSplitView) {
-                    this.toggleModalChildren(
-                      <CreateIssue
-                        isSplitView={this.state.isSplitView}
-                        onHide={this.clearModalChildren}
-                        predefinedDraftId={draft.id}
-                      />
-                    );
-                  } else {
-                    Router.CreateIssue({
-                      predefinedDraftId: draft.id,
-                    });
-                  }
+                  Router.CreateIssue({predefinedDraftId: draft.id, onHide: () => Router.AgileBoard()});
                 }
               }
             : null

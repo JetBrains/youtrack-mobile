@@ -276,7 +276,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
           if (this.props.helpDeskMode) {
             this.props.onOpenHelpDeskProjectsSelect();
           } else {
-            Router.CreateIssue({isMatchesQuery: this.isMatchesQuery});
+            Router.CreateIssue({isMatchesQuery: this.isMatchesQuery, onHide: () => Router.Issues()});
           }
         }}
         disabled={this.props.isInProgress}

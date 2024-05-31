@@ -23,6 +23,7 @@ import HelpDeskReCaptcha from 'views/helpdesk-feedback/helpdesk-feedback-recaptc
 import ModalView from 'components/modal-view/modal-view';
 import Router from 'components/router/router';
 import SelectWithCustomInput from 'components/select/select-with-custom-input';
+import usage from 'components/usage/usage';
 import {absDate} from 'components/date/date';
 import {ANALYTICS_HD_FEEDBACK_PAGE} from 'components/analytics/analytics-ids';
 import {
@@ -39,9 +40,8 @@ import {
 import {getLocalizedName} from 'components/custom-field/custom-field-helper';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
-import {IconBack, IconCheck, IconClose} from 'components/icon/icon';
+import {IconBack, IconCheck} from 'components/icon/icon';
 import {isIOSPlatform} from 'util/util';
-import {isSplitView} from 'components/responsive/responsive-helper';
 import {onToggleAttachDialogVisibility} from './helpdesk-feedback-actions';
 import {ThemeContext} from 'components/theme/theme-context';
 
@@ -52,9 +52,8 @@ import type {NormalizedAttachment} from 'types/Attachment';
 import type {ProjectHelpdesk} from 'types/Project';
 import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme, UIThemeColors} from 'types/Theme';
-import usage from 'components/usage/usage';
 
-const HelpDeskFeedback = ({project, isTablet}: {project: ProjectHelpdesk, isTablet: boolean}) => {
+const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
   const theme: Theme = React.useContext(ThemeContext);
   const uiThemeColors: UIThemeColors = theme.uiTheme.colors;
 
@@ -113,7 +112,7 @@ const HelpDeskFeedback = ({project, isTablet}: {project: ProjectHelpdesk, isTabl
       <Header
         showShadow
         title={form?.title || ''}
-        leftButton={isSplitView() && !isTablet ? <IconClose color={iconColor} /> : <IconBack color={uiThemeColors.$link} />}
+        leftButton={<IconBack color={uiThemeColors.$link} />}
         onBack={() => !inProgress && onBack()}
         extraButton={
           <TouchableOpacity hitSlop={HIT_SLOP} disabled={disabled} onPress={onSubmit}>
