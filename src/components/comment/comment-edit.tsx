@@ -143,9 +143,16 @@ const CommentEdit = (props: Props) => {
       attachments: state.editingComment.attachments,
       visibility: state.editingComment.visibility || props.editingComment.visibility,
       usesMarkdown: true,
+      canUpdateVisibility: !!(state.editingComment.canUpdateVisibility || props.canUpdateCommentVisibility),
       ...data,
     }),
-    [props.editingComment, state.editingComment.attachments, state.editingComment.visibility],
+    [
+      props.canUpdateCommentVisibility,
+      props.editingComment,
+      state.editingComment.attachments,
+      state.editingComment.canUpdateVisibility,
+      state.editingComment.visibility,
+    ]
   );
 
   const onCommentChange = React.useCallback(
@@ -163,7 +170,7 @@ const CommentEdit = (props: Props) => {
       toggleVisibilityControl(false);
       toggleSaving(true);
       const draft = getCurrentComment(state.editingComment);
-      const visibility = draft.canUpdateVisibility === false ? undefined : draft.visibility;
+      const visibility = !draft.canUpdateVisibility ? undefined : draft.visibility;
       const comment = await onCommentChange({
         ...draft,
         visibility,
