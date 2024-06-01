@@ -102,7 +102,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
     onBlockChange(b, (i: FeedbackBlock) => ({value: text}));
   };
 
-  const disabled = inProgress || (form?.useCaptcha && !captchaToken);
+  const disabled = inProgress || (form?.useCaptcha && !captchaToken) || formBlocks.some(b => b.required && !b.value);
   const iconColor = disabled ? uiThemeColors.$disabled : uiThemeColors.$link;
   return (
     <View
@@ -118,7 +118,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
         onBack={() => !inProgress && onBack()}
         extraButton={
           !error && <TouchableOpacity hitSlop={HIT_SLOP} disabled={disabled} onPress={onSubmit}>
-            {inProgress ? <ActivityIndicator color={uiThemeColors.$link} /> : <IconCheck color={iconColor} />}
+            {inProgress ? <ActivityIndicator color={uiThemeColors.$link} /> : <IconCheck size={26} color={iconColor} />}
           </TouchableOpacity>
         }
       />
@@ -238,6 +238,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                               })
                           );
                         }}
+                        required={b.required}
                       />
                     )}
 
