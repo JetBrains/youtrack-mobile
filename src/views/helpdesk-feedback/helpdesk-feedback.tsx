@@ -102,7 +102,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
     onBlockChange(b, (i: FeedbackBlock) => ({value: text}));
   };
 
-  const disabled = inProgress || (form?.useCaptcha && !captchaToken) || formBlocks.some(b => b.required && !b.value);
+  const disabled = inProgress || (form?.useCaptcha && !captchaToken) || formBlocks.some(b => b.type && b.required && !b.value);
   const iconColor = disabled ? uiThemeColors.$disabled : uiThemeColors.$link;
   return (
     <View
