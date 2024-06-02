@@ -1,6 +1,12 @@
 import type {Article} from './Article';
 import {EntityBase} from 'types/Entity';
 
+export enum UserTypeId {
+  AGENT = 'AGENT',
+  STANDARD_USER = 'STANDARD_USER',
+  REPORTER = 'REPORTER'
+}
+
 export interface UserBase extends EntityBase {
   login: string;
   ringId: string;
@@ -8,7 +14,7 @@ export interface UserBase extends EntityBase {
   name: string;
   localizedName: string | null;
   userType: {
-    id: string;
+    id: keyof typeof UserTypeId;
   };
   fullName: string;
 }

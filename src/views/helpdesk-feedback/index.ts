@@ -5,7 +5,7 @@ import {sortByOrdinal} from 'components/search/sorting';
 
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import {FeedbackForm, FeedbackFormBlock, FeedbackFormProject} from 'types/FeedbackForm';
-import {User} from 'types/User';
+import {User, UserTypeId} from 'types/User';
 import {EntityBase} from 'types/Entity';
 
 import {DATE_AND_TIME_FIELD_VALUE_TYPE} from 'components/custom-fields-panel';
@@ -124,7 +124,8 @@ export const createFormBlock = (
   switch (blockType) {
     case FeedbackFormPredefinedBlock.email:
       const isAdmin = issuePermissions.isAgentInProject(project);
-      const isAgent = currentUser.userType.id === 'AGENT' && isAdmin;
+      const userTypeId = currentUser.userType.id;
+      const isAgent = userTypeId === UserTypeId.AGENT && isAdmin;
       const isRestrictedProject = project.restricted;
       if (isAgent) {
         label = (isAdmin && isRestrictedProject) || !isRestrictedProject ? 'Reporter or email address' : 'Reporter';
@@ -133,7 +134,10 @@ export const createFormBlock = (
       }
       return {
         ...defaultBlock,
-        type: currentUser.userType.id !== 'REPORTER' ? formBlockType.email : null,
+        type:
+          userTypeId !== UserTypeId.REPORTER && userTypeId !== UserTypeId.STANDARD_USER
+            ? formBlockType.email
+            : null,
         label,
         name: 'email',
       };
