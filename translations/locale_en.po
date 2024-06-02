@@ -72,7 +72,7 @@ msgstr[1] "{{minutesAbsolute}}m"
 msgid "@Mention in a comment"
 msgstr "@Mention in a comment"
 
-#: src/views/helpdesk-feedback/index.ts:165
+#: src/views/helpdesk-feedback/index.ts:169
 #: src/views/issue/activity/activity__add-spent-time.tsx:383
 #: src/views/issue/activity/activity__add-spent-time.tsx:397
 msgid "1w 1d 1h 1m"
@@ -437,7 +437,7 @@ msgstr "Delete issue {{issueId}}?"
 msgid "Delete permanently"
 msgstr "Delete permanently"
 
-#: src/views/helpdesk-feedback/index.ts:198
+#: src/views/helpdesk-feedback/index.ts:202
 #: src/views/settings/settings__feedback-form.tsx:191
 msgid "Description"
 msgstr "Description"
@@ -502,7 +502,7 @@ msgid "Email"
 msgstr "Email"
 
 #: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts:98
-#: src/views/helpdesk-feedback/index.ts:132
+#: src/views/helpdesk-feedback/index.ts:133
 msgid "Email address"
 msgstr "Email address"
 
@@ -1015,11 +1015,11 @@ msgid "Sending crash report…"
 msgstr "Sending crash report…"
 
 #: src/components/date-picker/date-time-picker.tsx:67
-#: src/views/helpdesk-feedback/index.ts:172
+#: src/views/helpdesk-feedback/index.ts:176
 msgid "Set a date"
 msgstr "Set a date"
 
-#: src/views/helpdesk-feedback/index.ts:169
+#: src/views/helpdesk-feedback/index.ts:173
 msgid "Set date and time"
 msgstr "Set date and time"
 
@@ -1118,7 +1118,7 @@ msgstr "submitted a pull request"
 msgid "Subscriptions"
 msgstr "Subscriptions"
 
-#: src/views/helpdesk-feedback/index.ts:204
+#: src/views/helpdesk-feedback/index.ts:208
 #: src/views/settings/settings__feedback-form.tsx:179
 msgid "Summary"
 msgstr "Summary"
