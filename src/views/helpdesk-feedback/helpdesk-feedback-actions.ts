@@ -103,6 +103,7 @@ const setUserSelect = (
           dispatch(resetSelectProps());
         },
         onCancel: () => dispatch(resetSelectProps()),
+        filterItems: (users: FeedbackFormReporter[]) => users,
       })
     );
   };

@@ -41,6 +41,7 @@ export interface ISelectProps {
   getWrapperComponent?: () => any;
   getWrapperProps?: () => any;
   isSelectionDisabled?: (selected: any[], current: any) => boolean;
+  filterItems?: (items: IItem[]) => IItem[];
 }
 
 export interface ISelectState {
@@ -163,6 +164,9 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
   }
 
   getFilteredItems(items: IItem[] = [], query: string = ''): IItem[] {
+    if (this.props.filterItems) {
+      return this.props.filterItems(items);
+    }
     return items.filter((it: IItem) => this.filterItemByLabel(it, query));
   }
 
