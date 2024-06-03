@@ -229,6 +229,7 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
                                   }));
                                 },
                                 project,
+                                b?.reporter,
                               )
                               : actions.setSelect(b, (value: FeedbackFormBlockCustomField) => {
                                 const data = (i: FeedbackBlock) => ({

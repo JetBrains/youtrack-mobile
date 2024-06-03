@@ -76,6 +76,7 @@ const setUserSelect = (
   value: string = '',
   onSelect: ({reporter, email}: {reporter?: FeedbackFormReporter; email?: string}) => void,
   project: ProjectHelpdesk,
+  reporter?: FeedbackFormReporter,
 ): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     const dataSource = async (query: string = '') => {
@@ -94,15 +95,11 @@ const setUserSelect = (
         titleRenderer: (user: FeedbackFormReporter) => HelpDeskFeedbackReporterOption({user}),
         dataSource,
         selectedItems: [],
-        customInput: project.restricted ? undefined : value,
+        customInput: project.restricted ? undefined : reporter ? '' : value,
         customInputPlaceholder: i18n('Email address'),
         customInputValidator: emailRegexp,
         onSelect: (v: FeedbackFormReporter | string) => {
-          if (typeof v === 'string') {
-            onSelect({email: v});
-          } else {
-            onSelect({reporter: v});
-          }
+          onSelect(typeof v === 'string' ? {email: v} : {reporter: v});
           dispatch(resetSelectProps());
         },
         onCancel: () => dispatch(resetSelectProps()),
