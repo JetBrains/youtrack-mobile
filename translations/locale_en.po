@@ -501,7 +501,7 @@ msgstr "Edit comment"
 msgid "Email"
 msgstr "Email"
 
-#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts:98
+#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts:99
 #: src/views/helpdesk-feedback/index.ts:133
 msgid "Email address"
 msgstr "Email address"
@@ -547,7 +547,7 @@ msgstr "Filter boards by name"
 msgid "Filter existing accounts by name or username"
 msgstr "Filter existing accounts by name or username"
 
-#: src/components/select/select.tsx:349
+#: src/components/select/select.tsx:353
 msgid "Filter items"
 msgstr "Filter items"
 
@@ -692,7 +692,7 @@ msgstr "Link to comment copied"
 msgid "Linked issues"
 msgstr "Linked issues"
 
-#: src/components/select/select.tsx:304
+#: src/components/select/select.tsx:308
 msgid "Loading values…"
 msgstr "Loading values…"
 
@@ -812,7 +812,7 @@ msgstr "No favorites projects found"
 msgid "No issues found"
 msgstr "No issues found"
 
-#: src/components/select/select.tsx:308
+#: src/components/select/select.tsx:312
 msgid "No items"
 msgstr "No items"
 
@@ -973,7 +973,7 @@ msgstr "Search for the project"
 msgid "Search Input Mode"
 msgstr "Search Input Mode"
 
-#: src/views/helpdesk-feedback/helpdesk-feedback.tsx:217
+#: src/views/helpdesk-feedback/helpdesk-feedback.tsx:218
 msgid "Select a reporter or enter a new email address"
 msgstr "Select a reporter or enter a new email address"
 
