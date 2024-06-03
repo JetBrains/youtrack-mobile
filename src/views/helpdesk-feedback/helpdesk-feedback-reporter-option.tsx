@@ -17,12 +17,12 @@ const HelpDeskFeedbackReporterOption = ({user}: {user: FeedbackFormReporter}) =>
         <Text style={styles.text}>{getEntityPresentation(user)}</Text>
         {!!user.profile?.email?.email && (
           <View>
-            <Text style={styles.hintText}>{user.profile.email.email}</Text>
+            <Text numberOfLines={2} style={styles.selectText}>{user.profile.email.email}</Text>
           </View>
         )}
       </View>
       <View style={styles.selectUserDescription}>
-        <Text style={styles.hintText}>{user.login}</Text>
+        <Text numberOfLines={2} style={[styles.selectText, styles.selectUserDescriptionText]}>{user.login}</Text>
       </View>
     </View>
   );

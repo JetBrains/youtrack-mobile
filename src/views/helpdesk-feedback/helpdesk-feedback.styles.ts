@@ -4,7 +4,7 @@ import {formRowStyles} from 'components/form/form.style';
 import {headerMinHeight} from 'components/header/header.styles';
 import {rowFormStyles} from 'components/common-styles/form';
 import {UNIT} from 'components/variables';
-import {mainText} from 'components/common-styles';
+import {mainText, SECONDARY_FONT_SIZE} from 'components/common-styles';
 
 export default EStyleSheet.create({
   ...rowFormStyles,
@@ -25,15 +25,22 @@ export default EStyleSheet.create({
     alignItems: 'center',
   },
   selectUserOptionInfo: {
-    flexDirection: 'row',
     flex: 2,
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    alignItems: 'flex-start',
     marginLeft: UNIT * 1.5,
+    paddingRight: UNIT,
+  },
+  selectText: {
+    color: '$icon',
+    fontSize: SECONDARY_FONT_SIZE - 2,
   },
   selectUserDescription: {
     flex: 1,
     alignItems: 'flex-end',
+    textAlign: 'right',
+  },
+  selectUserDescriptionText: {
+    textAlign: 'right',
   },
   captcha: {
     ...mainText,
