@@ -1,6 +1,7 @@
 import {getApi} from 'components/api/api__instance';
 
-import {CustomField, CustomFieldValue, FieldValue} from 'types/CustomFields';
+import {CustomField, FieldValue} from 'types/CustomFields';
+import {ISelectProps} from 'components/select/select';
 
 export const getCustomFieldSelectProps = ({
   field,
@@ -12,12 +13,12 @@ export const getCustomFieldSelectProps = ({
   onChangeSelection: (selectedItems: FieldValue[], current: FieldValue) => unknown;
   onSelect: (value: FieldValue) => unknown;
   issueId?: string;
-}) => {
+}): ISelectProps => {
   const projectCustomField = field.projectCustomField;
 
   return {
     multi: projectCustomField.field.fieldType.isMultiValue,
-    selectedItems: new Array<CustomFieldValue>().concat(field.value),
+    selectedItems: new Array().concat(field.value).filter(Boolean),
     emptyValue: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
     dataSource: () => {
       const api = getApi();
