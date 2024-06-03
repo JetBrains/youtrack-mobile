@@ -1,6 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {COLOR_FIELD_SIZE} from 'components/color-field/color-field';
 import {monospace, SECONDARY_FONT_SIZE, secondaryText} from 'components/common-styles';
 
 export default EStyleSheet.create({
@@ -13,8 +12,8 @@ export default EStyleSheet.create({
     borderRadius: 6,
   },
   wrapperOneChar: {
-    width: COLOR_FIELD_SIZE,
-    height: COLOR_FIELD_SIZE,
+    minWidth: 21,
+    minHeight: 21,
   },
   text: {
     ...secondaryText,
