@@ -6,11 +6,15 @@ import log from 'components/log/log';
 
 
 const issueIdReg = /issue\/([\w-\d]+)/;
-
+const ticketIdReg = /tickets\/([\w-\d]+)/;
 const articleIdReg = /articles\/([\w-\d]+)/;
+
 const extractIssueId = (issueUrl: string = ''): string | null => {
-  const match = decodeURIComponent(issueUrl).match(issueIdReg);
-  return match && match[1];
+  const url = decodeURIComponent(issueUrl);
+  const matchIssue = url.match(issueIdReg);
+  const matchTicket = url.match(ticketIdReg);
+  log.debug(`Extracted ID from URL ${matchIssue?.[1]}`);
+  return matchIssue?.[1] || matchTicket?.[1] || null;
 };
 
 const extractArticleId = (issueUrl: string = ''): string | null => {

@@ -13,7 +13,7 @@ jest.mock('react-native/Libraries/Linking/Linking', () => ({
   addEventListener: jest.fn(),
 }));
 
-describe.skip('open-url-handler', () => {
+describe('Parse URL', () => {
   describe('extractIssueId', () => {
     it('should return NULL if URI is not provided', () => {
       expect(extractIssueId()).toEqual(null);
@@ -21,6 +21,12 @@ describe.skip('open-url-handler', () => {
 
     it('should extract issue id from a not encoded URI', () => {
       expect(extractIssueId('https://sample.com/issue/X-a_X-1')).toEqual(
+        'X-a_X-1'
+      );
+    });
+
+    it('should extract ticket id from a not encoded URI', () => {
+      expect(extractIssueId('https://sample.com/tickets/X-a_X-1')).toEqual(
         'X-a_X-1'
       );
     });
@@ -43,7 +49,7 @@ describe.skip('open-url-handler', () => {
     });
   });
 
-  describe('openByUrlDetector', () => {
+  describe.skip('openByUrlDetector', () => {
     let idMock: string;
     let urlMock: string;
     let onIdDetected: (
