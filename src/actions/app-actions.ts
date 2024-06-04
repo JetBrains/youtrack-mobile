@@ -498,7 +498,7 @@ export function removeAccountOrLogOut(): ReduxAction {
       setRegisteredForPush(false);
 
       try {
-        await PushNotifications.unregister();
+        await PushNotifications.unregister(getState().app.user?.login!);
       } catch (err) {
         log.warn('Failed to unsubscribe from push notifications', err);
       }
@@ -1081,10 +1081,8 @@ export function subscribeToPushNotifications(): ReduxAction {
 
     const userLogin = getState().app.user?.login as string;
     if (isRegisteredForPush()) {
-      log.info(
-        'Device was already registered for push notifications. Initializing.',
-      );
-      PushNotifications.initialize(onSwitchAccount, userLogin);
+      log.info('Device was already registered for push notifications. Initializing.');
+      PushNotifications.initialize(onSwitchAccount, getState().app.user?.login!);
       return;
     }
 

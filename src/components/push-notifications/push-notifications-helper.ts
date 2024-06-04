@@ -154,13 +154,13 @@ async function subscribe(
   }
 }
 
-async function unsubscribe(deviceToken: string): Promise<any> {
+async function unsubscribe(deviceToken: string, userLogin: string): Promise<any> {
   const api: Api = getApi();
   const resource = isAndroidPlatform() ? api.unsubscribeFromFCMNotifications : api.unsubscribeFromIOSNotifications;
 
   try {
     log.info(logMessages.unsubscribeStart);
-    const response = await resource.call(api, KONNECTOR_URL, deviceToken);
+    const response = await resource.call(api, KONNECTOR_URL, deviceToken, userLogin);
     log.info(logMessages.unsubscribeSuccess);
     return response;
   } catch (error) {

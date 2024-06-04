@@ -190,7 +190,7 @@ class API extends BaseAPI {
     return res.token;
   }
 
-  generateAccountHash(deviceToken: string, userLogin: string) {
+  generateAccountHash(deviceToken: string = '', userLogin: string = '') {
     return createBtoa(`${this.youTrackUrl}${deviceToken}${userLogin}`);
   }
 
@@ -211,12 +211,14 @@ class API extends BaseAPI {
   async unsubscribeFromFCMNotifications(
     konnectorURL: string,
     deviceToken: string,
+    userLogin: string,
   ): Promise<any> {
     return this.makeAuthorizedRequest(
       `${konnectorURL}/ring/fcmPushNotifications/unsubscribe`,
       'POST',
       {
         deviceToken,
+        accountHash: this.generateAccountHash(deviceToken, userLogin),
       },
     );
   }
@@ -238,12 +240,14 @@ class API extends BaseAPI {
   async unsubscribeFromIOSNotifications(
     konnectorURL: string,
     deviceToken: string,
+    userLogin: string,
   ): Promise<any> {
     return this.makeAuthorizedRequest(
       `${konnectorURL}/ring/pushNotifications/unsubscribe`,
       'POST',
       {
         appleDeviceId: deviceToken,
+        accountHash: this.generateAccountHash(deviceToken, userLogin),
       },
     );
   }

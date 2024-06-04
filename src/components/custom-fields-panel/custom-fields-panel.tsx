@@ -167,7 +167,7 @@ export default function CustomFieldsPanel(props: Props) {
         const projects = await api.getProjects(query);
         return projects
           .filter(project =>
-            helpDeskProjectsOnly ? project.plugins?.helpDeskSettings?.enabled : !project.plugins?.helpDeskSettings?.enabled
+            helpDeskProjectsOnly ? project?.plugins?.helpDeskSettings?.enabled : !project.plugins?.helpDeskSettings?.enabled
           )
           .filter(project => !project.archived && !project.template)
           .filter(project => hasPermission?.canCreateIssueToProject?.(project));

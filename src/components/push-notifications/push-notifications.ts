@@ -67,12 +67,12 @@ async function register(userLogin: string): Promise<void> {
   }
 }
 
-async function unregister(): Promise<void> {
+async function unregister(userLogin: string) {
   PNHelper.storeDeviceToken(null);
   const deviceToken: Token = await getDeviceToken();
 
   if (deviceToken) {
-    return await PNHelper.unsubscribe(deviceToken);
+    return await PNHelper.unsubscribe(deviceToken, userLogin);
   }
 }
 
@@ -89,6 +89,7 @@ async function initialize(
 
     try {
       PushNotificationsProcessor.init();
+      await unregister(userLogin);
       await register(userLogin);
     } catch (e) {
       const message: string =

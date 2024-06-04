@@ -1,10 +1,11 @@
-import * as API from '../api/api__instance';
-import * as storage from '../storage/storage';
+import * as API from 'components/api/api__instance';
+import * as storage from 'components/storage/storage';
 import * as util from 'util/util';
 import helper from './push-notifications-helper';
 import {categoryName} from '../activity/activity__category';
-import {mockEventsRegistry} from '../../../test/jest-mock__react-native-notifications';
+import {mockEventsRegistry} from 'test/jest-mock__react-native-notifications';
 
+const userLogin = 'user login';
 
 describe('push-notifications-helper', () => {
   const youTrackTokenMock: string = 'youTrackTokenMock';
@@ -111,10 +112,11 @@ describe('push-notifications-helper', () => {
         apiMock.unsubscribeFromFCMNotifications.mockResolvedValueOnce(
           successResponseMock,
         );
-        expect(await doUnsubscribe()).toEqual(successResponseMock);
+        expect(await doUnsubscribe(userLogin)).toEqual(successResponseMock);
         expect(apiMock.unsubscribeFromFCMNotifications).toHaveBeenCalledWith(
           helper.KONNECTOR_URL,
           mockEventsRegistry.deviceTokenMock,
+          userLogin
         );
       });
       it('should unsubscribe IOS', async () => {
@@ -122,10 +124,11 @@ describe('push-notifications-helper', () => {
         apiMock.unsubscribeFromIOSNotifications.mockResolvedValueOnce(
           successResponseMock,
         );
-        expect(await doUnsubscribe()).toEqual(successResponseMock);
+        expect(await doUnsubscribe(userLogin)).toEqual(successResponseMock);
         expect(apiMock.unsubscribeFromIOSNotifications).toHaveBeenCalledWith(
           helper.KONNECTOR_URL,
           mockEventsRegistry.deviceTokenMock,
+          userLogin
         );
       });
     });
@@ -137,10 +140,11 @@ describe('push-notifications-helper', () => {
         apiMock.unsubscribeFromFCMNotifications.mockRejectedValueOnce(
           errorMock,
         );
-        expect(await doUnsubscribe()).toEqual(null);
+        expect(await doUnsubscribe(userLogin)).toEqual(null);
         expect(apiMock.unsubscribeFromFCMNotifications).toHaveBeenCalledWith(
           helper.KONNECTOR_URL,
           mockEventsRegistry.deviceTokenMock,
+          userLogin
         );
       });
       it('should not unsubscribe IOS', async () => {
@@ -148,16 +152,17 @@ describe('push-notifications-helper', () => {
         apiMock.unsubscribeFromIOSNotifications.mockRejectedValueOnce(
           errorMock,
         );
-        expect(await doUnsubscribe()).toEqual(null);
+        expect(await doUnsubscribe(userLogin)).toEqual(null);
         expect(apiMock.unsubscribeFromIOSNotifications).toHaveBeenCalledWith(
           helper.KONNECTOR_URL,
           mockEventsRegistry.deviceTokenMock,
+          userLogin
         );
       });
     });
 
-    async function doUnsubscribe() {
-      return await helper.unsubscribe(mockEventsRegistry.deviceTokenMock);
+    async function doUnsubscribe(userLogin: string) {
+      return await helper.unsubscribe(mockEventsRegistry.deviceTokenMock, userLogin);
     }
   });
 
