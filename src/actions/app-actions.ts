@@ -45,7 +45,6 @@ import type {Article} from 'types/Article';
 import type {AuthParams, OAuthParams2} from 'types/Auth';
 import type {CustomError} from 'types/Error';
 import type {
-  Folder,
   User,
   UserAppearanceProfile,
   UserArticlesProfile,
@@ -60,6 +59,7 @@ import type {PermissionCacheItem} from 'types/Permission';
 import type {ReduxAction, ReduxStateGetter, ReduxAPIGetter, ReduxThunkDispatch} from 'types/Redux';
 import type {StorageState} from 'components/storage/storage';
 import type {UserGeneralProfileLocale} from 'types/User';
+import type {UserProject} from 'types/Project';
 import type {WorkTimeSettings} from 'types/Work';
 
 
@@ -469,7 +469,6 @@ export function changeAccount(
       await storeConfig(config);
       await dispatch(initializeAuth(config));
       await dispatch(checkUserAgreement());
-      await dispatch(applyGlobalSettings());
 
       if (!state.app.showUserAgreement) {
         dispatch(completeInitialization(issueId, articleId, navigateToActivity, searchQuery));
@@ -760,12 +759,15 @@ export function onLogIn(authParams: AuthParams): ReduxAction {
   };
 }
 
-export function cacheProjects(): ReduxAction<Promise<Folder[]>> {
+export function cacheProjects(): ReduxAction<Promise<UserProject[]>> {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
-    const [error, userFolders]: [CustomError | null, Folder[]] = await until(
-      getApi().user.getUserFolders('', ['$type,id,ringId,shortName,name,pinned'])
-    ) as [CustomError | null, Folder[]];
-    const projects: Folder[] = error ? [] : userFolders.filter(it => hasType.project(it));
+    const [error, userFolders] = await until<UserProject[]>(
+      getApi().user.getUserFolders('', [
+        '$type,id,ringId,shortName,name,pinned,restricted,plugins(helpDeskSettings(enabled))',
+      ])
+    );
+    const projects: UserProject[] = error ? [] : userFolders.filter(it => hasType.project(it));
+    dispatch({type: types.SET_PROJECTS, projects});
     await storage.flushStoragePart({projects});
     return projects;
   };

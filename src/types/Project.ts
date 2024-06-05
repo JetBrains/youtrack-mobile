@@ -47,6 +47,17 @@ export interface Project extends ProjectEntity {
   restricted: boolean;
 }
 
+export interface UserProject extends ProjectEntity {
+  shortName: string;
+  pinned: boolean;
+  plugins: {
+    helpDeskSettings: {
+      enabled: boolean,
+    };
+  };
+  restricted: boolean;
+}
+
 export interface ProjectHelpdesk extends ProjectEntity {
   archived: boolean;
   shortName: string;

@@ -13,6 +13,7 @@ import Router from 'components/router/router';
 import SettingsAppearance from './settings__appearance';
 import SettingsFeedbackForm from './settings__feedback-form';
 import usage, {VERSION_STRING} from 'components/usage/usage';
+import {ANALYTICS_SETTINGS_PAGE} from 'components/analytics/analytics-ids';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
@@ -24,7 +25,6 @@ import type {AppState} from 'reducers';
 import type {StorageState} from 'components/storage/storage';
 import type {ReduxThunkDispatch} from 'types/Redux';
 
-const CATEGORY_NAME: string = 'Settings';
 
 export default function Settings() {
   const dispatch: ReduxThunkDispatch = useDispatch();
@@ -35,9 +35,13 @@ export default function Settings() {
   const isChangingAccount = useSelector((state: AppState) => state.app.isChangingAccount);
   const isReporter = useSelector((state: AppState) => state.app.user?.profiles.helpdesk.isReporter);
   const otherAccounts = useSelector((state: AppState) => state.app.otherAccounts || []);
+  const hasHDProjects = useSelector(
+    (state: AppState) =>
+      state.app.globalSettings.helpdeskEnabled && state.app.projects.some(p => !!p?.plugins?.helpDeskSettings?.enabled)
+  );
 
   React.useEffect(() => {
-    usage.trackScreenView(CATEGORY_NAME);
+    usage.trackScreenView(ANALYTICS_SETTINGS_PAGE);
   }, []);
 
   return (
@@ -72,7 +76,7 @@ export default function Settings() {
             </TouchableOpacity>
           </View>
 
-          {!isReporter && isHelpdeskFeatureEnabled && (
+          {hasHDProjects && !isReporter && isHelpdeskFeatureEnabled && (
             <View style={styles.settingsListItem}>
               <Text style={styles.settingsListItemTitleText}>{i18n('Tickets')}</Text>
               <Switch

@@ -12,3 +12,4 @@ export const ANALYTICS_NOTIFICATIONS_PAGE = 'inbox view';
 export const ANALYTICS_NOTIFICATIONS_THREADS_PAGE = 'InboxThreads';
 export const ANALYTICS_PREVIEW_PAGE = 'Preview file view';
 export const ANALYTICS_HD_FEEDBACK_PAGE = 'HelpDesk Feedback page';
+export const ANALYTICS_SETTINGS_PAGE = 'Settings';

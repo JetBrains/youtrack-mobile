@@ -24,3 +24,4 @@ export const SET_PROGRESS = 'app.SET_PROGRESS';
 export const SET_DRAFT_COMMENT_DATA = 'app.SET_DRAFT_COMMENT_DATA';
 export const SET_SETTINGS = 'app.SET_SETTINGS';
 export const SET_HELPDESK_MENU_HIDDEN = 'app.SET_HELPDESK_MENU_HIDDEN';
+export const SET_PROJECTS = 'app.SET_PROJECTS';

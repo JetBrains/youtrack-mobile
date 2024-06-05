@@ -13,6 +13,7 @@ import type {NetInfoState} from '@react-native-community/netinfo';
 import type {PermissionsStore} from 'components/permissions-store/permissions-store';
 import type {StorageState} from 'components/storage/storage';
 import type {User, UserAppearanceProfile, UserArticlesProfile, UserHelpdeskProfile} from 'types/User';
+import type {UserProject} from 'types/Project';
 import type {WorkTimeSettings} from 'types/Work';
 
 
@@ -34,6 +35,7 @@ export type RootState = {
   draftCommentData: DraftCommentData;
   globalSettings: GlobalSettings;
   helpdeskMenuHidden: boolean;
+  projects: UserProject[];
 };
 
 const initialState: RootState = {
@@ -56,6 +58,7 @@ const initialState: RootState = {
   draftCommentData: {} as DraftCommentData,
   globalSettings: {} as GlobalSettings,
   helpdeskMenuHidden: false,
+  projects: [],
 };
 
 
@@ -366,6 +369,16 @@ export default createReducer(initialState, {
     return {
       ...state,
       helpdeskMenuHidden: action.hidden,
+    };
+  },
+
+  [types.SET_PROJECTS](
+    state: RootState,
+    action: { projects: UserProject[] },
+  ) {
+    return {
+      ...state,
+      projects: action.projects,
     };
   },
 });
