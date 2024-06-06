@@ -9,6 +9,7 @@ import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import ReactionsPanel from './issue__activity-reactions-dialog';
 import usage from 'components/usage/usage';
 import ActivityStream from 'components/activity-stream/activity__stream';
+import useIsReporter from 'components/user/useIsReporter';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
 import {attachmentActions} from './issue-activity__attachment-actions-and-types';
 import {createActivityCommentActions} from './issue-activity__comment-actions';
@@ -27,9 +28,9 @@ import type {AppState} from 'reducers';
 import type {Attachment, IssueComment} from 'types/CustomFields';
 import type {ContextMenuConfig, ContextMenuConfigItem} from 'types/MenuConfig';
 import type {CustomError} from 'types/Error';
+import type {Entity} from 'types/Entity';
 import type {IssueContextData, IssueFull} from 'types/Issue';
 import type {Reaction} from 'types/Reaction';
-import {Entity} from 'types/Entity';
 
 type Props = ActivityStreamProps & {
   issueId: string;
@@ -50,7 +51,7 @@ const IssueActivityStream: React.FC<Props> = (props: Props) => {
   const configBackendUrl: string = useSelector((appState: AppState) => appState.app.auth?.config?.backendUrl || '');
   const issueContext: IssueContextData = useContext(IssueContext);
   const commentActions = createActivityCommentActions();
-  const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles.helpdesk.isReporter);
+  const isReporter = useIsReporter();
 
   const [reactionState, setReactionState] = useState<IReactionState>({
     currentComment: null,

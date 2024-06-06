@@ -141,7 +141,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   };
   loadIssueActivities = (doNotReset?: boolean, issueId?: string) => {
     if (isIssueActivitiesAPIEnabled()) {
-      this.props.loadActivitiesPage(doNotReset, issueId, this.props.user.profiles.helpdesk?.isReporter);
+      this.props.loadActivitiesPage(doNotReset, issueId, this.props.user?.profiles?.helpdesk?.isReporter);
     } else {
       this.props.loadIssueCommentsAsActivityPage();
     }

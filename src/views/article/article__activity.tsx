@@ -14,6 +14,7 @@ import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import ReactionsPanel from 'views/issue/activity/issue__activity-reactions-dialog';
 import TipActivityActionAccessTouch from 'components/tip/tips/activity-touch-actions';
 import usage from 'components/usage/usage';
+import useIsReporter from 'components/user/useIsReporter';
 import {ANALYTICS_ARTICLE_PAGE_STREAM} from 'components/analytics/analytics-ids';
 import {convertCommentsToActivityPage, createActivityModel, getReplyToText} from 'components/activity/activity-helper';
 import {getApi} from 'components/api/api__instance';
@@ -31,11 +32,11 @@ import type {Activity, ActivityStreamCommentActions} from 'types/Activity';
 import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
 import type {Attachment, IssueComment} from 'types/CustomFields';
+import type {ContextMenuConfig, ContextMenuConfigItem} from 'types/MenuConfig';
 import type {Reaction} from 'types/Reaction';
+import type {ReduxThunkDispatch} from 'types/Redux';
 import type {UITheme} from 'types/Theme';
 import type {User} from 'types/User';
-import {ContextMenuConfig, ContextMenuConfigItem} from 'types/MenuConfig';
-import {ReduxThunkDispatch} from 'types/Redux';
 
 interface Props {
   article: Article;
@@ -65,7 +66,7 @@ const ArticleActivities = (props: Props) => {
   const currentUser = useSelector((state: AppState) => state.app.user);
   const user = useSelector((state: AppState) => state.app.user);
   const workTimeSettings = useSelector((store: AppState) => store.app.workTimeSettings);
-  const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles.helpdesk.isReporter);
+  const isReporter = useIsReporter();
 
   const canCommentOn = issuePermissions.articleCanCommentOn(article);
   const isNaturalSortOrder = !!user?.profiles?.appearance?.naturalCommentsOrder;

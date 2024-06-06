@@ -12,6 +12,7 @@ import BottomSheetModal from 'components/modal-panel-bottom/bottom-sheet-modal';
 import IssuesFiltersSetting from 'views/issues/issues__filters-settings';
 import IssuesSortBy from './issues__sortby';
 import usage from 'components/usage/usage';
+import useIsReporter from 'components/user/useIsReporter';
 import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {i18n} from 'components/i18n/i18n';
 import {IconCheck} from 'components/icon/icon';
@@ -52,7 +53,7 @@ const IssuesListSettings = ({
   const searchContext = useSelector((state: AppState) => state.issueList.searchContext);
   const settings = useSelector((state: AppState) => state.issueList.settings);
   const user: User = useSelector((state: AppState) => state.app.user) as User;
-  const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles.helpdesk.isReporter);
+  const isReporter = useIsReporter();
   const isHelpdeskMode = useSelector((state: AppState) => state.issueList.helpDeskMode);
 
   const isQueryMode: boolean = settings.search.mode === issuesSearchSettingMode.query;

@@ -33,7 +33,7 @@ const IssuesFiltersSetting = ({
 
   const getFilters = React.useCallback((): string[] => {
     const profiles = user.profiles;
-    return ((isHelpdeskMode ? profiles.helpdesk.ticketFilters : profiles.appearance?.liteUiFilters) || []).filter(Boolean);
+    return ((isHelpdeskMode ? profiles?.helpdesk?.ticketFilters : profiles.appearance?.liteUiFilters) || []).filter(Boolean);
   }, [isHelpdeskMode, user.profiles]);
 
   useEffect(() => {

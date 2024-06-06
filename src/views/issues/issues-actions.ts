@@ -649,7 +649,7 @@ const setFilters = (): (
         ...Object.assign(
           {},
           helpdeskMode
-            ? {helpdesk: {...ytCurrentUser.profiles.helpdesk, ticketFilters: visibleFiltersNames}}
+            ? {helpdesk: {...ytCurrentUser?.profiles?.helpdesk, ticketFilters: visibleFiltersNames}}
             : {appearance: {...ytCurrentUser?.profiles?.appearance, liteUiFilters: visibleFiltersNames}}
         ),
       };

@@ -381,7 +381,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
   }
 
   isReporter(): boolean {
-    return this.props.user.profiles.helpdesk.isReporter;
+    return !!this.props?.user?.profiles?.helpdesk?.isReporter;
   }
 
   renderContextButton() {

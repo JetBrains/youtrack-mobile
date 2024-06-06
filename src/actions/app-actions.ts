@@ -923,7 +923,7 @@ export function initializeApp(
       )
     );
     if (isRedirectedToTargetRoute) {
-      navigateToRouteById(issueId, articleId, navigateToActivity, profiles?.helpdesk.isReporter);
+      navigateToRouteById(issueId, articleId, navigateToActivity, profiles?.helpdesk?.isReporter);
     }
 
     const url = await Linking.getInitialURL();

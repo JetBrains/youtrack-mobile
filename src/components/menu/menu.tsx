@@ -12,6 +12,7 @@ import IconNotifications from 'components/icon/assets/menu_notification.svg';
 import IconKnowledgeBase from 'components/icon/assets/menu_kb.svg';
 import IconSettings from 'components/icon/assets/settings.svg';
 import Router from 'components/router/router';
+import useIsReporter from 'components/user/useIsReporter';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
 import {folderIdMap} from 'views/inbox-threads/inbox-threads-helper';
 import {getStorageState} from 'components/storage/storage';
@@ -41,7 +42,7 @@ export default function Menu() {
 
   const isHelpdeskFeatureEnabled: boolean = checkVersion(FEATURE_VERSION.helpDesk);
 
-  const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles?.helpdesk?.isReporter);
+  const isReporter = useIsReporter();
 
   const isHelpdeskEnabled = useSelector((state: AppState) => {
     const appState: RootState = state.app;

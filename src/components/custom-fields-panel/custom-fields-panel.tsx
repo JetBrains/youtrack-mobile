@@ -103,7 +103,8 @@ export default function CustomFieldsPanel(props: Props) {
   const isComponentMounted = React.useRef<boolean>(false);
   const isConnected = useSelector((state: AppState) => state.app.networkState?.isConnected);
   const user = useSelector((state: AppState) => state.app.user);
-  const isReporter = user?.profiles.helpdesk.isReporter;
+  const isReporter = !!user?.profiles?.helpdesk?.isReporter;
+
   const [selectState, setSelectState] = React.useState<SelectState | null>(null);
   const [simpleValueState, setSimpleValue] = React.useState<SimpleValueState | null>(null);
   const [datePickerState, setDatePickerState] = React.useState<DatePickerState>(dataPickerDefault);
@@ -360,7 +361,7 @@ export default function CustomFieldsPanel(props: Props) {
     }
   };
 
-  const isFieldDisabled = () => isConnected === false || !!isReporter;
+  const isFieldDisabled = () => isConnected === false || isReporter;
 
   const renderFields = () => {
     const {issueProject = {name: ''}} = props;
