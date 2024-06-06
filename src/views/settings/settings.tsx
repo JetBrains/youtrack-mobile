@@ -24,21 +24,25 @@ import styles from './settings.styles';
 import type {AppState} from 'reducers';
 import type {StorageState} from 'components/storage/storage';
 import type {ReduxThunkDispatch} from 'types/Redux';
+import type {UserHelpdeskProfile} from 'types/User';
 
 
 export default function Settings() {
   const dispatch: ReduxThunkDispatch = useDispatch();
-  const isHelpdeskFeatureEnabled: boolean = checkVersion(FEATURE_VERSION.helpDesk);
   const uiTheme = useUITheme();
 
+  const isHelpdeskFeatureEnabled: boolean = checkVersion(FEATURE_VERSION.helpDesk);
   const helpdeskMenuHidden = useSelector((state: AppState) => state.app.helpdeskMenuHidden);
+  const isHelpdeskAccessible = useSelector((state: AppState) => {
+    const helpdeskProfile: UserHelpdeskProfile | undefined = state.app.user?.profiles?.helpdesk;
+    if (!isHelpdeskFeatureEnabled || helpdeskProfile?.isReporter) {
+      return false;
+    }
+    return !!helpdeskProfile?.helpdeskFolder?.id && state.app.globalSettings.helpdeskEnabled;
+  });
+
   const isChangingAccount = useSelector((state: AppState) => state.app.isChangingAccount);
-  const isReporter = useSelector((state: AppState) => state.app.user?.profiles.helpdesk.isReporter);
   const otherAccounts = useSelector((state: AppState) => state.app.otherAccounts || []);
-  const hasHDProjects = useSelector(
-    (state: AppState) =>
-      state.app.globalSettings.helpdeskEnabled && state.app.projects.some(p => !!p?.plugins?.helpDeskSettings?.enabled)
-  );
 
   React.useEffect(() => {
     usage.trackScreenView(ANALYTICS_SETTINGS_PAGE);
@@ -76,7 +80,7 @@ export default function Settings() {
             </TouchableOpacity>
           </View>
 
-          {hasHDProjects && !isReporter && isHelpdeskFeatureEnabled && (
+          {isHelpdeskAccessible && (
             <View style={styles.settingsListItem}>
               <Text style={styles.settingsListItemTitleText}>{i18n('Tickets')}</Text>
               <Switch
