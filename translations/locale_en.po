@@ -98,8 +98,8 @@ msgstr "Add filter"
 msgid "Add project to favorites"
 msgstr "Add project to favorites"
 
-#: src/views/article/article__activity.tsx:195
-#: src/views/issue/activity/issue__activity-stream.tsx:122
+#: src/views/article/article__activity.tsx:196
+#: src/views/issue/activity/issue__activity-stream.tsx:123
 msgid "Add reaction"
 msgstr "Add reaction"
 
@@ -134,7 +134,7 @@ msgid "All projects"
 msgstr "All projects"
 
 #: src/views/settings/settings__appearance.tsx:53
-#: src/views/settings/settings.tsx:71
+#: src/views/settings/settings.tsx:79
 msgid "Appearance"
 msgstr "Appearance"
 
@@ -306,7 +306,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:828
+#: src/actions/app-actions.ts:831
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -326,9 +326,9 @@ msgstr "Content revised"
 
 #: src/components/user/user-card.tsx:120
 #: src/components/wiki/markdown/markdown-code-highlighter.tsx:158
-#: src/views/article/article__activity.tsx:215
-#: src/views/article/article__activity.tsx:224
-#: src/views/issue/activity/issue__activity-stream.tsx:145
+#: src/views/article/article__activity.tsx:216
+#: src/views/article/article__activity.tsx:225
+#: src/views/issue/activity/issue__activity-stream.tsx:146
 #: src/views/issue/activity/issue-activity__comment-actions.ts:309
 #: src/views/issue/issue-base-actions-creater.ts:546
 #: src/views/issue/issue-base-actions-creater.ts:647
@@ -344,8 +344,8 @@ msgid "Copy field text"
 msgstr "Copy field text"
 
 #: src/views/article/arcticle-actions.ts:604
-#: src/views/article/article__activity.tsx:220
-#: src/views/issue/activity/issue__activity-stream.tsx:151
+#: src/views/article/article__activity.tsx:221
+#: src/views/issue/activity/issue__activity-stream.tsx:152
 #: src/views/issue/activity/issue-activity__comment-actions.ts:313
 #: src/views/issue/issue-base-actions-creater.ts:542
 msgid "Copy link"
@@ -356,8 +356,8 @@ msgstr "Copy link"
 msgid "Copy link to article"
 msgstr "Copy link to article"
 
-#: src/views/article/article__activity.tsx:211
-#: src/views/issue/activity/issue__activity-stream.tsx:141
+#: src/views/article/article__activity.tsx:212
+#: src/views/issue/activity/issue__activity-stream.tsx:142
 #: src/views/issue/activity/issue-activity__comment-actions.ts:305
 #: src/views/issue/issue-base-actions-creater.ts:643
 msgid "Copy text"
@@ -402,9 +402,9 @@ msgstr "declined the pull request"
 #: src/components/confirmation/confirmation.ts:5
 #: src/views/article/arcticle-actions.ts:295
 #: src/views/article/arcticle-actions.ts:618
-#: src/views/article/article__activity.tsx:249
+#: src/views/article/article__activity.tsx:250
 #: src/views/create-issue/create-issue-drafts.tsx:38
-#: src/views/issue/activity/issue__activity-stream.tsx:178
+#: src/views/issue/activity/issue__activity-stream.tsx:179
 #: src/views/issue/activity/issue__activity.tsx:272
 #: src/views/issue/activity/issue-activity__actions.ts:281
 #: src/views/issue/activity/issue-activity__comment-actions.ts:273
@@ -485,8 +485,8 @@ msgid "Drafts"
 msgstr "Drafts"
 
 #: src/views/article/arcticle-actions.ts:268
-#: src/views/article/article__activity.tsx:178
-#: src/views/issue/activity/issue__activity-stream.tsx:100
+#: src/views/article/article__activity.tsx:179
+#: src/views/issue/activity/issue__activity-stream.tsx:101
 #: src/views/issue/activity/issue__activity.tsx:261
 #: src/views/issue/activity/issue-activity__comment-actions.ts:323
 #: src/views/issue/issue-base-actions-creater.ts:553
@@ -523,7 +523,7 @@ msgstr "Enter search request"
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr "Enter the web address for a YouTrack installation where you have a registered account"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:202
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:203
 msgid "Enter time value"
 msgstr "Enter time value"
 
@@ -562,7 +562,7 @@ msgid "Filter projects, saved searches, and tags"
 msgstr "Filter projects, saved searches, and tags"
 
 #: src/views/issues/issues__filters-settings__list.tsx:201
-#: src/views/issues/issues__settings.tsx:109
+#: src/views/issues/issues__settings.tsx:110
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
@@ -865,7 +865,7 @@ msgstr "People added as CCs receive the same notifications that are sent to the 
 msgid "Photo and video library"
 msgstr "Photo and video library"
 
-#: src/views/issues/issues__settings.tsx:148
+#: src/views/issues/issues__settings.tsx:149
 msgid "Preview Size"
 msgstr "Preview Size"
 
@@ -927,8 +927,8 @@ msgstr "removed a reaction"
 msgid "reopened the pull request"
 msgstr "reopened the pull request"
 
-#: src/views/article/article__activity.tsx:187
-#: src/views/issue/activity/issue__activity-stream.tsx:114
+#: src/views/article/article__activity.tsx:188
+#: src/views/issue/activity/issue__activity-stream.tsx:115
 msgid "Reply"
 msgstr "Reply"
 
@@ -965,11 +965,11 @@ msgstr "Search articles"
 msgid "Search for a different value"
 msgstr "Search for a different value"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:176
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:177
 msgid "Search for the project"
 msgstr "Search for the project"
 
-#: src/views/issues/issues__settings.tsx:76
+#: src/views/issues/issues__settings.tsx:77
 msgid "Search Input Mode"
 msgstr "Search Input Mode"
 
@@ -998,7 +998,7 @@ msgstr "Send crash report"
 msgid "Send extended report to Bugsnag"
 msgstr "Send extended report to Bugsnag"
 
-#: src/views/settings/settings.tsx:107
+#: src/views/settings/settings.tsx:115
 msgid "Send feedback"
 msgstr "Send feedback"
 
@@ -1023,7 +1023,7 @@ msgstr "Set a date"
 msgid "Set date and time"
 msgstr "Set date and time"
 
-#: src/views/settings/settings.tsx:45
+#: src/views/settings/settings.tsx:53
 msgid "Settings"
 msgstr "Settings"
 
@@ -1032,10 +1032,10 @@ msgid "Share"
 msgstr "Share"
 
 #: src/views/article/arcticle-actions.ts:594
-#: src/views/article/article__activity.tsx:229
-#: src/views/article/article__activity.tsx:238
-#: src/views/issue/activity/issue__activity-stream.tsx:161
-#: src/views/issue/activity/issue__activity-stream.tsx:168
+#: src/views/article/article__activity.tsx:230
+#: src/views/article/article__activity.tsx:239
+#: src/views/issue/activity/issue__activity-stream.tsx:162
+#: src/views/issue/activity/issue__activity-stream.tsx:169
 #: src/views/issue/issue-base-actions-creater.ts:533
 msgid "Share link"
 msgstr "Share link"
@@ -1044,7 +1044,7 @@ msgstr "Share link"
 msgid "Share link to article"
 msgstr "Share link to article"
 
-#: src/views/settings/settings.tsx:98
+#: src/views/settings/settings.tsx:106
 msgid "Share logs"
 msgstr "Share logs"
 
@@ -1080,7 +1080,7 @@ msgstr "Something went wrong"
 msgid "Sort Attributes"
 msgstr "Sort Attributes"
 
-#: src/views/issues/issues__settings.tsx:108
+#: src/views/issues/issues__settings.tsx:109
 msgid "Sort Order"
 msgstr "Sort Order"
 
@@ -1227,7 +1227,7 @@ msgstr "Thread unmuted"
 
 #: src/views/issues/issues-actions.ts:72
 #: src/views/issues/issues-reducers.ts:57
-#: src/views/settings/settings.tsx:77
+#: src/views/settings/settings.tsx:85
 #: src/views/tickets/tickets.tsx:30
 msgid "Tickets"
 msgstr "Tickets"
@@ -1280,8 +1280,8 @@ msgstr "Unread only"
 msgid "Untitled"
 msgstr "Untitled"
 
-#: src/views/article/article__activity.tsx:203
-#: src/views/issue/activity/issue__activity-stream.tsx:133
+#: src/views/article/article__activity.tsx:204
+#: src/views/issue/activity/issue__activity-stream.tsx:134
 msgid "Update visibility"
 msgstr "Update visibility"
 
