@@ -559,6 +559,7 @@ export function completeInitialization(
   skipNavigateToRoute: boolean = false,
 ): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
+    await dispatch(applyGlobalSettings());
     dispatch({
       type: types.SET_HELPDESK_MENU_HIDDEN,
       hidden: storage.getStorageState().helpdeskMenuHidden,
@@ -911,7 +912,6 @@ export function initializeApp(
 
     await dispatch(migrateToIssuesFilterSearch());
     await createAPIInstance();
-    await dispatch(applyGlobalSettings());
 
     const splitView: boolean = isSplitView();
     const isRedirectedToTargetRoute: boolean = (

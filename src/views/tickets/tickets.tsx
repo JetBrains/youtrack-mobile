@@ -36,10 +36,11 @@ export class Tickets extends Issues<TicketsProps> {
 
   getSearchContext(): Folder {
     const {helpdeskSearchContext, user} = this.props;
-    const defaultHelpdeskFolder: Folder = user.profiles.helpdesk.helpdeskFolder;
-    const name = defaultHelpdeskFolder.id === helpdeskSearchContext.id
-      ? this.ticketsTitle
-      : helpdeskSearchContext.name;
+    const defaultHelpdeskFolder: Folder | undefined = user.profiles.helpdesk.helpdeskFolder;
+    const name =
+      !defaultHelpdeskFolder || defaultHelpdeskFolder.id === helpdeskSearchContext.id
+        ? this.ticketsTitle
+        : helpdeskSearchContext.name;
     return {...helpdeskSearchContext, name};
   }
 

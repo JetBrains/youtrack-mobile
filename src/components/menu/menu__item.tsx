@@ -8,7 +8,7 @@ import styles from './menu.styles';
 import type {ViewStyleProp} from 'types/Internal';
 
 interface Props {
-  disabled?: boolean;
+  notAllowed?: boolean;
   icon: React.ReactElement<React.ComponentProps<any>, any>;
   onPress: () => any;
   style?: ViewStyleProp;
@@ -17,8 +17,8 @@ interface Props {
 
 
 export const MenuItem = (props: Props): React.JSX.Element | null => {
-  const {icon, onPress, style, testID, disabled = false} = props;
-  return disabled ? null : (
+  const {icon, onPress, style, testID, notAllowed = false} = props;
+  return notAllowed ? null : (
     <View style={[styles.menuItem, style]}>
       <TouchableOpacity
         testID={testID}

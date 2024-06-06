@@ -87,7 +87,7 @@ class Router {
     return SlideFromRight;
   };
 
-  registerRoute({name, component, props, type, modal, tabletComponentName}) {
+  registerRoute({name, component, props, type, modal, tabletComponentName}: Record<string, any>) {
     this.routes[name] = {
       screen: ({navigation}) =>
         createElement(component, navigation.state.params),

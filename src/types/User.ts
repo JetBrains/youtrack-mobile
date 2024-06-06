@@ -124,7 +124,7 @@ export type UserGeneralProfile = {
 export interface UserHelpdeskProfile {
   isAgent: boolean;
   isReporter: boolean;
-  helpdeskFolder: Folder
+  helpdeskFolder?: Folder
   agentInProjects: {
     id: string;
   }[];

@@ -5,17 +5,21 @@ import {render, cleanup, fireEvent, screen, act} from '@testing-library/react-na
 
 import * as appActions from 'actions/app-actions';
 import * as feature from 'components/feature/feature';
+import IssuePermissions from 'components/issue-permissions/issue-permissions';
 import Menu, {menuPollInboxStatusDelay} from './menu';
 import mocks from 'test/mocks';
+import PermissionsStore from 'components/permissions-store/permissions-store';
 import Router from 'components/router/router';
 import {rootRoutesList, routeMap} from 'app-routes';
 
 import type API from 'components/api/api';
 import type OAuth2 from 'components/auth/oauth2';
-import {AppState} from 'reducers';
-import {MockStore} from 'redux-mock-store';
-import {RootState} from 'reducers/app-reducer';
-import {User} from 'types/User';
+import type {AppState} from 'reducers';
+import type {MockStore} from 'redux-mock-store';
+import type {RootState} from 'reducers/app-reducer';
+import type {User} from 'types/User';
+import type {PermissionCacheItem} from 'types/Permission';
+import type {NavigationNavigator} from 'react-navigation';
 
 jest.mock('components/feature/feature');
 
@@ -24,6 +28,7 @@ const getApi = () => apiMock;
 
 const createStoreMock = mocks.createMockStore(getApi);
 const rootTestID = 'menu';
+let issuePermissions: IssuePermissions;
 
 describe('<Menu/>', () => {
   let storeMock: MockStore;
@@ -32,14 +37,21 @@ describe('<Menu/>', () => {
 
   beforeEach(() => {
     jest.restoreAllMocks();
+
+    const currentUser = mocks.createUserMock()  as unknown as User;
+    issuePermissions = new IssuePermissions(
+      new PermissionsStore([{permission: {key: 'permissionName'}} as PermissionCacheItem]),
+      currentUser
+    );
     stateMock = {
       app: {
         auth: {} as OAuth2,
         inboxThreadsFolders: [],
         isChangingAccount: false,
         otherAccounts: [],
-        user: {} as User,
+        user: currentUser,
         globalSettings: {},
+        issuePermissions,
       } as unknown as RootState,
     } as AppState;
     storeMock = createStoreMock(stateMock);
@@ -62,59 +74,78 @@ describe('<Menu/>', () => {
       expect(queryByTestId1).toBeTruthy();
     });
 
-    it('should render menu `Issue` item', async () => {
+    it('should render `Issues`', async () => {
       const {getByTestId} = doRender();
 
       expect(getByTestId('test:id/menuIssues')).toBeTruthy();
     });
 
-    it('should render menu `Agile Boards` item', async () => {
+    it('should render `Agile Boards`', async () => {
       const {getByTestId} = doRender();
 
       expect(getByTestId('test:id/menuAgile')).toBeTruthy();
     });
 
-    it('should render menu `Knowledge Base` item', async () => {
+    it('should not render `Agile Boards` for the reporter', async () => {
+      setUserAsReporter();
+      doRender();
+
+      expect(screen.queryByTestId('test:id/menuAgile')).toBeNull();
+    });
+
+    it('should render `Knowledge Base`', async () => {
       (feature.checkVersion as jest.Mock).mockReturnValue(true);
+      jest.spyOn(issuePermissions, 'articleReadAccess').mockReturnValueOnce(true);
       const {getByTestId} = doRender();
 
       expect(getByTestId('test:id/menuKnowledgeBase')).toBeTruthy();
     });
 
-    it('should not render menu `Knowledge Base` item', async () => {
+    it('should not render `Knowledge Base`', async () => {
       (feature.checkVersion as jest.Mock).mockReturnValue(false);
+      doRender();
 
-      const {getByTestId} = doRender();
-
-      expect(() => {
-        getByTestId('test:id/menuKnowledgeBase');
-      }).toThrow();
+      expect(screen.queryByTestId('test:id/menuKnowledgeBase')).toBeNull();
     });
 
-    it('should render menu `Notifications` item', async () => {
-      (feature.checkVersion as jest.Mock).mockReturnValueOnce(true);
+    it('should not render `Knowledge Base` if user has no general `read article` permission', async () => {
+      (feature.checkVersion as jest.Mock).mockReturnValue(true);
+      setUserAsReporter();
+      doRender();
+
+      expect(screen.queryByTestId('test:id/menuKnowledgeBase')).toBeNull();
+    });
+
+    it('should render `Notifications`', async () => {
+      (feature.checkVersion as jest.Mock).mockReturnValue(true);
 
       const {getByTestId} = doRender();
 
       expect(getByTestId('test:id/menuNotifications')).toBeTruthy();
     });
 
-    it('should not render menu `Notifications` item', async () => {
+    it('should not render `Notifications` for the old server', async () => {
       (feature.checkVersion as jest.Mock).mockReturnValue(false);
-      const {getByTestId} = doRender();
+      doRender();
 
-      expect(() => {
-        getByTestId('test:id/menuNotifications');
-      }).toThrow();
+      expect(screen.queryByTestId('test:id/menuNotifications')).toBeNull();
     });
 
-    it('should render menu `Settings` item', async () => {
+    it('should not render `Notifications` for the reporter', async () => {
+      (feature.checkVersion as jest.Mock).mockReturnValue(true);
+      setUserAsReporter();
+      doRender();
+
+      expect(screen.queryByTestId('test:id/menuNotifications')).toBeNull();
+    });
+
+    it('should render `Settings`', async () => {
       const {getByTestId} = doRender();
 
       expect(getByTestId('test:id/menuSettings')).toBeTruthy();
     });
 
-    it('should render menu container if `auth` is not provided', () => {
+    it('should render container if `auth` is not provided', () => {
       stateMock.app.auth = null;
       storeMock = createStoreMock(stateMock);
 
@@ -123,7 +154,7 @@ describe('<Menu/>', () => {
       expect(queryByTestId('menu')).toBeTruthy();
     });
 
-    it('should render menu container if `user` is not provided', () => {
+    it('should render container if `user` is not provided', () => {
       stateMock.app.user = null;
       storeMock = createStoreMock(stateMock);
 
@@ -131,6 +162,11 @@ describe('<Menu/>', () => {
 
       expect(queryByTestId('menu')).toBeTruthy();
     });
+
+    function setUserAsReporter() {
+      stateMock.app.user!.profiles.helpdesk.isReporter = true;
+      storeMock = createStoreMock(stateMock);
+    }
   });
 
 
@@ -261,40 +297,82 @@ describe('<Menu/>', () => {
 
 
     describe('Help Desk', () => {
-      it('should not be enable because of older server version', () => {
-        setUp(false, true);
+      describe('Not allowed', () => {
+        it('should not be allowed because of old server version', () => {
+          init({versionMatches: false});
+          doRender();
 
-        doRender();
+          expect(screen.queryByTestId('test:id/menuTickets')).toBeNull();
+        });
 
-        expect(screen.queryByTestId('test:id/menuTickets')).toBeNull();
+        it('should not be allowed because of global settings', () => {
+          init({globalEnabled: false});
+          doRender();
+
+          expect(screen.queryByTestId('test:id/menuTickets')).toBeNull();
+        });
+
+        it('should not be allowed for not reporter without `helpdeskFolder`', () => {
+          const currentUser = mocks.createUserMock() as unknown as User;
+          currentUser.profiles.helpdesk.helpdeskFolder = undefined;
+          init({currentUser});
+          doRender();
+
+          expect(screen.queryByTestId('test:id/menuTickets')).toBeNull();
+        });
+
+        it('should not be allowed for not reporter if hidden manually from the Settings', () => {
+          const currentUser = mocks.createUserMock() as unknown as User;
+          init({currentUser, helpdeskMenuHidden: true});
+          doRender();
+
+          expect(screen.queryByTestId('test:id/menuTickets')).toBeNull();
+        });
       });
 
-      it('should not be enable because of global settings', () => {
-        setUp(true, false);
+      describe('Allowed', () => {
+        it('should be allowed for a user with enabled feature and enabled globally on the server', () => {
+          init({});
+          doRender();
 
-        doRender();
+          expect(screen.getByTestId('test:id/menuTickets')).toBeTruthy();
+        });
 
-        expect(screen.queryByTestId('test:id/menuTickets')).toBeNull();
+        it('should be enabled for a reporter with globally enabled feature', () => {
+          const currentUser = mocks.createUserMock() as unknown as User;
+          currentUser.profiles.helpdesk.isReporter = true;
+          currentUser.profiles.helpdesk.helpdeskFolder = undefined;
+          init({currentUser});
+          doRender();
+
+          expect(screen.getByTestId('test:id/menuTickets')).toBeTruthy();
+        });
       });
 
-      it('should be enable', () => {
-        setUp(true, true);
 
-        doRender();
-
-        expect(screen.getByTestId('test:id/menuTickets')).toBeTruthy();
-      });
-
-      function setUp(versionMatches: boolean, isEnabled: boolean) {
+      function init({
+        versionMatches = true,
+        globalEnabled = true,
+        helpdeskMenuHidden = false,
+        currentUser = mocks.createUserMock() as unknown as User,
+      }: {
+        versionMatches?: boolean;
+        globalEnabled?: boolean;
+        helpdeskMenuHidden?: boolean;
+        currentUser?: User;
+      }) {
         (feature.checkVersion as jest.Mock).mockReturnValue(versionMatches);
-        stateMock.app.globalSettings = {helpdeskEnabled: isEnabled, type: 'public'};
+        stateMock.app.globalSettings = {helpdeskEnabled: globalEnabled, type: 'public'};
+        stateMock.app.helpdeskMenuHidden = helpdeskMenuHidden;
+        stateMock.app.issuePermissions = issuePermissions;
+        stateMock.app.user = currentUser;
         storeMock = createStoreMock(stateMock);
       }
     });
   });
 
   function mockRouter() {
-    Router.setNavigator(mocks.navigatorMock);
+    Router.setNavigator(mocks.navigatorMock as unknown as NavigationNavigator);
     rootRoutesList.map(routeName => {
       Router.registerRoute({
         name: routeName,

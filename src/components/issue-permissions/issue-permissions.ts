@@ -327,6 +327,8 @@ export default class IssuePermissions {
 
   articleCanReadArticle = (projectRingId?: string) => this.permissionsStore.has(READ_ARTICLE, projectRingId);
 
+  articleReadAccess = (): boolean => this.permissionsStore.has(READ_ARTICLE);
+
   articleCanDeleteArticle = (projectRingId?: string) => this.permissionsStore.has(DELETE_ARTICLE, projectRingId);
 
   articleCanAddAttachment = (article: Article): boolean => this.hasPermissionFor(article, CREATE_ARTICLE_COMMENT);

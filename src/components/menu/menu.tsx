@@ -26,7 +26,8 @@ import styles from './menu.styles';
 
 import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
-import {ReduxThunkDispatch} from 'types/Redux';
+import type {ReduxThunkDispatch} from 'types/Redux';
+import type {RootState} from 'reducers/app-reducer';
 
 export const menuPollInboxStatusDelay: number = 60 * 1000;
 
@@ -38,11 +39,20 @@ type Routes = {
 export default function Menu() {
   const dispatch: ReduxThunkDispatch = useDispatch();
 
-  const isHelpdeskEnabled = useSelector(
-    (state: AppState) => !state.app.helpdeskMenuHidden && state.app.globalSettings.helpdeskEnabled
-  );
+  const isHelpdeskFeatureEnabled: boolean = checkVersion(FEATURE_VERSION.helpDesk);
 
   const isReporter = useSelector((state: AppState) => !!state.app.user?.profiles?.helpdesk?.isReporter);
+
+  const isHelpdeskEnabled = useSelector((state: AppState) => {
+    const appState: RootState = state.app;
+    if (!isHelpdeskFeatureEnabled || !appState.globalSettings.helpdeskEnabled) {
+      return false;
+    }
+    if (!isReporter) {
+      return !appState.helpdeskMenuHidden && appState.user?.profiles?.helpdesk?.helpdeskFolder;
+    }
+    return true;
+  });
 
   const interval = useRef<ReturnType<typeof setInterval>>();
 
@@ -52,7 +62,9 @@ export default function Menu() {
 
   const isKBEnabled: boolean = checkVersion(FEATURE_VERSION.knowledgeBase);
 
-  const isHelpdeskFeatureEnabled: boolean = checkVersion(FEATURE_VERSION.helpDesk);
+  const isKBAccessible: boolean = useSelector((state: AppState) => {
+    return isKBEnabled && state.app.issuePermissions.articleReadAccess();
+  });
 
   const hasNewNotifications: boolean = useSelector((appState: AppState) => {
     if (!isInboxThreadsEnabled || isReporter) {
@@ -79,6 +91,9 @@ export default function Menu() {
   const [splitView, updateSplitView] = useState(isSplitView());
 
   useEffect(() => {
+    if (!isInboxThreadsEnabled || isReporter) {
+      return;
+    }
     const unsubscribe = () => {
       if (interval.current) {
         clearInterval(interval.current);
@@ -86,14 +101,14 @@ export default function Menu() {
       }
     };
 
-    if (isInboxThreadsEnabled && !isChangingAccount) {
+    if (!isChangingAccount) {
       unsubscribe();
       interval.current = setInterval(setInboxHasUpdateStatus, menuPollInboxStatusDelay);
       setInboxHasUpdateStatus();
     }
 
     return unsubscribe;
-  }, [isInboxThreadsEnabled, setInboxHasUpdateStatus, isChangingAccount]);
+  }, [isInboxThreadsEnabled, setInboxHasUpdateStatus, isChangingAccount, isReporter]);
 
   useEffect(() => {
     const unsubscribeOnDispatch = Router.setOnDispatchCallback(
@@ -252,65 +267,60 @@ export default function Menu() {
         />
       </View>
       <View style={styles.menu}>
-        {!isReporter && (
-          <MenuItem
-            testID="test:id/menuIssues"
-            icon={
-              <IconIssues
-                testID="test:id/menuIssuesIcon"
-                // @ts-ignore - for testing purposes
-                isActive={isActiveRoute(routeMap.Issues)}
-                width={24}
-                height={24}
-                color={color(routeMap.Issues)}
-              />
-            }
-            onPress={openIssueList}
-          />
-        )}
+        <MenuItem
+          notAllowed={isReporter}
+          testID="test:id/menuIssues"
+          icon={
+            <IconIssues
+              testID="test:id/menuIssuesIcon"
+              // @ts-ignore - for testing purposes
+              isActive={isActiveRoute(routeMap.Issues)}
+              width={24}
+              height={24}
+              color={color(routeMap.Issues)}
+            />
+          }
+          onPress={openIssueList}
+        />
 
         <MenuItem
-          disabled={!isHelpdeskFeatureEnabled || !isHelpdeskEnabled}
+          notAllowed={!isHelpdeskFeatureEnabled || !isHelpdeskEnabled}
           testID="test:id/menuTickets"
           icon={<IconHelpdesk width={24} height={24} color={color(routeMap.Tickets)} />}
           onPress={openTickets}
         />
 
-        {!isReporter && (
-          <MenuItem
-            testID="test:id/menuAgile"
-            icon={<IconAgile width={22} height={22} color={color(routeMap.AgileBoard)} />}
-            onPress={openAgileBoard}
-          />
-        )}
-
-        {!isReporter && (
-          <MenuItem
-            disabled={!isInboxEnabled && !isInboxThreadsEnabled}
-            testID="test:id/menuNotifications"
-            icon={
-              <View>
-                <IconNotifications
-                  width={23}
-                  height={23}
-                  color={color(isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox)}
-                />
-                {isInboxThreadsEnabled &&
-                  !isReporter &&
-                  hasNewNotifications &&
-                  !isActiveRoute(isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox) && (
-                    <AnimatedView useNativeDriver duration={1000} animation="fadeIn" style={styles.circleIcon}>
-                      <IconCircle size={8} color={styles.link.color} />
-                    </AnimatedView>
-                  )}
-              </View>
-            }
-            onPress={openInbox}
-          />
-        )}
+        <MenuItem
+          notAllowed={isReporter}
+          testID="test:id/menuAgile"
+          icon={<IconAgile width={22} height={22} color={color(routeMap.AgileBoard)} />}
+          onPress={openAgileBoard}
+        />
 
         <MenuItem
-          disabled={!isKBEnabled}
+          notAllowed={!isInboxEnabled && !isInboxThreadsEnabled || isReporter}
+          testID="test:id/menuNotifications"
+          icon={
+            <View>
+              <IconNotifications
+                width={23}
+                height={23}
+                color={color(isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox)}
+              />
+              {isInboxThreadsEnabled &&
+                hasNewNotifications &&
+                !isActiveRoute(isInboxThreadsEnabled ? routeMap.InboxThreads : routeMap.Inbox) && (
+                  <AnimatedView useNativeDriver duration={1000} animation="fadeIn" style={styles.circleIcon}>
+                    <IconCircle size={8} color={styles.link.color} />
+                  </AnimatedView>
+                )}
+            </View>
+          }
+          onPress={openInbox}
+        />
+
+        <MenuItem
+          notAllowed={!isKBAccessible}
           testID="test:id/menuKnowledgeBase"
           icon={<IconKnowledgeBase width={25} height={25} color={color(routeMap.KnowledgeBase)} />}
           onPress={openKnowledgeBase}
