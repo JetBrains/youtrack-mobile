@@ -46,6 +46,7 @@ describe('<ColorField/>', () => {
         styles.wrapper,
         styles.wrapperOneChar,
         null,
+        null,
       ]);
     });
 
