@@ -2,7 +2,7 @@ import React from 'react';
 
 import {render, screen} from '@testing-library/react-native';
 
-import ColorField, {ColorCoding} from '../color-field/color-field';
+import ColorField, {ColorCoding, NO_COLOR_CODING_ID} from '../color-field/color-field';
 
 import styles from './color-field.styles';
 
@@ -14,48 +14,43 @@ const textMock = 'Test custom field';
 describe('<ColorField/>', () => {
   describe('Render text', () => {
     it('should render if `text` prop is not provided', () => {
-      doRender({});
+      renderDefault();
 
       expect(screen.getByTestId('test:id/color-field-value')).toBeTruthy();
     });
 
+    it('should not render if color coding is default', () => {
+      doRender({color: {id: NO_COLOR_CODING_ID, foreground: '', background: ''}});
+
+      expect(screen.queryByTestId('test:id/color-field-value')).toBeNull();
+    });
+
     it('should render first letter of color field', () => {
-      doRender({text: textMock});
+      renderDefault(textMock);
 
       expect(screen.findByText(textMock[0])).toBeTruthy();
     });
 
     it('should render whole text of color field', () => {
-      doRender({text: textMock, fullText: true});
+      renderDefault(textMock, true);
 
       expect(screen.getByText(textMock)).toBeTruthy();
     });
   });
 
   describe('Colorize', () => {
-    beforeEach(() => {
-      doRender({
-        text: textMock,
-        color: {
-          id: '1',
-          foreground: colorForegroundMock,
-          background: colorBackgroundMock,
-        },
-      });
-
-    });
-
     it('should set a background color', () => {
+      renderDefault();
       expect(screen.getByTestId('test:id/color-field-value-wrapper')).toHaveProp('style', [
         {backgroundColor: colorBackgroundMock},
         styles.wrapper,
         styles.wrapperOneChar,
         null,
-        null,
       ]);
     });
 
     it('should set a foreground color', () => {
+      renderDefault();
       expect(screen.getByText(textMock[0])).toHaveProp('style', [
         styles.text,
         null,
@@ -101,7 +96,20 @@ describe('<ColorField/>', () => {
         {color: colorForegroundMock},
       ]);
     });
+
   });
+
+  function renderDefault(text?: string, fullText = false) {
+    doRender({
+      text: text || textMock,
+      fullText,
+      color: {
+        id: '1',
+        foreground: colorForegroundMock,
+        background: colorBackgroundMock,
+      },
+    });
+  }
 
   function doRender({
     text,

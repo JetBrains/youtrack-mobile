@@ -21,7 +21,7 @@ interface Props {
 }
 
 export const COLOR_FIELD_SIZE = 21;
-const NO_COLOR_CODING_ID = '0';
+export const NO_COLOR_CODING_ID = '0';
 
 export default function ColorField(props: Props) {
   const getText = (): string => {
@@ -34,7 +34,7 @@ export default function ColorField(props: Props) {
   const {style = null, color} = props;
   const hasNoColor: boolean = !color || color?.id === NO_COLOR_CODING_ID;
 
-  return (
+  return hasNoColor ? null : (
     <View
       testID="test:id/color-field-value-wrapper"
       accessible={true}
@@ -43,7 +43,6 @@ export default function ColorField(props: Props) {
         styles.wrapper,
         !props.fullText && styles.wrapperOneChar,
         style,
-        hasNoColor ? styles.defaultColorCoding : null,
       ]}
     >
       {props.children}
@@ -52,7 +51,7 @@ export default function ColorField(props: Props) {
           styles.text,
           style?.fontSize ? {fontSize: style.fontSize} : null,
           props.monospace ? styles.textMonospace : null,
-          {color: hasNoColor ? styles.defaultColorCoding.color : color?.foreground},
+          {color: color?.foreground},
         ]}
         numberOfLines={1}
         testID="test:id/color-field-value"
