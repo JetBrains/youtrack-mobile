@@ -139,7 +139,7 @@ export default EStyleSheet.create({
     paddingLeft: 0,
   },
   searchContext: {
-    height: searchContextHeight,
+    minHeight: searchContextHeight,
     backgroundColor: '$background',
   },
   searchContextPinned: {...elevation1},
@@ -189,7 +189,6 @@ export default EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: UNIT * 2,
-    height: 17,
   },
   toolbarActionSortBy: {
     marginRight: -1,

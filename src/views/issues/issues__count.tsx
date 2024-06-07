@@ -20,24 +20,21 @@ const IssuesCount = ({issuesCount, isHelpdesk}: { issuesCount: number | null, is
       style={styles.toolbarAction}
     >
       <Text numberOfLines={2} style={styles.toolbarText}>
-        {isHelpdesk ? i18nPlural(
-          issuesCount,
-          'Matches {{issuesCount}} ticket',
-          'Matches {{issuesCount}} tickets',
-          {
-            issuesCount,
-          },
-        ) : i18nPlural(
-          issuesCount,
-          'Matches {{issuesCount}} issue',
-          'Matches {{issuesCount}} issues',
-          {
-            issuesCount,
-          },
-        )}
+        {isHelpdesk
+          ? i18nPlural(issuesCount, 'Matches {{issuesCount}} ticket', 'Matches {{issuesCount}} tickets', {
+              issuesCount,
+            })
+          : i18nPlural(issuesCount, 'Matches {{issuesCount}} issue', 'Matches {{issuesCount}} issues', {
+              issuesCount,
+            })}
       </Text>
     </AnimatedView>
-  ) : <View style={styles.toolbarAction}><Skeleton width={40} height={17} speed={2000} shimmerWidth={100}/></View>;
+  ) : (
+    <View style={styles.toolbarAction}>
+      <Skeleton width={40} height={17} speed={2000} shimmerWidth={100} />
+      <Text style={styles.toolbarText}>{' '}</Text>
+    </View>
+  );
 };
 
 
