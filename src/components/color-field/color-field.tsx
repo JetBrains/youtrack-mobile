@@ -18,6 +18,7 @@ interface Props {
   monospace?: boolean;
   style?: TextStyleProp & ViewStyleProp;
   text?: string;
+  forceDisplay?: boolean;
 }
 
 export const COLOR_FIELD_SIZE = 21;
@@ -31,10 +32,10 @@ export default function ColorField(props: Props) {
     return props.fullText ? props.text : Array.from(props.text)[0];
   };
 
-  const {style = null, color} = props;
+  const {style = null, color, forceDisplay} = props;
   const hasNoColor: boolean = !color || color?.id === NO_COLOR_CODING_ID;
 
-  return hasNoColor ? null : (
+  return hasNoColor && !forceDisplay ? null : (
     <View
       testID="test:id/color-field-value-wrapper"
       accessible={true}
@@ -43,6 +44,7 @@ export default function ColorField(props: Props) {
         styles.wrapper,
         !props.fullText && styles.wrapperOneChar,
         style,
+        hasNoColor ? styles.defaultColorCoding : null,
       ]}
     >
       {props.children}
@@ -51,7 +53,7 @@ export default function ColorField(props: Props) {
           styles.text,
           style?.fontSize ? {fontSize: style.fontSize} : null,
           props.monospace ? styles.textMonospace : null,
-          {color: color?.foreground},
+          {color: hasNoColor ? styles.defaultColorCoding.color : color?.foreground},
         ]}
         numberOfLines={1}
         testID="test:id/color-field-value"

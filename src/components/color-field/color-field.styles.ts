@@ -23,4 +23,10 @@ export default EStyleSheet.create({
   textMonospace: {
     ...monospace,
   },
+  defaultColorCoding: {
+    color: '$text',
+    borderColor: '$disabled',
+    borderWidth: 0.5,
+    backgroundColor: '$boxBackground',
+  },
 });
