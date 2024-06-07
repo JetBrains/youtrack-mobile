@@ -735,13 +735,13 @@ msgstr "Mark as unread"
 msgid "Marked as read"
 msgstr "Marked as read"
 
-#: src/views/issues/issues__count.tsx:30
+#: src/views/issues/issues__count.tsx:27
 msgid "Matches {{issuesCount}} issue"
 msgid_plural "Matches {{issuesCount}} issues"
 msgstr[0] "Matches {{issuesCount}} issue"
 msgstr[1] "Matches {{issuesCount}} issues"
 
-#: src/views/issues/issues__count.tsx:23
+#: src/views/issues/issues__count.tsx:24
 msgid "Matches {{issuesCount}} ticket"
 msgid_plural "Matches {{issuesCount}} tickets"
 msgstr[0] "Matches {{issuesCount}} ticket"
