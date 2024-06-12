@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextInput, TouchableWithoutFeedback, View} from 'react-native';
+import {TextInput, View, TouchableOpacity} from 'react-native';
 
 import IconSearch from 'components/icon/assets/search.svg';
 import {i18n} from 'components/i18n/i18n';
@@ -38,14 +38,14 @@ const QueryPreview = (props: Props) => {
 
   return (
     <View style={[styles.inputContainer, style]}>
-      <TouchableWithoutFeedback onPress={focus}>
+      <TouchableOpacity onPress={focus}>
         <IconSearch
           style={styles.searchIcon}
           width={17}
           height={17}
           color={styles.clearIcon.color}
         />
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
 
       <TextInput
         editable={editable}

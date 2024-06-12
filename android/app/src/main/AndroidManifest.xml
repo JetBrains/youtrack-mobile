@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.jetbrains.youtrack.mobile.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,7 +23,8 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_icon_round"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -32,7 +34,7 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/notification_icon_color" />
 
-        <activity xmlns:tools="http://schemas.android.com/tools"
+        <activity
             android:name="net.openid.appauth.AuthorizationManagementActivity"
             android:launchMode="singleInstance"
             tools:replace="android:launchMode" />

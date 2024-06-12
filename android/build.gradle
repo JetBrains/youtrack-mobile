@@ -2,15 +2,13 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "33.0.0"
+        buildToolsVersion = "34.0.0"
         minSdkVersion = 23
-        compileSdkVersion = 33
-        targetSdkVersion = 33
-        kotlinVersion = "1.7.0"
-        androidXCore = "1.7.0"
-
-        // We use NDK 23 which has both M1 support and is the side-by-side NDK versweion from AGP.
-        ndkVersion = "23.1.7779620"
+        compileSdkVersion = 34
+        targetSdkVersion = 34
+        ndkVersion = "25.1.8937393"
+        kotlinVersion = "1.8.0"
+        androidXCore = "1.8.0"
     }
     repositories {
         google()
@@ -24,5 +22,8 @@ buildscript {
         // in the individual module build.gradle files
         classpath("com.bugsnag:bugsnag-android-gradle-plugin:7.+")
         classpath 'com.google.gms:google-services:4.3.14'
+
     }
 }
+
+apply plugin: "com.facebook.react.rootproject"
