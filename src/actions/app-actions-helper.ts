@@ -50,7 +50,7 @@ async function targetAccountToSwitchTo(targetBackendUrl: string = ''): Promise<S
     ) || null;
   }
   if (targetAccount) {
-    log.debug('The account to switch is found', url);
+    log.info('App Actions: The account to switch is found');
   }
 
   return targetAccount;

@@ -127,14 +127,14 @@ export default class BaseAPI {
         log.warn('Request failed. Unauthorised', response);
         throw response;
       } else {
-        log.debug('Unauthorised. Refreshing token...');
+        log.info('API: Unauthorised. Refreshing token...');
         try {
           await this.auth.refreshToken();
-          log.debug('Repeating a request');
+          log.info('API: Repeating a request');
           response = await request();
         } catch (e) {
           if (!this.isRefreshingToken) {
-            log.debug('Unauthorised. Token refresh failed. Logging in...', e);
+            log.info('API: Unauthorised. Token refresh failed. Logging in...', e);
             this.isRefreshingToken = true;
           }
           throw e;
@@ -155,11 +155,6 @@ export default class BaseAPI {
     },
   ): Promise<any> {
     url = patchTopParam(url);
-    log.debug(
-      `"${method || 'GET'}" to ${url}${
-        body ? ` with body |${JSON.stringify(body)}|` : ''
-      }`,
-    );
     assertLongQuery(url);
 
     const sendRequest = async (): Promise<Response> => {
@@ -194,14 +189,14 @@ export default class BaseAPI {
         log.warn('Request failed', response);
         throw response;
       } else {
-        log.debug('Unauthorised. Refreshing token...');
+        log.info('API: Unauthorised. Refreshing token...');
         try {
           await this.auth.refreshToken();
-          log.debug('Repeat a request', url);
+          log.info('API: Repeat a request');
           response = await sendRequest();
         } catch (e) {
           if (!this.isRefreshingToken) {
-            log.debug('Unauthorised. Token refresh failed. Logging in...', e);
+            log.info('API: Unauthorised. Token refresh failed. Logging in...', e);
             this.isRefreshingToken = true;
             Router.EnterServer({serverUrl: this.config.backendUrl});
           }
@@ -224,7 +219,7 @@ export default class BaseAPI {
       parseJson: true,
     },
   ) {
-    log.debug(`'Submitting a form' to ${url} with body ${JSON.stringify(body)}`);
+    log.info('API: Submitting a form');
     const request = async (): Promise<Response> => {
       const formData = new FormData();
       formData.append(name, JSON.stringify(body));

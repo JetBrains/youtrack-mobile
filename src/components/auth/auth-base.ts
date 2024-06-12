@@ -49,7 +49,6 @@ export class AuthBase {
     const authorization: string = `Basic ${createBtoa(
       `${config.auth.clientId}:${(config.auth.clientSecret as any) as string}`,
     )}`;
-    log.info(`AuthBase(getHeaders): ${authorization}`);
     return {
       Accept: ACCEPT_HEADER,
       'User-Agent': USER_AGENT,
@@ -86,9 +85,7 @@ export class AuthBase {
     password: string,
     config: AppConfig,
   ): Promise<AuthParams> {
-    log.info(
-      `Obtaining token by credentials on ${config.auth.serverUri} for "${login}"`,
-    );
+    log.info(`Auth: Obtaining token by credentials`);
     return this.obtainToken(
       [
         'grant_type=password',
@@ -148,7 +145,7 @@ export class AuthBase {
   }
 
   loadCurrentUser(authParams: any): Promise<any> {
-    log.info('loadCurrentUser: Verifying token, loading current user...');
+    log.info('Auth: loadCurrentUser: Verifying token, loading current user...');
     return fetch(this.LOAD_USER_URL, {
       headers: {
         Accept: ACCEPT_HEADER,
@@ -165,7 +162,7 @@ export class AuthBase {
           throw res;
         }
 
-        log.info('loadCurrentUser: Token refreshed.');
+        log.info('Auth: loadCurrentUser: Token refreshed.');
         return res.json();
       })
       .then((currentUser: User) => {
@@ -178,7 +175,7 @@ export class AuthBase {
         }
 
         this.setCurrentUser(currentUser);
-        log.info('loadCurrentUser: Current user updated.');
+        log.info('Auth: loadCurrentUser: Current user updated.');
         return authParams;
       })
       .catch((error: CustomError) => {
@@ -187,7 +184,7 @@ export class AuthBase {
         );
 
         if (!prevToken) {
-          log.warn('loadCurrentUser: Previous token is undefined.');
+          log.warn('Auth: loadCurrentUser: Previous token is undefined.');
         }
 
         if (error.status === 401 && prevToken) {

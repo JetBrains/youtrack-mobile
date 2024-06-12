@@ -84,7 +84,7 @@ export function logOut(): ReduxAction {
     dispatch({
       type: types.LOG_OUT,
     });
-    log.info('User is logged out');
+    log.info('App Actions: User is logged out');
   };
 }
 
@@ -140,7 +140,7 @@ export function receiveUserAppearanceProfile(userAppearanceProfile?: UserAppeara
           },
         });
       } catch (error) {
-        log.info('Cannot update user appearance profile.');
+        log.info('App Actions: Cannot update user appearance profile.');
       }
     }
   };
@@ -160,7 +160,7 @@ export function receiveUserHelpdeskProfile(helpdeskProfiles?: UserHelpdeskProfil
           helpdesk,
         });
       } catch (error) {
-        log.info('Cannot update user helpdesk profile.');
+        log.info('App Actions: Cannot update user helpdesk profile.');
       }
     }
   };
@@ -340,16 +340,14 @@ function applyAccount(config: AppConfig, auth: OAuth2, authParams: AuthParams): 
 
 export function addAccount(serverUrl: string = ''): ReduxAction {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
-    log.info('Adding new account started');
+    log.info('App Actions: Adding new account started');
 
     try {
       const config: AppConfig = await connectToOneMoreServer(serverUrl, () => {
-        log.info('Adding new server canceled by user');
+        log.info('App Actions: Adding new server canceled by user');
         Router.navigateToDefaultRoute();
       });
-      log.info(
-        `Config loaded for new server (${config.backendUrl}), logging in...`,
-      );
+      log.info(`App Actions: Config loaded for the new server, logging in...`);
       const tmpAuthInstance: OAuth2 = new OAuth2(config); //NB! this temporary instance for Login screen code
 
       const authParams: OAuthParams2 = await authorizeOnOneMoreServer(
@@ -359,15 +357,11 @@ export function addAccount(serverUrl: string = ''): ReduxAction {
           dispatch(addAccount(url));
         },
       );
-      log.info('Authorized on new server, applying');
+      log.info('App Actions: Authorized on new server, applying');
       await dispatch(
         applyAccount(config, tmpAuthInstance, normalizeAuthParams(authParams)),
       );
-      const user: User | null | undefined = storage.getStorageState().currentUser;
-      const userName: string = user?.name || '';
-      log.info(
-        `Successfully added account, user "${userName}", server "${config.backendUrl}"`,
-      );
+      log.info(`App Actions: Successfully added account`);
     } catch (err) {
       notifyError(err as CustomError);
       const {otherAccounts} = getState().app;
@@ -405,11 +399,7 @@ export function updateOtherAccounts(
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const state: AppState = getState();
     const currentAccount: StorageState = storage.getStorageState();
-    log.info(
-      `Changing account: ${currentAccount?.config?.backendUrl || ''} -> ${
-        account?.config?.backendUrl || ''
-      }`,
-    );
+    log.info('App Actions: Changing account');
     const otherAccounts: StorageState[] = (
       state.app.otherAccounts || []
     ).filter(
@@ -474,7 +464,7 @@ export function changeAccount(
         dispatch(completeInitialization(issueId, articleId, navigateToActivity, searchQuery));
       }
 
-      log.info('Account changed, URL:', account?.config?.backendUrl);
+      log.info('App Actions: Account changed');
     } catch (err) {
       notifyError(err as CustomError);
       throw err;
@@ -507,9 +497,9 @@ export function removeAccountOrLogOut(): ReduxAction {
     dispatch(logOut());
     await storage.clearStorage();
 
-    log.info('Logging out from the curren account');
+    log.info('App Actions: Logging out from the curren account');
     if (otherAccounts.length > 0) {
-      log.info('Switching an account');
+      log.info('App Actions: Switching an account');
       redirectToHome(otherAccounts[0].config?.backendUrl);
       await dispatch(switchAccount(otherAccounts[0], true));
     } else {
@@ -542,9 +532,9 @@ export function loadUserPermissions(): ReduxAction {
         auth.getPermissionsCacheURL(),
       );
       await dispatch(setUserPermissions(permissions));
-      log.info('PermissionsStore created');
+      log.info('App Actions: PermissionsStore created');
       appActionsHelper.updateCachedPermissions(permissions);
-      log.debug('Permissions stored');
+      log.info('App Actions: Permissions stored');
     } catch (error) {
       log.warn(error);
     }
@@ -564,7 +554,7 @@ export function completeInitialization(
       type: types.SET_HELPDESK_MENU_HIDDEN,
       hidden: storage.getStorageState().helpdeskMenuHidden,
     });
-    log.debug('Completing initialization');
+    log.info('App Actions: Completing initialization');
     const cachedCurrentUser: UserCurrent | undefined = storage.getStorageState()?.currentUser?.ytCurrentUser;
     const cachedLocale: UserGeneralProfileLocale | undefined = cachedCurrentUser?.profiles?.general?.locale;
     const currentUser: UserCurrent = await dispatch(loadYTCurrentUser());
@@ -586,7 +576,7 @@ export function completeInitialization(
 
     await dispatch(loadUserPermissions());
     await dispatch(cacheProjects());
-    log.debug('Initialization completed');
+    log.info('App Actions: Initialization completed');
 
     if (!skipNavigateToRoute || (isLanguageChanged && !issueId && !articleId)) {
       if (isReporter) {
@@ -657,7 +647,7 @@ export function acceptUserAgreement(): ReduxAction {
     getState: ReduxStateGetter,
     getApi: ReduxAPIGetter,
   ) => {
-    log.info('User agreement accepted');
+    log.info('App Actions: User agreement accepted');
     usage.trackEvent('EUA is accepted');
     const api: Api = getApi();
     try {
@@ -673,7 +663,7 @@ export function acceptUserAgreement(): ReduxAction {
 
 export function declineUserAgreement(): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
-    log.info('User agreement declined');
+    log.info('App Actions: User agreement declined');
     usage.trackEvent('EUA is declined');
     dispatch({
       type: types.HIDE_USER_AGREEMENT,
@@ -701,34 +691,30 @@ function checkUserAgreement(): ReduxAction {
     const api: Api = getApi();
     const auth: OAuth2 = (getState().app.auth as any) as OAuth2;
     const {currentUser} = auth;
-    log.debug('Checking user agreement', currentUser);
+    log.info('App Actions: Checking user agreement', currentUser);
 
     if (
       currentUser &&
       currentUser.endUserAgreementConsent &&
       currentUser.endUserAgreementConsent.accepted
     ) {
-      log.info('The EUA already accepted, skip check');
+      log.info('App Actions: The EUA already accepted, skip check');
       return;
     }
 
     const agreement: Agreement = await api.getUserAgreement();
 
     if (!agreement) {
-      log.debug('EUA is not supported, skip check');
+      log.info('App Actions: EUA is not supported, skip check');
       return;
     }
 
     if (!agreement.enabled) {
-      log.debug('EUA is disabled, skip check');
+      log.info('App Actions: EUA is disabled, skip check');
       return;
     }
 
-    log.info(
-      'User agreement should be accepted',
-      {...agreement, text: 'NOT_PRINTED'},
-      currentUser,
-    );
+    log.warn('App Actions: User agreement should be accepted');
     dispatch(showUserAgreement(agreement));
   };
 }
@@ -794,7 +780,7 @@ export function subscribeToURL(): ReduxAction {
     function isAuthorized(): boolean {
       const isUserAuthorized = !!getState().app?.auth?.currentUser;
       if (!isUserAuthorized) {
-        log.debug('User is not authorized, URL won\'t be opened');
+        log.info(`App Actions: User is not authorized, URL won't be opened`);
       }
       return isUserAuthorized;
     }
@@ -934,13 +920,13 @@ export function initializeApp(
 
     try {
       if (versionHasChanged) {
-        log.info(`App upgraded to "${packageJson.version}"; reloading config`);
+        log.info(`App Actions: App upgraded to "${packageJson.version}"; reloading config`);
         configCurrent = await refreshConfig(config.backendUrl);
       }
 
       await dispatch(initializeAuth(configCurrent));
     } catch (error) {
-      log.log('App failed to initialize auth. Reloading config...', error);
+      log.log('App Actions: App failed to initialize auth. Reloading config...', error);
 
       try {
         configCurrent = await refreshConfig(config.backendUrl);
@@ -1046,7 +1032,7 @@ export function setAccount(notificationRouteData: NotificationRouteData = {}): R
         ),
       );
     } else {
-      log.info('App is not configured, entering server URL');
+      log.info('App Actions: App is not configured, entering server URL');
 
       const navigateTo = (serverUrl: string | null) =>
         Router.EnterServer({
@@ -1083,7 +1069,7 @@ export function subscribeToPushNotifications(): ReduxAction {
 
     const userLogin = getState().app.user?.login as string;
     if (isRegisteredForPush()) {
-      log.info('Device was already registered for push notifications. Initializing.');
+      log.info('App Actions: Device was already registered for push notifications. Initializing.');
       PushNotifications.initialize(onSwitchAccount, getState().app.user?.login!);
       return;
     }
@@ -1093,9 +1079,9 @@ export function subscribeToPushNotifications(): ReduxAction {
         const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           await doSubscribe(onSwitchAccount, userLogin);
-          log.info('Push notifications permission granted');
+          log.info('App Actions: Push notifications permission granted');
         } else {
-          log.warn('Push notifications permission is not allowed');
+          log.warn('App Actions: Push notifications permission is not allowed');
         }
       } catch (err) {
         log.warn(err);

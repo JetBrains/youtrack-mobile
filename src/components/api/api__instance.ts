@@ -4,10 +4,10 @@ import type Api from './api';
 let api: Api | null = null;
 
 export function setApi(newApi: Api | null) {
-  log.debug(
+  log.info(
     newApi
-      ? `New API instance received (${newApi.youTrackIssueUrl})`
-      : 'API instance destroyed',
+      ? `API: New API instance received`
+      : 'API: API instance destroyed',
   );
   api = newApi;
 }

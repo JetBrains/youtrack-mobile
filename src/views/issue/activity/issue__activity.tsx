@@ -104,7 +104,9 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   }
 
   async componentDidMount() {
-    await this.props.setDefaultProjectTeam(this.props.issue.project);
+    if (this.props.issue?.project) {
+      await this.props.setDefaultProjectTeam(this.props.issue.project);
+    }
     this.load(this.getCurrentIssueId());
   }
 

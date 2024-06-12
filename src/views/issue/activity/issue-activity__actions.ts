@@ -113,11 +113,11 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
 
         try {
           dispatch(loadingActivityPage(true));
-          log.info('Loading activities...');
+          log.info('Issue Actions: Loading activities...');
           const activityPage: Activity[] = await api.issue.getActivitiesPage(targetIssueId, activityCategories);
           dispatch(receiveActivityPage(activityPage));
           updateCache(activityPage);
-          log.info('Received activities');
+          log.info('Issue Actions: Received activities');
         } catch (error) {
           dispatch(receiveActivityPageError(error as CustomError));
           dispatch({

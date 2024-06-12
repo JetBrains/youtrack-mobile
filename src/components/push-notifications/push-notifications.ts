@@ -83,9 +83,7 @@ async function initialize(
   const deviceToken: Token = await getDeviceToken();
 
   if (PNHelper.isDeviceTokenChanged(deviceToken)) {
-    log.info(
-      `'${PNHelper.logPrefix}'(initialize): device token has changed, re-subscribe`,
-    );
+    log.info(`'${PNHelper.logPrefix}'(initialize): device token has changed, re-subscribe`);
 
     try {
       PushNotificationsProcessor.init();

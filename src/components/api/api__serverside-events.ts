@@ -35,10 +35,10 @@ export default class ServersideEvents {
     }
 
     this.eventSource.addEventListener('open', () =>
-      log.info('SSE connection opened'),
+      log.info('API: SSE connection opened'),
     );
     this.eventSource.addEventListener('error', () =>
-      log.info('SSE connection closed'),
+      log.info('API: SSE connection closed'),
     );
     this.eventSource.addEventListener(
       'ping',

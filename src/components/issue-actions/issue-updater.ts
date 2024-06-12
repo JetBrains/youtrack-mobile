@@ -8,11 +8,11 @@ import {IssueFull, IssueOnList} from 'types/Issue';
 
 export const loadIssue = async (issueId: string): Promise<IssueFull> => {
   const api: Api = getApi();
-  log.info(`Updating issue ${issueId}`);
+  log.info(`Issue Updater: Updating Issue`);
   const [error, issue] = await until(api.issue.getIssue(issueId));
 
   if (error || !issue) {
-    log.info(`Failed to load issue ${issueId}`);
+    log.info(`Issue Updater: Failed to load Issue`);
     return {} as IssueFull;
   } else {
     return ApiHelper.fillIssuesFieldHash([issue])[0] as IssueFull;

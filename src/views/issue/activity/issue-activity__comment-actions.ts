@@ -137,7 +137,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
 
         try {
           const comments = await api.issue.getIssueComments(issueId);
-          log.info(`Loaded ${comments.length} comments for ${issueId} issue`);
+          log.info(`Issue Activity: Loaded comments for an issue`);
           dispatch(receiveActivityAPIAvailability(false));
           const activityPage = convertCommentsToActivityPage(comments);
           dispatch(createIssueActivityActions(stateFieldName).receiveActivityEnabledTypes());
@@ -225,8 +225,8 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
         usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update comment');
 
         try {
-          const updatedComment = await getApi().issue.submitComment(issue.id, comment);
-          log.info(`Comment ${updatedComment.id} updated. Refreshing...`);
+          await getApi().issue.submitComment(issue.id, comment);
+          log.info(`Issue Activity: Comment updated. Refreshing...`);
 
           if (isAttachmentChange) {
             notify(i18n('Comment updated'));
@@ -249,7 +249,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
         try {
           const _comment: IssueComment = await getApi().issue.updateCommentDeleted(issueId, comment.id, deleted);
           dispatch(updateComment({...comment, ..._comment}));
-          log.info(`Comment ${comment.id} deleted state updated: ${deleted.toString()}`);
+          log.info(`Issue Activity: Comment deleted state updated: ${deleted.toString()}`);
         } catch (error) {
           dispatch(updateComment({...comment}));
           notifyError(error as CustomError);
@@ -274,7 +274,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
           .then(async () => {
             try {
               await getApi().issue.deleteCommentPermanently(issueId, comment.id);
-              log.info(`Comment ${comment.id} deleted forever`);
+              log.info(`Issue Activity: Comment deleted forever`);
               dispatch(deleteCommentFromList(comment, activityId));
               dispatch(actions.loadActivity());
             } catch (error) {

@@ -119,7 +119,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           notifyError(error);
           return [];
         } else {
-          log.info(`File attached to the ${isArticle ? 'Article' : 'Issue'} ${entity.id}`);
+          log.info(`Attachment Actions: File attached to the ${isArticle ? 'Article' : 'Issue'}`);
           usage.trackEvent(
             isArticle ? ANALYTICS_ARTICLE_PAGE : ANALYTICS_ISSUE_PAGE,
             'Attach image',
@@ -174,7 +174,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           notifyError(error);
           return [];
         } else {
-          log.info(`File attached to the ${isArticle ? 'Article' : 'Issue'} Comment ${entity.id}`);
+          log.info(`Attachment Actions: File attached to the ${isArticle ? 'Article' : 'Issue'} Comment`);
           usage.trackEvent(
             isArticle ? ANALYTICS_ARTICLE_PAGE_STREAM : ANALYTICS_ISSUE_STREAM_SECTION,
             'Attach image',
