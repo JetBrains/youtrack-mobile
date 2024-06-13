@@ -2,31 +2,29 @@ import objectWalk from 'object-walk';
 import {getReadableID} from '../issue-formatter/issue-formatter';
 import {handleRelativeUrl} from '../config/config';
 import {toField} from 'util/to-field';
-import type {CustomField} from 'types/CustomFields';
-import type {
+import {ICustomFieldValue} from 'types/CustomFields';
+import {
   AnyIssue,
   ServersideSuggestion,
   TransformedSuggestion,
   ServersideSuggestionLegacy,
+  ListIssue,
+  ListIssueField,
+  ListIssueFieldValue,
+  IssueOnList,
 } from 'types/Issue';
+
 const API = {
-  makeFieldHash: (issue: AnyIssue): Record<string, any> => {
-    const fieldHash: Partial<{
-      key: string;
-      value: CustomField;
-    }> = {};
-    (issue.fields || []).forEach((field: CustomField) => {
-      const _field: CustomField = field.projectCustomField.field;
-      const fieldName: string = _field.localizedName || _field.name;
-      fieldHash[fieldName] = field.value;
+  makeFieldHash: (issue: ListIssue): Record<string, any> => {
+    const fieldHash: {[key: string]: ListIssueFieldValue} = {};
+    issue.fields.forEach((field: ListIssueField) => {
+      const f: ICustomFieldValue = field.projectCustomField.field;
+      fieldHash[f.localizedName || f.name] = field.value;
     });
     return fieldHash;
   },
-  fillIssuesFieldHash: (issues: AnyIssue[] = []): AnyIssue[] => {
-    issues.forEach((issue: AnyIssue) => {
-      issue.fieldHash = API.makeFieldHash(issue);
-    });
-    return issues;
+  fillIssuesFieldHash: (issues: ListIssue[] = []) => {
+    return issues.map(i => ({...i, fieldHash: API.makeFieldHash(i)})) as IssueOnList[];
   },
   convertQueryAssistSuggestions: (
     suggestions: ServersideSuggestion[],

@@ -5,7 +5,7 @@ import {guid} from 'util/util';
 import type {Activity} from 'types/Activity';
 import type {CustomError} from 'types/Error';
 import type {IssueComment} from 'types/CustomFields';
-import type {IssueFull, OpenNestedViewParams} from 'types/Issue';
+import type {IssueFull, IssueOnList, OpenNestedViewParams} from 'types/Issue';
 import type {User, UserAppearanceProfile} from 'types/User';
 import type {WorkTimeSettings} from 'types/Work';
 import {ProjectTeam} from 'types/Project';
@@ -24,7 +24,7 @@ export type State = {
   issueActivityEnabledTypes: Array<Record<string, any>>;
   issueActivityTypes: Array<Record<string, any>>;
   issueLoadingError: Error | null | undefined;
-  issuePlaceholder: Partial<IssueFull>;
+  issuePlaceholder: IssueOnList;
   openNestedIssueView: (params: OpenNestedViewParams) => any;
   renderRefreshControl: (onRefreshCallback: () => void) => any;
   updateUserAppearanceProfile: (
@@ -47,7 +47,7 @@ export const initialState: State = {
   issueActivityEnabledTypes: [],
   issueActivityTypes: [],
   issueLoadingError: null,
-  issuePlaceholder: {},
+  issuePlaceholder: {} as IssueOnList,
   openNestedIssueView: () => {},
   renderRefreshControl: () => {},
   updateUserAppearanceProfile: () => {},

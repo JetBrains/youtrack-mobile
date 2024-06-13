@@ -339,13 +339,13 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   }
 
-  handleOnBack() {
-    const hasParentRoute: boolean = Router.pop();
+  handleOnBack = () => {
+    const hasParentRoute: boolean = Router.pop(false, {issueId: this.props.issueId || this.props?.issue?.id});
 
     if (!hasParentRoute) {
       Router.Issues();
     }
-  }
+  };
 
   renderBackIcon = () => {
     return isSplitView() ? null : (

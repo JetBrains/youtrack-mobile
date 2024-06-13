@@ -1,7 +1,6 @@
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 
 import * as commandDialogHelper from 'components/command-dialog/command-dialog-helper';
-import ApiHelper from 'components/api/api__helper';
 import issueCommonLinksActions from 'components/issue-actions/issue-links-actions';
 import log from 'components/log/log';
 import usage from 'components/usage/usage';
@@ -253,8 +252,7 @@ export function createIssue(
       const isMatches: boolean = await isMatchesQuery(created.idReadable);
 
       if (isMatches) {
-        const filledIssue: AnyIssue = ApiHelper.fillIssuesFieldHash([created])[0];
-        dispatch(propagateCreatedIssue(filledIssue, getState().creation.predefinedDraftId));
+        dispatch(propagateCreatedIssue(created, getState().creation.predefinedDraftId));
       }
 
       dispatch(actions.resetCreation());

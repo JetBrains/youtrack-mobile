@@ -1,18 +1,22 @@
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
+
+import type {AnyCustomField} from 'components/custom-field/custom-field-helper';
+import type {Article} from 'types/Article';
 import type {
-  Tag,
   Attachment,
+  ColorField,
+  CustomFieldBase,
+  ICustomFieldValue,
   IssueComment,
   IssueLink,
-  CustomFieldBase,
+  Tag,
+  TagBase,
 } from './CustomFields';
+import type {EntityBase} from 'types/Entity';
+import type {Project, ProjectBase, ProjectHelpDeskSettingsBase} from 'types/Project';
+import type {User, UserBase} from './User';
 import type {UserGroup} from './UserGroup';
-import type {User} from './User';
 import type {Visibility} from './Visibility';
-import {Activity} from 'types/Activity';
-import {AnyCustomField} from 'components/custom-field/custom-field-helper';
-import {Article} from 'types/Article';
-import {Project} from 'types/Project';
 
 export type IssueContextData = {
   dispatcher: () => any;
@@ -21,11 +25,9 @@ export type IssueContextData = {
   issuePermissions: IssuePermissions;
 };
 
-export interface BaseIssue {
-  $type: string;
+export interface BaseIssue extends EntityBase {
   created: number;
   fields: CustomFieldBase[];
-  id: string;
   idReadable: string;
   links: IssueLink[];
   project: Project;
@@ -36,17 +38,68 @@ export interface BaseIssue {
   updated: number;
 }
 
-export interface IssueOnList extends BaseIssue {
-  fieldHash: {
-    key: string;
-    value: Record<string, any>;
+interface TimeTrackingSettings {
+  $type: string;
+  enabled: boolean;
+  timeSpent: {
+    $type: string;
+    field: ICustomFieldValue;
+    id: string;
   };
-  trimmedDescription: string;
-  activityPage?: Activity[],
-  description?: string;
 }
 
-export interface IssueFull  extends BaseIssue {
+export interface ListIssueFieldValue extends ICustomFieldValue {
+  color: ColorField;
+}
+
+export interface ListIssueField {
+  $type: string;
+  id: string;
+  name: string;
+  projectCustomField: {
+    $type: string;
+    field: ICustomFieldValue;
+  };
+  value: ListIssueFieldValue;
+}
+
+export interface ListIssueProject extends ProjectBase {
+  plugins: {
+    $type: string;
+    helpDeskSettings: ProjectHelpDeskSettingsBase;
+    timeTrackingSettings: TimeTrackingSettings;
+  };
+}
+
+export interface IssueOnListS extends EntityBase {
+  created: number;
+  fields: Array<ListIssueField>;
+  idReadable: string;
+  project: ListIssueProject;
+  reporter: UserBase;
+  resolved: number | null;
+  summary: string;
+}
+
+export interface IssueOnListM extends IssueOnListS {
+  tags: Array<TagBase>;
+  updated: number;
+}
+
+export interface IssueOnListL extends IssueOnListM {
+  trimmedDescription: string | null;
+}
+
+export type ListIssue = IssueOnListS | IssueOnListM | IssueOnListL;
+
+export type IssueOnList = ListIssue & {
+  fieldHash: {
+    key: string;
+    value: ListIssueFieldValue;
+  };
+};
+
+export interface IssueFull extends BaseIssue {
   attachments: Attachment[];
   comments?: IssueComment[];
   description: string;
@@ -82,8 +135,10 @@ export type IssueCreate = Omit<
   | 'voters'
   | 'watchers'
   | 'wikifiedDescription'
-> & { project: Partial<Project>; canUpdateVisibility: boolean };
+> & {project: Partial<Project>; canUpdateVisibility: boolean};
+
 export type AnyIssue = IssueOnList | IssueFull | IssueLink | IssueCreate;
+
 export type TransformedSuggestion = {
   prefix: string;
   option: string;
@@ -95,6 +150,7 @@ export type TransformedSuggestion = {
   completionStart: number;
   completionEnd: number;
 };
+
 export type ServersideSuggestion = {
   $type?: string;
   auxiliaryIcon?: string | null;
@@ -111,6 +167,7 @@ export type ServersideSuggestion = {
   prefix: string | null;
   suffix: string | null;
 };
+
 export type ServersideSuggestionLegacy = {
   o: string;
   d: string;
@@ -123,11 +180,13 @@ export type ServersideSuggestionLegacy = {
   cs: number;
   ce: number;
 };
+
 export type SuggestedCommand = {
   description: string;
   error: boolean;
   delete: boolean;
 };
+
 export type CommandSuggestion = {
   id: string;
   caret: number;
@@ -141,6 +200,7 @@ export type CommandSuggestion = {
   prefix: string | null | undefined;
   suffix: string;
 };
+
 export type CommandSuggestionResponse = {
   query: string;
   caret: number;

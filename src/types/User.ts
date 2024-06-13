@@ -7,16 +7,17 @@ export enum UserTypeId {
   REPORTER = 'REPORTER'
 }
 
+export interface UserType {
+  id: keyof typeof UserTypeId;
+}
+
 export interface UserBase extends EntityBase {
-  login: string;
-  ringId: string;
   avatarUrl: string;
-  name: string;
-  localizedName: string | null;
-  userType: {
-    id: keyof typeof UserTypeId;
-  };
   fullName: string;
+  login: string;
+  name: string;
+  ringId: string;
+  userType: UserType;
 }
 
 export interface UserCC extends Omit<UserBase, 'id'> {

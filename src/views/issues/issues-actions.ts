@@ -39,7 +39,7 @@ import type {CustomError} from 'types/Error';
 import type {FilterField, FilterFieldValue} from 'types/Sorting';
 import type {Folder, User, UserProfiles} from 'types/User';
 import type {ISelectProps} from 'components/select/select';
-import type {IssueOnList} from 'types/Issue';
+import type {IssueOnList, ListIssue} from 'types/Issue';
 import type {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
 import type {ProjectHelpdesk} from 'types/Project';
 import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
@@ -499,13 +499,13 @@ const doLoadIssues = (query: string, pageSize: number, skip = 0): ReduxAction<Pr
   }
 
   if (Array.isArray(sortedIssues?.tree) && sortedIssues.tree.length > 0) {
-    const [err, _issues] = await until(
+    const [err, issues] = await until<ListIssue[]>(
       api.issues.issuesGetter(sortedIssues.tree, appState.issueList.settings.view.mode),
     );
     if (err) {
       handleError(err);
     }
-    listIssues = ApiHelper.fillIssuesFieldHash(_issues) as IssueOnList[];
+    listIssues = ApiHelper.fillIssuesFieldHash(issues);
   }
 
   return listIssues;

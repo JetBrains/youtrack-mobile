@@ -16,7 +16,7 @@ import {WORK_ITEM_CREATE, WORK_ITEM_UPDATE} from 'components/issue-permissions/i
 
 import type Api from 'components/api/api';
 import type {Activity, ActivityType} from 'types/Activity';
-import type {AnyIssue} from 'types/Issue';
+import type {AnyIssue, ListIssueProject} from 'types/Issue';
 import type {CustomError} from 'types/Error';
 import type {TimeTracking, WorkItemType} from 'types/Work';
 import type {User} from 'types/User';
@@ -61,7 +61,7 @@ export interface IssueActivityActions {
     issueActivityTypes: ActivityType[];
     type: any;
   };
-  setDefaultProjectTeam: (project: Project) => ReduxAction;
+  setDefaultProjectTeam: (project: Project | ListIssueProject) => ReduxAction;
   loadActivitiesPage: (doNotReset?: boolean, issueId?: string, commentsOnly?: boolean) => ReduxAction;
   doUpdateWorkItem: (workItem: WorkItem) => ReduxAction;
   createWorkItem: (draft: WorkItem, issueId?: string) => ReduxAction<Promise<CustomError | WorkItem>>;
@@ -290,7 +290,7 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
         });
       };
     },
-    setDefaultProjectTeam: function (project: Project): ReduxAction {
+    setDefaultProjectTeam: function (project: Project | ListIssueProject): ReduxAction {
       return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         let team: ProjectTeam | undefined;
         if (isHelpdeskProject({project} as Entity)) {
