@@ -86,7 +86,7 @@ msgstr "Accept"
 msgid "Activity"
 msgstr "Activity"
 
-#: src/views/issue/activity/issue__activity.tsx:171
+#: src/views/issue/activity/issue__activity.tsx:175
 msgid "Activity Settings"
 msgstr "Activity Settings"
 
@@ -138,7 +138,7 @@ msgstr "All projects"
 msgid "Appearance"
 msgstr "Appearance"
 
-#: src/views/create-issue/create-issue-actions.ts:361
+#: src/views/create-issue/create-issue-actions.ts:359
 #: src/views/issue/issue-base-actions-creater.ts:591
 msgid "Apply command…"
 msgstr "Apply command…"
@@ -224,7 +224,7 @@ msgstr "Camera"
 #: src/components/tags/tags.tsx:53
 #: src/views/article/arcticle-actions.ts:311
 #: src/views/article/arcticle-actions.ts:631
-#: src/views/create-issue/create-issue-actions.ts:368
+#: src/views/create-issue/create-issue-actions.ts:366
 #: src/views/inbox-threads/inbox-threads__thread.tsx:199
 #: src/views/inbox-threads/inbox-threads.tsx:278
 #: src/views/issue/activity/issue-activity__comment-actions.ts:342
@@ -405,7 +405,7 @@ msgstr "declined the pull request"
 #: src/views/article/article__activity.tsx:250
 #: src/views/create-issue/create-issue-drafts.tsx:38
 #: src/views/issue/activity/issue__activity-stream.tsx:179
-#: src/views/issue/activity/issue__activity.tsx:274
+#: src/views/issue/activity/issue__activity.tsx:278
 #: src/views/issue/activity/issue-activity__actions.ts:281
 #: src/views/issue/activity/issue-activity__comment-actions.ts:273
 #: src/views/issue/activity/issue-activity__comment-actions.ts:333
@@ -487,7 +487,7 @@ msgstr "Drafts"
 #: src/views/article/arcticle-actions.ts:268
 #: src/views/article/article__activity.tsx:179
 #: src/views/issue/activity/issue__activity-stream.tsx:101
-#: src/views/issue/activity/issue__activity.tsx:263
+#: src/views/issue/activity/issue__activity.tsx:267
 #: src/views/issue/activity/issue-activity__comment-actions.ts:323
 #: src/views/issue/issue-base-actions-creater.ts:550
 msgid "Edit"
