@@ -3,7 +3,7 @@ import {ActivityIndicator, FlatList, Text, TextInput, TouchableOpacity, View,} f
 
 import debounce from 'lodash.debounce';
 
-import ColorField from 'components/color-field/color-field';
+import ColorField, {NO_COLOR_CODING_ID} from 'components/color-field/color-field';
 import ModalPortal from 'components/modal-view/modal-portal';
 import ModalView from 'components/modal-view/modal-view';
 import SelectItem from './select__item';
@@ -185,7 +185,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
       <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>
     );
 
-    if (item.color) {
+    if (item.color && item.color.id !== NO_COLOR_CODING_ID) {
       return (
         <View style={styles.colorFieldItemWrapper}>
           <ColorField

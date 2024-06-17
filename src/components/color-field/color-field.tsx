@@ -18,7 +18,6 @@ interface Props {
   monospace?: boolean;
   style?: TextStyleProp & ViewStyleProp;
   text?: string;
-  forceDisplay?: boolean;
 }
 
 export const COLOR_FIELD_SIZE = 21;
@@ -32,10 +31,10 @@ export default function ColorField(props: Props) {
     return props.fullText ? props.text : Array.from(props.text)[0];
   };
 
-  const {style = null, color, forceDisplay} = props;
+  const {style = null, color} = props;
   const hasNoColor: boolean = !color || color?.id === NO_COLOR_CODING_ID;
 
-  return hasNoColor && !forceDisplay ? null : (
+  return (
     <View
       testID="test:id/color-field-value-wrapper"
       accessible={true}
