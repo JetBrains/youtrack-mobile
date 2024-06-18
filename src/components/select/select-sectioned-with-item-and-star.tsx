@@ -26,7 +26,7 @@ interface ISSWithItemActionsState extends ISectionedState {
 }
 
 export class SectionedSelectWithItemActions<P extends ISSWithItemActionsProps, S extends ISSWithItemActionsState> extends SelectSectioned<P, S> {
-  _renderTitle(item: IItem): React.ReactNode {
+  _renderTitle(item: IItem) {
     const name: string = `${item.name}${item.shortName ? ` (${item.shortName})` : ''}`;
     return (
       <>
@@ -51,7 +51,7 @@ export class SectionedSelectWithItemActions<P extends ISSWithItemActionsProps, S
 }
 
 export class SectionedSelectWithItemActionsModal<P extends ISSWithItemActionsProps, S extends ISSWithItemActionsState> extends SelectSectionedModal<P, S> implements SectionedSelectWithItemActions<P, S> {
-  render: () => React.ReactNode = (): React.ReactNode => {
+  render = () => {
     return (
       <ModalPortal
         testID="test:id/selectModalContainer"

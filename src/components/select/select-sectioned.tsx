@@ -44,7 +44,7 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
     };
   }
 
-  renderSectionHeader = ({section}: { section: SLItem }): React.ReactNode => {
+  renderSectionHeader = ({section}: { section: SLItem }) => {
     return section.title ? (
       <View style={[styles.sectionHeader, !section.title.trim() && styles.sectionHeaderEmpty]}>
         <Text style={styles.sectionHeaderText}>{section.title}</Text>
@@ -58,16 +58,15 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
         {...akk, [it.id]: it.id}),
       {}
     );
-    return source?.reduce(
-      (akk, it) => [
-        ...akk,
-        {
+    return source
+      ?.reduce((akk, it) => {
+        akk.push({
           ...it,
           data: it.data.filter((it: IItem) => !(it.id in selectedMap)),
-        },
-      ],
-        []
-    ).filter((it: SLItem) => it.data.length > 0);
+        });
+        return akk;
+      }, [])
+      .filter((it: SLItem) => it.data.length > 0);
   }
 
   getFilteredItems(items: SLItem[], selected?: SLItem[]): Section[] {
@@ -76,10 +75,13 @@ export default class SelectSectioned<P extends ISectionedProps, S extends ISecti
 
     if (_selectedItems?.length) {
       const itemsMap: Record<string, SLItem> = items.reduce((akk, it: SLItem) => {
-        return {
-          ...akk,
-          ...it.data.reduce((a,i) => ({...a, [i.id]: i}), {}),
-        };
+        if (it?.data) {
+          akk = {
+            ...akk,
+            ...it.data.reduce((a,i) => ({...a, [i.id]: i}), {}),
+          };
+        }
+        return akk;
       }, {});
 
       _selectedItems = _selectedItems.reduce((akk: SLItem[], it: SLItem) => {
@@ -158,26 +160,26 @@ export class SelectSectionedModal<P extends ISectionedProps, S extends ISelectio
     this.state = {...this.state, visible: true};
   }
 
-  onHide: () => void = (): void => {
+  onHide = () => {
     this.setState({
       visible: false,
     });
   };
-  onCancel: () => void = (): void => {
+  onCancel = () => {
     this.props.onCancel();
     this.onHide();
   };
-  onSelect: (items: any) => void = (item: any): void => {
+  onSelect = (item: IItem) => {
     this.props.onSelect(item);
     this.onHide();
   };
   getWrapperProps = (): IItem | null => {
     return null;
   };
-  getWrapperComponent: () => any = (): any => {
+  getWrapperComponent = () => {
     return View;
   };
-  render: () => React.ReactNode = (): React.ReactNode => {
+  render = () => {
     return (
       <ModalPortal
         testID="test:id/selectModalContainer"

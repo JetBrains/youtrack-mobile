@@ -9,27 +9,27 @@ import {View as AnimatedView} from 'react-native-animatable';
 
 import styles from './select.styles';
 
+import type {IItem} from 'components/select/select';
 import type {ViewStyleProp} from 'types/Internal';
-import {IItem} from 'components/select/select';
 
-export type Props = {
+export interface Props {
   item: IItem;
   isSelected: boolean;
-  onPress: (item: Record<string, any>) => any;
-  onLongPress?: (arg0: any) => any;
+  onPress: (item: IItem) => void;
+  onLongPress?: (item: IItem) => void;
   disabled?: boolean;
-  titleRenderer?: (item: Record<string, any>) => any;
+  titleRenderer?: (item: IItem) => React.ReactNode;
   style?: ViewStyleProp;
-};
+}
 
 
 export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
   static defaultProps: {
     isSelected: boolean;
-    onPress: (item: any) => void;
+    onPress: (item: IItem) => void;
   } = {
     isSelected: false,
-    onPress: (item: Record<string, any>) => {},
+    onPress: (item: IItem) => {},
   };
 
   getDefaultTitle(item: Record<string, any>): string {
@@ -49,7 +49,7 @@ export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
     onPress(item);
   };
 
-  render(): React.ReactNode {
+  render() {
     const {
       item,
       isSelected,
