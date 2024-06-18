@@ -26,7 +26,7 @@ import {getAssistSuggestions} from 'components/query-assist/query-assist-helper'
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {getGroupedFolders, GroupedFolders, sortFolders} from 'components/folder/folder';
 import {i18n} from 'components/i18n/i18n';
-import {guid, removeDuplicatesFromArray, until} from 'util/util';
+import {removeDuplicatesFromArray, until} from 'util/util';
 import {
   receiveUserAppearanceProfile, receiveUserHelpdeskProfile,
   setGlobalInProgress,
@@ -407,20 +407,23 @@ const openFilterFieldSelect = (filterSetting: FilterSetting): ReduxAction => (
     dataSource: async (prefix: string = '') => {
       const q = await dispatch(composeSearchQuery());
       const contextQuery = await dispatch(getSearchContext()).query;
-      const [error, filterFieldValues] = await until(
+      const [error, filterFieldValues] = await until<FilterFieldValue[]>(
         filterSetting.filterField.map(
           (it: FilterField) => getApi().filterFields.filterFieldValues(it.id, prefix, `${contextQuery} ${q}`)
         ),
         true,
         true
-      ) as [CustomError | null, FilterFieldValue[]];
+      );
+      let _values = [];
+      if (!error && filterFieldValues.length) {
+        _values = removeDuplicatesFromArray(
+          filterFieldValues.map(i => ({id: i.id, name: i.presentation})).concat(selectedItems)
+        );
+      }
       if (error) {
         log.warn('Failed to load user folders for the context');
       }
-      const _values = removeDuplicatesFromArray(
-        filterFieldValues.map(i => ({id: i?.id || guid(), name: i.presentation})).concat(selectedItems)
-      );
-      return error ? [] : _values;
+      return _values;
     },
     selectedItems,
     onCancel: () => dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT()),
