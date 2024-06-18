@@ -547,7 +547,7 @@ msgstr "Filter boards by name"
 msgid "Filter existing accounts by name or username"
 msgstr "Filter existing accounts by name or username"
 
-#: src/components/select/select.tsx:353
+#: src/components/select/select.tsx:350
 msgid "Filter items"
 msgstr "Filter items"
 
@@ -692,7 +692,7 @@ msgstr "Link to comment copied"
 msgid "Linked issues"
 msgstr "Linked issues"
 
-#: src/components/select/select.tsx:308
+#: src/components/select/select.tsx:305
 msgid "Loading values…"
 msgstr "Loading values…"
 
@@ -812,7 +812,7 @@ msgstr "No favorites projects found"
 msgid "No issues found"
 msgstr "No issues found"
 
-#: src/components/select/select.tsx:312
+#: src/components/select/select.tsx:309
 msgid "No items"
 msgstr "No items"
 
