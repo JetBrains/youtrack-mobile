@@ -214,8 +214,7 @@ export class AuthBase {
       | undefined = await getStoredSecurelyAuthParams(authParamsKey);
 
     if (!authParams) {
-      log.log('No stored auth params found');
-      throw new Error('');
+      throw new Error('No stored auth params found');
     }
 
     return authParams;
