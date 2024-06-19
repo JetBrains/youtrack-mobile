@@ -60,7 +60,7 @@ export default function Settings() {
           }}
           onClose={() => {}}
           onLogOut={() => {
-            dispatch(appActions.removeAccountOrLogOut());
+            dispatch(appActions.signOutFromAccount());
           }}
           openDebugView={() => clicksToShowCounter(() => Router.PageModal({children: <FeaturesDebugSettings />}))}
           otherAccounts={otherAccounts}

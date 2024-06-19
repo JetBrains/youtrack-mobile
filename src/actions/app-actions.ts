@@ -474,25 +474,19 @@ export function changeAccount(
   };
 }
 
-export function removeAccountOrLogOut(): ReduxAction {
+export function signOutFromAccount(): ReduxAction {
   return async (
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
     getApi: ReduxAPIGetter,
   ) => {
-    const otherAccounts: StorageState[] =
-      getState().app.otherAccounts || [];
-
-    if (isRegisteredForPush()) {
-      setRegisteredForPush(false);
-
-      try {
-        await PushNotifications.unregister(getState().app.user?.login!);
-      } catch (err) {
-        log.warn('Failed to unsubscribe from push notifications', err);
-      }
+    const otherAccounts: StorageState[] = getState().app.otherAccounts || [];
+    setRegisteredForPush(false);
+    try {
+      await PushNotifications.unregister(getState().app.user?.login!);
+    } catch (err) {
+      log.warn('Failed to unsubscribe from push notifications', err);
     }
-
     await getApi().user.logout();
     dispatch(logOut());
     await storage.clearStorage();
@@ -654,7 +648,7 @@ export function acceptUserAgreement(): ReduxAction {
       await api.acceptUserAgreement();
       dispatch(completeInitialization());
     } catch (e) {
-      dispatch(removeAccountOrLogOut());
+      dispatch(signOutFromAccount());
     } finally {
       dispatch({type: types.HIDE_USER_AGREEMENT});
     }
@@ -668,7 +662,7 @@ export function declineUserAgreement(): ReduxAction {
     dispatch({
       type: types.HIDE_USER_AGREEMENT,
     });
-    dispatch(removeAccountOrLogOut());
+    dispatch(signOutFromAccount());
   };
 }
 

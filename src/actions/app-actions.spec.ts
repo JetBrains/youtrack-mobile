@@ -178,7 +178,7 @@ describe('app-actions', () => {
   });
 
 
-  describe('removeAccountOrLogOut', () => {
+  describe('signOutFromAccount', () => {
     afterEach(() => {
       (PushNotifications.unregister as jest.Mock).mockReset();
       (appStateMock.auth?.logOut as jest.Mock)?.mockReset?.();
@@ -193,7 +193,7 @@ describe('app-actions', () => {
     it('should logout from the only account', async () => {
       const auth = appStateMock.auth as OAuth2;
       jest.spyOn(auth, 'logOut');
-      await dispatch(actions.removeAccountOrLogOut());
+      await dispatch(actions.signOutFromAccount());
 
       expect(auth.logOut).toHaveBeenCalled();
     });
@@ -204,22 +204,22 @@ describe('app-actions', () => {
       } as unknown as AppState);
       const auth = appStateMock.auth as OAuth2;
       jest.spyOn(auth, 'logOut');
-      await dispatch(actions.removeAccountOrLogOut());
+      await dispatch(actions.signOutFromAccount());
 
       expect(auth.logOut).toHaveBeenCalled();
       expect(apiMock.user.logout).toHaveBeenCalled();
     });
 
-    it('should not unsubscribe from push notifications', async () => {
+    it('should unsubscribe from push notifications in any case', async () => {
       setRegistered(false);
-      await dispatch(actions.removeAccountOrLogOut());
+      await dispatch(actions.signOutFromAccount());
 
-      expect(PushNotifications.unregister).not.toHaveBeenCalled();
+      expect(PushNotifications.unregister).toHaveBeenCalled();
     });
 
     it('should unsubscribe from push notifications', async () => {
       setRegistered(true);
-      await dispatch(actions.removeAccountOrLogOut());
+      await dispatch(actions.signOutFromAccount());
 
       expect(PushNotifications.unregister).toHaveBeenCalled();
     });
