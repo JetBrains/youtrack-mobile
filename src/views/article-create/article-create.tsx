@@ -148,7 +148,7 @@ const ArticleCreate = (props: Props) => {
         placeholder: i18n('Filter projects'),
         dataSource: () =>
           Promise.resolve(
-            getStorageState().projects.filter(
+            (getStorageState().projects || []).filter(
               it => issuePermissions.articleCanCreateArticle(it.ringId),
             ),
           ),

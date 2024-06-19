@@ -461,7 +461,7 @@ const showContextActions = (
 
   if (
     canCreateArticle &&
-    getStorageState().projects.some(it => it.pinned)
+    (getStorageState().projects || []).some(it => it.pinned)
   ) {
     actions.unshift({
       title: i18n('New Article'),
