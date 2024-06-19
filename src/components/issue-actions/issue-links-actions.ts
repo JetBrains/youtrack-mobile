@@ -96,9 +96,9 @@ const issueCommonLinksActions = (
       try {
         links = await api.issue.getIssueLinksTitle(issue.id);
         log.info(`Linked issues title data loaded`);
-      } catch (rawError) {
+      } catch (e) {
         links = [];
-        const error = await resolveError(rawError);
+        const error = await resolveError(e);
         log.warn('Failed to load linked issues', error);
       }
 

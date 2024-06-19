@@ -11,9 +11,9 @@ import {HTTP_STATUS} from 'components/error/error-http-codes';
 import Auth from 'components/auth/oauth2';
 import type {AppConfig} from 'types/AppConfig';
 import type {RequestHeaders} from 'types/Auth';
-import {Attachment} from 'types/CustomFields';
-import {NormalizedAttachment} from 'types/Attachment';
-import {Visibility, VisibilityGroups} from 'types/Visibility';
+import type {Attachment} from 'types/CustomFields';
+import type {NormalizedAttachment} from 'types/Attachment';
+import type {Visibility, VisibilityGroups} from 'types/Visibility';
 
 const MAX_QUERY_LENGTH = 2048;
 
@@ -124,7 +124,7 @@ export default class BaseAPI {
     if (this.isError(response)) {
       const isNotAuthorized: boolean = response.status === HTTP_STATUS.UNAUTHORIZED || this.isTokenOutdated();
       if (!isNotAuthorized) {
-        log.warn('Request failed. Unauthorised', response);
+        log.warn('Request failed. Unauthorized');
         throw response;
       } else {
         log.info('API: Unauthorised. Refreshing token...');
@@ -186,7 +186,7 @@ export default class BaseAPI {
     if (this.isError(response)) {
       const isNotAuthorized: boolean = response.status === HTTP_STATUS.UNAUTHORIZED || this.isTokenOutdated();
       if (!isNotAuthorized) {
-        log.warn('Request failed', response);
+        log.warn('Request failed. Unauthorized');
         throw response;
       } else {
         log.info('API: Unauthorised. Refreshing token...');

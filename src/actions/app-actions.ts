@@ -685,7 +685,7 @@ function checkUserAgreement(): ReduxAction {
     const api: Api = getApi();
     const auth: OAuth2 = (getState().app.auth as any) as OAuth2;
     const {currentUser} = auth;
-    log.info('App Actions: Checking user agreement', currentUser);
+    log.info('App Actions: Checking user agreement');
 
     if (
       currentUser &&
