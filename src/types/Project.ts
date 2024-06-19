@@ -14,7 +14,8 @@ export interface ProjectEntity extends EntityBase {
   ringId: string;
 }
 
-export interface ProjectHelpDeskSettingsBase extends EntityBase {
+export interface ProjectHelpDeskSettingsBase {
+  $type: string;
   enabled: boolean;
 }
 
@@ -31,9 +32,14 @@ export interface ProjectWithPlugins extends ProjectEntity {
   };
 }
 
-export interface Project extends ProjectEntity {
-  shortName: string;
+export interface ProjectBase extends ProjectEntity {
   archived: boolean;
+  restricted: boolean;
+  shortName: string;
+  template: boolean;
+}
+
+export interface Project extends ProjectBase {
   pinned: boolean;
   plugins?: {
     helpDeskSettings?: ProjectHelpDeskSettingsBase;
@@ -43,8 +49,6 @@ export interface Project extends ProjectEntity {
       workItemTypes?: WorkItemType[];
     };
   };
-  template: boolean;
-  restricted: boolean;
 }
 
 export interface UserProject extends ProjectEntity {

@@ -53,7 +53,7 @@ export default class IssueAPI extends ApiBase {
       issue.attachments,
       this.config.backendUrl,
     );
-    return issue;
+    return ApiHelper.patchAllRelativeAvatarUrls(issue, this.config.backendUrl);
   }
 
   async deleteIssue(id: string): Promise<void> {

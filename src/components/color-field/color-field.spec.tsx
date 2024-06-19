@@ -19,10 +19,10 @@ describe('<ColorField/>', () => {
       expect(screen.getByTestId('test:id/color-field-value')).toBeTruthy();
     });
 
-    it('should not render if color coding is default', () => {
+    it('should render if color coding is default', () => {
       doRender({color: {id: NO_COLOR_CODING_ID, foreground: '', background: ''}});
 
-      expect(screen.queryByTestId('test:id/color-field-value')).toBeNull();
+      expect(screen.queryByTestId('test:id/color-field-value')).toBeTruthy();
     });
 
     it('should render first letter of color field', () => {

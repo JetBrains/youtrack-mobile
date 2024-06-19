@@ -3,7 +3,7 @@ import {ActivityIndicator, FlatList, Text, TextInput, TouchableOpacity, View,} f
 
 import debounce from 'lodash.debounce';
 
-import ColorField from 'components/color-field/color-field';
+import ColorField, {NO_COLOR_CODING_ID} from 'components/color-field/color-field';
 import ModalPortal from 'components/modal-view/modal-portal';
 import ModalView from 'components/modal-view/modal-view';
 import SelectItem from './select__item';
@@ -180,12 +180,12 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
 
   _onSearch = debounce(this.onSearch, 300);
 
-  _renderTitle(item: IItem): React.ReactNode {
+  _renderTitle(item: IItem) {
     const label: React.ReactElement<React.ComponentProps<any>, any> = (
       <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>
     );
 
-    if (item.color) {
+    if (item.color && item.color.id !== NO_COLOR_CODING_ID) {
       return (
         <View style={styles.colorFieldItemWrapper}>
           <ColorField
@@ -207,7 +207,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     );
   }
 
-  onSelect(item: any): any {
+  onSelect(item: IItem | null) {
     return this.props.onSelect(item);
   }
 
@@ -243,12 +243,9 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     return this.onSelect(this.state.selectedItems);
   }
 
-  getItemLayout(
-    items: IItem[] | null | undefined,
-    index: number,
-  ): {
+  getItemLayout(items: IItem[] | null, index: number): {
     index: number;
-    length: any;
+    length: number;
     offset: number;
   } {
     return {
@@ -318,7 +315,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     );
   }
 
-  getWrapperComponent(): any {
+  getWrapperComponent(): React.ElementType {
     return this.props.getWrapperComponent
       ? this.props.getWrapperComponent()
       : ModalView;
@@ -330,7 +327,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
       : defaultWrapperProps;
   }
 
-  onCancel: () => void = (): void => {
+  onCancel = () => {
     this.props.onCancel();
   };
 
@@ -345,7 +342,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     this._onSearch(text);
   };
 
-  renderContent = (): React.ReactNode => {
+  renderContent = () => {
     const {
       multi,
       autoFocus,
@@ -416,7 +413,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     );
   };
 
-  render(): React.ReactNode {
+  render() {
     return this.renderContent();
   }
 }
@@ -428,26 +425,26 @@ export class SelectModal extends Select<ISelectProps, ISelectState & { visible: 
     this.state = {...this.state, visible: true};
   }
 
-  onHide: () => void = (): void => {
+  onHide = () => {
     this.setState({
       visible: false,
     });
   };
-  onCancel: () => void = (): void => {
+  onCancel = () => {
     this.props.onCancel();
     this.onHide();
   };
-  onSelect: (items: any) => void = (item: any): void => {
+  onSelect = (item: IItem) => {
     this.props.onSelect(item);
     this.onHide();
   };
   getWrapperProps = (): IItem | null => {
     return null;
   };
-  getWrapperComponent: () => any = (): any => {
+  getWrapperComponent = () => {
     return View;
   };
-  render: () => React.ReactNode = (): React.ReactNode => {
+  render = () => {
     const {visible} = this.state;
     return (
       <ModalPortal

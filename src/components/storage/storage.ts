@@ -196,64 +196,8 @@ export const initialState: Readonly<StorageState> = {
   helpdeskMenuHidden: false,
 };
 
-function cleanAndLogState(message, state?: StorageState) {
-  const CENSORED: string = 'CENSORED';
-  const config: Partial<AppConfig> | null | undefined = state?.config
-    ? ({
-        ...state.config,
-        backendUrl: state.config.backendUrl,
-        auth: state.config.auth
-          ? {
-              serverUri: state.config.auth.serverUri,
-              scopes: state.config.auth.scopes,
-            }
-          : undefined,
-        statisticsEnabled: state.config.statisticsEnabled,
-        version: state.config.version,
-      } as any)
-    : undefined;
-  log.debug(message, {
-    ...state,
-    ...(state?.agileLastSprint
-      ? {
-          agileLastSprint: state.agileLastSprint.id,
-        }
-      : undefined),
-    ...(state?.articleLastVisited
-      ? {
-          articleLastVisited: state.articleLastVisited,
-        }
-      : undefined),
-    ...(state?.articlesList
-      ? {
-          articlesList: state.articlesList.length,
-        }
-      : undefined),
-    ...(state?.currentUser
-      ? {
-          currentUser: state.currentUser.guest,
-        }
-      : undefined),
-    ...{
-      config,
-    },
-    ...(state?.projects
-      ? {
-          projects: state.projects.length,
-        }
-      : undefined),
-    ...(state?.permissions
-      ? {
-          permissions: state.permissions.length,
-        }
-      : undefined),
-    issuesCache: CENSORED,
-    inboxCache: CENSORED,
-  });
-}
-
 export async function clearCachesAndDrafts(): Promise<StorageState> {
-  log.debug('Storage drafts has been cleared');
+  log.info('Storage drafts has been cleared');
   await AsyncStorage.multiRemove([
     storageKeys.articles,
     storageKeys.articlesList,
@@ -333,7 +277,7 @@ export async function populateStorage(): Promise<StorageState> {
     },
     initialStateCopy,
   );
-  cleanAndLogState('Storage populated', storageState);
+  log.info('Storage populated');
   await secureAccount(storageState);
   return storageState;
 }
@@ -359,7 +303,7 @@ export async function flushStorage(
   );
 
   if (pairsToWrite.length === 0) {
-    log.debug('Storage state is empty, no actual write has been done');
+    log.info('Storage state is empty, no actual write has been done');
     return newState;
   }
 
@@ -377,7 +321,6 @@ export async function flushStoragePart(
   let newState: Promise<StorageState>;
 
   try {
-    cleanAndLogState('Flushing storage part');
     newState = flushStorage({...currentState, ...part});
   } catch (error) {
     newState = new Promise(resolve => resolve(currentState));

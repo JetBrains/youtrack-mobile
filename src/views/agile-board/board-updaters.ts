@@ -337,7 +337,7 @@ export function moveIssueOnBoard(
   const issueOnBoard = findIssueOnBoard(board, movedId);
 
   if (!issueOnBoard) {
-    log.debug('Cannot find moved issue on board');
+    log.info('Agile: Cannot find moved issue on board');
     return;
   }
 

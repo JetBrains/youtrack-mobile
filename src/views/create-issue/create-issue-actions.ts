@@ -1,7 +1,6 @@
 import {ActionSheetProvider} from '@expo/react-native-action-sheet';
 
 import * as commandDialogHelper from 'components/command-dialog/command-dialog-helper';
-import ApiHelper from 'components/api/api__helper';
 import issueCommonLinksActions from 'components/issue-actions/issue-links-actions';
 import log from 'components/log/log';
 import usage from 'components/usage/usage';
@@ -92,7 +91,7 @@ export function loadStoredProject(): ReduxAction {
     }
 
     if (projectId) {
-      log.info(`Stored project loaded, id=${projectId}`);
+      log.info(`Create Issue Actions: Last stored project loaded`);
       dispatch(actions.setDraftProjectId({projectId}));
       await dispatch(updateIssueDraft());
     }
@@ -105,10 +104,10 @@ export function loadIssueFromDraft(draftId: string): ReduxAction {
 
     try {
       const draftIssue = await api.issue.loadIssueDraft(draftId);
-      log.info(`Issue draft loaded, "${draftIssue.id || ''}"`);
+      log.info(`Create Issue Actions: Issue draft loaded`);
       dispatch(actions.setIssueDraft({issue: draftIssue}));
     } catch (err) {
-      log.info('Cannot load issue draft, cleaning up');
+      log.info('Create Issue Actions: Cannot load issue draft, cleaning up');
       clearIssueDraftStorage();
       dispatch(actions.resetIssueDraftId());
       dispatch(loadStoredProject());
@@ -161,7 +160,7 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Reco
         delete updatedDraftIssue.fields;
       }
 
-      log.info('Issue draft updated', draftIssue.id);
+      log.info('Create Issue Actions: Issue draft updated');
       dispatch(actions.setIssueDraft({issue: updatedDraftIssue}));
 
       if (!getState().creation.predefinedDraftId) {
@@ -195,12 +194,12 @@ export function initializeWithDraftOrProject(preDefinedDraftId: string | null): 
     const draftId = preDefinedDraftId || getStorageState().draftId;
 
     if (draftId) {
-      log.info(`Initializing with draft ${draftId}`);
+      log.info(`Create Issue Actions: Initializing with draft`);
       await dispatch(loadIssueFromDraft(draftId));
       dispatch(actions.setIssueLinks({links: await dispatch(loadIssueLinksTitle())}));
       dispatch(initAndSetIssueDrafts());
     } else {
-      log.info('Draft not found, initializing new draft');
+      log.info('Create Issue Actions: Draft not found, initializing new draft');
       await dispatch(loadStoredProject());
     }
   };
@@ -248,13 +247,12 @@ export function createIssue(
     try {
       await dispatch(updateIssueDraft(true));
       const created = await api.issue.createIssue(getState().creation.issue);
-      log.info('Issue has been created');
+      log.info('Create Issue Actions: Issue has been created');
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Success');
       const isMatches: boolean = await isMatchesQuery(created.idReadable);
 
       if (isMatches) {
-        const filledIssue: AnyIssue = ApiHelper.fillIssuesFieldHash([created])[0];
-        dispatch(propagateCreatedIssue(filledIssue, getState().creation.predefinedDraftId));
+        dispatch(propagateCreatedIssue(created, getState().creation.predefinedDraftId));
       }
 
       dispatch(actions.resetCreation());
@@ -272,7 +270,7 @@ export function createIssue(
 export function updateProject(project: Record<string, any>): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
     dispatch(actions.setIssueProject({project}));
-    log.info('Project has been updated');
+    log.info('Create Issue Actions: Project has been updated');
     usage.trackEvent(CATEGORY_NAME, 'Change project');
     dispatch(updateIssueDraft(false, {fields: []}));
     storeProjectId(project.id);
@@ -283,10 +281,7 @@ export function updateFieldValue(field: CustomField | CustomFieldText, value: Pa
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     dispatch(actions.setIssueFieldValue({field, value}));
     usage.trackEvent(CATEGORY_NAME, 'Change field value');
-    log.info('Value of draft field has been changed successfully', {
-      field,
-      value,
-    });
+    log.info('Create Issue Actions: Value of draft field has been changed successfully');
     const api = getApi();
     const {issue} = getState().creation;
 
@@ -294,7 +289,7 @@ export function updateFieldValue(field: CustomField | CustomFieldText, value: Pa
       await dispatch(updateIssueDraft(true)); // Update summary/description first
 
       await api.issue.updateIssueDraftFieldValue(issue.id, field.id, value);
-      log.info('Issue field value updated');
+      log.info('Create Issue Actions: Issue field value updated');
       dispatch(loadIssueFromDraft(issue.id));
     } catch (err) {
       notifyError(err as CustomError);

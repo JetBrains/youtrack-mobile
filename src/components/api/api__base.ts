@@ -11,9 +11,9 @@ import {HTTP_STATUS} from 'components/error/error-http-codes';
 import Auth from 'components/auth/oauth2';
 import type {AppConfig} from 'types/AppConfig';
 import type {RequestHeaders} from 'types/Auth';
-import {Attachment} from 'types/CustomFields';
-import {NormalizedAttachment} from 'types/Attachment';
-import {Visibility, VisibilityGroups} from 'types/Visibility';
+import type {Attachment} from 'types/CustomFields';
+import type {NormalizedAttachment} from 'types/Attachment';
+import type {Visibility, VisibilityGroups} from 'types/Visibility';
 
 const MAX_QUERY_LENGTH = 2048;
 
@@ -124,17 +124,17 @@ export default class BaseAPI {
     if (this.isError(response)) {
       const isNotAuthorized: boolean = response.status === HTTP_STATUS.UNAUTHORIZED || this.isTokenOutdated();
       if (!isNotAuthorized) {
-        log.warn('Request failed. Unauthorised', response);
+        log.warn('Request failed. Unauthorized');
         throw response;
       } else {
-        log.debug('Unauthorised. Refreshing token...');
+        log.info('API: Unauthorised. Refreshing token...');
         try {
           await this.auth.refreshToken();
-          log.debug('Repeating a request');
+          log.info('API: Repeating a request');
           response = await request();
         } catch (e) {
           if (!this.isRefreshingToken) {
-            log.debug('Unauthorised. Token refresh failed. Logging in...', e);
+            log.info('API: Unauthorised. Token refresh failed. Logging in...', e);
             this.isRefreshingToken = true;
           }
           throw e;
@@ -155,22 +155,10 @@ export default class BaseAPI {
     },
   ): Promise<any> {
     url = patchTopParam(url);
-    log.debug(
-      `"${method || 'GET'}" to ${url}${
-        body ? ` with body |${JSON.stringify(body)}|` : ''
-      }`,
-    );
     assertLongQuery(url);
 
     const sendRequest = async (): Promise<Response> => {
       const requestHeaders: RequestHeaders = this.auth.getAuthorizationHeaders();
-
-      if (!requestHeaders.Authorization) {
-        log.warn(
-          `Missing auth header in a request: "${method || 'GET'}":${url}`,
-        );
-      }
-
       return await fetch2(
         url,
         {
@@ -191,17 +179,17 @@ export default class BaseAPI {
     if (this.isError(response)) {
       const isNotAuthorized: boolean = response.status === HTTP_STATUS.UNAUTHORIZED || this.isTokenOutdated();
       if (!isNotAuthorized) {
-        log.warn('Request failed', response);
+        log.warn('Request failed. Unauthorized');
         throw response;
       } else {
-        log.debug('Unauthorised. Refreshing token...');
+        log.info('API: Unauthorised. Refreshing token...');
         try {
           await this.auth.refreshToken();
-          log.debug('Repeat a request', url);
+          log.info('API: Repeat a request');
           response = await sendRequest();
         } catch (e) {
           if (!this.isRefreshingToken) {
-            log.debug('Unauthorised. Token refresh failed. Logging in...', e);
+            log.info('API: Unauthorised. Token refresh failed. Logging in...', e);
             this.isRefreshingToken = true;
             Router.EnterServer({serverUrl: this.config.backendUrl});
           }
@@ -224,7 +212,7 @@ export default class BaseAPI {
       parseJson: true,
     },
   ) {
-    log.debug(`'Submitting a form' to ${url} with body ${JSON.stringify(body)}`);
+    log.info('API: Submitting a form');
     const request = async (): Promise<Response> => {
       const formData = new FormData();
       formData.append(name, JSON.stringify(body));

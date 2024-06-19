@@ -113,9 +113,9 @@ export const createActions = (
         };
 
         try {
-          log.debug(`Loading issue "${issueId}"`);
+          log.info('Issue Actions: Loading issue');
           const issue = await api.issue.getIssue(issueId);
-          log.info(`Issue "${issueId}" loaded`);
+          log.info('Issue Actions: Issue loaded');
           issue.fieldHash = ApiHelper.makeFieldHash(issue);
           doUpdate(issue);
           updateCache(issue);
@@ -212,9 +212,6 @@ export const createActions = (
           const successMessage = i18n('Issue updated');
           await dispatch(actions.loadIssue());
           notify(successMessage);
-          log.debug(
-            `${successMessage} "${(getState()[stateFieldName] as IssueState).issueId}" loaded`,
-          );
         } catch (error) {
           notifyError(error as CustomError);
         } finally {
@@ -250,7 +247,7 @@ export const createActions = (
             descriptionCopy,
             textCustomFields.length > 0 ? textCustomFields : undefined,
           );
-          log.info(`Issue (${issue.id}) summary/description has been updated`);
+          log.info(`Issue Actions: Issue summary/description has been updated`);
           usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Update issue', 'Success');
           await dispatch(actions.loadIssue());
           dispatch(dispatchActions.stopEditingIssue());
@@ -341,7 +338,7 @@ export const createActions = (
 
         try {
           await updateMethod(issue.id, field.id, value);
-          log.info('Field value updated', field, value);
+          log.info('Issue Actions: Field value updated');
           await dispatch(actions.loadIssue());
           dispatch(
             dispatchActions.issueUpdated((getState()[stateFieldName] as IssueState).issue),
@@ -353,7 +350,7 @@ export const createActions = (
             error.error_type === 'workflow' &&
             error.error_workflow_type === 'require'
           ) {
-            log.info('Workflow require received', error);
+            log.info('Issue Actions: Workflow require received', error);
             dispatch(
               dispatchActions.openCommandDialog(`${error.error_field} `),
             );
@@ -379,7 +376,7 @@ export const createActions = (
 
         try {
           await api.issue.updateProject(issue, project);
-          log.info('Project updated');
+          log.info('Issue Actions: Project updated');
           await dispatch(actions.loadIssue());
           dispatch(
             dispatchActions.issueUpdated((getState()[stateFieldName] as IssueState).issue),

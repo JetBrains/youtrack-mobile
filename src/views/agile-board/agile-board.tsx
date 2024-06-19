@@ -241,7 +241,7 @@ class AgileBoard extends Component<Props, State> {
 
   clearModalChildren = () => this.toggleModalChildren(null);
   _onTapIssue = (issue: IssueOnList) => {
-    log.debug(`Opening issue "${issue.id}" from Agile Board`);
+    log.info(`Agile: Opening issue from Agile Board`);
     usage.trackEvent(CATEGORY_NAME, 'Open issue');
 
     if (this.state.isSplitView) {

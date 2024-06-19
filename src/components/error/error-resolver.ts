@@ -1,9 +1,6 @@
 import {DEFAULT_ERROR_MESSAGE} from './error-messages';
 import type {CustomError} from 'types/Error';
-export const extractErrorMessage = function (
-  err: CustomError | string,
-  isDescriptionOnly: boolean | null | undefined,
-): string {
+export const extractErrorMessage = function (err: CustomError | string, isDescriptionOnly?: boolean): string {
   if (!err) {
     return DEFAULT_ERROR_MESSAGE;
   }
@@ -12,9 +9,7 @@ export const extractErrorMessage = function (
     return err;
   }
 
-  let fields = [
-    err.error_description,
-  ];
+  let fields = [err.error_description];
 
   if (!isDescriptionOnly) {
     fields = fields.concat([
@@ -27,15 +22,13 @@ export const extractErrorMessage = function (
     ]);
   }
 
-  let errorText = fields.filter(Boolean).join('. ');
+  let errorText = fields.filter(i => i != null).join('. ');
   if (err.error_children) {
     errorText = [errorText, ...err.error_children.map(it => it.error)].join('\n  - ');
   }
   return errorText || DEFAULT_ERROR_MESSAGE;
 };
-export async function resolveError(
-  err: CustomError | null | undefined,
-): Promise<any> {
+export async function resolveError(err: CustomError): Promise<CustomError> {
   if (err && err.json) {
     try {
       return await err.json();
@@ -46,16 +39,11 @@ export async function resolveError(
     return err;
   }
 }
-export async function resolveErrorMessage(
-  err: CustomError | null | undefined,
-  isDescriptionOnly?: boolean,
-): Promise<string> {
+export async function resolveErrorMessage(err: CustomError, isDescriptionOnly?: boolean) {
   const error = await resolveError(err);
   return extractErrorMessage(error, isDescriptionOnly);
 }
-export function getErrorMessage(
-  error: CustomError | null | undefined,
-): string {
+export function getErrorMessage(error: CustomError): string {
   return (
     error?.message ||
     error?.localizedDescription ||

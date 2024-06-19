@@ -13,7 +13,12 @@ const extractIssueId = (issueUrl: string = ''): string | null => {
   const url = decodeURIComponent(issueUrl);
   const matchIssue = url.match(issueIdReg);
   const matchTicket = url.match(ticketIdReg);
-  log.debug(`Extracted ID from URL ${matchIssue?.[1]}`);
+  if (matchTicket?.[1]) {
+    log.info(`Open URL Handler: Extracted Ticket ID from URL`);
+  }
+  if (matchIssue?.[1]) {
+    log.info(`Open URL Handler: Extracted Issue ID from URL`);
+  }
   return matchIssue?.[1] || matchTicket?.[1] || null;
 };
 
@@ -30,13 +35,15 @@ function extractIssuesQuery(issuesUrl: string | null | undefined): string | null
   const match = issuesUrl.match(/\?(.*)/);
 
   if (!match || !match[1]) {
-    log.warn(`Cannot extract query string from "${issuesUrl}"`);
+    log.warn(`Open URL Handler: Cannot extract query string from URL`);
     return null;
   }
 
   const queryString: string = match[1];
   const query = qs.parse(queryString).q;
-  log.info(`extractIssuesQuery: ${query} :: from URL: "${issuesUrl}"`);
+  if (query) {
+    log.info(`Open URL Handler: query is parsed from URL`);
+  }
   return query as string;
 }
 
@@ -58,19 +65,17 @@ function parseUrl(
   if (typeof issueId === 'string' || typeof articleId === 'string') {
     log.info(
       issueId
-        ? `Issue ID detected in URL: ${issueId}` : (articleId
-          ? `Article ID detected in URL: ${articleId}`
-          : ''),
+        ? `Open URL Handler: Issue ID detected in URL` : (articleId ? `Open URL Handler: Article ID detected in URL` : ''),
     );
     return onIdDetected(url, issueId, articleId);
   }
 
   const query: string | null = extractIssuesQuery(url);
   if (query) {
-    log.info(`Query detected in URL: ${query}`);
+    log.info('Open URL Handler: Query detected in the URL');
     return onQueryDetected(url, query);
   } else {
-    log.info(`No entity ID or query detected in URL ${url}`);
+    log.info(`Open URL Handler: No entity ID or query detected in URL`);
   }
 
   DeviceEventEmitter.emit('openWithUrl', decodeURIComponent(url));
@@ -82,8 +87,8 @@ const openByUrlDetector = async (
 ) => {
   setTimeout(() => {
     Linking.getInitialURL().then((url: string | null) => {
-      log.debug(`App has been initially started with URL "${url || 'NOPE'}"`);
       if (url) {
+        log.info('Open URL Handler: App has been initially started by pressing an URL');
         return parseUrl(url, onIdDetected, onQueryDetected);
       }
     });
@@ -92,7 +97,7 @@ const openByUrlDetector = async (
   const onURLOpen = (event: { url: string } | string) => {
     const url: string = typeof event === 'string' ? event : event?.url;
     if (url) {
-      log.debug(`Linking URL event fired with URL "${url}"`);
+      log.info(`Open URL Handler: On URL press event is fired`);
       parseUrl(url, onIdDetected, onQueryDetected);
     }
   };

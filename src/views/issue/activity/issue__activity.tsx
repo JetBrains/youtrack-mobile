@@ -44,7 +44,7 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './issue-activity.styles';
 
 import type {Activity, ActivityItem} from 'types/Activity';
-import type {IssueContextData} from 'types/Issue';
+import type {IssueContextData, IssueFull, IssueOnList} from 'types/Issue';
 import type {EventSubscription} from 'react-native';
 import type {IssueComment} from 'types/CustomFields';
 import type {State as IssueActivityState} from './issue-activity__reducers';
@@ -99,27 +99,30 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   constructor(props: IssueActivityProps) {
     super(props);
     this.goOnlineSubscription = addListenerGoOnline(() => {
-      this.load(this.props.issuePlaceholder?.id);
+      this.load(this.getCurrentIssue());
     });
   }
 
   async componentDidMount() {
-    await this.props.setDefaultProjectTeam(this.props.issue.project);
-    this.load(this.getCurrentIssueId());
+    await this.load(this.getCurrentIssue());
   }
 
   getCurrentIssueId(): string {
     return this.props.issuePlaceholder?.id || this.props.issue?.id;
   }
 
-  componentDidUpdate(prevProps: IssueActivityProps) {
+  getCurrentIssue() {
+    return this.props.issuePlaceholder || this.props.issue;
+  }
+
+  async componentDidUpdate(prevProps: IssueActivityProps) {
     if (
       (!prevProps.issuePlaceholder && this.props.issuePlaceholder) ||
       (prevProps.issuePlaceholder &&
         this.props.issuePlaceholder &&
         prevProps.issuePlaceholder.id !== this.props.issuePlaceholder.id)
     ) {
-      this.load(this.props.issuePlaceholder.id);
+      await this.load(this.getCurrentIssue());
     }
   }
 
@@ -128,10 +131,13 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
     this.goOnlineSubscription?.remove();
   }
 
-  load = (issueId?: string) => {
-    if (issueId) {
-      this.loadIssueActivities(false, issueId);
+  load = async (issue: IssueFull | IssueOnList) => {
+    if (issue?.id) {
+      this.loadIssueActivities(false, issue.id);
       this.loadDraftComment();
+    }
+    if (issue?.project) {
+      await this.props.setDefaultProjectTeam(issue.project);
     }
   };
   loadDraftComment = async () => {

@@ -34,6 +34,6 @@ export function loadTranslation(
       gt.addTranslations(localeString, DEFAULT_DOMAIN, translations);
     }
   } catch (e) {
-    log.warn('Translation for locale can\'t be loaded', localeString);
+    log.warn(`Translation for locale can't be loaded`, localeString);
   }
 }

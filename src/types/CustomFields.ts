@@ -5,22 +5,25 @@ import type {Visibility} from './Visibility';
 import {Entity, EntityBase} from 'types/Entity';
 import {Mentions} from 'components/wiki/markdown-view-rules';
 
-export type ColorField = {
-  id: string;
+export interface ColorField extends EntityBase {
   background: string;
   foreground: string;
-};
-export type Tag = {
-  id: string;
+}
+
+export interface TagBase extends EntityBase {
   name: string;
   query: string;
-  pinned?: boolean;
   color: ColorField;
+}
+
+export interface Tag extends TagBase {
+  pinned?: boolean;
   owner: {
     id: string;
     ringId: string;
   };
-};
+}
+
 export interface BundleValue extends ICustomFieldValue {
   description: string;
   ordinal: number;

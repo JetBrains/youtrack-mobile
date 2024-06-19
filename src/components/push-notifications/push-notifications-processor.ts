@@ -31,33 +31,32 @@ export default class PushNotificationsProcessor extends PushNotifications {
 
     this.registerNotificationOpenListener = Notifications.events().registerNotificationOpened(
       async (notification: Notification, completion: () => void) => {
-        log.info(`On notification open:: ${JSON.stringify(notification)}`);
+        log.info(`Push notifications: On notification open event`);
         const issueId: string | undefined = helper.getIssueId(notification);
         const articleId: string | undefined = helper.getArticleId(notification);
-        log.info(`On notification open:: issue ID ${issueId}`);
+        if (issueId) {
+          log.info(`Push notifications: On notification open:: Issue ID detected`);
+        }
+        if (articleId) {
+          log.info(`Push notifications: On notification open:: Article ID detected`);
+        }
 
         if (!issueId && !articleId) {
           return;
         }
 
         const targetBackendUrl: string = helper.getBackendURL(notification);
-        log.info(
-          `On notification open:: notification?.payload?.backendUrl ${JSON.stringify(
-            targetBackendUrl,
-          )}`,
-        );
+        if (targetBackendUrl) {
+          log.info(
+            `On notification open:: another account URL is detected`,
+          );
+        }
         const targetAccount = await targetAccountToSwitchTo(targetBackendUrl);
-        log.info(
-          `On notification open:: target account ${
-            targetAccount?.config?.backendUrl || ''
-          }`,
-        );
-
         if (targetAccount) {
           await onSwitchAccount(targetAccount, issueId, articleId);
           log.info(`On notification open:: switched to target account`);
         } else if (issueId || articleId) {
-          log.info(`On notification open:: redirecting to ${issueId}`);
+          log.info(`On notification open:: redirecting to detected Issue ID`);
           navigateToRouteById(issueId, articleId, helper.getActivityId(notification));
         }
 
@@ -80,9 +79,11 @@ export default class PushNotificationsProcessor extends PushNotifications {
     Notifications.registerRemoteNotifications();
     Notifications.getInitialNotification()
       .then(notification => {
-        log.info(`Initial notification:: ${JSON.stringify(notification)}`);
+        if (notification) {
+          log.info(`Push notifications processor: Initial notification detected`);
+        }
       })
-      .catch(err => log.info(`Initial notification::failed ${err}`));
+      .catch(err => log.info(`Push notifications processor: Initial notification detection failed ${err}`));
     Notifications.events().registerRemoteNotificationsRegistered(
       (event: { deviceToken: string }) => {
         this.setDeviceToken(event.deviceToken);
@@ -97,11 +98,7 @@ export default class PushNotificationsProcessor extends PushNotifications {
         notification: Notification,
         completion: (response: NotificationCompletion) => void,
       ) => {
-        log.info(
-          `Notification received in foreground:: ${JSON.stringify(
-            notification,
-          )}`,
-        );
+        log.info(`Push notifications processor: Notification received in foreground`);
         completion({
           alert: true,
           sound: true,
@@ -114,11 +111,7 @@ export default class PushNotificationsProcessor extends PushNotifications {
         notification: Notification,
         completion: (response: NotificationCompletion) => void,
       ) => {
-        log.info(
-          `Notification received in background:: ${JSON.stringify(
-            notification,
-          )}`,
-        );
+        log.info(`Push notifications processor: Notification received in background`);
         completion({
           alert: true,
           sound: true,

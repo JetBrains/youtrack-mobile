@@ -18,7 +18,7 @@ const setHelpDeskMode = (): ReduxAction => (dispatch: ReduxThunkDispatch, getSta
 const setTicketsFromCache = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
   const cachedTickets: IssueOnList[] = getStorageState().helpdeskCache || [];
   if (cachedTickets.length > 0) {
-    log.debug(`Loaded ${cachedTickets.length} cached tickets`);
+    log.info(`Tickets: Cached tickets loaded`);
     dispatch(RECEIVE_ISSUES(cachedTickets));
   }
 };
@@ -30,9 +30,9 @@ const setHelpdeskProjects = (): ReduxAction => async (
 ) => {
     const [error, projects] = await until<ProjectHelpdesk[]>(getApi().helpDesk.getProjects());
     if (error) {
-      log.debug(error);
+      log.warn(error);
     } else {
-      log.debug(`Loaded ${projects.length} helpdesk projects`);
+      log.info(`Tickets: Loaded helpdesk projects`);
       dispatch(SET_HELPDESK_PROJECTS(projects));
     }
   };

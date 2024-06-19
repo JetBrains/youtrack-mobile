@@ -20,11 +20,12 @@ import UserAPI from './api__user';
 import UserGroupAPI from './api__user-group';
 import {createBtoa} from 'util/util';
 
-import type Auth from '../auth/oauth2';
+import type Auth from 'components/auth/oauth2';
 import type {EndUserAgreement} from 'types/AppConfig';
 import type {CommandSuggestionResponse} from 'types/Issue';
 import type {Project} from 'types/Project';
 import type {User} from 'types/User';
+import type {WorkTimeSettings} from 'types/Work';
 
 
 class API extends BaseAPI {
@@ -228,7 +229,7 @@ class API extends BaseAPI {
     youtrackToken: string,
     deviceToken: string,
     userLogin: string,
-  ): Promise<string> {
+  ): Promise<Response> {
     const url = `${konnectorURL}/ring/pushNotifications`;
     return await this.makeAuthorizedRequest(url, 'POST', {
       token: youtrackToken,
@@ -241,7 +242,7 @@ class API extends BaseAPI {
     konnectorURL: string,
     deviceToken: string,
     userLogin: string,
-  ): Promise<any> {
+  ): Promise<Response> {
     return this.makeAuthorizedRequest(
       `${konnectorURL}/ring/pushNotifications/unsubscribe`,
       'POST',
@@ -252,7 +253,7 @@ class API extends BaseAPI {
     );
   }
 
-  async getWorkTimeSettings(): Promise<Record<string, any>> {
+  async getWorkTimeSettings(): Promise<WorkTimeSettings> {
     const fields = 'id,daysAWeek,workDays,minutesADay';
     const url = `${this.youTrackUrl}/api/admin/timeTrackingSettings/workTimeSettings?fields=${fields}`;
     return await this.makeAuthorizedRequest(url, 'GET');

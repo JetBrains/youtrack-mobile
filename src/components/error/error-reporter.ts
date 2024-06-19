@@ -11,7 +11,7 @@ export type ReportErrorData = {
 const {EXCEPTION_REPORTER_TOKEN} = appPackage.config;
 
 if (!EXCEPTION_REPORTER_TOKEN) {
-  log.debug('Exception reporter token is not set');
+  log.info('Exception reporter token is not set');
 }
 
 const SERVER_URI =

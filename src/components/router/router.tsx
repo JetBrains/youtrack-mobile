@@ -140,10 +140,7 @@ class Router {
   }
 
   navigate(routeName: string, props: Record<string, any>, {forceReset} = {}) {
-    log.info(`Router(navigate) ${routeName}`, {
-      ...props,
-      imageHeaders: 'CENSORED',
-    });
+    log.info(`Router(navigate): -> ${routeName}`);
 
     if (!this._navigator) {
       throw 'Router(navigate): call setNavigator(navigator) first!';

@@ -75,7 +75,6 @@ export default class IssueRow<P extends Props, S = {}> extends Component<P, S> {
         style={{...styles.priorityWrapper, ...customStyle}}
         text={text || values[LAST].name}
         color={values[LAST].color}
-        forceDisplay={true}
       />
     );
   }

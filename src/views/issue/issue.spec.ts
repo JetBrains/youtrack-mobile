@@ -33,7 +33,8 @@ describe('Issue view actions', () => {
     jest.resetAllMocks();
     issueMock = {
       id: ISSUE_ID,
-    } as IssueFull;
+      fields: [],
+    } as unknown as IssueFull;
     commentMock = {
       id: 'fake-comment',
       text: 'fake-text',

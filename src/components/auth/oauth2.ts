@@ -39,14 +39,14 @@ export default class OAuth2 extends AuthBase {
   async refreshToken(): Promise<AuthParams> {
     let authParams: OAuthParams;
     const prevAuthParams: AuthParams = ((await this.getCachedAuthParams()) as any) as AuthParams;
-    log.info('OAuth2 token refresh: start...', prevAuthParams);
+    log.info('Auth: OAuth2 token refresh: start...');
 
     try {
       authParams = await refreshToken(
         this.config,
         prevAuthParams.refresh_token,
       );
-      log.info('OAuth2 token refresh: success', authParams);
+      log.info('Auth: OAuth2 token refresh: success');
     } catch (e: any) {
       const message: string = `OAuth2 token refresh failed. ${getErrorMessage(e) || e}`;
       logEvent({message, isError: true});

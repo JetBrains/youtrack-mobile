@@ -88,7 +88,7 @@ export type IssuesProps = IssuesState & IssuesActions & ReduxExtraActions & {
   onFilterPress: (filterField: FilterSetting) => any,
   issuePermissions: IssuePermissions,
 
-  getIssueFromCache: (issueId: string) => ReduxThunkDispatch;
+  getIssueFromCache: (issueId: string) => IssueOnList | null;
   onQueryUpdate: (query: string) => ReduxThunkDispatch
   onOpenContextSelect: () => ReduxThunkDispatch
   updateSearchContextPinned: ReduxThunkDispatch;
@@ -178,13 +178,11 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         }
       },
     );
-    const issueId: string | null | undefined = this.props.issueId;
+    const issueId: string | undefined = this.props.issueId;
 
     if (issueId) {
-      const targetIssue: IssueOnList = this.props.getIssueFromCache(issueId) || ({
-        id: issueId,
-      }) as IssueOnList;
-      this.updateFocusedIssue(targetIssue);
+      const targetIssue: IssueOnList | null = this.props.getIssueFromCache(issueId);
+      this.updateFocusedIssue(targetIssue || {id: issueId} as IssueOnList);
     }
 
     this.goOnlineSubscription = addListenerGoOnline(() => {
@@ -212,10 +210,10 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
   }
 
   goToIssue(issue: IssueOnList) {
-    log.debug(`Opening issue "${issue.id}" from list`);
+    log.info(`Issues: Opening issue from the Issues`);
 
     if (!issue.id) {
-      log.warn('Attempt to open bad issue', issue);
+      log.warn('Issues: Attempt to open bad issue');
       notify('Attempt to open issue without ID', 7000);
       return;
     }
@@ -748,7 +746,6 @@ export function doConnectComponent(ReactComponent: React.ComponentType<any>, ext
     (dispatch: ReduxThunkDispatch) => {
       return {
         ...bindActionCreators(issueActions, dispatch),
-        getIssueFromCache: (issueId: string) => dispatch(issueActions.getIssueFromCache(issueId)),
         onQueryUpdate: (query: string) => dispatch(issueActions.onQueryUpdate(query)),
         onOpenContextSelect: () => dispatch(issueActions.openContextSelect()),
         onOpenHelpDeskProjectsSelect: () => dispatch(issueActions.onOpenHelpDeskProjectsSelect()),

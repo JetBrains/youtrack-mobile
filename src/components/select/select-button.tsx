@@ -34,7 +34,4 @@ const SelectButton = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(SelectButton) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(SelectButton);

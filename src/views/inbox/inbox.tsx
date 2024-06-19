@@ -132,7 +132,7 @@ class Inbox extends Component<Props, State> {
       return;
     }
 
-    log.debug(`Opening issue "${issue.id}" from notifications`);
+    log.info(`Inbox: Opening issue`);
     Router.Issue({
       issuePlaceholder: issue,
       issueId: issue.id,

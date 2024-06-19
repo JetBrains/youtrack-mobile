@@ -26,7 +26,7 @@ import {getAssistSuggestions} from 'components/query-assist/query-assist-helper'
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {getGroupedFolders, GroupedFolders, sortFolders} from 'components/folder/folder';
 import {i18n} from 'components/i18n/i18n';
-import {guid, removeDuplicatesFromArray, until} from 'util/util';
+import {removeDuplicatesFromArray, until} from 'util/util';
 import {
   receiveUserAppearanceProfile, receiveUserHelpdeskProfile,
   setGlobalInProgress,
@@ -39,7 +39,7 @@ import type {CustomError} from 'types/Error';
 import type {FilterField, FilterFieldValue} from 'types/Sorting';
 import type {Folder, User, UserProfiles} from 'types/User';
 import type {ISelectProps} from 'components/select/select';
-import type {IssueOnList} from 'types/Issue';
+import type {IssueOnList, ListIssue} from 'types/Issue';
 import type {ISSWithItemActionsProps} from 'components/select/select-sectioned-with-item-and-star';
 import type {ProjectHelpdesk} from 'types/Project';
 import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
@@ -186,27 +186,27 @@ const loadIssues = (query: string): ReduxAction => async (
   dispatch: ReduxThunkDispatch,
   getState: ReduxStateGetter,
 ) => {
-  const context = isHelpDeskMode() ? 'tickets' : 'issues';
+  const entityType = isHelpDeskMode() ? 'tickets' : 'issues';
   try {
     const isOffline: boolean = getState().app?.networkState?.isConnected === false;
     if (!isOffline) {
       dispatch(startIssuesLoading());
-      log.info(`Loading ${context}...`);
+      log.info(`Issues Actions: Loading ${entityType}...`);
     }
     const pageSize: number = dispatch(getPageSize());
     const issues: IssueOnList[] = await dispatch(doLoadIssues(query, pageSize));
-    log.info(`${issues?.length} issues loaded`);
+    log.info(`Issues Actions: more ${entityType} loaded`);
 
     dispatch(issuesActions.RECEIVE_ISSUES(issues));
     dispatch(cacheIssues(issues));
 
     if (issues.length < pageSize) {
       dispatch(issuesActions.SET_ISSUES_COUNT(issues.length));
-      log.info('End reached during initial load');
+      log.info('Issues Actions: End reached during initial load');
       dispatch(issuesActions.LIST_END_REACHED());
     }
   } catch (e) {
-    log.log(`Failed to load ${context}`);
+    log.log(`Issues Actions: Failed to load ${entityType}`);
     dispatch(setIssuesError(e as CustomError));
   } finally {
     dispatch(stopIssuesLoading());
@@ -407,20 +407,23 @@ const openFilterFieldSelect = (filterSetting: FilterSetting): ReduxAction => (
     dataSource: async (prefix: string = '') => {
       const q = await dispatch(composeSearchQuery());
       const contextQuery = await dispatch(getSearchContext()).query;
-      const [error, filterFieldValues] = await until(
+      const [error, filterFieldValues] = await until<FilterFieldValue[]>(
         filterSetting.filterField.map(
           (it: FilterField) => getApi().filterFields.filterFieldValues(it.id, prefix, `${contextQuery} ${q}`)
         ),
         true,
         true
-      ) as [CustomError | null, FilterFieldValue[]];
+      );
+      let _values = [];
+      if (!error && filterFieldValues.length) {
+        _values = removeDuplicatesFromArray(
+          filterFieldValues.map(i => ({id: i.id, name: i.presentation})).concat(selectedItems)
+        );
+      }
       if (error) {
         log.warn('Failed to load user folders for the context');
       }
-      const _values = removeDuplicatesFromArray(
-        filterFieldValues.map(i => ({id: i?.id || guid(), name: i.presentation})).concat(selectedItems)
-      );
-      return error ? [] : _values;
+      return _values;
     },
     selectedItems,
     onCancel: () => dispatch(issuesActions.CLOSE_SEARCH_CONTEXT_SELECT()),
@@ -499,13 +502,13 @@ const doLoadIssues = (query: string, pageSize: number, skip = 0): ReduxAction<Pr
   }
 
   if (Array.isArray(sortedIssues?.tree) && sortedIssues.tree.length > 0) {
-    const [err, _issues] = await until(
+    const [err, issues] = await until<ListIssue[]>(
       api.issues.issuesGetter(sortedIssues.tree, appState.issueList.settings.view.mode),
     );
     if (err) {
       handleError(err);
     }
-    listIssues = ApiHelper.fillIssuesFieldHash(_issues) as IssueOnList[];
+    listIssues = ApiHelper.fillIssuesFieldHash(issues);
   }
 
   return listIssues;
@@ -720,7 +723,7 @@ const setIssuesMode = (): ReduxAction => async (dispatch: ReduxThunkDispatch) =>
 const setIssuesFromCache = (): ReduxAction => async (dispatch: ReduxThunkDispatch) => {
   const cachedIssues: IssueOnList[] = getStorageState().issuesCache || [];
   if (cachedIssues.length > 0) {
-    log.debug(`Loaded ${cachedIssues.length} cached issues`);
+    log.info(`Issues Actions: Cached issues are loaded`);
     dispatch(issuesActions.RECEIVE_ISSUES(cachedIssues));
   }
 };
@@ -743,7 +746,7 @@ const loadMoreIssues = (): ReduxAction => async (
   dispatch: ReduxThunkDispatch,
   getState: ReduxStateGetter,
 ) => {
-  const context = isHelpDeskMode() ? 'tickets' : 'issues';
+  const entityType = isHelpDeskMode() ? 'tickets' : 'issues';
   try {
     const isOffline: boolean = getState().app?.networkState?.isConnected === false;
     if (isOffline) {
@@ -772,13 +775,13 @@ const loadMoreIssues = (): ReduxAction => async (
 
     const pageSize: number = dispatch(getPageSize());
     const newSkip: number = skip + pageSize;
-    log.info(`Loading more ${context}. newSkip = ${newSkip}`);
+    log.info(`Issues Actions: Loading more ${entityType}. newSkip = ${newSkip}`);
     dispatch(issuesActions.START_LOADING_MORE(newSkip));
 
     try {
       const searchQuery = await dispatch(composeSearchQuery());
       let moreIssues: IssueOnList[] = await dispatch(doLoadIssues(searchQuery, pageSize, newSkip));
-      log.info(`Loaded ${pageSize} more ${context}.`);
+      log.info(`Issues Actions: Loaded more ${entityType}.`);
       moreIssues = ApiHelper.fillIssuesFieldHash(moreIssues) as IssueOnList[];
       const updatedIssues: IssueOnList[] = ApiHelper.removeDuplicatesByPropName(
         issues.concat(moreIssues),
@@ -788,17 +791,17 @@ const loadMoreIssues = (): ReduxAction => async (
       dispatch(cacheIssues(updatedIssues));
 
       if (moreIssues.length < pageSize) {
-        log.info(`End of ${context} reached: all ${updatedIssues?.length} are loaded`);
+        log.info(`Issues Actions: End of ${entityType} reached: all items are loaded`);
         dispatch(issuesActions.LIST_END_REACHED());
       }
     } catch (e) {
-      log.log(`Failed to load more ${context}`);
+      log.log(`Issues Actions: Failed to load more ${entityType}`);
       dispatch(setIssuesError(e as CustomError));
     } finally {
       dispatch(issuesActions.STOP_LOADING_MORE());
     }
   } catch (e) {
-    log.log(`Failed to load more ${context}`);
+    log.log(`Issues Actions: Failed to load more ${entityType}`);
   }
 };
 

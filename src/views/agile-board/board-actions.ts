@@ -158,12 +158,10 @@ export function loadBoard(
     if (!sprint) {
       sprint = (board.sprints || []).slice(-1)[0];
       trackError('Cannot find last visited sprint');
-      log.info(
-        'Last visited sprint is undefined. Use the last one of the current board.',
-      );
+      log.info('Agile Actions: Last visited sprint is undefined. Use the last one of the current board.');
     }
     if (sprint?.id) {
-      log.info(`Loading: Board ${board?.name}, Sprint = ${sprint?.name}`);
+      log.info(`Agile Actions: Loading Sprint`);
       dispatch(loadSprint(board.id, sprint.id, query));
     } else {
       dispatch(receiveSprint(null));
@@ -237,12 +235,10 @@ export function loadAgile(
     try {
       const agileWithStatus: Board = await api.agile.getAgile(agileId);
       dispatch(receiveAgile(agileWithStatus));
-      log.info(
-        `Loaded agile board ${agileId} status: ${agileWithStatus.status.valid}`,
-      );
+      log.info(`Agile Actions: Loaded agile board status: ${agileWithStatus.status.valid}`);
       return agileWithStatus;
     } catch (error) {
-      log.warn(`Cannot load agile board ${agileId} status`, error);
+      log.warn(`Agile Actions: Cannot load agile board status`, error);
       return DEFAULT_ERROR_AGILE_WITH_INVALID_STATUS;
     }
   };
@@ -319,9 +315,7 @@ export function loadSprint(
 
       dispatch(loadSprintIssues(sprint));
       dispatch(updateAgileUserProfileLastVisitedSprint(sprint.id));
-      log.info(
-        `Sprint ${sprintId} (agileBoardId="${agileId}") has been loaded`,
-      );
+      log.info(`Agile Actions: Sprint has been loaded`);
     } catch (e) {
       const message: string = 'Could not load requested sprint';
       const error: CustomError = (new Error(message) as any) as CustomError;
@@ -408,7 +402,7 @@ export function loadDefaultAgileBoard(
     const agileUserProfile = await dispatch(getAgileUserProfile());
     const board = agileUserProfile?.defaultAgile;
     if (board) {
-      log.info('Loading Default Agile board', board?.name || board?.id);
+      log.info('Agile Actions: Loading Default Agile board');
       await dispatch(loadBoard(board, query, refresh));
     } else {
       dispatch(receiveSprint(null));
@@ -449,7 +443,7 @@ function setSSEInstance(sseInstance: ServersideEvents | null) {
 
 export function destroySSE() {
   if (serverSideEventsInstance) {
-    log.info('Force close SSE');
+    log.info('Agile Actions: Force close SSE');
     clearTimeout(serverSideEventsInstanceErrorTimer);
     serverSideEventsInstanceErrorTimer = undefined;
     serverSideEventsInstance.close();
@@ -505,7 +499,7 @@ export function fetchMoreSwimlanes(
         query,
       );
       dispatch(receiveSwimlanes(swimlanes));
-      log.info(`Loaded ${swimlanes.length} more swimlanes`);
+      log.info(`Agile Actions: More swimlanes are loaded`);
       trackEvent('Load more swimlanes');
     } catch (e) {
       notifyError(e);
@@ -554,9 +548,7 @@ export function rowCollapseToggle(
         collapsed: !row.collapsed,
       });
       log.info(
-        `Collapse state successfully updated for row ${
-          row.id
-        }, new state is = ${oldCollapsed ? 'expanded' : 'collapsed'}`,
+        `Agile Actions: Collapse state successfully updated for the row, new state is = ${oldCollapsed ? 'expanded' : 'collapsed'}`,
       );
       trackEvent('Toggle row collapsing');
     } catch (e) {
@@ -599,9 +591,7 @@ export function columnCollapseToggle(
         collapsed: !column.collapsed,
       });
       log.info(
-        `Collapse state successfully updated for column ${
-          column.id
-        }, new state is ${oldCollapsed ? 'expanded' : 'collapsed'}`,
+        `Agile Actions: Collapse state successfully updated for column, new state is ${oldCollapsed ? 'expanded' : 'collapsed'}`,
       );
       trackEvent('Toggle column collapsing');
     } catch (e) {
@@ -829,7 +819,7 @@ export function subscribeServersideUpdates(): ReduxAction {
     serverSideEventsInstance.listenTo('error', () => {
       clearTimeout(serverSideEventsInstanceErrorTimer);
       serverSideEventsInstanceErrorTimer = setTimeout(() => {
-        log.info('Reloading sprint and reconnecting to LiveUpdate...');
+        log.info('Agile Actions: Reloading sprint and reconnecting to LiveUpdate...');
 
         if (Router.getCurrentRouteName() !== routeMap.AgileBoard) {
           destroySSE(); //TODO: remove after implementing lazy screens loading
@@ -905,16 +895,12 @@ export function onCardDrop(data: {
       issueOnBoard.cell.id === data.cellId &&
       currentLeading?.id === data.leadingId
     ) {
-      log.info('Card dropped to original position');
+      log.info('Agile Actions: Card dropped to original position');
       return;
     }
 
     try {
-      log.info(
-        `Applying issue move: movedId="${data.movedId}", cellId="${
-          data.cellId
-        }", leadingId="${data.leadingId || ''}"`,
-      );
+      log.info(`Agile Actions: Applying card move`);
       animateLayout();
       dispatch(moveIssue(data.movedId, data.cellId, data.leadingId));
       await api.agile.updateCardPosition(
@@ -940,7 +926,7 @@ export function refreshAgile(
   query: string,
 ): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
-    log.info('Refresh agile with popup');
+    log.info('Agile Actions: Refresh agile with popup');
     flushStoragePart({
       agileQuery: query,
     });
