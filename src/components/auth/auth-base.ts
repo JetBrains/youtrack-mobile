@@ -130,26 +130,21 @@ export class AuthBase {
       'User-Agent': USER_AGENT,
     };
 
-    const _authParams: AuthParams | null | undefined =
-      authParams || this.authParams;
+    const _authParams: AuthParams | null | undefined = authParams || this.authParams;
 
     if (_authParams) {
       headers.Authorization = `${_authParams.token_type} ${_authParams.access_token}`;
-    } else {
-      log.warn(
-        'Auth: getAuthorizationHeaders called before authParams initialization',
-      );
     }
 
     return headers;
   }
 
-  loadCurrentUser(authParams: any): Promise<any> {
+  loadCurrentUser(authParams: AuthParams) {
     log.info('Auth: loadCurrentUser: Verifying token, loading current user...');
     return fetch(this.LOAD_USER_URL, {
       headers: {
         Accept: ACCEPT_HEADER,
-        'Hub-API-Version': 2,
+        'Hub-API-Version': '2',
         ...this.getAuthorizationHeaders(authParams),
       },
     })

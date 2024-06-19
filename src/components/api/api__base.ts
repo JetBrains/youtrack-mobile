@@ -159,13 +159,6 @@ export default class BaseAPI {
 
     const sendRequest = async (): Promise<Response> => {
       const requestHeaders: RequestHeaders = this.auth.getAuthorizationHeaders();
-
-      if (!requestHeaders.Authorization) {
-        log.warn(
-          `Missing auth header in a request: "${method || 'GET'}":${url}`,
-        );
-      }
-
       return await fetch2(
         url,
         {

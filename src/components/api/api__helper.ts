@@ -1,10 +1,10 @@
 import objectWalk from 'object-walk';
-import {getReadableID} from '../issue-formatter/issue-formatter';
-import {handleRelativeUrl} from '../config/config';
+import {getReadableID} from 'components/issue-formatter/issue-formatter';
+import {handleRelativeUrl} from 'components/config/config';
 import {toField} from 'util/to-field';
-import {ICustomFieldValue} from 'types/CustomFields';
-import {
-  AnyIssue,
+
+import type {Attachment, ICustomFieldValue} from 'types/CustomFields';
+import type {
   ServersideSuggestion,
   TransformedSuggestion,
   ServersideSuggestionLegacy,
@@ -12,6 +12,7 @@ import {
   ListIssueField,
   ListIssueFieldValue,
   IssueOnList,
+  IssueFull,
 } from 'types/Issue';
 
 const API = {
@@ -70,36 +71,30 @@ const API = {
   },
 
   convertAttachmentRelativeToAbsURLs(
-    attachments: Array<Record<string, any>>,
+    attachments: Attachment[],
     backendUrl: string,
-  ): Array<Record<string, any>> {
+  ): Array<Attachment> {
     let convertedItems = attachments;
     ['url', 'thumbnailURL', 'avatarUrl'].forEach((fieldName: string) => {
       convertedItems = this.convertRelativeUrls(
         convertedItems,
         fieldName,
         backendUrl,
-      );
+      ) as Attachment[];
     });
     return convertedItems;
   },
 
   toField: toField,
 
-  getIssueId(issue: AnyIssue): string {
+  getIssueId(issue: IssueOnList | IssueFull): string {
     return getReadableID(issue);
   },
 
-  patchAllRelativeAvatarUrls(
-    data: Record<string, any>,
-    backendUrl: string,
-  ): any {
+  patchAllRelativeAvatarUrls(data: Record<string, any>, backendUrl: string) {
     //TODO: potentially slow place
-    objectWalk(data, (value, propertyName, obj) => {
-      if (
-        typeof value === 'string' &&
-        value.indexOf('/hub/api/rest/avatar/') === 0
-      ) {
+    objectWalk(data, (value: string | Record<string, any>, propertyName: string, obj: Record<string, any>) => {
+      if (typeof value === 'string' && value.indexOf('/hub/api/rest/avatar/') === 0) {
         obj[propertyName] = handleRelativeUrl(obj[propertyName], backendUrl);
       }
     });
@@ -113,7 +108,7 @@ const API = {
   removeDuplicatesByPropName(
     items: Array<Record<string, any>>,
     valueName: string,
-  ): Array<Record<string, any>> {
+  ) {
     if (!valueName) {
       return items;
     }
@@ -134,7 +129,7 @@ const API = {
     const _b = b.reduce((keys, it) => keys.concat(it[propName]), []);
 
     return (
-      _a.length === _b.length && _a.every((value, index) => value === _b[index])
+      _a.length === _b.length && _a.every((value: Record<string, any>, index: number) => value === _b[index])
     );
   },
 };
