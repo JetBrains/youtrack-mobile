@@ -1064,7 +1064,11 @@ export function subscribeToPushNotifications(): ReduxAction {
     const userLogin = getState().app.user?.login as string;
     if (isRegisteredForPush()) {
       log.info('App Actions: Device was already registered for push notifications. Initializing.');
-      PushNotifications.initialize(onSwitchAccount, getState().app.user?.login!);
+      try {
+        PushNotifications.initialize(onSwitchAccount, getState().app.user?.login!);
+      } catch (e) {
+        setRegisteredForPush(false);
+      }
       return;
     }
 
