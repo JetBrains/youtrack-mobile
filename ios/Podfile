@@ -53,3 +53,5 @@ target 'YouTrackMobile' do
     )
   end
 end
+
+plugin 'cocoapods-bugsnag'

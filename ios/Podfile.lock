@@ -5,7 +5,7 @@ PODS:
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
   - boost (1.83.0)
-  - BugsnagReactNative (7.22.2):
+  - BugsnagReactNative (7.24.0):
     - React-Core
   - BVLinearGradient (2.6.2):
     - React-Core
@@ -1398,7 +1398,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
-  BugsnagReactNative: ca14503071d534fcfdcb5f2da08eca140963e5d0
+  BugsnagReactNative: 65729c7ee7d9f61b8dbd9f046d920bb38a43931a
   BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   FBLazyVector: df34a309e356a77581809834f6ec3fbe7153f620
@@ -1478,6 +1478,6 @@ SPEC CHECKSUMS:
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   Yoga: 2a16e58450c48e110211dae1159fb114bbcdcfc0
 
-PODFILE CHECKSUM: 3c85ca8ebe586515823a04fb37cb06769aa9db3c
+PODFILE CHECKSUM: 0ec45fc327031594f059f248de3f6708b8a954e7
 
 COCOAPODS: 1.15.2
