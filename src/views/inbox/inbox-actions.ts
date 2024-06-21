@@ -17,11 +17,7 @@ export function setLoading(loading: boolean) {
   return {type: types.SET_LOADING, loading};
 }
 
-export function addItems(
-  items: Array<Record<string, any>>,
-  hasMore: boolean,
-  issueLinkTypes: Record<string, string>
-) {
+export function addItems(items: Array<Record<string, any>>, hasMore: boolean, issueLinkTypes: Record<string, string>) {
   return {
     type: types.ADD_ITEMS,
     items,
