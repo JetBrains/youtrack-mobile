@@ -28,3 +28,6 @@
   **[] $VALUES;
   public *;
 }
+-keep class com.facebook.imagepipeline.image.CloseableAnimatedImage.** {*;}
+-keep class com.bugsnag.android.ThreadType.** {*;}
+-keep class com.google.errorprone.annotations.Immutable.** {*;}

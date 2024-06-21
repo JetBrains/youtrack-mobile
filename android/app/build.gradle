@@ -122,6 +122,13 @@ android {
 
 bugsnag {
     uploadReactNativeMappings = true
+    variantFilter { variant ->
+        // disables plugin for all variants of the 'staging' productFlavor
+        def name = variant.name.toLowerCase()
+        if (name.contains("staging") || name.contains("debug")) {
+            enabled = false
+        }
+    }
 }
 
 dependencies {
