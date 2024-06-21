@@ -124,7 +124,7 @@ export default class UserAPI extends ApiBase {
     id: string;
     reaction: Reaction;
     timestamp: number;
-  }> {
+  }[]> {
     const queryString = `$skip=${skip}&$top=${top}&ignoreLicenseErrors=true&fields=added,comment(created,deleted,id,issue(id,idReadable,resolved,summary),reactionOrder,reactions(author(fullName,id,isLocked),id,reaction),text),id,reaction(author(fullName,id,isLocked),reaction),timestamp`;
     return await this.makeAuthorizedRequest(
       `${this.youTrackApiUrl}/users/me/reactionsFeed?${queryString}`,
