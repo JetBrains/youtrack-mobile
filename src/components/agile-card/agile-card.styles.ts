@@ -8,13 +8,13 @@ export const agileCard = {
   borderRadius: UNIT,
   overflow: 'hidden',
   backgroundColor: '$boxBackground',
+  borderColor: '$disabled',
+  borderWidth: 1,
 };
 export default EStyleSheet.create({
   card: agileCard,
   cardColorCoding: {
     flexShrink: 0,
-    marginTop: UNIT / 4,
-    marginBottom: UNIT / 4,
     width: UNIT / 2,
     borderTopLeftRadius: UNIT,
     borderBottomLeftRadius: UNIT,
