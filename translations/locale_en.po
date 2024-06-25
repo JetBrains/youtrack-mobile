@@ -306,7 +306,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:817
+#: src/actions/app-actions.ts:811
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -588,7 +588,7 @@ msgstr "Filters"
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
-#: src/views/issues/issues.tsx:556
+#: src/views/issues/issues.tsx:554
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
@@ -808,7 +808,7 @@ msgstr "No drafts yet"
 msgid "No favorites projects found"
 msgstr "No favorites projects found"
 
-#: src/views/issues/issues.tsx:606
+#: src/views/issues/issues.tsx:604
 msgid "No issues found"
 msgstr "No issues found"
 
@@ -982,7 +982,7 @@ msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
 #: src/views/inbox/inbox.tsx:750
-#: src/views/issues/issues.tsx:671
+#: src/views/issues/issues.tsx:669
 msgid "Select an issue from the list"
 msgstr "Select an issue from the list"
 

@@ -439,7 +439,7 @@ export class KnowledgeBase extends Component<Props, State> {
   );
 
   getVisibleProjects() {
-    return getStorageState().projects;
+    return getStorageState().projects || [];
   }
 
   renderActionsBar = () => {
