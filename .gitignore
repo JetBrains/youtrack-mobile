@@ -23,6 +23,7 @@ DerivedData
 google-services.json
 ios/.xcode.env.local
 ios/YouTrackMobile.xcworkspace/contents.xcworkspacedata
+**/.xcode.env.local
 
 # Android/IntelliJ
 #
