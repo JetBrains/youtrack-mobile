@@ -29,6 +29,5 @@
   public *;
 }
 -keep class com.facebook.imagepipeline.image.CloseableAnimatedImage.** {*;}
--keep class com.bugsnag.android.** {*;}
 -dontwarn com.google.errorprone.annotations.Immutable
 -keepattributes LineNumberTable,SourceFile
