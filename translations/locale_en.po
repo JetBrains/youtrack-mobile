@@ -14,7 +14,7 @@ msgstr " ({{amount}} unresolved)"
 msgid " or "
 msgstr " or "
 
-#: src/views/agile-board/board-actions.ts:632
+#: src/views/agile-board/board-actions.ts:628
 msgid "(archived)"
 msgstr "(archived)"
 
@@ -211,7 +211,7 @@ msgstr "Browser"
 msgid "Bugsnag Privacy Policy"
 msgstr "Bugsnag Privacy Policy"
 
-#: src/views/log-in/log-in.tsx:289
+#: src/views/log-in/log-in.tsx:290
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "By logging in, you agree to the Privacy Policy."
 
@@ -312,7 +312,7 @@ msgstr "Connecting to YouTrack..."
 
 #: src/components/error-boundary/error-boundary.tsx:251
 #: src/components/error-message/error-message-inline.tsx:62
-#: src/views/enter-server/enter-server.tsx:307
+#: src/views/enter-server/enter-server.tsx:310
 msgid "Contact support"
 msgstr "Contact support"
 
@@ -519,7 +519,7 @@ msgstr "Enter command"
 msgid "Enter search request"
 msgstr "Enter search request"
 
-#: src/views/enter-server/enter-server.tsx:205
+#: src/views/enter-server/enter-server.tsx:208
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr "Enter the web address for a YouTrack installation where you have a registered account"
 
@@ -539,7 +539,7 @@ msgstr "Favorites"
 msgid "Feature request"
 msgstr "Feature request"
 
-#: src/views/agile-board/board-actions.ts:659
+#: src/views/agile-board/board-actions.ts:655
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
@@ -566,7 +566,7 @@ msgstr "Filter projects, saved searches, and tags"
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
-#: src/views/agile-board/board-actions.ts:625
+#: src/views/agile-board/board-actions.ts:621
 msgid "Filter sprints by name"
 msgstr "Filter sprints by name"
 
@@ -592,7 +592,7 @@ msgstr "Find favorite projects"
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
-#: src/views/enter-server/enter-server.tsx:290
+#: src/views/enter-server/enter-server.tsx:293
 msgid "Get help"
 msgstr "Get help"
 
@@ -696,15 +696,15 @@ msgstr "Linked issues"
 msgid "Loading values…"
 msgstr "Loading values…"
 
-#: src/views/log-in/log-in.tsx:259
+#: src/views/log-in/log-in.tsx:260
 msgid "Log in"
 msgstr "Log in"
 
-#: src/views/log-in/log-in.tsx:185
+#: src/views/log-in/log-in.tsx:186
 msgid "Log in to YouTrack"
 msgstr "Log in to YouTrack"
 
-#: src/views/log-in/log-in.tsx:312
+#: src/views/log-in/log-in.tsx:313
 msgid "Log in with Browser"
 msgstr "Log in with Browser"
 
@@ -780,7 +780,7 @@ msgstr "New Issue"
 msgid "New messages"
 msgstr "New messages"
 
-#: src/views/enter-server/enter-server.tsx:252
+#: src/views/enter-server/enter-server.tsx:255
 msgid "Next"
 msgstr "Next"
 
@@ -849,7 +849,7 @@ msgstr "Other"
 msgid "Other groups and teams"
 msgstr "Other groups and teams"
 
-#: src/views/log-in/log-in.tsx:223
+#: src/views/log-in/log-in.tsx:224
 msgid "Password"
 msgstr "Password"
 
@@ -949,7 +949,7 @@ msgstr "Restart"
 msgid "Restore"
 msgstr "Restore"
 
-#: src/views/home/home.tsx:51
+#: src/views/home/home.tsx:37
 msgid "Retry"
 msgstr "Retry"
 
@@ -1302,7 +1302,7 @@ msgstr "Use fewer search parameters"
 msgid "User account is banned"
 msgstr "User account is banned"
 
-#: src/views/log-in/log-in.tsx:201
+#: src/views/log-in/log-in.tsx:202
 msgid "Username or email"
 msgstr "Username or email"
 
@@ -1384,7 +1384,7 @@ msgstr "You don’t have any unread notifications"
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 msgstr "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 
-#: src/views/log-in/log-in.tsx:280
+#: src/views/log-in/log-in.tsx:281
 msgid ""
 "You need a YouTrack account to use the app.\n"
 ""
