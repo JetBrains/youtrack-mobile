@@ -9,41 +9,27 @@ import {logo, IconPencil} from 'components/icon/icon';
 
 import styles from './home.styles';
 
-type Props = {
+interface Props {
   backendUrl: string;
   message?: string;
-  error?: {
-    message: string;
-  };
+  error?: {message: string};
   onChangeBackendUrl: (newUrl: string) => any;
   onRetry: () => any;
-};
+}
 
-const Home = (props: Props): React.ReactNode => {
-  usage.trackScreenView('Loading');
+const Home = (props: Props) => {
+  usage.trackScreenView('HomeLoading');
   const {backendUrl, onChangeBackendUrl, error, message, onRetry} = props;
-  const errorMessage: string | null | undefined = error?.message || message;
+  const errorMessage: string | undefined = error?.message || message;
   return (
     <View style={styles.container}>
-      <Image style={styles.logoImage} source={logo}/>
+      <Image style={styles.logoImage} source={logo} />
       <View style={styles.info}>
-        {Boolean(errorMessage) && (
-          <Text style={[styles.message, error && styles.messageError]}>
-            {errorMessage}
-          </Text>
-        )}
+        {Boolean(errorMessage) && <Text style={[styles.message, error && styles.messageError]}>{errorMessage}</Text>}
         {Boolean(backendUrl) && (
-          <TouchableOpacity
-            hitSlop={HIT_SLOP}
-            style={styles.urlButton}
-            onPress={() => onChangeBackendUrl(backendUrl)}
-          >
+          <TouchableOpacity hitSlop={HIT_SLOP} style={styles.urlButton} onPress={() => onChangeBackendUrl(backendUrl)}>
             <Text style={styles.url}>{formatYouTrackURL(backendUrl)}</Text>
-            <IconPencil
-              style={styles.editUrlIcon}
-              size={22}
-              color={styles.retry.color}
-            />
+            <IconPencil style={styles.editUrlIcon} size={22} color={styles.retry.color} />
           </TouchableOpacity>
         )}
         {Boolean(error) && (
@@ -56,7 +42,4 @@ const Home = (props: Props): React.ReactNode => {
   );
 };
 
-export default React.memo<Props>(Home) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(Home);

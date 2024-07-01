@@ -20,10 +20,9 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-google-services.json
+ios/GoogleService-Info.plist
 ios/.xcode.env.local
 ios/YouTrackMobile.xcworkspace/contents.xcworkspacedata
-**/.xcode.env.local
 
 # Android/IntelliJ
 #
@@ -39,6 +38,7 @@ out*.txt
 .cxx/
 *.keystore
 !debug.keystore
+google-services.json
 
 # node.js
 #

@@ -252,7 +252,7 @@ async function createAuthInstance(config: AppConfig): Promise<OAuth2> {
 }
 
 function showUserAgreement(agreement: Agreement) {
-  usage.trackEvent('EUA is shown');
+  usage.trackEvent('app_actions', 'EUA is shown');
   return {
     type: types.SHOW_USER_AGREEMENT,
     agreement,
@@ -642,7 +642,7 @@ export function acceptUserAgreement(): ReduxAction {
     getApi: ReduxAPIGetter,
   ) => {
     log.info('App Actions: User agreement accepted');
-    usage.trackEvent('EUA is accepted');
+    usage.trackEvent('app_actions', 'EUA is accepted');
     const api: Api = getApi();
     try {
       await api.acceptUserAgreement();
@@ -658,7 +658,7 @@ export function acceptUserAgreement(): ReduxAction {
 export function declineUserAgreement(): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
     log.info('App Actions: User agreement declined');
-    usage.trackEvent('EUA is declined');
+    usage.trackEvent('app_actions', 'EUA is declined');
     dispatch({
       type: types.HIDE_USER_AGREEMENT,
     });
@@ -759,13 +759,13 @@ export function subscribeToURL(): ReduxAction {
     openByUrlDetector(
       async (url: string, issueId?: string, articleId?: string) => {
         if (isAuthorized()) {
-          usage.trackEvent('app', 'Open issue in app by URL');
+          usage.trackEvent('app_actions', 'Open issue in app by URL');
           navigateTo(url, issueId, articleId);
         }
       },
       async (url: string, searchQuery: string) => {
         if (isAuthorized()) {
-          usage.trackEvent('app', 'Open issues query in app by URL');
+          usage.trackEvent('app_actions', 'Open issues query in app by URL');
           navigateTo(url, undefined, undefined, searchQuery);
         }
       }
@@ -1072,17 +1072,20 @@ export function subscribeToPushNotifications(): ReduxAction {
       return;
     }
 
-    if (isAndroidPlatform() && Platform.Version >= 33) {
-      try {
-        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          await doSubscribe(onSwitchAccount, userLogin);
-          log.info('App Actions: Push notifications permission granted');
-        } else {
-          log.warn('App Actions: Push notifications permission is not allowed');
+    if (isAndroidPlatform()) {
+      const ver = typeof Platform.Version === 'string' ? parseInt(Platform.Version, 10) : Platform.Version;
+      if (ver >= 33) {
+        try {
+          const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            await doSubscribe(onSwitchAccount, userLogin);
+            log.info('App Actions: Push notifications permission granted');
+          } else {
+            log.warn('App Actions: Push notifications permission is not allowed');
+          }
+        } catch (err) {
+          log.warn(err);
         }
-      } catch (err) {
-        log.warn(err);
       }
     } else {
       await doSubscribe(onSwitchAccount, userLogin);

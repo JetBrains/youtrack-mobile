@@ -18,19 +18,22 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import log from 'components/log/log';
 import Popup from 'components/popup/popup';
 import usage from 'components/usage/usage';
+import {ANALYTICS_ENTER_SERVER_PAGE} from 'components/analytics/analytics-ids.ts';
 import {connectToNewYoutrack, openDebugView} from 'actions/app-actions';
 import {formStyles} from 'components/common-styles/form';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
-import {logo, IconBack} from 'components/icon/icon';
+import {IconBack, logo} from 'components/icon/icon';
 import {NETWORK_PROBLEM_TIPS} from 'components/error-message/error-text-messages';
 import {resolveErrorMessage} from 'components/error/error-resolver';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables';
+
 import styles from './enter-server.styles';
+
 import type {AppConfig} from 'types/AppConfig';
 import type {Theme, UIThemeColors} from 'types/Theme';
-const CATEGORY_NAME: string = 'Choose server';
+
 const protocolRegExp = /^http(s?):\/\//i;
 const CLOUD_DOMAINS: string[] = ['myjetbrains.com', 'youtrack.cloud'];
 type Props = {
@@ -60,7 +63,7 @@ export class EnterServer extends Component<Props, State> {
       error: null,
       isErrorInfoModalVisible: false,
     };
-    usage.trackScreenView(CATEGORY_NAME);
+    usage.trackScreenView(ANALYTICS_ENTER_SERVER_PAGE);
     log.info('Entering server URL view has been opened');
   }
 

@@ -70,16 +70,12 @@ function setError(error: CustomError | null) {
   };
 }
 
-function track(msg: string, additionalParam?: string) {
-  usage.trackEvent(ANALYTICS_AGILE_PAGE, msg, additionalParam);
-}
-
-function trackError(msg: string) {
-  track(msg, 'Error');
-}
-
 function trackEvent(msg: string) {
-  track(msg);
+  usage.trackEvent(ANALYTICS_AGILE_PAGE, msg);
+}
+
+function trackError(e: string) {
+  usage.trackError(ANALYTICS_AGILE_PAGE, e);
 }
 
 function animateLayout() {

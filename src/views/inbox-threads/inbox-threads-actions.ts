@@ -45,7 +45,7 @@ const DEFAULT_CACHE_DATA = {
   unreadOnly: false,
 } as InboxThreadsCache;
 
-const trackEvent = (event: string, params?: Record<string, any>) => {
+const trackEvent = (event: string, params?: Object) => {
   usage.trackEvent(
     ANALYTICS_NOTIFICATIONS_THREADS_PAGE,
     `Inbox threads: ${event}`,

@@ -1,6 +1,7 @@
 #import <Bugsnag/Bugsnag.h>
 #import "RNNotifications.h"
 #import "AppDelegate.h"
+#import <Firebase.h>
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
@@ -12,12 +13,13 @@
 {
   [Bugsnag start];
   [RNNotifications startMonitorNotifications];
+  [FIRApp configure];
 
   self.moduleName = @"YouTrackMobile";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
-  
+
   BOOL result = [super application:application didFinishLaunchingWithOptions:launchOptions];
   RCTRootView *rootView = (RCTRootView *)self.window.rootViewController.view;
   if (@available(iOS 13.0, *)) {

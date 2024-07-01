@@ -1,21 +1,24 @@
 import React, {PureComponent} from 'react';
-import {View, Text, ScrollView, Share} from 'react-native';
+import {ScrollView, Share, Text, View} from 'react-native';
+
 import Header from 'components/header/header';
 import LongText from 'components/wiki/text-renderer';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
 import YoutrackWiki from 'components/wiki/youtrack-wiki';
+import {ANALYTICS_WIKI_PAGE} from 'components/analytics/analytics-ids.ts';
 import {getApi} from 'components/api/api__instance';
-import {IconClose} from 'components/icon/icon';
-import {IconShare} from 'components/icon/icon';
+import {IconClose, IconShare} from 'components/icon/icon';
 import {isAndroidPlatform, isIOSPlatform} from 'util/util';
 import {ThemeContext} from 'components/theme/theme-context';
 import {UNIT} from 'components/variables';
+
 import styles from './wiki-page.styles';
+
 import type {Attachment} from 'types/CustomFields';
 import type {Theme, UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
-const CATEGORY_NAME = 'WikiPage';
+
 const isAndroid: boolean = isAndroidPlatform();
 type Props = {
   wikiText?: string;
@@ -42,7 +45,7 @@ export default class WikiPage extends PureComponent<Props, State> {
   };
 
   async componentDidMount() {
-    usage.trackScreenView(CATEGORY_NAME);
+    usage.trackScreenView(ANALYTICS_WIKI_PAGE);
   }
 
   onBack() {

@@ -122,7 +122,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     };
     this.props.setIssuesMode();
     this.props.setIssuesFromCache();
-    usage.trackScreenView('Issue list');
+    usage.trackScreenView(ANALYTICS_ISSUES_PAGE);
   }
 
   get searchQuery() {

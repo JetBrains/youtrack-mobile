@@ -4,7 +4,7 @@ export type AuthParams = {
   access_token: string;
   accessTokenExpirationDate: string;
   error_code?: string;
-  expires_in?: string;
+  expires_in: number;
   refresh_token: string;
   scope: string;
   token_type: string;

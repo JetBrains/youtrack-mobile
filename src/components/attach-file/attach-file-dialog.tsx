@@ -42,7 +42,7 @@ interface Props {
 const AttachFileDialog = (props: Props) => {
   const {analyticsId = ANALYTICS_ISSUE_STREAM_SECTION} = props;
 
-  usage.trackScreenView('Attach file modal');
+  usage.trackScreenView('AttachFileModal');
   const mounted: React.MutableRefObject<boolean> = useRef(false);
   const theme: Theme = useContext(ThemeContext);
 

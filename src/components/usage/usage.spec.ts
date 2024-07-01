@@ -1,78 +1,59 @@
-// @ts-ignore
-import {Analytics, Hits} from 'react-native-google-analytics';
+import * as usage from './usage';
 
-import * as ga from './usage';
-import appPackage from '../../../package.json';
+describe('Analytics', () => {
+  it('should be enabled by default', async () => {
+    expect(usage.isAnalyticsEnabled).toEqual(false);
+    usage.default.init(true);
 
-const paramsMock = {};
-jest.mock('react-native-google-analytics', () => ({
-  Analytics: jest.fn().mockImplementation(() => ({
-    send: jest.fn().mockResolvedValue(paramsMock),
-  })),
-  Hits: {
-    ScreenView: jest.fn().mockReturnValue(paramsMock),
-    Event: jest.fn().mockReturnValue(paramsMock),
-  },
-}));
-
-
-describe('Google Analytics', () => {
-  beforeEach(() => {
-    ga.reset();
-    ga.default.init(false);
-  });
-
-  it('should create GA instance', async () => {
-    const instance: Analytics = await ga.getInstance();
-
-    await expect(instance.send).toBeTruthy();
-  });
-
-  it('should enable analytics', async () => {
-    expect(ga.isAnalyticsEnabled).toEqual(false);
-    ga.default.init(true);
-
-    expect(ga.isAnalyticsEnabled).toEqual(true);
+    expect(usage.isAnalyticsEnabled).toEqual(true);
   });
 
   it('should disable analytics', async () => {
-    ga.default.init(true);
-    expect(ga.isAnalyticsEnabled).toEqual(true);
-    ga.default.init(false);
+    usage.default.init(true);
+    expect(usage.isAnalyticsEnabled).toEqual(true);
+    usage.default.init(false);
 
-    expect(ga.isAnalyticsEnabled).toEqual(false);
+    expect(usage.isAnalyticsEnabled).toEqual(false);
   });
 
 
-  describe('Analytics enabled', () => {
+  describe('Analytic events', () => {
     beforeEach(() => {
-      ga.default.init(true);
+      usage.default.init(true);
     });
 
-    it('should create GA instance if it`s not created yet before sending an event', async () => {
-      expect(ga.gaAnalyticInstance).toEqual(null);
-      await ga.default.trackScreenView('');
+    it('should track an event without params', () => {
+      usage.default.trackEvent('event name');
 
-      await expect(ga.gaAnalyticInstance).toBeTruthy();
+      expect(usage.default.getInstance().logEvent).toHaveBeenCalledWith('event_name', {});
     });
 
-    it('should track an event', async () => {
-      expect(ga.gaAnalyticInstance).toEqual(null);
-      await ga.default.trackEvent('');
+    it('should track an event with message', () => {
+      usage.default.trackEvent('eventName', 'Success');
 
-      await expect(ga.gaAnalyticInstance.send).toHaveBeenCalledWith(paramsMock);
+      expect(usage.default.getInstance().logEvent).toHaveBeenCalledWith('eventName', {message: 'Success'});
+    });
+
+    it('should track an event with message and extra data', () => {
+      usage.default.trackEvent('eventName', 'Success', {id: 1});
+
+      expect(usage.default.getInstance().logEvent).toHaveBeenCalledWith('eventName', {message: 'Success', id: 1});
+    });
+
+    it('should track an event with message and extra data 2', () => {
+      usage.default.trackEvent('eventName', null, {id: 1});
+
+      expect(usage.default.getInstance().logEvent).toHaveBeenCalledWith('eventName', {id: 1});
     });
 
     it('should create screen view event params and track screen view', async () => {
-      const screenName: string = 'screenName';
-      await ga.default.trackScreenView(screenName);
+      const screenName: string = 'ScreenName';
+      await usage.default.trackScreenView(screenName);
 
-      await expect(Hits.ScreenView).toHaveBeenCalledWith(
-        'YouTrack Mobile',
-        screenName,
-        appPackage.version
-      );
-      await expect(ga.gaAnalyticInstance.send).toHaveBeenCalledWith(paramsMock);
+      await expect(usage.default.getInstance().logScreenView).toHaveBeenCalledWith({
+        screen_name: screenName,
+        screen_class: screenName,
+      });
     });
 
   });

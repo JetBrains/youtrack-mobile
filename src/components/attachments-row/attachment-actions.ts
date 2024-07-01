@@ -122,8 +122,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           log.info(`Attachment Actions: File attached to the ${isArticle ? 'Article' : 'Issue'}`);
           usage.trackEvent(
             isArticle ? ANALYTICS_ARTICLE_PAGE : ANALYTICS_ISSUE_PAGE,
-            'Attach image',
-            'Success'
+            'Attach image success',
           );
           dispatch(actions.stopImageAttaching());
           dispatch(actions.toggleAttachFileDialog(false));
@@ -177,8 +176,7 @@ export const getAttachmentActions = (prefix: string): AttachmentActions => {
           log.info(`Attachment Actions: File attached to the ${isArticle ? 'Article' : 'Issue'} Comment`);
           usage.trackEvent(
             isArticle ? ANALYTICS_ARTICLE_PAGE_STREAM : ANALYTICS_ISSUE_STREAM_SECTION,
-            'Attach image',
-            'Success'
+            'Attach image success',
           );
           dispatch(actions.stopImageAttaching());
           dispatch(actions.toggleAttachFileDialog(false));

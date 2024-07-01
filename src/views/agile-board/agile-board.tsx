@@ -538,10 +538,7 @@ class AgileBoard extends Component<Props, State> {
       zoomedIn,
     });
     this.updateZoomedInStorageState(zoomedIn);
-    usage.trackEvent(
-      ANALYTICS_AGILE_PAGE,
-      `Toggle zoom-in: ${zoomedIn.toString()}`,
-    );
+    usage.trackEvent(ANALYTICS_AGILE_PAGE, 'Toggle zoom-in', {zoomedIn});
   };
   toggleQueryAssist = (isAssistVisible: boolean = false) => {
     this.setState({

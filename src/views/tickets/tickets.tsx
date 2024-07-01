@@ -19,7 +19,7 @@ export class Tickets extends Issues<TicketsProps> {
   constructor(props: TicketsProps) {
     super(props);
     this.props.init();
-    usage.trackScreenView('Tickets');
+    usage.trackScreenView(ANALYTICS_TICKETS_PAGE);
   }
 
   get searchQuery() {

@@ -16,20 +16,20 @@ import {i18n} from 'components/i18n/i18n';
 import {IconClone} from 'components/icon/icon';
 import {notify} from 'components/notification/notification';
 import {useBottomSheetContext} from 'components/bottom-sheet';
+import {useCardData} from 'components/hooks/use-card-data';
 import {usePermissions} from 'components/hooks/use-permissions';
 import {useUserCardAsync} from 'components/hooks/use-user-card-async';
 
 import styles from './user-card.styles';
 
-import {AnyIssue} from 'types/Issue';
-import {Article} from 'types/Article';
-import {DraftCommentData} from 'types/CustomFields';
-import {useCardData} from 'components/hooks/use-card-data';
-import {User} from 'types/User';
+import type {Article} from 'types/Article';
+import type {DraftCommentData} from 'types/CustomFields';
+import type {ReduxThunkDispatch} from 'types/Redux.ts';
+import type {User} from 'types/User';
 
 
-const UserCard = ({user}: { user: User}): JSX.Element | null => {
-  const dispatch = useDispatch();
+const UserCard = ({user}: { user: User}) => {
+  const dispatch: ReduxThunkDispatch = useDispatch();
   const {closeBottomSheet} = useBottomSheetContext();
 
   const loadedUser: User | null = useUserCardAsync(user.id);
@@ -38,7 +38,7 @@ const UserCard = ({user}: { user: User}): JSX.Element | null => {
   const data: DraftCommentData = useCardData();
   const issuePermissions: IssuePermissions = usePermissions();
   const canComment = !!data?.entity && (
-    issuePermissions.canCommentOn(data.entity as AnyIssue) ||
+    issuePermissions.canCommentOn(data.entity) ||
     issuePermissions.articleCanCommentOn(data.entity as Article)
   );
   const canReadUserBasic: boolean = !!issuePermissions?.canReadUserBasic?.(user);
@@ -46,7 +46,7 @@ const UserCard = ({user}: { user: User}): JSX.Element | null => {
 
 
   React.useEffect(() => {
-    usage.trackEvent('Show user card');
+    usage.trackEvent('user_card', 'Show user card');
   }, []);
 
   return canReadUserBasic || canReadUser ? (
@@ -81,7 +81,7 @@ const UserCard = ({user}: { user: User}): JSX.Element | null => {
           accessibilityLabel="userCardName"
           accessible={true}
           onPress={() => {
-            usage.trackEvent('User card: press visit profile');
+            usage.trackEvent('user_card', 'Press visit profile');
             const serverURL: string | undefined = getStorageState()?.config?.backendUrl;
             if (serverURL) {
               Linking.openURL(`${serverURL}/users/${usr.login}`);
@@ -134,7 +134,7 @@ const UserCard = ({user}: { user: User}): JSX.Element | null => {
           accessibilityLabel="userCardReportedIssuesButton"
           accessible={true}
           onPress={() => {
-            usage.trackEvent('User card: view reported issues');
+            usage.trackEvent('user_card', 'View reported issues');
             Router.Issues({searchQuery: `created by: ${usr.login}`});
             closeBottomSheet();
           }}
@@ -152,7 +152,7 @@ const UserCard = ({user}: { user: User}): JSX.Element | null => {
           accessibilityLabel="userCardMentionButton"
           accessible={true}
           onPress={() => {
-            usage.trackEvent('User card: mention in a comment');
+            usage.trackEvent('user_card', 'Mention in a comment');
             dispatch(addMentionToDraftComment(usr.login));
             closeBottomSheet();
           }}

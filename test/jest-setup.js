@@ -81,3 +81,14 @@ jest.mock('react-native-webview', () => 'View');
 jest.mock('react-native-safe-area-context', () => ({
   useSafeAreaInsets: () => jest.fn().mockReturnValue({top: 0, right: 0, bottom: 0, left: 0}),
 }));
+
+jest.mock('@react-native-firebase/analytics', () => ({
+  __esModule: true,
+  default: jest.fn().mockImplementation(() => {
+    return {
+      logScreenView: jest.fn(),
+      logEvent: jest.fn(),
+    };
+  }),
+}));
+

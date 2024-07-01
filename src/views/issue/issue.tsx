@@ -80,7 +80,6 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   static contextTypes = {
     actionSheet: Function,
   };
-  CATEGORY_NAME: string = 'Issue';
   imageHeaders: RequestHeaders = getApi().auth.getAuthorizationHeaders();
   backendUrl: string = getApi().config.backendUrl;
   renderRefreshControl: (
@@ -96,7 +95,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   }
 
   async init() {
-    usage.trackScreenView(this.CATEGORY_NAME);
+    usage.trackScreenView(ANALYTICS_ISSUE_PAGE);
     await this.props.unloadIssueIfExist();
     await this.props.setIssueId(
       this.props.issueId || this.props?.issuePlaceholder?.id,
@@ -230,7 +229,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         descriptionCopy={descriptionCopy}
         setIssueSummaryCopy={setIssueSummaryCopy}
         setIssueDescriptionCopy={setIssueDescriptionCopy}
-        analyticCategory={this.CATEGORY_NAME}
+        analyticCategory={ANALYTICS_ISSUE_PAGE}
         renderRefreshControl={() =>
           this.renderRefreshControl(() => this.loadIssue(), uiTheme)
         }

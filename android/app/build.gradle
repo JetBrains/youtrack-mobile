@@ -131,7 +131,7 @@ dependencies {
     }
 
     implementation project(':react-native-notifications')
-    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
 
     implementation 'com.facebook.fresco:fresco:2.6.0'
     implementation 'com.facebook.fresco:animated-gif:2.6.0'

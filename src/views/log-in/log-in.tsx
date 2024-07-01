@@ -1,13 +1,13 @@
 import {
+  ActivityIndicator,
   Image,
-  View,
+  Linking,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
-  Linking,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import React, {Component} from 'react';
 import clicksToShowCounter from 'components/debug-view/clicks-to-show-counter';
@@ -17,23 +17,25 @@ import log from 'components/log/log';
 import OAuth2 from 'components/auth/oauth2';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
+import {ANALYTICS_LOGIN_PAGE} from 'components/analytics/analytics-ids.ts';
 import {connect} from 'react-redux';
 import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 import {formatYouTrackURL} from 'components/config/config';
 import {formStyles} from 'components/common-styles/form';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
-import {logo, IconBack} from 'components/icon/icon';
-import {openDebugView, onLogIn} from 'actions/app-actions';
+import {IconBack, logo} from 'components/icon/icon';
+import {onLogIn, openDebugView} from 'actions/app-actions';
 import {ThemeContext} from 'components/theme/theme-context';
 import styles from './log-in.styles';
 import type {AppConfig} from 'types/AppConfig';
 import type {AuthParams, OAuthParams2} from 'types/Auth';
 import type {CustomError} from 'types/Error';
 import type {Theme, UIThemeColors} from 'types/Theme';
+
 type Props = {
   config: AppConfig;
-  onLogIn: (authParams: OAuthParams2) => any;
+  onLogIn: (authParams: OAuthParams2 | AuthParams) => any;
   onShowDebugView: (...args: any[]) => any;
   onChangeServerUrl: (currentUrl: string) => any;
   errorMessage?: string;
@@ -47,7 +49,6 @@ type State = {
   youTrackBackendUrl: string;
 };
 
-const CATEGORY_NAME = 'Login form';
 export class LogIn extends Component<Props, State> {
   passInputRef: any;
 
@@ -61,7 +62,7 @@ export class LogIn extends Component<Props, State> {
       youTrackBackendUrl: props.config.backendUrl,
     };
     this.passInputRef = React.createRef();
-    usage.trackScreenView('Login form');
+    usage.trackScreenView('LoginForm');
   }
 
   async componentDidMount() {
@@ -85,22 +86,21 @@ export class LogIn extends Component<Props, State> {
     });
 
     try {
-      const authParams: OAuthParams2 = await OAuth2.obtainTokenByCredentials(
+      const authParams = await OAuth2.obtainTokenByCredentials(
         username,
         password,
         config,
       );
-      usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Success');
-      authParams.inAppLogin = true;
+      usage.trackEvent(ANALYTICS_LOGIN_PAGE, 'Login via credentials successful');
 
       if (!authParams.accessTokenExpirationDate && authParams.expires_in) {
-        authParams.accessTokenExpirationDate =
-          Date.now() + authParams.expires_in * 1000;
+        authParams.accessTokenExpirationDate = `${Date.now() + authParams.expires_in * 1000}`;
       }
 
       onLogIn(authParams);
     } catch (err) {
-      usage.trackEvent(CATEGORY_NAME, 'Login via credentials', 'Error');
+      usage.trackEvent(ANALYTICS_LOGIN_PAGE, 'Login via credentials error');
+      usage.trackError(ANALYTICS_LOGIN_PAGE, err);
       const errorMessage: string = ERROR_MESSAGE_DATA[err.error]
         ? ERROR_MESSAGE_DATA[err.error].title
         : err.error_description || err.message;
@@ -121,12 +121,13 @@ export class LogIn extends Component<Props, State> {
 
     try {
       this.setState({loggingIn: true});
-      const authParams: OAuthParams2 = await OAuth2.obtainTokenWithOAuthCode(config);
-      usage.trackEvent(CATEGORY_NAME, msg, 'Success');
+      const authParams = await OAuth2.obtainTokenWithOAuthCode(config);
+      usage.trackEvent(ANALYTICS_LOGIN_PAGE, msg, 'Success');
       onLogIn(authParams);
     } catch (err) {
       this.setState({loggingIn: false});
-      usage.trackEvent(CATEGORY_NAME, msg, 'Error');
+      usage.trackEvent(ANALYTICS_LOGIN_PAGE, msg, 'Error');
+      usage.trackError(ANALYTICS_LOGIN_PAGE, err);
       log.warn(msg, err);
       this.changeYouTrackUrl();
     }
