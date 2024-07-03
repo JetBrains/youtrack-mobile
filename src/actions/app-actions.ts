@@ -747,7 +747,8 @@ export function cacheProjects(): ReduxAction<Promise<UserProject[]>> {
         '$type,id,ringId,shortName,name,pinned,restricted,plugins(helpDeskSettings(enabled))',
       ])
     );
-    const projects: UserProject[] = error ? [] : userFolders.filter(it => hasType.project(it));
+    const projects: UserProject[] =
+      error || !Array.isArray(userFolders) ? [] : userFolders.filter(it => hasType.project(it));
     dispatch({type: types.SET_PROJECTS, projects});
     await storage.flushStoragePart({projects});
     return projects;
