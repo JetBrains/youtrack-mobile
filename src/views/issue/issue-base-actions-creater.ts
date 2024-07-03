@@ -500,8 +500,8 @@ export const createActions = (
         canTag: boolean;
         canDeleteIssue: boolean;
       },
-      switchToDetailsTab: () => any,
-      renderLinkIssues?: () => any,
+      switchToDetailsTab: () => void,
+      renderLinkIssues?: () => void,
     ): ReduxAction {
       return async (
         dispatch: ReduxThunkDispatch,
@@ -620,8 +620,8 @@ export const createActions = (
           actionSheetActions,
           actionSheet,
           issue.idReadable,
-          issue.summary.length > 155
-            ? `${issue.summary.substr(0, 153)}…`
+          issue.summary?.length > 155
+            ? `${issue.summary.substring(0, 153)}…`
             : issue.summary,
         );
 

@@ -1,12 +1,13 @@
 import * as types from '../issue-action-types';
 import {actions} from './issue.modal-reducers';
-import {
-  attachmentActions,
-  attachmentTypes,
-} from './issue.modal__attachment-actions-and-types';
-import {createDispatchActions} from '../issue-actions-helper';
+import {attachmentActions, attachmentTypes} from './issue.modal__attachment-actions-and-types';
 import {createActions} from '../issue-base-actions-creater';
-export const ISSUE_MODAL_STATE_FIELD_NAME: string = 'issueModalState';
+import {createDispatchActions} from '../issue-actions-helper';
+
+import type {AppState} from 'reducers';
+
+export const ISSUE_MODAL_STATE_FIELD_NAME: keyof AppState = 'issueModalState';
+
 export const dispatchActions: any = createDispatchActions(
   actions,
   types.commandDialogTypes,
