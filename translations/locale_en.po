@@ -306,7 +306,7 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:811
+#: src/actions/app-actions.ts:817
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
@@ -501,7 +501,7 @@ msgstr "Edit comment"
 msgid "Email"
 msgstr "Email"
 
-#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts:99
+#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts:98
 #: src/views/helpdesk-feedback/index.ts:133
 msgid "Email address"
 msgstr "Email address"
@@ -547,7 +547,7 @@ msgstr "Filter boards by name"
 msgid "Filter existing accounts by name or username"
 msgstr "Filter existing accounts by name or username"
 
-#: src/components/select/select.tsx:350
+#: src/components/select/select.tsx:346
 msgid "Filter items"
 msgstr "Filter items"
 
@@ -692,7 +692,7 @@ msgstr "Link to comment copied"
 msgid "Linked issues"
 msgstr "Linked issues"
 
-#: src/components/select/select.tsx:305
+#: src/components/select/select.tsx:301
 msgid "Loading values…"
 msgstr "Loading values…"
 
@@ -812,7 +812,7 @@ msgstr "No favorites projects found"
 msgid "No issues found"
 msgstr "No issues found"
 
-#: src/components/select/select.tsx:309
+#: src/components/select/select.tsx:305
 msgid "No items"
 msgstr "No items"
 
@@ -1189,7 +1189,7 @@ msgstr "The commit author is not an assignee in the project."
 msgid "The search query contains unknown values"
 msgstr "The search query contains unknown values"
 
-#: src/actions/app-actions.ts:434
+#: src/actions/app-actions.ts:435
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
