@@ -1,3 +1,7 @@
+if (__DEV__) {
+    require('./ReactotronConfig');
+}
+
 import Bugsnag from '@bugsnag/react-native';
 Bugsnag.start();
 
