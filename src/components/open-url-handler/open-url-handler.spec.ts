@@ -6,6 +6,7 @@ import {
   extractIssueId,
   extractArticleId,
   openByUrlDetector,
+  extractHelpdeskFormId,
 } from './open-url-handler';
 
 jest.mock('react-native/Libraries/Linking/Linking', () => ({
@@ -46,6 +47,17 @@ describe('Parse URL', () => {
       expect(
         extractArticleId('https://sample.com/articles/X-X-123-45')
       ).toEqual('X-X-123-45');
+    });
+  });
+
+  describe('extractFormId', () => {
+    it('should return NULL if URI is not provided', () => {
+      expect(extractHelpdeskFormId()).toEqual(null);
+    });
+    it('should extract issue id from a not encoded URI', () => {
+      expect(
+        extractHelpdeskFormId('http://sample.com/form/999-eee--123-45')
+      ).toEqual('999-eee--123-45');
     });
   });
 

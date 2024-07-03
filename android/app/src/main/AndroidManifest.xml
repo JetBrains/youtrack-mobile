@@ -74,6 +74,14 @@
                     android:host="youtrack.jetbrains.com"
                     android:pathPattern="/articles/.*"
                     android:scheme="https" />
+                <data
+                    android:host="youtrack.jetbrains.com"
+                    android:pathPattern="/form/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="youtrack.jetbrains.com"
+                    android:pathPattern="/form/.*"
+                    android:scheme="https" />
             </intent-filter>
 
             <intent-filter android:autoVerify="true">
@@ -114,6 +122,14 @@
                     android:host="*.myjetbrains.com"
                     android:pathPattern="/youtrack/articles/.*"
                     android:scheme="https" />
+                <data
+                    android:host="*.myjetbrains.com"
+                    android:pathPattern="/form/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.myjetbrains.com"
+                    android:pathPattern="/youtrack/form/.*"
+                    android:scheme="https" />
             </intent-filter>
 
             <intent-filter android:autoVerify="true">
@@ -153,6 +169,14 @@
                 <data
                     android:host="*.youtrack.cloud"
                     android:pathPattern="/youtrack/articles/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.youtrack.cloud"
+                    android:pathPattern="/form/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*.youtrack.cloud"
+                    android:pathPattern="/youtrack/form/.*"
                     android:scheme="https" />
             </intent-filter>
             <intent-filter>
@@ -224,6 +248,22 @@
                 <data
                     android:host="*"
                     android:pathPattern="/youtrack/articles/.*"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/form/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/youtrack/form/.*"
+                    android:scheme="https" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/form/.*"
+                    android:scheme="http" />
+                <data
+                    android:host="*"
+                    android:pathPattern="/youtrack/form/.*"
                     android:scheme="http" />
             </intent-filter>
         </activity>

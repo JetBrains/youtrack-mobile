@@ -8,6 +8,7 @@ import log from 'components/log/log';
 const issueIdReg = /issue\/([\w-\d]+)/;
 const ticketIdReg = /tickets\/([\w-\d]+)/;
 const articleIdReg = /articles\/([\w-\d]+)/;
+const helpdeskFormIdReg = /form\/([\w-\d]+)/;
 
 const extractIssueId = (issueUrl: string = ''): string | null => {
   const url = decodeURIComponent(issueUrl);
@@ -24,6 +25,11 @@ const extractIssueId = (issueUrl: string = ''): string | null => {
 
 const extractArticleId = (issueUrl: string = ''): string | null => {
   const match = decodeURIComponent(issueUrl).match(articleIdReg);
+  return match && match[1];
+};
+
+const extractHelpdeskFormId = (issueUrl: string = ''): string | null => {
+  const match = decodeURIComponent(issueUrl).match(helpdeskFormIdReg);
   return match && match[1];
 };
 
@@ -53,6 +59,7 @@ function parseUrl(
     url: string,
     issueId?: string,
     articleId?: string,
+    helpdeskFormId?: string,
   ) => void,
   onQueryDetected: (
     url: string,
@@ -61,13 +68,14 @@ function parseUrl(
 ) {
   const issueId = extractIssueId(url) ?? undefined;
   const articleId = extractArticleId(url) ?? undefined;
+  const helpdeskFormId = extractHelpdeskFormId(url) ?? undefined;
 
-  if (typeof issueId === 'string' || typeof articleId === 'string') {
+  if (typeof issueId === 'string' || typeof articleId === 'string' || typeof helpdeskFormId === 'string') {
     log.info(
       issueId
         ? `Open URL Handler: Issue ID detected in URL` : (articleId ? `Open URL Handler: Article ID detected in URL` : ''),
     );
-    return onIdDetected(url, issueId, articleId);
+    return onIdDetected(url, issueId, articleId, helpdeskFormId);
   }
 
   const query: string | null = extractIssuesQuery(url);
@@ -82,7 +90,7 @@ function parseUrl(
 }
 
 const openByUrlDetector = async (
-  onIdDetected: (url: string, issueId?: string, articleId?: string) => any,
+  onIdDetected: (url: string, issueId?: string, articleId?: string, formId?: string) => any,
   onQueryDetected: (url: string, query: string) => any,
 ) => {
   setTimeout(() => {
@@ -110,6 +118,7 @@ const openByUrlDetector = async (
 export {
   extractArticleId,
   extractIssueId,
+  extractHelpdeskFormId,
   openByUrlDetector,
   extractIssuesQuery,
 };

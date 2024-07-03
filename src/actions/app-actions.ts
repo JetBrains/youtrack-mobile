@@ -424,6 +424,7 @@ export function changeAccount(
   articleId?: string,
   navigateToActivity?: string,
   searchQuery?: string,
+  helpdeskFormId?: string,
 ): ReduxAction {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const state: AppState = getState();
@@ -461,7 +462,7 @@ export function changeAccount(
       await dispatch(checkUserAgreement());
 
       if (!state.app.showUserAgreement) {
-        dispatch(completeInitialization(issueId, articleId, navigateToActivity, searchQuery));
+        dispatch(completeInitialization(issueId, articleId, navigateToActivity, searchQuery, false, helpdeskFormId));
       }
 
       log.info('App Actions: Account changed');
@@ -541,6 +542,7 @@ export function completeInitialization(
   navigateToActivity?: string,
   searchQuery?: string,
   skipNavigateToRoute: boolean = false,
+  helpdeskFormId?: string,
 ): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
     await dispatch(applyGlobalSettings());
@@ -582,6 +584,7 @@ export function completeInitialization(
             articleId,
             navigateToActivity,
             searchQuery,
+            helpdeskFormId,
           } : undefined,
         );
       }
@@ -758,10 +761,10 @@ export function cacheProjects(): ReduxAction<Promise<UserProject[]>> {
 export function subscribeToURL(): ReduxAction {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     openByUrlDetector(
-      async (url: string, issueId?: string, articleId?: string) => {
+      async (url: string, issueId?: string, articleId?: string, helpdeskFormId?: string) => {
         if (isAuthorized()) {
           usage.trackEvent('app_actions', 'Open issue in app by URL');
-          navigateTo(url, issueId, articleId);
+          navigateTo(url, issueId, articleId, undefined, helpdeskFormId);
         }
       },
       async (url: string, searchQuery: string) => {
@@ -780,7 +783,7 @@ export function subscribeToURL(): ReduxAction {
       return isUserAuthorized;
     }
 
-    async function navigateTo(url: string, issueId?: string, articleId?: string, searchQuery?: string) {
+    async function navigateTo(url: string, issueId?: string, articleId?: string, searchQuery?: string, helpdeskFormId?: string) {
       const backendUrl = getApi().config?.backendUrl;
       if (!backendUrl) {
         return;
@@ -789,11 +792,13 @@ export function subscribeToURL(): ReduxAction {
         const serverURL = UrlParse(url).origin || '';
         const account = await targetAccountToSwitchTo(serverURL);
         if (account) {
-          await dispatch(changeAccount(account, false, issueId, articleId, undefined, searchQuery));
+          await dispatch(changeAccount(account, false, issueId, articleId, undefined, searchQuery, helpdeskFormId));
         }
       } else {
         const navigateToActivity: string | undefined = url.split('#focus=Comments-')?.[1];
-        if (issueId) {
+        if (helpdeskFormId) {
+          Router.HelpDeskFeedback({uuid: helpdeskFormId});
+        } else if (issueId) {
           Router.Issue({issueId, navigateToActivity}, {forceReset: true});
         } else if (articleId) {
           Router.Article({articlePlaceholder: {id: articleId}, navigateToActivity}, {forceReset: true});

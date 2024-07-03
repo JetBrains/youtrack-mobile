@@ -54,7 +54,7 @@ import type {ProjectHelpdesk} from 'types/Project';
 import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme, UIThemeColors} from 'types/Theme';
 
-const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
+const HelpDeskFeedback = ({project, uuid}: {project: ProjectHelpdesk, uuid?: string}) => {
   const theme: Theme = React.useContext(ThemeContext);
   const uiThemeColors: UIThemeColors = theme.uiTheme.colors;
 
@@ -80,9 +80,9 @@ const HelpDeskFeedback = ({project}: {project: ProjectHelpdesk}) => {
 
   React.useEffect(() => {
     usage.trackScreenView(ANALYTICS_HD_FEEDBACK_PAGE);
-    dispatch(actions.loadFeedbackForm(project));
+    dispatch(actions.loadFeedbackForm(project, uuid));
     setCaptchaToken(null);
-  }, [dispatch, project]);
+  }, [dispatch, project, uuid]);
 
   const onBack = () => Router.pop();
 

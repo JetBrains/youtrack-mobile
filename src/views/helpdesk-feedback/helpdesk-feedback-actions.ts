@@ -22,14 +22,13 @@ import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} 
 import type {User} from 'types/User';
 import type {NormalizedAttachment} from 'types/Attachment';
 
-const loadFeedbackForm = (project: ProjectHelpdesk): ReduxAction => {
+const loadFeedbackForm = (project: ProjectHelpdesk, uuid?: string): ReduxAction => {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     dispatch(setError(null));
     dispatch(setProject(project));
     const state = getState();
-    const [error, form] = await until<FeedbackForm>(
-      getApi().helpDesk.getForm(project.plugins.helpDeskSettings.defaultForm.uuid)
-    );
+    const id = uuid || project.plugins.helpDeskSettings.defaultForm.uuid;
+    const [error, form] = await until<FeedbackForm>(getApi().helpDesk.getForm(id));
     if (error) {
       dispatch(setError(error));
     } else {

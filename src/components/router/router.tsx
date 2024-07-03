@@ -182,13 +182,24 @@ class Router {
     }
   }
 
-  navigateToDefaultRoute(props?: { issueId?: string; articleId?: string; navigateToActivity?: string; searchQuery?: string }) {
+  navigateToDefaultRoute(props?: { issueId?: string; articleId?: string; navigateToActivity?: string; searchQuery?: string, helpdeskFormId?: string }) {
     const defaultRoute: NavigationJumpToActionPayload = this.rootRoutes[0];
-    const route = props?.issueId ? routeMap.Issue : props?.articleId ? routeMap.ArticleSingle : null;
+    let route = null;
+    const params: typeof props & {uuid?: string} = Object.assign({}, props);
+    if (props?.issueId) {
+      route = props?.issueId;
+    }
+    if (props?.articleId) {
+      route = routeMap.ArticleSingle;
+    }
+    if (props?.helpdeskFormId) {
+      params.uuid = props.helpdeskFormId;
+      route = routeMap.HelpDeskFeedback;
+    }
     if (route) {
-      this.navigate(route, props, {forceReset: true});
+      this.navigate(route, params, {forceReset: true});
     } else {
-      this.navigate(defaultRoute, props);
+      this.navigate(defaultRoute, params);
     }
   }
 
