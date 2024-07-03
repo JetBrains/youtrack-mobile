@@ -99,16 +99,12 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
   }
 
   getSortedItems = (items: IItem[] = []): IItem[] => {
-    const selectedItemsKey: string[] = this.state.selectedItems.map(
-      (it: IItem) => this.getItemKey(it),
-    );
-    const nonSelected: IItem[] = items.reduce(
-      (data: IItem[], item: IItem) => [
-        ...data,
-        ...(selectedItemsKey.includes(this.getItemKey(item)) ? [] : [item]),
-      ],
-      [] as IItem[]
-    );
+    const selectedItemsKey: string[] = this.state.selectedItems.map((it: IItem) => this.getItemKey(it));
+    const nonSelected = items
+      .reduce((data: IItem[], item: IItem) => {
+        data.push(...(selectedItemsKey.includes(this.getItemKey(item)) ? [] : [item]));
+        return data;
+      }, []);
     return [...this.state.selectedItems, ...nonSelected];
   };
 
@@ -122,7 +118,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
         loaded: false,
         filteredItems: [],
         items: null,
-        selectedItems: this.props.selectedItems || [],
+        selectedItems: this.props.selectedItems != null ? this.props.selectedItems : [],
       });
 
       this.onSearch(this.state.query);
@@ -272,7 +268,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     );
   };
 
-  getItemKey = (item: IItem): string => item.key || item.ringId || item.id;
+  getItemKey = (item: IItem): string => item.id || item.ringId || item.name || item.key;
 
   renderListHeader() {
     return this.renderEmptyValueItem();
