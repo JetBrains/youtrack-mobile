@@ -510,7 +510,7 @@ msgstr "Email address"
 msgid "Email address for follow-up"
 msgstr "Email address for follow-up"
 
-#: src/components/command-dialog/command-dialog.tsx:136
+#: src/components/command-dialog/command-dialog.tsx:94
 msgid "Enter command"
 msgstr "Enter command"
 
