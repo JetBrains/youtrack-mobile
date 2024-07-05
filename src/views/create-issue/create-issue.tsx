@@ -163,7 +163,7 @@ class CreateIssue extends PureComponent<Props, State> {
     return (
       <CustomFieldsPanel
         analyticsId={ANALYTICS_ISSUE_CREATE_PAGE}
-        autoFocusSelect
+        autoFocusSelect={true}
         testID="test:id/createIssueFields"
         accessibilityLabel="createIssueFields"
         accessible={false}
@@ -457,7 +457,7 @@ class CreateIssue extends PureComponent<Props, State> {
                 extraButton={!this.isActionDisabled() ? (
                   <View style={styles.row}>
                     {this.renderDraftsButton()}
-                    {this.renderActionsIcon()}
+                    {!!this.props.issue.summary && this.renderActionsIcon()}
                   </View>
                 ) : null}
                 onRightButtonClick={() =>

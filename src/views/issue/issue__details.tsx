@@ -452,7 +452,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
     return (
       <CustomFieldsPanel
         analyticsId={ANALYTICS_ISSUE_PAGE}
-        autoFocusSelect
+        autoFocusSelect={true}
         issueId={i?.id}
         issueProject={i?.project}
         fields={getIssueCustomFieldsNotText(i?.fields || [])}
