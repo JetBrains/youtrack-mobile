@@ -5,8 +5,6 @@ import Avatar from 'components/avatar/avatar';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {IconCheck} from 'components/icon/icon';
 
-import {View as AnimatedView} from 'react-native-animatable';
-
 import styles from './select.styles';
 
 import type {IItem} from 'components/select/select';
@@ -21,7 +19,6 @@ export interface Props {
   titleRenderer?: (item: IItem) => React.ReactNode;
   style?: ViewStyleProp;
 }
-
 
 export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
   static defaultProps: {
@@ -50,62 +47,47 @@ export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
   };
 
   render() {
-    const {
-      item,
-      isSelected,
-      style,
-      onLongPress = () => {},
-      disabled = false,
-    } = this.props;
+    const {item, isSelected, style, onLongPress = () => {}, disabled = false} = this.props;
 
-    if (!item) {
-      return null;
-    }
-
-    return (
-      <AnimatedView
-        useNativeDriver
-        duration={500}
-        animation="fadeIn"
+    return !item ? null : (
+      <TouchableOpacity
+        testID="test:id/selectListItem"
+        accessibilityLabel="selectListItem"
+        accessible={false}
+        key={item.id}
+        style={[styles.row, style]}
+        onPress={this.onSelect}
+        onLongPress={onLongPress}
+        disabled={disabled}
       >
-        <TouchableOpacity
-          testID="test:id/selectListItem"
-          accessibilityLabel="selectListItem"
-          accessible={false}
-          key={item.id}
-          style={[styles.row, style]}
-          onPress={this.onSelect}
-          onLongPress={onLongPress}
-          disabled={disabled}
-        >
-          <View
-            style={styles.selectItemValue}
-            testID="test:id/selectListItemText"
-            accessible={true}
-          >
-            {(item.avatarUrl || item.icon) && (
-              <Avatar
-                userName={this.getDefaultTitle(item)}
-                size={32}
-                style={styles.itemIcon}
-                source={{
-                  uri: item.avatarUrl || item.icon,
-                }}
-              />
+        <View style={styles.selectItemValue} testID="test:id/selectListItemText" accessible={true}>
+          {(item.avatarUrl || item.icon) && (
+            <Avatar
+              userName={this.getDefaultTitle(item)}
+              size={32}
+              style={styles.itemIcon}
+              source={{
+                uri: item.avatarUrl || item.icon,
+              }}
+            />
+          )}
+
+          <View style={styles.item}>
+            {this.renderTitle(item)}
+            {!!item.description && (
+              <Text numberOfLines={1} style={styles.description}>
+                {item.description}
+              </Text>
             )}
-
-            <View style={styles.item}>
-              {this.renderTitle(item)}
-              {!!item.description &&
-                  <Text numberOfLines={1} style={styles.description}>{item.description}</Text>}
-            </View>
           </View>
+        </View>
 
-          {isSelected && <View style={styles.itemIconSelected}>
-            <IconCheck color={styles.link.color}/>
-          </View>}
-        </TouchableOpacity>
-      </AnimatedView>
+        {isSelected && (
+          <View style={styles.itemIconSelected}>
+            <IconCheck color={styles.link.color} />
+          </View>
+        )}
+      </TouchableOpacity>
     );
   }
 }
