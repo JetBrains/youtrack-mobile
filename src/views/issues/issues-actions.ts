@@ -646,11 +646,10 @@ const setFilters = (): (
 
     const visibleFiltersNames: string[] = userProfileFiltersNames.length > 0 ? userProfileFiltersNames : Object.values(defaultIssuesFilterFieldConfig);
     if (userProfileFiltersNames.length === 0) {
-      const ytCurrentUser: User = getStorageState().currentUser?.ytCurrentUser as User;
+      const ytCurrentUser: User = getStorageState().currentUser?.ytCurrentUser || {} as User;
       const profiles: UserProfiles = {
-        ...ytCurrentUser.profiles,
         ...Object.assign(
-          {},
+          ytCurrentUser?.profiles || {},
           helpdeskMode
             ? {helpdesk: {...ytCurrentUser?.profiles?.helpdesk, ticketFilters: visibleFiltersNames}}
             : {appearance: {...ytCurrentUser?.profiles?.appearance, liteUiFilters: visibleFiltersNames}}
