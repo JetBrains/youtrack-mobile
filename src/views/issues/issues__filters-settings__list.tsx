@@ -60,7 +60,7 @@ const IssuesFiltersSettingList = ({
 
   const getFilterSettingPresentation = (fs: FilterSetting) => {
     const filterField = fs.filterField[0];
-    return filterField ? getLocalizedName(filterField) : fs.id;
+    return filterField ? getPredefinedFilterPresentation(filterField) : fs.id;
   };
 
   const getFilterPresentation = (ff: FilterSetting | FilterField) => {
