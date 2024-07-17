@@ -26,7 +26,8 @@ export interface DescriptionFeedbackBlock extends FeedbackFormBlockBase {
 
 export interface CustomFieldFeedbackBlockProjectField extends EntityBase {
   defaultValues?: Array<ICustomFieldValue>;
-  emptyFieldText: string;
+  emptyFieldText: string | null;
+  canBeEmpty: boolean;
   bundle: {
     id: string;
   }

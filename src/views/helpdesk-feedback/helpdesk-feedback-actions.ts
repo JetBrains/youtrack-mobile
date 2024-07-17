@@ -53,6 +53,7 @@ const setSelect = (b: FeedbackBlock, onSelect: (s: FeedbackFormBlockCustomField)
     }
     const field = b.field!;
     const multi = field.isMultiValue;
+    const selectedItems = field.value ? ((multi ? field.value : [field.value]) as FeedbackFormBlockFieldValue[]) : [];
     dispatch(
       error
         ? null
@@ -60,7 +61,7 @@ const setSelect = (b: FeedbackBlock, onSelect: (s: FeedbackFormBlockCustomField)
             multi,
             getTitle: getLocalizedName,
             dataSource: () => Promise.resolve(values),
-            selectedItems: (multi ? field.value : [field.value]) as FeedbackFormBlockFieldValue[],
+            selectedItems,
             onSelect: (selected: FeedbackFormBlockCustomField) => {
               onSelect(selected);
               dispatch(resetSelectProps());

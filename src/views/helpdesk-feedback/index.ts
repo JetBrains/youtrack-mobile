@@ -151,22 +151,24 @@ export const createFormBlock = (
     case FeedbackFormPredefinedBlock.customField:
       let value;
       let periodPattern;
-      const isMultiValue = b.projectField.field.fieldType.isMultiValue;
-      if (b.projectField.defaultValues) {
-        value = isMultiValue ? b.projectField.defaultValues : b.projectField.defaultValues[0];
+      const pf = b.projectField;
+      const isMultiValue = pf.field.fieldType.isMultiValue;
+      if (pf.defaultValues) {
+        value = isMultiValue ? pf.defaultValues : pf.defaultValues[0];
       }
-      const ft = getFieldType(b.projectField.field) || '';
+      const ft = getFieldType(pf.field) || '';
       let type = formBlockType[ft];
       let presentation = '';
+      const emptyFieldText = pf.emptyFieldText;
       switch (true) {
         case (ft === formBlockType.float || ft === formBlockType.integer || ft === formBlockType.string):
-          label = `${b.projectField.field.name}${
-            b.projectField.emptyFieldText ? ` (${b.projectField.emptyFieldText})` : ''
+          label = `${pf.field.name}${
+            emptyFieldText ? ` (${emptyFieldText})` : ''
           }`;
           break;
         case ft === formBlockType.period:
           periodPattern = new RegExp(`^${b.periodFieldPattern}$`, 'i');
-          label = `${b.projectField.field.name} (${i18n('1w 1d 1h 1m')})`;
+          label = `${pf.field.name} (${i18n('1w 1d 1h 1m')})`;
           break;
         case (ft === DATE_AND_TIME_FIELD_VALUE_TYPE):
           type = formBlockType.dateTime;
@@ -177,18 +179,21 @@ export const createFormBlock = (
           break;
         default:
           type = formBlockType.field;
-          presentation = b.projectField.defaultValues
-            ? b.projectField.defaultValues.map(getLocalizedName).join(', ')
-            : b.projectField.emptyFieldText;
+          presentation = pf.defaultValues
+            ? pf.defaultValues.map(getLocalizedName).join(', ')
+            : emptyFieldText || '';
+      }
+      if (!presentation && pf.canBeEmpty && emptyFieldText) {
+        presentation = emptyFieldText;
       }
       return {
         ...defaultBlock,
-        label: label || getLocalizedName(b.projectField.field),
+        label: label || getLocalizedName(pf.field),
         name: 'fields',
         type,
         field: {
-          $type: b.projectField.$type!,
-          id: b.projectField.id,
+          $type: pf.$type!,
+          id: pf.id,
           value,
           isMultiValue,
           periodPattern,

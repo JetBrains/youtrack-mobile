@@ -28,6 +28,7 @@ export default class HelpDeskFormAPI extends ApiBase {
               projectField: [
                 '$type',
                 'id',
+                'canBeEmpty',
                 'emptyFieldText',
                 'bundle(id)',
                 {
