@@ -1,9 +1,10 @@
 PODS:
-  - AppAuth (1.4.0):
-    - AppAuth/Core (= 1.4.0)
-    - AppAuth/ExternalUserAgent (= 1.4.0)
-  - AppAuth/Core (1.4.0)
-  - AppAuth/ExternalUserAgent (1.4.0)
+  - AppAuth (1.7.5):
+    - AppAuth/Core (= 1.7.5)
+    - AppAuth/ExternalUserAgent (= 1.7.5)
+  - AppAuth/Core (1.7.5)
+  - AppAuth/ExternalUserAgent (1.7.5):
+    - AppAuth/Core
   - boost (1.83.0)
   - BugsnagReactNative (7.24.0):
     - React-Core
@@ -36,9 +37,9 @@ PODS:
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.12)
     - GoogleUtilities/Logger (~> 7.12)
-  - FirebaseCoreInternal (10.28.0):
+  - FirebaseCoreInternal (10.29.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
-  - FirebaseInstallations (10.28.0):
+  - FirebaseInstallations (10.29.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
@@ -972,8 +973,8 @@ PODS:
   - React-Mapbuffer (0.73.8):
     - glog
     - React-debug
-  - react-native-app-auth (6.4.3):
-    - AppAuth (= 1.4.0)
+  - react-native-app-auth (7.2.0):
+    - AppAuth (>= 1.7.3)
     - React-Core
   - react-native-document-picker (9.2.0):
     - React-Core
@@ -1485,7 +1486,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
+  AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   BugsnagReactNative: 65729c7ee7d9f61b8dbd9f046d920bb38a43931a
   BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
@@ -1495,8 +1496,8 @@ SPEC CHECKSUMS:
   Firebase: 26b040b20866a55f55eb3611b9fcf3ae64816b86
   FirebaseAnalytics: f9211b719db260cc91aebee8bb539cb367d0dfd1
   FirebaseCore: a2b95ae4ce7c83ceecfbbbe3b6f1cddc7415a808
-  FirebaseCoreInternal: 58d07f1362fddeb0feb6a857d1d1d1c5e558e698
-  FirebaseInstallations: 60c1d3bc1beef809fd1ad1189a8057a040c59f2e
+  FirebaseCoreInternal: df84dd300b561c27d5571684f389bf60b0a5c934
+  FirebaseInstallations: 913cf60d0400ebd5d6b63a28b290372ab44590dd
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
   GoogleAppMeasurement: f65fc137531af9ad647f1c0a42f3b6a4d3a98049
@@ -1527,7 +1528,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 1729acf5ffe2d4439d698da25fddf0c75d07d1a1
   React-logger: 60afd40b183e8e6642bfd0108f1a1ad360cc665e
   React-Mapbuffer: 780a8ecda636bf19e5e2bfdbbb937e898ff39d7f
-  react-native-app-auth: fd1eaa667c0bc014199456d14a6440cb74de814e
+  react-native-app-auth: 63fa4e58c5bd29aeb974d3a06a23c5858322d533
   react-native-document-picker: 2b3efb60622b7be891b8d0e0e5424632150e0c94
   react-native-encrypted-storage: db300a3f2f0aba1e818417c1c0a6be549038deb7
   react-native-eventsource: fea4e2c2505d19660b312406ce45dbb3fe68fd35
