@@ -4,13 +4,15 @@ import ApiHelper from './api__helper';
 import issueFields from 'components/api/api__issue-fields';
 import log from 'components/log/log';
 import Router from 'components/router/router';
+import {CustomError} from 'types/Error.ts';
 import {fetch2, RequestController, requestController} from './api__request-controller';
+import {getErrorMessage} from 'components/error/error-resolver.ts';
 import {handleRelativeUrl} from 'components/config/config';
 import {HTTP_STATUS} from 'components/error/error-http-codes';
+import {i18n} from 'components/i18n/i18n.ts';
 
-import Auth from 'components/auth/oauth2';
+import type Auth from 'components/auth/oauth2';
 import type {AppConfig} from 'types/AppConfig';
-import type {RequestHeaders} from 'types/Auth';
 import type {Attachment} from 'types/CustomFields';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
@@ -52,12 +54,14 @@ function assertLongQuery(url: string) {
   if (query.length > MAX_QUERY_LENGTH) {
     log.warn(
       `Query length (${query.length}) is longer than ${MAX_QUERY_LENGTH}. This doesn't work on some servers`,
-      url,
+      url
     );
   }
 }
 
 requestController.init();
+
+const defaultRequestOptions: RequestOptions = {parseJson: true};
 
 export default class BaseAPI {
   auth: Auth;
@@ -67,7 +71,7 @@ export default class BaseAPI {
   youTrackUrl: string;
   youTrackIssueUrl: string;
   youTrackApiUrl: string;
-  isRefreshingToken: boolean;
+  isTokenRefreshFailed: boolean;
   youTrackProjectUrl: string;
 
   constructor(auth: Auth) {
@@ -85,14 +89,14 @@ export default class BaseAPI {
     this.youTrackUrl = this.config.backendUrl;
     this.youTrackApiUrl = `${this.youTrackUrl}/api`;
     this.youTrackIssueUrl = `${this.youTrackApiUrl}/issues`;
-    this.isRefreshingToken = false;
+    this.isTokenRefreshFailed = false;
     this.youTrackProjectUrl = `${this.youTrackUrl}/api/admin/projects`;
   }
 
   static createFieldsQuery(
     fields: Record<string, any> | Array<Record<string, any> | string> | string,
     restParams?: Record<string, any> | null,
-    opts?: Record<string, any>,
+    opts?: Record<string, any>
   ): string {
     return qs.stringify(
       Object.assign({
@@ -111,54 +115,63 @@ export default class BaseAPI {
     return this.auth.isTokenOutdated();
   }
 
-  isError(response: Response): boolean {
-    return (
-      response.status < HTTP_STATUS.SUCCESS ||
-      response.status >= HTTP_STATUS.REDIRECT
-    );
+  isHTTPError(response: Response | CustomError): boolean {
+    return response.status < HTTP_STATUS.SUCCESS || response.status >= HTTP_STATUS.REDIRECT;
   }
 
-  async doRequest(request: Function) {
-    let response = await request();
+  async doRequest(request: () => Promise<Response | CustomError>): Promise<Response | CustomError> {
+    const send = async () => await request();
+    let response = await send();
 
-    if (this.isError(response)) {
-      const isNotAuthorized: boolean = response.status === HTTP_STATUS.UNAUTHORIZED || this.isTokenOutdated();
-      if (!isNotAuthorized) {
-        log.warn('Request failed. Unauthorized');
-        throw response;
-      } else {
-        log.info('API: Unauthorised. Refreshing token...');
-        try {
-          await this.auth.refreshToken();
-          log.info('API: Repeating a request');
-          response = await request();
-        } catch (e) {
-          if (!this.isRefreshingToken) {
-            log.info('API: Unauthorised. Token refresh failed. Logging in...', e);
-            this.isRefreshingToken = true;
-          }
-          throw e;
-        }
-      }
-    } else {
-      this.isRefreshingToken = false;
+    if (!this.isHTTPError(response)) {
+      this.isTokenRefreshFailed = false;
+      return response;
     }
-    return response;
+
+    const isUnauthorized: boolean = response.status === HTTP_STATUS.UNAUTHORIZED || this.isTokenOutdated();
+    if (isUnauthorized) {
+      try {
+        log.info('API(doRequest):Unauthorised: Refreshing token...');
+        await this.auth.refreshToken();
+        log.info('API(doRequest):Repeating a request');
+        response = await send();
+      } catch (authError) {
+        try {
+          log.info(
+            'API(doRequest):Unauthorised: Token refresh failed. Logging in...',
+            getErrorMessage(response as CustomError)
+          );
+        } catch (error) {}
+        if (!this.isTokenRefreshFailed) {
+          this.isTokenRefreshFailed = true;
+          Router.EnterServer({
+            serverUrl: this.config.backendUrl,
+            error: i18n(
+              `Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator.`
+            ),
+          });
+        }
+        throw authError;
+      }
+      return response;
+    } else {
+      try {
+        log.warn('API(doRequest): Request failed.', getErrorMessage(response as CustomError));
+      } catch (error) {}
+      throw response;
+    }
   }
 
   async makeAuthorizedRequest(
     url: string,
-    method?: string | null | undefined,
-    body?: Record<string, any> | null | undefined,
-    options: RequestOptions = {
-      parseJson: true,
-    },
-  ): Promise<any> {
+    method?: string | null,
+    body?: Record<string, any> | null,
+    options: RequestOptions = defaultRequestOptions
+  ) {
     url = patchTopParam(url);
     assertLongQuery(url);
 
-    const sendRequest = async (): Promise<Response> => {
-      const requestHeaders: RequestHeaders = this.auth.getAuthorizationHeaders();
+    const request = async () => {
       return await fetch2(
         url,
         {
@@ -166,40 +179,14 @@ export default class BaseAPI {
           headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json, text/plain, */*',
-            ...requestHeaders,
+            ...this.auth.getAuthorizationHeaders(),
           },
           body: JSON.stringify(body),
         },
-        options.controller,
+        options.controller
       );
     };
-
-    let response: any = await sendRequest();
-
-    if (this.isError(response)) {
-      const isNotAuthorized: boolean = response.status === HTTP_STATUS.UNAUTHORIZED || this.isTokenOutdated();
-      if (!isNotAuthorized) {
-        log.warn('Request failed. Unauthorized');
-        throw response;
-      } else {
-        log.info('API: Unauthorised. Refreshing token...');
-        try {
-          await this.auth.refreshToken();
-          log.info('API: Repeat a request');
-          response = await sendRequest();
-        } catch (e) {
-          if (!this.isRefreshingToken) {
-            log.info('API: Unauthorised. Token refresh failed. Logging in...', e);
-            this.isRefreshingToken = true;
-            Router.EnterServer({serverUrl: this.config.backendUrl});
-          }
-          throw e;
-        }
-      }
-    } else {
-      this.isRefreshingToken = false;
-    }
-
+    const response = await this.doRequest(request);
     return options.parseJson === false ? response : await response?.json?.();
   }
 
@@ -208,9 +195,7 @@ export default class BaseAPI {
     url: string,
     body: Record<string, any> | null,
     files: NormalizedAttachment[] | null,
-    options: RequestOptions = {
-      parseJson: true,
-    },
+    options: RequestOptions = defaultRequestOptions
   ) {
     log.info('API: Submitting a form');
     const request = async (): Promise<Response> => {
@@ -219,7 +204,6 @@ export default class BaseAPI {
       if (files?.length) {
         files.forEach(f => formData.append('file', createFileData(f)));
       }
-
       return await fetch2(
         url,
         {

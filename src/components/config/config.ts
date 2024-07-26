@@ -88,8 +88,12 @@ async function loadConfig(ytUrl: string): Promise<any> {
     },
   })
     .then(res => {
-      log.log(`Got result from ${ytUrl}: ${res && res.status}`);
-      log.log(`Response body: ${res && res._bodyText}`);
+      if ('status' in res) {
+        log.log(`Got result from ${ytUrl}:`, res.status);
+      }
+      if ('_bodyText' in res) {
+        log.log(`Response body:`, res._bodyText);
+      }
       return res.json();
     })
     .then(res => {

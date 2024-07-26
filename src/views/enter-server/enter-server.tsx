@@ -27,40 +27,39 @@ import {IconBack, logo} from 'components/icon/icon';
 import {NETWORK_PROBLEM_TIPS} from 'components/error-message/error-text-messages';
 import {resolveErrorMessage} from 'components/error/error-resolver';
 import {ThemeContext} from 'components/theme/theme-context';
-import {UNIT} from 'components/variables';
 
 import styles from './enter-server.styles';
 
 import type {AppConfig} from 'types/AppConfig';
+import type {AppState} from 'reducers';
+import type {ReduxThunkDispatch} from 'types/Redux.ts';
 import type {Theme, UIThemeColors} from 'types/Theme';
 
 const protocolRegExp = /^http(s?):\/\//i;
 const CLOUD_DOMAINS: string[] = ['myjetbrains.com', 'youtrack.cloud'];
-type Props = {
+
+interface Props {
   serverUrl: string;
   connectToYoutrack: (newServerUrl: string) => Promise<AppConfig>;
-  onShowDebugView: (...args: any[]) => any;
-  onCancel: () => any;
-};
-type State = {
+  onShowDebugView: (actionToPerform?: () => void, message?: string, numberOfTaps?: number) => void;
+  onCancel: () => void;
+  error?: string;
+}
+
+interface State {
   serverUrl: string;
   connecting: boolean;
-  error: string | null | undefined;
+  error: string | null;
   isErrorInfoModalVisible: boolean;
-};
-const hitSlop = {
-  top: UNIT,
-  bottom: UNIT,
-  left: UNIT,
-  right: UNIT,
-};
+}
+
 export class EnterServer extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
       serverUrl: props.serverUrl,
       connecting: false,
-      error: null,
+      error: props.error || null,
       isErrorInfoModalVisible: false,
     };
     usage.trackScreenView(ANALYTICS_ENTER_SERVER_PAGE);
@@ -122,7 +121,7 @@ export class EnterServer extends Component<Props, State> {
         log.log(`Failed to connect to ${url}`, error);
         log.log(`Connection error for ${url}: ${error && error.toString()}`);
 
-        if (error && error.isIncompatibleYouTrackError) {
+        if (error?.isIncompatibleYouTrackError) {
           errorToShow = error;
           break;
         }
@@ -283,7 +282,7 @@ export class EnterServer extends Component<Props, State> {
                   style={styles.supportLinkContent}
                 >
                   <TouchableOpacity
-                    hitSlop={hitSlop}
+                    hitSlop={HIT_SLOP}
                     onPress={() =>
                       Linking.openURL(
                         'https://www.jetbrains.com/help/youtrack/incloud/youtrack-mobile.html#start-using-youtrack-mobile',
@@ -299,7 +298,7 @@ export class EnterServer extends Component<Props, State> {
                   style={styles.supportLinkContent}
                 >
                   <TouchableOpacity
-                    hitSlop={hitSlop}
+                    hitSlop={HIT_SLOP}
                     onPress={() =>
                       Linking.openURL(
                         'https://youtrack-support.jetbrains.com/hc/en-us/requests/new',
@@ -329,19 +328,24 @@ export class EnterServer extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: AppState, ownProps: Props) => {
   return {...ownProps};
 };
 
-const mapDispatchToProps = dispatch => {
+type MappedActions = {
+  onShowDebugView: () => void;
+  connectToYoutrack: (url: string) => void;
+};
+
+const mapDispatchToProps = (dispatch: ReduxThunkDispatch): MappedActions => {
   return {
-    connectToYoutrack: newURL => dispatch(connectToNewYoutrack(newURL)),
+    connectToYoutrack: (url: string) => dispatch(connectToNewYoutrack(url)),
     onShowDebugView: () => dispatch(openDebugView()),
   };
 };
 
 // Needed to have a possibility to override callback by own props
-const mergeProps = (stateProps, dispatchProps) => {
+const mergeProps = (stateProps: Props, dispatchProps: MappedActions): Props & MappedActions => {
   return {...dispatchProps, ...stateProps};
 };
 

@@ -85,12 +85,12 @@ describe('API', () => {
 
   it('should set `isRefreshingToken` to false when a request is successful', async () => {
     const instance: Api = createApiInstance();
-    instance.isRefreshingToken = true;
+    instance.isTokenRefreshFailed = true;
     fetchMock.mock(`${serverUrl}?$top=-1`, {});
 
     await instance.makeAuthorizedRequest(serverUrl);
 
-    expect(instance.isRefreshingToken).toEqual(false);
+    expect(instance.isTokenRefreshFailed).toEqual(false);
   });
 
 
@@ -118,22 +118,25 @@ describe('API', () => {
       prepareUnsuccesfulRequest();
       await performRequest();
 
-      expect(instance.isRefreshingToken).toEqual(true);
-      expect(Router.EnterServer).toHaveBeenCalledWith({serverUrl: authMock.config.backendUrl});
+      expect(instance.isTokenRefreshFailed).toEqual(true);
+      expect(Router.EnterServer).toHaveBeenCalledWith({
+        serverUrl: authMock.config.backendUrl,
+        error: 'Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator.',
+      });
 
     });
 
     it('should not redirect to login screen several times', async () => {
       prepareUnsuccesfulRequest();
 
-      expect(instance.isRefreshingToken).toEqual(false);
+      expect(instance.isTokenRefreshFailed).toEqual(false);
 
       await performRequest();
       expect(Router.EnterServer).toHaveBeenCalled();
-      expect(instance.isRefreshingToken).toEqual(true);
+      expect(instance.isTokenRefreshFailed).toEqual(true);
 
       await performRequest();
-      expect(instance.isRefreshingToken).toEqual(true);
+      expect(instance.isTokenRefreshFailed).toEqual(true);
 
       expect(Router.EnterServer).toHaveBeenCalledTimes(1);
     });
