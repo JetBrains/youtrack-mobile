@@ -1,109 +1,81 @@
-import {
-  authorize,
-  prefetchConfiguration,
-  refresh,
-  revoke,
-} from 'react-native-app-auth';
+import {authorize, refresh, revoke} from 'react-native-app-auth';
 import log from '../log/log';
+
 import type {AppConfig} from 'types/AppConfig';
-import type {AuthParams, OAuthConfig, OAuthParams2} from 'types/Auth';
+import type {AuthParams} from 'types/Auth';
+import type {
+  AppAuthError,
+  AuthConfiguration,
+  AuthorizeResult,
+  RefreshResult,
+} from 'react-native-app-auth';
+
+
 const ACCEPT_HEADER: string = 'application/json, text/plain, */*';
 const URL_ENCODED_TYPE: string = 'application/x-www-form-urlencoded';
 
-const normalizeAuthParams = (authParams: OAuthParams2): AuthParams => {
-  return {
-    access_token: authParams.accessToken || authParams.access_token,
-    accessTokenExpirationDate: authParams.accessTokenExpirationDate,
-    expires_in: authParams.expires_in,
-    refresh_token: authParams.refreshToken || authParams.refresh_token,
-    scope: authParams.scope,
-    scopes: authParams.scopes,
-    token_type: authParams.tokenType || authParams.token_type,
-  };
-};
-
-const createConfig = (
-  config: AppConfig,
-  isRefresh: boolean = false,
-): OAuthConfig => {
-  let authConfiguration: OAuthConfig = {
-    clientId: config.auth.clientId,
-    clientSecret: config.auth.clientSecret,
+const createAuthConfig = (config: AppConfig, isRefresh: boolean = false): AuthConfiguration => {
+  const {serverUri, clientId, landingUrl, scopes, clientSecret} = config.auth;
+  const authURL = `${serverUri}/api/rest/oauth2`;
+  const authConfig: AuthConfiguration = {
+    clientId,
     dangerouslyAllowInsecureHttpRequests: true,
-    redirectUrl: config.auth.landingUrl,
+    redirectUrl: landingUrl,
     serviceConfiguration: {
-      authorizationEndpoint: `${config.auth.serverUri}/api/rest/oauth2/auth`,
-      tokenEndpoint: `${config.auth.serverUri}/api/rest/oauth2/token`,
+      authorizationEndpoint: `${authURL}/auth`,
+      tokenEndpoint: `${authURL}/token`,
     },
+    scopes: scopes.split(' '),
   };
-
+  if (clientSecret) {
+    authConfig.clientSecret = clientSecret;
+  }
   if (!isRefresh) {
-    authConfiguration = {
-      ...authConfiguration,
-      additionalParameters: {
-        access_type: 'offline',
-        prompt: 'login',
-      },
-      scopes: config.auth.scopes.split(' '),
-      usePKCE: !config.auth.clientSecret,
+    authConfig.additionalParameters = {
+      access_type: 'offline',
+      prompt: 'login',
     };
+    authConfig.usePKCE = !clientSecret;
   }
-
-  if (!config.auth.clientSecret) {
-    delete authConfiguration.clientSecret;
-  }
-
-  return authConfiguration;
+  return authConfig;
 };
 
-const prefetch = (config: AppConfig): void => {
-  prefetchConfiguration({
-    warmAndPrefetchChrome: true,
-    ...createConfig(config),
-  });
-};
-
-const revokeToken = async (
-  config: AppConfig,
-  tokenToRevoke: string,
-): Promise<void> => {
+const revokeToken = async (config: AppConfig, tokenToRevoke: string): Promise<void> => {
   try {
-    await revoke(createConfig(config), {
+    await revoke(createAuthConfig(config), {
       tokenToRevoke,
       sendClientId: true,
     });
-    log.log('Access token revoked');
+    log.log('OAuth2(revokeToken): Access token revoked');
   } catch (error) {
-    log.warn('Failed to revoke access token', error.message);
+    log.warn('OAuth2(revokeToken): Failed to revoke access token', error);
   }
 };
 
-const refreshToken = async (
-  config: AppConfig,
-  refreshToken: string,
-): Promise<OAuthParams2> => {
+const refreshToken = async (config: AppConfig, refreshToken: string): Promise<RefreshResult> => {
   try {
-    const newOAuthParams: OAuthParams2 = await refresh(
-      createConfig(config, true),
-      {
-        refreshToken,
-      },
-    );
+    const results: RefreshResult = await refresh(createAuthConfig(config, true), {refreshToken});
     log.log('Access token refreshed');
-    return newOAuthParams;
+    return results;
   } catch (error) {
-    log.warn('Failed to refresh token', error.message);
+    const e = error as AppAuthError;
+    log.warn('OAuth2(refreshToken): Failed to refresh token', e.message || e);
     throw error;
   }
 };
 
 const doAuthorize = async (config: AppConfig): Promise<AuthParams> => {
   try {
-    const authParams: OAuthParams2 = await authorize(createConfig(config));
-    log.log('Access token received');
-    return normalizeAuthParams(authParams);
+    const authResult: AuthorizeResult = await authorize(createAuthConfig(config));
+    log.log('OAuth2(doAuthorize): Access token received');
+    return {
+      access_token: authResult.accessToken,
+      refresh_token: authResult.refreshToken,
+      scope: config.auth.scopes,
+      token_type: authResult.tokenType,
+    };
   } catch (error) {
-    log.warn('Authorization failed', error.message);
+    log.warn('Authorization failed', error);
     throw error;
   }
 };
@@ -111,8 +83,6 @@ const doAuthorize = async (config: AppConfig): Promise<AuthParams> => {
 export {
   ACCEPT_HEADER,
   doAuthorize,
-  normalizeAuthParams,
-  prefetch,
   refreshToken,
   revokeToken,
   URL_ENCODED_TYPE,

@@ -30,7 +30,6 @@ import {isSplitView} from 'components/responsive/responsive-helper';
 import {loadConfig} from 'components/config/config';
 import {loadTranslation} from 'components/i18n/i18n-translation';
 import {logEvent} from 'components/log/log-helper';
-import {normalizeAuthParams} from 'components/auth/oauth2-helper';
 import {navigateToRouteById} from 'components/router/router-helper';
 import {notify, notifyError} from 'components/notification/notification';
 import {extractIssuesQuery, openByUrlDetector} from 'components/open-url-handler/open-url-handler';
@@ -42,7 +41,7 @@ import type {AnyIssue} from 'types/Issue';
 import type {AppConfig, EndUserAgreement} from 'types/AppConfig';
 import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
-import type {AuthParams, OAuthParams2} from 'types/Auth';
+import type {AuthParams} from 'types/Auth';
 import type {CustomError} from 'types/Error';
 import type {
   User,
@@ -301,12 +300,12 @@ async function connectToOneMoreServer(
 async function authorizeOnOneMoreServer(
   config: AppConfig,
   onBack: (serverUrl: string) => any,
-): Promise<OAuthParams2> {
+): Promise<AuthParams> {
   return new Promise(resolve => {
     Router.LogIn({
       config,
       onChangeServerUrl: onBack,
-      onLogIn: (authParams: OAuthParams2) => resolve(authParams),
+      onLogIn: (authParams: AuthParams) => resolve(authParams),
     });
   });
 }
@@ -350,7 +349,7 @@ export function addAccount(serverUrl: string = ''): ReduxAction {
       log.info(`App Actions: Config loaded for the new server, logging in...`);
       const tmpAuthInstance: OAuth2 = new OAuth2(config); //NB! this temporary instance for Login screen code
 
-      const authParams: OAuthParams2 = await authorizeOnOneMoreServer(
+      const authParams: AuthParams = await authorizeOnOneMoreServer(
         config,
         function onBack(url: string) {
           log.info('Authorization canceled by user, going back');
@@ -359,7 +358,7 @@ export function addAccount(serverUrl: string = ''): ReduxAction {
       );
       log.info('App Actions: Authorized on new server, applying');
       await dispatch(
-        applyAccount(config, tmpAuthInstance, normalizeAuthParams(authParams)),
+        applyAccount(config, tmpAuthInstance, authParams),
       );
       log.info(`App Actions: Successfully added account`);
     } catch (err) {

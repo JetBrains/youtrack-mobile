@@ -1,14 +1,9 @@
-import type {AuthConfiguration} from 'react-native-app-auth';
-
-export type AuthParams = {
+export interface AuthParams {
   access_token: string;
-  accessTokenExpirationDate: string;
-  error_code?: string;
-  expires_in: number;
   refresh_token: string;
   scope: string;
   token_type: string;
-};
+}
 
 export type AuthConfig = {
   serverUri: string;
@@ -33,12 +28,7 @@ export type OAuthParams = {
   tokenType: string;
 };
 
-export type OAuthConfig = AuthConfiguration;
-
-export type OAuthParams2 = AuthParams &
-  OAuthParams & {
-  inAppLogin?: boolean;
-};
+export type OAuthParams2 = AuthParams & OAuthParams;
 
 export type RequestHeaders = {
   Authorization?: string;

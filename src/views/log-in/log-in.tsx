@@ -27,27 +27,32 @@ import {i18n} from 'components/i18n/i18n';
 import {IconBack, logo} from 'components/icon/icon';
 import {onLogIn, openDebugView} from 'actions/app-actions';
 import {ThemeContext} from 'components/theme/theme-context';
+
 import styles from './log-in.styles';
+
 import type {AppConfig} from 'types/AppConfig';
-import type {AuthParams, OAuthParams2} from 'types/Auth';
+import type {AppState} from 'reducers';
+import type {AuthParams} from 'types/Auth';
 import type {CustomError} from 'types/Error';
+import type {ReduxThunkDispatch} from 'types/Redux.ts';
 import type {Theme, UIThemeColors} from 'types/Theme';
 
-type Props = {
+interface Props {
   config: AppConfig;
-  onLogIn: (authParams: OAuthParams2 | AuthParams) => any;
+  onLogIn: (authParams: AuthParams) => void;
   onShowDebugView: (...args: any[]) => any;
   onChangeServerUrl: (currentUrl: string) => any;
   errorMessage?: string;
   error?: CustomError;
-};
-type State = {
+}
+
+interface State {
   username: string;
   password: string;
   errorMessage: string;
   loggingIn: boolean;
   youTrackBackendUrl: string;
-};
+}
 
 export class LogIn extends Component<Props, State> {
   passInputRef: any;
@@ -92,22 +97,19 @@ export class LogIn extends Component<Props, State> {
         config,
       );
       usage.trackEvent(ANALYTICS_LOGIN_PAGE, 'Login via credentials successful');
-
-      if (!authParams.accessTokenExpirationDate && authParams.expires_in) {
-        authParams.accessTokenExpirationDate = `${Date.now() + authParams.expires_in * 1000}`;
-      }
-
       onLogIn(authParams);
     } catch (err) {
       usage.trackEvent(ANALYTICS_LOGIN_PAGE, 'Login via credentials error');
       usage.trackError(ANALYTICS_LOGIN_PAGE, err);
-      const errorMessage: string = ERROR_MESSAGE_DATA[err.error]
-        ? ERROR_MESSAGE_DATA[err.error].title
-        : err.error_description || err.message;
-      this.setState({
-        errorMessage: errorMessage,
-        loggingIn: false,
-      });
+      let errorMessage: string = ERROR_MESSAGE_DATA.DEFAULT.title;
+      const e = err as CustomError;
+      if ('message' in e) {
+        errorMessage = e.message;
+      }
+      if ('error_description' in e) {
+        errorMessage = e.error_description;
+      }
+      this.setState({errorMessage, loggingIn: false});
     }
   };
 
@@ -208,6 +210,7 @@ export class LogIn extends Component<Props, State> {
                       onChangeText={(username: string) =>
                         this.setState({
                           username,
+                          errorMessage: '',
                         })
                       }
                     />
@@ -233,6 +236,7 @@ export class LogIn extends Component<Props, State> {
                       onChangeText={(password: string) =>
                         this.setState({
                           password,
+                          errorMessage: '',
                         })
                       }
                     />
@@ -325,13 +329,13 @@ export class LogIn extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: AppState, ownProps: Props) => {
   return {...ownProps};
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch: ReduxThunkDispatch, ownProps: Props) => {
   return {
-    onChangeServerUrl: youtrackUrl => {
+    onChangeServerUrl: (youtrackUrl: string) => {
       if (ownProps.onChangeServerUrl) {
         return ownProps.onChangeServerUrl(youtrackUrl);
       }
@@ -345,9 +349,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-// Needed to have a possibility to override callback by own props
-const mergeProps = (stateProps, dispatchProps) => {
-  return {...dispatchProps, ...stateProps};
-};
+const mergeProps = (
+  stateProps: Props,
+  dispatchProps: {
+    onChangeServerUrl: (youtrackUrl: string) => void;
+    onLogIn: (authParams: AuthParams) => unknown;
+    onShowDebugView: () => unknown;
+  }
+) => ({...dispatchProps, ...stateProps});
 
 export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(LogIn);

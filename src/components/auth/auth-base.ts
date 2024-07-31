@@ -78,7 +78,7 @@ export class AuthBase {
       });
   }
 
-  static async obtainTokenWithOAuthCode(config: AppConfig): Promise<void> {}
+  static async obtainTokenWithOAuthCode(config: AppConfig): Promise<void | AuthParams> {}
 
   static obtainTokenByCredentials(
     login: string,
@@ -174,9 +174,7 @@ export class AuthBase {
         return authParams;
       })
       .catch((error: CustomError) => {
-        const prevToken: string | null | undefined = this.getRefreshToken(
-          authParams,
-        );
+        const prevToken: string | undefined = this.getRefreshToken(authParams);
 
         if (!prevToken) {
           log.warn('Auth: loadCurrentUser: Previous token is undefined.');

@@ -4,14 +4,13 @@ import * as feature from 'components/feature/feature';
 import Api from './api';
 
 import IssuesAPI from 'components/api/api__issues';
-import type Auth from 'components/auth/oauth2';
-import {AppConfig} from 'types/AppConfig';
-import {AuthParams, RequestHeaders} from 'types/Auth';
-import {IssueComment} from 'types/CustomFields';
 import Router from 'components/router/router';
 import {HTTP_STATUS} from 'components/error/error-http-codes';
-import {CustomError} from 'types/Error';
 
+import type Auth from 'components/auth/oauth2';
+import type {AuthParams} from 'types/Auth';
+import type {CustomError} from 'types/Error';
+import type {IssueComment} from 'types/CustomFields';
 
 describe('API', () => {
   const serverUrl = 'http://foo.bar';
@@ -19,9 +18,7 @@ describe('API', () => {
     token_type: 'token type',
     access_token: 'fake token',
   } as AuthParams;
-  let authMock: Auth & {
-    refreshToken: jest.Mock
-  };
+  let authMock: Auth;
 
   const createApiInstance = (auth: Auth = authMock) => new Api(auth);
 
@@ -32,13 +29,13 @@ describe('API', () => {
   beforeEach(() => {
     authMock = {
       refreshToken: jest.fn().mockResolvedValue({}),
-      authParams: authParamsMock as AuthParams,
+      authParams: authParamsMock,
       getAuthorizationHeaders: () => ({
         Authorization: 'token type fake token',
-      }) as RequestHeaders,
+      }),
       config: {
         backendUrl: serverUrl,
-      } as AppConfig,
+      },
     } as unknown as Auth;
   });
 
@@ -93,8 +90,7 @@ describe('API', () => {
     expect(instance.isTokenRefreshFailed).toEqual(false);
   });
 
-
-  describe('Response Error and Re-login', () => {
+  describe('Handling errors', () => {
     let error: CustomError;
     let instance: Api;
     beforeEach(() => {
@@ -103,15 +99,15 @@ describe('API', () => {
 
       error = new Error('') as CustomError;
       error.status = HTTP_STATUS.UNAUTHORIZED;
-      error.error_description = 'token is invalid';
+      error.error_description = 'unauthorized';
       error.json = jest.fn();
     });
 
-    it('should not return a response', async () => {
+    it('should not return a response on error', async () => {
       prepareUnsuccesfulRequest();
-      await performRequest();
+      const response = await performRequest();
 
-      expect(error.json).not.toHaveBeenCalled();
+      expect(response).toBeFalsy();
     });
 
     it('should redirect to login screen if refreshing token failed', async () => {
@@ -123,7 +119,6 @@ describe('API', () => {
         serverUrl: authMock.config.backendUrl,
         error: 'Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator.',
       });
-
     });
 
     it('should not redirect to login screen several times', async () => {
@@ -141,18 +136,26 @@ describe('API', () => {
       expect(Router.EnterServer).toHaveBeenCalledTimes(1);
     });
 
+    it('should return TRUE if error status is 401', async () => {
+      expect(await instance.isUnauthorized(error)).toEqual(true);
+    });
+
+    it('should return TRUE if error contains `Invalid token`', async () => {
+      error.error_description = 'Invalid token';
+      expect(await instance.isUnauthorized(error)).toEqual(true);
+    });
 
     function prepareUnsuccesfulRequest() {
       fetchMock.mock(`${serverUrl}?$top=-1`, error);
-      authMock.refreshToken.mockRejectedValueOnce(error);
+      (authMock.refreshToken as jest.Mock).mockRejectedValueOnce(error);
     }
+
     async function performRequest() {
       try {
         await instance.makeAuthorizedRequest(serverUrl);
       } catch (e) {}
     }
   });
-
 
   describe('Issue', () => {
     const issueIdMock: Readonly<string> = 'issue-id';
@@ -261,7 +264,6 @@ describe('API', () => {
       expect(res.author.avatarUrl).toEqual(`${serverUrl}${relativeUrl}`);
     });
   });
-
 
   describe('Get issues count', () => {
     let issuesApi: IssuesAPI;

@@ -25,7 +25,8 @@ const getStoredSecurelyAuthParams = async (authParamsKey: string | null): Promis
       const authParams: string | null = await EncryptedStorage.getItem(authParamsKey);
       return typeof authParams === 'string' ? JSON.parse(authParams) : null;
     } catch (e) {
-      log.warn('getStoredSecurelyAuthParams(getItem) failed', e.code);
+      const err = e as Error;
+      log.warn('getStoredSecurelyAuthParams(getItem) failed', err.message);
       return null;
     }
   }

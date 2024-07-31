@@ -4,9 +4,8 @@ import ApiHelper from './api__helper';
 import issueFields from 'components/api/api__issue-fields';
 import log from 'components/log/log';
 import Router from 'components/router/router';
-import {CustomError} from 'types/Error.ts';
 import {fetch2, RequestController, requestController} from './api__request-controller';
-import {getErrorMessage} from 'components/error/error-resolver.ts';
+import {getErrorMessage, resolveErrorMessage} from 'components/error/error-resolver.ts';
 import {handleRelativeUrl} from 'components/config/config';
 import {HTTP_STATUS} from 'components/error/error-http-codes';
 import {i18n} from 'components/i18n/i18n.ts';
@@ -14,6 +13,7 @@ import {i18n} from 'components/i18n/i18n.ts';
 import type Auth from 'components/auth/oauth2';
 import type {AppConfig} from 'types/AppConfig';
 import type {Attachment} from 'types/CustomFields';
+import type {CustomError} from 'types/Error.ts';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
 
@@ -111,8 +111,16 @@ export default class BaseAPI {
     return handleRelativeUrl(url, this.config.backendUrl) as string;
   }
 
-  isTokenOutdated(): boolean {
-    return this.auth.isTokenOutdated();
+  async getErrorMessage(err: CustomError) {
+    return await resolveErrorMessage(err);
+  }
+
+  async isUnauthorized(err: CustomError) {
+    let errorMsg = '';
+    try {
+      errorMsg = await this.getErrorMessage(err);
+    } catch (e) {}
+    return errorMsg === 'Invalid token' || err.status === HTTP_STATUS.UNAUTHORIZED;
   }
 
   isHTTPError(response: Response | CustomError): boolean {
@@ -128,30 +136,31 @@ export default class BaseAPI {
       return response;
     }
 
-    const isUnauthorized: boolean = response.status === HTTP_STATUS.UNAUTHORIZED || this.isTokenOutdated();
+    const isUnauthorized: boolean = await this.isUnauthorized(response as CustomError);
     if (isUnauthorized) {
       try {
         log.info('API(doRequest):Unauthorised: Refreshing token...');
         await this.auth.refreshToken();
         log.info('API(doRequest):Repeating a request');
         response = await send();
-      } catch (authError) {
+      } catch (tokenRefreshError) {
         try {
           log.info(
             'API(doRequest):Unauthorised: Token refresh failed. Logging in...',
-            getErrorMessage(response as CustomError)
+            await this.getErrorMessage(tokenRefreshError as CustomError)
           );
         } catch (error) {}
         if (!this.isTokenRefreshFailed) {
           this.isTokenRefreshFailed = true;
+          const error = i18n(
+            `Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator.`
+          );
           Router.EnterServer({
             serverUrl: this.config.backendUrl,
-            error: i18n(
-              `Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator.`
-            ),
+            error,
           });
         }
-        throw authError;
+        throw tokenRefreshError;
       }
       return response;
     } else {
