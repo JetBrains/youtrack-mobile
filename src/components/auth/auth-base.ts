@@ -25,8 +25,9 @@ export class AuthBase {
   currentUser: User | null;
   PERMISSIONS_CACHE_URL: string;
   permissionsStore: PermissionsStore;
+  onTokenRefreshError: () => void = () => {};
 
-  constructor(config: AppConfig) {
+  constructor(config: AppConfig, onTokenRefreshError: () => void) {
     this.authParams = null;
     this.config = config;
     this.LOAD_USER_URL = `${this.config.auth.serverUri}/api/rest/users/me?fields=id,guest,name,profile/avatar/url,endUserAgreementConsent(accepted,majorVersion,minorVersion)`;
@@ -36,6 +37,7 @@ export class AuthBase {
     });
     this.PERMISSIONS_CACHE_URL = `${this.config.auth.serverUri}/api/rest/permissions/cache?${permissionsQueryString}`;
     this.getAuthorizationHeaders = this.getAuthorizationHeaders.bind(this);
+    this.onTokenRefreshError = onTokenRefreshError;
   }
 
   static getHeaders(
@@ -140,7 +142,7 @@ export class AuthBase {
   }
 
   loadCurrentUser(authParams: AuthParams) {
-    log.info('Auth: loadCurrentUser: Verifying token, loading current user...');
+    log.info('AuthBase(loadCurrentUser): Verifying token, loading current user...');
     return fetch(this.LOAD_USER_URL, {
       headers: {
         Accept: ACCEPT_HEADER,
@@ -151,13 +153,13 @@ export class AuthBase {
       .then((res: Response) => {
         if (res.status > 400) {
           log.log(
-            `loadCurrentUser: Error ${res.status}. Verifying token...`,
+            `AuthBase(loadCurrentUser):Error: ${res.status}. Verifying token...`,
             res,
           );
           throw res;
         }
 
-        log.info('Auth: loadCurrentUser: Token refreshed.');
+        log.info('AuthBase(loadCurrentUser): Current user loaded.');
         return res.json();
       })
       .then((currentUser: User) => {
@@ -170,26 +172,31 @@ export class AuthBase {
         }
 
         this.setCurrentUser(currentUser);
-        log.info('Auth: loadCurrentUser: Current user updated.');
+        log.info('AuthBase(loadCurrentUser): Current user updated.');
         return authParams;
       })
       .catch((error: CustomError) => {
         const prevToken: string | undefined = this.getRefreshToken(authParams);
 
         if (!prevToken) {
-          log.warn('Auth: loadCurrentUser: Previous token is undefined.');
+          log.warn('AuthBase(loadCurrentUser):Error: Previous token is undefined.');
         }
 
         if (error.status === 401 && prevToken) {
-          log.log('loadCurrentUser: Token refresh.', error);
-          return this.refreshToken();
+          log.log('AuthBase(loadCurrentUser):Unauthorised: Refreshing token...', error?.message);
+          try {
+            this.refreshToken();
+          } catch (e) {
+            this.onTokenRefreshError();
+          }
+          return;
         }
 
         throw error;
       })
       .catch((err: CustomError) => {
         log.log(
-          `loadCurrentUser: Token refresh failed. Error ${err.status}`,
+          `AuthBase(loadCurrentUser):Error: Token refresh failed. ${err.status}`,
           err,
         );
         throw err;

@@ -3,12 +3,10 @@ import qs from 'qs';
 import ApiHelper from './api__helper';
 import issueFields from 'components/api/api__issue-fields';
 import log from 'components/log/log';
-import Router from 'components/router/router';
 import {fetch2, RequestController, requestController} from './api__request-controller';
 import {getErrorMessage, resolveErrorMessage} from 'components/error/error-resolver.ts';
 import {handleRelativeUrl} from 'components/config/config';
 import {HTTP_STATUS} from 'components/error/error-http-codes';
-import {i18n} from 'components/i18n/i18n.ts';
 
 import type Auth from 'components/auth/oauth2';
 import type {AppConfig} from 'types/AppConfig';
@@ -152,13 +150,7 @@ export default class BaseAPI {
         } catch (error) {}
         if (!this.isTokenRefreshFailed) {
           this.isTokenRefreshFailed = true;
-          const error = i18n(
-            `Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator.`
-          );
-          Router.EnterServer({
-            serverUrl: this.config.backendUrl,
-            error,
-          });
+          this.auth.onTokenRefreshError();
         }
         throw tokenRefreshError;
       }

@@ -4,6 +4,7 @@ import * as feature from 'components/feature/feature';
 import Api from './api';
 
 import IssuesAPI from 'components/api/api__issues';
+import mocks from 'test/mocks';
 import Router from 'components/router/router';
 import {HTTP_STATUS} from 'components/error/error-http-codes';
 
@@ -14,11 +15,9 @@ import type {IssueComment} from 'types/CustomFields';
 
 describe('API', () => {
   const serverUrl = 'http://foo.bar';
-  const authParamsMock: AuthParams = {
-    token_type: 'token type',
-    access_token: 'fake token',
-  } as AuthParams;
+  const authParamsMock: AuthParams = mocks.createAuthParamsMock() as AuthParams;
   let authMock: Auth;
+  let onTokenRefreshError;
 
   const createApiInstance = (auth: Auth = authMock) => new Api(auth);
 
@@ -27,8 +26,10 @@ describe('API', () => {
   });
 
   beforeEach(() => {
+    onTokenRefreshError = jest.fn();
     authMock = {
       refreshToken: jest.fn().mockResolvedValue({}),
+      onTokenRefreshError,
       authParams: authParamsMock,
       getAuthorizationHeaders: () => ({
         Authorization: 'token type fake token',
@@ -115,10 +116,7 @@ describe('API', () => {
       await performRequest();
 
       expect(instance.isTokenRefreshFailed).toEqual(true);
-      expect(Router.EnterServer).toHaveBeenCalledWith({
-        serverUrl: authMock.config.backendUrl,
-        error: 'Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator.',
-      });
+      expect(instance.auth.onTokenRefreshError).toHaveBeenCalled();
     });
 
     it('should not redirect to login screen several times', async () => {
@@ -127,13 +125,13 @@ describe('API', () => {
       expect(instance.isTokenRefreshFailed).toEqual(false);
 
       await performRequest();
-      expect(Router.EnterServer).toHaveBeenCalled();
+      expect(instance.auth.onTokenRefreshError).toHaveBeenCalled();
       expect(instance.isTokenRefreshFailed).toEqual(true);
 
       await performRequest();
       expect(instance.isTokenRefreshFailed).toEqual(true);
 
-      expect(Router.EnterServer).toHaveBeenCalledTimes(1);
+      expect(instance.auth.onTokenRefreshError).toHaveBeenCalledTimes(1);
     });
 
     it('should return TRUE if error status is 401', async () => {

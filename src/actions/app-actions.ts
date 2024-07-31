@@ -239,8 +239,19 @@ function setAuthInstance(auth: OAuth2) {
   };
 }
 
-async function createAuthInstance(config: AppConfig): Promise<OAuth2> {
-  const auth: OAuth2 = new OAuth2(config);
+function createAuthInstance(config: AppConfig): OAuth2 {
+  return new OAuth2(config, () => {
+    Router.EnterServer({
+      serverUrl: config.backendUrl,
+      error: i18n(
+        `Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator.`
+      ),
+    });
+  });
+}
+
+async function initAuthInstance(config: AppConfig): Promise<OAuth2> {
+  const auth: OAuth2 = createAuthInstance(config);
 
   try {
     await auth.setAuthParamsFromCache();
@@ -347,7 +358,7 @@ export function addAccount(serverUrl: string = ''): ReduxAction {
         Router.navigateToDefaultRoute();
       });
       log.info(`App Actions: Config loaded for the new server, logging in...`);
-      const tmpAuthInstance: OAuth2 = new OAuth2(config); //NB! this temporary instance for Login screen code
+      const tmpAuthInstance: OAuth2 = createAuthInstance(config); //NB! this temporary instance for Login screen code
 
       const authParams: AuthParams = await authorizeOnOneMoreServer(
         config,
@@ -439,7 +450,7 @@ export function changeAccount(
     }
 
     redirectToHome(account.config!.backendUrl);
-    const auth: OAuth2 = new OAuth2(config);
+    const auth: OAuth2 = createAuthInstance(config);
     dispatch(beginAccountChange());
 
     try {
@@ -670,7 +681,7 @@ export function declineUserAgreement(): ReduxAction {
 
 export function initializeAuth(config: AppConfig): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
-    const auth: OAuth2 = await createAuthInstance(config);
+    const auth: OAuth2 = await initAuthInstance(config);
     dispatch(setAuthInstance(auth));
     await dispatch(loadCurrentUserAndSetAPI());
   };
@@ -971,7 +982,7 @@ export function initializeApp(
     async function createAPIInstance() {
       if (config) {
         try {
-          const auth: OAuth2 = await createAuthInstance(config);
+          const auth: OAuth2 = await initAuthInstance(config);
           dispatch(setAuthInstance(auth));
           setApi(new Api(auth));
         } catch (e) {
@@ -990,7 +1001,7 @@ export function connectToNewYoutrack(newURL: string): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
     const config = await doConnect(newURL);
     await storeConfig(config);
-    const auth: OAuth2 = await createAuthInstance(config);
+    const auth: OAuth2 = await initAuthInstance(config);
     dispatch(setAuthInstance(auth));
     Router.LogIn({
       config,
