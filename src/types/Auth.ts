@@ -5,7 +5,7 @@ export interface AuthParams {
   token_type: string;
 }
 
-export type AuthConfig = {
+export interface AuthConfig {
   serverUri: string;
   clientId: string;
   clientSecret?: string;
@@ -13,24 +13,9 @@ export type AuthConfig = {
   sessionCookie?: string;
   landingUrl: string;
   youtrackServiceId: string;
-};
+}
 
-export type OAuthParams = {
-  accessToken: string;
-  accessTokenExpirationDate: string;
-  authorizationCode: string;
-  authorizeAdditionalParameters: Record<string, any>;
-  codeVerifier: string;
-  idToken: string;
-  refreshToken: string;
-  scopes: string[];
-  tokenAdditionalParameters: Record<string, any>;
-  tokenType: string;
-};
-
-export type OAuthParams2 = AuthParams & OAuthParams;
-
-export type RequestHeaders = {
+export interface RequestHeaders {
   Authorization?: string;
   'User-Agent': string;
-};
+}

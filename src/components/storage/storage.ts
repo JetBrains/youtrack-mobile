@@ -15,7 +15,7 @@ import type {Article, ArticleProject, ArticlesList} from 'types/Article';
 import type {Board, Sprint} from 'types/Agile';
 import type {Folder, UserCurrent} from 'types/User';
 import type {InboxThread, Notification, ThreadsStateFilterId} from 'types/Inbox';
-import type {OAuthParams2} from 'types/Auth';
+import type {AuthParams} from 'types/Auth';
 import type {PermissionCacheItem} from 'types/Permission';
 import {Project} from 'types/Project';
 
@@ -57,7 +57,7 @@ export type StorageState = TipsState & FeatureState & {
     article?: Article;
     activities?: Activity[];
   } | null;
-  authParams: OAuthParams2 | null;
+  authParams: AuthParams | null;
   projectId: string | null;
   projects: (Project | ArticleProject)[];
   draftId: string | null;
@@ -335,8 +335,8 @@ export async function flushStoragePart(
   return newState;
 }
 export async function cacheAuthParamsSecured(
-  authParams: OAuthParams2 | null | undefined,
-  key: string | null | undefined,
+  authParams: AuthParams | null,
+  key: string | null,
 ): Promise<void> {
   if (authParams && key) {
     await EncryptedStorage.setItem(
