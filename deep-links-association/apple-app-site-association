@@ -1,0 +1,52 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["2ZEFAR8TH3.org.jetbrains.youtrack.YouTrackMobile"],
+        "components": [
+           {
+              "/": "/issue/*",
+              "comment": "Issue"
+           },
+           {
+              "/": "/youtrack/issue/*",
+              "comment": "Issue with a context"
+           },
+           {
+              "/": "/issues*",
+              "comment": "Issues"
+           },
+           {
+              "/": "/tickets*",
+              "comment": "Tickets"
+           },
+           {
+              "/": "/youtrack/issues*",
+              "comment": "Tickets with a context"
+           },
+           {
+              "/": "/youtrack/tickets*",
+              "comment": "Issues with a context"
+           },
+           {
+              "/": "/articles/*",
+              "comment": "Articles"
+           },
+           {
+              "/": "/youtrack/articles/*",
+              "comment": "Articles with a context"
+           },
+           {
+              "/": "/form/*",
+              "comment": "Help Desk Feedback Form"
+           },
+           {
+              "/": "/youtrack/form/*",
+              "comment": "Help Desk Feedback Form with a context"
+           }
+         ]
+      }
+    ]
+  }
+}

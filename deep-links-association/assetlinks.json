@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.jetbrains.youtrack.mobile.app",
+      "sha256_cert_fingerprints": [
+        "EB:36:A2:10:71:97:CB:3E:4C:84:54:F8:E6:44:E5:3E:FB:EA:6E:FA:A7:A6:97:B7:37:8C:60:B7:78:5B:6B:EF"
+      ]
+    }
+  }
+]
