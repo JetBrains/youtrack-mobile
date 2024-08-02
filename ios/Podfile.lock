@@ -19,21 +19,21 @@ PODS:
     - React-Core (= 0.73.8)
     - React-jsi (= 0.73.8)
     - ReactCommon/turbomodule/core (= 0.73.8)
-  - Firebase/AnalyticsWithoutAdIdSupport (10.27.0):
+  - Firebase/AnalyticsWithoutAdIdSupport (10.29.0):
     - Firebase/CoreOnly
-    - FirebaseAnalytics/WithoutAdIdSupport (~> 10.27.0)
-  - Firebase/CoreOnly (10.27.0):
-    - FirebaseCore (= 10.27.0)
-  - FirebaseAnalytics/WithoutAdIdSupport (10.27.0):
+    - FirebaseAnalytics/WithoutAdIdSupport (~> 10.29.0)
+  - Firebase/CoreOnly (10.29.0):
+    - FirebaseCore (= 10.29.0)
+  - FirebaseAnalytics/WithoutAdIdSupport (10.29.0):
     - FirebaseCore (~> 10.0)
     - FirebaseInstallations (~> 10.0)
-    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.27.0)
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 10.29.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30911.0, >= 2.30908.0)
-  - FirebaseCore (10.27.0):
+  - FirebaseCore (10.29.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.12)
     - GoogleUtilities/Logger (~> 7.12)
@@ -46,7 +46,7 @@ PODS:
     - PromisesObjC (~> 2.1)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - GoogleAppMeasurement/WithoutAdIdSupport (10.27.0):
+  - GoogleAppMeasurement/WithoutAdIdSupport (10.29.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
     - GoogleUtilities/MethodSwizzler (~> 7.11)
     - GoogleUtilities/Network (~> 7.11)
@@ -1186,12 +1186,12 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFBAnalytics (20.1.0):
-    - Firebase/AnalyticsWithoutAdIdSupport (= 10.27.0)
+  - RNFBAnalytics (20.3.0):
+    - Firebase/AnalyticsWithoutAdIdSupport (= 10.29.0)
     - React-Core
     - RNFBApp
-  - RNFBApp (20.1.0):
-    - Firebase/CoreOnly (= 10.27.0)
+  - RNFBApp (20.3.0):
+    - Firebase/CoreOnly (= 10.29.0)
     - React-Core
   - RNGestureHandler (2.16.2):
     - glog
@@ -1493,14 +1493,14 @@ SPEC CHECKSUMS:
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   FBLazyVector: df34a309e356a77581809834f6ec3fbe7153f620
   FBReactNativeSpec: bbe8b686178e5ce03d1d8a356789f211f91f31b8
-  Firebase: 26b040b20866a55f55eb3611b9fcf3ae64816b86
-  FirebaseAnalytics: f9211b719db260cc91aebee8bb539cb367d0dfd1
-  FirebaseCore: a2b95ae4ce7c83ceecfbbbe3b6f1cddc7415a808
+  Firebase: cec914dab6fd7b1bd8ab56ea07ce4e03dd251c2d
+  FirebaseAnalytics: 23717de130b779aa506e757edb9713d24b6ffeda
+  FirebaseCore: 30e9c1cbe3d38f5f5e75f48bfcea87d7c358ec16
   FirebaseCoreInternal: df84dd300b561c27d5571684f389bf60b0a5c934
   FirebaseInstallations: 913cf60d0400ebd5d6b63a28b290372ab44590dd
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
-  GoogleAppMeasurement: f65fc137531af9ad647f1c0a42f3b6a4d3a98049
+  GoogleAppMeasurement: f9de05ee17401e3355f68e8fc8b5064d429f5918
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   hermes-engine: b12d9bb1b7cee546f5e48212e7ea7e3c1665a367
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
@@ -1565,8 +1565,8 @@ SPEC CHECKSUMS:
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
   RNDeviceInfo: bf8a32acbcb875f568217285d1793b0e8588c974
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
-  RNFBAnalytics: 0918525a3908267fd4cf0f71c231f04f9f9a6dfd
-  RNFBApp: 9acbe359ef3559d6f8ca5c350db471f2b352f98a
+  RNFBAnalytics: 046d20d9a73d3091ed7463cf33c5b26e61751c3f
+  RNFBApp: 793adb33298db7e67dc365dc1ec0dc8a55a7a044
   RNGestureHandler: bbb04bccfd972fc228f7307815ccd11f47324605
   RNImageCropPicker: 648356d68fbf9911a1016b3e3723885d28373eda
   RNReanimated: c0ef6d8727123e5b0b081c0004b84db4fb290b85
