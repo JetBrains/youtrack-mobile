@@ -1387,6 +1387,10 @@ msgstr "アプリを使用するには YouTrack アカウントが必要です�
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "あなたのアカウントにはこの操作を実行するのに必要な権限がありません。"
 
+#: src/actions/app-actions.ts
+msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
+msgstr ""
+
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 msgstr "お使いのモバイルデバイスは空きストレージ容量が少ない状態で動作しています。アプリの一部機能が使用できない可能性があります。"

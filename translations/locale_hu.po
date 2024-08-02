@@ -1398,6 +1398,10 @@ msgstr "Az alkalmazás használatához YouTrack-fiókra van szüksége.\n"
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "A fiók engedélye nem elegendő ezen művelet végrehajtásához."
 
+#: src/actions/app-actions.ts
+msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
+msgstr "Az engedélyezési token lejárt vagy érvénytelen. Írja be újra a bejelentkezési adatait a token frissítéséhez. Ha továbbra sem tud bejelentkezni, forduljon a rendszergazdához."
+
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 msgstr ""

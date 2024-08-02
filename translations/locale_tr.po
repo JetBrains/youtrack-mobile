@@ -1398,6 +1398,10 @@ msgstr ""
 msgid "Your account has insufficient permission to perform this operation."
 msgstr ""
 
+#: src/actions/app-actions.ts
+msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
+msgstr ""
+
 #: src/components/storage/storage.ts
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
 msgstr "Mobil cihazınızın kullanılabilir depolama alanı azalıyor. Bazı uygulama işlevleri kullanılamayabilir."

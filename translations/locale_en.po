@@ -211,7 +211,7 @@ msgstr "Browser"
 msgid "Bugsnag Privacy Policy"
 msgstr "Bugsnag Privacy Policy"
 
-#: src/views/log-in/log-in.tsx:290
+#: src/views/log-in/log-in.tsx:294
 msgid "By logging in, you agree to the Privacy Policy."
 msgstr "By logging in, you agree to the Privacy Policy."
 
@@ -306,13 +306,13 @@ msgstr "Confirm logout"
 msgid "Confirmation required"
 msgstr "Confirmation required"
 
-#: src/actions/app-actions.ts:817
+#: src/actions/app-actions.ts:827
 msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
 #: src/components/error-boundary/error-boundary.tsx:251
 #: src/components/error-message/error-message-inline.tsx:62
-#: src/views/enter-server/enter-server.tsx:310
+#: src/views/enter-server/enter-server.tsx:309
 msgid "Contact support"
 msgstr "Contact support"
 
@@ -519,7 +519,7 @@ msgstr "Enter command"
 msgid "Enter search request"
 msgstr "Enter search request"
 
-#: src/views/enter-server/enter-server.tsx:208
+#: src/views/enter-server/enter-server.tsx:207
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr "Enter the web address for a YouTrack installation where you have a registered account"
 
@@ -592,7 +592,7 @@ msgstr "Find favorite projects"
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
-#: src/views/enter-server/enter-server.tsx:293
+#: src/views/enter-server/enter-server.tsx:292
 msgid "Get help"
 msgstr "Get help"
 
@@ -696,15 +696,15 @@ msgstr "Linked issues"
 msgid "Loading values…"
 msgstr "Loading values…"
 
-#: src/views/log-in/log-in.tsx:260
+#: src/views/log-in/log-in.tsx:264
 msgid "Log in"
 msgstr "Log in"
 
-#: src/views/log-in/log-in.tsx:186
+#: src/views/log-in/log-in.tsx:188
 msgid "Log in to YouTrack"
 msgstr "Log in to YouTrack"
 
-#: src/views/log-in/log-in.tsx:313
+#: src/views/log-in/log-in.tsx:317
 msgid "Log in with Browser"
 msgstr "Log in with Browser"
 
@@ -780,7 +780,7 @@ msgstr "New Issue"
 msgid "New messages"
 msgstr "New messages"
 
-#: src/views/enter-server/enter-server.tsx:255
+#: src/views/enter-server/enter-server.tsx:254
 msgid "Next"
 msgstr "Next"
 
@@ -849,7 +849,7 @@ msgstr "Other"
 msgid "Other groups and teams"
 msgstr "Other groups and teams"
 
-#: src/views/log-in/log-in.tsx:224
+#: src/views/log-in/log-in.tsx:227
 msgid "Password"
 msgstr "Password"
 
@@ -1189,7 +1189,7 @@ msgstr "The commit author is not an assignee in the project."
 msgid "The search query contains unknown values"
 msgstr "The search query contains unknown values"
 
-#: src/actions/app-actions.ts:435
+#: src/actions/app-actions.ts:445
 msgid "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 msgstr "The selected account is no longer authorized to use YouTrack Mobile. Please log in again."
 
@@ -1302,7 +1302,7 @@ msgstr "Use fewer search parameters"
 msgid "User account is banned"
 msgstr "User account is banned"
 
-#: src/views/log-in/log-in.tsx:202
+#: src/views/log-in/log-in.tsx:204
 msgid "Username or email"
 msgstr "Username or email"
 
@@ -1384,7 +1384,7 @@ msgstr "You don’t have any unread notifications"
 msgid "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 msgstr "You haven't received any notifications yet. To configure the notification preferences for your account, access your YouTrack profile in the web app."
 
-#: src/views/log-in/log-in.tsx:281
+#: src/views/log-in/log-in.tsx:285
 msgid ""
 "You need a YouTrack account to use the app.\n"
 ""
@@ -1395,6 +1395,10 @@ msgstr ""
 #: src/components/error/error-message-data.ts:9
 msgid "Your account has insufficient permission to perform this operation."
 msgstr "Your account has insufficient permission to perform this operation."
+
+#: src/actions/app-actions.ts:246
+msgid "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
+msgstr "Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator."
 
 #: src/components/storage/storage.ts:328
 msgid "Your mobile device is running low on available storage space. Some app functionality may be unavailable."
