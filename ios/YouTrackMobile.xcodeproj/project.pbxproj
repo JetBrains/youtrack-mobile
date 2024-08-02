@@ -13,6 +13,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		1E518DA22C32B94C00C2C634 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1E518DA12C32B94C00C2C634 /* GoogleService-Info.plist */; };
+		1E6BF36F2C5CE1980002C895 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1E6BF36E2C5CE1980002C895 /* PrivacyInfo.xcprivacy */; };
 		3BD0B9F9263ADD3200529830 /* youtrackmobile.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3BD0B9F8263ADD3200529830 /* youtrackmobile.ttf */; };
 		3BDCA52226026D870063D0CC /* YouTrackMobile.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 3BBB692926020192000F66AE /* YouTrackMobile.entitlements */; };
 		5AED93D07E2FAF7F0C9A83CC /* Pods_YouTrackMobile_YouTrackMobileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 337B46BEDEB900209FB4EEAF /* Pods_YouTrackMobile_YouTrackMobileTests.framework */; };
@@ -40,6 +41,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = YouTrackMobile/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = YouTrackMobile/main.m; sourceTree = "<group>"; };
 		1E518DA12C32B94C00C2C634 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1E6BF36E2C5CE1980002C895 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		236C8C717C5F1B202F1E691E /* Pods_YouTrackMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouTrackMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		337B46BEDEB900209FB4EEAF /* Pods_YouTrackMobile_YouTrackMobileTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouTrackMobile_YouTrackMobileTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		33D2BECA6B84DC6BBB0F2430 /* Pods-YouTrackMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouTrackMobile.release.xcconfig"; path = "Target Support Files/Pods-YouTrackMobile/Pods-YouTrackMobile.release.xcconfig"; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				1E6BF36E2C5CE1980002C895 /* PrivacyInfo.xcprivacy */,
 				1E518DA12C32B94C00C2C634 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* YouTrackMobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -262,6 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E6BF36F2C5CE1980002C895 /* PrivacyInfo.xcprivacy in Resources */,
 				3BD0B9F9263ADD3200529830 /* youtrackmobile.ttf in Resources */,
 				3BDCA52226026D870063D0CC /* YouTrackMobile.entitlements in Resources */,
 				1E518DA22C32B94C00C2C634 /* GoogleService-Info.plist in Resources */,
