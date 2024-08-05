@@ -7,8 +7,7 @@ const mdCheckboxRegex = /(?:[-*]\s)(\[(x|\s)\])/gi;
 const whiteSpacesInHTMLRegex: RegExp = />\s+</g;
 const whiteSpacesRegex: RegExp = /\s+/g;
 const imageEmbedRegExp: RegExp = /!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/g;
-const imageHeight: RegExp = /{height=\d+(%|px)?}/i;
-const imageWidth: RegExp = /{width=\d+(%|px)?}/i;
+const imageSize: RegExp = /{((height|width)=\d+(%|px)?(\s*?)){1,2}}/i;
 
 const escapeRegExp = (str: string): string => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -34,8 +33,7 @@ export {
   htmlCodeStartRegex,
   htmlTagRegex,
   imageEmbedRegExp,
-  imageHeight,
-  imageWidth,
+  imageSize,
   issueIdRegExp,
   linebreakRegex,
   mdCheckboxRegex,

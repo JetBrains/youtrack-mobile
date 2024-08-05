@@ -28,25 +28,28 @@ export const baseMarkdownStyles = {
   heading1: {
     flexDirection: 'row',
     fontSize: 32,
+    fontWeight: '700',
     lineHeight: null,
     ...vSpace,
   },
   heading2: {
     flexDirection: 'row',
     fontSize: 24,
+    fontWeight: '700',
     lineHeight: null,
     ...vSpace,
   },
   heading3: {
     flexDirection: 'row',
     fontSize: 20,
+    fontWeight: '700',
     lineHeight: null,
     ...vSpace,
   },
   heading4: {
     flexDirection: 'row',
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '700',
     letterSpacing: 0.5,
     lineHeight: null,
     ...vSpace,
@@ -54,12 +57,14 @@ export const baseMarkdownStyles = {
   heading5: {
     flexDirection: 'row',
     fontSize: 13,
+    fontWeight: '700',
     lineHeight: null,
     ...vSpace,
   },
   heading6: {
     flexDirection: 'row',
     fontSize: MAIN_FONT_SIZE - 5,
+    fontWeight: '700',
     lineHeight: null,
     ...vSpace,
   },
@@ -89,15 +94,23 @@ export const baseMarkdownStyles = {
     fontSize: MAIN_FONT_SIZE,
   },
   bullet_list: {},
-  ordered_list: {},
+  ordered_list: {
+    ...Platform.select({
+      ios: {
+        lineHeight: 36,
+      },
+      android: {
+        lineHeight: 34,
+      },
+    }),
+  },
   list_item: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
   },
-  // @pseudo class, does not have a unique render rule
+
   bullet_list_icon: {
-    marginLeft: UNIT * 3,
-    marginRight: UNIT * 1.5,
+    lineHeight: UNIT * 4.5,
     ...Platform.select({
       ios: {
         fontSize: 30,
@@ -113,18 +126,18 @@ export const baseMarkdownStyles = {
   bullet_list_icon_checkbox: {
     color: 'transparent',
   },
-  // @pseudo class, does not have a unique render rule
+
   bullet_list_content: {
     flex: 1,
     flexWrap: 'wrap',
   },
-  // @pseudo class, does not have a unique render rule
+
   ordered_list_icon: {
     marginTop: 1,
     marginLeft: UNIT,
     marginRight: UNIT,
   },
-  // @pseudo class, does not have a unique render rule
+
   ordered_list_content: {
     flex: 1,
     flexWrap: 'wrap',
@@ -181,7 +194,7 @@ export const baseMarkdownStyles = {
     height: 1,
   },
   softbreak: {},
-  // Believe these are never used but retained for completeness
+
   pre: {},
   inline: {},
   span: {},

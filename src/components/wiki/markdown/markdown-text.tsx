@@ -5,16 +5,16 @@ import * as regExps from 'components/wiki/util/patterns';
 import {doSortBy} from 'components/search/sorting';
 import {hasMimeType} from 'components/mime-type/mime-type';
 import {hasType} from 'components/api/api__resource-types';
-import {imageEmbedRegExp, imageHeight, imageWidth} from 'components/wiki/util/patterns';
+import {imageEmbedRegExp, imageSize} from 'components/wiki/util/patterns';
 import {MarkdownEmbedLink} from 'components/wiki/markdown/index';
 import {MarkdownMentionWithUserCard} from 'components/wiki/markdown/markdown-mention';
 import {Mention, Mentions} from 'components/wiki/markdown-view-rules';
 
-import {Article} from 'types/Article';
-import {Attachment} from 'types/CustomFields';
-import {MarkdownNode} from 'types/Markdown';
-import {UITheme} from 'types/Theme';
-import {User} from 'types/User';
+import type {Article} from 'types/Article';
+import type {Attachment} from 'types/CustomFields';
+import type {MarkdownNode} from 'types/Markdown';
+import type {UITheme} from 'types/Theme';
+import type {User} from 'types/User';
 
 type Matcher = { regex: RegExp, mention: Mention, startPos: number | undefined };
 type TextNodes = (string | React.ReactNode)[];
@@ -48,12 +48,10 @@ const MarkdownText = ({
   attachments: Attachment[],
   mentions: Mentions | undefined,
   uiTheme: UITheme,
-}): JSX.Element | null => {
-
+}) => {
   const text: string = (
     node.content
-      .replace(imageHeight, '')
-      .replace(imageWidth, '')
+      .replace(imageSize, '')
       .replace(regExps.whiteSpacesRegex, ' ')
       .replace(regExps.htmlTagRegex, ' ')
   );

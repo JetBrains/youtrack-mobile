@@ -7,16 +7,27 @@ import {guid} from 'util/util';
 
 import {ImageDimensions} from 'types/CustomFields';
 
-
-export default function MarkdownImage({uri, alt, imageDimensions}: {
-  uri: string, alt: string | undefined, imageDimensions: ImageDimensions | undefined
-}): JSX.Element | null {
+export default function MarkdownImage({
+  uri,
+  alt,
+  imageDimensions,
+}: {
+  uri: string;
+  alt?: string;
+  imageDimensions?: ImageDimensions;
+}) {
   const imageProps: Record<string, any> = {
     key: guid(),
-    style: calculateAspectRatio(imageDimensions || {
-      width: 250,
-      height: 300,
-    }),
+    style: {
+      ...calculateAspectRatio(
+        imageDimensions || {
+          width: 250,
+          height: 300,
+        }
+      ),
+      alignSelf: 'top',
+      backgroundColor: 'transparent',
+    },
     source: {
       uri,
       headers: getApi().auth.getAuthorizationHeaders(),

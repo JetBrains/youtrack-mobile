@@ -68,7 +68,7 @@ function getMarkdownRules(
       inheritedStyles: TextStyleProp = {},
     ) => {
       const {src = '', alt} = node.attributes;
-      const targetAttach: Attachment | null | undefined = attachments.find(
+      const targetAttach: Attachment | undefined = attachments.find(
         (it: Attachment) => it.name && it.name.includes(src),
       );
       const parsedURL = UrlParse(src);
