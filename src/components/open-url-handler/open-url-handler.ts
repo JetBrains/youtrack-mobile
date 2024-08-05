@@ -41,7 +41,7 @@ function extractIssuesQuery(issuesUrl: string | null | undefined): string | null
   const match = issuesUrl.match(/\?(.*)/);
 
   if (!match || !match[1]) {
-    log.warn(`Open URL Handler: Cannot extract query string from URL`);
+    log.debug(`Open URL Handler: No search query param found`);
     return null;
   }
 

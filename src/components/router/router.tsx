@@ -187,7 +187,7 @@ class Router {
     let route = null;
     const params: typeof props & {uuid?: string} = Object.assign({}, props);
     if (props?.issueId) {
-      route = props?.issueId;
+      route = routeMap.Issue;
     }
     if (props?.articleId) {
       route = routeMap.ArticleSingle;
