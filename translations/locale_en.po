@@ -501,7 +501,7 @@ msgstr "Edit comment"
 msgid "Email"
 msgstr "Email"
 
-#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts:99
+#: src/views/helpdesk-feedback/helpdesk-feedback-actions.ts:107
 #: src/views/helpdesk-feedback/index.ts:133
 msgid "Email address"
 msgstr "Email address"
