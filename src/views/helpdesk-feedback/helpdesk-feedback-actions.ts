@@ -9,7 +9,9 @@ import {
 } from 'views/helpdesk-feedback/index';
 import {emailRegexp} from 'components/form/validate';
 import {getLocalizedName, projectCustomFieldTypeToFieldType} from 'components/custom-field/custom-field-helper';
+import {HTTP_STATUS} from 'components/error/error-http-codes.ts';
 import {i18n} from 'components/i18n/i18n';
+import {notFoundMessageData} from 'components/error/error-message-data.ts';
 import {notify, notifyError} from 'components/notification/notification';
 import {SET_PROGRESS} from 'actions/action-types';
 import {setError, setSelectProps, setFormData, setProject, setAttachDialogVisibile} from './helpdesk-feedback-reducers';
@@ -30,6 +32,12 @@ const loadFeedbackForm = (project: ProjectHelpdesk, uuid?: string): ReduxAction 
     const id = uuid || project.plugins.helpDeskSettings.defaultForm.uuid;
     const [error, form] = await until<FeedbackForm>(getApi().helpDesk.getForm(id));
     if (error) {
+      if (error.status === HTTP_STATUS.NOT_FOUND) {
+        error.message = notFoundMessageData.title;
+        if (notFoundMessageData.description) {
+          error.error_description = notFoundMessageData.description;
+        }
+      }
       dispatch(setError(error));
     } else {
       const currentUser = getState().app.user as User;
