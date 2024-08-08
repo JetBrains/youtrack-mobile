@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
+import React from 'react';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import MarkdownView from 'components/wiki/markdown-view';
 import ModalView from 'components/modal-view/modal-view';
@@ -11,64 +11,47 @@ import {i18n} from 'components/i18n/i18n';
 
 import styles from './user-agreement.styles';
 
-import type {EndUserAgreement} from 'types/AppConfig';
+import type {AppState} from 'reducers';
+import type {ReduxThunkDispatch} from 'types/Redux';
 
-type Props = {
-  show: boolean;
-  agreement: EndUserAgreement;
-  onAccept: () => any;
-  onDecline: () => any;
-};
+const UserAgreementView = () => {
+  const dispatch: ReduxThunkDispatch = useDispatch();
 
-export class UserAgreementView extends Component<Props, void> {
-  render(): React.ReactNode {
-    const {show, agreement, onAccept, onDecline} = this.props;
+  const show = useSelector((state: AppState) => state.app.showUserAgreement);
+  const agreement = useSelector((state: AppState) => state.app.endUserAgreement);
 
-    if (!show || !agreement?.text) {
-      return null;
-    }
-
-    return (
-      <ModalView
-        animationType="fade"
-        transparent={true}
-        onRequestClose={() => {}}
-      >
-        <View style={styles.container}>
-          <ScrollView contentContainerStyle={styles.markdownScroll}>
-            <MarkdownView>{agreement.text}</MarkdownView>
-          </ScrollView>
-          <View style={styles.buttons}>
-            <TouchableOpacity
-              hitSlop={HIT_SLOP}
-              style={styles.button}
-              onPress={onAccept}
-            >
-              <Text style={styles.buttonText}>{i18n('Accept')}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={onDecline}>
-              <Text style={styles.buttonText}>{i18n('Decline')}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ModalView>
-    );
+  if (!show || !agreement?.text) {
+    return null;
   }
-}
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    show: state.app.showUserAgreement,
-    agreement: state.app.endUserAgreement,
-    ...ownProps,
-  };
+  return (
+    <ModalView animationType="fade" transparent={true} onRequestClose={() => {}}>
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.markdownScroll}>
+          <MarkdownView>{agreement.text}</MarkdownView>
+        </ScrollView>
+        <View style={styles.buttons}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              dispatch(declineUserAgreement());
+            }}
+          >
+            <Text style={styles.buttonText}>{i18n('Decline')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            hitSlop={HIT_SLOP}
+            style={styles.button}
+            onPress={() => {
+              dispatch(acceptUserAgreement());
+            }}
+          >
+            <Text style={styles.buttonText}>{i18n('Accept')}</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </ModalView>
+  );
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onAccept: () => dispatch(acceptUserAgreement()),
-    onDecline: () => dispatch(declineUserAgreement()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserAgreementView);
+export default React.memo(UserAgreementView);
