@@ -3,12 +3,14 @@ import {Linking} from 'react-native';
 import configureMockStore, {MockStore} from 'redux-mock-store';
 import fetchMock from 'fetch-mock';
 import thunk from 'redux-thunk';
+import {cleanup} from '@testing-library/react-native';
 
 import * as actions from './app-actions';
 import * as appActionHelper from './app-actions-helper';
 import * as feature from 'components/feature/feature';
 import * as Notification from 'components/notification/notification';
 import * as permissionsHelper from 'components/permissions-store/permissions-helper';
+import * as routerHelper from 'components/router/router-helper';
 import * as storage from 'components/storage/storage';
 import * as storageOauth from 'components/storage/storage__oauth';
 import * as types from './action-types';
@@ -89,6 +91,7 @@ describe('app-actions', () => {
   afterEach(() => {
     (storageOauth.getStoredSecurelyAuthParams as jest.Mock).mockClear();
     jest.clearAllMocks();
+    cleanup();
   });
 
 
@@ -468,35 +471,26 @@ describe('app-actions', () => {
 
   describe('Redirect to a default route on start', () => {
     beforeEach(() => {
-      jest
-        .spyOn(appActionHelper, 'getCachedPermissions')
-        .mockReturnValueOnce([]);
-      jest.spyOn(appActionHelper, 'storeYTCurrentUser');
-      setStoreAndCurrentUser({guest: true} as UserCurrent);
+      jest.spyOn(appActionHelper, 'getCachedPermissions');
+      jest.spyOn(routerHelper, 'navigateToRouteById');
+    });
+
+    it('should not redirect user to `Issues screen` if no permissions are cached', async () => {
+      appActionHelper.getCachedPermissions.mockReturnValueOnce(null);
+
+
+      await dispatch(actions.initializeApp(appConfigMock));
+
+      expect(routerHelper.navigateToRouteById).not.toHaveBeenCalled();
     });
 
     it('should redirect to `Issues screen`', async () => {
+      appActionHelper.getCachedPermissions.mockReturnValueOnce([]);
       setStoreAndCurrentUser({guest: false} as UserCurrent);
 
       await dispatch(actions.initializeApp(appConfigMock));
 
-      expect(Router.Issues).toHaveBeenCalled();
-    });
-
-    it('should not redirect `guest` user to `Issues screen`', async () => {
-      await dispatch(actions.initializeApp(appConfigMock));
-
-      expect(Router.Issues).not.toHaveBeenCalled();
-    });
-
-    it('should not redirect user to `Issues screen` if no permissions are cached', async () => {
-      jest
-        .spyOn(appActionHelper, 'getCachedPermissions')
-        .mockReturnValueOnce(null);
-
-      await dispatch(actions.initializeApp(appConfigMock));
-
-      expect(Router.Issues).not.toHaveBeenCalled();
+      expect(routerHelper.navigateToRouteById).toHaveBeenCalled();
     });
   });
 
@@ -623,8 +617,8 @@ describe('app-actions', () => {
         scopes: '',
         youtrackServiceId: '',
       },
-    };
-    const authMock = new OAuth2(appConfigMock);
+    } as AppConfig;
+    const authMock = new OAuth2(appConfigMock, () => {});
     authParamsMock = {
       token_type: 'token_type',
       access_token: 'access_token',

@@ -22,7 +22,7 @@ export type RootState = {
   showMenu: boolean;
   showDebugView: boolean;
   showUserAgreement: boolean;
-  endUserAgreement: EndUserAgreement | null | undefined;
+  endUserAgreement: EndUserAgreement | null;
   otherAccounts: StorageState[] | null | undefined;
   isChangingAccount: boolean;
   features: string[];

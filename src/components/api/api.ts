@@ -68,7 +68,7 @@ class API extends BaseAPI {
     this.youtTrackFieldBundleUrl = `${this.youTrackUrl}/api/admin/customFieldSettings/bundles`;
   }
 
-  async getUserAgreement(): Promise<EndUserAgreement | null | undefined> {
+  async getUserAgreement(): Promise<EndUserAgreement | undefined> {
     const queryString = qs.stringify({
       fields: 'endUserAgreement(enabled,text,majorVersion,minorVersion)',
     });

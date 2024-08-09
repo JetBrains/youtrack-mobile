@@ -26,7 +26,6 @@ import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {isAndroidPlatform, isIOSPlatform, until} from 'util/util';
-import {isSplitView} from 'components/responsive/responsive-helper';
 import {loadConfig} from 'components/config/config';
 import {loadTranslation} from 'components/i18n/i18n-translation';
 import {logEvent} from 'components/log/log-helper';
@@ -220,18 +219,21 @@ export const cacheUserLastVisitedArticle = (article: Article | null, activities?
 
 export function loadCurrentUserAndSetAPI(): ReduxAction {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
-    if (getState().app?.networkState?.isConnected === true) {
-      const auth: OAuth2 = (getState().app.auth as any) as OAuth2;
+    if (!getState().app?.networkState?.isConnected) {
+      return;
+    }
+    const auth = getState().app.auth;
+    if (auth) {
       const authParams = auth.getAuthParams();
       await auth.loadCurrentUser(authParams);
+      const currentUser = storage.getStorageState().currentUser;
       await storage.flushStoragePart({
-        currentUser: {...storage.getStorageState().currentUser, ...auth.currentUser},
+        currentUser: {...currentUser, ...auth.currentUser},
       });
       setApi(new Api(auth));
     }
   };
 }
-
 function setAuthInstance(auth: OAuth2) {
   return {
     type: types.INITIALIZE_AUTH,
@@ -551,7 +553,7 @@ export function completeInitialization(
   articleId?: string,
   navigateToActivity?: string,
   searchQuery?: string,
-  skipNavigateToRoute: boolean = false,
+  isRedirected: boolean = false,
   helpdeskFormId?: string,
 ): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
@@ -570,7 +572,6 @@ export function completeInitialization(
       !!userProfileLocale?.language &&
       cachedLocale?.language !== userProfileLocale?.language
     );
-    const isReporter = currentUser.profiles?.helpdesk?.isReporter;
 
     if (isLanguageChanged && userProfileLocale?.language) {
       loadTranslation(userProfileLocale?.locale, userProfileLocale?.language);
@@ -584,12 +585,12 @@ export function completeInitialization(
     await dispatch(cacheProjects());
     log.info('App Actions: Initialization completed');
 
-    if (!skipNavigateToRoute || (isLanguageChanged && !issueId && !articleId)) {
-      if (isReporter) {
+    if (!isRedirected) {
+      if (currentUser.profiles?.helpdesk?.isReporter) {
         Router.Tickets();
       } else {
         Router.navigateToDefaultRoute(
-          issueId || articleId || searchQuery ? {
+          issueId || articleId || searchQuery || helpdeskFormId ? {
             issueId,
             articleId,
             navigateToActivity,
@@ -696,20 +697,15 @@ function checkUserAgreement(): ReduxAction {
     getApi: ReduxAPIGetter,
   ): Promise<void> => {
     const api: Api = getApi();
-    const auth: OAuth2 = (getState().app.auth as any) as OAuth2;
-    const {currentUser} = auth;
+    const hubUser = getState().app.auth!.currentUser;
     log.info('App Actions: Checking user agreement');
 
-    if (
-      currentUser &&
-      currentUser.endUserAgreementConsent &&
-      currentUser.endUserAgreementConsent.accepted
-    ) {
+    if (hubUser?.endUserAgreementConsent?.accepted) {
       log.info('App Actions: The EUA already accepted, skip check');
       return;
     }
 
-    const agreement: Agreement = await api.getUserAgreement();
+    const agreement = await api.getUserAgreement();
 
     if (!agreement) {
       log.info('App Actions: EUA is not supported, skip check');
@@ -891,7 +887,8 @@ export function initializeApp(
   navigateToActivity?: string,
 ): ReduxAction {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
-    const cachedCurrentUser: User | undefined = storage.getStorageState()?.currentUser?.ytCurrentUser;
+    const currentUser = storage.getStorageState()?.currentUser;
+    const cachedCurrentUser: User | undefined = currentUser?.ytCurrentUser;
     if (cachedCurrentUser) {
       await dispatch(setYTCurrentUser(cachedCurrentUser));
     }
@@ -909,20 +906,11 @@ export function initializeApp(
     await dispatch(migrateToIssuesFilterSearch());
     await createAPIInstance();
 
-    const splitView: boolean = isSplitView();
-    const isRedirectedToTargetRoute: boolean = (
-      !!cachedPermissions &&
-      !cachedCurrentUser?.guest && (
-        (!splitView && !!(issueId || articleId)) ||
-        splitView ||
-        !(issueId && articleId)
-      )
-    );
-    if (isRedirectedToTargetRoute) {
-      navigateToRouteById(issueId, articleId, navigateToActivity, profiles?.helpdesk?.isReporter);
+    let isRedirected: boolean = false;
+    if (cachedPermissions) {
+      isRedirected = navigateToRouteById(issueId, articleId, navigateToActivity, !!profiles?.helpdesk?.isReporter);
     }
 
-    const url = await Linking.getInitialURL();
     let configCurrent = config;
     const currentAppVersion: string | null = storage.getStorageState().currentAppVersion;
     const versionHasChanged: boolean = currentAppVersion != null && packageJson.version !== currentAppVersion;
@@ -962,13 +950,14 @@ export function initializeApp(
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
+      const url = await Linking.getInitialURL();
       await dispatch(
         completeInitialization(
           issueId,
           articleId,
           navigateToActivity,
           extractIssuesQuery(url) ?? undefined,
-          isRedirectedToTargetRoute,
+          isRedirected,
         ),
       );
     }
@@ -1009,18 +998,18 @@ export function connectToNewYoutrack(newURL: string): ReduxAction {
   };
 }
 
-export function setAccount(notificationRouteData: NotificationRouteData = {}): ReduxAction {
+export function setAccount(notificationRouteData: NotificationRouteData | null): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
     const state: StorageState = await storage.populateStorage();
     await dispatch(populateAccounts());
-    const notificationBackendUrl: string | undefined = notificationRouteData?.backendUrl;
+    const backendUrl: string | undefined = notificationRouteData?.backendUrl;
 
     if (
-      notificationBackendUrl &&
+      backendUrl &&
       state?.config &&
-      notificationBackendUrl !== state.config?.backendUrl
+      backendUrl !== state.config?.backendUrl
     ) {
-      const notificationIssueAccount = await appActionsHelper.targetAccountToSwitchTo(notificationBackendUrl);
+      const notificationIssueAccount = await appActionsHelper.targetAccountToSwitchTo(backendUrl);
 
       if (notificationIssueAccount) {
         await dispatch(updateOtherAccounts(notificationIssueAccount));
@@ -1030,7 +1019,7 @@ export function setAccount(notificationRouteData: NotificationRouteData = {}): R
       }
     }
 
-    const targetConfig: AppConfig | null | undefined = storage.getStorageState().config;
+    const targetConfig: AppConfig | null = storage.getStorageState().config;
 
     if (targetConfig) {
       dispatch(
@@ -1038,7 +1027,7 @@ export function setAccount(notificationRouteData: NotificationRouteData = {}): R
           targetConfig,
           notificationRouteData?.issueId,
           notificationRouteData?.articleId,
-          notificationRouteData.navigateToActivity,
+          notificationRouteData?.navigateToActivity,
         ),
       );
     } else {
@@ -1118,6 +1107,7 @@ async function doSubscribe(
     PushNotifications.initialize(onSwitchAccount, userLogin);
     setRegisteredForPush(true);
   } catch (err) {
+    setRegisteredForPush(null);
     notifyError(err as CustomError);
   }
 }
@@ -1130,7 +1120,7 @@ function isRegisteredForPush(): boolean {
     : Boolean(storageState.deviceToken);
 }
 
-function setRegisteredForPush(isRegistered: boolean) {
+function setRegisteredForPush(isRegistered: boolean | null) {
   if (isIOSPlatform()) {
     //TODO: also use device token
     storage.flushStoragePart({
