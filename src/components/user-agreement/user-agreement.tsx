@@ -25,7 +25,7 @@ const UserAgreementView = () => {
   }
 
   return (
-    <ModalView animationType="fade" transparent={true} onRequestClose={() => {}}>
+    <ModalView animationType="fade" transparent={true} onRequestClose={() => {}} style={styles.modal}>
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.markdownScroll}>
           <MarkdownView>{agreement.text}</MarkdownView>

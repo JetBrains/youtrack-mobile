@@ -2,6 +2,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import {UNIT} from 'components/variables';
 export default EStyleSheet.create({
   container: {
+    minWidth: 280,
     flex: 1,
     marginTop: UNIT * 2,
     backgroundColor: '$background',

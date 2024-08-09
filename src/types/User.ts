@@ -52,8 +52,6 @@ export interface User extends UserBase {
   profiles: UserProfiles;
   endUserAgreementConsent?: {
     accepted: boolean;
-    majorVersion: string;
-    minorVersion: string;
   };
 }
 

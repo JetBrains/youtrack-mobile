@@ -16,6 +16,4 @@ export type AppConfig = {
 export type EndUserAgreement = {
   enabled: boolean;
   text: string;
-  majorVersion: number;
-  minorVersion: number;
 };

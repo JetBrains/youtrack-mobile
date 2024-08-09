@@ -70,7 +70,7 @@ class API extends BaseAPI {
 
   async getUserAgreement(): Promise<EndUserAgreement | undefined> {
     const queryString = qs.stringify({
-      fields: 'endUserAgreement(enabled,text,majorVersion,minorVersion)',
+      fields: 'endUserAgreement(enabled,text)',
     });
     const res = await this.makeAuthorizedRequest(
       `${this.auth.config.auth.serverUri}/api/rest/settings/public?${queryString}`,

@@ -342,6 +342,7 @@ function applyAccount(config: AppConfig, auth: OAuth2, authParams: AuthParams): 
     await auth.cacheAuthParams(authParams, creationTimestamp.toString());
     await storeConfig(config);
     await dispatch(initializeAuth(config));
+    await dispatch(loadCurrentUserAndSetAPI());
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
@@ -471,6 +472,7 @@ export function changeAccount(
       );
       await storeConfig(config);
       await dispatch(initializeAuth(config));
+      await dispatch(loadCurrentUserAndSetAPI());
       await dispatch(checkUserAgreement());
 
       if (!state.app.showUserAgreement) {
@@ -684,7 +686,6 @@ export function initializeAuth(config: AppConfig): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
     const auth: OAuth2 = await initAuthInstance(config);
     dispatch(setAuthInstance(auth));
-    await dispatch(loadCurrentUserAndSetAPI());
   };
 }
 
@@ -923,27 +924,21 @@ export function initializeApp(
       }
 
       await dispatch(initializeAuth(configCurrent));
+      await dispatch(loadCurrentUserAndSetAPI());
     } catch (error) {
       log.log('App Actions: App failed to initialize auth. Reloading config...', error);
 
       try {
         configCurrent = await refreshConfig(config.backendUrl);
       } catch (err) {
-        Router.Home({
-          backendUrl: config.backendUrl,
-          err,
-        });
-        return;
+        return Router.Home({backendUrl: config.backendUrl, err});
       }
 
       try {
         await dispatch(initializeAuth(configCurrent));
+        await dispatch(loadCurrentUserAndSetAPI());
       } catch (e) {
-        Router.LogIn({
-          config,
-          errorMessage: getErrorMessage(e as CustomError),
-        });
-        return;
+        return Router.LogIn({config, errorMessage: getErrorMessage(e as CustomError)});
       }
     }
 
