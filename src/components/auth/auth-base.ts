@@ -175,7 +175,7 @@ export class AuthBase {
         log.info('AuthBase(loadCurrentUser): Current user updated.');
         return authParams;
       })
-      .catch((error: CustomError) => {
+      .catch(async (error: CustomError) => {
         const prevToken: string | undefined = this.getRefreshToken(authParams);
 
         if (!prevToken) {
@@ -185,7 +185,7 @@ export class AuthBase {
         if (error.status === 401 && prevToken) {
           log.log('AuthBase(loadCurrentUser):Unauthorised: Refreshing token...', error?.message);
           try {
-            this.refreshToken();
+            await this.refreshToken();
           } catch (e) {
             this.onTokenRefreshError();
           }

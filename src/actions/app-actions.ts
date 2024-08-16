@@ -20,6 +20,7 @@ import {
   folderIdMap,
 } from 'views/inbox-threads/inbox-threads-helper';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
+import {extractIssuesQuery, openByUrlDetector} from 'components/open-url-handler/open-url-handler';
 import {getCachedPermissions, storeYTCurrentUser, targetAccountToSwitchTo} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
@@ -31,7 +32,7 @@ import {loadTranslation} from 'components/i18n/i18n-translation';
 import {logEvent} from 'components/log/log-helper';
 import {navigateToRouteById} from 'components/router/router-helper';
 import {notify, notifyError} from 'components/notification/notification';
-import {extractIssuesQuery, openByUrlDetector} from 'components/open-url-handler/open-url-handler';
+import {routeMap} from 'app-routes';
 import {SET_DRAFT_COMMENT_DATA, SET_PROGRESS} from './action-types';
 import {setApi} from 'components/api/api__instance';
 
@@ -227,6 +228,12 @@ export function loadCurrentUserAndSetAPI(): ReduxAction {
       const authParams = auth.getAuthParams();
       await auth.loadCurrentUser(authParams);
       const currentUser = storage.getStorageState().currentUser;
+      if (!auth.currentUser) {
+        log.warn('AppActions(loadCurrentUserAndSetAPI): Auth Current user is not set');
+      }
+      if (!auth.currentUser?.endUserAgreementConsent?.accepted) {
+        log.warn('AppActions(loadCurrentUserAndSetAPI): Auth Current user consent is not accepted');
+      }
       await storage.flushStoragePart({
         currentUser: {...currentUser, ...auth.currentUser},
       });
@@ -662,7 +669,11 @@ export function acceptUserAgreement(): ReduxAction {
     const api: Api = getApi();
     try {
       await api.acceptUserAgreement();
-      dispatch(completeInitialization());
+      if (
+        !(Router._currentRoute?.routeName === routeMap.Issues || Router._currentRoute?.routeName === routeMap.Issue)
+      ) {
+        dispatch(completeInitialization());
+      }
     } catch (e) {
       dispatch(signOutFromAccount());
     } finally {
@@ -698,12 +709,14 @@ function checkUserAgreement(): ReduxAction {
     getApi: ReduxAPIGetter,
   ): Promise<void> => {
     const api: Api = getApi();
-    const hubUser = getState().app.auth!.currentUser;
+    const euc = getState().app.auth!.currentUser?.endUserAgreementConsent;
     log.info('App Actions: Checking user agreement');
 
-    if (hubUser?.endUserAgreementConsent?.accepted) {
+    if (euc?.accepted) {
       log.info('App Actions: The EUA already accepted, skip check');
       return;
+    } else {
+      log.info('App Actions(checkUserAgreement): The EUA is not accepted');
     }
 
     const agreement = await api.getUserAgreement();
@@ -717,8 +730,7 @@ function checkUserAgreement(): ReduxAction {
       log.info('App Actions: EUA is disabled, skip check');
       return;
     }
-
-    log.warn('App Actions: User agreement should be accepted');
+    log.warn('App Actions(checkUserAgreement): User agreement should be accepted');
     dispatch(showUserAgreement(agreement));
   };
 }
