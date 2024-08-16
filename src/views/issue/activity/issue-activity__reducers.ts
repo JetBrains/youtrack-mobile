@@ -2,7 +2,7 @@ import {createReducer} from 'redux-create-reducer';
 import * as types from '../issue-action-types';
 import {attachmentTypes} from './issue-activity__attachment-actions-and-types';
 import {guid} from 'util/util';
-import type {Activity} from 'types/Activity';
+import type {Activity, ActivityType} from 'types/Activity';
 import type {CustomError} from 'types/Error';
 import type {IssueComment} from 'types/CustomFields';
 import type {IssueFull, IssueOnList, OpenNestedViewParams} from 'types/Issue';
@@ -21,8 +21,8 @@ export type State = {
   isAttachFileDialogVisible: boolean;
   isSavingEditedIssue: boolean;
   issue: IssueFull;
-  issueActivityEnabledTypes: Array<Record<string, any>>;
-  issueActivityTypes: Array<Record<string, any>>;
+  issueActivityEnabledTypes: Array<ActivityType>;
+  issueActivityTypes: Array<ActivityType>;
   issueLoadingError: Error | null | undefined;
   issuePlaceholder: IssueOnList;
   openNestedIssueView: (params: OpenNestedViewParams) => any;
@@ -33,6 +33,7 @@ export type State = {
   user: User;
   workTimeSettings: WorkTimeSettings | null | undefined;
   defaultProjectTeam: ProjectTeam | undefined;
+  isLoading: boolean;
 };
 
 export const initialState: State = {
@@ -54,6 +55,7 @@ export const initialState: State = {
   user: null,
   workTimeSettings: null,
   defaultProjectTeam: undefined,
+  isLoading: false,
 };
 const attachmentReducers = {
   [attachmentTypes.ATTACH_START_ADDING](

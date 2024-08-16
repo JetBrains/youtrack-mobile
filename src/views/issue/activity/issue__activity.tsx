@@ -65,8 +65,8 @@ type IssueActivityProps = IssueActivityState &
   CommentActions &
   typeof attachmentActions & {
     canAttach: boolean;
-    onAttach: () => any;
-    stateFieldName: string;
+    onAttach: () => void;
+    stateFieldName: keyof AppState;
     highlight?: {
       activityId: string;
       commentId?: string;
@@ -142,7 +142,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   };
   loadDraftComment = async () => {
     await this.props.setEditingComment(null);
-    const draft: IssueComment | null = await this.props.getDraftComment();
+    const draft = await this.props.getDraftComment();
     this.props.setEditingComment(draft);
   };
   loadIssueActivities = (doNotReset?: boolean, issueId?: string) => {
@@ -528,7 +528,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   }
 }
 
-const mapStateToProps = (state: AppState, ownProps) => {
+const mapStateToProps = (state: AppState, ownProps: IssueActivityProps) => {
   return {
     ...state.issueCommentActivity,
     ...state.issueActivity,

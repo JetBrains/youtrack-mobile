@@ -51,7 +51,7 @@ import {ViewStyleProp} from 'types/Internal';
 interface Props {
   activities: ActivityGroup[] | null;
   attachments: Attachment[];
-  commentActions: ActivityStreamCommentActions;
+  commentActions?: ActivityStreamCommentActions;
   currentUser: User;
   issueFields?: Array<Record<string, any>>;
   onReactionSelect?: (
@@ -79,7 +79,7 @@ interface Props {
     activityId?: string;
     commentId?: string;
   };
-  isReporter: boolean;
+  isReporter?: boolean;
 }
 
 const isAndroidOrDesktop: boolean = isAndroidPlatform() || isDesktop();
