@@ -68,11 +68,11 @@ async function register(userLogin: string): Promise<void> {
 }
 
 async function unregister(userLogin: string) {
-  PNHelper.storeDeviceToken(null);
   const deviceToken: Token = await getDeviceToken();
-
   if (deviceToken) {
-    return await PNHelper.unsubscribe(deviceToken, userLogin);
+    const response = await PNHelper.unsubscribe(deviceToken, userLogin);
+    PNHelper.storeDeviceToken(null);
+    return response;
   }
 }
 
