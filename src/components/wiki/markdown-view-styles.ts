@@ -1,8 +1,5 @@
-import {Platform} from 'react-native';
-
 import {DEFAULT_THEME} from 'components/theme/theme';
-import {MAIN_FONT_SIZE} from 'components/common-styles/typography';
-import {UNIT} from 'components/variables';
+import {MAIN_FONT_SIZE, UNIT} from 'components/common-styles';
 
 import type {UITheme, UIThemeColors} from 'types/Theme';
 import type {TextStyleProp} from 'types/Internal';
@@ -94,35 +91,10 @@ export const baseMarkdownStyles = {
     fontSize: MAIN_FONT_SIZE,
   },
   bullet_list: {},
-  ordered_list: {
-    ...Platform.select({
-      ios: {
-        lineHeight: 36,
-      },
-      android: {
-        lineHeight: 34,
-      },
-    }),
-  },
-  list_item: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-  },
+  ordered_list: {},
+  list_item: {},
 
-  bullet_list_icon: {
-    lineHeight: UNIT * 4.5,
-    ...Platform.select({
-      ios: {
-        fontSize: 30,
-      },
-      android: {
-        fontSize: MAIN_FONT_SIZE,
-      },
-      default: {
-        marginTop: 0,
-      },
-    }),
-  },
+  bullet_list_icon: {},
   bullet_list_icon_checkbox: {
     color: 'transparent',
   },
@@ -133,15 +105,11 @@ export const baseMarkdownStyles = {
   },
 
   ordered_list_icon: {
-    marginTop: 1,
     marginLeft: UNIT,
     marginRight: UNIT,
   },
 
-  ordered_list_content: {
-    flex: 1,
-    flexWrap: 'wrap',
-  },
+  ordered_list_content: {},
   code_inline: {...code},
   code_block: {...code},
   fence: {...code},
@@ -181,13 +149,8 @@ export const baseMarkdownStyles = {
   },
   textgroup: {},
   paragraph: {
-    marginTop: UNIT,
-    marginBottom: UNIT / 2,
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    width: '100%',
+    marginTop: 0,
+    marginBottom: UNIT * 1.5,
   },
   hardbreak: {
     width: '100%',
