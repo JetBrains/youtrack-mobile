@@ -1,8 +1,9 @@
-import {Dimensions} from 'react-native';
+import {Dimensions, StatusBar} from 'react-native';
 
 import DeviceInfo from 'react-native-device-info';
 
 import {getStorageState} from '../storage/storage';
+import {isIOSPlatform} from 'util/util';
 
 
 const tabletSplitViewFactor: number = 0.66;
@@ -28,7 +29,23 @@ const isSplitView = (): boolean => {
   );
 };
 
+const getKeyboardMargin = () => {
+  let notchHeight: number;
+  const isIOS = isIOSPlatform();
+  if (isIOS) {
+    if (DeviceInfo.isTablet()) {
+      notchHeight = 8;
+    } else {
+      notchHeight = DeviceInfo.hasNotch() ? 40 : 0;
+    }
+  } else {
+    notchHeight = StatusBar.currentHeight || 0;
+  }
+  return notchHeight;
+};
+
 export {
+  getKeyboardMargin,
   isDesktop,
   isSplitView,
 };

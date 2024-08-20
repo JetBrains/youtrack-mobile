@@ -13,7 +13,7 @@ import IssueActivityCommentAdd from './issue__activity-comment-add';
 import IssueActivityStream from './issue__activity-stream';
 import IssueActivityStreamCommentEdit from './issue-activity__comment-edit';
 import IssuePermissions from 'components/issue-permissions/issue-permissions';
-import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
+import KeyboardWrapper from 'components/keyboard-wrapper/keyboard-wrapper';
 import ModalPortal from 'components/modal-view/modal-portal';
 import Router from 'components/router/router';
 import Select, {ISelectProps} from 'components/select/select';
@@ -384,7 +384,6 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
             </TouchableOpacity>
           }
         />
-        <KeyboardSpacerIOS top={66} />
       </>
     );
   }
@@ -409,8 +408,6 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
           onCommentChange={async (comment: IssueComment) => await updateDraftComment(comment)}
           onSubmitComment={this.onSubmitComment}
         />
-
-        <KeyboardSpacerIOS top={66} />
       </View>
     );
   }
@@ -494,30 +491,31 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
               {(theme: Theme) => {
                 this.theme = theme;
                 return (
-                  <View style={styles.activities}>
-                    {isVisibilitySelectShown &&
-                      this.renderCommentVisibilitySelect()}
+                  <KeyboardWrapper>
+                    <View style={styles.activities}>
+                      {isVisibilitySelectShown && this.renderCommentVisibilitySelect()}
 
-                    <View style={styles.container}>
-                      {!this.hasLoadingError() && this._renderActivities()}
+                        <View style={styles.container}>
+                          <View>{!this.hasLoadingError() && this._renderActivities()}</View>
+                        </View>
+
+                        {Boolean(this.canAddComment()) && !editingComment?.isEdit && this.renderAddCommentInput()}
+                        {editingComment?.isEdit && this.renderEditCommentInput()}
+                        <TipActivityActionAccessTouch canAddComment={this.canAddComment()} />
+
+                        {this.state.modalChildren && (
+                          <ModalPortal
+                            onHide={() =>
+                              this.setState({
+                                modalChildren: null,
+                              })
+                            }
+                          >
+                            {this.state.modalChildren}
+                          </ModalPortal>
+                        )}
                     </View>
-
-                    {Boolean(this.canAddComment()) && !editingComment?.isEdit && this.renderAddCommentInput()}
-                    {editingComment?.isEdit && this.renderEditCommentInput()}
-                    <TipActivityActionAccessTouch canAddComment={this.canAddComment()}/>
-
-                    {this.state.modalChildren && (
-                      <ModalPortal
-                        onHide={() =>
-                          this.setState({
-                            modalChildren: null,
-                          })
-                        }
-                      >
-                        {this.state.modalChildren}
-                      </ModalPortal>
-                    )}
-                  </View>
+                    </KeyboardWrapper>
                 );
               }}
             </ThemeContext.Consumer>
