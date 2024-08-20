@@ -11,6 +11,7 @@ export const splitViewStyles = {
   },
   splitViewSide: {
     flexBasis: splitViewLeftSideBarWidth,
+    maxWidth: '33%',
     borderColor: '$separator',
     borderRightWidth: 1,
   },
