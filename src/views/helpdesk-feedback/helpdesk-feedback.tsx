@@ -228,7 +228,7 @@ const HelpDeskFeedback = ({project, uuid}: {project: ProjectHelpdesk, uuid?: str
                                     value: email || reporter?.name || '',
                                   }));
                                 },
-                                project,
+                                project || form?.parent.project,
                                 b?.reporter,
                               )
                               : actions.setSelect(b, (value: FeedbackFormBlockCustomField) => {
