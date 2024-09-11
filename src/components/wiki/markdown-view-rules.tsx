@@ -35,9 +35,13 @@ export type Mentions = {
 };
 const imageRegExp: RegExp = /<img [^>]*src=(["“'])[^"]*(["”'])[^>]*>/i;
 const htmlTagRegex = /(<([^>]+)>)/gi;
+
 const googleCalendarURL: RegExp = /^http(s?):\/\/calendar.google.([a-z]{2,})\/calendar/i;
 const googleDocsURL: RegExp = /^http(s?):\/\/docs.google.([a-z]{2,})\/document/i;
 const figmaURL: RegExp = /^http(s?):\/\/(www\.)?figma.com/i;
+const appDiagramsURL: RegExp = /^http(s?):\/\/(www\.)?app.diagrams.net/i;
+const viewerDiagramsURL: RegExp = /^http(s?):\/\/(www\.)?viewer.diagrams.net/i;
+const miroURL: RegExp = /^http(s?):\/\/(www\.)?miro.com/i;
 
 
 function getMarkdownRules(
@@ -78,7 +82,7 @@ function getMarkdownRules(
         return null;
       }
 
-      if (isGoogleShared(url) || isFigmaImage(url)) {
+      if (isEmbedContent(url)) {
         return (
           <MarkdownHyperLink
             uri={url}
@@ -319,12 +323,24 @@ function getMarkdownRules(
 
 export default getMarkdownRules;
 
-function isFigmaImage(url: string = ''): boolean {
+function isFigma(url: string = ''): boolean {
   return figmaURL.test(url);
 }
 
-function isGoogleShared(url: string = ''): boolean {
+function isGoogleEmbed(url: string = ''): boolean {
   return googleCalendarURL.test(url) || googleDocsURL.test(url);
+}
+
+function isDiagram(url: string = ''): boolean {
+  return appDiagramsURL.test(url) || viewerDiagramsURL.test(url);
+}
+
+function isMiro(url: string = ''): boolean {
+  return miroURL.test(url) || viewerDiagramsURL.test(url);
+}
+
+function isEmbedContent(url: string = ''): boolean {
+  return isFigma(url) || isGoogleEmbed(url) || isDiagram(url) || isMiro(url);
 }
 
 function isHTMLLinebreak(text: string): boolean {
