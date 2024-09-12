@@ -18,7 +18,7 @@ msgstr " or "
 msgid "(archived)"
 msgstr "(archived)"
 
-#: src/components/date-picker/date-time-picker.tsx:74
+#: src/components/date-picker/date-time-picker.tsx:76
 msgid "(Clear value)"
 msgstr "(Clear value)"
 
@@ -112,7 +112,7 @@ msgstr "Add spent time"
 msgid "Add tag"
 msgstr "Add tag"
 
-#: src/components/date-picker/date-time-picker.tsx:84
+#: src/components/date-picker/date-time-picker.tsx:86
 msgid "Add time"
 msgstr "Add time"
 
@@ -1014,7 +1014,7 @@ msgstr "Send logs"
 msgid "Sending crash report…"
 msgstr "Sending crash report…"
 
-#: src/components/date-picker/date-time-picker.tsx:67
+#: src/components/date-picker/date-time-picker.tsx:69
 #: src/views/helpdesk-feedback/index.ts:178
 msgid "Set a date"
 msgstr "Set a date"
