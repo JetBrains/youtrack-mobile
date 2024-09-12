@@ -33,11 +33,14 @@ const DateTimePicker = (props: Props) => {
     if (props.withTime) {
       setTime(props.current ? toTimeString(props.current) : toStartOfDayTimeString(date));
     }
-  }, [date, props]);
+  },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   const validateTime = (t: string = '') => {
     const str = t.trim();
-    setDisabled(!str ? false : !/^([0-1][0-9]|2[0-3]):([0-5][0-9])$/.test(t));
+    setDisabled(!str ? true : !/^([0-1][0-9]|2[0-3]):([0-5][0-9])$/.test(t));
   };
 
   const linkColor = styles.link.color;
@@ -47,7 +50,7 @@ const DateTimePicker = (props: Props) => {
         showShadow
         leftButton={props.modal ? <IconBack color={linkColor} /> : <IconClose color={linkColor} />}
         extraButton={
-          props.withTime ? <TouchableOpacity
+          <TouchableOpacity
             disabled={disabled}
             hitSlop={HIT_SLOP}
             onPress={() => {
@@ -61,8 +64,7 @@ const DateTimePicker = (props: Props) => {
             }}
           >
             <IconCheck color={disabled ? styles.icon.color : styles.link.color} />
-          </TouchableOpacity> : null
-        }
+          </TouchableOpacity>}
         onBack={props.onHide}
         title={props.title || i18n('Set a date')}
       />
@@ -96,13 +98,9 @@ const DateTimePicker = (props: Props) => {
 
         <DatePicker
           style={styles.customFieldDateEditorCalendar}
-          date={date}
+          date={props.current}
           onDateSelect={(timestamp: number) => {
-            const d = new Date(timestamp);
-            setDate(d);
-            if (!props.withTime) {
-              props.onApply(d);
-            }
+            setDate(new Date(timestamp));
           }}
         />
       </View>

@@ -75,7 +75,7 @@ export interface FeedbackBlock {
   id: string;
   label: string | null;
   name: string | null;
-  value?: string | undefined;
+  value?: string;
   multiline: boolean;
   required: boolean;
   type: string | null;

@@ -293,8 +293,11 @@ const HelpDeskFeedback = ({project, uuid}: {project: ProjectHelpdesk, uuid?: str
                 onApply={(date: Date | null) => {
                   if (dateTimeBlock.field) {
                     const timestamp = date ? date.valueOf() : undefined;
-                    dateTimeBlock.field.value = timestamp;
-                    dateTimeBlock.value = timestamp ? absDate(timestamp, dateTimeBlock.type === formBlockType.date) : '';
+                    const data = (i: FeedbackBlock) => ({
+                      value: timestamp ? absDate(timestamp, dateTimeBlock.type === formBlockType.date) : '',
+                      field: {...i.field!, value: timestamp},
+                    });
+                    onBlockChange(dateTimeBlock, data);
                   }
                   setDateTimeBlock(null);
                 }}
