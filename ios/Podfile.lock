@@ -1197,15 +1197,15 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNImageCropPicker (0.38.1):
+  - RNImageCropPicker (0.41.2):
     - React-Core
     - React-RCTImage
-    - RNImageCropPicker/QBImagePickerController (= 0.38.1)
-    - TOCropViewController
-  - RNImageCropPicker/QBImagePickerController (0.38.1):
+    - RNImageCropPicker/QBImagePickerController (= 0.41.2)
+    - TOCropViewController (~> 2.7.4)
+  - RNImageCropPicker/QBImagePickerController (0.41.2):
     - React-Core
     - React-RCTImage
-    - TOCropViewController
+    - TOCropViewController (~> 2.7.4)
   - RNReanimated (3.12.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1568,7 +1568,7 @@ SPEC CHECKSUMS:
   RNFBAnalytics: 046d20d9a73d3091ed7463cf33c5b26e61751c3f
   RNFBApp: 793adb33298db7e67dc365dc1ec0dc8a55a7a044
   RNGestureHandler: bbb04bccfd972fc228f7307815ccd11f47324605
-  RNImageCropPicker: 648356d68fbf9911a1016b3e3723885d28373eda
+  RNImageCropPicker: 771e2ca319d2cf92e04ebf334ece892ee9a6728f
   RNReanimated: c0ef6d8727123e5b0b081c0004b84db4fb290b85
   RNScreens: f0e300a3be13eff48f8afb0b5c6fc558c9369b03
   RNSVG: a48668fd382115bc89761ce291a81c4ca5f2fd2e
