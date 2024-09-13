@@ -976,7 +976,9 @@ PODS:
   - react-native-app-auth (7.2.0):
     - AppAuth (>= 1.7.3)
     - React-Core
-  - react-native-document-picker (9.2.0):
+  - react-native-document-picker (9.3.1):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
     - React-Core
   - react-native-encrypted-storage (4.0.3):
     - React-Core
@@ -1529,7 +1531,7 @@ SPEC CHECKSUMS:
   React-logger: 60afd40b183e8e6642bfd0108f1a1ad360cc665e
   React-Mapbuffer: 780a8ecda636bf19e5e2bfdbbb937e898ff39d7f
   react-native-app-auth: 63fa4e58c5bd29aeb974d3a06a23c5858322d533
-  react-native-document-picker: 2b3efb60622b7be891b8d0e0e5424632150e0c94
+  react-native-document-picker: 37a899d1b52694d1b16ba0e542f985db9e878759
   react-native-encrypted-storage: db300a3f2f0aba1e818417c1c0a6be549038deb7
   react-native-eventsource: fea4e2c2505d19660b312406ce45dbb3fe68fd35
   react-native-ios-context-menu: e529171ba760a1af7f2ef0729f5a7f4d226171c5

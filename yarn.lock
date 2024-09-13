@@ -8386,10 +8386,10 @@ react-native-device-log@Trihydro/react-native-device-log:
     react-native-invertible-scroll-view "^1.1.0"
     stacktrace-parser "^0.1.4"
 
-react-native-document-picker@^9.2.0:
-  version "9.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-9.2.0.tgz#e5d58c8166813488e0ea033c61ae1bc32b50fd34"
-  integrity sha512-eJx1aa8e0XBPPIxz7NajH4pdBWoCZ84LHY9AQ9Gqn1P+Pv7ILDal9l8vupt6eTumh0hSz2QEcfwijQa38H1Yew==
+react-native-document-picker@^9.3.1:
+  version "9.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-9.3.1.tgz#f2c33237a906fd0893130e0605c8f18a3aef1605"
+  integrity sha512-Vcofv9wfB0j67zawFjfq9WQPMMzXxOZL9kBmvWDpjVuEcVK73ndRmlXHlkeFl5ZHVsv4Zb6oZYhqm9u5omJOPA==
   dependencies:
     invariant "^2.2.4"
 
