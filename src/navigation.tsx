@@ -1,11 +1,15 @@
 import React, {PureComponent} from 'react';
 import {StyleSheet, View} from 'react-native';
+
 import Menu from 'components/menu/menu';
 import Router from 'components/router/router';
 import {menuHeight} from 'components/common-styles/header';
 import {routeMap} from './app-routes';
 import {ThemeContext} from 'components/theme/theme-context';
+
 import type {Theme} from 'types/Theme';
+import type {NavigationNavigateActionPayload} from 'react-navigation';
+
 const styles = StyleSheet.create({
   flexBox: {
     flex: 1,
@@ -21,16 +25,12 @@ const styles = StyleSheet.create({
     bottom: -100,
   },
 });
-type State = {
-  isMenuShown: boolean;
-};
-export default class Navigation extends PureComponent<{}, State> {
-  state: State = {
-    isMenuShown: false,
-  };
+
+export default class Navigation extends PureComponent<{}, { isMenuShown: boolean;}> {
+  state = {isMenuShown: false};
 
   render(): React.ReactNode {
-    const onRoute = currentRoute => {
+    const onRoute = (currentRoute: NavigationNavigateActionPayload) => {
       const isMenuShown =
         currentRoute.routeName !== routeMap.Home &&
         currentRoute.routeName !== routeMap.EnterServer &&

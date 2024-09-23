@@ -1,6 +1,7 @@
-import React, {createElement} from 'react';
+import React from 'react';
 import {Easing, Animated} from 'react-native';
-import StackViewStyleInterpolator from 'react-navigation-stack/lib/module/views/StackView/StackViewStyleInterpolator';
+
+import StackViewStyleInterpolator from 'react-navigation-stack/src/views/StackView/StackViewStyleInterpolator';
 import {
   createStackNavigator,
   createAppContainer,
@@ -8,19 +9,20 @@ import {
   NavigationActions,
   NavigationNavigateAction,
   NavigationRoute,
+  NavigationContainer,
+  TransitionConfig,
+  NavigationEventPayload,
+  NavigationContainerComponent,
+  NavigationAction,
+  NavigationNavigateActionPayload,
 } from 'react-navigation';
+
 import log from 'components/log/log';
 import {flushStoragePart} from 'components/storage/storage';
 import {isSplitView} from 'components/responsive/responsive-helper';
-import {guid} from 'util/util';
 import {routeMap} from 'app-routes';
-import type {
-  NavigationNavigator,
-  NavigationResetActionPayload,
-  NavigationJumpToActionPayload,
-  NavigationState,
-  NavigationResetAction,
-} from 'react-navigation';
+
+import type {NavigationResetAction, NavigationState} from 'react-navigation';
 
 const TransitionSpec = {
   duration: 500,
@@ -28,14 +30,14 @@ const TransitionSpec = {
   timing: Animated.timing,
 };
 
-const SlideFromRight = {
+const SlideFromRight: TransitionConfig = {
   transitionSpec: TransitionSpec,
   screenInterpolator: StackViewStyleInterpolator.forHorizontal,
 };
 
 const SlideModal = {
   transitionSpec: TransitionSpec,
-  screenInterpolator: (sceneProps: { scenes: string | any[]; }) => {
+  screenInterpolator: (sceneProps: {scenes: string | any[]}) => {
     const route = sceneProps.scenes[sceneProps.scenes.length - 1].route;
 
     if (route?.routeName === routeMap.Modal && sceneProps.scenes.length > 1) {
@@ -51,33 +53,41 @@ const SlideModal = {
  */
 
 type RouterMethodName = keyof typeof routeMap;
+type Navigator = NavigationContainer & NavigationContainerComponent;
+
+interface AppRoute {
+  screen: ({navigation}: {navigation: NavigationEventPayload}) => React.ReactNode;
+  type?: string;
+  props: Record<string, any>;
+  modal?: boolean;
+  defaultNavigationOptions: {gesturesEnabled: boolean};
+}
 
 class Router {
   [index: RouterMethodName | string]: any;
-  _navigator: NavigationNavigator | null = null;
-  _currentRoute: NavigationJumpToActionPayload | null = null;
-  rootRoutes: NavigationJumpToActionPayload[] = [];
-  onDispatchCallbacks: ((...args: any[]) => any)[] | null = [];
-  routes = {};
 
-  onBack() {
-    return {};
-  }
+  _navigator: Navigator | null = null;
+  _currentRoute: NavigationNavigateActionPayload | null = null;
+  rootRoutes: Array<string> = [];
+  onDispatchCallbacks: Array<(...args: any[]) => any> = [];
+  routes: {[routeName: string]: AppRoute} = {};
 
-  setNavigator = (navigator?: NavigationNavigator) => {
+  onBack(closingView: NavigationNavigateActionPayload): void {}
+
+  setNavigator = (navigator?: Navigator) => {
     if (!navigator) {
       return;
     }
-
     this._navigator = navigator;
   };
+
   getTransitionConfig = () => {
     if (!this._navigator) {
       return null;
     }
 
-    const {nav} = this._navigator.state;
-    const currentRouteName = nav.routes[nav.index].routeName;
+    const nav: NavigationState | null = this._navigator.state.nav;
+    const currentRouteName = nav ? nav.routes[nav.index].routeName : '';
     const route = this.routes[currentRouteName];
 
     if (route.modal || this._modalTransition) {
@@ -89,8 +99,7 @@ class Router {
 
   registerRoute({name, component, props, type, modal, tabletComponentName}: Record<string, any>) {
     this.routes[name] = {
-      screen: ({navigation}) =>
-        createElement(component, navigation.state.params),
+      screen: ({navigation}) => React.createElement(component, navigation.state.params),
       type,
       props,
       modal,
@@ -101,10 +110,7 @@ class Router {
 
     if (!this[name]) {
       this[name] = (...args) => {
-        this.navigate(
-          tabletComponentName && isSplitView() ? tabletComponentName : name,
-          ...args,
-        );
+        this.navigate(tabletComponentName && isSplitView() ? tabletComponentName : name, ...args);
       };
     }
   }
@@ -126,20 +132,12 @@ class Router {
     };
   }
 
-  dispatch(
-    data: NavigationResetActionPayload,
-    routeName?: string,
-    prevRouteName?: string,
-    options?: Record<string, any>,
-  ) {
-    this._navigator.dispatch(data);
-
-    this.onDispatchCallbacks.forEach(onDispatch =>
-      onDispatch(routeName, prevRouteName, options),
-    );
+  dispatch(action: NavigationAction, routeName?: string, prevRouteName?: string, options?: Record<string, any>) {
+    this._navigator!.dispatch(action);
+    this.onDispatchCallbacks.forEach(onDispatch => onDispatch(routeName, prevRouteName, options));
   }
 
-  navigate(routeName: string, props: Record<string, any>, {forceReset} = {}) {
+  navigate(routeName: string, props: Record<string, any>, {forceReset = false} = {}) {
     log.info(`Router(navigate): -> ${routeName}`);
 
     if (!this._navigator) {
@@ -158,32 +156,36 @@ class Router {
 
     const newRoute = Object.assign({}, this.routes[routeName]);
     newRoute.props = Object.assign({}, newRoute.props, props);
-    const prevRouteName: string | null | undefined = this._currentRoute
-      ?.routeName;
-    const navigationData: NavigationNavigateAction = NavigationActions.navigate(
-      {
-        routeName,
-        params: newRoute.props,
-        key: guid(),
-      },
-    );
+    const prevRouteName: string | undefined = this._currentRoute?.routeName;
+    const navigationData: NavigationNavigateAction = NavigationActions.navigate({
+      routeName,
+      params: newRoute.props,
+      key: routeName,
+    });
 
     if (newRoute.type === 'reset' || forceReset) {
       this.dispatch(
         StackActions.reset({
           index: 0,
           actions: [navigationData],
+          key: null,
         }),
         routeName,
-        prevRouteName,
+        prevRouteName
       );
     } else {
       this.dispatch(navigationData, routeName, prevRouteName);
     }
   }
 
-  navigateToDefaultRoute(props?: { issueId?: string; articleId?: string; navigateToActivity?: string; searchQuery?: string, helpdeskFormId?: string }) {
-    const defaultRoute: NavigationJumpToActionPayload = this.rootRoutes[0];
+  navigateToDefaultRoute(props?: {
+    issueId?: string;
+    articleId?: string;
+    navigateToActivity?: string;
+    searchQuery?: string;
+    helpdeskFormId?: string;
+  }) {
+    const defaultRoute: string = this.rootRoutes[0];
     let route = null;
     const params: typeof props & {uuid?: string} = Object.assign({}, props);
     if (props?.issueId) {
@@ -203,14 +205,11 @@ class Router {
     }
   }
 
-  getRoutes: NavigationRoute[] = () => this._navigator.state.nav.routes;
-  hasNoParentRoute: NavigationRoute[] = () => {
-    const routes: NavigationRoute[] = this.getRoutes();
-    return (
-      routes.length <= 1 ||
-      (routes[routes.length - 2] &&
-        routes[routes.length - 2].routeName === routeMap.Home)
-    );
+  getRoutes = (): NavigationRoute[] => this._navigator?.state?.nav?.routes || [];
+
+  hasNoParentRoute = (): boolean => {
+    const routes = this.getRoutes();
+    return routes.length <= 1 || (routes[routes.length - 2] && routes[routes.length - 2].routeName === routeMap.Home);
   };
 
   pop(isModalTransition?: boolean, options?: Record<string, any>) {
@@ -220,46 +219,24 @@ class Router {
 
     this._modalTransition = isModalTransition;
     const routes: NavigationRoute[] = this.getRoutes();
-    this.dispatch(
-      NavigationActions.back(),
-      routes[routes.length - 2].routeName,
-      this.getCurrentRouteName(),
-      options,
-    );
+    this.dispatch(NavigationActions.back(), routes[routes.length - 2].routeName, this.getCurrentRouteName(), options);
     return true;
-  }
-
-  backTo(index: number) {
-    let count = index;
-
-    while (count > 0) {
-      if (this.hasNoParentRoute()) {
-        return false;
-      }
-
-      this.pop();
-      count--;
-    }
-
-    return true;
-  }
-
-  _getNavigator() {
-    return this._navigator;
   }
 
   getCurrentRouteName(): string {
-    return this._currentRoute.routeName;
+    return this._currentRoute?.routeName || '';
   }
 
   onNavigationStateChange = (
-    prevNav,
-    nav,
-    action,
-    onRoute: (currentRoute: NavigationJumpToActionPayload) => any,
+    prevNav: NavigationRoute,
+    nav: NavigationRoute,
+    action: NavigationAction,
+    onRoute: (currentRoute: NavigationNavigateActionPayload) => void
   ) => {
     this._currentRoute = nav.routes[nav.index];
-    onRoute(this._currentRoute);
+    if (this._currentRoute) {
+      onRoute(this._currentRoute);
+    }
 
     if (action.type === NavigationActions.BACK) {
       const closingView = prevNav.routes[prevNav.index];
@@ -267,18 +244,12 @@ class Router {
     }
   };
 
-  renderNavigatorView(
-    onRoute?: (currentRoute: NavigationJumpToActionPayload) => any,
-  ) {
+  renderNavigatorView(onRoute: (currentRoute: NavigationNavigateActionPayload) => void) {
     const {AppNavigator} = this;
     return (
       <AppNavigator
         ref={this.setNavigator}
-        onNavigationStateChange={(
-          prevNav: NavigationState,
-          nav: NavigationState,
-          action: NavigationResetAction,
-        ) => {
+        onNavigationStateChange={(prevNav: NavigationRoute, nav: NavigationRoute, action: NavigationResetAction) => {
           this.onNavigationStateChange(prevNav, nav, action, onRoute);
         }}
       />

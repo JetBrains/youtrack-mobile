@@ -35,6 +35,7 @@ import {onNavigateBack, setAccount} from 'actions/app-actions';
 import {rootRoutesList, routeMap} from 'app-routes';
 import {setNotificationComponent} from 'components/notification/notification';
 
+import type {NavigationNavigateActionPayload} from 'react-navigation';
 import type {NotificationRouteData} from 'types/Notification';
 
 if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -49,7 +50,7 @@ class YouTrackMobile extends Component<void, void> {
     this.registerRoutes();
     YouTrackMobile.init(YouTrackMobile.getNotificationData);
 
-    Router.onBack = closingView => {
+    Router.onBack = (closingView: NavigationNavigateActionPayload) => {
       store.dispatch(onNavigateBack(closingView));
     };
 
