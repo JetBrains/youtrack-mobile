@@ -1208,7 +1208,19 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController (~> 2.7.4)
-  - RNReanimated (3.12.0):
+  - RNReanimated (3.15.3):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
+    - RNReanimated/reanimated (= 3.15.3)
+    - RNReanimated/worklets (= 3.15.3)
+  - RNReanimated/reanimated (3.15.3):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+    - ReactCommon/turbomodule/core
+  - RNReanimated/worklets (3.15.3):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1571,7 +1583,7 @@ SPEC CHECKSUMS:
   RNFBApp: 793adb33298db7e67dc365dc1ec0dc8a55a7a044
   RNGestureHandler: bbb04bccfd972fc228f7307815ccd11f47324605
   RNImageCropPicker: 771e2ca319d2cf92e04ebf334ece892ee9a6728f
-  RNReanimated: c0ef6d8727123e5b0b081c0004b84db4fb290b85
+  RNReanimated: c23921c73b1b020eb218d50180542d2f735d6aa8
   RNScreens: f0e300a3be13eff48f8afb0b5c6fc558c9369b03
   RNSVG: a48668fd382115bc89761ce291a81c4ca5f2fd2e
   RNVectorIcons: b307b181c8e98d633d416d36421d515cf2fe9e31
