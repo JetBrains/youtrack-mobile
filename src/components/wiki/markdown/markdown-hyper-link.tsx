@@ -1,35 +1,37 @@
 import React from 'react';
-import {Linking, Text, TextStyle} from 'react-native';
+import {Text, TextStyle} from 'react-native';
+
+import {useDispatch} from 'react-redux';
 
 import {guid} from 'util/util';
+import {handleURL} from 'actions/app-actions';
 
 import styles from 'components/wiki/youtrack-wiki.styles';
 
+import type {ReduxThunkDispatch} from 'types/Redux.ts';
 
 const MarkdownHyperLink = ({
   children,
   uri,
   style,
 }: {
-  children?: any;
+  children?: React.ReactNode;
   uri: string;
   style: TextStyle | TextStyle[];
-}): JSX.Element => {
+}) => {
+  const dispatch: ReduxThunkDispatch = useDispatch();
   return (
     <Text
       selectable={true}
       key={guid()}
-      style={[...(Array.isArray(style) ? style : [style]), styles.link]}
+      style={new Array().concat(style).concat(styles.link)}
       onPress={() => {
-        if (uri?.trim?.()) {
-          Linking.openURL(uri);
-        }
+        dispatch(handleURL(uri));
       }}
     >
       {children || uri}
     </Text>
   );
 };
-
 
 export default React.memo(MarkdownHyperLink);

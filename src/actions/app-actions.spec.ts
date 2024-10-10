@@ -515,7 +515,6 @@ describe('app-actions', () => {
       const issueIdMock = `I-1`;
       beforeEach(() => {
         Router.Issue = jest.fn();
-        Router.Is;
       });
 
       it('should navigate to an issue', async () => {
@@ -644,6 +643,7 @@ describe('app-actions', () => {
       globalSettings: {
         getSettings: jest.fn().mockResolvedValue([{}]),
       },
+      config: {backendUrl: backendURLMock},
     } as unknown as API;
   }
 

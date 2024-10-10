@@ -34,7 +34,7 @@ function loadPermissions(
   );
 }
 
-async function targetAccountToSwitchTo(targetBackendUrl: string = ''): Promise<StorageState | null> {
+async function targetAccountToSwitchTo(targetBackendUrl: string = '', backendUrl: string): Promise<StorageState | null> {
   const url = targetBackendUrl.trim();
   if (!url) {
     return null;
@@ -42,7 +42,7 @@ async function targetAccountToSwitchTo(targetBackendUrl: string = ''): Promise<S
 
   let targetAccount: StorageState | null = null;
   const targetURL = removeTrailingSlash(url);
-  if (targetURL !== removeTrailingSlash(getStorageState()?.config?.backendUrl || '')) {
+  if (targetURL !== removeTrailingSlash(backendUrl)) {
     const otherAccounts: StorageState[] = await getOtherAccounts();
     targetAccount = otherAccounts.find(
       (account: StorageState) =>

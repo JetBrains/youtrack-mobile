@@ -20,7 +20,12 @@ import {
   folderIdMap,
 } from 'views/inbox-threads/inbox-threads-helper';
 import {checkVersion, FEATURE_VERSION} from 'components/feature/feature';
-import {extractIssuesQuery, openByUrlDetector} from 'components/open-url-handler/open-url-handler';
+import {
+  extractArticleId, extractHelpdeskFormId,
+  extractIssueId,
+  extractIssuesQuery,
+  openByUrlDetector,
+} from 'components/open-url-handler/open-url-handler';
 import {getCachedPermissions, storeYTCurrentUser, targetAccountToSwitchTo} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
@@ -777,19 +782,58 @@ export function cacheProjects(): ReduxAction<Promise<UserProject[]>> {
   };
 }
 
+async function navigateToScreen(
+  backendUrl: string,
+  dispatch: ReduxThunkDispatch,
+  url: string,
+  forceReset: boolean,
+  issueId?: string,
+  articleId?: string,
+  searchQuery?: string,
+  helpdeskFormId?: string,
+) {
+  if (url.indexOf(backendUrl) === -1) {
+    const targetServerURL = UrlParse(url).origin;
+    const account = await targetAccountToSwitchTo(targetServerURL, backendUrl);
+    if (account) {
+      await dispatch(changeAccount(account, false, issueId, articleId, undefined, searchQuery, helpdeskFormId));
+    }
+  } else {
+    const navigateToActivity: string | undefined = url.split('#focus=Comments-')?.[1];
+    if (helpdeskFormId) {
+      Router.HelpDeskFeedback({uuid: helpdeskFormId});
+    } else if (issueId) {
+      Router.Issue({issueId, issuePlaceholder: {id: issueId}, navigateToActivity}, {forceReset});
+    } else if (articleId) {
+      Router.Article({articlePlaceholder: {id: articleId}, navigateToActivity}, {forceReset});
+    } else {
+      Router.navigateToDefaultRoute({searchQuery});
+    }
+  }
+}
+
 export function subscribeToURL(): ReduxAction {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     openByUrlDetector(
       async (url: string, issueId?: string, articleId?: string, helpdeskFormId?: string) => {
         if (isAuthorized()) {
           usage.trackEvent('app_actions', 'Open issue in app by URL');
-          navigateTo(url, issueId, articleId, undefined, helpdeskFormId);
+          navigateToScreen(
+            getApi().config.backendUrl,
+            dispatch,
+            url,
+            true,
+            issueId,
+            articleId,
+            undefined,
+            helpdeskFormId
+          );
         }
       },
       async (url: string, searchQuery: string) => {
         if (isAuthorized()) {
           usage.trackEvent('app_actions', 'Open issues query in app by URL');
-          navigateTo(url, undefined, undefined, searchQuery);
+          navigateToScreen(getApi().config.backendUrl, dispatch, url, true, undefined, undefined, searchQuery);
         }
       }
     );
@@ -801,29 +845,24 @@ export function subscribeToURL(): ReduxAction {
       }
       return isUserAuthorized;
     }
+  };
+}
 
-    async function navigateTo(url: string, issueId?: string, articleId?: string, searchQuery?: string, helpdeskFormId?: string) {
-      const backendUrl = getApi().config?.backendUrl;
-      if (!backendUrl) {
-        return;
-      }
-      if (url.indexOf(backendUrl) === -1) {
-        const serverURL = UrlParse(url).origin || '';
-        const account = await targetAccountToSwitchTo(serverURL);
-        if (account) {
-          await dispatch(changeAccount(account, false, issueId, articleId, undefined, searchQuery, helpdeskFormId));
-        }
+export function handleURL(uri: string = ''): ReduxAction {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
+    const backendUrl = getApi().config.backendUrl;
+    const url = uri.trim();
+    if (url) {
+      const issueId = extractIssueId(url) ?? undefined;
+      const articleId = extractArticleId(url) ?? undefined;
+      const helpdeskFormId = extractHelpdeskFormId(url) ?? undefined;
+      const query = extractIssuesQuery(url) ?? undefined;
+      if (issueId || articleId || helpdeskFormId) {
+        navigateToScreen(backendUrl, dispatch, url, true, issueId, articleId, undefined, helpdeskFormId);
+      } else if (query) {
+        navigateToScreen(backendUrl, dispatch, url, true, undefined, undefined, query);
       } else {
-        const navigateToActivity: string | undefined = url.split('#focus=Comments-')?.[1];
-        if (helpdeskFormId) {
-          Router.HelpDeskFeedback({uuid: helpdeskFormId});
-        } else if (issueId) {
-          Router.Issue({issueId, navigateToActivity}, {forceReset: true});
-        } else if (articleId) {
-          Router.Article({articlePlaceholder: {id: articleId}, navigateToActivity}, {forceReset: true});
-        } else {
-          Router.navigateToDefaultRoute({searchQuery});
-        }
+        Linking.openURL(url);
       }
     }
   };
@@ -1250,4 +1289,5 @@ export {
   inboxCheckUpdateStatus,
   setGlobalInProgress,
   setHelpdeskMenuVisibility,
+  navigateToScreen,
 };

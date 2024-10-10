@@ -219,6 +219,7 @@ class Router {
     return (
       <AppNavigator
         ref={this.setNavigator}
+        enableURLHandling={false}
         onNavigationStateChange={(prevNav: NavigationRoute, nav: NavigationRoute, action: NavigationResetAction) => {
           this.onNavigationStateChange(prevNav, nav, action, onRoute);
         }}
