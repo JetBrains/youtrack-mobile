@@ -1,5 +1,6 @@
 import type {AuthConfig} from './Auth';
-export type AppConfig = {
+
+export interface AppConfig {
   backendUrl: string;
   auth: AuthConfig;
   statisticsEnabled: boolean;
@@ -12,7 +13,16 @@ export type AppConfig = {
       [id: string]: string;
     }
   };
-};
+  mobile: {
+    serviceId: string;
+    serviceSecret?: string;
+  }
+  ring: {
+    serviceId: string;
+    url: string;
+  }
+}
+
 export type EndUserAgreement = {
   enabled: boolean;
   text: string;

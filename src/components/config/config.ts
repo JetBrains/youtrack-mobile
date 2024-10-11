@@ -1,61 +1,47 @@
+import log from 'components/log/log';
 import UrlParse from 'url-parse';
-import {USER_AGENT} from '../usage/usage';
-import log from '../log/log';
-import {YT_SUPPORTED_VERSION} from '../error-message/error-text-messages';
+import {USER_AGENT} from 'components/usage/usage';
+import {YT_SUPPORTED_VERSION} from 'components/error-message/error-text-messages';
+
 import type {AppConfig} from 'types/AppConfig';
-import type {CustomError} from '../../types/Error';
+import type {CustomError} from 'types/Error';
+
 const MIN_YT_VERSION = 7.0;
 const PROTOCOL_REGEXP = /^https?:\/\//i;
 const YOUTRACK_CONTEXT_REGEXP = /\/youtrack$/i;
 const VERSION_DETECT_FALLBACK_URL = '/rest/workflow/version';
-export function getDefaultConfig(): AppConfig {
-  return {
-    backendUrl: '',
-    statisticsEnabled: false,
-    version: '0.0.0-dev',
-    auth: {
-      serverUri: null,
-      clientId: null,
-      clientSecret: null,
-      youtrackServiceId: null,
-      scopes: 'Hub YouTrack',
-      landingUrl: 'ytoauth://landing.url',
-    },
-  };
-}
 
 class IncompatibleYouTrackError extends Error {
   isIncompatibleYouTrackError = true;
 }
 
-function handleIncompatibleYouTrack(response: CustomError, ytUrl: string) {
+function handleError(response: CustomError | AppConfig, ytUrl: string) {
   ytUrl = ytUrl.replace(VERSION_DETECT_FALLBACK_URL, '');
 
   //Handle very old (6.5 and below) instances
-  if (response.error === 'Not Found') {
+  if ('error' in response && response.error === 'Not Found') {
     throw new IncompatibleYouTrackError(
       `Cannot connect to ${ytUrl} - this version of YouTrack is not supported. ${YT_SUPPORTED_VERSION}`,
     );
   }
 
   //Handle config load error
-  if (response.error_developer_message) {
+  if ('error_developer_message' in response && response.error_developer_message) {
     throw new IncompatibleYouTrackError(
       `Unable to connect to this YouTrack instance. ${YT_SUPPORTED_VERSION} ${response.error_developer_message}`,
     );
   }
 
-  if (parseFloat(response.version) < MIN_YT_VERSION) {
-    throw new IncompatibleYouTrackError(
-      `${YT_SUPPORTED_VERSION} ${ytUrl} has version ${response.version}.`,
-    );
+  if (!response?.version || parseFloat(response.version) < MIN_YT_VERSION) {
+    throw new IncompatibleYouTrackError(YT_SUPPORTED_VERSION);
   }
 
-  if (!response.mobile || !response.mobile.serviceId) {
+  if (!response?.mobile?.serviceId) {
     throw new IncompatibleYouTrackError(
       `The mobile application feature is not enabled for ${ytUrl}. Please contact support.`,
     );
   }
+  return response;
 }
 
 export function getBaseUrl(url: string): any | string {
@@ -96,22 +82,22 @@ async function loadConfig(ytUrl: string): Promise<any> {
       }
       return res.json();
     })
+    .then(res => handleError(res, ytUrl))
     .then(res => {
-      handleIncompatibleYouTrack(res, ytUrl);
-      const config = getDefaultConfig();
+      const config = res as AppConfig;
       config.backendUrl = ytUrl;
-      config.statisticsEnabled = res.statisticsEnabled;
-      config.version = res.version;
-      config.l10n = res.l10n;
-      Object.assign(config.auth, {
-        serverUri: handleRelativeUrl(res.ring.url, ytUrl),
-        youtrackServiceId: res.ring.serviceId,
-        clientId: res.mobile.serviceId,
-        clientSecret: res.mobile.serviceSecret,
-      });
+      config.auth = {
+        ...config.auth,
+        serverUri: handleRelativeUrl(config.ring.url, ytUrl),
+        youtrackServiceId: config.ring.serviceId,
+        clientId: config.mobile.serviceId,
+        clientSecret: config.mobile.serviceSecret,
+        scopes: 'Hub YouTrack Konnektor',
+        landingUrl: 'ytoauth://landing.url',
+      };
       return config;
     })
-    .catch((err: Error) => {
+    .catch(err => {
       log.log(
         `Failed to load config: ${err && err.toString && err.toString()}`,
       );
