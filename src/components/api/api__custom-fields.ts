@@ -3,7 +3,7 @@ import ApiBase from './api__base';
 import {sortAlphabetically} from 'components/search/sorting';
 import {toField} from 'util/to-field';
 
-import type {FilterField, PredefinedFilterFieldBase} from 'types/Sorting';
+import type {FilterField} from 'types/Sorting';
 
 const sortByFields = toField([
   'id',
@@ -83,10 +83,10 @@ export default class CustomFieldsAPI extends ApiBase {
   async getFilters(
     contextId: string | null,
     query: string = ''
-  ): Promise<Array<FilterField | PredefinedFilterFieldBase>> {
+  ): Promise<Array<FilterField>> {
     const custom = await this.getFiltersCustom(contextId, query);
     const predefined = await this.getFiltersPredefined(contextId, query);
-    return new Array<FilterField | PredefinedFilterFieldBase>()
+    return new Array<FilterField>()
       .concat(custom)
       .concat(predefined)
       .sort(sortAlphabetically);
