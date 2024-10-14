@@ -20,23 +20,16 @@ export const getCustomFieldSelectProps = ({
     multi: projectCustomField.field.fieldType.isMultiValue,
     selectedItems: new Array().concat(field.value).filter(Boolean),
     emptyValue: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
-    dataSource: () => {
-      const api = getApi();
+    dataSource: async () => {
       if (field.hasStateMachine && issueId) {
-        return api.getStateMachineEvents(issueId, field.id).then(
-          (
-            items: {
-              id: string;
-              presentation: string;
-            }[]
-          ) =>
-            items.flatMap(it => ({
-              name: `${it.id} (${it.presentation})`,
-            }))
-        );
+        const items = await getApi().getStateMachineEvents(issueId, field.id);
+        return items.map(it => ({id: it.id, name: `${it.id} (${it.presentation})`}));
       }
 
-      return api.getCustomFieldValues(projectCustomField?.bundle?.id, projectCustomField.field.fieldType.valueType);
+      return getApi().getCustomFieldValues(
+        projectCustomField?.bundle?.id,
+        projectCustomField.field.fieldType.valueType
+      );
     },
     onChangeSelection,
     onSelect,

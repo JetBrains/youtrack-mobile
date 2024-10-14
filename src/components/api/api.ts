@@ -141,7 +141,7 @@ class API extends BaseAPI {
     );
   }
 
-  async getStateMachineEvents(issueId: string, fieldId: string): Promise<any> {
+  async getStateMachineEvents(issueId: string, fieldId: string): Promise<Array<{id: string; presentation: string}>> {
     const url = `${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}/possibleEvents?fields=id,presentation`;
     return await this.makeAuthorizedRequest(url);
   }
