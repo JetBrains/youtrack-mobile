@@ -444,22 +444,22 @@ export const createActions = (
           dispatchActions.openTagsSelect({
             multi: true,
             placeholder: i18n('Filter tags'),
-            dataSource: async () => {
+            dataSource: async (q: string) => {
               const issueProjectId: string = issue.project.id;
               const [error, relevantProjectTags] = await until<Tag[]>(
-                api.issueFolder.getProjectRelevantTags(issueProjectId),
+                api.issueFolder.getProjectRelevantTags(issueProjectId, q)
               );
-              return error ? [] : relevantProjectTags.filter((it: Tag) => {
-                return it.id !== getState()?.app?.user?.profiles?.general?.star?.id;
-              });
+              return error
+                ? []
+                : relevantProjectTags.filter((it: Tag) => {
+                    return it.id !== getState()?.app?.user?.profiles?.general?.star?.id;
+                  });
             },
             selectedItems: issue?.tags || [],
             getTitle: (item: Tag) => getEntityPresentation(item),
             onCancel: () => dispatch(actions.onCloseTagsSelect()),
             onSelect: async (tags: Tag[]) => {
-              const [error, issueWithTags] = await until(
-                api.issue.addTags(issue.id, tags),
-              );
+              const [error, issueWithTags] = await until(api.issue.addTags(issue.id, tags));
               dispatch(
                 dispatchActions.receiveIssue({
                   ...issue,

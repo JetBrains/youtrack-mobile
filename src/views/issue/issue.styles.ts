@@ -110,7 +110,6 @@ export default EStyleSheet.create({
   },
   issueTagSelectItem: {
     paddingHorizontal: UNIT / 2,
-    paddingVertical: UNIT / 4,
   },
   issueActions: {
     padding: UNIT / 2,

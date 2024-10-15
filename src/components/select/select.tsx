@@ -177,9 +177,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
   _onSearch = debounce(this.onSearch, 300);
 
   _renderTitle(item: IItem) {
-    const label: React.ReactElement<React.ComponentProps<any>, any> = (
-      <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>
-    );
+    const label = <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>;
 
     if (item.color && item.color.id !== NO_COLOR_CODING_ID) {
       return (

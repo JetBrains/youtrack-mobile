@@ -1,12 +1,15 @@
 import React from 'react';
-import ColorField from '../color-field/color-field';
-import Select from '../select/select';
-import {getApi} from '../api/api__instance';
-import {getEntityPresentation} from '../issue-formatter/issue-formatter';
+
+import ColorField from 'components/color-field/color-field';
+import Select from 'components/select/select';
+import {getApi} from 'components/api/api__instance';
+import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {until} from 'util/util';
-import API from '../api/api';
+
 import styles from './tags.styles';
+
+import type {ISelectProps} from 'components/select/select';
 import type {Tag} from 'types/CustomFields';
 
 interface Props {
@@ -19,13 +22,12 @@ interface Props {
 
 const TagAddSelect = (props: Props) => {
   const {onAdd, onHide, projectId, existed = []} = props;
-  const api: API = getApi();
-  const selectProps = {
+  const selectProps: ISelectProps = {
     placeholder: i18n('Filter tags'),
     multi: true,
-    dataSource: async () => {
+    dataSource: async (q: string) => {
       const [error, relevantTags] = await until(
-        api.issueFolder.getProjectRelevantTags(projectId),
+        getApi().issueFolder.getProjectRelevantTags(projectId, q),
       );
       return error ? [] : relevantTags.filter((it: Tag) => it.id !== props.starId);
     },

@@ -36,6 +36,5 @@ export default EStyleSheet.create({
   },
   tagSelectItem: {
     paddingHorizontal: UNIT / 2,
-    paddingVertical: UNIT / 4,
   },
 });
