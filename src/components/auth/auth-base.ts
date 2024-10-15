@@ -66,9 +66,8 @@ export class AuthBase {
       headers: AuthBase.getHeaders(config),
       body: body,
     })
-      .then(async (res: Response & any) => {
-        log.log(`Got result from ${hubTokenUrl}: ${res && res.status}`);
-        log.log(`Response body: ${res && res._bodyText}`);
+      .then(async (res: Response) => {
+        log.log(`Got result from ${hubTokenUrl}: ${res.status}`);
         return res.json();
       })
       .then(res => {

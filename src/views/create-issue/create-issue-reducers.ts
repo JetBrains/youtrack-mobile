@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction, Slice} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {attachmentTypes} from './create-issue__attachment-actions-and-types';
 import {createCommandDialogReducers} from 'components/command-dialog/command-dialog-reducer';
@@ -6,7 +6,6 @@ import {createIssueNamespace} from './create-issue-action-types';
 import {LOG_OUT} from 'actions/action-types';
 
 import type {Attachment, CustomField, FieldValue, IssueLink} from 'types/CustomFields';
-import type {AnyCustomField} from 'components/custom-field/custom-field-helper';
 import type {CommandSuggestionResponse, IssueCreate, IssueFull} from 'types/Issue';
 import type {Project} from 'types/Project';
 
@@ -18,7 +17,7 @@ export type CreateIssueState = {
   issue: IssueCreate;
   isAttachFileDialogVisible: boolean;
   commandIsApplying: boolean;
-  commandSuggestions: CommandSuggestionResponse | null | undefined;
+  commandSuggestions?: CommandSuggestionResponse | null;
   showCommandDialog: boolean;
 };
 
@@ -46,7 +45,7 @@ const initialState: CreateIssueState = {
   showCommandDialog: false,
 };
 
-const slice: Slice = createSlice({
+const slice = createSlice({
   name: createIssueNamespace,
   initialState,
   extraReducers: {
@@ -113,8 +112,8 @@ const slice: Slice = createSlice({
     ) => {
       state.issue = {
         ...state.issue,
-        fields: [...state.issue.fields].map((it: AnyCustomField) =>
-          it === action.payload.field ? {...it, value: action.payload.value} : it
+        fields: [...state.issue.fields].map(f =>
+          f === action.payload.field ? {...f, value: action.payload.value} : f
         ),
       };
     },

@@ -1,24 +1,22 @@
-import Store from 'store';
-
 import * as actions from './create-issue-actions';
 import * as commandDialogHelper from 'components/command-dialog/command-dialog-helper';
 import * as storage from 'components/storage/storage';
 import mocks from 'test/mocks';
-import IssueAPI from 'components/api/api__issue';
 import {commandDialogTypes, createIssueNamespace} from './create-issue-action-types';
 import {CUSTOM_ERROR_MESSAGE} from 'components/error/error-messages';
 import {ISSUE_CREATED} from './create-issue-action-types';
 import {setApi} from 'components/api/api__instance';
 
-import {CommandSuggestionResponse, IssueCreate} from 'types/Issue';
-import {CustomError} from 'types/Error';
-import {CustomField} from 'types/CustomFields';
+import type API from 'components/api/api';
+import type {CommandSuggestionResponse, IssueCreate} from 'types/Issue';
+import type {CustomError} from 'types/Error';
+import type {CustomField} from 'types/CustomFields';
+import type {MockStore} from 'redux-mock-store';
+import type {ReduxThunkDispatch} from 'types/Redux';
 
-type ApiMock = {
-  auth: {getAuthorizationHeaders: jest.Mock},
-  issue: Record<keyof typeof IssueAPI.prototype, jest.Mock>
-}
-let apiMock: ApiMock;
+jest.mock('components/api/api');
+
+let apiMock: API;
 const getApi = () => apiMock;
 
 const createStoreMock = mocks.createMockStore(getApi);
@@ -27,9 +25,9 @@ const PROJECT_ID_MOCK = 'PROJECT_ID';
 
 describe('<CreateIssue/>', () => {
   let stateMock;
-  let ownPropsMock;
   let issueMock: IssueCreate;
-  let store: typeof Store;
+  let store: MockStore;
+  let dispatch: ReduxThunkDispatch;
   let issueDraftBase: Partial<IssueCreate>;
   beforeEach(async () => {
     await storage.__setStorageState({});
@@ -54,7 +52,7 @@ describe('<CreateIssue/>', () => {
       await storage.__setStorageState({
         projectId: PROJECT_ID_MOCK,
       });
-      await store.dispatch(actions.loadStoredProject());
+      await dispatch(actions.loadStoredProject());
       expect(store.getActions()[0]).toEqual({
         payload: {
           projectId: PROJECT_ID_MOCK,
@@ -67,7 +65,7 @@ describe('<CreateIssue/>', () => {
       await storage.__setStorageState({
         projectId: null,
       });
-      await store.dispatch(actions.loadStoredProject());
+      await dispatch(actions.loadStoredProject());
       expect(store.getActions()).toHaveLength(0);
     });
 
@@ -85,7 +83,7 @@ describe('<CreateIssue/>', () => {
         projectId: undefined,
       });
 
-      await store.dispatch(actions.loadStoredProject());
+      await dispatch(actions.loadStoredProject());
 
       expect(store.getActions()[0]).toEqual({
         payload: {
@@ -101,11 +99,11 @@ describe('<CreateIssue/>', () => {
   describe('loadIssueFromDraft', () => {
     it('should load issue draft', async () => {
       const draftIdMock = 'draftId';
-      apiMock.issue.loadIssueDraft.mockResolvedValueOnce(issueMock);
+      (apiMock.issue.loadIssueDraft as jest.Mock).mockResolvedValueOnce(issueMock);
 
-      await store.dispatch(actions.loadIssueFromDraft(draftIdMock));
+      await dispatch(actions.loadIssueFromDraft(draftIdMock));
 
-      expect(apiMock.issue.loadIssueDraft).toHaveBeenCalledWith(draftIdMock);
+      expect((apiMock.issue.loadIssueDraft as jest.Mock)).toHaveBeenCalledWith(draftIdMock);
       expect(store.getActions()[0]).toEqual({
         payload: {
           issue: issueMock,
@@ -115,13 +113,13 @@ describe('<CreateIssue/>', () => {
     });
     it('should reset issue draft id on failed request', async () => {
       const draftIdMock = 'draftId';
-      apiMock.issue.loadIssueDraft.mockRejectedValueOnce({});
+      (apiMock.issue.loadIssueDraft as jest.Mock).mockRejectedValueOnce({});
 
       expect(store.getState().creation.issue.id).toEqual(issueMock.id);
 
-      await store.dispatch(actions.loadIssueFromDraft(draftIdMock));
+      await dispatch(actions.loadIssueFromDraft(draftIdMock));
 
-      expect(apiMock.issue.loadIssueDraft).toHaveBeenCalledWith(draftIdMock);
+      expect((apiMock.issue.loadIssueDraft as jest.Mock)).toHaveBeenCalledWith(draftIdMock);
       expect(store.getActions()[0]).toEqual({
         payload: undefined,
         type: `${createIssueNamespace}/resetIssueDraftId`,
@@ -136,9 +134,9 @@ describe('<CreateIssue/>', () => {
         fields: [{}, {}],
       };
       const responseMock = {...issueMock, ...draftMockData, created: 0};
-      apiMock.issue.updateIssueDraft.mockResolvedValueOnce(responseMock);
-      await store.dispatch(actions.updateIssueDraft(false, draftMockData));
-      expect(apiMock.issue.updateIssueDraft).toHaveBeenCalledWith({
+      (apiMock.issue.updateIssueDraft as jest.Mock).mockResolvedValueOnce(responseMock);
+      await dispatch(actions.updateIssueDraft(false, draftMockData));
+      expect((apiMock.issue.updateIssueDraft as jest.Mock)).toHaveBeenCalledWith({
         ...issueDraftBase,
         ...draftMockData,
       });
@@ -150,13 +148,13 @@ describe('<CreateIssue/>', () => {
       });
     });
     it('should update a summary and description only', async () => {
-      apiMock.issue.updateIssueDraft.mockResolvedValueOnce({
+      (apiMock.issue.updateIssueDraft as jest.Mock).mockResolvedValueOnce({
         summary: issueMock.summary,
         description: issueMock.description,
         fields: [{}],
       });
-      await store.dispatch(actions.updateIssueDraft(true));
-      expect(apiMock.issue.updateIssueDraft).toHaveBeenCalledWith({
+      await dispatch(actions.updateIssueDraft(true));
+      expect((apiMock.issue.updateIssueDraft as jest.Mock)).toHaveBeenCalledWith({
         ...issueDraftBase,
         fields: undefined,
       });
@@ -171,11 +169,11 @@ describe('<CreateIssue/>', () => {
       });
     });
     it('should reset a project fields of the issue draft if server responded with 404 error', async () => {
-      const error: CustomError = new Error('404') as CustomError;
+      const error: CustomError = new Error('404') as unknown as CustomError;
       error.error_description = CUSTOM_ERROR_MESSAGE.NO_ENTITY_FOUND;
-      apiMock.issue.updateIssueDraft.mockRejectedValueOnce(error);
-      await store.dispatch(actions.updateIssueDraft(false));
-      expect(apiMock.issue.updateIssueDraft).toHaveBeenCalledWith(
+      (apiMock.issue.updateIssueDraft as jest.Mock).mockRejectedValueOnce(error);
+      await dispatch(actions.updateIssueDraft(false));
+      expect((apiMock.issue.updateIssueDraft as jest.Mock)).toHaveBeenCalledWith(
         issueDraftBase,
       );
       expect(store.getActions()[0]).toEqual({
@@ -188,9 +186,9 @@ describe('<CreateIssue/>', () => {
   describe('initializeWithDraftOrProject', () => {
 
     it('should load an issue draft with provided draft id', async () => {
-      await store.dispatch(actions.initializeWithDraftOrProject(issueMock.id));
+      await dispatch(actions.initializeWithDraftOrProject(issueMock.id));
 
-      expect(apiMock.issue.loadIssueDraft).toHaveBeenCalledWith(issueMock.id);
+      expect((apiMock.issue.loadIssueDraft as jest.Mock)).toHaveBeenCalledWith(issueMock.id);
       expect(store.getActions()[0]).toEqual({
         payload: {
           preDefinedDraftId: issueMock.id,
@@ -200,27 +198,27 @@ describe('<CreateIssue/>', () => {
     });
 
     it('should load an issue draft with cached draft id', async () => {
-      apiMock.issue.loadIssueDraft.mockResolvedValueOnce(issueMock);
+      (apiMock.issue.loadIssueDraft as jest.Mock).mockResolvedValueOnce(issueMock);
       await storage.__setStorageState({
         draftId: issueMock.summary,
       });
-      await store.dispatch(actions.initializeWithDraftOrProject());
+      await dispatch(actions.initializeWithDraftOrProject(null));
 
-      expect(apiMock.issue.loadIssueDraft).toHaveBeenCalledWith(
+      expect((apiMock.issue.loadIssueDraft as jest.Mock)).toHaveBeenCalledWith(
         issueMock.summary,
       );
     });
 
     it('should create a new issue draft with cached project id', async () => {
-      apiMock.issue.loadIssueDraft.mockResolvedValueOnce(issueMock);
+      (apiMock.issue.loadIssueDraft as jest.Mock).mockResolvedValueOnce(issueMock);
       const projectIdMock = issueMock.project.id;
       await storage.__setStorageState({
         draftId: null,
         projectId: projectIdMock,
       });
-      await store.dispatch(actions.initializeWithDraftOrProject());
+      await dispatch(actions.initializeWithDraftOrProject(null));
 
-      expect(apiMock.issue.loadIssueDraft).not.toHaveBeenCalledWith(
+      expect((apiMock.issue.loadIssueDraft as jest.Mock)).not.toHaveBeenCalledWith(
         issueMock.summary,
       );
       expect(store.getActions()[0]).toEqual({
@@ -236,20 +234,20 @@ describe('<CreateIssue/>', () => {
   describe('createIssue', () => {
     let createdIssueMock: IssueCreate;
     beforeEach(async () => {
-      apiMock.issue.updateIssueDraft.mockResolvedValueOnce(issueMock);
+      (apiMock.issue.updateIssueDraft as jest.Mock).mockResolvedValueOnce(issueMock);
       createdIssueMock = {...issueMock, created: 1974};
-      apiMock.issue.createIssue.mockResolvedValueOnce(createdIssueMock);
+      (apiMock.issue.createIssue as jest.Mock).mockResolvedValueOnce(createdIssueMock);
     });
     it('should enable processing', async () => {
-      await store.dispatch(actions.createIssue());
+      await dispatch(actions.createIssue());
       expect(store.getActions()[0]).toEqual({
         payload: undefined,
         type: `${createIssueNamespace}/startIssueCreation`,
       });
     });
     it('should update a draft before create a new issue', async () => {
-      await store.dispatch(actions.createIssue());
-      expect(apiMock.issue.updateIssueDraft).toHaveBeenCalledWith(
+      await dispatch(actions.createIssue());
+      expect((apiMock.issue.updateIssueDraft as jest.Mock)).toHaveBeenCalledWith(
         {...issueDraftBase, fields: undefined},
       );
       expect(store.getActions()[1]).toEqual({
@@ -260,8 +258,8 @@ describe('<CreateIssue/>', () => {
       });
     });
     it('should submit a new issue and propagate just created entity', async () => {
-      await store.dispatch(actions.createIssue());
-      expect(apiMock.issue.createIssue).toHaveBeenCalledWith(issueMock);
+      await dispatch(actions.createIssue());
+      expect((apiMock.issue.createIssue as jest.Mock)).toHaveBeenCalledWith(issueMock.id);
       expect(store.getActions()[2]).toEqual({
         type: ISSUE_CREATED,
         issue: createdIssueMock,
@@ -269,13 +267,13 @@ describe('<CreateIssue/>', () => {
       });
     });
     it('should submit a new issue and do not propagate just created entity', async () => {
-      await store.dispatch(
+      await dispatch(
         actions.createIssue(
           () => null,
           () => false,
         ),
       );
-      expect(apiMock.issue.createIssue).toHaveBeenCalledWith(issueMock);
+      expect((apiMock.issue.createIssue as jest.Mock)).toHaveBeenCalledWith(issueMock.id);
       expect(store.getActions()).toHaveLength(4);
       expect(store.getActions()[0]).toEqual({
         type: 'IssueCreate/startIssueCreation',
@@ -294,7 +292,7 @@ describe('<CreateIssue/>', () => {
       });
     });
     it('should reset issue draft and disable processing after submitting', async () => {
-      await store.dispatch(actions.createIssue());
+      await dispatch(actions.createIssue());
       expect(store.getActions()[3]).toEqual({
         payload: undefined,
         type: `${createIssueNamespace}/resetCreation`,
@@ -307,17 +305,17 @@ describe('<CreateIssue/>', () => {
   });
   describe('updateFieldValue', () => {
     it('should update issue draft before updating a field value', async () => {
-      apiMock.issue.updateIssueDraft.mockResolvedValueOnce(issueMock);
-      await store.dispatch(actions.updateFieldValue({} as CustomField, {}));
-      expect(apiMock.issue.updateIssueDraft).toHaveBeenCalled();
+      (apiMock.issue.updateIssueDraft as jest.Mock).mockResolvedValueOnce(issueMock);
+      await dispatch(actions.updateFieldValue({} as CustomField, {}));
+      expect((apiMock.issue.updateIssueDraft as jest.Mock)).toHaveBeenCalled();
     });
     it('should update issue field value', async () => {
       const fieldMock = mocks.createIssueFieldMock();
       const fieldValueMock = {...fieldMock.value, name: 'Show-stopper'};
-      apiMock.issue.updateIssueDraftFieldValue.mockResolvedValueOnce({
+      (apiMock.issue.updateIssueDraftFieldValue as jest.Mock).mockResolvedValueOnce({
         value: fieldValueMock,
       });
-      await store.dispatch(actions.updateFieldValue(fieldMock, fieldValueMock));
+      await dispatch(actions.updateFieldValue(fieldMock, fieldValueMock));
       expect(store.getActions()[0]).toEqual({
         payload: {
           field: fieldMock,
@@ -327,23 +325,23 @@ describe('<CreateIssue/>', () => {
       });
     });
     it('should refresh an issue draft after updating a field value', async () => {
-      apiMock.issue.loadIssueDraft.mockResolvedValueOnce(issueMock);
-      apiMock.issue.updateIssueDraftFieldValue.mockResolvedValueOnce({
+      (apiMock.issue.loadIssueDraft as jest.Mock).mockResolvedValueOnce(issueMock);
+      (apiMock.issue.updateIssueDraftFieldValue as jest.Mock).mockResolvedValueOnce({
         value: {},
       });
-      await store.dispatch(actions.updateFieldValue({} as CustomField, {}));
-      expect(apiMock.issue.loadIssueDraft).toHaveBeenCalled();
+      await dispatch(actions.updateFieldValue({} as CustomField, {}));
+      expect((apiMock.issue.loadIssueDraft as jest.Mock)).toHaveBeenCalled();
     });
   });
   describe('toggleCommandDialog', () => {
     it('should show the command dialog', async () => {
-      await store.dispatch(actions.toggleCommandDialog(true));
+      await dispatch(actions.toggleCommandDialog(true));
       expect(store.getActions()[0]).toEqual({
         type: commandDialogTypes.OPEN_COMMAND_DIALOG,
       });
     });
     it('should close the command dialog', async () => {
-      await store.dispatch(actions.toggleCommandDialog(false));
+      await dispatch(actions.toggleCommandDialog(false));
       expect(store.getActions()[0]).toEqual({
         type: commandDialogTypes.CLOSE_COMMAND_DIALOG,
       });
@@ -351,9 +349,9 @@ describe('<CreateIssue/>', () => {
   });
   describe('getCommandSuggestions', () => {
     it('should show command suggestions', async () => {
-      const commandSuggestionDataMock: CommandSuggestionResponse = {
+      const commandSuggestionDataMock = {
         suggestions: [{}],
-      };
+      } as CommandSuggestionResponse;
       jest
         .spyOn(commandDialogHelper, 'loadIssueCommandSuggestions')
         .mockResolvedValueOnce(commandSuggestionDataMock);
@@ -372,14 +370,14 @@ describe('<CreateIssue/>', () => {
     });
 
     async function loadSuggestions() {
-      await store.dispatch(actions.getCommandSuggestions('maj', 3));
+      await dispatch(actions.getCommandSuggestions('maj', 3));
     }
   });
   describe('applyCommand', () => {
     it('should apply a command', async () => {
-      apiMock.issue.loadIssueDraft.mockResolvedValueOnce({});
-      jest.spyOn(commandDialogHelper, 'applyCommand').mockResolvedValueOnce({});
-      await store.dispatch(actions.applyCommand('major'));
+      (apiMock.issue.loadIssueDraft as jest.Mock).mockResolvedValueOnce({});
+      jest.spyOn(commandDialogHelper, 'applyCommand').mockResolvedValueOnce();
+      await dispatch(actions.applyCommand('major'));
       expect(store.getActions()[0]).toEqual({
         type: commandDialogTypes.START_APPLYING_COMMAND,
       });
@@ -407,8 +405,10 @@ describe('<CreateIssue/>', () => {
         updateIssueDraftFieldValue: jest.fn(),
         getUserIssueDrafts: jest.fn().mockResolvedValue([]),
       },
-    };
+    } as unknown as API;
+
     setApi(apiMock);
+
     stateMock = {
       app: {
         issuePermissions: {},
@@ -420,7 +420,7 @@ describe('<CreateIssue/>', () => {
         issue: issueMock,
       },
     };
-    ownPropsMock = {};
-    store = createStoreMock({...stateMock, ...stateData}, ownPropsMock);
+    store = createStoreMock({...stateMock, ...stateData});
+    dispatch = store.dispatch;
   }
 });

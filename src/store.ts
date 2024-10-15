@@ -4,7 +4,7 @@ import {getApi} from 'components/api/api__instance';
 import reducer from './reducers';
 const middlewares = [thunk.withExtraArgument(getApi)];
 const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
-const store: any = createStoreWithMiddleware(
+const store = createStoreWithMiddleware(
   reducer,
   global.__REDUX_DEVTOOLS_EXTENSION__ && global.__REDUX_DEVTOOLS_EXTENSION__(),
 );

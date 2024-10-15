@@ -64,21 +64,21 @@ describe('API', () => {
   });
 
   it('should refresh token', async () => {
-    const callSpy = jest.fn();
+    const fn = jest.fn();
     let isFirst = true;
     fetchMock.mock(`${serverUrl}?$top=-1`, () => {
-      callSpy();
+      fn();
       if (isFirst) {
         isFirst = false;
-        return {status: HTTP_STATUS.UNAUTHORIZED};
+        return {body: {message: 'Unauthorized'}, status: HTTP_STATUS.UNAUTHORIZED};
       }
-      return {foo: 'bar'};
+      return {body: {message: 'ok'}, status: HTTP_STATUS.SUCCESS};
     });
 
     await createApiInstance().makeAuthorizedRequest(serverUrl);
 
     expect(authMock.refreshToken).toHaveBeenCalled();
-    expect(callSpy).toHaveBeenCalledTimes(2);
+    expect(fn).toHaveBeenCalledTimes(2);
   });
 
   it('should set `isRefreshingToken` to false when a request is successful', async () => {
@@ -92,66 +92,69 @@ describe('API', () => {
   });
 
   describe('Handling errors', () => {
-    let error: CustomError;
+    let errorResponse: Response | CustomError;
     let instance: Api;
     beforeEach(() => {
       Router.EnterServer = jest.fn();
       instance = createApiInstance();
-
-      error = new Error('') as CustomError;
-      error.status = HTTP_STATUS.UNAUTHORIZED;
-      error.error_description = 'unauthorized';
-      error.json = jest.fn();
+      errorResponse = {
+        status: HTTP_STATUS.UNAUTHORIZED,
+        body: {error: 'Unauthorized'},
+      };
     });
 
-    it('should not return a response on error', async () => {
-      prepareUnsuccesfulRequest();
-      const response = await performRequest();
+    it('should throw an error if unauthorised', async () => {
+      prepareUnauthorisedRequest();
 
-      expect(response).toBeFalsy();
+      await expect(async () => {
+        await performRequest();
+      }).rejects.toEqual(errorResponse);
     });
 
-    it('should redirect to login screen if refreshing token failed', async () => {
-      prepareUnsuccesfulRequest();
-      await performRequest();
+    it('should invoke a refresh token error callback', async () => {
+      const refreshTokenError = new Error('Unable to refresh token');
+      jest.spyOn(instance.auth, 'refreshToken').mockRejectedValueOnce(refreshTokenError);
+      prepareUnauthorisedRequest();
 
-      expect(instance.isTokenRefreshFailed).toEqual(true);
-      expect(instance.auth.onTokenRefreshError).toHaveBeenCalled();
+      await expect(async () => {
+        await performRequest();
+
+        expect(instance.isTokenRefreshFailed).toEqual(false);
+        expect(instance.auth.onTokenRefreshError).toHaveBeenCalled();
+      }).rejects.toEqual(refreshTokenError);
+
     });
 
     it('should not redirect to login screen several times', async () => {
-      prepareUnsuccesfulRequest();
+      fetchMock.mock(`${serverUrl}?$top=-1`, {status: 401, body: {message: 'Unauthorized'}});
+      jest.spyOn(instance.auth, 'refreshToken').mockRejectedValueOnce(new Error());
 
-      expect(instance.isTokenRefreshFailed).toEqual(false);
-
-      await performRequest();
+      try {
+        await instance.makeAuthorizedRequest(serverUrl);
+        await instance.makeAuthorizedRequest(serverUrl);
+      } catch (e) {
+      }
       expect(instance.auth.onTokenRefreshError).toHaveBeenCalled();
       expect(instance.isTokenRefreshFailed).toEqual(true);
-
-      await performRequest();
-      expect(instance.isTokenRefreshFailed).toEqual(true);
-
       expect(instance.auth.onTokenRefreshError).toHaveBeenCalledTimes(1);
     });
 
     it('should return TRUE if error status is 401', async () => {
-      expect(await instance.isUnauthorized(error)).toEqual(true);
+      expect(await instance.isUnauthorized(errorResponse, 401)).toEqual(true);
     });
 
     it('should return TRUE if error contains `Invalid token`', async () => {
-      error.error_description = 'Invalid token';
-      expect(await instance.isUnauthorized(error)).toEqual(true);
+      (errorResponse as CustomError).error_description = 'Invalid token';
+      expect(await instance.isUnauthorized(errorResponse, 403)).toEqual(true);
     });
 
-    function prepareUnsuccesfulRequest() {
-      fetchMock.mock(`${serverUrl}?$top=-1`, error);
-      (authMock.refreshToken as jest.Mock).mockRejectedValueOnce(error);
+    function prepareUnauthorisedRequest() {
+      fetchMock.mock(`${serverUrl}?$top=-1`, errorResponse);
+      (authMock.refreshToken as jest.Mock).mockRejectedValueOnce(errorResponse);
     }
 
     async function performRequest() {
-      try {
-        await instance.makeAuthorizedRequest(serverUrl);
-      } catch (e) {}
+      await instance.makeAuthorizedRequest(serverUrl);
     }
   });
 

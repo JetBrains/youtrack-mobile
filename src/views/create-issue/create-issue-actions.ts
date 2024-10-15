@@ -237,16 +237,17 @@ export function deleteDraft(draftId: string): ReduxAction {
 }
 
 export function createIssue(
-  onHide: () => unknown,
+  onHide: () => unknown = () => {},
   isMatchesQuery: (issueIdReadable: string) => boolean = () => true
 ): ReduxAction {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
-    const api: Api = getApi();
     dispatch(actions.startIssueCreation());
-
-    try {
-      await dispatch(updateIssueDraft(true));
-      const created = await api.issue.createIssue(getState().creation.issue);
+    await dispatch(updateIssueDraft(true));
+    const [err, created] = await until(getApi().issue.createIssue(getState().creation.issue.id));
+    if (err) {
+      usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Error');
+      notifyError(err);
+    } else {
       log.info('Create Issue Actions: Issue has been created');
       usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Success');
       const isMatches: boolean = await isMatchesQuery(created.idReadable);
@@ -258,12 +259,8 @@ export function createIssue(
       dispatch(actions.resetCreation());
       onHide();
       clearIssueDraftStorage();
-    } catch (err) {
-      usage.trackEvent(CATEGORY_NAME, 'Issue created', 'Error');
-      notifyError(err as CustomError);
-    } finally {
-      dispatch(actions.stopIssueCreation());
     }
+    dispatch(actions.stopIssueCreation());
   };
 }
 

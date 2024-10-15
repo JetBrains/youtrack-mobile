@@ -161,12 +161,12 @@ export default class IssueAPI extends ApiBase {
     return comments;
   }
 
-  async createIssue(issueDraft: Partial<IssueFull>): Promise<any> {
+  async createIssue(draftId: string): Promise<any> {
     const queryString = qs.stringify({
-      draftId: issueDraft.id,
+      draftId,
       fields: issueFields.issuesOnList.toString(),
     });
-    return await this.makeAuthorizedRequest(
+    return this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}?${queryString}`,
       'POST',
       {},

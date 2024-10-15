@@ -113,29 +113,25 @@ export default class BaseAPI {
     return await resolveErrorMessage(err);
   }
 
-  async isUnauthorized(err: CustomError) {
-    let errorMsg = '';
-    try {
-      errorMsg = await this.getErrorMessage(err);
-    } catch (e) {}
-    return errorMsg === 'Invalid token' || err.status === HTTP_STATUS.UNAUTHORIZED;
+  isUnauthorized(err: Response | CustomError, status: number) {
+    return getErrorMessage(err) === 'Invalid token' || status === HTTP_STATUS.UNAUTHORIZED;
   }
 
-  isHTTPError(response: Response | CustomError): boolean {
-    return response.status < HTTP_STATUS.SUCCESS || response.status >= HTTP_STATUS.REDIRECT;
+  isHTTPError(status: number): boolean {
+    return status < HTTP_STATUS.SUCCESS || status >= HTTP_STATUS.REDIRECT;
   }
 
-  async doRequest(request: () => Promise<Response | CustomError>): Promise<Response | CustomError> {
-    const send = async () => await request();
+  async doRequest(apiCall: () => Promise<Response | CustomError>): Promise<Response | CustomError> {
+    const send = async () => await apiCall();
     let response = await send();
 
-    if (!this.isHTTPError(response)) {
+    if (!this.isHTTPError(response.status)) {
       this.isTokenRefreshFailed = false;
       return response;
     }
 
-    const isUnauthorized: boolean = await this.isUnauthorized(response as CustomError);
-    if (isUnauthorized) {
+    const error = await (response as Response).json();
+    if (this.isUnauthorized(error, response.status)) {
       try {
         log.info('API(doRequest):Unauthorised: Refreshing token...');
         await this.auth.refreshToken();
@@ -147,7 +143,7 @@ export default class BaseAPI {
             'API(doRequest):Unauthorised: Token refresh failed. Logging in...',
             await this.getErrorMessage(tokenRefreshError as CustomError)
           );
-        } catch (error) {}
+        } catch (er) {}
         if (!this.isTokenRefreshFailed) {
           this.isTokenRefreshFailed = true;
           this.auth.onTokenRefreshError();
@@ -157,9 +153,14 @@ export default class BaseAPI {
       return response;
     } else {
       try {
-        log.warn('API(doRequest): Request failed.', getErrorMessage(response as CustomError));
-      } catch (error) {}
-      throw response;
+        log.warn('API(doRequest): Request failed.', {
+          error: error.error || '',
+          error_description: error.error_description || '',
+          error_type: error.error_type || '',
+          error_workflow_type: error.error_workflow_type || '',
+        });
+      } catch (er) {}
+      throw error;
     }
   }
 
@@ -187,7 +188,7 @@ export default class BaseAPI {
         options.controller
       );
     };
-    const response = await this.doRequest(request);
+    const response = await this.doRequest(request) as Response;
     return options.parseJson === false ? response : await response?.json?.();
   }
 
@@ -216,7 +217,7 @@ export default class BaseAPI {
       );
     };
 
-    const response = await this.doRequest(request);
+    const response = await this.doRequest(request) as Response;
     return options.parseJson === false ? response : await response?.json?.();
   }
 
