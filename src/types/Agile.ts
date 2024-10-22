@@ -1,5 +1,6 @@
+import type {EntityBase} from 'types/Entity.ts';
 import type {IssueFull, IssueOnList} from './Issue';
-import {ProjectWithPlugins} from 'types/Project';
+import type {ProjectWithPlugins} from 'types/Project';
 
 export type Cell = {
   id: string;
@@ -108,9 +109,8 @@ export type Board = {
     enabled: boolean;
   };
 };
-export type BoardOnList = {
-  $type: string;
-  id: string;
+
+export interface BoardOnList extends EntityBase {
   name: string;
   favorite: boolean;
   sprints: {
@@ -121,11 +121,9 @@ export type BoardOnList = {
     id: string;
     fullName: string;
   };
-};
+}
 
-export interface Agile {
-  $type: string;
-  id: string;
+export interface Agile extends EntityBase {
   name: string;
   hideOrphansSwimlane: boolean;
   isUpdatable: boolean;
@@ -136,8 +134,7 @@ export interface Agile {
   colorCoding: FieldBasedColorCoding | ProjectBasedColorCoding;
 }
 
-export interface SprintBase {
-  id: string;
+export interface SprintBase extends EntityBase {
   name: string;
   start: number | null;
   finish: number | null;
@@ -151,7 +148,6 @@ export interface Sprint extends SprintBase {
 }
 
 export interface SprintFull extends Sprint {
-  id: string;
   board: Board;
   agile: Agile;
   eventSourceTicket: string;

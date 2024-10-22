@@ -4,6 +4,6 @@ import {Article} from 'types/Article';
 export type Entity = Article | IssueFull | IssueOnList;
 
 export interface EntityBase {
-  $type?: string;
+  $type: string;
   id: string;
 }
