@@ -1,4 +1,6 @@
+// @ts-ignore
 import objectWalk from 'object-walk';
+
 import {getReadableID} from 'components/issue-formatter/issue-formatter';
 import {handleRelativeUrl} from 'components/config/config';
 import {toField} from 'util/to-field';
@@ -91,9 +93,9 @@ const API = {
     return getReadableID(issue);
   },
 
-  patchAllRelativeAvatarUrls(data: Record<string, any>, backendUrl: string) {
+  patchAllRelativeAvatarUrls<T>(data: T, backendUrl: string): T {
     //TODO: potentially slow place
-    objectWalk(data, (value: string | Record<string, any>, propertyName: string, obj: Record<string, any>) => {
+    objectWalk(data, (value: string | T, propertyName: string, obj: {[key: string]: any}) => {
       if (typeof value === 'string' && value.indexOf('/hub/api/rest/avatar/') === 0) {
         obj[propertyName] = handleRelativeUrl(obj[propertyName], backendUrl);
       }

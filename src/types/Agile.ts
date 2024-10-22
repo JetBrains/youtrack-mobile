@@ -1,17 +1,20 @@
 import type {EntityBase} from 'types/Entity.ts';
-import type {IssueFull, IssueOnList} from './Issue';
+import type {ICustomField, Tag} from 'types/CustomFields';
+import type {IssueFull, IssueOnList, ListIssueFieldValue} from './Issue';
 import type {ProjectWithPlugins} from 'types/Project';
 
-export type Cell = {
+export interface Cell {
   id: string;
   column: AgileColumn;
   issues: IssueOnList[];
-};
-export type Swimlane = Record<string, any> & {
+}
+
+export interface Swimlane {
   issue: IssueFull;
   cells: Cell[];
-};
-export type AgileUserProfile = {
+}
+
+export interface AgileUserProfile {
   defaultAgile: {
     id: string;
     name: string;
@@ -20,7 +23,7 @@ export type AgileUserProfile = {
     projects: Array<{
       id: string;
       ringId: string;
-    }>
+    }>;
   };
   visitedSprints: {
     id: string;
@@ -29,44 +32,48 @@ export type AgileUserProfile = {
       id: string;
     };
   }[];
-};
-export type AgileColumnFieldValue = {
+}
+
+export interface AgileColumnFieldValue {
   id: string;
   presentation: string;
-};
-export type AgileColumn = {
+}
+
+export interface AgileColumn {
   id: string;
   collapsed: boolean;
   isVisible: boolean;
   fieldValues: AgileColumnFieldValue[];
-};
-export type BoardCell = {
+}
+
+export interface BoardCell {
   id: string;
   tooManyIssues: boolean;
   column: {
     id: string;
   };
   issues: IssueOnList[];
-};
-export type AgileBoardRow = {
-  $type: string;
-  id: string;
+}
+
+export interface AgileBoardRow extends EntityBase {
   name: string;
   collapsed: boolean;
   issue: IssueOnList;
   cells: BoardCell[];
-};
-export type BoardColumn = {
+}
+
+export interface BoardColumn {
   id: string;
   collapsed: boolean;
   agileColumn: AgileColumn;
-};
-export type FieldStyle = {
-  $type?: string;
+}
+
+export interface FieldStyle {
   id: string;
   background?: string;
-};
-export type ProjectColor = {
+}
+
+export interface ProjectColor {
   id: string;
   color: {
     id: string;
@@ -74,18 +81,19 @@ export type ProjectColor = {
   project: {
     id: string;
   };
-};
-type FieldBasedColorCoding = {
-  id: string;
-  prototype: {
-    id: string;
+}
+
+export interface FieldBasedColorCoding extends EntityBase {
+  prototype: EntityBase & {
     name: string;
   };
-};
+}
+
 type ProjectBasedColorCoding = FieldBasedColorCoding & {
   projectColors: ProjectColor[];
 };
-export type Board = {
+
+export interface Board {
   favorite: boolean;
   id: string;
   name: string;
@@ -108,7 +116,7 @@ export type Board = {
     $type: string;
     enabled: boolean;
   };
-};
+}
 
 export interface BoardOnList extends EntityBase {
   name: string;
@@ -148,7 +156,28 @@ export interface Sprint extends SprintBase {
 }
 
 export interface SprintFull extends Sprint {
-  board: Board;
   agile: Agile;
+  board: Board;
   eventSourceTicket: string;
+}
+
+export interface SprintIssue extends EntityBase {
+  resolved: boolean;
+  tags: Tag[];
+  project: {
+    $type: string;
+    id: string;
+    name: string;
+  };
+  fields: Array<{
+    $type: string;
+    id: string;
+    name: string;
+    projectCustomField: {
+      $type: string;
+      id: string;
+      field: Omit<ICustomField, 'localizedName'>;
+    };
+    value: Omit<ListIssueFieldValue, 'localizedName'> | null | [];
+  }>;
 }

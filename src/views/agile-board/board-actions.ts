@@ -339,9 +339,7 @@ export function loadSprintIssues(
       const allIssuesIds: Array<{
         id: string;
       }> = getSprintAllIssues(sprint);
-      const sprintIssues: IssueFull[] = await api.agile.getAgileIssues(
-        allIssuesIds,
-      );
+      const sprintIssues = await api.agile.getAgileIssues(allIssuesIds);
       const updatedSprint: Sprint = updateSprintIssues(sprint, sprintIssues);
       dispatch(receiveSprint(updatedSprint));
       animateLayout();
@@ -864,7 +862,7 @@ export function subscribeServersideUpdates(): ReduxAction {
 export function onCardDrop(data: {
   columnId: string;
   cellId: string;
-  leadingId: string | null | undefined;
+  leadingId?: string | null;
   movedId: string;
 }): ReduxAction {
   return async (
@@ -872,7 +870,7 @@ export function onCardDrop(data: {
     getState: ReduxStateGetter,
     getApi: ReduxAPIGetter,
   ) => {
-    const {sprint} = getState().agile;
+    const sprint = getState().agile.sprint!;
     const api: Api = getApi();
     const issueOnBoard = findIssueOnBoard(
       sprint.board,
@@ -904,8 +902,8 @@ export function onCardDrop(data: {
         sprint.id,
         data.columnId,
         data.cellId,
-        data.leadingId,
         data.movedId,
+        data.leadingId,
       );
       trackEvent('Card drop');
     } catch (err) {
