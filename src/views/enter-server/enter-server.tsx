@@ -30,6 +30,7 @@ import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './enter-server.styles';
 
+import type {AnyError} from 'types/Error.ts';
 import type {AppConfig} from 'types/AppConfig';
 import type {AppState} from 'reducers';
 import type {ReduxThunkDispatch} from 'types/Redux.ts';
@@ -40,9 +41,9 @@ const CLOUD_DOMAINS: string[] = ['myjetbrains.com', 'youtrack.cloud'];
 
 interface Props {
   serverUrl: string;
-  connectToYoutrack: (newServerUrl: string) => Promise<AppConfig>;
-  onShowDebugView: (actionToPerform?: () => void, message?: string, numberOfTaps?: number) => void;
-  onCancel: () => void;
+  connectToYoutrack?: (newServerUrl: string) => Promise<AppConfig>;
+  onShowDebugView?: (actionToPerform?: () => void, message?: string, numberOfTaps?: number) => void;
+  onCancel?: () => void;
   error?: string;
 }
 
@@ -108,29 +109,23 @@ export class EnterServer extends Component<Props, State> {
         ', ',
       )}`,
     );
-    let errorToShow = null;
+    let errorToShow: AnyError | null = null;
 
     for (const url of urlsToTry) {
       log.log(`Trying: "${url}"`);
 
       try {
-        await this.props.connectToYoutrack(url);
+        await this.props?.connectToYoutrack?.(url);
         log.log(`Successfully connected to ${url}`);
         return;
       } catch (error) {
         log.log(`Failed to connect to ${url}`, error);
         log.log(`Connection error for ${url}: ${error && error.toString()}`);
-
-        if (error?.isIncompatibleYouTrackError) {
-          errorToShow = error;
-          break;
-        }
-
-        errorToShow = errorToShow || error;
+        errorToShow = (errorToShow || error) as AnyError;
       }
     }
 
-    const errorMessage = await resolveErrorMessage(errorToShow);
+    const errorMessage = errorToShow ? await resolveErrorMessage(errorToShow) : null;
     this.setState({
       error: errorMessage,
       connecting: false,
@@ -328,19 +323,21 @@ export class EnterServer extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: AppState, ownProps: Props) => {
+const mapStateToProps = (_: AppState, ownProps: Props) => {
   return {...ownProps};
 };
 
-type MappedActions = {
+interface MappedActions {
   onShowDebugView: () => void;
-  connectToYoutrack: (url: string) => void;
-};
+  connectToYoutrack: (url: string) => Promise<AppConfig>;
+}
 
 const mapDispatchToProps = (dispatch: ReduxThunkDispatch): MappedActions => {
   return {
     connectToYoutrack: (url: string) => dispatch(connectToNewYoutrack(url)),
-    onShowDebugView: () => dispatch(openDebugView()),
+    onShowDebugView: () => {
+      dispatch(openDebugView());
+    },
   };
 };
 

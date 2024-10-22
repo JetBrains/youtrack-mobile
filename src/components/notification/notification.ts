@@ -1,10 +1,13 @@
 import log from '../log/log';
+import Toast from 'react-native-easy-toast';
 // @ts-ignore
 import showNotification from './notification_show';
 import {resolveErrorMessage} from '../error/error-resolver';
-import {CustomError} from 'types/Error';
+
+import type {AnyError} from 'types/Error';
+
 const NOTIFY_DURATION: number = 3000;
-let toastComponentRef: any;
+let toastComponentRef: Toast;
 
 const showMessage = function (
   message: string,
@@ -14,7 +17,7 @@ const showMessage = function (
 };
 
 export function notifyError(
-  err: CustomError,
+  err: AnyError,
   duration: number = NOTIFY_DURATION * 2,
 ): void {
   resolveErrorMessage(err, true).then((message: string) => {
@@ -28,6 +31,6 @@ export function notifyError(
 export function notify(message: string, duration?: number): void {
   showMessage(message, duration);
 }
-export function setNotificationComponent(reference: any) {
+export function setNotificationComponent(reference: Toast) {
   toastComponentRef = reference;
 }

@@ -1,16 +1,16 @@
-import log from '../log/log';
-import {getApi} from '../api/api__instance';
+import log from 'components/log/log';
+import {getApi} from 'components/api/api__instance';
 import {i18n} from 'components/i18n/i18n';
-import {notify, notifyError} from '../notification/notification';
-import {resolveError} from '../error/error-resolver';
+import {notify, notifyError} from 'components/notification/notification';
+import {resolveError} from 'components/error/error-resolver';
 import {until} from 'util/util';
-import type API from '../api/api';
-import type {IssueFull, IssueOnList} from 'types/Issue';
-import type {IssueLink, IssueLinkType} from 'types/CustomFields';
 
-const issueCommonLinksActions = (
-  issue: Partial<IssueFull>,
-): {
+import type API from '../api/api';
+import type {AnyError} from 'types/Error.ts';
+import type {IssueLink, IssueLinkType} from 'types/CustomFields';
+import type {IssueOnList} from 'types/Issue';
+
+const issueCommonLinksActions = (issue: IssueLink): {
   getIssueLinksTitle: (links?: IssueLink[]) => Promise<Array<IssueLink>>;
   loadIssueLinksTitle: () => Promise<Array<IssueLink>>;
   loadIssuesXShort: (query: string, page?: number) => Promise<IssueOnList>;
@@ -67,7 +67,7 @@ const issueCommonLinksActions = (
         issueLinks = await api.issue.getIssueLinks(issue.id);
         log.info(`Linked issues loaded`);
       } catch (rawError) {
-        const error = await resolveError(rawError);
+        const error = await resolveError(rawError as AnyError);
         log.warn('Failed to load linked issues', error);
         issueLinks = [];
       }
@@ -98,7 +98,7 @@ const issueCommonLinksActions = (
         log.info(`Linked issues title data loaded`);
       } catch (e) {
         links = [];
-        const error = await resolveError(e);
+        const error = await resolveError(e as AnyError);
         log.warn('Failed to load linked issues', error);
       }
 
@@ -115,7 +115,7 @@ const issueCommonLinksActions = (
       );
 
       if (error) {
-        const err: Error = await resolveError(error);
+        const err = await resolveError(error);
         const errorMsg: string = 'Failed to link issue';
         log.warn(errorMsg, err);
       }

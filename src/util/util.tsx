@@ -4,7 +4,7 @@ import {Platform} from 'react-native';
 import base64 from 'base64-js';
 import {getStorageState} from 'components/storage/storage';
 
-import type {CustomError} from 'types/Error';
+import type {AnyError} from 'types/Error';
 import type {StorageState} from 'components/storage/storage';
 import {CustomField} from 'types/CustomFields';
 
@@ -75,7 +75,7 @@ export const until = <P = any>(
   promises: any,
   isCombined: boolean = false,
   anyPromiseSuccess: boolean = false,
-): Promise<[CustomError | null, P]> => {
+): Promise<[AnyError | null, P]> => {
   if (!promises) {
     return Promise.reject(['No promises are provided']);
   }
@@ -97,7 +97,7 @@ export const until = <P = any>(
           ),
         ];
       })
-      .catch((err: CustomError) => {
+      .catch((err: AnyError) => {
         return [err, undefined];
       });
   }
@@ -106,7 +106,7 @@ export const until = <P = any>(
     .then((data: any) => {
       return [null, data];
     })
-    .catch((err: CustomError) => {
+    .catch((err: AnyError) => {
       return [err];
     });
 };

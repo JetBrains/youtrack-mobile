@@ -1032,15 +1032,14 @@ export async function doConnect(newURL: string): Promise<any> {
   return await loadConfig(newURL);
 }
 
-export function connectToNewYoutrack(newURL: string): ReduxAction {
+export function connectToNewYoutrack(newURL: string): ReduxAction<Promise<AppConfig>> {
   return async (dispatch: ReduxThunkDispatch) => {
     const config = await doConnect(newURL);
     await storeConfig(config);
     const auth: OAuth2 = await initAuthInstance(config);
     dispatch(setAuthInstance(auth));
-    Router.LogIn({
-      config,
-    });
+    Router.LogIn({config});
+    return config;
   };
 }
 
