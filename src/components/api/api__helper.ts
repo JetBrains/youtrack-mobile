@@ -5,7 +5,7 @@ import {getReadableID} from 'components/issue-formatter/issue-formatter';
 import {handleRelativeUrl} from 'components/config/config';
 import {toField} from 'util/to-field';
 
-import type {Attachment, ICustomFieldValue} from 'types/CustomFields';
+import type {ICustomFieldValue} from 'types/CustomFields';
 import type {
   ServersideSuggestion,
   TransformedSuggestion,
@@ -16,6 +16,10 @@ import type {
   IssueOnList,
   IssueFull,
 } from 'types/Issue';
+
+interface Entity {
+  [key: string]: any
+}
 
 const API = {
   makeFieldHash: (issue: ListIssue): Record<string, any> => {
@@ -46,9 +50,7 @@ const API = {
       };
     });
   },
-  convertQueryAssistSuggestionsLegacy: (
-    suggestions: ServersideSuggestionLegacy[],
-  ): TransformedSuggestion[] => {
+  convertQueryAssistSuggestionsLegacy: (suggestions: ServersideSuggestionLegacy[]): TransformedSuggestion[] => {
     return suggestions.map((suggestion: ServersideSuggestionLegacy) => {
       return {
         prefix: suggestion.pre || '',
@@ -64,25 +66,14 @@ const API = {
     });
   },
   convertRelativeUrl: convertRelativeUrl,
-  convertRelativeUrls: (
-    items: Array<Record<string, any>> = [],
-    urlField: string,
-    backendUrl: string,
-  ): Array<Record<string, any>> => {
-    return items.map(item => convertRelativeUrl(item, urlField, backendUrl));
+  convertRelativeUrls: <T extends Entity>(items: Array<T> = [], urlField: string, backendUrl: string): Array<T> => {
+    return items.map(item => convertRelativeUrl<T>(item, urlField, backendUrl));
   },
 
-  convertAttachmentRelativeToAbsURLs(
-    attachments: Attachment[],
-    backendUrl: string,
-  ): Array<Attachment> {
-    let convertedItems = attachments;
+  convertAttachmentRelativeToAbsURLs<T extends Entity>(items: T[], backendUrl: string): Array<T> {
+    let convertedItems = items;
     ['url', 'thumbnailURL', 'avatarUrl'].forEach((fieldName: string) => {
-      convertedItems = this.convertRelativeUrls(
-        convertedItems,
-        fieldName,
-        backendUrl,
-      ) as Attachment[];
+      convertedItems = this.convertRelativeUrls<T>(convertedItems, fieldName, backendUrl);
     });
     return convertedItems;
   },
@@ -95,7 +86,7 @@ const API = {
 
   patchAllRelativeAvatarUrls<T>(data: T, backendUrl: string): T {
     //TODO: potentially slow place
-    objectWalk(data, (value: string | T, propertyName: string, obj: {[key: string]: any}) => {
+    objectWalk(data, (value: string | T, propertyName: string, obj: Entity) => {
       if (typeof value === 'string' && value.indexOf('/hub/api/rest/avatar/') === 0) {
         obj[propertyName] = handleRelativeUrl(obj[propertyName], backendUrl);
       }
@@ -137,8 +128,8 @@ const API = {
 };
 export default API;
 
-function convertRelativeUrl(
-  item: Record<string, any>,
+function convertRelativeUrl<T extends Entity>(
+  item: T,
   urlField: string,
   backendUrl: string,
 ) {
