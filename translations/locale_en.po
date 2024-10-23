@@ -14,7 +14,7 @@ msgstr " ({{amount}} unresolved)"
 msgid " or "
 msgstr " or "
 
-#: src/views/agile-board/board-actions.ts:628
+#: src/views/agile-board/board-actions.ts:626
 msgid "(archived)"
 msgstr "(archived)"
 
@@ -312,7 +312,7 @@ msgstr "Connecting to YouTrack..."
 
 #: src/components/error-boundary/error-boundary.tsx:251
 #: src/components/error-message/error-message-inline.tsx:62
-#: src/views/enter-server/enter-server.tsx:309
+#: src/views/enter-server/enter-server.tsx:304
 msgid "Contact support"
 msgstr "Contact support"
 
@@ -519,7 +519,7 @@ msgstr "Enter command"
 msgid "Enter search request"
 msgstr "Enter search request"
 
-#: src/views/enter-server/enter-server.tsx:207
+#: src/views/enter-server/enter-server.tsx:202
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr "Enter the web address for a YouTrack installation where you have a registered account"
 
@@ -539,7 +539,7 @@ msgstr "Favorites"
 msgid "Feature request"
 msgstr "Feature request"
 
-#: src/views/agile-board/board-actions.ts:655
+#: src/views/agile-board/board-actions.ts:653
 msgid "Filter boards by name"
 msgstr "Filter boards by name"
 
@@ -566,7 +566,7 @@ msgstr "Filter projects, saved searches, and tags"
 msgid "Filter Settings"
 msgstr "Filter Settings"
 
-#: src/views/agile-board/board-actions.ts:621
+#: src/views/agile-board/board-actions.ts:619
 msgid "Filter sprints by name"
 msgstr "Filter sprints by name"
 
@@ -592,7 +592,7 @@ msgstr "Find favorite projects"
 msgid "Find issues that contain key words"
 msgstr "Find issues that contain key words"
 
-#: src/views/enter-server/enter-server.tsx:292
+#: src/views/enter-server/enter-server.tsx:287
 msgid "Get help"
 msgstr "Get help"
 
@@ -780,7 +780,7 @@ msgstr "New Issue"
 msgid "New messages"
 msgstr "New messages"
 
-#: src/views/enter-server/enter-server.tsx:254
+#: src/views/enter-server/enter-server.tsx:249
 msgid "Next"
 msgstr "Next"
 
