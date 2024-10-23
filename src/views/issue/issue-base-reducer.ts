@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {attachmentActionMap} from 'components/attachments-row/attachment-helper';
-import type {CommandSuggestionResponse, IssueFull} from 'types/Issue';
+import type {CommandSuggestionResponse, IssueFull, IssueSprint} from 'types/Issue';
 import type {
   CustomField,
   FieldValue,
@@ -38,6 +38,7 @@ export type IssueState = {
   user: User | null;
   isConnected: boolean;
   usersCC: Array<UserCC> | null;
+  issueSprints: IssueSprint[];
 };
 
 export const initialState: IssueState = {
@@ -66,6 +67,7 @@ export const initialState: IssueState = {
   user: null,
   isConnected: false,
   usersCC: null,
+  issueSprints: [],
 };
 export type IssueBaseActions = {
   SET_ISSUE_ID: (action: {
@@ -142,7 +144,8 @@ export type IssueBaseActions = {
   UNLOAD_ACTIVE_ISSUE_VIEW: () => IssueState;
   OPEN_ISSUE_SELECT: (action: {payload: any}) => IssueState;
   CLOSE_ISSUE_SELECT: (action: {payload: any}) => IssueState;
-  SET_USERS_CC: (action: PayloadAction<Array<UserCC>>) => IssueState;
+  SET_USERS_CC: (action: UserCC[]) => IssueState;
+  SET_ISSUE_SPRINTS: (action: IssueSprint[]) => IssueState;
 };
 
 export const createAttachmentReducer = (types: Record<keyof typeof attachmentActionMap, string>) => ({
@@ -440,8 +443,11 @@ export const createIssueReduxSlice: (
         state.selectProps = action.payload.selectProps;
         state.isTagsSelectVisible = false;
       },
-      SET_USERS_CC: (state: IssueState, action: PayloadAction<Array<User>>) => {
+      SET_USERS_CC: (state: IssueState, action: PayloadAction<UserCC[]>) => {
         state.usersCC = action.payload;
+      },
+      SET_ISSUE_SPRINTS: (state: IssueState, action: PayloadAction<IssueSprint[]>) => {
+        state.issueSprints = action.payload;
       },
     },
   });

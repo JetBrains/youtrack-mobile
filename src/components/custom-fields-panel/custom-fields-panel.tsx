@@ -8,6 +8,7 @@ import {useSelector} from 'react-redux';
 import Api from 'components/api/api';
 import CustomField from 'components/custom-field/custom-field';
 import DateTimePicker from '../date-picker/date-time-picker';
+import IssueSprintsField from 'components/custom-field/Issue-sprints-field';
 import ModalPortal from 'components/modal-view/modal-portal';
 import ModalView from 'components/modal-view/modal-view';
 import SimpleValueEditor from './custom-fields-panel__simple-value';
@@ -413,6 +414,8 @@ export default function CustomFieldsPanel(props: Props) {
                   </React.Fragment>
                 );
               })}
+
+              <IssueSprintsField />
             </ScrollView>
           </PanelWithSeparator>
         )}

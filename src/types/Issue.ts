@@ -38,6 +38,14 @@ export interface BaseIssue extends EntityBase {
   updated: number;
 }
 
+export interface IssueSprint extends EntityBase {
+  name: string;
+  agile: {
+    id: string;
+    name: string;
+  };
+}
+
 interface TimeTrackingSettings {
   $type: string;
   enabled: boolean;

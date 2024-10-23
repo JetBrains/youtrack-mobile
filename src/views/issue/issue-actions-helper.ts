@@ -2,7 +2,7 @@ import {attachmentActionMap} from 'components/attachments-row/attachment-helper'
 import {commandDialogActionMap} from 'components/command-dialog/command-dialog-action-types';
 
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
-import type {CommandSuggestionResponse, IssueFull, IssueOnList} from 'types/Issue';
+import type {CommandSuggestionResponse, IssueFull, IssueOnList, IssueSprint} from 'types/Issue';
 import type {CustomError} from 'types/Error';
 import type {CustomField, FieldValue} from 'types/CustomFields';
 import type {IssueBaseActions} from './issue-base-reducer';
@@ -265,5 +265,8 @@ export const createDispatchActions = (
   },
   setUserCC: (users: UserCC[]) => {
     return actions.SET_USERS_CC(users);
+  },
+  setIssueSprints: (sprints: IssueSprint[]) => {
+    return actions.SET_ISSUE_SPRINTS(sprints);
   },
 });

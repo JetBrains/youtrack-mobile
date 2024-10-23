@@ -21,12 +21,12 @@ import type {
   IssueLinkType,
   Tag,
 } from 'types/CustomFields';
-import type {AnyIssue, IssueCreate, IssueFull} from 'types/Issue';
+import type {AnyIssue, IssueCreate, IssueFull, IssueSprint} from 'types/Issue';
+import type {NormalizedAttachment} from 'types/Attachment';
+import type {Project} from 'types/Project';
+import type {UserCC} from 'types/User';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
 import type {WorkItem} from 'types/Work';
-import {NormalizedAttachment} from 'types/Attachment';
-import {Project} from 'types/Project';
-import {UserCC} from 'types/User';
 
 export default class IssueAPI extends ApiBase {
   draftsURL: string = `${this.youTrackApiUrl}${
@@ -820,6 +820,11 @@ export default class IssueAPI extends ApiBase {
     return ApiHelper.convertAttachmentRelativeToAbsURLs(
       users,
       this.config.backendUrl,
-    ) as UserCC[];
+    );
+  }
+
+  async getIssueSprints(issueId: string): Promise<IssueSprint[]> {
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/issues/${issueId}/sprints?fields=id,name,agile(id,name)`);
   }
 }
+

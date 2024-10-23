@@ -41,7 +41,7 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './issue.styles';
 
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
-import type {IssueFull, TabRoute} from 'types/Issue';
+import type {IssueFull, IssueSprint, TabRoute} from 'types/Issue';
 import type {Attachment, IssueLink, Tag} from 'types/CustomFields';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import type {EventSubscription} from 'react-native';
@@ -68,6 +68,7 @@ type AdditionalProps = {
   commentId?: string;
   user: User;
   userCC: Array<UserCC>;
+  issueSprints: IssueSprint[]
 };
 
 export type IssueProps = IssueState &
@@ -163,10 +164,12 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
   }
 
   async loadIssue(issuePlaceholder?: Partial<IssueFull> | null) {
+    const issueId: string = this.props.issueId || this.props?.issuePlaceholder?.id || this.props.issue?.id;
     await this.props.loadIssue(issuePlaceholder);
     if (isHelpdeskProject(this.props.issue)) {
-      this.props.loadUsersCC(this.props.issueId || this.props?.issuePlaceholder?.id || this.props.issue?.id);
+      this.props.loadUsersCC(issueId);
     }
+    this.props.loadIssueSprints(issueId);
   }
 
   createIssueDetails: (

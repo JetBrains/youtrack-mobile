@@ -26,7 +26,14 @@ import {resolveError} from 'components/error/error-resolver';
 import type Api from 'components/api/api';
 import type {AppState} from 'reducers';
 import type {Attachment, CustomField, CustomFieldText, FieldValue, IssueLink, Tag} from 'types/CustomFields';
-import type {AnyIssue, CommandSuggestionResponse, IssueFull, IssueOnList, OpenNestedViewParams} from 'types/Issue';
+import type {
+  AnyIssue,
+  CommandSuggestionResponse,
+  IssueFull,
+  IssueOnList,
+  IssueSprint,
+  OpenNestedViewParams,
+} from 'types/Issue';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {UserAppearanceProfile, UserCC} from 'types/User';
 import type {Visibility} from 'types/Visibility';
@@ -879,6 +886,17 @@ export const createActions = (
     setUsersCC: function (users: UserCC[]): ReduxAction {
       return async (dispatch: ReduxThunkDispatch) => {
         dispatch(dispatchActions.setUserCC(users));
+      };
+    },
+    loadIssueSprints: function (issueId: string): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter,) => {
+        const [e, sprints] = await until<IssueSprint[]>(getApi().issue.getIssueSprints(issueId));
+        if (e) {
+          log.warn(e);
+        }
+        if (sprints.length) {
+          dispatch(dispatchActions.setIssueSprints(sprints));
+        }
       };
     },
   };

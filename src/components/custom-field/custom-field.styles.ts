@@ -58,6 +58,18 @@ export default EStyleSheet.create({
   valueTextDisabled: {
     color: '$text',
   },
+  valueTag: {
+    marginVertical: -1,
+    paddingVertical: 1,
+    paddingHorizontal: UNIT / 1.5,
+    marginRight: UNIT,
+    backgroundColor: '$iconBackground',
+    borderRadius: UNIT / 1.5,
+  },
+  valueTagText: {
+    ...mainText,
+    fontSize: MAIN_FONT_SIZE - 1,
+  },
   colorMarker: {
     minWidth: COLOR_FIELD_SIZE,
     minHeight: COLOR_FIELD_SIZE - 1,
