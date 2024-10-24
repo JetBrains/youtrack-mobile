@@ -65,6 +65,7 @@ import type {
   BoardColumn,
   BoardOnList,
   Sprint,
+  Board,
 } from 'types/Agile';
 import type {Theme, UITheme} from 'types/Theme';
 import {Entity} from 'types/Entity';
@@ -79,7 +80,7 @@ type Props = AgilePageState & RootState & typeof boardActions & {
   isSprintSelectOpen: boolean;
   selectProps: Record<string, any>;
   issuePermissions: IssuePermissions;
-  onLoadBoard: (query: string, refresh: boolean) => any;
+  onLoadBoard: (query: string, refresh: boolean, agileId?: string, sprintId?: string) => any;
   onLoadMoreSwimlanes: (query?: string) => any;
   onRowCollapseToggle: (row: AgileBoardRow) => any;
   onColumnCollapseToggle: (column: BoardColumn) => any;
@@ -92,9 +93,11 @@ type Props = AgilePageState & RootState & typeof boardActions & {
   suggestAgileQuery: (query: string | null | undefined, caret: number) => any;
   storeLastQuery: (query: string) => any;
   updateIssue: (issueId: string, sprint?: SprintFull) => any;
+  agileId?: string;
+  sprintId?: string
 };
 
-type State = {
+interface State {
   zoomedIn: boolean;
   stickElement: {
     agile: boolean;
@@ -105,7 +108,7 @@ type State = {
   clearQuery: boolean;
   isSplitView: boolean;
   modalChildren: any;
-};
+}
 
 class AgileBoard extends Component<Props, State> {
   boardHeader: BoardHeader | null | undefined;
@@ -139,7 +142,7 @@ class AgileBoard extends Component<Props, State> {
       'change',
       this.onDimensionsChange,
     );
-    this.loadBoard();
+    this.loadBoard(false, this.props.agileId, this.props.sprintId);
     this.unsubscribeOnDispatch = Router.setOnDispatchCallback(
       (
         routeName: string,
@@ -181,8 +184,8 @@ class AgileBoard extends Component<Props, State> {
       zoomedIn: !isLandscape,
     });
   };
-  loadBoard = (refresh: boolean = false) => {
-    this.props.onLoadBoard(this.query, refresh);
+  loadBoard = (refresh: boolean = false, agileId?: string, sprintId?: string) => {
+    this.props.onLoadBoard(this.query, refresh, agileId, sprintId);
   };
   onVerticalScroll = (event: { nativeEvent: NativeScrollEvent }) => {
     const {nativeEvent} = event;
@@ -698,16 +701,24 @@ class AgileBoard extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: AppState) => {
-  return {...state.agile, ...state.app};
+const mapStateToProps = (state: AppState, ownProps: {agileId?: string; sprintId?: string}) => {
+  return {
+    ...state.app,
+    ...state.agile,
+    ...ownProps,
+  };
 };
 
 const mapDispatchToProps = (dispatch: ReduxThunkDispatch) => {
   return {
-    onLoadBoard: (query: string, refresh: boolean) =>
-      dispatch(boardActions.loadDefaultAgileBoard(query, refresh)),
-    onLoadMoreSwimlanes: (query?: string) =>
-      dispatch(boardActions.fetchMoreSwimlanes(query)),
+    onLoadBoard: (query: string, refresh: boolean, agileId?: string, sprintId?: string) => {
+      if (agileId && sprintId) {
+        dispatch(boardActions.loadBoard({id: agileId, currentSprint: {id: sprintId}} as Board, ''));
+      } else {
+        dispatch(boardActions.loadDefaultAgileBoard(query, refresh));
+      }
+    },
+    onLoadMoreSwimlanes: (query?: string) => dispatch(boardActions.fetchMoreSwimlanes(query)),
     onRowCollapseToggle: (row: AgileBoardRow) => dispatch(boardActions.rowCollapseToggle(row)),
     onColumnCollapseToggle: (column: BoardColumn) =>
       dispatch(boardActions.columnCollapseToggle(column)),

@@ -31,7 +31,7 @@ export default function IssueSprintsField() {
               key={text}
               style={styles.valueTag}
               onPress={() => {
-                Router.AgileBoard();
+                Router.AgileBoard({agileId: sprint.agile.id, sprintId: sprint.id});
               }}
             >
               <Text style={styles.valueTagText}>{text}</Text>
