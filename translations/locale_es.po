@@ -209,6 +209,10 @@ msgstr "Nombre del archivo adjunto"
 msgid "Author"
 msgstr "Autor"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "Boards"
+msgstr ""
+
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
 msgstr "Navegador"

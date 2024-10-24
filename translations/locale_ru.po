@@ -225,6 +225,10 @@ msgstr "Имя вложения"
 msgid "Author"
 msgstr "Автор"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "Boards"
+msgstr ""
+
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
 msgstr "Браузер"

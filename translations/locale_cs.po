@@ -225,6 +225,10 @@ msgstr "Název přílohy"
 msgid "Author"
 msgstr "Autor"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "Boards"
+msgstr "Tabule"
+
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
 msgstr "Prohlížeč"

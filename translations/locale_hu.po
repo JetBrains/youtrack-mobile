@@ -209,6 +209,10 @@ msgstr "Csatolmány neve"
 msgid "Author"
 msgstr "Szerző"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "Boards"
+msgstr "Táblák"
+
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
 msgstr "Böngésző"

@@ -209,6 +209,10 @@ msgstr "Nom de la pièce jointe"
 msgid "Author"
 msgstr "Auteur"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "Boards"
+msgstr ""
+
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
 msgstr "Navigateur"

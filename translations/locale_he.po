@@ -225,6 +225,10 @@ msgstr ""
 msgid "Author"
 msgstr "יוצר"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "Boards"
+msgstr ""
+
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
 msgstr ""

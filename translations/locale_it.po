@@ -209,6 +209,10 @@ msgstr "Nome allegato"
 msgid "Author"
 msgstr "Autore"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "Boards"
+msgstr "Bacheche"
+
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
 msgstr "Browser"

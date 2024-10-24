@@ -201,6 +201,10 @@ msgstr "첨부 파일 이름"
 msgid "Author"
 msgstr "작성자"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "Boards"
+msgstr ""
+
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
 msgstr "브라우저"

@@ -225,6 +225,10 @@ msgstr "Nazwa załącznika"
 msgid "Author"
 msgstr "Autor"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "Boards"
+msgstr "Tablice"
+
 #: src/views/attachment-preview/attachment-preview.tsx
 msgid "Browser"
 msgstr "Przeglądarka"
