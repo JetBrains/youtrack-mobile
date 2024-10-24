@@ -261,11 +261,11 @@ msgstr "Close"
 msgid "Collapse all"
 msgstr "Collapse all"
 
-#: src/views/agile-board/agile-board.tsx:366
+#: src/views/agile-board/agile-board.tsx:369
 msgid "Column collapsed"
 msgstr "Column collapsed"
 
-#: src/views/agile-board/agile-board.tsx:366
+#: src/views/agile-board/agile-board.tsx:369
 msgid "Column expanded"
 msgstr "Column expanded"
 
@@ -1157,7 +1157,7 @@ msgstr "The application failed to restart automatically. Please try to restart i
 msgid "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
 msgstr "The author of this commit has not been identified because they haven't specified their email address in their YouTrack profile."
 
-#: src/views/agile-board/agile-board.tsx:435
+#: src/views/agile-board/agile-board.tsx:438
 msgid "The board {{boardName}} has configuration errors"
 msgstr "The board {{boardName}} has configuration errors"
 
