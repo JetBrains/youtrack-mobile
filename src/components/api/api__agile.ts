@@ -134,12 +134,25 @@ export default class AgileAPI extends ApiBase {
     return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${boardId}/sprints?${queryString}`);
   }
 
-  async getAgileBoardsList(): Promise<Array<BoardOnList>> {
+  async getAgileBoardsList(id: string | null = '', fields?: string): Promise<Array<BoardOnList>> {
     const queryString = qs.stringify({
-      fields: agileFields.boardOnList.toString(),
+      fields: fields || agileFields.boardOnList.toString(),
       templates: false,
     });
-    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles?${queryString}`);
+
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${id}?${queryString}`);
+  }
+
+  async getIssueAgileBoards(id: string | null = ''): Promise<Array<BoardOnList>> {
+    const queryString = qs.stringify({
+      templates: false,
+      fields: 'id,name,projects(id),sprintsSettings(disableSprints)',
+    });
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${id}?${queryString}`);
+  }
+
+  async getIssueBoardSprints(id: string): Promise<Array<BoardOnList>> {
+    return await this.makeAuthorizedRequest(`${this.youTrackUrl}/api/agiles/${id}/sprints?fields=id,name,agile(id)`);
   }
 
   async getAgileUserProfile(): Promise<AgileUserProfile> {

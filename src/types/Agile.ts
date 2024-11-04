@@ -131,6 +131,23 @@ export interface BoardOnList extends EntityBase {
   };
 }
 
+export interface BoardOnIssue extends EntityBase {
+  name: string;
+  projects: Array<{
+    id: string
+  }>,
+  sprintsSettings: {
+    disableSprints: boolean;
+  };
+}
+
+export interface SprintOnIssue extends EntityBase {
+  name: string;
+  agile: {
+    id: string;
+  }
+}
+
 export interface Agile extends EntityBase {
   name: string;
   hideOrphansSwimlane: boolean;

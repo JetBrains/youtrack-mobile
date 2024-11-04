@@ -24,6 +24,7 @@ import {receiveUserAppearanceProfile} from 'actions/app-actions';
 import {resolveError} from 'components/error/error-resolver';
 
 import type Api from 'components/api/api';
+import type {AnyError} from 'types/Error';
 import type {AppState} from 'reducers';
 import type {Attachment, CustomField, CustomFieldText, FieldValue, IssueLink, Tag} from 'types/CustomFields';
 import type {
@@ -34,10 +35,10 @@ import type {
   IssueSprint,
   OpenNestedViewParams,
 } from 'types/Issue';
+import type {BoardOnIssue, SprintOnIssue} from 'types/Agile';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {UserAppearanceProfile, UserCC} from 'types/User';
 import type {Visibility} from 'types/Visibility';
-import type {CustomError} from 'types/Error';
 import type {Project} from 'types/Project';
 import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 
@@ -138,7 +139,7 @@ export const createActions = (
             }
           } else {
             log.warn('Failed to load issue', err);
-            const error = await resolveError(err as CustomError);
+            const error = await resolveError(err as AnyError);
             dispatch(dispatchActions.setError(error));
           }
         }
@@ -220,7 +221,7 @@ export const createActions = (
           await dispatch(actions.loadIssue());
           notify(successMessage);
         } catch (error) {
-          notifyError(error as CustomError);
+          notifyError(error as AnyError);
         } finally {
           dispatch(dispatchActions.stopIssueRefreshing());
         }
@@ -262,7 +263,7 @@ export const createActions = (
             dispatchActions.issueUpdated((issueState as IssueState).issue),
           );
         } catch (err) {
-          notifyError(err as CustomError);
+          notifyError(err as AnyError);
         } finally {
           dispatch(dispatchActions.stopSavingEditedIssue());
         }
@@ -351,7 +352,7 @@ export const createActions = (
             dispatchActions.issueUpdated((getState()[stateFieldName] as IssueState).issue),
           );
         } catch (err) {
-          const error = await resolveError(err as CustomError);
+          const error = await resolveError(err as AnyError);
 
           if (
             error.error_type === 'workflow' &&
@@ -389,7 +390,7 @@ export const createActions = (
             dispatchActions.issueUpdated((getState()[stateFieldName] as IssueState).issue),
           );
         } catch (err) {
-          notifyError(err as CustomError);
+          notifyError(err as AnyError);
           dispatch(actions.loadIssue());
         }
       };
@@ -413,7 +414,7 @@ export const createActions = (
         try {
           await api.issue.updateIssueVoted(issue.id, voted);
         } catch (err) {
-          notifyError(err as CustomError);
+          notifyError(err as AnyError);
           dispatch(dispatchActions.setVoted(!voted));
         }
       };
@@ -433,7 +434,7 @@ export const createActions = (
         try {
           await api.issue.updateIssueStarred(issue.id, starred);
         } catch (err) {
-          notifyError(err as CustomError);
+          notifyError(err as AnyError);
           dispatch(dispatchActions.setStarred(!starred));
         }
       };
@@ -720,7 +721,7 @@ export const createActions = (
           };
           dispatch(dispatchActions.receiveIssue(updatedIssue));
         } catch (err) {
-          notifyError(err as CustomError);
+          notifyError(err as AnyError);
         }
       };
     },
@@ -853,7 +854,7 @@ export const createActions = (
               ),
             ),
           );
-          notifyError(err as CustomError);
+          notifyError(err as AnyError);
         }
       };
     },
@@ -897,6 +898,36 @@ export const createActions = (
         if (sprints.length) {
           dispatch(dispatchActions.setIssueSprints(sprints));
         }
+      };
+    },
+    getIssueBoards: function (): ReduxAction<Promise<BoardOnIssue[]>> {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter,) => {
+        const [e, boards] = await until<BoardOnIssue[]>(getApi().agile.getIssueAgileBoards());
+        if (e) {
+          notifyError(e);
+        }
+        return e ? [] : boards;
+      };
+    },
+    getIssueSprints: function (boardId: string): ReduxAction<Promise<SprintOnIssue[]>> {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter,) => {
+        const [e, sprints] = await until<SprintOnIssue[]>(getApi().agile.getIssueBoardSprints(boardId));
+        if (e) {
+          notifyError(e);
+        }
+        return e ? [] : sprints;
+      };
+    },
+    addIssueToSprint: function (issueId: string, boardName: string, sprintName: string | null): ReduxAction<Promise<SprintOnIssue[]>> {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter,) => {
+        const [e, sprints] = await until<SprintOnIssue[]>(getApi().applyCommand({
+          issueIds: [issueId],
+          command: `add board ${boardName} ${sprintName !== null ? sprintName : ''}`.trim(),
+        }));
+        if (e) {
+          notifyError(e);
+        }
+        return e ? [] : sprints;
       };
     },
   };

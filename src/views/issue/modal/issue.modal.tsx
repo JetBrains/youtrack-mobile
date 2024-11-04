@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import issueModalActions, {
+import issueModalActionsCreator, {
   dispatchActions,
   ISSUE_MODAL_STATE_FIELD_NAME,
 } from './issue.modal-actions';
@@ -183,9 +183,11 @@ const mapStateToProps = (
   } as Partial<IssueState & OwnProps>;
 };
 
+export const issueModalActions = issueModalActionsCreator();
+
 const mapDispatchToProps = dispatch => {
   return {
-    ...bindActionCreatorsExt(issueModalActions(), dispatch),
+    ...bindActionCreatorsExt(issueModalActions, dispatch),
     createAttachActions: () => attachmentActions.createAttachActions(dispatch),
     dispatcher: dispatch,
     setIssueId: issueId => dispatch(dispatchActions.setIssueId(issueId)),

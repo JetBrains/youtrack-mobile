@@ -5,12 +5,13 @@ import {notify, notifyError} from 'components/notification/notification';
 import {resolveError} from 'components/error/error-resolver';
 import {until} from 'util/util';
 
-import type API from '../api/api';
+import type API from 'components/api/api';
 import type {AnyError} from 'types/Error.ts';
+import type {EntityBase} from 'types/Entity';
 import type {IssueLink, IssueLinkType} from 'types/CustomFields';
 import type {IssueOnList} from 'types/Issue';
 
-const issueCommonLinksActions = (issue: IssueLink): {
+const issueCommonLinksActions = (issue: EntityBase): {
   getIssueLinksTitle: (links?: IssueLink[]) => Promise<Array<IssueLink>>;
   loadIssueLinksTitle: () => Promise<Array<IssueLink>>;
   loadIssuesXShort: (query: string, page?: number) => Promise<IssueOnList>;

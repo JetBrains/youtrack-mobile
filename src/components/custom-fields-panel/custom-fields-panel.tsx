@@ -50,6 +50,7 @@ interface Props {
   };
   onUpdate: (field: IssueCustomField, value: CustomFieldValue | null) => Promise<unknown>;
   onUpdateProject: (project: Project) => Promise<unknown>;
+  onUpdateSprints: () => void;
   uiTheme: UITheme;
   analyticsId?: string;
   testID?: string;
@@ -365,7 +366,7 @@ export default function CustomFieldsPanel(props: Props) {
   const isFieldDisabled = () => isConnected === false || isReporter;
 
   const renderFields = () => {
-    const {issueProject = {name: ''}} = props;
+    const {issueProject, onUpdateSprints} = props;
     return (
       <>
         {!props.fields && <SkeletonIssueCustomFields />}
@@ -415,7 +416,7 @@ export default function CustomFieldsPanel(props: Props) {
                 );
               })}
 
-              <IssueSprintsField />
+              <IssueSprintsField projectId={issueProject?.id} onUpdate={onUpdateSprints} />
             </ScrollView>
           </PanelWithSeparator>
         )}

@@ -163,13 +163,17 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return this.props.issuePermissions.helpdesk.isAgent(this.props.issue);
   }
 
+  loadIssueSprints() {
+    this.props.loadIssueSprints(this.props.issueId);
+  }
+
   async loadIssue(issuePlaceholder?: Partial<IssueFull> | null) {
     const issueId: string = this.props.issueId || this.props?.issuePlaceholder?.id || this.props.issue?.id;
     await this.props.loadIssue(issuePlaceholder);
     if (isHelpdeskProject(this.props.issue)) {
       this.props.loadUsersCC(issueId);
     }
-    this.props.loadIssueSprints(issueId);
+    this.loadIssueSprints();
   }
 
   createIssueDetails: (
@@ -222,6 +226,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         issuePermissions={issuePermissions}
         updateIssueFieldValue={updateIssueFieldValue}
         updateProject={updateProject}
+        onUpdateSprints={() => this.loadIssueSprints()}
         issue={issue}
         issuePlaceholder={issuePlaceholder}
         issueLoaded={issueLoaded}

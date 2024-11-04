@@ -69,6 +69,7 @@ export interface IssueDetailsProps {
     value: FieldValue,
   ) => void;
   updateProject: (project: Project) => void;
+  onUpdateSprints: () => void;
   issue: IssueFull;
   issuePlaceholder: IssueOnList;
   issueLoaded: boolean;
@@ -446,6 +447,8 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
 
   onUpdateProject = async (project: Project) => await this.props.updateProject(project);
 
+  onUpdateSprints = async () => await this.props.onUpdateSprints();
+
   renderCustomFieldPanel = () => {
     const i = this.getIssue();
 
@@ -463,6 +466,7 @@ export default class IssueDetails extends Component<IssueDetailsProps, void> {
         }}
         onUpdate={this.onFieldUpdate}
         onUpdateProject={this.onUpdateProject}
+        onUpdateSprints={this.onUpdateSprints}
         uiTheme={this.uiTheme!}
         modal={this.props.modal}
         helpDeskProjectsOnly={!!i?.project?.plugins?.helpDeskSettings?.enabled}

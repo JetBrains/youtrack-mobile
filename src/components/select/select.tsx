@@ -42,6 +42,7 @@ export interface ISelectProps {
   getWrapperProps?: () => any;
   isSelectionDisabled?: (selected: any[], current: any) => boolean;
   filterItems?: (items: IItem[]) => IItem[];
+  closeIcon?: React.JSXElementConstructor<any>;
 }
 
 export interface ISelectState {
@@ -349,6 +350,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
       visible: true,
       animationType: 'slide',
     });
+    const Icon = this.props.closeIcon || IconClose;
     return (
       <WrapperComponent
         testID="test:id/select"
@@ -364,7 +366,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
               accessible={true}
               onPress={this.onCancel}
             >
-              <IconClose
+              <Icon
                 size={23}
                 style={styles.cancelButton}
                 color={styles.cancelButton.color}

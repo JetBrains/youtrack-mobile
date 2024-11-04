@@ -70,6 +70,10 @@ export default EStyleSheet.create({
     ...mainText,
     fontSize: MAIN_FONT_SIZE - 1,
   },
+  valueAddIcon: {
+    color: '$link',
+    marginLeft: UNIT,
+  },
   colorMarker: {
     minWidth: COLOR_FIELD_SIZE,
     minHeight: COLOR_FIELD_SIZE - 1,
@@ -98,5 +102,23 @@ export default EStyleSheet.create({
   },
   error: {
     color: '$error',
+  },
+  selectItem: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    ...mainText,
+  },
+  selectItemSecondary: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  selectItemSecondaryText: {
+    paddingRight: UNIT,
+    lineHeight: 55,
+    ...secondaryText,
+    color: '$icon',
   },
 });
