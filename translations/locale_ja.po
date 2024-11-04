@@ -223,6 +223,7 @@ msgstr "カメラ"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
+#: src/components/custom-field/Issue-sprints-field.tsx
 #: src/components/tags/tags.tsx
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
@@ -902,6 +903,7 @@ msgstr "最近の検索条件"
 msgid "Recommended groups and teams"
 msgstr "推奨するグループとチーム"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
 msgstr "削除"
@@ -985,6 +987,10 @@ msgstr "リストから記事を選択"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "リストから課題を選択"
+
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "select sprint"
+msgstr ""
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"

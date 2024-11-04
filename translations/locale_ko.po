@@ -223,6 +223,7 @@ msgstr "카메라"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
+#: src/components/custom-field/Issue-sprints-field.tsx
 #: src/components/tags/tags.tsx
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
@@ -902,6 +903,7 @@ msgstr "최근 검색"
 msgid "Recommended groups and teams"
 msgstr "권장 그룹 및 팀"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
 msgstr "제거"
@@ -985,6 +987,10 @@ msgstr "목록에서 기사 선택"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "목록에서 이슈 선택"
+
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "select sprint"
+msgstr ""
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"

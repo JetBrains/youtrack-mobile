@@ -231,6 +231,7 @@ msgstr ""
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
+#: src/components/custom-field/Issue-sprints-field.tsx
 #: src/components/tags/tags.tsx
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
@@ -912,6 +913,7 @@ msgstr ""
 msgid "Recommended groups and teams"
 msgstr "Ajánlott csoportok és csapatok"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
 msgstr "Eltávolít"
@@ -995,6 +997,10 @@ msgstr "Válasszon ki egy cikket a listából"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr ""
+
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "select sprint"
+msgstr "sprint kiválasztása"
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"

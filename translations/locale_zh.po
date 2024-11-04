@@ -223,6 +223,7 @@ msgstr "相机"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
+#: src/components/custom-field/Issue-sprints-field.tsx
 #: src/components/tags/tags.tsx
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
@@ -902,6 +903,7 @@ msgstr "最近的搜索"
 msgid "Recommended groups and teams"
 msgstr "推荐的群组和团队"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
 msgstr "移除"
@@ -985,6 +987,10 @@ msgstr "从列表中选择文章"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "从列表中选择问题"
+
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "select sprint"
+msgstr ""
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"

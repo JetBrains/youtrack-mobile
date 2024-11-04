@@ -231,6 +231,7 @@ msgstr "Appareil photo"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
+#: src/components/custom-field/Issue-sprints-field.tsx
 #: src/components/tags/tags.tsx
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
@@ -912,6 +913,7 @@ msgstr "Recherches récentes"
 msgid "Recommended groups and teams"
 msgstr "Groupes et équipes recommandés"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
 msgstr "Supprimer"
@@ -995,6 +997,10 @@ msgstr "Sélectionnez un article dans la liste"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "Sélectionnez un ticket dans la liste"
+
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "select sprint"
+msgstr ""
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"

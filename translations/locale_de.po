@@ -231,6 +231,7 @@ msgstr "Kamera"
 
 #: src/components/account/accounts.tsx
 #: src/components/confirmation/confirmation.ts
+#: src/components/custom-field/Issue-sprints-field.tsx
 #: src/components/tags/tags.tsx
 #: src/views/article/arcticle-actions.ts
 #: src/views/article/arcticle-actions.ts
@@ -912,6 +913,7 @@ msgstr "Letzte Suchanfragen"
 msgid "Recommended groups and teams"
 msgstr "Empfohlene Gruppen und Teams"
 
+#: src/components/custom-field/Issue-sprints-field.tsx
 #: src/views/knowledge-base/knowledge-base-actions.ts
 msgid "Remove"
 msgstr "Entfernen"
@@ -995,6 +997,10 @@ msgstr "Wählen Sie einen Artikel aus der Liste aus"
 #: src/views/issues/issues.tsx
 msgid "Select an issue from the list"
 msgstr "Wählen Sie ein Ticket von der Liste aus"
+
+#: src/components/custom-field/Issue-sprints-field.tsx
+msgid "select sprint"
+msgstr ""
 
 #: src/components/visibility/comment-visibility-control.tsx
 msgid "Select users, groups, and teams"
