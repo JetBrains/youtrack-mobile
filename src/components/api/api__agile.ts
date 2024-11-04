@@ -221,4 +221,14 @@ export default class AgileAPI extends ApiBase {
       },
     });
   }
+
+  async removeIssueFromSprint(boardId: string, sprintId: string, issueId: string) {
+    return await this.makeAuthorizedRequest(
+      `${this.youTrackUrl}/api/agiles/${boardId}/sprints/${sprintId}/issues/${issueId}`,
+      'DELETE',
+      null,
+      {parseJson: false}
+    );
+  }
+
 }

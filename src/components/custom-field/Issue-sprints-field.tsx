@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
+import {useActionSheet} from '@expo/react-native-action-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 
 import Router from 'components/router/router';
@@ -13,18 +14,14 @@ import {IconAdd, IconAngleRight, IconBack} from 'components/icon/icon';
 
 import styles from './custom-field.styles';
 
+import type {ActionSheetAction} from 'types/Action';
 import type {AppState} from 'reducers';
 import type {IssueSprint} from 'types/Issue';
 import type {ReduxThunkDispatch} from 'types/Redux';
 
-export default function IssueSprintsField({
-  projectId,
-  onUpdate,
-}: {
-  projectId: string;
-  onUpdate: () => void;
-}) {
+export default function IssueSprintsField({projectId, onUpdate}: {projectId: string; onUpdate: () => void}) {
   const dispatch: ReduxThunkDispatch = useDispatch();
+  const {showActionSheetWithOptions} = useActionSheet();
 
   const issueSprints = useSelector((state: AppState) => getIssueState(state).issueSprints);
   const issueId = useSelector((state: AppState) => getIssueState(state).issueId);
@@ -37,6 +34,16 @@ export default function IssueSprintsField({
   const loadSprints = React.useCallback(
     async (boardId: string): Promise<SprintOnIssue[]> => await dispatch(getIssueActions().getIssueSprints(boardId)),
     [dispatch]
+  );
+
+  const removeFromSprint = React.useCallback(
+    async (boardId: string, sprintId: string) => {
+      try {
+        await dispatch(getIssueActions().removeIssueFromSprint(boardId, sprintId, issueId));
+        onUpdate();
+      } catch (e) {}
+    },
+    [dispatch, issueId, onUpdate]
   );
 
   const addToBoard = React.useCallback(
@@ -125,6 +132,22 @@ export default function IssueSprintsField({
               style={styles.valueTag}
               onPress={() => {
                 Router.AgileBoard({agileId: sprint.agile.id, sprintId: sprint.id});
+              }}
+              onLongPress={() => {
+                const options: ActionSheetAction[] = [
+                  {
+                    title: i18n('Remove'),
+                    execute: () => removeFromSprint(sprint.agile.id, sprint.id),
+                  },
+                  {title: i18n('Cancel')},
+                ];
+                showActionSheetWithOptions(
+                  {
+                    options: options.map(it => it.title),
+                    cancelButtonIndex: 1,
+                  },
+                  index => options[index as number]?.execute?.()
+                );
               }}
             >
               <Text style={styles.valueTagText}>{text}</Text>

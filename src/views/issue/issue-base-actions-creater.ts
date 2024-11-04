@@ -930,6 +930,14 @@ export const createActions = (
         return e ? [] : sprints;
       };
     },
+    removeIssueFromSprint: function (boardId: string, sprintId: string, issueId: string): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter,) => {
+        const [e] = await until(getApi().agile.removeIssueFromSprint(boardId, sprintId, issueId));
+        if (e) {
+          notifyError(e, 8000);
+        }
+      };
+    },
   };
   return actions;
 };
