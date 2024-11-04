@@ -8,21 +8,20 @@ import {
 } from './issue-base-reducer';
 import {createCommandDialogReducers} from 'components/command-dialog/command-dialog-reducer';
 import {ON_NAVIGATE_BACK} from 'actions/action-types';
-import {routeMap} from '../../app-routes';
+import {routeMap} from 'app-routes';
+
 import * as types from './issue-action-types';
 import type {Activity} from 'types/Activity';
 import type {IssueState} from './issue-base-reducer';
-import type {Slice} from '@reduxjs/toolkit';
-export type {IssueState as State}; //TODO
 
 export {initialState}; //TODO
 
 export const singleIssueNamespace = 'single';
-const {actions, reducer}: Slice = createIssueReduxSlice(singleIssueNamespace, {
+const {actions, reducer} = createIssueReduxSlice(singleIssueNamespace, {
   ...createAttachmentReducer(attachmentTypes),
   ...createCommandDialogReducers(commandDialogNamespace),
   [ON_NAVIGATE_BACK]: (
-    state: State,
+    state: IssueState,
     action: {
       closingView: {
         routeName: string;
@@ -40,11 +39,11 @@ const {actions, reducer}: Slice = createIssueReduxSlice(singleIssueNamespace, {
   },
   //Tab comment counter
   [types.RECEIVE_ACTIVITY_PAGE]: (
-    state: State,
+    state: IssueState,
     action: {
       activityPage: Activity[];
     },
-  ): State => {
+  ): IssueState => {
     const {activityPage} = action;
 
     if (!activityPage) {
