@@ -66,9 +66,9 @@ function getStoredDeviceToken(): Token {
   return getStorageState().deviceToken;
 }
 
-function isDeviceTokenChanged(deviceToken: Token): any {
+function isDeviceTokenChanged(deviceToken: Token): boolean {
   const storedDeviceToken: Token = getStoredDeviceToken();
-  return storedDeviceToken && deviceToken && storedDeviceToken !== deviceToken;
+  return !!storedDeviceToken && !!deviceToken && storedDeviceToken !== deviceToken;
 }
 
 function showInfoMessage(

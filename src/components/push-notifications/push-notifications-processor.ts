@@ -5,12 +5,12 @@ import {
 } from 'react-native-notifications';
 import helper, {PushNotifications} from './push-notifications-helper';
 import log from 'components/log/log';
+import {getStorageState, StorageState} from 'components/storage/storage';
 import {navigateToRouteById} from 'components/router/router-helper';
 import {targetAccountToSwitchTo} from 'actions/app-actions-helper';
 
 import type {NotificationCompletion, TokenHandler} from 'types/Notification';
-import type {StorageState} from 'components/storage/storage';
-import {EmitterSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
+import type {EmitterSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 
 
 export default class PushNotificationsProcessor extends PushNotifications {
@@ -51,7 +51,9 @@ export default class PushNotificationsProcessor extends PushNotifications {
             `On notification open:: another account URL is detected`,
           );
         }
-        const targetAccount = await targetAccountToSwitchTo(targetBackendUrl);
+        const backendUrl = getStorageState().config!.backendUrl;
+        log.info(`On notification open:: current account URL is ${backendUrl}`);
+        const targetAccount = await targetAccountToSwitchTo(targetBackendUrl, backendUrl);
         if (targetAccount) {
           await onSwitchAccount(targetAccount, issueId, articleId);
           log.info(`On notification open:: switched to target account`);

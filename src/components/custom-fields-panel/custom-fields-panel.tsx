@@ -366,7 +366,7 @@ export default function CustomFieldsPanel(props: Props) {
   const isFieldDisabled = () => isConnected === false || isReporter;
 
   const renderFields = () => {
-    const {issueProject, onUpdateSprints} = props;
+    const {issueProject = {name: ''}, onUpdateSprints} = props;
     return (
       <>
         {!props.fields && <SkeletonIssueCustomFields />}

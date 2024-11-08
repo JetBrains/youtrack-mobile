@@ -12,6 +12,7 @@ import OAuth2 from 'components/auth/oauth2';
 import packageJson from '../../package.json';
 import PermissionsStore from 'components/permissions-store/permissions-store';
 import PushNotifications from 'components/push-notifications/push-notifications';
+import pushNotificationsHelper from 'components/push-notifications/push-notifications-helper';
 import PushNotificationsProcessor from 'components/push-notifications/push-notifications-processor';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
@@ -29,6 +30,7 @@ import {
 import {getCachedPermissions, storeYTCurrentUser, targetAccountToSwitchTo} from './app-actions-helper';
 import {getErrorMessage} from 'components/error/error-resolver';
 import {getStoredSecurelyAuthParams} from 'components/storage/storage__oauth';
+import {getStorageState} from 'components/storage/storage';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {isAndroidPlatform, isIOSPlatform, until} from 'util/util';
@@ -61,7 +63,7 @@ import type {NetInfoState} from '@react-native-community/netinfo';
 import type {NotificationRouteData} from 'types/Notification';
 import type {PermissionCacheItem} from 'types/Permission';
 import type {ReduxAction, ReduxStateGetter, ReduxAPIGetter, ReduxThunkDispatch} from 'types/Redux';
-import {StorageState} from 'components/storage/storage';
+import type {StorageState} from 'components/storage/storage';
 import type {UserGeneralProfileLocale} from 'types/User';
 import type {UserProject} from 'types/Project';
 import type {WorkTimeSettings} from 'types/Work';
@@ -964,12 +966,15 @@ export function initializeApp(
 
     let configCurrent = config;
     const currentAppVersion: string | null = storage.getStorageState().currentAppVersion;
-    const versionHasChanged: boolean = currentAppVersion != null && packageJson.version !== currentAppVersion;
-    storage.flushStoragePart({currentAppVersion: packageJson.version});
+    const newVersion = packageJson.version;
+    const versionHasChanged: boolean = currentAppVersion != null && newVersion !== currentAppVersion;
+    storage.flushStoragePart({currentAppVersion: newVersion});
 
     try {
       if (versionHasChanged) {
-        log.info(`App Actions: App upgraded to "${packageJson.version}"; reloading config`);
+        await _refactoringAndroidResubscribeToPN(); //should be first in a row
+
+        log.info(`App Actions: App upgraded to "${newVersion}"; reloading config`);
         configCurrent = await refreshConfig(config.backendUrl);
       }
 
@@ -1024,6 +1029,19 @@ export function initializeApp(
         }
       }
     }
+
+    async function _refactoringAndroidResubscribeToPN() {
+      if (
+        isAndroidPlatform() &&
+        !!getStorageState().deviceToken &&
+        (currentAppVersion || '').startsWith('2024.2.1') &&
+        newVersion.startsWith('2024.3.1')
+      ) {
+        log.info('REFACTORING:ANDROID:(YTM-21855): re-subscribe to push notifications');
+        await pushNotificationsHelper.storeDeviceToken('_');
+      }
+
+    }
   };
 }
 
@@ -1043,7 +1061,7 @@ export function connectToNewYoutrack(newURL: string): ReduxAction<Promise<AppCon
 }
 
 export function setAccount(notificationRouteData: NotificationRouteData | null): ReduxAction {
-  return async (dispatch: ReduxThunkDispatch) => {
+  return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     const state: StorageState = await storage.populateStorage();
     await dispatch(populateAccounts());
     const backendUrl: string | undefined = notificationRouteData?.backendUrl;
@@ -1053,7 +1071,10 @@ export function setAccount(notificationRouteData: NotificationRouteData | null):
       state?.config &&
       backendUrl !== state.config?.backendUrl
     ) {
-      const notificationIssueAccount = await appActionsHelper.targetAccountToSwitchTo(backendUrl);
+      const notificationIssueAccount = await appActionsHelper.targetAccountToSwitchTo(
+        backendUrl,
+        state.config?.backendUrl,
+      );
 
       if (notificationIssueAccount) {
         await dispatch(updateOtherAccounts(notificationIssueAccount));
@@ -1157,11 +1178,10 @@ async function doSubscribe(
 }
 
 function isRegisteredForPush(): boolean {
-  //TODO: YTM-1267
   const storageState: StorageState = storage.getStorageState();
   return isIOSPlatform()
     ? storageState.isRegisteredForPush
-    : Boolean(storageState.deviceToken);
+    : !!storageState.deviceToken;
 }
 
 function setRegisteredForPush(isRegistered: boolean | null) {
