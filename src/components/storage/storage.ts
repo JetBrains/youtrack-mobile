@@ -377,7 +377,7 @@ const clearStorage = async () => {
     EncryptedStorage.setItem(STORAGE_AUTH_PARAMS_KEY, '');
   });
   await flushStorage(initialState);
-  await AsyncStorage.multiRemove(Object.keys(initialState));
+  await AsyncStorage.multiRemove(Object.keys(storageKeys));
 };
 
 

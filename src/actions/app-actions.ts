@@ -47,7 +47,7 @@ import type {AppConfig, EndUserAgreement} from 'types/AppConfig';
 import type {AppState} from 'reducers';
 import type {Article} from 'types/Article';
 import type {AuthParams} from 'types/Auth';
-import type {CustomError} from 'types/Error';
+import type {AnyError} from 'types/Error';
 import type {
   User,
   UserAppearanceProfile,
@@ -61,7 +61,7 @@ import type {NetInfoState} from '@react-native-community/netinfo';
 import type {NotificationRouteData} from 'types/Notification';
 import type {PermissionCacheItem} from 'types/Permission';
 import type {ReduxAction, ReduxStateGetter, ReduxAPIGetter, ReduxThunkDispatch} from 'types/Redux';
-import type {StorageState} from 'components/storage/storage';
+import {StorageState} from 'components/storage/storage';
 import type {UserGeneralProfileLocale} from 'types/User';
 import type {UserProject} from 'types/Project';
 import type {WorkTimeSettings} from 'types/Work';
@@ -82,7 +82,7 @@ export function logOut(): ReduxAction {
     if (auth) {
       auth.logOut();
     }
-    storage.clearStorage();
+    await storage.clearStorage();
 
     setApi(null);
     dispatch({
@@ -388,7 +388,7 @@ export function addAccount(serverUrl: string = ''): ReduxAction {
       );
       log.info(`App Actions: Successfully added account`);
     } catch (err) {
-      notifyError(err as CustomError);
+      notifyError(err as AnyError);
       const {otherAccounts} = getState().app;
 
       if (!storage.getStorageState().config && otherAccounts?.length) {
@@ -493,7 +493,7 @@ export function changeAccount(
 
       log.info('App Actions: Account changed');
     } catch (err) {
-      notifyError(err as CustomError);
+      notifyError(err as AnyError);
       throw err;
     }
 
@@ -516,7 +516,6 @@ export function signOutFromAccount(): ReduxAction {
     }
     await getApi().user.logout();
     dispatch(logOut());
-    await storage.clearStorage();
 
     log.info('App Actions: Logging out from the curren account');
     if (otherAccounts.length > 0) {
@@ -658,7 +657,7 @@ function loadWorkTimeSettings(): ReduxAction {
         workTimeSettings,
       });
     } catch (error) {
-      notifyError(error as CustomError);
+      notifyError(error as AnyError);
     }
   };
 }
@@ -989,7 +988,7 @@ export function initializeApp(
         await dispatch(initializeAuth(configCurrent));
         await dispatch(loadCurrentUserAndSetAPI());
       } catch (e) {
-        return Router.LogIn({config, errorMessage: getErrorMessage(e as CustomError)});
+        return Router.LogIn({config, errorMessage: getErrorMessage(e as AnyError)});
       }
     }
 
@@ -1153,7 +1152,7 @@ async function doSubscribe(
     setRegisteredForPush(true);
   } catch (err) {
     setRegisteredForPush(null);
-    notifyError(err as CustomError);
+    notifyError(err as AnyError);
   }
 }
 
@@ -1202,13 +1201,13 @@ const inboxCheckUpdateStatus = (): ReduxAction => {
         | InboxThread
         | null
         | undefined = getFirstCachedThread();
-      const [error, folders]: [CustomError | null, InboxFolder[]] = await until(
+      const [error, folders] = await until<InboxFolder[]>(
         getApi().inbox.getFolders(
           typeof firstCachedThread?.notified === 'number'
             ? firstCachedThread?.notified + 1
             : undefined,
         ),
-      ) as [CustomError | null, InboxFolder[]];
+      );
 
       if (!error && Array.isArray(folders)) {
         const sorted: InboxFolder[] = folders.reduce(
