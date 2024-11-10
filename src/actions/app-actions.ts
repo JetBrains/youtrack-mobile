@@ -1034,7 +1034,7 @@ export function initializeApp(
       if (
         isAndroidPlatform() &&
         !!getStorageState().deviceToken &&
-        (currentAppVersion || '').startsWith('2024.2.1') &&
+        currentAppVersion &&
         newVersion.startsWith('2024.3.1')
       ) {
         log.info('REFACTORING:ANDROID:(YTM-21855): re-subscribe to push notifications');
