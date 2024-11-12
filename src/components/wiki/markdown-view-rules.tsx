@@ -2,6 +2,8 @@ import React from 'react';
 import {
   Text,
   View,
+  TouchableWithoutFeedback,
+  ScrollView,
 } from 'react-native';
 
 // @ts-ignore
@@ -78,7 +80,7 @@ function getMarkdownRules(
       const parsedURL = UrlParse(src);
       const url: string | null | undefined = parsedURL?.protocol && parsedURL?.origin ? src : targetAttach?.url;
 
-      if (!url || hasMimeType.svg(targetAttach)) {
+      if (!url || (targetAttach && hasMimeType.svg(targetAttach))) {
         return null;
       }
 
@@ -317,6 +319,26 @@ function getMarkdownRules(
         style={_style}
         uiTheme={uiTheme}
       />;
+    },
+    table: (
+      node: MarkdownNode,
+      children: React.ReactElement,
+      parent: React.ReactElement,
+      style: typeof baseMarkdownStyles,
+      inheritedStyles = {},
+    ) => {
+      return (
+        <ScrollView
+          key={node.key}
+          horizontal={true}
+        >
+          <TouchableWithoutFeedback>
+            <View style={[style.table, inheritedStyles]}>
+              {children}
+            </View>
+          </TouchableWithoutFeedback>
+        </ScrollView>
+      );
     },
   };
 }

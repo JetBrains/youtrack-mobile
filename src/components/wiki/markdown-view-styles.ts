@@ -123,6 +123,7 @@ export const baseMarkdownStyles = {
   th: {
     flex: 1,
     padding: 5,
+    width: 120,
   },
   tr: {
     borderColor: DEFAULT_THEME.colors.$text,
@@ -131,6 +132,7 @@ export const baseMarkdownStyles = {
   td: {
     flex: 1,
     padding: 5,
+    width: 120,
   },
   link: {
     textDecorationLine: 'none',
