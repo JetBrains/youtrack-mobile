@@ -35,6 +35,7 @@ import {onNavigateBack, setAccount} from 'actions/app-actions';
 import {rootRoutesList, routeMap} from 'app-routes';
 import {setNotificationComponent} from 'components/notification/notification';
 
+import type {ActionSheetProviderRef} from '@expo/react-native-action-sheet';
 import type {NavigationNavigateActionPayload} from 'react-navigation';
 import type {NotificationRouteData} from 'types/Notification';
 
@@ -82,10 +83,7 @@ class YouTrackMobile extends Component<void, void> {
       type: 'reset',
       props: {
         message: 'Loading configuration...',
-        onChangeBackendUrl: oldUrl =>
-          Router.EnterServer({
-            serverUrl: oldUrl,
-          }),
+        onChangeBackendUrl: (url: string) => Router.EnterServer({serverUrl: url}),
         onRetry: YouTrackMobile.init,
       },
     });
@@ -193,29 +191,27 @@ class YouTrackMobile extends Component<void, void> {
   }
 }
 
-const AppActionSheetConnected = connectActionSheet<{}>(YouTrackMobile);
-
-type ActionSheetRef = React.Ref<unknown> | undefined;
+const AppActionSheetConnected = connectActionSheet(YouTrackMobile);
 
 class AppContainer extends Component<void, void> {
   static childContextTypes: any = {
     actionSheet: Function,
   };
-  private actionSheetRef: ActionSheetRef;
+  private actionSheetRef: ActionSheetProviderRef | null = null;
 
-  getChildContext(): { actionSheet: () => ActionSheetRef; } {
+  getChildContext(): { actionSheet: () => ActionSheetProviderRef | null; } {
     return {
       actionSheet: () => this.actionSheetRef,
     };
   }
 
-  setActionSheetRef = (component: ActionSheetRef) => {
+  setActionSheetRef = (component: ActionSheetProviderRef) => {
     if (component) {
       this.actionSheetRef = component;
     }
   };
 
-  render(): React.ReactNode {
+  render() {
     return (
       <Provider store={store}>
         <BottomSheetProvider>
