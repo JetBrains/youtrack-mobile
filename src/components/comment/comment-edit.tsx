@@ -20,7 +20,6 @@ import Header from 'components/header/header';
 import {IconAdd} from 'components/icon/icon';
 import IconTime from 'components/icon/assets/time.svg';
 import IssueVisibility from 'components/visibility/issue-visibility';
-import KeyboardSpacerIOS from 'components/platform/keyboard-spacer.ios';
 import log from 'components/log/log';
 import Mentions from 'components/mentions/mentions';
 import Router from 'components/router/router';
@@ -681,8 +680,6 @@ const CommentEdit = (props: Props) => {
                 )}
               </View>
             )}
-
-            <KeyboardSpacerIOS/>
           </View>
         </InputScrollView>
       </View>

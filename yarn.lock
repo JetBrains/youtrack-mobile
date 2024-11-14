@@ -8548,10 +8548,10 @@ react-native-clean-project@4.0.0:
   resolved "https://registry.yarnpkg.com/react-native-clean-project/-/react-native-clean-project-4.0.0.tgz#a7522abfd45ffb0927100cbfa781879c09db315b"
   integrity sha512-khV6TwZEn73/6wWXwcwN8bvLKTE8ePVeZXJi7uhCv2wIL4iSrZkZGdEz+x26VR+oTNsjCronr/bHa1Hy+44ZQg==
 
-react-native-device-info@^10.11.0:
-  version "10.11.0"
-  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-10.11.0.tgz#2c9f378f1c3c5eb9aafa803d015b84325991a9aa"
-  integrity sha512-qRzhuYOm5ZXQi5dhfJFjDq157oipxcEW/fo0QyMm5+TI6V6/+P/tju+Hif6z0rpLCf7MV7iDVRv2Kqha4D/yvQ==
+react-native-device-info@^14.0.0:
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-14.0.0.tgz#371601bb07f738aba721c74ad9c58b815d16f2b7"
+  integrity sha512-hKgH5URRQyMvr1wcBF8pZ9EnSM6fLGAfYRGZaOM8ljkr841kV5bjteI/p9ORfulxgZjB/vfz2J8zMAYwPOQWJg==
 
 react-native-device-log@Trihydro/react-native-device-log:
   version "1.0.3"

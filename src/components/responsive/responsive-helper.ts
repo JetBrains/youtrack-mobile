@@ -36,7 +36,7 @@ const getKeyboardMargin = () => {
     if (DeviceInfo.isTablet()) {
       notchHeight = 8;
     } else {
-      notchHeight = DeviceInfo.hasNotch() ? 40 : 0;
+      notchHeight = DeviceInfo.hasNotch() ? 44 : 0;
     }
   } else {
     notchHeight = StatusBar.currentHeight || 0;
