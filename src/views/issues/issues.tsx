@@ -32,6 +32,7 @@ import {ANALYTICS_ISSUES_PAGE} from 'components/analytics/analytics-ids';
 import {createAnimatedRotateStyle} from 'views/issues/issues-helper';
 import {DEFAULT_THEME} from 'components/theme/theme';
 import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
+import {getIssueFromCache} from './index';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {IconAdd, IconAngleDown, IconMoreOptions} from 'components/icon/icon';
@@ -88,7 +89,6 @@ export type IssuesProps = IssuesState & IssuesActions & ReduxExtraActions & {
   onFilterPress: (filterField: FilterSetting) => any,
   issuePermissions: IssuePermissions,
 
-  getIssueFromCache: (issueId: string) => IssueOnList | null;
   onQueryUpdate: (query: string) => ReduxThunkDispatch
   onOpenContextSelect: () => ReduxThunkDispatch
   updateSearchContextPinned: ReduxThunkDispatch;
@@ -181,7 +181,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     const issueId: string | undefined = this.props.issueId;
 
     if (issueId) {
-      const targetIssue: IssueOnList | null = this.props.getIssueFromCache(issueId);
+      const targetIssue: IssueOnList | null = getIssueFromCache(issueId);
       this.updateFocusedIssue(targetIssue || {id: issueId} as IssueOnList);
     }
 

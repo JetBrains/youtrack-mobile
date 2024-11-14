@@ -528,11 +528,6 @@ const isIssueMatchesQuery = (issueIdReadable: string): ReduxAction<Promise<boole
   return !error && listIssues.length > 0;
 };
 
-const getIssueFromCache = (issueId: string): IssueOnList | null => {
-  const cachedIssues: IssueOnList[] = getStorageState().issuesCache || [];
-  return cachedIssues.find((it: IssueOnList) => it.id === issueId || it.idReadable === issueId) || null;
-};
-
 const updateIssue = (issueId: string): ReduxAction => async (
   dispatch: ReduxThunkDispatch,
   getState: ReduxStateGetter,
@@ -811,7 +806,6 @@ export {
   composeSearchQuery,
   doLoadIssues,
   getFiltersQuery,
-  getIssueFromCache,
   getIssuesSettings,
   getPageSize,
   getSearchContext,

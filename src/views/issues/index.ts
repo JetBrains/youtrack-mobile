@@ -1,6 +1,8 @@
 import {i18n} from 'components/i18n/i18n';
+import {getStorageState} from 'components/storage/storage';
 
 import type {FilterField} from 'types/Sorting';
+import type {IssueOnList} from 'types/Issue';
 
 
 export interface FilterSetting {
@@ -73,6 +75,12 @@ const issuesSettingsDefault: IssuesSettings = {
   },
 };
 
+const getIssueFromCache = (issueId: string): IssueOnList | null => {
+  const cachedIssues: IssueOnList[] = getStorageState().issuesCache || [];
+  return cachedIssues.find((it: IssueOnList) => it.id === issueId || it.idReadable === issueId) || null;
+};
+
+
 enum defaultIssuesFilterFieldConfig {
   project = 'project',
   state = 'state',
@@ -88,4 +96,5 @@ export {
   issuesSettingsIssueSizes,
   issuesSettingsSearch,
   issuesViewSettingMode,
+  getIssueFromCache,
 };
