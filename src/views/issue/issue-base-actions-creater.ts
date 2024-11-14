@@ -893,9 +893,8 @@ export const createActions = (
       return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter,) => {
         const [e, sprints] = await until<IssueSprint[]>(getApi().issue.getIssueSprints(issueId));
         if (e) {
-          log.warn(e);
-        }
-        if (sprints.length) {
+          notifyError(e);
+        } else if (sprints.length) {
           dispatch(dispatchActions.setIssueSprints(sprints));
         }
       };
