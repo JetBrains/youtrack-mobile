@@ -103,7 +103,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:598
+#: src/components/comment/comment-edit.tsx:597
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -175,7 +175,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:567
+#: src/components/comment/comment-edit.tsx:566
 #: src/views/issue/issue-base-actions-creater.ts:578
 msgid "Attach file"
 msgstr "Attach file"
@@ -316,7 +316,7 @@ msgid "Connecting to YouTrack..."
 msgstr "Connecting to YouTrack..."
 
 #: src/components/error-boundary/error-boundary.tsx:251
-#: src/components/error-message/error-message-inline.tsx:62
+#: src/components/error-message/error-message-inline.tsx:56
 #: src/views/enter-server/enter-server.tsx:304
 msgid "Contact support"
 msgstr "Contact support"
@@ -498,7 +498,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:615
+#: src/components/comment/comment-edit.tsx:614
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -585,7 +585,7 @@ msgstr "Filter tags"
 msgid "Filter users, groups, and teams"
 msgstr "Filter users, groups, and teams"
 
-#: src/views/issues/index.ts:62
+#: src/views/issues/index.ts:64
 msgid "Filters"
 msgstr "Filters"
 
@@ -669,7 +669,7 @@ msgstr "just now"
 msgid "Knowledge Base"
 msgstr "Knowledge Base"
 
-#: src/views/issues/index.ts:51
+#: src/views/issues/index.ts:53
 msgid "Large"
 msgstr "Large"
 
@@ -752,7 +752,7 @@ msgid_plural "Matches {{issuesCount}} tickets"
 msgstr[0] "Matches {{issuesCount}} ticket"
 msgstr[1] "Matches {{issuesCount}} tickets"
 
-#: src/views/issues/index.ts:47
+#: src/views/issues/index.ts:49
 msgid "Medium"
 msgstr "Medium"
 
@@ -895,7 +895,7 @@ msgstr "Projects collapsed"
 msgid "Projects expanded"
 msgstr "Projects expanded"
 
-#: src/views/issues/index.ts:58
+#: src/views/issues/index.ts:60
 msgid "Query"
 msgstr "Query"
 
@@ -1077,7 +1077,7 @@ msgstr "Show all issues tagged with \"{{tagName}}\"..."
 msgid "Show more"
 msgstr "Show more"
 
-#: src/views/issues/index.ts:43
+#: src/views/issues/index.ts:45
 msgid "Small"
 msgstr "Small"
 
@@ -1373,7 +1373,7 @@ msgstr "Woah, you can't touch this!"
 msgid "Wrap attribute values that contain spaces in braces {like this}."
 msgstr "Wrap attribute values that contain spaces in braces {like this}."
 
-#: src/components/comment/comment-edit.tsx:432
+#: src/components/comment/comment-edit.tsx:431
 #: src/views/issue/activity/activity__add-spent-time.tsx:423
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
