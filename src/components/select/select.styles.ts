@@ -77,8 +77,10 @@ export default EStyleSheet.create({
     alignItems: 'center',
     overflow: 'hidden',
   },
-  item: {
+  itemWrapper: {
     flex: 1,
+  },
+  item: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
