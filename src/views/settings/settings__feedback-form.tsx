@@ -16,17 +16,9 @@ import {until} from 'util/util';
 
 import styles from './settings__feedback-form.styles';
 
-import type {FeedbackLogs, FeedbackType} from './settings-helper';
+import type {FeedbackData} from 'views/settings/settings-types';
 import type {UITheme, UIThemeColors} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
-
-interface Feedback {
-  summary: string;
-  email?: string;
-  type: FeedbackType;
-  logs: FeedbackLogs;
-  description?: string | null;
-}
 
 interface Props {
   uiTheme: UITheme;
@@ -36,7 +28,7 @@ interface State {
   isFeedbackFormSending: boolean;
   isSubjectSelectorVisible: boolean;
   isLogsSelectorVisible: boolean;
-  feedback: Feedback;
+  feedback: FeedbackData;
 }
 
 export default class SettingsFeedbackForm extends PureComponent<Props, State> {
@@ -44,7 +36,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
     actionSheet: typeof ActionSheetProvider,
   };
   initialState: {
-    feedback: Feedback;
+    feedback: FeedbackData;
     isFeedbackFormSending: boolean;
     isLogsSelectorVisible: boolean;
     isSubjectSelectorVisible: boolean;
@@ -54,6 +46,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
     isLogsSelectorVisible: false,
     feedback: {
       summary: '',
+      email: '',
       type: feedbackTypeOptions[0],
       logs: feedbackLogsOptions[0],
     },
@@ -82,7 +75,11 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
   };
 
   renderContextActions = async (isType: boolean) => {
-    const selectedAction = await showActions(this.getContextActions(isType), this.context.actionSheet());
+    const selectedAction = await showActions(
+      this.getContextActions(isType),
+      // @ts-expect-error context is defined by @expo/react-native-action-sheet
+      this.context.actionSheet()
+    );
     if (selectedAction && selectedAction.execute) {
       selectedAction.execute();
     }
@@ -119,7 +116,7 @@ export default class SettingsFeedbackForm extends PureComponent<Props, State> {
     const isSummaryEmpty: boolean = !(feedback.summary || '').trim();
     const isEmailValid: boolean = !!feedback.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(feedback.email);
 
-    const update = (feedbackPartial: Partial<Feedback>) =>
+    const update = (feedbackPartial: Partial<FeedbackData>) =>
       this.setState({feedback: {...feedback, ...feedbackPartial}});
 
     const disabled: boolean = isSummaryEmpty || isFeedbackFormSending || !isEmailValid;

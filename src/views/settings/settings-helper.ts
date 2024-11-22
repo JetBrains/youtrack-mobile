@@ -1,27 +1,7 @@
-import {
-  getAppAndDeviceData,
-  getDeviceLogs,
-  sendReport,
-} from 'components/error/error-reporter';
+import {getAppAndDeviceData, getDeviceLogs, sendReport} from 'components/error/error-reporter';
 import {i18n} from 'components/i18n/i18n';
 
-export interface FeedbackType {
-  title: string;
-  marker: string;
-}
-
-export interface FeedbackLogs {
-  title: string;
-  value: boolean;
-}
-
-export interface FeedbackData {
-  summary: string;
-  email: string;
-  type: FeedbackType;
-  logs: FeedbackLogs;
-  description?: string;
-}
+import type {FeedbackData, FeedbackLogs, FeedbackType} from 'views/settings/settings-types';
 
 const feedbackTypeMarker: string = '[InAppFeedback]';
 
@@ -39,6 +19,7 @@ export const feedbackTypeOptions: FeedbackType[] = [
     marker: feedbackTypeMarker,
   },
 ];
+
 export const feedbackLogsOptions: FeedbackLogs[] = [
   {
     title: i18n(`Don't send logs`),
@@ -49,6 +30,7 @@ export const feedbackLogsOptions: FeedbackLogs[] = [
     value: true,
   },
 ];
+
 export const sendFeedback = async (
   feedbackData: FeedbackData,
 ): Promise<string> => {
