@@ -110,7 +110,7 @@ export default function Settings() {
           <View style={styles.settingsListItem}>
             <TouchableOpacity
               hitSlop={HIT_SLOP}
-              onPress={() => Router.Page({children: <SettingsFeedbackForm uiTheme={uiTheme} />})}
+              onPress={() => Router.Page({children: <SettingsFeedbackForm />})}
             >
               <Text style={styles.settingsListItemTitleText}>{i18n('Send feedback')}</Text>
             </TouchableOpacity>

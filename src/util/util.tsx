@@ -71,11 +71,11 @@ export const createBtoa = (str: string): any => {
   return base64.fromByteArray(new Uint8Array(byteArray));
 };
 
-export const until = <P = any>(
+export const until = <P = any, E = AnyError>(
   promises: any,
   isCombined: boolean = false,
   anyPromiseSuccess: boolean = false,
-): Promise<[AnyError | null, P]> => {
+): Promise<[E | null, P]> => {
   if (!promises) {
     return Promise.reject(['No promises are provided']);
   }
@@ -97,7 +97,7 @@ export const until = <P = any>(
           ),
         ];
       })
-      .catch((err: AnyError) => {
+      .catch((err: E) => {
         return [err, undefined];
       });
   }
