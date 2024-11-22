@@ -362,9 +362,7 @@ const ArticleCreate = (props: Props) => {
                   })
                 }
                 uiTheme={theme.uiTheme}
-                getOptions={() =>
-                  getApi().articles.getDraftVisibilityOptions(articleDraft.id)
-                }
+                getOptions={(q: string) => getApi().articles.getDraftVisibilityOptions(articleDraft.id, q)}
               />
 
               {articleDraft?.id && !props.isNew && (

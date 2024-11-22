@@ -16,7 +16,7 @@ describe('<VisibilityControl/>', () => {
   let counter: number;
   let onApplyMock: jest.Mock;
   let onSubmitMock: jest.Mock;
-  const getOptionsFn = () => Promise.resolve({} as VisibilityGroups);
+  const getOptionsFn = (q: string) => Promise.resolve({} as VisibilityGroups);
 
   afterEach(cleanup);
   beforeEach(() => {

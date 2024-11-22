@@ -212,10 +212,11 @@ export default class ArticlesAPI extends ApiBase {
     );
   }
 
-  getVisibilityOptions = async (articleId: string, url?: string): Promise<VisibilityGroups> => {
+  getVisibilityOptions = async (articleId: string, visibilityPrefix?: string, url?: string): Promise<VisibilityGroups> => {
     const queryString = ApiBase.createFieldsQuery(issueFields.getVisibility.toString(), {
       $visibilityTop: 50,
       $visibilitySkip: 0,
+      visibilityPrefix,
     });
     const requestURL: string = url || `${this.youTrackApiUrl}/articles/${articleId}/visibilityOptions`;
     const visibilityOptions = await this.makeAuthorizedRequest(`${requestURL}?${queryString}`, 'GET');
@@ -232,11 +233,13 @@ export default class ArticlesAPI extends ApiBase {
     return visibilityOptions;
   };
 
-  getDraftVisibilityOptions: (articleId: string) => Promise<VisibilityGroups> = async (
+  getDraftVisibilityOptions = async (
     articleId: string,
+    visibilityPrefix?: string
   ): Promise<VisibilityGroups> =>
     this.getVisibilityOptions(
       articleId,
+      visibilityPrefix,
       `${this.currentUserAPIUrl}/articleDrafts/${articleId}/visibilityOptions`,
     );
 

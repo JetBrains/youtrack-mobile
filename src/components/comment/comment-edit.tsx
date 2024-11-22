@@ -60,7 +60,7 @@ export interface Props {
   editingComment: EditingComment;
   focus?: boolean;
   getCommentSuggestions: (query: string) => Promise<UserMentions>;
-  getVisibilityOptions: () => Promise<VisibilityGroups>;
+  getVisibilityOptions: (q: string) => Promise<VisibilityGroups>;
   header?: React.ReactNode;
   isArticle?: boolean;
   isEditMode?: boolean;

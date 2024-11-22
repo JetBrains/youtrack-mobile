@@ -44,7 +44,7 @@ export default class VisibilityControl extends PureComponent<Props, State> {
   static defaultProps: Partial<Props> = {
     visibility: null,
     onApply: () => null,
-    getOptions: () => Promise.resolve({} as VisibilityGroups),
+    getOptions: (q: string) => Promise.resolve({} as VisibilityGroups),
     style: null,
     uiTheme: DEFAULT_THEME,
   };

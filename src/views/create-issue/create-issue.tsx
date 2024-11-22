@@ -192,7 +192,7 @@ class CreateIssue extends PureComponent<Props, State> {
           visibility={issue.visibility}
           onSubmit={updateVisibility}
           uiTheme={this.getUITheme()}
-          getOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
+          getOptions={(q: string) => getApi().issue.getVisibilityOptions(issue.id, q)}
         />
       </View>
     );

@@ -45,7 +45,7 @@ const CommentVisibilityControl = ({
     const [error, options] = await until<VisibilityGroups>(
       hasType.issue(entity)
         ? api.issue.getVisibilityOptions(entity.id, q)
-        : api.articles.getVisibilityOptions(entity.id)
+        : api.articles.getVisibilityOptions(entity.id, q)
     );
     return error ? {} : options;
   };

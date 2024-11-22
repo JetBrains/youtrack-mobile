@@ -51,7 +51,7 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
   return (
     <IssueCommentEdit
       onCommentChange={props.onCommentChange}
-      getVisibilityOptions={() => getApi().issue.getVisibilityOptions(issue.id)}
+      getVisibilityOptions={(q: string) => getApi().issue.getVisibilityOptions(issue.id, q)}
       onSubmitComment={props.onSubmitComment}
       editingComment={{
         ...props.comment,

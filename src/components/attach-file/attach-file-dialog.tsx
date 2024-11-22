@@ -33,7 +33,7 @@ interface Props {
     onAttach: (attachments: NormalizedAttachment[], onAttachingFinish: () => any) => any;
     onCancel: () => any;
   };
-  getVisibilityOptions?: () => Promise<VisibilityGroups>;
+  getVisibilityOptions?: (q: string) => Promise<VisibilityGroups>;
   hideVisibility?: boolean;
   source?: keyof typeof attachFileMethod;
   analyticsId?: string;

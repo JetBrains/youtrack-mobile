@@ -48,7 +48,7 @@ const ArticleAddComment = (props: Props) => {
     <IssueCommentEdit
       isArticle={true}
       onCommentChange={props.onCommentChange}
-      getVisibilityOptions={() => getApi().articles.getVisibilityOptions(props.article.id)}
+      getVisibilityOptions={(q: string) => getApi().articles.getVisibilityOptions(props.article.id, q)}
       onSubmitComment={props.onSubmitComment}
       editingComment={{...props.comment, article: {id: props.article.id}, visibility}}
       getCommentSuggestions={(query: string) => dispatch(articleActions.getMentions(query))}
