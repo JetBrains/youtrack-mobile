@@ -163,7 +163,7 @@ msgstr "Are you sure you want to delete this work item?"
 msgid "Article added to favorites"
 msgstr "Article added to favorites"
 
-#: src/views/article-create/article-create.tsx:392
+#: src/views/article-create/article-create.tsx:390
 msgid "Article content"
 msgstr "Article content"
 
@@ -236,7 +236,7 @@ msgstr "Camera"
 #: src/views/issue/issue-base-actions-creater.ts:625
 #: src/views/issue/issue-base-actions-creater.ts:656
 #: src/views/knowledge-base/knowledge-base-actions.ts:458
-#: src/views/settings/settings__feedback-form.tsx:81
+#: src/views/settings/settings__feedback-form.tsx:79
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -443,7 +443,7 @@ msgid "Delete permanently"
 msgstr "Delete permanently"
 
 #: src/views/helpdesk-feedback/index.ts:207
-#: src/views/settings/settings__feedback-form.tsx:191
+#: src/views/settings/settings__feedback-form.tsx:189
 msgid "Description"
 msgstr "Description"
 
@@ -480,7 +480,7 @@ msgstr "Do you really want to remove this account?"
 msgid "Document"
 msgstr "Document"
 
-#: src/views/settings/settings-helper.ts:44
+#: src/views/settings/settings-helper.ts:25
 msgid "Don't send logs"
 msgstr "Don't send logs"
 
@@ -511,7 +511,7 @@ msgstr "Email"
 msgid "Email address"
 msgstr "Email address"
 
-#: src/views/settings/settings__feedback-form.tsx:169
+#: src/views/settings/settings__feedback-form.tsx:167
 msgid "Email address for follow-up"
 msgstr "Email address for follow-up"
 
@@ -540,7 +540,7 @@ msgstr "Everything"
 msgid "Favorites"
 msgstr "Favorites"
 
-#: src/views/settings/settings-helper.ts:34
+#: src/views/settings/settings-helper.ts:14
 msgid "Feature request"
 msgstr "Feature request"
 
@@ -713,7 +713,7 @@ msgstr "Log in to YouTrack"
 msgid "Log in with Browser"
 msgstr "Log in with Browser"
 
-#: src/views/settings/settings__feedback-form.tsx:158
+#: src/views/settings/settings__feedback-form.tsx:156
 msgid "Logs"
 msgstr "Logs"
 
@@ -846,7 +846,7 @@ msgstr "Notification settings…"
 msgid "Notifications"
 msgstr "Notifications"
 
-#: src/views/settings/settings-helper.ts:38
+#: src/views/settings/settings-helper.ts:18
 msgid "Other"
 msgstr "Other"
 
@@ -874,7 +874,7 @@ msgstr "Photo and video library"
 msgid "Preview Size"
 msgstr "Preview Size"
 
-#: src/views/settings/settings-helper.ts:30
+#: src/views/settings/settings-helper.ts:10
 msgid "Problem"
 msgstr "Problem"
 
@@ -1012,11 +1012,11 @@ msgstr "Send extended report to Bugsnag"
 msgid "Send feedback"
 msgstr "Send feedback"
 
-#: src/views/settings/settings__feedback-form.tsx:130
+#: src/views/settings/settings__feedback-form.tsx:128
 msgid "Send Feedback"
 msgstr "Send Feedback"
 
-#: src/views/settings/settings-helper.ts:48
+#: src/views/settings/settings-helper.ts:29
 msgid "Send logs"
 msgstr "Send logs"
 
@@ -1129,7 +1129,7 @@ msgid "Subscriptions"
 msgstr "Subscriptions"
 
 #: src/views/helpdesk-feedback/index.ts:213
-#: src/views/settings/settings__feedback-form.tsx:179
+#: src/views/settings/settings__feedback-form.tsx:177
 msgid "Summary"
 msgstr "Summary"
 
@@ -1151,7 +1151,7 @@ msgstr[1] "Tags"
 msgid "Tags"
 msgstr "Tags"
 
-#: src/views/settings/settings__feedback-form.tsx:101
+#: src/views/settings/settings__feedback-form.tsx:103
 msgid "Thank you for your feedback!"
 msgstr "Thank you for your feedback!"
 
@@ -1242,7 +1242,7 @@ msgstr "Thread unmuted"
 msgid "Tickets"
 msgstr "Tickets"
 
-#: src/views/article-create/article-create.tsx:391
+#: src/views/article-create/article-create.tsx:389
 msgid "Title"
 msgstr "Title"
 
