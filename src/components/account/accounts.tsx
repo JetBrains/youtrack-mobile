@@ -37,7 +37,7 @@ type Props = {
 };
 
 
-export default class Accounts extends PureComponent<Props, void> {
+export default class Accounts extends PureComponent<Props, Readonly<{}>> {
   _logOut = () => {
     const {otherAccounts, onLogOut, onClose} = this.props;
     const hasOtherAccounts = otherAccounts.length > 0;
