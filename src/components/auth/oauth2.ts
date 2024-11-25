@@ -64,7 +64,7 @@ export default class OAuth2 extends AuthBase {
       };
       this.setAuthParams(authParams);
       await this.cacheAuthParams(authParams, getAuthParamsKey());
-      await this.loadCurrentUser(authParams);
+      await this.loadCurrentHubUser(authParams);
     }
 
     return authParams;

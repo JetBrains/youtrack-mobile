@@ -54,7 +54,6 @@ import type {
   User,
   UserAppearanceProfile,
   UserArticlesProfile,
-  UserCurrent,
   UserHelpdeskProfile,
 } from 'types/User';
 import type {DraftCommentData, IssueComment} from 'types/CustomFields';
@@ -225,7 +224,7 @@ export const cacheUserLastVisitedArticle = (article: Article | null, activities?
   }
 };
 
-export function loadCurrentUserAndSetAPI(): ReduxAction {
+export function loadCurrentHubUserAndSetAPI(): ReduxAction {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter) => {
     if (!getState().app?.networkState?.isConnected) {
       return;
@@ -233,7 +232,7 @@ export function loadCurrentUserAndSetAPI(): ReduxAction {
     const auth = getState().app.auth;
     if (auth) {
       const authParams = auth.getAuthParams();
-      await auth.loadCurrentUser(authParams);
+      await auth.loadCurrentHubUser(authParams);
       const currentUser = storage.getStorageState().currentUser;
       if (!auth.currentUser) {
         log.warn('AppActions(loadCurrentUserAndSetAPI): Auth Current user is not set');
@@ -256,10 +255,10 @@ function setAuthInstance(auth: OAuth2) {
 }
 
 function createAuthInstance(config: AppConfig): OAuth2 {
-  return new OAuth2(config, () => {
+  return new OAuth2(config, (errorMsg?: string) => {
     Router.EnterServer({
       serverUrl: config.backendUrl,
-      error: i18n(
+      error: errorMsg || i18n(
         `Your authorization token has expired or is invalid. Re-enter your login credentials to refresh the token. If you are still unable to log in, please contact your administrator.`
       ),
     });
@@ -356,7 +355,7 @@ function applyAccount(config: AppConfig, auth: OAuth2, authParams: AuthParams): 
     await auth.cacheAuthParams(authParams, creationTimestamp.toString());
     await storeConfig(config);
     await dispatch(initializeAuth(config));
-    await dispatch(loadCurrentUserAndSetAPI());
+    await dispatch(loadCurrentHubUserAndSetAPI());
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
@@ -482,11 +481,11 @@ export function changeAccount(
       await auth.cacheAuthParams(
         authParams as any,
         account.authParamsKey ||
-        ((account.creationTimestamp as any) as number).toString(),
+        account.creationTimestamp!.toString(),
       );
       await storeConfig(config);
       await dispatch(initializeAuth(config));
-      await dispatch(loadCurrentUserAndSetAPI());
+      await dispatch(loadCurrentHubUserAndSetAPI());
       await dispatch(checkUserAgreement());
 
       if (!state.app.showUserAgreement) {
@@ -578,9 +577,9 @@ export function completeInitialization(
       hidden: storage.getStorageState().helpdeskMenuHidden,
     });
     log.info('App Actions: Completing initialization');
-    const cachedCurrentUser: UserCurrent | undefined = storage.getStorageState()?.currentUser?.ytCurrentUser;
+    const cachedCurrentUser: User | undefined = storage.getStorageState()?.currentUser?.ytCurrentUser;
     const cachedLocale: UserGeneralProfileLocale | undefined = cachedCurrentUser?.profiles?.general?.locale;
-    const currentUser: UserCurrent = await dispatch(loadYTCurrentUser());
+    const currentUser: User = await dispatch(loadYTCurrentUser());
     const userProfileLocale: UserGeneralProfileLocale | undefined = currentUser?.profiles?.general?.locale;
     const isLanguageChanged: boolean = !cachedLocale?.language || (
       !!cachedLocale?.language &&
@@ -634,7 +633,7 @@ export function setYTCurrentUser(user: User): ReduxAction {
   };
 }
 
-export function loadYTCurrentUser(): ReduxAction<Promise<UserCurrent>> {
+export function loadYTCurrentUser(): ReduxAction<Promise<User>> {
   return async (
     dispatch: ReduxThunkDispatch,
     getState: ReduxStateGetter,
@@ -759,7 +758,7 @@ export function onLogIn(authParams: AuthParams): ReduxAction {
       await auth.cacheAuthParams(authParams as any, authStorageStateValue);
     }
 
-    await dispatch(loadCurrentUserAndSetAPI());
+    await dispatch(loadCurrentHubUserAndSetAPI());
     await dispatch(checkUserAgreement());
 
     if (!getState().app.showUserAgreement) {
@@ -979,7 +978,7 @@ export function initializeApp(
       }
 
       await dispatch(initializeAuth(configCurrent));
-      await dispatch(loadCurrentUserAndSetAPI());
+      await dispatch(loadCurrentHubUserAndSetAPI());
     } catch (error) {
       log.log('App Actions: App failed to initialize auth. Reloading config...', error);
 
@@ -991,7 +990,7 @@ export function initializeApp(
 
       try {
         await dispatch(initializeAuth(configCurrent));
-        await dispatch(loadCurrentUserAndSetAPI());
+        await dispatch(loadCurrentHubUserAndSetAPI());
       } catch (e) {
         return Router.LogIn({config, errorMessage: getErrorMessage(e as AnyError)});
       }

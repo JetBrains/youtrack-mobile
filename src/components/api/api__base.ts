@@ -3,15 +3,16 @@ import qs from 'qs';
 import ApiHelper from './api__helper';
 import issueFields from 'components/api/api__issue-fields';
 import log from 'components/log/log';
+import Router from 'components/router/router';
 import {fetch2, RequestController, requestController} from './api__request-controller';
-import {getErrorMessage, resolveErrorMessage} from 'components/error/error-resolver.ts';
+import {extractErrorMessage, getErrorMessage, resolveErrorMessage} from 'components/error/error-resolver';
 import {handleRelativeUrl} from 'components/config/config';
 import {HTTP_STATUS} from 'components/error/error-http-codes';
 
 import type Auth from 'components/auth/oauth2';
 import type {AppConfig} from 'types/AppConfig';
 import type {Attachment} from 'types/CustomFields';
-import type {CustomError} from 'types/Error.ts';
+import type {AnyError} from 'types/Error.ts';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
 
@@ -109,11 +110,11 @@ export default class BaseAPI {
     return handleRelativeUrl(url, this.config.backendUrl) as string;
   }
 
-  async getErrorMessage(err: CustomError) {
+  async getErrorMessage(err: AnyError) {
     return await resolveErrorMessage(err);
   }
 
-  isUnauthorized(err: Response | CustomError, status: number) {
+  isUnauthorized(err: AnyError, status: number) {
     return getErrorMessage(err) === 'Invalid token' || status === HTTP_STATUS.UNAUTHORIZED;
   }
 
@@ -121,7 +122,7 @@ export default class BaseAPI {
     return status < HTTP_STATUS.SUCCESS || status >= HTTP_STATUS.REDIRECT;
   }
 
-  async doRequest(apiCall: () => Promise<Response | CustomError>): Promise<Response | CustomError> {
+  async doRequest(apiCall: () => Promise<Response>): Promise<Response> {
     const send = async () => await apiCall();
     let response = await send();
 
@@ -130,7 +131,7 @@ export default class BaseAPI {
       return response;
     }
 
-    const error = await (response as Response).json();
+    const error = await response.json();
     if (this.isUnauthorized(error, response.status)) {
       try {
         log.info('API(doRequest):Unauthorised: Refreshing token...');
@@ -141,7 +142,7 @@ export default class BaseAPI {
         try {
           log.info(
             'API(doRequest):Unauthorised: Token refresh failed. Logging in...',
-            await this.getErrorMessage(tokenRefreshError as CustomError)
+            await this.getErrorMessage(tokenRefreshError as AnyError)
           );
         } catch (er) {}
         if (!this.isTokenRefreshFailed) {
@@ -160,6 +161,9 @@ export default class BaseAPI {
           error_workflow_type: error.error_workflow_type || '',
         });
       } catch (er) {}
+      if (response.status === HTTP_STATUS.FORBIDDEN) {
+        return Router.EnterServer({serverUrl: this.config.backendUrl, error: extractErrorMessage(error, true)});
+      }
       throw error;
     }
   }

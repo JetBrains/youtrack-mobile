@@ -10,8 +10,7 @@ import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
 
 import type {AppConfig} from 'types/AppConfig';
 import type {AuthParams} from 'types/Auth';
-import type {CustomError} from 'types/Error';
-import type {FetchMock, ErrorOrFunction} from 'jest-fetch-mock';
+import type {FetchMock} from 'jest-fetch-mock';
 
 jest.mock('react-native-app-auth');
 enableFetchMocks();
@@ -52,56 +51,53 @@ describe('OAuth', () => {
         });
         mockLoadCurrentUserResponse(null, {status: 401});
 
-        await auth.loadCurrentUser(authParamsMock);
+        await auth.loadCurrentHubUser(authParamsMock);
 
-        expect(auth.onTokenRefreshError).toHaveBeenCalledWith();
+        expect(auth.onTokenRefreshError).toHaveBeenCalled();
       });
     });
 
     describe('Flow', () => {
-      let errorMock: CustomError;
+      let errorResponse: Response;
       beforeEach(() => {
-        errorMock = new Error('Invalid') as CustomError;
+        errorResponse = new Response('Invalid', {status: 400, statusText: 'Invalid'});
         jest.spyOn(auth, 'getRefreshToken');
-        jest.spyOn(auth, 'refreshToken').mockImplementationOnce(() => null);
+        jest.spyOn(auth, 'refreshToken');
       });
       it('should throw if request responded with an error', async () => {
-        mockLoadCurrentUserResponse(null, errorMock);
-        await expect(auth.loadCurrentUser(authParamsMock)).rejects.toThrow(
-          errorMock,
-        );
+        mockLoadCurrentUserResponse(null, errorResponse);
+        await expect(auth.loadCurrentHubUser(authParamsMock)).rejects.toEqual(errorResponse);
       });
 
       it('should throw if the current user is banned', async () => {
         mockLoadCurrentUserResponse({
           banned: true,
         });
-        await expect(auth.loadCurrentUser(authParamsMock)).rejects.toThrow(
+        await expect(auth.loadCurrentHubUser(authParamsMock)).rejects.toThrow(
           new Error(ERROR_MESSAGE_DATA.USER_BANNED.title),
         );
       });
 
       it('should not refresh a token if user has no required permissions', async () => {
-        errorMock.status = 403;
+        const rejectData = {...errorResponse, status: 403};
         doMockGetRefreshToken('prevToken');
-        mockLoadCurrentUserResponse(null, errorMock);
-        await expect(auth.loadCurrentUser(authParamsMock)).rejects.toThrow();
+        mockLoadCurrentUserResponse(null, rejectData);
+        await expect(auth.loadCurrentHubUser(authParamsMock)).rejects.toEqual(rejectData);
         expect(auth.refreshToken).not.toHaveBeenCalled();
       });
 
       it('should refresh a token if a token is out of date', async () => {
-        errorMock.status = 401;
         doMockGetRefreshToken('prevToken');
-        mockLoadCurrentUserResponse(null, errorMock);
-        await auth.loadCurrentUser(authParamsMock);
+        mockLoadCurrentUserResponse(null, {...errorResponse, status: 401});
+        await auth.loadCurrentHubUser(authParamsMock);
         expect(auth.refreshToken).toHaveBeenCalled();
       });
 
       it('should not refresh a token if there is no auth params in a cache', async () => {
-        errorMock.status = 401;
+        const rejectData = {...errorResponse, status: 401};
         doMockGetRefreshToken('');
-        mockLoadCurrentUserResponse(null, errorMock);
-        await expect(auth.loadCurrentUser(authParamsMock)).rejects.toThrow();
+        mockLoadCurrentUserResponse(null, rejectData);
+        await expect(auth.loadCurrentHubUser(authParamsMock)).rejects.toEqual(rejectData);
         expect(auth.refreshToken).not.toHaveBeenCalled();
       });
 
@@ -110,7 +106,7 @@ describe('OAuth', () => {
           id: 'currentUser',
         };
         mockLoadCurrentUserResponse(userMock);
-        await auth.loadCurrentUser(authParamsMock);
+        await auth.loadCurrentHubUser(authParamsMock);
         expect(auth.currentUser).toEqual(userMock);
       });
 
@@ -188,7 +184,7 @@ describe('OAuth', () => {
           ...authParamsMock,
           scope: auth.config.auth.scopes,
         };
-        jest.spyOn(auth, 'loadCurrentUser').mockResolvedValueOnce({});
+        jest.spyOn(auth, 'loadCurrentHubUser').mockResolvedValueOnce();
         (auth.getCachedAuthParams as jest.Mock).mockResolvedValueOnce(authParamsMock);
         auth.setAuthParams(prevAuthParams);
       });
@@ -291,7 +287,7 @@ describe('OAuth', () => {
       it('should get auth parameters', async () => {
         jest
           .spyOn(EncryptedStorage, 'getItem')
-          .mockResolvedValueOnce(JSON.stringify(authParamsMock));
+          .mockImplementationOnce(() => Promise.resolve(JSON.stringify(authParamsMock)));
         const cachedAuthParams = await auth.getCachedAuthParams();
         await expect(
           storageHelper.getStoredSecurelyAuthParams,
@@ -306,7 +302,7 @@ function createAuthMock(config: AppConfig = appConfigMock) {
   return new OAuth2(config, jest.fn());
 }
 
-function mockLoadCurrentUserResponse(resolveData: any, rejectData?: any) {
+function mockLoadCurrentUserResponse(resolveData: object | null, rejectData?: Partial<Response>) {
   const containsApiPath = (param: string) => param.indexOf('api/rest/users/me?fields=') !== -1;
   const _fetch = fetch as FetchMock;
   if (resolveData) {
@@ -314,8 +310,8 @@ function mockLoadCurrentUserResponse(resolveData: any, rejectData?: any) {
       return Promise.resolve(JSON.stringify(containsApiPath(req.url) ? resolveData : req));
     });
   } else {
-    _fetch.mockRejectOnce((url: ErrorOrFunction) => {
-      if (containsApiPath(url as unknown as string)) {
+    _fetch.mockRejectOnce((url: string) => {
+      if (containsApiPath(url)) {
         return Promise.reject(rejectData);
       }
       return Promise.reject(url);

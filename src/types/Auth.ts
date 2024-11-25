@@ -15,7 +15,10 @@ export interface AuthConfig {
   youtrackServiceId: string;
 }
 
-export interface RequestHeaders {
-  Authorization?: string;
+export interface RequestHeaders extends Record<string, string> {
   'User-Agent': string;
+}
+
+export interface RequestHeadersExtended extends RequestHeaders {
+  Authorization: string;
 }

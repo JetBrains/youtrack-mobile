@@ -1,7 +1,6 @@
 import qs from 'qs';
 
 import log from 'components/log/log';
-import PermissionsStore from 'components/permissions-store/permissions-store';
 import {ACCEPT_HEADER, URL_ENCODED_TYPE} from './oauth2-helper';
 import {createBtoa} from 'util/util';
 import {ERROR_MESSAGE_DATA} from 'components/error/error-message-data';
@@ -10,27 +9,26 @@ import {
   getStoredSecurelyAuthParams,
   storeSecurelyAuthParams,
 } from '../storage/storage__oauth';
-import {HTTP_STATUS} from 'components/error/error-http-codes';
 import {USER_AGENT} from 'components/usage/usage';
 
+import type {AnyError, CustomError} from 'types/Error';
 import type {AppConfig} from 'types/AppConfig';
-import type {AuthParams, RequestHeaders} from 'types/Auth';
-import type {CustomError} from 'types/Error';
-import type {User} from 'types/User';
+import type {AuthParams, RequestHeaders, RequestHeadersExtended} from 'types/Auth';
+import type {UserHub} from 'types/User';
 
 export class AuthBase {
   authParams: AuthParams | null;
   LOAD_USER_URL: string;
   config: AppConfig;
-  currentUser: User | null;
+  currentUser: UserHub | null;
   PERMISSIONS_CACHE_URL: string;
-  permissionsStore: PermissionsStore;
-  onTokenRefreshError: () => void = () => {};
+  onTokenRefreshError: (errorMsg?: string) => void = () => {};
 
   constructor(config: AppConfig, onTokenRefreshError: () => void) {
     this.authParams = null;
+    this.currentUser = null;
     this.config = config;
-    this.LOAD_USER_URL = `${this.config.auth.serverUri}/api/rest/users/me?fields=id,guest,name,profile/avatar/url,endUserAgreementConsent(accepted)`;
+    this.LOAD_USER_URL = `${this.config.auth.serverUri}/api/rest/users/me?fields=id,guest,name,banned,profile/avatar/url,endUserAgreementConsent(accepted)`;
     const permissionsQueryString = qs.stringify({
       query: `service:{0-0-0-0-0} or service:{${config.auth.youtrackServiceId}}`,
       fields: 'permission/key,global,projects(id)',
@@ -79,7 +77,7 @@ export class AuthBase {
       });
   }
 
-  static async obtainTokenWithOAuthCode(config: AppConfig): Promise<void | AuthParams> {}
+  static async obtainTokenWithOAuthCode(_: AppConfig): Promise<void | AuthParams> {}
 
   static obtainTokenByCredentials(
     login: string,
@@ -115,18 +113,18 @@ export class AuthBase {
     return authParams.refresh_token;
   }
 
-  setCurrentUser(user: User | null): void {
+  setCurrentUser(user: UserHub | null) {
     this.currentUser = user;
   }
 
-  logOut(): void {
+  logOut() {
     this.authParams = null;
     this.setCurrentUser(null);
   }
 
   async refreshToken(): Promise<any> {}
 
-  getAuthorizationHeaders(authParams?: AuthParams): RequestHeaders {
+  getAuthorizationHeaders(authParams?: AuthParams): RequestHeaders | RequestHeadersExtended {
     const headers: RequestHeaders = {
       'User-Agent': USER_AGENT,
     };
@@ -140,7 +138,7 @@ export class AuthBase {
     return headers;
   }
 
-  loadCurrentUser(authParams: AuthParams) {
+  loadCurrentHubUser(authParams: AuthParams) {
     log.info('AuthBase(loadCurrentUser): Verifying token, loading current user...');
     return fetch(this.LOAD_USER_URL, {
       headers: {
@@ -161,16 +159,12 @@ export class AuthBase {
         log.info('AuthBase(loadCurrentUser): Current user loaded.');
         return res.json();
       })
-      .then((currentUser: User) => {
-        if (currentUser.banned) {
-          const e: CustomError = new Error(
-            ERROR_MESSAGE_DATA.USER_BANNED.title,
-          ) as any;
-          e.status = HTTP_STATUS.FORBIDDEN;
-          throw e;
+      .then((hubUser: UserHub) => {
+        if (hubUser.banned) {
+          throw new Error(ERROR_MESSAGE_DATA.USER_BANNED.title);
         }
 
-        this.setCurrentUser(currentUser);
+        this.setCurrentUser(hubUser);
         log.info('AuthBase(loadCurrentUser): Current user updated.');
         return authParams;
       })
@@ -186,7 +180,12 @@ export class AuthBase {
           try {
             await this.refreshToken();
           } catch (e) {
-            this.onTokenRefreshError();
+            const err = e as AnyError;
+            let errorMsg = err?.message != null ? err.message : '';
+            if (errorMsg.indexOf('The owner of the refresh token is banned') !== -1) {
+              errorMsg = ERROR_MESSAGE_DATA.USER_BANNED.title;
+            }
+            this.onTokenRefreshError(errorMsg);
           }
           return;
         }

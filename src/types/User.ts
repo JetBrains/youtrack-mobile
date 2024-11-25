@@ -43,6 +43,20 @@ export interface UserHubCC extends EntityBase {
   }
 }
 
+export interface UserHub {
+  id: string;
+  name: string;
+  guest: boolean;
+  banned: boolean;
+  endUserAgreementConsent: {
+    accepted: boolean;
+  };
+  profile: {
+    avatar: {
+      url: string;
+    };
+  };
+}
 
 export interface User extends UserBase {
   email: string;
@@ -55,7 +69,7 @@ export interface User extends UserBase {
   };
 }
 
-export type UserCurrent = User & {
+export type UserCurrent = UserHub & {
   ytCurrentUser?: User;
 };
 export type IssueRelatedGroup = {
