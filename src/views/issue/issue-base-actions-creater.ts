@@ -26,7 +26,15 @@ import {resolveError} from 'components/error/error-resolver';
 import type Api from 'components/api/api';
 import type {AnyError} from 'types/Error';
 import type {AppState} from 'reducers';
-import type {Attachment, CustomField, CustomFieldText, FieldValue, IssueLink, Tag} from 'types/CustomFields';
+import {
+  Attachment,
+  CustomField,
+  CustomFieldText,
+  CustomFieldValue,
+  FieldValue,
+  IssueLink,
+  Tag,
+} from 'types/CustomFields';
 import type {
   AnyIssue,
   CommandSuggestionResponse,
@@ -323,48 +331,34 @@ export const createActions = (
         dispatch(dispatchActions.setIssueFieldValue(field, value));
       };
     },
-    updateIssueFieldValue: function (
-      field: CustomField,
-      value: FieldValue,
-    ): ReduxAction {
+    updateIssueFieldValue: function (field: CustomField, value: FieldValue): ReduxAction {
       return async (
         dispatch: ReduxThunkDispatch,
         getState: ReduxStateGetter,
         getApi: ReduxAPIGetter,
       ) => {
         const api: Api = getApi();
-        const issue: IssueFull = (getState()[stateFieldName] as IssueState).issue;
+        const getIssue = () => (getState()[stateFieldName] as IssueState).issue;
         dispatch(actions.setCustomFieldValue(field, value));
 
         const updateMethod = (issueId: string, fieldId: string, fieldValue: FieldValue) => {
           if (field.hasStateMachine) {
             return api.issue.updateIssueFieldEvent(issueId, fieldId, fieldValue);
           }
-
           return api.issue.updateIssueFieldValue(issueId, fieldId, fieldValue);
         };
 
-        try {
-          await updateMethod(issue.id, field.id, value);
+        const [err] = await until<CustomFieldValue>(updateMethod(getIssue().id, field.id, value));
+        if (!err) {
           log.info('Issue Actions: Field value updated');
           await dispatch(actions.loadIssue());
-          dispatch(
-            dispatchActions.issueUpdated((getState()[stateFieldName] as IssueState).issue),
-          );
-        } catch (err) {
-          const error = await resolveError(err as AnyError);
-
-          if (
-            error.error_type === 'workflow' &&
-            error.error_workflow_type === 'require'
-          ) {
+          dispatch(dispatchActions.issueUpdated(getIssue()));
+        } else {
+          const error = await resolveError(err);
+          if (error.error_type === 'workflow' && error.error_workflow_type === 'require') {
             log.info('Issue Actions: Workflow require received', error);
-            dispatch(
-              dispatchActions.openCommandDialog(`${error.error_field} `),
-            );
+            dispatch(dispatchActions.openCommandDialog(`${value.localizedName || value.name} ${error.error_field} `));
           }
-
-          notifyError(error);
           dispatch(actions.loadIssue());
         }
       };
@@ -750,25 +744,22 @@ export const createActions = (
         dispatch: ReduxThunkDispatch,
         getState: ReduxStateGetter,
       ): Promise<void> => {
-        const issueId: string = (getState()[stateFieldName] as IssueState).issueId;
+        const getIssueState = () => (getState()[stateFieldName] as IssueState);
         dispatch(dispatchActions.startApplyingCommand());
         return await commandDialogHelper
-          .applyCommand([issueId], command)
+          .applyCommand([getIssueState().issueId], command)
           .then(async () => {
-            dispatch(dispatchActions.closeCommandDialog());
-
             if (command.toLowerCase().trim() === 'delete') {
               notify(i18n('Issue deleted'));
               Router.Issues();
             } else {
               await dispatch(actions.loadIssue());
-              dispatch(
-                dispatchActions.issueUpdated((getState()[stateFieldName] as IssueState).issue),
-              );
+              dispatch(dispatchActions.issueUpdated(getIssueState().issue));
             }
           })
           .finally(() => {
             dispatch(dispatchActions.stopApplyingCommand());
+            dispatch(dispatchActions.closeCommandDialog());
           });
       };
     },
