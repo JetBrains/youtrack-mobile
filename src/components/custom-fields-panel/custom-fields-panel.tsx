@@ -23,7 +23,7 @@ import {
 import {getApi} from 'components/api/api__instance';
 import {getCustomFieldSelectProps} from 'components/custom-field';
 import {i18n} from 'components/i18n/i18n';
-import {IItem, ISelectState, Select, SelectModal} from 'components/select/select';
+import {ISelectProps, Select, SelectModal} from 'components/select/select';
 import {isSplitView} from 'components/responsive/responsive-helper';
 import {PanelWithSeparator} from 'components/panel/panel-with-separator';
 import {SkeletonIssueCustomFields} from 'components/skeleton/skeleton';
@@ -60,16 +60,8 @@ interface Props {
   helpDeskProjectsOnly: boolean;
 }
 
-interface SelectState extends ISelectState {
+interface SelectState extends ISelectProps {
   show?: boolean;
-  dataSource: (query: string) => Promise<Array<IItem>>;
-  emptyValue?: string | null | undefined;
-  getTitle?: (item: IItem) => string;
-  getValue?: (item: IItem) => string;
-  multi: boolean;
-  onChangeSelection?: (selectedItems: Array<IItem>) => any;
-  onSelect: (item: any) => any;
-  placeholder?: string;
 }
 
 interface SimpleValueState {
@@ -135,22 +127,25 @@ export default function CustomFieldsPanel(props: Props) {
     }
   };
 
-  const saveUpdatedField = (field: IssueCustomField, value: CustomFieldValue | null) => {
-    const updateSavingState = (savingField: IssueCustomField | null) => {
+  const closeEditor = () => {
+    setEditingField(null);
+    setEditingProject(false);
+    setSelectState(null);
+    setSimpleValue(null);
+    setDatePickerState(dataPickerDefault);
+  };
+
+  const saveUpdatedField = async (field: IssueCustomField, value: CustomFieldValue | null) => {
+    const updateSavingState = (f: IssueCustomField | null) => {
       if (isComponentMounted) {
-        setSavingField(savingField);
+        setSavingField(f);
       }
     };
 
     closeEditor();
     updateSavingState(field);
-    return props
-      .onUpdate(field, value)
-      .then(res => {
-        updateSavingState(null);
-        return res;
-      })
-      .catch(() => updateSavingState(null));
+    await props.onUpdate(field, value);
+    updateSavingState(null);
   };
 
   const onSelectProject = () => {
@@ -187,14 +182,6 @@ export default function CustomFieldsPanel(props: Props) {
     });
   };
 
-  const closeEditor = () => {
-    setEditingField(null);
-    setEditingProject(false);
-    setSelectState(null);
-    setSimpleValue(null);
-    setDatePickerState(dataPickerDefault);
-  };
-
   const editDateField = (field: IssueCustomField) => {
     trackEvent('Edit date field');
     const projectCustomField = field.projectCustomField;
@@ -209,9 +196,10 @@ export default function CustomFieldsPanel(props: Props) {
       emptyValueName: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
       onSelect: (d: Date | null) => {
         if (!d) {
-          return saveUpdatedField(field, null);
+          saveUpdatedField(field, null);
+        } else {
+          saveUpdatedField(field, d.getTime());
         }
-        saveUpdatedField(field, d.getTime());
       },
     });
   };
@@ -225,11 +213,13 @@ export default function CustomFieldsPanel(props: Props) {
         ? (field.value as PeriodFieldValue)?.presentation || (field.value as TextFieldValue)?.text || `${field.value}`
         : '';
 
-    return setSimpleValue({
+    setSimpleValue({
       show: true,
       placeholder,
       value,
-      onApply: (v: string) => saveUpdatedField(field, valueFormatter(v) as CustomFieldValue),
+      onApply: (v: string) => {
+        saveUpdatedField(field, valueFormatter(v) as CustomFieldValue);
+      },
     });
   };
 
@@ -242,9 +232,11 @@ export default function CustomFieldsPanel(props: Props) {
       field,
       issueId: props.issueId,
       onChangeSelection: selectedItems => {
-        setSelectState((prevState: SelectState | null) => ({...prevState, ...selectState, selectedItems}));
+        setSelectState(prevState => ({...prevState, ...selectState, selectedItems}));
       },
-      onSelect: value => saveUpdatedField(field, value),
+      onSelect: value => {
+        saveUpdatedField(field, value);
+      },
     });
 
     setSelectState(p);
