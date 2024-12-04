@@ -22,7 +22,7 @@ interface Props {
 
 const TagAddSelect = (props: Props) => {
   const {onAdd, onHide, projectId, existed = []} = props;
-  const selectProps: ISelectProps = {
+  const selectProps: ISelectProps<Tag> = {
     placeholder: i18n('Filter tags'),
     multi: true,
     dataSource: async (q: string) => {
