@@ -3,6 +3,7 @@ import React, {memo, useContext, useState} from 'react';
 import {Calendar} from 'react-native-calendars';
 import {useSelector} from 'react-redux';
 
+import {getFormattedDate} from 'components/date/date';
 import {ThemeContext} from 'components/theme/theme-context';
 
 import styles, {calendarTheme} from './date-picker.styles';
@@ -21,19 +22,11 @@ const DatePicker = (props: {date: Date | null; onDateSelect: (timestamp: number)
 
   const [selected, setSelected] = useState<string>('');
 
-  const format = (s: string) => `${parseInt(s, 10) < 10 ? `0${s}` : s}`;
-
-  const createSelected = React.useCallback((d: Date) => {
-    const localeDate = d.toLocaleDateString();
-    const [mm, dd, yyyy] = localeDate.split('/');
-    return `${yyyy}-${format(mm)}-${format(dd)}`;
-  }, []);
-
   React.useEffect(() => {
     if (props.date) {
-      setSelected(createSelected(props.date));
+      setSelected(getFormattedDate(props.date, 'yyyy-MM-dd'));
     }
-  }, [createSelected, props.date]);
+  }, [props.date]);
 
   return (
     <Calendar

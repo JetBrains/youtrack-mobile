@@ -109,11 +109,16 @@ function absDate(date?: Date | number, noTime?: boolean): string {
     : formatDate(date, noTime ? getDatePattern() : getPattern(), getLocale());
 }
 
-function ytDate(date: number, noTime?: boolean): string {
+function ytDate(date?: number, noTime?: boolean): string {
   if (date == null) {
     return '';
   }
   return isAbsoluteDates() ? absDate(date, noTime) : ytDateRelative(date);
+}
+
+function getFormattedDate(d: Date, pattern: string) {
+  const locale = getLocale();
+  return format(d, pattern, {locale: locale});
 }
 
 function ytDateRelative(date: number): string {
@@ -164,4 +169,5 @@ export {
   toTimeString,
   ytDate,
   ytDateRelative,
+  getFormattedDate,
 };
