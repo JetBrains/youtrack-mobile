@@ -60,7 +60,7 @@ interface Props {
   helpDeskProjectsOnly: boolean;
 }
 
-interface SelectState extends ISelectProps {
+interface SelectState extends ISelectProps<Project> {
   show?: boolean;
 }
 
