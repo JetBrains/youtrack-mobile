@@ -56,7 +56,7 @@ export interface ISelectState<T> {
 }
 
 
-export default class Select<T extends ISelectProps<T>, S extends ISelectState<T>> extends React.PureComponent<T, S> {
+export class Select<T extends ISelectProps<T>, S extends ISelectState<T>> extends React.PureComponent<T, S> {
   static defaultProps = {
     autoFocus: false,
     noFilter: false,
@@ -435,3 +435,5 @@ export class SelectModal<T extends ISelectProps<T>, S extends ISelectState<T> & 
     );
   };
 }
+
+export default Select;
