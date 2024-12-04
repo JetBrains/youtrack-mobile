@@ -62,7 +62,7 @@ const getLocalizedName = (customField: {localizedName?: string | null; name?: st
   return customField?.localizedName || customField?.name || '';
 };
 
-const isSLAField = (cf: CustomField): boolean => cf.$type === 'SlaIssueCustomField';
+const isSLAField = (cf: {$type: string}): boolean => cf.$type === 'SlaIssueCustomField';
 
 const projectCustomFieldTypeToFieldType = ($type: string, isMultiValue: boolean): string => {
   const prefix = isMultiValue ? 'Multi' : 'Single';

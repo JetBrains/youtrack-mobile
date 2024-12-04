@@ -1,7 +1,11 @@
 import {getApi} from 'components/api/api__instance';
 
-import {CustomField, FieldValue} from 'types/CustomFields';
-import {ISelectProps} from 'components/select/select';
+import type {CustomField, FieldValue} from 'types/CustomFields';
+import type {ISelectProps} from 'components/select/select';
+import type {UserGroup} from 'types/UserGroup';
+import type {User} from 'types/User';
+
+type SelectType = UserGroup | User | {id: string; name: string};
 
 export const getCustomFieldSelectProps = ({
   field,
@@ -10,10 +14,10 @@ export const getCustomFieldSelectProps = ({
   issueId,
 }: {
   field: CustomField;
-  onChangeSelection: (selectedItems: FieldValue[], current: FieldValue) => unknown;
-  onSelect: (value: FieldValue) => unknown;
+  onChangeSelection: (selectedItems: SelectType[], current: SelectType) => void;
+  onSelect: (value: FieldValue) => void;
   issueId?: string;
-}): ISelectProps => {
+}): ISelectProps<SelectType> => {
   const projectCustomField = field.projectCustomField;
 
   return {

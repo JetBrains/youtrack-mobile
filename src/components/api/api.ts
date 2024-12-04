@@ -24,6 +24,8 @@ import type Auth from 'components/auth/oauth2';
 import type {EndUserAgreement} from 'types/AppConfig';
 import type {CommandSuggestionResponse} from 'types/Issue';
 import type {Project} from 'types/Project';
+import type {StateMachineEvent} from 'types/StateMachine';
+import type {UserGroup} from 'types/UserGroup';
 import type {User} from 'types/User';
 import type {WorkTimeSettings} from 'types/Work';
 
@@ -122,7 +124,7 @@ class API extends BaseAPI {
     bundleId: string,
     fieldValueType: string,
     query: string = '',
-  ): Promise<Array<Record<string, any>>> {
+  ): Promise<Array<UserGroup | User>> {
     if (fieldValueType === 'group') {
       return this.userGroup.getAllUserGroups();
     }
@@ -141,7 +143,7 @@ class API extends BaseAPI {
     );
   }
 
-  async getStateMachineEvents(issueId: string, fieldId: string): Promise<Array<{id: string; presentation: string}>> {
+  async getStateMachineEvents(issueId: string, fieldId: string): Promise<StateMachineEvent[]> {
     const url = `${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}/possibleEvents?fields=id,presentation`;
     return await this.makeAuthorizedRequest(url);
   }
