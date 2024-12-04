@@ -6,6 +6,8 @@ import {screen, waitFor} from '@testing-library/react-native';
 import {ISelectProps, SelectModal} from './select';
 import {renderTestSelectComponent} from 'components/select/select-spec-helper';
 
+import type {Project} from 'types/Project';
+
 
 jest.mock('react-native-portalize', () => ({
   Portal: 'View',
@@ -78,7 +80,7 @@ describe('Select', () => {
   });
 
 
-  function doRender(props: Partial<ISelectProps & { Component: React.ComponentType<any> | undefined }> = {}) {
+  function doRender(props: Partial<ISelectProps<Project> & { Component: React.ComponentType<any> | undefined }> = {}) {
     return renderTestSelectComponent(props);
   }
 });

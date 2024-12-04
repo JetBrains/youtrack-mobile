@@ -5,6 +5,8 @@ import SelectSectioned from 'components/select/select-sectioned';
 import {ISelectProps} from './select';
 import {renderTestSelectComponent} from 'components/select/select-spec-helper';
 
+import type {Project} from 'types/Project';
+
 jest.mock('react-native-portalize', () => ({
   Portal: 'View',
 }));
@@ -56,7 +58,7 @@ describe('<SelectSectioned/>', () => {
   });
 
 
-  function doRender(props: Partial<ISelectProps> = {}) {
+  function doRender(props: Partial<ISelectProps<Project>> = {}) {
     return renderTestSelectComponent({...props, Component: SelectSectioned});
   }
 

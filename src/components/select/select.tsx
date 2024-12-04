@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ActivityIndicator, FlatList, Text, TextInput, TouchableOpacity, View,} from 'react-native';
+import {ActivityIndicator, FlatList, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import debounce from 'lodash.debounce';
 
@@ -13,64 +13,58 @@ import {IconCheck, IconClose} from 'components/icon/icon';
 
 import styles, {SELECT_ITEM_HEIGHT, SELECT_ITEM_SEPARATOR_HEIGHT} from './select.styles';
 
+import type {ColorCoding} from 'components/color-field/color-field';
+import type {ViewProps} from 'react-native';
 
-export type IItem = {
+export interface IItem {
   [key: string]: any;
-};
+}
 
 interface TitleRenderer<T> {
   (item: T): React.ReactNode;
 }
 
-export interface ISelectProps {
-  dataSource: (query: string) => Promise<IItem[]>;
+export interface ISelectProps<T extends IItem> {
+  dataSource: (query: string) => Promise<T[]>;
   onSelect: (item: any | any[]) => any;
-  onChangeSelection?: (selectedItems: IItem[], current: IItem) => any;
-  onCancel: () => any;
-  getTitle: (item: IItem) => string;
+  onChangeSelection?: (selectedItems: T[], current: T) => void;
+  onCancel?: () => void;
+  getTitle?: (item: T) => string;
   header?: () => any;
-  titleRenderer?: TitleRenderer<any>;
-  getValue?: (item: IItem) => string;
-  selectedItems: IItem[];
+  titleRenderer?: TitleRenderer<T>;
+  getValue?: (item: T) => string;
+  selectedItems: T[];
   placeholder?: string;
   multi?: boolean;
   autoFocus?: boolean;
-  emptyValue?: string | null | undefined;
+  emptyValue?: string | null;
   style?: any;
   noFilter?: boolean;
-  getWrapperComponent?: () => any;
-  getWrapperProps?: () => any;
+  getWrapperComponent?: () => React.ElementType;
+  getWrapperProps?: () => Partial<ViewProps> | ViewProps | null;
   isSelectionDisabled?: (selected: any[], current: any) => boolean;
-  filterItems?: (items: IItem[]) => IItem[];
-  closeIcon?: React.JSXElementConstructor<any>;
+  filterItems?: (items: T[]) => T[];
+  closeIcon?: React.ElementType;
 }
 
-export interface ISelectState {
+export interface ISelectState<T> {
   query: string;
-  items: IItem[] | null;
-  filteredItems: IItem[];
-  selectedItems: IItem[];
+  items: T[] | null;
+  filteredItems: T[];
+  selectedItems: T[];
   loaded: boolean;
 }
 
 
-export class Select<P extends ISelectProps, S extends ISelectState> extends React.PureComponent<P, S> {
-  static defaultProps: {
-    autoFocus: boolean;
-    getTitle: (item: any) => any;
-    header: () => null;
-    noFilter: boolean;
-  } = {
+export default class Select<T extends ISelectProps<T>, S extends ISelectState<T>> extends React.PureComponent<T, S> {
+  static defaultProps = {
     autoFocus: false,
     noFilter: false,
     getTitle: (item: IItem) => getEntityPresentation(item),
     header: () => null,
   };
 
-  static getItemLayout(
-    items: IItem[] | null | undefined,
-    index: number,
-  ): {
+  static getItemLayout<P>(items: ArrayLike<P> | null | undefined, index: number): {
     index: number;
     length: number;
     offset: number;
@@ -88,24 +82,23 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     return <View style={styles.rowSeparator}/>;
   }
 
-  constructor(props: P) {
+  constructor(props: T) {
     super(props);
     this.state = {
       query: '',
       items: null,
-      filteredItems: [] as IItem[],
-      selectedItems: props.selectedItems || ([] as IItem[]),
+      filteredItems: [] as T[],
+      selectedItems: props.selectedItems || ([] as T[]),
       loaded: false,
     } as S;
   }
 
-  getSortedItems = (items: IItem[] = []): IItem[] => {
-    const selectedItemsKey: string[] = this.state.selectedItems.map((it: IItem) => this.getItemKey(it));
-    const nonSelected = items
-      .reduce((data: IItem[], item: IItem) => {
-        data.push(...(selectedItemsKey.includes(this.getItemKey(item)) ? [] : [item]));
-        return data;
-      }, []);
+  getSortedItems = (items: T[] = []): T[] => {
+    const selectedItemsKey: string[] = this.state.selectedItems.map((it: T) => this.getItemKey(it));
+    const nonSelected = items.reduce((data: T[], item: T) => {
+      data.push(...(selectedItemsKey.includes(this.getItemKey(item)) ? [] : [item]));
+      return data;
+    }, []);
     return [...this.state.selectedItems, ...nonSelected];
   };
 
@@ -113,7 +106,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     this.onSearch(this.state.query);
   }
 
-  componentDidUpdate(prevProps: ISelectProps) {
+  componentDidUpdate(prevProps: ISelectProps<T>) {
     if (prevProps.dataSource !== this.props.dataSource) {
       this.setState({
         loaded: false,
@@ -126,9 +119,9 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     }
   }
 
-  async doLoadItems(query: string = ''): Promise<IItem[]> {
+  async doLoadItems(query: string = ''): Promise<T[]> {
     this.setState({loaded: false});
-    const items: IItem[] = await this.props.dataSource(query);
+    const items = await this.props.dataSource(query);
     this.setState({loaded: true, items});
     return items;
   }
@@ -154,22 +147,21 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     );
   }
 
-  filterItemByLabel(item: any, query: string): boolean {
-    const {getValue, getTitle} = this.props;
-    const label: string = (getValue && getValue(item)) || getTitle(item) || '';
+  filterItemByLabel(item: T, query: string): boolean {
+    const label: string = this.props?.getValue?.(item) || this.props?.getTitle?.(item) || '';
     return label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
   }
 
-  getFilteredItems(items: IItem[] = [], query: string = ''): IItem[] {
+  getFilteredItems(items: T[] = [], query: string = ''): T[] {
     if (this.props.filterItems) {
       return this.props.filterItems(items);
     }
-    return items.filter((it: IItem) => this.filterItemByLabel(it, query));
+    return items.filter(it => this.filterItemByLabel(it, query));
   }
 
   async onSearch(query: string) {
     await this.doLoadItems(query);
-    const filteredItems: IItem[] = this.getFilteredItems(this.state.items || [], query);
+    const filteredItems: T[] = this.getFilteredItems(this.state.items || [], query);
     this.setState({
       filteredItems: this.getSortedItems(filteredItems),
     });
@@ -177,17 +169,13 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
 
   _onSearch = debounce(this.onSearch, 300);
 
-  _renderTitle(item: IItem) {
-    const label = <Text style={styles.itemTitle}>{this.props.getTitle(item)}</Text>;
+  _renderTitle<P extends T & {color?: ColorCoding}>(item: P) {
+    const label = <Text style={styles.itemTitle}>{this?.props?.getTitle?.(item)}</Text>;
 
-    if (item.color && item.color.id !== NO_COLOR_CODING_ID) {
+    if ('color' in item && item?.color?.id !== NO_COLOR_CODING_ID) {
       return (
         <View style={styles.colorFieldItemWrapper}>
-          <ColorField
-            text={this.props.getTitle(item)}
-            color={item.color}
-            style={styles.colorField}
-          />
+          <ColorField text={this?.props?.getTitle?.(item)} color={item.color} style={styles.colorField} />
           {label}
         </View>
       );
@@ -196,17 +184,17 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     return label;
   }
 
-  _isSelected(item: IItem) {
+  _isSelected(item: T) {
     return this.state.selectedItems.some(
-      selectedItem => item.id === selectedItem.id,
+      selectedItem => 'id' in item && 'id' in selectedItem && item.id === selectedItem.id
     );
   }
 
-  onSelect(item: IItem | null) {
+  onSelect(item: T | T[] | null) {
     return this.props.onSelect(item);
   }
 
-  _onTouchItem(item: IItem): IItem[] {
+  _onTouchItem(item: T): T[] {
     const selectionDisabled = this.props?.isSelectionDisabled?.(this.state.selectedItems, item) || false;
     if (selectionDisabled) {
       return this.state.selectedItems;
@@ -215,22 +203,16 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
       this.onSelect(item);
       return [item];
     }
-    let selectedItems = this._isSelected(item)
-      ? this.state.selectedItems.filter(it => it.id !== item.id)
+    const selectedItems = this._isSelected(item)
+      ? this.state.selectedItems.filter(it => 'id' in it && 'id' in item && it.id !== item.id)
       : this.state.selectedItems.concat(item);
-
-    if (item.toggleItem) {
-      selectedItems = selectedItems.filter((it: IItem) => {
-        return it.toggleItem ? it.id === item.id : it;
-      });
-    }
 
     this.setState({selectedItems});
     this.props?.onChangeSelection?.(selectedItems, item);
     return selectedItems;
   }
 
-  onClearValue: () => any = () => {
+  onClearValue = () => {
     return this.onSelect(this.props.multi ? [] : null);
   };
 
@@ -238,7 +220,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     return this.onSelect(this.state.selectedItems);
   }
 
-  getItemLayout(items: IItem[] | null, index: number): {
+  getItemLayout(items: T[] | null, index: number): {
     index: number;
     length: number;
     offset: number;
@@ -250,24 +232,27 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
     };
   }
 
-  renderItem = ({item}: IItem) => {
+  renderItem = ({item}: {item: T}) => {
     return (
       <SelectItem
         item={item}
-        isSelected={this.state.selectedItems.some(
-          selectedItem => item.id === selectedItem.id,
-        )}
+        isSelected={this._isSelected(item)}
         onPress={() => this._onTouchItem(item)}
-        titleRenderer={() =>
-          this.props.titleRenderer
-            ? this.props.titleRenderer(item)
-            : this._renderTitle(item)
-        }
+        titleRenderer={() => (this.props.titleRenderer ? this.props.titleRenderer(item) : this._renderTitle(item))}
       />
     );
   };
 
-  getItemKey = (item: IItem): string => item.id || item.ringId || item.name || item.key;
+  getItemKey = <
+    P extends T & {
+      id?: string;
+      ringId?: string;
+      name?: string;
+      key?: string;
+    }
+  >(
+    item: P
+  ): string => item.id || item.ringId || item.name || item.key || '';
 
   renderListHeader() {
     return this.renderEmptyValueItem();
@@ -275,7 +260,6 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
 
   renderItems() {
     return (
-      // @ts-ignore
       <FlatList
         contentContainerStyle={styles.container}
         testID="test:id/selectList"
@@ -316,14 +300,12 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
       : ModalView;
   }
 
-  getWrapperProps(defaultWrapperProps: { visible: boolean; animationType: string; }): IItem | null {
-    return this.props.getWrapperProps
-      ? this.props.getWrapperProps()
-      : defaultWrapperProps;
+  getWrapperProps(defaultWrapperProps: {visible: boolean; animationType: string}) {
+    return this.props.getWrapperProps ? this.props.getWrapperProps() : defaultWrapperProps;
   }
 
   onCancel = () => {
-    this.props.onCancel();
+    this?.props?.onCancel?.();
   };
 
   renderHeader() {
@@ -345,8 +327,8 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
       placeholder = i18n('Filter items'),
       noFilter,
     } = this.props;
-    const WrapperComponent: any = this.getWrapperComponent();
-    const wrapperProps: IItem | null = this.getWrapperProps({
+    const WrapperComponent = this.getWrapperComponent();
+    const wrapperProps = this.getWrapperProps({
       visible: true,
       animationType: 'slide',
     });
@@ -383,7 +365,7 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
               returnKeyType={multi ? 'done' : 'search'}
               autoCorrect={false}
               underlineColorAndroid="transparent"
-              onSubmitEditing={async () => multi ? this._onSave() : await this.onSearch(this.state.query)}
+              onSubmitEditing={async () => (multi ? this._onSave() : await this.onSearch(this.state.query))}
               value={this.state.query}
               onChangeText={this.onChangeText}
               autoCapitalize="none"
@@ -415,8 +397,8 @@ export class Select<P extends ISelectProps, S extends ISelectState> extends Reac
 }
 
 
-export class SelectModal extends Select<ISelectProps, ISelectState & { visible: boolean; }> {
-  constructor(props: ISelectProps) {
+export class SelectModal<T extends ISelectProps<T>, S extends ISelectState<T> & {visible: boolean}> extends Select<T, S> {
+  constructor(props: T) {
     super(props);
     this.state = {...this.state, visible: true};
   }
@@ -427,14 +409,14 @@ export class SelectModal extends Select<ISelectProps, ISelectState & { visible: 
     });
   };
   onCancel = () => {
-    this.props.onCancel();
+    this?.props?.onCancel?.();
     this.onHide();
   };
-  onSelect = (item: IItem) => {
+  onSelect = (item: T) => {
     this.props.onSelect(item);
     this.onHide();
   };
-  getWrapperProps = (): IItem | null => {
+  getWrapperProps = (): Partial<ViewProps> | null => {
     return null;
   };
   getWrapperComponent = () => {
@@ -453,5 +435,3 @@ export class SelectModal extends Select<ISelectProps, ISelectState & { visible: 
     );
   };
 }
-
-export default Select;
