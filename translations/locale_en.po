@@ -50,19 +50,19 @@ msgid_plural "{{amount}} issues"
 msgstr[0] "{{amount}} issue"
 msgstr[1] "{{amount}} issues"
 
-#: src/components/date/date.ts:149
+#: src/components/date/date.ts:154
 msgid "{{daysLeft}}d"
 msgid_plural "{{daysLeft}}d"
 msgstr[0] "{{daysLeft}}d"
 msgstr[1] "{{daysLeft}}d"
 
-#: src/components/date/date.ts:141
+#: src/components/date/date.ts:146
 msgid "{{hoursLeft}}h"
 msgid_plural "{{hoursLeft}}h"
 msgstr[0] "{{hoursLeft}}h"
 msgstr[1] "{{hoursLeft}}h"
 
-#: src/components/date/date.ts:132
+#: src/components/date/date.ts:137
 msgid "{{minutesAbsolute}}m"
 msgid_plural "{{minutesAbsolute}}m"
 msgstr[0] "{{minutesAbsolute}}m"
@@ -661,7 +661,7 @@ msgstr "It could mean that the issue doesn't exist or you don't have permission 
 msgid "JetBrains Privacy Policy"
 msgstr "JetBrains Privacy Policy"
 
-#: src/components/date/date.ts:121
+#: src/components/date/date.ts:126
 msgid "just now"
 msgstr "just now"
 
