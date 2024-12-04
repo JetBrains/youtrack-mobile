@@ -1,10 +1,13 @@
 import {isSLAField} from 'components/custom-field/custom-field-helper';
 
-import type {AnyIssue, IssueFull, IssueOnList} from 'types/Issue';
+import type {AnyIssue, IssueFull, IssueOnList, ListIssueField} from 'types/Issue';
 import type {Article} from 'types/Article';
 import type {CustomField, CustomFieldBase} from 'types/CustomFields';
 
-function findIssueField(issue: AnyIssue, predicate: (field: CustomFieldBase | CustomField) => boolean) {
+function findIssueField(
+  issue: AnyIssue,
+  predicate: (field: CustomFieldBase | CustomField | ListIssueField) => boolean
+) {
   const fields = issue.fields || [];
 
   for (const field of fields) {
@@ -39,7 +42,7 @@ function getReadableID(entity: IssueOnList | IssueFull | Article) {
   return (!!entity && entity?.idReadable) || '';
 }
 
-function getEntityPresentation<T extends {[key: string]: string}>(entity?: T) {
+function getEntityPresentation<T extends {[key: string]: any}>(entity?: T) {
   let userName: string = '';
 
   if (entity) {
