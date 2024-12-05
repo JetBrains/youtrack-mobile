@@ -202,7 +202,7 @@ class API extends BaseAPI {
     youtrackToken: string,
     deviceToken: string,
     userLogin: string,
-  ): Promise<string> {
+  ): Promise<Response> {
     const url = `${konnectorURL}/ring/fcmPushNotifications`;
     return await this.makeAuthorizedRequest(url, 'POST', {
       youtrackToken: youtrackToken,
