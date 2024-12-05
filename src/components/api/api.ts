@@ -108,13 +108,18 @@ class API extends BaseAPI {
     const queryString = qs.stringify({
       banned: false,
       sort: true,
-      fields: issueFields.user.toString(),
+      fields: issueFields.ISSUE_USER_WITH_GROUP_FIELDS.toString(),
     });
-    const values: User[] = await this.makeAuthorizedRequest(
+    const users: User[] = await this.makeAuthorizedRequest(
       `${this.youtTrackFieldBundleUrl}/user/${bundleId}/aggregatedUsers?${queryString}`,
     );
+    users.forEach(user => {
+      if (user.issueRelatedGroup?.icon) {
+        user.issueRelatedGroup = ApiHelper.convertRelativeUrl(user.issueRelatedGroup, 'icon', this.config.backendUrl);
+      }
+    });
     return ApiHelper.convertRelativeUrls(
-      values,
+      users,
       'avatarUrl',
       this.config.backendUrl,
     ) as User[];

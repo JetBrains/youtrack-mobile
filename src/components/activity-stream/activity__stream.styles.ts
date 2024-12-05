@@ -71,6 +71,17 @@ export const rowStyles = {
     alignItems: 'center',
     justifyContent: 'center',
   },
+  activityAvatarGroupIcon: {
+    position: 'absolute',
+    left: 20,
+    top: 20,
+    width: UNIT * 2,
+    height: UNIT * 2,
+    borderWidth: 1,
+    borderColor: '$background',
+    borderRadius: UNIT / 4,
+    overflow: 'hidden',
+  },
   activityAvatarIcon: {
     backgroundColor: '$iconBackground',
   },

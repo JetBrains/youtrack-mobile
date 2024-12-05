@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import {View, TouchableOpacity, Text} from 'react-native';
 
 import Avatar from 'components/avatar/avatar';
+import ImageWithProgress from 'components/image/image-with-progress';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {IconCheck} from 'components/icon/icon';
 
@@ -69,6 +70,13 @@ export default class ListSelectItem extends PureComponent<Props, Readonly<{}>> {
               source={{
                 uri: item.avatarUrl || item.icon,
               }}
+            />
+          )}
+          {item.avatarUrl && item.icon && (
+            <ImageWithProgress
+              resizeMethod="scale"
+              style={styles.itemIconSecondary}
+              source={{uri: item.icon}}
             />
           )}
 

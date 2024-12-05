@@ -30,12 +30,13 @@ import {SkeletonIssueCustomFields} from 'components/skeleton/skeleton';
 
 import styles from './custom-fields-panel.styles';
 
+import type {AppState} from 'reducers';
 import type {CustomField as IssueCustomField, CustomFieldValue} from 'types/CustomFields';
+import type {CustomFieldSelect} from 'components/custom-field';
+import type {PeriodFieldValue, TextFieldValue} from 'types/CustomFields';
+import type {Project} from 'types/Project';
 import type {UITheme} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
-import {AppState} from 'reducers';
-import {Project} from 'types/Project';
-import {PeriodFieldValue, TextFieldValue} from 'types/CustomFields';
 
 interface Props {
   autoFocusSelect?: boolean;
@@ -60,7 +61,7 @@ interface Props {
   helpDeskProjectsOnly: boolean;
 }
 
-interface SelectState extends ISelectProps<Project> {
+interface SelectState extends ISelectProps<CustomFieldSelect> {
   show?: boolean;
 }
 
@@ -160,12 +161,17 @@ export default function CustomFieldsPanel(props: Props) {
     setEditingProject(true);
     setSelectState({
       show: true,
-      getValue: (project: Project) => `${project.name} (${project.shortName})`,
+      getValue: (it) => {
+        const p = it as Project;
+        return `${p.name} (${p.shortName})`;
+      },
       dataSource: async query => {
         const projects = await api.getProjects(query);
         return projects
           .filter(project =>
-            helpDeskProjectsOnly ? project?.plugins?.helpDeskSettings?.enabled : !project.plugins?.helpDeskSettings?.enabled
+            helpDeskProjectsOnly
+              ? project?.plugins?.helpDeskSettings?.enabled
+              : !project.plugins?.helpDeskSettings?.enabled
           )
           .filter(project => !project.archived && !project.template)
           .filter(project => hasPermission?.canCreateIssueToProject?.(project));
@@ -290,7 +296,7 @@ export default function CustomFieldsPanel(props: Props) {
   };
 
   const renderSelect = () => {
-    const Component = isSplitView() ? SelectModal : Select;
+    const Component : React.ElementType = isSplitView() ? SelectModal : Select;
     return <Component {...selectState} autoFocus={props.autoFocusSelect} onCancel={() => closeEditor()} />;
   };
 

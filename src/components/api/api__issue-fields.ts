@@ -70,6 +70,14 @@ const ISSUE_USER_CC_FIELDS: any = toField([
   ISSUE_USER_FIELDS,
   'email',
 ]);
+const ISSUE_USER_RELATED_GROUP_FIELDS: any = toField([
+  {issueRelatedGroup: ['icon']},
+]);
+const ISSUE_USER_WITH_GROUP_FIELDS: any = toField([
+  ISSUE_USER_FIELDS,
+  ISSUE_USER_RELATED_GROUP_FIELDS,
+  'email',
+]);
 const BUNDLE_VALUE: any = toField([
   '$type',
   'id',
@@ -99,6 +107,7 @@ const ISSUE_FIELD_VALUE = toField([
       'fullName',
       'avatarUrl',
       'login',
+      'email',
       'minutes',
       'presentation',
       'text',
@@ -106,6 +115,7 @@ const ISSUE_FIELD_VALUE = toField([
       {
         color: ['id', 'background', 'foreground'],
       },
+      ISSUE_USER_RELATED_GROUP_FIELDS,
     ],
   },
 ]);
@@ -540,6 +550,7 @@ export default {
   ]),
   bundleValues: BUNDLE_VALUE,
   user: ISSUE_USER_FIELDS,
+  ISSUE_USER_WITH_GROUP_FIELDS,
   issueComment: ISSUE_COMMENTS_FIELDS,
   issueFolder: ISSUE_FOLDER_FIELDS,
   commandSuggestionFields: COMMAND_SUGGESTION_FIELDS,

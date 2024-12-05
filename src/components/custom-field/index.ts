@@ -2,10 +2,31 @@ import {getApi} from 'components/api/api__instance';
 
 import type {CustomField, FieldValue} from 'types/CustomFields';
 import type {ISelectProps} from 'components/select/select';
+import type {Project} from 'types/Project';
 import type {UserGroup} from 'types/UserGroup';
 import type {User} from 'types/User';
 
-type SelectType = UserGroup | User | {id: string; name: string};
+export type SelectExtendedType = {description?: string; icon?: string};
+export type UserCustomFieldSelect = User & SelectExtendedType;
+export type CustomFieldSelect =
+  | UserGroup
+  | UserCustomFieldSelect
+  | Project
+  | {
+      id: string;
+      name: string;
+    };
+
+const addDescriptionAndIcon = (f: User | UserGroup) => {
+  let it = f as UserCustomFieldSelect;
+  if (it.email) {
+    it = {...it, description: it.email};
+  }
+  if (it?.issueRelatedGroup?.icon) {
+    it = {...it, icon: it.issueRelatedGroup.icon};
+  }
+  return it;
+};
 
 export const getCustomFieldSelectProps = ({
   field,
@@ -14,15 +35,15 @@ export const getCustomFieldSelectProps = ({
   issueId,
 }: {
   field: CustomField;
-  onChangeSelection: (selectedItems: SelectType[], current: SelectType) => void;
+  onChangeSelection: (selectedItems: CustomFieldSelect[], current: CustomFieldSelect) => void;
   onSelect: (value: FieldValue) => void;
   issueId?: string;
-}): ISelectProps<SelectType> => {
+}): ISelectProps<CustomFieldSelect> => {
   const projectCustomField = field.projectCustomField;
 
   return {
     multi: projectCustomField.field.fieldType.isMultiValue,
-    selectedItems: new Array().concat(field.value).filter(Boolean),
+    selectedItems: new Array().concat(field.value).filter(Boolean).map(addDescriptionAndIcon),
     emptyValue: projectCustomField.canBeEmpty ? projectCustomField.emptyFieldText : null,
     dataSource: async () => {
       if (field.hasStateMachine && issueId) {
@@ -30,10 +51,12 @@ export const getCustomFieldSelectProps = ({
         return items.map(it => ({id: it.id, name: `${it.id} (${it.presentation})`}));
       }
 
-      return getApi().getCustomFieldValues(
-        projectCustomField?.bundle?.id,
-        projectCustomField.field.fieldType.valueType
-      );
+      const fieldValueType = projectCustomField.field.fieldType.valueType;
+      const customFieldValues = await getApi().getCustomFieldValues(projectCustomField?.bundle?.id, fieldValueType);
+      if (fieldValueType === 'user') {
+        return customFieldValues.map(addDescriptionAndIcon);
+      }
+      return customFieldValues;
     },
     onChangeSelection,
     onSelect,

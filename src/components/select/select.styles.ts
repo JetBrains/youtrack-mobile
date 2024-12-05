@@ -89,6 +89,17 @@ export default EStyleSheet.create({
   itemIcon: {
     marginRight: UNIT * 2,
   },
+  itemIconSecondary: {
+    position: 'absolute',
+    left: 21,
+    top: 23,
+    width: UNIT * 2,
+    height: UNIT * 2,
+    borderWidth: 1,
+    borderColor: '$background',
+    borderRadius: UNIT / 4,
+    overflow: 'hidden',
+  },
   itemIconSelected: {
     height: '90%',
     justifyContent: 'center',

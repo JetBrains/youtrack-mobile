@@ -87,7 +87,10 @@ const API = {
   patchAllRelativeAvatarUrls<T>(data: T, backendUrl: string): T {
     //TODO: potentially slow place
     objectWalk(data, (value: string | T, propertyName: string, obj: Entity) => {
-      if (typeof value === 'string' && value.indexOf('/hub/api/rest/avatar/') === 0) {
+      if (
+        typeof value === 'string' &&
+        (value.indexOf('/hub/api/rest/avatar/') === 0 || value.indexOf('/api/files/') === 0)
+      ) {
         obj[propertyName] = handleRelativeUrl(obj[propertyName], backendUrl);
       }
     });
