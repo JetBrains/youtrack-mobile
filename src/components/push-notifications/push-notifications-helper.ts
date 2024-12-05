@@ -137,6 +137,7 @@ async function subscribe(
   const api: Api = getApi();
   const resource = isAndroidPlatform() ? api.subscribeToFCMNotifications : api.subscribeToIOSNotifications;
   try {
+    log.info(`${logPrefix}(device token): ${deviceToken}`);
     log.info(logMessages.startSubscribing);
     const response = await resource.call(
       api,
