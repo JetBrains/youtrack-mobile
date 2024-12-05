@@ -34,12 +34,11 @@ import styles from './activity__add-spent-time.styles';
 import type {AppState} from 'reducers';
 import type {IssueFull} from 'types/Issue';
 import type {ISelectProps} from 'components/select/select';
+import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
 import type {WorkItem, WorkItemType} from 'types/Work';
-import {Project} from 'types/Project';
-import {ReduxThunkDispatch} from 'types/Redux';
 
 type Props = {
   issue: IssueFull;
@@ -49,12 +48,17 @@ type Props = {
   canCreateNotOwn: boolean;
 };
 
+type SelectType = User | WorkItemType;
+
 const AddSpentTimeForm = (props: Props) => {
-  const currentUser = useSelector((state: AppState) => state.app.user);
+  const currentUser = useSelector((state: AppState) => state.app.user!);
   const draftDefault = {
-    date: new Date(Date.now()),
+    ringId: '',
+    created: Date.now(),
+    date: Date.now(),
     author: currentUser,
     duration: {
+      $type: '',
       presentation: '1d',
     },
     type: {
@@ -67,6 +71,7 @@ const AddSpentTimeForm = (props: Props) => {
       id: props.issue.id,
       project: {
         id: props.issue.project.id,
+        ringId: props.issue.project.ringId,
       },
     },
   };
@@ -75,12 +80,12 @@ const AddSpentTimeForm = (props: Props) => {
   const [isProgress, updateProgress] = useState(false);
   const [isSelectVisible, updateSelectVisibility] = useState(false);
   const [draft, updateDraftWorkItem] = useState<WorkItem>(props.workItem || draftDefault);
-  const [selectProps, updateSelectProps] = useState<Partial<ISelectProps> | null>(null);
+  const [selectProps, updateSelectProps] = useState<ISelectProps<SelectType> | null>(null);
   const [error, updateError] = useState(false);
   const [modalChildren, updateModalChildren] = useState<React.ReactNode>(null);
   const issueActivityActions = createIssueActivityActions();
 
-  const doHide: () => void = (): void => {
+  const doHide = (): void => {
     if (props.onHide) {
       props.onHide();
     } else {
@@ -88,26 +93,18 @@ const AddSpentTimeForm = (props: Props) => {
     }
   };
 
-  const getIssueId: () => string = (): string =>
-    ((props.issue || (props.workItem?.issue as any)) as IssueFull).id;
+  const getIssueId = (): string => ((props.issue || props.workItem?.issue) as IssueFull).id;
 
-  const getProjectRingId: () => string = (): string =>
-    (
-      props?.issue?.project ||
-      ((props.workItem?.issue?.project as any) as Project)
-    ).ringId;
+  const getProjectRingId = (): string => (props?.issue?.project || props.workItem?.issue?.project).ringId;
 
   const getDraft = (draftItem: WorkItem): WorkItem => ({
     ...draftItem,
-    type:
-      !draftItem.type || draftItem.type?.id === null ? null : draftItem.type,
+    type: !draftItem.type || draftItem.type?.id === null ? null : draftItem.type,
   });
 
   const updateDraft = async (draftItem: WorkItem) => {
     const draftWithType: WorkItem = getDraft(draftItem);
-    dispatch(
-      issueActivityActions.updateWorkItemDraft(draftWithType, getIssueId()),
-    )
+    dispatch(issueActivityActions.updateWorkItemDraft(draftWithType, getIssueId()))
       .then((updatedDraft: WorkItem | null) => {
         if (updatedDraft) {
           updateDraftWorkItem({
@@ -157,8 +154,8 @@ const AddSpentTimeForm = (props: Props) => {
     }
   };
 
-  const renderSelect = (p: ISelectProps) => {
-    const defaultSelectProps: ISelectProps = {
+  const renderSelect = (p: ISelectProps<SelectType>) => {
+    const defaultSelectProps: ISelectProps<SelectType> = {
       multi: false,
       dataSource: () => Promise.resolve([]),
       selectedItems: [],
@@ -247,7 +244,7 @@ const AddSpentTimeForm = (props: Props) => {
       ),
     );
     updateProgress(false);
-    const isWorkItem = hasType.work(item);
+    const isWorkItem = hasType.work({$type: item.$type!});
 
     if (isWorkItem) {
       onAdd();
@@ -430,7 +427,7 @@ const AddSpentTimeForm = (props: Props) => {
           <View style={styles.feedbackFormBottomIndent} />
         </View>
       </InputScrollView>
-      {isSelectVisible && !!selectProps && renderSelect(selectProps as ISelectProps)}
+      {isSelectVisible && !!selectProps && renderSelect(selectProps)}
 
       {modalChildren && (
         <ModalPortal onHide={() => updateModalChildren(null)}>

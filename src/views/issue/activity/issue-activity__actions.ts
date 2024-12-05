@@ -64,8 +64,8 @@ export interface IssueActivityActions {
   setDefaultProjectTeam: (project: Project | ListIssueProject) => ReduxAction;
   loadActivitiesPage: (doNotReset?: boolean, issueId?: string, commentsOnly?: boolean) => ReduxAction;
   doUpdateWorkItem: (workItem: WorkItem) => ReduxAction;
-  createWorkItem: (draft: WorkItem, issueId?: string) => ReduxAction<Promise<CustomError | WorkItem>>;
-  getWorkItemTypes: (projectId?: string) => ReduxAction<Promise<WorkItemType[] | {}>>;
+  createWorkItem: (draft: WorkItem, issueId?: string) => ReduxAction<Promise<WorkItem>>;
+  getWorkItemTypes: (projectId?: string) => ReduxAction<Promise<WorkItemType[]>>;
   deleteWorkItemDraft: (issueId?: string) => ReduxAction;
   updateWorkItemDraft: (draft: WorkItem, issueId?: string) => ReduxAction<Promise<WorkItem | null>>;
   getWorkItemAuthors: (projectRingId?: string) => ReduxAction<Promise<Partial<User>[]>>;
@@ -256,7 +256,7 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
           .sort(sortAlphabetically);
       };
     },
-    getWorkItemTypes: function (projectId?: string): ReduxAction<Promise<WorkItemType[] | {}>> {
+    getWorkItemTypes: function (projectId?: string): ReduxAction<Promise<WorkItemType[]>> {
       return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         const api: Api = getApi();
         const targetProjectId: string = projectId || (getState()[stateFieldName] as IssueState).issue.project.id;
