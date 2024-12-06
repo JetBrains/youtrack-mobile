@@ -73,8 +73,8 @@ msgid "@Mention in a comment"
 msgstr "@Mention in a comment"
 
 #: src/views/helpdesk-feedback/index.ts:171
-#: src/views/issue/activity/activity__add-spent-time.tsx:383
-#: src/views/issue/activity/activity__add-spent-time.tsx:397
+#: src/views/issue/activity/activity__add-spent-time.tsx:380
+#: src/views/issue/activity/activity__add-spent-time.tsx:394
 msgid "1w 1d 1h 1m"
 msgstr "1w 1d 1h 1m"
 
@@ -199,7 +199,7 @@ msgstr "Attachment deleted"
 msgid "Attachment name"
 msgstr "Attachment name"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:352
+#: src/views/issue/activity/activity__add-spent-time.tsx:349
 msgid "Author"
 msgstr "Author"
 
@@ -392,7 +392,7 @@ msgstr "Current issue"
 msgid "Dark theme"
 msgstr "Dark theme"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:362
+#: src/views/issue/activity/activity__add-spent-time.tsx:359
 msgid "Date"
 msgstr "Date"
 
@@ -456,11 +456,11 @@ msgstr "Description changed"
 msgid "Details"
 msgstr "Details"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:220
+#: src/views/issue/activity/activity__add-spent-time.tsx:217
 msgid "Discard and close"
 msgstr "Discard and close"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:220
+#: src/views/issue/activity/activity__add-spent-time.tsx:217
 msgid "Discard draft and close?"
 msgstr "Discard draft and close?"
 
@@ -528,7 +528,7 @@ msgstr "Enter search request"
 msgid "Enter the web address for a YouTrack installation where you have a registered account"
 msgstr "Enter the web address for a YouTrack installation where you have a registered account"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:192
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:198
 msgid "Enter time value"
 msgstr "Enter time value"
 
@@ -552,7 +552,7 @@ msgstr "Filter boards by name"
 msgid "Filter existing accounts by name or username"
 msgstr "Filter existing accounts by name or username"
 
-#: src/components/select/select.tsx:345
+#: src/components/select/select.tsx:327
 msgid "Filter items"
 msgstr "Filter items"
 
@@ -697,7 +697,7 @@ msgstr "Link to comment copied"
 msgid "Linked issues"
 msgstr "Linked issues"
 
-#: src/components/select/select.tsx:300
+#: src/components/select/select.tsx:284
 msgid "Loading values…"
 msgstr "Loading values…"
 
@@ -817,7 +817,7 @@ msgstr "No favorites projects found"
 msgid "No issues found"
 msgstr "No issues found"
 
-#: src/components/select/select.tsx:304
+#: src/components/select/select.tsx:288
 msgid "No items"
 msgstr "No items"
 
@@ -825,7 +825,7 @@ msgstr "No items"
 msgid "No notifications"
 msgstr "No notifications"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:62
+#: src/views/issue/activity/activity__add-spent-time.tsx:66
 msgid "No type"
 msgstr "No type"
 
@@ -971,7 +971,7 @@ msgstr "Search articles"
 msgid "Search for a different value"
 msgstr "Search for a different value"
 
-#: src/components/custom-fields-panel/custom-fields-panel.tsx:174
+#: src/components/custom-fields-panel/custom-fields-panel.tsx:180
 msgid "Search for the project"
 msgstr "Search for the project"
 
@@ -1103,8 +1103,8 @@ msgid "Sorted by"
 msgstr "Sorted by"
 
 #: src/components/activity/activity-helper.ts:48
-#: src/views/issue/activity/activity__add-spent-time.tsx:274
-#: src/views/issue/activity/activity__add-spent-time.tsx:378
+#: src/views/issue/activity/activity__add-spent-time.tsx:271
+#: src/views/issue/activity/activity__add-spent-time.tsx:375
 msgid "Spent time"
 msgstr "Spent time"
 
@@ -1270,7 +1270,7 @@ msgstr "Touch and hold an item to view a list of available actions"
 msgid "Try Again"
 msgstr "Try Again"
 
-#: src/views/issue/activity/activity__add-spent-time.tsx:408
+#: src/views/issue/activity/activity__add-spent-time.tsx:405
 msgid "Type"
 msgstr "Type"
 
@@ -1374,7 +1374,7 @@ msgid "Wrap attribute values that contain spaces in braces {like this}."
 msgstr "Wrap attribute values that contain spaces in braces {like this}."
 
 #: src/components/comment/comment-edit.tsx:431
-#: src/views/issue/activity/activity__add-spent-time.tsx:423
+#: src/views/issue/activity/activity__add-spent-time.tsx:420
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
 
