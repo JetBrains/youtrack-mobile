@@ -238,7 +238,7 @@ const GET_VISIBILITY_FIELDS: any = toField([
     groupsWithoutRecommended: USER_GROUP_FIELDS,
     recommendedGroups: USER_GROUP_FIELDS,
     visibilityGroups: USER_GROUP_FIELDS,
-    visibilityUsers: ISSUE_USER_FIELDS,
+    visibilityUsers: ISSUE_USER_WITH_GROUP_FIELDS,
   },
 ]);
 const ISSUE_COMMENTS_BASE_FIELDS = toField([

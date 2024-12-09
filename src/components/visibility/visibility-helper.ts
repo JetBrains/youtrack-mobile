@@ -18,6 +18,13 @@ export const getGroupedData = (opts: VisibilityGroups) => {
       ? opts.groupsWithoutRecommended
       : opts.permittedGroups || opts.visibilityGroups;
 
+  const users = (opts?.permittedUsers || opts?.visibilityUsers || []).map(u => {
+    return {
+      ...u,
+      // description: u.email,
+      icon: u?.issueRelatedGroup?.icon,
+    };
+  });
   const grouped = {
     recommended: {
       title: i18n('Recommended groups and teams'),
@@ -29,7 +36,7 @@ export const getGroupedData = (opts: VisibilityGroups) => {
     },
     users: {
       title: i18n('Users'),
-      data: sort(opts.permittedUsers || opts.visibilityUsers),
+      data: sort(users),
     },
   };
 

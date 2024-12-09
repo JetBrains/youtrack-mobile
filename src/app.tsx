@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {UIManager} from 'react-native';
+import {UIManager, LogBox} from 'react-native';
 
 import Toast from 'react-native-easy-toast';
 import {ActionSheetProvider, connectActionSheet} from '@expo/react-native-action-sheet';
@@ -42,7 +42,7 @@ import type {NotificationRouteData} from 'types/Notification';
 if (UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-
+LogBox.ignoreAllLogs()
 class YouTrackMobile extends Component<void, void> {
   routeHomeName = 'Home';
 

@@ -72,6 +72,8 @@ export default EStyleSheet.create({
     color: '$text',
   },
   selectItemValue: {
+    height: SELECT_ITEM_HEIGHT,
+    position: 'relative',
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -92,7 +94,7 @@ export default EStyleSheet.create({
   itemIconSecondary: {
     position: 'absolute',
     left: 21,
-    top: 23,
+    bottom: 8,
     width: UNIT * 2,
     height: UNIT * 2,
     borderWidth: 1,

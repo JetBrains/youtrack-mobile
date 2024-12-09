@@ -579,12 +579,7 @@ export default class IssueAPI extends ApiBase {
       skip,
       top,
     });
-    visibilityOptions.visibilityUsers = ApiHelper.convertRelativeUrls(
-      visibilityOptions.visibilityUsers || [],
-      'avatarUrl',
-      this.config.backendUrl,
-    );
-    return visibilityOptions;
+    return ApiHelper.patchAllRelativeAvatarUrls(visibilityOptions, this.config.backendUrl);
   };
 
   async getMentionSuggests(
