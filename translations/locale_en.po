@@ -601,7 +601,7 @@ msgstr "Find issues that contain key words"
 msgid "Get help"
 msgstr "Get help"
 
-#: src/components/visibility/visibility-helper.ts:27
+#: src/components/visibility/visibility-helper.ts:34
 msgid "Groups and teams"
 msgstr "Groups and teams"
 
@@ -625,7 +625,7 @@ msgstr "In addition to our built-in error reporting, YouTrack Mobile uses Bugsna
 msgid "in revision"
 msgstr "in revision"
 
-#: src/components/visibility/visibility-helper.ts:51
+#: src/components/visibility/visibility-helper.ts:58
 msgid "Inherited restrictions"
 msgstr "Inherited restrictions"
 
@@ -850,7 +850,7 @@ msgstr "Notifications"
 msgid "Other"
 msgstr "Other"
 
-#: src/components/visibility/visibility-helper.ts:27
+#: src/components/visibility/visibility-helper.ts:34
 msgid "Other groups and teams"
 msgstr "Other groups and teams"
 
@@ -903,7 +903,7 @@ msgstr "Query"
 msgid "Recent searches"
 msgstr "Recent searches"
 
-#: src/components/visibility/visibility-helper.ts:23
+#: src/components/visibility/visibility-helper.ts:30
 msgid "Recommended groups and teams"
 msgstr "Recommended groups and teams"
 
@@ -1316,7 +1316,7 @@ msgstr "User account is banned"
 msgid "Username or email"
 msgstr "Username or email"
 
-#: src/components/visibility/visibility-helper.ts:31
+#: src/components/visibility/visibility-helper.ts:38
 msgid "Users"
 msgstr "Users"
 
