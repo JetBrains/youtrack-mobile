@@ -32,7 +32,7 @@ msgid_plural "{{amount}} articles"
 msgstr[0] "{{amount}} article"
 msgstr[1] "{{amount}} articles"
 
-#: src/views/create-issue/create-issue.tsx:402
+#: src/views/create-issue/create-issue.tsx:405
 msgid "{{amount}} draft"
 msgid_plural "{{amount}} drafts"
 msgstr[0] "{{amount}} draft"
@@ -103,7 +103,7 @@ msgstr "Add project to favorites"
 msgid "Add reaction"
 msgstr "Add reaction"
 
-#: src/components/comment/comment-edit.tsx:597
+#: src/components/comment/comment-edit.tsx:596
 msgid "Add spent time"
 msgstr "Add spent time"
 
@@ -138,7 +138,7 @@ msgstr "All projects"
 msgid "Appearance"
 msgstr "Appearance"
 
-#: src/views/create-issue/create-issue-actions.ts:356
+#: src/views/create-issue/create-issue-actions.ts:363
 #: src/views/issue/issue-base-actions-creater.ts:593
 msgid "Apply command…"
 msgstr "Apply command…"
@@ -175,7 +175,7 @@ msgstr "Article published"
 msgid "Article removed from favorites"
 msgstr "Article removed from favorites"
 
-#: src/components/comment/comment-edit.tsx:566
+#: src/components/comment/comment-edit.tsx:565
 #: src/views/issue/issue-base-actions-creater.ts:572
 msgid "Attach file"
 msgstr "Attach file"
@@ -229,7 +229,7 @@ msgstr "Camera"
 #: src/components/tags/tags.tsx:53
 #: src/views/article/arcticle-actions.ts:311
 #: src/views/article/arcticle-actions.ts:631
-#: src/views/create-issue/create-issue-actions.ts:363
+#: src/views/create-issue/create-issue-actions.ts:370
 #: src/views/inbox-threads/inbox-threads__thread.tsx:199
 #: src/views/inbox-threads/inbox-threads.tsx:278
 #: src/views/issue/activity/issue-activity__comment-actions.ts:342
@@ -258,7 +258,7 @@ msgstr "Clear the current search context"
 msgid "Close"
 msgstr "Close"
 
-#: src/views/knowledge-base/knowledge-base.tsx:466
+#: src/views/knowledge-base/knowledge-base.tsx:472
 msgid "Collapse all"
 msgstr "Collapse all"
 
@@ -384,7 +384,7 @@ msgstr "created"
 msgid "Created by"
 msgstr "Created by"
 
-#: src/views/create-issue/create-issue.tsx:285
+#: src/views/create-issue/create-issue.tsx:288
 msgid "Current issue"
 msgstr "Current issue"
 
@@ -485,7 +485,7 @@ msgid "Don't send logs"
 msgstr "Don't send logs"
 
 #: src/views/create-issue/create-issue-drafts.tsx:66
-#: src/views/knowledge-base/knowledge-base.tsx:489
+#: src/views/knowledge-base/knowledge-base.tsx:495
 msgid "Drafts"
 msgstr "Drafts"
 
@@ -498,7 +498,7 @@ msgstr "Drafts"
 msgid "Edit"
 msgstr "Edit"
 
-#: src/components/comment/comment-edit.tsx:614
+#: src/components/comment/comment-edit.tsx:613
 msgid "Edit comment"
 msgstr "Edit comment"
 
@@ -536,7 +536,7 @@ msgstr "Enter time value"
 msgid "Everything"
 msgstr "Everything"
 
-#: src/views/knowledge-base/knowledge-base.tsx:524
+#: src/views/knowledge-base/knowledge-base.tsx:530
 msgid "Favorites"
 msgstr "Favorites"
 
@@ -558,7 +558,7 @@ msgstr "Filter items"
 
 #: src/views/article-create/article-create.tsx:148
 #: src/views/issues/issues-actions.ts:355
-#: src/views/knowledge-base/knowledge-base.tsx:508
+#: src/views/knowledge-base/knowledge-base.tsx:514
 msgid "Filter projects"
 msgstr "Filter projects"
 
@@ -589,7 +589,7 @@ msgstr "Filter users, groups, and teams"
 msgid "Filters"
 msgstr "Filters"
 
-#: src/views/knowledge-base/knowledge-base.tsx:566
+#: src/views/knowledge-base/knowledge-base.tsx:572
 msgid "Find favorite projects"
 msgstr "Find favorite projects"
 
@@ -609,7 +609,7 @@ msgstr "Groups and teams"
 msgid "Help us fix problems faster"
 msgstr "Help us fix problems faster"
 
-#: src/views/knowledge-base/knowledge-base.tsx:563
+#: src/views/knowledge-base/knowledge-base.tsx:569
 msgid "Here you'll see a list of articles from your favorite projects"
 msgstr "Here you'll see a list of articles from your favorite projects"
 
@@ -665,7 +665,7 @@ msgstr "JetBrains Privacy Policy"
 msgid "just now"
 msgstr "just now"
 
-#: src/views/knowledge-base/knowledge-base.tsx:602
+#: src/views/knowledge-base/knowledge-base.tsx:608
 msgid "Knowledge Base"
 msgstr "Knowledge Base"
 
@@ -683,7 +683,7 @@ msgid "Light theme"
 msgstr "Light theme"
 
 #: src/components/linked-issues/linked-issues-add-link.tsx:247
-#: src/views/create-issue/create-issue.tsx:373
+#: src/views/create-issue/create-issue.tsx:376
 #: src/views/issue/issue-base-actions-creater.ts:583
 msgid "Link issue"
 msgstr "Link issue"
@@ -718,7 +718,7 @@ msgid "Logs"
 msgstr "Logs"
 
 #: src/views/knowledge-base/knowledge-base-actions.ts:454
-#: src/views/knowledge-base/knowledge-base.tsx:411
+#: src/views/knowledge-base/knowledge-base.tsx:417
 msgid "Manage Favorite Projects"
 msgstr "Manage Favorite Projects"
 
@@ -777,7 +777,7 @@ msgstr "Mute thread"
 msgid "New Article"
 msgstr "New Article"
 
-#: src/views/create-issue/create-issue.tsx:452
+#: src/views/create-issue/create-issue.tsx:455
 msgid "New Issue"
 msgstr "New Issue"
 
@@ -793,7 +793,7 @@ msgstr "Next"
 msgid "No activity yet"
 msgstr "No activity yet"
 
-#: src/views/knowledge-base/knowledge-base.tsx:239
+#: src/views/knowledge-base/knowledge-base.tsx:245
 msgid "No articles"
 msgstr "No articles"
 
@@ -883,7 +883,7 @@ msgid "Project"
 msgstr "Project"
 
 #: src/views/issues/issues-actions.ts:296
-#: src/views/knowledge-base/knowledge-base.tsx:527
+#: src/views/knowledge-base/knowledge-base.tsx:533
 msgid "Projects"
 msgstr "Projects"
 
@@ -983,7 +983,7 @@ msgstr "Search Input Mode"
 msgid "Select a reporter or enter a new email address"
 msgstr "Select a reporter or enter a new email address"
 
-#: src/views/knowledge-base/knowledge-base.tsx:645
+#: src/views/knowledge-base/knowledge-base.tsx:651
 msgid "Select an article from the list"
 msgstr "Select an article from the list"
 
@@ -1254,7 +1254,7 @@ msgstr "Title changed"
 msgid "To view an item in context, select an issue, article, or update from the list"
 msgstr "To view an item in context, select an issue, article, or update from the list"
 
-#: src/views/knowledge-base/knowledge-base.tsx:512
+#: src/views/knowledge-base/knowledge-base.tsx:518
 msgid "To view articles in the knowledge base for a specific project, mark it as a favorite"
 msgstr "To view articles in the knowledge base for a specific project, mark it as a favorite"
 
@@ -1373,7 +1373,7 @@ msgstr "Woah, you can't touch this!"
 msgid "Wrap attribute values that contain spaces in braces {like this}."
 msgstr "Wrap attribute values that contain spaces in braces {like this}."
 
-#: src/components/comment/comment-edit.tsx:431
+#: src/components/comment/comment-edit.tsx:430
 #: src/views/issue/activity/activity__add-spent-time.tsx:420
 msgid "Write a comment, @mention people"
 msgstr "Write a comment, @mention people"
