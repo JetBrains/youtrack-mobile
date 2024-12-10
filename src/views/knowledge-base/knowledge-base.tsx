@@ -153,6 +153,12 @@ export class KnowledgeBase extends Component<Props, State> {
     });
   }
 
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.lastVisitedArticle !== this.props.lastVisitedArticle) {
+      this.updateFocusedArticle(this.props.lastVisitedArticle);
+    }
+  }
+
   setSplitView = (): void => {
     this.setState({
       isSplitView: isSplitView(),
