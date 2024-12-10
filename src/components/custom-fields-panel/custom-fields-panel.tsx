@@ -31,7 +31,7 @@ import {SkeletonIssueCustomFields} from 'components/skeleton/skeleton';
 import styles from './custom-fields-panel.styles';
 
 import type {AppState} from 'reducers';
-import type {CustomField as IssueCustomField, CustomFieldValue} from 'types/CustomFields';
+import type {CustomField as IssueCustomField, CustomFieldBaseValue, CustomFieldValue} from 'types/CustomFields';
 import type {CustomFieldSelect} from 'components/custom-field';
 import type {PeriodFieldValue, TextFieldValue} from 'types/CustomFields';
 import type {Project} from 'types/Project';
@@ -49,7 +49,7 @@ interface Props {
     canCreateIssueToProject?: (project: Project) => boolean;
     canEditProject: boolean;
   };
-  onUpdate: (field: IssueCustomField, value: CustomFieldValue | null) => Promise<unknown>;
+  onUpdate: (field: IssueCustomField, value: CustomFieldBaseValue) => Promise<unknown>;
   onUpdateProject: (project: Project) => Promise<unknown>;
   onUpdateSprints: () => void;
   uiTheme: UITheme;
@@ -136,7 +136,7 @@ export default function CustomFieldsPanel(props: Props) {
     setDatePickerState(dataPickerDefault);
   };
 
-  const saveUpdatedField = async (field: IssueCustomField, value: CustomFieldValue | null) => {
+  const saveUpdatedField = async (field: IssueCustomField, value: CustomFieldBaseValue) => {
     const updateSavingState = (f: IssueCustomField | null) => {
       if (isComponentMounted) {
         setSavingField(f);
@@ -364,7 +364,7 @@ export default function CustomFieldsPanel(props: Props) {
   const isFieldDisabled = () => isConnected === false || isReporter;
 
   const renderFields = () => {
-    const {issueProject = {name: ''}, onUpdateSprints} = props;
+    const {issueProject = {name: '', id: ''}, onUpdateSprints} = props;
     return (
       <>
         {!props.fields && <SkeletonIssueCustomFields />}
@@ -414,7 +414,7 @@ export default function CustomFieldsPanel(props: Props) {
                 );
               })}
 
-              <IssueSprintsField projectId={issueProject?.id} onUpdate={onUpdateSprints} />
+              <IssueSprintsField projectId={issueProject.id} onUpdate={onUpdateSprints} />
             </ScrollView>
           </PanelWithSeparator>
         )}

@@ -5,7 +5,7 @@ import {createCommandDialogReducers} from 'components/command-dialog/command-dia
 import {createIssueNamespace} from './create-issue-action-types';
 import {LOG_OUT} from 'actions/action-types';
 
-import type {Attachment, CustomField, FieldValue, IssueLink} from 'types/CustomFields';
+import {Attachment, CustomField, CustomFieldBaseValue, IssueLink} from 'types/CustomFields';
 import type {CommandSuggestionResponse, IssueCreate, IssueFull} from 'types/Issue';
 import type {Project} from 'types/Project';
 
@@ -108,7 +108,7 @@ const slice = createSlice({
     resetCreation: () => initialState,
     setIssueFieldValue: (
       state: CreateIssueState,
-      action: PayloadAction<{field: CustomField; value: FieldValue;}>
+      action: PayloadAction<{field: CustomField; value: CustomFieldBaseValue;}>
     ) => {
       state.issue = {
         ...state.issue,

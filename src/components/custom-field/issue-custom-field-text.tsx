@@ -16,10 +16,13 @@ interface Props {
   textField: CustomFieldText;
   style?: ViewStyleProp;
   usesMarkdown: boolean;
+  testID?: string;
+  accessibilityLabel?: string;
+  accessible?: boolean;
 }
 
 const IssueCustomFieldText = (props: Props) => {
-  const timeout: { current: NodeJS.Timeout | string | number | undefined } = useRef();
+  const timeout: {current: NodeJS.Timeout | string | number | undefined} = useRef();
 
   useEffect(() => {
     return clearTimeout(timeout.current);
@@ -30,7 +33,7 @@ const IssueCustomFieldText = (props: Props) => {
         props.onUpdateFieldValue(text.trim());
       }, 300);
     },
-    [props],
+    [props]
   );
   const fieldValue: string = props.textField?.value?.text || '';
 
@@ -39,21 +42,22 @@ const IssueCustomFieldText = (props: Props) => {
   }
 
   return (
-    <View style={[styles.issueTextField, props.style]}>
+    <View
+      style={[styles.issueTextField, props.style]}
+      testID={props.testID}
+      accessibilityLabel={props.accessibilityLabel}
+      accessible={props.accessible}
+    >
       <Text style={styles.issueTextFieldTitle}>
         {props.textField?.name}
-        {isRequiredCustomField(props.textField) && (
-          <Text style={styles.error}> *</Text>
-        )}
+        {isRequiredCustomField(props.textField) && <Text style={styles.error}> *</Text>}
       </Text>
 
       {props.editMode && (
         <TextEditForm
           editable={true}
           description={fieldValue}
-          placeholderText={
-            props.textField.projectCustomField.emptyFieldText || ''
-          }
+          placeholderText={props.textField.projectCustomField.emptyFieldText || ''}
           multiline={true}
           onDescriptionChange={(text: string) => {
             onChange(text);

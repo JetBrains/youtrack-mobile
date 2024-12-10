@@ -1,9 +1,10 @@
+import type {ColorCoding} from 'components/color-field/color-field';
+import type {Entity, EntityBase} from 'types/Entity';
 import type {IssueFull, IssueOnList} from './Issue';
+import type {Mentions} from 'components/wiki/markdown-view-rules';
 import type {Reaction} from './Reaction';
 import type {User} from './User';
 import type {Visibility} from './Visibility';
-import {Entity, EntityBase} from 'types/Entity';
-import {Mentions} from 'components/wiki/markdown-view-rules';
 
 export interface ColorField extends EntityBase {
   background: string;
@@ -99,17 +100,35 @@ export interface FieldValue extends ICustomFieldValue {
   text: string;
 }
 
+export interface EnumBundleValue extends ICustomFieldValue {
+  archived: boolean;
+  color: ColorCoding;
+  description: string;
+}
+
+export interface OwnedBundleValue {
+  $type: string;
+  id: string;
+  name: string;
+  color: ColorCoding;
+}
+
 export type CustomFieldValue =
   | FloatIntNumberFieldValue
   | TextFieldValue
   | UserFieldValue
   | PeriodFieldValue
-  | StateFieldValue;
+  | StateFieldValue
+  | EnumBundleValue
+  | CustomFieldPeriod
+  | OwnedBundleValue;
+
+export type CustomFieldBaseValue = CustomFieldValue | CustomFieldValue[] | TextFieldValue | null;
 
 export interface CustomFieldBase extends EntityBase {
   name: string;
   projectCustomField: ProjectCustomField;
-  value: CustomFieldValue | CustomFieldValue[];
+  value: CustomFieldBaseValue;
 }
 
 export interface CustomFieldSLA extends CustomFieldBase {
@@ -121,11 +140,11 @@ export interface CustomField extends CustomFieldBase {
   hasStateMachine?: boolean;
 }
 
-export interface CustomFieldText extends Omit<CustomFieldBase, 'value'> {
+export interface CustomFieldText extends CustomFieldBase {
   value: TextFieldValue;
 }
 
-export interface CustomFieldPeriod extends Omit<CustomFieldBase, 'value'> {
+export interface CustomFieldPeriod extends CustomFieldBase {
   value: PeriodFieldValue;
 }
 

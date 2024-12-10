@@ -7,9 +7,10 @@ import usage from 'components/usage/usage';
 import {actions} from './create-issue-reducers';
 import {ANALYTICS_ISSUE_CREATE_PAGE} from 'components/analytics/analytics-ids';
 import {attachmentActions} from './create-issue__attachment-actions-and-types';
+import {CATEGORY_NAME} from 'views/create-issue/constants';
 import {commandDialogTypes, ISSUE_CREATED} from './create-issue-action-types';
 import {CUSTOM_ERROR_MESSAGE, DEFAULT_ERROR_MESSAGE} from 'components/error/error-messages';
-import {getStorageState, flushStoragePart} from 'components/storage/storage';
+import {flushStoragePart, getStorageState} from 'components/storage/storage';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {notifyError} from 'components/notification/notification';
@@ -20,15 +21,20 @@ import {until} from 'util/util';
 import type Api from 'components/api/api';
 import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
 import type {AnyIssue, CommandSuggestionResponse, IssueCreate, IssueOnList} from 'types/Issue';
-import type {CustomError} from 'types/Error';
-import type {CustomField, FieldValue, Attachment, CustomFieldText, IssueLink} from 'types/CustomFields';
+import {
+  Attachment,
+  CustomField,
+  CustomFieldBaseValue,
+  CustomFieldText,
+  IssueLink,
+} from 'types/CustomFields';
+import type {AnyError} from 'types/Error';
 import type {Folder} from 'types/User';
 import type {NormalizedAttachment} from 'types/Attachment';
+import type {Project} from 'types/Project';
 import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 import type {StorageState} from 'components/storage/storage';
 import type {Visibility} from 'types/Visibility';
-
-export const CATEGORY_NAME = 'Create issue view';
 
 export function setIssueSummary(summary: string) {
   return actions.setIssueSummary({summary});
@@ -85,7 +91,7 @@ export function loadStoredProject(): ReduxAction {
 
     if (!projectId) {
       const searchContext: Partial<Folder> | null = getState().issueList?.searchContext;
-      if (searchContext && hasType.project(searchContext)) {
+      if (searchContext && hasType.project({$type: searchContext.$type!})) {
         projectId = searchContext.id;
       }
     }
@@ -167,7 +173,8 @@ export function updateIssueDraft(ignoreFields: boolean = false, draftData?: Reco
         await storeIssueDraftId(updatedDraftIssue.id);
       }
     } catch (err) {
-      const error = (await resolveError(err as CustomError)) || new Error(DEFAULT_ERROR_MESSAGE);
+      const e = err as AnyError;
+      const error = (await resolveError(e)) || new Error(DEFAULT_ERROR_MESSAGE);
       const {error_description} = error;
 
       if (
@@ -264,7 +271,7 @@ export function createIssue(
   };
 }
 
-export function updateProject(project: Record<string, any>): ReduxAction {
+export function updateProject(project: Project): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
     dispatch(actions.setIssueProject({project}));
     log.info('Create Issue Actions: Project has been updated');
@@ -274,7 +281,7 @@ export function updateProject(project: Record<string, any>): ReduxAction {
   };
 }
 
-export function updateFieldValue(field: CustomField | CustomFieldText, value: Partial<FieldValue>): ReduxAction {
+export function updateFieldValue(field: CustomField | CustomFieldText, value: CustomFieldBaseValue): ReduxAction {
   return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
     dispatch(actions.setIssueFieldValue({field, value}));
     usage.trackEvent(CATEGORY_NAME, 'Change field value');
@@ -289,7 +296,7 @@ export function updateFieldValue(field: CustomField | CustomFieldText, value: Pa
       log.info('Create Issue Actions: Issue field value updated');
       dispatch(loadIssueFromDraft(issue.id));
     } catch (err) {
-      notifyError(err as CustomError);
+      notifyError(err as AnyError);
     }
   };
 }
@@ -343,7 +350,7 @@ export function updateVisibility(visibility: Visibility): ReduxAction {
       dispatch(actions.setIssueDraft({issue: draftWithVisibility}));
     } catch (err) {
       dispatch(actions.setIssueDraft({issue: draftIssueCopy}));
-      notifyError(err as CustomError);
+      notifyError(err as AnyError);
     }
   };
 }

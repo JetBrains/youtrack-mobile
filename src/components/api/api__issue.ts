@@ -14,6 +14,7 @@ import type Auth from 'components/auth/oauth2';
 import type {Activity} from 'types/Activity';
 import type {
   Attachment,
+  CustomFieldBaseValue,
   CustomFieldText,
   FieldValue,
   IssueComment,
@@ -233,8 +234,8 @@ export default class IssueAPI extends ApiBase {
   async updateIssueDraftFieldValue(
     issueId: string,
     fieldId: string,
-    value: FieldValue,
-  ): Promise<any> {
+    value: CustomFieldBaseValue,
+  ) {
     const queryString = qs.stringify({
       fields: 'id,ringId,value',
     });

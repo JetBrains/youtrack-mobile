@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {bindActionCreators, Dispatch} from 'redux';
+import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import * as createIssueActions from './create-issue-actions';
@@ -48,12 +48,13 @@ import {
 } from 'components/icon/icon';
 import {ThemeContext} from 'components/theme/theme-context';
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
-import type {AnyIssue, IssueFull} from 'types/Issue';
+import type {AnyIssue} from 'types/Issue';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import type {CreateIssueState} from './create-issue-reducers';
-import type {
+import {
   Attachment,
   CustomField,
+  CustomFieldBaseValue,
   CustomFieldText,
   IssueLink,
   Tag,
@@ -61,13 +62,14 @@ import type {
 
 import styles from './create-issue.styles';
 
+import type {AppState} from 'reducers';
+import type {IssueCreate} from 'types/Issue';
 import type {NormalizedAttachment} from 'types/Attachment';
+import type {Project} from 'types/Project';
+import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme, UITheme, UIThemeColors} from 'types/Theme';
-import {AppState} from 'reducers';
-import {IssueCreate} from 'types/Issue';
-import {Project} from 'types/Project';
 
-type AdditionalProps = {
+interface AdditionalProps {
   issuePermissions: IssuePermissions;
   predefinedDraftId: string | null;
   drafts: IssueCreate[];
@@ -76,7 +78,7 @@ type AdditionalProps = {
   isMatchesQuery?: () => boolean;
   isConnected: boolean;
   starId: string;
-};
+}
 
 type Props = CreateIssueState &
   typeof createIssueActions &
@@ -153,9 +155,9 @@ class CreateIssue extends PureComponent<Props, State> {
       />
     );
   };
-  canUpdateField = (field: CustomField) => this.props.issuePermissions.canUpdateField(this.props.issue as IssueFull, field);
+  canUpdateField = (field: CustomField) => this.props.issuePermissions.canUpdateField(this.props.issue, field);
   canCreateIssueToProject = (project: Project) => this.props.issuePermissions.canCreateIssueToProject(project);
-  onFieldUpdate = async (field: CustomField, value: any) => await this.props.updateFieldValue(field, value);
+  onFieldUpdate = async (field: CustomField, value: CustomFieldBaseValue) => await this.props.updateFieldValue(field, value);
   onUpdateProject = async (project: Project) => await this.props.updateProject(project);
 
   renderCustomFieldPanel() {
@@ -177,6 +179,7 @@ class CreateIssue extends PureComponent<Props, State> {
         }}
         onUpdate={this.onFieldUpdate}
         onUpdateProject={this.onUpdateProject}
+        onUpdateSprints={() => {}}
         uiTheme={this.getUITheme()}
         helpDeskProjectsOnly={false}
       />
@@ -497,12 +500,8 @@ class CreateIssue extends PureComponent<Props, State> {
                           key={`issueCustomFieldText${index}`}
                           style={styles.textFields}
                           editMode={true}
-                          onUpdateFieldValue={async (
-                            fieldValue: string,
-                          ): Promise<void> => {
-                            await this.props.updateFieldValue(textField, {
-                              text: fieldValue,
-                            });
+                          onUpdateFieldValue={async (fieldText: string) => {
+                            await this.props.updateFieldValue(textField, {...textField, text: fieldText});
                           }}
                           textField={textField}
                           usesMarkdown={issue.usesMarkdown}
@@ -632,7 +631,7 @@ const mapStateToProps = (state: AppState, ownProps: { predefinedDraftId?: string
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
+const mapDispatchToProps = (dispatch: ReduxThunkDispatch) => {
   return {
     ...bindActionCreators(createIssueActions, dispatch),
     deleteAllDrafts: () => {
