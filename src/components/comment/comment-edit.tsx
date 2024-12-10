@@ -299,7 +299,6 @@ const CommentEdit = (props: Props) => {
         onSubmit={(visibility: Visibility | null) => {
           setEditingComment(getCurrentComment({...state.editingComment, visibility}));
         }}
-        uiTheme={theme.uiTheme}
         getOptions={props.getVisibilityOptions}
         visibilityDefaultLabel={props.visibilityLabel}
       />
@@ -517,10 +516,10 @@ const CommentEdit = (props: Props) => {
               props.focus || !!editingComment.reply,
               () => toggleVisibilityControl(true),
               () => {
-                changeState({
-                  mentionsVisible: false,
-                });
-                toggleVisibilityControl(false);
+                if (!isVisibilitySelectVisible) {
+                  changeState({mentionsVisible: false});
+                  toggleVisibilityControl(false);
+                }
               },
             )}
             {Boolean(!!editingComment.text || hasAttachments()) && renderSubmitButton()}
