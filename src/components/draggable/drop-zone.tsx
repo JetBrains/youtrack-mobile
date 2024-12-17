@@ -24,7 +24,7 @@ export type ZoneInfo = {
   y: number;
   data: ZoneInfoData;
   placeholderIndex: number | null | undefined;
-  ref: React.Ref<typeof DropZone>;
+  ref: View | null;
   onMoveOver: (
     arg0: {
       x: number;
@@ -55,6 +55,7 @@ type State = {
 };
 
 class DropZone extends React.Component<PropsWithContext, State> {
+  wrapper = React.createRef<View>();
   placeholderStyles: ViewStyleProp = {
     height: UNIT,
     marginLeft: UNIT * 2,
@@ -65,17 +66,17 @@ class DropZone extends React.Component<PropsWithContext, State> {
     active: false,
   };
   reportMeasurements: () => void = () => {
-    if (!this.refs.wrapper) {
+    if (!this.wrapper.current) {
       return;
     }
 
     const {dragContext, dragging, data} = this.props;
 
     if (dragging) {
-      dragContext.removeZone(this.refs.wrapper);
+      dragContext.removeZone(this.wrapper.current);
     }
 
-    this.refs.wrapper.measure((_, __, width, height, x, y) => {
+    this.wrapper.current.measure((_, __, width, height, x, y) => {
       if (dragging) {
         return;
       }
@@ -87,7 +88,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
         y,
         data,
         placeholderIndex: this.state.placeholderIndex,
-        ref: this.refs.wrapper,
+        ref: this.wrapper.current,
         onMoveOver: this.onMoveOver,
         onLeave: this.onLeave,
         onDrop: this.onDrop,
@@ -102,7 +103,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
   }
 
   componentWillUnmount() {
-    this.props.dragContext.removeZone(this.refs.wrapper);
+    this.props.dragContext.removeZone(this.wrapper.current);
   }
 
   componentDidUpdate() {
@@ -218,7 +219,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
   render(): React.ReactNode {
     const {style, children} = this.props;
     return (
-      <View style={style} onLayout={this.reportMeasurements} ref="wrapper">
+      <View style={style} onLayout={this.reportMeasurements} ref={this.wrapper}>
         {this.getChildrenWithPlaceholder(children)}
       </View>
     );

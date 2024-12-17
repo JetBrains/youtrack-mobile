@@ -12,7 +12,6 @@ import com.facebook.soloader.SoLoader
 import com.wix.reactnativenotifications.RNNotificationsPackage
 import com.facebook.react.ReactHost
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
-import com.facebook.react.flipper.ReactNativeFlipper
 
 class MainApplication : Application(), ReactApplication {
     override val reactNativeHost: ReactNativeHost =
@@ -33,7 +32,7 @@ class MainApplication : Application(), ReactApplication {
             }
 
     override val reactHost: ReactHost
-        get() = getDefaultReactHost(this.applicationContext, reactNativeHost)
+        get() = getDefaultReactHost(applicationContext, reactNativeHost)
 
     override fun onCreate() {
         super.onCreate()
@@ -43,6 +42,5 @@ class MainApplication : Application(), ReactApplication {
             // If you opted-in for the New Architecture, we load the native entry point for this app.
             load()
         }
-        ReactNativeFlipper.initializeFlipper(this, reactNativeHost.reactInstanceManager)
     }
 }

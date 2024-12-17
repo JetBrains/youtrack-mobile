@@ -3,7 +3,7 @@
  * Modification of https://github.com/deanmcpherson/react-native-drag-drop
  */
 import * as React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {DragContext} from './drag-container';
 import type {DragContextType} from './drag-container';
 const LONG_PRESS_DELAY = 500;
@@ -21,10 +21,12 @@ type PropsWithContext = Props & {
 };
 
 class Draggable extends React.Component<PropsWithContext, void> {
+  wrapper = React.createRef<View>();
+
   _initiateDrag = () => {
     if (!this.props.disabled) {
       this.props.dragContext.onInitiateDrag(
-        this.refs.wrapper,
+        this.wrapper.current,
         this.props.children,
         this.props.data,
       );
@@ -49,7 +51,7 @@ class Draggable extends React.Component<PropsWithContext, void> {
         onPressIn={
           this.props.dragOn === 'onPressIn' ? this._initiateDrag : null
         }
-        ref="wrapper"
+        ref={this.wrapper}
       >
         {React.Children.map(this.props.children, child => {
           return React.cloneElement(child, {

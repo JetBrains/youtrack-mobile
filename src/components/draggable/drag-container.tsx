@@ -11,10 +11,9 @@ import {
   Animated,
   TouchableWithoutFeedback,
 } from 'react-native';
-type Draggable = typeof import('./draggable').default;
 import DropZone, {ZoneInfo} from './drop-zone';
 type DraggingInfo = {
-  ref: React.Ref<Draggable> | null | undefined;
+  ref: React.RefObject<View> | null;
   data: Record<string, any>;
   children: React.ReactNode;
   startPosition: {
@@ -27,13 +26,13 @@ type DraggingInfo = {
 export type DragContextType = {
   dropZones: ZoneInfo[];
   onInitiateDrag: (
-    ref: Record<string, any>,
+    ref: View | null,
     children: React.ReactNode,
     data: Record<string, any>,
   ) => any;
   dragging: DraggingInfo | null | undefined;
   updateZone: (arg0: ZoneInfo) => any;
-  removeZone: (arg0: React.Ref<typeof DropZone>) => any;
+  removeZone: (arg0: View | null) => any;
   registerOnDragStart: (...args: any[]) => any;
   registerOnDrag: (...args: any[]) => any;
   registerOnDrop: (...args: any[]) => any;
@@ -280,13 +279,13 @@ class DragContainer extends React.Component<Props, State> {
     });
   }
 
-  onInitiateDrag: (ref: any, children: any, data: any) => void = (
-    ref: Record<string, any>,
+  onInitiateDrag = (
+    ref: View,
     children: any,
     data: Record<string, any>,
   ) => {
     this.reportOnDragStart();
-    ref.measure((x, y, width, height, pageX, pageY) => {
+    ref.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
       if (this._listener) {
         this.state.location.removeListener(this._listener);
       }
