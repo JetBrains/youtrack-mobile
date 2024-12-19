@@ -11,8 +11,8 @@ async function setStorage(state = {}) {
   return await storage.__setStorageState(state);
 }
 
-function createIssuePriorityFieldMock(...args) {
-  return Object.assign({
+function createIssuePriorityFieldMock(data) {
+  return {
     projectCustomField: {
       field: {
         name: 'priority',
@@ -35,30 +35,27 @@ function createIssuePriorityFieldMock(...args) {
     },
     localizedName: null,
     color: {id: '17', $type: 'FieldStyle'},
-  }, ...args);
+    ...data,
+  };
 }
 
-function createIssueMock(...args) {
-  return Object.assign(
-    {
-      $type: 'Issue',
-      id: '00-00',
-      summary: 'Issue test summary',
-      description: 'Issue test description',
-      fields: [createIssuePriorityFieldMock()],
-    },
-    ...args
-  );
+function createIssueMock(data) {
+  return {
+    $type: 'Issue',
+    id: '00-00',
+    summary: 'Issue test summary',
+    description: 'Issue test description',
+    fields: [createIssuePriorityFieldMock()],
+    ...data,
+  };
 }
 
-function createArticleMock(...args) {
-  return Object.assign(
-    createIssueMock(),
-    {
-      $type: 'Article',
-    },
-    ...args
-  );
+function createArticleMock(data) {
+  return {
+    ...createIssueMock(),
+    $type: 'Article',
+    ...data,
+  };
 }
 
 function createMockStore(middlewareArgument) {
@@ -113,7 +110,7 @@ function createUserMock(data = {}) {
 }
 
 function createProjectMock(data) {
-  return Object.assign({
+  return {
     shortName: uuid().toString().toUpperCase(),
     name: uuid(),
     ringId: uuid(),
@@ -126,9 +123,9 @@ function createProjectMock(data) {
         enabled: true,
       },
     },
-  }, data);
+    ...data,
+  };
 }
-
 
 function createCommentMock(data = {}) {
   return deepmerge(
@@ -161,7 +158,7 @@ function getPastTime() {
 }
 
 function uuid(isNumber) {
-  uuid.id = (uuid.id || 1);
+  uuid.id = uuid.id || 1;
   return isNumber ? uuid.id++ : `${uuid.id++}`;
 }
 
@@ -190,50 +187,55 @@ function createConfigMock() {
 
 function createAuthParamsMock() {
   return {
-    'access_token': 'access-token',
-    'refresh_token': 'refresh-token',
-    'token_type': 'token-type',
+    access_token: 'access-token',
+    refresh_token: 'refresh-token',
+    token_type: 'token-type',
   };
 }
 
 function createAuthMock(config) {
   return {
-    ...(new Auth(config || createConfigMock())),
+    ...new Auth(config || createConfigMock()),
     getAuthorizationHeaders: () => ({Authorization: 'token type fake token'}),
   };
 }
 
 function createActivityCustomFieldMock(data = {}) {
-  return deepmerge({
-    $type: 'CustomFieldActivityItem',
-    added: [{
-      $type: 'StateBundleElement',
-      color: {$type: 'FieldStyle', id: 3},
-      id: '0-1',
-      name: 'Fixed',
-    }],
-    author: {
-      $type: 'User',
-      avatarUrl: 'https://example.com/avatar',
-      fullName: 'John Dow',
-      id: '0-1',
-      login: 'John.Dow',
-      name: 'John Dow',
-      ringId: '1234',
+  return deepmerge(
+    {
+      $type: 'CustomFieldActivityItem',
+      added: [
+        {
+          $type: 'StateBundleElement',
+          color: {$type: 'FieldStyle', id: 3},
+          id: '0-1',
+          name: 'Fixed',
+        },
+      ],
+      author: {
+        $type: 'User',
+        avatarUrl: 'https://example.com/avatar',
+        fullName: 'John Dow',
+        id: '0-1',
+        login: 'John.Dow',
+        name: 'John Dow',
+        ringId: '1234',
+      },
+      category: {
+        $type: 'ActivityCategory',
+        id: 'CustomFieldCategory',
+      },
+      removed: [],
+      timestamp: uuid(true),
+      target: {
+        $type: 'Issue',
+        created: 1,
+        id: '0-1',
+        usesMarkdown: true,
+      },
     },
-    category: {
-      $type: 'ActivityCategory',
-      id: 'CustomFieldCategory',
-    },
-    removed: [],
-    timestamp: uuid(true),
-    target: {
-      $type: 'Issue',
-      created: 1,
-      id: '0-1',
-      usesMarkdown: true,
-    },
-  }, data);
+    data
+  );
 }
 
 function createThreadMock(data = {}) {
@@ -242,12 +244,14 @@ function createThreadMock(data = {}) {
       id: `S-${uuid()}`,
       notified: 1,
       muted: false,
-      messages: [{
-        id: `S-message-${uuid()}`,
-        read: false,
-        timestamp: 0,
-        activities: [createActivityCustomFieldMock()],
-      }],
+      messages: [
+        {
+          id: `S-message-${uuid()}`,
+          read: false,
+          timestamp: 0,
+          activities: [createActivityCustomFieldMock()],
+        },
+      ],
       subject: {
         target: {
           $type: 'jetbrains.charisma.persistent.Issue',
@@ -262,30 +266,34 @@ function createThreadMock(data = {}) {
 }
 
 function reactReduxMockFn() {
-  return () => jest.mock('react-redux', () => {
-    return {
-      ...jest.requireActual('react-redux'),
-      useSelector: jest.fn().mockImplementation(() => true),
-      useDispatch: jest.fn().mockImplementation(() => {}),
-    };
-  });
+  return () =>
+    jest.mock('react-redux', () => {
+      return {
+        ...jest.requireActual('react-redux'),
+        useSelector: jest.fn().mockImplementation(() => true),
+        useDispatch: jest.fn().mockImplementation(() => {}),
+      };
+    });
 }
 
 function createFolder(data = {}) {
-  return deepmerge({
-    $type: ResourceTypes.ISSUE_FOLDER_SAVED_QUERY,
-    id: uuid(),
-    ringId: uuid(),
-    shortName: randomWord(),
-    name: randomWord(),
-    query: randomWord(),
-    pinned: false,
-    pinnedInHelpdesk: true,
-    issuesUrl: '/issues/',
-    fqFolderId: randomWord(),
-    isUpdatable: true,
-    template: false,
-  }, data);
+  return deepmerge(
+    {
+      $type: ResourceTypes.ISSUE_FOLDER_SAVED_QUERY,
+      id: uuid(),
+      ringId: uuid(),
+      shortName: randomWord(),
+      name: randomWord(),
+      query: randomWord(),
+      pinned: false,
+      pinnedInHelpdesk: true,
+      issuesUrl: '/issues/',
+      fqFolderId: randomWord(),
+      isUpdatable: true,
+      template: false,
+    },
+    data
+  );
 }
 
 export default {

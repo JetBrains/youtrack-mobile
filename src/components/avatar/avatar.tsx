@@ -16,6 +16,9 @@ interface Props {
     uri: string;
   };
   style?: ViewStyleProp;
+  testID?: string;
+  accessibilityLabel?: string;
+  accessible?: boolean;
 }
 
 interface State {
@@ -26,7 +29,7 @@ interface State {
 const errors = ['error decoding image data', 'unknown image format'];
 
 const Avatar = (props: Props) => {
-  const {source, userName = 'A', size, style} = props;
+  const {source, userName = 'A', size, style, testID, accessibilityLabel, accessible} = props;
 
   const [state, setState] = React.useState<State>({
     renderDefault: !source.uri,
@@ -39,6 +42,9 @@ const Avatar = (props: Props) => {
 
   return (
     <View
+      testID={testID}
+      accessibilityLabel={accessibilityLabel}
+      accessible={accessible}
       style={[
         styles.common,
         style,

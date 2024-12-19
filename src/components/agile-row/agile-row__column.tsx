@@ -18,13 +18,15 @@ interface ColumnProps {
   renderIssueCard: (issue: IssueOnList) => React.ReactNode;
   zoomedIn?: boolean;
   columnsLength: number;
+  testID?: string;
 }
 
 export default function AgileRowColumn(props: ColumnProps) {
-  const {cell, zoomedIn, columnsLength} = props;
+  const {cell, zoomedIn, columnsLength, testID} = props;
   const issues = cell.issues || [];
   return (
     <DropZone
+      testID={testID}
       style={[styles.column, props.lastColumn && styles.columnWithoutBorder]}
       data={{
         columnId: cell.column.id,

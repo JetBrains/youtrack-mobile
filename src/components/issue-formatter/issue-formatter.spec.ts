@@ -6,10 +6,11 @@ import {
 describe('Issue formatter', () => {
   describe('getEntityPresentation', function () {
     it('should return empty string if no parameter is provided', () => {
-      getEntityPresentation().should.equal('');
+      expect(getEntityPresentation()).toBe('');
     });
+
     it('should return empty string if no parameter has no field to return', () => {
-      getEntityPresentation({}).should.equal('');
+      expect(getEntityPresentation({})).toBe('');
     });
 
     describe('Has ringId', () => {
@@ -19,38 +20,46 @@ describe('Issue formatter', () => {
           fullName: 'fullName',
           name: 'name',
         };
-        getEntityPresentation(item).should.equal(item.fullName);
+
+        expect(getEntityPresentation(item)).toBe(item.fullName);
       });
+
       it('should return `localizedName`', () => {
         const item = {
           ringId: 'id',
           name: 'name',
           localizedName: 'localizedName',
         };
-        getEntityPresentation(item).should.equal(item.localizedName);
+
+        expect(getEntityPresentation(item)).toBe(item.localizedName);
       });
+
       it('should return `name`', () => {
         const item = {
           ringId: 'id',
           login: 'login',
           name: 'name',
         };
-        getEntityPresentation(item).should.equal(item.name);
+
+        expect(getEntityPresentation(item)).toBe(item.name);
       });
+
       it('should return `login`', () => {
         const item = {
           ringId: 'id',
           presentation: 'presentation',
           login: 'login',
         };
-        getEntityPresentation(item).should.equal(item.login);
+        expect(getEntityPresentation(item)).toBe(item.login);
       });
+
       it('should return `presentation`', () => {
         const item = {
           ringId: 'id',
           presentation: 'presentation',
         };
-        getEntityPresentation(item).should.equal(item.presentation);
+
+        expect(getEntityPresentation(item)).toBe(item.presentation);
       });
     });
 
@@ -60,34 +69,42 @@ describe('Issue formatter', () => {
           fullName: 'fullName',
           name: 'name',
         };
-        getEntityPresentation(item).should.equal(item.name);
+
+        expect(getEntityPresentation(item)).toBe(item.name);
       });
+
       it('should return `userName` if `ringId` is missing', () => {
         const item = {
           fullName: 'fullName',
           userName: 'name',
         };
-        getEntityPresentation(item).should.equal(item.userName);
+
+        expect(getEntityPresentation(item)).toBe(item.userName);
       });
+
       it('should return `login` if `ringId` is missing', () => {
         const item = {
           fullName: 'fullName',
           login: 'name',
         };
-        getEntityPresentation(item).should.equal(item.login);
+
+        expect(getEntityPresentation(item)).toBe(item.login);
       });
     });
   });
 
   describe('getVisibilityPresentation', function () {
     it('should return null if no parameter is provided', () => {
+      // @ts-ignore
       const visibilityPresentation = getVisibilityPresentation() === null;
-      visibilityPresentation.should.be.true;
+      expect(visibilityPresentation).toBe(true);
     });
+
     it('should return empty string if there are no `permittedGroups` and `permittedUsers`', () => {
       const visibilityPresentation = getVisibilityPresentation({});
-      visibilityPresentation.should.equal('');
+      expect(visibilityPresentation).toBe('');
     });
+
     it('should return combined `permittedGroups` and `permittedUsers` presentation separated by comma', () => {
       const permittedUsers = [
         {
@@ -105,7 +122,7 @@ describe('Issue formatter', () => {
           permittedUsers: permittedUsers,
         },
       });
-      visibilityPresentation.should.equal(
+      expect(visibilityPresentation).toBe(
         `${permittedGroups[0].name}, ${permittedUsers[0].login}`,
       );
     });

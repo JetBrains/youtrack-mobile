@@ -12,7 +12,7 @@ export default function Popup({
   onHide,
   noButton,
 }: {
-  childrenRenderer: () => any;
+  childrenRenderer: () => React.ReactNode;
   onHide: () => void;
   noButton?: boolean;
 }) {

@@ -1,7 +1,9 @@
 import ApiHelper from './api__helper';
+import {IssueOnList} from 'types/Issue';
+
 describe('Api helper', () => {
   describe('fieldHash', () => {
-    let issue;
+    let issue: IssueOnList;
     beforeEach(() => {
       issue = {
         fields: [
@@ -12,23 +14,28 @@ describe('Api helper', () => {
               },
             },
             value: {
-              foo: 'bar',
+              name: 'bar',
             },
           },
         ],
-      };
+      } as IssueOnList;
     });
+
     it('should convert fields array to field hash object', () => {
       const hash = ApiHelper.makeFieldHash(issue);
-      hash.should.be.object;
+      expect(hash).toBeTruthy();
     });
     it('should put field value into property called by field name', () => {
       const hash = ApiHelper.makeFieldHash(issue);
-      hash.testField.should.deep.equal({
-        foo: 'bar',
+
+      expect(hash).toEqual({
+        testField: {
+          name: 'bar',
+        },
       });
     });
   });
+
   describe('relative urls converter', () => {
     it('should convert relative urls to absolute', () => {
       const items = [
@@ -36,37 +43,34 @@ describe('Api helper', () => {
           url: '/bar',
         },
       ];
-      const fixedItems = ApiHelper.convertRelativeUrls(
-        items,
-        'url',
-        'http://test.com',
-      );
-      fixedItems[0].url.should.equal('http://test.com/bar');
+      const fixedItems = ApiHelper.convertRelativeUrls(items, 'url', 'http://test.com');
+      expect(fixedItems[0].url).toBe('http://test.com/bar');
     });
+
     it('should not touch absolute urls', () => {
       const items = [
         {
           url: 'https://youtrack/bar',
         },
       ];
-      const fixedItems = ApiHelper.convertRelativeUrls(
-        items,
-        'url',
-        'http://test.com',
-      );
-      fixedItems[0].url.should.equal('https://youtrack/bar');
+      const fixedItems = ApiHelper.convertRelativeUrls(items, 'url', 'http://test.com');
+
+      expect(fixedItems[0].url).toBe('https://youtrack/bar');
     });
+
     it('should patch all possible avatar field values', () => {
       const res = ApiHelper.patchAllRelativeAvatarUrls(
         {
           val: 'foo',
           avatarUrl: '/hub/api/rest/avatar/123',
         },
-        'http://test.com',
+        'http://test.com'
       );
-      res.val.should.equal('foo');
-      res.avatarUrl.should.equal('http://test.com/hub/api/rest/avatar/123');
+
+      expect(res.val).toBe('foo');
+      expect(res.avatarUrl).toBe('http://test.com/hub/api/rest/avatar/123');
     });
+
     it('should patch nested avatar field values', () => {
       const res = ApiHelper.patchAllRelativeAvatarUrls(
         {
@@ -75,23 +79,23 @@ describe('Api helper', () => {
             avatarUrl: '/hub/api/rest/avatar/123',
           },
         },
-        'http://test.com',
+        'http://test.com'
       );
-      res.val.should.equal('foo');
-      res.test.avatarUrl.should.equal(
-        'http://test.com/hub/api/rest/avatar/123',
-      );
+
+      expect(res.val).toBe('foo');
+      expect(res.test.avatarUrl).toBe('http://test.com/hub/api/rest/avatar/123');
     });
+
     it('should stript html tags from commandPreview', () => {
-      ApiHelper.stripHtml('foo <span class="bold">bar</span>').should.equal(
-        'foo bar',
-      );
+      expect(ApiHelper.stripHtml('foo <span class="bold">bar</span>')).toBe('foo bar');
     });
+
     it('should not touch clean strings while stripping tags', () => {
-      ApiHelper.stripHtml('foo bar').should.equal('foo bar');
+      expect(ApiHelper.stripHtml('foo bar')).toBe('foo bar');
     });
+
     describe('removeDuplicatesByPropName', () => {
-      let items = [];
+      let items: Array<Record<string, any>> = [];
       beforeEach(() => {
         items = [
           {
@@ -108,15 +112,16 @@ describe('Api helper', () => {
           },
         ];
       });
+
       it('should return an array if an object value name is not provided', function () {
-        const result = ApiHelper.removeDuplicatesByPropName(items);
-        result.should.equal(items);
-        result.length.should.equal(items.length);
+        const result = ApiHelper.removeDuplicatesByPropName(items, '');
+
+        expect(result).toEqual(items);
+        expect(result).toHaveLength(items.length);
       });
+
       it('should remove duplicates in an array by provided object value name', () => {
-        ApiHelper.removeDuplicatesByPropName(items, 'name').length.should.equal(
-          2,
-        );
+        expect(ApiHelper.removeDuplicatesByPropName(items, 'name')).toHaveLength(items.length - 1);
       });
     });
   });

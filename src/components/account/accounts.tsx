@@ -76,7 +76,7 @@ export default class Accounts extends PureComponent<Props, Readonly<{}>> {
   };
 
   renderAccount(account: StorageState) {
-    const config: AppConfig = account.config as AppConfig;
+    const config: AppConfig = account.config!;
     const user = account.currentUser;
 
     if (!user) {
@@ -87,7 +87,9 @@ export default class Accounts extends PureComponent<Props, Readonly<{}>> {
       <View
         testID="test:id/accountsAccount"
         accessible={true}
-        key={`${config?.backendUrl}_${account.creationTimestamp || ''}`}
+        key={`${config.backendUrl}_${account.creationTimestamp || ''}`}
+        //@ts-ignore used for testing purposes only
+        testKey={`${config.backendUrl}_${account.creationTimestamp || ''}`}
         style={[styles.accountProfile, this.props.style]}
       >
         <TouchableWithoutFeedback>
@@ -113,14 +115,14 @@ export default class Accounts extends PureComponent<Props, Readonly<{}>> {
   renderAccounts() {
     const {
       openDebugView,
-      otherAccounts,
+      otherAccounts = [],
       isChangingAccount,
       uiTheme,
     } = this.props;
     const storageState = getStorageState();
-    const accounts: StorageState[] = ([] as StorageState[])
+    const accounts: StorageState[] = new Array<StorageState>()
       .concat(storageState)
-      .concat(otherAccounts || [])
+      .concat(otherAccounts)
       .filter(account => !!account.config) // Do not render if account is not ready
       .sort((a, b) => (b.creationTimestamp || 0) - (a.creationTimestamp || 0));
     return (

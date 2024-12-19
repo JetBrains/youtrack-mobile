@@ -1,28 +1,29 @@
 import React, {PureComponent} from 'react';
 import {Text} from 'react-native';
-import EStyleSheet from 'react-native-extended-stylesheet';
+
+import styles from './text-view.styles';
+
 import type {ViewStyleProp} from 'types/Internal';
-type Props = {
+
+interface Props {
   maxLength?: number;
   text: string;
   style?: ViewStyleProp;
-};
-type State = {
-  showMore: boolean;
-};
+}
+
 export const showMoreText = 'Show\xa0more…';
 export const showMoreInlineText = `  ${showMoreText}  `;
-export default class TextView extends PureComponent<Props, State> {
-  MAX_TO_SHOW: number = 500;
-  DEFAULT_MAX_LENGTH: number = 50;
-  THRESHOLD: number = 5;
+export const MAX_TO_SHOW: number = 500;
+export const DEFAULT_MAX_LENGTH: number = 50;
+export const THRESHOLD: number = 5;
 
+export default class TextView extends PureComponent<Props, {showMore: boolean}> {
   constructor(props: Props) {
     super(props);
-    const maxLength = props.maxLength || this.DEFAULT_MAX_LENGTH;
+    const maxLength = props.maxLength || DEFAULT_MAX_LENGTH;
     const textLength = props.text.length;
     this.state = {
-      showMore: textLength > maxLength + this.THRESHOLD,
+      showMore: textLength > maxLength + THRESHOLD,
     };
   }
 
@@ -33,14 +34,14 @@ export default class TextView extends PureComponent<Props, State> {
   }
 
   _getText() {
-    const {text, maxLength = this.DEFAULT_MAX_LENGTH} = this.props;
-    const length = Math.min(maxLength, this.MAX_TO_SHOW);
+    const {text, maxLength = DEFAULT_MAX_LENGTH} = this.props;
+    const length = Math.min(maxLength, MAX_TO_SHOW);
 
     if (this.state.showMore && text.length) {
       return text.substr(0, length);
     }
 
-    return text.substr(0, this.MAX_TO_SHOW);
+    return text.substr(0, MAX_TO_SHOW);
   }
 
   render(): React.ReactNode {
@@ -48,13 +49,7 @@ export default class TextView extends PureComponent<Props, State> {
       <Text testID="textMoreContent">
         <Text style={this.props.style}>{`${this._getText()}...`}</Text>
         {this.state.showMore && (
-          <Text
-            testID="textMoreShowMore"
-            style={{
-              color: EStyleSheet.value('$link'),
-            }}
-            onPress={() => this._toggleShowMore()}
-          >
+          <Text testID="textMoreShowMore" style={{color: styles.link.color}} onPress={() => this._toggleShowMore()}>
             {showMoreInlineText}
           </Text>
         )}

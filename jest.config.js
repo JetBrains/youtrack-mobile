@@ -11,6 +11,9 @@ module.exports = {
   'moduleNameMapper': {
     '^.+.(svg)$': '<rootDir>/test/svg-mock.js',
     '^@jetbrains/icons/(.*)$': '<rootDir>/test/svg-mock.js',
+    '^react-navigation-stack$': '<rootDir>/__mocks__/react-navigation-stack.js',
+    '^react-native-progress$': '<rootDir>/__mocks__/react-native-progress.js',
+    '^react-native-encrypted-storage$': '<rootDir>/node_modules/react-native-encrypted-storage',
   },
   'setupFilesAfterEnv': [
     '<rootDir>/test/jest-setup.js',

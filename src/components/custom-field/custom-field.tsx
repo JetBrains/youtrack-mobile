@@ -32,7 +32,7 @@ interface Props {
 
 const maxValueStringWidth: number = 30;
 
-export default class CustomField extends Component<Props, void> {
+export default class CustomField extends Component<Props, Readonly<{}>> {
   _getFieldType(field: CustomFieldType) {
     return field?.projectCustomField?.field?.fieldType?.valueType || null;
   }

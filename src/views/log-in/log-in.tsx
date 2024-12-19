@@ -37,7 +37,7 @@ import type {CustomError} from 'types/Error';
 import type {ReduxThunkDispatch} from 'types/Redux.ts';
 import type {Theme, UIThemeColors} from 'types/Theme';
 
-interface Props {
+export interface Props {
   config: AppConfig;
   onLogIn: (authParams: AuthParams) => void;
   onShowDebugView: (...args: any[]) => any;

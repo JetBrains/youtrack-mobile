@@ -59,7 +59,7 @@ function getEntityPresentation<T extends {[key: string]: any}>(entity?: T) {
   return userName || '';
 }
 
-const getVisibilityPresentation = (entity: Record<string, any>) => {
+const getVisibilityPresentation = (entity: Record<string, any>): string | null => {
   if (!entity) {
     return null;
   }

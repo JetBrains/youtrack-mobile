@@ -1381,9 +1381,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-ios-utilities (5.0.0-53):
+  - react-native-ios-utilities (5.0.0-55):
     - ComputableLayout (~> 0.7)
-    - DGSwiftUtilities (~> 0.34)
+    - DGSwiftUtilities (~> 0.36)
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2323,7 +2323,7 @@ SPEC CHECKSUMS:
   react-native-encrypted-storage: db300a3f2f0aba1e818417c1c0a6be549038deb7
   react-native-eventsource: fea4e2c2505d19660b312406ce45dbb3fe68fd35
   react-native-ios-context-menu: 15399c2cf69f198d22ac5c7ed7b87eec1b1d5bd7
-  react-native-ios-utilities: 2a5b7f01f729456ebeab13beee55db7f4b3d7895
+  react-native-ios-utilities: 112026144c8c5d956b0f8345ff475ef522525e3c
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
   react-native-notifications: 83b4fd4a127a6c918fc846cae90da60f84819e44
   react-native-pager-view: 3ae40be5b2700f3f2645c1fbc751a03a4323172d
@@ -2376,6 +2376,6 @@ SPEC CHECKSUMS:
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   Yoga: a9ef4f5c2cd79ad812110525ef61048be6a582a4
 
-PODFILE CHECKSUM: b01b47cbccc758890ad6de4da0313110f9776a81
+PODFILE CHECKSUM: 693f3401e2a3cd4b14163efc73c54a706a37f172
 
 COCOAPODS: 1.16.2

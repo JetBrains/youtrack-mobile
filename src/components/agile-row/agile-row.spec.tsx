@@ -1,8 +1,15 @@
 import React from 'react';
-import {shallow} from 'enzyme';
-import mocks from '../../../test/mocks';
+
+import {render} from '@testing-library/react-native';
+
+import mocks from 'test/mocks';
 import BoardRow from './agile-row';
-import {buildStyles, DEFAULT_THEME} from '../theme/theme';
+import {DEFAULT_THEME} from 'components/theme/theme';
+
+import type {AgileBoardRow, BoardCell, BoardColumn} from 'types/Agile';
+import type {IssueOnList} from 'types/Issue';
+import {DragContext} from 'components/draggable/drag-container';
+
 const cellMock = {
   id: 'id',
   row: {
@@ -14,72 +21,82 @@ const cellMock = {
   },
   issues: [],
 };
+
 describe('<BoardRow/>', () => {
-  let wrapper;
-  let issueMock;
-  beforeAll(() => buildStyles(DEFAULT_THEME.mode, DEFAULT_THEME));
+  let issueMock: IssueOnList;
   beforeEach(() => {
     issueMock = mocks.createIssueMock();
   });
+
   describe('Render', () => {
-    beforeEach(() => {
-      doShallow(createRowMock(), false);
-    });
     it('should not render a row', () => {
-      doShallow(null, false);
-      expect(findByTestId('agileRowHeader')).toHaveLength(0);
+      const {queryByTestId} = renderComponent(undefined as unknown as AgileBoardRow, false);
+
+      expect(queryByTestId('agileRowHeader')).toBeNull();
     });
+
     it('should not render empty cells', () => {
-      doShallow(
-        {
-          collapsed: false,
-        },
-        false,
-      );
-      expect(findByTestId('agileRowCells')).toHaveLength(0);
+      const {queryByTestId} = renderComponent({collapsed: false} as unknown as AgileBoardRow, false);
+      expect(queryByTestId('agileRowCells')).toBeNull();
     });
+
     it('should not render cells if collapsed', () => {
-      doShallow(
+      const {queryByTestId} = renderComponent(
         {
           collapsed: true,
-          cells: [cellMock],
-        },
-        false,
+          cells: [cellMock as unknown as BoardCell],
+        } as unknown as AgileBoardRow,
+        false
       );
-      expect(findByTestId('agileRowCells')).toHaveLength(0);
+      expect(queryByTestId('agileRowCells')).toBeNull();
     });
+
     it('should render a header', () => {
-      expect(findByTestId('agile-row-header')).toHaveLength(1);
+      const {getByTestId} = renderComponent(createRowMock(), false);
+      expect(getByTestId('agile-row-header')).toBeTruthy();
     });
+
     it('should render a collapse button', () => {
-      expect(findByTestId('agileRowCollapseButton')).toHaveLength(1);
+      const {getByTestId} = renderComponent(createRowMock(), false);
+      expect(getByTestId('agileRowCollapseButton')).toBeTruthy();
     });
+
     it('should render cells', () => {
-      expect(findByTestId('agileRowCells')).toHaveLength(1);
+      const {getByTestId} = renderComponent(createRowMock(), false);
+      expect(getByTestId('agileRowCells')).toBeTruthy();
     });
+
     describe('Issue id', () => {
       const rowMock = createRowMock({
         issue: {
           idReadable: 'X-1',
         },
       });
+
       it('should not render an issue readable id', () => {
-        expect(findByTestId('agileRowIssueId')).toHaveLength(0);
+        const {queryByTestId} = renderComponent(createRowMock());
+        expect(queryByTestId('agileRowIssueId')).toBeNull();
       });
+
       it('should render an issue readable id', () => {
-        doShallow(rowMock);
-        expect(findByTestId('agileRowIssueId')).toHaveLength(1);
+        const {getByTestId} = renderComponent(rowMock);
+        expect(getByTestId('agileRowIssueId')).toBeTruthy();
       });
     });
+
     describe('Column', () => {
       it('should render an expanded column', () => {
-        expect(findByTestId('agileRowColumn')).toHaveLength(1);
-        expect(findByTestId('agileRowColumnCollapsed')).toHaveLength(0);
+        const {getByTestId, queryByTestId} = renderComponent(createRowMock());
+
+        expect(getByTestId('agileRowColumn')).toBeTruthy();
+        expect(queryByTestId('agileRowColumnCollapsed')).toBeNull();
       });
+
       describe('Collapsed column', () => {
+        const collapsedColumnIdMock = 'columnIdCollapsed';
+        let rowWithCollapsedColumnMock: AgileBoardRow;
         beforeEach(() => {
-          const collapsedColumnIdMock = 'columnIdCollapsed';
-          const rowMock = createRowMock({
+          rowWithCollapsedColumnMock = createRowMock({
             cells: [
               {
                 id: '',
@@ -91,71 +108,72 @@ describe('<BoardRow/>', () => {
               },
             ],
           });
-          doShallow(rowMock, true, [collapsedColumnIdMock]);
         });
+
         it('should render a collapsed column', () => {
-          expect(findByTestId('agileRowColumn')).toHaveLength(0);
-          expect(findByTestId('agileRowColumnCollapsed')).toHaveLength(1);
+          const {queryByTestId} = renderComponent(rowWithCollapsedColumnMock, true, [collapsedColumnIdMock]);
+
+          expect(queryByTestId('agileRowColumn')).toBeNull();
+          expect(queryByTestId('agileRowColumnCollapsed')).toBeTruthy();
         });
+
         it('should render a color-coded rect represents a card', () => {
-          expect(findByTestId('agileRowColumnCollapsedCard')).toHaveLength(1);
+          const {getByTestId} = renderComponent(rowWithCollapsedColumnMock, true, [collapsedColumnIdMock]);
+          expect(getByTestId('agileRowColumnCollapsedCard')).toBeTruthy();
         });
       });
     });
+
     describe('Row', () => {
       it('should render a row', () => {
-        doShallow(
-          createRowMock({
-            collapsed: false,
-          }),
-        );
-        expect(findByTestId('agileRow')).toHaveLength(1);
+        const {getByTestId} = renderComponent(createRowMock({collapsed: false}));
+        expect(getByTestId('agileRow')).toBeTruthy();
       });
+
       it('should not render a collapsed row', () => {
-        doShallow(
-          createRowMock({
-            collapsed: true,
-          }),
-        );
-        expect(findByTestId('agileRowColumn')).toHaveLength(0);
+        const {queryByTestId} = renderComponent(createRowMock({collapsed: true}));
+        expect(queryByTestId('agileRowColumn')).toBeNull();
       });
     });
   });
 
-  function doShallow(
-    row,
-    zoomedIn: boolean = true,
-    collapsedColumnIds: string[] | null | undefined = [],
-  ) {
-    wrapper = shallow(
-      <BoardRow
-        collapsedColumnIds={collapsedColumnIds}
-        columns={[{}, {}]}
-        row={row}
-        zoomedIn={zoomedIn}
-        uiTheme={DEFAULT_THEME}
-      />,
+  function renderComponent(row: AgileBoardRow, zoomedIn: boolean = true, collapsedColumnIds: string[] = []) {
+    const columns = [{}, {}] as BoardColumn[];
+    return render(
+      <DragContext.Provider
+        value={{
+          dragging: null,
+          registerOnDragStart: () => {},
+          registerOnDrag: () => {},
+          registerOnDrop: () => {},
+          removeZone: () => {},
+          onInitiateDrag: () => {},
+          dropZones: [],
+          updateZone: () => {},
+        }}
+      >
+        <BoardRow
+          collapsedColumnIds={collapsedColumnIds}
+          columns={columns}
+          row={row}
+          zoomedIn={zoomedIn}
+          uiTheme={DEFAULT_THEME}
+          onCollapseToggle={() => {}}
+          onTapIssue={() => {}}
+          renderIssueCard={() => {}}
+          onTapCreateIssue={() => {}}
+        />
+      </DragContext.Provider>
     );
   }
 
-  function findByTestId(testId) {
-    return (
-      wrapper &&
-      wrapper.find({
-        testID: testId,
-      })
-    );
-  }
-
-  function createRowMock(...args) {
-    return Object.assign(
-      {
-        id: 'rowMockId',
-        name: 'orphans',
-        summary: 'summary',
-        cells: [cellMock],
-      },
-      ...args,
-    );
+  function createRowMock(params: object = {}): AgileBoardRow {
+    return {
+      id: 'rowMockId',
+      name: 'orphans',
+      summary: 'summary',
+      cells: [cellMock],
+      ...params,
+    } as unknown as AgileBoardRow;
   }
 });

@@ -1,44 +1,40 @@
 import React from 'react';
 import {Text} from 'react-native';
-import {shallow} from 'enzyme';
+
+import {render, screen} from '@testing-library/react-native';
+
 import AttachmentErrorBoundary from './attachment-error-boundary';
+
 describe('<AttachmentErrorBoundary/>', () => {
   const childrenTestId = 'attachmentErrorBoundaryChildren';
   const errorPlaceholderTestId = 'attachmentErrorBoundaryPlaceholder';
-  let wrapper;
-  beforeEach(() => {
-    wrapper = doShallow();
-  });
+
   describe('Render', () => {
     it('should render children', () => {
-      expect(findByTestId(errorPlaceholderTestId)).toHaveLength(0);
-      expect(findByTestId(childrenTestId)).toHaveLength(1);
+      render(
+        <AttachmentErrorBoundary attachName="name">
+          <Text testID={childrenTestId}>txt</Text>
+        </AttachmentErrorBoundary>
+      );
+
+      expect(screen.queryByTestId(errorPlaceholderTestId)).toBeNull();
+      expect(screen.getByTestId(childrenTestId)).toBeTruthy();
     });
   });
+
   describe('Render placeholder', () => {
+    const BuggyComponent = () => {
+      throw new Error('Render error simulated');
+    };
+
     it('should render error placeholder', () => {
-      wrapper.setState({
-        hasError: true,
-      });
-      expect(findByTestId(errorPlaceholderTestId)).toHaveLength(1);
-      expect(findByTestId(childrenTestId)).toHaveLength(0);
+      render(
+        <AttachmentErrorBoundary attachName="name">
+          <BuggyComponent />
+        </AttachmentErrorBoundary>
+      );
+      expect(screen.getByTestId(errorPlaceholderTestId)).toBeTruthy();
+      expect(screen.queryByTestId(childrenTestId)).toBeNull();
     });
   });
-
-  function findByTestId(testId) {
-    return (
-      wrapper &&
-      wrapper.find({
-        testID: testId,
-      })
-    );
-  }
-
-  function doShallow() {
-    return shallow(
-      <AttachmentErrorBoundary>
-        <Text testID={childrenTestId}>children</Text>
-      </AttachmentErrorBoundary>,
-    );
-  }
 });

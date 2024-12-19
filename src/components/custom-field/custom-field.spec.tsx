@@ -1,153 +1,180 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+
+import {render, screen} from '@testing-library/react-native';
+
 import CustomField from './custom-field';
 import {absDate} from 'components/date/date';
-import {__setStorageState} from 'components/storage/storage';
+
+import type {CustomFieldBase, EnumBundleValue, UserFieldValue} from 'types/CustomFields';
+
+let fieldMock: CustomFieldBase;
 describe('<CustomField/>', () => {
-  let fakeField;
-  beforeEach(() => {
-    fakeField = {
-      projectCustomField: {
-        emptyFieldText: 'im empty',
-        field: {
-          name: 'Test custom field',
-          fieldType: {
-            valueType: 'some-type',
-          },
-        },
-      },
-      value: {
-        name: 'Test value',
-      },
-      color: {
-        id: 4,
-      },
-    };
+  beforeEach(() => (fieldMock = createFielMock()));
+
+  it('should render', () => {
+    doRender();
+    expect(screen.getByTestId('test:id/name')).toBeDefined();
   });
-  it('should init', () => {
-    const wrapper = shallow(<CustomField field={fakeField} />);
-    wrapper.should.be.defined;
-  });
+
   it('should render field name', () => {
-    const wrapper = shallow(<CustomField field={fakeField} />);
-    const name = wrapper.find({
-      testID: 'test:id/name',
-    });
-    name.children().should.have.text(fakeField.projectCustomField.field.name);
+    doRender();
+
+    const el = screen.getByTestId('test:id/name');
+    expect(el.props.children).toContain(fieldMock.projectCustomField.field.name);
   });
+
   it('should render localized field name', () => {
-    fakeField.projectCustomField.field.localizedName = 'Test custom field name';
-    const wrapper = shallow(<CustomField field={fakeField} />);
-    const name = wrapper.find({
-      testID: 'test:id/name',
-    });
-    name
-      .children()
-      .should.have.text(fakeField.projectCustomField.field.localizedName);
+    fieldMock.projectCustomField.field.localizedName = 'Test custom field name';
+
+    doRender();
+
+    const el = screen.getByTestId('test:id/name');
+    expect(el.props.children).toContain(fieldMock.projectCustomField.field.localizedName);
   });
+
   it('should render shortened field name', () => {
-    fakeField.projectCustomField.field.localizedName =
-      'Test custom field long-long-long name';
-    const wrapper = shallow(<CustomField field={fakeField} />);
-    const name = wrapper.find({
-      testID: 'test:id/name',
-    });
-    name.children().should.have.text('Test custom field long-long-lo…');
+    fieldMock.projectCustomField.field.localizedName = 'Test custom field long-long-long name';
+
+    doRender();
+
+    const nameElement = screen.getByTestId('test:id/name');
+    expect(nameElement.props.children).toContain('Test custom field long-long-lo…');
   });
+
   it('should render field value', () => {
-    const wrapper = shallow(<CustomField field={fakeField} />);
-    const value = wrapper.find({
-      testID: 'test:id/value',
-    });
-    value.children().should.have.text(fakeField.value.localizedName);
+    doRender();
+
+    const el = screen.getByTestId('test:id/value');
+    expect(el.props.children).toContain((fieldMock.value as EnumBundleValue).name);
   });
+
   it('should render localized field value', () => {
-    fakeField.value = {
-      name: 'Test value',
+    fieldMock.value = {
+      ...(fieldMock.value as EnumBundleValue),
       localizedName: 'Test value localized',
     };
-    const wrapper = shallow(<CustomField field={fakeField} />);
-    const value = wrapper.find({
-      testID: 'test:id/value',
-    });
-    value.children().should.have.text(fakeField.value.localizedName);
-  });
-  it('should render user field value with avatar', () => {
-    __setStorageState({});
 
-    const userFieldMock = {
+    doRender();
+
+    const el = screen.getByTestId('test:id/value');
+    expect(el.props.children).toContain((fieldMock.value as EnumBundleValue).localizedName);
+  });
+
+  it('should render user field value with avatar', () => {
+    fieldMock = {
+      ...fieldMock,
       projectCustomField: {
+        ...fieldMock.projectCustomField,
         field: {
+          ...fieldMock.projectCustomField.field,
           fieldType: {
+            isMultiValue: false,
             valueType: 'user',
           },
         },
       },
       value: {
+        ...fieldMock.value as UserFieldValue,
         fullName: 'Full Name',
-        avatarUrl: '/userAvatarUrl',
-      },
+        avatarUrl: '/userAvatarUrl.svg',
+      } as UserFieldValue,
     };
-    const wrapper = shallow(<CustomField field={userFieldMock} />);
-    expect(
-      wrapper.find({
-        testID: 'test:id/customFieldAvatar',
-      }),
-    ).toHaveLength(1);
-    expect(
-      wrapper
-        .find({
-          testID: 'test:id/value',
-        })
-        .children(),
-    ).toHaveLength(1);
+
+    doRender();
+
+    expect(screen.getByTestId('test:id/customFieldAvatar')).toBeTruthy();
+    expect(screen.getByTestId('test:id/value')).toBeTruthy();
   });
+
   it('should render value of type date', () => {
     const timestamp = 1481885918348;
-    fakeField.value = timestamp;
-    fakeField.projectCustomField.field.fieldType.valueType = 'date';
-    const wrapper = shallow(<CustomField field={fakeField} />);
-    const value = wrapper.find({
-      testID: 'test:id/value',
-    });
-    value.children().should.have.text(absDate(timestamp, true));
+    fieldMock.value = timestamp;
+    fieldMock.projectCustomField.field.fieldType.valueType = 'date';
+
+    doRender();
+
+    const el = screen.getByTestId('test:id/value');
+    expect(el.props.children).toContain(absDate(timestamp, true));
   });
+
   it('should render value of type integer', () => {
-    fakeField.value = 123;
-    fakeField.projectCustomField.field.fieldType.valueType = 'integer';
-    const wrapper = shallow(<CustomField field={fakeField} />);
-    const value = wrapper.find({
-      testID: 'test:id/value',
-    });
-    value.children().should.have.text('123');
+    fieldMock.value = 123;
+    fieldMock.projectCustomField.field.fieldType.valueType = 'integer';
+
+    doRender();
+
+    const el = screen.getByTestId('test:id/value');
+    expect(el.props.children).toContain('123');
   });
+
   it('should render user field value', () => {
-    fakeField.value.name = null;
-    fakeField.value.login = 'testuser';
-    const wrapper = shallow(<CustomField field={fakeField} />);
-    const value = wrapper.find({
-      testID: 'test:id/value',
-    });
-    value.children().should.have.text('testuser');
+    fieldMock.value = {
+      ...fieldMock.value as UserFieldValue,
+      name: null,
+      login: 'testuser',
+    } as unknown as UserFieldValue;
+
+    doRender();
+
+    const el = screen.getByTestId('test:id/value');
+    expect(el.props.children).toContain('testuser');
   });
+
   it('should render empty value if value is empty', () => {
-    fakeField.value = null;
-    const wrapper = shallow(<CustomField field={fakeField} />);
-    const value = wrapper.find({
-      testID: 'test:id/value',
-    });
-    value
-      .children()
-      .should.have.text(fakeField.projectCustomField.emptyFieldText);
+    fieldMock.value = null;
+
+    doRender();
+
+    const el = screen.getByTestId('test:id/value');
+    expect(el.props.children).toContain(fieldMock.projectCustomField.emptyFieldText);
   });
+
   it('should render empty value if value is empty array', () => {
-    fakeField.value = [];
-    const wrapper = shallow(<CustomField field={fakeField} />);
-    const value = wrapper.find({
-      testID: 'test:id/value',
-    });
-    value
-      .children()
-      .should.have.text(fakeField.projectCustomField.emptyFieldText);
+    fieldMock.value = [];
+
+    doRender();
+
+    const el = screen.getByTestId('test:id/value');
+    expect(el.props.children).toContain(fieldMock.projectCustomField.emptyFieldText);
   });
+
+  function doRender(field: CustomFieldBase = fieldMock) {
+    return render(<CustomField field={field} onPress={() => {}} disabled={false} active={false} />);
+  }
+
+  function createFielMock() {
+    return {
+      $type: '',
+      id: '',
+      name: 'Test custom field',
+      projectCustomField: {
+        $type: '',
+        id: '',
+        emptyFieldText: 'is empty',
+        canBeEmpty: true,
+        isPublic: true,
+        bundle: {
+          id: '',
+          isUpdateable: true,
+        },
+        defaultValues: [],
+        field: {
+          $type: '',
+          id: '',
+          localizedName: null,
+          name: 'Test custom field',
+          fieldType: {
+            isMultiValue: false,
+            valueType: 'some-type',
+          },
+        },
+      },
+      value: {
+        $type: '',
+        id: 'Test value',
+        name: 'Test value',
+        localizedName: null,
+      } as EnumBundleValue,
+    };
+  }
 });

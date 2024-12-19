@@ -45,6 +45,7 @@ type Props = {
   disabled?: boolean;
   children: React.ReactNode;
   style: any;
+  testID?: string;
 };
 type PropsWithContext = Props & {
   dragContext: DragContextType;
@@ -196,8 +197,7 @@ class DropZone extends React.Component<PropsWithContext, State> {
     }
 
     const withoutMoving = React.Children.toArray(children).filter(
-      (c: React.ReactElement<typeof Draggable | any>) =>
-        this.props.dragContext?.dragging?.data !== c.props.data,
+      (c): c is React.ReactElement => this.props.dragContext?.dragging?.data !== c?.props?.data,
     );
     withoutMoving.splice(
       placeholderIndex,
@@ -216,10 +216,10 @@ class DropZone extends React.Component<PropsWithContext, State> {
     return withoutMoving;
   }
 
-  render(): React.ReactNode {
-    const {style, children} = this.props;
+  render() {
+    const {style, children, testID} = this.props;
     return (
-      <View style={style} onLayout={this.reportMeasurements} ref={this.wrapper}>
+      <View style={style} onLayout={this.reportMeasurements} ref={this.wrapper} testID={testID}>
         {this.getChildrenWithPlaceholder(children)}
       </View>
     );
