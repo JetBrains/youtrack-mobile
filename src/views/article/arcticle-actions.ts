@@ -1,7 +1,5 @@
 import {Alert, Clipboard, Share} from 'react-native';
 
-import {ActionSheetProvider} from '@expo/react-native-action-sheet';
-
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
 import {
@@ -27,10 +25,7 @@ import {
   setPrevArticle,
   setProcessing,
 } from './article-reducers';
-import {
-  showActions,
-  showActionSheet,
-} from 'components/action-sheet/action-sheet';
+import {showActionSheet} from 'components/action-sheet/action-sheet';
 import {updateActivityCommentReactions} from 'components/activity-stream/activity__stream-helper';
 
 import type Api from 'components/api/api';
@@ -179,7 +174,7 @@ const loadActivitiesPage = (reset: boolean = true): ReduxAction => {
 };
 
 const showArticleActions = (
-  actionSheet: typeof ActionSheetProvider,
+  showActionSheetWithOptions: ShowActionSheetWithOptions,
   canUpdate: boolean,
   canDelete: boolean,
   renderBreadCrumbs: (...args: any[]) => any,
@@ -310,7 +305,7 @@ const showArticleActions = (
     actions.push({
       title: i18n('Cancel'),
     });
-    const selectedAction = await showActions(actions, actionSheet);
+    const selectedAction = await showActionSheet(actions, showActionSheetWithOptions, '');
 
     if (selectedAction && selectedAction.execute) {
       selectedAction.execute();

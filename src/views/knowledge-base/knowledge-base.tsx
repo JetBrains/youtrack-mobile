@@ -11,6 +11,7 @@ import {
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {connectActionSheet} from '@expo/react-native-action-sheet';
 
 import * as knowledgeBaseActions from './knowledge-base-actions';
 import Article from 'views/article/article';
@@ -66,6 +67,7 @@ import type {KnowledgeBaseState} from './knowledge-base-reducers';
 import type {ISelectProps} from 'components/select/select';
 import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme, UITheme} from 'types/Theme';
+import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
 
 type Props = KnowledgeBaseActions &
   KnowledgeBaseState & {
@@ -73,6 +75,7 @@ type Props = KnowledgeBaseActions &
     project?: ArticleProject;
     preventReload?: boolean;
     lastVisitedArticle?: ArticleSingle;
+    showActionSheetWithOptions: ShowActionSheetWithOptions;
   };
 
 interface State {
@@ -601,7 +604,7 @@ export class KnowledgeBase extends Component<Props, State> {
   }
 
   renderArticleList = () => {
-    const {isLoading, articlesList, error, showContextActions, issuePermissions} = this.props;
+    const {isLoading, articlesList, error, showContextActions, showActionSheetWithOptions, issuePermissions} = this.props;
     return (
       <>
         {this.renderHeader({
@@ -612,7 +615,7 @@ export class KnowledgeBase extends Component<Props, State> {
               style={{padding: 7, marginRight: -7}}
               onPress={() => {
                 showContextActions(
-                  this.context.actionSheet(),
+                  showActionSheetWithOptions,
                   issuePermissions.articleCanCreateArticle(),
                   this.openProjectSelect,
                   this.onArticleCreate
@@ -695,4 +698,4 @@ const mapDispatchToProps = (dispatch: ReduxThunkDispatch) => {
   return {...bindActionCreators(knowledgeBaseActions, dispatch)};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(KnowledgeBase);
+export default connectActionSheet(connect(mapStateToProps, mapDispatchToProps)(KnowledgeBase));

@@ -21,13 +21,12 @@ import {
   resetUserArticlesProfile,
   setGlobalInProgress,
 } from 'actions/app-actions';
-import {showActions} from 'components/action-sheet/action-sheet';
+import {showActionSheet} from 'components/action-sheet/action-sheet';
 import {sortByUpdatedReverse} from 'components/search/sorting';
 import {until} from 'util/util';
 
 import type Api from 'components/api/api';
 import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
-import type {ActionSheetProvider} from '@expo/react-native-action-sheet';
 import type {
   Article,
   ArticleNodeList,
@@ -40,6 +39,7 @@ import type {ArticleDraft} from 'types/Article';
 import type {CustomError} from 'types/Error';
 import type {Folder} from 'types/User';
 import type {ReduxAction, ReduxThunkDispatch, ReduxStateGetter, ReduxAPIGetter} from 'types/Redux';
+import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
 
 export const getCachedArticleList = (): ArticlesList =>
   getStorageState().articlesList || [];
@@ -444,7 +444,7 @@ const setNoFavoriteProjects = (): ReduxAction => async (dispatch: ReduxThunkDisp
 };
 
 const showContextActions = (
-  actionSheet: typeof ActionSheetProvider,
+  showActionSheetWithOptions: ShowActionSheetWithOptions,
   canCreateArticle: boolean,
   onShowMoreProjects: (...args: any[]) => void,
   onCreateArticle: () => void,
@@ -469,10 +469,7 @@ const showContextActions = (
     });
   }
 
-  const selectedAction:
-    | ActionSheetOption
-    | null
-    | undefined = await showActions(actions, actionSheet);
+  const selectedAction = await showActionSheet(actions, showActionSheetWithOptions, '');
 
   if (selectedAction && selectedAction.execute) {
     selectedAction.execute();

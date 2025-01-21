@@ -9,6 +9,7 @@ import {
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {connectActionSheet} from '@expo/react-native-action-sheet';
 
 import * as createIssueActions from './create-issue-actions';
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
@@ -67,6 +68,7 @@ import type {IssueCreate} from 'types/Issue';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Project} from 'types/Project';
 import type {ReduxThunkDispatch} from 'types/Redux';
+import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
 import type {Theme, UITheme, UIThemeColors} from 'types/Theme';
 
 interface AdditionalProps {
@@ -78,6 +80,7 @@ interface AdditionalProps {
   isMatchesQuery?: () => boolean;
   isConnected: boolean;
   starId: string;
+  showActionSheetWithOptions: ShowActionSheetWithOptions;
 }
 
 type Props = CreateIssueState &
@@ -233,7 +236,7 @@ class CreateIssue extends PureComponent<Props, State> {
         hitSlop={HIT_SLOP}
         onPress={() => {
           !this.isProcessing() &&
-          this.props.showContextActions((this.context as any).actionSheet());
+          this.props.showContextActions(this.props.showActionSheetWithOptions);
         }}
       >
         <Text style={styles.iconMore}>
@@ -646,4 +649,4 @@ const mapDispatchToProps = (dispatch: ReduxThunkDispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateIssue);
+export default connectActionSheet(connect(mapStateToProps, mapDispatchToProps)(CreateIssue));

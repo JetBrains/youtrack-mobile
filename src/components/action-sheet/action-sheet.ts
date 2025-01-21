@@ -1,5 +1,3 @@
-import {ActionSheetProvider} from '@expo/react-native-action-sheet';
-
 import {DEFAULT_THEME, getSystemThemeMode, getUITheme} from 'components/theme/theme';
 import {getStorageState} from 'components/storage/storage';
 
@@ -68,19 +66,6 @@ async function doShowActions(
   });
 }
 
-export function showActions(
-  options: ActionSheetOption[],
-  actionSheetInstance: typeof ActionSheetProvider,
-  title?: string,
-  message?: string,
-): Promise<ActionSheetOption> {
-  return doShowActions(
-    options,
-    actionSheetInstance.getContext().showActionSheetWithOptions,
-    title,
-    message,
-  );
-}
 export function showActionSheet(
   options: ActionSheetOption[],
   showActionSheetWithOptions: ShowActionSheetWithOptions,

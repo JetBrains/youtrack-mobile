@@ -1,5 +1,3 @@
-import {ActionSheetProvider} from '@expo/react-native-action-sheet';
-
 import * as commandDialogHelper from 'components/command-dialog/command-dialog-helper';
 import issueCommonLinksActions from 'components/issue-actions/issue-links-actions';
 import log from 'components/log/log';
@@ -15,11 +13,10 @@ import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {notifyError} from 'components/notification/notification';
 import {resolveError} from 'components/error/error-resolver';
-import {showActions} from 'components/action-sheet/action-sheet';
+import {showActionSheet} from 'components/action-sheet/action-sheet';
 import {until} from 'util/util';
 
 import type Api from 'components/api/api';
-import type {ActionSheetOption} from 'components/action-sheet/action-sheet';
 import type {AnyIssue, CommandSuggestionResponse, IssueCreate, IssueOnList} from 'types/Issue';
 import {
   Attachment,
@@ -33,6 +30,7 @@ import type {Folder} from 'types/User';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Project} from 'types/Project';
 import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
+import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
 import type {StorageState} from 'components/storage/storage';
 import type {Visibility} from 'types/Visibility';
 
@@ -355,9 +353,9 @@ export function updateVisibility(visibility: Visibility): ReduxAction {
   };
 }
 
-export function showContextActions(actionSheet: typeof ActionSheetProvider): ReduxAction {
+export function showContextActions(showActionSheetWithOptions: ShowActionSheetWithOptions): ReduxAction {
   return async (dispatch: ReduxThunkDispatch) => {
-    const selectedAction: ActionSheetOption = await showActions(
+    const selectedAction = await showActionSheet(
       [
         {
           title: i18n('Apply command…'),
@@ -370,7 +368,8 @@ export function showContextActions(actionSheet: typeof ActionSheetProvider): Red
           title: i18n('Cancel'),
         },
       ],
-      actionSheet
+      showActionSheetWithOptions,
+      '',
     );
 
     if (selectedAction && selectedAction.execute) {

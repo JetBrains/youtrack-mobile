@@ -1,7 +1,5 @@
 import {Clipboard, Share} from 'react-native';
 
-import {ActionSheetProvider} from '@expo/react-native-action-sheet';
-
 import * as commandDialogHelper from 'components/command-dialog/command-dialog-helper';
 import ApiHelper from 'components/api/api__helper';
 import issueCommonLinksActions from 'components/issue-actions/issue-links-actions';
@@ -9,7 +7,6 @@ import log from 'components/log/log';
 import Router from 'components/router/router';
 import usage from 'components/usage/usage';
 import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
-import {ActionSheetOption, showActions} from 'components/action-sheet/action-sheet';
 import {confirmDeleteIssue} from 'components/confirmation/issue-confirmations';
 import {getEntityPresentation, getReadableID} from 'components/issue-formatter/issue-formatter';
 import {getIssueTextCustomFields} from 'components/custom-field/custom-field-helper';
@@ -22,8 +19,10 @@ import {makeIssueWebUrl} from 'views/issue/activity/issue-activity__helper';
 import {notify, notifyError} from 'components/notification/notification';
 import {receiveUserAppearanceProfile} from 'actions/app-actions';
 import {resolveError} from 'components/error/error-resolver';
+import {showActionSheet} from 'components/action-sheet/action-sheet';
 
 import type Api from 'components/api/api';
+import type {ActionSheetOption, ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
 import type {AnyError} from 'types/Error';
 import type {AppState} from 'reducers';
 import {
@@ -494,7 +493,7 @@ export const createActions = (
       };
     },
     showIssueActions: function (
-      actionSheet: typeof ActionSheetProvider,
+      showActionSheetWithOptions: ShowActionSheetWithOptions,
       permissions: {
         canAttach: boolean;
         canEdit: boolean;
@@ -618,9 +617,10 @@ export const createActions = (
         actionSheetActions.push({
           title: i18n('Cancel'),
         });
-        const selectedAction = await showActions(
+
+        const selectedAction = await showActionSheet(
           actionSheetActions,
-          actionSheet,
+          showActionSheetWithOptions,
           issue.idReadable,
           issue.summary?.length > 155
             ? `${issue.summary.substring(0, 153)}…`
@@ -631,12 +631,12 @@ export const createActions = (
       };
     },
     onShowCopyTextContextActions: function (
-      actionSheet: typeof ActionSheetProvider,
+      showActionSheetWithOptions: ShowActionSheetWithOptions,
       text: string,
       title?: string,
     ): ReduxAction {
       return async () => {
-        const selectedAction: ActionSheetOption = await showActions(
+        const selectedAction = await showActionSheet(
           [
             {
               title: title || i18n('Copy text'),
@@ -650,7 +650,8 @@ export const createActions = (
               title: i18n('Cancel'),
             },
           ],
-          actionSheet,
+          showActionSheetWithOptions,
+          '',
         );
 
         selectedAction?.execute?.();

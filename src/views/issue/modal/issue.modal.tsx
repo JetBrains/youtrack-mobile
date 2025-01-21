@@ -1,22 +1,29 @@
 import React from 'react';
+
 import {connect} from 'react-redux';
+import {connectActionSheet} from '@expo/react-native-action-sheet';
+
 import issueModalActionsCreator, {
   dispatchActions,
   ISSUE_MODAL_STATE_FIELD_NAME,
 } from './issue.modal-actions';
 import IssueModalDetails from './issue.modal__details';
-import {attachmentActions} from '../issue__attachment-actions-and-types';
+import {ANALYTICS_ISSUE_PAGE} from 'components/analytics/analytics-ids';
 import {bindActionCreatorsExt} from 'util/redux-ext';
 import {CommandDialogModal} from 'components/command-dialog/command-dialog';
 import {IconClose} from 'components/icon/icon';
 import {Issue} from '../issue';
+
 import styles from '../issue.styles';
+
 import type {IssueOnList} from 'types/Issue';
 import type {IssueProps, OwnProps} from '../issue';
+import type {ReduxThunkDispatch} from 'types/Redux';
 import type {RootState} from 'reducers/app-reducer';
 import type {ScrollData} from 'types/Markdown';
-import type {State as IssueState} from '../issue-reducers';
+import type {IssueState} from '../issue-base-reducer';
 import type {UITheme} from 'types/Theme';
+
 type Props = IssueProps & {
   onHide: () => any;
   onBack?: () => any;
@@ -24,7 +31,7 @@ type Props = IssueProps & {
   onNavigate?: (issue: IssueOnList) => any;
   stacked?: boolean;
   onCommandApply: () => any;
-}; //@ts-expect-error
+};
 
 class IssueModal extends Issue<Props> {
     handleOnBack = () => {
@@ -102,7 +109,7 @@ class IssueModal extends Issue<Props> {
         descriptionCopy={descriptionCopy}
         setIssueSummaryCopy={setIssueSummaryCopy}
         setIssueDescriptionCopy={setIssueDescriptionCopy}
-        analyticCategory={this.CATEGORY_NAME}
+        analyticCategory={ANALYTICS_ISSUE_PAGE}
         renderRefreshControl={() =>
           this.renderRefreshControl(() => this.loadIssue(), uiTheme)
         }
@@ -118,7 +125,7 @@ class IssueModal extends Issue<Props> {
           description: string,
         ) => onCheckboxUpdate(checked, position, description)}
         onLongPress={(text: string, title?: string) => {
-          onShowCopyTextContextActions(this.context.actionSheet(), text, title);
+          onShowCopyTextContextActions(this.props.showActionSheetWithOptions, text, title);
         }}
         getIssueLinksTitle={getIssueLinksTitle}
         issuesGetter={this.props.loadIssuesXShort}
@@ -180,27 +187,23 @@ const mapStateToProps = (
     issueId: ownProps.issueId,
     user: state.app.user,
     navigateToActivity: ownProps.navigateToActivity,
-  } as Partial<IssueState & OwnProps>;
+  };
 };
 
 export const issueModalActions = issueModalActionsCreator();
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: ReduxThunkDispatch) => {
   return {
     ...bindActionCreatorsExt(issueModalActions, dispatch),
-    createAttachActions: () => attachmentActions.createAttachActions(dispatch),
     dispatcher: dispatch,
-    setIssueId: issueId => dispatch(dispatchActions.setIssueId(issueId)),
-    setIssueSummaryCopy: summary =>
+    setIssueId: (issueId: string) => dispatch(dispatchActions.setIssueId(issueId)),
+    setIssueSummaryCopy: (summary: string) =>
       dispatch(dispatchActions.setIssueSummaryCopy(summary)),
-    setIssueDescriptionCopy: description =>
+    setIssueDescriptionCopy: (description: string) =>
       dispatch(dispatchActions.setIssueDescriptionCopy(description)),
     stopEditingIssue: () => dispatch(dispatchActions.stopEditingIssue()),
     closeCommandDialog: () => dispatch(dispatchActions.closeCommandDialog()),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(IssueModal) as React$AbstractComponent<Props, unknown>;
+export default connectActionSheet(connect(mapStateToProps, mapDispatchToProps)(IssueModal));

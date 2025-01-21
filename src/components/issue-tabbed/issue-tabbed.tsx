@@ -8,36 +8,42 @@ import {TabView, TabBar} from 'react-native-tab-view';
 
 import styles from './issue-tabbed.style';
 
+import type {ScaledSize} from 'react-native';
 import type {TabRoute} from 'types/Issue';
 import type {UITheme, UIThemeColors} from 'types/Theme';
 
-export type IssueTabbedState = {
+export interface IssueTabbedState {
   index: number;
   routes: TabRoute[];
   isTransitionInProgress: boolean;
   isSplitView: boolean;
   navigateToActivity: boolean;
-};
+}
 
 
-export default class IssueTabbed<P = {}, S = IssueTabbedState> extends PureComponent<P, S> {
-  initialWindowDimensions: any = Dimensions.get('window');
-  tabRoutes: TabRoute[] = [
-    this.getMainTabText(),
-    this.getSecondaryTabText(),
-  ].map((name: string) => ({
-    key: name,
-    title: name,
-  }));
+export default class IssueTabbed<P = {}> extends PureComponent<P, IssueTabbedState> {
+  initialWindowDimensions: ScaledSize;
+  tabRoutes: TabRoute[];
   unsubscribeOnDimensionsChange: EventSubscription | undefined;
-  // @ts-ignore
-  state: IssueTabbedState = {
-    index: 0,
-    routes: this.tabRoutes,
-    isTransitionInProgress: false,
-    isSplitView: isSplitView(),
-    navigateToActivity: false,
-  };
+
+  constructor(props: P) {
+    super(props);
+    this.initialWindowDimensions = Dimensions.get('window');
+    this.tabRoutes = [
+      this.getMainTabText(),
+      this.getSecondaryTabText(),
+    ].map((name: string) => ({
+      key: name,
+      title: name,
+    }));
+    this.state = {
+      index: 0,
+      routes: this.tabRoutes,
+      isTransitionInProgress: false,
+      isSplitView: isSplitView(),
+      navigateToActivity: false,
+    };
+  }
 
   componentDidMount() {
     this.unsubscribeOnDimensionsChange = Dimensions.addEventListener(
@@ -58,22 +64,13 @@ export default class IssueTabbed<P = {}, S = IssueTabbedState> extends PureCompo
     return i18n('Activity');
   }
 
-  renderDetails: (uiTheme: UITheme) => null = (uiTheme: UITheme) => null;
-  renderActivity: (uiTheme: UITheme) => null = (uiTheme: UITheme) => null;
-  isTabChangeEnabled: () => boolean = () => true;
-  switchToDetailsTab: () => void = () =>
-    this.setState({
-      index: 0,
-    });
-  switchToActivityTab: () => void = () =>
-    this.setState({
-      index: 1,
-    });
-  isActivityTabEnabled: () => boolean = (): boolean => this?.state?.index === 1;
-  setSplitView: () => void = (): void => {
-    this.setState({
-      isSplitView: isSplitView(),
-    });
+  renderDetails = (uiTheme: UITheme): React.ReactNode => null;
+  renderActivity = (uiTheme: UITheme): React.ReactNode => null;
+  isTabChangeEnabled = (): boolean => true;
+  switchToDetailsTab = () => {this.setState({index: 0})};
+  switchToActivityTab = () => {this.setState({index: 1})};
+  isActivityTabEnabled = (): boolean => this?.state?.index === 1;
+  setSplitView = () => {this.setState({isSplitView: isSplitView()});
   };
 
   getRouteBadge(isVisible: boolean, children?: string | React.ReactNode) {
@@ -94,10 +91,7 @@ export default class IssueTabbed<P = {}, S = IssueTabbedState> extends PureCompo
     ) : null;
   }
 
-  renderTabBar(
-    uiTheme: UITheme,
-    editMode: boolean = false,
-  ): (props: any)=> React.ReactNode {
+  renderTabBar(uiTheme: UITheme, editMode: boolean = false) {
     return (props: Record<string, any>) => {
       const uiThemeColors: UIThemeColors = uiTheme.colors;
       return (
@@ -175,7 +169,7 @@ export default class IssueTabbed<P = {}, S = IssueTabbedState> extends PureCompo
     );
   };
 
-  render(): null {
+  render(): React.ReactNode {
     return null;
   }
 }

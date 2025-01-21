@@ -3,6 +3,7 @@ import {FlatList, RefreshControl, Text, TouchableOpacity, View} from 'react-nati
 
 import {bindActionCreatorsExt} from 'util/redux-ext';
 import {connect} from 'react-redux';
+import {connectActionSheet} from '@expo/react-native-action-sheet';
 
 import createIssueActions, {dispatchActions} from './issue-actions';
 import AttachFileDialog from 'components/attach-file/attach-file-dialog';
@@ -45,26 +46,25 @@ import type {IssueFull, IssueSprint, TabRoute} from 'types/Issue';
 import type {Attachment, IssueLink, Tag} from 'types/CustomFields';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import type {EventSubscription} from 'react-native';
-import type {IssueTabbedState} from 'components/issue-tabbed/issue-tabbed';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {ReduxThunkDispatch} from 'types/Redux';
 import type {RequestHeaders} from 'types/Auth';
 import type {RootState} from 'reducers/app-reducer';
 import type {ScrollData} from 'types/Markdown';
-import type {State as IssueState} from './issue-reducers';
+import type {IssueState} from './issue-base-reducer';
 import type {Theme, UITheme} from 'types/Theme';
 import type {User, UserCC} from 'types/User';
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
   issuePlaceholder: Record<string, any>;
-  uploadIssueAttach: (files: NormalizedAttachment[]) => any;
-  loadAttachments: () => any;
-  hideAddAttachDialog: () => any;
-  createAttachActions: () => any;
-  removeAttachment: (attach: Attachment) => any;
+  uploadIssueAttach: (files: NormalizedAttachment[]) => void;
+  loadAttachments: () => void;
+  hideAddAttachDialog: () => void;
+  createAttachActions: () => void;
+  removeAttachment: (attach: Attachment) => void;
   isTagsSelectVisible: boolean;
-  onCommandApply: () => any;
+  onCommandApply: () => void;
   commentId?: string;
   user: User;
   userCC: Array<UserCC>;
@@ -77,7 +77,7 @@ export type IssueProps = IssueState &
   AdditionalProps;
 
 
-export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
+export class Issue<T extends IssueProps> extends IssueTabbed<IssueProps & T> {
   static contextTypes = {
     actionSheet: Function,
   };
@@ -253,7 +253,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
           description: string,
         ) => onCheckboxUpdate(checked, position, description)}
         onLongPress={(text: string, title?: string) => {
-          onShowCopyTextContextActions(this.context.actionSheet(), text, title);
+          onShowCopyTextContextActions(this.props.showActionSheetWithOptions, text, title);
         }}
         getIssueLinksTitle={getIssueLinksTitle}
         issuesGetter={this.props.loadIssuesXShort}
@@ -266,11 +266,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
       />
     );
   };
-  renderDetails: (
-    uiTheme: UITheme,
-  ) => React.ReactElement<React.ComponentProps<any>, any> = (
-    uiTheme: UITheme,
-  ) => {
+  renderDetails = (uiTheme: UITheme) => {
     const scrollData: ScrollData = {
       loadMore: () => null,
     };
@@ -294,14 +290,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return DEFAULT_ISSUE_STATE_FIELD_NAME;
   }
 
-  renderActivity: (
-    uiTheme: UITheme,
-  ) => React.ReactElement<React.ComponentProps<any>, any> = (
-    uiTheme: UITheme,
-  ): React.ReactElement<
-    React.ComponentProps<typeof IssueActivity>,
-    typeof IssueActivity
-  > => {
+  renderActivity = (uiTheme: UITheme) => {
     const {
       issue,
       user,
@@ -334,7 +323,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     );
   };
 
-  isTabChangeEnabled(): boolean {
+  isTabChangeEnabled = (): boolean => {
     const {
       editMode,
       isSavingEditedIssue,
@@ -344,7 +333,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return (
       !editMode && !isSavingEditedIssue && !isRefreshing && !attachingImage
     );
-  }
+  };
 
   handleOnBack = () => {
     const hasParentRoute: boolean = Router.pop(false, {issueId: this.props.issueId || this.props?.issue?.id});
@@ -399,7 +388,7 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
         onPress={() => {
           if (this.isIssueLoaded()) {
             showIssueActions(
-              this.context.actionSheet(),
+              this.props.showActionSheetWithOptions,
               this.createIssueActionsPermissionsMap(),
               this.switchToDetailsTab,
               issuePermissions.canLink(issue) ? this.onAddIssueLink : null,
@@ -678,9 +667,9 @@ export class Issue extends IssueTabbed<IssueProps, IssueTabbedState> {
     return Boolean(issueLoaded && !issueLoadingError);
   };
 
-  renderTagsSelect(): any {
+  renderTagsSelect() {
     const {selectProps} = this.props;
-    const Component: any = this.state.isSplitView ? SelectModal : Select;
+    const Component: React.ElementType = this.state.isSplitView ? SelectModal : Select;
     return (
       <Component
         {...selectProps}
@@ -758,7 +747,7 @@ export type OwnProps = {
   issuePermissions: IssuePermissions;
   issuePlaceholder: Partial<IssueFull>;
   issueId: string;
-  user: User;
+  user: User | null;
   navigateToActivity: string | undefined;
 };
 
@@ -795,9 +784,9 @@ const mapDispatchToProps = (dispatch: ReduxThunkDispatch) => {
   };
 };
 
-export function connectIssue(Component: any): any {
+export function connectIssue(Component: any) {
   return connect(mapStateToProps, mapDispatchToProps)(Component);
 }
 
 
-export default connectIssue(Issue);
+export default connectActionSheet(connectIssue(Issue));

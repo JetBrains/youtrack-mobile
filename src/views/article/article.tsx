@@ -9,6 +9,7 @@ import {
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {connectActionSheet} from '@expo/react-native-action-sheet';
 
 import * as articleActions from './arcticle-actions';
 import ArticleActivities from './article__activity';
@@ -44,13 +45,14 @@ import type {Attachment} from 'types/CustomFields';
 import type {CustomError} from 'types/Error';
 import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 import type {HeaderProps} from 'components/header/header';
-import type {IssueTabbedState} from 'components/issue-tabbed/issue-tabbed';
 import type {KnowledgeBaseState} from '../knowledge-base/knowledge-base-reducers';
+import type {ReduxThunkDispatch} from 'types/Redux';
 import type {RootState} from 'reducers/app-reducer';
+import type {ShowActionSheetWithOptions} from 'components/action-sheet/action-sheet';
+import type {TabRoute} from 'types/Issue';
 import type {Theme, UITheme, UIThemeColors} from 'types/Theme';
 import type {ViewStyleProp} from 'types/Internal';
 import type {Visibility} from 'types/Visibility';
-import {TabRoute} from 'types/Issue';
 
 type Props = ArticleState & {
   articlePlaceholder: ArticleEntity;
@@ -59,18 +61,11 @@ type Props = ArticleState & {
   lastVisitedArticle: Article | null | undefined;
   commentId?: string;
   navigateToActivity?: string;
+  showActionSheetWithOptions: ShowActionSheetWithOptions;
 } & typeof articleActions;
 
-type State = IssueTabbedState & {
-  modalChildren: any;
-};
 
-
-class Article extends IssueTabbed<Props, State> {
-  static contextTypes = {
-    actionSheet: Function,
-  };
-
+class Article extends IssueTabbed<Props> {
   uiTheme!: UITheme;
   unsubscribe: ((...args: any[]) => any) | undefined;
   articleDetailsList: FlatList | undefined;
@@ -410,6 +405,7 @@ class Article extends IssueTabbed<Props, State> {
       isProcessing,
       showArticleActions,
       issuePermissions,
+      showActionSheetWithOptions,
     } = this.props;
     const articleData: Partial<ArticleEntity> = article || articlePlaceholder;
 
@@ -443,7 +439,7 @@ class Article extends IssueTabbed<Props, State> {
         ) : null,
       onRightButtonClick: () =>
         showArticleActions(
-          this.context.actionSheet(),
+          showActionSheetWithOptions,
           this.canEditArticle(),
           this.canDeleteArticle(),
           () =>
@@ -518,7 +514,7 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: ReduxThunkDispatch) => {
   return {
     ...bindActionCreators(articleActions, dispatch),
     deleteAttachment: (attachmentId: string) =>
@@ -528,4 +524,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Article);
+export default connectActionSheet(connect(mapStateToProps, mapDispatchToProps)(Article));

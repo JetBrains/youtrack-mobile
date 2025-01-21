@@ -13,28 +13,25 @@ import {
   receiveActivityPage,
 } from './issue-activity__actions';
 import {DEFAULT_ISSUE_STATE_FIELD_NAME} from '../issue-base-actions-creater';
-import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {i18n} from 'components/i18n/i18n';
 import {notify, notifyError} from 'components/notification/notification';
-import {ActionSheetOption, showActions} from 'components/action-sheet/action-sheet';
 import {until} from 'util/util';
 import {updateActivityCommentReactions} from 'components/activity-stream/activity__stream-helper';
 
 import type Api from 'components/api/api';
 import type IssueAPI from 'components/api/api__issue';
 import type {Activity, ActivityPositionData} from 'types/Activity';
-import type {CustomError} from 'types/Error';
+import type {AnyError} from 'types/Error';
 import type {IssueComment} from 'types/CustomFields';
 import type {IssueFull} from 'types/Issue';
 import type {Reaction} from 'types/Reaction';
 import type {State as SingleIssueState} from '../issue-reducers';
 import type {UserGroup} from 'types/UserGroup';
 import type {User, UserMentions} from 'types/User';
-import {ActionSheetProvider} from '@expo/react-native-action-sheet';
-import {ActivityGroup} from 'types/Activity';
-import {AppState} from 'reducers';
-import {IssueState} from 'views/issue/issue-base-reducer';
-import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
+import type {ActivityGroup} from 'types/Activity';
+import type {AppState} from 'reducers';
+import type {IssueState} from '../issue-base-reducer';
+import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 
 export function updateComment(comment: IssueComment): {
   comment: IssueComment;
@@ -93,12 +90,6 @@ export interface CommentActions {
   loadActivity: (doNotReset?: boolean) => ReduxAction;
   deleteComment: (comment: IssueComment) => ReduxAction<Promise<unknown>>;
   onCheckboxUpdate: (checked: boolean, position: number, comment: IssueComment) => ReduxAction;
-  showIssueCommentActions: (
-    actionSheet: typeof ActionSheetProvider,
-    comment: IssueComment,
-    updateComment: ((comment: IssueComment) => void) | null | undefined,
-    canDeleteComment: boolean
-  ) => ReduxAction;
   loadIssueCommentsAsActivityPage: () => ReduxAction;
   submitEditedComment: (comment: IssueComment, isAttachmentChange?: boolean) => ReduxAction;
   copyCommentUrl: (id: string) => ReduxAction;
@@ -113,7 +104,7 @@ export interface CommentActions {
     comment: IssueComment,
     reaction: Reaction,
     activities: ActivityGroup[],
-    onReactionUpdate: (activities: Activity[], error?: CustomError) => void
+    onReactionUpdate: (activities: Activity[], error?: AnyError) => void
   ) => ReduxAction;
   updateDraftComment: (
     draftComment: IssueComment,
@@ -147,7 +138,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
             type: types.RECEIVE_COMMENTS_ERROR,
             error: error,
           });
-          notifyError(error as CustomError);
+          notifyError(error as AnyError);
         }
       };
     },
@@ -238,7 +229,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
 
           await dispatch(actions.loadActivity(true));
         } catch (error) {
-          notifyError(error as CustomError);
+          notifyError(error as AnyError);
         }
       };
     },
@@ -252,7 +243,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
           log.info(`Issue Activity: Comment deleted state updated: ${deleted.toString()}`);
         } catch (error) {
           dispatch(updateComment({...comment}));
-          notifyError(error as CustomError);
+          notifyError(error as AnyError);
         }
       };
     },
@@ -279,7 +270,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
               dispatch(actions.loadActivity());
             } catch (error) {
               dispatch(actions.loadActivity());
-              notifyError(error as CustomError);
+              notifyError(error as AnyError);
             }
           })
           .catch(() => {});
@@ -291,66 +282,6 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
         const {issue} = getState()[stateFieldName as keyof AppState] as IssueState;
         Clipboard.setString(activityHelper.makeIssueWebUrl(api, issue, id));
         notify(i18n('Link to comment copied'));
-      };
-    },
-    showIssueCommentActions: function (
-      actionSheet: typeof ActionSheetProvider,
-      comment: IssueComment,
-      updateComment: ((comment: IssueComment) => void) | null | undefined,
-      canDeleteComment: boolean
-    ): ReduxAction {
-      return async (dispatch: ReduxThunkDispatch) => {
-        const contextActions: ActionSheetOption[] = [
-          {
-            title: i18n('Copy text'),
-            execute: () => {
-              Clipboard.setString(comment.text);
-              usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment text');
-              notify(i18n('Copied'));
-            },
-          },
-          {
-            title: i18n('Copy link'),
-            execute: () => {
-              dispatch(actions.copyCommentUrl(comment.id));
-              usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Copy comment URL');
-            },
-          },
-        ];
-
-        if (typeof updateComment === 'function') {
-          contextActions.push({
-            title: i18n('Edit'),
-            execute: () => {
-              usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Edit comment');
-              updateComment(comment);
-            },
-          });
-        }
-
-        if (canDeleteComment) {
-          contextActions.push({
-            title: i18n('Delete'),
-            execute: () => {
-              usage.trackEvent(ANALYTICS_ISSUE_PAGE, 'Delete comment');
-              dispatch(actions.deleteComment(comment));
-            },
-          });
-        }
-
-        contextActions.push({
-          title: i18n('Cancel'),
-        });
-        const selectedAction = await showActions(
-          contextActions,
-          actionSheet,
-          comment?.author ? getEntityPresentation(comment.author) : '',
-          comment.text.length > 155 ? `${comment.text.substring(0, 153)}…` : comment.text
-        );
-
-        if (selectedAction && selectedAction.execute) {
-          selectedAction.execute();
-        }
       };
     },
     loadCommentSuggestions: function (query: string): ReduxAction<Promise<UserMentions>> {
@@ -370,7 +301,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
           dispatch(receiveCommentSuggestions(suggestions));
           return suggestions;
         } catch (error) {
-          notifyError(error as CustomError);
+          notifyError(error as AnyError);
           return {users: []};
         } finally {
           dispatch(stopLoadingCommentSuggestions());
@@ -394,7 +325,7 @@ export const createActivityCommentActions = (stateFieldName = DEFAULT_ISSUE_STAT
       comment: IssueComment,
       reaction: Reaction,
       activities: ActivityGroup[],
-      onReactionUpdate: (activities: Activity[], error?: CustomError) => void
+      onReactionUpdate: (activities: Activity[], error?: AnyError) => void
     ): ReduxAction {
       return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         const issueApi: IssueAPI = getApi().issue;
