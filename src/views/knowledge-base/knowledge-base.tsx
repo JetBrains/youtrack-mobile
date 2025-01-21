@@ -97,9 +97,6 @@ const ERROR_MESSAGE_DATA: Record<string, any> = {
 };
 
 export class KnowledgeBase extends Component<Props, State> {
-  static contextTypes: any = {
-    actionSheet: Function,
-  };
   listRef: any;
   uiTheme!: UITheme;
   unsubscribe: Function | undefined;

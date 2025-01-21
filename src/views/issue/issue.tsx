@@ -78,9 +78,6 @@ export type IssueProps = IssueState &
 
 
 export class Issue<T extends IssueProps> extends IssueTabbed<IssueProps & T> {
-  static contextTypes = {
-    actionSheet: Function,
-  };
   imageHeaders: RequestHeaders = getApi().auth.getAuthorizationHeaders();
   backendUrl: string = getApi().config.backendUrl;
   renderRefreshControl: (

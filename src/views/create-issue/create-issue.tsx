@@ -97,9 +97,6 @@ interface State {
 
 
 class CreateIssue extends PureComponent<Props, State> {
-  static contextTypes = {
-    actionSheet: Function,
-  };
   private uiTheme: UITheme | undefined;
   state = {
     modalChildren: null,

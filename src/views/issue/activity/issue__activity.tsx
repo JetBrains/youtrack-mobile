@@ -82,9 +82,6 @@ interface State {
 }
 
 export class IssueActivity extends PureComponent<IssueActivityProps, State> {
-  static contextTypes: any = {
-    actionSheet: Function,
-  };
   backendUrl: string = getApi().config.backendUrl;
   imageHeaders: RequestHeaders = getApi().auth.getAuthorizationHeaders();
   issuePermissions: IssuePermissions;
