@@ -1,23 +1,29 @@
 import React from 'react';
+
 import {Text, View} from 'react-native';
-import Router from '../router/router';
+import Router from 'components/router/router';
+
 import {getActivityEventTitle} from './activity__stream-helper';
 import {getReadableID} from '../issue-formatter/issue-formatter';
+
 import styles from './activity__stream.styles';
+
 import type {Activity} from 'types/Activity';
 import type {IssueFull} from 'types/Issue';
-type Props = {
+
+interface Props {
   activity: Activity;
-};
-type LinkedIssue = IssueFull & {
-  isRemoved?: boolean;
-};
+}
+
+interface LinkedIssue extends IssueFull {
+  isRemoved: boolean;
+}
 
 const StreamLink = (props: Props) => {
-  const added: LinkedIssue[] = props.activity.added as any;
-  const removed: LinkedIssue[] = (props.activity
-    .removed as any).map((issue: LinkedIssue) => ({...issue, isRemoved: true}));
-  const linkedIssues: LinkedIssue[] = [].concat(added).concat(removed);
+  const added = props.activity.added as LinkedIssue[];
+  const removed = props.activity.removed as LinkedIssue[];
+  removed.forEach(issue => (issue.isRemoved = true));
+  const linkedIssues = [...added, ...removed];
   return (
     <>
       <View>
@@ -64,7 +70,4 @@ const StreamLink = (props: Props) => {
   );
 };
 
-export default React.memo<Props>(StreamLink) as React$AbstractComponent<
-  Props,
-  unknown
->;
+export default React.memo<Props>(StreamLink);
