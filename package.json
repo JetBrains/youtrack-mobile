@@ -173,6 +173,7 @@
     "eslint-plugin-ft-flow": "^2.0.3",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^28.9.0",
+    "fast-glob": "^3.3.3",
     "fetch-mock": "5.6.0",
     "gettext-extractor": "3.5.4",
     "husky": "^8.0.2",
