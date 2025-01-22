@@ -113,12 +113,21 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
   }
 
   async componentDidUpdate(prevProps: IssueActivityProps) {
-    if (
-      (!prevProps.issuePlaceholder && this.props.issuePlaceholder) ||
-      (prevProps.issuePlaceholder &&
-        this.props.issuePlaceholder &&
-        prevProps.issuePlaceholder.id !== this.props.issuePlaceholder.id)
-    ) {
+    if (this.props.isLoading) {
+      return;
+    }
+
+    const redirectedFromIssueToIssue = prevProps?.issue?.id !== this.props.issue.id && this.props.activityPage === null;
+    const isIssueOpenedFromList = !prevProps.issuePlaceholder && this.props.issuePlaceholder;
+    const isRedirectedFromIssueToIssue =
+      prevProps.issuePlaceholder &&
+      this.props.issuePlaceholder &&
+      prevProps.issuePlaceholder.id !== this.props.issuePlaceholder.id;
+
+    if (redirectedFromIssueToIssue && this.props.activityPage === null) {
+      await this.load(this.props.issue);
+      return;
+    } else if (isIssueOpenedFromList || isRedirectedFromIssueToIssue) {
       await this.load(this.getCurrentIssue());
     }
   }

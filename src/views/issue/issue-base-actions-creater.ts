@@ -1,6 +1,7 @@
 import {Clipboard, Share} from 'react-native';
 
 import * as commandDialogHelper from 'components/command-dialog/command-dialog-helper';
+import * as types from 'views/issue/issue-action-types';
 import ApiHelper from 'components/api/api__helper';
 import issueCommonLinksActions from 'components/issue-actions/issue-links-actions';
 import log from 'components/log/log';
@@ -104,51 +105,32 @@ export const createActions = (
       ) => {
         const issueId = (getState()[stateFieldName] as IssueState).issueId;
         const api: Api = getApi();
+        const issuesCache = getStorageState().issuesCache || [];
 
-        const doUpdate = (issue: AnyIssue): void => {
-          dispatch(dispatchActions.setIssueId(issue.id)); //Set issue ID again because first one could be readable id
-
-          dispatch(dispatchActions.receiveIssue(issue));
-          dispatch(actions.getIssueLinksTitle());
-        };
-
-        const updateCache = (issue: AnyIssue) => {
-          const updatedCache: AnyIssue[] = (
-            getStorageState().issuesCache || []
-          ).map((it: AnyIssue) => {
-            if (it.id === issue.id) {
-              return {...it, ...issue};
-            }
-
-            return it;
-          });
-          flushStoragePart({
-            issuesCache: updatedCache,
-          });
-        };
-
-        try {
-          log.info('Issue Actions: Loading issue');
-          const issue = await api.issue.getIssue(issueId);
+        log.info('Issue Actions: Loading issue');
+        const [error, issue] = await until<IssueFull>(api.issue.getIssue(issueId));
+        if (!error) {
           log.info('Issue Actions: Issue loaded');
           issue.fieldHash = ApiHelper.makeFieldHash(issue);
           doUpdate(issue);
           updateCache(issue);
           return issue;
-        } catch (err) {
-          if (getState().app?.networkState?.isConnected === false) {
-            const cachedIssue: IssueOnList | undefined =
-              (getStorageState().issuesCache || []).find(
-                (issue: IssueOnList) => issue.id === issueId || issue.idReadable === issueId
-              ) || issuePlaceholder;
-            if (cachedIssue) {
-              doUpdate(cachedIssue);
-            }
-          } else {
-            log.warn('Failed to load issue', err);
-            const error = await resolveError(err as AnyError);
-            dispatch(dispatchActions.setError(error));
-          }
+        } else if (getState().app?.networkState?.isConnected === true) {
+          log.warn('Failed to load issue', error);
+          dispatch(dispatchActions.setError(await resolveError(error)));
+        }
+
+        function doUpdate(iss: AnyIssue) {
+          dispatch(dispatchActions.setIssueId(iss.id));
+          dispatch(dispatchActions.receiveIssue(iss));
+          dispatch(actions.getIssueLinksTitle());
+        }
+
+        function updateCache(i: AnyIssue) {
+          const updatedCache: AnyIssue[] = issuesCache.map(it => {
+            return {...it, ...(it.id === i.id ? i : {})};
+          });
+          flushStoragePart({issuesCache: updatedCache});
         }
       };
     },
@@ -927,6 +909,14 @@ export const createActions = (
         if (e) {
           notifyError(e, 8000);
         }
+      };
+    },
+    resetActivityPage: function (): ReduxAction {
+      return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter,) => {
+        dispatch({
+          type: types.RECEIVE_ACTIVITY_PAGE,
+          activityPage: null,
+        });
       };
     },
   };

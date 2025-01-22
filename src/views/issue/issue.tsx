@@ -42,7 +42,7 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './issue.styles';
 
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
-import type {IssueFull, IssueSprint, TabRoute} from 'types/Issue';
+import type {IssueFull, IssueOnList, IssueSprint, TabRoute} from 'types/Issue';
 import type {Attachment, IssueLink, Tag} from 'types/CustomFields';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import type {EventSubscription} from 'react-native';
@@ -57,7 +57,7 @@ import type {User, UserCC} from 'types/User';
 
 type AdditionalProps = {
   issuePermissions: IssuePermissions;
-  issuePlaceholder: Record<string, any>;
+  issuePlaceholder: IssueOnList;
   uploadIssueAttach: (files: NormalizedAttachment[]) => void;
   loadAttachments: () => void;
   hideAddAttachDialog: () => void;
@@ -95,15 +95,10 @@ export class Issue<T extends IssueProps> extends IssueTabbed<IssueProps & T> {
   async init() {
     usage.trackScreenView(ANALYTICS_ISSUE_PAGE);
     await this.props.unloadIssueIfExist();
-    await this.props.setIssueId(
-      this.props.issueId || this.props?.issuePlaceholder?.id,
-    );
-
+    await this.props.setIssueId(this.props.issueId || this.props?.issuePlaceholder?.id);
+    await this.loadIssue(this.props?.issuePlaceholder);
     if (this.props.navigateToActivity) {
-      await this.loadIssue(this.props?.issuePlaceholder);
       this.switchToActivityTab();
-    } else {
-      await this.loadIssue(this.props?.issuePlaceholder);
     }
   }
 
@@ -120,8 +115,10 @@ export class Issue<T extends IssueProps> extends IssueTabbed<IssueProps & T> {
     this.goOnlineSubscription?.remove?.();
   }
 
-  async UNSAFE_componentWillReceiveProps(nextProps: IssueProps): Promise<void> {
-    if (nextProps.issueId !== this.props.issueId) {
+  async componentWillUpdate(nextProps: IssueProps) {
+    if (nextProps.issueId !== this.props.issueId && this.props.issuePlaceholder.idReadable !== nextProps.issueId) {
+      this.switchToDetailsTab();
+      this.props.resetActivityPage();
       await this.init();
     }
   }
