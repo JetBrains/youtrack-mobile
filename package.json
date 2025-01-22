@@ -140,7 +140,7 @@
     "@babel/core": "^7.25.2",
     "@babel/plugin-transform-named-capturing-groups-regex": "^7.25.9",
     "@babel/runtime": "^7.25.0",
-    "@bugsnag/cli": "^2.3.0",
+    "@bugsnag/cli": "^2.9.0",
     "@react-native/babel-preset": "0.75.4",
     "@react-native/eslint-config": "0.75.4",
     "@react-native/metro-config": "0.75.4",

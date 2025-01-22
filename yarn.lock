@@ -760,10 +760,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bugsnag/cli@^2.3.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@bugsnag/cli/-/cli-2.7.0.tgz#b4634a9f5c128e3d36be2affb6c49cc316a96a18"
-  integrity sha512-qTyMfJaXqiPiIVscXYDQQrQiaDSVOrTql/fGDGKwJfgnXVyQb3Q9dnNtYKb3XNKPQVnygjWy7KJK/ogm8tFvOw==
+"@bugsnag/cli@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/cli/-/cli-2.9.0.tgz#be9f2a89b2190f71c96160f66d66d9fc3f2092b3"
+  integrity sha512-MAADhfkblzWHZwCnHMsLasJ1LbnFwJcxRaOvqE44hE9gcqIo/8J0AahHjAcIzV1fceSX8itw5k9yJ8YQye/u9Q==
   dependencies:
     js-yaml "^4.1.0"
 
