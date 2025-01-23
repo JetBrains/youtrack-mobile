@@ -143,3 +143,4 @@ dependencies {
 
 apply plugin: 'com.google.gms.google-services'
 apply plugin: "com.bugsnag.android.gradle"
+apply from: "../../node_modules/@bugsnag/react-native/bugsnag-react-native.gradle"
