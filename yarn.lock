@@ -8111,10 +8111,10 @@ react-native-ios-context-menu@anisimov74/react-native-ios-context-menu#d40cd3c:
   dependencies:
     "@dominicstop/ts-event-emitter" "^1.1.0"
 
-react-native-ios-utilities@^5.0.0-51:
-  version "5.0.0-55"
-  resolved "https://registry.yarnpkg.com/react-native-ios-utilities/-/react-native-ios-utilities-5.0.0-55.tgz#00e4bdc39c343ae94d7bf45a92e6362b8d285409"
-  integrity sha512-MM7tgpiCfOhRBAgRkrSdILTEfYhW9aHbyFc1ZuIpWb2pHXN/IXeou0HaYQlTtGGmcA9TAiDxbcCF13BiI6IC6g==
+react-native-ios-utilities@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-ios-utilities/-/react-native-ios-utilities-5.1.1.tgz#de86a261bc76113782bcb284b989f0b9a58632ea"
+  integrity sha512-fOm7IR2KCn3MzghITbrnZfpJ3Z7wai4S46GwXwTql1fzX25eO8MXVgaUeMd5EvPwg1zAqF5I6c3T6Dby8DoF3A==
 
 react-native-keyboard-spacer@0.4.1:
   version "0.4.1"

@@ -203,7 +203,6 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				1E24D3782A026266000BEFEC /* Stripe Hermes bitcode */,
 				2C78DE56E290E3D602DDF5E1 /* [CP] Embed Pods Frameworks */,
 				D36BB353BC7B4414CD5F8340 /* [CP] Copy Pods Resources */,
 				DEBBA627666766C14414C1DB /* [CP-User] [RNFB] Core Configuration */,
@@ -292,24 +291,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
-		};
-		1E24D3782A026266000BEFEC /* Stripe Hermes bitcode */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Stripe Hermes bitcode";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [[ \"${__IS_NOT_SIMULATOR}\" == \"NO\" ]]\nthen\n    # Stripping bitcode for the real devices only, since it's depricated\n    exit 0 \nfi\n\nBITCODE_STRIP=\"$(xcrun -sdk iphoneos --find bitcode_strip)\"\n\nfunction strip_framework_bitcode {\n    FRAMEWORK=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Frameworks/$1.framework/$1\"\n    \"${BITCODE_STRIP}\" -r \"${FRAMEWORK}\" -o \"${FRAMEWORK}\" \n}\n\nstrip_framework_bitcode \"hermes\"\n";
 		};
 		2C78DE56E290E3D602DDF5E1 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -582,7 +563,7 @@
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 				);
 				INFOPLIST_FILE = YouTrackMobile/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -629,7 +610,7 @@
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 				);
 				INFOPLIST_FILE = YouTrackMobile/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

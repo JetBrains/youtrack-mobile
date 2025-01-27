@@ -14,7 +14,7 @@ PODS:
     - DGSwiftUtilities (~> 0.11)
   - ContextMenuAuxiliaryPreview (0.5.2):
     - DGSwiftUtilities (~> 0.29)
-  - DGSwiftUtilities (0.36.0)
+  - DGSwiftUtilities (0.46.3)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.75.4)
   - Firebase/AnalyticsWithoutAdIdSupport (11.5.0):
@@ -1381,9 +1381,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-ios-utilities (5.0.0-55):
+  - react-native-ios-utilities (5.1.1):
     - ComputableLayout (~> 0.7)
-    - DGSwiftUtilities (~> 0.36)
+    - DGSwiftUtilities (~> 0.46)
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2273,7 +2273,7 @@ SPEC CHECKSUMS:
   BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
   ComputableLayout: c50faffac4ed9f8f05b0ce5e6f3a60df1f6042c8
   ContextMenuAuxiliaryPreview: 20be0be795b783b68f8792732eed4bed9f202c1c
-  DGSwiftUtilities: 3be87518a22cc29d3a93e1b9543576705f501fb5
+  DGSwiftUtilities: 2f0d35d5ff3d57bd70ccc42f15971460db202c41
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   FBLazyVector: 430e10366de01d1e3d57374500b1b150fe482e6d
   Firebase: 7a56fe4f56b5ab81b86a6822f5b8f909ae6fc7e2
@@ -2323,7 +2323,7 @@ SPEC CHECKSUMS:
   react-native-encrypted-storage: db300a3f2f0aba1e818417c1c0a6be549038deb7
   react-native-eventsource: fea4e2c2505d19660b312406ce45dbb3fe68fd35
   react-native-ios-context-menu: 15399c2cf69f198d22ac5c7ed7b87eec1b1d5bd7
-  react-native-ios-utilities: 112026144c8c5d956b0f8345ff475ef522525e3c
+  react-native-ios-utilities: 9e79d6d2625516f3e21dd2a59d3354d4bfbad3bd
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
   react-native-notifications: 83b4fd4a127a6c918fc846cae90da60f84819e44
   react-native-pager-view: 3ae40be5b2700f3f2645c1fbc751a03a4323172d
