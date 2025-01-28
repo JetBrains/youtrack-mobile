@@ -62,7 +62,6 @@ function MarkdownView(props: Props) {
         onCheckBoxPress,
         props.textStyle,
       )}
-      ui
     >
       {children}
     </Markdown>

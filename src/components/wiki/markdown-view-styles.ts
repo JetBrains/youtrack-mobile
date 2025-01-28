@@ -1,3 +1,5 @@
+import {StyleSheet} from 'react-native';
+
 import {DEFAULT_THEME} from 'components/theme/theme';
 import {MAIN_FONT_SIZE, UNIT} from 'components/common-styles';
 
@@ -165,7 +167,10 @@ export const baseMarkdownStyles = {
   span: {},
 };
 
-const markdownStyles = (uiTheme: UITheme = DEFAULT_THEME, textStyle: TextStyleProp = {}) => {
+const markdownStyles = (
+  uiTheme: UITheme = DEFAULT_THEME,
+  textStyle: TextStyleProp = {}
+): StyleSheet.NamedStyles<any> => {
   const uiThemeColors: UIThemeColors = uiTheme.colors;
   return {
     ...baseMarkdownStyles,
