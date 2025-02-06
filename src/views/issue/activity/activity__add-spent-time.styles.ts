@@ -1,5 +1,7 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
 import feedbackFormStyles from 'components/common-styles/feedback-form';
+import {UNIT} from 'components/common-styles';
+
 export default EStyleSheet.create({
   ...feedbackFormStyles,
   container: {
@@ -13,5 +15,8 @@ export default EStyleSheet.create({
   },
   icon: {
     color: '$icon',
+  },
+  separator: {
+    marginTop: UNIT * 2,
   },
 });

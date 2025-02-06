@@ -1,18 +1,13 @@
 import React, {memo, useContext, useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, Text, TextInput, TouchableOpacity, View} from 'react-native';
+
 import debounce from 'lodash.debounce';
 import InputScrollView from 'react-native-input-scroll-view';
 import {useDispatch, useSelector} from 'react-redux';
 
 import DatePicker from 'components/date-picker/date-picker';
 import Header from 'components/header/header';
-import ModalPortal from 'components/modal-view/modal-portal';
+import ModalView from 'components/modal-view/modal-view';
 import Router from 'components/router/router';
 import Select from 'components/select/select';
 import usage from 'components/usage/usage';
@@ -25,30 +20,29 @@ import {hasType} from 'components/api/api__resource-types';
 import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconAngleRight, IconCheck, IconClose} from 'components/icon/icon';
-import {isSplitView} from 'components/responsive/responsive-helper';
 import {logEvent} from 'components/log/log-helper';
 import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './activity__add-spent-time.styles';
 
 import type {AppState} from 'reducers';
-import type {IssueFull} from 'types/Issue';
 import type {ISelectProps} from 'components/select/select';
+import type {IssueFull} from 'types/Issue';
 import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
 import type {WorkItem, WorkItemType} from 'types/Work';
 
-type Props = {
+interface Props {
   issue: IssueFull;
   workItem?: WorkItem;
-  onAdd: () => any;
-  onHide: () => any;
+  onAdd: () => void;
+  onHide: () => void;
   canCreateNotOwn: boolean;
-};
+}
 
-type SelectType = User | WorkItemType;
+type SelectType = {ringId: string; name: string} | WorkItemType;
 
 const AddSpentTimeForm = (props: Props) => {
   const currentUser = useSelector((state: AppState) => state.app.user!);
@@ -58,7 +52,6 @@ const AddSpentTimeForm = (props: Props) => {
     date: Date.now(),
     author: currentUser,
     duration: {
-      $type: '',
       presentation: '1d',
     },
     type: {
@@ -77,13 +70,15 @@ const AddSpentTimeForm = (props: Props) => {
   };
   const theme: Theme = useContext(ThemeContext);
   const dispatch: ReduxThunkDispatch = useDispatch();
+  const issueActivityActions = createIssueActivityActions();
+
   const [isProgress, updateProgress] = useState(false);
   const [isSelectVisible, updateSelectVisibility] = useState(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [draft, updateDraftWorkItem] = useState<WorkItem>(props.workItem || draftDefault);
   const [selectProps, updateSelectProps] = useState<ISelectProps<SelectType> | null>(null);
-  const [error, updateError] = useState(false);
-  const [modalChildren, updateModalChildren] = useState<React.ReactNode>(null);
-  const issueActivityActions = createIssueActivityActions();
+  const [hasError, setHasError] = useState(false);
+  const [spentTime, setSpentTime] = useState('');
 
   const doHide = (): void => {
     if (props.onHide) {
@@ -145,7 +140,7 @@ const AddSpentTimeForm = (props: Props) => {
   }, [props.workItem, dispatch]);
 
   const update = (data: Partial<WorkItem>) => {
-    updateError(false);
+    setHasError(false);
     const updatedDraft = {...draft, ...data};
     updateDraftWorkItem(updatedDraft);
 
@@ -173,12 +168,13 @@ const AddSpentTimeForm = (props: Props) => {
     return <Select {...Object.assign({}, defaultSelectProps, p)} />;
   };
 
-  const getUserSelectProps = () => {
+  const getUserSelectProps = (user: {ringId: string}) => {
     return {
-      dataSource: async () =>
-        await dispatch(
-          issueActivityActions.getWorkItemAuthors(getProjectRingId()),
-        ),
+      selectedItems: [],
+      dataSource: async () => {
+        const users = await dispatch(issueActivityActions.getWorkItemAuthors(getProjectRingId()));
+        return users.filter(u => u.ringId !== user.ringId);
+      },
       onSelect: (author: User) => {
         logEvent({
           message: 'SpentTime: form:set-author',
@@ -194,11 +190,12 @@ const AddSpentTimeForm = (props: Props) => {
 
   const getWorkTypeSelectProps = () => {
     return {
+      selectedItems: [],
       dataSource: async () => {
-        const types = await dispatch(
+        const types: WorkItemType[] = await dispatch(
           issueActivityActions.getWorkItemTypes(draft.issue!.project.id),
         );
-        return [draftDefault.type].concat(types);
+        return [draftDefault.type, ...types];
       },
       onSelect: async (type: WorkItemType) => {
         logEvent({
@@ -250,7 +247,7 @@ const AddSpentTimeForm = (props: Props) => {
       onAdd();
       doHide();
     } else {
-      updateError(true);
+      setHasError(true);
     }
   };
 
@@ -259,7 +256,8 @@ const AddSpentTimeForm = (props: Props) => {
       !draft.date ||
       !draft.duration ||
       !draft.author ||
-      !draft?.duration?.presentation;
+      !draft?.duration?.presentation ||
+      !spentTime;
     const submitIcon = isProgress ? (
       <ActivityIndicator color={styles.link.color} />
     ) : (
@@ -300,32 +298,16 @@ const AddSpentTimeForm = (props: Props) => {
     keyboardAppearance: theme.uiTheme.name,
   };
 
-  const renderDatePicker: () => void = (): void => {
-    const isSplitModeView: boolean = isSplitView();
-    const datePicker = (
+  const renderDatePicker = () => {
+    return (
       <DatePicker
         date={draft.date ? new Date(draft.date) : new Date(Date.now())}
         onDateSelect={(timestamp: number) => {
-          update({
-            date: timestamp,
-          });
-
-          if (isSplitModeView) {
-            updateModalChildren(null);
-          } else {
-            doHide();
-          }
+          update({date: timestamp});
+          setDatePickerVisibility(false);
         }}
       />
     );
-
-    if (isSplitModeView) {
-      updateModalChildren(datePicker);
-    } else {
-      Router.PageModal({
-        children: datePicker,
-      });
-    }
   };
 
   return (
@@ -342,58 +324,43 @@ const AddSpentTimeForm = (props: Props) => {
             style={buttonStyle}
             disabled={!props.canCreateNotOwn}
             onPress={() => {
-              updateSelectProps(getUserSelectProps());
+              updateSelectProps(getUserSelectProps(author));
               updateSelectVisibility(true);
             }}
           >
             <Text style={styles.feedbackFormTextSup}>{i18n('Author')}</Text>
-            <Text
-              style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
-            >
-              {getEntityPresentation(author)}
-            </Text>
+            <Text style={[styles.feedbackFormText, styles.feedbackFormTextMain]}>{getEntityPresentation(author)}</Text>
             {props.canCreateNotOwn && iconAngleRight}
           </TouchableOpacity>
 
-          <TouchableOpacity style={buttonStyle} onPress={renderDatePicker}>
+          <TouchableOpacity style={buttonStyle} onPress={() => setDatePickerVisibility(true)}>
             <Text style={styles.feedbackFormTextSup}>{i18n('Date')}</Text>
-            <Text
-              style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
-            >
-              {absDate(draft.date, true)}
-            </Text>
+            <Text style={[styles.feedbackFormText, styles.feedbackFormTextMain]}>{absDate(draft.date, true)}</Text>
             {iconAngleRight}
           </TouchableOpacity>
 
           <View style={buttonStyle}>
-            <Text
-              style={[
-                styles.feedbackFormTextSup,
-                error && styles.feedbackFormTextError,
-              ]}
-            >
+            <Text style={[styles.feedbackFormTextSup, hasError && styles.feedbackFormTextError]}>
               {i18n('Spent time')}
             </Text>
             <TextInput
               {...commonInputProps}
               style={[styles.feedbackInput, styles.feedbackFormTextMain]}
               placeholder={i18n('1w 1d 1h 1m')}
-              value={draft?.duration?.presentation}
-              onChangeText={(periodValue: string) =>
+              value={spentTime}
+              onChangeText={(periodValue: string) => {
+                setHasError(false);
+                setSpentTime(periodValue);
                 updateDraftWorkItem({
                   ...draft,
                   duration: {
                     presentation: periodValue,
                   },
-                })
-              }
+                });
+              }}
             />
           </View>
-          {error && (
-            <Text style={styles.feedbackInputErrorHint}>
-              {i18n('1w 1d 1h 1m')}
-            </Text>
-          )}
+          {hasError && <Text style={styles.feedbackInputErrorHint}>{i18n('1w 1d 1h 1m')}</Text>}
 
           <TouchableOpacity
             style={buttonStyle}
@@ -403,10 +370,7 @@ const AddSpentTimeForm = (props: Props) => {
             }}
           >
             <Text style={styles.feedbackFormTextSup}>{i18n('Type')}</Text>
-            <Text
-              style={[styles.feedbackFormText, styles.feedbackFormTextMain]}
-              numberOfLines={1}
-            >
+            <Text style={[styles.feedbackFormText, styles.feedbackFormTextMain]} numberOfLines={1}>
               {draft?.type?.name || draftDefault.type?.name}
             </Text>
             {iconAngleRight}
@@ -416,24 +380,17 @@ const AddSpentTimeForm = (props: Props) => {
             {...commonInputProps}
             multiline
             textAlignVertical="top"
-            style={[styles.feedbackFormInputMultiline]}
+            style={[styles.feedbackFormInputMultiline, styles.separator]}
             placeholder={i18n('Write a comment, @mention people')}
             value={draft?.text || undefined}
-            onChangeText={(comment: string) =>
-              updateDraftWorkItem({...draft, text: comment})
-            }
+            onChangeText={(comment: string) => updateDraftWorkItem({...draft, text: comment})}
           />
 
           <View style={styles.feedbackFormBottomIndent} />
         </View>
       </InputScrollView>
       {isSelectVisible && !!selectProps && renderSelect(selectProps)}
-
-      {modalChildren && (
-        <ModalPortal onHide={() => updateModalChildren(null)}>
-          {modalChildren}
-        </ModalPortal>
-      )}
+      {isDatePickerVisible && <ModalView>{renderDatePicker()}</ModalView>}
     </View>
   );
 };

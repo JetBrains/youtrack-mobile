@@ -18,7 +18,7 @@ export interface WorkItemTemplate {
   author: User;
   date: number;
   duration: {
-    $type: string;
+    $type?: string;
     presentation: string;
   };
   type: null;

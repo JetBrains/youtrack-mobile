@@ -68,7 +68,7 @@ export interface IssueActivityActions {
   getWorkItemTypes: (projectId?: string) => ReduxAction<Promise<WorkItemType[]>>;
   deleteWorkItemDraft: (issueId?: string) => ReduxAction;
   updateWorkItemDraft: (draft: WorkItem, issueId?: string) => ReduxAction<Promise<WorkItem | null>>;
-  getWorkItemAuthors: (projectRingId?: string) => ReduxAction<Promise<Partial<User>[]>>;
+  getWorkItemAuthors: (projectRingId?: string) => ReduxAction<Promise<{ringId: string; name: string}[]>>;
   deleteWorkItem: (workItem: WorkItem) => ReduxAction<Promise<boolean>>;
 }
 
@@ -228,7 +228,7 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
         }
       };
     },
-    getWorkItemAuthors: function (projectRingId?: string): ReduxAction<Promise<Partial<User>[]>> {
+    getWorkItemAuthors: function (projectRingId?: string): ReduxAction<Promise<{ringId: string; name: string}[]>> {
       return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         const api: Api = getApi();
         logEvent({
