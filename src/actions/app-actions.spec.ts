@@ -32,7 +32,7 @@ import type {PermissionCacheItem} from 'types/Permission';
 import type {ReduxThunkDispatch} from 'types/Redux';
 import type {RootState} from 'reducers/app-reducer';
 import type {StorageState} from 'components/storage/storage';
-import type {User, UserCurrent} from 'types/User';
+import type {User, UserCurrent, UserHub} from 'types/User';
 
 jest.mock('components/storage/storage', () => {
   const st = jest.requireActual('components/storage/storage');
@@ -86,6 +86,8 @@ describe('app-actions', () => {
     } as RootState;
     updateStore({app: appStateMock} as AppState);
     await storage.populateStorage();
+
+    Router.getRoutes = jest.fn().mockReturnValue([{}]);
   });
 
   afterEach(() => {
@@ -101,9 +103,7 @@ describe('app-actions', () => {
       jest.spyOn(PushNotifications, 'initialize');
       jest.spyOn(Notification, 'notifyError');
       jest.spyOn(Notification, 'notify');
-      Notification.setNotificationComponent({
-        show: jest.fn(),
-      });
+      Notification.setNotificationComponent({show: jest.fn()} as any);
       setRegistered(false);
     });
     afterEach(() => {
@@ -187,7 +187,7 @@ describe('app-actions', () => {
       (appStateMock.auth?.logOut as jest.Mock)?.mockReset?.();
     });
     beforeEach(() => {
-      jest.spyOn(PushNotifications, 'unregister').mockResolvedValueOnce(Promise.resolve());
+      jest.spyOn(PushNotifications, 'unregister').mockResolvedValueOnce(null);
       updateStore({
         app: {...appStateMock, otherAccounts: []},
       } as unknown as AppState);
@@ -357,7 +357,7 @@ describe('app-actions', () => {
             naturalCommentsOrder: naturalCommentsOrderMock,
           },
         },
-      }) as unknown as UserCurrent;
+      });
       await setYTCurrentUser(userMock);
       await dispatch(actions.initializeApp(appConfigMock));
       const action = store.getActions()[0];
@@ -477,7 +477,7 @@ describe('app-actions', () => {
     });
 
     it('should not redirect user to `Issues screen` if no permissions are cached', async () => {
-      appActionHelper.getCachedPermissions.mockReturnValueOnce(null);
+      (appActionHelper.getCachedPermissions as jest.Mock).mockReturnValueOnce(null);
 
 
       await dispatch(actions.initializeApp(appConfigMock));
@@ -486,8 +486,8 @@ describe('app-actions', () => {
     });
 
     it('should redirect to `Issues screen`', async () => {
-      appActionHelper.getCachedPermissions.mockReturnValueOnce([]);
-      setStoreAndCurrentUser({guest: false} as UserCurrent);
+      (appActionHelper.getCachedPermissions as jest.Mock).mockReturnValueOnce([]);
+      setStoreAndCurrentUser({guest: false} as User);
 
       await dispatch(actions.initializeApp(appConfigMock));
 
@@ -625,7 +625,7 @@ describe('app-actions', () => {
     } as AuthParams;
     authMock.setAuthParams(authParamsMock);
     if (currentUser) {
-      authMock.setCurrentUser(currentUser);
+      authMock.setCurrentUser(currentUser as unknown as UserHub);
     }
     return authMock;
   }
