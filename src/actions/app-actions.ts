@@ -602,7 +602,7 @@ export function completeInitialization(
     if (!isRedirected) {
       if (currentUser.profiles?.helpdesk?.isReporter) {
         Router.Tickets();
-      } else {
+      } else if (Router.getRoutes().length <= 1) {
         Router.navigateToDefaultRoute(
           issueId || articleId || searchQuery || helpdeskFormId ? {
             issueId,
