@@ -420,6 +420,13 @@ const ISSUE_WORK_ITEMS_FIELDS: any = toField([
   {
     duration: ISSUE_WORK_ITEMS_DURATION_FIELDS,
   },
+  {
+    attributes: [
+      'id',
+      'name',
+      'value',
+    ],
+  },
 ]);
 const ISSUE_WORK_ITEM_TEMPLATE = toField([
   {
@@ -436,6 +443,13 @@ const ISSUE_TIME_TRACKING_WITH_DRAFT_FIELDS: any = toField([
   'enabled',
   {
     draftWorkItem: ISSUE_WORK_ITEMS_FIELDS,
+  },
+  {
+    attributes: [
+      'id',
+      'name',
+      'value',
+    ],
   },
   ISSUE_WORK_ITEM_TEMPLATE,
 ]);
