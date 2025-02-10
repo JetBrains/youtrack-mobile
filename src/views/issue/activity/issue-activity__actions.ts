@@ -17,8 +17,7 @@ import {WORK_ITEM_CREATE, WORK_ITEM_UPDATE} from 'components/issue-permissions/i
 import type Api from 'components/api/api';
 import type {Activity, ActivityType} from 'types/Activity';
 import type {AnyIssue, ListIssueProject} from 'types/Issue';
-import type {CustomError} from 'types/Error';
-import type {TimeTracking, WorkItemType} from 'types/Work';
+import type {DraftWorkItem, TimeTracking, WorkItemType} from 'types/Work';
 import type {User} from 'types/User';
 import type {WorkItem} from 'types/Work';
 import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
@@ -64,10 +63,10 @@ export interface IssueActivityActions {
   setDefaultProjectTeam: (project: Project | ListIssueProject) => ReduxAction;
   loadActivitiesPage: (doNotReset?: boolean, issueId?: string, commentsOnly?: boolean) => ReduxAction;
   doUpdateWorkItem: (workItem: WorkItem) => ReduxAction;
-  createWorkItem: (draft: WorkItem, issueId?: string) => ReduxAction<Promise<WorkItem>>;
+  submitWorkItem: (draft: WorkItem | DraftWorkItem, issueId?: string) => ReduxAction<Promise<WorkItem | null>>;
   getWorkItemTypes: (projectId?: string) => ReduxAction<Promise<WorkItemType[]>>;
   deleteWorkItemDraft: (issueId?: string) => ReduxAction;
-  updateWorkItemDraft: (draft: WorkItem, issueId?: string) => ReduxAction<Promise<WorkItem | null>>;
+  updateWorkItemDraft: (draft: Partial<WorkItem>, issueId?: string) => ReduxAction<Promise<WorkItem | null>>;
   getWorkItemAuthors: (projectRingId?: string) => ReduxAction<Promise<{ringId: string; name: string}[]>>;
   deleteWorkItem: (workItem: WorkItem) => ReduxAction<Promise<boolean>>;
 }
@@ -119,7 +118,7 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
           updateCache(activityPage);
           log.info('Issue Actions: Received activities');
         } catch (error) {
-          dispatch(receiveActivityPageError(error as CustomError));
+          dispatch(receiveActivityPageError(error as Error));
           dispatch({
             type: types.RECEIVE_ACTIVITY_ERROR,
             error,
@@ -165,18 +164,14 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
         return timeTracking;
       };
     },
-    updateWorkItemDraft: function (draft: WorkItem, issueId?: string): ReduxAction<Promise<WorkItem | null>> {
+    updateWorkItemDraft: function (draft: Partial<WorkItem>, issueId?: string): ReduxAction<Promise<WorkItem | null>> {
       return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
-        const api: Api = getApi();
         const targetIssueId: string = issueId || (getState()[stateFieldName] as IssueState).issueId;
-        const [error, updatedDraft] = await until(api.issue.updateDraftWorkItem(targetIssueId, draft));
-
+        const [error, _draft] = await until<WorkItem>(getApi().issue.updateDraftWorkItem(targetIssueId, draft));
         if (error) {
           notifyError(error);
-          return null;
         }
-
-        return updatedDraft;
+        return error ? null : _draft;
       };
     },
     doUpdateWorkItem: function (workItem: WorkItem): ReduxAction {
@@ -187,8 +182,7 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
         });
         const api: Api = getApi();
         const targetIssueId: string = workItem.issue.id || (getState()[stateFieldName] as IssueState).issueId;
-        const [error] = await until(api.issue.createWorkItem(targetIssueId, workItem));
-
+        const [error] = await until(api.issue.submitWorkItem(targetIssueId, workItem));
         if (error) {
           notifyError(error);
         } else {
@@ -199,7 +193,7 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
         }
       };
     },
-    createWorkItem: function (draft: WorkItem, issueId?: string): ReduxAction<Promise<CustomError | WorkItem>> {
+    submitWorkItem: function (draft: WorkItem | DraftWorkItem, issueId?: string): ReduxAction<Promise<WorkItem | null>> {
       return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
         const api: Api = getApi();
         const targetIssueId: string = issueId || (getState()[stateFieldName] as IssueState).issueId;
@@ -207,14 +201,11 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
           message: 'Create work item',
           analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
-        const [error, updatedDraft] = await until<WorkItem>(api.issue.createWorkItem(targetIssueId, draft));
-
+        const [error, _draft] = await until<WorkItem>(api.issue.submitWorkItem(targetIssueId, draft));
         if (error) {
           notifyError(error);
-          return error;
         }
-
-        return updatedDraft;
+        return error ? null : _draft;
       };
     },
     deleteWorkItemDraft: function (issueId?: string): ReduxAction {
@@ -265,13 +256,10 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
           analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
         const [error, projectTimeTrackingSettings] = await until(api.projects.getTimeTrackingSettings(targetProjectId));
-
         if (error) {
           notifyError(error);
-          return {};
         }
-
-        return projectTimeTrackingSettings.workItemTypes.sort(sortByOrdinal);
+        return error ? [] : projectTimeTrackingSettings.workItemTypes.sort(sortByOrdinal);
       };
     },
     deleteWorkItem: function (workItem: WorkItem): ReduxAction<Promise<boolean>> {

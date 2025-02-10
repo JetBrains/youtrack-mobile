@@ -1,7 +1,6 @@
 import React, {memo, useContext, useEffect, useState} from 'react';
 import {ActivityIndicator, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
-import debounce from 'lodash.debounce';
 import InputScrollView from 'react-native-input-scroll-view';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -32,7 +31,7 @@ import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
-import type {WorkItem, WorkItemType} from 'types/Work';
+import type {DraftWorkItem, WorkItem, WorkItemType} from 'types/Work';
 
 interface Props {
   issue: IssueFull;
@@ -42,32 +41,10 @@ interface Props {
   canCreateNotOwn: boolean;
 }
 
-type SelectType = {ringId: string; name: string} | WorkItemType;
+type SelectPropsType = {ringId: string; name: string} | WorkItemType;
 
 const AddSpentTimeForm = (props: Props) => {
   const currentUser = useSelector((state: AppState) => state.app.user!);
-  const draftDefault = {
-    ringId: '',
-    created: Date.now(),
-    date: Date.now(),
-    author: currentUser,
-    duration: {
-      presentation: '1d',
-    },
-    type: {
-      id: null,
-      name: i18n('No type'),
-    },
-    text: null,
-    usesMarkdown: true,
-    issue: {
-      id: props.issue.id,
-      project: {
-        id: props.issue.project.id,
-        ringId: props.issue.project.ringId,
-      },
-    },
-  };
   const theme: Theme = useContext(ThemeContext);
   const dispatch: ReduxThunkDispatch = useDispatch();
   const issueActivityActions = createIssueActivityActions();
@@ -75,12 +52,14 @@ const AddSpentTimeForm = (props: Props) => {
   const [isProgress, updateProgress] = useState(false);
   const [isSelectVisible, updateSelectVisibility] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [draft, updateDraftWorkItem] = useState<WorkItem>(props.workItem || draftDefault);
-  const [selectProps, updateSelectProps] = useState<ISelectProps<SelectType> | null>(null);
+  const [draft, updateDraftWorkItem] = useState<WorkItem | DraftWorkItem>(
+    props.workItem || createDraftWorkItem(props.issue, currentUser)
+  );
+  const [selectProps, updateSelectProps] = useState<ISelectProps<SelectPropsType> | null>(null);
   const [hasError, setHasError] = useState(false);
-  const [spentTime, setSpentTime] = useState('');
+  const [spentTime, setSpentTime] = useState(props.workItem?.duration.presentation || '');
 
-  const doHide = (): void => {
+  const doHide = () => {
     if (props.onHide) {
       props.onHide();
     } else {
@@ -90,67 +69,33 @@ const AddSpentTimeForm = (props: Props) => {
 
   const getIssueId = (): string => ((props.issue || props.workItem?.issue) as IssueFull).id;
 
-  const getProjectRingId = (): string => (props?.issue?.project || props.workItem?.issue?.project).ringId;
-
-  const getDraft = (draftItem: WorkItem): WorkItem => ({
-    ...draftItem,
-    type: !draftItem.type || draftItem.type?.id === null ? null : draftItem.type,
-  });
-
-  const updateDraft = async (draftItem: WorkItem) => {
-    const draftWithType: WorkItem = getDraft(draftItem);
-    dispatch(issueActivityActions.updateWorkItemDraft(draftWithType, getIssueId()))
-      .then((updatedDraft: WorkItem | null) => {
-        if (updatedDraft) {
-          updateDraftWorkItem({
-            ...draftItem,
-            $type: updatedDraft.$type,
-            type: updatedDraft.type,
-            id: updatedDraft.id,
-          });
-        }
-      })
-      .catch(() => {});
-  };
-
-  const delayedUpdate = debounce(updateDraft, 300);
   useEffect(() => {
     if (props.workItem) {
       updateDraftWorkItem(props.workItem);
     } else {
-      loadTimeTracking();
+      createDraft();
     }
 
-    async function loadTimeTracking() {
+    async function createDraft() {
+      const issueId = getIssueId();
+      const timeTracking = await dispatch(issueActivityActions.getTimeTracking(issueId));
+      const draftData = {...draft, ...timeTracking?.draftWorkItem, type: null};
       updateProgress(true);
-      const timeTracking = await dispatch(issueActivityActions.getTimeTracking(getIssueId()));
-      updateDraftWorkItem({
-        ...draftDefault,
-        ...timeTracking?.workItemTemplate,
-        ...timeTracking?.draftWorkItem,
-        $type: undefined,
-        type:
-          timeTracking?.draftWorkItem?.type ||
-          timeTracking?.workItemTemplate?.type ||
-          draftDefault.type,
-        usesMarkdown: true,
-      } as WorkItem);
+      const _draft = await dispatch(issueActivityActions.updateWorkItemDraft(draftData, issueId));
       updateProgress(false);
+      if (_draft) {
+        updateDraftWorkItem({...draftData, ..._draft});
+      }
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.workItem, dispatch]);
 
   const update = (data: Partial<WorkItem>) => {
     setHasError(false);
-    const updatedDraft = {...draft, ...data};
-    updateDraftWorkItem(updatedDraft);
-
-    if (!props.workItem) {
-      delayedUpdate(updatedDraft as WorkItem);
-    }
+    updateDraftWorkItem({...draft, ...data});
   };
 
-  const renderSelect = (p: ISelectProps<SelectType>) => {
-    const defaultSelectProps: ISelectProps<SelectType> = {
+  const renderSelect = (p: ISelectProps<SelectPropsType>) => {
+    const defaultSelectProps: ISelectProps<SelectPropsType> = {
       multi: false,
       dataSource: () => Promise.resolve([]),
       selectedItems: [],
@@ -158,21 +103,21 @@ const AddSpentTimeForm = (props: Props) => {
       onCancel: () => updateSelectVisibility(false),
       onChangeSelection: () => null,
       onSelect: () => {
-        usage.trackEvent(
-          ANALYTICS_ISSUE_STREAM_SECTION,
-          'SpentTime: visibility update',
-        );
+        usage.trackEvent(ANALYTICS_ISSUE_STREAM_SECTION, 'SpentTime: visibility update');
         updateSelectVisibility(false);
       },
     };
     return <Select {...Object.assign({}, defaultSelectProps, p)} />;
   };
 
-  const getUserSelectProps = (user: {ringId: string}) => {
+  const getUserSelectProps = (user: {ringId: string}): ISelectProps<SelectPropsType> => {
     return {
       selectedItems: [],
       dataSource: async () => {
-        const users = await dispatch(issueActivityActions.getWorkItemAuthors(getProjectRingId()));
+        const project = props?.issue?.project || props.workItem?.issue?.project;
+        const users = await dispatch(
+          issueActivityActions.getWorkItemAuthors(project.ringId)
+        );
         return users.filter(u => u.ringId !== user.ringId);
       },
       onSelect: (author: User) => {
@@ -180,31 +125,25 @@ const AddSpentTimeForm = (props: Props) => {
           message: 'SpentTime: form:set-author',
           analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
-        update({
-          author,
-        });
+        update({author});
         updateSelectVisibility(false);
       },
     };
   };
 
-  const getWorkTypeSelectProps = () => {
+  const getWorkTypeSelectProps = (): ISelectProps<SelectPropsType> => {
     return {
       selectedItems: [],
       dataSource: async () => {
-        const types: WorkItemType[] = await dispatch(
-          issueActivityActions.getWorkItemTypes(draft.issue!.project.id),
-        );
-        return [draftDefault.type, ...types];
+        const types = await dispatch(issueActivityActions.getWorkItemTypes(draft.issue.project.id));
+        return [getDefaultType(), ...types];
       },
       onSelect: async (type: WorkItemType) => {
         logEvent({
           message: 'SpentTime: form:set-work-type',
           analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
-        update({
-          type,
-        });
+        update({type});
         updateSelectVisibility(false);
       },
     };
@@ -230,20 +169,18 @@ const AddSpentTimeForm = (props: Props) => {
       analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
     });
     updateProgress(true);
-    const updatedDraft: WorkItem = getDraft(draft);
     const item = await dispatch(
-      issueActivityActions.createWorkItem(
+      issueActivityActions.submitWorkItem(
         {
-          ...updatedDraft,
-          $type: props.workItem ? updatedDraft.$type : undefined,
+          ...draft,
+          $type: props.workItem ? draft.$type : undefined,
+          type: draft.type?.id ? draft.type : null,
         },
-        getIssueId(),
-      ),
+        getIssueId()
+      )
     );
     updateProgress(false);
-    const isWorkItem = hasType.work({$type: item.$type!});
-
-    if (isWorkItem) {
+    if (item && hasType.work({$type: item.$type!})) {
       onAdd();
       doHide();
     } else {
@@ -252,31 +189,20 @@ const AddSpentTimeForm = (props: Props) => {
   };
 
   const renderHeader = () => {
-    const isSubmitDisabled: boolean =
-      !draft.date ||
-      !draft.duration ||
-      !draft.author ||
-      !draft?.duration?.presentation ||
-      !spentTime;
+    const isSubmitDisabled: boolean = !draft.duration || !draft.author || !draft?.duration?.presentation || !spentTime;
     const submitIcon = isProgress ? (
       <ActivityIndicator color={styles.link.color} />
     ) : (
-      <IconCheck color={isSubmitDisabled ? styles.disabled.color : styles.link.color}/>
+      <IconCheck color={isSubmitDisabled ? styles.disabled.color : styles.link.color} />
     );
     return (
       <Header
         style={styles.elevation1}
         title={i18n('Spent time')}
-        leftButton={
-          <IconClose color={isProgress ? styles.disabled.color : styles.link.color}/>
-        }
+        leftButton={<IconClose color={isProgress ? styles.disabled.color : styles.link.color} />}
         onBack={() => !isProgress && onClose()}
         extraButton={
-          <TouchableOpacity
-            hitSlop={HIT_SLOP}
-            disabled={isSubmitDisabled}
-            onPress={onCreate}
-          >
+          <TouchableOpacity hitSlop={HIT_SLOP} disabled={isSubmitDisabled} onPress={onCreate}>
             {submitIcon}
           </TouchableOpacity>
         }
@@ -284,10 +210,7 @@ const AddSpentTimeForm = (props: Props) => {
     );
   };
 
-  const buttonStyle: ViewStyleProp[] = [
-    styles.feedbackFormInput,
-    styles.feedbackFormType,
-  ];
+  const buttonStyle: ViewStyleProp[] = [styles.feedbackFormInput, styles.feedbackFormType];
   const iconAngleRight = <IconAngleRight size={20} color={styles.icon.color} />;
   const author: User | null | undefined = draft?.author || currentUser;
   const commonInputProps: Record<string, any> = {
@@ -371,7 +294,7 @@ const AddSpentTimeForm = (props: Props) => {
           >
             <Text style={styles.feedbackFormTextSup}>{i18n('Type')}</Text>
             <Text style={[styles.feedbackFormText, styles.feedbackFormTextMain]} numberOfLines={1}>
-              {draft?.type?.name || draftDefault.type?.name}
+              {draft.type?.name || getDefaultType().name}
             </Text>
             {iconAngleRight}
           </TouchableOpacity>
@@ -380,7 +303,7 @@ const AddSpentTimeForm = (props: Props) => {
             {...commonInputProps}
             multiline
             textAlignVertical="top"
-            style={[styles.feedbackFormInputMultiline, styles.separator]}
+            style={[styles.feedbackFormInputMultiline, styles.commentInput]}
             placeholder={i18n('Write a comment, @mention people')}
             value={draft?.text || undefined}
             onChangeText={(comment: string) => updateDraftWorkItem({...draft, text: comment})}
@@ -396,3 +319,31 @@ const AddSpentTimeForm = (props: Props) => {
 };
 
 export default memo<Props>(AddSpentTimeForm);
+
+function createDraftWorkItem(issue: IssueFull, user: User): DraftWorkItem {
+  return {
+    date: Date.now(),
+    author: user,
+    creator: user,
+    duration: {
+      presentation: '1d',
+    },
+    type: getDefaultType(),
+    text: null,
+    usesMarkdown: true,
+    issue: {
+      id: issue.id,
+      project: {
+        id: issue.project.id,
+        ringId: issue.project.ringId,
+      },
+    },
+  };
+}
+
+function getDefaultType() {
+  return {
+    id: null,
+    name: i18n('No type'),
+  };
+}

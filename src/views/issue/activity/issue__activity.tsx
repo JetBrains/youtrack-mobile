@@ -429,10 +429,7 @@ export class IssueActivity extends PureComponent<IssueActivityProps, State> {
           })
         : Router.pop(true);
 
-    const addSpentTimeForm: React.ReactElement<
-      React.ComponentProps<typeof AddSpentTimeForm>,
-      typeof AddSpentTimeForm
-    > = (
+    const addSpentTimeForm = (
       <AddSpentTimeForm
         workItem={workItem}
         issue={issue}

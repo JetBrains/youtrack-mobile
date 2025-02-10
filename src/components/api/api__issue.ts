@@ -22,12 +22,12 @@ import type {
   IssueLinkType,
   Tag,
 } from 'types/CustomFields';
-import type {AnyIssue, IssueCreate, IssueFull, IssueSprint} from 'types/Issue';
+import type {AnyIssue, IssueCreate, IssueFull, IssueOnList, IssueSprint} from 'types/Issue';
 import type {NormalizedAttachment} from 'types/Attachment';
 import type {Project} from 'types/Project';
 import type {UserCC} from 'types/User';
 import type {Visibility, VisibilityGroups} from 'types/Visibility';
-import type {WorkItem} from 'types/Work';
+import type {DraftWorkItem, WorkItem} from 'types/Work';
 
 export default class IssueAPI extends ApiBase {
   draftsURL: string = `${this.youTrackApiUrl}${
@@ -131,7 +131,7 @@ export default class IssueAPI extends ApiBase {
   async updateVisibility(
     issueId: string,
     visibility: Visibility | null,
-  ): Promise<any> {
+  ) {
     const queryString = qs.stringify({
       fields:
         'id,visibility($type,permittedGroups($type,id,name),permittedUsers($type,id,name))',
@@ -162,7 +162,7 @@ export default class IssueAPI extends ApiBase {
     return comments;
   }
 
-  async createIssue(draftId: string): Promise<any> {
+  async createIssue(draftId: string): Promise<IssueOnList> {
     const queryString = qs.stringify({
       draftId,
       fields: issueFields.issuesOnList.toString(),
@@ -337,7 +337,7 @@ export default class IssueAPI extends ApiBase {
     issueId: string,
     commentId: string,
     deleted: boolean,
-  ): Promise<any> {
+  ) {
     const queryString = qs.stringify({
       fields: issueFields.issueComment.toString(),
     });
@@ -355,7 +355,7 @@ export default class IssueAPI extends ApiBase {
   async deleteCommentPermanently(
     issueId: string,
     commentId: string,
-  ): Promise<any> {
+  ) {
     return this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/comments/${commentId}`,
       'DELETE',
@@ -370,7 +370,7 @@ export default class IssueAPI extends ApiBase {
     issueId: string,
     commentId: string,
     reactionName: string,
-  ): Promise<any> {
+  ) {
     const queryString = qs.stringify({
       fields: issueFields.reaction.toString(),
     });
@@ -384,7 +384,7 @@ export default class IssueAPI extends ApiBase {
     issueId: string,
     commentId: string,
     reactionId: string,
-  ): Promise<any> {
+  ) {
     const url: string = `${this.youTrackIssueUrl}/${issueId}/comments/${commentId}/reactions/${reactionId}`;
     return this.makeAuthorizedRequest(url, 'DELETE', null, {
       parseJson: false,
@@ -451,6 +451,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
+  // @ts-ignore
   async updateCommentAttachmentVisibility(
     issueId: string,
     attachment: Attachment,
@@ -469,14 +470,10 @@ export default class IssueAPI extends ApiBase {
     summary: string,
     description: string,
     fields?: CustomFieldText[],
-  ): Promise<any> {
+  ) {
     const queryString = qs.stringify(
-      {
-        fields: issueFields.singleIssue.toString(),
-      },
-      {
-        encode: false,
-      },
+      {fields: issueFields.singleIssue.toString()},
+      {encode: false},
     );
     return await this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}?${queryString}`,
@@ -493,18 +490,15 @@ export default class IssueAPI extends ApiBase {
     issueId: string,
     fieldId: string,
     value: FieldValue,
-  ): Promise<any> {
-    const queryString = qs.stringify({
-      fields: 'id,ringId,value',
-    });
-    const body = {
-      id: fieldId,
-      value,
-    };
+  ): Promise<{id: string; ringId: string; value: unknown}> {
+    const queryString = qs.stringify({fields: 'id,ringId,value'});
     return await this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}?${queryString}`,
       'POST',
-      body,
+      {
+        id: fieldId,
+        value,
+      },
     );
   }
 
@@ -512,22 +506,19 @@ export default class IssueAPI extends ApiBase {
     issueId: string,
     fieldId: string,
     event: Record<string, any>,
-  ): Promise<any> {
-    const queryString = qs.stringify({
-      fields: 'id,ringId,value',
-    });
-    const body = {
-      id: fieldId,
-      event,
-    };
+  ): Promise<{id: string; ringId: string; value: unknown}> {
+    const queryString = qs.stringify({fields: 'id,ringId,value'});
     return await this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/fields/${fieldId}?${queryString}`,
       'POST',
-      body,
+      {
+        id: fieldId,
+        event,
+      },
     );
   }
 
-  async updateIssueStarred(issueId: string, hasStar: boolean): Promise<any> {
+  async updateIssueStarred(issueId: string, hasStar: boolean): Promise<{id: string}> {
     return await this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/watchers`,
       'POST',
@@ -537,7 +528,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async updateIssueVoted(issueId: string, hasVote: boolean): Promise<any> {
+  async updateIssueVoted(issueId: string, hasVote: boolean): Promise<{id: string}> {
     return await this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/voters`,
       'POST',
@@ -547,15 +538,14 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async updateProject(issue: AnyIssue, project: Project): Promise<any> {
-    const body = {
-      id: issue.id,
-      project: project,
-    };
+  async updateProject(issue: AnyIssue, project: Project) {
     return await this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issue.id}`,
       'POST',
-      body,
+      {
+        id: issue.id,
+        project: project,
+      },
     );
   }
 
@@ -586,7 +576,7 @@ export default class IssueAPI extends ApiBase {
   async getMentionSuggests(
     issueIds: string[],
     query: string,
-  ): Promise<any> {
+  ) {
     const $top = 10;
     const fields = 'issues(id),users(id,login,fullName,avatarUrl)';
     const queryString = qs.stringify({
@@ -594,15 +584,12 @@ export default class IssueAPI extends ApiBase {
       fields,
       query,
     });
-    const body = {
-      issues: issueIds.map(id => ({
-        id,
-      })),
-    };
     const suggestions = await this.makeAuthorizedRequest(
       `${this.youTrackUrl}/api/mention?${queryString}`,
       'POST',
-      body,
+      {
+        issues: issueIds.map(id => ({id}))
+      },
     );
     return ApiHelper.patchAllRelativeAvatarUrls(
       suggestions,
@@ -638,7 +625,7 @@ export default class IssueAPI extends ApiBase {
     resourceName: string,
     issueId: string,
     entityId: string,
-  ): any {
+  ) {
     return this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/${resourceName}/${entityId}`,
       'DELETE',
@@ -649,15 +636,15 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  removeTag(issueId: string, tagId: string): any {
+  removeTag(issueId: string, tagId: string) {
     return this.removeIssueEntity('tags', issueId, tagId);
   }
 
-  removeAttachment(issueId: string, attachmentId: string): any {
+  removeAttachment(issueId: string, attachmentId: string) {
     return this.removeIssueEntity('attachments', issueId, attachmentId);
   }
 
-  addTags(issueId: string, tags: Tag[]): any {
+  addTags(issueId: string, tags: Tag[]) {
     return this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}?${ApiBase.createFieldsQuery({
         tags: issueFields.ISSUE_TAGS_FIELDS,
@@ -669,7 +656,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async timeTracking(issueId: string): Promise<any> {
+  async timeTracking(issueId: string) {
     return this.makeAuthorizedRequest(
       `${
         this.youTrackIssueUrl
@@ -682,7 +669,7 @@ export default class IssueAPI extends ApiBase {
 
   async updateDraftWorkItem(
     issueId: string,
-    draft: WorkItem,
+    draft: Partial<WorkItem>,
   ): Promise<WorkItem> {
     return this.makeAuthorizedRequest(
       `${
@@ -695,24 +682,17 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async createWorkItem(issueId: string, draft: WorkItem): Promise<WorkItem> {
+  async submitWorkItem(issueId: string, draft: WorkItem | DraftWorkItem): Promise<WorkItem> {
+    const query = `${ApiBase.createFieldsQuery(issueFields.workItems)}`;
+    const id = draft.$type ? (draft as WorkItem).id : '';
     return this.makeAuthorizedRequest(
-      `${this.youTrackIssueUrl}/${issueId}/timeTracking/workItems/${
-        draft.$type ? (draft.id as any) : ''
-      }?${ApiBase.createFieldsQuery(
-        issueFields.workItems,
-        draft.$type
-          ? null
-          : {
-              draftId: draft.id,
-            },
-      )}`,
+      `${this.youTrackIssueUrl}/${issueId}/timeTracking/workItems/${id}?${query}`,
       'POST',
       draft,
     );
   }
 
-  async deleteWorkItem(issueId: string, workItemId: string = ''): Promise<any> {
+  async deleteWorkItem(issueId: string, workItemId: string = '') {
     return this.makeAuthorizedRequest(
       `${
         this.youTrackIssueUrl
@@ -727,7 +707,7 @@ export default class IssueAPI extends ApiBase {
     );
   }
 
-  async deleteDraftWorkItem(issueId: string): Promise<any> {
+  async deleteDraftWorkItem(issueId: string) {
     return this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/timeTracking/draftWorkItem`,
       'DELETE',
@@ -768,7 +748,7 @@ export default class IssueAPI extends ApiBase {
     checked: boolean,
     position: number,
     comment: IssueComment,
-  ): Promise<any> {
+  ) {
     return this.makeAuthorizedRequest(
       `${this.youTrackIssueUrl}/${issueId}/comments/${
         comment.id

@@ -39,7 +39,12 @@ const StreamWork = (props: Props) => {
             <Text style={styles.activityWorkTime}>
               {` ${getDurationPresentation(work.duration)}`}
             </Text>
-            {!!work.type && `, ${work.type.name}`}
+            {!!work.type && (
+              <>
+                <Text>{`, `}</Text>
+                <Text style={styles.activityWorkTime}>{work.type.name}</Text>
+              </>
+            )}
             {!!work.date && `, ${absDate(work.date, true)}`}
           </Text>
 

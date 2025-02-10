@@ -18,17 +18,14 @@ export interface WorkItemTemplate {
   author: User;
   date: number;
   duration: {
-    $type?: string;
     presentation: string;
   };
-  type: null;
+  type: WorkItemType | null;
 }
 
-export interface WorkItem extends Omit<WorkItemTemplate, 'type'> {
+export interface DraftWorkItem extends WorkItemTemplate {
   $type?: string;
-  created: number;
-  creator?: User;
-  id?: string;
+  creator: User;
   issue: {
     id: string;
     project: {
@@ -37,8 +34,19 @@ export interface WorkItem extends Omit<WorkItemTemplate, 'type'> {
     };
   };
   text: string | null;
-  type: WorkItemType | null;
+  attributes?: {
+    id: string;
+    name: string;
+    value: string | null;
+  }
   usesMarkdown: boolean;
+}
+
+
+export interface WorkItem extends DraftWorkItem {
+  $type: string;
+  created: number;
+  id: string;
 }
 
 export interface TimeTracking {

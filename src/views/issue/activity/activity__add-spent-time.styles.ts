@@ -16,7 +16,9 @@ export default EStyleSheet.create({
   icon: {
     color: '$icon',
   },
-  separator: {
+  commentInput: {
     marginTop: UNIT * 2,
+    padding: UNIT,
+  borderRadius: UNIT,
   },
 });
