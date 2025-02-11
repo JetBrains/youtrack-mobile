@@ -8,13 +8,18 @@ const ISSUE_ACTIVITIES_EVENT_BASE = toField([
   'color(id)',
 ]);
 const ISSUE_PROJECT_FIELDS = toField(['$type', 'id', 'shortName', 'name', 'localizedName']);
+const COLOR = 'color(id,background,foreground)';
+export const ISSUE_WORK_ITEM_ATTRIBUTES_FIELDS = toField([
+  `id,name,value(id,name,${COLOR},hasRunningJobs)`,
+]);
 const ISSUE_WORK_ITEMS_FIELDS = toField([
   '$type',
   'date',
   {
-    type: ['id,name'],
+    type: [`id,name,${COLOR}`],
     duration: ['presentation'],
     issue: ['id,project(id,ringId)'],
+    attributes: ISSUE_WORK_ITEM_ATTRIBUTES_FIELDS,
   },
 ]);
 const VCS_INTEGRATION_PROCESSOR_FIELDS = toField(['$type', 'id']);
@@ -55,7 +60,7 @@ const VCS_INTEGRATION_FIELDS = toField([
   },
   'urls',
 ]);
-export const ISSUE_ACTIVITIES_FIELDS_LEGACY: string = toField([
+export const ISSUE_ACTIVITIES_FIELDS_LEGACY = toField([
   'id',
   'timestamp',
   'targetMember',

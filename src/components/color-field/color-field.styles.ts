@@ -29,4 +29,7 @@ export default EStyleSheet.create({
     borderWidth: 0.5,
     backgroundColor: '$boxBackground',
   },
+  bullet: {
+    fontSize: SECONDARY_FONT_SIZE,
+  },
 });

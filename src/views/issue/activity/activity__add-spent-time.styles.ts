@@ -19,6 +19,9 @@ export default EStyleSheet.create({
   commentInput: {
     marginTop: UNIT * 2,
     padding: UNIT,
-  borderRadius: UNIT,
+    borderRadius: UNIT,
+  },
+  placeholderText: {
+    color: '$textSecondary',
   },
 });

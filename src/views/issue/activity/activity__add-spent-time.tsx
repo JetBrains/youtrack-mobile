@@ -12,6 +12,7 @@ import Select from 'components/select/select';
 import usage from 'components/usage/usage';
 import {absDate} from 'components/date/date';
 import {ANALYTICS_ISSUE_STREAM_SECTION} from 'components/analytics/analytics-ids';
+import {ColorBullet} from 'components/color-field/color-field';
 import {confirmation} from 'components/confirmation/confirmation';
 import {createIssueActivityActions} from './issue-activity__actions';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
@@ -20,6 +21,7 @@ import {HIT_SLOP} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconAngleRight, IconCheck, IconClose} from 'components/icon/icon';
 import {logEvent} from 'components/log/log-helper';
+import {sortByOrdinal} from 'components/search/sorting';
 import {ThemeContext} from 'components/theme/theme-context';
 
 import styles from './activity__add-spent-time.styles';
@@ -31,7 +33,14 @@ import type {ReduxThunkDispatch} from 'types/Redux';
 import type {Theme} from 'types/Theme';
 import type {User} from 'types/User';
 import type {ViewStyleProp} from 'types/Internal';
-import type {DraftWorkItem, WorkItem, WorkItemType} from 'types/Work';
+import type {
+  DraftWorkItem,
+  ProjectTimeTrackingSettings,
+  WorkItem,
+  WorkItemAttribute,
+  WorkItemAttributeValue,
+  WorkItemType,
+} from 'types/Work';
 
 interface Props {
   issue: IssueFull;
@@ -41,7 +50,7 @@ interface Props {
   canCreateNotOwn: boolean;
 }
 
-type SelectPropsType = {ringId: string; name: string} | WorkItemType;
+type SelectPropsType = {ringId: string; name: string} | WorkItemType | WorkItemAttributeValue;
 
 const AddSpentTimeForm = (props: Props) => {
   const currentUser = useSelector((state: AppState) => state.app.user!);
@@ -115,9 +124,7 @@ const AddSpentTimeForm = (props: Props) => {
       selectedItems: [],
       dataSource: async () => {
         const project = props?.issue?.project || props.workItem?.issue?.project;
-        const users = await dispatch(
-          issueActivityActions.getWorkItemAuthors(project.ringId)
-        );
+        const users = await dispatch(issueActivityActions.getWorkItemAuthors(project.ringId));
         return users.filter(u => u.ringId !== user.ringId);
       },
       onSelect: (author: User) => {
@@ -131,19 +138,47 @@ const AddSpentTimeForm = (props: Props) => {
     };
   };
 
-  const getWorkTypeSelectProps = (): ISelectProps<SelectPropsType> => {
+  const getProjectTimeSettings = async (): Promise<ProjectTimeTrackingSettings> =>
+    await dispatch(issueActivityActions.getTimeTrackingSettings(draft.issue.project.id));
+
+  const getProjectTimeTrackingSettingsWorkTypes = (): ISelectProps<SelectPropsType> => {
     return {
       selectedItems: [],
       dataSource: async () => {
-        const types = await dispatch(issueActivityActions.getWorkItemTypes(draft.issue.project.id));
-        return [getDefaultType(), ...types];
+        const settings: ProjectTimeTrackingSettings = await getProjectTimeSettings();
+        return [getDefaultType(), ...settings.workItemTypes.sort(sortByOrdinal)];
       },
-      onSelect: async (type: WorkItemType) => {
+      onSelect: async (value: WorkItemType) => {
         logEvent({
           message: 'SpentTime: form:set-work-type',
           analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
-        update({type});
+        update({type: value});
+        updateSelectVisibility(false);
+      },
+    };
+  };
+
+  const getProjectTimeTrackingSettingsAttributes = (attributeId: string): ISelectProps<SelectPropsType> => {
+    return {
+      selectedItems: [],
+      dataSource: async () => {
+        const settings: ProjectTimeTrackingSettings = await getProjectTimeSettings();
+        return settings.attributes.find(a => a.id === attributeId)?.values || [];
+      },
+      onSelect: async (value: WorkItemAttributeValue) => {
+        logEvent({
+          message: 'SpentTime: form:set-custom-attribute',
+          analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
+        });
+        const attributes = draft.attributes!.reduce((akk: WorkItemAttribute[], a) => {
+          if (a.id === attributeId) {
+            a.value = value;
+          }
+          akk.push(a);
+          return akk;
+        }, []);
+        update({attributes});
         updateSelectVisibility(false);
       },
     };
@@ -288,16 +323,39 @@ const AddSpentTimeForm = (props: Props) => {
           <TouchableOpacity
             style={buttonStyle}
             onPress={() => {
-              updateSelectProps(getWorkTypeSelectProps());
+              updateSelectProps(getProjectTimeTrackingSettingsWorkTypes());
               updateSelectVisibility(true);
             }}
           >
             <Text style={styles.feedbackFormTextSup}>{i18n('Type')}</Text>
             <Text style={[styles.feedbackFormText, styles.feedbackFormTextMain]} numberOfLines={1}>
-              {draft.type?.name || getDefaultType().name}
+              {!!draft?.type?.color && <ColorBullet color={draft.type.color} />}
+              {draft.type?.name || <Text style={styles.placeholderText}>{getDefaultType().name}</Text>}
             </Text>
             {iconAngleRight}
           </TouchableOpacity>
+
+          {!!draft.attributes?.length && (
+            <>
+              {draft.attributes.map(attr => (
+                <TouchableOpacity
+                  key={attr.id}
+                  style={buttonStyle}
+                  onPress={() => {
+                    updateSelectProps(getProjectTimeTrackingSettingsAttributes(attr.id));
+                    updateSelectVisibility(true);
+                  }}
+                >
+                  <Text style={styles.feedbackFormTextSup}>{attr.name}</Text>
+                  <Text style={[styles.feedbackFormText, styles.feedbackFormTextMain]} numberOfLines={1}>
+                    {attr?.value?.color && <ColorBullet color={attr.value.color} />}
+                    {attr?.value?.name || <Text style={styles.placeholderText}>{i18n('Select an option')}</Text>}
+                  </Text>
+                  {iconAngleRight}
+                </TouchableOpacity>
+              ))}
+            </>
+          )}
 
           <TextInput
             {...commonInputProps}
@@ -345,5 +403,6 @@ function getDefaultType() {
   return {
     id: null,
     name: i18n('No type'),
+    ordinal: 0,
   };
 }

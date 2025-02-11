@@ -10,20 +10,20 @@ import {i18n} from 'components/i18n/i18n';
 import {isHelpdeskProject} from 'components/helpdesk';
 import {logEvent} from 'components/log/log-helper';
 import {notifyError} from 'components/notification/notification';
-import {sortAlphabetically, sortByOrdinal} from 'components/search/sorting';
+import {sortAlphabetically} from 'components/search/sorting';
 import {until} from 'util/util';
 import {WORK_ITEM_CREATE, WORK_ITEM_UPDATE} from 'components/issue-permissions/issue-permissions';
 
 import type Api from 'components/api/api';
 import type {Activity, ActivityType} from 'types/Activity';
 import type {AnyIssue, ListIssueProject} from 'types/Issue';
-import type {DraftWorkItem, TimeTracking, WorkItemType} from 'types/Work';
+import type {DraftWorkItem, ProjectTimeTrackingSettings, TimeTracking} from 'types/Work';
+import type {Entity} from 'types/Entity';
+import type {IssueState} from 'views/issue/issue-base-reducer';
+import type {Project, ProjectTeam} from 'types/Project';
+import type {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
 import type {User} from 'types/User';
 import type {WorkItem} from 'types/Work';
-import {ReduxAction, ReduxAPIGetter, ReduxStateGetter, ReduxThunkDispatch} from 'types/Redux';
-import {Project, ProjectTeam} from 'types/Project';
-import {IssueState} from 'views/issue/issue-base-reducer';
-import {Entity} from 'types/Entity';
 
 export function receiveActivityAPIAvailability(activitiesEnabled: boolean) {
   return {
@@ -58,25 +58,25 @@ export interface IssueActivityActions {
   receiveActivityEnabledTypes: (commentsOnly?: boolean) => {
     issueActivityEnabledTypes: ActivityType[];
     issueActivityTypes: ActivityType[];
-    type: any;
+    type: string;
   };
   setDefaultProjectTeam: (project: Project | ListIssueProject) => ReduxAction;
   loadActivitiesPage: (doNotReset?: boolean, issueId?: string, commentsOnly?: boolean) => ReduxAction;
   doUpdateWorkItem: (workItem: WorkItem) => ReduxAction;
   submitWorkItem: (draft: WorkItem | DraftWorkItem, issueId?: string) => ReduxAction<Promise<WorkItem | null>>;
-  getWorkItemTypes: (projectId?: string) => ReduxAction<Promise<WorkItemType[]>>;
+  getTimeTrackingSettings: (projectId: string) => ReduxAction<Promise<ProjectTimeTrackingSettings>>;
   deleteWorkItemDraft: (issueId?: string) => ReduxAction;
   updateWorkItemDraft: (draft: Partial<WorkItem>, issueId?: string) => ReduxAction<Promise<WorkItem | null>>;
   getWorkItemAuthors: (projectRingId?: string) => ReduxAction<Promise<{ringId: string; name: string}[]>>;
   deleteWorkItem: (workItem: WorkItem) => ReduxAction<Promise<boolean>>;
 }
 
-export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_FIELD_NAME) => {
+export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_FIELD_NAME): IssueActivityActions => {
   const actions: IssueActivityActions = {
     receiveActivityEnabledTypes: function (commentsOnly?: boolean): {
       issueActivityEnabledTypes: ActivityType[];
       issueActivityTypes: ActivityType[];
-      type: any;
+      type: string;
     } {
       return {
         type: types.RECEIVE_ACTIVITY_CATEGORIES,
@@ -247,19 +247,19 @@ export const createIssueActivityActions = (stateFieldName = DEFAULT_ISSUE_STATE_
           .sort(sortAlphabetically);
       };
     },
-    getWorkItemTypes: function (projectId?: string): ReduxAction<Promise<WorkItemType[]>> {
+    getTimeTrackingSettings: function (projectId: string): ReduxAction<Promise<ProjectTimeTrackingSettings>> {
       return async (dispatch: ReduxThunkDispatch, getState: ReduxStateGetter, getApi: ReduxAPIGetter) => {
-        const api: Api = getApi();
-        const targetProjectId: string = projectId || (getState()[stateFieldName] as IssueState).issue.project.id;
         logEvent({
-          message: 'SpentTime: form:get-work-types',
+          message: 'SpentTime: form:get-time-tracking-settings',
           analyticsId: ANALYTICS_ISSUE_STREAM_SECTION,
         });
-        const [error, projectTimeTrackingSettings] = await until(api.projects.getTimeTrackingSettings(targetProjectId));
+        const [error, projectTimeTrackingSettings] = await until<ProjectTimeTrackingSettings>(
+          getApi().projects.getTimeTrackingSettings(projectId)
+        );
         if (error) {
           notifyError(error);
         }
-        return error ? [] : projectTimeTrackingSettings.workItemTypes.sort(sortByOrdinal);
+        return error ? {} as ProjectTimeTrackingSettings : projectTimeTrackingSettings;
       };
     },
     deleteWorkItem: function (workItem: WorkItem): ReduxAction<Promise<boolean>> {

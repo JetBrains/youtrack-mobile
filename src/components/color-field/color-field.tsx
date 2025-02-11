@@ -5,6 +5,8 @@ import styles from './color-field.styles';
 
 import {TextStyleProp, ViewStyleProp} from 'types/Internal';
 
+export const bulletChar = `⦁\u2009`;
+
 export interface ColorCoding {
   id: string;
   foreground: string;
@@ -59,6 +61,25 @@ export default function ColorField(props: Props) {
         accessible={true}
       >
         {getText()}
+      </Text>
+    </View>
+  );
+}
+
+export function ColorBullet({color, style}: {color: ColorCoding; style?: TextStyleProp}) {
+  return (
+    <View testID="test:id/color-bullet-value-wrapper" accessible={true}>
+      <Text
+        style={[
+          styles.bullet,
+          !!style?.fontSize && {fontSize: style.fontSize},
+          {color: color.id !== NO_COLOR_CODING_ID && color.background},
+        ]}
+        numberOfLines={1}
+        testID="test:id/color-field-value"
+        accessible={true}
+      >
+        {bulletChar}
       </Text>
     </View>
   );

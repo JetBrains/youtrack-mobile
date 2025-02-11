@@ -19,6 +19,8 @@ interface Props {
   onLongPress?: () => any;
 }
 
+const bulletChar = `⦁\u2009`;
+
 const StreamWork = (props: Props) => {
   const work = firstActivityChange(props.activityGroup.work) as WorkItem | null;
 
@@ -30,20 +32,33 @@ const StreamWork = (props: Props) => {
     <TouchableWithoutFeedback delayLongPress={280} onLongPress={props?.onLongPress}>
       <>
         {!props.activityGroup.merged && props.activityGroup.author && (
-          <StreamUserInfo activityGroup={props.activityGroup}/>
+          <StreamUserInfo activityGroup={props.activityGroup} />
         )}
 
         <View style={[styles.activityChange, props.activityGroup.merged && styles.activityChangeMerged]}>
           <Text style={styles.secondaryTextColor}>
             <Text style={styles.activityLabel}>{i18n('Spent time:')}</Text>
-            <Text style={styles.activityWorkTime}>
-              {` ${getDurationPresentation(work.duration)}`}
-            </Text>
+            <Text style={styles.activityWorkTime}>{` ${getDurationPresentation(work.duration)}`}</Text>
+
             {!!work.type && (
-              <>
-                <Text>{`, `}</Text>
-                <Text style={styles.activityWorkTime}>{work.type.name}</Text>
-              </>
+              <Text style={styles.activityWorkTime}>
+                {`, `}
+                {work.type.color && <Text style={{color: work.type?.color?.background}}>{bulletChar}</Text>}
+                {work.type.name}
+                {work.attributes?.length
+                  ? work.attributes.map(attr =>
+                      attr.value?.name ? (
+                        <Text style={styles.activityWorkTime}>
+                          {', '}
+                          {!!attr.value?.color && (
+                            <Text style={{color: attr?.value?.color.background}}>{bulletChar}</Text>
+                          )}
+                          {attr.value?.name}
+                        </Text>
+                      ) : null
+                    )
+                  : null}
+              </Text>
             )}
             {!!work.date && `, ${absDate(work.date, true)}`}
           </Text>
@@ -51,11 +66,7 @@ const StreamWork = (props: Props) => {
           {!!work.text && (
             <MarkdownView
               textStyle={markdownText}
-              onCheckboxUpdate={(
-                checked: boolean,
-                position: number,
-                workItemText: string,
-              ): void => {
+              onCheckboxUpdate={(checked: boolean, position: number, workItemText: string): void => {
                 if (props.onUpdate) {
                   props.onUpdate({...work, text: workItemText});
                 }

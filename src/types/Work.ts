@@ -1,3 +1,4 @@
+import type {ColorCoding} from 'components/color-field/color-field';
 import type {User} from './User';
 
 export type WorkTimeSettings =
@@ -12,6 +13,28 @@ export type WorkTimeSettings =
 export interface WorkItemType {
   id: string | null;
   name: string;
+  ordinal: number;
+  color?: ColorCoding;
+}
+
+export interface WorkItemAttributeValue {
+  id: string;
+  name: string;
+  color: ColorCoding;
+  description: string | null;
+  hasRunningJobs: boolean;
+}
+
+export interface WorkItemProjectAttribute {
+  id: string;
+  name: string;
+  values: WorkItemAttributeValue[];
+}
+
+export interface ProjectTimeTrackingSettings {
+  enabled: boolean;
+  workItemTypes: WorkItemType[];
+  attributes: WorkItemProjectAttribute[];
 }
 
 export interface WorkItemTemplate {
@@ -21,6 +44,12 @@ export interface WorkItemTemplate {
     presentation: string;
   };
   type: WorkItemType | null;
+}
+
+export interface WorkItemAttribute {
+  id: string;
+  name: string;
+  value: WorkItemAttributeValue | null;
 }
 
 export interface DraftWorkItem extends WorkItemTemplate {
@@ -34,14 +63,9 @@ export interface DraftWorkItem extends WorkItemTemplate {
     };
   };
   text: string | null;
-  attributes?: {
-    id: string;
-    name: string;
-    value: string | null;
-  }
+  attributes?: WorkItemAttribute[];
   usesMarkdown: boolean;
 }
-
 
 export interface WorkItem extends DraftWorkItem {
   $type: string;

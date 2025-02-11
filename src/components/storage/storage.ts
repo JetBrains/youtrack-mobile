@@ -69,7 +69,7 @@ export type StorageState = TipsState & FeatureState & {
   searchContext: Folder | null;
   helpdeskSearchContext: Folder | null;
   lastQueries: string[] | null;
-  issuesCache: IssueOnList[] | null;
+  issuesCache: (IssueOnList & {activityPage: Activity[]})[] | null;
   helpdeskCache: IssueOnList[] | null;
   inboxCache: Notification[] | null;
   inboxThreadsCache: InboxThreadsCache | null;
