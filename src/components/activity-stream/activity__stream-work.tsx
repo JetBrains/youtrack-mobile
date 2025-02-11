@@ -30,7 +30,7 @@ const StreamWork = (props: Props) => {
 
   return (
     <TouchableWithoutFeedback delayLongPress={280} onLongPress={props?.onLongPress}>
-      <>
+      <View>
         {!props.activityGroup.merged && props.activityGroup.author && (
           <StreamUserInfo activityGroup={props.activityGroup} />
         )}
@@ -76,7 +76,7 @@ const StreamWork = (props: Props) => {
             </MarkdownView>
           )}
         </View>
-      </>
+      </View>
     </TouchableWithoutFeedback>
   );
 };
