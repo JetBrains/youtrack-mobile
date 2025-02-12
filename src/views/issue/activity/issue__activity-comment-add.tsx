@@ -43,8 +43,8 @@ const IssueActivityStreamCommentAdd = (props: Props) => {
     return attachmentActions.doUploadFileToComment(false, files, issue, comment);
   };
 
-  let visibility: Visibility | undefined;
-  if (isHelpdeskProject && !isAgent && team) {
+  let visibility: Visibility | null | undefined = props?.comment?.visibility;
+  if (!visibility && isHelpdeskProject && !isAgent && team) {
     visibility = IssueVisibility.createLimitedVisibility([team]);
   }
 

@@ -296,8 +296,10 @@ const CommentEdit = (props: Props) => {
         onShow={() => toggleSelectVisibility(true)}
         onHide={() => toggleSelectVisibility(false)}
         visibility={state.editingComment.visibility}
-        onSubmit={(visibility: Visibility | null) => {
-          setEditingComment(getCurrentComment({...state.editingComment, visibility}));
+        onSubmit={async (visibility: Visibility | null) => {
+          const draft = getCurrentComment({...state.editingComment, visibility});
+          setEditingComment(draft);
+          await onCommentChange(draft);
         }}
         getOptions={props.getVisibilityOptions}
         visibilityDefaultLabel={props.visibilityLabel}
