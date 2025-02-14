@@ -45,21 +45,21 @@ const StreamWork = (props: Props) => {
                 {`, `}
                 {work.type.color && <Text style={{color: work.type?.color?.background}}>{bulletChar}</Text>}
                 {work.type.name}
-                {work.attributes?.length
-                  ? work.attributes.map(attr =>
-                      attr.value?.name ? (
-                        <Text style={styles.activityWorkTime}>
-                          {', '}
-                          {!!attr.value?.color && (
-                            <Text style={{color: attr?.value?.color.background}}>{bulletChar}</Text>
-                          )}
-                          {attr.value?.name}
-                        </Text>
-                      ) : null
-                    )
-                  : null}
               </Text>
             )}
+            {work.attributes?.length
+              ? work.attributes.map(attr => {
+                return attr.value ? (
+                  <Text style={styles.activityWorkTime}>
+                    {', '}
+                    {!!attr.value?.color && (
+                      <Text style={{color: attr.value.color.background}}>{bulletChar}</Text>
+                    )}
+                    {attr.value.name}
+                  </Text>
+                ) : null;
+              })
+              : null}
             {!!work.date && `, ${absDate(work.date, true)}`}
           </Text>
 
