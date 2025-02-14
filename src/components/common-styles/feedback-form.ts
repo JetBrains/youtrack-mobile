@@ -34,6 +34,7 @@ const feedbackFormStyles = {
     color: '$textSecondary',
   },
   feedbackFormTextMain: {
+    flexGrow: 1,
     marginBottom: -UNIT * 2,
   },
   feedbackFormTextError: {

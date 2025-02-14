@@ -24,4 +24,8 @@ export default EStyleSheet.create({
   placeholderText: {
     color: '$textSecondary',
   },
+  resetIcon: {
+    color: '$icon',
+    marginRight: UNIT * 2,
+  },
 });

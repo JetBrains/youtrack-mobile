@@ -17,7 +17,7 @@ import {confirmation} from 'components/confirmation/confirmation';
 import {createIssueActivityActions} from './issue-activity__actions';
 import {getEntityPresentation} from 'components/issue-formatter/issue-formatter';
 import {hasType} from 'components/api/api__resource-types';
-import {HIT_SLOP} from 'components/common-styles';
+import {HIT_SLOP, HIT_SLOP2} from 'components/common-styles';
 import {i18n} from 'components/i18n/i18n';
 import {IconAngleRight, IconCheck, IconClose} from 'components/icon/icon';
 import {logEvent} from 'components/log/log-helper';
@@ -268,6 +268,12 @@ const AddSpentTimeForm = (props: Props) => {
     );
   };
 
+  const renderResetButton = (onPress: () => void) => (
+    <TouchableOpacity hitSlop={HIT_SLOP2} onPress={onPress} style={styles.resetIcon}>
+      <IconClose size={21} color={styles.icon.color} />
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.container}>
       {renderHeader()}
@@ -332,6 +338,9 @@ const AddSpentTimeForm = (props: Props) => {
               {!!draft?.type?.color && <ColorBullet color={draft.type.color} />}
               {draft.type?.name || <Text style={styles.placeholderText}>{getDefaultType().name}</Text>}
             </Text>
+            {!!draft.type?.name && renderResetButton(() => {
+              update({type: null});
+            })}
             {iconAngleRight}
           </TouchableOpacity>
 
@@ -351,7 +360,18 @@ const AddSpentTimeForm = (props: Props) => {
                     {attr?.value?.color && <ColorBullet color={attr.value.color} />}
                     {attr?.value?.name || <Text style={styles.placeholderText}>{i18n('Select an option')}</Text>}
                   </Text>
-                  {iconAngleRight}
+                  <>
+                    {!!attr?.value?.name &&
+                      renderResetButton(() => {
+                        update({
+                          attributes: draft.attributes!.reduce((akk: WorkItemAttribute[], a) => {
+                            akk.push(a.id === attr.id ? {...a, value: null} : a);
+                            return akk;
+                          }, []),
+                        });
+                      })}
+                    {iconAngleRight}
+                  </>
                 </TouchableOpacity>
               ))}
             </>
