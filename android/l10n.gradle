@@ -10,7 +10,7 @@ buildscript {
     maven { url 'https://jitpack.io'}
   }
   dependencies {
-    classpath 'org.jetbrains.ring:youtrack-crowdin:0.18.8'
+    classpath 'org.jetbrains.ring:youtrack-crowdin:0.29'
   }
 }
 
