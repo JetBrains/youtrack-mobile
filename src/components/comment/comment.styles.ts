@@ -31,8 +31,7 @@ export default EStyleSheet.create({
   reactionsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: UNIT / 2,
-    marginBottom: -UNIT,
+    marginTop: UNIT / 1.5,
   },
   reactionsReaction: {
     flexDirection: 'row',

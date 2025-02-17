@@ -153,8 +153,8 @@ export const baseMarkdownStyles = {
   },
   textgroup: {},
   paragraph: {
-    marginTop: 0,
-    marginBottom: UNIT * 1.5,
+    marginTop: UNIT,
+    marginBottom: 0,
   },
   hardbreak: {
     width: '100%',

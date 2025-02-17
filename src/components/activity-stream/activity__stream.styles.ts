@@ -47,7 +47,6 @@ export const rowStyles = {
   activityContent: {
     flex: 1,
     padding: UNIT,
-    paddingBottom: 0,
     marginLeft: UNIT / 2,
     borderRadius: UNIT,
   },
