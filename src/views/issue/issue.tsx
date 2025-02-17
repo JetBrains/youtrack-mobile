@@ -42,7 +42,7 @@ import {ThemeContext} from 'components/theme/theme-context';
 import styles from './issue.styles';
 
 import type IssuePermissions from 'components/issue-permissions/issue-permissions';
-import type {IssueFull, IssueOnList, IssueSprint, TabRoute} from 'types/Issue';
+import type {AnyIssue, IssueFull, IssueOnList, IssueSprint, TabRoute} from 'types/Issue';
 import type {Attachment, IssueLink, Tag} from 'types/CustomFields';
 import type {AttachmentActions} from 'components/attachments-row/attachment-actions';
 import type {EventSubscription} from 'react-native';
@@ -739,7 +739,7 @@ export class Issue<T extends IssueProps> extends IssueTabbed<IssueProps & T> {
 }
 export type OwnProps = {
   issuePermissions: IssuePermissions;
-  issuePlaceholder: Partial<IssueFull>;
+  issuePlaceholder: Partial<AnyIssue>;
   issueId: string;
   user: User | null;
   navigateToActivity: string | undefined;

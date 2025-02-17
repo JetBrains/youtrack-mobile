@@ -34,6 +34,7 @@ import {getStorageState} from 'components/storage/storage';
 import {hasType} from 'components/api/api__resource-types';
 import {i18n} from 'components/i18n/i18n';
 import {isAndroidPlatform, isIOSPlatform, until} from 'util/util';
+import {isSplitView} from 'components/responsive/responsive-helper';
 import {loadConfig} from 'components/config/config';
 import {loadTranslation} from 'components/i18n/i18n-translation';
 import {logEvent} from 'components/log/log-helper';
@@ -802,12 +803,23 @@ async function navigateToScreen(
     const navigateToActivity: string | undefined = url.split('#focus=Comments-')?.[1];
     if (helpdeskFormId) {
       Router.HelpDeskFeedback({uuid: helpdeskFormId});
-    } else if (issueId) {
-      Router.Issue({issueId, issuePlaceholder: {id: issueId}, navigateToActivity}, {forceReset});
-    } else if (articleId) {
-      Router.Article({articlePlaceholder: {id: articleId}, navigateToActivity}, {forceReset});
     } else {
-      Router.navigateToDefaultRoute({searchQuery});
+      const splitView = isSplitView();
+      if (issueId) {
+            if (splitView) {
+              Router.Issues({issueId, issuePlaceholder: {id: issueId}, navigateToActivity});
+            } else {
+              Router.Issue({issueId, issuePlaceholder: {id: issueId}, navigateToActivity}, {forceReset});
+            }
+          } else if (articleId) {
+            if (splitView) {
+              Router.KnowledgeBase({lastVisitedArticle: {id: articleId}, navigateToActivity, preventReload: true}, {forceReset});
+            } else {
+              Router.Article({articlePlaceholder: {id: articleId}, navigateToActivity}, {forceReset});
+            }
+          } else {
+            Router.navigateToDefaultRoute({searchQuery});
+          }
     }
   }
 }

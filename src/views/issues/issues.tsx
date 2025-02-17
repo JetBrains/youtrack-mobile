@@ -178,16 +178,24 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
         }
       },
     );
-    const issueId: string | undefined = this.props.issueId;
-
-    if (issueId) {
-      const targetIssue: IssueOnList | null = getIssueFromCache(issueId);
-      this.updateFocusedIssue(targetIssue || {id: issueId} as IssueOnList);
-    }
+    this.initFocusedIssue(this.props.issueId);
 
     this.goOnlineSubscription = addListenerGoOnline(() => {
       this.refresh();
     });
+  }
+
+  initFocusedIssue(issueId?: string) {
+    if (issueId) {
+      const targetIssue: IssueOnList | null = getIssueFromCache(issueId);
+      this.updateFocusedIssue(targetIssue || {id: issueId} as IssueOnList);
+    }
+  }
+
+  componentWillReceiveProps(nextProps: IssuesProps) {
+    if(nextProps.issueId !== this.props.issueId) {
+      this.initFocusedIssue(nextProps.issueId);
+    }
   }
 
   componentWillUnmount() {
@@ -198,10 +206,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
 
   shouldComponentUpdate(nextProps: IssuesProps, nextState: State): boolean {
     if (
-      Object.keys(initialState).some(
-        // @ts-ignore
-        (stateKey: string) => (this.props)[stateKey] !== nextProps[stateKey],
-      )
+      Object.keys(initialState).some((stateKey: string) => (this.props)[stateKey] !== nextProps[stateKey])
     ) {
       return true;
     }
@@ -308,7 +313,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
       (
         contextIsProject &&
         selectedProjects?.length === 1 &&
-        this.props.searchContext.id === filterFieldProject.filterField?.[0]?.customField?.id
+        filterFieldProject && this.props.searchContext.id === filterFieldProject.filterField?.[0]?.customField?.id
       )
     );
     return (
@@ -484,7 +489,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     this.props.onQueryUpdate(query);
   };
 
-  renderSearchQueryAssist: () => React.ReactNode = () => {
+  renderSearchQueryAssist = () => {
     const {suggestIssuesQuery, queryAssistSuggestions} = this.props;
     const _query = this.state.clearSearchQuery ? '' : this.searchQuery;
     return (
@@ -647,7 +652,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     return null;
   }
 
-  renderIssues: () => React.ReactNode = () => {
+  renderIssues = () => {
     const {isIssuesContextOpen} = this.props;
     return (
       <View style={styles.listContainer} testID="test:id/issueListPhone">
@@ -660,7 +665,8 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
       </View>
     );
   };
-  renderFocusedIssue: () => React.ReactNode = () => {
+
+  renderFocusedIssue = () => {
     const {focusedIssue} = this.state;
 
     if (!focusedIssue || !this.hasIssues()) {
@@ -704,8 +710,7 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
     ) : null;
   }
 
-  render(): React.ReactNode {
-    const {isSplitView} = this.state;
+  render() {
     return (
       <ThemeContext.Consumer>
         {(theme: Theme) => {
@@ -714,11 +719,11 @@ export class Issues<P extends IssuesProps> extends Component<P, State> {
             <View
               style={[
                 styles.listContainer,
-                isSplitView ? styles.splitViewContainer : null,
+                this.state.isSplitView ? styles.splitViewContainer : null,
               ]}
             >
-              {isSplitView && this.renderSplitView()}
-              {!isSplitView && this.renderIssues()}
+              {this.state.isSplitView && this.renderSplitView()}
+              {!this.state.isSplitView && this.renderIssues()}
               {this.renderSettings()}
             </View>
           );
