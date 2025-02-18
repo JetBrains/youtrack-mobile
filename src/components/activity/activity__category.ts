@@ -97,25 +97,10 @@ export const activityArticleCategory = {
   VISIBILITY: 'ArticleVisibilityCategory',
 };
 
-export interface IActivityCategory {
-  ActivityCategories: {
-    IssueComments: string[];
-    IssueHistory: string[];
-    IssueVcs: string[];
-    TimeTracking: string[];
-  };
-  CategoryPresentation: {
-    IssueComments: string;
-    IssueHistory: string;
-    IssueVcs: string;
-    TimeTracking: string;
-  };
-  Source: {
-    COMMENT: string;
-    HISTORY: string;
-    WORK_ITEM: string;
-    VCS_ITEM: string;
-  };
+interface IActivityCategory {
+  ActivityCategories: Record<string, any>;
+  CategoryPresentation: Record<string, any>;
+  Source: Record<string, any>;
 }
 
 export const issueCommentsCategoryId = 'IssueComments';
@@ -153,15 +138,11 @@ export const ActivityCategory: IActivityCategory = [
   ],
 ].reduce(
   function (
-    Activity: {
-      ActivityCategories: Record<string, any>;
-      CategoryPresentation: Record<string, any>;
-      Source: Record<string, any>;
-    },
+    Activity: IActivityCategory,
     source,
   ) {
-    const sourceName = source[0];
-    const sourceKey = source[1];
+    const sourceName = source[0] as string;
+    const sourceKey = source[1] as string;
     const activityCategories = source[2];
     const presentation = source[3];
     Activity.Source[sourceName] = sourceKey;

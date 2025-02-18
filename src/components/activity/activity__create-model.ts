@@ -2,25 +2,25 @@ import {ActivityCategory, isActivityCategory} from './activity__category';
 import {ResourceTypes, hasType} from '../api/api__resource-types';
 import {sortByTimestamp} from 'components/search/sorting';
 
-import {Activity, ActivityGroup} from 'types/Activity';
+import {Activity, ActivityAuthorGroup, ActivityGroup} from 'types/Activity';
 
 
 export const createActivitiesModel = (activityGroups: ActivityGroup[] = []): Activity[] => {
   const activities = getStream(activityGroups).map(streamGroup => {
-    streamGroup.events = streamGroup.events
+    streamGroup.events = (streamGroup.events || [])
       .sort(sortByCategory)
       .sort(sortByTimestamp);
     return streamGroup;
   });
   return addMergeMetaDataToActivities(removeHiddenActivities(activities));
 
-  function getStream(activityGroups: ActivityGroup[]) {
-    const createGroup = (event, timestamp, authorGroup) => {
-      const streamGroup = {
+  function getStream(activityGroups: ActivityGroup[]): ActivityGroup[] {
+    const createGroup = (event: Activity, timestamp: number, authorGroup: ActivityAuthorGroup | null) => {
+      const streamGroup: ActivityGroup = {
         $type: ResourceTypes.EVENT_GROUP,
         timestamp: timestamp,
         events: [],
-        authorGroup: authorGroup,
+        authorGroup,
         author: event?.author,
         work: null,
         key: '',
@@ -56,23 +56,23 @@ export const createActivitiesModel = (activityGroups: ActivityGroup[] = []): Act
       return streamGroup;
     };
 
-    const streamDataModel = [];
+    const streamDataModel: ActivityGroup[] = [];
 
-    const filterOutUnnecessaryEvents = event =>
+    const filterOutUnnecessaryEvents = (event: Activity) =>
       !isActivityCategory.voters(event) &&
       !isActivityCategory.totalVotes(event) &&
       !isActivityCategory.commentText(event);
 
     activityGroups.forEach(rawGroup => {
-      let currentGroup;
-      rawGroup.events = rawGroup.events.filter(filterOutUnnecessaryEvents);
+      let currentGroup: ActivityGroup;
+      rawGroup.events = (rawGroup.events || []).filter(filterOutUnnecessaryEvents);
       const events = rawGroup.events;
 
       if (!events || !events.length) {
         return;
       }
 
-      let historyChanges = [];
+      let historyChanges: Activity[] = [];
       let isFirst = true;
       events.forEach(event => {
         if (
@@ -113,7 +113,7 @@ export const createActivitiesModel = (activityGroups: ActivityGroup[] = []): Act
     return streamDataModel.map(mergeAttachmentEvents);
   }
 
-  function isComment(rawGroup) {
+  function isComment(rawGroup: ActivityGroup) {
     if (rawGroup.category) {
       return isActivityCategory.comment(rawGroup);
     }
@@ -127,17 +127,15 @@ export const createActivitiesModel = (activityGroups: ActivityGroup[] = []): Act
     return hasType.comment(entity);
   }
 
-  function removeHiddenActivities(
-    activities: Array<Record<string, any>>,
-  ): Array<Record<string, any>> {
-    return activities.filter((it: Record<string, any>) => !it.hidden);
+  function removeHiddenActivities(activities: ActivityGroup[] = []) {
+    return activities.filter(it => !it.hidden);
   }
 
-  function addMergeMetaDataToActivities(activities = []) {
+  function addMergeMetaDataToActivities(activities: ActivityGroup[] = []) {
     let currentIndex = activities.length - 1;
-    let activity = null;
-    let prevActivity = null;
-    let lastGroup = true;
+    let activity: ActivityGroup | null = null;
+    let prevActivity: ActivityGroup | null = null;
+    let lastGroup: ActivityGroup | null = {} as ActivityGroup;
     reset();
 
     while (currentIndex >= 0) {
@@ -177,7 +175,7 @@ export const createActivitiesModel = (activityGroups: ActivityGroup[] = []): Act
       });
     }
 
-    function isMergedActivity(activity: Activity, prevActivity: Activity) {
+    function isMergedActivity(activity: ActivityGroup, prevActivity: ActivityGroup) {
       return !!(
         prevActivity &&
         activity.author.id === prevActivity.author.id &&
@@ -192,7 +190,7 @@ export const createActivitiesModel = (activityGroups: ActivityGroup[] = []): Act
     }
   }
 
-  function sortByCategory(item1, item2) {
+  function sortByCategory(item1: ActivityGroup, item2: ActivityGroup) {
     if (item1.category.id < item2.category.id) {
       return 1;
     }
@@ -209,7 +207,7 @@ export const createActivitiesModel = (activityGroups: ActivityGroup[] = []): Act
       return streamGroup;
     }
 
-    let attachmentEvents = streamGroup.events.filter(event =>
+    let attachmentEvents: Activity[] = streamGroup.events.filter((event: Activity) =>
       isActivityCategory.attachment(event),
     );
 
@@ -217,7 +215,7 @@ export const createActivitiesModel = (activityGroups: ActivityGroup[] = []): Act
       return streamGroup;
     }
 
-    streamGroup.events = streamGroup.events.reduce((list, event) => {
+    streamGroup.events = streamGroup.events.reduce((list: Activity[], event: Activity) => {
       //remove attachmentEvents
       if (!attachmentEvents.some(it => it.id === event.id)) {
         list.push(event);
@@ -250,16 +248,16 @@ export const createActivitiesModel = (activityGroups: ActivityGroup[] = []): Act
     return streamGroup;
   }
 
-  function removeAddEventsAboutCommentAttachments(comment, attachEvents) {
+  function removeAddEventsAboutCommentAttachments(comment: Activity, attachEvents) {
     const attachments = comment.attachments;
 
     if (attachments && attachments.length) {
-      const idsMap = attachments
+      const idsMap: Record<string, boolean> = attachments
         .filter(attachment => !attachment.removed)
-        .reduce((idsMap, attachment) => {
+        .reduce((idsMap: Record<string, boolean>, attachment) => {
           idsMap[attachment.id] = true;
           return idsMap;
-        }, {});
+        }, {} as Record<string, boolean>);
       return attachEvents.filter(
         activity =>
           (attachEvents.removed && attachEvents.removed.length) ||

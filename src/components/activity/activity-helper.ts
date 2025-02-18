@@ -6,7 +6,7 @@ import {i18n} from 'components/i18n/i18n';
 import {IconComment, IconHistory, IconHourGlass, IconVcs} from 'components/icon/icon';
 import {mergeActivities} from './activity__merge-activities';
 
-import type {Activity, ActivityPositionData, ActivityType} from 'types/Activity';
+import type {Activity, ActivityGroup, ActivityPositionData, ActivityType} from 'types/Activity';
 import type {IssueComment} from 'types/CustomFields';
 import {User} from 'types/User';
 
@@ -22,7 +22,7 @@ const getActivityAllTypes = (): ActivityType[] => {
   return Object.keys(ActivityCategory.ActivityCategories).map(key =>
     Object.assign({
       id: key,
-      name: ActivityCategory.CategoryPresentation[key],
+      name: ActivityCategory.CategoryPresentation[key as keyof typeof ActivityCategory.CategoryPresentation],
     }),
   );
 };
@@ -32,16 +32,16 @@ const getActivityCategories = (
 ): string[] => {
   return categoryTypes.reduce(
     (list: string[], category: ActivityType) =>
-      list.concat(ActivityCategory.ActivityCategories[category.id]),
+      list.concat(ActivityCategory.ActivityCategories[category.id as keyof typeof ActivityCategory.CategoryPresentation]),
     [],
   );
 };
 
-const getIssueActivityIcon = (activityTypeName: string): {} => {
+const getIssueActivityIcon = (activityTypeName: keyof typeof activityIconMap) => {
   return activityIconMap[activityTypeName];
 };
 
-const getIssueActivityLabel = (activityTypeName: string): string => {
+const getIssueActivityLabel = (activityTypeName: string) => {
   return {
     [ActivityCategory.Source.COMMENT]: i18n('Comments'),
     [ActivityCategory.Source.HISTORY]: i18n('Issue history'),
@@ -117,7 +117,7 @@ const createActivityModel = (
   }
 
   const groupedActivities = groupActivities(activityPage, {
-    onAddActivityToGroup: (group, activity: Activity) => {
+    onAddActivityToGroup: (group: ActivityGroup, activity: Activity) => {
       if (isActivityCategory.issueCreated(activity)) {
         group.hidden = true;
       }

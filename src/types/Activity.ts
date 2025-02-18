@@ -39,6 +39,11 @@ export type ActivityItem =
   | string
   | null;
 
+export interface ActivityAuthorGroup {
+  icon: string;
+  name: string;
+}
+
 export interface Activity {
   $type?: string;
   attachments?: Attachment[];
@@ -50,10 +55,7 @@ export interface Activity {
   timestamp: number;
   targetMember: Record<string, any> | null;
   targetSubMember?: Record<string, any>;
-  authorGroup: {
-    icon: string;
-    name: string;
-  } | null;
+  authorGroup: ActivityAuthorGroup | null;
   author: User;
   target: {
     $type?: string;
@@ -72,7 +74,7 @@ export interface Activity {
         $type: string;
         isMultiValue: boolean;
         valueType: string;
-      }
+      };
     };
   };
   added: ActivityItem | ActivityItem[];
