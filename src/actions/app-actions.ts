@@ -798,6 +798,8 @@ async function navigateToScreen(
     const account = await targetAccountToSwitchTo(targetServerURL, backendUrl);
     if (account) {
       await dispatch(changeAccount(account, false, issueId, articleId, undefined, searchQuery, helpdeskFormId));
+    } else {
+      notify(i18n('You are trying to open a link from another server. Please add this server to the app first.'));
     }
   } else {
     const navigateToActivity: string | undefined = url.split('#focus=Comments-')?.[1];
